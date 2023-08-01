@@ -1,0 +1,49 @@
+---
+name: Build/Push Development Images
+env:
+  LC_ALL: "C.UTF-8" # prevent ERROR: Ansible could not initialize the preferred locale: unsupported locale setting
+on:
+  push:
+    branches:
+      - devel
+      - release_*
+      - feature_*
+jobs:
+  push:
+    if: endsWith(github.repository, '/ascender') || startsWith(github.ref, 'refs/heads/release_')
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Get python version from Makefile
+        run: echo py_version=`make PYTHON_VERSION` >> $GITHUB_ENV
+
+      - name: Set lower case owner name
+        run: |
+          echo "OWNER_LC=${OWNER,,}" >>${GITHUB_ENV}
+        env:
+          OWNER: '${{ github.repository_owner }}'
+
+      - name: Install python ${{ env.py_version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ env.py_version }}
+
+      - name: Log in to registry
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Pre-pull image to warm build cache
+        run: |
+          docker pull ghcr.io/${OWNER_LC}/ascender_devel:${GITHUB_REF##*/} || :
+
+      - name: Build images
+        run: |
+          DEV_DOCKER_TAG_BASE=ghcr.io/${OWNER_LC} COMPOSE_TAG=${GITHUB_REF##*/} make docker-compose-build
+
+      - name: Push image
+        run: |
+          docker push ghcr.io/${OWNER_LC}/ascender_devel:${GITHUB_REF##*/}

@@ -1,0 +1,306 @@
+#jinja2: lstrip_blocks: True
+# Modifications Copyright (c) 2023 Ctrl IQ, Inc.
+---
+version: '2.1'
+services:
+{% for i in range(control_plane_node_count|int) %}
+  {% set container_postfix = loop.index %}
+  {% set awx_sdb_port_start = 7899 + (loop.index0*1000) | int %}
+  {% set awx_sdb_port_end = 7999 + (loop.index0*1000) | int %}
+  # Primary AWX Development Container
+  awx_{{ container_postfix }}:
+    user: "{{ ansible_user_uid }}"
+    image: "{{ awx_image }}:{{ awx_image_tag }}"
+    container_name: tools_awx_{{ container_postfix }}
+    hostname: awx_{{ container_postfix }}
+    command: launch_awx.sh
+    environment:
+      OS: "{{ os_info.stdout }}"
+      SDB_HOST: 0.0.0.0
+      SDB_PORT: {{ awx_sdb_port_start }}
+      AWX_GROUP_QUEUES: tower
+      MAIN_NODE_TYPE: "${MAIN_NODE_TYPE:-hybrid}"
+      RECEPTORCTL_SOCKET: {{ receptor_socket_file }}
+      CONTROL_PLANE_NODE_COUNT: {{ control_plane_node_count|int }}
+      EXECUTION_NODE_COUNT: {{ execution_node_count|int }}
+      AWX_LOGGING_MODE: stdout
+      DJANGO_SUPERUSER_PASSWORD: {{ admin_password }}
+      UWSGI_MOUNT_PATH: {{ ingress_path }}
+{% if loop.index == 1 %}
+      RUN_MIGRATIONS: 1
+{% endif %}
+{% if minikube_container_group|bool %}
+      MINIKUBE_CONTAINER_GROUP: "true"
+{% endif %}
+    links:
+      - postgres
+      - redis_{{ container_postfix }}
+    working_dir: "/awx_devel"
+    volumes:
+      - "../../../:/awx_devel"
+      - "../../docker-compose/supervisor.conf:/etc/supervisord.conf"
+      - "../../docker-compose/_sources/database.py:/etc/tower/conf.d/database.py"
+      - "../../docker-compose/_sources/websocket_secret.py:/etc/tower/conf.d/websocket_secret.py"
+      - "../../docker-compose/_sources/local_settings.py:/etc/tower/conf.d/local_settings.py"
+      - "../../docker-compose/_sources/nginx.conf:/etc/nginx/nginx.conf"
+      - "../../docker-compose/_sources/nginx.locations.conf:/etc/nginx/conf.d/nginx.locations.conf"
+      - "../../docker-compose/_sources/SECRET_KEY:/etc/tower/SECRET_KEY"
+      - "../../docker-compose/_sources/receptor/receptor-awx-{{ loop.index }}.conf:/etc/receptor/receptor.conf"
+      - "../../docker-compose/_sources/receptor/receptor-awx-{{ loop.index }}.conf.lock:/etc/receptor/receptor.conf.lock"
+{% if sign_work|bool %}
+      - "../../docker-compose/_sources/receptor/work_public_key.pem:/etc/receptor/work_public_key.pem"
+      - "../../docker-compose/_sources/receptor/work_private_key.pem:/etc/receptor/work_private_key.pem"
+{% endif %}
+      # - "../../docker-compose/_sources/certs:/etc/receptor/certs"  # TODO: optionally generate certs
+      - "/sys/fs/cgroup:/sys/fs/cgroup"
+      - "~/.kube/config:/var/lib/awx/.kube/config"
+      - "redis_socket_{{ container_postfix }}:/var/run/redis/:rw"
+    privileged: true
+    tty: true
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+    ports:
+      - "{{ awx_sdb_port_start }}-{{ awx_sdb_port_end }}:{{ awx_sdb_port_start }}-{{ awx_sdb_port_end }}"  # sdb-listen
+{% if control_plane_node_count|int == 1 %}
+      - "6899:6899"
+      - "8080:8080"  # unused but mapped for debugging
+      - "8888:8888"  # jupyter notebook
+      - "8013:8013"  # http
+      - "8043:8043"  # https
+      - "2222:2222"  # receptor foo node
+      - "3000:3001"  # used by the UI dev env
+{% endif %}
+  redis_{{ container_postfix }}:
+    image: redis:latest
+    container_name: tools_redis_{{ container_postfix }}
+    volumes:
+      - "../../redis/redis.conf:/usr/local/etc/redis/redis.conf:Z"
+      - "redis_socket_{{ container_postfix }}:/var/run/redis/:rw"
+    entrypoint: ["redis-server"]
+    command: ["/usr/local/etc/redis/redis.conf"]
+{% endfor %}
+{% if control_plane_node_count|int > 1 %}
+  haproxy:
+    image: haproxy:2.3
+    user: "{{ ansible_user_uid }}"
+    volumes:
+      - "./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:Z"
+    ports:
+      - "8013:8013"
+      - "8043:8043"
+      - "1936:1936"
+    depends_on:
+  {% for i in range(control_plane_node_count|int) -%}
+  {% set container_postfix = loop.index %}
+    - "awx_{{ container_postfix }}"
+  {% endfor %}
+{% endif %}
+{% if enable_keycloak|bool %}
+  keycloak:
+    image: quay.io/keycloak/keycloak:15.0.2
+    container_name: tools_keycloak_1
+    hostname: keycloak
+    user: "{{ ansible_user_uid }}"
+    ports:
+      - "8443:8443"
+    environment:
+      DB_VENDOR: postgres
+      DB_ADDR: postgres
+      DB_DATABASE: keycloak
+      DB_USER: {{ pg_username }}
+      DB_PASSWORD: {{ pg_password }}
+    depends_on:
+      - postgres
+{% endif %}
+{% if enable_ldap|bool %}
+  ldap:
+    image: bitnami/openldap:2
+    container_name: tools_ldap_1
+    hostname: ldap
+    user: "{{ ansible_user_uid }}"
+    ports:
+      - "389:1389"
+      - "636:1636"
+    environment:
+      LDAP_ADMIN_USERNAME: admin
+      LDAP_ADMIN_PASSWORD: admin
+      LDAP_CUSTOM_LDIF_DIR: /opt/bitnami/openldap/ldiffs
+      LDAP_ENABLE_TLS: "yes"
+      LDAP_LDAPS_PORT_NUMBER: 1636
+      LDAP_TLS_CERT_FILE: /opt/bitnami/openldap/certs/{{ ldap_public_key_file_name }}
+      LDAP_TLS_CA_FILE: /opt/bitnami/openldap/certs/{{ ldap_public_key_file_name }}
+      LDAP_TLS_KEY_FILE: /opt/bitnami/openldap/certs/{{ ldap_private_key_file_name }}
+    volumes:
+      - 'openldap_data:/bitnami/openldap'
+      - '../../docker-compose/_sources/ldap_certs:/opt/bitnami/openldap/certs'
+      - '../../docker-compose/_sources/ldap_diffs:/opt/bitnami/openldap/ldiffs'
+{% endif %}
+{% if enable_splunk|bool %}
+  splunk:
+    image: splunk/splunk:latest
+    container_name: tools_splunk_1
+    hostname: splunk
+    ports:
+      - "8000:8000"
+      - "8089:8089"
+      - "9199:9199"
+    environment:
+      SPLUNK_START_ARGS: --accept-license
+      SPLUNK_PASSWORD: splunk_admin
+{% endif %}
+{% if enable_prometheus|bool %}
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: tools_prometheus_1
+    hostname: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - "../../docker-compose/_sources/prometheus.yml:/etc/prometheus/prometheus.yml"
+      - "prometheus_storage:/prometheus:rw"
+    links:
+{% for i in range(control_plane_node_count|int) %}
+      - awx_{{ loop.index }}:awx{{ loop.index }} # because underscores are not valid in hostnames
+{% endfor %}
+{% endif %}
+{% if enable_grafana|bool %}
+  grafana:
+    image: grafana/grafana-enterprise:latest
+    container_name: tools_grafana_1
+    hostname: grafana
+    ports:
+      - "3001:3000"
+    volumes:
+      - "../../grafana:/etc/grafana/provisioning"
+      - "grafana_storage:/var/lib/grafana:rw"
+    links:
+      - prometheus
+    depends_on:
+      - prometheus
+{% endif %}
+{% if enable_tacacs|bool %}
+  tacacs:
+    image: dchidell/docker-tacacs
+    container_name: tools_tacacs_1
+    hostname: tacacs
+    ports:
+      - "49:49"
+{% endif %}
+  # A useful container that simply passes through log messages to the console
+  # helpful for testing awx/tower logging
+  # logstash:
+  #   build:
+  #     context: ./docker-compose
+  #     dockerfile: Dockerfile-logstash
+  postgres:
+    image: postgres:12
+    container_name: tools_postgres_1
+    # additional logging settings for postgres can be found https://www.postgresql.org/docs/current/runtime-config-logging.html
+    command: postgres -c log_destination=stderr -c log_min_messages=info -c log_min_duration_statement={{ pg_log_min_duration_statement|default(1000) }} -c max_connections={{ pg_max_connections|default(1024) }}
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+      POSTGRES_USER: {{ pg_username }}
+      POSTGRES_DB: {{ pg_database }}
+      POSTGRES_PASSWORD: {{ pg_password }}
+    volumes:
+      - "awx_db:/var/lib/postgresql/data"
+{% if enable_pgbouncer|bool %}
+  pgbouncer:
+    image: bitnami/pgbouncer:latest
+    container_name: tools_pgbouncer_1
+    hostname: pgbouncer
+    environment:
+      POSTGRESQL_USERNAME: {{ pg_username }}
+      POSTGRESQL_DATABASE: {{ pg_database }}
+      PGBOUNCER_DATABASE: {{ pg_database }}
+      POSTGRESQL_PASSWORD: {{ pg_password }}
+      POSTGRESQL_HOST: {{ pg_hostname | default('postgres') }}
+      POSTGRESQL_PORT: {{ pg_port }}
+      PGBOUNCER_AUTH_TYPE: trust
+      PGBOUNCER_PORT: {{ pgbouncer_port }}
+      PGBOUNCER_DEFAULT_POOL_SIZE: {{ pgbouncer_max_pool_size }}
+      # This is the default, but we're being explicit here because it's important:
+      # pg_notify will NOT work in transaction mode.
+      PGBOUNCER_POOL_MODE: session
+{% endif %}
+{% if execution_node_count|int > 0 %}
+  receptor-hop:
+    image: {{ receptor_image }}
+    user: root
+    container_name: tools_receptor_hop
+    hostname: receptor-hop
+    command: 'receptor --config /etc/receptor/receptor.conf'
+    links:
+      - awx_1
+    ports:
+      - "5555:5555"
+    volumes:
+      - "../../docker-compose/_sources/receptor/receptor-hop.conf:/etc/receptor/receptor.conf"
+  {% for i in range(execution_node_count|int) %}
+  receptor-{{ loop.index }}:
+    image: "{{ awx_image }}:{{ awx_image_tag }}"
+    user: "{{ ansible_user_uid }}"
+    container_name: tools_receptor_{{ loop.index }}
+    hostname: receptor-{{ loop.index }}
+    command: 'receptor --config /etc/receptor/receptor.conf'
+    environment:
+      RECEPTORCTL_SOCKET: {{ receptor_socket_file }}
+    links:
+      - receptor-hop
+    volumes:
+      - "../../../:/awx_devel"  # not used, but mounted so that any in-place installs can be used for whole cluster
+      - "../../docker-compose/_sources/receptor/receptor-worker-{{ loop.index }}.conf:/etc/receptor/receptor.conf"
+      - "/sys/fs/cgroup:/sys/fs/cgroup"
+      - "../../docker-compose/_sources/receptor/work_public_key.pem:/etc/receptor/work_public_key.pem"
+    privileged: true
+  {% endfor %}
+{% endif %}
+{% if enable_vault|bool %}
+  vault:
+    image: hashicorp/vault:1.14
+    container_name: tools_vault_1
+    command: server
+    hostname: vault
+    ports:
+      - "1234:1234"
+    environment:
+      VAULT_LOCAL_CONFIG: '{"storage": {"file": {"path": "/vault/file"}}, "listener": [{"tcp": { "address": "0.0.0.0:1234", "tls_disable": true}}], "default_lease_ttl": "168h", "max_lease_ttl": "720h", "ui": true}'
+    cap_add:
+      - IPC_LOCK
+    volumes:
+      - 'hashicorp_vault_data:/vault/file'
+{% endif %}
+
+volumes:
+  awx_db:
+    name: tools_awx_db
+{% for i in range(control_plane_node_count|int) -%}
+  {% set container_postfix = loop.index %}
+  redis_socket_{{ container_postfix }}:
+    name: tools_redis_socket_{{ container_postfix }}
+{% endfor -%}
+{% if enable_ldap|bool %}
+  openldap_data:
+    name: tools_ldap_1
+    driver: local
+{% endif %}
+{% if enable_vault|bool %}
+  hashicorp_vault_data:
+    name: tools_vault_1
+{% endif %}
+{% if enable_prometheus|bool %}
+  prometheus_storage:
+    name: tools_prometheus_storage
+{% endif %}
+{% if enable_grafana|bool %}
+  grafana_storage:
+    name: tools_grafana_storage
+{% endif %}
+{% if minikube_container_group|bool %}
+networks:
+  default:
+    external:
+      name: minikube
+{% endif %}

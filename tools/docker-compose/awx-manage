@@ -1,0 +1,10 @@
+#!/usr/bin/awx-python
+# EASY-INSTALL-ENTRY-SCRIPT: 'awx','console_scripts','awx-manage'
+import sys
+from pkg_resources import load_entry_point
+__requires__ = 'awx'
+
+if __name__ == '__main__':
+    sys.exit(
+        load_entry_point('awx', 'console_scripts', 'awx-manage')()
+    )

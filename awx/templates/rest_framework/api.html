@@ -1,0 +1,82 @@
+{#
+  Modifications Copyright (c) 2023 Ctrl IQ, Inc.
+#}
+{% extends 'rest_framework/base.html' %}
+{% load i18n static %}
+
+{% block title %}{{ name }} &middot; {% trans 'ASCENDER REST API' %}{% endblock %}
+
+{% block bootstrap_theme %}
+  <link rel="stylesheet" type="text/css" href="{% static 'rest_framework/css/bootstrap.min.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'api/api.css' %}?v={{tower_version}}" />
+{% endblock %}
+
+{% block style %}
+<link href="{% static 'media/favicon_ascender.ico' %}?v={{tower_version}}" rel="shortcut icon" />
+{{ block.super }}
+{% endblock %}
+
+{% block navbar %}
+  <div class="navbar navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button btn btn-primary" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="{% url 'api:api_root_view' %}">
+          <img class="logo" src="{% static 'media/AscenderAuto_icon_clr_S.png' %}" width="20px">
+          <span>{% trans 'REST API' %}</span>
+        </a>
+        <a class="navbar-title" href="{{ request.get_full_path }}">
+          <span>&nbsp;&mdash; {{name}}</span>
+        </a>
+      </div>
+      <div class="collapse navbar-collapse" id="navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          {% if user.is_authenticated and not inside_login_context %}
+          <li><a href="{% if request.version %}{% url 'api:user_me_list' version=request.version%}{% else %}{% url 'api:user_me_list' version="v2" %}{% endif %}" data-toggle="tooltip" data-placement="bottom" data-delay="1000" title="Logged in as {{ user }}{% if user.get_full_name %} ({{ user.get_full_name }}){% endif %}"><span class="glyphicon glyphicon-user"></span> <span class="visible-xs-inline">Logged in as </span>{{ user }}{% if user.get_full_name %}<span class="visible-xs-inline"> ({{ user.get_full_name }})</span>{% endif %}</a></li>
+          <li><a href="{% url 'api:logout' %}?next=/api/login/" data-toggle="tooltip" data-placement="bottom" data-delay="1000" title="Log out"><span class="glyphicon glyphicon-log-out"></span>Log out</a></li>
+          {% else %}
+          <li><a href="{% url 'api:login' %}?next={{ request.get_full_path }}" data-toggle="tooltip" data-placement="bottom" data-delay="1000" title="Log in"><span class="glyphicon glyphicon-log-in"></span>Log in</a></li>
+          {% endif %}
+          <li><a href="//docs.ansible.com/ansible-tower/{{short_tower_version}}/html/towerapi/index.html" target="_blank" data-toggle="tooltip" data-placement="bottom" data-delay="1000" title="{% trans 'API Guide' %}"><span class="glyphicon glyphicon-question-sign"></span><span class="visible-xs-inline">{% trans 'API Guide' %}</span></a></li>
+          <li><a href="/" data-toggle="tooltip" data-placement="bottom" data-delay="1000" title="{% trans 'Back to application' %}"><span class="glyphicon glyphicon-circle-arrow-left"></span><span class="visible-xs-inline">{% trans 'Back to application' %}</span></a></li>
+          <li class="hidden-xs"><a href="#" class="resize" data-toggle="tooltip" data-placement="bottom" data-delay="1000" title="{% trans 'Resize' %}"><span class="glyphicon glyphicon-resize-full"></span></a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+  {% if deprecated %}
+    <div class="breadcrumb" style="background: #FCC;">
+        <b>This resource has been deprecated and will be removed in a future release.</b>
+    </div>
+  {% endif %}
+{{ block.super }}
+{% endblock content %}
+
+{% block script %}
+<div id="footer">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6">
+      </div>
+      <div class="col-sm-6 footer-copyright">
+        Copyright &copy; 2021 <a href="http://www.redhat.com" target="_blank">Red Hat</a>, Inc. All Rights Reserved.<br>
+        Copyright &copy; 2023 <a href="http://www.ciq.com" target="_blank">Ctrl IQ, </a>, Inc. All Rights Reserved.
+      </div>
+    </div>
+  </div>
+</div>
+<div class="hidden">
+  <a class="hide-description pull-right js-tooltip" href="#" title="Hide Description"><span class="glyphicon glyphicon-remove-sign"></span></a>
+  <a class="toggle-description js-tooltip" href="#" title="Show/Hide Description"><span class="glyphicon glyphicon-question-sign"></span></a>
+</div>
+{{ block.super }}
+<script src="{% static 'api/api.js' %}?v={{tower_version}}"></script>
+{% endblock %}

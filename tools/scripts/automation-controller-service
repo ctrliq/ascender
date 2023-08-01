@@ -1,0 +1,21 @@
+#!/bin/bash
+
+if [ -f /etc/sysconfig/automation-controller ]; then
+	source /etc/sysconfig/automation-controller
+fi
+
+case "$1" in
+	start|stop|restart)
+		exec systemctl $1 automation-controller.service
+		;;
+	status)
+		exec systemctl status automation-controller.service $CONTROLLER_SERVICES
+		;;
+	enable|disable)
+		exec systemctl $1 automation-controller.service $CONTROLLER_SERVICES
+		;;
+	*)
+		echo "Usage: automation-controller-service start|stop|restart|status|enable|disable"
+		exit 1
+		;;
+esac

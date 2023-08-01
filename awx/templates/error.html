@@ -1,0 +1,32 @@
+{# Modifications Copyright (c) 2023 Ctrl IQ, Inc. #}
+{% extends "rest_framework/api.html" %}
+{% load i18n static %}
+
+{% block title %}{{ name }} &middot; {% trans 'AWX' %}{% endblock %}
+
+{% block style %}
+{{ block.super }}
+<style type="text/css">
+div.request-info,
+div.response-info span.meta {
+  display: none;
+}
+</style>
+{% endblock %}
+
+{% block navbar %}
+  <div class="navbar navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/">
+          <img class="logo" src="{% static 'media/AscenderAuto_icon_clr_S.png' %}">
+        </a>
+        <a class="navbar-title" href="{{ request.get_full_path }}">
+          <span>&nbsp;&mdash; {{name}}</span>
+        </a>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}

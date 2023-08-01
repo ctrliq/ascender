@@ -1,0 +1,29 @@
+#page-sidebar {
+  background-image: radial-gradient(116.94% 41.63% at 5% 1.23%, rgb(38, 194, 140) 0%, rgb(2, 93, 133) 50.52%, rgb(1, 17, 23) 100%) !important;
+  line-height: 12px !important;
+}
+
+.pf-c-nav__link:focus {
+  background-color: transparent !important;
+}
+
+.pf-c-nav__link:active {
+  background-color: transparent !important;
+}
+
+.pf-c-nav__link:hover {
+  background-color: rgba(51, 170, 51, .1) !important;
+}
+
+.pf-c-nav__link.pf-m-current {
+  background-color: rgba(51, 170, 51, .2) !important;
+}
+
+.pf-c-nav__link.pf-m-current::after {
+  border-color: rgba(51, 170, 51, .3) !important;
+}
+
+body {
+  font-family: "Open SansVariable", sans-serif;
+}
+

@@ -1,0 +1,139 @@
+---
+name: Stage Release
+
+env:
+  LC_ALL: "C.UTF-8" # prevent ERROR: Ansible could not initialize the preferred locale: unsupported locale setting
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Ascender version.'
+        required: true
+        default: ''
+      operator_version:
+        description: 'Operator version. Leave blank to skip staging awx-operator.'
+        default: ''
+      confirm:
+        description: 'Are you sure? Set this to yes.'
+        required: true
+        default: 'no'
+
+jobs:
+  stage:
+    if: endsWith(github.repository, '/ascender')
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: write
+    steps:
+      - name: Verify inputs
+        run: |
+          set -e
+
+          if [[ ${{ github.event.inputs.confirm }} != "yes" ]]; then
+            >&2 echo "Confirm must be 'yes'"
+            exit 1
+          fi
+
+          if [[ ${{ github.event.inputs.version }} == "" ]]; then
+            >&2 echo "Set version to continue."
+            exit 1
+          fi
+
+          exit 0
+
+      - name: Checkout ascender
+        uses: actions/checkout@v2
+        with:
+          path: ascender
+
+      - name: Get python version from Makefile
+        run: echo py_version=`make PYTHON_VERSION` >> $GITHUB_ENV
+
+      - name: Install python ${{ env.py_version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ env.py_version }}
+
+      - name: Checkout awx-logos
+        uses: actions/checkout@v2
+        with:
+          repository: ansible/awx-logos
+          path: awx-logos
+
+      - name: Checkout awx-operator
+        uses: actions/checkout@v2
+        with:
+          repository: ansible/awx-operator
+          path: awx-operator
+
+      - name: Install playbook dependencies
+        run: |
+          python3 -m pip install docker
+
+      - name: Build and stage AWX
+        working-directory: ascender
+        run: |
+          ansible-playbook -v tools/ansible/build.yml \
+            -e registry=ghcr.io \
+            -e registry_username=${{ github.actor }} \
+            -e registry_password=${{ secrets.GITHUB_TOKEN }} \
+            -e awx_image=${{ github.repository }} \
+            -e awx_version=${{ github.event.inputs.version }} \
+            -e ansible_python_interpreter=$(which python3) \
+            -e push=yes \
+            -e awx_official=yes
+
+      - name: Log in to GHCR
+        run: |
+          echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+#      - name: Log in to Quay
+#        run: |
+#          echo ${{ secrets.QUAY_TOKEN }} | docker login quay.io -u ${{ secrets.QUAY_USER }} --password-stdin
+
+      - name: tag awx-ee:latest with version input
+        run: |
+          docker pull quay.io/ansible/awx-ee:latest
+          docker tag quay.io/ansible/awx-ee:latest ghcr.io/${{ github.repository_owner }}/awx-ee:${{ github.event.inputs.version }}
+          docker push ghcr.io/${{ github.repository_owner }}/awx-ee:${{ github.event.inputs.version }}
+
+#      - name: Build and stage awx-operator
+#        working-directory: awx-operator
+#        run: |
+#          BUILD_ARGS="--build-arg DEFAULT_AWX_VERSION=${{ github.event.inputs.version }} \
+#                      --build-arg OPERATOR_VERSION=${{ github.event.inputs.operator_version }}" \
+#          IMAGE_TAG_BASE=ghcr.io/${{ github.repository_owner }}/awx-operator \
+#          VERSION=${{ github.event.inputs.operator_version }} make docker-build docker-push
+
+#      - name: Run test deployment with awx-operator
+#        working-directory: awx-operator
+#        run: |
+#          python3 -m pip install -r molecule/requirements.txt
+#          ansible-galaxy collection install -r molecule/requirements.yml
+#          sudo rm -f $(which kustomize)
+#          make kustomize
+#          KUSTOMIZE_PATH=$(readlink -f bin/kustomize) molecule test -s kind
+#        env:
+#          AWX_TEST_IMAGE: ${{ github.repository }}
+#          AWX_TEST_VERSION: ${{ github.event.inputs.version }}
+#          AWX_EE_TEST_IMAGE: ghcr.io/${{ github.repository_owner }}/awx-ee:${{ github.event.inputs.version }}
+
+      - name: Create draft release for Ascender
+        working-directory: ascender
+        run: |
+          ansible-playbook -v tools/ansible/stage.yml \
+            -e repo=${{ github.repository }} \
+            -e awx_image=ghcr.io/${{ github.repository }} \
+            -e version=${{ github.event.inputs.version }} \
+            -e github_token=${{ secrets.GITHUB_TOKEN }}
+
+#      - name: Create draft release for awx-operator
+#        if: ${{ github.event.inputs.operator_version != '' }}
+#        working-directory: ascender
+#        run: |
+#          ansible-playbook tools/ansible/stage.yml \
+#            -e version=${{ github.event.inputs.operator_version }} \
+#            -e repo=${{ github.repository_owner }}/awx-operator \
+#            -e github_token=${{ secrets.AWX_OPERATOR_RELEASE_TOKEN }}

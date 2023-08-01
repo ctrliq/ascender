@@ -1,0 +1,142 @@
+---
+name: Bug Report
+description: "🐞 Create a report to help us improve"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Bug Report issues are for **concrete, actionable bugs** only.
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Please confirm the following
+      options:
+        - label: I have checked the [current issues](https://github.com/ctrliq/ascender/issues) for duplicates.
+          required: true
+        - label: I understand that Ascender is open source software provided for free and that I might not receive a timely response.
+          required: true
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Bug Summary
+      description: Briefly describe the problem.
+    validations:
+      required: false
+
+  - type: input
+    id: awx-version
+    attributes:
+      label: Ascender version
+      description: What version of Ascender are you running?
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: components
+    attributes:
+      label: Select the relevant components
+      options:
+        - label: UI
+        - label: UI (tech preview)
+        - label: API
+        - label: Docs
+        - label: Collection
+        - label: CLI
+        - label: Other
+
+  - type: dropdown
+    id: awx-install-method
+    attributes:
+      label: Installation method
+      description: How did you install Ascender?
+      multiple: false
+      options:
+        - kubernetes
+        - minikube
+        - openshift
+        - minishift
+        - docker development environment
+        - Ascender Installation Sctipt
+        - N/A
+    validations:
+      required: true
+
+  - type: dropdown
+    id: modified-architecture
+    attributes:
+      label: Modifications
+      description: >-
+       Have you modified the installation, deployment topology, or container images in any way? If yes, please
+       explain in the "additional information" field at the bottom of the form.
+      multiple: false
+      options:
+        - "no"
+        - "yes"
+    validations:
+      required: true
+
+  - type: input
+    id: ansible-version
+    attributes:
+      label: Ansible version
+      description: What version of Ansible are you running?
+    validations:
+      required: false
+
+  - type: input
+    id: operating-system
+    attributes:
+      label: Operating system
+      description: What operating system are you using?
+    validations:
+      required: false
+
+  - type: dropdown
+    id: browsers
+    attributes:
+      label: Web browser
+      description: Which browsers are affected?
+      multiple: true
+      options:
+        - Firefox
+        - Chrome
+        - Safari
+        - Edge
+    validations:
+      required: false
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to reproduce
+      description: >-
+        Starting from a new installation of the system, describe exactly how a developer or quality engineer can reproduce the bug
+        on infrastructure that isn't yours. Include any and all resources created, input values, test users, roles assigned, playbooks used, etc.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-results
+    attributes:
+      label: Expected results
+      description: What did you expect to happpen when running the steps above?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual-results
+    attributes:
+      label: Actual results
+      description: What actually happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-information
+    attributes:
+      label: Additional information
+      description: Include any relevant log output, links to sosreport, database dumps, screenshots, or other information.
+    validations:
+      required: false

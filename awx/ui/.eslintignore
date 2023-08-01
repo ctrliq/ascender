@@ -1,0 +1,11 @@
+jest.*.js
+webpack.*.js
+
+etc
+coverage
+build
+node_modules
+dist
+images
+instrumented
+*test*.js
