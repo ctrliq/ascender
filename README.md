@@ -5,7 +5,7 @@ A separate installer is being released to ease the burden of installing Ascender
 
 Contributing
 ------------
-- It is recommended that all contributions be applied upstream first to [AWX](https://github.com/ansible/awx), to better support collaboration with the community
+- It is recommended that all contributions be applied upstream first to [AWX](https://github.com/ansible/awx), to better support collaboration with the community.
 
 Reporting Issues
 ----------------
