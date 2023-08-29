@@ -512,12 +512,36 @@ def execution_node_health_check(node):
     return data
 
 
-def inspect_execution_nodes(instance_list):
-    with advisory_lock('inspect_execution_nodes_lock', wait=False):
-        node_lookup = {inst.hostname: inst for inst in instance_list}
+def inspect_established_receptor_connections(mesh_status):
+    '''
+    Flips link state from ADDING to ESTABLISHED
+    If the InstanceLink source and target match the entries
+    in Known Connection Costs, flip to Established.
+    '''
+    from awx.main.models import InstanceLink
 
+    all_links = InstanceLink.objects.filter(link_state=InstanceLink.States.ADDING)
+    if not all_links.exists():
+        return
+    active_receptor_conns = mesh_status['KnownConnectionCosts']
+    update_links = []
+    for link in all_links:
+        if link.link_state != InstanceLink.States.REMOVING:
+            if link.target.hostname in active_receptor_conns.get(link.source.hostname, {}):
+                if link.link_state is not InstanceLink.States.ESTABLISHED:
+                    link.link_state = InstanceLink.States.ESTABLISHED
+                    update_links.append(link)
+
+    InstanceLink.objects.bulk_update(update_links, ['link_state'])
+
+
+def inspect_execution_and_hop_nodes(instance_list):
+    with advisory_lock('inspect_execution_and_hop_nodes_lock', wait=False):
+        node_lookup = {inst.hostname: inst for inst in instance_list}
         ctl = get_receptor_ctl()
         mesh_status = ctl.simple_command('status')
+
+        inspect_established_receptor_connections(mesh_status)
 
         nowtime = now()
         workers = mesh_status['Advertisements']
@@ -576,7 +600,7 @@ def cluster_node_heartbeat(dispatch_time=None, worker_tasks=None):
             this_inst = inst
             break
 
-    inspect_execution_nodes(instance_list)
+    inspect_execution_and_hop_nodes(instance_list)
 
     for inst in list(instance_list):
         if inst == this_inst:
