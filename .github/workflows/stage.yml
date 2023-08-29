@@ -11,9 +11,6 @@ on:
         description: 'Ascender version.'
         required: true
         default: ''
-      operator_version:
-        description: 'Operator version. Leave blank to skip staging awx-operator.'
-        default: ''
       confirm:
         description: 'Are you sure? Set this to yes.'
         required: true
@@ -62,11 +59,11 @@ jobs:
 #          repository: ansible/awx-logos
 #          path: awx-logos
 
-      - name: Checkout awx-operator
-        uses: actions/checkout@v2
-        with:
-          repository: ansible/awx-operator
-          path: awx-operator
+#      - name: Checkout awx-operator
+#        uses: actions/checkout@v2
+#        with:
+#          repository: ansible/awx-operator
+#          path: awx-operator
 
       - name: Install playbook dependencies
         run: |
