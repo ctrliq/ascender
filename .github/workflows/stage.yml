@@ -56,11 +56,11 @@ jobs:
         with:
           python-version: ${{ env.py_version }}
 
-      - name: Checkout awx-logos
-        uses: actions/checkout@v2
-        with:
-          repository: ansible/awx-logos
-          path: awx-logos
+#      - name: Checkout awx-logos
+#        uses: actions/checkout@v2
+#        with:
+#          repository: ansible/awx-logos
+#          path: awx-logos
 
       - name: Checkout awx-operator
         uses: actions/checkout@v2
@@ -83,7 +83,7 @@ jobs:
             -e awx_version=${{ github.event.inputs.version }} \
             -e ansible_python_interpreter=$(which python3) \
             -e push=yes \
-            -e awx_official=yes
+            -e awx_official=no
 
       - name: Log in to GHCR
         run: |
