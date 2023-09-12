@@ -118,18 +118,36 @@ $ make docker-compose
 
 > For running docker-compose detached mode, start the containers using the following command: `$ make docker-compose COMPOSE_UP_OPTS=-d`
 
+###### Solving database-related issues during initial startup
+
+If you have encountered the infinitely-repeating `Waiting for postgres to be ready to accept connections` message during the execution, try to do the following:
+
+1. Stop and delete AWX-related docker containers.
+2. Delete all associated docker volumes.
+3. Delete all associated docker networks.
+4. Repeat the process from scratch.
+
+If you have **only** AWX-related container entities in your system, you can simply stop and delete everything using the following commands:
+
+```bash
+docker stop $(docker ps -a -q)
+docker system prune -a
+docker volume prune
+docker network prune
+```
 
 ##### _(alternative method)_ Spin up a development environment with customized mesh node cluster
 
-With the introduction of Receptor, a cluster (of containers) with execution nodes and a hop node can be created by the docker-compose Makefile target.
-By default, it will create 1 hybrid node, 1 hop node, and 2 execution nodes.
-You can switch the type of AWX nodes between hybrid and control with this syntax.
+A cluster (of containers) with execution nodes and a hop node can be created by the docker-compose Makefile target.
+By default, it will create 1 hybrid node.
+You can switch the type of AWX nodes between hybrid and control with `MAIN_NODE_TYPE`.
 
 ```
-MAIN_NODE_TYPE=control COMPOSE_TAG=devel make docker-compose
+MAIN_NODE_TYPE=control EXECUTION_NODE_COUNT=2 COMPOSE_TAG=devel make docker-compose
 ```
 
 Running the above command will create a cluster of 1 control node, 1 hop node, and 2 execution nodes.
+A hop node is automatically created whenever there are 1 or more execution nodes.
 
 The number of nodes can be changed:
 
@@ -175,7 +193,7 @@ The first time you start the environment, database migrations need to run in ord
 ```bash
 awx_1        | Operations to perform:
 awx_1        |   Synchronize unmigrated apps: solo, api, staticfiles, debug_toolbar, messages, channels, django_extensions, ui, rest_framework, polymorphic
-awx_1        |   Apply all migrations: sso, sessions, sites, kombu_transport_django, social_auth, contenttypes, auth, conf, main
+awx_1        |   Apply all migrations: sso, taggit, sessions, sites, kombu_transport_django, social_auth, contenttypes, auth, conf, main
 awx_1        | Synchronizing apps without migrations:
 awx_1        |   Creating tables...
 awx_1        |     Running deferred SQL...
