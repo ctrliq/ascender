@@ -41,7 +41,7 @@ jobs:
           exit 0
 
       - name: Checkout ascender
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           path: ascender
 
@@ -49,18 +49,18 @@ jobs:
         run: echo py_version=`make PYTHON_VERSION` >> $GITHUB_ENV
 
       - name: Install python ${{ env.py_version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ env.py_version }}
 
 #      - name: Checkout awx-logos
-#        uses: actions/checkout@v2
+#        uses: actions/checkout@v3
 #        with:
 #          repository: ansible/awx-logos
 #          path: awx-logos
 
 #      - name: Checkout awx-operator
-#        uses: actions/checkout@v2
+#        uses: actions/checkout@v3
 #        with:
 #          repository: ansible/awx-operator
 #          path: awx-operator
