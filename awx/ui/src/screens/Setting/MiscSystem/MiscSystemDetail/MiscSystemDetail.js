@@ -48,8 +48,6 @@ function MiscSystemDetail() {
         data,
         'ACTIVITY_STREAM_ENABLED',
         'ACTIVITY_STREAM_ENABLED_FOR_INVENTORY_SYNC',
-        'AUTOMATION_ANALYTICS_GATHER_INTERVAL',
-        'AUTOMATION_ANALYTICS_URL',
         'INSIGHTS_TRACKING_STATE',
         'MANAGE_ORGANIZATION_AUTH',
         'ORG_ADMINS_CAN_SEE_ALL_USERS',
@@ -60,8 +58,7 @@ function MiscSystemDetail() {
         'PROXY_IP_ALLOWED_LIST',
         'CSRF_TRUSTED_ORIGINS',
         'AUTOMATION_ANALYTICS_LAST_GATHER',
-        'AUTOMATION_ANALYTICS_LAST_ENTRIES',
-        'UI_NEXT'
+        'AUTOMATION_ANALYTICS_LAST_ENTRIES'
       );
 
       const mergedData = {};
