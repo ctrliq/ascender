@@ -48,7 +48,8 @@ const Login = styled(PFLogin)`
 
 function AWXLogin({ alt, isAuthenticated }) {
   const [userId, setUserId] = useState(null);
-  const { authRedirectTo, isSessionExpired } = useSession();
+  const { authRedirectTo, isSessionExpired, isRedirectLinkReceived } =
+    useSession();
   const isNewUser = useRef(true);
   const hasVerifiedUser = useRef(false);
 
@@ -182,7 +183,8 @@ function AWXLogin({ alt, isAuthenticated }) {
     return <LoadingSpinner />;
   }
   if (userId && hasVerifiedUser.current) {
-    const redirect = isNewUser.current ? '/home' : authRedirectTo;
+    const redirect =
+      isNewUser.current && !isRedirectLinkReceived ? '/home' : authRedirectTo;
 
     return <Redirect to={redirect} />;
   }
