@@ -53,18 +53,6 @@ jobs:
         with:
           python-version: ${{ env.py_version }}
 
-#      - name: Checkout awx-logos
-#        uses: actions/checkout@v3
-#        with:
-#          repository: ansible/awx-logos
-#          path: awx-logos
-
-#      - name: Checkout awx-operator
-#        uses: actions/checkout@v3
-#        with:
-#          repository: ansible/awx-operator
-#          path: awx-operator
-
       - name: Install playbook dependencies
         run: |
           python3 -m pip install docker
@@ -86,36 +74,11 @@ jobs:
         run: |
           echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-#      - name: Log in to Quay
-#        run: |
-#          echo ${{ secrets.QUAY_TOKEN }} | docker login quay.io -u ${{ secrets.QUAY_USER }} --password-stdin
-
       - name: tag awx-ee:latest with version input
         run: |
           docker pull quay.io/ansible/awx-ee:latest
           docker tag quay.io/ansible/awx-ee:latest ghcr.io/${{ github.repository_owner }}/awx-ee:${{ github.event.inputs.version }}
           docker push ghcr.io/${{ github.repository_owner }}/awx-ee:${{ github.event.inputs.version }}
-
-#      - name: Build and stage awx-operator
-#        working-directory: awx-operator
-#        run: |
-#          BUILD_ARGS="--build-arg DEFAULT_AWX_VERSION=${{ github.event.inputs.version }} \
-#                      --build-arg OPERATOR_VERSION=${{ github.event.inputs.operator_version }}" \
-#          IMAGE_TAG_BASE=ghcr.io/${{ github.repository_owner }}/awx-operator \
-#          VERSION=${{ github.event.inputs.operator_version }} make docker-build docker-push
-
-#      - name: Run test deployment with awx-operator
-#        working-directory: awx-operator
-#        run: |
-#          python3 -m pip install -r molecule/requirements.txt
-#          ansible-galaxy collection install -r molecule/requirements.yml
-#          sudo rm -f $(which kustomize)
-#          make kustomize
-#          KUSTOMIZE_PATH=$(readlink -f bin/kustomize) molecule test -s kind
-#        env:
-#          AWX_TEST_IMAGE: ${{ github.repository }}
-#          AWX_TEST_VERSION: ${{ github.event.inputs.version }}
-#          AWX_EE_TEST_IMAGE: ghcr.io/${{ github.repository_owner }}/awx-ee:${{ github.event.inputs.version }}
 
       - name: Create draft release for Ascender
         working-directory: ascender
@@ -126,11 +89,3 @@ jobs:
             -e version=${{ github.event.inputs.version }} \
             -e github_token=${{ secrets.GITHUB_TOKEN }}
 
-#      - name: Create draft release for awx-operator
-#        if: ${{ github.event.inputs.operator_version != '' }}
-#        working-directory: ascender
-#        run: |
-#          ansible-playbook tools/ansible/stage.yml \
-#            -e version=${{ github.event.inputs.operator_version }} \
-#            -e repo=${{ github.repository_owner }}/awx-operator \
-#            -e github_token=${{ secrets.AWX_OPERATOR_RELEASE_TOKEN }}
