@@ -16,16 +16,13 @@ jobs:
       packages: write
       contents: read
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout ascender
+        uses: actions/checkout@v3
+        with:
+          path: ascender
 
       - name: Get python version from Makefile
         run: echo py_version=`make PYTHON_VERSION` >> $GITHUB_ENV
-
-      - name: Set lower case owner name
-        run: |
-          echo "OWNER_LC=${OWNER,,}" >>${GITHUB_ENV}
-        env:
-          OWNER: '${{ github.repository_owner }}'
 
       - name: Install python ${{ env.py_version }}
         uses: actions/setup-python@v4
