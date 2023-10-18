@@ -69,7 +69,7 @@ jobs:
         run: |
           python3 -m pip install docker
 
-      - name: Build and stage AWX
+      - name: Build and stage Ascender
         working-directory: ascender
         run: |
           ansible-playbook -v tools/ansible/build.yml \
