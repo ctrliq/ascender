@@ -1133,6 +1133,30 @@ ManagedCredentialType(
 )
 
 ManagedCredentialType(
+    namespace='ciq',
+    kind='cloud',
+    name=gettext_noop('CIQ Mountain Access Token'),
+    managed=True,
+    inputs={
+        'fields': [
+            {
+                'id': 'token',
+                'label': gettext_noop('Access Token'),
+                'type': 'string',
+                'secret': True,
+                'help_text': gettext_noop('A CIQ Mountain Access token.'),
+            },
+        ],
+        'required': ['token'],
+    },
+    injectors={
+        'env': {
+            'MOUNTAIN_TOKEN': '{{token}}',
+        }
+    },
+)
+
+ManagedCredentialType(
     namespace='kubernetes_bearer_token',
     kind='kubernetes',
     name=gettext_noop('OpenShift or Kubernetes API Bearer Token'),
