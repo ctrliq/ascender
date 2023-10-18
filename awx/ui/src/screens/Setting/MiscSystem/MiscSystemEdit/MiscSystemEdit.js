@@ -197,43 +197,6 @@ function MiscSystemEdit() {
                   name="MANAGE_ORGANIZATION_AUTH"
                   config={system.MANAGE_ORGANIZATION_AUTH}
                 />
-                {/* <BooleanField
-                  name="INSIGHTS_TRACKING_STATE"
-                  config={system.INSIGHTS_TRACKING_STATE}
-                /> */}
-                {/* <InputField
-                  name="REDHAT_USERNAME"
-                  config={system.REDHAT_USERNAME}
-                />
-                <EncryptedField
-                  name="REDHAT_PASSWORD"
-                  config={system.REDHAT_PASSWORD}
-                /> */}
-                {/* <InputField
-                  name="SUBSCRIPTIONS_USERNAME"
-                  config={system.SUBSCRIPTIONS_USERNAME}
-                />
-                <EncryptedField
-                  name="SUBSCRIPTIONS_PASSWORD"
-                  config={system.SUBSCRIPTIONS_PASSWORD}
-                /> */}
-                {/* <InputField
-                  name="AUTOMATION_ANALYTICS_URL"
-                  config={system.AUTOMATION_ANALYTICS_URL}
-                  type="url"
-                />
-                <InputField
-                  name="AUTOMATION_ANALYTICS_GATHER_INTERVAL"
-                  config={system.AUTOMATION_ANALYTICS_GATHER_INTERVAL}
-                  type="number"
-                  isRequired
-                />
-                <BooleanField name="UI_NEXT" config={system.UI_NEXT} />
-                <ObjectField
-                  name="AUTOMATION_ANALYTICS_LAST_ENTRIES"
-                  config={system.AUTOMATION_ANALYTICS_LAST_ENTRIES}
-                  revertValue={system.AUTOMATION_ANALYTICS_LAST_ENTRIES.default}
-                /> */}
                 <ObjectField
                   name="REMOTE_HOST_HEADERS"
                   config={system.REMOTE_HOST_HEADERS}
