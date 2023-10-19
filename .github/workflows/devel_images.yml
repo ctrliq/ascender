@@ -33,6 +33,9 @@ jobs:
         run: |
           python3 -m pip install docker
 
+	- name: Get latest Ascender tag
+       run: echo ascender_tag=`git -c 'versionsort.suffix=-' ls-remote --tags --refs --sort='v:refname' https://github.com/${{ github.repository_owner }}/${{ github.repository }}.git  | tail --lines=1  | cut --delimiter='/' --fields=3`
+
       - name: Build and stage Ascender
         working-directory: ascender
         run: |
@@ -41,7 +44,7 @@ jobs:
             -e registry_username=${{ github.actor }} \
             -e registry_password=${{ secrets.GITHUB_TOKEN }} \
             -e awx_image=${{ github.repository }}_devel \
-            -e awx_version=devel \
+            -e awx_version=${{ env.ascender_tag }}+devel \
             -e ansible_python_interpreter=$(which python3) \
             -e push=yes \
             -e awx_official=no
