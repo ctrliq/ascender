@@ -42,7 +42,7 @@ jobs:
             -e registry=ghcr.io \
             -e registry_username=${{ github.actor }} \
             -e registry_password=${{ secrets.GITHUB_TOKEN }} \
-            -e awx_image=${{ github.repository }} \
+            -e awx_image=${{ github.repository }}_devel \
             -e awx_version=${{ env.ASCENDER_TAG }} \
             -e ansible_python_interpreter=$(which python3) \
             -e push=yes \
