@@ -30,11 +30,10 @@ jobs:
           python-version: ${{ env.py_version }}
 
       - name: Install playbook dependencies
-        run: |
-          python3 -m pip install docker
+        run: python3 -m pip install docker
 
-	- name: Get latest Ascender tag
-       run: echo ascender_tag=`git -c 'versionsort.suffix=-' ls-remote --tags --refs --sort='v:refname' https://github.com/${{ github.repository_owner }}/${{ github.repository }}.git  | tail --lines=1  | cut --delimiter='/' --fields=3`
+      - name: Get latest Ascender tag
+        run: echo ascender_tag=`git -c 'versionsort.suffix=-' ls-remote --tags --refs --sort='v:refname' https://github.com/${{ github.repository_owner }}/${{ github.repository }}.git  | tail --lines=1  | cut --delimiter='/' --fields=3`
 
       - name: Build and stage Ascender
         working-directory: ascender
