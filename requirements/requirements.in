@@ -50,7 +50,7 @@ receptorctl==1.3.0
 social-auth-core[openidconnect]==4.3.0  # see UPGRADE BLOCKERs
 social-auth-app-django==5.0.0  # see UPGRADE BLOCKERs
 sqlparse >= 0.4.4   # Required by django https://github.com/ansible/awx/security/dependabot/96
-redis
+redis>=4.4.4
 requests>=2.31.0 # CVE-2023-32681
 slack-sdk
 tacacs_plus==1.0  # UPGRADE BLOCKER: auth does not work with later versions
