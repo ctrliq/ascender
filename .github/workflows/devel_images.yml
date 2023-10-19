@@ -16,34 +16,34 @@ jobs:
       packages: write
       contents: read
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout ascender
+        uses: actions/checkout@v3
+        with:
+          path: ascender
 
       - name: Get python version from Makefile
         run: echo py_version=`make PYTHON_VERSION` >> $GITHUB_ENV
-
-      - name: Set lower case owner name
-        run: |
-          echo "OWNER_LC=${OWNER,,}" >>${GITHUB_ENV}
-        env:
-          OWNER: '${{ github.repository_owner }}'
 
       - name: Install python ${{ env.py_version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ env.py_version }}
 
-      - name: Log in to registry
-        run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      - name: Install playbook dependencies
+        run: python3 -m pip install docker
 
-      - name: Pre-pull image to warm build cache
-        run: |
-          docker pull ghcr.io/${OWNER_LC}/ascender_devel:${GITHUB_REF##*/} || :
+      - name: Get latest Ascender tag
+        run: echo "ASCENDER_TAG=`git -c 'versionsort.suffix=-' ls-remote --tags --refs --sort='v:refname' https://github.com/${{ github.repository }}.git  | tail --lines=1  | cut --delimiter='/' --fields=3`" >> $GITHUB_ENV
 
-      - name: Build images
+      - name: Build and stage Ascender
+        working-directory: ascender
         run: |
-          DEV_DOCKER_TAG_BASE=ghcr.io/${OWNER_LC} COMPOSE_TAG=${GITHUB_REF##*/} make docker-compose-build
-
-      - name: Push image
-        run: |
-          docker push ghcr.io/${OWNER_LC}/ascender_devel:${GITHUB_REF##*/}
+          ansible-playbook -v tools/ansible/build.yml \
+            -e registry=ghcr.io \
+            -e registry_username=${{ github.actor }} \
+            -e registry_password=${{ secrets.GITHUB_TOKEN }} \
+            -e awx_image=${{ github.repository }}_devel \
+            -e awx_version=${{ env.ASCENDER_TAG }} \
+            -e ansible_python_interpreter=$(which python3) \
+            -e push=yes \
+            -e awx_official=no
