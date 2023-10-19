@@ -48,15 +48,15 @@ class Command(BaseCommand):
 #                    )
 #
 #                    c.admin_role.members.add(superuser)
-#
-#                    public_galaxy_credential, _ = Credential.objects.get_or_create(
-#                        name='Ansible Galaxy',
-#                        managed=True,
-#                        credential_type=CredentialType.objects.get(kind='galaxy'),
-#                        inputs={'url': 'https://galaxy.ansible.com/'},
-#                    )
-#                    o.galaxy_credentials.add(public_galaxy_credential)
-#
+
+                    public_galaxy_credential, _ = Credential.objects.get_or_create(
+                        name='Ansible Galaxy',
+                        managed=True,
+                        credential_type=CredentialType.objects.get(kind='galaxy'),
+                        inputs={'url': 'https://galaxy.ansible.com/'},
+                    )
+                    o.galaxy_credentials.add(public_galaxy_credential)
+
 #                    i, _ = Inventory.objects.get_or_create(name='Demo Inventory', organization=o, created_by=superuser)
 #
 #                    Host.objects.get_or_create(

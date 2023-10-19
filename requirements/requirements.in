@@ -12,7 +12,7 @@ cryptography>=41.0.2  # CVE-2023-38325
 Cython<3 # Since the bump to PyYAML 5.4.1 this is now a mandatory dep
 daphne
 distro
-django==4.2.5  # see UPGRADE BLOCKERs, CVE-2023-41164
+django==4.2.6  # CVE-2023-43665
 django-auth-ldap
 django-cors-headers
 django-crum
@@ -26,7 +26,7 @@ django-split-settings==1.0.0    # We hit a strange issue where the release proce
 djangorestframework
 djangorestframework-yaml
 filelock
-GitPython>=3.1.32  # CVE-2023-40267
+GitPython>=3.1.37  # CVE-2023-41040
 hiredis==2.0.0  # see UPGRADE BLOCKERs
 irc
 jinja2
@@ -50,8 +50,8 @@ receptorctl==1.3.0
 social-auth-core[openidconnect]==4.3.0  # see UPGRADE BLOCKERs
 social-auth-app-django==5.0.0  # see UPGRADE BLOCKERs
 sqlparse >= 0.4.4   # Required by django https://github.com/ansible/awx/security/dependabot/96
-redis
-requests
+redis==4.4.4 # CVE-2023-28858 & CVE-2023-28859
+requests>=2.31.0 # CVE-2023-32681
 slack-sdk
 tacacs_plus==1.0  # UPGRADE BLOCKER: auth does not work with later versions
 twilio
