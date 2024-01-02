@@ -9,7 +9,6 @@ import requests
 # Django
 from django.apps import apps
 from django.conf import settings
-from django.contrib.auth.models import User  # noqa
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -17,8 +16,9 @@ from django.db.models.query import QuerySet
 from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _
 
+from ansible_base.utils.models import prevent_search
+
 # AWX
-from awx.main.models.base import prevent_search
 from awx.main.models.rbac import Role, RoleAncestorEntry
 from awx.main.utils import parse_yaml_or_json, get_custom_venv_choices, get_licenser, polymorphic
 from awx.main.utils.execution_environments import get_default_execution_environment
@@ -64,13 +64,12 @@ class ResourceMixin(models.Model):
 
     @staticmethod
     def _accessible_pk_qs(cls, accessor, role_field, content_types=None):
-        if type(accessor) == User:
+        if accessor._meta.model_name == 'user':
             ancestor_roles = accessor.roles.all()
         elif type(accessor) == Role:
             ancestor_roles = [accessor]
         else:
-            accessor_type = ContentType.objects.get_for_model(accessor)
-            ancestor_roles = Role.objects.filter(content_type__pk=accessor_type.id, object_id=accessor.id)
+            raise RuntimeError(f'Role filters only valid for users and ancestor role, received {accessor}')
 
         if content_types is None:
             ct_kwarg = dict(content_type_id=ContentType.objects.get_for_model(cls).id)
