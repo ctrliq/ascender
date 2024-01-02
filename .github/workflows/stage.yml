@@ -20,6 +20,7 @@ jobs:
   stage:
     if: endsWith(github.repository, '/ascender')
     runs-on: ubuntu-latest
+    timeout-minutes: 90
     permissions:
       packages: write
       contents: write

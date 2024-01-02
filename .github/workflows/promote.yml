@@ -15,6 +15,7 @@ jobs:
   promote:
     if: endsWith(github.repository, '/ascender') 
     runs-on: ubuntu-latest
+    timeout-minutes: 90
     permissions:
       contents: read
       packages: write
