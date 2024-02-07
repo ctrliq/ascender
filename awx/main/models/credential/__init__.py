@@ -932,6 +932,25 @@ ManagedCredentialType(
 )
 
 ManagedCredentialType(
+    namespace='bitbucket_dc_token',
+    kind='token',
+    name=gettext_noop('Bitbucket Data Center HTTP Access Token'),
+    managed=True,
+    inputs={
+        'fields': [
+            {
+                'id': 'token',
+                'label': gettext_noop('Token'),
+                'type': 'string',
+                'secret': True,
+                'help_text': gettext_noop('This token needs to come from your user settings in Bitbucket'),
+            }
+        ],
+        'required': ['token'],
+    },
+)
+
+ManagedCredentialType(
     namespace='ascender',
     kind='cloud',
     name=gettext_noop('CIQ Ascender Automation Platform'),
