@@ -5,7 +5,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('main', '0187_hop_nodes'),
+        ('main', '0187a_mountain_credential'),
     ]
 
     operations = [
