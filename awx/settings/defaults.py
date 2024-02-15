@@ -192,7 +192,7 @@ DEFAULT_EXECUTION_ENVIRONMENT = None
 # Should be ordered from highest to lowest precedence.
 # The awx-manage register_default_execution_environments command reads this setting and registers the EE(s)
 # If a registry credential is needed to pull the image, that can be provided to the awx-manage command
-GLOBAL_JOB_EXECUTION_ENVIRONMENTS = [{'name': 'AWX EE (latest)', 'image': 'quay.io/ansible/awx-ee:latest'}]
+GLOBAL_JOB_EXECUTION_ENVIRONMENTS = [{'name': 'Ascender EE (latest)', 'image': 'ghcr.io/ctrliq/ascender-ee:latest'}]
 # This setting controls which EE will be used for project updates.
 # The awx-manage register_default_execution_environments command reads this setting and registers the EE
 # This image is distinguished from others by having "managed" set to True and users have limited
@@ -1077,6 +1077,35 @@ CLEANUP_HOST_METRICS_HARD_THRESHOLD = 36  # months
 # Host metric summary monthly task - last time of run
 HOST_METRIC_SUMMARY_TASK_LAST_TS = None
 HOST_METRIC_SUMMARY_TASK_INTERVAL = 7  # days
+
+
+# TODO: cmeyers, replace with with register pattern
+# The register pattern is particularly nice for this because we need
+# to know the process to start the thread that will be the server.
+# The registration location should be the same location as we would
+# call MetricsServer.start()
+# Note: if we don't get to this TODO, then at least create constants
+# for the services strings below.
+# TODO: cmeyers, break this out into a separate django app so other
+# projects can take advantage.
+
+METRICS_SERVICE_CALLBACK_RECEIVER = 'callback_receiver'
+METRICS_SERVICE_DISPATCHER = 'dispatcher'
+METRICS_SERVICE_WEBSOCKETS = 'websockets'
+
+METRICS_SUBSYSTEM_CONFIG = {
+    'server': {
+        METRICS_SERVICE_CALLBACK_RECEIVER: {
+            'port': 8014,
+        },
+        METRICS_SERVICE_DISPATCHER: {
+            'port': 8015,
+        },
+        METRICS_SERVICE_WEBSOCKETS: {
+            'port': 8016,
+        },
+    }
+}
 
 
 # django-ansible-base
