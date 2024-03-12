@@ -598,7 +598,7 @@ docker-compose-buildx: Dockerfile.dev
 	- docker buildx build \
 		--push \
 		--build-arg BUILDKIT_INLINE_CACHE=1 \
-		--cache-from=$(DEV_DOCKER_TAG_BASE)/awx_devel:$(COMPOSE_TAG) \
+		--cache-from=$(DEV_DOCKER_TAG_BASE)/ascender_devel:$(COMPOSE_TAG) \
 		--platform=$(PLATFORMS) \
 		--tag $(DEVEL_IMAGE_NAME) \
 		-f Dockerfile.dev .
@@ -664,7 +664,7 @@ awx-kube-build: Dockerfile
 		--build-arg VERSION=$(VERSION) \
 		--build-arg SETUPTOOLS_SCM_PRETEND_VERSION=$(VERSION) \
 		--build-arg HEADLESS=$(HEADLESS) \
-		-t $(DEV_DOCKER_TAG_BASE)/awx:$(COMPOSE_TAG) .
+		-t $(DEV_DOCKER_TAG_BASE)/ascender:$(COMPOSE_TAG) .
 
 ## Build multi-arch awx image for deployment on Kubernetes environment.
 awx-kube-buildx: Dockerfile
@@ -676,7 +676,7 @@ awx-kube-buildx: Dockerfile
 		--build-arg SETUPTOOLS_SCM_PRETEND_VERSION=$(VERSION) \
 		--build-arg HEADLESS=$(HEADLESS) \
 		--platform=$(PLATFORMS) \
-		--tag $(DEV_DOCKER_TAG_BASE)/awx:$(COMPOSE_TAG) \
+		--tag $(DEV_DOCKER_TAG_BASE)/ascender:$(COMPOSE_TAG) \
 		-f Dockerfile .
 	- docker buildx rm awx-kube-buildx
 
@@ -694,8 +694,8 @@ Dockerfile.kube-dev: tools/ansible/roles/dockerfile/templates/Dockerfile.j2
 awx-kube-dev-build: Dockerfile.kube-dev
 	DOCKER_BUILDKIT=1 docker build -f Dockerfile.kube-dev \
 	    --build-arg BUILDKIT_INLINE_CACHE=1 \
-	    --cache-from=$(DEV_DOCKER_TAG_BASE)/awx_kube_devel:$(COMPOSE_TAG) \
-	    -t $(DEV_DOCKER_TAG_BASE)/awx_kube_devel:$(COMPOSE_TAG) .
+	    --cache-from=$(DEV_DOCKER_TAG_BASE)/ascender_kube_devel:$(COMPOSE_TAG) \
+	    -t $(DEV_DOCKER_TAG_BASE)/ascender_kube_devel:$(COMPOSE_TAG) .
 
 ## Build and push multi-arch awx_kube_devel image for development on local Kubernetes environment.
 awx-kube-dev-buildx: Dockerfile.kube-dev
@@ -704,14 +704,14 @@ awx-kube-dev-buildx: Dockerfile.kube-dev
 	- docker buildx build \
 		--push \
 		--build-arg BUILDKIT_INLINE_CACHE=1 \
-		--cache-from=$(DEV_DOCKER_TAG_BASE)/awx_kube_devel:$(COMPOSE_TAG) \
+		--cache-from=$(DEV_DOCKER_TAG_BASE)/ascender_kube_devel:$(COMPOSE_TAG) \
 		--platform=$(PLATFORMS) \
-		--tag $(DEV_DOCKER_TAG_BASE)/awx_kube_devel:$(COMPOSE_TAG) \
+		--tag $(DEV_DOCKER_TAG_BASE)/ascender_kube_devel:$(COMPOSE_TAG) \
 		-f Dockerfile.kube-dev .
 	- docker buildx rm awx-kube-dev-buildx
 
 kind-dev-load: awx-kube-dev-build
-	$(KIND_BIN) load docker-image $(DEV_DOCKER_TAG_BASE)/awx_kube_devel:$(COMPOSE_TAG)
+	$(KIND_BIN) load docker-image $(DEV_DOCKER_TAG_BASE)/ascender_kube_devel:$(COMPOSE_TAG)
 
 # Translation TASKS
 # --------------------------------------
