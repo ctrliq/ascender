@@ -3,48 +3,75 @@ name: Build/Push Development Images
 env:
   LC_ALL: "C.UTF-8" # prevent ERROR: Ansible could not initialize the preferred locale: unsupported locale setting
 on:
+  workflow_dispatch:
   push:
     branches:
       - devel
       - release_*
       - feature_*
 jobs:
-  push:
-    if: endsWith(github.repository, '/ascender') || startsWith(github.ref, 'refs/heads/release_')
+  push-development-images:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 120
     permissions:
       packages: write
       contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        build-targets:
+          - image-name: awx_devel
+            make-target: docker-compose-buildx
+#          - image-name: awx_kube_devel
+#            make-target: awx-kube-dev-buildx
+#          - image-name: awx
+#            make-target: awx-kube-buildx
     steps:
-      - name: Checkout ascender
-        uses: actions/checkout@v3
-        with:
-          path: ascender
 
-      - name: Get python version from Makefile
-        run: echo py_version=`make PYTHON_VERSION` >> $GITHUB_ENV
+      - name: Skipping build of awx image for non-awx repository
+        run: |
+          echo "Skipping build of awx image for non-awx repository"
+          exit 0
+        if: matrix.build-targets.image-name == 'awx' && !endsWith(github.repository, '/ascender')
+
+      - uses: actions/checkout@v3
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Set GITHUB_ENV variables
+        run: |
+          echo "DEV_DOCKER_TAG_BASE=ghcr.io/${OWNER,,}" >> $GITHUB_ENV
+          echo "COMPOSE_TAG=${GITHUB_REF##*/}" >> $GITHUB_ENV
+          echo py_version=`make PYTHON_VERSION` >> $GITHUB_ENV
+        env:
+          OWNER: '${{ github.repository_owner }}'
 
       - name: Install python ${{ env.py_version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ env.py_version }}
 
-      - name: Install playbook dependencies
-        run: python3 -m pip install docker
-
-      - name: Get latest Ascender tag
-        run: echo "ASCENDER_TAG=`git -c 'versionsort.suffix=-' ls-remote --tags --refs --sort='v:refname' https://github.com/${{ github.repository }}.git  | tail --lines=1  | cut --delimiter='/' --fields=3`" >> $GITHUB_ENV
-
-      - name: Build and stage Ascender
-        working-directory: ascender
+      - name: Log in to registry
         run: |
-          ansible-playbook -v tools/ansible/build.yml \
-            -e registry=ghcr.io \
-            -e registry_username=${{ github.actor }} \
-            -e registry_password=${{ secrets.GITHUB_TOKEN }} \
-            -e awx_image=${{ github.repository }}_devel \
-            -e awx_version=${{ env.ASCENDER_TAG }} \
-            -e ansible_python_interpreter=$(which python3) \
-            -e push=yes \
-            -e awx_official=no
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Setup node and npm
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.13.1'
+        if: matrix.build-targets.image-name == 'awx'
+
+      - name: Prebuild UI for awx image (to speed up build process)
+        run: |
+          sudo apt-get install gettext
+          make ui-release
+#          make ui-next
+        if: matrix.build-targets.image-name == 'awx'
+
+      - name: Build and push AWX devel images
+        run: |
+          make ${{ matrix.build-targets.make-target }}
