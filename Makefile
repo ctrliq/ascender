@@ -216,8 +216,6 @@ collectstatic:
 	fi; \
 	$(PYTHON) manage.py collectstatic --clear --noinput > /dev/null 2>&1
 
-DEV_RELOAD_COMMAND ?= supervisorctl restart tower-processes:*
-
 uwsgi: collectstatic
 	@if [ "$(VENV_BASE)" ]; then \
 		. $(VENV_BASE)/awx/bin/activate; \
@@ -225,7 +223,7 @@ uwsgi: collectstatic
 	uwsgi /etc/tower/uwsgi.ini
 
 awx-autoreload:
-	@/awx_devel/tools/docker-compose/awx-autoreload /awx_devel/awx "$(DEV_RELOAD_COMMAND)"
+	@/awx_devel/tools/docker-compose/awx-autoreload /awx_devel/awx
 
 daphne:
 	@if [ "$(VENV_BASE)" ]; then \
@@ -305,7 +303,7 @@ swagger: reports
 	@if [ "$(VENV_BASE)" ]; then \
 		. $(VENV_BASE)/awx/bin/activate; \
 	fi; \
-	(set -o pipefail && py.test $(PYTEST_ARGS) awx/conf/tests/functional awx/main/tests/functional/api awx/main/tests/docs --release=$(VERSION_TARGET) | tee reports/$@.report)
+	(set -o pipefail && py.test $(PYTEST_ARGS) awx/conf/tests/functional awx/main/tests/functional/api awx/main/tests/docs | tee reports/$@.report)
 
 check: black
 
@@ -630,9 +628,6 @@ clean-elk:
 	docker rm tools_logstash_1
 	docker rm tools_elasticsearch_1
 	docker rm tools_kibana_1
-
-psql-container:
-	docker run -it --net tools_default --rm postgres:12 sh -c 'exec psql -h "postgres" -p "5432" -U postgres'
 
 VERSION:
 	@echo "awx: $(VERSION)"
