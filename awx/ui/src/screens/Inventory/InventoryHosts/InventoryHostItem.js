@@ -13,6 +13,7 @@ import HostToggle from 'components/HostToggle';
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import { Host } from 'types';
+import Sparkline from 'components/Sparkline';
 
 function InventoryHostItem({
   detailUrl,
@@ -27,6 +28,10 @@ function InventoryHostItem({
     results: [],
     count: 0,
   };
+
+  const {
+    summary_fields: { recent_jobs: recentJobs = [] },
+  } = host;
 
   const {
     error,
@@ -65,6 +70,9 @@ function InventoryHostItem({
             <b>{host.name}</b>
           </Link>
         </TdBreakWord>
+        <Td>
+            {recentJobs.length > 0 ? (<Sparkline jobs={recentJobs} />) : (t`No job data available`)}
+        </Td>
         <TdBreakWord
           id={`host-description-${host.id}`}
           dataLabel={t`Description`}
