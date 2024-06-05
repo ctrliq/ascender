@@ -56,7 +56,7 @@ jobs:
 
       - name: Install playbook dependencies
         run: |
-          python3 -m pip install docker
+          python3 -m pip install docker==6.1.3
 
       - name: Build and stage Ascender
         working-directory: ascender
