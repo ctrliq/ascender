@@ -4,13 +4,12 @@ import { string, bool, func } from 'prop-types';
 
 import { t } from '@lingui/macro';
 import { Button } from '@patternfly/react-core';
-import { Tr, Td, ExpandableRowContent } from '@patternfly/react-table';
+import { Tr, Td } from '@patternfly/react-table';
 import { Link } from 'react-router-dom';
 import { PencilAltIcon } from '@patternfly/react-icons';
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
 import { Host } from 'types';
 import HostToggle from 'components/HostToggle';
-import { DetailList, Detail } from 'components/DetailList';
 import Sparkline from 'components/Sparkline';
 
 function HostListItem({
@@ -19,8 +18,6 @@ function HostListItem({
   onSelect,
   detailUrl,
   rowIndex,
-  isExpanded,
-  onExpand,
 }) {
   const labelId = `check-action-${host.id}`;
 
@@ -29,15 +26,7 @@ function HostListItem({
   } = host;
 
   return (
-    <>
       <Tr id={`host-row-${host.id}`} ouiaId={`host-row-${host.id}`}>
-        <Td
-          expand={{
-            rowIndex,
-            isExpanded,
-            onToggle: onExpand,
-          }}
-        />
         <Td
           data-cy={labelId}
           select={{
@@ -52,6 +41,9 @@ function HostListItem({
             <b>{host.name}</b>
           </Link>
         </TdBreakWord>
+        <Td>
+            {recentJobs.length > 0 ? (<Sparkline jobs={recentJobs} />) : (t`No job data available`)}
+        </Td>
         <TdBreakWord
           id={`host-description-${host.id}}`}
           dataLabel={t`Description`}
@@ -85,27 +77,6 @@ function HostListItem({
           </ActionItem>
         </ActionsTd>
       </Tr>
-      <Tr ouiaId={`host-row-${host.id}-expanded`} isExpanded={isExpanded}>
-        <Td colSpan={2} />
-        <Td colSpan={4}>
-          <ExpandableRowContent>
-            <DetailList gutter="sm">
-              <Detail
-                dataCy={`${host.name}-activity`}
-                label={t`Activity`}
-                value={
-                  recentJobs.length > 0 ? (
-                    <Sparkline jobs={recentJobs} />
-                  ) : (
-                    t`No job data available`
-                  )
-                }
-              />
-            </DetailList>
-          </ExpandableRowContent>
-        </Td>
-      </Tr>
-    </>
   );
 }
 

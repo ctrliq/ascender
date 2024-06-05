@@ -15,7 +15,6 @@ import PaginatedTable, {
 } from 'components/PaginatedTable';
 import useRequest, { useDeleteItems } from 'hooks/useRequest';
 import useSelected from 'hooks/useSelected';
-import useExpanded from 'hooks/useExpanded';
 import { encodeQueryString, getQSConfig, parseQueryString } from 'util/qs';
 
 import HostListItem from './HostListItem';
@@ -96,9 +95,6 @@ function HostList() {
   const { selected, isAllSelected, handleSelect, selectAll, clearSelected } =
     useSelected(hosts);
 
-  const { expanded, isAllExpanded, handleExpand, expandAll } =
-    useExpanded(hosts);
-
   const {
     isLoading: isDeleteLoading,
     deleteItems: deleteHosts,
@@ -165,8 +161,9 @@ function HostList() {
           toolbarSearchableKeys={searchableKeys}
           toolbarRelatedSearchableKeys={relatedSearchableKeys}
           headerRow={
-            <HeaderRow qsConfig={QS_CONFIG} isExpandable>
+            <HeaderRow qsConfig={QS_CONFIG}>
               <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
+              <HeaderCell>{t`Activity`}</HeaderCell>
               <HeaderCell sortKey="description">{t`Description`}</HeaderCell>
               <HeaderCell>{t`Inventory`}</HeaderCell>
               <HeaderCell>{t`Actions`}</HeaderCell>
@@ -177,8 +174,6 @@ function HostList() {
               {...props}
               isAllSelected={isAllSelected}
               onSelectAll={selectAll}
-              isAllExpanded={isAllExpanded}
-              onExpandAll={expandAll}
               qsConfig={QS_CONFIG}
               additionalControls={[
                 ...(canAdd
@@ -211,8 +206,6 @@ function HostList() {
             <HostListItem
               key={host.id}
               host={host}
-              isExpanded={expanded.some((row) => row.id === host.id)}
-              onExpand={() => handleExpand(host)}
               detailUrl={`${match.url}/${host.id}/details`}
               isSelected={selected.some((row) => row.id === host.id)}
               onSelect={() => handleSelect(host)}

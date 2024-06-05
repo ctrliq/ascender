@@ -1,4 +1,4 @@
-aiohttp>=3.8.6  # CVE-2023-47627
+aiohttp>=3.9.4  # CVE-2024-30251
 ansiconv==1.0.0  # UPGRADE BLOCKER: from 2013, consider replacing instead of upgrading
 asciichartpy
 asn1
@@ -12,7 +12,7 @@ cryptography>=41.0.6  # CVE-2023-49083
 Cython<3 # this is needed as a build dependency, one day we may have separated build deps
 daphne
 distro
-django==4.2.6  # CVE-2023-43665
+django==4.2.10  # CVE-2024-24680
 django-auth-ldap
 django-cors-headers
 django-crum
