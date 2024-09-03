@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { t } from '@lingui/macro';
 import { Card, PageSection } from '@patternfly/react-core';
 
-import { useConfig } from 'contexts/Config';
 import ScreenHeader from 'components/ScreenHeader';
 import SubscriptionUsageChart from './SubscriptionUsageChart';
 
