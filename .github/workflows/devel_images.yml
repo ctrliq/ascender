@@ -52,7 +52,7 @@ jobs:
         run: |
           python3 -m pip install docker==6.1.3 requests==2.31.0 --force-reinstall
 
-      - name: Build and stage Ascender
+      - name: Build Ascender Devel Image
         working-directory: ascender
         run: |
           ansible-playbook -v tools/ansible/build.yml \
