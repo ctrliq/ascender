@@ -25,16 +25,6 @@ function SubscriptionUsage() {
 
   return (
     <>
-      {config?.ui_next && (
-        <Banner variant="info">
-          <Trans>
-            <p>
-              <InfoCircleIcon /> A tech preview of the new {brandName} user
-              interface can be found <a href="/ui_next">here</a>.
-            </p>
-          </Trans>
-        </Banner>
-      )}
       <ScreenHeader
         streamType="all"
         breadcrumbConfig={{ '/subscription_usage': t`Subscription Usage` }}
