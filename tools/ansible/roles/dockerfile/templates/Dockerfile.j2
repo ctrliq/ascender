@@ -46,8 +46,7 @@ RUN dnf -y update && dnf install -y 'dnf-command(config-manager)' && \
     patch \
     postgresql \
     postgresql-devel \
-# Not needed and python3-devel and its dependencies are not in the same repo and can get out of sync
-#   python3-devel \
+    python3-devel \
     python3-pip \
     python3-setuptools \
     swig \
@@ -129,15 +128,14 @@ RUN dnf -y update && dnf install -y 'dnf-command(config-manager)' && \
     # pin to older openssl, see jira AAP-23449
     openssl-3.0.7 \
     postgresql \
-# Not needed and python3-devel and its dependencies are not in the same repo and can get out of sync
-#   python3-devel \
+    python3-devel \
     python3-libselinux \
     python3-pip \
     python3-setuptools \
     rsync \
 #    rsyslog-8.2102.0-106.el9 \
-    https://download.copr.fedorainfracloud.org/results/ansible/Rsyslog/epel-9-x86_64/06076718-rsyslog/rsyslog-8.2102.0-106.el9.x86_64.rpm \
-#    rsyslog \
+#    https://download.copr.fedorainfracloud.org/results/ansible/Rsyslog/epel-9-x86_64/06076718-rsyslog/rsyslog-8.2102.0-106.el9.x86_64.rpm \
+    rsyslog \
     subversion \
     sudo \
     vim-minimal \
