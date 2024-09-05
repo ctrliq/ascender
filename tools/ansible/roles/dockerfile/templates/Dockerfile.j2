@@ -42,7 +42,7 @@ RUN dnf -y update && dnf install -y 'dnf-command(config-manager)' && \
     nss \
     openldap-devel \
     # pin to older openssl, see jira AAP-23449
-    openssl-3.0.7 \
+ #   openssl-3.0.7 \
     patch \
     postgresql \
     postgresql-devel \
@@ -126,7 +126,7 @@ RUN dnf -y update && dnf install -y 'dnf-command(config-manager)' && \
     nginx \
     "openldap >= 2.6.2-3" \
     # pin to older openssl, see jira AAP-23449
-    openssl-3.0.7 \
+ #   openssl-3.0.7 \
     postgresql \
     python3-devel \
     python3-libselinux \
