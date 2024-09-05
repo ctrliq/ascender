@@ -457,7 +457,7 @@ urllib3==1.26.17
     #   botocore
     #   kubernetes
     #   requests
-uwsgi==2.0.21
+uwsgi==2.0.26
     # via -r /awx_devel/requirements/requirements.in
 uwsgitop==0.11
     # via -r /awx_devel/requirements/requirements.in
