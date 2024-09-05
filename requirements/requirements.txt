@@ -183,7 +183,7 @@ importlib-metadata==4.6.4
     # via
     #   ansible-runner
     #   markdown
-incremental==22.10.0
+incremental==24.7.2
     # via twisted
 inflect==6.0.2
     # via jaraco-text
@@ -434,10 +434,12 @@ tempora==5.1.0
     #   irc
     #   jaraco-logging
 tomli==2.0.1
-    # via setuptools-scm
+    # via
+    #   incremental
+    #   setuptools-scm
 twilio==7.15.3
     # via -r /awx_devel/requirements/requirements.in
-twisted[tls]==23.10.0
+twisted[tls]==24.7.0
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   daphne
@@ -482,6 +484,7 @@ setuptools==65.6.3
     #   -r /awx_devel/requirements/requirements.in
     #   asciichartpy
     #   autobahn
+    #   incremental
     #   kubernetes
     #   python-daemon
     #   setuptools-rust
