@@ -1,6 +1,6 @@
 # Copyright (c) 2015 Ansible, Inc.
 # All Rights Reserved.
-# Modifications Copyright (c) 2023 Ctrl IQ, Inc.
+# Modifications Copyright (c) 2024 Ctrl IQ, Inc.
 
 from django.conf import settings
 from django.urls import re_path, include
