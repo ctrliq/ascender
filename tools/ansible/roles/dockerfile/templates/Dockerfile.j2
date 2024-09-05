@@ -46,7 +46,8 @@ RUN dnf -y update && dnf install -y 'dnf-command(config-manager)' && \
     patch \
     postgresql \
     postgresql-devel \
-#    python3-devel \
+# Not needed and python3-devel and its dependencies are not in the same repo and can get out of sync
+#   python3-devel \
     python3-pip \
     python3-setuptools \
     swig \
@@ -128,7 +129,8 @@ RUN dnf -y update && dnf install -y 'dnf-command(config-manager)' && \
     # pin to older openssl, see jira AAP-23449
     openssl-3.0.7 \
     postgresql \
- #   python3-devel \
+# Not needed and python3-devel and its dependencies are not in the same repo and can get out of sync
+#   python3-devel \
     python3-libselinux \
     python3-pip \
     python3-setuptools \
