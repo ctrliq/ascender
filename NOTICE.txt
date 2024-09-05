@@ -10,6 +10,7 @@ Any and all changes are being distributed under the original License
 Apache 2.0 License (see /LICENSE.md)
 
 Data Files modified by Ctrl IQ, Inc
+  /MANIFEST.in
   /ui/package-lock.json
   /ui/package.json
   /ui/public/static/media/default.strings.json
