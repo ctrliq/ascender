@@ -1,9 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { t } from '@lingui/macro';
-import { Card, PageSection } from '@patternfly/react-core';
+import { t, Trans } from '@lingui/macro';
+import { Banner, Card, PageSection } from '@patternfly/react-core';
+import { InfoCircleIcon } from '@patternfly/react-icons';
 
+import { useConfig } from 'contexts/Config';
+import useBrandName from 'hooks/useBrandName';
 import ScreenHeader from 'components/ScreenHeader';
 import SubscriptionUsageChart from './SubscriptionUsageChart';
 
@@ -17,8 +20,21 @@ const MainPageSection = styled(PageSection)`
 `;
 
 function SubscriptionUsage() {
+  const config = useConfig();
+  const brandName = useBrandName();
+
   return (
     <>
+      {config?.ui_next && (
+        <Banner variant="info">
+          <Trans>
+            <p>
+              <InfoCircleIcon /> A tech preview of the new {brandName} user
+              interface can be found <a href="/ui_next">here</a>.
+            </p>
+          </Trans>
+        </Banner>
+      )}
       <ScreenHeader
         streamType="all"
         breadcrumbConfig={{ '/subscription_usage': t`Subscription Usage` }}

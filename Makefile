@@ -1,3 +1,5 @@
+-include awx/ui_next/Makefile
+
 PYTHON := $(notdir $(shell for i in python3.9 python3; do command -v $$i; done|sed 1q))
 SHELL := bash
 DOCKER_COMPOSE ?= docker-compose
@@ -475,11 +477,12 @@ ui-test-general:
 	$(NPM_BIN) run --prefix awx/ui pretest
 	$(NPM_BIN) run --prefix awx/ui/ test-general --runInBand
 
+# NOTE: The make target ui-next is imported from awx/ui_next/Makefile
 HEADLESS ?= no
 ifeq ($(HEADLESS), yes)
 dist/$(SDIST_TAR_FILE):
 else
-dist/$(SDIST_TAR_FILE): $(UI_BUILD_FLAG_FILE)
+dist/$(SDIST_TAR_FILE): $(UI_BUILD_FLAG_FILE) ui-next
 endif
 	$(PYTHON) -m build -s
 	ln -sf $(SDIST_TAR_FILE) dist/awx.tar.gz
@@ -711,10 +714,12 @@ kind-dev-load: awx-kube-dev-build
 ## generate UI .pot file, an empty template of strings yet to be translated
 pot: $(UI_BUILD_FLAG_FILE)
 	$(NPM_BIN) --prefix awx/ui --loglevel warn run extract-template --clean
+	$(NPM_BIN) --prefix awx/ui_next --loglevel warn run extract-template --clean
 
 ## generate UI .po files for each locale (will update translated strings for `en`)
 po: $(UI_BUILD_FLAG_FILE)
 	$(NPM_BIN) --prefix awx/ui --loglevel warn run extract-strings -- --clean
+	$(NPM_BIN) --prefix awx/ui_next --loglevel warn run extract-strings -- --clean
 
 ## generate API django .pot .po
 messages:
@@ -761,3 +766,7 @@ help/generate:
 	} \
 	{ lastLine = $$0 }' $(MAKEFILE_LIST) | sort -u
 	@printf "\n"
+
+## Display help for ui-next targets
+help/ui-next:
+	@$(MAKE) -s help MAKEFILE_LIST="awx/ui_next/Makefile"

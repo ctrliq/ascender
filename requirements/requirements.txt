@@ -100,7 +100,7 @@ deprecated==1.2.13
     # via jwcrypto
 distro==1.8.0
     # via -r /awx_devel/requirements/requirements.in
-django==4.2.15
+django==4.2.10
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   channels
@@ -363,7 +363,7 @@ receptorctl==1.4.4
     # via -r /awx_devel/requirements/requirements.in
 redis==4.4.4
     # via -r /awx_devel/requirements/requirements.in
-requests==2.32.3
+requests==2.31.0
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   adal

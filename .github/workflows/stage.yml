@@ -76,6 +76,12 @@ jobs:
         run: |
           echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
+      - name: tag awx-ee:latest with version input
+        run: |
+          docker buildx imagetools create \
+            quay.io/ansible/awx-ee:latest \
+            --tag ghcr.io/${{ github.repository_owner }}/awx-ee:${{ github.event.inputs.version }}
+
       - name: Create draft release for Ascender
         working-directory: ascender
         run: |
