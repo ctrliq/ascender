@@ -4,7 +4,9 @@
 
 from django.core.management.base import BaseCommand
 from crum import impersonate
-from awx.main.models import User, Organization, Project, Inventory, CredentialType, Credential, Host, JobTemplate
+from awx.main.models import User, Organization, CredentialType, Credential
+#from awx.main.models import User, Organization, Project, Inventory, CredentialType, Credential, Host, JobTemplate
+
 from awx.main.signals import disable_computed_fields
 
 
