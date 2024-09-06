@@ -197,7 +197,7 @@ GLOBAL_JOB_EXECUTION_ENVIRONMENTS = [{'name': 'Ascender EE (latest)', 'image': '
 # This image is distinguished from others by having "managed" set to True and users have limited
 # ability to modify it through the API.
 # If a registry credential is needed to pull the image, that can be provided to the awx-manage command
-CONTROL_PLANE_EXECUTION_ENVIRONMENT = 'quay.io/ansible/awx-ee:latest'
+CONTROL_PLANE_EXECUTION_ENVIRONMENT = 'ghcr.io/ctrliq/ascender-ee:latest'
 
 # Note: This setting may be overridden by database settings.
 STDOUT_MAX_BYTES_DISPLAY = 1048576

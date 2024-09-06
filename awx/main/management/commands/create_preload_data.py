@@ -32,7 +32,7 @@ class Command(BaseCommand):
             superuser = None
         with impersonate(superuser):
             with disable_computed_fields():
-                if not Organization.objects.exists() or Credential.objects.exists():
+                if not Organization.objects.exists() or not Credential.objects.exists():
                     o, _ = Organization.objects.get_or_create(name='Default')
 
 #                    # Avoid calling directly the get_or_create() to bypass project update
