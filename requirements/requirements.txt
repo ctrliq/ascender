@@ -4,8 +4,6 @@ aiohappyeyeballs==2.4.0
     # via aiohttp
 aiohttp==3.10.5
     # via -r /awx_devel/requirements/requirements.in
-aioredis==1.3.1
-    # via channels-redis
 aiosignal==1.3.1
     # via aiohttp
     # via -r /awx_devel/requirements/requirements_git.txt
@@ -21,10 +19,9 @@ asgiref==3.6.0
     #   django
 asn1==2.6.0
     # via -r /awx_devel/requirements/requirements.in
-async-timeout==4.0.2
+async-timeout==4.0.3
     # via
     #   aiohttp
-    #   aioredis
     #   redis
 asyncpg==0.27.0
     # via -r /awx_devel/requirements/requirements.in
@@ -69,7 +66,7 @@ channels==3.0.5
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   channels-redis
-channels-redis==3.4.1
+channels-redis==4.2.0
     # via -r /awx_devel/requirements/requirements.in
 charset-normalizer==2.1.1
     # via requests
@@ -167,10 +164,8 @@ gitpython==3.1.42
     # via -r /awx_devel/requirements/requirements.in
 google-auth==2.14.1
     # via kubernetes
-hiredis==2.0.0
-    # via
-    #   -r /awx_devel/requirements/requirements.in
-    #   aioredis
+hiredis==3.0.0
+    # via redis
 hyperlink==21.0.0
     # via
     #   autobahn
@@ -363,8 +358,10 @@ pyyaml==6.0.1
     #   receptorctl
 receptorctl==1.4.4
     # via -r /awx_devel/requirements/requirements.in
-redis==4.4.4
-    # via -r /awx_devel/requirements/requirements.in
+redis[hiredis]==5.0.8
+    # via
+    #   -r /awx_devel/requirements/requirements.in
+    #   channels-redis
 requests==2.32.3
     # via
     #   -r /awx_devel/requirements/requirements.in
