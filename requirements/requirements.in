@@ -47,7 +47,7 @@ python-ldap
 pyyaml>=6.0.1
 receptorctl
 social-auth-core[openidconnect]==4.4.2  # see UPGRADE BLOCKERs
-social-auth-app-django==5.4.0  # see UPGRADE BLOCKERs
+social-auth-app-django==5.4.2  # see UPGRADE BLOCKERs
 sqlparse>=0.5.0   # Required by django https://github.com/ansible/awx/security/dependabot/96
 redis[hiredis]
 requests>=2.32.0 # CVE-2024-35195
