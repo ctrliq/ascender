@@ -450,8 +450,9 @@ typing-extensions==4.4.0
     #   setuptools-rust
     #   setuptools-scm
     #   twisted
-urllib3==1.26.17
+urllib3==1.26.20
     # via
+    #   -r /awx_devel/requirements/requirements.in
     #   botocore
     #   kubernetes
     #   requests
