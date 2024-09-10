@@ -296,7 +296,7 @@ pyasn1-modules==0.2.8
     #   service-identity
 pycparser==2.21
     # via cffi
-pydantic==1.10.2
+pydantic==1.10.18
     # via inflect
 pygerduty==0.38.3
     # via -r /awx_devel/requirements/requirements.in
@@ -443,7 +443,7 @@ twisted[tls]==24.7.0
     #   daphne
 txaio==22.2.1
     # via autobahn
-typing-extensions==4.4.0
+typing-extensions==4.12.2
     # via
     #   azure-core
     #   psycopg
