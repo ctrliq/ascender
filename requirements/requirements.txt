@@ -28,15 +28,14 @@ asyncpg==0.27.0
 attrs==22.1.0
     # via
     #   aiohttp
-    #   automat
     #   jsonschema
     #   service-identity
     #   twisted
-autobahn==22.7.1
+autobahn==24.4.2
     # via daphne
 autocommand==2.2.2
     # via jaraco-text
-automat==22.10.0
+automat==24.8.1
     # via twisted
 azure-common==1.1.28
     # via azure-keyvault
@@ -62,7 +61,7 @@ cachetools==5.2.0
     #   requests
 cffi==1.15.1
     # via cryptography
-channels==3.0.5
+channels==4.1.0
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   channels-redis
@@ -72,9 +71,9 @@ charset-normalizer==2.1.1
     # via requests
 click==8.1.3
     # via receptorctl
-constantly==15.1.0
+constantly==23.10.4
     # via twisted
-cryptography==41.0.7
+cryptography==43.0.1
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   adal
@@ -87,10 +86,8 @@ cryptography==41.0.7
     #   social-auth-core
 cython==0.29.32
     # via -r /awx_devel/requirements/requirements.in
-daphne==3.0.2
-    # via
-    #   -r /awx_devel/requirements/requirements.in
-    #   channels
+daphne==4.1.2
+    # via -r /awx_devel/requirements/requirements.in
 defusedxml==0.7.1
     # via
     #   python3-openid
@@ -239,7 +236,7 @@ more-itertools==9.0.0
     #   jaraco-classes
     #   jaraco-functools
     #   jaraco-text
-msgpack==1.0.4
+msgpack==1.1.0
     # via channels-redis
 msrest==0.7.1
     # via
@@ -304,7 +301,7 @@ pyjwt==2.6.0
     #   django-ansible-base
     #   social-auth-core
     #   twilio
-pyopenssl==23.2.0
+pyopenssl==24.2.1
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   twisted
@@ -387,7 +384,7 @@ s3transfer==0.6.0
     # via boto3
 semantic-version==2.10.0
     # via setuptools-rust
-service-identity==21.1.0
+service-identity==24.1.0
     # via twisted
 setuptools-rust==1.5.2
     # via -r /awx_devel/requirements/requirements.in
@@ -395,7 +392,6 @@ setuptools-scm[toml]==8.0.4
     # via -r /awx_devel/requirements/requirements.in
 six==1.16.0
     # via
-    #   automat
     #   azure-core
     #   django-pglocks
     #   ecdsa
@@ -407,7 +403,6 @@ six==1.16.0
     #   pygerduty
     #   pyrad
     #   python-dateutil
-    #   service-identity
     #   tacacs-plus
 slack-sdk==3.19.4
     # via -r /awx_devel/requirements/requirements.in
@@ -439,10 +434,11 @@ twisted[tls]==24.7.0
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   daphne
-txaio==22.2.1
+txaio==23.1.1
     # via autobahn
 typing-extensions==4.12.2
     # via
+    #   automat
     #   azure-core
     #   jwcrypto
     #   psycopg
@@ -469,7 +465,7 @@ yarl==1.8.1
     # via aiohttp
 zipp==3.20.1
     # via importlib-metadata
-zope-interface==5.5.2
+zope-interface==7.0.3
     # via twisted
 
 # The following packages are considered to be unsafe in a requirements file:
