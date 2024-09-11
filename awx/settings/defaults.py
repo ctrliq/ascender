@@ -95,7 +95,6 @@ USE_TZ = True
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'ui', 'build', 'static'),
-    os.path.join(BASE_DIR, 'ui_next', 'build'),
     os.path.join(BASE_DIR, 'static'),
 ]
 
@@ -198,7 +197,7 @@ GLOBAL_JOB_EXECUTION_ENVIRONMENTS = [{'name': 'Ascender EE (latest)', 'image': '
 # This image is distinguished from others by having "managed" set to True and users have limited
 # ability to modify it through the API.
 # If a registry credential is needed to pull the image, that can be provided to the awx-manage command
-CONTROL_PLANE_EXECUTION_ENVIRONMENT = 'quay.io/ansible/awx-ee:latest'
+CONTROL_PLANE_EXECUTION_ENVIRONMENT = 'ghcr.io/ctrliq/ascender-ee:latest'
 
 # Note: This setting may be overridden by database settings.
 STDOUT_MAX_BYTES_DISPLAY = 1048576
@@ -323,7 +322,6 @@ TEMPLATES = [
             os.path.join(BASE_DIR, 'templates'),
             os.path.join(BASE_DIR, 'ui', 'build'),
             os.path.join(BASE_DIR, 'ui', 'public'),
-            os.path.join(BASE_DIR, 'ui_next', 'build', 'awx'),
         ],
     },
 ]
@@ -1068,7 +1066,7 @@ AWX_MOUNT_ISOLATED_PATHS_ON_K8S = False
 # This is overridden downstream via /etc/tower/conf.d/cluster_host_id.py
 CLUSTER_HOST_ID = socket.gethostname()
 
-UI_NEXT = True
+UI_NEXT = False
 
 # License compliance for total host count. Possible values:
 # - '': No model - Subscription not counted from Host Metrics

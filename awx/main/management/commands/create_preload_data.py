@@ -3,8 +3,11 @@
 # Modifications Copyright (c) 2023 Ctrl IQ, Inc.
 
 from django.core.management.base import BaseCommand
+from django.db import transaction
 from crum import impersonate
-from awx.main.models import User, Organization, Project, Inventory, CredentialType, Credential, Host, JobTemplate
+from awx.main.models import User, Organization, CredentialType, Credential
+#from awx.main.models import User, Organization, Project, Inventory, CredentialType, Credential, Host, JobTemplate
+
 from awx.main.signals import disable_computed_fields
 
 
@@ -14,6 +17,12 @@ class Command(BaseCommand):
     help = 'Creates a preload tower data if there is none.'
 
     def handle(self, *args, **kwargs):
+        # Wrap the operation in an atomic block, so we do not on accident
+        # create the organization but not create the project, etc.
+        with transaction.atomic():
+            self._handle()
+
+    def _handle(self):
         changed = False
 
         # Create a default organization as the first superuser found.
@@ -23,7 +32,7 @@ class Command(BaseCommand):
             superuser = None
         with impersonate(superuser):
             with disable_computed_fields():
-                if not Organization.objects.exists():
+                if not Organization.objects.exists() or not Credential.objects.exists():
                     o, _ = Organization.objects.get_or_create(name='Default')
 
 #                    # Avoid calling directly the get_or_create() to bypass project update

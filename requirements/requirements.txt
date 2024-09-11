@@ -1,9 +1,9 @@
 adal==1.2.7
     # via msrestazure
-aiohttp==3.9.5
+aiohappyeyeballs==2.4.0
+    # via aiohttp
+aiohttp==3.10.5
     # via -r /awx_devel/requirements/requirements.in
-aioredis==1.3.1
-    # via channels-redis
 aiosignal==1.3.1
     # via aiohttp
     # via -r /awx_devel/requirements/requirements_git.txt
@@ -19,25 +19,23 @@ asgiref==3.6.0
     #   django
 asn1==2.6.0
     # via -r /awx_devel/requirements/requirements.in
-async-timeout==4.0.2
+async-timeout==4.0.3
     # via
     #   aiohttp
-    #   aioredis
     #   redis
 asyncpg==0.27.0
     # via -r /awx_devel/requirements/requirements.in
 attrs==22.1.0
     # via
     #   aiohttp
-    #   automat
     #   jsonschema
     #   service-identity
     #   twisted
-autobahn==22.7.1
+autobahn==24.4.2
     # via daphne
 autocommand==2.2.2
     # via jaraco-text
-automat==22.10.0
+automat==24.8.1
     # via twisted
 azure-common==1.1.28
     # via azure-keyvault
@@ -63,19 +61,19 @@ cachetools==5.2.0
     #   requests
 cffi==1.15.1
     # via cryptography
-channels==3.0.5
+channels==4.1.0
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   channels-redis
-channels-redis==3.4.1
+channels-redis==4.2.0
     # via -r /awx_devel/requirements/requirements.in
 charset-normalizer==2.1.1
     # via requests
 click==8.1.3
     # via receptorctl
-constantly==15.1.0
+constantly==23.10.4
     # via twisted
-cryptography==41.0.7
+cryptography==43.0.1
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   adal
@@ -88,19 +86,15 @@ cryptography==41.0.7
     #   social-auth-core
 cython==0.29.32
     # via -r /awx_devel/requirements/requirements.in
-daphne==3.0.2
-    # via
-    #   -r /awx_devel/requirements/requirements.in
-    #   channels
+daphne==4.1.2
+    # via -r /awx_devel/requirements/requirements.in
 defusedxml==0.7.1
     # via
     #   python3-openid
     #   social-auth-core
-deprecated==1.2.13
-    # via jwcrypto
 distro==1.8.0
     # via -r /awx_devel/requirements/requirements.in
-django==4.2.10
+django==4.2.15
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   channels
@@ -141,7 +135,7 @@ django-split-settings==1.0.0
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   django-ansible-base
-djangorestframework==3.14.0
+djangorestframework==3.15.2
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   django-ansible-base
@@ -165,15 +159,13 @@ gitpython==3.1.42
     # via -r /awx_devel/requirements/requirements.in
 google-auth==2.14.1
     # via kubernetes
-hiredis==2.0.0
-    # via
-    #   -r /awx_devel/requirements/requirements.in
-    #   aioredis
+hiredis==3.0.0
+    # via redis
 hyperlink==21.0.0
     # via
     #   autobahn
     #   twisted
-idna==3.4
+idna==3.8
     # via
     #   hyperlink
     #   requests
@@ -183,7 +175,7 @@ importlib-metadata==4.6.4
     # via
     #   ansible-runner
     #   markdown
-incremental==22.10.0
+incremental==24.7.2
     # via twisted
 inflect==6.0.2
     # via jaraco-text
@@ -214,7 +206,7 @@ jaraco-text==3.11.0
     # via
     #   irc
     #   jaraco-collections
-jinja2==3.1.3
+jinja2==3.1.4
     # via -r /awx_devel/requirements/requirements.in
 jmespath==1.0.1
     # via
@@ -224,7 +216,7 @@ json-log-formatter==0.5.1
     # via -r /awx_devel/requirements/requirements.in
 jsonschema==4.17.3
     # via -r /awx_devel/requirements/requirements.in
-jwcrypto==1.4.2
+jwcrypto==1.5.6
     # via django-oauth-toolkit
 kubernetes==25.3.0
     # via openshift
@@ -244,7 +236,7 @@ more-itertools==9.0.0
     #   jaraco-classes
     #   jaraco-functools
     #   jaraco-text
-msgpack==1.0.4
+msgpack==1.1.0
     # via channels-redis
 msrest==0.7.1
     # via
@@ -299,7 +291,7 @@ pyasn1-modules==0.2.8
     #   service-identity
 pycparser==2.21
     # via cffi
-pydantic==1.10.2
+pydantic==1.10.18
     # via inflect
 pygerduty==0.38.3
     # via -r /awx_devel/requirements/requirements.in
@@ -309,7 +301,7 @@ pyjwt==2.6.0
     #   django-ansible-base
     #   social-auth-core
     #   twilio
-pyopenssl==23.2.0
+pyopenssl==24.2.1
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   twisted
@@ -348,7 +340,6 @@ python3-openid==3.2.0
     # via -r /awx_devel/requirements/requirements_git.txt
 pytz==2022.6
     # via
-    #   djangorestframework
     #   irc
     #   tempora
     #   twilio
@@ -361,9 +352,11 @@ pyyaml==6.0.1
     #   receptorctl
 receptorctl==1.4.4
     # via -r /awx_devel/requirements/requirements.in
-redis==4.4.4
-    # via -r /awx_devel/requirements/requirements.in
-requests==2.31.0
+redis[hiredis]==5.0.8
+    # via
+    #   -r /awx_devel/requirements/requirements.in
+    #   channels-redis
+requests==2.32.3
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   adal
@@ -391,7 +384,7 @@ s3transfer==0.6.0
     # via boto3
 semantic-version==2.10.0
     # via setuptools-rust
-service-identity==21.1.0
+service-identity==24.1.0
     # via twisted
 setuptools-rust==1.5.2
     # via -r /awx_devel/requirements/requirements.in
@@ -399,7 +392,6 @@ setuptools-scm[toml]==8.0.4
     # via -r /awx_devel/requirements/requirements.in
 six==1.16.0
     # via
-    #   automat
     #   azure-core
     #   django-pglocks
     #   ecdsa
@@ -411,19 +403,18 @@ six==1.16.0
     #   pygerduty
     #   pyrad
     #   python-dateutil
-    #   service-identity
     #   tacacs-plus
 slack-sdk==3.19.4
     # via -r /awx_devel/requirements/requirements.in
 smmap==5.0.0
     # via gitdb
-social-auth-app-django==5.4.0
+social-auth-app-django==5.4.2
     # via -r /awx_devel/requirements/requirements.in
 social-auth-core[openidconnect]==4.4.2
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   social-auth-app-django
-sqlparse==0.4.4
+sqlparse==0.5.1
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   django
@@ -434,28 +425,33 @@ tempora==5.1.0
     #   irc
     #   jaraco-logging
 tomli==2.0.1
-    # via setuptools-scm
+    # via
+    #   incremental
+    #   setuptools-scm
 twilio==7.15.3
     # via -r /awx_devel/requirements/requirements.in
-twisted[tls]==23.10.0
+twisted[tls]==24.7.0
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   daphne
-txaio==22.2.1
+txaio==23.1.1
     # via autobahn
-typing-extensions==4.4.0
+typing-extensions==4.12.2
     # via
+    #   automat
     #   azure-core
+    #   jwcrypto
     #   psycopg
     #   setuptools-rust
     #   setuptools-scm
     #   twisted
-urllib3==1.26.17
+urllib3==1.26.20
     # via
+    #   -r /awx_devel/requirements/requirements.in
     #   botocore
     #   kubernetes
     #   requests
-uwsgi==2.0.21
+uwsgi==2.0.26
     # via -r /awx_devel/requirements/requirements.in
 uwsgitop==0.11
     # via -r /awx_devel/requirements/requirements.in
@@ -463,15 +459,13 @@ websocket-client==1.4.2
     # via kubernetes
 wheel==0.38.4
     # via -r /awx_devel/requirements/requirements.in
-wrapt==1.15.0
-    # via deprecated
 xmlsec==1.3.13
     # via python3-saml
 yarl==1.8.1
     # via aiohttp
-zipp==3.11.0
+zipp==3.20.1
     # via importlib-metadata
-zope-interface==5.5.2
+zope-interface==7.0.3
     # via twisted
 
 # The following packages are considered to be unsafe in a requirements file:
@@ -482,6 +476,7 @@ setuptools==65.6.3
     #   -r /awx_devel/requirements/requirements.in
     #   asciichartpy
     #   autobahn
+    #   incremental
     #   kubernetes
     #   python-daemon
     #   setuptools-rust

@@ -1,5 +1,6 @@
 # Copyright (c) 2015 Ansible, Inc.
 # All Rights Reserved.
+# Modifications Copyright (c) 2024 Ctrl IQ, Inc.
 
 from django.conf import settings
 from django.urls import re_path, include
@@ -11,7 +12,6 @@ from awx.main.views import handle_400, handle_403, handle_404, handle_500, handl
 
 urlpatterns = [
     re_path(r'', include('awx.ui.urls', namespace='ui')),
-    re_path(r'^ui_next/.*', include('awx.ui_next.urls', namespace='ui_next')),
     re_path(r'^api/', include('awx.api.urls', namespace='api')),
     re_path(r'^api/v2/', include(resource_api_urls)),
     re_path(r'^sso/', include('awx.sso.urls', namespace='sso')),
