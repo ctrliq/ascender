@@ -174,7 +174,7 @@ function DashboardGraph() {
       <CardBody>
         <LineChart
           jobStatus={jobStatusSelection}
-          height={300}
+          height={220}
           id="d3-line-chart-root"
           data={jobGraphData}
         />
