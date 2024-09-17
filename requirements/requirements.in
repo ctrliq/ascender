@@ -12,7 +12,7 @@ cryptography>=43.0.1  # GHSA-h4gh-qq45-vh27
 Cython<3 # this is needed as a build dependency, one day we may have separated build deps
 daphne
 distro
-django==4.2.15 # CVE-2024-42005
+django==4.2.16 # CVE-2024-45231
 django-auth-ldap
 django-cors-headers
 django-crum
