@@ -76,7 +76,7 @@ SDIST_TAR_FILE ?= $(SDIST_TAR_NAME).tar.gz
 I18N_FLAG_FILE = .i18n_built
 
 ## PLATFORMS defines the target platforms for  the manager image be build to provide support to multiple
-PLATFORMS ?= linux/amd64,linux/arm64  # linux/ppc64le,linux/s390x
+PLATFORMS ?= linux/amd64  #,linux/arm64  # linux/ppc64le,linux/s390x
 
 .PHONY: awx-link clean clean-tmp clean-venv requirements requirements_dev \
 	develop refresh adduser migrate dbchange \
