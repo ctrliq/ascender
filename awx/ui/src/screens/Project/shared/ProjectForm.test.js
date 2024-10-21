@@ -55,7 +55,6 @@ describe('<ProjectForm />', () => {
               ['git', 'Git'],
               ['svn', 'Subversion'],
               ['archive', 'Remote Archive'],
-              ['insights', 'Red Hat Insights'],
             ],
           },
         },
@@ -71,19 +70,6 @@ describe('<ProjectForm />', () => {
           id: 4,
           name: 'Source Control',
           kind: 'scm',
-        },
-      ],
-    },
-  };
-
-  const insightsCredentialResolve = {
-    data: {
-      count: 1,
-      results: [
-        {
-          id: 5,
-          name: 'Insights',
-          kind: 'insights',
         },
       ],
     },
@@ -113,9 +99,6 @@ describe('<ProjectForm />', () => {
     );
     await CredentialTypesAPI.read.mockImplementation(
       () => scmCredentialResolve
-    );
-    await CredentialTypesAPI.read.mockImplementation(
-      () => insightsCredentialResolve
     );
     await CredentialTypesAPI.read.mockImplementation(
       () => cryptographyCredentialResolve
@@ -258,45 +241,6 @@ describe('<ProjectForm />', () => {
     });
   });
 
-  test('should display insights credential lookup when source control type is "insights"', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ProjectForm handleSubmit={jest.fn()} handleCancel={jest.fn()} />
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    await act(async () => {
-      await wrapper.find('AnsibleSelect[id="scm_type"]').invoke('onChange')(
-        null,
-        'insights'
-      );
-    });
-    wrapper.update();
-    expect(wrapper.find('FormGroup[label="Insights Credential"]').length).toBe(
-      1
-    );
-    await act(async () => {
-      wrapper
-        .find('CredentialLookup[label="Insights Credential"]')
-        .invoke('onBlur')();
-      wrapper
-        .find('CredentialLookup[label="Insights Credential"]')
-        .invoke('onChange')({
-        id: 123,
-        name: 'credential',
-      });
-    });
-    wrapper.update();
-    expect(
-      wrapper
-        .find('CredentialLookup[label="Insights Credential"]')
-        .prop('value')
-    ).toEqual({
-      id: 123,
-      name: 'credential',
-    });
-  });
-
   test('manual subform should display expected fields', async () => {
     const config = {
       project_local_paths: ['foobar', 'qux'],
@@ -348,49 +292,6 @@ describe('<ProjectForm />', () => {
     });
     await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
     expect(wrapper.find('ManualSubForm Alert').length).toBe(1);
-  });
-
-  test('should reset source control subform values when source control type changes', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ProjectForm
-          handleSubmit={jest.fn()}
-          handleCancel={jest.fn()}
-          project={{ scm_type: 'insights' }}
-        />
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-
-    const scmTypeSelect = wrapper.find(
-      'FormGroup[label="Source Control Type"] FormSelect'
-    );
-    await act(async () => {
-      scmTypeSelect.invoke('onChange')('svn', {
-        target: { name: 'Subversion' },
-      });
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper
-        .find('FormGroup[label="Source Control URL"] input')
-        .simulate('change', {
-          target: { value: 'baz', name: 'scm_url' },
-        });
-    });
-    wrapper.update();
-    expect(wrapper.find('input#project-scm-url').prop('value')).toEqual('baz');
-    await act(async () => {
-      scmTypeSelect
-        .props()
-        .onChange('insights', { target: { name: 'insights' } });
-    });
-    wrapper.update();
-    await act(async () => {
-      scmTypeSelect.props().onChange('svn', { target: { name: 'Subversion' } });
-    });
-    wrapper.update();
-    expect(wrapper.find('input#project-scm-url').prop('value')).toEqual('');
   });
 
   test('should call handleSubmit when Submit button is clicked', async () => {
