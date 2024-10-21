@@ -92,51 +92,6 @@
                   "read_only": false
               }
           },
-          "REDHAT_USERNAME": {
-              "type": "string",
-              "required": false,
-              "label": "Red Hat customer username",
-              "help_text": "This username is used to send data to Automation Analytics",
-              "category": "System",
-              "category_slug": "system",
-              "default": ""
-          },
-          "REDHAT_PASSWORD": {
-              "type": "string",
-              "required": false,
-              "label": "Red Hat customer password",
-              "help_text": "This password is used to send data to Automation Analytics",
-              "category": "System",
-              "category_slug": "system",
-              "default": ""
-          },
-          "SUBSCRIPTIONS_USERNAME": {
-              "type": "string",
-              "required": false,
-              "label": "Red Hat or Satellite username",
-              "help_text": "This username is used to retrieve subscription and content information",
-              "category": "System",
-              "category_slug": "system",
-              "default": ""
-          },
-          "SUBSCRIPTIONS_PASSWORD": {
-              "type": "string",
-              "required": false,
-              "label": "Red Hat or Satellite password",
-              "help_text": "This password is used to retrieve subscription and content information",
-              "category": "System",
-              "category_slug": "system",
-              "default": ""
-          },
-          "AUTOMATION_ANALYTICS_URL": {
-              "type": "string",
-              "required": false,
-              "label": "Automation Analytics upload URL",
-              "help_text": "This setting is used to to configure the upload URL for data collection for Automation Analytics.",
-              "category": "System",
-              "category_slug": "system",
-              "default": "https://example.com"
-          },
           "DEFAULT_EXECUTION_ENVIRONMENT": {
               "type": "field",
               "required": false,
@@ -286,15 +241,6 @@
                   "required": true,
                   "read_only": false
               }
-          },
-          "INSIGHTS_TRACKING_STATE": {
-              "type": "boolean",
-              "required": false,
-              "label": "Gather data for Automation Analytics",
-              "help_text": "Enables the service to gather data on automation and send it to Automation Analytics.",
-              "category": "System",
-              "category_slug": "system",
-              "default": false
           },
           "PROJECT_UPDATE_VVV": {
               "type": "boolean",
@@ -718,25 +664,6 @@
               "category_slug": "system",
               "default": null
           },
-          "AUTOMATION_ANALYTICS_LAST_ENTRIES": {
-              "type": "string",
-              "required": false,
-              "label": "Last gathered entries from the data collection service of Automation Analytics",
-              "category": "System",
-              "category_slug": "system",
-              "default": ""
-          },
-          "AUTOMATION_ANALYTICS_GATHER_INTERVAL": {
-              "type": "integer",
-              "required": false,
-              "label": "Automation Analytics Gather Interval",
-              "help_text": "Interval (in seconds) between data gathering.",
-              "min_value": 1800,
-              "category": "System",
-              "category_slug": "system",
-              "unit": "seconds",
-              "default": 14400
-          },
           "BULK_JOB_MAX_LAUNCH": {
               "type": "integer",
               "required": false,
@@ -754,15 +681,6 @@
               "category": "Bulk Actions",
               "category_slug": "bulk",
               "default": 100
-          },
-          "UI_NEXT": {
-              "type": "boolean",
-              "required": false,
-              "label": "Enable Preview of New User Interface",
-              "help_text": "Enable preview of new user interface.",
-              "category": "System",
-              "category_slug": "system",
-              "default": true
           },
           "SUBSCRIPTION_USAGE_MODEL": {
               "type": "choice",
@@ -4527,46 +4445,6 @@
                   "type": "field"
               }
           },
-          "REDHAT_USERNAME": {
-              "type": "string",
-              "label": "Red Hat customer username",
-              "help_text": "This username is used to send data to Automation Analytics",
-              "category": "System",
-              "category_slug": "system",
-              "defined_in_file": false
-          },
-          "REDHAT_PASSWORD": {
-              "type": "string",
-              "label": "Red Hat customer password",
-              "help_text": "This password is used to send data to Automation Analytics",
-              "category": "System",
-              "category_slug": "system",
-              "defined_in_file": false
-          },
-          "SUBSCRIPTIONS_USERNAME": {
-              "type": "string",
-              "label": "Red Hat or Satellite username",
-              "help_text": "This username is used to retrieve subscription and content information",
-              "category": "System",
-              "category_slug": "system",
-              "defined_in_file": false
-          },
-          "SUBSCRIPTIONS_PASSWORD": {
-              "type": "string",
-              "label": "Red Hat or Satellite password",
-              "help_text": "This password is used to retrieve subscription and content information",
-              "category": "System",
-              "category_slug": "system",
-              "defined_in_file": false
-          },
-          "AUTOMATION_ANALYTICS_URL": {
-              "type": "string",
-              "label": "Automation Analytics upload URL",
-              "help_text": "This setting is used to to configure the upload URL for data collection for Automation Analytics.",
-              "category": "System",
-              "category_slug": "system",
-              "defined_in_file": false
-          },
           "INSTALL_UUID": {
               "type": "string",
               "label": "Unique identifier for an installation",
@@ -4688,14 +4566,6 @@
               "child": {
                   "type": "string"
               }
-          },
-          "INSIGHTS_TRACKING_STATE": {
-              "type": "boolean",
-              "label": "Gather data for Automation Analytics",
-              "help_text": "Enables the service to gather data on automation and send it to Automation Analytics.",
-              "category": "System",
-              "category_slug": "system",
-              "defined_in_file": false
           },
           "PROJECT_UPDATE_VVV": {
               "type": "boolean",
@@ -5073,23 +4943,6 @@
               "category_slug": "system",
               "defined_in_file": false
           },
-          "AUTOMATION_ANALYTICS_LAST_ENTRIES": {
-              "type": "string",
-              "label": "Last gathered entries from the data collection service of Automation Analytics",
-              "category": "System",
-              "category_slug": "system",
-              "defined_in_file": false
-          },
-          "AUTOMATION_ANALYTICS_GATHER_INTERVAL": {
-              "type": "integer",
-              "label": "Automation Analytics Gather Interval",
-              "help_text": "Interval (in seconds) between data gathering.",
-              "min_value": 1800,
-              "category": "System",
-              "category_slug": "system",
-              "defined_in_file": false,
-              "unit": "seconds"
-          },
           "IS_K8S": {
               "type": "boolean",
               "label": "Is k8s",
@@ -5112,14 +4965,6 @@
               "help_text": "Max number of hosts to allow to be created in a single bulk action",
               "category": "Bulk Actions",
               "category_slug": "bulk",
-              "defined_in_file": false
-          },
-          "UI_NEXT": {
-              "type": "boolean",
-              "label": "Enable Preview of New User Interface",
-              "help_text": "Enable preview of new user interface.",
-              "category": "System",
-              "category_slug": "system",
               "defined_in_file": false
           },
           "SUBSCRIPTION_USAGE_MODEL": {

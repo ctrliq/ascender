@@ -31,20 +31,11 @@ describe('<MiscSystemDetail />', () => {
         PROXY_IP_ALLOWED_LIST: [],
         CSRF_TRUSTED_ORIGINS: [],
         LICENSE: null,
-        REDHAT_USERNAME: 'name1',
-        REDHAT_PASSWORD: '$encrypted$',
-        SUBSCRIPTIONS_USERNAME: 'name2',
-        SUBSCRIPTIONS_PASSWORD: '$encrypted$',
-        AUTOMATION_ANALYTICS_URL: 'https://example.com',
         INSTALL_UUID: 'db39b9ec-0c6e-4554-987d-42aw9c732ed8',
         DEFAULT_EXECUTION_ENVIRONMENT: 1,
         CUSTOM_VENV_PATHS: [],
-        INSIGHTS_TRACKING_STATE: false,
-        AUTOMATION_ANALYTICS_LAST_GATHER: null,
         AUTOMATION_ANALYTICS_LAST_ENTRIES:
           '{"foo": "2021-11-24R06:35:15.179Z"}',
-        AUTOMATION_ANALYTICS_GATHER_INTERVAL: 14400,
-        UI_NEXT: true,
       },
     });
     ExecutionEnvironmentsAPI.readDetail = jest.fn();
@@ -84,18 +75,7 @@ describe('<MiscSystemDetail />', () => {
       'db39b9ec-0c6e-4554-987d-42aw9c732ed8'
     );
     assertDetail(wrapper, 'All Users Visible to Organization Admins', 'On');
-    assertDetail(
-      wrapper,
-      'Automation Analytics Gather Interval',
-      '14400 seconds'
-    );
-    assertDetail(
-      wrapper,
-      'Automation Analytics upload URL',
-      'https://example.com'
-    );
     assertDetail(wrapper, 'Base URL of the service', 'https://towerhost');
-    assertDetail(wrapper, 'Gather data for Automation Analytics', 'Off');
     assertDetail(
       wrapper,
       'Organization Admins Can Manage Users and Teams',
@@ -103,19 +83,9 @@ describe('<MiscSystemDetail />', () => {
     );
     assertDetail(wrapper, 'Enable Activity Stream', 'On');
     assertDetail(wrapper, 'Enable Activity Stream for Inventory Sync', 'Off');
-    assertDetail(wrapper, 'Red Hat customer password', 'Encrypted');
-    assertDetail(wrapper, 'Red Hat customer username', 'name1');
-    assertDetail(wrapper, 'Red Hat or Satellite password', 'Encrypted');
-    assertDetail(wrapper, 'Red Hat or Satellite username', 'name2');
-    assertVariableDetail(
-      wrapper,
-      'Last gathered entries from the data collection service of Automation Analytics',
-      '{\n  "foo": "2021-11-24R06:35:15.179Z"\n}'
-    );
     assertVariableDetail(wrapper, 'Remote Host Headers', '[]');
     assertVariableDetail(wrapper, 'Proxy IP Allowed List', '[]');
     assertDetail(wrapper, 'Global default execution environment', 'Foo');
-    assertDetail(wrapper, 'Enable Preview of New User Interface', 'On');
   });
 
   test('should render execution environment as not configured', async () => {

@@ -45,7 +45,7 @@ describe('PageHeaderToolbar', () => {
     });
     expect(wrapper.find('DropdownItem')).toHaveLength(0);
     wrapper.find(pageHelpDropdownSelector).simulate('click');
-    expect(wrapper.find('DropdownItem')).toHaveLength(2);
+    expect(wrapper.find('DropdownItem')).toHaveLength(1);
 
     const about = wrapper.find('DropdownItem li button');
     about.simulate('click');
