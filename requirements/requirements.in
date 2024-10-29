@@ -60,7 +60,7 @@ uWSGI>=2.0.22 # CVE-2023-27522
 uwsgitop
 wheel>=0.38.1  # CVE-2022-40898
 pip==21.2.4  # see UPGRADE BLOCKERs
-setuptools  # see UPGRADE BLOCKERs
+setuptools==70.0.0  # see UPGRADE BLOCKERs
 setuptools_scm[toml]  # see UPGRADE BLOCKERs, xmlsec build dep
 setuptools-rust>=0.11.4  # cryptography build dep
 pkgconfig>=1.5.1  # xmlsec build dep - needed for offline build
