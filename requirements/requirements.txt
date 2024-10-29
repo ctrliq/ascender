@@ -17,6 +17,7 @@ asgiref==3.6.0
     #   channels-redis
     #   daphne
     #   django
+    #   django-ansible-base
 asn1==2.6.0
     # via -r /awx_devel/requirements/requirements.in
 async-timeout==4.0.3
@@ -143,8 +144,6 @@ djangorestframework-yaml==2.0.0
     # via -r /awx_devel/requirements/requirements.in
 docutils==0.19
     # via python-daemon
-ecdsa==0.18.0
-    # via python-jose
 enum-compat==0.0.3
     # via asn1
 filelock==3.8.0
@@ -280,7 +279,6 @@ ptyprocess==0.7.0
 pyasn1==0.4.8
     # via
     #   pyasn1-modules
-    #   python-jose
     #   python-ldap
     #   rsa
     #   service-identity
@@ -295,7 +293,7 @@ pydantic==1.10.18
     # via inflect
 pygerduty==0.38.3
     # via -r /awx_devel/requirements/requirements.in
-pyjwt==2.6.0
+pyjwt==2.9.0
     # via
     #   adal
     #   django-ansible-base
@@ -325,8 +323,6 @@ python-dateutil==2.8.2
     #   receptorctl
 python-dsv-sdk==1.0.4
     # via -r /awx_devel/requirements/requirements.in
-python-jose==3.3.0
-    # via social-auth-core
 python-ldap==3.4.3
     # via
     #   -r /awx_devel/requirements/requirements.in
@@ -377,9 +373,7 @@ requests-oauthlib==1.3.1
     #   msrest
     #   social-auth-core
 rsa==4.9
-    # via
-    #   google-auth
-    #   python-jose
+    # via google-auth
 s3transfer==0.6.0
     # via boto3
 semantic-version==2.10.0
@@ -394,7 +388,6 @@ six==1.16.0
     # via
     #   azure-core
     #   django-pglocks
-    #   ecdsa
     #   google-auth
     #   isodate
     #   kubernetes
@@ -409,8 +402,10 @@ slack-sdk==3.19.4
 smmap==5.0.0
     # via gitdb
 social-auth-app-django==5.4.2
-    # via -r /awx_devel/requirements/requirements.in
-social-auth-core[openidconnect]==4.4.2
+    # via
+    #   -r /awx_devel/requirements/requirements.in
+    #   django-ansible-base
+social-auth-core[openidconnect]==4.5.0
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   social-auth-app-django
@@ -418,6 +413,7 @@ sqlparse==0.5.1
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   django
+    #   django-ansible-base
 tacacs-plus==1.0
     # via -r /awx_devel/requirements/requirements.in
 tempora==5.1.0
@@ -442,6 +438,7 @@ typing-extensions==4.12.2
     #   azure-core
     #   jwcrypto
     #   psycopg
+    #   pydantic
     #   setuptools-rust
     #   setuptools-scm
     #   twisted
@@ -449,6 +446,7 @@ urllib3==1.26.20
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   botocore
+    #   django-ansible-base
     #   kubernetes
     #   requests
 uwsgi==2.0.26
