@@ -1029,7 +1029,7 @@ ManagedCredentialType(
 )
 
 ManagedCredentialType(
-    namespace='ciq',
+    namespace='ciq_depot',
     kind='cloud',
     name=gettext_noop('CIQ Depot'),
     managed=True,
