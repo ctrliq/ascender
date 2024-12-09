@@ -1029,6 +1029,45 @@ ManagedCredentialType(
 )
 
 ManagedCredentialType(
+    namespace='ciq_depot',
+    kind='cloud',
+    name=gettext_noop('CIQ Depot'),
+    managed=True,
+    inputs={
+        'fields': [
+            {
+                'id': 'depot_server',
+                'label': gettext_noop('CIQ Depot Server'),
+                'type': 'string',
+                'help_text': gettext_noop('A CIQ Depot server.'),
+                'default': 'depot.ciq.com'
+            },
+            {
+                'id': 'depot_user',
+                'label': gettext_noop('CIQ Depot User'),
+                'type': 'string',
+                'help_text': gettext_noop('A CIQ Depot user.'),
+            },
+            {
+                'id': 'depot_token',
+                'label': gettext_noop('CIQ Depot Token'),
+                'type': 'string',
+                'secret': True,
+                'help_text': gettext_noop('A CIQ Depot Token.'),
+            },
+        ],
+        'required': ['depot_server', 'depot_user', 'depot_token'],
+    },
+    injectors={
+        'env': {
+            'DEPOT_SERVER': '{{depot_server}}',
+            'DEPOT_USER': '{{depot_user}}',
+            'DEPOT_TOKEN': '{{depot_token}}'
+        }
+    },
+)
+
+ManagedCredentialType(
     namespace='kubernetes_bearer_token',
     kind='kubernetes',
     name=gettext_noop('OpenShift or Kubernetes API Bearer Token'),
