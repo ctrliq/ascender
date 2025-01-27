@@ -213,7 +213,7 @@ UI_LIVE_UPDATES_ENABLED = True
 
 # The maximum size of the ansible callback event's res data structure
 # beyond this limit and the value will be removed
-MAX_EVENT_RES_DATA = 700000
+MAX_EVENT_RES_DATA = 25000000
 
 # Note: These settings may be overridden by database settings.
 EVENT_STDOUT_MAX_BYTES_DISPLAY = 1024
