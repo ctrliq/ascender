@@ -1,4 +1,4 @@
-aiohttp>=3.10.2  # CVE-2024-42367
+aiohttp>=3.10.11  # CVE-2024-52304
 ansiconv==1.0.0  # UPGRADE BLOCKER: from 2013, consider replacing instead of upgrading
 asciichartpy
 asn1
@@ -12,7 +12,7 @@ cryptography>=43.0.1  # GHSA-h4gh-qq45-vh27
 Cython<3 # this is needed as a build dependency, one day we may have separated build deps
 daphne
 distro
-django==4.2.16 # CVE-2024-45231
+django==4.2.18 # CVE-2024-53908
 django-auth-ldap
 django-cors-headers
 django-crum
@@ -46,7 +46,7 @@ python-tss-sdk>=1.2.1
 python-ldap
 pyyaml>=6.0.1
 receptorctl
-social-auth-core[openidconnect]==4.4.2  # see UPGRADE BLOCKERs
+social-auth-core[openidconnect]==4.5.0  # see UPGRADE BLOCKERs
 social-auth-app-django==5.4.2  # see UPGRADE BLOCKERs
 sqlparse>=0.5.0   # Required by django https://github.com/ansible/awx/security/dependabot/96
 redis[hiredis]
@@ -60,7 +60,7 @@ uWSGI>=2.0.22 # CVE-2023-27522
 uwsgitop
 wheel>=0.38.1  # CVE-2022-40898
 pip==21.2.4  # see UPGRADE BLOCKERs
-setuptools  # see UPGRADE BLOCKERs
+setuptools==65.6.3  # see UPGRADE BLOCKERs
 setuptools_scm[toml]  # see UPGRADE BLOCKERs, xmlsec build dep
 setuptools-rust>=0.11.4  # cryptography build dep
 pkgconfig>=1.5.1  # xmlsec build dep - needed for offline build

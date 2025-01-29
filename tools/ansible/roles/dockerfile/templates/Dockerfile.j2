@@ -41,8 +41,6 @@ RUN dnf -y update && dnf install -y 'dnf-command(config-manager)' && \
 {% endif %}
     nss \
     openldap-devel \
-    # pin to older openssl, see jira AAP-23449
-    openssl-3.0.7 \
     patch \
     postgresql \
     postgresql-devel \
@@ -125,8 +123,6 @@ RUN dnf -y update && dnf install -y 'dnf-command(config-manager)' && \
     krb5-workstation \
     nginx \
     "openldap >= 2.6.2-3" \
-    # pin to older openssl, see jira AAP-23449
-    openssl-3.0.7 \
     postgresql \
     python3-devel \
     python3-libselinux \
@@ -195,7 +191,7 @@ RUN ln -s /var/lib/awx/venv/awx/bin/awx-manage /usr/bin/awx-manage
 COPY --from={{ receptor_image }} /usr/bin/receptor /usr/bin/receptor
 
 RUN openssl req -nodes -newkey rsa:2048 -keyout /etc/nginx/nginx.key -out /etc/nginx/nginx.csr \
-        -subj "/C=US/ST=North Carolina/L=Durham/O=Ansible/OU=AWX Development/CN=awx.localhost" && \
+        -subj "/C=US/ST=Texas/L=College Station/O=CIQ/OU=Ascender Development/CN=ascender.localhost" && \
     openssl x509 -req -days 365 -in /etc/nginx/nginx.csr -signkey /etc/nginx/nginx.key -out /etc/nginx/nginx.crt && \
     chmod 640 /etc/nginx/nginx.{csr,key,crt}
 {% endif %}

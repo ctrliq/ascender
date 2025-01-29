@@ -32,6 +32,7 @@ from rest_framework.negotiation import DefaultContentNegotiation
 
 from ansible_base.rest_filters.rest_framework.field_lookup_backend import FieldLookupBackend
 from ansible_base.lib.utils.models import get_all_field_names
+from ansible_base.lib.utils.requests import get_remote_host
 
 # AWX
 from awx.main.models import UnifiedJob, UnifiedJobTemplate, User, Role, Credential, WorkflowJobTemplateNode, WorkflowApprovalTemplate
@@ -89,15 +90,16 @@ class LoggedLoginView(auth_views.LoginView):
 
     def post(self, request, *args, **kwargs):
         ret = super(LoggedLoginView, self).post(request, *args, **kwargs)
+        ip = get_remote_host(request)  # request.META.get('REMOTE_ADDR', None)
         if request.user.is_authenticated:
-            logger.info(smart_str(u"User {} logged in from {}".format(self.request.user.username, request.META.get('REMOTE_ADDR', None))))
+            logger.info(smart_str(u"User {} logged in from {}".format(self.request.user.username, ip)))
             ret.set_cookie('userLoggedIn', 'true', secure=getattr(settings, 'SESSION_COOKIE_SECURE', False))
             ret.setdefault('X-API-Session-Cookie-Name', getattr(settings, 'SESSION_COOKIE_NAME', 'awx_sessionid'))
 
             return ret
         else:
             if 'username' in self.request.POST:
-                logger.warning(smart_str(u"Login failed for user {} from {}".format(self.request.POST.get('username'), request.META.get('REMOTE_ADDR', None))))
+                logger.warning(smart_str(u"Login failed for user {} from {}".format(self.request.POST.get('username'), ip)))
             ret.status_code = 401
             return ret
 
@@ -202,11 +204,12 @@ class APIView(views.APIView):
             return response
 
         if response.status_code >= 400:
+            ip = get_remote_host(request)  # request.META.get('REMOTE_ADDR', None)
             msg_data = {
                 'status_code': response.status_code,
                 'user_name': request.user,
                 'url_path': request.path,
-                'remote_addr': request.META.get('REMOTE_ADDR', None),
+                'remote_addr': ip,
             }
 
             if type(response.data) is dict:
