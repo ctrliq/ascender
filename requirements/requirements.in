@@ -12,7 +12,7 @@ cryptography>=43.0.1  # GHSA-h4gh-qq45-vh27
 Cython<3 # this is needed as a build dependency, one day we may have separated build deps
 daphne
 distro
-django==4.2.18 # CVE-2024-53908
+django==4.2.20 # CVE-2025-26699
 django-auth-ldap
 django-cors-headers
 django-crum
@@ -28,7 +28,7 @@ djangorestframework-yaml
 filelock
 GitPython>=3.1.37  # CVE-2023-41040
 irc
-jinja2>=3.1.5  # CVE-2024-56326
+jinja2>=3.1.6  # CVE-2025-27516
 JSON-log-formatter
 jsonschema
 Markdown  # used for formatting API help

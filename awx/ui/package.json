@@ -16,7 +16,7 @@
     "axios": "1.7.7",
     "d3": "7.6.1",
     "dagre": "^0.8.4",
-    "dompurify": "2.5.4",
+    "dompurify": "3.2.4",
     "formik": "2.2.9",
     "has-ansi": "5.0.1",
     "html-entities": "2.3.2",
