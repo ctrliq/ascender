@@ -143,10 +143,6 @@ class LogstashFormatterBase(logging.Formatter):
 class LogstashFormatter(LogstashFormatterBase):
     def __init__(self, *args, **kwargs):
         self.cluster_host_id = settings.CLUSTER_HOST_ID
-        self.tower_uuid = None
-        uuid = getattr(settings, 'LOG_AGGREGATOR_TOWER_UUID', None) or getattr(settings, 'INSTALL_UUID', None)
-        if uuid:
-            self.tower_uuid = uuid
         super(LogstashFormatter, self).__init__(*args, **kwargs)
 
     def reformat_data_for_log(self, raw_data, kind=None):
@@ -169,8 +165,6 @@ class LogstashFormatter(LogstashFormatterBase):
         if isinstance(data, str):
             data = json.loads(data)
         data_for_log = {}
-        data_for_log['install_uuid'] = settings.INSTALL_UUID
-        data_for_log['install_url'] = settings.TOWER_URL_BASE
 
         if kind == 'job_events' and raw_data.get('python_objects', {}).get('job_event'):
             job_event = raw_data['python_objects']['job_event']
@@ -260,7 +254,8 @@ class LogstashFormatter(LogstashFormatterBase):
             fields = self.reformat_data_for_log(fields, kind=log_kind)
         # General AWX metadata
         fields['cluster_host_id'] = self.cluster_host_id
-        fields['tower_uuid'] = self.tower_uuid
+        fields['tower_uuid'] = settings.INSTALL_UUID
+        fields['tower_url'] = settings.TOWER_URL_BASE
         return fields
 
     def format(self, record):
