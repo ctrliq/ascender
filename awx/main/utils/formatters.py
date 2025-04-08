@@ -169,6 +169,8 @@ class LogstashFormatter(LogstashFormatterBase):
         if isinstance(data, str):
             data = json.loads(data)
         data_for_log = {}
+        data_for_log['install_uuid'] = settings.INSTALL_UUID
+        data_for_log['install_url'] = settings.TOWER_URL_BASE
 
         if kind == 'job_events' and raw_data.get('python_objects', {}).get('job_event'):
             job_event = raw_data['python_objects']['job_event']
