@@ -6,7 +6,7 @@ from django.utils.timezone import now
 from django.db.models import Q
 
 from awx.main.models import Job, JobEvent, Inventory, Host, JobHostSummary, HostMetric
-
+from awx.main.models.events import emit_event_detail
 
 @pytest.mark.django_db
 class TestEvents:
@@ -15,6 +15,26 @@ class TestEvents:
         self.host_map = dict()
         self.inventory = None
         self.job = None
+
+    @mock.patch('awx.main.consumers.emit_channel_notification')
+    def test_emit_event_detail_with_job_event(self, mock_emit_channel_notification):
+        j = Job()
+        j.save()
+        JobEvent.create_from_data(job_id=j.pk, uuid='abc123', event='playbook_on_task_start').save()
+        assert JobEvent.objects.count() == 1
+        for job_event in JobEvent.objects.all():
+            assert job_event.failed is False
+            emit_event_detail(job_event)
+
+            mock_emit_channel_notification.assert_called_once()
+            args, kwargs = mock_emit_channel_notification.call_args[0]
+
+            expected_event_data = {
+                'url': job_event.get_absolute_url() + '/api/v2/job_events/{}'.format(job_event.id)
+            # Include other properties as necessary...
+        }
+
+        assert kwargs['url'] == expected_event_data['url']
 
     @mock.patch('awx.main.models.events.emit_event_detail')
     def test_parent_changed(self, emit):

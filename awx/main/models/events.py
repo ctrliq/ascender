@@ -71,11 +71,11 @@ def emit_event_detail(event):
         InventoryUpdateEvent: 'inventory_update_id',
         SystemJobEvent: 'system_job_id',
     }[cls]
-    url = ''
+    url = event.get_absolute_url()
     if isinstance(event, JobEvent):
-        url = '/api/v2/job_events/{}'.format(event.id)
+        url += '/api/v2/job_events/{}'.format(event.id)
     if isinstance(event, AdHocCommandEvent):
-        url = '/api/v2/ad_hoc_command_events/{}'.format(event.id)
+        url += '/api/v2/ad_hoc_command_events/{}'.format(event.id)
     group = camelcase_to_underscore(cls.__name__) + 's'
     timestamp = event.created.isoformat()
     consumers.emit_channel_notification(
