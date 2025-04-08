@@ -113,6 +113,10 @@ def construct_rsyslog_conf_template(settings=settings):
                 # > arbitrary header key/value lists.
                 params.append('httpheaderkey="Authorization"')
                 params.append(f'httpheadervalue="Splunk {password}"')
+        if getattr(settings, 'LOG_AGGREGATOR_TYPE', None) == 'ledger':
+            if password:
+                params.append('httpheaderkey="Authorization"')
+                params.append(f'httpheadervalue="Ledger {password}"')
         elif username:
             params.append(f'uid="{username}"')
             if password:
