@@ -2,6 +2,7 @@
 # All Rights Reserved.
 
 # Python
+import socket
 import logging
 import sys
 import traceback
@@ -15,13 +16,11 @@ from django.utils.encoding import force_str
 # AWX
 from awx.main.exceptions import PostRunError
 
-
 class RSysLogHandler(logging.handlers.SysLogHandler):
     append_nul = False
 
-    def _connect_unixsocket(self, address):
-        super(RSysLogHandler, self)._connect_unixsocket(address)
-        self.socket.setblocking(False)
+    def __init__(self, address=(settings.LOGGING['handlers']['external_logger']['address']), facility=logging.handlers.SysLogHandler.LOG_USER, socktype=socket.SOCK_STREAM):
+        super(RSysLogHandler, self).__init__(address, facility, socktype)
 
     def handleError(self, record):
         # for any number of reasons, rsyslogd has gone to lunch;
