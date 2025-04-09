@@ -7,7 +7,7 @@ import functools
 import inspect
 import logging
 import os
-from pkg_resources import iter_entry_points
+from importlib_metadata import entry_points
 import re
 import stat
 import tempfile
@@ -50,7 +50,7 @@ from . import injectors as builtin_injectors
 __all__ = ['Credential', 'CredentialType', 'CredentialInputSource', 'build_safe_env']
 
 logger = logging.getLogger('awx.main.models.credential')
-credential_plugins = dict((ep.name, ep.load()) for ep in iter_entry_points('awx.credential_plugins'))
+credential_plugins = {entry_point.name: entry_point.load() for entry_point in entry_points(group='awx.credential_plugins')}
 
 HIDDEN_PASSWORD = '**********'
 

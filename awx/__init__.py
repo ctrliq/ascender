@@ -5,7 +5,7 @@ from __future__ import absolute_import, unicode_literals
 import os
 import sys
 import warnings
-
+from importlib_metadata import PackageNotFoundError, version as _get_version
 
 def get_version():
     version_from_file = get_version_from_file()
@@ -34,10 +34,8 @@ def version_file():
 
 
 try:
-    import pkg_resources
-
-    __version__ = pkg_resources.get_distribution('awx').version
-except pkg_resources.DistributionNotFound:
+    __version__ = _get_version('awx')
+except PackageNotFoundError:
     __version__ = get_version()
 
 __all__ = ['__version__']
