@@ -19,7 +19,7 @@ from awx.main.exceptions import PostRunError
 class RSysLogHandler(logging.handlers.SysLogHandler):
     append_nul = False
 
-    def __init__(self, address=('/var/run/awx-rsyslog/rsyslog.sock'), facility=logging.handlers.SysLogHandler.LOG_USER, socktype=socket.SOCK_STREAM):
+    def __init__(self, address=(settings.LOGGING['handlers']['external_logger']['address']), facility=logging.handlers.SysLogHandler.LOG_USER, socktype=socket.SOCK_STREAM):
         super(RSysLogHandler, self).__init__(address, facility, socktype)
 
     def handleError(self, record):
