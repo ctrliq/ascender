@@ -47,7 +47,7 @@ def construct_rsyslog_conf_template(settings=settings):
         [
             f'global (maxMessageSize="{max_bytes}" workDirectory="/var/lib/awx/rsyslog")',
             'module(load="imptcp")',
-            'input(type="imptcp" Path="' + settings.LOGGING['handlers']['external_logger']['address'] + '")',
+            'input(type="imptcp" Path="' + settings.LOGGING['handlers']['external_logger']['address'] + '" unlink="on")',
             'template(name="awx" type="string" string="%rawmsg-after-pri%")',
         ]
     )
