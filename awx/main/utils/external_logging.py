@@ -48,8 +48,8 @@ def construct_rsyslog_conf_template(settings=settings):
             '$WorkDirectory /var/lib/awx/rsyslog',
             f'$MaxMessageSize {max_bytes}',
             '$IncludeConfig /var/lib/awx/rsyslog/conf.d/*.conf',
-            'module(load="imuxsock" SysSock.Use="off")',
-            'input(type="imuxsock" Socket="' + settings.LOGGING['handlers']['external_logger']['address'] + '" unlink="on" RateLimit.Burst="0")',
+            'module(load="imptcp")',
+            'input(type="imptcp" Path="' + settings.LOGGING['handlers']['external_logger']['address'] + '")',
             'template(name="awx" type="string" string="%rawmsg-after-pri%")',
         ]
     )
