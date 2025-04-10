@@ -45,11 +45,9 @@ def construct_rsyslog_conf_template(settings=settings):
         parts.append('$DebugLevel 2')
     parts.extend(
         [
-            '$WorkDirectory /var/lib/awx/rsyslog',
-            f'$MaxMessageSize {max_bytes}',
-            '$IncludeConfig /var/lib/awx/rsyslog/conf.d/*.conf',
-            'module(load="imuxsock" SysSock.Use="off")',
-            'input(type="imuxsock" Socket="' + settings.LOGGING['handlers']['external_logger']['address'] + '" unlink="on" RateLimit.Burst="0")',
+            f'global (maxMessageSize="{max_bytes}" workDirectory="/var/lib/awx/rsyslog")',
+            'module(load="imptcp")',
+            'input(type="imptcp" Path="' + settings.LOGGING['handlers']['external_logger']['address'] + '" unlink="on")',
             'template(name="awx" type="string" string="%rawmsg-after-pri%")',
         ]
     )
@@ -113,6 +111,10 @@ def construct_rsyslog_conf_template(settings=settings):
                 # > arbitrary header key/value lists.
                 params.append('httpheaderkey="Authorization"')
                 params.append(f'httpheadervalue="Splunk {password}"')
+        if getattr(settings, 'LOG_AGGREGATOR_TYPE', None) == 'ledger':
+            if password:
+                params.append('httpheaderkey="Authorization"')
+                params.append(f'httpheadervalue="Ledger {password}"')
         elif username:
             params.append(f'uid="{username}"')
             if password:

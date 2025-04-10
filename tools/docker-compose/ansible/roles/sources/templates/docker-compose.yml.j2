@@ -76,7 +76,7 @@ services:
       - "3000:3001"  # used by the UI dev env
 {% endif %}
   redis_{{ container_postfix }}:
-    image: redis:latest
+    image: mirror.gcr.io/library/redis:latest
     container_name: tools_redis_{{ container_postfix }}
     volumes:
       - "../../redis/redis.conf:/usr/local/etc/redis/redis.conf:Z"
@@ -88,7 +88,7 @@ services:
 {% endfor %}
 {% if control_plane_node_count|int > 1 %}
   haproxy:
-    image: haproxy:2.3
+    image: mirror.gcr.io/library/haproxy:2.3
     user: "{{ ansible_user_uid }}"
     volumes:
       - "./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:Z"
@@ -150,7 +150,7 @@ services:
 {% endif %}
 {% if enable_splunk|bool %}
   splunk:
-    image: splunk/splunk:latest
+    image: mirror.gcr.io/splunk/splunk:latest
     container_name: tools_splunk_1
     hostname: splunk
     networks:
@@ -165,7 +165,7 @@ services:
 {% endif %}
 {% if enable_prometheus|bool %}
   prometheus:
-    image: prom/prometheus:latest
+    image: mirror.gcr.io/prom/prometheus:latest
     container_name: tools_prometheus_1
     hostname: prometheus
     networks:
@@ -182,7 +182,7 @@ services:
 {% endif %}
 {% if enable_grafana|bool %}
   grafana:
-    image: grafana/grafana-enterprise:latest
+    image: mirror.gcr.io/grafana/grafana-enterprise:latest
     container_name: tools_grafana_1
     hostname: grafana
     networks:
@@ -199,7 +199,7 @@ services:
 {% endif %}
 {% if enable_tacacs|bool %}
   tacacs:
-    image: dchidell/docker-tacacs
+    image: mirror.gcr.io/dchidell/docker-tacacs
     container_name: tools_tacacs_1
     hostname: tacacs
     ports:
@@ -228,7 +228,7 @@ services:
        - "${AWX_PG_PORT:-5441}:5432"
 {% if enable_pgbouncer|bool %}
   pgbouncer:
-    image: bitnami/pgbouncer:latest
+    image: mirror.gcr.io/bitnami/pgbouncer:latest
     container_name: tools_pgbouncer_1
     hostname: pgbouncer
     networks:
@@ -285,7 +285,7 @@ services:
 {% endif %}
 {% if enable_vault | bool %}
   vault:
-    image: hashicorp/vault:1.14
+    image: mirror.gcr.io/hashicorp/vault:1.14
     container_name: tools_vault_1
     command: server
     hostname: vault
