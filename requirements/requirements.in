@@ -8,7 +8,7 @@ boto3
 botocore
 channels
 channels-redis>=4.2.0
-cryptography>=43.0.1  # GHSA-h4gh-qq45-vh27
+cryptography>=44.0.1  # GHSA-h4gh-qq45-vh27
 Cython<3 # this is needed as a build dependency, one day we may have separated build deps
 daphne
 distro
