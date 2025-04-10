@@ -301,7 +301,7 @@ pyjwt==2.9.0
     #   adal
     #   social-auth-core
     #   twilio
-pyopenssl==24.2.1
+pyopenssl==24.3.0
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   twisted
