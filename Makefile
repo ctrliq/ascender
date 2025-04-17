@@ -208,7 +208,7 @@ supervisor:
 	@if [ "$(VENV_BASE)" ]; then \
 		. $(VENV_BASE)/awx/bin/activate; \
 	fi; \
-	supervisord --pidfile=/tmp/supervisor_pid -n
+	supervisord --pidfile=/tmp/supervisor_pid -n -c /etc/supervisord.conf
 
 collectstatic:
 	@if [ "$(VENV_BASE)" ]; then \
