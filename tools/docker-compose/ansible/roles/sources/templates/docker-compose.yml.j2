@@ -1,7 +1,6 @@
 #jinja2: lstrip_blocks: True
 # Modifications Copyright (c) 2023 Ctrl IQ, Inc.
 ---
-version: '2.1'
 services:
 {% for i in range(control_plane_node_count|int) %}
   {% set container_postfix = loop.index %}
