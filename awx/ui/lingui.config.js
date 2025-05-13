@@ -9,8 +9,5 @@ module.exports = {
     },
   ],
   compileNamespace: "es",
-  fallbackLocale: "en",
-  formatOptions: {
-    explicitIdAsDefault: true, // Treat all messages as having explicit IDs
-  },
+  fallbackLocales: { default: "en" }, // Updated to use fallbackLocales
 };
