@@ -6,7 +6,7 @@
     "node": ">=16.13.1"
   },
   "dependencies": {
-    "@lingui/react": "3.14.0",
+    "@lingui/react": "^4.0.0",
     "@patternfly/patternfly": "4.224.2",
     "@patternfly/react-core": "4.276.8",
     "@patternfly/react-icons": "4.93.6",
@@ -40,9 +40,9 @@
     "@babel/polyfill": "^7.12.1",
     "@babel/preset-react": "^7.22.5",
     "@cypress/instrument-cra": "^1.4.0",
-    "@lingui/cli": "^3.7.1",
-    "@lingui/loader": "3.15.0",
-    "@lingui/macro": "^3.7.1",
+    "@lingui/cli": "^4.0.0",
+    "@lingui/loader": "^4.0.0",
+    "@lingui/macro": "^4.0.0",
     "@nteract/mockument": "^1.0.4",
     "@testing-library/dom": "^8.18.1",
     "@testing-library/jest-dom": "^5.16.2",
