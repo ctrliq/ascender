@@ -902,7 +902,7 @@ LOGGING = {
         'awx.analytics': {'handlers': ['external_logger'], 'level': 'INFO', 'propagate': False},
         'awx.analytics.broadcast_websocket': {'handlers': ['console', 'file', 'wsrelay', 'external_logger'], 'level': 'INFO', 'propagate': False},
         'awx.analytics.performance': {'handlers': ['console', 'file', 'tower_warnings', 'external_logger'], 'level': 'DEBUG', 'propagate': False},
-        'awx.analytics.job_lifecycle': {'handlers': ['console', 'job_lifecycle'], 'level': 'DEBUG', 'propagate': False},
+        'awx.analytics.job_lifecycle': {'handlers': ['console', 'job_lifecycle', 'external_logger'], 'level': 'DEBUG', 'propagate': False},
         'django_auth_ldap': {'handlers': ['console', 'file', 'tower_warnings'], 'level': 'DEBUG'},
         'social': {'handlers': ['console', 'file', 'tower_warnings'], 'level': 'DEBUG'},
         'system_tracking_migrations': {'handlers': ['console', 'file', 'tower_warnings'], 'level': 'DEBUG'},
