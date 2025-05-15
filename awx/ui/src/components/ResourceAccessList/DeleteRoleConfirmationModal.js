@@ -3,7 +3,6 @@ import React from 'react';
 import { func, string } from 'prop-types';
 import { Button } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react';
-import { i18n } from '@lingui/core';
 import { msg } from '@lingui/macro';
 
 import { Role } from 'types';
