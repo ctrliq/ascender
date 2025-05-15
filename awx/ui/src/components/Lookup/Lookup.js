@@ -55,6 +55,7 @@ function Lookup(props) {
     modalDescription,
     onUpdate,
   } = props;
+  const { i18n } = useLingui();
   const [typedText, setTypedText] = useState('');
   const debounceRequest = useDebounce(onDebounce, 1000);
   useField({

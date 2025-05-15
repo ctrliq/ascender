@@ -90,7 +90,7 @@ const QS_CONFIG = getQSConfig(
   ['id', 'page', 'page_size', 'inventory']
 );
 
-const buildSearchColumns = () => [
+const buildSearchColumns = (i18n) => [
   {
     name: i18n._(msg`Name`),
     key: 'name__icontains',
@@ -146,7 +146,7 @@ function HostFilterLookup({
   const { isModalOpen, toggleModal, closeModal } = useModal();
   const [isAnsibleFactsSelected, setIsAnsibleFactsSelected] = useState(false);
 
-  const searchColumns = buildSearchColumns();
+  const searchColumns = buildSearchColumns(i18n);
   const config = useConfig();
 
   const parseRelatedSearchFields = (searchFields) => {
