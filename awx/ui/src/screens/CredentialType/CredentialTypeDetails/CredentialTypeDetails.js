@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
 import { Link, useHistory } from 'react-router-dom';
 import { Button } from '@patternfly/react-core';
 
@@ -17,8 +17,10 @@ import {
   getRelatedResourceDeleteCounts,
 } from 'util/getRelatedResourceDeleteDetails';
 import ErrorDetail from 'components/ErrorDetail';
+import { useLingui } from '@lingui/react';
 
 function CredentialTypeDetails({ credentialType }) {
+  const { i18n } = useLingui();
   const { id, name, description, injectors, inputs } = credentialType;
   const history = useHistory();
 
@@ -65,34 +67,34 @@ function CredentialTypeDetails({ credentialType }) {
     <CardBody>
       <DetailList>
         <Detail
-          label={t`Name`}
+          label={i18n._(msg`Name`)}
           value={name}
           dataCy="credential-type-detail-name"
         />
-        <Detail label={t`Description`} value={description} />
+        <Detail label={i18n._(msg`Description`)} value={description} />
         <VariablesDetail
-          label={t`Input configuration`}
+          label={i18n._(msg`Input configuration`)}
           value={jsonToYaml(JSON.stringify(inputs))}
           rows={6}
           name="input"
           dataCy="credential-type-detail-input"
-          helpText={t`Input schema which defines a set of ordered fields for that type.`}
+          helpText={i18n._(msg`Input schema which defines a set of ordered fields for that type.`)}
         />
         <VariablesDetail
-          label={t`Injector configuration`}
+          label={i18n._(msg`Injector configuration`)}
           value={jsonToYaml(JSON.stringify(injectors))}
           rows={6}
           name="injector"
           dataCy="credential-type-detail-injector"
-          helpText={t`Environment variables or extra variables that specify the values a credential type can inject.`}
+          helpText={i18n._(msg`Environment variables or extra variables that specify the values a credential type can inject.`)}
         />
         <UserDateDetail
-          label={t`Created`}
+          label={i18n._(msg`Created`)}
           date={credentialType.created}
           user={credentialType.summary_fields.created_by}
         />
         <UserDateDetail
-          label={t`Last Modified`}
+          label={i18n._(msg`Last Modified`)}
           date={credentialType.modified}
           user={credentialType.summary_fields.modified_by}
         />
@@ -102,26 +104,26 @@ function CredentialTypeDetails({ credentialType }) {
           credentialType.summary_fields.user_capabilities.edit && (
             <Button
               ouiaId="credential-type-detail-edit-button"
-              aria-label={t`edit`}
+              aria-label={i18n._(msg`edit`)}
               component={Link}
               to={`/credential_types/${id}/edit`}
             >
-              {t`Edit`}
+              {i18n._(msg`Edit`)}
             </Button>
           )}
         {credentialType.summary_fields.user_capabilities &&
           credentialType.summary_fields.user_capabilities.delete && (
             <DeleteButton
               name={name}
-              modalTitle={t`Delete credential type`}
+              modalTitle={i18n._(msg`Delete credential type`)}
               onConfirm={deleteCredentialType}
               isDisabled={isLoading || isDeleteDisabled}
               disabledTooltip={
                 isDeleteDisabled &&
-                t`This credential type is currently being used by some credentials and cannot be deleted`
+                i18n._(msg`This credential type is currently being used by some credentials and cannot be deleted`)
               }
             >
-              {t`Delete`}
+              {i18n._(msg`Delete`)}
             </DeleteButton>
           )}
       </CardActionsRow>
@@ -130,7 +132,7 @@ function CredentialTypeDetails({ credentialType }) {
         <AlertModal
           isOpen={error}
           onClose={dismissError}
-          title={t`Error`}
+          title={i18n._(msg`Error`)}
           variant="error"
         >
           <ErrorDetail error={error} />
