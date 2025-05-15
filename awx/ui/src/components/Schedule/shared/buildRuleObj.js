@@ -1,4 +1,3 @@
-import { useLingui } from '@lingui/react';
 import { msg } from '@lingui/macro';
 import { RRule } from 'rrule';
 import { DateTime } from 'luxon';
@@ -37,8 +36,7 @@ function pad(num) {
   return num < 10 ? `0${num}` : num;
 }
 
-export default function buildRuleObj(values, includeStart) {
-  const { i18n } = useLingui();
+export default function buildRuleObj(values, includeStart, i18n) {
   const ruleObj = {
     interval: values.interval,
   };

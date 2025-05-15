@@ -50,7 +50,7 @@ function ResourceAccessListItem({ accessRecord, onRoleDelete }) {
   );
 
   const [teamRoles, userRoles] = getRoleLists();
-
+  const { i18n } = useLingui();
   return (
     <Tr
       id={`access-item-row-${accessRecord.id}`}
