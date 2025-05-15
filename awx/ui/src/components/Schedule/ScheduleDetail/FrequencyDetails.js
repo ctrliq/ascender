@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { t, Plural, SelectOrdinal } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import { DateTime } from 'luxon';
 import { formatDateString } from 'util/dates';
 import { DetailList, Detail } from '../../DetailList';
@@ -17,6 +18,7 @@ export default function FrequencyDetails({
   timezone,
   isException,
 }) {
+  const { i18n } = useLingui();
   const getRunEveryLabel = () => {
     const { interval } = options;
     switch (type) {
@@ -69,18 +71,18 @@ export default function FrequencyDetails({
           />
         );
       default:
-        throw new Error(t`Frequency did not match an expected value`);
+        throw new Error(i18n._(msg`Frequency did not match an expected value`));
     }
   };
 
   const weekdays = {
-    0: t`Monday`,
-    1: t`Tuesday`,
-    2: t`Wednesday`,
-    3: t`Thursday`,
-    4: t`Friday`,
-    5: t`Saturday`,
-    6: t`Sunday`,
+    0: i18n._(msg`Monday`),
+    1: i18n._(msg`Tuesday`),
+    2: i18n._(msg`Wednesday`),
+    3: i18n._(msg`Thursday`),
+    4: i18n._(msg`Friday`),
+    5: i18n._(msg`Saturday`),
+    6: i18n._(msg`Sunday`),
   };
 
   const prefix = isException ? `exception-${type}` : `frequency-${type}`;
@@ -90,13 +92,13 @@ export default function FrequencyDetails({
       <Label>{label}</Label>
       <DetailList gutter="sm">
         <Detail
-          label={isException ? t`Skip every` : t`Run every`}
+          label={isException ? i18n._(msg`Skip every`) : i18n._(msg`Run every`)}
           value={getRunEveryLabel()}
           dataCy={`${prefix}-run-every`}
         />
         {type === 'week' && options.daysOfWeek ? (
           <Detail
-            label={t`On days`}
+            label={i18n._(msg`On days`)}
             value={options.daysOfWeek
               .sort(sortWeekday)
               .map((d) => weekdays[d.weekday])
@@ -123,23 +125,23 @@ function sortWeekday(a, b) {
 
 function RunOnDetail({ type, options, prefix }) {
   const weekdays = {
-    sunday: t`Sunday`,
-    monday: t`Monday`,
-    tuesday: t`Tuesday`,
-    wednesday: t`Wednesday`,
-    thursday: t`Thursday`,
-    friday: t`Friday`,
-    saturday: t`Saturday`,
-    day: t`day`,
-    weekday: t`weekday`,
-    weekendDay: t`weekend day`,
-  };
+    sunday: i18n._(msg`Sunday`),
+    monday: i18n._(msg`Monday`),
+    tuesday: i18n._(msg`Tuesday`),
+    wednesday: i18n._(msg`Wednesday`),
+    thursday: i18n._(msg`Thursday`),
+    friday: i18n._(msg`Friday`),
+    saturday: i18n._(msg`Saturday`),
+    day: i18n._(msg`day`),
+    weekday: i18n._(msg`weekday`),
+    weekendDay: i18n._(msg`weekend day`),
+  }
   if (type === 'month') {
     if (options.runOn === 'day') {
       return (
         <Detail
-          label={t`Run on`}
-          value={t`Day ${options.runOnDayNumber}`}
+          label={i18n._(msg`Run on`)}
+          value={i18n._(msg`Day {num}`, { num: options.runOnDayNumber })}
           dataCy={`${prefix}-run-on-day`}
         />
       );
@@ -147,7 +149,7 @@ function RunOnDetail({ type, options, prefix }) {
     const dayOfWeek = weekdays[options.runOnTheDay];
     return (
       <Detail
-        label={t`Run on`}
+        label={i18n._(msg`Run on`)}
         value={
           options.runOnTheOccurrence === -1 ? (
             t`The last ${dayOfWeek}`
@@ -168,23 +170,22 @@ function RunOnDetail({ type, options, prefix }) {
   }
   if (type === 'year') {
     const months = {
-      1: t`January`,
-      2: t`February`,
-      3: t`March`,
-      4: t`April`,
-      5: t`May`,
-      6: t`June`,
-      7: t`July`,
-      8: t`August`,
-      9: t`September`,
-      10: t`October`,
-      11: t`November`,
-      12: t`December`,
+      1: i18n._(msg`January`),
+      2: i18n._(msg`February`),
+      3: i18n._(msg`March`),
+      4: i18n._(msg`April`),
+      5: i18n._(msg`June`),
+      6: i18n._(msg`July`),
+      7: i18n._(msg`August`),
+      8: i18n._(msg`September`),
+      9: i18n._(msg`October`),
+      10: i18n._(msg`November`),
+      11: i18n._(msg`December`),
     };
     if (options.runOn === 'day') {
       return (
         <Detail
-          label={t`Run on`}
+          label={i18n._(msg`Run on`)}
           value={`${months[options.runOnTheMonth]} ${options.runOnDayMonth}`}
           dataCy={`${prefix}-run-on-day`}
         />
@@ -194,7 +195,7 @@ function RunOnDetail({ type, options, prefix }) {
     const month = months[options.runOnTheMonth];
     return (
       <Detail
-        label={t`Run on`}
+        label={i18n._(msg`Run on`)}
         value={
           options.runOnTheOccurrence === -1 ? (
             t`The last ${weekday} of ${month}`
@@ -218,7 +219,7 @@ function RunOnDetail({ type, options, prefix }) {
 
 function getEndValue(type, options, timezone) {
   if (options.end === 'never') {
-    return t`Never`;
+    return i18n._(msg`Never`);
   }
   if (options.end === 'after') {
     const numOccurrences = options.occurrences;
@@ -230,7 +231,6 @@ function getEndValue(type, options, timezone) {
       />
     );
   }
-
   const date = DateTime.fromFormat(
     `${options.endDate} ${options.endTime}`,
     'yyyy-MM-dd h:mm a',
