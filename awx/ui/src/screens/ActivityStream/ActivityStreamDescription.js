@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 
 const buildAnchor = (obj, resource, activity) => {
   let url;
@@ -143,6 +144,7 @@ const buildLabeledLink = (label, link) => (
 );
 
 function ActivityStreamDescription({ activity }) {
+  const { i18n } = useLingui();
   const labeledLinks = [];
   // Activity stream objects will outlive the resources they reference
   // in that case, summary_fields will not be available - show generic error text instead
@@ -502,18 +504,18 @@ function ActivityStreamDescription({ activity }) {
             ) {
               let operationText = '';
               if (activity.changes.status[1] === 'successful') {
-                operationText = t`approved`;
+                operationText = msg`approved`;
               } else if (activity.changes.status[1] === 'failed') {
                 if (
                   activity.changes.timed_out &&
                   activity.changes.timed_out[1] === true
                 ) {
-                  operationText = t`timed out`;
+                  operationText = msg`timed out`;
                 } else {
-                  operationText = t`denied`;
+                  operationText = msg`denied`;
                 }
               } else {
-                operationText = t`updated`;
+                operationText = msg`updated`;
               }
               labeledLinks.push(
                 buildLabeledLink(
@@ -552,7 +554,7 @@ function ActivityStreamDescription({ activity }) {
         break;
     }
   } catch (err) {
-    return <span>{t`Event summary not available`}</span>;
+    return <span>{i18n._(msg`Event summary not available`)}</span>;
   }
 
   return (

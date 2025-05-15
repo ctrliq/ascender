@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
-
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import { Link, useHistory } from 'react-router-dom';
 import { Button } from '@patternfly/react-core';
 
@@ -18,6 +18,7 @@ function ApplicationDetails({
   authorizationOptions,
   clientTypeOptions,
 }) {
+  const { i18n } = useLingui();
   const applicationHelpTextStrings = getApplicationHelpTextStrings();
   const history = useHistory();
   const {
@@ -57,17 +58,17 @@ function ApplicationDetails({
     <CardBody>
       <DetailList>
         <Detail
-          label={t`Name`}
+          label={i18n._(msg`Name`)}
           value={application.name}
           dataCy="app-detail-name"
         />
         <Detail
-          label={t`Description`}
+          label={i18n._(msg`Description`)}
           value={application.description}
           dataCy="app-detail-description"
         />
         <Detail
-          label={t`Organization`}
+          label={i18n._(msg`Organization`)}
           value={
             <Link
               to={`/organizations/${application.summary_fields.organization.id}/details`}
@@ -78,7 +79,7 @@ function ApplicationDetails({
           dataCy="app-detail-organization"
         />
         <Detail
-          label={t`Authorization grant type`}
+          label={i18n._(msg`Authorization grant type`)}
           value={getAuthorizationGrantType(
             application.authorization_grant_type
           )}
@@ -86,24 +87,24 @@ function ApplicationDetails({
           helpText={applicationHelpTextStrings.authorizationGrantType}
         />
         <Detail
-          label={t`Client ID`}
+          label={i18n._(msg`Client ID`)}
           value={application.client_id}
           dataCy="app-detail-client-id"
         />
         <Detail
-          label={t`Redirect URIs`}
+          label={i18n._(msg`Redirect URIs`)}
           value={application.redirect_uris}
           dataCy="app-detail-redirect-uris"
           helpText={applicationHelpTextStrings.redirectURIS}
         />
         <Detail
-          label={t`Client type`}
+          label={i18n._(msg`Client type`)}
           value={getClientType(application.client_type)}
           dataCy="app-detail-client-type"
           helpText={applicationHelpTextStrings.clientType}
         />
-        <UserDateDetail label={t`Created`} date={application.created} />
-        <UserDateDetail label={t`Last Modified`} date={application.modified} />
+        <UserDateDetail label={i18n._(msg`Created`)} date={application.created} />
+        <UserDateDetail label={i18n._(msg`Last Modified`)} date={application.modified} />
       </DetailList>
       <CardActionsRow>
         {application.summary_fields.user_capabilities &&
@@ -112,20 +113,20 @@ function ApplicationDetails({
               ouiaId="application-details-edit-button"
               component={Link}
               to={`/applications/${application.id}/edit`}
-              aria-label={t`Edit`}
+              aria-label={i18n._(msg`Edit`)}
             >
-              {t`Edit`}
+              {i18n._(msg`Edit`)}
             </Button>
           )}
         {application.summary_fields.user_capabilities &&
           application.summary_fields.user_capabilities.delete && (
             <DeleteButton
               name={application.name}
-              modalTitle={t`Delete application`}
+              modalTitle={i18n._(msg`Delete application`)}
               onConfirm={deleteApplications}
               isDisabled={deleteLoading}
             >
-              {t`Delete`}
+              {i18n._(msg`Delete`)}
             </DeleteButton>
           )}
       </CardActionsRow>
@@ -133,10 +134,10 @@ function ApplicationDetails({
         <AlertModal
           isOpen={error}
           variant="error"
-          title={t`Error!`}
+          title={i18n._(msg`Error!`)}
           onClose={dismissError}
         >
-          {t`Failed to delete application.`}
+          {i18n._(msg`Failed to delete application.`)}
           <ErrorDetail error={error} />
         </AlertModal>
       )}
