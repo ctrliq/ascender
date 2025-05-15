@@ -14,11 +14,14 @@ function HostToggle({
   host,
   isDisabled = false,
   onToggle,
-  tooltip = i18n._(msg`Indicates if a host is available and should be included in running
-    jobs.  For hosts that are part of an external inventory, this may be
-    reset by the inventory sync process.`),
+  tooltip,
 }) {
   const { i18n } = useLingui();
+  if (!tooltip) {
+    tooltip = i18n._(msg`Indicates if a host is available and should be included in running
+    jobs.  For hosts that are part of an external inventory, this may be
+    reset by the inventory sync process.`);
+  }
   const [isEnabled, setIsEnabled] = useState(host.enabled);
   const [showError, setShowError] = useState(false);
 
