@@ -176,6 +176,7 @@ function ModeToggle({
   onExpand,
   name,
 }) {
+  const { i18n } = useLingui();
   return (
     <Split hasGutter>
       <SplitItem isFilled>

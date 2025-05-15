@@ -216,6 +216,7 @@ function VariablesFieldInternals({
   handleChange,
   isRequired,
 }) {
+  const { i18n } = useLingui();
   const [field, meta, helpers] = useField(name);
 
   useEffect(() => {
