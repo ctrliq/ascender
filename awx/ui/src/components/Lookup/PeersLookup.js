@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect } from 'react';
 import { arrayOf, string, func, bool, shape } from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { FormGroup, Chip } from '@patternfly/react-core';
 import { InstancesAPI } from 'api';
 import { Instance } from 'types';
@@ -39,6 +40,7 @@ function PeersLookup({
   typePeers,
   instance_details,
 }) {
+  const { i18n } = useLingui();
   const {
     result: { instances, count, relatedSearchableKeys, searchableKeys },
     request: fetchInstances,
@@ -121,14 +123,14 @@ function PeersLookup({
             displayKey="hostname"
             searchColumns={[
               {
-                name: t`Hostname`,
+                name: i18n._(msg`Hostname`),
                 key: 'hostname__icontains',
                 isDefault: true,
               },
             ]}
             sortColumns={[
               {
-                name: t`Hostname`,
+                name: i18n._(msg`Hostname`),
                 key: 'hostname',
               },
             ]}
@@ -196,14 +198,14 @@ PeersLookup.defaultProps = {
   columns: [
     {
       key: 'hostname',
-      name: t`Hostname`,
+      name: i18n._(msg`Hostname`),
     },
     {
       key: 'node_type',
-      name: t`Node Type`,
+      name: i18n._(msg`Node Type`),
     },
   ],
-  formLabel: t`Instances`,
+  formLabel: i18n._(msg`Instances`),
   instance_details: {},
   multiple: true,
   typePeers: false,

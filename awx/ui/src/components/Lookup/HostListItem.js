@@ -1,13 +1,15 @@
 import React from 'react';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { Td, Tr } from '@patternfly/react-table';
 
 function HostListItem({ item }) {
+  const { i18n } = useLingui();
   return (
     <Tr ouiaId={`host-list-item-${item.id}`}>
-      <Td dataLabel={t`Name`}>{item.name}</Td>
-      <Td dataLabel={t`Description`}>{item.description}</Td>
-      <Td dataLabel={t`Inventory`}>{item.summary_fields.inventory.name}</Td>
+      <Td dataLabel={i18n._(msg`Name`)}>{item.name}</Td>
+      <Td dataLabel={i18n._(msg`Description`)}>{item.description}</Td>
+      <Td dataLabel={i18n._(msg`Inventory`)}>{item.summary_fields.inventory.name}</Td>
     </Tr>
   );
 }
