@@ -195,17 +195,8 @@ PeersLookup.defaultProps = {
   required: false,
   validate: () => undefined,
   fieldName: 'instances',
-  columns: [
-    {
-      key: 'hostname',
-      name: i18n._(msg`Hostname`),
-    },
-    {
-      key: 'node_type',
-      name: i18n._(msg`Node Type`),
-    },
-  ],
-  formLabel: i18n._(msg`Instances`),
+  columns: undefined,
+  formLabel: undefined,
   instance_details: {},
   multiple: true,
   typePeers: false,
