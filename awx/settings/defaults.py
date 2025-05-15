@@ -854,7 +854,6 @@ LOGGING = {
         'json': {'()': 'awx.main.utils.formatters.LogstashFormatter'},
         'timed_import': {'()': 'awx.main.utils.formatters.TimeFormatter', 'format': '%(relativeSeconds)9.3f %(levelname)-8s %(message)s'},
         'dispatcher': {'format': '%(asctime)s %(levelname)-8s [%(guid)s] %(name)s PID:%(process)d %(message)s'},
-        'job_lifecycle': {'()': 'awx.main.utils.formatters.JobLifeCycleFormatter'},
     },
     # Extended below based on install scenario. You probably don't want to add something directly here.
     # See 'handler_config' below.
@@ -903,7 +902,7 @@ LOGGING = {
         'awx.analytics': {'handlers': ['external_logger'], 'level': 'INFO', 'propagate': False},
         'awx.analytics.broadcast_websocket': {'handlers': ['console', 'file', 'wsrelay', 'external_logger'], 'level': 'INFO', 'propagate': False},
         'awx.analytics.performance': {'handlers': ['console', 'file', 'tower_warnings', 'external_logger'], 'level': 'DEBUG', 'propagate': False},
-        'awx.analytics.job_lifecycle': {'handlers': ['console', 'job_lifecycle'], 'level': 'DEBUG', 'propagate': False},
+        'awx.analytics.job_lifecycle': {'handlers': ['console', 'job_lifecycle', 'external_logger'], 'level': 'DEBUG', 'propagate': False},
         'django_auth_ldap': {'handlers': ['console', 'file', 'tower_warnings'], 'level': 'DEBUG'},
         'social': {'handlers': ['console', 'file', 'tower_warnings'], 'level': 'DEBUG'},
         'system_tracking_migrations': {'handlers': ['console', 'file', 'tower_warnings'], 'level': 'DEBUG'},
@@ -922,7 +921,7 @@ handler_config = {
     'wsrelay': {'filename': 'wsrelay.log'},
     'task_system': {'filename': 'task_system.log'},
     'rbac_migrations': {'filename': 'tower_rbac_migrations.log'},
-    'job_lifecycle': {'filename': 'job_lifecycle.log', 'formatter': 'job_lifecycle'},
+    'job_lifecycle': {'filename': 'job_lifecycle.log'},
     'rsyslog_configurer': {'filename': 'rsyslog_configurer.log'},
     'cache_clear': {'filename': 'cache_clear.log'},
     'ws_heartbeat': {'filename': 'ws_heartbeat.log'},
