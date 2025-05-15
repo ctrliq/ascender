@@ -19,9 +19,9 @@ const QS_CONFIG = (order_by = 'name') =>
   });
 
 function AssociateModal({
-  header = i18n._(msg`Items`),
+  header,
   columns = [],
-  title = i18n._(msg`Select Items`),
+  title,
   onClose,
   onAssociate,
   fetchRequest,
@@ -34,6 +34,10 @@ function AssociateModal({
   const { i18n } = useLingui();
   const history = useHistory();
   const { selected, handleSelect } = useSelected([]);
+
+  // Set default values for header and title after i18n is available
+  header = header || i18n._(msg`Items`);
+  title = title || i18n._(msg`Select Items`);
 
   const {
     request: fetchItems,
