@@ -1,6 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-import { t } from '@lingui/macro';
+import { msg } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
 import { useField } from 'formik';
 import { Form, FormGroup } from '@patternfly/react-core';
 import { ExecutionEnvironmentsAPI } from 'api';
@@ -19,6 +20,7 @@ const QS_CONFIG = getQSConfig('execution_environments', {
   order_by: 'name',
 });
 function AdHocExecutionEnvironmentStep({ organizationId }) {
+  const { i18n } = useLingui();
   const history = useHistory();
   const [executionEnvironmentField, , executionEnvironmentHelpers] = useField(
     'execution_environment'
@@ -87,11 +89,11 @@ function AdHocExecutionEnvironmentStep({ organizationId }) {
     <Form autoComplete="off">
       <FormGroup
         fieldId="execution_enviroment"
-        label={t`Execution Environment`}
-        aria-label={t`Execution Environment`}
+        label={i18n._(msg`Execution Environment`)}
+        aria-label={i18n._(msg`Execution Environment`)}
         labelIcon={
           <Popover
-            content={t`Select the Execution Environment you want this command to run inside.`}
+            content={i18n._(msg`Select the Execution Environment you want this command to run inside.`)}
           />
         }
       >
@@ -100,26 +102,26 @@ function AdHocExecutionEnvironmentStep({ organizationId }) {
           value={executionEnvironmentField.value || []}
           options={executionEnvironments}
           optionCount={executionEnvironmentsCount}
-          header={t`Execution Environments`}
+          header={i18n._(msg`Execution Environments`)}
           qsConfig={QS_CONFIG}
           searchColumns={[
             {
-              name: t`Name`,
+              name: i18n._(msg`Name`),
               key: 'name__icontains',
               isDefault: true,
             },
             {
-              name: t`Created By (Username)`,
+              name: i18n._(msg`Created By (Username)`),
               key: 'created_by__username',
             },
             {
-              name: t`Modified By (Username)`,
+              name: i18n._(msg`Modified By (Username)`),
               key: 'modified_by__username',
             },
           ]}
           sortColumns={[
             {
-              name: t`Name`,
+              name: i18n._(msg`Name`),
               key: 'name',
             },
           ]}

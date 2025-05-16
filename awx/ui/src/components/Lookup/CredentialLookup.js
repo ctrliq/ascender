@@ -10,7 +10,8 @@ import {
   oneOfType,
 } from 'prop-types';
 
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { FormGroup } from '@patternfly/react-core';
 import { CredentialsAPI } from 'api';
 import { Credential } from 'types';
@@ -49,6 +50,7 @@ function CredentialLookup({
   validate,
   value,
 }) {
+  const { i18n } = useLingui();
   const history = useHistory();
   const autoPopulateLookup = useAutoPopulateLookup(onChange);
   const {
@@ -186,22 +188,22 @@ function CredentialLookup({
             qsConfig={QS_CONFIG}
             searchColumns={[
               {
-                name: t`Name`,
+                name: i18n._(msg`Name`),
                 key: 'name__icontains',
                 isDefault: true,
               },
               {
-                name: t`Created By (Username)`,
+                name: i18n._(msg`Created By (Username)`),
                 key: 'created_by__username__icontains',
               },
               {
-                name: t`Modified By (Username)`,
+                name: i18n._(msg`Modified By (Username)`),
                 key: 'modified_by__username__icontains',
               },
             ]}
             sortColumns={[
               {
-                name: t`Name`,
+                name: i18n._(msg`Name`),
                 key: 'name',
               },
             ]}

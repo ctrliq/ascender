@@ -1,7 +1,9 @@
 import React from 'react';
 import { bool, string } from 'prop-types';
 import { Link } from 'react-router-dom';
-import { t, Trans } from '@lingui/macro';
+import { msg, Trans } from '@lingui/macro';
+import { useLingui } from "@lingui/react";
+
 import { Popover, Tooltip } from '@patternfly/react-core';
 import styled from 'styled-components';
 import { ExclamationTriangleIcon as PFExclamationTriangleIcon } from '@patternfly/react-icons';
@@ -32,13 +34,14 @@ function ExecutionEnvironmentDetail({
   helpText,
   dataCy,
 }) {
+  const { i18n } = useLingui();
   const config = useConfig();
   const docsLink = `${getDocsBaseUrl(
     config
   )}/html/upgrade-migration-guide/upgrade_to_ees.html`;
   const label = isDefaultEnvironment
-    ? t`Default Execution Environment`
-    : t`Execution Environment`;
+    ? i18n._(msg`Default Execution Environment`)
+    : i18n._(msg`Execution Environment`);
 
   if (executionEnvironment) {
     return (
@@ -63,11 +66,11 @@ function ExecutionEnvironmentDetail({
         helpText={helpText}
         value={
           <>
-            {t`Missing resource`}
+            {i18n._(msg`Missing resource`)}
             <span>
               <Popover
                 className="missing-execution-environment"
-                headerContent={<div>{t`Execution Environment Missing`}</div>}
+                headerContent={<div>{i18n._(msg`Execution Environment Missing`)}</div>}
                 bodyContent={
                   <div>
                     <Trans>
@@ -102,14 +105,14 @@ function ExecutionEnvironmentDetail({
   ) {
     return (
       <Detail
-        label={t`Execution Environment`}
+        label={i18n._(msg`Execution Environment`)}
         helpText={helpText}
         value={
           <>
-            {t`Missing resource`}
+            {i18n._(msg`Missing resource`)}
             <span>
               <Tooltip
-                content={t`Execution environment is missing or deleted.`}
+                content={i18n._(msg`Execution environment is missing or deleted.`)}
               >
                 <ExclamationTriangleIcon />
               </Tooltip>
