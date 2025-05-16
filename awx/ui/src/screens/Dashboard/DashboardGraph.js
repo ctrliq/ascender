@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import {
   Card,
   CardHeader,
@@ -33,6 +34,7 @@ const GraphCardActions = styled(CardActions)`
 `;
 
 function DashboardGraph() {
+  const { i18n } = useLingui();
   const [isPeriodDropdownOpen, setIsPeriodDropdownOpen] = useState(false);
   const [isJobTypeDropdownOpen, setIsJobTypeDropdownOpen] = useState(false);
   const [isJobStatusDropdownOpen, setIsJobStatusDropdownOpen] = useState(false);
@@ -92,9 +94,9 @@ function DashboardGraph() {
         <GraphCardActions>
           <Select
             variant={SelectVariant.single}
-            placeholderText={t`Select period`}
-            aria-label={t`Select period`}
-            typeAheadAriaLabel={t`Select period`}
+            placeholderText={i18n._(msg`Select period`)}
+            aria-label={i18n._(msg`Select period`)}
+            typeAheadAriaLabel={i18n._(msg`Select period`)}
             className="periodSelect"
             onToggle={setIsPeriodDropdownOpen}
             onSelect={(event, selection) => {
@@ -103,26 +105,26 @@ function DashboardGraph() {
             }}
             selections={periodSelection}
             isOpen={isPeriodDropdownOpen}
-            noResultsFoundText={t`No results found`}
+            noResultsFoundText={i18n._(msg`No results found`)}
             ouiaId="dashboard-period-select"
           >
             <SelectOption key="month" value="month">
-              {t`Past month`}
+              {i18n._(msg`Past month`)}
             </SelectOption>
             <SelectOption key="two_weeks" value="two_weeks">
-              {t`Past two weeks`}
+              {i18n._(msg`Past two weeks`)}
             </SelectOption>
             <SelectOption key="week" value="week">
-              {t`Past week`}
+              {i18n._(msg`Past week`)}
             </SelectOption>
             <SelectOption key="day" value="day">
-              {t`Past 24 hours`}
+              {i18n._(msg`Past 24 hours`)}
             </SelectOption>
           </Select>
           <Select
             variant={SelectVariant.single}
-            placeholderText={t`Select job type`}
-            aria-label={t`Select job type`}
+            placeholderText={i18n._(msg`Select job type`)}
+            aria-label={i18n._(msg`Select job type`)}
             className="jobTypeSelect"
             onToggle={setIsJobTypeDropdownOpen}
             onSelect={(event, selection) => {
@@ -134,22 +136,22 @@ function DashboardGraph() {
             ouiaId="dashboard-job-type-select"
           >
             <SelectOption key="all" value="all">
-              {t`All job types`}
+              {i18n._(msg`All job types`)}
             </SelectOption>
             <SelectOption key="inv_sync" value="inv_sync">
-              {t`Inventory sync`}
+              {i18n._(msg`Inventory sync`)}
             </SelectOption>
             <SelectOption key="scm_update" value="scm_update">
-              {t`SCM update`}
+              {i18n._(msg`SCM update`)}
             </SelectOption>
             <SelectOption key="playbook_run" value="playbook_run">
-              {t`Playbook run`}
+              {i18n._(msg`Playbook run`)}
             </SelectOption>
           </Select>
           <StatusSelect
             variant={SelectVariant.single}
-            placeholderText={t`Select status`}
-            aria-label={t`Select status`}
+            placeholderText={i18n._(msg`Select status`)}
+            aria-label={i18n._(msg`Select status`)}
             className="jobStatusSelect"
             onToggle={setIsJobStatusDropdownOpen}
             onSelect={(event, selection) => {
@@ -159,15 +161,15 @@ function DashboardGraph() {
             selections={jobStatusSelection}
             isOpen={isJobStatusDropdownOpen}
           >
-            <SelectOption key="all" value="all">{t`All jobs`}</SelectOption>
+            <SelectOption key="all" value="all">{i18n._(msg`All jobs`)}</SelectOption>
             <SelectOption
               key="successful"
               value="successful"
-            >{t`Successful jobs`}</SelectOption>
+            >{i18n._(msg`Successful jobs`)}</SelectOption>
             <SelectOption
               key="failed"
               value="failed"
-            >{t`Failed jobs`}</SelectOption>
+            >{i18n._(msg`Failed jobs`)}</SelectOption>
           </StatusSelect>
         </GraphCardActions>
       </GraphCardHeader>

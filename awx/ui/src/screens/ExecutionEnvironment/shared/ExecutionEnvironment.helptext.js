@@ -1,13 +1,13 @@
 import React from 'react';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
 
-const executionEnvironmentHelpTextStrings = () => ({
+const executionEnvironmentHelpTextStrings = {
   image: (
     <span>
-      {t`The full image location, including the container registry, image name, and version tag.`}
+      {msg`The full image location, including the container registry, image name, and version tag.`}
       <br />
       <br />
-      {t`Examples:`}
+      {msg`Examples:`}
       <ul css="margin: 10px 0 10px 20px">
         <li>
           <code>quay.io/ansible/awx-ee:latest</code>
@@ -18,7 +18,7 @@ const executionEnvironmentHelpTextStrings = () => ({
       </ul>
     </span>
   ),
-  registryCredential: t`Credential to authenticate with a protected container registry.`,
-});
+  registryCredential: msg`Credential to authenticate with a protected container registry.`,
+};
 
 export default executionEnvironmentHelpTextStrings;
