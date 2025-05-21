@@ -34,7 +34,7 @@ def hosts(ref_time):
 
 def test_start_job_fact_cache(hosts, tmpdir):
     fact_cache = os.path.join(tmpdir, 'facts')
-    last_modified = start_fact_cache(hosts, fact_cache, timeout=0)
+    last_modified, _ = start_fact_cache(hosts, fact_cache, timeout=0)
 
     for host in hosts:
         filepath = os.path.join(fact_cache, host.name)
@@ -61,7 +61,7 @@ def test_fact_cache_with_invalid_path_traversal(tmpdir):
 def test_start_job_fact_cache_past_timeout(hosts, tmpdir):
     fact_cache = os.path.join(tmpdir, 'facts')
     # the hosts fixture was modified 5s ago, which is more than 2s
-    last_modified = start_fact_cache(hosts, fact_cache, timeout=2)
+    last_modified, _ = start_fact_cache(hosts, fact_cache, timeout=2)
     assert last_modified is None
 
     for host in hosts:
@@ -71,7 +71,7 @@ def test_start_job_fact_cache_past_timeout(hosts, tmpdir):
 def test_start_job_fact_cache_within_timeout(hosts, tmpdir):
     fact_cache = os.path.join(tmpdir, 'facts')
     # the hosts fixture was modified 5s ago, which is less than 7s
-    last_modified = start_fact_cache(hosts, fact_cache, timeout=7)
+    last_modified, _ = start_fact_cache(hosts, fact_cache, timeout=7)
     assert last_modified
 
     for host in hosts:
@@ -80,7 +80,7 @@ def test_start_job_fact_cache_within_timeout(hosts, tmpdir):
 
 def test_finish_job_fact_cache_clear(hosts, mocker, ref_time, tmpdir):
     fact_cache = os.path.join(tmpdir, 'facts')
-    last_modified = start_fact_cache(hosts, fact_cache, timeout=0)
+    last_modified, _ = start_fact_cache(hosts, fact_cache, timeout=0)
 
     bulk_update = mocker.patch('awx.main.tasks.facts.bulk_update_sorted_by_id')
     mocker.patch('os.path.exists', side_effect=lambda path: hosts[1].name not in path)
@@ -108,7 +108,7 @@ def test_finish_job_fact_cache_clear(hosts, mocker, ref_time, tmpdir):
 
 def test_finish_job_fact_cache_with_bad_data(hosts, mocker, tmpdir):
     fact_cache = os.path.join(tmpdir, 'facts')
-    last_modified = start_fact_cache(hosts, fact_cache, timeout=0)
+    last_modified, _ = start_fact_cache(hosts, fact_cache, timeout=0)
 
     bulk_update = mocker.patch('django.db.models.query.QuerySet.bulk_update')
 
