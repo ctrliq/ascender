@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { t, Trans } from '@lingui/macro';
+import { msg, Trans } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { Banner, Card, PageSection } from '@patternfly/react-core';
 import { InfoCircleIcon } from '@patternfly/react-icons';
 
@@ -22,7 +23,7 @@ const MainPageSection = styled(PageSection)`
 function SubscriptionUsage() {
   const config = useConfig();
   const brandName = useBrandName();
-
+  const { i18n } = useLingui();
   return (
     <>
       {config?.ui_next && (
@@ -37,7 +38,7 @@ function SubscriptionUsage() {
       )}
       <ScreenHeader
         streamType="all"
-        breadcrumbConfig={{ '/subscription_usage': t`Subscription Usage` }}
+        breadcrumbConfig={{ '/subscription_usage': i18n._(msg`Subscription Usage`)}}
       />
       <MainPageSection>
         <div className="spacer">

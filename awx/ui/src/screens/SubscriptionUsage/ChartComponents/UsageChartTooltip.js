@@ -1,11 +1,12 @@
 import * as d3 from 'd3';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
 
 class UsageChartTooltip {
   constructor(opts) {
     this.label = opts.label;
     this.svg = opts.svg;
     this.colors = opts.colors;
+    this.i18n = opts.i18n;
 
     this.draw();
   }
@@ -56,14 +57,14 @@ class UsageChartTooltip {
       .attr('y', 4)
       .attr('font-size', 12)
       .attr('fill', 'white')
-      .text(t`Subscriptions consumed`);
+      .text(this.i18n._(msg`Subscriptions consumed`));
     this.capacityText = this.toolTipBase
       .append('text')
       .attr('x', 43)
       .attr('y', 28)
       .attr('font-size', 12)
       .attr('fill', 'white')
-      .text(t`Subscription capacity`);
+      .text(this.i18n._(msg`Subscription capacity`));
     this.icon = this.toolTipBase
       .append('text')
       .attr('fill', 'white')

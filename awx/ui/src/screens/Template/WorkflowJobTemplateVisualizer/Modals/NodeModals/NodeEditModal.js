@@ -1,10 +1,13 @@
 import React, { useContext } from 'react';
 
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+
 import { WorkflowDispatchContext } from 'contexts/Workflow';
 import NodeModal from './NodeModal';
 
 function NodeEditModal() {
+  const { i18n } = useLingui();
   const dispatch = useContext(WorkflowDispatchContext);
 
   const updateNode = (values, config) => {
@@ -61,7 +64,7 @@ function NodeEditModal() {
   };
 
   return (
-    <NodeModal askLinkType={false} onSave={updateNode} title={t`Edit Node`} />
+    <NodeModal askLinkType={false} onSave={updateNode} title={i18n._(msg`Edit Node`)} />
   );
 }
 

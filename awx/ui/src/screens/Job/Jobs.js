@@ -1,8 +1,10 @@
 import React, { useState, useCallback } from 'react';
 import { Route, Switch, useParams, useRouteMatch } from 'react-router-dom';
 
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
 import { PageSection } from '@patternfly/react-core';
+import { useLingui } from '@lingui/react';
+
 import ScreenHeader from 'components/ScreenHeader/ScreenHeader';
 import JobList from 'components/JobList';
 import PersistentFilters from 'components/PersistentFilters';
@@ -17,24 +19,28 @@ function TypeRedirect({ view }) {
 }
 
 function Jobs() {
+  const { i18n } = useLingui();
   const match = useRouteMatch();
   const [breadcrumbConfig, setBreadcrumbConfig] = useState({
-    '/jobs': t`Jobs`,
+    '/jobs': i18n._(msg`Jobs`),
   });
 
-  const buildBreadcrumbConfig = useCallback((job) => {
-    if (!job) {
-      return;
-    }
+  const buildBreadcrumbConfig = useCallback(
+    (job) => {
+      if (!job) {
+        return;
+      }
 
-    const typeSegment = JOB_TYPE_URL_SEGMENTS[job.type];
-    setBreadcrumbConfig({
-      '/jobs': t`Jobs`,
-      [`/jobs/${typeSegment}/${job.id}`]: `${job.id} - ${job.name}`,
-      [`/jobs/${typeSegment}/${job.id}/output`]: t`Output`,
-      [`/jobs/${typeSegment}/${job.id}/details`]: t`Details`,
-    });
-  }, []);
+      const typeSegment = JOB_TYPE_URL_SEGMENTS[job.type];
+      setBreadcrumbConfig({
+        '/jobs': i18n._(msg`Jobs`),
+        [`/jobs/${typeSegment}/${job.id}`]: `${job.id} - ${job.name}`,
+        [`/jobs/${typeSegment}/${job.id}/output`]: i18n._(msg`Output`),
+        [`/jobs/${typeSegment}/${job.id}/details`]: i18n._(msg`Details`),
+      });
+    },
+    [i18n]
+  );
 
   return (
     <>

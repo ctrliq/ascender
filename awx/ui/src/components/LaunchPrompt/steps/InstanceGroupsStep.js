@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { useField } from 'formik';
 import { InstanceGroupsAPI } from 'api';
 import { getSearchableKeys } from 'components/PaginatedTable';
@@ -18,6 +19,7 @@ const QS_CONFIG = getQSConfig('instance-groups', {
 });
 
 function InstanceGroupsStep() {
+  const { i18n } = useLingui();
   const [field, , helpers] = useField('instance_groups');
   const { selected, handleSelect, setSelected } = useSelected([], field.value);
 
@@ -75,25 +77,25 @@ function InstanceGroupsStep() {
         optionCount={count}
         searchColumns={[
           {
-            name: t`Name`,
+            name: i18n._(msg`Name`),
             key: 'name__icontains',
             isDefault: true,
           },
           {
-            name: t`Credential Name`,
+            name: i18n._(msg`Credential Name`),
             key: 'credential__name__icontains',
           },
         ]}
         sortColumns={[
           {
-            name: t`Name`,
+            name: i18n._(msg`Name`),
             key: 'name',
           },
         ]}
         searchableKeys={searchableKeys}
         relatedSearchableKeys={relatedSearchableKeys}
         multiple
-        header={t`Instance Groups`}
+        header={i18n._(msg`Instance Groups`)}
         name="instanceGroups"
         qsConfig={QS_CONFIG}
         selectItem={handleSelect}

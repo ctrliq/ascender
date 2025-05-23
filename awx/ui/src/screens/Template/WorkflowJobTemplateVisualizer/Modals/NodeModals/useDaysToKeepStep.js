@@ -1,17 +1,19 @@
 import React from 'react';
-import { t } from '@lingui/macro';
 import { useField } from 'formik';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import DaysToKeepStep from './DaysToKeepStep';
 import StepName from '../../../../../components/LaunchPrompt/steps/StepName';
 
 const STEP_ID = 'daysToKeep';
 
 export default function useDaysToKeepStep() {
+  const { i18n } = useLingui();
   const [, nodeResourceMeta] = useField('nodeResource');
   const [, daysToKeepMeta] = useField('daysToKeep');
 
   return {
-    step: getStep(nodeResourceMeta, daysToKeepMeta),
+    step: getStep(i18n, nodeResourceMeta, daysToKeepMeta),
     initialValues: { daysToKeep: 30 },
     isReady: true,
     contentError: null,
@@ -22,7 +24,7 @@ export default function useDaysToKeepStep() {
     validate: () => {},
   };
 }
-function getStep(nodeResourceMeta, daysToKeepMeta) {
+function getStep(i18n, nodeResourceMeta, daysToKeepMeta) {
   if (
     ['cleanup_activitystream', 'cleanup_jobs'].includes(
       nodeResourceMeta?.value?.job_type
@@ -32,7 +34,7 @@ function getStep(nodeResourceMeta, daysToKeepMeta) {
       id: STEP_ID,
       name: (
         <StepName hasErrors={!!daysToKeepMeta.error} id="days-to-keep-step">
-          {t`Days to keep`}
+          {i18n._(msg`Days to keep`)}
         </StepName>
       ),
       component: <DaysToKeepStep />,

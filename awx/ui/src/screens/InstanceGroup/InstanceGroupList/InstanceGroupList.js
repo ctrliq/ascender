@@ -1,7 +1,9 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLocation, useRouteMatch, Link } from 'react-router-dom';
 
-import { t, Plural } from '@lingui/macro';
+import { msg, Plural } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+
 import { Card, PageSection, DropdownItem } from '@patternfly/react-core';
 
 import { InstanceGroupsAPI } from 'api';
@@ -27,6 +29,7 @@ const QS_CONFIG = getQSConfig('instance-group', {
 });
 
 function InstanceGroupList() {
+  const { i18n } = useLingui();
   const location = useLocation();
   const match = useRouteMatch();
 
@@ -103,10 +106,9 @@ function InstanceGroupList() {
 
   const cannotDelete = (item) => !item.summary_fields.user_capabilities.delete;
 
-  const pluralizedItemName = t`Instance Groups`;
-
-  const addContainerGroup = t`Add container group`;
-  const addInstanceGroup = t`Add instance group`;
+  const pluralizedItemName = i18n._(msg`Instance Groups`);
+  const addContainerGroup = i18n._(msg`Add container group`);
+  const addInstanceGroup = i18n._(msg`Add instance group`);
 
   const addButton = (
     <AddDropDownButton
@@ -158,7 +160,7 @@ function InstanceGroupList() {
             toolbarRelatedSearchableKeys={relatedSearchableKeys}
             toolbarSearchColumns={[
               {
-                name: t`Name`,
+                name: i18n._(msg`Name`),
                 key: 'name__icontains',
                 isDefault: true,
               },
@@ -176,13 +178,13 @@ function InstanceGroupList() {
                     onDelete={handleDelete}
                     cannotDelete={cannotDelete}
                     itemsToDelete={selected}
-                    pluralizedItemName={t`Instance Groups`}
+                    pluralizedItemName={pluralizedItemName}
                     deleteDetailsRequests={deleteDetailsRequests}
                     deleteMessage={
                       <Plural
                         value={selected.length}
-                        one="This instance group is currently being by other resources. Are you sure you want to delete it?"
-                        other="Deleting these instance groups could impact other resources that rely on them. Are you sure you want to delete anyway?"
+                        one={i18n._(msg`This instance group is currently being by other resources. Are you sure you want to delete it?`)}
+                        other={i18n._(msg`Deleting these instance groups could impact other resources that rely on them. Are you sure you want to delete anyway?`)}
                       />
                     }
                   />,
@@ -191,13 +193,13 @@ function InstanceGroupList() {
             )}
             headerRow={
               <HeaderRow qsConfig={QS_CONFIG}>
-                <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
-                <HeaderCell>{t`Type`}</HeaderCell>
-                <HeaderCell>{t`Running Jobs`}</HeaderCell>
-                <HeaderCell>{t`Total Jobs`}</HeaderCell>
-                <HeaderCell>{t`Instances`}</HeaderCell>
-                <HeaderCell>{t`Capacity`}</HeaderCell>
-                <HeaderCell>{t`Actions`}</HeaderCell>
+                <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
+                <HeaderCell>{i18n._(msg`Type`)}</HeaderCell>
+                <HeaderCell>{i18n._(msg`Running Jobs`)}</HeaderCell>
+                <HeaderCell>{i18n._(msg`Total Jobs`)}</HeaderCell>
+                <HeaderCell>{i18n._(msg`Instances`)}</HeaderCell>
+                <HeaderCell>{i18n._(msg`Capacity`)}</HeaderCell>
+                <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
               </HeaderRow>
             }
             renderRow={(instanceGroup, index) => (
@@ -216,13 +218,13 @@ function InstanceGroupList() {
         </Card>
       </PageSection>
       <AlertModal
-        aria-label={t`Deletion error`}
+        aria-label={i18n._(msg`Deletion error`)}
         isOpen={deletionError}
         onClose={clearDeletionError}
-        title={t`Error`}
+        title={i18n._(msg`Error`)}
         variant="error"
       >
-        {t`Failed to delete one or more instance groups.`}
+        {i18n._(msg`Failed to delete one or more instance groups.`)}
         <ErrorDetail error={deletionError} />
       </AlertModal>
     </>

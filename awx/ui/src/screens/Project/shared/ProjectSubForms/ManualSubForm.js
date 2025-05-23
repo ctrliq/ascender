@@ -1,6 +1,7 @@
 import 'styled-components/macro';
 import React from 'react';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { useField } from 'formik';
 import { FormGroup, Alert } from '@patternfly/react-core';
 import { required } from 'util/validators';
@@ -15,14 +16,15 @@ const ManualSubForm = ({
   project_base_dir,
   project_local_paths,
 }) => {
-  const projectHelpStrings = getProjectHelpStrings();
+  const { i18n } = useLingui();
+  const projectHelpStrings = getProjectHelpStrings(i18n);
   const brandName = useBrandName();
   const localPaths = [...new Set([...project_local_paths, localPath])];
   const options = [
     {
       value: '',
       key: '',
-      label: t`Choose a Playbook Directory`,
+      label: i18n._(msg`Choose a Playbook Directory`),
     },
     ...localPaths
       .filter((path) => path)
@@ -34,31 +36,31 @@ const ManualSubForm = ({
   ];
   const [pathField, pathMeta, pathHelpers] = useField({
     name: 'local_path',
-    validate: required(t`Select a value for this field`),
+    validate: required(i18n._(msg`Select a value for this field`)),
   });
 
   return (
     <>
       {options.length === 1 && (
         <Alert
-          title={t`WARNING: `}
+          title={i18n._(msg`WARNING: `)}
           css="grid-column: 1/-1"
           variant="warning"
           isInline
           ouiaId="project-manual-subform-alert"
         >
-          {t`
+          {i18n._(msg`
             There are no available playbook directories in ${project_base_dir}.
             Either that directory is empty, or all of the contents are already
             assigned to other projects. Create a new directory there and make
             sure the playbook files can be read by the "awx" system user,
             or have ${brandName} directly retrieve your playbooks from
-            source control using the Source Control Type option above.`}
+            source control using the Source Control Type option above.`)}
         </Alert>
       )}
       <FormField
         id="project-base-dir"
-        label={t`Project Base Path`}
+        label={i18n._(msg`Project Base Path`)}
         name="base_dir"
         type="text"
         isReadOnly
@@ -69,7 +71,7 @@ const ManualSubForm = ({
         helperTextInvalid={pathMeta.error}
         isRequired
         validated={!pathMeta.touched || !pathMeta.error ? 'default' : 'error'}
-        label={t`Playbook Directory`}
+        label={i18n._(msg`Playbook Directory`)}
         labelIcon={<Popover content={projectHelpStrings.projectLocalPath} />}
       >
         <AnsibleSelect

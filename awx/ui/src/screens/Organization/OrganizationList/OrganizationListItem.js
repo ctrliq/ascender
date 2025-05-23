@@ -1,7 +1,7 @@
 import React from 'react';
 import { string, bool, func } from 'prop-types';
-
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import { Button, Tooltip } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
 import { Link } from 'react-router-dom';
@@ -26,6 +26,7 @@ function OrganizationListItem({
   rowIndex,
   detailUrl,
 }) {
+  const { i18n } = useLingui();
   const labelId = `check-action-${organization.id}`;
 
   const missingExecutionEnvironment =
@@ -40,9 +41,9 @@ function OrganizationListItem({
           onSelect,
           disable: false,
         }}
-        dataLabel={t`Selected`}
+        dataLabel={i18n._(msg`Selected`)}
       />
-      <TdBreakWord id={labelId} dataLabel={t`Name`}>
+      <TdBreakWord id={labelId} dataLabel={i18n._(msg`Name`)}>
         <span>
           <Link to={`${detailUrl}`}>
             <b>{organization.name}</b>
@@ -52,7 +53,7 @@ function OrganizationListItem({
           <span>
             <Tooltip
               className="missing-execution-environment"
-              content={t`Custom virtual environment ${organization.custom_virtualenv} must be replaced by an execution environment.`}
+              content={i18n._(msg`Custom virtual environment ${organization.custom_virtualenv} must be replaced by an execution environment.`)}
               position="right"
             >
               <ExclamationTriangleIcon />
@@ -60,20 +61,20 @@ function OrganizationListItem({
           </span>
         )}
       </TdBreakWord>
-      <Td dataLabel={t`Members`}>
+      <Td dataLabel={i18n._(msg`Members`)}>
         {organization.summary_fields.related_field_counts.users}
       </Td>
-      <Td dataLabel={t`Teams`}>
+      <Td dataLabel={i18n._(msg`Teams`)}>
         {organization.summary_fields.related_field_counts.teams}
       </Td>
-      <ActionsTd dataLabel={t`Actions`}>
+      <ActionsTd dataLabel={i18n._(msg`Actions`)}>
         <ActionItem
           visible={organization.summary_fields.user_capabilities.edit}
-          tooltip={t`Edit Organization`}
+          tooltip={i18n._(msg`Edit Organization`)}
         >
           <Button
             ouiaId={`${organization.id}-edit-button`}
-            aria-label={t`Edit Organization`}
+            aria-label={i18n._(msg`Edit Organization`)}
             variant="plain"
             component={Link}
             to={`/organizations/${organization.id}/edit`}

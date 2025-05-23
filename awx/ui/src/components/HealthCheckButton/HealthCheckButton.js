@@ -1,5 +1,6 @@
 import React from 'react';
-import { Plural, t } from '@lingui/macro';
+import { Plural, msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { Button, DropdownItem, Tooltip } from '@patternfly/react-core';
 import { useKebabifiedMenu } from 'contexts/Kebabified';
 
@@ -9,6 +10,7 @@ function HealthCheckButton({
   selectedItems,
   healthCheckPending,
 }) {
+  const { i18n } = useLingui();
   const { isKebabified } = useKebabifiedMenu();
 
   const selectedItemsCount = selectedItems.length;
@@ -21,7 +23,7 @@ function HealthCheckButton({
         other="Click to run a health check on the selected instances."
       />
     ) : (
-      t`Select an instance to run a health check.`
+      i18n._(msg`Select an instance to run a health check.`)
     );
 
   if (isKebabified) {
@@ -34,9 +36,9 @@ function HealthCheckButton({
           onClick={onClick}
           ouiaId="health-check"
           isLoading={healthCheckPending}
-          spinnerAriaLabel={t`Running health check`}
+          spinnerAriaLabel={i18n._(msg`Running health check`)}
         >
-          {healthCheckPending ? t`Running health check` : t`Run health check`}
+          {healthCheckPending ? i18n._(msg`Running health check`) : i18n._(msg`Run health check`)}
         </DropdownItem>
       </Tooltip>
     );
@@ -50,9 +52,9 @@ function HealthCheckButton({
           ouiaId="health-check"
           onClick={onClick}
           isLoading={healthCheckPending}
-          spinnerAriaLabel={t`Running health check`}
+          spinnerAriaLabel={i18n._(msg`Running health check`)}
         >
-          {healthCheckPending ? t`Running health check` : t`Run health check`}
+          {healthCheckPending ? i18n._(msg`Running health check`) : i18n._(msg`Run health check`)}
         </Button>
       </div>
     </Tooltip>

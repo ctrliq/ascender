@@ -1,8 +1,9 @@
 import React, { useState, useCallback, useRef } from 'react';
 
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
 import { Route, withRouter, Switch } from 'react-router-dom';
 import { PageSection } from '@patternfly/react-core';
+import { useLingui } from '@lingui/react';
 
 import ScreenHeader from 'components/ScreenHeader/ScreenHeader';
 import TemplateList from 'components/TemplateList';
@@ -13,10 +14,11 @@ import JobTemplateAdd from './JobTemplateAdd';
 import WorkflowJobTemplateAdd from './WorkflowJobTemplateAdd';
 
 function Templates() {
+  const { i18n } = useLingui();
   const initScreenHeader = useRef({
-    '/templates': t`Templates`,
-    '/templates/job_template/add': t`Create New Job Template`,
-    '/templates/workflow_job_template/add': t`Create New Workflow Template`,
+    '/templates': i18n._(msg`Templates`),
+    '/templates/job_template/add': i18n._(msg`Create New Job Template`),
+    '/templates/workflow_job_template/add': i18n._(msg`Create New Workflow Template`),
   });
   const [breadcrumbConfig, setScreenHeader] = useState(
     initScreenHeader.current
@@ -40,22 +42,22 @@ function Templates() {
       setScreenHeader({
         ...initScreenHeader.current,
         [templatePath]: `${template.name}`,
-        [`${templatePath}/details`]: t`Details`,
-        [`${templatePath}/edit`]: t`Edit Details`,
-        [`${templatePath}/access`]: t`Access`,
-        [`${templatePath}/notifications`]: t`Notifications`,
-        [`${templatePath}/jobs`]: t`Jobs`,
-        [surveyPath]: t`Survey`,
-        [`${surveyPath}/add`]: t`Add Question`,
-        [`${surveyPath}/edit`]: t`Edit Question`,
-        [schedulesPath]: t`Schedules`,
-        [`${schedulesPath}/add`]: t`Create New Schedule`,
+        [`${templatePath}/details`]: i18n._(msg`Details`),
+        [`${templatePath}/edit`]: i18n._(msg`Edit Details`),
+        [`${templatePath}/access`]: i18n._(msg`Access`),
+        [`${templatePath}/notifications`]: i18n._(msg`Notifications`),
+        [`${templatePath}/jobs`]: i18n._(msg`Jobs`),
+        [surveyPath]: i18n._(msg`Survey`),
+        [`${surveyPath}/add`]: i18n._(msg`Add Question`),
+        [`${surveyPath}/edit`]: i18n._(msg`Edit Question`),
+        [schedulesPath]: i18n._(msg`Schedules`),
+        [`${schedulesPath}/add`]: i18n._(msg`Create New Schedule`),
         [`${schedulesPath}/${schedule?.id}`]: `${schedule?.name}`,
-        [`${schedulesPath}/${schedule?.id}/details`]: t`Schedule Details`,
-        [`${schedulesPath}/${schedule?.id}/edit`]: t`Edit Schedule`,
+        [`${schedulesPath}/${schedule?.id}/details`]: i18n._(msg`Schedule Details`),
+        [`${schedulesPath}/${schedule?.id}/edit`]: i18n._(msg`Edit Schedule`),
       });
     },
-    [template, schedule]
+    [template, schedule, i18n]
   );
 
   return (

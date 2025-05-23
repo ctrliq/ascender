@@ -1,12 +1,13 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 import React, { useState, useRef, useEffect } from 'react';
-import { t } from '@lingui/macro';
-import PropTypes from 'prop-types';
+import { msg } from "@lingui/macro";
+import { useLingui } from "@lingui/react";import PropTypes from 'prop-types';
 import { Dropdown, DropdownPosition } from '@patternfly/react-core';
 import { useKebabifiedMenu } from 'contexts/Kebabified';
 import { ToolbarAddButton } from '../PaginatedTable';
 
 function AddDropDownButton({ dropdownItems, ouiaId }) {
+  const { i18n } = useLingui();
   const { isKebabified } = useKebabifiedMenu();
   const [isOpen, setIsOpen] = useState(false);
   const element = useRef(null);
@@ -37,7 +38,7 @@ function AddDropDownButton({ dropdownItems, ouiaId }) {
         toggle={
           <ToolbarAddButton
             ouiaId={ouiaId}
-            aria-label={t`Add`}
+            aria-label={i18n._(msg`Add`)}
             showToggleIndicator
             onClick={() => setIsOpen(!isOpen)}
           />

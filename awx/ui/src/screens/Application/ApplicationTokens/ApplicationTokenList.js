@@ -1,13 +1,8 @@
 import React, { useCallback, useEffect } from 'react';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import { useParams, useLocation } from 'react-router-dom';
-import { t } from '@lingui/macro';
-
-import PaginatedTable, {
-  HeaderCell,
-  HeaderRow,
-  ToolbarDeleteButton,
-  getSearchableKeys,
-} from 'components/PaginatedTable';
+import PaginatedTable, { getSearchableKeys } from 'components/PaginatedTable';
 import { getQSConfig, parseQueryString } from 'util/qs';
 import { TokensAPI, ApplicationsAPI } from 'api';
 import ErrorDetail from 'components/ErrorDetail';
@@ -24,6 +19,7 @@ const QS_CONFIG = getQSConfig('applications', {
 });
 
 function ApplicationTokenList() {
+  const { i18n } = useLingui();
   const { id } = useParams();
   const location = useLocation();
   const {
@@ -102,11 +98,11 @@ function ApplicationTokenList() {
         hasContentLoading={isLoading || deleteLoading}
         items={tokens}
         itemCount={itemCount}
-        pluralizedItemName={t`Tokens`}
+        pluralizedItemName={i18n._(msg`Tokens`)}
         qsConfig={QS_CONFIG}
         toolbarSearchColumns={[
           {
-            name: t`Name`,
+            name: i18n._(msg`Name`),
             key: 'user__username__icontains',
             isDefault: true,
           },
@@ -119,43 +115,28 @@ function ApplicationTokenList() {
             {...props}
             isAllSelected={isAllSelected}
             onSelectAll={selectAll}
-            qsConfig={QS_CONFIG}
-            additionalControls={[
-              <ToolbarDeleteButton
-                key="delete"
-                onDelete={handleDelete}
-                itemsToDelete={selected}
-                pluralizedItemName={t`Tokens`}
-              />,
-            ]}
+            deleteButtonText={i18n._(msg`Delete selected tokens`)}
+            onDelete={handleDelete}
+            isDeleteDisabled={!selected.length}
           />
         )}
-        headerRow={
-          <HeaderRow qsConfig={QS_CONFIG}>
-            <HeaderCell sortKey="user__username">{t`Name`}</HeaderCell>
-            <HeaderCell sortKey="scope">{t`Scope`}</HeaderCell>
-            <HeaderCell sortKey="expires">{t`Expires`}</HeaderCell>
-          </HeaderRow>
-        }
-        renderRow={(token, index) => (
+        renderRow={(token) => (
           <ApplicationTokenListItem
             key={token.id}
-            value={token.name}
             token={token}
-            detailUrl={`/users/${token.summary_fields.user.id}/details`}
-            onSelect={() => handleSelect(token)}
             isSelected={selected.some((row) => row.id === token.id)}
-            rowIndex={index}
+            onSelect={() => handleSelect(token)}
+            detailUrl={`/applications/${id}/tokens/${token.id}/details`}
+            rowIndex={tokens.findIndex((t) => t.id === token.id)}
           />
         )}
       />
       <AlertModal
-        isOpen={deletionError}
-        variant="error"
-        title={t`Error!`}
+        isOpen={Boolean(deletionError)}
+        variant="danger"
+        title={i18n._(msg`Error deleting tokens`)}
         onClose={clearDeletionError}
       >
-        {t`Failed to delete one or more tokens.`}
         <ErrorDetail error={deletionError} />
       </AlertModal>
     </>

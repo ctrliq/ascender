@@ -1,5 +1,6 @@
 import React from 'react';
-import { t } from '@lingui/macro';
+import { i18n } from '@lingui/core';
+import { msg } from '@lingui/macro';
 import { useFormikContext } from 'formik';
 import SurveyStep from './SurveyStep';
 import StepName from './StepName';
@@ -23,7 +24,7 @@ export default function useSurveyStep(
           id: STEP_ID,
           name: (
             <StepName hasErrors={hasError} id="survey-step">
-              {t`Survey`}
+              {i18n._(msg`Survey`)}
             </StepName>
           ),
           component: <SurveyStep surveyConfig={surveyConfig} />,
@@ -96,19 +97,21 @@ function validateSurveyField(question, value) {
   const isNumeric = ['integer', 'float'].includes(question.type);
   if (isTextField && (value || value === 0)) {
     if (question.min && value.length < question.min) {
-      return t`This field must be at least ${question.min} characters`;
+      return i18n._(msg`This field must be at least ${question.min} characters`);
     }
     if (question.max && value.length > question.max) {
-      return t`This field must not exceed ${question.max} characters`;
+      return i18n._(msg`This field must not exceed ${question.max} characters`);
     }
   }
   if (isNumeric && (value || value === 0)) {
     if (value < question.min || value > question.max) {
-      return t`This field must be a number and have a value between ${question.min} and ${question.max}`;
+      return i18n._(
+        msg`This field must be a number and have a value between ${question.min} and ${question.max}`
+      );
     }
   }
   if (question.required && !value && value !== 0) {
-    return t`This field must not be blank`;
+    return i18n._(msg`This field must not be blank`);
   }
   return null;
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { func } from 'prop-types';
-
-import { t, Trans } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg, Trans } from '@lingui/macro';
 import styled from 'styled-components';
 import { Button, ButtonVariant, Tooltip } from '@patternfly/react-core';
 import { KeyIcon } from '@patternfly/react-icons';
@@ -29,17 +29,18 @@ function CredentialPluginSelected({
   onClearPlugin,
   fieldId,
 }) {
+  const { i18n } = useLingui();
   return (
     <>
       <SelectedCredential>
         <SpacedCredentialChip onClick={onClearPlugin} credential={credential} />
         <Tooltip
-          content={t`Edit Credential Plugin Configuration`}
+          content={i18n._(msg`Edit Credential Plugin Configuration`)}
           position="top"
         >
           <Button
             ouiaId={`credential-field-${fieldId}-edit-plugin-button`}
-            aria-label={t`Edit Credential Plugin Configuration`}
+            aria-label={i18n._(msg`Edit Credential Plugin Configuration`)}
             onClick={onEditPlugin}
             variant={ButtonVariant.control}
           >

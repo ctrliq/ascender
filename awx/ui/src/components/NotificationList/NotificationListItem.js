@@ -1,7 +1,9 @@
 import React from 'react';
 import { shape, number, string, bool, func } from 'prop-types';
 
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+
 import { Link } from 'react-router-dom';
 import { Switch } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
@@ -20,24 +22,25 @@ function NotificationListItem({
   typeLabels,
   showApprovalsToggle,
 }) {
+  const { i18n } = useLingui();
   return (
     <Tr
       id={`notification-row-${notification.id}`}
       ouiaId={`notification-row-${notification.id}`}
     >
-      <Td id={`notification-${notification.id}`} dataLabel={t`Name`}>
+      <Td id={`notification-${notification.id}`} dataLabel={i18n._(msg`Name`)}>
         <Link to={`${detailUrl}`}>
           <b>{notification.name}</b>
         </Link>
       </Td>
-      <Td dataLabel={t`Type`}>{typeLabels[notification.notification_type]}</Td>
-      <ActionsTd dataLabel={t`Options`} gridColumns="120px 120px 120px 120px">
+      <Td dataLabel={i18n._(msg`Type`)}>{typeLabels[notification.notification_type]}</Td>
+      <ActionsTd dataLabel={i18n._(msg`Options`)} gridColumns="120px 120px 120px 120px">
         <ActionItem visible={showApprovalsToggle}>
           <Switch
             id={`notification-${notification.id}-approvals-toggle`}
             ouiaId={`notification-${notification.id}-approvals-toggle`}
-            label={t`Approval`}
-            labelOff={t`Approval`}
+            label={i18n._(msg`Approval`)}
+            labelOff={i18n._(msg`Approval`)}
             isChecked={approvalsTurnedOn}
             isDisabled={!canToggleNotifications}
             onChange={() =>
@@ -47,49 +50,49 @@ function NotificationListItem({
                 'approvals'
               )
             }
-            aria-label={t`Toggle notification approvals`}
+            aria-label={i18n._(msg`Toggle notification approvals`)}
           />
         </ActionItem>
         <ActionItem visible>
           <Switch
             id={`notification-${notification.id}-started-toggle`}
             ouiaId={`notification-${notification.id}-started-toggle`}
-            label={t`Start`}
-            labelOff={t`Start`}
+            label={i18n._(msg`Start`)}
+            labelOff={i18n._(msg`Start`)}
             isChecked={startedTurnedOn}
             isDisabled={!canToggleNotifications}
             onChange={() =>
               toggleNotification(notification.id, startedTurnedOn, 'started')
             }
-            aria-label={t`Toggle notification start`}
+            aria-label={i18n._(msg`Toggle notification start`)}
           />
         </ActionItem>
         <ActionItem visible>
           <Switch
             id={`notification-${notification.id}-success-toggle`}
             ouiaId={`notification-${notification.id}-success-toggle`}
-            label={t`Success`}
-            labelOff={t`Success`}
+            label={i18n._(msg`Success`)}
+            labelOff={i18n._(msg`Success`)}
             isChecked={successTurnedOn}
             isDisabled={!canToggleNotifications}
             onChange={() =>
               toggleNotification(notification.id, successTurnedOn, 'success')
             }
-            aria-label={t`Toggle notification success`}
+            aria-label={i18n._(msg`Toggle notification success`)}
           />
         </ActionItem>
         <ActionItem visible>
           <Switch
             id={`notification-${notification.id}-error-toggle`}
             ouiaId={`notification-${notification.id}-error-toggle`}
-            label={t`Failure`}
-            labelOff={t`Failure`}
+            label={i18n._(msg`Failure`)}
+            labelOff={i18n._(msg`Failure`)}
             isChecked={errorTurnedOn}
             isDisabled={!canToggleNotifications}
             onChange={() =>
               toggleNotification(notification.id, errorTurnedOn, 'error')
             }
-            aria-label={t`Toggle notification failure`}
+            aria-label={i18n._(msg`Toggle notification failure`)}
           />
         </ActionItem>
       </ActionsTd>

@@ -1,14 +1,17 @@
 import React from 'react';
 
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
 import { Button } from '@patternfly/react-core';
+import { useLingui } from '@lingui/react';
+
 import AlertModal from 'components/AlertModal';
 
 function RevertAllAlert({ onClose, onRevertAll }) {
+  const { i18n } = useLingui();
   return (
     <AlertModal
       isOpen
-      title={t`Revert settings`}
+      title={i18n._(msg`Revert settings`)}
       variant="info"
       onClose={onClose}
       ouiaId="revert-all-modal"
@@ -17,24 +20,24 @@ function RevertAllAlert({ onClose, onRevertAll }) {
           ouiaId="revert-all-confirm-button"
           key="revert"
           variant="primary"
-          aria-label={t`Confirm revert all`}
+          aria-label={i18n._(msg`Confirm revert all`)}
           onClick={onRevertAll}
         >
-          {t`Revert all`}
+          {i18n._(msg`Revert all`)}
         </Button>,
         <Button
           ouiaId="revert-all-cancel-button"
           key="cancel"
           variant="link"
-          aria-label={t`Cancel revert`}
+          aria-label={i18n._(msg`Cancel revert`)}
           onClick={onClose}
         >
-          {t`Cancel`}
+          {i18n._(msg`Cancel`)}
         </Button>,
       ]}
     >
-      {t`This will revert all configuration values on this page to
-      their factory defaults. Are you sure you want to proceed?`}
+      {i18n._(msg`This will revert all configuration values on this page to
+      their factory defaults. Are you sure you want to proceed?`)}
     </AlertModal>
   );
 }

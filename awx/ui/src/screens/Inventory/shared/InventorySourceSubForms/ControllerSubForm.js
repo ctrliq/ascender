@@ -1,7 +1,8 @@
 import React, { useCallback } from 'react';
 import { useField, useFormikContext } from 'formik';
 
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import getDocsBaseUrl from 'util/getDocsBaseUrl';
 import { useConfig } from 'contexts/Config';
 import CredentialLookup from 'components/Lookup/CredentialLookup';
@@ -17,7 +18,8 @@ import {
 import getHelpText from '../Inventory.helptext';
 
 const ControllerSubForm = ({ autoPopulateCredential }) => {
-  const helpText = getHelpText();
+  const { i18n } = useLingui();
+  const helpText = getHelpText(i18n);
   const { setFieldValue, setFieldTouched } = useFormikContext();
   const [credentialField, credentialMeta, credentialHelpers] =
     useField('credential');
@@ -34,7 +36,7 @@ const ControllerSubForm = ({ autoPopulateCredential }) => {
     <>
       <CredentialLookup
         credentialTypeNamespace="controller"
-        label={t`Credential`}
+        label={i18n._(msg`Credential`)}
         helperTextInvalid={credentialMeta.error}
         isValid={!credentialMeta.touched || !credentialMeta.error}
         onBlur={() => credentialHelpers.setTouched()}
@@ -42,7 +44,7 @@ const ControllerSubForm = ({ autoPopulateCredential }) => {
         value={credentialField.value}
         required
         autoPopulate={autoPopulateCredential}
-        validate={required(t`Select a value for this field`)}
+        validate={required(i18n._(msg`Select a value for this field`))}
       />
       <VerbosityField />
       <HostFilterField />

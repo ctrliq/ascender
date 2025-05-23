@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 
-import { t } from '@lingui/macro';
 import { Host } from 'types';
 import { CardBody } from 'components/Card';
 import { DetailList } from 'components/DetailList';
@@ -11,6 +12,7 @@ import useRequest from 'hooks/useRequest';
 import { HostsAPI } from 'api';
 
 function HostFacts({ host }) {
+  const { i18n } = useLingui();
   const {
     result: facts,
     isLoading,
@@ -42,7 +44,7 @@ function HostFacts({ host }) {
     <CardBody>
       <DetailList gutter="sm">
         <VariablesDetail
-          label={t`Facts`}
+          label={i18n._(msg`Facts`)}
           rows="auto"
           value={facts}
           name="facts"

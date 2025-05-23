@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLocation, useRouteMatch } from 'react-router-dom';
 
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
 import { Card, PageSection } from '@patternfly/react-core';
 import { UsersAPI } from 'api';
 import AlertModal from 'components/AlertModal';
@@ -17,6 +17,7 @@ import PaginatedTable, {
 import useRequest, { useDeleteItems } from 'hooks/useRequest';
 import useSelected from 'hooks/useSelected';
 import { getQSConfig, parseQueryString } from 'util/qs';
+import { useLingui } from '@lingui/react';
 import UserListItem from './UserListItem';
 
 const QS_CONFIG = getQSConfig('user', {
@@ -28,6 +29,7 @@ const QS_CONFIG = getQSConfig('user', {
 function UserList() {
   const location = useLocation();
   const match = useRouteMatch();
+  const { i18n } = useLingui();
 
   const {
     result: {
@@ -107,25 +109,25 @@ function UserList() {
             hasContentLoading={hasContentLoading}
             items={users}
             itemCount={itemCount}
-            pluralizedItemName={t`Users`}
+            pluralizedItemName={i18n._(msg`Users`)}
             qsConfig={QS_CONFIG}
             clearSelected={clearSelected}
             toolbarSearchColumns={[
               {
-                name: t`Email`,
+                name: i18n._(msg`Email`),
                 key: 'email__icontains',
                 isDefault: true,
               },
               {
-                name: t`Username`,
+                name: i18n._(msg`Username`),
                 key: 'username__icontains',
               },
               {
-                name: t`First Name`,
+                name: i18n._(msg`First Name`),
                 key: 'first_name__icontains',
               },
               {
-                name: t`Last Name`,
+                name: i18n._(msg`Last Name`),
                 key: 'last_name__icontains',
               },
             ]}
@@ -150,18 +152,19 @@ function UserList() {
                     key="delete"
                     onDelete={handleUserDelete}
                     itemsToDelete={selected}
-                    pluralizedItemName={t`Users`}
+                    pluralizedItemName={i18n._(msg`Users`)}
                   />,
                 ]}
               />
             )}
             headerRow={
               <HeaderRow qsConfig={QS_CONFIG}>
-                <HeaderCell sortKey="username">{t`Username`}</HeaderCell>
-                <HeaderCell sortKey="first_name">{t`First Name`}</HeaderCell>
-                <HeaderCell sortKey="last_name">{t`Last Name`}</HeaderCell>
-                <HeaderCell>{t`Role`}</HeaderCell>
-                <HeaderCell>{t`Actions`}</HeaderCell>
+                <HeaderCell sortKey="username">{i18n._(msg`Username`)}</HeaderCell>
+                <HeaderCell sortKey="first_name">{i18n._(msg`First Name`)}</HeaderCell>
+                <HeaderCell sortKey="last_name">{i18n._(msg`Last Name`)}</HeaderCell>
+                <HeaderCell>{i18n._(msg`Email`)}</HeaderCell>
+                <HeaderCell>{i18n._(msg`Organization`)}</HeaderCell>
+                <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
               </HeaderRow>
             }
             renderRow={(user, index) => (
@@ -186,10 +189,10 @@ function UserList() {
         <AlertModal
           isOpen={deletionError}
           variant="error"
-          title={t`Error!`}
+          title={msg`Error!`}
           onClose={clearDeletionError}
         >
-          {t`Failed to delete one or more users.`}
+          {msg`Failed to delete one or more users.`}
           <ErrorDetail error={deletionError} />
         </AlertModal>
       )}

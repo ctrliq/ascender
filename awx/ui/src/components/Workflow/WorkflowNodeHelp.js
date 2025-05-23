@@ -1,7 +1,7 @@
 import 'styled-components/macro';
 import React from 'react';
-
-import { t, Trans } from '@lingui/macro';
+import { msg, Trans } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import styled from 'styled-components';
 import { ExclamationTriangleIcon } from '@patternfly/react-icons';
 import { shape } from 'prop-types';
@@ -33,6 +33,7 @@ const StyledExclamationTriangleIcon = styled(ExclamationTriangleIcon)`
 `;
 
 function WorkflowNodeHelp({ node }) {
+  const { i18n } = useLingui();
   let nodeType;
   const job = node?.originalNodeObject?.summary_fields?.job;
   const unifiedJobTemplate =
@@ -56,27 +57,27 @@ function WorkflowNodeHelp({ node }) {
     switch (type) {
       case 'job_template':
       case 'job':
-        nodeType = t`Job Template`;
+        nodeType = i18n._(msg`Job Template`);
         break;
       case 'workflow_job_template':
       case 'workflow_job':
-        nodeType = t`Workflow Job Template`;
+        nodeType = i18n._(msg`Workflow Job Template`);
         break;
       case 'project':
       case 'project_update':
-        nodeType = t`Project Update`;
+        nodeType = i18n._(msg`Project Update`);
         break;
       case 'inventory_source':
       case 'inventory_update':
-        nodeType = t`Inventory Update`;
+        nodeType = i18n._(msg`Inventory Update`);
         break;
       case 'workflow_approval_template':
       case 'workflow_approval':
-        nodeType = t`Workflow Approval`;
+        nodeType = i18n._(msg`Workflow Approval`);
         break;
       case 'system_job_template':
       case 'system_job':
-        nodeType = t`Management Job`;
+        nodeType = i18n._(msg`Management Job`);
         break;
       default:
         nodeType = '';
@@ -87,43 +88,43 @@ function WorkflowNodeHelp({ node }) {
   if (job) {
     switch (job.status) {
       case 'new':
-        jobStatus = t`New`;
+        jobStatus = i18n._(msg`New`);
         break;
       case 'pending':
-        jobStatus = t`Pending`;
+        jobStatus = i18n._(msg`Pending`);
         break;
       case 'waiting':
-        jobStatus = t`Waiting`;
+        jobStatus = i18n._(msg`Waiting`);
         break;
       case 'running':
-        jobStatus = t`Running`;
+        jobStatus = i18n._(msg`Running`);
         break;
       case 'successful':
-        jobStatus = t`Successful`;
+        jobStatus = i18n._(msg`Successful`);
         break;
       case 'failed':
-        jobStatus = t`Failed`;
+        jobStatus = i18n._(msg`Failed`);
         break;
       case 'error':
-        jobStatus = t`Error`;
+        jobStatus = i18n._(msg`Error`);
         break;
       case 'canceled':
-        jobStatus = t`Canceled`;
+        jobStatus = i18n._(msg`Canceled`);
         break;
       case 'never updated':
-        jobStatus = t`Never Updated`;
+        jobStatus = i18n._(msg`Never Updated`);
         break;
       case 'ok':
-        jobStatus = t`OK`;
+        jobStatus = i18n._(msg`OK`);
         break;
       case 'missing':
-        jobStatus = t`Missing`;
+        jobStatus = i18n._(msg`Missing`);
         break;
       case 'none':
-        jobStatus = t`None`;
+        jobStatus = i18n._(msg`None`);
         break;
       case 'updating':
-        jobStatus = t`Updating`;
+        jobStatus = i18n._(msg`Updating`);
         break;
       default:
         jobStatus = '';
@@ -145,29 +146,29 @@ function WorkflowNodeHelp({ node }) {
           {identifier && (
             <>
               <dt>
-                <b>{t`Node Alias`}</b>
+                <b>{i18n._(msg`Node Alias`)}</b>
               </dt>
               <dd id="workflow-node-help-alias">{identifier}</dd>
             </>
           )}
           <dt>
-            <b>{t`Resource Name`}</b>
+            <b>{i18n._(msg`Resource Name`)}</b>
           </dt>
           <dd id="workflow-node-help-name">
-            {unifiedJobTemplate?.name || t`Deleted`}
+            {unifiedJobTemplate?.name || i18n._(msg`Deleted`)}
           </dd>
           <dt>
-            <b>{t`Type`}</b>
+            <b>{i18n._(msg`Type`)}</b>
           </dt>
           <dd id="workflow-node-help-type">{nodeType}</dd>
           <dt>
-            <b>{t`Job Status`}</b>
+            <b>{i18n._(msg`Job Status`)}</b>
           </dt>
           <dd id="workflow-node-help-status">{jobStatus}</dd>
           {typeof job.elapsed === 'number' && (
             <>
               <dt>
-                <b>{t`Elapsed`}</b>
+                <b>{i18n._(msg`Elapsed`)}</b>
               </dt>
               <dd id="workflow-node-help-elapsed">
                 {secondsToHHMMSS(job.elapsed)}
@@ -181,25 +182,25 @@ function WorkflowNodeHelp({ node }) {
           {identifier && (
             <>
               <dt>
-                <b>{t`Node Alias`}</b>
+                <b>{i18n._(msg`Node Alias`)}</b>
               </dt>
               <dd id="workflow-node-help-alias">{identifier}</dd>
             </>
           )}
           <dt>
-            <b>{t`Resource Name`}</b>
+            <b>{i18n._(msg`Resource Name`)}</b>
           </dt>
           <dd id="workflow-node-help-name">
-            {unifiedJobTemplate?.name || t`Deleted`}
+            {unifiedJobTemplate?.name || i18n._(msg`Deleted`)}
           </dd>
           <dt>
-            <b>{t`Type`}</b>
+            <b>{i18n._(msg`Type`)}</b>
           </dt>
           <dd id="workflow-node-help-type">{nodeType}</dd>
         </GridDL>
       )}
       {job && job.type !== 'workflow_approval' && (
-        <p css="margin-top: 10px">{t`Click to view job details`}</p>
+        <p css="margin-top: 10px">{i18n._(msg`Click to view job details`)}</p>
       )}
     </>
   );

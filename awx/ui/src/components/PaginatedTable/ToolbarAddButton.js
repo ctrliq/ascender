@@ -3,18 +3,19 @@ import { string, func } from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Button, DropdownItem, Tooltip } from '@patternfly/react-core';
 import CaretDownIcon from '@patternfly/react-icons/dist/js/icons/caret-down-icon';
-
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import { useKebabifiedMenu } from 'contexts/Kebabified';
 
 function ToolbarAddButton({
   linkTo,
   onClick,
   isDisabled,
-  defaultLabel = t`Add`,
+  defaultLabel,
   showToggleIndicator,
   ouiaId,
 }) {
+  const { i18n } = useLingui();
   const { isKebabified } = useKebabifiedMenu();
 
   if (!linkTo && !onClick) {
@@ -22,7 +23,6 @@ function ToolbarAddButton({
       'ToolbarAddButton requires either `linkTo` or `onClick` prop'
     );
   }
-
   if (isKebabified) {
     return (
       <DropdownItem
@@ -33,38 +33,36 @@ function ToolbarAddButton({
         to={linkTo}
         onClick={!onClick ? undefined : onClick}
       >
-        {defaultLabel}
+        {defaultLabel || i18n._(msg`Add`)}
       </DropdownItem>
     );
   }
   if (linkTo) {
     return (
-      <Tooltip content={defaultLabel} position="top">
+      <Tooltip content={defaultLabel || i18n._(msg`Add`)} position="top">
         <Button
           ouiaId={ouiaId}
-          isDisabled={isDisabled}
           component={Link}
           to={linkTo}
-          variant="primary"
-          aria-label={defaultLabel}
+          isDisabled={isDisabled}
         >
-          {defaultLabel}
+          {defaultLabel || i18n._(msg`Add`)}
+          {showToggleIndicator && <CaretDownIcon />}
         </Button>
       </Tooltip>
     );
   }
   return (
-    <Button
-      ouiaId={ouiaId}
-      isDisabled={isDisabled}
-      icon={showToggleIndicator ? <CaretDownIcon /> : null}
-      iconPosition={showToggleIndicator ? 'right' : null}
-      variant="primary"
-      aria-label={defaultLabel}
-      onClick={onClick}
-    >
-      {defaultLabel}
-    </Button>
+    <Tooltip content={defaultLabel || i18n._(msg`Add`)} position="top">
+      <Button
+        ouiaId={ouiaId}
+        onClick={onClick}
+        isDisabled={isDisabled}
+      >
+        {defaultLabel || i18n._(msg`Add`)}
+        {showToggleIndicator && <CaretDownIcon />}
+      </Button>
+    </Tooltip>
   );
 }
 ToolbarAddButton.propTypes = {

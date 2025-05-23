@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { useField } from 'formik';
 import styled from 'styled-components';
 import { Alert } from '@patternfly/react-core';
@@ -25,6 +25,7 @@ const QS_CONFIG = getQSConfig('inventory', {
 });
 
 function InventoryStep({ warningMessage = null }) {
+  const { i18n } = useLingui();
   const [field, meta, helpers] = useField('inventory');
 
   const history = useHistory();
@@ -81,28 +82,28 @@ function InventoryStep({ warningMessage = null }) {
         optionCount={count}
         searchColumns={[
           {
-            name: t`Name`,
+            name: i18n._(msg`Name`),
             key: 'name__icontains',
             isDefault: true,
           },
           {
-            name: t`Created By (Username)`,
+            name: i18n._(msg`Created By (Username)`),
             key: 'created_by__username__icontains',
           },
           {
-            name: t`Modified By (Username)`,
+            name: i18n._(msg`Modified By (Username)`),
             key: 'modified_by__username__icontains',
           },
         ]}
         sortColumns={[
           {
-            name: t`Name`,
+            name: i18n._(msg`Name`),
             key: 'name',
           },
         ]}
         searchableKeys={searchableKeys}
         relatedSearchableKeys={relatedSearchableKeys}
-        header={t`Inventory`}
+        header={i18n._(msg`Inventory`)}
         name="inventory"
         qsConfig={QS_CONFIG}
         readOnly

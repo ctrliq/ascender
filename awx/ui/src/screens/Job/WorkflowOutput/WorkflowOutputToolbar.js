@@ -1,8 +1,9 @@
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
 import { shape } from 'prop-types';
 import { Badge as PFBadge, Button, Tooltip } from '@patternfly/react-core';
+import { useLingui } from '@lingui/react';
 
 import {
   CompassIcon,
@@ -63,6 +64,7 @@ const ActionButton = styled(Button)`
   }
 `;
 function WorkflowOutputToolbar({ job }) {
+  const { i18n } = useLingui();
   const dispatch = useContext(WorkflowDispatchContext);
   const history = useHistory();
   const { nodes, showLegend, showTools } = useContext(WorkflowStateContext);
@@ -85,25 +87,25 @@ function WorkflowOutputToolbar({ job }) {
           <JobCancelButton
             style={{ margin: '0px 6px', padding: '6px 10px' }}
             job={job}
-            errorTitle={t`Job Cancel Error`}
-            title={t`Cancel ${job.name}`}
-            errorMessage={t`Failed to cancel ${job.name}`}
+            errorTitle={i18n._(msg`Job Cancel Error`)}
+            title={i18n._(msg`Cancel ${job.name}`)}
+            errorMessage={i18n._(msg`Failed to cancel ${job.name}`)}
             showIconButton
           />
         ) : null}
 
         <ActionButton
           ouiaId="edit-workflow"
-          aria-label={t`Edit workflow`}
+          aria-label={i18n._(msg`Edit workflow`)}
           id="edit-workflow"
           variant="plain"
           onClick={navToWorkflow}
         >
           <ProjectDiagramIcon />
         </ActionButton>
-        <div>{t`Total Nodes`}</div>
+        <div>{i18n._(msg`Total Nodes`)}</div>
         <Badge isRead>{totalNodes}</Badge>
-        <Tooltip content={t`Toggle Legend`} position="bottom">
+        <Tooltip content={i18n._(msg`Toggle Legend`)} position="bottom">
           <ActionButton
             id="workflow-output-toggle-legend"
             isActive={showLegend}
@@ -113,7 +115,7 @@ function WorkflowOutputToolbar({ job }) {
             <CompassIcon />
           </ActionButton>
         </Tooltip>
-        <Tooltip content={t`Toggle Tools`} position="bottom">
+        <Tooltip content={i18n._(msg`Toggle Tools`)} position="bottom">
           <ActionButton
             id="workflow-output-toggle-tools"
             isActive={showTools}
