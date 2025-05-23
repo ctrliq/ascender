@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
-
 import { useHistory, useParams, Link } from 'react-router-dom';
-import { t, Plural } from '@lingui/macro';
+import { msg, Plural } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import {
   Button,
   Progress,
@@ -63,6 +63,7 @@ function computeForks(memCapacity, cpuCapacity, selectedCapacityAdjustment) {
 }
 
 function InstanceDetail({ setBreadcrumb, isK8s }) {
+  const { i18n } = useLingui();
   const config = useConfig();
 
   const { id } = useParams();
@@ -193,12 +194,12 @@ function InstanceDetail({ setBreadcrumb, isK8s }) {
       <CardBody>
         <DetailList gutter="sm">
           <Detail
-            label={t`Host Name`}
+            label={i18n._(msg`Host Name`)}
             value={instance.hostname}
             dataCy="instance-detail-name"
           />
           <Detail
-            label={t`Status`}
+            label={i18n._(msg`Status`)}
             dataCy="status"
             value={
               instance.node_state ? (
@@ -206,14 +207,14 @@ function InstanceDetail({ setBreadcrumb, isK8s }) {
               ) : null
             }
           />
-          <Detail label={t`Node Type`} value={instance.node_type} />
-          <Detail label={t`Host`} value={instance.ip_address} />
-          <Detail label={t`Listener Port`} value={instance.listener_port} />
+          <Detail label={i18n._(msg`Node Type`)} value={instance.node_type} />
+          <Detail label={i18n._(msg`Host`)} value={instance.ip_address} />
+          <Detail label={i18n._(msg`Listener Port`)} value={instance.listener_port} />
           {!isManaged && instance.related?.install_bundle && (
             <Detail
-              label={t`Install Bundle`}
+              label={i18n._(msg`Install Bundle`)}
               value={
-                <Tooltip content={t`Click to download bundle`}>
+                <Tooltip content={i18n._(msg`Click to download bundle`)}>
                   <Button
                     component="a"
                     isSmall
@@ -231,24 +232,24 @@ function InstanceDetail({ setBreadcrumb, isK8s }) {
           )}
           {(isExecutionNode || isHopNode) && (
             <Detail
-              label={t`Peers from control nodes`}
-              value={instance.peers_from_control_nodes ? t`On` : t`Off`}
+              label={i18n._(msg`Peers from control nodes`)}
+              value={instance.peers_from_control_nodes ? i18n._(msg`On`) : i18n._(msg`Off`)}
             />
           )}
           {!isHopNode && (
             <>
               <Detail
-                label={t`Policy Type`}
-                value={instance.managed_by_policy ? t`Auto` : t`Manual`}
+                label={i18n._(msg`Policy Type`)}
+                value={instance.managed_by_policy ? i18n._(msg`Auto`) : i18n._(msg`Manual`)}
               />
-              <Detail label={t`Running Jobs`} value={instance.jobs_running} />
-              <Detail label={t`Total Jobs`} value={instance.jobs_total} />
+              <Detail label={i18n._(msg`Running Jobs`)} value={instance.jobs_running} />
+              <Detail label={i18n._(msg`Total Jobs`)} value={instance.jobs_total} />
               {instanceGroups && (
                 <Detail
                   fullWidth
-                  label={t`Instance Groups`}
+                  label={i18n._(msg`Instance Groups`)}
                   dataCy="instance-groups"
-                  helpText={t`The Instance Groups to which this instance belongs.`}
+                  helpText={i18n._(msg`The Instance Groups to which this instance belongs.`)}
                   value={
                     <InstanceGroupLabels labels={instanceGroups} isLinkable />
                   }
@@ -256,11 +257,11 @@ function InstanceDetail({ setBreadcrumb, isK8s }) {
                 />
               )}
               <Detail
-                label={t`Last Health Check`}
+                label={i18n._(msg`Last Health Check`)}
                 dataCy="last-health-check"
                 helpText={
                   <>
-                    {t`Health checks are asynchronous tasks. See the`}{' '}
+                    {i18n._(msg`Health checks are asynchronous tasks. See the`)}{' '}
                     <a
                       href={`${getDocsBaseUrl(
                         config
@@ -268,22 +269,22 @@ function InstanceDetail({ setBreadcrumb, isK8s }) {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      {t`documentation`}
+                      {i18n._(msg`documentation`)}
                     </a>{' '}
-                    {t`for more info.`}
+                    {i18n._(msg`for more info.`)}
                   </>
                 }
                 value={formatHealthCheckTimeStamp(instance.last_health_check)}
               />
               <Detail
-                label={t`Capacity Adjustment`}
+                label={i18n._(msg`Capacity Adjustment`)}
                 dataCy="capacity-adjustment"
                 value={
                   <SliderHolder data-cy="slider-holder">
-                    <div data-cy="cpu-capacity">{t`CPU ${instance.cpu_capacity}`}</div>
+                    <div data-cy="cpu-capacity">{i18n._(msg`CPU ${instance.cpu_capacity}`)}</div>
                     <SliderForks data-cy="slider-forks">
                       <div data-cy="number-forks">
-                        <Plural value={forks} one="# fork" other="# forks" />
+                        <Plural value={forks} one={i18n._(msg`# fork`)} other={i18n._(msg`# forks`)} />
                       </div>
                       <Slider
                         areCustomStepsContinuous
@@ -300,26 +301,26 @@ function InstanceDetail({ setBreadcrumb, isK8s }) {
                         data-cy="slider"
                       />
                     </SliderForks>
-                    <div data-cy="mem-capacity">{t`RAM ${instance.mem_capacity}`}</div>
+                    <div data-cy="mem-capacity">{i18n._(msg`RAM ${instance.mem_capacity}`)}</div>
                   </SliderHolder>
                 }
               />
               <Detail
-                label={t`Used Capacity`}
+                label={i18n._(msg`Used Capacity`)}
                 dataCy="used-capacity"
                 value={
                   instance.enabled ? (
                     <Progress
-                      title={t`Used capacity`}
+                      title={i18n._(msg`Used capacity`)}
                       value={Math.round(
                         100 - instance.percent_capacity_remaining
                       )}
                       measureLocation={ProgressMeasureLocation.top}
                       size={ProgressSize.sm}
-                      aria-label={t`Used capacity`}
+                      aria-label={i18n._(msg`Used capacity`)}
                     />
                   ) : (
-                    <Unavailable>{t`Unavailable`}</Unavailable>
+                    <Unavailable>{i18n._(msg`Unavailable`)}</Unavailable>
                   )
                 }
               />
@@ -328,7 +329,7 @@ function InstanceDetail({ setBreadcrumb, isK8s }) {
           {healthCheck?.errors && (
             <Detail
               fullWidth
-              label={t`Errors`}
+              label={i18n._(msg`Errors`)}
               dataCy="errors"
               value={
                 <CodeBlock>
@@ -343,11 +344,11 @@ function InstanceDetail({ setBreadcrumb, isK8s }) {
             <>
               <Button
                 ouiaId="instance-detail-edit-button"
-                aria-label={t`edit`}
+                aria-label={i18n._(msg`edit`)}
                 component={Link}
                 to={`/instances/${id}/edit`}
               >
-                {t`Edit`}
+                {i18n._(msg`Edit`)}
               </Button>
               <RemoveInstanceButton
                 dataCy="remove-instance-button"
@@ -358,7 +359,7 @@ function InstanceDetail({ setBreadcrumb, isK8s }) {
             </>
           )}
           {isExecutionNode && (
-            <Tooltip content={t`Run a health check on the instance`}>
+            <Tooltip content={i18n._(msg`Run a health check on the instance`)}>
               <Button
                 isDisabled={
                   !config?.me?.is_superuser ||
@@ -369,11 +370,11 @@ function InstanceDetail({ setBreadcrumb, isK8s }) {
                 ouiaId="health-check-button"
                 onClick={fetchHealthCheck}
                 isLoading={instance.health_check_pending}
-                spinnerAriaLabel={t`Running health check`}
+                spinnerAriaLabel={i18n._(msg`Running health check`)}
               >
                 {instance.health_check_pending
-                  ? t`Running health check`
-                  : t`Run health check`}
+                  ? i18n._(msg`Running health check`)
+                  : i18n._(msg`Run health check`)}
               </Button>
             </Tooltip>
           )}
@@ -391,12 +392,12 @@ function InstanceDetail({ setBreadcrumb, isK8s }) {
           <AlertModal
             isOpen={error}
             onClose={dismissError}
-            title={t`Error!`}
+            title={i18n._(msg`Error!`)}
             variant="error"
           >
             {updateInstanceError
-              ? t`Failed to update capacity adjustment.`
-              : t`Failed to disassociate one or more instances.`}
+              ? i18n._(msg`Failed to update capacity adjustment.`)
+              : i18n._(msg`Failed to disassociate one or more instances.`)}
             <ErrorDetail error={error} />
           </AlertModal>
         )}
@@ -405,11 +406,11 @@ function InstanceDetail({ setBreadcrumb, isK8s }) {
           <AlertModal
             isOpen={removeError}
             variant="error"
-            aria-label={t`Removal Error`}
-            title={t`Error!`}
+            aria-label={i18n._(msg`Removal Error`)}
+            title={i18n._(msg`Error!`)}
             onClose={clearDeletionError}
           >
-            {t`Failed to remove one or more instances.`}
+            {i18n._(msg`Failed to remove one or more instances.`)}
             <ErrorDetail error={removeError} />
           </AlertModal>
         )}

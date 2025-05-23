@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { t } from '@lingui/macro';
-
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import {
   Switch,
   Route,
@@ -20,6 +20,7 @@ import InventoryGroupHosts from '../InventoryGroupHosts';
 import InventoryRelatedGroups from '../InventoryRelatedGroups';
 
 function InventoryGroup({ setBreadcrumb, inventory }) {
+  const { i18n } = useLingui();
   const [inventoryGroup, setInventoryGroup] = useState(null);
   const [contentLoading, setContentLoading] = useState(true);
   const [contentError, setContentError] = useState(null);
@@ -46,25 +47,25 @@ function InventoryGroup({ setBreadcrumb, inventory }) {
     {
       name: (
         <>
-          <CaretLeftIcon aria-label={t`Back to Groups`} />
-          {t`Back to Groups`}
+          <CaretLeftIcon aria-label={i18n._(msg`Back to Groups`)} />
+          {i18n._(msg`Back to Groups`)}
         </>
       ),
       link: `/inventories/${inventoryType}/${inventoryId}/groups`,
       id: 99,
     },
     {
-      name: t`Details`,
+      name: i18n._(msg`Details`),
       link: `/inventories/${inventoryType}/${inventoryId}/groups/${inventoryGroup?.id}/details`,
       id: 0,
     },
     {
-      name: t`Related Groups`,
+      name: i18n._(msg`Related Groups`),
       link: `/inventories/${inventoryType}/${inventoryId}/groups/${inventoryGroup?.id}/nested_groups`,
       id: 1,
     },
     {
-      name: t`Hosts`,
+      name: i18n._(msg`Hosts`),
       link: `/inventories/${inventoryType}/${inventoryId}/groups/${inventoryGroup?.id}/nested_hosts`,
       id: 2,
     },
@@ -89,7 +90,7 @@ function InventoryGroup({ setBreadcrumb, inventory }) {
     return (
       <ContentError isNotFound>
         <Link to={`/inventories/inventory/${inventory.id}/groups`}>
-          {t`View Inventory Groups`}
+          {i18n._(msg`View Inventory Groups`)}
         </Link>
       </ContentError>
     );
@@ -139,7 +140,7 @@ function InventoryGroup({ setBreadcrumb, inventory }) {
           <ContentError>
             {inventory && (
               <Link to={`/inventories/:inventoryType/${inventory.id}/details`}>
-                {t`View Inventory Details`}
+                {i18n._(msg`View Inventory Details`)}
               </Link>
             )}
           </ContentError>

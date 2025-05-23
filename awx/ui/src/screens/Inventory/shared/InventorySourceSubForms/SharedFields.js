@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { useField } from 'formik';
 import { FormGroup } from '@patternfly/react-core';
 import { minMaxValue, regExp } from 'util/validators';
@@ -12,13 +13,14 @@ import Popover from 'components/Popover';
 import getHelpText from '../Inventory.helptext';
 
 export const SourceVarsField = ({ popoverContent }) => {
-  const helpText = getHelpText();
+  const { i18n } = useLingui();
+  const helpText = getHelpText(i18n);
   return (
     <FormFullWidthLayout>
       <VariablesField
         id="source_vars"
         name="source_vars"
-        label={t`Source variables`}
+        label={i18n._(msg`Source variables`)}
         tooltip={
           <>
             {popoverContent}
@@ -31,20 +33,21 @@ export const SourceVarsField = ({ popoverContent }) => {
 };
 
 export const VerbosityField = () => {
-  const helpText = getHelpText();
+  const { i18n } = useLingui();
+  const helpText = getHelpText(i18n);
   const [field, meta, helpers] = useField('verbosity');
   const isValid = !(meta.touched && meta.error);
   const options = [
-    { value: '0', key: '0', label: t`0 (Warning)` },
-    { value: '1', key: '1', label: t`1 (Info)` },
-    { value: '2', key: '2', label: t`2 (Debug)` },
+    { value: '0', key: '0', label: i18n._(msg`0 (Warning)`) },
+    { value: '1', key: '1', label: i18n._(msg`1 (Info)`) },
+    { value: '2', key: '2', label: i18n._(msg`2 (Debug)`) },
   ];
 
   return (
     <FormGroup
       fieldId="verbosity"
       validated={isValid ? 'default' : 'error'}
-      label={t`Verbosity`}
+      label={i18n._(msg`Verbosity`)}
       labelIcon={<Popover content={helpText.subFormVerbosityFields} />}
     >
       <AnsibleSelect
@@ -58,7 +61,8 @@ export const VerbosityField = () => {
 };
 
 export const OptionsField = () => {
-  const helpText = getHelpText();
+  const { i18n } = useLingui();
+  const helpText = getHelpText(i18n);
   const [updateOnLaunchField] = useField('update_on_launch');
   const [, , updateCacheTimeoutHelper] = useField('update_cache_timeout');
   const [projectField] = useField('source_project');
@@ -72,24 +76,24 @@ export const OptionsField = () => {
   return (
     <>
       <FormFullWidthLayout>
-        <FormGroup fieldId="option-checkboxes" label={t`Update options`}>
+        <FormGroup fieldId="option-checkboxes" label={i18n._(msg`Update options`)}>
           <FormCheckboxLayout>
             <CheckboxField
               id="overwrite"
               name="overwrite"
-              label={t`Overwrite`}
+              label={i18n._(msg`Overwrite`)}
               tooltip={helpText.subFormOptions.overwrite}
             />
             <CheckboxField
               id="overwrite_vars"
               name="overwrite_vars"
-              label={t`Overwrite variables`}
+              label={i18n._(msg`Overwrite variables`)}
               tooltip={helpText.subFormOptions.overwriteVariables}
             />
             <CheckboxField
               id="update_on_launch"
               name="update_on_launch"
-              label={t`Update on launch`}
+              label={i18n._(msg`Update on launch`)}
               tooltip={helpText.subFormOptions.updateOnLaunch(projectField)}
             />
           </FormCheckboxLayout>
@@ -103,7 +107,7 @@ export const OptionsField = () => {
           min="0"
           max="2147483647"
           validate={minMaxValue(0, 2147483647)}
-          label={t`Cache timeout (seconds)`}
+          label={i18n._(msg`Cache timeout (seconds)`)}
           tooltip={helpText.cachedTimeOut}
         />
       )}
@@ -112,11 +116,12 @@ export const OptionsField = () => {
 };
 
 export const EnabledVarField = () => {
-  const helpText = getHelpText();
+  const { i18n } = useLingui();
+  const helpText = getHelpText(i18n);
   return (
     <FormField
       id="inventory-enabled-var"
-      label={t`Enabled Variable`}
+      label={i18n._(msg`Enabled Variable`)}
       tooltip={helpText.enabledVariableField}
       name="enabled_var"
       type="text"
@@ -125,11 +130,12 @@ export const EnabledVarField = () => {
 };
 
 export const EnabledValueField = () => {
-  const helpText = getHelpText();
+  const { i18n } = useLingui();
+  const helpText = getHelpText(i18n);
   return (
     <FormField
       id="inventory-enabled-value"
-      label={t`Enabled Value`}
+      label={i18n._(msg`Enabled Value`)}
       tooltip={helpText.enabledValue}
       name="enabled_value"
       type="text"
@@ -138,11 +144,12 @@ export const EnabledValueField = () => {
 };
 
 export const HostFilterField = () => {
-  const helpText = getHelpText();
+  const { i18n } = useLingui();
+  const helpText = getHelpText(i18n);
   return (
     <FormField
       id="host-filter"
-      label={t`Host Filter`}
+      label={i18n._(msg`Host Filter`)}
       tooltip={helpText.hostFilter}
       name="host_filter"
       type="text"

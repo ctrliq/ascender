@@ -1,7 +1,8 @@
 import 'styled-components/macro';
 import React from 'react';
 import { shape } from 'prop-types';
-import { t, Trans } from '@lingui/macro';
+import { msg, Trans } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Chip, Divider, Title } from '@patternfly/react-core';
@@ -104,6 +105,7 @@ function PromptDetail({
   overrides = {},
   workflowNode = false,
 }) {
+  const { i18n } = useLingui();
   const details = omitOverrides(resource, overrides, launchConfig.defaults);
   details.type = overrides?.nodeType || details.type;
   const hasOverrides = Object.keys(overrides).length > 0;
@@ -112,29 +114,29 @@ function PromptDetail({
     <>
       <DetailList gutter="sm">
         <Detail
-          label={t`Name`}
+          label={i18n._(msg`Name`)}
           dataCy="prompt-detail-name"
           value={buildResourceLink(resource)}
         />
         <Detail
-          label={t`Description`}
+          label={i18n._(msg`Description`)}
           dataCy="prompt-detail-description"
           value={details.description}
         />
         <Detail
-          label={t`Type`}
+          label={i18n._(msg`Type`)}
           dataCy="prompt-detail-type"
           value={toTitleCase(details.unified_job_type || details.type)}
         />
         {workflowNode && (
           <Detail
-            label={t`Convergence`}
+            label={i18n._(msg`Convergence`)}
             dataCy="prompt-detail-convergence"
-            value={workflowNode?.all_parents_must_converge ? t`All` : t`Any`}
+            value={workflowNode?.all_parents_must_converge ? i18n._(msg`All`) : i18n._(msg`Any`)}
           />
         )}
         <Detail
-          label={t`Timeout`}
+          label={i18n._(msg`Timeout`)}
           dataCy="prompt-detail-timeout"
           value={formatTimeout(details?.timeout)}
         />
@@ -152,21 +154,21 @@ function PromptDetail({
         )}
         {details?.created && (
           <UserDateDetail
-            label={t`Created`}
+            label={i18n._(msg`Created`)}
             date={details.created}
             user={details?.summary_fields?.created_by}
           />
         )}
         {details?.modified && (
           <UserDateDetail
-            label={t`Last Modified`}
+            label={i18n._(msg`Last Modified`)}
             date={details?.modified}
             user={details?.summary_fields?.modified_by}
           />
         )}
         {details?.type === 'system_job_template' && (
           <VariablesDetail
-            label={t`Variables`}
+            label={i18n._(msg`Variables`)}
             rows={4}
             value={overrides.extra_vars}
             name="extra_vars"
@@ -178,19 +180,19 @@ function PromptDetail({
         hasPromptData(launchConfig) &&
         hasOverrides && (
           <>
-            <PromptTitle headingLevel="h2">{t`Prompted Values`}</PromptTitle>
+            <PromptTitle headingLevel="h2">{i18n._(msg`Prompted Values`)}</PromptTitle>
             <PromptDivider />
-            <PromptDetailList aria-label={t`Prompt Overrides`}>
+            <PromptDetailList aria-label={i18n._(msg`Prompt Overrides`)}>
               {launchConfig.ask_job_type_on_launch && (
                 <Detail
-                  label={t`Job Type`}
+                  label={i18n._(msg`Job Type`)}
                   value={toTitleCase(overrides.job_type)}
                 />
               )}
               {launchConfig.ask_credential_on_launch && (
                 <Detail
                   fullWidth
-                  label={t`Credentials`}
+                  label={i18n._(msg`Credentials`)}
                   rows={4}
                   value={
                     <ChipGroup
@@ -212,20 +214,20 @@ function PromptDetail({
               )}
               {launchConfig.ask_inventory_on_launch && (
                 <Detail
-                  label={t`Inventory`}
+                  label={i18n._(msg`Inventory`)}
                   value={overrides.inventory?.name}
                 />
               )}
               {launchConfig.ask_execution_environment_on_launch && (
                 <Detail
-                  label={t`Execution Environment`}
+                  label={i18n._(msg`Execution Environment`)}
                   value={overrides.execution_environment?.name}
                 />
               )}
               {launchConfig.ask_instance_groups_on_launch && (
                 <Detail
                   fullWidth
-                  label={t`Instance Groups`}
+                  label={i18n._(msg`Instance Groups`)}
                   rows={4}
                   value={
                     <InstanceGroupLabels labels={overrides.instance_groups} />
@@ -234,24 +236,24 @@ function PromptDetail({
               )}
               {launchConfig.ask_scm_branch_on_launch && (
                 <Detail
-                  label={t`Source Control Branch`}
+                  label={i18n._(msg`Source Control Branch`)}
                   value={overrides.scm_branch}
                 />
               )}
               {launchConfig.ask_limit_on_launch && (
-                <Detail label={t`Limit`} value={overrides.limit} />
+                <Detail label={i18n._(msg`Limit`)} value={overrides.limit} />
               )}
               {Object.prototype.hasOwnProperty.call(overrides, 'verbosity') &&
               launchConfig.ask_verbosity_on_launch ? (
                 <Detail
-                  label={t`Verbosity`}
-                  value={VERBOSITY()[overrides.verbosity]}
+                  label={i18n._(msg`Verbosity`)}
+                  value={VERBOSITY(i18n)[overrides.verbosity]}
                 />
               ) : null}
               {launchConfig.ask_tags_on_launch && (
                 <Detail
                   fullWidth
-                  label={t`Job Tags`}
+                  label={i18n._(msg`Job Tags`)}
                   value={
                     <ChipGroup
                       numChips={5}
@@ -284,7 +286,7 @@ function PromptDetail({
               {launchConfig.ask_skip_tags_on_launch && (
                 <Detail
                   fullWidth
-                  label={t`Skip Tags`}
+                  label={i18n._(msg`Skip Tags`)}
                   value={
                     <ChipGroup
                       numChips={5}
@@ -317,7 +319,7 @@ function PromptDetail({
               {launchConfig.ask_labels_on_launch && (
                 <Detail
                   fullWidth
-                  label={t`Labels`}
+                  label={i18n._(msg`Labels`)}
                   value={
                     <ChipGroup
                       numChips={5}
@@ -339,31 +341,31 @@ function PromptDetail({
                 />
               )}
               {launchConfig.ask_forks_on_launch && (
-                <Detail label={t`Forks`} value={overrides.forks} />
+                <Detail label={i18n._(msg`Forks`)} value={overrides.forks} />
               )}
               {launchConfig.ask_job_slice_count_on_launch && (
                 <Detail
-                  label={t`Job Slicing`}
+                  label={i18n._(msg`Job Slicing`)}
                   value={overrides.job_slice_count}
                 />
               )}
               {launchConfig.ask_timeout_on_launch && (
                 <Detail
-                  label={t`Timeout`}
+                  label={i18n._(msg`Timeout`)}
                   value={formatTimeout(overrides?.timeout)}
                 />
               )}
               {launchConfig.ask_diff_mode_on_launch && (
                 <Detail
-                  label={t`Show Changes`}
-                  value={overrides.diff_mode === true ? t`On` : t`Off`}
+                  label={i18n._(msg`Show Changes`)}
+                  value={overrides.diff_mode === true ? i18n._(msg`On`) : i18n._(msg`Off`)}
                 />
               )}
               {(launchConfig.survey_enabled ||
                 launchConfig.ask_variables_on_launch) && (
                 <VariablesDetail
                   dataCy="prompt-detail-variables"
-                  label={t`Variables`}
+                  label={i18n._(msg`Variables`)}
                   rows={4}
                   value={overrides.extra_vars}
                   name="extra_vars"

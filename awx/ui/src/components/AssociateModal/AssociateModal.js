@@ -1,7 +1,9 @@
 import React, { useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { t } from '@lingui/macro';
+import { msg } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
+
 import { Button, Modal } from '@patternfly/react-core';
 import { getSearchableKeys } from 'components/PaginatedTable';
 import useRequest from 'hooks/useRequest';
@@ -17,9 +19,9 @@ const QS_CONFIG = (order_by = 'name') =>
   });
 
 function AssociateModal({
-  header = t`Items`,
+  header,
   columns = [],
-  title = t`Select Items`,
+  title,
   onClose,
   onAssociate,
   fetchRequest,
@@ -29,8 +31,13 @@ function AssociateModal({
   ouiaId,
   modalNote,
 }) {
+  const { i18n } = useLingui();
   const history = useHistory();
   const { selected, handleSelect } = useSelected([]);
+
+  // Set default values for header and title after i18n is available
+  header = header || i18n._(msg`Items`);
+  title = title || i18n._(msg`Select Items`);
 
   const {
     request: fetchItems,
@@ -96,28 +103,28 @@ function AssociateModal({
       ouiaId={ouiaId}
       variant="large"
       title={title}
-      aria-label={t`Association modal`}
+      aria-label={i18n._(msg`Association modal`)}
       isOpen={isModalOpen}
       onClose={handleClose}
       actions={[
         <Button
           ouiaId="associate-modal-save"
-          aria-label={t`Save`}
+          aria-label={i18n._(msg`Save`)}
           key="select"
           variant="primary"
           onClick={handleSave}
           isDisabled={selected.length === 0}
         >
-          {t`Save`}
+          {i18n._(msg`Save`)}
         </Button>,
         <Button
           ouiaId="associate-modal-cancel"
-          aria-label={t`Cancel`}
+          aria-label={i18n._(msg`Cancel`)}
           key="cancel"
           variant="link"
           onClick={handleClose}
         >
-          {t`Cancel`}
+          {i18n._(msg`Cancel`)}
         </Button>,
       ]}
     >
@@ -138,22 +145,22 @@ function AssociateModal({
         value={selected}
         searchColumns={[
           {
-            name: t`Name`,
+            name: i18n._(msg`Name`),
             key: `${displayKey}__icontains`,
             isDefault: true,
           },
           {
-            name: t`Created By (Username)`,
+            name: i18n._(msg`Created By (Username)`),
             key: 'created_by__username__icontains',
           },
           {
-            name: t`Modified By (Username)`,
+            name: i18n._(msg`Modified By (Username)`),
             key: 'modified_by__username__icontains',
           },
         ]}
         sortColumns={[
           {
-            name: t`Name`,
+            name: i18n._(msg`Name`),
             key: `${displayKey}`,
           },
         ]}

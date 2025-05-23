@@ -1,5 +1,6 @@
 import React from 'react';
-import { t } from '@lingui/macro';
+import { msg } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
 import {
   Title,
   EmptyState,
@@ -13,15 +14,18 @@ const ContentEmpty = ({
   message = '',
   icon = CubesIcon,
   className = '',
-}) => (
-  <EmptyState variant="full" className={className}>
-    <EmptyStateIcon icon={icon} />
-    <Title size="lg" headingLevel="h3">
-      {title || t`No items found.`}
-    </Title>
-    <EmptyStateBody>{message}</EmptyStateBody>
-  </EmptyState>
-);
+}) => {
+  const { i18n } = useLingui();
+  return (
+    <EmptyState variant="full" className={className}>
+      <EmptyStateIcon icon={icon} />
+      <Title size="lg" headingLevel="h3">
+        {title || i18n._(msg`No items found.`)}
+      </Title>
+      <EmptyStateBody>{message}</EmptyStateBody>
+    </EmptyState>
+  );
+};
 
 export { ContentEmpty as _ContentEmpty };
 export default ContentEmpty;

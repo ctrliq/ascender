@@ -1,5 +1,7 @@
 import React from 'react';
-import { t } from '@lingui/macro';
+import { msg } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
+
 import { withFormik, useFormikContext } from 'formik';
 import PropTypes from 'prop-types';
 import Wizard from '../Wizard';
@@ -12,6 +14,7 @@ function AdHocCommandsWizard({
   credentialTypeId,
   organizationId,
 }) {
+  const { i18n } = useLingui();
   const { setFieldTouched, values } = useFormikContext();
 
   const { steps, validateStep, visitStep, visitAllSteps } = useAdHocLaunchSteps(
@@ -45,10 +48,10 @@ function AdHocCommandsWizard({
         }
       }}
       steps={steps}
-      title={t`Run command`}
-      backButtonText={t`Back`}
-      cancelButtonText={t`Cancel`}
-      nextButtonText={t`Next`}
+      title={i18n._(msg`Run command`)}
+      backButtonText={i18n._(msg`Back`)}
+      cancelButtonText={i18n._(msg`Cancel`)}
+      nextButtonText={i18n._(msg`Next`)}
     />
   );
 }

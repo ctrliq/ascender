@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import styled from 'styled-components';
 import { shape } from 'prop-types';
 
@@ -18,16 +19,17 @@ const GridDL = styled.dl`
 `;
 
 function WorkflowLinkHelp({ link }) {
+  const { i18n } = useLingui();
   let linkType;
   switch (link.linkType) {
     case 'always':
-      linkType = t`Always`;
+      linkType = i18n._(msg`Always`);
       break;
     case 'success':
-      linkType = t`On Success`;
+      linkType = i18n._(msg`On Success`);
       break;
     case 'failure':
-      linkType = t`On Failure`;
+      linkType = i18n._(msg`On Failure`);
       break;
     default:
       linkType = '';
@@ -36,7 +38,7 @@ function WorkflowLinkHelp({ link }) {
   return (
     <GridDL>
       <dt>
-        <b>{t`Run`}</b>
+        <b>{i18n._(msg`Run`)}</b>
       </dt>
       <dd id="workflow-link-help-type">{linkType}</dd>
     </GridDL>

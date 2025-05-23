@@ -1,12 +1,14 @@
 import React, { useEffect, useCallback } from 'react';
 import { string, number, shape, arrayOf } from 'prop-types';
 import * as d3 from 'd3';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { PageContextConsumer } from '@patternfly/react-core';
 import ChartTooltip from './ChartTooltip';
 
 function LineChart({ id, data, height, pageContext, jobStatus }) {
   const { isNavOpen } = pageContext;
+  const { i18n } = useLingui();
 
   // Methods
   const draw = useCallback(() => {
@@ -61,7 +63,7 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
     const tooltip = new ChartTooltip({
       svg: `#${id}`,
       colors,
-      label: t`Jobs`,
+      label: i18n._(msg`Jobs`),
     });
     const parseTime = d3.timeParse('%Y-%m-%d');
 
@@ -125,7 +127,7 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
       .attr('x', 0 - height / 2)
       .attr('dy', '1em')
       .style('text-anchor', 'middle')
-      .text(t`Job Runs`);
+      .text(i18n._(msg`Job Runs`));
 
     // Add the X Axis
     let ticks;
@@ -165,7 +167,7 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
         `translate(${width / 2} , ${height + margin.top + 20})`
       )
       .style('text-anchor', 'middle')
-      .text(t`Date`);
+      .text(i18n._(msg`Date`));
     const vertical = svg
       .append('path')
       .attr('class', 'mouse-line')
@@ -252,7 +254,7 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
         .on('mousemove', handleMouseMove)
         .on('mouseout', handleMouseOut);
     }
-  }, [data, height, id, jobStatus]);
+  }, [data, height, id, jobStatus, i18n]);
 
   useEffect(() => {
     draw();

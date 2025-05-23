@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
-
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import { func, shape } from 'prop-types';
 import { WorkflowJobTemplatesAPI } from 'api';
 import { getQSConfig, parseQueryString } from 'util/qs';
@@ -22,6 +22,7 @@ const QS_CONFIG = getQSConfig('workflow-job-templates', {
 
 function WorkflowJobTemplatesList({ nodeResource, onUpdateNodeResource }) {
   const location = useLocation();
+  const { i18n } = useLingui();
 
   const {
     result: {
@@ -72,7 +73,7 @@ function WorkflowJobTemplatesList({ nodeResource, onUpdateNodeResource }) {
       qsConfig={QS_CONFIG}
       headerRow={
         <HeaderRow isExpandable={false} qsConfig={QS_CONFIG}>
-          <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
+          <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
         </HeaderRow>
       }
       renderRow={(item, index) => (
@@ -92,24 +93,24 @@ function WorkflowJobTemplatesList({ nodeResource, onUpdateNodeResource }) {
       showPageSizeOptions={false}
       toolbarSearchColumns={[
         {
-          name: t`Name`,
+          name: i18n._(msg`Name`),
           key: 'name__icontains',
           isDefault: true,
         },
         {
-          name: t`Organization (Name)`,
+          name: i18n._(msg`Organization (Name)`),
           key: 'organization__name__icontains',
         },
         {
-          name: t`Inventory (Name)`,
+          name: i18n._(msg`Inventory (Name)`),
           key: 'inventory__name__icontains',
         },
         {
-          name: t`Created By (Username)`,
+          name: i18n._(msg`Created By (Username)`),
           key: 'created_by__username__icontains',
         },
         {
-          name: t`Modified By (Username)`,
+          name: i18n._(msg`Modified By (Username)`),
           key: 'modified_by__username__icontains',
         },
       ]}

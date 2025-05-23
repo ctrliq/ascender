@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import {
   Button,
   TextList,
@@ -35,7 +36,8 @@ import useWsInventorySourcesDetails from '../shared/useWsInventorySourcesDetails
 import getHelpText from '../shared/Inventory.helptext';
 
 function InventorySourceDetail({ inventorySource }) {
-  const helpText = getHelpText();
+  const { i18n } = useLingui();
+  const helpText = getHelpText(i18n);
   const {
     created,
     custom_virtualenv,
@@ -119,19 +121,19 @@ function InventorySourceDetail({ inventorySource }) {
       <TextList component={TextListVariants.ul}>
         {overwrite && (
           <TextListItem component={TextListItemVariants.li}>
-            {t`Overwrite local groups and hosts from remote inventory source`}
+            {i18n._(msg`Overwrite local groups and hosts from remote inventory source`)}
             <Popover content={helpText.subFormOptions.overwrite} />
           </TextListItem>
         )}
         {overwrite_vars && (
           <TextListItem component={TextListItemVariants.li}>
-            {t`Overwrite local variables from remote inventory source`}
+            {i18n._(msg`Overwrite local variables from remote inventory source`)}
             <Popover content={helpText.subFormOptions.overwriteVariables} />
           </TextListItem>
         )}
         {update_on_launch && (
           <TextListItem component={TextListItemVariants.li}>
-            {t`Update on launch`}
+            {i18n._(msg`Update on launch`)}
             <Popover
               content={helpText.subFormOptions.updateOnLaunch({
                 value: source_project,
@@ -153,16 +155,16 @@ function InventorySourceDetail({ inventorySource }) {
 
   const generateLastJobTooltip = (job) => (
     <>
-      <div>{t`MOST RECENT SYNC`}</div>
+      <div>{i18n._(msg`MOST RECENT SYNC`)}</div>
       <div>
-        {t`JOB ID:`} {job.id}
+        {i18n._(msg`JOB ID:`)} {job.id}
       </div>
       <div>
-        {t`STATUS:`} {job.status.toUpperCase()}
+        {i18n._(msg`STATUS:`)} {job.status.toUpperCase()}
       </div>
       {job.finished && (
         <div>
-          {t`FINISHED:`} {formatDateString(job.finished)}
+          {i18n._(msg`FINISHED:`)} {formatDateString(job.finished)}
         </div>
       )}
     </>
@@ -179,9 +181,9 @@ function InventorySourceDetail({ inventorySource }) {
   return (
     <CardBody>
       <DetailList gutter="sm">
-        <Detail label={t`Name`} value={name} />
+        <Detail label={i18n._(msg`Name`)} value={name} />
         <Detail
-          label={t`Last Job Status`}
+          label={i18n._(msg`Last Job Status`)}
           value={
             job && (
               <Tooltip
@@ -196,11 +198,11 @@ function InventorySourceDetail({ inventorySource }) {
             )
           }
         />
-        <Detail label={t`Description`} value={description} />
-        <Detail label={t`Source`} value={sourceChoices[source]} />
+        <Detail label={i18n._(msg`Description`)} value={description} />
+        <Detail label={i18n._(msg`Source`)} value={sourceChoices[source]} />
         {organization && (
           <Detail
-            label={t`Organization`}
+            label={i18n._(msg`Organization`)}
             value={
               <Link to={`/organizations/${organization.id}/details`}>
                 {organization.name}
@@ -214,7 +216,7 @@ function InventorySourceDetail({ inventorySource }) {
         />
         {source_project && (
           <Detail
-            label={t`Project`}
+            label={i18n._(msg`Project`)}
             value={
               <Link to={`/projects/${source_project.id}/details`}>
                 {source_project.name}
@@ -224,55 +226,55 @@ function InventorySourceDetail({ inventorySource }) {
         )}
         {source === 'scm' ? (
           <Detail
-            label={t`Inventory file`}
+            label={i18n._(msg`Inventory file`)}
             helpText={helpText.sourcePath}
-            value={source_path === '' ? t`/ (project root)` : source_path}
+            value={source_path === '' ? i18n._(msg`/ (project root)`) : source_path}
           />
         ) : null}
         <Detail
-          label={t`Verbosity`}
+          label={i18n._(msg`Verbosity`)}
           helpText={helpText.subFormVerbosityFields}
-          value={VERBOSITY()[verbosity]}
+          value={VERBOSITY(i18n)[verbosity]}
         />
         <Detail
-          label={t`Source Control Branch`}
+          label={i18n._(msg`Source Control Branch`)}
           helpText={helpText.sourceControlBranch}
           value={scm_branch}
         />
         <Detail
-          label={t`Cache timeout`}
-          value={`${update_cache_timeout} ${t`seconds`}`}
+          label={i18n._(msg`Cache timeout`)}
+          value={`${update_cache_timeout} ${i18n._(msg`seconds`)}`}
           helpText={helpText.subFormOptions.cachedTimeOut}
         />
         <Detail
-          label={t`Host Filter`}
+          label={i18n._(msg`Host Filter`)}
           helpText={helpText.hostFilter}
           value={host_filter}
         />
         <Detail
-          label={t`Enabled Variable`}
+          label={i18n._(msg`Enabled Variable`)}
           helpText={helpText.enabledVariableField}
           value={enabled_var}
         />
         <Detail
-          label={t`Enabled Value`}
+          label={i18n._(msg`Enabled Value`)}
           helpText={helpText.enabledValue}
           value={enabled_value}
         />
         <Detail
           fullWidth
-          label={t`Credential`}
+          label={i18n._(msg`Credential`)}
           value={credentials?.map((cred) => (
             <CredentialChip key={cred?.id} credential={cred} isReadOnly />
           ))}
           isEmpty={credentials?.length === 0}
         />
         {optionsList && (
-          <Detail fullWidth label={t`Enabled Options`} value={optionsList} />
+          <Detail fullWidth label={i18n._(msg`Enabled Options`)} value={optionsList} />
         )}
         {source_vars && (
           <VariablesDetail
-            label={t`Source variables`}
+            label={i18n._(msg`Source variables`)}
             rows={4}
             value={source_vars}
             helpText={helpText.sourceVars(docsBaseUrl, source)}
@@ -280,10 +282,10 @@ function InventorySourceDetail({ inventorySource }) {
             dataCy="inventory-source-detail-variables"
           />
         )}
-        <UserDateDetail date={created} label={t`Created`} user={created_by} />
+        <UserDateDetail date={created} label={i18n._(msg`Created`)} user={created_by} />
         <UserDateDetail
           date={modified}
-          label={t`Last modified`}
+          label={i18n._(msg`Last modified`)}
           user={modified_by}
         />
       </DetailList>
@@ -292,20 +294,20 @@ function InventorySourceDetail({ inventorySource }) {
           <Button
             ouiaId="inventory-source-detail-edit-button"
             component={Link}
-            aria-label={t`edit`}
+            aria-label={i18n._(msg`edit`)}
             to={`/inventories/inventory/${inventory.id}/sources/${id}/edit`}
           >
-            {t`Edit`}
+            {i18n._(msg`Edit`)}
           </Button>
         )}
         {user_capabilities?.start &&
           (['new', 'running', 'pending', 'waiting'].includes(job?.status) ? (
             <JobCancelButton
               job={{ id: job.id, type: 'inventory_update' }}
-              errorTitle={t`Inventory Source Sync Error`}
-              title={t`Cancel Inventory Source Sync`}
-              errorMessage={t`Failed to cancel Inventory Source Sync`}
-              buttonText={t`Cancel Sync`}
+              errorTitle={i18n._(msg`Inventory Source Sync Error`)}
+              title={i18n._(msg`Cancel Inventory Source Sync`)}
+              errorMessage={i18n._(msg`Failed to cancel Inventory Source Sync`)}
+              buttonText={i18n._(msg`Cancel Sync`)}
             />
           ) : (
             <InventorySourceSyncButton source={inventorySource} icon={false} />
@@ -313,24 +315,24 @@ function InventorySourceDetail({ inventorySource }) {
         {user_capabilities?.delete && (
           <DeleteButton
             name={name}
-            modalTitle={t`Delete inventory source`}
+            modalTitle={i18n._(msg`Delete inventory source`)}
             onConfirm={handleDelete}
             deleteDetailsRequests={deleteDetailsRequests}
-            deleteMessage={t`This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?`}
+            deleteMessage={i18n._(msg`This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?`)}
             isDisabled={job?.status === 'running'}
           >
-            {t`Delete`}
+            {i18n._(msg`Delete`)}
           </DeleteButton>
         )}
       </CardActionsRow>
       {deletionError && (
         <AlertModal
           variant="error"
-          title={t`Error!`}
+          title={i18n._(msg`Error!`)}
           isOpen={deletionError}
           onClose={() => setDeletionError(false)}
         >
-          {t`Failed to delete inventory source ${name}.`}
+          {i18n._(msg`Failed to delete inventory source ${name}.`)}
           <ErrorDetail error={deletionError} />
         </AlertModal>
       )}

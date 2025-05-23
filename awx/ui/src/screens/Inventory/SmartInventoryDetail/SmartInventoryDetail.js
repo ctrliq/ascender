@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import { Button, Label } from '@patternfly/react-core';
 
 import { Inventory } from 'types';
@@ -20,6 +21,7 @@ import Sparkline from 'components/Sparkline';
 import InstanceGroupLabels from 'components/InstanceGroupLabels';
 
 function SmartInventoryDetail({ inventory }) {
+  const { i18n } = useLingui();
   const history = useHistory();
   const {
     created,
@@ -95,16 +97,16 @@ function SmartInventoryDetail({ inventory }) {
     <>
       <CardBody>
         <DetailList>
-          <Detail label={t`Name`} value={name} />
+          <Detail label={i18n._(msg`Name`)} value={name} />
           <Detail
-            label={t`Activity`}
+            label={i18n._(msg`Activity`)}
             value={<Sparkline jobs={recentJobs} />}
             isEmpty={recentJobs.length === 0}
           />
-          <Detail label={t`Description`} value={description} />
-          <Detail label={t`Type`} value={t`Smart inventory`} />
+          <Detail label={i18n._(msg`Description`)} value={description} />
+          <Detail label={i18n._(msg`Type`)} value={i18n._(msg`Smart inventory`)} />
           <Detail
-            label={t`Organization`}
+            label={i18n._(msg`Organization`)}
             value={
               <Link to={`/organizations/${organization.id}/details`}>
                 {organization.name}
@@ -113,26 +115,26 @@ function SmartInventoryDetail({ inventory }) {
           />
           <Detail
             fullWidth
-            label={t`Smart host filter`}
+            label={i18n._(msg`Smart host filter`)}
             value={<Label variant="outline">{host_filter}</Label>}
           />
-          <Detail label={t`Total hosts`} value={total_hosts} />
+          <Detail label={i18n._(msg`Total hosts`)} value={total_hosts} />
           <Detail
             fullWidth
-            label={t`Instance groups`}
+            label={i18n._(msg`Instance groups`)}
             value={<InstanceGroupLabels labels={instanceGroups} />}
             isEmpty={instanceGroups.length === 0}
           />
           <VariablesDetail
-            label={t`Variables`}
+            label={i18n._(msg`Variables`)}
             value={variables}
             rows={4}
             name="variables"
             dataCy="smart-inventory-detail-variables"
           />
-          <UserDateDetail label={t`Created`} date={created} user={created_by} />
+          <UserDateDetail label={i18n._(msg`Created`)} date={created} user={created_by} />
           <UserDateDetail
-            label={t`Last modified`}
+            label={i18n._(msg`Last modified`)}
             date={modified}
             user={modified_by}
           />
@@ -142,20 +144,20 @@ function SmartInventoryDetail({ inventory }) {
             <Button
               ouiaId="smart-inventory-detail-edit-button"
               component={Link}
-              aria-label={t`edit`}
+              aria-label={i18n._(msg`edit`)}
               to={`/inventories/smart_inventory/${id}/edit`}
             >
-              {t`Edit`}
+              {i18n._(msg`Edit`)}
             </Button>
           )}
           {user_capabilities?.delete && (
             <DeleteButton
               name={name}
-              modalTitle={t`Delete smart inventory`}
+              modalTitle={i18n._(msg`Delete smart inventory`)}
               onConfirm={handleDelete}
               isDisabled={isLoading}
             >
-              {t`Delete`}
+              {i18n._(msg`Delete`)}
             </DeleteButton>
           )}
         </CardActionsRow>
@@ -164,10 +166,10 @@ function SmartInventoryDetail({ inventory }) {
         <AlertModal
           isOpen={error}
           variant="error"
-          title={t`Error!`}
+          title={i18n._(msg`Error!`)}
           onClose={dismissError}
         >
-          {t`Failed to delete smart inventory.`}
+          {i18n._(msg`Failed to delete smart inventory.`)}
           <ErrorDetail error={error} />
         </AlertModal>
       )}

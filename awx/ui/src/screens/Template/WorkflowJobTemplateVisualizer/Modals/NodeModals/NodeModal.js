@@ -2,7 +2,8 @@
 import 'styled-components/macro';
 import React, { useContext, useState, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { Formik, useFormikContext } from 'formik';
 import yaml from 'js-yaml';
 import { bool, node, func } from 'prop-types';
@@ -44,6 +45,7 @@ function NodeModalForm({
   const history = useHistory();
   const dispatch = useContext(WorkflowDispatchContext);
   const { values, setFieldTouched } = useFormikContext();
+  const { i18n } = useLingui();
 
   const [triggerNext, setTriggerNext] = useState(0);
 
@@ -128,8 +130,8 @@ function NodeModalForm({
         activeStep.id === promptSteps[promptSteps.length - 1]?.id;
     }
     return verifyPromptSteps || activeStep.name === 'Preview'
-      ? t`Save`
-      : t`Next`;
+      ? i18n._(msg`Save`)
+      : i18n._(msg`Next`);
   }
 
   const CustomFooter = (
@@ -151,20 +153,20 @@ function NodeModalForm({
                 ouiaId="node-modal-back-button"
                 id="back-node-modal"
                 variant="secondary"
-                aria-label={t`Back`}
+                aria-label={i18n._(msg`Back`)}
                 onClick={onBack}
               >
-                {t`Back`}
+                {i18n._(msg`Back`)}
               </Button>
             )}
             <Button
               ouiaId="node-modal-cancel-button"
               id="cancel-node-modal"
               variant="link"
-              aria-label={t`Cancel`}
+              aria-label={i18n._(msg`Cancel`)}
               onClick={handleCancel}
             >
-              {t`Cancel`}
+              {i18n._(msg`Cancel`)}
             </Button>
           </>
         )}
@@ -177,7 +179,7 @@ function NodeModalForm({
       <AlertModal
         isOpen={error}
         variant="error"
-        title={t`Error!`}
+        title={i18n._(msg`Error!`)}
         onClose={() => {
           dismissError();
         }}
@@ -192,7 +194,7 @@ function NodeModalForm({
       <AlertModal
         isOpen={error}
         variant="error"
-        title={t`Error!`}
+        title={i18n._(msg`Error!`)}
         onClose={() => {
           dismissError();
         }}
@@ -237,6 +239,7 @@ function NodeModalForm({
 
 const NodeModalInner = ({ title, ...rest }) => {
   const { values } = useFormikContext();
+  const { i18n } = useLingui();
 
   const wizardTitle = values.nodeResource
     ? `${title} | ${values.nodeResource.name}`
@@ -334,7 +337,7 @@ const NodeModalInner = ({ title, ...rest }) => {
       <AlertModal
         isOpen={error}
         variant="error"
-        title={t`Error!`}
+        title={i18n._(msg`Error!`)}
         onClose={() => {
           dismissError();
         }}
@@ -350,7 +353,7 @@ const NodeModalInner = ({ title, ...rest }) => {
         isOpen
         steps={[
           {
-            name: t`Loading`,
+            name: i18n._(msg`Loading`),
             component: <ContentLoading />,
           },
         ]}

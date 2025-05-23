@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
 import {
   Card,
   CardHeader,
@@ -15,6 +15,7 @@ import {
   SelectOption,
   Text,
 } from '@patternfly/react-core';
+import { useLingui } from '@lingui/react';
 
 import useRequest from 'hooks/useRequest';
 import { SubscriptionUsageAPI } from 'api';
@@ -42,6 +43,7 @@ const GraphCardActions = styled(CardActions)`
 `;
 
 function SubscriptionUsageChart() {
+  const { i18n } = useLingui();
   const [isPeriodDropdownOpen, setIsPeriodDropdownOpen] = useState(false);
   const [periodSelection, setPeriodSelection] = useState('year');
   const userProfile = useUserProfile();
@@ -110,11 +112,11 @@ function SubscriptionUsageChart() {
     <Card>
       <Flex style={{ justifyContent: 'space-between' }}>
         <FlexItem>
-          <ChartCardTitle>{t`Subscription Compliance`}</ChartCardTitle>
+          <ChartCardTitle>{i18n._(msg`Subscription Compliance`)}</ChartCardTitle>
         </FlexItem>
         <FlexItem>
           <CardText component="small">
-            {t`Last recalculation date:`}{' '}
+            {i18n._(msg`Last recalculation date:`)}{' '}
             {userProfile.systemConfig.HOST_METRIC_SUMMARY_TASK_LAST_TS.slice(
               0,
               10
@@ -126,9 +128,9 @@ function SubscriptionUsageChart() {
         <GraphCardActions>
           <Select
             variant={SelectVariant.single}
-            placeholderText={t`Select period`}
-            aria-label={t`Select period`}
-            typeAheadAriaLabel={t`Select period`}
+            placeholderText={i18n._(msg`Select period`)}
+            aria-label={i18n._(msg`Select period`)}
+            typeAheadAriaLabel={i18n._(msg`Select period`)}
             className="periodSelect"
             onToggle={setIsPeriodDropdownOpen}
             onSelect={(event, selection) => {
@@ -137,17 +139,17 @@ function SubscriptionUsageChart() {
             }}
             selections={periodSelection}
             isOpen={isPeriodDropdownOpen}
-            noResultsFoundText={t`No results found`}
+            noResultsFoundText={i18n._(msg`No results found`)}
             ouiaId="subscription-usage-period-select"
           >
             <SelectOption key="year" value="year">
-              {t`Past year`}
+              {i18n._(msg`Past year`)}
             </SelectOption>
             <SelectOption key="two_years" value="two_years">
-              {t`Past two years`}
+              {i18n._(msg`Past two years`)}
             </SelectOption>
             <SelectOption key="three_years" value="three_years">
-              {t`Past three years`}
+              {i18n._(msg`Past three years`)}
             </SelectOption>
           </Select>
         </GraphCardActions>

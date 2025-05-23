@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory, Link } from 'react-router-dom';
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 
 import { Card, PageSection } from '@patternfly/react-core';
 import { CardBody } from 'components/Card';
@@ -10,6 +11,7 @@ import ContentError from 'components/ContentError';
 import NotificationTemplateForm from './shared/NotificationTemplateForm';
 
 function NotificationTemplateAdd() {
+  const { i18n } = useLingui();
   const history = useHistory();
   const [formError, setFormError] = useState(null);
   const {
@@ -47,9 +49,9 @@ function NotificationTemplateAdd() {
           <ContentError error={error}>
             {error.response.status === 404 && (
               <span>
-                {t`Notification Template not found.`}{' '}
+                {i18n._(msg`Notification Template not found.`)}{' '}
                 <Link to="/notification_templates">
-                  {t`View all Notification Templates.`}
+                  {i18n._(msg`View all Notification Templates.`)}
                 </Link>
               </span>
             )}

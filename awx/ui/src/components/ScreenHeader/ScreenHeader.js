@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import useTitle from 'hooks/useTitle';
 
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import {
   Button,
   PageSection,
@@ -32,7 +33,7 @@ const ScreenHeader = ({ breadcrumbConfig, streamType }) => {
   useTitle(pathTitle);
 
   const isOnlyOneCrumb = oneCrumbMatch && oneCrumbMatch.isExact;
-
+  const { i18n } = useLingui();
   return (
     <PageSection variant={light}>
       <div
@@ -62,10 +63,10 @@ const ScreenHeader = ({ breadcrumbConfig, streamType }) => {
         </div>
         {streamType !== 'none' && (
           <div>
-            <Tooltip content={t`View activity stream`} position="top">
+            <Tooltip content={i18n._(msg`View activity stream`)} position="top">
               <Button
                 ouiaId="activity-stream-button"
-                aria-label={t`View activity stream`}
+                aria-label={i18n._(msg`View activity stream`)}
                 variant="plain"
                 component={Link}
                 to={`/activity_stream${

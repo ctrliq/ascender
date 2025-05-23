@@ -4,11 +4,13 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { t } from '@lingui/macro';
+import { msg } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
 import { AboutModal } from '@patternfly/react-core';
 import useBrandName from 'hooks/useBrandName';
 
 function About({ version, isOpen, onClose }) {
+  const { i18n } = useLingui();
   const brandName = useBrandName();
 
   const createSpeechBubble = () => {
@@ -36,8 +38,8 @@ function About({ version, isOpen, onClose }) {
   };
 
   const speechBubble = createSpeechBubble();
-  const copyright = t`Copyright`;
-  const redHatInc = t`Red Hat, Inc.`;
+  const copyright = i18n._(msg`Copyright`);
+  const redHatInc = i18n._(msg`Red Hat, Inc.`);
 
   return (
     <AboutModal
@@ -46,7 +48,7 @@ function About({ version, isOpen, onClose }) {
       productName={brandName}
       trademark={`${copyright} ${new Date().getFullYear()} ${redHatInc} ----- ${copyright} ${new Date().getFullYear()} Ctrl IQ, Inc.`}
       brandImageSrc="static/media/AscenderAuto_logo_h_rev_M.png"
-      brandImageAlt={t`Brand Image`}
+      brandImageAlt={i18n._(msg`Brand Image`)}
       backgroundImageSrc="static/media/CIQ_grayscale_bkgd.jpg"
     >
       <pre>

@@ -7,7 +7,8 @@ import {
   SelectOption,
   SelectVariant,
 } from '@patternfly/react-core';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { LabelsAPI } from 'api';
 import useIsMounted from 'hooks/useIsMounted';
 import { useSyncedSelectValue } from '../MultiSelect';
@@ -44,6 +45,7 @@ function LabelSelect({ value, placeholder, onChange, onError, createText }) {
   const [isLoading, setIsLoading] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
   const isMounted = useIsMounted();
+  const { i18n } = useLingui();
   const { selections, onSelect, options, setOptions } = useSyncedSelectValue(
     value,
     onChange
@@ -124,10 +126,10 @@ function LabelSelect({ value, placeholder, onChange, onError, createText }) {
       isDisabled={isLoading}
       selections={selections}
       isOpen={isExpanded}
-      typeAheadAriaLabel={t`Select Labels`}
+      typeAheadAriaLabel={i18n._(msg`Select Labels`)}
       placeholderText={placeholder}
       createText={createText}
-      noResultsFoundText={t`No results found`}
+      noResultsFoundText={i18n._(msg`No results found`)}
       ouiaId="template-label-select"
       chipGroupComponent={chipGroupComponent()}
     >

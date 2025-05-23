@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
-
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import PropTypes from 'prop-types';
 import { Button, DropdownItem, Tooltip } from '@patternfly/react-core';
 import { KebabifiedContext } from 'contexts/Kebabified';
@@ -11,11 +11,12 @@ function cannotDeny(item) {
 }
 
 function WorkflowApprovalListDenyButton({ onDeny, selectedItems }) {
+  const { i18n } = useLingui();
   const { isKebabified } = useContext(KebabifiedContext);
 
   const renderTooltip = () => {
     if (selectedItems.length === 0) {
-      return t`Select a row to deny`;
+      return i18n._(msg`Select a row to deny`);
     }
 
     const itemsUnableToDeny = selectedItems
@@ -24,10 +25,10 @@ function WorkflowApprovalListDenyButton({ onDeny, selectedItems }) {
       .join(', ');
 
     if (selectedItems.some(cannotDeny)) {
-      return t`You are unable to act on the following workflow approvals: ${itemsUnableToDeny}`;
+      return i18n._(msg`You are unable to act on the following workflow approvals: ${itemsUnableToDeny}`);
     }
 
-    return t`Deny`;
+    return i18n._(msg`Deny`);
   };
 
   const isDisabled =
@@ -43,7 +44,7 @@ function WorkflowApprovalListDenyButton({ onDeny, selectedItems }) {
           component="button"
           onClick={onDeny}
         >
-          {t`Deny`}
+          {i18n._(msg`Deny`)}
         </DropdownItem>
       ) : (
         <Tooltip content={renderTooltip()} position="top">
@@ -51,11 +52,11 @@ function WorkflowApprovalListDenyButton({ onDeny, selectedItems }) {
             <Button
               ouiaId="workflow-approval-deny-button"
               isDisabled={isDisabled}
-              aria-label={t`Deny`}
+              aria-label={i18n._(msg`Deny`)}
               variant="danger"
               onClick={onDeny}
             >
-              {t`Deny`}
+              {i18n._(msg`Deny`)}
             </Button>
           </div>
         </Tooltip>

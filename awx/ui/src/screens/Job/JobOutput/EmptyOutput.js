@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import 'styled-components/macro';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
 import {
   SearchIcon,
   ExclamationCircleIcon as PFExclamationCircleIcon,
 } from '@patternfly/react-icons';
 import ContentEmpty from 'components/ContentEmpty';
+import { useLingui } from '@lingui/react';
 
 import styled from 'styled-components';
 
@@ -20,6 +21,7 @@ export default function EmptyOutput({
   onUnmount,
   job,
 }) {
+  const { i18n } = useLingui();
   let title;
   let message;
   let icon;
@@ -28,28 +30,36 @@ export default function EmptyOutput({
   useEffect(() => onUnmount);
 
   if (hasQueryParams) {
-    title = t`The search filter did not produce any results…`;
-    message = t`Please try another search using the filter above`;
+    title = i18n._(msg`The search filter did not produce any results…`);
+    message = i18n._(msg`Please try another search using the filter above`);
     icon = SearchIcon;
   } else if (isJobRunning) {
-    title = t`Waiting for job output…`;
+    title = i18n._(msg`Waiting for job output…`);
   } else if (job.status === 'failed') {
-    title = t`This job failed and has no output.`;
-    message = (
-      <>
-        {t`Return to `}{' '}
-        <Link to={`/jobs/${typeSegment}/${id}/details`}>{t`details.`}</Link>
-        <br />
-        {job.job_explanation && (
-          <>
-            {t`Failure Explanation:`} {`${job.job_explanation}`}
-          </>
-        )}
-      </>
+    title = i18n._(msg`This job failed and has no output.`);
+    message = React.createElement(
+      React.Fragment,
+      null,
+      i18n._(msg`Return to`),
+      ' ',
+      React.createElement(
+        Link,
+        { to: `/jobs/${typeSegment}/${id}/details` },
+        i18n._(msg`details.`)
+      ),
+      React.createElement('br'),
+      job.job_explanation &&
+        React.createElement(
+          React.Fragment,
+          null,
+          i18n._(msg`Failure Explanation:`),
+          ' ',
+          `${job.job_explanation}`
+        )
     );
     icon = ExclamationCircleIcon;
   } else {
-    title = t`No output found for this job.`;
+    title = i18n._(msg`No output found for this job.`);
   }
 
   return (

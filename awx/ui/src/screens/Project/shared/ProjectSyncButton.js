@@ -4,8 +4,8 @@ import { Button, Tooltip } from '@patternfly/react-core';
 import { SyncIcon } from '@patternfly/react-icons';
 
 import { number } from 'prop-types';
-
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 
 import AlertModal from 'components/AlertModal';
@@ -14,7 +14,8 @@ import { ProjectsAPI } from 'api';
 import getProjectHelpStrings from './Project.helptext';
 
 function ProjectSyncButton({ projectId, lastJobStatus = null }) {
-  const projectHelpStrings = getProjectHelpStrings();
+  const { i18n } = useLingui();
+  const projectHelpStrings = getProjectHelpStrings(i18n);
   const match = useRouteMatch();
 
   const { request: handleSync, error: syncError } = useRequest(
@@ -34,33 +35,33 @@ function ProjectSyncButton({ projectId, lastJobStatus = null }) {
           <div>
             <Button
               ouiaId={`${projectId}-sync-button`}
-              aria-label={t`Sync Project`}
+              aria-label={i18n._(msg`Sync Project`)}
               variant={isDetailsView ? 'secondary' : 'plain'}
               isDisabled={isDisabled}
             >
-              {match.url.endsWith('/details') ? t`Sync` : <SyncIcon />}
+              {match.url.endsWith('/details') ? i18n._(msg`Sync`) : <SyncIcon />}
             </Button>
           </div>
         </Tooltip>
       ) : (
         <Button
           ouiaId={`${projectId}-sync-button`}
-          aria-label={t`Sync Project`}
+          aria-label={i18n._(msg`Sync Project`)}
           variant={isDetailsView ? 'secondary' : 'plain'}
           isDisabled={isDisabled}
           onClick={handleSync}
         >
-          {match.url.endsWith('/details') ? t`Sync` : <SyncIcon />}
+          {match.url.endsWith('/details') ? i18n._(msg`Sync`) : <SyncIcon />}
         </Button>
       )}
       {error && (
         <AlertModal
           isOpen={error}
           variant="error"
-          title={t`Error!`}
+          title={i18n._(msg`Error!`)}
           onClose={dismissError}
         >
-          {t`Failed to sync project.`}
+          {i18n._(msg`Failed to sync project.`)}
           <ErrorDetail error={error} />
         </AlertModal>
       )}

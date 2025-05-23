@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import { Badge, Tooltip } from '@patternfly/react-core';
 
 const BarWrapper = styled.div`
@@ -28,27 +29,28 @@ const TooltipContent = styled.div`
 `;
 
 const HostStatusBar = ({ counts = {} }) => {
+  const { i18n } = useLingui();
   const noData = Object.keys(counts).length === 0;
   const hostStatus = {
     ok: {
       color: '#4CB140',
-      label: t`OK`,
+      label: i18n._(msg`OK`),
     },
     skipped: {
       color: '#73BCF7',
-      label: t`Skipped`,
+      label: i18n._(msg`Skipped`),
     },
     changed: {
       color: '#F0AB00',
-      label: t`Changed`,
+      label: i18n._(msg`Changed`),
     },
     failures: {
       color: '#C9190B',
-      label: t`Failed`,
+      label: i18n._(msg`Failed`),
     },
     dark: {
       color: '#8F4700',
-      label: t`Unreachable`,
+      label: i18n._(msg`Unreachable`),
     },
   };
 
@@ -73,7 +75,7 @@ const HostStatusBar = ({ counts = {} }) => {
     return (
       <BarWrapper>
         <Tooltip
-          content={t`Host status information for this job is unavailable.`}
+          content={i18n._(msg`Host status information for this job is unavailable.`)}
         >
           <BarSegment count={1} />
         </Tooltip>

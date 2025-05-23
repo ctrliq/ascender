@@ -2,7 +2,9 @@ import 'styled-components/macro';
 import React from 'react';
 import { bool, func } from 'prop-types';
 
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+
 import { Link } from 'react-router-dom';
 import { Button, Tooltip } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
@@ -30,14 +32,15 @@ function ScheduleListItem({
   isMissingInventory,
   isMissingSurvey,
 }) {
+  const { i18n } = useLingui();
   const labelId = `check-action-${schedule.id}`;
 
   const jobTypeLabels = {
-    inventory_update: t`Inventory Sync`,
-    job: t`Playbook Run`,
-    project_update: t`Source Control Update`,
-    system_job: t`Management Job`,
-    workflow_job: t`Workflow Job`,
+    inventory_update: i18n._(msg`Inventory Sync`),
+    job: i18n._(msg`Playbook Run`),
+    project_update: i18n._(msg`Source Control Update`),
+    system_job: i18n._(msg`Management Job`),
+    workflow_job: i18n._(msg`Workflow Job`),
   };
 
   let scheduleBaseUrl;
@@ -81,9 +84,9 @@ function ScheduleListItem({
           onSelect,
           disable: false,
         }}
-        dataLabel={t`Selected`}
+        dataLabel={i18n._(msg`Selected`)}
       />
-      <TdBreakWord id={labelId} dataLabel={t`Name`}>
+      <TdBreakWord id={labelId} dataLabel={i18n._(msg`Name`)}>
         <Link to={`${scheduleBaseUrl}/details`}>
           <b>{schedule.name}</b>
         </Link>
@@ -102,38 +105,38 @@ function ScheduleListItem({
       </TdBreakWord>
       <TdBreakWord
         id={`related-resource-${schedule.id}`}
-        dataLabel={t`Related resource`}
+        dataLabel={i18n._(msg`Related resource`)}
       >
         <Link to={`${relatedResourceUrl}`}>
           <b>{schedule.summary_fields.unified_job_template.name}</b>
         </Link>
       </TdBreakWord>
-      <Td dataLabel={t`Resource type`}>
+      <Td dataLabel={i18n._(msg`Resource type`)}>
         {
           jobTypeLabels[
             schedule.summary_fields.unified_job_template.unified_job_type
           ]
         }
       </Td>
-      <Td dataLabel={t`Next Run`}>
+      <Td dataLabel={i18n._(msg`Next Run`)}>
         {schedule.next_run && (
           <DetailList stacked>
             <Detail
-              label={t`Next Run`}
+              label={i18n._(msg`Next Run`)}
               value={formatDateString(schedule.next_run, schedule.timezone)}
             />
           </DetailList>
         )}
       </Td>
-      <ActionsTd dataLabel={t`Actions`} gridColumns="auto 40px">
+      <ActionsTd dataLabel={i18n._(msg`Actions`)} gridColumns="auto 40px">
         <ScheduleToggle schedule={schedule} isDisabled={isDisabled} />
         <ActionItem
           visible={schedule.summary_fields.user_capabilities.edit}
-          tooltip={t`Edit Schedule`}
+          tooltip={i18n._(msg`Edit Schedule`)}
         >
           <Button
             ouiaId={`${schedule.id}-edit-button`}
-            aria-label={t`Edit Schedule`}
+            aria-label={i18n._(msg`Edit Schedule`)}
             css="grid-column: 2"
             variant="plain"
             component={Link}

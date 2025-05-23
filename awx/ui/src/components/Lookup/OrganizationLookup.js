@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect } from 'react';
 import { node, func, bool, string } from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { FormGroup } from '@patternfly/react-core';
 import { OrganizationsAPI } from 'api';
 import { Organization } from 'types';
@@ -34,6 +35,7 @@ function OrganizationLookup({
   validate,
   fieldName,
 }) {
+  const { i18n } = useLingui();
   const autoPopulateLookup = useAutoPopulateLookup(onChange);
 
   const {
@@ -98,13 +100,13 @@ function OrganizationLookup({
       helperTextInvalid={helperTextInvalid}
       isRequired={required}
       validated={isValid ? 'default' : 'error'}
-      label={t`Organization`}
+      label={i18n._(msg`Organization`)}
       helperText={helperText}
     >
       <Lookup
         isDisabled={isDisabled}
         id={id}
-        header={t`Organization`}
+        header={i18n._(msg`Organization`)}
         value={value}
         onBlur={onBlur}
         onChange={onChange}
@@ -121,27 +123,27 @@ function OrganizationLookup({
             options={organizations}
             optionCount={itemCount}
             multiple={state.multiple}
-            header={t`Organization`}
+            header={i18n._(msg`Organization`)}
             name="organization"
             qsConfig={QS_CONFIG}
             searchColumns={[
               {
-                name: t`Name`,
+                name: i18n._(msg`Name`),
                 key: 'name__icontains',
                 isDefault: true,
               },
               {
-                name: t`Created By (Username)`,
+                name: i18n._(msg`Created By (Username)`),
                 key: 'created_by__username__icontains',
               },
               {
-                name: t`Modified By (Username)`,
+                name: i18n._(msg`Modified By (Username)`),
                 key: 'modified_by__username__icontains',
               },
             ]}
             sortColumns={[
               {
-                name: t`Name`,
+                name: i18n._(msg`Name`),
                 key: 'name',
               },
             ]}

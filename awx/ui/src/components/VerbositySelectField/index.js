@@ -1,1 +1,1 @@
-export { VERBOSITY, VerbositySelectField } from './VerbositySelectField';
+export { default as VerbositySelectField, VERBOSITY } from './VerbositySelectField';

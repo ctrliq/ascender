@@ -1,5 +1,6 @@
 import React from 'react';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 
 import styled from 'styled-components';
 import {
@@ -23,24 +24,27 @@ const TopologyIcon = styled(PFTopologyIcon)`
   fill: #6a6e73;
 `;
 
-const ContentLoading = ({ className, progress }) => (
-  <EmptyState variant="full" className={className} data-cy={className}>
-    <TopologyIcon />
-    <Progress
-      value={progress}
-      measureLocation={ProgressMeasureLocation.inside}
-      aria-label={t`content-loading-in-progress`}
-      style={{ margin: '20px' }}
-    />
-    <TextContent style={{ margin: '20px' }}>
-      <Text
-        component={TextVariants.small}
-        style={{ fontWeight: 'bold', color: 'black' }}
-      >
-        {t`Please wait until the topology view is populated...`}
-      </Text>
-    </TextContent>
-  </EmptyState>
-);
+const ContentLoading = ({ className, progress }) => {
+  const { i18n } = useLingui();
+  return (
+    <EmptyState variant="full" className={className} data-cy={className}>
+      <TopologyIcon />
+      <Progress
+        value={progress}
+        measureLocation={ProgressMeasureLocation.inside}
+        aria-label={i18n._(msg`content-loading-in-progress`)}
+        style={{ margin: '20px' }}
+      />
+      <TextContent style={{ margin: '20px' }}>
+        <Text
+          component={TextVariants.small}
+          style={{ fontWeight: 'bold', color: 'black' }}
+        >
+          {i18n._(msg`Please wait until the topology view is populated...`)}
+        </Text>
+      </TextContent>
+    </EmptyState>
+  );
+};
 
 export default ContentLoading;

@@ -1,8 +1,10 @@
 import React, { useEffect, useCallback } from 'react';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import * as d3 from 'd3';
 
 function LineChart({ data, helpText }) {
+  const { i18n } = useLingui();
   const count = data[0]?.values.length;
   const draw = useCallback(() => {
     const margin = 80;
@@ -61,7 +63,6 @@ function LineChart({ data, helpText }) {
       .range([height - margin, 0]);
 
     const color = d3.scaleOrdinal(d3.schemeCategory10);
-
     /* Add SVG */
     d3.selectAll(`#chart > *`).remove();
 
@@ -117,7 +118,7 @@ function LineChart({ data, helpText }) {
       .attr('class', 'legend-title')
       .attr('x', '100')
       .attr('y', '50')
-      .text(t`Legend`);
+      .text(i18n._(msg`Legend`));
 
     legendContainer.data(data, (d, i) => {
       if (d?.name) {
@@ -229,7 +230,7 @@ function LineChart({ data, helpText }) {
       .call(xAxis);
 
     svg.append('g').attr('class', 'y axis').call(yAxis);
-  }, [data, helpText]);
+  }, [data, helpText, i18n]);
 
   useEffect(() => {
     draw();

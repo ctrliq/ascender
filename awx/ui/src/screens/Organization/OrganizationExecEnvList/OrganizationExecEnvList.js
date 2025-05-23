@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
-
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import { Card } from '@patternfly/react-core';
 
 import { OrganizationsAPI } from 'api';
@@ -25,7 +25,7 @@ const QS_CONFIG = getQSConfig('organizations', {
 function OrganizationExecEnvList({ organization }) {
   const { id } = organization;
   const location = useLocation();
-
+  const { i18n } = useLingui();
   const {
     error: contentError,
     isLoading,
@@ -75,27 +75,27 @@ function OrganizationExecEnvList({ organization }) {
         hasContentLoading={isLoading}
         items={executionEnvironments}
         itemCount={executionEnvironmentsCount}
-        pluralizedItemName={t`Execution Environments`}
+        pluralizedItemName={i18n._(msg`Execution Environments`)}
         qsConfig={QS_CONFIG}
         toolbarSearchableKeys={searchableKeys}
         toolbarRelatedSearchableKeys={relatedSearchableKeys}
         toolbarSearchColumns={[
           {
-            name: t`Name`,
+            name: i18n._(msg`Name`),
             key: 'name__icontains',
             isDefault: true,
           },
           {
-            name: t`Image`,
+            name: i18n._(msg`Image`),
             key: 'image__icontains',
             isDefault: false,
           },
           {
-            name: t`Created By (Username)`,
+            name: i18n._(msg`Created By (Username)`),
             key: 'created_by__username__icontains',
           },
           {
-            name: t`Modified By (Username)`,
+            name: i18n._(msg`Modified By (Username)`),
             key: 'modified_by__username__icontains',
           },
         ]}
@@ -104,8 +104,8 @@ function OrganizationExecEnvList({ organization }) {
         )}
         headerRow={
           <HeaderRow qsConfig={QS_CONFIG} isSelectable={false}>
-            <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
-            <HeaderCell sortKey="image">{t`Image`}</HeaderCell>
+            <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
+            <HeaderCell sortKey="image">{i18n._(msg`Image`)}</HeaderCell>
           </HeaderRow>
         }
         renderRow={(executionEnvironment, index) => (

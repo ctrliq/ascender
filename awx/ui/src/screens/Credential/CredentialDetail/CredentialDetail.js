@@ -1,6 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import styled from 'styled-components';
 import {
   Button,
@@ -33,6 +34,7 @@ const PluginFieldText = styled.p`
 `;
 
 function CredentialDetail({ credential }) {
+  const { i18n } = useLingui();
   const {
     id: credentialId,
     name,
@@ -157,7 +159,7 @@ function CredentialDetail({ credential }) {
           id={`credential-${id}-detail`}
           key={id}
           label={label}
-          value={t`Encrypted`}
+          value={i18n._(msg`Encrypted`)}
           helpText={help_text}
           isEncrypted
         />
@@ -172,7 +174,7 @@ function CredentialDetail({ credential }) {
           id={`credential-${id}-detail`}
           key={id}
           label={label}
-          value={t`Prompt on launch`}
+          value={i18n._(msg`Prompt on launch`)}
         />
       );
     }
@@ -214,20 +216,20 @@ function CredentialDetail({ credential }) {
         <Detail
           dataCy="credential-name-detail"
           id="credential-name-detail"
-          label={t`Name`}
+          label={i18n._(msg`Name`)}
           value={name}
         />
         <Detail
           dataCy="credential-description-detail"
           id="credential-description-detail"
-          label={t`Description`}
+          label={i18n._(msg`Description`)}
           value={description}
         />
         {organization && (
           <Detail
             dataCy="credential-organization-detail"
             id="credential-organization-detail"
-            label={t`Organization`}
+            label={i18n._(msg`Organization`)}
             value={
               <Link to={`/organizations/${organization.id}/details`}>
                 {organization.name}
@@ -238,7 +240,7 @@ function CredentialDetail({ credential }) {
         <Detail
           dataCy="credential-credential_type-detail"
           id="credential-credential_type-detail"
-          label={t`Credential Type`}
+          label={i18n._(msg`Credential Type`)}
           value={
             managedByTower ? (
               credential_type.name
@@ -254,18 +256,18 @@ function CredentialDetail({ credential }) {
 
         <UserDateDetail
           id="credential-created-detail"
-          label={t`Created`}
+          label={i18n._(msg`Created`)}
           date={created}
           user={created_by}
         />
         <UserDateDetail
           id="credential-last_modified-detail"
-          label={t`Last Modified`}
+          label={i18n._(msg`Last Modified`)}
           date={modified}
           user={modified_by}
         />
         <Detail
-          label={t`Enabled Options`}
+          label={i18n._(msg`Enabled Options`)}
           value={
             <TextList component={TextListVariants.ul}>
               {enabledBooleanFields.map(({ id, label }) => (
@@ -280,7 +282,7 @@ function CredentialDetail({ credential }) {
       </DetailList>
       {Object.keys(inputSources).length > 0 && (
         <PluginFieldText>
-          {t`* This field will be retrieved from an external secret management system using the specified credential.`}
+          {i18n._(msg`* This field will be retrieved from an external secret management system using the specified credential.`)}
         </PluginFieldText>
       )}
       <CardActionsRow>
@@ -288,22 +290,22 @@ function CredentialDetail({ credential }) {
           <Button
             ouiaId="credential-detail-edit-button"
             component={Link}
-            to={`/credentials/${credentialId}/edit`}
+            to={`/credentials/${credentialId}/edii18n._(msg`}
           >
-            {t`Edit`}
+            {i18n._(msg`Edit`)}
           </Button>
         )}
         {user_capabilities.delete && (
           <DeleteButton
             name={name}
             itemToDelete={credential}
-            modalTitle={t`Delete Credential`}
+            modalTitle={i18n._(msg`Delete Credential`)}
             onConfirm={deleteCredential}
             isLoading={isLoading}
             deleteDetailsRequests={deleteDetailsRequests}
-            deleteMessage={t`This credential is currently being used by other resources. Are you sure you want to delete it?`}
+            deleteMessage={i18n._(msg`This credential is currently being used by other resources. Are you sure you want to delete it?`)}
           >
-            {t`Delete`}
+            {i18n._(msg`Delete`)}
           </DeleteButton>
         )}
       </CardActionsRow>
@@ -311,10 +313,10 @@ function CredentialDetail({ credential }) {
         <AlertModal
           isOpen={error}
           variant="error"
-          title={t`Error!`}
+          title={i18n._(msg`Error!`)}
           onClose={dismissError}
         >
-          {t`Failed to delete credential.`}
+          {i18n._(msg`Failed to delete credential.`)}
           <ErrorDetail error={error} />
         </AlertModal>
       )}

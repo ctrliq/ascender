@@ -1,5 +1,6 @@
 import React from 'react';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { Form } from '@patternfly/react-core';
 import { useField } from 'formik';
 import {
@@ -11,6 +12,7 @@ import {
 import FormField from '../../../../../components/FormField';
 
 function DaysToKeepStep() {
+  const { i18n } = useLingui();
   const [, meta] = useField('daysToKeep');
   const validators = [required(null), minMaxValue(0), integer()];
   return (
@@ -25,7 +27,7 @@ function DaysToKeepStep() {
         isRequired
         validate={combine(validators)}
         validated={!(meta.touched && meta.error) ? 'default' : 'error'}
-        label={t`Days of data to be retained`}
+        label={i18n._(msg`Days of data to be retained`)}
       />
     </Form>
   );

@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect } from 'react';
 import { string, func, bool, oneOfType, number } from 'prop-types';
 import { useLocation } from 'react-router-dom';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { FormGroup, Tooltip } from '@patternfly/react-core';
 import { ExecutionEnvironmentsAPI, ProjectsAPI } from 'api';
 import { getSearchableKeys } from 'components/PaginatedTable';
@@ -40,6 +41,7 @@ function ExecutionEnvironmentLookup({
   promptId,
   promptName,
 }) {
+  const { i18n } = useLingui();
   const location = useLocation();
   const {
     request: fetchProject,
@@ -156,7 +158,7 @@ function ExecutionEnvironmentLookup({
     <>
       <Lookup
         id={id}
-        header={t`Execution Environment`}
+        header={i18n._(msg`Execution Environment`)}
         value={value}
         onBlur={onBlur}
         onChange={onChange}
@@ -174,21 +176,21 @@ function ExecutionEnvironmentLookup({
             optionCount={count}
             searchColumns={[
               {
-                name: t`Name`,
+                name: i18n._(msg`Name`),
                 key: 'name__icontains',
                 isDefault: true,
               },
             ]}
             sortColumns={[
               {
-                name: t`Name`,
+                name: i18n._(msg`Name`),
                 key: 'name',
               },
             ]}
             searchableKeys={searchableKeys}
             relatedSearchableKeys={relatedSearchableKeys}
             multiple={state.multiple}
-            header={t`Execution Environment`}
+            header={i18n._(msg`Execution Environment`)}
             name="executionEnvironments"
             qsConfig={QS_CONFIG}
             readOnly={!canDelete}
@@ -205,7 +207,7 @@ function ExecutionEnvironmentLookup({
     if (overrideLabel) {
       return null;
     }
-    return t`Execution Environment`;
+    return i18n._(msg`Execution Environment`);
   };
 
   return isPromptableField ? (

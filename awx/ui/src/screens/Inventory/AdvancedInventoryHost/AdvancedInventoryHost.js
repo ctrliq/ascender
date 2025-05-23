@@ -1,6 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { Link, Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import ContentError from 'components/ContentError';
@@ -11,6 +12,7 @@ import { InventoriesAPI } from 'api';
 import AdvancedInventoryHostDetail from '../AdvancedInventoryHostDetail';
 
 function AdvancedInventoryHost({ inventory, setBreadcrumb }) {
+  const { i18n } = useLingui();
   const { params, path, url } = useRouteMatch(
     '/inventories/:inventoryType/:id/hosts/:hostId'
   );
@@ -49,14 +51,14 @@ function AdvancedInventoryHost({ inventory, setBreadcrumb }) {
       name: (
         <>
           <CaretLeftIcon />
-          {t`Back to Hosts`}
+          {i18n._(msg`Back to Hosts`)}
         </>
       ),
       link: `/inventories/${params.inventoryType}/${inventory.id}/hosts`,
       id: 0,
     },
     {
-      name: t`Details`,
+      name: i18n._(msg`Details`),
       link: `${url}/details`,
       id: 1,
     },
@@ -82,8 +84,8 @@ function AdvancedInventoryHost({ inventory, setBreadcrumb }) {
             <ContentError isNotFound>
               <Link to={`${url}/details`}>
                 {params.inventoryType === 'smart_inventory'
-                  ? t`View smart inventory host details`
-                  : t`View constructed inventory host details`}
+                  ? i18n._(msg`View smart inventory host details`)
+                  : i18n._(msg`View constructed inventory host details`)}
               </Link>
             </ContentError>
           </Route>

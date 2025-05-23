@@ -1,5 +1,6 @@
 import React, { useEffect, useCallback, useState, useRef } from 'react';
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import { PageSection, Card, CardBody } from '@patternfly/react-core';
 import ContentError from 'components/ContentError';
 import useRequest from 'hooks/useRequest';
@@ -10,6 +11,7 @@ import useZoom from './utils/useZoom';
 import { CHILDSELECTOR, PARENTSELECTOR } from './constants';
 
 function TopologyView() {
+  const { i18n } = useLingui();
   const storedNodes = useRef(null);
   const [showLegend, setShowLegend] = useState(true);
   const [showZoomControls, setShowZoomControls] = useState(false);
@@ -39,7 +41,7 @@ function TopologyView() {
   return (
     <>
       <Header
-        title={t`Topology View`}
+        title={i18n._(msg`Topology View`)}
         handleSwitchToggle={setShowLegend}
         toggleState={showLegend}
         zoomIn={zoomIn}

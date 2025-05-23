@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import PropTypes from 'prop-types';
 import { Button, DropdownItem, Tooltip } from '@patternfly/react-core';
 import { KebabifiedContext } from 'contexts/Kebabified';
@@ -11,11 +12,12 @@ function cannotApprove(item) {
 }
 
 function WorkflowApprovalListApproveButton({ onApprove, selectedItems }) {
+  const { i18n } = useLingui();
   const { isKebabified } = useContext(KebabifiedContext);
 
   const renderTooltip = () => {
     if (selectedItems.length === 0) {
-      return t`Select a row to approve`;
+      return i18n._(msg`Select a row to approve`);
     }
 
     const itemsUnableToApprove = selectedItems
@@ -24,10 +26,10 @@ function WorkflowApprovalListApproveButton({ onApprove, selectedItems }) {
       .join(', ');
 
     if (selectedItems.some(cannotApprove)) {
-      return t`You are unable to act on the following workflow approvals: ${itemsUnableToApprove}`;
+      return i18n._(msg`You are unable to act on the following workflow approvals: ${itemsUnableToApprove}`);
     }
 
-    return t`Approve`;
+    return i18n._(msg`Approve`);
   };
 
   const isDisabled =
@@ -43,7 +45,7 @@ function WorkflowApprovalListApproveButton({ onApprove, selectedItems }) {
           component="button"
           onClick={onApprove}
         >
-          {t`Approve`}
+          {i18n._(msg`Approve`)}
         </DropdownItem>
       ) : (
         <Tooltip content={renderTooltip()} position="top">
@@ -51,11 +53,11 @@ function WorkflowApprovalListApproveButton({ onApprove, selectedItems }) {
             <Button
               ouiaId="workflow-approval-approve-button"
               isDisabled={isDisabled}
-              aria-label={t`Approve`}
+              aria-label={i18n._(msg`Approve`)}
               variant="primary"
               onClick={onApprove}
             >
-              {t`Approve`}
+              {i18n._(msg`Approve`)}
             </Button>
           </div>
         </Tooltip>

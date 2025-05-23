@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
-import { t, Plural } from '@lingui/macro';
+import { msg, Plural } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 
 import useRequest, {
   useDeleteItems,
@@ -31,6 +32,7 @@ const QS_CONFIG = getQSConfig('inventory-sources', {
 });
 
 function InventorySourceList() {
+  const { i18n } = useLingui();
   const { inventoryType, id } = useParams();
   const { search } = useLocation();
 
@@ -173,7 +175,7 @@ function InventorySourceList() {
         }
         items={sources}
         itemCount={sourceCount}
-        pluralizedItemName={t`Inventory Sources`}
+        pluralizedItemName={i18n._(msg`Inventory Sources`)}
         qsConfig={QS_CONFIG}
         clearSelected={clearSelected}
         renderToolbar={(props) => (
@@ -190,13 +192,13 @@ function InventorySourceList() {
                 key="delete"
                 onDelete={handleDelete}
                 itemsToDelete={selected}
-                pluralizedItemName={t`Inventory Sources`}
+                pluralizedItemName={i18n._(msg`Inventory Sources`)}
                 deleteDetailsRequests={deleteDetailsRequests}
                 deleteMessage={
                   <Plural
                     value={selected.length}
-                    one="This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?"
-                    other="Deleting these inventory sources could impact other resources that rely on them. Are you sure you want to delete anyway"
+                    one={i18n._(msg`This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?`)}
+                    other={i18n._(msg`Deleting these inventory sources could impact other resources that rely on them. Are you sure you want to delete anyway`)}
                   />
                 }
               />,
@@ -208,10 +210,10 @@ function InventorySourceList() {
         )}
         headerRow={
           <HeaderRow qsConfig={QS_CONFIG}>
-            <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
-            <HeaderCell>{t`Status`}</HeaderCell>
-            <HeaderCell>{t`Type`}</HeaderCell>
-            <HeaderCell>{t`Actions`}</HeaderCell>
+            <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
+            <HeaderCell>{i18n._(msg`Status`)}</HeaderCell>
+            <HeaderCell>{i18n._(msg`Type`)}</HeaderCell>
+            <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
           </HeaderRow>
         }
         renderRow={(inventorySource, index) => {
@@ -233,26 +235,25 @@ function InventorySourceList() {
       />
       {syncError && (
         <AlertModal
-          aria-label={t`Sync error`}
+          aria-label={i18n._(msg`Sync error`)}
           isOpen={syncError}
           variant="error"
-          title={t`Error!`}
+          title={i18n._(msg`Error!`)}
           onClose={dismissError}
         >
-          {t`Failed to sync some or all inventory sources.`}
+          {i18n._(msg`Failed to sync some or all inventory sources.`)}
           <ErrorDetail error={syncError} />
         </AlertModal>
       )}
-
       {(deletionError || deleteRelatedResourcesError) && (
         <AlertModal
-          aria-label={t`Delete error`}
+          aria-label={i18n._(msg`Delete error`)}
           isOpen={deletionError || deleteRelatedResourcesError}
           variant="error"
-          title={t`Error!`}
+          title={i18n._(msg`Error!`)}
           onClose={clearDeletionError}
         >
-          {t`Failed to delete one or more inventory sources.`}
+          {i18n._(msg`Failed to delete one or more inventory sources.`)}
           <ErrorDetail error={deletionError || deleteRelatedResourcesError} />
         </AlertModal>
       )}

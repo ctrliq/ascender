@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { Select, SelectOption, SelectVariant } from '@patternfly/react-core';
 
 function RelatedLookupTypeInput({
@@ -9,46 +10,46 @@ function RelatedLookupTypeInput({
   enableFuzzyFiltering,
 }) {
   const [isOpen, setIsOpen] = useState(false);
-
+  const { i18n } = useLingui();
   return (
     <Select
       ouiaId="set-lookup-typeahead"
-      aria-label={t`Related search type`}
+      aria-label={i18n._(msg`Related search type`)}
       className="lookupSelect"
       variant={SelectVariant.typeahead}
-      typeAheadAriaLabel={t`Related search type typeahead`}
+      typeAheadAriaLabel={i18n._(msg`Related search type typeahead`)}
       onToggle={setIsOpen}
       onSelect={(event, selection) => setValue(selection)}
       selections={value}
       isOpen={isOpen}
-      placeholderText={t`Related search type`}
+      placeholderText={i18n._(msg`Related search type`)}
       maxHeight={maxSelectHeight}
-      noResultsFoundText={t`No results found`}
+      noResultsFoundText={i18n._(msg`No results found`)}
     >
       <SelectOption
         id="name-option-select"
         key="name__icontains"
         value="name__icontains"
-        description={t`Fuzzy search on name field.`}
+        description={i18n._(msg`Fuzzy search on name field.`)}
       />
       <SelectOption
         id="name-exact-option-select"
         key="name"
         value="name"
-        description={t`Exact search on name field.`}
+        description={i18n._(msg`Exact search on name field.`)}
       />
       <SelectOption
         id="id-option-select"
         key="id"
         value="id"
-        description={t`Exact search on id field.`}
+        description={i18n._(msg`Exact search on id field.`)}
       />
       {enableFuzzyFiltering && (
         <SelectOption
           id="search-option-select"
           key="search"
           value="search"
-          description={t`Fuzzy search on id, name or description fields.`}
+          description={i18n._(msg`Fuzzy search on id, name or description fields.`)}
         />
       )}
     </Select>

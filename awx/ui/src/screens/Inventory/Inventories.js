@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useRef } from 'react';
+import { useLingui } from '@lingui/react';
 
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
 import { Route, Switch } from 'react-router-dom';
 
 import { Config } from 'contexts/Config';
@@ -16,11 +17,12 @@ import ConstructedInventoryAdd from './ConstructedInventoryAdd';
 import { getInventoryPath } from './shared/utils';
 
 function Inventories() {
+  const { i18n } = useLingui();
   const initScreenHeader = useRef({
-    '/inventories': t`Inventories`,
-    '/inventories/inventory/add': t`Create new inventory`,
-    '/inventories/smart_inventory/add': t`Create new smart inventory`,
-    '/inventories/constructed_inventory/add': t`Create new constructed inventory`,
+    '/inventories': i18n._(msg`Inventories`),
+    '/inventories/inventory/add': i18n._(msg`Create new inventory`),
+    '/inventories/smart_inventory/add': i18n._(msg`Create new smart inventory`),
+    '/inventories/constructed_inventory/add': i18n._(msg`Create new constructed inventory`),
   });
 
   const [breadcrumbConfig, setScreenHeader] = useState(
@@ -57,44 +59,44 @@ function Inventories() {
       setScreenHeader({
         ...initScreenHeader.current,
         [inventoryPath]: `${inventory.name}`,
-        [`${inventoryPath}/access`]: t`Access`,
-        [`${inventoryPath}/jobs`]: t`Jobs`,
-        [`${inventoryPath}/details`]: t`Details`,
-        [`${inventoryPath}/job_templates`]: t`Job Templates`,
-        [`${inventoryPath}/edit`]: t`Edit details`,
+        [`${inventoryPath}/access`]: i18n._(msg`Access`),
+        [`${inventoryPath}/jobs`]: i18n._(msg`Jobs`),
+        [`${inventoryPath}/details`]: i18n._(msg`Details`),
+        [`${inventoryPath}/job_templates`]: i18n._(msg`Job Templates`),
+        [`${inventoryPath}/edit`]: i18n._(msg`Edit details`),
 
-        [inventoryHostsPath]: t`Hosts`,
-        [`${inventoryHostsPath}/add`]: t`Create new host`,
+        [inventoryHostsPath]: i18n._(msg`Hosts`),
+        [`${inventoryHostsPath}/add`]: i18n._(msg`Create new host`),
         [`${inventoryHostsPath}/${nestedObject?.id}`]: `${nestedObject?.name}`,
-        [`${inventoryHostsPath}/${nestedObject?.id}/edit`]: t`Edit details`,
-        [`${inventoryHostsPath}/${nestedObject?.id}/details`]: t`Host details`,
-        [`${inventoryHostsPath}/${nestedObject?.id}/jobs`]: t`Jobs`,
-        [`${inventoryHostsPath}/${nestedObject?.id}/facts`]: t`Facts`,
-        [`${inventoryHostsPath}/${nestedObject?.id}/groups`]: t`Groups`,
+        [`${inventoryHostsPath}/${nestedObject?.id}/edit`]: i18n._(msg`Edit details`),
+        [`${inventoryHostsPath}/${nestedObject?.id}/details`]: i18n._(msg`Host details`),
+        [`${inventoryHostsPath}/${nestedObject?.id}/jobs`]: i18n._(msg`Jobs`),
+        [`${inventoryHostsPath}/${nestedObject?.id}/facts`]: i18n._(msg`Facts`),
+        [`${inventoryHostsPath}/${nestedObject?.id}/groups`]: i18n._(msg`Groups`),
 
-        [inventoryGroupsPath]: t`Groups`,
-        [`${inventoryGroupsPath}/add`]: t`Create new group`,
+        [inventoryGroupsPath]: i18n._(msg`Groups`),
+        [`${inventoryGroupsPath}/add`]: i18n._(msg`Create new group`),
         [`${inventoryGroupsPath}/${nestedObject?.id}`]: `${nestedObject?.name}`,
-        [`${inventoryGroupsPath}/${nestedObject?.id}/edit`]: t`Edit details`,
-        [`${inventoryGroupsPath}/${nestedObject?.id}/details`]: t`Group details`,
-        [`${inventoryGroupsPath}/${nestedObject?.id}/nested_hosts`]: t`Hosts`,
-        [`${inventoryGroupsPath}/${nestedObject?.id}/nested_hosts/add`]: t`Create new host`,
-        [`${inventoryGroupsPath}/${nestedObject?.id}/nested_groups`]: t`Related Groups`,
-        [`${inventoryGroupsPath}/${nestedObject?.id}/nested_groups/add`]: t`Create new group`,
+        [`${inventoryGroupsPath}/${nestedObject?.id}/edit`]: i18n._(msg`Edit details`),
+        [`${inventoryGroupsPath}/${nestedObject?.id}/details`]: i18n._(msg`Group details`),
+        [`${inventoryGroupsPath}/${nestedObject?.id}/nested_hosts`]: i18n._(msg`Hosts`),
+        [`${inventoryGroupsPath}/${nestedObject?.id}/nested_hosts/add`]: i18n._(msg`Create new host`),
+        [`${inventoryGroupsPath}/${nestedObject?.id}/nested_groups`]: i18n._(msg`Related Groups`),
+        [`${inventoryGroupsPath}/${nestedObject?.id}/nested_groups/add`]: i18n._(msg`Create new group`),
 
-        [`${inventorySourcesPath}`]: t`Sources`,
-        [`${inventorySourcesPath}/add`]: t`Create new source`,
+        [`${inventorySourcesPath}`]: i18n._(msg`Sources`),
+        [`${inventorySourcesPath}/add`]: i18n._(msg`Create new source`),
         [`${inventorySourcesPath}/${nestedObject?.id}`]: `${nestedObject?.name}`,
-        [`${inventorySourcesPath}/${nestedObject?.id}/details`]: t`Details`,
-        [`${inventorySourcesPath}/${nestedObject?.id}/edit`]: t`Edit details`,
-        [`${inventorySourcesPath}/${nestedObject?.id}/schedules`]: t`Schedules`,
+        [`${inventorySourcesPath}/${nestedObject?.id}/details`]: i18n._(msg`Details`),
+        [`${inventorySourcesPath}/${nestedObject?.id}/edit`]: i18n._(msg`Edit details`),
+        [`${inventorySourcesPath}/${nestedObject?.id}/schedules`]: i18n._(msg`Schedules`),
         [`${inventorySourcesPath}/${nestedObject?.id}/schedules/${schedule?.id}`]: `${schedule?.name}`,
-        [`${inventorySourcesPath}/${nestedObject?.id}/schedules/add`]: t`Create New Schedule`,
-        [`${inventorySourcesPath}/${nestedObject?.id}/schedules/${schedule?.id}/details`]: t`Schedule details`,
-        [`${inventorySourcesPath}/${nestedObject?.id}/notifications`]: t`Notifications`,
+        [`${inventorySourcesPath}/${nestedObject?.id}/schedules/add`]: i18n._(msg`Create New Schedule`),
+        [`${inventorySourcesPath}/${nestedObject?.id}/schedules/${schedule?.id}/details`]: i18n._(msg`Schedule details`),
+        [`${inventorySourcesPath}/${nestedObject?.id}/notifications`]: i18n._(msg`Notifications`),
       });
     },
-    [inventory, nestedObject, schedule]
+    [inventory, nestedObject, schedule, i18n]
   );
 
   return (

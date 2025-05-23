@@ -4,7 +4,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { t, Trans } from '@lingui/macro';
+import { msg, Trans } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import {
   Banner,
   Card,
@@ -47,6 +48,7 @@ const MainPageSection = styled(PageSection)`
 `;
 
 function Dashboard() {
+  const { i18n } = useLingui();
   const config = useConfig();
   const brandName = useBrandName();
   const [activeTabId, setActiveTabId] = useState(0);
@@ -90,42 +92,42 @@ function Dashboard() {
       )}
       <ScreenHeader
         streamType="all"
-        breadcrumbConfig={{ '/home': t`Dashboard` }}
+        breadcrumbConfig={{ '/home': i18n._(msg`Dashboard`)}}
       />
       <PageSection>
         <Counts>
           <Count
             link="/hosts"
             data={countData?.hosts?.total}
-            label={t`Hosts`}
+            label={i18n._(msg`Hosts`)}
           />
           <Count
             failed
             link="/hosts?host.last_job_host_summary__failed=true"
             data={countData?.hosts?.failed}
-            label={t`Failed hosts`}
+            label={i18n._(msg`Failed hosts`)}
           />
           <Count
             link="/inventories"
             data={countData?.inventories?.total}
-            label={t`Inventories`}
+            label={i18n._(msg`Inventories`)}
           />
           <Count
             failed
             link="/inventories?inventory.inventory_sources_with_failures__gt=0"
             data={countData?.inventories?.inventory_failed}
-            label={t`Inventory sync failures`}
+            label={i18n._(msg`Inventory sync failures`)}
           />
           <Count
             link="/projects"
             data={countData?.projects?.total}
-            label={t`Projects`}
+            label={i18n._(msg`Projects`)}
           />
           <Count
             failed
             link="/projects?project.status__in=failed,canceled"
             data={countData?.projects?.failed}
-            label={t`Project sync failures`}
+            label={i18n._(msg`Project sync failures`)}
           />
         </Counts>
       </PageSection>
@@ -133,23 +135,23 @@ function Dashboard() {
         <div className="spacer">
           <Card id="dashboard-main-container">
             <Tabs
-              aria-label={t`Tabs`}
+              aria-label={i18n._(msg`Tabs`)}
               activeKey={activeTabId}
               onSelect={(key, eventKey) => setActiveTabId(eventKey)}
               ouiaId="dashboard-tabs"
             >
               <Tab
-                aria-label={t`Job status graph tab`}
+                aria-label={i18n._(msg`Job status graph tab`)}
                 eventKey={0}
-                title={<TabTitleText>{t`Job status`}</TabTitleText>}
+                title={<TabTitleText>{i18n._(msg`Job status`)}</TabTitleText>}
                 ouiaId="job-status-graph-tab"
               >
                 <DashboardGraph />
               </Tab>
               <Tab
-                aria-label={t`Recent Jobs list tab`}
+                aria-label={i18n._(msg`Recent Jobs list tab`)}
                 eventKey={1}
-                title={<TabTitleText>{t`Recent Jobs`}</TabTitleText>}
+                title={<TabTitleText>{i18n._(msg`Recent Jobs`)}</TabTitleText>}
                 ouiaId="recent-jobs-list-tab"
               >
                 <div>
@@ -159,9 +161,9 @@ function Dashboard() {
                 </div>
               </Tab>
               <Tab
-                aria-label={t`Recent Templates list tab`}
+                aria-label={i18n._(msg`Recent Templates list tab`)}
                 eventKey={2}
-                title={<TabTitleText>{t`Recent Templates`}</TabTitleText>}
+                title={<TabTitleText>{i18n._(msg`Recent Templates`)}</TabTitleText>}
                 ouiaId="recent-templates-list-tab"
               >
                 <div>
