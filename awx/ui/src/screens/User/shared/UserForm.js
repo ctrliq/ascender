@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import { Formik, useField, useFormikContext } from 'formik';
 import { Form, FormGroup } from '@patternfly/react-core';
 import { useConfig } from 'contexts/Config';
@@ -16,6 +16,7 @@ import { required } from 'util/validators';
 import { FormColumnLayout } from 'components/FormLayout';
 
 function UserFormFields({ user }) {
+  const { i18n } = useLingui();
   const { setFieldValue, setFieldTouched } = useFormikContext();
   const { me = {} } = useConfig();
   const ldapUser = user.ldap_dn;
@@ -26,19 +27,19 @@ function UserFormFields({ user }) {
     {
       value: 'normal',
       key: 'normal',
-      label: t`Normal User`,
+      label: i18n._(msg`Normal User`),
       isDisabled: false,
     },
     {
       value: 'auditor',
       key: 'auditor',
-      label: t`System Auditor`,
+      label: i18n._(msg`System Auditor`),
       isDisabled: false,
     },
     {
       value: 'administrator',
       key: 'administrator',
-      label: t`System Administrator`,
+      label: i18n._(msg`System Administrator`),
       isDisabled: false,
     },
   ];
@@ -60,20 +61,20 @@ function UserFormFields({ user }) {
     <>
       <FormField
         id="user-first-name"
-        label={t`First Name`}
+        label={i18n._(msg`First Name`)}
         name="first_name"
         type="text"
       />
       <FormField
         id="user-last-name"
-        label={t`Last Name`}
+        label={i18n._(msg`Last Name`)}
         name="last_name"
         type="text"
       />
-      <FormField id="user-email" label={t`Email`} name="email" type="text" />
+      <FormField id="user-email" label={i18n._(msg`Email`)} name="email" type="text" />
       <FormField
         id="user-username"
-        label={t`Username`}
+        label={i18n._(msg`Username`)}
         name="username"
         type="text"
         validate={
@@ -85,22 +86,22 @@ function UserFormFields({ user }) {
         <>
           <PasswordField
             id="user-password"
-            label={t`Password`}
+            label={i18n._(msg`Password`)}
             name="password"
             validate={
               !user.id
-                ? required(t`This field must not be blank`)
+                ? required(i18n._(msg`This field must not be blank`))
                 : () => undefined
             }
             isRequired={!user.id}
           />
           <PasswordField
             id="user-confirm-password"
-            label={t`Confirm Password`}
+            label={i18n._(msg`Confirm Password`)}
             name="confirm_password"
             validate={
               !user.id
-                ? required(t`This field must not be blank`)
+                ? required(i18n._(msg`This field must not be blank`))
                 : () => undefined
             }
             isRequired={!user.id}
@@ -116,7 +117,7 @@ function UserFormFields({ user }) {
           validated={
             !userTypeMeta.touched || !userTypeMeta.error ? 'default' : 'error'
           }
-          label={t`User Type`}
+          label={i18n._(msg`User Type`)}
         >
           <AnsibleSelect
             isValid={!userTypeMeta.touched || !userTypeMeta.error}
@@ -136,7 +137,7 @@ function UserFormFields({ user }) {
           value={organizationField.value}
           required
           autoPopulate={!user?.id}
-          validate={required(t`Select a value for this field`)}
+          validate={required(i18n._(msg`Select a value for this field`))}
         />
       )}
     </>
@@ -144,10 +145,11 @@ function UserFormFields({ user }) {
 }
 
 function UserForm({ user, handleCancel, handleSubmit, submitError }) {
+  const { i18n } = useLingui();
   const handleValidateAndSubmit = (values, { setErrors }) => {
     if (values.password !== values.confirm_password) {
       setErrors({
-        confirm_password: t`This value does not match the password you entered previously. Please confirm that password.`,
+        confirm_password: i18n._(msg`This value does not match the password you entered previously. Please confirm that password.`),
       });
     } else {
       values.is_superuser = values.user_type === 'administrator';

@@ -1,8 +1,9 @@
 import React from 'react';
 import 'styled-components/macro';
 import { string, bool, func } from 'prop-types';
+import { useLingui } from '@lingui/react';
 
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
 import { Button } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
 import { Link } from 'react-router-dom';
@@ -11,6 +12,7 @@ import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
 import { Team } from 'types';
 
 function TeamListItem({ team, isSelected, onSelect, detailUrl, rowIndex }) {
+  const { i18n } = useLingui();
   TeamListItem.propTypes = {
     team: Team.isRequired,
     detailUrl: string.isRequired,
@@ -28,14 +30,14 @@ function TeamListItem({ team, isSelected, onSelect, detailUrl, rowIndex }) {
           isSelected,
           onSelect,
         }}
-        dataLabel={t`Selected`}
+        dataLabel={i18n._(msg`Selected`)}
       />
-      <TdBreakWord id={labelId} dataLabel={t`Name`}>
+      <TdBreakWord id={labelId} dataLabel={i18n._(msg`Name`)}>
         <Link to={`${detailUrl}`}>
           <b>{team.name}</b>
         </Link>
       </TdBreakWord>
-      <TdBreakWord dataLabel={t`Organization`}>
+      <TdBreakWord dataLabel={i18n._(msg`Organization`)}>
         {team.summary_fields.organization && (
           <Link
             to={`/organizations/${team.summary_fields.organization.id}/details`}
@@ -44,14 +46,14 @@ function TeamListItem({ team, isSelected, onSelect, detailUrl, rowIndex }) {
           </Link>
         )}
       </TdBreakWord>
-      <ActionsTd dataLabel={t`Actions`}>
+      <ActionsTd dataLabel={i18n._(msg`Actions`)}>
         <ActionItem
           visible={team.summary_fields.user_capabilities.edit}
-          tooltip={t`Edit Team`}
+          tooltip={i18n._(msg`Edit Team`)}
         >
           <Button
             ouiaId={`${team.id}-edit-button`}
-            aria-label={t`Edit Team`}
+            aria-label={i18n._(msg`Edit Team`)}
             variant="plain"
             component={Link}
             to={`/teams/${team.id}/edit`}

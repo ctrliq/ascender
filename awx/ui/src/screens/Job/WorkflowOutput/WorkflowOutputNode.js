@@ -1,7 +1,8 @@
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import styled from 'styled-components';
 import { func, shape } from 'prop-types';
 import { WorkflowStateContext } from 'contexts/Workflow';
@@ -65,6 +66,7 @@ const ConvergenceLabel = styled.p`
 Elapsed.displayName = 'Elapsed';
 
 function WorkflowOutputNode({ mouseEnter, mouseLeave, node }) {
+  const { i18n } = useLingui();
   const history = useHistory();
   const { nodePositions } = useContext(WorkflowStateContext);
   const job = node?.originalNodeObject?.summary_fields?.job;
@@ -106,7 +108,7 @@ function WorkflowOutputNode({ mouseEnter, mouseLeave, node }) {
     nodeName =
       node?.fullUnifiedJobTemplate?.name ||
       node?.originalNodeObject?.summary_fields?.unified_job_template?.name ||
-      t`DELETED`;
+      i18n._(msg`DELETED`);
   }
 
   return (
@@ -140,7 +142,7 @@ function WorkflowOutputNode({ mouseEnter, mouseLeave, node }) {
             x={wfConstants.nodeW / 2 - wfConstants.nodeW / 10 + 7}
             y={-wfConstants.nodeH / 4 - 1}
           >
-            <ConvergenceLabel>{t`ALL`}</ConvergenceLabel>
+            <ConvergenceLabel>{i18n._(msg`ALL`)}</ConvergenceLabel>
           </foreignObject>
         </>
       )}

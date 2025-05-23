@@ -1,6 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import { Button } from '@patternfly/react-core';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { CardBody, CardActionsRow } from 'components/Card';
@@ -15,6 +16,7 @@ import { SettingsAPI } from 'api';
 import { SettingDetail } from '../../shared';
 
 function MiscAuthenticationDetail() {
+  const { i18n } = useLingui();
   const { me } = useConfig();
   const { GET: options } = useSettings();
 
@@ -40,14 +42,14 @@ function MiscAuthenticationDetail() {
       name: (
         <>
           <CaretLeftIcon />
-          {t`Back to Settings`}
+          {i18n._(msg`Back to Settings`)}
         </>
       ),
       link: `/settings`,
       id: 99,
     },
     {
-      name: t`Details`,
+      name: i18n._(msg`Details`),
       link: `/settings/miscellaneous_authentication/details`,
       id: 0,
     },
@@ -81,11 +83,11 @@ function MiscAuthenticationDetail() {
           <CardActionsRow>
             <Button
               ouiaId="authentication-detail-edit-button"
-              aria-label={t`Edit`}
+              aria-label={i18n._(msg`Edit`)}
               component={Link}
               to="/settings/miscellaneous_authentication/edit"
             >
-              {t`Edit`}
+              {i18n._(msg`Edit`)}
             </Button>
           </CardActionsRow>
         )}

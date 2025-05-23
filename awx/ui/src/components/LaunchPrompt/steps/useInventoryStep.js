@@ -1,5 +1,6 @@
 import React from 'react';
-import { t } from '@lingui/macro';
+import { i18n } from '@lingui/core';
+import { msg } from '@lingui/macro';
 import { useField } from 'formik';
 import styled from 'styled-components';
 import { Alert } from '@patternfly/react-core';
@@ -32,7 +33,7 @@ export default function useInventoryStep(launchConfig, resource, visitedSteps) {
     },
     validate: () => {
       if (meta.touched && !meta.value && resource.type === 'job_template') {
-        helpers.setError(t`An inventory must be selected`);
+        helpers.setError(i18n._(msg`An inventory must be selected`));
       }
     },
   };
@@ -45,7 +46,7 @@ function getStep(launchConfig, formError, resource) {
     id: STEP_ID,
     name: (
       <StepName hasErrors={formError} id="inventory-step">
-        {t`Inventory`}
+        {i18n._(msg`Inventory`)}
       </StepName>
     ),
     component: (
@@ -56,7 +57,9 @@ function getStep(launchConfig, formError, resource) {
               ouiaId="InventoryStep-alert"
               variant="warning"
               isInline
-              title={t`This inventory is applied to all workflow nodes within this workflow (${resource.name}) that prompt for an inventory.`}
+              title={i18n._(
+                msg`This inventory is applied to all workflow nodes within this workflow (${resource.name}) that prompt for an inventory.`
+              )}
             />
           ) : null
         }

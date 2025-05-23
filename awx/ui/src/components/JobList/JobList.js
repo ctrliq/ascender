@@ -1,6 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
-import { t, Plural } from '@lingui/macro';
+import { msg, Plural } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 
 import { Card } from '@patternfly/react-core';
 import useRequest, {
@@ -31,6 +32,7 @@ function JobList({
   showTypeColumn = false,
   additionalRelatedSearchableKeys = [],
 }) {
+  const { i18n } = useLingui();
   const qsConfig = getQSConfig(
     'job',
     {
@@ -187,66 +189,66 @@ function JobList({
           hasContentLoading={isLoading || isDeleteLoading || isCancelLoading}
           items={jobs}
           itemCount={count}
-          emptyContentMessage={t`Please run a job to populate this list.`}
-          pluralizedItemName={t`Jobs`}
+          emptyContentMessage={i18n._(msg`Please run a job to populate this list.`)}
+          pluralizedItemName={i18n._(msg`Jobs`)}
           qsConfig={qsConfig}
           toolbarSearchColumns={[
             {
-              name: t`Name`,
+              name: i18n._(msg`Name`),
               key: 'name__icontains',
               isDefault: true,
             },
             {
-              name: t`ID`,
+              name: i18n._(msg`ID`),
               key: 'id',
             },
             {
-              name: t`Label Name`,
+              name: i18n._(msg`Label Name`),
               key: 'labels__name__icontains',
             },
             {
-              name: t`Job Type`,
+              name: i18n._(msg`Job Type`),
               key: `or__type`,
               options: [
-                [`project_update`, t`Source Control Update`],
-                [`inventory_update`, t`Inventory Sync`],
-                [`job`, t`Playbook Run`],
-                [`ad_hoc_command`, t`Command`],
-                [`system_job`, t`Management Job`],
-                [`workflow_job`, t`Workflow Job`],
+                [`project_update`, i18n._(msg`Source Control Update`)],
+                [`inventory_update`, i18n._(msg`Inventory Sync`)],
+                [`job`, i18n._(msg`Playbook Run`)],
+                [`ad_hoc_command`, i18n._(msg`Command`)],
+                [`system_job`, i18n._(msg`Management Job`)],
+                [`workflow_job`, i18n._(msg`Workflow Job`)],
               ],
             },
             {
-              name: t`Launched By (Username)`,
+              name: i18n._(msg`Launched By (Username)`),
               key: 'created_by__username__icontains',
             },
             {
-              name: t`Status`,
+              name: i18n._(msg`Status`),
               key: 'or__status',
               options: [
-                [`new`, t`New`],
-                [`pending`, t`Pending`],
-                [`waiting`, t`Waiting`],
-                [`running`, t`Running`],
-                [`successful`, t`Successful`],
-                [`failed`, t`Failed`],
-                [`error`, t`Error`],
-                [`canceled`, t`Canceled`],
+                [`new`, i18n._(msg`New`)],
+                [`pending`, i18n._(msg`Pending`)],
+                [`waiting`, i18n._(msg`Waiting`)],
+                [`running`, i18n._(msg`Running`)],
+                [`successful`, i18n._(msg`Successful`)],
+                [`failed`, i18n._(msg`Failed`)],
+                [`error`, i18n._(msg`Error`)],
+                [`canceled`, i18n._(msg`Canceled`)],
               ],
             },
             {
-              name: t`Limit`,
+              name: i18n._(msg`Limit`),
               key: 'job__limit',
             },
           ]}
           headerRow={
             <HeaderRow qsConfig={qsConfig} isExpandable>
-              <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
-              <HeaderCell sortKey="status">{t`Status`}</HeaderCell>
-              {showTypeColumn && <HeaderCell>{t`Type`}</HeaderCell>}
-              <HeaderCell sortKey="started">{t`Start Time`}</HeaderCell>
-              <HeaderCell sortKey="finished">{t`Finish Time`}</HeaderCell>
-              <HeaderCell>{t`Actions`}</HeaderCell>
+              <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
+              <HeaderCell sortKey="status">{i18n._(msg`Status`)}</HeaderCell>
+              {showTypeColumn && <HeaderCell>{i18n._(msg`Type`)}</HeaderCell>}
+              <HeaderCell sortKey="started">{i18n._(msg`Start Time`)}</HeaderCell>
+              <HeaderCell sortKey="finished">{i18n._(msg`Finish Time`)}</HeaderCell>
+              <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
             </HeaderRow>
           }
           clearSelected={clearSelected}
@@ -271,7 +273,7 @@ function JobList({
                     item.name = `${item.id} - ${item.name}`;
                     return item;
                   })}
-                  pluralizedItemName={t`Jobs`}
+                  pluralizedItemName={i18n._(msg`Jobs`)}
                   cannotDelete={(item) =>
                     isJobRunning(item.status) ||
                     !item.summary_fields.user_capabilities.delete
@@ -312,10 +314,10 @@ function JobList({
         <AlertModal
           isOpen
           variant="error"
-          title={t`Error!`}
+          title={i18n._(msg`Error!`)}
           onClose={clearDeletionError}
         >
-          {t`Failed to delete one or more jobs.`}
+          {i18n._(msg`Failed to delete one or more jobs.`)}
           <ErrorDetail error={deletionError} />
         </AlertModal>
       )}
@@ -323,10 +325,10 @@ function JobList({
         <AlertModal
           isOpen
           variant="error"
-          title={t`Error!`}
+          title={i18n._(msg`Error!`)}
           onClose={dismissCancelError}
         >
-          {t`Failed to cancel one or more jobs.`}
+          {i18n._(msg`Failed to cancel one or more jobs.`)}
           <ErrorDetail error={cancelError} />
         </AlertModal>
       )}

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useField } from 'formik';
 import { bool, shape, string } from 'prop-types';
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import {
   FormGroup,
   Select,
@@ -11,6 +12,7 @@ import {
 import Popover from 'components/Popover';
 
 function BecomeMethodField({ fieldOptions, isRequired }) {
+  const { i18n } = useLingui();
   const [isOpen, setIsOpen] = useState(false);
   const [options, setOptions] = useState(
     [
@@ -35,7 +37,7 @@ function BecomeMethodField({ fieldOptions, isRequired }) {
     <FormGroup
       fieldId={`credential-${fieldOptions.id}`}
       helperTextInvalid={meta.error}
-      label={fieldOptions.label}
+      label={i18n._(msg`Become method`)}
       labelIcon={
         fieldOptions.help_text && <Popover content={fieldOptions.help_text} />
       }
@@ -62,8 +64,8 @@ function BecomeMethodField({ fieldOptions, isRequired }) {
         onCreateOption={(option) => {
           setOptions([...options, { value: option }]);
         }}
-        noResultsFoundText={t`No results found`}
-        createText={t`Create`}
+        noResultsFoundText={i18n._(msg`No results found`)}
+        createText={i18n._(msg`Create`)}
       >
         {options.map((option) => (
           <SelectOption key={option.value} value={option.value} />

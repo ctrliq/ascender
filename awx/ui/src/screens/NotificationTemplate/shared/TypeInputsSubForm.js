@@ -1,6 +1,6 @@
 import React from 'react';
-
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import { useField } from 'formik';
 import { FormGroup, Title } from '@patternfly/react-core';
 import {
@@ -40,11 +40,12 @@ const TypeFields = {
   webhook: WebhookFields,
 };
 function TypeInputsSubForm({ type }) {
+  const { i18n } = useLingui();
   const Fields = TypeFields[type];
   return (
     <SubFormLayout>
       <Title size="md" headingLevel="h4">
-        {t`Type Details`}
+        {i18n._(msg`Type Details`)}
       </Title>
       <FormColumnLayout>
         <Fields />
@@ -59,23 +60,24 @@ TypeInputsSubForm.propTypes = {
 export default TypeInputsSubForm;
 
 function EmailFields() {
-  const helpText = getHelpText();
+  const { i18n } = useLingui();
+  const helpText = getHelpText(i18n);
   return (
     <>
       <FormField
         id="email-username"
-        label={t`Username`}
+        label={i18n._(msg`Username`)}
         name="notification_configuration.username"
         type="text"
       />
       <PasswordField
         id="email-password"
-        label={t`Password`}
+        label={i18n._(msg`Password`)}
         name="notification_configuration.password"
       />
       <FormField
         id="email-host"
-        label={t`Host`}
+        label={i18n._(msg`Host`)}
         name="notification_configuration.host"
         type="text"
         validate={required(null)}
@@ -83,7 +85,7 @@ function EmailFields() {
       />
       <ArrayTextField
         id="email-recipients"
-        label={t`Recipient list`}
+        label={i18n._(msg`Recipient list`)}
         name="notification_configuration.recipients"
         type="textarea"
         validate={required(null)}
@@ -93,7 +95,7 @@ function EmailFields() {
       />
       <FormField
         id="email-sender"
-        label={t`Sender e-mail`}
+        label={i18n._(msg`Sender e-mail`)}
         name="notification_configuration.sender"
         type="text"
         validate={requiredEmail()}
@@ -101,7 +103,7 @@ function EmailFields() {
       />
       <FormField
         id="email-port"
-        label={t`Port`}
+        label={i18n._(msg`Port`)}
         name="notification_configuration.port"
         type="number"
         validate={combine([required(null), minMaxValue(1, 65535)])}
@@ -111,7 +113,7 @@ function EmailFields() {
       />
       <FormField
         id="email-timeout"
-        label={t`Timeout`}
+        label={i18n._(msg`Timeout`)}
         name="notification_configuration.timeout"
         type="number"
         validate={combine([required(null), minMaxValue(1, 120)])}
@@ -122,19 +124,19 @@ function EmailFields() {
       />
       <FormGroup
         fieldId="email-options"
-        label={t`Email Options`}
+        label={i18n._(msg`Email Options`)}
         labelIcon={<Popover content={helpText.emailOptions} />}
       >
         <FormCheckboxLayout>
           <CheckboxField
             id="option-use-ssl"
             name="notification_configuration.use_ssl"
-            label={t`Use SSL`}
+            label={i18n._(msg`Use SSL`)}
           />
           <CheckboxField
             id="option-use-tls"
             name="notification_configuration.use_tls"
-            label={t`Use TLS`}
+            label={i18n._(msg`Use TLS`)}
           />
         </FormCheckboxLayout>
       </FormGroup>
@@ -143,12 +145,13 @@ function EmailFields() {
 }
 
 function GrafanaFields() {
-  const helpText = getHelpText();
+  const { i18n } = useLingui();
+  const helpText = getHelpText(i18n);
   return (
     <>
       <FormField
         id="grafana-url"
-        label={t`Grafana URL`}
+        label={i18n._(msg`Grafana URL`)}
         name="notification_configuration.grafana_url"
         type="text"
         validate={required(null)}
@@ -157,26 +160,26 @@ function GrafanaFields() {
       />
       <PasswordField
         id="grafana-key"
-        label={t`Grafana API key`}
+        label={i18n._(msg`Grafana API key`)}
         name="notification_configuration.grafana_key"
         validate={required(null)}
         isRequired
       />
       <FormField
         id="grafana-dashboard-id"
-        label={t`ID of the dashboard (optional)`}
+        label={i18n._(msg`ID of the dashboard (optional)`)}
         name="notification_configuration.dashboardId"
         type="text"
       />
       <FormField
         id="grafana-panel-id"
-        label={t`ID of the panel (optional)`}
+        label={i18n._(msg`ID of the panel (optional)`)}
         name="notification_configuration.panelId"
         type="text"
       />
       <ArrayTextField
         id="grafana-tags"
-        label={t`Tags for the annotation (optional)`}
+        label={i18n._(msg`Tags for the annotation (optional)`)}
         name="notification_configuration.annotation_tags"
         type="textarea"
         rows={3}
@@ -184,7 +187,7 @@ function GrafanaFields() {
       />
       <CheckboxField
         id="grafana-ssl"
-        label={t`Disable SSL verification`}
+        label={i18n._(msg`Disable SSL verification`)}
         name="notification_configuration.grafana_no_verify_ssl"
       />
     </>
@@ -192,18 +195,18 @@ function GrafanaFields() {
 }
 
 function IRCFields() {
-  const helpText = getHelpText();
-
+  const { i18n } = useLingui();
+  const helpText = getHelpText(i18n);
   return (
     <>
       <PasswordField
         id="irc-password"
-        label={t`IRC server password`}
+        label={i18n._(msg`IRC server password`)}
         name="notification_configuration.password"
       />
       <FormField
         id="irc-port"
-        label={t`IRC server port`}
+        label={i18n._(msg`IRC server port`)}
         name="notification_configuration.port"
         type="number"
         validate={required(null)}
@@ -212,7 +215,7 @@ function IRCFields() {
       />
       <FormField
         id="irc-server"
-        label={t`IRC server address`}
+        label={i18n._(msg`IRC server address`)}
         name="notification_configuration.server"
         type="text"
         validate={required(null)}
@@ -220,7 +223,7 @@ function IRCFields() {
       />
       <FormField
         id="irc-nickname"
-        label={t`IRC nick`}
+        label={i18n._(msg`IRC nick`)}
         name="notification_configuration.nickname"
         type="text"
         validate={required(null)}
@@ -228,7 +231,7 @@ function IRCFields() {
       />
       <ArrayTextField
         id="irc-targets"
-        label={t`Destination channels or users`}
+        label={i18n._(msg`Destination channels or users`)}
         name="notification_configuration.targets"
         type="textarea"
         validate={required(null)}
@@ -237,7 +240,7 @@ function IRCFields() {
       />
       <CheckboxField
         id="grafana-ssl"
-        label={t`Disable SSL verification`}
+        label={i18n._(msg`Disable SSL verification`)}
         name="notification_configuration.use_ssl"
       />
     </>
@@ -245,11 +248,12 @@ function IRCFields() {
 }
 
 function MattermostFields() {
+  const { i18n } = useLingui();
   return (
     <>
       <FormField
         id="mattermost-url"
-        label={t`Target URL`}
+        label={i18n._(msg`Target URL`)}
         name="notification_configuration.mattermost_url"
         type="text"
         validate={combine([required(null), url()])}
@@ -257,26 +261,26 @@ function MattermostFields() {
       />
       <FormField
         id="mattermost-username"
-        label={t`Username`}
+        label={i18n._(msg`Username`)}
         name="notification_configuration.mattermost_username"
         type="text"
       />
       <FormField
         id="mattermost-channel"
-        label={t`Channel`}
+        label={i18n._(msg`Channel`)}
         name="notification_configuration.mattermost_channel"
         type="text"
       />
       <FormField
         id="mattermost-icon"
-        label={t`Icon URL`}
+        label={i18n._(msg`Icon URL`)}
         name="notification_configuration.mattermost_icon_url"
         type="text"
         validate={url()}
       />
       <CheckboxField
         id="mattermost-ssl"
-        label={t`Disable SSL verification`}
+        label={i18n._(msg`Disable SSL verification`)}
         name="notification_configuration.mattermost_no_verify_ssl"
       />
     </>
@@ -284,18 +288,19 @@ function MattermostFields() {
 }
 
 function PagerdutyFields() {
+  const { i18n } = useLingui();
   return (
     <>
       <PasswordField
         id="pagerduty-token"
-        label={t`API Token`}
+        label={i18n._(msg`API Token`)}
         name="notification_configuration.token"
         validate={required(null)}
         isRequired
       />
       <FormField
         id="pagerduty-subdomain"
-        label={t`Pagerduty subdomain`}
+        label={i18n._(msg`Pagerduty subdomain`)}
         name="notification_configuration.subdomain"
         type="text"
         validate={required(null)}
@@ -303,7 +308,7 @@ function PagerdutyFields() {
       />
       <FormField
         id="pagerduty-service-key"
-        label={t`API service/integration key`}
+        label={i18n._(msg`API service/integration key`)}
         name="notification_configuration.service_key"
         type="text"
         validate={required(null)}
@@ -311,7 +316,7 @@ function PagerdutyFields() {
       />
       <FormField
         id="pagerduty-identifier"
-        label={t`Client identifier`}
+        label={i18n._(msg`Client identifier`)}
         name="notification_configuration.client_name"
         type="text"
         validate={required(null)}
@@ -322,11 +327,12 @@ function PagerdutyFields() {
 }
 
 function RocketChatFields() {
+  const { i18n } = useLingui();
   return (
     <>
       <FormField
         id="rocketchat-url"
-        label={t`Target URL`}
+        label={i18n._(msg`Target URL`)}
         name="notification_configuration.rocketchat_url"
         type="text"
         validate={combine([required(null), url()])}
@@ -334,20 +340,20 @@ function RocketChatFields() {
       />
       <FormField
         id="rocketchat-username"
-        label={t`Username`}
+        label={i18n._(msg`Username`)}
         name="notification_configuration.rocketchat_username"
         type="text"
       />
       <FormField
         id="rocketchat-icon-url"
-        label={t`Icon URL`}
+        label={i18n._(msg`Icon URL`)}
         name="notification_configuration.rocketchat_icon_url"
         type="text"
         validate={url()}
       />
       <CheckboxField
         id="rocketchat-ssl"
-        label={t`Disable SSL verification`}
+        label={i18n._(msg`Disable SSL verification`)}
         name="notification_configuration.rocketchat_no_verify_ssl"
       />
     </>
@@ -355,13 +361,13 @@ function RocketChatFields() {
 }
 
 function SlackFields() {
-  const helpText = getHelpText();
-
+  const { i18n } = useLingui();
+  const helpText = getHelpText(i18n);
   return (
     <>
       <ArrayTextField
         id="slack-channels"
-        label={t`Destination channels`}
+        label={i18n._(msg`Destination channels`)}
         name="notification_configuration.channels"
         type="textarea"
         validate={required(null)}
@@ -370,14 +376,14 @@ function SlackFields() {
       />
       <PasswordField
         id="slack-token"
-        label={t`Token`}
+        label={i18n._(msg`Token`)}
         name="notification_configuration.token"
         validate={required(null)}
         isRequired
       />
       <FormField
         id="slack-color"
-        label={t`Notification color`}
+        label={i18n._(msg`Notification color`)}
         name="notification_configuration.hex_color"
         type="text"
         tooltip={helpText.slackColor}
@@ -387,20 +393,20 @@ function SlackFields() {
 }
 
 function TwilioFields() {
-  const helpText = getHelpText();
-
+  const { i18n } = useLingui();
+  const helpText = getHelpText(i18n);
   return (
     <>
       <PasswordField
         id="twilio-token"
-        label={t`Account token`}
+        label={i18n._(msg`Account token`)}
         name="notification_configuration.account_token"
         validate={required(null)}
         isRequired
       />
       <FormField
         id="twilio-from-phone"
-        label={t`Source phone number`}
+        label={i18n._(msg`Source phone number`)}
         name="notification_configuration.from_number"
         type="text"
         validate={combine([required(null), twilioPhoneNumber()])}
@@ -409,7 +415,7 @@ function TwilioFields() {
       />
       <ArrayTextField
         id="twilio-destination-numbers"
-        label={t`Destination SMS number(s)`}
+        label={i18n._(msg`Destination SMS number(s)`)}
         name="notification_configuration.to_numbers"
         type="textarea"
         validate={combine([required(null), twilioPhoneNumber()])}
@@ -418,7 +424,7 @@ function TwilioFields() {
       />
       <FormField
         id="twilio-account-sid"
-        label={t`Account SID`}
+        label={i18n._(msg`Account SID`)}
         name="notification_configuration.account_sid"
         type="text"
         validate={required(null)}
@@ -429,28 +435,28 @@ function TwilioFields() {
 }
 
 function WebhookFields() {
-  const helpText = getHelpText();
-
+  const { i18n } = useLingui();
+  const helpText = getHelpText(i18n);
   const [methodField, methodMeta] = useField({
     name: 'notification_configuration.http_method',
-    validate: required(t`Select a value for this field`),
+    validate: required(i18n._(msg`Select a value for this field`)),
   });
   return (
     <>
       <FormField
         id="webhook-username"
-        label={t`Username`}
+        label={i18n._(msg`Username`)}
         name="notification_configuration.username"
         type="text"
       />
       <PasswordField
         id="webhook-password"
-        label={t`Basic auth password`}
+        label={i18n._(msg`Basic auth password`)}
         name="notification_configuration.password"
       />
       <FormField
         id="webhook-url"
-        label={t`Target URL`}
+        label={i18n._(msg`Target URL`)}
         name="notification_configuration.url"
         type="text"
         validate={combine([required(null), url()])}
@@ -458,14 +464,14 @@ function WebhookFields() {
       />
       <CheckboxField
         id="webhook-ssl"
-        label={t`Disable SSL verification`}
+        label={i18n._(msg`Disable SSL verification`)}
         name="notification_configuration.disable_ssl_verification"
       />
       <FormFullWidthLayout>
         <CodeEditorField
           id="webhook-headers"
           name="notification_configuration.headers"
-          label={t`HTTP Headers`}
+          label={i18n._(msg`HTTP Headers`)}
           mode="javascript"
           tooltip={helpText.webhookHeaders}
           rows={5}
@@ -478,7 +484,7 @@ function WebhookFields() {
         validated={
           !methodMeta.touched || !methodMeta.error ? 'default' : 'error'
         }
-        label={t`HTTP Method`}
+        label={i18n._(msg`HTTP Method`)}
       >
         <AnsibleSelect
           {...methodField}
@@ -487,11 +493,11 @@ function WebhookFields() {
             {
               value: '',
               key: '',
-              label: t`Choose an HTTP method`,
+              label: i18n._(msg`Choose an HTTP method`),
               isDisabled: true,
             },
-            { value: 'POST', key: 'post', label: t`POST` },
-            { value: 'PUT', key: 'put', label: t`PUT` },
+            { value: 'POST', key: 'post', label: i18n._(msg`POST`) },
+            { value: 'PUT', key: 'put', label: i18n._(msg`PUT`) },
           ]}
         />
       </FormGroup>

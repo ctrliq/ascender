@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { string, bool, func, oneOf, shape } from 'prop-types';
 
-import { t } from '@lingui/macro';
+import { msg } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
 import { useField } from 'formik';
 import styled from 'styled-components';
 import { Split, SplitItem, Button, Modal } from '@patternfly/react-core';
@@ -41,6 +42,7 @@ function VariablesField({
   isRequired,
   validators,
 }) {
+  const { i18n } = useLingui();
   // track focus manually, because the Code Editor library doesn't wire
   // into Formik completely
   const [shouldValidate, setShouldValidate] = useState(false);
@@ -141,13 +143,13 @@ function VariablesField({
         onClose={() => setIsExpanded(false)}
         actions={[
           <Button
-            aria-label={t`Done`}
+            aria-label={i18n._(msg`Done`)}
             key="select"
             variant="primary"
             onClick={() => setIsExpanded(false)}
             ouiaId={`${id}-variables-unexpand`}
           >
-            {t`Done`}
+            {i18n._(msg`Done`)}
           </Button>,
         ]}
       >
@@ -214,6 +216,7 @@ function VariablesFieldInternals({
   handleChange,
   isRequired,
 }) {
+  const { i18n } = useLingui();
   const [field, meta, helpers] = useField(name);
 
   useEffect(() => {
@@ -258,14 +261,14 @@ function VariablesFieldInternals({
         {promptId && (
           <StyledCheckboxField
             id="template-ask-variables-on-launch"
-            label={t`Prompt on launch`}
+            label={i18n._(msg`Prompt on launch`)}
             name="ask_variables_on_launch"
           />
         )}
         {onExpand && (
           <Button
             variant="plain"
-            aria-label={t`Expand input`}
+            aria-label={i18n._(msg`Expand input`)}
             onClick={onExpand}
             ouiaId={`${id}-expand`}
           >

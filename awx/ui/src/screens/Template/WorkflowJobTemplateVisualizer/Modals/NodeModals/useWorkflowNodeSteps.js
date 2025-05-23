@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect } from 'react';
 import { useFormikContext } from 'formik';
-import { t } from '@lingui/macro';
+import { i18n } from '@lingui/core';
+import { msg } from '@lingui/macro';
 import useInventoryStep from 'components/LaunchPrompt/steps/useInventoryStep';
 import useCredentialsStep from 'components/LaunchPrompt/steps/useCredentialsStep';
 import useExecutionEnvironmentStep from 'components/LaunchPrompt/steps/useExecutionEnvironmentStep';
@@ -360,7 +361,9 @@ export default function useWorkflowNodeSteps(
         !launchConfig?.ask_credential_on_launch &&
         launchConfig?.passwords_needed_to_start?.length > 0
       ) {
-        errors.nodeResource = t`Job Templates with credentials that prompt for passwords cannot be selected when creating or editing nodes`;
+        errors.nodeResource = i18n._(
+          msg`Job Templates with credentials that prompt for passwords cannot be selected when creating or editing nodes`
+        );
       }
 
       resetForm({

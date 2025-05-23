@@ -1,8 +1,8 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import { bool, func } from 'prop-types';
-
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import { SchedulesAPI } from 'api';
 import useRequest, { useDeleteItems } from 'hooks/useRequest';
 import useSelected from 'hooks/useSelected';
@@ -33,6 +33,7 @@ function ScheduleList({
   launchConfig,
   surveyConfig,
 }) {
+  const { i18n } = useLingui();
   const location = useLocation();
 
   const {
@@ -119,7 +120,7 @@ function ScheduleList({
     ) {
       return null;
     }
-    return t`This schedule is missing an Inventory`;
+    return i18n._(msg`This schedule is missing an Inventory`);
   };
 
   const hasMissingSurveyValue = (schedule) => {
@@ -144,12 +145,12 @@ function ScheduleList({
         }
       });
     }
-    return missingValues && t`This schedule is missing required survey values`;
+    return missingValues && i18n._(msg`This schedule is missing required survey values`);
   };
-  let emptyContentMessage = t`Please add a Schedule to populate this list.`;
+  let emptyContentMessage = i18n._(msg`Please add a Schedule to populate this list.`);
 
   if (location.pathname.startsWith('/schedules')) {
-    emptyContentMessage = t`Please add a Schedule to populate this list.  Schedules can be added to a Template, Project, or Inventory Source.`;
+    emptyContentMessage = i18n._(msg`Please add a Schedule to populate this list.  Schedules can be added to a Template, Project, or Inventory Source.`);
   }
 
   return (
@@ -160,16 +161,16 @@ function ScheduleList({
         items={schedules}
         itemCount={itemCount}
         qsConfig={QS_CONFIG}
-        pluralizedItemName={t`Schedules`}
+        pluralizedItemName={i18n._(msg`Schedules`)}
         emptyContentMessage={emptyContentMessage}
         onRowClick={handleSelect}
         headerRow={
           <HeaderRow qsConfig={QS_CONFIG}>
-            <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
-            <HeaderCell sortKey="unified_job_template">{t`Related resource`}</HeaderCell>
-            <HeaderCell sortKey="unified_job_template__polymorphic_ctype__model">{t`Resource type`}</HeaderCell>
-            <HeaderCell sortKey="next_run">{t`Next Run`}</HeaderCell>
-            <HeaderCell>{t`Actions`}</HeaderCell>
+            <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
+            <HeaderCell sortKey="unified_job_template">{i18n._(msg`Related resource`)}</HeaderCell>
+            <HeaderCell sortKey="unified_job_template__polymorphic_ctype__model">{i18n._(msg`Resource type`)}</HeaderCell>
+            <HeaderCell sortKey="next_run">{i18n._(msg`Next Run`)}</HeaderCell>
+            <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
           </HeaderRow>
         }
         renderRow={(item, index) => (
@@ -186,20 +187,20 @@ function ScheduleList({
         clearSelected={clearSelected}
         toolbarSearchColumns={[
           {
-            name: t`Name`,
+            name: i18n._(msg`Name`),
             key: 'name__icontains',
             isDefault: true,
           },
           {
-            name: t`Description`,
+            name: i18n._(msg`Description`),
             key: 'description__icontains',
           },
           {
-            name: t`Created By (Username)`,
+            name: i18n._(msg`Created By (Username)`),
             key: 'created_by__username__icontains',
           },
           {
-            name: t`Modified By (Username)`,
+            name: i18n._(msg`Modified By (Username)`),
             key: 'modified_by__username__icontains',
           },
         ]}
@@ -226,7 +227,7 @@ function ScheduleList({
                 key="delete"
                 onDelete={handleDelete}
                 itemsToDelete={selected}
-                pluralizedItemName={t`Schedules`}
+                pluralizedItemName={i18n._(msg`Schedules`)}
               />,
             ]}
           />
@@ -236,10 +237,10 @@ function ScheduleList({
         <AlertModal
           isOpen={deletionError}
           variant="danger"
-          title={t`Error!`}
+          title={i18n._(msg`Error!`)}
           onClose={clearDeletionError}
         >
-          {t`Failed to delete one or more schedules.`}
+          {i18n._(msg`Failed to delete one or more schedules.`)}
           <ErrorDetail error={deletionError} />
         </AlertModal>
       )}

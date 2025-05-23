@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { useHistory, Link, useRouteMatch } from 'react-router-dom';
-import { t, Trans } from '@lingui/macro';
+import { msg, Trans } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { Formik, useFormikContext } from 'formik';
 import {
   Alert,
@@ -22,6 +23,7 @@ import AnalyticsStep from './AnalyticsStep';
 import EulaStep from './EulaStep';
 
 const CustomFooter = ({ isSubmitLoading }) => {
+  const { i18n } = useLingui();
   const { values, errors } = useFormikContext();
   const { me, license_info } = useConfig();
   const history = useHistory();
@@ -34,7 +36,7 @@ const CustomFooter = ({ isSubmitLoading }) => {
             {activeStep.id === 'eula-step' ? (
               <Button
                 id="subscription-wizard-submit"
-                aria-label={t`Submit`}
+                aria-label={i18n._(msg`Submit`)}
                 variant="primary"
                 onClick={onNext}
                 isDisabled={
@@ -74,7 +76,7 @@ const CustomFooter = ({ isSubmitLoading }) => {
                 id="subscription-wizard-cancel"
                 ouiaId="subscription-wizard-cancel"
                 variant="link"
-                aria-label={t`Cancel subscription edit`}
+                aria-label={i18n._(msg`Cancel subscription edit`)}
                 onClick={() => history.push('/settings/subscription/details')}
               >
                 <Trans>Cancel</Trans>
@@ -88,6 +90,7 @@ const CustomFooter = ({ isSubmitLoading }) => {
 };
 
 function SubscriptionEdit() {
+  const { i18n } = useLingui();
   const history = useHistory();
   const { request: updateConfig, license_info } = useConfig();
   const hasValidKey = Boolean(license_info?.valid_key);
@@ -191,25 +194,25 @@ function SubscriptionEdit() {
   const steps = [
     {
       name: hasValidKey
-        ? t`Subscription Management`
-        : `${brandName} ${t`Subscription`}`,
+        ? i18n._(msg`Subscription Management`)
+        : `${brandName} ${i18n._(msg`Subscription`)}`,
       id: 'subscription-step',
       component: <SubscriptionStep />,
     },
     ...(!hasValidKey
       ? [
           {
-            name: t`User and Automation Analytics`,
+            name: i18n._(msg`User and Automation Analytics`),
             id: 'analytics-step',
             component: <AnalyticsStep />,
           },
         ]
       : []),
     {
-      name: t`End user license agreement`,
+      name: i18n._(msg`End user license agreement`),
       component: <EulaStep />,
       id: 'eula-step',
-      nextButtonText: t`Submit`,
+      nextButtonText: i18n._(msg`Submit`),
     },
   ];
 
@@ -251,7 +254,7 @@ function SubscriptionEdit() {
         {submitSuccessful && (
           <Alert
             variant="success"
-            title={t`Save successful!`}
+            title={i18n._(msg`Save successful!`)}
             ouiaId="success-alert"
           >
             {subscriptionMgmtRoute ? (

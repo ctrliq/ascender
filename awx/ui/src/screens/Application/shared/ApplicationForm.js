@@ -1,7 +1,8 @@
 import React, { useCallback } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import { Formik, useField, useFormikContext } from 'formik';
 import { Form, FormGroup } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
@@ -20,6 +21,7 @@ function ApplicationFormFields({
   authorizationOptions,
   clientTypeOptions,
 }) {
+  const { i18n } = useLingui();
   const applicationHelpTextStrings = getApplicationHelpTextStrings();
   const match = useRouteMatch();
   const { setFieldValue, setFieldTouched } = useFormikContext();
@@ -51,7 +53,7 @@ function ApplicationFormFields({
     <>
       <FormField
         id="name"
-        label={t`Name`}
+        label={i18n._(msg`Name`)}
         name="name"
         type="text"
         validate={required(null)}
@@ -59,7 +61,7 @@ function ApplicationFormFields({
       />
       <FormField
         id="description"
-        label={t`Description`}
+        label={i18n._(msg`Description`)}
         name="description"
         type="text"
       />
@@ -82,7 +84,7 @@ function ApplicationFormFields({
             : 'error'
         }
         isRequired
-        label={t`Authorization grant type`}
+        label={i18n._(msg`Authorization grant type`)}
         labelIcon={
           <Popover
             content={applicationHelpTextStrings.authorizationGrantType}
@@ -104,7 +106,7 @@ function ApplicationFormFields({
       </FormGroup>
       <FormField
         id="redirect_uris"
-        label={t`Redirect URIs`}
+        label={i18n._(msg`Redirect URIs`)}
         name="redirect_uris"
         type="text"
         isRequired={Boolean(
@@ -124,7 +126,7 @@ function ApplicationFormFields({
           !clientTypeMeta.touched || !clientTypeMeta.error ? 'default' : 'error'
         }
         isRequired
-        label={t`Client type`}
+        label={i18n._(msg`Client type`)}
         labelIcon={<Popover content={applicationHelpTextStrings.clientType} />}
       >
         <AnsibleSelect

@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect } from 'react';
 import { func, bool, string, oneOfType, arrayOf } from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { InventoriesAPI } from 'api';
 import { Inventory } from 'types';
 import useRequest from 'hooks/useRequest';
@@ -36,6 +37,7 @@ function InventoryLookup({
   value,
   multiple,
 }) {
+  const { i18n } = useLingui();
   const autoPopulateLookup = useAutoPopulateLookup(onChange);
 
   const {
@@ -120,16 +122,16 @@ function InventoryLookup({
     <FieldWithPrompt
       fieldId={fieldId}
       isRequired={required}
-      label={t`Inventory`}
+      label={i18n._(msg`Inventory`)}
       promptId={promptId}
       promptName={promptName}
       isDisabled={isDisabled}
-      tooltip={t`Select the inventory containing the hosts
-            you want this job to manage.`}
+      tooltip={i18n._(msg`Select the inventory containing the hosts
+            you want this job to manage.`)}
     >
       <Lookup
         id="inventory-lookup"
-        header={t`Inventory`}
+        header={i18n._(msg`Inventory`)}
         value={value}
         onChange={onChange}
         onUpdate={fetchInventories}
@@ -148,29 +150,29 @@ function InventoryLookup({
             optionCount={count}
             searchColumns={[
               {
-                name: t`Name`,
+                name: i18n._(msg`Name`),
                 key: 'name__icontains',
                 isDefault: true,
               },
               {
-                name: t`Created By (Username)`,
+                name: i18n._(msg`Created By (Username)`),
                 key: 'created_by__username__icontains',
               },
               {
-                name: t`Modified By (Username)`,
+                name: i18n._(msg`Modified By (Username)`),
                 key: 'modified_by__username__icontains',
               },
             ]}
             sortColumns={[
               {
-                name: t`Name`,
+                name: i18n._(msg`Name`),
                 key: 'name',
               },
             ]}
             searchableKeys={searchableKeys}
             relatedSearchableKeys={relatedSearchableKeys}
             multiple={state.multiple}
-            header={t`Inventory`}
+            header={i18n._(msg`Inventory`)}
             name="inventory"
             qsConfig={QS_CONFIG}
             readOnly={!canDelete}
@@ -185,7 +187,7 @@ function InventoryLookup({
     <>
       <Lookup
         id="inventory-lookup"
-        header={t`Inventory`}
+        header={i18n._(msg`Inventory`)}
         value={value}
         onChange={onChange}
         onDebounce={checkInventoryName}
@@ -204,29 +206,29 @@ function InventoryLookup({
             optionCount={count}
             searchColumns={[
               {
-                name: t`Name`,
+                name: i18n._(msg`Name`),
                 key: 'name__icontains',
                 isDefault: true,
               },
               {
-                name: t`Created By (Username)`,
+                name: i18n._(msg`Created By (Username)`),
                 key: 'created_by__username__icontains',
               },
               {
-                name: t`Modified By (Username)`,
+                name: i18n._(msg`Modified By (Username)`),
                 key: 'modified_by__username__icontains',
               },
             ]}
             sortColumns={[
               {
-                name: t`Name`,
+                name: i18n._(msg`Name`),
                 key: 'name',
               },
             ]}
             searchableKeys={searchableKeys}
             relatedSearchableKeys={relatedSearchableKeys}
             multiple={state.multiple}
-            header={t`Inventory`}
+            header={i18n._(msg`Inventory`)}
             name="inventory"
             qsConfig={QS_CONFIG}
             readOnly={!canDelete}

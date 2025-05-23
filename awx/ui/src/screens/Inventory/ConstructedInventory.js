@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import {
   Link,
   Switch,
@@ -27,6 +28,7 @@ import AdvancedInventoryHosts from './AdvancedInventoryHosts';
 import { getInventoryPath } from './shared/utils';
 
 function ConstructedInventory({ setBreadcrumb }) {
+  const { i18n } = useLingui();
   const location = useLocation();
   const match = useRouteMatch('/inventories/constructed_inventory/:id');
 
@@ -60,22 +62,22 @@ function ConstructedInventory({ setBreadcrumb }) {
       name: (
         <>
           <CaretLeftIcon />
-          {t`Back to Inventories`}
+          {i18n._(msg`Back to Inventories`)}
         </>
       ),
       link: `/inventories`,
       id: 99,
     },
-    { name: t`Details`, link: `${match.url}/details`, id: 0 },
-    { name: t`Access`, link: `${match.url}/access`, id: 1 },
-    { name: t`Hosts`, link: `${match.url}/hosts`, id: 2 },
-    { name: t`Groups`, link: `${match.url}/groups`, id: 3 },
+    { name: i18n._(msg`Details`), link: `${match.url}/details`, id: 0 },
+    { name: i18n._(msg`Access`), link: `${match.url}/access`, id: 1 },
+    { name: i18n._(msg`Hosts`), link: `${match.url}/hosts`, id: 2 },
+    { name: i18n._(msg`Groups`), link: `${match.url}/groups`, id: 3 },
     {
-      name: t`Jobs`,
+      name: i18n._(msg`Jobs`),
       link: `${match.url}/jobs`,
       id: 4,
     },
-    { name: t`Job Templates`, link: `${match.url}/job_templates`, id: 5 },
+    { name: i18n._(msg`Job Templates`), link: `${match.url}/job_templates`, id: 5 },
   ];
 
   if (isLoading) {
@@ -95,8 +97,8 @@ function ConstructedInventory({ setBreadcrumb }) {
           <ContentError error={contentError}>
             {contentError?.response?.status === 404 && (
               <span>
-                {t`Constructed Inventory not found.`}{' '}
-                <Link to="/inventories">{t`View all Inventories.`}</Link>
+                {i18n._(msg`Constructed Inventory not found.`)}{' '}
+                <Link to="/inventories">{i18n._(msg`View all Inventories.`)}</Link>
               </span>
             )}
           </ContentError>
@@ -197,7 +199,7 @@ function ConstructedInventory({ setBreadcrumb }) {
                 <Link
                   to={`/inventories/constructed_inventory/${match.params.id}/details`}
                 >
-                  {t`View Constructed Inventory Details`}
+                  {i18n._(msg`View Constructed Inventory Details`)}
                 </Link>
               )}
             </ContentError>

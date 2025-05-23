@@ -1,31 +1,36 @@
-import React from 'react';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
 
-const wfHelpTextStrings = () => ({
-  inventory: t`Select an inventory for the workflow. This inventory is applied to all workflow nodes that prompt for an inventory.`,
-  limit: t`Provide a host pattern to further constrain
-  the list of hosts that will be managed or affected by the
-  playbook. Multiple patterns are allowed. Refer to Ansible
-  documentation for more information and examples on patterns.`,
-  sourceControlBranch: t`Select a branch for the workflow. This branch is applied to all job template nodes that prompt for a branch.`,
-  labels: t`Optional labels that describe this workflow job template,
-  such as 'dev' or 'test'. Labels can be used to group and filter
-  workflow job templates and completed jobs.`,
-  variables: t`Pass extra command line variables to the playbook. This is the -e or --extra-vars command line parameter for ansible-playbook. Provide key/value pairs using either YAML or JSON. Refer to the Ansible Controller documentation for example syntax.`,
-  enableWebhook: t`Enable Webhook for this workflow job template.`,
-  enableConcurrentJobs: t`If enabled, simultaneous runs of this workflow job template will be allowed.`,
-  webhookURL: t`Webhook services can launch jobs with this workflow job template by making a POST request to this URL.`,
-  webhookKey: t`Webhook services can use this as a shared secret.`,
-  webhookCredential: t`Optionally select the credential to use to send status updates back to the webhook service.`,
-  webhookService: t`Select a webhook service.`,
-  jobTags: t`Tags are useful when you have a large playbook, and you want to run a specific part of a play or task. Use commas to separate multiple tags. Refer to the documentation for details on the usage of tags.`,
-  skipTags: t`Skip tags are useful when you have a large playbook, and you want to skip specific parts of a play or task. Use commas to separate multiple tags. Refer to the documentation for details on the usage of tags.`,
-  enabledOptions: (
-    <>
-      <p>{t`Concurrent jobs: If enabled, simultaneous runs of this workflow job template will be allowed.`}</p>
-      <p>{t`Webhooks: Enable Webhook for this workflow job template.`}</p>
-    </>
-  ),
-});
+function getHelpText(i18n) {
+  return {
+    name: i18n._(msg`Name of the workflow job template.`),
+    description: i18n._(msg`Optional description for the workflow job template.`),
+    inventory: i18n._(msg`Select the inventory containing the hosts you want this workflow to manage.`),
+    organization: i18n._(msg`The organization that owns this workflow job template.`),
+    extra_vars: i18n._(msg`Pass extra command line variables to the workflow.`),
+    limit: i18n._(msg`Provide a host pattern to further constrain the list of hosts that will be managed or affected by the workflow.`),
+    scm_branch: i18n._(msg`Select a branch for the workflow.`),
+    survey_enabled: i18n._(msg`Enable a survey for this workflow job template.`),
+    allow_simultaneous: i18n._(msg`Allow simultaneous runs of this workflow job template.`),
+    ask_variables_on_launch: i18n._(msg`Prompt for variables on launch.`),
+    ask_limit_on_launch: i18n._(msg`Prompt for limit on launch.`),
+    ask_scm_branch_on_launch: i18n._(msg`Prompt for SCM branch on launch.`),
+    ask_inventory_on_launch: i18n._(msg`Prompt for inventory on launch.`),
+    ask_labels_on_launch: i18n._(msg`Prompt for labels on launch.`),
+    ask_credential_on_launch: i18n._(msg`Prompt for credentials on launch.`),
+    ask_job_type_on_launch: i18n._(msg`Prompt for job type on launch.`),
+    ask_verbosity_on_launch: i18n._(msg`Prompt for verbosity on launch.`),
+    ask_tags_on_launch: i18n._(msg`Prompt for tags on launch.`),
+    ask_skip_tags_on_launch: i18n._(msg`Prompt for skip tags on launch.`),
+    ask_execution_environment_on_launch: i18n._(msg`Prompt for execution environment on launch.`),
+    ask_instance_groups_on_launch: i18n._(msg`Prompt for instance groups on launch.`),
+    ask_job_slice_count_on_launch: i18n._(msg`Prompt for job slice count on launch.`),
+    ask_timeout_on_launch: i18n._(msg`Prompt for timeout on launch.`),
+    ask_diff_mode_on_launch: i18n._(msg`Prompt for diff mode on launch.`),
+    webhook_service: i18n._(msg`Webhook service for this workflow job template.`),
+    webhook_url: i18n._(msg`Webhook URL for this workflow job template.`),
+    webhook_key: i18n._(msg`Webhook key for this workflow job template.`),
+    webhook_credential: i18n._(msg`Webhook credential for this workflow job template.`),
+  };
+}
 
-export default wfHelpTextStrings;
+export default getHelpText;

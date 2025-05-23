@@ -1,7 +1,8 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 
-import { t } from '@lingui/macro';
 import DataListToolbar from 'components/DataListToolbar';
 import PaginatedTable, {
   HeaderRow,
@@ -22,6 +23,7 @@ const QS_CONFIG = getQSConfig('host', {
 });
 
 function AdvancedInventoryHostList({ inventory }) {
+  const { i18n } = useLingui();
   const location = useLocation();
   const [isAdHocLaunchLoading, setIsAdHocLaunchLoading] = useState(false);
   const {
@@ -71,21 +73,21 @@ function AdvancedInventoryHostList({ inventory }) {
       hasContentLoading={isLoading || isAdHocLaunchLoading}
       items={hosts}
       itemCount={count}
-      pluralizedItemName={t`Hosts`}
+      pluralizedItemName={i18n._(msg`Hosts`)}
       qsConfig={QS_CONFIG}
       clearSelected={clearSelected}
       toolbarSearchColumns={[
         {
-          name: t`Name`,
+          name: i18n._(msg`Name`),
           key: 'name__icontains',
           isDefault: true,
         },
         {
-          name: t`Created by (username)`,
+          name: i18n._(msg`Created by (username)`),
           key: 'created_by__username',
         },
         {
-          name: t`Modified by (username)`,
+          name: i18n._(msg`Modified by (username)`),
           key: 'modified_by__username',
         },
       ]}
@@ -111,9 +113,9 @@ function AdvancedInventoryHostList({ inventory }) {
       )}
       headerRow={
         <HeaderRow qsConfig={QS_CONFIG}>
-          <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
-          <HeaderCell>{t`Recent jobs`}</HeaderCell>
-          <HeaderCell>{t`Inventory`}</HeaderCell>
+          <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
+          <HeaderCell>{i18n._(msg`Recent jobs`)}</HeaderCell>
+          <HeaderCell>{i18n._(msg`Inventory`)}</HeaderCell>
         </HeaderRow>
       }
       renderRow={(host, index) => (

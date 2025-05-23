@@ -7,7 +7,8 @@ import React, { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Popover, Tooltip, Chip } from '@patternfly/react-core';
 import { Tr, Td, ExpandableRowContent } from '@patternfly/react-table';
-import { t, Trans } from '@lingui/macro';
+import { msg, Trans } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import {
   ExclamationTriangleIcon,
   PencilAltIcon,
@@ -48,6 +49,7 @@ function TemplateListItem({
   fetchTemplates,
   rowIndex,
 }) {
+  const { i18n } = useLingui();
   const config = useConfig();
   const [isDisabled, setIsDisabled] = useState(false);
   const labelId = `check-action-${template.id}`;
@@ -104,7 +106,7 @@ function TemplateListItem({
         <Link to={`/inventories/${inventorykind}/${id}/details`}>
           {summaryFields.inventory.name}
         </Link>
-        <span> {t`(Prompt on launch)`}</span>
+        <span> {i18n._(msg`(Prompt on launch)`)}</span>
       </>
     ) : (
       <Link to={`/inventories/${inventorykind}/${id}/details`}>
@@ -119,7 +121,7 @@ function TemplateListItem({
   if (mostRecentJob) {
     lastRun = mostRecentJob.finished
       ? formatDateString(mostRecentJob.finished)
-      : t`Running`;
+      : i18n._(msg`Running`);
   }
 
   return (
@@ -141,16 +143,16 @@ function TemplateListItem({
             isSelected,
             onSelect,
           }}
-          dataLabel={t`Selected`}
+          dataLabel={i18n._(msg`Selected`)}
         />
-        <TdBreakWord id={labelId} dataLabel={t`Name`}>
+        <TdBreakWord id={labelId} dataLabel={i18n._(msg`Name`)}>
           <Link to={`${detailUrl}`}>
             <b>{template.name}</b>
           </Link>
           {missingResourceIcon && (
             <span>
               <Tooltip
-                content={t`Resources are missing from this template.`}
+                content={i18n._(msg`Resources are missing from this template.`)}
                 position="right"
               >
                 <ExclamationTriangleIcon css="color: #c9190b; margin-left: 20px;" />
@@ -161,7 +163,7 @@ function TemplateListItem({
             <span>
               <Popover
                 className="missing-execution-environment"
-                headerContent={<div>{t`Execution Environment Missing`}</div>}
+                headerContent={<div>{i18n._(msg`Execution Environment Missing`)}</div>}
                 bodyContent={
                   <div>
                     <Trans>
@@ -185,23 +187,23 @@ function TemplateListItem({
             </span>
           )}
         </TdBreakWord>
-        <Td dataLabel={t`Activity`}>
+        <Td dataLabel={i18n._(msg`Activity`)}>
           {summaryFields.recent_jobs ? (
             <Sparkline jobs={summaryFields.recent_jobs} />
           ) : null}
         </Td>
-        <Td dataLabel={t`Last Ran`}>{lastRun}</Td>
-        <Td dataLabel={t`Type`}>{toTitleCase(template.type)}</Td>
-        <ActionsTd dataLabel={t`Actions`}>
+        <Td dataLabel={i18n._(msg`Last Ran`)}>{lastRun}</Td>
+        <Td dataLabel={i18n._(msg`Type`)}>{toTitleCase(template.type)}</Td>
+        <ActionsTd dataLabel={i18n._(msg`Actions`)}>
           <ActionItem
             visible={template.type === 'workflow_job_template'}
-            tooltip={t`Visualizer`}
+            tooltip={i18n._(msg`Visualizer`)}
           >
             <Button
               ouiaId={`${template.id}-visualizer-button`}
               id={`template-action-visualizer-${template.id}`}
               isDisabled={isDisabled}
-              aria-label={t`Visualizer`}
+              aria-label={i18n._(msg`Visualizer`)}
               variant="plain"
               component={Link}
               to={`/templates/workflow_job_template/${template.id}/visualizer`}
@@ -211,7 +213,7 @@ function TemplateListItem({
           </ActionItem>
           <ActionItem
             visible={template.summary_fields.user_capabilities.start}
-            tooltip={t`Launch Template`}
+            tooltip={i18n._(msg`Launch Template`)}
           >
             <LaunchButton resource={template}>
               {({ handleLaunch, isLaunching }) => (
@@ -219,7 +221,7 @@ function TemplateListItem({
                   ouiaId={`${template.id}-launch-button`}
                   id={`template-action-launch-${template.id}`}
                   isDisabled={isDisabled || isLaunching}
-                  aria-label={t`Launch template`}
+                  aria-label={i18n._(msg`Launch template`)}
                   variant="plain"
                   onClick={handleLaunch}
                 >
@@ -230,13 +232,13 @@ function TemplateListItem({
           </ActionItem>
           <ActionItem
             visible={template.summary_fields.user_capabilities.edit}
-            tooltip={t`Edit Template`}
+            tooltip={i18n._(msg`Edit Template`)}
           >
             <Button
               ouiaId={`${template.id}-edit-button`}
               id={`template-action-edit-${template.id}`}
               isDisabled={isDisabled}
-              aria-label={t`Edit Template`}
+              aria-label={i18n._(msg`Edit Template`)}
               variant="plain"
               component={Link}
               to={`/templates/${template.type}/${template.id}/edit`}
@@ -245,12 +247,12 @@ function TemplateListItem({
             </Button>
           </ActionItem>
           <ActionItem
-            tooltip={t`Copy Template`}
+            tooltip={i18n._(msg`Copy Template`)}
             visible={template.summary_fields.user_capabilities.copy}
           >
             <CopyButton
               id={`template-action-copy-${template.id}`}
-              errorMessage={t`Failed to copy template.`}
+              errorMessage={i18n._(msg`Failed to copy template.`)}
               isDisabled={isDisabled}
               onCopyStart={handleCopyStart}
               onCopyFinish={handleCopyFinish}
@@ -268,13 +270,13 @@ function TemplateListItem({
           <ExpandableRowContent>
             <DetailList>
               <Detail
-                label={t`Description`}
+                label={i18n._(msg`Description`)}
                 value={template.description}
                 dataCy={`template-${template.id}-description`}
               />
               {summaryFields.organization ? (
                 <Detail
-                  label={t`Organization`}
+                  label={i18n._(msg`Organization`)}
                   value={
                     <Link to={`/organizations/${summaryFields.organization.id}/details`}>
                       {summaryFields.organization.name}
@@ -285,7 +287,7 @@ function TemplateListItem({
               ) : null}
               {summaryFields.inventory ? (
                 <Detail
-                  label={t`Inventory`}
+                  label={i18n._(msg`Inventory`)}
                   value={inventoryValue(
                     summaryFields.inventory.kind,
                     summaryFields.inventory.id
@@ -295,12 +297,12 @@ function TemplateListItem({
               ) : (
                 !askInventoryOnLaunch &&
                 template.type === 'job_template' && (
-                  <DeletedDetail label={t`Inventory`} />
+                  <DeletedDetail label={i18n._(msg`Inventory`)} />
                 )
               )}
               {summaryFields.project && (
                 <Detail
-                  label={t`Project`}
+                  label={i18n._(msg`Project`)}
                   value={
                     <Link to={`/projects/${summaryFields.project.id}/details`}>
                       {summaryFields.project.name}
@@ -316,14 +318,14 @@ function TemplateListItem({
                 />
               )}
               <Detail
-                label={t`Last Modified`}
+                label={i18n._(msg`Last Modified`)}
                 value={formatDateString(template.modified)}
                 dataCy={`template-${template.id}-last-modified`}
               />
               {summaryFields.credentials ? (
                 <Detail
                   fullWidth
-                  label={t`Credentials`}
+                  label={i18n._(msg`Credentials`)}
                   value={
                     <ChipGroup
                       numChips={5}
@@ -347,7 +349,7 @@ function TemplateListItem({
               {summaryFields.labels && (
                 <Detail
                   fullWidth
-                  label={t`Labels`}
+                  label={i18n._(msg`Labels`)}
                   value={
                     <ChipGroup
                       numChips={5}

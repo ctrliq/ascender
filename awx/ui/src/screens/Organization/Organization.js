@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef } from 'react';
-
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import {
   Switch,
   Route,
@@ -107,24 +107,25 @@ function Organization({ setBreadcrumb, me }) {
   const canToggleNotifications =
     isNotifAdmin &&
     (me.is_system_auditor || isAuditorOfThisOrg || isAdminOfThisOrg);
+  const { i18n } = useLingui();
 
   const tabsArray = [
     {
       name: (
         <>
           <CaretLeftIcon />
-          {t`Back to Organizations`}
+          {i18n._(msg`Back to Organizations`)}
         </>
       ),
       link: `/organizations`,
       id: 99,
       persistentFilterKey: 'organizations',
     },
-    { name: t`Details`, link: `${match.url}/details`, id: 0 },
-    { name: t`Access`, link: `${match.url}/access`, id: 1 },
-    { name: t`Teams`, link: `${match.url}/teams`, id: 2 },
+    { name: i18n._(msg`Details`), link: `${match.url}/details`, id: 0 },
+    { name: i18n._(msg`Access`), link: `${match.url}/access`, id: 1 },
+    { name: i18n._(msg`Teams`), link: `${match.url}/teams`, id: 2 },
     {
-      name: t`Execution Environments`,
+      name: i18n._(msg`Execution Environments`),
       link: `${match.url}/execution_environments`,
       id: 4,
     },
@@ -132,7 +133,7 @@ function Organization({ setBreadcrumb, me }) {
 
   if (canSeeNotificationsTab) {
     tabsArray.push({
-      name: t`Notifications`,
+      name: i18n._(msg`Notifications`),
       link: `${match.url}/notifications`,
       id: 3,
     });
@@ -151,8 +152,8 @@ function Organization({ setBreadcrumb, me }) {
           <ContentError error={organizationError}>
             {organizationError.response.status === 404 && (
               <span>
-                {t`Organization not found.`}{' '}
-                <Link to="/organizations">{t`View all Organizations.`}</Link>
+                {i18n._(msg`Organization not found.`)}{' '}
+                <Link to="/organizations">{i18n._(msg`View all Organizations.`)}</Link>
               </span>
             )}
           </ContentError>
@@ -222,7 +223,7 @@ function Organization({ setBreadcrumb, me }) {
               <ContentError isNotFound>
                 {match.params.id && (
                   <Link to={`/organizations/${match.params.id}/details`}>
-                    {t`View Organization Details`}
+                    {i18n._(msg`View Organization Details`)}
                   </Link>
                 )}
               </ContentError>

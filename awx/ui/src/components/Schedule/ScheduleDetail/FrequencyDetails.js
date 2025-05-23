@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { t, Plural, SelectOrdinal } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { DateTime } from 'luxon';
 import { formatDateString } from 'util/dates';
 import { DetailList, Detail } from '../../DetailList';
@@ -17,71 +18,36 @@ export default function FrequencyDetails({
   timezone,
   isException,
 }) {
+  const { i18n } = useLingui();
   const getRunEveryLabel = () => {
     const { interval } = options;
     switch (type) {
       case 'minute':
-        return (
-          <Plural
-            value={interval}
-            one="{interval} minute"
-            other="{interval} minutes"
-          />
-        );
+        return i18n._(msg`{interval, plural, one {# minute} other {# minutes}}`, { interval });
       case 'hour':
-        return (
-          <Plural
-            value={interval}
-            one="{interval} hour"
-            other="{interval} hours"
-          />
-        );
+        return i18n._(msg`{interval, plural, one {# hour} other {# hours}}`, { interval });
       case 'day':
-        return (
-          <Plural
-            value={interval}
-            one="{interval} day"
-            other="{interval} days"
-          />
-        );
+        return i18n._(msg`{interval, plural, one {# day} other {# days}}`, { interval });
       case 'week':
-        return (
-          <Plural
-            value={interval}
-            one="{interval} week"
-            other="{interval} weeks"
-          />
-        );
+        return i18n._(msg`{interval, plural, one {# week} other {# weeks}}`, { interval });
       case 'month':
-        return (
-          <Plural
-            value={interval}
-            one="{interval} month"
-            other="{interval} months"
-          />
-        );
+        return i18n._(msg`{interval, plural, one {# month} other {# months}}`, { interval });
       case 'year':
-        return (
-          <Plural
-            value={interval}
-            one="{interval} year"
-            other="{interval} years"
-          />
-        );
+        return i18n._(msg`{interval, plural, one {# year} other {# years}}`, { interval });
       default:
-        throw new Error(t`Frequency did not match an expected value`);
+        throw new Error(i18n._(msg`Frequency did not match an expected value`));
     }
   };
 
-  const weekdays = {
-    0: t`Monday`,
-    1: t`Tuesday`,
-    2: t`Wednesday`,
-    3: t`Thursday`,
-    4: t`Friday`,
-    5: t`Saturday`,
-    6: t`Sunday`,
-  };
+  const weekdays = React.useMemo(() => ({
+    0: i18n._(msg`Monday`),
+    1: i18n._(msg`Tuesday`),
+    2: i18n._(msg`Wednesday`),
+    3: i18n._(msg`Thursday`),
+    4: i18n._(msg`Friday`),
+    5: i18n._(msg`Saturday`),
+    6: i18n._(msg`Sunday`),
+  }), [i18n]);
 
   const prefix = isException ? `exception-${type}` : `frequency-${type}`;
 
@@ -90,13 +56,13 @@ export default function FrequencyDetails({
       <Label>{label}</Label>
       <DetailList gutter="sm">
         <Detail
-          label={isException ? t`Skip every` : t`Run every`}
+          label={isException ? i18n._(msg`Skip every`) : i18n._(msg`Run every`)}
           value={getRunEveryLabel()}
           dataCy={`${prefix}-run-every`}
         />
         {type === 'week' && options.daysOfWeek ? (
           <Detail
-            label={t`On days`}
+            label={i18n._(msg`On days`)}
             value={options.daysOfWeek
               .sort(sortWeekday)
               .map((d) => weekdays[d.weekday])
@@ -104,10 +70,10 @@ export default function FrequencyDetails({
             dataCy={`${prefix}-days-of-week`}
           />
         ) : null}
-        <RunOnDetail type={type} options={options} prefix={prefix} />
+        <RunOnDetail type={type} options={options} prefix={prefix} i18n={i18n} />
         <Detail
-          label={t`End`}
-          value={getEndValue(type, options, timezone)}
+          label={i18n._(msg`End`)}
+          value={getEndValue(type, options, timezone, i18n)}
           dataCy={`${prefix}-end`}
         />
       </DetailList>
@@ -121,25 +87,39 @@ function sortWeekday(a, b) {
   return a.weekday - b.weekday;
 }
 
-function RunOnDetail({ type, options, prefix }) {
-  const weekdays = {
-    sunday: t`Sunday`,
-    monday: t`Monday`,
-    tuesday: t`Tuesday`,
-    wednesday: t`Wednesday`,
-    thursday: t`Thursday`,
-    friday: t`Friday`,
-    saturday: t`Saturday`,
-    day: t`day`,
-    weekday: t`weekday`,
-    weekendDay: t`weekend day`,
-  };
+function RunOnDetail({ type, options, prefix, i18n }) {
+  const weekdays = React.useMemo(() => ({
+    sunday: i18n._(msg`Sunday`),
+    monday: i18n._(msg`Monday`),
+    tuesday: i18n._(msg`Tuesday`),
+    wednesday: i18n._(msg`Wednesday`),
+    thursday: i18n._(msg`Thursday`),
+    friday: i18n._(msg`Friday`),
+    saturday: i18n._(msg`Saturday`),
+    day: i18n._(msg`day`),
+    weekday: i18n._(msg`weekday`),
+    weekendDay: i18n._(msg`weekend day`),
+  }), [i18n]);
+  const months = React.useMemo(() => ({
+    1: i18n._(msg`January`),
+    2: i18n._(msg`February`),
+    3: i18n._(msg`March`),
+    4: i18n._(msg`April`),
+    5: i18n._(msg`May`),
+    6: i18n._(msg`June`),
+    7: i18n._(msg`July`),
+    8: i18n._(msg`August`),
+    9: i18n._(msg`September`),
+    10: i18n._(msg`October`),
+    11: i18n._(msg`November`),
+    12: i18n._(msg`December`),
+  }), [i18n]);
   if (type === 'month') {
     if (options.runOn === 'day') {
       return (
         <Detail
-          label={t`Run on`}
-          value={t`Day ${options.runOnDayNumber}`}
+          label={i18n._(msg`Run on`)}
+          value={i18n._(msg`Day {num}`, { num: options.runOnDayNumber })}
           dataCy={`${prefix}-run-on-day`}
         />
       );
@@ -147,44 +127,27 @@ function RunOnDetail({ type, options, prefix }) {
     const dayOfWeek = weekdays[options.runOnTheDay];
     return (
       <Detail
-        label={t`Run on`}
+        label={i18n._(msg`Run on`)}
         value={
-          options.runOnTheOccurrence === -1 ? (
-            t`The last ${dayOfWeek}`
-          ) : (
-            <SelectOrdinal
-              value={options.runOnTheOccurrence}
-              one={`The first ${dayOfWeek}`}
-              two={`The second ${dayOfWeek}`}
-              _3={`The third ${dayOfWeek}`}
-              _4={`The fourth ${dayOfWeek}`}
-              _5={`The fifth ${dayOfWeek}`}
-            />
-          )
+          options.runOnTheOccurrence === -1
+            ? i18n._(msg`The last {dayOfWeek}`, { dayOfWeek })
+            : i18n._(msg`The {ordinal, selectordinal,
+              one {first}
+              two {second}
+              few {third}
+              four {fourth}
+              other {#th}
+            } {dayOfWeek}`, { ordinal: options.runOnTheOccurrence, dayOfWeek })
         }
         dataCy={`${prefix}-run-on-day`}
       />
     );
   }
   if (type === 'year') {
-    const months = {
-      1: t`January`,
-      2: t`February`,
-      3: t`March`,
-      4: t`April`,
-      5: t`May`,
-      6: t`June`,
-      7: t`July`,
-      8: t`August`,
-      9: t`September`,
-      10: t`October`,
-      11: t`November`,
-      12: t`December`,
-    };
     if (options.runOn === 'day') {
       return (
         <Detail
-          label={t`Run on`}
+          label={i18n._(msg`Run on`)}
           value={`${months[options.runOnTheMonth]} ${options.runOnDayMonth}`}
           dataCy={`${prefix}-run-on-day`}
         />
@@ -194,20 +157,17 @@ function RunOnDetail({ type, options, prefix }) {
     const month = months[options.runOnTheMonth];
     return (
       <Detail
-        label={t`Run on`}
+        label={i18n._(msg`Run on`)}
         value={
-          options.runOnTheOccurrence === -1 ? (
-            t`The last ${weekday} of ${month}`
-          ) : (
-            <SelectOrdinal
-              value={options.runOnTheOccurrence}
-              one={`The first ${weekday} of ${month}`}
-              two={`The second ${weekday} of ${month}`}
-              _3={`The third ${weekday} of ${month}`}
-              _4={`The fourth ${weekday} of ${month}`}
-              _5={`The fifth ${weekday} of ${month}`}
-            />
-          )
+          options.runOnTheOccurrence === -1
+            ? i18n._(msg`The last {weekday} of {month}`, { weekday, month })
+            : i18n._(msg`The {ordinal, selectordinal,
+                one {first}
+                two {second}
+                few {third}
+                four {fourth}
+                other {#th}
+              } {weekday} of {month}`, { ordinal: options.runOnTheOccurrence, weekday, month })
         }
         dataCy={`${prefix}-run-on-day`}
       />
@@ -216,21 +176,14 @@ function RunOnDetail({ type, options, prefix }) {
   return null;
 }
 
-function getEndValue(type, options, timezone) {
+function getEndValue(type, options, timezone, i18n) {
   if (options.end === 'never') {
-    return t`Never`;
+    return i18n._(msg`Never`);
   }
   if (options.end === 'after') {
     const numOccurrences = options.occurrences;
-    return (
-      <Plural
-        value={numOccurrences}
-        one="After {numOccurrences} occurrence"
-        other="After {numOccurrences} occurrences"
-      />
-    );
+    return i18n._(msg`After {numOccurrences, plural, one {# occurrence} other {# occurrences}}`, { numOccurrences });
   }
-
   const date = DateTime.fromFormat(
     `${options.endDate} ${options.endTime}`,
     'yyyy-MM-dd h:mm a',

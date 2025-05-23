@@ -1,7 +1,8 @@
 import 'styled-components/macro';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { t } from '@lingui/macro';
+import { msg } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
 import { Td, Tr } from '@patternfly/react-table';
 import { ActionsTd } from 'components/PaginatedTable';
 
@@ -25,6 +26,7 @@ const CheckboxListItem = ({
       onSelect(itemId);
     }
   };
+  const { i18n } = useLingui();
 
   return (
     <Tr
@@ -41,7 +43,7 @@ const CheckboxListItem = ({
           variant: isRadio ? 'radio' : 'checkbox',
         }}
         name={name}
-        dataLabel={t`Selected`}
+        dataLabel={i18n._(msg`Selected`)}
       />
 
       {columns?.length > 0 ? (

@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { Link, useHistory, useLocation } from 'react-router-dom';
-
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import { Button } from '@patternfly/react-core';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { CardBody, CardActionsRow } from 'components/Card';
@@ -17,6 +17,7 @@ import { pluck } from '../../shared/settingUtils';
 import { SettingDetail } from '../../shared';
 
 function UIDetail() {
+  const { i18n } = useLingui();
   const { me } = useConfig();
   const { GET: options } = useSettings();
   const history = useHistory();
@@ -56,14 +57,14 @@ function UIDetail() {
       name: (
         <>
           <CaretLeftIcon />
-          {t`Back to Settings`}
+          {i18n._(msg`Back to Settings`)}
         </>
       ),
       link: `/settings`,
       id: 99,
     },
     {
-      name: t`Details`,
+      name: i18n._(msg`Details`),
       link: `/settings/ui/details`,
       id: 0,
     },
@@ -102,12 +103,12 @@ function UIDetail() {
         {me?.is_superuser && (
           <CardActionsRow>
             <Button
-              aria-label={t`Edit`}
+              aria-label={i18n._(msg`Edit`)}
               component={Link}
               to="/settings/ui/edit"
               ouiaId="ui-detail-edit-button"
             >
-              {t`Edit`}
+              {i18n._(msg`Edit`)}
             </Button>
           </CardActionsRow>
         )}

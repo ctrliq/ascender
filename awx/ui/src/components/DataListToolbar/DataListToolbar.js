@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { t } from '@lingui/macro';
+import { msg } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
 import {
   Button,
   Checkbox,
@@ -59,6 +60,7 @@ function DataListToolbar({
   isFilterCleared,
   advancedSearchDisabled,
 }) {
+  const { i18n } = useLingui();
   const showExpandCollapse = onCompact && onExpand;
   const [isKebabOpen, setIsKebabOpen] = useState(false);
   const [isKebabModalOpen, setIsKebabModalOpen] = useState(false);
@@ -89,7 +91,7 @@ function DataListToolbar({
   );
   const columns = [...searchColumns];
   if (!advancedSearchDisabled) {
-    columns.push({ name: t`Advanced`, key: 'advanced' });
+    columns.push({ name: i18n._(msg`Advanced`), key: 'advanced' });
   }
   return (
     <Toolbar
@@ -97,7 +99,7 @@ function DataListToolbar({
       ouiaId={`${qsConfig.namespace}-list-toolbar`}
       clearAllFilters={clearAllFilters}
       collapseListedFiltersBreakpoint="lg"
-      clearFiltersButtonText={t`Clear all filters`}
+      clearFiltersButtonText={i18n._(msg`Clear all filters`)}
     >
       <ToolbarContent>
         {onExpandAll && (
@@ -107,14 +109,14 @@ function DataListToolbar({
                 onClick={() => {
                   onExpandAll(!isAllExpanded);
                 }}
-                aria-label={t`Expand all rows`}
+                aria-label={i18n._(msg`Expand all rows`)}
                 ouiaId="expand-all-rows"
                 variant="plain"
               >
                 {isAllExpanded ? (
-                  <AngleDownIcon aria-label={t`Is expanded`} />
+                  <AngleDownIcon aria-label={i18n._(msg`Is expanded`)} />
                 ) : (
-                  <AngleRightIcon aria-label={t`Is not expanded`} />
+                  <AngleRightIcon aria-label={i18n._(msg`Is not expanded`)} />
                 )}
               </Button>
             </ToolbarItem>
@@ -123,11 +125,11 @@ function DataListToolbar({
         {onSelectAll && (
           <ToolbarGroup>
             <ToolbarItem>
-              <Tooltip content={t`Select all`} position="top">
+              <Tooltip content={i18n._(msg`Select all`)} position="top">
                 <Checkbox
                   isChecked={isAllSelected}
                   onChange={onSelectAll}
-                  aria-label={t`Select all`}
+                  aria-label={i18n._(msg`Select all`)}
                   id="select-all"
                   ouiaId="select-all"
                 />

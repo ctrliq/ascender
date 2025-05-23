@@ -3,7 +3,8 @@ import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { string, bool, func, number } from 'prop-types';
 
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 
 import { Td, Tr } from '@patternfly/react-table';
 import { Button } from '@patternfly/react-core';
@@ -20,6 +21,7 @@ function InventoryRelatedGroupListItem({
   isSelected,
   onSelect,
 }) {
+  const { i18n } = useLingui();
   const labelId = `check-action-${group.id}`;
   const { inventoryType } = useParams();
   return (
@@ -34,7 +36,7 @@ function InventoryRelatedGroupListItem({
           isSelected,
           onSelect,
         }}
-        dataLabel={t`Selected`}
+        dataLabel={i18n._(msg`Selected`)}
       />
       <Td id={labelId}>
         <Link to={`${detailUrl}`}>
@@ -42,14 +44,14 @@ function InventoryRelatedGroupListItem({
         </Link>
       </Td>
       {inventoryType !== 'constructed_inventory' && (
-        <ActionsTd dataLabel={t`Actions`}>
+        <ActionsTd dataLabel={i18n._(msg`Actions`)}>
           <ActionItem
-            tooltip={t`Edit Group`}
+            tooltip={i18n._(msg`Edit Group`)}
             visible={group.summary_fields.user_capabilities?.edit}
           >
             <Button
               ouiaId={`${group.id}-edit-button`}
-              aria-label={t`Edit Group`}
+              aria-label={i18n._(msg`Edit Group`)}
               variant="plain"
               component={Link}
               to={`${editUrl}`}

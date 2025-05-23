@@ -1,6 +1,7 @@
 import 'styled-components/macro';
 import React, { useState, useEffect, useCallback } from 'react';
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import { Link } from 'react-router-dom';
 import { Button } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
@@ -27,6 +28,7 @@ function NotificationTemplateListItem({
   onSelect,
   rowIndex,
 }) {
+  const { i18n } = useLingui();
   const recentNotifications = template.summary_fields?.recent_notifications;
   const latestStatus = recentNotifications
     ? recentNotifications[0]?.status
@@ -107,32 +109,32 @@ function NotificationTemplateListItem({
             isSelected,
             onSelect,
           }}
-          dataLabel={t`Selected`}
+          dataLabel={i18n._(msg`Selected`)}
         />
-        <TdBreakWord id={labelId} dataLabel={t`Name`}>
+        <TdBreakWord id={labelId} dataLabel={i18n._(msg`Name`)}>
           <Link to={`${detailUrl}`}>
             <b>{template.name}</b>
           </Link>
         </TdBreakWord>
-        <Td dataLabel={t`Status`}>
+        <Td dataLabel={i18n._(msg`Status`)}>
           {status && <StatusLabel status={status} />}
         </Td>
-        <Td dataLabel={t`Type`}>
+        <Td dataLabel={i18n._(msg`Type`)}>
           {NOTIFICATION_TYPES[template.notification_type] ||
             template.notification_type}
         </Td>
-        <Td dataLabel={t`Oragnization`}>
+        <Td dataLabel={i18n._(msg`Oragnization`)}>
           <Link
             to={`/organizations/${template.summary_fields.organization.id}/details`}
           >
             <b>{template.summary_fields.organization.name}</b>
           </Link>
         </Td>
-        <ActionsTd dataLabel={t`Actions`}>
-          <ActionItem visible tooltip={t`Test notification`}>
+        <ActionsTd dataLabel={i18n._(msg`Actions`)}>
+          <ActionItem visible tooltip={i18n._(msg`Test notification`)}>
             <Button
               ouiaId={`notification-test-button-${template.id}`}
-              aria-label={t`Test Notification`}
+              aria-label={i18n._(msg`Test Notification`)}
               variant="plain"
               onClick={sendTestNotification}
               isDisabled={isLoading || status === 'running'}
@@ -142,11 +144,11 @@ function NotificationTemplateListItem({
           </ActionItem>
           <ActionItem
             visible={template.summary_fields.user_capabilities.edit}
-            tooltip={t`Edit`}
+            tooltip={i18n._(msg`Edit`)}
           >
             <Button
               ouiaId={`notification-edit-button-${template.id}`}
-              aria-label={t`Edit Notification Template`}
+              aria-label={i18n._(msg`Edit Notification Template`)}
               variant="plain"
               component={Link}
               to={`/notification_templates/${template.id}/edit`}
@@ -156,7 +158,7 @@ function NotificationTemplateListItem({
           </ActionItem>
           <ActionItem
             visible={template.summary_fields.user_capabilities.copy}
-            tooltip={t`Copy Notification Template`}
+            tooltip={i18n._(msg`Copy Notification Template`)}
           >
             <CopyButton
               ouiaId={`notification-copy-button-${template.id}`}
@@ -164,7 +166,7 @@ function NotificationTemplateListItem({
               isCopyDisabled={isCopyDisabled}
               onCopyStart={handleCopyStart}
               onCopyFinish={handleCopyFinish}
-              errorMessage={t`Failed to copy template.`}
+              errorMessage={i18n._(msg`Failed to copy template.`)}
             />
           </ActionItem>
         </ActionsTd>
@@ -173,10 +175,10 @@ function NotificationTemplateListItem({
         <AlertModal
           isOpen
           variant="error"
-          title={t`Error!`}
+          title={i18n._(msg`Error!`)}
           onClose={dismissError}
         >
-          {t`Failed to send test notification.`}
+          {i18n._(msg`Failed to send test notification.`)}
           <ErrorDetail error={sendTestError} />
         </AlertModal>
       )}

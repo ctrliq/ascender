@@ -1,8 +1,8 @@
 import 'styled-components/macro';
 import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import { Button } from '@patternfly/react-core';
 import { Host } from 'types';
 import { CardBody, CardActionsRow } from 'components/Card';
@@ -31,7 +31,7 @@ function InventoryHostDetail({ host }) {
       user_capabilities,
     },
   } = host;
-
+  const { i18n } = useLingui();
   const [isLoading, setIsloading] = useState(false);
   const [deletionError, setDeletionError] = useState(false);
   const history = useHistory();
@@ -53,10 +53,10 @@ function InventoryHostDetail({ host }) {
       <AlertModal
         isOpen={deletionError}
         variant="error"
-        title={t`Error!`}
+        title={i18n._(msg`Error!`)}
         onClose={() => setDeletionError(false)}
       >
-        {t`Failed to delete ${name}.`}
+        {i18n._(msg`Failed to delete ${name}.`)}
         <ErrorDetail error={deletionError} />
       </AlertModal>
     );
@@ -71,21 +71,21 @@ function InventoryHostDetail({ host }) {
     <CardBody>
       <HostToggle host={host} css="padding-bottom: 40px" />
       <DetailList gutter="sm">
-        <Detail label={t`Name`} value={name} />
+        <Detail label={i18n._(msg`Name`)} value={name} />
         <Detail
-          label={t`Activity`}
+          label={i18n._(msg`Activity`)}
           value={<Sparkline jobs={recentPlaybookJobs} />}
           isEmpty={recentPlaybookJobs?.length === 0}
         />
-        <Detail label={t`Description`} value={description} />
-        <UserDateDetail date={created} label={t`Created`} user={created_by} />
+        <Detail label={i18n._(msg`Description`)} value={description} />
+        <UserDateDetail date={created} label={i18n._(msg`Created`)} user={created_by} />
         <UserDateDetail
           date={modified}
-          label={t`Last Modified`}
+          label={i18n._(msg`Last Modified`)}
           user={modified_by}
         />
         <VariablesDetail
-          label={t`Variables`}
+          label={i18n._(msg`Variables`)}
           rows={4}
           value={variables}
           name="variables"
@@ -96,17 +96,17 @@ function InventoryHostDetail({ host }) {
         {user_capabilities?.edit && (
           <Button
             ouiaId="inventory-host-detail-edit-button"
-            aria-label={t`edit`}
+            aria-label={i18n._(msg`edit`)}
             component={Link}
             to={`/inventories/inventory/${inventory.id}/hosts/${id}/edit`}
           >
-            {t`Edit`}
+            {i18n._(msg`Edit`)}
           </Button>
         )}
         {user_capabilities?.delete && (
           <DeleteButton
             name={name}
-            modalTitle={t`Delete Host`}
+            modalTitle={i18n._(msg`Delete Host`)}
             onConfirm={() => handleHostDelete()}
           />
         )}
@@ -115,10 +115,10 @@ function InventoryHostDetail({ host }) {
         <AlertModal
           isOpen={deletionError}
           variant="error"
-          title={t`Error!`}
+          title={i18n._(msg`Error!`)}
           onClose={() => setDeletionError(null)}
         >
-          {t`Failed to delete host.`}
+          {i18n._(msg`Failed to delete host.`)}
           <ErrorDetail error={deletionError} />
         </AlertModal>
       )}

@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import { Button } from '@patternfly/react-core';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { CardBody, CardActionsRow } from 'components/Card';
@@ -16,6 +16,7 @@ import { useSettings } from 'contexts/Settings';
 import { SettingDetail } from '../../shared';
 
 function OIDCDetail() {
+  const {  i18n } = useLingui();
   const { me } = useConfig();
   const { GET: options } = useSettings();
 
@@ -41,14 +42,14 @@ function OIDCDetail() {
       name: (
         <>
           <CaretLeftIcon />
-          {t`Back to Settings`}
+          {i18n._(msg`Back to Settings`)}
         </>
       ),
       link: `/settings`,
       id: 99,
     },
     {
-      name: t`Details`,
+      name: i18n._(msg`Details`),
       link: `/settings/oidc/details`,
       id: 0,
     },
@@ -82,11 +83,11 @@ function OIDCDetail() {
           <CardActionsRow>
             <Button
               ouiaId="oidc-detail-edit-button"
-              aria-label={t`Edit`}
+              aria-label={i18n._(msg`Edit`)}
               component={Link}
               to="/settings/oidc/edit"
             >
-              {t`Edit`}
+              {i18n._(msg`Edit`)}
             </Button>
           </CardActionsRow>
         )}
