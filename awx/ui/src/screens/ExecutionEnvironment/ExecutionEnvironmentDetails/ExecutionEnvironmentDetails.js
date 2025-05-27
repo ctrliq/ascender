@@ -12,11 +12,11 @@ import useRequest, { useDismissableError } from 'hooks/useRequest';
 import { toTitleCase } from 'util/strings';
 import { ExecutionEnvironmentsAPI } from 'api';
 import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails';
-import getHelpText from '../shared/ExecutionEnvironment.helptext';
+import executionEnvironmentHelpTextStrings from '../shared/ExecutionEnvironment.helptext';
 
 function ExecutionEnvironmentDetails({ executionEnvironment }) {
   const { i18n } = useLingui();
-  const helpText = getHelpText(i18n);
+  const helpText = executionEnvironmentHelpTextStrings;
   const history = useHistory();
   const {
     id,

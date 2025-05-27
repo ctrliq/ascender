@@ -10,8 +10,6 @@ import {
   TextListItemVariants,
   Tooltip,
 } from '@patternfly/react-core';
-import getDocsBaseUrl from 'util/getDocsBaseUrl';
-import { useConfig } from 'contexts/Config';
 import AlertModal from 'components/AlertModal';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
@@ -31,13 +29,32 @@ import useIsMounted from 'hooks/useIsMounted';
 import { formatDateString } from 'util/dates';
 import Popover from 'components/Popover';
 import { VERBOSITY } from 'components/VerbositySelectField';
+import getDocsBaseUrl from 'util/getDocsBaseUrl';
 import InventorySourceSyncButton from '../shared/InventorySourceSyncButton';
 import useWsInventorySourcesDetails from '../shared/useWsInventorySourcesDetails';
 import getHelpText from '../shared/Inventory.helptext';
 
 function InventorySourceDetail({ inventorySource }) {
   const { i18n } = useLingui();
-  const helpText = getHelpText(i18n);
+  const [isI18nLoading, setIsI18nLoading] = useState(true);
+  const [deletionError, setDeletionError] = useState(false);
+  const history = useHistory();
+  const isMounted = useIsMounted();
+
+  const {
+    result: sourceChoices,
+    error,
+    isLoading,
+    request: fetchSourceChoices,
+  } = useRequest(
+    useCallback(async () => {
+      const { data } = await InventorySourcesAPI.readOptions();
+      return Object.assign(
+        ...data.actions.GET.source.choices.map(([key, val]) => ({ [key]: val }))
+      );
+    }, [])
+  );
+
   const {
     created,
     custom_virtualenv,
@@ -60,6 +77,17 @@ function InventorySourceDetail({ inventorySource }) {
     summary_fields,
   } = useWsInventorySourcesDetails(inventorySource);
 
+  useEffect(() => {
+    if (i18n) {
+      setIsI18nLoading(false);
+    }
+  }, [i18n]);
+
+  useEffect(() => {
+    fetchSourceChoices();
+  }, [fetchSourceChoices]);
+
+  const helpText = getHelpText(i18n);
   const {
     created_by,
     credentials,
@@ -70,31 +98,6 @@ function InventorySourceDetail({ inventorySource }) {
     user_capabilities,
     execution_environment,
   } = summary_fields;
-
-  const [deletionError, setDeletionError] = useState(false);
-  const config = useConfig();
-  const history = useHistory();
-  const isMounted = useIsMounted();
-
-  const {
-    result: sourceChoices,
-    error,
-    isLoading,
-    request: fetchSourceChoices,
-  } = useRequest(
-    useCallback(async () => {
-      const { data } = await InventorySourcesAPI.readOptions();
-      return Object.assign(
-        ...data.actions.GET.source.choices.map(([key, val]) => ({ [key]: val }))
-      );
-    }, []),
-    {}
-  );
-
-  const docsBaseUrl = getDocsBaseUrl(config);
-  useEffect(() => {
-    fetchSourceChoices();
-  }, [fetchSourceChoices]);
 
   const handleDelete = async () => {
     try {
@@ -114,6 +117,10 @@ function InventorySourceDetail({ inventorySource }) {
   const deleteDetailsRequests = relatedResourceDeleteRequests.inventorySource(
     inventorySource.id
   );
+
+  if (isI18nLoading) {
+    return <ContentLoading />;
+  }
 
   let optionsList = '';
   if (overwrite || overwrite_vars || update_on_launch) {
@@ -177,6 +184,8 @@ function InventorySourceDetail({ inventorySource }) {
   } else if (summary_fields?.last_job) {
     job = summary_fields.last_job;
   }
+
+  const docsBaseUrl = getDocsBaseUrl();
 
   return (
     <CardBody>
