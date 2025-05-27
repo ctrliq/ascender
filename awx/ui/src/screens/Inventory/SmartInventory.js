@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
 import {
   Link,
   Switch,
@@ -10,6 +10,7 @@ import {
 } from 'react-router-dom';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card, PageSection } from '@patternfly/react-core';
+import { useLingui } from '@lingui/react';
 
 import useRequest from 'hooks/useRequest';
 import { InventoriesAPI } from 'api';
@@ -26,6 +27,7 @@ import AdvancedInventoryHosts from './AdvancedInventoryHosts';
 import { getInventoryPath } from './shared/utils';
 
 function SmartInventory({ setBreadcrumb }) {
+  const { i18n } = useLingui();
   const location = useLocation();
   const match = useRouteMatch('/inventories/smart_inventory/:id');
 
@@ -58,21 +60,21 @@ function SmartInventory({ setBreadcrumb }) {
       name: (
         <>
           <CaretLeftIcon />
-          {t`Back to Inventories`}
+          {i18n._(msg`Back to Inventories`)}
         </>
       ),
       link: `/inventories`,
       id: 99,
     },
-    { name: t`Details`, link: `${match.url}/details`, id: 0 },
-    { name: t`Access`, link: `${match.url}/access`, id: 1 },
-    { name: t`Hosts`, link: `${match.url}/hosts`, id: 2 },
+    { name: i18n._(msg`Details`), link: `${match.url}/details`, id: 0 },
+    { name: i18n._(msg`Access`), link: `${match.url}/access`, id: 1 },
+    { name: i18n._(msg`Hosts`), link: `${match.url}/hosts`, id: 2 },
     {
-      name: t`Jobs`,
+      name: i18n._(msg`Jobs`),
       link: `${match.url}/jobs`,
       id: 3,
     },
-    { name: t`Job Templates`, link: `${match.url}/job_templates`, id: 4 },
+    { name: i18n._(msg`Job Templates`), link: `${match.url}/job_templates`, id: 4 },
   ];
 
   if (hasContentLoading) {
@@ -92,8 +94,8 @@ function SmartInventory({ setBreadcrumb }) {
           <ContentError error={contentError}>
             {contentError?.response?.status === 404 && (
               <span>
-                {t`Smart Inventory not found.`}{' '}
-                <Link to="/inventories">{t`View all Inventories.`}</Link>
+                {i18n._(msg`Smart Inventory not found.`)}{' '}
+                <Link to="/inventories">{i18n._(msg`View all Inventories.`)}</Link>
               </span>
             )}
           </ContentError>
@@ -173,7 +175,7 @@ function SmartInventory({ setBreadcrumb }) {
                     <Link
                       to={`/inventories/smart_inventory/${match.params.id}/details`}
                     >
-                      {t`View Inventory Details`}
+                      {i18n._(msg`View Inventory Details`)}
                     </Link>
                   )}
                 </ContentError>

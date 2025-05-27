@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { Formik, useField, useFormikContext } from 'formik';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
 import { useLocation } from 'react-router-dom';
 import { func, shape, arrayOf } from 'prop-types';
 import { Form } from '@patternfly/react-core';
@@ -21,8 +21,10 @@ import OrganizationLookup from 'components/Lookup/OrganizationLookup';
 import useRequest from 'hooks/useRequest';
 import { required } from 'util/validators';
 import { InventoriesAPI } from 'api';
+import { useLingui } from '@lingui/react';
 
 const SmartInventoryFormFields = ({ inventory }) => {
+  const { i18n } = useLingui();
   const { setFieldValue, setFieldTouched } = useFormikContext();
   const [organizationField, organizationMeta, organizationHelpers] =
     useField('organization');
@@ -44,7 +46,7 @@ const SmartInventoryFormFields = ({ inventory }) => {
     <>
       <FormField
         id="name"
-        label={t`Name`}
+        label={i18n._(msg`Name`)}
         name="name"
         type="text"
         validate={required(null)}
@@ -52,7 +54,7 @@ const SmartInventoryFormFields = ({ inventory }) => {
       />
       <FormField
         id="description"
-        label={t`Description`}
+        label={i18n._(msg`Description`)}
         name="description"
         type="text"
       />
@@ -64,7 +66,7 @@ const SmartInventoryFormFields = ({ inventory }) => {
         value={organizationField.value}
         required
         autoPopulate={!inventory?.id}
-        validate={required(t`Select a value for this field`)}
+        validate={required(i18n._(msg`Select a value for this field`))}
       />
       <HostFilterLookup
         value={hostFilterField.value}
@@ -84,14 +86,14 @@ const SmartInventoryFormFields = ({ inventory }) => {
         onChange={(value) => {
           instanceGroupsHelpers.setValue(value);
         }}
-        tooltip={t`Select the Instance Groups for this Inventory to run on.`}
+        tooltip={i18n._(msg`Select the Instance Groups for this Inventory to run on.`)}
       />
       <FormFullWidthLayout>
         <VariablesField
           id="variables"
           name="variables"
-          label={t`Variables`}
-          tooltip={t`Enter inventory variables using either JSON or YAML syntax. Use the radio button to toggle between the two. Refer to the Ansible Controller documentation for example syntax.`}
+          label={i18n._(msg`Variables`)}
+          tooltip={i18n._(msg`Enter inventory variables using either JSON or YAML syntax. Use the radio button to toggle between the two. Refer to the Ansible Controller documentation for example syntax.`)}
         />
       </FormFullWidthLayout>
     </>

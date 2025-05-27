@@ -2,7 +2,8 @@ import 'styled-components/macro';
 import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import { Button } from '@patternfly/react-core';
 import { Host } from 'types';
 import { CardBody, CardActionsRow } from 'components/Card';
@@ -16,6 +17,7 @@ import { HostsAPI } from 'api';
 import HostToggle from 'components/HostToggle';
 
 function HostDetail({ host }) {
+  const { i18n } = useLingui();
   const {
     created,
     description,
@@ -53,10 +55,10 @@ function HostDetail({ host }) {
       <AlertModal
         isOpen={deletionError}
         variant="error"
-        title={t`Error!`}
+        title={i18n._(msg`Error!`)}
         onClose={() => setDeletionError(false)}
       >
-        {t`Failed to delete ${name}.`}
+        {i18n._(msg`Failed to delete ${name}.`, { name })}
         <ErrorDetail error={deletionError} />
       </AlertModal>
     );
@@ -66,31 +68,31 @@ function HostDetail({ host }) {
     <CardBody>
       <HostToggle host={host} css="padding-bottom: 40px" />
       <DetailList gutter="sm">
-        <Detail label={t`Name`} value={name} dataCy="host-name" />
+        <Detail label={i18n._(msg`Name`)} value={name} dataCy="host-name" />
         <Detail
-          label={t`Activity`}
+          label={i18n._(msg`Activity`)}
           value={<Sparkline jobs={recentJobs} />}
           isEmpty={recentJobs?.length === 0}
         />
-        <Detail label={t`Description`} value={description} />
+        <Detail label={i18n._(msg`Description`)} value={description} />
         <Detail
-          label={t`Inventory`}
+          label={i18n._(msg`Inventory`)}
           dataCy="host-inventory"
-          helpText={t`The inventory that this host belongs to.`}
+          helpText={i18n._(msg`The inventory that this host belongs to.`)}
           value={
             <Link to={`/inventories/inventory/${inventory.id}/details`}>
               {inventory.name}
             </Link>
           }
         />
-        <UserDateDetail date={created} label={t`Created`} user={created_by} />
+        <UserDateDetail date={created} label={i18n._(msg`Created`)} user={created_by} />
         <UserDateDetail
           date={modified}
-          label={t`Last Modified`}
+          label={i18n._(msg`Last Modified`)}
           user={modified_by}
         />
         <VariablesDetail
-          label={t`Variables`}
+          label={i18n._(msg`Variables`)}
           rows={4}
           value={variables}
           name="variables"
@@ -101,17 +103,17 @@ function HostDetail({ host }) {
         {user_capabilities?.edit && (
           <Button
             ouiaId="host-detail-edit-button"
-            aria-label={t`edit`}
+            aria-label={i18n._(msg`edit`)}
             component={Link}
             to={`/hosts/${id}/edit`}
           >
-            {t`Edit`}
+            {i18n._(msg`Edit`)}
           </Button>
         )}
         {user_capabilities?.delete && (
           <DeleteButton
             onConfirm={() => handleHostDelete()}
-            modalTitle={t`Delete Host`}
+            modalTitle={i18n._(msg`Delete Host`)}
             name={name}
           />
         )}
@@ -120,10 +122,10 @@ function HostDetail({ host }) {
         <AlertModal
           isOpen={deletionError}
           variant="error"
-          title={t`Error!`}
+          title={i18n._(msg`Error!`)}
           onClose={() => setDeletionError(null)}
         >
-          {t`Failed to delete host.`}
+          {i18n._(msg`Failed to delete host.`)}
           <ErrorDetail error={deletionError} />
         </AlertModal>
       )}

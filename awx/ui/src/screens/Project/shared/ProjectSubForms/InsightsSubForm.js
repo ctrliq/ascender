@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
-
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { useField, useFormikContext } from 'formik';
 import CredentialLookup from 'components/Lookup/CredentialLookup';
 import { required } from 'util/validators';
@@ -12,6 +12,7 @@ const InsightsSubForm = ({
   scmUpdateOnLaunch,
   autoPopulateCredential,
 }) => {
+  const { i18n } = useLingui();
   const { setFieldValue, setFieldTouched } = useFormikContext();
   const [, credMeta, credHelpers] = useField('credential');
 
@@ -28,7 +29,7 @@ const InsightsSubForm = ({
     <>
       <CredentialLookup
         credentialTypeId={credential.typeId}
-        label={t`Insights Credential`}
+        label={i18n._(msg`Insights Credential`)}
         helperTextInvalid={credMeta.error}
         isValid={!credMeta.touched || !credMeta.error}
         onBlur={() => credHelpers.setTouched()}
@@ -36,7 +37,7 @@ const InsightsSubForm = ({
         value={credential.value}
         required
         autoPopulate={autoPopulateCredential}
-        validate={required(t`Select a value for this field`)}
+        validate={required(i18n._(msg`Select a value for this field`))}
       />
       <ScmTypeOptions hideAllowOverride scmUpdateOnLaunch={scmUpdateOnLaunch} />
     </>

@@ -1,5 +1,6 @@
 import React from 'react';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import 'styled-components/macro';
 import { Tr, Td } from '@patternfly/react-table';
 
@@ -9,6 +10,7 @@ function InstanceListenerAddressListItem({
   onSelect,
   rowIndex,
 }) {
+  const { i18n } = useLingui();
   const labelId = `check-action-${peerListenerAddress.id}`;
   return (
     <Tr
@@ -21,22 +23,22 @@ function InstanceListenerAddressListItem({
           isSelected,
           onSelect,
         }}
-        dataLabel={t`Selected`}
+        dataLabel={i18n._(msg`Selected`)}
       />
 
-      <Td id={labelId} dataLabel={t`Address`}>
+      <Td id={labelId} dataLabel={i18n._(msg`Address`)}>
         {peerListenerAddress.address}
       </Td>
 
-      <Td id={labelId} dataLabel={t`Port`}>
+      <Td id={labelId} dataLabel={i18n._(msg`Port`)}>
         {peerListenerAddress.port}
       </Td>
 
-      <Td id={labelId} dataLabel={t`Protocol`}>
+      <Td id={labelId} dataLabel={i18n._(msg`Protocol`)}>
         {peerListenerAddress.protocol}
       </Td>
 
-      <Td id={labelId} dataLabel={t`Canonical`}>
+      <Td id={labelId} dataLabel={i18n._(msg`Canonical`)}>
         {peerListenerAddress.canonical.toString()}
       </Td>
     </Tr>

@@ -4,8 +4,8 @@ import { useLocation } from 'react-router-dom';
 import { useField, useFormikContext } from 'formik';
 import { shape, string } from 'prop-types';
 import styled from 'styled-components';
-
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import {
   Button,
   ButtonVariant,
@@ -35,6 +35,7 @@ function CredentialInput({
   isVaultIdDisabled,
   ...rest
 }) {
+  const { i18n } = useLingui();
   const [fileName, setFileName] = useState('');
   const [fileIsUploading, setFileIsUploading] = useState(false);
   const [subFormField, meta, helpers] = useField(`inputs.${fieldOptions.id}`);
@@ -49,15 +50,15 @@ function CredentialInput({
         !passwordPromptsField.value && (
           <Tooltip
             id={`credential-${fieldOptions.id}-replace-tooltip`}
-            content={meta.value !== meta.initialValue ? t`Revert` : t`Replace`}
+            content={meta.value !== meta.initialValue ? i18n._(msg`Revert`) : i18n._(msg`Replace`)}
           >
             <Button
               id={`credential-${fieldOptions.id}-replace-button`}
               variant={ButtonVariant.control}
               aria-label={
                 meta.touched
-                  ? t`Revert field to previously saved value`
-                  : t`Replace field with new value`
+                  ? i18n._(msg`Revert field to previously saved value`)
+                  : i18n._(msg`Replace field with new value`)
               }
               onClick={() => {
                 if (meta.value !== meta.initialValue) {
@@ -90,9 +91,9 @@ function CredentialInput({
             id={`credential-${fieldOptions.id}`}
             type="text"
             filename={fileName}
-            filenamePlaceholder={t`Drag a file here or browse to upload`}
-            browseButtonText={t`Browse…`}
-            clearButtonText={t`Clear`}
+            filenamePlaceholder={i18n._(msg`Drag a file here or browse to upload`)}
+            browseButtonText={i18n._(msg`Browse…`)}
+            clearButtonText={i18n._(msg`Clear`)}
             onChange={handleFileChange}
             onReadStarted={() => setFileIsUploading(true)}
             onReadFinished={() => setFileIsUploading(false)}
@@ -111,9 +112,9 @@ function CredentialInput({
         id={`credential-${fieldOptions.id}`}
         type="text"
         filename={fileName}
-        filenamePlaceholder={t`Drag a file here or browse to upload`}
-        browseButtonText={t`Browse…`}
-        clearButtonText={t`Clear`}
+        filenamePlaceholder={i18n._(msg`Drag a file here or browse to upload`)}
+        browseButtonText={i18n._(msg`Browse…`)}
+        clearButtonText={i18n._(msg`Clear`)}
         onChange={handleFileChange}
         onReadStarted={() => setFileIsUploading(true)}
         onReadFinished={() => setFileIsUploading(false)}
@@ -171,12 +172,13 @@ CredentialInput.defaultProps = {
 function CredentialField({ credentialType, fieldOptions }) {
   const { values: formikValues } = useFormikContext();
   const location = useLocation();
+  const { i18n } = useLingui();
   const requiredFields = credentialType?.inputs?.required || [];
   const isRequired = requiredFields.includes(fieldOptions.id);
   const validateField = () => {
     if (isRequired && !formikValues?.passwordPrompts[fieldOptions.id]) {
       const validationMsg = fieldOptions.ask_at_runtime
-        ? t`Provide a value for this field or select the Prompt on launch option.`
+        ? i18n._(msg`Provide a value for this field or select the Prompt on launch option.`)
         : null;
       return required(validationMsg);
     }

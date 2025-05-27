@@ -1,5 +1,6 @@
 import React from 'react';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { Link } from 'react-router-dom';
 import {
   Chip,
@@ -18,6 +19,7 @@ import ExecutionEnvironmentDetail from '../ExecutionEnvironmentDetail';
 import { VERBOSITY } from '../VerbositySelectField';
 
 function PromptJobTemplateDetail({ resource }) {
+  const { i18n } = useLingui();
   const {
     allow_simultaneous,
     ask_inventory_on_launch,
@@ -55,27 +57,27 @@ function PromptJobTemplateDetail({ resource }) {
       <TextList component={TextListVariants.ul}>
         {become_enabled && (
           <TextListItem component={TextListItemVariants.li}>
-            {t`Privilege Escalation`}
+            {i18n._(msg`Privilege Escalation`)}
           </TextListItem>
         )}
         {host_config_key && (
           <TextListItem component={TextListItemVariants.li}>
-            {t`Provisioning Callbacks`}
+            {i18n._(msg`Provisioning Callbacks`)}
           </TextListItem>
         )}
         {allow_simultaneous && (
           <TextListItem component={TextListItemVariants.li}>
-            {t`Concurrent Jobs`}
+            {i18n._(msg`Concurrent Jobs`)}
           </TextListItem>
         )}
         {use_fact_cache && (
           <TextListItem component={TextListItemVariants.li}>
-            {t`Fact Storage`}
+            {i18n._(msg`Fact Storage`)}
           </TextListItem>
         )}
         {webhook_service && (
           <TextListItem component={TextListItemVariants.li}>
-            {t`Webhooks`}
+            {i18n._(msg`Webhooks`)}
           </TextListItem>
         )}
       </TextList>
@@ -95,14 +97,14 @@ function PromptJobTemplateDetail({ resource }) {
   return (
     <>
       <Detail
-        label={t`Activity`}
+        label={i18n._(msg`Activity`)}
         value={<Sparkline jobs={recentJobs} />}
         isEmpty={summary_fields.recent_jobs?.length === 0}
       />
-      <Detail label={t`Job Type`} value={toTitleCase(job_type)} />
+      <Detail label={i18n._(msg`Job Type`)} value={toTitleCase(job_type)} />
       {summary_fields?.organization ? (
         <Detail
-          label={t`Organization`}
+          label={i18n._(msg`Organization`)}
           value={
             <Link
               to={`/organizations/${summary_fields.organization.id}/details`}
@@ -112,11 +114,11 @@ function PromptJobTemplateDetail({ resource }) {
           }
         />
       ) : (
-        <DeletedDetail label={t`Organization`} />
+        <DeletedDetail label={i18n._(msg`Organization`)} />
       )}
       {summary_fields?.inventory ? (
         <Detail
-          label={t`Inventory`}
+          label={i18n._(msg`Inventory`)}
           value={
             <Link
               to={`/inventories/${inventoryKind}/${summary_fields.inventory?.id}/details`}
@@ -126,11 +128,11 @@ function PromptJobTemplateDetail({ resource }) {
           }
         />
       ) : (
-        !ask_inventory_on_launch && <DeletedDetail label={t`Inventory`} />
+        !ask_inventory_on_launch && <DeletedDetail label={i18n._(msg`Inventory`)} />
       )}
       {summary_fields?.project ? (
         <Detail
-          label={t`Project`}
+          label={i18n._(msg`Project`)}
           value={
             <Link to={`/projects/${summary_fields.project?.id}/details`}>
               {summary_fields.project?.name}
@@ -138,43 +140,43 @@ function PromptJobTemplateDetail({ resource }) {
           }
         />
       ) : (
-        <DeletedDetail label={t`Project`} />
+        <DeletedDetail label={i18n._(msg`Project`)} />
       )}
       <ExecutionEnvironmentDetail
         virtualEnvironment={custom_virtualenv}
         executionEnvironment={summary_fields?.execution_environment}
       />
-      <Detail label={t`Source Control Branch`} value={scm_branch} />
-      <Detail label={t`Playbook`} value={playbook} />
+      <Detail label={i18n._(msg`Source Control Branch`)} value={scm_branch} />
+      <Detail label={i18n._(msg`Playbook`)} value={playbook} />
       <Detail
-        label={t`Forks`}
+        label={i18n._(msg`Forks`)}
         value={typeof forks === 'number' ? forks.toString() : forks}
       />
-      <Detail label={t`Limit`} value={limit} />
-      <Detail label={t`Verbosity`} value={VERBOSITY()[verbosity]} />
+      <Detail label={i18n._(msg`Limit`)} value={limit} />
+      <Detail label={i18n._(msg`Verbosity`)} value={VERBOSITY(i18n)[verbosity]} />
       {typeof diff_mode === 'boolean' && (
-        <Detail label={t`Show Changes`} value={diff_mode ? t`On` : t`Off`} />
+        <Detail label={i18n._(msg`Show Changes`)} value={diff_mode ? i18n._(msg`On`) : i18n._(msg`Off`)} />
       )}
-      <Detail label={t` Job Slicing`} value={job_slice_count} />
-      <Detail label={t`Host Config Key`} value={host_config_key} />
+      <Detail label={i18n._(msg` Job Slicing`)} value={job_slice_count} />
+      <Detail label={i18n._(msg`Host Config Key`)} value={host_config_key} />
       {related?.callback && (
         <Detail
-          label={t`Provisioning Callback URL`}
+          label={i18n._(msg`Provisioning Callback URL`)}
           value={`${window.location.origin}${related.callback}`}
         />
       )}
-      <Detail label={t`Webhook Service`} value={toTitleCase(webhook_service)} />
+      <Detail label={i18n._(msg`Webhook Service`)} value={toTitleCase(webhook_service)} />
       {related?.webhook_receiver && (
         <Detail
-          label={t`Webhook URL`}
+          label={i18n._(msg`Webhook URL`)}
           value={`${window.location.origin}${related.webhook_receiver}`}
         />
       )}
-      <Detail label={t`Webhook Key`} value={webhook_key} />
+      <Detail label={i18n._(msg`Webhook Key`)} value={webhook_key} />
       {summary_fields?.webhook_credential && (
         <Detail
           fullWidth
-          label={t`Webhook Credential`}
+          label={i18n._(msg`Webhook Credential`)}
           value={
             <CredentialChip
               key={summary_fields.webhook_credential?.id}
@@ -184,11 +186,11 @@ function PromptJobTemplateDetail({ resource }) {
           }
         />
       )}
-      {optionsList && <Detail label={t`Enabled Options`} value={optionsList} />}
+      {optionsList && <Detail label={i18n._(msg`Enabled Options`)} value={optionsList} />}
       {summary_fields?.credentials && (
         <Detail
           fullWidth
-          label={t`Credentials`}
+          label={i18n._(msg`Credentials`)}
           value={
             <ChipGroup
               numChips={5}
@@ -206,7 +208,7 @@ function PromptJobTemplateDetail({ resource }) {
       {summary_fields?.labels?.results && (
         <Detail
           fullWidth
-          label={t`Labels`}
+          label={i18n._(msg`Labels`)}
           value={
             <ChipGroup
               numChips={5}
@@ -225,7 +227,7 @@ function PromptJobTemplateDetail({ resource }) {
       )}
       <Detail
         fullWidth
-        label={t`Instance Groups`}
+        label={i18n._(msg`Instance Groups`)}
         value={
           <ChipGroup
             numChips={5}
@@ -244,7 +246,7 @@ function PromptJobTemplateDetail({ resource }) {
       {job_tags && (
         <Detail
           fullWidth
-          label={t`Job Tags`}
+          label={i18n._(msg`Job Tags`)}
           value={
             <ChipGroup
               numChips={5}
@@ -264,7 +266,7 @@ function PromptJobTemplateDetail({ resource }) {
       {skip_tags && (
         <Detail
           fullWidth
-          label={t`Skip Tags`}
+          label={i18n._(msg`Skip Tags`)}
           value={
             <ChipGroup
               numChips={5}
@@ -283,7 +285,7 @@ function PromptJobTemplateDetail({ resource }) {
       )}
       {extra_vars && (
         <VariablesDetail
-          label={t`Variables`}
+          label={i18n._(msg`Variables`)}
           rows={4}
           value={extra_vars}
           name="extra_vars"

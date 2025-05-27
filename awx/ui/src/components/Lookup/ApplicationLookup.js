@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect } from 'react';
 import { func, node, string } from 'prop-types';
 import { useLocation } from 'react-router-dom';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { FormGroup } from '@patternfly/react-core';
 import { ApplicationsAPI } from 'api';
 import { Application } from 'types';
@@ -19,6 +20,7 @@ const QS_CONFIG = getQSConfig('applications', {
 });
 
 function ApplicationLookup({ onChange, value, label, fieldName, validate }) {
+  const { i18n } = useLingui();
   const location = useLocation();
   const {
     error,
@@ -80,7 +82,7 @@ function ApplicationLookup({ onChange, value, label, fieldName, validate }) {
     <FormGroup fieldId="application" label={label}>
       <Lookup
         id="application"
-        header={t`Application`}
+        header={i18n._(msg`Application`)}
         value={value}
         onChange={onChange}
         onUpdate={fetchApplications}
@@ -93,34 +95,34 @@ function ApplicationLookup({ onChange, value, label, fieldName, validate }) {
             value={state.selectedItems}
             options={applications}
             optionCount={itemCount}
-            header={t`Applications`}
+            header={i18n._(msg`Applications`)}
             qsConfig={QS_CONFIG}
             searchColumns={[
               {
-                name: t`Name`,
+                name: i18n._(msg`Name`),
                 key: 'name__icontains',
                 isDefault: true,
               },
               {
-                name: t`Description`,
+                name: i18n._(msg`Description`),
                 key: 'description__icontains',
               },
             ]}
             sortColumns={[
               {
-                name: t`Name`,
+                name: i18n._(msg`Name`),
                 key: 'name',
               },
               {
-                name: t`Created`,
+                name: i18n._(msg`Created`),
                 key: 'created',
               },
               {
-                name: t`Organization`,
+                name: i18n._(msg`Organization`),
                 key: 'organization',
               },
               {
-                name: t`Description`,
+                name: i18n._(msg`Description`),
                 key: 'description',
               },
             ]}

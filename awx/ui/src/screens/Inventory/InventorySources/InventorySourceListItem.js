@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { Button, Tooltip } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
 import {
@@ -29,18 +30,19 @@ function InventorySourceListItem({
   label,
   rowIndex,
 }) {
+  const { i18n } = useLingui();
   const generateLastJobTooltip = (job) => (
     <>
-      <div>{t`MOST RECENT SYNC`}</div>
+      <div>{i18n._(msg`MOST RECENT SYNC`)}</div>
       <div>
-        {t`JOB ID:`} {job.id}
+        {i18n._(msg`JOB ID:`)} {job.id}
       </div>
       <div>
-        {t`STATUS:`} {job.status.toUpperCase()}
+        {i18n._(msg`STATUS:`)} {job.status.toUpperCase()}
       </div>
       {job.finished && (
         <div>
-          {t`FINISHED:`} {formatDateString(job.finished)}
+          {i18n._(msg`FINISHED:`)} {formatDateString(job.finished)}
         </div>
       )}
     </>
@@ -68,7 +70,7 @@ function InventorySourceListItem({
           disable: isJobRunning(source.status),
         }}
       />
-      <TdBreakWord dataLabel={t`Name`}>
+      <TdBreakWord dataLabel={i18n._(msg`Name`)}>
         <Link to={`${detailUrl}/details`}>
           <b>{source.name}</b>
         </Link>
@@ -76,7 +78,7 @@ function InventorySourceListItem({
           <span>
             <Tooltip
               className="missing-execution-environment"
-              content={t`Custom virtual environment ${source.custom_virtualenv} must be replaced by an execution environment.`}
+              content={i18n._(msg`Custom virtual environment ${source.custom_virtualenv} must be replaced by an execution environment.`)}
               position="right"
             >
               <ExclamationTriangleIcon />
@@ -84,7 +86,7 @@ function InventorySourceListItem({
           </span>
         )}
       </TdBreakWord>
-      <Td dataLabel={t`Status`}>
+      <Td dataLabel={i18n._(msg`Status`)}>
         {job && (
           <Tooltip
             position="top"
@@ -97,8 +99,8 @@ function InventorySourceListItem({
           </Tooltip>
         )}
       </Td>
-      <Td dataLabel={t`Type`}>{label}</Td>
-      <ActionsTd dataLabel={t`Actions`}>
+      <Td dataLabel={i18n._(msg`Type`)}>{label}</Td>
+      <ActionsTd dataLabel={i18n._(msg`Actions`)}>
         {['running', 'pending', 'waiting'].includes(job?.status) ? (
           <ActionItem visible={source.summary_fields.user_capabilities.start}>
             {source.summary_fields?.current_job?.id && (
@@ -107,9 +109,9 @@ function InventorySourceListItem({
                   type: 'inventory_update',
                   id: source?.summary_fields?.current_job?.id,
                 }}
-                errorTitle={t`Inventory Source Sync Error`}
-                errorMessage={t`Failed to cancel Inventory Source Sync`}
-                title={t`Cancel Inventory Source Sync`}
+                errorTitle={i18n._(msg`Inventory Source Sync Error`)}
+                errorMessage={i18n._(msg`Failed to cancel Inventory Source Sync`)}
+                title={i18n._(msg`Cancel Inventory Source Sync`)}
                 showIconButton
               />
             )}
@@ -117,18 +119,18 @@ function InventorySourceListItem({
         ) : (
           <ActionItem
             visible={source.summary_fields.user_capabilities.start}
-            tooltip={t`Sync`}
+            tooltip={i18n._(msg`Sync`)}
           >
             <InventorySourceSyncButton source={source} />
           </ActionItem>
         )}
         <ActionItem
           visible={source.summary_fields.user_capabilities.edit}
-          tooltip={t`Edit`}
+          tooltip={i18n._(msg`Edit`)}
         >
           <Button
             ouiaId={`${source.id}-edit-button`}
-            aria-label={t`Edit Source`}
+            aria-label={i18n._(msg`Edit Source`)}
             variant="plain"
             component={Link}
             to={`${detailUrl}/edit`}

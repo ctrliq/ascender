@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { t, Plural } from '@lingui/macro';
+import { msg, Plural } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { KebabifiedContext } from 'contexts/Kebabified';
 import {
   getRelatedResourceDeleteCounts,
@@ -27,6 +28,7 @@ const Label = styled.span`
 `;
 
 function RemoveInstanceButton({ itemsToRemove, onRemove, isK8s }) {
+  const { i18n } = useLingui();
   const { isKebabified, onKebabModalChange } = useContext(KebabifiedContext);
   const [removeMessageError, setRemoveMessageError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -70,12 +72,12 @@ function RemoveInstanceButton({ itemsToRemove, onRemove, isK8s }) {
       .map((item) => item.hostname)
       .join(', ');
     if (itemsToRemove.some(cannotRemove)) {
-      return t`You do not have permission to remove instances: ${itemsUnableToremove}`;
+      return i18n._(msg`You do not have permission to remove instances: ${itemsUnableToremove}`);
     }
     if (itemsToRemove.length) {
-      return t`Remove`;
+      return i18n._(msg`Remove`);
     }
-    return t`Select a row to remove`;
+    return i18n._(msg`Select a row to remove`);
   };
 
   const isDisabled =
@@ -85,8 +87,8 @@ function RemoveInstanceButton({ itemsToRemove, onRemove, isK8s }) {
     <div>
       <Plural
         value={itemsToRemove.length}
-        one="This intance is currently being used by other resources. Are you sure you want to delete it?"
-        other="Deprovisioning these instances could impact other resources that rely on them. Are you sure you want to delete anyway?"
+        one={i18n._(msg`This intance is currently being used by other resources. Are you sure you want to delete it?`)}
+        other={i18n._(msg`Deprovisioning these instances could impact other resources that rely on them. Are you sure you want to delete anyway?`)}
       />
       {removeDetails &&
         Object.entries(removeDetails).map(([key, value]) => (
@@ -102,7 +104,7 @@ function RemoveInstanceButton({ itemsToRemove, onRemove, isK8s }) {
     return (
       <AlertModal
         isOpen={removeMessageError}
-        title={t`Error!`}
+        title={i18n._(msg`Error!`)}
         onClose={() => {
           toggleModal(false);
           setRemoveMessageError();
@@ -127,7 +129,7 @@ function RemoveInstanceButton({ itemsToRemove, onRemove, isK8s }) {
               toggleModal(true);
             }}
           >
-            {t`Remove`}
+            {i18n._(msg`Remove`)}
           </DropdownItem>
         </Tooltip>
       ) : (
@@ -141,7 +143,7 @@ function RemoveInstanceButton({ itemsToRemove, onRemove, isK8s }) {
               onClick={() => toggleModal(true)}
               isDisabled={isDisabled || !isK8s}
             >
-              {t`Remove`}
+              {i18n._(msg`Remove`)}
             </Button>
           </div>
         </Tooltip>
@@ -150,7 +152,7 @@ function RemoveInstanceButton({ itemsToRemove, onRemove, isK8s }) {
       {isModalOpen && (
         <AlertModal
           variant="danger"
-          title={t`Remove Instances`}
+          title={i18n._(msg`Remove Instances`)}
           isOpen={isModalOpen}
           onClose={() => toggleModal(false)}
           actions={[
@@ -158,25 +160,25 @@ function RemoveInstanceButton({ itemsToRemove, onRemove, isK8s }) {
               ouiaId="remove-modal-confirm"
               key="remove"
               variant="danger"
-              aria-label={t`Confirm remove`}
+              aria-label={i18n._(msg`Confirm remove`)}
               onClick={handleRemove}
             >
-              {t`Remove`}
+              {i18n._(msg`Remove`)}
             </Button>,
             <Button
               ouiaId="remove-cancel"
               key="cancel"
               variant="link"
-              aria-label={t`cancel remove`}
+              aria-label={i18n._(msg`cancel remove`)}
               onClick={() => {
                 toggleModal(false);
               }}
             >
-              {t`Cancel`}
+              {i18n._(msg`Cancel`)}
             </Button>,
           ]}
         >
-          <div>{t`This action will remove the following instance and you may need to rerun the install bundle for any instance that was previously connected to:`}</div>
+          <div>{i18n._(msg`This action will remove the following instance and you may need to rerun the install bundle for any instance that was previously connected to:`)}</div>
           {itemsToRemove.map((item) => (
             <span key={item.id} id={`item-to-be-removed-${item.id}`}>
               <strong>{item.hostname}</strong>

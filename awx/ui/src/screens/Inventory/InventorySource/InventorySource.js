@@ -1,6 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import {
   Link,
   Switch,
@@ -22,6 +23,7 @@ import InventorySourceDetail from '../InventorySourceDetail';
 import InventorySourceEdit from '../InventorySourceEdit';
 
 function InventorySource({ inventory, setBreadcrumb, me }) {
+  const { i18n } = useLingui();
   const location = useLocation();
   const match = useRouteMatch('/inventories/inventory/:id/sources/:sourceId');
   const sourceListUrl = `/inventories/inventory/${inventory.id}/sources`;
@@ -73,19 +75,19 @@ function InventorySource({ inventory, setBreadcrumb, me }) {
       name: (
         <>
           <CaretLeftIcon />
-          {t`Back to Sources`}
+          {i18n._(msg`Back to Sources`)}
         </>
       ),
       link: `${sourceListUrl}`,
       id: 0,
     },
     {
-      name: t`Details`,
+      name: i18n._(msg`Details`),
       link: `${match.url}/details`,
       id: 1,
     },
     {
-      name: t`Schedules`,
+      name: i18n._(msg`Schedules`),
       link: `${match.url}/schedules`,
       id: 2,
     },
@@ -96,7 +98,7 @@ function InventorySource({ inventory, setBreadcrumb, me }) {
 
   if (canSeeNotificationsTab) {
     tabsArray.push({
-      name: t`Notifications`,
+      name: i18n._(msg`Notifications`),
       link: `${match.url}/notifications`,
       id: 3,
     });
@@ -164,7 +166,7 @@ function InventorySource({ inventory, setBreadcrumb, me }) {
           <Route key="not-found" path="*">
             <ContentError isNotFound>
               <Link to={`${match.url}/details`}>
-                {t`View inventory source details`}
+                {i18n._(msg`View inventory source details`)}
               </Link>
             </ContentError>
           </Route>

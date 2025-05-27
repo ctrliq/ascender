@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import 'styled-components/macro';
 import { Tr, Td, ExpandableRowContent } from '@patternfly/react-table';
 import { formatDateString } from 'util/dates';
@@ -14,6 +15,7 @@ function InstancePeerListItem({
   onExpand,
   rowIndex,
 }) {
+  const { i18n } = useLingui();
   const labelId = `check-action-${peerInstance.id}`;
   const isHopNode = peerInstance.node_type === 'hop';
   return (
@@ -39,26 +41,26 @@ function InstancePeerListItem({
             isSelected,
             onSelect,
           }}
-          dataLabel={t`Selected`}
+          dataLabel={i18n._(msg`Selected`)}
         />
 
-        <Td id={labelId} dataLabel={t`Name`}>
+        <Td id={labelId} dataLabel={i18n._(msg`Name`)}>
           <Link to={`/instances/${peerInstance.instance}/details`}>
             <b>{peerInstance.hostname}</b>
           </Link>
         </Td>
 
-        <Td id={labelId} dataLabel={t`Address`}>
+        <Td id={labelId} dataLabel={i18n._(msg`Address`)}>
           {peerInstance.address}
         </Td>
 
-        <Td id={labelId} dataLabel={t`Port`}>
+        <Td id={labelId} dataLabel={i18n._(msg`Port`)}>
           {peerInstance.port}
         </Td>
 
-        <Td dataLabel={t`Node Type`}>{peerInstance.node_type}</Td>
+        <Td dataLabel={i18n._(msg`Node Type`)}>{peerInstance.node_type}</Td>
 
-        <Td id={labelId} dataLabel={t`Canonical`}>
+        <Td id={labelId} dataLabel={i18n._(msg`Canonical`)}>
           {peerInstance.canonical.toString()}
         </Td>
       </Tr>
@@ -74,21 +76,21 @@ function InstancePeerListItem({
                 <Detail
                   data-cy="running-jobs"
                   value={peerInstance.jobs_running}
-                  label={t`Running Jobs`}
+                  label={i18n._(msg`Running Jobs`)}
                 />
                 <Detail
                   data-cy="total-jobs"
                   value={peerInstance.jobs_total}
-                  label={t`Total Jobs`}
+                  label={i18n._(msg`Total Jobs`)}
                 />
                 <Detail
                   data-cy="policy-type"
-                  label={t`Policy Type`}
-                  value={peerInstance.managed_by_policy ? t`Auto` : t`Manual`}
+                  label={i18n._(msg`Policy Type`)}
+                  value={peerInstance.managed_by_policy ? i18n._(msg`Auto`) : i18n._(msg`Manual`)}
                 />
                 <Detail
                   data-cy="last-health-check"
-                  label={t`Last Health Check`}
+                  label={i18n._(msg`Last Health Check`)}
                   value={formatDateString(peerInstance.last_health_check)}
                 />
               </DetailList>

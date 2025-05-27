@@ -1,7 +1,8 @@
 import React from 'react';
+import { useLingui } from '@lingui/react';
 import styled from 'styled-components';
 
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
 import { Tooltip } from '@patternfly/react-core';
 import { ExclamationCircleIcon as PFExclamationCircleIcon } from '@patternfly/react-icons';
 
@@ -15,6 +16,7 @@ const ExclamationCircleIcon = styled(PFExclamationCircleIcon)`
 `;
 
 function StepName({ hasErrors, children, id }) {
+  const { i18n } = useLingui();
   if (!hasErrors) {
     return <div id={id}>{children}</div>;
   }
@@ -23,7 +25,7 @@ function StepName({ hasErrors, children, id }) {
       {children}
       <Tooltip
         position="right"
-        content={t`This step contains errors`}
+        content={i18n._(msg`This step contains errors`)}
         trigger="click mouseenter focus"
       >
         <ExclamationCircleIcon css="color: var(--pf-global--danger-color--100)" />

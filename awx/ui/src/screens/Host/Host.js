@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect } from 'react';
 
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
+
 import {
   Switch,
   Route,
@@ -23,6 +25,7 @@ import HostEdit from './HostEdit';
 import HostGroups from './HostGroups';
 
 function Host({ setBreadcrumb }) {
+  const { i18n } = useLingui();
   const location = useLocation();
   const match = useRouteMatch('/hosts/:id');
   const {
@@ -47,7 +50,7 @@ function Host({ setBreadcrumb }) {
       name: (
         <>
           <CaretLeftIcon />
-          {t`Back to Hosts`}
+          {i18n._(msg`Back to Hosts`)}
         </>
       ),
       link: `/hosts`,
@@ -55,22 +58,22 @@ function Host({ setBreadcrumb }) {
       persistentFilterKey: 'hosts',
     },
     {
-      name: t`Details`,
+      name: i18n._(msg`Details`),
       link: `${match.url}/details`,
       id: 0,
     },
     {
-      name: t`Facts`,
+      name: i18n._(msg`Facts`),
       link: `${match.url}/facts`,
       id: 1,
     },
     {
-      name: t`Groups`,
+      name: i18n._(msg`Groups`),
       link: `${match.url}/groups`,
       id: 2,
     },
     {
-      name: t`Jobs`,
+      name: i18n._(msg`Jobs`),
       link: `${match.url}/jobs`,
       id: 3,
     },
@@ -93,8 +96,8 @@ function Host({ setBreadcrumb }) {
           <ContentError error={error}>
             {error?.response?.status === 404 && (
               <span>
-                {t`Host not found.`}{' '}
-                <Link to="/hosts">{t`View all Hosts.`}</Link>
+                {i18n._(msg`Host not found.`)}{' '}
+                <Link to="/hosts">{i18n._(msg`View all Hosts.`)}</Link>
               </span>
             )}
           </ContentError>
@@ -134,7 +137,7 @@ function Host({ setBreadcrumb }) {
           ]}
           <Route key="not-found" path="*">
             <ContentError isNotFound>
-              <Link to={`${match.url}/details`}>{t`View Host Details`}</Link>
+              <Link to={`${match.url}/details`}>{i18n._(msg`View Host Details`)}</Link>
             </ContentError>
           </Route>
         </Switch>

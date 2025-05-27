@@ -1,6 +1,7 @@
 import 'styled-components/macro';
 import React from 'react';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import FormField from 'components/FormField';
 import getDocsBaseUrl from 'util/getDocsBaseUrl';
 import { useConfig } from 'contexts/Config';
@@ -18,18 +19,19 @@ const GitSubForm = ({
   onCredentialSelection,
   scmUpdateOnLaunch,
 }) => {
+  const { i18n } = useLingui();
   const docsURL = `${getDocsBaseUrl(
     useConfig()
   )}/html/userguide/projects.html#manage-playbooks-using-source-control`;
-  const projectHelpStrings = getProjectHelpStrings();
+  const projectHelpStrings = getProjectHelpStrings(i18n);
 
   return (
     <>
       <UrlFormField tooltip={projectHelpStrings.githubSourceControlUrl} />
-      <BranchFormField label={t`Source Control Branch/Tag/Commit`} />
+      <BranchFormField label={i18n._(msg`Source Control Branch/Tag/Commit`)} />
       <FormField
         id="project-scm-refspec"
-        label={t`Source Control Refspec`}
+        label={i18n._(msg`Source Control Refspec`)}
         name="scm_refspec"
         type="text"
         tooltipMaxWidth="400px"

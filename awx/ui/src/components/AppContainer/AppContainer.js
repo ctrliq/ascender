@@ -11,7 +11,8 @@ import {
   PageHeaderToolsItem,
   PageSidebar,
 } from '@patternfly/react-core';
-import { t, Plural } from '@lingui/macro';
+import { msg, Plural } from '@lingui/macro';
+import { useLingui } from "@lingui/react";
 
 import styled from 'styled-components';
 
@@ -34,6 +35,7 @@ const PageHeader = styled(PFPageHeader)`
 `;
 
 function AppContainer({ navRouteConfig = [], children }) {
+  const { i18n } = useLingui();
   const config = useConfig();
   const { logout, handleSessionContinue, sessionCountdown } = useSession();
 
@@ -52,7 +54,7 @@ function AppContainer({ navRouteConfig = [], children }) {
   }, [config.analytics_status]);
 
   const brandName = config?.license_info?.product_name;
-  const alt = brandName ? t`${brandName} logo` : t`brand logo`;
+  const alt = brandName ? i18n._(msg`${brandName} logo`) : i18n._(msg`brand logo`);
 
   const header = (
     <PageHeader
@@ -78,7 +80,7 @@ function AppContainer({ navRouteConfig = [], children }) {
           <PageHeaderToolsGroup>
             <PageHeaderToolsItem>
               <Button onClick={logout} variant="tertiary" ouiaId="logout">
-                {t`Logout`}
+                {i18n._(msg`Logout`)}
               </Button>
             </PageHeaderToolsItem>
           </PageHeaderToolsGroup>
@@ -92,7 +94,7 @@ function AppContainer({ navRouteConfig = [], children }) {
       theme="dark"
       nav={
         <Nav
-          aria-label={t`Navigation`}
+          aria-label={i18n._(msg`Navigation`)}
           theme="dark"
           ouiaId="sidebar-navigation"
         >
@@ -127,7 +129,7 @@ function AppContainer({ navRouteConfig = [], children }) {
       />
       <AlertModal
         ouiaId="session-expiration-modal"
-        title={t`Your session is about to expire`}
+        title={i18n._(msg`Your session is about to expire`)}
         isOpen={sessionCountdown && sessionCountdown > 0}
         onClose={logout}
         showClose={false}
@@ -139,7 +141,7 @@ function AppContainer({ navRouteConfig = [], children }) {
             variant="primary"
             onClick={handleSessionContinue}
           >
-            {t`Continue`}
+            {i18n._(msg`Continue`)}
           </Button>,
           <Button
             ouiaId="session-expiration-logout-button"
@@ -147,7 +149,7 @@ function AppContainer({ navRouteConfig = [], children }) {
             variant="secondary"
             onClick={logout}
           >
-            {t`Logout`}
+            {i18n._(msg`Logout`)}
           </Button>,
         ]}
       >

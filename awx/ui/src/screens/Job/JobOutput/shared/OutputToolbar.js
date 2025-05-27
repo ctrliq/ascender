@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { DateTime, Duration } from 'luxon';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
 import { bool, shape, func } from 'prop-types';
 import {
   DownloadIcon,
@@ -12,6 +12,7 @@ import { Badge as PFBadge, Button, Tooltip } from '@patternfly/react-core';
 import DeleteButton from 'components/DeleteButton';
 import { LaunchButton, ReLaunchDropDown } from 'components/LaunchButton';
 import { useConfig } from 'contexts/Config';
+import { useLingui } from '@lingui/react';
 
 import JobCancelButton from 'components/JobCancelButton';
 
@@ -62,6 +63,7 @@ const OUTPUT_NO_COUNT_JOB_TYPES = [
 ];
 
 const OutputToolbar = ({ job, onDelete, isDeleteDisabled, jobStatus }) => {
+  const { i18n } = useLingui();
   const [activeJobElapsedTime, setActiveJobElapsedTime] = useState('00:00:00');
   const hideCounts = OUTPUT_NO_COUNT_JOB_TYPES.includes(job.type);
 
@@ -96,27 +98,27 @@ const OutputToolbar = ({ job, onDelete, isDeleteDisabled, jobStatus }) => {
       {!hideCounts && (
         <>
           {playCount > 0 && (
-            <BadgeGroup aria-label={t`Play Count`}>
-              <div>{t`Plays`}</div>
+            <BadgeGroup aria-label={i18n._(msg`Play Count`)}>
+              <div>{i18n._(msg`Plays`)}</div>
               <Badge isRead>{playCount}</Badge>
             </BadgeGroup>
           )}
           {taskCount > 0 && (
-            <BadgeGroup aria-label={t`Task Count`}>
-              <div>{t`Tasks`}</div>
+            <BadgeGroup aria-label={i18n._(msg`Task Count`)}>
+              <div>{i18n._(msg`Tasks`)}</div>
               <Badge isRead>{taskCount}</Badge>
             </BadgeGroup>
           )}
           {totalHostCount > 0 && (
-            <BadgeGroup aria-label={t`Host Count`}>
-              <div>{t`Hosts`}</div>
+            <BadgeGroup aria-label={i18n._(msg`Host Count`)}>
+              <div>{i18n._(msg`Hosts`)}</div>
               <Badge isRead>{totalHostCount}</Badge>
             </BadgeGroup>
           )}
           {darkCount > 0 && (
-            <BadgeGroup aria-label={t`Unreachable Host Count`}>
-              <div>{t`Unreachable`}</div>
-              <Tooltip content={t`Unreachable Hosts`}>
+            <BadgeGroup aria-label={i18n._(msg`Unreachable Host Count`)}>
+              <div>{i18n._(msg`Unreachable`)}</div>
+              <Tooltip content={i18n._(msg`Unreachable Hosts`)}>
                 <Badge color="#470000" isRead>
                   {darkCount}
                 </Badge>
@@ -124,9 +126,9 @@ const OutputToolbar = ({ job, onDelete, isDeleteDisabled, jobStatus }) => {
             </BadgeGroup>
           )}
           {failureCount > 0 && (
-            <BadgeGroup aria-label={t`Failed Host Count`}>
-              <div>{t`Failed`}</div>
-              <Tooltip content={t`Failed Hosts`}>
+            <BadgeGroup aria-label={i18n._(msg`Failed Host Count`)}>
+              <div>{i18n._(msg`Failed`)}</div>
+              <Tooltip content={i18n._(msg`Failed Hosts`)}>
                 <Badge color="#C9190B" isRead>
                   {failureCount}
                 </Badge>
@@ -136,9 +138,9 @@ const OutputToolbar = ({ job, onDelete, isDeleteDisabled, jobStatus }) => {
         </>
       )}
 
-      <BadgeGroup aria-label={t`Elapsed Time`}>
-        <div>{t`Elapsed`}</div>
-        <Tooltip content={t`Elapsed time that the job ran`}>
+      <BadgeGroup aria-label={i18n._(msg`Elapsed Time`)}>
+        <div>{i18n._(msg`Elapsed`)}</div>
+        <Tooltip content={i18n._(msg`Elapsed time that the job ran`)}>
           <Badge isRead>
             {job.finished
               ? Duration.fromObject({ seconds: job.elapsed }).toFormat(
@@ -154,9 +156,9 @@ const OutputToolbar = ({ job, onDelete, isDeleteDisabled, jobStatus }) => {
           : job?.summary_fields?.user_capabilities?.start) && (
           <JobCancelButton
             job={job}
-            errorTitle={t`Job Cancel Error`}
-            title={t`Cancel ${job.name}`}
-            errorMessage={t`Failed to cancel ${job.name}`}
+            errorTitle={i18n._(msg`Job Cancel Error`)}
+            title={i18n._(msg`Cancel ${job.name}`)}
+            errorMessage={i18n._(msg`Failed to cancel ${job.name}`)}
             showIconButton
           />
         )}
@@ -164,8 +166,8 @@ const OutputToolbar = ({ job, onDelete, isDeleteDisabled, jobStatus }) => {
         <Tooltip
           content={
             job.status === 'failed' && job.type === 'job'
-              ? t`Relaunch using host parameters`
-              : t`Relaunch Job`
+              ? i18n._(msg`Relaunch using host parameters`)
+              : i18n._(msg`Relaunch Job`)
           }
         >
           {job.status === 'failed' && job.type === 'job' ? (
@@ -185,7 +187,7 @@ const OutputToolbar = ({ job, onDelete, isDeleteDisabled, jobStatus }) => {
                   ouiaId="job-output-relaunch-button"
                   variant="plain"
                   onClick={() => handleRelaunch()}
-                  aria-label={t`Relaunch`}
+                  aria-label={i18n._(msg`Relaunch`)}
                   isDisabled={isLaunching}
                 >
                   <RocketIcon />
@@ -197,12 +199,12 @@ const OutputToolbar = ({ job, onDelete, isDeleteDisabled, jobStatus }) => {
       )}
 
       {job.related?.stdout && (
-        <Tooltip content={t`Download Output`}>
+        <Tooltip content={i18n._(msg`Download Output`)}>
           <a href={`${job.related.stdout}?format=txt_download`}>
             <Button
               ouiaId="job-output-download-button"
               variant="plain"
-              aria-label={t`Download Output`}
+              aria-label={i18n._(msg`Download Output`)}
             >
               <DownloadIcon />
             </Button>
@@ -213,11 +215,11 @@ const OutputToolbar = ({ job, onDelete, isDeleteDisabled, jobStatus }) => {
         ['new', 'successful', 'failed', 'error', 'canceled'].includes(
           jobStatus
         ) && (
-          <Tooltip content={t`Delete Job`}>
+          <Tooltip content={i18n._(msg`Delete Job`)}>
             <DeleteButton
               ouiaId="job-output-delete-button"
               name={job.name}
-              modalTitle={t`Delete Job`}
+              modalTitle={i18n._(msg`Delete Job`)}
               onConfirm={onDelete}
               variant="plain"
               isDisabled={isDeleteDisabled}

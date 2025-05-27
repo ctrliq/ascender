@@ -1,6 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLocation, useRouteMatch } from 'react-router-dom';
-import { t, Plural } from '@lingui/macro';
+import { msg, Plural } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { Card, PageSection } from '@patternfly/react-core';
 import { ProjectsAPI } from 'api';
 import useRequest, {
@@ -33,6 +34,7 @@ const QS_CONFIG = getQSConfig('project', {
 });
 
 function ProjectList() {
+  const { i18n } = useLingui();
   const location = useLocation();
   const match = useRouteMatch();
   const { addToast, Toast, toastProps } = useToast();
@@ -129,12 +131,12 @@ function ProjectList() {
     (newId) => {
       addToast({
         id: newId,
-        title: t`Project copied successfully`,
+        title: i18n._(msg`Project copied successfully`),
         variant: AlertVariant.success,
         hasTimeout: true,
       });
     },
-    [addToast]
+    [addToast, i18n]
   );
 
   const handleProjectDelete = async () => {
@@ -177,40 +179,40 @@ function ProjectList() {
             hasContentLoading={hasContentLoading}
             items={projects}
             itemCount={itemCount}
-            pluralizedItemName={t`Projects`}
+            pluralizedItemName={i18n._(msg`Projects`)}
             qsConfig={QS_CONFIG}
             clearSelected={clearSelected}
             toolbarSearchColumns={[
               {
-                name: t`Name`,
+                name: i18n._(msg`Name`),
                 key: 'name__icontains',
                 isDefault: true,
               },
               {
-                name: t`Description`,
+                name: i18n._(msg`Description`),
                 key: 'description__icontains',
               },
               {
-                name: t`Type`,
+                name: i18n._(msg`Type`),
                 key: 'or__scm_type',
                 options: [
-                  [``, t`Manual`],
-                  [`git`, t`Git`],
-                  [`svn`, t`Subversion`],
-                  [`archive`, t`Remote Archive`],
-                  [`insights`, t`Red Hat Insights`],
+                  [``, i18n._(msg`Manual`)],
+                  [`gii18n._(msg`, i18n._(msg`Gii18n._(msg`)],
+                  [`svn`, i18n._(msg`Subversion`)],
+                  [`archive`, i18n._(msg`Remote Archive`)],
+                  [`insights`, i18n._(msg`Red Hat Insights`)],
                 ],
               },
               {
-                name: t`Source Control URL`,
+                name: i18n._(msg`Source Control URL`),
                 key: 'scm_url__icontains',
               },
               {
-                name: t`Modified By (Username)`,
+                name: i18n._(msg`Modified By (Username)`),
                 key: 'modified_by__username__icontains',
               },
               {
-                name: t`Created By (Username)`,
+                name: i18n._(msg`Created By (Username)`),
                 key: 'created_by__username__icontains',
               },
             ]}
@@ -218,11 +220,11 @@ function ProjectList() {
             toolbarRelatedSearchableKeys={relatedSearchableKeys}
             headerRow={
               <HeaderRow qsConfig={QS_CONFIG} isExpandable>
-                <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
-                <HeaderCell>{t`Status`}</HeaderCell>
-                <HeaderCell>{t`Type`}</HeaderCell>
-                <HeaderCell>{t`Revision`}</HeaderCell>
-                <HeaderCell>{t`Actions`}</HeaderCell>
+                <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
+                <HeaderCell>{i18n._(msg`Status`)}</HeaderCell>
+                <HeaderCell>{i18n._(msg`Type`)}</HeaderCell>
+                <HeaderCell>{i18n._(msg`Revision`)}</HeaderCell>
+                <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
               </HeaderRow>
             }
             renderToolbar={(props) => (
@@ -246,7 +248,7 @@ function ProjectList() {
                     key="delete"
                     onDelete={handleProjectDelete}
                     itemsToDelete={selected}
-                    pluralizedItemName={t`Projects`}
+                    pluralizedItemName={i18n._(msg`Projects`)}
                     deleteDetailsRequests={deleteDetailsRequests}
                     deleteMessage={
                       <Plural
@@ -287,11 +289,11 @@ function ProjectList() {
         <AlertModal
           isOpen={deletionError}
           variant="error"
-          aria-label={t`Deletion Error`}
-          title={t`Error!`}
+          aria-label={i18n._(msg`Deletion Error`)}
+          title={i18n._(msg`Error!`)}
           onClose={clearDeletionError}
         >
-          {t`Failed to delete one or more projects.`}
+          {i18n._(msg`Failed to delete one or more projects.`)}
           <ErrorDetail error={deletionError} />
         </AlertModal>
       )}
@@ -299,11 +301,11 @@ function ProjectList() {
         <AlertModal
           isOpen={projectError}
           variant="error"
-          aria-label={t`Error fetching updated project`}
-          title={t`Error!`}
+          aria-label={i18n._(msg`Error fetching updated project`)}
+          title={i18n._(msg`Error!`)}
           onClose={dismissProjectError}
         >
-          {t`Failed to fetch the updated project data.`}
+          {i18n._(msg`Failed to fetch the updated project data.`)}
           <ErrorDetail error={projectError} />
         </AlertModal>
       )}

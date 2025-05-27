@@ -1,7 +1,8 @@
 import 'styled-components/macro';
 import React, { useState, useEffect, useCallback } from 'react';
 
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { Switch, Tooltip } from '@patternfly/react-core';
 import useRequest from 'hooks/useRequest';
 import { HostsAPI } from 'api';
@@ -13,10 +14,14 @@ function HostToggle({
   host,
   isDisabled = false,
   onToggle,
-  tooltip = t`Indicates if a host is available and should be included in running
-    jobs.  For hosts that are part of an external inventory, this may be
-    reset by the inventory sync process.`,
+  tooltip,
 }) {
+  const { i18n } = useLingui();
+  if (!tooltip) {
+    tooltip = i18n._(msg`Indicates if a host is available and should be included in running
+    jobs.  For hosts that are part of an external inventory, this may be
+    reset by the inventory sync process.`);
+  }
   const [isEnabled, setIsEnabled] = useState(host.enabled);
   const [showError, setShowError] = useState(false);
 
@@ -57,8 +62,8 @@ function HostToggle({
           className={className}
           css="display: inline-flex;"
           id={`host-${host.id}-toggle`}
-          label={t`On`}
-          labelOff={t`Off`}
+          label={i18n._(msg`On`)}
+          labelOff={i18n._(msg`Off`)}
           isChecked={isEnabled}
           isDisabled={
             isLoading ||
@@ -67,17 +72,17 @@ function HostToggle({
           }
           onChange={toggleHost}
           ouiaId={`host-${host.id}-toggle`}
-          aria-label={t`Toggle host`}
+          aria-label={i18n._(msg`Toggle host`)}
         />
       </Tooltip>
       {showError && error && !isLoading && (
         <AlertModal
           variant="error"
-          title={t`Error!`}
+          title={i18n._(msg`Error!`)}
           isOpen={error && !isLoading}
           onClose={() => setShowError(false)}
         >
-          {t`Failed to toggle host.`}
+          {i18n._(msg`Failed to toggle host.`)}
           <ErrorDetail error={error} />
         </AlertModal>
       )}

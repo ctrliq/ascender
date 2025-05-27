@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { useLocation } from 'react-router-dom';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import {
   Button,
   ButtonVariant,
@@ -33,6 +34,7 @@ const NoOptionDropdown = styled.div`
 `;
 
 function Sort({ columns, qsConfig, onSort }) {
+  const { i18n } = useLingui();
   const location = useLocation();
   const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false);
 
@@ -136,7 +138,7 @@ function Sort({ columns, qsConfig, onSort }) {
 
           <Button
             variant={ButtonVariant.control}
-            aria-label={t`Sort`}
+            aria-label={i18n._(msg`Sort`)}
             onClick={handleSort}
             ouiaId="sort-button"
           >

@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 
 import { Switch, Route, Redirect, Link, useRouteMatch } from 'react-router-dom';
 import { CaretLeftIcon } from '@patternfly/react-icons';
@@ -15,6 +16,7 @@ import InstancePeerList from './InstancePeers';
 import InstanceListenerAddressList from './InstanceListenerAddressList';
 
 function Instance({ setBreadcrumb }) {
+  const { i18n } = useLingui();
   const { me } = useConfig();
   const canReadSettings = me.is_superuser || me.is_system_auditor;
 
@@ -24,14 +26,14 @@ function Instance({ setBreadcrumb }) {
       name: (
         <>
           <CaretLeftIcon />
-          {t`Back to Instances`}
+          {i18n._(msg`Back to Instances`)}
         </>
       ),
       link: `/instances`,
       id: 99,
       persistentFilterKey: 'instances',
     },
-    { name: t`Details`, link: `${match.url}/details`, id: 0 },
+    { name: i18n._(msg`Details`), link: `${match.url}/details`, id: 0 },
   ];
 
   const {
@@ -56,11 +58,11 @@ function Instance({ setBreadcrumb }) {
 
   if (isK8s) {
     tabsArray.push({
-      name: t`Listener Addresses`,
+      name: i18n._(msg`Listener Addresses`),
       link: `${match.url}/listener_addresses`,
       id: 1,
     });
-    tabsArray.push({ name: t`Peers`, link: `${match.url}/peers`, id: 2 });
+    tabsArray.push({ name: i18n._(msg`Peers`), link: `${match.url}/peers`, id: 2 });
   }
   if (isLoading) {
     return <ContentLoading />;
@@ -95,7 +97,7 @@ function Instance({ setBreadcrumb }) {
             <ContentError isNotFound>
               {match.params.id && (
                 <Link to={`/instances/${match.params.id}/details`}>
-                  {t`View Instance Details`}
+                  {i18n._(msg`View Instance Details`)}
                 </Link>
               )}
             </ContentError>
