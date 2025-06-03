@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { shape, string } from 'prop-types';
 import { msg } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import {  i18n } from '@lingui/core';
 import { useField } from 'formik';
 import {
   Button,
@@ -58,8 +58,7 @@ const SettingGroup = ({
   label,
   onRevertCallback,
   popoverContent,
-  validated,
-  i18n
+  validated
 }) => (
   <FormGroup
     fieldId={fieldId}
@@ -96,7 +95,6 @@ const BooleanField = ({
 }) => {
   const [field, meta, helpers] = useField(name);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { i18n } = useLingui();
 
   return config ? (
     <SettingGroup
@@ -169,7 +167,6 @@ BooleanField.propTypes = {
 };
 
 const ChoiceField = ({ name, config, isRequired = false }) => {
-  const { i18n } = useLingui();
   const validate = isRequired ? required(null) : null;
   const [field, meta] = useField({ name, validate });
   const isValid = !meta.error || !meta.touched;
@@ -238,7 +235,6 @@ EncryptedField.propTypes = {
 };
 
 const ExecutionEnvField = ({ name, config, isRequired = false }) => {
-  const { i18n } = useLingui();
   const [field, meta, helpers] = useField({ name });
   return config ? (
     <SettingGroup
@@ -269,7 +265,6 @@ ExecutionEnvField.propTypes = {
 };
 
 const InputAlertField = ({ name, config }) => {
-  const { i18n } = useLingui();
   const [field, meta] = useField({ name });
   const isValid = !(meta.touched && meta.error);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -371,7 +366,6 @@ InputAlertField.propTypes = {
 };
 
 const InputField = ({ name, config, type = 'text', isRequired = false }) => {
-  const { i18n } = useLingui();
   const min_value = config?.min_value ?? Number.MIN_SAFE_INTEGER;
   const max_value = config?.max_value ?? Number.MAX_SAFE_INTEGER;
   const validators = [
@@ -417,7 +411,6 @@ InputField.defaultProps = {
 };
 
 const TextAreaField = ({ name, config, isRequired = false }) => {
-  const { i18n } = useLingui();
   const validate = isRequired ? required(null) : null;
   const [field, meta] = useField({ name, validate });
   const isValid = !(meta.touched && meta.error);
@@ -454,7 +447,6 @@ TextAreaField.propTypes = {
 };
 
 const ObjectField = ({ name, config, revertValue, isRequired = false }) => {
-  const { i18n } = useLingui();
   const validate = isRequired ? required(null) : null;
   const [field, meta, helpers] = useField({ name, validate });
   const isValid = !(meta.touched && meta.error);
@@ -508,7 +500,6 @@ const FileUploadField = ({
   type = 'text',
   isRequired = false,
 }) => {
-  const { i18n } = useLingui();
   const validate = isRequired ? required(null) : null;
   const [filename, setFilename] = useState('');
   const [fileIsUploading, setFileIsUploading] = useState(false);
