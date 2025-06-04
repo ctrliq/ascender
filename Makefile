@@ -48,6 +48,8 @@ VAULT_TLS ?= false
 # If set to true docker-compose will also start a tacacs+ instance
 TACACS ?= false
 
+EDITABLE_DEPENDENCIES ?= false
+
 VENV_BASE ?= /var/lib/awx/venv
 
 DEV_DOCKER_OWNER ?= ctrliq
@@ -208,7 +210,7 @@ supervisor:
 	@if [ "$(VENV_BASE)" ]; then \
 		. $(VENV_BASE)/awx/bin/activate; \
 	fi; \
-	supervisord --pidfile=/tmp/supervisor_pid -n
+	supervisord --pidfile=/tmp/supervisor_pid -n -c /etc/supervisord.conf
 
 collectstatic:
 	@if [ "$(VENV_BASE)" ]; then \
@@ -532,6 +534,7 @@ docker-compose-sources: .git/hooks/pre-commit
 	    -e enable_vault=$(VAULT) \
 	    -e vault_tls=$(VAULT_TLS) \
 	    -e enable_tacacs=$(TACACS) \
+		-e install_editable_dependencies=$(EDITABLE_DEPENDENCIES) \
 	    $(EXTRA_SOURCES_ANSIBLE_OPTS)
 
 docker-compose: awx/projects docker-compose-sources
@@ -539,8 +542,14 @@ docker-compose: awx/projects docker-compose-sources
 	ansible-playbook -i tools/docker-compose/inventory tools/docker-compose/ansible/initialize_containers.yml \
 	    -e enable_vault=$(VAULT) \
 	    -e vault_tls=$(VAULT_TLS) \
-	    -e enable_ldap=$(LDAP);
+	    -e enable_ldap=$(LDAP); \
+	$(MAKE) docker-compose-up
+
+docker-compose-up:
 	$(DOCKER_COMPOSE) -f tools/docker-compose/_sources/docker-compose.yml $(COMPOSE_OPTS) up $(COMPOSE_UP_OPTS) --remove-orphans
+
+docker-compose-down:
+	$(DOCKER_COMPOSE) -f tools/docker-compose/_sources/docker-compose.yml $(COMPOSE_OPTS) down --remove-orphans
 
 docker-compose-credential-plugins: awx/projects docker-compose-sources
 	echo -e "\033[0;31mTo generate a CyberArk Conjur API key: docker exec -it tools_conjur_1 conjurctl account create quick-start\033[0m"
@@ -606,7 +615,7 @@ docker-clean:
 	-$(foreach image_id,$(shell docker images --filter=reference='*/*/*ascender_devel*' --filter=reference='*/*ascender_devel*' --filter=reference='*ascender_devel*' -aq),docker rmi --force $(image_id);)
 
 docker-clean-volumes: docker-compose-clean docker-compose-container-group-clean
-	docker volume rm -f tools_awx_db tools_vault_1 tools_ldap_1 tools_grafana_storage tools_prometheus_storage $(docker volume ls --filter name=tools_redis_socket_ -q)
+	docker volume rm -f tools_var_lib_awx tools_awx_db tools_vault_1 tools_ldap_1 tools_grafana_storage tools_prometheus_storage $(docker volume ls --filter name=tools_redis_socket_ -q)
 
 docker-refresh: docker-clean docker-compose
 

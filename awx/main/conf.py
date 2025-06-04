@@ -2,6 +2,7 @@
 import logging
 
 # Django
+from django.core.checks import Error
 from django.utils.translation import gettext_lazy as _
 
 # Django REST Framework
@@ -593,7 +594,7 @@ register(
 register(
     'LOG_AGGREGATOR_LOGGERS',
     field_class=fields.StringListField,
-    default=['awx', 'activity_stream', 'job_events', 'system_tracking', 'broadcast_websocket'],
+    default=['awx', 'activity_stream', 'job_events', 'system_tracking', 'broadcast_websocket', 'job_lifecycle'],
     label=_('Loggers Sending Data to Log Aggregator Form'),
     help_text=_(
         'List of loggers that will send HTTP logs to the collector, these can '
@@ -603,6 +604,7 @@ register(
         'job_events - callback data from Ansible job events\n'
         'system_tracking - facts gathered from scan jobs\n'
         'broadcast_websocket - errors pertaining to websockets broadcast metrics\n'
+        'job_lifecycle - logs related to processing of a job\n'
     ),
     category=_('Logging'),
     category_slug='logging',
@@ -948,3 +950,26 @@ def logging_validate(serializer, attrs):
 
 
 register_validate('logging', logging_validate)
+
+
+def csrf_trusted_origins_validate(serializer, attrs):
+    if not serializer.instance or not hasattr(serializer.instance, 'CSRF_TRUSTED_ORIGINS'):
+        return attrs
+    if 'CSRF_TRUSTED_ORIGINS' not in attrs:
+        return attrs
+    errors = []
+    for origin in attrs['CSRF_TRUSTED_ORIGINS']:
+        if "://" not in origin:
+            errors.append(
+                Error(
+                    "As of Django 4.0, the values in the CSRF_TRUSTED_ORIGINS "
+                    "setting must start with a scheme (usually http:// or "
+                    "https://) but found %s. See the release notes for details." % origin,
+                )
+            )
+    if errors:
+        error_messages = [error.msg for error in errors]
+        raise serializers.ValidationError(_('\n'.join(error_messages)))
+    return attrs
+
+register_validate('system', csrf_trusted_origins_validate)
