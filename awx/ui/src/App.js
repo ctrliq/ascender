@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   useRouteMatch,
   useLocation,
@@ -28,6 +28,7 @@ import { getLanguageWithoutRegionCode } from 'util/language';
 import Metrics from 'screens/Metrics';
 import SubscriptionEdit from 'screens/Setting/Subscription/SubscriptionEdit';
 import useTitle from 'hooks/useTitle';
+import { msg } from '@lingui/macro';
 import { dynamicActivate, locales } from './i18nLoader';
 import getRouteConfig from './routeConfig';
 import { SESSION_REDIRECT_URL } from './constants';
@@ -137,6 +138,7 @@ export function ProtectedRoute({ children, ...rest }) {
 }
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
   const history = useHistory();
   const { hash, search, pathname } = useLocation();
   const searchParams = Object.fromEntries(new URLSearchParams(search));
@@ -152,7 +154,9 @@ function App() {
   }
 
   useEffect(() => {
-    dynamicActivate(language, pseudolocalization);
+    dynamicActivate(language, pseudolocalization).then(() => {
+      setIsLoading(false);
+    });
   }, [language, pseudolocalization]);
 
   useTitle();
@@ -162,6 +166,10 @@ function App() {
     window.sessionStorage.removeItem(SESSION_REDIRECT_URL);
     if (redirectURL !== '/' || redirectURL !== '/home')
       history.replace(redirectURL);
+  }
+
+  if (isLoading) {
+    return <div>{i18n._(msg`Loading...`)}</div>;
   }
 
   return (

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
 import { Button } from '@patternfly/react-core';
 import { TableComposable, Thead, Tr, Th, Tbody } from '@patternfly/react-table';
 import AlertModal from 'components/AlertModal';
 import ContentEmpty from 'components/ContentEmpty';
 import ContentLoading from 'components/ContentLoading';
+import { useLingui } from '@lingui/react';
 
 import useSelected from 'hooks/useSelected';
 import SurveyListItem from './SurveyListItem';
@@ -21,6 +22,7 @@ function SurveyList({
   deleteSurvey,
   canEdit,
 }) {
+  const { i18n } = useLingui();
   const questions = survey?.spec || [];
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
@@ -49,7 +51,7 @@ function SurveyList({
   const deleteModal = (
     <AlertModal
       variant="danger"
-      title={isAllSelected ? t`Delete Survey` : t`Delete Questions`}
+      title={isAllSelected ? i18n._(msg`Delete Survey`) : i18n._(msg`Delete Questions`)}
       isOpen={isDeleteModalOpen}
       onClose={() => {
         setIsDeleteModalOpen(false);
@@ -60,26 +62,26 @@ function SurveyList({
           ouiaId="delete-confirm-button"
           key="delete"
           variant="danger"
-          aria-label={t`confirm delete`}
+          aria-label={i18n._(msg`confirm delete`)}
           onClick={handleDelete}
         >
-          {t`Delete`}
+          {i18n._(msg`Delete`)}
         </Button>,
         <Button
           ouiaId="delete-cancel-button"
           key="cancel"
           variant="link"
-          aria-label={t`cancel delete`}
+          aria-label={i18n._(msg`cancel delete`)}
           onClick={() => {
             setIsDeleteModalOpen(false);
             clearSelected();
           }}
         >
-          {t`Cancel`}
+          {i18n._(msg`Cancel`)}
         </Button>,
       ]}
     >
-      <div>{t`This action will delete the following:`}</div>
+      <div>{i18n._(msg`This action will delete the following:`)}</div>
       {selected.map((question) => (
         <span key={question.variable}>
           <strong>{question.question_name}</strong>
@@ -99,10 +101,10 @@ function SurveyList({
           <Thead>
             <Tr ouiaId="survey-table-header">
               <Th />
-              <Th dataLabel={t`Name`}>{t`Name`}</Th>
-              <Th dataLabel={t`Type`}>{t`Type`}</Th>
-              <Th dataLabel={t`Default`}>{t`Default`}</Th>
-              <Th dataLabel={t`Actions`}>{t`Actions`}</Th>
+              <Th dataLabel={i18n._(msg`Name`)}>{i18n._(msg`Name`)}</Th>
+              <Th dataLabel={i18n._(msg`Type`)}>{i18n._(msg`Type`)}</Th>
+              <Th dataLabel={i18n._(msg`Default`)}>{i18n._(msg`Default`)}</Th>
+              <Th dataLabel={i18n._(msg`Actions`)}>{i18n._(msg`Actions`)}</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -143,8 +145,8 @@ function SurveyList({
   if (emptyList && !isLoading) {
     content = (
       <ContentEmpty
-        message={t`Please add survey questions.`}
-        title={t`No survey questions found.`}
+        message={i18n._(msg`Please add survey questions.`)}
+        title={i18n._(msg`No survey questions found.`)}
       />
     );
   }

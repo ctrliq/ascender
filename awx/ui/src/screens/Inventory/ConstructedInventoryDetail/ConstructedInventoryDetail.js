@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 
-import { t } from '@lingui/macro';
 import {
   Button,
   Chip,
@@ -36,6 +37,7 @@ import useWsInventorySourcesDetails from '../shared/useWsInventorySourcesDetails
 import getHelpText from '../shared/Inventory.helptext';
 
 function JobStatusLabel({ job }) {
+  const { i18n } = useLingui();
   if (!job) {
     return null;
   }
@@ -45,16 +47,16 @@ function JobStatusLabel({ job }) {
       position="top"
       content={
         <>
-          <div>{t`MOST RECENT SYNC`}</div>
+          <div>{i18n._(msg`MOST RECENT SYNC`)}</div>
           <div>
-            {t`JOB ID:`} {job.id}
+            {i18n._(msg`JOB ID:`)} {job.id}
           </div>
           <div>
-            {t`STATUS:`} {job.status.toUpperCase()}
+            {i18n._(msg`STATUS:`)} {job.status.toUpperCase()}
           </div>
           {job.finished && (
             <div>
-              {t`FINISHED:`} {formatDateString(job.finished)}
+              {i18n._(msg`FINISHED:`)} {formatDateString(job.finished)}
             </div>
           )}
         </>
@@ -69,8 +71,9 @@ function JobStatusLabel({ job }) {
 }
 
 function ConstructedInventoryDetail({ inventory }) {
+  const { i18n } = useLingui();
   const history = useHistory();
-  const helpText = getHelpText();
+  const helpText = getHelpText(i18n);
 
   const {
     result: { instanceGroups, inputInventories, inventorySource, actions },
@@ -145,12 +148,12 @@ function ConstructedInventoryDetail({ inventory }) {
     <CardBody>
       <DetailList>
         <Detail
-          label={t`Name`}
+          label={i18n._(msg`Name`)}
           value={inventory.name}
           dataCy="constructed-inventory-name"
         />
         <Detail
-          label={t`Last Job Status`}
+          label={i18n._(msg`Last Job Status`)}
           value={
             inventorySourceSyncJob && (
               <JobStatusLabel job={inventorySourceSyncJob} />
@@ -158,13 +161,13 @@ function ConstructedInventoryDetail({ inventory }) {
           }
         />
         <Detail
-          label={t`Description`}
+          label={i18n._(msg`Description`)}
           value={inventory.description}
           dataCy="constructed-inventory-description"
         />
         <Detail
-          label={t`Type`}
-          value={t`Constructed Inventory`}
+          label={i18n._(msg`Type`)}
+          value={i18n._(msg`Constructed Inventory`)}
           dataCy="constructed-inventory-type"
         />
         <Detail
@@ -174,7 +177,7 @@ function ConstructedInventoryDetail({ inventory }) {
           dataCy="constructed-inventory-limit"
         />
         <Detail
-          label={t`Organization`}
+          label={i18n._(msg`Organization`)}
           dataCy="constructed-inventory-organization"
           value={
             <Link
@@ -223,7 +226,7 @@ function ConstructedInventoryDetail({ inventory }) {
         {instanceGroups && (
           <Detail
             fullWidth
-            label={t`Instance Groups`}
+            label={i18n._(msg`Instance Groups`)}
             value={<InstanceGroupLabels labels={instanceGroups} isLinkable />}
             isEmpty={instanceGroups.length === 0}
             dataCy="constructed-inventory-instance-groups"
@@ -232,15 +235,15 @@ function ConstructedInventoryDetail({ inventory }) {
         {inventory.prevent_instance_group_fallback && (
           <Detail
             fullWidth
-            label={t`Enabled Options`}
+            label={i18n._(msg`Enabled Options`)}
             dataCy="constructed-inventory-instance-group-fallback"
             value={
               <TextList component={TextListVariants.ul}>
                 {inventory.prevent_instance_group_fallback && (
                   <TextListItem component={TextListItemVariants.li}>
-                    {t`Prevent Instance Group Fallback`}
+                    {i18n._(msg`Prevent Instance Group Fallback`)}
                     <Popover
-                      header={t`Prevent Instance Group Fallback`}
+                      header={i18n._(msg`Prevent Instance Group Fallback`)}
                       content={helpText.preventInstanceGroupFallback}
                     />
                   </TextListItem>
@@ -253,7 +256,7 @@ function ConstructedInventoryDetail({ inventory }) {
           fullWidth
           helpText={helpText.labels}
           dataCy="constructed-inventory-labels"
-          label={t`Labels`}
+          label={i18n._(msg`Labels`)}
           value={
             <ChipGroup
               numChips={5}
@@ -270,7 +273,7 @@ function ConstructedInventoryDetail({ inventory }) {
         />
         <Detail
           fullWidth
-          label={t`Input Inventories`}
+          label={i18n._(msg`Input Inventories`)}
           value={
             <LabelGroup numLabels={5}>
               {inputInventories?.map((inputInventory) => (
@@ -320,7 +323,7 @@ function ConstructedInventoryDetail({ inventory }) {
             component={Link}
             to={`/inventories/constructed_inventory/${inventory.id}/edit`}
           >
-            {t`Edit`}
+            {i18n._(msg`Edit`)}
           </Button>
         )}
         {inventorySource?.summary_fields?.user_capabilities?.start &&
@@ -329,10 +332,10 @@ function ConstructedInventoryDetail({ inventory }) {
           ) ? (
             <JobCancelButton
               job={{ id: inventorySourceSyncJob.id, type: 'inventory_update' }}
-              errorTitle={t`Constructed Inventory Source Sync Error`}
-              title={t`Cancel Constructed Inventory Source Sync`}
-              errorMessage={t`Failed to cancel Constructed Inventory Source Sync`}
-              buttonText={t`Cancel Sync`}
+              errorTitle={i18n._(msg`Constructed Inventory Source Sync Error`)}
+              title={i18n._(msg`Cancel Constructed Inventory Source Sync`)}
+              errorMessage={i18n._(msg`Failed to cancel Constructed Inventory Source Sync`)}
+              buttonText={i18n._(msg`Cancel Sync`)}
             />
           ) : (
             <ConstructedInventorySyncButton inventoryId={inventory.id} />
@@ -340,12 +343,12 @@ function ConstructedInventoryDetail({ inventory }) {
         {inventory?.summary_fields?.user_capabilities?.delete && (
           <DeleteButton
             name={inventory.name}
-            modalTitle={t`Delete Inventory`}
+            modalTitle={i18n._(msg`Delete Inventory`)}
             onConfirm={deleteInventory}
             deleteDetailsRequests={deleteDetailsRequests}
-            deleteMessage={t`This inventory is currently being used by other resources. Are you sure you want to delete it?`}
+            deleteMessage={i18n._(msg`This inventory is currently being used by other resources. Are you sure you want to delete it?`)}
           >
-            {t`Delete`}
+            {i18n._(msg`Delete`)}
           </DeleteButton>
         )}
       </CardActionsRow>
@@ -353,10 +356,10 @@ function ConstructedInventoryDetail({ inventory }) {
         <AlertModal
           isOpen={error}
           variant="error"
-          title={t`Error!`}
+          title={i18n._(msg`Error!`)}
           onClose={dismissError}
         >
-          {t`Failed to delete inventory.`}
+          {i18n._(msg`Failed to delete inventory.`)}
           <ErrorDetail error={error} />
         </AlertModal>
       )}

@@ -1,5 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 
 import { Card, PageSection } from '@patternfly/react-core';
 import { CaretLeftIcon } from '@patternfly/react-icons';
@@ -19,6 +20,7 @@ import { WorkflowApprovalsAPI } from 'api';
 import WorkflowApprovalDetail from './WorkflowApprovalDetail';
 
 function WorkflowApproval({ setBreadcrumb }) {
+  const { i18n } = useLingui();
   const { id: workflowApprovalId } = useParams();
   const match = useRouteMatch();
   const location = useLocation();
@@ -49,9 +51,9 @@ function WorkflowApproval({ setBreadcrumb }) {
           <ContentError error={error}>
             {error.response.status === 404 && (
               <span>
-                {t`Workflow Approval not found.`}{' '}
+                {i18n._(msg`Workflow Approval not found.`)}{' '}
                 <Link to="/workflow_approvals">
-                  {t`View all Workflow Approvals.`}
+                  {i18n._(msg`View all Workflow Approvals.`)}
                 </Link>
               </span>
             )}
@@ -66,7 +68,7 @@ function WorkflowApproval({ setBreadcrumb }) {
       name: (
         <>
           <CaretLeftIcon />
-          {t`Back to Workflow Approvals`}
+          {i18n._(msg`Back to Workflow Approvals`)}
         </>
       ),
       link: `/workflow_approvals`,
@@ -74,7 +76,7 @@ function WorkflowApproval({ setBreadcrumb }) {
       id: 99,
     },
     {
-      name: t`Details`,
+      name: i18n._(msg`Details`),
       link: `${match.url}/details`,
       id: 0,
     },
@@ -102,7 +104,7 @@ function WorkflowApproval({ setBreadcrumb }) {
               <ContentError isNotFound>
                 {match.params.id && (
                   <Link to={`/workflow_approvals/${match.params.id}/details`}>
-                    {t`View Workflow Approval Details`}
+                    {i18n._(msg`View Workflow Approval Details`)}
                   </Link>
                 )}
               </ContentError>

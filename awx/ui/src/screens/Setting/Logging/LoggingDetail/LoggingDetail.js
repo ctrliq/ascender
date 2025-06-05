@@ -1,7 +1,8 @@
 import React, { useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import { Button } from '@patternfly/react-core';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { CardBody, CardActionsRow } from 'components/Card';
@@ -19,6 +20,7 @@ import { sortNestedDetails, pluck } from '../../shared/settingUtils';
 function LoggingDetail() {
   const { me } = useConfig();
   const { GET: options } = useSettings();
+  const { i18n } = useLingui();
 
   const {
     isLoading,
@@ -66,14 +68,14 @@ function LoggingDetail() {
       name: (
         <>
           <CaretLeftIcon />
-          {t`Back to Settings`}
+          {i18n._(msg`Back to Settings`)}
         </>
       ),
       link: `/settings`,
       id: 99,
     },
     {
-      name: t`Details`,
+      name: i18n._(msg`Details`),
       link: `/settings/logging/details`,
       id: 0,
     },
@@ -104,11 +106,11 @@ function LoggingDetail() {
           <CardActionsRow>
             <Button
               ouiaId="logging-detail-edit-button"
-              aria-label={t`Edit`}
+              aria-label={i18n._(msg`Edit`)}
               component={Link}
               to="/settings/logging/edit"
             >
-              {t`Edit`}
+              {i18n._(msg`Edit`)}
             </Button>
           </CardActionsRow>
         )}

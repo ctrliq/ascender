@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { CardBody } from 'components/Card';
 import PaginatedTable, {
   getSearchableKeys,
@@ -23,6 +24,7 @@ const QS_CONFIG = getQSConfig('peer', {
 });
 
 function InstanceListenerAddressList({ setBreadcrumb }) {
+  const { i18n } = useLingui();
   const { id } = useParams();
   const { Toast, toastProps } = useToast();
   const {
@@ -100,7 +102,7 @@ function InstanceListenerAddressList({ setBreadcrumb }) {
         hasContentLoading={isLoading}
         items={listenerAddresses}
         itemCount={count}
-        pluralizedItemName={t`Listener Addresses`}
+        pluralizedItemName={i18n._(msg`Listener Addresses`)}
         qsConfig={QS_CONFIG}
         onRowClick={handleSelect}
         clearSelected={clearSelected}
@@ -108,23 +110,23 @@ function InstanceListenerAddressList({ setBreadcrumb }) {
         toolbarRelatedSearchableKeys={relatedSearchableKeys}
         toolbarSearchColumns={[
           {
-            name: t`Name`,
+            name: i18n._(msg`Name`),
             key: 'hostname__icontains',
             isDefault: true,
           },
         ]}
         toolbarSortColumns={[
           {
-            name: t`Name`,
+            name: i18n._(msg`Name`),
             key: 'hostname',
           },
         ]}
         headerRow={
           <HeaderRow qsConfig={QS_CONFIG}>
-            <HeaderCell sortKey="address">{t`Address`}</HeaderCell>
-            <HeaderCell sortKey="port">{t`Port`}</HeaderCell>
-            <HeaderCell sortKey="protocol">{t`Protocol`}</HeaderCell>
-            <HeaderCell sortKey="canonical">{t`Canonical`}</HeaderCell>
+            <HeaderCell sortKey="address">{i18n._(msg`Address`)}</HeaderCell>
+            <HeaderCell sortKey="port">{i18n._(msg`Port`)}</HeaderCell>
+            <HeaderCell sortKey="protocol">{i18n._(msg`Protocol`)}</HeaderCell>
+            <HeaderCell sortKey="canonical">{i18n._(msg`Canonical`)}</HeaderCell>
           </HeaderRow>
         }
         renderToolbar={(props) => (

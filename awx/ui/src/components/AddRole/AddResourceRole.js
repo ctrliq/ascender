@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import { t } from '@lingui/macro';
+import { msg } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
 import { TeamsAPI, UsersAPI } from 'api';
 import useSelected from 'hooks/useSelected';
 import SelectableCard from '../SelectableCard';
@@ -18,59 +19,60 @@ const readTeams = async (queryParams) => TeamsAPI.read(queryParams);
 
 const readTeamsOptions = async () => TeamsAPI.readOptions();
 
-const userSearchColumns = [
-  {
-    name: t`Username`,
-    key: 'username__icontains',
-    isDefault: true,
-  },
-  {
-    name: t`First Name`,
-    key: 'first_name__icontains',
-  },
-  {
-    name: t`Last Name`,
-    key: 'last_name__icontains',
-  },
-];
-const userSortColumns = [
-  {
-    name: t`Username`,
-    key: 'username',
-  },
-  {
-    name: t`First Name`,
-    key: 'first_name',
-  },
-  {
-    name: t`Last Name`,
-    key: 'last_name',
-  },
-];
-const teamSearchColumns = [
-  {
-    name: t`Name`,
-    key: 'name__icontains',
-    isDefault: true,
-  },
-  {
-    name: t`Created By (Username)`,
-    key: 'created_by__username',
-  },
-  {
-    name: t`Modified By (Username)`,
-    key: 'modified_by__username',
-  },
-];
-
-const teamSortColumns = [
-  {
-    name: t`Name`,
-    key: 'name',
-  },
-];
 function AddResourceRole({ onSave, onClose, roles, resource, onError }) {
+  const { i18n } = useLingui();
   const history = useHistory();
+
+  const userSearchColumns = [
+    {
+      name: i18n._(msg`Username`),
+      key: 'username__icontains',
+      isDefault: true,
+    },
+    {
+      name: i18n._(msg`First Name`),
+      key: 'first_name__icontains',
+    },
+    {
+      name: i18n._(msg`Last Name`),
+      key: 'last_name__icontains',
+    },
+  ];
+  const userSortColumns = [
+    {
+      name: i18n._(msg`Username`),
+      key: 'username',
+    },
+    {
+      name: i18n._(msg`First Name`),
+      key: 'first_name',
+    },
+    {
+      name: i18n._(msg`Last Name`),
+      key: 'last_name',
+    },
+  ];
+  const teamSearchColumns = [
+    {
+      name: i18n._(msg`Name`),
+      key: 'name__icontains',
+      isDefault: true,
+    },
+    {
+      name: i18n._(msg`Created By (Username)`),
+      key: 'created_by__username',
+    },
+    {
+      name: i18n._(msg`Modified By (Username)`),
+      key: 'modified_by__username',
+    },
+  ];
+  const teamSortColumns = [
+    {
+      name: i18n._(msg`Name`),
+      key: 'name',
+    },
+  ];
 
   const {
     selected: resourcesSelected,
@@ -155,28 +157,28 @@ function AddResourceRole({ onSave, onClose, roles, resource, onError }) {
 
   switch (resourceType) {
     case 'users':
-      wizardTitle = t`Add User Roles`;
+      wizardTitle = i18n._(msg`Add User Roles`);
       break;
     case 'teams':
-      wizardTitle = t`Add Team Roles`;
+      wizardTitle = i18n._(msg`Add Team Roles`);
       break;
     default:
-      wizardTitle = t`Add Roles`;
+      wizardTitle = i18n._(msg`Add Roles`);
   }
 
   const steps = [
     {
       id: 1,
-      name: t`Select a Resource Type`,
+      name: i18n._(msg`Select a Resource Type`),
       component: (
         <div style={{ display: 'flex', flexWrap: 'wrap' }}>
           <div style={{ width: '100%', marginBottom: '10px' }}>
-            {t`Choose the type of resource that will be receiving new roles.  For example, if you'd like to add new roles to a set of users please choose Users and click Next.  You'll be able to select the specific resources in the next step.`}
+            {i18n._(msg`Choose the type of resource that will be receiving new roles.  For example, if you'd like to add new roles to a set of users please choose Users and click Next.  You'll be able to select the specific resources in the next step.`)}
           </div>
           <SelectableCard
             isSelected={resourceType === 'users'}
-            label={t`Users`}
-            ariaLabel={t`Users`}
+            label={i18n._(msg`Users`)}
+            ariaLabel={i18n._(msg`Users`)}
             dataCy="add-role-users"
             onClick={() => handleResourceTypeSelect('users')}
           />
@@ -185,20 +187,20 @@ function AddResourceRole({ onSave, onClose, roles, resource, onError }) {
             !resource?.organization) ? null : (
             <SelectableCard
               isSelected={resourceType === 'teams'}
-              label={t`Teams`}
-              ariaLabel={t`Teams`}
+              label={i18n._(msg`Teams`)}
+              ariaLabel={i18n._(msg`Teams`)}
               dataCy="add-role-teams"
               onClick={() => handleResourceTypeSelect('teams')}
             />
           )}
         </div>
       ),
-      nextButtonText: t`Next`,
+      nextButtonText: i18n._(msg`Next`),
       enableNext: resourceType !== null,
     },
     {
       id: 2,
-      name: t`Select Items from List`,
+      name: i18n._(msg`Select Items from List`),
       component: (
         <>
           {resourceType === 'users' && (
@@ -209,7 +211,7 @@ function AddResourceRole({ onSave, onClose, roles, resource, onError }) {
               onRowClick={handleResourceSelect}
               fetchItems={readUsers}
               fetchOptions={readUsersOptions}
-              selectedLabel={t`Selected`}
+              selectedLabel={i18n._(msg`Selected`)}
               selectedResourceRows={resourcesSelected}
               sortedColumnKey="username"
             />
@@ -221,30 +223,30 @@ function AddResourceRole({ onSave, onClose, roles, resource, onError }) {
               onRowClick={handleResourceSelect}
               fetchItems={readTeams}
               fetchOptions={readTeamsOptions}
-              selectedLabel={t`Selected`}
+              selectedLabel={i18n._(msg`Selected`)}
               selectedResourceRows={resourcesSelected}
             />
           )}
         </>
       ),
       enableNext: resourcesSelected.length > 0,
-      nextButtonText: t`Next`,
+      nextButtonText: i18n._(msg`Next`),
       canJumpTo: maxEnabledStep >= 2,
     },
     {
       id: 3,
-      name: t`Select Roles to Apply`,
+      name: i18n._(msg`Select Roles to Apply`),
       component: (
         <SelectRoleStep
           onRolesClick={handleRoleSelect}
           roles={selectableRoles}
           selectedListKey={resourceType === 'users' ? 'username' : 'name'}
-          selectedListLabel={t`Selected`}
+          selectedListLabel={i18n._(msg`Selected`)}
           selectedResourceRows={resourcesSelected}
           selectedRoleRows={rolesSelected}
         />
       ),
-      nextButtonText: t`Save`,
+      nextButtonText: i18n._(msg`Save`),
       enableNext: rolesSelected.length > 0,
       canJumpTo: maxEnabledStep >= 3,
     },
@@ -264,8 +266,8 @@ function AddResourceRole({ onSave, onClose, roles, resource, onError }) {
       steps={steps}
       title={wizardTitle}
       nextButtonText={currentStep.nextButtonText || undefined}
-      backButtonText={t`Back`}
-      cancelButtonText={t`Cancel`}
+      backButtonText={i18n._(msg`Back`)}
+      cancelButtonText={i18n._(msg`Cancel`)}
     />
   );
 }

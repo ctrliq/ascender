@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 
 import PaginatedTable, {
   HeaderRow,
@@ -22,6 +23,7 @@ const QS_CONFIG = getQSConfig('organizations', {
 function UserOrganizationList() {
   const location = useLocation();
   const { id } = useParams();
+  const { i18n } = useLingui();
 
   const {
     result: { organizations, count, searchableKeys, relatedSearchableKeys },
@@ -69,15 +71,15 @@ function UserOrganizationList() {
       toolbarRelatedSearchableKeys={relatedSearchableKeys}
       hasContentLoading={isLoading}
       itemCount={count}
-      pluralizedItemName={t`Organizations`}
+      pluralizedItemName={i18n._(msg`Organizations`)}
       qsConfig={QS_CONFIG}
       toolbarSearchColumns={[
-        { name: t`Name`, key: 'name__icontains', isDefault: true },
+        { name: i18n._(msg`Name`), key: 'name__icontains', isDefault: true },
       ]}
       headerRow={
         <HeaderRow qsConfig={QS_CONFIG} isSelectable={false}>
-          <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
-          <HeaderCell>{t`Description`}</HeaderCell>
+          <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
+          <HeaderCell>{i18n._(msg`Description`)}</HeaderCell>
         </HeaderRow>
       }
       renderRow={(organization, index) => (

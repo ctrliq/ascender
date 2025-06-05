@@ -1,7 +1,9 @@
 import React, { useContext, useState } from 'react';
 import { Button, FormGroup, Modal } from '@patternfly/react-core';
 
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+
 import { func } from 'prop-types';
 import {
   WorkflowDispatchContext,
@@ -10,6 +12,7 @@ import {
 import AnsibleSelect from 'components/AnsibleSelect';
 
 function LinkModal({ header, onConfirm }) {
+  const { i18n } = useLingui();
   const dispatch = useContext(WorkflowDispatchContext);
   const { linkToEdit } = useContext(WorkflowStateContext);
   const [linkType, setLinkType] = useState(
@@ -20,8 +23,8 @@ function LinkModal({ header, onConfirm }) {
       width={600}
       header={header}
       isOpen
-      title={t`Workflow Link`}
-      aria-label={t`Workflow link modal`}
+      title={i18n._(msg`Workflow Link`)}
+      aria-label={i18n._(msg`Workflow link modal`)}
       onClose={() => dispatch({ type: 'CANCEL_LINK_MODAL' })}
       actions={[
         <Button
@@ -29,24 +32,24 @@ function LinkModal({ header, onConfirm }) {
           id="link-confirm"
           key="save"
           variant="primary"
-          aria-label={t`Save link changes`}
+          aria-label={i18n._(msg`Save link changes`)}
           onClick={() => onConfirm(linkType)}
         >
-          {t`Save`}
+          {i18n._(msg`Save`)}
         </Button>,
         <Button
           ouiaId="link-cancel-button"
           id="link-cancel"
           key="cancel"
           variant="link"
-          aria-label={t`Cancel link changes`}
+          aria-label={i18n._(msg`Cancel link changes`)}
           onClick={() => dispatch({ type: 'CANCEL_LINK_MODAL' })}
         >
-          {t`Cancel`}
+          {i18n._(msg`Cancel`)}
         </Button>,
       ]}
     >
-      <FormGroup fieldId="link-select" label={t`Run`}>
+      <FormGroup fieldId="link-select" label={i18n._(msg`Run`)}>
         <AnsibleSelect
           id="link-select"
           name="linkType"
@@ -55,17 +58,17 @@ function LinkModal({ header, onConfirm }) {
             {
               value: 'always',
               key: 'always',
-              label: t`Always`,
+              label: i18n._(msg`Always`),
             },
             {
               value: 'success',
               key: 'success',
-              label: t`On Success`,
+              label: i18n._(msg`On Success`),
             },
             {
               value: 'failure',
               key: 'failure',
-              label: t`On Failure`,
+              label: i18n._(msg`On Failure`),
             },
           ]}
           onChange={(event, value) => {

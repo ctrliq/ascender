@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 
 import AlertModal from 'components/AlertModal';
 import { CardBody, CardActionsRow } from 'components/Card';
@@ -12,10 +12,11 @@ import { TokensAPI } from 'api';
 import { formatDateString } from 'util/dates';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import { toTitleCase } from 'util/strings';
-import getHelptext from '../shared/User.helptext';
+import userHelpTextStrings from '../shared/User.helptext';
 
 function UserTokenDetail({ token }) {
-  const helptext = getHelptext();
+  const { i18n } = useLingui();
+  const helptext = userHelpTextStrings(i18n);
   const { scope, description, created, modified, expires, summary_fields } =
     token;
   const history = useHistory();
@@ -36,56 +37,56 @@ function UserTokenDetail({ token }) {
     <CardBody>
       <DetailList>
         <Detail
-          label={t`Application`}
+          label={i18n._(msg`Application`)}
           value={summary_fields?.application?.name}
           dataCy="application-token-detail-name"
           helpText={helptext.application}
         />
         <Detail
-          label={t`Description`}
+          label={i18n._(msg`Description`)}
           value={description}
           dataCy="application-token-detail-description"
         />
         <Detail
-          label={t`Scope`}
+          label={i18n._(msg`Scope`)}
           value={toTitleCase(scope)}
           dataCy="application-token-detail-scope"
           helpText={helptext.scope}
         />
         <Detail
-          label={t`Expires`}
+          label={i18n._(msg`Expires`)}
           value={formatDateString(expires)}
           dataCy="application-token-detail-expires"
         />
         <UserDateDetail
-          label={t`Created`}
+          label={i18n._(msg`Created`)}
           date={created}
           user={summary_fields.user}
         />
         <UserDateDetail
-          label={t`Last Modified`}
+          label={i18n._(msg`Last Modified`)}
           date={modified}
           user={summary_fields.user}
         />
       </DetailList>
       <CardActionsRow>
         <DeleteButton
-          name={summary_fields?.application?.name || t`Personal Access Token`}
-          modalTitle={t`Delete User Token`}
+          name={summary_fields?.application?.name || i18n._(msg`Personal Access Token`)}
+          modalTitle={i18n._(msg`Delete User Token`)}
           onConfirm={deleteToken}
           isDisabled={isLoading}
         >
-          {t`Delete`}
+          {i18n._(msg`Delete`)}
         </DeleteButton>
       </CardActionsRow>
       {error && (
         <AlertModal
           isOpen={error}
           variant="error"
-          title={t`Error!`}
+          title={i18n._(msg`Error!`)}
           onClose={dismissError}
         >
-          {t`Failed to user token.`}
+          {i18n._(msg`Failed to user token.`)}
           <ErrorDetail error={error} />
         </AlertModal>
       )}

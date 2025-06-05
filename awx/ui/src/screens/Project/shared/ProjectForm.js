@@ -4,8 +4,8 @@
 /* eslint no-nested-ternary: 0 */
 import React, { useCallback, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { Formik, useField, useFormikContext } from 'formik';
 import { Form, FormGroup, Title } from '@patternfly/react-core';
 import { useConfig } from 'contexts/Config';
@@ -94,7 +94,8 @@ function ProjectFormFields({
   setScmSubFormState,
   scmSubFormState,
 }) {
-  const projectHelpText = getProjectHelpText();
+  const { i18n } = useLingui();
+  const projectHelpText = getProjectHelpText(i18n);
   const scmFormFields = {
     scm_url: '',
     scm_branch: '',
@@ -112,7 +113,7 @@ function ProjectFormFields({
 
   const [scmTypeField, scmTypeMeta, scmTypeHelpers] = useField({
     name: 'scm_type',
-    validate: required(t`Set a value for this field`),
+    validate: required(i18n._(msg`Set a value for this field`)),
   });
   const [organizationField, organizationMeta, organizationHelpers] =
     useField('organization');
@@ -214,7 +215,7 @@ function ProjectFormFields({
     <>
       <FormField
         id="project-name"
-        label={t`Name`}
+        label={i18n._(msg`Name`)}
         name="name"
         type="text"
         validate={required(null)}
@@ -222,7 +223,7 @@ function ProjectFormFields({
       />
       <FormField
         id="project-description"
-        label={t`Description`}
+        label={i18n._(msg`Description`)}
         name="description"
         type="text"
       />
@@ -234,7 +235,7 @@ function ProjectFormFields({
         value={organizationField.value}
         required
         autoPopulate={!project?.id}
-        validate={required(t`Select a value for this field`)}
+        validate={required(i18n._(msg`Select a value for this field`))}
       />
       <ExecutionEnvironmentLookup
         helperTextInvalid={executionEnvironmentMeta.error}
@@ -245,7 +246,7 @@ function ProjectFormFields({
         value={executionEnvironmentField.value}
         popoverContent={projectHelpText.executionEnvironment}
         onChange={handleExecutionEnvironmentUpdate}
-        tooltip={t`Select an organization before editing the default execution environment.`}
+        tooltip={i18n._(msg`Select an organization before editing the default execution environment.`)}
         globallyAvailable
         isDisabled={!organizationField.value}
         organizationId={organizationField.value?.id}
@@ -259,7 +260,7 @@ function ProjectFormFields({
         validated={
           !scmTypeMeta.touched || !scmTypeMeta.error ? 'default' : 'error'
         }
-        label={t`Source Control Type`}
+        label={i18n._(msg`Source Control Type`)}
       >
         <AnsibleSelect
           {...scmTypeField}
@@ -268,7 +269,7 @@ function ProjectFormFields({
             {
               value: '',
               key: '',
-              label: t`Choose a Source Control Type`,
+              label: i18n._(msg`Choose a Source Control Type`),
               isDisabled: true,
             },
             ...scmTypeOptions.map(([value, label]) => {
@@ -290,7 +291,7 @@ function ProjectFormFields({
       </FormGroup>
       <CredentialLookup
         credentialTypeId={signatureValidationCredentials.cryptography.typeId}
-        label={t`Content Signature Validation Credential`}
+        label={i18n._(msg`Content Signature Validation Credential`)}
         onChange={handleSignatureValidationCredentialChange}
         value={signatureValidationCredentials.cryptography.value}
         tooltip={projectHelpText.signatureValidation}
@@ -298,7 +299,7 @@ function ProjectFormFields({
       {formik.values.scm_type !== '' && (
         <SubFormLayout>
           <Title size="md" headingLevel="h4">
-            {t`Type Details`}
+            {i18n._(msg`Type Details`)}
           </Title>
           <FormColumnLayout>
             {
@@ -339,6 +340,7 @@ function ProjectFormFields({
     </>
   );
 }
+
 function ProjectForm({ project, submitError, ...props }) {
   const { handleCancel, handleSubmit } = props;
   const { summary_fields = {} } = project;

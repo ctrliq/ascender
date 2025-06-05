@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { AngleDownIcon, AngleRightIcon } from '@patternfly/react-icons';
 
 const Wrapper = styled.div`
@@ -27,6 +28,7 @@ export default function JobEventLineToggle({
   isCollapsed,
   onToggle,
 }) {
+  const { i18n } = useLingui();
   if (!canToggle) {
     return <Wrapper />;
   }
@@ -34,9 +36,9 @@ export default function JobEventLineToggle({
     <Wrapper>
       <Button onClick={onToggle} type="button">
         {isCollapsed ? (
-          <AngleRightIcon size="sm" title={t`Expand section`} />
+          <AngleRightIcon size="sm" title={i18n._(msg`Expand section`)} />
         ) : (
-          <AngleDownIcon size="sm" title={t`Collapse section`} />
+          <AngleDownIcon size="sm" title={i18n._(msg`Collapse section`)} />
         )}
       </Button>
     </Wrapper>

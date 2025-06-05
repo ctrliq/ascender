@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { MinusCircleIcon } from '@patternfly/react-icons';
 import { Button, Tooltip } from '@patternfly/react-core';
 import { getJobModel } from 'util/jobs';
@@ -20,6 +21,7 @@ function JobCancelButton({
   cancelationMessage,
   onCancelWorkflow,
 }) {
+  const { i18n } = useLingui();
   const [isOpen, setIsOpen] = useState(false);
   const { error: cancelError, request: cancelJob } = useRequest(
     useCallback(async () => {
@@ -66,7 +68,7 @@ function JobCancelButton({
               onClick={() => setIsOpen(true)}
               style={style}
             >
-              {buttonText || t`Cancel Job`}
+              {buttonText || i18n._(msg`Cancel Job`)}
             </Button>
           )}
         </div>
@@ -83,25 +85,25 @@ function JobCancelButton({
               id="cancel-job-confirm-button"
               key="delete"
               variant="danger"
-              aria-label={t`Confirm cancel job`}
+              aria-label={i18n._(msg`Confirm cancel job`)}
               ouiaId="cancel-job-confirm-button"
               onClick={cancelJob}
             >
-              {t`Confirm cancellation`}
+              {i18n._(msg`Confirm cancellation`)}
             </Button>,
             <Button
               id="cancel-job-return-button"
               key="cancel"
               ouiaId="return"
-              aria-label={t`Return`}
+              aria-label={i18n._(msg`Return`)}
               variant="secondary"
               onClick={() => setIsOpen(false)}
             >
-              {t`Return`}
+              {i18n._(msg`Return`)}
             </Button>,
           ]}
         >
-          {cancelationMessage ?? t`Are you sure you want to cancel this job?`}
+          {cancelationMessage ?? i18n._(msg`Are you sure you want to cancel this job?`)}
         </AlertModal>
       )}
       {error && !isAlreadyCancelled && (

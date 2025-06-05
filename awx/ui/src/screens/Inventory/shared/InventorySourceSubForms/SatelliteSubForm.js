@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
 import { useField, useFormikContext } from 'formik';
-import { t } from '@lingui/macro';
-import { useConfig } from 'contexts/Config';
-import getDocsBaseUrl from 'util/getDocsBaseUrl';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import docsBaseUrl from 'util/getDocsBaseUrl';
 import CredentialLookup from 'components/Lookup/CredentialLookup';
 import { required } from 'util/validators';
 import {
@@ -16,11 +16,11 @@ import {
 import getHelpText from '../Inventory.helptext';
 
 const SatelliteSubForm = ({ autoPopulateCredential }) => {
-  const helpText = getHelpText();
+  const { i18n } = useLingui();
+  const helpText = getHelpText(i18n);
   const { setFieldValue, setFieldTouched } = useFormikContext();
   const [credentialField, credentialMeta, credentialHelpers] =
     useField('credential');
-  const config = useConfig();
   const handleCredentialUpdate = useCallback(
     (value) => {
       setFieldValue('credential', value);
@@ -32,8 +32,8 @@ const SatelliteSubForm = ({ autoPopulateCredential }) => {
   return (
     <>
       <CredentialLookup
-        credentialTypeNamespace="satellite6"
-        label={t`Credential`}
+        credentialTypeNamespace="redhat_satellite6"
+        label={i18n._(msg`Credential`)}
         helperTextInvalid={credentialMeta.error}
         isValid={!credentialMeta.touched || !credentialMeta.error}
         onBlur={() => credentialHelpers.setTouched()}
@@ -41,7 +41,7 @@ const SatelliteSubForm = ({ autoPopulateCredential }) => {
         value={credentialField.value}
         required
         autoPopulate={autoPopulateCredential}
-        validate={required(t`Select a value for this field`)}
+        validate={required(i18n._(msg`Select a value for this field`))}
       />
       <VerbosityField />
       <HostFilterField />
@@ -49,10 +49,7 @@ const SatelliteSubForm = ({ autoPopulateCredential }) => {
       <EnabledValueField />
       <OptionsField />
       <SourceVarsField
-        popoverContent={helpText.sourceVars(
-          getDocsBaseUrl(config),
-          'satellite6'
-        )}
+        popoverContent={helpText.sourceVars(docsBaseUrl, 'redhat_satellite6')}
       />
     </>
   );

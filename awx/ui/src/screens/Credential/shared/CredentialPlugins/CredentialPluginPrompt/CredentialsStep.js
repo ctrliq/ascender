@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import { useField } from 'formik';
 import { CredentialsAPI } from 'api';
 import CheckboxListItem from 'components/CheckboxListItem';
@@ -23,6 +23,7 @@ const QS_CONFIG = getQSConfig('credential', {
 });
 
 function CredentialsStep() {
+  const { i18n } = useLingui();
   const [selectedCredential, , selectedCredentialHelper] =
     useField('credential');
   const history = useHistory();
@@ -68,7 +69,7 @@ function CredentialsStep() {
       qsConfig={QS_CONFIG}
       headerRow={
         <HeaderRow isExpandable={false} qsConfig={QS_CONFIG}>
-          <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
+          <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
         </HeaderRow>
       }
       renderRow={(credential, index) => (
@@ -88,16 +89,16 @@ function CredentialsStep() {
       showPageSizeOptions={false}
       toolbarSearchColumns={[
         {
-          name: t`Name`,
+          name: i18n._(msg`Name`),
           key: 'name__icontains',
           isDefault: true,
         },
         {
-          name: t`Created By (Username)`,
+          name: i18n._(msg`Created By (Username)`),
           key: 'created_by__username__icontains',
         },
         {
-          name: t`Modified By (Username)`,
+          name: i18n._(msg`Modified By (Username)`),
           key: 'modified_by__username__icontains',
         },
       ]}

@@ -39,7 +39,7 @@ function UIEdit() {
           return;
         }
         mergedData[key] = options[key];
-        mergedData[key].value = data[key];
+        mergedData[key].value = data[key] ?? { value: null, label: '' }; // Fallback for undefined values
       });
       return mergedData;
     }, [options]),
@@ -114,13 +114,23 @@ function UIEdit() {
               <FormColumnLayout>
                 <ChoiceField
                   name="PENDO_TRACKING_STATE"
-                  config={uiData.PENDO_TRACKING_STATE}
+                  config={
+                    uiData?.PENDO_TRACKING_STATE ?? {
+                      default: 'off',
+                      label: 'Pendo Tracking State',
+                      help_text: 'Enable or disable Pendo tracking.',
+                      choices: [
+                        ['off', 'Off'],
+                        ['on', 'On'],
+                      ],
+                    }
+                  }
                   isDisabled={license_info?.license_type === 'open'}
                   isRequired
                 />
                 <TextAreaField
                   name="CUSTOM_LOGIN_INFO"
-                  config={uiData.CUSTOM_LOGIN_INFO}
+                  config={uiData?.CUSTOM_LOGIN_INFO}
                 />
                 <FileUploadField
                   name="CUSTOM_LOGO"

@@ -1,7 +1,8 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import styled from 'styled-components';
 import {
   AutoSizer,
@@ -90,6 +91,7 @@ const cache = new CellMeasurerCache({
 });
 
 function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
+  const { i18n } = useLingui();
   const location = useLocation();
   const listRef = useRef(null);
   const previousWidth = useRef(0);
@@ -722,7 +724,7 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
             variant="default"
             title={
               <>
-                {t`Events processing complete.`}{' '}
+                {i18n._(msg`Events processing complete.`)}{' '}
                 <Button
                   variant="link"
                   isInline
@@ -732,7 +734,7 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
                     });
                     setShowEventsRefresh(false);
                   }}
-                >{t`Reload output`}</Button>
+                >{i18n._(msg`Reload output`)}</Button>
               </>
             }
           />
@@ -811,31 +813,31 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
           isOpen={showCancelModal}
           variant="danger"
           onClose={() => setShowCancelModal(false)}
-          title={t`Cancel Job`}
-          label={t`Cancel Job`}
+          title={i18n._(msg`Cancel Job`)}
+          label={i18n._(msg`Cancel Job`)}
           actions={[
             <Button
               id="cancel-job-confirm-button"
               key="delete"
               variant="danger"
               isDisabled={isCancelling}
-              aria-label={t`Cancel job`}
+              aria-label={i18n._(msg`Cancel job`)}
               onClick={cancelJob}
             >
-              {t`Cancel job`}
+              {i18n._(msg`Cancel job`)}
             </Button>,
             <Button
               id="cancel-job-return-button"
               key="cancel"
               variant="secondary"
-              aria-label={t`Return`}
+              aria-label={i18n._(msg`Return`)}
               onClick={() => setShowCancelModal(false)}
             >
-              {t`Return`}
+              {i18n._(msg`Return`)}
             </Button>,
           ]}
         >
-          {t`Are you sure you want to submit the request to cancel this job?`}
+          {i18n._(msg`Are you sure you want to submit the request to cancel this job?`)}
         </AlertModal>
       )}
       {dismissableDeleteError && (
@@ -843,8 +845,8 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
           isOpen={dismissableDeleteError}
           variant="danger"
           onClose={dismissDeleteError}
-          title={t`Job Delete Error`}
-          label={t`Job Delete Error`}
+          title={i18n._(msg`Job Delete Error`)}
+          label={i18n._(msg`Job Delete Error`)}
         >
           <ErrorDetail error={dismissableDeleteError} />
         </AlertModal>
@@ -854,8 +856,8 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
           isOpen={dismissableCancelError}
           variant="danger"
           onClose={dismissCancelError}
-          title={t`Job Cancel Error`}
-          label={t`Job Cancel Error`}
+          title={i18n._(msg`Job Cancel Error`)}
+          label={i18n._(msg`Job Cancel Error`)}
         >
           <ErrorDetail error={dismissableCancelError} />
         </AlertModal>

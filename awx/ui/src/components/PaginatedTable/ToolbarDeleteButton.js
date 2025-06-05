@@ -17,7 +17,8 @@ import {
   DropdownItem,
   Tooltip,
 } from '@patternfly/react-core';
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import { KebabifiedContext } from 'contexts/Kebabified';
 import { getRelatedResourceDeleteCounts } from 'util/getRelatedResourceDeleteDetails';
 import AlertModal from '../AlertModal';
@@ -96,6 +97,7 @@ function ToolbarDeleteButton({
   deleteMessage,
   cannotDelete,
 }) {
+  const { i18n } = useLingui();
   const { isKebabified, onKebabModalChange } = useContext(KebabifiedContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deleteDetails, setDeleteDetails] = useState(null);
@@ -149,18 +151,18 @@ function ToolbarDeleteButton({
               <span>{`: ${itemsUnableToDelete}`}</span>
             </>
           ) : (
-            t`You do not have permission to delete ${pluralizedItemName}: ${itemsUnableToDelete}`
+            i18n._(msg`You do not have permission to delete ${pluralizedItemName}: ${itemsUnableToDelete}`)
           )}
         </div>
       );
     }
     if (itemsToDelete.length) {
-      return t`Delete`;
+      return i18n._(msg`Delete`);
     }
-    return t`Select a row to delete`;
+    return i18n._(msg`Select a row to delete`);
   };
 
-  const modalTitle = t`Delete ${pluralizedItemName}?`;
+  const modalTitle = i18n._(msg`Delete ${pluralizedItemName}?`);
 
   const isDisabled =
     itemsToDelete.length === 0 || itemsToDelete.some(cannotDelete);
@@ -202,7 +204,7 @@ function ToolbarDeleteButton({
     return (
       <AlertModal
         isOpen={deleteMessageError}
-        title={t`Error!`}
+        title={i18n._(msg`Error!`)}
         onClose={() => {
           toggleModal(false);
           setDeleteMessageError();
@@ -232,7 +234,7 @@ function ToolbarDeleteButton({
               toggleModal(true);
             }}
           >
-            {t`Delete`}
+            {i18n._(msg`Delete`)}
           </DropdownItem>
         </Tooltip>
       ) : (
@@ -243,11 +245,11 @@ function ToolbarDeleteButton({
               isLoading={isLoading}
               ouiaId="delete-button"
               spinnerAriaValueText={isLoading ? 'Loading' : undefined}
-              aria-label={t`Delete`}
+              aria-label={i18n._(msg`Delete`)}
               onClick={() => toggleModal(true)}
               isDisabled={isDisabled}
             >
-              {t`Delete`}
+              {i18n._(msg`Delete`)}
             </Button>
           </div>
         </Tooltip>
@@ -264,26 +266,26 @@ function ToolbarDeleteButton({
               ouiaId="delete-modal-confirm"
               key="delete"
               variant="danger"
-              aria-label={t`confirm delete`}
+              aria-label={i18n._(msg`confirm delete`)}
               isDisabled={Boolean(
                 deleteDetails && itemsToDelete[0]?.type === 'credential_type'
               )}
               onClick={handleDelete}
             >
-              {t`Delete`}
+              {i18n._(msg`Delete`)}
             </Button>,
             <Button
               ouiaId="delete-cancel"
               key="cancel"
               variant="link"
-              aria-label={t`cancel delete`}
+              aria-label={i18n._(msg`cancel delete`)}
               onClick={() => toggleModal(false)}
             >
-              {t`Cancel`}
+              {i18n._(msg`Cancel`)}
             </Button>,
           ]}
         >
-          <div>{t`This action will delete the following:`}</div>
+          <div>{i18n._(msg`This action will delete the following:`)}</div>
           {itemsToDelete.map((item) => (
             <span key={item.id} id={`item-to-be-deleted-${item.id}`}>
               <strong>{item.name || item.username || item.image}</strong>

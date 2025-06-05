@@ -1,8 +1,9 @@
 import 'styled-components/macro';
 import React from 'react';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
 import { Link } from 'react-router-dom';
 import { Chip, Tooltip, Button } from '@patternfly/react-core';
+import { useLingui } from '@lingui/react';
 
 import { Tr, Td } from '@patternfly/react-table';
 import { PencilAltIcon } from '@patternfly/react-icons';
@@ -22,6 +23,7 @@ const SurveyActionsTd = styled(ActionsTd)`
 `;
 
 function SurveyListItem({ canEdit, question, isChecked, onSelect, rowIndex }) {
+  const { i18n } = useLingui();
   return (
     <Tr ouiaId={`survey-row-${question.variable}`}>
       <Td
@@ -31,12 +33,12 @@ function SurveyListItem({ canEdit, question, isChecked, onSelect, rowIndex }) {
           isSelected: isChecked,
           onSelect,
         }}
-        dataLabel={t`Selected`}
+        dataLabel={i18n._(msg`Selected`)}
       />
       <Td
         data-cy={`${question.variable}-name`}
         id={`survey-list-item-${question.variable}`}
-        dataLabel={t`Name`}
+        dataLabel={i18n._(msg`Name`)}
       >
         <>
           <Link
@@ -48,7 +50,7 @@ function SurveyListItem({ canEdit, question, isChecked, onSelect, rowIndex }) {
           </Link>
           {question.required && (
             <Required
-              aria-label={t`Required`}
+              aria-label={i18n._(msg`Required`)}
               className="pf-c-form__label-required"
               aria-hidden="true"
             >
@@ -57,12 +59,12 @@ function SurveyListItem({ canEdit, question, isChecked, onSelect, rowIndex }) {
           )}
         </>
       </Td>
-      <Td data-cy={`${question.variable}-type`} dataLabel={t`Type`}>
+      <Td data-cy={`${question.variable}-type`} dataLabel={i18n._(msg`Type`)}>
         {question.type}
       </Td>
-      <Td dataLabel={t`Default`}>
+      <Td dataLabel={i18n._(msg`Default`)}>
         {[question.type].includes('password') && (
-          <span>{t`encrypted`.toUpperCase()}</span>
+          <span>{i18n._(msg`encrypted`).toUpperCase()}</span>
         )}
         {[question.type].includes('multiselect') &&
           question.default.length > 0 && (
@@ -87,9 +89,9 @@ function SurveyListItem({ canEdit, question, isChecked, onSelect, rowIndex }) {
             <span>{question.default}</span>
           )}
       </Td>
-      <SurveyActionsTd dataLabel={t`Actions`}>
+      <SurveyActionsTd dataLabel={i18n._(msg`Actions`)}>
         <ActionItem visible={canEdit}>
-          <Tooltip content={t`Edit Survey`} position="top">
+          <Tooltip content={i18n._(msg`Edit Survey`)} position="top">
             <Button
               ouiaId={`edit-survey-${question.variable}`}
               variant="plain"

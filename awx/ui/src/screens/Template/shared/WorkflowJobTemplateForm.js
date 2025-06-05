@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import PropTypes, { shape } from 'prop-types';
 import { useField, useFormikContext, withFormik } from 'formik';
 import {
@@ -41,7 +42,8 @@ function WorkflowJobTemplateForm({
   isOrgAdmin,
   isInventoryDisabled,
 }) {
-  const helpText = getHelpText();
+  const { i18n } = useLingui();
+  const helpText = getHelpText(i18n);
   const { setFieldValue, setFieldTouched } = useFormikContext();
   const [enableWebhooks, setEnableWebhooks] = useState(
     Boolean(template.webhook_service)
@@ -106,7 +108,7 @@ function WorkflowJobTemplateForm({
           id="wfjt-name"
           name="name"
           type="text"
-          label={t`Name`}
+          label={i18n._(msg`Name`)}
           validate={required(null)}
           isRequired
         />
@@ -114,7 +116,7 @@ function WorkflowJobTemplateForm({
           id="wfjt-description"
           name="description"
           type="text"
-          label={t`Description`}
+          label={i18n._(msg`Description`)}
         />
         <OrganizationLookup
           helperTextInvalid={organizationMeta.error}
@@ -127,7 +129,7 @@ function WorkflowJobTemplateForm({
           required={isOrgAdmin}
           autoPopulate={isOrgAdmin}
           validate={
-            isOrgAdmin ? required(t`Select a value for this field`) : undefined
+            isOrgAdmin ? required(i18n._(msg`Select a value for this field`)) : undefined
           }
         />
         <FormGroup
@@ -156,7 +158,7 @@ function WorkflowJobTemplateForm({
         </FormGroup>
         <FieldWithPrompt
           fieldId="wfjt-limit"
-          label={t`Limit`}
+          label={i18n._(msg`Limit`)}
           promptId="template-ask-limit-on-launch"
           promptName="ask_limit_on_launch"
           tooltip={helpText.limit}
@@ -174,7 +176,7 @@ function WorkflowJobTemplateForm({
         </FieldWithPrompt>
         <FieldWithPrompt
           fieldId="wfjt-scm-branch"
-          label={t`Source control branch`}
+          label={i18n._(msg`Source control branch`)}
           promptId="wfjt-ask-scm-branch-on-launch"
           promptName="ask_scm_branch_on_launch"
           tooltip={helpText.sourceControlBranch}
@@ -185,14 +187,14 @@ function WorkflowJobTemplateForm({
             onChange={(value) => {
               scmHelpers.setValue(value);
             }}
-            aria-label={t`source control branch`}
+            aria-label={i18n._(msg`source control branch`)}
           />
         </FieldWithPrompt>
       </FormColumnLayout>
       <FormFullWidthLayout>
         <FieldWithPrompt
           fieldId="template-labels"
-          label={t`Labels`}
+          label={i18n._(msg`Labels`)}
           promptId="template-ask-labels-on-launch"
           promptName="ask_labels_on_launch"
           tooltip={helpText.labels}
@@ -201,7 +203,7 @@ function WorkflowJobTemplateForm({
             value={labelsField.value}
             onChange={(labels) => labelsHelpers.setValue(labels)}
             onError={setContentError}
-            createText={t`Create`}
+            createText={i18n._(msg`Create`)}
           />
         </FieldWithPrompt>
       </FormFullWidthLayout>
@@ -209,13 +211,13 @@ function WorkflowJobTemplateForm({
         <VariablesField
           id="wfjt-variables"
           name="extra_vars"
-          label={t`Variables`}
+          label={i18n._(msg`Variables`)}
           promptId="template-ask-variables-on-launch"
           tooltip={helpText.variables}
         />
         <FieldWithPrompt
           fieldId="template-tags"
-          label={t`Job Tags`}
+          label={i18n._(msg`Job Tags`)}
           promptId="template-ask-tags-on-launch"
           promptName="ask_tags_on_launch"
           tooltip={helpText.jobTags}
@@ -227,7 +229,7 @@ function WorkflowJobTemplateForm({
         </FieldWithPrompt>
         <FieldWithPrompt
           fieldId="template-skip-tags"
-          label={t`Skip Tags`}
+          label={i18n._(msg`Skip Tags`)}
           promptId="template-ask-skip-tags-on-launch"
           promptName="ask_skip_tags_on_launch"
           tooltip={helpText.skipTags}
@@ -238,13 +240,13 @@ function WorkflowJobTemplateForm({
           />
         </FieldWithPrompt>
       </FormFullWidthLayout>
-      <FormGroup fieldId="options" label={t`Options`}>
+      <FormGroup fieldId="options" label={i18n._(msg`Options`)}>
         <FormCheckboxLayout isInline>
           <Checkbox
-            aria-label={t`Enable Webhook`}
+            aria-label={i18n._(msg`Enable Webhook`)}
             label={
               <span>
-                {t`Enable Webhook`}
+                {i18n._(msg`Enable Webhook`)}
                 &nbsp;
                 <Popover content={helpText.enableWebhook} />
               </span>
@@ -260,7 +262,7 @@ function WorkflowJobTemplateForm({
             name="allow_simultaneous"
             id="allow_simultaneous"
             tooltip={helpText.enableConcurrentJobs}
-            label={t`Enable Concurrent Jobs`}
+            label={i18n._(msg`Enable Concurrent Jobs`)}
           />
         </FormCheckboxLayout>
       </FormGroup>
@@ -268,7 +270,7 @@ function WorkflowJobTemplateForm({
       {enableWebhooks && (
         <SubFormLayout>
           <Title size="md" headingLevel="h4">
-            {t`Webhook details`}
+            {i18n._(msg`Webhook details`)}
           </Title>
           <WebhookSubForm templateType={template.type} />
         </SubFormLayout>

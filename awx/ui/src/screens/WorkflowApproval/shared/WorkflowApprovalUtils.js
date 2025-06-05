@@ -1,26 +1,19 @@
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+
 import { formatDateString } from 'util/dates';
 
-export function getTooltip(workflowApproval) {
+export function getTooltip(workflowApproval, i18n) {
   if (workflowApproval.status === 'successful') {
     if (workflowApproval.summary_fields?.approved_or_denied_by?.username) {
-      return t`Approved by ${
-        workflowApproval.summary_fields.approved_or_denied_by.username
-      } - ${formatDateString(workflowApproval.finished)}`;
+      return i18n._(msg`Approved by ${workflowApproval.summary_fields.approved_or_denied_by.username} - ${formatDateString(workflowApproval.finished)}`);
     }
-    return t`Approved - ${formatDateString(
-      workflowApproval.finished
-    )}.  See the Activity Stream for more information.`;
+    return i18n._(msg`Approved - ${formatDateString(workflowApproval.finished)}.  See the Activity Stream for more information.`);
   }
   if (workflowApproval.status === 'failed' && workflowApproval.failed) {
     if (workflowApproval.summary_fields?.approved_or_denied_by?.username) {
-      return t`Denied by ${
-        workflowApproval.summary_fields.approved_or_denied_by.username
-      } - ${formatDateString(workflowApproval.finished)}`;
+      return i18n._(msg`Denied by ${workflowApproval.summary_fields.approved_or_denied_by.username} - ${formatDateString(workflowApproval.finished)}`);
     }
-    return t`Denied - ${formatDateString(
-      workflowApproval.finished
-    )}.  See the Activity Stream for more information.`;
+    return i18n._(msg`Denied - ${formatDateString(workflowApproval.finished)}.  See the Activity Stream for more information.`);
   }
   return '';
 }
@@ -31,10 +24,10 @@ export function getStatus(workflowApproval) {
   }
 
   if (workflowApproval.canceled_on) {
-    return t`canceled`;
+    return 'canceled';
   }
   if (workflowApproval.status === 'failed' && workflowApproval.failed) {
-    return t`denied`;
+    return 'denied';
   }
   if (workflowApproval.status === 'successful') {
     return 'approved';
@@ -42,19 +35,17 @@ export function getStatus(workflowApproval) {
   return workflowApproval.status;
 }
 
-export function getPendingLabel(workflowApproval) {
+export function getPendingLabel(workflowApproval, i18n) {
   if (!workflowApproval.approval_expiration) {
-    return t`Never expires`;
+    return i18n._(msg`Never expires`);
   }
 
-  return t`Expires on ${formatDateString(
-    workflowApproval.approval_expiration
-  )}`;
+  return i18n._(msg`Expires on ${formatDateString(workflowApproval.approval_expiration)}`);
 }
 
-export function getDetailPendingLabel(workflowApproval) {
+export function getDetailPendingLabel(workflowApproval, i18n) {
   if (!workflowApproval.approval_expiration) {
-    return t`Never`;
+    return i18n._(msg`Never`);
   }
 
   return `${formatDateString(workflowApproval.approval_expiration)}`;

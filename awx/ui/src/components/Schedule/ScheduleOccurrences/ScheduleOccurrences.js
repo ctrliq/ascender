@@ -3,7 +3,9 @@ import React, { useState } from 'react';
 import { shape, string } from 'prop-types';
 import styled from 'styled-components';
 
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+
 import { Split, SplitItem, TextListItemVariants } from '@patternfly/react-core';
 import { formatDateString } from 'util/dates';
 import { DetailName, DetailValue } from '../../DetailList';
@@ -23,6 +25,7 @@ const OccurrencesLabel = styled.div`
 `;
 
 function ScheduleOccurrences({ preview = { local: [], utc: [] }, tz }) {
+  const { i18n } = useLingui();
   const [mode, setMode] = useState('local');
 
   if (preview.local.length < 2) {
@@ -39,15 +42,15 @@ function ScheduleOccurrences({ preview = { local: [], utc: [] }, tz }) {
         <Split hasGutter>
           <SplitItem>
             <OccurrencesLabel>
-              <span>{t`Occurrences`}</span>
-              <span>{t`(Limited to first 10)`}</span>
+              <span>{i18n._(msg`Occurrences`)}</span>
+              <span>{i18n._(msg`(Limited to first 10)`)}</span>
             </OccurrencesLabel>
           </SplitItem>
           <SplitItem>
             <MultiButtonToggle
               buttons={[
-                ['local', t`Local`],
-                ['utc', t`UTC`],
+                ['local', i18n._(msg`Local`)],
+                ['utc', i18n._(msg`UTC`)],
               ]}
               value={mode}
               onChange={(newMode) => setMode(newMode)}

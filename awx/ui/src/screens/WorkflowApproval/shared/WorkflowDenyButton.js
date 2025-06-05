@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import { Button } from '@patternfly/react-core';
 import { OutlinedThumbsDownIcon } from '@patternfly/react-icons';
 import { WorkflowApprovalsAPI } from 'api';
@@ -9,6 +10,7 @@ import AlertModal from 'components/AlertModal';
 import ErrorDetail from 'components/ErrorDetail';
 
 function WorkflowDenyButton({ isDetailView, workflowApproval, onHandleToast }) {
+  const { i18n } = useLingui();
   const hasBeenActedOn =
     Object.keys(workflowApproval.summary_fields.approved_or_denied_by || {})
       .length > 0 || workflowApproval.status === 'canceled';
@@ -22,7 +24,7 @@ function WorkflowDenyButton({ isDetailView, workflowApproval, onHandleToast }) {
 
   const handleDeny = async () => {
     await denyWorkflowApprovals();
-    onHandleToast(workflowApproval.id, t`Successfully Denied`);
+    onHandleToast(workflowApproval.id, i18n._(msg`Successfully Denied`));
   };
 
   const { error: denyError, dismissError: dismissDenyError } =
@@ -32,23 +34,23 @@ function WorkflowDenyButton({ isDetailView, workflowApproval, onHandleToast }) {
     <>
       <Button
         aria-label={
-          hasBeenActedOn ? t`This workflow has already been acted on` : t`Deny`
+          hasBeenActedOn ? i18n._(msg`This workflow has already been acted on`) : i18n._(msg`Deny`)
         }
         ouiaId="workflow-deny-button"
         isDisabled={hasBeenActedOn}
         variant={isDetailView ? 'secondary' : 'plain'}
         onClick={() => handleDeny()}
       >
-        {isDetailView ? t`Deny` : <OutlinedThumbsDownIcon />}
+        {isDetailView ? i18n._(msg`Deny`) : <OutlinedThumbsDownIcon />}
       </Button>
       {denyError && (
         <AlertModal
           isOpen={denyError}
           variant="error"
-          title={t`Error!`}
+          title={i18n._(msg`Error!`)}
           onClose={dismissDenyError}
         >
-          {t`Failed to deny ${workflowApproval.name}.`}
+          {i18n._(msg`Failed to deny ${workflowApproval.name}.`)}
           <ErrorDetail error={denyError} />
         </AlertModal>
       )}

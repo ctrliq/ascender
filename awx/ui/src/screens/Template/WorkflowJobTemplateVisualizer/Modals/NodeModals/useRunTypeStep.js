@@ -1,16 +1,18 @@
 import React from 'react';
-import { t } from '@lingui/macro';
 import { useField } from 'formik';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import StepName from 'components/LaunchPrompt/steps/StepName';
 import RunStep from './RunStep';
 
 const STEP_ID = 'runType';
 
 export default function useRunTypeStep(askLinkType) {
+  const { i18n } = useLingui();
   const [, meta] = useField('linkType');
 
   return {
-    step: getStep(askLinkType, meta),
+    step: getStep(i18n, askLinkType, meta),
     initialValues: askLinkType ? { linkType: 'success' } : {},
     isReady: true,
     contentError: null,
@@ -21,7 +23,7 @@ export default function useRunTypeStep(askLinkType) {
     validate: () => {},
   };
 }
-function getStep(askLinkType, meta) {
+function getStep(i18n, askLinkType, meta) {
   if (!askLinkType) {
     return null;
   }
@@ -29,7 +31,7 @@ function getStep(askLinkType, meta) {
     id: STEP_ID,
     name: (
       <StepName hasErrors={false} id="run-type-step">
-        {t`Run type`}
+        {i18n._(msg`Run type`)}
       </StepName>
     ),
     component: <RunStep />,
