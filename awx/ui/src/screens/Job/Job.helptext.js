@@ -1,7 +1,8 @@
 import React from 'react';
 import { msg } from '@lingui/macro';
+import { i18n } from '@lingui/core';
 
-const jobHelpText = (i18n) => ({
+const jobHelpText = () => ({
   jobType: i18n._(msg`For job templates, select run to execute the playbook. Select check to only check playbook syntax, test environment setup, and report problems without executing the playbook.`),
   inventory: i18n._(msg`Select the inventory containing the hosts you want this job to manage.`),
   project: i18n._(msg`The project containing the playbook this job will execute.`),

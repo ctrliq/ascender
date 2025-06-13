@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { shape } from 'prop-types';
 import { i18n } from '@lingui/core';
 import { msg } from '@lingui/macro';
+
 import {
   WorkflowDispatchContext,
   WorkflowStateContext,
@@ -661,7 +662,6 @@ function Visualizer({ template }) {
   }
 
   const readOnly = !template?.summary_fields?.user_capabilities?.edit;
-
   return (
     <WorkflowStateContext.Provider value={state}>
       <WorkflowDispatchContext.Provider value={dispatch}>

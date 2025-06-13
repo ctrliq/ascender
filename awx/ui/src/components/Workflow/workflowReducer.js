@@ -1,4 +1,5 @@
 import { msg } from '@lingui/macro';
+import { i18n } from '@lingui/core';
 
 export function initReducer() {
   return {
@@ -407,7 +408,7 @@ function deleteNode(state) {
   };
 }
 
-function generateNodes(workflowNodes, i18n) {
+function generateNodes(workflowNodes) {
   const allNodeIds = [];
   const chartNodeIdToIndexMapping = {};
   const nodeIdToChartNodeIdMapping = {};
@@ -422,10 +423,12 @@ function generateNodes(workflowNodes, i18n) {
   ];
   workflowNodes.forEach((node) => {
     node.workflowMakerNodeId = nodeIdCounter;
+
     const nodeObj = {
       id: nodeIdCounter,
       originalNodeObject: node,
     };
+
     if (
       node.summary_fields?.unified_job_template?.unified_job_type ===
       'workflow_approval'
@@ -435,12 +438,14 @@ function generateNodes(workflowNodes, i18n) {
         type: 'workflow_approval_template',
       };
     }
+
     arrayOfNodesForChart.push(nodeObj);
     allNodeIds.push(node.id);
     nodeIdToChartNodeIdMapping[node.id] = node.workflowMakerNodeId;
     chartNodeIdToIndexMapping[nodeIdCounter] = nodeIdCounter - 1;
     nodeIdCounter++;
   });
+
   return [
     arrayOfNodesForChart,
     allNodeIds,
@@ -496,14 +501,13 @@ function generateLinks(
 }
 
 function generateNodesAndLinks(state, workflowNodes) {
-  const { i18n } = state;
   const [
     arrayOfNodesForChart,
     allNodeIds,
     nodeIdToChartNodeIdMapping,
     chartNodeIdToIndexMapping,
     nodeIdCounter,
-  ] = generateNodes(workflowNodes, i18n);
+  ] = generateNodes(workflowNodes);
   const [arrayOfLinksForChart, nonRootNodeIds] = generateLinks(
     workflowNodes,
     chartNodeIdToIndexMapping,

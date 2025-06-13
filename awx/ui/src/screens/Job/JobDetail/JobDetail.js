@@ -41,7 +41,7 @@ const StatusDetailValue = styled.div`
 
 function JobDetail({ job, inventorySourceLabels }) {
   const { i18n } = useLingui();
-  const jobHelpText = getJobHelpText(i18n);
+  const jobHelpText = getJobHelpText();
   const { me } = useConfig();
   const {
     created_by,
@@ -109,15 +109,19 @@ function JobDetail({ job, inventorySourceLabels }) {
           label={i18n._(msg`Inventory`)}
           helpText={jobHelpText.inventory}
           value={
-            <Link
-              to={
-                inventory.kind === 'smart'
-                  ? `/inventories/smart_inventory/${inventory.id}`
-                  : `/inventories/inventory/${inventory.id}`
-              }
-            >
-              {inventory.name}
-            </Link>
+            inventory.name ? (
+              <Link
+                to={
+                  inventory.kind === 'smart'
+                    ? `/inventories/smart_inventory/${inventory.id}`
+                    : `/inventories/inventory/${inventory.id}`
+                }
+              >
+                {inventory.name}
+              </Link>
+            ) : (
+              'Unknown Inventory'
+            )
           }
         />
       ) : (
@@ -131,15 +135,19 @@ function JobDetail({ job, inventorySourceLabels }) {
           label={i18n._(msg`Inventory`)}
           helpText={jobHelpText.inventory}
           value={
-            <Link
-              to={
-                inventory.kind === 'smart'
-                  ? `/inventories/smart_inventory/${inventory.id}`
-                  : `/inventories/inventory/${inventory.id}`
-              }
-            >
-              {inventory.name}
-            </Link>
+            inventory.name ? (
+              <Link
+                to={
+                  inventory.kind === 'smart'
+                    ? `/inventories/smart_inventory/${inventory.id}`
+                    : `/inventories/inventory/${inventory.id}`
+                }
+              >
+                {inventory.name}
+              </Link>
+            ) : (
+              'Unknown Inventory'
+            )
           }
         />
       ) : null;
@@ -175,7 +183,13 @@ function JobDetail({ job, inventorySourceLabels }) {
             helpText={
               project ? jobHelpText.project : jobHelpText.project_source
             }
-            value={<Link to={`${projectDetailsLink}`}>{projectName}</Link>}
+            value={
+              projectName ? (
+                <Link to={`${projectDetailsLink}`}>{projectName}</Link>
+              ) : (
+                'Unknown Project'
+              )
+            }
           />
           <Detail
             dataCy="job-project-status"
@@ -192,7 +206,9 @@ function JobDetail({ job, inventorySourceLabels }) {
                     }
                   />
                 </Link>
-              ) : null
+              ) : (
+                'No Status Available'
+              )
             }
           />
         </>
@@ -205,28 +221,30 @@ function JobDetail({ job, inventorySourceLabels }) {
   return (
     <CardBody>
       <DetailList>
-        <Detail dataCy="job-id" label={i18n._(msg`Job ID`)} value={job.id} />
+        <Detail dataCy="job-id" label={i18n._(msg`Job ID`)} value={validateReactNode(job.id)} />
         <Detail
           dataCy="job-status"
           fullWidth={Boolean(job.job_explanation)}
           label={i18n._(msg`Status`)}
           value={
             <StatusDetailValue>
-              {job.status && <StatusLabel status={job.status} />}
-              {job?.job_explanation !== job.status ? job.job_explanation : null}
+              {validateReactNode(job.status) ? <StatusLabel status={job.status} /> : 'Unknown Status'}
+              {job?.job_explanation && job.job_explanation !== job.status
+                ? validateReactNode(job.job_explanation)
+                : null}
             </StatusDetailValue>
           }
         />
         <Detail
           dataCy="job-started-date"
           label={i18n._(msg`Started`)}
-          value={formatDateString(job.started)}
+          value={formatDateString(job.started) || 'Unknown Start Date'}
         />
         {job?.finished && (
           <Detail
             dataCy="job-finished-date"
             label={i18n._(msg`Finished`)}
-            value={formatDateString(job.finished)}
+            value={formatDateString(job.finished) || 'Unknown Finish Date'}
           />
         )}
         {jobTemplate && (
@@ -234,9 +252,13 @@ function JobDetail({ job, inventorySourceLabels }) {
             dataCy="job-template"
             label={i18n._(msg`Job Template`)}
             value={
-              <Link to={`/templates/job_template/${jobTemplate.id}`}>
-                {jobTemplate.name}
-              </Link>
+              jobTemplate.name ? (
+                <Link to={`/templates/job_template/${jobTemplate.id}`}>
+                  {jobTemplate.name}
+                </Link>
+              ) : (
+                'Unknown Template'
+              )
             }
           />
         )}
@@ -245,11 +267,15 @@ function JobDetail({ job, inventorySourceLabels }) {
             dataCy="workflow-job-template"
             label={i18n._(msg`Workflow Job Template`)}
             value={
-              <Link
-                to={`/templates/workflow_job_template/${workflowJobTemplate.id}`}
-              >
-                {workflowJobTemplate.name}
-              </Link>
+              workflowJobTemplate.name ? (
+                <Link
+                  to={`/templates/workflow_job_template/${workflowJobTemplate.id}`}
+                >
+                  {workflowJobTemplate.name}
+                </Link>
+              ) : (
+                'Unknown Workflow Template'
+              )
             }
           />
         )}
@@ -258,9 +284,13 @@ function JobDetail({ job, inventorySourceLabels }) {
             dataCy="source-workflow-job"
             label={i18n._(msg`Source Workflow Job`)}
             value={
-              <Link to={`/jobs/workflow/${source_workflow_job.id}`}>
-                {source_workflow_job.id} - {source_workflow_job.name}
-              </Link>
+              source_workflow_job.name ? (
+                <Link to={`/jobs/workflow/${source_workflow_job.id}`}>
+                  {source_workflow_job.id} - {source_workflow_job.name}
+                </Link>
+              ) : (
+                'Unknown Workflow Job'
+              )
             }
           />
         )}
@@ -397,9 +427,9 @@ function JobDetail({ job, inventorySourceLabels }) {
           <Detail
             dataCy="timeout"
             label={i18n._(msg`Timeout`)}
-            value={
+            value={i18n._(validateReactNode(
               job.timeout ? msg`${job.timeout} seconds` : msg`No timeout specified`
-            }
+            ))}
             helpText={jobHelpText.timeout}
           />
         )}
@@ -633,3 +663,9 @@ JobDetail.propTypes = {
 };
 
 export default JobDetail;
+
+function validateReactNode(value) {
+  if (value === null || value === undefined) return 'Unknown';
+  if (typeof value === 'object') return JSON.stringify(value);
+  return value;
+}
