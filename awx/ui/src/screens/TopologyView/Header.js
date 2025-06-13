@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import {
   Button,
   PageSection,
@@ -30,6 +31,7 @@ const Header = ({
   refresh,
   showZoomControls,
 }) => {
+  const { i18n } = useLingui();
   const { light } = PageSectionVariants;
   return (
     <PageSection variant={light}>
@@ -50,10 +52,10 @@ const Header = ({
           </Title>
         </div>
         <div>
-          <Tooltip content={t`Refresh`} position="top">
+          <Tooltip content={i18n._(msg`Refresh`)} position="top">
             <Button
               ouiaId="refresh-button"
-              aria-label={t`Refresh`}
+              aria-label={i18n._(msg`Refresh`)}
               variant="plain"
               icon={<RedoAltIcon />}
               onClick={refresh}
@@ -62,10 +64,10 @@ const Header = ({
               <RedoAltIcon />
             </Button>
           </Tooltip>
-          <Tooltip content={t`Zoom in`} position="top">
+          <Tooltip content={i18n._(msg`Zoom in`)} position="top">
             <Button
               ouiaId="zoom-in-button"
-              aria-label={t`Zoom in`}
+              aria-label={i18n._(msg`Zoom in`)}
               variant="plain"
               icon={<SearchPlusIcon />}
               onClick={zoomIn}
@@ -74,10 +76,10 @@ const Header = ({
               <SearchPlusIcon />
             </Button>
           </Tooltip>
-          <Tooltip content={t`Zoom out`} position="top">
+          <Tooltip content={i18n._(msg`Zoom out`)} position="top">
             <Button
               ouiaId="zoom-out-button"
-              aria-label={t`Zoom out`}
+              aria-label={i18n._(msg`Zoom out`)}
               variant="plain"
               icon={<SearchMinusIcon />}
               onClick={zoomOut}
@@ -86,10 +88,10 @@ const Header = ({
               <SearchMinusIcon />
             </Button>
           </Tooltip>
-          <Tooltip content={t`Fit to screen`} position="top">
+          <Tooltip content={i18n._(msg`Fit to screen`)} position="top">
             <Button
               ouiaId="fit-to-screen-button"
-              aria-label={t`Fit to screen`}
+              aria-label={i18n._(msg`Fit to screen`)}
               variant="plain"
               icon={<ExpandArrowsAltIcon />}
               onClick={zoomFit}
@@ -98,10 +100,10 @@ const Header = ({
               <ExpandArrowsAltIcon />
             </Button>
           </Tooltip>
-          <Tooltip content={t`Reset zoom`} position="top">
+          <Tooltip content={i18n._(msg`Reset zoom`)} position="top">
             <Button
               ouiaId="reset-zoom-button"
-              aria-label={t`Reset zoom`}
+              aria-label={i18n._(msg`Reset zoom`)}
               variant="plain"
               icon={<ExpandIcon />}
               onClick={resetZoom}
@@ -110,10 +112,10 @@ const Header = ({
               <ExpandIcon />
             </Button>
           </Tooltip>
-          <Tooltip content={t`Toggle legend`} position="top">
+          <Tooltip content={i18n._(msg`Toggle legend`)} position="top">
             <Switch
               id="legend-toggle-switch"
-              label={t`Legend`}
+              label={i18n._(msg`Legend`)}
               isChecked={toggleState}
               onChange={() => handleSwitchToggle(!toggleState)}
             />

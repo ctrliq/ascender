@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import styled from 'styled-components';
 import {
   ExclamationTriangleIcon,
@@ -79,55 +80,55 @@ const Close = styled(TimesIcon)`
 
 function WorkflowLegend() {
   const dispatch = useContext(WorkflowDispatchContext);
-
+  const { i18n } = useLingui();
   return (
     <Wrapper>
       <Header>
-        <b>{t`Legend`}</b>
+        <b>{i18n._(msg`Legend`)}</b>
         <Close onClick={() => dispatch({ type: 'TOGGLE_LEGEND' })} />
       </Header>
       <Legend>
         <li>
           <NodeTypeLetter>JT</NodeTypeLetter>
-          <span>{t`Job Template`}</span>
+          <span>{i18n._(msg`Job Template`)}</span>
         </li>
         <li>
           <NodeTypeLetter>W</NodeTypeLetter>
-          <span>{t`Workflow`}</span>
+          <span>{i18n._(msg`Workflow`)}</span>
         </li>
         <li>
           <NodeTypeLetter>I</NodeTypeLetter>
-          <span>{t`Inventory Sync`}</span>
+          <span>{i18n._(msg`Inventory Sync`)}</span>
         </li>
         <li>
           <NodeTypeLetter>P</NodeTypeLetter>
-          <span>{t`Project Sync`}</span>
+          <span>{i18n._(msg`Project Sync`)}</span>
         </li>
         <li>
           <NodeTypeLetter>M</NodeTypeLetter>
-          <span>{t`Management Job`}</span>
+          <span>{i18n._(msg`Management Job`)}</span>
         </li>
         <li>
           <NodeTypeLetter>
             <PauseIcon />
           </NodeTypeLetter>
-          <span>{t`Approval`}</span>
+          <span>{i18n._(msg`Approval`)}</span>
         </li>
         <li>
           <StyledExclamationTriangleIcon />
-          <span>{t`Warning`}</span>
+          <span>{i18n._(msg`Warning`)}</span>
         </li>
         <li>
           <SuccessLink />
-          <span>{t`On Success`}</span>
+          <span>{i18n._(msg`On Success`)}</span>
         </li>
         <li>
           <FailureLink />
-          <span>{t`On Failure`}</span>
+          <span>{i18n._(msg`On Failure`)}</span>
         </li>
         <li>
           <AlwaysLink />
-          <span>{t`Always`}</span>
+          <span>{i18n._(msg`Always`)}</span>
         </li>
       </Legend>
     </Wrapper>

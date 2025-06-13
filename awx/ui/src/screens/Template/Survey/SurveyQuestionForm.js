@@ -1,7 +1,8 @@
 import React from 'react';
 import { func, string, bool, number, shape } from 'prop-types';
 import { Formik, useField } from 'formik';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { Form, FormGroup } from '@patternfly/react-core';
 import { FormColumnLayout } from 'components/FormLayout';
 import FormActionGroup from 'components/FormActionGroup/FormActionGroup';
@@ -25,9 +26,10 @@ import {
 import MultipleChoiceField from './MultipleChoiceField';
 
 function AnswerTypeField() {
+  const { i18n } = useLingui();
   const [field, meta, helpers] = useField({
     name: 'type',
-    validate: required(t`Select a value for this field`),
+    validate: required(i18n._(msg`Select a value for this field`)),
   });
   const [choicesField, choicesMeta, choicesHelpers] =
     useField('formattedChoices');
@@ -40,12 +42,12 @@ function AnswerTypeField() {
 
   return (
     <FormGroup
-      label={t`Answer type`}
+      label={i18n._(msg`Answer type`)}
       labelIcon={
         <Popover
-          content={t`Choose an answer type or format you want as the prompt for the user.
+          content={i18n._(msg`Choose an answer type or format you want as the prompt for the user.
           Refer to the Ansible Controller Documentation for more additional
-          information about each option.`}
+          information about each option.`)}
         />
       }
       isRequired
@@ -77,21 +79,21 @@ function AnswerTypeField() {
           }
         }}
         data={[
-          { key: 'text', value: 'text', label: t`Text` },
-          { key: 'textarea', value: 'textarea', label: t`Textarea` },
-          { key: 'password', value: 'password', label: t`Password` },
+          { key: 'text', value: 'text', label: i18n._(msg`Text`) },
+          { key: 'textarea', value: 'textarea', label: i18n._(msg`Textarea`) },
+          { key: 'password', value: 'password', label: i18n._(msg`Password`) },
           {
             key: 'multiplechoice',
             value: 'multiplechoice',
-            label: t`Multiple Choice (single select)`,
+            label: i18n._(msg`Multiple Choice (single select)`),
           },
           {
             key: 'multiselect',
             value: 'multiselect',
-            label: t`Multiple Choice (multiple select)`,
+            label: i18n._(msg`Multiple Choice (multiple select)`),
           },
-          { key: 'integer', value: 'integer', label: t`Integer` },
-          { key: 'float', value: 'float', label: t`Float` },
+          { key: 'integer', value: 'integer', label: i18n._(msg`Integer`) },
+          { key: 'float', value: 'float', label: i18n._(msg`Float`) },
         ]}
       />
     </FormGroup>
@@ -105,6 +107,7 @@ function SurveyQuestionForm({
   submitError,
 }) {
   const config = useConfig();
+  const { i18n } = useLingui();
 
   let initialValues = {
     question_name: question?.question_name || '',
@@ -160,7 +163,7 @@ function SurveyQuestionForm({
               id="question-name"
               name="question_name"
               type="text"
-              label={t`Question`}
+              label={i18n._(msg`Question`)}
               validate={required(null)}
               isRequired
             />
@@ -168,24 +171,24 @@ function SurveyQuestionForm({
               id="question-description"
               name="question_description"
               type="text"
-              label={t`Description`}
+              label={i18n._(msg`Description`)}
             />
             <FormField
               id="question-variable"
               name="variable"
               type="text"
-              label={t`Answer variable name`}
+              label={i18n._(msg`Answer variable name`)}
               validate={combine([noWhiteSpace(), required(null)])}
               isRequired
-              tooltip={t`The suggested format for variable names is lowercase and
+              tooltip={i18n._(msg`The suggested format for variable names is lowercase and
                 underscore-separated (for example, foo_bar, user_id, host_name,
-                etc.). Variable names with spaces are not allowed.`}
+                etc.). Variable names with spaces are not allowed.`)}
             />
             <AnswerTypeField />
             <CheckboxField
               id="question-required"
               name="required"
-              label={t`Required`}
+              label={i18n._(msg`Required`)}
             />
           </FormColumnLayout>
           <FormColumnLayout>
@@ -195,13 +198,13 @@ function SurveyQuestionForm({
                   id="question-min"
                   name="min"
                   type="number"
-                  label={t`Minimum length`}
+                  label={i18n._(msg`Minimum length`)}
                 />
                 <FormField
                   id="question-max"
                   name="max"
                   type="number"
-                  label={t`Maximum length`}
+                  label={i18n._(msg`Maximum length`)}
                 />
               </>
             )}
@@ -211,13 +214,13 @@ function SurveyQuestionForm({
                   id="question-min"
                   name="min"
                   type="number"
-                  label={t`Minimum`}
+                  label={i18n._(msg`Minimum`)}
                 />
                 <FormField
                   id="question-max"
                   name="max"
                   type="number"
-                  label={t`Maximum`}
+                  label={i18n._(msg`Maximum`)}
                 />
               </>
             )}
@@ -235,7 +238,7 @@ function SurveyQuestionForm({
                 min={formik.values.min}
                 max={formik.values.max}
                 type={formik.values.type === 'text' ? 'text' : 'number'}
-                label={t`Default answer`}
+                label={i18n._(msg`Default answer`)}
               />
             )}
             {formik.values.type === 'textarea' && (
@@ -243,22 +246,22 @@ function SurveyQuestionForm({
                 id="question-default"
                 name="default"
                 type="textarea"
-                label={t`Default answer`}
+                label={i18n._(msg`Default answer`)}
               />
             )}
             {formik.values.type === 'password' && (
               <PasswordField
                 id="question-default"
                 name="default"
-                label={t`Default answer`}
+                label={i18n._(msg`Default answer`)}
               />
             )}
             {['multiplechoice', 'multiselect'].includes(formik.values.type) && (
               <MultipleChoiceField
-                label={t`Multiple Choice Options`}
-                tooltip={
+                label={i18n._(msg`Multiple Choice Options`)}
+                tooltip={(
                   <>
-                    <span>{t`Refer to the`} </span>
+                    <span>{i18n._(msg`Refer to the`)} </span>
                     <a
                       href={`${getDocsBaseUrl(
                         config
@@ -266,11 +269,11 @@ function SurveyQuestionForm({
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      {t`documentation`}
+                      {i18n._(msg`documentation`)}
                     </a>{' '}
-                    {t`for more information.`}
+                    {i18n._(msg`for more information.`)}
                   </>
-                }
+                )}
               />
             )}
           </FormColumnLayout>

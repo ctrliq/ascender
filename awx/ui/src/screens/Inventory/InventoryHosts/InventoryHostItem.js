@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { string, bool, func } from 'prop-types';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { Tr, Td } from '@patternfly/react-table';
 import { Link } from 'react-router-dom';
 import { PencilAltIcon } from '@patternfly/react-icons';
@@ -23,6 +24,7 @@ function InventoryHostItem({
   onSelect,
   rowIndex,
 }) {
+  const { i18n } = useLingui();
   const labelId = `check-action-${host.id}`;
   const initialGroups = host?.summary_fields?.groups ?? {
     results: [],
@@ -65,26 +67,26 @@ function InventoryHostItem({
             onSelect,
           }}
         />
-        <TdBreakWord id={labelId} dataLabel={t`Name`}>
+        <TdBreakWord id={labelId} dataLabel={i18n._(msg`Name`)}>
           <Link to={`${detailUrl}`}>
             <b>{host.name}</b>
           </Link>
         </TdBreakWord>
         <Td>
-            {recentJobs.length > 0 ? (<Sparkline jobs={recentJobs} />) : (t`No job data available`)}
+            {recentJobs.length > 0 ? (<Sparkline jobs={recentJobs} />) : (i18n._(msg`No job data available`))}
         </Td>
         <TdBreakWord
           id={`host-description-${host.id}`}
-          dataLabel={t`Description`}
+          dataLabel={i18n._(msg`Description`)}
         >
           {host.description}
         </TdBreakWord>
         <TdBreakWord
           id={`host-related-groups-${host.id}`}
-          dataLabel={t`Related Groups`}
+          dataLabel={i18n._(msg`Related Groups`)}
         >
           <ChipGroup
-            aria-label={t`Related Groups`}
+            aria-label={i18n._(msg`Related Groups`)}
             numChips={4}
             totalChips={initialGroups.count}
             ouiaId="host-related-groups-chips"
@@ -98,17 +100,17 @@ function InventoryHostItem({
           </ChipGroup>
         </TdBreakWord>
         <ActionsTd
-          aria-label={t`Actions`}
-          dataLabel={t`Actions`}
+          aria-label={i18n._(msg`Actions`)}
+          dataLabel={i18n._(msg`Actions`)}
           gridColumns="auto 40px"
         >
           <HostToggle host={host} />
           <ActionItem
             visible={host.summary_fields.user_capabilities?.edit}
-            tooltip={t`Edit host`}
+            tooltip={i18n._(msg`Edit host`)}
           >
             <Button
-              aria-label={t`Edit host`}
+              aria-label={i18n._(msg`Edit host`)}
               ouiaId={`${host.id}-edit-button`}
               variant="plain"
               component={Link}
@@ -123,10 +125,10 @@ function InventoryHostItem({
         <AlertModal
           isOpen={dismissableError}
           onClose={dismissError}
-          title={t`Error!`}
+          title={i18n._(msg`Error!`)}
           variant="error"
         >
-          {t`Failed to load related groups.`}
+          {i18n._(msg`Failed to load related groups.`)}
           <ErrorDetail error={dismissableError} />
         </AlertModal>
       )}

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import { useField } from 'formik';
 import {
   Form,
@@ -92,6 +93,7 @@ function NumberField({ question }) {
 }
 
 function MultipleChoiceField({ question }) {
+  const { i18n } = useLingui();
   const [field, meta, helpers] = useField({
     name: `survey_${question.variable}`,
     validate: question.required ? required(null) : null,
@@ -128,12 +130,12 @@ function MultipleChoiceField({ question }) {
         id={id}
         ouiaId={`single-survey-question-${question.variable}`}
         isOpen={isOpen}
-        placeholderText={t`Select an option`}
+        placeholderText={i18n._(msg`Select an option`)}
         onClear={() => {
           helpers.setTouched(true);
           helpers.setValue('');
         }}
-        noResultsFoundText={t`No results found`}
+        noResultsFoundText={i18n._(msg`No results found`)}
       >
         {options.map((opt) => (
           <SelectOption key={opt} value={opt} />
@@ -144,6 +146,7 @@ function MultipleChoiceField({ question }) {
 }
 
 function MultiSelectField({ question }) {
+  const { i18n } = useLingui();
   const [isOpen, setIsOpen] = useState(false);
   const [field, meta, helpers] = useField({
     name: `survey_${question.variable}`,
@@ -165,7 +168,7 @@ function MultiSelectField({ question }) {
     <FormGroup
       fieldId={id}
       helperTextInvalid={
-        meta.error || t`At least one value must be selected for this field.`
+        meta.error || i18n._(msg`At least one value must be selected for this field.`)
       }
       isRequired={question.required}
       validated={isValid ? 'default' : 'error'}
@@ -176,7 +179,7 @@ function MultiSelectField({ question }) {
         ouiaId={`multi-survey-question-${question.variable}`}
         variant={SelectVariant.typeaheadMulti}
         id={id}
-        placeholderText={!field.value.length && t`Select option(s)`}
+        placeholderText={!field.value.length && i18n._(msg`Select option(s)`)}
         onToggle={setIsOpen}
         onSelect={(event, option) => {
           if (field?.value?.includes(option)) {
@@ -192,7 +195,7 @@ function MultiSelectField({ question }) {
           helpers.setTouched(true);
           helpers.setValue([]);
         }}
-        noResultsFoundText={t`No results found`}
+        noResultsFoundText={i18n._(msg`No results found`)}
       >
         {options.map((opt) => (
           <SelectOption key={opt} value={opt} />

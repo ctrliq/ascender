@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ExpandableSection, Wizard } from '@patternfly/react-core';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { Formik, useFormikContext } from 'formik';
 import { useDismissableError } from 'hooks/useRequest';
 import mergeExtraVars from 'util/prompt/mergeExtraVars';
@@ -21,6 +22,7 @@ function PromptModalForm({
   instanceGroups,
   resourceDefaultCredentials,
 }) {
+  const { i18n } = useLingui();
   const { setFieldTouched, values } = useFormikContext();
   const [showDescription, setShowDescription] = useState(false);
 
@@ -94,7 +96,7 @@ function PromptModalForm({
       <AlertModal
         isOpen={error}
         variant="error"
-        title={t`Error!`}
+        title={i18n._(msg`Error!`)}
         onClose={() => {
           dismissError();
         }}
@@ -128,12 +130,12 @@ function PromptModalForm({
           validateStep(nextStep.id);
         }
       }}
-      title={t`Launch | ${resource.name}`}
+      title={i18n._(msg`Launch | ${resource.name})`)}
       description={
         resource.description?.length > 512 ? (
           <ExpandableSection
             toggleText={
-              showDescription ? t`Hide description` : t`Show description`
+              showDescription ? i18n._(msg`Hide description`) : i18n._(msg`Show description`)
             }
             onToggle={() => {
               setShowDescription(!showDescription);
@@ -151,14 +153,14 @@ function PromptModalForm({
           ? steps
           : [
               {
-                name: t`Content Loading`,
+                name: i18n._(msg`Content Loading`),
                 component: <ContentLoading />,
               },
             ]
       }
-      backButtonText={t`Back`}
-      cancelButtonText={t`Cancel`}
-      nextButtonText={t`Next`}
+      backButtonText={i18n._(msg`Back`)}
+      cancelButtonText={i18n._(msg`Cancel`)}
+      nextButtonText={i18n._(msg`Nexit`)}
     />
   );
 }

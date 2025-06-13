@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import { RolesAPI, TeamsAPI, UsersAPI } from 'api';
 import { getQSConfig, parseQueryString } from 'util/qs';
 import useRequest, { useDeleteItems } from 'hooks/useRequest';
@@ -25,6 +26,7 @@ const QS_CONFIG = getQSConfig('access', {
 });
 
 function ResourceAccessList({ apiModel, resource }) {
+  const { i18n } = useLingui();
   const { isSuperUser } = useUserProfile();
   const [submitError, setSubmitError] = useState(null);
   const [deletionRecord, setDeletionRecord] = useState(null);
@@ -91,11 +93,9 @@ function ResourceAccessList({ apiModel, resource }) {
             if (key === 'admin_role') {
               return [`${value.id}, ${systemAdmin[0].id}`, value.name];
             }
-
             if (key === 'auditor_role') {
               return [`${value.id}, ${systemAuditor[0].id}`, value.name];
             }
-
             return [`${value.id}`, value.name];
           }
         );
@@ -140,25 +140,26 @@ function ResourceAccessList({ apiModel, resource }) {
       fetchItems: fetchAccessRecords,
     }
   );
+
   const toolbarSearchColumns = [
     {
-      name: t`Username`,
+      name: i18n._(msg`Username`),
       key: 'username__icontains',
       isDefault: true,
     },
     {
-      name: t`First Name`,
+      name: i18n._(msg`First Name`),
       key: 'first_name__icontains',
     },
     {
-      name: t`Last Name`,
+      name: i18n._(msg`Last Name`),
       key: 'last_name__icontains',
     },
   ];
 
   if (organizationRoles?.length > 0) {
     toolbarSearchColumns.push({
-      name: t`Roles`,
+      name: i18n._(msg`Roles`),
       key: `or__roles__in`,
       options: organizationRoles,
     });
@@ -171,7 +172,7 @@ function ResourceAccessList({ apiModel, resource }) {
         hasContentLoading={isLoading || isDeleteLoading}
         items={accessRecords}
         itemCount={itemCount}
-        pluralizedItemName={t`Roles`}
+        pluralizedItemName={i18n._(msg`Roles`)}
         qsConfig={QS_CONFIG}
         toolbarSearchColumns={toolbarSearchColumns}
         toolbarSearchableKeys={searchableKeys}
@@ -195,10 +196,10 @@ function ResourceAccessList({ apiModel, resource }) {
         )}
         headerRow={
           <HeaderRow qsConfig={QS_CONFIG} isSelectable={false}>
-            <HeaderCell sortKey="username">{t`Username`}</HeaderCell>
-            <HeaderCell sortKey="first_name">{t`First name`}</HeaderCell>
-            <HeaderCell sortKey="last_name">{t`Last name`}</HeaderCell>
-            <HeaderCell>{t`Roles`}</HeaderCell>
+            <HeaderCell sortKey="username">{i18n._(msg`Username`)}</HeaderCell>
+            <HeaderCell sortKey="first_name">{i18n._(msg`First name`)}</HeaderCell>
+            <HeaderCell sortKey="last_name">{i18n._(msg`Last name`)}</HeaderCell>
+            <HeaderCell>{i18n._(msg`Roles`)}</HeaderCell>
           </HeaderRow>
         }
         renderRow={(accessRecord, index) => (
@@ -246,11 +247,11 @@ function ResourceAccessList({ apiModel, resource }) {
       {submitError && (
         <AlertModal
           variant="error"
-          title={t`Error!`}
+          title={i18n._(msg`Error!`)}
           isOpen={submitError}
           onClose={() => setSubmitError(null)}
         >
-          {t`Failed to assign roles properly`}
+          {i18n._(msg`Failed to assign roles properly`)}
           <ErrorDetail error={submitError} />
         </AlertModal>
       )}
@@ -258,13 +259,14 @@ function ResourceAccessList({ apiModel, resource }) {
         <AlertModal
           isOpen={deletionError}
           variant="error"
-          title={t`Error!`}
+          title={i18n._(msg`Error!`)}
           onClose={clearDeletionError}
         >
-          {t`Failed to delete role`}
+          {i18n._(msg`Failed to delete role`)}
         </AlertModal>
       )}
     </>
   );
 }
+
 export default ResourceAccessList;

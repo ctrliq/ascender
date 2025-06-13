@@ -1,7 +1,7 @@
 import 'styled-components/macro';
 import React, { useState, useEffect, useCallback } from 'react';
-
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import { Switch, Tooltip } from '@patternfly/react-core';
 import useRequest from 'hooks/useRequest';
 import { SchedulesAPI } from 'api';
@@ -9,6 +9,7 @@ import AlertModal from '../../AlertModal';
 import ErrorDetail from '../../ErrorDetail';
 
 function ScheduleToggle({ schedule, onToggle, className, isDisabled }) {
+  const { i18n } = useLingui();
   const [isEnabled, setIsEnabled] = useState(schedule.enabled);
   const [showError, setShowError] = useState(false);
 
@@ -46,7 +47,9 @@ function ScheduleToggle({ schedule, onToggle, className, isDisabled }) {
     <>
       <Tooltip
         content={
-          schedule.enabled ? t`Schedule is active` : t`Schedule is inactive`
+          schedule.enabled
+            ? i18n._(msg`Schedule is active`)
+            : i18n._(msg`Schedule is inactive`)
         }
         position="top"
       >
@@ -54,8 +57,8 @@ function ScheduleToggle({ schedule, onToggle, className, isDisabled }) {
           className={className}
           css="display: inline-flex;"
           id={`schedule-${schedule.id}-toggle`}
-          label={t`On`}
-          labelOff={t`Off`}
+          label={i18n._(msg`On`)}
+          labelOff={i18n._(msg`Off`)}
           isChecked={isEnabled}
           isDisabled={
             isLoading ||
@@ -63,18 +66,18 @@ function ScheduleToggle({ schedule, onToggle, className, isDisabled }) {
             isDisabled
           }
           onChange={toggleSchedule}
-          aria-label={t`Toggle schedule`}
+          aria-label={i18n._(msg`Toggle schedule`)}
           ouiaId={`schedule-${schedule.id}-toggle`}
         />
       </Tooltip>
       {showError && error && !isLoading && (
         <AlertModal
           variant="error"
-          title={t`Error!`}
+          title={i18n._(msg`Error!`)}
           isOpen={error && !isLoading}
           onClose={() => setShowError(false)}
         >
-          {t`Failed to toggle schedule.`}
+          {i18n._(msg`Failed to toggle schedule.`)}
           <ErrorDetail error={error} />
         </AlertModal>
       )}

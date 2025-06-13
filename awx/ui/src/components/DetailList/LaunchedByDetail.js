@@ -1,10 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from "@lingui/react";
 import getScheduleUrl from 'util/getScheduleUrl';
 import Detail from './Detail';
 
-const getLaunchedByDetails = (job) => {
+const getLaunchedByDetails = (job, i18n) => {
   const {
     created_by: createdBy,
     job_template: jobTemplate,
@@ -21,7 +22,7 @@ const getLaunchedByDetails = (job) => {
 
   switch (job.launch_type) {
     case 'webhook':
-      value = t`Webhook`;
+      value = i18n._(msg`Webhook`);
       link =
         (jobTemplate && `/templates/job_template/${jobTemplate.id}/details`) ||
         (workflowJT &&
@@ -45,13 +46,14 @@ const getLaunchedByDetails = (job) => {
 };
 
 export default function LaunchedByDetail({ job, dataCy = null }) {
+  const { i18n } = useLingui();
   const { value: launchedByValue, link: launchedByLink } =
-    getLaunchedByDetails(job) || {};
+    getLaunchedByDetails(job, i18n) || {};
 
   return (
     <Detail
       dataCy={dataCy}
-      label={t`Launched By`}
+      label={i18n._(msg`Launched By`)}
       value={
         launchedByLink ? (
           <Link to={`${launchedByLink}`}>{launchedByValue}</Link>

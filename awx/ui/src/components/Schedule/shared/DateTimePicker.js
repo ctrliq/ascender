@@ -1,5 +1,6 @@
 import React from 'react';
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import { useField } from 'formik';
 import {
   DatePicker,
@@ -15,6 +16,7 @@ const DateTimeGroup = styled.span`
   display: flex;
 `;
 function DateTimePicker({ dateFieldName, timeFieldName, label }) {
+  const { i18n } = useLingui();
   const [dateField, dateMeta, dateHelpers] = useField({
     name: dateFieldName,
     validate: combine([required(null), isValidDate]),
@@ -48,7 +50,7 @@ function DateTimePicker({ dateFieldName, timeFieldName, label }) {
       <DateTimeGroup>
         <DatePicker
           aria-label={
-            dateFieldName.startsWith('start') ? t`Start date` : t`End date`
+            dateFieldName.startsWith('start') ? i18n._(msg`Start date`) : i18n._(msg`End date`)
           }
           {...dateField}
           value={dateField.value.split('T')[0]}
@@ -58,7 +60,7 @@ function DateTimePicker({ dateFieldName, timeFieldName, label }) {
           placeholder="hh:mm AM/PM"
           stepMinutes={15}
           aria-label={
-            timeFieldName.startsWith('start') ? t`Start time` : t`End time`
+            timeFieldName.startsWith('start') ? i18n._(msg`Start time`) : i18n._(msg`End time`)
           }
           time={timeField.value}
           {...timeField}

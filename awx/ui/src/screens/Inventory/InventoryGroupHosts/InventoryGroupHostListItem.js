@@ -2,7 +2,8 @@ import 'styled-components/macro';
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { string, bool, func, number } from 'prop-types';
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import { Button, Tooltip } from '@patternfly/react-core';
 import { PencilAltIcon } from '@patternfly/react-icons';
 
@@ -20,6 +21,7 @@ function InventoryGroupHostListItem({
   isSelected,
   onSelect,
 }) {
+  const { i18n } = useLingui();
   const recentPlaybookJobs = host.summary_fields.recent_jobs.map((job) => ({
     ...job,
     type: 'job',
@@ -39,33 +41,33 @@ function InventoryGroupHostListItem({
           isSelected,
           onSelect,
         }}
-        dataLabel={t`Selected`}
+        dataLabel={i18n._(msg`Selected`)}
       />
-      <Td dataLabel={t`host-name-${host.id}`} id={labelId}>
+      <Td dataLabel={i18n._(msg`host-name-${host.id}`)} id={labelId}>
         <Link to={`${detailUrl}`}>
           <b>{host.name}</b>
         </Link>
       </Td>
-      <Td dataLabel={t`host-description-${host.id}`}>{host.description}</Td>
-      <Td dataLabel={t`Activity`}>
+      <Td dataLabel={i18n._(msg`host-description-${host.id}`)}>{host.description}</Td>
+      <Td dataLabel={i18n._(msg`Activity`)}>
         <Sparkline jobs={recentPlaybookJobs} />
       </Td>
-      <ActionsTd dataLabel={t`Actions`} gridColumns="auto 40px">
+      <ActionsTd dataLabel={i18n._(msg`Actions`)} gridColumns="auto 40px">
         <ActionItem
           visible={host.summary_fields.user_capabilities?.edit}
-          tooltip={t`Toggle host`}
+          tooltip={i18n._(msg`Toggle host`)}
         >
           <HostToggle host={host} />
         </ActionItem>
         {inventoryType !== 'constructed_inventory' && (
           <ActionItem
-            tooltip={t`Edit Host`}
+            tooltip={i18n._(msg`Edit Host`)}
             visible={host.summary_fields.user_capabilities?.edit}
           >
-            <Tooltip content={t`Edit Host`} position="top">
+            <Tooltip content={i18n._(msg`Edit Host`)} position="top">
               <Button
                 ouiaId={`${host.id}-edit-button`}
-                aria-label={t`Edit Host`}
+                aria-label={i18n._(msg`Edit Host`)}
                 variant="plain"
                 component={Link}
                 to={`${editUrl}`}

@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { Button } from '@patternfly/react-core';
 import { OutlinedThumbsUpIcon } from '@patternfly/react-icons';
 import { WorkflowApprovalsAPI } from 'api';
@@ -13,6 +14,7 @@ function WorkflowApprovalButton({
   workflowApproval,
   onHandleToast,
 }) {
+  const { i18n } = useLingui();
   const { id } = workflowApproval;
   const hasBeenActedOn =
     Object.keys(workflowApproval.summary_fields.approved_or_denied_by || {})
@@ -25,7 +27,7 @@ function WorkflowApprovalButton({
 
   const handleApprove = async () => {
     await approveWorkflowApprovals();
-    onHandleToast(workflowApproval.id, t`Successfully Approved`);
+    onHandleToast(workflowApproval.id, i18n._(msg`Successfully Approved`));
   };
 
   const { error: approveError, dismissError: dismissApproveError } =
@@ -40,20 +42,20 @@ function WorkflowApprovalButton({
         onClick={() => handleApprove()}
         aria-label={
           hasBeenActedOn
-            ? t`This workflow has already been acted on`
-            : t`Approve`
+            ? i18n._(msg`This workflow has already been acted on`)
+            : i18n._(msg`Approve`)
         }
       >
-        {isDetailView ? t`Approve` : <OutlinedThumbsUpIcon />}
+        {isDetailView ? i18n._(msg`Approve`) : <OutlinedThumbsUpIcon />}
       </Button>
       {approveError && (
         <AlertModal
           isOpen={approveError}
           variant="error"
-          title={t`Error!`}
+          title={i18n._(msg`Error!`)}
           onClose={dismissApproveError}
         >
-          {t`Failed to approve ${workflowApproval.name}.`}
+          {i18n._(msg`Failed to approve ${workflowApproval.name}.`)}
           <ErrorDetail error={approveError} />
         </AlertModal>
       )}

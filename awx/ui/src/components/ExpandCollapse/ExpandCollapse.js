@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import {
   Button as PFButton,
   ToolbarItem as PFToolbarItem,
@@ -32,13 +33,14 @@ const ToolbarItem = styled(PFToolbarItem)`
 // TODO: Recommend renaming this component to avoid confusion
 // with ExpandingContainer
 function ExpandCollapse({ isCompact, onCompact, onExpand }) {
+  const { i18n } = useLingui();
   return (
     <>
       <ToolbarItem>
         <Button
           ouiaId="toolbar-collapse-button"
           variant="plain"
-          aria-label={t`Collapse`}
+          aria-label={i18n._(msg`Collapse`)}
           onClick={onCompact}
           isActive={isCompact}
         >
@@ -49,7 +51,7 @@ function ExpandCollapse({ isCompact, onCompact, onExpand }) {
         <Button
           ouiaId="toolbar-expand-button"
           variant="plain"
-          aria-label={t`Expand`}
+          aria-label={i18n._(msg`Expand`)}
           onClick={onExpand}
           isActive={!isCompact}
         >

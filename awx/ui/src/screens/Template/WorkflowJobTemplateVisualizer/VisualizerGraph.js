@@ -1,6 +1,7 @@
 import 'styled-components/macro';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { t } from '@lingui/macro';
+import { i18n } from '@lingui/core';
+import { msg } from '@lingui/macro';
 import styled from 'styled-components';
 import { bool } from 'prop-types';
 import * as d3 from 'd3';
@@ -242,7 +243,9 @@ function VisualizerGraph({ readOnly }) {
             onMouseMove: (e) => drawPotentialLinkToCursor(e),
             onMouseOver: () =>
               setHelpText(
-                t`Click an available node to create a new link.  Click outside the graph to cancel.`
+                i18n._(
+                  msg`Click an available node to create a new link.  Click outside the graph to cancel.`
+                )
               ),
             onMouseOut: () => setHelpText(null),
             onClick: () => handleBackgroundClick(),

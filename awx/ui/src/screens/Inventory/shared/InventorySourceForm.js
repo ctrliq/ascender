@@ -1,7 +1,8 @@
 import React, { useEffect, useCallback } from 'react';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import { Formik, useField, useFormikContext } from 'formik';
 import { func, shape } from 'prop-types';
-import { t } from '@lingui/macro';
 import { Form, FormGroup, Title } from '@patternfly/react-core';
 import { InventorySourcesAPI } from 'api';
 import useRequest from 'hooks/useRequest';
@@ -40,11 +41,12 @@ const InventorySourceFormFields = ({
   sourceOptions,
   organizationId,
 }) => {
+  const { i18n } = useLingui();
   const { values, initialValues, resetForm, setFieldTouched, setFieldValue } =
     useFormikContext();
   const [sourceField, sourceMeta] = useField({
     name: 'source',
-    validate: required(t`Set a value for this field`),
+    validate: required(i18n._(msg`Set a value for this field`)),
   });
   const [
     executionEnvironmentField,
@@ -99,7 +101,7 @@ const InventorySourceFormFields = ({
     <>
       <FormField
         id="name"
-        label={t`Name`}
+        label={i18n._(msg`Name`)}
         name="name"
         type="text"
         validate={required(null)}
@@ -107,7 +109,7 @@ const InventorySourceFormFields = ({
       />
       <FormField
         id="description"
-        label={t`Description`}
+        label={i18n._(msg`Description`)}
         name="description"
         type="text"
       />
@@ -129,7 +131,7 @@ const InventorySourceFormFields = ({
         validated={
           !sourceMeta.touched || !sourceMeta.error ? 'default' : 'error'
         }
-        label={t`Source`}
+        label={i18n._(msg`Source`)}
       >
         <AnsibleSelect
           {...sourceField}
@@ -138,7 +140,7 @@ const InventorySourceFormFields = ({
             {
               value: '',
               key: '',
-              label: t`Choose a source`,
+              label: i18n._(msg`Choose a source`),
               isDisabled: true,
             },
             ...buildSourceChoiceOptions(sourceOptions),
@@ -151,7 +153,7 @@ const InventorySourceFormFields = ({
       {!['', 'custom'].includes(sourceField.value) && (
         <SubFormLayout>
           <Title size="md" headingLevel="h4">
-            {t`Source details`}
+            {i18n._(msg`Source details`)}
           </Title>
           <FormColumnLayout>
             {

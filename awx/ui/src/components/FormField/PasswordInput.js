@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { useField } from 'formik';
 import {
   Button,
@@ -12,6 +13,7 @@ import {
 import { EyeIcon, EyeSlashIcon } from '@patternfly/react-icons';
 
 function PasswordInput(props) {
+  const { i18n } = useLingui();
   const {
     autocomplete,
     id,
@@ -32,11 +34,11 @@ function PasswordInput(props) {
 
   return (
     <>
-      <Tooltip content={inputType === 'password' ? t`Show` : t`Hide`}>
+      <Tooltip content={inputType === 'password' ? i18n._(msg`Show`) : i18n._(msg`Hide`)}>
         <Button
           ouiaId={`${id}-toggle`}
           variant={ButtonVariant.control}
-          aria-label={t`Toggle Password`}
+          aria-label={i18n._(msg`Toggle Password`)}
           onClick={handlePasswordToggle}
           isDisabled={isDisabled}
         >

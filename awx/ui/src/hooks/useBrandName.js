@@ -5,13 +5,19 @@ export default function useBrandName() {
   const [brandName, setBrandName] = useState('');
 
   useEffect(() => {
+    let isMounted = true;
     async function fetchBrandName() {
       const {
         data: { BRAND_NAME },
       } = await RootAPI.readAssetVariables();
-      setBrandName(BRAND_NAME);
+      if (isMounted) {
+        setBrandName(BRAND_NAME);
+      }
     }
     fetchBrandName();
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return brandName;

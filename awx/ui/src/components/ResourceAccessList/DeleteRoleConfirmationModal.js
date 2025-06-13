@@ -2,16 +2,17 @@
 import React from 'react';
 import { func, string } from 'prop-types';
 import { Button } from '@patternfly/react-core';
-
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 
 import { Role } from 'types';
 import AlertModal from '../AlertModal';
 
 function DeleteRoleConfirmationModal({ role, username, onCancel, onConfirm }) {
+  const { i18n } = useLingui();
   const sourceOfRole = () =>
-    typeof role.team_id !== 'undefined' ? t`Team` : t`User`;
-  const title = t`Remove ${sourceOfRole()} Access`;
+    typeof role.team_id !== 'undefined' ? i18n._(msg`Team`) : i18n._(msg`User`);
+  const title = i18n._(msg`Remove ${sourceOfRole()} Access`);
   return (
     <AlertModal
       variant="danger"
@@ -23,10 +24,10 @@ function DeleteRoleConfirmationModal({ role, username, onCancel, onConfirm }) {
           ouiaId="delete-role-modal-delete-button"
           key="delete"
           variant="danger"
-          aria-label={t`Confirm delete`}
+          aria-label={i18n._(msg`Confirm delete`)}
           onClick={onConfirm}
         >
-          {t`Delete`}
+          {i18n._(msg`Delete`)}
         </Button>,
         <Button
           ouiaId="delete-role-modal-cancel-button"
@@ -34,20 +35,20 @@ function DeleteRoleConfirmationModal({ role, username, onCancel, onConfirm }) {
           variant="link"
           onClick={onCancel}
         >
-          {t`Cancel`}
+          {i18n._(msg`Cancel`)}
         </Button>,
       ]}
     >
       {sourceOfRole() === 'Team' ? (
         <>
-          {t`Are you sure you want to remove ${role.name} access from ${role.team_name}?  Doing so affects all members of the team.`}
+          {i18n._(msg`Are you sure you want to remove ${role.name} access from ${role.team_name}?  Doing so affects all members of the team.`)}
           <br />
           <br />
-          {t`If you only want to remove access for this particular user, please remove them from the team.`}
+          {i18n._(msg`If you only want to remove access for this particular user, please remove them from the team.`)}
         </>
       ) : (
         <>
-          {t`Are you sure you want to remove ${role.name} access from ${username}?`}
+          {i18n._(msg`Are you sure you want to remove ${role.name} access from ${username}?`)}
         </>
       )}
     </AlertModal>

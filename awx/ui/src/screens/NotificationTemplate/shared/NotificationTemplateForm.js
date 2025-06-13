@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
 import { shape, func } from 'prop-types';
 import { Formik, useField, useFormikContext } from 'formik';
-
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import { Form, FormGroup } from '@patternfly/react-core';
 
 import AnsibleSelect from 'components/AnsibleSelect';
@@ -17,11 +17,12 @@ import hasCustomMessages from './hasCustomMessages';
 import typeFieldNames, { initialConfigValues } from './typeFieldNames';
 
 function NotificationTemplateFormFields({ defaultMessages, template }) {
+  const { i18n } = useLingui();
   const { setFieldValue, setFieldTouched } = useFormikContext();
   const [orgField, orgMeta, orgHelpers] = useField('organization');
   const [typeField, typeMeta] = useField({
     name: 'notification_type',
-    validate: required(t`Select a value for this field`),
+    validate: required(i18n._(msg`Select a value for this field`)),
   });
 
   const handleOrganizationUpdate = useCallback(
@@ -38,7 +39,7 @@ function NotificationTemplateFormFields({ defaultMessages, template }) {
         id="notification-name"
         name="name"
         type="text"
-        label={t`Name`}
+        label={i18n._(msg`Name`)}
         validate={required(null)}
         isRequired
       />
@@ -46,7 +47,7 @@ function NotificationTemplateFormFields({ defaultMessages, template }) {
         id="notification-description"
         name="description"
         type="text"
-        label={t`Description`}
+        label={i18n._(msg`Description`)}
       />
       <OrganizationLookup
         helperTextInvalid={orgMeta.error}
@@ -58,14 +59,14 @@ function NotificationTemplateFormFields({ defaultMessages, template }) {
         error={orgMeta.error}
         required
         autoPopulate={!template?.id}
-        validate={required(t`Select a value for this field`)}
+        validate={required(i18n._(msg`Select a value for this field`))}
       />
       <FormGroup
         fieldId="notification-type"
         helperTextInvalid={typeMeta.error}
         isRequired
         validated={!typeMeta.touched || !typeMeta.error ? 'default' : 'error'}
-        label={t`Type`}
+        label={i18n._(msg`Type`)}
       >
         <AnsibleSelect
           {...typeField}
@@ -75,10 +76,10 @@ function NotificationTemplateFormFields({ defaultMessages, template }) {
             {
               value: '',
               key: 'none',
-              label: t`Choose a Notification Type`,
+              label: i18n._(msg`Choose a Notification Type`),
               isDisabled: true,
             },
-            { value: 'email', key: 'email', label: t`E-mail` },
+            { value: 'email', key: 'email', label: i18n._(msg`E-mail`) },
             { value: 'grafana', key: 'grafana', label: 'Grafana' },
             { value: 'irc', key: 'irc', label: 'IRC' },
             { value: 'mattermost', key: 'mattermost', label: 'Mattermost' },

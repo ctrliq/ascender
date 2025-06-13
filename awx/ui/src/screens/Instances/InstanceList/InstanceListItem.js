@@ -1,7 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { bool, func } from 'prop-types';
-import { t, Plural } from '@lingui/macro';
+import { msg, Plural } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import styled from 'styled-components';
 import 'styled-components/macro';
 import {
@@ -54,6 +55,7 @@ function InstanceListItem({
   fetchInstances,
   rowIndex,
 }) {
+  const { i18n } = useLingui();
   const config = useConfig();
   const [forks, setForks] = useState(
     computeForks(
@@ -72,11 +74,11 @@ function InstanceListItem({
           value={Math.round(100 - item.percent_capacity_remaining)}
           measureLocation={ProgressMeasureLocation.top}
           size={ProgressSize.sm}
-          title={t`Used capacity`}
+          title={i18n._(msg`Used capacity`)}
         />
       );
     }
-    return <Unavailable>{t`Unavailable`}</Unavailable>;
+    return <Unavailable>{i18n._(msg`Unavailable`)}</Unavailable>;
   }
 
   const { error: updateInstanceError, request: updateInstance } = useRequest(
@@ -141,19 +143,19 @@ function InstanceListItem({
             onSelect,
             disable: isManaged,
           }}
-          dataLabel={t`Selected`}
+          dataLabel={i18n._(msg`Selected`)}
         />
-        <Td id={labelId} dataLabel={t`Name`}>
+        <Td id={labelId} dataLabel={i18n._(msg`Name`)}>
           <Link to={`/instances/${instance.id}/details`}>
             <b>{instance.hostname}</b>
           </Link>
         </Td>
 
-        <Td dataLabel={t`Status`}>
+        <Td dataLabel={i18n._(msg`Status`)}>
           <Tooltip
             content={
               <div>
-                {t`Last Health Check`}
+                {i18n._(msg`Last Health Check`)}
                 &nbsp;
                 {formatDateString(
                   instance.last_health_check ?? instance.last_seen
@@ -165,15 +167,15 @@ function InstanceListItem({
           </Tooltip>
         </Td>
 
-        <Td dataLabel={t`Node Type`}>{instance.node_type}</Td>
+        <Td dataLabel={i18n._(msg`Node Type`)}>{instance.node_type}</Td>
         {!isHopNode && (
           <>
-            <Td dataLabel={t`Capacity Adjustment`}>
+            <Td dataLabel={i18n._(msg`Capacity Adjustment`)}>
               <SliderHolder data-cy="slider-holder">
-                <div data-cy="cpu-capacity">{t`CPU ${instance.cpu_capacity}`}</div>
+                <div data-cy="cpu-capacity">{i18n._(msg`CPU ${instance.cpu_capacity}`)}</div>
                 <SliderForks data-cy="slider-forks">
                   <div data-cy="number-forks">
-                    <Plural value={forks} one="# fork" other="# forks" />
+                    <Plural value={forks} one={i18n._(msg`# fork`)} other={i18n._(msg`# forks`)} />
                   </div>
                   <Slider
                     areCustomStepsContinuous
@@ -186,19 +188,19 @@ function InstanceListItem({
                     data-cy="slider"
                   />
                 </SliderForks>
-                <div data-cy="mem-capacity">{t`RAM ${instance.mem_capacity}`}</div>
+                <div data-cy="mem-capacity">{i18n._(msg`RAM ${instance.mem_capacity}`)}</div>
               </SliderHolder>
             </Td>
 
             <Td
-              dataLabel={t`Instance group used capacity`}
+              dataLabel={i18n._(msg`Instance group used capacity`)}
               css="--pf-c-table--cell--MinWidth: 175px;"
             >
               {usedCapacity(instance)}
             </Td>
 
             <ActionsTd
-              dataLabel={t`Actions`}
+              dataLabel={i18n._(msg`Actions`)}
               css="--pf-c-table--cell--Width: 125px"
             >
               <ActionItem visible>
@@ -224,24 +226,24 @@ function InstanceListItem({
                 <Detail
                   data-cy="running-jobs"
                   value={instance.jobs_running}
-                  label={t`Running Jobs`}
+                  label={i18n._(msg`Running Jobs`)}
                 />
                 <Detail
                   data-cy="total-jobs"
                   value={instance.jobs_total}
-                  label={t`Total Jobs`}
+                  label={i18n._(msg`Total Jobs`)}
                 />
                 <Detail
                   data-cy="policy-type"
-                  label={t`Policy Type`}
-                  value={instance.managed_by_policy ? t`Auto` : t`Manual`}
+                  label={i18n._(msg`Policy Type`)}
+                  value={instance.managed_by_policy ? i18n._(msg`Auto`) : i18n._(msg`Manual`)}
                 />
                 <Detail
                   data-cy="last-health-check"
-                  label={t`Last Health Check`}
+                  label={i18n._(msg`Last Health Check`)}
                   helpText={
                     <>
-                      {t`Health checks are asynchronous tasks. See the`}{' '}
+                      {i18n._(msg`Health checks are asynchronous tasks. See the`)}{' '}
                       <a
                         href={`${getDocsBaseUrl(
                           config
@@ -249,9 +251,9 @@ function InstanceListItem({
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        {t`documentation`}
+                        {i18n._(msg`documentation`)}
                       </a>{' '}
-                      {t`for more info.`}
+                      {i18n._(msg`for more info.`)}
                     </>
                   }
                   value={formatHealthCheckTimeStamp(instance.last_health_check)}
@@ -264,11 +266,10 @@ function InstanceListItem({
       {updateError && (
         <AlertModal
           variant="error"
-          title={t`Error!`}
-          isOpen
+          title={i18n._(msg`Error!`)}
           onClose={dismissUpdateError}
         >
-          {t`Failed to update capacity adjustment.`}
+          {i18n._(msg`Failed to update capacity adjustment.`)}
           <ErrorDetail error={updateError} />
         </AlertModal>
       )}

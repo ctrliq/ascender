@@ -1,6 +1,9 @@
 import React, { useEffect, useCallback } from 'react';
 import { useHistory, useLocation, useRouteMatch } from 'react-router-dom';
-import { t } from '@lingui/macro';
+
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
+
 import { Card, PageSection } from '@patternfly/react-core';
 import { HostsAPI } from 'api';
 import AlertModal from 'components/AlertModal';
@@ -27,6 +30,7 @@ const QS_CONFIG = getQSConfig('host', {
 });
 
 function HostList() {
+  const { i18n } = useLingui();
   const history = useHistory();
   const location = useLocation();
   const match = useRouteMatch();
@@ -136,25 +140,25 @@ function HostList() {
           hasContentLoading={isLoading || isDeleteLoading}
           items={hosts}
           itemCount={count}
-          pluralizedItemName={t`Hosts`}
+          pluralizedItemName={i18n._(msg`Hosts`)}
           qsConfig={QS_CONFIG}
           clearSelected={clearSelected}
           toolbarSearchColumns={[
             {
-              name: t`Name`,
+              name: i18n._(msg`Name`),
               key: 'name__icontains',
               isDefault: true,
             },
             {
-              name: t`Description`,
+              name: i18n._(msg`Description`),
               key: 'description__icontains',
             },
             {
-              name: t`Created By (Username)`,
+              name: i18n._(msg`Created By (Username)`),
               key: 'created_by__username__icontains',
             },
             {
-              name: t`Modified By (Username)`,
+              name: i18n._(msg`Modified By (Username)`),
               key: 'modified_by__username__icontains',
             },
           ]}
@@ -162,11 +166,11 @@ function HostList() {
           toolbarRelatedSearchableKeys={relatedSearchableKeys}
           headerRow={
             <HeaderRow qsConfig={QS_CONFIG}>
-              <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
-              <HeaderCell>{t`Activity`}</HeaderCell>
-              <HeaderCell sortKey="description">{t`Description`}</HeaderCell>
-              <HeaderCell>{t`Inventory`}</HeaderCell>
-              <HeaderCell>{t`Actions`}</HeaderCell>
+              <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
+              <HeaderCell>{i18n._(msg`Activity`)}</HeaderCell>
+              <HeaderCell sortKey="description">{i18n._(msg`Description`)}</HeaderCell>
+              <HeaderCell>{i18n._(msg`Inventory`)}</HeaderCell>
+              <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
             </HeaderRow>
           }
           renderToolbar={(props) => (
@@ -183,7 +187,7 @@ function HostList() {
                   key="delete"
                   onDelete={handleHostDelete}
                   itemsToDelete={selected}
-                  pluralizedItemName={t`Hosts`}
+                  pluralizedItemName={i18n._(msg`Hosts`)}
                 />,
                 ...(canAdd
                   ? [
@@ -223,10 +227,10 @@ function HostList() {
         <AlertModal
           isOpen={deletionError}
           variant="error"
-          title={t`Error!`}
+          title={i18n._(msg`Error!`)}
           onClose={clearDeletionError}
         >
-          {t`Failed to delete one or more hosts.`}
+          {i18n._(msg`Failed to delete one or more hosts.`)}
           <ErrorDetail error={deletionError} />
         </AlertModal>
       )}

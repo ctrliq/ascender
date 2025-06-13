@@ -1,4 +1,5 @@
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { i18n } from '@lingui/core';
 
 export function initReducer() {
   return {
@@ -416,7 +417,7 @@ function generateNodes(workflowNodes) {
     {
       id: 1,
       fullUnifiedJobTemplate: {
-        name: t`START`,
+        name: i18n._(msg`START`),
       },
     },
   ];

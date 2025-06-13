@@ -1,6 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-import { t } from '@lingui/macro';
+import { msg } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { useField } from 'formik';
@@ -27,6 +28,8 @@ const QS_CONFIG = getQSConfig('credentials', {
 });
 
 function AdHocCredentialStep({ credentialTypeId }) {
+  const { i18n } = useLingui();
+
   const history = useHistory();
   const {
     error,
@@ -94,14 +97,14 @@ function AdHocCredentialStep({ credentialTypeId }) {
       <Form autoComplete="off">
         <FormGroup
           fieldId="credential"
-          label={t`Machine Credential`}
-          aria-label={t`Machine Credential`}
+          label={i18n._(msg`Machine Credential`)}
+          aria-label={i18n._(msg`Machine Credential`)}
           isRequired
           validated={!meta.touched || !meta.error ? 'default' : 'error'}
           helperTextInvalid={meta.error}
           labelIcon={
             <Popover
-              content={t`Select the credential you want to use when accessing the remote hosts to run the command. Choose the credential containing the username and SSH key or password that Ansible will need to log into the remote hosts.`}
+              content={i18n._(msg`Select the credential you want to use when accessing the remote hosts to run the command. Choose the credential containing the username and SSH key or password that Ansible will need to log into the remote hosts.`)}
             />
           }
         >
@@ -109,27 +112,27 @@ function AdHocCredentialStep({ credentialTypeId }) {
             value={field.value || []}
             options={credentials}
             optionCount={credentialCount}
-            header={t`Machine Credential`}
+            header={i18n._(msg`Machine Credential`)}
             readOnly
             qsConfig={QS_CONFIG}
             searchColumns={[
               {
-                name: t`Name`,
+                name: i18n._(msg`Name`),
                 key: 'name__icontains',
                 isDefault: true,
               },
               {
-                name: t`Created By (Username)`,
+                name: i18n._(msg`Created By (Username)`),
                 key: 'created_by__username__icontains',
               },
               {
-                name: t`Modified By (Username)`,
+                name: i18n._(msg`Modified By (Username)`),
                 key: 'modified_by__username__icontains',
               },
             ]}
             sortColumns={[
               {
-                name: t`Name`,
+                name: i18n._(msg`Name`),
                 key: 'name',
               },
             ]}

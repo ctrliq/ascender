@@ -1,11 +1,13 @@
 import React from 'react';
-import { t } from '@lingui/macro';
+import { msg } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
 import { useFormikContext } from 'formik';
 import StepName from '../LaunchPrompt/steps/StepName';
 import AdHocPreviewStep from './AdHocPreviewStep';
 
 const STEP_ID = 'preview';
 export default function useAdHocPreviewStep(hasErrors) {
+  const { i18n } = useLingui();
   const { values } = useFormikContext();
 
   return {
@@ -14,12 +16,12 @@ export default function useAdHocPreviewStep(hasErrors) {
       key: 4,
       name: (
         <StepName hasErrors={false} id="preview-step">
-          {t`Preview`}
+          {i18n._(msg`Preview`)}
         </StepName>
       ),
       component: <AdHocPreviewStep hasErrors={hasErrors} values={values} />,
       enableNext: !hasErrors,
-      nextButtonText: t`Launch`,
+      nextButtonText: i18n._(msg`Launch`),
     },
     hasErrors: false,
     validate: () => {},

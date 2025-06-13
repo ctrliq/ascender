@@ -2,9 +2,10 @@ import 'styled-components/macro';
 import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
 import { Button, Chip } from '@patternfly/react-core';
 import styled from 'styled-components';
+import { useLingui } from '@lingui/react';
 
 import { useConfig } from 'contexts/Config';
 import AlertModal from 'components/AlertModal';
@@ -39,6 +40,7 @@ const StatusDetailValue = styled.div`
 `;
 
 function JobDetail({ job, inventorySourceLabels }) {
+  const { i18n } = useLingui();
   const jobHelpText = getJobHelpText();
   const { me } = useConfig();
   const {
@@ -62,20 +64,20 @@ function JobDetail({ job, inventorySourceLabels }) {
   const history = useHistory();
 
   const jobTypes = {
-    project_update: t`Source Control Update`,
-    inventory_update: t`Inventory Sync`,
-    job: job.job_type === 'check' ? t`Playbook Check` : t`Playbook Run`,
-    ad_hoc_command: t`Run Command`,
-    system_job: t`Management Job`,
-    workflow_job: t`Workflow Job`,
+    project_update: i18n._(msg`Source Control Update`),
+    inventory_update: i18n._(msg`Inventory Sync`),
+    job: job.job_type === 'check' ? i18n._(msg`Playbook Check`) : i18n._(msg`Playbook Run`),
+    ad_hoc_command: i18n._(msg`Run Command`),
+    system_job: i18n._(msg`Management Job`),
+    workflow_job: i18n._(msg`Workflow Job`),
   };
 
   const scmTypes = {
-    '': t`Manual`,
-    git: t`Git`,
-    svn: t`Subversion`,
-    insights: t`Red Hat Insights`,
-    archive: t`Remote Archive`,
+    '': i18n._(msg`Manual`),
+    git: i18n._(msg`Git`),
+    svn: i18n._(msg`Subversion`),
+    insights: i18n._(msg`Red Hat Insights`),
+    archive: i18n._(msg`Remote Archive`),
   };
 
   const deleteJob = async () => {
@@ -104,40 +106,48 @@ function JobDetail({ job, inventorySourceLabels }) {
       return inventory ? (
         <Detail
           dataCy="job-inventory"
-          label={t`Inventory`}
+          label={i18n._(msg`Inventory`)}
           helpText={jobHelpText.inventory}
           value={
-            <Link
-              to={
-                inventory.kind === 'smart'
-                  ? `/inventories/smart_inventory/${inventory.id}`
-                  : `/inventories/inventory/${inventory.id}`
-              }
-            >
-              {inventory.name}
-            </Link>
+            inventory.name ? (
+              <Link
+                to={
+                  inventory.kind === 'smart'
+                    ? `/inventories/smart_inventory/${inventory.id}`
+                    : `/inventories/inventory/${inventory.id}`
+                }
+              >
+                {inventory.name}
+              </Link>
+            ) : (
+              'Unknown Inventory'
+            )
           }
         />
       ) : (
-        <DeletedDetail label={t`Inventory`} helpText={jobHelpText.inventory} />
+        <DeletedDetail label={i18n._(msg`Inventory`)} helpText={jobHelpText.inventory} />
       );
     }
     if (job.type === 'workflow_job') {
       return inventory ? (
         <Detail
           dataCy="job-inventory"
-          label={t`Inventory`}
+          label={i18n._(msg`Inventory`)}
           helpText={jobHelpText.inventory}
           value={
-            <Link
-              to={
-                inventory.kind === 'smart'
-                  ? `/inventories/smart_inventory/${inventory.id}`
-                  : `/inventories/inventory/${inventory.id}`
-              }
-            >
-              {inventory.name}
-            </Link>
+            inventory.name ? (
+              <Link
+                to={
+                  inventory.kind === 'smart'
+                    ? `/inventories/smart_inventory/${inventory.id}`
+                    : `/inventories/inventory/${inventory.id}`
+                }
+              >
+                {inventory.name}
+              </Link>
+            ) : (
+              'Unknown Inventory'
+            )
           }
         />
       ) : null;
@@ -169,15 +179,21 @@ function JobDetail({ job, inventorySourceLabels }) {
         <>
           <Detail
             dataCy="job-project"
-            label={project ? t`Project` : t`Source`}
+            label={project ? i18n._(msg`Project`) : i18n._(msg`Source`)}
             helpText={
               project ? jobHelpText.project : jobHelpText.project_source
             }
-            value={<Link to={`${projectDetailsLink}`}>{projectName}</Link>}
+            value={
+              projectName ? (
+                <Link to={`${projectDetailsLink}`}>{projectName}</Link>
+              ) : (
+                'Unknown Project'
+              )
+            }
           />
           <Detail
             dataCy="job-project-status"
-            label={t`Project Update Status`}
+            label={i18n._(msg`Project Update Status`)}
             helpText={jobHelpText.projectUpdate}
             value={
               projectUpdate || job.source_project_update ? (
@@ -190,12 +206,14 @@ function JobDetail({ job, inventorySourceLabels }) {
                     }
                   />
                 </Link>
-              ) : null
+              ) : (
+                'No Status Available'
+              )
             }
           />
         </>
       ) : (
-        <DeletedDetail label={t`Project`} />
+        <DeletedDetail label={i18n._(msg`Project`)} />
       );
     }
     return null;
@@ -203,74 +221,88 @@ function JobDetail({ job, inventorySourceLabels }) {
   return (
     <CardBody>
       <DetailList>
-        <Detail dataCy="job-id" label={t`Job ID`} value={job.id} />
+        <Detail dataCy="job-id" label={i18n._(msg`Job ID`)} value={validateReactNode(job.id)} />
         <Detail
           dataCy="job-status"
           fullWidth={Boolean(job.job_explanation)}
-          label={t`Status`}
+          label={i18n._(msg`Status`)}
           value={
             <StatusDetailValue>
-              {job.status && <StatusLabel status={job.status} />}
-              {job?.job_explanation !== job.status ? job.job_explanation : null}
+              {validateReactNode(job.status) ? <StatusLabel status={job.status} /> : 'Unknown Status'}
+              {job?.job_explanation && job.job_explanation !== job.status
+                ? validateReactNode(job.job_explanation)
+                : null}
             </StatusDetailValue>
           }
         />
         <Detail
           dataCy="job-started-date"
-          label={t`Started`}
-          value={formatDateString(job.started)}
+          label={i18n._(msg`Started`)}
+          value={formatDateString(job.started) || 'Unknown Start Date'}
         />
         {job?.finished && (
           <Detail
             dataCy="job-finished-date"
-            label={t`Finished`}
-            value={formatDateString(job.finished)}
+            label={i18n._(msg`Finished`)}
+            value={formatDateString(job.finished) || 'Unknown Finish Date'}
           />
         )}
         {jobTemplate && (
           <Detail
             dataCy="job-template"
-            label={t`Job Template`}
+            label={i18n._(msg`Job Template`)}
             value={
-              <Link to={`/templates/job_template/${jobTemplate.id}`}>
-                {jobTemplate.name}
-              </Link>
+              jobTemplate.name ? (
+                <Link to={`/templates/job_template/${jobTemplate.id}`}>
+                  {jobTemplate.name}
+                </Link>
+              ) : (
+                'Unknown Template'
+              )
             }
           />
         )}
         {workflowJobTemplate && (
           <Detail
             dataCy="workflow-job-template"
-            label={t`Workflow Job Template`}
+            label={i18n._(msg`Workflow Job Template`)}
             value={
-              <Link
-                to={`/templates/workflow_job_template/${workflowJobTemplate.id}`}
-              >
-                {workflowJobTemplate.name}
-              </Link>
+              workflowJobTemplate.name ? (
+                <Link
+                  to={`/templates/workflow_job_template/${workflowJobTemplate.id}`}
+                >
+                  {workflowJobTemplate.name}
+                </Link>
+              ) : (
+                'Unknown Workflow Template'
+              )
             }
           />
         )}
         {source_workflow_job && (
           <Detail
             dataCy="source-workflow-job"
-            label={t`Source Workflow Job`}
+            label={i18n._(msg`Source Workflow Job`)}
             value={
-              <Link to={`/jobs/workflow/${source_workflow_job.id}`}>
-                {source_workflow_job.id} - {source_workflow_job.name}
-              </Link>
+              source_workflow_job.name ? (
+                <Link to={`/jobs/workflow/${source_workflow_job.id}`}>
+                  {source_workflow_job.id} - {source_workflow_job.name}
+                </Link>
+              ) : (
+                'Unknown Workflow Job'
+              )
             }
           />
         )}
         <Detail
           dataCy="job-type"
-          label={t`Job Type`}
+          label={i18n._(msg`Job Type`)}
           helpText={jobHelpText.jobType}
           value={jobTypes[job.type]}
         />
         <Detail
           dataCy="source-control-type"
-          label={t`Source Control Type`}
+          label={i18n._(msg`Source Control Type`)}
           value={scmTypes[job.scm_type]}
         />
         <LaunchedByDetail dataCy="job-launched-by" job={job} />
@@ -279,7 +311,7 @@ function JobDetail({ job, inventorySourceLabels }) {
           <>
             <Detail
               dataCy="job-inventory-source"
-              label={t`Inventory Source`}
+              label={i18n._(msg`Inventory Source`)}
               value={
                 <Link
                   to={`/inventories/inventory/${inventory.id}/sources/${inventory_source.id}`}
@@ -291,7 +323,7 @@ function JobDetail({ job, inventorySourceLabels }) {
             {!source_project && (
               <Detail
                 dataCy="job-inventory-source-type"
-                label={t`Source`}
+                label={i18n._(msg`Source`)}
                 value={inventorySourceLabels.map(([string, label]) =>
                   string === job.source ? label : null
                 )}
@@ -304,33 +336,33 @@ function JobDetail({ job, inventorySourceLabels }) {
         {scmBranch && (
           <Detail
             dataCy="source-control-branch"
-            label={t`Source Control Branch`}
+            label={i18n._(msg`Source Control Branch`)}
             helpText={jobHelpText.sourceControlBranch}
             value={scmBranch}
           />
         )}
         <Detail
           dataCy="job-scm-revision"
-          label={t`Revision`}
+          label={i18n._(msg`Revision`)}
           value={job.scm_revision}
         />
         <Detail
           dataCy="job-playbook"
-          label={t`Playbook`}
+          label={i18n._(msg`Playbook`)}
           helpText={jobHelpText.playbook}
           value={job.playbook}
         />
         <Detail
           dataCy="job-limit"
-          label={t`Limit`}
+          label={i18n._(msg`Limit`)}
           helpText={jobHelpText.limit}
           value={job.limit}
         />
         <Detail
           dataCy="job-verbosity"
-          label={t`Verbosity`}
+          label={i18n._(msg`Verbosity`)}
           helpText={jobHelpText.verbosity}
-          value={VERBOSITY()[job.verbosity]}
+          value={VERBOSITY(i18n)[job.verbosity]}
         />
         {job.type !== 'workflow_job' && !isJobRunning(job.status) && (
           <ExecutionEnvironmentDetail
@@ -342,20 +374,20 @@ function JobDetail({ job, inventorySourceLabels }) {
         )}
         <Detail
           dataCy="job-execution-node"
-          label={t`Execution Node`}
+          label={i18n._(msg`Execution Node`)}
           value={job.execution_node}
         />
         {job?.controller_node ? (
           <Detail
             dataCy="job-controller-node"
-            label={t`Controller Node`}
+            label={i18n._(msg`Controller Node`)}
             value={job.controller_node}
           />
         ) : null}
         {instanceGroup && !instanceGroup?.is_container_group && (
           <Detail
             dataCy="job-instance-group"
-            label={t`Instance Group`}
+            label={i18n._(msg`Instance Group`)}
             helpText={jobHelpText.instanceGroups}
             value={buildInstanceGroupLink(instanceGroup)}
           />
@@ -363,7 +395,7 @@ function JobDetail({ job, inventorySourceLabels }) {
         {instanceGroup && instanceGroup?.is_container_group && (
           <Detail
             dataCy="job-container-group"
-            label={t`Container Group`}
+            label={i18n._(msg`Container Group`)}
             value={buildContainerGroupLink(instanceGroup)}
           />
         )}
@@ -371,7 +403,7 @@ function JobDetail({ job, inventorySourceLabels }) {
           typeof job.job_slice_count === 'number' && (
             <Detail
               dataCy="job-slice"
-              label={t`Job Slice`}
+              label={i18n._(msg`Job Slice`)}
               helpText={jobHelpText.jobSlicing}
               value={`${job.job_slice_number}/${job.job_slice_count}`}
             />
@@ -379,14 +411,14 @@ function JobDetail({ job, inventorySourceLabels }) {
         {job.type === 'workflow_job' && job.is_sliced_job && (
           <Detail
             dataCy="job-slice-parent"
-            label={t`Job Slice Parent`}
-            value={t`True`}
+            label={i18n._(msg`Job Slice Parent`)}
+            value={i18n._(msg`True`)}
           />
         )}
         {typeof job.forks === 'number' && (
           <Detail
             dataCy="forks"
-            label={t`Forks`}
+            label={i18n._(msg`Forks`)}
             value={`${job.forks}`}
             helpText={jobHelpText.forks}
           />
@@ -394,17 +426,17 @@ function JobDetail({ job, inventorySourceLabels }) {
         {typeof job.timeout === 'number' && (
           <Detail
             dataCy="timeout"
-            label={t`Timeout`}
-            value={
-              job.timeout ? t`${job.timeout} seconds` : t`No timeout specified`
-            }
+            label={i18n._(msg`Timeout`)}
+            value={i18n._(validateReactNode(
+              job.timeout ? msg`${job.timeout} seconds` : msg`No timeout specified`
+            ))}
             helpText={jobHelpText.timeout}
           />
         )}
         {credential && (
           <Detail
             dataCy="job-machine-credential"
-            label={t`Machine Credential`}
+            label={i18n._(msg`Machine Credential`)}
             value={
               <ChipGroup
                 numChips={5}
@@ -426,7 +458,7 @@ function JobDetail({ job, inventorySourceLabels }) {
             dataCy="job-credentials"
             fullWidth
             helpText={jobHelpText.credentials}
-            label={t`Credentials`}
+            label={i18n._(msg`Credentials`)}
             value={
               <ChipGroup
                 numChips={5}
@@ -450,7 +482,7 @@ function JobDetail({ job, inventorySourceLabels }) {
           <Detail
             dataCy="job-labels"
             fullWidth
-            label={t`Labels`}
+            label={i18n._(msg`Labels`)}
             helpText={jobHelpText.labels}
             value={
               <ChipGroup
@@ -471,7 +503,7 @@ function JobDetail({ job, inventorySourceLabels }) {
           <Detail
             dataCy="job-tags"
             fullWidth
-            label={t`Job Tags`}
+            label={i18n._(msg`Job Tags`)}
             helpText={jobHelpText.jobTags}
             value={
               <ChipGroup
@@ -497,7 +529,7 @@ function JobDetail({ job, inventorySourceLabels }) {
           <Detail
             dataCy="job-skip-tags"
             fullWidth
-            label={t`Skip Tags`}
+            label={i18n._(msg`Skip Tags`)}
             helpText={jobHelpText.skipTags}
             value={
               <ChipGroup
@@ -521,21 +553,21 @@ function JobDetail({ job, inventorySourceLabels }) {
         )}
         <Detail
           dataCy="job-module-name"
-          label={t`Module Name`}
+          label={i18n._(msg`Module Name`)}
           value={job.module_name}
           helpText={jobHelpText.module(job.module_name)}
         />
         <Detail
           dataCy="job-module-arguments"
-          label={t`Module Arguments`}
+          label={i18n._(msg`Module Arguments`)}
           value={job.module_args}
         />
         <UserDateDetail
-          label={t`Created`}
+          label={i18n._(msg`Created`)}
           date={job.created}
           user={created_by}
         />
-        <UserDateDetail label={t`Last Modified`} date={job.modified} />
+        <UserDateDetail label={i18n._(msg`Last Modified`)} date={job.modified} />
         {job.extra_vars && (
           <VariablesDetail
             css="margin: 20px 0"
@@ -543,7 +575,7 @@ function JobDetail({ job, inventorySourceLabels }) {
             readOnly
             value={job.extra_vars}
             rows={4}
-            label={t`Variables`}
+            label={i18n._(msg`Variables`)}
             name="extra_vars"
             dataCy="job-detail-extra-variables"
             helpText={jobHelpText.variables}
@@ -556,7 +588,7 @@ function JobDetail({ job, inventorySourceLabels }) {
             readOnly
             value={JSON.stringify(job.artifacts)}
             rows={4}
-            label={t`Artifacts`}
+            label={i18n._(msg`Artifacts`)}
             name="artifacts"
             dataCy="job-detail-artifacts"
           />
@@ -577,7 +609,7 @@ function JobDetail({ job, inventorySourceLabels }) {
               )}
             </LaunchButton>
           ) : (
-            <LaunchButton resource={job} aria-label={t`Relaunch`}>
+            <LaunchButton resource={job} aria-label={i18n._(msg`Relaunch`)}>
               {({ handleRelaunch, isLaunching }) => (
                 <Button
                   ouiaId="job-detail-relaunch-button"
@@ -585,7 +617,7 @@ function JobDetail({ job, inventorySourceLabels }) {
                   onClick={() => handleRelaunch()}
                   isDisabled={isLaunching}
                 >
-                  {t`Relaunch`}
+                  {i18n._(msg`Relaunch`)}
                 </Button>
               )}
             </LaunchButton>
@@ -596,20 +628,20 @@ function JobDetail({ job, inventorySourceLabels }) {
             : job?.summary_fields?.user_capabilities?.start) && (
             <JobCancelButton
               job={job}
-              errorTitle={t`Job Cancel Error`}
-              title={t`Cancel ${job.name}`}
-              errorMessage={t`Failed to cancel ${job.name}`}
+              errorTitle={i18n._(msg`Job Cancel Error`)}
+              title={i18n._(msg`Cancel ${job.name}`)}
+              errorMessage={i18n._(msg`Failed to cancel ${job.name}`)}
             />
           )}
         {!isJobRunning(job.status) &&
           job?.summary_fields?.user_capabilities?.delete && (
             <DeleteButton
               name={job.name}
-              modalTitle={t`Delete Job`}
+              modalTitle={i18n._(msg`Delete Job`)}
               onConfirm={deleteJob}
               ouiaId="job-detail-delete-button"
             >
-              {t`Delete`}
+              {i18n._(msg`Delete`)}
             </DeleteButton>
           )}
       </CardActionsRow>
@@ -618,7 +650,7 @@ function JobDetail({ job, inventorySourceLabels }) {
           isOpen={errorMsg}
           variant="error"
           onClose={() => setErrorMsg()}
-          title={t`Job Delete Error`}
+          title={i18n._(msg`Job Delete Error`)}
         >
           <ErrorDetail error={errorMsg} />
         </AlertModal>
@@ -631,3 +663,9 @@ JobDetail.propTypes = {
 };
 
 export default JobDetail;
+
+function validateReactNode(value) {
+  if (value === null || value === undefined) return 'Unknown';
+  if (typeof value === 'object') return JSON.stringify(value);
+  return value;
+}

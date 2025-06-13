@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { useLocation, useRouteMatch } from 'react-router-dom';
-import { t, Plural } from '@lingui/macro';
+import { msg, Plural } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { Card, PageSection } from '@patternfly/react-core';
 import { WorkflowApprovalsAPI } from 'api';
 import PaginatedTable, {
@@ -32,9 +33,9 @@ const QS_CONFIG = getQSConfig('workflow_approvals', {
 function WorkflowApprovalsList() {
   const location = useLocation();
   const match = useRouteMatch();
-
+  const { i18n } = useLingui();
   const {
-    result: { results, count, relatedSearchableKeys, searchableKeys },
+    result: { results, count, relatedSearchableKeys }, // removed searchableKeys
     error: contentError,
     isLoading: isWorkflowApprovalsLoading,
     request: fetchWorkflowApprovals,
@@ -51,6 +52,7 @@ function WorkflowApprovalsList() {
         relatedSearchableKeys: (
           actionsResponse?.data?.related_search_fields || []
         ).map((val) => val.slice(0, -8)),
+        // eslint-disable-next-line max-len
         searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET),
       };
     }, [location]),
@@ -58,6 +60,7 @@ function WorkflowApprovalsList() {
       results: [],
       count: 0,
       relatedSearchableKeys: [],
+      // eslint-disable-next-line max-len
       searchableKeys: [],
     }
   );
@@ -163,21 +166,20 @@ function WorkflowApprovalsList() {
             hasContentLoading={isLoading}
             items={workflowApprovals}
             itemCount={count}
-            pluralizedItemName={t`Workflow Approvals`}
+            pluralizedItemName={i18n._(msg`Workflow Approvals`)}
             qsConfig={QS_CONFIG}
             clearSelected={clearSelected}
             toolbarSearchColumns={[
               {
-                name: t`Name`,
+                name: i18n._(msg`Name`),
                 key: 'name__icontains',
                 isDefault: true,
               },
               {
-                name: t`Description`,
+                name: i18n._(msg`Description`),
                 key: 'description__icontains',
               },
             ]}
-            toolbarSearchableKeys={searchableKeys}
             toolbarRelatedSearchableKeys={relatedSearchableKeys}
             renderToolbar={(props) => (
               <DataListToolbar
@@ -200,7 +202,7 @@ function WorkflowApprovalsList() {
                     key="delete"
                     onDelete={handleDelete}
                     itemsToDelete={selected}
-                    pluralizedItemName={t`Workflow Approvals`}
+                    pluralizedItemName={i18n._(msg`Workflow Approvals`)}
                     cannotDelete={(item) =>
                       item.status === 'pending' ||
                       !item.summary_fields.user_capabilities.delete
@@ -218,11 +220,11 @@ function WorkflowApprovalsList() {
             )}
             headerRow={
               <HeaderRow qsConfig={QS_CONFIG}>
-                <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
-                <HeaderCell>{t`Workflow Job`}</HeaderCell>
-                <HeaderCell sortKey="started">{t`Started`}</HeaderCell>
-                <HeaderCell>{t`Status`}</HeaderCell>
-                <HeaderCell>{t`Actions`}</HeaderCell>
+                <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
+                <HeaderCell>{i18n._(msg`Workflow Job`)}</HeaderCell>
+                <HeaderCell sortKey="started">{i18n._(msg`Started`)}</HeaderCell>
+                <HeaderCell>{i18n._(msg`Status`)}</HeaderCell>
+                <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
               </HeaderRow>
             }
             renderRow={(workflowApproval, index) => (
@@ -244,24 +246,38 @@ function WorkflowApprovalsList() {
         <AlertModal
           isOpen={deletionError}
           variant="error"
-          title={t`Error!`}
+          title={i18n._(msg`Error!`)}
           onClose={clearDeletionError}
         >
-          {t`Failed to delete one or more workflow approval.`}
-          <ErrorDetail error={deletionError} />
+          {typeof deletionError === 'string'
+            ? i18n._(msg`Failed to delete one or more workflow approval.`)
+            : i18n._(msg`Failed to delete one or more workflow approval.`)}
+          <ErrorDetail
+            error={
+              deletionError instanceof Error
+                ? deletionError
+                : new Error(JSON.stringify(deletionError))
+            }
+          />
         </AlertModal>
       )}
       {actionError && (
         <AlertModal
           isOpen={actionError}
           variant="error"
-          title={t`Error!`}
+          title={i18n._(msg`Error!`)}
           onClose={dismissActionError}
         >
           {approveApprovalError
-            ? t`Failed to approve one or more workflow approval.`
-            : t`Failed to deny one or more workflow approval.`}
-          <ErrorDetail error={actionError} />
+            ? i18n._(msg`Failed to approve one or more workflow approval.`)
+            : i18n._(msg`Failed to deny one or more workflow approval.`)}
+          <ErrorDetail
+            error={
+              actionError instanceof Error
+                ? actionError
+                : new Error(JSON.stringify(actionError))
+            }
+          />
         </AlertModal>
       )}
     </>

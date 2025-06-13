@@ -1,7 +1,8 @@
 import React from 'react';
+import { useLingui } from '@lingui/react';
 
 import 'styled-components/macro';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
 import { Button } from '@patternfly/react-core';
 import {
   AngleDoubleUpIcon,
@@ -41,57 +42,62 @@ const PageControls = ({
   isAllCollapsed,
   isFlatMode,
   isTemplateJob,
-}) => (
-  <ControllsWrapper>
-    <ExpandCollapseWrapper>
-      {!isFlatMode && isTemplateJob && (
+}) => {
+  const { i18n } = useLingui();
+  return (
+    <ControllsWrapper>
+      <ExpandCollapseWrapper>
+        {!isFlatMode && isTemplateJob && (
+          <Button
+            aria-label={
+              isAllCollapsed
+                ? i18n._(msg`Expand job events`)
+                : i18n._(msg`Collapse all job events`)
+            }
+            variant="plain"
+            type="button"
+            onClick={toggleExpandCollapseAll}
+          >
+            {isAllCollapsed ? <AngleRightIcon /> : <AngleDownIcon />}
+          </Button>
+        )}
+      </ExpandCollapseWrapper>
+      <ScrollWrapper>
         <Button
-          aria-label={
-            isAllCollapsed ? t`Expand job events` : t`Collapse all job events`
-          }
+          ouiaId="job-output-scroll-previous-button"
+          aria-label={i18n._(msg`Scroll previous`)}
+          onClick={onScrollPrevious}
           variant="plain"
-          type="button"
-          onClick={toggleExpandCollapseAll}
         >
-          {isAllCollapsed ? <AngleRightIcon /> : <AngleDownIcon />}
+          <AngleUpIcon />
         </Button>
-      )}
-    </ExpandCollapseWrapper>
-    <ScrollWrapper>
-      <Button
-        ouiaId="job-output-scroll-previous-button"
-        aria-label={t`Scroll previous`}
-        onClick={onScrollPrevious}
-        variant="plain"
-      >
-        <AngleUpIcon />
-      </Button>
-      <Button
-        ouiaId="job-output-scroll-next-button"
-        aria-label={t`Scroll next`}
-        onClick={onScrollNext}
-        variant="plain"
-      >
-        <AngleDownIcon />
-      </Button>
-      <Button
-        ouiaId="job-output-scroll-first-button"
-        aria-label={t`Scroll first`}
-        onClick={onScrollFirst}
-        variant="plain"
-      >
-        <AngleDoubleUpIcon />
-      </Button>
-      <Button
-        ouiaId="job-output-scroll-last-button"
-        aria-label={t`Scroll last`}
-        onClick={onScrollLast}
-        variant="plain"
-      >
-        <AngleDoubleDownIcon />
-      </Button>
-    </ScrollWrapper>
-  </ControllsWrapper>
-);
+        <Button
+          ouiaId="job-output-scroll-next-button"
+          aria-label={i18n._(msg`Scroll next`)}
+          onClick={onScrollNext}
+          variant="plain"
+        >
+          <AngleDownIcon />
+        </Button>
+        <Button
+          ouiaId="job-output-scroll-first-button"
+          aria-label={i18n._(msg`Scroll first`)}
+          onClick={onScrollFirst}
+          variant="plain"
+        >
+          <AngleDoubleUpIcon />
+        </Button>
+        <Button
+          ouiaId="job-output-scroll-last-button"
+          aria-label={i18n._(msg`Scroll last`)}
+          onClick={onScrollLast}
+          variant="plain"
+        >
+          <AngleDoubleDownIcon />
+        </Button>
+      </ScrollWrapper>
+    </ControllsWrapper>
+  );
+};
 
 export default PageControls;
