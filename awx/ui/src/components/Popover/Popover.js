@@ -1,7 +1,8 @@
 import React from 'react';
 import { node, string } from 'prop-types';
 
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { Popover as PFPopover } from '@patternfly/react-core';
 import { HelpIcon } from '@patternfly/react-icons';
 import styled from 'styled-components';
@@ -15,6 +16,7 @@ const PopoverButton = styled.button`
 `;
 
 function Popover({ ariaLabel, content, header, id, maxWidth, ...rest }) {
+  const { i18n } = useLingui();
   if (!content) {
     return null;
   }
@@ -29,7 +31,7 @@ function Popover({ ariaLabel, content, header, id, maxWidth, ...rest }) {
       {...rest}
     >
       <PopoverButton
-        aria-label={ariaLabel ?? t`More information`}
+        aria-label={ariaLabel ?? i18n._(msg`More information`)}
         aria-haspopup="true"
         className="pf-c-form__group-label-help"
         onClick={(e) => e.preventDefault()}

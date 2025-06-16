@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
-
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import { Route, Switch } from 'react-router-dom';
 import PersistentFilters from 'components/PersistentFilters';
 import ScreenHeader from 'components/ScreenHeader/ScreenHeader';
@@ -9,9 +9,10 @@ import ExecutionEnvironmentAdd from './ExecutionEnvironmentAdd';
 import ExecutionEnvironmentList from './ExecutionEnvironmentList';
 
 function ExecutionEnvironments() {
+  const { i18n } = useLingui();
   const [breadcrumbConfig, setBreadcrumbConfig] = useState({
-    '/execution_environments': t`Execution Environments`,
-    '/execution_environments/add': t`Create new execution environment`,
+    '/execution_environments': i18n._(msg`Execution Environments`),
+    '/execution_environments/add': i18n._(msg`Create new execution environment`),
   });
 
   const buildBreadcrumbConfig = useCallback((executionEnvironments) => {
@@ -19,13 +20,13 @@ function ExecutionEnvironments() {
       return;
     }
     setBreadcrumbConfig({
-      '/execution_environments': t`Execution Environments`,
-      '/execution_environments/add': t`Create new execution environment`,
+      '/execution_environments': i18n._(msg`Execution Environments`),
+      '/execution_environments/add': i18n._(msg`Create new execution environment`),
       [`/execution_environments/${executionEnvironments.id}`]: `${executionEnvironments.name}`,
-      [`/execution_environments/${executionEnvironments.id}/edit`]: t`Edit details`,
-      [`/execution_environments/${executionEnvironments.id}/details`]: t`Details`,
+      [`/execution_environments/${executionEnvironments.id}/edit`]: i18n._(msg`Edit details`),
+      [`/execution_environments/${executionEnvironments.id}/details`]: i18n._(msg`Details`),
     });
-  }, []);
+  }, [i18n]);
   return (
     <>
       <ScreenHeader

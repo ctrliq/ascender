@@ -1,6 +1,7 @@
 import React from 'react';
 import { useRouteMatch } from 'react-router-dom';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 
 import styled from 'styled-components';
 
@@ -34,6 +35,7 @@ function SurveyToolbar({
   onOpenOrderModal,
   emptyList,
 }) {
+  const { i18n } = useLingui();
   isDeleteDisabled = !canEdit || isDeleteDisabled;
   const match = useRouteMatch();
   return (
@@ -46,7 +48,7 @@ function SurveyToolbar({
             onChange={(isChecked) => {
               onSelectAll(isChecked);
             }}
-            aria-label={t`Select all`}
+            aria-label={i18n._(msg`Select all`)}
             id="select-all"
             ouiaId="select-all"
           />
@@ -61,7 +63,7 @@ function SurveyToolbar({
           {canEdit && onOpenOrderModal && (
             <ToolbarItem>
               <Tooltip
-                content={t`Click to rearrange the order of the survey questions`}
+                content={i18n._(msg`Click to rearrange the order of the survey questions`)}
               >
                 <Button
                   onClick={() => {
@@ -70,7 +72,7 @@ function SurveyToolbar({
                   variant="secondary"
                   ouiaId="edit-order"
                 >
-                  {t`Edit Order`}
+                  {i18n._(msg`Edit Order`)}
                 </Button>
               </Tooltip>
             </ToolbarItem>
@@ -79,8 +81,8 @@ function SurveyToolbar({
             <Tooltip
               content={
                 isDeleteDisabled
-                  ? t`Select a question to delete`
-                  : t`Delete survey question`
+                  ? i18n._(msg`Select a question to delete`)
+                  : i18n._(msg`Delete survey question`)
               }
             >
               <div>
@@ -90,7 +92,7 @@ function SurveyToolbar({
                   isDisabled={isDeleteDisabled}
                   onClick={() => onToggleDeleteModal(true)}
                 >
-                  {t`Delete`}
+                  {i18n._(msg`Delete`)}
                 </Button>
               </div>
             </Tooltip>
@@ -99,10 +101,10 @@ function SurveyToolbar({
         {!emptyList && (
           <SwitchWrapper>
             <Switch
-              aria-label={t`Survey Toggle`}
+              aria-label={i18n._(msg`Survey Toggle`)}
               id="survey-toggle"
-              label={t`Survey Enabled`}
-              labelOff={t`Survey Disabled`}
+              label={i18n._(msg`Survey Enabled`)}
+              labelOff={i18n._(msg`Survey Disabled`)}
               isChecked={surveyEnabled}
               isDisabled={!canEdit}
               onChange={() => onToggleSurvey(!surveyEnabled)}

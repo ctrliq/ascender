@@ -1,6 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import { func, shape } from 'prop-types';
 import { SystemJobTemplatesAPI } from 'api';
 import { getQSConfig, parseQueryString } from 'util/qs';
@@ -21,6 +22,7 @@ const QS_CONFIG = getQSConfig('system-job-templates', {
 
 function SystemJobTemplatesList({ nodeResource, onUpdateNodeResource }) {
   const location = useLocation();
+  const { i18n } = useLingui();
 
   const {
     result: {
@@ -71,7 +73,7 @@ function SystemJobTemplatesList({ nodeResource, onUpdateNodeResource }) {
       qsConfig={QS_CONFIG}
       headerRow={
         <HeaderRow isExpandable={false} qsConfig={QS_CONFIG}>
-          <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
+          <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
         </HeaderRow>
       }
       renderRow={(item, index) => (
@@ -91,7 +93,7 @@ function SystemJobTemplatesList({ nodeResource, onUpdateNodeResource }) {
       showPageSizeOptions={false}
       toolbarSearchColumns={[
         {
-          name: t`Name`,
+          name: i18n._(msg`Name`),
           key: 'name__icontains',
           isDefault: true,
         },

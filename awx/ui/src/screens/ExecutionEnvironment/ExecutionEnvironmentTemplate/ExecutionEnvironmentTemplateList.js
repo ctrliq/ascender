@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
-
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import { Card } from '@patternfly/react-core';
 
 import { ExecutionEnvironmentsAPI } from 'api';
@@ -28,6 +28,7 @@ const QS_CONFIG = getQSConfig(
 );
 
 function ExecutionEnvironmentTemplateList({ executionEnvironment }) {
+  const { i18n } = useLingui();
   const { id } = executionEnvironment;
   const location = useLocation();
 
@@ -80,30 +81,30 @@ function ExecutionEnvironmentTemplateList({ executionEnvironment }) {
         hasContentLoading={isLoading}
         items={templates}
         itemCount={templatesCount}
-        pluralizedItemName={t`Templates`}
+        pluralizedItemName={i18n._(msg`Templates`)}
         qsConfig={QS_CONFIG}
         toolbarSearchableKeys={searchableKeys}
         toolbarRelatedSearchableKeys={relatedSearchableKeys}
         toolbarSearchColumns={[
           {
-            name: t`Name`,
+            name: i18n._(msg`Name`),
             key: 'name__icontains',
             isDefault: true,
           },
           {
-            name: t`Type`,
+            name: i18n._(msg`Type`),
             key: 'or__type',
             options: [
-              [`job_template`, t`Job Template`],
-              [`workflow_job_template`, t`Workflow Template`],
+              [`job_template`, i18n._(msg`Job Template`)],
+              [`workflow_job_template`, i18n._(msg`Workflow Template`)],
             ],
           },
           {
-            name: t`Created By (Username)`,
+            name: i18n._(msg`Created By (Username)`),
             key: 'created_by__username__icontains',
           },
           {
-            name: t`Modified By (Username)`,
+            name: i18n._(msg`Modified By (Username)`),
             key: 'modified_by__username__icontains',
           },
         ]}
@@ -112,8 +113,8 @@ function ExecutionEnvironmentTemplateList({ executionEnvironment }) {
         )}
         headerRow={
           <HeaderRow qsConfig={QS_CONFIG} isSelectable={false}>
-            <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
-            <HeaderCell>{t`Type`}</HeaderCell>
+            <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
+            <HeaderCell>{i18n._(msg`Type`)}</HeaderCell>
           </HeaderRow>
         }
         renderRow={(template) => (

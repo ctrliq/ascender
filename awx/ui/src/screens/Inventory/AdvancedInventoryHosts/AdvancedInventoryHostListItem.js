@@ -1,10 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { string, bool, func } from 'prop-types';
-
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import 'styled-components/macro';
-
 import { Tr, Td } from '@patternfly/react-table';
 import Sparkline from 'components/Sparkline';
 import { Host } from 'types';
@@ -21,6 +20,7 @@ function AdvancedInventoryHostListItem({
   rowIndex,
   inventoryType,
 }) {
+  const { i18n } = useLingui();
   const recentPlaybookJobs = recent_jobs.map((job) => ({
     ...job,
     type: 'job',
@@ -36,15 +36,15 @@ function AdvancedInventoryHostListItem({
           onSelect,
         }}
       />
-      <Td dataLabel={t`Name`}>
+      <Td dataLabel={i18n._(msg`Name`)}>
         <Link to={`${detailUrl}`}>
           <b>{name}</b>
         </Link>
       </Td>
-      <Td dataLabel={t`Recent jobs`}>
+      <Td dataLabel={i18n._(msg`Recent jobs`)}>
         <Sparkline jobs={recentPlaybookJobs} />
       </Td>
-      <Td dataLabel={t`Inventory`}>
+      <Td dataLabel={i18n._(msg`Inventory`)}>
         <Link to={inventoryLink}>{inventory.name}</Link>
       </Td>
     </Tr>

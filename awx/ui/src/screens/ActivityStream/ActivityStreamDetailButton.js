@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import { Button, Modal } from '@patternfly/react-core';
 import { SearchPlusIcon } from '@patternfly/react-icons';
 
@@ -10,6 +10,7 @@ import { DetailList, Detail } from 'components/DetailList';
 import { VariablesDetail } from 'components/CodeEditor';
 
 function ActivityStreamDetailButton({ streamItem, user, description }) {
+  const { i18n } = useLingui();
   const [isOpen, setIsOpen] = useState(false);
 
   const setting = streamItem?.summary_fields?.setting;
@@ -22,7 +23,7 @@ function ActivityStreamDetailButton({ streamItem, user, description }) {
     <>
       <Button
         ouiaId={`${streamItem.id}-view-details-button`}
-        aria-label={t`View event details`}
+        aria-label={i18n._(msg`View event details`)}
         variant="plain"
         component="button"
         onClick={() => setIsOpen(true)}
@@ -32,25 +33,25 @@ function ActivityStreamDetailButton({ streamItem, user, description }) {
       <Modal
         variant="large"
         isOpen={isOpen}
-        title={t`Event detail`}
-        aria-label={t`Event detail modal`}
+        title={i18n._(msg`Event detail`)}
+        aria-label={i18n._(msg`Event detail modal`)}
         onClose={() => setIsOpen(false)}
       >
         <DetailList gutter="sm">
           <Detail
-            label={t`Time`}
+            label={i18n._(msg`Time`)}
             value={formatDateString(streamItem.timestamp)}
           />
-          <Detail label={t`Initiated by`} value={user} />
+          <Detail label={i18n._(msg`Initiated by`)} value={user} />
           <Detail
-            label={t`Setting category`}
+            label={i18n._(msg`Setting category`)}
             value={setting && setting[0]?.category}
           />
-          <Detail label={t`Setting name`} value={setting && setting[0]?.name} />
-          <Detail fullWidth label={t`Action`} value={description} />
+          <Detail label={i18n._(msg`Setting name`)} value={setting && setting[0]?.name} />
+          <Detail fullWidth label={i18n._(msg`Action`)} value={description} />
           {streamItem?.changes && (
             <VariablesDetail
-              label={t`Changes`}
+              label={i18n._(msg`Changes`)}
               rows={changeRows}
               value={
                 streamItem?.changes ? JSON.stringify(streamItem.changes) : ''

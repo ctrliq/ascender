@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
-
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import {
   Switch,
   Route,
@@ -24,6 +24,7 @@ import InventoryHostFacts from '../InventoryHostFacts';
 import InventoryHostGroups from '../InventoryHostGroups';
 
 function InventoryHost({ setBreadcrumb, inventory }) {
+  const { i18n } = useLingui();
   const location = useLocation();
   const match = useRouteMatch('/inventories/inventory/:id/hosts/:hostId');
   const hostListUrl = `/inventories/inventory/${inventory.id}/hosts`;
@@ -63,29 +64,29 @@ function InventoryHost({ setBreadcrumb, inventory }) {
       name: (
         <>
           <CaretLeftIcon />
-          {t`Back to Hosts`}
+          {i18n._(msg`Back to Hosts`)}
         </>
       ),
       link: `${hostListUrl}`,
       id: 0,
     },
     {
-      name: t`Details`,
+      name: i18n._(msg`Details`),
       link: `${match.url}/details`,
       id: 1,
     },
     {
-      name: t`Facts`,
+      name: i18n._(msg`Facts`),
       link: `${match.url}/facts`,
       id: 2,
     },
     {
-      name: t`Groups`,
+      name: i18n._(msg`Groups`),
       link: `${match.url}/groups`,
       id: 3,
     },
     {
-      name: t`Jobs`,
+      name: i18n._(msg`Jobs`),
       link: `${match.url}/jobs`,
       id: 4,
     },
@@ -97,8 +98,8 @@ function InventoryHost({ setBreadcrumb, inventory }) {
         <ContentError error={contentError}>
           {contentError.response && contentError.response.status === 404 && (
             <span>
-              {t`Host not found.`}{' '}
-              <Link to={hostListUrl}>{t`View all Inventory Hosts.`}</Link>
+              {i18n._(msg`Host not found.`)}{' '}
+              <Link to={hostListUrl}>{i18n._(msg`View all Inventory Hosts.`)}</Link>
             </span>
           )}
         </ContentError>
@@ -157,7 +158,7 @@ function InventoryHost({ setBreadcrumb, inventory }) {
           <Route key="not-found" path="*">
             <ContentError isNotFound>
               <Link to={`${match.url}/details`}>
-                {t`View Inventory Host Details`}
+                {i18n._(msg`View Inventory Host Details`)}
               </Link>
             </ContentError>
           </Route>

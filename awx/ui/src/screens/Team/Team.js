@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 import React, { useState, useEffect } from 'react';
 
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
 import {
   Link,
   Redirect,
@@ -17,11 +17,13 @@ import RoutedTabs from 'components/RoutedTabs';
 import ContentError from 'components/ContentError';
 import { TeamsAPI } from 'api';
 import { ResourceAccessList } from 'components/ResourceAccessList';
+import { useLingui } from '@lingui/react';
 import TeamDetail from './TeamDetail';
 import TeamEdit from './TeamEdit';
 import TeamRolesList from './TeamRoles';
 
 function Team({ setBreadcrumb }) {
+  const { i18n } = useLingui();
   const [team, setTeam] = useState(null);
   const [contentError, setContentError] = useState(null);
   const [hasContentLoading, setHasContentLoading] = useState(true);
@@ -47,16 +49,16 @@ function Team({ setBreadcrumb }) {
       name: (
         <>
           <CaretLeftIcon />
-          {t`Back to Teams`}
+          {i18n._(msg`Back to Teams`)}
         </>
       ),
       link: `/teams`,
       id: 99,
       persistentFilterKey: 'teams',
     },
-    { name: t`Details`, link: `/teams/${id}/details`, id: 0 },
-    { name: t`Access`, link: `/teams/${id}/access`, id: 1 },
-    { name: t`Roles`, link: `/teams/${id}/roles`, id: 2 },
+    { name: i18n._(msg`Details`), link: `/teams/${id}/details`, id: 0 },
+    { name: i18n._(msg`Access`), link: `/teams/${id}/access`, id: 1 },
+    { name: i18n._(msg`Roles`), link: `/teams/${id}/roles`, id: 2 },
   ];
 
   let showCardHeader = true;
@@ -72,8 +74,8 @@ function Team({ setBreadcrumb }) {
           <ContentError error={contentError}>
             {contentError.response.status === 404 && (
               <span>
-                {t`Team not found.`}{' '}
-                <Link to="/teams">{t`View all Teams.`}</Link>
+                {i18n._(msg`Team not found.`)}{' '}
+                <Link to="/teams">{i18n._(msg`View all Teams.`)}</Link>
               </span>
             )}
           </ContentError>
@@ -115,7 +117,7 @@ function Team({ setBreadcrumb }) {
               <ContentError isNotFound>
                 {id && (
                   <Link to={`/teams/${id}/details`}>
-                    {t`View Team Details`}
+                    {i18n._(msg`View Team Details`)}
                   </Link>
                 )}
               </ContentError>

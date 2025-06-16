@@ -1,8 +1,8 @@
 import 'styled-components/macro';
 import React, { useState, useCallback, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import { useField } from 'formik';
 import styled from 'styled-components';
 import { Alert, ToolbarItem } from '@patternfly/react-core';
@@ -31,6 +31,7 @@ function CredentialsStep({
   allowCredentialsWithPasswords,
   defaultCredentials = [],
 }) {
+  const { i18n } = useLingui();
   const history = useHistory();
   const location = useLocation();
   const [field, meta, helpers] = useField({
@@ -159,12 +160,12 @@ function CredentialsStep({
       {types && types.length > 0 && (
         <ToolbarItem css=" display: flex; align-items: center;">
           <div css="flex: 0 0 25%; margin-right: 32px">
-            {t`Selected Category`}
+            {i18n._(msg`Selected Category`)}
           </div>
           <AnsibleSelect
             css="flex: 1 1 75%;"
             id="multiCredentialsLookUp-select"
-            label={t`Selected Category`}
+            label={i18n._(msg`Selected Category`)}
             data={types.map((type) => ({
               key: type.id,
               value: type.id,
@@ -187,29 +188,29 @@ function CredentialsStep({
         optionCount={count}
         searchColumns={[
           {
-            name: t`Name`,
+            name: i18n._(msg`Name`),
             key: 'name__icontains',
             isDefault: true,
           },
           {
-            name: t`Created By (Username)`,
+            name: i18n._(msg`Created By (Username)`),
             key: 'created_by__username__icontains',
           },
           {
-            name: t`Modified By (Username)`,
+            name: i18n._(msg`Modified By (Username)`),
             key: 'modified_by__username__icontains',
           },
         ]}
         sortColumns={[
           {
-            name: t`Name`,
+            name: i18n._(msg`Name`),
             key: 'name',
           },
         ]}
         searchableKeys={searchableKeys}
         relatedSearchableKeys={relatedSearchableKeys}
         multiple={isVault}
-        header={t`Credentials`}
+        header={i18n._(msg`Credentials`)}
         name="credentials"
         qsConfig={QS_CONFIG}
         readOnly={false}

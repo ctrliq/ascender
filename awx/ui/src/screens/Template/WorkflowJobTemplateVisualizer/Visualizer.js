@@ -2,7 +2,9 @@ import React, { useCallback, useEffect, useReducer } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { shape } from 'prop-types';
-import { t } from '@lingui/macro';
+import { i18n } from '@lingui/core';
+import { msg } from '@lingui/macro';
+
 import {
   WorkflowDispatchContext,
   WorkflowStateContext,
@@ -660,7 +662,6 @@ function Visualizer({ template }) {
   }
 
   const readOnly = !template?.summary_fields?.user_capabilities?.edit;
-
   return (
     <WorkflowStateContext.Provider value={state}>
       <WorkflowDispatchContext.Provider value={dispatch}>
@@ -700,11 +701,11 @@ function Visualizer({ template }) {
           <AlertModal
             isOpen
             variant="error"
-            title={t`Error saving the workflow!`}
+            title={i18n._(msg`Error saving the workflow!`)}
             onClose={dismissNodeRequestError}
-            aria-label={t`Error saving the workflow!`}
+            aria-label={i18n._(msg`Error saving the workflow!`)}
           >
-            {t`There was an error saving the workflow.`}
+            {i18n._(msg`There was an error saving the workflow.`)}
             <ErrorDetail error={nodeRequestError} />
           </AlertModal>
         )}

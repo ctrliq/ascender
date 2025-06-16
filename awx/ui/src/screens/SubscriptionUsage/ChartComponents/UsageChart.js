@@ -1,12 +1,15 @@
 import React, { useEffect, useCallback } from 'react';
 import { string, number, shape, arrayOf } from 'prop-types';
 import * as d3 from 'd3';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
 import { PageContextConsumer } from '@patternfly/react-core';
+import { useLingui } from '@lingui/react';
+
 import UsageChartTooltip from './UsageChartTooltip';
 
 function UsageChart({ id, data, height, pageContext }) {
   const { isNavOpen } = pageContext;
+  const { i18n } = useLingui();
 
   // Methods
   const draw = useCallback(() => {
@@ -60,7 +63,8 @@ function UsageChart({ id, data, height, pageContext }) {
     const tooltip = new UsageChartTooltip({
       svg: `#${id}`,
       colors,
-      label: t`Hosts`,
+      label: i18n._(msg`Hosts`),
+      i18n,
     });
 
     const parseTime = d3.timeParse('%Y-%m-%d');
@@ -125,7 +129,7 @@ function UsageChart({ id, data, height, pageContext }) {
       .attr('x', 0 - height / 2)
       .attr('dy', '1em')
       .style('text-anchor', 'middle')
-      .text(t`Unique Hosts`);
+      .text(i18n._(msg`Unique Hosts`));
 
     // Add the X Axis
     let ticks;
@@ -169,7 +173,7 @@ function UsageChart({ id, data, height, pageContext }) {
         `translate(${width / 2} , ${height + margin.top + 50})`
       )
       .style('text-anchor', 'middle')
-      .text(t`Month`);
+      .text(i18n._(msg`Month`));
     const vertical = svg
       .append('path')
       .attr('class', 'mouse-line')
@@ -254,7 +258,7 @@ function UsageChart({ id, data, height, pageContext }) {
       .on('mouseout', handleMouseOut);
 
     // Create legend
-    const legend_keys = [t`Subscriptions consumed`, t`Subscription capacity`];
+    const legend_keys = [i18n._(msg`Subscriptions consumed`), i18n._(msg`Subscription capacity`)];
     let totalWidth = width / 2 - 175;
 
     const lineLegend = svg
@@ -280,7 +284,7 @@ function UsageChart({ id, data, height, pageContext }) {
       .attr('fill', (d) => colors(d))
       .attr('width', 10)
       .attr('height', 10);
-  }, [data, height, id]);
+  }, [data, height, id, i18n]);
 
   useEffect(() => {
     draw();

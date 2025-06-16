@@ -1,8 +1,9 @@
 import React from 'react';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 
 import { Formik } from 'formik';
 import { Form, Card } from '@patternfly/react-core';
-import { t } from '@lingui/macro';
 
 import { CardBody } from 'components/Card';
 import FormField, { FormSubmitError } from 'components/FormField';
@@ -12,6 +13,7 @@ import { required } from 'util/validators';
 import { FormColumnLayout, FormFullWidthLayout } from 'components/FormLayout';
 
 function InventoryGroupForm({ error, group = {}, handleSubmit, handleCancel }) {
+  const { i18n } = useLingui();
   const initialValues = {
     name: group.name || '',
     description: group.description || '',
@@ -29,7 +31,7 @@ function InventoryGroupForm({ error, group = {}, handleSubmit, handleCancel }) {
                   id="inventoryGroup-name"
                   name="name"
                   type="text"
-                  label={t`Name`}
+                  label={i18n._(msg`Name`)}
                   validate={required(null)}
                   isRequired
                 />
@@ -37,13 +39,13 @@ function InventoryGroupForm({ error, group = {}, handleSubmit, handleCancel }) {
                   id="inventoryGroup-description"
                   name="description"
                   type="text"
-                  label={t`Description`}
+                  label={i18n._(msg`Description`)}
                 />
                 <FormFullWidthLayout>
                   <VariablesField
                     id="host-variables"
                     name="variables"
-                    label={t`Variables`}
+                    label={i18n._(msg`Variables`)}
                   />
                 </FormFullWidthLayout>
                 <FormActionGroup

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { useLingui } from '@lingui/react';
 
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
 import { Link, useHistory } from 'react-router-dom';
 import { Button, Tooltip } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
@@ -21,6 +22,7 @@ function ManagementJobListItem({
   name,
   description,
 }) {
+  const { i18n } = useLingui();
   const detailsUrl = `/management_jobs/${id}`;
 
   const history = useHistory();
@@ -64,13 +66,13 @@ function ManagementJobListItem({
     <>
       <Tr id={rowId} ouiaId={rowId}>
         <Td />
-        <Td dataLabel={t`Name`}>
+        <Td dataLabel={i18n._(msg`Name`)}>
           <Link to={`${detailsUrl}`}>
             <b>{name}</b>
           </Link>
         </Td>
-        <Td dataLabel={t`Description`}>{description}</Td>
-        <ActionsTd dataLabel={t`Actions`}>
+        <Td dataLabel={i18n._(msg`Description`)}>{description}</Td>
+        <ActionsTd dataLabel={i18n._(msg`Actions`)}>
           <ActionItem visible={isSuperUser}>
             {isSuperUser ? (
               <>
@@ -84,10 +86,10 @@ function ManagementJobListItem({
                     defaultDays={30}
                   />
                 ) : (
-                  <Tooltip content={t`Launch management job`} position="left">
+                  <Tooltip content={i18n._(msg`Launch management job`)} position="left">
                     <Button
                       ouiaId={`${id}-launch-button`}
-                      aria-label={t`Launch management job`}
+                      aria-label={i18n._(msg`Launch management job`)}
                       variant="plain"
                       onClick={handleLaunch}
                       isDisabled={isLaunchLoading}
@@ -106,8 +108,8 @@ function ManagementJobListItem({
           isOpen={managementPromptError}
           variant="danger"
           onClose={() => setManagementPromptError(null)}
-          title={t`Management job launch error`}
-          label={t`Management job launch error`}
+          title={i18n._(msg`Management job launch error`)}
+          label={i18n._(msg`Management job launch error`)}
         >
           <ErrorDetail error={managementPromptError} />
         </AlertModal>

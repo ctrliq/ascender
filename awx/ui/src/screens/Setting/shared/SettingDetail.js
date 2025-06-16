@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { Detail } from 'components/DetailList';
 import CodeDetail from 'components/DetailList/CodeDetail';
 
@@ -18,6 +19,7 @@ function sortObj(obj) {
 }
 
 export default ({ helpText, id, label, type, unit = '', value }) => {
+  const { i18n } = useLingui();
   const dataType = value === '$encrypted$' ? 'encrypted' : type;
   let detail = null;
 
@@ -68,7 +70,7 @@ export default ({ helpText, id, label, type, unit = '', value }) => {
           label={label}
           value={
             !value ? (
-              t`Not configured`
+              i18n._(msg`Not configured`)
             ) : (
               <img src={value} alt={label} height="40" width="40" />
             )
@@ -84,7 +86,7 @@ export default ({ helpText, id, label, type, unit = '', value }) => {
           helpText={helpText}
           isEncrypted
           label={label}
-          value={t`Encrypted`}
+          value={i18n._(msg`Encrypted`)}
         />
       );
       break;
@@ -95,7 +97,7 @@ export default ({ helpText, id, label, type, unit = '', value }) => {
           dataCy={id}
           helpText={helpText}
           label={label}
-          value={value ? t`On` : t`Off`}
+          value={value ? i18n._(msg`On`) : i18n._(msg`Off`)}
         />
       );
       break;
@@ -109,7 +111,7 @@ export default ({ helpText, id, label, type, unit = '', value }) => {
           helpText={helpText}
           isNotConfigured={!value}
           label={label}
-          value={!value ? t`Not configured` : value}
+          value={!value ? i18n._(msg`Not configured`) : value}
         />
       );
       break;

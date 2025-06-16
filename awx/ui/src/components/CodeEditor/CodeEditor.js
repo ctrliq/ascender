@@ -8,7 +8,9 @@ import 'ace-builds/src-noconflict/mode-yaml';
 import 'ace-builds/src-noconflict/mode-django';
 import 'ace-builds/src-noconflict/theme-github';
 
-import { t } from '@lingui/macro';
+import { msg } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
+
 import styled from 'styled-components';
 import debounce from 'util/debounce';
 
@@ -79,6 +81,7 @@ function CodeEditor({
   fullHeight,
   className,
 }) {
+  const { i18n } = useLingui();
   if (rows && typeof rows !== 'number' && rows !== 'auto') {
     // eslint-disable-next-line no-console
     console.warn(
@@ -178,7 +181,7 @@ function CodeEditor({
           className="pf-c-form__helper-text keyboard-help-text"
           aria-live="polite"
         >
-          {t`Press Enter to edit. Press ESC to stop editing.`}
+          {i18n._(msg`Press Enter to edit. Press ESC to stop editing.`)}
         </div>
       )}
     </>

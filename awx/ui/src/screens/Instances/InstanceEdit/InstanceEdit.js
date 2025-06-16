@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { useHistory, useParams, Link } from 'react-router-dom';
 import { Card, PageSection } from '@patternfly/react-core';
 import useRequest from 'hooks/useRequest';
@@ -11,6 +12,7 @@ import { InstancesAPI } from 'api';
 import InstanceForm from '../Shared/InstanceForm';
 
 function InstanceEdit({ setBreadcrumb }) {
+  const { i18n } = useLingui();
   const history = useHistory();
   const { id } = useParams();
   const [formError, setFormError] = useState();
@@ -77,8 +79,8 @@ function InstanceEdit({ setBreadcrumb }) {
         <ContentError error={error}>
           {error?.response?.status === 404 && (
             <span>
-              {t`Instance not found.`}{' '}
-              <Link to="/instances">{t`View all Instances.`}</Link>
+              {i18n._(msg`Instance not found.`)}{' '}
+              <Link to="/instances">{i18n._(msg`View all Instances.`)}</Link>
             </span>
           )}
         </ContentError>

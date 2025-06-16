@@ -1,5 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 
 import {
   Switch,
@@ -26,6 +27,7 @@ function Schedule({
   hasDaysToKeepField,
   resourceDefaultCredentials,
 }) {
+  const { i18n } = useLingui();
   const { scheduleId } = useParams();
 
   const { pathname } = useLocation();
@@ -61,14 +63,14 @@ function Schedule({
       name: (
         <>
           <CaretLeftIcon />
-          {t`Back to Schedules`}
+          {i18n._(msg`Back to Schedules`)}
         </>
       ),
       link: `${pathRoot}schedules`,
       id: 99,
     },
     {
-      name: t`Details`,
+      name: i18n._(msg`Details`),
       link: `${pathRoot}schedules/${schedule && schedule.id}/details`,
       id: 0,
     },
@@ -79,8 +81,8 @@ function Schedule({
       <ContentError isNotFound error={error}>
         {error.response && error.response.status === 404 && (
           <span>
-            {t`Schedule not found.`}{' '}
-            <Link to={`${pathRoot}schedules`}>{t`View Schedules`}</Link>
+            {i18n._(msg`Schedule not found.`)}{' '}
+            <Link to={`${pathRoot}schedules`}>{i18n._(msg`View Schedules`)}</Link>
           </span>
         )}
       </ContentError>
@@ -98,7 +100,7 @@ function Schedule({
     return (
       <ContentError>
         {schedule && (
-          <Link to={`${pathRoot}schedules`}>{t`View Schedules`}</Link>
+          <Link to={`${pathRoot}schedules`}>{i18n._(msg`View Schedules`)}</Link>
         )}
       </ContentError>
     );
@@ -148,7 +150,7 @@ function Schedule({
         <Route key="not-found" path="*">
           <ContentError>
             {resource && (
-              <Link to={`${pathRoot}details`}>{t`View Details`}</Link>
+              <Link to={`${pathRoot}details`}>{i18n._(msg`View Details`)}</Link>
             )}
           </ContentError>
         </Route>

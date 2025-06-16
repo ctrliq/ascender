@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from "@lingui/react";
+
 import styled from 'styled-components';
 import { Button, Badge, Alert, Tooltip } from '@patternfly/react-core';
 import { getRelatedResourceDeleteCounts } from 'util/getRelatedResourceDeleteDetails';
@@ -28,6 +30,7 @@ function DeleteButton({
   deleteDetailsRequests,
   disabledTooltip,
 }) {
+  const { i18n } = useLingui();
   const [isOpen, setIsOpen] = useState(false);
   const [deleteMessageError, setDeleteMessageError] = useState();
   const [deleteDetails, setDeleteDetails] = useState({});
@@ -53,7 +56,7 @@ function DeleteButton({
     return (
       <AlertModal
         isOpen={deleteMessageError}
-        title={t`Error!`}
+        title={i18n._(msg`Error!`)}
         onClose={() => {
           toggleModal(false);
           setDeleteMessageError();
@@ -72,12 +75,12 @@ function DeleteButton({
               isLoading={isLoading}
               spinnerAriaValueText={isLoading ? 'Loading' : undefined}
               variant={variant || 'secondary'}
-              aria-label={t`Delete`}
+              aria-label={i18n._(msg`Delete`)}
               isDisabled={isDisabled}
               onClick={() => toggleModal(true)}
               ouiaId={ouiaId}
             >
-              {children || t`Delete`}
+              {children || i18n._(msg`Delete`)}
             </Button>
           </div>
         </Tooltip>
@@ -87,11 +90,11 @@ function DeleteButton({
           isLoading={isLoading}
           spinnerAriaValueText={isLoading ? 'Loading' : undefined}
           variant={variant || 'secondary'}
-          aria-label={t`Delete`}
+          aria-label={i18n._(msg`Delete`)}
           isDisabled={isDisabled}
           onClick={() => toggleModal(true)}
         >
-          {children || t`Delete`}
+          {children || i18n._(msg`Delete`)}
         </Button>
       )}
       <AlertModal
@@ -104,27 +107,27 @@ function DeleteButton({
             ouiaId="delete-modal-confirm"
             key="delete"
             variant="danger"
-            aria-label={t`Confirm Delete`}
+            aria-label={i18n._(msg`Confirm Delete`)}
             isDisabled={isDisabled}
             onClick={() => {
               onConfirm();
               toggleModal(false);
             }}
           >
-            {t`Delete`}
+            {i18n._(msg`Delete`)}
           </Button>,
           <Button
             ouiaId="delete-modal-cancel"
             key="cancel"
             variant="link"
-            aria-label={t`Cancel`}
+            aria-label={i18n._(msg`Cancel`)}
             onClick={() => toggleModal(false)}
           >
-            {t`Cancel`}
+            {i18n._(msg`Cancel`)}
           </Button>,
         ]}
       >
-        {t`Are you sure you want to delete:`}
+        {i18n._(msg`Are you sure you want to delete:`)}
         <br />
         <strong>{name}</strong>
         {Object.values(deleteDetails).length > 0 && (

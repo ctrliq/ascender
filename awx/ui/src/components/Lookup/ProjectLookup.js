@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect } from 'react';
 import { node, string, func, bool, object, oneOfType } from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { FormGroup } from '@patternfly/react-core';
 import { ProjectsAPI } from 'api';
 import { Project } from 'types';
@@ -35,6 +36,7 @@ function ProjectLookup({
   validate,
   fieldName,
 }) {
+  const { i18n } = useLingui();
   const autoPopulateLookup = useAutoPopulateLookup(onChange);
   const {
     result: { projects, count, relatedSearchableKeys, searchableKeys, canEdit },
@@ -101,12 +103,12 @@ function ProjectLookup({
       helperTextInvalid={helperTextInvalid}
       isRequired={required}
       validated={isValid ? 'default' : 'error'}
-      label={t`Project`}
+      label={i18n._(msg`Project`)}
       labelIcon={tooltip && <Popover content={tooltip} />}
     >
       <Lookup
         id="project"
-        header={t`Project`}
+        header={i18n._(msg`Project`)}
         name="project"
         value={value}
         onBlur={onBlur}
@@ -124,37 +126,37 @@ function ProjectLookup({
             value={state.selectedItems}
             searchColumns={[
               {
-                name: t`Name`,
+                name: i18n._(msg`Name`),
                 key: 'name__icontains',
                 isDefault: true,
               },
               {
-                name: t`Type`,
+                name: i18n._(msg`Type`),
                 key: 'or__scm_type',
                 options: [
-                  [``, t`Manual`],
-                  [`git`, t`Git`],
-                  [`svn`, t`Subversion`],
-                  [`archive`, t`Remote Archive`],
-                  [`insights`, t`Red Hat Insights`],
+                  [``, i18n._(msg`Manual`)],
+                  [`git`, i18n._(msg`Git`)],
+                  [`svn`, i18n._(msg`Subversion`)],
+                  [`archive`, i18n._(msg`Remote Archive`)],
+                  [`insights`, i18n._(msg`Red Hat Insights`)],
                 ],
               },
               {
-                name: t`Source Control URL`,
+                name: i18n._(msg`Source Control URL`),
                 key: 'scm_url__icontains',
               },
               {
-                name: t`Modified By (Username)`,
+                name: i18n._(msg`Modified By (Username)`),
                 key: 'modified_by__username__icontains',
               },
               {
-                name: t`Created By (Username)`,
+                name: i18n._(msg`Created By (Username)`),
                 key: 'created_by__username__icontains',
               },
             ]}
             sortColumns={[
               {
-                name: t`Name`,
+                name: i18n._(msg`Name`),
                 key: 'name',
               },
             ]}
@@ -163,7 +165,7 @@ function ProjectLookup({
             options={projects}
             optionCount={count}
             multiple={state.multiple}
-            header={t`Project`}
+            header={i18n._(msg`Project`)}
             name="project"
             qsConfig={QS_CONFIG}
             readOnly={!canDelete}

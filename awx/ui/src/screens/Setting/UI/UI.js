@@ -1,13 +1,14 @@
 import React from 'react';
 import { Link, Redirect, Route, Switch } from 'react-router-dom';
-
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import { PageSection, Card } from '@patternfly/react-core';
 import ContentError from 'components/ContentError';
 import UIDetail from './UIDetail';
 import UIEdit from './UIEdit';
 
 function UI() {
+  const { i18n } = useLingui();
   const baseURL = '/settings/ui';
   return (
     <PageSection>
@@ -23,7 +24,7 @@ function UI() {
           <Route key="not-found" path={`${baseURL}/*`}>
             <ContentError isNotFound>
               <Link to={`${baseURL}/details`}>
-                {t`View User Interface settings`}
+                {i18n._(msg`View User Interface settings`)}
               </Link>
             </ContentError>
           </Route>

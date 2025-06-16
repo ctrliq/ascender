@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { t, Trans } from '@lingui/macro';
+import { msg, Trans } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import styled from 'styled-components';
 import {
   Button,
@@ -24,6 +25,7 @@ const HelperText = styled(PFHelperText)`
 `;
 
 function SubscriptionDetail() {
+  const { i18n } = useLingui();
   const { me = {}, license_info, version, systemConfig } = useConfig();
   const baseURL = '/settings/subscription';
   const tabsArray = [
@@ -31,14 +33,14 @@ function SubscriptionDetail() {
       name: (
         <>
           <CaretLeftIcon />
-          {t`Back to Settings`}
+          {i18n._(msg`Back to Settings`)}
         </>
       ),
       link: '/settings',
       id: 99,
     },
     {
-      name: t`Subscription Details`,
+      name: i18n._(msg`Subscription Details`),
       link: `${baseURL}/details`,
       id: 0,
     },
@@ -60,15 +62,15 @@ function SubscriptionDetail() {
             'unique_managed_hosts' && (
             <Detail
               dataCy="subscription-status"
-              label={t`Status`}
+              label={i18n._(msg`Status`)}
               value={
                 license_info.compliant ? (
                   <>
                     <Label variant="outline" color="green" icon={<CheckIcon />}>
-                      {t`Compliant`}
+                      {i18n._(msg`Compliant`)}
                     </Label>
                     <HelperText>
-                      <HelperTextItem>{t`The number of hosts you have automated against is below your subscription count.`}</HelperTextItem>
+                      <HelperTextItem>{i18n._(msg`The number of hosts you have automated against is below your subscription count.`)}</HelperTextItem>
                     </HelperText>
                   </>
                 ) : (
@@ -78,10 +80,10 @@ function SubscriptionDetail() {
                       color="red"
                       icon={<ExclamationCircleIcon />}
                     >
-                      {t`Out of compliance`}
+                      {i18n._(msg`Out of compliance`)}
                     </Label>
                     <HelperText>
-                      <HelperTextItem>{t`You have automated against more hosts than your subscription allows.`}</HelperTextItem>
+                      <HelperTextItem>{i18n._(msg`You have automated against more hosts than your subscription allows.`)}</HelperTextItem>
                     </HelperText>
                   </>
                 )
@@ -93,7 +95,7 @@ function SubscriptionDetail() {
             systemConfig?.SUBSCRIPTION_USAGE_MODEL !== '' && (
               <Detail
                 dataCy="subscription-hosts-automated"
-                label={t`Hosts automated`}
+                label={i18n._(msg`Hosts automated`)}
                 value={
                   automated_since ? (
                     <Trans>
@@ -109,7 +111,7 @@ function SubscriptionDetail() {
           {systemConfig?.SUBSCRIPTION_USAGE_MODEL !== '' && (
             <Detail
               dataCy="subscription-hosts-imported"
-              label={t`Hosts imported`}
+              label={i18n._(msg`Hosts imported`)}
               value={license_info.current_instances}
             />
           )}
@@ -117,7 +119,7 @@ function SubscriptionDetail() {
             'unique_managed_hosts' && (
             <Detail
               dataCy="subscription-hosts-remaining"
-              label={t`Hosts remaining`}
+              label={i18n._(msg`Hosts remaining`)}
               value={license_info.free_instances}
             />
           )}
@@ -125,7 +127,7 @@ function SubscriptionDetail() {
             'unique_managed_hosts' && (
             <Detail
               dataCy="subscription-hosts-deleted"
-              label={t`Hosts deleted`}
+              label={i18n._(msg`Hosts deleted`)}
               value={license_info.deleted_instances}
             />
           )}
@@ -133,7 +135,7 @@ function SubscriptionDetail() {
             'unique_managed_hosts' && (
             <Detail
               dataCy="subscription-hosts-reactivated"
-              label={t`Active hosts previously deleted`}
+              label={i18n._(msg`Active hosts previously deleted`)}
               value={license_info.reactivated_instances}
             />
           )}
@@ -142,7 +144,7 @@ function SubscriptionDetail() {
             license_info.instance_count < 9999999 && (
               <Detail
                 dataCy="subscription-hosts-available"
-                label={t`Hosts available`}
+                label={i18n._(msg`Hosts available`)}
                 value={license_info.available_instances}
               />
             )}
@@ -150,28 +152,28 @@ function SubscriptionDetail() {
             license_info.instance_count >= 9999999 && (
               <Detail
                 dataCy="subscription-unlimited-hosts-available"
-                label={t`Hosts available`}
-                value={t`Unlimited`}
+                label={i18n._(msg`Hosts available`)}
+                value={i18n._(msg`Unlimited`)}
               />
             )}
           <Detail
             dataCy="subscription-type"
-            label={t`Subscription type`}
+            label={i18n._(msg`Subscription type`)}
             value={license_info.license_type}
           />
           <Detail
             dataCy="subscription-name"
-            label={t`Subscription`}
+            label={i18n._(msg`Subscription`)}
             value={license_info.subscription_name}
           />
           <Detail
             dataCy="subscription-trial"
-            label={t`Trial`}
-            value={license_info.trial ? t`True` : t`False`}
+            label={i18n._(msg`Trial`)}
+            value={license_info.trial ? i18n._(msg`True`) : i18n._(msg`False`)}
           />
           <Detail
             dataCy="subscription-expires-on-date"
-            label={t`Expires on`}
+            label={i18n._(msg`Expires on`)}
             value={
               license_info.license_date &&
               formatDateString(
@@ -181,7 +183,7 @@ function SubscriptionDetail() {
           />
           <Detail
             dataCy="subscription-expires-on-utc-date"
-            label={t`Expires on UTC`}
+            label={i18n._(msg`Expires on UTC`)}
             value={
               license_info.license_date &&
               formatDateString(
@@ -192,7 +194,7 @@ function SubscriptionDetail() {
           />
           <Detail
             dataCy="subscription-days-remaining"
-            label={t`Days remaining`}
+            label={i18n._(msg`Days remaining`)}
             value={
               license_info.time_remaining &&
               secondsToDays(license_info.time_remaining)
@@ -200,7 +202,7 @@ function SubscriptionDetail() {
           />
           <Detail
             dataCy="subscription-version"
-            label={t`Automation controller version`}
+            label={i18n._(msg`Automation controller version`)}
             value={version}
           />
         </DetailList>
@@ -221,7 +223,7 @@ function SubscriptionDetail() {
         {me.is_superuser && (
           <CardActionsRow>
             <Button
-              aria-label={t`edit`}
+              aria-label={i18n._(msg`edit`)}
               component={Link}
               to="/settings/subscription/edit"
             >

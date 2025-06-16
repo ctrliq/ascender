@@ -1,4 +1,4 @@
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
 import { RRule } from 'rrule';
 import { DateTime } from 'luxon';
 import { getRRuleDayConstants } from 'util/dates';
@@ -36,7 +36,7 @@ function pad(num) {
   return num < 10 ? `0${num}` : num;
 }
 
-export default function buildRuleObj(values, includeStart) {
+export default function buildRuleObj(values, includeStart, i18n) {
   const ruleObj = {
     interval: values.interval,
   };
@@ -88,7 +88,7 @@ export default function buildRuleObj(values, includeStart) {
       }
       break;
     default:
-      throw new Error(t`Frequency did not match an expected value`);
+      throw new Error(i18n._(msg`Frequency did not match an expected value`));
   }
 
   if (values.frequency !== 'none') {
@@ -107,7 +107,9 @@ export default function buildRuleObj(values, includeStart) {
         break;
       }
       default:
-        throw new Error(t`End did not match an expected value (${values.end})`);
+        throw new Error(
+          i18n._(msg`End did not match an expected value (${values.end})`)
+        );
     }
   }
 

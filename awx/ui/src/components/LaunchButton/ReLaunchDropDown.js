@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
-import { t } from '@lingui/macro';
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import {
   Dropdown,
   DropdownToggle,
@@ -18,6 +19,7 @@ function ReLaunchDropDown({
   id = 'relaunch-job',
   ouiaId,
 }) {
+  const { i18n } = useLingui();
   const [isOpen, setIsOpen] = useState(false);
 
   const onToggle = () => {
@@ -27,38 +29,38 @@ function ReLaunchDropDown({
   const dropdownItems = [
     <DropdownItem
       ouiaId={`${ouiaId}-on`}
-      aria-label={t`Relaunch on`}
+      aria-label={i18n._(msg`Relaunch on`)}
       key="relaunch_on"
       component="div"
       isPlainText
     >
-      {t`Relaunch on`}
+      {i18n._(msg`Relaunch on`)}
     </DropdownItem>,
     <DropdownSeparator key="separator" />,
     <DropdownItem
       ouiaId={`${ouiaId}-all`}
       key="relaunch_all"
-      aria-label={t`Relaunch all hosts`}
+      aria-label={i18n._(msg`Relaunch all hosts`)}
       component="button"
       onClick={() => {
         handleRelaunch({ hosts: 'all' });
       }}
       isDisabled={isLaunching}
     >
-      {t`All`}
+      {i18n._(msg`All`)}
     </DropdownItem>,
 
     <DropdownItem
       ouiaId={`${ouiaId}-failed`}
       key="relaunch_failed"
-      aria-label={t`Relaunch failed hosts`}
+      aria-label={i18n._(msg`Relaunch failed hosts`)}
       component="button"
       onClick={() => {
         handleRelaunch({ hosts: 'failed' });
       }}
       isDisabled={isLaunching}
     >
-      {t`Failed hosts`}
+      {i18n._(msg`Failed hosts`)}
     </DropdownItem>,
   ];
 
@@ -74,12 +76,12 @@ function ReLaunchDropDown({
           <DropdownToggle
             toggleIndicator={null}
             onToggle={onToggle}
-            aria-label={t`relaunch jobs`}
+            aria-label={i18n._(msg`relaunch jobs`)}
             id={id}
             isPrimary
             ouiaId="relaunch-job-toggle"
           >
-            {t`Relaunch`}
+            {i18n._(msg`Relaunch`)}
           </DropdownToggle>
         }
       />
@@ -97,7 +99,7 @@ function ReLaunchDropDown({
         <DropdownToggle
           toggleIndicator={null}
           onToggle={onToggle}
-          aria-label={t`relaunch jobs`}
+          aria-label={i18n._(msg`relaunch jobs`)}
           id={id}
           ouiaId="relaunch-job-toggle"
         >

@@ -1,7 +1,8 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 import { Popover } from '@patternfly/react-core';
 import { OutlinedQuestionCircleIcon } from '@patternfly/react-icons';
 import { func, shape } from 'prop-types';
@@ -27,26 +28,27 @@ const QS_CONFIG = getQSConfig('job-templates', {
 });
 
 function TemplatePopoverContent({ template }) {
+  const { i18n } = useLingui();
   return (
     <DetailList compact stacked>
       <Detail
-        label={t`Inventory`}
+        label={i18n._(msg`Inventory`)}
         value={template.summary_fields?.inventory?.name}
         dataCy={`template-${template.id}-inventory`}
       />
       <Detail
-        label={t`Project`}
+        label={i18n._(msg`Project`)}
         value={template.summary_fields?.project?.name}
         dataCy={`template-${template.id}-project`}
       />
       <Detail
-        label={t`Playbook`}
+        label={i18n._(msg`Playbook`)}
         value={template?.playbook}
         dataCy={`template-${template.id}-playbook`}
       />
       <Detail
         fullWidth
-        label={t`Credentials`}
+        label={i18n._(msg`Credentials`)}
         dataCy={`template-${template.id}-credentials`}
         value={
           <ChipGroup
@@ -72,6 +74,7 @@ function TemplatePopoverContent({ template }) {
 
 function JobTemplatesList({ nodeResource, onUpdateNodeResource }) {
   const location = useLocation();
+  const { i18n } = useLingui();
 
   const {
     result: { jobTemplates, count, relatedSearchableKeys, searchableKeys },
@@ -117,7 +120,7 @@ function JobTemplatesList({ nodeResource, onUpdateNodeResource }) {
       qsConfig={QS_CONFIG}
       headerRow={
         <HeaderRow isExpandable={false} qsConfig={QS_CONFIG}>
-          <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
+          <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
         </HeaderRow>
       }
       renderRow={(item, index) => (
@@ -135,7 +138,7 @@ function JobTemplatesList({ nodeResource, onUpdateNodeResource }) {
             <ActionItem id={item.id} visible>
               <Popover
                 bodyContent={<TemplatePopoverContent template={item} />}
-                headerContent={<div>{t`Details`}</div>}
+                headerContent={<div>{i18n._(msg`Details`)}</div>}
                 id={`item-${item.id}-info-popover`}
                 position="right"
               >
@@ -149,20 +152,20 @@ function JobTemplatesList({ nodeResource, onUpdateNodeResource }) {
       showPageSizeOptions={false}
       toolbarSearchColumns={[
         {
-          name: t`Name`,
+          name: i18n._(msg`Name`),
           key: 'name__icontains',
           isDefault: true,
         },
         {
-          name: t`Playbook name`,
+          name: i18n._(msg`Playbook name`),
           key: 'playbook__icontains',
         },
         {
-          name: t`Created By (Username)`,
+          name: i18n._(msg`Created By (Username)`),
           key: 'created_by__username__icontains',
         },
         {
-          name: t`Modified By (Username)`,
+          name: i18n._(msg`Modified By (Username)`),
           key: 'modified_by__username__icontains',
         },
       ]}

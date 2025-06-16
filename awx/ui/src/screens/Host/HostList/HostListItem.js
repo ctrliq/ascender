@@ -2,7 +2,9 @@ import 'styled-components/macro';
 import React from 'react';
 import { string, bool, func } from 'prop-types';
 
-import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
+
 import { Button } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
 import { Link } from 'react-router-dom';
@@ -19,6 +21,7 @@ function HostListItem({
   detailUrl,
   rowIndex,
 }) {
+  const { i18n } = useLingui();
   const labelId = `check-action-${host.id}`;
 
   const {
@@ -34,23 +37,23 @@ function HostListItem({
             isSelected,
             onSelect,
           }}
-          dataLabel={t`Selected`}
+          dataLabel={i18n._(msg`Selected`)}
         />
-        <TdBreakWord id={labelId} dataLabel={t`Name`}>
+        <TdBreakWord id={labelId} dataLabel={i18n._(msg`Name`)}>
           <Link to={`${detailUrl}`}>
             <b>{host.name}</b>
           </Link>
         </TdBreakWord>
         <Td>
-            {recentJobs.length > 0 ? (<Sparkline jobs={recentJobs} />) : (t`No job data available`)}
+            {recentJobs.length > 0 ? (<Sparkline jobs={recentJobs} />) : (i18n._(msg`No job data available`))}
         </Td>
         <TdBreakWord
           id={`host-description-${host.id}}`}
-          dataLabel={t`Description`}
+          dataLabel={i18n._(msg`Description`)}
         >
           {host.description}
         </TdBreakWord>
-        <TdBreakWord dataLabel={t`Inventory`}>
+        <TdBreakWord dataLabel={i18n._(msg`Inventory`)}>
           {host.summary_fields.inventory && (
             <Link
               to={`/inventories/inventory/${host.summary_fields.inventory.id}/details`}
@@ -59,15 +62,15 @@ function HostListItem({
             </Link>
           )}
         </TdBreakWord>
-        <ActionsTd dataLabel={t`Actions`} gridColumns="auto 40px">
+        <ActionsTd dataLabel={i18n._(msg`Actions`)} gridColumns="auto 40px">
           <HostToggle host={host} />
           <ActionItem
             visible={host.summary_fields.user_capabilities.edit}
-            tooltip={t`Edit Host`}
+            tooltip={i18n._(msg`Edit Host`)}
           >
             <Button
               ouiaId={`${host.id}-edit-button}`}
-              aria-label={t`Edit Host`}
+              aria-label={i18n._(msg`Edit Host`)}
               variant="plain"
               component={Link}
               to={`/hosts/${host.id}/edit`}
