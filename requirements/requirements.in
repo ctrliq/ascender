@@ -28,11 +28,13 @@ djangorestframework-yaml
 filelock
 GitPython>=3.1.37  # CVE-2023-41040
 irc
+jaraco.functools>= 4
 jinja2>=3.1.6  # CVE-2025-27516
 JSON-log-formatter
 jsonschema
 Markdown  # used for formatting API help
 openshift
+packaging==24.2
 pexpect==4.7.0  # see library notes
 prometheus_client
 psycopg
@@ -60,7 +62,7 @@ uWSGI>=2.0.22 # CVE-2023-27522
 uwsgitop
 wheel>=0.38.1  # CVE-2022-40898
 pip==23.3  # see CVE-2023-5752
-setuptools==70.0.0  # CVE-2024-6345
+setuptools==78.1.1  # CVE-2025-47273
 setuptools_scm[toml]  # see UPGRADE BLOCKERs, xmlsec build dep
 setuptools-rust>=0.11.4  # cryptography build dep
 pkgconfig>=1.5.1  # xmlsec build dep - needed for offline build
