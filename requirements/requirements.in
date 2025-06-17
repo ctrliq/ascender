@@ -28,11 +28,13 @@ djangorestframework-yaml
 filelock
 GitPython>=3.1.37  # CVE-2023-41040
 irc
+jaraco.functools>= 4
 jinja2>=3.1.6  # CVE-2025-27516
 JSON-log-formatter
 jsonschema
 Markdown  # used for formatting API help
 openshift
+packaging==24.2
 pexpect==4.7.0  # see library notes
 prometheus_client
 psycopg

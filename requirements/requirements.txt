@@ -191,8 +191,9 @@ jaraco-collections==3.8.0
     # via irc
 jaraco-context==4.2.0
     # via jaraco-text
-jaraco-functools==3.5.2
+jaraco-functools==4.1.0
     # via
+    #   -r /awx_devel/requirements/requirements.in
     #   irc
     #   jaraco-text
     #   tempora
@@ -255,8 +256,9 @@ oauthlib==3.2.2
     #   social-auth-core
 openshift==0.13.1
     # via -r /awx_devel/requirements/requirements.in
-packaging==21.3
+packaging==24.2
     # via
+    #   -r /awx_devel/requirements/requirements.in
     #   ansible-runner
     #   setuptools-scm
 pbr==5.11.0
@@ -306,9 +308,7 @@ pyopenssl==24.3.0
     #   -r /awx_devel/requirements/requirements.in
     #   twisted
 pyparsing==2.4.6
-    # via
-    #   -r /awx_devel/requirements/requirements.in
-    #   packaging
+    # via -r /awx_devel/requirements/requirements.in
 pyrad==2.4
     # via django-radius
 pyrsistent==0.19.2
