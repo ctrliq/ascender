@@ -693,7 +693,7 @@ JobTemplateForm.defaultProps = {
 };
 
 const FormikApp = withFormik({
-  mapPropsToValues({ resourceValues = null, template = {}, i18n }) {
+  mapPropsToValues({ resourceValues = null, template = {} }) {
     const {
       summary_fields = {
         labels: { results: [] },
@@ -751,10 +751,10 @@ const FormikApp = withFormik({
       webhook_service: template.webhook_service || '',
       webhook_url: template?.related?.webhook_receiver
         ? `${origin}${template.related.webhook_receiver}`
-        : i18n._(msg`a new webhook url will be generated on save.`.toUpperCase()),
+        : 'A NEW WEBHOOK URL WILL BE GENERATED ON SAVE.',
       webhook_key:
         template.webhook_key ||
-        i18n._(msg`a new webhook key will be generated on save.`.toUpperCase()),
+        'A NEW WEBHOOK KEY WILL BE GENERATED ON SAVE.',
       webhook_credential: template?.summary_fields?.webhook_credential || null,
       execution_environment:
         template.summary_fields?.execution_environment || null,
@@ -777,12 +777,14 @@ const FormikApp = withFormik({
     }
     return initialValues;
   },
-  handleSubmit(values, { setSubmitting, props: { handleSubmit } }) {
-    const { id, ...rest } = values;
-    handleSubmit({ id, data: rest });
-    setSubmitting(false);
+  handleSubmit: async (values, { props, setErrors }) => {
+    try {
+      await props.handleSubmit(values);
+    } catch (errors) {
+      setErrors(errors);
+    }
   },
 })(JobTemplateForm);
 
-export { FormikApp as JobTemplateForm };
+export { JobTemplateForm as _JobTemplateForm };
 export default FormikApp;
