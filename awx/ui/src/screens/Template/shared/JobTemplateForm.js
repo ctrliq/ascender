@@ -693,7 +693,7 @@ JobTemplateForm.defaultProps = {
 };
 
 const FormikApp = withFormik({
-  mapPropsToValues({ resourceValues = null, template = {} }) {
+  mapPropsToValues({ resourceValues = null, template = {}, i18n }) {
     const {
       summary_fields = {
         labels: { results: [] },
@@ -751,10 +751,10 @@ const FormikApp = withFormik({
       webhook_service: template.webhook_service || '',
       webhook_url: template?.related?.webhook_receiver
         ? `${origin}${template.related.webhook_receiver}`
-        : 'A NEW WEBHOOK URL WILL BE GENERATED ON SAVE.',
+        : i18n._(msg`A NEW WEBHOOK URL WILL BE GENERATED ON SAVE.`),
       webhook_key:
         template.webhook_key ||
-        'A NEW WEBHOOK KEY WILL BE GENERATED ON SAVE.',
+        i18n._(msg`A NEW WEBHOOK KEY WILL BE GENERATED ON SAVE.`),
       webhook_credential: template?.summary_fields?.webhook_credential || null,
       execution_environment:
         template.summary_fields?.execution_environment || null,
