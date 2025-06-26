@@ -142,7 +142,7 @@ function WorkflowApprovalDetail({ workflowApproval, fetchWorkflowApproval }) {
         {workflowApproval.status !== 'pending' && (
           <Detail
             label={i18n._(msg`Status`)}
-            value={<StatusLabel status={getStatus(workflowApproval)} />}
+            value={<StatusLabel status={getStatus(workflowApproval, i18n)} />}
             dataCy="wa-detail-status"
           />
         )}

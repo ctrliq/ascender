@@ -175,10 +175,10 @@ function InstanceList() {
                 name: i18n._(msg`Node Type`),
                 key: `or__node_type`,
                 options: [
-                  [`control`, i18n._(msg`Control`).toString()],
-                  [`execution`, i18n._(msg`Execution`).toString()],
-                  [`hybrid`, i18n._(msg`Hybrid`).toString()],
-                  [`hop`, i18n._(msg`Hop`).toString()],
+                  [`control`, i18n._(msg`Control`)],
+                  [`execution`, i18n._(msg`Execution`)],
+                  [`hybrid`, i18n._(msg`Hybrid`)],
+                  [`hop`, i18n._(msg`Hop`)],
                 ],
               },
             ]}
