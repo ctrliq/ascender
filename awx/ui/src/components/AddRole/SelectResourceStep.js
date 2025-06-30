@@ -38,6 +38,10 @@ function SelectResourceStep({
   const location = useLocation();
   const { i18n } = useLingui();
 
+  // Store stable references to fetchItems and fetchOptions
+  const fetchItemsRef = React.useRef(fetchItems);
+  const fetchOptionsRef = React.useRef(fetchOptions);
+
   const {
     isLoading,
     error,
@@ -55,7 +59,10 @@ function SelectResourceStep({
           data: { count, results },
         },
         actionsResponse,
-      ] = await Promise.all([fetchItems(queryParams), fetchOptions()]);
+      ] = await Promise.all([
+        fetchItemsRef.current(queryParams),
+        fetchOptionsRef.current()
+      ]);
       return {
         resources: results,
         itemCount: count,
@@ -64,7 +71,7 @@ function SelectResourceStep({
         ).map((val) => val.slice(0, -8)),
         searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET),
       };
-    }, [location, fetchItems, fetchOptions, sortColumns]),
+    }, [location, sortColumns]),
     {
       resources: [],
       itemCount: 0,
@@ -73,9 +80,11 @@ function SelectResourceStep({
     }
   );
 
+  // Remove readResourceList from deps, use location.search and sortColumns instead
   useEffect(() => {
     readResourceList();
-  }, [readResourceList]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.search, JSON.stringify(sortColumns)]);
 
   return (
     <>
