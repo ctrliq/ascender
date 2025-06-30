@@ -1,6 +1,7 @@
 import React from 'react';
 import { msg } from '@lingui/macro';
 import { useLingui } from '@lingui/react';
+import useToast, { AlertVariant } from 'hooks/useToast';
 import { string, bool, func } from 'prop-types';
 import { Tr, Td } from '@patternfly/react-table';
 import { Link } from 'react-router-dom';
@@ -25,6 +26,7 @@ function WorkflowApprovalListItem({
   rowIndex,
 }) {
   const { i18n } = useLingui();
+  const { addToast } = useToast();
   const hasBeenActedOn =
     workflowApproval.status === 'successful' ||
     workflowApproval.status === 'failed' ||
@@ -32,6 +34,15 @@ function WorkflowApprovalListItem({
   const labelId = `check-action-${workflowApproval.id}`;
   const workflowJob = workflowApproval?.summary_fields?.source_workflow_job;
   const status = getStatus(workflowApproval);
+  // Toast handler for approve/deny actions (PatternFly style)
+  const handleToast = (id, message) => {
+    addToast({
+      id,
+      title: message,
+      variant: AlertVariant.success,
+      hasTimeout: true,
+    });
+  };
   return (
     <Tr id={`workflow-approval-row-${workflowApproval.id}`}>
       <Td
@@ -84,13 +95,13 @@ function WorkflowApprovalListItem({
             hasBeenActedOn ? i18n._(msg`This has already been acted on`) : i18n._(msg`Approve`)
           }
         >
-          <WorkflowApprovalButton workflowApproval={workflowApproval} />
+          <WorkflowApprovalButton workflowApproval={workflowApproval} onHandleToast={handleToast} />
         </ActionItem>
         <ActionItem
           visible
           tooltip={hasBeenActedOn ? i18n._(msg`This has already been acted on`) : i18n._(msg`Deny`)}
         >
-          <WorkflowDenyButton workflowApproval={workflowApproval} />
+          <WorkflowDenyButton workflowApproval={workflowApproval} onHandleToast={handleToast} />
         </ActionItem>
         <ActionItem visible>
           <JobCancelButton
