@@ -64,7 +64,7 @@ CodeDetail.propTypes = {
   dataCy: string,
   helpText: string,
   rows: oneOfType([number, string]),
-  mode: oneOf(['javascript', 'yaml', 'jinja2']).isRequired,
+  mode: oneOf(['json', 'javascript', 'yaml', 'jinja2']).isRequired,
 };
 CodeDetail.defaultProps = {
   rows: null,
