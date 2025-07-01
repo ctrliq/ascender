@@ -354,7 +354,7 @@ redis[hiredis]==5.0.8
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   channels-redis
-requests==2.32.3
+requests==2.32.4
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   adal

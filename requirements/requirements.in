@@ -52,7 +52,7 @@ social-auth-core[openidconnect]==4.5.0  # see UPGRADE BLOCKERs
 social-auth-app-django==5.4.2  # see UPGRADE BLOCKERs
 sqlparse>=0.5.0   # Required by django https://github.com/ansible/awx/security/dependabot/96
 redis[hiredis]
-requests>=2.32.0 # CVE-2024-35195
+requests>=2.32.4 # CVE-2024-47081
 slack-sdk
 tacacs_plus==1.0  # UPGRADE BLOCKER: auth does not work with later versions
 twilio
