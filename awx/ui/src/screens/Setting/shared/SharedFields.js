@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { shape, string } from 'prop-types';
 import { msg } from '@lingui/macro';
-import {  i18n } from '@lingui/core';
+import { i18n } from '@lingui/core';
 import { useField } from 'formik';
 import {
   Button,

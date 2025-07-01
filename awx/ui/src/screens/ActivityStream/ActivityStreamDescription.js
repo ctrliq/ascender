@@ -504,18 +504,18 @@ function ActivityStreamDescription({ activity }) {
             ) {
               let operationText = '';
               if (activity.changes.status[1] === 'successful') {
-                operationText = msg`approved`;
+                operationText = i18n._(msg`approved`);
               } else if (activity.changes.status[1] === 'failed') {
                 if (
                   activity.changes.timed_out &&
                   activity.changes.timed_out[1] === true
                 ) {
-                  operationText = msg`timed out`;
+                  operationText = i18n._(msg`timed out`);
                 } else {
-                  operationText = msg`denied`;
+                  operationText = i18n._(msg`denied`);
                 }
               } else {
-                operationText = msg`updated`;
+                operationText = i18n._(msg`updated`);
               }
               labeledLinks.push(
                 buildLabeledLink(

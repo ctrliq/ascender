@@ -116,23 +116,13 @@ function UIEdit() {
               <FormColumnLayout>
                 <ChoiceField
                   name="PENDO_TRACKING_STATE"
-                  config={
-                    uiData?.PENDO_TRACKING_STATE ?? {
-                      default: 'off',
-                      label: 'Pendo Tracking State',
-                      help_text: 'Enable or disable Pendo tracking.',
-                      choices: [
-                        ['off', 'Off'],
-                        ['on', 'On'],
-                      ],
-                    }
-                  }
+                  config={uiData.PENDO_TRACKING_STATE}
                   isDisabled={license_info?.license_type === 'open'}
                   isRequired
                 />
                 <TextAreaField
                   name="CUSTOM_LOGIN_INFO"
-                  config={uiData?.CUSTOM_LOGIN_INFO}
+                  config={uiData.CUSTOM_LOGIN_INFO}
                 />
                 <BooleanField
                   name="ASCENDER_DISABLE_GRADIENT"

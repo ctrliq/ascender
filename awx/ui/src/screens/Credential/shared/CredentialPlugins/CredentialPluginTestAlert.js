@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 
-import { msg } from '@lingui/macro';
 import { string, shape } from 'prop-types';
 import {
   Alert,

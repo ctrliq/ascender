@@ -186,9 +186,9 @@ function UserTokenList() {
         headerRow={
           <HeaderRow qsConfig={QS_CONFIG}>
             <HeaderCell sortKey="application__name">{i18n._(msg`Application Name`)}</HeaderCell>
-            <HeaderCell>{i18n._(msg`Description`)}</HeaderCell>
-            <HeaderCell>{i18n._(msg`Scope`)}</HeaderCell>
-            <HeaderCell>{i18n._(msg`Expires`)}</HeaderCell>
+            <HeaderCell sortKey="description">{i18n._(msg`Description`)}</HeaderCell>
+            <HeaderCell sortKey="scope">{i18n._(msg`Scope`)}</HeaderCell>
+            <HeaderCell sortKey="expires">{i18n._(msg`Expires`)}</HeaderCell>
           </HeaderRow>
         }
         renderRow={(token, index) => (

@@ -12,6 +12,8 @@ import { ApplicationsAPI } from 'api';
 import PaginatedTable, {
   HeaderRow,
   HeaderCell,
+  ToolbarDeleteButton,
+  ToolbarAddButton,
   getSearchableKeys,
 } from 'components/PaginatedTable';
 import useSelected from 'hooks/useSelected';
@@ -122,49 +124,66 @@ function ApplicationsList() {
             ]}
             toolbarSearchableKeys={searchableKeys}
             toolbarRelatedSearchableKeys={relatedSearchableKeys}
-            headerRow={
-              <HeaderRow qsConfig={QS_CONFIG}>
-                <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
-                <HeaderCell>{i18n._(msg`Description`)}</HeaderCell>
-                <HeaderCell>{i18n._(msg`Organization`)}</HeaderCell>
-                <HeaderCell>{i18n._(msg`Created By`)}</HeaderCell>
-                <HeaderCell>{i18n._(msg`Modified By`)}</HeaderCell>
-                <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
-              </HeaderRow>
-            }
             renderToolbar={(props) => (
               <DatalistToolbar
                 {...props}
                 isAllSelected={isAllSelected}
                 onSelectAll={selectAll}
-                canAdd={canAdd}
-                addButtonText={i18n._(msg`Create application`)}
-                onAdd={() => {
-                  clearSelected();
-                  match.history.push(`${match.url}/add`);
-                }}
-                deleteButtonText={i18n._(msg`Delete selected applications`)}
-                onDelete={handleDeleteApplications}
-                isDeleteDisabled={!selected.length}
+                qsConfig={QS_CONFIG}
+                additionalControls={[
+                  ...(canAdd
+                    ? [
+                        <ToolbarAddButton
+                          key="add"
+                          linkTo={`${match.url}/add`}
+                        />,
+                      ]
+                    : []),
+                  <ToolbarDeleteButton
+                    key="delete"
+                    onDelete={handleDeleteApplications}
+                    itemsToDelete={selected}
+                    pluralizedItemName={i18n._(msg`Applications`)}
+                  />,
+                ]}
               />
             )}
-            renderRow={(application) => (
+            headerRow={
+              <HeaderRow qsConfig={QS_CONFIG}>
+                <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
+                <HeaderCell sortKey="organization">
+                  {i18n._(msg`Organization`)}
+                </HeaderCell>
+                <HeaderCell>{i18n._(msg`Last Modified`)}</HeaderCell>
+                <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
+              </HeaderRow>
+            }
+            renderRow={(application, index) => (
               <ApplicationListItem
                 key={application.id}
+                value={application.name}
                 application={application}
-                isSelected={selected.some((row) => row.id === application.id)}
+                detailUrl={`${match.url}/${application.id}/details`}
                 onSelect={() => handleSelect(application)}
+                isSelected={selected.some((row) => row.id === application.id)}
+                rowIndex={index}
               />
             )}
+            emptyStateControls={
+              canAdd && (
+                <ToolbarAddButton key="add" linkTo={`${match.url}/add`} />
+              )
+            }
           />
         </Card>
       </PageSection>
       <AlertModal
-        isOpen={Boolean(deletionError)}
-        variant="danger"
-        title={i18n._(msg`Error deleting applications`)}
+        isOpen={deletionError}
+        variant="error"
+        title={i18n._(msg`Error!`)}
         onClose={clearDeletionError}
       >
+        {i18n._(msg`Failed to delete one or more applications.`)}
         <ErrorDetail error={deletionError} />
       </AlertModal>
     </>

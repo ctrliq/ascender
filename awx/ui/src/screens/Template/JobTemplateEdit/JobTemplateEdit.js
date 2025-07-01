@@ -8,7 +8,7 @@ import { getAddedAndRemoved } from 'util/lists';
 import useRequest from 'hooks/useRequest';
 import ContentLoading from 'components/ContentLoading';
 import { CardBody } from 'components/Card';
-import { JobTemplateForm } from '../shared/JobTemplateForm';
+import JobTemplateForm from '../shared/JobTemplateForm';
 
 function JobTemplateEdit({ template, reloadTemplate }) {
   const history = useHistory();

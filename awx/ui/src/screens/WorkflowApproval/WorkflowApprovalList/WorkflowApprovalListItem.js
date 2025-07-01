@@ -33,7 +33,7 @@ function WorkflowApprovalListItem({
     workflowApproval.status === 'canceled';
   const labelId = `check-action-${workflowApproval.id}`;
   const workflowJob = workflowApproval?.summary_fields?.source_workflow_job;
-  const status = getStatus(workflowApproval);
+  const status = getStatus(workflowApproval, i18n);
   // Toast handler for approve/deny actions (PatternFly style)
   const handleToast = (id, message) => {
     addToast({

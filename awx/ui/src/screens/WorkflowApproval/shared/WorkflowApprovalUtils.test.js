@@ -35,14 +35,14 @@ describe('<WorkflowApproval />', () => {
   test('shows when an approval has timed out', () => {
     workflowApproval.status = 'failed';
     workflowApproval.timed_out = true;
-    expect(getStatus(workflowApproval)).toEqual('timedOut');
+    expect(getStatus(workflowApproval, i18n)).toEqual('timedOut');
   });
 
   test('shows when an approval has canceled', () => {
     workflowApproval.status = 'canceled';
     workflowApproval.canceled_on = '2020-10-10T17:13:12.067947Z';
     workflowApproval.timed_out = false;
-    expect(getStatus(workflowApproval)).toEqual('canceled');
+    expect(getStatus(workflowApproval, i18n)).toEqual('canceled');
   });
 
   test('shows when an approval has beeen approved', () => {
@@ -53,7 +53,7 @@ describe('<WorkflowApproval />', () => {
     workflowApproval.status = 'successful';
     workflowApproval.canceled_on = '';
     workflowApproval.finished = '';
-    expect(getStatus(workflowApproval)).toEqual('approved');
+    expect(getStatus(workflowApproval, i18n)).toEqual('approved');
   });
 
   test('shows when an approval has timed out', () => {
@@ -64,7 +64,7 @@ describe('<WorkflowApproval />', () => {
     workflowApproval.status = 'failed';
     workflowApproval.finished = '';
     workflowApproval.failed = true;
-    expect(getStatus(workflowApproval)).toEqual('denied');
+    expect(getStatus(workflowApproval, i18n)).toEqual('denied');
   });
 
   test('shows correct approved tooltip with user', () => {

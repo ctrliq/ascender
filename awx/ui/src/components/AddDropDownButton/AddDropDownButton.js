@@ -1,7 +1,8 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 import React, { useState, useRef, useEffect } from 'react';
 import { msg } from "@lingui/macro";
-import { useLingui } from "@lingui/react";import PropTypes from 'prop-types';
+import { useLingui } from "@lingui/react";
+import PropTypes from 'prop-types';
 import { Dropdown, DropdownPosition } from '@patternfly/react-core';
 import { useKebabifiedMenu } from 'contexts/Kebabified';
 import { ToolbarAddButton } from '../PaginatedTable';

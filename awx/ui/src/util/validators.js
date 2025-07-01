@@ -136,10 +136,10 @@ export function twilioPhoneNumber() {
     if (!error) {
       phoneNumbers.forEach((v) => {
         if (!/^\s*(?:\+?(\d{1,3}))?[. (]*(\d{7,12})$/.test(v)) {
-          error = i18n._(plural(phoneNumbers.length, {
+          error = plural(phoneNumbers.length, {
             one: 'Please enter a valid phone number.',
             other: 'Please enter valid phone numbers.',
-          }));
+          });
         }
       });
     }

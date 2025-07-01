@@ -120,7 +120,7 @@ function JobDetail({ job, inventorySourceLabels }) {
                 {inventory.name}
               </Link>
             ) : (
-              'Unknown Inventory'
+              i18n._(msg`Unknown Inventory`)
             )
           }
         />
@@ -146,7 +146,7 @@ function JobDetail({ job, inventorySourceLabels }) {
                 {inventory.name}
               </Link>
             ) : (
-              'Unknown Inventory'
+              i18n._(msg`Unknown Inventory`)
             )
           }
         />
@@ -187,7 +187,7 @@ function JobDetail({ job, inventorySourceLabels }) {
               projectName ? (
                 <Link to={`${projectDetailsLink}`}>{projectName}</Link>
               ) : (
-                'Unknown Project'
+                i18n._(msg`Unknown Project`)
               )
             }
           />
@@ -207,7 +207,7 @@ function JobDetail({ job, inventorySourceLabels }) {
                   />
                 </Link>
               ) : (
-                'No Status Available'
+                i18n._(msg`No Status Available`)
               )
             }
           />
@@ -228,7 +228,7 @@ function JobDetail({ job, inventorySourceLabels }) {
           label={i18n._(msg`Status`)}
           value={
             <StatusDetailValue>
-              {validateReactNode(job.status) ? <StatusLabel status={job.status} /> : 'Unknown Status'}
+              {validateReactNode(job.status) ? <StatusLabel status={job.status} /> : i18n._(msg`Unknown Status`)}
               {job?.job_explanation && job.job_explanation !== job.status
                 ? validateReactNode(job.job_explanation)
                 : null}
@@ -238,13 +238,13 @@ function JobDetail({ job, inventorySourceLabels }) {
         <Detail
           dataCy="job-started-date"
           label={i18n._(msg`Started`)}
-          value={formatDateString(job.started) || 'Unknown Start Date'}
+          value={formatDateString(job.started) || i18n._(msg`Unknown Start Date`)}
         />
         {job?.finished && (
           <Detail
             dataCy="job-finished-date"
             label={i18n._(msg`Finished`)}
-            value={formatDateString(job.finished) || 'Unknown Finish Date'}
+            value={formatDateString(job.finished) || i18n._(msg`Unknown Finish Date`)}
           />
         )}
         {jobTemplate && (
@@ -428,7 +428,7 @@ function JobDetail({ job, inventorySourceLabels }) {
             dataCy="timeout"
             label={i18n._(msg`Timeout`)}
             value={i18n._(validateReactNode(
-              job.timeout ? msg`${job.timeout} seconds` : msg`No timeout specified`
+              job.timeout ? i18n._(msg`${job.timeout} seconds`) : i18n._(msg`No timeout specified`)
             ))}
             helpText={jobHelpText.timeout}
           />

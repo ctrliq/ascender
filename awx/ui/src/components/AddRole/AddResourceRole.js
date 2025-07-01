@@ -19,60 +19,60 @@ const readTeams = async (queryParams) => TeamsAPI.read(queryParams);
 
 const readTeamsOptions = async () => TeamsAPI.readOptions();
 
+const userSearchColumns = (i18n) => [
+  {
+    name: i18n._(msg`Username`),
+    key: 'username__icontains',
+    isDefault: true,
+  },
+  {
+    name: i18n._(msg`First Name`),
+    key: 'first_name__icontains',
+  },
+  {
+    name: i18n._(msg`Last Name`),
+    key: 'last_name__icontains',
+  },
+];
+const userSortColumns = (i18n) => [
+  {
+    name: i18n._(msg`Username`),
+    key: 'username',
+  },
+  {
+    name: i18n._(msg`First Name`),
+    key: 'first_name',
+  },
+  {
+    name: i18n._(msg`Last Name`),
+    key: 'last_name',
+  },
+];
+const teamSearchColumns = (i18n) => [
+  {
+    name: i18n._(msg`Name`),
+    key: 'name__icontains',
+    isDefault: true,
+  },
+  {
+    name: i18n._(msg`Created By (Username)`),
+    key: 'created_by__username',
+  },
+  {
+    name: i18n._(msg`Modified By (Username)`),
+    key: 'modified_by__username',
+  },
+];
+
+const teamSortColumns = (i18n) => [
+  {
+    name: i18n._(msg`Name`),
+    key: 'name',
+  },
+];
 function AddResourceRole({ onSave, onClose, roles, resource, onError }) {
   const { i18n } = useLingui();
   const history = useHistory();
-
-  const userSearchColumns = [
-    {
-      name: i18n._(msg`Username`),
-      key: 'username__icontains',
-      isDefault: true,
-    },
-    {
-      name: i18n._(msg`First Name`),
-      key: 'first_name__icontains',
-    },
-    {
-      name: i18n._(msg`Last Name`),
-      key: 'last_name__icontains',
-    },
-  ];
-  const userSortColumns = [
-    {
-      name: i18n._(msg`Username`),
-      key: 'username',
-    },
-    {
-      name: i18n._(msg`First Name`),
-      key: 'first_name',
-    },
-    {
-      name: i18n._(msg`Last Name`),
-      key: 'last_name',
-    },
-  ];
-  const teamSearchColumns = [
-    {
-      name: i18n._(msg`Name`),
-      key: 'name__icontains',
-      isDefault: true,
-    },
-    {
-      name: i18n._(msg`Created By (Username)`),
-      key: 'created_by__username',
-    },
-    {
-      name: i18n._(msg`Modified By (Username)`),
-      key: 'modified_by__username',
-    },
-  ];
-  const teamSortColumns = [
-    {
-      name: i18n._(msg`Name`),
-      key: 'name',
-    },
-  ];
 
   const {
     selected: resourcesSelected,
@@ -205,8 +205,8 @@ function AddResourceRole({ onSave, onClose, roles, resource, onError }) {
         <>
           {resourceType === 'users' && (
             <SelectResourceStep
-              searchColumns={userSearchColumns}
-              sortColumns={userSortColumns}
+              searchColumns={userSearchColumns(i18n)}
+              sortColumns={userSortColumns(i18n)}
               displayKey="username"
               onRowClick={handleResourceSelect}
               fetchItems={readUsers}
@@ -218,8 +218,8 @@ function AddResourceRole({ onSave, onClose, roles, resource, onError }) {
           )}
           {resourceType === 'teams' && (
             <SelectResourceStep
-              searchColumns={teamSearchColumns}
-              sortColumns={teamSortColumns}
+              searchColumns={teamSearchColumns(i18n)}
+              sortColumns={teamSortColumns(i18n)}
               onRowClick={handleResourceSelect}
               fetchItems={readTeams}
               fetchOptions={readTeamsOptions}

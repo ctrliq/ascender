@@ -16,7 +16,7 @@ import userHelpTextStrings from '../shared/User.helptext';
 
 function UserTokenDetail({ token }) {
   const { i18n } = useLingui();
-  const helptext = userHelpTextStrings(i18n);
+  const helptext = userHelpTextStrings();
   const { scope, description, created, modified, expires, summary_fields } =
     token;
   const history = useHistory();

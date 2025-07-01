@@ -36,7 +36,7 @@ const VirtualizationSubForm = ({ autoPopulateCredential }) => {
   return (
     <>
       <CredentialLookup
-        credentialTypeNamespace="virtualization"
+        credentialTypeNamespace="rhv"
         label={i18n._(msg`Credential`)}
         helperTextInvalid={credentialMeta.error}
         isValid={!credentialMeta.touched || !credentialMeta.error}
@@ -53,7 +53,7 @@ const VirtualizationSubForm = ({ autoPopulateCredential }) => {
       <EnabledValueField />
       <OptionsField />
       <SourceVarsField
-        popoverContent={helpText.sourceVars(docsBaseUrl, 'virtualization')}
+        popoverContent={helpText.sourceVars(docsBaseUrl, 'rhv')}
       />
     </>
   );
