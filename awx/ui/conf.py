@@ -38,7 +38,7 @@ register(
 register(
     'ASCENDER_DISABLE_CSS',
     field_class=fields.BooleanField,
-    default=True,
+    default=False,
     label=_('Disable Menu Gradient'),
     help_text=_('Disable loading the CSS file for custom UI appearance.'),
     category=_('UI'),
