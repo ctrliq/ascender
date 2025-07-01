@@ -16,7 +16,7 @@ SettingsAPI.readCategory.mockResolvedValue({
     CUSTOM_LOGIN_INFO: '',
     CUSTOM_LOGO: '',
     PENDO_TRACKING_STATE: 'off',
-    ASCENDER_DISABLE_CSS: false,
+    ASCENDER_DISABLE_GRADIENT: false,
   },
 });
 
