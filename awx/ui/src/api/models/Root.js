@@ -14,7 +14,9 @@ class Root extends Base {
     
     // Ensure 'next' is an absolute path based on the current location
     const next = encodeURIComponent(
-      redirect.startsWith('/') ? redirect : `${window.location.pathname}${redirect}`
+      redirect.startsWith('/') 
+        ? redirect 
+        : `${window.location.pathname.endsWith('/') ? window.location.pathname : window.location.pathname + '/'}${redirect}`
     );
 
     const data = `username=${un}&password=${pw}&next=${next}`;
