@@ -39,9 +39,9 @@ function UIDetail() {
       const uiData = pluck(
         data,
         'PENDO_TRACKING_STATE',
-        'CUSTOM_LOGO',
         'CUSTOM_LOGIN_INFO',
-        'ASCENDER_DISABLE_CSS'
+        'ASCENDER_DISABLE_CSS',
+        'CUSTOM_LOGO'
       );
 
       return uiData;
