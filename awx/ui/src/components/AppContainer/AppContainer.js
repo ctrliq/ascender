@@ -58,9 +58,7 @@ function AppContainer({ navRouteConfig = [], children }) {
     const link = document.createElement('link');
     link.rel = 'stylesheet';
     if (config && typeof config.uiConfig?.ASCENDER_DISABLE_CSS !== 'undefined' && !config.uiConfig.ASCENDER_DISABLE_CSS) {
-      link.href = '/static/css/ascender.css';
-    } else {
-      link.href = '/static/css/ascender_ng.css';
+      link.href = '/static/css/ascender_gradient.css';
     }
     document.head.appendChild(link);
   }, [config]);
