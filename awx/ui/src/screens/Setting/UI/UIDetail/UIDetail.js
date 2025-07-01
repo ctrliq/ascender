@@ -40,7 +40,8 @@ function UIDetail() {
         data,
         'PENDO_TRACKING_STATE',
         'CUSTOM_LOGO',
-        'CUSTOM_LOGIN_INFO'
+        'CUSTOM_LOGIN_INFO',
+        'ASCENDER_DISABLE_CSS'
       );
 
       return uiData;

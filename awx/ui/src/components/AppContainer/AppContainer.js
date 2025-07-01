@@ -53,6 +53,18 @@ function AppContainer({ navRouteConfig = [], children }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [config.analytics_status]);
 
+  // Dynamically load ascender.css based on ASCENDER_DISABLE_CSS UI setting from config
+  useEffect(() => {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    if (config && typeof config.uiConfig?.ASCENDER_DISABLE_CSS !== 'undefined' && !config.uiConfig.ASCENDER_DISABLE_CSS) {
+      link.href = '/static/css/ascender.css';
+    } else {
+      link.href = '/static/css/ascender_ng.css';
+    }
+    document.head.appendChild(link);
+  }, [config]);
+
   const brandName = config?.license_info?.product_name;
   const alt = brandName ? i18n._(msg`${brandName} logo`) : i18n._(msg`brand logo`);
 

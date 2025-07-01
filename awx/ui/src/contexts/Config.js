@@ -47,6 +47,14 @@ export const ConfigProvider = ({ children }) => {
         systemConfig = systemConfigResults;
       }
 
+      let uiConfig = {};
+      try {
+        const { data: uiConfigResults } = await SettingsAPI.readCategory('ui');
+        uiConfig = uiConfigResults;
+      } catch (e) {
+        uiConfig = {};
+      }
+
       const [
         {
           data: { count: adminOrgCount },
@@ -75,6 +83,7 @@ export const ConfigProvider = ({ children }) => {
         notifAdminCount,
         execEnvAdminCount,
         systemConfig,
+        uiConfig,
       };
     }, []),
     {
@@ -82,6 +91,7 @@ export const ConfigProvider = ({ children }) => {
       notifAdminCount: 0,
       execEnvAdminCount: 0,
       systemConfig: {},
+      uiConfig: {},
     }
   );
 
