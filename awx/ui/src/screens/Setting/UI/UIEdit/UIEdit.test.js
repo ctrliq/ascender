@@ -24,6 +24,7 @@ describe('<UIEdit />', () => {
         CUSTOM_LOGIN_INFO: 'mock info',
         CUSTOM_LOGO: 'data:mock/jpeg;',
         PENDO_TRACKING_STATE: 'detailed',
+        ASCENDER_DISABLE_GRADIENT: false,
       },
     });
   });
@@ -99,6 +100,7 @@ describe('<UIEdit />', () => {
       CUSTOM_LOGIN_INFO: 'new login info',
       CUSTOM_LOGO: '',
       PENDO_TRACKING_STATE: 'detailed',
+      ASCENDER_DISABLE_GRADIENT: false,
     });
   });
 
