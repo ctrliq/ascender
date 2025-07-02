@@ -12,4 +12,3 @@ Reporting Issues
 
 - If you're experiencing a problem that you feel is a bug in Ascender or have ideas for improving Ascender, we encourage you to open a Github issue and share your feedback.
 
-
