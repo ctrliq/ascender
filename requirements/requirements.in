@@ -3,7 +3,8 @@ ansiconv==1.0.0  # UPGRADE BLOCKER: from 2013, consider replacing instead of upg
 asciichartpy
 asn1
 asyncpg
-azure-keyvault==1.1.0  # see UPGRADE BLOCKERs
+azure-identity
+azure-keyvault
 boto3
 botocore
 channels
@@ -21,18 +22,21 @@ django-guid==3.2.1
 django-oauth-toolkit<2.0.0      # Version 2.0.0 has breaking changes that will need to be worked out before upgrading
 django-polymorphic
 django-pglocks
+django-radius
 django-solo
 django-split-settings==1.0.0    # We hit a strange issue where the release process errored when upgrading past 1.0.0 see UPGRADE BLOCKERS
 djangorestframework>=3.15.2 # CVE-2024-21520
 djangorestframework-yaml
 filelock
 GitPython>=3.1.37  # CVE-2023-41040
+importlib-metadata==4.6.4
 irc
 jaraco.functools>= 4
 jinja2>=3.1.6  # CVE-2025-27516
 JSON-log-formatter
 jsonschema
 Markdown  # used for formatting API help
+msrestazure
 openshift
 packaging==24.2
 pexpect==4.7.0  # see library notes
@@ -57,7 +61,7 @@ slack-sdk
 tacacs_plus==1.0  # UPGRADE BLOCKER: auth does not work with later versions
 twilio
 twisted[tls]>=24.7.0   # CVE-2024-41671
-urllib3>=1.26.19 # CVE-2024-37891
+urllib3>=2.5.0 # CVE-2025-50181
 uWSGI>=2.0.22 # CVE-2023-27522
 uwsgitop
 wheel>=0.38.1  # CVE-2022-40898
@@ -66,7 +70,3 @@ setuptools==78.1.1  # CVE-2025-47273
 setuptools_scm[toml]  # see UPGRADE BLOCKERs, xmlsec build dep
 setuptools-rust>=0.11.4  # cryptography build dep
 pkgconfig>=1.5.1  # xmlsec build dep - needed for offline build
-
-# Temporarily added to use ansible-runner from git branch, to be removed
-# when ansible-runner moves from requirements_git.txt to here
-pbr
