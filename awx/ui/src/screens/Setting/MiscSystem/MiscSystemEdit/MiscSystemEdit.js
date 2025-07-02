@@ -191,17 +191,14 @@ function MiscSystemEdit() {
                 <ObjectField
                   name="REMOTE_HOST_HEADERS"
                   config={system.REMOTE_HOST_HEADERS}
-                  isRequired
                 />
                 <ObjectField
                   name="PROXY_IP_ALLOWED_LIST"
                   config={system.PROXY_IP_ALLOWED_LIST}
-                  isRequired
                 />
                 <ObjectField
                   name="CSRF_TRUSTED_ORIGINS"
                   config={system.CSRF_TRUSTED_ORIGINS}
-                  isRequired
                 />
                 {submitError && <FormSubmitError error={submitError} />}
                 {revertError && <FormSubmitError error={revertError} />}

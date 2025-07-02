@@ -35,7 +35,7 @@ function WorkflowApprovalsList() {
   const match = useRouteMatch();
   const { i18n } = useLingui();
   const {
-    result: { results, count, relatedSearchableKeys }, // removed searchableKeys
+    result: { results, count, relatedSearchableKeys },
     error: contentError,
     isLoading: isWorkflowApprovalsLoading,
     request: fetchWorkflowApprovals,

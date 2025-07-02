@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { Card, PageSection } from '@patternfly/react-core';
 import { CardBody } from 'components/Card';
 import { JobTemplatesAPI, OrganizationsAPI } from 'api';
-import { JobTemplateForm } from '../shared/JobTemplateForm';
+import JobTemplateForm from '../shared/JobTemplateForm';
 
 function JobTemplateAdd() {
   const [formSubmitError, setFormSubmitError] = useState(null);

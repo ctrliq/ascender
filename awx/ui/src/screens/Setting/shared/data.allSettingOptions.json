@@ -862,6 +862,15 @@
               "category_slug": "ui",
               "default": ""
           },
+          "ASCENDER_DISABLE_GRADIENT": {
+              "type": "boolean",
+              "required": true,
+              "label": "Disable Menu Gradient",
+              "help_text": "Disable loading the CSS file for custom UI appearance.",
+              "category": "UI",
+              "category_slug": "ui",
+              "default": false
+          },
           "CUSTOM_LOGO": {
               "type": "string",
               "required": false,
@@ -5128,6 +5137,15 @@
               "category": "UI",
               "category_slug": "ui",
               "defined_in_file": false
+          },
+          "ASCENDER_DISABLE_GRADIENT": {
+              "type": "boolean",
+              "required": true,
+              "label": "Disable Menu Gradient",
+              "help_text": "Disable loading the CSS file for custom UI appearance.",
+              "category": "UI",
+              "category_slug": "ui",
+              "default": false
           },
           "CUSTOM_LOGO": {
               "type": "string",

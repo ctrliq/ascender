@@ -160,7 +160,7 @@ function PromptModalForm({
       }
       backButtonText={i18n._(msg`Back`)}
       cancelButtonText={i18n._(msg`Cancel`)}
-      nextButtonText={i18n._(msg`Nexit`)}
+      nextButtonText={i18n._(msg`Next`)}
     />
   );
 }

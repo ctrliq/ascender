@@ -18,19 +18,19 @@ export function getTooltip(workflowApproval, i18n) {
   return '';
 }
 
-export function getStatus(workflowApproval) {
+export function getStatus(workflowApproval, i18n) {
   if (workflowApproval.timed_out) {
-    return 'timedOut';
+    return i18n._(msg`timedOut`);
   }
 
   if (workflowApproval.canceled_on) {
-    return 'canceled';
+    return i18n._(msg`canceled`);
   }
   if (workflowApproval.status === 'failed' && workflowApproval.failed) {
-    return 'denied';
+    return i18n._(msg`denied`);
   }
   if (workflowApproval.status === 'successful') {
-    return 'approved';
+    return i18n._(msg`approved`);
   }
   return workflowApproval.status;
 }

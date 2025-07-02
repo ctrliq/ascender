@@ -11,7 +11,13 @@ class Root extends Base {
     const loginUrl = `${this.baseUrl}login/`;
     const un = encodeURIComponent(username);
     const pw = encodeURIComponent(password);
-    const next = encodeURIComponent(redirect);
+
+    // Ensure 'next' is an absolute path based on the current location
+    const next = encodeURIComponent(
+      redirect.startsWith('/')
+        ? redirect
+        : `${window.location.pathname.replace(/\/$/, '')}/${redirect}`
+    );
 
     const data = `username=${un}&password=${pw}&next=${next}`;
     const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };

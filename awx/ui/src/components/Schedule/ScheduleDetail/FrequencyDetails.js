@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { msg } from '@lingui/macro';
+import { msg, SelectOrdinal } from '@lingui/macro';
 import { useLingui } from '@lingui/react';
 import { DateTime } from 'luxon';
 import { formatDateString } from 'util/dates';
@@ -100,20 +100,7 @@ function RunOnDetail({ type, options, prefix, i18n }) {
     weekday: i18n._(msg`weekday`),
     weekendDay: i18n._(msg`weekend day`),
   }), [i18n]);
-  const months = React.useMemo(() => ({
-    1: i18n._(msg`January`),
-    2: i18n._(msg`February`),
-    3: i18n._(msg`March`),
-    4: i18n._(msg`April`),
-    5: i18n._(msg`May`),
-    6: i18n._(msg`June`),
-    7: i18n._(msg`July`),
-    8: i18n._(msg`August`),
-    9: i18n._(msg`September`),
-    10: i18n._(msg`October`),
-    11: i18n._(msg`November`),
-    12: i18n._(msg`December`),
-  }), [i18n]);
+
   if (type === 'month') {
     if (options.runOn === 'day') {
       return (
@@ -129,21 +116,38 @@ function RunOnDetail({ type, options, prefix, i18n }) {
       <Detail
         label={i18n._(msg`Run on`)}
         value={
-          options.runOnTheOccurrence === -1
-            ? i18n._(msg`The last {dayOfWeek}`, { dayOfWeek })
-            : i18n._(msg`The {ordinal, selectordinal,
-              one {first}
-              two {second}
-              few {third}
-              four {fourth}
-              other {#th}
-            } {dayOfWeek}`, { ordinal: options.runOnTheOccurrence, dayOfWeek })
+          options.runOnTheOccurrence === -1 ? (
+            i18n._(msg`The last ${dayOfWeek}`)
+          ) : (
+            <SelectOrdinal
+              value={options.runOnTheOccurrence}
+              one={`The first ${dayOfWeek}`}
+              two={`The second ${dayOfWeek}`}
+              _3={`The third ${dayOfWeek}`}
+              _4={`The fourth ${dayOfWeek}`}
+              _5={`The fifth ${dayOfWeek}`}
+            />
+          )
         }
         dataCy={`${prefix}-run-on-day`}
       />
     );
   }
   if (type === 'year') {
+    const months = {
+      1: i18n._(msg`January`),
+      2: i18n._(msg`February`),
+      3: i18n._(msg`March`),
+      4: i18n._(msg`April`),
+      5: i18n._(msg`May`),
+      6: i18n._(msg`June`),
+      7: i18n._(msg`July`),
+      8: i18n._(msg`August`),
+      9: i18n._(msg`September`),
+      10: i18n._(msg`October`),
+      11: i18n._(msg`November`),
+      12: i18n._(msg`December`),
+    };
     if (options.runOn === 'day') {
       return (
         <Detail
@@ -159,15 +163,18 @@ function RunOnDetail({ type, options, prefix, i18n }) {
       <Detail
         label={i18n._(msg`Run on`)}
         value={
-          options.runOnTheOccurrence === -1
-            ? i18n._(msg`The last {weekday} of {month}`, { weekday, month })
-            : i18n._(msg`The {ordinal, selectordinal,
-                one {first}
-                two {second}
-                few {third}
-                four {fourth}
-                other {#th}
-              } {weekday} of {month}`, { ordinal: options.runOnTheOccurrence, weekday, month })
+          options.runOnTheOccurrence === -1 ? (
+            i18n._(msg`The last ${weekday} of ${month}`)
+          ) : (
+            <SelectOrdinal
+              value={options.runOnTheOccurrence}
+              one={`The first ${weekday} of ${month}`}
+              two={`The second ${weekday} of ${month}`}
+              _3={`The third ${weekday} of ${month}`}
+              _4={`The fourth ${weekday} of ${month}`}
+              _5={`The fifth ${weekday} of ${month}`}
+            />
+          )
         }
         dataCy={`${prefix}-run-on-day`}
       />

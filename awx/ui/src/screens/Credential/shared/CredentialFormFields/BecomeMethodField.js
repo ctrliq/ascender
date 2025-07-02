@@ -37,7 +37,7 @@ function BecomeMethodField({ fieldOptions, isRequired }) {
     <FormGroup
       fieldId={`credential-${fieldOptions.id}`}
       helperTextInvalid={meta.error}
-      label={i18n._(msg`Become method`)}
+      label={fieldOptions.label}
       labelIcon={
         fieldOptions.help_text && <Popover content={fieldOptions.help_text} />
       }

@@ -290,7 +290,7 @@ function CredentialDetail({ credential }) {
           <Button
             ouiaId="credential-detail-edit-button"
             component={Link}
-            to={`/credentials/${credentialId}/edii18n._(msg`}
+            to={`/credentials/${credentialId}/edit`}
           >
             {i18n._(msg`Edit`)}
           </Button>

@@ -197,7 +197,7 @@ function ProjectList() {
                 key: 'or__scm_type',
                 options: [
                   [``, i18n._(msg`Manual`)],
-                  [`gii18n._(msg`, i18n._(msg`Gii18n._(msg`)],
+                  [`git`, i18n._(msg`Git`)],
                   [`svn`, i18n._(msg`Subversion`)],
                   [`archive`, i18n._(msg`Remote Archive`)],
                   [`insights`, i18n._(msg`Red Hat Insights`)],

@@ -777,12 +777,14 @@ const FormikApp = withFormik({
     }
     return initialValues;
   },
-  handleSubmit(values, { setSubmitting, props: { handleSubmit } }) {
-    const { id, ...rest } = values;
-    handleSubmit({ id, data: rest });
-    setSubmitting(false);
+  handleSubmit: async (values, { props, setErrors }) => {
+    try {
+      await props.handleSubmit(values);
+    } catch (errors) {
+      setErrors(errors);
+    }
   },
 })(JobTemplateForm);
 
-export { FormikApp as JobTemplateForm };
+export { JobTemplateForm as _JobTemplateForm };
 export default FormikApp;

@@ -12,7 +12,7 @@ cryptography>=44.0.1  # GHSA-h4gh-qq45-vh27
 Cython<3 # this is needed as a build dependency, one day we may have separated build deps
 daphne
 distro
-django==4.2.21 # CVE-2025-32873
+django==4.2.22 # CVE-2025-48432
 django-auth-ldap
 django-cors-headers
 django-crum
@@ -28,11 +28,13 @@ djangorestframework-yaml
 filelock
 GitPython>=3.1.37  # CVE-2023-41040
 irc
+jaraco.functools>= 4
 jinja2>=3.1.6  # CVE-2025-27516
 JSON-log-formatter
 jsonschema
 Markdown  # used for formatting API help
 openshift
+packaging==24.2
 pexpect==4.7.0  # see library notes
 prometheus_client
 psycopg
@@ -50,7 +52,7 @@ social-auth-core[openidconnect]==4.5.0  # see UPGRADE BLOCKERs
 social-auth-app-django==5.4.2  # see UPGRADE BLOCKERs
 sqlparse>=0.5.0   # Required by django https://github.com/ansible/awx/security/dependabot/96
 redis[hiredis]
-requests>=2.32.0 # CVE-2024-35195
+requests>=2.32.4 # CVE-2024-47081
 slack-sdk
 tacacs_plus==1.0  # UPGRADE BLOCKER: auth does not work with later versions
 twilio
@@ -60,7 +62,7 @@ uWSGI>=2.0.22 # CVE-2023-27522
 uwsgitop
 wheel>=0.38.1  # CVE-2022-40898
 pip==23.3  # see CVE-2023-5752
-setuptools==70.0.0  # CVE-2024-6345
+setuptools==78.1.1  # CVE-2025-47273
 setuptools_scm[toml]  # see UPGRADE BLOCKERs, xmlsec build dep
 setuptools-rust>=0.11.4  # cryptography build dep
 pkgconfig>=1.5.1  # xmlsec build dep - needed for offline build

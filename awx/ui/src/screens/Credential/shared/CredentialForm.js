@@ -219,16 +219,16 @@ function CredentialFormFields({ initialTypeId, credentialTypes }) {
 }
 
 function CredentialForm({
-  initialTypeId,
+  credential = {},
   credentialTypes,
+  inputSources,
   onSubmit,
   onCancel,
   submitError,
-  credential,
-  inputSources = {},
-  isOrgLookupDisabled = false,
+  isOrgLookupDisabled,
   ...rest
 }) {
+  const initialTypeId = credential?.credential_type;
   const { i18n } = useLingui();
 
   const [showExternalTestModal, setShowExternalTestModal] = useState(false);

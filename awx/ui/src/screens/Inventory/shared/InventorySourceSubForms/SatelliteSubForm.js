@@ -32,7 +32,7 @@ const SatelliteSubForm = ({ autoPopulateCredential }) => {
   return (
     <>
       <CredentialLookup
-        credentialTypeNamespace="redhat_satellite6"
+        credentialTypeNamespace="satellite6"
         label={i18n._(msg`Credential`)}
         helperTextInvalid={credentialMeta.error}
         isValid={!credentialMeta.touched || !credentialMeta.error}
@@ -49,7 +49,7 @@ const SatelliteSubForm = ({ autoPopulateCredential }) => {
       <EnabledValueField />
       <OptionsField />
       <SourceVarsField
-        popoverContent={helpText.sourceVars(docsBaseUrl, 'redhat_satellite6')}
+        popoverContent={helpText.sourceVars(docsBaseUrl, 'satellite6')}
       />
     </>
   );

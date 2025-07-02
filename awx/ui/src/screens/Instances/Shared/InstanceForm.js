@@ -1,6 +1,6 @@
 import React from 'react';
 import { msg } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { i18n } from '@lingui/core';
 import { Formik, useField } from 'formik';
 import { Form, FormGroup, CardBody } from '@patternfly/react-core';
 import { FormColumnLayout } from 'components/FormLayout';
@@ -13,12 +13,11 @@ import AnsibleSelect from 'components/AnsibleSelect';
 import { required } from 'util/validators';
 
 const INSTANCE_TYPES = [
-  { id: 'execution', name: msg`Execution` },
-  { id: 'hop', name: msg`Hop` },
+  { id: 'execution', name: i18n._(msg`Execution`)},
+  { id: 'hop', name: i18n._(msg`Hop`)},
 ];
 
 function InstanceFormFields({ isEdit }) {
-  const { i18n } = useLingui();
   const [instanceTypeField, instanceTypeMeta, instanceTypeHelpers] = useField({
     name: 'node_type',
     validate: required(i18n._(msg`Set a value for this field`)),

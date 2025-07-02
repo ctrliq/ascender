@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 
-import { msg } from '@lingui/macro';
 import { func, shape } from 'prop-types';
 import { Formik } from 'formik';
 import { Button, Form, FormGroup, Modal } from '@patternfly/react-core';

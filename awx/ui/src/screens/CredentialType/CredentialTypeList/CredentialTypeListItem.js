@@ -47,7 +47,7 @@ function CredentialTypeListItem({
             aria-label={i18n._(msg`Edit credential type`)}
             variant="plain"
             component={Link}
-            to={`/credential_types/${credentialType.id}/edii18n._(msg`}
+            to={`/credential_types/${credentialType.id}/edit`}
           >
             <PencilAltIcon />
           </Button>
