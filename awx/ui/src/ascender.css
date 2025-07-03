@@ -1,5 +1,10 @@
 #page-sidebar {
-  line-height: 12px !important;
+  line-height: 10px !important;
+}
+
+#page-sidebar .pf-c-nav__link {
+  padding-bottom: 8px !important;
+  padding-top: 8px !important;
 }
 
 body {

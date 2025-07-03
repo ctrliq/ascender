@@ -53,6 +53,7 @@ class ApiRootView(APIView):
         data['available_versions'] = dict(v2=v2)
         data['oauth2'] = drf_reverse('api:oauth_authorization_root_view')
         data['custom_logo'] = settings.CUSTOM_LOGO
+        data['custom_logo_menu'] = settings.CUSTOM_LOGO_MENU
         data['custom_login_info'] = settings.CUSTOM_LOGIN_INFO
         data['login_redirect_override'] = settings.LOGIN_REDIRECT_OVERRIDE
         if MODE == 'development':
