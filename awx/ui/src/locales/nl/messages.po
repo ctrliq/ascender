@@ -12,10 +12,6 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:334
-#~ msgid "Delete Project"
-#~ msgstr "Project verwijderen"
-
 #: screens/TopologyView/Tooltip.js:290
 msgid "{forks, plural, one {# fork} other {# forks}}"
 msgstr "{forks, plural, one {# fork} other {# forks}}"
@@ -156,10 +152,6 @@ msgstr "(Melding bij opstarten)"
 msgid "Lookup typeahead"
 msgstr "Typeahead opzoeken"
 
-#: screens/Login/Login.js:190
-#~ msgid "Welcome to {brandName}!"
-#~ msgstr "Welkom bij {brandName}!"
-
 #: screens/Template/Survey/SurveyToolbar.js:106
 msgid "Survey Enabled"
 msgstr "Enquête ingeschakeld"
@@ -247,7 +239,7 @@ msgstr ""
 msgid "Select Input Inventories for the constructed inventory plugin."
 msgstr ""
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:59
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:61
 msgid ""
 "Welcome to Red Hat Ansible Automation Platform!\n"
 "Please complete the steps below to activate your subscription."
@@ -276,10 +268,6 @@ msgstr "Aantal taken"
 msgid "Template"
 msgstr "Sjabloon"
 
-#: screens/Inventory/shared/Inventory.helptext.js:167
-#~ msgid "Variables used to configure the inventory source. For a detailed description of how to configure this plugin, see <0>Inventory Plugins</0> in the documentation and the <1>{sourceType}</1> plugin configuration guide."
-#~ msgstr "Voer variabelen in om de inventarisbron te configureren. Voor een gedetailleerde beschrijving om deze plug-in te configureren, zie <0>Inventarisplug-ins</0> in de documentatie en de plug-inconfiguratiegids voor <1>{sourceType}</1>."
-
 #: components/Schedule/shared/FrequencyDetailSubform.js:207
 msgid "{intervalValue, plural, one {year} other {years}}"
 msgstr "{intervalValue, plural, one {year} other {years}}"
@@ -302,10 +290,6 @@ msgid ""
 "fetches the Github pull request number 62, in this example\n"
 "the branch needs to be \"pull/62/head\"."
 msgstr "De eerste haalt alle referenties op. De tweede haalt het Github pullverzoek nummer 62 op, in dit voorbeeld moet de vertakking `pull/62/head` zijn."
-
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:25
-#~ msgid "{interval, plural, one {{interval} minute} other {{interval} minutes}}"
-#~ msgstr "{interval, plural, one {{interval} minuut} other {{interval} minuten}}"
 
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:239
 msgid "Failed to delete one or more notification template."
@@ -521,12 +505,6 @@ msgstr "Meerkeuze-opties (meerdere keuzes mogelijk)"
 msgid "Please select an end date/time that comes after the start date/time."
 msgstr "Kies een einddatum/-tijd die na de begindatum/-tijd komt."
 
-#: screens/Setting/Logging/LoggingEdit/LoggingEdit.js:129
-#~ msgid ""
-#~ "Cannot enable log aggregator without providing\n"
-#~ "logging aggregator host and logging aggregator type."
-#~ msgstr "Kan aggregator logboekregistraties niet inschakelen zonder de host en het type ervan te verstrekken."
-
 #: components/Schedule/shared/FrequencyDetailSubform.js:291
 msgid "Wed"
 msgstr "Wo"
@@ -548,9 +526,9 @@ msgstr ""
 msgid "Event"
 msgstr "Gebeurtenis"
 
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginTestAlert.js:39
-#~ msgid "Something went wrong with the request to test this credential and metadata."
-#~ msgstr "Er is iets misgegaan met het verzoek om deze toegangsgegevens en metadata te testen."
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginTestAlert.js:41
+msgid "Something went wrong with the request to test this credential and metadata."
+msgstr ""
 
 #: screens/Setting/SettingList.js:67
 msgid "Google OAuth 2 settings"
@@ -907,7 +885,7 @@ msgstr "Uitvoeringsomgeving niet gevonden."
 msgid "View and edit debug options"
 msgstr ""
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:195
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:197
 msgid ""
 "Provide your Red Hat or Red Hat Satellite credentials\n"
 "below and you can choose from a list of your available subscriptions.\n"
@@ -921,6 +899,7 @@ msgstr "Synchronisatie inventarisbronnen"
 
 #: components/LaunchPrompt/steps/OtherPromptsStep.js:137
 #: components/Workflow/WorkflowLinkHelp.js:41
+#: screens/Credential/shared/ExternalTestModal.js:91
 #: screens/Template/shared/JobTemplateForm.js:217
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.js:52
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/RunStep.js:25
@@ -961,7 +940,7 @@ msgid "1 (Info)"
 msgstr "1 (Info)"
 
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.js:203
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:228
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:227
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:221
 msgid "Deletion error"
 msgstr "Fout bij verwijderen"
@@ -1031,25 +1010,9 @@ msgstr "Categorie instellen"
 msgid "Back to Credentials"
 msgstr "Terug naar toegangsgegevens"
 
-#: screens/Project/shared/Project.helptext.js:108
-#~ msgid ""
-#~ "Enable content signing to verify that the content \n"
-#~ "has remained secure when a project is synced. \n"
-#~ "If the content has been tampered with, the \n"
-#~ "job will not run."
-#~ msgstr ""
-#~ "Inhoud ondertekenen inschakelen om te verifiëren dat de inhoud \n"
-#~ "veilig is gebleven wanneer een project wordt gesynchroniseerd. \n"
-#~ "Als er met de inhoud is geknoeid, zal de \n"
-#~ "opdracht niet uitgevoerd."
-
 #: screens/Team/Team.js:78
 msgid "View all Teams."
 msgstr "Geef alle teams weer."
-
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:41
-#~ msgid "{interval, plural, one {{interval} day} other {{interval} days}}"
-#~ msgstr "{interval, plural, one {{interval} dag} other {{interval} dagen}}"
 
 #: util/validators.js:186
 msgid "This field must be a regular expression"
@@ -1172,10 +1135,6 @@ msgstr "Alle beheertaken weergeven"
 msgid "Delete application"
 msgstr "Toepassing maken"
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:5
-#~ msgid "Select an inventory for the workflow. This inventory is applied to all workflow nodes that prompt for an inventory."
-#~ msgstr "Selecteer een inventaris voor de workflow. Deze inventaris wordt toegepast op alle workflowknooppunten die vragen naar een inventaris."
-
 #: screens/Job/Job.helptext.js:15
 #: screens/Template/shared/JobTemplate.helptext.js:33
 msgid "Provide a host pattern to further constrain the list of hosts that will be managed or affected by the playbook. Multiple patterns are allowed. Refer to Ansible documentation for more information and examples on patterns."
@@ -1224,10 +1183,6 @@ msgstr "Weet u zeker dat u alle knooppunten in deze workflow wilt verwijderen?"
 #: screens/InstanceGroup/shared/ContainerGroupForm.js:69
 msgid "Maximum number of jobs to run concurrently on this group.\\n          Zero means no limit will be enforced."
 msgstr ""
-
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:15
-#~ msgid "Enable Webhook for this workflow job template."
-#~ msgstr "Webhook inschakelen voor deze workflowtaaksjabloon."
 
 #: components/Lookup/HostFilterLookup.js:121
 msgid "Last job"
@@ -1940,7 +1895,7 @@ msgstr "Ga naar de eerste pagina"
 msgid "details."
 msgstr "Meer informatie"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:83
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:85
 msgid "Subscription manifest"
 msgstr "Abonnementsmanifest"
 
@@ -1988,8 +1943,8 @@ msgstr "Sleutel"
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:264
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:343
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:448
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:93
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:208
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:96
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:210
 #: screens/User/shared/UserForm.js:77
 #: screens/User/UserDetail/UserDetail.js:70
 #: screens/User/UserList/UserList.js:122
@@ -2025,10 +1980,6 @@ msgstr "Dit project wordt momenteel gesynchroniseerd en er kan pas op worden gek
 msgid "Administration"
 msgstr "Beheer"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:351
-#~ msgid "Failed to delete project."
-#~ msgstr "Kan project niet verwijderen."
-
 #: components/RelatedTemplateList/RelatedTemplateList.js:193
 #: components/TemplateList/TemplateList.js:240
 msgid "Label"
@@ -2042,7 +1993,7 @@ msgstr "Alles terugzetten"
 msgid "Allowed URIs list, space separated"
 msgstr "Lijst met toegestane URI's, door spaties gescheiden"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:80
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:82
 msgid "Select your Ansible Automation Platform subscription to use."
 msgstr "Selecteer het Ansible Automation Platform-abonnement dat u wilt gebruiken."
 
@@ -2060,8 +2011,8 @@ msgstr "merklogo"
 
 #: screens/Login/Login.js:237
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:75
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:102
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:216
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:105
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:218
 #: screens/Template/Survey/SurveyQuestionForm.js:84
 #: screens/User/shared/UserForm.js:89
 msgid "Password"
@@ -2096,7 +2047,7 @@ msgstr "Taaksjabloon"
 msgid "Install Bundle"
 msgstr "Bundel installeren"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:251
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:253
 msgid "Clear subscription"
 msgstr "Abonnement wissen"
 
@@ -2173,10 +2124,6 @@ msgstr "Nieuwe gebruiker maken"
 #: screens/Template/shared/WebhookSubForm.js:158
 msgid "a new webhook key will be generated on save."
 msgstr "Er wordt een nieuwe webhooksleutel gegenereerd bij het opslaan."
-
-#: screens/Inventory/InventoryList/InventoryList.js:240
-#~ msgid "{0, plural, one {This inventory is currently being used by some templates. Are you sure you want to delete it?} other {Deleting these inventories could impact some templates that rely on them. Are you sure you want to delete anyway?}}"
-#~ msgstr "{0, plural, one {This inventory is currently being used by some templates. Are you sure you want to delete it?} other {Deleting these inventories could impact some templates that rely on them. Are you sure you want to delete anyway?}}"
 
 #: screens/Credential/shared/CredentialFormFields/GceFileUploadField.js:47
 msgid "Expected at least one of client_email, project_id or private_key to be present in the file."
@@ -2302,6 +2249,7 @@ msgid "Failed Hosts"
 msgstr "Mislukte hosts"
 
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:133
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:197
 msgid "This execution environment is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "Deze uitvoeringsomgeving wordt momenteel gebruikt door andere bronnen. Weet u zeker dat u deze wilt verwijderen?"
 
@@ -2363,10 +2311,6 @@ msgstr "Uitvoeringsomgeving gekopieerd"
 msgid "Log In"
 msgstr "Inloggen"
 
-#: screens/Login/Login.js:191
-#~ msgid "Please log in"
-#~ msgstr "Log in"
-
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:346
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:183
 msgid "Delete Inventory"
@@ -2380,15 +2324,6 @@ msgstr "Er is iets misgegaan..."
 #: screens/TopologyView/Header.js:70
 msgid "Zoom in"
 msgstr "Inzoomen"
-
-#: screens/Inventory/shared/Inventory.helptext.js:147
-#~ msgid ""
-#~ "Time in seconds to consider an inventory sync\n"
-#~ "to be current. During job runs and callbacks the task system will\n"
-#~ "evaluate the timestamp of the latest sync. If it is older than\n"
-#~ "Cache Timeout, it is not considered current, and a new\n"
-#~ "inventory sync will be performed."
-#~ msgstr "Tijd in seconden waarmee een inventarissynchronisatie actueel genoemd kan worden. Tijdens taken in uitvoering en terugkoppelingen zal het taaksysteem de tijdstempel van de meest recente synchronisatie bekijken. Indien dit ouder is dan de Cache-timeout wordt het project niet gezien als actueel en moet er een nieuwe inventarissynchronisatie uitgevoerd worden."
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:336
 msgid "Cancel Constructed Inventory Source Sync"
@@ -2423,7 +2358,7 @@ msgstr ""
 msgid "Job Slice"
 msgstr "Taken verdelen"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:119
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:121
 msgid "Red Hat subscription manifest"
 msgstr "Red Hat-abonnementsmanifest"
 
@@ -2518,7 +2453,7 @@ msgstr "Goedgekeurd door {0} - {1}"
 msgid "Host Started"
 msgstr "Host gestart"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:98
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:100
 msgid "Upload a Red Hat Subscription Manifest containing your subscription. To generate your subscription manifest, go to <0>subscription allocations</0> on the Red Hat Customer Portal."
 msgstr "Upload een Red Hat-abonnementsmanifest met uw abonnement. Ga naar <0>abonnementstoewijzingen</0> op het Red Hat-klantenportaal om uw abonnementsmanifest te genereren."
 
@@ -2572,17 +2507,6 @@ msgstr "Type broncontrole"
 #: screens/Job/JobOutput/HostEventModal.js:127
 msgid "No result found"
 msgstr "Geen resultaat gevonden"
-
-#: screens/Inventory/shared/Inventory.helptext.js:84
-#~ msgid ""
-#~ "If checked, any hosts and groups that were\n"
-#~ "previously present on the external source but are now removed\n"
-#~ "will be removed from the inventory. Hosts and groups\n"
-#~ "that were not managed by the inventory source will be promoted\n"
-#~ "to the next manually created group or if there is no manually\n"
-#~ "created group to promote them into, they will be left in the \"all\"\n"
-#~ "default group for the inventory."
-#~ msgstr "Als dit vakje is ingeschakeld, worden alle groepen en hosts die eerder aanwezig waren in de externe bron, maar die nu verwijderd zijn, verwijderd uit de inventaris. Hosts en groepen die niet beheerd werden door de inventarisbron, worden omhoog verplaatst naar de volgende handmatig gemaakte groep. Als er geen handmatig gemaakte groep is waar ze naartoe kunnen worden verplaatst, blijven ze staan in de standaard inventarisgroep 'Alle'."
 
 #: screens/User/UserToken/UserToken.js:101
 msgid "View Tokens"
@@ -2709,10 +2633,6 @@ msgstr "Details van schema"
 #: components/DisassociateButton/DisassociateButton.js:88
 msgid "Select a row to disassociate"
 msgstr "Rij selecteren om deze te ontkoppelen"
-
-#: screens/Inventory/shared/InventoryGroupsDeleteModal.js:86
-#~ msgid "{0, plural, one {Delete Group?} other {Delete Groups?}}"
-#~ msgstr "{0, plural, one {Delete Group?} other {Delete Groups?}}"
 
 #: screens/Instances/InstancePeers/InstancePeerList.js:245
 msgid "Instance Name"
@@ -3022,7 +2942,7 @@ msgstr "Uitgeschakeld"
 msgid "Default Execution Environment"
 msgstr "Standaarduitvoeringsomgeving"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:118
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:120
 msgid "Invalid file format. Please upload a valid Red Hat Subscription Manifest."
 msgstr "Ongeldige bestandsindeling. Upload een geldig Red Hat-abonnementsmanifest."
 
@@ -3040,10 +2960,6 @@ msgstr "Koppel host los!"
 #: screens/Instances/InstancePeers/InstancePeerListItem.js:93
 msgid "Last Health Check"
 msgstr "Laatste gezondheidscontrole"
-
-#: screens/Instances/Shared/RemoveInstanceButton.js:178
-#~ msgid "This action will remove the following instances:"
-#~ msgstr "Deze actie zal de volgende instanties verwijderen:"
 
 #: routeConfig.js:164
 #: screens/TopologyView/TopologyView.js:44
@@ -3153,6 +3069,10 @@ msgstr ""
 msgid "Delete Credential"
 msgstr "Toegangsgegevens verwijderen"
 
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:54
+msgid "this Tower documentation page"
+msgstr ""
+
 #: screens/Inventory/shared/Inventory.helptext.js:59
 msgid "View JSON examples at"
 msgstr ""
@@ -3236,10 +3156,6 @@ msgstr "Dit annuleert alle volgende knooppunten in deze werkstroom."
 #: screens/Project/ProjectDetail/ProjectDetail.js:140
 msgid "FINISHED:"
 msgstr ""
-
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:57
-#~ msgid "{interval, plural, one {{interval} month} other {{interval} months}}"
-#~ msgstr "{interval, plural, one {{interval} maand} other {{interval} maanden}}"
 
 #: screens/InstanceGroup/Instances/InstanceList.js:354
 msgid "<0>Note: Manually associated instances may be automatically disassociated from an instance group if the instance is managed by <1>policy rules.</1></0>"
@@ -3452,10 +3368,6 @@ msgstr "0 (Waarschuwing)"
 msgid "Prompt for job type on launch."
 msgstr ""
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:26
-#~ msgid "Webhooks: Enable Webhook for this workflow job template."
-#~ msgstr "Webhook inschakelen voor deze workflowtaaksjabloon."
-
 #: screens/Setting/SettingList.js:98
 msgid "Jobs settings"
 msgstr "Taakinstellingen"
@@ -3571,10 +3483,6 @@ msgstr "Samenvouwen"
 msgid "Execution node"
 msgstr "Uitvoeringsknooppunt"
 
-#: screens/Application/ApplicationTokens/ApplicationTokenList.js:158
-#~ msgid "Failed to delete one or more tokens."
-#~ msgstr "Een of meer tokens kunnen niet worden verwijderd."
-
 #: screens/Template/shared/WebhookSubForm.js:196
 msgid "Update webhook key"
 msgstr "Webhooksleutel bijwerken"
@@ -3631,7 +3539,7 @@ msgstr "Terug naar teams"
 msgid "Injector configuration"
 msgstr "Configuratie-injector"
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:63
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:66
 msgid ""
 "This data is used to enhance\n"
 "future releases of the Tower Software and help\n"
@@ -3679,14 +3587,6 @@ msgstr "Terugzetten annuleren"
 msgid "select module"
 msgstr "module selecteren"
 
-#: screens/Inventory/shared/Inventory.helptext.js:195
-#~ msgid ""
-#~ "If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on.\n"
-#~ "Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied."
-#~ msgstr ""
-#~ "Indien ingeschakeld, voorkomt de inventaris dat organisatie-instantiegroepen worden toegevoegd aan de lijst van voorkeursinstantiegroepen om geassocieerde taaksjablonen op uit te voeren.\n"
-#~ "Opmerking: Als deze instelling is ingeschakeld en u een lege lijst hebt opgegeven, worden de globale instantiegroepen toegepast."
-
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:60
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:139
 msgid "Use TLS"
@@ -3728,10 +3628,6 @@ msgstr "Optie Details"
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionModal.js:138
 msgid "No subscriptions found"
 msgstr "Geen abonnementen gevonden"
-
-#: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:182
-#~ msgid "{0, plural, one {This instance group is currently being by other resources. Are you sure you want to delete it?} other {Deleting these instance groups could impact other resources that rely on them. Are you sure you want to delete anyway?}}"
-#~ msgstr "{0, plural, one {This instance group is currently being by other resources. Are you sure you want to delete it?} other {Deleting these instance groups could impact other resources that rely on them. Are you sure you want to delete anyway?}}"
 
 #: screens/HostMetrics/HostMetricsListItem.js:22
 msgid "Last automation"
@@ -3842,13 +3738,6 @@ msgstr "Selecteer een vertakking voor de workflow. Deze vertakking wordt toegepa
 #: screens/ManagementJob/ManagementJob.js:135
 msgid "Management job not found."
 msgstr "Beheertaak niet gevonden."
-
-#: screens/Inventory/shared/Inventory.helptext.js:192
-#~ msgid ""
-#~ "The inventory file\n"
-#~ "to be synced by this source. You can select from\n"
-#~ "the dropdown or enter a file within the input."
-#~ msgstr "Selecteer het inventarisbestand dat gesynchroniseerd moet worden door deze bron. U kunt kiezen uit het uitklapbare menu of een bestand invoeren in het invoerveld."
 
 #: components/LaunchPrompt/steps/InstanceGroupsStep.js:98
 #: components/LaunchPrompt/steps/useInstanceGroupsStep.js:32
@@ -3990,13 +3879,6 @@ msgstr "sociale aanmelding"
 msgid "Delete Workflow Approval"
 msgstr "Workflowgoedkeuring verwijderen"
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:11
-#~ msgid ""
-#~ "Optional labels that describe this workflow job template,\n"
-#~ "such as 'dev' or 'test'. Labels can be used to group and filter\n"
-#~ "workflow job templates and completed jobs."
-#~ msgstr "Optionele labels die de taaksjabloon beschrijven, zoals 'dev' of 'test'. Labels kunnen gebruikt worden om taaksjablonen en uitgevoerde taken te ordenen en filteren."
-
 #: screens/SubscriptionUsage/SubscriptionUsageChart.js:119
 msgid "Last recalculation date:"
 msgstr ""
@@ -4035,9 +3917,9 @@ msgstr "Bron verwijderd"
 msgid "YAML:"
 msgstr "YAML:"
 
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginTestAlert.js:44
-#~ msgid "Test passed"
-#~ msgstr "Test geslaagd"
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginTestAlert.js:46
+msgid "Test passed"
+msgstr ""
 
 #: components/ResourceAccessList/DeleteRoleConfirmationModal.js:14
 msgid "Team"
@@ -4075,7 +3957,7 @@ msgstr "Inputbronnen toegangsgegevens"
 msgid "Visualizer"
 msgstr "Visualizer"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:226
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:228
 msgid "Get subscription"
 msgstr "Abonnement ophalen"
 
@@ -4087,7 +3969,7 @@ msgstr "Wereldwijd beschikbare uitvoeringsomgeving kan niet opnieuw worden toege
 msgid "Lookup select"
 msgstr "Opzoeken selecteren"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:256
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:258
 msgid "Clear subscription selection"
 msgstr "Abonnementskeuze wissen"
 
@@ -4213,20 +4095,10 @@ msgstr "Ontbrekende bron"
 msgid "Group"
 msgstr "Groep"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:67
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:75
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:69
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:77
 msgid "Request subscription"
 msgstr "Abonnement aanvragen"
-
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:65
-#~ msgid "{interval, plural, one {{interval} year} other {{interval} years}}"
-#~ msgstr "{interval, plural, one {{interval} jaar} other {{interval} jaar}}"
-
-#: screens/Inventory/shared/Inventory.helptext.js:153
-#~ msgid ""
-#~ "Retrieve the enabled state from the given dict of host variables.\n"
-#~ "The enabled variable may be specified using dot notation, e.g: 'foo.bar'"
-#~ msgstr "Haal de ingeschakelde status op uit het gegeven dictaat van de hostvariabelen. De ingeschakelde variabele kan worden gespecificeerd met behulp van puntnotatie, bijvoorbeeld: 'foo.bar'"
 
 #: screens/Setting/Jobs/Jobs.js:26
 msgid "View Jobs settings"
@@ -4248,10 +4120,6 @@ msgstr "Feit niet gevonden."
 #: screens/InstanceGroup/shared/InstanceGroupForm.js:32
 msgid "Minimum number of instances that will be automatically assigned to this group when new instances come online."
 msgstr ""
-
-#: components/LaunchPrompt/LaunchPrompt.js:130
-#~ msgid "Launch | {0}"
-#~ msgstr "Starten | {0}"
 
 #: screens/Organization/Organization.js:156
 msgid "View all Organizations."
@@ -4509,7 +4377,7 @@ msgid ""
 "Grafana URL."
 msgstr "De basis-URL van de Grafana-server - het /api/annotations-eindpunt wordt automatisch toegevoegd aan de basis-URL voor Grafana."
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:34
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:37
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.js:205
 msgid "User and Automation Analytics"
 msgstr "Gebruikers- en Automatiseringsanalyses"
@@ -4771,7 +4639,7 @@ msgstr "Taak {0} weergeven"
 msgid "Sign in with SAML {samlIDP}"
 msgstr "Aanmelden met SAML {samlIDP}"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:162
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:164
 msgid "Browse"
 msgstr "Bladeren"
 
@@ -5094,10 +4962,6 @@ msgstr "Versleepbare lijst om geselecteerde items te herschikken en te verwijder
 msgid "Collapse all job events"
 msgstr "Alle taakgebeurtenissen samenvouwen"
 
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:194
-#~ msgid "{0, plural, one {This execution environment is currently being used by other resources. Are you sure you want to delete it?} other {These execution environments could be in use by other resources that rely on them. Are you sure you want to delete them anyway?}}"
-#~ msgstr "{0, plural, one {This execution environment is currently being used by other resources. Are you sure you want to delete it?} other {These execution environments could be in use by other resources that rely on them. Are you sure you want to delete them anyway?}}"
-
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:244
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:246
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:74
@@ -5354,16 +5218,16 @@ msgstr "Veld begint met waarde."
 msgid "GitHub"
 msgstr "GitHub"
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:16
-#~ msgid "If enabled, simultaneous runs of this workflow job template will be allowed."
-#~ msgstr "Indien deze mogelijkheid ingeschakeld is, zijn gelijktijdige uitvoeringen van deze workflow-taaksjabloon toegestaan."
-
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkDeleteModal.js:46
 msgid "Are you sure you want to remove this link?"
 msgstr "Weet u zeker dat u deze link wilt verwijderen?"
 
 #: screens/Template/shared/WorkflowJobTemplate.helptext.js:14
 msgid "Prompt for variables on launch."
+msgstr ""
+
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:152
+msgid "User Guide"
 msgstr ""
 
 #: screens/Credential/CredentialList/CredentialList.js:115
@@ -5412,7 +5276,7 @@ msgstr "Geselecteerde taken annuleren"
 msgid "ID"
 msgstr "ID"
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:75
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:78
 msgid ""
 "This data is used to enhance\n"
 "future releases of the Software and to provide\n"
@@ -5580,7 +5444,7 @@ msgstr "Naam toegangsgegevens"
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.js:135
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.js:206
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:144
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:231
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:230
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:143
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:149
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:224
@@ -5746,7 +5610,7 @@ msgstr "Kan team niet verwijderen."
 msgid "Days of data to be retained"
 msgstr "Aantal dagen dat gegevens moeten worden bewaard"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:220
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:222
 msgid "Get subscriptions"
 msgstr "Abonnementen ophalen"
 
@@ -5964,10 +5828,6 @@ msgstr "Fout tijdens inventarissynchronisatie"
 msgid "Deleting these instance groups could impact other resources that rely on them. Are you sure you want to delete anyway?"
 msgstr ""
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:195
-#~ msgid "Source Control Revision"
-#~ msgstr "Herziening broncontrole"
-
 #: components/Search/LookupTypeInput.js:88
 msgid "Case-insensitive version of endswith."
 msgstr "Hoofdletterongevoelige versie van endswith."
@@ -6117,14 +5977,6 @@ msgstr "Kan geen volledig bronobject van knooppunt ophalen."
 msgid "Toggle Tools"
 msgstr "Gereedschap wisselen"
 
-#: components/Schedule/shared/UnsupportedScheduleForm.js:12
-#~ msgid ""
-#~ "This schedule uses complex rules that are not supported in the\n"
-#~ "UI.  Please use the API to manage this schedule."
-#~ msgstr ""
-#~ "Dit schema gebruikt complexe regels die niet worden ondersteund in de\n"
-#~ "UI.  Gebruik de API om deze agenda te beheren."
-
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:349
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:186
 msgid "This inventory is currently being used by other resources. Are you sure you want to delete it?"
@@ -6173,8 +6025,8 @@ msgstr "Seconden"
 msgid "{intervalValue, plural, one {day} other {days}}"
 msgstr "{intervalValue, plural, one {day} other {days}}"
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:60
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:61
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:63
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:64
 msgid "User analytics"
 msgstr "Gebruikersanalyses"
 
@@ -6182,10 +6034,6 @@ msgstr "Gebruikersanalyses"
 #: components/ResourceAccessList/ResourceAccessListItem.js:68
 msgid "First name"
 msgstr "Voornaam"
-
-#: screens/Inventory/InventoryList/InventoryList.js:247
-#~ msgid "{0, plural, one {The inventory will be in a pending status until the final delete is processed.} other {The inventories will be in a pending status until the final delete is processed.}}"
-#~ msgstr "{0, plural, one {The inventory will be in a pending status until the final delete is processed.} other {The inventories will be in a pending status until the final delete is processed.}}"
 
 #: screens/Instances/Instance.js:61
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressList.js:105
@@ -6447,10 +6295,6 @@ msgid ""
 "Refer to the Ansible Controller Documentation for more additional\n"
 "information about each option."
 msgstr "Kies een antwoordtype of -formaat dat u als melding voor de gebruiker wilt. Raadpleeg de documentatie van Ansible Tower voor meer informatie over iedere optie."
-
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:25
-#~ msgid "Concurrent jobs: If enabled, simultaneous runs of this workflow job template will be allowed."
-#~ msgstr "Indien deze mogelijkheid ingeschakeld is, zijn gelijktijdige uitvoeringen van deze workflow-taaksjabloon toegestaan."
 
 #: components/NotificationList/NotificationList.js:203
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:144
@@ -6779,10 +6623,6 @@ msgstr ""
 msgid "Hosts by processor type"
 msgstr ""
 
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:49
-#~ msgid "{interval, plural, one {{interval} week} other {{interval} weeks}}"
-#~ msgstr "{interval, plural, one {{interval} week} other {{interval} weken}}"
-
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:200
 msgid "Notification timed out"
 msgstr "Time-out voor bericht"
@@ -6820,10 +6660,6 @@ msgstr "Statusinformatie van de host is niet beschikbaar voor deze taak."
 #: screens/Inventory/InventorySource/InventorySource.js:169
 msgid "View inventory source details"
 msgstr "Details inventarisbron weergeven"
-
-#: screens/Project/ProjectDetail/ProjectDetail.js:338
-#~ msgid "This project is currently being used by other resources. Are you sure you want to delete it?"
-#~ msgstr "Dit project wordt momenteel gebruikt door andere bronnen. Weet u zeker dat u het wilt verwijderen?"
 
 #: screens/InstanceGroup/Instances/InstanceList.js:260
 #: screens/Instances/InstancePeers/InstancePeerList.js:265
@@ -6863,10 +6699,6 @@ msgstr ""
 "Maakt het mogelijk een provisioning terugkoppelings-URL aan te maken. Met deze URL kan een host contact opnemen met {brandName}\n"
 "en een verzoek voor een configuratie-update indienen met behulp van deze taaksjabloon."
 
-#: screens/Inventory/shared/Inventory.helptext.js:55
-#~ msgid "View JSON examples at <0>www.json.org</0>"
-#~ msgstr "JSON-voorbeelden op <0>www.json.org</0> weergeven"
-
 #: components/AdHocCommands/AdHocDetailsStep.js:190
 #: components/HostToggle/HostToggle.js:65
 #: components/LaunchPrompt/steps/OtherPromptsStep.js:196
@@ -6898,7 +6730,7 @@ msgstr "Goedkeuring"
 msgid "Greater than or equal to comparison."
 msgstr "Groter dan of gelijk aan vergelijking."
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:112
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:115
 msgid "Automation Analytics dashboard"
 msgstr "Dashboard automatiseringsanalyse"
 
@@ -7305,10 +7137,6 @@ msgstr ""
 msgid "HTTP Method"
 msgstr "HTTP-methode"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:124
-msgid "A subscription manifest is an export of a Red Hat Subscription. To generate a subscription manifest, go to <0>access.redhat.com</0>. For more information, see the <1>User Guide</1>."
-msgstr "Een abonnementsmanifest is een export van een Red Hat-abonnement. Om een abonnementsmanifest te genereren, gaat u naar <0>access.redhat.com</0>. Raadpleeg voor meer informatie de <1>Gebruikershandleiding</1>."
-
 #: components/Workflow/WorkflowLegend.js:97
 msgid "Workflow"
 msgstr "Workflow"
@@ -7322,7 +7150,7 @@ msgstr "Ingeschakelde waarde"
 msgid "Use one Annotation Tag per line, without commas."
 msgstr "Voer een opmerkingstas in per regel, zonder komma's."
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:89
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:91
 msgid "Username / password"
 msgstr "Gebruikersnaam/wachtwoord"
 
@@ -7449,10 +7277,6 @@ msgstr "Feitenopslag"
 #: screens/WorkflowApproval/WorkflowApproval.js:107
 msgid "View Workflow Approval Details"
 msgstr "Details workflowgoedkeuring weergeven"
-
-#: components/AppContainer/PageHeaderToolbar.js:116
-#~ msgid "Help"
-#~ msgstr "Help"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionModal.js:124
 msgid "Close subscription modal"
@@ -7654,6 +7478,10 @@ msgstr "Minder dan of gelijk aan vergelijking."
 msgid "Delete"
 msgstr "Verwijderen"
 
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:39
+msgid "By default, we collect and transmit analytics data on the service usage to Red Hat. There are two categories of data collected by the service. For more information, see <0>{0}</0>. Uncheck the following boxes to disable this feature."
+msgstr ""
+
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginSelected.js:52
 msgid "This field will be retrieved from an external secret management system using the specified credential."
 msgstr "Dit veld wordt met behulp van de opgegeven referentie opgehaald uit een extern geheimbeheersysteem."
@@ -7704,6 +7532,10 @@ msgstr "Gemaakt"
 #: screens/Template/Survey/SurveyList.js:84
 msgid "This action will delete the following:"
 msgstr "Met deze actie wordt het volgende verwijderd:"
+
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:126
+msgid "A subscription manifest is an export of a Red Hat Subscription. To generate a subscription manifest, go to <0>access.redhat.com</0>. For more information, see the <1>{0}</1>."
+msgstr ""
 
 #: components/Schedule/ScheduleOccurrences/ScheduleOccurrences.js:52
 msgid "Local"
@@ -7770,6 +7602,7 @@ msgstr "Inventaris niet gevonden."
 #: screens/Credential/shared/CredentialForm.js:345
 #: screens/Credential/shared/CredentialForm.js:350
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.js:102
+#: screens/Credential/shared/ExternalTestModal.js:100
 #: screens/HostMetrics/HostMetricsDeleteButton.js:168
 #: screens/Instances/Shared/RemoveInstanceButton.js:177
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:113
@@ -7857,11 +7690,6 @@ msgstr "Inventarisbestand"
 msgid "Go to last page"
 msgstr "Ga naar de laatste pagina"
 
-#. js-lingui-explicit-id
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:195
-msgid "deleteExecutionEnvironments"
-msgstr ""
-
 #: screens/Job/JobOutput/shared/OutputToolbar.js:113
 msgid "Host Count"
 msgstr "Aantal hosts"
@@ -7879,7 +7707,7 @@ msgstr "Controleknooppunt"
 msgid "Subversion"
 msgstr "Subversie"
 
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:234
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:233
 msgid "Failed to delete one or more execution environments"
 msgstr "Een of meer uitvoeringsomgevingen kunnen niet worden verwijderd"
 
@@ -8098,8 +7926,8 @@ msgstr ""
 msgid "edit"
 msgstr ""
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:72
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:73
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:75
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:76
 msgid "Automation Analytics"
 msgstr "Automatiseringsanalyse"
 
@@ -8143,10 +7971,6 @@ msgstr "Deze actie ontkoppelt het volgende:"
 #: components/JobCancelButton/JobCancelButton.js:92
 msgid "Confirm cancellation"
 msgstr "Annuleren bevestigen"
-
-#: screens/Inventory/shared/InventoryGroupsDeleteModal.js:115
-#~ msgid "{0, plural, one {Are you sure you want delete the group below?} other {Are you sure you want delete the groups below?}}"
-#~ msgstr "{0, plural, one {Are you sure you want delete the group below?} other {Are you sure you want delete the groups below?}}"
 
 #: components/Sort/Sort.js:141
 msgid "Sort"
@@ -8200,10 +8024,6 @@ msgstr "{numJobsToCancel, plural, one {Cancel job} other {Cancel jobs}}"
 #: util/getRelatedResourceDeleteDetails.js:210
 msgid "Applications"
 msgstr "Toepassingen"
-
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:130
-#~ msgid "Day {0}"
-#~ msgstr "Dag {0}"
 
 #: screens/Project/ProjectList/ProjectListItem.js:136
 msgid "Refresh project revision"
@@ -8373,14 +8193,6 @@ msgstr "bezig-met-content-laden"
 msgid "Mon"
 msgstr "Ma"
 
-#: screens/Template/shared/JobTemplate.helptext.js:33
-#~ msgid ""
-#~ "If enabled, the job template will prevent adding any inventory or organization instance groups to the list of preferred instances groups to run on.\n"
-#~ "Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied."
-#~ msgstr ""
-#~ "Indien ingeschakeld, zal de taaksjabloon voorkomen dat inventaris- of organisatie-instantiegroepen worden toegevoegd aan de lijst met voorkeursinstantiegroepen om op te draaien.\n"
-#~ "Opmerking: Als deze instelling is ingeschakeld en u een lege lijst hebt opgegeven, worden de globale instantiegroepen toegepast."
-
 #: screens/Credential/shared/CredentialFormFields/CredentialField.js:53
 msgid "Replace"
 msgstr "Vervangen"
@@ -8504,7 +8316,7 @@ msgstr ""
 msgid "Select a job to cancel"
 msgstr "Taak selecteren om deze te annuleren"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:120
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:122
 msgid "Upload a .zip file"
 msgstr ".zip-bestand uploaden"
 
@@ -8645,17 +8457,9 @@ msgstr "Verwijder de huidige zoekopdracht die gerelateerd is aan ansible-feiten 
 msgid "Image"
 msgstr "Image"
 
-#: screens/Instances/Shared/RemoveInstanceButton.js:85
-#~ msgid "{0, plural, one {This intance is currently being used by other resources. Are you sure you want to delete it?} other {Deprovisioning these instances could impact other resources that rely on them. Are you sure you want to delete anyway?}}"
-#~ msgstr "{0, plural, one {This intance is currently being used by other resources. Are you sure you want to delete it?} other {Deprovisioning these instances could impact other resources that rely on them. Are you sure you want to delete anyway?}}"
-
 #: screens/Instances/InstancePeers/InstancePeerList.js:300
 msgid "Select Peer Addresses"
 msgstr ""
-
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:14
-#~ msgid "Pass extra command line variables to the playbook. This is the -e or --extra-vars command line parameter for ansible-playbook. Provide key/value pairs using either YAML or JSON. Refer to the Ansible Controller documentation for example syntax."
-#~ msgstr "Geef extra commandoregelvariabelen op in het draaiboek. Dit is de commandoregelparameter -e of --extra-vars voor het ansible-draaiboek. Geef sleutel/waarde-paren op met YAML of JSON. Raadpleeg de documentatie van Ansible Tower voor voorbeeldsyntaxis."
 
 #: screens/Application/ApplicationsList/ApplicationListItem.js:53
 #: screens/Application/ApplicationsList/ApplicationListItem.js:57
@@ -8936,15 +8740,6 @@ msgstr "Geen JSON beschikbaar"
 msgid "Group details"
 msgstr "Groepsdetails"
 
-#: screens/Inventory/shared/Inventory.helptext.js:120
-#: screens/Inventory/shared/Inventory.helptext.js:139
-#~ msgid ""
-#~ "If you want the Inventory Source to update on\n"
-#~ "launch and on project update, click on Update on launch, and also go to"
-#~ msgstr ""
-#~ "Als u wilt dat de inventarisbron wordt bijgewerkt bij\n"
-#~ "het opstarten en bij projectupdates, klik op Update bij opstarten, en ga ook naar"
-
 #: screens/Job/JobOutput/shared/OutputToolbar.js:101
 msgid "Play Count"
 msgstr "Aantal afspelen"
@@ -9016,12 +8811,6 @@ msgstr "Zoeken op ansible_facts vereist speciale syntax. Raadpleeg de"
 #: screens/TopologyView/Legend.js:237
 msgid "Link state types"
 msgstr "Typen verbindingstoestanden"
-
-#: screens/Inventory/shared/Inventory.helptext.js:79
-#~ msgid ""
-#~ "Control the level of output Ansible\n"
-#~ "will produce for inventory source update jobs."
-#~ msgstr "Stel in hoeveel output Ansible produceert bij taken die de inventarisbron updaten."
 
 #: components/Lookup/HostFilterLookup.js:352
 msgid ""
@@ -9161,10 +8950,6 @@ msgstr "Geen (eenmaal uitgevoerd)"
 #: components/Schedule/shared/ScheduleFormFields.js:176
 msgid "Add exceptions"
 msgstr "Uitzonderingen toevoegen"
-
-#: components/Schedule/shared/ScheduleFormFields.js:43
-#~ msgid "Warning: {selectedValue} is a link to {0} and will be saved as that."
-#~ msgstr "Waarschuwing: {selectedValue} is een link naar {0} en wordt als zodanig opgeslagen."
 
 #: screens/Inventory/InventoryList/InventoryList.js:263
 msgid "The inventories will be in a pending status until the final delete is processed."
@@ -9324,13 +9109,6 @@ msgstr "Selecteer de instantiegroepen waar dit taaksjabloon op uitgevoerd wordt.
 #: screens/User/UserList/UserListItem.js:23
 msgid "System Auditor"
 msgstr "Systeemcontroleur"
-
-#: screens/Inventory/shared/Inventory.helptext.js:113
-#~ msgid ""
-#~ "Each time a job runs using this inventory,\n"
-#~ "refresh the inventory from the selected source before\n"
-#~ "executing job tasks."
-#~ msgstr "Elke keer dat een taak uitgevoerd wordt met dit inventaris, dient het inventaris vernieuwd te worden vanuit de geselecteerde bron voordat de opdrachten van de taak uitgevoerd worden."
 
 #: components/Popover/Popover.js:34
 msgid "More information"
@@ -9584,13 +9362,6 @@ msgstr "Typen knooppuntstatus"
 msgid "Past three years"
 msgstr ""
 
-#: screens/Inventory/shared/SmartInventoryForm.js:94
-#~ msgid ""
-#~ "Enter inventory variables using either JSON or YAML syntax.\n"
-#~ "Use the radio button to toggle between the two. Refer to the\n"
-#~ "Ansible Controller documentation for example syntax."
-#~ msgstr "Voer de variabelen van het inventaris in met JSON- of YAML-syntaxis. Gebruik de radio-knop om tussen de twee te wisselen. Raadpleeg de documentatie van Ansible Tower voor voorbeeldsyntaxis"
-
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.js:123
 msgid "LDAP4"
 msgstr "LDAP4"
@@ -9614,10 +9385,6 @@ msgstr "Kan groep {0} niet verwijderen."
 #: components/LaunchPrompt/steps/CredentialPasswordsStep.js:112
 msgid "Privilege escalation password"
 msgstr "Wachtwoord verhoging van rechten"
-
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:33
-#~ msgid "{interval, plural, one {{interval} hour} other {{interval} hours}}"
-#~ msgstr "{interval, plural, one {{interval} hour} other {{interval} hours}}"
 
 #: components/PromptDetail/PromptDetail.js:46
 msgid "{minutes} min {seconds} sec"
@@ -9800,6 +9567,10 @@ msgstr "Ingeschakelde variabele"
 #: components/AppContainer/PageHeaderToolbar.js:177
 msgid "Logout"
 msgstr "Afmelden"
+
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:198
+msgid "These execution environments could be in use by other resources that rely on them. Are you sure you want to delete them anyway?"
+msgstr ""
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:122
 msgid "{0, selectordinal, one {The first {dayOfWeek}} two {The second {dayOfWeek}} =3 {The third {dayOfWeek}} =4 {The fourth {dayOfWeek}} =5 {The fifth {dayOfWeek}}}"
@@ -9999,10 +9770,6 @@ msgstr ""
 msgid "Webhook URL for this workflow job template."
 msgstr ""
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:36
-msgid "By default, we collect and transmit analytics data on the service usage to Red Hat. There are two categories of data collected by the service. For more information, see <0>this Tower documentation page</0>. Uncheck the following boxes to disable this feature."
-msgstr "Standaard verzamelen wij analytische gegevens over het gebruik van de service en sturen deze door naar Red Hat. Er zijn twee categorieën gegevens die door de service worden verzameld. Zie voor meer informatie <0>deze Tower-documentatiepagina</0>. Schakel de volgende vakjes uit om deze functie uit te schakelen."
-
 #: screens/Setting/SettingList.js:63
 msgid "GitHub settings"
 msgstr "GitHub-instellingen"
@@ -10052,13 +9819,6 @@ msgstr "Aanmelden met GitHub Enterprise-teams"
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/UnsavedChangesModal.js:17
 msgid "Unsaved changes modal"
 msgstr "Modus Niet-opgeslagen wijzigingen"
-
-#: screens/Inventory/shared/Inventory.helptext.js:100
-#~ msgid ""
-#~ "If checked, all variables for child groups\n"
-#~ "and hosts will be removed and replaced by those found\n"
-#~ "on the external source."
-#~ msgstr "Als dit vakje is ingeschakeld, worden alle variabelen voor onderliggende groepen en hosts verwijderd en worden ze vervangen door de variabelen die aangetroffen worden in de externe bron."
 
 #: components/JobList/JobList.js:233
 #: components/StatusLabel/StatusLabel.js:45
@@ -10287,14 +10047,6 @@ msgstr "Link naar een beschikbaar knooppunt"
 msgid "Track submodules latest commit on branch"
 msgstr "Submodules laatste binding op vertakking tracken"
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:6
-#~ msgid ""
-#~ "Provide a host pattern to further constrain\n"
-#~ "the list of hosts that will be managed or affected by the\n"
-#~ "playbook. Multiple patterns are allowed. Refer to Ansible\n"
-#~ "documentation for more information and examples on patterns."
-#~ msgstr "Geef een hostpatroon op om de lijst van hosts die beheerd of beïnvloed worden door het draaiboek verder te beperken. Meerdere patronen zijn toegestaan. Raadpleeg de documentatie van Ansible voor meer informatie over en voorbeelden van patronen."
-
 #: screens/Template/shared/JobTemplateForm.js:618
 msgid "Provisioning Callback details"
 msgstr "Provisioning terugkoppelingsdetails"
@@ -10303,7 +10055,7 @@ msgstr "Provisioning terugkoppelingsdetails"
 msgid "These are the modules that {brandName} supports running commands against."
 msgstr "Dit zijn de modules waar {brandName} commando's tegen kan uitvoeren."
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:63
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:65
 msgid ""
 "If you do not have a subscription, you can visit\n"
 "Red Hat to obtain a trial subscription."
@@ -10593,10 +10345,6 @@ msgstr "Geen output gevonden voor deze taak."
 msgid "Logging settings"
 msgstr "Instellingen voor logboekregistratie"
 
-#: screens/Inventory/InventorySources/InventorySourceList.js:196
-#~ msgid "{0, plural, one {This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?} other {Deleting these inventory sources could impact other resources that rely on them. Are you sure you want to delete anyway}}"
-#~ msgstr "{0, plural, one {This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?} other {Deleting these inventory sources could impact other resources that rely on them. Are you sure you want to delete anyway}}"
-
 #: screens/Job/Job.js:163
 msgid "View all Jobs."
 msgstr "Geef alle taken weer."
@@ -10639,10 +10387,6 @@ msgstr "Recente sjablonen"
 #: components/PromptDetail/PromptProjectDetail.js:62
 msgid "Update revision on job launch"
 msgstr "Herziening bijwerken bij starten taak"
-
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:226
-#~ msgid "{numOccurrences, plural, one {After {numOccurrences} occurrence} other {After {numOccurrences} occurrences}}"
-#~ msgstr "{numOccurrences, plural, one {After {numOccurrences} occurrence} other {After {numOccurrences} occurrences}}"
 
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListDenyButton.js:19
 msgid "Select a row to deny"
@@ -10712,10 +10456,6 @@ msgstr "Opdracht"
 #: components/LaunchButton/LaunchButton.js:56
 msgid "A job has already been launched"
 msgstr ""
-
-#: screens/Inventory/InventoryList/InventoryListItem.js:65
-#~ msgid "{0, plural, one {# source with sync failures.} other {# sources with sync failures.}}"
-#~ msgstr "{0, plural, one {# source with sync failures.} other {# sources with sync failures.}}"
 
 #: screens/Job/JobDetail/JobDetail.js:314
 msgid "Inventory Source"
@@ -10970,17 +10710,6 @@ msgstr "Maximumaantal hosts dat beheerd mag worden door deze organisatie. De sta
 msgid "Cancel lookup"
 msgstr "Opzoeken annuleren"
 
-#: screens/Inventory/shared/Inventory.helptext.js:93
-#~ msgid ""
-#~ "When not checked, local child\n"
-#~ "hosts and groups not found on the external source will remain\n"
-#~ "untouched by the inventory update process."
-#~ msgstr "Als dit vakje niet aangevinkt is, worden lokale onderliggende hosts en groepen die niet aangetroffen zijn in de externe bron niet behandeld in het synchronisatieproces van de inventaris."
-
-#: screens/Instances/Shared/InstanceForm.js:43
-#~ msgid "Select the port that Receptor will listen on for incoming connections. Default is 27199."
-#~ msgstr "Selecteer de poort waarop Receptor zal luisteren voor inkomende verbindingen. De standaardinstelling is 27199."
-
 #: components/Schedule/shared/FrequencyDetailSubform.js:419
 msgid "Fifth"
 msgstr "Vijfde"
@@ -11050,9 +10779,9 @@ msgstr "Gemaakt door (gebruikersnaam)"
 msgid "Organization"
 msgstr "Organisatie"
 
-#: screens/Credential/shared/ExternalTestModal.js:77
-#~ msgid "Test External Credential"
-#~ msgstr "Test externe inloggegevens"
+#: screens/Credential/shared/ExternalTestModal.js:79
+msgid "Test External Credential"
+msgstr ""
 
 #: components/SelectedList/DraggableSelectedList.js:45
 msgid "Dragging cancelled. List is unchanged."
@@ -11116,14 +10845,6 @@ msgstr "loskoppelen"
 #: screens/Instances/InstancePeers/InstancePeerListItem.js:84
 msgid "Total Jobs"
 msgstr "Totale taken"
-
-#: screens/Inventory/shared/Inventory.helptext.js:131
-#~ msgid ""
-#~ "After every project update where the SCM revision\n"
-#~ "changes, refresh the inventory from the selected source\n"
-#~ "before executing job tasks. This is intended for static content,\n"
-#~ "like the Ansible inventory .ini file format."
-#~ msgstr "Na iedere projectupdate waarbij de SCM-revisie verandert, dient het inventaris vernieuwd te worden vanuit de geselecteerde bron voordat de opdrachten die bij de taak horen uitgevoerd worden. Dit is bedoeld voor statische content, zoals .ini, het inventarisbestandsformaat van Ansible."
 
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:344
 msgid "Failed to delete inventory source {name}."
@@ -11267,10 +10988,6 @@ msgstr ""
 #: screens/Template/shared/WorkflowJobTemplate.helptext.js:21
 msgid "Prompt for verbosity on launch."
 msgstr ""
-
-#: screens/Inventory/shared/Inventory.helptext.js:66
-#~ msgid "View YAML examples at <0>docs.ansible.com</0>"
-#~ msgstr "YAML-voorbeelden weergeven op <0>docs.ansible.com</0>"
 
 #: screens/User/UserToken/UserToken.js:75
 msgid "View all tokens."
@@ -11736,13 +11453,6 @@ msgstr "Mislukte hosts"
 msgid "Direct Keys"
 msgstr "Directe sleutels"
 
-#: screens/Inventory/shared/Inventory.helptext.js:105
-#~ msgid ""
-#~ "When not checked, a merge will be performed,\n"
-#~ "combining local variables with those found on the\n"
-#~ "external source."
-#~ msgstr "Als dit vakje niet aangevinkt is, worden lokale variabelen samengevoegd met de variabelen die aangetroffen zijn in de externe bron."
-
 #: screens/HostMetrics/HostMetrics.js:132
 msgid "How many times was the host automated"
 msgstr ""
@@ -11783,7 +11493,7 @@ msgstr "Input uitbreiden"
 #: screens/Organization/OrganizationList/OrganizationListItem.js:44
 #: screens/Organization/shared/OrganizationForm.js:114
 #: screens/Project/ProjectList/ProjectListItem.js:179
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:246
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:248
 #: screens/Team/TeamList/TeamListItem.js:33
 #: screens/Template/Survey/SurveyListItem.js:36
 #: screens/User/UserTokenList/UserTokenListItem.js:20
@@ -11912,7 +11622,7 @@ msgstr "ldap-gebruiker"
 msgid "Back to Organizations"
 msgstr "Terug naar organisaties"
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:84
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:87
 msgid "Provide your Red Hat or Red Hat Satellite credentials to enable Automation Analytics."
 msgstr "Geef uw Red Hat- of Red Hat Satellite-toegangsgegevens op om Automatiseringsanalyse in te schakelen."
 
@@ -11956,7 +11666,7 @@ msgstr "Toegangsgegevens voor authenticatie met Kubernetes of OpenShift. Moet va
 msgid "Survey preview modal"
 msgstr "Modus Voorbeeld van vragenlijst"
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:122
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:125
 msgid "Learn more about Automation Analytics"
 msgstr "Meer informatie over Automatiseringsanalyse"
 

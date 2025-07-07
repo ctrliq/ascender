@@ -12,10 +12,6 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:334
-#~ msgid "Delete Project"
-#~ msgstr "プロジェクトの削除"
-
 #: screens/TopologyView/Tooltip.js:290
 msgid "{forks, plural, one {# fork} other {# forks}}"
 msgstr "{forks, plural, one {# fork} other {# forks}}"
@@ -156,10 +152,6 @@ msgstr "(起動プロンプト)"
 msgid "Lookup typeahead"
 msgstr "ルックアップの先行入力"
 
-#: screens/Login/Login.js:190
-#~ msgid "Welcome to {brandName}!"
-#~ msgstr "{brandName} へようこそ"
-
 #: screens/Template/Survey/SurveyToolbar.js:106
 msgid "Survey Enabled"
 msgstr "Survey の有効化"
@@ -247,7 +239,7 @@ msgstr ""
 msgid "Select Input Inventories for the constructed inventory plugin."
 msgstr ""
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:59
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:61
 msgid ""
 "Welcome to Red Hat Ansible Automation Platform!\n"
 "Please complete the steps below to activate your subscription."
@@ -274,10 +266,6 @@ msgstr "タスク数"
 msgid "Template"
 msgstr "テンプレート"
 
-#: screens/Inventory/shared/Inventory.helptext.js:167
-#~ msgid "Variables used to configure the inventory source. For a detailed description of how to configure this plugin, see <0>Inventory Plugins</0> in the documentation and the <1>{sourceType}</1> plugin configuration guide."
-#~ msgstr "インベントリーソースの設定に使用する変数。このプラグインの設定方法の詳細については、ドキュメントの <0>インベントリープラグイン</0> および <1>{sourceType}</1> プラグイン設定ガイドを参照してください。"
-
 #: components/Schedule/shared/FrequencyDetailSubform.js:207
 msgid "{intervalValue, plural, one {year} other {years}}"
 msgstr "{intervalValue, plural, one {year} other {years}}"
@@ -302,10 +290,6 @@ msgid ""
 msgstr ""
 "1 番目はすべての参照を取得します。2 番目は Github のプル要求の 62 番を取得します。\n"
 "この例では、ブランチは \"pull/62/head\" でなければなりません。"
-
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:25
-#~ msgid "{interval, plural, one {{interval} minute} other {{interval} minutes}}"
-#~ msgstr "{interval, plural, one {{interval} minute} other {{interval} minutes}}"
 
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:239
 msgid "Failed to delete one or more notification template."
@@ -525,14 +509,6 @@ msgstr "多項選択法 (複数の選択可)"
 msgid "Please select an end date/time that comes after the start date/time."
 msgstr "開始日時より後の終了日時を選択してください。"
 
-#: screens/Setting/Logging/LoggingEdit/LoggingEdit.js:129
-#~ msgid ""
-#~ "Cannot enable log aggregator without providing\n"
-#~ "logging aggregator host and logging aggregator type."
-#~ msgstr ""
-#~ "ログアグリゲーターホストとログアグリゲータータイプを指定せずに、\n"
-#~ "ログアグリゲーターを有効にすることはできません。"
-
 #: components/Schedule/shared/FrequencyDetailSubform.js:291
 msgid "Wed"
 msgstr "水"
@@ -554,9 +530,9 @@ msgstr ""
 msgid "Event"
 msgstr "イベント"
 
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginTestAlert.js:39
-#~ msgid "Something went wrong with the request to test this credential and metadata."
-#~ msgstr "この認証情報およびメタデータをテストする要求で問題が発生しました。"
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginTestAlert.js:41
+msgid "Something went wrong with the request to test this credential and metadata."
+msgstr ""
 
 #: screens/Setting/SettingList.js:67
 msgid "Google OAuth 2 settings"
@@ -913,7 +889,7 @@ msgstr "実行環境が見つかりません。"
 msgid "View and edit debug options"
 msgstr ""
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:195
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:197
 msgid ""
 "Provide your Red Hat or Red Hat Satellite credentials\n"
 "below and you can choose from a list of your available subscriptions.\n"
@@ -927,6 +903,7 @@ msgstr "インベントリーソース同期"
 
 #: components/LaunchPrompt/steps/OtherPromptsStep.js:137
 #: components/Workflow/WorkflowLinkHelp.js:41
+#: screens/Credential/shared/ExternalTestModal.js:91
 #: screens/Template/shared/JobTemplateForm.js:217
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.js:52
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/RunStep.js:25
@@ -967,7 +944,7 @@ msgid "1 (Info)"
 msgstr "1 (情報)"
 
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.js:203
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:228
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:227
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:221
 msgid "Deletion error"
 msgstr "削除エラー"
@@ -1037,25 +1014,9 @@ msgstr "カテゴリーの設定"
 msgid "Back to Credentials"
 msgstr "認証情報に戻る"
 
-#: screens/Project/shared/Project.helptext.js:108
-#~ msgid ""
-#~ "Enable content signing to verify that the content \n"
-#~ "has remained secure when a project is synced. \n"
-#~ "If the content has been tampered with, the \n"
-#~ "job will not run."
-#~ msgstr ""
-#~ "コンテンツの署名を有効にして、コンテンツが\n"
-#~ "プロジェクトが同期されても安全です。\n"
-#~ "内容が改ざんされた場合、\n"
-#~ "ジョブは実行されません。"
-
 #: screens/Team/Team.js:78
 msgid "View all Teams."
 msgstr "すべてのチームを表示します。"
-
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:41
-#~ msgid "{interval, plural, one {{interval} day} other {{interval} days}}"
-#~ msgstr "{interval, plural, one {{interval} day} other {{interval} days}}"
 
 #: util/validators.js:186
 msgid "This field must be a regular expression"
@@ -1178,10 +1139,6 @@ msgstr "すべての管理ジョブの表示"
 msgid "Delete application"
 msgstr "アプリケーションの削除"
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:5
-#~ msgid "Select an inventory for the workflow. This inventory is applied to all workflow nodes that prompt for an inventory."
-#~ msgstr "ワークフローのインベントリーを選択してください。このインベントリーが、インベントリーをプロンプトするすべてのワークフローノードに適用されます。"
-
 #: screens/Job/Job.helptext.js:15
 #: screens/Template/shared/JobTemplate.helptext.js:33
 msgid "Provide a host pattern to further constrain the list of hosts that will be managed or affected by the playbook. Multiple patterns are allowed. Refer to Ansible documentation for more information and examples on patterns."
@@ -1230,10 +1187,6 @@ msgstr "このワークフローのすべてのノードを削除してもよろ
 #: screens/InstanceGroup/shared/ContainerGroupForm.js:69
 msgid "Maximum number of jobs to run concurrently on this group.\\n          Zero means no limit will be enforced."
 msgstr ""
-
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:15
-#~ msgid "Enable Webhook for this workflow job template."
-#~ msgstr "このワークフローのジョブテンプレートの Webhook を有効にします。"
 
 #: components/Lookup/HostFilterLookup.js:121
 msgid "Last job"
@@ -1946,7 +1899,7 @@ msgstr "最初のページに移動"
 msgid "details."
 msgstr "詳細。"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:83
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:85
 msgid "Subscription manifest"
 msgstr "サブスクリプションマニュフェスト"
 
@@ -1994,8 +1947,8 @@ msgstr "キー"
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:264
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:343
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:448
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:93
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:208
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:96
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:210
 #: screens/User/shared/UserForm.js:77
 #: screens/User/UserDetail/UserDetail.js:70
 #: screens/User/UserList/UserList.js:122
@@ -2031,10 +1984,6 @@ msgstr "このプロジェクトは現在同期中で、同期プロセスが完
 msgid "Administration"
 msgstr "管理"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:351
-#~ msgid "Failed to delete project."
-#~ msgstr "プロジェクトを削除できませんでした。"
-
 #: components/RelatedTemplateList/RelatedTemplateList.js:193
 #: components/TemplateList/TemplateList.js:240
 msgid "Label"
@@ -2048,7 +1997,7 @@ msgstr "すべて元に戻す"
 msgid "Allowed URIs list, space separated"
 msgstr "許可された URI リスト (スペース区切り)"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:80
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:82
 msgid "Select your Ansible Automation Platform subscription to use."
 msgstr "使用する Ansible Automation Platform サブスクリプションを選択します。"
 
@@ -2066,8 +2015,8 @@ msgstr "ブランドロゴ"
 
 #: screens/Login/Login.js:237
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:75
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:102
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:216
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:105
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:218
 #: screens/Template/Survey/SurveyQuestionForm.js:84
 #: screens/User/shared/UserForm.js:89
 msgid "Password"
@@ -2102,7 +2051,7 @@ msgstr "ジョブテンプレート"
 msgid "Install Bundle"
 msgstr "バンドルのインストール"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:251
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:253
 msgid "Clear subscription"
 msgstr "サブスクリプションの解除"
 
@@ -2179,10 +2128,6 @@ msgstr "新規ユーザーの作成"
 #: screens/Template/shared/WebhookSubForm.js:158
 msgid "a new webhook key will be generated on save."
 msgstr "新規 Webhook キーは保存時に生成されます。"
-
-#: screens/Inventory/InventoryList/InventoryList.js:240
-#~ msgid "{0, plural, one {This inventory is currently being used by some templates. Are you sure you want to delete it?} other {Deleting these inventories could impact some templates that rely on them. Are you sure you want to delete anyway?}}"
-#~ msgstr "{0, plural, one {This inventory is currently being used by some templates. Are you sure you want to delete it?} other {Deleting these inventories could impact some templates that rely on them. Are you sure you want to delete anyway?}}"
 
 #: screens/Credential/shared/CredentialFormFields/GceFileUploadField.js:47
 msgid "Expected at least one of client_email, project_id or private_key to be present in the file."
@@ -2308,6 +2253,7 @@ msgid "Failed Hosts"
 msgstr "失敗したホスト"
 
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:133
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:197
 msgid "This execution environment is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "この実行環境は、現在他のリソースで使用されています。削除してもよろしいですか?"
 
@@ -2369,10 +2315,6 @@ msgstr "実行環境が正常にコピーされました"
 msgid "Log In"
 msgstr "ログイン"
 
-#: screens/Login/Login.js:191
-#~ msgid "Please log in"
-#~ msgstr "ログインしてください"
-
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:346
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:183
 msgid "Delete Inventory"
@@ -2386,15 +2328,6 @@ msgstr "問題が発生しました..."
 #: screens/TopologyView/Header.js:70
 msgid "Zoom in"
 msgstr "ズームイン"
-
-#: screens/Inventory/shared/Inventory.helptext.js:147
-#~ msgid ""
-#~ "Time in seconds to consider an inventory sync\n"
-#~ "to be current. During job runs and callbacks the task system will\n"
-#~ "evaluate the timestamp of the latest sync. If it is older than\n"
-#~ "Cache Timeout, it is not considered current, and a new\n"
-#~ "inventory sync will be performed."
-#~ msgstr "インベントリーの同期が最新の状態であることを判別するために使用される時間 (秒単位) です。ジョブの実行およびコールバック時に、タスクシステムは最新の同期のタイムスタンプを評価します。これがキャッシュタイムアウトよりも古い場合は最新とは見なされず、インベントリーの同期が新たに実行されます。"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:336
 msgid "Cancel Constructed Inventory Source Sync"
@@ -2429,7 +2362,7 @@ msgstr ""
 msgid "Job Slice"
 msgstr "ジョブスライス"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:119
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:121
 msgid "Red Hat subscription manifest"
 msgstr "Red Hat サブスクリプションマニュフェスト"
 
@@ -2524,7 +2457,7 @@ msgstr "{0} により承認済 - {1}"
 msgid "Host Started"
 msgstr "ホストの開始"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:98
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:100
 msgid "Upload a Red Hat Subscription Manifest containing your subscription. To generate your subscription manifest, go to <0>subscription allocations</0> on the Red Hat Customer Portal."
 msgstr "サブスクリプションを含む Red Hat Subscription Manifest をアップロードします。サブスクリプションマニフェストを生成するには、Red Hat カスタマーポータルの <0>サブスクリプション割り当て</0> にアクセスします。"
 
@@ -2578,17 +2511,6 @@ msgstr "ソースコントロールのタイプ"
 #: screens/Job/JobOutput/HostEventModal.js:127
 msgid "No result found"
 msgstr "結果が見つかりません"
-
-#: screens/Inventory/shared/Inventory.helptext.js:84
-#~ msgid ""
-#~ "If checked, any hosts and groups that were\n"
-#~ "previously present on the external source but are now removed\n"
-#~ "will be removed from the inventory. Hosts and groups\n"
-#~ "that were not managed by the inventory source will be promoted\n"
-#~ "to the next manually created group or if there is no manually\n"
-#~ "created group to promote them into, they will be left in the \"all\"\n"
-#~ "default group for the inventory."
-#~ msgstr "チェックを付けると、以前は外部ソースにあり、現在は削除されているホストおよびグループがインベントリーから削除されます。インベントリーソースで管理されていなかったホストおよびグループは、次に手動で作成したグループにプロモートされます。プロモート先となる、手動で作成したグループがない場合、ホストおよびグループは、インベントリーの \"すべて\" のデフォルトグループに残ります。"
 
 #: screens/User/UserToken/UserToken.js:101
 msgid "View Tokens"
@@ -2715,10 +2637,6 @@ msgstr "スケジュールの詳細"
 #: components/DisassociateButton/DisassociateButton.js:88
 msgid "Select a row to disassociate"
 msgstr "関連付けを解除する行を選択してください"
-
-#: screens/Inventory/shared/InventoryGroupsDeleteModal.js:86
-#~ msgid "{0, plural, one {Delete Group?} other {Delete Groups?}}"
-#~ msgstr "{0, plural, one {Delete Group?} other {Delete Groups?}}"
 
 #: screens/Instances/InstancePeers/InstancePeerList.js:245
 msgid "Instance Name"
@@ -3028,7 +2946,7 @@ msgstr "無効化"
 msgid "Default Execution Environment"
 msgstr "デフォルトの実行環境"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:118
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:120
 msgid "Invalid file format. Please upload a valid Red Hat Subscription Manifest."
 msgstr "ファイル形式が無効です。有効な Red Hat サブスクリプションマニフェストをアップロードしてください。"
 
@@ -3046,10 +2964,6 @@ msgstr "ロールの関連付けの解除!"
 #: screens/Instances/InstancePeers/InstancePeerListItem.js:93
 msgid "Last Health Check"
 msgstr "最終可用性チェック"
-
-#: screens/Instances/Shared/RemoveInstanceButton.js:178
-#~ msgid "This action will remove the following instances:"
-#~ msgstr "この操作により、次のインスタンスが削除されます。"
 
 #: routeConfig.js:164
 #: screens/TopologyView/TopologyView.js:44
@@ -3159,6 +3073,10 @@ msgstr ""
 msgid "Delete Credential"
 msgstr "認証情報の削除"
 
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:54
+msgid "this Tower documentation page"
+msgstr ""
+
 #: screens/Inventory/shared/Inventory.helptext.js:59
 msgid "View JSON examples at"
 msgstr ""
@@ -3246,10 +3164,6 @@ msgstr "これにより、このワークフローの後続のノードがすべ
 #: screens/Project/ProjectDetail/ProjectDetail.js:140
 msgid "FINISHED:"
 msgstr ""
-
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:57
-#~ msgid "{interval, plural, one {{interval} month} other {{interval} months}}"
-#~ msgstr "{interval, plural, one {{interval} month} other {{interval} months}}"
 
 #: screens/InstanceGroup/Instances/InstanceList.js:354
 msgid "<0>Note: Manually associated instances may be automatically disassociated from an instance group if the instance is managed by <1>policy rules.</1></0>"
@@ -3462,10 +3376,6 @@ msgstr "0 (警告)"
 msgid "Prompt for job type on launch."
 msgstr ""
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:26
-#~ msgid "Webhooks: Enable Webhook for this workflow job template."
-#~ msgstr "Webhook: このワークフローのジョブテンプレートの Webhook を有効にします。"
-
 #: screens/Setting/SettingList.js:98
 msgid "Jobs settings"
 msgstr "ジョブ設定"
@@ -3581,10 +3491,6 @@ msgstr "折りたたむ"
 msgid "Execution node"
 msgstr "実行ノード"
 
-#: screens/Application/ApplicationTokens/ApplicationTokenList.js:158
-#~ msgid "Failed to delete one or more tokens."
-#~ msgstr "1 つ以上のトークンを削除できませんでした。"
-
 #: screens/Template/shared/WebhookSubForm.js:196
 msgid "Update webhook key"
 msgstr "Webhook キーの更新"
@@ -3641,7 +3547,7 @@ msgstr "チームに戻る"
 msgid "Injector configuration"
 msgstr "インジェクターの設定"
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:63
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:66
 msgid ""
 "This data is used to enhance\n"
 "future releases of the Tower Software and help\n"
@@ -3689,14 +3595,6 @@ msgstr "元に戻すの取り消し"
 msgid "select module"
 msgstr "モジュールの選択"
 
-#: screens/Inventory/shared/Inventory.helptext.js:195
-#~ msgid ""
-#~ "If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on.\n"
-#~ "Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied."
-#~ msgstr ""
-#~ "有効にすると、インベントリーは、関連付けられたジョブテンプレートを実行する優先インスタンスグループのリストに組織インスタンスグループを追加することを防ぎます。\n"
-#~ "注: この設定が有効で空のリストを指定した場合は、グローバルインスタンスグループが適用されます。"
-
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:60
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:139
 msgid "Use TLS"
@@ -3738,10 +3636,6 @@ msgstr "オプションの詳細"
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionModal.js:138
 msgid "No subscriptions found"
 msgstr "サブスクリプションが見つかりません"
-
-#: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:182
-#~ msgid "{0, plural, one {This instance group is currently being by other resources. Are you sure you want to delete it?} other {Deleting these instance groups could impact other resources that rely on them. Are you sure you want to delete anyway?}}"
-#~ msgstr "{0, plural, one {This instance group is currently being by other resources. Are you sure you want to delete it?} other {Deleting these instance groups could impact other resources that rely on them. Are you sure you want to delete anyway?}}"
 
 #: screens/HostMetrics/HostMetricsListItem.js:22
 msgid "Last automation"
@@ -3852,13 +3746,6 @@ msgstr "ワークフローにブランチを選択してください。このブ
 #: screens/ManagementJob/ManagementJob.js:135
 msgid "Management job not found."
 msgstr "管理ジョブが見つかりません。"
-
-#: screens/Inventory/shared/Inventory.helptext.js:192
-#~ msgid ""
-#~ "The inventory file\n"
-#~ "to be synced by this source. You can select from\n"
-#~ "the dropdown or enter a file within the input."
-#~ msgstr "このソースで同期されるインベントリーファイル。ドロップダウンから選択するか、入力にファイルを指定できます。"
 
 #: components/LaunchPrompt/steps/InstanceGroupsStep.js:98
 #: components/LaunchPrompt/steps/useInstanceGroupsStep.js:32
@@ -4002,16 +3889,6 @@ msgstr "ソーシャルログイン"
 msgid "Delete Workflow Approval"
 msgstr "ワークフロー承認の削除"
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:11
-#~ msgid ""
-#~ "Optional labels that describe this workflow job template,\n"
-#~ "such as 'dev' or 'test'. Labels can be used to group and filter\n"
-#~ "workflow job templates and completed jobs."
-#~ msgstr ""
-#~ "「dev」、「test」などのこのワークフロージョブテンプレートを説明するオプションラベルです。\n"
-#~ "ラベルを使用し、ワークフロージョブテンプレートおよび完了した\n"
-#~ "ジョブの分類およびフィルターを実行できます。"
-
 #: screens/SubscriptionUsage/SubscriptionUsageChart.js:119
 msgid "Last recalculation date:"
 msgstr ""
@@ -4050,9 +3927,9 @@ msgstr "リソースが削除されました"
 msgid "YAML:"
 msgstr "YAML:"
 
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginTestAlert.js:44
-#~ msgid "Test passed"
-#~ msgstr "テストに成功"
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginTestAlert.js:46
+msgid "Test passed"
+msgstr ""
 
 #: components/ResourceAccessList/DeleteRoleConfirmationModal.js:14
 msgid "Team"
@@ -4090,7 +3967,7 @@ msgstr "認証情報の入力ソース"
 msgid "Visualizer"
 msgstr "ビジュアライザー"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:226
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:228
 msgid "Get subscription"
 msgstr "サブスクリプションの取得"
 
@@ -4102,7 +3979,7 @@ msgstr "システム全体で利用可能な実行環境を特定の組織に再
 msgid "Lookup select"
 msgstr "ルックアップ選択"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:256
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:258
 msgid "Clear subscription selection"
 msgstr "サブスクリプションの選択解除"
 
@@ -4224,20 +4101,10 @@ msgstr "不足しているリソース"
 msgid "Group"
 msgstr "グループ"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:67
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:75
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:69
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:77
 msgid "Request subscription"
 msgstr "サブスクリプションの要求"
-
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:65
-#~ msgid "{interval, plural, one {{interval} year} other {{interval} years}}"
-#~ msgstr "{interval, plural, one {{interval} year} other {{interval} years}}"
-
-#: screens/Inventory/shared/Inventory.helptext.js:153
-#~ msgid ""
-#~ "Retrieve the enabled state from the given dict of host variables.\n"
-#~ "The enabled variable may be specified using dot notation, e.g: 'foo.bar'"
-#~ msgstr "ホスト変数の指定された辞書から有効な状態を取得します。有効な変数は、ドット表記を使用して指定できます (例: 「foo.bar」)。"
 
 #: screens/Setting/Jobs/Jobs.js:26
 msgid "View Jobs settings"
@@ -4259,10 +4126,6 @@ msgstr "プロジェクトが見つかりません。"
 #: screens/InstanceGroup/shared/InstanceGroupForm.js:32
 msgid "Minimum number of instances that will be automatically assigned to this group when new instances come online."
 msgstr ""
-
-#: components/LaunchPrompt/LaunchPrompt.js:130
-#~ msgid "Launch | {0}"
-#~ msgstr "起動 | {0}"
 
 #: screens/Organization/Organization.js:156
 msgid "View all Organizations."
@@ -4522,7 +4385,7 @@ msgstr ""
 "Grafana サーバーのベース URL。/api/annotations エンドポイントは、ベース Grafana URL に自動的に\n"
 "追加されます。"
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:34
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:37
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.js:205
 msgid "User and Automation Analytics"
 msgstr "ユーザーおよび自動化アナリティクス"
@@ -4784,7 +4647,7 @@ msgstr "ジョブ {0} の表示"
 msgid "Sign in with SAML {samlIDP}"
 msgstr "SAML {samlIDP} でサインイン"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:162
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:164
 msgid "Browse"
 msgstr "参照"
 
@@ -5105,10 +4968,6 @@ msgstr "選択した項目を並べ替えたり削除したりできるドラッ
 msgid "Collapse all job events"
 msgstr "すべてのジョブイベントを折りたたむ"
 
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:194
-#~ msgid "{0, plural, one {This execution environment is currently being used by other resources. Are you sure you want to delete it?} other {These execution environments could be in use by other resources that rely on them. Are you sure you want to delete them anyway?}}"
-#~ msgstr "{0, plural, one {This execution environment is currently being used by other resources. Are you sure you want to delete it?} other {These execution environments could be in use by other resources that rely on them. Are you sure you want to delete them anyway?}}"
-
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:244
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:246
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:74
@@ -5371,16 +5230,16 @@ msgstr "値で開始するフィールド。"
 msgid "GitHub"
 msgstr "GitHub"
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:16
-#~ msgid "If enabled, simultaneous runs of this workflow job template will be allowed."
-#~ msgstr "有効な場合は、このワークフロージョブテンプレートの同時実行が許可されます。"
-
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkDeleteModal.js:46
 msgid "Are you sure you want to remove this link?"
 msgstr "このリンクを削除してもよろしいですか?"
 
 #: screens/Template/shared/WorkflowJobTemplate.helptext.js:14
 msgid "Prompt for variables on launch."
+msgstr ""
+
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:152
+msgid "User Guide"
 msgstr ""
 
 #: screens/Credential/CredentialList/CredentialList.js:115
@@ -5429,7 +5288,7 @@ msgstr "選択したジョブの取り消し"
 msgid "ID"
 msgstr "ID"
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:75
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:78
 msgid ""
 "This data is used to enhance\n"
 "future releases of the Software and to provide\n"
@@ -5594,7 +5453,7 @@ msgstr "認証情報名"
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.js:135
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.js:206
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:144
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:231
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:230
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:143
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:149
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:224
@@ -5760,7 +5619,7 @@ msgstr "チームを削除できませんでした。"
 msgid "Days of data to be retained"
 msgstr "データの保持日数"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:220
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:222
 msgid "Get subscriptions"
 msgstr "サブスクリプションの取得"
 
@@ -5980,10 +5839,6 @@ msgstr "インベントリーの同期の失敗"
 msgid "Deleting these instance groups could impact other resources that rely on them. Are you sure you want to delete anyway?"
 msgstr ""
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:195
-#~ msgid "Source Control Revision"
-#~ msgstr "ソースコントロールの改訂"
-
 #: components/Search/LookupTypeInput.js:88
 msgid "Case-insensitive version of endswith."
 msgstr "endswith で大文字小文字の区別なし。"
@@ -6133,14 +5988,6 @@ msgstr "フルノードリソースオブジェクトを取得できませんで
 msgid "Toggle Tools"
 msgstr "ツールの切り替え"
 
-#: components/Schedule/shared/UnsupportedScheduleForm.js:12
-#~ msgid ""
-#~ "This schedule uses complex rules that are not supported in the\n"
-#~ "UI.  Please use the API to manage this schedule."
-#~ msgstr ""
-#~ "このスケジュールは、でサポートされていない複雑なルールを使用しています\n"
-#~ "UI。このスケジュールを管理するには API を使用してください。"
-
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:349
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:186
 msgid "This inventory is currently being used by other resources. Are you sure you want to delete it?"
@@ -6189,8 +6036,8 @@ msgstr "秒"
 msgid "{intervalValue, plural, one {day} other {days}}"
 msgstr "{intervalValue, plural, one {day} other {days}}"
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:60
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:61
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:63
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:64
 msgid "User analytics"
 msgstr "ユーザーアナリティクス"
 
@@ -6198,10 +6045,6 @@ msgstr "ユーザーアナリティクス"
 #: components/ResourceAccessList/ResourceAccessListItem.js:68
 msgid "First name"
 msgstr "名"
-
-#: screens/Inventory/InventoryList/InventoryList.js:247
-#~ msgid "{0, plural, one {The inventory will be in a pending status until the final delete is processed.} other {The inventories will be in a pending status until the final delete is processed.}}"
-#~ msgstr "{0, plural, one {The inventory will be in a pending status until the final delete is processed.} other {The inventories will be in a pending status until the final delete is processed.}}"
 
 #: screens/Instances/Instance.js:61
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressList.js:105
@@ -6466,10 +6309,6 @@ msgstr ""
 "ユーザーに表示されるプロンプトとして使用する回答タイプまたは形式を選択します。\n"
 "各オプションの詳細については、\n"
 "Ansible Controller のドキュメントを参照してください。"
-
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:25
-#~ msgid "Concurrent jobs: If enabled, simultaneous runs of this workflow job template will be allowed."
-#~ msgstr "同時実行ジョブ: 有効な場合は、このワークフロージョブテンプレートの同時実行が許可されます。"
 
 #: components/NotificationList/NotificationList.js:203
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:144
@@ -6798,10 +6637,6 @@ msgstr ""
 msgid "Hosts by processor type"
 msgstr ""
 
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:49
-#~ msgid "{interval, plural, one {{interval} week} other {{interval} weeks}}"
-#~ msgstr "{interval, plural, one {{interval} week} other {{interval} weeks}}"
-
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:200
 msgid "Notification timed out"
 msgstr "通知がタイムアウトしました"
@@ -6840,10 +6675,6 @@ msgstr "このジョブのホストのステータス情報は利用できませ
 msgid "View inventory source details"
 msgstr "インベントリソース詳細の表示"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:338
-#~ msgid "This project is currently being used by other resources. Are you sure you want to delete it?"
-#~ msgstr "このプロジェクトは、現在他のリソースで使用されています。削除してもよろしいですか?"
-
 #: screens/InstanceGroup/Instances/InstanceList.js:260
 #: screens/Instances/InstancePeers/InstancePeerList.js:265
 #: screens/User/UserTeams/UserTeamList.js:209
@@ -6880,10 +6711,6 @@ msgstr ""
 msgid "Enables creation of a provisioning callback URL. Using the URL a host can contact {brandName} and request a configuration update using this job template."
 msgstr "プロビジョニングコールバック URL の作成を有効にします。この URL を使用してホストは {brandName} に接続でき、このジョブテンプレートを使用して接続の更新を要求できます。"
 
-#: screens/Inventory/shared/Inventory.helptext.js:55
-#~ msgid "View JSON examples at <0>www.json.org</0>"
-#~ msgstr "JSON のサンプルについては、<0>www.json.org</0> を参照してください。"
-
 #: components/AdHocCommands/AdHocDetailsStep.js:190
 #: components/HostToggle/HostToggle.js:65
 #: components/LaunchPrompt/steps/OtherPromptsStep.js:196
@@ -6915,7 +6742,7 @@ msgstr "承認"
 msgid "Greater than or equal to comparison."
 msgstr "Greater than or equal to の比較条件"
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:112
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:115
 msgid "Automation Analytics dashboard"
 msgstr "自動化アナリティクスダッシュボード"
 
@@ -7329,10 +7156,6 @@ msgstr ""
 msgid "HTTP Method"
 msgstr "HTTP メソッド"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:124
-msgid "A subscription manifest is an export of a Red Hat Subscription. To generate a subscription manifest, go to <0>access.redhat.com</0>. For more information, see the <1>User Guide</1>."
-msgstr "サブスクリプションマニフェストは、Red Hat サブスクリプションのエクスポートです。サブスクリプションマニフェストを生成するには、<0>access.redhat.com</0> にアクセスします。詳細は、『<1>ユーザーガイド</1>』を参照してください。"
-
 #: components/Workflow/WorkflowLegend.js:97
 msgid "Workflow"
 msgstr "ワークフロー"
@@ -7346,7 +7169,7 @@ msgstr "有効な値"
 msgid "Use one Annotation Tag per line, without commas."
 msgstr "コンマで区切らずに、1 行ごとに 1 つのアノテーションタグを指定します。"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:89
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:91
 msgid "Username / password"
 msgstr "ユーザー名 / パスワード"
 
@@ -7473,10 +7296,6 @@ msgstr "ファクトストレージ"
 #: screens/WorkflowApproval/WorkflowApproval.js:107
 msgid "View Workflow Approval Details"
 msgstr "ワークフロー承認の詳細の表示"
-
-#: components/AppContainer/PageHeaderToolbar.js:116
-#~ msgid "Help"
-#~ msgstr "ヘルプ"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionModal.js:124
 msgid "Close subscription modal"
@@ -7678,6 +7497,10 @@ msgstr "Less than or equal to の比較条件"
 msgid "Delete"
 msgstr "削除"
 
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:39
+msgid "By default, we collect and transmit analytics data on the service usage to Red Hat. There are two categories of data collected by the service. For more information, see <0>{0}</0>. Uncheck the following boxes to disable this feature."
+msgstr ""
+
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginSelected.js:52
 msgid "This field will be retrieved from an external secret management system using the specified credential."
 msgstr "このフィールドは、指定された認証情報を使用して外部のシークレット管理システムから取得されます。"
@@ -7728,6 +7551,10 @@ msgstr "作成日時"
 #: screens/Template/Survey/SurveyList.js:84
 msgid "This action will delete the following:"
 msgstr "このアクションにより、以下が削除されます。"
+
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:126
+msgid "A subscription manifest is an export of a Red Hat Subscription. To generate a subscription manifest, go to <0>access.redhat.com</0>. For more information, see the <1>{0}</1>."
+msgstr ""
 
 #: components/Schedule/ScheduleOccurrences/ScheduleOccurrences.js:52
 msgid "Local"
@@ -7794,6 +7621,7 @@ msgstr "インベントリーが見つかりません。"
 #: screens/Credential/shared/CredentialForm.js:345
 #: screens/Credential/shared/CredentialForm.js:350
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.js:102
+#: screens/Credential/shared/ExternalTestModal.js:100
 #: screens/HostMetrics/HostMetricsDeleteButton.js:168
 #: screens/Instances/Shared/RemoveInstanceButton.js:177
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:113
@@ -7881,11 +7709,6 @@ msgstr "インベントリーファイル"
 msgid "Go to last page"
 msgstr "最後のページに移動"
 
-#. js-lingui-explicit-id
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:195
-msgid "deleteExecutionEnvironments"
-msgstr ""
-
 #: screens/Job/JobOutput/shared/OutputToolbar.js:113
 msgid "Host Count"
 msgstr "ホスト数"
@@ -7903,7 +7726,7 @@ msgstr "コントロールノード"
 msgid "Subversion"
 msgstr "Subversion"
 
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:234
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:233
 msgid "Failed to delete one or more execution environments"
 msgstr "1 つ以上の実行環境を削除できませんでした。"
 
@@ -8124,8 +7947,8 @@ msgstr ""
 msgid "edit"
 msgstr ""
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:72
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:73
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:75
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:76
 msgid "Automation Analytics"
 msgstr "自動化アナリティクス"
 
@@ -8169,10 +7992,6 @@ msgstr "このアクションにより、以下の関連付けが解除されま
 #: components/JobCancelButton/JobCancelButton.js:92
 msgid "Confirm cancellation"
 msgstr "取り消しの確認"
-
-#: screens/Inventory/shared/InventoryGroupsDeleteModal.js:115
-#~ msgid "{0, plural, one {Are you sure you want delete the group below?} other {Are you sure you want delete the groups below?}}"
-#~ msgstr "{0, plural, one {Are you sure you want delete the group below?} other {Are you sure you want delete the groups below?}}"
 
 #: components/Sort/Sort.js:141
 msgid "Sort"
@@ -8226,10 +8045,6 @@ msgstr "{numJobsToCancel, plural, one {Cancel job} other {Cancel jobs}}"
 #: util/getRelatedResourceDeleteDetails.js:210
 msgid "Applications"
 msgstr "アプリケーション"
-
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:130
-#~ msgid "Day {0}"
-#~ msgstr "日 {0}"
 
 #: screens/Project/ProjectList/ProjectListItem.js:136
 msgid "Refresh project revision"
@@ -8399,14 +8214,6 @@ msgstr "コンテンツの読み込みが進行中"
 msgid "Mon"
 msgstr "月"
 
-#: screens/Template/shared/JobTemplate.helptext.js:33
-#~ msgid ""
-#~ "If enabled, the job template will prevent adding any inventory or organization instance groups to the list of preferred instances groups to run on.\n"
-#~ "Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied."
-#~ msgstr ""
-#~ "有効にすると、ジョブテンプレートによって、実行する優先インスタンスグループのリストにインベントリーまたは組織インスタンスグループが追加されなくなります。\n"
-#~ "注: この設定が有効で空のリストを指定した場合は、グローバルインスタンスグループが適用されます。"
-
 #: screens/Credential/shared/CredentialFormFields/CredentialField.js:53
 msgid "Replace"
 msgstr "置換"
@@ -8528,7 +8335,7 @@ msgstr ""
 msgid "Select a job to cancel"
 msgstr "取り消すジョブを選択してください"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:120
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:122
 msgid "Upload a .zip file"
 msgstr ".zip ファイルをアップロードする"
 
@@ -8669,17 +8476,9 @@ msgstr "Ansible ファクトに関連する現在の検索を削除して、こ�
 msgid "Image"
 msgstr "イメージ"
 
-#: screens/Instances/Shared/RemoveInstanceButton.js:85
-#~ msgid "{0, plural, one {This intance is currently being used by other resources. Are you sure you want to delete it?} other {Deprovisioning these instances could impact other resources that rely on them. Are you sure you want to delete anyway?}}"
-#~ msgstr "{0, plural, one {This intance is currently being used by other resources. Are you sure you want to delete it?} other {Deprovisioning these instances could impact other resources that rely on them. Are you sure you want to delete anyway?}}"
-
 #: screens/Instances/InstancePeers/InstancePeerList.js:300
 msgid "Select Peer Addresses"
 msgstr ""
-
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:14
-#~ msgid "Pass extra command line variables to the playbook. This is the -e or --extra-vars command line parameter for ansible-playbook. Provide key/value pairs using either YAML or JSON. Refer to the Ansible Controller documentation for example syntax."
-#~ msgstr "追加のコマンドライン変数を Playbook に渡します。これは、ansible-playbook の -e または --extra-vars コマンドラインパラメーターです。YAML または JSON のいずれかを使用してキーと値のペアを指定します。構文のサンプルについては Ansible Controller ドキュメントを参照してください。"
 
 #: screens/Application/ApplicationsList/ApplicationListItem.js:53
 #: screens/Application/ApplicationsList/ApplicationListItem.js:57
@@ -8960,13 +8759,6 @@ msgstr "JSON は利用できません"
 msgid "Group details"
 msgstr "グループの詳細"
 
-#: screens/Inventory/shared/Inventory.helptext.js:120
-#: screens/Inventory/shared/Inventory.helptext.js:139
-#~ msgid ""
-#~ "If you want the Inventory Source to update on\n"
-#~ "launch and on project update, click on Update on launch, and also go to"
-#~ msgstr "起動時およびプロジェクトの更新時にインベントリーソースを更新する場合は、起動時に更新をクリックして移動します"
-
 #: screens/Job/JobOutput/shared/OutputToolbar.js:101
 msgid "Play Count"
 msgstr "再生回数"
@@ -9038,14 +8830,6 @@ msgstr "ansible_facts による検索には特別な構文が必要です。詳�
 #: screens/TopologyView/Legend.js:237
 msgid "Link state types"
 msgstr "リンク状態のタイプ"
-
-#: screens/Inventory/shared/Inventory.helptext.js:79
-#~ msgid ""
-#~ "Control the level of output Ansible\n"
-#~ "will produce for inventory source update jobs."
-#~ msgstr ""
-#~ "インベントリーソースの更新ジョブ用に\n"
-#~ " Ansible が生成する出力のレベルを制御します。"
 
 #: components/Lookup/HostFilterLookup.js:352
 msgid ""
@@ -9181,10 +8965,6 @@ msgstr "なし (1回実行)"
 #: components/Schedule/shared/ScheduleFormFields.js:176
 msgid "Add exceptions"
 msgstr "例外の追加"
-
-#: components/Schedule/shared/ScheduleFormFields.js:43
-#~ msgid "Warning: {selectedValue} is a link to {0} and will be saved as that."
-#~ msgstr "警告:{selectedValue} は {0} へのリンクで、そのように保存されます。"
 
 #: screens/Inventory/InventoryList/InventoryList.js:263
 msgid "The inventories will be in a pending status until the final delete is processed."
@@ -9341,16 +9121,6 @@ msgstr "このジョブテンプレートが実行されるインスタンスグ
 #: screens/User/UserList/UserListItem.js:23
 msgid "System Auditor"
 msgstr "システム監査者"
-
-#: screens/Inventory/shared/Inventory.helptext.js:113
-#~ msgid ""
-#~ "Each time a job runs using this inventory,\n"
-#~ "refresh the inventory from the selected source before\n"
-#~ "executing job tasks."
-#~ msgstr ""
-#~ "このインベントリーでジョブを実行する際は常に、\n"
-#~ "選択されたソースのインベントリーを更新してから\n"
-#~ "ジョブのタスクを実行します。"
 
 #: components/Popover/Popover.js:34
 msgid "More information"
@@ -9604,16 +9374,6 @@ msgstr "ノード状態のタイプ"
 msgid "Past three years"
 msgstr ""
 
-#: screens/Inventory/shared/SmartInventoryForm.js:94
-#~ msgid ""
-#~ "Enter inventory variables using either JSON or YAML syntax.\n"
-#~ "Use the radio button to toggle between the two. Refer to the\n"
-#~ "Ansible Controller documentation for example syntax."
-#~ msgstr ""
-#~ "JSON または YAML 構文のいずれかを使用してインベントリー変数を入力します。\n"
-#~ "ラジオボタンを使用して構文間で切り替えを行います。\n"
-#~ "構文のサンプルについては Ansible Controller ドキュメントを参照してください。"
-
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.js:123
 msgid "LDAP4"
 msgstr "LDAP4"
@@ -9637,10 +9397,6 @@ msgstr "グループ {0} を削除できませんでした。"
 #: components/LaunchPrompt/steps/CredentialPasswordsStep.js:112
 msgid "Privilege escalation password"
 msgstr "権限昇格のパスワード"
-
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:33
-#~ msgid "{interval, plural, one {{interval} hour} other {{interval} hours}}"
-#~ msgstr "{interval, plural, one {{interval} hour} other {{interval} hours}}"
 
 #: components/PromptDetail/PromptDetail.js:46
 msgid "{minutes} min {seconds} sec"
@@ -9819,6 +9575,10 @@ msgstr "有効な変数"
 #: components/AppContainer/PageHeaderToolbar.js:177
 msgid "Logout"
 msgstr "ログアウト"
+
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:198
+msgid "These execution environments could be in use by other resources that rely on them. Are you sure you want to delete them anyway?"
+msgstr ""
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:122
 msgid "{0, selectordinal, one {The first {dayOfWeek}} two {The second {dayOfWeek}} =3 {The third {dayOfWeek}} =4 {The fourth {dayOfWeek}} =5 {The fifth {dayOfWeek}}}"
@@ -10018,10 +9778,6 @@ msgstr ""
 msgid "Webhook URL for this workflow job template."
 msgstr ""
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:36
-msgid "By default, we collect and transmit analytics data on the service usage to Red Hat. There are two categories of data collected by the service. For more information, see <0>this Tower documentation page</0>. Uncheck the following boxes to disable this feature."
-msgstr "デフォルトでは、サービスの使用状況に関する解析データを収集して、Red Hat に送信します。サービスが収集するデータにはカテゴリーが 2 種類あります。詳細情報は、<0>Tower のドキュメントページ<</0> を参照してください。この機能を無効にするには、以下のボックスのチェックを解除します。"
-
 #: screens/Setting/SettingList.js:63
 msgid "GitHub settings"
 msgstr "GitHub 設定"
@@ -10071,13 +9827,6 @@ msgstr "GitHub Enterprise チームでサインイン"
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/UnsavedChangesModal.js:17
 msgid "Unsaved changes modal"
 msgstr "保存されていない変更モーダル"
-
-#: screens/Inventory/shared/Inventory.helptext.js:100
-#~ msgid ""
-#~ "If checked, all variables for child groups\n"
-#~ "and hosts will be removed and replaced by those found\n"
-#~ "on the external source."
-#~ msgstr "チェックが付けられている場合、子グループおよびホストのすべての変数が削除され、外部ソースにあるものによって置き換えられます。"
 
 #: components/JobList/JobList.js:233
 #: components/StatusLabel/StatusLabel.js:45
@@ -10308,17 +10057,6 @@ msgstr "利用可能なノードへのリンク"
 msgid "Track submodules latest commit on branch"
 msgstr "ブランチでのサブモジュールの最新のコミットを追跡する"
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:6
-#~ msgid ""
-#~ "Provide a host pattern to further constrain\n"
-#~ "the list of hosts that will be managed or affected by the\n"
-#~ "playbook. Multiple patterns are allowed. Refer to Ansible\n"
-#~ "documentation for more information and examples on patterns."
-#~ msgstr ""
-#~ "Playbook によって管理されるか、またはその影響を受けるホストの一覧をさらに制限するためのホストのパターンを指定します。\n"
-#~ "複数のパターンが許可されます。\n"
-#~ "パターンについての詳細およびサンプルについては、Ansible ドキュメントを参照してください。"
-
 #: screens/Template/shared/JobTemplateForm.js:618
 msgid "Provisioning Callback details"
 msgstr "プロビジョニングコールバックの詳細"
@@ -10327,7 +10065,7 @@ msgstr "プロビジョニングコールバックの詳細"
 msgid "These are the modules that {brandName} supports running commands against."
 msgstr "これらは {brandName} がコマンドの実行をサポートするモジュールです。"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:63
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:65
 msgid ""
 "If you do not have a subscription, you can visit\n"
 "Red Hat to obtain a trial subscription."
@@ -10615,10 +10353,6 @@ msgstr "このジョブの出力は見つかりません"
 msgid "Logging settings"
 msgstr "ロギング設定"
 
-#: screens/Inventory/InventorySources/InventorySourceList.js:196
-#~ msgid "{0, plural, one {This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?} other {Deleting these inventory sources could impact other resources that rely on them. Are you sure you want to delete anyway}}"
-#~ msgstr "{0, plural, one {This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?} other {Deleting these inventory sources could impact other resources that rely on them. Are you sure you want to delete anyway}}"
-
 #: screens/Job/Job.js:163
 msgid "View all Jobs."
 msgstr "すべてのジョブを表示します。"
@@ -10661,10 +10395,6 @@ msgstr "最近のテンプレート"
 #: components/PromptDetail/PromptProjectDetail.js:62
 msgid "Update revision on job launch"
 msgstr "ジョブ起動時のリビジョン更新"
-
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:226
-#~ msgid "{numOccurrences, plural, one {After {numOccurrences} occurrence} other {After {numOccurrences} occurrences}}"
-#~ msgstr "{numOccurrences, plural, one {After {numOccurrences} occurrence} other {After {numOccurrences} occurrences}}"
 
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListDenyButton.js:19
 msgid "Select a row to deny"
@@ -10734,10 +10464,6 @@ msgstr "コマンド"
 #: components/LaunchButton/LaunchButton.js:56
 msgid "A job has already been launched"
 msgstr ""
-
-#: screens/Inventory/InventoryList/InventoryListItem.js:65
-#~ msgid "{0, plural, one {# source with sync failures.} other {# sources with sync failures.}}"
-#~ msgstr "{0, plural, one {# source with sync failures.} other {# sources with sync failures.}}"
 
 #: screens/Job/JobDetail/JobDetail.js:314
 msgid "Inventory Source"
@@ -10995,17 +10721,6 @@ msgstr ""
 msgid "Cancel lookup"
 msgstr "ルックアップの取り消し"
 
-#: screens/Inventory/shared/Inventory.helptext.js:93
-#~ msgid ""
-#~ "When not checked, local child\n"
-#~ "hosts and groups not found on the external source will remain\n"
-#~ "untouched by the inventory update process."
-#~ msgstr "チェックが付けられていない場合、外部ソースにないローカルの子ホストおよびグループは、インベントリーの更新プロセスによって処理されないままになります。"
-
-#: screens/Instances/Shared/InstanceForm.js:43
-#~ msgid "Select the port that Receptor will listen on for incoming connections. Default is 27199."
-#~ msgstr "Receptor が着信接続をリッスンするポートを選択します。デフォルトは 27199 です。"
-
 #: components/Schedule/shared/FrequencyDetailSubform.js:419
 msgid "Fifth"
 msgstr "第 5"
@@ -11075,9 +10790,9 @@ msgstr "作成者 (ユーザー名)"
 msgid "Organization"
 msgstr "組織"
 
-#: screens/Credential/shared/ExternalTestModal.js:77
-#~ msgid "Test External Credential"
-#~ msgstr "外部認証情報のテスト"
+#: screens/Credential/shared/ExternalTestModal.js:79
+msgid "Test External Credential"
+msgstr ""
 
 #: components/SelectedList/DraggableSelectedList.js:45
 msgid "Dragging cancelled. List is unchanged."
@@ -11141,18 +10856,6 @@ msgstr "関連付けの解除"
 #: screens/Instances/InstancePeers/InstancePeerListItem.js:84
 msgid "Total Jobs"
 msgstr "ジョブの合計"
-
-#: screens/Inventory/shared/Inventory.helptext.js:131
-#~ msgid ""
-#~ "After every project update where the SCM revision\n"
-#~ "changes, refresh the inventory from the selected source\n"
-#~ "before executing job tasks. This is intended for static content,\n"
-#~ "like the Ansible inventory .ini file format."
-#~ msgstr ""
-#~ "SCM リビジョンを変更するプロジェクトの毎回の更新後に、\n"
-#~ "選択されたソースのインベントリーを更新してからジョブのタスクを実行します。\n"
-#~ "これは、Ansible インベントリーの .ini ファイル形式のような静的コンテンツが対象であることが\n"
-#~ "意図されています。"
 
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:344
 msgid "Failed to delete inventory source {name}."
@@ -11294,10 +10997,6 @@ msgstr ""
 #: screens/Template/shared/WorkflowJobTemplate.helptext.js:21
 msgid "Prompt for verbosity on launch."
 msgstr ""
-
-#: screens/Inventory/shared/Inventory.helptext.js:66
-#~ msgid "View YAML examples at <0>docs.ansible.com</0>"
-#~ msgstr "<0>docs.ansible.com</0> での YAML サンプルの表示"
 
 #: screens/User/UserToken/UserToken.js:75
 msgid "View all tokens."
@@ -11757,13 +11456,6 @@ msgstr "失敗したホスト"
 msgid "Direct Keys"
 msgstr "ダイレクトキー"
 
-#: screens/Inventory/shared/Inventory.helptext.js:105
-#~ msgid ""
-#~ "When not checked, a merge will be performed,\n"
-#~ "combining local variables with those found on the\n"
-#~ "external source."
-#~ msgstr "チェックが付けられていない場合は、ローカル変数と外部ソースにあるものを組み合わせるマージが実行されます。"
-
 #: screens/HostMetrics/HostMetrics.js:132
 msgid "How many times was the host automated"
 msgstr ""
@@ -11804,7 +11496,7 @@ msgstr "入力の展開"
 #: screens/Organization/OrganizationList/OrganizationListItem.js:44
 #: screens/Organization/shared/OrganizationForm.js:114
 #: screens/Project/ProjectList/ProjectListItem.js:179
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:246
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:248
 #: screens/Team/TeamList/TeamListItem.js:33
 #: screens/Template/Survey/SurveyListItem.js:36
 #: screens/User/UserTokenList/UserTokenListItem.js:20
@@ -11933,7 +11625,7 @@ msgstr "LDAP ユーザー"
 msgid "Back to Organizations"
 msgstr "組織に戻る"
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:84
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:87
 msgid "Provide your Red Hat or Red Hat Satellite credentials to enable Automation Analytics."
 msgstr "Red Hat または Red Hat Satellite の認証情報を提供して、自動化アナリティクスを有効にします。"
 
@@ -11977,7 +11669,7 @@ msgstr "Kubernetes または OpenShift との認証に使用する認証情報�
 msgid "Survey preview modal"
 msgstr "Survey プレビューモーダル"
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:122
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:125
 msgid "Learn more about Automation Analytics"
 msgstr "自動化アナリティクスについて"
 

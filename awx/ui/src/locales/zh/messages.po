@@ -12,10 +12,6 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:334
-#~ msgid "Delete Project"
-#~ msgstr "删除项目"
-
 #: screens/TopologyView/Tooltip.js:290
 msgid "{forks, plural, one {# fork} other {# forks}}"
 msgstr "{forks, plural, one {# fork} other {# forks}}"
@@ -156,10 +152,6 @@ msgstr "（启动时提示）"
 msgid "Lookup typeahead"
 msgstr "查找 typeahead"
 
-#: screens/Login/Login.js:190
-#~ msgid "Welcome to {brandName}!"
-#~ msgstr "欢迎使用 {brandName}！"
-
 #: screens/Template/Survey/SurveyToolbar.js:106
 msgid "Survey Enabled"
 msgstr "启用问卷调查"
@@ -247,7 +239,7 @@ msgstr ""
 msgid "Select Input Inventories for the constructed inventory plugin."
 msgstr ""
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:59
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:61
 msgid ""
 "Welcome to Red Hat Ansible Automation Platform!\n"
 "Please complete the steps below to activate your subscription."
@@ -274,10 +266,6 @@ msgstr "任务计数"
 msgid "Template"
 msgstr "模板"
 
-#: screens/Inventory/shared/Inventory.helptext.js:167
-#~ msgid "Variables used to configure the inventory source. For a detailed description of how to configure this plugin, see <0>Inventory Plugins</0> in the documentation and the <1>{sourceType}</1> plugin configuration guide."
-#~ msgstr "用来配置清单源的变量。有关如何配置此插件的详细描述，请参阅文档中的<0>清单插件</0>部分，以及 <1>{sourceType}</1> 插件配置指南 。"
-
 #: components/Schedule/shared/FrequencyDetailSubform.js:207
 msgid "{intervalValue, plural, one {year} other {years}}"
 msgstr "{intervalValue, plural, one {year} other {years}}"
@@ -300,10 +288,6 @@ msgid ""
 "fetches the Github pull request number 62, in this example\n"
 "the branch needs to be \"pull/62/head\"."
 msgstr "第一次获取所有引用。第二次获取 Github 拉取请求号 62，在本示例中，分支需要为 \"pull/62/head\"。"
-
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:25
-#~ msgid "{interval, plural, one {{interval} minute} other {{interval} minutes}}"
-#~ msgstr "{interval, plural, one {{interval} 分钟} other {{interval} 分钟}}"
 
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:239
 msgid "Failed to delete one or more notification template."
@@ -519,12 +503,6 @@ msgstr "多项选择（多选）"
 msgid "Please select an end date/time that comes after the start date/time."
 msgstr "请选择一个比开始日期/时间晚的结束日期/时间。"
 
-#: screens/Setting/Logging/LoggingEdit/LoggingEdit.js:129
-#~ msgid ""
-#~ "Cannot enable log aggregator without providing\n"
-#~ "logging aggregator host and logging aggregator type."
-#~ msgstr "在不提供日志记录聚合器主机和日志记录聚合器类型的情况下，无法启用日志聚合器。"
-
 #: components/Schedule/shared/FrequencyDetailSubform.js:291
 msgid "Wed"
 msgstr "周三"
@@ -546,9 +524,9 @@ msgstr ""
 msgid "Event"
 msgstr "事件"
 
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginTestAlert.js:39
-#~ msgid "Something went wrong with the request to test this credential and metadata."
-#~ msgstr "请求测试此凭证和元数据时出错。"
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginTestAlert.js:41
+msgid "Something went wrong with the request to test this credential and metadata."
+msgstr ""
 
 #: screens/Setting/SettingList.js:67
 msgid "Google OAuth 2 settings"
@@ -905,7 +883,7 @@ msgstr "未找到执行环境。"
 msgid "View and edit debug options"
 msgstr ""
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:195
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:197
 msgid ""
 "Provide your Red Hat or Red Hat Satellite credentials\n"
 "below and you can choose from a list of your available subscriptions.\n"
@@ -919,6 +897,7 @@ msgstr "清单源同步"
 
 #: components/LaunchPrompt/steps/OtherPromptsStep.js:137
 #: components/Workflow/WorkflowLinkHelp.js:41
+#: screens/Credential/shared/ExternalTestModal.js:91
 #: screens/Template/shared/JobTemplateForm.js:217
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.js:52
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/RunStep.js:25
@@ -959,7 +938,7 @@ msgid "1 (Info)"
 msgstr "1（信息）"
 
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.js:203
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:228
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:227
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:221
 msgid "Deletion error"
 msgstr "删除错误"
@@ -1029,21 +1008,9 @@ msgstr "设置类别"
 msgid "Back to Credentials"
 msgstr "返回到凭证"
 
-#: screens/Project/shared/Project.helptext.js:108
-#~ msgid ""
-#~ "Enable content signing to verify that the content \n"
-#~ "has remained secure when a project is synced. \n"
-#~ "If the content has been tampered with, the \n"
-#~ "job will not run."
-#~ msgstr "启用内容签名以验证内容在项目同步时仍然保持安全。如果内容已被篡改，任务将不会运行。"
-
 #: screens/Team/Team.js:78
 msgid "View all Teams."
 msgstr "查看所有团队。"
-
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:41
-#~ msgid "{interval, plural, one {{interval} day} other {{interval} days}}"
-#~ msgstr "{interval, plural, one {{interval} 天} other {{interval} 天}}"
 
 #: util/validators.js:186
 msgid "This field must be a regular expression"
@@ -1166,10 +1133,6 @@ msgstr "查看所有管理作业"
 msgid "Delete application"
 msgstr "创建应用"
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:5
-#~ msgid "Select an inventory for the workflow. This inventory is applied to all workflow nodes that prompt for an inventory."
-#~ msgstr "为工作流选择清单。此清单应用于提示清单的所有工作流节点。"
-
 #: screens/Job/Job.helptext.js:15
 #: screens/Template/shared/JobTemplate.helptext.js:33
 msgid "Provide a host pattern to further constrain the list of hosts that will be managed or affected by the playbook. Multiple patterns are allowed. Refer to Ansible documentation for more information and examples on patterns."
@@ -1218,10 +1181,6 @@ msgstr "您确定要删除此工作流中的所有节点吗？"
 #: screens/InstanceGroup/shared/ContainerGroupForm.js:69
 msgid "Maximum number of jobs to run concurrently on this group.\\n          Zero means no limit will be enforced."
 msgstr ""
-
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:15
-#~ msgid "Enable Webhook for this workflow job template."
-#~ msgstr "为此工作流作业模板启用 Webhook。"
 
 #: components/Lookup/HostFilterLookup.js:121
 msgid "Last job"
@@ -1936,7 +1895,7 @@ msgstr "前往第一页"
 msgid "details."
 msgstr "详情。"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:83
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:85
 msgid "Subscription manifest"
 msgstr "订阅清单"
 
@@ -1984,8 +1943,8 @@ msgstr "密钥"
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:264
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:343
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:448
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:93
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:208
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:96
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:210
 #: screens/User/shared/UserForm.js:77
 #: screens/User/UserDetail/UserDetail.js:70
 #: screens/User/UserList/UserList.js:122
@@ -2021,10 +1980,6 @@ msgstr "此项目当前处于同步状态，在同步过程完成前无法点击
 msgid "Administration"
 msgstr "管理"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:351
-#~ msgid "Failed to delete project."
-#~ msgstr "删除项目失败。"
-
 #: components/RelatedTemplateList/RelatedTemplateList.js:193
 #: components/TemplateList/TemplateList.js:240
 msgid "Label"
@@ -2038,7 +1993,7 @@ msgstr "恢复所有"
 msgid "Allowed URIs list, space separated"
 msgstr "允许的 URI 列表，以空格分开"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:80
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:82
 msgid "Select your Ansible Automation Platform subscription to use."
 msgstr "选择要使用的 Ansible Automation Platform 订阅。"
 
@@ -2056,8 +2011,8 @@ msgstr "品牌徽标"
 
 #: screens/Login/Login.js:237
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:75
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:102
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:216
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:105
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:218
 #: screens/Template/Survey/SurveyQuestionForm.js:84
 #: screens/User/shared/UserForm.js:89
 msgid "Password"
@@ -2092,7 +2047,7 @@ msgstr "任务模板"
 msgid "Install Bundle"
 msgstr "安装捆绑包"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:251
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:253
 msgid "Clear subscription"
 msgstr "清除订阅"
 
@@ -2169,10 +2124,6 @@ msgstr "创建新用户"
 #: screens/Template/shared/WebhookSubForm.js:158
 msgid "a new webhook key will be generated on save."
 msgstr "在保存时会生成一个新的 WEBHOOK 密钥。"
-
-#: screens/Inventory/InventoryList/InventoryList.js:240
-#~ msgid "{0, plural, one {This inventory is currently being used by some templates. Are you sure you want to delete it?} other {Deleting these inventories could impact some templates that rely on them. Are you sure you want to delete anyway?}}"
-#~ msgstr "{0, plural, one {This inventory is currently being used by some templates. Are you sure you want to delete it?} other {Deleting these inventories could impact some templates that rely on them. Are you sure you want to delete anyway?}}"
 
 #: screens/Credential/shared/CredentialFormFields/GceFileUploadField.js:47
 msgid "Expected at least one of client_email, project_id or private_key to be present in the file."
@@ -2298,6 +2249,7 @@ msgid "Failed Hosts"
 msgstr "失败的主机"
 
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:133
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:197
 msgid "This execution environment is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "其他资源目前正在使用此执行环境。确定要删除它吗？"
 
@@ -2359,10 +2311,6 @@ msgstr "执行环境复制成功"
 msgid "Log In"
 msgstr "登录"
 
-#: screens/Login/Login.js:191
-#~ msgid "Please log in"
-#~ msgstr "请登录"
-
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:346
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:183
 msgid "Delete Inventory"
@@ -2376,15 +2324,6 @@ msgstr "出现错误..."
 #: screens/TopologyView/Header.js:70
 msgid "Zoom in"
 msgstr "放大"
-
-#: screens/Inventory/shared/Inventory.helptext.js:147
-#~ msgid ""
-#~ "Time in seconds to consider an inventory sync\n"
-#~ "to be current. During job runs and callbacks the task system will\n"
-#~ "evaluate the timestamp of the latest sync. If it is older than\n"
-#~ "Cache Timeout, it is not considered current, and a new\n"
-#~ "inventory sync will be performed."
-#~ msgstr "将清单同步视为最新的时间（以秒为单位）。在作业运行和回调期间，任务系统将评估最新同步的时间戳。如果它比缓存超时旧，则不被视为最新，并且会执行新的清单同步。"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:336
 msgid "Cancel Constructed Inventory Source Sync"
@@ -2419,7 +2358,7 @@ msgstr ""
 msgid "Job Slice"
 msgstr "作业分片"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:119
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:121
 msgid "Red Hat subscription manifest"
 msgstr "Red Hat 订阅清单"
 
@@ -2514,7 +2453,7 @@ msgstr "由 {0} - {1} 批准"
 msgid "Host Started"
 msgstr "主机已启动"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:98
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:100
 msgid "Upload a Red Hat Subscription Manifest containing your subscription. To generate your subscription manifest, go to <0>subscription allocations</0> on the Red Hat Customer Portal."
 msgstr "上传一个包含了您的订阅的 Red Hat Subscription Manifest。要生成订阅清单，请访问红帽用户门户网站中的 <0>subscription allocations</0>。"
 
@@ -2568,17 +2507,6 @@ msgstr "源控制类型"
 #: screens/Job/JobOutput/HostEventModal.js:127
 msgid "No result found"
 msgstr "未找到结果"
-
-#: screens/Inventory/shared/Inventory.helptext.js:84
-#~ msgid ""
-#~ "If checked, any hosts and groups that were\n"
-#~ "previously present on the external source but are now removed\n"
-#~ "will be removed from the inventory. Hosts and groups\n"
-#~ "that were not managed by the inventory source will be promoted\n"
-#~ "to the next manually created group or if there is no manually\n"
-#~ "created group to promote them into, they will be left in the \"all\"\n"
-#~ "default group for the inventory."
-#~ msgstr "如果选中，以前存在于外部源上的但现已被删除的任何主机和组都将从清单中删除。不由清单源管理的主机和组将提升到下一个手动创建的组，如果没有手动创建组来提升它们，则它们将保留在清单的“all”默认组中。"
 
 #: screens/User/UserToken/UserToken.js:101
 msgid "View Tokens"
@@ -2705,10 +2633,6 @@ msgstr "调度详情"
 #: components/DisassociateButton/DisassociateButton.js:88
 msgid "Select a row to disassociate"
 msgstr "选择要解除关联的行"
-
-#: screens/Inventory/shared/InventoryGroupsDeleteModal.js:86
-#~ msgid "{0, plural, one {Delete Group?} other {Delete Groups?}}"
-#~ msgstr "{0, plural, one {Delete Group?} other {Delete Groups?}}"
 
 #: screens/Instances/InstancePeers/InstancePeerList.js:245
 msgid "Instance Name"
@@ -3018,7 +2942,7 @@ msgstr "禁用"
 msgid "Default Execution Environment"
 msgstr "默认执行环境"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:118
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:120
 msgid "Invalid file format. Please upload a valid Red Hat Subscription Manifest."
 msgstr "无效的文件格式。请上传有效的红帽订阅清单。"
 
@@ -3036,10 +2960,6 @@ msgstr "解除关联角色！"
 #: screens/Instances/InstancePeers/InstancePeerListItem.js:93
 msgid "Last Health Check"
 msgstr "最后的健康检查"
-
-#: screens/Instances/Shared/RemoveInstanceButton.js:178
-#~ msgid "This action will remove the following instances:"
-#~ msgstr "此操作将删除以下实例："
 
 #: routeConfig.js:164
 #: screens/TopologyView/TopologyView.js:44
@@ -3149,6 +3069,10 @@ msgstr ""
 msgid "Delete Credential"
 msgstr "删除凭证"
 
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:54
+msgid "this Tower documentation page"
+msgstr ""
+
 #: screens/Inventory/shared/Inventory.helptext.js:59
 msgid "View JSON examples at"
 msgstr ""
@@ -3232,10 +3156,6 @@ msgstr "这将取消此工作流中的所有后续节点"
 #: screens/Project/ProjectDetail/ProjectDetail.js:140
 msgid "FINISHED:"
 msgstr ""
-
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:57
-#~ msgid "{interval, plural, one {{interval} month} other {{interval} months}}"
-#~ msgstr "{interval, plural, one {{interval} 月} other {{interval} 月}}"
 
 #: screens/InstanceGroup/Instances/InstanceList.js:354
 msgid "<0>Note: Manually associated instances may be automatically disassociated from an instance group if the instance is managed by <1>policy rules.</1></0>"
@@ -3448,10 +3368,6 @@ msgstr "0（警告）"
 msgid "Prompt for job type on launch."
 msgstr ""
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:26
-#~ msgid "Webhooks: Enable Webhook for this workflow job template."
-#~ msgstr "Webhook：为此工作流任务模板启用 Webhook。"
-
 #: screens/Setting/SettingList.js:98
 msgid "Jobs settings"
 msgstr "作业设置"
@@ -3567,10 +3483,6 @@ msgstr "折叠"
 msgid "Execution node"
 msgstr "执行节点"
 
-#: screens/Application/ApplicationTokens/ApplicationTokenList.js:158
-#~ msgid "Failed to delete one or more tokens."
-#~ msgstr "删除一个或多个令牌失败。"
-
 #: screens/Template/shared/WebhookSubForm.js:196
 msgid "Update webhook key"
 msgstr "轮转 Webhook 密钥"
@@ -3627,7 +3539,7 @@ msgstr "返回到团队"
 msgid "Injector configuration"
 msgstr "注入程序配置"
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:63
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:66
 msgid ""
 "This data is used to enhance\n"
 "future releases of the Tower Software and help\n"
@@ -3675,14 +3587,6 @@ msgstr "取消恢复"
 msgid "select module"
 msgstr "选择模块"
 
-#: screens/Inventory/shared/Inventory.helptext.js:195
-#~ msgid ""
-#~ "If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on.\n"
-#~ "Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied."
-#~ msgstr ""
-#~ "如果启用，清单将阻止将任何机构实例组添加到运行关联作业模板的首选实例组列表中。 \n"
-#~ " 注： 如果启用此设置，并且提供了空列表，则会应用全局实例组。"
-
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:60
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:139
 msgid "Use TLS"
@@ -3724,10 +3628,6 @@ msgstr "选项详情"
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionModal.js:138
 msgid "No subscriptions found"
 msgstr "未找到订阅"
-
-#: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:182
-#~ msgid "{0, plural, one {This instance group is currently being by other resources. Are you sure you want to delete it?} other {Deleting these instance groups could impact other resources that rely on them. Are you sure you want to delete anyway?}}"
-#~ msgstr "{0, plural, one {This instance group is currently being by other resources. Are you sure you want to delete it?} other {Deleting these instance groups could impact other resources that rely on them. Are you sure you want to delete anyway?}}"
 
 #: screens/HostMetrics/HostMetricsListItem.js:22
 msgid "Last automation"
@@ -3838,13 +3738,6 @@ msgstr "为工作流选择分支。此分支应用于提示分支的所有任务
 #: screens/ManagementJob/ManagementJob.js:135
 msgid "Management job not found."
 msgstr "未找到管理作业。"
-
-#: screens/Inventory/shared/Inventory.helptext.js:192
-#~ msgid ""
-#~ "The inventory file\n"
-#~ "to be synced by this source. You can select from\n"
-#~ "the dropdown or enter a file within the input."
-#~ msgstr "要由此源同步的清单文件。您可以从下拉列表中选择，或者在输入中输入一个文件。"
 
 #: components/LaunchPrompt/steps/InstanceGroupsStep.js:98
 #: components/LaunchPrompt/steps/useInstanceGroupsStep.js:32
@@ -3986,13 +3879,6 @@ msgstr "社交登录"
 msgid "Delete Workflow Approval"
 msgstr "删除工作流批准"
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:11
-#~ msgid ""
-#~ "Optional labels that describe this workflow job template,\n"
-#~ "such as 'dev' or 'test'. Labels can be used to group and filter\n"
-#~ "workflow job templates and completed jobs."
-#~ msgstr "描述此工作流作业模板的可选标签，如 'dev' 或 'test'。标签可用于对工作流作业模板和完成的作业进行分组和过滤。"
-
 #: screens/SubscriptionUsage/SubscriptionUsageChart.js:119
 msgid "Last recalculation date:"
 msgstr ""
@@ -4031,9 +3917,9 @@ msgstr "资源已删除"
 msgid "YAML:"
 msgstr "YAML："
 
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginTestAlert.js:44
-#~ msgid "Test passed"
-#~ msgstr "测试通过"
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginTestAlert.js:46
+msgid "Test passed"
+msgstr ""
 
 #: components/ResourceAccessList/DeleteRoleConfirmationModal.js:14
 msgid "Team"
@@ -4071,7 +3957,7 @@ msgstr "凭证输入源"
 msgid "Visualizer"
 msgstr "可视化工具"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:226
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:228
 msgid "Get subscription"
 msgstr "获取订阅"
 
@@ -4083,7 +3969,7 @@ msgstr "全局可用的执行环境无法重新分配给特定机构"
 msgid "Lookup select"
 msgstr "查找选择"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:256
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:258
 msgid "Clear subscription selection"
 msgstr "清除订阅选择"
 
@@ -4205,20 +4091,10 @@ msgstr "缺少资源"
 msgid "Group"
 msgstr "组"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:67
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:75
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:69
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:77
 msgid "Request subscription"
 msgstr "请求订阅"
-
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:65
-#~ msgid "{interval, plural, one {{interval} year} other {{interval} years}}"
-#~ msgstr "{interval, plural, one {{interval} 年} other {{interval} 年}}"
-
-#: screens/Inventory/shared/Inventory.helptext.js:153
-#~ msgid ""
-#~ "Retrieve the enabled state from the given dict of host variables.\n"
-#~ "The enabled variable may be specified using dot notation, e.g: 'foo.bar'"
-#~ msgstr "从给定的主机变量字典中检索启用的状态。启用的变量可以使用点符号来指定，如 'foo.bar'"
 
 #: screens/Setting/Jobs/Jobs.js:26
 msgid "View Jobs settings"
@@ -4240,10 +4116,6 @@ msgstr "未找到项目。"
 #: screens/InstanceGroup/shared/InstanceGroupForm.js:32
 msgid "Minimum number of instances that will be automatically assigned to this group when new instances come online."
 msgstr ""
-
-#: components/LaunchPrompt/LaunchPrompt.js:130
-#~ msgid "Launch | {0}"
-#~ msgstr "启动 | {0}"
 
 #: screens/Organization/Organization.js:156
 msgid "View all Organizations."
@@ -4501,7 +4373,7 @@ msgid ""
 "Grafana URL."
 msgstr "Grafana 服务器的基本 URL - /api/annotations 端点将自动添加到基本 Grafana URL。"
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:34
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:37
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.js:205
 msgid "User and Automation Analytics"
 msgstr "用户和 Automation Analytics"
@@ -4763,7 +4635,7 @@ msgstr "查看作业 {0}"
 msgid "Sign in with SAML {samlIDP}"
 msgstr "使用 SAML {samlIDP} 登陆"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:162
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:164
 msgid "Browse"
 msgstr "浏览"
 
@@ -5084,10 +4956,6 @@ msgstr "可拖动列表以重新排序和删除选定的项目。"
 msgid "Collapse all job events"
 msgstr "折叠所有作业事件"
 
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:194
-#~ msgid "{0, plural, one {This execution environment is currently being used by other resources. Are you sure you want to delete it?} other {These execution environments could be in use by other resources that rely on them. Are you sure you want to delete them anyway?}}"
-#~ msgstr "{0, plural, one {This execution environment is currently being used by other resources. Are you sure you want to delete it?} other {These execution environments could be in use by other resources that rely on them. Are you sure you want to delete them anyway?}}"
-
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:244
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:246
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:74
@@ -5344,16 +5212,16 @@ msgstr "字段以值开头。"
 msgid "GitHub"
 msgstr "GitHub"
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:16
-#~ msgid "If enabled, simultaneous runs of this workflow job template will be allowed."
-#~ msgstr "如果启用，将允许同时运行此工作流任务模板。"
-
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkDeleteModal.js:46
 msgid "Are you sure you want to remove this link?"
 msgstr "您确定要从删除这个链接吗？"
 
 #: screens/Template/shared/WorkflowJobTemplate.helptext.js:14
 msgid "Prompt for variables on launch."
+msgstr ""
+
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:152
+msgid "User Guide"
 msgstr ""
 
 #: screens/Credential/CredentialList/CredentialList.js:115
@@ -5402,7 +5270,7 @@ msgstr "取消所选作业"
 msgid "ID"
 msgstr "ID"
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:75
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:78
 msgid ""
 "This data is used to enhance\n"
 "future releases of the Software and to provide\n"
@@ -5570,7 +5438,7 @@ msgstr "凭证名称"
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.js:135
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.js:206
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:144
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:231
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:230
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:143
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:149
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:224
@@ -5736,7 +5604,7 @@ msgstr "删除团队失败。"
 msgid "Days of data to be retained"
 msgstr "数据被保留的天数"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:220
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:222
 msgid "Get subscriptions"
 msgstr "获取订阅"
 
@@ -5954,10 +5822,6 @@ msgstr "清单同步失败"
 msgid "Deleting these instance groups could impact other resources that rely on them. Are you sure you want to delete anyway?"
 msgstr ""
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:195
-#~ msgid "Source Control Revision"
-#~ msgstr "源控制修订"
-
 #: components/Search/LookupTypeInput.js:88
 msgid "Case-insensitive version of endswith."
 msgstr "结尾不区分大小写的版本。"
@@ -6107,12 +5971,6 @@ msgstr "获取完整节点资源对象失败。"
 msgid "Toggle Tools"
 msgstr "切换工具"
 
-#: components/Schedule/shared/UnsupportedScheduleForm.js:12
-#~ msgid ""
-#~ "This schedule uses complex rules that are not supported in the\n"
-#~ "UI.  Please use the API to manage this schedule."
-#~ msgstr "UI 尚不支持复杂的规则，请使用 API 管理此调度。"
-
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:349
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:186
 msgid "This inventory is currently being used by other resources. Are you sure you want to delete it?"
@@ -6161,8 +6019,8 @@ msgstr "秒"
 msgid "{intervalValue, plural, one {day} other {days}}"
 msgstr "{intervalValue, plural, one {day} other {days}}"
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:60
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:61
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:63
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:64
 msgid "User analytics"
 msgstr "用户分析"
 
@@ -6170,10 +6028,6 @@ msgstr "用户分析"
 #: components/ResourceAccessList/ResourceAccessListItem.js:68
 msgid "First name"
 msgstr "名字"
-
-#: screens/Inventory/InventoryList/InventoryList.js:247
-#~ msgid "{0, plural, one {The inventory will be in a pending status until the final delete is processed.} other {The inventories will be in a pending status until the final delete is processed.}}"
-#~ msgstr "{0, plural, one {The inventory will be in a pending status until the final delete is processed.} other {The inventories will be in a pending status until the final delete is processed.}}"
 
 #: screens/Instances/Instance.js:61
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressList.js:105
@@ -6435,10 +6289,6 @@ msgid ""
 "Refer to the Ansible Controller Documentation for more additional\n"
 "information about each option."
 msgstr "选择您想要作为用户提示的回答类型或格式。请参阅 Ansible 控制器文档来了解每个选项的更多其他信息。"
-
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:25
-#~ msgid "Concurrent jobs: If enabled, simultaneous runs of this workflow job template will be allowed."
-#~ msgstr "并行作业：如果启用，将允许同时运行此工作流作业模板。"
 
 #: components/NotificationList/NotificationList.js:203
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:144
@@ -6765,10 +6615,6 @@ msgstr "您可以在消息中应用多个可能的变量。如需更多信息，
 msgid "Hosts by processor type"
 msgstr ""
 
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:49
-#~ msgid "{interval, plural, one {{interval} week} other {{interval} weeks}}"
-#~ msgstr "{interval, plural, one {{interval} 周} other {{interval} 周}}"
-
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:200
 msgid "Notification timed out"
 msgstr "通知超时"
@@ -6807,10 +6653,6 @@ msgstr "此作业的主机状态信息不可用。"
 msgid "View inventory source details"
 msgstr "查看清单源详情"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:338
-#~ msgid "This project is currently being used by other resources. Are you sure you want to delete it?"
-#~ msgstr "其他资源目前正在使用这个项目。确定要删除它吗？"
-
 #: screens/InstanceGroup/Instances/InstanceList.js:260
 #: screens/Instances/InstancePeers/InstancePeerList.js:265
 #: screens/User/UserTeams/UserTeamList.js:209
@@ -6847,10 +6689,6 @@ msgstr ""
 msgid "Enables creation of a provisioning callback URL. Using the URL a host can contact {brandName} and request a configuration update using this job template."
 msgstr "允许创建部署回调 URL。使用此 URL，主机可访问 {brandName} 并使用此任务模板请求配置更新。"
 
-#: screens/Inventory/shared/Inventory.helptext.js:55
-#~ msgid "View JSON examples at <0>www.json.org</0>"
-#~ msgstr "在 <0>www.json.org</0> 查看 JSON 示例"
-
 #: components/AdHocCommands/AdHocDetailsStep.js:190
 #: components/HostToggle/HostToggle.js:65
 #: components/LaunchPrompt/steps/OtherPromptsStep.js:196
@@ -6882,7 +6720,7 @@ msgstr "批准"
 msgid "Greater than or equal to comparison."
 msgstr "大于或等于比较。"
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:112
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:115
 msgid "Automation Analytics dashboard"
 msgstr "自动化分析仪表盘"
 
@@ -7287,10 +7125,6 @@ msgstr ""
 msgid "HTTP Method"
 msgstr "HTTP 方法"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:124
-msgid "A subscription manifest is an export of a Red Hat Subscription. To generate a subscription manifest, go to <0>access.redhat.com</0>. For more information, see the <1>User Guide</1>."
-msgstr "订阅清单是红帽订阅的一个导出。要生成订阅清单，请访问 <0>access.redhat.com</0>。如需更多信息，请参阅<1>用户指南</1>。"
-
 #: components/Workflow/WorkflowLegend.js:97
 msgid "Workflow"
 msgstr "工作流"
@@ -7304,7 +7138,7 @@ msgstr "启用的值"
 msgid "Use one Annotation Tag per line, without commas."
 msgstr "每行使用一个注解标签，不带逗号。"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:89
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:91
 msgid "Username / password"
 msgstr "用户名/密码"
 
@@ -7431,10 +7265,6 @@ msgstr "事实存储"
 #: screens/WorkflowApproval/WorkflowApproval.js:107
 msgid "View Workflow Approval Details"
 msgstr "查看工作流批准详情"
-
-#: components/AppContainer/PageHeaderToolbar.js:116
-#~ msgid "Help"
-#~ msgstr "帮助"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionModal.js:124
 msgid "Close subscription modal"
@@ -7636,6 +7466,10 @@ msgstr "小于或等于比较。"
 msgid "Delete"
 msgstr "删除"
 
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:39
+msgid "By default, we collect and transmit analytics data on the service usage to Red Hat. There are two categories of data collected by the service. For more information, see <0>{0}</0>. Uncheck the following boxes to disable this feature."
+msgstr ""
+
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginSelected.js:52
 msgid "This field will be retrieved from an external secret management system using the specified credential."
 msgstr "此字段将使用指定的凭证从外部 secret 管理系统检索。"
@@ -7686,6 +7520,10 @@ msgstr "创建"
 #: screens/Template/Survey/SurveyList.js:84
 msgid "This action will delete the following:"
 msgstr "此操作将删除以下内容："
+
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:126
+msgid "A subscription manifest is an export of a Red Hat Subscription. To generate a subscription manifest, go to <0>access.redhat.com</0>. For more information, see the <1>{0}</1>."
+msgstr ""
 
 #: components/Schedule/ScheduleOccurrences/ScheduleOccurrences.js:52
 msgid "Local"
@@ -7752,6 +7590,7 @@ msgstr "未找到清单。"
 #: screens/Credential/shared/CredentialForm.js:345
 #: screens/Credential/shared/CredentialForm.js:350
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.js:102
+#: screens/Credential/shared/ExternalTestModal.js:100
 #: screens/HostMetrics/HostMetricsDeleteButton.js:168
 #: screens/Instances/Shared/RemoveInstanceButton.js:177
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:113
@@ -7839,11 +7678,6 @@ msgstr "清单文件"
 msgid "Go to last page"
 msgstr "进入最后页"
 
-#. js-lingui-explicit-id
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:195
-msgid "deleteExecutionEnvironments"
-msgstr ""
-
 #: screens/Job/JobOutput/shared/OutputToolbar.js:113
 msgid "Host Count"
 msgstr "主机计数"
@@ -7861,7 +7695,7 @@ msgstr "控制节点"
 msgid "Subversion"
 msgstr "Subversion"
 
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:234
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:233
 msgid "Failed to delete one or more execution environments"
 msgstr "删除一个或多个执行环境失败"
 
@@ -8080,8 +7914,8 @@ msgstr ""
 msgid "edit"
 msgstr ""
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:72
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:73
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:75
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:76
 msgid "Automation Analytics"
 msgstr "自动化分析"
 
@@ -8125,10 +7959,6 @@ msgstr "此操作将解除以下关联："
 #: components/JobCancelButton/JobCancelButton.js:92
 msgid "Confirm cancellation"
 msgstr "确认取消"
-
-#: screens/Inventory/shared/InventoryGroupsDeleteModal.js:115
-#~ msgid "{0, plural, one {Are you sure you want delete the group below?} other {Are you sure you want delete the groups below?}}"
-#~ msgstr "{0, plural, one {Are you sure you want delete the group below?} other {Are you sure you want delete the groups below?}}"
 
 #: components/Sort/Sort.js:141
 msgid "Sort"
@@ -8182,10 +8012,6 @@ msgstr "{numJobsToCancel, plural, one {Cancel job} other {Cancel jobs}}"
 #: util/getRelatedResourceDeleteDetails.js:210
 msgid "Applications"
 msgstr "应用程序"
-
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:130
-#~ msgid "Day {0}"
-#~ msgstr "天 {0}"
 
 #: screens/Project/ProjectList/ProjectListItem.js:136
 msgid "Refresh project revision"
@@ -8355,14 +8181,6 @@ msgstr "content-loading-in-progress"
 msgid "Mon"
 msgstr "周一"
 
-#: screens/Template/shared/JobTemplate.helptext.js:33
-#~ msgid ""
-#~ "If enabled, the job template will prevent adding any inventory or organization instance groups to the list of preferred instances groups to run on.\n"
-#~ "Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied."
-#~ msgstr ""
-#~ "如果启用，作业模板将阻止将任何清单或机构实例组添加到要运行的首选实例组列表中。 \n"
-#~ " 注： 如果启用此设置，并且提供了空列表，则会应用全局实例组。"
-
 #: screens/Credential/shared/CredentialFormFields/CredentialField.js:53
 msgid "Replace"
 msgstr "替换"
@@ -8484,7 +8302,7 @@ msgstr ""
 msgid "Select a job to cancel"
 msgstr "选择要取消的作业"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:120
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:122
 msgid "Upload a .zip file"
 msgstr "上传一个 .zip 文件"
 
@@ -8625,17 +8443,9 @@ msgstr "删除与 ansible 事实相关的当前搜索，以启用使用此键的
 msgid "Image"
 msgstr "镜像"
 
-#: screens/Instances/Shared/RemoveInstanceButton.js:85
-#~ msgid "{0, plural, one {This intance is currently being used by other resources. Are you sure you want to delete it?} other {Deprovisioning these instances could impact other resources that rely on them. Are you sure you want to delete anyway?}}"
-#~ msgstr "{0, plural, one {This intance is currently being used by other resources. Are you sure you want to delete it?} other {Deprovisioning these instances could impact other resources that rely on them. Are you sure you want to delete anyway?}}"
-
 #: screens/Instances/InstancePeers/InstancePeerList.js:300
 msgid "Select Peer Addresses"
 msgstr ""
-
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:14
-#~ msgid "Pass extra command line variables to the playbook. This is the -e or --extra-vars command line parameter for ansible-playbook. Provide key/value pairs using either YAML or JSON. Refer to the Ansible Controller documentation for example syntax."
-#~ msgstr "向 playbook 传递额外的命令行变量。这是 ansible-playbook 的 -e 或 --extra-vars 命令行参数。使用 YAML 或 JSON 提供键/值对。示例语法请参阅 Ansible 控制器文档。"
 
 #: screens/Application/ApplicationsList/ApplicationListItem.js:53
 #: screens/Application/ApplicationsList/ApplicationListItem.js:57
@@ -8916,13 +8726,6 @@ msgstr "没有可用的 JSON"
 msgid "Group details"
 msgstr "组详情"
 
-#: screens/Inventory/shared/Inventory.helptext.js:120
-#: screens/Inventory/shared/Inventory.helptext.js:139
-#~ msgid ""
-#~ "If you want the Inventory Source to update on\n"
-#~ "launch and on project update, click on Update on launch, and also go to"
-#~ msgstr "如果您希望清单源在启动和项目更新时更新，请点启动时更新，并进入"
-
 #: screens/Job/JobOutput/shared/OutputToolbar.js:101
 msgid "Play Count"
 msgstr "play 数量"
@@ -8994,12 +8797,6 @@ msgstr "根据 ansible_facts 搜索需要特殊的语法。请参阅"
 #: screens/TopologyView/Legend.js:237
 msgid "Link state types"
 msgstr "链接状态类型"
-
-#: screens/Inventory/shared/Inventory.helptext.js:79
-#~ msgid ""
-#~ "Control the level of output Ansible\n"
-#~ "will produce for inventory source update jobs."
-#~ msgstr "控制 Ansible 为清单源更新作业生成的输出级别。"
 
 #: components/Lookup/HostFilterLookup.js:352
 msgid ""
@@ -9133,10 +8930,6 @@ msgstr "无（运行一次）"
 #: components/Schedule/shared/ScheduleFormFields.js:176
 msgid "Add exceptions"
 msgstr "添加例外"
-
-#: components/Schedule/shared/ScheduleFormFields.js:43
-#~ msgid "Warning: {selectedValue} is a link to {0} and will be saved as that."
-#~ msgstr "警告： {selectedValue} 是到 {0} 的链接，并将保存为到其中。"
 
 #: screens/Inventory/InventoryList/InventoryList.js:263
 msgid "The inventories will be in a pending status until the final delete is processed."
@@ -9293,13 +9086,6 @@ msgstr "选择要运行此任务模板的实例组。"
 #: screens/User/UserList/UserListItem.js:23
 msgid "System Auditor"
 msgstr "系统审核员"
-
-#: screens/Inventory/shared/Inventory.helptext.js:113
-#~ msgid ""
-#~ "Each time a job runs using this inventory,\n"
-#~ "refresh the inventory from the selected source before\n"
-#~ "executing job tasks."
-#~ msgstr "每次使用此清单运行作业时，请在执行作业前从所选源中刷新清单。"
 
 #: components/Popover/Popover.js:34
 msgid "More information"
@@ -9553,13 +9339,6 @@ msgstr "节点状态类型"
 msgid "Past three years"
 msgstr ""
 
-#: screens/Inventory/shared/SmartInventoryForm.js:94
-#~ msgid ""
-#~ "Enter inventory variables using either JSON or YAML syntax.\n"
-#~ "Use the radio button to toggle between the two. Refer to the\n"
-#~ "Ansible Controller documentation for example syntax."
-#~ msgstr "使用 JSON 或 YAML 语法输入清单变量。使用单选按钮在两者之间切换。示例语法请参阅 Ansible 控制器文档。"
-
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.js:123
 msgid "LDAP4"
 msgstr "LDAP4"
@@ -9583,10 +9362,6 @@ msgstr "删除组 {0} 失败。"
 #: components/LaunchPrompt/steps/CredentialPasswordsStep.js:112
 msgid "Privilege escalation password"
 msgstr "权限升级密码"
-
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:33
-#~ msgid "{interval, plural, one {{interval} hour} other {{interval} hours}}"
-#~ msgstr "{interval, plural, one {{interval} 小时} other {{interval} 小时}}"
 
 #: components/PromptDetail/PromptDetail.js:46
 msgid "{minutes} min {seconds} sec"
@@ -9765,6 +9540,10 @@ msgstr "启用的变量"
 #: components/AppContainer/PageHeaderToolbar.js:177
 msgid "Logout"
 msgstr "退出"
+
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:198
+msgid "These execution environments could be in use by other resources that rely on them. Are you sure you want to delete them anyway?"
+msgstr ""
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:122
 msgid "{0, selectordinal, one {The first {dayOfWeek}} two {The second {dayOfWeek}} =3 {The third {dayOfWeek}} =4 {The fourth {dayOfWeek}} =5 {The fifth {dayOfWeek}}}"
@@ -9964,10 +9743,6 @@ msgstr ""
 msgid "Webhook URL for this workflow job template."
 msgstr ""
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:36
-msgid "By default, we collect and transmit analytics data on the service usage to Red Hat. There are two categories of data collected by the service. For more information, see <0>this Tower documentation page</0>. Uncheck the following boxes to disable this feature."
-msgstr "默认情况下，我们会收集关于服务使用情况的分析数据并将其传送到红帽。服务收集的数据分为两类。如需更多信息，请参阅<0>此 Tower 文档页</0>。取消选择以下复选框以禁用此功能。"
-
 #: screens/Setting/SettingList.js:63
 msgid "GitHub settings"
 msgstr "GitHub 设置"
@@ -10017,13 +9792,6 @@ msgstr "使用 GitHub Enterprise Teams 登录"
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/UnsavedChangesModal.js:17
 msgid "Unsaved changes modal"
 msgstr "未保存的修改 modal"
-
-#: screens/Inventory/shared/Inventory.helptext.js:100
-#~ msgid ""
-#~ "If checked, all variables for child groups\n"
-#~ "and hosts will be removed and replaced by those found\n"
-#~ "on the external source."
-#~ msgstr "如果选中，子组和主机的所有变量都将被删除，并替换为外部源上的变量。"
 
 #: components/JobList/JobList.js:233
 #: components/StatusLabel/StatusLabel.js:45
@@ -10252,14 +10020,6 @@ msgstr "链接到可用节点"
 msgid "Track submodules latest commit on branch"
 msgstr "跟踪分支中的最新提交"
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:6
-#~ msgid ""
-#~ "Provide a host pattern to further constrain\n"
-#~ "the list of hosts that will be managed or affected by the\n"
-#~ "playbook. Multiple patterns are allowed. Refer to Ansible\n"
-#~ "documentation for more information and examples on patterns."
-#~ msgstr "提供主机模式以进一步限制受 playbook 管理或影响的主机列表。允许使用多种模式。请参阅 Ansible 文档，以了解更多有关模式的信息和示例。"
-
 #: screens/Template/shared/JobTemplateForm.js:618
 msgid "Provisioning Callback details"
 msgstr "置备回调详情"
@@ -10268,7 +10028,7 @@ msgstr "置备回调详情"
 msgid "These are the modules that {brandName} supports running commands against."
 msgstr "这些是 {brandName} 支持运行命令的模块。"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:63
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:65
 msgid ""
 "If you do not have a subscription, you can visit\n"
 "Red Hat to obtain a trial subscription."
@@ -10556,10 +10316,6 @@ msgstr "没有为该作业找到输出。"
 msgid "Logging settings"
 msgstr "日志设置"
 
-#: screens/Inventory/InventorySources/InventorySourceList.js:196
-#~ msgid "{0, plural, one {This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?} other {Deleting these inventory sources could impact other resources that rely on them. Are you sure you want to delete anyway}}"
-#~ msgstr "{0, plural, one {This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?} other {Deleting these inventory sources could impact other resources that rely on them. Are you sure you want to delete anyway}}"
-
 #: screens/Job/Job.js:163
 msgid "View all Jobs."
 msgstr "查看所有作业"
@@ -10602,10 +10358,6 @@ msgstr "最近模板"
 #: components/PromptDetail/PromptProjectDetail.js:62
 msgid "Update revision on job launch"
 msgstr "启动作业时更新修订"
-
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:226
-#~ msgid "{numOccurrences, plural, one {After {numOccurrences} occurrence} other {After {numOccurrences} occurrences}}"
-#~ msgstr "{numOccurrences, plural, one {After {numOccurrences} 事件发生} other {After {numOccurrences} 事件发生}}"
 
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListDenyButton.js:19
 msgid "Select a row to deny"
@@ -10675,10 +10427,6 @@ msgstr "命令"
 #: components/LaunchButton/LaunchButton.js:56
 msgid "A job has already been launched"
 msgstr ""
-
-#: screens/Inventory/InventoryList/InventoryListItem.js:65
-#~ msgid "{0, plural, one {# source with sync failures.} other {# sources with sync failures.}}"
-#~ msgstr "{0, plural, one {# source with sync failures.} other {# sources with sync failures.}}"
 
 #: screens/Job/JobDetail/JobDetail.js:314
 msgid "Inventory Source"
@@ -10933,17 +10681,6 @@ msgstr "允许由此机构管理的最大主机数。默认值为 0，表示无�
 msgid "Cancel lookup"
 msgstr "取消查找"
 
-#: screens/Inventory/shared/Inventory.helptext.js:93
-#~ msgid ""
-#~ "When not checked, local child\n"
-#~ "hosts and groups not found on the external source will remain\n"
-#~ "untouched by the inventory update process."
-#~ msgstr "如果没有选中，外部源上没有的本地子主机和组将在清单更新过程中保持不变。"
-
-#: screens/Instances/Shared/InstanceForm.js:43
-#~ msgid "Select the port that Receptor will listen on for incoming connections. Default is 27199."
-#~ msgstr "选择 Receptor 将侦听传入连接的端口。默认为 27199。"
-
 #: components/Schedule/shared/FrequencyDetailSubform.js:419
 msgid "Fifth"
 msgstr "第五"
@@ -11013,9 +10750,9 @@ msgstr "创建者（用户名）"
 msgid "Organization"
 msgstr "机构"
 
-#: screens/Credential/shared/ExternalTestModal.js:77
-#~ msgid "Test External Credential"
-#~ msgstr "测试外部凭证"
+#: screens/Credential/shared/ExternalTestModal.js:79
+msgid "Test External Credential"
+msgstr ""
 
 #: components/SelectedList/DraggableSelectedList.js:45
 msgid "Dragging cancelled. List is unchanged."
@@ -11079,14 +10816,6 @@ msgstr "解除关联"
 #: screens/Instances/InstancePeers/InstancePeerListItem.js:84
 msgid "Total Jobs"
 msgstr "作业总数"
-
-#: screens/Inventory/shared/Inventory.helptext.js:131
-#~ msgid ""
-#~ "After every project update where the SCM revision\n"
-#~ "changes, refresh the inventory from the selected source\n"
-#~ "before executing job tasks. This is intended for static content,\n"
-#~ "like the Ansible inventory .ini file format."
-#~ msgstr "因 SCM 修订版本变更进行每次项目更新后，请在执行作业任务前从所选源刷新清单。这是面向静态内容，如 Ansible 清单 .ini 文件格式。"
 
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:344
 msgid "Failed to delete inventory source {name}."
@@ -11230,10 +10959,6 @@ msgstr ""
 #: screens/Template/shared/WorkflowJobTemplate.helptext.js:21
 msgid "Prompt for verbosity on launch."
 msgstr ""
-
-#: screens/Inventory/shared/Inventory.helptext.js:66
-#~ msgid "View YAML examples at <0>docs.ansible.com</0>"
-#~ msgstr "在 <0>docs.ansible.com</0> 查看 YAML 示例"
 
 #: screens/User/UserToken/UserToken.js:75
 msgid "View all tokens."
@@ -11693,13 +11418,6 @@ msgstr "失败的主机"
 msgid "Direct Keys"
 msgstr "直接密钥"
 
-#: screens/Inventory/shared/Inventory.helptext.js:105
-#~ msgid ""
-#~ "When not checked, a merge will be performed,\n"
-#~ "combining local variables with those found on the\n"
-#~ "external source."
-#~ msgstr "如果没有选中，就会执行合并，将本地变量与外部源上的变量合并。"
-
 #: screens/HostMetrics/HostMetrics.js:132
 msgid "How many times was the host automated"
 msgstr ""
@@ -11740,7 +11458,7 @@ msgstr "展开输入"
 #: screens/Organization/OrganizationList/OrganizationListItem.js:44
 #: screens/Organization/shared/OrganizationForm.js:114
 #: screens/Project/ProjectList/ProjectListItem.js:179
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:246
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:248
 #: screens/Team/TeamList/TeamListItem.js:33
 #: screens/Template/Survey/SurveyListItem.js:36
 #: screens/User/UserTokenList/UserTokenListItem.js:20
@@ -11869,7 +11587,7 @@ msgstr "LDAP 用户"
 msgid "Back to Organizations"
 msgstr "返回到机构"
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:84
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:87
 msgid "Provide your Red Hat or Red Hat Satellite credentials to enable Automation Analytics."
 msgstr "提供您的 Red Hat 或 Red Hat Satellite 凭证以启用 Automation Analytics。"
 
@@ -11913,7 +11631,7 @@ msgstr "与 Kubernetes 或 OpenShift 进行身份验证的凭证。必须为“K
 msgid "Survey preview modal"
 msgstr "问卷调查预览模态"
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:122
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:125
 msgid "Learn more about Automation Analytics"
 msgstr "了解更多有关 Automation Analytics 的信息"
 
