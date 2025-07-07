@@ -7729,9 +7729,6 @@ msgstr "Selección de convergencia"
 #: screens/Template/shared/JobTemplate.helptext.js:45
 msgid "If enabled, show the changes made by Ansible tasks, where supported. This is equivalent to Ansible's --diff mode."
 msgstr "Si se habilita esta opción, muestre los cambios realizados por las tareas de Ansible, cuando sea compatible. Esto es equivalente al modo --diff de Ansible."
-"Si se habilita esta opción, muestre los cambios realizados\n"
-"por las tareas de Ansible, donde sea compatible. Esto es equivalente\n"
-"al modo --diff de Ansible."
 
 #: components/Lookup/HostFilterLookup.js:411
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:244
