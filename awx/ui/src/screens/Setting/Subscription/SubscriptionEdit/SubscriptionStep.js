@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Trans, t } from '@lingui/macro';
+import { Trans, msg } from '@lingui/macro';
 import { useField, useFormikContext } from 'formik';
 import styled from 'styled-components';
 import { TimesIcon } from '@patternfly/react-icons';
@@ -21,6 +21,7 @@ import useModal from 'hooks/useModal';
 import FormField, { PasswordField } from 'components/FormField';
 import Popover from 'components/Popover';
 import SubscriptionModal from './SubscriptionModal';
+import { useLingui } from '@lingui/react';
 
 const LICENSELINK = 'https://www.ansible.com/license';
 const FileUploadField = styled(FormGroup)`
@@ -31,6 +32,7 @@ const FileUploadField = styled(FormGroup)`
 `;
 
 function SubscriptionStep() {
+  const { i18n } = useLingui();
   const config = useConfig();
   const hasValidKey = Boolean(config?.license_info?.valid_key);
 
@@ -56,15 +58,15 @@ function SubscriptionStep() {
       {!hasValidKey && (
         <>
           <b>
-            {t`Welcome to Red Hat Ansible Automation Platform!
-              Please complete the steps below to activate your subscription.`}
+            {i18n._(msg`Welcome to Red Hat Ansible Automation Platform!
+              Please complete the steps below to activate your subscription.`)}
           </b>
           <p>
-            {t`If you do not have a subscription, you can visit
-            Red Hat to obtain a trial subscription.`}
+            {i18n._(msg`If you do not have a subscription, you can visit
+            Red Hat to obtain a trial subscription.`)}
           </p>
           <Button
-            aria-label={t`Request subscription`}
+            aria-label={i18n._(msg`Request subscription`)}
             component="a"
             href={LICENSELINK}
             ouiaId="request-subscription-button"
@@ -72,21 +74,21 @@ function SubscriptionStep() {
             variant="secondary"
             rel="noopener noreferrer"
           >
-            {t`Request subscription`}
+            {i18n._(msg`Request subscription`)}
           </Button>
           <Divider />
         </>
       )}
-      <p>{t`Select your Ansible Automation Platform subscription to use.`}</p>
+      <p>{i18n._(msg`Select your Ansible Automation Platform subscription to use.`)}</p>
       <ToggleGroup>
         <ToggleGroupItem
-          text={t`Subscription manifest`}
+          text={i18n._(msg`Subscription manifest`)}
           isSelected={isSelected === 'uploadManifest'}
           onChange={() => setIsSelected('uploadManifest')}
           id="subscription-manifest"
         />
         <ToggleGroupItem
-          text={t`Username / password`}
+          text={i18n._(msg`Username / password`)}
           isSelected={isSelected === 'selectSubscription'}
           onChange={() => setIsSelected('selectSubscription')}
           id="username-password"
@@ -115,9 +117,9 @@ function SubscriptionStep() {
           <FileUploadField
             fieldId="subscription-manifest"
             validated={manifestMeta.error ? 'error' : 'default'}
-            helperTextInvalid={t`Invalid file format. Please upload a valid Red Hat Subscription Manifest.`}
-            label={t`Red Hat subscription manifest`}
-            helperText={t`Upload a .zip file`}
+            helperTextInvalid={i18n._(msg`Invalid file format. Please upload a valid Red Hat Subscription Manifest.`)}
+            label={i18n._(msg`Red Hat subscription manifest`)}
+            helperText={i18n._(msg`Upload a .zip file`)}
             labelIcon={
               <Popover
                 content={
@@ -147,7 +149,7 @@ function SubscriptionStep() {
                       ouiaId="import-license-link"
                       isInline
                     >
-                      User Guide
+                      {i18n._(msg`User Guide`)}
                     </Button>
                     .
                   </Trans>
@@ -159,7 +161,7 @@ function SubscriptionStep() {
               id="upload-manifest"
               value={manifest.value}
               filename={manifestFilename.value}
-              browseButtonText={t`Browse`}
+              browseButtonText={i18n._(msg`Browse`)}
               isDisabled={!config?.me?.is_superuser}
               dropzoneProps={{
                 accept: '.zip',
@@ -192,10 +194,10 @@ function SubscriptionStep() {
       ) : (
         <>
           <p>
-            {t`Provide your Red Hat or Red Hat Satellite credentials
+            {i18n._(msg`Provide your Red Hat or Red Hat Satellite credentials
                  below and you can choose from a list of your available subscriptions.
                  The credentials you use will be stored for future use in
-                 retrieving renewal or expanded subscriptions.`}
+                 retrieving renewal or expanded subscriptions.`)}
           </p>
           <Flex
             direction={{ default: 'column', md: 'row' }}
@@ -205,7 +207,7 @@ function SubscriptionStep() {
           >
             <FormField
               id="username-field"
-              label={t`Username`}
+              label={i18n._(msg`Username`)}
               name="username"
               type="text"
               isDisabled={!config.me.is_superuser}
@@ -213,17 +215,17 @@ function SubscriptionStep() {
             <PasswordField
               id="password-field"
               name="password"
-              label={t`Password`}
+              label={i18n._(msg`Password`)}
               isDisabled={!config.me.is_superuser}
             />
             <Button
-              aria-label={t`Get subscriptions`}
+              aria-label={i18n._(msg`Get subscriptions`)}
               ouiaId="subscription-modal-button"
               onClick={toggleModal}
               style={{ maxWidth: 'fit-content' }}
               isDisabled={!(username.value && password.value)}
             >
-              {t`Get subscription`}
+              {i18n._(msg`Get subscription`)}
             </Button>
             {isModalOpen && (
               <SubscriptionModal
@@ -243,17 +245,17 @@ function SubscriptionStep() {
               alignSelf={{ default: 'alignSelfFlexStart' }}
               spaceItems={{ default: 'spaceItemsMd' }}
             >
-              <b>{t`Selected`}</b>
+              <b>{i18n._(msg`Selected`)}</b>
               <FlexItem>
                 <i>{subscription?.value?.subscription_name}</i>
                 <Tooltip
                   trigger="mouseenter focus click"
-                  content={t`Clear subscription`}
+                  content={i18n._(msg`Clear subscription`)}
                 >
                   <Button
                     onClick={() => subscriptionHelpers.setValue(null)}
                     variant="plain"
-                    aria-label={t`Clear subscription selection`}
+                    aria-label={i18n._(msg`Clear subscription selection`)}
                     ouiaId="clear-subscription-selection"
                   >
                     <TimesIcon />
