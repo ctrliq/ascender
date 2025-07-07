@@ -1,10 +1,10 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2018-12-10 10:08-0500\n"
+"POT-Creation-Date: 2025-07-07 21:07+0000\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: @lingui/cli\n"
-"Language: en\n"
+"Language: zh\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "PO-Revision-Date: \n"
@@ -233,7 +233,7 @@ msgstr "要重新调整调查问题的顺序，将问题拖放到所需的位置
 #: screens/Inventory/shared/ConstructedInventoryHint.js:339
 #: screens/Inventory/shared/ConstructedInventoryHint.js:348
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "复制到剪贴板"
 
 #: screens/Inventory/shared/ConstructedInventoryForm.js:99
 msgid "Select Input Inventories for the constructed inventory plugin."
@@ -1164,7 +1164,7 @@ msgstr "版权"
 
 #: screens/Instances/Instances.js:31
 msgid "Edit Instance"
-msgstr ""
+msgstr "编辑实例"
 
 #: screens/Setting/TACACS/TACACS.js:26
 msgid "View TACACS+ settings"
@@ -2351,7 +2351,7 @@ msgstr "启用外部日志记录"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:122
 msgid "Allow branch override"
-msgstr ""
+msgstr "允许分支覆写"
 
 #: components/JobList/JobListItem.js:316
 #: screens/Job/JobDetail/JobDetail.js:406
@@ -2443,7 +2443,7 @@ msgstr "JSON"
 
 #: screens/HostMetrics/HostMetrics.js:128
 msgid "Last automated"
-msgstr ""
+msgstr "最后自动"
 
 #: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:8
 msgid "Approved by {0} - {1}"
@@ -2619,7 +2619,7 @@ msgstr "实例 ID"
 
 #: components/AppContainer/PageHeaderToolbar.js:108
 msgid "Info"
-msgstr "Info"
+msgstr ""
 
 #: screens/Setting/Settings.js:83
 msgid "LDAP 1"
@@ -2688,7 +2688,7 @@ msgstr "选择主机"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:269
 msgid "Cache Timeout"
-msgstr ""
+msgstr "缓存超时"
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:322
@@ -2750,7 +2750,7 @@ msgstr "点击这个按钮使用所选凭证和指定的输入验证到 secret �
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:293
 msgid "Created"
-msgstr ""
+msgstr "创建"
 
 #: screens/Setting/Subscription/Subscription.js:31
 msgid "View Settings"
@@ -2878,7 +2878,7 @@ msgstr "此操作将从所选团队中解除该用户的所有角色。"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:341
 msgid "Delete"
-msgstr ""
+msgstr "删除"
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:335
@@ -2888,12 +2888,12 @@ msgstr ""
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:101
 msgid "Delete the project before syncing"
-msgstr ""
+msgstr "在同步前删除项目"
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:178
 msgid "Description"
-msgstr ""
+msgstr "描述"
 
 #: screens/Job/JobDetail/JobDetail.js:383
 msgid "Controller Node"
@@ -2902,7 +2902,7 @@ msgstr "控制器节点"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:95
 msgid "Discard local changes before syncing"
-msgstr ""
+msgstr "在同步前丢弃本地更改"
 
 #: screens/Template/shared/WebhookSubForm.js:102
 msgid "Choose a Webhook Service"
@@ -2910,7 +2910,7 @@ msgstr "选择 Webhook 服务"
 
 #: screens/HostMetrics/HostMetrics.js:122
 msgid "First automated"
-msgstr ""
+msgstr "第一个自动的"
 
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressList.js:126
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressListItem.js:29
@@ -3032,7 +3032,7 @@ msgstr "无"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:314
 msgid "Edit"
-msgstr ""
+msgstr "编辑"
 
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:354
 msgid "Local Time Zone"
@@ -3134,7 +3134,7 @@ msgstr "点击节点图标显示详细信息。"
 #: screens/HostMetrics/HostMetrics.js:134
 #: screens/HostMetrics/HostMetricsListItem.js:25
 msgid "Automation"
-msgstr ""
+msgstr "自动化"
 
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:100
 msgid "Select items from list"
@@ -3460,7 +3460,7 @@ msgstr ""
 #: screens/HostMetrics/HostMetrics.js:117
 #: screens/HostMetrics/HostMetricsListItem.js:18
 msgid "Hostname"
-msgstr ""
+msgstr "主机名"
 
 #: screens/Setting/SettingList.js:128
 msgid "User Interface settings"
@@ -4313,7 +4313,7 @@ msgstr "删除一个或多个组失败。"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:193
 msgid "Manual"
-msgstr ""
+msgstr "手动"
 
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:204
 msgid "IRC server password"
@@ -4464,7 +4464,7 @@ msgstr "没有找到项。"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:177
 msgid "Name"
-msgstr ""
+msgstr "名称"
 
 #: components/JobList/JobList.js:250
 #: components/JobList/JobListItem.js:102
@@ -4473,7 +4473,7 @@ msgstr "完成时间"
 
 #: components/Workflow/WorkflowTools.js:177
 msgid "Pan Right"
-msgstr "Pan Right"
+msgstr ""
 
 #: components/JobList/JobListCancelButton.js:170
 msgid "{numJobsToCancel, plural, one {This action will cancel the following job:} other {This action will cancel the following jobs:}}"
@@ -4680,7 +4680,7 @@ msgstr "选择频率"
 
 #: components/Workflow/WorkflowTools.js:133
 msgid "Pan Left"
-msgstr "Pan Left"
+msgstr ""
 
 #: screens/HostMetrics/HostMetrics.js:126
 msgid "When was the host last automated"
@@ -4776,7 +4776,7 @@ msgstr "对 id 字段进行精确搜索。"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:181
 msgid "Organization"
-msgstr ""
+msgstr "机构（Organization）"
 
 #: screens/Job/JobOutput/JobOutputSearch.js:104
 msgid "Debug"
@@ -4934,7 +4934,7 @@ msgstr "复制执行环境失败"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:282
 msgid "Project Base Path"
-msgstr ""
+msgstr "项目基本路径"
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:321
@@ -5130,7 +5130,7 @@ msgstr "返回到"
 #: screens/Instances/InstanceList/InstanceListItem.js:239
 #: screens/Instances/InstancePeers/InstancePeerListItem.js:89
 msgid "Auto"
-msgstr "Auto"
+msgstr "自动"
 
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:132
 msgid "Delete All Groups and Hosts"
@@ -5310,7 +5310,7 @@ msgstr ""
 
 #: components/Workflow/WorkflowTools.js:144
 msgid "Pan Up"
-msgstr "Pan Up"
+msgstr ""
 
 #: components/ResourceAccessList/DeleteRoleConfirmationModal.js:51
 msgid "Are you sure you want to remove {0} access from {username}?"
@@ -5501,7 +5501,7 @@ msgstr "已弃用"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:202
 msgid "Successfully copied to clipboard!"
-msgstr ""
+msgstr "成功复制至剪贴板！"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:533
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:169
@@ -5536,7 +5536,7 @@ msgstr "用户"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:214
 msgid "Sync for revision"
-msgstr ""
+msgstr "修订版本同步"
 
 #: screens/Setting/SettingList.js:71
 msgid "LDAP settings"
@@ -5557,11 +5557,11 @@ msgstr "Forks"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:70
 msgid "Parameter"
-msgstr ""
+msgstr "参数"
 
 #: components/Schedule/shared/FrequencyDetailSubform.js:401
 msgid "The"
-msgstr "The"
+msgstr ""
 
 #: screens/Inventory/shared/Inventory.helptext.js:74
 msgid "docs.ansible.com"
@@ -5585,7 +5585,7 @@ msgstr "用户必须用来获取此应用令牌的授予类型"
 
 #: screens/Job/JobOutput/HostEventModal.js:123
 msgid "Play"
-msgstr "Play"
+msgstr ""
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.js:111
 #: screens/Setting/Settings.js:69
@@ -5756,7 +5756,7 @@ msgstr "周中日"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:110
 msgid "Track submodules latest commit on branch"
-msgstr ""
+msgstr "跟踪分支中的最新提交"
 
 #: components/LaunchPrompt/steps/CredentialPasswordsStep.js:104
 msgid "Private key passphrase"
@@ -5988,7 +5988,7 @@ msgstr "第三"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:116
 msgid "Update revision on job launch"
-msgstr ""
+msgstr "启动作业时更新修订"
 
 #: components/ExecutionEnvironmentDetail/ExecutionEnvironmentDetail.js:115
 msgid "Execution environment is missing or deleted."
@@ -7046,7 +7046,7 @@ msgstr "用户详情"
 
 #: screens/Inventory/shared/Inventory.helptext.js:195
 msgid "If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on. Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied."
-msgstr ""
+msgstr "如果启用，则该清单将阻止将任何机构实例组添加到运行相关作业模板的首选实例组列表中。注：如果启用了此设置，且提供了空列表，则会应用全局实例组。"
 
 #: screens/NotificationTemplate/shared/Notifications.helptext.js:34
 #: screens/NotificationTemplate/shared/Notifications.helptext.js:63
@@ -7744,7 +7744,7 @@ msgstr "选择通知类型"
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:87
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironmentForm.js:116
 msgid "Pull"
-msgstr "Pull"
+msgstr ""
 
 #: screens/Setting/shared/RevertAllAlert.js:39
 msgid ""
@@ -9171,7 +9171,7 @@ msgstr "是"
 #: screens/TopologyView/Header.js:55
 #: screens/TopologyView/Header.js:58
 msgid "Refresh"
-msgstr ""
+msgstr "刷新"
 
 #: screens/InstanceGroup/InstanceGroups.js:19
 #: screens/InstanceGroup/InstanceGroups.js:29
@@ -9255,7 +9255,7 @@ msgstr "Pagerduty"
 
 #: components/Workflow/WorkflowTools.js:166
 msgid "Pan Down"
-msgstr "Pan Down"
+msgstr ""
 
 #: screens/Application/Application/Application.js:97
 msgid "Application not found."

@@ -1,10 +1,10 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2018-12-10 10:08-0500\n"
+"POT-Creation-Date: 2025-07-07 21:07+0000\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: @lingui/cli\n"
-"Language: en\n"
+"Language: ja\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "PO-Revision-Date: \n"
@@ -233,7 +233,7 @@ msgstr "Survey の質問を並べ替えるには、目的の場所にドラッ�
 #: screens/Inventory/shared/ConstructedInventoryHint.js:339
 #: screens/Inventory/shared/ConstructedInventoryHint.js:348
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "クリップボードにコピーする"
 
 #: screens/Inventory/shared/ConstructedInventoryForm.js:99
 msgid "Select Input Inventories for the constructed inventory plugin."
@@ -1170,7 +1170,7 @@ msgstr "著作権"
 
 #: screens/Instances/Instances.js:31
 msgid "Edit Instance"
-msgstr ""
+msgstr "インスタンスの編集"
 
 #: screens/Setting/TACACS/TACACS.js:26
 msgid "View TACACS+ settings"
@@ -2355,7 +2355,7 @@ msgstr "外部ログの有効化"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:122
 msgid "Allow branch override"
-msgstr ""
+msgstr "ブランチの上書き許可"
 
 #: components/JobList/JobListItem.js:316
 #: screens/Job/JobDetail/JobDetail.js:406
@@ -2447,7 +2447,7 @@ msgstr "JSON"
 
 #: screens/HostMetrics/HostMetrics.js:128
 msgid "Last automated"
-msgstr ""
+msgstr "最後に自動化"
 
 #: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:8
 msgid "Approved by {0} - {1}"
@@ -2692,7 +2692,7 @@ msgstr "ホストの選択"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:269
 msgid "Cache Timeout"
-msgstr ""
+msgstr "キャッシュタイムアウト"
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:322
@@ -2754,7 +2754,7 @@ msgstr "このボタンをクリックして、選択した認証情報と指定
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:293
 msgid "Created"
-msgstr ""
+msgstr "作成済み"
 
 #: screens/Setting/Subscription/Subscription.js:31
 msgid "View Settings"
@@ -2882,7 +2882,7 @@ msgstr "このアクションにより、このユーザーのすべてのロー
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:341
 msgid "Delete"
-msgstr ""
+msgstr "削除"
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:335
@@ -2892,12 +2892,12 @@ msgstr ""
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:101
 msgid "Delete the project before syncing"
-msgstr ""
+msgstr "プロジェクトを削除してから同期する"
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:178
 msgid "Description"
-msgstr ""
+msgstr "説明"
 
 #: screens/Job/JobDetail/JobDetail.js:383
 msgid "Controller Node"
@@ -2906,7 +2906,7 @@ msgstr "コントローラーノード"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:95
 msgid "Discard local changes before syncing"
-msgstr ""
+msgstr "同期する前にローカル変更を破棄する"
 
 #: screens/Template/shared/WebhookSubForm.js:102
 msgid "Choose a Webhook Service"
@@ -2914,7 +2914,7 @@ msgstr "Webhook サービスの選択"
 
 #: screens/HostMetrics/HostMetrics.js:122
 msgid "First automated"
-msgstr ""
+msgstr "最初に自動化"
 
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressList.js:126
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressListItem.js:29
@@ -3036,7 +3036,7 @@ msgstr "なし"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:314
 msgid "Edit"
-msgstr ""
+msgstr "編集"
 
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:354
 msgid "Local Time Zone"
@@ -3138,7 +3138,7 @@ msgstr "ノードアイコンをクリックして詳細を表示します。"
 #: screens/HostMetrics/HostMetrics.js:134
 #: screens/HostMetrics/HostMetricsListItem.js:25
 msgid "Automation"
-msgstr ""
+msgstr "自動化"
 
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:100
 msgid "Select items from list"
@@ -4323,7 +4323,7 @@ msgstr "1 つ以上のグループを削除できませんでした。"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:193
 msgid "Manual"
-msgstr ""
+msgstr "手動"
 
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:204
 msgid "IRC server password"
@@ -4476,7 +4476,7 @@ msgstr "項目は見つかりません。"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:177
 msgid "Name"
-msgstr ""
+msgstr "名前"
 
 #: components/JobList/JobList.js:250
 #: components/JobList/JobListItem.js:102
@@ -4788,7 +4788,7 @@ msgstr "id フィールドでの正確な検索。"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:181
 msgid "Organization"
-msgstr ""
+msgstr "組織"
 
 #: screens/Job/JobOutput/JobOutputSearch.js:104
 msgid "Debug"
@@ -4946,7 +4946,7 @@ msgstr "実行環境をコピーできませんでした"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:282
 msgid "Project Base Path"
-msgstr ""
+msgstr "プロジェクトのベースパス"
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:321
@@ -5410,7 +5410,7 @@ msgstr "詳細の表示"
 
 #: screens/Template/Survey/SurveyQuestionForm.js:83
 msgid "Textarea"
-msgstr "Textarea"
+msgstr ""
 
 #: components/JobList/JobList.js:218
 #: components/JobList/JobListItem.js:49
@@ -5516,7 +5516,7 @@ msgstr "非推奨"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:202
 msgid "Successfully copied to clipboard!"
-msgstr ""
+msgstr "クリップボードへのコピーに成功しました!"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:533
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:169
@@ -5551,7 +5551,7 @@ msgstr "ユーザー"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:214
 msgid "Sync for revision"
-msgstr ""
+msgstr "リビジョンの同期"
 
 #: screens/Setting/SettingList.js:71
 msgid "LDAP settings"
@@ -5572,7 +5572,7 @@ msgstr "フォーク"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:70
 msgid "Parameter"
-msgstr ""
+msgstr "パラメーター"
 
 #: components/Schedule/shared/FrequencyDetailSubform.js:401
 msgid "The"
@@ -5773,7 +5773,7 @@ msgstr "平日"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:110
 msgid "Track submodules latest commit on branch"
-msgstr ""
+msgstr "ブランチでのサブモジュールの最新のコミットを追跡する"
 
 #: components/LaunchPrompt/steps/CredentialPasswordsStep.js:104
 msgid "Private key passphrase"
@@ -6005,7 +6005,7 @@ msgstr "第 3"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:116
 msgid "Update revision on job launch"
-msgstr ""
+msgstr "ジョブ起動時のリビジョン更新"
 
 #: components/ExecutionEnvironmentDetail/ExecutionEnvironmentDetail.js:115
 msgid "Execution environment is missing or deleted."
@@ -7073,7 +7073,7 @@ msgstr "ユーザーの詳細"
 
 #: screens/Inventory/shared/Inventory.helptext.js:195
 msgid "If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on. Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied."
-msgstr ""
+msgstr "有効化されると、インベントリーは、関連付けられたジョブテンプレートを実行する優先インスタンスグループのリストに、組織インスタンスグループを追加することを阻止します。注記: この設定が有効で空のリストを指定した場合、グローバルインスタンスグループが適用されます。"
 
 #: screens/NotificationTemplate/shared/Notifications.helptext.js:34
 #: screens/NotificationTemplate/shared/Notifications.helptext.js:63
@@ -8423,7 +8423,7 @@ msgstr ""
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.js:197
 msgid "Subscription Management"
-msgstr "Subscription Management"
+msgstr ""
 
 #: screens/Job/JobOutput/HostEventModal.js:153
 msgid "YAML"
@@ -9206,7 +9206,7 @@ msgstr "はい"
 #: screens/TopologyView/Header.js:55
 #: screens/TopologyView/Header.js:58
 msgid "Refresh"
-msgstr ""
+msgstr "更新"
 
 #: screens/InstanceGroup/InstanceGroups.js:19
 #: screens/InstanceGroup/InstanceGroups.js:29
@@ -10688,7 +10688,7 @@ msgstr "ジョブキャンセルエラー"
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:226
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListItem.js:79
 msgid "Status"
-msgstr "Status"
+msgstr "ステータス"
 
 #: screens/Login/Login.js:207
 msgid "Your session has expired. Please log in to continue where you left off."

@@ -1,10 +1,10 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2018-12-10 10:08-0500\n"
+"POT-Creation-Date: 2025-07-07 21:07+0000\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: @lingui/cli\n"
-"Language: en\n"
+"Language: nl\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "PO-Revision-Date: \n"
@@ -233,7 +233,7 @@ msgstr "Om de enquêtevragen te herordenen, sleept u ze naar de gewenste locatie
 #: screens/Inventory/shared/ConstructedInventoryHint.js:339
 #: screens/Inventory/shared/ConstructedInventoryHint.js:348
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "Gekopieerd naar klembord"
 
 #: screens/Inventory/shared/ConstructedInventoryForm.js:99
 msgid "Select Input Inventories for the constructed inventory plugin."
@@ -937,7 +937,7 @@ msgstr "Host niet gevonden."
 
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:42
 msgid "1 (Info)"
-msgstr "1 (Info)"
+msgstr ""
 
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.js:203
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:227
@@ -1162,11 +1162,11 @@ msgstr "Inventarissynchronisatie"
 
 #: components/About/About.js:41
 msgid "Copyright"
-msgstr "Copyright"
+msgstr ""
 
 #: screens/Instances/Instances.js:31
 msgid "Edit Instance"
-msgstr ""
+msgstr "Instantie Bewerken"
 
 #: screens/Setting/TACACS/TACACS.js:26
 msgid "View TACACS+ settings"
@@ -1254,7 +1254,7 @@ msgstr "Frequentie kwam niet overeen met een verwachte waarde"
 
 #: screens/NotificationTemplate/shared/NotificationTemplateForm.js:82
 msgid "E-mail"
-msgstr "E-mail"
+msgstr ""
 
 #: components/JobList/JobList.js:210
 #: components/LaunchPrompt/steps/OtherPromptsStep.js:149
@@ -1915,7 +1915,7 @@ msgstr "Goedgekeurd"
 #: routeConfig.js:36
 #: screens/Dashboard/Dashboard.js:95
 msgid "Dashboard"
-msgstr "Dashboard"
+msgstr ""
 
 #: components/PromptDetail/PromptProjectDetail.js:67
 msgid "Allow branch override"
@@ -1983,7 +1983,7 @@ msgstr "Beheer"
 #: components/RelatedTemplateList/RelatedTemplateList.js:193
 #: components/TemplateList/TemplateList.js:240
 msgid "Label"
-msgstr "Label"
+msgstr ""
 
 #: screens/Setting/shared/RevertAllAlert.js:26
 msgid "Revert all"
@@ -2351,7 +2351,7 @@ msgstr "Externe logboekregistratie inschakelen"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:122
 msgid "Allow branch override"
-msgstr ""
+msgstr "Overschrijven van vertakking toelaten"
 
 #: components/JobList/JobListItem.js:316
 #: screens/Job/JobDetail/JobDetail.js:406
@@ -2443,7 +2443,7 @@ msgstr "JSON"
 
 #: screens/HostMetrics/HostMetrics.js:128
 msgid "Last automated"
-msgstr ""
+msgstr "Laatste geautomatiseerd"
 
 #: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:8
 msgid "Approved by {0} - {1}"
@@ -2548,7 +2548,7 @@ msgstr "Feiten"
 #: components/AssociateModal/AssociateModal.js:39
 #: components/PaginatedTable/PaginatedTable.js:47
 msgid "Items"
-msgstr "Items"
+msgstr ""
 
 #: screens/Setting/SettingList.js:59
 msgid "Azure AD settings"
@@ -2619,7 +2619,7 @@ msgstr "Instantie-id"
 
 #: components/AppContainer/PageHeaderToolbar.js:108
 msgid "Info"
-msgstr "Info"
+msgstr ""
 
 #: screens/Setting/Settings.js:83
 msgid "LDAP 1"
@@ -2669,7 +2669,7 @@ msgstr "Webhook inschakelen"
 
 #: screens/Template/Survey/SurveyQuestionForm.js:217
 msgid "Minimum"
-msgstr "Minimum"
+msgstr ""
 
 #: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostList.js:90
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:153
@@ -2688,7 +2688,7 @@ msgstr "Hosts selecteren"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:269
 msgid "Cache Timeout"
-msgstr ""
+msgstr "Cache time-out"
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:322
@@ -2750,7 +2750,7 @@ msgstr "Klik op deze knop om de verbinding met het geheimbeheersysteem te verifi
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:293
 msgid "Created"
-msgstr ""
+msgstr "Gemaakt"
 
 #: screens/Setting/Subscription/Subscription.js:31
 msgid "View Settings"
@@ -2878,7 +2878,7 @@ msgstr "Deze actie ontkoppelt alle rollen voor deze gebruiker van de geselecteer
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:341
 msgid "Delete"
-msgstr ""
+msgstr "Verwijderen"
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:335
@@ -2888,12 +2888,12 @@ msgstr ""
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:101
 msgid "Delete the project before syncing"
-msgstr ""
+msgstr "Verwijder het project alvorens te synchroniseren"
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:178
 msgid "Description"
-msgstr ""
+msgstr "Omschrijving"
 
 #: screens/Job/JobDetail/JobDetail.js:383
 msgid "Controller Node"
@@ -2902,7 +2902,7 @@ msgstr "Naam controller"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:95
 msgid "Discard local changes before syncing"
-msgstr ""
+msgstr "Alle lokale wijzigingen vernietigen alvorens te synchroniseren"
 
 #: screens/Template/shared/WebhookSubForm.js:102
 msgid "Choose a Webhook Service"
@@ -2910,7 +2910,7 @@ msgstr "Kies een Webhookservice"
 
 #: screens/HostMetrics/HostMetrics.js:122
 msgid "First automated"
-msgstr ""
+msgstr "Eerste geautomatiseerd"
 
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressList.js:126
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressListItem.js:29
@@ -3032,7 +3032,7 @@ msgstr "Geen"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:314
 msgid "Edit"
-msgstr ""
+msgstr "Bewerken"
 
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:354
 msgid "Local Time Zone"
@@ -3134,7 +3134,7 @@ msgstr "Klik op een knooppuntpictogram om de details weer te geven."
 #: screens/HostMetrics/HostMetrics.js:134
 #: screens/HostMetrics/HostMetricsListItem.js:25
 msgid "Automation"
-msgstr ""
+msgstr "Automatisering"
 
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:100
 msgid "Select items from list"
@@ -3252,7 +3252,7 @@ msgstr "RADIUS"
 
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:151
 msgid "Actor"
-msgstr "Actor"
+msgstr ""
 
 #: screens/Project/shared/Project.helptext.js:45
 msgid "Example URLs for Subversion Source Control include:"
@@ -3460,7 +3460,7 @@ msgstr ""
 #: screens/HostMetrics/HostMetrics.js:117
 #: screens/HostMetrics/HostMetricsListItem.js:18
 msgid "Hostname"
-msgstr ""
+msgstr "Hostnaam"
 
 #: screens/Setting/SettingList.js:128
 msgid "User Interface settings"
@@ -3955,7 +3955,7 @@ msgstr "Inputbronnen toegangsgegevens"
 #: components/TemplateList/TemplateListItem.js:206
 #: screens/Template/WorkflowJobTemplate.js:139
 msgid "Visualizer"
-msgstr "Visualizer"
+msgstr ""
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:228
 msgid "Get subscription"
@@ -4317,7 +4317,7 @@ msgstr "Een of meer groepen kunnen niet worden verwijderd."
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:193
 msgid "Manual"
-msgstr ""
+msgstr "Handmatig"
 
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:204
 msgid "IRC server password"
@@ -4444,7 +4444,7 @@ msgstr "Toepassingsnaam"
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:219
 msgid "sec"
-msgstr "sec"
+msgstr ""
 
 #: screens/Template/Survey/SurveyQuestionForm.js:95
 msgid "Integer"
@@ -4468,7 +4468,7 @@ msgstr "Geen items gevonden."
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:177
 msgid "Name"
-msgstr ""
+msgstr "Naam"
 
 #: components/JobList/JobList.js:250
 #: components/JobList/JobListItem.js:102
@@ -4497,7 +4497,7 @@ msgstr "Brontype toevoegen"
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.js:82
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:428
 msgid "Test"
-msgstr "Test"
+msgstr ""
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/useNodeTypeStep.js:27
 msgid "Job Templates with a missing inventory or project cannot be selected when creating or editing nodes.  Select another template or fix the missing fields to proceed."
@@ -4780,7 +4780,7 @@ msgstr "Exact zoeken op id-veld."
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:181
 msgid "Organization"
-msgstr ""
+msgstr "Organisatie"
 
 #: screens/Job/JobOutput/JobOutputSearch.js:104
 msgid "Debug"
@@ -4938,7 +4938,7 @@ msgstr "Kan uitvoeringsomgeving niet kopiëren"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:282
 msgid "Project Base Path"
-msgstr ""
+msgstr "Basispad project"
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:321
@@ -5507,7 +5507,7 @@ msgstr "Afgeschaft"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:202
 msgid "Successfully copied to clipboard!"
-msgstr ""
+msgstr "Succesvol gekopieerd naar klembord!"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:533
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:169
@@ -5542,7 +5542,7 @@ msgstr "Gebruikers"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:214
 msgid "Sync for revision"
-msgstr ""
+msgstr "Synchroniseren voor revisie"
 
 #: screens/Setting/SettingList.js:71
 msgid "LDAP settings"
@@ -5762,7 +5762,7 @@ msgstr "Doordeweeks"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:110
 msgid "Track submodules latest commit on branch"
-msgstr ""
+msgstr "Submodules laatste binding op vertakking tracken"
 
 #: components/LaunchPrompt/steps/CredentialPasswordsStep.js:104
 msgid "Private key passphrase"
@@ -5994,7 +5994,7 @@ msgstr "Derde"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:116
 msgid "Update revision on job launch"
-msgstr ""
+msgstr "Herziening bijwerken bij starten taak"
 
 #: components/ExecutionEnvironmentDetail/ExecutionEnvironmentDetail.js:115
 msgid "Execution environment is missing or deleted."
@@ -6665,7 +6665,7 @@ msgstr "Details inventarisbron weergeven"
 #: screens/Instances/InstancePeers/InstancePeerList.js:265
 #: screens/User/UserTeams/UserTeamList.js:209
 msgid "Associate"
-msgstr "Associate"
+msgstr ""
 
 #: components/Lookup/HostFilterLookup.js:125
 msgid "Insights system ID"
@@ -7012,7 +7012,7 @@ msgstr "Uitvoeringsknooppunt"
 #: screens/Template/Survey/SurveyReorderModal.js:164
 #: screens/Template/Survey/SurveyReorderModal.js:165
 msgid "Multi-Select"
-msgstr "Multi-Select"
+msgstr ""
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.js:106
 msgid "Red Hat Virtualization"
@@ -7058,7 +7058,7 @@ msgstr "Gebruikersdetails"
 
 #: screens/Inventory/shared/Inventory.helptext.js:195
 msgid "If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on. Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied."
-msgstr ""
+msgstr "Indien ingeschakeld, voorkomt deze inventaris dat instantiegroepen voor een organisatie worden toegevoegd aan de lijst met voorkeursinstantiegroepen om gekoppelde taaksjablonen op uit te voeren. Opmerking: als deze instelling is ingeschakeld en u een lege lijst hebt opgegeven, worden de globale instantiegroepen toegepast."
 
 #: screens/NotificationTemplate/shared/Notifications.helptext.js:34
 #: screens/NotificationTemplate/shared/Notifications.helptext.js:63
@@ -7139,7 +7139,7 @@ msgstr "HTTP-methode"
 
 #: components/Workflow/WorkflowLegend.js:97
 msgid "Workflow"
-msgstr "Workflow"
+msgstr ""
 
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:269
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:138
@@ -8581,7 +8581,7 @@ msgstr "Voer een zoekopdracht uit om een hostfilter te definiëren"
 
 #: components/Pagination/Pagination.js:27
 msgid "items"
-msgstr "items"
+msgstr ""
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:146
 #: components/Schedule/shared/FrequencyDetailSubform.js:141
@@ -9194,7 +9194,7 @@ msgstr "Ja"
 #: screens/TopologyView/Header.js:55
 #: screens/TopologyView/Header.js:58
 msgid "Refresh"
-msgstr ""
+msgstr "Vernieuwen"
 
 #: screens/InstanceGroup/InstanceGroups.js:19
 #: screens/InstanceGroup/InstanceGroups.js:29
@@ -9352,7 +9352,7 @@ msgstr "Opmerking: dit veld gaat ervan uit dat de naam op afstand \"oorsprong\" 
 
 #: screens/Template/Survey/SurveyQuestionForm.js:223
 msgid "Maximum"
-msgstr "Maximum"
+msgstr ""
 
 #: screens/TopologyView/Legend.js:107
 msgid "Node state types"
@@ -10121,7 +10121,7 @@ msgstr "Update broncontrole"
 
 #: components/Lookup/HostFilterLookup.js:421
 msgid "hosts"
-msgstr "hosts"
+msgstr ""
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.js:27
 msgid "Workflow link modal"
@@ -10975,7 +10975,7 @@ msgstr ""
 #: components/AdHocCommands/AdHocDetailsStep.js:61
 #: screens/Job/JobOutput/HostEventModal.js:126
 msgid "Module"
-msgstr "Module"
+msgstr ""
 
 #: screens/Template/shared/WorkflowJobTemplate.helptext.js:23
 msgid "Prompt for skip tags on launch."
@@ -11518,7 +11518,7 @@ msgstr "Stelt het huidige levenscyclusstadium van deze instantie in. Standaard i
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.js:70
 msgid "Compliant"
-msgstr "Compliant"
+msgstr ""
 
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:253
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:254
@@ -11754,7 +11754,7 @@ msgstr "Berichtgoedkeuringen wisselen"
 #: components/Schedule/shared/ScheduleFormFields.js:133
 #: components/Schedule/shared/ScheduleFormFields.js:193
 msgid "Week"
-msgstr "Week"
+msgstr ""
 
 #: components/NotificationList/NotificationListItem.js:74
 #: components/NotificationList/NotificationListItem.js:75

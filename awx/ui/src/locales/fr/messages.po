@@ -1,10 +1,10 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2018-12-10 10:08-0500\n"
+"POT-Creation-Date: 2025-07-07 21:07+0000\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: @lingui/cli\n"
-"Language: en\n"
+"Language: fr\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "PO-Revision-Date: \n"
@@ -233,7 +233,7 @@ msgstr "Pour réorganiser les questions de l'enquête, faites-les glisser et dé
 #: screens/Inventory/shared/ConstructedInventoryHint.js:339
 #: screens/Inventory/shared/ConstructedInventoryHint.js:348
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "Copier dans le presse-papiers"
 
 #: screens/Inventory/shared/ConstructedInventoryForm.js:99
 msgid "Select Input Inventories for the constructed inventory plugin."
@@ -1160,11 +1160,11 @@ msgstr "Sync Inventaires"
 
 #: components/About/About.js:41
 msgid "Copyright"
-msgstr "Copyright"
+msgstr ""
 
 #: screens/Instances/Instances.js:31
 msgid "Edit Instance"
-msgstr ""
+msgstr "Modifier l'instance"
 
 #: screens/Setting/TACACS/TACACS.js:26
 msgid "View TACACS+ settings"
@@ -1205,7 +1205,7 @@ msgstr "Types de nœud"
 #: screens/Template/Survey/SurveyQuestionForm.js:272
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:241
 msgid "documentation"
-msgstr "documentation"
+msgstr ""
 
 #: components/JobCancelButton/JobCancelButton.js:106
 msgid "Are you sure you want to cancel this job?"
@@ -1252,7 +1252,7 @@ msgstr "La fréquence ne correspondait pas à une valeur attendue"
 
 #: screens/NotificationTemplate/shared/NotificationTemplateForm.js:82
 msgid "E-mail"
-msgstr "E-mail"
+msgstr ""
 
 #: components/JobList/JobList.js:210
 #: components/LaunchPrompt/steps/OtherPromptsStep.js:149
@@ -1437,7 +1437,7 @@ msgstr "Jetons"
 #: components/Schedule/shared/ScheduleFormFields.js:130
 #: components/Schedule/shared/ScheduleFormFields.js:190
 msgid "Minute"
-msgstr "Minute"
+msgstr ""
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:172
 #: screens/Inventory/shared/ConstructedInventoryHint.js:258
@@ -2236,7 +2236,7 @@ msgstr "Modèles de Jobs"
 
 #: components/Pagination/Pagination.js:29
 msgid "pages"
-msgstr "pages"
+msgstr ""
 
 #: screens/Setting/shared/RevertButton.js:45
 msgid "Restore initial value."
@@ -2349,7 +2349,7 @@ msgstr "Activer la journalisation externe"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:122
 msgid "Allow branch override"
-msgstr ""
+msgstr "Autoriser le remplacement de la branche"
 
 #: components/JobList/JobListItem.js:316
 #: screens/Job/JobDetail/JobDetail.js:406
@@ -2441,7 +2441,7 @@ msgstr "JSON"
 
 #: screens/HostMetrics/HostMetrics.js:128
 msgid "Last automated"
-msgstr ""
+msgstr "Dernière automatisation"
 
 #: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:8
 msgid "Approved by {0} - {1}"
@@ -2617,7 +2617,7 @@ msgstr "ID d'instance"
 
 #: components/AppContainer/PageHeaderToolbar.js:108
 msgid "Info"
-msgstr "Info"
+msgstr ""
 
 #: screens/Setting/Settings.js:83
 msgid "LDAP 1"
@@ -2667,7 +2667,7 @@ msgstr "Activer le webhook"
 
 #: screens/Template/Survey/SurveyQuestionForm.js:217
 msgid "Minimum"
-msgstr "Minimum"
+msgstr ""
 
 #: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostList.js:90
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:153
@@ -2686,7 +2686,7 @@ msgstr "Sélectionner les hôtes"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:269
 msgid "Cache Timeout"
-msgstr ""
+msgstr "Expiration Délai d’attente du cache"
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:322
@@ -2748,7 +2748,7 @@ msgstr "Cliquez sur ce bouton pour vérifier la connexion au système de gestion
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:293
 msgid "Created"
-msgstr ""
+msgstr "Créé"
 
 #: screens/Setting/Subscription/Subscription.js:31
 msgid "View Settings"
@@ -2876,7 +2876,7 @@ msgstr "Cette action permettra de dissocier tous les rôles de cet utilisateur d
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:341
 msgid "Delete"
-msgstr ""
+msgstr "Supprimer"
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:335
@@ -2886,7 +2886,7 @@ msgstr ""
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:101
 msgid "Delete the project before syncing"
-msgstr ""
+msgstr "Supprimez le projet avant la synchronisation"
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:178
@@ -2900,7 +2900,7 @@ msgstr "Noeud du contrôleur"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:95
 msgid "Discard local changes before syncing"
-msgstr ""
+msgstr "Ignorez les modifications locales avant de synchroniser"
 
 #: screens/Template/shared/WebhookSubForm.js:102
 msgid "Choose a Webhook Service"
@@ -2908,7 +2908,7 @@ msgstr "Choisir un service de webhook"
 
 #: screens/HostMetrics/HostMetrics.js:122
 msgid "First automated"
-msgstr ""
+msgstr "Hôtes automatisés"
 
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressList.js:126
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressListItem.js:29
@@ -3030,7 +3030,7 @@ msgstr "Aucun"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:314
 msgid "Edit"
-msgstr ""
+msgstr "Modifier"
 
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:354
 msgid "Local Time Zone"
@@ -3458,7 +3458,7 @@ msgstr ""
 #: screens/HostMetrics/HostMetrics.js:117
 #: screens/HostMetrics/HostMetricsListItem.js:18
 msgid "Hostname"
-msgstr ""
+msgstr "Nom d'hôte"
 
 #: screens/Setting/SettingList.js:128
 msgid "User Interface settings"
@@ -3874,7 +3874,7 @@ msgstr "Suivi des sous-modules"
 
 #: screens/User/UserList/UserListItem.js:51
 msgid "social login"
-msgstr "social login"
+msgstr ""
 
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:317
 msgid "Delete Workflow Approval"
@@ -4317,7 +4317,7 @@ msgstr "N'a pas réussi à supprimer un ou plusieurs groupes."
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:193
 msgid "Manual"
-msgstr ""
+msgstr "Manuel"
 
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:204
 msgid "IRC server password"
@@ -4347,7 +4347,7 @@ msgstr "Retour aux groupes d'instances"
 
 #: components/Pagination/Pagination.js:28
 msgid "page"
-msgstr "page"
+msgstr ""
 
 #: screens/Project/shared/Project.helptext.js:5
 msgid "The execution environment that will be used for jobs that use this project. This will be used as fallback when an execution environment has not been explicitly assigned at the job template or workflow level."
@@ -4444,7 +4444,7 @@ msgstr "Nom de l'application"
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:219
 msgid "sec"
-msgstr "sec"
+msgstr ""
 
 #: screens/Template/Survey/SurveyQuestionForm.js:95
 msgid "Integer"
@@ -4468,7 +4468,7 @@ msgstr "Aucun objet trouvé."
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:177
 msgid "Name"
-msgstr ""
+msgstr "Nom"
 
 #: components/JobList/JobList.js:250
 #: components/JobList/JobListItem.js:102
@@ -4497,7 +4497,7 @@ msgstr "Type de ressources"
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.js:82
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:428
 msgid "Test"
-msgstr "Test"
+msgstr ""
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/useNodeTypeStep.js:27
 msgid "Job Templates with a missing inventory or project cannot be selected when creating or editing nodes.  Select another template or fix the missing fields to proceed."
@@ -4780,7 +4780,7 @@ msgstr "Recherche exacte sur le champ d'identification."
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:181
 msgid "Organization"
-msgstr ""
+msgstr "Organisation"
 
 #: screens/Job/JobOutput/JobOutputSearch.js:104
 msgid "Debug"
@@ -4940,7 +4940,7 @@ msgstr "Échec de la copie de l'environnement d'exécution"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:282
 msgid "Project Base Path"
-msgstr ""
+msgstr "Chemin de base du projet"
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:321
@@ -5506,7 +5506,7 @@ msgstr "Obsolète"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:202
 msgid "Successfully copied to clipboard!"
-msgstr ""
+msgstr "Copie réussie dans le presse-papiers !"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:533
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:169
@@ -5541,7 +5541,7 @@ msgstr "Utilisateurs"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:214
 msgid "Sync for revision"
-msgstr ""
+msgstr "Synchronisation pour la révision"
 
 #: screens/Setting/SettingList.js:71
 msgid "LDAP settings"
@@ -5562,7 +5562,7 @@ msgstr "Forks"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:70
 msgid "Parameter"
-msgstr ""
+msgstr "Paramètres"
 
 #: components/Schedule/shared/FrequencyDetailSubform.js:401
 msgid "The"
@@ -5590,7 +5590,7 @@ msgstr "Le type d’autorisation que l'utilisateur doit utiliser pour acquérir 
 
 #: screens/Job/JobOutput/HostEventModal.js:123
 msgid "Play"
-msgstr "Play"
+msgstr ""
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.js:111
 #: screens/Setting/Settings.js:69
@@ -5761,7 +5761,7 @@ msgstr "jour de la semaine"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:110
 msgid "Track submodules latest commit on branch"
-msgstr ""
+msgstr "Suivre le dernier commit des sous-modules sur la branche"
 
 #: components/LaunchPrompt/steps/CredentialPasswordsStep.js:104
 msgid "Private key passphrase"
@@ -5993,7 +5993,7 @@ msgstr "Troisième"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:116
 msgid "Update revision on job launch"
-msgstr ""
+msgstr "Mettre à jour Révision au lancement"
 
 #: components/ExecutionEnvironmentDetail/ExecutionEnvironmentDetail.js:115
 msgid "Execution environment is missing or deleted."
@@ -6009,7 +6009,7 @@ msgstr "Relancer les hôtes défaillants"
 
 #: components/AppContainer/AppContainer.js:108
 msgid "Navigation"
-msgstr "Navigation"
+msgstr ""
 
 #: components/PaginatedTable/ToolbarDeleteButton.js:165
 msgid "Delete {pluralizedItemName}?"
@@ -6388,7 +6388,7 @@ msgstr "Afficher Modifications"
 
 #: components/Pagination/Pagination.js:38
 msgid "Pagination"
-msgstr "Pagination"
+msgstr ""
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:277
 msgid "If specified, this field will be shown on the node instead of the resource name when viewing the workflow"
@@ -7005,7 +7005,7 @@ msgstr "Nœud d'exécution"
 #: screens/Template/Survey/SurveyReorderModal.js:164
 #: screens/Template/Survey/SurveyReorderModal.js:165
 msgid "Multi-Select"
-msgstr "Multi-Select"
+msgstr ""
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.js:106
 msgid "Red Hat Virtualization"
@@ -7051,7 +7051,7 @@ msgstr "Détails de l'utilisateur"
 
 #: screens/Inventory/shared/Inventory.helptext.js:195
 msgid "If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on. Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied."
-msgstr ""
+msgstr "Empêcher le repli des groupes d'instances : s'il est activé, l'inventaire empêchera l'ajout de tout groupe d'instances d'organisation à la liste des groupes d'instances préférés pour exécuter les modèles de tâches associés. Remarque : si ce paramètre est activé et que vous avez fourni une liste vide, les groupes d'instances globaux seront appliqués."
 
 #: screens/NotificationTemplate/shared/Notifications.helptext.js:34
 #: screens/NotificationTemplate/shared/Notifications.helptext.js:63
@@ -7185,7 +7185,7 @@ msgstr "Icône URL"
 
 #: screens/Template/Survey/SurveyQuestionForm.js:166
 msgid "Question"
-msgstr "Question"
+msgstr ""
 
 #: components/VerbositySelectField/VerbositySelectField.js:53
 msgid "0 (Normal)"
@@ -7235,7 +7235,7 @@ msgstr "Créer un nouveau type d'informations d'identification."
 #: components/Schedule/ScheduleOccurrences/ScheduleOccurrences.js:45
 #: components/Schedule/shared/FrequencyDetailSubform.js:552
 msgid "Occurrences"
-msgstr "Occurrences"
+msgstr ""
 
 #: screens/Template/shared/WorkflowJobTemplate.helptext.js:7
 msgid "Select the inventory containing the hosts you want this workflow to manage."
@@ -8527,7 +8527,7 @@ msgstr "Créer"
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:167
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:106
 msgid "Port"
-msgstr "Port"
+msgstr ""
 
 #: screens/Setting/shared/SharedFields.js:144
 msgid "Are you sure you want to disable local authentication?  Doing so could impact users' ability to log in and the system administrator's ability to reverse this change."
@@ -9128,7 +9128,7 @@ msgstr "Ajouter les permissions de l’utilisateur"
 
 #: components/Schedule/shared/ScheduleFormFields.js:165
 msgid "Exceptions"
-msgstr "Exceptions"
+msgstr ""
 
 #: screens/Template/shared/WorkflowJobTemplate.helptext.js:11
 msgid "Select a branch for the workflow."
@@ -9154,7 +9154,7 @@ msgstr "AD Azure"
 
 #: screens/Metrics/Metrics.js:188
 msgid "Instance"
-msgstr "Instance"
+msgstr ""
 
 #: components/LaunchPrompt/steps/CredentialPasswordsStep.js:122
 msgid "Vault password | {credId}"
@@ -9183,7 +9183,7 @@ msgstr "Oui"
 #: screens/TopologyView/Header.js:55
 #: screens/TopologyView/Header.js:58
 msgid "Refresh"
-msgstr ""
+msgstr "Recharger"
 
 #: screens/InstanceGroup/InstanceGroups.js:19
 #: screens/InstanceGroup/InstanceGroups.js:29
@@ -9341,7 +9341,7 @@ msgstr "Remarque : ce champ suppose que le nom distant est \"origin\"."
 
 #: screens/Template/Survey/SurveyQuestionForm.js:223
 msgid "Maximum"
-msgstr "Maximum"
+msgstr ""
 
 #: screens/TopologyView/Legend.js:107
 msgid "Node state types"
@@ -9361,7 +9361,7 @@ msgstr "Cette programmation d’horaire ne contient pas les valeurs d'enquête r
 
 #: screens/Dashboard/shared/LineChart.js:170
 msgid "Date"
-msgstr "Date"
+msgstr ""
 
 #: screens/Template/shared/JobTemplate.helptext.js:96
 msgid "Privilege escalation: If enabled, run this playbook as an administrator."
@@ -10465,7 +10465,7 @@ msgstr "Avancé"
 
 #: components/About/About.js:51
 msgid "Brand Image"
-msgstr "Brand Image"
+msgstr ""
 
 #: components/Schedule/shared/FrequencyDetailSubform.js:407
 msgid "First"
@@ -10833,7 +10833,7 @@ msgstr "dissocier"
 #: screens/Instances/InstanceList/InstanceListItem.js:234
 #: screens/Instances/InstancePeers/InstancePeerListItem.js:84
 msgid "Total Jobs"
-msgstr "Total Jobs"
+msgstr ""
 
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:344
 msgid "Failed to delete inventory source {name}."
@@ -10962,7 +10962,7 @@ msgstr ""
 #: components/AdHocCommands/AdHocDetailsStep.js:61
 #: screens/Job/JobOutput/HostEventModal.js:126
 msgid "Module"
-msgstr "Module"
+msgstr ""
 
 #: screens/Template/shared/WorkflowJobTemplate.helptext.js:23
 msgid "Prompt for skip tags on launch."

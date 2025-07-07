@@ -1,10 +1,10 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2018-12-10 10:08-0500\n"
+"POT-Creation-Date: 2025-07-07 21:07+0000\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: @lingui/cli\n"
-"Language: en\n"
+"Language: ko\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "PO-Revision-Date: \n"
@@ -233,7 +233,7 @@ msgstr "설문조사 질문을 재정렬하려면 원하는 위치에 끌어다 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:339
 #: screens/Inventory/shared/ConstructedInventoryHint.js:348
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "클립보드에 복사"
 
 #: screens/Inventory/shared/ConstructedInventoryForm.js:99
 msgid "Select Input Inventories for the constructed inventory plugin."
@@ -1164,7 +1164,7 @@ msgstr "저작권"
 
 #: screens/Instances/Instances.js:31
 msgid "Edit Instance"
-msgstr ""
+msgstr "인스턴스 편집"
 
 #: screens/Setting/TACACS/TACACS.js:26
 msgid "View TACACS+ settings"
@@ -2349,7 +2349,7 @@ msgstr "외부 로깅 활성화"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:122
 msgid "Allow branch override"
-msgstr ""
+msgstr "분기 덮어쓰기 허용"
 
 #: components/JobList/JobListItem.js:316
 #: screens/Job/JobDetail/JobDetail.js:406
@@ -2441,7 +2441,7 @@ msgstr "JSON"
 
 #: screens/HostMetrics/HostMetrics.js:128
 msgid "Last automated"
-msgstr ""
+msgstr "마지막 자동화"
 
 #: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:8
 msgid "Approved by {0} - {1}"
@@ -2686,7 +2686,7 @@ msgstr "호스트 선택"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:269
 msgid "Cache Timeout"
-msgstr ""
+msgstr "캐시 제한 시간"
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:322
@@ -2748,7 +2748,7 @@ msgstr "이 버튼을 클릭하여 선택한 인증 정보 및 지정된 입력�
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:293
 msgid "Created"
-msgstr ""
+msgstr "생성됨"
 
 #: screens/Setting/Subscription/Subscription.js:31
 msgid "View Settings"
@@ -2876,7 +2876,7 @@ msgstr "이 작업은 선택한 팀에서 이 사용자의 모든 역할을 제�
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:341
 msgid "Delete"
-msgstr ""
+msgstr "삭제"
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:335
@@ -2886,12 +2886,12 @@ msgstr ""
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:101
 msgid "Delete the project before syncing"
-msgstr ""
+msgstr "동기화 전에 프로젝트 삭제"
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:178
 msgid "Description"
-msgstr ""
+msgstr "설명"
 
 #: screens/Job/JobDetail/JobDetail.js:383
 msgid "Controller Node"
@@ -2900,7 +2900,7 @@ msgstr "컨트롤러 노드"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:95
 msgid "Discard local changes before syncing"
-msgstr ""
+msgstr "동기화 전에 로컬 변경 사항 삭제"
 
 #: screens/Template/shared/WebhookSubForm.js:102
 msgid "Choose a Webhook Service"
@@ -2908,7 +2908,7 @@ msgstr "Webhook 서비스 선택"
 
 #: screens/HostMetrics/HostMetrics.js:122
 msgid "First automated"
-msgstr ""
+msgstr "첫 번째 자동화"
 
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressList.js:126
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressListItem.js:29
@@ -3030,7 +3030,7 @@ msgstr "없음"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:314
 msgid "Edit"
-msgstr ""
+msgstr "편집"
 
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:354
 msgid "Local Time Zone"
@@ -3132,7 +3132,7 @@ msgstr "노드 아이콘을 클릭하여 세부 정보를 표시합니다."
 #: screens/HostMetrics/HostMetrics.js:134
 #: screens/HostMetrics/HostMetricsListItem.js:25
 msgid "Automation"
-msgstr ""
+msgstr "자동화"
 
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:100
 msgid "Select items from list"
@@ -3458,7 +3458,7 @@ msgstr ""
 #: screens/HostMetrics/HostMetrics.js:117
 #: screens/HostMetrics/HostMetricsListItem.js:18
 msgid "Hostname"
-msgstr ""
+msgstr "호스트 이름"
 
 #: screens/Setting/SettingList.js:128
 msgid "User Interface settings"
@@ -4311,7 +4311,7 @@ msgstr "하나 이상의 그룹을 삭제하지 못했습니다."
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:193
 msgid "Manual"
-msgstr ""
+msgstr "수동"
 
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:204
 msgid "IRC server password"
@@ -4462,7 +4462,7 @@ msgstr "항목을 찾을 수 없습니다."
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:177
 msgid "Name"
-msgstr ""
+msgstr "이름"
 
 #: components/JobList/JobList.js:250
 #: components/JobList/JobListItem.js:102
@@ -4774,7 +4774,7 @@ msgstr "id 필드에서 정확한 검색"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:181
 msgid "Organization"
-msgstr ""
+msgstr "조직"
 
 #: screens/Job/JobOutput/JobOutputSearch.js:104
 msgid "Debug"
@@ -4932,7 +4932,7 @@ msgstr "실행 환경을 복사하지 못했습니다."
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:282
 msgid "Project Base Path"
-msgstr ""
+msgstr "프로젝트 기본 경로"
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:321
@@ -5128,7 +5128,7 @@ msgstr "다음으로 돌아가기"
 #: screens/Instances/InstanceList/InstanceListItem.js:239
 #: screens/Instances/InstancePeers/InstancePeerListItem.js:89
 msgid "Auto"
-msgstr "Auto"
+msgstr "자동"
 
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:132
 msgid "Delete All Groups and Hosts"
@@ -5308,7 +5308,7 @@ msgstr ""
 
 #: components/Workflow/WorkflowTools.js:144
 msgid "Pan Up"
-msgstr "Pan Up"
+msgstr ""
 
 #: components/ResourceAccessList/DeleteRoleConfirmationModal.js:51
 msgid "Are you sure you want to remove {0} access from {username}?"
@@ -5499,7 +5499,7 @@ msgstr "더 이상 사용되지 않음"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:202
 msgid "Successfully copied to clipboard!"
-msgstr ""
+msgstr "클립보드에 성공적으로 복사되었습니다!"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:533
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:169
@@ -5534,7 +5534,7 @@ msgstr "사용자"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:214
 msgid "Sync for revision"
-msgstr ""
+msgstr "버전의 동기화"
 
 #: screens/Setting/SettingList.js:71
 msgid "LDAP settings"
@@ -5555,11 +5555,11 @@ msgstr "포크"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:70
 msgid "Parameter"
-msgstr ""
+msgstr "매개변수"
 
 #: components/Schedule/shared/FrequencyDetailSubform.js:401
 msgid "The"
-msgstr "The"
+msgstr ""
 
 #: screens/Inventory/shared/Inventory.helptext.js:74
 msgid "docs.ansible.com"
@@ -5754,7 +5754,7 @@ msgstr "평일"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:110
 msgid "Track submodules latest commit on branch"
-msgstr ""
+msgstr "분기에서 하위 모듈의 최신 커밋 추적"
 
 #: components/LaunchPrompt/steps/CredentialPasswordsStep.js:104
 msgid "Private key passphrase"
@@ -5986,7 +5986,7 @@ msgstr "세 번째"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:116
 msgid "Update revision on job launch"
-msgstr ""
+msgstr "작업 시작 시 버전 업데이트"
 
 #: components/ExecutionEnvironmentDetail/ExecutionEnvironmentDetail.js:115
 msgid "Execution environment is missing or deleted."
@@ -7044,7 +7044,7 @@ msgstr "사용자 세부 정보"
 
 #: screens/Inventory/shared/Inventory.helptext.js:195
 msgid "If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on. Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied."
-msgstr ""
+msgstr "활성화하면 인벤토리에서 연결된 작업 템플릿을 실행하는 기본 인스턴스 그룹 목록에 조직 인스턴스 그룹을 추가하지 않습니다. 참고: 이 설정이 활성화되어 있고 빈 목록을 제공한 경우 글로벌 인스턴스 그룹이 적용됩니다."
 
 #: screens/NotificationTemplate/shared/Notifications.helptext.js:34
 #: screens/NotificationTemplate/shared/Notifications.helptext.js:63
@@ -7742,7 +7742,7 @@ msgstr "알림 유형 선택"
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:87
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironmentForm.js:116
 msgid "Pull"
-msgstr "Pull"
+msgstr ""
 
 #: screens/Setting/shared/RevertAllAlert.js:39
 msgid ""
@@ -9169,7 +9169,7 @@ msgstr "제공됨"
 #: screens/TopologyView/Header.js:55
 #: screens/TopologyView/Header.js:58
 msgid "Refresh"
-msgstr ""
+msgstr "새로고침"
 
 #: screens/InstanceGroup/InstanceGroups.js:19
 #: screens/InstanceGroup/InstanceGroups.js:29
@@ -9253,7 +9253,7 @@ msgstr "PagerDuty"
 
 #: components/Workflow/WorkflowTools.js:166
 msgid "Pan Down"
-msgstr "Pan Down"
+msgstr ""
 
 #: screens/Application/Application/Application.js:97
 msgid "Application not found."
@@ -9889,7 +9889,7 @@ msgstr "Pod 사양 사용자 정의"
 
 #: components/AdHocCommands/AdHocDetailsStep.js:219
 msgid "command"
-msgstr "command"
+msgstr ""
 
 #: screens/Template/Survey/MultipleChoiceField.js:61
 msgid ""

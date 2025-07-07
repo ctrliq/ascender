@@ -1,10 +1,10 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2018-12-10 10:08-0500\n"
+"POT-Creation-Date: 2025-07-07 21:07+0000\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: @lingui/cli\n"
-"Language: en\n"
+"Language: es\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "PO-Revision-Date: \n"
@@ -233,7 +233,7 @@ msgstr "Para reordenar las preguntas de la encuesta, arrástrelas y suéltelas e
 #: screens/Inventory/shared/ConstructedInventoryHint.js:339
 #: screens/Inventory/shared/ConstructedInventoryHint.js:348
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "Copiar al portapapeles"
 
 #: screens/Inventory/shared/ConstructedInventoryForm.js:99
 msgid "Select Input Inventories for the constructed inventory plugin."
@@ -1068,7 +1068,7 @@ msgstr "Copie la revisión completa al portapapeles."
 
 #: components/CodeEditor/VariablesDetail.js:108
 msgid "Error:"
-msgstr "Error:"
+msgstr ""
 
 #: screens/Setting/Settings.js:213
 msgid "View all settings"
@@ -1173,11 +1173,11 @@ msgstr "Sincronización de inventario"
 
 #: components/About/About.js:41
 msgid "Copyright"
-msgstr "Copyright"
+msgstr ""
 
 #: screens/Instances/Instances.js:31
 msgid "Edit Instance"
-msgstr ""
+msgstr "Editar instancia"
 
 #: screens/Setting/TACACS/TACACS.js:26
 msgid "View TACACS+ settings"
@@ -2368,7 +2368,7 @@ msgstr "Habilitar registro externo"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:122
 msgid "Allow branch override"
-msgstr ""
+msgstr "Permitir la invalidación de la rama"
 
 #: components/JobList/JobListItem.js:316
 #: screens/Job/JobDetail/JobDetail.js:406
@@ -2460,7 +2460,7 @@ msgstr "JSON"
 
 #: screens/HostMetrics/HostMetrics.js:128
 msgid "Last automated"
-msgstr ""
+msgstr "Último automatizado"
 
 #: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:8
 msgid "Approved by {0} - {1}"
@@ -2705,7 +2705,7 @@ msgstr "Seleccionar hosts"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:269
 msgid "Cache Timeout"
-msgstr ""
+msgstr "Tiempo de espera de la caché"
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:322
@@ -2767,7 +2767,7 @@ msgstr "Haga clic en este botón para verificar la conexión con el sistema de g
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:293
 msgid "Created"
-msgstr ""
+msgstr "Creado"
 
 #: screens/Setting/Subscription/Subscription.js:31
 msgid "View Settings"
@@ -2901,7 +2901,7 @@ msgstr "Esta acción disociará todos los roles de este usuario de los equipos s
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:341
 msgid "Delete"
-msgstr ""
+msgstr "ELIMINAR"
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:335
@@ -2911,12 +2911,12 @@ msgstr ""
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:101
 msgid "Delete the project before syncing"
-msgstr ""
+msgstr "Eliminar el proyecto antes de la sincronización"
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:178
 msgid "Description"
-msgstr ""
+msgstr "Descripción"
 
 #: screens/Job/JobDetail/JobDetail.js:383
 msgid "Controller Node"
@@ -2925,7 +2925,7 @@ msgstr "Nombre del controlador"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:95
 msgid "Discard local changes before syncing"
-msgstr ""
+msgstr "Descartar los cambios locales antes de la sincronización"
 
 #: screens/Template/shared/WebhookSubForm.js:102
 msgid "Choose a Webhook Service"
@@ -2933,7 +2933,7 @@ msgstr "Elegir un servicio de Webhook"
 
 #: screens/HostMetrics/HostMetrics.js:122
 msgid "First automated"
-msgstr ""
+msgstr "Primer automatizado"
 
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressList.js:126
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressListItem.js:29
@@ -3055,7 +3055,7 @@ msgstr "Ninguno"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:314
 msgid "Edit"
-msgstr ""
+msgstr "Editar"
 
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:354
 msgid "Local Time Zone"
@@ -3157,7 +3157,7 @@ msgstr "Haga clic en el icono de un nodo para mostrar los detalles."
 #: screens/HostMetrics/HostMetrics.js:134
 #: screens/HostMetrics/HostMetricsListItem.js:25
 msgid "Automation"
-msgstr ""
+msgstr "Automatización"
 
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:100
 msgid "Select items from list"
@@ -3275,7 +3275,7 @@ msgstr "RADIUS"
 
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:151
 msgid "Actor"
-msgstr "Actor"
+msgstr ""
 
 #: screens/Project/shared/Project.helptext.js:45
 msgid "Example URLs for Subversion Source Control include:"
@@ -3486,7 +3486,7 @@ msgstr ""
 #: screens/HostMetrics/HostMetrics.js:117
 #: screens/HostMetrics/HostMetricsListItem.js:18
 msgid "Hostname"
-msgstr ""
+msgstr "Nombre de host"
 
 #: screens/Setting/SettingList.js:128
 msgid "User Interface settings"
@@ -4507,7 +4507,7 @@ msgstr "No se encontraron elementos."
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:177
 msgid "Name"
-msgstr ""
+msgstr "Nombre"
 
 #: components/JobList/JobList.js:250
 #: components/JobList/JobListItem.js:102
@@ -4797,10 +4797,7 @@ msgstr "Iniciar sesión con las organizaciones GitHub"
 #: screens/Job/Job.helptext.js:18
 #: screens/Template/shared/JobTemplate.helptext.js:42
 msgid "The amount of time (in seconds) to run before the job is canceled. Defaults to 0 for no job timeout."
-msgstr ""
-"La cantidad de tiempo (en segundos) para ejecutar\n"
-"antes de que se cancele la tarea. Valores predeterminados\n"
-"en 0 para el tiempo de espera de la tarea."
+msgstr "La cantidad de tiempo (en segundos) que debe ejecutarse antes de que se cancele la tarea. El valor predeterminado es 0 si no hay tiempo de espera."
 
 #: screens/User/UserTokens/UserTokens.js:51
 #: screens/User/UserTokens/UserTokens.js:54
@@ -4824,7 +4821,7 @@ msgstr "Búsqueda exacta en el campo de identificación."
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:181
 msgid "Organization"
-msgstr ""
+msgstr "Organización"
 
 #: screens/Job/JobOutput/JobOutputSearch.js:104
 msgid "Debug"
@@ -4985,7 +4982,7 @@ msgstr "No se pudo copiar el entorno de ejecución"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:282
 msgid "Project Base Path"
-msgstr ""
+msgstr "Ruta base del proyecto"
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:321
@@ -5560,7 +5557,7 @@ msgstr "Obsoleto"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:202
 msgid "Successfully copied to clipboard!"
-msgstr ""
+msgstr "¡Copiado correctamente en el portapapeles!"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:533
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:169
@@ -5595,7 +5592,7 @@ msgstr "Usuarios"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:214
 msgid "Sync for revision"
-msgstr ""
+msgstr "Sincronizar para revisión"
 
 #: screens/Setting/SettingList.js:71
 msgid "LDAP settings"
@@ -5616,7 +5613,7 @@ msgstr "Forks"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:70
 msgid "Parameter"
-msgstr ""
+msgstr "Parámetro"
 
 #: components/Schedule/shared/FrequencyDetailSubform.js:401
 msgid "The"
@@ -5819,7 +5816,7 @@ msgstr "Día de la semana"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:110
 msgid "Track submodules latest commit on branch"
-msgstr ""
+msgstr "Seguimiento del último commit de los submódulos en la rama"
 
 #: components/LaunchPrompt/steps/CredentialPasswordsStep.js:104
 msgid "Private key passphrase"
@@ -6051,7 +6048,7 @@ msgstr "Tercero"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:116
 msgid "Update revision on job launch"
-msgstr ""
+msgstr "Revisión de la actualización en el lanzamiento del trabajo"
 
 #: components/ExecutionEnvironmentDetail/ExecutionEnvironmentDetail.js:115
 msgid "Execution environment is missing or deleted."
@@ -7127,7 +7124,7 @@ msgstr "Detalles del usuario"
 
 #: screens/Inventory/shared/Inventory.helptext.js:195
 msgid "If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on. Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied."
-msgstr ""
+msgstr "Si se activa, el inventario impedirá que se añadan grupos de instancias de la organización a la lista de grupos de instancias preferidos para ejecutar plantillas de trabajo asociadas. Nota: si esta opción está activada y ha proporcionado una lista vacía, se aplicarán los grupos de instancias globales."
 
 #: screens/NotificationTemplate/shared/Notifications.helptext.js:34
 #: screens/NotificationTemplate/shared/Notifications.helptext.js:63
@@ -7731,7 +7728,7 @@ msgstr "Selección de convergencia"
 
 #: screens/Template/shared/JobTemplate.helptext.js:45
 msgid "If enabled, show the changes made by Ansible tasks, where supported. This is equivalent to Ansible's --diff mode."
-msgstr ""
+msgstr "Si se habilita esta opción, muestre los cambios realizados por las tareas de Ansible, cuando sea compatible. Esto es equivalente al modo --diff de Ansible."
 "Si se habilita esta opción, muestre los cambios realizados\n"
 "por las tareas de Ansible, donde sea compatible. Esto es equivalente\n"
 "al modo --diff de Ansible."
@@ -8083,13 +8080,7 @@ msgstr "Rama/etiqueta/commit de fuente de control"
 #: screens/Job/Job.helptext.js:12
 #: screens/Template/shared/JobTemplate.helptext.js:24
 msgid "Select credentials for accessing the nodes this job will be ran against. You can only select one credential of each type. For machine credentials (SSH), checking \"Prompt on launch\" without selecting credentials will require you to select a machine credential at run time. If you select credentials and check \"Prompt on launch\", the selected credential(s) become the defaults that can be updated at run time."
-msgstr ""
-"Seleccione las credenciales para acceder a los nodos en función de\n"
-"los cuales se ejecutará este trabajo. Solo puede seleccionar una credencial de cada tipo. Para las\n"
-"credenciales de máquina (SSH), si marca \"Preguntar al ejecutar\" sin seleccionar las credenciales,\n"
-"se le pedirá que seleccione una credencial de máquina en el momento de la ejecución. Si selecciona\n"
-"las credenciales y marca \"Preguntar al ejecutar\", las credenciales seleccionadas se convierten en las credenciales\n"
-"predeterminadas que pueden actualizarse en tiempo de ejecución."
+msgstr "Seleccione las credenciales para acceder a los nodos contra los que se ejecutará este trabajo. Sólo puede seleccionar una credencial de cada tipo. Para las credenciales de máquina (SSH), si marca \"Preguntar al iniciar\" sin seleccionar las credenciales, deberá seleccionar una credencial de máquina en tiempo de ejecución. Si selecciona credenciales y marca \"Preguntar al iniciar\", las credenciales seleccionadas se convierten en las predeterminadas que pueden actualizarse en tiempo de ejecución."
 
 #: screens/Instances/Shared/InstanceForm.js:88
 msgid "Enable Instance"
@@ -9080,12 +9071,7 @@ msgstr "Credenciales de máquina"
 #: screens/Job/Job.helptext.js:21
 #: screens/Template/shared/JobTemplate.helptext.js:54
 msgid "Skip tags are useful when you have a large playbook, and you want to skip specific parts of a play or task. Use commas to separate multiple tags. Refer to the documentation for details on the usage of tags."
-msgstr ""
-"La omisión de etiquetas resulta útil cuando tiene un playbook\n"
-"de gran tamaño y desea omitir partes específicas de la tarea\n"
-"o la jugada. Utilice comas para separar las distintas etiquetas.\n"
-"Consulte la documentación para obtener información detallada\n"
-"sobre el uso de etiquetas."
+msgstr "Omitir etiquetas es útil cuando se posee de un playbook largo y desea omitir algunas partes de una jugada o tarea. Utilice comas para separar varias etiquetas. Consulte la documentación para más detalles sobre el uso de las etiquetas."
 
 #: routeConfig.js:51
 #: screens/ActivityStream/ActivityStream.js:45
@@ -9284,7 +9270,7 @@ msgstr "SÍ"
 #: screens/TopologyView/Header.js:55
 #: screens/TopologyView/Header.js:58
 msgid "Refresh"
-msgstr ""
+msgstr "Actualizar"
 
 #: screens/InstanceGroup/InstanceGroups.js:19
 #: screens/InstanceGroup/InstanceGroups.js:29
@@ -10221,7 +10207,7 @@ msgstr "Actualización de fuente de control"
 
 #: components/Lookup/HostFilterLookup.js:421
 msgid "hosts"
-msgstr "hosts"
+msgstr ""
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.js:27
 msgid "Workflow link modal"
@@ -10621,12 +10607,7 @@ msgstr "ADVERTENCIA:"
 #: screens/Job/Job.helptext.js:20
 #: screens/Template/shared/JobTemplate.helptext.js:51
 msgid "Tags are useful when you have a large playbook, and you want to run a specific part of a play or task. Use commas to separate multiple tags. Refer to the documentation for details on the usage of tags."
-msgstr ""
-"Las etiquetas resultan útiles cuando tiene un playbook\n"
-"de gran tamaño y desea ejecutar una parte específica\n"
-"de la tarea o la jugada. Utilice comas para separar varias\n"
-"etiquetas. Consulte la documentación para obtener\n"
-"información detallada sobre el uso de etiquetas."
+msgstr "Etiquetas son útiles cuando se tiene un playbook largo y se desea especificar una parte específica de una jugada o tarea. Utilice comas para separar varias etiquetas. Consulte la documentación para más detalles sobre el uso de las etiquetas."
 
 #: components/TemplateList/TemplateList.js:272
 msgid "{0, plural, one {This template is currently being used by some workflow nodes. Are you sure you want to delete it?} other {Deleting these templates could impact some workflow nodes that rely on them. Are you sure you want to delete anyway?}}"
