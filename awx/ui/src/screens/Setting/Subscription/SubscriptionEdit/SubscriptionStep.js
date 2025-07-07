@@ -20,8 +20,8 @@ import getDocsBaseUrl from 'util/getDocsBaseUrl';
 import useModal from 'hooks/useModal';
 import FormField, { PasswordField } from 'components/FormField';
 import Popover from 'components/Popover';
-import SubscriptionModal from './SubscriptionModal';
 import { useLingui } from '@lingui/react';
+import SubscriptionModal from './SubscriptionModal';
 
 const LICENSELINK = 'https://www.ansible.com/license';
 const FileUploadField = styled(FormGroup)`

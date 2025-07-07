@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 
-import { Trans, t } from '@lingui/macro';
 import { useField } from 'formik';
 import { Button, Flex, FormGroup } from '@patternfly/react-core';
 import getDocsBaseUrl from 'util/getDocsBaseUrl';
@@ -8,7 +7,7 @@ import { required } from 'util/validators';
 import FormField, { CheckboxField, PasswordField } from 'components/FormField';
 import { useConfig } from 'contexts/Config';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { Trans, msg } from '@lingui/macro';
 
 const ANALYTICSLINK = 'https://www.ansible.com/products/automation-analytics';
 
