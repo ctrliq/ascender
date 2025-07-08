@@ -61,7 +61,7 @@ function LabelLists() {
             <HeaderCell>{i18n._(msg`Organization`)}</HeaderCell>
           </HeaderRow>
         }
-        renderRow={(label) => <LabelListItem label={label} searchOrg />}
+        renderRow={(label) => <LabelListItem key={label.id} label={label} searchOrg />}
       />
     </Card>
   );
