@@ -1,4 +1,6 @@
 import React, { useCallback } from 'react';
+import { useLingui } from '@lingui/react';
+import { msg } from '@lingui/macro';
 
 import { func, shape } from 'prop-types';
 import { Formik } from 'formik';
@@ -18,6 +20,7 @@ function ExternalTestModal({
   credentialFormValues,
   onClose,
 }) {
+  const { i18n } = useLingui();
   const {
     result: testPluginSuccess,
     error: testPluginError,
@@ -73,7 +76,7 @@ function ExternalTestModal({
       >
         {({ handleSubmit, setFieldValue }) => (
           <Modal
-            title={t`Test External Credential`}
+            title={i18n._(msg`Test External Credential`)}
             isOpen
             onClose={() => onClose()}
             variant="small"
@@ -85,7 +88,7 @@ function ExternalTestModal({
                 variant="primary"
                 onClick={() => handleSubmit()}
               >
-                {t`Run`}
+                {i18n._(msg`Run`)}
               </Button>,
               <Button
                 ouiaId="external-test-modal-cancel-button"
@@ -94,7 +97,7 @@ function ExternalTestModal({
                 variant="link"
                 onClick={() => onClose()}
               >
-                {t`Cancel`}
+                {i18n._(msg`Cancel`)}
               </Button>,
             ]}
           >

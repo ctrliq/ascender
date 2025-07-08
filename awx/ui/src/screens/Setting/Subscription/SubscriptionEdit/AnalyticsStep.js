@@ -1,16 +1,18 @@
 import React, { useEffect } from 'react';
 
-import { Trans, t } from '@lingui/macro';
 import { useField } from 'formik';
 import { Button, Flex, FormGroup } from '@patternfly/react-core';
 import getDocsBaseUrl from 'util/getDocsBaseUrl';
 import { required } from 'util/validators';
 import FormField, { CheckboxField, PasswordField } from 'components/FormField';
 import { useConfig } from 'contexts/Config';
+import { useLingui } from '@lingui/react';
+import { Trans, msg } from '@lingui/macro';
 
 const ANALYTICSLINK = 'https://www.ansible.com/products/automation-analytics';
 
 function AnalyticsStep() {
+  const { i18n } = useLingui();
   const config = useConfig();
   const [manifest] = useField('manifest_file');
   const [insights] = useField('insights');
@@ -48,7 +50,7 @@ function AnalyticsStep() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            this Tower documentation page
+            {i18n._(msg`this Tower documentation page`)}
           </Button>
           . Uncheck the following boxes to disable this feature.
         </Trans>
@@ -57,24 +59,24 @@ function AnalyticsStep() {
         <CheckboxField
           name="pendo"
           isDisabled={!config.me.is_superuser}
-          aria-label={t`User analytics`}
-          label={t`User analytics`}
+          aria-label={i18n._(msg`User analytics`)}
+          label={i18n._(msg`User analytics`)}
           id="pendo-field"
-          description={t`This data is used to enhance
+          description={i18n._(msg`This data is used to enhance
                    future releases of the Tower Software and help
-                   streamline customer experience and success.`}
+                   streamline customer experience and success.`)}
         />
       </FormGroup>
       <FormGroup fieldId="insights">
         <CheckboxField
           name="insights"
           isDisabled={!config.me.is_superuser}
-          aria-label={t`Automation Analytics`}
-          label={t`Automation Analytics`}
+          aria-label={i18n._(msg`Automation Analytics`)}
+          label={i18n._(msg`Automation Analytics`)}
           id="insights-field"
-          description={t`This data is used to enhance
+          description={i18n._(msg`This data is used to enhance
                    future releases of the Software and to provide
-                   Automation Analytics.`}
+                   Automation Analytics.`)}
         />
       </FormGroup>
       {requireCredentialFields && (
@@ -90,7 +92,7 @@ function AnalyticsStep() {
             id="username-field"
             isDisabled={!config.me.is_superuser}
             isRequired={requireCredentialFields}
-            label={t`Username`}
+            label={i18n._(msg`Username`)}
             name="username"
             type="text"
             validate={required(null)}
@@ -99,7 +101,7 @@ function AnalyticsStep() {
             id="password-field"
             isDisabled={!config.me.is_superuser}
             isRequired={requireCredentialFields}
-            label={t`Password`}
+            label={i18n._(msg`Password`)}
             name="password"
             validate={required(null)}
           />
@@ -109,7 +111,7 @@ function AnalyticsStep() {
         <img
           width="300"
           src="static/media/insights-analytics-dashboard.jpeg"
-          alt={t`Automation Analytics dashboard`}
+          alt={i18n._(msg`Automation Analytics dashboard`)}
         />
         <Button
           component="a"

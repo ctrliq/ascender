@@ -192,12 +192,11 @@ function ExecutionEnvironmentList() {
                     itemsToDelete={selected}
                     pluralizedItemName={i18n._(msg`Execution Environments`)}
                     deleteDetailsRequests={deleteDetailsRequests}
-                    deleteMessage={i18n._(msg({
-                      id: 'deleteExecutionEnvironments',
-                      message: selected.length === 1
-                        ? 'This execution environment is currently being used by other resources. Are you sure you want to delete it?'
-                        : 'These execution environments could be in use by other resources that rely on them. Are you sure you want to delete them anyway?'
-                    }))}
+                    deleteMessage={
+                      selected.length === 1
+                        ? i18n._(msg`This execution environment is currently being used by other resources. Are you sure you want to delete it?`)
+                        : i18n._(msg`These execution environments could be in use by other resources that rely on them. Are you sure you want to delete them anyway?`)
+                    }
                   />,
                 ]}
               />
