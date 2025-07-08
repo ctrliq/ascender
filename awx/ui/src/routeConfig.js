@@ -25,6 +25,7 @@ import Users from 'screens/User';
 import WorkflowApprovals from 'screens/WorkflowApproval';
 import { Jobs } from 'screens/Job';
 import HostMetrics from 'screens/HostMetrics';
+import Labels from 'screens/Labels';
 
 function getRouteConfig(userProfile = {}) {
   let routeConfig = [
@@ -73,6 +74,11 @@ function getRouteConfig(userProfile = {}) {
       groupTitle: <Trans>Resources</Trans>,
       groupId: 'resources_group',
       routes: [
+        {
+          title: <Trans>Labels</Trans>,
+          path: '/labels',
+          screen: Labels,
+        },
         {
           title: <Trans>Templates</Trans>,
           path: '/templates',
