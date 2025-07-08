@@ -1,5 +1,5 @@
 ---
-# Modifications Copyright (c) 2023 Ctrl IQ, Inc.
+# Modifications Copyright (c) 2025 Ctrl IQ, Inc.
 name: Build/Push Development Images
 env:
   LC_ALL: "C.UTF-8" # prevent ERROR: Ansible could not initialize the preferred locale: unsupported locale setting
@@ -7,8 +7,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - devel
-      - jc_devel
+      - main
 #      - release_*
 #      - feature_*
 jobs:
@@ -29,9 +28,9 @@ jobs:
           #- image-name: awx
           #  make-target: awx-kube-buildx
     steps:
-      - name: Skipping build of awx image for non-awx repository
+      - name: Skipping build of Ascender image for non-Ascender repository
         run: |
-          echo "Skipping build of awx image for non-awx repository"
+          echo "Skipping build of Ascender image for non-Ascender repository"
           exit 0
         if: matrix.build-targets.image-name == 'awx' && !endsWith(github.repository, '/ascender')
 
@@ -62,7 +61,7 @@ jobs:
             -e registry_username=${{ github.actor }} \
             -e registry_password=${{ secrets.GITHUB_TOKEN }} \
             -e awx_image=${{ github.repository }}_devel \
-            -e awx_version=24 \
+            -e awx_version=latest \
             -e ansible_python_interpreter=$(which python3) \
             -e push=yes \
             -e awx_official=no
