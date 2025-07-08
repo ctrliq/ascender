@@ -41,7 +41,7 @@ function About({ version, isOpen, onClose }) {
   const copyright = i18n._(msg`Copyright`);
   const redHatInc = i18n._(msg`Red Hat, Inc.`);
   const CIQInc = i18n._(msg`Ctrl IQ, Inc.`);
-
+  const currentyear = new Date().getFullYear();
   return (
     <AboutModal
       isOpen={isOpen}
@@ -63,10 +63,10 @@ function About({ version, isOpen, onClose }) {
                   ||     ||
                     `}
       </pre>
-      <div style={{ marginTop: 16, whiteSpace: 'pre-line' }}>
-        {copyright} {new Date().getFullYear()} {CIQInc}
+      <div style={{ marginTop: 16 }}>
+        {copyright} {currentyear} {CIQInc}
         <br />
-        {copyright} {new Date().getFullYear()} {redHatInc}
+        {copyright} {currentyear} {redHatInc}
       </div>
     </AboutModal>
   );
