@@ -16,6 +16,10 @@
         awx_version: "{{ scm_version.stdout }}"
       when: awx_version is not defined
 
+    - name: Set awx_docker_version with + replaced by _
+      set_fact:
+        awx_docker_version: "{{ awx_version | replace('+', '_') }}"
+
     - include_role:
         name: dockerfile
     - include_role:
