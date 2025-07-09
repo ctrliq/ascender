@@ -57,7 +57,7 @@ jobs:
         id: date
         uses: Kaven-Universe/github-action-current-date-time@v1
         with:
-          format: "YYYY.MM.DD"
+          format: "YYYY.M.D"
 
       - uses: benjlevesque/short-sha@v3.0
         id: short-sha
