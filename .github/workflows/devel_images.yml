@@ -56,8 +56,6 @@ jobs:
       - name: Get current date
         id: date
         uses: Kaven-Universe/github-action-current-date-time@v1
-        with:
-          format: "YYYY.M.D"
 
       - uses: benjlevesque/short-sha@v3.0
         id: short-sha
@@ -72,7 +70,7 @@ jobs:
             -e registry_username=${{ github.actor }} \
             -e registry_password=${{ secrets.GITHUB_TOKEN }} \
             -e awx_image=${{ github.repository }}_devel \
-            -e awx_version=${{ steps.date.outputs.time }}+git${{ steps.short-sha.outputs.sha }} \
+            -e awx_version=${{ steps.date.outputs.year }}.${{ steps.date.outputs.month }}.${{ steps.date.outputs.day }}+git${{ steps.short-sha.outputs.sha }} \
             -e ansible_python_interpreter=$(which python3) \
             -e push=yes \
             -e awx_official=no
