@@ -57,7 +57,7 @@ azure-core==1.30.0
     #   azure-keyvault-keys
     #   azure-keyvault-secrets
     #   msrest
-azure-identity==1.15.0
+azure-identity==1.16.1
     # via -r /awx_devel/requirements/requirements.in
 azure-keyvault==4.2.0
     # via -r /awx_devel/requirements/requirements.in
