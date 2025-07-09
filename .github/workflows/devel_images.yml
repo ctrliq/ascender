@@ -57,13 +57,7 @@ jobs:
         id: date
         uses: Kaven-Universe/github-action-current-date-time@v1
         with:
-          format: "YYYY.MM"
-
-      - name: Get current day
-        id: day
-        uses: Kaven-Universe/github-action-current-date-time@v1
-        with:
-          format: "DD"
+          format: "YYYY.MM.DD"
 
       - name: Build Ascender Devel Image
         working-directory: ascender
@@ -73,7 +67,7 @@ jobs:
             -e registry_username=${{ github.actor }} \
             -e registry_password=${{ secrets.GITHUB_TOKEN }} \
             -e awx_image=${{ github.repository }}_devel \
-            -e awx_version=${{ steps.date.outputs.time }}.dev${{ steps.day.outputs.time }}+git${{ github.sha }} \
+            -e awx_version=${{ steps.date.outputs.time }}+git${{ github.sha }} \
             -e ansible_python_interpreter=$(which python3) \
             -e push=yes \
             -e awx_official=no
