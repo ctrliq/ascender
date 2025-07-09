@@ -19,7 +19,7 @@ msgid "{forks, plural, one {# fork} other {# forks}}"
 msgstr ""
 
 #: components/UserAndTeamAccessAdd/getResourceAccessConfig.js:147
-#: routeConfig.js:87
+#: routeConfig.js:93
 #: screens/ActivityStream/ActivityStream.js:172
 #: screens/Dashboard/Dashboard.js:124
 #: screens/Project/ProjectList/ProjectList.js:182
@@ -139,7 +139,7 @@ msgstr ""
 msgid "Unable to load last job update"
 msgstr ""
 
-#: routeConfig.js:66
+#: routeConfig.js:67
 #: screens/SubscriptionUsage/SubscriptionUsage.js:41
 msgid "Subscription Usage"
 msgstr ""
@@ -210,6 +210,7 @@ msgstr ""
 #: screens/Project/ProjectList/ProjectListItem.js:220
 #: screens/Team/TeamRoles/TeamRoleListItem.js:19
 #: screens/Team/TeamRoles/TeamRolesList.js:183
+#: screens/Template/Survey/SurveyList.js:105
 #: screens/Template/Survey/SurveyList.js:105
 #: screens/Template/Survey/SurveyListItem.js:62
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/ProjectsList.js:95
@@ -370,9 +371,7 @@ msgstr ""
 msgid "Removing"
 msgstr ""
 
-#. js-lingui-explicit-id
 #: screens/Project/ProjectList/ProjectListItem.js:109
-#: screens/Project/ProjectDetail/ProjectDetail.js:212
 msgid "The project must be synced before a revision is available."
 msgstr ""
 
@@ -564,10 +563,8 @@ msgstr ""
 msgid "Options"
 msgstr ""
 
-#. js-lingui-explicit-id
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:338
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:319
-#: screens/Project/ProjectDetail/ProjectDetail.js:324
 msgid "Cancel Sync"
 msgstr ""
 
@@ -595,7 +592,6 @@ msgstr ""
 msgid "GPG Public Key"
 msgstr ""
 
-#. js-lingui-explicit-id
 #: components/Lookup/ProjectLookup.js:145
 #: components/PromptDetail/PromptProjectDetail.js:103
 #: components/UserAndTeamAccessAdd/getResourceAccessConfig.js:97
@@ -603,7 +599,6 @@ msgstr ""
 #: screens/Project/ProjectList/ProjectList.js:207
 #: screens/Project/shared/ProjectSubForms/SharedFields.js:18
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/ProjectsList.js:106
-#: screens/Project/ProjectDetail/ProjectDetail.js:226
 msgid "Source Control URL"
 msgstr ""
 
@@ -651,7 +646,7 @@ msgstr ""
 msgid "JSON:"
 msgstr ""
 
-#: routeConfig.js:32
+#: routeConfig.js:33
 #: screens/ActivityStream/ActivityStream.js:147
 msgid "Views"
 msgstr ""
@@ -722,7 +717,7 @@ msgstr ""
 msgid "Failed to delete one or more instance groups."
 msgstr ""
 
-#: routeConfig.js:61
+#: routeConfig.js:62
 #: screens/HostMetrics/HostMetrics.js:31
 #: screens/HostMetrics/HostMetrics.js:67
 #: screens/HostMetrics/HostMetrics.js:110
@@ -1056,9 +1051,7 @@ msgstr ""
 msgid "Edit group"
 msgstr ""
 
-#. js-lingui-explicit-id
 #: screens/Project/ProjectList/ProjectListItem.js:100
-#: screens/Project/ProjectDetail/ProjectDetail.js:203
 msgid "Copy full revision to clipboard."
 msgstr ""
 
@@ -1228,7 +1221,7 @@ msgid ""
 "with directly and indirectly."
 msgstr ""
 
-#: routeConfig.js:97
+#: routeConfig.js:103
 #: screens/ActivityStream/ActivityStream.js:178
 #: screens/Dashboard/Dashboard.js:102
 #: screens/Host/HostList/HostList.js:143
@@ -1293,6 +1286,7 @@ msgstr ""
 #: components/ResourceAccessList/ResourceAccessListItem.js:70
 #: screens/Team/Team.js:61
 #: screens/Team/Teams.js:34
+#: screens/User/User.js:73
 #: screens/User/Users.js:32
 msgid "Roles"
 msgstr ""
@@ -1465,7 +1459,6 @@ msgstr ""
 msgid "Hour"
 msgstr ""
 
-#. js-lingui-explicit-id
 #: components/AddRole/AddResourceRole.js:53
 #: components/AddRole/AddResourceRole.js:69
 #: components/AdHocCommands/AdHocCredentialStep.js:120
@@ -1478,6 +1471,9 @@ msgstr ""
 #: components/JobList/JobList.js:197
 #: components/JobList/JobList.js:246
 #: components/JobList/JobListItem.js:88
+#: components/LabelLists/LabelListItem.js:16
+#: components/LabelLists/LabelLists.js:55
+#: components/LabelLists/LabelLists.js:60
 #: components/LaunchPrompt/steps/CredentialsStep.js:191
 #: components/LaunchPrompt/steps/CredentialsStep.js:206
 #: components/LaunchPrompt/steps/ExecutionEnvironmentStep.js:78
@@ -1665,7 +1661,9 @@ msgstr ""
 #: screens/Template/shared/JobTemplateForm.js:246
 #: screens/Template/shared/WorkflowJobTemplateForm.js:111
 #: screens/Template/Survey/SurveyList.js:104
+#: screens/Template/Survey/SurveyList.js:104
 #: screens/Template/Survey/SurveyListItem.js:41
+#: screens/Template/Survey/SurveyReorderModal.js:219
 #: screens/Template/Survey/SurveyReorderModal.js:219
 #: screens/Template/Survey/SurveyReorderModal.js:240
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:112
@@ -1693,7 +1691,6 @@ msgstr ""
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:174
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:223
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListItem.js:56
-#: screens/Project/ProjectDetail/ProjectDetail.js:177
 msgid "Name"
 msgstr ""
 
@@ -1773,6 +1770,10 @@ msgstr ""
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.js:122
 msgid "Hosts remaining"
+msgstr ""
+
+#: components/About/About.js:43
+msgid "Ctrl IQ, Inc."
 msgstr ""
 
 #: screens/Template/TemplateSurvey.js:134
@@ -1858,6 +1859,7 @@ msgstr ""
 #: screens/Team/TeamList/TeamList.js:146
 #: screens/Team/TeamList/TeamListItem.js:49
 #: screens/Template/Survey/SurveyList.js:107
+#: screens/Template/Survey/SurveyList.js:107
 #: screens/Template/Survey/SurveyListItem.js:92
 #: screens/User/UserList/UserList.js:167
 #: screens/User/UserList/UserListItem.js:58
@@ -1917,14 +1919,12 @@ msgstr ""
 msgid "Approved"
 msgstr ""
 
-#: routeConfig.js:36
+#: routeConfig.js:37
 #: screens/Dashboard/Dashboard.js:95
 msgid "Dashboard"
 msgstr ""
 
-#. js-lingui-explicit-id
 #: components/PromptDetail/PromptProjectDetail.js:67
-#: screens/Project/ProjectDetail/ProjectDetail.js:122
 msgid "Allow branch override"
 msgstr ""
 
@@ -1950,7 +1950,7 @@ msgstr ""
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:264
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:343
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:448
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:96
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:95
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:210
 #: screens/User/shared/UserForm.js:77
 #: screens/User/UserDetail/UserDetail.js:70
@@ -1982,7 +1982,7 @@ msgstr ""
 msgid "This project is currently on sync and cannot be clicked until sync process completed"
 msgstr ""
 
-#: routeConfig.js:125
+#: routeConfig.js:131
 #: screens/ActivityStream/ActivityStream.js:192
 msgid "Administration"
 msgstr ""
@@ -2018,7 +2018,7 @@ msgstr ""
 
 #: screens/Login/Login.js:237
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:75
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:105
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:104
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:218
 #: screens/Template/Survey/SurveyQuestionForm.js:84
 #: screens/User/shared/UserForm.js:89
@@ -2283,10 +2283,8 @@ msgstr ""
 msgid "Undo"
 msgstr ""
 
-#. js-lingui-explicit-id
 #: components/PromptDetail/PromptProjectDetail.js:119
 #: screens/Project/shared/ProjectSubForms/SharedFields.js:61
-#: screens/Project/ProjectDetail/ProjectDetail.js:257
 msgid "Source Control Credential"
 msgstr ""
 
@@ -2304,9 +2302,7 @@ msgstr ""
 msgid "The Instance Groups for this Organization to run on."
 msgstr ""
 
-#. js-lingui-explicit-id
 #: screens/Project/ProjectList/ProjectListItem.js:111
-#: screens/Project/ProjectDetail/ProjectDetail.js:214
 msgid "Sync for revision"
 msgstr ""
 
@@ -2359,6 +2355,11 @@ msgstr ""
 msgid "Enable external logging"
 msgstr ""
 
+#. js-lingui-explicit-id
+#: screens/Project/ProjectDetail/ProjectDetail.js:122
+msgid "Allow branch override"
+msgstr ""
+
 #: components/JobList/JobListItem.js:316
 #: screens/Job/JobDetail/JobDetail.js:406
 msgid "Job Slice"
@@ -2376,14 +2377,12 @@ msgstr ""
 msgid "Job Templates with credentials that prompt for passwords cannot be selected when creating or editing nodes"
 msgstr ""
 
-#. js-lingui-explicit-id
 #: components/PromptDetail/PromptProjectDetail.js:113
 #: screens/Project/shared/ProjectSubForms/GitSubForm.js:34
-#: screens/Project/ProjectDetail/ProjectDetail.js:236
 msgid "Source Control Refspec"
 msgstr ""
 
-#: routeConfig.js:149
+#: routeConfig.js:155
 #: screens/ActivityStream/ActivityStream.js:205
 #: screens/InstanceGroup/InstanceGroup.js:76
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:200
@@ -2433,13 +2432,11 @@ msgstr ""
 msgid "Failed to disassociate one or more hosts."
 msgstr ""
 
-#. js-lingui-explicit-id
 #: components/Sparkline/Sparkline.js:30
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:52
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:167
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:38
 #: screens/Project/ProjectList/ProjectListItem.js:72
-#: screens/Project/ProjectDetail/ProjectDetail.js:133
 msgid "JOB ID:"
 msgstr ""
 
@@ -2492,7 +2489,6 @@ msgstr ""
 msgid "Template copied successfully"
 msgstr ""
 
-#. js-lingui-explicit-id
 #: components/Lookup/ProjectLookup.js:137
 #: components/PromptDetail/PromptProjectDetail.js:100
 #: components/UserAndTeamAccessAdd/getResourceAccessConfig.js:89
@@ -2506,15 +2502,12 @@ msgstr ""
 #: screens/Project/ProjectList/ProjectList.js:199
 #: screens/Project/ProjectList/ProjectListItem.js:221
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/ProjectsList.js:98
-#: screens/Project/ProjectDetail/ProjectDetail.js:193
 msgid "Manual"
 msgstr ""
 
-#. js-lingui-explicit-id
 #: components/PromptDetail/PromptProjectDetail.js:98
 #: screens/Job/JobDetail/JobDetail.js:305
 #: screens/Project/shared/ProjectForm.js:263
-#: screens/Project/ProjectDetail/ProjectDetail.js:192
 msgid "Source Control Type"
 msgstr ""
 
@@ -2608,7 +2601,7 @@ msgstr ""
 
 #: components/AddRole/AddResourceRole.js:190
 #: components/AddRole/AddResourceRole.js:191
-#: routeConfig.js:118
+#: routeConfig.js:124
 #: screens/ActivityStream/ActivityStream.js:189
 #: screens/Organization/Organization.js:126
 #: screens/Organization/OrganizationList/OrganizationList.js:147
@@ -2619,6 +2612,7 @@ msgstr ""
 #: screens/Team/TeamList/TeamList.js:168
 #: screens/Team/Teams.js:17
 #: screens/Team/Teams.js:27
+#: screens/User/User.js:72
 #: screens/User/Users.js:33
 #: screens/User/UserTeams/UserTeamList.js:176
 #: screens/User/UserTeams/UserTeamList.js:247
@@ -2700,16 +2694,17 @@ msgstr ""
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:269
-#: components/PromptDetail/PromptInventorySourceDetail.js:103
-#: components/PromptDetail/PromptProjectDetail.js:151
-#: screens/Project/shared/ProjectSubForms/SharedFields.js:124
 msgid "Cache Timeout"
 msgstr ""
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:322
-#: screens/Project/ProjectList/ProjectListItem.js:232
 msgid "Cancel Project Sync"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: screens/Project/ProjectDetail/ProjectDetail.js:324
+msgid "Cancel Sync"
 msgstr ""
 
 #: components/AdHocCommands/AdHocCredentialStep.js:107
@@ -2747,9 +2742,12 @@ msgstr ""
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:241
-#: components/PromptDetail/PromptProjectDetail.js:132
-#: screens/Project/shared/ProjectForm.js:294
 msgid "Content Signature Validation Credential"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: screens/Project/ProjectDetail/ProjectDetail.js:203
+msgid "Copy full revision to clipboard."
 msgstr ""
 
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.js:73
@@ -2758,33 +2756,6 @@ msgstr ""
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:293
-#: components/Lookup/ApplicationLookup.js:117
-#: components/PromptDetail/PromptDetail.js:157
-#: components/Schedule/ScheduleDetail/ScheduleDetail.js:417
-#: screens/Application/ApplicationDetails/ApplicationDetails.js:106
-#: screens/Credential/CredentialDetail/CredentialDetail.js:259
-#: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.js:92
-#: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:104
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:153
-#: screens/Host/HostDetail/HostDetail.js:88
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:88
-#: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:108
-#: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.js:49
-#: screens/Inventory/InventoryDetail/InventoryDetail.js:160
-#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:44
-#: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:81
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:294
-#: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:135
-#: screens/Job/JobDetail/JobDetail.js:566
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:395
-#: screens/Organization/OrganizationDetail/OrganizationDetail.js:112
-#: screens/Team/TeamDetail/TeamDetail.js:49
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.js:349
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:191
-#: screens/User/UserDetail/UserDetail.js:84
-#: screens/User/UserTokenDetail/UserTokenDetail.js:62
-#: screens/User/UserTokenList/UserTokenList.js:151
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:181
 msgid "Created"
 msgstr ""
 
@@ -2913,49 +2884,6 @@ msgstr ""
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:341
-#: components/DeleteButton/DeleteButton.js:78
-#: components/DeleteButton/DeleteButton.js:83
-#: components/DeleteButton/DeleteButton.js:93
-#: components/DeleteButton/DeleteButton.js:97
-#: components/DeleteButton/DeleteButton.js:117
-#: components/PaginatedTable/ToolbarDeleteButton.js:160
-#: components/PaginatedTable/ToolbarDeleteButton.js:237
-#: components/PaginatedTable/ToolbarDeleteButton.js:248
-#: components/PaginatedTable/ToolbarDeleteButton.js:252
-#: components/PaginatedTable/ToolbarDeleteButton.js:275
-#: components/ResourceAccessList/DeleteRoleConfirmationModal.js:30
-#: components/Schedule/ScheduleDetail/ScheduleDetail.js:639
-#: screens/Application/ApplicationDetails/ApplicationDetails.js:129
-#: screens/Credential/CredentialDetail/CredentialDetail.js:308
-#: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.js:126
-#: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:135
-#: screens/HostMetrics/HostMetricsDeleteButton.js:134
-#: screens/HostMetrics/HostMetricsDeleteButton.js:138
-#: screens/HostMetrics/HostMetricsDeleteButton.js:159
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:135
-#: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:141
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:351
-#: screens/Inventory/InventoryDetail/InventoryDetail.js:188
-#: screens/Inventory/InventoryGroups/InventoryGroupsList.js:103
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:333
-#: screens/Inventory/shared/InventoryGroupsDeleteModal.js:66
-#: screens/Inventory/shared/InventoryGroupsDeleteModal.js:70
-#: screens/Inventory/shared/InventoryGroupsDeleteModal.js:75
-#: screens/Inventory/shared/InventoryGroupsDeleteModal.js:80
-#: screens/Inventory/shared/InventoryGroupsDeleteModal.js:104
-#: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:160
-#: screens/Job/JobDetail/JobDetail.js:644
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:438
-#: screens/Organization/OrganizationDetail/OrganizationDetail.js:178
-#: screens/Project/shared/ProjectSubForms/SharedFields.js:86
-#: screens/Team/TeamDetail/TeamDetail.js:72
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.js:523
-#: screens/Template/Survey/SurveyList.js:68
-#: screens/Template/Survey/SurveyToolbar.js:95
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:273
-#: screens/User/UserDetail/UserDetail.js:109
-#: screens/User/UserTokenDetail/UserTokenDetail.js:79
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:321
 msgid "Delete"
 msgstr ""
 
@@ -2966,92 +2894,11 @@ msgstr ""
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:101
-#: components/PromptDetail/PromptProjectDetail.js:52
 msgid "Delete the project before syncing"
 msgstr ""
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:178
-#: components/HostForm/HostForm.js:108
-#: components/Lookup/ApplicationLookup.js:107
-#: components/Lookup/ApplicationLookup.js:125
-#: components/Lookup/HostFilterLookup.js:426
-#: components/Lookup/HostListItem.js:11
-#: components/NotificationList/NotificationList.js:188
-#: components/PromptDetail/PromptDetail.js:122
-#: components/Schedule/ScheduleDetail/ScheduleDetail.js:338
-#: components/Schedule/ScheduleList/ScheduleList.js:195
-#: components/Schedule/shared/ScheduleFormFields.js:85
-#: components/TemplateList/TemplateList.js:216
-#: components/TemplateList/TemplateListItem.js:273
-#: screens/Application/ApplicationDetails/ApplicationDetails.js:66
-#: screens/Application/ApplicationsList/ApplicationsList.js:121
-#: screens/Application/shared/ApplicationForm.js:64
-#: screens/Credential/CredentialDetail/CredentialDetail.js:225
-#: screens/Credential/CredentialList/CredentialList.js:148
-#: screens/Credential/shared/CredentialForm.js:171
-#: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.js:74
-#: screens/CredentialType/CredentialTypeList/CredentialTypeList.js:129
-#: screens/CredentialType/shared/CredentialTypeForm.js:31
-#: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:61
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:161
-#: screens/ExecutionEnvironment/shared/ExecutionEnvironmentForm.js:129
-#: screens/Host/HostDetail/HostDetail.js:77
-#: screens/Host/HostList/HostList.js:153
-#: screens/Host/HostList/HostList.js:171
-#: screens/Host/HostList/HostListItem.js:52
-#: screens/Instances/Shared/InstanceForm.js:39
-#: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.js:39
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:164
-#: screens/Inventory/InventoryDetail/InventoryDetail.js:96
-#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:36
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.js:220
-#: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:80
-#: screens/Inventory/InventoryHosts/InventoryHostItem.js:80
-#: screens/Inventory/InventoryHosts/InventoryHostList.js:126
-#: screens/Inventory/InventoryHosts/InventoryHostList.js:142
-#: screens/Inventory/InventoryList/InventoryList.js:208
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:210
-#: screens/Inventory/shared/ConstructedInventoryForm.js:70
-#: screens/Inventory/shared/ConstructedInventoryHint.js:71
-#: screens/Inventory/shared/InventoryForm.js:60
-#: screens/Inventory/shared/InventoryGroupForm.js:42
-#: screens/Inventory/shared/InventorySourceForm.js:112
-#: screens/Inventory/shared/SmartInventoryForm.js:57
-#: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:106
-#: screens/Job/JobOutput/HostEventModal.js:113
-#: screens/ManagementJob/ManagementJobList/ManagementJobList.js:103
-#: screens/ManagementJob/ManagementJobList/ManagementJobListItem.js:74
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:111
-#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:129
-#: screens/NotificationTemplate/shared/NotificationTemplateForm.js:50
-#: screens/Organization/OrganizationDetail/OrganizationDetail.js:92
-#: screens/Organization/OrganizationList/OrganizationList.js:129
-#: screens/Organization/shared/OrganizationForm.js:65
-#: screens/Project/ProjectList/ProjectList.js:192
-#: screens/Project/ProjectList/ProjectListItem.js:283
-#: screens/Project/shared/ProjectForm.js:226
-#: screens/Team/shared/TeamForm.js:39
-#: screens/Team/TeamDetail/TeamDetail.js:40
-#: screens/Team/TeamList/TeamList.js:124
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.js:183
-#: screens/Template/shared/JobTemplateForm.js:254
-#: screens/Template/shared/WorkflowJobTemplateForm.js:119
-#: screens/Template/Survey/SurveyQuestionForm.js:174
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:114
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:185
-#: screens/User/shared/UserTokenForm.js:61
-#: screens/User/UserOrganizations/UserOrganizationList.js:82
-#: screens/User/UserOrganizations/UserOrganizationListItem.js:21
-#: screens/User/UserTeams/UserTeamList.js:183
-#: screens/User/UserTeams/UserTeamListItem.js:34
-#: screens/User/UserTokenDetail/UserTokenDetail.js:46
-#: screens/User/UserTokenList/UserTokenList.js:129
-#: screens/User/UserTokenList/UserTokenList.js:139
-#: screens/User/UserTokenList/UserTokenList.js:189
-#: screens/User/UserTokenList/UserTokenListItem.js:30
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:127
-#: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:179
 msgid "Description"
 msgstr ""
 
@@ -3061,7 +2908,6 @@ msgstr ""
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:95
-#: components/PromptDetail/PromptProjectDetail.js:47
 msgid "Discard local changes before syncing"
 msgstr ""
 
@@ -3122,7 +2968,7 @@ msgstr ""
 msgid "Last Health Check"
 msgstr ""
 
-#: routeConfig.js:164
+#: routeConfig.js:170
 #: screens/TopologyView/TopologyView.js:44
 msgid "Topology View"
 msgstr ""
@@ -3192,67 +3038,6 @@ msgstr ""
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:314
-#: components/Schedule/ScheduleDetail/ScheduleDetail.js:625
-#: components/Schedule/ScheduleDetail/ScheduleDetail.js:629
-#: screens/Application/ApplicationDetails/ApplicationDetails.js:116
-#: screens/Application/ApplicationDetails/ApplicationDetails.js:118
-#: screens/Credential/CredentialDetail/CredentialDetail.js:295
-#: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.js:111
-#: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:122
-#: screens/Host/HostDetail/HostDetail.js:110
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:121
-#: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:127
-#: screens/Instances/InstanceDetail/InstanceDetail.js:351
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:326
-#: screens/Inventory/InventoryDetail/InventoryDetail.js:177
-#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:57
-#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:64
-#: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:103
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:309
-#: screens/Inventory/InventorySources/InventorySourceListItem.js:129
-#: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:150
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:420
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:422
-#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.js:147
-#: screens/Organization/OrganizationDetail/OrganizationDetail.js:161
-#: screens/Organization/OrganizationDetail/OrganizationDetail.js:165
-#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.js:86
-#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.js:90
-#: screens/Setting/GitHub/GitHubDetail/GitHubDetail.js:149
-#: screens/Setting/GitHub/GitHubDetail/GitHubDetail.js:153
-#: screens/Setting/GoogleOAuth2/GoogleOAuth2Detail/GoogleOAuth2Detail.js:86
-#: screens/Setting/GoogleOAuth2/GoogleOAuth2Detail/GoogleOAuth2Detail.js:90
-#: screens/Setting/Jobs/JobsDetail/JobsDetail.js:97
-#: screens/Setting/Jobs/JobsDetail/JobsDetail.js:101
-#: screens/Setting/LDAP/LDAPDetail/LDAPDetail.js:165
-#: screens/Setting/LDAP/LDAPDetail/LDAPDetail.js:169
-#: screens/Setting/Logging/LoggingDetail/LoggingDetail.js:109
-#: screens/Setting/Logging/LoggingDetail/LoggingDetail.js:113
-#: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.js:86
-#: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.js:90
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.js:148
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.js:152
-#: screens/Setting/OIDC/OIDCDetail/OIDCDetail.js:86
-#: screens/Setting/OIDC/OIDCDetail/OIDCDetail.js:90
-#: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.js:100
-#: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.js:104
-#: screens/Setting/SAML/SAMLDetail/SAMLDetail.js:87
-#: screens/Setting/SAML/SAMLDetail/SAMLDetail.js:91
-#: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.js:230
-#: screens/Setting/TACACS/TACACSDetail/TACACSDetail.js:104
-#: screens/Setting/TACACS/TACACSDetail/TACACSDetail.js:109
-#: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.js:93
-#: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.js:97
-#: screens/Setting/UI/UIDetail/UIDetail.js:112
-#: screens/Setting/UI/UIDetail/UIDetail.js:117
-#: screens/Team/TeamDetail/TeamDetail.js:57
-#: screens/Team/TeamDetail/TeamDetail.js:61
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.js:492
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.js:494
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:243
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:245
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeViewModal.js:266
-#: screens/User/UserDetail/UserDetail.js:98
 msgid "Edit"
 msgstr ""
 
@@ -3260,6 +3045,7 @@ msgstr ""
 msgid "Local Time Zone"
 msgstr ""
 
+#: screens/Template/Survey/SurveyReorderModal.js:220
 #: screens/Template/Survey/SurveyReorderModal.js:220
 #: screens/Template/Survey/SurveyReorderModal.js:243
 msgid "Default Answer(s)"
@@ -3283,16 +3069,6 @@ msgstr ""
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:303
-#: components/PromptDetail/PromptInventorySourceDetail.js:172
-#: components/PromptDetail/PromptJobTemplateDetail.js:189
-#: components/PromptDetail/PromptProjectDetail.js:145
-#: components/PromptDetail/PromptWFJobTemplateDetail.js:101
-#: screens/Credential/CredentialDetail/CredentialDetail.js:270
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:238
-#: screens/Inventory/InventoryDetail/InventoryDetail.js:125
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:282
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.js:361
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:203
 msgid "Enabled Options"
 msgstr ""
 
@@ -3300,7 +3076,7 @@ msgstr ""
 msgid "Delete Credential"
 msgstr ""
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:54
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:53
 msgid "this Tower documentation page"
 msgstr ""
 
@@ -3310,99 +3086,6 @@ msgstr ""
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:349
-#: components/AdHocCommands/AdHocCommands.js:107
-#: components/CopyButton/CopyButton.js:53
-#: components/DeleteButton/DeleteButton.js:59
-#: components/HostToggle/HostToggle.js:81
-#: components/InstanceToggle/InstanceToggle.js:69
-#: components/JobList/JobList.js:317
-#: components/JobList/JobList.js:328
-#: components/LaunchButton/LaunchButton.js:231
-#: components/LaunchPrompt/LaunchPrompt.js:99
-#: components/NotificationList/NotificationList.js:248
-#: components/PaginatedTable/ToolbarDeleteButton.js:207
-#: components/RelatedTemplateList/RelatedTemplateList.js:256
-#: components/ResourceAccessList/ResourceAccessList.js:250
-#: components/ResourceAccessList/ResourceAccessList.js:262
-#: components/Schedule/ScheduleDetail/ScheduleDetail.js:647
-#: components/Schedule/ScheduleList/ScheduleList.js:240
-#: components/Schedule/ScheduleToggle/ScheduleToggle.js:76
-#: components/Schedule/shared/SchedulePromptableFields.js:65
-#: components/TemplateList/TemplateList.js:305
-#: contexts/Config.js:122
-#: screens/Application/ApplicationDetails/ApplicationDetails.js:137
-#: screens/Application/ApplicationsList/ApplicationsList.js:183
-#: screens/Credential/CredentialDetail/CredentialDetail.js:316
-#: screens/Credential/CredentialList/CredentialList.js:216
-#: screens/Host/HostDetail/HostDetail.js:58
-#: screens/Host/HostDetail/HostDetail.js:125
-#: screens/Host/HostGroups/HostGroupsList.js:247
-#: screens/Host/HostList/HostList.js:230
-#: screens/HostMetrics/HostMetricsDeleteButton.js:110
-#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:357
-#: screens/InstanceGroup/Instances/InstanceList.js:376
-#: screens/InstanceGroup/Instances/InstanceListItem.js:250
-#: screens/Instances/InstanceDetail/InstanceDetail.js:395
-#: screens/Instances/InstanceDetail/InstanceDetail.js:410
-#: screens/Instances/InstanceList/InstanceList.js:260
-#: screens/Instances/InstanceList/InstanceList.js:272
-#: screens/Instances/InstanceList/InstanceListItem.js:269
-#: screens/Instances/InstancePeers/InstancePeerList.js:317
-#: screens/Instances/Shared/RemoveInstanceButton.js:107
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:359
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventorySyncButton.js:46
-#: screens/Inventory/InventoryDetail/InventoryDetail.js:197
-#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:81
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.js:293
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.js:304
-#: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:56
-#: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:118
-#: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.js:258
-#: screens/Inventory/InventoryHosts/InventoryHostItem.js:128
-#: screens/Inventory/InventoryHosts/InventoryHostList.js:205
-#: screens/Inventory/InventoryList/InventoryList.js:293
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:271
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:340
-#: screens/Inventory/InventorySources/InventorySourceList.js:241
-#: screens/Inventory/InventorySources/InventorySourceList.js:253
-#: screens/Inventory/shared/InventoryGroupsDeleteModal.js:154
-#: screens/Inventory/shared/InventorySourceSyncButton.js:51
-#: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:169
-#: screens/Login/Login.js:249
-#: screens/ManagementJob/ManagementJobList/ManagementJobList.js:127
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:446
-#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:236
-#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.js:178
-#: screens/Organization/OrganizationDetail/OrganizationDetail.js:187
-#: screens/Organization/OrganizationList/OrganizationList.js:197
-#: screens/Project/ProjectList/ProjectList.js:293
-#: screens/Project/ProjectList/ProjectList.js:305
-#: screens/Project/shared/ProjectSyncButton.js:61
-#: screens/Team/TeamDetail/TeamDetail.js:80
-#: screens/Team/TeamList/TeamList.js:194
-#: screens/Team/TeamRoles/TeamRolesList.js:249
-#: screens/Team/TeamRoles/TeamRolesList.js:260
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.js:532
-#: screens/Template/TemplateSurvey.js:131
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:281
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:182
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:197
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:340
-#: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.js:376
-#: screens/TopologyView/MeshGraph.js:419
-#: screens/TopologyView/Tooltip.js:200
-#: screens/User/UserDetail/UserDetail.js:117
-#: screens/User/UserList/UserList.js:192
-#: screens/User/UserRoles/UserRolesList.js:246
-#: screens/User/UserRoles/UserRolesList.js:257
-#: screens/User/UserTeams/UserTeamList.js:260
-#: screens/User/UserTokenDetail/UserTokenDetail.js:86
-#: screens/User/UserTokenList/UserTokenList.js:215
-#: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:55
-#: screens/WorkflowApproval/shared/WorkflowDenyButton.js:50
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:329
-#: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:249
-#: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:268
 msgid "Error!"
 msgstr ""
 
@@ -3478,11 +3161,6 @@ msgstr ""
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:140
-#: components/Sparkline/Sparkline.js:37
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:59
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:174
-#: screens/Inventory/InventorySources/InventorySourceListItem.js:45
-#: screens/Project/ProjectList/ProjectListItem.js:79
 msgid "FINISHED:"
 msgstr ""
 
@@ -3514,7 +3192,6 @@ msgstr ""
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:323
-#: screens/Project/ProjectList/ProjectListItem.js:234
 msgid "Failed to cancel Project Sync"
 msgstr ""
 
@@ -3671,7 +3348,7 @@ msgstr ""
 
 #: components/Schedule/ScheduleList/ScheduleList.js:164
 #: components/Schedule/ScheduleList/ScheduleList.js:230
-#: routeConfig.js:46
+#: routeConfig.js:47
 #: screens/ActivityStream/ActivityStream.js:155
 #: screens/Inventory/Inventories.js:92
 #: screens/Inventory/InventorySource/InventorySource.js:90
@@ -3827,7 +3504,7 @@ msgstr ""
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:520
 #: components/TemplateList/TemplateListItem.js:328
 #: components/UserAndTeamAccessAdd/getResourceAccessConfig.js:78
-#: routeConfig.js:82
+#: routeConfig.js:88
 #: screens/ActivityStream/ActivityStream.js:169
 #: screens/Credential/CredentialList/CredentialList.js:197
 #: screens/Credential/Credentials.js:16
@@ -3869,7 +3546,7 @@ msgstr ""
 msgid "Injector configuration"
 msgstr ""
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:66
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:65
 msgid ""
 "This data is used to enhance\n"
 "future releases of the Tower Software and help\n"
@@ -4008,6 +3685,19 @@ msgstr ""
 msgid "Test notification"
 msgstr ""
 
+#: components/PromptDetail/PromptInventorySourceDetail.js:172
+#: components/PromptDetail/PromptJobTemplateDetail.js:189
+#: components/PromptDetail/PromptProjectDetail.js:145
+#: components/PromptDetail/PromptWFJobTemplateDetail.js:101
+#: screens/Credential/CredentialDetail/CredentialDetail.js:270
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:238
+#: screens/Inventory/InventoryDetail/InventoryDetail.js:125
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:282
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.js:361
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:203
+msgid "Enabled Options"
+msgstr ""
+
 #: screens/Template/Template.js:161
 #: screens/Template/WorkflowJobTemplate.js:147
 msgid "View Survey"
@@ -4066,7 +3756,7 @@ msgstr ""
 #: components/PromptDetail/PromptJobTemplateDetail.js:230
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:510
 #: components/UserAndTeamAccessAdd/getResourceAccessConfig.js:216
-#: routeConfig.js:144
+#: routeConfig.js:150
 #: screens/ActivityStream/ActivityStream.js:207
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:109
 #: screens/InstanceGroup/InstanceGroups.js:18
@@ -4150,6 +3840,11 @@ msgstr ""
 
 #: components/Schedule/ScheduleList/ScheduleList.js:243
 msgid "Failed to delete one or more schedules."
+msgstr ""
+
+#. js-lingui-explicit-id
+#: screens/Project/ProjectDetail/ProjectDetail.js:133
+msgid "JOB ID:"
 msgstr ""
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:34
@@ -4250,7 +3945,7 @@ msgstr ""
 msgid "This inventory is currently being used by some templates. Are you sure you want to delete it?"
 msgstr ""
 
-#: routeConfig.js:129
+#: routeConfig.js:135
 #: screens/ActivityStream/ActivityStream.js:194
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.js:119
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.js:162
@@ -4454,36 +4149,11 @@ msgstr ""
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:162
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:156
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:195
 msgid "Last Job Status"
 msgstr ""
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:298
-#: components/PromptDetail/PromptDetail.js:164
-#: components/Schedule/ScheduleDetail/ScheduleDetail.js:422
-#: components/TemplateList/TemplateListItem.js:321
-#: screens/Application/ApplicationDetails/ApplicationDetails.js:107
-#: screens/Application/ApplicationsList/ApplicationListItem.js:47
-#: screens/Application/ApplicationsList/ApplicationsList.js:157
-#: screens/Credential/CredentialDetail/CredentialDetail.js:265
-#: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.js:97
-#: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:109
-#: screens/Host/HostDetail/HostDetail.js:91
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:93
-#: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:113
-#: screens/Inventory/InventoryDetail/InventoryDetail.js:165
-#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:46
-#: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:84
-#: screens/Job/JobDetail/JobDetail.js:570
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:400
-#: screens/Organization/OrganizationDetail/OrganizationDetail.js:117
-#: screens/Team/TeamDetail/TeamDetail.js:50
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.js:354
-#: screens/User/UserDetail/UserDetail.js:86
-#: screens/User/UserTokenDetail/UserTokenDetail.js:67
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:186
 msgid "Last Modified"
 msgstr ""
 
@@ -4533,7 +4203,7 @@ msgstr ""
 msgid "Toggle notification success"
 msgstr ""
 
-#: routeConfig.js:104
+#: routeConfig.js:110
 #: screens/ActivityStream/ActivityStream.js:181
 #: screens/Credential/Credential.js:91
 #: screens/Credential/Credentials.js:32
@@ -4607,10 +4277,6 @@ msgstr ""
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:131
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:50
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:165
-#: screens/Inventory/InventorySources/InventorySourceListItem.js:36
-#: screens/Project/ProjectList/ProjectListItem.js:70
 msgid "MOST RECENT SYNC"
 msgstr ""
 
@@ -4649,6 +4315,11 @@ msgstr ""
 
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:157
 msgid "Failed to delete one or more groups."
+msgstr ""
+
+#. js-lingui-explicit-id
+#: screens/Project/ProjectDetail/ProjectDetail.js:193
+msgid "Manual"
 msgstr ""
 
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:204
@@ -4709,7 +4380,7 @@ msgid ""
 "Grafana URL."
 msgstr ""
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:37
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:36
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.js:205
 msgid "User and Automation Analytics"
 msgstr ""
@@ -4797,6 +4468,11 @@ msgstr ""
 msgid "No items found."
 msgstr ""
 
+#. js-lingui-explicit-id
+#: screens/Project/ProjectDetail/ProjectDetail.js:177
+msgid "Name"
+msgstr ""
+
 #: components/JobList/JobList.js:250
 #: components/JobList/JobListItem.js:102
 msgid "Finish Time"
@@ -4853,6 +4529,89 @@ msgstr ""
 #: screens/Project/shared/ProjectSyncButton.js:42
 #: screens/Project/shared/ProjectSyncButton.js:54
 msgid "Sync"
+msgstr ""
+
+#: components/HostForm/HostForm.js:108
+#: components/Lookup/ApplicationLookup.js:107
+#: components/Lookup/ApplicationLookup.js:125
+#: components/Lookup/HostFilterLookup.js:426
+#: components/Lookup/HostListItem.js:11
+#: components/NotificationList/NotificationList.js:188
+#: components/PromptDetail/PromptDetail.js:122
+#: components/Schedule/ScheduleDetail/ScheduleDetail.js:338
+#: components/Schedule/ScheduleList/ScheduleList.js:195
+#: components/Schedule/shared/ScheduleFormFields.js:85
+#: components/TemplateList/TemplateList.js:216
+#: components/TemplateList/TemplateListItem.js:273
+#: screens/Application/ApplicationDetails/ApplicationDetails.js:66
+#: screens/Application/ApplicationsList/ApplicationsList.js:121
+#: screens/Application/shared/ApplicationForm.js:64
+#: screens/Credential/CredentialDetail/CredentialDetail.js:225
+#: screens/Credential/CredentialList/CredentialList.js:148
+#: screens/Credential/shared/CredentialForm.js:171
+#: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.js:74
+#: screens/CredentialType/CredentialTypeList/CredentialTypeList.js:129
+#: screens/CredentialType/shared/CredentialTypeForm.js:31
+#: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:61
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:161
+#: screens/ExecutionEnvironment/shared/ExecutionEnvironmentForm.js:129
+#: screens/Host/HostDetail/HostDetail.js:77
+#: screens/Host/HostList/HostList.js:153
+#: screens/Host/HostList/HostList.js:171
+#: screens/Host/HostList/HostListItem.js:52
+#: screens/Instances/Shared/InstanceForm.js:39
+#: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.js:39
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:164
+#: screens/Inventory/InventoryDetail/InventoryDetail.js:96
+#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:36
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.js:220
+#: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:80
+#: screens/Inventory/InventoryHosts/InventoryHostItem.js:80
+#: screens/Inventory/InventoryHosts/InventoryHostList.js:126
+#: screens/Inventory/InventoryHosts/InventoryHostList.js:142
+#: screens/Inventory/InventoryList/InventoryList.js:208
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:210
+#: screens/Inventory/shared/ConstructedInventoryForm.js:70
+#: screens/Inventory/shared/ConstructedInventoryHint.js:71
+#: screens/Inventory/shared/InventoryForm.js:60
+#: screens/Inventory/shared/InventoryGroupForm.js:42
+#: screens/Inventory/shared/InventorySourceForm.js:112
+#: screens/Inventory/shared/SmartInventoryForm.js:57
+#: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:106
+#: screens/Job/JobOutput/HostEventModal.js:113
+#: screens/ManagementJob/ManagementJobList/ManagementJobList.js:103
+#: screens/ManagementJob/ManagementJobList/ManagementJobListItem.js:74
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:111
+#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:129
+#: screens/NotificationTemplate/shared/NotificationTemplateForm.js:50
+#: screens/Organization/OrganizationDetail/OrganizationDetail.js:92
+#: screens/Organization/OrganizationList/OrganizationList.js:129
+#: screens/Organization/shared/OrganizationForm.js:65
+#: screens/Project/ProjectList/ProjectList.js:192
+#: screens/Project/ProjectList/ProjectListItem.js:283
+#: screens/Project/shared/ProjectForm.js:226
+#: screens/Team/shared/TeamForm.js:39
+#: screens/Team/TeamDetail/TeamDetail.js:40
+#: screens/Team/TeamList/TeamList.js:124
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.js:183
+#: screens/Template/shared/JobTemplateForm.js:254
+#: screens/Template/shared/WorkflowJobTemplateForm.js:119
+#: screens/Template/Survey/SurveyQuestionForm.js:174
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:114
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:185
+#: screens/User/shared/UserTokenForm.js:61
+#: screens/User/UserOrganizations/UserOrganizationList.js:82
+#: screens/User/UserOrganizations/UserOrganizationListItem.js:21
+#: screens/User/UserTeams/UserTeamList.js:183
+#: screens/User/UserTeams/UserTeamListItem.js:34
+#: screens/User/UserTokenDetail/UserTokenDetail.js:46
+#: screens/User/UserTokenList/UserTokenList.js:129
+#: screens/User/UserTokenList/UserTokenList.js:139
+#: screens/User/UserTokenList/UserTokenList.js:189
+#: screens/User/UserTokenList/UserTokenListItem.js:30
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:127
+#: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:179
+msgid "Description"
 msgstr ""
 
 #: components/AddRole/SelectRoleStep.js:23
@@ -5023,48 +4782,6 @@ msgstr ""
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:181
-#: components/Lookup/ApplicationLookup.js:121
-#: components/Lookup/OrganizationLookup.js:103
-#: components/Lookup/OrganizationLookup.js:109
-#: components/Lookup/OrganizationLookup.js:126
-#: components/PromptDetail/PromptInventorySourceDetail.js:63
-#: components/PromptDetail/PromptInventorySourceDetail.js:73
-#: components/PromptDetail/PromptJobTemplateDetail.js:107
-#: components/PromptDetail/PromptJobTemplateDetail.js:117
-#: components/PromptDetail/PromptProjectDetail.js:79
-#: components/PromptDetail/PromptProjectDetail.js:90
-#: components/PromptDetail/PromptWFJobTemplateDetail.js:69
-#: components/TemplateList/TemplateListItem.js:279
-#: screens/Application/ApplicationDetails/ApplicationDetails.js:71
-#: screens/Application/ApplicationsList/ApplicationListItem.js:40
-#: screens/Application/ApplicationsList/ApplicationsList.js:155
-#: screens/Credential/CredentialDetail/CredentialDetail.js:232
-#: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:71
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:157
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:169
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:77
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:180
-#: screens/Inventory/InventoryDetail/InventoryDetail.js:99
-#: screens/Inventory/InventoryList/InventoryList.js:204
-#: screens/Inventory/InventoryList/InventoryList.js:234
-#: screens/Inventory/InventoryList/InventoryListItem.js:128
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:214
-#: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:109
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:123
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:133
-#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:183
-#: screens/Project/ProjectList/ProjectListItem.js:289
-#: screens/Project/ProjectList/ProjectListItem.js:300
-#: screens/Team/TeamDetail/TeamDetail.js:42
-#: screens/Team/TeamList/TeamList.js:145
-#: screens/Team/TeamList/TeamListItem.js:40
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.js:195
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.js:206
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:124
-#: screens/User/UserList/UserList.js:166
-#: screens/User/UserTeams/UserTeamList.js:182
-#: screens/User/UserTeams/UserTeamList.js:238
-#: screens/User/UserTeams/UserTeamListItem.js:25
 msgid "Organization"
 msgstr ""
 
@@ -5201,14 +4918,19 @@ msgstr ""
 msgid "Sat"
 msgstr ""
 
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:50
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:165
+#: screens/Inventory/InventorySources/InventorySourceListItem.js:36
+#: screens/Project/ProjectList/ProjectListItem.js:70
+msgid "MOST RECENT SYNC"
+msgstr ""
+
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeDeleteModal.js:58
 msgid "Are you sure you want to remove the node below:"
 msgstr ""
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:289
-#: components/PromptDetail/PromptProjectDetail.js:165
-#: screens/Project/shared/ProjectSubForms/ManualSubForm.js:74
 msgid "Playbook Directory"
 msgstr ""
 
@@ -5218,14 +4940,11 @@ msgstr ""
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:282
-#: components/PromptDetail/PromptProjectDetail.js:158
-#: screens/Project/shared/ProjectSubForms/ManualSubForm.js:63
 msgid "Project Base Path"
 msgstr ""
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:321
-#: screens/Project/ProjectList/ProjectListItem.js:231
 msgid "Project Sync Error"
 msgstr ""
 
@@ -5558,7 +5277,7 @@ msgstr ""
 msgid "ID"
 msgstr ""
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:78
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:77
 msgid ""
 "This data is used to enhance\n"
 "future releases of the Software and to provide\n"
@@ -5654,11 +5373,6 @@ msgstr ""
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:136
-#: components/Sparkline/Sparkline.js:33
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:55
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:170
-#: screens/Inventory/InventorySources/InventorySourceListItem.js:41
-#: screens/Project/ProjectList/ProjectListItem.js:75
 msgid "STATUS:"
 msgstr ""
 
@@ -5698,8 +5412,6 @@ msgstr ""
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:270
-#: components/PromptDetail/PromptInventorySourceDetail.js:104
-#: components/PromptDetail/PromptProjectDetail.js:153
 msgid "Seconds"
 msgstr ""
 
@@ -5745,24 +5457,32 @@ msgstr ""
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:231
-#: components/LaunchPrompt/steps/OtherPromptsStep.js:46
-#: components/PromptDetail/PromptDetail.js:239
-#: components/PromptDetail/PromptJobTemplateDetail.js:149
-#: components/PromptDetail/PromptProjectDetail.js:108
-#: components/PromptDetail/PromptWFJobTemplateDetail.js:91
-#: components/Schedule/ScheduleDetail/ScheduleDetail.js:478
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:249
-#: screens/Job/JobDetail/JobDetail.js:339
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.js:244
-#: screens/Template/shared/JobTemplateForm.js:338
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:137
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:227
 msgid "Source Control Branch"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: screens/Project/ProjectDetail/ProjectDetail.js:257
+msgid "Source Control Credential"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: screens/Project/ProjectDetail/ProjectDetail.js:236
+msgid "Source Control Refspec"
 msgstr ""
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:196
 msgid "Source Control Revision"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: screens/Project/ProjectDetail/ProjectDetail.js:192
+msgid "Source Control Type"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: screens/Project/ProjectDetail/ProjectDetail.js:226
+msgid "Source Control URL"
 msgstr ""
 
 #: screens/Dashboard/shared/LineChart.js:130
@@ -5784,10 +5504,6 @@ msgstr ""
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:202
-#: screens/Inventory/shared/ConstructedInventoryHint.js:194
-#: screens/Inventory/shared/ConstructedInventoryHint.js:280
-#: screens/Inventory/shared/ConstructedInventoryHint.js:347
-#: screens/Project/ProjectList/ProjectListItem.js:99
 msgid "Successfully copied to clipboard!"
 msgstr ""
 
@@ -5811,7 +5527,7 @@ msgstr ""
 
 #: components/AddRole/AddResourceRole.js:180
 #: components/AddRole/AddResourceRole.js:181
-#: routeConfig.js:113
+#: routeConfig.js:119
 #: screens/ActivityStream/ActivityStream.js:186
 #: screens/Team/Teams.js:32
 #: screens/User/UserList/UserList.js:112
@@ -5819,6 +5535,11 @@ msgstr ""
 #: screens/User/Users.js:16
 #: screens/User/Users.js:27
 msgid "Users"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: screens/Project/ProjectDetail/ProjectDetail.js:214
+msgid "Sync for revision"
 msgstr ""
 
 #: screens/Setting/SettingList.js:71
@@ -5984,6 +5705,11 @@ msgid "Provisioning Callback URL"
 msgstr ""
 
 #. js-lingui-explicit-id
+#: screens/Project/ProjectDetail/ProjectDetail.js:212
+msgid "The project must be synced before a revision is available."
+msgstr ""
+
+#. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:339
 msgid "This project is currently being used by other resources. Are you sure you want to delete it?"
 msgstr ""
@@ -6002,7 +5728,7 @@ msgstr ""
 
 #: components/JobList/JobList.js:193
 #: components/JobList/JobList.js:276
-#: routeConfig.js:41
+#: routeConfig.js:42
 #: screens/ActivityStream/ActivityStream.js:152
 #: screens/Dashboard/shared/LineChart.js:66
 #: screens/Host/Host.js:76
@@ -6033,7 +5759,6 @@ msgstr ""
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:110
-#: components/PromptDetail/PromptProjectDetail.js:57
 msgid "Track submodules latest commit on branch"
 msgstr ""
 
@@ -6053,8 +5778,8 @@ msgstr ""
 msgid "System Administrator"
 msgstr ""
 
-#: routeConfig.js:171
-#: routeConfig.js:175
+#: routeConfig.js:177
+#: routeConfig.js:181
 #: screens/ActivityStream/ActivityStream.js:222
 #: screens/ActivityStream/ActivityStream.js:224
 #: screens/Setting/Settings.js:46
@@ -6192,6 +5917,7 @@ msgstr ""
 #: screens/TopologyView/Tooltip.js:214
 #: screens/User/User.js:66
 #: screens/User/Users.js:31
+#: screens/User/Users.js:37
 #: screens/User/UserToken/UserToken.js:55
 #: screens/WorkflowApproval/WorkflowApproval.js:79
 #: screens/WorkflowApproval/WorkflowApprovals.js:27
@@ -6221,6 +5947,7 @@ msgstr ""
 msgid "and click on Update Revision on Launch"
 msgstr ""
 
+#: screens/Template/Survey/SurveyReorderModal.js:218
 #: screens/Template/Survey/SurveyReorderModal.js:218
 #: screens/Template/Survey/SurveyReorderModal.js:235
 msgid "Order"
@@ -6264,7 +5991,6 @@ msgstr ""
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:116
-#: components/PromptDetail/PromptProjectDetail.js:62
 msgid "Update revision on job launch"
 msgstr ""
 
@@ -6288,12 +6014,17 @@ msgstr ""
 msgid "Delete {pluralizedItemName}?"
 msgstr ""
 
+#: components/PromptDetail/PromptInventorySourceDetail.js:104
+#: components/PromptDetail/PromptProjectDetail.js:153
+msgid "Seconds"
+msgstr ""
+
 #: components/Schedule/shared/FrequencyDetailSubform.js:201
 msgid "{intervalValue, plural, one {day} other {days}}"
 msgstr ""
 
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:62
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:63
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:64
 msgid "User analytics"
 msgstr ""
 
@@ -6344,7 +6075,7 @@ msgstr ""
 msgid "Wednesday"
 msgstr ""
 
-#: routeConfig.js:56
+#: routeConfig.js:57
 #: screens/ActivityStream/ActivityStream.js:158
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:169
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:205
@@ -6941,6 +6672,10 @@ msgstr ""
 msgid "Unknown Inventory"
 msgstr ""
 
+#: screens/Project/ProjectList/ProjectListItem.js:234
+msgid "Failed to cancel Project Sync"
+msgstr ""
+
 #: components/AnsibleSelect/AnsibleSelect.js:40
 msgid "Select Input"
 msgstr ""
@@ -6989,7 +6724,7 @@ msgstr ""
 msgid "Greater than or equal to comparison."
 msgstr ""
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:115
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:114
 msgid "Automation Analytics dashboard"
 msgstr ""
 
@@ -7301,6 +7036,14 @@ msgstr ""
 msgid "Add resource type"
 msgstr ""
 
+#: components/Sparkline/Sparkline.js:33
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:55
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:170
+#: screens/Inventory/InventorySources/InventorySourceListItem.js:41
+#: screens/Project/ProjectList/ProjectListItem.js:75
+msgid "STATUS:"
+msgstr ""
+
 #: components/AppContainer/PageHeaderToolbar.js:168
 msgid "User Details"
 msgstr ""
@@ -7343,7 +7086,7 @@ msgstr ""
 msgid "Off"
 msgstr ""
 
-#: routeConfig.js:139
+#: routeConfig.js:145
 #: screens/ManagementJob/ManagementJobList/ManagementJobList.js:86
 msgid "Management Jobs"
 msgstr ""
@@ -7681,7 +7424,53 @@ msgstr ""
 msgid "Less than or equal to comparison."
 msgstr ""
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:39
+#: components/DeleteButton/DeleteButton.js:78
+#: components/DeleteButton/DeleteButton.js:83
+#: components/DeleteButton/DeleteButton.js:93
+#: components/DeleteButton/DeleteButton.js:97
+#: components/DeleteButton/DeleteButton.js:117
+#: components/PaginatedTable/ToolbarDeleteButton.js:160
+#: components/PaginatedTable/ToolbarDeleteButton.js:237
+#: components/PaginatedTable/ToolbarDeleteButton.js:248
+#: components/PaginatedTable/ToolbarDeleteButton.js:252
+#: components/PaginatedTable/ToolbarDeleteButton.js:275
+#: components/ResourceAccessList/DeleteRoleConfirmationModal.js:30
+#: components/Schedule/ScheduleDetail/ScheduleDetail.js:639
+#: screens/Application/ApplicationDetails/ApplicationDetails.js:129
+#: screens/Credential/CredentialDetail/CredentialDetail.js:308
+#: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.js:126
+#: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:135
+#: screens/HostMetrics/HostMetricsDeleteButton.js:134
+#: screens/HostMetrics/HostMetricsDeleteButton.js:138
+#: screens/HostMetrics/HostMetricsDeleteButton.js:159
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:135
+#: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:141
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:351
+#: screens/Inventory/InventoryDetail/InventoryDetail.js:188
+#: screens/Inventory/InventoryGroups/InventoryGroupsList.js:103
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:333
+#: screens/Inventory/shared/InventoryGroupsDeleteModal.js:66
+#: screens/Inventory/shared/InventoryGroupsDeleteModal.js:70
+#: screens/Inventory/shared/InventoryGroupsDeleteModal.js:75
+#: screens/Inventory/shared/InventoryGroupsDeleteModal.js:80
+#: screens/Inventory/shared/InventoryGroupsDeleteModal.js:104
+#: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:160
+#: screens/Job/JobDetail/JobDetail.js:644
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:438
+#: screens/Organization/OrganizationDetail/OrganizationDetail.js:178
+#: screens/Project/shared/ProjectSubForms/SharedFields.js:86
+#: screens/Team/TeamDetail/TeamDetail.js:72
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.js:523
+#: screens/Template/Survey/SurveyList.js:68
+#: screens/Template/Survey/SurveyToolbar.js:95
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:273
+#: screens/User/UserDetail/UserDetail.js:109
+#: screens/User/UserTokenDetail/UserTokenDetail.js:79
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:321
+msgid "Delete"
+msgstr ""
+
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:38
 msgid "By default, we collect and transmit analytics data on the service usage to Red Hat. There are two categories of data collected by the service. For more information, see <0>{0}</0>. Uncheck the following boxes to disable this feature."
 msgstr ""
 
@@ -7699,6 +7488,36 @@ msgstr ""
 
 #: screens/TopologyView/Legend.js:253
 msgid "Established"
+msgstr ""
+
+#: components/Lookup/ApplicationLookup.js:117
+#: components/PromptDetail/PromptDetail.js:157
+#: components/Schedule/ScheduleDetail/ScheduleDetail.js:417
+#: screens/Application/ApplicationDetails/ApplicationDetails.js:106
+#: screens/Credential/CredentialDetail/CredentialDetail.js:259
+#: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.js:92
+#: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:104
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:153
+#: screens/Host/HostDetail/HostDetail.js:88
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:88
+#: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:108
+#: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.js:49
+#: screens/Inventory/InventoryDetail/InventoryDetail.js:160
+#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:44
+#: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:81
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:294
+#: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:135
+#: screens/Job/JobDetail/JobDetail.js:566
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:395
+#: screens/Organization/OrganizationDetail/OrganizationDetail.js:112
+#: screens/Team/TeamDetail/TeamDetail.js:49
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.js:349
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:191
+#: screens/User/UserDetail/UserDetail.js:84
+#: screens/User/UserTokenDetail/UserTokenDetail.js:62
+#: screens/User/UserTokenList/UserTokenList.js:151
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:181
+msgid "Created"
 msgstr ""
 
 #: components/PaginatedTable/ToolbarDeleteButton.js:288
@@ -7884,6 +7703,13 @@ msgstr ""
 msgid "Failed to delete one or more execution environments"
 msgstr ""
 
+#: screens/Inventory/shared/ConstructedInventoryHint.js:194
+#: screens/Inventory/shared/ConstructedInventoryHint.js:280
+#: screens/Inventory/shared/ConstructedInventoryHint.js:347
+#: screens/Project/ProjectList/ProjectListItem.js:99
+msgid "Successfully copied to clipboard!"
+msgstr ""
+
 #: components/LaunchPrompt/steps/useSurveyStep.js:109
 msgid "This field must be a number and have a value between {0} and {1}"
 msgstr ""
@@ -7979,6 +7805,70 @@ msgstr ""
 msgid "Source details"
 msgstr ""
 
+#: components/Schedule/ScheduleDetail/ScheduleDetail.js:625
+#: components/Schedule/ScheduleDetail/ScheduleDetail.js:629
+#: screens/Application/ApplicationDetails/ApplicationDetails.js:116
+#: screens/Application/ApplicationDetails/ApplicationDetails.js:118
+#: screens/Credential/CredentialDetail/CredentialDetail.js:295
+#: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.js:111
+#: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:122
+#: screens/Host/HostDetail/HostDetail.js:110
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:121
+#: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:127
+#: screens/Instances/InstanceDetail/InstanceDetail.js:351
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:326
+#: screens/Inventory/InventoryDetail/InventoryDetail.js:177
+#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:57
+#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:64
+#: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:103
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:309
+#: screens/Inventory/InventorySources/InventorySourceListItem.js:129
+#: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:150
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:420
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:422
+#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.js:147
+#: screens/Organization/OrganizationDetail/OrganizationDetail.js:161
+#: screens/Organization/OrganizationDetail/OrganizationDetail.js:165
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.js:86
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.js:90
+#: screens/Setting/GitHub/GitHubDetail/GitHubDetail.js:149
+#: screens/Setting/GitHub/GitHubDetail/GitHubDetail.js:153
+#: screens/Setting/GoogleOAuth2/GoogleOAuth2Detail/GoogleOAuth2Detail.js:86
+#: screens/Setting/GoogleOAuth2/GoogleOAuth2Detail/GoogleOAuth2Detail.js:90
+#: screens/Setting/Jobs/JobsDetail/JobsDetail.js:97
+#: screens/Setting/Jobs/JobsDetail/JobsDetail.js:101
+#: screens/Setting/LDAP/LDAPDetail/LDAPDetail.js:165
+#: screens/Setting/LDAP/LDAPDetail/LDAPDetail.js:169
+#: screens/Setting/Logging/LoggingDetail/LoggingDetail.js:109
+#: screens/Setting/Logging/LoggingDetail/LoggingDetail.js:113
+#: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.js:86
+#: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.js:90
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.js:148
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.js:152
+#: screens/Setting/OIDC/OIDCDetail/OIDCDetail.js:86
+#: screens/Setting/OIDC/OIDCDetail/OIDCDetail.js:90
+#: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.js:100
+#: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.js:104
+#: screens/Setting/SAML/SAMLDetail/SAMLDetail.js:87
+#: screens/Setting/SAML/SAMLDetail/SAMLDetail.js:91
+#: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.js:230
+#: screens/Setting/TACACS/TACACSDetail/TACACSDetail.js:104
+#: screens/Setting/TACACS/TACACSDetail/TACACSDetail.js:109
+#: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.js:93
+#: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.js:97
+#: screens/Setting/UI/UIDetail/UIDetail.js:112
+#: screens/Setting/UI/UIDetail/UIDetail.js:117
+#: screens/Team/TeamDetail/TeamDetail.js:57
+#: screens/Team/TeamDetail/TeamDetail.js:61
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.js:492
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.js:494
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:243
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:245
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeViewModal.js:266
+#: screens/User/UserDetail/UserDetail.js:98
+msgid "Edit"
+msgstr ""
+
 #: screens/Setting/SettingList.js:75
 msgid "RADIUS settings"
 msgstr ""
@@ -8025,22 +7915,11 @@ msgstr ""
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:310
-#: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.js:107
-#: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:118
-#: screens/Host/HostDetail/HostDetail.js:106
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:117
-#: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:123
-#: screens/Instances/InstanceDetail/InstanceDetail.js:347
-#: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:99
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:306
-#: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:147
-#: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.js:226
-#: screens/User/UserDetail/UserDetail.js:94
 msgid "edit"
 msgstr ""
 
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:74
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:75
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:76
 msgid "Automation Analytics"
 msgstr ""
 
@@ -8129,7 +8008,7 @@ msgid "{numJobsToCancel, plural, one {Cancel job} other {Cancel jobs}}"
 msgstr ""
 
 #: components/Lookup/ApplicationLookup.js:98
-#: routeConfig.js:154
+#: routeConfig.js:160
 #: screens/Application/Applications.js:27
 #: screens/Application/Applications.js:36
 #: screens/Application/ApplicationsList/ApplicationsList.js:111
@@ -8152,6 +8031,102 @@ msgstr ""
 
 #: screens/Organization/Organization.js:226
 msgid "View Organization Details"
+msgstr ""
+
+#: components/AdHocCommands/AdHocCommands.js:107
+#: components/CopyButton/CopyButton.js:53
+#: components/DeleteButton/DeleteButton.js:59
+#: components/HostToggle/HostToggle.js:81
+#: components/InstanceToggle/InstanceToggle.js:69
+#: components/JobList/JobList.js:317
+#: components/JobList/JobList.js:328
+#: components/LaunchButton/LaunchButton.js:231
+#: components/LaunchPrompt/LaunchPrompt.js:99
+#: components/NotificationList/NotificationList.js:248
+#: components/PaginatedTable/ToolbarDeleteButton.js:207
+#: components/RelatedTemplateList/RelatedTemplateList.js:256
+#: components/ResourceAccessList/ResourceAccessList.js:250
+#: components/ResourceAccessList/ResourceAccessList.js:262
+#: components/Schedule/ScheduleDetail/ScheduleDetail.js:647
+#: components/Schedule/ScheduleList/ScheduleList.js:240
+#: components/Schedule/ScheduleToggle/ScheduleToggle.js:76
+#: components/Schedule/shared/SchedulePromptableFields.js:65
+#: components/TemplateList/TemplateList.js:305
+#: contexts/Config.js:122
+#: screens/Application/ApplicationDetails/ApplicationDetails.js:137
+#: screens/Application/ApplicationsList/ApplicationsList.js:183
+#: screens/Credential/CredentialDetail/CredentialDetail.js:316
+#: screens/Credential/CredentialList/CredentialList.js:216
+#: screens/Host/HostDetail/HostDetail.js:58
+#: screens/Host/HostDetail/HostDetail.js:125
+#: screens/Host/HostGroups/HostGroupsList.js:247
+#: screens/Host/HostList/HostList.js:230
+#: screens/HostMetrics/HostMetricsDeleteButton.js:110
+#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:357
+#: screens/InstanceGroup/Instances/InstanceList.js:376
+#: screens/InstanceGroup/Instances/InstanceListItem.js:250
+#: screens/Instances/InstanceDetail/InstanceDetail.js:395
+#: screens/Instances/InstanceDetail/InstanceDetail.js:410
+#: screens/Instances/InstanceList/InstanceList.js:260
+#: screens/Instances/InstanceList/InstanceList.js:272
+#: screens/Instances/InstanceList/InstanceListItem.js:269
+#: screens/Instances/InstancePeers/InstancePeerList.js:317
+#: screens/Instances/Shared/RemoveInstanceButton.js:107
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:359
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventorySyncButton.js:46
+#: screens/Inventory/InventoryDetail/InventoryDetail.js:197
+#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:81
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.js:293
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.js:304
+#: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:56
+#: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:118
+#: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.js:258
+#: screens/Inventory/InventoryHosts/InventoryHostItem.js:128
+#: screens/Inventory/InventoryHosts/InventoryHostList.js:205
+#: screens/Inventory/InventoryList/InventoryList.js:293
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:271
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:340
+#: screens/Inventory/InventorySources/InventorySourceList.js:241
+#: screens/Inventory/InventorySources/InventorySourceList.js:253
+#: screens/Inventory/shared/InventoryGroupsDeleteModal.js:154
+#: screens/Inventory/shared/InventorySourceSyncButton.js:51
+#: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:169
+#: screens/Login/Login.js:249
+#: screens/ManagementJob/ManagementJobList/ManagementJobList.js:127
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:446
+#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:236
+#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.js:178
+#: screens/Organization/OrganizationDetail/OrganizationDetail.js:187
+#: screens/Organization/OrganizationList/OrganizationList.js:197
+#: screens/Project/ProjectList/ProjectList.js:293
+#: screens/Project/ProjectList/ProjectList.js:305
+#: screens/Project/shared/ProjectSyncButton.js:61
+#: screens/Team/TeamDetail/TeamDetail.js:80
+#: screens/Team/TeamList/TeamList.js:194
+#: screens/Team/TeamRoles/TeamRolesList.js:249
+#: screens/Team/TeamRoles/TeamRolesList.js:260
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.js:532
+#: screens/Template/TemplateSurvey.js:131
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:281
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:182
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:197
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:340
+#: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.js:376
+#: screens/TopologyView/MeshGraph.js:419
+#: screens/TopologyView/Tooltip.js:200
+#: screens/User/UserDetail/UserDetail.js:117
+#: screens/User/UserList/UserList.js:192
+#: screens/User/UserRoles/UserRolesList.js:246
+#: screens/User/UserRoles/UserRolesList.js:257
+#: screens/User/UserTeams/UserTeamList.js:260
+#: screens/User/UserTokenDetail/UserTokenDetail.js:86
+#: screens/User/UserTokenList/UserTokenList.js:215
+#: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:55
+#: screens/WorkflowApproval/shared/WorkflowDenyButton.js:50
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:329
+#: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:249
+#: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:268
+msgid "Error!"
 msgstr ""
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/DeleteAllNodesModal.js:20
@@ -8271,7 +8246,7 @@ msgstr ""
 
 #: components/AdHocCommands/AdHocExecutionEnvironmentStep.js:105
 #: components/LaunchPrompt/steps/ExecutionEnvironmentStep.js:109
-#: routeConfig.js:159
+#: routeConfig.js:165
 #: screens/ActivityStream/ActivityStream.js:219
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:131
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:193
@@ -8296,6 +8271,11 @@ msgstr ""
 #: screens/Team/Teams.js:18
 #: screens/Team/Teams.js:28
 msgid "Create New Team"
+msgstr ""
+
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:156
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:195
+msgid "Last Job Status"
 msgstr ""
 
 #: screens/Setting/UI/UI.js:27
@@ -8400,6 +8380,10 @@ msgstr ""
 msgid "deletion error"
 msgstr ""
 
+#: screens/Project/ProjectList/ProjectListItem.js:232
+msgid "Cancel Project Sync"
+msgstr ""
+
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:28
 msgid "{interval, plural, one {# hour} other {# hours}}"
 msgstr ""
@@ -8417,16 +8401,19 @@ msgid "YAML"
 msgstr ""
 
 #: components/JobList/JobListItem.js:286
+#: components/LabelLists/LabelLists.js:52
 #: components/LaunchPrompt/steps/OtherPromptsStep.js:228
 #: components/PromptDetail/PromptDetail.js:322
 #: components/PromptDetail/PromptJobTemplateDetail.js:211
 #: components/PromptDetail/PromptWFJobTemplateDetail.js:118
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:543
 #: components/TemplateList/TemplateListItem.js:352
+#: routeConfig.js:78
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:259
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:135
 #: screens/Inventory/shared/InventoryForm.js:85
 #: screens/Job/JobDetail/JobDetail.js:485
+#: screens/Labels/Labels.js:14
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:397
 #: screens/Template/shared/JobTemplateForm.js:390
 #: screens/Template/shared/WorkflowJobTemplateForm.js:197
@@ -8571,6 +8558,11 @@ msgstr ""
 msgid "Copy"
 msgstr ""
 
+#: components/PromptDetail/PromptProjectDetail.js:158
+#: screens/Project/shared/ProjectSubForms/ManualSubForm.js:63
+msgid "Project Base Path"
+msgstr ""
+
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:140
 #: components/Schedule/shared/FrequencyDetailSubform.js:111
 msgid "March"
@@ -8612,6 +8604,11 @@ msgstr ""
 #: screens/Team/TeamRoles/TeamRoleListItem.js:14
 #: screens/Team/TeamRoles/TeamRolesList.js:182
 msgid "Resource Name"
+msgstr ""
+
+#: components/PromptDetail/PromptProjectDetail.js:132
+#: screens/Project/shared/ProjectForm.js:294
+msgid "Content Signature Validation Credential"
 msgstr ""
 
 #: components/JobList/JobList.js:217
@@ -8676,7 +8673,7 @@ msgid "Source phone number"
 msgstr ""
 
 #: components/NotificationList/NotificationList.js:179
-#: routeConfig.js:134
+#: routeConfig.js:140
 #: screens/Inventory/Inventories.js:96
 #: screens/Inventory/InventorySource/InventorySource.js:101
 #: screens/ManagementJob/ManagementJob.js:118
@@ -8758,7 +8755,7 @@ msgstr ""
 
 #: components/TemplateList/TemplateList.js:206
 #: components/TemplateList/TemplateList.js:269
-#: routeConfig.js:77
+#: routeConfig.js:83
 #: screens/ActivityStream/ActivityStream.js:166
 #: screens/ExecutionEnvironment/ExecutionEnvironment.js:72
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateList.js:84
@@ -8918,7 +8915,7 @@ msgid "This credential is currently being used by other resources. Are you sure 
 msgstr ""
 
 #: components/UserAndTeamAccessAdd/getResourceAccessConfig.js:189
-#: routeConfig.js:108
+#: routeConfig.js:114
 #: screens/ActivityStream/ActivityStream.js:183
 #: screens/Organization/OrganizationList/OrganizationList.js:119
 #: screens/Organization/OrganizationList/OrganizationList.js:165
@@ -8986,7 +8983,7 @@ msgstr ""
 msgid "Skip tags are useful when you have a large playbook, and you want to skip specific parts of a play or task. Use commas to separate multiple tags. Refer to the documentation for details on the usage of tags."
 msgstr ""
 
-#: routeConfig.js:51
+#: routeConfig.js:52
 #: screens/ActivityStream/ActivityStream.js:45
 #: screens/ActivityStream/ActivityStream.js:123
 #: screens/Setting/Settings.js:47
@@ -9222,6 +9219,20 @@ msgstr ""
 #: screens/Host/HostDetail/HostDetail.js:116
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:109
 msgid "Delete Host"
+msgstr ""
+
+#: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.js:107
+#: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:118
+#: screens/Host/HostDetail/HostDetail.js:106
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:117
+#: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:123
+#: screens/Instances/InstanceDetail/InstanceDetail.js:347
+#: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:99
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:306
+#: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:147
+#: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.js:226
+#: screens/User/UserDetail/UserDetail.js:94
+msgid "edit"
 msgstr ""
 
 #: screens/Template/Template.js:177
@@ -9510,6 +9521,10 @@ msgstr ""
 msgid "View Project Details"
 msgstr ""
 
+#: components/PromptDetail/PromptProjectDetail.js:52
+msgid "Delete the project before syncing"
+msgstr ""
+
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.js:98
 msgid "File, directory or script"
 msgstr ""
@@ -9547,6 +9562,12 @@ msgstr ""
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionModal.js:130
 msgid "Return to subscription management."
+msgstr ""
+
+#: components/PromptDetail/PromptInventorySourceDetail.js:103
+#: components/PromptDetail/PromptProjectDetail.js:151
+#: screens/Project/shared/ProjectSubForms/SharedFields.js:124
+msgid "Cache Timeout"
 msgstr ""
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/UnsavedChangesModal.js:16
@@ -9757,6 +9778,10 @@ msgstr ""
 msgid "Sender Email"
 msgstr ""
 
+#: screens/Project/ProjectList/ProjectListItem.js:231
+msgid "Project Sync Error"
+msgstr ""
+
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:67
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:212
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:242
@@ -9801,6 +9826,7 @@ msgid "Clear all filters"
 msgstr ""
 
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.js:103
+#: screens/Template/Survey/SurveyList.js:106
 #: screens/Template/Survey/SurveyList.js:106
 #: screens/Template/Survey/SurveyListItem.js:65
 msgid "Default"
@@ -9995,6 +10021,10 @@ msgstr ""
 
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.js:264
 msgid "Link to an available node"
+msgstr ""
+
+#: components/PromptDetail/PromptProjectDetail.js:57
+msgid "Track submodules latest commit on branch"
 msgstr ""
 
 #: screens/Template/shared/JobTemplateForm.js:618
@@ -10223,7 +10253,7 @@ msgid "Download bundle"
 msgstr ""
 
 #: components/UserAndTeamAccessAdd/getResourceAccessConfig.js:120
-#: routeConfig.js:92
+#: routeConfig.js:98
 #: screens/ActivityStream/ActivityStream.js:175
 #: screens/Dashboard/Dashboard.js:113
 #: screens/Inventory/Inventories.js:22
@@ -10234,7 +10264,7 @@ msgstr ""
 msgid "Inventories"
 msgstr ""
 
-#: routeConfig.js:73
+#: routeConfig.js:74
 #: screens/ActivityStream/ActivityStream.js:161
 msgid "Resources"
 msgstr ""
@@ -10332,6 +10362,10 @@ msgstr ""
 msgid "Recent Templates"
 msgstr ""
 
+#: components/PromptDetail/PromptProjectDetail.js:62
+msgid "Update revision on job launch"
+msgstr ""
+
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListDenyButton.js:19
 msgid "Select a row to deny"
 msgstr ""
@@ -10365,6 +10399,32 @@ msgstr ""
 msgid "User not found."
 msgstr ""
 
+#: components/PromptDetail/PromptDetail.js:164
+#: components/Schedule/ScheduleDetail/ScheduleDetail.js:422
+#: components/TemplateList/TemplateListItem.js:321
+#: screens/Application/ApplicationDetails/ApplicationDetails.js:107
+#: screens/Application/ApplicationsList/ApplicationListItem.js:47
+#: screens/Application/ApplicationsList/ApplicationsList.js:157
+#: screens/Credential/CredentialDetail/CredentialDetail.js:265
+#: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.js:97
+#: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:109
+#: screens/Host/HostDetail/HostDetail.js:91
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:93
+#: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:113
+#: screens/Inventory/InventoryDetail/InventoryDetail.js:165
+#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:46
+#: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:84
+#: screens/Job/JobDetail/JobDetail.js:570
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:400
+#: screens/Organization/OrganizationDetail/OrganizationDetail.js:117
+#: screens/Team/TeamDetail/TeamDetail.js:50
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.js:354
+#: screens/User/UserDetail/UserDetail.js:86
+#: screens/User/UserTokenDetail/UserTokenDetail.js:67
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:186
+msgid "Last Modified"
+msgstr ""
+
 #: components/JobList/JobList.js:216
 #: components/JobList/JobListItem.js:47
 #: screens/Job/JobOutput/HostEventModal.js:129
@@ -10392,7 +10452,7 @@ msgstr ""
 msgid "Advanced"
 msgstr ""
 
-#: components/About/About.js:51
+#: components/About/About.js:52
 msgid "Brand Image"
 msgstr ""
 
@@ -10509,6 +10569,21 @@ msgstr ""
 
 #: screens/Credential/CredentialDetail/CredentialDetail.js:319
 msgid "Failed to delete credential."
+msgstr ""
+
+#: components/LaunchPrompt/steps/OtherPromptsStep.js:46
+#: components/PromptDetail/PromptDetail.js:239
+#: components/PromptDetail/PromptJobTemplateDetail.js:149
+#: components/PromptDetail/PromptProjectDetail.js:108
+#: components/PromptDetail/PromptWFJobTemplateDetail.js:91
+#: components/Schedule/ScheduleDetail/ScheduleDetail.js:478
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:249
+#: screens/Job/JobDetail/JobDetail.js:339
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.js:244
+#: screens/Template/shared/JobTemplateForm.js:338
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:137
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:227
+msgid "Source Control Branch"
 msgstr ""
 
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:176
@@ -10635,6 +10710,54 @@ msgstr ""
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:149
 #: screens/Organization/OrganizationTeams/OrganizationTeamList.js:74
 msgid "Created by (username)"
+msgstr ""
+
+#: components/LabelLists/LabelListItem.js:19
+#: components/LabelLists/LabelLists.js:56
+#: components/LabelLists/LabelLists.js:61
+#: components/Lookup/ApplicationLookup.js:121
+#: components/Lookup/OrganizationLookup.js:103
+#: components/Lookup/OrganizationLookup.js:109
+#: components/Lookup/OrganizationLookup.js:126
+#: components/PromptDetail/PromptInventorySourceDetail.js:63
+#: components/PromptDetail/PromptInventorySourceDetail.js:73
+#: components/PromptDetail/PromptJobTemplateDetail.js:107
+#: components/PromptDetail/PromptJobTemplateDetail.js:117
+#: components/PromptDetail/PromptProjectDetail.js:79
+#: components/PromptDetail/PromptProjectDetail.js:90
+#: components/PromptDetail/PromptWFJobTemplateDetail.js:69
+#: components/TemplateList/TemplateListItem.js:279
+#: screens/Application/ApplicationDetails/ApplicationDetails.js:71
+#: screens/Application/ApplicationsList/ApplicationListItem.js:40
+#: screens/Application/ApplicationsList/ApplicationsList.js:155
+#: screens/Credential/CredentialDetail/CredentialDetail.js:232
+#: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:71
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:157
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:169
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:77
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:180
+#: screens/Inventory/InventoryDetail/InventoryDetail.js:99
+#: screens/Inventory/InventoryList/InventoryList.js:204
+#: screens/Inventory/InventoryList/InventoryList.js:234
+#: screens/Inventory/InventoryList/InventoryListItem.js:128
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:214
+#: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:109
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:123
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:133
+#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:183
+#: screens/Project/ProjectList/ProjectListItem.js:289
+#: screens/Project/ProjectList/ProjectListItem.js:300
+#: screens/Team/TeamDetail/TeamDetail.js:42
+#: screens/Team/TeamList/TeamList.js:145
+#: screens/Team/TeamList/TeamListItem.js:40
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.js:195
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.js:206
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:124
+#: screens/User/UserList/UserList.js:166
+#: screens/User/UserTeams/UserTeamList.js:182
+#: screens/User/UserTeams/UserTeamList.js:238
+#: screens/User/UserTeams/UserTeamListItem.js:25
+msgid "Organization"
 msgstr ""
 
 #: screens/Credential/shared/ExternalTestModal.js:79
@@ -11062,6 +11185,14 @@ msgstr ""
 msgid "Preconditions for running this node when there are multiple parents. Refer to the"
 msgstr ""
 
+#: components/Sparkline/Sparkline.js:37
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:59
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:174
+#: screens/Inventory/InventorySources/InventorySourceListItem.js:45
+#: screens/Project/ProjectList/ProjectListItem.js:79
+msgid "FINISHED:"
+msgstr ""
+
 #: screens/Inventory/shared/InventorySourceForm.js:143
 msgid "Choose a source"
 msgstr ""
@@ -11435,6 +11566,10 @@ msgstr ""
 msgid "Leave this field blank to make the execution environment globally available."
 msgstr ""
 
+#: components/PromptDetail/PromptProjectDetail.js:47
+msgid "Discard local changes before syncing"
+msgstr ""
+
 #: components/PromptDetail/PromptJobTemplateDetail.js:150
 #: screens/Job/JobDetail/JobDetail.js:351
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:249
@@ -11447,6 +11582,11 @@ msgstr ""
 msgid "Invalid username or password. Please try again."
 msgstr ""
 
+#: components/PromptDetail/PromptProjectDetail.js:165
+#: screens/Project/shared/ProjectSubForms/ManualSubForm.js:74
+msgid "Playbook Directory"
+msgstr ""
+
 #: screens/User/UserList/UserListItem.js:46
 msgid "ldap user"
 msgstr ""
@@ -11455,7 +11595,7 @@ msgstr ""
 msgid "Back to Organizations"
 msgstr ""
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:87
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:86
 msgid "Provide your Red Hat or Red Hat Satellite credentials to enable Automation Analytics."
 msgstr ""
 
@@ -11499,7 +11639,7 @@ msgstr ""
 msgid "Survey preview modal"
 msgstr ""
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:125
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:124
 msgid "Learn more about Automation Analytics"
 msgstr ""
 

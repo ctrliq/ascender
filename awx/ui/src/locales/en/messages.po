@@ -18,7 +18,7 @@ msgid "{forks, plural, one {# fork} other {# forks}}"
 msgstr "{forks, plural, one {# fork} other {# forks}}"
 
 #: components/UserAndTeamAccessAdd/getResourceAccessConfig.js:147
-#: routeConfig.js:87
+#: routeConfig.js:93
 #: screens/ActivityStream/ActivityStream.js:172
 #: screens/Dashboard/Dashboard.js:124
 #: screens/Project/ProjectList/ProjectList.js:182
@@ -138,7 +138,7 @@ msgstr "Privilege Escalation"
 msgid "Unable to load last job update"
 msgstr "Unable to load last job update"
 
-#: routeConfig.js:66
+#: routeConfig.js:67
 #: screens/SubscriptionUsage/SubscriptionUsage.js:41
 msgid "Subscription Usage"
 msgstr "Subscription Usage"
@@ -656,7 +656,7 @@ msgstr "View Schedules"
 msgid "JSON:"
 msgstr "JSON:"
 
-#: routeConfig.js:32
+#: routeConfig.js:33
 #: screens/ActivityStream/ActivityStream.js:147
 msgid "Views"
 msgstr ""
@@ -727,7 +727,7 @@ msgstr "Failed to toggle instance."
 msgid "Failed to delete one or more instance groups."
 msgstr "Failed to delete one or more instance groups."
 
-#: routeConfig.js:61
+#: routeConfig.js:62
 #: screens/HostMetrics/HostMetrics.js:31
 #: screens/HostMetrics/HostMetrics.js:67
 #: screens/HostMetrics/HostMetrics.js:110
@@ -1241,7 +1241,7 @@ msgstr ""
 "children.  This list shows all groups the host is associated\n"
 "with directly and indirectly."
 
-#: routeConfig.js:97
+#: routeConfig.js:103
 #: screens/ActivityStream/ActivityStream.js:178
 #: screens/Dashboard/Dashboard.js:102
 #: screens/Host/HostList/HostList.js:143
@@ -1493,6 +1493,9 @@ msgstr "Hour"
 #: components/JobList/JobList.js:197
 #: components/JobList/JobList.js:246
 #: components/JobList/JobListItem.js:88
+#: components/LabelLists/LabelListItem.js:16
+#: components/LabelLists/LabelLists.js:55
+#: components/LabelLists/LabelLists.js:60
 #: components/LaunchPrompt/steps/CredentialsStep.js:191
 #: components/LaunchPrompt/steps/CredentialsStep.js:206
 #: components/LaunchPrompt/steps/ExecutionEnvironmentStep.js:78
@@ -1796,6 +1799,10 @@ msgstr "Failed to cancel one or more jobs."
 msgid "Hosts remaining"
 msgstr "Hosts remaining"
 
+#: components/About/About.js:43
+msgid "Ctrl IQ, Inc."
+msgstr "Ctrl IQ, Inc."
+
 #: screens/Template/TemplateSurvey.js:134
 msgid "Failed to update survey."
 msgstr "Failed to update survey."
@@ -1939,7 +1946,7 @@ msgstr "No job data available"
 msgid "Approved"
 msgstr "Approved"
 
-#: routeConfig.js:36
+#: routeConfig.js:37
 #: screens/Dashboard/Dashboard.js:95
 msgid "Dashboard"
 msgstr ""
@@ -1970,7 +1977,7 @@ msgstr "Key"
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:264
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:343
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:448
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:96
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:95
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:210
 #: screens/User/shared/UserForm.js:77
 #: screens/User/UserDetail/UserDetail.js:70
@@ -2002,7 +2009,7 @@ msgstr ""
 msgid "This project is currently on sync and cannot be clicked until sync process completed"
 msgstr "This project is currently on sync and cannot be clicked until sync process completed"
 
-#: routeConfig.js:125
+#: routeConfig.js:131
 #: screens/ActivityStream/ActivityStream.js:192
 msgid "Administration"
 msgstr ""
@@ -2038,7 +2045,7 @@ msgstr "brand logo"
 
 #: screens/Login/Login.js:237
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:75
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:105
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:104
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:218
 #: screens/Template/Survey/SurveyQuestionForm.js:84
 #: screens/User/shared/UserForm.js:89
@@ -2402,7 +2409,7 @@ msgstr "Job Templates with credentials that prompt for passwords cannot be selec
 msgid "Source Control Refspec"
 msgstr "Source Control Refspec"
 
-#: routeConfig.js:149
+#: routeConfig.js:155
 #: screens/ActivityStream/ActivityStream.js:205
 #: screens/InstanceGroup/InstanceGroup.js:76
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:200
@@ -2621,7 +2628,7 @@ msgstr "Webhook details"
 
 #: components/AddRole/AddResourceRole.js:190
 #: components/AddRole/AddResourceRole.js:191
-#: routeConfig.js:118
+#: routeConfig.js:124
 #: screens/ActivityStream/ActivityStream.js:189
 #: screens/Organization/Organization.js:126
 #: screens/Organization/OrganizationList/OrganizationList.js:147
@@ -2998,7 +3005,7 @@ msgstr "Disassociate role!"
 msgid "Last Health Check"
 msgstr "Last Health Check"
 
-#: routeConfig.js:164
+#: routeConfig.js:170
 #: screens/TopologyView/TopologyView.js:44
 msgid "Topology View"
 msgstr "Topology View"
@@ -3106,7 +3113,7 @@ msgstr "Enabled Options"
 msgid "Delete Credential"
 msgstr "Delete Credential"
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:54
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:53
 msgid "this Tower documentation page"
 msgstr "this Tower documentation page"
 
@@ -3385,7 +3392,7 @@ msgstr "Failed to delete one or more organizations."
 
 #: components/Schedule/ScheduleList/ScheduleList.js:164
 #: components/Schedule/ScheduleList/ScheduleList.js:230
-#: routeConfig.js:46
+#: routeConfig.js:47
 #: screens/ActivityStream/ActivityStream.js:155
 #: screens/Inventory/Inventories.js:92
 #: screens/Inventory/InventorySource/InventorySource.js:90
@@ -3541,7 +3548,7 @@ msgstr "Update webhook key"
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:520
 #: components/TemplateList/TemplateListItem.js:328
 #: components/UserAndTeamAccessAdd/getResourceAccessConfig.js:78
-#: routeConfig.js:82
+#: routeConfig.js:88
 #: screens/ActivityStream/ActivityStream.js:169
 #: screens/Credential/CredentialList/CredentialList.js:197
 #: screens/Credential/Credentials.js:16
@@ -3583,7 +3590,7 @@ msgstr "Back to Teams"
 msgid "Injector configuration"
 msgstr "Injector configuration"
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:66
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:65
 msgid ""
 "This data is used to enhance\n"
 "future releases of the Tower Software and help\n"
@@ -3796,7 +3803,7 @@ msgstr "Management job not found."
 #: components/PromptDetail/PromptJobTemplateDetail.js:230
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:510
 #: components/UserAndTeamAccessAdd/getResourceAccessConfig.js:216
-#: routeConfig.js:144
+#: routeConfig.js:150
 #: screens/ActivityStream/ActivityStream.js:207
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:109
 #: screens/InstanceGroup/InstanceGroups.js:18
@@ -3992,7 +3999,7 @@ msgstr "How to use constructed inventory plugin"
 msgid "This inventory is currently being used by some templates. Are you sure you want to delete it?"
 msgstr "This inventory is currently being used by some templates. Are you sure you want to delete it?"
 
-#: routeConfig.js:129
+#: routeConfig.js:135
 #: screens/ActivityStream/ActivityStream.js:194
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.js:119
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.js:162
@@ -4257,7 +4264,7 @@ msgstr "Provisioning Callbacks"
 msgid "Toggle notification success"
 msgstr ""
 
-#: routeConfig.js:104
+#: routeConfig.js:110
 #: screens/ActivityStream/ActivityStream.js:181
 #: screens/Credential/Credential.js:91
 #: screens/Credential/Credentials.js:32
@@ -4437,7 +4444,7 @@ msgstr ""
 "/api/annotations endpoint will be added automatically to the base\n"
 "Grafana URL."
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:37
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:36
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.js:205
 msgid "User and Automation Analytics"
 msgstr "User and Automation Analytics"
@@ -5353,7 +5360,7 @@ msgstr "Cancel selected jobs"
 msgid "ID"
 msgstr "ID"
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:78
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:77
 msgid ""
 "This data is used to enhance\n"
 "future releases of the Software and to provide\n"
@@ -5610,7 +5617,7 @@ msgstr "Generic OIDC settings"
 
 #: components/AddRole/AddResourceRole.js:180
 #: components/AddRole/AddResourceRole.js:181
-#: routeConfig.js:113
+#: routeConfig.js:119
 #: screens/ActivityStream/ActivityStream.js:186
 #: screens/Team/Teams.js:32
 #: screens/User/UserList/UserList.js:112
@@ -5815,7 +5822,7 @@ msgstr "Copy Credential"
 
 #: components/JobList/JobList.js:193
 #: components/JobList/JobList.js:276
-#: routeConfig.js:41
+#: routeConfig.js:42
 #: screens/ActivityStream/ActivityStream.js:152
 #: screens/Dashboard/shared/LineChart.js:66
 #: screens/Host/Host.js:76
@@ -5865,8 +5872,8 @@ msgstr "View Constructed Inventory Details"
 msgid "System Administrator"
 msgstr "System Administrator"
 
-#: routeConfig.js:171
-#: routeConfig.js:175
+#: routeConfig.js:177
+#: routeConfig.js:181
 #: screens/ActivityStream/ActivityStream.js:222
 #: screens/ActivityStream/ActivityStream.js:224
 #: screens/Setting/Settings.js:46
@@ -6112,8 +6119,8 @@ msgstr "Seconds"
 msgid "{intervalValue, plural, one {day} other {days}}"
 msgstr "{intervalValue, plural, one {day} other {days}}"
 
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:62
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:63
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:64
 msgid "User analytics"
 msgstr "User analytics"
 
@@ -6164,7 +6171,7 @@ msgstr "Create new container group"
 msgid "Wednesday"
 msgstr "Wednesday"
 
-#: routeConfig.js:56
+#: routeConfig.js:57
 #: screens/ActivityStream/ActivityStream.js:158
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:169
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:205
@@ -6820,7 +6827,7 @@ msgstr "Approve"
 msgid "Greater than or equal to comparison."
 msgstr "Greater than or equal to comparison."
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:115
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:114
 msgid "Automation Analytics dashboard"
 msgstr "Automation Analytics dashboard"
 
@@ -7196,7 +7203,7 @@ msgstr "Please select an organization before editing the host filter"
 msgid "Off"
 msgstr "Off"
 
-#: routeConfig.js:139
+#: routeConfig.js:145
 #: screens/ManagementJob/ManagementJobList/ManagementJobList.js:86
 msgid "Management Jobs"
 msgstr ""
@@ -7586,7 +7593,7 @@ msgstr "Less than or equal to comparison."
 msgid "Delete"
 msgstr ""
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:39
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:38
 msgid "By default, we collect and transmit analytics data on the service usage to Red Hat. There are two categories of data collected by the service. For more information, see <0>{0}</0>. Uncheck the following boxes to disable this feature."
 msgstr "By default, we collect and transmit analytics data on the service usage to Red Hat. There are two categories of data collected by the service. For more information, see <0>{0}</0>. Uncheck the following boxes to disable this feature."
 
@@ -8036,8 +8043,8 @@ msgstr "Constructed Inventory not found."
 msgid "edit"
 msgstr "edit"
 
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:74
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:75
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:76
 msgid "Automation Analytics"
 msgstr "Automation Analytics"
 
@@ -8128,7 +8135,7 @@ msgid "{numJobsToCancel, plural, one {Cancel job} other {Cancel jobs}}"
 msgstr "{numJobsToCancel, plural, one {Cancel job} other {Cancel jobs}}"
 
 #: components/Lookup/ApplicationLookup.js:98
-#: routeConfig.js:154
+#: routeConfig.js:160
 #: screens/Application/Applications.js:27
 #: screens/Application/Applications.js:36
 #: screens/Application/ApplicationsList/ApplicationsList.js:111
@@ -8369,7 +8376,7 @@ msgstr "Add job template"
 
 #: components/AdHocCommands/AdHocExecutionEnvironmentStep.js:105
 #: components/LaunchPrompt/steps/ExecutionEnvironmentStep.js:109
-#: routeConfig.js:159
+#: routeConfig.js:165
 #: screens/ActivityStream/ActivityStream.js:219
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:131
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:193
@@ -8524,16 +8531,19 @@ msgid "YAML"
 msgstr "YAML"
 
 #: components/JobList/JobListItem.js:286
+#: components/LabelLists/LabelLists.js:52
 #: components/LaunchPrompt/steps/OtherPromptsStep.js:228
 #: components/PromptDetail/PromptDetail.js:322
 #: components/PromptDetail/PromptJobTemplateDetail.js:211
 #: components/PromptDetail/PromptWFJobTemplateDetail.js:118
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:543
 #: components/TemplateList/TemplateListItem.js:352
+#: routeConfig.js:78
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:259
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:135
 #: screens/Inventory/shared/InventoryForm.js:85
 #: screens/Job/JobDetail/JobDetail.js:485
+#: screens/Labels/Labels.js:14
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:397
 #: screens/Template/shared/JobTemplateForm.js:390
 #: screens/Template/shared/WorkflowJobTemplateForm.js:197
@@ -8795,7 +8805,7 @@ msgid "Source phone number"
 msgstr "Source phone number"
 
 #: components/NotificationList/NotificationList.js:179
-#: routeConfig.js:134
+#: routeConfig.js:140
 #: screens/Inventory/Inventories.js:96
 #: screens/Inventory/InventorySource/InventorySource.js:101
 #: screens/ManagementJob/ManagementJob.js:118
@@ -8877,7 +8887,7 @@ msgstr "Disable SSL Verification"
 
 #: components/TemplateList/TemplateList.js:206
 #: components/TemplateList/TemplateList.js:269
-#: routeConfig.js:77
+#: routeConfig.js:83
 #: screens/ActivityStream/ActivityStream.js:166
 #: screens/ExecutionEnvironment/ExecutionEnvironment.js:72
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateList.js:84
@@ -9046,7 +9056,7 @@ msgid "This credential is currently being used by other resources. Are you sure 
 msgstr "This credential is currently being used by other resources. Are you sure you want to delete it?"
 
 #: components/UserAndTeamAccessAdd/getResourceAccessConfig.js:189
-#: routeConfig.js:108
+#: routeConfig.js:114
 #: screens/ActivityStream/ActivityStream.js:183
 #: screens/Organization/OrganizationList/OrganizationList.js:119
 #: screens/Organization/OrganizationList/OrganizationList.js:165
@@ -9114,7 +9124,7 @@ msgstr "Machine Credential"
 msgid "Skip tags are useful when you have a large playbook, and you want to skip specific parts of a play or task. Use commas to separate multiple tags. Refer to the documentation for details on the usage of tags."
 msgstr "Skip tags are useful when you have a large playbook, and you want to skip specific parts of a play or task. Use commas to separate multiple tags. Refer to the documentation for details on the usage of tags."
 
-#: routeConfig.js:51
+#: routeConfig.js:52
 #: screens/ActivityStream/ActivityStream.js:45
 #: screens/ActivityStream/ActivityStream.js:123
 #: screens/Setting/Settings.js:47
@@ -10405,7 +10415,7 @@ msgid "Download bundle"
 msgstr "Download bundle"
 
 #: components/UserAndTeamAccessAdd/getResourceAccessConfig.js:120
-#: routeConfig.js:92
+#: routeConfig.js:98
 #: screens/ActivityStream/ActivityStream.js:175
 #: screens/Dashboard/Dashboard.js:113
 #: screens/Inventory/Inventories.js:22
@@ -10416,7 +10426,7 @@ msgstr "Download bundle"
 msgid "Inventories"
 msgstr ""
 
-#: routeConfig.js:73
+#: routeConfig.js:74
 #: screens/ActivityStream/ActivityStream.js:161
 msgid "Resources"
 msgstr ""
@@ -10604,7 +10614,7 @@ msgstr "Returns results that satisfy this one or any other filters."
 msgid "Advanced"
 msgstr "Advanced"
 
-#: components/About/About.js:51
+#: components/About/About.js:52
 msgid "Brand Image"
 msgstr ""
 
@@ -10867,6 +10877,9 @@ msgstr "Select a project before editing the execution environment."
 msgid "Created by (username)"
 msgstr "Created by (username)"
 
+#: components/LabelLists/LabelListItem.js:19
+#: components/LabelLists/LabelLists.js:56
+#: components/LabelLists/LabelLists.js:61
 #: components/Lookup/ApplicationLookup.js:121
 #: components/Lookup/OrganizationLookup.js:103
 #: components/Lookup/OrganizationLookup.js:109
@@ -11763,7 +11776,7 @@ msgstr "ldap user"
 msgid "Back to Organizations"
 msgstr "Back to Organizations"
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:87
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:86
 msgid "Provide your Red Hat or Red Hat Satellite credentials to enable Automation Analytics."
 msgstr "Provide your Red Hat or Red Hat Satellite credentials to enable Automation Analytics."
 
@@ -11807,7 +11820,7 @@ msgstr "Credential to authenticate with Kubernetes or OpenShift. Must be of type
 msgid "Survey preview modal"
 msgstr "Survey preview modal"
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:125
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:124
 msgid "Learn more about Automation Analytics"
 msgstr "Learn more about Automation Analytics"
 
