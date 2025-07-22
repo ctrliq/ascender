@@ -78,7 +78,9 @@ function CredentialTypeDetails({ credentialType }) {
           rows={6}
           name="input"
           dataCy="credential-type-detail-input"
-          helpText={i18n._(msg`Input schema which defines a set of ordered fields for that type.`)}
+          helpText={i18n._(
+            msg`Input schema which defines a set of ordered fields for that type.`
+          )}
         />
         <VariablesDetail
           label={i18n._(msg`Injector configuration`)}
@@ -86,7 +88,9 @@ function CredentialTypeDetails({ credentialType }) {
           rows={6}
           name="injector"
           dataCy="credential-type-detail-injector"
-          helpText={i18n._(msg`Environment variables or extra variables that specify the values a credential type can inject.`)}
+          helpText={i18n._(
+            msg`Environment variables or extra variables that specify the values a credential type can inject.`
+          )}
         />
         <UserDateDetail
           label={i18n._(msg`Created`)}
@@ -120,7 +124,9 @@ function CredentialTypeDetails({ credentialType }) {
               isDisabled={isLoading || isDeleteDisabled}
               disabledTooltip={
                 isDeleteDisabled &&
-                i18n._(msg`This credential type is currently being used by some credentials and cannot be deleted`)
+                i18n._(
+                  msg`This credential type is currently being used by some credentials and cannot be deleted`
+                )
               }
             >
               {i18n._(msg`Delete`)}

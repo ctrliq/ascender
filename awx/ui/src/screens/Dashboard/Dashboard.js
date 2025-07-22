@@ -92,7 +92,7 @@ function Dashboard() {
       )}
       <ScreenHeader
         streamType="all"
-        breadcrumbConfig={{ '/home': i18n._(msg`Dashboard`)}}
+        breadcrumbConfig={{ '/home': i18n._(msg`Dashboard`) }}
       />
       <PageSection>
         <Counts>
@@ -163,7 +163,9 @@ function Dashboard() {
               <Tab
                 aria-label={i18n._(msg`Recent Templates list tab`)}
                 eventKey={2}
-                title={<TabTitleText>{i18n._(msg`Recent Templates`)}</TabTitleText>}
+                title={
+                  <TabTitleText>{i18n._(msg`Recent Templates`)}</TabTitleText>
+                }
                 ouiaId="recent-templates-list-tab"
               >
                 <div>

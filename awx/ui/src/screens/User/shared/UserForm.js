@@ -71,7 +71,12 @@ function UserFormFields({ user }) {
         name="last_name"
         type="text"
       />
-      <FormField id="user-email" label={i18n._(msg`Email`)} name="email" type="text" />
+      <FormField
+        id="user-email"
+        label={i18n._(msg`Email`)}
+        name="email"
+        type="text"
+      />
       <FormField
         id="user-username"
         label={i18n._(msg`Username`)}
@@ -149,7 +154,9 @@ function UserForm({ user, handleCancel, handleSubmit, submitError }) {
   const handleValidateAndSubmit = (values, { setErrors }) => {
     if (values.password !== values.confirm_password) {
       setErrors({
-        confirm_password: i18n._(msg`This value does not match the password you entered previously. Please confirm that password.`),
+        confirm_password: i18n._(
+          msg`This value does not match the password you entered previously. Please confirm that password.`
+        ),
       });
     } else {
       values.is_superuser = values.user_type === 'administrator';

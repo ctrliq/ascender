@@ -34,7 +34,9 @@ function WorkflowDenyButton({ isDetailView, workflowApproval, onHandleToast }) {
     <>
       <Button
         aria-label={
-          hasBeenActedOn ? i18n._(msg`This workflow has already been acted on`) : i18n._(msg`Deny`)
+          hasBeenActedOn
+            ? i18n._(msg`This workflow has already been acted on`)
+            : i18n._(msg`Deny`)
         }
         ouiaId="workflow-deny-button"
         isDisabled={hasBeenActedOn}

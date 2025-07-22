@@ -16,7 +16,7 @@ import { useSettings } from 'contexts/Settings';
 import { SettingDetail } from '../../shared';
 
 function OIDCDetail() {
-  const {  i18n } = useLingui();
+  const { i18n } = useLingui();
   const { me } = useConfig();
   const { GET: options } = useSettings();
 

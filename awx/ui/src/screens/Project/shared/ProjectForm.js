@@ -246,7 +246,9 @@ function ProjectFormFields({
         value={executionEnvironmentField.value}
         popoverContent={projectHelpText.executionEnvironment}
         onChange={handleExecutionEnvironmentUpdate}
-        tooltip={i18n._(msg`Select an organization before editing the default execution environment.`)}
+        tooltip={i18n._(
+          msg`Select an organization before editing the default execution environment.`
+        )}
         globallyAvailable
         isDisabled={!organizationField.value}
         organizationId={organizationField.value?.id}

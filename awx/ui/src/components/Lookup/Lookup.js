@@ -62,7 +62,9 @@ function Lookup(props) {
     name: fieldName,
     validate: (val) => {
       if (!multiple && !val && typedText && typedText !== '') {
-        return i18n._(msg`That value was not found. Please enter or select a valid value.`);
+        return i18n._(
+          msg`That value was not found. Please enter or select a valid value.`
+        );
       }
       return validate(val);
     },

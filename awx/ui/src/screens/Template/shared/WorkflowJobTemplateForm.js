@@ -129,7 +129,9 @@ function WorkflowJobTemplateForm({
           required={isOrgAdmin}
           autoPopulate={isOrgAdmin}
           validate={
-            isOrgAdmin ? required(i18n._(msg`Select a value for this field`)) : undefined
+            isOrgAdmin
+              ? required(i18n._(msg`Select a value for this field`))
+              : undefined
           }
         />
         <FormGroup

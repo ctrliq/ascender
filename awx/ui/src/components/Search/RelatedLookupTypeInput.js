@@ -49,7 +49,9 @@ function RelatedLookupTypeInput({
           id="search-option-select"
           key="search"
           value="search"
-          description={i18n._(msg`Fuzzy search on id, name or description fields.`)}
+          description={i18n._(
+            msg`Fuzzy search on id, name or description fields.`
+          )}
         />
       )}
     </Select>

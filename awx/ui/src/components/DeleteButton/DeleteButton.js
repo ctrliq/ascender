@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { msg } from '@lingui/macro';
-import { useLingui } from "@lingui/react";
+import { useLingui } from '@lingui/react';
 
 import styled from 'styled-components';
 import { Button, Badge, Alert, Tooltip } from '@patternfly/react-core';

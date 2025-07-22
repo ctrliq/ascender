@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import { msg } from "@lingui/macro";
-import { useLingui } from "@lingui/react";
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import {
   Card,
   PageSection,
@@ -199,10 +199,9 @@ function ActivityStream() {
             >
               {i18n._(msg`Notification Templates`)}
             </SelectOption>
-            <SelectOption
-              key="instance"
-              value="instance"
-            >{i18n._(msg`Instances`)}</SelectOption>
+            <SelectOption key="instance" value="instance">
+              {i18n._(msg`Instances`)}
+            </SelectOption>
             <SelectOption key="instance_groups" value="instance_group">
               {i18n._(msg`Instance Groups`)}
             </SelectOption>

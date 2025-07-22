@@ -159,9 +159,15 @@ function UserList() {
             )}
             headerRow={
               <HeaderRow qsConfig={QS_CONFIG}>
-                <HeaderCell sortKey="username">{i18n._(msg`Username`)}</HeaderCell>
-                <HeaderCell sortKey="first_name">{i18n._(msg`First Name`)}</HeaderCell>
-                <HeaderCell sortKey="last_name">{i18n._(msg`Last Name`)}</HeaderCell>
+                <HeaderCell sortKey="username">
+                  {i18n._(msg`Username`)}
+                </HeaderCell>
+                <HeaderCell sortKey="first_name">
+                  {i18n._(msg`First Name`)}
+                </HeaderCell>
+                <HeaderCell sortKey="last_name">
+                  {i18n._(msg`Last Name`)}
+                </HeaderCell>
                 <HeaderCell>{i18n._(msg`Email`)}</HeaderCell>
                 <HeaderCell>{i18n._(msg`Organization`)}</HeaderCell>
                 <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>

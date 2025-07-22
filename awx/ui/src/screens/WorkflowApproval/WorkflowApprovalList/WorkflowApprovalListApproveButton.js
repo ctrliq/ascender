@@ -26,7 +26,9 @@ function WorkflowApprovalListApproveButton({ onApprove, selectedItems }) {
       .join(', ');
 
     if (selectedItems.some(cannotApprove)) {
-      return i18n._(msg`You are unable to act on the following workflow approvals: ${itemsUnableToApprove}`);
+      return i18n._(
+        msg`You are unable to act on the following workflow approvals: ${itemsUnableToApprove}`
+      );
     }
 
     return i18n._(msg`Approve`);

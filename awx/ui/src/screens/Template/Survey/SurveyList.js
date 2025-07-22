@@ -51,7 +51,11 @@ function SurveyList({
   const deleteModal = (
     <AlertModal
       variant="danger"
-      title={isAllSelected ? i18n._(msg`Delete Survey`) : i18n._(msg`Delete Questions`)}
+      title={
+        isAllSelected
+          ? i18n._(msg`Delete Survey`)
+          : i18n._(msg`Delete Questions`)
+      }
       isOpen={isDeleteModalOpen}
       onClose={() => {
         setIsDeleteModalOpen(false);

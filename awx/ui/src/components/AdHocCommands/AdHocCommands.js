@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState, useContext } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { msg } from "@lingui/macro";
-import { useLingui } from "@lingui/react";
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 
 import PropTypes from 'prop-types';
 import { Button, DropdownItem, Tooltip } from '@patternfly/react-core';

@@ -13,14 +13,18 @@ function NotificationTemplates() {
   const match = useRouteMatch();
   const [breadcrumbConfig, setBreadcrumbConfig] = useState({
     '/notification_templates': i18n._(msg`Notification Templates`),
-    '/notification_templates/add': i18n._(msg`Create New Notification Template`),
+    '/notification_templates/add': i18n._(
+      msg`Create New Notification Template`
+    ),
   });
 
   const updateBreadcrumbConfig = useCallback((notification) => {
     const { id } = notification;
     setBreadcrumbConfig({
       '/notification_templates': i18n._(msg`Notification Templates`),
-      '/notification_templates/add': i18n._(msg`Create New Notification Template`),
+      '/notification_templates/add': i18n._(
+        msg`Create New Notification Template`
+      ),
       [`/notification_templates/${id}`]: notification.name,
       [`/notification_templates/${id}/edit`]: i18n._(msg`Edit Details`),
       [`/notification_templates/${id}/details`]: i18n._(msg`Details`),

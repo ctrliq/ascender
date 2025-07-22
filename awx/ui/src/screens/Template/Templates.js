@@ -18,7 +18,9 @@ function Templates() {
   const initScreenHeader = useRef({
     '/templates': i18n._(msg`Templates`),
     '/templates/job_template/add': i18n._(msg`Create New Job Template`),
-    '/templates/workflow_job_template/add': i18n._(msg`Create New Workflow Template`),
+    '/templates/workflow_job_template/add': i18n._(
+      msg`Create New Workflow Template`
+    ),
   });
   const [breadcrumbConfig, setScreenHeader] = useState(
     initScreenHeader.current
@@ -53,7 +55,9 @@ function Templates() {
         [schedulesPath]: i18n._(msg`Schedules`),
         [`${schedulesPath}/add`]: i18n._(msg`Create New Schedule`),
         [`${schedulesPath}/${schedule?.id}`]: `${schedule?.name}`,
-        [`${schedulesPath}/${schedule?.id}/details`]: i18n._(msg`Schedule Details`),
+        [`${schedulesPath}/${schedule?.id}/details`]: i18n._(
+          msg`Schedule Details`
+        ),
         [`${schedulesPath}/${schedule?.id}/edit`]: i18n._(msg`Edit Schedule`),
       });
     },

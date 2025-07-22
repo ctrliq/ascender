@@ -2,8 +2,8 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { bool, instanceOf } from 'prop-types';
-import { msg } from "@lingui/macro";
-import { useLingui } from "@lingui/react";
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 
 import {
   Title,
@@ -36,13 +36,19 @@ function ContentError({ error, children, isNotFound }) {
         <EmptyState variant="full">
           <EmptyStateIcon icon={ExclamationTriangleIcon} />
           <Title size="lg" headingLevel="h3">
-            {is404 ? i18n._(msg`Not Found`) : i18n._(msg`Something went wrong...`)}
+            {is404
+              ? i18n._(msg`Not Found`)
+              : i18n._(msg`Something went wrong...`)}
           </Title>
           <EmptyStateBody>
             {is404
               ? i18n._(msg`The page you requested could not be found.`)
-              : i18n._(msg`There was an error loading this content. Please reload the page.`)}{' '}
-            {children || <Link to="/home">{i18n._(msg`Back to Dashboard.`)}</Link>}
+              : i18n._(
+                  msg`There was an error loading this content. Please reload the page.`
+                )}{' '}
+            {children || (
+              <Link to="/home">{i18n._(msg`Back to Dashboard.`)}</Link>
+            )}
           </EmptyStateBody>
           {error && <ErrorDetail error={error} />}
         </EmptyState>

@@ -29,7 +29,9 @@ function Logging() {
           </Route>
           <Route key="not-found" path={`${baseURL}/*`}>
             <ContentError isNotFound>
-              <Link to={`${baseURL}/details`}>{i18n._(msg`View Logging settings`)}</Link>
+              <Link to={`${baseURL}/details`}>
+                {i18n._(msg`View Logging settings`)}
+              </Link>
             </ContentError>
           </Route>
         </Switch>

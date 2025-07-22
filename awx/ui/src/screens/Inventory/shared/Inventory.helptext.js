@@ -47,7 +47,9 @@ function useInventoryHelpTextStrings() {
 
       return (
         <>
-          {i18n._(msg`Variables must be in JSON or YAML syntax. Use the radio button to toggle between the two.`)}
+          {i18n._(
+            msg`Variables must be in JSON or YAML syntax. Use the radio button to toggle between the two.`
+          )}
           <br />
           <br />
           {i18n._(msg`JSON:`)}
@@ -76,33 +78,47 @@ function useInventoryHelpTextStrings() {
         </>
       );
     },
-    subFormVerbosityFields: i18n._(msg`Control the level of output Ansible will produce for inventory source update jobs.`),
+    subFormVerbosityFields: i18n._(
+      msg`Control the level of output Ansible will produce for inventory source update jobs.`
+    ),
     subFormOptions: {
       overwrite: (
         <>
-          {i18n._(msg`If checked, any hosts and groups that were previously present on the external source but are now removed will be removed from the inventory. Hosts and groups that were not managed by the inventory source will be promoted to the next manually created group or if there is no manually created group to promote them into, they will be left in the "all" default group for the inventory.`)}
+          {i18n._(
+            msg`If checked, any hosts and groups that were previously present on the external source but are now removed will be removed from the inventory. Hosts and groups that were not managed by the inventory source will be promoted to the next manually created group or if there is no manually created group to promote them into, they will be left in the "all" default group for the inventory.`
+          )}
           <br />
           <br />
-          {i18n._(msg`When not checked, local child hosts and groups not found on the external source will remain untouched by the inventory update process.`)}
+          {i18n._(
+            msg`When not checked, local child hosts and groups not found on the external source will remain untouched by the inventory update process.`
+          )}
         </>
       ),
       overwriteVariables: (
         <>
-          {i18n._(msg`If checked, all variables for child groups and hosts will be removed and replaced by those found on the external source.`)}
+          {i18n._(
+            msg`If checked, all variables for child groups and hosts will be removed and replaced by those found on the external source.`
+          )}
           <br />
           <br />
-          {i18n._(msg`When not checked, a merge will be performed, combining local variables with those found on the external source.`)}
+          {i18n._(
+            msg`When not checked, a merge will be performed, combining local variables with those found on the external source.`
+          )}
         </>
       ),
       updateOnLaunch: ({ value }) => (
         <>
           <div>
-            {i18n._(msg`Each time a job runs using this inventory, refresh the inventory from the selected source before executing job tasks.`)}
+            {i18n._(
+              msg`Each time a job runs using this inventory, refresh the inventory from the selected source before executing job tasks.`
+            )}
           </div>
           <br />
           {value && (
             <div>
-              {i18n._(msg`If you want the Inventory Source to update on launch , click on Update on Launch, and also go to `)}
+              {i18n._(
+                msg`If you want the Inventory Source to update on launch , click on Update on Launch, and also go to `
+              )}
               <Link to={`/projects/${value.id}/details`}> {value.name} </Link>
               {i18n._(msg`and click on Update Revision on Launch.`)}
             </div>
@@ -112,24 +128,38 @@ function useInventoryHelpTextStrings() {
       updateOnProjectUpdate: ({ value }) => (
         <>
           <div>
-            {i18n._(msg`After every project update where the SCM revision changes, refresh the inventory from the selected source before executing job tasks. This is intended for static content, like the Ansible inventory .ini file format.`)}
+            {i18n._(
+              msg`After every project update where the SCM revision changes, refresh the inventory from the selected source before executing job tasks. This is intended for static content, like the Ansible inventory .ini file format.`
+            )}
           </div>
           <br />
           {value && (
             <div>
-              {i18n._(msg`If you want the Inventory Source to update on launch , click on Update on Launch, and also go to `)}
+              {i18n._(
+                msg`If you want the Inventory Source to update on launch , click on Update on Launch, and also go to `
+              )}
               <Link to={`/projects/${value.id}/details`}> {value.name} </Link>
               {i18n._(msg`and click on Update Revision on Launch`)}
             </div>
           )}
         </>
       ),
-      cachedTimeOut: i18n._(msg`Time in seconds to consider an inventory sync to be current. During job runs and callbacks the task system will evaluate the timestamp of the latest sync. If it is older than Cache Timeout, it is not considered current, and a new inventory sync will be performed.`),
+      cachedTimeOut: i18n._(
+        msg`Time in seconds to consider an inventory sync to be current. During job runs and callbacks the task system will evaluate the timestamp of the latest sync. If it is older than Cache Timeout, it is not considered current, and a new inventory sync will be performed.`
+      ),
     },
-    enabledVariableField: i18n._(msg`Retrieve the enabled state from the given dict of host variables. The enabled variable may be specified using dot notation, e.g: 'foo.bar'`),
-    sourceControlBranch: i18n._(msg`Branch to use on inventory sync. Project default used if blank. Only allowed if project allow_override field is set to true.`),
-    enabledValue: i18n._(msg`This field is ignored unless an Enabled Variable is set. If the enabled variable matches this value, the host will be enabled on import.`),
-    hostFilter: i18n._(msg`Regular expression where only matching host names will be imported. The filter is applied as a post-processing step after any inventory plugin filters are applied.`),
+    enabledVariableField: i18n._(
+      msg`Retrieve the enabled state from the given dict of host variables. The enabled variable may be specified using dot notation, e.g: 'foo.bar'`
+    ),
+    sourceControlBranch: i18n._(
+      msg`Branch to use on inventory sync. Project default used if blank. Only allowed if project allow_override field is set to true.`
+    ),
+    enabledValue: i18n._(
+      msg`This field is ignored unless an Enabled Variable is set. If the enabled variable matches this value, the host will be enabled on import.`
+    ),
+    hostFilter: i18n._(
+      msg`Regular expression where only matching host names will be imported. The filter is applied as a post-processing step after any inventory plugin filters are applied.`
+    ),
     sourceVars: (docsBaseUrl, source) => {
       const docsUrl = `${docsBaseUrl}/html/userguide/inventories.html#inventory-plugins`;
       let sourceType = '';
@@ -139,7 +169,9 @@ function useInventoryHelpTextStrings() {
       }
       return (
         <>
-          {i18n._(msg`Variables used to configure the inventory source. For a detailed description of how to configure this plugin, see`)}{' '}
+          {i18n._(
+            msg`Variables used to configure the inventory source. For a detailed description of how to configure this plugin, see`
+          )}{' '}
           <a
             href={docsBaseUrl ? docsUrl : ''}
             target="_blank"
@@ -170,7 +202,9 @@ function useInventoryHelpTextStrings() {
     `;
       return (
         <>
-          {i18n._(msg`Variables used to configure the constructed inventory plugin. For a detailed description of how to configure this plugin, see`)}{' '}
+          {i18n._(
+            msg`Variables used to configure the constructed inventory plugin. For a detailed description of how to configure this plugin, see`
+          )}{' '}
           <a
             href={ansibleDocUrls.constructed}
             target="_blank"
@@ -183,7 +217,9 @@ function useInventoryHelpTextStrings() {
           <br />
           <hr />
           <br />
-          {i18n._(msg`Variables must be in JSON or YAML syntax. Use the radio button to toggle between the two.`)}
+          {i18n._(
+            msg`Variables must be in JSON or YAML syntax. Use the radio button to toggle between the two.`
+          )}
           <br />
           <br />
           {i18n._(msg`YAML:`)}
@@ -191,10 +227,18 @@ function useInventoryHelpTextStrings() {
         </>
       );
     },
-    sourcePath: i18n._(msg`The inventory file to be synced by this source. You can select from the dropdown or enter a file within the input.`),
-    preventInstanceGroupFallback: i18n._(msg`If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on. Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied.`),
+    sourcePath: i18n._(
+      msg`The inventory file to be synced by this source. You can select from the dropdown or enter a file within the input.`
+    ),
+    preventInstanceGroupFallback: i18n._(
+      msg`If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on. Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied.`
+    ),
     enabledOptions: (
-      <p>{i18n._(msg`Prevent Instance Group Fallback: If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on.`)}</p>
+      <p>
+        {i18n._(
+          msg`Prevent Instance Group Fallback: If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on.`
+        )}
+      </p>
     ),
   };
 }

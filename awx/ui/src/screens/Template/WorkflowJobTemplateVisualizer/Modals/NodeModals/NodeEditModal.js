@@ -64,7 +64,11 @@ function NodeEditModal() {
   };
 
   return (
-    <NodeModal askLinkType={false} onSave={updateNode} title={i18n._(msg`Edit Node`)} />
+    <NodeModal
+      askLinkType={false}
+      onSave={updateNode}
+      title={i18n._(msg`Edit Node`)}
+    />
   );
 }
 

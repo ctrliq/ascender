@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { msg } from "@lingui/macro";
-import { useLingui } from "@lingui/react";
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 
 import { ChipGroup as PFChipGroup } from '@patternfly/react-core';
 import { number } from 'prop-types';

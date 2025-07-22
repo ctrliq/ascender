@@ -117,7 +117,9 @@ function Credential({ setBreadcrumb }) {
             {contentError.response && contentError.response.status === 404 && (
               <span>
                 {i18n._(msg`Credential not found.`)}{' '}
-                <Link to="/credentials">{i18n._(msg`View all Credentials.`)}</Link>
+                <Link to="/credentials">
+                  {i18n._(msg`View all Credentials.`)}
+                </Link>
               </span>
             )}
           </ContentError>

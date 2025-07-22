@@ -108,7 +108,8 @@ function UIEdit() {
             CUSTOM_LOGIN_INFO: uiData?.CUSTOM_LOGIN_INFO?.value ?? '',
             CUSTOM_LOGO: uiData?.CUSTOM_LOGO?.value ?? '',
             CUSTOM_LOGO_MENU: uiData?.CUSTOM_LOGO_MENU?.value ?? '',
-            ASCENDER_DISABLE_GRADIENT: uiData?.ASCENDER_DISABLE_GRADIENT?.value ?? false,
+            ASCENDER_DISABLE_GRADIENT:
+              uiData?.ASCENDER_DISABLE_GRADIENT?.value ?? false,
           }}
           onSubmit={handleSubmit}
         >

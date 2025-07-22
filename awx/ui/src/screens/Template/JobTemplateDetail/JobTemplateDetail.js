@@ -178,7 +178,11 @@ function JobTemplateDetail({ template }) {
   return (
     <CardBody>
       <DetailList gutter="sm">
-        <Detail label={i18n._(msg`Name`)} value={name} dataCy="jt-detail-name" />
+        <Detail
+          label={i18n._(msg`Name`)}
+          value={name}
+          dataCy="jt-detail-name"
+        />
         <Detail
           label={i18n._(msg`Description`)}
           value={description}
@@ -217,7 +221,10 @@ function JobTemplateDetail({ template }) {
           />
         ) : (
           !ask_inventory_on_launch && (
-            <DeletedDetail label={i18n._(msg`Inventory`)} dataCy="jt-detail-inventory" />
+            <DeletedDetail
+              label={i18n._(msg`Inventory`)}
+              dataCy="jt-detail-inventory"
+            />
           )
         )}
         {summary_fields.project ? (
@@ -305,7 +312,11 @@ function JobTemplateDetail({ template }) {
         {webhook_service && (
           <Detail
             label={i18n._(msg`Webhook Service`)}
-            value={webhook_service === 'github' ? i18n._(msg`GitHub`) : i18n._(msg`GitLab`)}
+            value={
+              webhook_service === 'github'
+                ? i18n._(msg`GitHub`)
+                : i18n._(msg`GitLab`)
+            }
             dataCy="jt-detail-webhook-service"
             helpText={helpText.webhookService}
           />
@@ -518,7 +529,9 @@ function JobTemplateDetail({ template }) {
               onConfirm={deleteJobTemplate}
               isDisabled={isDeleteLoading}
               deleteDetailsRequests={deleteDetailsRequests}
-              deleteMessage={i18n._(msg`This job template is currently being used by other resources. Are you sure you want to delete it?`)}
+              deleteMessage={i18n._(
+                msg`This job template is currently being used by other resources. Are you sure you want to delete it?`
+              )}
             >
               {i18n._(msg`Delete`)}
             </DeleteButton>

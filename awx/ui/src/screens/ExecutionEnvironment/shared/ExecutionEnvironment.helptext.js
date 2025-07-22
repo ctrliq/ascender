@@ -5,7 +5,9 @@ import { i18n } from '@lingui/core';
 const executionEnvironmentHelpTextStrings = {
   image: (
     <span>
-      {i18n._(msg`The full image location, including the container registry, image name, and version tag.`)}
+      {i18n._(
+        msg`The full image location, including the container registry, image name, and version tag.`
+      )}
       <br />
       <br />
       {i18n._(msg`Examples:`)}
@@ -19,7 +21,9 @@ const executionEnvironmentHelpTextStrings = {
       </ul>
     </span>
   ),
-  registryCredential: i18n._(msg`Credential to authenticate with a protected container registry.`),
+  registryCredential: i18n._(
+    msg`Credential to authenticate with a protected container registry.`
+  ),
 };
 
 export default executionEnvironmentHelpTextStrings;

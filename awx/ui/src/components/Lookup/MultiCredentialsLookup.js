@@ -154,7 +154,9 @@ function MultiCredentialsLookup({
               variant="info"
               isInline
               css="margin-bottom: 20px;"
-              title={i18n._(msg`You cannot select multiple vault credentials with the same vault ID. Doing so will automatically deselect the other with the same vault ID.`)}
+              title={i18n._(
+                msg`You cannot select multiple vault credentials with the same vault ID. Doing so will automatically deselect the other with the same vault ID.`
+              )}
               ouiaId="multi-credentials-lookup-alert"
             />
           )}

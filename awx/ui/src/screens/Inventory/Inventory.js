@@ -74,7 +74,11 @@ function Inventory({ setBreadcrumb }) {
       link: `${match.url}/jobs`,
       id: 5,
     },
-    { name: i18n._(msg`Job Templates`), link: `${match.url}/job_templates`, id: 6 },
+    {
+      name: i18n._(msg`Job Templates`),
+      link: `${match.url}/job_templates`,
+      id: 6,
+    },
   ];
 
   if (hasContentLoading) {
@@ -95,7 +99,9 @@ function Inventory({ setBreadcrumb }) {
             {contentError.response?.status === 404 && (
               <span>
                 {i18n._(msg`Inventory not found.`)}{' '}
-                <Link to="/inventories">{i18n._(msg`View all Inventories.`)}</Link>
+                <Link to="/inventories">
+                  {i18n._(msg`View all Inventories.`)}
+                </Link>
               </span>
             )}
           </ContentError>

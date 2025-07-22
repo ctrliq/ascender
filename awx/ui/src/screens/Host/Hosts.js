@@ -18,21 +18,24 @@ function Hosts() {
     '/hosts/add': i18n._(msg`Create New Host`),
   });
 
-  const buildBreadcrumbConfig = useCallback((host) => {
-    if (!host) {
-      return;
-    }
-    setBreadcrumbConfig({
-      '/hosts': i18n._(msg`Hosts`),
-      '/hosts/add': i18n._(msg`Create New Host`),
-      [`/hosts/${host.id}`]: `${host.name}`,
-      [`/hosts/${host.id}/edit`]: i18n._(msg`Edit Details`),
-      [`/hosts/${host.id}/details`]: i18n._(msg`Details`),
-      [`/hosts/${host.id}/facts`]: i18n._(msg`Facts`),
-      [`/hosts/${host.id}/groups`]: i18n._(msg`Groups`),
-      [`/hosts/${host.id}/jobs`]: i18n._(msg`Jobs`),
-    });
-  }, [i18n]);
+  const buildBreadcrumbConfig = useCallback(
+    (host) => {
+      if (!host) {
+        return;
+      }
+      setBreadcrumbConfig({
+        '/hosts': i18n._(msg`Hosts`),
+        '/hosts/add': i18n._(msg`Create New Host`),
+        [`/hosts/${host.id}`]: `${host.name}`,
+        [`/hosts/${host.id}/edit`]: i18n._(msg`Edit Details`),
+        [`/hosts/${host.id}/details`]: i18n._(msg`Details`),
+        [`/hosts/${host.id}/facts`]: i18n._(msg`Facts`),
+        [`/hosts/${host.id}/groups`]: i18n._(msg`Groups`),
+        [`/hosts/${host.id}/jobs`]: i18n._(msg`Jobs`),
+      });
+    },
+    [i18n]
+  );
 
   return (
     <>

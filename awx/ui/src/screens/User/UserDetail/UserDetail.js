@@ -75,15 +75,26 @@ function UserDetail({ user }) {
         {userAuthType && (
           <Detail
             label={i18n._(msg`Type`)}
-            value={<Label aria-label={i18n._(msg`login type`)}>{userAuthType}</Label>}
+            value={
+              <Label aria-label={i18n._(msg`login type`)}>{userAuthType}</Label>
+            }
           />
         )}
         {last_login && (
-          <Detail label={i18n._(msg`Last Login`)} value={formatDateString(last_login)} />
+          <Detail
+            label={i18n._(msg`Last Login`)}
+            value={formatDateString(last_login)}
+          />
         )}
-        <Detail label={i18n._(msg`Created`)} value={formatDateString(created)} />
+        <Detail
+          label={i18n._(msg`Created`)}
+          value={formatDateString(created)}
+        />
         {modified && (
-          <Detail label={i18n._(msg`Last Modified`)} value={formatDateString(modified)} />
+          <Detail
+            label={i18n._(msg`Last Modified`)}
+            value={formatDateString(modified)}
+          />
         )}
       </DetailList>
       <CardActionsRow>

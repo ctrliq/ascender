@@ -192,7 +192,9 @@ function SurveyReorderModal({
       title={i18n._(msg`Survey Question Order`)}
       aria-label={i18n._(msg`Survey preview modal`)}
       isOpen={isOrderModalOpen}
-      description={i18n._(msg`To reorder the survey questions drag and drop them in the desired location.`)}
+      description={i18n._(
+        msg`To reorder the survey questions drag and drop them in the desired location.`
+      )}
       onClose={() => onCloseOrderModal()}
       variant="medium"
       actions={[
@@ -203,13 +205,17 @@ function SurveyReorderModal({
           onClick={() => {
             onSave(surveyQuestions);
           }}
-        >{i18n._(msg`Save`)}</Button>,
+        >
+          {i18n._(msg`Save`)}
+        </Button>,
         <Button
           ouiaId="survey-order-cancel"
           key="cancel"
           variant="link"
           onClick={() => onCloseOrderModal()}
-        >{i18n._(msg`Cancel`)}</Button>,
+        >
+          {i18n._(msg`Cancel`)}
+        </Button>,
       ]}
     >
       <TableComposable>
@@ -217,7 +223,8 @@ function SurveyReorderModal({
           <Tr ouiaId="survey-order-table-header">
             <Th dataLabel={i18n._(msg`Order`)}>{i18n._(msg`Order`)}</Th>
             <Th dataLabel={i18n._(msg`Name`)}>{i18n._(msg`Name`)}</Th>
-            <Th dataLabel={i18n._(msg`Default Answer(s)`)}>{i18n._(msg`Default Answer(s)`)}
+            <Th dataLabel={i18n._(msg`Default Answer(s)`)}>
+              {i18n._(msg`Default Answer(s)`)}
             </Th>
           </Tr>
         </Thead>
@@ -240,7 +247,9 @@ function SurveyReorderModal({
               <Td dataLabel={i18n._(msg`Name`)} aria-label={q.question_name}>
                 {q.question_name}
               </Td>
-              <Td dataLabel={i18n._(msg`Default Answer(s)`)}>{defaultAnswer(q)}</Td>
+              <Td dataLabel={i18n._(msg`Default Answer(s)`)}>
+                {defaultAnswer(q)}
+              </Td>
             </Tr>
           ))}
         </Tbody>

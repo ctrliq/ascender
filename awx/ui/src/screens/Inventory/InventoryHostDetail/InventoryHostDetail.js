@@ -78,7 +78,11 @@ function InventoryHostDetail({ host }) {
           isEmpty={recentPlaybookJobs?.length === 0}
         />
         <Detail label={i18n._(msg`Description`)} value={description} />
-        <UserDateDetail date={created} label={i18n._(msg`Created`)} user={created_by} />
+        <UserDateDetail
+          date={created}
+          label={i18n._(msg`Created`)}
+          user={created_by}
+        />
         <UserDateDetail
           date={modified}
           label={i18n._(msg`Last Modified`)}

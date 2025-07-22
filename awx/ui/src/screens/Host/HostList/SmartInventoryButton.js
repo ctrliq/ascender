@@ -18,13 +18,19 @@ function SmartInventoryButton({
 
   const renderTooltipContent = () => {
     if (hasInvalidKeys) {
-      return i18n._(msg`Some search modifiers like not__ and __search are not supported in Smart Inventory host filters.  Remove these to create a new Smart Inventory with this filter.`);
+      return i18n._(
+        msg`Some search modifiers like not__ and __search are not supported in Smart Inventory host filters.  Remove these to create a new Smart Inventory with this filter.`
+      );
     }
     if (hasAnsibleFactsKeys) {
-      return i18n._(msg`To create a smart inventory using ansible facts, go to the smart inventory screen.`);
+      return i18n._(
+        msg`To create a smart inventory using ansible facts, go to the smart inventory screen.`
+      );
     }
     if (isDisabled) {
-      return i18n._(msg`Enter at least one search filter to create a new Smart Inventory`);
+      return i18n._(
+        msg`Enter at least one search filter to create a new Smart Inventory`
+      );
     }
 
     return i18n._(msg`Create a new Smart Inventory with the applied filter`);

@@ -104,7 +104,10 @@ function SmartInventoryDetail({ inventory }) {
             isEmpty={recentJobs.length === 0}
           />
           <Detail label={i18n._(msg`Description`)} value={description} />
-          <Detail label={i18n._(msg`Type`)} value={i18n._(msg`Smart inventory`)} />
+          <Detail
+            label={i18n._(msg`Type`)}
+            value={i18n._(msg`Smart inventory`)}
+          />
           <Detail
             label={i18n._(msg`Organization`)}
             value={
@@ -132,7 +135,11 @@ function SmartInventoryDetail({ inventory }) {
             name="variables"
             dataCy="smart-inventory-detail-variables"
           />
-          <UserDateDetail label={i18n._(msg`Created`)} date={created} user={created_by} />
+          <UserDateDetail
+            label={i18n._(msg`Created`)}
+            date={created}
+            user={created_by}
+          />
           <UserDateDetail
             label={i18n._(msg`Last modified`)}
             date={modified}

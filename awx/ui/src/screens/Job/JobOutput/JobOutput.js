@@ -734,7 +734,9 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
                     });
                     setShowEventsRefresh(false);
                   }}
-                >{i18n._(msg`Reload output`)}</Button>
+                >
+                  {i18n._(msg`Reload output`)}
+                </Button>
               </>
             }
           />
@@ -837,7 +839,9 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
             </Button>,
           ]}
         >
-          {i18n._(msg`Are you sure you want to submit the request to cancel this job?`)}
+          {i18n._(
+            msg`Are you sure you want to submit the request to cancel this job?`
+          )}
         </AlertModal>
       )}
       {dismissableDeleteError && (

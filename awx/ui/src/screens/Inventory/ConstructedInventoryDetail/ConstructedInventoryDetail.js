@@ -334,7 +334,9 @@ function ConstructedInventoryDetail({ inventory }) {
               job={{ id: inventorySourceSyncJob.id, type: 'inventory_update' }}
               errorTitle={i18n._(msg`Constructed Inventory Source Sync Error`)}
               title={i18n._(msg`Cancel Constructed Inventory Source Sync`)}
-              errorMessage={i18n._(msg`Failed to cancel Constructed Inventory Source Sync`)}
+              errorMessage={i18n._(
+                msg`Failed to cancel Constructed Inventory Source Sync`
+              )}
               buttonText={i18n._(msg`Cancel Sync`)}
             />
           ) : (
@@ -346,7 +348,9 @@ function ConstructedInventoryDetail({ inventory }) {
             modalTitle={i18n._(msg`Delete Inventory`)}
             onConfirm={deleteInventory}
             deleteDetailsRequests={deleteDetailsRequests}
-            deleteMessage={i18n._(msg`This inventory is currently being used by other resources. Are you sure you want to delete it?`)}
+            deleteMessage={i18n._(
+              msg`This inventory is currently being used by other resources. Are you sure you want to delete it?`
+            )}
           >
             {i18n._(msg`Delete`)}
           </DeleteButton>

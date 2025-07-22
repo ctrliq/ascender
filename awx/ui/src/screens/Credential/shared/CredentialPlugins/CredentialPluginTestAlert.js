@@ -38,7 +38,9 @@ function CredentialPluginTestAlert({
         }
       } else {
         setTestMessage(
-          i18n._(msg`Something went wrong with the request to test this credential and metadata.`)
+          i18n._(
+            msg`Something went wrong with the request to test this credential and metadata.`
+          )
         );
       }
       setTestVariant('danger');

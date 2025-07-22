@@ -223,9 +223,16 @@ function InstanceDetails({ setBreadcrumb, instanceGroup }) {
           />
           <Detail
             label={i18n._(msg`Policy Type`)}
-            value={instance.managed_by_policy ? i18n._(msg`Auto`) : i18n._(msg`Manual`)}
+            value={
+              instance.managed_by_policy
+                ? i18n._(msg`Auto`)
+                : i18n._(msg`Manual`)
+            }
           />
-          <Detail label={i18n._(msg`Running Jobs`)} value={instance.jobs_running} />
+          <Detail
+            label={i18n._(msg`Running Jobs`)}
+            value={instance.jobs_running}
+          />
           <Detail label={i18n._(msg`Total Jobs`)} value={instance.jobs_total} />
           <Detail
             label={i18n._(msg`Last Health Check`)}
@@ -251,10 +258,18 @@ function InstanceDetails({ setBreadcrumb, instanceGroup }) {
             label={i18n._(msg`Capacity Adjustment`)}
             value={
               <SliderHolder data-cy="slider-holder">
-                <div data-cy="cpu-capacity">{i18n._(msg`CPU ${instance.cpu_capacity}`, { cpu_capacity: instance.cpu_capacity })}</div>
+                <div data-cy="cpu-capacity">
+                  {i18n._(msg`CPU ${instance.cpu_capacity}`, {
+                    cpu_capacity: instance.cpu_capacity,
+                  })}
+                </div>
                 <SliderForks data-cy="slider-forks">
                   <div data-cy="number-forks">
-                    <Plural value={forks} one={i18n._(msg`# fork`)} other={i18n._(msg`# forks`)} />
+                    <Plural
+                      value={forks}
+                      one={i18n._(msg`# fork`)}
+                      other={i18n._(msg`# forks`)}
+                    />
                   </div>
                   <Slider
                     areCustomStepsContinuous
@@ -267,7 +282,11 @@ function InstanceDetails({ setBreadcrumb, instanceGroup }) {
                     data-cy="slider"
                   />
                 </SliderForks>
-                <div data-cy="mem-capacity">{i18n._(msg`RAM ${instance.mem_capacity}`, { mem_capacity: instance.mem_capacity })}</div>
+                <div data-cy="mem-capacity">
+                  {i18n._(msg`RAM ${instance.mem_capacity}`, {
+                    mem_capacity: instance.mem_capacity,
+                  })}
+                </div>
               </SliderHolder>
             }
           />
@@ -325,12 +344,16 @@ function InstanceDetails({ setBreadcrumb, instanceGroup }) {
               onDisassociate={disassociateInstance}
               itemsToDisassociate={[instance]}
               isProtectedInstanceGroup={instanceGroup.name === 'controlplane'}
-              modalTitle={i18n._(msg`Disassociate instance from instance group?`)}
+              modalTitle={i18n._(
+                msg`Disassociate instance from instance group?`
+              )}
               modalNote={
                 instance.managed_by_policy ? (
                   <Trans>
                     <b>
-                      {i18n._(msg`Note: This instance may be re-associated with this instance group if it is managed by `)}
+                      {i18n._(
+                        msg`Note: This instance may be re-associated with this instance group if it is managed by `
+                      )}
                       <a
                         href={policyRulesDocsLink}
                         target="_blank"

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { msg } from '@lingui/macro';
-import { useLingui } from "@lingui/react";
+import { useLingui } from '@lingui/react';
 import getScheduleUrl from 'util/getScheduleUrl';
 import Detail from './Detail';
 

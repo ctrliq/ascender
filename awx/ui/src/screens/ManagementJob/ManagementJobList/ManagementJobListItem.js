@@ -86,7 +86,10 @@ function ManagementJobListItem({
                     defaultDays={30}
                   />
                 ) : (
-                  <Tooltip content={i18n._(msg`Launch management job`)} position="left">
+                  <Tooltip
+                    content={i18n._(msg`Launch management job`)}
+                    position="left"
+                  >
                     <Button
                       ouiaId={`${id}-launch-button`}
                       aria-label={i18n._(msg`Launch management job`)}

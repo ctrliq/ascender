@@ -14,20 +14,27 @@ function ManagementJobs() {
     [basePath]: i18n._(msg`Management jobs`),
   });
 
-  const buildBreadcrumbConfig = useCallback(({ id, name }, nested) => {
-    if (!id) return;
+  const buildBreadcrumbConfig = useCallback(
+    ({ id, name }, nested) => {
+      if (!id) return;
 
-    setBreadcrumbConfig({
-      [basePath]: i18n._(msg`Management job`),
-      [`${basePath}/${id}`]: name,
-      [`${basePath}/${id}/notifications`]: i18n._(msg`Notifications`),
-      [`${basePath}/${id}/schedules`]: i18n._(msg`Schedules`),
-      [`${basePath}/${id}/schedules/add`]: i18n._(msg`Create New Schedule`),
-      [`${basePath}/${id}/schedules/${nested?.id}`]: `${nested?.name}`,
-      [`${basePath}/${id}/schedules/${nested?.id}/details`]: i18n._(msg`Details`),
-      [`${basePath}/${id}/schedules/${nested?.id}/edit`]: i18n._(msg`Edit Details`),
-    });
-  }, [i18n]);
+      setBreadcrumbConfig({
+        [basePath]: i18n._(msg`Management job`),
+        [`${basePath}/${id}`]: name,
+        [`${basePath}/${id}/notifications`]: i18n._(msg`Notifications`),
+        [`${basePath}/${id}/schedules`]: i18n._(msg`Schedules`),
+        [`${basePath}/${id}/schedules/add`]: i18n._(msg`Create New Schedule`),
+        [`${basePath}/${id}/schedules/${nested?.id}`]: `${nested?.name}`,
+        [`${basePath}/${id}/schedules/${nested?.id}/details`]: i18n._(
+          msg`Details`
+        ),
+        [`${basePath}/${id}/schedules/${nested?.id}/edit`]: i18n._(
+          msg`Edit Details`
+        ),
+      });
+    },
+    [i18n]
+  );
 
   return (
     <>

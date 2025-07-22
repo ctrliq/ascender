@@ -97,7 +97,9 @@ function validateSurveyField(question, value) {
   const isNumeric = ['integer', 'float'].includes(question.type);
   if (isTextField && (value || value === 0)) {
     if (question.min && value.length < question.min) {
-      return i18n._(msg`This field must be at least ${question.min} characters`);
+      return i18n._(
+        msg`This field must be at least ${question.min} characters`
+      );
     }
     if (question.max && value.length > question.max) {
       return i18n._(msg`This field must not exceed ${question.max} characters`);

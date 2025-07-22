@@ -1,8 +1,8 @@
 import 'styled-components/macro';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { msg } from "@lingui/macro";
-import { useLingui } from "@lingui/react";
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { Td, Tr } from '@patternfly/react-table';
 import { ActionsTd } from 'components/PaginatedTable';
 

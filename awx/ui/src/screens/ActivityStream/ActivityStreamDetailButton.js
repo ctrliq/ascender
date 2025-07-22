@@ -47,7 +47,10 @@ function ActivityStreamDetailButton({ streamItem, user, description }) {
             label={i18n._(msg`Setting category`)}
             value={setting && setting[0]?.category}
           />
-          <Detail label={i18n._(msg`Setting name`)} value={setting && setting[0]?.name} />
+          <Detail
+            label={i18n._(msg`Setting name`)}
+            value={setting && setting[0]?.name}
+          />
           <Detail fullWidth label={i18n._(msg`Action`)} value={description} />
           {streamItem?.changes && (
             <VariablesDetail

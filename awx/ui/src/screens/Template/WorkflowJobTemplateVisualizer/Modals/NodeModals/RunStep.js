@@ -25,28 +25,36 @@ function RunStep() {
         {i18n._(msg`Run`)}
       </Title>
       <p>
-        {i18n._(msg`Specify the conditions under which this node should be executed`)}
+        {i18n._(
+          msg`Specify the conditions under which this node should be executed`
+        )}
       </p>
       <Grid>
         <SelectableCard
           id="link-type-success"
           isSelected={field.value === 'success'}
           label={i18n._(msg`On Success`)}
-          description={i18n._(msg`Execute when the parent node results in a successful state.`)}
+          description={i18n._(
+            msg`Execute when the parent node results in a successful state.`
+          )}
           onClick={() => helpers.setValue('success')}
         />
         <SelectableCard
           id="link-type-failure"
           isSelected={field.value === 'failure'}
           label={i18n._(msg`On Failure`)}
-          description={i18n._(msg`Execute when the parent node results in a failure state.`)}
+          description={i18n._(
+            msg`Execute when the parent node results in a failure state.`
+          )}
           onClick={() => helpers.setValue('failure')}
         />
         <SelectableCard
           id="link-type-always"
           isSelected={field.value === 'always'}
           label={i18n._(msg`Always`)}
-          description={i18n._(msg`Execute regardless of the parent node's final state.`)}
+          description={i18n._(
+            msg`Execute regardless of the parent node's final state.`
+          )}
           onClick={() => helpers.setValue('always')}
         />
       </Grid>

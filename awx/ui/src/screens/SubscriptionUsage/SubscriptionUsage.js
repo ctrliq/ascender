@@ -38,7 +38,9 @@ function SubscriptionUsage() {
       )}
       <ScreenHeader
         streamType="all"
-        breadcrumbConfig={{ '/subscription_usage': i18n._(msg`Subscription Usage`)}}
+        breadcrumbConfig={{
+          '/subscription_usage': i18n._(msg`Subscription Usage`),
+        }}
       />
       <MainPageSection>
         <div className="spacer">

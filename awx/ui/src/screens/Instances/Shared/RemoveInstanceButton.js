@@ -72,7 +72,9 @@ function RemoveInstanceButton({ itemsToRemove, onRemove, isK8s }) {
       .map((item) => item.hostname)
       .join(', ');
     if (itemsToRemove.some(cannotRemove)) {
-      return i18n._(msg`You do not have permission to remove instances: ${itemsUnableToremove}`);
+      return i18n._(
+        msg`You do not have permission to remove instances: ${itemsUnableToremove}`
+      );
     }
     if (itemsToRemove.length) {
       return i18n._(msg`Remove`);
@@ -87,8 +89,12 @@ function RemoveInstanceButton({ itemsToRemove, onRemove, isK8s }) {
     <div>
       <Plural
         value={itemsToRemove.length}
-        one={i18n._(msg`This intance is currently being used by other resources. Are you sure you want to delete it?`)}
-        other={i18n._(msg`Deprovisioning these instances could impact other resources that rely on them. Are you sure you want to delete anyway?`)}
+        one={i18n._(
+          msg`This intance is currently being used by other resources. Are you sure you want to delete it?`
+        )}
+        other={i18n._(
+          msg`Deprovisioning these instances could impact other resources that rely on them. Are you sure you want to delete anyway?`
+        )}
       />
       {removeDetails &&
         Object.entries(removeDetails).map(([key, value]) => (
@@ -178,7 +184,11 @@ function RemoveInstanceButton({ itemsToRemove, onRemove, isK8s }) {
             </Button>,
           ]}
         >
-          <div>{i18n._(msg`This action will remove the following instance and you may need to rerun the install bundle for any instance that was previously connected to:`)}</div>
+          <div>
+            {i18n._(
+              msg`This action will remove the following instance and you may need to rerun the install bundle for any instance that was previously connected to:`
+            )}
+          </div>
           {itemsToRemove.map((item) => (
             <span key={item.id} id={`item-to-be-removed-${item.id}`}>
               <strong>{item.hostname}</strong>

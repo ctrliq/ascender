@@ -62,7 +62,11 @@ function Instance({ setBreadcrumb }) {
       link: `${match.url}/listener_addresses`,
       id: 1,
     });
-    tabsArray.push({ name: i18n._(msg`Peers`), link: `${match.url}/peers`, id: 2 });
+    tabsArray.push({
+      name: i18n._(msg`Peers`),
+      link: `${match.url}/peers`,
+      id: 2,
+    });
   }
   if (isLoading) {
     return <ContentLoading />;

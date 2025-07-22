@@ -86,14 +86,18 @@ const SmartInventoryFormFields = ({ inventory }) => {
         onChange={(value) => {
           instanceGroupsHelpers.setValue(value);
         }}
-        tooltip={i18n._(msg`Select the Instance Groups for this Inventory to run on.`)}
+        tooltip={i18n._(
+          msg`Select the Instance Groups for this Inventory to run on.`
+        )}
       />
       <FormFullWidthLayout>
         <VariablesField
           id="variables"
           name="variables"
           label={i18n._(msg`Variables`)}
-          tooltip={i18n._(msg`Enter inventory variables using either JSON or YAML syntax. Use the radio button to toggle between the two. Refer to the Ansible Controller documentation for example syntax.`)}
+          tooltip={i18n._(
+            msg`Enter inventory variables using either JSON or YAML syntax. Use the radio button to toggle between the two. Refer to the Ansible Controller documentation for example syntax.`
+          )}
         />
       </FormFullWidthLayout>
     </>

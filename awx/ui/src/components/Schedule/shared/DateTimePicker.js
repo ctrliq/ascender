@@ -50,7 +50,9 @@ function DateTimePicker({ dateFieldName, timeFieldName, label }) {
       <DateTimeGroup>
         <DatePicker
           aria-label={
-            dateFieldName.startsWith('start') ? i18n._(msg`Start date`) : i18n._(msg`End date`)
+            dateFieldName.startsWith('start')
+              ? i18n._(msg`Start date`)
+              : i18n._(msg`End date`)
           }
           {...dateField}
           value={dateField.value.split('T')[0]}
@@ -60,7 +62,9 @@ function DateTimePicker({ dateFieldName, timeFieldName, label }) {
           placeholder="hh:mm AM/PM"
           stepMinutes={15}
           aria-label={
-            timeFieldName.startsWith('start') ? i18n._(msg`Start time`) : i18n._(msg`End time`)
+            timeFieldName.startsWith('start')
+              ? i18n._(msg`Start time`)
+              : i18n._(msg`End time`)
           }
           time={timeField.value}
           {...timeField}

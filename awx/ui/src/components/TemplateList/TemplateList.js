@@ -247,7 +247,9 @@ function TemplateList({ defaultParams }) {
             <HeaderRow qsConfig={qsConfig} isExpandable>
               <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
               <HeaderCell>{i18n._(msg`Activity`)}</HeaderCell>
-              <HeaderCell sortKey="last_job_run">{i18n._(msg`Last Ran`)}</HeaderCell>
+              <HeaderCell sortKey="last_job_run">
+                {i18n._(msg`Last Ran`)}
+              </HeaderCell>
               <HeaderCell sortKey="type">{i18n._(msg`Type`)}</HeaderCell>
               <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
             </HeaderRow>

@@ -74,7 +74,11 @@ function SmartInventory({ setBreadcrumb }) {
       link: `${match.url}/jobs`,
       id: 3,
     },
-    { name: i18n._(msg`Job Templates`), link: `${match.url}/job_templates`, id: 4 },
+    {
+      name: i18n._(msg`Job Templates`),
+      link: `${match.url}/job_templates`,
+      id: 4,
+    },
   ];
 
   if (hasContentLoading) {
@@ -95,7 +99,9 @@ function SmartInventory({ setBreadcrumb }) {
             {contentError?.response?.status === 404 && (
               <span>
                 {i18n._(msg`Smart Inventory not found.`)}{' '}
-                <Link to="/inventories">{i18n._(msg`View all Inventories.`)}</Link>
+                <Link to="/inventories">
+                  {i18n._(msg`View all Inventories.`)}
+                </Link>
               </span>
             )}
           </ContentError>

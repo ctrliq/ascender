@@ -24,7 +24,9 @@ export default function useNodeTypeStep(nodeToEdit) {
           ((!value?.inventory || value?.inventory === null) &&
             !value?.ask_inventory_on_launch))
       ) {
-        return i18n._(msg`Job Templates with a missing inventory or project cannot be selected when creating or editing nodes.  Select another template or fix the missing fields to proceed.`);
+        return i18n._(
+          msg`Job Templates with a missing inventory or project cannot be selected when creating or editing nodes.  Select another template or fix the missing fields to proceed.`
+        );
       }
       return undefined;
     },

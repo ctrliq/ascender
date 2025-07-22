@@ -16,18 +16,25 @@ function CredentialTypes() {
     '/credential_types/add': i18n._(msg`Create new credential type`),
   });
 
-  const buildBreadcrumbConfig = useCallback((credentialTypes) => {
-    if (!credentialTypes) {
-      return;
-    }
-    setBreadcrumbConfig({
-      '/credential_types': i18n._(msg`Credential Types`),
-      '/credential_types/add': i18n._(msg`Create new credential Type`),
-      [`/credential_types/${credentialTypes.id}`]: `${credentialTypes.name}`,
-      [`/credential_types/${credentialTypes.id}/edit`]: i18n._(msg`Edit details`),
-      [`/credential_types/${credentialTypes.id}/details`]: i18n._(msg`Details`),
-    });
-  }, [i18n]);
+  const buildBreadcrumbConfig = useCallback(
+    (credentialTypes) => {
+      if (!credentialTypes) {
+        return;
+      }
+      setBreadcrumbConfig({
+        '/credential_types': i18n._(msg`Credential Types`),
+        '/credential_types/add': i18n._(msg`Create new credential Type`),
+        [`/credential_types/${credentialTypes.id}`]: `${credentialTypes.name}`,
+        [`/credential_types/${credentialTypes.id}/edit`]: i18n._(
+          msg`Edit details`
+        ),
+        [`/credential_types/${credentialTypes.id}/details`]: i18n._(
+          msg`Details`
+        ),
+      });
+    },
+    [i18n]
+  );
   return (
     <>
       <ScreenHeader

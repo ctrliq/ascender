@@ -151,7 +151,9 @@ function ToolbarDeleteButton({
               <span>{`: ${itemsUnableToDelete}`}</span>
             </>
           ) : (
-            i18n._(msg`You do not have permission to delete ${pluralizedItemName}: ${itemsUnableToDelete}`)
+            i18n._(
+              msg`You do not have permission to delete ${pluralizedItemName}: ${itemsUnableToDelete}`
+            )
           )}
         </div>
       );

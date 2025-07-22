@@ -77,7 +77,9 @@ function TACACSDetail() {
               variant="info"
               isInline
               data-cy="TACACS-deprecation-warning"
-              title={i18n._(msg`This feature is deprecated and will be removed in a future release.`)}
+              title={i18n._(
+                msg`This feature is deprecated and will be removed in a future release.`
+              )}
               ouiaId="tacacs-deprecation-alert"
             />
             <DetailList>

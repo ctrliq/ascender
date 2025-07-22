@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-import { msg } from "@lingui/macro";
-import { useLingui } from "@lingui/react";
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { useField } from 'formik';
@@ -104,7 +104,9 @@ function AdHocCredentialStep({ credentialTypeId }) {
           helperTextInvalid={meta.error}
           labelIcon={
             <Popover
-              content={i18n._(msg`Select the credential you want to use when accessing the remote hosts to run the command. Choose the credential containing the username and SSH key or password that Ansible will need to log into the remote hosts.`)}
+              content={i18n._(
+                msg`Select the credential you want to use when accessing the remote hosts to run the command. Choose the credential containing the username and SSH key or password that Ansible will need to log into the remote hosts.`
+              )}
             />
           }
         >

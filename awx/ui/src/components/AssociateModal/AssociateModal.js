@@ -1,8 +1,8 @@
 import React, { useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { msg } from "@lingui/macro";
-import { useLingui } from "@lingui/react";
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 
 import { Button, Modal } from '@patternfly/react-core';
 import { getSearchableKeys } from 'components/PaginatedTable';

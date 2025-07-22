@@ -168,7 +168,8 @@ function MultiSelectField({ question }) {
     <FormGroup
       fieldId={id}
       helperTextInvalid={
-        meta.error || i18n._(msg`At least one value must be selected for this field.`)
+        meta.error ||
+        i18n._(msg`At least one value must be selected for this field.`)
       }
       isRequired={question.required}
       validated={isValid ? 'default' : 'error'}

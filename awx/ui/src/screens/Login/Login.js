@@ -194,17 +194,19 @@ function AWXLogin({ alt, isAuthenticated }) {
     <Login header={Header} footer={Footer}>
       <LoginMainHeader
         data-cy="login-header"
-/*        title={brandName ? i18n._(msg`Welcome to ${brandName}!`) : ''} */
-        title=''
-/*        subtitle={i18n._(msg`Please log in`)} */
-        subtitle=''
+        /*        title={brandName ? i18n._(msg`Welcome to ${brandName}!`) : ''} */
+        title=""
+        /*        subtitle={i18n._(msg`Please log in`)} */
+        subtitle=""
       />
       <LoginMainBody>
         {isSessionExpired.current ? (
           <Alert
             variant="warning"
             isInline
-            title={i18n._(msg`Your session has expired. Please log in to continue where you left off.`)}
+            title={i18n._(
+              msg`Your session has expired. Please log in to continue where you left off.`
+            )}
             ouiaId="session-expired-warning-alert"
           />
         ) : null}
@@ -250,7 +252,9 @@ function AWXLogin({ alt, isAuthenticated }) {
             onClose={dismissLoginInfoError}
             data-cy="login-info-error"
           >
-            {i18n._(msg`Failed to fetch custom login configuration settings.  System defaults will be shown instead.`)}
+            {i18n._(
+              msg`Failed to fetch custom login configuration settings.  System defaults will be shown instead.`
+            )}
             <ErrorDetail error={loginInfoError} />
           </AlertModal>
         )}
@@ -297,7 +301,9 @@ function AWXLogin({ alt, isAuthenticated }) {
                       key={authKey}
                       onClick={setSessionRedirect}
                     >
-                      <Tooltip content={i18n._(msg`Sign in with GitHub Organizations`)}>
+                      <Tooltip
+                        content={i18n._(msg`Sign in with GitHub Organizations`)}
+                      >
                         <GithubIcon size="lg" />
                       </Tooltip>
                     </LoginMainFooterLinksItem>
@@ -325,7 +331,9 @@ function AWXLogin({ alt, isAuthenticated }) {
                       key={authKey}
                       onClick={setSessionRedirect}
                     >
-                      <Tooltip content={i18n._(msg`Sign in with GitHub Enterprise`)}>
+                      <Tooltip
+                        content={i18n._(msg`Sign in with GitHub Enterprise`)}
+                      >
                         <GithubIcon size="lg" />
                       </Tooltip>
                     </LoginMainFooterLinksItem>
@@ -340,7 +348,9 @@ function AWXLogin({ alt, isAuthenticated }) {
                       onClick={setSessionRedirect}
                     >
                       <Tooltip
-                        content={i18n._(msg`Sign in with GitHub Enterprise Organizations`)}
+                        content={i18n._(
+                          msg`Sign in with GitHub Enterprise Organizations`
+                        )}
                       >
                         <GithubIcon size="lg" />
                       </Tooltip>
@@ -356,7 +366,9 @@ function AWXLogin({ alt, isAuthenticated }) {
                       onClick={setSessionRedirect}
                     >
                       <Tooltip
-                        content={i18n._(msg`Sign in with GitHub Enterprise Teams`)}
+                        content={i18n._(
+                          msg`Sign in with GitHub Enterprise Teams`
+                        )}
                       >
                         <GithubIcon size="lg" />
                       </Tooltip>

@@ -39,7 +39,9 @@ function DeleteAllNodesModal() {
       variant="danger"
     >
       <p>
-        {i18n._(msg`Are you sure you want to remove all the nodes in this workflow?`)}
+        {i18n._(
+          msg`Are you sure you want to remove all the nodes in this workflow?`
+        )}
       </p>
     </AlertModal>
   );

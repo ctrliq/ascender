@@ -4,8 +4,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { msg } from "@lingui/macro";
-import { useLingui } from "@lingui/react";
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import {
@@ -43,7 +43,7 @@ function PageHeaderToolbar({
   const { i18n } = useLingui();
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [isUserOpen, setIsUserOpen] = useState(false);
-/*   const config = useConfig(); */
+  /*   const config = useConfig(); */
 
   const { request: fetchPendingApprovalCount, result: pendingApprovals } =
     useRequest(
@@ -78,7 +78,10 @@ function PageHeaderToolbar({
   return (
     <PageHeaderTools>
       <PageHeaderToolsGroup>
-        <Tooltip position="bottom" content={i18n._(msg`Pending Workflow Approvals`)}>
+        <Tooltip
+          position="bottom"
+          content={i18n._(msg`Pending Workflow Approvals`)}
+        >
           <PageHeaderToolsItem>
             <Link to="/workflow_approvals?workflow_approvals.status=pending">
               <PendingWorkflowApprovals>
@@ -112,7 +115,7 @@ function PageHeaderToolbar({
               </DropdownToggle>
             }
             dropdownItems={[
-/*
+              /*
               <DropdownItem
                 key="help"
                 target="_blank"

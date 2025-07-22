@@ -230,7 +230,9 @@ function NodeTypeStep({ isIdentifierRequired }) {
                 <Popover
                   content={
                     <>
-                      {i18n._(msg`Preconditions for running this node when there are multiple parents. Refer to the`)}{' '}
+                      {i18n._(
+                        msg`Preconditions for running this node when there are multiple parents. Refer to the`
+                      )}{' '}
                       <a
                         href={`${getDocsBaseUrl(
                           config
@@ -274,7 +276,9 @@ function NodeTypeStep({ isIdentifierRequired }) {
               name="identifier"
               aria-label={i18n._(msg`Node Alias`)}
               label={i18n._(msg`Node Alias`)}
-              tooltip={i18n._(msg`If specified, this field will be shown on the node instead of the resource name when viewing the workflow`)}
+              tooltip={i18n._(
+                msg`If specified, this field will be shown on the node instead of the resource name when viewing the workflow`
+              )}
               isRequired={isIdentifierRequired}
               validate={isIdentifierRequired ? required(null) : null}
               validated={isValid ? 'default' : 'error'}

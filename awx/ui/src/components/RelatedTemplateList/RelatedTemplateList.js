@@ -223,8 +223,12 @@ function RelatedTemplateList({ searchParams, resourceName = null }) {
                   deleteMessage={
                     <Plural
                       value={selected.length}
-                      one={i18n._(msg`This template is currently being used by some workflow nodes. Are you sure you want to delete it?`)}
-                      other={i18n._(msg`Deleting these templates could impact some workflow nodes that rely on them. Are you sure you want to delete anyway?`)}
+                      one={i18n._(
+                        msg`This template is currently being used by some workflow nodes. Are you sure you want to delete it?`
+                      )}
+                      other={i18n._(
+                        msg`Deleting these templates could impact some workflow nodes that rely on them. Are you sure you want to delete anyway?`
+                      )}
                     />
                   }
                 />,

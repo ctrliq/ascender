@@ -75,7 +75,9 @@ const HostStatusBar = ({ counts = {} }) => {
     return (
       <BarWrapper>
         <Tooltip
-          content={i18n._(msg`Host status information for this job is unavailable.`)}
+          content={i18n._(
+            msg`Host status information for this job is unavailable.`
+          )}
         >
           <BarSegment count={1} />
         </Tooltip>

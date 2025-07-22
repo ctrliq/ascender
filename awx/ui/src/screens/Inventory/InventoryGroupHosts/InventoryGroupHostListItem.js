@@ -48,7 +48,9 @@ function InventoryGroupHostListItem({
           <b>{host.name}</b>
         </Link>
       </Td>
-      <Td dataLabel={i18n._(msg`host-description-${host.id}`)}>{host.description}</Td>
+      <Td dataLabel={i18n._(msg`host-description-${host.id}`)}>
+        {host.description}
+      </Td>
       <Td dataLabel={i18n._(msg`Activity`)}>
         <Sparkline jobs={recentPlaybookJobs} />
       </Td>

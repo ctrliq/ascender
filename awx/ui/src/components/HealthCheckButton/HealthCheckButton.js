@@ -38,7 +38,9 @@ function HealthCheckButton({
           isLoading={healthCheckPending}
           spinnerAriaLabel={i18n._(msg`Running health check`)}
         >
-          {healthCheckPending ? i18n._(msg`Running health check`) : i18n._(msg`Run health check`)}
+          {healthCheckPending
+            ? i18n._(msg`Running health check`)
+            : i18n._(msg`Run health check`)}
         </DropdownItem>
       </Tooltip>
     );
@@ -54,7 +56,9 @@ function HealthCheckButton({
           isLoading={healthCheckPending}
           spinnerAriaLabel={i18n._(msg`Running health check`)}
         >
-          {healthCheckPending ? i18n._(msg`Running health check`) : i18n._(msg`Run health check`)}
+          {healthCheckPending
+            ? i18n._(msg`Running health check`)
+            : i18n._(msg`Run health check`)}
         </Button>
       </div>
     </Tooltip>

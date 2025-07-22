@@ -63,7 +63,9 @@ function SurveyToolbar({
           {canEdit && onOpenOrderModal && (
             <ToolbarItem>
               <Tooltip
-                content={i18n._(msg`Click to rearrange the order of the survey questions`)}
+                content={i18n._(
+                  msg`Click to rearrange the order of the survey questions`
+                )}
               >
                 <Button
                   onClick={() => {

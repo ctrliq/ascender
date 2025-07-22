@@ -359,7 +359,9 @@ function HostFilterLookup({
     >
       {isDisabled ? (
         <Tooltip
-          content={i18n._(msg`Please select an organization before editing the host filter`)}
+          content={i18n._(
+            msg`Please select an organization before editing the host filter`
+          )}
         >
           {renderLookup()}
         </Tooltip>
@@ -398,7 +400,9 @@ function HostFilterLookup({
               variant="info"
               title={
                 <>
-                  {i18n._(msg`Searching by ansible_facts requires special syntax. Refer to the`)}{' '}
+                  {i18n._(
+                    msg`Searching by ansible_facts requires special syntax. Refer to the`
+                  )}{' '}
                   <a
                     href={`${getDocsBaseUrl(
                       config
@@ -423,7 +427,9 @@ function HostFilterLookup({
             headerRow={
               <HeaderRow qsConfig={QS_CONFIG} isSelectable={false}>
                 <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
-                <HeaderCell sortKey="description">{i18n._(msg`Description`)}</HeaderCell>
+                <HeaderCell sortKey="description">
+                  {i18n._(msg`Description`)}
+                </HeaderCell>
                 <HeaderCell>{i18n._(msg`Inventory`)}</HeaderCell>
               </HeaderRow>
             }

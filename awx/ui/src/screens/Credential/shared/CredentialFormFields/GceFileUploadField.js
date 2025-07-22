@@ -23,7 +23,9 @@ function GceFileUploadField() {
       fieldId="credential-gce-file"
       validated={!fileError ? 'default' : 'error'}
       label={i18n._(msg`Service account JSON file`)}
-      helperText={i18n._(msg`Select a JSON formatted service account key to autopopulate the following fields.`)}
+      helperText={i18n._(
+        msg`Select a JSON formatted service account key to autopopulate the following fields.`
+      )}
       helperTextInvalid={fileError}
     >
       <FileUpload
@@ -44,7 +46,9 @@ function GceFileUploadField() {
                 !fileJSON.private_key
               ) {
                 setFileError(
-                  i18n._(msg`Expected at least one of client_email, project_id or private_key to be present in the file.`)
+                  i18n._(
+                    msg`Expected at least one of client_email, project_id or private_key to be present in the file.`
+                  )
                 );
               } else {
                 inputsUsernameHelpers.setValue(fileJSON.client_email || '');
@@ -54,7 +58,9 @@ function GceFileUploadField() {
               }
             } catch {
               setFileError(
-                i18n._(msg`There was an error parsing the file. Please check the file formatting and try again.`)
+                i18n._(
+                  msg`There was an error parsing the file. Please check the file formatting and try again.`
+                )
               );
             }
           } else {
@@ -70,7 +76,9 @@ function GceFileUploadField() {
           accept: '.json',
           onDropRejected: () => {
             setFileError(
-              i18n._(msg`File upload rejected. Please select a single .json file.`)
+              i18n._(
+                msg`File upload rejected. Please select a single .json file.`
+              )
             );
           },
         }}

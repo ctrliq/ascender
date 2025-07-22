@@ -307,7 +307,9 @@ function WorkflowApprovalDetail({ workflowApproval, fetchWorkflowApproval }) {
                   type: 'workflow_job',
                 }}
                 buttonText={i18n._(msg`Cancel Workflow`)}
-                cancelationMessage={i18n._(msg`This will cancel all subsequent nodes in this workflow.`)}
+                cancelationMessage={i18n._(
+                  msg`This will cancel all subsequent nodes in this workflow.`
+                )}
               />
             </>
           )}

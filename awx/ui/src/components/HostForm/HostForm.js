@@ -50,7 +50,9 @@ const InventoryLookupField = ({ isDisabled }) => {
       label={i18n._(msg`Inventory`)}
       labelIcon={
         <Popover
-          content={i18n._(msg`Select the inventory that this host will belong to.`)}
+          content={i18n._(
+            msg`Select the inventory that this host will belong to.`
+          )}
         />
       }
       isRequired

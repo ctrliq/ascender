@@ -41,7 +41,11 @@ function InventoryGroupDetail({ inventoryGroup }) {
           name="variables"
           dataCy="inventory-group-detail-variables"
         />
-        <UserDateDetail label={i18n._(msg`Created`)} date={created} user={created_by} />
+        <UserDateDetail
+          label={i18n._(msg`Created`)}
+          date={created}
+          user={created_by}
+        />
         <UserDateDetail
           label={i18n._(msg`Last Modified`)}
           date={modified}

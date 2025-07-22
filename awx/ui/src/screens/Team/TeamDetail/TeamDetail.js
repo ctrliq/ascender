@@ -36,7 +36,11 @@ function TeamDetail({ team }) {
   return (
     <CardBody>
       <DetailList>
-        <Detail label={i18n._(msg`Name`)} value={name} dataCy="team-detail-name" />
+        <Detail
+          label={i18n._(msg`Name`)}
+          value={name}
+          dataCy="team-detail-name"
+        />
         <Detail label={i18n._(msg`Description`)} value={description} />
         <Detail
           label={i18n._(msg`Organization`)}
@@ -46,8 +50,14 @@ function TeamDetail({ team }) {
             </Link>
           }
         />
-        <Detail label={i18n._(msg`Created`)} value={formatDateString(created)} />
-        <Detail label={i18n._(msg`Last Modified`)} value={formatDateString(modified)} />
+        <Detail
+          label={i18n._(msg`Created`)}
+          value={formatDateString(created)}
+        />
+        <Detail
+          label={i18n._(msg`Last Modified`)}
+          value={formatDateString(modified)}
+        />
       </DetailList>
       <CardActionsRow>
         {summary_fields.user_capabilities &&

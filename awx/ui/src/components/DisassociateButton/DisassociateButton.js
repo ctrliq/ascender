@@ -10,7 +10,7 @@ import {
 } from 'prop-types';
 
 import { msg } from '@lingui/macro';
-import { useLingui } from "@lingui/react";
+import { useLingui } from '@lingui/react';
 import { Button, Tooltip, DropdownItem } from '@patternfly/react-core';
 import styled from 'styled-components';
 import { KebabifiedContext } from 'contexts/Kebabified';
@@ -76,7 +76,9 @@ function DisassociateButton({
       ) {
         return (
           <div>
-            {i18n._(msg`You do not have permission to disassociate the following: ${itemsUnableToDisassociate}`)}
+            {i18n._(
+              msg`You do not have permission to disassociate the following: ${itemsUnableToDisassociate}`
+            )}
           </div>
         );
       }

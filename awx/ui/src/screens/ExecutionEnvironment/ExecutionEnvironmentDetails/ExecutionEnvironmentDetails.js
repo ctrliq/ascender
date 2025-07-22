@@ -130,7 +130,9 @@ function ExecutionEnvironmentDetails({ executionEnvironment }) {
             isDisabled={isLoading}
             ouiaId="delete-button"
             deleteDetailsRequests={deleteDetailsRequests}
-            deleteMessage={i18n._(msg`This execution environment is currently being used by other resources. Are you sure you want to delete it?`)}
+            deleteMessage={i18n._(
+              msg`This execution environment is currently being used by other resources. Are you sure you want to delete it?`
+            )}
           >
             {i18n._(msg`Delete`)}
           </DeleteButton>

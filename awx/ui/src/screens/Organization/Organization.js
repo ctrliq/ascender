@@ -153,7 +153,9 @@ function Organization({ setBreadcrumb, me }) {
             {organizationError.response.status === 404 && (
               <span>
                 {i18n._(msg`Organization not found.`)}{' '}
-                <Link to="/organizations">{i18n._(msg`View all Organizations.`)}</Link>
+                <Link to="/organizations">
+                  {i18n._(msg`View all Organizations.`)}
+                </Link>
               </span>
             )}
           </ContentError>

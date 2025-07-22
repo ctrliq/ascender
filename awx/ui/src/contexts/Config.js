@@ -1,8 +1,8 @@
 import React, { useCallback, useContext, useEffect, useMemo } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 
-import { msg } from "@lingui/macro";
-import { useLingui } from "@lingui/react";
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { ConfigAPI, MeAPI, UsersAPI, OrganizationsAPI } from 'api';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import AlertModal from 'components/AlertModal';

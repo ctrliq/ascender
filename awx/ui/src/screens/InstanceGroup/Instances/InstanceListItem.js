@@ -159,10 +159,16 @@ function InstanceListItem({
         <Td dataLabel={i18n._(msg`Node Type`)}>{instance.node_type}</Td>
         <Td dataLabel={i18n._(msg`Capacity Adjustment`)}>
           <SliderHolder data-cy="slider-holder">
-            <div data-cy="cpu-capacity">{i18n._(msg`CPU ${instance.cpu_capacity}`)}</div>
+            <div data-cy="cpu-capacity">
+              {i18n._(msg`CPU ${instance.cpu_capacity}`)}
+            </div>
             <SliderForks data-cy="slider-forks">
               <div data-cy="number-forks">
-                <Plural value={forks} one={i18n._(msg`# fork`)} other={i18n._(msg`# forks`)} />
+                <Plural
+                  value={forks}
+                  one={i18n._(msg`# fork`)}
+                  other={i18n._(msg`# forks`)}
+                />
               </div>
               <Slider
                 areCustomStepsContinuous
@@ -175,7 +181,9 @@ function InstanceListItem({
                 data-cy="slider"
               />
             </SliderForks>
-            <div data-cy="mem-capacity">{i18n._(msg`RAM ${instance.mem_capacity}`)}</div>
+            <div data-cy="mem-capacity">
+              {i18n._(msg`RAM ${instance.mem_capacity}`)}
+            </div>
           </SliderHolder>
         </Td>
         <Td
@@ -218,7 +226,11 @@ function InstanceListItem({
               <Detail
                 data-cy="policy-type"
                 label={i18n._(msg`Policy Type`)}
-                value={instance.managed_by_policy ? i18n._(msg`Auto`) : i18n._(msg`Manual`)}
+                value={
+                  instance.managed_by_policy
+                    ? i18n._(msg`Auto`)
+                    : i18n._(msg`Manual`)
+                }
               />
               <Detail
                 data-cy="last-health-check"

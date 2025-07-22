@@ -258,7 +258,10 @@ function UsageChart({ id, data, height, pageContext }) {
       .on('mouseout', handleMouseOut);
 
     // Create legend
-    const legend_keys = [i18n._(msg`Subscriptions consumed`), i18n._(msg`Subscription capacity`)];
+    const legend_keys = [
+      i18n._(msg`Subscriptions consumed`),
+      i18n._(msg`Subscription capacity`),
+    ];
     let totalWidth = width / 2 - 175;
 
     const lineLegend = svg

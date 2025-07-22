@@ -128,13 +128,17 @@ function InventorySourceDetail({ inventorySource }) {
       <TextList component={TextListVariants.ul}>
         {overwrite && (
           <TextListItem component={TextListItemVariants.li}>
-            {i18n._(msg`Overwrite local groups and hosts from remote inventory source`)}
+            {i18n._(
+              msg`Overwrite local groups and hosts from remote inventory source`
+            )}
             <Popover content={helpText.subFormOptions.overwrite} />
           </TextListItem>
         )}
         {overwrite_vars && (
           <TextListItem component={TextListItemVariants.li}>
-            {i18n._(msg`Overwrite local variables from remote inventory source`)}
+            {i18n._(
+              msg`Overwrite local variables from remote inventory source`
+            )}
             <Popover content={helpText.subFormOptions.overwriteVariables} />
           </TextListItem>
         )}
@@ -237,7 +241,9 @@ function InventorySourceDetail({ inventorySource }) {
           <Detail
             label={i18n._(msg`Inventory file`)}
             helpText={helpText.sourcePath}
-            value={source_path === '' ? i18n._(msg`/ (project root)`) : source_path}
+            value={
+              source_path === '' ? i18n._(msg`/ (project root)`) : source_path
+            }
           />
         ) : null}
         <Detail
@@ -279,7 +285,11 @@ function InventorySourceDetail({ inventorySource }) {
           isEmpty={credentials?.length === 0}
         />
         {optionsList && (
-          <Detail fullWidth label={i18n._(msg`Enabled Options`)} value={optionsList} />
+          <Detail
+            fullWidth
+            label={i18n._(msg`Enabled Options`)}
+            value={optionsList}
+          />
         )}
         {source_vars && (
           <VariablesDetail
@@ -291,7 +301,11 @@ function InventorySourceDetail({ inventorySource }) {
             dataCy="inventory-source-detail-variables"
           />
         )}
-        <UserDateDetail date={created} label={i18n._(msg`Created`)} user={created_by} />
+        <UserDateDetail
+          date={created}
+          label={i18n._(msg`Created`)}
+          user={created_by}
+        />
         <UserDateDetail
           date={modified}
           label={i18n._(msg`Last modified`)}
@@ -327,7 +341,9 @@ function InventorySourceDetail({ inventorySource }) {
             modalTitle={i18n._(msg`Delete inventory source`)}
             onConfirm={handleDelete}
             deleteDetailsRequests={deleteDetailsRequests}
-            deleteMessage={i18n._(msg`This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?`)}
+            deleteMessage={i18n._(
+              msg`This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?`
+            )}
             isDisabled={job?.status === 'running'}
           >
             {i18n._(msg`Delete`)}

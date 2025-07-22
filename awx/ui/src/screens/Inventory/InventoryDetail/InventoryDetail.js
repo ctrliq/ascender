@@ -93,7 +93,10 @@ function InventoryDetail({ inventory }) {
           value={inventory.name}
           dataCy="inventory-detail-name"
         />
-        <Detail label={i18n._(msg`Description`)} value={inventory.description} />
+        <Detail
+          label={i18n._(msg`Description`)}
+          value={inventory.description}
+        />
         <Detail label={i18n._(msg`Type`)} value={i18n._(msg`Inventory`)} />
         <Detail
           label={i18n._(msg`Organization`)}
@@ -103,7 +106,10 @@ function InventoryDetail({ inventory }) {
             </Link>
           }
         />
-        <Detail label={i18n._(msg`Total hosts`)} value={inventory.total_hosts} />
+        <Detail
+          label={i18n._(msg`Total hosts`)}
+          value={inventory.total_hosts}
+        />
         {instanceGroups && (
           <Detail
             fullWidth
@@ -183,7 +189,9 @@ function InventoryDetail({ inventory }) {
             modalTitle={i18n._(msg`Delete Inventory`)}
             onConfirm={deleteInventory}
             deleteDetailsRequests={deleteDetailsRequests}
-            deleteMessage={i18n._(msg`This inventory is currently being used by other resources. Are you sure you want to delete it?`)}
+            deleteMessage={i18n._(
+              msg`This inventory is currently being used by other resources. Are you sure you want to delete it?`
+            )}
           >
             {i18n._(msg`Delete`)}
           </DeleteButton>

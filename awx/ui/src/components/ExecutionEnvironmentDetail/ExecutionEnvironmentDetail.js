@@ -2,7 +2,7 @@ import React from 'react';
 import { bool, string } from 'prop-types';
 import { Link } from 'react-router-dom';
 import { msg, Trans } from '@lingui/macro';
-import { useLingui } from "@lingui/react";
+import { useLingui } from '@lingui/react';
 
 import { Popover, Tooltip } from '@patternfly/react-core';
 import styled from 'styled-components';
@@ -70,7 +70,9 @@ function ExecutionEnvironmentDetail({
             <span>
               <Popover
                 className="missing-execution-environment"
-                headerContent={<div>{i18n._(msg`Execution Environment Missing`)}</div>}
+                headerContent={
+                  <div>{i18n._(msg`Execution Environment Missing`)}</div>
+                }
                 bodyContent={
                   <div>
                     <Trans>
@@ -112,7 +114,9 @@ function ExecutionEnvironmentDetail({
             {i18n._(msg`Missing resource`)}
             <span>
               <Tooltip
-                content={i18n._(msg`Execution environment is missing or deleted.`)}
+                content={i18n._(
+                  msg`Execution environment is missing or deleted.`
+                )}
               >
                 <ExclamationTriangleIcon />
               </Tooltip>

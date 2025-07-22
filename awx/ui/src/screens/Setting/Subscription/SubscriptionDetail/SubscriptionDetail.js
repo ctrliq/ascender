@@ -70,7 +70,11 @@ function SubscriptionDetail() {
                       {i18n._(msg`Compliant`)}
                     </Label>
                     <HelperText>
-                      <HelperTextItem>{i18n._(msg`The number of hosts you have automated against is below your subscription count.`)}</HelperTextItem>
+                      <HelperTextItem>
+                        {i18n._(
+                          msg`The number of hosts you have automated against is below your subscription count.`
+                        )}
+                      </HelperTextItem>
                     </HelperText>
                   </>
                 ) : (
@@ -83,7 +87,11 @@ function SubscriptionDetail() {
                       {i18n._(msg`Out of compliance`)}
                     </Label>
                     <HelperText>
-                      <HelperTextItem>{i18n._(msg`You have automated against more hosts than your subscription allows.`)}</HelperTextItem>
+                      <HelperTextItem>
+                        {i18n._(
+                          msg`You have automated against more hosts than your subscription allows.`
+                        )}
+                      </HelperTextItem>
                     </HelperText>
                   </>
                 )

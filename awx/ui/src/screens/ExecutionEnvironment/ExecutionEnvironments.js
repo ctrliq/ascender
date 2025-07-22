@@ -12,21 +12,32 @@ function ExecutionEnvironments() {
   const { i18n } = useLingui();
   const [breadcrumbConfig, setBreadcrumbConfig] = useState({
     '/execution_environments': i18n._(msg`Execution Environments`),
-    '/execution_environments/add': i18n._(msg`Create new execution environment`),
+    '/execution_environments/add': i18n._(
+      msg`Create new execution environment`
+    ),
   });
 
-  const buildBreadcrumbConfig = useCallback((executionEnvironments) => {
-    if (!executionEnvironments) {
-      return;
-    }
-    setBreadcrumbConfig({
-      '/execution_environments': i18n._(msg`Execution Environments`),
-      '/execution_environments/add': i18n._(msg`Create new execution environment`),
-      [`/execution_environments/${executionEnvironments.id}`]: `${executionEnvironments.name}`,
-      [`/execution_environments/${executionEnvironments.id}/edit`]: i18n._(msg`Edit details`),
-      [`/execution_environments/${executionEnvironments.id}/details`]: i18n._(msg`Details`),
-    });
-  }, [i18n]);
+  const buildBreadcrumbConfig = useCallback(
+    (executionEnvironments) => {
+      if (!executionEnvironments) {
+        return;
+      }
+      setBreadcrumbConfig({
+        '/execution_environments': i18n._(msg`Execution Environments`),
+        '/execution_environments/add': i18n._(
+          msg`Create new execution environment`
+        ),
+        [`/execution_environments/${executionEnvironments.id}`]: `${executionEnvironments.name}`,
+        [`/execution_environments/${executionEnvironments.id}/edit`]: i18n._(
+          msg`Edit details`
+        ),
+        [`/execution_environments/${executionEnvironments.id}/details`]: i18n._(
+          msg`Details`
+        ),
+      });
+    },
+    [i18n]
+  );
   return (
     <>
       <ScreenHeader

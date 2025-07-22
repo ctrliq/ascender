@@ -23,9 +23,9 @@ function Troubleshooting() {
           </Route>
           <Route key="not-found" path={`${baseURL}/*`}>
             <ContentError isNotFound>
-              <Link
-                to={`${baseURL}/details`}
-              >{i18n._(msg`View Troubleshooting settings`)}</Link>
+              <Link to={`${baseURL}/details`}>
+                {i18n._(msg`View Troubleshooting settings`)}
+              </Link>
             </ContentError>
           </Route>
         </Switch>

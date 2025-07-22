@@ -107,7 +107,10 @@ function HostEventModal({ onClose, hostEvent = {}, isOpen = false }) {
             style={{ alignItems: 'center', marginTop: '20px' }}
             gutter="sm"
           >
-            <Detail label={i18n._(msg`Host`)} value={hostEvent.event_data?.host} />
+            <Detail
+              label={i18n._(msg`Host`)}
+              value={hostEvent.event_data?.host}
+            />
             {hostEvent.summary_fields?.host?.description ? (
               <Detail
                 label={i18n._(msg`Description`)}
@@ -124,9 +127,15 @@ function HostEventModal({ onClose, hostEvent = {}, isOpen = false }) {
             <Detail label={i18n._(msg`Task`)} value={hostEvent.task} />
             <Detail
               label={i18n._(msg`Module`)}
-              value={hostEvent.event_data?.task_action || i18n._(msg`No result found`)}
+              value={
+                hostEvent.event_data?.task_action ||
+                i18n._(msg`No result found`)
+              }
             />
-            <Detail label={i18n._(msg`Command`)} value={hostEvent.event_data?.res?.cmd} />
+            <Detail
+              label={i18n._(msg`Command`)}
+              value={hostEvent.event_data?.res?.cmd}
+            />
           </DetailList>
         </Tab>
         <Tab

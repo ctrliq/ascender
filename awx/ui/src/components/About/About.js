@@ -4,8 +4,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { msg } from "@lingui/macro";
-import { useLingui } from "@lingui/react";
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { AboutModal } from '@patternfly/react-core';
 import useBrandName from 'hooks/useBrandName';
 

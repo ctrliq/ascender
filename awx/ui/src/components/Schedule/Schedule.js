@@ -82,7 +82,9 @@ function Schedule({
         {error.response && error.response.status === 404 && (
           <span>
             {i18n._(msg`Schedule not found.`)}{' '}
-            <Link to={`${pathRoot}schedules`}>{i18n._(msg`View Schedules`)}</Link>
+            <Link to={`${pathRoot}schedules`}>
+              {i18n._(msg`View Schedules`)}
+            </Link>
           </span>
         )}
       </ContentError>

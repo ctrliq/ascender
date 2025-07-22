@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import { msg } from "@lingui/macro";
-import { useLingui } from "@lingui/react";
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { TeamsAPI, UsersAPI } from 'api';
 import useSelected from 'hooks/useSelected';
 import SelectableCard from '../SelectableCard';
@@ -173,7 +173,9 @@ function AddResourceRole({ onSave, onClose, roles, resource, onError }) {
       component: (
         <div style={{ display: 'flex', flexWrap: 'wrap' }}>
           <div style={{ width: '100%', marginBottom: '10px' }}>
-            {i18n._(msg`Choose the type of resource that will be receiving new roles.  For example, if you'd like to add new roles to a set of users please choose Users and click Next.  You'll be able to select the specific resources in the next step.`)}
+            {i18n._(
+              msg`Choose the type of resource that will be receiving new roles.  For example, if you'd like to add new roles to a set of users please choose Users and click Next.  You'll be able to select the specific resources in the next step.`
+            )}
           </div>
           <SelectableCard
             isSelected={resourceType === 'users'}

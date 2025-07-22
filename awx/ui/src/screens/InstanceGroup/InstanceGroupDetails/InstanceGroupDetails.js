@@ -136,7 +136,9 @@ function InstanceGroupDetails({ instanceGroup }) {
               onConfirm={deleteInstanceGroup}
               isDisabled={isLoading}
               deleteDetailsRequests={deleteDetailsRequests}
-              deleteMessage={i18n._(msg`This instance group is currently being by other resources. Are you sure you want to delete it?`)}
+              deleteMessage={i18n._(
+                msg`This instance group is currently being by other resources. Are you sure you want to delete it?`
+              )}
             >
               {i18n._(msg`Delete`)}
             </DeleteButton>

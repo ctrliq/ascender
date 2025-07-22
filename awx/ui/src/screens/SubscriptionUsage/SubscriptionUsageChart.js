@@ -112,7 +112,9 @@ function SubscriptionUsageChart() {
     <Card>
       <Flex style={{ justifyContent: 'space-between' }}>
         <FlexItem>
-          <ChartCardTitle>{i18n._(msg`Subscription Compliance`)}</ChartCardTitle>
+          <ChartCardTitle>
+            {i18n._(msg`Subscription Compliance`)}
+          </ChartCardTitle>
         </FlexItem>
         <FlexItem>
           <CardText component="small">

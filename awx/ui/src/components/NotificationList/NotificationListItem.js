@@ -33,8 +33,13 @@ function NotificationListItem({
           <b>{notification.name}</b>
         </Link>
       </Td>
-      <Td dataLabel={i18n._(msg`Type`)}>{typeLabels[notification.notification_type]}</Td>
-      <ActionsTd dataLabel={i18n._(msg`Options`)} gridColumns="120px 120px 120px 120px">
+      <Td dataLabel={i18n._(msg`Type`)}>
+        {typeLabels[notification.notification_type]}
+      </Td>
+      <ActionsTd
+        dataLabel={i18n._(msg`Options`)}
+        gridColumns="120px 120px 120px 120px"
+      >
         <ActionItem visible={showApprovalsToggle}>
           <Switch
             id={`notification-${notification.id}-approvals-toggle`}

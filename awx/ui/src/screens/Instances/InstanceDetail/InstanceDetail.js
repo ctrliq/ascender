@@ -209,7 +209,10 @@ function InstanceDetail({ setBreadcrumb, isK8s }) {
           />
           <Detail label={i18n._(msg`Node Type`)} value={instance.node_type} />
           <Detail label={i18n._(msg`Host`)} value={instance.ip_address} />
-          <Detail label={i18n._(msg`Listener Port`)} value={instance.listener_port} />
+          <Detail
+            label={i18n._(msg`Listener Port`)}
+            value={instance.listener_port}
+          />
           {!isManaged && instance.related?.install_bundle && (
             <Detail
               label={i18n._(msg`Install Bundle`)}
@@ -233,23 +236,39 @@ function InstanceDetail({ setBreadcrumb, isK8s }) {
           {(isExecutionNode || isHopNode) && (
             <Detail
               label={i18n._(msg`Peers from control nodes`)}
-              value={instance.peers_from_control_nodes ? i18n._(msg`On`) : i18n._(msg`Off`)}
+              value={
+                instance.peers_from_control_nodes
+                  ? i18n._(msg`On`)
+                  : i18n._(msg`Off`)
+              }
             />
           )}
           {!isHopNode && (
             <>
               <Detail
                 label={i18n._(msg`Policy Type`)}
-                value={instance.managed_by_policy ? i18n._(msg`Auto`) : i18n._(msg`Manual`)}
+                value={
+                  instance.managed_by_policy
+                    ? i18n._(msg`Auto`)
+                    : i18n._(msg`Manual`)
+                }
               />
-              <Detail label={i18n._(msg`Running Jobs`)} value={instance.jobs_running} />
-              <Detail label={i18n._(msg`Total Jobs`)} value={instance.jobs_total} />
+              <Detail
+                label={i18n._(msg`Running Jobs`)}
+                value={instance.jobs_running}
+              />
+              <Detail
+                label={i18n._(msg`Total Jobs`)}
+                value={instance.jobs_total}
+              />
               {instanceGroups && (
                 <Detail
                   fullWidth
                   label={i18n._(msg`Instance Groups`)}
                   dataCy="instance-groups"
-                  helpText={i18n._(msg`The Instance Groups to which this instance belongs.`)}
+                  helpText={i18n._(
+                    msg`The Instance Groups to which this instance belongs.`
+                  )}
                   value={
                     <InstanceGroupLabels labels={instanceGroups} isLinkable />
                   }
@@ -281,10 +300,16 @@ function InstanceDetail({ setBreadcrumb, isK8s }) {
                 dataCy="capacity-adjustment"
                 value={
                   <SliderHolder data-cy="slider-holder">
-                    <div data-cy="cpu-capacity">{i18n._(msg`CPU ${instance.cpu_capacity}`)}</div>
+                    <div data-cy="cpu-capacity">
+                      {i18n._(msg`CPU ${instance.cpu_capacity}`)}
+                    </div>
                     <SliderForks data-cy="slider-forks">
                       <div data-cy="number-forks">
-                        <Plural value={forks} one={i18n._(msg`# fork`)} other={i18n._(msg`# forks`)} />
+                        <Plural
+                          value={forks}
+                          one={i18n._(msg`# fork`)}
+                          other={i18n._(msg`# forks`)}
+                        />
                       </div>
                       <Slider
                         areCustomStepsContinuous
@@ -301,7 +326,9 @@ function InstanceDetail({ setBreadcrumb, isK8s }) {
                         data-cy="slider"
                       />
                     </SliderForks>
-                    <div data-cy="mem-capacity">{i18n._(msg`RAM ${instance.mem_capacity}`)}</div>
+                    <div data-cy="mem-capacity">
+                      {i18n._(msg`RAM ${instance.mem_capacity}`)}
+                    </div>
                   </SliderHolder>
                 }
               />

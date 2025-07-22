@@ -145,7 +145,9 @@ function WebhookSubForm({ templateType }) {
             webhookServiceHelpers.setValue(val);
             webhookUrlHelpers.setValue(
               pathname.endsWith('/add')
-                ? i18n._(msg`a new webhook url will be generated on save.`).toUpperCase()
+                ? i18n
+                    ._(msg`a new webhook url will be generated on save.`)
+                    .toUpperCase()
                 : `${origin}/api/v2/${templateType}s/${id}/${val}/`
             );
             if (val === webhookServiceMeta.initialValue || val === '') {
@@ -155,7 +157,9 @@ function WebhookSubForm({ templateType }) {
               );
             } else {
               webhookKeyHelpers.setValue(
-                i18n._(msg`a new webhook key will be generated on save.`).toUpperCase()
+                i18n
+                  ._(msg`a new webhook key will be generated on save.`)
+                  .toUpperCase()
               );
               webhookCredentialHelpers.setValue(null);
             }

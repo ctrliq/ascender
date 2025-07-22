@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-import { msg } from "@lingui/macro";
-import { useLingui } from "@lingui/react";
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { useField } from 'formik';
 import { Form, FormGroup } from '@patternfly/react-core';
 import { ExecutionEnvironmentsAPI } from 'api';
@@ -93,7 +93,9 @@ function AdHocExecutionEnvironmentStep({ organizationId }) {
         aria-label={i18n._(msg`Execution Environment`)}
         labelIcon={
           <Popover
-            content={i18n._(msg`Select the Execution Environment you want this command to run inside.`)}
+            content={i18n._(
+              msg`Select the Execution Environment you want this command to run inside.`
+            )}
           />
         }
       >

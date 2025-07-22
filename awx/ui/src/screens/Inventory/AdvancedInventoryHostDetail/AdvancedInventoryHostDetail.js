@@ -45,8 +45,15 @@ function AdvancedInventoryHostDetail({ host }) {
             </Link>
           }
         />
-        <Detail label={i18n._(msg`Enabled`)} value={enabled ? i18n._(msg`On`) : i18n._(msg`Off`)} />
-        <UserDateDetail date={created} label={i18n._(msg`Created`)} user={created_by} />
+        <Detail
+          label={i18n._(msg`Enabled`)}
+          value={enabled ? i18n._(msg`On`) : i18n._(msg`Off`)}
+        />
+        <UserDateDetail
+          date={created}
+          label={i18n._(msg`Created`)}
+          user={created_by}
+        />
         <UserDateDetail
           date={modified}
           label={i18n._(msg`Last modified`)}

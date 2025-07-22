@@ -168,7 +168,9 @@ function LoggingEdit() {
                 />
                 <BooleanField
                   name="LOG_AGGREGATOR_INDIVIDUAL_FACTS"
-                  ariaLabel={i18n._(msg`Enable log system tracking facts individually`)}
+                  ariaLabel={i18n._(
+                    msg`Enable log system tracking facts individually`
+                  )}
                   config={logging.LOG_AGGREGATOR_INDIVIDUAL_FACTS}
                 />
                 <ChoiceField
@@ -192,7 +194,9 @@ function LoggingEdit() {
                 {formik.values.LOG_AGGREGATOR_PROTOCOL === 'https' && (
                   <BooleanField
                     name="LOG_AGGREGATOR_VERIFY_CERT"
-                    ariaLabel={i18n._(msg`Enable HTTPS certificate verification`)}
+                    ariaLabel={i18n._(
+                      msg`Enable HTTPS certificate verification`
+                    )}
                     config={logging.LOG_AGGREGATOR_VERIFY_CERT}
                   />
                 )}

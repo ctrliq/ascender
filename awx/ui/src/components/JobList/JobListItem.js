@@ -43,7 +43,10 @@ function JobListItem({
   const jobTypes = {
     project_update: i18n._(msg`Source Control Update`),
     inventory_update: i18n._(msg`Inventory Sync`),
-    job: job.job_type === 'check' ? i18n._(msg`Playbook Check`) : i18n._(msg`Playbook Run`),
+    job:
+      job.job_type === 'check'
+        ? i18n._(msg`Playbook Check`)
+        : i18n._(msg`Playbook Run`),
     ad_hoc_command: i18n._(msg`Command`),
     system_job: i18n._(msg`Management Job`),
     workflow_job: i18n._(msg`Workflow Job`),
@@ -97,8 +100,12 @@ function JobListItem({
         <Td dataLabel={i18n._(msg`Status`)}>
           {job.status && <StatusLabel status={job.status} />}
         </Td>
-        {showTypeColumn && <Td dataLabel={i18n._(msg`Type`)}>{jobTypes[job.type]}</Td>}
-        <Td dataLabel={i18n._(msg`Start Time`)}>{formatDateString(job.started)}</Td>
+        {showTypeColumn && (
+          <Td dataLabel={i18n._(msg`Type`)}>{jobTypes[job.type]}</Td>
+        )}
+        <Td dataLabel={i18n._(msg`Start Time`)}>
+          {formatDateString(job.started)}
+        </Td>
         <Td dataLabel={i18n._(msg`Finish Time`)}>
           {job.finished ? formatDateString(job.finished) : ''}
         </Td>
@@ -318,7 +325,10 @@ function JobListItem({
                   />
                 )}
               {job.type === 'workflow_job' && isSlicedJob && (
-                <Detail label={i18n._(msg`Job Slice Parent`)} value={i18n._(msg`True`)} />
+                <Detail
+                  label={i18n._(msg`Job Slice Parent`)}
+                  value={i18n._(msg`True`)}
+                />
               )}
             </DetailList>
           </ExpandableRowContent>

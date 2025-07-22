@@ -22,7 +22,9 @@ export default function UnsupportedRRuleAlert({ schedule }) {
         isInline
         variant="danger"
         ouiaId="schedule-warning"
-        title={i18n._(msg`This schedule uses complex rules that are not supported in the\n        UI.  Please use the API to manage this schedule.`)}
+        title={i18n._(
+          msg`This schedule uses complex rules that are not supported in the\n        UI.  Please use the API to manage this schedule.`
+        )}
       />
       <RulesTitle>{i18n._(msg`Schedule Rules`)}:</RulesTitle>
       <pre css="white-space: pre; font-family: var(--pf-global--FontFamily--monospace)">

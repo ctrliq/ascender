@@ -47,7 +47,9 @@ function InstanceToggle({ className, fetchInstances, instance, onToggle }) {
   return (
     <>
       <Tooltip
-        content={i18n._(msg`Set the instance enabled or disabled. If disabled, jobs will not be assigned to this instance.`)}
+        content={i18n._(
+          msg`Set the instance enabled or disabled. If disabled, jobs will not be assigned to this instance.`
+        )}
         position="top"
       >
         <Switch

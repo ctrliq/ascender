@@ -24,7 +24,11 @@ function ToolbarSyncSourceButton({ onClick }) {
   }
 
   return (
-    <Tooltip key="update" content={i18n._(msg`Sync all sources`)} position="top">
+    <Tooltip
+      key="update"
+      content={i18n._(msg`Sync all sources`)}
+      position="top"
+    >
       <Button
         ouiaId="sync-all-button"
         onClick={onClick}

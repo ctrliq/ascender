@@ -43,12 +43,16 @@ function UserListItem({ user, isSelected, onSelect, detailUrl, rowIndex }) {
         </Link>
         {ldapUser && (
           <span css="margin-left: 12px">
-            <Label aria-label={i18n._(msg`ldap user`)}>{i18n._(msg`LDAP`)}</Label>
+            <Label aria-label={i18n._(msg`ldap user`)}>
+              {i18n._(msg`LDAP`)}
+            </Label>
           </span>
         )}
         {socialAuthUser && (
           <span css="margin-left: 12px">
-            <Label aria-label={i18n._(msg`social login`)}>{i18n._(msg`SOCIAL`)}</Label>
+            <Label aria-label={i18n._(msg`social login`)}>
+              {i18n._(msg`SOCIAL`)}
+            </Label>
           </span>
         )}
       </TdBreakWord>
