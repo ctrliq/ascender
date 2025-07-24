@@ -59,9 +59,8 @@ function Job({ setBreadcrumb }) {
       let relatedJobData = {};
       const { data: jobDetailData } = await getJobModel(type).readDetail(id);
       if (type !== 'workflow_job') {
-        const { data: jobEventOptions } = await getJobModel(
-          type
-        ).readEventOptions(id);
+        const { data: jobEventOptions } =
+          await getJobModel(type).readEventOptions(id);
         eventOptions = jobEventOptions;
       }
       if (jobDetailData.related.source_workflow_job) {

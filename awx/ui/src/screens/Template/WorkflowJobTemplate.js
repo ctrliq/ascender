@@ -58,9 +58,8 @@ function WorkflowJobTemplate({ setBreadcrumb }) {
       let surveyConfiguration = null;
 
       if (data.survey_enabled) {
-        const { data: survey } = await WorkflowJobTemplatesAPI.readSurvey(
-          templateId
-        );
+        const { data: survey } =
+          await WorkflowJobTemplatesAPI.readSurvey(templateId);
 
         surveyConfiguration = survey;
       }

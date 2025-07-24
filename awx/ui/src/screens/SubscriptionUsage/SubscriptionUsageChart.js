@@ -86,9 +86,10 @@ function SubscriptionUsageChart() {
     request: fetchSubscriptionUsageChart,
   } = useRequest(
     useCallback(async () => {
-      const data = await SubscriptionUsageAPI.readSubscriptionUsageChart(
-        calculateDateRange()
-      );
+      const data =
+        await SubscriptionUsageAPI.readSubscriptionUsageChart(
+          calculateDateRange()
+        );
       return data.data.results;
     }, [calculateDateRange]),
     []

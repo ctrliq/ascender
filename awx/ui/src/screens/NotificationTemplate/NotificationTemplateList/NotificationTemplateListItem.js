@@ -69,9 +69,8 @@ function NotificationTemplateListItem({
       } = await request;
 
       async function pollForStatusChange() {
-        const { data: notification } = await NotificationsAPI.readDetail(
-          notificationId
-        );
+        const { data: notification } =
+          await NotificationsAPI.readDetail(notificationId);
         if (notification.status !== 'pending') {
           onAddToast(notification);
           setStatus(notification.status);

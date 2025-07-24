@@ -100,9 +100,8 @@ describe('<Login />', () => {
     await act(async () => {
       wrapper = mountWithContexts(<AWXLogin isAuthenticated={() => false} />);
     });
-    const { usernameInput, passwordInput, submitButton } = await findChildren(
-      wrapper
-    );
+    const { usernameInput, passwordInput, submitButton } =
+      await findChildren(wrapper);
     expect(usernameInput.props().value).toBe('');
     expect(passwordInput.props().value).toBe('');
     expect(submitButton.props().isDisabled).toBe(false);
