@@ -51,7 +51,7 @@ function LaunchButton({ resource, children }) {
   const { addToast, Toast, toastProps } = useToast();
 
   // Add isMounted ref to prevent state updates after unmount
-  const isMounted = useRef(true);
+  const isMounted = useRef(false);
   useEffect(() => {
     isMounted.current = true;
     return () => {
