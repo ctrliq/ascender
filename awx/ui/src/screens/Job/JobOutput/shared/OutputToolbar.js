@@ -81,16 +81,21 @@ const OutputToolbar = ({ job, onDelete, isDeleteDisabled, jobStatus }) => {
 
   useEffect(() => {
     let secTimer;
+    let isMounted = true;
     if (job.finished) {
       return () => clearInterval(secTimer);
     }
 
     secTimer = setInterval(() => {
+      if (!isMounted) return;
       const elapsedTime = calculateElapsed(job.started);
       setActiveJobElapsedTime(elapsedTime);
     }, 1000);
 
-    return () => clearInterval(secTimer);
+    return () => {
+      isMounted = false;
+      clearInterval(secTimer);
+    };
   }, [job.started, job.finished]);
 
   return (
