@@ -50,7 +50,7 @@ export default function useWebsocket(subscribeGroups) {
     };
 
     // Delay initial connection by 50ms
-    const initialTimeout = setTimeout(connect, 200);
+    const initialTimeout = setTimeout(connect, 50);
 
     return () => {
       shouldReconnect = false;

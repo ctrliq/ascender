@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { msg, Trans } from '@lingui/macro';
 import { useLingui } from '@lingui/react';
 import { useLocation, useParams } from 'react-router-dom';
@@ -44,6 +44,7 @@ function InstanceList({ instanceGroup }) {
   const [canRunHealthCheck, setCanRunHealthCheck] = useState(true);
   const location = useLocation();
   const { id: instanceGroupId } = useParams();
+  const isMounted = useRef(false);
 
   const policyRulesDocsLink = `${getDocsBaseUrl(
     config
@@ -70,7 +71,7 @@ function InstanceList({ instanceGroup }) {
       const isPending = response.data.results.some(
         (i) => i.health_check_pending === true
       );
-      setPendingHealthCheck(isPending);
+      if (isMounted.current) setPendingHealthCheck(isPending);
       return {
         instances: response.data.results,
         count: response.data.count,
@@ -108,7 +109,7 @@ function InstanceList({ instanceGroup }) {
           .filter(({ node_type }) => node_type === 'execution')
           .map(({ id }) => InstancesAPI.healthCheck(id))
       );
-      if (response) {
+      if (isMounted.current && response) {
         setShowHealthCheckAlert(true);
       }
     }, [selected])
@@ -203,6 +204,13 @@ function InstanceList({ instanceGroup }) {
 
   const { expanded, isAllExpanded, handleExpand, expandAll } =
     useExpanded(instances);
+
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
 
   return (
     <>

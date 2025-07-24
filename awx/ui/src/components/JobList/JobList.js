@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { msg, Plural } from '@lingui/macro';
 import { useLingui } from '@lingui/react';
@@ -104,12 +104,21 @@ function JobList({
     fetchJobs();
   }, [fetchJobs]);
 
+  const isMounted = useRef(false);
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+
   const fetchJobsById = useCallback(
     async (ids) => {
       const params = parseQueryString(qsConfig, location.search);
       params.id__in = ids.join(',');
       try {
         const { data } = await UnifiedJobsAPI.read(params);
+        if (!isMounted.current) return [];
         return data.results;
       } catch (e) {
         return [];
