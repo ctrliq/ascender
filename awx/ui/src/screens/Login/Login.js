@@ -33,8 +33,6 @@ import {
 } from '@patternfly/react-icons';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import { AuthAPI, RootAPI, MeAPI } from 'api';
-import AlertModal from 'components/AlertModal';
-import ErrorDetail from 'components/ErrorDetail';
 import { useSession } from 'contexts/Session';
 import LoadingSpinner from 'components/LoadingSpinner';
 import { SESSION_REDIRECT_URL, SESSION_USER_ID } from '../../constants';
@@ -57,7 +55,6 @@ function AWXLogin({ alt, isAuthenticated }) {
 
   const {
     isLoading: isCustomLoginInfoLoading,
-    error: customLoginInfoError,
     request: fetchCustomLoginInfo,
     result: { brandName, logo, loginInfo, socialAuthOptions },
   } = useRequest(
@@ -93,9 +90,6 @@ function AWXLogin({ alt, isAuthenticated }) {
       socialAuthOptions: {},
     }
   );
-
-  const { error: loginInfoError, dismissError: dismissLoginInfoError } =
-    useDismissableError(customLoginInfoError);
 
   useEffect(() => {
     fetchCustomLoginInfo();
@@ -244,20 +238,6 @@ function AWXLogin({ alt, isAuthenticated }) {
             />
           )}
         </Formik>
-        {loginInfoError && (
-          <AlertModal
-            isOpen={loginInfoError}
-            variant="error"
-            title={i18n._(msg`Error!`)}
-            onClose={dismissLoginInfoError}
-            data-cy="login-info-error"
-          >
-            {i18n._(
-              msg`Failed to fetch custom login configuration settings.  System defaults will be shown instead.`
-            )}
-            <ErrorDetail error={loginInfoError} />
-          </AlertModal>
-        )}
       </LoginMainBody>
       <LoginMainFooter
         socialMediaLoginContent={
