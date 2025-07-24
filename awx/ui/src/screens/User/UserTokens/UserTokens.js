@@ -57,7 +57,9 @@ function UserTokens({ setBreadcrumb, user }) {
           <TokenAlert
             variant="info"
             isInline
-            title={i18n._(msg`This is the only time the token value and associated refresh token value will be shown.`)}
+            title={i18n._(
+              msg`This is the only time the token value and associated refresh token value will be shown.`
+            )}
           />
           <DetailList stacked>
             {tokenModalSource.token && (

@@ -95,7 +95,9 @@ function InventoryGroupsList() {
     if (selected.some(cannotDelete)) {
       return (
         <div>
-          {i18n._(msg`You do not have permission to delete the following Groups: ${itemsUnableToDelete}`)}
+          {i18n._(
+            msg`You do not have permission to delete the following Groups: ${itemsUnableToDelete}`
+          )}
         </div>
       );
     }
@@ -143,7 +145,9 @@ function InventoryGroupsList() {
       headerRow={
         <HeaderRow qsConfig={QS_CONFIG}>
           <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
-          {isNotConstructedInventory && <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>}
+          {isNotConstructedInventory && (
+            <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
+          )}
         </HeaderRow>
       }
       renderRow={(item, index) => (

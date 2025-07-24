@@ -58,9 +58,8 @@ function WorkflowJobTemplate({ setBreadcrumb }) {
       let surveyConfiguration = null;
 
       if (data.survey_enabled) {
-        const { data: survey } = await WorkflowJobTemplatesAPI.readSurvey(
-          templateId
-        );
+        const { data: survey } =
+          await WorkflowJobTemplatesAPI.readSurvey(templateId);
 
         surveyConfiguration = survey;
       }
@@ -144,7 +143,9 @@ function WorkflowJobTemplate({ setBreadcrumb }) {
       link: `${match.url}/jobs`,
     },
     {
-      name: canAddAndEditSurvey ? i18n._(msg`Survey`) : i18n._(msg`View Survey`),
+      name: canAddAndEditSurvey
+        ? i18n._(msg`Survey`)
+        : i18n._(msg`View Survey`),
       link: `${match.url}/survey`,
     }
   );

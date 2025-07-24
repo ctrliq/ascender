@@ -93,7 +93,9 @@ function InstanceGroup({ setBreadcrumb }) {
               <span>
                 {i18n._(msg`Instance group not found.`)}
 
-                <Link to="/instance_groups">{i18n._(msg`View all instance groups`)}</Link>
+                <Link to="/instance_groups">
+                  {i18n._(msg`View all instance groups`)}
+                </Link>
               </span>
             )}
           </ContentError>

@@ -128,7 +128,9 @@ function PromptJobTemplateDetail({ resource }) {
           }
         />
       ) : (
-        !ask_inventory_on_launch && <DeletedDetail label={i18n._(msg`Inventory`)} />
+        !ask_inventory_on_launch && (
+          <DeletedDetail label={i18n._(msg`Inventory`)} />
+        )
       )}
       {summary_fields?.project ? (
         <Detail
@@ -153,9 +155,15 @@ function PromptJobTemplateDetail({ resource }) {
         value={typeof forks === 'number' ? forks.toString() : forks}
       />
       <Detail label={i18n._(msg`Limit`)} value={limit} />
-      <Detail label={i18n._(msg`Verbosity`)} value={VERBOSITY(i18n)[verbosity]} />
+      <Detail
+        label={i18n._(msg`Verbosity`)}
+        value={VERBOSITY(i18n)[verbosity]}
+      />
       {typeof diff_mode === 'boolean' && (
-        <Detail label={i18n._(msg`Show Changes`)} value={diff_mode ? i18n._(msg`On`) : i18n._(msg`Off`)} />
+        <Detail
+          label={i18n._(msg`Show Changes`)}
+          value={diff_mode ? i18n._(msg`On`) : i18n._(msg`Off`)}
+        />
       )}
       <Detail label={i18n._(msg` Job Slicing`)} value={job_slice_count} />
       <Detail label={i18n._(msg`Host Config Key`)} value={host_config_key} />
@@ -165,7 +173,10 @@ function PromptJobTemplateDetail({ resource }) {
           value={`${window.location.origin}${related.callback}`}
         />
       )}
-      <Detail label={i18n._(msg`Webhook Service`)} value={toTitleCase(webhook_service)} />
+      <Detail
+        label={i18n._(msg`Webhook Service`)}
+        value={toTitleCase(webhook_service)}
+      />
       {related?.webhook_receiver && (
         <Detail
           label={i18n._(msg`Webhook URL`)}
@@ -186,7 +197,9 @@ function PromptJobTemplateDetail({ resource }) {
           }
         />
       )}
-      {optionsList && <Detail label={i18n._(msg`Enabled Options`)} value={optionsList} />}
+      {optionsList && (
+        <Detail label={i18n._(msg`Enabled Options`)} value={optionsList} />
+      )}
       {summary_fields?.credentials && (
         <Detail
           fullWidth

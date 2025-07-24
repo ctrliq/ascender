@@ -197,8 +197,12 @@ function ResourceAccessList({ apiModel, resource }) {
         headerRow={
           <HeaderRow qsConfig={QS_CONFIG} isSelectable={false}>
             <HeaderCell sortKey="username">{i18n._(msg`Username`)}</HeaderCell>
-            <HeaderCell sortKey="first_name">{i18n._(msg`First name`)}</HeaderCell>
-            <HeaderCell sortKey="last_name">{i18n._(msg`Last name`)}</HeaderCell>
+            <HeaderCell sortKey="first_name">
+              {i18n._(msg`First name`)}
+            </HeaderCell>
+            <HeaderCell sortKey="last_name">
+              {i18n._(msg`Last name`)}
+            </HeaderCell>
             <HeaderCell>{i18n._(msg`Roles`)}</HeaderCell>
           </HeaderRow>
         }

@@ -68,7 +68,9 @@ function getHelpText(i18n) {
       i18n._(
         msg`Enables creation of a provisioning callback URL. Using the URL a host can contact ${brandName} and request a configuration update using this job template.`
       ),
-    privilegeEscalation: i18n._(msg`If enabled, run this playbook as an administrator.`),
+    privilegeEscalation: i18n._(
+      msg`If enabled, run this playbook as an administrator.`
+    ),
     enableWebhook: i18n._(msg`Enable webhook for this template.`),
     concurrentJobs: i18n._(
       msg`If enabled, simultaneous runs of this job template will be allowed.`
@@ -101,9 +103,7 @@ function getHelpText(i18n) {
             msg`Provisioning callbacks: Enables creation of a provisioning callback URL. Using the URL a host can contact Ansible AWX and request a configuration update using this job template.`
           )}
         </p>
-        <p>
-          {i18n._(msg`Webhooks: Enable webhook for this template.`)}
-        </p>
+        <p>{i18n._(msg`Webhooks: Enable webhook for this template.`)}</p>
         <p>
           {i18n._(
             msg`Prevent Instance Group Fallback: If enabled, the job template will prevent adding any inventory or organization instance groups to the list of preferred instances groups to run on.`

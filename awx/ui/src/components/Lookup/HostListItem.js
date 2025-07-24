@@ -9,7 +9,9 @@ function HostListItem({ item }) {
     <Tr ouiaId={`host-list-item-${item.id}`}>
       <Td dataLabel={i18n._(msg`Name`)}>{item.name}</Td>
       <Td dataLabel={i18n._(msg`Description`)}>{item.description}</Td>
-      <Td dataLabel={i18n._(msg`Inventory`)}>{item.summary_fields.inventory.name}</Td>
+      <Td dataLabel={i18n._(msg`Inventory`)}>
+        {item.summary_fields.inventory.name}
+      </Td>
     </Tr>
   );
 }

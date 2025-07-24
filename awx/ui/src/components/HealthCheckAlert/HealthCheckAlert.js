@@ -21,12 +21,16 @@ function HealthCheckAlert({ onSetHealthCheckAlert }) {
       }
       title={
         <>
-          {i18n._(msg`Health check request(s) submitted. Please wait and reload the page.`)}{' '}
+          {i18n._(
+            msg`Health check request(s) submitted. Please wait and reload the page.`
+          )}{' '}
           <Button
             variant="link"
             isInline
             onClick={() => window.location.reload()}
-          >{i18n._(msg`Reload`)}</Button>
+          >
+            {i18n._(msg`Reload`)}
+          </Button>
         </>
       }
     />

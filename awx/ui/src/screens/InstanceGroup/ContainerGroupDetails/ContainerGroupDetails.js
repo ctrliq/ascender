@@ -71,7 +71,9 @@ function ContainerGroupDetails({ instanceGroup }) {
         {instanceGroup.summary_fields.credential && (
           <Detail
             label={i18n._(msg`Credential`)}
-            helpText={i18n._(msg`Credential to authenticate with Kubernetes or OpenShift`)}
+            helpText={i18n._(
+              msg`Credential to authenticate with Kubernetes or OpenShift`
+            )}
             value={
               <Link
                 to={`/credentials/${instanceGroup?.summary_fields?.credential?.id}`}
@@ -103,7 +105,9 @@ function ContainerGroupDetails({ instanceGroup }) {
                 : instanceGroup.pod_spec_override
             }
             rows={6}
-            helpText={i18n._(msg`Custom Kubernetes or OpenShift Pod specification.`)}
+            helpText={i18n._(
+              msg`Custom Kubernetes or OpenShift Pod specification.`
+            )}
             name="pod_spec_override"
             dataCy="container-group-detail-pod-spec-override"
           />
@@ -130,7 +134,9 @@ function ContainerGroupDetails({ instanceGroup }) {
               onConfirm={deleteInstanceGroup}
               isDisabled={isLoading}
               deleteDetailsRequests={deleteDetailsRequests}
-              deleteMessage={i18n._(msg`This container group is currently being by other resources. Are you sure you want to delete it?`)}
+              deleteMessage={i18n._(
+                msg`This container group is currently being by other resources. Are you sure you want to delete it?`
+              )}
             >
               {i18n._(msg`Delete`)}
             </DeleteButton>

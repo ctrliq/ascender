@@ -37,7 +37,9 @@ function DraggableSelectedList({ selected, onRemove, onRowDrag }) {
 
   const onDragMove = (oldIndex, newIndex) => {
     setLiveText(
-      i18n._(msg`Dragging item ${id}. Item with index ${oldIndex} in now ${newIndex}.`)
+      i18n._(
+        msg`Dragging item ${id}. Item with index ${oldIndex} in now ${newIndex}.`
+      )
     );
   };
 
@@ -67,7 +69,9 @@ function DraggableSelectedList({ selected, onRemove, onRowDrag }) {
   return (
     <>
       <DataList
-        aria-label={i18n._(msg`Draggable list to reorder and remove selected items.`)}
+        aria-label={i18n._(
+          msg`Draggable list to reorder and remove selected items.`
+        )}
         data-cy="draggable-list"
         itemOrder={orderedList}
         onDragCancel={onDragCancel}
@@ -100,7 +104,10 @@ function DraggableSelectedList({ selected, onRemove, onRowDrag }) {
                     </DataListCell>,
                   ]}
                 />
-                <RemoveActionSection aria-label={i18n._(msg`Actions`)} id={rowPosition}>
+                <RemoveActionSection
+                  aria-label={i18n._(msg`Actions`)}
+                  id={rowPosition}
+                >
                   <Button
                     onClick={() => removeItem(label)}
                     variant="plain"

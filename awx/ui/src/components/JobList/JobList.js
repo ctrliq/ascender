@@ -189,7 +189,9 @@ function JobList({
           hasContentLoading={isLoading || isDeleteLoading || isCancelLoading}
           items={jobs}
           itemCount={count}
-          emptyContentMessage={i18n._(msg`Please run a job to populate this list.`)}
+          emptyContentMessage={i18n._(
+            msg`Please run a job to populate this list.`
+          )}
           pluralizedItemName={i18n._(msg`Jobs`)}
           qsConfig={qsConfig}
           toolbarSearchColumns={[
@@ -246,8 +248,12 @@ function JobList({
               <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
               <HeaderCell sortKey="status">{i18n._(msg`Status`)}</HeaderCell>
               {showTypeColumn && <HeaderCell>{i18n._(msg`Type`)}</HeaderCell>}
-              <HeaderCell sortKey="started">{i18n._(msg`Start Time`)}</HeaderCell>
-              <HeaderCell sortKey="finished">{i18n._(msg`Finish Time`)}</HeaderCell>
+              <HeaderCell sortKey="started">
+                {i18n._(msg`Start Time`)}
+              </HeaderCell>
+              <HeaderCell sortKey="finished">
+                {i18n._(msg`Finish Time`)}
+              </HeaderCell>
               <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
             </HeaderRow>
           }

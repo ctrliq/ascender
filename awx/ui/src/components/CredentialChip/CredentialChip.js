@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { msg } from "@lingui/macro";
-import { useLingui } from "@lingui/react";
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { Chip } from '@patternfly/react-core';
 import { Credential } from 'types';
 import { toTitleCase } from 'util/strings';

@@ -179,8 +179,12 @@ function NotificationTemplatesList() {
               <HeaderRow qsConfig={QS_CONFIG}>
                 <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
                 <HeaderCell>{i18n._(msg`Status`)}</HeaderCell>
-                <HeaderCell sortKey="notification_type">{i18n._(msg`Type`)}</HeaderCell>
-                <HeaderCell sortKey="organization">{i18n._(msg`Organization`)}</HeaderCell>
+                <HeaderCell sortKey="notification_type">
+                  {i18n._(msg`Type`)}
+                </HeaderCell>
+                <HeaderCell sortKey="organization">
+                  {i18n._(msg`Organization`)}
+                </HeaderCell>
                 <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
               </HeaderRow>
             }

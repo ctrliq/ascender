@@ -2,7 +2,9 @@ import React from 'react';
 import { msg } from '@lingui/macro';
 
 const getProjectHelpText = (i18n) => ({
-  executionEnvironment: i18n._(msg`The execution environment that will be used for jobs that use this project. This will be used as fallback when an execution environment has not been explicitly assigned at the job template or workflow level.`),
+  executionEnvironment: i18n._(
+    msg`The execution environment that will be used for jobs that use this project. This will be used as fallback when an execution environment has not been explicitly assigned at the job template or workflow level.`
+  ),
   projectBasePath: (brandName = '') => (
     <span>
       {i18n._(msg`Base path used for locating playbooks. Directories
@@ -56,7 +58,9 @@ const getProjectHelpText = (i18n) => ({
       </ul>
     </span>
   ),
-  syncButtonDisabled: i18n._(msg`This project is currently on sync and cannot be clicked until sync process completed`),
+  syncButtonDisabled: i18n._(
+    msg`This project is currently on sync and cannot be clicked until sync process completed`
+  ),
   archiveUrl: (
     <span>
       {i18n._(msg`Example URLs for Remote Archive Source Control include:`)}
@@ -105,12 +109,15 @@ const getProjectHelpText = (i18n) => ({
         you can input tags, commit hashes, and arbitrary refs. Some
         commit hashes and refs may not be available unless you also
         provide a custom refspec.`),
-  signatureValidation: i18n._(msg`Enable content signing to verify that the content
+  signatureValidation:
+    i18n._(msg`Enable content signing to verify that the content
 has remained secure when a project is synced.
 If the content has been tampered with, the
 job will not run.`),
   options: {
-    clean: i18n._(msg`Remove any local modifications prior to performing an update.`),
+    clean: i18n._(
+      msg`Remove any local modifications prior to performing an update.`
+    ),
     delete: i18n._(msg`Delete the local repository in its entirety prior to
                   performing an update. Depending on the size of the
                   repository this may significantly increase the amount
@@ -121,9 +128,11 @@ job will not run.`),
                   the revision specified by the main project.
                   This is equivalent to specifying the --remote
                   flag to git submodule update.`),
-    updateOnLaunch: i18n._(msg`Each time a job runs using this project, update the
+    updateOnLaunch:
+      i18n._(msg`Each time a job runs using this project, update the
                   revision of the project prior to starting the job.`),
-    allowBranchOverride: i18n._(msg`Allow changing the Source Control branch or revision in a job
+    allowBranchOverride:
+      i18n._(msg`Allow changing the Source Control branch or revision in a job
                     template that uses this project.`),
     cacheTimeout: i18n._(msg`Time in seconds to consider a project
                     to be current. During job runs and callbacks the task

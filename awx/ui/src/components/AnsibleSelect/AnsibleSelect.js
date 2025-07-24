@@ -9,8 +9,8 @@ import {
   bool,
 } from 'prop-types';
 
-import { msg } from "@lingui/macro";
-import { useLingui } from "@lingui/react";
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { FormSelect, FormSelectOption } from '@patternfly/react-core';
 
 function AnsibleSelect({

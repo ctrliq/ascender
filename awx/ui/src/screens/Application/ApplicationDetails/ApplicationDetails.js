@@ -103,8 +103,14 @@ function ApplicationDetails({
           dataCy="app-detail-client-type"
           helpText={applicationHelpTextStrings.clientType}
         />
-        <UserDateDetail label={i18n._(msg`Created`)} date={application.created} />
-        <UserDateDetail label={i18n._(msg`Last Modified`)} date={application.modified} />
+        <UserDateDetail
+          label={i18n._(msg`Created`)}
+          date={application.created}
+        />
+        <UserDateDetail
+          label={i18n._(msg`Last Modified`)}
+          date={application.modified}
+        />
       </DetailList>
       <CardActionsRow>
         {application.summary_fields.user_capabilities &&

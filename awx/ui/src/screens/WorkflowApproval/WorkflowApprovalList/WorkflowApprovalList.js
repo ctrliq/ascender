@@ -222,7 +222,9 @@ function WorkflowApprovalsList() {
               <HeaderRow qsConfig={QS_CONFIG}>
                 <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
                 <HeaderCell>{i18n._(msg`Workflow Job`)}</HeaderCell>
-                <HeaderCell sortKey="started">{i18n._(msg`Started`)}</HeaderCell>
+                <HeaderCell sortKey="started">
+                  {i18n._(msg`Started`)}
+                </HeaderCell>
                 <HeaderCell>{i18n._(msg`Status`)}</HeaderCell>
                 <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
               </HeaderRow>

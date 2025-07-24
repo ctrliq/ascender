@@ -86,7 +86,11 @@ function InstancePeerListItem({
                 <Detail
                   data-cy="policy-type"
                   label={i18n._(msg`Policy Type`)}
-                  value={peerInstance.managed_by_policy ? i18n._(msg`Auto`) : i18n._(msg`Manual`)}
+                  value={
+                    peerInstance.managed_by_policy
+                      ? i18n._(msg`Auto`)
+                      : i18n._(msg`Manual`)
+                  }
                 />
                 <Detail
                   data-cy="last-health-check"

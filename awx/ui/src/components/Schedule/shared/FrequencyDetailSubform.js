@@ -71,7 +71,9 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
     name: `${prefix}.daysOfWeek`,
     validate: (val) => {
       if (frequency === 'week') {
-        return required(i18n._(msg`Select a value for this field`))(val?.length > 0);
+        return required(i18n._(msg`Select a value for this field`))(
+          val?.length > 0
+        );
       }
       return undefined;
     },

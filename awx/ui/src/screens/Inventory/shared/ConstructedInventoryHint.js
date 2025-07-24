@@ -55,9 +55,9 @@ function ConstructedInventoryHint() {
       <span>
         {i18n._(msg`This table gives a few useful parameters of the constructed
                inventory plugin. For the full list of parameters `)}{' '}
-        <a
-          href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/constructed_inventory.html"
-        >{i18n._(msg`view the constructed inventory plugin docs here.`)}</a>
+        <a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/constructed_inventory.html">
+          {i18n._(msg`view the constructed inventory plugin docs here.`)}
+        </a>
       </span>
       <br />
       <br />
@@ -168,8 +168,15 @@ groups:
         />
       }
     >
-      <FormGroup label={i18n._(msg`Limit`)} fieldId="intersection-example-limit">
-        <ClipboardCopy isReadOnly hoverTip={i18n._(msg`Copy`)} clickTip={i18n._(msg`Copied`)}>
+      <FormGroup
+        label={i18n._(msg`Limit`)}
+        fieldId="intersection-example-limit"
+      >
+        <ClipboardCopy
+          isReadOnly
+          hoverTip={i18n._(msg`Copy`)}
+          clickTip={i18n._(msg`Copied`)}
+        >
           {limitToIntersectionLimit}
         </ClipboardCopy>
       </FormGroup>
@@ -254,8 +261,15 @@ function FilterOnNestedGroupExample({ i18n }) {
           </CodeBlockCode>
         </CodeBlock>
       </FormGroup>
-      <FormGroup label={i18n._(msg`Limit`)} fieldId="nested-groups-example-limit">
-        <ClipboardCopy isReadOnly hoverTip={i18n._(msg`Copy`)} clickTip={i18n._(msg`Copied`)}>
+      <FormGroup
+        label={i18n._(msg`Limit`)}
+        fieldId="nested-groups-example-limit"
+      >
+        <ClipboardCopy
+          isReadOnly
+          hoverTip={i18n._(msg`Copy`)}
+          clickTip={i18n._(msg`Copied`)}
+        >
           {nestedGroupsInventoryLimit}
         </ClipboardCopy>
       </FormGroup>
@@ -325,11 +339,18 @@ groups:
       }
     >
       <FormGroup label={i18n._(msg`Limit`)} fieldId="processor-example-limit">
-        <ClipboardCopy isReadOnly hoverTip={i18n._(msg`Copy`)} clickTip={i18n._(msg`Copied`)}>
+        <ClipboardCopy
+          isReadOnly
+          hoverTip={i18n._(msg`Copy`)}
+          clickTip={i18n._(msg`Copied`)}
+        >
           {hostsByProcessorLimit}
         </ClipboardCopy>
       </FormGroup>
-      <FormGroup label={i18n._(msg`Source vars`)} fieldId="processor-example-source-vars">
+      <FormGroup
+        label={i18n._(msg`Source vars`)}
+        fieldId="processor-example-source-vars"
+      >
         <CodeBlock
           actions={
             <CodeBlockAction>

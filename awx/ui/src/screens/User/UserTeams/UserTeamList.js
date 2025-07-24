@@ -215,7 +215,9 @@ function UserTeamList() {
                 onDisassociate={handleDisassociate}
                 itemsToDisassociate={selected}
                 modalTitle={i18n._(msg`Disassociate related team(s)?`)}
-                modalNote={i18n._(msg`This action will disassociate all roles for this user from the selected teams.`)}
+                modalNote={i18n._(
+                  msg`This action will disassociate all roles for this user from the selected teams.`
+                )}
               />,
             ]}
             emptyStateControls={

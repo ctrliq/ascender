@@ -37,7 +37,9 @@ function LookupTypeInput({ value, type, setValue, maxSelectHeight }) {
         id="exact-option-select"
         key="exact"
         value="exact"
-        description={i18n._(msg`Exact match (default lookup if not specified).`)}
+        description={i18n._(
+          msg`Exact match (default lookup if not specified).`
+        )}
       />
       <Option
         id="iexact-option-select"
@@ -132,13 +134,17 @@ function LookupTypeInput({ value, type, setValue, maxSelectHeight }) {
         id="isnull-option-select"
         key="isnull"
         value="isnull"
-        description={i18n._(msg`Check whether the given field or related object is null; expects a boolean value.`)}
+        description={i18n._(
+          msg`Check whether the given field or related object is null; expects a boolean value.`
+        )}
       />
       <Option
         id="in-option-select"
         key="in"
         value="in"
-        description={i18n._(msg`Check whether the given field's value is present in the list provided; expects a comma-separated list of items.`)}
+        description={i18n._(
+          msg`Check whether the given field's value is present in the list provided; expects a comma-separated list of items.`
+        )}
       />
     </Select>
   );

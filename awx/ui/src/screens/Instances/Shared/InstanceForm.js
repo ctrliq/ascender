@@ -13,8 +13,8 @@ import AnsibleSelect from 'components/AnsibleSelect';
 import { required } from 'util/validators';
 
 const INSTANCE_TYPES = [
-  { id: 'execution', name: i18n._(msg`Execution`)},
-  { id: 'hop', name: i18n._(msg`Hop`)},
+  { id: 'execution', name: i18n._(msg`Execution`) },
+  { id: 'hop', name: i18n._(msg`Hop`) },
 ];
 
 function InstanceFormFields({ isEdit }) {
@@ -45,7 +45,9 @@ function InstanceFormFields({ isEdit }) {
         label={i18n._(msg`Instance State`)}
         name="node_state"
         type="text"
-        tooltip={i18n._(msg`Sets the current life cycle stage of this instance. Default is "installed."`)}
+        tooltip={i18n._(
+          msg`Sets the current life cycle stage of this instance. Default is "installed."`
+        )}
         isDisabled
       />
       <FormField
@@ -53,12 +55,16 @@ function InstanceFormFields({ isEdit }) {
         label={i18n._(msg`Listener Port`)}
         name="listener_port"
         type="number"
-        tooltip={i18n._(msg`Select the port that Receptor will listen on for incoming connections, e.g. 27199.`)}
+        tooltip={i18n._(
+          msg`Select the port that Receptor will listen on for incoming connections, e.g. 27199.`
+        )}
       />
       <FormGroup
         fieldId="instance-type"
         label={i18n._(msg`Instance Type`)}
-        tooltip={i18n._(msg`Sets the role that this instance will play within mesh topology. Default is "execution."`)}
+        tooltip={i18n._(
+          msg`Sets the role that this instance will play within mesh topology. Default is "execution."`
+        )}
         validated={
           !instanceTypeMeta.touched || !instanceTypeMeta.error
             ? 'default'
@@ -81,24 +87,33 @@ function InstanceFormFields({ isEdit }) {
           isDisabled={isEdit}
         />
       </FormGroup>
-      <FormGroup fieldId="instance-option-checkboxes" label={i18n._(msg`Options`)}>
+      <FormGroup
+        fieldId="instance-option-checkboxes"
+        label={i18n._(msg`Options`)}
+      >
         <CheckboxField
           id="enabled"
           name="enabled"
           label={i18n._(msg`Enable Instance`)}
-          tooltip={i18n._(msg`Set the instance enabled or disabled. If disabled, jobs will not be assigned to this instance.`)}
+          tooltip={i18n._(
+            msg`Set the instance enabled or disabled. If disabled, jobs will not be assigned to this instance.`
+          )}
         />
         <CheckboxField
           id="managed-by-policy"
           name="managed_by_policy"
           label={i18n._(msg`Managed by Policy`)}
-          tooltip={i18n._(msg`Controls whether or not this instance is managed by policy. If enabled, the instance will be available for automatic assignment to and unassignment from instance groups based on policy rules.`)}
+          tooltip={i18n._(
+            msg`Controls whether or not this instance is managed by policy. If enabled, the instance will be available for automatic assignment to and unassignment from instance groups based on policy rules.`
+          )}
         />
         <CheckboxField
           id="peers_from_control_nodes"
           name="peers_from_control_nodes"
           label={i18n._(msg`Peers from control nodes`)}
-          tooltip={i18n._(msg`If enabled, control nodes will peer to this instance automatically. If disabled, instance will be connected only to associated peers.`)}
+          tooltip={i18n._(
+            msg`If enabled, control nodes will peer to this instance automatically. If disabled, instance will be connected only to associated peers.`
+          )}
         />
       </FormGroup>
     </>

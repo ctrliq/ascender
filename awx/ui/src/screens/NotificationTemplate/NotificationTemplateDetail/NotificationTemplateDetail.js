@@ -84,9 +84,8 @@ function NotificationTemplateDetail({ template, defaultMessages }) {
       } = await NotificationTemplatesAPI.test(template.id);
 
       async function pollForStatusChange() {
-        const { data: notification } = await NotificationsAPI.readDetail(
-          notificationId
-        );
+        const { data: notification } =
+          await NotificationsAPI.readDetail(notificationId);
         if (notification.status !== 'pending') {
           setTestStatus(notification.status);
           return;
@@ -106,7 +105,11 @@ function NotificationTemplateDetail({ template, defaultMessages }) {
   return (
     <CardBody>
       <DetailList gutter="sm">
-        <Detail label={i18n._(msg`Name`)} value={template.name} dataCy="nt-detail-name" />
+        <Detail
+          label={i18n._(msg`Name`)}
+          value={template.name}
+          dataCy="nt-detail-name"
+        />
         <Detail
           label={i18n._(msg`Description`)}
           value={template.description}
@@ -209,7 +212,11 @@ function NotificationTemplateDetail({ template, defaultMessages }) {
             />
             <Detail
               label={i18n._(msg`Disable SSL Verification`)}
-              value={configuration.grafana_no_verify_ssl ? i18n._(msg`True`) : i18n._(msg`False`)}
+              value={
+                configuration.grafana_no_verify_ssl
+                  ? i18n._(msg`True`)
+                  : i18n._(msg`False`)
+              }
               dataCy="nt-detail-disable-ssl"
             />
           </>
@@ -239,7 +246,9 @@ function NotificationTemplateDetail({ template, defaultMessages }) {
             />
             <Detail
               label={i18n._(msg`SSL Connection`)}
-              value={configuration.use_ssl ? i18n._(msg`True`) : i18n._(msg`False`)}
+              value={
+                configuration.use_ssl ? i18n._(msg`True`) : i18n._(msg`False`)
+              }
               dataCy="nt-detail-irc-ssl"
             />
           </>
@@ -269,7 +278,9 @@ function NotificationTemplateDetail({ template, defaultMessages }) {
             <Detail
               label={i18n._(msg`Disable SSL Verification`)}
               value={
-                configuration.mattermost_no_verify_ssl ? i18n._(msg`True`) : i18n._(msg`False`)
+                configuration.mattermost_no_verify_ssl
+                  ? i18n._(msg`True`)
+                  : i18n._(msg`False`)
               }
               dataCy="nt-detail-disable-ssl"
             />
@@ -314,7 +325,9 @@ function NotificationTemplateDetail({ template, defaultMessages }) {
             <Detail
               label={i18n._(msg`Disable SSL Verification`)}
               value={
-                configuration.rocketchat_no_verify_ssl ? i18n._(msg`True`) : i18n._(msg`False`)
+                configuration.rocketchat_no_verify_ssl
+                  ? i18n._(msg`True`)
+                  : i18n._(msg`False`)
               }
               dataCy="nt-detail-disable-ssl"
             />
@@ -372,7 +385,9 @@ function NotificationTemplateDetail({ template, defaultMessages }) {
             <Detail
               label={i18n._(msg`Disable SSL Verification`)}
               value={
-                configuration.disable_ssl_verification ? i18n._(msg`True`) : i18n._(msg`False`)
+                configuration.disable_ssl_verification
+                  ? i18n._(msg`True`)
+                  : i18n._(msg`False`)
               }
               dataCy="nt-detail-disable-ssl"
             />
@@ -425,7 +440,9 @@ function NotificationTemplateDetail({ template, defaultMessages }) {
               onClick={sendTestNotification}
               variant="secondary"
               isDisabled={testStatus === ('running' || 'pending')}
-            >{i18n._(msg`Test`)}</Button>
+            >
+              {i18n._(msg`Test`)}
+            </Button>
           </>
         )}
         {summary_fields.user_capabilities?.delete && (

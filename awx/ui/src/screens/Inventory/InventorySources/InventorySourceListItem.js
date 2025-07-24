@@ -78,7 +78,9 @@ function InventorySourceListItem({
           <span>
             <Tooltip
               className="missing-execution-environment"
-              content={i18n._(msg`Custom virtual environment ${source.custom_virtualenv} must be replaced by an execution environment.`)}
+              content={i18n._(
+                msg`Custom virtual environment ${source.custom_virtualenv} must be replaced by an execution environment.`
+              )}
               position="right"
             >
               <ExclamationTriangleIcon />
@@ -110,7 +112,9 @@ function InventorySourceListItem({
                   id: source?.summary_fields?.current_job?.id,
                 }}
                 errorTitle={i18n._(msg`Inventory Source Sync Error`)}
-                errorMessage={i18n._(msg`Failed to cancel Inventory Source Sync`)}
+                errorMessage={i18n._(
+                  msg`Failed to cancel Inventory Source Sync`
+                )}
                 title={i18n._(msg`Cancel Inventory Source Sync`)}
                 showIconButton
               />

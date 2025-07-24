@@ -9,8 +9,8 @@ import {
   TimesCircleIcon,
 } from '@patternfly/react-icons';
 
-import { msg } from "@lingui/macro";
-import { useLingui } from "@lingui/react";
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import styled from 'styled-components';
 
 const Header = styled.div`

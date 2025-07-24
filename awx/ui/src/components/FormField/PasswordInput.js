@@ -34,7 +34,11 @@ function PasswordInput(props) {
 
   return (
     <>
-      <Tooltip content={inputType === 'password' ? i18n._(msg`Show`) : i18n._(msg`Hide`)}>
+      <Tooltip
+        content={
+          inputType === 'password' ? i18n._(msg`Show`) : i18n._(msg`Hide`)
+        }
+      >
         <Button
           ouiaId={`${id}-toggle`}
           variant={ButtonVariant.control}

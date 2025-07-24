@@ -1,6 +1,6 @@
 import React from 'react';
-import { msg } from "@lingui/macro";
-import { useLingui } from "@lingui/react";
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { Tooltip } from '@patternfly/react-core';
 import { ExclamationCircleIcon as PFExclamationCircleIcon } from '@patternfly/react-icons';
 import styled from 'styled-components';
@@ -62,7 +62,10 @@ function AdHocPreviewStep({ hasErrors, values }) {
           />
         )}
         {verbosity && (
-          <Detail label={i18n._(msg`Verbosity`)} value={VERBOSITY(i18n)[values.verbosity]} />
+          <Detail
+            label={i18n._(msg`Verbosity`)}
+            value={VERBOSITY(i18n)[values.verbosity]}
+          />
         )}
         {extra_vars && (
           <VariablesDetail

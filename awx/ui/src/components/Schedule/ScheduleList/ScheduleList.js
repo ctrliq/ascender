@@ -145,12 +145,19 @@ function ScheduleList({
         }
       });
     }
-    return missingValues && i18n._(msg`This schedule is missing required survey values`);
+    return (
+      missingValues &&
+      i18n._(msg`This schedule is missing required survey values`)
+    );
   };
-  let emptyContentMessage = i18n._(msg`Please add a Schedule to populate this list.`);
+  let emptyContentMessage = i18n._(
+    msg`Please add a Schedule to populate this list.`
+  );
 
   if (location.pathname.startsWith('/schedules')) {
-    emptyContentMessage = i18n._(msg`Please add a Schedule to populate this list.  Schedules can be added to a Template, Project, or Inventory Source.`);
+    emptyContentMessage = i18n._(
+      msg`Please add a Schedule to populate this list.  Schedules can be added to a Template, Project, or Inventory Source.`
+    );
   }
 
   return (
@@ -167,8 +174,12 @@ function ScheduleList({
         headerRow={
           <HeaderRow qsConfig={QS_CONFIG}>
             <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
-            <HeaderCell sortKey="unified_job_template">{i18n._(msg`Related resource`)}</HeaderCell>
-            <HeaderCell sortKey="unified_job_template__polymorphic_ctype__model">{i18n._(msg`Resource type`)}</HeaderCell>
+            <HeaderCell sortKey="unified_job_template">
+              {i18n._(msg`Related resource`)}
+            </HeaderCell>
+            <HeaderCell sortKey="unified_job_template__polymorphic_ctype__model">
+              {i18n._(msg`Resource type`)}
+            </HeaderCell>
             <HeaderCell sortKey="next_run">{i18n._(msg`Next Run`)}</HeaderCell>
             <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
           </HeaderRow>

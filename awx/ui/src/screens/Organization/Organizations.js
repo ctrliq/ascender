@@ -33,8 +33,12 @@ function Organizations() {
         [`/organizations/${organization.id}/details`]: i18n._(msg`Details`),
         [`/organizations/${organization.id}/access`]: i18n._(msg`Access`),
         [`/organizations/${organization.id}/teams`]: i18n._(msg`Teams`),
-        [`/organizations/${organization.id}/notifications`]: i18n._(msg`Notifications`),
-        [`/organizations/${organization.id}/execution_environments`]: i18n._(msg`Execution Environments`),
+        [`/organizations/${organization.id}/notifications`]: i18n._(
+          msg`Notifications`
+        ),
+        [`/organizations/${organization.id}/execution_environments`]: i18n._(
+          msg`Execution Environments`
+        ),
       };
       setBreadcrumbConfig(breadcrumb);
     },

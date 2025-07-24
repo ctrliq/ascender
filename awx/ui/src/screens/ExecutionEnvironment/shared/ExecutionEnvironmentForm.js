@@ -68,7 +68,9 @@ function ExecutionEnvironmentFormFields({
         me?.is_superuser &&
         ((!isOrgLookupDisabled && isGloballyAvailable) ||
           organizationField.value === null)
-          ? i18n._(msg`Leave this field blank to make the execution environment globally available.`)
+          ? i18n._(
+              msg`Leave this field blank to make the execution environment globally available.`
+            )
           : null
       }
       autoPopulate={!me?.is_superuser ? !executionEnvironment?.id : null}
@@ -133,7 +135,9 @@ function ExecutionEnvironmentFormFields({
       />
       {isOrgLookupDisabled && isGloballyAvailable.current ? (
         <Tooltip
-          content={i18n._(msg`Globally available execution environment can not be reassigned to a specific Organization`)}
+          content={i18n._(
+            msg`Globally available execution environment can not be reassigned to a specific Organization`
+          )}
         >
           {renderOrganizationLookup()}
         </Tooltip>

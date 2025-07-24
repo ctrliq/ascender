@@ -72,7 +72,9 @@ function UserToken({ setBreadcrumb, user }) {
             {error.response.status === 404 && (
               <span>
                 {i18n._(msg`Token not found.`)}{' '}
-                <Link to="/users/:id/tokens">{i18n._(msg`View all tokens.`)}</Link>
+                <Link to="/users/:id/tokens">
+                  {i18n._(msg`View all tokens.`)}
+                </Link>
               </span>
             )}
           </ContentError>
@@ -98,7 +100,11 @@ function UserToken({ setBreadcrumb, user }) {
         <Route key="not-found" path="*">
           {!isLoading && (
             <ContentError isNotFound>
-              {id && <Link to={`/users/${id}/tokens`}>{i18n._(msg`View Tokens`)}</Link>}
+              {id && (
+                <Link to={`/users/${id}/tokens`}>
+                  {i18n._(msg`View Tokens`)}
+                </Link>
+              )}
             </ContentError>
           )}
         </Route>

@@ -58,7 +58,7 @@ const SettingGroup = ({
   label,
   onRevertCallback,
   popoverContent,
-  validated
+  validated,
 }) => (
   <FormGroup
     fieldId={fieldId}
@@ -141,7 +141,11 @@ const BooleanField = ({
               {i18n._(msg`Cancel`)}
             </Button>,
           ]}
-        >{i18n._(msg`Are you sure you want to disable local authentication?  Doing so could impact users' ability to log in and the system administrator's ability to reverse this change.`)}</AlertModal>
+        >
+          {i18n._(
+            msg`Are you sure you want to disable local authentication?  Doing so could impact users' ability to log in and the system administrator's ability to reverse this change.`
+          )}
+        </AlertModal>
       )}
       <Switch
         id={name}
@@ -202,7 +206,6 @@ ChoiceField.propTypes = {
 };
 
 const EncryptedField = ({ name, config, isRequired = false }) => {
-
   const validate = isRequired ? required(null) : null;
   const [, meta] = useField({ name, validate });
   const isValid = !(meta.touched && meta.error);
@@ -353,7 +356,9 @@ const InputAlertField = ({ name, config }) => {
             </Button>,
           ]}
         >
-          {i18n._(msg`Are you sure you want to edit login redirect override URL?  Doing so could impact users' ability to log in to the system once local authentication is also disabled.`)}
+          {i18n._(
+            msg`Are you sure you want to edit login redirect override URL?  Doing so could impact users' ability to log in to the system once local authentication is also disabled.`
+          )}
         </AlertModal>
       )}
     </>

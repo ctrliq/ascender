@@ -416,11 +416,15 @@ function ScheduleForm({
         options.runOn === 'day' &&
         (options.runOnDayNumber < 1 || options.runOnDayNumber > 31)
       ) {
-        freqErrors.runOn = i18n._(msg`Please select a day number between 1 and 31.`);
+        freqErrors.runOn = i18n._(
+          msg`Please select a day number between 1 and 31.`
+        );
       }
 
       if (options.end === 'after' && !options.occurrences) {
-        freqErrors.occurrences = i18n._(msg`Please enter a number of occurrences.`);
+        freqErrors.occurrences = i18n._(
+          msg`Please enter a number of occurrences.`
+        );
       }
 
       if (options.end === 'onDate') {
@@ -434,7 +438,9 @@ function ScheduleForm({
             'yyyy-LL-dd h:mm a'
           ).toMillis()
         ) {
-          freqErrors.endDate = i18n._(msg`Please select an end date/time that comes after the start date/time.`);
+          freqErrors.endDate = i18n._(
+            msg`Please select an end date/time that comes after the start date/time.`
+          );
         }
 
         if (
@@ -451,8 +457,12 @@ function ScheduleForm({
             })
           );
           if (rule.all().length === 0) {
-            errors.startDate = i18n._(msg`Selected date range must have at least 1 schedule occurrence.`);
-            freqErrors.endDate = i18n._(msg`Selected date range must have at least 1 schedule occurrence.`);
+            errors.startDate = i18n._(
+              msg`Selected date range must have at least 1 schedule occurrence.`
+            );
+            freqErrors.endDate = i18n._(
+              msg`Selected date range must have at least 1 schedule occurrence.`
+            );
           }
         }
       }
@@ -465,7 +475,9 @@ function ScheduleForm({
     });
 
     if (values.exceptionFrequency.length > 0 && !scheduleHasInstances(values)) {
-      errors.exceptionFrequency = i18n._(msg`This schedule has no occurrences due to the selected exceptions.`);
+      errors.exceptionFrequency = i18n._(
+        msg`This schedule has no occurrences due to the selected exceptions.`
+      );
     }
 
     return errors;

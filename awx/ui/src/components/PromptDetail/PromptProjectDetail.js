@@ -134,7 +134,9 @@ function PromptProjectDetail({ resource }) {
           value={
             <CredentialChip
               key={resource.summary_fields.signature_validation_credential.id}
-              credential={resource.summary_fields.signature_validation_credential}
+              credential={
+                resource.summary_fields.signature_validation_credential
+              }
               isReadOnly
             />
           }

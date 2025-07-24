@@ -17,32 +17,49 @@ function InstanceGroups() {
   const [breadcrumbConfig, setBreadcrumbConfig] = useState({
     '/instance_groups': i18n._(msg`Instance Groups`),
     '/instance_groups/add': i18n._(msg`Create new instance group`),
-    '/instance_groups/container_group/add': i18n._(msg`Create new container group`),
+    '/instance_groups/container_group/add': i18n._(
+      msg`Create new container group`
+    ),
   });
 
-  const buildBreadcrumbConfig = useCallback((instanceGroups, instance) => {
-    if (!instanceGroups) {
-      return;
-    }
-    setBreadcrumbConfig({
-      '/instance_groups': i18n._(msg`Instance Groups`),
-      '/instance_groups/add': i18n._(msg`Create new instance group`),
-      '/instance_groups/container_group/add': i18n._(msg`Create new container group`),
+  const buildBreadcrumbConfig = useCallback(
+    (instanceGroups, instance) => {
+      if (!instanceGroups) {
+        return;
+      }
+      setBreadcrumbConfig({
+        '/instance_groups': i18n._(msg`Instance Groups`),
+        '/instance_groups/add': i18n._(msg`Create new instance group`),
+        '/instance_groups/container_group/add': i18n._(
+          msg`Create new container group`
+        ),
 
-      [`/instance_groups/${instanceGroups.id}/details`]: i18n._(msg`Details`),
-      [`/instance_groups/${instanceGroups.id}/instances`]: i18n._(msg`Instances`),
-      [`/instance_groups/${instanceGroups.id}/instances/${instance?.id}`]: `${instance?.hostname}`,
-      [`/instance_groups/${instanceGroups.id}/instances/${instance?.id}/details`]: i18n._(msg`Instance details`),
-      [`/instance_groups/${instanceGroups.id}/jobs`]: i18n._(msg`Jobs`),
-      [`/instance_groups/${instanceGroups.id}/edit`]: i18n._(msg`Edit details`),
-      [`/instance_groups/${instanceGroups.id}`]: `${instanceGroups.name}`,
+        [`/instance_groups/${instanceGroups.id}/details`]: i18n._(msg`Details`),
+        [`/instance_groups/${instanceGroups.id}/instances`]: i18n._(
+          msg`Instances`
+        ),
+        [`/instance_groups/${instanceGroups.id}/instances/${instance?.id}`]: `${instance?.hostname}`,
+        [`/instance_groups/${instanceGroups.id}/instances/${instance?.id}/details`]:
+          i18n._(msg`Instance details`),
+        [`/instance_groups/${instanceGroups.id}/jobs`]: i18n._(msg`Jobs`),
+        [`/instance_groups/${instanceGroups.id}/edit`]: i18n._(
+          msg`Edit details`
+        ),
+        [`/instance_groups/${instanceGroups.id}`]: `${instanceGroups.name}`,
 
-      [`/instance_groups/container_group/${instanceGroups.id}/details`]: i18n._(msg`Details`),
-      [`/instance_groups/container_group/${instanceGroups.id}/jobs`]: i18n._(msg`Jobs`),
-      [`/instance_groups/container_group/${instanceGroups.id}/edit`]: i18n._(msg`Edit details`),
-      [`/instance_groups/container_group/${instanceGroups.id}`]: `${instanceGroups.name}`,
-    });
-  }, [i18n]);
+        [`/instance_groups/container_group/${instanceGroups.id}/details`]:
+          i18n._(msg`Details`),
+        [`/instance_groups/container_group/${instanceGroups.id}/jobs`]: i18n._(
+          msg`Jobs`
+        ),
+        [`/instance_groups/container_group/${instanceGroups.id}/edit`]: i18n._(
+          msg`Edit details`
+        ),
+        [`/instance_groups/container_group/${instanceGroups.id}`]: `${instanceGroups.name}`,
+      });
+    },
+    [i18n]
+  );
 
   const streamType = pathname.includes('instances')
     ? 'instance'

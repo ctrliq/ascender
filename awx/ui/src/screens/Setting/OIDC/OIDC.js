@@ -23,7 +23,9 @@ function OIDC() {
           </Route>
           <Route key="not-found" path={`${baseURL}/*`}>
             <ContentError isNotFound>
-              <Link to={`${baseURL}/details`}>{i18n._(msg`View OIDC settings`)}</Link>
+              <Link to={`${baseURL}/details`}>
+                {i18n._(msg`View OIDC settings`)}
+              </Link>
             </ContentError>
           </Route>
         </Switch>

@@ -163,7 +163,9 @@ function TemplateListItem({
             <span>
               <Popover
                 className="missing-execution-environment"
-                headerContent={<div>{i18n._(msg`Execution Environment Missing`)}</div>}
+                headerContent={
+                  <div>{i18n._(msg`Execution Environment Missing`)}</div>
+                }
                 bodyContent={
                   <div>
                     <Trans>
@@ -278,7 +280,9 @@ function TemplateListItem({
                 <Detail
                   label={i18n._(msg`Organization`)}
                   value={
-                    <Link to={`/organizations/${summaryFields.organization.id}/details`}>
+                    <Link
+                      to={`/organizations/${summaryFields.organization.id}/details`}
+                    >
                       {summaryFields.organization.name}
                     </Link>
                   }

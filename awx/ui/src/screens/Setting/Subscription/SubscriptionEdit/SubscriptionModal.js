@@ -136,11 +136,16 @@ function SubscriptionModal({
       {!isLoading && !error && subscriptions?.length === 0 && (
         <ContentEmpty
           title={i18n._(msg`No subscriptions found`)}
-          message={i18n._(msg`We were unable to locate subscriptions associated with this account.`)}
+          message={i18n._(
+            msg`We were unable to locate subscriptions associated with this account.`
+          )}
         />
       )}
       {!isLoading && !error && subscriptions?.length > 0 && (
-        <TableComposable variant="compact" aria-label={i18n._(msg`Subscriptions table`)}>
+        <TableComposable
+          variant="compact"
+          aria-label={i18n._(msg`Subscriptions table`)}
+        >
           <Thead>
             <Tr ouiaId="subscription-table-header">
               <Th />
@@ -166,7 +171,9 @@ function SubscriptionModal({
                     rowIndex: `row-${subscription.id}`,
                   }}
                 />
-                <Td dataLabel={i18n._(msg`Trial`)}>{subscription.subscription_name}</Td>
+                <Td dataLabel={i18n._(msg`Trial`)}>
+                  {subscription.subscription_name}
+                </Td>
                 <Td dataLabel={i18n._(msg`Managed nodes`)}>
                   {subscription.instance_count}
                 </Td>

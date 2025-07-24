@@ -30,7 +30,9 @@ function Credentials() {
         [`/credentials/${credential.id}/edit`]: i18n._(msg`Edit Details`),
         [`/credentials/${credential.id}/details`]: i18n._(msg`Details`),
         [`/credentials/${credential.id}/access`]: i18n._(msg`Access`),
-        [`/credentials/${credential.id}/job_templates`]: i18n._(msg`Job Templates`),
+        [`/credentials/${credential.id}/job_templates`]: i18n._(
+          msg`Job Templates`
+        ),
       });
     },
     [i18n]

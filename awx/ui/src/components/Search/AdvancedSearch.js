@@ -157,20 +157,26 @@ function AdvancedSearch({
         id="and-option-select"
         key="and"
         value="and"
-        description={i18n._(msg`Returns results that satisfy this one as well as other filters.  This is the default set type if nothing is selected.`)}
+        description={i18n._(
+          msg`Returns results that satisfy this one as well as other filters.  This is the default set type if nothing is selected.`
+        )}
       />
       <SelectOption
         id="or-option-select"
         key="or"
         value="or"
-        description={i18n._(msg`Returns results that satisfy this one or any other filters.`)}
+        description={i18n._(
+          msg`Returns results that satisfy this one or any other filters.`
+        )}
       />
       {enableNegativeFiltering && (
         <SelectOption
           id="not-option-select"
           key="not"
           value="not"
-          description={i18n._(msg`Returns results that have values other than this one as well as other filters.`)}
+          description={i18n._(
+            msg`Returns results that have values other than this one as well as other filters.`
+          )}
         />
       )}
     </Select>
@@ -205,14 +211,18 @@ function AdvancedSearch({
     if (isTextInputDisabled) {
       return (
         <Tooltip
-          content={i18n._(msg`Remove the current search related to ansible facts to enable another search using this key.`)}
+          content={i18n._(
+            msg`Remove the current search related to ansible facts to enable another search using this key.`
+          )}
         >
           <TextInput
             data-cy="advanced-search-text-input"
             type="search"
             aria-label={i18n._(msg`Advanced search value input`)}
             isDisabled={!keySelection || isTextInputDisabled}
-            value={(!keySelection && i18n._(msg`First, select a key`)) || searchValue}
+            value={
+              (!keySelection && i18n._(msg`First, select a key`)) || searchValue
+            }
             onChange={setSearchValue}
             onKeyDown={handleAdvancedTextKeyDown}
           />
@@ -226,7 +236,9 @@ function AdvancedSearch({
         type="search"
         aria-label={i18n._(msg`Advanced search value input`)}
         isDisabled={!keySelection}
-        value={(!keySelection && i18n._(msg`First, select a key`)) || searchValue}
+        value={
+          (!keySelection && i18n._(msg`First, select a key`)) || searchValue
+        }
         onChange={setSearchValue}
         onKeyDown={handleAdvancedTextKeyDown}
         placeholder={placeholderText}
@@ -238,7 +250,9 @@ function AdvancedSearch({
     if (keySelection === 'ansible_facts') return null;
     return lookupSelection === 'search' ? (
       <Tooltip
-        content={i18n._(msg`Set type disabled for related search field fuzzy searches`)}
+        content={i18n._(
+          msg`Set type disabled for related search field fuzzy searches`
+        )}
       >
         {renderSetType()}
       </Tooltip>
@@ -286,7 +300,10 @@ function AdvancedSearch({
             : []),
           ...(relatedKeys.length
             ? [
-                <SelectGroup key="related keys" label={i18n._(msg`Related Keys`)}>
+                <SelectGroup
+                  key="related keys"
+                  label={i18n._(msg`Related Keys`)}
+                >
                   {relatedKeys.map((rKey) => (
                     <SelectOption
                       value={rKey}
@@ -317,7 +334,10 @@ function AdvancedSearch({
           </Button>
         </div>
       </InputGroup>
-      <Tooltip content={i18n._(msg`Advanced search documentation`)} position="bottom">
+      <Tooltip
+        content={i18n._(msg`Advanced search documentation`)}
+        position="bottom"
+      >
         <Button
           ouiaId="search-docs-button"
           component="a"

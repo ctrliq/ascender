@@ -25,7 +25,9 @@ function WorkflowApprovalListDenyButton({ onDeny, selectedItems }) {
       .join(', ');
 
     if (selectedItems.some(cannotDeny)) {
-      return i18n._(msg`You are unable to act on the following workflow approvals: ${itemsUnableToDeny}`);
+      return i18n._(
+        msg`You are unable to act on the following workflow approvals: ${itemsUnableToDeny}`
+      );
     }
 
     return i18n._(msg`Deny`);

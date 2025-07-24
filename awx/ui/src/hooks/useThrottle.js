@@ -11,12 +11,15 @@ export default function useThrottle(value, limit) {
       return () => {};
     }
 
-    const handler = setTimeout(() => {
-      if (Date.now() - lastRan.current >= limit) {
-        lastRan.current = Date.now();
-        setThrottledValue(value);
-      }
-    }, limit - (Date.now() - lastRan.current));
+    const handler = setTimeout(
+      () => {
+        if (Date.now() - lastRan.current >= limit) {
+          lastRan.current = Date.now();
+          setThrottledValue(value);
+        }
+      },
+      limit - (Date.now() - lastRan.current)
+    );
 
     return () => {
       clearTimeout(handler);

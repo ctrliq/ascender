@@ -218,7 +218,9 @@ function NotificationList({
         headerRow={
           <HeaderRow qsConfig={QS_CONFIG} isSelectable={false}>
             <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
-            <HeaderCell sortKey="notification_type">{i18n._(msg`Type`)}</HeaderCell>
+            <HeaderCell sortKey="notification_type">
+              {i18n._(msg`Type`)}
+            </HeaderCell>
             <HeaderCell>{i18n._(msg`Options`)}</HeaderCell>
           </HeaderRow>
         }

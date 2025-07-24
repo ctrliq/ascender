@@ -197,8 +197,12 @@ function InventorySourceList() {
                 deleteMessage={
                   <Plural
                     value={selected.length}
-                    one={i18n._(msg`This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?`)}
-                    other={i18n._(msg`Deleting these inventory sources could impact other resources that rely on them. Are you sure you want to delete anyway`)}
+                    one={i18n._(
+                      msg`This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?`
+                    )}
+                    other={i18n._(
+                      msg`Deleting these inventory sources could impact other resources that rely on them. Are you sure you want to delete anyway`
+                    )}
                   />
                 }
               />,

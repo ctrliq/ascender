@@ -261,7 +261,9 @@ function VisualizerNode({
             setHovering(false);
             dispatch({ type: 'SELECT_SOURCE_FOR_LINKING', node });
           }}
-          onMouseEnter={() => updateHelpText(i18n._(msg`Link to an available node`))}
+          onMouseEnter={() =>
+            updateHelpText(i18n._(msg`Link to an available node`))
+          }
           onMouseLeave={() => updateHelpText(null)}
         >
           <LinkIcon />
@@ -326,7 +328,9 @@ function VisualizerNode({
               x={wfConstants.nodeW / 2 - wfConstants.nodeW / 10 + 7}
               y={-wfConstants.nodeH / 4 - 1}
             >
-              <ConvergenceLabel data-cy="convergence-label">{i18n._(msg`ALL`)}</ConvergenceLabel>
+              <ConvergenceLabel data-cy="convergence-label">
+                {i18n._(msg`ALL`)}
+              </ConvergenceLabel>
             </foreignObject>
           </>
         )}

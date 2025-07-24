@@ -72,7 +72,10 @@ export const ScmTypeOptions = ({ scmUpdateOnLaunch, hideAllowOverride }) => {
 
   return (
     <FormFullWidthLayout>
-      <FormGroup fieldId="project-option-checkboxes" label={i18n._(msg`Options`)}>
+      <FormGroup
+        fieldId="project-option-checkboxes"
+        label={i18n._(msg`Options`)}
+      >
         <FormCheckboxLayout>
           <CheckboxField
             id="option-scm-clean"

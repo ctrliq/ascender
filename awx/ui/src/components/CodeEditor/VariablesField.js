@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { string, bool, func, oneOf, shape } from 'prop-types';
 
-import { msg } from "@lingui/macro";
-import { useLingui } from "@lingui/react";
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { useField } from 'formik';
 import styled from 'styled-components';
 import { Split, SplitItem, Button, Modal } from '@patternfly/react-core';

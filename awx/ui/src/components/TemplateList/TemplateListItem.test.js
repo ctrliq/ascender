@@ -45,7 +45,9 @@ describe('<TemplateListItem />', () => {
     );
     expect(wrapper.find('Td[dataLabel="Name"]').text()).toBe('Template 1');
     expect(wrapper.find('Td[dataLabel="Type"]').text()).toBe('Job Template');
-    expect(wrapper.find('Detail[label="Organization"]').text()).toBe('OrganizationFoo');
+    expect(wrapper.find('Detail[label="Organization"]').text()).toBe(
+      'OrganizationFoo'
+    );
     expect(
       wrapper.find('Detail[label="Organization"]').find('Link').prop('to')
     ).toBe('/organizations/1/details');
@@ -465,7 +467,7 @@ describe('<TemplateListItem />', () => {
     ).toEqual(true);
     expect(wrapper.find(`Td[dataLabel="Activity"] Sparkline`)).toHaveLength(1);
   });
-/*
+  /*
   test('should not load Activity', async () => {
     const wrapper = mountWithContexts(
       <table>

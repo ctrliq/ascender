@@ -73,7 +73,11 @@ function InventoryHostItem({
           </Link>
         </TdBreakWord>
         <Td>
-            {recentJobs.length > 0 ? (<Sparkline jobs={recentJobs} />) : (i18n._(msg`No job data available`))}
+          {recentJobs.length > 0 ? (
+            <Sparkline jobs={recentJobs} />
+          ) : (
+            i18n._(msg`No job data available`)
+          )}
         </Td>
         <TdBreakWord
           id={`host-description-${host.id}`}

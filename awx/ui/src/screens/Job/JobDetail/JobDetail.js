@@ -66,7 +66,10 @@ function JobDetail({ job, inventorySourceLabels }) {
   const jobTypes = {
     project_update: i18n._(msg`Source Control Update`),
     inventory_update: i18n._(msg`Inventory Sync`),
-    job: job.job_type === 'check' ? i18n._(msg`Playbook Check`) : i18n._(msg`Playbook Run`),
+    job:
+      job.job_type === 'check'
+        ? i18n._(msg`Playbook Check`)
+        : i18n._(msg`Playbook Run`),
     ad_hoc_command: i18n._(msg`Run Command`),
     system_job: i18n._(msg`Management Job`),
     workflow_job: i18n._(msg`Workflow Job`),
@@ -125,7 +128,10 @@ function JobDetail({ job, inventorySourceLabels }) {
           }
         />
       ) : (
-        <DeletedDetail label={i18n._(msg`Inventory`)} helpText={jobHelpText.inventory} />
+        <DeletedDetail
+          label={i18n._(msg`Inventory`)}
+          helpText={jobHelpText.inventory}
+        />
       );
     }
     if (job.type === 'workflow_job') {
@@ -221,14 +227,22 @@ function JobDetail({ job, inventorySourceLabels }) {
   return (
     <CardBody>
       <DetailList>
-        <Detail dataCy="job-id" label={i18n._(msg`Job ID`)} value={validateReactNode(job.id)} />
+        <Detail
+          dataCy="job-id"
+          label={i18n._(msg`Job ID`)}
+          value={validateReactNode(job.id)}
+        />
         <Detail
           dataCy="job-status"
           fullWidth={Boolean(job.job_explanation)}
           label={i18n._(msg`Status`)}
           value={
             <StatusDetailValue>
-              {validateReactNode(job.status) ? <StatusLabel status={job.status} /> : i18n._(msg`Unknown Status`)}
+              {validateReactNode(job.status) ? (
+                <StatusLabel status={job.status} />
+              ) : (
+                i18n._(msg`Unknown Status`)
+              )}
               {job?.job_explanation && job.job_explanation !== job.status
                 ? validateReactNode(job.job_explanation)
                 : null}
@@ -238,13 +252,17 @@ function JobDetail({ job, inventorySourceLabels }) {
         <Detail
           dataCy="job-started-date"
           label={i18n._(msg`Started`)}
-          value={formatDateString(job.started) || i18n._(msg`Unknown Start Date`)}
+          value={
+            formatDateString(job.started) || i18n._(msg`Unknown Start Date`)
+          }
         />
         {job?.finished && (
           <Detail
             dataCy="job-finished-date"
             label={i18n._(msg`Finished`)}
-            value={formatDateString(job.finished) || i18n._(msg`Unknown Finish Date`)}
+            value={
+              formatDateString(job.finished) || i18n._(msg`Unknown Finish Date`)
+            }
           />
         )}
         {jobTemplate && (
@@ -427,9 +445,13 @@ function JobDetail({ job, inventorySourceLabels }) {
           <Detail
             dataCy="timeout"
             label={i18n._(msg`Timeout`)}
-            value={i18n._(validateReactNode(
-              job.timeout ? i18n._(msg`${job.timeout} seconds`) : i18n._(msg`No timeout specified`)
-            ))}
+            value={i18n._(
+              validateReactNode(
+                job.timeout
+                  ? i18n._(msg`${job.timeout} seconds`)
+                  : i18n._(msg`No timeout specified`)
+              )
+            )}
             helpText={jobHelpText.timeout}
           />
         )}
@@ -567,7 +589,10 @@ function JobDetail({ job, inventorySourceLabels }) {
           date={job.created}
           user={created_by}
         />
-        <UserDateDetail label={i18n._(msg`Last Modified`)} date={job.modified} />
+        <UserDateDetail
+          label={i18n._(msg`Last Modified`)}
+          date={job.modified}
+        />
         {job.extra_vars && (
           <VariablesDetail
             css="margin: 20px 0"

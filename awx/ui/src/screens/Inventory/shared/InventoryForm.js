@@ -93,7 +93,10 @@ function InventoryFormFields({ inventory }) {
             createText={i18n._(msg`Create`)}
           />
         </FormGroup>
-        <FormGroup fieldId="inventory-option-checkboxes" label={i18n._(msg`Options`)}>
+        <FormGroup
+          fieldId="inventory-option-checkboxes"
+          label={i18n._(msg`Options`)}
+        >
           <FormCheckboxLayout>
             <CheckboxField
               id="option-prevent-instance-group-fallback"

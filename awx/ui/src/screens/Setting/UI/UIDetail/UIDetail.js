@@ -42,7 +42,7 @@ function UIDetail() {
         'CUSTOM_LOGIN_INFO',
         'ASCENDER_DISABLE_GRADIENT',
         'CUSTOM_LOGO',
-        'CUSTOM_LOGO_MENU',
+        'CUSTOM_LOGO_MENU'
       );
 
       return uiData;

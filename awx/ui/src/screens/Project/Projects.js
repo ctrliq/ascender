@@ -33,8 +33,12 @@ function Projects() {
         [`${projectSchedulesPath}`]: i18n._(msg`Schedules`),
         [`${projectSchedulesPath}/add`]: i18n._(msg`Create New Schedule`),
         [`${projectSchedulesPath}/${nested?.id}`]: `${nested?.name}`,
-        [`${projectSchedulesPath}/${nested?.id}/details`]: i18n._(msg`Schedule Details`),
-        [`${projectSchedulesPath}/${nested?.id}/edit`]: i18n._(msg`Edit Details`),
+        [`${projectSchedulesPath}/${nested?.id}/details`]: i18n._(
+          msg`Schedule Details`
+        ),
+        [`${projectSchedulesPath}/${nested?.id}/edit`]: i18n._(
+          msg`Edit Details`
+        ),
       });
     },
     [i18n]

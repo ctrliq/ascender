@@ -246,7 +246,9 @@ function ProjectFormFields({
         value={executionEnvironmentField.value}
         popoverContent={projectHelpText.executionEnvironment}
         onChange={handleExecutionEnvironmentUpdate}
-        tooltip={i18n._(msg`Select an organization before editing the default execution environment.`)}
+        tooltip={i18n._(
+          msg`Select an organization before editing the default execution environment.`
+        )}
         globallyAvailable
         isDisabled={!organizationField.value}
         organizationId={organizationField.value?.id}
@@ -435,8 +437,8 @@ function ProjectForm({ project, submitError, ...props }) {
           project.scm_type === ''
             ? 'manual'
             : project.scm_type === undefined
-            ? ''
-            : project.scm_type,
+              ? ''
+              : project.scm_type,
         scm_update_cache_timeout: project.scm_update_cache_timeout || 0,
         scm_update_on_launch: project.scm_update_on_launch || false,
         scm_url: project.scm_url || '',

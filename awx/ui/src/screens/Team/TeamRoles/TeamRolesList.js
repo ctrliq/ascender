@@ -130,7 +130,9 @@ function TeamRolesList({ me, team }) {
           {i18n._(msg`System Administrator`)}
         </Title>
         <EmptyStateBody>
-          {i18n._(msg`System administrators have unrestricted access to all resources.`)}
+          {i18n._(
+            msg`System administrators have unrestricted access to all resources.`
+          )}
         </EmptyStateBody>
       </EmptyState>
     );
@@ -235,7 +237,9 @@ function TeamRolesList({ me, team }) {
           ]}
         >
           <div>
-            {i18n._(msg`This action will disassociate the following role from ${roleToDisassociate.summary_fields.resource_name}:`)}
+            {i18n._(
+              msg`This action will disassociate the following role from ${roleToDisassociate.summary_fields.resource_name}:`
+            )}
             <br />
             <strong>{roleToDisassociate.name}</strong>
           </div>

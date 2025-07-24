@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import React from 'react';
-import { msg } from "@lingui/macro";
-import { useLingui } from "@lingui/react";
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import PropTypes from 'prop-types';
 import { useField } from 'formik';
 import { Form, FormGroup, Switch, Checkbox } from '@patternfly/react-core';
@@ -68,7 +68,9 @@ function AdHocDetailsStep({ moduleOptions }) {
             }
             labelIcon={
               <Popover
-                content={i18n._(msg`These are the modules that ${brandName} supports running commands against.`)}
+                content={i18n._(
+                  msg`These are the modules that ${brandName} supports running commands against.`
+                )}
               />
             }
           >
@@ -110,7 +112,9 @@ function AdHocDetailsStep({ moduleOptions }) {
             tooltip={
               moduleNameField.value ? (
                 <>
-                  {i18n._(msg`These arguments are used with the specified module. You can find information about ${moduleNameField.value} by clicking `)}
+                  {i18n._(
+                    msg`These arguments are used with the specified module. You can find information about ${moduleNameField.value} by clicking `
+                  )}
                   <a
                     href={`https://docs.ansible.com/ansible/latest/modules/${moduleNameField.value}_module.html`}
                     target="_blank"
@@ -128,7 +132,9 @@ function AdHocDetailsStep({ moduleOptions }) {
 
           <VerbositySelectField
             fieldId="verbosity"
-            tooltip={i18n._(msg`These are the verbosity levels for standard out of the command run that are supported.`)}
+            tooltip={i18n._(
+              msg`These are the verbosity levels for standard out of the command run that are supported.`
+            )}
             isValid={
               !verbosityMeta.touched || !verbosityMeta.error
                 ? 'default'
@@ -143,7 +149,9 @@ function AdHocDetailsStep({ moduleOptions }) {
             aria-label={i18n._(msg`Limit`)}
             tooltip={
               <span>
-                {i18n._(msg`The pattern used to target hosts in the inventory. Leaving the field blank, all, and * will all target all hosts in the inventory. You can find more information about Ansible's host patterns`)}{' '}
+                {i18n._(
+                  msg`The pattern used to target hosts in the inventory. Leaving the field blank, all, and * will all target all hosts in the inventory. You can find more information about Ansible's host patterns`
+                )}{' '}
                 <a
                   href="https://docs.ansible.com/ansible/latest/user_guide/intro_patterns.html"
                   target="_blank"
@@ -163,7 +171,9 @@ function AdHocDetailsStep({ moduleOptions }) {
             aria-label={i18n._(msg`Forks`)}
             tooltip={
               <span>
-                {i18n._(msg`The number of parallel or simultaneous processes to use while executing the playbook. Inputting no value will use the default value from the ansible configuration file.  You can find more information`)}{' '}
+                {i18n._(
+                  msg`The number of parallel or simultaneous processes to use while executing the playbook. Inputting no value will use the default value from the ansible configuration file.  You can find more information`
+                )}{' '}
                 <a
                   href="https://docs.ansible.com/ansible/latest/installation_guide/intro_configuration.html#the-ansible-configuration-file"
                   target="_blank"
@@ -180,7 +190,9 @@ function AdHocDetailsStep({ moduleOptions }) {
               aria-label={i18n._(msg`Show changes`)}
               labelIcon={
                 <Popover
-                  content={i18n._(msg`If enabled, show the changes made by Ansible tasks, where supported. This is equivalent to Ansible’s --diff mode.`)}
+                  content={i18n._(
+                    msg`If enabled, show the changes made by Ansible tasks, where supported. This is equivalent to Ansible’s --diff mode.`
+                  )}
                 />
               }
             >
@@ -242,7 +254,9 @@ function AdHocDetailsStep({ moduleOptions }) {
             tooltip={
               <TooltipWrapper>
                 <p>
-                  {i18n._(msg`Pass extra command line changes. There are two ansible command line parameters: `)}
+                  {i18n._(
+                    msg`Pass extra command line changes. There are two ansible command line parameters: `
+                  )}
                   <br />
                   <code>-e</code>, <code>--extra-vars </code>
                   <br />

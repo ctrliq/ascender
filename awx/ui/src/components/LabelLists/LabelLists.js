@@ -9,10 +9,15 @@ import { getQSConfig, parseQueryString } from 'util/qs';
 import PaginatedTable, { HeaderRow, HeaderCell } from '../PaginatedTable';
 import LabelListItem from './LabelListItem';
 
-const qsConfig = getQSConfig('labels', {
-        page: 1,
-        page_size: 20,
-        order_by: 'name' }, []);
+const qsConfig = getQSConfig(
+  'labels',
+  {
+    page: 1,
+    page_size: 20,
+    order_by: 'name',
+  },
+  []
+);
 
 function LabelLists() {
   const { i18n } = useLingui();
@@ -53,7 +58,10 @@ function LabelLists() {
         qsConfig={qsConfig}
         toolbarSearchColumns={[
           { name: i18n._(msg`Name`), key: 'name__icontains', isDefault: true },
-          { name: i18n._(msg`Organization`), key: 'organization__name__icontains' },
+          {
+            name: i18n._(msg`Organization`),
+            key: 'organization__name__icontains',
+          },
         ]}
         headerRow={
           <HeaderRow qsConfig={qsConfig}>
@@ -61,7 +69,9 @@ function LabelLists() {
             <HeaderCell>{i18n._(msg`Organization`)}</HeaderCell>
           </HeaderRow>
         }
-        renderRow={(label) => <LabelListItem key={label.id} label={label} searchOrg />}
+        renderRow={(label) => (
+          <LabelListItem key={label.id} label={label} searchOrg />
+        )}
       />
     </Card>
   );

@@ -92,16 +92,28 @@ function WorkflowApprovalListItem({
         <ActionItem
           visible
           tooltip={
-            hasBeenActedOn ? i18n._(msg`This has already been acted on`) : i18n._(msg`Approve`)
+            hasBeenActedOn
+              ? i18n._(msg`This has already been acted on`)
+              : i18n._(msg`Approve`)
           }
         >
-          <WorkflowApprovalButton workflowApproval={workflowApproval} onHandleToast={handleToast} />
+          <WorkflowApprovalButton
+            workflowApproval={workflowApproval}
+            onHandleToast={handleToast}
+          />
         </ActionItem>
         <ActionItem
           visible
-          tooltip={hasBeenActedOn ? i18n._(msg`This has already been acted on`) : i18n._(msg`Deny`)}
+          tooltip={
+            hasBeenActedOn
+              ? i18n._(msg`This has already been acted on`)
+              : i18n._(msg`Deny`)
+          }
         >
-          <WorkflowDenyButton workflowApproval={workflowApproval} onHandleToast={handleToast} />
+          <WorkflowDenyButton
+            workflowApproval={workflowApproval}
+            onHandleToast={handleToast}
+          />
         </ActionItem>
         <ActionItem visible>
           <JobCancelButton
@@ -114,9 +126,13 @@ function WorkflowApprovalListItem({
             buttonText={i18n._(msg`Cancel Workflow`)}
             isDisabled={hasBeenActedOn}
             tooltip={
-              hasBeenActedOn ? i18n._(msg`This has already been acted on`) : i18n._(msg`Cancel`)
+              hasBeenActedOn
+                ? i18n._(msg`This has already been acted on`)
+                : i18n._(msg`Cancel`)
             }
-            cancelationMessage={i18n._(msg`This will cancel all subsequent nodes in this workflow`)}
+            cancelationMessage={i18n._(
+              msg`This will cancel all subsequent nodes in this workflow`
+            )}
           />
         </ActionItem>
       </ActionsTd>

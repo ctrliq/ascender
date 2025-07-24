@@ -133,7 +133,9 @@ function ManagementJob({ setBreadcrumb }) {
             {error?.response?.status === 404 && (
               <span>
                 {i18n._(msg`Management job not found.`)}
-                <Link to={basePath}>{i18n._(msg`View all management jobs`)}</Link>
+                <Link to={basePath}>
+                  {i18n._(msg`View all management jobs`)}
+                </Link>
               </span>
             )}
           </ContentError>

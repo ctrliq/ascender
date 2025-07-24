@@ -48,7 +48,9 @@ function LinkDeleteModal() {
         <>
           <br />
           <p>
-            {i18n._(msg`Removing this link will orphan the rest of the branch and cause it to be executed immediately on launch.`)}
+            {i18n._(
+              msg`Removing this link will orphan the rest of the branch and cause it to be executed immediately on launch.`
+            )}
           </p>
         </>
       )}

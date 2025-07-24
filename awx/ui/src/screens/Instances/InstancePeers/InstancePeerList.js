@@ -169,7 +169,9 @@ function InstancePeerList({ setBreadcrumb }) {
         fetchPeers();
         addToast({
           id: instancesPeerToAssociate,
-          title: i18n._(msg`Peers update on ${instance.hostname}.  Please be sure to run the install bundle for ${instance.hostname} again in order to see changes take effect.`),
+          title: i18n._(
+            msg`Peers update on ${instance.hostname}.  Please be sure to run the install bundle for ${instance.hostname} again in order to see changes take effect.`
+          ),
           variant: AlertVariant.success,
           hasTimeout: true,
         });
@@ -195,7 +197,9 @@ function InstancePeerList({ setBreadcrumb }) {
 
       fetchPeers();
       addToast({
-        title: i18n._(msg`Peer removed. Please be sure to run the install bundle for ${instance.hostname} again in order to see changes take effect.`),
+        title: i18n._(
+          msg`Peer removed. Please be sure to run the install bundle for ${instance.hostname} again in order to see changes take effect.`
+        ),
         variant: AlertVariant.success,
         hasTimeout: true,
       });
@@ -242,11 +246,17 @@ function InstancePeerList({ setBreadcrumb }) {
             <HeaderCell
               tooltip={i18n._(msg`Cannot run health check on hop nodes.`)}
               sortKey="hostname"
-            >{i18n._(msg`Instance Name`)}</HeaderCell>
+            >
+              {i18n._(msg`Instance Name`)}
+            </HeaderCell>
             <HeaderCell sortKey="address">{i18n._(msg`Address`)}</HeaderCell>
             <HeaderCell sortKey="port">{i18n._(msg`Port`)}</HeaderCell>
-            <HeaderCell sortKey="node_type">{i18n._(msg`Node Type`)}</HeaderCell>
-            <HeaderCell sortKey="canonical">{i18n._(msg`Canonical`)}</HeaderCell>
+            <HeaderCell sortKey="node_type">
+              {i18n._(msg`Node Type`)}
+            </HeaderCell>
+            <HeaderCell sortKey="canonical">
+              {i18n._(msg`Canonical`)}
+            </HeaderCell>
           </HeaderRow>
         }
         renderToolbar={(props) => (

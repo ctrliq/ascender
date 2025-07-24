@@ -90,7 +90,10 @@ function PromptWFJobTemplateDetail({ resource }) {
       )}
       <Detail label={i18n._(msg`Source Control Branch`)} value={scm_branch} />
       <Detail label={i18n._(msg`Limit`)} value={limit} />
-      <Detail label={i18n._(msg`Webhook Service`)} value={toTitleCase(webhook_service)} />
+      <Detail
+        label={i18n._(msg`Webhook Service`)}
+        value={toTitleCase(webhook_service)}
+      />
       <Detail label={i18n._(msg`Webhook Key`)} value={webhook_key} />
       {related?.webhook_receiver && (
         <Detail
@@ -98,7 +101,9 @@ function PromptWFJobTemplateDetail({ resource }) {
           value={`${window.location.origin}${related.webhook_receiver}`}
         />
       )}
-      {optionsList && <Detail label={i18n._(msg`Enabled Options`)} value={optionsList} />}
+      {optionsList && (
+        <Detail label={i18n._(msg`Enabled Options`)} value={optionsList} />
+      )}
       {summary_fields?.webhook_credential && (
         <Detail
           fullWidth

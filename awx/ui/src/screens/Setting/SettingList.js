@@ -52,7 +52,9 @@ function SettingList() {
   const settingRoutes = [
     {
       header: i18n._(msg`Authentication`),
-      description: i18n._(msg`Enable simplified login for your ${brandName} applications`),
+      description: i18n._(
+        msg`Enable simplified login for your ${brandName} applications`
+      ),
       id: 'authentication',
       routes: [
         {
@@ -91,7 +93,9 @@ function SettingList() {
     },
     {
       header: i18n._(msg`Jobs`),
-      description: i18n._(msg`Update settings pertaining to Jobs within ${brandName}`),
+      description: i18n._(
+        msg`Update settings pertaining to Jobs within ${brandName}`
+      ),
       id: 'jobs',
       routes: [
         {
@@ -121,7 +125,9 @@ function SettingList() {
     },
     {
       header: i18n._(msg`User Interface`),
-      description: i18n._(msg`Set preferences for data collection, logos, and logins`),
+      description: i18n._(
+        msg`Set preferences for data collection, logos, and logins`
+      ),
       id: 'ui',
       routes: [
         {

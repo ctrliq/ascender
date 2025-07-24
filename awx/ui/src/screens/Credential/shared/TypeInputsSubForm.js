@@ -45,7 +45,10 @@ function TypeInputsSubForm({ credentialType }) {
         )}
         {booleanFields.length > 0 && (
           <FormFullWidthLayout>
-            <FormGroup fieldId="credential-checkboxes" label={i18n._(msg`Options`)}>
+            <FormGroup
+              fieldId="credential-checkboxes"
+              label={i18n._(msg`Options`)}
+            >
               <FormCheckboxLayout>
                 {booleanFields.map((fieldOptions) => (
                   <CheckboxField

@@ -158,7 +158,9 @@ function Template({ setBreadcrumb }) {
       link: `${match.url}/jobs`,
     },
     {
-      name: canAddAndEditSurvey ? i18n._(msg`Survey`) : i18n._(msg`View Survey`),
+      name: canAddAndEditSurvey
+        ? i18n._(msg`Survey`)
+        : i18n._(msg`View Survey`),
       link: `${match.url}/survey`,
     }
   );

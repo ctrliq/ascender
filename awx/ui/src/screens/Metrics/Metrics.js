@@ -80,7 +80,9 @@ function Metrics() {
 
       return {
         instances:
-          instanceNames.length > 1 ? [...instanceNames, i18n._(msg`All`)] : instanceNames,
+          instanceNames.length > 1
+            ? [...instanceNames, i18n._(msg`All`)]
+            : instanceNames,
         metrics: metricOptions,
       };
     }, [i18n]),
@@ -177,7 +179,7 @@ function Metrics() {
   }
   return (
     <>
-      <ScreenHeader breadcrumbConfig={{ '/metrics': i18n._(msg`Metrics`)}} />
+      <ScreenHeader breadcrumbConfig={{ '/metrics': i18n._(msg`Metrics`) }} />
 
       <PageSection>
         <Card>
@@ -240,7 +242,9 @@ function Metrics() {
               )
             ) : (
               <ContentEmpty
-                title={i18n._(msg`Select an instance and a metric to show chart`)}
+                title={i18n._(
+                  msg`Select an instance and a metric to show chart`
+                )}
               />
             )}
           </CardBody>

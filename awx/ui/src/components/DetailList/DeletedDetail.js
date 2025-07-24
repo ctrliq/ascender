@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { msg } from '@lingui/macro';
-import { useLingui } from "@lingui/react";
+import { useLingui } from '@lingui/react';
 import { node } from 'prop-types';
 import styled from 'styled-components';
 import _Detail from './Detail';

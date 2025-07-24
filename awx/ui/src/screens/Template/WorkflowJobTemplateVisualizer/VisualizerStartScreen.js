@@ -39,7 +39,9 @@ function VisualizerStartScreen({ readOnly }) {
       <StartPanelWrapper>
         <StartPanel>
           {readOnly ? (
-            <p>{i18n._(msg`This workflow does not have any nodes configured.`)}</p>
+            <p>
+              {i18n._(msg`This workflow does not have any nodes configured.`)}
+            </p>
           ) : (
             <>
               <p>{i18n._(msg`Please click the Start button to begin.`)}</p>

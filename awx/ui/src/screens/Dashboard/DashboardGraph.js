@@ -161,15 +161,15 @@ function DashboardGraph() {
             selections={jobStatusSelection}
             isOpen={isJobStatusDropdownOpen}
           >
-            <SelectOption key="all" value="all">{i18n._(msg`All jobs`)}</SelectOption>
-            <SelectOption
-              key="successful"
-              value="successful"
-            >{i18n._(msg`Successful jobs`)}</SelectOption>
-            <SelectOption
-              key="failed"
-              value="failed"
-            >{i18n._(msg`Failed jobs`)}</SelectOption>
+            <SelectOption key="all" value="all">
+              {i18n._(msg`All jobs`)}
+            </SelectOption>
+            <SelectOption key="successful" value="successful">
+              {i18n._(msg`Successful jobs`)}
+            </SelectOption>
+            <SelectOption key="failed" value="failed">
+              {i18n._(msg`Failed jobs`)}
+            </SelectOption>
           </StatusSelect>
         </GraphCardActions>
       </GraphCardHeader>

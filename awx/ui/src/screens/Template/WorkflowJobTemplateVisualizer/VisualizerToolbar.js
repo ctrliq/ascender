@@ -103,7 +103,10 @@ function VisualizerToolbar({
               <WrenchIcon />
             </ActionButton>
           </Tooltip>
-          <Tooltip content={i18n._(msg`Workflow documentation`)} position="bottom">
+          <Tooltip
+            content={i18n._(msg`Workflow documentation`)}
+            position="bottom"
+          >
             <ActionButton
               aria-label={i18n._(msg`Workflow documentation`)}
               id="visualizer-documentation"
@@ -120,7 +123,10 @@ function VisualizerToolbar({
           </Tooltip>
           {template.summary_fields?.user_capabilities?.start && (
             <Tooltip content={i18n._(msg`Launch workflow`)} position="bottom">
-              <LaunchButton resource={template} aria-label={i18n._(msg`Launch workflow`)}>
+              <LaunchButton
+                resource={template}
+                aria-label={i18n._(msg`Launch workflow`)}
+              >
                 {({ handleLaunch, isLaunching }) => (
                   <ActionButton
                     id="visualizer-launch"
@@ -138,7 +144,10 @@ function VisualizerToolbar({
           )}
           {!readOnly && (
             <>
-              <Tooltip content={i18n._(msg`Delete all nodes`)} position="bottom">
+              <Tooltip
+                content={i18n._(msg`Delete all nodes`)}
+                position="bottom"
+              >
                 <ActionButton
                   id="visualizer-delete-all"
                   aria-label={i18n._(msg`Delete all nodes`)}

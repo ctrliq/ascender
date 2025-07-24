@@ -106,7 +106,9 @@ function ProjectListItem({
         </ClipboardCopy>
       ) : (
         <Label
-          aria-label={i18n._(msg`The project must be synced before a revision is available.`)}
+          aria-label={i18n._(
+            msg`The project must be synced before a revision is available.`
+          )}
         >
           {i18n._(msg`Sync for revision`)}
         </Label>
@@ -119,7 +121,9 @@ function ProjectListItem({
     ) {
       return (
         <Label
-          aria-label={i18n._(msg`The project is currently syncing and the revision will be available after the sync is complete.`)}
+          aria-label={i18n._(
+            msg`The project is currently syncing and the revision will be available after the sync is complete.`
+          )}
         >
           {i18n._(msg`Syncing`)}
         </Label>
@@ -129,7 +133,9 @@ function ProjectListItem({
     return (
       <>
         <Label
-          aria-label={i18n._(msg`The project revision is currently out of date.  Please refresh to fetch the most recent revision.`)}
+          aria-label={i18n._(
+            msg`The project revision is currently out of date.  Please refresh to fetch the most recent revision.`
+          )}
         >
           {i18n._(msg`Refresh for revision`)}
         </Label>
@@ -187,7 +193,9 @@ function ProjectListItem({
           {missingExecutionEnvironment && (
             <span>
               <Tooltip
-                content={i18n._(msg`Custom virtual environment ${project.custom_virtualenv} must be replaced by an execution environment.`)}
+                content={i18n._(
+                  msg`Custom virtual environment ${project.custom_virtualenv} must be replaced by an execution environment.`
+                )}
                 position="right"
                 className="missing-execution-environment"
               >
@@ -218,7 +226,9 @@ function ProjectListItem({
           )}
         </Td>
         <Td dataLabel={i18n._(msg`Type`)}>
-          {project.scm_type === '' ? i18n._(msg`Manual`) : toTitleCase(project.scm_type)}
+          {project.scm_type === ''
+            ? i18n._(msg`Manual`)
+            : toTitleCase(project.scm_type)}
         </Td>
         <Td dataLabel={i18n._(msg`Revision`)}>{renderRevision()}</Td>
         <ActionsTd dataLabel={i18n._(msg`Actions`)}>

@@ -1,6 +1,6 @@
 import React from 'react';
-import { msg } from "@lingui/macro";
-import { useLingui } from "@lingui/react";
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { useFormikContext } from 'formik';
 import StepName from '../LaunchPrompt/steps/StepName';
 import AdHocPreviewStep from './AdHocPreviewStep';

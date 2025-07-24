@@ -259,7 +259,7 @@ function SurveyQuestionForm({
             {['multiplechoice', 'multiselect'].includes(formik.values.type) && (
               <MultipleChoiceField
                 label={i18n._(msg`Multiple Choice Options`)}
-                tooltip={(
+                tooltip={
                   <>
                     <span>{i18n._(msg`Refer to the`)} </span>
                     <a
@@ -273,7 +273,7 @@ function SurveyQuestionForm({
                     </a>{' '}
                     {i18n._(msg`for more information.`)}
                   </>
-                )}
+                }
               />
             )}
           </FormColumnLayout>

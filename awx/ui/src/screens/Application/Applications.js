@@ -28,19 +28,22 @@ function Applications() {
     '/applications/add': i18n._(msg`Create New Application`),
   });
 
-  const buildBreadcrumbConfig = useCallback((application) => {
-    if (!application) {
-      return;
-    }
-    setBreadcrumbConfig({
-      '/applications': i18n._(msg`Applications`),
-      '/applications/add': i18n._(msg`Create New Application`),
-      [`/applications/${application.id}`]: `${application.name}`,
-      [`/applications/${application.id}/edit`]: i18n._(msg`Edit Details`),
-      [`/applications/${application.id}/details`]: i18n._(msg`Details`),
-      [`/applications/${application.id}/tokens`]: i18n._(msg`Tokens`),
-    });
-  }, [i18n]);
+  const buildBreadcrumbConfig = useCallback(
+    (application) => {
+      if (!application) {
+        return;
+      }
+      setBreadcrumbConfig({
+        '/applications': i18n._(msg`Applications`),
+        '/applications/add': i18n._(msg`Create New Application`),
+        [`/applications/${application.id}`]: `${application.name}`,
+        [`/applications/${application.id}/edit`]: i18n._(msg`Edit Details`),
+        [`/applications/${application.id}/details`]: i18n._(msg`Details`),
+        [`/applications/${application.id}/tokens`]: i18n._(msg`Tokens`),
+      });
+    },
+    [i18n]
+  );
 
   return (
     <>
@@ -75,11 +78,16 @@ function Applications() {
             <ApplicationAlert
               variant="info"
               isInline
-              title={i18n._(msg`This is the only time the client secret will be shown.`)}
+              title={i18n._(
+                msg`This is the only time the client secret will be shown.`
+              )}
             />
           )}
           <DetailList stacked>
-            <Detail label={i18n._(msg`Name`)} value={applicationModalSource.name} />
+            <Detail
+              label={i18n._(msg`Name`)}
+              value={applicationModalSource.name}
+            />
             {applicationModalSource.client_id && (
               <Detail
                 label={i18n._(msg`Client ID`)}

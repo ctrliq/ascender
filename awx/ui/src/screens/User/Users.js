@@ -18,25 +18,30 @@ function Users() {
   });
   const match = useRouteMatch();
 
-  const addUserBreadcrumb = useCallback((user, token) => {
-    if (!user) {
-      return;
-    }
+  const addUserBreadcrumb = useCallback(
+    (user, token) => {
+      if (!user) {
+        return;
+      }
 
-    setBreadcrumbConfig({
-      '/users': i18n._(msg`Users`),
-      '/users/add': i18n._(msg`Create New User`),
-      [`/users/${user.id}`]: `${user.username}`,
-      [`/users/${user.id}/edit`]: i18n._(msg`Edit Details`),
-      [`/users/${user.id}/details`]: i18n._(msg`Details`),
-      [`/users/${user.id}/roles`]: i18n._(msg`Roles`),
-      [`/users/${user.id}/teams`]: i18n._(msg`Teams`),
-      [`/users/${user.id}/organizations`]: i18n._(msg`Organizations`),
-      [`/users/${user.id}/tokens`]: i18n._(msg`Tokens`),
-      [`/users/${user.id}/tokens/add`]: i18n._(msg`Create user token`),
-      [`/users/${user.id}/tokens/${token && token.id}/details`]: i18n._(msg`Details`),
-    });
-  }, [i18n]);
+      setBreadcrumbConfig({
+        '/users': i18n._(msg`Users`),
+        '/users/add': i18n._(msg`Create New User`),
+        [`/users/${user.id}`]: `${user.username}`,
+        [`/users/${user.id}/edit`]: i18n._(msg`Edit Details`),
+        [`/users/${user.id}/details`]: i18n._(msg`Details`),
+        [`/users/${user.id}/roles`]: i18n._(msg`Roles`),
+        [`/users/${user.id}/teams`]: i18n._(msg`Teams`),
+        [`/users/${user.id}/organizations`]: i18n._(msg`Organizations`),
+        [`/users/${user.id}/tokens`]: i18n._(msg`Tokens`),
+        [`/users/${user.id}/tokens/add`]: i18n._(msg`Create user token`),
+        [`/users/${user.id}/tokens/${token && token.id}/details`]: i18n._(
+          msg`Details`
+        ),
+      });
+    },
+    [i18n]
+  );
   return (
     <>
       <ScreenHeader streamType="user" breadcrumbConfig={breadcrumbConfig} />

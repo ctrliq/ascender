@@ -65,12 +65,16 @@ function CredentialPluginWizard({ handleSubmit, onClose }) {
               onClick={onNext}
               isDisabled={!selectedCredential.value}
             >
-              {activeStep.key === 'metadata' ? i18n._(msg`OK`) : i18n._(msg`Next`)}
+              {activeStep.key === 'metadata'
+                ? i18n._(msg`OK`)
+                : i18n._(msg`Next`)}
             </Button>
             {activeStep && activeStep.key === 'metadata' && (
               <>
                 <Tooltip
-                  content={i18n._(msg`Click this button to verify connection to the secret management system using the selected credential and specified inputs.`)}
+                  content={i18n._(
+                    msg`Click this button to verify connection to the secret management system using the selected credential and specified inputs.`
+                  )}
                   position="right"
                 >
                   <Button

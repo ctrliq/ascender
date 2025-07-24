@@ -109,11 +109,12 @@ function WorkflowJobTemplateDetail({ template }) {
   return (
     <CardBody>
       <DetailList gutter="sm">
-        <Detail label={i18n._(msg`Name`)} value={name} dataCy="jt-detail-name" />
         <Detail
-          label={i18n._(msg`Description`)}
-          value={description}
+          label={i18n._(msg`Name`)}
+          value={name}
+          dataCy="jt-detail-name"
         />
+        <Detail label={i18n._(msg`Description`)} value={description} />
         <Detail
           value={<Sparkline jobs={recentPlaybookJobs} />}
           label={i18n._(msg`Activity`)}
@@ -268,7 +269,9 @@ function WorkflowJobTemplateDetail({ template }) {
               onConfirm={deleteWorkflowJobTemplate}
               isDisabled={isLoading}
               deleteDetailsRequests={deleteDetailsRequests}
-              deleteMessage={i18n._(msg`This workflow job template is currently being used by other resources. Are you sure you want to delete it?`)}
+              deleteMessage={i18n._(
+                msg`This workflow job template is currently being used by other resources. Are you sure you want to delete it?`
+              )}
             >
               {i18n._(msg`Delete`)}
             </DeleteButton>

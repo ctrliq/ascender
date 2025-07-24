@@ -29,7 +29,9 @@ function InstanceGroupFormFields() {
         type="number"
         min="0"
         validate={minMaxValue(0, 2147483647)}
-        tooltip={i18n._(msg`Minimum number of instances that will be automatically assigned to this group when new instances come online.`)}
+        tooltip={i18n._(
+          msg`Minimum number of instances that will be automatically assigned to this group when new instances come online.`
+        )}
       />
       <FormField
         id="instance-group-policy-instance-percentage"
@@ -38,7 +40,9 @@ function InstanceGroupFormFields() {
         type="number"
         min="0"
         max="100"
-        tooltip={i18n._(msg`Minimum percentage of all instances that will be automatically assigned to this group when new instances come online.`)}
+        tooltip={i18n._(
+          msg`Minimum percentage of all instances that will be automatically assigned to this group when new instances come online.`
+        )}
         validate={minMaxValue(0, 100)}
       />
       <FormField
@@ -48,7 +52,9 @@ function InstanceGroupFormFields() {
         type="number"
         min="0"
         validate={minMaxValue(0, 2147483647)}
-        tooltip={i18n._(msg`Maximum number of jobs to run concurrently on this group. Zero means no limit will be enforced.`)}
+        tooltip={i18n._(
+          msg`Maximum number of jobs to run concurrently on this group. Zero means no limit will be enforced.`
+        )}
       />
       <FormField
         id="instance-group-max-forks"
@@ -57,7 +63,9 @@ function InstanceGroupFormFields() {
         type="number"
         min="0"
         validate={minMaxValue(0, 2147483647)}
-        tooltip={i18n._(msg`Maximum number of forks to allow across all jobs running concurrently on this group. Zero means no limit will be enforced.`)}
+        tooltip={i18n._(
+          msg`Maximum number of forks to allow across all jobs running concurrently on this group. Zero means no limit will be enforced.`
+        )}
       />
     </>
   );

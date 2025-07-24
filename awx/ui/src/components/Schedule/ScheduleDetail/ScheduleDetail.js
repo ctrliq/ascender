@@ -277,7 +277,8 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
   const showLimitDetail = ask_limit_on_launch && limit;
   const showJobTypeDetail = ask_job_type_on_launch && job_type;
   const showSCMBranchDetail = ask_scm_branch_on_launch && scm_branch;
-  const showVerbosityDetail = ask_verbosity_on_launch && VERBOSITY(i18n)[verbosity];
+  const showVerbosityDetail =
+    ask_verbosity_on_launch && VERBOSITY(i18n)[verbosity];
   const showExecutionEnvironmentDetail =
     ask_execution_environment_on_launch && execution_environment;
   const showLabelsDetail = ask_labels_on_launch && labels && labels.length > 0;
@@ -349,7 +350,10 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
           value={formatDateString(next_run, timezone)}
           dataCy="schedule-next-run"
         />
-        <Detail label={i18n._(msg`Last Run`)} value={formatDateString(dtend, timezone)} />
+        <Detail
+          label={i18n._(msg`Last Run`)}
+          value={formatDateString(dtend, timezone)}
+        />
         <Detail
           label={i18n._(msg`Local Time Zone`)}
           value={timezone}
@@ -426,7 +430,9 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
       </DetailList>
       {showPromptedFields && (
         <>
-          <PromptTitle headingLevel="h2">{i18n._(msg`Prompted Values`)}</PromptTitle>
+          <PromptTitle headingLevel="h2">
+            {i18n._(msg`Prompted Values`)}
+          </PromptTitle>
           <PromptDivider />
           <PromptDetailList>
             {ask_job_type_on_launch && (
@@ -481,9 +487,15 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
               />
             )}
             {ask_limit_on_launch && (
-              <Detail label={i18n._(msg`Limit`)} value={limit} dataCy="schedule-limit" />
+              <Detail
+                label={i18n._(msg`Limit`)}
+                value={limit}
+                dataCy="schedule-limit"
+              />
             )}
-            {ask_forks_on_launch && <Detail label={i18n._(msg`Forks`)} value={forks} />}
+            {ask_forks_on_launch && (
+              <Detail label={i18n._(msg`Forks`)} value={forks} />
+            )}
             {ask_verbosity_on_launch && (
               <Detail
                 label={i18n._(msg`Verbosity`)}
@@ -502,7 +514,10 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
               />
             )}
             {ask_job_slice_count_on_launch && (
-              <Detail label={i18n._(msg`Job Slicing`)} value={job_slice_count} />
+              <Detail
+                label={i18n._(msg`Job Slicing`)}
+                value={job_slice_count}
+              />
             )}
             {showInstanceGroupsDetail && (
               <Detail

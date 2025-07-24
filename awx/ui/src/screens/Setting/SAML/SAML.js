@@ -23,7 +23,9 @@ function SAML() {
           </Route>
           <Route key="not-found" path={`${baseURL}/*`}>
             <ContentError isNotFound>
-              <Link to={`${baseURL}/details`}>{i18n._(msg`View SAML settings`)}</Link>
+              <Link to={`${baseURL}/details`}>
+                {i18n._(msg`View SAML settings`)}
+              </Link>
             </ContentError>
           </Route>
         </Switch>

@@ -56,7 +56,9 @@ function ContainerGroupFormFields({ instanceGroup }) {
         onBlur={() => credentialHelpers.setTouched()}
         onChange={handleCredentialUpdate}
         value={credentialField.value}
-        tooltip={i18n._(msg`Credential to authenticate with Kubernetes or OpenShift. Must be of type "Kubernetes/OpenShift API Bearer Token". If left blank, the underlying Pod's service account will be used.`)}
+        tooltip={i18n._(
+          msg`Credential to authenticate with Kubernetes or OpenShift. Must be of type "Kubernetes/OpenShift API Bearer Token". If left blank, the underlying Pod's service account will be used.`
+        )}
         autoPopulate={!instanceGroup?.id}
       />
       <FormField
@@ -66,7 +68,9 @@ function ContainerGroupFormFields({ instanceGroup }) {
         type="number"
         min="0"
         validate={minMaxValue(0, 2147483647)}
-        tooltip={i18n._(msg`Maximum number of jobs to run concurrently on this group.\n          Zero means no limit will be enforced.`)}
+        tooltip={i18n._(
+          msg`Maximum number of jobs to run concurrently on this group.\n          Zero means no limit will be enforced.`
+        )}
       />
       <FormField
         id="instance-group-max-forks"
@@ -75,10 +79,15 @@ function ContainerGroupFormFields({ instanceGroup }) {
         type="number"
         min="0"
         validate={minMaxValue(0, 2147483647)}
-        tooltip={i18n._(msg`Maximum number of forks to allow across all jobs running concurrently on this group.\n          Zero means no limit will be enforced.`)}
+        tooltip={i18n._(
+          msg`Maximum number of forks to allow across all jobs running concurrently on this group.\n          Zero means no limit will be enforced.`
+        )}
       />
 
-      <FormGroup fieldId="container-groups-option-checkbox" label={i18n._(msg`Options`)}>
+      <FormGroup
+        fieldId="container-groups-option-checkbox"
+        label={i18n._(msg`Options`)}
+      >
         <FormCheckboxLayout>
           <CheckboxField
             name="override"
@@ -93,7 +102,9 @@ function ContainerGroupFormFields({ instanceGroup }) {
         <SubFormLayout>
           <FormFullWidthLayout>
             <VariablesField
-              tooltip={i18n._(msg`Field for passing a custom Kubernetes or OpenShift Pod specification.`)}
+              tooltip={i18n._(
+                msg`Field for passing a custom Kubernetes or OpenShift Pod specification.`
+              )}
               id="custom-pod-spec"
               name="pod_spec_override"
               label={i18n._(msg`Custom pod spec`)}

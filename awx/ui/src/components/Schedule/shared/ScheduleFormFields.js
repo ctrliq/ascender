@@ -42,10 +42,13 @@ export default function ScheduleFormFields({
   const warnLinkedTZ = (event, selectedValue) => {
     if (zoneLinks[selectedValue]) {
       setTimezoneMessage(
-        i18n._(msg`Warning: {selectedValue} is a link to {link} and will be saved as that.`, {
-          selectedValue,
-          link: zoneLinks[selectedValue],
-        })
+        i18n._(
+          msg`Warning: {selectedValue} is a link to {link} and will be saved as that.`,
+          {
+            selectedValue,
+            link: zoneLinks[selectedValue],
+          }
+        )
       );
     } else {
       setTimezoneMessage('');
@@ -122,11 +125,15 @@ export default function ScheduleFormFields({
           onChange={updateFrequency(frequencyHelper.setValue)}
           value={frequency.value}
           placeholderText={
-            frequency.value.length ? i18n._(msg`Select frequency`) : i18n._(msg`None (run once)`)
+            frequency.value.length
+              ? i18n._(msg`Select frequency`)
+              : i18n._(msg`None (run once)`)
           }
           onBlur={frequencyHelper.setTouched}
         >
-          <SelectClearOption value="none">{i18n._(msg`None (run once)`)}</SelectClearOption>
+          <SelectClearOption value="none">
+            {i18n._(msg`None (run once)`)}
+          </SelectClearOption>
           <SelectOption value="minute">{i18n._(msg`Minute`)}</SelectOption>
           <SelectOption value="hour">{i18n._(msg`Hour`)}</SelectOption>
           <SelectOption value="day">{i18n._(msg`Day`)}</SelectOption>
@@ -162,7 +169,9 @@ export default function ScheduleFormFields({
             size="md"
             headingLevel="h4"
             css="margin-top: var(--pf-c-card--child--PaddingRight)"
-          >{i18n._(msg`Exceptions`)}</Title>
+          >
+            {i18n._(msg`Exceptions`)}
+          </Title>
           <FormColumnLayout stacked>
             <FormGroup
               name="exceptions"
@@ -186,8 +195,12 @@ export default function ScheduleFormFields({
                 }
                 onBlur={exceptionFrequencyHelper.setTouched}
               >
-                <SelectClearOption value="none">{i18n._(msg`None`)}</SelectClearOption>
-                <SelectOption value="minute">{i18n._(msg`Minute`)}</SelectOption>
+                <SelectClearOption value="none">
+                  {i18n._(msg`None`)}
+                </SelectClearOption>
+                <SelectOption value="minute">
+                  {i18n._(msg`Minute`)}
+                </SelectOption>
                 <SelectOption value="hour">{i18n._(msg`Hour`)}</SelectOption>
                 <SelectOption value="day">{i18n._(msg`Day`)}</SelectOption>
                 <SelectOption value="week">{i18n._(msg`Week`)}</SelectOption>

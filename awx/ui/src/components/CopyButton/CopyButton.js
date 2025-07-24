@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { msg } from "@lingui/macro";
-import { useLingui } from "@lingui/react";
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import PropTypes from 'prop-types';
 import { Button } from '@patternfly/react-core';
 import { CopyIcon } from '@patternfly/react-icons';

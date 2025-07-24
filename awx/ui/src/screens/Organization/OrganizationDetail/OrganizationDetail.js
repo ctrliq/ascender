@@ -122,7 +122,9 @@ function OrganizationDetail({ organization }) {
           <Detail
             fullWidth
             label={i18n._(msg`Instance Groups`)}
-            helpText={i18n._(msg`The Instance Groups for this Organization to run on.`)}
+            helpText={i18n._(
+              msg`The Instance Groups for this Organization to run on.`
+            )}
             value={<InstanceGroupLabels labels={instanceGroups} isLinkable />}
             isEmpty={instanceGroups.length === 0}
           />
@@ -173,7 +175,9 @@ function OrganizationDetail({ organization }) {
               onConfirm={deleteOrganization}
               isDisabled={isLoading}
               deleteDetailsRequests={deleteDetailsRequests}
-              deleteMessage={i18n._(msg`This organization is currently being by other resources. Are you sure you want to delete it?`)}
+              deleteMessage={i18n._(
+                msg`This organization is currently being by other resources. Are you sure you want to delete it?`
+              )}
             >
               {i18n._(msg`Delete`)}
             </DeleteButton>

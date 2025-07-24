@@ -139,7 +139,9 @@ function InventoryHostList() {
           <HeaderRow qsConfig={QS_CONFIG}>
             <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
             <HeaderCell>{i18n._(msg`Activity`)}</HeaderCell>
-            <HeaderCell sortKey="description">{i18n._(msg`Description`)}</HeaderCell>
+            <HeaderCell sortKey="description">
+              {i18n._(msg`Description`)}
+            </HeaderCell>
             <HeaderCell>{i18n._(msg`Related Groups`)}</HeaderCell>
             <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
           </HeaderRow>

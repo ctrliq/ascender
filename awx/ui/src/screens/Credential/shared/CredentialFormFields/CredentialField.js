@@ -50,7 +50,11 @@ function CredentialInput({
         !passwordPromptsField.value && (
           <Tooltip
             id={`credential-${fieldOptions.id}-replace-tooltip`}
-            content={meta.value !== meta.initialValue ? i18n._(msg`Revert`) : i18n._(msg`Replace`)}
+            content={
+              meta.value !== meta.initialValue
+                ? i18n._(msg`Revert`)
+                : i18n._(msg`Replace`)
+            }
           >
             <Button
               id={`credential-${fieldOptions.id}-replace-button`}
@@ -91,7 +95,9 @@ function CredentialInput({
             id={`credential-${fieldOptions.id}`}
             type="text"
             filename={fileName}
-            filenamePlaceholder={i18n._(msg`Drag a file here or browse to upload`)}
+            filenamePlaceholder={i18n._(
+              msg`Drag a file here or browse to upload`
+            )}
             browseButtonText={i18n._(msg`Browse…`)}
             clearButtonText={i18n._(msg`Clear`)}
             onChange={handleFileChange}
@@ -178,7 +184,9 @@ function CredentialField({ credentialType, fieldOptions }) {
   const validateField = () => {
     if (isRequired && !formikValues?.passwordPrompts[fieldOptions.id]) {
       const validationMsg = fieldOptions.ask_at_runtime
-        ? i18n._(msg`Provide a value for this field or select the Prompt on launch option.`)
+        ? i18n._(
+            msg`Provide a value for this field or select the Prompt on launch option.`
+          )
         : null;
       return required(validationMsg);
     }

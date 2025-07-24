@@ -63,7 +63,9 @@ function Settings() {
     '/settings/github/enterprise': i18n._(msg`GitHub Enterprise`),
     '/settings/github/enterprise/details': i18n._(msg`Details`),
     '/settings/github/enterprise/edit': i18n._(msg`Edit Details`),
-    '/settings/github/enterprise_organization': i18n._(msg`GitHub Enterprise Organization`),
+    '/settings/github/enterprise_organization': i18n._(
+      msg`GitHub Enterprise Organization`
+    ),
     '/settings/github/enterprise_organization/details': i18n._(msg`Details`),
     '/settings/github/enterprise_organization/edit': i18n._(msg`Edit Details`),
     '/settings/github/enterprise_team': i18n._(msg`GitHub Enterprise Team`),
@@ -100,7 +102,9 @@ function Settings() {
     '/settings/logging': i18n._(msg`Logging`),
     '/settings/logging/details': i18n._(msg`Details`),
     '/settings/logging/edit': i18n._(msg`Edit Details`),
-    '/settings/miscellaneous_authentication': i18n._(msg`Miscellaneous Authentication`),
+    '/settings/miscellaneous_authentication': i18n._(
+      msg`Miscellaneous Authentication`
+    ),
     '/settings/miscellaneous_authentication/details': i18n._(msg`Details`),
     '/settings/miscellaneous_authentication/edit': i18n._(msg`Edit Details`),
     '/settings/miscellaneous_system': i18n._(msg`Miscellaneous System`),

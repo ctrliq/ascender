@@ -99,7 +99,9 @@ function InventoryHost({ setBreadcrumb, inventory }) {
           {contentError.response && contentError.response.status === 404 && (
             <span>
               {i18n._(msg`Host not found.`)}{' '}
-              <Link to={hostListUrl}>{i18n._(msg`View all Inventory Hosts.`)}</Link>
+              <Link to={hostListUrl}>
+                {i18n._(msg`View all Inventory Hosts.`)}
+              </Link>
             </span>
           )}
         </ContentError>

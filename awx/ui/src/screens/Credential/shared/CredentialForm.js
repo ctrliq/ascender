@@ -184,7 +184,11 @@ function CredentialFormFields({ initialTypeId, credentialTypes }) {
         isDisabled={initialValues.isOrgLookupDisabled}
         validate={
           isGalaxyCredential
-            ? required(i18n._(msg`Galaxy credentials must be owned by an Organization.`))
+            ? required(
+                i18n._(
+                  msg`Galaxy credentials must be owned by an Organization.`
+                )
+              )
             : undefined
         }
       />
@@ -199,7 +203,9 @@ function CredentialFormFields({ initialTypeId, credentialTypes }) {
       >
         {isCredentialTypeDisabled ? (
           <Tooltip
-            content={i18n._(msg`You cannot change the credential type of a credential, as it may break the functionality of the resources using it.`)}
+            content={i18n._(
+              msg`You cannot change the credential type of a credential, as it may break the functionality of the resources using it.`
+            )}
           >
             {credentialTypeSelect}
           </Tooltip>

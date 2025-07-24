@@ -53,7 +53,9 @@ function OrganizationListItem({
           <span>
             <Tooltip
               className="missing-execution-environment"
-              content={i18n._(msg`Custom virtual environment ${organization.custom_virtualenv} must be replaced by an execution environment.`)}
+              content={i18n._(
+                msg`Custom virtual environment ${organization.custom_virtualenv} must be replaced by an execution environment.`
+              )}
               position="right"
             >
               <ExclamationTriangleIcon />

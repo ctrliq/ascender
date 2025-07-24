@@ -1,7 +1,7 @@
 import React from 'react';
 import { useFormikContext } from 'formik';
-import { msg } from "@lingui/macro";
-import { useLingui } from "@lingui/react";
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import StepName from '../LaunchPrompt/steps/StepName';
 import CredentialPasswordsStep from '../LaunchPrompt/steps/CredentialPasswordsStep';
 

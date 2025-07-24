@@ -54,11 +54,7 @@ function ToolbarAddButton({
   }
   return (
     <Tooltip content={defaultLabel || i18n._(msg`Add`)} position="top">
-      <Button
-        ouiaId={ouiaId}
-        onClick={onClick}
-        isDisabled={isDisabled}
-      >
+      <Button ouiaId={ouiaId} onClick={onClick} isDisabled={isDisabled}>
         {defaultLabel || i18n._(msg`Add`)}
         {showToggleIndicator && <CaretDownIcon />}
       </Button>

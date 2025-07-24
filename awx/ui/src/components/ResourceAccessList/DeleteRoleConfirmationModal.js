@@ -41,14 +41,20 @@ function DeleteRoleConfirmationModal({ role, username, onCancel, onConfirm }) {
     >
       {sourceOfRole() === 'Team' ? (
         <>
-          {i18n._(msg`Are you sure you want to remove ${role.name} access from ${role.team_name}?  Doing so affects all members of the team.`)}
+          {i18n._(
+            msg`Are you sure you want to remove ${role.name} access from ${role.team_name}?  Doing so affects all members of the team.`
+          )}
           <br />
           <br />
-          {i18n._(msg`If you only want to remove access for this particular user, please remove them from the team.`)}
+          {i18n._(
+            msg`If you only want to remove access for this particular user, please remove them from the team.`
+          )}
         </>
       ) : (
         <>
-          {i18n._(msg`Are you sure you want to remove ${role.name} access from ${username}?`)}
+          {i18n._(
+            msg`Are you sure you want to remove ${role.name} access from ${username}?`
+          )}
         </>
       )}
     </AlertModal>

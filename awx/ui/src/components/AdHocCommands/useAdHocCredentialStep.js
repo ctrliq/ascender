@@ -1,7 +1,7 @@
 import React from 'react';
 import { useField } from 'formik';
-import { msg } from "@lingui/macro";
-import { useLingui } from "@lingui/react";
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import StepName from '../LaunchPrompt/steps/StepName';
 import AdHocCredentialStep from './AdHocCredentialStep';
 

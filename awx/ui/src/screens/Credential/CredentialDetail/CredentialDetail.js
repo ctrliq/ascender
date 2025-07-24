@@ -282,7 +282,9 @@ function CredentialDetail({ credential }) {
       </DetailList>
       {Object.keys(inputSources).length > 0 && (
         <PluginFieldText>
-          {i18n._(msg`* This field will be retrieved from an external secret management system using the specified credential.`)}
+          {i18n._(
+            msg`* This field will be retrieved from an external secret management system using the specified credential.`
+          )}
         </PluginFieldText>
       )}
       <CardActionsRow>
@@ -303,7 +305,9 @@ function CredentialDetail({ credential }) {
             onConfirm={deleteCredential}
             isLoading={isLoading}
             deleteDetailsRequests={deleteDetailsRequests}
-            deleteMessage={i18n._(msg`This credential is currently being used by other resources. Are you sure you want to delete it?`)}
+            deleteMessage={i18n._(
+              msg`This credential is currently being used by other resources. Are you sure you want to delete it?`
+            )}
           >
             {i18n._(msg`Delete`)}
           </DeleteButton>

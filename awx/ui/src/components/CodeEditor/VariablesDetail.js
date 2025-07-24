@@ -2,8 +2,8 @@ import 'styled-components/macro';
 import React, { useState } from 'react';
 import { node, number, oneOfType, shape, string, arrayOf } from 'prop-types';
 
-import { msg } from "@lingui/macro";
-import { useLingui } from "@lingui/react";
+import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import {
   Split,
   SplitItem,

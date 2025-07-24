@@ -18,10 +18,11 @@ function Teams() {
     '/teams/add': i18n._(msg`Create New Team`),
   });
 
-  const buildBreadcrumbConfig = useCallback((team) => {
-    if (!team) {
-      return;
-    }
+  const buildBreadcrumbConfig = useCallback(
+    (team) => {
+      if (!team) {
+        return;
+      }
 
       setBreadcrumbConfig({
         '/teams': i18n._(msg`Teams`),

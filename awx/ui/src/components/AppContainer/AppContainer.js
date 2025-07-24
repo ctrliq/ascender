@@ -12,7 +12,7 @@ import {
   PageSidebar,
 } from '@patternfly/react-core';
 import { msg, Plural } from '@lingui/macro';
-import { useLingui } from "@lingui/react";
+import { useLingui } from '@lingui/react';
 
 import styled from 'styled-components';
 
@@ -57,14 +57,20 @@ function AppContainer({ navRouteConfig = [], children }) {
   useEffect(() => {
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    if (config && typeof config.uiConfig?.ASCENDER_DISABLE_GRADIENT !== 'undefined' && !config.uiConfig.ASCENDER_DISABLE_GRADIENT) {
+    if (
+      config &&
+      typeof config.uiConfig?.ASCENDER_DISABLE_GRADIENT !== 'undefined' &&
+      !config.uiConfig.ASCENDER_DISABLE_GRADIENT
+    ) {
       link.href = '/static/css/ascender_gradient.css';
     }
     document.head.appendChild(link);
   }, [config]);
 
   const brandName = config?.license_info?.product_name;
-  const alt = brandName ? i18n._(msg`${brandName} logo`) : i18n._(msg`brand logo`);
+  const alt = brandName
+    ? i18n._(msg`${brandName} logo`)
+    : i18n._(msg`brand logo`);
   const customLogoMenu = config?.uiConfig?.CUSTOM_LOGO_MENU;
 
   const header = (

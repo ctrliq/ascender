@@ -103,7 +103,8 @@ function JobCancelButton({
             </Button>,
           ]}
         >
-          {cancelationMessage ?? i18n._(msg`Are you sure you want to cancel this job?`)}
+          {cancelationMessage ??
+            i18n._(msg`Are you sure you want to cancel this job?`)}
         </AlertModal>
       )}
       {error && !isAlreadyCancelled && (

@@ -225,11 +225,17 @@ function InstanceList() {
             headerRow={
               <HeaderRow qsConfig={QS_CONFIG} isExpandable>
                 <HeaderCell
-                  tooltip={i18n._(msg`Health checks can only be run on execution nodes.`)}
+                  tooltip={i18n._(
+                    msg`Health checks can only be run on execution nodes.`
+                  )}
                   sortKey="hostname"
-                >{i18n._(msg`Name`)}</HeaderCell>
+                >
+                  {i18n._(msg`Name`)}
+                </HeaderCell>
                 <HeaderCell sortKey="errors">{i18n._(msg`Status`)}</HeaderCell>
-                <HeaderCell sortKey="node_type">{i18n._(msg`Node Type`)}</HeaderCell>
+                <HeaderCell sortKey="node_type">
+                  {i18n._(msg`Node Type`)}
+                </HeaderCell>
                 <HeaderCell>{i18n._(msg`Capacity Adjustment`)}</HeaderCell>
                 <HeaderCell>{i18n._(msg`Used Capacity`)}</HeaderCell>
                 <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>

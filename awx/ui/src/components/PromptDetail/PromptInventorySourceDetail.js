@@ -39,12 +39,16 @@ function PromptInventorySourceDetail({ resource }) {
       <TextList component={TextListVariants.ul}>
         {overwrite && (
           <TextListItem component={TextListItemVariants.li}>
-            {i18n._(msg`Overwrite local groups and hosts from remote inventory source`)}
+            {i18n._(
+              msg`Overwrite local groups and hosts from remote inventory source`
+            )}
           </TextListItem>
         )}
         {overwrite_vars && (
           <TextListItem component={TextListItemVariants.li}>
-            {i18n._(msg`Overwrite local variables from remote inventory source`)}
+            {i18n._(
+              msg`Overwrite local variables from remote inventory source`
+            )}
           </TextListItem>
         )}
         {update_on_launch && (
@@ -98,7 +102,10 @@ function PromptInventorySourceDetail({ resource }) {
         executionEnvironment={summary_fields?.execution_environment}
       />
       <Detail label={i18n._(msg`Inventory File`)} value={source_path} />
-      <Detail label={i18n._(msg`Verbosity`)} value={VERBOSITY(i18n)[verbosity]} />
+      <Detail
+        label={i18n._(msg`Verbosity`)}
+        value={VERBOSITY(i18n)[verbosity]}
+      />
       <Detail
         label={i18n._(msg`Cache Timeout`)}
         value={`${update_cache_timeout} ${i18n._(msg`Seconds`)}`}
@@ -169,7 +176,11 @@ function PromptInventorySourceDetail({ resource }) {
         />
       )}
       {optionsList && (
-        <Detail fullWidth label={i18n._(msg`Enabled Options`)} value={optionsList} />
+        <Detail
+          fullWidth
+          label={i18n._(msg`Enabled Options`)}
+          value={optionsList}
+        />
       )}
       {source_vars && (
         <VariablesDetail

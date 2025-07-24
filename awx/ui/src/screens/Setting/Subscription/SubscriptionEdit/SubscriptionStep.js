@@ -79,7 +79,11 @@ function SubscriptionStep() {
           <Divider />
         </>
       )}
-      <p>{i18n._(msg`Select your Ansible Automation Platform subscription to use.`)}</p>
+      <p>
+        {i18n._(
+          msg`Select your Ansible Automation Platform subscription to use.`
+        )}
+      </p>
       <ToggleGroup>
         <ToggleGroupItem
           text={i18n._(msg`Subscription manifest`)}
@@ -117,7 +121,9 @@ function SubscriptionStep() {
           <FileUploadField
             fieldId="subscription-manifest"
             validated={manifestMeta.error ? 'error' : 'default'}
-            helperTextInvalid={i18n._(msg`Invalid file format. Please upload a valid Red Hat Subscription Manifest.`)}
+            helperTextInvalid={i18n._(
+              msg`Invalid file format. Please upload a valid Red Hat Subscription Manifest.`
+            )}
             label={i18n._(msg`Red Hat subscription manifest`)}
             helperText={i18n._(msg`Upload a .zip file`)}
             labelIcon={

@@ -81,7 +81,9 @@ function OrganizationFormFields({
       <InstanceGroupsLookup
         value={instanceGroups}
         onChange={setInstanceGroups}
-        tooltip={i18n._(msg`Select the Instance Groups for this Organization to run on.`)}
+        tooltip={i18n._(
+          msg`Select the Instance Groups for this Organization to run on.`
+        )}
       />
       <ExecutionEnvironmentLookup
         helperTextInvalid={executionEnvironmentMeta.error}
@@ -91,7 +93,9 @@ function OrganizationFormFields({
         onBlur={() => executionEnvironmentHelpers.setTouched()}
         value={executionEnvironmentField.value}
         onChange={(value) => executionEnvironmentHelpers.setValue(value)}
-        popoverContent={i18n._(msg`The execution environment that will be used for jobs inside of this organization. This will be used a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level.`)}
+        popoverContent={i18n._(
+          msg`The execution environment that will be used for jobs inside of this organization. This will be used a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level.`
+        )}
         globallyAvailable
         organizationId={organizationId}
         isDefaultEnvironment

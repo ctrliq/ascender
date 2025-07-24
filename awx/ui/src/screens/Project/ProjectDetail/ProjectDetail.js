@@ -174,7 +174,11 @@ function ProjectDetail({ project }) {
             )
           }
         />
-        <Detail label={i18n._(`Name`)} value={name} dataCy="project-detail-name" />
+        <Detail
+          label={i18n._(`Name`)}
+          value={name}
+          dataCy="project-detail-name"
+        />
         <Detail label={i18n._(`Description`)} value={description} />
         {summary_fields.organization && (
           <Detail
@@ -190,7 +194,9 @@ function ProjectDetail({ project }) {
         )}
         <Detail
           label={i18n._(`Source Control Type`)}
-          value={scm_type === '' ? i18n._(`Manual`) : toTitleCase(project.scm_type)}
+          value={
+            scm_type === '' ? i18n._(`Manual`) : toTitleCase(project.scm_type)
+          }
         />
         <Detail
           label={i18n._(`Source Control Revision`)}
@@ -209,7 +215,9 @@ function ProjectDetail({ project }) {
               </ClipboardCopy>
             ) : (
               <Label
-                aria-label={i18n._(`The project must be synced before a revision is available.`)}
+                aria-label={i18n._(
+                  `The project must be synced before a revision is available.`
+                )}
               >
                 {i18n._(`Sync for revision`)}
               </Label>
@@ -300,7 +308,11 @@ function ProjectDetail({ project }) {
           user={summary_fields.modified_by}
         />
         {optionsList && (
-          <Detail fullWidth label={i18n._(`Enabled Options`)} value={optionsList} />
+          <Detail
+            fullWidth
+            label={i18n._(`Enabled Options`)}
+            value={optionsList}
+          />
         )}
       </DetailList>
       <CardActionsRow>
@@ -336,7 +348,9 @@ function ProjectDetail({ project }) {
             onConfirm={deleteProject}
             isDisabled={isLoading || job?.status === 'running'}
             deleteDetailsRequests={deleteDetailsRequests}
-            deleteMessage={i18n._(`This project is currently being used by other resources. Are you sure you want to delete it?`)}
+            deleteMessage={i18n._(
+              `This project is currently being used by other resources. Are you sure you want to delete it?`
+            )}
           >
             {i18n._(`Delete`)}
           </DeleteButton>

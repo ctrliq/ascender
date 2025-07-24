@@ -86,7 +86,9 @@ function ConstructedInventoryFormFields({ inventory = {}, options }) {
         onChange={(value) => {
           instanceGroupsHelpers.setValue(value);
         }}
-        tooltip={i18n._(msg`Select the Instance Groups for this Inventory to run on.`)}
+        tooltip={i18n._(
+          msg`Select the Instance Groups for this Inventory to run on.`
+        )}
       />
       <FormGroup
         isRequired
@@ -96,7 +98,9 @@ function ConstructedInventoryFormFields({ inventory = {}, options }) {
         label={i18n._(msg`Input Inventories`)}
         labelIcon={
           <Popover
-            content={i18n._(msg`Select Input Inventories for the constructed inventory plugin.`)}
+            content={i18n._(
+              msg`Select Input Inventories for the constructed inventory plugin.`
+            )}
           />
         }
         validated={

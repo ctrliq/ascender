@@ -23,31 +23,47 @@ export default function FrequencyDetails({
     const { interval } = options;
     switch (type) {
       case 'minute':
-        return i18n._(msg`{interval, plural, one {# minute} other {# minutes}}`, { interval });
+        return i18n._(
+          msg`{interval, plural, one {# minute} other {# minutes}}`,
+          { interval }
+        );
       case 'hour':
-        return i18n._(msg`{interval, plural, one {# hour} other {# hours}}`, { interval });
+        return i18n._(msg`{interval, plural, one {# hour} other {# hours}}`, {
+          interval,
+        });
       case 'day':
-        return i18n._(msg`{interval, plural, one {# day} other {# days}}`, { interval });
+        return i18n._(msg`{interval, plural, one {# day} other {# days}}`, {
+          interval,
+        });
       case 'week':
-        return i18n._(msg`{interval, plural, one {# week} other {# weeks}}`, { interval });
+        return i18n._(msg`{interval, plural, one {# week} other {# weeks}}`, {
+          interval,
+        });
       case 'month':
-        return i18n._(msg`{interval, plural, one {# month} other {# months}}`, { interval });
+        return i18n._(msg`{interval, plural, one {# month} other {# months}}`, {
+          interval,
+        });
       case 'year':
-        return i18n._(msg`{interval, plural, one {# year} other {# years}}`, { interval });
+        return i18n._(msg`{interval, plural, one {# year} other {# years}}`, {
+          interval,
+        });
       default:
         throw new Error(i18n._(msg`Frequency did not match an expected value`));
     }
   };
 
-  const weekdays = React.useMemo(() => ({
-    0: i18n._(msg`Monday`),
-    1: i18n._(msg`Tuesday`),
-    2: i18n._(msg`Wednesday`),
-    3: i18n._(msg`Thursday`),
-    4: i18n._(msg`Friday`),
-    5: i18n._(msg`Saturday`),
-    6: i18n._(msg`Sunday`),
-  }), [i18n]);
+  const weekdays = React.useMemo(
+    () => ({
+      0: i18n._(msg`Monday`),
+      1: i18n._(msg`Tuesday`),
+      2: i18n._(msg`Wednesday`),
+      3: i18n._(msg`Thursday`),
+      4: i18n._(msg`Friday`),
+      5: i18n._(msg`Saturday`),
+      6: i18n._(msg`Sunday`),
+    }),
+    [i18n]
+  );
 
   const prefix = isException ? `exception-${type}` : `frequency-${type}`;
 
@@ -70,7 +86,12 @@ export default function FrequencyDetails({
             dataCy={`${prefix}-days-of-week`}
           />
         ) : null}
-        <RunOnDetail type={type} options={options} prefix={prefix} i18n={i18n} />
+        <RunOnDetail
+          type={type}
+          options={options}
+          prefix={prefix}
+          i18n={i18n}
+        />
         <Detail
           label={i18n._(msg`End`)}
           value={getEndValue(type, options, timezone, i18n)}
@@ -88,18 +109,21 @@ function sortWeekday(a, b) {
 }
 
 function RunOnDetail({ type, options, prefix, i18n }) {
-  const weekdays = React.useMemo(() => ({
-    sunday: i18n._(msg`Sunday`),
-    monday: i18n._(msg`Monday`),
-    tuesday: i18n._(msg`Tuesday`),
-    wednesday: i18n._(msg`Wednesday`),
-    thursday: i18n._(msg`Thursday`),
-    friday: i18n._(msg`Friday`),
-    saturday: i18n._(msg`Saturday`),
-    day: i18n._(msg`day`),
-    weekday: i18n._(msg`weekday`),
-    weekendDay: i18n._(msg`weekend day`),
-  }), [i18n]);
+  const weekdays = React.useMemo(
+    () => ({
+      sunday: i18n._(msg`Sunday`),
+      monday: i18n._(msg`Monday`),
+      tuesday: i18n._(msg`Tuesday`),
+      wednesday: i18n._(msg`Wednesday`),
+      thursday: i18n._(msg`Thursday`),
+      friday: i18n._(msg`Friday`),
+      saturday: i18n._(msg`Saturday`),
+      day: i18n._(msg`day`),
+      weekday: i18n._(msg`weekday`),
+      weekendDay: i18n._(msg`weekend day`),
+    }),
+    [i18n]
+  );
 
   if (type === 'month') {
     if (options.runOn === 'day') {
@@ -189,7 +213,10 @@ function getEndValue(type, options, timezone, i18n) {
   }
   if (options.end === 'after') {
     const numOccurrences = options.occurrences;
-    return i18n._(msg`After {numOccurrences, plural, one {# occurrence} other {# occurrences}}`, { numOccurrences });
+    return i18n._(
+      msg`After {numOccurrences, plural, one {# occurrence} other {# occurrences}}`,
+      { numOccurrences }
+    );
   }
   const date = DateTime.fromFormat(
     `${options.endDate} ${options.endTime}`,

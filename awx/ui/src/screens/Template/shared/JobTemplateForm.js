@@ -174,7 +174,9 @@ function JobTemplateForm({
 
   const handleInventoryValidation = (inventory) => {
     if (!inventory && !askInventoryOnLaunchField.value) {
-      return i18n._(msg`Please select an Inventory or check the Prompt on Launch option`);
+      return i18n._(
+        msg`Please select an Inventory or check the Prompt on Launch option`
+      );
     }
     return undefined;
   };
@@ -323,7 +325,9 @@ function JobTemplateForm({
           value={executionEnvironmentField.value}
           onChange={handleExecutionEnvironmentUpdate}
           popoverContent={helpText.executionEnvironmentForm}
-          tooltip={i18n._(msg`Select a project before editing the execution environment.`)}
+          tooltip={i18n._(
+            msg`Select a project before editing the execution environment.`
+          )}
           globallyAvailable
           isDisabled={!projectField.value?.id}
           projectId={projectField.value?.id}
@@ -753,8 +757,7 @@ const FormikApp = withFormik({
         ? `${origin}${template.related.webhook_receiver}`
         : 'A NEW WEBHOOK URL WILL BE GENERATED ON SAVE.',
       webhook_key:
-        template.webhook_key ||
-        'A NEW WEBHOOK KEY WILL BE GENERATED ON SAVE.',
+        template.webhook_key || 'A NEW WEBHOOK KEY WILL BE GENERATED ON SAVE.',
       webhook_credential: template?.summary_fields?.webhook_credential || null,
       execution_environment:
         template.summary_fields?.execution_environment || null,

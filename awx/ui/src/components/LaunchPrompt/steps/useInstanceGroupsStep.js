@@ -29,7 +29,11 @@ function getStep(launchConfig) {
   }
   return {
     id: STEP_ID,
-    name: <StepName id="instance-groups-step">{i18n._(msg`Instance Groups`)}</StepName>,
+    name: (
+      <StepName id="instance-groups-step">
+        {i18n._(msg`Instance Groups`)}
+      </StepName>
+    ),
     component: <InstanceGroupsStep />,
     enableNext: true,
   };

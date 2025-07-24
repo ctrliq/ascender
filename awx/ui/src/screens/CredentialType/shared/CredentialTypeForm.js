@@ -34,7 +34,9 @@ function CredentialTypeFormFields() {
       />
       <FormFullWidthLayout>
         <VariablesField
-          tooltip={i18n._(msg`Enter inputs using either JSON or YAML syntax. Refer to the Ansible Controller documentation for example syntax.`)}
+          tooltip={i18n._(
+            msg`Enter inputs using either JSON or YAML syntax. Refer to the Ansible Controller documentation for example syntax.`
+          )}
           id="credential-type-inputs-configuration"
           name="inputs"
           label={i18n._(msg`Input configuration`)}
@@ -42,7 +44,9 @@ function CredentialTypeFormFields() {
       </FormFullWidthLayout>
       <FormFullWidthLayout>
         <VariablesField
-          tooltip={i18n._(msg`Enter injectors using either JSON or YAML syntax. Refer to the Ansible Controller documentation for example syntax.`)}
+          tooltip={i18n._(
+            msg`Enter injectors using either JSON or YAML syntax. Refer to the Ansible Controller documentation for example syntax.`
+          )}
           id="credential-type-injectors-configuration"
           name="injectors"
           label={i18n._(msg`Injector configuration`)}

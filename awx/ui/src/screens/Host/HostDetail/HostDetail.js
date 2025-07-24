@@ -85,7 +85,11 @@ function HostDetail({ host }) {
             </Link>
           }
         />
-        <UserDateDetail date={created} label={i18n._(msg`Created`)} user={created_by} />
+        <UserDateDetail
+          date={created}
+          label={i18n._(msg`Created`)}
+          user={created_by}
+        />
         <UserDateDetail
           date={modified}
           label={i18n._(msg`Last Modified`)}

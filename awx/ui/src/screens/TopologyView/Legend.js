@@ -76,7 +76,9 @@ function Legend() {
           <DescriptionListTerm>
             <Button isSmall>C</Button>
           </DescriptionListTerm>
-          <DescriptionListDescription>{i18n._(msg`Control node`)}</DescriptionListDescription>
+          <DescriptionListDescription>
+            {i18n._(msg`Control node`)}
+          </DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
           <DescriptionListTerm>
@@ -84,7 +86,9 @@ function Legend() {
               Ex
             </Button>
           </DescriptionListTerm>
-          <DescriptionListDescription>{i18n._(msg`Execution node`)}</DescriptionListDescription>
+          <DescriptionListDescription>
+            {i18n._(msg`Execution node`)}
+          </DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
           <DescriptionListTerm>
@@ -92,7 +96,9 @@ function Legend() {
               Hy
             </Button>
           </DescriptionListTerm>
-          <DescriptionListDescription>{i18n._(msg`Hybrid node`)}</DescriptionListDescription>
+          <DescriptionListDescription>
+            {i18n._(msg`Hybrid node`)}
+          </DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
           <DescriptionListTerm>
@@ -100,11 +106,15 @@ function Legend() {
               h
             </Button>
           </DescriptionListTerm>
-          <DescriptionListDescription>{i18n._(msg`Hop node`)}</DescriptionListDescription>
+          <DescriptionListDescription>
+            {i18n._(msg`Hop node`)}
+          </DescriptionListDescription>
         </DescriptionListGroup>
       </DescriptionList>
       <TextContent>
-        <Text component={TextVariants.small}>{i18n._(msg`Node state types`)}</Text>
+        <Text component={TextVariants.small}>
+          {i18n._(msg`Node state types`)}
+        </Text>
       </TextContent>
       <DescriptionList isHorizontal isFluid>
         <DescriptionListGroup>
@@ -119,7 +129,9 @@ function Legend() {
               style={{ backgroundColor: '#3E8635' }}
             />
           </DescriptionListTerm>
-          <DescriptionListDescription>{i18n._(msg`Ready`)}</DescriptionListDescription>
+          <DescriptionListDescription>
+            {i18n._(msg`Ready`)}
+          </DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
           <DescriptionListTerm>
@@ -133,7 +145,9 @@ function Legend() {
               style={{ backgroundColor: '#0066CC' }}
             />
           </DescriptionListTerm>
-          <DescriptionListDescription>{i18n._(msg`Installed`)}</DescriptionListDescription>
+          <DescriptionListDescription>
+            {i18n._(msg`Installed`)}
+          </DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
           <DescriptionListTerm>
@@ -147,7 +161,9 @@ function Legend() {
               style={{ backgroundColor: '#6A6E73' }}
             />
           </DescriptionListTerm>
-          <DescriptionListDescription>{i18n._(msg`Provisioning`)}</DescriptionListDescription>
+          <DescriptionListDescription>
+            {i18n._(msg`Provisioning`)}
+          </DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
           <DescriptionListTerm>
@@ -161,7 +177,9 @@ function Legend() {
               style={{ backgroundColor: '#6A6E73' }}
             />
           </DescriptionListTerm>
-          <DescriptionListDescription>{i18n._(msg`Deprovisioning`)}</DescriptionListDescription>
+          <DescriptionListDescription>
+            {i18n._(msg`Deprovisioning`)}
+          </DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
           <DescriptionListTerm>
@@ -175,7 +193,9 @@ function Legend() {
               style={{ backgroundColor: '#C9190B' }}
             />
           </DescriptionListTerm>
-          <DescriptionListDescription>{i18n._(msg`Error`)}</DescriptionListDescription>
+          <DescriptionListDescription>
+            {i18n._(msg`Error`)}
+          </DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
           <DescriptionListTerm>
@@ -202,7 +222,9 @@ function Legend() {
               </text>
             </svg>
           </DescriptionListTerm>
-          <DescriptionListDescription>{i18n._(msg`Enabled`)}</DescriptionListDescription>
+          <DescriptionListDescription>
+            {i18n._(msg`Enabled`)}
+          </DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
           <DescriptionListTerm>
@@ -230,11 +252,15 @@ function Legend() {
               </text>
             </svg>
           </DescriptionListTerm>
-          <DescriptionListDescription>{i18n._(msg`Disabled`)}</DescriptionListDescription>
+          <DescriptionListDescription>
+            {i18n._(msg`Disabled`)}
+          </DescriptionListDescription>
         </DescriptionListGroup>
       </DescriptionList>
       <TextContent>
-        <Text component={TextVariants.small}>{i18n._(msg`Link state types`)}</Text>
+        <Text component={TextVariants.small}>
+          {i18n._(msg`Link state types`)}
+        </Text>
       </TextContent>
       <DescriptionList isHorizontal isFluid>
         <DescriptionListGroup>
@@ -250,7 +276,9 @@ function Legend() {
               />
             </svg>
           </DescriptionListTerm>
-          <DescriptionListDescription>{i18n._(msg`Established`)}</DescriptionListDescription>
+          <DescriptionListDescription>
+            {i18n._(msg`Established`)}
+          </DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
           <DescriptionListTerm>
@@ -266,7 +294,9 @@ function Legend() {
               />
             </svg>
           </DescriptionListTerm>
-          <DescriptionListDescription>{i18n._(msg`Adding`)}</DescriptionListDescription>
+          <DescriptionListDescription>
+            {i18n._(msg`Adding`)}
+          </DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
           <DescriptionListTerm>
@@ -282,7 +312,9 @@ function Legend() {
               />
             </svg>
           </DescriptionListTerm>
-          <DescriptionListDescription>{i18n._(msg`Removing`)}</DescriptionListDescription>
+          <DescriptionListDescription>
+            {i18n._(msg`Removing`)}
+          </DescriptionListDescription>
         </DescriptionListGroup>
       </DescriptionList>
     </Wrapper>

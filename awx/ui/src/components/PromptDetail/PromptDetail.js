@@ -132,7 +132,11 @@ function PromptDetail({
           <Detail
             label={i18n._(msg`Convergence`)}
             dataCy="prompt-detail-convergence"
-            value={workflowNode?.all_parents_must_converge ? i18n._(msg`All`) : i18n._(msg`Any`)}
+            value={
+              workflowNode?.all_parents_must_converge
+                ? i18n._(msg`All`)
+                : i18n._(msg`Any`)
+            }
           />
         )}
         <Detail
@@ -180,7 +184,9 @@ function PromptDetail({
         hasPromptData(launchConfig) &&
         hasOverrides && (
           <>
-            <PromptTitle headingLevel="h2">{i18n._(msg`Prompted Values`)}</PromptTitle>
+            <PromptTitle headingLevel="h2">
+              {i18n._(msg`Prompted Values`)}
+            </PromptTitle>
             <PromptDivider />
             <PromptDetailList aria-label={i18n._(msg`Prompt Overrides`)}>
               {launchConfig.ask_job_type_on_launch && (
@@ -358,7 +364,11 @@ function PromptDetail({
               {launchConfig.ask_diff_mode_on_launch && (
                 <Detail
                   label={i18n._(msg`Show Changes`)}
-                  value={overrides.diff_mode === true ? i18n._(msg`On`) : i18n._(msg`Off`)}
+                  value={
+                    overrides.diff_mode === true
+                      ? i18n._(msg`On`)
+                      : i18n._(msg`Off`)
+                  }
                 />
               )}
               {(launchConfig.survey_enabled ||

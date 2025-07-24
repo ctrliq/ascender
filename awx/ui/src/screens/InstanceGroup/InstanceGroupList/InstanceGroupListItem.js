@@ -71,7 +71,9 @@ function InstanceGroupListItem({
           ? i18n._(msg`Container group`).toString()
           : i18n._(msg`Instance group`).toString()}
       </Td>
-      <Td dataLabel={i18n._(msg`Running jobs`)}>{instanceGroup.jobs_running}</Td>
+      <Td dataLabel={i18n._(msg`Running jobs`)}>
+        {instanceGroup.jobs_running}
+      </Td>
       <Td dataLabel={i18n._(msg`Total jobs`)}>{instanceGroup.jobs_total}</Td>
       <Td dataLabel={i18n._(msg`Instances`)}>{instanceGroup.instances}</Td>
       <Td dataLabel={i18n._(msg`Capacity`)}>{usedCapacity(instanceGroup)}</Td>

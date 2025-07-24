@@ -137,7 +137,9 @@ function Host({ setBreadcrumb }) {
           ]}
           <Route key="not-found" path="*">
             <ContentError isNotFound>
-              <Link to={`${match.url}/details`}>{i18n._(msg`View Host Details`)}</Link>
+              <Link to={`${match.url}/details`}>
+                {i18n._(msg`View Host Details`)}
+              </Link>
             </ContentError>
           </Route>
         </Switch>

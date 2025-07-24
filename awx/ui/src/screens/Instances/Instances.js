@@ -17,20 +17,25 @@ function Instances() {
     '/instances/add': i18n._(msg`Create new Instance`),
   });
 
-  const buildBreadcrumbConfig = useCallback((instance) => {
-    if (!instance) {
-      return;
-    }
-    setBreadcrumbConfig({
-      '/instances': i18n._(msg`Instances`),
-      '/instances/add': i18n._(msg`Create new Instance`),
-      [`/instances/${instance.id}`]: `${instance.hostname}`,
-      [`/instances/${instance.id}/details`]: i18n._(msg`Details`),
-      [`/instances/${instance.id}/peers`]: i18n._(msg`Peers`),
-      [`/instances/${instance.id}/listener_addresses`]: i18n._(msg`Listener Addresses`),
-      [`/instances/${instance.id}/edit`]: i18n._(msg`Edit Instance`),
-    });
-  }, [i18n]);
+  const buildBreadcrumbConfig = useCallback(
+    (instance) => {
+      if (!instance) {
+        return;
+      }
+      setBreadcrumbConfig({
+        '/instances': i18n._(msg`Instances`),
+        '/instances/add': i18n._(msg`Create new Instance`),
+        [`/instances/${instance.id}`]: `${instance.hostname}`,
+        [`/instances/${instance.id}/details`]: i18n._(msg`Details`),
+        [`/instances/${instance.id}/peers`]: i18n._(msg`Peers`),
+        [`/instances/${instance.id}/listener_addresses`]: i18n._(
+          msg`Listener Addresses`
+        ),
+        [`/instances/${instance.id}/edit`]: i18n._(msg`Edit Instance`),
+      });
+    },
+    [i18n]
+  );
 
   return (
     <>

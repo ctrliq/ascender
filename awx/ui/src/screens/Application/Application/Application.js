@@ -95,7 +95,9 @@ function Application({ setBreadcrumb }) {
             {error.response?.status === 404 && (
               <span>
                 {i18n._(msg`Application not found.`)}{' '}
-                <Link to="/applications">{i18n._(msg`View all applications.`)}</Link>
+                <Link to="/applications">
+                  {i18n._(msg`View all applications.`)}
+                </Link>
               </span>
             )}
           </ContentError>
