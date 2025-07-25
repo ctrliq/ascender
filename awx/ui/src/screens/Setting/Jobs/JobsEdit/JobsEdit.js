@@ -210,6 +210,10 @@ function JobsEdit() {
                   config={jobs.AWX_COLLECTIONS_ENABLED}
                 />
                 <BooleanField
+                  name="ENABLE_ANSIBLE_29"
+                  config={jobs.ENABLE_ANSIBLE_29}
+                />
+                <BooleanField
                   name="AWX_SHOW_PLAYBOOK_LINKS"
                   config={jobs.AWX_SHOW_PLAYBOOK_LINKS}
                 />

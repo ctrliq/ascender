@@ -360,6 +360,16 @@ register(
 )
 
 register(
+    'ENABLE_ANSIBLE_29',
+    field_class=fields.BooleanField,
+    default=False,
+    label=_('Enable Ansible 2.9 Compatibility'),
+    help_text=_('If enabled, sets ANSIBLE_COLLECTIONS_PATHS for legacy Ansible 2.9 compatibility.'),
+    category=_('Jobs'),
+    category_slug='jobs',
+)
+
+register(
     'AWX_SHOW_PLAYBOOK_LINKS',
     field_class=fields.BooleanField,
     default=False,

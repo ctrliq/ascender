@@ -269,6 +269,15 @@
               "category_slug": "jobs",
               "default": true
           },
+          "ENABLE_ANSIBLE_29": {
+              "type": "boolean",
+              "required": false,
+              "label": "Enable Ansible 2.9 Compatibility",
+              "help_text": "If enabled, sets ANSIBLE_COLLECTIONS_PATHS for legacy Ansible 2.9 compatibility.",
+              "category": "Jobs",
+              "category_slug": "jobs",
+              "default": false
+          },
           "AWX_SHOW_PLAYBOOK_LINKS": {
               "type": "boolean",
               "required": false,
@@ -4609,6 +4618,13 @@
               "category": "Jobs",
               "category_slug": "jobs",
               "defined_in_file": false
+          },
+          "ENABLE_ANSIBLE_29": {
+              "type": "boolean",
+              "label": "Enable Ansible 2.9 Compatibility",
+              "help_text": "If enabled, sets ANSIBLE_COLLECTIONS_PATHS for legacy Ansible 2.9 compatibility.",
+              "category": "Jobs",
+              "category_slug": "jobs"
           },
           "AWX_SHOW_PLAYBOOK_LINKS": {
               "type": "boolean",
