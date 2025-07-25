@@ -4619,9 +4619,9 @@
               "category_slug": "jobs",
               "defined_in_file": false
           },
-          "SUPPORT_ANSIBLE_29": {
+          "ENABLE_ANSIBLE_29": {
               "type": "boolean",
-              "label": "Support Ansible 2.9 Compatibility",
+              "label": "Enable Ansible 2.9 Compatibility",
               "help_text": "If enabled, sets ANSIBLE_COLLECTIONS_PATHS for legacy Ansible 2.9 compatibility.",
               "category": "Jobs",
               "category_slug": "jobs"
