@@ -924,11 +924,15 @@ class RunJob(SourceControlMixin, BaseTask):
             if authorize:
                 env['ANSIBLE_NET_AUTH_PASS'] = network_cred.get_input('authorize_password', default='')
 
-        path_vars = (
-            ('ANSIBLE_COLLECTIONS_PATHS', 'collections_paths', 'requirements_collections', '~/.ansible/collections:/usr/share/ansible/collections'),
+        # ANSIBLE_COLLECTIONS_PATHS is Deprecated in Ansible 2.10 and replaced with ANSIBLE_COLLECTIONS_PATH
+        # Ansible 2.16 has started showing Deprecation warnings for it.  Disabled by default unless someone
+        # explicitly enables it to run an old version of Ansible with collections.
+        path_vars = [
             ('ANSIBLE_ROLES_PATH', 'roles_path', 'requirements_roles', '~/.ansible/roles:/usr/share/ansible/roles:/etc/ansible/roles'),
             ('ANSIBLE_COLLECTIONS_PATH', 'collections_path', 'requirements_collections', '~/.ansible/collections:/usr/share/ansible/collections'),
-        )
+        ]
+        if getattr(settings, 'ENABLE_ANSIBLE_29', False):
+            path_vars.append(('ANSIBLE_COLLECTIONS_PATHS', 'collections_paths', 'requirements_collections', '~/.ansible/collections:/usr/share/ansible/collections'))
 
         config_values = read_ansible_config(os.path.join(private_data_dir, 'project'), list(map(lambda x: x[1], path_vars)))
 
