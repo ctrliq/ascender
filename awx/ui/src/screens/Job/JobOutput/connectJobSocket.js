@@ -1,7 +1,5 @@
-let ws;
-
 export default function connectJobSocket({ type, id }, onMessage) {
-  ws = new WebSocket(
+  const ws = new WebSocket(
     `${window.location.protocol === 'http:' ? 'ws:' : 'wss:'}//${
       window.location.host
     }${window.location.pathname}websocket/`
@@ -41,9 +39,11 @@ export default function connectJobSocket({ type, id }, onMessage) {
     console.debug('Socket error: ', err, 'Disconnecting...');
     ws.close();
   };
+
+  return ws; // Return the ws instance so the caller can manage it
 }
 
-export function closeWebSocket() {
+export function closeWebSocket(ws) {
   if (ws) {
     ws.close();
   }

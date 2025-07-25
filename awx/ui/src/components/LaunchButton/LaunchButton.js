@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { number, shape } from 'prop-types';
 import { msg } from '@lingui/macro';
@@ -50,6 +50,15 @@ function LaunchButton({ resource, children }) {
   const [error, setError] = useState(null);
   const { addToast, Toast, toastProps } = useToast();
 
+  // Add isMounted ref to prevent state updates after unmount
+  const isMounted = useRef(false);
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+
   const showToast = () => {
     addToast({
       id: resource.id,
@@ -80,12 +89,11 @@ function LaunchButton({ resource, children }) {
 
     try {
       const { data: launch } = await readLaunch;
-      setLaunchConfig(launch);
+      if (isMounted.current) setLaunchConfig(launch);
 
       if (launch.survey_enabled) {
         const { data } = await readSurvey;
-
-        setSurveyConfig(data);
+        if (isMounted.current) setSurveyConfig(data);
       }
 
       if (launch.ask_labels_on_launch) {
@@ -98,25 +106,25 @@ function LaunchButton({ resource, children }) {
           isReadOnly: true,
         }));
 
-        setLabels(allLabels);
+        if (isMounted.current) setLabels(allLabels);
       }
 
       if (launch.ask_credential_on_launch) {
         const {
           data: { results: templateCredentials },
         } = await JobTemplatesAPI.readCredentials(resource.id);
-        setResourceCredentials(templateCredentials);
+        if (isMounted.current) setResourceCredentials(templateCredentials);
       }
 
       if (canLaunchWithoutPrompt(launch)) {
         await launchWithParams({});
-      } else {
+      } else if (isMounted.current) {
         setShowLaunchPrompt(true);
       }
     } catch (err) {
-      setError(err);
+      if (isMounted.current) setError(err);
     } finally {
-      setIsLaunching(false);
+      if (isMounted.current) setIsLaunching(false);
     }
   };
 
@@ -151,11 +159,11 @@ function LaunchButton({ resource, children }) {
       }
 
       const { data: job } = await jobPromise;
-      history.push(`/jobs/${job.id}/output`);
+      if (isMounted.current) history.push(`/jobs/${job.id}/output`);
     } catch (launchError) {
-      setError(launchError);
+      if (isMounted.current) setError(launchError);
     } finally {
-      setIsLaunching(false);
+      if (isMounted.current) setIsLaunching(false);
     }
   };
 
@@ -186,7 +194,7 @@ function LaunchButton({ resource, children }) {
 
     try {
       const { data: relaunchConfig } = await readRelaunch;
-      setLaunchConfig(relaunchConfig);
+      if (isMounted.current) setLaunchConfig(relaunchConfig);
       if (
         !relaunchConfig.passwords_needed_to_start ||
         relaunchConfig.passwords_needed_to_start.length === 0
@@ -205,14 +213,14 @@ function LaunchButton({ resource, children }) {
           relaunch = JobsAPI.relaunch(resource.id, params || {});
         }
         const { data: job } = await relaunch;
-        history.push(`/jobs/${job.id}/output`);
-      } else {
+        if (isMounted.current) history.push(`/jobs/${job.id}/output`);
+      } else if (isMounted.current) {
         setShowLaunchPrompt(true);
       }
     } catch (err) {
-      setError(err);
+      if (isMounted.current) setError(err);
     } finally {
-      setIsLaunching(false);
+      if (isMounted.current) setIsLaunching(false);
     }
   };
 

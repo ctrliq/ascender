@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 import { DateTime, Duration } from 'luxon';
 import { msg } from '@lingui/macro';
@@ -79,18 +79,28 @@ const OutputToolbar = ({ job, onDelete, isDeleteDisabled, jobStatus }) => {
     : 0;
   const { me } = useConfig();
 
+  const isMounted = useRef(false);
+
   useEffect(() => {
+    isMounted.current = true;
     let secTimer;
     if (job.finished) {
-      return () => clearInterval(secTimer);
+      return () => {
+        isMounted.current = false;
+        clearInterval(secTimer);
+      };
     }
 
     secTimer = setInterval(() => {
+      if (!isMounted.current) return;
       const elapsedTime = calculateElapsed(job.started);
       setActiveJobElapsedTime(elapsedTime);
     }, 1000);
 
-    return () => clearInterval(secTimer);
+    return () => {
+      isMounted.current = false;
+      clearInterval(secTimer);
+    };
   }, [job.started, job.finished]);
 
   return (
