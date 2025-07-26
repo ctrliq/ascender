@@ -454,9 +454,6 @@ ui-devel: awx/ui/node_modules
 		cp -r awx/ui/build/static/media/* /var/lib/awx/public/static/media; \
 	fi
 
-ui-devel-instrumented: awx/ui/node_modules
-	$(NPM_BIN) --prefix awx/ui --loglevel warn run start-instrumented
-
 ui-devel-test: awx/ui/node_modules
 	$(NPM_BIN) --prefix awx/ui --loglevel warn run start
 
