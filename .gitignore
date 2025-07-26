@@ -36,7 +36,6 @@ awx/ui/node_modules/
 awx/ui/coverage/
 awx/ui/build
 awx/ui/.env.local
-awx/ui/instrumented
 rsyslog.pid
 tools/docker-compose/ansible/awx_dump.sql
 tools/docker-compose/Dockerfile
