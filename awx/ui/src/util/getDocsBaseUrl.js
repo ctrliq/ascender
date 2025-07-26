@@ -1,5 +1,5 @@
 export default function getDocsBaseUrl(config) {
-  let version = 'latest';
+  let version = '4.5';
   const licenseType = config?.license_info?.license_type;
 
   if (licenseType && licenseType !== 'open' && config?.version) {
