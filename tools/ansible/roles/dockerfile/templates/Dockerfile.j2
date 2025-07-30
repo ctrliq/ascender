@@ -26,6 +26,8 @@ USER root
 # Install build dependencies
 RUN dnf -y update && dnf install -y 'dnf-command(config-manager)' && \
     dnf config-manager --set-enabled crb && \
+    dnf module reset nodejs -y && \
+    dnf module enable nodejs:20 -y && \
     dnf -y install \
     iputils \
     gcc \
@@ -86,7 +88,7 @@ RUN cd /tmp && make requirements_awx_dev
 # Use the distro provided npm to bootstrap our required version of node
 
 {% if not headless|bool %}
-RUN npm install -g n && n 16.13.1
+RUN npm install -g n && n 20.19.4
 {% endif %}
 
 # Copy source into builder, build sdist, install it into awx venv
@@ -151,7 +153,9 @@ RUN rm -rf /root/.cache && rm -rf /tmp/*
 
 {% if (build_dev|bool) or (kube_dev|bool) %}
 # Install development/test requirements
-RUN dnf -y install \
+RUN dnf module reset nodejs -y && \
+    dnf module enable nodejs:20 -y && \
+    dnf -y install \
     crun \
     gdb \
     gtk3 \
@@ -175,7 +179,7 @@ RUN dnf -y install \
     wget \
     diffutils \
     unzip && \
-    npm install -g n && n 16.13.1 && npm install -g npm@8.5.0 && dnf remove -y nodejs
+    npm install -g n && n 20.19.4 && npm install -g npm@10.8.2 && dnf remove -y nodejs
 
 RUN pip3.11 install -vv git+https://github.com/coderanger/supervisor-stdout.git@973ba19967cdaf46d9c1634d1675fc65b9574f6e
 RUN pip3.11 install -vv black setuptools-scm build
