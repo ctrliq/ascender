@@ -1,4 +1,4 @@
-FROM logstash:5-alpine
+FROM logstash:9.0.4
 COPY logstash.conf /
 RUN touch /logstash.log
 RUN chown logstash:logstash /logstash.log
