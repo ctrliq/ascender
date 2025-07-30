@@ -1,4 +1,4 @@
-FROM elasticsearch:5
+FROM elasticsearch:9.0.4
 
 ENV ES_JAVA_OPTS="-Des.path.conf=/etc/elasticsearch"
 
