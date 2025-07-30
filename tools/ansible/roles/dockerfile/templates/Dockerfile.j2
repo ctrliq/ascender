@@ -26,6 +26,8 @@ USER root
 # Install build dependencies
 RUN dnf -y update && dnf install -y 'dnf-command(config-manager)' && \
     dnf config-manager --set-enabled crb && \
+    dnf module reset nodejs -y && \
+    dnf module enable nodejs:20 -y && \
     dnf -y install \
     iputils \
     gcc \
