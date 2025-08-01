@@ -10,7 +10,7 @@ An :term:`Organization` is a logical collection of **Users**, **Teams**, **Proje
 
 |awx hierarchy|
 
-.. |awx hierarchy| image:: ../common/images/AWXHierarchy.png
+.. |awx hierarchy| image:: ../common/images/AscenderHierarchy.png
    :alt: Ascender Hierarchy
 
 Access the Organizations page by clicking **Organizations** from the left navigation bar. The Organizations page displays all of the existing organizations for your installation. Organizations can be searched by **Name** or **Description**. Modify and remove organizations using the **Edit** and **Delete** buttons.
