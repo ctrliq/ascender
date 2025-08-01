@@ -69,6 +69,10 @@ $(function() {
     }
   });
 
+  function setCookie(name, value, path) {
+    document.cookie = `${name}=${value}; path=${path}; SameSite=Lax` + (location.protocol === 'https:' ? '; Secure' : '');
+  }
+
   $('a.resize').click(function() {
     $(this).tooltip('hide');
     if ($(this).find('span.glyphicon-resize-full').length) {
@@ -80,9 +84,6 @@ $(function() {
       $(this).find('span.glyphicon').addClass('glyphicon-resize-full').removeClass('glyphicon-resize-small');
       $('.container-fluid').addClass('container').removeClass('container-fluid');
       setCookie('api_width', 'fixed', '/api/');
-    }
-    function setCookie(name, value, path) {
-      document.cookie = `${name}=${value}; path=${path}; SameSite=Lax` + (location.protocol === 'https:' ? '; Secure' : '');
     }
     return false;
   });
