@@ -14,6 +14,6 @@ The callbacks and handlers are:
 
 ### Debugging
 
-If you want to debug `ansible-runner`, then set `Ascender_CLEANUP_PATHS=False`, run a job, observe the job's `Ascender_PRIVATE_DATA_DIR` property, and go the node where the job was executed and inspect that directory.
+If you want to debug `ansible-runner`, then set `AWX_CLEANUP_PATHS=False`, run a job, observe the job's `AWX_PRIVATE_DATA_DIR` property, and go the node where the job was executed and inspect that directory.
 
 If you want to debug the process that `ansible-runner` invoked (_i.e._, Ansible or `ansible-playbook`), then observe the Job's `job_env`, `job_cwd`, and `job_args` parameters.

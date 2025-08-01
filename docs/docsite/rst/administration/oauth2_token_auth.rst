@@ -150,7 +150,7 @@ The easiest and most common way to obtain an OAuth 2 token is to create a person
 
 ::
 
-    curl -H "Content-type: application/json" -d '{"description":"Personal Ascender CLI token", "application":null, "scope":"write"}' https://<USERNAME>:<PASSWORD>@<Ascender_SERVER>/api/v2/users/<USER_ID>/personal_tokens/ | python -m json.tool
+    curl -H "Content-type: application/json" -d '{"description":"Personal Ascender CLI token", "application":null, "scope":"write"}' https://<USERNAME>:<PASSWORD>@<ASCENDER_SERVER>/api/v2/users/<USER_ID>/personal_tokens/ | python -m json.tool
 
 You could also pipe the JSON output through ``jq``, if installed.
 
