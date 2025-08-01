@@ -172,6 +172,7 @@ awx/ui_next/build
 
 # Docs build stuff
 docs/docsite/build/
+docs/docsite/venv/
 _readthedocs/
 
 # Pyenv

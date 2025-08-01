@@ -1,0 +1,65 @@
+alabaster==1.0.0
+    # via sphinx
+ansible-pygments==0.1.2
+    # via sphinx-ansible-theme
+babel==2.17.0
+    # via sphinx
+certifi==2025.7.14
+    # via requests
+charset-normalizer==3.4.2
+    # via requests
+docutils==0.21.2
+    # via
+    #   -r requirements.in
+    #   sphinx
+    #   sphinx-rtd-theme
+idna==3.10
+    # via requests
+imagesize==1.4.1
+    # via sphinx
+jinja2==3.1.6
+    # via
+    #   -r requirements.in
+    #   sphinx
+markupsafe==3.0.2
+    # via jinja2
+packaging==25.0
+    # via sphinx
+pygments==2.19.2
+    # via
+    #   ansible-pygments
+    #   sphinx
+pyyaml==6.0.2
+    # via -r requirements.in
+requests==2.32.4
+    # via sphinx
+roman-numerals-py==3.1.0
+    # via sphinx
+snowballstemmer==3.0.1
+    # via sphinx
+sphinx==8.2.3
+    # via
+    #   -r requirements.in
+    #   sphinx-ansible-theme
+    #   sphinx-rtd-theme
+    #   sphinxcontrib-jquery
+sphinx-ansible-theme==0.10.3
+    # via -r requirements.in
+sphinx-rtd-theme==3.0.2
+    # via sphinx-ansible-theme
+sphinxcontrib-applehelp==2.0.0
+    # via sphinx
+sphinxcontrib-devhelp==2.0.0
+    # via sphinx
+sphinxcontrib-htmlhelp==2.1.0
+    # via sphinx
+sphinxcontrib-jquery==4.1
+    # via sphinx-rtd-theme
+sphinxcontrib-jsmath==1.0.1
+    # via sphinx
+sphinxcontrib-qthelp==2.0.0
+    # via sphinx
+sphinxcontrib-serializinghtml==2.0.0
+    # via sphinx
+urllib3==2.5.0
+    # via requests
