@@ -871,7 +871,7 @@ To callback manually via REST, look at the callback URL in the UI, which is of t
 
 ::
 
-    https://<Ascender_SERVER_NAME>/api/v2/job_templates/7/callback/
+    https://<ASCENDER_SERVER_NAME>/api/v2/job_templates/7/callback/
 
 The '7' in this sample URL is the job template ID in Ascender.
 
@@ -880,7 +880,7 @@ The request from the host must be a POST. Here is an example using curl (all on 
 .. code-block:: bash
 
    curl -k -f -i -H 'Content-Type:application/json' -XPOST -d '{"host_config_key": "redhat"}' \ 
-                    https://<Ascender_SERVER_NAME>/api/v2/job_templates/7/callback/
+                    https://<ASCENDER_SERVER_NAME>/api/v2/job_templates/7/callback/
 
 The requesting host must be defined in your inventory for the callback to succeed. If Ascender fails to locate the host either by name or IP address in one of your defined inventories, the request is denied. When running a Job Template in this way, the host initiating the playbook run against itself must be in the inventory. If the host is missing from the inventory, the Job Template will fail with a "No Hosts Matched" type error message.
 
@@ -938,7 +938,7 @@ You can also pass extra variables to the Job Template call using ``curl``, such 
 
    root@localhost:~$ curl -f -H 'Content-Type: application/json' -XPOST \
                      -d '{"host_config_key": "redhat", "extra_vars": "{\"foo\": \"bar\"}"}' \
-                     https://<Ascender_SERVER_NAME>/api/v2/job_templates/7/callback
+                     https://<ASCENDER_SERVER_NAME>/api/v2/job_templates/7/callback
 
 For more information, refer to :ref:`Launching Jobs with Curl<launch_jobs_curl>`.
 
