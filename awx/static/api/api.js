@@ -71,15 +71,18 @@ $(function() {
 
   $('a.resize').click(function() {
     $(this).tooltip('hide');
-    if ($(this).find('span.glyphicon-resize-full').size()) {
+    if ($(this).find('span.glyphicon-resize-full').length) {
       $(this).find('span.glyphicon').addClass('glyphicon-resize-small').removeClass('glyphicon-resize-full');
       $('.container').addClass('container-fluid').removeClass('container');
-      document.cookie = 'api_width=wide; path=/api/';
+      setCookie('api_width', 'wide', '/api/');
     }
     else {
       $(this).find('span.glyphicon').addClass('glyphicon-resize-full').removeClass('glyphicon-resize-small');
       $('.container-fluid').addClass('container').removeClass('container-fluid');
-      document.cookie = 'api_width=fixed; path=/api/';
+      setCookie('api_width', 'fixed', '/api/');
+    }
+    function setCookie(name, value, path) {
+      document.cookie = `${name}=${value}; path=${path}; SameSite=Lax` + (location.protocol === 'https:' ? '; Secure' : '');
     }
     return false;
   });
