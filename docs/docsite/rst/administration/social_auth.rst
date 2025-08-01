@@ -9,7 +9,7 @@ Setting up Social Authentication
 
 Authentication methods help simplify logins for end users--offering single sign-ons using existing login information to sign into a third party website rather than creating a new login account specifically for that website. 
 
-Account authentication can be configured in the Ascender User Interface and saved to the PostgreSQL database. For instructions, refer to the :ref:`ag_configure_awx` section. 
+Account authentication can be configured in the Ascender User Interface and saved to the PostgreSQL database. For instructions, refer to the :ref:`ag_configure_ascender` section. 
 
 Account authentication in Ascender can be configured to centrally use OAuth2, while enterprise-level account authentication can be configured for :ref:`Azure <ag_auth_azure>`, :ref:`RADIUS <ag_auth_radius>`, :ref:`SAML <ag_auth_saml>`, or even :ref:`LDAP <ag_auth_ldap>` as a source for authentication information. See :ref:`ag_ent_auth` for more detail.
 

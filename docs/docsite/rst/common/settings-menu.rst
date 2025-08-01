@@ -10,4 +10,4 @@ To enter the Settings window for Ascender, click **Settings** from the left navi
 .. image:: ../common/images/ug-settings-menu-screen.png
 	:alt: The main settings window for Ascender.
 
-For more information on configuring these settings, refer to :ref:`ag_configure_awx` section of the |ata|.
+For more information on configuring these settings, refer to :ref:`ag_configure_ascender` section of the |ata|.

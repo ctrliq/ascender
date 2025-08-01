@@ -1,4 +1,4 @@
-.. _ag_configure_awx:
+.. _ag_configure_ascender:
 
 Ascender Configuration
 ~~~~~~~~~~~~~~~~~~~
@@ -6,7 +6,7 @@ Ascender Configuration
 .. index::
    single: configure Ascender
 
-.. _configure_awx_overview:
+.. _configure_ascender_overview:
 
 You can configure various Ascender settings within the Settings screen in the following tabs:
 
@@ -26,10 +26,10 @@ Authentication
     single: enterprise authentication
     pair: configuration; authentication
 
-.. include:: ./configure_awx_authentication.rst
+.. include:: ./configure_ascender_authentication.rst
 
 
-.. _configure_awx_jobs:
+.. _configure_ascender_jobs:
 
 Jobs
 =========
@@ -53,7 +53,7 @@ The Jobs tab allows you to configure the types of modules that are allowed to be
 3. Click **Save** to apply the settings or **Cancel** to abandon the changes.
 
 
-.. _configure_awx_system:
+.. _configure_ascender_system:
 
 System
 ======
@@ -89,7 +89,7 @@ The System tab allows you to define the base URL for the Ascender host, configur
 
 4. Click **Save** to apply the settings or **Cancel** to abandon the changes.
 
-.. _configure_awx_ui:
+.. _configure_ascender_ui:
 
 User Interface
 ================

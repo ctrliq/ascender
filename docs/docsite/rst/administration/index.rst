@@ -39,7 +39,7 @@ You can also find lots of Ascender discussion and get answers to questions at `f
   secret_handling
   security_best_practices
   awx-manage
-  configure_awx
+  configure_ascender
   isolation_variables
   oauth2_token_auth
   social_auth
