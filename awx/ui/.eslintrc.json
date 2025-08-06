@@ -167,6 +167,9 @@
     "react/jsx-filename-extension": "off",
     "no-restricted-exports": "off",
     "react/function-component-definition": "off",
-    "prefer-regex-literals": "off"
+    "prefer-regex-literals": "off",
+    // Resolve these 2 rules later
+    "react/no-unknown-property": ["error", { "ignore": ["css", "ouia-component-id"] }],
+    "react/forbid-prop-types": "off"
   }
 }

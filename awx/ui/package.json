@@ -45,43 +45,87 @@
     "@lingui/loader": "4.14.0",
     "@lingui/macro": "^4.14.0",
     "@nteract/mockument": "^1.0.4",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.3",
+    "@svgr/webpack": "^8.1.0",
     "@testing-library/dom": "^8.20.1",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^12.1.5",
     "@testing-library/user-event": "14.6.1",
     "@wojtekmaj/enzyme-adapter-react-17": "0.8.0",
+    "babel-jest": "^27.4.2",
+    "babel-loader": "^8.2.3",
     "babel-plugin-macros": "3.1.0",
+    "babel-plugin-named-asset-import": "^0.3.8",
+    "babel-preset-react-app": "^10.0.1",
+    "bfj": "^7.0.2",
+    "browserslist": "^4.18.1",
+    "camelcase": "^6.2.1",
+    "case-sensitive-paths-webpack-plugin": "^2.4.0",
     "core-js": "3.44.0",
+    "css-loader": "^6.5.1",
+    "css-minimizer-webpack-plugin": "^3.2.0",
+    "dotenv": "^10.0.0",
+    "dotenv-expand": "^5.1.0",
     "enzyme": "^3.11.0",
     "enzyme-to-json": "^3.6.2",
     "eslint": "^8.57.0",
     "eslint-config-airbnb": "19.0.4",
     "eslint-config-prettier": "10.1.5",
+    "eslint-config-react-app": "^7.0.1",
     "eslint-import-resolver-webpack": "0.13.10",
     "eslint-plugin-i18next": "5.2.1",
     "eslint-plugin-import": "2.32.0",
     "eslint-plugin-jsx-a11y": "6.10.2",
     "eslint-plugin-react": "7.37.5.0",
     "eslint-plugin-react-hooks": "4.6.0",
+    "eslint-webpack-plugin": "^4.2.0",
+    "file-loader": "^6.2.0",
+    "fs-extra": "^10.0.0",
+    "html-webpack-plugin": "^5.5.0",
     "http-proxy-middleware": "2.0.9",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^27.4.3",
+    "jest-resolve": "^27.4.2",
+    "jest-watch-typeahead": "^1.0.0",
     "jest-websocket-mock": "^2.5.0",
+    "mini-css-extract-plugin": "^2.4.5",
     "mock-socket": "^9.3.0",
+    "postcss": "^8.5.6",
+    "postcss-flexbugs-fixes": "^5.0.2",
+    "postcss-loader": "^6.2.1",
+    "postcss-normalize": "^10.0.1",
+    "postcss-preset-env": "^7.0.1",
     "prettier": "3.6.2",
-    "react-scripts": "5.0.1"
+    "prompts": "^2.4.2",
+    "react-app-polyfill": "^3.0.0",
+    "react-dev-utils": "^12.0.1",
+    "react-refresh": "^0.11.0",
+    "resolve": "^1.20.0",
+    "resolve-url-loader": "^5.0.0",
+    "sass-loader": "^12.3.0",
+    "semver": "^7.3.5",
+    "source-map-loader": "^3.0.0",
+    "style-loader": "^3.3.1",
+    "styled-components": "5.3.11",
+    "tailwindcss": "^3.0.2",
+    "terser-webpack-plugin": "^5.2.5",
+    "webpack": "^5.64.4",
+    "webpack-dev-server": "^5.2.2",
+    "webpack-manifest-plugin": "^4.0.2",
+    "workbox-webpack-plugin": "^6.4.1"
   },
   "scripts": {
     "prelint": "lingui compile",
     "prestart": "lingui compile",
     "pretest": "lingui compile",
     "pretest-watch": "lingui compile",
-    "start": "GENERATE_SOURCEMAP=false ESLINT_NO_DEV_ERRORS=true PORT=3001 HTTPS=true DANGEROUSLY_DISABLE_HOST_CHECK=true react-scripts start",
-    "build": "INLINE_RUNTIME_CHUNK=false react-scripts build",
-    "test": "TZ='UTC' react-scripts test --watchAll=false",
-    "test-screens": "TZ='UTC' react-scripts test screens --watchAll=false",
-    "test-general": "TZ='UTC' react-scripts test --testPathIgnorePatterns='<rootDir>/src/screens/' --watchAll=false",
-    "test-watch": "TZ='UTC' react-scripts test",
-    "eject": "react-scripts eject",
-    "lint": "eslint --ext .js --ext .jsx .",
+    "start": "GENERATE_SOURCEMAP=false ESLINT_NO_DEV_ERRORS=true PORT=3001 HTTPS=true DANGEROUSLY_DISABLE_HOST_CHECK=true node scripts/start.js",
+    "build": "INLINE_RUNTIME_CHUNK=false node scripts/build.js",
+    "test": "TZ='UTC' node scripts/test.js --watchAll=false",
+    "test-screens": "TZ='UTC' node scripts/test.js screens --watchAll=false",
+    "test-general": "TZ='UTC' node scripts/test.js --testPathIgnorePatterns='<rootDir>/src/screens/' --watchAll=false",
+    "test-watch": "TZ='UTC' node scripts/test.js",
+    "lint": "NODE_ENV=development eslint --ext .js --ext .jsx .",
     "extract-strings": "lingui extract",
     "extract-template": "lingui extract-template",
     "compile-strings": "lingui compile",
@@ -101,20 +145,71 @@
     ]
   },
   "jest": {
-    "snapshotSerializers": [
-      "enzyme-to-json/serializer"
+    "roots": [
+      "<rootDir>/src"
     ],
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}",
       "testUtils/**/*.{js,jsx}"
     ],
+    "setupFiles": [
+      "react-app-polyfill/jsdom"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/src/setupTests.js"
+    ],
+    "testMatch": [
+      "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
+      "<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}"
+    ],
+    "testEnvironment": "jsdom",
+    "transform": {
+      "^.+\\.(js|jsx|mjs|cjs|ts|tsx)$": "<rootDir>/config/jest/babelTransform.js",
+      "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
+      "^(?!.*\\.(js|jsx|mjs|cjs|ts|tsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
+    },
+    "transformIgnorePatterns": [
+      "<rootDir>/node_modules/(?!d3)/",
+      "<rootDir>/node_modules/(?!has-ansi)/"
+    ],
+    "modulePaths": [
+      "/root/ascender/awx/ui/src"
+    ],
+    "moduleNameMapper": {
+      "^react-native$": "react-native-web",
+      "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
+    },
+    "moduleFileExtensions": [
+      "web.js",
+      "js",
+      "web.ts",
+      "ts",
+      "web.tsx",
+      "tsx",
+      "json",
+      "web.jsx",
+      "jsx",
+      "node"
+    ],
+    "watchPlugins": [
+      "jest-watch-typeahead/filename",
+      "jest-watch-typeahead/testname"
+    ],
+    "resetMocks": true,
     "coveragePathIgnorePatterns": [
       "<rootDir>/src/locales",
       "index.js"
     ],
-    "transformIgnorePatterns": [
-      "<rootDir>/node_modules/(?!d3)/",
-      "<rootDir>/node_modules/(?!has-ansi)/"
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
     ]
+  },
+  "babel": {
+    "presets": [
+      "react-app"
+    ]
+  },
+  "eslintConfig": {
+    "extends": "react-app"
   }
 }
