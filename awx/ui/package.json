@@ -173,7 +173,7 @@
       "<rootDir>/node_modules/(?!has-ansi)/"
     ],
     "modulePaths": [
-      "/root/ascender/awx/ui/src"
+      "<rootDir>/src"
     ],
     "moduleNameMapper": {
       "^react-native$": "react-native-web",
