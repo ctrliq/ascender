@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { useField, useFormikContext } from 'formik';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import getDocsBaseUrl from 'util/getDocsBaseUrl';
 import { useConfig } from 'contexts/Config';
@@ -36,7 +36,7 @@ const TerraformSubForm = ({ autoPopulateCredential }) => {
     <>
       <CredentialLookup
         credentialTypeNamespace="terraform"
-        label={i18n._(msg`Credential`)}
+        label={i18n._(t`Credential`)}
         helperTextInvalid={credentialMeta.error}
         isValid={!credentialMeta.touched || !credentialMeta.error}
         onBlur={() => credentialHelpers.setTouched()}
@@ -44,7 +44,7 @@ const TerraformSubForm = ({ autoPopulateCredential }) => {
         value={credentialField.value}
         required
         autoPopulate={autoPopulateCredential}
-        validate={required(i18n._(msg`Select a value for this field`))}
+        validate={required(i18n._(t`Select a value for this field`))}
       />
       <VerbosityField />
       <HostFilterField />

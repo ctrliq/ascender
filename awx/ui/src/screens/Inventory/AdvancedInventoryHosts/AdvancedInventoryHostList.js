@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 
 import DataListToolbar from 'components/DataListToolbar';
@@ -73,21 +73,21 @@ function AdvancedInventoryHostList({ inventory }) {
       hasContentLoading={isLoading || isAdHocLaunchLoading}
       items={hosts}
       itemCount={count}
-      pluralizedItemName={i18n._(msg`Hosts`)}
+      pluralizedItemName={i18n._(t`Hosts`)}
       qsConfig={QS_CONFIG}
       clearSelected={clearSelected}
       toolbarSearchColumns={[
         {
-          name: i18n._(msg`Name`),
+          name: i18n._(t`Name`),
           key: 'name__icontains',
           isDefault: true,
         },
         {
-          name: i18n._(msg`Created by (username)`),
+          name: i18n._(t`Created by (username)`),
           key: 'created_by__username',
         },
         {
-          name: i18n._(msg`Modified by (username)`),
+          name: i18n._(t`Modified by (username)`),
           key: 'modified_by__username',
         },
       ]}
@@ -113,9 +113,9 @@ function AdvancedInventoryHostList({ inventory }) {
       )}
       headerRow={
         <HeaderRow qsConfig={QS_CONFIG}>
-          <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
-          <HeaderCell>{i18n._(msg`Recent jobs`)}</HeaderCell>
-          <HeaderCell>{i18n._(msg`Inventory`)}</HeaderCell>
+          <HeaderCell sortKey="name">{i18n._(t`Name`)}</HeaderCell>
+          <HeaderCell>{i18n._(t`Recent jobs`)}</HeaderCell>
+          <HeaderCell>{i18n._(t`Inventory`)}</HeaderCell>
         </HeaderRow>
       }
       renderRow={(host, index) => (

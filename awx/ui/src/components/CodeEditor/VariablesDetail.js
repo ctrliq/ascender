@@ -2,7 +2,7 @@ import 'styled-components/macro';
 import React, { useState } from 'react';
 import { node, number, oneOfType, shape, string, arrayOf } from 'prop-types';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import {
   Split,
@@ -105,7 +105,7 @@ function VariablesDetail({
             css="color: var(--pf-global--danger-color--100);
             font-size: var(--pf-global--FontSize--sm)"
           >
-            {i18n._(msg`Error:`)} {error.message}
+            {i18n._(t`Error:`)} {error.message}
           </div>
         )}
       </DetailValue>
@@ -117,13 +117,13 @@ function VariablesDetail({
         onClose={() => setIsExpanded(false)}
         actions={[
           <Button
-            aria-label={i18n._(msg`Done`)}
+            aria-label={i18n._(t`Done`)}
             key="select"
             variant="primary"
             onClick={() => setIsExpanded(false)}
             ouiaId={`${dataCy}-unexpand`}
           >
-            {i18n._(msg`Done`)}
+            {i18n._(t`Done`)}
           </Button>,
         ]}
       >
@@ -213,7 +213,7 @@ function ModeToggle({
         <SplitItem>
           <Button
             variant="plain"
-            aria-label={i18n._(msg`Expand input`)}
+            aria-label={i18n._(t`Expand input`)}
             onClick={onExpand}
             ouiaId={`${dataCy}-expand`}
           >

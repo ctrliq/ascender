@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { string, bool, func, oneOf, shape } from 'prop-types';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { useField } from 'formik';
 import styled from 'styled-components';
@@ -143,13 +143,13 @@ function VariablesField({
         onClose={() => setIsExpanded(false)}
         actions={[
           <Button
-            aria-label={i18n._(msg`Done`)}
+            aria-label={i18n._(t`Done`)}
             key="select"
             variant="primary"
             onClick={() => setIsExpanded(false)}
             ouiaId={`${id}-variables-unexpand`}
           >
-            {i18n._(msg`Done`)}
+            {i18n._(t`Done`)}
           </Button>,
         ]}
       >
@@ -261,14 +261,14 @@ function VariablesFieldInternals({
         {promptId && (
           <StyledCheckboxField
             id="template-ask-variables-on-launch"
-            label={i18n._(msg`Prompt on launch`)}
+            label={i18n._(t`Prompt on launch`)}
             name="ask_variables_on_launch"
           />
         )}
         {onExpand && (
           <Button
             variant="plain"
-            aria-label={i18n._(msg`Expand input`)}
+            aria-label={i18n._(t`Expand input`)}
             onClick={onExpand}
             ouiaId={`${id}-expand`}
           >

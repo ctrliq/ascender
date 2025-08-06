@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { node, func, bool, string } from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { FormGroup } from '@patternfly/react-core';
 import { OrganizationsAPI } from 'api';
@@ -100,13 +100,13 @@ function OrganizationLookup({
       helperTextInvalid={helperTextInvalid}
       isRequired={required}
       validated={isValid ? 'default' : 'error'}
-      label={i18n._(msg`Organization`)}
+      label={i18n._(t`Organization`)}
       helperText={helperText}
     >
       <Lookup
         isDisabled={isDisabled}
         id={id}
-        header={i18n._(msg`Organization`)}
+        header={i18n._(t`Organization`)}
         value={value}
         onBlur={onBlur}
         onChange={onChange}
@@ -123,27 +123,27 @@ function OrganizationLookup({
             options={organizations}
             optionCount={itemCount}
             multiple={state.multiple}
-            header={i18n._(msg`Organization`)}
+            header={i18n._(t`Organization`)}
             name="organization"
             qsConfig={QS_CONFIG}
             searchColumns={[
               {
-                name: i18n._(msg`Name`),
+                name: i18n._(t`Name`),
                 key: 'name__icontains',
                 isDefault: true,
               },
               {
-                name: i18n._(msg`Created By (Username)`),
+                name: i18n._(t`Created By (Username)`),
                 key: 'created_by__username__icontains',
               },
               {
-                name: i18n._(msg`Modified By (Username)`),
+                name: i18n._(t`Modified By (Username)`),
                 key: 'modified_by__username__icontains',
               },
             ]}
             sortColumns={[
               {
-                name: i18n._(msg`Name`),
+                name: i18n._(t`Name`),
                 key: 'name',
               },
             ]}

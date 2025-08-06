@@ -1,7 +1,7 @@
 import 'styled-components/macro';
 import React, { useEffect, useRef } from 'react';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useField, useFormikContext } from 'formik';
 import { Switch, Text } from '@patternfly/react-core';
 import { FormFullWidthLayout, SubFormLayout } from 'components/FormLayout';
@@ -59,7 +59,7 @@ function CustomMessagesSubForm({ defaultMessages, type }) {
     <>
       <Switch
         id="toggle-custom-messages"
-        label={i18n._(msg`Customize messages…`)}
+        label={i18n._(t`Customize messages…`)}
         isChecked={!!useCustomField.value}
         onChange={() => useCustomHelpers.setValue(!useCustomField.value)}
       />
@@ -70,7 +70,7 @@ function CustomMessagesSubForm({ defaultMessages, type }) {
             css="margin-bottom: var(--pf-c-content--MarginBottom)"
           >
             <small>
-              {i18n._(msg`Use custom messages to change the content of
+              {i18n._(t`Use custom messages to change the content of
                 notifications sent when a job starts, succeeds, or fails. Use
                 curly braces to access information about the job:`)}{' '}
               <code>
@@ -85,7 +85,7 @@ function CustomMessagesSubForm({ defaultMessages, type }) {
                 {'{{'} job.status {'}}'}
               </code>
               .{' '}
-              {i18n._(msg`You may apply a number of possible variables in the
+              {i18n._(t`You may apply a number of possible variables in the
                 message. For more information, refer to the`)}{' '}
               <a
                 target="_blank"
@@ -94,7 +94,7 @@ function CustomMessagesSubForm({ defaultMessages, type }) {
                   config
                 )}/html/userguide/notifications.html#create-custom-notifications`}
               >
-                {i18n._(msg`Ansible Controller Documentation.`)}
+                {i18n._(t`Ansible Controller Documentation.`)}
               </a>
             </small>
           </Text>
@@ -103,7 +103,7 @@ function CustomMessagesSubForm({ defaultMessages, type }) {
               <CodeEditorField
                 id="start-message"
                 name="messages.started.message"
-                label={i18n._(msg`Start message`)}
+                label={i18n._(t`Start message`)}
                 mode="jinja2"
                 rows={2}
               />
@@ -112,7 +112,7 @@ function CustomMessagesSubForm({ defaultMessages, type }) {
               <CodeEditorField
                 id="start-body"
                 name="messages.started.body"
-                label={i18n._(msg`Start message body`)}
+                label={i18n._(t`Start message body`)}
                 mode="jinja2"
                 rows={6}
               />
@@ -121,7 +121,7 @@ function CustomMessagesSubForm({ defaultMessages, type }) {
               <CodeEditorField
                 id="success-message"
                 name="messages.success.message"
-                label={i18n._(msg`Success message`)}
+                label={i18n._(t`Success message`)}
                 mode="jinja2"
                 rows={2}
               />
@@ -130,7 +130,7 @@ function CustomMessagesSubForm({ defaultMessages, type }) {
               <CodeEditorField
                 id="success-body"
                 name="messages.success.body"
-                label={i18n._(msg`Success message body`)}
+                label={i18n._(t`Success message body`)}
                 mode="jinja2"
                 rows={6}
               />
@@ -139,7 +139,7 @@ function CustomMessagesSubForm({ defaultMessages, type }) {
               <CodeEditorField
                 id="error-message"
                 name="messages.error.message"
-                label={i18n._(msg`Error message`)}
+                label={i18n._(t`Error message`)}
                 mode="jinja2"
                 rows={2}
               />
@@ -148,7 +148,7 @@ function CustomMessagesSubForm({ defaultMessages, type }) {
               <CodeEditorField
                 id="error-body"
                 name="messages.error.body"
-                label={i18n._(msg`Error message body`)}
+                label={i18n._(t`Error message body`)}
                 mode="jinja2"
                 rows={6}
               />
@@ -157,7 +157,7 @@ function CustomMessagesSubForm({ defaultMessages, type }) {
               <CodeEditorField
                 id="wf-approved-message"
                 name="messages.workflow_approval.approved.message"
-                label={i18n._(msg`Workflow approved message`)}
+                label={i18n._(t`Workflow approved message`)}
                 mode="jinja2"
                 rows={2}
               />
@@ -166,7 +166,7 @@ function CustomMessagesSubForm({ defaultMessages, type }) {
               <CodeEditorField
                 id="wf-approved-body"
                 name="messages.workflow_approval.approved.body"
-                label={i18n._(msg`Workflow approved message body`)}
+                label={i18n._(t`Workflow approved message body`)}
                 mode="jinja2"
                 rows={6}
               />
@@ -175,7 +175,7 @@ function CustomMessagesSubForm({ defaultMessages, type }) {
               <CodeEditorField
                 id="wf-denied-message"
                 name="messages.workflow_approval.denied.message"
-                label={i18n._(msg`Workflow denied message`)}
+                label={i18n._(t`Workflow denied message`)}
                 mode="jinja2"
                 rows={2}
               />
@@ -184,7 +184,7 @@ function CustomMessagesSubForm({ defaultMessages, type }) {
               <CodeEditorField
                 id="wf-denied-body"
                 name="messages.workflow_approval.denied.body"
-                label={i18n._(msg`Workflow denied message body`)}
+                label={i18n._(t`Workflow denied message body`)}
                 mode="jinja2"
                 rows={6}
               />
@@ -193,7 +193,7 @@ function CustomMessagesSubForm({ defaultMessages, type }) {
               <CodeEditorField
                 id="wf-running-message"
                 name="messages.workflow_approval.running.message"
-                label={i18n._(msg`Workflow pending message`)}
+                label={i18n._(t`Workflow pending message`)}
                 mode="jinja2"
                 rows={2}
               />
@@ -202,7 +202,7 @@ function CustomMessagesSubForm({ defaultMessages, type }) {
               <CodeEditorField
                 id="wf-running-body"
                 name="messages.workflow_approval.running.body"
-                label={i18n._(msg`Workflow pending message body`)}
+                label={i18n._(t`Workflow pending message body`)}
                 mode="jinja2"
                 rows={6}
               />
@@ -211,7 +211,7 @@ function CustomMessagesSubForm({ defaultMessages, type }) {
               <CodeEditorField
                 id="wf-timed-out-message"
                 name="messages.workflow_approval.timed_out.message"
-                label={i18n._(msg`Workflow timed out message`)}
+                label={i18n._(t`Workflow timed out message`)}
                 mode="jinja2"
                 rows={2}
               />
@@ -220,7 +220,7 @@ function CustomMessagesSubForm({ defaultMessages, type }) {
               <CodeEditorField
                 id="wf-timed-out-body"
                 name="messages.workflow_approval.timed_out.body"
-                label={i18n._(msg`Workflow timed out message body`)}
+                label={i18n._(t`Workflow timed out message body`)}
                 mode="jinja2"
                 rows={6}
               />

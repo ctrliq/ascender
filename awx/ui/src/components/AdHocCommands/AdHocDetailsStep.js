@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import React from 'react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import PropTypes from 'prop-types';
 import { useField } from 'formik';
@@ -57,8 +57,8 @@ function AdHocDetailsStep({ moduleOptions }) {
         <FormFullWidthLayout>
           <FormGroup
             fieldId="module_name"
-            aria-label={i18n._(msg`select module`)}
-            label={i18n._(msg`Module`)}
+            aria-label={i18n._(t`select module`)}
+            label={i18n._(t`Module`)}
             isRequired
             helperTextInvalid={moduleNameMeta.error}
             validated={
@@ -69,21 +69,21 @@ function AdHocDetailsStep({ moduleOptions }) {
             labelIcon={
               <Popover
                 content={i18n._(
-                  msg`These are the modules that ${brandName} supports running commands against.`
+                  t`These are the modules that ${brandName} supports running commands against.`
                 )}
               />
             }
           >
             <AnsibleSelect
               {...moduleNameField}
-              placeHolder={i18n._(msg`Select a module`)}
+              placeHolder={i18n._(t`Select a module`)}
               isValid={!moduleNameMeta.touched || !moduleNameMeta.error}
               id="module_name"
               data={[
                 {
                   value: '',
                   key: '',
-                  label: i18n._(msg`Choose a module`),
+                  label: i18n._(t`Choose a module`),
                   isDisabled: true,
                 },
                 ...moduleOptions.map((value) => ({
@@ -103,9 +103,9 @@ function AdHocDetailsStep({ moduleOptions }) {
           <FormField
             id="module_args"
             name="module_args"
-            aria-label={i18n._(msg`Arguments`)}
+            aria-label={i18n._(t`Arguments`)}
             type="text"
-            label={i18n._(msg`Arguments`)}
+            label={i18n._(t`Arguments`)}
             validated={isValid ? 'default' : 'error'}
             onBlur={() => argumentsHelpers.setTouched(true)}
             isRequired={argumentsRequired}
@@ -113,7 +113,7 @@ function AdHocDetailsStep({ moduleOptions }) {
               moduleNameField.value ? (
                 <>
                   {i18n._(
-                    msg`These arguments are used with the specified module. You can find information about ${moduleNameField.value} by clicking `
+                    t`These arguments are used with the specified module. You can find information about ${moduleNameField.value} by clicking `
                   )}
                   <a
                     href={`https://docs.ansible.com/ansible/latest/modules/${moduleNameField.value}_module.html`}
@@ -121,11 +121,11 @@ function AdHocDetailsStep({ moduleOptions }) {
                     rel="noopener noreferrer"
                   >
                     {' '}
-                    {i18n._(msg`here.`)}
+                    {i18n._(t`here.`)}
                   </a>
                 </>
               ) : (
-                i18n._(msg`These arguments are used with the specified module.`)
+                i18n._(t`These arguments are used with the specified module.`)
               )
             }
           />
@@ -133,7 +133,7 @@ function AdHocDetailsStep({ moduleOptions }) {
           <VerbositySelectField
             fieldId="verbosity"
             tooltip={i18n._(
-              msg`These are the verbosity levels for standard out of the command run that are supported.`
+              t`These are the verbosity levels for standard out of the command run that are supported.`
             )}
             isValid={
               !verbosityMeta.touched || !verbosityMeta.error
@@ -145,19 +145,19 @@ function AdHocDetailsStep({ moduleOptions }) {
             id="limit"
             name="limit"
             type="text"
-            label={i18n._(msg`Limit`)}
-            aria-label={i18n._(msg`Limit`)}
+            label={i18n._(t`Limit`)}
+            aria-label={i18n._(t`Limit`)}
             tooltip={
               <span>
                 {i18n._(
-                  msg`The pattern used to target hosts in the inventory. Leaving the field blank, all, and * will all target all hosts in the inventory. You can find more information about Ansible's host patterns`
+                  t`The pattern used to target hosts in the inventory. Leaving the field blank, all, and * will all target all hosts in the inventory. You can find more information about Ansible's host patterns`
                 )}{' '}
                 <a
                   href="https://docs.ansible.com/ansible/latest/user_guide/intro_patterns.html"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  {i18n._(msg`here`)}
+                  {i18n._(t`here`)}
                 </a>
               </span>
             }
@@ -167,31 +167,31 @@ function AdHocDetailsStep({ moduleOptions }) {
             name="forks"
             type="number"
             min="0"
-            label={i18n._(msg`Forks`)}
-            aria-label={i18n._(msg`Forks`)}
+            label={i18n._(t`Forks`)}
+            aria-label={i18n._(t`Forks`)}
             tooltip={
               <span>
                 {i18n._(
-                  msg`The number of parallel or simultaneous processes to use while executing the playbook. Inputting no value will use the default value from the ansible configuration file.  You can find more information`
+                  t`The number of parallel or simultaneous processes to use while executing the playbook. Inputting no value will use the default value from the ansible configuration file.  You can find more information`
                 )}{' '}
                 <a
                   href="https://docs.ansible.com/ansible/latest/installation_guide/intro_configuration.html#the-ansible-configuration-file"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  {i18n._(msg`here.`)}
+                  {i18n._(t`here.`)}
                 </a>
               </span>
             }
           />
           <FormColumnLayout>
             <FormGroup
-              label={i18n._(msg`Show changes`)}
-              aria-label={i18n._(msg`Show changes`)}
+              label={i18n._(t`Show changes`)}
+              aria-label={i18n._(t`Show changes`)}
               labelIcon={
                 <Popover
                   content={i18n._(
-                    msg`If enabled, show the changes made by Ansible tasks, where supported. This is equivalent to Ansible’s --diff mode.`
+                    t`If enabled, show the changes made by Ansible tasks, where supported. This is equivalent to Ansible’s --diff mode.`
                   )}
                 />
               }
@@ -199,36 +199,36 @@ function AdHocDetailsStep({ moduleOptions }) {
               <Switch
                 css="display: inline-flex;"
                 id="diff_mode"
-                label={i18n._(msg`On`)}
-                labelOff={i18n._(msg`Off`)}
+                label={i18n._(t`On`)}
+                labelOff={i18n._(t`Off`)}
                 isChecked={diffModeField.value}
                 onChange={() => {
                   diffModeHelpers.setValue(!diffModeField.value);
                 }}
                 ouiaId="diff-mode-switch"
-                aria-label={i18n._(msg`toggle changes`)}
+                aria-label={i18n._(t`toggle changes`)}
               />
             </FormGroup>
             <FormGroup name="become_enabled" fieldId="become_enabled">
               <FormCheckboxLayout>
                 <Checkbox
-                  aria-label={i18n._(msg`Enable privilege escalation`)}
+                  aria-label={i18n._(t`Enable privilege escalation`)}
                   label={
                     <span>
-                      {i18n._(msg`Enable privilege escalation`)}
+                      {i18n._(t`Enable privilege escalation`)}
                       &nbsp;
                       <Popover
                         content={
                           <p>
-                            {i18n._(msg`Enables creation of a provisioning
+                            {i18n._(t`Enables creation of a provisioning
                               callback URL. Using the URL a host can contact ${brandName}
                               and request a configuration update using this job
                               template`)}
                             &nbsp;
                             <code>--become </code>
-                            {i18n._(msg`option to the`)} &nbsp;
+                            {i18n._(t`option to the`)} &nbsp;
                             <code>ansible </code>
-                            {i18n._(msg`command`)}
+                            {i18n._(t`command`)}
                           </p>
                         }
                       />
@@ -255,12 +255,12 @@ function AdHocDetailsStep({ moduleOptions }) {
               <TooltipWrapper>
                 <p>
                   {i18n._(
-                    msg`Pass extra command line changes. There are two ansible command line parameters: `
+                    t`Pass extra command line changes. There are two ansible command line parameters: `
                   )}
                   <br />
                   <code>-e</code>, <code>--extra-vars </code>
                   <br />
-                  {i18n._(msg`Provide key/value pairs using either
+                  {i18n._(t`Provide key/value pairs using either
                   YAML or JSON.`)}
                 </p>
                 JSON:
@@ -285,8 +285,8 @@ function AdHocDetailsStep({ moduleOptions }) {
                 </code>
               </TooltipWrapper>
             }
-            label={i18n._(msg`Extra variables`)}
-            aria-label={i18n._(msg`Extra variables`)}
+            label={i18n._(t`Extra variables`)}
+            aria-label={i18n._(t`Extra variables`)}
           />
         </FormFullWidthLayout>
       </FormColumnLayout>

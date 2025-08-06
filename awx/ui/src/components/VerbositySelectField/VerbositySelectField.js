@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useField } from 'formik';
 import { FormGroup } from '@patternfly/react-core';
 import Popover from 'components/Popover';
@@ -24,7 +24,7 @@ function VerbositySelectField({
   return promptId ? (
     <FieldWithPrompt
       fieldId={fieldId}
-      label={i18n._(msg`Verbosity`)}
+      label={i18n._(t`Verbosity`)}
       promptId={promptId}
       promptName={promptName}
       tooltip={tooltip}
@@ -35,7 +35,7 @@ function VerbositySelectField({
     <FormGroup
       fieldId={fieldId}
       validated={isValid ? 'default' : 'error'}
-      label={i18n._(msg`Verbosity`)}
+      label={i18n._(t`Verbosity`)}
       labelIcon={<Popover content={tooltip} />}
     >
       <AnsibleSelect
@@ -50,12 +50,12 @@ function VerbositySelectField({
 
 export function VERBOSITY(i18n) {
   return {
-    0: i18n._(msg`0 (Normal)`),
-    1: i18n._(msg`1 (Verbose)`),
-    2: i18n._(msg`2 (More Verbose)`),
-    3: i18n._(msg`3 (Debug)`),
-    4: i18n._(msg`4 (Connection Debug)`),
-    5: i18n._(msg`5 (WinRM Debug)`),
+    0: i18n._(t`0 (Normal)`),
+    1: i18n._(t`1 (Verbose)`),
+    2: i18n._(t`2 (More Verbose)`),
+    3: i18n._(t`3 (Debug)`),
+    4: i18n._(t`4 (Connection Debug)`),
+    5: i18n._(t`5 (WinRM Debug)`),
   };
 }
 

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { useField } from 'formik';
 import { FormGroup } from '@patternfly/react-core';
@@ -20,7 +20,7 @@ export const SourceVarsField = ({ popoverContent }) => {
       <VariablesField
         id="source_vars"
         name="source_vars"
-        label={i18n._(msg`Source variables`)}
+        label={i18n._(t`Source variables`)}
         tooltip={
           <>
             {popoverContent}
@@ -38,16 +38,16 @@ export const VerbosityField = () => {
   const [field, meta, helpers] = useField('verbosity');
   const isValid = !(meta.touched && meta.error);
   const options = [
-    { value: '0', key: '0', label: i18n._(msg`0 (Warning)`) },
-    { value: '1', key: '1', label: i18n._(msg`1 (Info)`) },
-    { value: '2', key: '2', label: i18n._(msg`2 (Debug)`) },
+    { value: '0', key: '0', label: i18n._(t`0 (Warning)`) },
+    { value: '1', key: '1', label: i18n._(t`1 (Info)`) },
+    { value: '2', key: '2', label: i18n._(t`2 (Debug)`) },
   ];
 
   return (
     <FormGroup
       fieldId="verbosity"
       validated={isValid ? 'default' : 'error'}
-      label={i18n._(msg`Verbosity`)}
+      label={i18n._(t`Verbosity`)}
       labelIcon={<Popover content={helpText.subFormVerbosityFields} />}
     >
       <AnsibleSelect
@@ -78,25 +78,25 @@ export const OptionsField = () => {
       <FormFullWidthLayout>
         <FormGroup
           fieldId="option-checkboxes"
-          label={i18n._(msg`Update options`)}
+          label={i18n._(t`Update options`)}
         >
           <FormCheckboxLayout>
             <CheckboxField
               id="overwrite"
               name="overwrite"
-              label={i18n._(msg`Overwrite`)}
+              label={i18n._(t`Overwrite`)}
               tooltip={helpText.subFormOptions.overwrite}
             />
             <CheckboxField
               id="overwrite_vars"
               name="overwrite_vars"
-              label={i18n._(msg`Overwrite variables`)}
+              label={i18n._(t`Overwrite variables`)}
               tooltip={helpText.subFormOptions.overwriteVariables}
             />
             <CheckboxField
               id="update_on_launch"
               name="update_on_launch"
-              label={i18n._(msg`Update on launch`)}
+              label={i18n._(t`Update on launch`)}
               tooltip={helpText.subFormOptions.updateOnLaunch(projectField)}
             />
           </FormCheckboxLayout>
@@ -110,7 +110,7 @@ export const OptionsField = () => {
           min="0"
           max="2147483647"
           validate={minMaxValue(0, 2147483647)}
-          label={i18n._(msg`Cache timeout (seconds)`)}
+          label={i18n._(t`Cache timeout (seconds)`)}
           tooltip={helpText.cachedTimeOut}
         />
       )}
@@ -124,7 +124,7 @@ export const EnabledVarField = () => {
   return (
     <FormField
       id="inventory-enabled-var"
-      label={i18n._(msg`Enabled Variable`)}
+      label={i18n._(t`Enabled Variable`)}
       tooltip={helpText.enabledVariableField}
       name="enabled_var"
       type="text"
@@ -138,7 +138,7 @@ export const EnabledValueField = () => {
   return (
     <FormField
       id="inventory-enabled-value"
-      label={i18n._(msg`Enabled Value`)}
+      label={i18n._(t`Enabled Value`)}
       tooltip={helpText.enabledValue}
       name="enabled_value"
       type="text"
@@ -152,7 +152,7 @@ export const HostFilterField = () => {
   return (
     <FormField
       id="host-filter"
-      label={i18n._(msg`Host Filter`)}
+      label={i18n._(t`Host Filter`)}
       tooltip={helpText.hostFilter}
       name="host_filter"
       type="text"

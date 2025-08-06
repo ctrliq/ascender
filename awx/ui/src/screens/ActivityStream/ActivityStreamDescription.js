@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 
 const buildAnchor = (obj, resource, activity) => {
   let url;
@@ -504,18 +504,18 @@ function ActivityStreamDescription({ activity }) {
             ) {
               let operationText = '';
               if (activity.changes.status[1] === 'successful') {
-                operationText = i18n._(msg`approved`);
+                operationText = i18n._(t`approved`);
               } else if (activity.changes.status[1] === 'failed') {
                 if (
                   activity.changes.timed_out &&
                   activity.changes.timed_out[1] === true
                 ) {
-                  operationText = i18n._(msg`timed out`);
+                  operationText = i18n._(t`timed out`);
                 } else {
-                  operationText = i18n._(msg`denied`);
+                  operationText = i18n._(t`denied`);
                 }
               } else {
-                operationText = i18n._(msg`updated`);
+                operationText = i18n._(t`updated`);
               }
               labeledLinks.push(
                 buildLabeledLink(
@@ -554,7 +554,7 @@ function ActivityStreamDescription({ activity }) {
         break;
     }
   } catch (err) {
-    return <span>{i18n._(msg`Event summary not available`)}</span>;
+    return <span>{i18n._(t`Event summary not available`)}</span>;
   }
 
   return (

@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { Route, Switch } from 'react-router-dom';
 import PersistentFilters from 'components/PersistentFilters';
 import ScreenHeader from 'components/ScreenHeader';
@@ -12,8 +12,8 @@ import CredentialType from './CredentialType';
 function CredentialTypes() {
   const { i18n } = useLingui();
   const [breadcrumbConfig, setBreadcrumbConfig] = useState({
-    '/credential_types': i18n._(msg`Credential Types`),
-    '/credential_types/add': i18n._(msg`Create new credential type`),
+    '/credential_types': i18n._(t`Credential Types`),
+    '/credential_types/add': i18n._(t`Create new credential type`),
   });
 
   const buildBreadcrumbConfig = useCallback(
@@ -22,14 +22,14 @@ function CredentialTypes() {
         return;
       }
       setBreadcrumbConfig({
-        '/credential_types': i18n._(msg`Credential Types`),
-        '/credential_types/add': i18n._(msg`Create new credential Type`),
+        '/credential_types': i18n._(t`Credential Types`),
+        '/credential_types/add': i18n._(t`Create new credential Type`),
         [`/credential_types/${credentialTypes.id}`]: `${credentialTypes.name}`,
         [`/credential_types/${credentialTypes.id}/edit`]: i18n._(
-          msg`Edit details`
+          t`Edit details`
         ),
         [`/credential_types/${credentialTypes.id}/details`]: i18n._(
-          msg`Details`
+          t`Details`
         ),
       });
     },

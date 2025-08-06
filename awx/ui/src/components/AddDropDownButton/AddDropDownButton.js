@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 import React, { useState, useRef, useEffect } from 'react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownPosition } from '@patternfly/react-core';
@@ -39,7 +39,7 @@ function AddDropDownButton({ dropdownItems, ouiaId }) {
         toggle={
           <ToolbarAddButton
             ouiaId={ouiaId}
-            aria-label={i18n._(msg`Add`)}
+            aria-label={i18n._(t`Add`)}
             showToggleIndicator
             onClick={() => setIsOpen(!isOpen)}
           />

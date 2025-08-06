@@ -1,6 +1,6 @@
 import React from 'react';
 import { i18n } from '@lingui/core';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import ExecutionEnvironmentStep from './ExecutionEnvironmentStep';
 import StepName from './StepName';
 
@@ -27,7 +27,7 @@ function getStep(launchConfig) {
     id: STEP_ID,
     name: (
       <StepName id="execution-environment-step">
-        {i18n._(msg`Execution Environment`)}
+        {i18n._(t`Execution Environment`)}
       </StepName>
     ),
     component: <ExecutionEnvironmentStep />,

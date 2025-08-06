@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 
 import {
@@ -87,7 +87,7 @@ function ErrorDetail({ error }) {
 
   return (
     <Expandable
-      toggleText={i18n._(msg`Details`)}
+      toggleText={i18n._(t`Details`)}
       onToggle={handleToggle}
       isExpanded={isExpanded}
     >

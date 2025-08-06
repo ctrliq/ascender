@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { Card } from '@patternfly/react-core';
 
 import { ExecutionEnvironmentsAPI } from 'api';
@@ -81,30 +81,30 @@ function ExecutionEnvironmentTemplateList({ executionEnvironment }) {
         hasContentLoading={isLoading}
         items={templates}
         itemCount={templatesCount}
-        pluralizedItemName={i18n._(msg`Templates`)}
+        pluralizedItemName={i18n._(t`Templates`)}
         qsConfig={QS_CONFIG}
         toolbarSearchableKeys={searchableKeys}
         toolbarRelatedSearchableKeys={relatedSearchableKeys}
         toolbarSearchColumns={[
           {
-            name: i18n._(msg`Name`),
+            name: i18n._(t`Name`),
             key: 'name__icontains',
             isDefault: true,
           },
           {
-            name: i18n._(msg`Type`),
+            name: i18n._(t`Type`),
             key: 'or__type',
             options: [
-              [`job_template`, i18n._(msg`Job Template`)],
-              [`workflow_job_template`, i18n._(msg`Workflow Template`)],
+              [`job_template`, i18n._(t`Job Template`)],
+              [`workflow_job_template`, i18n._(t`Workflow Template`)],
             ],
           },
           {
-            name: i18n._(msg`Created By (Username)`),
+            name: i18n._(t`Created By (Username)`),
             key: 'created_by__username__icontains',
           },
           {
-            name: i18n._(msg`Modified By (Username)`),
+            name: i18n._(t`Modified By (Username)`),
             key: 'modified_by__username__icontains',
           },
         ]}
@@ -113,8 +113,8 @@ function ExecutionEnvironmentTemplateList({ executionEnvironment }) {
         )}
         headerRow={
           <HeaderRow qsConfig={QS_CONFIG} isSelectable={false}>
-            <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
-            <HeaderCell>{i18n._(msg`Type`)}</HeaderCell>
+            <HeaderCell sortKey="name">{i18n._(t`Name`)}</HeaderCell>
+            <HeaderCell>{i18n._(t`Type`)}</HeaderCell>
           </HeaderRow>
         }
         renderRow={(template) => (

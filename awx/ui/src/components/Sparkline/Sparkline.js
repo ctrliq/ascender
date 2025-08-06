@@ -4,7 +4,7 @@ import { arrayOf } from 'prop-types';
 import { Link as _Link } from 'react-router-dom';
 import { Tooltip } from '@patternfly/react-core';
 import styled from 'styled-components';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { formatDateString } from 'util/dates';
 import { Job } from 'types';
@@ -27,14 +27,14 @@ const Sparkline = ({ jobs }) => {
   const generateTooltip = (job) => (
     <>
       <div>
-        {i18n._(msg`JOB ID:`)} {job.id}
+        {i18n._(t`JOB ID:`)} {job.id}
       </div>
       <div>
-        {i18n._(msg`STATUS:`)} {job.status.toUpperCase()}
+        {i18n._(t`STATUS:`)} {job.status.toUpperCase()}
       </div>
       {job.finished && (
         <div>
-          {i18n._(msg`FINISHED:`)} {formatDateString(job.finished)}
+          {i18n._(t`FINISHED:`)} {formatDateString(job.finished)}
         </div>
       )}
     </>
@@ -43,7 +43,7 @@ const Sparkline = ({ jobs }) => {
   const statusIcons = jobs.map((job) => (
     <Tooltip position="top" content={generateTooltip(job)} key={job.id}>
       <Link
-        aria-label={i18n._(msg`View job ${job.id}`)}
+        aria-label={i18n._(t`View job ${job.id}`)}
         to={`/jobs/${JOB_TYPE_URL_SEGMENTS[job.type]}/${job.id}`}
       >
         <StatusIcon status={job.status} />

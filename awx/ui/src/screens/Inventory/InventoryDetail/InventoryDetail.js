@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import {
   Button,
@@ -71,7 +71,7 @@ function InventoryDetail({ inventory }) {
     <TextList component={TextListVariants.ul}>
       {prevent_instance_group_fallback && (
         <TextListItem component={TextListItemVariants.li}>
-          {i18n._(msg`Prevent Instance Group Fallback`)}
+          {i18n._(t`Prevent Instance Group Fallback`)}
         </TextListItem>
       )}
     </TextList>
@@ -89,17 +89,17 @@ function InventoryDetail({ inventory }) {
     <CardBody>
       <DetailList>
         <Detail
-          label={i18n._(msg`Name`)}
+          label={i18n._(t`Name`)}
           value={inventory.name}
           dataCy="inventory-detail-name"
         />
         <Detail
-          label={i18n._(msg`Description`)}
+          label={i18n._(t`Description`)}
           value={inventory.description}
         />
-        <Detail label={i18n._(msg`Type`)} value={i18n._(msg`Inventory`)} />
+        <Detail label={i18n._(t`Type`)} value={i18n._(t`Inventory`)} />
         <Detail
-          label={i18n._(msg`Organization`)}
+          label={i18n._(t`Organization`)}
           value={
             <Link to={`/organizations/${organization.id}/details`}>
               {organization.name}
@@ -107,20 +107,20 @@ function InventoryDetail({ inventory }) {
           }
         />
         <Detail
-          label={i18n._(msg`Total hosts`)}
+          label={i18n._(t`Total hosts`)}
           value={inventory.total_hosts}
         />
         {instanceGroups && (
           <Detail
             fullWidth
-            label={i18n._(msg`Instance Groups`)}
+            label={i18n._(t`Instance Groups`)}
             value={<InstanceGroupLabels labels={instanceGroups} isLinkable />}
             isEmpty={instanceGroups.length === 0}
           />
         )}
         {prevent_instance_group_fallback && (
           <Detail
-            label={i18n._(msg`Prevent Instance Group Fallback`)}
+            label={i18n._(t`Prevent Instance Group Fallback`)}
             dataCy="inv-detail-prevent-instnace-group-fallback"
             helpText={helpText.preventInstanceGroupFallback}
           />
@@ -128,7 +128,7 @@ function InventoryDetail({ inventory }) {
         {renderOptionsField && (
           <Detail
             fullWidth
-            label={i18n._(msg`Enabled Options`)}
+            label={i18n._(t`Enabled Options`)}
             value={renderOptions}
             dataCy="jt-detail-enabled-options"
             helpText={helpText.enabledOptions}
@@ -138,7 +138,7 @@ function InventoryDetail({ inventory }) {
           <Detail
             fullWidth
             helpText={helpText.labels}
-            label={i18n._(msg`Labels`)}
+            label={i18n._(t`Labels`)}
             value={
               <ChipGroup
                 numChips={5}
@@ -155,7 +155,7 @@ function InventoryDetail({ inventory }) {
           />
         )}
         <VariablesDetail
-          label={i18n._(msg`Variables`)}
+          label={i18n._(t`Variables`)}
           helpText={helpText.variables()}
           value={inventory.variables}
           rows={4}
@@ -163,12 +163,12 @@ function InventoryDetail({ inventory }) {
           dataCy="inventory-detail-variables"
         />
         <UserDateDetail
-          label={i18n._(msg`Created`)}
+          label={i18n._(t`Created`)}
           date={inventory.created}
           user={inventory.summary_fields.created_by}
         />
         <UserDateDetail
-          label={i18n._(msg`Last Modified`)}
+          label={i18n._(t`Last Modified`)}
           date={inventory.modified}
           user={inventory.summary_fields.modified_by}
         />
@@ -180,20 +180,20 @@ function InventoryDetail({ inventory }) {
             component={Link}
             to={`/inventories/inventory/${inventory.id}/edit`}
           >
-            {i18n._(msg`Edit`)}
+            {i18n._(t`Edit`)}
           </Button>
         )}
         {userCapabilities.delete && (
           <DeleteButton
             name={inventory.name}
-            modalTitle={i18n._(msg`Delete Inventory`)}
+            modalTitle={i18n._(t`Delete Inventory`)}
             onConfirm={deleteInventory}
             deleteDetailsRequests={deleteDetailsRequests}
             deleteMessage={i18n._(
-              msg`This inventory is currently being used by other resources. Are you sure you want to delete it?`
+              t`This inventory is currently being used by other resources. Are you sure you want to delete it?`
             )}
           >
-            {i18n._(msg`Delete`)}
+            {i18n._(t`Delete`)}
           </DeleteButton>
         )}
       </CardActionsRow>
@@ -202,10 +202,10 @@ function InventoryDetail({ inventory }) {
         <AlertModal
           isOpen={error}
           variant="error"
-          title={i18n._(msg`Error!`)}
+          title={i18n._(t`Error!`)}
           onClose={dismissError}
         >
-          {i18n._(msg`Failed to delete inventory.`)}
+          {i18n._(t`Failed to delete inventory.`)}
           <ErrorDetail error={error} />
         </AlertModal>
       )}

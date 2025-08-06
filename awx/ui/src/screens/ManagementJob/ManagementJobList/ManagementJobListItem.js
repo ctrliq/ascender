@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useLingui } from '@lingui/react';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { Link, useHistory } from 'react-router-dom';
 import { Button, Tooltip } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
@@ -66,13 +66,13 @@ function ManagementJobListItem({
     <>
       <Tr id={rowId} ouiaId={rowId}>
         <Td />
-        <Td dataLabel={i18n._(msg`Name`)}>
+        <Td dataLabel={i18n._(t`Name`)}>
           <Link to={`${detailsUrl}`}>
             <b>{name}</b>
           </Link>
         </Td>
-        <Td dataLabel={i18n._(msg`Description`)}>{description}</Td>
-        <ActionsTd dataLabel={i18n._(msg`Actions`)}>
+        <Td dataLabel={i18n._(t`Description`)}>{description}</Td>
+        <ActionsTd dataLabel={i18n._(t`Actions`)}>
           <ActionItem visible={isSuperUser}>
             {isSuperUser ? (
               <>
@@ -87,12 +87,12 @@ function ManagementJobListItem({
                   />
                 ) : (
                   <Tooltip
-                    content={i18n._(msg`Launch management job`)}
+                    content={i18n._(t`Launch management job`)}
                     position="left"
                   >
                     <Button
                       ouiaId={`${id}-launch-button`}
-                      aria-label={i18n._(msg`Launch management job`)}
+                      aria-label={i18n._(t`Launch management job`)}
                       variant="plain"
                       onClick={handleLaunch}
                       isDisabled={isLaunchLoading}
@@ -111,8 +111,8 @@ function ManagementJobListItem({
           isOpen={managementPromptError}
           variant="danger"
           onClose={() => setManagementPromptError(null)}
-          title={i18n._(msg`Management job launch error`)}
-          label={i18n._(msg`Management job launch error`)}
+          title={i18n._(t`Management job launch error`)}
+          label={i18n._(t`Management job launch error`)}
         >
           <ErrorDetail error={managementPromptError} />
         </AlertModal>

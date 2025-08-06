@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { func, number, string, oneOfType } from 'prop-types';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { SelectVariant, Select, SelectOption } from '@patternfly/react-core';
 import { ProjectsAPI } from 'api';
@@ -59,8 +59,8 @@ function PlaybookSelect({
       variant={SelectVariant.typeahead}
       selections={selected}
       onToggle={setIsOpen}
-      placeholderText={i18n._(msg`Select a playbook`)}
-      typeAheadAriaLabel={i18n._(msg`Select a playbook`)}
+      placeholderText={i18n._(t`Select a playbook`)}
+      typeAheadAriaLabel={i18n._(t`Select a playbook`)}
       isCreatable
       createText=""
       onSelect={(event, value) => {
@@ -72,7 +72,7 @@ function PlaybookSelect({
       onBlur={onBlur}
       isDisabled={isLoading || isDisabled}
       maxHeight="1000%"
-      noResultsFoundText={i18n._(msg`No results found`)}
+      noResultsFoundText={i18n._(t`No results found`)}
     >
       {options.map((opt) => (
         <SelectOption key={opt} value={opt} />

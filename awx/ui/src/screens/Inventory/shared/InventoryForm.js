@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { Formik, useField, useFormikContext } from 'formik';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { func, shape } from 'prop-types';
 import { Form, FormGroup } from '@patternfly/react-core';
 import { VariablesField } from 'components/CodeEditor';
@@ -49,7 +49,7 @@ function InventoryFormFields({ inventory }) {
     <>
       <FormField
         id="inventory-name"
-        label={i18n._(msg`Name`)}
+        label={i18n._(t`Name`)}
         name="name"
         type="text"
         validate={required(null)}
@@ -57,7 +57,7 @@ function InventoryFormFields({ inventory }) {
       />
       <FormField
         id="inventory-description"
-        label={i18n._(msg`Description`)}
+        label={i18n._(t`Description`)}
         name="description"
         type="text"
       />
@@ -71,7 +71,7 @@ function InventoryFormFields({ inventory }) {
         error={organizationMeta.error}
         required
         autoPopulate={!inventory?.id}
-        validate={required(i18n._(msg`Select a value for this field`))}
+        validate={required(i18n._(t`Select a value for this field`))}
       />
       <InstanceGroupsLookup
         value={instanceGroupsField.value}
@@ -82,7 +82,7 @@ function InventoryFormFields({ inventory }) {
       />
       <FormFullWidthLayout>
         <FormGroup
-          label={i18n._(msg`Labels`)}
+          label={i18n._(t`Labels`)}
           labelIcon={<Popover content={helpText.labels} />}
           fieldId="inventory-labels"
         >
@@ -90,18 +90,18 @@ function InventoryFormFields({ inventory }) {
             value={labelsField.value}
             onChange={(labels) => labelsHelpers.setValue(labels)}
             onError={setContentError}
-            createText={i18n._(msg`Create`)}
+            createText={i18n._(t`Create`)}
           />
         </FormGroup>
         <FormGroup
           fieldId="inventory-option-checkboxes"
-          label={i18n._(msg`Options`)}
+          label={i18n._(t`Options`)}
         >
           <FormCheckboxLayout>
             <CheckboxField
               id="option-prevent-instance-group-fallback"
               name="prevent_instance_group_fallback"
-              label={i18n._(msg`Prevent Instance Group Fallback`)}
+              label={i18n._(t`Prevent Instance Group Fallback`)}
               tooltip={helpText.preventInstanceGroupFallback}
             />
           </FormCheckboxLayout>
@@ -110,7 +110,7 @@ function InventoryFormFields({ inventory }) {
           tooltip={helpText.variables()}
           id="inventory-variables"
           name="variables"
-          label={i18n._(msg`Variables`)}
+          label={i18n._(t`Variables`)}
         />
       </FormFullWidthLayout>
     </>

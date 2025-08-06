@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { useField } from 'formik';
 import { ExecutionEnvironmentsAPI } from 'api';
@@ -75,38 +75,38 @@ function ExecutionEnvironmentStep() {
         optionCount={count}
         columns={[
           {
-            name: i18n._(msg`Name`),
+            name: i18n._(t`Name`),
             key: 'name',
           },
           {
-            name: i18n._(msg`Image`),
+            name: i18n._(t`Image`),
             key: 'image',
           },
         ]}
         searchColumns={[
           {
-            name: i18n._(msg`Name`),
+            name: i18n._(t`Name`),
             key: 'name__icontains',
             isDefault: true,
           },
           {
-            name: i18n._(msg`Image`),
+            name: i18n._(t`Image`),
             key: 'image__icontains',
           },
         ]}
         sortColumns={[
           {
-            name: i18n._(msg`Name`),
+            name: i18n._(t`Name`),
             key: 'name',
           },
           {
-            name: i18n._(msg`Image`),
+            name: i18n._(t`Image`),
             key: 'image',
           },
         ]}
         searchableKeys={searchableKeys}
         relatedSearchableKeys={relatedSearchableKeys}
-        header={i18n._(msg`Execution Environments`)}
+        header={i18n._(t`Execution Environments`)}
         name="execution_environment"
         qsConfig={QS_CONFIG}
         readOnly

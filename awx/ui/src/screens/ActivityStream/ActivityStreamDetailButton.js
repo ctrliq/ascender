@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { Button, Modal } from '@patternfly/react-core';
 import { SearchPlusIcon } from '@patternfly/react-icons';
 
@@ -23,7 +23,7 @@ function ActivityStreamDetailButton({ streamItem, user, description }) {
     <>
       <Button
         ouiaId={`${streamItem.id}-view-details-button`}
-        aria-label={i18n._(msg`View event details`)}
+        aria-label={i18n._(t`View event details`)}
         variant="plain"
         component="button"
         onClick={() => setIsOpen(true)}
@@ -33,28 +33,28 @@ function ActivityStreamDetailButton({ streamItem, user, description }) {
       <Modal
         variant="large"
         isOpen={isOpen}
-        title={i18n._(msg`Event detail`)}
-        aria-label={i18n._(msg`Event detail modal`)}
+        title={i18n._(t`Event detail`)}
+        aria-label={i18n._(t`Event detail modal`)}
         onClose={() => setIsOpen(false)}
       >
         <DetailList gutter="sm">
           <Detail
-            label={i18n._(msg`Time`)}
+            label={i18n._(t`Time`)}
             value={formatDateString(streamItem.timestamp)}
           />
-          <Detail label={i18n._(msg`Initiated by`)} value={user} />
+          <Detail label={i18n._(t`Initiated by`)} value={user} />
           <Detail
-            label={i18n._(msg`Setting category`)}
+            label={i18n._(t`Setting category`)}
             value={setting && setting[0]?.category}
           />
           <Detail
-            label={i18n._(msg`Setting name`)}
+            label={i18n._(t`Setting name`)}
             value={setting && setting[0]?.name}
           />
-          <Detail fullWidth label={i18n._(msg`Action`)} value={description} />
+          <Detail fullWidth label={i18n._(t`Action`)} value={description} />
           {streamItem?.changes && (
             <VariablesDetail
-              label={i18n._(msg`Changes`)}
+              label={i18n._(t`Changes`)}
               rows={changeRows}
               value={
                 streamItem?.changes ? JSON.stringify(streamItem.changes) : ''

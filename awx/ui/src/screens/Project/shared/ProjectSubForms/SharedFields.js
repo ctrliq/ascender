@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { useFormikContext } from 'formik';
 import { FormGroup, Title } from '@patternfly/react-core';
@@ -15,7 +15,7 @@ export const UrlFormField = ({ tooltip }) => {
     <FormField
       id="project-scm-url"
       isRequired
-      label={i18n._(msg`Source Control URL`)}
+      label={i18n._(t`Source Control URL`)}
       name="scm_url"
       tooltip={tooltip}
       tooltipMaxWidth="350px"
@@ -58,7 +58,7 @@ export const ScmCredentialFormField = ({
   return (
     <CredentialLookup
       credentialTypeId={credential.typeId}
-      label={i18n._(msg`Source Control Credential`)}
+      label={i18n._(t`Source Control Credential`)}
       value={credential.value}
       onChange={onCredentialChange}
     />
@@ -74,40 +74,40 @@ export const ScmTypeOptions = ({ scmUpdateOnLaunch, hideAllowOverride }) => {
     <FormFullWidthLayout>
       <FormGroup
         fieldId="project-option-checkboxes"
-        label={i18n._(msg`Options`)}
+        label={i18n._(t`Options`)}
       >
         <FormCheckboxLayout>
           <CheckboxField
             id="option-scm-clean"
             name="scm_clean"
-            label={i18n._(msg`Clean`)}
+            label={i18n._(t`Clean`)}
             tooltip={projectHelpStrings.options.clean}
           />
           <CheckboxField
             id="option-scm-delete-on-update"
             name="scm_delete_on_update"
-            label={i18n._(msg`Delete`)}
+            label={i18n._(t`Delete`)}
             tooltip={projectHelpStrings.options.delete}
           />
           {values.scm_type === 'git' ? (
             <CheckboxField
               id="option-scm-track-submodules"
               name="scm_track_submodules"
-              label={i18n._(msg`Track submodules`)}
+              label={i18n._(t`Track submodules`)}
               tooltip={projectHelpStrings.options.trackSubModules}
             />
           ) : null}
           <CheckboxField
             id="option-scm-update-on-launch"
             name="scm_update_on_launch"
-            label={i18n._(msg`Update Revision on Launch`)}
+            label={i18n._(t`Update Revision on Launch`)}
             tooltip={projectHelpStrings.options.updateOnLaunch}
           />
           {!hideAllowOverride && (
             <CheckboxField
               id="option-allow-override"
               name="allow_override"
-              label={i18n._(msg`Allow Branch Override`)}
+              label={i18n._(t`Allow Branch Override`)}
               tooltip={projectHelpStrings.options.allowBranchOverride}
             />
           )}
@@ -117,14 +117,14 @@ export const ScmTypeOptions = ({ scmUpdateOnLaunch, hideAllowOverride }) => {
       {scmUpdateOnLaunch && (
         <>
           <Title size="md" headingLevel="h4">
-            {i18n._(msg`Option Details`)}
+            {i18n._(t`Option Details`)}
           </Title>
           <FormField
             id="project-cache-timeout"
             name="scm_update_cache_timeout"
             type="number"
             min="0"
-            label={i18n._(msg`Cache Timeout`)}
+            label={i18n._(t`Cache Timeout`)}
             tooltip={projectHelpStrings.options.cacheTimeout}
           />
         </>

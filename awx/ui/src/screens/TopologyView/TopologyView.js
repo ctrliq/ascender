@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback, useState, useRef } from 'react';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { PageSection, Card, CardBody } from '@patternfly/react-core';
 import ContentError from 'components/ContentError';
 import useRequest from 'hooks/useRequest';
@@ -41,7 +41,7 @@ function TopologyView() {
   return (
     <>
       <Header
-        title={i18n._(msg`Topology View`)}
+        title={i18n._(t`Topology View`)}
         handleSwitchToggle={setShowLegend}
         toggleState={showLegend}
         zoomIn={zoomIn}

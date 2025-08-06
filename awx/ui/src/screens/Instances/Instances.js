@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { Route, Switch } from 'react-router-dom';
 import ScreenHeader from 'components/ScreenHeader';
@@ -13,8 +13,8 @@ import InstanceEdit from './InstanceEdit';
 function Instances() {
   const { i18n } = useLingui();
   const [breadcrumbConfig, setBreadcrumbConfig] = useState({
-    '/instances': i18n._(msg`Instances`),
-    '/instances/add': i18n._(msg`Create new Instance`),
+    '/instances': i18n._(t`Instances`),
+    '/instances/add': i18n._(t`Create new Instance`),
   });
 
   const buildBreadcrumbConfig = useCallback(
@@ -23,15 +23,15 @@ function Instances() {
         return;
       }
       setBreadcrumbConfig({
-        '/instances': i18n._(msg`Instances`),
-        '/instances/add': i18n._(msg`Create new Instance`),
+        '/instances': i18n._(t`Instances`),
+        '/instances/add': i18n._(t`Create new Instance`),
         [`/instances/${instance.id}`]: `${instance.hostname}`,
-        [`/instances/${instance.id}/details`]: i18n._(msg`Details`),
-        [`/instances/${instance.id}/peers`]: i18n._(msg`Peers`),
+        [`/instances/${instance.id}/details`]: i18n._(t`Details`),
+        [`/instances/${instance.id}/peers`]: i18n._(t`Peers`),
         [`/instances/${instance.id}/listener_addresses`]: i18n._(
-          msg`Listener Addresses`
+          t`Listener Addresses`
         ),
-        [`/instances/${instance.id}/edit`]: i18n._(msg`Edit Instance`),
+        [`/instances/${instance.id}/edit`]: i18n._(t`Edit Instance`),
       });
     },
     [i18n]

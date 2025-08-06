@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Link, useHistory, useRouteMatch } from 'react-router-dom';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { Button } from '@patternfly/react-core';
 import { OrganizationsAPI } from 'api';
@@ -85,16 +85,16 @@ function OrganizationDetail({ organization }) {
     <CardBody>
       <DetailList>
         <Detail
-          label={i18n._(msg`Name`)}
+          label={i18n._(t`Name`)}
           value={name}
           dataCy="organization-detail-name"
         />
-        <Detail label={i18n._(msg`Description`)} value={description} />
+        <Detail label={i18n._(t`Description`)} value={description} />
         {license_info?.license_type !== 'open' && (
           <Detail
-            label={i18n._(msg`Max Hosts`)}
+            label={i18n._(t`Max Hosts`)}
             value={`${max_hosts}`}
-            helpText={i18n._(msg`The maximum number of hosts allowed to be managed by
+            helpText={i18n._(t`The maximum number of hosts allowed to be managed by
             this organization. Value defaults to 0 which means no limit.
             Refer to the Ansible documentation for more details.`)}
           />
@@ -103,27 +103,27 @@ function OrganizationDetail({ organization }) {
           virtualEnvironment={custom_virtualenv}
           executionEnvironment={summary_fields?.default_environment}
           isDefaultEnvironment
-          helpText={i18n._(msg`The execution environment that will be used for jobs
+          helpText={i18n._(t`The execution environment that will be used for jobs
           inside of this organization. This will be used a fallback when
           an execution environment has not been explicitly assigned at the
           project, job template or workflow level.`)}
         />
         <UserDateDetail
-          label={i18n._(msg`Created`)}
+          label={i18n._(t`Created`)}
           date={created}
           user={summary_fields.created_by}
         />
         <UserDateDetail
-          label={i18n._(msg`Last Modified`)}
+          label={i18n._(t`Last Modified`)}
           date={modified}
           user={summary_fields.modified_by}
         />
         {instanceGroups && (
           <Detail
             fullWidth
-            label={i18n._(msg`Instance Groups`)}
+            label={i18n._(t`Instance Groups`)}
             helpText={i18n._(
-              msg`The Instance Groups for this Organization to run on.`
+              t`The Instance Groups for this Organization to run on.`
             )}
             value={<InstanceGroupLabels labels={instanceGroups} isLinkable />}
             isEmpty={instanceGroups.length === 0}
@@ -131,7 +131,7 @@ function OrganizationDetail({ organization }) {
         )}
         <Detail
           fullWidth
-          label={i18n._(msg`Galaxy Credentials`)}
+          label={i18n._(t`Galaxy Credentials`)}
           value={
             <ChipGroup
               numChips={5}
@@ -160,26 +160,26 @@ function OrganizationDetail({ organization }) {
         {summary_fields.user_capabilities.edit && (
           <Button
             ouiaId="organization-detail-edit-button"
-            aria-label={i18n._(msg`Edit`)}
+            aria-label={i18n._(t`Edit`)}
             component={Link}
             to={`/organizations/${id}/edit`}
           >
-            {i18n._(msg`Edit`)}
+            {i18n._(t`Edit`)}
           </Button>
         )}
         {summary_fields.user_capabilities &&
           summary_fields.user_capabilities.delete && (
             <DeleteButton
               name={name}
-              modalTitle={i18n._(msg`Delete Organization`)}
+              modalTitle={i18n._(t`Delete Organization`)}
               onConfirm={deleteOrganization}
               isDisabled={isLoading}
               deleteDetailsRequests={deleteDetailsRequests}
               deleteMessage={i18n._(
-                msg`This organization is currently being by other resources. Are you sure you want to delete it?`
+                t`This organization is currently being by other resources. Are you sure you want to delete it?`
               )}
             >
-              {i18n._(msg`Delete`)}
+              {i18n._(t`Delete`)}
             </DeleteButton>
           )}
       </CardActionsRow>
@@ -188,10 +188,10 @@ function OrganizationDetail({ organization }) {
         <AlertModal
           isOpen={error}
           variant="error"
-          title={i18n._(msg`Error!`)}
+          title={i18n._(t`Error!`)}
           onClose={dismissError}
         >
-          {i18n._(msg`Failed to delete organization.`)}
+          {i18n._(t`Failed to delete organization.`)}
           <ErrorDetail error={error} />
         </AlertModal>
       )}

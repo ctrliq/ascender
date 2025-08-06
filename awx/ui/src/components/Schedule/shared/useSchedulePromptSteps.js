@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import useInventoryStep from '../../LaunchPrompt/steps/useInventoryStep';
 import useCredentialsStep from '../../LaunchPrompt/steps/useCredentialsStep';
 import useExecutionEnvironmentStep from '../../LaunchPrompt/steps/useExecutionEnvironmentStep';
@@ -48,7 +48,7 @@ export default function useSchedulePromptSteps(
       surveyConfig,
       hasErrors,
       true,
-      i18n._(msg`Save`)
+      i18n._(t`Save`)
     )
   );
 

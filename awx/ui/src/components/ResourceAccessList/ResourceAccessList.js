@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { RolesAPI, TeamsAPI, UsersAPI } from 'api';
 import { getQSConfig, parseQueryString } from 'util/qs';
 import useRequest, { useDeleteItems } from 'hooks/useRequest';
@@ -143,23 +143,23 @@ function ResourceAccessList({ apiModel, resource }) {
 
   const toolbarSearchColumns = [
     {
-      name: i18n._(msg`Username`),
+      name: i18n._(t`Username`),
       key: 'username__icontains',
       isDefault: true,
     },
     {
-      name: i18n._(msg`First Name`),
+      name: i18n._(t`First Name`),
       key: 'first_name__icontains',
     },
     {
-      name: i18n._(msg`Last Name`),
+      name: i18n._(t`Last Name`),
       key: 'last_name__icontains',
     },
   ];
 
   if (organizationRoles?.length > 0) {
     toolbarSearchColumns.push({
-      name: i18n._(msg`Roles`),
+      name: i18n._(t`Roles`),
       key: `or__roles__in`,
       options: organizationRoles,
     });
@@ -172,7 +172,7 @@ function ResourceAccessList({ apiModel, resource }) {
         hasContentLoading={isLoading || isDeleteLoading}
         items={accessRecords}
         itemCount={itemCount}
-        pluralizedItemName={i18n._(msg`Roles`)}
+        pluralizedItemName={i18n._(t`Roles`)}
         qsConfig={QS_CONFIG}
         toolbarSearchColumns={toolbarSearchColumns}
         toolbarSearchableKeys={searchableKeys}
@@ -196,14 +196,14 @@ function ResourceAccessList({ apiModel, resource }) {
         )}
         headerRow={
           <HeaderRow qsConfig={QS_CONFIG} isSelectable={false}>
-            <HeaderCell sortKey="username">{i18n._(msg`Username`)}</HeaderCell>
+            <HeaderCell sortKey="username">{i18n._(t`Username`)}</HeaderCell>
             <HeaderCell sortKey="first_name">
-              {i18n._(msg`First name`)}
+              {i18n._(t`First name`)}
             </HeaderCell>
             <HeaderCell sortKey="last_name">
-              {i18n._(msg`Last name`)}
+              {i18n._(t`Last name`)}
             </HeaderCell>
-            <HeaderCell>{i18n._(msg`Roles`)}</HeaderCell>
+            <HeaderCell>{i18n._(t`Roles`)}</HeaderCell>
           </HeaderRow>
         }
         renderRow={(accessRecord, index) => (
@@ -251,11 +251,11 @@ function ResourceAccessList({ apiModel, resource }) {
       {submitError && (
         <AlertModal
           variant="error"
-          title={i18n._(msg`Error!`)}
+          title={i18n._(t`Error!`)}
           isOpen={submitError}
           onClose={() => setSubmitError(null)}
         >
-          {i18n._(msg`Failed to assign roles properly`)}
+          {i18n._(t`Failed to assign roles properly`)}
           <ErrorDetail error={submitError} />
         </AlertModal>
       )}
@@ -263,10 +263,10 @@ function ResourceAccessList({ apiModel, resource }) {
         <AlertModal
           isOpen={deletionError}
           variant="error"
-          title={i18n._(msg`Error!`)}
+          title={i18n._(t`Error!`)}
           onClose={clearDeletionError}
         >
-          {i18n._(msg`Failed to delete role`)}
+          {i18n._(t`Failed to delete role`)}
         </AlertModal>
       )}
     </>

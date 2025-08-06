@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import PropTypes from 'prop-types';
 import { Button, Tooltip } from '@patternfly/react-core';
@@ -28,25 +28,25 @@ function ConstructedInventorySyncButton({ inventoryId }) {
 
   return (
     <>
-      <Tooltip content={i18n._(msg`Start sync process`)} position="top">
+      <Tooltip content={i18n._(t`Start sync process`)} position="top">
         <Button
           ouiaId={testId}
           isDisabled={startSyncLoading}
-          aria-label={i18n._(msg`Start inventory source sync`)}
+          aria-label={i18n._(t`Start inventory source sync`)}
           variant="secondary"
           onClick={startSyncProcess}
         >
-          {i18n._(msg`Sync`)}
+          {i18n._(t`Sync`)}
         </Button>
       </Tooltip>
       {startError && (
         <AlertModal
           isOpen={startError}
           variant="error"
-          title={i18n._(msg`Error!`)}
+          title={i18n._(t`Error!`)}
           onClose={dismissStartError}
         >
-          {i18n._(msg`Failed to sync constructed inventory source`)}
+          {i18n._(t`Failed to sync constructed inventory source`)}
           <ErrorDetail error={startError} />
         </AlertModal>
       )}

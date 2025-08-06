@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { Route, Switch } from 'react-router-dom';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import {
   Alert,
   ClipboardCopy,
@@ -24,8 +24,8 @@ function Applications() {
   const { i18n } = useLingui();
   const [applicationModalSource, setApplicationModalSource] = useState(null);
   const [breadcrumbConfig, setBreadcrumbConfig] = useState({
-    '/applications': i18n._(msg`Applications`),
-    '/applications/add': i18n._(msg`Create New Application`),
+    '/applications': i18n._(t`Applications`),
+    '/applications/add': i18n._(t`Create New Application`),
   });
 
   const buildBreadcrumbConfig = useCallback(
@@ -34,12 +34,12 @@ function Applications() {
         return;
       }
       setBreadcrumbConfig({
-        '/applications': i18n._(msg`Applications`),
-        '/applications/add': i18n._(msg`Create New Application`),
+        '/applications': i18n._(t`Applications`),
+        '/applications/add': i18n._(t`Create New Application`),
         [`/applications/${application.id}`]: `${application.name}`,
-        [`/applications/${application.id}/edit`]: i18n._(msg`Edit Details`),
-        [`/applications/${application.id}/details`]: i18n._(msg`Details`),
-        [`/applications/${application.id}/tokens`]: i18n._(msg`Tokens`),
+        [`/applications/${application.id}/edit`]: i18n._(t`Edit Details`),
+        [`/applications/${application.id}/details`]: i18n._(t`Details`),
+        [`/applications/${application.id}/tokens`]: i18n._(t`Tokens`),
       });
     },
     [i18n]
@@ -68,10 +68,10 @@ function Applications() {
       </Switch>
       {applicationModalSource && (
         <Modal
-          aria-label={i18n._(msg`Application information`)}
+          aria-label={i18n._(t`Application information`)}
           isOpen
           variant="medium"
-          title={i18n._(msg`Application information`)}
+          title={i18n._(t`Application information`)}
           onClose={() => setApplicationModalSource(null)}
         >
           {applicationModalSource.client_secret && (
@@ -79,18 +79,18 @@ function Applications() {
               variant="info"
               isInline
               title={i18n._(
-                msg`This is the only time the client secret will be shown.`
+                t`This is the only time the client secret will be shown.`
               )}
             />
           )}
           <DetailList stacked>
             <Detail
-              label={i18n._(msg`Name`)}
+              label={i18n._(t`Name`)}
               value={applicationModalSource.name}
             />
             {applicationModalSource.client_id && (
               <Detail
-                label={i18n._(msg`Client ID`)}
+                label={i18n._(t`Client ID`)}
                 value={
                   <ClipboardCopy
                     isReadOnly
@@ -103,7 +103,7 @@ function Applications() {
             )}
             {applicationModalSource.client_secret && (
               <Detail
-                label={i18n._(msg`Client secret`)}
+                label={i18n._(t`Client secret`)}
                 value={
                   <ClipboardCopy
                     isReadOnly

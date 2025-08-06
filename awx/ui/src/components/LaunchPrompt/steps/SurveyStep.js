@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useField } from 'formik';
 import {
   Form,
@@ -130,12 +130,12 @@ function MultipleChoiceField({ question }) {
         id={id}
         ouiaId={`single-survey-question-${question.variable}`}
         isOpen={isOpen}
-        placeholderText={i18n._(msg`Select an option`)}
+        placeholderText={i18n._(t`Select an option`)}
         onClear={() => {
           helpers.setTouched(true);
           helpers.setValue('');
         }}
-        noResultsFoundText={i18n._(msg`No results found`)}
+        noResultsFoundText={i18n._(t`No results found`)}
       >
         {options.map((opt) => (
           <SelectOption key={opt} value={opt} />
@@ -169,7 +169,7 @@ function MultiSelectField({ question }) {
       fieldId={id}
       helperTextInvalid={
         meta.error ||
-        i18n._(msg`At least one value must be selected for this field.`)
+        i18n._(t`At least one value must be selected for this field.`)
       }
       isRequired={question.required}
       validated={isValid ? 'default' : 'error'}
@@ -180,7 +180,7 @@ function MultiSelectField({ question }) {
         ouiaId={`multi-survey-question-${question.variable}`}
         variant={SelectVariant.typeaheadMulti}
         id={id}
-        placeholderText={!field.value.length && i18n._(msg`Select option(s)`)}
+        placeholderText={!field.value.length && i18n._(t`Select option(s)`)}
         onToggle={setIsOpen}
         onSelect={(event, option) => {
           if (field?.value?.includes(option)) {
@@ -196,7 +196,7 @@ function MultiSelectField({ question }) {
           helpers.setTouched(true);
           helpers.setValue([]);
         }}
-        noResultsFoundText={i18n._(msg`No results found`)}
+        noResultsFoundText={i18n._(t`No results found`)}
       >
         {options.map((opt) => (
           <SelectOption key={opt} value={opt} />

@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react';
 
@@ -37,13 +37,13 @@ function TeamDetail({ team }) {
     <CardBody>
       <DetailList>
         <Detail
-          label={i18n._(msg`Name`)}
+          label={i18n._(t`Name`)}
           value={name}
           dataCy="team-detail-name"
         />
-        <Detail label={i18n._(msg`Description`)} value={description} />
+        <Detail label={i18n._(t`Description`)} value={description} />
         <Detail
-          label={i18n._(msg`Organization`)}
+          label={i18n._(t`Organization`)}
           value={
             <Link to={`/organizations/${summary_fields.organization.id}`}>
               {summary_fields.organization.name}
@@ -51,11 +51,11 @@ function TeamDetail({ team }) {
           }
         />
         <Detail
-          label={i18n._(msg`Created`)}
+          label={i18n._(t`Created`)}
           value={formatDateString(created)}
         />
         <Detail
-          label={i18n._(msg`Last Modified`)}
+          label={i18n._(t`Last Modified`)}
           value={formatDateString(modified)}
         />
       </DetailList>
@@ -64,22 +64,22 @@ function TeamDetail({ team }) {
           summary_fields.user_capabilities.edit && (
             <Button
               ouiaId="team-detail-edit-button"
-              aria-label={i18n._(msg`Edit`)}
+              aria-label={i18n._(t`Edit`)}
               component={Link}
               to={`/teams/${id}/edit`}
             >
-              {i18n._(msg`Edit`)}
+              {i18n._(t`Edit`)}
             </Button>
           )}
         {summary_fields.user_capabilities &&
           summary_fields.user_capabilities.delete && (
             <DeleteButton
               name={name}
-              modalTitle={i18n._(msg`Delete Team`)}
+              modalTitle={i18n._(t`Delete Team`)}
               onConfirm={deleteTeam}
               isDisabled={isLoading}
             >
-              {i18n._(msg`Delete`)}
+              {i18n._(t`Delete`)}
             </DeleteButton>
           )}
       </CardActionsRow>
@@ -87,10 +87,10 @@ function TeamDetail({ team }) {
         <AlertModal
           isOpen={error}
           variant="error"
-          title={i18n._(msg`Error!`)}
+          title={i18n._(t`Error!`)}
           onClose={dismissError}
         >
-          {i18n._(msg`Failed to delete team.`)}
+          {i18n._(t`Failed to delete team.`)}
           <ErrorDetail error={error} />
         </AlertModal>
       )}

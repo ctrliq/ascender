@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { Formik, useField, useFormikContext } from 'formik';
 import { Form, FormGroup } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
@@ -53,7 +53,7 @@ function ApplicationFormFields({
     <>
       <FormField
         id="name"
-        label={i18n._(msg`Name`)}
+        label={i18n._(t`Name`)}
         name="name"
         type="text"
         validate={required(null)}
@@ -61,7 +61,7 @@ function ApplicationFormFields({
       />
       <FormField
         id="description"
-        label={i18n._(msg`Description`)}
+        label={i18n._(t`Description`)}
         name="description"
         type="text"
       />
@@ -84,7 +84,7 @@ function ApplicationFormFields({
             : 'error'
         }
         isRequired
-        label={i18n._(msg`Authorization grant type`)}
+        label={i18n._(t`Authorization grant type`)}
         labelIcon={
           <Popover
             content={applicationHelpTextStrings.authorizationGrantType}
@@ -106,7 +106,7 @@ function ApplicationFormFields({
       </FormGroup>
       <FormField
         id="redirect_uris"
-        label={i18n._(msg`Redirect URIs`)}
+        label={i18n._(t`Redirect URIs`)}
         name="redirect_uris"
         type="text"
         isRequired={Boolean(
@@ -126,7 +126,7 @@ function ApplicationFormFields({
           !clientTypeMeta.touched || !clientTypeMeta.error ? 'default' : 'error'
         }
         isRequired
-        label={i18n._(msg`Client type`)}
+        label={i18n._(t`Client type`)}
         labelIcon={<Popover content={applicationHelpTextStrings.clientType} />}
       >
         <AnsibleSelect

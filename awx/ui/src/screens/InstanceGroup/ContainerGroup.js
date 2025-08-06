@@ -8,7 +8,7 @@ import {
   useParams,
 } from 'react-router-dom';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card, PageSection } from '@patternfly/react-core';
@@ -58,19 +58,19 @@ function ContainerGroup({ setBreadcrumb }) {
       name: (
         <>
           <CaretLeftIcon />
-          {i18n._(msg`Back to instance groups`)}
+          {i18n._(t`Back to instance groups`)}
         </>
       ),
       link: '/instance_groups',
       id: 99,
     },
     {
-      name: i18n._(msg`Details`),
+      name: i18n._(t`Details`),
       link: `/instance_groups/container_group/${id}/details`,
       id: 0,
     },
     {
-      name: i18n._(msg`Jobs`),
+      name: i18n._(t`Jobs`),
       link: `/instance_groups/container_group/${id}/jobs`,
       id: 1,
     },
@@ -83,10 +83,10 @@ function ContainerGroup({ setBreadcrumb }) {
           <ContentError error={contentError}>
             {contentError.response?.status === 404 && (
               <span>
-                {i18n._(msg`Container group not found.`)}
+                {i18n._(t`Container group not found.`)}
 
                 <Link to="/instance_groups">
-                  {i18n._(msg`View all instance groups`)}
+                  {i18n._(t`View all instance groups`)}
                 </Link>
               </span>
             )}

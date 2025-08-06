@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import { Button } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import {
   WorkflowDispatchContext,
   WorkflowStateContext,
@@ -27,7 +27,7 @@ function NodeDeleteModal() {
   return (
     <AlertModal
       variant="danger"
-      title={i18n._(msg`Remove Node ${nodeName}`)}
+      title={i18n._(t`Remove Node ${nodeName}`)}
       isOpen={nodeToDelete}
       onClose={() => dispatch({ type: 'SET_NODE_TO_DELETE', value: null })}
       actions={[
@@ -36,33 +36,33 @@ function NodeDeleteModal() {
           id="confirm-node-removal"
           key="remove"
           variant="danger"
-          aria-label={i18n._(msg`Confirm node removal`)}
+          aria-label={i18n._(t`Confirm node removal`)}
           onClick={() => dispatch({ type: 'DELETE_NODE' })}
         >
-          {i18n._(msg`Remove`)}
+          {i18n._(t`Remove`)}
         </Button>,
         <Button
           ouiaId="node-removal-cancel-button"
           id="cancel-node-removal"
           key="cancel"
           variant="link"
-          aria-label={i18n._(msg`Cancel node removal`)}
+          aria-label={i18n._(t`Cancel node removal`)}
           onClick={() => dispatch({ type: 'SET_NODE_TO_DELETE', value: null })}
         >
-          {i18n._(msg`Cancel`)}
+          {i18n._(t`Cancel`)}
         </Button>,
       ]}
     >
       {nodeToDelete && nodeToDelete.unifiedJobTemplate ? (
         <>
-          <p>{i18n._(msg`Are you sure you want to remove the node below:`)}</p>
+          <p>{i18n._(t`Are you sure you want to remove the node below:`)}</p>
           <br />
           <strong css="color: var(--pf-global--danger-color--100)">
             {nodeToDelete.unifiedJobTemplate.name}
           </strong>
         </>
       ) : (
-        <p>{i18n._(msg`Are you sure you want to remove this node?`)}</p>
+        <p>{i18n._(t`Are you sure you want to remove this node?`)}</p>
       )}
     </AlertModal>
   );

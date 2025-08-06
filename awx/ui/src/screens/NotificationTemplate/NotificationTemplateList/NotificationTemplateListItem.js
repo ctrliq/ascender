@@ -1,7 +1,7 @@
 import 'styled-components/macro';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { Link } from 'react-router-dom';
 import { Button } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
@@ -108,32 +108,32 @@ function NotificationTemplateListItem({
             isSelected,
             onSelect,
           }}
-          dataLabel={i18n._(msg`Selected`)}
+          dataLabel={i18n._(t`Selected`)}
         />
-        <TdBreakWord id={labelId} dataLabel={i18n._(msg`Name`)}>
+        <TdBreakWord id={labelId} dataLabel={i18n._(t`Name`)}>
           <Link to={`${detailUrl}`}>
             <b>{template.name}</b>
           </Link>
         </TdBreakWord>
-        <Td dataLabel={i18n._(msg`Status`)}>
+        <Td dataLabel={i18n._(t`Status`)}>
           {status && <StatusLabel status={status} />}
         </Td>
-        <Td dataLabel={i18n._(msg`Type`)}>
+        <Td dataLabel={i18n._(t`Type`)}>
           {NOTIFICATION_TYPES[template.notification_type] ||
             template.notification_type}
         </Td>
-        <Td dataLabel={i18n._(msg`Oragnization`)}>
+        <Td dataLabel={i18n._(t`Oragnization`)}>
           <Link
             to={`/organizations/${template.summary_fields.organization.id}/details`}
           >
             <b>{template.summary_fields.organization.name}</b>
           </Link>
         </Td>
-        <ActionsTd dataLabel={i18n._(msg`Actions`)}>
-          <ActionItem visible tooltip={i18n._(msg`Test notification`)}>
+        <ActionsTd dataLabel={i18n._(t`Actions`)}>
+          <ActionItem visible tooltip={i18n._(t`Test notification`)}>
             <Button
               ouiaId={`notification-test-button-${template.id}`}
-              aria-label={i18n._(msg`Test Notification`)}
+              aria-label={i18n._(t`Test Notification`)}
               variant="plain"
               onClick={sendTestNotification}
               isDisabled={isLoading || status === 'running'}
@@ -143,11 +143,11 @@ function NotificationTemplateListItem({
           </ActionItem>
           <ActionItem
             visible={template.summary_fields.user_capabilities.edit}
-            tooltip={i18n._(msg`Edit`)}
+            tooltip={i18n._(t`Edit`)}
           >
             <Button
               ouiaId={`notification-edit-button-${template.id}`}
-              aria-label={i18n._(msg`Edit Notification Template`)}
+              aria-label={i18n._(t`Edit Notification Template`)}
               variant="plain"
               component={Link}
               to={`/notification_templates/${template.id}/edit`}
@@ -157,7 +157,7 @@ function NotificationTemplateListItem({
           </ActionItem>
           <ActionItem
             visible={template.summary_fields.user_capabilities.copy}
-            tooltip={i18n._(msg`Copy Notification Template`)}
+            tooltip={i18n._(t`Copy Notification Template`)}
           >
             <CopyButton
               ouiaId={`notification-copy-button-${template.id}`}
@@ -165,7 +165,7 @@ function NotificationTemplateListItem({
               isCopyDisabled={isCopyDisabled}
               onCopyStart={handleCopyStart}
               onCopyFinish={handleCopyFinish}
-              errorMessage={i18n._(msg`Failed to copy template.`)}
+              errorMessage={i18n._(t`Failed to copy template.`)}
             />
           </ActionItem>
         </ActionsTd>
@@ -174,10 +174,10 @@ function NotificationTemplateListItem({
         <AlertModal
           isOpen
           variant="error"
-          title={i18n._(msg`Error!`)}
+          title={i18n._(t`Error!`)}
           onClose={dismissError}
         >
-          {i18n._(msg`Failed to send test notification.`)}
+          {i18n._(t`Failed to send test notification.`)}
           <ErrorDetail error={sendTestError} />
         </AlertModal>
       )}

@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { Config } from 'contexts/Config';
 import ScreenHeader from 'components/ScreenHeader';
 import PersistentFilters from 'components/PersistentFilters';
@@ -13,8 +13,8 @@ import { CredentialList } from './CredentialList';
 function Credentials() {
   const { i18n } = useLingui();
   const [breadcrumbConfig, setBreadcrumbConfig] = useState({
-    '/credentials': i18n._(msg`Credentials`),
-    '/credentials/add': i18n._(msg`Create New Credential`),
+    '/credentials': i18n._(t`Credentials`),
+    '/credentials/add': i18n._(t`Create New Credential`),
   });
 
   const buildBreadcrumbConfig = useCallback(
@@ -24,14 +24,14 @@ function Credentials() {
       }
 
       setBreadcrumbConfig({
-        '/credentials': i18n._(msg`Credentials`),
-        '/credentials/add': i18n._(msg`Create New Credential`),
+        '/credentials': i18n._(t`Credentials`),
+        '/credentials/add': i18n._(t`Create New Credential`),
         [`/credentials/${credential.id}`]: `${credential.name}`,
-        [`/credentials/${credential.id}/edit`]: i18n._(msg`Edit Details`),
-        [`/credentials/${credential.id}/details`]: i18n._(msg`Details`),
-        [`/credentials/${credential.id}/access`]: i18n._(msg`Access`),
+        [`/credentials/${credential.id}/edit`]: i18n._(t`Edit Details`),
+        [`/credentials/${credential.id}/details`]: i18n._(t`Details`),
+        [`/credentials/${credential.id}/access`]: i18n._(t`Access`),
         [`/credentials/${credential.id}/job_templates`]: i18n._(
-          msg`Job Templates`
+          t`Job Templates`
         ),
       });
     },

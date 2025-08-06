@@ -1,6 +1,6 @@
 import 'styled-components/macro';
 import React from 'react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import FormField from 'components/FormField';
 import getDocsBaseUrl from 'util/getDocsBaseUrl';
@@ -28,10 +28,10 @@ const GitSubForm = ({
   return (
     <>
       <UrlFormField tooltip={projectHelpStrings.githubSourceControlUrl} />
-      <BranchFormField label={i18n._(msg`Source Control Branch/Tag/Commit`)} />
+      <BranchFormField label={i18n._(t`Source Control Branch/Tag/Commit`)} />
       <FormField
         id="project-scm-refspec"
-        label={i18n._(msg`Source Control Refspec`)}
+        label={i18n._(t`Source Control Refspec`)}
         name="scm_refspec"
         type="text"
         tooltipMaxWidth="400px"

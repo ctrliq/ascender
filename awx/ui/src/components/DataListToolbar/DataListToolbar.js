@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import {
   Button,
@@ -91,7 +91,7 @@ function DataListToolbar({
   );
   const columns = [...searchColumns];
   if (!advancedSearchDisabled) {
-    columns.push({ name: i18n._(msg`Advanced`), key: 'advanced' });
+    columns.push({ name: i18n._(t`Advanced`), key: 'advanced' });
   }
   return (
     <Toolbar
@@ -99,7 +99,7 @@ function DataListToolbar({
       ouiaId={`${qsConfig.namespace}-list-toolbar`}
       clearAllFilters={clearAllFilters}
       collapseListedFiltersBreakpoint="lg"
-      clearFiltersButtonText={i18n._(msg`Clear all filters`)}
+      clearFiltersButtonText={i18n._(t`Clear all filters`)}
     >
       <ToolbarContent>
         {onExpandAll && (
@@ -109,14 +109,14 @@ function DataListToolbar({
                 onClick={() => {
                   onExpandAll(!isAllExpanded);
                 }}
-                aria-label={i18n._(msg`Expand all rows`)}
+                aria-label={i18n._(t`Expand all rows`)}
                 ouiaId="expand-all-rows"
                 variant="plain"
               >
                 {isAllExpanded ? (
-                  <AngleDownIcon aria-label={i18n._(msg`Is expanded`)} />
+                  <AngleDownIcon aria-label={i18n._(t`Is expanded`)} />
                 ) : (
-                  <AngleRightIcon aria-label={i18n._(msg`Is not expanded`)} />
+                  <AngleRightIcon aria-label={i18n._(t`Is not expanded`)} />
                 )}
               </Button>
             </ToolbarItem>
@@ -125,11 +125,11 @@ function DataListToolbar({
         {onSelectAll && (
           <ToolbarGroup>
             <ToolbarItem>
-              <Tooltip content={i18n._(msg`Select all`)} position="top">
+              <Tooltip content={i18n._(t`Select all`)} position="top">
                 <Checkbox
                   isChecked={isAllSelected}
                   onChange={onSelectAll}
-                  aria-label={i18n._(msg`Select all`)}
+                  aria-label={i18n._(t`Select all`)}
                   id="select-all"
                   ouiaId="select-all"
                 />

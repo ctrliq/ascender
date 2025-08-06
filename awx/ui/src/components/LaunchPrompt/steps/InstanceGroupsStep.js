@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { useField } from 'formik';
 import { InstanceGroupsAPI } from 'api';
@@ -77,25 +77,25 @@ function InstanceGroupsStep() {
         optionCount={count}
         searchColumns={[
           {
-            name: i18n._(msg`Name`),
+            name: i18n._(t`Name`),
             key: 'name__icontains',
             isDefault: true,
           },
           {
-            name: i18n._(msg`Credential Name`),
+            name: i18n._(t`Credential Name`),
             key: 'credential__name__icontains',
           },
         ]}
         sortColumns={[
           {
-            name: i18n._(msg`Name`),
+            name: i18n._(t`Name`),
             key: 'name',
           },
         ]}
         searchableKeys={searchableKeys}
         relatedSearchableKeys={relatedSearchableKeys}
         multiple
-        header={i18n._(msg`Instance Groups`)}
+        header={i18n._(t`Instance Groups`)}
         name="instanceGroups"
         qsConfig={QS_CONFIG}
         selectItem={handleSelect}

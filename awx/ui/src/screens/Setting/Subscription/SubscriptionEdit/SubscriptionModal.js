@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 
-import { msg, Trans } from '@lingui/macro';
+import { t, Trans } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import {
   Button,
@@ -82,14 +82,14 @@ function SubscriptionModal({
   const { i18n } = useLingui();
   return (
     <Modal
-      aria-label={i18n._(msg`Subscription selection modal`)}
+      aria-label={i18n._(t`Subscription selection modal`)}
       isOpen
       onClose={onClose}
-      title={i18n._(msg`Select a subscription`)}
+      title={i18n._(t`Select a subscription`)}
       width="50%"
       actions={[
         <Button
-          aria-label={i18n._(msg`Confirm selection`)}
+          aria-label={i18n._(t`Confirm selection`)}
           isDisabled={selected.length === 0}
           key="confirm"
           onClick={handleConfirm}
@@ -99,7 +99,7 @@ function SubscriptionModal({
           <Trans>Select</Trans>
         </Button>,
         <Button
-          aria-label={i18n._(msg`Cancel`)}
+          aria-label={i18n._(t`Cancel`)}
           key="cancel"
           onClick={onClose}
           variant="link"
@@ -121,7 +121,7 @@ function SubscriptionModal({
               We were unable to locate licenses associated with this account.
             </Trans>{' '}
             <Button
-              aria-label={i18n._(msg`Close subscription modal`)}
+              aria-label={i18n._(t`Close subscription modal`)}
               onClick={onClose}
               variant="link"
               isInline
@@ -135,23 +135,23 @@ function SubscriptionModal({
       )}
       {!isLoading && !error && subscriptions?.length === 0 && (
         <ContentEmpty
-          title={i18n._(msg`No subscriptions found`)}
+          title={i18n._(t`No subscriptions found`)}
           message={i18n._(
-            msg`We were unable to locate subscriptions associated with this account.`
+            t`We were unable to locate subscriptions associated with this account.`
           )}
         />
       )}
       {!isLoading && !error && subscriptions?.length > 0 && (
         <TableComposable
           variant="compact"
-          aria-label={i18n._(msg`Subscriptions table`)}
+          aria-label={i18n._(t`Subscriptions table`)}
         >
           <Thead>
             <Tr ouiaId="subscription-table-header">
               <Th />
-              <Th>{i18n._(msg`Name`)}</Th>
-              <Th modifier="fitContent">{i18n._(msg`Managed nodes`)}</Th>
-              <Th modifier="fitContent">{i18n._(msg`Expires`)}</Th>
+              <Th>{i18n._(t`Name`)}</Th>
+              <Th modifier="fitContent">{i18n._(t`Managed nodes`)}</Th>
+              <Th modifier="fitContent">{i18n._(t`Expires`)}</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -171,13 +171,13 @@ function SubscriptionModal({
                     rowIndex: `row-${subscription.id}`,
                   }}
                 />
-                <Td dataLabel={i18n._(msg`Trial`)}>
+                <Td dataLabel={i18n._(t`Trial`)}>
                   {subscription.subscription_name}
                 </Td>
-                <Td dataLabel={i18n._(msg`Managed nodes`)}>
+                <Td dataLabel={i18n._(t`Managed nodes`)}>
                   {subscription.instance_count}
                 </Td>
-                <Td dataLabel={i18n._(msg`Expires`)} modifier="nowrap">
+                <Td dataLabel={i18n._(t`Expires`)} modifier="nowrap">
                   {formatDateString(
                     new Date(subscription.license_date * 1000).toISOString(),
                     'UTC'

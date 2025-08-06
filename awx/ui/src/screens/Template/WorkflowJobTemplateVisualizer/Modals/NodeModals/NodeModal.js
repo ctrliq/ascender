@@ -2,7 +2,7 @@
 import 'styled-components/macro';
 import React, { useContext, useState, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { Formik, useFormikContext } from 'formik';
 import yaml from 'js-yaml';
@@ -130,8 +130,8 @@ function NodeModalForm({
         activeStep.id === promptSteps[promptSteps.length - 1]?.id;
     }
     return verifyPromptSteps || activeStep.name === 'Preview'
-      ? i18n._(msg`Save`)
-      : i18n._(msg`Next`);
+      ? i18n._(t`Save`)
+      : i18n._(t`Next`);
   }
 
   const CustomFooter = (
@@ -153,20 +153,20 @@ function NodeModalForm({
                 ouiaId="node-modal-back-button"
                 id="back-node-modal"
                 variant="secondary"
-                aria-label={i18n._(msg`Back`)}
+                aria-label={i18n._(t`Back`)}
                 onClick={onBack}
               >
-                {i18n._(msg`Back`)}
+                {i18n._(t`Back`)}
               </Button>
             )}
             <Button
               ouiaId="node-modal-cancel-button"
               id="cancel-node-modal"
               variant="link"
-              aria-label={i18n._(msg`Cancel`)}
+              aria-label={i18n._(t`Cancel`)}
               onClick={handleCancel}
             >
-              {i18n._(msg`Cancel`)}
+              {i18n._(t`Cancel`)}
             </Button>
           </>
         )}
@@ -179,7 +179,7 @@ function NodeModalForm({
       <AlertModal
         isOpen={error}
         variant="error"
-        title={i18n._(msg`Error!`)}
+        title={i18n._(t`Error!`)}
         onClose={() => {
           dismissError();
         }}
@@ -194,7 +194,7 @@ function NodeModalForm({
       <AlertModal
         isOpen={error}
         variant="error"
-        title={i18n._(msg`Error!`)}
+        title={i18n._(t`Error!`)}
         onClose={() => {
           dismissError();
         }}
@@ -337,7 +337,7 @@ const NodeModalInner = ({ title, ...rest }) => {
       <AlertModal
         isOpen={error}
         variant="error"
-        title={i18n._(msg`Error!`)}
+        title={i18n._(t`Error!`)}
         onClose={() => {
           dismissError();
         }}
@@ -353,7 +353,7 @@ const NodeModalInner = ({ title, ...rest }) => {
         isOpen
         steps={[
           {
-            name: i18n._(msg`Loading`),
+            name: i18n._(t`Loading`),
             component: <ContentLoading />,
           },
         ]}

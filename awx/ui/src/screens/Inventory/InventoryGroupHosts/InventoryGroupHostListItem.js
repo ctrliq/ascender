@@ -3,7 +3,7 @@ import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { string, bool, func, number } from 'prop-types';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { Button, Tooltip } from '@patternfly/react-core';
 import { PencilAltIcon } from '@patternfly/react-icons';
 
@@ -41,35 +41,35 @@ function InventoryGroupHostListItem({
           isSelected,
           onSelect,
         }}
-        dataLabel={i18n._(msg`Selected`)}
+        dataLabel={i18n._(t`Selected`)}
       />
-      <Td dataLabel={i18n._(msg`host-name-${host.id}`)} id={labelId}>
+      <Td dataLabel={i18n._(t`host-name-${host.id}`)} id={labelId}>
         <Link to={`${detailUrl}`}>
           <b>{host.name}</b>
         </Link>
       </Td>
-      <Td dataLabel={i18n._(msg`host-description-${host.id}`)}>
+      <Td dataLabel={i18n._(t`host-description-${host.id}`)}>
         {host.description}
       </Td>
-      <Td dataLabel={i18n._(msg`Activity`)}>
+      <Td dataLabel={i18n._(t`Activity`)}>
         <Sparkline jobs={recentPlaybookJobs} />
       </Td>
-      <ActionsTd dataLabel={i18n._(msg`Actions`)} gridColumns="auto 40px">
+      <ActionsTd dataLabel={i18n._(t`Actions`)} gridColumns="auto 40px">
         <ActionItem
           visible={host.summary_fields.user_capabilities?.edit}
-          tooltip={i18n._(msg`Toggle host`)}
+          tooltip={i18n._(t`Toggle host`)}
         >
           <HostToggle host={host} />
         </ActionItem>
         {inventoryType !== 'constructed_inventory' && (
           <ActionItem
-            tooltip={i18n._(msg`Edit Host`)}
+            tooltip={i18n._(t`Edit Host`)}
             visible={host.summary_fields.user_capabilities?.edit}
           >
-            <Tooltip content={i18n._(msg`Edit Host`)} position="top">
+            <Tooltip content={i18n._(t`Edit Host`)} position="top">
               <Button
                 ouiaId={`${host.id}-edit-button`}
-                aria-label={i18n._(msg`Edit Host`)}
+                aria-label={i18n._(t`Edit Host`)}
                 variant="plain"
                 component={Link}
                 to={`${editUrl}`}

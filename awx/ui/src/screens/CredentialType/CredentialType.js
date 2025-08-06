@@ -9,7 +9,7 @@ import {
 } from 'react-router-dom';
 
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { Card, PageSection } from '@patternfly/react-core';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 
@@ -54,7 +54,7 @@ function CredentialType({ setBreadcrumb }) {
       name: (
         <>
           <CaretLeftIcon />
-          {i18n._(msg`Back to credential types`)}
+          {i18n._(t`Back to credential types`)}
         </>
       ),
       link: '/credential_types',
@@ -62,7 +62,7 @@ function CredentialType({ setBreadcrumb }) {
       persistentFilterKey: 'credentialTypes',
     },
     {
-      name: i18n._(msg`Details`),
+      name: i18n._(t`Details`),
       link: `/credential_types/${id}/details`,
       id: 0,
     },
@@ -75,9 +75,9 @@ function CredentialType({ setBreadcrumb }) {
           <ContentError error={contentError}>
             {contentError.response?.status === 404 && (
               <span>
-                {i18n._(msg`Credential type not found.`)}{' '}
+                {i18n._(t`Credential type not found.`)}{' '}
                 <Link to="/credential_types">
-                  {i18n._(msg`View all credential types`)}
+                  {i18n._(t`View all credential types`)}
                 </Link>
               </span>
             )}

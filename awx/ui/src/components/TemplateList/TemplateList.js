@@ -4,7 +4,7 @@
 
 import React, { useEffect, useCallback } from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import { msg, Plural } from '@lingui/macro';
+import { t, Plural } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { Card, DropdownItem } from '@patternfly/react-core';
 import {
@@ -136,7 +136,7 @@ function TemplateList({ defaultParams }) {
     (newTemplateId) => {
       addToast({
         id: newTemplateId,
-        title: i18n._(msg`Template copied successfully`),
+        title: i18n._(t`Template copied successfully`),
         variant: AlertVariant.success,
         hasTimeout: true,
       });
@@ -154,8 +154,8 @@ function TemplateList({ defaultParams }) {
   const canAddWFJT =
     wfjtActions && Object.prototype.hasOwnProperty.call(wfjtActions, 'POST');
 
-  const addTemplate = i18n._(msg`Add job template`);
-  const addWFTemplate = i18n._(msg`Add workflow template`);
+  const addTemplate = i18n._(t`Add job template`);
+  const addWFTemplate = i18n._(t`Add workflow template`);
   const addDropDownButton = [];
   if (canAddJT) {
     addDropDownButton.push(
@@ -203,41 +203,41 @@ function TemplateList({ defaultParams }) {
           hasContentLoading={isLoading || isDeleteLoading}
           items={templates}
           itemCount={count}
-          pluralizedItemName={i18n._(msg`Templates`)}
+          pluralizedItemName={i18n._(t`Templates`)}
           qsConfig={qsConfig}
           clearSelected={clearSelected}
           toolbarSearchColumns={[
             {
-              name: i18n._(msg`Name`),
+              name: i18n._(t`Name`),
               key: 'name__icontains',
               isDefault: true,
             },
             {
-              name: i18n._(msg`Description`),
+              name: i18n._(t`Description`),
               key: 'description__icontains',
             },
             {
-              name: i18n._(msg`Type`),
+              name: i18n._(t`Type`),
               key: 'or__type',
               options: [
-                [`job_template`, i18n._(msg`Job Template`)],
-                [`workflow_job_template`, i18n._(msg`Workflow Template`)],
+                [`job_template`, i18n._(t`Job Template`)],
+                [`workflow_job_template`, i18n._(t`Workflow Template`)],
               ],
             },
             {
-              name: i18n._(msg`Playbook name`),
+              name: i18n._(t`Playbook name`),
               key: 'job_template__playbook__icontains',
             },
             {
-              name: i18n._(msg`Created By (Username)`),
+              name: i18n._(t`Created By (Username)`),
               key: 'created_by__username__icontains',
             },
             {
-              name: i18n._(msg`Modified By (Username)`),
+              name: i18n._(t`Modified By (Username)`),
               key: 'modified_by__username__icontains',
             },
             {
-              name: i18n._(msg`Label`),
+              name: i18n._(t`Label`),
               key: 'labels__name__icontains',
             },
           ]}
@@ -245,13 +245,13 @@ function TemplateList({ defaultParams }) {
           toolbarRelatedSearchableKeys={relatedSearchableKeys}
           headerRow={
             <HeaderRow qsConfig={qsConfig} isExpandable>
-              <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
-              <HeaderCell>{i18n._(msg`Activity`)}</HeaderCell>
+              <HeaderCell sortKey="name">{i18n._(t`Name`)}</HeaderCell>
+              <HeaderCell>{i18n._(t`Activity`)}</HeaderCell>
               <HeaderCell sortKey="last_job_run">
-                {i18n._(msg`Last Ran`)}
+                {i18n._(t`Last Ran`)}
               </HeaderCell>
-              <HeaderCell sortKey="type">{i18n._(msg`Type`)}</HeaderCell>
-              <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
+              <HeaderCell sortKey="type">{i18n._(t`Type`)}</HeaderCell>
+              <HeaderCell>{i18n._(t`Actions`)}</HeaderCell>
             </HeaderRow>
           }
           renderToolbar={(props) => (
@@ -268,7 +268,7 @@ function TemplateList({ defaultParams }) {
                   key="delete"
                   onDelete={handleTemplateDelete}
                   itemsToDelete={selected}
-                  pluralizedItemName={i18n._(msg`Templates`)}
+                  pluralizedItemName={i18n._(t`Templates`)}
                   deleteDetailsRequests={deleteDetailsRequests}
                   deleteMessage={
                     <Plural
@@ -301,13 +301,13 @@ function TemplateList({ defaultParams }) {
       </Card>
       <Toast {...toastProps} />
       <AlertModal
-        aria-label={i18n._(msg`Deletion Error`)}
+        aria-label={i18n._(t`Deletion Error`)}
         isOpen={deletionError}
         variant="error"
-        title={i18n._(msg`Error!`)}
+        title={i18n._(t`Error!`)}
         onClose={clearDeletionError}
       >
-        {i18n._(msg`Failed to delete one or more templates.`)}
+        {i18n._(t`Failed to delete one or more templates.`)}
         <ErrorDetail error={deletionError} />
       </AlertModal>
     </>

@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import {
   Link,
@@ -75,19 +75,19 @@ function InventorySource({ inventory, setBreadcrumb, me }) {
       name: (
         <>
           <CaretLeftIcon />
-          {i18n._(msg`Back to Sources`)}
+          {i18n._(t`Back to Sources`)}
         </>
       ),
       link: `${sourceListUrl}`,
       id: 0,
     },
     {
-      name: i18n._(msg`Details`),
+      name: i18n._(t`Details`),
       link: `${match.url}/details`,
       id: 1,
     },
     {
-      name: i18n._(msg`Schedules`),
+      name: i18n._(t`Schedules`),
       link: `${match.url}/schedules`,
       id: 2,
     },
@@ -98,7 +98,7 @@ function InventorySource({ inventory, setBreadcrumb, me }) {
 
   if (canSeeNotificationsTab) {
     tabsArray.push({
-      name: i18n._(msg`Notifications`),
+      name: i18n._(t`Notifications`),
       link: `${match.url}/notifications`,
       id: 3,
     });
@@ -166,7 +166,7 @@ function InventorySource({ inventory, setBreadcrumb, me }) {
           <Route key="not-found" path="*">
             <ContentError isNotFound>
               <Link to={`${match.url}/details`}>
-                {i18n._(msg`View inventory source details`)}
+                {i18n._(t`View inventory source details`)}
               </Link>
             </ContentError>
           </Route>

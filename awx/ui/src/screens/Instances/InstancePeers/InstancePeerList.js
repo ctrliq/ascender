@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { CardBody } from 'components/Card';
 import PaginatedTable, {
@@ -170,7 +170,7 @@ function InstancePeerList({ setBreadcrumb }) {
         addToast({
           id: instancesPeerToAssociate,
           title: i18n._(
-            msg`Peers update on ${instance.hostname}.  Please be sure to run the install bundle for ${instance.hostname} again in order to see changes take effect.`
+            t`Peers update on ${instance.hostname}.  Please be sure to run the install bundle for ${instance.hostname} again in order to see changes take effect.`
           ),
           variant: AlertVariant.success,
           hasTimeout: true,
@@ -198,7 +198,7 @@ function InstancePeerList({ setBreadcrumb }) {
       fetchPeers();
       addToast({
         title: i18n._(
-          msg`Peer removed. Please be sure to run the install bundle for ${instance.hostname} again in order to see changes take effect.`
+          t`Peer removed. Please be sure to run the install bundle for ${instance.hostname} again in order to see changes take effect.`
         ),
         variant: AlertVariant.success,
         hasTimeout: true,
@@ -222,7 +222,7 @@ function InstancePeerList({ setBreadcrumb }) {
         }
         items={peers}
         itemCount={count}
-        pluralizedItemName={i18n._(msg`Peers`)}
+        pluralizedItemName={i18n._(t`Peers`)}
         qsConfig={QS_CONFIG}
         onRowClick={handleSelect}
         clearSelected={clearSelected}
@@ -230,32 +230,32 @@ function InstancePeerList({ setBreadcrumb }) {
         toolbarRelatedSearchableKeys={relatedSearchableKeys}
         toolbarSearchColumns={[
           {
-            name: i18n._(msg`Name`),
+            name: i18n._(t`Name`),
             key: 'hostname__icontains',
             isDefault: true,
           },
         ]}
         toolbarSortColumns={[
           {
-            name: i18n._(msg`Name`),
+            name: i18n._(t`Name`),
             key: 'hostname',
           },
         ]}
         headerRow={
           <HeaderRow qsConfig={QS_CONFIG} isExpandable>
             <HeaderCell
-              tooltip={i18n._(msg`Cannot run health check on hop nodes.`)}
+              tooltip={i18n._(t`Cannot run health check on hop nodes.`)}
               sortKey="hostname"
             >
-              {i18n._(msg`Instance Name`)}
+              {i18n._(t`Instance Name`)}
             </HeaderCell>
-            <HeaderCell sortKey="address">{i18n._(msg`Address`)}</HeaderCell>
-            <HeaderCell sortKey="port">{i18n._(msg`Port`)}</HeaderCell>
+            <HeaderCell sortKey="address">{i18n._(t`Address`)}</HeaderCell>
+            <HeaderCell sortKey="port">{i18n._(t`Port`)}</HeaderCell>
             <HeaderCell sortKey="node_type">
-              {i18n._(msg`Node Type`)}
+              {i18n._(t`Node Type`)}
             </HeaderCell>
             <HeaderCell sortKey="canonical">
-              {i18n._(msg`Canonical`)}
+              {i18n._(t`Canonical`)}
             </HeaderCell>
           </HeaderRow>
         }
@@ -272,7 +272,7 @@ function InstancePeerList({ setBreadcrumb }) {
                 <ToolbarAddButton
                   ouiaId="add-instance-peers-button"
                   key="associate"
-                  defaultLabel={i18n._(msg`Associate`)}
+                  defaultLabel={i18n._(t`Associate`)}
                   onClick={() => setIsModalOpen(true)}
                 />
               ),
@@ -282,7 +282,7 @@ function InstancePeerList({ setBreadcrumb }) {
                   key="disassociate"
                   onDisassociate={handlePeersDiassociate}
                   itemsToDisassociate={selected}
-                  modalTitle={i18n._(msg`Remove peers?`)}
+                  modalTitle={i18n._(t`Remove peers?`)}
                 />
               ),
             ]}
@@ -302,20 +302,20 @@ function InstancePeerList({ setBreadcrumb }) {
       />
       {isModalOpen && (
         <AssociateModal
-          header={i18n._(msg`Instances`)}
+          header={i18n._(t`Instances`)}
           fetchRequest={fetchPeersToAssociate}
           isModalOpen={isModalOpen}
           onAssociate={handlePeerAssociate}
           onClose={() => setIsModalOpen(false)}
-          title={i18n._(msg`Select Peer Addresses`)}
+          title={i18n._(t`Select Peer Addresses`)}
           optionsRequest={readInstancesOptions}
           displayKey="address"
           columns={[
-            { key: 'hostname', name: i18n._(msg`Name`) },
-            { key: 'address', name: i18n._(msg`Address`) },
-            { key: 'port', name: i18n._(msg`Port`) },
-            { key: 'node_type', name: i18n._(msg`Node Type`) },
-            { key: 'protocol', name: i18n._(msg`Protocol`) },
+            { key: 'hostname', name: i18n._(t`Name`) },
+            { key: 'address', name: i18n._(t`Address`) },
+            { key: 'port', name: i18n._(t`Port`) },
+            { key: 'node_type', name: i18n._(t`Node Type`) },
+            { key: 'protocol', name: i18n._(t`Protocol`) },
           ]}
         />
       )}
@@ -324,11 +324,11 @@ function InstancePeerList({ setBreadcrumb }) {
         <AlertModal
           isOpen={error}
           onClose={dismissError}
-          title={i18n._(msg`Error!`)}
+          title={i18n._(t`Error!`)}
           variant="error"
         >
-          {associateError && i18n._(msg`Failed to associate peer.`)}
-          {disassociateError && i18n._(msg`Failed to remove peers.`)}
+          {associateError && i18n._(t`Failed to associate peer.`)}
+          {disassociateError && i18n._(t`Failed to remove peers.`)}
           <ErrorDetail error={error} />
         </AlertModal>
       )}

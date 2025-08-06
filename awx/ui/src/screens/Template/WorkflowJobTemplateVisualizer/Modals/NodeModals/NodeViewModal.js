@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useCallback } from 'react';
 import { Button, Modal } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import {
   WorkflowDispatchContext,
   WorkflowStateContext,
@@ -130,10 +130,10 @@ function NodeViewModal({ readOnly }) {
   } else if (!fullUnifiedJobTemplate) {
     Content = (
       <p>
-        {i18n._(msg`The resource associated with this node has been deleted.`)}
+        {i18n._(t`The resource associated with this node has been deleted.`)}
         &nbsp;&nbsp;
         {!readOnly
-          ? i18n._(msg`Click the Edit button below to reconfigure the node.`)
+          ? i18n._(t`Click the Edit button below to reconfigure the node.`)
           : ''}
       </p>
     );
@@ -249,8 +249,8 @@ function NodeViewModal({ readOnly }) {
     <Modal
       variant="large"
       isOpen
-      title={fullUnifiedJobTemplate?.name || i18n._(msg`Resource deleted`)}
-      aria-label={i18n._(msg`Workflow node view modal`)}
+      title={fullUnifiedJobTemplate?.name || i18n._(t`Resource deleted`)}
+      aria-label={i18n._(t`Workflow node view modal`)}
       onClose={() => dispatch({ type: 'SET_NODE_TO_VIEW', value: null })}
       actions={
         readOnly
@@ -260,10 +260,10 @@ function NodeViewModal({ readOnly }) {
                 ouiaId="node-view-edit-button"
                 id="node-view-edit-button"
                 key="edit"
-                aria-label={i18n._(msg`Edit Node`)}
+                aria-label={i18n._(t`Edit Node`)}
                 onClick={handleEdit}
               >
-                {i18n._(msg`Edit`)}
+                {i18n._(t`Edit`)}
               </Button>,
             ]
       }

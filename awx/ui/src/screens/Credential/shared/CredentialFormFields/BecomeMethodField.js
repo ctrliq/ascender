@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useField } from 'formik';
 import { bool, shape, string } from 'prop-types';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import {
   FormGroup,
   Select,
@@ -64,8 +64,8 @@ function BecomeMethodField({ fieldOptions, isRequired }) {
         onCreateOption={(option) => {
           setOptions([...options, { value: option }]);
         }}
-        noResultsFoundText={i18n._(msg`No results found`)}
-        createText={i18n._(msg`Create`)}
+        noResultsFoundText={i18n._(t`No results found`)}
+        createText={i18n._(t`Create`)}
       >
         {options.map((option) => (
           <SelectOption key={option.value} value={option.value} />

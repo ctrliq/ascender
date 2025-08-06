@@ -4,7 +4,7 @@ import { Tr, Td } from '@patternfly/react-table';
 import { formatDateString } from 'util/dates';
 import { HostMetrics } from 'types';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { bool, func } from 'prop-types';
 
 function HostMetricsListItem({ item, isSelected, onSelect, rowIndex }) {
@@ -16,17 +16,17 @@ function HostMetricsListItem({ item, isSelected, onSelect, rowIndex }) {
     >
       <Td
         select={{ rowIndex, isSelected, onSelect }}
-        dataLabel={i18n._(msg`Selected`)}
+        dataLabel={i18n._(t`Selected`)}
       />
-      <Td dataLabel={i18n._(msg`Hostname`)}>{item.hostname}</Td>
-      <Td dataLabel={i18n._(msg`First automation`)}>
+      <Td dataLabel={i18n._(t`Hostname`)}>{item.hostname}</Td>
+      <Td dataLabel={i18n._(t`First automation`)}>
         {formatDateString(item.first_automation)}
       </Td>
-      <Td dataLabel={i18n._(msg`Last automation`)}>
+      <Td dataLabel={i18n._(t`Last automation`)}>
         {formatDateString(item.last_automation)}
       </Td>
-      <Td dataLabel={i18n._(msg`Automation`)}>{item.automated_counter}</Td>
-      <Td dataLabel={i18n._(msg`Deleted`)}>{item.deleted_counter}</Td>
+      <Td dataLabel={i18n._(t`Automation`)}>{item.automated_counter}</Td>
+      <Td dataLabel={i18n._(t`Deleted`)}>{item.deleted_counter}</Td>
     </Tr>
   );
 }

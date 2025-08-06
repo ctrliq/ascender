@@ -1,6 +1,6 @@
 import 'styled-components/macro';
 import React, { useContext } from 'react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import styled from 'styled-components';
 import { func, number } from 'prop-types';
@@ -81,12 +81,12 @@ function WorkflowTools({
   return (
     <Wrapper>
       <Header>
-        <b>{i18n._(msg`Tools`)}</b>
+        <b>{i18n._(t`Tools`)}</b>
         <Close onClick={() => dispatch({ type: 'TOGGLE_TOOLS' })} />
       </Header>
       <Tools>
         <Tooltip
-          content={i18n._(msg`Fit the graph to the available screen size`)}
+          content={i18n._(t`Fit the graph to the available screen size`)}
           position="bottom"
         >
           <Button
@@ -98,7 +98,7 @@ function WorkflowTools({
             <DesktopIcon />
           </Button>
         </Tooltip>
-        <Tooltip content={i18n._(msg`Zoom Out`)} position="bottom">
+        <Tooltip content={i18n._(t`Zoom Out`)} position="bottom">
           <Button
             ouiaId="visualizer-zoom-out-button"
             variant="tertiary"
@@ -119,7 +119,7 @@ function WorkflowTools({
           type="range"
           value={zoomPercentage}
         />
-        <Tooltip content={i18n._(msg`Zoom In`)} position="bottom">
+        <Tooltip content={i18n._(t`Zoom In`)} position="bottom">
           <Button
             ouiaId="visualizer-zoom-in-button"
             variant="tertiary"
@@ -130,7 +130,7 @@ function WorkflowTools({
           </Button>
         </Tooltip>
         <Pan>
-          <Tooltip content={i18n._(msg`Pan Left`)} position="left">
+          <Tooltip content={i18n._(t`Pan Left`)} position="left">
             <Button
               ouiaId="visualizer-pan-left-button"
               variant="tertiary"
@@ -141,7 +141,7 @@ function WorkflowTools({
             </Button>
           </Tooltip>
           <PanCenter>
-            <Tooltip content={i18n._(msg`Pan Up`)} position="top">
+            <Tooltip content={i18n._(t`Pan Up`)} position="top">
               <Button
                 ouiaId="visualizer-pan-up-button"
                 variant="tertiary"
@@ -152,7 +152,7 @@ function WorkflowTools({
               </Button>
             </Tooltip>
             <Tooltip
-              content={i18n._(msg`Set zoom to 100% and center graph`)}
+              content={i18n._(t`Set zoom to 100% and center graph`)}
               position="top"
             >
               <Button
@@ -163,7 +163,7 @@ function WorkflowTools({
                 <HomeIcon />
               </Button>
             </Tooltip>
-            <Tooltip content={i18n._(msg`Pan Down`)} position="bottom">
+            <Tooltip content={i18n._(t`Pan Down`)} position="bottom">
               <Button
                 ouiaId="visualizer-pan-down-button"
                 variant="tertiary"
@@ -174,7 +174,7 @@ function WorkflowTools({
               </Button>
             </Tooltip>
           </PanCenter>
-          <Tooltip content={i18n._(msg`Pan Right`)} position="right">
+          <Tooltip content={i18n._(t`Pan Right`)} position="right">
             <Button
               ouiaId="visualizer-pan-right-button"
               variant="tertiary"

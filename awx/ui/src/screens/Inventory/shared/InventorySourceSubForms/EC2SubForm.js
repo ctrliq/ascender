@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { useField, useFormikContext } from 'formik';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import getDocsBaseUrl from 'util/getDocsBaseUrl';
 import { useConfig } from 'contexts/Config';
@@ -36,7 +36,7 @@ const EC2SubForm = () => {
         helperTextInvalid={credentialMeta.error}
         isValid={!credentialMeta.touched || !credentialMeta.error}
         credentialTypeNamespace="aws"
-        label={i18n._(msg`Credential`)}
+        label={i18n._(t`Credential`)}
         value={credentialField.value}
         onChange={handleCredentialUpdate}
       />

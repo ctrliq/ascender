@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 
 import AlertModal from 'components/AlertModal';
 import { CardBody, CardActionsRow } from 'components/Card';
@@ -37,34 +37,34 @@ function UserTokenDetail({ token }) {
     <CardBody>
       <DetailList>
         <Detail
-          label={i18n._(msg`Application`)}
+          label={i18n._(t`Application`)}
           value={summary_fields?.application?.name}
           dataCy="application-token-detail-name"
           helpText={helptext.application}
         />
         <Detail
-          label={i18n._(msg`Description`)}
+          label={i18n._(t`Description`)}
           value={description}
           dataCy="application-token-detail-description"
         />
         <Detail
-          label={i18n._(msg`Scope`)}
+          label={i18n._(t`Scope`)}
           value={toTitleCase(scope)}
           dataCy="application-token-detail-scope"
           helpText={helptext.scope}
         />
         <Detail
-          label={i18n._(msg`Expires`)}
+          label={i18n._(t`Expires`)}
           value={formatDateString(expires)}
           dataCy="application-token-detail-expires"
         />
         <UserDateDetail
-          label={i18n._(msg`Created`)}
+          label={i18n._(t`Created`)}
           date={created}
           user={summary_fields.user}
         />
         <UserDateDetail
-          label={i18n._(msg`Last Modified`)}
+          label={i18n._(t`Last Modified`)}
           date={modified}
           user={summary_fields.user}
         />
@@ -73,23 +73,23 @@ function UserTokenDetail({ token }) {
         <DeleteButton
           name={
             summary_fields?.application?.name ||
-            i18n._(msg`Personal Access Token`)
+            i18n._(t`Personal Access Token`)
           }
-          modalTitle={i18n._(msg`Delete User Token`)}
+          modalTitle={i18n._(t`Delete User Token`)}
           onConfirm={deleteToken}
           isDisabled={isLoading}
         >
-          {i18n._(msg`Delete`)}
+          {i18n._(t`Delete`)}
         </DeleteButton>
       </CardActionsRow>
       {error && (
         <AlertModal
           isOpen={error}
           variant="error"
-          title={i18n._(msg`Error!`)}
+          title={i18n._(t`Error!`)}
           onClose={dismissError}
         >
-          {i18n._(msg`Failed to user token.`)}
+          {i18n._(t`Failed to user token.`)}
           <ErrorDetail error={error} />
         </AlertModal>
       )}

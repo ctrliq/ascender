@@ -1,7 +1,7 @@
 import React from 'react';
 import { string, bool, func } from 'prop-types';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 
 import { Link } from 'react-router-dom';
@@ -42,11 +42,11 @@ function InstanceGroupListItem({
             value={Math.round(100 - item.percent_capacity_remaining)}
             measureLocation={ProgressMeasureLocation.top}
             size={ProgressSize.sm}
-            title={i18n._(msg`Used capacity`)}
+            title={i18n._(t`Used capacity`)}
           />
         );
       }
-      return <Unavailable>{i18n._(msg`Unavailable`)}</Unavailable>;
+      return <Unavailable>{i18n._(t`Unavailable`)}</Unavailable>;
     }
     return null;
   }
@@ -59,32 +59,32 @@ function InstanceGroupListItem({
           isSelected,
           onSelect,
         }}
-        dataLabel={i18n._(msg`Selected`)}
+        dataLabel={i18n._(t`Selected`)}
       />
-      <TdBreakWord id={labelId} dataLabel={i18n._(msg`Name`)}>
+      <TdBreakWord id={labelId} dataLabel={i18n._(t`Name`)}>
         <Link to={`${detailUrl}`}>
           <b>{instanceGroup.name}</b>
         </Link>
       </TdBreakWord>
-      <Td dataLabel={i18n._(msg`Type`)}>
+      <Td dataLabel={i18n._(t`Type`)}>
         {isContainerGroup(instanceGroup)
-          ? i18n._(msg`Container group`).toString()
-          : i18n._(msg`Instance group`).toString()}
+          ? i18n._(t`Container group`).toString()
+          : i18n._(t`Instance group`).toString()}
       </Td>
-      <Td dataLabel={i18n._(msg`Running jobs`)}>
+      <Td dataLabel={i18n._(t`Running jobs`)}>
         {instanceGroup.jobs_running}
       </Td>
-      <Td dataLabel={i18n._(msg`Total jobs`)}>{instanceGroup.jobs_total}</Td>
-      <Td dataLabel={i18n._(msg`Instances`)}>{instanceGroup.instances}</Td>
-      <Td dataLabel={i18n._(msg`Capacity`)}>{usedCapacity(instanceGroup)}</Td>
-      <ActionsTd dataLabel={i18n._(msg`Actions`)}>
+      <Td dataLabel={i18n._(t`Total jobs`)}>{instanceGroup.jobs_total}</Td>
+      <Td dataLabel={i18n._(t`Instances`)}>{instanceGroup.instances}</Td>
+      <Td dataLabel={i18n._(t`Capacity`)}>{usedCapacity(instanceGroup)}</Td>
+      <ActionsTd dataLabel={i18n._(t`Actions`)}>
         <ActionItem
           visible={instanceGroup.summary_fields.user_capabilities.edit}
-          tooltip={i18n._(msg`Edit instance group`)}
+          tooltip={i18n._(t`Edit instance group`)}
         >
           <Button
             ouiaId={`${instanceGroup.id}-edit-button`}
-            aria-label={i18n._(msg`Edit instance group`)}
+            aria-label={i18n._(t`Edit instance group`)}
             variant="plain"
             component={Link}
             to={

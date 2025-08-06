@@ -1,6 +1,6 @@
 import React from 'react';
 import { i18n } from '@lingui/core';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import PreviewStep from './PreviewStep';
 import StepName from './StepName';
 
@@ -21,7 +21,7 @@ export default function usePreviewStep(
           id: STEP_ID,
           name: (
             <StepName hasErrors={false} id="preview-step">
-              {i18n._(msg`Preview`)}
+              {i18n._(t`Preview`)}
             </StepName>
           ),
           component: (
@@ -33,7 +33,7 @@ export default function usePreviewStep(
             />
           ),
           enableNext: !hasErrors,
-          nextButtonText: nextButtonText || i18n._(msg`Launch`),
+          nextButtonText: nextButtonText || i18n._(t`Launch`),
         }
       : null,
     initialValues: {},

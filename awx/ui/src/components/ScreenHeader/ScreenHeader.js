@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import useTitle from 'hooks/useTitle';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import {
   Button,
@@ -63,10 +63,10 @@ const ScreenHeader = ({ breadcrumbConfig, streamType }) => {
         </div>
         {streamType !== 'none' && (
           <div>
-            <Tooltip content={i18n._(msg`View activity stream`)} position="top">
+            <Tooltip content={i18n._(t`View activity stream`)} position="top">
               <Button
                 ouiaId="activity-stream-button"
-                aria-label={i18n._(msg`View activity stream`)}
+                aria-label={i18n._(t`View activity stream`)}
                 variant="plain"
                 component={Link}
                 to={`/activity_stream${

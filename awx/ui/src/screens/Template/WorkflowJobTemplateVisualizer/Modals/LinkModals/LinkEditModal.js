@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Title } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 
 import { WorkflowDispatchContext } from 'contexts/Workflow';
 import LinkModal from './LinkModal';
@@ -13,7 +13,7 @@ function LinkEditModal() {
     <LinkModal
       header={
         <Title headingLevel="h1" size="xl">
-          {i18n._(msg`Edit Link`)}
+          {i18n._(t`Edit Link`)}
         </Title>
       }
       onConfirm={(linkType) => dispatch({ type: 'UPDATE_LINK', linkType })}

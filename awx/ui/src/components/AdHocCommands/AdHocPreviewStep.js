@@ -1,5 +1,5 @@
 import React from 'react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { Tooltip } from '@patternfly/react-core';
 import { ExclamationCircleIcon as PFExclamationCircleIcon } from '@patternfly/react-icons';
@@ -31,10 +31,10 @@ function AdHocPreviewStep({ hasErrors, values }) {
     <>
       {hasErrors && (
         <ErrorMessageWrapper>
-          {i18n._(msg`Some of the previous step(s) have errors`)}
+          {i18n._(t`Some of the previous step(s) have errors`)}
           <Tooltip
             position="right"
-            content={i18n._(msg`See errors on the left`)}
+            content={i18n._(t`See errors on the left`)}
             trigger="click mouseenter focus"
           >
             <ExclamationCircleIcon />
@@ -53,17 +53,17 @@ function AdHocPreviewStep({ hasErrors, values }) {
             )
         )}
         {credential && (
-          <Detail label={i18n._(msg`Credential`)} value={credential[0]?.name} />
+          <Detail label={i18n._(t`Credential`)} value={credential[0]?.name} />
         )}
         {execution_environment && (
           <Detail
-            label={i18n._(msg`Execution Environment`)}
+            label={i18n._(t`Execution Environment`)}
             value={execution_environment[0]?.name}
           />
         )}
         {verbosity && (
           <Detail
-            label={i18n._(msg`Verbosity`)}
+            label={i18n._(t`Verbosity`)}
             value={VERBOSITY(i18n)[values.verbosity]}
           />
         )}
@@ -71,7 +71,7 @@ function AdHocPreviewStep({ hasErrors, values }) {
           <VariablesDetail
             value={jsonToYaml(JSON.stringify(extra_vars))}
             rows={4}
-            label={i18n._(msg`Variables`)}
+            label={i18n._(t`Variables`)}
             name="extra_vars"
           />
         )}

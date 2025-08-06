@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { Button, Label } from '@patternfly/react-core';
 
 import { Inventory } from 'types';
@@ -97,19 +97,19 @@ function SmartInventoryDetail({ inventory }) {
     <>
       <CardBody>
         <DetailList>
-          <Detail label={i18n._(msg`Name`)} value={name} />
+          <Detail label={i18n._(t`Name`)} value={name} />
           <Detail
-            label={i18n._(msg`Activity`)}
+            label={i18n._(t`Activity`)}
             value={<Sparkline jobs={recentJobs} />}
             isEmpty={recentJobs.length === 0}
           />
-          <Detail label={i18n._(msg`Description`)} value={description} />
+          <Detail label={i18n._(t`Description`)} value={description} />
           <Detail
-            label={i18n._(msg`Type`)}
-            value={i18n._(msg`Smart inventory`)}
+            label={i18n._(t`Type`)}
+            value={i18n._(t`Smart inventory`)}
           />
           <Detail
-            label={i18n._(msg`Organization`)}
+            label={i18n._(t`Organization`)}
             value={
               <Link to={`/organizations/${organization.id}/details`}>
                 {organization.name}
@@ -118,30 +118,30 @@ function SmartInventoryDetail({ inventory }) {
           />
           <Detail
             fullWidth
-            label={i18n._(msg`Smart host filter`)}
+            label={i18n._(t`Smart host filter`)}
             value={<Label variant="outline">{host_filter}</Label>}
           />
-          <Detail label={i18n._(msg`Total hosts`)} value={total_hosts} />
+          <Detail label={i18n._(t`Total hosts`)} value={total_hosts} />
           <Detail
             fullWidth
-            label={i18n._(msg`Instance groups`)}
+            label={i18n._(t`Instance groups`)}
             value={<InstanceGroupLabels labels={instanceGroups} />}
             isEmpty={instanceGroups.length === 0}
           />
           <VariablesDetail
-            label={i18n._(msg`Variables`)}
+            label={i18n._(t`Variables`)}
             value={variables}
             rows={4}
             name="variables"
             dataCy="smart-inventory-detail-variables"
           />
           <UserDateDetail
-            label={i18n._(msg`Created`)}
+            label={i18n._(t`Created`)}
             date={created}
             user={created_by}
           />
           <UserDateDetail
-            label={i18n._(msg`Last modified`)}
+            label={i18n._(t`Last modified`)}
             date={modified}
             user={modified_by}
           />
@@ -151,20 +151,20 @@ function SmartInventoryDetail({ inventory }) {
             <Button
               ouiaId="smart-inventory-detail-edit-button"
               component={Link}
-              aria-label={i18n._(msg`edit`)}
+              aria-label={i18n._(t`edit`)}
               to={`/inventories/smart_inventory/${id}/edit`}
             >
-              {i18n._(msg`Edit`)}
+              {i18n._(t`Edit`)}
             </Button>
           )}
           {user_capabilities?.delete && (
             <DeleteButton
               name={name}
-              modalTitle={i18n._(msg`Delete smart inventory`)}
+              modalTitle={i18n._(t`Delete smart inventory`)}
               onConfirm={handleDelete}
               isDisabled={isLoading}
             >
-              {i18n._(msg`Delete`)}
+              {i18n._(t`Delete`)}
             </DeleteButton>
           )}
         </CardActionsRow>
@@ -173,10 +173,10 @@ function SmartInventoryDetail({ inventory }) {
         <AlertModal
           isOpen={error}
           variant="error"
-          title={i18n._(msg`Error!`)}
+          title={i18n._(t`Error!`)}
           onClose={dismissError}
         >
-          {i18n._(msg`Failed to delete smart inventory.`)}
+          {i18n._(t`Failed to delete smart inventory.`)}
           <ErrorDetail error={error} />
         </AlertModal>
       )}

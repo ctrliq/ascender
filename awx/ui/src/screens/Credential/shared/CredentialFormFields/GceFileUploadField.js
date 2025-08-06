@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useField } from 'formik';
 import { FileUpload, FormGroup } from '@patternfly/react-core';
 
@@ -22,9 +22,9 @@ function GceFileUploadField() {
     <FormGroup
       fieldId="credential-gce-file"
       validated={!fileError ? 'default' : 'error'}
-      label={i18n._(msg`Service account JSON file`)}
+      label={i18n._(t`Service account JSON file`)}
       helperText={i18n._(
-        msg`Select a JSON formatted service account key to autopopulate the following fields.`
+        t`Select a JSON formatted service account key to autopopulate the following fields.`
       )}
       helperTextInvalid={fileError}
     >
@@ -32,7 +32,7 @@ function GceFileUploadField() {
         id="credential-gce-file"
         value={file}
         filename={filename}
-        filenamePlaceholder={i18n._(msg`Choose a .json file`)}
+        filenamePlaceholder={i18n._(t`Choose a .json file`)}
         onChange={async (value) => {
           if (value) {
             try {
@@ -47,7 +47,7 @@ function GceFileUploadField() {
               ) {
                 setFileError(
                   i18n._(
-                    msg`Expected at least one of client_email, project_id or private_key to be present in the file.`
+                    t`Expected at least one of client_email, project_id or private_key to be present in the file.`
                   )
                 );
               } else {
@@ -59,7 +59,7 @@ function GceFileUploadField() {
             } catch {
               setFileError(
                 i18n._(
-                  msg`There was an error parsing the file. Please check the file formatting and try again.`
+                  t`There was an error parsing the file. Please check the file formatting and try again.`
                 )
               );
             }
@@ -77,7 +77,7 @@ function GceFileUploadField() {
           onDropRejected: () => {
             setFileError(
               i18n._(
-                msg`File upload rejected. Please select a single .json file.`
+                t`File upload rejected. Please select a single .json file.`
               )
             );
           },

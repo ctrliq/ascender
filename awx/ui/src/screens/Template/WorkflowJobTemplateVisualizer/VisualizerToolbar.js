@@ -2,7 +2,7 @@ import 'styled-components/macro';
 import React, { useContext } from 'react';
 
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { bool, func, shape } from 'prop-types';
 import {
   Badge as PFBadge,
@@ -75,13 +75,13 @@ function VisualizerToolbar({
           {template.name}
         </Title>
         <div css="align-items: center; display: flex; flex: 1; justify-content: flex-end">
-          <div>{i18n._(msg`Total Nodes`)}</div>
+          <div>{i18n._(t`Total Nodes`)}</div>
           <Badge id="visualizer-total-nodes-badge" isRead>
             {totalNodes}
           </Badge>
-          <Tooltip content={i18n._(msg`Toggle legend`)} position="bottom">
+          <Tooltip content={i18n._(t`Toggle legend`)} position="bottom">
             <ActionButton
-              aria-label={i18n._(msg`Toggle legend`)}
+              aria-label={i18n._(t`Toggle legend`)}
               id="visualizer-toggle-legend"
               isActive={totalNodes > 0 && showLegend}
               isDisabled={totalNodes === 0}
@@ -91,9 +91,9 @@ function VisualizerToolbar({
               <CompassIcon />
             </ActionButton>
           </Tooltip>
-          <Tooltip content={i18n._(msg`Toggle tools`)} position="bottom">
+          <Tooltip content={i18n._(t`Toggle tools`)} position="bottom">
             <ActionButton
-              aria-label={i18n._(msg`Toggle tools`)}
+              aria-label={i18n._(t`Toggle tools`)}
               id="visualizer-toggle-tools"
               isActive={totalNodes > 0 && showTools}
               isDisabled={totalNodes === 0}
@@ -104,11 +104,11 @@ function VisualizerToolbar({
             </ActionButton>
           </Tooltip>
           <Tooltip
-            content={i18n._(msg`Workflow documentation`)}
+            content={i18n._(t`Workflow documentation`)}
             position="bottom"
           >
             <ActionButton
-              aria-label={i18n._(msg`Workflow documentation`)}
+              aria-label={i18n._(t`Workflow documentation`)}
               id="visualizer-documentation"
               variant="plain"
               component="a"
@@ -122,10 +122,10 @@ function VisualizerToolbar({
             </ActionButton>
           </Tooltip>
           {template.summary_fields?.user_capabilities?.start && (
-            <Tooltip content={i18n._(msg`Launch workflow`)} position="bottom">
+            <Tooltip content={i18n._(t`Launch workflow`)} position="bottom">
               <LaunchButton
                 resource={template}
-                aria-label={i18n._(msg`Launch workflow`)}
+                aria-label={i18n._(t`Launch workflow`)}
               >
                 {({ handleLaunch, isLaunching }) => (
                   <ActionButton
@@ -145,12 +145,12 @@ function VisualizerToolbar({
           {!readOnly && (
             <>
               <Tooltip
-                content={i18n._(msg`Delete all nodes`)}
+                content={i18n._(t`Delete all nodes`)}
                 position="bottom"
               >
                 <ActionButton
                   id="visualizer-delete-all"
-                  aria-label={i18n._(msg`Delete all nodes`)}
+                  aria-label={i18n._(t`Delete all nodes`)}
                   isDisabled={totalNodes === 0}
                   onClick={() =>
                     dispatch({
@@ -167,18 +167,18 @@ function VisualizerToolbar({
                 ouiaId="visualizer-save-button"
                 id="visualizer-save"
                 css="margin: 0 32px"
-                aria-label={i18n._(msg`Save`)}
+                aria-label={i18n._(t`Save`)}
                 variant="primary"
                 onClick={onSave}
               >
-                {i18n._(msg`Save`)}
+                {i18n._(t`Save`)}
               </Button>
             </>
           )}
           <Button
             ouiaId="visualizer-close-button"
             id="visualizer-close"
-            aria-label={i18n._(msg`Close`)}
+            aria-label={i18n._(t`Close`)}
             onClick={onClose}
             variant="plain"
           >

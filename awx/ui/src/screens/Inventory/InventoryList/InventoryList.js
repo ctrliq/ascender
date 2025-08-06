@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useLocation, useRouteMatch, Link } from 'react-router-dom';
-import { msg, Plural } from '@lingui/macro';
+import { t, Plural } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { Card, PageSection, DropdownItem } from '@patternfly/react-core';
 import { InventoriesAPI } from 'api';
@@ -120,7 +120,7 @@ function InventoryList() {
     (newInventoryId) => {
       addToast({
         id: newInventoryId,
-        title: i18n._(msg`Inventory copied successfully`),
+        title: i18n._(t`Inventory copied successfully`),
         variant: AlertVariant.success,
         hasTimeout: true,
       });
@@ -135,9 +135,9 @@ function InventoryList() {
     selected[0]
   );
 
-  const addInventory = i18n._(msg`Add inventory`);
-  const addSmartInventory = i18n._(msg`Add smart inventory`);
-  const addConstructedInventory = i18n._(msg`Add constructed inventory`);
+  const addInventory = i18n._(t`Add inventory`);
+  const addSmartInventory = i18n._(t`Add smart inventory`);
+  const addConstructedInventory = i18n._(t`Add constructed inventory`);
   const addButton = (
     <AddDropDownButton
       ouiaId="add-inventory-button"
@@ -183,43 +183,43 @@ function InventoryList() {
             hasContentLoading={hasContentLoading}
             items={inventories}
             itemCount={itemCount}
-            pluralizedItemName={i18n._(msg`Inventories`)}
+            pluralizedItemName={i18n._(t`Inventories`)}
             qsConfig={QS_CONFIG}
             toolbarSearchColumns={[
               {
-                name: i18n._(msg`Name`),
+                name: i18n._(t`Name`),
                 key: 'name__icontains',
                 isDefault: true,
               },
               {
-                name: i18n._(msg`Inventory Type`),
+                name: i18n._(t`Inventory Type`),
                 key: 'or__kind',
                 options: [
-                  ['', i18n._(msg`Inventory`)],
-                  ['smart', i18n._(msg`Smart Inventory`)],
-                  ['constructed', i18n._(msg`Constructed Inventory`)],
+                  ['', i18n._(t`Inventory`)],
+                  ['smart', i18n._(t`Smart Inventory`)],
+                  ['constructed', i18n._(t`Constructed Inventory`)],
                 ],
               },
               {
-                name: i18n._(msg`Organization`),
+                name: i18n._(t`Organization`),
                 key: 'organization__name',
               },
               {
-                name: i18n._(msg`Description`),
+                name: i18n._(t`Description`),
                 key: 'description__icontains',
               },
               {
-                name: i18n._(msg`Created By (Username)`),
+                name: i18n._(t`Created By (Username)`),
                 key: 'created_by__username__icontains',
               },
               {
-                name: i18n._(msg`Modified By (Username)`),
+                name: i18n._(t`Modified By (Username)`),
                 key: 'modified_by__username__icontains',
               },
             ]}
             toolbarSortColumns={[
               {
-                name: i18n._(msg`Name`),
+                name: i18n._(t`Name`),
                 key: 'name',
               },
             ]}
@@ -228,11 +228,11 @@ function InventoryList() {
             clearSelected={clearSelected}
             headerRow={
               <HeaderRow qsConfig={QS_CONFIG}>
-                <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
-                <HeaderCell>{i18n._(msg`Sync Status`)}</HeaderCell>
-                <HeaderCell>{i18n._(msg`Type`)}</HeaderCell>
-                <HeaderCell>{i18n._(msg`Organization`)}</HeaderCell>
-                <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
+                <HeaderCell sortKey="name">{i18n._(t`Name`)}</HeaderCell>
+                <HeaderCell>{i18n._(t`Sync Status`)}</HeaderCell>
+                <HeaderCell>{i18n._(t`Type`)}</HeaderCell>
+                <HeaderCell>{i18n._(t`Organization`)}</HeaderCell>
+                <HeaderCell>{i18n._(t`Actions`)}</HeaderCell>
               </HeaderRow>
             }
             renderToolbar={(props) => (
@@ -247,16 +247,16 @@ function InventoryList() {
                     key="delete"
                     onDelete={handleInventoryDelete}
                     itemsToDelete={selected}
-                    pluralizedItemName={i18n._(msg`Inventories`)}
+                    pluralizedItemName={i18n._(t`Inventories`)}
                     deleteDetailsRequests={deleteDetailsRequests}
                     deleteMessage={
                       <Plural
                         value={selected.length}
                         one={i18n._(
-                          msg`This inventory is currently being used by some templates. Are you sure you want to delete it?`
+                          t`This inventory is currently being used by some templates. Are you sure you want to delete it?`
                         )}
                         other={i18n._(
-                          msg`Deleting these inventories could impact some templates that rely on them. Are you sure you want to delete anyway?`
+                          t`Deleting these inventories could impact some templates that rely on them. Are you sure you want to delete anyway?`
                         )}
                       />
                     }
@@ -264,10 +264,10 @@ function InventoryList() {
                       <Plural
                         value={selected.length}
                         one={i18n._(
-                          msg`The inventory will be in a pending status until the final delete is processed.`
+                          t`The inventory will be in a pending status until the final delete is processed.`
                         )}
                         other={i18n._(
-                          msg`The inventories will be in a pending status until the final delete is processed.`
+                          t`The inventories will be in a pending status until the final delete is processed.`
                         )}
                       />
                     }
@@ -297,11 +297,11 @@ function InventoryList() {
         <AlertModal
           isOpen={deletionError}
           variant="error"
-          aria-label={i18n._(msg`Deletion Error`)}
-          title={i18n._(msg`Error!`)}
+          aria-label={i18n._(t`Deletion Error`)}
+          title={i18n._(t`Error!`)}
           onClose={clearDeletionError}
         >
-          {i18n._(msg`Failed to delete one or more inventories.`)}
+          {i18n._(t`Failed to delete one or more inventories.`)}
           <ErrorDetail error={deletionError} />
         </AlertModal>
       </PageSection>

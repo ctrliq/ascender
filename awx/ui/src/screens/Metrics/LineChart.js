@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import * as d3 from 'd3';
 
@@ -118,7 +118,7 @@ function LineChart({ data, helpText }) {
       .attr('class', 'legend-title')
       .attr('x', '100')
       .attr('y', '50')
-      .text(i18n._(msg`Legend`));
+      .text(i18n._(t`Legend`));
 
     legendContainer.data(data, (d, i) => {
       if (d?.name) {

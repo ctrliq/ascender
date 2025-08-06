@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import styled from 'styled-components';
 import { Switch, Route, useParams } from 'react-router-dom';
 import {
@@ -48,23 +48,23 @@ function UserTokens({ setBreadcrumb, user }) {
       </Switch>
       {tokenModalSource && (
         <Modal
-          aria-label={i18n._(msg`Token information`)}
+          aria-label={i18n._(t`Token information`)}
           isOpen
           variant="medium"
-          title={i18n._(msg`Token information`)}
+          title={i18n._(t`Token information`)}
           onClose={() => setTokenModalSource(null)}
         >
           <TokenAlert
             variant="info"
             isInline
             title={i18n._(
-              msg`This is the only time the token value and associated refresh token value will be shown.`
+              t`This is the only time the token value and associated refresh token value will be shown.`
             )}
           />
           <DetailList stacked>
             {tokenModalSource.token && (
               <Detail
-                label={i18n._(msg`Token`)}
+                label={i18n._(t`Token`)}
                 value={
                   <ClipboardCopy
                     isReadOnly
@@ -77,7 +77,7 @@ function UserTokens({ setBreadcrumb, user }) {
             )}
             {tokenModalSource.refresh_token && (
               <Detail
-                label={i18n._(msg`Refresh Token`)}
+                label={i18n._(t`Refresh Token`)}
                 value={
                   <ClipboardCopy
                     isReadOnly
@@ -89,7 +89,7 @@ function UserTokens({ setBreadcrumb, user }) {
               />
             )}
             <Detail
-              label={i18n._(msg`Expires`)}
+              label={i18n._(t`Expires`)}
               value={formatDateString(tokenModalSource.expires)}
             />
           </DetailList>

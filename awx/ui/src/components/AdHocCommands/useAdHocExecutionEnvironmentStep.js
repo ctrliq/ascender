@@ -1,5 +1,5 @@
 import React from 'react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import StepName from '../LaunchPrompt/steps/StepName';
 import AdHocExecutionEnvironmentStep from './AdHocExecutionEnvironmentStep';
@@ -14,14 +14,14 @@ export default function useAdHocExecutionEnvironmentStep(organizationId) {
       stepNavItemProps: { style: { whiteSpace: 'nowrap' } },
       name: (
         <StepName hasErrors={false} id="executionEnvironment-step">
-          {i18n._(msg`Execution Environment`)}
+          {i18n._(t`Execution Environment`)}
         </StepName>
       ),
       component: (
         <AdHocExecutionEnvironmentStep organizationId={organizationId} />
       ),
       enableNext: true,
-      nextButtonText: i18n._(msg`Next`),
+      nextButtonText: i18n._(t`Next`),
     },
     hasError: false,
     validate: () => {},

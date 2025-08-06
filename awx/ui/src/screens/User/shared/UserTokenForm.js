@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { Formik, useField, useFormikContext } from 'formik';
 import { Form, FormGroup } from '@patternfly/react-core';
 import AnsibleSelect from 'components/AnsibleSelect';
@@ -19,7 +19,7 @@ function UserTokenFormFields() {
 
   const [scopeField, scopeMeta, scopeHelpers] = useField({
     name: 'scope',
-    validate: required(i18n._(msg`Please enter a value.`)),
+    validate: required(i18n._(t`Please enter a value.`)),
   });
 
   const handleApplicationUpdate = useCallback(
@@ -47,7 +47,7 @@ function UserTokenFormFields() {
           onChange={handleApplicationUpdate}
           label={
             <span>
-              {i18n._(msg`Application`)}
+              {i18n._(t`Application`)}
               <Popover content={helptext.application} />
             </span>
           }
@@ -58,7 +58,7 @@ function UserTokenFormFields() {
         id="token-description"
         name="description"
         type="text"
-        label={i18n._(msg`Description`)}
+        label={i18n._(t`Description`)}
       />
 
       <FormGroup
@@ -67,7 +67,7 @@ function UserTokenFormFields() {
         helperTextInvalid={scopeMeta.error}
         isRequired
         validated={!scopeMeta.touched || !scopeMeta.error ? 'default' : 'error'}
-        label={i18n._(msg`Scope`)}
+        label={i18n._(t`Scope`)}
         labelIcon={<Popover content={helptext.scope} />}
       >
         <AnsibleSelect
@@ -75,8 +75,8 @@ function UserTokenFormFields() {
           id="token-scope"
           data={[
             { key: 'default', label: '', value: '' },
-            { key: 'read', value: 'read', label: i18n._(msg`Read`) },
-            { key: 'write', value: 'write', label: i18n._(msg`Write`) },
+            { key: 'read', value: 'read', label: i18n._(t`Read`) },
+            { key: 'write', value: 'write', label: i18n._(t`Write`) },
           ]}
           onChange={(event, value) => {
             scopeHelpers.setValue(value);

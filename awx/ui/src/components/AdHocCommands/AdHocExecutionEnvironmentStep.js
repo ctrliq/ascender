@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { useField } from 'formik';
 import { Form, FormGroup } from '@patternfly/react-core';
@@ -89,12 +89,12 @@ function AdHocExecutionEnvironmentStep({ organizationId }) {
     <Form autoComplete="off">
       <FormGroup
         fieldId="execution_enviroment"
-        label={i18n._(msg`Execution Environment`)}
-        aria-label={i18n._(msg`Execution Environment`)}
+        label={i18n._(t`Execution Environment`)}
+        aria-label={i18n._(t`Execution Environment`)}
         labelIcon={
           <Popover
             content={i18n._(
-              msg`Select the Execution Environment you want this command to run inside.`
+              t`Select the Execution Environment you want this command to run inside.`
             )}
           />
         }
@@ -104,26 +104,26 @@ function AdHocExecutionEnvironmentStep({ organizationId }) {
           value={executionEnvironmentField.value || []}
           options={executionEnvironments}
           optionCount={executionEnvironmentsCount}
-          header={i18n._(msg`Execution Environments`)}
+          header={i18n._(t`Execution Environments`)}
           qsConfig={QS_CONFIG}
           searchColumns={[
             {
-              name: i18n._(msg`Name`),
+              name: i18n._(t`Name`),
               key: 'name__icontains',
               isDefault: true,
             },
             {
-              name: i18n._(msg`Created By (Username)`),
+              name: i18n._(t`Created By (Username)`),
               key: 'created_by__username',
             },
             {
-              name: i18n._(msg`Modified By (Username)`),
+              name: i18n._(t`Modified By (Username)`),
               key: 'modified_by__username',
             },
           ]}
           sortColumns={[
             {
-              name: i18n._(msg`Name`),
+              name: i18n._(t`Name`),
               key: 'name',
             },
           ]}

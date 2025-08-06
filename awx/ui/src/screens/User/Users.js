@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { Route, useRouteMatch, Switch } from 'react-router-dom';
 
 import ScreenHeader from 'components/ScreenHeader/ScreenHeader';
@@ -13,8 +13,8 @@ import User from './User';
 function Users() {
   const { i18n } = useLingui();
   const [breadcrumbConfig, setBreadcrumbConfig] = useState({
-    '/users': i18n._(msg`Users`),
-    '/users/add': i18n._(msg`Create New User`),
+    '/users': i18n._(t`Users`),
+    '/users/add': i18n._(t`Create New User`),
   });
   const match = useRouteMatch();
 
@@ -25,18 +25,18 @@ function Users() {
       }
 
       setBreadcrumbConfig({
-        '/users': i18n._(msg`Users`),
-        '/users/add': i18n._(msg`Create New User`),
+        '/users': i18n._(t`Users`),
+        '/users/add': i18n._(t`Create New User`),
         [`/users/${user.id}`]: `${user.username}`,
-        [`/users/${user.id}/edit`]: i18n._(msg`Edit Details`),
-        [`/users/${user.id}/details`]: i18n._(msg`Details`),
-        [`/users/${user.id}/roles`]: i18n._(msg`Roles`),
-        [`/users/${user.id}/teams`]: i18n._(msg`Teams`),
-        [`/users/${user.id}/organizations`]: i18n._(msg`Organizations`),
-        [`/users/${user.id}/tokens`]: i18n._(msg`Tokens`),
-        [`/users/${user.id}/tokens/add`]: i18n._(msg`Create user token`),
+        [`/users/${user.id}/edit`]: i18n._(t`Edit Details`),
+        [`/users/${user.id}/details`]: i18n._(t`Details`),
+        [`/users/${user.id}/roles`]: i18n._(t`Roles`),
+        [`/users/${user.id}/teams`]: i18n._(t`Teams`),
+        [`/users/${user.id}/organizations`]: i18n._(t`Organizations`),
+        [`/users/${user.id}/tokens`]: i18n._(t`Tokens`),
+        [`/users/${user.id}/tokens/add`]: i18n._(t`Create user token`),
         [`/users/${user.id}/tokens/${token && token.id}/details`]: i18n._(
-          msg`Details`
+          t`Details`
         ),
       });
     },

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
 import { TableComposable, Thead, Tr, Th, Tbody } from '@patternfly/react-table';
 import AlertModal from 'components/AlertModal';
@@ -53,8 +53,8 @@ function SurveyList({
       variant="danger"
       title={
         isAllSelected
-          ? i18n._(msg`Delete Survey`)
-          : i18n._(msg`Delete Questions`)
+          ? i18n._(t`Delete Survey`)
+          : i18n._(t`Delete Questions`)
       }
       isOpen={isDeleteModalOpen}
       onClose={() => {
@@ -66,26 +66,26 @@ function SurveyList({
           ouiaId="delete-confirm-button"
           key="delete"
           variant="danger"
-          aria-label={i18n._(msg`confirm delete`)}
+          aria-label={i18n._(t`confirm delete`)}
           onClick={handleDelete}
         >
-          {i18n._(msg`Delete`)}
+          {i18n._(t`Delete`)}
         </Button>,
         <Button
           ouiaId="delete-cancel-button"
           key="cancel"
           variant="link"
-          aria-label={i18n._(msg`cancel delete`)}
+          aria-label={i18n._(t`cancel delete`)}
           onClick={() => {
             setIsDeleteModalOpen(false);
             clearSelected();
           }}
         >
-          {i18n._(msg`Cancel`)}
+          {i18n._(t`Cancel`)}
         </Button>,
       ]}
     >
-      <div>{i18n._(msg`This action will delete the following:`)}</div>
+      <div>{i18n._(t`This action will delete the following:`)}</div>
       {selected.map((question) => (
         <span key={question.variable}>
           <strong>{question.question_name}</strong>
@@ -105,10 +105,10 @@ function SurveyList({
           <Thead>
             <Tr ouiaId="survey-table-header">
               <Th />
-              <Th dataLabel={i18n._(msg`Name`)}>{i18n._(msg`Name`)}</Th>
-              <Th dataLabel={i18n._(msg`Type`)}>{i18n._(msg`Type`)}</Th>
-              <Th dataLabel={i18n._(msg`Default`)}>{i18n._(msg`Default`)}</Th>
-              <Th dataLabel={i18n._(msg`Actions`)}>{i18n._(msg`Actions`)}</Th>
+              <Th dataLabel={i18n._(t`Name`)}>{i18n._(t`Name`)}</Th>
+              <Th dataLabel={i18n._(t`Type`)}>{i18n._(t`Type`)}</Th>
+              <Th dataLabel={i18n._(t`Default`)}>{i18n._(t`Default`)}</Th>
+              <Th dataLabel={i18n._(t`Actions`)}>{i18n._(t`Actions`)}</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -149,8 +149,8 @@ function SurveyList({
   if (emptyList && !isLoading) {
     content = (
       <ContentEmpty
-        message={i18n._(msg`Please add survey questions.`)}
-        title={i18n._(msg`No survey questions found.`)}
+        message={i18n._(t`Please add survey questions.`)}
+        title={i18n._(t`No survey questions found.`)}
       />
     );
   }

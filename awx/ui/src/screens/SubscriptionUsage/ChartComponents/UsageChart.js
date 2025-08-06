@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { string, number, shape, arrayOf } from 'prop-types';
 import * as d3 from 'd3';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { PageContextConsumer } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react';
 
@@ -63,7 +63,7 @@ function UsageChart({ id, data, height, pageContext }) {
     const tooltip = new UsageChartTooltip({
       svg: `#${id}`,
       colors,
-      label: i18n._(msg`Hosts`),
+      label: i18n._(t`Hosts`),
       i18n,
     });
 
@@ -129,7 +129,7 @@ function UsageChart({ id, data, height, pageContext }) {
       .attr('x', 0 - height / 2)
       .attr('dy', '1em')
       .style('text-anchor', 'middle')
-      .text(i18n._(msg`Unique Hosts`));
+      .text(i18n._(t`Unique Hosts`));
 
     // Add the X Axis
     let ticks;
@@ -173,7 +173,7 @@ function UsageChart({ id, data, height, pageContext }) {
         `translate(${width / 2} , ${height + margin.top + 50})`
       )
       .style('text-anchor', 'middle')
-      .text(i18n._(msg`Month`));
+      .text(i18n._(t`Month`));
     const vertical = svg
       .append('path')
       .attr('class', 'mouse-line')
@@ -259,8 +259,8 @@ function UsageChart({ id, data, height, pageContext }) {
 
     // Create legend
     const legend_keys = [
-      i18n._(msg`Subscriptions consumed`),
-      i18n._(msg`Subscription capacity`),
+      i18n._(t`Subscriptions consumed`),
+      i18n._(t`Subscription capacity`),
     ];
     let totalWidth = width / 2 - 175;
 

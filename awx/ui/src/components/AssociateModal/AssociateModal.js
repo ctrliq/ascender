@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 
 import { Button, Modal } from '@patternfly/react-core';
@@ -36,8 +36,8 @@ function AssociateModal({
   const { selected, handleSelect } = useSelected([]);
 
   // Set default values for header and title after i18n is available
-  header = header || i18n._(msg`Items`);
-  title = title || i18n._(msg`Select Items`);
+  header = header || i18n._(t`Items`);
+  title = title || i18n._(t`Select Items`);
 
   const {
     request: fetchItems,
@@ -103,28 +103,28 @@ function AssociateModal({
       ouiaId={ouiaId}
       variant="large"
       title={title}
-      aria-label={i18n._(msg`Association modal`)}
+      aria-label={i18n._(t`Association modal`)}
       isOpen={isModalOpen}
       onClose={handleClose}
       actions={[
         <Button
           ouiaId="associate-modal-save"
-          aria-label={i18n._(msg`Save`)}
+          aria-label={i18n._(t`Save`)}
           key="select"
           variant="primary"
           onClick={handleSave}
           isDisabled={selected.length === 0}
         >
-          {i18n._(msg`Save`)}
+          {i18n._(t`Save`)}
         </Button>,
         <Button
           ouiaId="associate-modal-cancel"
-          aria-label={i18n._(msg`Cancel`)}
+          aria-label={i18n._(t`Cancel`)}
           key="cancel"
           variant="link"
           onClick={handleClose}
         >
-          {i18n._(msg`Cancel`)}
+          {i18n._(t`Cancel`)}
         </Button>,
       ]}
     >
@@ -145,22 +145,22 @@ function AssociateModal({
         value={selected}
         searchColumns={[
           {
-            name: i18n._(msg`Name`),
+            name: i18n._(t`Name`),
             key: `${displayKey}__icontains`,
             isDefault: true,
           },
           {
-            name: i18n._(msg`Created By (Username)`),
+            name: i18n._(t`Created By (Username)`),
             key: 'created_by__username__icontains',
           },
           {
-            name: i18n._(msg`Modified By (Username)`),
+            name: i18n._(t`Modified By (Username)`),
             key: 'modified_by__username__icontains',
           },
         ]}
         sortColumns={[
           {
-            name: i18n._(msg`Name`),
+            name: i18n._(t`Name`),
             key: `${displayKey}`,
           },
         ]}

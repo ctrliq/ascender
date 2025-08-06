@@ -3,7 +3,7 @@ import React, { useState, useCallback } from 'react';
 import { string, bool, func } from 'prop-types';
 import { Button, ClipboardCopy, Tooltip } from '@patternfly/react-core';
 import { Tr, Td, ExpandableRowContent } from '@patternfly/react-table';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { Link } from 'react-router-dom';
 import {
@@ -67,16 +67,16 @@ function ProjectListItem({
 
   const generateLastJobTooltip = (job) => (
     <>
-      <div>{i18n._(msg`MOST RECENT SYNC`)}</div>
+      <div>{i18n._(t`MOST RECENT SYNC`)}</div>
       <div>
-        {i18n._(msg`JOB ID:`)} {job.id}
+        {i18n._(t`JOB ID:`)} {job.id}
       </div>
       <div>
-        {i18n._(msg`STATUS:`)} {job.status.toUpperCase()}
+        {i18n._(t`STATUS:`)} {job.status.toUpperCase()}
       </div>
       {job.finished && (
         <div>
-          {i18n._(msg`FINISHED:`)} {formatDateString(job.finished)}
+          {i18n._(t`FINISHED:`)} {formatDateString(job.finished)}
         </div>
       )}
     </>
@@ -96,8 +96,8 @@ function ProjectListItem({
         <ClipboardCopy
           data-cy={`project-copy-revision-${project.id}`}
           variant="inline-compact"
-          clickTip={i18n._(msg`Successfully copied to clipboard!`)}
-          hoverTip={i18n._(msg`Copy full revision to clipboard.`)}
+          clickTip={i18n._(t`Successfully copied to clipboard!`)}
+          hoverTip={i18n._(t`Copy full revision to clipboard.`)}
           onCopy={() =>
             navigator.clipboard.writeText(project.scm_revision.toString())
           }
@@ -107,10 +107,10 @@ function ProjectListItem({
       ) : (
         <Label
           aria-label={i18n._(
-            msg`The project must be synced before a revision is available.`
+            t`The project must be synced before a revision is available.`
           )}
         >
-          {i18n._(msg`Sync for revision`)}
+          {i18n._(t`Sync for revision`)}
         </Label>
       );
     }
@@ -122,10 +122,10 @@ function ProjectListItem({
       return (
         <Label
           aria-label={i18n._(
-            msg`The project is currently syncing and the revision will be available after the sync is complete.`
+            t`The project is currently syncing and the revision will be available after the sync is complete.`
           )}
         >
-          {i18n._(msg`Syncing`)}
+          {i18n._(t`Syncing`)}
         </Label>
       );
     }
@@ -134,12 +134,12 @@ function ProjectListItem({
       <>
         <Label
           aria-label={i18n._(
-            msg`The project revision is currently out of date.  Please refresh to fetch the most recent revision.`
+            t`The project revision is currently out of date.  Please refresh to fetch the most recent revision.`
           )}
         >
-          {i18n._(msg`Refresh for revision`)}
+          {i18n._(t`Refresh for revision`)}
         </Label>
-        <Tooltip content={i18n._(msg`Refresh project revision`)}>
+        <Tooltip content={i18n._(t`Refresh project revision`)}>
           <Button
             ouiaId={`project-refresh-revision-${project.id}`}
             variant="plain"
@@ -182,9 +182,9 @@ function ProjectListItem({
             onSelect,
             disable: isJobRunning(job?.status),
           }}
-          dataLabel={i18n._(msg`Selected`)}
+          dataLabel={i18n._(t`Selected`)}
         />
-        <TdBreakWord id={labelId} dataLabel={i18n._(msg`Name`)}>
+        <TdBreakWord id={labelId} dataLabel={i18n._(t`Name`)}>
           <span>
             <Link to={`${detailUrl}`}>
               <b>{project.name}</b>
@@ -194,7 +194,7 @@ function ProjectListItem({
             <span>
               <Tooltip
                 content={i18n._(
-                  msg`Custom virtual environment ${project.custom_virtualenv} must be replaced by an execution environment.`
+                  t`Custom virtual environment ${project.custom_virtualenv} must be replaced by an execution environment.`
                 )}
                 position="right"
                 className="missing-execution-environment"
@@ -204,7 +204,7 @@ function ProjectListItem({
             </span>
           )}
         </TdBreakWord>
-        <Td dataLabel={i18n._(msg`Status`)}>
+        <Td dataLabel={i18n._(t`Status`)}>
           {job ? (
             <Tooltip
               position="top"
@@ -218,36 +218,36 @@ function ProjectListItem({
           ) : (
             <Tooltip
               position="top"
-              content={i18n._(msg`Unable to load last job update`)}
+              content={i18n._(t`Unable to load last job update`)}
               key={project.id}
             >
               <StatusLabel status={project?.status} />
             </Tooltip>
           )}
         </Td>
-        <Td dataLabel={i18n._(msg`Type`)}>
+        <Td dataLabel={i18n._(t`Type`)}>
           {project.scm_type === ''
-            ? i18n._(msg`Manual`)
+            ? i18n._(t`Manual`)
             : toTitleCase(project.scm_type)}
         </Td>
-        <Td dataLabel={i18n._(msg`Revision`)}>{renderRevision()}</Td>
-        <ActionsTd dataLabel={i18n._(msg`Actions`)}>
+        <Td dataLabel={i18n._(t`Revision`)}>{renderRevision()}</Td>
+        <ActionsTd dataLabel={i18n._(t`Actions`)}>
           {['running', 'pending', 'waiting'].includes(job?.status) ? (
             <ActionItem
               visible={project.summary_fields.user_capabilities.start}
             >
               <JobCancelButton
                 job={{ id: job.id, type: 'project_update' }}
-                errorTitle={i18n._(msg`Project Sync Error`)}
-                title={i18n._(msg`Cancel Project Sync`)}
+                errorTitle={i18n._(t`Project Sync Error`)}
+                title={i18n._(t`Cancel Project Sync`)}
                 showIconButton
-                errorMessage={i18n._(msg`Failed to cancel Project Sync`)}
+                errorMessage={i18n._(t`Failed to cancel Project Sync`)}
               />
             </ActionItem>
           ) : (
             <ActionItem
               visible={project.summary_fields.user_capabilities.start}
-              tooltip={i18n._(msg`Sync Project`)}
+              tooltip={i18n._(t`Sync Project`)}
             >
               <ProjectSyncButton
                 projectId={project.id}
@@ -257,12 +257,12 @@ function ProjectListItem({
           )}
           <ActionItem
             visible={project.summary_fields.user_capabilities.edit}
-            tooltip={i18n._(msg`Edit Project`)}
+            tooltip={i18n._(t`Edit Project`)}
           >
             <Button
               ouiaId={`${project.id}-edit-button`}
               isDisabled={isDisabled}
-              aria-label={i18n._(msg`Edit Project`)}
+              aria-label={i18n._(t`Edit Project`)}
               variant="plain"
               component={Link}
               to={`/projects/${project.id}/edit`}
@@ -271,7 +271,7 @@ function ProjectListItem({
             </Button>
           </ActionItem>
           <ActionItem
-            tooltip={i18n._(msg`Copy Project`)}
+            tooltip={i18n._(t`Copy Project`)}
             visible={project.summary_fields.user_capabilities.copy}
           >
             <CopyButton
@@ -279,7 +279,7 @@ function ProjectListItem({
               isDisabled={isDisabled}
               onCopyStart={handleCopyStart}
               onCopyFinish={handleCopyFinish}
-              errorMessage={i18n._(msg`Failed to copy project.`)}
+              errorMessage={i18n._(t`Failed to copy project.`)}
             />
           </ActionItem>
         </ActionsTd>
@@ -290,13 +290,13 @@ function ProjectListItem({
           <ExpandableRowContent>
             <DetailList>
               <Detail
-                label={i18n._(msg`Description`)}
+                label={i18n._(t`Description`)}
                 value={project.description}
                 dataCy={`project-${project.id}-description`}
               />
               {project.summary_fields.organization ? (
                 <Detail
-                  label={i18n._(msg`Organization`)}
+                  label={i18n._(t`Organization`)}
                   value={
                     <Link
                       to={`/organizations/${project.summary_fields.organization.id}/details`}
@@ -307,7 +307,7 @@ function ProjectListItem({
                   dataCy={`project-${project.id}-organization`}
                 />
               ) : (
-                <DeletedDetail label={i18n._(msg`Organization`)} />
+                <DeletedDetail label={i18n._(t`Organization`)} />
               )}
               <ExecutionEnvironmentDetail
                 virtualEnvironment={project.custom_virtualenv}
@@ -317,12 +317,12 @@ function ProjectListItem({
                 isDefaultEnvironment
               />
               <Detail
-                label={i18n._(msg`Last modified`)}
+                label={i18n._(t`Last modified`)}
                 value={formatDateString(project.modified)}
                 dataCy={`project-${project.id}-last-modified`}
               />
               <Detail
-                label={i18n._(msg`Last used`)}
+                label={i18n._(t`Last used`)}
                 value={formatDateString(project.last_job_run)}
                 dataCy={`project-${project.id}-last-used`}
               />

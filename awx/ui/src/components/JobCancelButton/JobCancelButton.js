@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { MinusCircleIcon } from '@patternfly/react-icons';
 import { Button, Tooltip } from '@patternfly/react-core';
@@ -68,7 +68,7 @@ function JobCancelButton({
               onClick={() => setIsOpen(true)}
               style={style}
             >
-              {buttonText || i18n._(msg`Cancel Job`)}
+              {buttonText || i18n._(t`Cancel Job`)}
             </Button>
           )}
         </div>
@@ -85,26 +85,26 @@ function JobCancelButton({
               id="cancel-job-confirm-button"
               key="delete"
               variant="danger"
-              aria-label={i18n._(msg`Confirm cancel job`)}
+              aria-label={i18n._(t`Confirm cancel job`)}
               ouiaId="cancel-job-confirm-button"
               onClick={cancelJob}
             >
-              {i18n._(msg`Confirm cancellation`)}
+              {i18n._(t`Confirm cancellation`)}
             </Button>,
             <Button
               id="cancel-job-return-button"
               key="cancel"
               ouiaId="return"
-              aria-label={i18n._(msg`Return`)}
+              aria-label={i18n._(t`Return`)}
               variant="secondary"
               onClick={() => setIsOpen(false)}
             >
-              {i18n._(msg`Return`)}
+              {i18n._(t`Return`)}
             </Button>,
           ]}
         >
           {cancelationMessage ??
-            i18n._(msg`Are you sure you want to cancel this job?`)}
+            i18n._(t`Are you sure you want to cancel this job?`)}
         </AlertModal>
       )}
       {error && !isAlreadyCancelled && (

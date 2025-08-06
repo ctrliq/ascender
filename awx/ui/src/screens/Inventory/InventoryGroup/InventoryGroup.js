@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import {
   Switch,
@@ -47,25 +47,25 @@ function InventoryGroup({ setBreadcrumb, inventory }) {
     {
       name: (
         <>
-          <CaretLeftIcon aria-label={i18n._(msg`Back to Groups`)} />
-          {i18n._(msg`Back to Groups`)}
+          <CaretLeftIcon aria-label={i18n._(t`Back to Groups`)} />
+          {i18n._(t`Back to Groups`)}
         </>
       ),
       link: `/inventories/${inventoryType}/${inventoryId}/groups`,
       id: 99,
     },
     {
-      name: i18n._(msg`Details`),
+      name: i18n._(t`Details`),
       link: `/inventories/${inventoryType}/${inventoryId}/groups/${inventoryGroup?.id}/details`,
       id: 0,
     },
     {
-      name: i18n._(msg`Related Groups`),
+      name: i18n._(t`Related Groups`),
       link: `/inventories/${inventoryType}/${inventoryId}/groups/${inventoryGroup?.id}/nested_groups`,
       id: 1,
     },
     {
-      name: i18n._(msg`Hosts`),
+      name: i18n._(t`Hosts`),
       link: `/inventories/${inventoryType}/${inventoryId}/groups/${inventoryGroup?.id}/nested_hosts`,
       id: 2,
     },
@@ -90,7 +90,7 @@ function InventoryGroup({ setBreadcrumb, inventory }) {
     return (
       <ContentError isNotFound>
         <Link to={`/inventories/inventory/${inventory.id}/groups`}>
-          {i18n._(msg`View Inventory Groups`)}
+          {i18n._(t`View Inventory Groups`)}
         </Link>
       </ContentError>
     );
@@ -140,7 +140,7 @@ function InventoryGroup({ setBreadcrumb, inventory }) {
           <ContentError>
             {inventory && (
               <Link to={`/inventories/:inventoryType/${inventory.id}/details`}>
-                {i18n._(msg`View Inventory Details`)}
+                {i18n._(t`View Inventory Details`)}
               </Link>
             )}
           </ContentError>

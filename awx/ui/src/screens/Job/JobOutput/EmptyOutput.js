@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import 'styled-components/macro';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import {
   SearchIcon,
   ExclamationCircleIcon as PFExclamationCircleIcon,
@@ -30,36 +30,36 @@ export default function EmptyOutput({
   useEffect(() => onUnmount);
 
   if (hasQueryParams) {
-    title = i18n._(msg`The search filter did not produce any results…`);
-    message = i18n._(msg`Please try another search using the filter above`);
+    title = i18n._(t`The search filter did not produce any results…`);
+    message = i18n._(t`Please try another search using the filter above`);
     icon = SearchIcon;
   } else if (isJobRunning) {
-    title = i18n._(msg`Waiting for job output…`);
+    title = i18n._(t`Waiting for job output…`);
   } else if (job.status === 'failed') {
-    title = i18n._(msg`This job failed and has no output.`);
+    title = i18n._(t`This job failed and has no output.`);
     message = React.createElement(
       React.Fragment,
       null,
-      i18n._(msg`Return to`),
+      i18n._(t`Return to`),
       ' ',
       React.createElement(
         Link,
         { to: `/jobs/${typeSegment}/${id}/details` },
-        i18n._(msg`details.`)
+        i18n._(t`details.`)
       ),
       React.createElement('br'),
       job.job_explanation &&
         React.createElement(
           React.Fragment,
           null,
-          i18n._(msg`Failure Explanation:`),
+          i18n._(t`Failure Explanation:`),
           ' ',
           `${job.job_explanation}`
         )
     );
     icon = ExclamationCircleIcon;
   } else {
-    title = i18n._(msg`No output found for this job.`);
+    title = i18n._(t`No output found for this job.`);
   }
 
   return (

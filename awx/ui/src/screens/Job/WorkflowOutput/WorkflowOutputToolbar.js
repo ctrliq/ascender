@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { shape } from 'prop-types';
 import { Badge as PFBadge, Button, Tooltip } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react';
@@ -87,25 +87,25 @@ function WorkflowOutputToolbar({ job }) {
           <JobCancelButton
             style={{ margin: '0px 6px', padding: '6px 10px' }}
             job={job}
-            errorTitle={i18n._(msg`Job Cancel Error`)}
-            title={i18n._(msg`Cancel ${job.name}`)}
-            errorMessage={i18n._(msg`Failed to cancel ${job.name}`)}
+            errorTitle={i18n._(t`Job Cancel Error`)}
+            title={i18n._(t`Cancel ${job.name}`)}
+            errorMessage={i18n._(t`Failed to cancel ${job.name}`)}
             showIconButton
           />
         ) : null}
 
         <ActionButton
           ouiaId="edit-workflow"
-          aria-label={i18n._(msg`Edit workflow`)}
+          aria-label={i18n._(t`Edit workflow`)}
           id="edit-workflow"
           variant="plain"
           onClick={navToWorkflow}
         >
           <ProjectDiagramIcon />
         </ActionButton>
-        <div>{i18n._(msg`Total Nodes`)}</div>
+        <div>{i18n._(t`Total Nodes`)}</div>
         <Badge isRead>{totalNodes}</Badge>
-        <Tooltip content={i18n._(msg`Toggle Legend`)} position="bottom">
+        <Tooltip content={i18n._(t`Toggle Legend`)} position="bottom">
           <ActionButton
             id="workflow-output-toggle-legend"
             isActive={showLegend}
@@ -115,7 +115,7 @@ function WorkflowOutputToolbar({ job }) {
             <CompassIcon />
           </ActionButton>
         </Tooltip>
-        <Tooltip content={i18n._(msg`Toggle Tools`)} position="bottom">
+        <Tooltip content={i18n._(t`Toggle Tools`)} position="bottom">
           <ActionButton
             id="workflow-output-toggle-tools"
             isActive={showTools}

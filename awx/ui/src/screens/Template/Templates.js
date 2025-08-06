@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useRef } from 'react';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { Route, withRouter, Switch } from 'react-router-dom';
 import { PageSection } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react';
@@ -16,10 +16,10 @@ import WorkflowJobTemplateAdd from './WorkflowJobTemplateAdd';
 function Templates() {
   const { i18n } = useLingui();
   const initScreenHeader = useRef({
-    '/templates': i18n._(msg`Templates`),
-    '/templates/job_template/add': i18n._(msg`Create New Job Template`),
+    '/templates': i18n._(t`Templates`),
+    '/templates/job_template/add': i18n._(t`Create New Job Template`),
     '/templates/workflow_job_template/add': i18n._(
-      msg`Create New Workflow Template`
+      t`Create New Workflow Template`
     ),
   });
   const [breadcrumbConfig, setScreenHeader] = useState(
@@ -44,21 +44,21 @@ function Templates() {
       setScreenHeader({
         ...initScreenHeader.current,
         [templatePath]: `${template.name}`,
-        [`${templatePath}/details`]: i18n._(msg`Details`),
-        [`${templatePath}/edit`]: i18n._(msg`Edit Details`),
-        [`${templatePath}/access`]: i18n._(msg`Access`),
-        [`${templatePath}/notifications`]: i18n._(msg`Notifications`),
-        [`${templatePath}/jobs`]: i18n._(msg`Jobs`),
-        [surveyPath]: i18n._(msg`Survey`),
-        [`${surveyPath}/add`]: i18n._(msg`Add Question`),
-        [`${surveyPath}/edit`]: i18n._(msg`Edit Question`),
-        [schedulesPath]: i18n._(msg`Schedules`),
-        [`${schedulesPath}/add`]: i18n._(msg`Create New Schedule`),
+        [`${templatePath}/details`]: i18n._(t`Details`),
+        [`${templatePath}/edit`]: i18n._(t`Edit Details`),
+        [`${templatePath}/access`]: i18n._(t`Access`),
+        [`${templatePath}/notifications`]: i18n._(t`Notifications`),
+        [`${templatePath}/jobs`]: i18n._(t`Jobs`),
+        [surveyPath]: i18n._(t`Survey`),
+        [`${surveyPath}/add`]: i18n._(t`Add Question`),
+        [`${surveyPath}/edit`]: i18n._(t`Edit Question`),
+        [schedulesPath]: i18n._(t`Schedules`),
+        [`${schedulesPath}/add`]: i18n._(t`Create New Schedule`),
         [`${schedulesPath}/${schedule?.id}`]: `${schedule?.name}`,
         [`${schedulesPath}/${schedule?.id}/details`]: i18n._(
-          msg`Schedule Details`
+          t`Schedule Details`
         ),
-        [`${schedulesPath}/${schedule?.id}/edit`]: i18n._(msg`Edit Schedule`),
+        [`${schedulesPath}/${schedule?.id}/edit`]: i18n._(t`Edit Schedule`),
       });
     },
     [template, schedule, i18n]

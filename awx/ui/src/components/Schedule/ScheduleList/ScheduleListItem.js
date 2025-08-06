@@ -2,7 +2,7 @@ import 'styled-components/macro';
 import React from 'react';
 import { bool, func } from 'prop-types';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 
 import { Link } from 'react-router-dom';
@@ -36,11 +36,11 @@ function ScheduleListItem({
   const labelId = `check-action-${schedule.id}`;
 
   const jobTypeLabels = {
-    inventory_update: i18n._(msg`Inventory Sync`),
-    job: i18n._(msg`Playbook Run`),
-    project_update: i18n._(msg`Source Control Update`),
-    system_job: i18n._(msg`Management Job`),
-    workflow_job: i18n._(msg`Workflow Job`),
+    inventory_update: i18n._(t`Inventory Sync`),
+    job: i18n._(t`Playbook Run`),
+    project_update: i18n._(t`Source Control Update`),
+    system_job: i18n._(t`Management Job`),
+    workflow_job: i18n._(t`Workflow Job`),
   };
 
   let scheduleBaseUrl;
@@ -84,9 +84,9 @@ function ScheduleListItem({
           onSelect,
           disable: false,
         }}
-        dataLabel={i18n._(msg`Selected`)}
+        dataLabel={i18n._(t`Selected`)}
       />
-      <TdBreakWord id={labelId} dataLabel={i18n._(msg`Name`)}>
+      <TdBreakWord id={labelId} dataLabel={i18n._(t`Name`)}>
         <Link to={`${scheduleBaseUrl}/details`}>
           <b>{schedule.name}</b>
         </Link>
@@ -105,38 +105,38 @@ function ScheduleListItem({
       </TdBreakWord>
       <TdBreakWord
         id={`related-resource-${schedule.id}`}
-        dataLabel={i18n._(msg`Related resource`)}
+        dataLabel={i18n._(t`Related resource`)}
       >
         <Link to={`${relatedResourceUrl}`}>
           <b>{schedule.summary_fields.unified_job_template.name}</b>
         </Link>
       </TdBreakWord>
-      <Td dataLabel={i18n._(msg`Resource type`)}>
+      <Td dataLabel={i18n._(t`Resource type`)}>
         {
           jobTypeLabels[
             schedule.summary_fields.unified_job_template.unified_job_type
           ]
         }
       </Td>
-      <Td dataLabel={i18n._(msg`Next Run`)}>
+      <Td dataLabel={i18n._(t`Next Run`)}>
         {schedule.next_run && (
           <DetailList stacked>
             <Detail
-              label={i18n._(msg`Next Run`)}
+              label={i18n._(t`Next Run`)}
               value={formatDateString(schedule.next_run, schedule.timezone)}
             />
           </DetailList>
         )}
       </Td>
-      <ActionsTd dataLabel={i18n._(msg`Actions`)} gridColumns="auto 40px">
+      <ActionsTd dataLabel={i18n._(t`Actions`)} gridColumns="auto 40px">
         <ScheduleToggle schedule={schedule} isDisabled={isDisabled} />
         <ActionItem
           visible={schedule.summary_fields.user_capabilities.edit}
-          tooltip={i18n._(msg`Edit Schedule`)}
+          tooltip={i18n._(t`Edit Schedule`)}
         >
           <Button
             ouiaId={`${schedule.id}-edit-button`}
-            aria-label={i18n._(msg`Edit Schedule`)}
+            aria-label={i18n._(t`Edit Schedule`)}
             css="grid-column: 2"
             variant="plain"
             component={Link}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import {
   Select,
@@ -73,7 +73,7 @@ function WorkflowOutputNavigation({ relatedJobs, parentRef }) {
       isOpen={isOpen}
       isGrouped
       hasInlineFilter
-      placeholderText={i18n._(msg`Workflow Job 1/${relevantResults.length}`)}
+      placeholderText={i18n._(t`Workflow Job 1/${relevantResults.length}`)}
       chipGroupComponent={
         <ChipGroup numChips={1} totalChips={1}>
           <Chip key={filterBy} onClick={() => handleFilter(filterBy)}>
@@ -83,21 +83,21 @@ function WorkflowOutputNavigation({ relatedJobs, parentRef }) {
       }
     >
       {[
-        <SelectGroup label={i18n._(msg`Workflow Statuses`)} key="status">
+        <SelectGroup label={i18n._(t`Workflow Statuses`)} key="status">
           <SelectOption
-            description={i18n._(msg`Filter by failed jobs`)}
+            description={i18n._(t`Filter by failed jobs`)}
             key="failed"
-            value={i18n._(msg`Failed`)}
+            value={i18n._(t`Failed`)}
             itemCount={numFailedJobs}
           />
           <SelectOption
-            description={i18n._(msg`Filter by successful jobs`)}
+            description={i18n._(t`Filter by successful jobs`)}
             key="successful"
-            value={i18n._(msg`Successful`)}
+            value={i18n._(t`Successful`)}
             itemCount={numSuccessJobs}
           />
         </SelectGroup>,
-        <SelectGroup label={i18n._(msg`Workflow Nodes`)} key="nodes">
+        <SelectGroup label={i18n._(t`Workflow Nodes`)} key="nodes">
           {sortedJobs?.map((node) => (
             <SelectOption
               key={node.id}

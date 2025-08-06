@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import { i18n } from '@lingui/core';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { bool, func, shape } from 'prop-types';
 import { PencilAltIcon, PlusIcon, TrashAltIcon } from '@patternfly/react-icons';
 import {
@@ -47,7 +47,7 @@ function VisualizerLink({ link, updateLinkHelp, readOnly, updateHelpText }) {
         });
       }}
       onMouseEnter={() =>
-        updateHelpText(i18n._(msg`Add a new node between these two nodes`))
+        updateHelpText(i18n._(t`Add a new node between these two nodes`))
       }
       onMouseLeave={() => updateHelpText(null)}
     >
@@ -68,7 +68,7 @@ function VisualizerLink({ link, updateLinkHelp, readOnly, updateHelpText }) {
               setHovering(false);
               dispatch({ type: 'SET_LINK_TO_EDIT', value: link });
             }}
-            onMouseEnter={() => updateHelpText(i18n._(msg`Edit this link`))}
+            onMouseEnter={() => updateHelpText(i18n._(t`Edit this link`))}
             onMouseLeave={() => updateHelpText(null)}
           >
             <PencilAltIcon />
@@ -81,7 +81,7 @@ function VisualizerLink({ link, updateLinkHelp, readOnly, updateHelpText }) {
               setHovering(false);
               dispatch({ type: 'START_DELETE_LINK', link });
             }}
-            onMouseEnter={() => updateHelpText(i18n._(msg`Delete this link`))}
+            onMouseEnter={() => updateHelpText(i18n._(t`Delete this link`))}
             onMouseLeave={() => updateHelpText(null)}
           >
             <TrashAltIcon />

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { Button, Chip } from '@patternfly/react-core';
 import { Tr, Td, ExpandableRowContent } from '@patternfly/react-table';
@@ -41,15 +41,15 @@ function JobListItem({
   const labelId = `check-action-${job.id}`;
 
   const jobTypes = {
-    project_update: i18n._(msg`Source Control Update`),
-    inventory_update: i18n._(msg`Inventory Sync`),
+    project_update: i18n._(t`Source Control Update`),
+    inventory_update: i18n._(t`Inventory Sync`),
     job:
       job.job_type === 'check'
-        ? i18n._(msg`Playbook Check`)
-        : i18n._(msg`Playbook Run`),
-    ad_hoc_command: i18n._(msg`Command`),
-    system_job: i18n._(msg`Management Job`),
-    workflow_job: i18n._(msg`Workflow Job`),
+        ? i18n._(t`Playbook Check`)
+        : i18n._(t`Playbook Run`),
+    ad_hoc_command: i18n._(t`Command`),
+    system_job: i18n._(t`Management Job`),
+    workflow_job: i18n._(t`Workflow Job`),
   };
 
   const {
@@ -86,9 +86,9 @@ function JobListItem({
             isSelected,
             onSelect,
           }}
-          dataLabel={i18n._(msg`Select`)}
+          dataLabel={i18n._(t`Select`)}
         />
-        <TdBreakWord id={labelId} dataLabel={i18n._(msg`Name`)}>
+        <TdBreakWord id={labelId} dataLabel={i18n._(t`Name`)}>
           <span>
             <Link to={`/jobs/${JOB_TYPE_URL_SEGMENTS[job.type]}/${job.id}`}>
               <b>
@@ -97,19 +97,19 @@ function JobListItem({
             </Link>
           </span>
         </TdBreakWord>
-        <Td dataLabel={i18n._(msg`Status`)}>
+        <Td dataLabel={i18n._(t`Status`)}>
           {job.status && <StatusLabel status={job.status} />}
         </Td>
         {showTypeColumn && (
-          <Td dataLabel={i18n._(msg`Type`)}>{jobTypes[job.type]}</Td>
+          <Td dataLabel={i18n._(t`Type`)}>{jobTypes[job.type]}</Td>
         )}
-        <Td dataLabel={i18n._(msg`Start Time`)}>
+        <Td dataLabel={i18n._(t`Start Time`)}>
           {formatDateString(job.started)}
         </Td>
-        <Td dataLabel={i18n._(msg`Finish Time`)}>
+        <Td dataLabel={i18n._(t`Finish Time`)}>
           {job.finished ? formatDateString(job.finished) : ''}
         </Td>
-        <ActionsTd dataLabel={i18n._(msg`Actions`)}>
+        <ActionsTd dataLabel={i18n._(t`Actions`)}>
           <ActionItem
             visible={
               ['pending', 'waiting', 'running'].includes(job.status) &&
@@ -118,9 +118,9 @@ function JobListItem({
           >
             <JobCancelButton
               job={job}
-              errorTitle={i18n._(msg`Job Cancel Error`)}
-              title={i18n._(msg`Cancel ${job.name}`)}
-              errorMessage={i18n._(msg`Failed to cancel ${job.name}`)}
+              errorTitle={i18n._(t`Job Cancel Error`)}
+              title={i18n._(t`Cancel ${job.name}`)}
+              errorMessage={i18n._(t`Failed to cancel ${job.name}`)}
               showIconButton
             />
           </ActionItem>
@@ -131,8 +131,8 @@ function JobListItem({
             }
             tooltip={
               job.status === 'failed' && job.type === 'job'
-                ? i18n._(msg`Relaunch using host parameters`)
-                : i18n._(msg`Relaunch Job`)
+                ? i18n._(t`Relaunch using host parameters`)
+                : i18n._(t`Relaunch Job`)
             }
           >
             {job.status === 'failed' && job.type === 'job' ? (
@@ -152,7 +152,7 @@ function JobListItem({
                     ouiaId={`${job.id}-relaunch-button`}
                     variant="plain"
                     onClick={() => handleRelaunch()}
-                    aria-label={i18n._(msg`Relaunch`)}
+                    aria-label={i18n._(t`Relaunch`)}
                     isDisabled={isLaunching}
                   >
                     <RocketIcon />
@@ -175,7 +175,7 @@ function JobListItem({
               {job.type === 'inventory_update' && (
                 <Detail
                   dataCy="job-inventory-source-type"
-                  label={i18n._(msg`Source`)}
+                  label={i18n._(t`Source`)}
                   value={inventorySourceLabels?.map(([string, label]) =>
                     string === job.source ? label : null
                   )}
@@ -187,17 +187,17 @@ function JobListItem({
                 (schedule ? (
                   <Detail
                     dataCy="job-schedule"
-                    label={i18n._(msg`Schedule`)}
+                    label={i18n._(t`Schedule`)}
                     value={
                       <Link to={getScheduleUrl(job)}>{schedule.name}</Link>
                     }
                   />
                 ) : (
-                  <DeletedDetail label={i18n._(msg`Schedule`)} />
+                  <DeletedDetail label={i18n._(t`Schedule`)} />
                 ))}
               {job_template && (
                 <Detail
-                  label={i18n._(msg`Job Template`)}
+                  label={i18n._(t`Job Template`)}
                   value={
                     <Link to={`/templates/job_template/${job_template.id}`}>
                       {job_template.name}
@@ -207,7 +207,7 @@ function JobListItem({
               )}
               {workflow_job_template && (
                 <Detail
-                  label={i18n._(msg`Workflow Job Template`)}
+                  label={i18n._(t`Workflow Job Template`)}
                   value={
                     <Link
                       to={`/templates/workflow_job_template/${workflow_job_template.id}`}
@@ -219,7 +219,7 @@ function JobListItem({
               )}
               {source_workflow_job && (
                 <Detail
-                  label={i18n._(msg`Source Workflow Job`)}
+                  label={i18n._(t`Source Workflow Job`)}
                   value={
                     <Link to={`/jobs/workflow/${source_workflow_job.id}`}>
                       {source_workflow_job.id} - {source_workflow_job.name}
@@ -229,7 +229,7 @@ function JobListItem({
               )}
               {inventory && (
                 <Detail
-                  label={i18n._(msg`Inventory`)}
+                  label={i18n._(t`Inventory`)}
                   value={
                     <Link
                       to={
@@ -245,7 +245,7 @@ function JobListItem({
               )}
               {project && (
                 <Detail
-                  label={i18n._(msg`Project`)}
+                  label={i18n._(t`Project`)}
                   value={
                     <Link to={`/projects/${project.id}/details`}>
                       {project.name}
@@ -266,7 +266,7 @@ function JobListItem({
               {credentials && (
                 <Detail
                   fullWidth
-                  label={i18n._(msg`Credentials`)}
+                  label={i18n._(t`Credentials`)}
                   dataCy={`job-${job.id}-credentials`}
                   value={
                     <ChipGroup
@@ -290,7 +290,7 @@ function JobListItem({
               {labels && labels.count > 0 && (
                 <Detail
                   fullWidth
-                  label={i18n._(msg`Labels`)}
+                  label={i18n._(t`Labels`)}
                   value={
                     <ChipGroup
                       numChips={5}
@@ -313,21 +313,21 @@ function JobListItem({
               {job.job_explanation && (
                 <Detail
                   fullWidth
-                  label={i18n._(msg`Explanation`)}
+                  label={i18n._(t`Explanation`)}
                   value={job.job_explanation}
                 />
               )}
               {typeof jobSliceNumber === 'number' &&
                 typeof jobSliceCount === 'number' && (
                   <Detail
-                    label={i18n._(msg`Job Slice`)}
+                    label={i18n._(t`Job Slice`)}
                     value={`${jobSliceNumber}/${jobSliceCount}`}
                   />
                 )}
               {job.type === 'workflow_job' && isSlicedJob && (
                 <Detail
-                  label={i18n._(msg`Job Slice Parent`)}
-                  value={i18n._(msg`True`)}
+                  label={i18n._(t`Job Slice Parent`)}
+                  value={i18n._(t`True`)}
                 />
               )}
             </DetailList>

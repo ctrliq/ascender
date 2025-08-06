@@ -5,7 +5,7 @@ import { useField, useFormikContext } from 'formik';
 import { shape, string } from 'prop-types';
 import styled from 'styled-components';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import {
   Button,
   ButtonVariant,
@@ -52,8 +52,8 @@ function CredentialInput({
             id={`credential-${fieldOptions.id}-replace-tooltip`}
             content={
               meta.value !== meta.initialValue
-                ? i18n._(msg`Revert`)
-                : i18n._(msg`Replace`)
+                ? i18n._(t`Revert`)
+                : i18n._(t`Replace`)
             }
           >
             <Button
@@ -61,8 +61,8 @@ function CredentialInput({
               variant={ButtonVariant.control}
               aria-label={
                 meta.touched
-                  ? i18n._(msg`Revert field to previously saved value`)
-                  : i18n._(msg`Replace field with new value`)
+                  ? i18n._(t`Revert field to previously saved value`)
+                  : i18n._(t`Replace field with new value`)
               }
               onClick={() => {
                 if (meta.value !== meta.initialValue) {
@@ -96,10 +96,10 @@ function CredentialInput({
             type="text"
             filename={fileName}
             filenamePlaceholder={i18n._(
-              msg`Drag a file here or browse to upload`
+              t`Drag a file here or browse to upload`
             )}
-            browseButtonText={i18n._(msg`Browse…`)}
-            clearButtonText={i18n._(msg`Clear`)}
+            browseButtonText={i18n._(t`Browse…`)}
+            clearButtonText={i18n._(t`Clear`)}
             onChange={handleFileChange}
             onReadStarted={() => setFileIsUploading(true)}
             onReadFinished={() => setFileIsUploading(false)}
@@ -118,9 +118,9 @@ function CredentialInput({
         id={`credential-${fieldOptions.id}`}
         type="text"
         filename={fileName}
-        filenamePlaceholder={i18n._(msg`Drag a file here or browse to upload`)}
-        browseButtonText={i18n._(msg`Browse…`)}
-        clearButtonText={i18n._(msg`Clear`)}
+        filenamePlaceholder={i18n._(t`Drag a file here or browse to upload`)}
+        browseButtonText={i18n._(t`Browse…`)}
+        clearButtonText={i18n._(t`Clear`)}
         onChange={handleFileChange}
         onReadStarted={() => setFileIsUploading(true)}
         onReadFinished={() => setFileIsUploading(false)}
@@ -185,7 +185,7 @@ function CredentialField({ credentialType, fieldOptions }) {
     if (isRequired && !formikValues?.passwordPrompts[fieldOptions.id]) {
       const validationMsg = fieldOptions.ask_at_runtime
         ? i18n._(
-            msg`Provide a value for this field or select the Prompt on launch option.`
+            t`Provide a value for this field or select the Prompt on launch option.`
           )
         : null;
       return required(validationMsg);

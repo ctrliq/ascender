@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, Redirect, Route, Switch } from 'react-router-dom';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { PageSection, Card } from '@patternfly/react-core';
 import ContentError from 'components/ContentError';
 import OIDCDetail from './OIDCDetail';
@@ -24,7 +24,7 @@ function OIDC() {
           <Route key="not-found" path={`${baseURL}/*`}>
             <ContentError isNotFound>
               <Link to={`${baseURL}/details`}>
-                {i18n._(msg`View OIDC settings`)}
+                {i18n._(t`View OIDC settings`)}
               </Link>
             </ContentError>
           </Route>

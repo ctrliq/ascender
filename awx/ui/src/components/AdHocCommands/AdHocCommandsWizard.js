@@ -1,5 +1,5 @@
 import React from 'react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 
 import { withFormik, useFormikContext } from 'formik';
@@ -48,10 +48,10 @@ function AdHocCommandsWizard({
         }
       }}
       steps={steps}
-      title={i18n._(msg`Run command`)}
-      backButtonText={i18n._(msg`Back`)}
-      cancelButtonText={i18n._(msg`Cancel`)}
-      nextButtonText={i18n._(msg`Next`)}
+      title={i18n._(t`Run command`)}
+      backButtonText={i18n._(t`Back`)}
+      cancelButtonText={i18n._(t`Cancel`)}
+      nextButtonText={i18n._(t`Next`)}
     />
   );
 }

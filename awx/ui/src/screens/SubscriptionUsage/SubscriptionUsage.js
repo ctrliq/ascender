@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { msg, Trans } from '@lingui/macro';
+import { t, Trans } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { Banner, Card, PageSection } from '@patternfly/react-core';
 import { InfoCircleIcon } from '@patternfly/react-icons';
@@ -39,7 +39,7 @@ function SubscriptionUsage() {
       <ScreenHeader
         streamType="all"
         breadcrumbConfig={{
-          '/subscription_usage': i18n._(msg`Subscription Usage`),
+          '/subscription_usage': i18n._(t`Subscription Usage`),
         }}
       />
       <MainPageSection>

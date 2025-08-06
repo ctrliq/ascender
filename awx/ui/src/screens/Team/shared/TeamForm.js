@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { Formik, useField, useFormikContext } from 'formik';
 import { Form } from '@patternfly/react-core';
 import FormActionGroup from 'components/FormActionGroup/FormActionGroup';
@@ -28,7 +28,7 @@ function TeamFormFields({ team }) {
     <>
       <FormField
         id="team-name"
-        label={i18n._(msg`Name`)}
+        label={i18n._(t`Name`)}
         name="name"
         type="text"
         validate={required(null)}
@@ -36,7 +36,7 @@ function TeamFormFields({ team }) {
       />
       <FormField
         id="team-description"
-        label={i18n._(msg`Description`)}
+        label={i18n._(t`Description`)}
         name="description"
         type="text"
       />
@@ -48,7 +48,7 @@ function TeamFormFields({ team }) {
         value={orgField.value}
         required
         autoPopulate={!team?.id}
-        validate={required(i18n._(msg`Select a value for this field`))}
+        validate={required(i18n._(t`Select a value for this field`))}
       />
     </>
   );

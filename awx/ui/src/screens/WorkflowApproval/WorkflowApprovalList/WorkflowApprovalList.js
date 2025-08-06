@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useLocation, useRouteMatch } from 'react-router-dom';
-import { msg, Plural } from '@lingui/macro';
+import { t, Plural } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { Card, PageSection } from '@patternfly/react-core';
 import { WorkflowApprovalsAPI } from 'api';
@@ -166,17 +166,17 @@ function WorkflowApprovalsList() {
             hasContentLoading={isLoading}
             items={workflowApprovals}
             itemCount={count}
-            pluralizedItemName={i18n._(msg`Workflow Approvals`)}
+            pluralizedItemName={i18n._(t`Workflow Approvals`)}
             qsConfig={QS_CONFIG}
             clearSelected={clearSelected}
             toolbarSearchColumns={[
               {
-                name: i18n._(msg`Name`),
+                name: i18n._(t`Name`),
                 key: 'name__icontains',
                 isDefault: true,
               },
               {
-                name: i18n._(msg`Description`),
+                name: i18n._(t`Description`),
                 key: 'description__icontains',
               },
             ]}
@@ -202,7 +202,7 @@ function WorkflowApprovalsList() {
                     key="delete"
                     onDelete={handleDelete}
                     itemsToDelete={selected}
-                    pluralizedItemName={i18n._(msg`Workflow Approvals`)}
+                    pluralizedItemName={i18n._(t`Workflow Approvals`)}
                     cannotDelete={(item) =>
                       item.status === 'pending' ||
                       !item.summary_fields.user_capabilities.delete
@@ -220,13 +220,13 @@ function WorkflowApprovalsList() {
             )}
             headerRow={
               <HeaderRow qsConfig={QS_CONFIG}>
-                <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
-                <HeaderCell>{i18n._(msg`Workflow Job`)}</HeaderCell>
+                <HeaderCell sortKey="name">{i18n._(t`Name`)}</HeaderCell>
+                <HeaderCell>{i18n._(t`Workflow Job`)}</HeaderCell>
                 <HeaderCell sortKey="started">
-                  {i18n._(msg`Started`)}
+                  {i18n._(t`Started`)}
                 </HeaderCell>
-                <HeaderCell>{i18n._(msg`Status`)}</HeaderCell>
-                <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
+                <HeaderCell>{i18n._(t`Status`)}</HeaderCell>
+                <HeaderCell>{i18n._(t`Actions`)}</HeaderCell>
               </HeaderRow>
             }
             renderRow={(workflowApproval, index) => (
@@ -248,12 +248,12 @@ function WorkflowApprovalsList() {
         <AlertModal
           isOpen={deletionError}
           variant="error"
-          title={i18n._(msg`Error!`)}
+          title={i18n._(t`Error!`)}
           onClose={clearDeletionError}
         >
           {typeof deletionError === 'string'
-            ? i18n._(msg`Failed to delete one or more workflow approval.`)
-            : i18n._(msg`Failed to delete one or more workflow approval.`)}
+            ? i18n._(t`Failed to delete one or more workflow approval.`)
+            : i18n._(t`Failed to delete one or more workflow approval.`)}
           <ErrorDetail
             error={
               deletionError instanceof Error
@@ -267,12 +267,12 @@ function WorkflowApprovalsList() {
         <AlertModal
           isOpen={actionError}
           variant="error"
-          title={i18n._(msg`Error!`)}
+          title={i18n._(t`Error!`)}
           onClose={dismissActionError}
         >
           {approveApprovalError
-            ? i18n._(msg`Failed to approve one or more workflow approval.`)
-            : i18n._(msg`Failed to deny one or more workflow approval.`)}
+            ? i18n._(t`Failed to approve one or more workflow approval.`)
+            : i18n._(t`Failed to deny one or more workflow approval.`)}
           <ErrorDetail
             error={
               actionError instanceof Error

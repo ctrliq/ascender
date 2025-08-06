@@ -9,7 +9,7 @@ import {
   bool,
 } from 'prop-types';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { FormSelect, FormSelectOption } from '@patternfly/react-core';
 
@@ -37,7 +37,7 @@ function AnsibleSelect({
       value={value}
       onChange={onSelectChange}
       onBlur={onBlur}
-      aria-label={i18n._(msg`Select Input`)}
+      aria-label={i18n._(t`Select Input`)}
       validated={isValid ? 'default' : 'error'}
       className={className}
       isDisabled={isDisabled}

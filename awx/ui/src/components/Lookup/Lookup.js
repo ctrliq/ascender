@@ -21,7 +21,7 @@ import {
   Modal,
   TextInput,
 } from '@patternfly/react-core';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import styled from 'styled-components';
 import useDebounce from 'hooks/useDebounce';
@@ -63,7 +63,7 @@ function Lookup(props) {
     validate: (val) => {
       if (!multiple && !val && typedText && typedText !== '') {
         return i18n._(
-          msg`That value was not found. Please enter or select a valid value.`
+          t`That value was not found. Please enter or select a valid value.`
         );
       }
       return validate(val);
@@ -144,7 +144,7 @@ function Lookup(props) {
     <>
       <InputGroup onBlur={onBlur}>
         <Button
-          aria-label={i18n._(msg`Search`)}
+          aria-label={i18n._(t`Search`)}
           id={`${id}-open`}
           ouiaId={`${id}-open`}
           onClick={onClick}
@@ -187,8 +187,8 @@ function Lookup(props) {
 
       <Modal
         variant="large"
-        title={i18n._(msg`Select ${header || i18n._(msg`Items`)}`)}
-        aria-label={i18n._(msg`Lookup modal`)}
+        title={i18n._(t`Select ${header || i18n._(t`Items`)}`)}
+        aria-label={i18n._(t`Lookup modal`)}
         isOpen={isModalOpen}
         onClose={closeModal}
         description={state?.selectedItems?.length > 0 && modalDescription}
@@ -201,16 +201,16 @@ function Lookup(props) {
             onClick={save}
             isDisabled={required && selectedItems.length === 0}
           >
-            {i18n._(msg`Select`)}
+            {i18n._(t`Select`)}
           </Button>,
           <Button
             ouiaId="modal-cancel-button"
             key="cancel"
             variant="link"
             onClick={closeModal}
-            aria-label={i18n._(msg`Cancel lookup`)}
+            aria-label={i18n._(t`Cancel lookup`)}
           >
-            {i18n._(msg`Cancel`)}
+            {i18n._(t`Cancel`)}
           </Button>,
         ]}
       >

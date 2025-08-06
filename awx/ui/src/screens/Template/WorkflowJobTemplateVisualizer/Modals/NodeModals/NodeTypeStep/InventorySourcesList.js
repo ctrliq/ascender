@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { func, shape } from 'prop-types';
 import { InventorySourcesAPI } from 'api';
 import { getQSConfig, parseQueryString } from 'util/qs';
@@ -68,7 +68,7 @@ function InventorySourcesList({ nodeResource, onUpdateNodeResource }) {
       showPageSizeOptions={false}
       headerRow={
         <HeaderRow isExpandable={false} qsConfig={QS_CONFIG}>
-          <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
+          <HeaderCell sortKey="name">{i18n._(t`Name`)}</HeaderCell>
         </HeaderRow>
       }
       renderRow={(item, index) => (
@@ -87,24 +87,24 @@ function InventorySourcesList({ nodeResource, onUpdateNodeResource }) {
       renderToolbar={(props) => <DataListToolbar {...props} fillWidth />}
       toolbarSearchColumns={[
         {
-          name: i18n._(msg`Name`),
+          name: i18n._(t`Name`),
           key: 'name__icontains',
           isDefault: true,
         },
         {
-          name: i18n._(msg`Source`),
+          name: i18n._(t`Source`),
           key: 'or__source',
           options: [
-            [`file`, i18n._(msg`File, directory or script`)],
-            [`scm`, i18n._(msg`Sourced from a project`)],
-            [`ec2`, i18n._(msg`Amazon EC2`)],
-            [`gce`, i18n._(msg`Google Compute Engine`)],
-            [`azure_rm`, i18n._(msg`Microsoft Azure Resource Manager`)],
-            [`vmware`, i18n._(msg`VMware vCenter`)],
-            [`satellite6`, i18n._(msg`Red Hat Satellite 6`)],
-            [`openstack`, i18n._(msg`OpenStack`)],
-            [`rhv`, i18n._(msg`Red Hat Virtualization`)],
-            [`controller`, i18n._(msg`Red Hat Ansible Automation Platform`)],
+            [`file`, i18n._(t`File, directory or script`)],
+            [`scm`, i18n._(t`Sourced from a project`)],
+            [`ec2`, i18n._(t`Amazon EC2`)],
+            [`gce`, i18n._(t`Google Compute Engine`)],
+            [`azure_rm`, i18n._(t`Microsoft Azure Resource Manager`)],
+            [`vmware`, i18n._(t`VMware vCenter`)],
+            [`satellite6`, i18n._(t`Red Hat Satellite 6`)],
+            [`openstack`, i18n._(t`OpenStack`)],
+            [`rhv`, i18n._(t`Red Hat Virtualization`)],
+            [`controller`, i18n._(t`Red Hat Ansible Automation Platform`)],
           ],
         },
       ]}

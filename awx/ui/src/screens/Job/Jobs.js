@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { Route, Switch, useParams, useRouteMatch } from 'react-router-dom';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { PageSection } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react';
 
@@ -22,7 +22,7 @@ function Jobs() {
   const { i18n } = useLingui();
   const match = useRouteMatch();
   const [breadcrumbConfig, setBreadcrumbConfig] = useState({
-    '/jobs': i18n._(msg`Jobs`),
+    '/jobs': i18n._(t`Jobs`),
   });
 
   const buildBreadcrumbConfig = useCallback(
@@ -33,10 +33,10 @@ function Jobs() {
 
       const typeSegment = JOB_TYPE_URL_SEGMENTS[job.type];
       setBreadcrumbConfig({
-        '/jobs': i18n._(msg`Jobs`),
+        '/jobs': i18n._(t`Jobs`),
         [`/jobs/${typeSegment}/${job.id}`]: `${job.id} - ${job.name}`,
-        [`/jobs/${typeSegment}/${job.id}/output`]: i18n._(msg`Output`),
-        [`/jobs/${typeSegment}/${job.id}/details`]: i18n._(msg`Details`),
+        [`/jobs/${typeSegment}/${job.id}/output`]: i18n._(t`Output`),
+        [`/jobs/${typeSegment}/${job.id}/details`]: i18n._(t`Details`),
       });
     },
     [i18n]

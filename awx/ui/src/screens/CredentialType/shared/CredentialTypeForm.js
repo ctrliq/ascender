@@ -3,7 +3,7 @@ import { func, shape } from 'prop-types';
 import { Formik } from 'formik';
 
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 
 import { Form } from '@patternfly/react-core';
 import { VariablesField } from 'components/CodeEditor';
@@ -20,7 +20,7 @@ function CredentialTypeFormFields() {
     <>
       <FormField
         id="credential-type-name"
-        label={i18n._(msg`Name`)}
+        label={i18n._(t`Name`)}
         name="name"
         type="text"
         validate={required(null)}
@@ -28,28 +28,28 @@ function CredentialTypeFormFields() {
       />
       <FormField
         id="credential-type-description"
-        label={i18n._(msg`Description`)}
+        label={i18n._(t`Description`)}
         name="description"
         type="text"
       />
       <FormFullWidthLayout>
         <VariablesField
           tooltip={i18n._(
-            msg`Enter inputs using either JSON or YAML syntax. Refer to the Ansible Controller documentation for example syntax.`
+            t`Enter inputs using either JSON or YAML syntax. Refer to the Ansible Controller documentation for example syntax.`
           )}
           id="credential-type-inputs-configuration"
           name="inputs"
-          label={i18n._(msg`Input configuration`)}
+          label={i18n._(t`Input configuration`)}
         />
       </FormFullWidthLayout>
       <FormFullWidthLayout>
         <VariablesField
           tooltip={i18n._(
-            msg`Enter injectors using either JSON or YAML syntax. Refer to the Ansible Controller documentation for example syntax.`
+            t`Enter injectors using either JSON or YAML syntax. Refer to the Ansible Controller documentation for example syntax.`
           )}
           id="credential-type-injectors-configuration"
           name="injectors"
-          label={i18n._(msg`Injector configuration`)}
+          label={i18n._(t`Injector configuration`)}
         />
       </FormFullWidthLayout>
     </>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { FormGroup, Title } from '@patternfly/react-core';
 import {
   FormCheckboxLayout,
@@ -23,7 +23,7 @@ function TypeInputsSubForm({ credentialType }) {
   return (
     <SubFormLayout>
       <Title size="md" headingLevel="h4">
-        {i18n._(msg`Type Details`)}
+        {i18n._(t`Type Details`)}
       </Title>
       <FormColumnLayout>
         {credentialType.namespace === 'gce' && <GceFileUploadField />}
@@ -47,7 +47,7 @@ function TypeInputsSubForm({ credentialType }) {
           <FormFullWidthLayout>
             <FormGroup
               fieldId="credential-checkboxes"
-              label={i18n._(msg`Options`)}
+              label={i18n._(t`Options`)}
             >
               <FormCheckboxLayout>
                 {booleanFields.map((fieldOptions) => (

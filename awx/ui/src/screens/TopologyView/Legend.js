@@ -1,7 +1,7 @@
 /* eslint i18next/no-literal-string: "off" */
 import React from 'react';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import styled from 'styled-components';
 import {
   Button as PFButton,
@@ -66,10 +66,10 @@ function Legend() {
           component={TextVariants.small}
           style={{ fontWeight: 'bold', color: 'black', marginTop: 0 }}
         >
-          {i18n._(msg`Legend`)}
+          {i18n._(t`Legend`)}
         </Text>
         <Divider component="div" />
-        <Text component={TextVariants.small}>{i18n._(msg`Node types`)}</Text>
+        <Text component={TextVariants.small}>{i18n._(t`Node types`)}</Text>
       </TextContent>
       <DescriptionList isHorizontal isFluid>
         <DescriptionListGroup>
@@ -77,7 +77,7 @@ function Legend() {
             <Button isSmall>C</Button>
           </DescriptionListTerm>
           <DescriptionListDescription>
-            {i18n._(msg`Control node`)}
+            {i18n._(t`Control node`)}
           </DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
@@ -87,7 +87,7 @@ function Legend() {
             </Button>
           </DescriptionListTerm>
           <DescriptionListDescription>
-            {i18n._(msg`Execution node`)}
+            {i18n._(t`Execution node`)}
           </DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
@@ -97,7 +97,7 @@ function Legend() {
             </Button>
           </DescriptionListTerm>
           <DescriptionListDescription>
-            {i18n._(msg`Hybrid node`)}
+            {i18n._(t`Hybrid node`)}
           </DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
@@ -107,13 +107,13 @@ function Legend() {
             </Button>
           </DescriptionListTerm>
           <DescriptionListDescription>
-            {i18n._(msg`Hop node`)}
+            {i18n._(t`Hop node`)}
           </DescriptionListDescription>
         </DescriptionListGroup>
       </DescriptionList>
       <TextContent>
         <Text component={TextVariants.small}>
-          {i18n._(msg`Node state types`)}
+          {i18n._(t`Node state types`)}
         </Text>
       </TextContent>
       <DescriptionList isHorizontal isFluid>
@@ -130,7 +130,7 @@ function Legend() {
             />
           </DescriptionListTerm>
           <DescriptionListDescription>
-            {i18n._(msg`Ready`)}
+            {i18n._(t`Ready`)}
           </DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
@@ -146,7 +146,7 @@ function Legend() {
             />
           </DescriptionListTerm>
           <DescriptionListDescription>
-            {i18n._(msg`Installed`)}
+            {i18n._(t`Installed`)}
           </DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
@@ -162,7 +162,7 @@ function Legend() {
             />
           </DescriptionListTerm>
           <DescriptionListDescription>
-            {i18n._(msg`Provisioning`)}
+            {i18n._(t`Provisioning`)}
           </DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
@@ -178,7 +178,7 @@ function Legend() {
             />
           </DescriptionListTerm>
           <DescriptionListDescription>
-            {i18n._(msg`Deprovisioning`)}
+            {i18n._(t`Deprovisioning`)}
           </DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
@@ -194,7 +194,7 @@ function Legend() {
             />
           </DescriptionListTerm>
           <DescriptionListDescription>
-            {i18n._(msg`Error`)}
+            {i18n._(t`Error`)}
           </DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
@@ -223,7 +223,7 @@ function Legend() {
             </svg>
           </DescriptionListTerm>
           <DescriptionListDescription>
-            {i18n._(msg`Enabled`)}
+            {i18n._(t`Enabled`)}
           </DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
@@ -253,13 +253,13 @@ function Legend() {
             </svg>
           </DescriptionListTerm>
           <DescriptionListDescription>
-            {i18n._(msg`Disabled`)}
+            {i18n._(t`Disabled`)}
           </DescriptionListDescription>
         </DescriptionListGroup>
       </DescriptionList>
       <TextContent>
         <Text component={TextVariants.small}>
-          {i18n._(msg`Link state types`)}
+          {i18n._(t`Link state types`)}
         </Text>
       </TextContent>
       <DescriptionList isHorizontal isFluid>
@@ -277,7 +277,7 @@ function Legend() {
             </svg>
           </DescriptionListTerm>
           <DescriptionListDescription>
-            {i18n._(msg`Established`)}
+            {i18n._(t`Established`)}
           </DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
@@ -295,7 +295,7 @@ function Legend() {
             </svg>
           </DescriptionListTerm>
           <DescriptionListDescription>
-            {i18n._(msg`Adding`)}
+            {i18n._(t`Adding`)}
           </DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
@@ -313,7 +313,7 @@ function Legend() {
             </svg>
           </DescriptionListTerm>
           <DescriptionListDescription>
-            {i18n._(msg`Removing`)}
+            {i18n._(t`Removing`)}
           </DescriptionListDescription>
         </DescriptionListGroup>
       </DescriptionList>

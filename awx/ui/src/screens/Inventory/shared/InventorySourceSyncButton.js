@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import PropTypes from 'prop-types';
 import { Button, Tooltip } from '@patternfly/react-core';
 import { SyncIcon } from '@patternfly/react-icons';
@@ -32,15 +32,15 @@ function InventorySourceSyncButton({ source, icon }) {
 
   return (
     <>
-      <Tooltip content={i18n._(msg`Start sync process`)} position="top">
+      <Tooltip content={i18n._(t`Start sync process`)} position="top">
         <Button
           ouiaId={`${source}-sync-button`}
           isDisabled={startSyncLoading}
-          aria-label={i18n._(msg`Start sync source`)}
+          aria-label={i18n._(t`Start sync source`)}
           variant={icon ? 'plain' : 'secondary'}
           onClick={startSyncProcess}
         >
-          {icon ? <SyncIcon /> : i18n._(msg`Sync`)}
+          {icon ? <SyncIcon /> : i18n._(t`Sync`)}
         </Button>
       </Tooltip>
 
@@ -48,10 +48,10 @@ function InventorySourceSyncButton({ source, icon }) {
         <AlertModal
           isOpen={startError}
           variant="error"
-          title={i18n._(msg`Error!`)}
+          title={i18n._(t`Error!`)}
           onClose={dismissStartError}
         >
-          {i18n._(msg`Failed to sync inventory source.`)}
+          {i18n._(t`Failed to sync inventory source.`)}
           <ErrorDetail error={startError} />
         </AlertModal>
       )}

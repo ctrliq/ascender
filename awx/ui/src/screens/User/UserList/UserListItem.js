@@ -3,7 +3,7 @@ import 'styled-components/macro';
 import { string, bool, func } from 'prop-types';
 
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { Button, Label } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
 import { Link } from 'react-router-dom';
@@ -18,11 +18,11 @@ function UserListItem({ user, isSelected, onSelect, detailUrl, rowIndex }) {
 
   let user_type;
   if (user.is_superuser) {
-    user_type = i18n._(msg`System Administrator`);
+    user_type = i18n._(t`System Administrator`);
   } else if (user.is_system_auditor) {
-    user_type = i18n._(msg`System Auditor`);
+    user_type = i18n._(t`System Auditor`);
   } else {
-    user_type = i18n._(msg`Normal User`);
+    user_type = i18n._(t`Normal User`);
   }
 
   const ldapUser = user.ldap_dn;
@@ -37,36 +37,36 @@ function UserListItem({ user, isSelected, onSelect, detailUrl, rowIndex }) {
           onSelect,
         }}
       />
-      <TdBreakWord id={labelId} dataLabel={i18n._(msg`Username`)}>
+      <TdBreakWord id={labelId} dataLabel={i18n._(t`Username`)}>
         <Link to={`${detailUrl}`}>
           <b>{user.username}</b>
         </Link>
         {ldapUser && (
           <span css="margin-left: 12px">
-            <Label aria-label={i18n._(msg`ldap user`)}>
-              {i18n._(msg`LDAP`)}
+            <Label aria-label={i18n._(t`ldap user`)}>
+              {i18n._(t`LDAP`)}
             </Label>
           </span>
         )}
         {socialAuthUser && (
           <span css="margin-left: 12px">
-            <Label aria-label={i18n._(msg`social login`)}>
-              {i18n._(msg`SOCIAL`)}
+            <Label aria-label={i18n._(t`social login`)}>
+              {i18n._(t`SOCIAL`)}
             </Label>
           </span>
         )}
       </TdBreakWord>
-      <Td dataLabel={i18n._(msg`First Name`)}>{user.first_name}</Td>
-      <Td dataLabel={i18n._(msg`Last Name`)}>{user.last_name}</Td>
-      <Td dataLabel={i18n._(msg`Role`)}>{user_type}</Td>
-      <ActionsTd dataLabel={i18n._(msg`Actions`)}>
+      <Td dataLabel={i18n._(t`First Name`)}>{user.first_name}</Td>
+      <Td dataLabel={i18n._(t`Last Name`)}>{user.last_name}</Td>
+      <Td dataLabel={i18n._(t`Role`)}>{user_type}</Td>
+      <ActionsTd dataLabel={i18n._(t`Actions`)}>
         <ActionItem
           visible={user.summary_fields.user_capabilities.edit}
-          tooltip={i18n._(msg`Edit User`)}
+          tooltip={i18n._(t`Edit User`)}
         >
           <Button
             ouiaId={`${user.id}-edit-button`}
-            aria-label={i18n._(msg`Edit User`)}
+            aria-label={i18n._(t`Edit User`)}
             variant="plain"
             component={Link}
             to={`/users/${user.id}/edit`}

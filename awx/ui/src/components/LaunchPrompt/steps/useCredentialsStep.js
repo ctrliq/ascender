@@ -1,6 +1,6 @@
 import React from 'react';
 import { i18n } from '@lingui/core';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useField } from 'formik';
 import CredentialsStep from './CredentialsStep';
 import StepName from './StepName';
@@ -60,7 +60,7 @@ function getStep(
     key: 4,
     name: (
       <StepName hasErrors={formError} id="credentials-step">
-        {i18n._(msg`Credentials`)}
+        {i18n._(t`Credentials`)}
       </StepName>
     ),
     component: (

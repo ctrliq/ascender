@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 
 import { CaretLeftIcon } from '@patternfly/react-icons';
@@ -127,40 +127,40 @@ function Template({ setBreadcrumb }) {
       name: (
         <>
           <CaretLeftIcon />
-          {i18n._(msg`Back to Templates`)}
+          {i18n._(t`Back to Templates`)}
         </>
       ),
       link: `/templates`,
       persistentFilterKey: 'templates',
       id: 99,
     },
-    { name: i18n._(msg`Details`), link: `${match.url}/details` },
-    { name: i18n._(msg`Access`), link: `${match.url}/access` },
+    { name: i18n._(t`Details`), link: `${match.url}/details` },
+    { name: i18n._(t`Access`), link: `${match.url}/access` },
   ];
 
   if (canSeeNotificationsTab) {
     tabsArray.push({
-      name: i18n._(msg`Notifications`),
+      name: i18n._(t`Notifications`),
       link: `${match.url}/notifications`,
     });
   }
 
   if (template) {
     tabsArray.push({
-      name: i18n._(msg`Schedules`),
+      name: i18n._(t`Schedules`),
       link: `${match.url}/schedules`,
     });
   }
 
   tabsArray.push(
     {
-      name: i18n._(msg`Jobs`),
+      name: i18n._(t`Jobs`),
       link: `${match.url}/jobs`,
     },
     {
       name: canAddAndEditSurvey
-        ? i18n._(msg`Survey`)
-        : i18n._(msg`View Survey`),
+        ? i18n._(t`Survey`)
+        : i18n._(t`View Survey`),
       link: `${match.url}/survey`,
     }
   );
@@ -176,8 +176,8 @@ function Template({ setBreadcrumb }) {
           <ContentError error={contentError}>
             {contentError.response?.status === 404 && (
               <span>
-                {i18n._(msg`Template not found.`)}{' '}
-                <Link to="/templates">{i18n._(msg`View all Templates.`)}</Link>
+                {i18n._(t`Template not found.`)}{' '}
+                <Link to="/templates">{i18n._(t`View all Templates.`)}</Link>
               </span>
             )}
           </ContentError>
@@ -261,7 +261,7 @@ function Template({ setBreadcrumb }) {
                     <Link
                       to={`/templates/${match?.params?.templateType}/${templateId}/details`}
                     >
-                      {i18n._(msg`View Template Details`)}
+                      {i18n._(t`View Template Details`)}
                     </Link>
                   )}
                 </ContentError>

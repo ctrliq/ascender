@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { string, bool, func } from 'prop-types';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { Link } from 'react-router-dom';
 import { Button } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
@@ -63,18 +63,18 @@ function ExecutionEnvironmentListItem({
           onSelect,
           disable: false,
         }}
-        dataLabel={i18n._(msg`Selected`)}
+        dataLabel={i18n._(t`Selected`)}
       />
       <TdBreakWord
         id={`ee-name-${executionEnvironment.id}`}
-        dataLabel={i18n._(msg`Name`)}
+        dataLabel={i18n._(t`Name`)}
       >
         <Link to={`${detailUrl}`}>
           <b>{executionEnvironment.name}</b>
         </Link>
       </TdBreakWord>
-      <Td dataLabel={i18n._(msg`Image`)}>{executionEnvironment.image}</Td>
-      <Td dataLabel={i18n._(msg`Organization`)}>
+      <Td dataLabel={i18n._(t`Image`)}>{executionEnvironment.image}</Td>
+      <Td dataLabel={i18n._(t`Organization`)}>
         {executionEnvironment.organization ? (
           <Link
             to={`/organizations/${executionEnvironment?.summary_fields?.organization?.id}/details`}
@@ -82,17 +82,17 @@ function ExecutionEnvironmentListItem({
             <b>{executionEnvironment?.summary_fields?.organization?.name}</b>
           </Link>
         ) : (
-          i18n._(msg`Globally Available`)
+          i18n._(t`Globally Available`)
         )}
       </Td>
-      <ActionsTd dataLabel={i18n._(msg`Actions`)} gridColumns="auto 40px">
+      <ActionsTd dataLabel={i18n._(t`Actions`)} gridColumns="auto 40px">
         <ActionItem
           visible={executionEnvironment.summary_fields.user_capabilities.edit}
-          tooltip={i18n._(msg`Edit Execution Environment`)}
+          tooltip={i18n._(t`Edit Execution Environment`)}
         >
           <Button
             ouiaId={`${executionEnvironment.id}-edit-button`}
-            aria-label={i18n._(msg`Edit Execution Environment`)}
+            aria-label={i18n._(t`Edit Execution Environment`)}
             variant="plain"
             component={Link}
             to={`/execution_environments/${executionEnvironment.id}/edit`}
@@ -102,7 +102,7 @@ function ExecutionEnvironmentListItem({
         </ActionItem>
         <ActionItem
           visible={executionEnvironment.summary_fields.user_capabilities.copy}
-          tooltip={i18n._(msg`Copy Execution Environment`)}
+          tooltip={i18n._(t`Copy Execution Environment`)}
         >
           <CopyButton
             ouiaId={`copy-ee-${executionEnvironment.id}`}
@@ -110,7 +110,7 @@ function ExecutionEnvironmentListItem({
             onCopyStart={handleCopyStart}
             onCopyFinish={handleCopyFinish}
             copyItem={copyExecutionEnvironment}
-            errorMessage={i18n._(msg`Failed to copy execution environment`)}
+            errorMessage={i18n._(t`Failed to copy execution environment`)}
           />
         </ActionItem>
       </ActionsTd>

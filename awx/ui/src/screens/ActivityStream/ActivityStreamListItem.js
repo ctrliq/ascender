@@ -1,7 +1,7 @@
 import React from 'react';
 import { shape } from 'prop-types';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { Tr, Td } from '@patternfly/react-table';
 import { Link } from 'react-router-dom';
 
@@ -26,9 +26,9 @@ function ActivityStreamListItem({ streamItem }) {
         </Link>
       );
     } else if (item?.summary_fields?.actor) {
-      link = i18n._(msg`${item.summary_fields.actor.username} (deleted)`);
+      link = i18n._(t`${item.summary_fields.actor.username} (deleted)`);
     } else {
-      link = i18n._(msg`system`);
+      link = i18n._(t`system`);
     }
     return link;
   };
@@ -40,15 +40,15 @@ function ActivityStreamListItem({ streamItem }) {
   return (
     <Tr id={streamItem.id} ouiaId={streamItem.id} aria-labelledby={labelId}>
       <Td />
-      <Td dataLabel={i18n._(msg`Time`)}>
+      <Td dataLabel={i18n._(t`Time`)}>
         {streamItem.timestamp ? formatDateString(streamItem.timestamp) : ''}
       </Td>
-      <Td dataLabel={i18n._(msg`Initiated By`)}>{user}</Td>
-      <Td id={labelId} dataLabel={i18n._(msg`Event`)}>
+      <Td dataLabel={i18n._(t`Initiated By`)}>{user}</Td>
+      <Td id={labelId} dataLabel={i18n._(t`Event`)}>
         {description}
       </Td>
-      <ActionsTd dataLabel={i18n._(msg`Actions`)}>
-        <ActionItem visible tooltip={i18n._(msg`View event details`)}>
+      <ActionsTd dataLabel={i18n._(t`Actions`)}>
+        <ActionItem visible tooltip={i18n._(t`View event details`)}>
           <ActivityStreamDetailButton
             streamItem={streamItem}
             user={user}

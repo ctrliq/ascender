@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { useField } from 'formik';
 import {
@@ -36,13 +36,13 @@ function PasswordInput(props) {
     <>
       <Tooltip
         content={
-          inputType === 'password' ? i18n._(msg`Show`) : i18n._(msg`Hide`)
+          inputType === 'password' ? i18n._(t`Show`) : i18n._(t`Hide`)
         }
       >
         <Button
           ouiaId={`${id}-toggle`}
           variant={ButtonVariant.control}
-          aria-label={i18n._(msg`Toggle Password`)}
+          aria-label={i18n._(t`Toggle Password`)}
           onClick={handlePasswordToggle}
           isDisabled={isDisabled}
         >

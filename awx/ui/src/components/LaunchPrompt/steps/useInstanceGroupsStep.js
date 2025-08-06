@@ -1,6 +1,6 @@
 import React from 'react';
 import { i18n } from '@lingui/core';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import InstanceGroupsStep from './InstanceGroupsStep';
 import StepName from './StepName';
 
@@ -31,7 +31,7 @@ function getStep(launchConfig) {
     id: STEP_ID,
     name: (
       <StepName id="instance-groups-step">
-        {i18n._(msg`Instance Groups`)}
+        {i18n._(t`Instance Groups`)}
       </StepName>
     ),
     component: <InstanceGroupsStep />,

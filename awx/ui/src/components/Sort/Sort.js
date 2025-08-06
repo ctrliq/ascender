@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { useLocation } from 'react-router-dom';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import {
   Button,
@@ -138,7 +138,7 @@ function Sort({ columns, qsConfig, onSort }) {
 
           <Button
             variant={ButtonVariant.control}
-            aria-label={i18n._(msg`Sort`)}
+            aria-label={i18n._(t`Sort`)}
             onClick={handleSort}
             ouiaId="sort-button"
           >

@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 
 import { Button, Label } from '@patternfly/react-core';
 import AlertModal from 'components/AlertModal';
@@ -46,53 +46,53 @@ function UserDetail({ user }) {
 
   let user_type;
   if (is_superuser) {
-    user_type = i18n._(msg`System Administrator`);
+    user_type = i18n._(t`System Administrator`);
   } else if (is_system_auditor) {
-    user_type = i18n._(msg`System Auditor`);
+    user_type = i18n._(t`System Auditor`);
   } else {
-    user_type = i18n._(msg`Normal User`);
+    user_type = i18n._(t`Normal User`);
   }
 
   let userAuthType;
   if (user.ldap_dn) {
-    userAuthType = i18n._(msg`LDAP`);
+    userAuthType = i18n._(t`LDAP`);
   } else if (user.auth.length > 0) {
-    userAuthType = i18n._(msg`SOCIAL`);
+    userAuthType = i18n._(t`SOCIAL`);
   }
 
   return (
     <CardBody>
       <DetailList>
-        <Detail label={i18n._(msg`First Name`)} value={`${first_name}`} />
-        <Detail label={i18n._(msg`Last Name`)} value={`${last_name}`} />
-        <Detail label={i18n._(msg`Email`)} value={email} />
+        <Detail label={i18n._(t`First Name`)} value={`${first_name}`} />
+        <Detail label={i18n._(t`Last Name`)} value={`${last_name}`} />
+        <Detail label={i18n._(t`Email`)} value={email} />
         <Detail
-          label={i18n._(msg`Username`)}
+          label={i18n._(t`Username`)}
           value={username}
           dataCy="user-detail-username"
         />
-        <Detail label={i18n._(msg`User Type`)} value={`${user_type}`} />
+        <Detail label={i18n._(t`User Type`)} value={`${user_type}`} />
         {userAuthType && (
           <Detail
-            label={i18n._(msg`Type`)}
+            label={i18n._(t`Type`)}
             value={
-              <Label aria-label={i18n._(msg`login type`)}>{userAuthType}</Label>
+              <Label aria-label={i18n._(t`login type`)}>{userAuthType}</Label>
             }
           />
         )}
         {last_login && (
           <Detail
-            label={i18n._(msg`Last Login`)}
+            label={i18n._(t`Last Login`)}
             value={formatDateString(last_login)}
           />
         )}
         <Detail
-          label={i18n._(msg`Created`)}
+          label={i18n._(t`Created`)}
           value={formatDateString(created)}
         />
         {modified && (
           <Detail
-            label={i18n._(msg`Last Modified`)}
+            label={i18n._(t`Last Modified`)}
             value={formatDateString(modified)}
           />
         )}
@@ -102,22 +102,22 @@ function UserDetail({ user }) {
           summary_fields.user_capabilities.edit && (
             <Button
               ouiaId="user-detail-edit-button"
-              aria-label={i18n._(msg`edit`)}
+              aria-label={i18n._(t`edit`)}
               component={Link}
               to={`/users/${id}/edit`}
             >
-              {i18n._(msg`Edit`)}
+              {i18n._(t`Edit`)}
             </Button>
           )}
         {summary_fields.user_capabilities &&
           summary_fields.user_capabilities.delete && (
             <DeleteButton
               name={username}
-              modalTitle={i18n._(msg`Delete User`)}
+              modalTitle={i18n._(t`Delete User`)}
               onConfirm={deleteUser}
               isDisabled={isLoading}
             >
-              {i18n._(msg`Delete`)}
+              {i18n._(t`Delete`)}
             </DeleteButton>
           )}
       </CardActionsRow>
@@ -125,10 +125,10 @@ function UserDetail({ user }) {
         <AlertModal
           isOpen={error}
           variant="error"
-          title={i18n._(msg`Error!`)}
+          title={i18n._(t`Error!`)}
           onClose={dismissError}
         >
-          {i18n._(msg`Failed to delete user.`)}
+          {i18n._(t`Failed to delete user.`)}
           <ErrorDetail error={error} />
         </AlertModal>
       )}

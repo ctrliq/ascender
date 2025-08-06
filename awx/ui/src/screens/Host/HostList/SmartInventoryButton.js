@@ -3,7 +3,7 @@ import { bool, func } from 'prop-types';
 import { Button, DropdownItem, Tooltip } from '@patternfly/react-core';
 
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 
 import { useKebabifiedMenu } from 'contexts/Kebabified';
 
@@ -19,21 +19,21 @@ function SmartInventoryButton({
   const renderTooltipContent = () => {
     if (hasInvalidKeys) {
       return i18n._(
-        msg`Some search modifiers like not__ and __search are not supported in Smart Inventory host filters.  Remove these to create a new Smart Inventory with this filter.`
+        t`Some search modifiers like not__ and __search are not supported in Smart Inventory host filters.  Remove these to create a new Smart Inventory with this filter.`
       );
     }
     if (hasAnsibleFactsKeys) {
       return i18n._(
-        msg`To create a smart inventory using ansible facts, go to the smart inventory screen.`
+        t`To create a smart inventory using ansible facts, go to the smart inventory screen.`
       );
     }
     if (isDisabled) {
       return i18n._(
-        msg`Enter at least one search filter to create a new Smart Inventory`
+        t`Enter at least one search filter to create a new Smart Inventory`
       );
     }
 
-    return i18n._(msg`Create a new Smart Inventory with the applied filter`);
+    return i18n._(t`Create a new Smart Inventory with the applied filter`);
   };
 
   const renderContent = () => {
@@ -46,7 +46,7 @@ function SmartInventoryButton({
           onClick={onClick}
           ouiaId="smart-inventory-dropdown-item"
         >
-          {i18n._(msg`Smart Inventory`)}
+          {i18n._(t`Smart Inventory`)}
         </DropdownItem>
       );
     }
@@ -55,11 +55,11 @@ function SmartInventoryButton({
       <Button
         ouiaId="smart-inventory-button"
         onClick={onClick}
-        aria-label={i18n._(msg`Smart Inventory`)}
+        aria-label={i18n._(t`Smart Inventory`)}
         variant="secondary"
         isDisabled={isDisabled}
       >
-        {i18n._(msg`Smart Inventory`)}
+        {i18n._(t`Smart Inventory`)}
       </Button>
     );
   };

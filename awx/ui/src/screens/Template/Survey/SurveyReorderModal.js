@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { GripVerticalIcon } from '@patternfly/react-icons';
 import {
@@ -124,7 +124,7 @@ function SurveyReorderModal({
       case 'password':
         component = (
           <span id="survey-preview-encrypted">
-            {i18n._(msg`encrypted`).toUpperCase()}
+            {i18n._(t`encrypted`).toUpperCase()}
           </span>
         );
         break;
@@ -134,7 +134,7 @@ function SurveyReorderModal({
             id={`survey-preview-textArea-${q.variable}`}
             type={`survey-preview-textArea-${q.variable}`}
             value={q.default}
-            aria-label={i18n._(msg`Text Area`)}
+            aria-label={i18n._(t`Text Area`)}
             isDisabled
           />
         );
@@ -145,8 +145,8 @@ function SurveyReorderModal({
             id={`survey-preview-multipleChoice-${q.variable}`}
             ouiaId={`survey-preview-multipleChoice-${q.variable}`}
             isDisabled
-            aria-label={i18n._(msg`Multiple Choice`)}
-            typeAheadAriaLabel={i18n._(msg`Multiple Choice`)}
+            aria-label={i18n._(t`Multiple Choice`)}
+            typeAheadAriaLabel={i18n._(t`Multiple Choice`)}
             placeholderText={q.default}
             onToggle={() => {}}
           />
@@ -161,11 +161,11 @@ function SurveyReorderModal({
             isOpen={false}
             selections={q.default.length > 0 ? q.default.split('\n') : []}
             onToggle={() => {}}
-            aria-label={i18n._(msg`Multi-Select`)}
-            typeAheadAriaLabel={i18n._(msg`Multi-Select`)}
+            aria-label={i18n._(t`Multi-Select`)}
+            typeAheadAriaLabel={i18n._(t`Multi-Select`)}
             id={`survey-preview-multiSelect-${q.variable}`}
             ouiaId={`survey-preview-multiSelect-${q.variable}`}
-            noResultsFoundText={i18n._(msg`No results found`)}
+            noResultsFoundText={i18n._(t`No results found`)}
           >
             {choices.length > 0 &&
               choices.map((option) => (
@@ -180,7 +180,7 @@ function SurveyReorderModal({
             id={`survey-preview-text-${q.variable}`}
             value={q.default}
             isDisabled
-            aria-label={i18n._(msg`Text`)}
+            aria-label={i18n._(t`Text`)}
           />
         );
         break;
@@ -189,11 +189,11 @@ function SurveyReorderModal({
   };
   return (
     <Modal
-      title={i18n._(msg`Survey Question Order`)}
-      aria-label={i18n._(msg`Survey preview modal`)}
+      title={i18n._(t`Survey Question Order`)}
+      aria-label={i18n._(t`Survey preview modal`)}
       isOpen={isOrderModalOpen}
       description={i18n._(
-        msg`To reorder the survey questions drag and drop them in the desired location.`
+        t`To reorder the survey questions drag and drop them in the desired location.`
       )}
       onClose={() => onCloseOrderModal()}
       variant="medium"
@@ -206,7 +206,7 @@ function SurveyReorderModal({
             onSave(surveyQuestions);
           }}
         >
-          {i18n._(msg`Save`)}
+          {i18n._(t`Save`)}
         </Button>,
         <Button
           ouiaId="survey-order-cancel"
@@ -214,17 +214,17 @@ function SurveyReorderModal({
           variant="link"
           onClick={() => onCloseOrderModal()}
         >
-          {i18n._(msg`Cancel`)}
+          {i18n._(t`Cancel`)}
         </Button>,
       ]}
     >
       <TableComposable>
         <Thead>
           <Tr ouiaId="survey-order-table-header">
-            <Th dataLabel={i18n._(msg`Order`)}>{i18n._(msg`Order`)}</Th>
-            <Th dataLabel={i18n._(msg`Name`)}>{i18n._(msg`Name`)}</Th>
-            <Th dataLabel={i18n._(msg`Default Answer(s)`)}>
-              {i18n._(msg`Default Answer(s)`)}
+            <Th dataLabel={i18n._(t`Order`)}>{i18n._(t`Order`)}</Th>
+            <Th dataLabel={i18n._(t`Name`)}>{i18n._(t`Name`)}</Th>
+            <Th dataLabel={i18n._(t`Default Answer(s)`)}>
+              {i18n._(t`Default Answer(s)`)}
             </Th>
           </Tr>
         </Thead>
@@ -239,15 +239,15 @@ function SurveyReorderModal({
               onDragStart={onDragStart}
               ouiaId={`survey-order-row-${q.variable}`}
             >
-              <Td dataLabel={i18n._(msg`Order`)}>
+              <Td dataLabel={i18n._(t`Order`)}>
                 <Button variant="plain">
                   <GripVerticalIcon />
                 </Button>
               </Td>
-              <Td dataLabel={i18n._(msg`Name`)} aria-label={q.question_name}>
+              <Td dataLabel={i18n._(t`Name`)} aria-label={q.question_name}>
                 {q.question_name}
               </Td>
-              <Td dataLabel={i18n._(msg`Default Answer(s)`)}>
+              <Td dataLabel={i18n._(t`Default Answer(s)`)}>
                 {defaultAnswer(q)}
               </Td>
             </Tr>

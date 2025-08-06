@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { i18n } from '@lingui/core';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useField } from 'formik';
 import { jsonToYaml, yamlToJson } from 'util/yaml';
 import OtherPromptsStep from './OtherPromptsStep';
@@ -88,7 +88,7 @@ function getStep(launchConfig, hasError, variablesMode, handleModeChange) {
     key: 5,
     name: (
       <StepName hasErrors={hasError} id="other-prompts-step">
-        {i18n._(msg`Other prompts`)}
+        {i18n._(t`Other prompts`)}
       </StepName>
     ),
     component: (

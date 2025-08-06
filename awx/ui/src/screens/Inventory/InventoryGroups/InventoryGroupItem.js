@@ -1,7 +1,7 @@
 import React from 'react';
 import { bool, func } from 'prop-types';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 
 import { Button } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
@@ -28,20 +28,20 @@ function InventoryGroupItem({ group, isSelected, onSelect, rowIndex }) {
           onSelect,
         }}
       />
-      <Td id={labelId} dataLabel={i18n._(msg`Name`)}>
+      <Td id={labelId} dataLabel={i18n._(t`Name`)}>
         <Link to={`${detailUrl}`} id={labelId}>
           <b>{group.name}</b>
         </Link>
       </Td>
       {inventoryType !== 'constructed_inventory' && (
-        <ActionsTd dataLabel={i18n._(msg`Actions`)} gridColumns="auto 40px">
+        <ActionsTd dataLabel={i18n._(t`Actions`)} gridColumns="auto 40px">
           <ActionItem
             visible={group.summary_fields.user_capabilities.edit}
-            tooltip={i18n._(msg`Edit group`)}
+            tooltip={i18n._(t`Edit group`)}
           >
             <Button
               ouiaId={`${group.id}-edit-button`}
-              aria-label={i18n._(msg`Edit Group`)}
+              aria-label={i18n._(t`Edit Group`)}
               variant="plain"
               component={Link}
               to={editUrl}

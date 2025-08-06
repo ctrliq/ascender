@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 
 import { Host } from 'types';
 import { CardBody } from 'components/Card';
@@ -44,7 +44,7 @@ function HostFacts({ host }) {
     <CardBody>
       <DetailList gutter="sm">
         <VariablesDetail
-          label={i18n._(msg`Facts`)}
+          label={i18n._(t`Facts`)}
           rows="auto"
           value={facts}
           name="facts"

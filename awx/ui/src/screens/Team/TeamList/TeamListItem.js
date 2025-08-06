@@ -3,7 +3,7 @@ import 'styled-components/macro';
 import { string, bool, func } from 'prop-types';
 import { useLingui } from '@lingui/react';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
 import { Link } from 'react-router-dom';
@@ -30,14 +30,14 @@ function TeamListItem({ team, isSelected, onSelect, detailUrl, rowIndex }) {
           isSelected,
           onSelect,
         }}
-        dataLabel={i18n._(msg`Selected`)}
+        dataLabel={i18n._(t`Selected`)}
       />
-      <TdBreakWord id={labelId} dataLabel={i18n._(msg`Name`)}>
+      <TdBreakWord id={labelId} dataLabel={i18n._(t`Name`)}>
         <Link to={`${detailUrl}`}>
           <b>{team.name}</b>
         </Link>
       </TdBreakWord>
-      <TdBreakWord dataLabel={i18n._(msg`Organization`)}>
+      <TdBreakWord dataLabel={i18n._(t`Organization`)}>
         {team.summary_fields.organization && (
           <Link
             to={`/organizations/${team.summary_fields.organization.id}/details`}
@@ -46,14 +46,14 @@ function TeamListItem({ team, isSelected, onSelect, detailUrl, rowIndex }) {
           </Link>
         )}
       </TdBreakWord>
-      <ActionsTd dataLabel={i18n._(msg`Actions`)}>
+      <ActionsTd dataLabel={i18n._(t`Actions`)}>
         <ActionItem
           visible={team.summary_fields.user_capabilities.edit}
-          tooltip={i18n._(msg`Edit Team`)}
+          tooltip={i18n._(t`Edit Team`)}
         >
           <Button
             ouiaId={`${team.id}-edit-button`}
-            aria-label={i18n._(msg`Edit Team`)}
+            aria-label={i18n._(t`Edit Team`)}
             variant="plain"
             component={Link}
             to={`/teams/${team.id}/edit`}

@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
-import { msg, Plural } from '@lingui/macro';
+import { t, Plural } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 
 import { Card } from '@patternfly/react-core';
@@ -199,71 +199,71 @@ function JobList({
           items={jobs}
           itemCount={count}
           emptyContentMessage={i18n._(
-            msg`Please run a job to populate this list.`
+            t`Please run a job to populate this list.`
           )}
-          pluralizedItemName={i18n._(msg`Jobs`)}
+          pluralizedItemName={i18n._(t`Jobs`)}
           qsConfig={qsConfig}
           toolbarSearchColumns={[
             {
-              name: i18n._(msg`Name`),
+              name: i18n._(t`Name`),
               key: 'name__icontains',
               isDefault: true,
             },
             {
-              name: i18n._(msg`ID`),
+              name: i18n._(t`ID`),
               key: 'id',
             },
             {
-              name: i18n._(msg`Label Name`),
+              name: i18n._(t`Label Name`),
               key: 'labels__name__icontains',
             },
             {
-              name: i18n._(msg`Job Type`),
+              name: i18n._(t`Job Type`),
               key: `or__type`,
               options: [
-                [`project_update`, i18n._(msg`Source Control Update`)],
-                [`inventory_update`, i18n._(msg`Inventory Sync`)],
-                [`job`, i18n._(msg`Playbook Run`)],
-                [`ad_hoc_command`, i18n._(msg`Command`)],
-                [`system_job`, i18n._(msg`Management Job`)],
-                [`workflow_job`, i18n._(msg`Workflow Job`)],
+                [`project_update`, i18n._(t`Source Control Update`)],
+                [`inventory_update`, i18n._(t`Inventory Sync`)],
+                [`job`, i18n._(t`Playbook Run`)],
+                [`ad_hoc_command`, i18n._(t`Command`)],
+                [`system_job`, i18n._(t`Management Job`)],
+                [`workflow_job`, i18n._(t`Workflow Job`)],
               ],
             },
             {
-              name: i18n._(msg`Launched By (Username)`),
+              name: i18n._(t`Launched By (Username)`),
               key: 'created_by__username__icontains',
             },
             {
-              name: i18n._(msg`Status`),
+              name: i18n._(t`Status`),
               key: 'or__status',
               options: [
-                [`new`, i18n._(msg`New`)],
-                [`pending`, i18n._(msg`Pending`)],
-                [`waiting`, i18n._(msg`Waiting`)],
-                [`running`, i18n._(msg`Running`)],
-                [`successful`, i18n._(msg`Successful`)],
-                [`failed`, i18n._(msg`Failed`)],
-                [`error`, i18n._(msg`Error`)],
-                [`canceled`, i18n._(msg`Canceled`)],
+                [`new`, i18n._(t`New`)],
+                [`pending`, i18n._(t`Pending`)],
+                [`waiting`, i18n._(t`Waiting`)],
+                [`running`, i18n._(t`Running`)],
+                [`successful`, i18n._(t`Successful`)],
+                [`failed`, i18n._(t`Failed`)],
+                [`error`, i18n._(t`Error`)],
+                [`canceled`, i18n._(t`Canceled`)],
               ],
             },
             {
-              name: i18n._(msg`Limit`),
+              name: i18n._(t`Limit`),
               key: 'job__limit',
             },
           ]}
           headerRow={
             <HeaderRow qsConfig={qsConfig} isExpandable>
-              <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
-              <HeaderCell sortKey="status">{i18n._(msg`Status`)}</HeaderCell>
-              {showTypeColumn && <HeaderCell>{i18n._(msg`Type`)}</HeaderCell>}
+              <HeaderCell sortKey="name">{i18n._(t`Name`)}</HeaderCell>
+              <HeaderCell sortKey="status">{i18n._(t`Status`)}</HeaderCell>
+              {showTypeColumn && <HeaderCell>{i18n._(t`Type`)}</HeaderCell>}
               <HeaderCell sortKey="started">
-                {i18n._(msg`Start Time`)}
+                {i18n._(t`Start Time`)}
               </HeaderCell>
               <HeaderCell sortKey="finished">
-                {i18n._(msg`Finish Time`)}
+                {i18n._(t`Finish Time`)}
               </HeaderCell>
-              <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
+              <HeaderCell>{i18n._(t`Actions`)}</HeaderCell>
             </HeaderRow>
           }
           clearSelected={clearSelected}
@@ -288,7 +288,7 @@ function JobList({
                     item.name = `${item.id} - ${item.name}`;
                     return item;
                   })}
-                  pluralizedItemName={i18n._(msg`Jobs`)}
+                  pluralizedItemName={i18n._(t`Jobs`)}
                   cannotDelete={(item) =>
                     isJobRunning(item.status) ||
                     !item.summary_fields.user_capabilities.delete
@@ -329,10 +329,10 @@ function JobList({
         <AlertModal
           isOpen
           variant="error"
-          title={i18n._(msg`Error!`)}
+          title={i18n._(t`Error!`)}
           onClose={clearDeletionError}
         >
-          {i18n._(msg`Failed to delete one or more jobs.`)}
+          {i18n._(t`Failed to delete one or more jobs.`)}
           <ErrorDetail error={deletionError} />
         </AlertModal>
       )}
@@ -340,10 +340,10 @@ function JobList({
         <AlertModal
           isOpen
           variant="error"
-          title={i18n._(msg`Error!`)}
+          title={i18n._(t`Error!`)}
           onClose={dismissCancelError}
         >
-          {i18n._(msg`Failed to cancel one or more jobs.`)}
+          {i18n._(t`Failed to cancel one or more jobs.`)}
           <ErrorDetail error={cancelError} />
         </AlertModal>
       )}

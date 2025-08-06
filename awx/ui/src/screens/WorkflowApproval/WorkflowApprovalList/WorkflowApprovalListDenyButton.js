@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import PropTypes from 'prop-types';
 import { Button, DropdownItem, Tooltip } from '@patternfly/react-core';
@@ -16,7 +16,7 @@ function WorkflowApprovalListDenyButton({ onDeny, selectedItems }) {
 
   const renderTooltip = () => {
     if (selectedItems.length === 0) {
-      return i18n._(msg`Select a row to deny`);
+      return i18n._(t`Select a row to deny`);
     }
 
     const itemsUnableToDeny = selectedItems
@@ -26,11 +26,11 @@ function WorkflowApprovalListDenyButton({ onDeny, selectedItems }) {
 
     if (selectedItems.some(cannotDeny)) {
       return i18n._(
-        msg`You are unable to act on the following workflow approvals: ${itemsUnableToDeny}`
+        t`You are unable to act on the following workflow approvals: ${itemsUnableToDeny}`
       );
     }
 
-    return i18n._(msg`Deny`);
+    return i18n._(t`Deny`);
   };
 
   const isDisabled =
@@ -46,7 +46,7 @@ function WorkflowApprovalListDenyButton({ onDeny, selectedItems }) {
           component="button"
           onClick={onDeny}
         >
-          {i18n._(msg`Deny`)}
+          {i18n._(t`Deny`)}
         </DropdownItem>
       ) : (
         <Tooltip content={renderTooltip()} position="top">
@@ -54,11 +54,11 @@ function WorkflowApprovalListDenyButton({ onDeny, selectedItems }) {
             <Button
               ouiaId="workflow-approval-deny-button"
               isDisabled={isDisabled}
-              aria-label={i18n._(msg`Deny`)}
+              aria-label={i18n._(t`Deny`)}
               variant="danger"
               onClick={onDeny}
             >
-              {i18n._(msg`Deny`)}
+              {i18n._(t`Deny`)}
             </Button>
           </div>
         </Tooltip>

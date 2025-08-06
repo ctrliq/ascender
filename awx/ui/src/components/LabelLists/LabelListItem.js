@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tr, Td } from '@patternfly/react-table';
 import { Link } from 'react-router-dom';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 
 function LabelListItem({ label, searchOrg }) {
@@ -17,12 +17,12 @@ function LabelListItem({ label, searchOrg }) {
   return (
     <Tr key={label.id}>
       <Td style={{ width: 46, minWidth: 0, maxWidth: 46 }} />
-      <Td dataLabel={i18n._(msg`Name`)}>
+      <Td dataLabel={i18n._(t`Name`)}>
         <b>
           <Link to={{ pathname: '/templates', search }}>{label.name}</Link>
         </b>
       </Td>
-      <Td dataLabel={i18n._(msg`Organization`)}>
+      <Td dataLabel={i18n._(t`Organization`)}>
         {label.summary_fields?.organization?.name || ''}
       </Td>
     </Tr>

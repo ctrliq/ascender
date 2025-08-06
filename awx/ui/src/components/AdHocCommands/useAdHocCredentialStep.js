@@ -1,6 +1,6 @@
 import React from 'react';
 import { useField } from 'formik';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import StepName from '../LaunchPrompt/steps/StepName';
 import AdHocCredentialStep from './AdHocCredentialStep';
@@ -23,12 +23,12 @@ export default function useAdHocExecutionEnvironmentStep(
       key: 3,
       name: (
         <StepName hasErrors={hasError} id="credential-step">
-          {i18n._(msg`Credential`)}
+          {i18n._(t`Credential`)}
         </StepName>
       ),
       component: <AdHocCredentialStep credentialTypeId={credentialTypeId} />,
       enableNext: true,
-      nextButtonText: i18n._(msg`Next`),
+      nextButtonText: i18n._(t`Next`),
     },
     hasError,
     validate: () => {

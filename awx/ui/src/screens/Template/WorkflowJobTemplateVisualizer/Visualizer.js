@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { shape } from 'prop-types';
 import { i18n } from '@lingui/core';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 
 import {
   WorkflowDispatchContext,
@@ -701,11 +701,11 @@ function Visualizer({ template }) {
           <AlertModal
             isOpen
             variant="error"
-            title={i18n._(msg`Error saving the workflow!`)}
+            title={i18n._(t`Error saving the workflow!`)}
             onClose={dismissNodeRequestError}
-            aria-label={i18n._(msg`Error saving the workflow!`)}
+            aria-label={i18n._(t`Error saving the workflow!`)}
           >
-            {i18n._(msg`There was an error saving the workflow.`)}
+            {i18n._(t`There was an error saving the workflow.`)}
             <ErrorDetail error={nodeRequestError} />
           </AlertModal>
         )}

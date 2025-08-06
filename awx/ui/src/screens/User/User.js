@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import {
   Switch,
   Route,
@@ -56,26 +56,26 @@ function User({ setBreadcrumb, me }) {
       name: (
         <>
           <CaretLeftIcon />
-          {i18n._(msg`Back to Users`)}
+          {i18n._(t`Back to Users`)}
         </>
       ),
       link: `/users`,
       id: 99,
       persistentFilterKey: 'users',
     },
-    { name: i18n._(msg`Details`), link: `${match.url}/details`, id: 0 },
+    { name: i18n._(t`Details`), link: `${match.url}/details`, id: 0 },
     {
-      name: i18n._(msg`Organizations`),
+      name: i18n._(t`Organizations`),
       link: `${match.url}/organizations`,
       id: 1,
     },
-    { name: i18n._(msg`Teams`), link: `${match.url}/teams`, id: 2 },
-    { name: i18n._(msg`Roles`), link: `${match.url}/roles`, id: 3 },
+    { name: i18n._(t`Teams`), link: `${match.url}/teams`, id: 2 },
+    { name: i18n._(t`Roles`), link: `${match.url}/roles`, id: 3 },
   ];
 
   if (me?.id === Number(match.params.id)) {
     tabsArray.push({
-      name: i18n._(msg`Tokens`),
+      name: i18n._(t`Tokens`),
       link: `${match.url}/tokens`,
       id: 4,
     });
@@ -95,8 +95,8 @@ function User({ setBreadcrumb, me }) {
           <ContentError error={contentError}>
             {contentError.response && contentError.response.status === 404 && (
               <span>
-                {i18n._(msg`User not found.`)}{' '}
-                <Link to={userListUrl}>{i18n._(msg`View all Users.`)}</Link>
+                {i18n._(t`User not found.`)}{' '}
+                <Link to={userListUrl}>{i18n._(t`View all Users.`)}</Link>
               </span>
             )}
           </ContentError>
@@ -140,7 +140,7 @@ function User({ setBreadcrumb, me }) {
               <ContentError isNotFound>
                 {match.params.id && (
                   <Link to={`/users/${match.params.id}/details`}>
-                    {i18n._(msg`View User Details`)}
+                    {i18n._(t`View User Details`)}
                   </Link>
                 )}
               </ContentError>

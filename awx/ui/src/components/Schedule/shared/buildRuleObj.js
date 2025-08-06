@@ -1,4 +1,4 @@
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { RRule } from 'rrule';
 import { DateTime } from 'luxon';
 import { getRRuleDayConstants } from 'util/dates';
@@ -88,7 +88,7 @@ export default function buildRuleObj(values, includeStart, i18n) {
       }
       break;
     default:
-      throw new Error(i18n._(msg`Frequency did not match an expected value`));
+      throw new Error(i18n._(t`Frequency did not match an expected value`));
   }
 
   if (values.frequency !== 'none') {
@@ -108,7 +108,7 @@ export default function buildRuleObj(values, includeStart, i18n) {
       }
       default:
         throw new Error(
-          i18n._(msg`End did not match an expected value (${values.end})`)
+          i18n._(t`End did not match an expected value (${values.end})`)
         );
     }
   }

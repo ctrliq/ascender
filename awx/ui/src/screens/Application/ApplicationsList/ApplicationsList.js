@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLocation, useRouteMatch } from 'react-router-dom';
 import { Card, PageSection } from '@patternfly/react-core';
 import { getQSConfig, parseQueryString } from 'util/qs';
@@ -108,17 +108,17 @@ function ApplicationsList() {
             hasContentLoading={isLoading || deleteLoading}
             items={applications}
             itemCount={itemCount}
-            pluralizedItemName={i18n._(msg`Applications`)}
+            pluralizedItemName={i18n._(t`Applications`)}
             qsConfig={QS_CONFIG}
             clearSelected={clearSelected}
             toolbarSearchColumns={[
               {
-                name: i18n._(msg`Name`),
+                name: i18n._(t`Name`),
                 key: 'name__icontains',
                 isDefault: true,
               },
               {
-                name: i18n._(msg`Description`),
+                name: i18n._(t`Description`),
                 key: 'description__icontains',
               },
             ]}
@@ -143,19 +143,19 @@ function ApplicationsList() {
                     key="delete"
                     onDelete={handleDeleteApplications}
                     itemsToDelete={selected}
-                    pluralizedItemName={i18n._(msg`Applications`)}
+                    pluralizedItemName={i18n._(t`Applications`)}
                   />,
                 ]}
               />
             )}
             headerRow={
               <HeaderRow qsConfig={QS_CONFIG}>
-                <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
+                <HeaderCell sortKey="name">{i18n._(t`Name`)}</HeaderCell>
                 <HeaderCell sortKey="organization">
-                  {i18n._(msg`Organization`)}
+                  {i18n._(t`Organization`)}
                 </HeaderCell>
-                <HeaderCell>{i18n._(msg`Last Modified`)}</HeaderCell>
-                <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
+                <HeaderCell>{i18n._(t`Last Modified`)}</HeaderCell>
+                <HeaderCell>{i18n._(t`Actions`)}</HeaderCell>
               </HeaderRow>
             }
             renderRow={(application, index) => (
@@ -180,10 +180,10 @@ function ApplicationsList() {
       <AlertModal
         isOpen={deletionError}
         variant="error"
-        title={i18n._(msg`Error!`)}
+        title={i18n._(t`Error!`)}
         onClose={clearDeletionError}
       >
-        {i18n._(msg`Failed to delete one or more applications.`)}
+        {i18n._(t`Failed to delete one or more applications.`)}
         <ErrorDetail error={deletionError} />
       </AlertModal>
     </>

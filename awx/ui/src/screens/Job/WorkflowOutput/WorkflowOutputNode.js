@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import styled from 'styled-components';
 import { func, shape } from 'prop-types';
@@ -108,7 +108,7 @@ function WorkflowOutputNode({ mouseEnter, mouseLeave, node }) {
     nodeName =
       node?.fullUnifiedJobTemplate?.name ||
       node?.originalNodeObject?.summary_fields?.unified_job_template?.name ||
-      i18n._(msg`DELETED`);
+      i18n._(t`DELETED`);
   }
 
   return (
@@ -142,7 +142,7 @@ function WorkflowOutputNode({ mouseEnter, mouseLeave, node }) {
             x={wfConstants.nodeW / 2 - wfConstants.nodeW / 10 + 7}
             y={-wfConstants.nodeH / 4 - 1}
           >
-            <ConvergenceLabel>{i18n._(msg`ALL`)}</ConvergenceLabel>
+            <ConvergenceLabel>{i18n._(t`ALL`)}</ConvergenceLabel>
           </foreignObject>
         </>
       )}

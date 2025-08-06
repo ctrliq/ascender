@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ExpandableSection, Wizard } from '@patternfly/react-core';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { Formik, useFormikContext } from 'formik';
 import { useDismissableError } from 'hooks/useRequest';
@@ -96,7 +96,7 @@ function PromptModalForm({
       <AlertModal
         isOpen={error}
         variant="error"
-        title={i18n._(msg`Error!`)}
+        title={i18n._(t`Error!`)}
         onClose={() => {
           dismissError();
         }}
@@ -130,14 +130,14 @@ function PromptModalForm({
           validateStep(nextStep.id);
         }
       }}
-      title={i18n._(msg`Launch | ${resource.name})`)}
+      title={i18n._(t`Launch | ${resource.name})`)}
       description={
         resource.description?.length > 512 ? (
           <ExpandableSection
             toggleText={
               showDescription
-                ? i18n._(msg`Hide description`)
-                : i18n._(msg`Show description`)
+                ? i18n._(t`Hide description`)
+                : i18n._(t`Show description`)
             }
             onToggle={() => {
               setShowDescription(!showDescription);
@@ -155,14 +155,14 @@ function PromptModalForm({
           ? steps
           : [
               {
-                name: i18n._(msg`Content Loading`),
+                name: i18n._(t`Content Loading`),
                 component: <ContentLoading />,
               },
             ]
       }
-      backButtonText={i18n._(msg`Back`)}
-      cancelButtonText={i18n._(msg`Cancel`)}
-      nextButtonText={i18n._(msg`Next`)}
+      backButtonText={i18n._(t`Back`)}
+      cancelButtonText={i18n._(t`Cancel`)}
+      nextButtonText={i18n._(t`Next`)}
     />
   );
 }

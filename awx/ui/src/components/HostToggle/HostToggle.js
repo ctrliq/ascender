@@ -1,7 +1,7 @@
 import 'styled-components/macro';
 import React, { useState, useEffect, useCallback } from 'react';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { Switch, Tooltip } from '@patternfly/react-core';
 import useRequest from 'hooks/useRequest';
@@ -19,7 +19,7 @@ function HostToggle({
   const { i18n } = useLingui();
   if (!tooltip) {
     tooltip =
-      i18n._(msg`Indicates if a host is available and should be included in running
+      i18n._(t`Indicates if a host is available and should be included in running
     jobs.  For hosts that are part of an external inventory, this may be
     reset by the inventory sync process.`);
   }
@@ -63,8 +63,8 @@ function HostToggle({
           className={className}
           css="display: inline-flex;"
           id={`host-${host.id}-toggle`}
-          label={i18n._(msg`On`)}
-          labelOff={i18n._(msg`Off`)}
+          label={i18n._(t`On`)}
+          labelOff={i18n._(t`Off`)}
           isChecked={isEnabled}
           isDisabled={
             isLoading ||
@@ -73,17 +73,17 @@ function HostToggle({
           }
           onChange={toggleHost}
           ouiaId={`host-${host.id}-toggle`}
-          aria-label={i18n._(msg`Toggle host`)}
+          aria-label={i18n._(t`Toggle host`)}
         />
       </Tooltip>
       {showError && error && !isLoading && (
         <AlertModal
           variant="error"
-          title={i18n._(msg`Error!`)}
+          title={i18n._(t`Error!`)}
           isOpen={error && !isLoading}
           onClose={() => setShowError(false)}
         >
-          {i18n._(msg`Failed to toggle host.`)}
+          {i18n._(t`Failed to toggle host.`)}
           <ErrorDetail error={error} />
         </AlertModal>
       )}

@@ -2,7 +2,7 @@ import React, { useEffect, useCallback } from 'react';
 import { useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 
 import { Card, PageSection } from '@patternfly/react-core';
 import { HostsAPI } from 'api';
@@ -140,25 +140,25 @@ function HostList() {
           hasContentLoading={isLoading || isDeleteLoading}
           items={hosts}
           itemCount={count}
-          pluralizedItemName={i18n._(msg`Hosts`)}
+          pluralizedItemName={i18n._(t`Hosts`)}
           qsConfig={QS_CONFIG}
           clearSelected={clearSelected}
           toolbarSearchColumns={[
             {
-              name: i18n._(msg`Name`),
+              name: i18n._(t`Name`),
               key: 'name__icontains',
               isDefault: true,
             },
             {
-              name: i18n._(msg`Description`),
+              name: i18n._(t`Description`),
               key: 'description__icontains',
             },
             {
-              name: i18n._(msg`Created By (Username)`),
+              name: i18n._(t`Created By (Username)`),
               key: 'created_by__username__icontains',
             },
             {
-              name: i18n._(msg`Modified By (Username)`),
+              name: i18n._(t`Modified By (Username)`),
               key: 'modified_by__username__icontains',
             },
           ]}
@@ -166,13 +166,13 @@ function HostList() {
           toolbarRelatedSearchableKeys={relatedSearchableKeys}
           headerRow={
             <HeaderRow qsConfig={QS_CONFIG}>
-              <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
-              <HeaderCell>{i18n._(msg`Activity`)}</HeaderCell>
+              <HeaderCell sortKey="name">{i18n._(t`Name`)}</HeaderCell>
+              <HeaderCell>{i18n._(t`Activity`)}</HeaderCell>
               <HeaderCell sortKey="description">
-                {i18n._(msg`Description`)}
+                {i18n._(t`Description`)}
               </HeaderCell>
-              <HeaderCell>{i18n._(msg`Inventory`)}</HeaderCell>
-              <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
+              <HeaderCell>{i18n._(t`Inventory`)}</HeaderCell>
+              <HeaderCell>{i18n._(t`Actions`)}</HeaderCell>
             </HeaderRow>
           }
           renderToolbar={(props) => (
@@ -189,7 +189,7 @@ function HostList() {
                   key="delete"
                   onDelete={handleHostDelete}
                   itemsToDelete={selected}
-                  pluralizedItemName={i18n._(msg`Hosts`)}
+                  pluralizedItemName={i18n._(t`Hosts`)}
                 />,
                 ...(canAdd
                   ? [
@@ -229,10 +229,10 @@ function HostList() {
         <AlertModal
           isOpen={deletionError}
           variant="error"
-          title={i18n._(msg`Error!`)}
+          title={i18n._(t`Error!`)}
           onClose={clearDeletionError}
         >
-          {i18n._(msg`Failed to delete one or more hosts.`)}
+          {i18n._(t`Failed to delete one or more hosts.`)}
           <ErrorDetail error={deletionError} />
         </AlertModal>
       )}

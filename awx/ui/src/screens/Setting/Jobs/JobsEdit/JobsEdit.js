@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useHistory } from 'react-router-dom';
 import { Formik } from 'formik';
 import { Form } from '@patternfly/react-core';
@@ -132,7 +132,7 @@ function JobsEdit() {
   };
   jinja.choices = jobs?.ALLOW_JINJA_IN_EXTRA_VARS?.choices.map(
     ([value, label]) =>
-      value === 'template' ? [value, i18n._(msg`Template`)] : [value, label]
+      value === 'template' ? [value, i18n._(t`Template`)] : [value, label]
   );
 
   return (

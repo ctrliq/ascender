@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback, useState, useRef } from 'react';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import {
   PageSection,
   Card,
@@ -81,7 +81,7 @@ function Metrics() {
       return {
         instances:
           instanceNames.length > 1
-            ? [...instanceNames, i18n._(msg`All`)]
+            ? [...instanceNames, i18n._(t`All`)]
             : instanceNames,
         metrics: metricOptions,
       };
@@ -179,7 +179,7 @@ function Metrics() {
   }
   return (
     <>
-      <ScreenHeader breadcrumbConfig={{ '/metrics': i18n._(msg`Metrics`) }} />
+      <ScreenHeader breadcrumbConfig={{ '/metrics': i18n._(t`Metrics`) }} />
 
       <PageSection>
         <Card>
@@ -187,7 +187,7 @@ function Metrics() {
             <Toolbar ouiaId="metrics-toolbar">
               <ToolbarContent>
                 <ToolbarGroup>
-                  <ToolbarItem>{i18n._(msg`Instance`)}</ToolbarItem>
+                  <ToolbarItem>{i18n._(t`Instance`)}</ToolbarItem>
                   <ToolbarItem>
                     <Select
                       ouiaId="Instance-select"
@@ -200,18 +200,18 @@ function Metrics() {
                         setRenderedData([]);
                       }}
                       selections={instance}
-                      placeholderText={i18n._(msg`Select an instance`)}
+                      placeholderText={i18n._(t`Select an instance`)}
                     >
                       {instances.map((inst) => (
                         <SelectOption value={inst} key={inst} />
                       ))}
                     </Select>
                   </ToolbarItem>
-                  <ToolbarItem>{i18n._(msg`Metric`)}</ToolbarItem>
+                  <ToolbarItem>{i18n._(t`Metric`)}</ToolbarItem>
                   <ToolbarItem>
                     <Select
                       ouiaId="Metric-select"
-                      placeholderText={i18n._(msg`Select a metric`)}
+                      placeholderText={i18n._(t`Select a metric`)}
                       isOpen={metricIsOpen}
                       onSelect={(e, value) => {
                         count = [0];
@@ -243,7 +243,7 @@ function Metrics() {
             ) : (
               <ContentEmpty
                 title={i18n._(
-                  msg`Select an instance and a metric to show chart`
+                  t`Select an instance and a metric to show chart`
                 )}
               />
             )}

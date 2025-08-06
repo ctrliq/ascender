@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import {
   Button,
@@ -52,10 +52,10 @@ const Header = ({
           </Title>
         </div>
         <div>
-          <Tooltip content={i18n._(msg`Refresh`)} position="top">
+          <Tooltip content={i18n._(t`Refresh`)} position="top">
             <Button
               ouiaId="refresh-button"
-              aria-label={i18n._(msg`Refresh`)}
+              aria-label={i18n._(t`Refresh`)}
               variant="plain"
               icon={<RedoAltIcon />}
               onClick={refresh}
@@ -64,10 +64,10 @@ const Header = ({
               <RedoAltIcon />
             </Button>
           </Tooltip>
-          <Tooltip content={i18n._(msg`Zoom in`)} position="top">
+          <Tooltip content={i18n._(t`Zoom in`)} position="top">
             <Button
               ouiaId="zoom-in-button"
-              aria-label={i18n._(msg`Zoom in`)}
+              aria-label={i18n._(t`Zoom in`)}
               variant="plain"
               icon={<SearchPlusIcon />}
               onClick={zoomIn}
@@ -76,10 +76,10 @@ const Header = ({
               <SearchPlusIcon />
             </Button>
           </Tooltip>
-          <Tooltip content={i18n._(msg`Zoom out`)} position="top">
+          <Tooltip content={i18n._(t`Zoom out`)} position="top">
             <Button
               ouiaId="zoom-out-button"
-              aria-label={i18n._(msg`Zoom out`)}
+              aria-label={i18n._(t`Zoom out`)}
               variant="plain"
               icon={<SearchMinusIcon />}
               onClick={zoomOut}
@@ -88,10 +88,10 @@ const Header = ({
               <SearchMinusIcon />
             </Button>
           </Tooltip>
-          <Tooltip content={i18n._(msg`Fit to screen`)} position="top">
+          <Tooltip content={i18n._(t`Fit to screen`)} position="top">
             <Button
               ouiaId="fit-to-screen-button"
-              aria-label={i18n._(msg`Fit to screen`)}
+              aria-label={i18n._(t`Fit to screen`)}
               variant="plain"
               icon={<ExpandArrowsAltIcon />}
               onClick={zoomFit}
@@ -100,10 +100,10 @@ const Header = ({
               <ExpandArrowsAltIcon />
             </Button>
           </Tooltip>
-          <Tooltip content={i18n._(msg`Reset zoom`)} position="top">
+          <Tooltip content={i18n._(t`Reset zoom`)} position="top">
             <Button
               ouiaId="reset-zoom-button"
-              aria-label={i18n._(msg`Reset zoom`)}
+              aria-label={i18n._(t`Reset zoom`)}
               variant="plain"
               icon={<ExpandIcon />}
               onClick={resetZoom}
@@ -112,10 +112,10 @@ const Header = ({
               <ExpandIcon />
             </Button>
           </Tooltip>
-          <Tooltip content={i18n._(msg`Toggle legend`)} position="top">
+          <Tooltip content={i18n._(t`Toggle legend`)} position="top">
             <Switch
               id="legend-toggle-switch"
-              label={i18n._(msg`Legend`)}
+              label={i18n._(t`Legend`)}
               isChecked={toggleState}
               onChange={() => handleSwitchToggle(!toggleState)}
             />

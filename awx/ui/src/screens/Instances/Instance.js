@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 
 import { Switch, Route, Redirect, Link, useRouteMatch } from 'react-router-dom';
@@ -26,14 +26,14 @@ function Instance({ setBreadcrumb }) {
       name: (
         <>
           <CaretLeftIcon />
-          {i18n._(msg`Back to Instances`)}
+          {i18n._(t`Back to Instances`)}
         </>
       ),
       link: `/instances`,
       id: 99,
       persistentFilterKey: 'instances',
     },
-    { name: i18n._(msg`Details`), link: `${match.url}/details`, id: 0 },
+    { name: i18n._(t`Details`), link: `${match.url}/details`, id: 0 },
   ];
 
   const {
@@ -58,12 +58,12 @@ function Instance({ setBreadcrumb }) {
 
   if (isK8s) {
     tabsArray.push({
-      name: i18n._(msg`Listener Addresses`),
+      name: i18n._(t`Listener Addresses`),
       link: `${match.url}/listener_addresses`,
       id: 1,
     });
     tabsArray.push({
-      name: i18n._(msg`Peers`),
+      name: i18n._(t`Peers`),
       link: `${match.url}/peers`,
       id: 2,
     });
@@ -101,7 +101,7 @@ function Instance({ setBreadcrumb }) {
             <ContentError isNotFound>
               {match.params.id && (
                 <Link to={`/instances/${match.params.id}/details`}>
-                  {i18n._(msg`View Instance Details`)}
+                  {i18n._(t`View Instance Details`)}
                 </Link>
               )}
             </ContentError>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Trans, msg } from '@lingui/macro';
+import { Trans, t } from '@lingui/react/macro';
 import { useField, useFormikContext } from 'formik';
 import styled from 'styled-components';
 import { TimesIcon } from '@patternfly/react-icons';
@@ -58,15 +58,15 @@ function SubscriptionStep() {
       {!hasValidKey && (
         <>
           <b>
-            {i18n._(msg`Welcome to Red Hat Ansible Automation Platform!
+            {i18n._(t`Welcome to Red Hat Ansible Automation Platform!
               Please complete the steps below to activate your subscription.`)}
           </b>
           <p>
-            {i18n._(msg`If you do not have a subscription, you can visit
+            {i18n._(t`If you do not have a subscription, you can visit
             Red Hat to obtain a trial subscription.`)}
           </p>
           <Button
-            aria-label={i18n._(msg`Request subscription`)}
+            aria-label={i18n._(t`Request subscription`)}
             component="a"
             href={LICENSELINK}
             ouiaId="request-subscription-button"
@@ -74,25 +74,25 @@ function SubscriptionStep() {
             variant="secondary"
             rel="noopener noreferrer"
           >
-            {i18n._(msg`Request subscription`)}
+            {i18n._(t`Request subscription`)}
           </Button>
           <Divider />
         </>
       )}
       <p>
         {i18n._(
-          msg`Select your Ansible Automation Platform subscription to use.`
+          t`Select your Ansible Automation Platform subscription to use.`
         )}
       </p>
       <ToggleGroup>
         <ToggleGroupItem
-          text={i18n._(msg`Subscription manifest`)}
+          text={i18n._(t`Subscription manifest`)}
           isSelected={isSelected === 'uploadManifest'}
           onChange={() => setIsSelected('uploadManifest')}
           id="subscription-manifest"
         />
         <ToggleGroupItem
-          text={i18n._(msg`Username / password`)}
+          text={i18n._(t`Username / password`)}
           isSelected={isSelected === 'selectSubscription'}
           onChange={() => setIsSelected('selectSubscription')}
           id="username-password"
@@ -122,10 +122,10 @@ function SubscriptionStep() {
             fieldId="subscription-manifest"
             validated={manifestMeta.error ? 'error' : 'default'}
             helperTextInvalid={i18n._(
-              msg`Invalid file format. Please upload a valid Red Hat Subscription Manifest.`
+              t`Invalid file format. Please upload a valid Red Hat Subscription Manifest.`
             )}
-            label={i18n._(msg`Red Hat subscription manifest`)}
-            helperText={i18n._(msg`Upload a .zip file`)}
+            label={i18n._(t`Red Hat subscription manifest`)}
+            helperText={i18n._(t`Upload a .zip file`)}
             labelIcon={
               <Popover
                 content={
@@ -155,7 +155,7 @@ function SubscriptionStep() {
                       ouiaId="import-license-link"
                       isInline
                     >
-                      {i18n._(msg`User Guide`)}
+                      {i18n._(t`User Guide`)}
                     </Button>
                     .
                   </Trans>
@@ -167,7 +167,7 @@ function SubscriptionStep() {
               id="upload-manifest"
               value={manifest.value}
               filename={manifestFilename.value}
-              browseButtonText={i18n._(msg`Browse`)}
+              browseButtonText={i18n._(t`Browse`)}
               isDisabled={!config?.me?.is_superuser}
               dropzoneProps={{
                 accept: '.zip',
@@ -200,7 +200,7 @@ function SubscriptionStep() {
       ) : (
         <>
           <p>
-            {i18n._(msg`Provide your Red Hat or Red Hat Satellite credentials
+            {i18n._(t`Provide your Red Hat or Red Hat Satellite credentials
                  below and you can choose from a list of your available subscriptions.
                  The credentials you use will be stored for future use in
                  retrieving renewal or expanded subscriptions.`)}
@@ -213,7 +213,7 @@ function SubscriptionStep() {
           >
             <FormField
               id="username-field"
-              label={i18n._(msg`Username`)}
+              label={i18n._(t`Username`)}
               name="username"
               type="text"
               isDisabled={!config.me.is_superuser}
@@ -221,17 +221,17 @@ function SubscriptionStep() {
             <PasswordField
               id="password-field"
               name="password"
-              label={i18n._(msg`Password`)}
+              label={i18n._(t`Password`)}
               isDisabled={!config.me.is_superuser}
             />
             <Button
-              aria-label={i18n._(msg`Get subscriptions`)}
+              aria-label={i18n._(t`Get subscriptions`)}
               ouiaId="subscription-modal-button"
               onClick={toggleModal}
               style={{ maxWidth: 'fit-content' }}
               isDisabled={!(username.value && password.value)}
             >
-              {i18n._(msg`Get subscription`)}
+              {i18n._(t`Get subscription`)}
             </Button>
             {isModalOpen && (
               <SubscriptionModal
@@ -251,17 +251,17 @@ function SubscriptionStep() {
               alignSelf={{ default: 'alignSelfFlexStart' }}
               spaceItems={{ default: 'spaceItemsMd' }}
             >
-              <b>{i18n._(msg`Selected`)}</b>
+              <b>{i18n._(t`Selected`)}</b>
               <FlexItem>
                 <i>{subscription?.value?.subscription_name}</i>
                 <Tooltip
                   trigger="mouseenter focus click"
-                  content={i18n._(msg`Clear subscription`)}
+                  content={i18n._(t`Clear subscription`)}
                 >
                   <Button
                     onClick={() => subscriptionHelpers.setValue(null)}
                     variant="plain"
-                    aria-label={i18n._(msg`Clear subscription selection`)}
+                    aria-label={i18n._(t`Clear subscription selection`)}
                     ouiaId="clear-subscription-selection"
                   >
                     <TimesIcon />

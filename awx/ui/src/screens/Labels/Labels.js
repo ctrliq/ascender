@@ -1,6 +1,6 @@
 import React from 'react';
 import { PageSection } from '@patternfly/react-core';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import ScreenHeader from 'components/ScreenHeader/ScreenHeader';
 import LabelLists from 'components/LabelLists/LabelLists';
@@ -11,7 +11,7 @@ function Labels() {
     <>
       <ScreenHeader
         streamType="label"
-        breadcrumbConfig={{ '/labels': i18n._(msg`Labels`) }}
+        breadcrumbConfig={{ '/labels': i18n._(t`Labels`) }}
       />
       <PageSection>
         <LabelLists />

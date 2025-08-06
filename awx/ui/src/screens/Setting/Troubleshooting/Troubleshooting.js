@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, Redirect, Route, Switch } from 'react-router-dom';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { PageSection, Card } from '@patternfly/react-core';
 import ContentError from 'components/ContentError';
 import TroubleshootingDetail from './TroubleshootingDetail';
@@ -24,7 +24,7 @@ function Troubleshooting() {
           <Route key="not-found" path={`${baseURL}/*`}>
             <ContentError isNotFound>
               <Link to={`${baseURL}/details`}>
-                {i18n._(msg`View Troubleshooting settings`)}
+                {i18n._(t`View Troubleshooting settings`)}
               </Link>
             </ContentError>
           </Route>

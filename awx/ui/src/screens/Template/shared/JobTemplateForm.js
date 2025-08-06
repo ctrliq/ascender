@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 
 import { withFormik, useField } from 'formik';
@@ -154,10 +154,10 @@ function JobTemplateForm({
 
   const handleProjectValidation = (project) => {
     if (!project) {
-      return i18n._(msg`This field must not be blank`);
+      return i18n._(t`This field must not be blank`);
     }
     if (project?.status === 'never updated') {
-      return i18n._(msg`This Project needs to be updated`);
+      return i18n._(t`This Project needs to be updated`);
     }
     return undefined;
   };
@@ -175,7 +175,7 @@ function JobTemplateForm({
   const handleInventoryValidation = (inventory) => {
     if (!inventory && !askInventoryOnLaunchField.value) {
       return i18n._(
-        msg`Please select an Inventory or check the Prompt on Launch option`
+        t`Please select an Inventory or check the Prompt on Launch option`
       );
     }
     return undefined;
@@ -213,14 +213,14 @@ function JobTemplateForm({
     {
       value: '',
       key: '',
-      label: i18n._(msg`Choose a job type`),
+      label: i18n._(t`Choose a job type`),
       isDisabled: true,
     },
-    { value: 'run', key: 'run', label: i18n._(msg`Run`), isDisabled: false },
+    { value: 'run', key: 'run', label: i18n._(t`Run`), isDisabled: false },
     {
       value: 'check',
       key: 'check',
-      label: i18n._(msg`Check`),
+      label: i18n._(t`Check`),
       isDisabled: false,
     },
   ];
@@ -245,7 +245,7 @@ function JobTemplateForm({
           id="template-name"
           name="name"
           type="text"
-          label={i18n._(msg`Name`)}
+          label={i18n._(t`Name`)}
           validate={combine([required(null), maxLength(512)])}
           isRequired
         />
@@ -253,12 +253,12 @@ function JobTemplateForm({
           id="template-description"
           name="description"
           type="text"
-          label={i18n._(msg`Description`)}
+          label={i18n._(t`Description`)}
         />
         <FieldWithPrompt
           fieldId="template-job-type"
           isRequired
-          label={i18n._(msg`Job Type`)}
+          label={i18n._(t`Job Type`)}
           promptId="template-ask-job-type-on-launch"
           promptName="ask_job_type_on_launch"
           tooltip={helpText.jobType}
@@ -326,7 +326,7 @@ function JobTemplateForm({
           onChange={handleExecutionEnvironmentUpdate}
           popoverContent={helpText.executionEnvironmentForm}
           tooltip={i18n._(
-            msg`Select a project before editing the execution environment.`
+            t`Select a project before editing the execution environment.`
           )}
           globallyAvailable
           isDisabled={!projectField.value?.id}
@@ -339,7 +339,7 @@ function JobTemplateForm({
         {projectField.value?.allow_override && (
           <FieldWithPrompt
             fieldId="template-scm-branch"
-            label={i18n._(msg`Source Control Branch`)}
+            label={i18n._(t`Source Control Branch`)}
             promptId="template-ask-scm-branch-on-launch"
             promptName="ask_scm_branch_on_launch"
             tooltip={helpText.sourceControlBranch}
@@ -350,7 +350,7 @@ function JobTemplateForm({
                 scmHelpers.setValue(value);
               }}
               value={scmField.value}
-              aria-label={i18n._(msg`source control branch`)}
+              aria-label={i18n._(t`source control branch`)}
             />
           </FieldWithPrompt>
         )}
@@ -361,7 +361,7 @@ function JobTemplateForm({
             !playbookMeta.touched || !playbookMeta.error ? 'default' : 'error'
           }
           isRequired
-          label={i18n._(msg`Playbook`)}
+          label={i18n._(t`Playbook`)}
           labelIcon={<Popover content={helpText.playbook} />}
         >
           <PlaybookSelect
@@ -376,7 +376,7 @@ function JobTemplateForm({
         <FormFullWidthLayout>
           <FieldWithPrompt
             fieldId="template-credentials"
-            label={i18n._(msg`Credentials`)}
+            label={i18n._(t`Credentials`)}
             promptId="template-ask-credential-on-launch"
             promptName="ask_credential_on_launch"
             tooltip={helpText.credentials}
@@ -391,7 +391,7 @@ function JobTemplateForm({
           </FieldWithPrompt>
           <FieldWithPrompt
             fieldId="template-labels"
-            label={i18n._(msg`Labels`)}
+            label={i18n._(t`Labels`)}
             promptId="template-ask-labels-on-launch"
             promptName="ask_labels_on_launch"
             tooltip={helpText.labels}
@@ -400,20 +400,20 @@ function JobTemplateForm({
               value={labelsField.value}
               onChange={(labels) => labelsHelpers.setValue(labels)}
               onError={setContentError}
-              createText={i18n._(msg`Create`)}
+              createText={i18n._(t`Create`)}
             />
           </FieldWithPrompt>
           <VariablesField
             id="template-variables"
             name="extra_vars"
-            label={i18n._(msg`Variables`)}
+            label={i18n._(t`Variables`)}
             promptId="template-ask-variables-on-launch"
             tooltip={helpText.variables}
           />
           <FormColumnLayout>
             <FieldWithPrompt
               fieldId="template-forks"
-              label={i18n._(msg`Forks`)}
+              label={i18n._(t`Forks`)}
               promptId="template-ask-forks-on-launch"
               promptName="ask_forks_on_launch"
               tooltip={helpText.forks}
@@ -433,7 +433,7 @@ function JobTemplateForm({
             </FieldWithPrompt>
             <FieldWithPrompt
               fieldId="template-limit"
-              label={i18n._(msg`Limit`)}
+              label={i18n._(t`Limit`)}
               promptId="template-ask-limit-on-launch"
               promptName="ask_limit_on_launch"
               tooltip={helpText.limit}
@@ -457,7 +457,7 @@ function JobTemplateForm({
             />
             <FieldWithPrompt
               fieldId="template-job-slicing"
-              label={i18n._(msg`Job Slicing`)}
+              label={i18n._(t`Job Slicing`)}
               promptId="template-ask-job-slicing-on-launch"
               promptName="ask_job_slice_count_on_launch"
               tooltip={helpText.jobSlicing}
@@ -479,7 +479,7 @@ function JobTemplateForm({
             </FieldWithPrompt>
             <FieldWithPrompt
               fieldId="template-timeout"
-              label={i18n._(msg`Timeout`)}
+              label={i18n._(t`Timeout`)}
               promptId="template-ask-timeout-on-launch"
               promptName="ask_timeout_on_launch"
               tooltip={helpText.timeout}
@@ -501,14 +501,14 @@ function JobTemplateForm({
             </FieldWithPrompt>
             <FieldWithPrompt
               fieldId="template-diff-mode"
-              label={i18n._(msg`Show Changes`)}
+              label={i18n._(t`Show Changes`)}
               promptId="template-ask-diff-mode-on-launch"
               promptName="ask_diff_mode_on_launch"
               tooltip={helpText.showChanges}
             >
               <Switch
                 id="template-show-changes"
-                label={diffModeField.value ? i18n._(msg`On`) : i18n._(msg`Off`)}
+                label={diffModeField.value ? i18n._(t`On`) : i18n._(t`Off`)}
                 isChecked={diffModeField.value}
                 onChange={(checked) => diffModeHelpers.setValue(checked)}
               />
@@ -525,7 +525,7 @@ function JobTemplateForm({
               />
               <FieldWithPrompt
                 fieldId="template-tags"
-                label={i18n._(msg`Job Tags`)}
+                label={i18n._(t`Job Tags`)}
                 promptId="template-ask-tags-on-launch"
                 promptName="ask_tags_on_launch"
                 tooltip={helpText.jobTags}
@@ -537,7 +537,7 @@ function JobTemplateForm({
               </FieldWithPrompt>
               <FieldWithPrompt
                 fieldId="template-skip-tags"
-                label={i18n._(msg`Skip Tags`)}
+                label={i18n._(t`Skip Tags`)}
                 promptId="template-ask-skip-tags-on-launch"
                 promptName="ask_skip_tags_on_launch"
                 tooltip={helpText.skipTags}
@@ -549,20 +549,20 @@ function JobTemplateForm({
               </FieldWithPrompt>
               <FormGroup
                 fieldId="template-option-checkboxes"
-                label={i18n._(msg`Options`)}
+                label={i18n._(t`Options`)}
               >
                 <FormCheckboxLayout>
                   <CheckboxField
                     id="option-privilege-escalation"
                     name="become_enabled"
-                    label={i18n._(msg`Privilege Escalation`)}
+                    label={i18n._(t`Privilege Escalation`)}
                     tooltip={helpText.privilegeEscalation}
                   />
                   <Checkbox
-                    aria-label={i18n._(msg`Provisioning Callbacks`)}
+                    aria-label={i18n._(t`Provisioning Callbacks`)}
                     label={
                       <span>
-                        {i18n._(msg`Provisioning Callbacks`)}
+                        {i18n._(t`Provisioning Callbacks`)}
                         &nbsp;
                         <Popover
                           content={helpText.provisioningCallbacks(brandName)}
@@ -577,10 +577,10 @@ function JobTemplateForm({
                     }}
                   />
                   <Checkbox
-                    aria-label={i18n._(msg`Enable Webhook`)}
+                    aria-label={i18n._(t`Enable Webhook`)}
                     label={
                       <span>
-                        {i18n._(msg`Enable Webhook`)}
+                        {i18n._(t`Enable Webhook`)}
                         &nbsp;
                         <Popover content={helpText.enableWebhook} />
                       </span>
@@ -595,19 +595,19 @@ function JobTemplateForm({
                   <CheckboxField
                     id="option-concurrent"
                     name="allow_simultaneous"
-                    label={i18n._(msg`Concurrent Jobs`)}
+                    label={i18n._(t`Concurrent Jobs`)}
                     tooltip={helpText.concurrentJobs}
                   />
                   <CheckboxField
                     id="option-fact-cache"
                     name="use_fact_cache"
-                    label={i18n._(msg`Enable Fact Storage`)}
+                    label={i18n._(t`Enable Fact Storage`)}
                     tooltip={helpText.enableFactStorage}
                   />
                   <CheckboxField
                     id="option-prevent-instance-group-fallback"
                     name="prevent_instance_group_fallback"
-                    label={i18n._(msg`Prevent Instance Group Fallback`)}
+                    label={i18n._(t`Prevent Instance Group Fallback`)}
                     tooltip={helpText.preventInstanceGroupFallback}
                   />
                 </FormCheckboxLayout>
@@ -619,12 +619,12 @@ function JobTemplateForm({
                 {allowCallbacks && (
                   <>
                     <Title size="md" headingLevel="h4">
-                      {i18n._(msg`Provisioning Callback details`)}
+                      {i18n._(t`Provisioning Callback details`)}
                     </Title>
                     <FormColumnLayout>
                       {callbackUrl && (
                         <FormGroup
-                          label={i18n._(msg`Provisioning Callback URL`)}
+                          label={i18n._(t`Provisioning Callback URL`)}
                           fieldId="template-callback-url"
                         >
                           <TextInput
@@ -637,7 +637,7 @@ function JobTemplateForm({
                       <FormField
                         id="template-host-config-key"
                         name="host_config_key"
-                        label={i18n._(msg`Host Config Key`)}
+                        label={i18n._(t`Host Config Key`)}
                         validate={allowCallbacks ? required(null) : null}
                         isRequired={allowCallbacks}
                       />
@@ -650,7 +650,7 @@ function JobTemplateForm({
                 {enableWebhooks && (
                   <>
                     <Title size="md" headingLevel="h4">
-                      {i18n._(msg`Webhook details`)}
+                      {i18n._(t`Webhook details`)}
                     </Title>
                     <FormColumnLayout>
                       <WebhookSubForm templateType={template.type} />

@@ -1,7 +1,7 @@
 import 'styled-components/macro';
 import React, { useEffect, useState } from 'react';
 import { string, func, bool, arrayOf } from 'prop-types';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import {
   Button,
@@ -139,18 +139,18 @@ function AdvancedSearch({
   const renderSetType = () => (
     <Select
       ouiaId="set-type-typeahead"
-      aria-label={i18n._(msg`Set type select`)}
+      aria-label={i18n._(t`Set type select`)}
       className="setTypeSelect"
       variant={SelectVariant.typeahead}
-      typeAheadAriaLabel={i18n._(msg`Set type typeahead`)}
+      typeAheadAriaLabel={i18n._(t`Set type typeahead`)}
       onToggle={setIsPrefixDropdownOpen}
       onSelect={(event, selection) => setPrefixSelection(selection)}
       onClear={() => setPrefixSelection(null)}
       selections={prefixSelection}
       isOpen={isPrefixDropdownOpen}
-      placeholderText={i18n._(msg`Set type`)}
+      placeholderText={i18n._(t`Set type`)}
       maxHeight={maxSelectHeight}
-      noResultsFoundText={i18n._(msg`No results found`)}
+      noResultsFoundText={i18n._(t`No results found`)}
       isDisabled={lookupSelection === 'search'}
     >
       <SelectOption
@@ -158,7 +158,7 @@ function AdvancedSearch({
         key="and"
         value="and"
         description={i18n._(
-          msg`Returns results that satisfy this one as well as other filters.  This is the default set type if nothing is selected.`
+          t`Returns results that satisfy this one as well as other filters.  This is the default set type if nothing is selected.`
         )}
       />
       <SelectOption
@@ -166,7 +166,7 @@ function AdvancedSearch({
         key="or"
         value="or"
         description={i18n._(
-          msg`Returns results that satisfy this one or any other filters.`
+          t`Returns results that satisfy this one or any other filters.`
         )}
       />
       {enableNegativeFiltering && (
@@ -175,7 +175,7 @@ function AdvancedSearch({
           key="not"
           value="not"
           description={i18n._(
-            msg`Returns results that have values other than this one as well as other filters.`
+            t`Returns results that have values other than this one as well as other filters.`
           )}
         />
       )}
@@ -212,16 +212,16 @@ function AdvancedSearch({
       return (
         <Tooltip
           content={i18n._(
-            msg`Remove the current search related to ansible facts to enable another search using this key.`
+            t`Remove the current search related to ansible facts to enable another search using this key.`
           )}
         >
           <TextInput
             data-cy="advanced-search-text-input"
             type="search"
-            aria-label={i18n._(msg`Advanced search value input`)}
+            aria-label={i18n._(t`Advanced search value input`)}
             isDisabled={!keySelection || isTextInputDisabled}
             value={
-              (!keySelection && i18n._(msg`First, select a key`)) || searchValue
+              (!keySelection && i18n._(t`First, select a key`)) || searchValue
             }
             onChange={setSearchValue}
             onKeyDown={handleAdvancedTextKeyDown}
@@ -234,10 +234,10 @@ function AdvancedSearch({
       <TextInput
         data-cy="advanced-search-text-input"
         type="search"
-        aria-label={i18n._(msg`Advanced search value input`)}
+        aria-label={i18n._(t`Advanced search value input`)}
         isDisabled={!keySelection}
         value={
-          (!keySelection && i18n._(msg`First, select a key`)) || searchValue
+          (!keySelection && i18n._(t`First, select a key`)) || searchValue
         }
         onChange={setSearchValue}
         onKeyDown={handleAdvancedTextKeyDown}
@@ -251,7 +251,7 @@ function AdvancedSearch({
     return lookupSelection === 'search' ? (
       <Tooltip
         content={i18n._(
-          msg`Set type disabled for related search field fuzzy searches`
+          t`Set type disabled for related search field fuzzy searches`
         )}
       >
         {renderSetType()}
@@ -266,25 +266,25 @@ function AdvancedSearch({
       {renderLookupSelection()}
       <Select
         ouiaId="set-key-typeahead"
-        aria-label={i18n._(msg`Key select`)}
+        aria-label={i18n._(t`Key select`)}
         className="keySelect"
         variant={SelectVariant.typeahead}
-        typeAheadAriaLabel={i18n._(msg`Key typeahead`)}
+        typeAheadAriaLabel={i18n._(t`Key typeahead`)}
         onToggle={setIsKeyDropdownOpen}
         onSelect={(event, selection) => setKeySelection(selection)}
         onClear={() => setKeySelection(null)}
         selections={keySelection}
         isOpen={isKeyDropdownOpen}
-        placeholderText={i18n._(msg`Key`)}
+        placeholderText={i18n._(t`Key`)}
         isGrouped
         onCreateOption={setKeySelection}
         maxHeight={maxSelectHeight}
-        noResultsFoundText={i18n._(msg`No results found`)}
+        noResultsFoundText={i18n._(t`No results found`)}
       >
         {[
           ...(searchableKeys.length
             ? [
-                <SelectGroup key="direct keys" label={i18n._(msg`Direct Keys`)}>
+                <SelectGroup key="direct keys" label={i18n._(t`Direct Keys`)}>
                   {searchableKeys.map((k) => (
                     <SelectOption
                       value={k.key}
@@ -302,7 +302,7 @@ function AdvancedSearch({
             ? [
                 <SelectGroup
                   key="related keys"
-                  label={i18n._(msg`Related Keys`)}
+                  label={i18n._(t`Related Keys`)}
                 >
                   {relatedKeys.map((rKey) => (
                     <SelectOption
@@ -327,7 +327,7 @@ function AdvancedSearch({
             ouiaId="advanced-search-text-input"
             variant={ButtonVariant.control}
             isDisabled={!searchValue}
-            aria-label={i18n._(msg`Search submit button`)}
+            aria-label={i18n._(t`Search submit button`)}
             onClick={handleAdvancedSearch}
           >
             <SearchIcon />
@@ -335,7 +335,7 @@ function AdvancedSearch({
         </div>
       </InputGroup>
       <Tooltip
-        content={i18n._(msg`Advanced search documentation`)}
+        content={i18n._(t`Advanced search documentation`)}
         position="bottom"
       >
         <Button

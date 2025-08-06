@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { func, node, string } from 'prop-types';
 import { useLocation } from 'react-router-dom';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { FormGroup } from '@patternfly/react-core';
 import { ApplicationsAPI } from 'api';
@@ -82,7 +82,7 @@ function ApplicationLookup({ onChange, value, label, fieldName, validate }) {
     <FormGroup fieldId="application" label={label}>
       <Lookup
         id="application"
-        header={i18n._(msg`Application`)}
+        header={i18n._(t`Application`)}
         value={value}
         onChange={onChange}
         onUpdate={fetchApplications}
@@ -95,34 +95,34 @@ function ApplicationLookup({ onChange, value, label, fieldName, validate }) {
             value={state.selectedItems}
             options={applications}
             optionCount={itemCount}
-            header={i18n._(msg`Applications`)}
+            header={i18n._(t`Applications`)}
             qsConfig={QS_CONFIG}
             searchColumns={[
               {
-                name: i18n._(msg`Name`),
+                name: i18n._(t`Name`),
                 key: 'name__icontains',
                 isDefault: true,
               },
               {
-                name: i18n._(msg`Description`),
+                name: i18n._(t`Description`),
                 key: 'description__icontains',
               },
             ]}
             sortColumns={[
               {
-                name: i18n._(msg`Name`),
+                name: i18n._(t`Name`),
                 key: 'name',
               },
               {
-                name: i18n._(msg`Created`),
+                name: i18n._(t`Created`),
                 key: 'created',
               },
               {
-                name: i18n._(msg`Organization`),
+                name: i18n._(t`Organization`),
                 key: 'organization',
               },
               {
-                name: i18n._(msg`Description`),
+                name: i18n._(t`Description`),
                 key: 'description',
               },
             ]}

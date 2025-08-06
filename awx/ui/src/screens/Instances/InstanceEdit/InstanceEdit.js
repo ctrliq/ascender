@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { useHistory, useParams, Link } from 'react-router-dom';
 import { Card, PageSection } from '@patternfly/react-core';
@@ -79,8 +79,8 @@ function InstanceEdit({ setBreadcrumb }) {
         <ContentError error={error}>
           {error?.response?.status === 404 && (
             <span>
-              {i18n._(msg`Instance not found.`)}{' '}
-              <Link to="/instances">{i18n._(msg`View all Instances.`)}</Link>
+              {i18n._(t`Instance not found.`)}{' '}
+              <Link to="/instances">{i18n._(t`View all Instances.`)}</Link>
             </span>
           )}
         </ContentError>

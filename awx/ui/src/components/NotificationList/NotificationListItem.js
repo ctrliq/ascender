@@ -1,7 +1,7 @@
 import React from 'react';
 import { shape, number, string, bool, func } from 'prop-types';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 
 import { Link } from 'react-router-dom';
@@ -28,24 +28,24 @@ function NotificationListItem({
       id={`notification-row-${notification.id}`}
       ouiaId={`notification-row-${notification.id}`}
     >
-      <Td id={`notification-${notification.id}`} dataLabel={i18n._(msg`Name`)}>
+      <Td id={`notification-${notification.id}`} dataLabel={i18n._(t`Name`)}>
         <Link to={`${detailUrl}`}>
           <b>{notification.name}</b>
         </Link>
       </Td>
-      <Td dataLabel={i18n._(msg`Type`)}>
+      <Td dataLabel={i18n._(t`Type`)}>
         {typeLabels[notification.notification_type]}
       </Td>
       <ActionsTd
-        dataLabel={i18n._(msg`Options`)}
+        dataLabel={i18n._(t`Options`)}
         gridColumns="120px 120px 120px 120px"
       >
         <ActionItem visible={showApprovalsToggle}>
           <Switch
             id={`notification-${notification.id}-approvals-toggle`}
             ouiaId={`notification-${notification.id}-approvals-toggle`}
-            label={i18n._(msg`Approval`)}
-            labelOff={i18n._(msg`Approval`)}
+            label={i18n._(t`Approval`)}
+            labelOff={i18n._(t`Approval`)}
             isChecked={approvalsTurnedOn}
             isDisabled={!canToggleNotifications}
             onChange={() =>
@@ -55,49 +55,49 @@ function NotificationListItem({
                 'approvals'
               )
             }
-            aria-label={i18n._(msg`Toggle notification approvals`)}
+            aria-label={i18n._(t`Toggle notification approvals`)}
           />
         </ActionItem>
         <ActionItem visible>
           <Switch
             id={`notification-${notification.id}-started-toggle`}
             ouiaId={`notification-${notification.id}-started-toggle`}
-            label={i18n._(msg`Start`)}
-            labelOff={i18n._(msg`Start`)}
+            label={i18n._(t`Start`)}
+            labelOff={i18n._(t`Start`)}
             isChecked={startedTurnedOn}
             isDisabled={!canToggleNotifications}
             onChange={() =>
               toggleNotification(notification.id, startedTurnedOn, 'started')
             }
-            aria-label={i18n._(msg`Toggle notification start`)}
+            aria-label={i18n._(t`Toggle notification start`)}
           />
         </ActionItem>
         <ActionItem visible>
           <Switch
             id={`notification-${notification.id}-success-toggle`}
             ouiaId={`notification-${notification.id}-success-toggle`}
-            label={i18n._(msg`Success`)}
-            labelOff={i18n._(msg`Success`)}
+            label={i18n._(t`Success`)}
+            labelOff={i18n._(t`Success`)}
             isChecked={successTurnedOn}
             isDisabled={!canToggleNotifications}
             onChange={() =>
               toggleNotification(notification.id, successTurnedOn, 'success')
             }
-            aria-label={i18n._(msg`Toggle notification success`)}
+            aria-label={i18n._(t`Toggle notification success`)}
           />
         </ActionItem>
         <ActionItem visible>
           <Switch
             id={`notification-${notification.id}-error-toggle`}
             ouiaId={`notification-${notification.id}-error-toggle`}
-            label={i18n._(msg`Failure`)}
-            labelOff={i18n._(msg`Failure`)}
+            label={i18n._(t`Failure`)}
+            labelOff={i18n._(t`Failure`)}
             isChecked={errorTurnedOn}
             isDisabled={!canToggleNotifications}
             onChange={() =>
               toggleNotification(notification.id, errorTurnedOn, 'error')
             }
-            aria-label={i18n._(msg`Toggle notification failure`)}
+            aria-label={i18n._(t`Toggle notification failure`)}
           />
         </ActionItem>
       </ActionsTd>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFormikContext } from 'formik';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import StepName from '../LaunchPrompt/steps/StepName';
 import CredentialPasswordsStep from '../LaunchPrompt/steps/CredentialPasswordsStep';
@@ -22,7 +22,7 @@ export default function useCredentialPasswordsStep(showStep, visitedSteps) {
           id: STEP_ID,
           name: (
             <StepName hasErrors={hasError} id="credential-passwords-step">
-              {i18n._(msg`Credential passwords`)}
+              {i18n._(t`Credential passwords`)}
             </StepName>
           ),
           component: <CredentialPasswordsStep launchConfig={{}} />,
@@ -43,7 +43,7 @@ export default function useCredentialPasswordsStep(showStep, visitedSteps) {
     },
     validate: () => {
       const setPasswordFieldError = (fieldName) => {
-        setFieldError(fieldName, i18n._(msg`This field may not be blank`));
+        setFieldError(fieldName, i18n._(t`This field may not be blank`));
       };
 
       Object.entries(values.credentials[0].inputs).forEach(([key, value]) => {

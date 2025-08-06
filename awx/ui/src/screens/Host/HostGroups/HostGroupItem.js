@@ -2,7 +2,7 @@ import React from 'react';
 import { bool, func, number, oneOfType, string } from 'prop-types';
 
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 
 import { Button } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
@@ -25,18 +25,18 @@ function HostGroupItem({ group, inventoryId, isSelected, onSelect, rowIndex }) {
           isSelected,
           onSelect,
         }}
-        dataLabel={i18n._(msg`Selected`)}
+        dataLabel={i18n._(t`Selected`)}
       />
-      <Td dataLabel={i18n._(msg`Name`)}>
+      <Td dataLabel={i18n._(t`Name`)}>
         {' '}
         <Link to={`${detailUrl}`} id={labelId}>
           <b>{group.name}</b>
         </Link>
       </Td>
-      <ActionsTd dataLabel={i18n._(msg`Actions`)}>
+      <ActionsTd dataLabel={i18n._(t`Actions`)}>
         <ActionItem
           visible={group.summary_fields.user_capabilities.edit}
-          tooltip={i18n._(msg`Edit Group`)}
+          tooltip={i18n._(t`Edit Group`)}
         >
           <Button
             ouiaId={`${group.id}-edit-button`}

@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import {
   Switch,
   Route,
@@ -64,29 +64,29 @@ function InventoryHost({ setBreadcrumb, inventory }) {
       name: (
         <>
           <CaretLeftIcon />
-          {i18n._(msg`Back to Hosts`)}
+          {i18n._(t`Back to Hosts`)}
         </>
       ),
       link: `${hostListUrl}`,
       id: 0,
     },
     {
-      name: i18n._(msg`Details`),
+      name: i18n._(t`Details`),
       link: `${match.url}/details`,
       id: 1,
     },
     {
-      name: i18n._(msg`Facts`),
+      name: i18n._(t`Facts`),
       link: `${match.url}/facts`,
       id: 2,
     },
     {
-      name: i18n._(msg`Groups`),
+      name: i18n._(t`Groups`),
       link: `${match.url}/groups`,
       id: 3,
     },
     {
-      name: i18n._(msg`Jobs`),
+      name: i18n._(t`Jobs`),
       link: `${match.url}/jobs`,
       id: 4,
     },
@@ -98,9 +98,9 @@ function InventoryHost({ setBreadcrumb, inventory }) {
         <ContentError error={contentError}>
           {contentError.response && contentError.response.status === 404 && (
             <span>
-              {i18n._(msg`Host not found.`)}{' '}
+              {i18n._(t`Host not found.`)}{' '}
               <Link to={hostListUrl}>
-                {i18n._(msg`View all Inventory Hosts.`)}
+                {i18n._(t`View all Inventory Hosts.`)}
               </Link>
             </span>
           )}
@@ -160,7 +160,7 @@ function InventoryHost({ setBreadcrumb, inventory }) {
           <Route key="not-found" path="*">
             <ContentError isNotFound>
               <Link to={`${match.url}/details`}>
-                {i18n._(msg`View Inventory Host Details`)}
+                {i18n._(t`View Inventory Host Details`)}
               </Link>
             </ContentError>
           </Route>

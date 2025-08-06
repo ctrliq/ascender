@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { useHistory, useParams } from 'react-router-dom';
 import { Button } from '@patternfly/react-core';
@@ -29,25 +29,25 @@ function InventoryGroupDetail({ inventoryGroup }) {
     <CardBody>
       <DetailList gutter="sm">
         <Detail
-          label={i18n._(msg`Name`)}
+          label={i18n._(t`Name`)}
           value={name}
           dataCy="inventory-group-detail-name"
         />
-        <Detail label={i18n._(msg`Description`)} value={description} />
+        <Detail label={i18n._(t`Description`)} value={description} />
         <VariablesDetail
-          label={i18n._(msg`Variables`)}
+          label={i18n._(t`Variables`)}
           value={variables}
           rows={4}
           name="variables"
           dataCy="inventory-group-detail-variables"
         />
         <UserDateDetail
-          label={i18n._(msg`Created`)}
+          label={i18n._(t`Created`)}
           date={created}
           user={created_by}
         />
         <UserDateDetail
-          label={i18n._(msg`Last Modified`)}
+          label={i18n._(t`Last Modified`)}
           date={modified}
           user={modified_by}
         />
@@ -58,14 +58,14 @@ function InventoryGroupDetail({ inventoryGroup }) {
             <Button
               ouiaId="inventory-group-detail-edit-button"
               variant="primary"
-              aria-label={i18n._(msg`Edit`)}
+              aria-label={i18n._(t`Edit`)}
               onClick={() =>
                 history.push(
                   `/inventories/inventory/${id}/groups/${groupId}/edit`
                 )
               }
             >
-              {i18n._(msg`Edit`)}
+              {i18n._(t`Edit`)}
             </Button>
           )}
           {user_capabilities?.delete && (
@@ -82,11 +82,11 @@ function InventoryGroupDetail({ inventoryGroup }) {
       {error && (
         <AlertModal
           variant="error"
-          title={i18n._(msg`Error!`)}
+          title={i18n._(t`Error!`)}
           isOpen={error}
           onClose={() => setError(false)}
         >
-          {i18n._(msg`Failed to delete group ${inventoryGroup.name}.`)}
+          {i18n._(t`Failed to delete group ${inventoryGroup.name}.`)}
           <ErrorDetail error={error} />
         </AlertModal>
       )}

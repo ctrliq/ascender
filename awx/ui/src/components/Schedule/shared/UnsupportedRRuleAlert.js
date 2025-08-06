@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { Alert } from '@patternfly/react-core';
 
 const AlertWrapper = styled.div`
@@ -23,10 +23,10 @@ export default function UnsupportedRRuleAlert({ schedule }) {
         variant="danger"
         ouiaId="schedule-warning"
         title={i18n._(
-          msg`This schedule uses complex rules that are not supported in the\n        UI.  Please use the API to manage this schedule.`
+          t`This schedule uses complex rules that are not supported in the\n        UI.  Please use the API to manage this schedule.`
         )}
       />
-      <RulesTitle>{i18n._(msg`Schedule Rules`)}:</RulesTitle>
+      <RulesTitle>{i18n._(t`Schedule Rules`)}:</RulesTitle>
       <pre css="white-space: pre; font-family: var(--pf-global--FontFamily--monospace)">
         {schedule.rrule.split(' ').join('\n')}
       </pre>

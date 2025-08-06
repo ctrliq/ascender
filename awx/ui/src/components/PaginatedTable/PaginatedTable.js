@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import { TableComposable, Tbody } from '@patternfly/react-table';
 import { useLocation, useHistory } from 'react-router-dom';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 
 import { parseQueryString, updateQueryString } from 'util/qs';
@@ -44,7 +44,7 @@ function PaginatedTable({
   const history = useHistory();
   const location = useLocation();
   if (!pluralizedItemName) {
-    pluralizedItemName = i18n._(msg`Items`);
+    pluralizedItemName = i18n._(t`Items`);
   }
 
   useEffect(() => {
@@ -74,15 +74,15 @@ function PaginatedTable({
     ? toolbarSearchColumns
     : [
         {
-          name: i18n._(msg`Name`),
+          name: i18n._(t`Name`),
           key: 'name',
           isDefault: true,
         },
       ];
   const queryParams = parseQueryString(qsConfig, history.location.search);
 
-  const dataListLabel = i18n._(msg`${pluralizedItemName} List`);
-  const emptyContentTitle = i18n._(msg`No ${pluralizedItemName} Found `);
+  const dataListLabel = i18n._(t`${pluralizedItemName} List`);
+  const emptyContentTitle = i18n._(t`No ${pluralizedItemName} Found `);
 
   let Content;
   if (hasContentLoading && items.length <= 0) {
@@ -95,7 +95,7 @@ function PaginatedTable({
         title={emptyContentTitle}
         message={
           emptyContentMessage ||
-          i18n._(msg`Please add ${pluralizedItemName} to populate this list `)
+          i18n._(t`Please add ${pluralizedItemName} to populate this list `)
         }
       />
     );

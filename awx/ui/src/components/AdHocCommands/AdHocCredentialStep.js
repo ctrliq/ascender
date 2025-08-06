@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
@@ -97,15 +97,15 @@ function AdHocCredentialStep({ credentialTypeId }) {
       <Form autoComplete="off">
         <FormGroup
           fieldId="credential"
-          label={i18n._(msg`Machine Credential`)}
-          aria-label={i18n._(msg`Machine Credential`)}
+          label={i18n._(t`Machine Credential`)}
+          aria-label={i18n._(t`Machine Credential`)}
           isRequired
           validated={!meta.touched || !meta.error ? 'default' : 'error'}
           helperTextInvalid={meta.error}
           labelIcon={
             <Popover
               content={i18n._(
-                msg`Select the credential you want to use when accessing the remote hosts to run the command. Choose the credential containing the username and SSH key or password that Ansible will need to log into the remote hosts.`
+                t`Select the credential you want to use when accessing the remote hosts to run the command. Choose the credential containing the username and SSH key or password that Ansible will need to log into the remote hosts.`
               )}
             />
           }
@@ -114,27 +114,27 @@ function AdHocCredentialStep({ credentialTypeId }) {
             value={field.value || []}
             options={credentials}
             optionCount={credentialCount}
-            header={i18n._(msg`Machine Credential`)}
+            header={i18n._(t`Machine Credential`)}
             readOnly
             qsConfig={QS_CONFIG}
             searchColumns={[
               {
-                name: i18n._(msg`Name`),
+                name: i18n._(t`Name`),
                 key: 'name__icontains',
                 isDefault: true,
               },
               {
-                name: i18n._(msg`Created By (Username)`),
+                name: i18n._(t`Created By (Username)`),
                 key: 'created_by__username__icontains',
               },
               {
-                name: i18n._(msg`Modified By (Username)`),
+                name: i18n._(t`Modified By (Username)`),
                 key: 'modified_by__username__icontains',
               },
             ]}
             sortColumns={[
               {
-                name: i18n._(msg`Name`),
+                name: i18n._(t`Name`),
                 key: 'name',
               },
             ]}

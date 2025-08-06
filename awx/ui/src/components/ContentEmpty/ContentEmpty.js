@@ -1,5 +1,5 @@
 import React from 'react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import {
   Title,
@@ -20,7 +20,7 @@ const ContentEmpty = ({
     <EmptyState variant="full" className={className}>
       <EmptyStateIcon icon={icon} />
       <Title size="lg" headingLevel="h3">
-        {title || i18n._(msg`No items found.`)}
+        {title || i18n._(t`No items found.`)}
       </Title>
       <EmptyStateBody>{message}</EmptyStateBody>
     </EmptyState>

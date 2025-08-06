@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { Formik, useField, useFormikContext } from 'formik';
 import { Form, FormGroup } from '@patternfly/react-core';
 import { useConfig } from 'contexts/Config';
@@ -27,19 +27,19 @@ function UserFormFields({ user }) {
     {
       value: 'normal',
       key: 'normal',
-      label: i18n._(msg`Normal User`),
+      label: i18n._(t`Normal User`),
       isDisabled: false,
     },
     {
       value: 'auditor',
       key: 'auditor',
-      label: i18n._(msg`System Auditor`),
+      label: i18n._(t`System Auditor`),
       isDisabled: false,
     },
     {
       value: 'administrator',
       key: 'administrator',
-      label: i18n._(msg`System Administrator`),
+      label: i18n._(t`System Administrator`),
       isDisabled: false,
     },
   ];
@@ -61,25 +61,25 @@ function UserFormFields({ user }) {
     <>
       <FormField
         id="user-first-name"
-        label={i18n._(msg`First Name`)}
+        label={i18n._(t`First Name`)}
         name="first_name"
         type="text"
       />
       <FormField
         id="user-last-name"
-        label={i18n._(msg`Last Name`)}
+        label={i18n._(t`Last Name`)}
         name="last_name"
         type="text"
       />
       <FormField
         id="user-email"
-        label={i18n._(msg`Email`)}
+        label={i18n._(t`Email`)}
         name="email"
         type="text"
       />
       <FormField
         id="user-username"
-        label={i18n._(msg`Username`)}
+        label={i18n._(t`Username`)}
         name="username"
         type="text"
         validate={
@@ -91,22 +91,22 @@ function UserFormFields({ user }) {
         <>
           <PasswordField
             id="user-password"
-            label={i18n._(msg`Password`)}
+            label={i18n._(t`Password`)}
             name="password"
             validate={
               !user.id
-                ? required(i18n._(msg`This field must not be blank`))
+                ? required(i18n._(t`This field must not be blank`))
                 : () => undefined
             }
             isRequired={!user.id}
           />
           <PasswordField
             id="user-confirm-password"
-            label={i18n._(msg`Confirm Password`)}
+            label={i18n._(t`Confirm Password`)}
             name="confirm_password"
             validate={
               !user.id
-                ? required(i18n._(msg`This field must not be blank`))
+                ? required(i18n._(t`This field must not be blank`))
                 : () => undefined
             }
             isRequired={!user.id}
@@ -122,7 +122,7 @@ function UserFormFields({ user }) {
           validated={
             !userTypeMeta.touched || !userTypeMeta.error ? 'default' : 'error'
           }
-          label={i18n._(msg`User Type`)}
+          label={i18n._(t`User Type`)}
         >
           <AnsibleSelect
             isValid={!userTypeMeta.touched || !userTypeMeta.error}
@@ -142,7 +142,7 @@ function UserFormFields({ user }) {
           value={organizationField.value}
           required
           autoPopulate={!user?.id}
-          validate={required(i18n._(msg`Select a value for this field`))}
+          validate={required(i18n._(t`Select a value for this field`))}
         />
       )}
     </>
@@ -155,7 +155,7 @@ function UserForm({ user, handleCancel, handleSubmit, submitError }) {
     if (values.password !== values.confirm_password) {
       setErrors({
         confirm_password: i18n._(
-          msg`This value does not match the password you entered previously. Please confirm that password.`
+          t`This value does not match the password you entered previously. Please confirm that password.`
         ),
       });
     } else {

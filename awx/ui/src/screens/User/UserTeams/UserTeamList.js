@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import PaginatedTable, {
   HeaderRow,
   HeaderCell,
@@ -173,14 +173,14 @@ function UserTeamList() {
         contentError={contentError}
         hasContentLoading={isLoading || isDisassociateLoading}
         itemCount={count}
-        pluralizedItemName={i18n._(msg`Teams`)}
+        pluralizedItemName={i18n._(t`Teams`)}
         qsConfig={QS_CONFIG}
         clearSelected={clearSelected}
         headerRow={
           <HeaderRow qsConfig={QS_CONFIG}>
-            <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
-            <HeaderCell>{i18n._(msg`Organization`)}</HeaderCell>
-            <HeaderCell>{i18n._(msg`Description`)}</HeaderCell>
+            <HeaderCell sortKey="name">{i18n._(t`Name`)}</HeaderCell>
+            <HeaderCell>{i18n._(t`Organization`)}</HeaderCell>
+            <HeaderCell>{i18n._(t`Description`)}</HeaderCell>
           </HeaderRow>
         }
         renderRow={(team, index) => (
@@ -206,7 +206,7 @@ function UserTeamList() {
                     <ToolbarAddButton
                       key="associate"
                       onClick={() => setIsModalOpen(true)}
-                      defaultLabel={i18n._(msg`Associate`)}
+                      defaultLabel={i18n._(t`Associate`)}
                     />,
                   ]
                 : []),
@@ -214,9 +214,9 @@ function UserTeamList() {
                 key="disassociate"
                 onDisassociate={handleDisassociate}
                 itemsToDisassociate={selected}
-                modalTitle={i18n._(msg`Disassociate related team(s)?`)}
+                modalTitle={i18n._(t`Disassociate related team(s)?`)}
                 modalNote={i18n._(
-                  msg`This action will disassociate all roles for this user from the selected teams.`
+                  t`This action will disassociate all roles for this user from the selected teams.`
                 )}
               />,
             ]}
@@ -232,12 +232,12 @@ function UserTeamList() {
         )}
         toolbarSearchColumns={[
           {
-            name: i18n._(msg`Name`),
+            name: i18n._(t`Name`),
             key: 'name__icontains',
             isDefault: true,
           },
           {
-            name: i18n._(msg`Organization`),
+            name: i18n._(t`Organization`),
             key: 'organization__name__icontains',
           },
         ]}
@@ -246,12 +246,12 @@ function UserTeamList() {
       />
       {isModalOpen && (
         <AssociateModal
-          header={i18n._(msg`Teams`)}
+          header={i18n._(t`Teams`)}
           fetchRequest={fetchTeamsToAssociate}
           isModalOpen={isModalOpen}
           onAssociate={handleAssociate}
           onClose={() => setIsModalOpen(false)}
-          title={i18n._(msg`Select Teams`)}
+          title={i18n._(t`Select Teams`)}
           optionsRequest={readTeamOptions}
         />
       )}
@@ -259,12 +259,12 @@ function UserTeamList() {
         <AlertModal
           isOpen={error}
           onClose={dismissError}
-          title={i18n._(msg`Error!`)}
+          title={i18n._(t`Error!`)}
           variant="error"
         >
           {associateError
-            ? i18n._(msg`Failed to associate.`)
-            : i18n._(msg`Failed to disassociate one or more teams.`)}
+            ? i18n._(t`Failed to associate.`)
+            : i18n._(t`Failed to disassociate one or more teams.`)}
           <ErrorDetail error={error} />
         </AlertModal>
       )}

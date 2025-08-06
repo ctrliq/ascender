@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { number, shape } from 'prop-types';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import {
   AdHocCommandsAPI,
@@ -62,7 +62,7 @@ function LaunchButton({ resource, children }) {
   const showToast = () => {
     addToast({
       id: resource.id,
-      title: i18n._(msg`A job has already been launched`),
+      title: i18n._(t`A job has already been launched`),
       variant: AlertVariant.info,
       hasTimeout: true,
     });
@@ -236,10 +236,10 @@ function LaunchButton({ resource, children }) {
         <AlertModal
           isOpen={error}
           variant="error"
-          title={i18n._(msg`Error!`)}
+          title={i18n._(t`Error!`)}
           onClose={() => setError(null)}
         >
-          {i18n._(msg`Failed to launch job.`)}
+          {i18n._(t`Failed to launch job.`)}
           <ErrorDetail error={error} />
         </AlertModal>
       )}

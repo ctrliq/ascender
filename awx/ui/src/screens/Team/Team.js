@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 import React, { useState, useEffect } from 'react';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import {
   Link,
   Redirect,
@@ -49,16 +49,16 @@ function Team({ setBreadcrumb }) {
       name: (
         <>
           <CaretLeftIcon />
-          {i18n._(msg`Back to Teams`)}
+          {i18n._(t`Back to Teams`)}
         </>
       ),
       link: `/teams`,
       id: 99,
       persistentFilterKey: 'teams',
     },
-    { name: i18n._(msg`Details`), link: `/teams/${id}/details`, id: 0 },
-    { name: i18n._(msg`Access`), link: `/teams/${id}/access`, id: 1 },
-    { name: i18n._(msg`Roles`), link: `/teams/${id}/roles`, id: 2 },
+    { name: i18n._(t`Details`), link: `/teams/${id}/details`, id: 0 },
+    { name: i18n._(t`Access`), link: `/teams/${id}/access`, id: 1 },
+    { name: i18n._(t`Roles`), link: `/teams/${id}/roles`, id: 2 },
   ];
 
   let showCardHeader = true;
@@ -74,8 +74,8 @@ function Team({ setBreadcrumb }) {
           <ContentError error={contentError}>
             {contentError.response.status === 404 && (
               <span>
-                {i18n._(msg`Team not found.`)}{' '}
-                <Link to="/teams">{i18n._(msg`View all Teams.`)}</Link>
+                {i18n._(t`Team not found.`)}{' '}
+                <Link to="/teams">{i18n._(t`View all Teams.`)}</Link>
               </span>
             )}
           </ContentError>
@@ -117,7 +117,7 @@ function Team({ setBreadcrumb }) {
               <ContentError isNotFound>
                 {id && (
                   <Link to={`/teams/${id}/details`}>
-                    {i18n._(msg`View Team Details`)}
+                    {i18n._(t`View Team Details`)}
                   </Link>
                 )}
               </ContentError>

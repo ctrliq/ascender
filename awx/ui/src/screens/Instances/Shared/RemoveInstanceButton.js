@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { msg, Plural } from '@lingui/macro';
+import { t, Plural } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { KebabifiedContext } from 'contexts/Kebabified';
 import {
@@ -73,13 +73,13 @@ function RemoveInstanceButton({ itemsToRemove, onRemove, isK8s }) {
       .join(', ');
     if (itemsToRemove.some(cannotRemove)) {
       return i18n._(
-        msg`You do not have permission to remove instances: ${itemsUnableToremove}`
+        t`You do not have permission to remove instances: ${itemsUnableToremove}`
       );
     }
     if (itemsToRemove.length) {
-      return i18n._(msg`Remove`);
+      return i18n._(t`Remove`);
     }
-    return i18n._(msg`Select a row to remove`);
+    return i18n._(t`Select a row to remove`);
   };
 
   const isDisabled =
@@ -90,10 +90,10 @@ function RemoveInstanceButton({ itemsToRemove, onRemove, isK8s }) {
       <Plural
         value={itemsToRemove.length}
         one={i18n._(
-          msg`This intance is currently being used by other resources. Are you sure you want to delete it?`
+          t`This intance is currently being used by other resources. Are you sure you want to delete it?`
         )}
         other={i18n._(
-          msg`Deprovisioning these instances could impact other resources that rely on them. Are you sure you want to delete anyway?`
+          t`Deprovisioning these instances could impact other resources that rely on them. Are you sure you want to delete anyway?`
         )}
       />
       {removeDetails &&
@@ -110,7 +110,7 @@ function RemoveInstanceButton({ itemsToRemove, onRemove, isK8s }) {
     return (
       <AlertModal
         isOpen={removeMessageError}
-        title={i18n._(msg`Error!`)}
+        title={i18n._(t`Error!`)}
         onClose={() => {
           toggleModal(false);
           setRemoveMessageError();
@@ -135,7 +135,7 @@ function RemoveInstanceButton({ itemsToRemove, onRemove, isK8s }) {
               toggleModal(true);
             }}
           >
-            {i18n._(msg`Remove`)}
+            {i18n._(t`Remove`)}
           </DropdownItem>
         </Tooltip>
       ) : (
@@ -149,7 +149,7 @@ function RemoveInstanceButton({ itemsToRemove, onRemove, isK8s }) {
               onClick={() => toggleModal(true)}
               isDisabled={isDisabled || !isK8s}
             >
-              {i18n._(msg`Remove`)}
+              {i18n._(t`Remove`)}
             </Button>
           </div>
         </Tooltip>
@@ -158,7 +158,7 @@ function RemoveInstanceButton({ itemsToRemove, onRemove, isK8s }) {
       {isModalOpen && (
         <AlertModal
           variant="danger"
-          title={i18n._(msg`Remove Instances`)}
+          title={i18n._(t`Remove Instances`)}
           isOpen={isModalOpen}
           onClose={() => toggleModal(false)}
           actions={[
@@ -166,27 +166,27 @@ function RemoveInstanceButton({ itemsToRemove, onRemove, isK8s }) {
               ouiaId="remove-modal-confirm"
               key="remove"
               variant="danger"
-              aria-label={i18n._(msg`Confirm remove`)}
+              aria-label={i18n._(t`Confirm remove`)}
               onClick={handleRemove}
             >
-              {i18n._(msg`Remove`)}
+              {i18n._(t`Remove`)}
             </Button>,
             <Button
               ouiaId="remove-cancel"
               key="cancel"
               variant="link"
-              aria-label={i18n._(msg`cancel remove`)}
+              aria-label={i18n._(t`cancel remove`)}
               onClick={() => {
                 toggleModal(false);
               }}
             >
-              {i18n._(msg`Cancel`)}
+              {i18n._(t`Cancel`)}
             </Button>,
           ]}
         >
           <div>
             {i18n._(
-              msg`This action will remove the following instance and you may need to rerun the install bundle for any instance that was previously connected to:`
+              t`This action will remove the following instance and you may need to rerun the install bundle for any instance that was previously connected to:`
             )}
           </div>
           {itemsToRemove.map((item) => (

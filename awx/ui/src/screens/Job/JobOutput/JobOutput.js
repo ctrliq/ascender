@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import styled from 'styled-components';
 import {
@@ -724,7 +724,7 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
             variant="default"
             title={
               <>
-                {i18n._(msg`Events processing complete.`)}{' '}
+                {i18n._(t`Events processing complete.`)}{' '}
                 <Button
                   variant="link"
                   isInline
@@ -735,7 +735,7 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
                     setShowEventsRefresh(false);
                   }}
                 >
-                  {i18n._(msg`Reload output`)}
+                  {i18n._(t`Reload output`)}
                 </Button>
               </>
             }
@@ -815,32 +815,32 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
           isOpen={showCancelModal}
           variant="danger"
           onClose={() => setShowCancelModal(false)}
-          title={i18n._(msg`Cancel Job`)}
-          label={i18n._(msg`Cancel Job`)}
+          title={i18n._(t`Cancel Job`)}
+          label={i18n._(t`Cancel Job`)}
           actions={[
             <Button
               id="cancel-job-confirm-button"
               key="delete"
               variant="danger"
               isDisabled={isCancelling}
-              aria-label={i18n._(msg`Cancel job`)}
+              aria-label={i18n._(t`Cancel job`)}
               onClick={cancelJob}
             >
-              {i18n._(msg`Cancel job`)}
+              {i18n._(t`Cancel job`)}
             </Button>,
             <Button
               id="cancel-job-return-button"
               key="cancel"
               variant="secondary"
-              aria-label={i18n._(msg`Return`)}
+              aria-label={i18n._(t`Return`)}
               onClick={() => setShowCancelModal(false)}
             >
-              {i18n._(msg`Return`)}
+              {i18n._(t`Return`)}
             </Button>,
           ]}
         >
           {i18n._(
-            msg`Are you sure you want to submit the request to cancel this job?`
+            t`Are you sure you want to submit the request to cancel this job?`
           )}
         </AlertModal>
       )}
@@ -849,8 +849,8 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
           isOpen={dismissableDeleteError}
           variant="danger"
           onClose={dismissDeleteError}
-          title={i18n._(msg`Job Delete Error`)}
-          label={i18n._(msg`Job Delete Error`)}
+          title={i18n._(t`Job Delete Error`)}
+          label={i18n._(t`Job Delete Error`)}
         >
           <ErrorDetail error={dismissableDeleteError} />
         </AlertModal>
@@ -860,8 +860,8 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
           isOpen={dismissableCancelError}
           variant="danger"
           onClose={dismissCancelError}
-          title={i18n._(msg`Job Cancel Error`)}
-          label={i18n._(msg`Job Cancel Error`)}
+          title={i18n._(t`Job Cancel Error`)}
+          label={i18n._(t`Job Cancel Error`)}
         >
           <ErrorDetail error={dismissableCancelError} />
         </AlertModal>

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { useParams, useLocation, Link } from 'react-router-dom';
 
@@ -140,8 +140,8 @@ function InventoryRelatedGroupList() {
 
   const addFormUrl = `/inventories/inventory/${inventoryId}/groups/${groupId}/nested_groups/add`;
 
-  const addExistingGroup = i18n._(msg`Add existing group`);
-  const addNewGroup = i18n._(msg`Add new group`);
+  const addExistingGroup = i18n._(t`Add existing group`);
+  const addNewGroup = i18n._(t`Add new group`);
   const addButton = (
     <AddDropDownButton
       key="add"
@@ -175,27 +175,27 @@ function InventoryRelatedGroupList() {
         hasContentLoading={isLoading || isAdHocLaunchLoading}
         items={groups}
         itemCount={itemCount}
-        pluralizedItemName={i18n._(msg`Related Groups`)}
+        pluralizedItemName={i18n._(t`Related Groups`)}
         qsConfig={QS_CONFIG}
         onRowClick={handleSelect}
         toolbarSearchColumns={[
           {
-            name: i18n._(msg`Name`),
+            name: i18n._(t`Name`),
             key: 'name__icontains',
             isDefault: true,
           },
           {
-            name: i18n._(msg`Created By (Username)`),
+            name: i18n._(t`Created By (Username)`),
             key: 'created_by__username__icontains',
           },
           {
-            name: i18n._(msg`Modified By (Username)`),
+            name: i18n._(t`Modified By (Username)`),
             key: 'modified_by__username__icontains',
           },
         ]}
         toolbarSortColumns={[
           {
-            name: i18n._(msg`Name`),
+            name: i18n._(t`Name`),
             key: 'name',
           },
         ]}
@@ -227,7 +227,7 @@ function InventoryRelatedGroupList() {
                       key="disassociate"
                       onDisassociate={disassociateGroups}
                       itemsToDisassociate={selected}
-                      modalTitle={i18n._(msg`Disassociate related group(s)?`)}
+                      modalTitle={i18n._(t`Disassociate related group(s)?`)}
                     />,
                   ]
                 : []),
@@ -236,9 +236,9 @@ function InventoryRelatedGroupList() {
         )}
         headerRow={
           <HeaderRow qsConfig={QS_CONFIG}>
-            <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
+            <HeaderCell sortKey="name">{i18n._(t`Name`)}</HeaderCell>
             {isNotConstructedInventory && (
-              <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
+              <HeaderCell>{i18n._(t`Actions`)}</HeaderCell>
             )}
           </HeaderRow>
         }
@@ -257,25 +257,25 @@ function InventoryRelatedGroupList() {
       />
       {isModalOpen && (
         <AssociateModal
-          header={i18n._(msg`Groups`)}
+          header={i18n._(t`Groups`)}
           fetchRequest={fetchGroupsToAssociate}
           optionsRequest={fetchGroupsOptions}
           isModalOpen={isModalOpen}
           onAssociate={associateGroup}
           onClose={() => setIsModalOpen(false)}
-          title={i18n._(msg`Select Groups`)}
+          title={i18n._(t`Select Groups`)}
         />
       )}
       {error && (
         <AlertModal
           isOpen={error}
           onClose={dismissError}
-          title={i18n._(msg`Error!`)}
+          title={i18n._(t`Error!`)}
           variant="error"
         >
           {associateError
-            ? i18n._(msg`Failed to associate.`)
-            : i18n._(msg`Failed to disassociate one or more groups.`)}
+            ? i18n._(t`Failed to associate.`)
+            : i18n._(t`Failed to disassociate one or more groups.`)}
           <ErrorDetail error={error} />
         </AlertModal>
       )}

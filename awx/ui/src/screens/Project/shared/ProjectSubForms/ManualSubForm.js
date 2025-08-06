@@ -1,6 +1,6 @@
 import 'styled-components/macro';
 import React from 'react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { useField } from 'formik';
 import { FormGroup, Alert } from '@patternfly/react-core';
@@ -24,7 +24,7 @@ const ManualSubForm = ({
     {
       value: '',
       key: '',
-      label: i18n._(msg`Choose a Playbook Directory`),
+      label: i18n._(t`Choose a Playbook Directory`),
     },
     ...localPaths
       .filter((path) => path)
@@ -36,20 +36,20 @@ const ManualSubForm = ({
   ];
   const [pathField, pathMeta, pathHelpers] = useField({
     name: 'local_path',
-    validate: required(i18n._(msg`Select a value for this field`)),
+    validate: required(i18n._(t`Select a value for this field`)),
   });
 
   return (
     <>
       {options.length === 1 && (
         <Alert
-          title={i18n._(msg`WARNING: `)}
+          title={i18n._(t`WARNING: `)}
           css="grid-column: 1/-1"
           variant="warning"
           isInline
           ouiaId="project-manual-subform-alert"
         >
-          {i18n._(msg`
+          {i18n._(t`
             There are no available playbook directories in ${project_base_dir}.
             Either that directory is empty, or all of the contents are already
             assigned to other projects. Create a new directory there and make
@@ -60,7 +60,7 @@ const ManualSubForm = ({
       )}
       <FormField
         id="project-base-dir"
-        label={i18n._(msg`Project Base Path`)}
+        label={i18n._(t`Project Base Path`)}
         name="base_dir"
         type="text"
         isReadOnly
@@ -71,7 +71,7 @@ const ManualSubForm = ({
         helperTextInvalid={pathMeta.error}
         isRequired
         validated={!pathMeta.touched || !pathMeta.error ? 'default' : 'error'}
-        label={i18n._(msg`Playbook Directory`)}
+        label={i18n._(t`Playbook Directory`)}
         labelIcon={<Popover content={projectHelpStrings.projectLocalPath} />}
       >
         <AnsibleSelect

@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLocation, useRouteMatch, Link } from 'react-router-dom';
 
-import { msg, Plural } from '@lingui/macro';
+import { t, Plural } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 
 import { Card, PageSection, DropdownItem } from '@patternfly/react-core';
@@ -106,9 +106,9 @@ function InstanceGroupList() {
 
   const cannotDelete = (item) => !item.summary_fields.user_capabilities.delete;
 
-  const pluralizedItemName = i18n._(msg`Instance Groups`);
-  const addContainerGroup = i18n._(msg`Add container group`);
-  const addInstanceGroup = i18n._(msg`Add instance group`);
+  const pluralizedItemName = i18n._(t`Instance Groups`);
+  const addContainerGroup = i18n._(t`Add container group`);
+  const addInstanceGroup = i18n._(t`Add instance group`);
 
   const addButton = (
     <AddDropDownButton
@@ -160,7 +160,7 @@ function InstanceGroupList() {
             toolbarRelatedSearchableKeys={relatedSearchableKeys}
             toolbarSearchColumns={[
               {
-                name: i18n._(msg`Name`),
+                name: i18n._(t`Name`),
                 key: 'name__icontains',
                 isDefault: true,
               },
@@ -184,10 +184,10 @@ function InstanceGroupList() {
                       <Plural
                         value={selected.length}
                         one={i18n._(
-                          msg`This instance group is currently being by other resources. Are you sure you want to delete it?`
+                          t`This instance group is currently being by other resources. Are you sure you want to delete it?`
                         )}
                         other={i18n._(
-                          msg`Deleting these instance groups could impact other resources that rely on them. Are you sure you want to delete anyway?`
+                          t`Deleting these instance groups could impact other resources that rely on them. Are you sure you want to delete anyway?`
                         )}
                       />
                     }
@@ -197,13 +197,13 @@ function InstanceGroupList() {
             )}
             headerRow={
               <HeaderRow qsConfig={QS_CONFIG}>
-                <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
-                <HeaderCell>{i18n._(msg`Type`)}</HeaderCell>
-                <HeaderCell>{i18n._(msg`Running Jobs`)}</HeaderCell>
-                <HeaderCell>{i18n._(msg`Total Jobs`)}</HeaderCell>
-                <HeaderCell>{i18n._(msg`Instances`)}</HeaderCell>
-                <HeaderCell>{i18n._(msg`Capacity`)}</HeaderCell>
-                <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
+                <HeaderCell sortKey="name">{i18n._(t`Name`)}</HeaderCell>
+                <HeaderCell>{i18n._(t`Type`)}</HeaderCell>
+                <HeaderCell>{i18n._(t`Running Jobs`)}</HeaderCell>
+                <HeaderCell>{i18n._(t`Total Jobs`)}</HeaderCell>
+                <HeaderCell>{i18n._(t`Instances`)}</HeaderCell>
+                <HeaderCell>{i18n._(t`Capacity`)}</HeaderCell>
+                <HeaderCell>{i18n._(t`Actions`)}</HeaderCell>
               </HeaderRow>
             }
             renderRow={(instanceGroup, index) => (
@@ -222,13 +222,13 @@ function InstanceGroupList() {
         </Card>
       </PageSection>
       <AlertModal
-        aria-label={i18n._(msg`Deletion error`)}
+        aria-label={i18n._(t`Deletion error`)}
         isOpen={deletionError}
         onClose={clearDeletionError}
-        title={i18n._(msg`Error`)}
+        title={i18n._(t`Error`)}
         variant="error"
       >
-        {i18n._(msg`Failed to delete one or more instance groups.`)}
+        {i18n._(t`Failed to delete one or more instance groups.`)}
         <ErrorDetail error={deletionError} />
       </AlertModal>
     </>

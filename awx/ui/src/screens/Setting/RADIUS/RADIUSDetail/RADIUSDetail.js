@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { Button, Alert as PFAlert } from '@patternfly/react-core';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import styled from 'styled-components';
@@ -47,14 +47,14 @@ function RADIUSDetail() {
       name: (
         <>
           <CaretLeftIcon />
-          {i18n._(msg`Back to Settings`)}
+          {i18n._(t`Back to Settings`)}
         </>
       ),
       link: `/settings`,
       id: 99,
     },
     {
-      name: i18n._(msg`Details`),
+      name: i18n._(t`Details`),
       link: `/settings/radius/details`,
       id: 0,
     },
@@ -73,7 +73,7 @@ function RADIUSDetail() {
               isInline
               data-cy="RADIUS-deprecation-warning"
               title={i18n._(
-                msg`This feature is deprecated and will be removed in a future release.`
+                t`This feature is deprecated and will be removed in a future release.`
               )}
               ouiaId="radius-deprecation-alert"
             />
@@ -99,11 +99,11 @@ function RADIUSDetail() {
           <CardActionsRow>
             <Button
               ouiaId="radius-detail-edit-button"
-              aria-label={i18n._(msg`Edit`)}
+              aria-label={i18n._(t`Edit`)}
               component={Link}
               to="/settings/radius/edit"
             >
-              {i18n._(msg`Edit`)}
+              {i18n._(t`Edit`)}
             </Button>
           </CardActionsRow>
         )}

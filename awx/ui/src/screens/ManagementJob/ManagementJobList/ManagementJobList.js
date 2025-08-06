@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 
 import { useLocation } from 'react-router-dom';
 import { Card, PageSection } from '@patternfly/react-core';
@@ -83,13 +83,13 @@ function ManagementJobList() {
             hasContentLoading={isLoading}
             items={items}
             itemCount={count}
-            pluralizedItemName={i18n._(msg`Management Jobs`)}
+            pluralizedItemName={i18n._(t`Management Jobs`)}
             emptyContentMessage={' '}
             toolbarSearchableKeys={searchableKeys}
             toolbarRelatedSearchableKeys={relatedSearchableKeys}
             toolbarSearchColumns={[
               {
-                name: i18n._(msg`Name`),
+                name: i18n._(t`Name`),
                 key: 'name__icontains',
                 isDefault: true,
               },
@@ -99,9 +99,9 @@ function ManagementJobList() {
             )}
             headerRow={
               <HeaderRow qsConfig={QS_CONFIG}>
-                <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
-                <HeaderCell>{i18n._(msg`Description`)}</HeaderCell>
-                <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
+                <HeaderCell sortKey="name">{i18n._(t`Name`)}</HeaderCell>
+                <HeaderCell>{i18n._(t`Description`)}</HeaderCell>
+                <HeaderCell>{i18n._(t`Actions`)}</HeaderCell>
               </HeaderRow>
             }
             renderRow={({ id, name, description, job_type }) => (
@@ -124,10 +124,10 @@ function ManagementJobList() {
       <AlertModal
         isOpen={Boolean(launchError)}
         variant="error"
-        title={i18n._(msg`Error!`)}
+        title={i18n._(t`Error!`)}
         onClose={() => setLaunchError(null)}
       >
-        {i18n._(msg`Failed to launch job.`)}
+        {i18n._(t`Failed to launch job.`)}
         <ErrorDetail error={launchError} />
       </AlertModal>
     </>

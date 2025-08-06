@@ -8,7 +8,7 @@ import 'ace-builds/src-noconflict/mode-yaml';
 import 'ace-builds/src-noconflict/mode-django';
 import 'ace-builds/src-noconflict/theme-github';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 
 import styled from 'styled-components';
@@ -181,7 +181,7 @@ function CodeEditor({
           className="pf-c-form__helper-text keyboard-help-text"
           aria-live="polite"
         >
-          {i18n._(msg`Press Enter to edit. Press ESC to stop editing.`)}
+          {i18n._(t`Press Enter to edit. Press ESC to stop editing.`)}
         </div>
       )}
     </>

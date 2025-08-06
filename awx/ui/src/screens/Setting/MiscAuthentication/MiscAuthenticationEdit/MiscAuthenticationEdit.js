@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { Formik } from 'formik';
 import { Form } from '@patternfly/react-core';
@@ -79,20 +79,20 @@ function MiscAuthenticationEdit() {
           ...OAUTH2_PROVIDER_OPTIONS,
           default: OAUTH2_PROVIDER_OPTIONS.default.ACCESS_TOKEN_EXPIRE_SECONDS,
           type: OAUTH2_PROVIDER_OPTIONS.child.type,
-          label: i18n._(msg`Access Token Expiration`),
+          label: i18n._(t`Access Token Expiration`),
         },
         REFRESH_TOKEN_EXPIRE_SECONDS: {
           ...OAUTH2_PROVIDER_OPTIONS,
           default: OAUTH2_PROVIDER_OPTIONS.default.REFRESH_TOKEN_EXPIRE_SECONDS,
           type: OAUTH2_PROVIDER_OPTIONS.child.type,
-          label: i18n._(msg`Refresh Token Expiration`),
+          label: i18n._(t`Refresh Token Expiration`),
         },
         AUTHORIZATION_CODE_EXPIRE_SECONDS: {
           ...OAUTH2_PROVIDER_OPTIONS,
           default:
             OAUTH2_PROVIDER_OPTIONS.default.AUTHORIZATION_CODE_EXPIRE_SECONDS,
           type: OAUTH2_PROVIDER_OPTIONS.child.type,
-          label: i18n._(msg`Authorization Code Expiration`),
+          label: i18n._(t`Authorization Code Expiration`),
         },
       };
 
@@ -195,7 +195,7 @@ function MiscAuthenticationEdit() {
                 <BooleanField
                   name="DISABLE_LOCAL_AUTH"
                   needsConfirmationModal
-                  modalTitle={i18n._(msg`Confirm Disable Local Authorization`)}
+                  modalTitle={i18n._(t`Confirm Disable Local Authorization`)}
                   config={authentication.DISABLE_LOCAL_AUTH}
                 />
                 <InputField

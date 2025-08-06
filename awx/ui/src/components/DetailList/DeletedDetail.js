@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { node } from 'prop-types';
 import styled from 'styled-components';
@@ -18,7 +18,7 @@ function DeletedDetail({ label, dataCy, helpText }) {
     <Detail
       label={label}
       dataCy={dataCy}
-      value={i18n._(msg`Deleted`)}
+      value={i18n._(t`Deleted`)}
       helpText={helpText}
     />
   );

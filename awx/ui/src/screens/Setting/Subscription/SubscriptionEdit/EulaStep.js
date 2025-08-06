@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { Flex, FormGroup, TextArea } from '@patternfly/react-core';
 import { useConfig } from 'contexts/Config';
 
@@ -12,7 +12,7 @@ function EulaStep() {
       spaceItems={{ default: 'spaceItemsMd' }}
       direction={{ default: 'column' }}
     >
-      <FormGroup fieldId="eula" label={i18n._(msg`End User License Agreement`)}>
+      <FormGroup fieldId="eula" label={i18n._(t`End User License Agreement`)}>
         <TextArea
           id="eula-container"
           style={{ minHeight: '200px' }}

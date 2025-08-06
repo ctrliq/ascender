@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { Link, Redirect, useRouteMatch } from 'react-router-dom';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { CardBody, CardActionsRow } from 'components/Card';
@@ -93,39 +93,39 @@ function LDAPDetail() {
       name: (
         <>
           <CaretLeftIcon />
-          {i18n._(msg`Back to Settings`)}
+          {i18n._(t`Back to Settings`)}
         </>
       ),
       link: `/settings`,
       id: 99,
     },
     {
-      name: i18n._(msg`Default`),
+      name: i18n._(t`Default`),
       link: `${baseURL}/default/details`,
       id: 0,
     },
     {
-      name: i18n._(msg`LDAP1`),
+      name: i18n._(t`LDAP1`),
       link: `${baseURL}/1/details`,
       id: 1,
     },
     {
-      name: i18n._(msg`LDAP2`),
+      name: i18n._(t`LDAP2`),
       link: `${baseURL}/2/details`,
       id: 2,
     },
     {
-      name: i18n._(msg`LDAP3`),
+      name: i18n._(t`LDAP3`),
       link: `${baseURL}/3/details`,
       id: 3,
     },
     {
-      name: i18n._(msg`LDAP4`),
+      name: i18n._(t`LDAP4`),
       link: `${baseURL}/4/details`,
       id: 4,
     },
     {
-      name: i18n._(msg`LDAP5`),
+      name: i18n._(t`LDAP5`),
       link: `${baseURL}/5/details`,
       id: 5,
     },
@@ -162,11 +162,11 @@ function LDAPDetail() {
           <CardActionsRow>
             <Button
               ouiaId="ldap-detail-edit-button"
-              aria-label={i18n._(msg`Edit`)}
+              aria-label={i18n._(t`Edit`)}
               component={Link}
               to={`${baseURL}/${category}/edit`}
             >
-              {i18n._(msg`Edit`)}
+              {i18n._(t`Edit`)}
             </Button>
           </CardActionsRow>
         )}

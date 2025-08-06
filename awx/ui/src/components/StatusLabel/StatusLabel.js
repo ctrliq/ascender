@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 import 'styled-components/macro';
 import React from 'react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { oneOf } from 'prop-types';
 import { Label, Tooltip } from '@patternfly/react-core';
@@ -38,31 +38,31 @@ const colors = {
 export default function StatusLabel({ status, tooltipContent = '', children }) {
   const { i18n } = useLingui();
   const upperCaseStatus = {
-    approved: i18n._(msg`Approved`),
-    denied: i18n._(msg`Denied`),
-    success: i18n._(msg`Success`),
-    healthy: i18n._(msg`Healthy`),
-    successful: i18n._(msg`Successful`),
-    ok: i18n._(msg`OK`),
-    failed: i18n._(msg`Failed`),
-    error: i18n._(msg`Error`),
-    unreachable: i18n._(msg`Unreachable`),
-    running: i18n._(msg`Running`),
-    pending: i18n._(msg`Pending`),
-    skipped: i18n._(msg`Skipped`),
-    timedOut: i18n._(msg`Timed out`),
-    waiting: i18n._(msg`Waiting`),
-    disabled: i18n._(msg`Disabled`),
-    canceled: i18n._(msg`Canceled`),
-    changed: i18n._(msg`Changed`),
+    approved: i18n._(t`Approved`),
+    denied: i18n._(t`Denied`),
+    success: i18n._(t`Success`),
+    healthy: i18n._(t`Healthy`),
+    successful: i18n._(t`Successful`),
+    ok: i18n._(t`OK`),
+    failed: i18n._(t`Failed`),
+    error: i18n._(t`Error`),
+    unreachable: i18n._(t`Unreachable`),
+    running: i18n._(t`Running`),
+    pending: i18n._(t`Pending`),
+    skipped: i18n._(t`Skipped`),
+    timedOut: i18n._(t`Timed out`),
+    waiting: i18n._(t`Waiting`),
+    disabled: i18n._(t`Disabled`),
+    canceled: i18n._(t`Canceled`),
+    changed: i18n._(t`Changed`),
     /* Instance statuses */
-    ready: i18n._(msg`Ready`),
-    installed: i18n._(msg`Installed`),
-    provisioning: i18n._(msg`Provisioning`),
-    deprovisioning: i18n._(msg`Deprovisioning`),
-    unavailable: i18n._(msg`Unavailable`),
-    'provision-fail': i18n._(msg`Provisioning fail`),
-    'deprovision-fail': i18n._(msg`Deprovisioning fail`),
+    ready: i18n._(t`Ready`),
+    installed: i18n._(t`Installed`),
+    provisioning: i18n._(t`Provisioning`),
+    deprovisioning: i18n._(t`Deprovisioning`),
+    unavailable: i18n._(t`Unavailable`),
+    'provision-fail': i18n._(t`Provisioning fail`),
+    'deprovision-fail': i18n._(t`Deprovisioning fail`),
   };
   const label = upperCaseStatus[status] || status;
   const color = colors[status] || 'grey';

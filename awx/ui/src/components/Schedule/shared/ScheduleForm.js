@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback, useState, useRef } from 'react';
 import { shape, func } from 'prop-types';
 import { DateTime } from 'luxon';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { Formik } from 'formik';
 import { RRule } from 'rrule';
@@ -393,7 +393,7 @@ function ScheduleForm({
       rruleError = error;
     }
   } else if (schedule.id) {
-    rruleError = new Error(i18n._(msg`Schedule is missing rrule`));
+    rruleError = new Error(i18n._(t`Schedule is missing rrule`));
   }
 
   if (contentError || rruleError) {
@@ -417,13 +417,13 @@ function ScheduleForm({
         (options.runOnDayNumber < 1 || options.runOnDayNumber > 31)
       ) {
         freqErrors.runOn = i18n._(
-          msg`Please select a day number between 1 and 31.`
+          t`Please select a day number between 1 and 31.`
         );
       }
 
       if (options.end === 'after' && !options.occurrences) {
         freqErrors.occurrences = i18n._(
-          msg`Please enter a number of occurrences.`
+          t`Please enter a number of occurrences.`
         );
       }
 
@@ -439,7 +439,7 @@ function ScheduleForm({
           ).toMillis()
         ) {
           freqErrors.endDate = i18n._(
-            msg`Please select an end date/time that comes after the start date/time.`
+            t`Please select an end date/time that comes after the start date/time.`
           );
         }
 
@@ -458,10 +458,10 @@ function ScheduleForm({
           );
           if (rule.all().length === 0) {
             errors.startDate = i18n._(
-              msg`Selected date range must have at least 1 schedule occurrence.`
+              t`Selected date range must have at least 1 schedule occurrence.`
             );
             freqErrors.endDate = i18n._(
-              msg`Selected date range must have at least 1 schedule occurrence.`
+              t`Selected date range must have at least 1 schedule occurrence.`
             );
           }
         }
@@ -476,7 +476,7 @@ function ScheduleForm({
 
     if (values.exceptionFrequency.length > 0 && !scheduleHasInstances(values)) {
       errors.exceptionFrequency = i18n._(
-        msg`This schedule has no occurrences due to the selected exceptions.`
+        t`This schedule has no occurrences due to the selected exceptions.`
       );
     }
 
@@ -543,13 +543,13 @@ function ScheduleForm({
                   <ActionGroup>
                     <Button
                       ouiaId="schedule-form-save-button"
-                      aria-label={i18n._(msg`Save`)}
+                      aria-label={i18n._(t`Save`)}
                       variant="primary"
                       type="button"
                       onClick={formik.handleSubmit}
                       isDisabled={isSaveDisabled}
                     >
-                      {i18n._(msg`Save`)}
+                      {i18n._(t`Save`)}
                     </Button>
 
                     {isTemplate && showPromptButton && (
@@ -557,20 +557,20 @@ function ScheduleForm({
                         ouiaId="schedule-form-prompt-button"
                         variant="secondary"
                         type="button"
-                        aria-label={i18n._(msg`Prompt`)}
+                        aria-label={i18n._(t`Prompt`)}
                         onClick={() => setIsWizardOpen(true)}
                       >
-                        {i18n._(msg`Prompt`)}
+                        {i18n._(t`Prompt`)}
                       </Button>
                     )}
                     <Button
                       ouiaId="schedule-form-cancel-button"
-                      aria-label={i18n._(msg`Cancel`)}
+                      aria-label={i18n._(t`Cancel`)}
                       variant="secondary"
                       type="button"
                       onClick={handleCancel}
                     >
-                      {i18n._(msg`Cancel`)}
+                      {i18n._(t`Cancel`)}
                     </Button>
                   </ActionGroup>
                 </FormFullWidthLayout>

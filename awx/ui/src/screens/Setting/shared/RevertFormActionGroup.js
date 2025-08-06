@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { ActionGroup, Button } from '@patternfly/react-core';
 import { FormFullWidthLayout } from 'components/FormLayout';
 
@@ -11,32 +11,32 @@ const RevertFormActionGroup = ({ children, onCancel, onRevert, onSubmit }) => {
     <FormFullWidthLayout>
       <ActionGroup>
         <Button
-          aria-label={i18n._(msg`Save`)}
+          aria-label={i18n._(t`Save`)}
           variant="primary"
           type="button"
           onClick={onSubmit}
           ouiaId="save-button"
         >
-          {i18n._(msg`Save`)}
+          {i18n._(t`Save`)}
         </Button>
         <Button
-          aria-label={i18n._(msg`Revert all to default`)}
+          aria-label={i18n._(t`Revert all to default`)}
           variant="secondary"
           type="button"
           onClick={onRevert}
           ouiaId="revert-all-button"
         >
-          {i18n._(msg`Revert all to default`)}
+          {i18n._(t`Revert all to default`)}
         </Button>
         {children}
         <Button
-          aria-label={i18n._(msg`Cancel`)}
+          aria-label={i18n._(t`Cancel`)}
           variant="link"
           type="button"
           onClick={onCancel}
           ouiaId="cancel-button"
         >
-          {i18n._(msg`Cancel`)}
+          {i18n._(t`Cancel`)}
         </Button>
       </ActionGroup>
     </FormFullWidthLayout>

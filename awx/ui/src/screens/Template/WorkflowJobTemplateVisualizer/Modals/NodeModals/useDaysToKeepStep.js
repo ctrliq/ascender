@@ -1,7 +1,7 @@
 import React from 'react';
 import { useField } from 'formik';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import DaysToKeepStep from './DaysToKeepStep';
 import StepName from '../../../../../components/LaunchPrompt/steps/StepName';
 
@@ -34,7 +34,7 @@ function getStep(i18n, nodeResourceMeta, daysToKeepMeta) {
       id: STEP_ID,
       name: (
         <StepName hasErrors={!!daysToKeepMeta.error} id="days-to-keep-step">
-          {i18n._(msg`Days to keep`)}
+          {i18n._(t`Days to keep`)}
         </StepName>
       ),
       component: <DaysToKeepStep />,

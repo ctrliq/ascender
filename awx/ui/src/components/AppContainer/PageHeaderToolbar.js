@@ -4,7 +4,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { msg } from '@lingui/macro';
 import { useLingui } from '@lingui/react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
@@ -80,7 +79,7 @@ function PageHeaderToolbar({
       <PageHeaderToolsGroup>
         <Tooltip
           position="bottom"
-          content={i18n._(msg`Pending Workflow Approvals`)}
+          content={i18n._('Pending Workflow Approvals')}
         >
           <PageHeaderToolsItem>
             <Link to="/workflow_approvals?workflow_approvals.status=pending">
@@ -108,7 +107,7 @@ function PageHeaderToolbar({
             toggle={
               <DropdownToggle
                 onToggle={setIsHelpOpen}
-                aria-label={i18n._(msg`Info`)}
+                aria-label={i18n._('Info')}
                 ouiaId="toolbar-info-dropdown-toggle"
               >
                 <QuestionCircleIcon />
@@ -123,7 +122,7 @@ function PageHeaderToolbar({
                 ouiaId="help-dropdown-item"
                 rel="noopener noreferrer"
               >
-                {i18n._(msg`Help`)}
+                {i18n._(t`Help`)}
               </DropdownItem>,
 */
               <DropdownItem
@@ -133,7 +132,7 @@ function PageHeaderToolbar({
                 onClick={onAboutClick}
                 ouiaId="about-dropdown-item"
               >
-                {i18n._(msg`About`)}
+                {i18n._('About')}
               </DropdownItem>,
             ]}
           />
@@ -162,13 +161,13 @@ function PageHeaderToolbar({
             dropdownItems={[
               <DropdownItem
                 key="user"
-                aria-label={i18n._(msg`User details`)}
+                aria-label={i18n._('User details')}
                 href={
                   loggedInUser ? `#/users/${loggedInUser.id}/details` : '#/home'
                 }
                 ouiaId="user-dropdown-item"
               >
-                {i18n._(msg`User Details`)}
+                {i18n._('User Details')}
               </DropdownItem>,
               <DropdownItem
                 key="logout"
@@ -177,7 +176,7 @@ function PageHeaderToolbar({
                 id="logout-button"
                 ouiaId="logout-dropdown-item"
               >
-                {i18n._(msg`Logout`)}
+                {i18n._('Logout')}
               </DropdownItem>,
             ]}
           />

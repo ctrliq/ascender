@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useParams, useLocation } from 'react-router-dom';
 import PaginatedTable, { getSearchableKeys } from 'components/PaginatedTable';
 import { getQSConfig, parseQueryString } from 'util/qs';
@@ -98,11 +98,11 @@ function ApplicationTokenList() {
         hasContentLoading={isLoading || deleteLoading}
         items={tokens}
         itemCount={itemCount}
-        pluralizedItemName={i18n._(msg`Tokens`)}
+        pluralizedItemName={i18n._(t`Tokens`)}
         qsConfig={QS_CONFIG}
         toolbarSearchColumns={[
           {
-            name: i18n._(msg`Name`),
+            name: i18n._(t`Name`),
             key: 'user__username__icontains',
             isDefault: true,
           },
@@ -115,7 +115,7 @@ function ApplicationTokenList() {
             {...props}
             isAllSelected={isAllSelected}
             onSelectAll={selectAll}
-            deleteButtonText={i18n._(msg`Delete selected tokens`)}
+            deleteButtonText={i18n._(t`Delete selected tokens`)}
             onDelete={handleDelete}
             isDeleteDisabled={!selected.length}
           />
@@ -127,14 +127,14 @@ function ApplicationTokenList() {
             isSelected={selected.some((row) => row.id === token.id)}
             onSelect={() => handleSelect(token)}
             detailUrl={`/applications/${id}/tokens/${token.id}/details`}
-            rowIndex={tokens.findIndex((t) => t.id === token.id)}
+            rowIndex={tokens.findIndex((to) => to.id === token.id)}
           />
         )}
       />
       <AlertModal
         isOpen={Boolean(deletionError)}
         variant="danger"
-        title={i18n._(msg`Error deleting tokens`)}
+        title={i18n._(t`Error deleting tokens`)}
         onClose={clearDeletionError}
       >
         <ErrorDetail error={deletionError} />

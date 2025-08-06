@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { string, func, bool, oneOfType, number } from 'prop-types';
 import { useLocation } from 'react-router-dom';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { FormGroup, Tooltip } from '@patternfly/react-core';
 import { ExecutionEnvironmentsAPI, ProjectsAPI } from 'api';
@@ -158,7 +158,7 @@ function ExecutionEnvironmentLookup({
     <>
       <Lookup
         id={id}
-        header={i18n._(msg`Execution Environment`)}
+        header={i18n._(t`Execution Environment`)}
         value={value}
         onBlur={onBlur}
         onChange={onChange}
@@ -176,21 +176,21 @@ function ExecutionEnvironmentLookup({
             optionCount={count}
             searchColumns={[
               {
-                name: i18n._(msg`Name`),
+                name: i18n._(t`Name`),
                 key: 'name__icontains',
                 isDefault: true,
               },
             ]}
             sortColumns={[
               {
-                name: i18n._(msg`Name`),
+                name: i18n._(t`Name`),
                 key: 'name',
               },
             ]}
             searchableKeys={searchableKeys}
             relatedSearchableKeys={relatedSearchableKeys}
             multiple={state.multiple}
-            header={i18n._(msg`Execution Environment`)}
+            header={i18n._(t`Execution Environment`)}
             name="executionEnvironments"
             qsConfig={QS_CONFIG}
             readOnly={!canDelete}
@@ -207,7 +207,7 @@ function ExecutionEnvironmentLookup({
     if (overrideLabel) {
       return null;
     }
-    return i18n._(msg`Execution Environment`);
+    return i18n._(t`Execution Environment`);
   };
 
   return isPromptableField ? (

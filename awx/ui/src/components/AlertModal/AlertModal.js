@@ -9,7 +9,6 @@ import {
   TimesCircleIcon,
 } from '@patternfly/react-icons';
 
-import { msg } from '@lingui/macro';
 import { useLingui } from '@lingui/react';
 import styled from 'styled-components';
 
@@ -74,7 +73,7 @@ function AlertModal({
   return (
     <Modal
       header={customHeader}
-      aria-label={label || i18n._(msg`Alert modal`)}
+      aria-label={label || i18n._('Alert modal')}
       aria-labelledby="alert-modal-header-label"
       isOpen={Boolean(isOpen)}
       variant="small"

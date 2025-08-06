@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLocation, useRouteMatch } from 'react-router-dom';
-import { msg, Plural } from '@lingui/macro';
+import { t, Plural } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { Card, PageSection } from '@patternfly/react-core';
 
@@ -116,25 +116,25 @@ function OrganizationsList() {
             hasContentLoading={hasContentLoading}
             items={organizations}
             itemCount={organizationCount}
-            pluralizedItemName={i18n._(msg`Organizations`)}
+            pluralizedItemName={i18n._(t`Organizations`)}
             qsConfig={QS_CONFIG}
             clearSelected={clearSelected}
             toolbarSearchColumns={[
               {
-                name: i18n._(msg`Name`),
+                name: i18n._(t`Name`),
                 key: 'name__icontains',
                 isDefault: true,
               },
               {
-                name: i18n._(msg`Description`),
+                name: i18n._(t`Description`),
                 key: 'description__icontains',
               },
               {
-                name: i18n._(msg`Created By (Username)`),
+                name: i18n._(t`Created By (Username)`),
                 key: 'created_by__username__icontains',
               },
               {
-                name: i18n._(msg`Modified By (Username)`),
+                name: i18n._(t`Modified By (Username)`),
                 key: 'modified_by__username__icontains',
               },
             ]}
@@ -142,10 +142,10 @@ function OrganizationsList() {
             toolbarRelatedSearchableKeys={relatedSearchableKeys}
             headerRow={
               <HeaderRow qsConfig={QS_CONFIG}>
-                <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
-                <HeaderCell>{i18n._(msg`Members`)}</HeaderCell>
-                <HeaderCell>{i18n._(msg`Teams`)}</HeaderCell>
-                <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
+                <HeaderCell sortKey="name">{i18n._(t`Name`)}</HeaderCell>
+                <HeaderCell>{i18n._(t`Members`)}</HeaderCell>
+                <HeaderCell>{i18n._(t`Teams`)}</HeaderCell>
+                <HeaderCell>{i18n._(t`Actions`)}</HeaderCell>
               </HeaderRow>
             }
             renderToolbar={(props) => (
@@ -162,7 +162,7 @@ function OrganizationsList() {
                     key="delete"
                     onDelete={handleOrgDelete}
                     itemsToDelete={selected}
-                    pluralizedItemName={i18n._(msg`Organizations`)}
+                    pluralizedItemName={i18n._(t`Organizations`)}
                     deleteDetailsRequests={deleteDetailsRequests}
                     deleteMessage={
                       <Plural
@@ -194,10 +194,10 @@ function OrganizationsList() {
       <AlertModal
         isOpen={deletionError}
         variant="error"
-        title={i18n._(msg`Error!`)}
+        title={i18n._(t`Error!`)}
         onClose={clearDeletionError}
       >
-        {i18n._(msg`Failed to delete one or more organizations.`)}
+        {i18n._(t`Failed to delete one or more organizations.`)}
         <ErrorDetail error={deletionError} />
       </AlertModal>
     </>

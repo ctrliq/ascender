@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useField } from 'formik';
 import {
   DatePicker,
@@ -51,8 +51,8 @@ function DateTimePicker({ dateFieldName, timeFieldName, label }) {
         <DatePicker
           aria-label={
             dateFieldName.startsWith('start')
-              ? i18n._(msg`Start date`)
-              : i18n._(msg`End date`)
+              ? i18n._(t`Start date`)
+              : i18n._(t`End date`)
           }
           {...dateField}
           value={dateField.value.split('T')[0]}
@@ -63,8 +63,8 @@ function DateTimePicker({ dateFieldName, timeFieldName, label }) {
           stepMinutes={15}
           aria-label={
             timeFieldName.startsWith('start')
-              ? i18n._(msg`Start time`)
-              : i18n._(msg`End time`)
+              ? i18n._(t`Start time`)
+              : i18n._(t`End time`)
           }
           time={timeField.value}
           {...timeField}

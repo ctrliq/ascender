@@ -3,7 +3,7 @@ import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { string, bool, func, number } from 'prop-types';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 
 import { Td, Tr } from '@patternfly/react-table';
@@ -36,7 +36,7 @@ function InventoryRelatedGroupListItem({
           isSelected,
           onSelect,
         }}
-        dataLabel={i18n._(msg`Selected`)}
+        dataLabel={i18n._(t`Selected`)}
       />
       <Td id={labelId}>
         <Link to={`${detailUrl}`}>
@@ -44,14 +44,14 @@ function InventoryRelatedGroupListItem({
         </Link>
       </Td>
       {inventoryType !== 'constructed_inventory' && (
-        <ActionsTd dataLabel={i18n._(msg`Actions`)}>
+        <ActionsTd dataLabel={i18n._(t`Actions`)}>
           <ActionItem
-            tooltip={i18n._(msg`Edit Group`)}
+            tooltip={i18n._(t`Edit Group`)}
             visible={group.summary_fields.user_capabilities?.edit}
           >
             <Button
               ouiaId={`${group.id}-edit-button`}
-              aria-label={i18n._(msg`Edit Group`)}
+              aria-label={i18n._(t`Edit Group`)}
               variant="plain"
               component={Link}
               to={`${editUrl}`}

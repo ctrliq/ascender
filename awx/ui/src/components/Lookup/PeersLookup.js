@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { arrayOf, string, func, bool, shape } from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { FormGroup, Chip } from '@patternfly/react-core';
 import { InstancesAPI } from 'api';
@@ -123,14 +123,14 @@ function PeersLookup({
             displayKey="hostname"
             searchColumns={[
               {
-                name: i18n._(msg`Hostname`),
+                name: i18n._(t`Hostname`),
                 key: 'hostname__icontains',
                 isDefault: true,
               },
             ]}
             sortColumns={[
               {
-                name: i18n._(msg`Hostname`),
+                name: i18n._(t`Hostname`),
                 key: 'hostname',
               },
             ]}

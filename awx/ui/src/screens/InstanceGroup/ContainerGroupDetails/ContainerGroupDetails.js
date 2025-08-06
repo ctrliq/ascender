@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 
 import { Link, useHistory } from 'react-router-dom';
 import { Button, Label } from '@patternfly/react-core';
@@ -45,34 +45,34 @@ function ContainerGroupDetails({ instanceGroup }) {
     <CardBody>
       <DetailList>
         <Detail
-          label={i18n._(msg`Name`)}
+          label={i18n._(t`Name`)}
           value={instanceGroup.name}
           dataCy="container-group-detail-name"
         />
         <Detail
-          label={i18n._(msg`Type`)}
-          value={i18n._(msg`Container group`)}
+          label={i18n._(t`Type`)}
+          value={i18n._(t`Container group`)}
           dataCy="container-group-type"
         />
         <DetailBadge
-          label={i18n._(msg`Max concurrent jobs`)}
+          label={i18n._(t`Max concurrent jobs`)}
           dataCy="instance-group-max-concurrent-jobs"
-          helpText={i18n._(msg`Maximum number of jobs to run concurrently on this group.
+          helpText={i18n._(t`Maximum number of jobs to run concurrently on this group.
           Zero means no limit will be enforced.`)}
           content={instanceGroup.max_concurrent_jobs}
         />
         <DetailBadge
-          label={i18n._(msg`Max forks`)}
+          label={i18n._(t`Max forks`)}
           dataCy="instance-group-max-forks"
-          helpText={i18n._(msg`Maximum number of forks to allow across all jobs running concurrently on this group.
+          helpText={i18n._(t`Maximum number of forks to allow across all jobs running concurrently on this group.
           Zero means no limit will be enforced.`)}
           content={instanceGroup.max_forks}
         />
         {instanceGroup.summary_fields.credential && (
           <Detail
-            label={i18n._(msg`Credential`)}
+            label={i18n._(t`Credential`)}
             helpText={i18n._(
-              msg`Credential to authenticate with Kubernetes or OpenShift`
+              t`Credential to authenticate with Kubernetes or OpenShift`
             )}
             value={
               <Link
@@ -87,18 +87,18 @@ function ContainerGroupDetails({ instanceGroup }) {
           />
         )}
         <UserDateDetail
-          label={i18n._(msg`Created`)}
+          label={i18n._(t`Created`)}
           date={instanceGroup.created}
           user={instanceGroup.summary_fields.created_by}
         />
         <UserDateDetail
-          label={i18n._(msg`Last Modified`)}
+          label={i18n._(t`Last Modified`)}
           date={instanceGroup.modified}
           user={instanceGroup.summary_fields.modified_by}
         />
         {instanceGroup.pod_spec_override && (
           <VariablesDetail
-            label={i18n._(msg`Pod spec override`)}
+            label={i18n._(t`Pod spec override`)}
             value={
               isJsonString(instanceGroup.pod_spec_override)
                 ? jsonToYaml(instanceGroup.pod_spec_override)
@@ -106,7 +106,7 @@ function ContainerGroupDetails({ instanceGroup }) {
             }
             rows={6}
             helpText={i18n._(
-              msg`Custom Kubernetes or OpenShift Pod specification.`
+              t`Custom Kubernetes or OpenShift Pod specification.`
             )}
             name="pod_spec_override"
             dataCy="container-group-detail-pod-spec-override"
@@ -118,11 +118,11 @@ function ContainerGroupDetails({ instanceGroup }) {
           instanceGroup.summary_fields.user_capabilities.edit && (
             <Button
               ouiaId="container-group-detail-edit-button"
-              aria-label={i18n._(msg`edit`)}
+              aria-label={i18n._(t`edit`)}
               component={Link}
               to={`/instance_groups/container_group/${id}/edit`}
             >
-              {i18n._(msg`Edit`)}
+              {i18n._(t`Edit`)}
             </Button>
           )}
         {instanceGroup.summary_fields.user_capabilities &&
@@ -130,15 +130,15 @@ function ContainerGroupDetails({ instanceGroup }) {
             <DeleteButton
               ouiaId="container-group-detail-delete-button"
               name={name}
-              modalTitle={i18n._(msg`Delete instance group`)}
+              modalTitle={i18n._(t`Delete instance group`)}
               onConfirm={deleteInstanceGroup}
               isDisabled={isLoading}
               deleteDetailsRequests={deleteDetailsRequests}
               deleteMessage={i18n._(
-                msg`This container group is currently being by other resources. Are you sure you want to delete it?`
+                t`This container group is currently being by other resources. Are you sure you want to delete it?`
               )}
             >
-              {i18n._(msg`Delete`)}
+              {i18n._(t`Delete`)}
             </DeleteButton>
           )}
       </CardActionsRow>
@@ -146,7 +146,7 @@ function ContainerGroupDetails({ instanceGroup }) {
         <AlertModal
           isOpen={error}
           onClose={dismissError}
-          title={i18n._(msg`Error`)}
+          title={i18n._(t`Error`)}
           variant="error"
         >
           <ErrorDetail error={error} />

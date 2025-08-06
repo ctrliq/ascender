@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
-import { msg, Plural } from '@lingui/macro';
+import { t, Plural } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { Card, PageSection } from '@patternfly/react-core';
 import { CredentialsAPI } from 'api';
@@ -112,7 +112,7 @@ function CredentialList() {
     (newCredentialId) => {
       addToast({
         id: newCredentialId,
-        title: i18n._(msg`Credential copied successfully`),
+        title: i18n._(t`Credential copied successfully`),
         variant: AlertVariant.success,
         hasTimeout: true,
       });
@@ -140,32 +140,32 @@ function CredentialList() {
             toolbarRelatedSearchableKeys={relatedSearchableKeys}
             toolbarSearchColumns={[
               {
-                name: i18n._(msg`Name`),
+                name: i18n._(t`Name`),
                 key: 'name__icontains',
                 isDefault: true,
               },
               {
-                name: i18n._(msg`Description`),
+                name: i18n._(t`Description`),
                 key: 'description__icontains',
               },
               {
-                name: i18n._(msg`Created By (Username)`),
+                name: i18n._(t`Created By (Username)`),
                 key: 'created_by__username__icontains',
               },
               {
-                name: i18n._(msg`Modified By (Username)`),
+                name: i18n._(t`Modified By (Username)`),
                 key: 'modified_by__username__icontains',
               },
               {
-                name: i18n._(msg`Credential Type`),
+                name: i18n._(t`Credential Type`),
                 key: 'credential_type__search',
               },
             ]}
             headerRow={
               <HeaderRow qsConfig={QS_CONFIG}>
-                <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
-                <HeaderCell>{i18n._(msg`Type`)}</HeaderCell>
-                <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
+                <HeaderCell sortKey="name">{i18n._(t`Name`)}</HeaderCell>
+                <HeaderCell>{i18n._(t`Type`)}</HeaderCell>
+                <HeaderCell>{i18n._(t`Actions`)}</HeaderCell>
               </HeaderRow>
             }
             renderRow={(item, index) => (
@@ -194,7 +194,7 @@ function CredentialList() {
                     key="delete"
                     onDelete={handleDelete}
                     itemsToDelete={selected}
-                    pluralizedItemName={i18n._(msg`Credentials`)}
+                    pluralizedItemName={i18n._(t`Credentials`)}
                     deleteDetailsRequests={deleteDetailsRequests}
                     deleteMessage={
                       <Plural
@@ -210,13 +210,13 @@ function CredentialList() {
           />
         </Card>
         <AlertModal
-          aria-label={i18n._(msg`Deletion Error`)}
+          aria-label={i18n._(t`Deletion Error`)}
           isOpen={deletionError}
           variant="error"
-          title={i18n._(msg`Error!`)}
+          title={i18n._(t`Error!`)}
           onClose={clearDeletionError}
         >
-          {i18n._(msg`Failed to delete one or more credentials.`)}
+          {i18n._(t`Failed to delete one or more credentials.`)}
           <ErrorDetail error={deletionError} />
         </AlertModal>
       </PageSection>

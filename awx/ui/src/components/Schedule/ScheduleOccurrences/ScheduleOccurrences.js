@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { shape, string } from 'prop-types';
 import styled from 'styled-components';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 
 import { Split, SplitItem, TextListItemVariants } from '@patternfly/react-core';
@@ -42,15 +42,15 @@ function ScheduleOccurrences({ preview = { local: [], utc: [] }, tz }) {
         <Split hasGutter>
           <SplitItem>
             <OccurrencesLabel>
-              <span>{i18n._(msg`Occurrences`)}</span>
-              <span>{i18n._(msg`(Limited to first 10)`)}</span>
+              <span>{i18n._(t`Occurrences`)}</span>
+              <span>{i18n._(t`(Limited to first 10)`)}</span>
             </OccurrencesLabel>
           </SplitItem>
           <SplitItem>
             <MultiButtonToggle
               buttons={[
-                ['local', i18n._(msg`Local`)],
-                ['utc', i18n._(msg`UTC`)],
+                ['local', i18n._(t`Local`)],
+                ['utc', i18n._(t`UTC`)],
               ]}
               value={mode}
               onChange={(newMode) => setMode(newMode)}

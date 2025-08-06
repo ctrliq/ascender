@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import { func, shape, bool } from 'prop-types';
 import { Formik, useField, useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { Form, FormGroup, Tooltip } from '@patternfly/react-core';
 import { ExecutionEnvironmentsAPI } from 'api';
 import CredentialLookup from 'components/Lookup/CredentialLookup';
@@ -69,7 +69,7 @@ function ExecutionEnvironmentFormFields({
         ((!isOrgLookupDisabled && isGloballyAvailable) ||
           organizationField.value === null)
           ? i18n._(
-              msg`Leave this field blank to make the execution environment globally available.`
+              t`Leave this field blank to make the execution environment globally available.`
             )
           : null
       }
@@ -80,7 +80,7 @@ function ExecutionEnvironmentFormFields({
       }
       validate={
         !me?.is_superuser
-          ? required(i18n._(msg`Select a value for this field`))
+          ? required(i18n._(t`Select a value for this field`))
           : undefined
       }
     />
@@ -90,7 +90,7 @@ function ExecutionEnvironmentFormFields({
     <>
       <FormField
         id="execution-environment-name"
-        label={i18n._(msg`Name`)}
+        label={i18n._(t`Name`)}
         name="name"
         type="text"
         validate={required(null)}
@@ -99,7 +99,7 @@ function ExecutionEnvironmentFormFields({
       />
       <FormField
         id="execution-environment-image"
-        label={i18n._(msg`Image`)}
+        label={i18n._(t`Image`)}
         name="image"
         type="text"
         validate={required(null)}
@@ -115,7 +115,7 @@ function ExecutionEnvironmentFormFields({
             ? 'default'
             : 'error'
         }
-        label={i18n._(msg`Pull`)}
+        label={i18n._(t`Pull`)}
       >
         <AnsibleSelect
           {...containerOptionsField}
@@ -128,7 +128,7 @@ function ExecutionEnvironmentFormFields({
       </FormGroup>
       <FormField
         id="execution-environment-description"
-        label={i18n._(msg`Description`)}
+        label={i18n._(t`Description`)}
         name="description"
         type="text"
         isDisabled={executionEnvironment?.managed || false}
@@ -136,7 +136,7 @@ function ExecutionEnvironmentFormFields({
       {isOrgLookupDisabled && isGloballyAvailable.current ? (
         <Tooltip
           content={i18n._(
-            msg`Globally available execution environment can not be reassigned to a specific Organization`
+            t`Globally available execution environment can not be reassigned to a specific Organization`
           )}
         >
           {renderOrganizationLookup()}
@@ -146,7 +146,7 @@ function ExecutionEnvironmentFormFields({
       )}
 
       <CredentialLookup
-        label={i18n._(msg`Registry credential`)}
+        label={i18n._(t`Registry credential`)}
         credentialTypeKind="registry"
         helperTextInvalid={credentialMeta.error}
         isValid={!credentialMeta.touched || !credentialMeta.error}

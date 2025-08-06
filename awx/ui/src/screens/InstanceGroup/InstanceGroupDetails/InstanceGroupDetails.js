@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 
 import { Link, useHistory } from 'react-router-dom';
@@ -48,50 +48,50 @@ function InstanceGroupDetails({ instanceGroup }) {
     <CardBody>
       <DetailList>
         <Detail
-          label={i18n._(msg`Name`)}
+          label={i18n._(t`Name`)}
           value={instanceGroup.name}
           dataCy="instance-group-detail-name"
         />
         <Detail
-          label={i18n._(msg`Type`)}
+          label={i18n._(t`Type`)}
           value={
             instanceGroup.is_container_group
-              ? i18n._(msg`Container group`)
-              : i18n._(msg`Instance group`)
+              ? i18n._(t`Container group`)
+              : i18n._(t`Instance group`)
           }
           dataCy="instance-group-type"
         />
         <DetailBadge
-          label={i18n._(msg`Policy instance minimum`)}
+          label={i18n._(t`Policy instance minimum`)}
           dataCy="instance-group-policy-instance-minimum"
-          helpText={i18n._(msg`Minimum number of instances that will be automatically
+          helpText={i18n._(t`Minimum number of instances that will be automatically
           assigned to this group when new instances come online.`)}
           content={instanceGroup.policy_instance_minimum}
         />
         <DetailBadge
-          label={i18n._(msg`Policy instance percentage`)}
-          helpText={i18n._(msg`Minimum percentage of all instances that will be automatically
+          label={i18n._(t`Policy instance percentage`)}
+          helpText={i18n._(t`Minimum percentage of all instances that will be automatically
           assigned to this group when new instances come online.`)}
           dataCy="instance-group-policy-instance-percentage"
           content={`${instanceGroup.policy_instance_percentage} %`}
         />
         <DetailBadge
-          label={i18n._(msg`Max concurrent jobs`)}
+          label={i18n._(t`Max concurrent jobs`)}
           dataCy="instance-group-max-concurrent-jobs"
-          helpText={i18n._(msg`Maximum number of jobs to run concurrently on this group.
+          helpText={i18n._(t`Maximum number of jobs to run concurrently on this group.
           Zero means no limit will be enforced.`)}
           content={instanceGroup.max_concurrent_jobs}
         />
         <DetailBadge
-          label={i18n._(msg`Max forks`)}
+          label={i18n._(t`Max forks`)}
           dataCy="instance-group-max-forks"
-          helpText={i18n._(msg`Maximum number of forks to allow across all jobs running concurrently on this group.
+          helpText={i18n._(t`Maximum number of forks to allow across all jobs running concurrently on this group.
           Zero means no limit will be enforced.`)}
           content={instanceGroup.max_forks}
         />
         {instanceGroup.capacity ? (
           <DetailBadge
-            label={i18n._(msg`Used capacity`)}
+            label={i18n._(t`Used capacity`)}
             content={`${Math.round(
               100 - instanceGroup.percent_capacity_remaining
             )} %`}
@@ -99,18 +99,18 @@ function InstanceGroupDetails({ instanceGroup }) {
           />
         ) : (
           <Detail
-            label={i18n._(msg`Used capacity`)}
-            value={<Unavailable>{i18n._(msg`Unavailable`)}</Unavailable>}
+            label={i18n._(t`Used capacity`)}
+            value={<Unavailable>{i18n._(t`Unavailable`)}</Unavailable>}
             dataCy="instance-group-used-capacity"
           />
         )}
         <UserDateDetail
-          label={i18n._(msg`Created`)}
+          label={i18n._(t`Created`)}
           date={instanceGroup.created}
           user={instanceGroup.summary_fields.created_by}
         />
         <UserDateDetail
-          label={i18n._(msg`Last Modified`)}
+          label={i18n._(t`Last Modified`)}
           date={instanceGroup.modified}
           user={instanceGroup.summary_fields.modified_by}
         />
@@ -120,11 +120,11 @@ function InstanceGroupDetails({ instanceGroup }) {
           instanceGroup.summary_fields.user_capabilities.edit && (
             <Button
               ouiaId="instance-group-detail-edit-button"
-              aria-label={i18n._(msg`edit`)}
+              aria-label={i18n._(t`edit`)}
               component={Link}
               to={`/instance_groups/${id}/edit`}
             >
-              {i18n._(msg`Edit`)}
+              {i18n._(t`Edit`)}
             </Button>
           )}
         {instanceGroup.summary_fields.user_capabilities &&
@@ -132,15 +132,15 @@ function InstanceGroupDetails({ instanceGroup }) {
             <DeleteButton
               ouiaId="instance-group-detail-delete-button"
               name={name}
-              modalTitle={i18n._(msg`Delete instance group`)}
+              modalTitle={i18n._(t`Delete instance group`)}
               onConfirm={deleteInstanceGroup}
               isDisabled={isLoading}
               deleteDetailsRequests={deleteDetailsRequests}
               deleteMessage={i18n._(
-                msg`This instance group is currently being by other resources. Are you sure you want to delete it?`
+                t`This instance group is currently being by other resources. Are you sure you want to delete it?`
               )}
             >
-              {i18n._(msg`Delete`)}
+              {i18n._(t`Delete`)}
             </DeleteButton>
           )}
       </CardActionsRow>
@@ -148,7 +148,7 @@ function InstanceGroupDetails({ instanceGroup }) {
         <AlertModal
           isOpen={error}
           onClose={dismissError}
-          title={i18n._(msg`Error`)}
+          title={i18n._(t`Error`)}
           variant="error"
         >
           <ErrorDetail error={error} />

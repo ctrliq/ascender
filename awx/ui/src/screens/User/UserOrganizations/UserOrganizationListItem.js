@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useLingui } from '@lingui/react';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { Tr, Td } from '@patternfly/react-table';
 
 export default function UserOrganizationListItem({ organization }) {
@@ -13,12 +13,12 @@ export default function UserOrganizationListItem({ organization }) {
       id={`user-org-row-${organization.id}`}
       ouiaId={`user-org-row-${organization.id}`}
     >
-      <Td id={labelId} dataLabel={i18n._(msg`Name`)}>
+      <Td id={labelId} dataLabel={i18n._(t`Name`)}>
         <Link to={`/organizations/${organization.id}/details`} id={labelId}>
           <b>{organization.name}</b>
         </Link>
       </Td>
-      <Td dataLabel={i18n._(msg`Description`)}>{organization.description}</Td>
+      <Td dataLabel={i18n._(t`Description`)}>{organization.description}</Td>
     </Tr>
   );
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory, Link } from 'react-router-dom';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 
 import { Card, PageSection } from '@patternfly/react-core';
 import { CardBody } from 'components/Card';
@@ -49,9 +49,9 @@ function NotificationTemplateAdd() {
           <ContentError error={error}>
             {error.response.status === 404 && (
               <span>
-                {i18n._(msg`Notification Template not found.`)}{' '}
+                {i18n._(t`Notification Template not found.`)}{' '}
                 <Link to="/notification_templates">
-                  {i18n._(msg`View all Notification Templates.`)}
+                  {i18n._(t`View all Notification Templates.`)}
                 </Link>
               </span>
             )}

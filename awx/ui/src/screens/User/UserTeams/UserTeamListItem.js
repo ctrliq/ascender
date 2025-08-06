@@ -2,7 +2,7 @@ import React from 'react';
 import { bool, func } from 'prop-types';
 import { Link } from 'react-router-dom';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { Tr, Td } from '@patternfly/react-table';
 import { Team } from 'types';
 
@@ -17,12 +17,12 @@ function UserTeamListItem({ team, isSelected, onSelect, rowIndex }) {
           onSelect,
         }}
       />
-      <Td id={`team-${team.id}`} dataLabel={i18n._(msg`Name`)}>
+      <Td id={`team-${team.id}`} dataLabel={i18n._(t`Name`)}>
         <Link to={`/teams/${team.id}/details`}>
           <b>{team.name}</b>
         </Link>
       </Td>
-      <Td dataLabel={i18n._(msg`Organization`)}>
+      <Td dataLabel={i18n._(t`Organization`)}>
         {team.summary_fields.organization ? (
           <Link
             to={`/organizations/${team.summary_fields.organization.id}/details`}
@@ -31,7 +31,7 @@ function UserTeamListItem({ team, isSelected, onSelect, rowIndex }) {
           </Link>
         ) : null}
       </Td>
-      <Td dataLabel={i18n._(msg`Description`)}>{team.description}</Td>
+      <Td dataLabel={i18n._(t`Description`)}>{team.description}</Td>
     </Tr>
   );
 }

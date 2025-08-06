@@ -1,7 +1,7 @@
 import React from 'react';
 import { bool, node, string } from 'prop-types';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import styled from 'styled-components';
 import { CheckboxField } from '../FormField';
@@ -45,7 +45,7 @@ function FieldWithPrompt({
         <StyledCheckboxField
           isDisabled={isDisabled}
           id={promptId}
-          label={i18n._(msg`Prompt on launch`)}
+          label={i18n._(t`Prompt on launch`)}
           name={promptName}
           ouiaId={`${promptId}-checkbox`}
         />

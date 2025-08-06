@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useRef } from 'react';
 import { useLingui } from '@lingui/react';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { Route, Switch } from 'react-router-dom';
 
 import { Config } from 'contexts/Config';
@@ -19,11 +19,11 @@ import { getInventoryPath } from './shared/utils';
 function Inventories() {
   const { i18n } = useLingui();
   const initScreenHeader = useRef({
-    '/inventories': i18n._(msg`Inventories`),
-    '/inventories/inventory/add': i18n._(msg`Create new inventory`),
-    '/inventories/smart_inventory/add': i18n._(msg`Create new smart inventory`),
+    '/inventories': i18n._(t`Inventories`),
+    '/inventories/inventory/add': i18n._(t`Create new inventory`),
+    '/inventories/smart_inventory/add': i18n._(t`Create new smart inventory`),
     '/inventories/constructed_inventory/add': i18n._(
-      msg`Create new constructed inventory`
+      t`Create new constructed inventory`
     ),
   });
 
@@ -61,68 +61,68 @@ function Inventories() {
       setScreenHeader({
         ...initScreenHeader.current,
         [inventoryPath]: `${inventory.name}`,
-        [`${inventoryPath}/access`]: i18n._(msg`Access`),
-        [`${inventoryPath}/jobs`]: i18n._(msg`Jobs`),
-        [`${inventoryPath}/details`]: i18n._(msg`Details`),
-        [`${inventoryPath}/job_templates`]: i18n._(msg`Job Templates`),
-        [`${inventoryPath}/edit`]: i18n._(msg`Edit details`),
+        [`${inventoryPath}/access`]: i18n._(t`Access`),
+        [`${inventoryPath}/jobs`]: i18n._(t`Jobs`),
+        [`${inventoryPath}/details`]: i18n._(t`Details`),
+        [`${inventoryPath}/job_templates`]: i18n._(t`Job Templates`),
+        [`${inventoryPath}/edit`]: i18n._(t`Edit details`),
 
-        [inventoryHostsPath]: i18n._(msg`Hosts`),
-        [`${inventoryHostsPath}/add`]: i18n._(msg`Create new host`),
+        [inventoryHostsPath]: i18n._(t`Hosts`),
+        [`${inventoryHostsPath}/add`]: i18n._(t`Create new host`),
         [`${inventoryHostsPath}/${nestedObject?.id}`]: `${nestedObject?.name}`,
         [`${inventoryHostsPath}/${nestedObject?.id}/edit`]: i18n._(
-          msg`Edit details`
+          t`Edit details`
         ),
         [`${inventoryHostsPath}/${nestedObject?.id}/details`]: i18n._(
-          msg`Host details`
+          t`Host details`
         ),
-        [`${inventoryHostsPath}/${nestedObject?.id}/jobs`]: i18n._(msg`Jobs`),
-        [`${inventoryHostsPath}/${nestedObject?.id}/facts`]: i18n._(msg`Facts`),
+        [`${inventoryHostsPath}/${nestedObject?.id}/jobs`]: i18n._(t`Jobs`),
+        [`${inventoryHostsPath}/${nestedObject?.id}/facts`]: i18n._(t`Facts`),
         [`${inventoryHostsPath}/${nestedObject?.id}/groups`]: i18n._(
-          msg`Groups`
+          t`Groups`
         ),
 
-        [inventoryGroupsPath]: i18n._(msg`Groups`),
-        [`${inventoryGroupsPath}/add`]: i18n._(msg`Create new group`),
+        [inventoryGroupsPath]: i18n._(t`Groups`),
+        [`${inventoryGroupsPath}/add`]: i18n._(t`Create new group`),
         [`${inventoryGroupsPath}/${nestedObject?.id}`]: `${nestedObject?.name}`,
         [`${inventoryGroupsPath}/${nestedObject?.id}/edit`]: i18n._(
-          msg`Edit details`
+          t`Edit details`
         ),
         [`${inventoryGroupsPath}/${nestedObject?.id}/details`]: i18n._(
-          msg`Group details`
+          t`Group details`
         ),
         [`${inventoryGroupsPath}/${nestedObject?.id}/nested_hosts`]: i18n._(
-          msg`Hosts`
+          t`Hosts`
         ),
         [`${inventoryGroupsPath}/${nestedObject?.id}/nested_hosts/add`]: i18n._(
-          msg`Create new host`
+          t`Create new host`
         ),
         [`${inventoryGroupsPath}/${nestedObject?.id}/nested_groups`]: i18n._(
-          msg`Related Groups`
+          t`Related Groups`
         ),
         [`${inventoryGroupsPath}/${nestedObject?.id}/nested_groups/add`]:
-          i18n._(msg`Create new group`),
+          i18n._(t`Create new group`),
 
-        [`${inventorySourcesPath}`]: i18n._(msg`Sources`),
-        [`${inventorySourcesPath}/add`]: i18n._(msg`Create new source`),
+        [`${inventorySourcesPath}`]: i18n._(t`Sources`),
+        [`${inventorySourcesPath}/add`]: i18n._(t`Create new source`),
         [`${inventorySourcesPath}/${nestedObject?.id}`]: `${nestedObject?.name}`,
         [`${inventorySourcesPath}/${nestedObject?.id}/details`]: i18n._(
-          msg`Details`
+          t`Details`
         ),
         [`${inventorySourcesPath}/${nestedObject?.id}/edit`]: i18n._(
-          msg`Edit details`
+          t`Edit details`
         ),
         [`${inventorySourcesPath}/${nestedObject?.id}/schedules`]: i18n._(
-          msg`Schedules`
+          t`Schedules`
         ),
         [`${inventorySourcesPath}/${nestedObject?.id}/schedules/${schedule?.id}`]: `${schedule?.name}`,
         [`${inventorySourcesPath}/${nestedObject?.id}/schedules/add`]: i18n._(
-          msg`Create New Schedule`
+          t`Create New Schedule`
         ),
         [`${inventorySourcesPath}/${nestedObject?.id}/schedules/${schedule?.id}/details`]:
-          i18n._(msg`Schedule details`),
+          i18n._(t`Schedule details`),
         [`${inventorySourcesPath}/${nestedObject?.id}/notifications`]: i18n._(
-          msg`Notifications`
+          t`Notifications`
         ),
       });
     },

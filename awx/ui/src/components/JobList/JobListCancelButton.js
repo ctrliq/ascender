@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 
-import { msg, Plural } from '@lingui/macro';
+import { t, Plural } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { arrayOf, func } from 'prop-types';
 import { Button, DropdownItem, Tooltip } from '@patternfly/react-core';
@@ -92,12 +92,12 @@ function JobListCancelButton({ jobsToCancel, onCancel }) {
       return (
         <Plural
           value={numJobsToCancel}
-          one={i18n._(msg`Cancel selected job`)}
-          other={i18n._(msg`Cancel selected jobs`)}
+          one={i18n._(t`Cancel selected job`)}
+          other={i18n._(t`Cancel selected jobs`)}
         />
       );
     }
-    return i18n._(msg`Select a job to cancel`);
+    return i18n._(t`Select a job to cancel`);
   };
 
   const isDisabled =
@@ -159,10 +159,10 @@ function JobListCancelButton({ jobsToCancel, onCancel }) {
               id="cancel-job-return-button"
               key="cancel"
               variant="secondary"
-              aria-label={i18n._(msg`Return`)}
+              aria-label={i18n._(t`Return`)}
               onClick={toggleModal}
             >
-              {i18n._(msg`Return`)}
+              {i18n._(t`Return`)}
             </Button>,
           ]}
         >

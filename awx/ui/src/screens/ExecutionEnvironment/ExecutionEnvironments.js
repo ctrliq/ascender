@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { Route, Switch } from 'react-router-dom';
 import PersistentFilters from 'components/PersistentFilters';
 import ScreenHeader from 'components/ScreenHeader/ScreenHeader';
@@ -11,9 +11,9 @@ import ExecutionEnvironmentList from './ExecutionEnvironmentList';
 function ExecutionEnvironments() {
   const { i18n } = useLingui();
   const [breadcrumbConfig, setBreadcrumbConfig] = useState({
-    '/execution_environments': i18n._(msg`Execution Environments`),
+    '/execution_environments': i18n._(t`Execution Environments`),
     '/execution_environments/add': i18n._(
-      msg`Create new execution environment`
+      t`Create new execution environment`
     ),
   });
 
@@ -23,16 +23,16 @@ function ExecutionEnvironments() {
         return;
       }
       setBreadcrumbConfig({
-        '/execution_environments': i18n._(msg`Execution Environments`),
+        '/execution_environments': i18n._(t`Execution Environments`),
         '/execution_environments/add': i18n._(
-          msg`Create new execution environment`
+          t`Create new execution environment`
         ),
         [`/execution_environments/${executionEnvironments.id}`]: `${executionEnvironments.name}`,
         [`/execution_environments/${executionEnvironments.id}/edit`]: i18n._(
-          msg`Edit details`
+          t`Edit details`
         ),
         [`/execution_environments/${executionEnvironments.id}/details`]: i18n._(
-          msg`Details`
+          t`Details`
         ),
       });
     },

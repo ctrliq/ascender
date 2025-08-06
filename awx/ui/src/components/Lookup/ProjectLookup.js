@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { node, string, func, bool, object, oneOfType } from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { FormGroup } from '@patternfly/react-core';
 import { ProjectsAPI } from 'api';
@@ -103,12 +103,12 @@ function ProjectLookup({
       helperTextInvalid={helperTextInvalid}
       isRequired={required}
       validated={isValid ? 'default' : 'error'}
-      label={i18n._(msg`Project`)}
+      label={i18n._(t`Project`)}
       labelIcon={tooltip && <Popover content={tooltip} />}
     >
       <Lookup
         id="project"
-        header={i18n._(msg`Project`)}
+        header={i18n._(t`Project`)}
         name="project"
         value={value}
         onBlur={onBlur}
@@ -126,37 +126,37 @@ function ProjectLookup({
             value={state.selectedItems}
             searchColumns={[
               {
-                name: i18n._(msg`Name`),
+                name: i18n._(t`Name`),
                 key: 'name__icontains',
                 isDefault: true,
               },
               {
-                name: i18n._(msg`Type`),
+                name: i18n._(t`Type`),
                 key: 'or__scm_type',
                 options: [
-                  [``, i18n._(msg`Manual`)],
-                  [`git`, i18n._(msg`Git`)],
-                  [`svn`, i18n._(msg`Subversion`)],
-                  [`archive`, i18n._(msg`Remote Archive`)],
-                  [`insights`, i18n._(msg`Red Hat Insights`)],
+                  [``, i18n._(t`Manual`)],
+                  [`git`, i18n._(t`Git`)],
+                  [`svn`, i18n._(t`Subversion`)],
+                  [`archive`, i18n._(t`Remote Archive`)],
+                  [`insights`, i18n._(t`Red Hat Insights`)],
                 ],
               },
               {
-                name: i18n._(msg`Source Control URL`),
+                name: i18n._(t`Source Control URL`),
                 key: 'scm_url__icontains',
               },
               {
-                name: i18n._(msg`Modified By (Username)`),
+                name: i18n._(t`Modified By (Username)`),
                 key: 'modified_by__username__icontains',
               },
               {
-                name: i18n._(msg`Created By (Username)`),
+                name: i18n._(t`Created By (Username)`),
                 key: 'created_by__username__icontains',
               },
             ]}
             sortColumns={[
               {
-                name: i18n._(msg`Name`),
+                name: i18n._(t`Name`),
                 key: 'name',
               },
             ]}
@@ -165,7 +165,7 @@ function ProjectLookup({
             options={projects}
             optionCount={count}
             multiple={state.multiple}
-            header={i18n._(msg`Project`)}
+            header={i18n._(t`Project`)}
             name="project"
             qsConfig={QS_CONFIG}
             readOnly={!canDelete}

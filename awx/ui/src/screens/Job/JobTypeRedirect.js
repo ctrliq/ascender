@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import { PageSection, Card } from '@patternfly/react-core';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 
 import useRequest from 'hooks/useRequest';
@@ -40,7 +40,7 @@ function JobTypeRedirect({ id, path, view }) {
         <Card>
           {error === NOT_FOUND ? (
             <ContentError isNotFound>
-              <Link to="/jobs">{i18n._(msg`View all Jobs`)}</Link>
+              <Link to="/jobs">{i18n._(t`View all Jobs`)}</Link>
             </ContentError>
           ) : (
             <ContentError error={error} />

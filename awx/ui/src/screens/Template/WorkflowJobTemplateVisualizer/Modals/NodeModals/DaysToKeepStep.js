@@ -1,5 +1,5 @@
 import React from 'react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { Form } from '@patternfly/react-core';
 import { useField } from 'formik';
@@ -27,7 +27,7 @@ function DaysToKeepStep() {
         isRequired
         validate={combine(validators)}
         validated={!(meta.touched && meta.error) ? 'default' : 'error'}
-        label={i18n._(msg`Days of data to be retained`)}
+        label={i18n._(t`Days of data to be retained`)}
       />
     </Form>
   );

@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { Card, PageSection } from '@patternfly/react-core';
 import { CaretLeftIcon } from '@patternfly/react-icons';
@@ -56,9 +56,9 @@ function NotificationTemplate({ setBreadcrumb }) {
           <ContentError error={error}>
             {error.response?.status === 404 && (
               <span>
-                {i18n._(msg`Notification Template not found.`)}{' '}
+                {i18n._(t`Notification Template not found.`)}{' '}
                 <Link to="/notification_templates">
-                  {i18n._(msg`View all Notification Templates.`)}
+                  {i18n._(t`View all Notification Templates.`)}
                 </Link>
               </span>
             )}
@@ -74,7 +74,7 @@ function NotificationTemplate({ setBreadcrumb }) {
       name: (
         <>
           <CaretLeftIcon />
-          {i18n._(msg`Back to Notifications`)}
+          {i18n._(t`Back to Notifications`)}
         </>
       ),
       link: `/notification_templates`,
@@ -82,7 +82,7 @@ function NotificationTemplate({ setBreadcrumb }) {
       persistentFilterKey: 'notificationTemplates',
     },
     {
-      name: i18n._(msg`Details`),
+      name: i18n._(t`Details`),
       link: `${match.url}/details`,
       id: 0,
     },

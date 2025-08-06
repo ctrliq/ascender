@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { Link, useHistory } from 'react-router-dom';
 import { Button } from '@patternfly/react-core';
 
@@ -58,17 +58,17 @@ function ApplicationDetails({
     <CardBody>
       <DetailList>
         <Detail
-          label={i18n._(msg`Name`)}
+          label={i18n._(t`Name`)}
           value={application.name}
           dataCy="app-detail-name"
         />
         <Detail
-          label={i18n._(msg`Description`)}
+          label={i18n._(t`Description`)}
           value={application.description}
           dataCy="app-detail-description"
         />
         <Detail
-          label={i18n._(msg`Organization`)}
+          label={i18n._(t`Organization`)}
           value={
             <Link
               to={`/organizations/${application.summary_fields.organization.id}/details`}
@@ -79,7 +79,7 @@ function ApplicationDetails({
           dataCy="app-detail-organization"
         />
         <Detail
-          label={i18n._(msg`Authorization grant type`)}
+          label={i18n._(t`Authorization grant type`)}
           value={getAuthorizationGrantType(
             application.authorization_grant_type
           )}
@@ -87,28 +87,28 @@ function ApplicationDetails({
           helpText={applicationHelpTextStrings.authorizationGrantType}
         />
         <Detail
-          label={i18n._(msg`Client ID`)}
+          label={i18n._(t`Client ID`)}
           value={application.client_id}
           dataCy="app-detail-client-id"
         />
         <Detail
-          label={i18n._(msg`Redirect URIs`)}
+          label={i18n._(t`Redirect URIs`)}
           value={application.redirect_uris}
           dataCy="app-detail-redirect-uris"
           helpText={applicationHelpTextStrings.redirectURIS}
         />
         <Detail
-          label={i18n._(msg`Client type`)}
+          label={i18n._(t`Client type`)}
           value={getClientType(application.client_type)}
           dataCy="app-detail-client-type"
           helpText={applicationHelpTextStrings.clientType}
         />
         <UserDateDetail
-          label={i18n._(msg`Created`)}
+          label={i18n._(t`Created`)}
           date={application.created}
         />
         <UserDateDetail
-          label={i18n._(msg`Last Modified`)}
+          label={i18n._(t`Last Modified`)}
           date={application.modified}
         />
       </DetailList>
@@ -119,20 +119,20 @@ function ApplicationDetails({
               ouiaId="application-details-edit-button"
               component={Link}
               to={`/applications/${application.id}/edit`}
-              aria-label={i18n._(msg`Edit`)}
+              aria-label={i18n._(t`Edit`)}
             >
-              {i18n._(msg`Edit`)}
+              {i18n._(t`Edit`)}
             </Button>
           )}
         {application.summary_fields.user_capabilities &&
           application.summary_fields.user_capabilities.delete && (
             <DeleteButton
               name={application.name}
-              modalTitle={i18n._(msg`Delete application`)}
+              modalTitle={i18n._(t`Delete application`)}
               onConfirm={deleteApplications}
               isDisabled={deleteLoading}
             >
-              {i18n._(msg`Delete`)}
+              {i18n._(t`Delete`)}
             </DeleteButton>
           )}
       </CardActionsRow>
@@ -140,10 +140,10 @@ function ApplicationDetails({
         <AlertModal
           isOpen={error}
           variant="error"
-          title={i18n._(msg`Error!`)}
+          title={i18n._(t`Error!`)}
           onClose={dismissError}
         >
-          {i18n._(msg`Failed to delete application.`)}
+          {i18n._(t`Failed to delete application.`)}
           <ErrorDetail error={error} />
         </AlertModal>
       )}

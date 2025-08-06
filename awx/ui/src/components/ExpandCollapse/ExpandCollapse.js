@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import {
   Button as PFButton,
@@ -40,7 +40,7 @@ function ExpandCollapse({ isCompact, onCompact, onExpand }) {
         <Button
           ouiaId="toolbar-collapse-button"
           variant="plain"
-          aria-label={i18n._(msg`Collapse`)}
+          aria-label={i18n._(t`Collapse`)}
           onClick={onCompact}
           isActive={isCompact}
         >
@@ -51,7 +51,7 @@ function ExpandCollapse({ isCompact, onCompact, onExpand }) {
         <Button
           ouiaId="toolbar-expand-button"
           variant="plain"
-          aria-label={i18n._(msg`Expand`)}
+          aria-label={i18n._(t`Expand`)}
           onClick={onExpand}
           isActive={!isCompact}
         >

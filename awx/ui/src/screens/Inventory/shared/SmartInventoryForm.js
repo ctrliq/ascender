@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { Formik, useField, useFormikContext } from 'formik';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLocation } from 'react-router-dom';
 import { func, shape, arrayOf } from 'prop-types';
 import { Form } from '@patternfly/react-core';
@@ -46,7 +46,7 @@ const SmartInventoryFormFields = ({ inventory }) => {
     <>
       <FormField
         id="name"
-        label={i18n._(msg`Name`)}
+        label={i18n._(t`Name`)}
         name="name"
         type="text"
         validate={required(null)}
@@ -54,7 +54,7 @@ const SmartInventoryFormFields = ({ inventory }) => {
       />
       <FormField
         id="description"
-        label={i18n._(msg`Description`)}
+        label={i18n._(t`Description`)}
         name="description"
         type="text"
       />
@@ -66,7 +66,7 @@ const SmartInventoryFormFields = ({ inventory }) => {
         value={organizationField.value}
         required
         autoPopulate={!inventory?.id}
-        validate={required(i18n._(msg`Select a value for this field`))}
+        validate={required(i18n._(t`Select a value for this field`))}
       />
       <HostFilterLookup
         value={hostFilterField.value}
@@ -87,16 +87,16 @@ const SmartInventoryFormFields = ({ inventory }) => {
           instanceGroupsHelpers.setValue(value);
         }}
         tooltip={i18n._(
-          msg`Select the Instance Groups for this Inventory to run on.`
+          t`Select the Instance Groups for this Inventory to run on.`
         )}
       />
       <FormFullWidthLayout>
         <VariablesField
           id="variables"
           name="variables"
-          label={i18n._(msg`Variables`)}
+          label={i18n._(t`Variables`)}
           tooltip={i18n._(
-            msg`Enter inventory variables using either JSON or YAML syntax. Use the radio button to toggle between the two. Refer to the Ansible Controller documentation for example syntax.`
+            t`Enter inventory variables using either JSON or YAML syntax. Use the radio button to toggle between the two. Refer to the Ansible Controller documentation for example syntax.`
           )}
         />
       </FormFullWidthLayout>

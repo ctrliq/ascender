@@ -3,7 +3,7 @@ import { func, node, string, arrayOf, shape } from 'prop-types';
 import styled from 'styled-components';
 import { Alert, Badge, Button, Tooltip } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { getRelatedResourceDeleteCounts } from 'util/getRelatedResourceDeleteDetails';
 import AlertModal from '../../components/AlertModal';
 
@@ -66,12 +66,12 @@ function HostMetricsDeleteButton({
 
   const renderTooltip = () => {
     if (itemsToDelete.length) {
-      return i18n._(msg`Soft delete`);
+      return i18n._(t`Soft delete`);
     }
-    return i18n._(msg`Select a row to delete`);
+    return i18n._(t`Select a row to delete`);
   };
 
-  const modalTitle = i18n._(msg`Soft delete ${pluralizedItemName}?`);
+  const modalTitle = i18n._(t`Soft delete ${pluralizedItemName}?`);
 
   const isDisabled = itemsToDelete.length === 0;
 
@@ -107,7 +107,7 @@ function HostMetricsDeleteButton({
     return (
       <AlertModal
         isOpen={deleteMessageError}
-        title={i18n._(msg`Error!`)}
+        title={i18n._(t`Error!`)}
         onClose={() => {
           toggleModal(false);
           setDeleteMessageError();
@@ -131,11 +131,11 @@ function HostMetricsDeleteButton({
             isLoading={isLoading}
             ouiaId="delete-button"
             spinnerAriaValueText={isLoading ? 'Loading' : undefined}
-            aria-label={i18n._(msg`Delete`)}
+            aria-label={i18n._(t`Delete`)}
             onClick={() => toggleModal(true)}
             isDisabled={isDisabled}
           >
-            {i18n._(msg`Delete`)}
+            {i18n._(t`Delete`)}
           </Button>
         </div>
       </Tooltip>
@@ -150,26 +150,26 @@ function HostMetricsDeleteButton({
               ouiaId="delete-modal-confirm"
               key="delete"
               variant="danger"
-              aria-label={i18n._(msg`confirm delete`)}
+              aria-label={i18n._(t`confirm delete`)}
               isDisabled={Boolean(
                 deleteDetails && itemsToDelete[0]?.type === 'credential_type'
               )}
               onClick={handleDelete}
             >
-              {i18n._(msg`Delete`)}
+              {i18n._(t`Delete`)}
             </Button>,
             <Button
               ouiaId="delete-cancel"
               key="cancel"
               variant="link"
-              aria-label={i18n._(msg`cancel delete`)}
+              aria-label={i18n._(t`cancel delete`)}
               onClick={() => toggleModal(false)}
             >
-              {i18n._(msg`Cancel`)}
+              {i18n._(t`Cancel`)}
             </Button>,
           ]}
         >
-          <div>{i18n._(msg`This action will soft delete the following:`)}</div>
+          <div>{i18n._(t`This action will soft delete the following:`)}</div>
           {itemsToDelete.map((item) => (
             <span
               key={item.hostname}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { Form } from '@patternfly/react-core';
 import { useFormikContext } from 'formik';
 import { PasswordField } from '../../FormField';
@@ -93,7 +93,7 @@ function CredentialPasswordsStep({ launchConfig }) {
       {showcredentialPasswordSsh && (
         <PasswordField
           id="launch-ssh-password"
-          label={i18n._(msg`SSH password`)}
+          label={i18n._(t`SSH password`)}
           name="credential_passwords.ssh_password"
           isRequired
         />
@@ -101,7 +101,7 @@ function CredentialPasswordsStep({ launchConfig }) {
       {showcredentialPasswordPrivateKeyPassphrase && (
         <PasswordField
           id="launch-private-key-passphrase"
-          label={i18n._(msg`Private key passphrase`)}
+          label={i18n._(t`Private key passphrase`)}
           name="credential_passwords.ssh_key_unlock"
           isRequired
         />
@@ -109,7 +109,7 @@ function CredentialPasswordsStep({ launchConfig }) {
       {showcredentialPasswordPrivilegeEscalation && (
         <PasswordField
           id="launch-privilege-escalation-password"
-          label={i18n._(msg`Privilege escalation password`)}
+          label={i18n._(t`Privilege escalation password`)}
           name="credential_passwords.become_password"
           isRequired
         />
@@ -120,8 +120,8 @@ function CredentialPasswordsStep({ launchConfig }) {
           key={credId}
           label={
             credId === ''
-              ? i18n._(msg`Vault password`)
-              : i18n._(msg`Vault password | ${credId}`)
+              ? i18n._(t`Vault password`)
+              : i18n._(t`Vault password | ${credId}`)
           }
           name={`credential_passwords['vault_password${
             credId !== '' ? `.${credId}` : ''

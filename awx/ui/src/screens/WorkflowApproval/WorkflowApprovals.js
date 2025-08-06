@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 
 import ScreenHeader from 'components/ScreenHeader/ScreenHeader';
@@ -12,7 +12,7 @@ function WorkflowApprovals() {
   const match = useRouteMatch();
   const { i18n } = useLingui();
   const [breadcrumbConfig, setBreadcrumbConfig] = useState({
-    '/workflow_approvals': i18n._(msg`Workflow Approvals`),
+    '/workflow_approvals': i18n._(t`Workflow Approvals`),
   });
 
   const updateBreadcrumbConfig = useCallback(
@@ -22,9 +22,9 @@ function WorkflowApprovals() {
       }
       const { id } = workflowApproval;
       setBreadcrumbConfig({
-        '/workflow_approvals': i18n._(msg`Workflow Approvals`),
+        '/workflow_approvals': i18n._(t`Workflow Approvals`),
         [`/workflow_approvals/${id}`]: workflowApproval.name,
-        [`/workflow_approvals/${id}/details`]: i18n._(msg`Details`),
+        [`/workflow_approvals/${id}/details`]: i18n._(t`Details`),
       });
     },
     [i18n]

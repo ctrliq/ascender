@@ -1,5 +1,5 @@
 import React from 'react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import useToast, { AlertVariant } from 'hooks/useToast';
 import { string, bool, func } from 'prop-types';
@@ -51,15 +51,15 @@ function WorkflowApprovalListItem({
           isSelected,
           onSelect,
         }}
-        dataLabel={i18n._(msg`Selected`)}
+        dataLabel={i18n._(t`Selected`)}
       />
-      <Td id={labelId} dataLabel={i18n._(msg`Name`)}>
+      <Td id={labelId} dataLabel={i18n._(t`Name`)}>
         <Link to={`${detailUrl}`}>
           {workflowJob && workflowJob?.id ? (
             <b>{`${workflowJob?.id} - ${workflowApproval?.name}`}</b>
           ) : (
             <b>
-              {i18n._(msg`Deleted`)} {`- ${workflowApproval?.name}`}
+              {i18n._(t`Deleted`)} {`- ${workflowApproval?.name}`}
             </b>
           )}
         </Link>
@@ -70,13 +70,13 @@ function WorkflowApprovalListItem({
             {`${workflowJob?.id} - ${workflowJob?.name}`}
           </Link>
         ) : (
-          i18n._(msg`Deleted`)
+          i18n._(t`Deleted`)
         )}
       </Td>
-      <Td dataLabel={i18n._(msg`Started`)}>
+      <Td dataLabel={i18n._(t`Started`)}>
         {formatDateString(workflowApproval.started)}
       </Td>
-      <Td dataLabel={i18n._(msg`Status`)}>
+      <Td dataLabel={i18n._(t`Status`)}>
         {workflowApproval.status === 'pending' ? (
           <StatusLabel status={workflowApproval.status}>
             {getPendingLabel(workflowApproval, i18n)}
@@ -88,13 +88,13 @@ function WorkflowApprovalListItem({
           />
         )}
       </Td>
-      <ActionsTd dataLabel={i18n._(msg`Actions`)}>
+      <ActionsTd dataLabel={i18n._(t`Actions`)}>
         <ActionItem
           visible
           tooltip={
             hasBeenActedOn
-              ? i18n._(msg`This has already been acted on`)
-              : i18n._(msg`Approve`)
+              ? i18n._(t`This has already been acted on`)
+              : i18n._(t`Approve`)
           }
         >
           <WorkflowApprovalButton
@@ -106,8 +106,8 @@ function WorkflowApprovalListItem({
           visible
           tooltip={
             hasBeenActedOn
-              ? i18n._(msg`This has already been acted on`)
-              : i18n._(msg`Deny`)
+              ? i18n._(t`This has already been acted on`)
+              : i18n._(t`Deny`)
           }
         >
           <WorkflowDenyButton
@@ -117,21 +117,21 @@ function WorkflowApprovalListItem({
         </ActionItem>
         <ActionItem visible>
           <JobCancelButton
-            title={i18n._(msg`Cancel Workflow`)}
+            title={i18n._(t`Cancel Workflow`)}
             showIconButton
             job={{
               ...workflowApproval.summary_fields.source_workflow_job,
               type: 'workflow_job',
             }}
-            buttonText={i18n._(msg`Cancel Workflow`)}
+            buttonText={i18n._(t`Cancel Workflow`)}
             isDisabled={hasBeenActedOn}
             tooltip={
               hasBeenActedOn
-                ? i18n._(msg`This has already been acted on`)
-                : i18n._(msg`Cancel`)
+                ? i18n._(t`This has already been acted on`)
+                : i18n._(t`Cancel`)
             }
             cancelationMessage={i18n._(
-              msg`This will cancel all subsequent nodes in this workflow`
+              t`This will cancel all subsequent nodes in this workflow`
             )}
           />
         </ActionItem>

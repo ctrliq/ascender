@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { PageSection, Card } from '@patternfly/react-core';
 import ContentError from 'components/ContentError';
 import GitHubDetail from './GitHubDetail';
@@ -56,7 +56,7 @@ function GitHub() {
           <Route key="not-found" path={`${baseURL}/*`}>
             <ContentError isNotFound>
               <Link to={`${baseURL}/default/details`}>
-                {i18n._(msg`View GitHub Settings`)}
+                {i18n._(t`View GitHub Settings`)}
               </Link>
             </ContentError>
           </Route>

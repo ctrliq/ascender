@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { Link, Redirect, useRouteMatch } from 'react-router-dom';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { CardBody, CardActionsRow } from 'components/Card';
@@ -76,39 +76,39 @@ function GitHubDetail() {
       name: (
         <>
           <CaretLeftIcon />
-          {i18n._(msg`Back to Settings`)}
+          {i18n._(t`Back to Settings`)}
         </>
       ),
       link: `/settings`,
       id: 99,
     },
     {
-      name: i18n._(msg`GitHub Default`),
+      name: i18n._(t`GitHub Default`),
       link: `${baseURL}/default/details`,
       id: 0,
     },
     {
-      name: i18n._(msg`GitHub Organization`),
+      name: i18n._(t`GitHub Organization`),
       link: `${baseURL}/organization/details`,
       id: 1,
     },
     {
-      name: i18n._(msg`GitHub Team`),
+      name: i18n._(t`GitHub Team`),
       link: `${baseURL}/team/details`,
       id: 2,
     },
     {
-      name: i18n._(msg`GitHub Enterprise`),
+      name: i18n._(t`GitHub Enterprise`),
       link: `${baseURL}/enterprise/details`,
       id: 3,
     },
     {
-      name: i18n._(msg`GitHub Enterprise Organization`),
+      name: i18n._(t`GitHub Enterprise Organization`),
       link: `${baseURL}/enterprise_organization/details`,
       id: 4,
     },
     {
-      name: i18n._(msg`GitHub Enterprise Team`),
+      name: i18n._(t`GitHub Enterprise Team`),
       link: `${baseURL}/enterprise_team/details`,
       id: 5,
     },
@@ -146,11 +146,11 @@ function GitHubDetail() {
           <CardActionsRow>
             <Button
               ouiaId="github-detail-edit-button"
-              aria-label={i18n._(msg`Edit`)}
+              aria-label={i18n._(t`Edit`)}
               component={Link}
               to={`${baseURL}/${category}/edit`}
             >
-              {i18n._(msg`Edit`)}
+              {i18n._(t`Edit`)}
             </Button>
           </CardActionsRow>
         )}

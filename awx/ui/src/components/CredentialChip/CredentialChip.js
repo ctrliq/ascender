@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { Chip } from '@patternfly/react-core';
 import { Credential } from 'types';
@@ -10,9 +10,9 @@ function CredentialChip({ credential, ...props }) {
   const { i18n } = useLingui();
   let type;
   if (credential.cloud) {
-    type = i18n._(msg`Cloud`);
+    type = i18n._(t`Cloud`);
   } else if (credential.kind === 'gpg_public_key') {
-    type = i18n._(msg`GPG Public Key`);
+    type = i18n._(t`GPG Public Key`);
   } else if (credential.kind === 'aws' || credential.kind === 'ssh') {
     type = credential.kind.toUpperCase();
   } else {

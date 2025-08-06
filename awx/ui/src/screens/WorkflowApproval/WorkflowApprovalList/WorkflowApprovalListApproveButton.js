@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import PropTypes from 'prop-types';
 import { Button, DropdownItem, Tooltip } from '@patternfly/react-core';
@@ -17,7 +17,7 @@ function WorkflowApprovalListApproveButton({ onApprove, selectedItems }) {
 
   const renderTooltip = () => {
     if (selectedItems.length === 0) {
-      return i18n._(msg`Select a row to approve`);
+      return i18n._(t`Select a row to approve`);
     }
 
     const itemsUnableToApprove = selectedItems
@@ -27,11 +27,11 @@ function WorkflowApprovalListApproveButton({ onApprove, selectedItems }) {
 
     if (selectedItems.some(cannotApprove)) {
       return i18n._(
-        msg`You are unable to act on the following workflow approvals: ${itemsUnableToApprove}`
+        t`You are unable to act on the following workflow approvals: ${itemsUnableToApprove}`
       );
     }
 
-    return i18n._(msg`Approve`);
+    return i18n._(t`Approve`);
   };
 
   const isDisabled =
@@ -47,7 +47,7 @@ function WorkflowApprovalListApproveButton({ onApprove, selectedItems }) {
           component="button"
           onClick={onApprove}
         >
-          {i18n._(msg`Approve`)}
+          {i18n._(t`Approve`)}
         </DropdownItem>
       ) : (
         <Tooltip content={renderTooltip()} position="top">
@@ -55,11 +55,11 @@ function WorkflowApprovalListApproveButton({ onApprove, selectedItems }) {
             <Button
               ouiaId="workflow-approval-approve-button"
               isDisabled={isDisabled}
-              aria-label={i18n._(msg`Approve`)}
+              aria-label={i18n._(t`Approve`)}
               variant="primary"
               onClick={onApprove}
             >
-              {i18n._(msg`Approve`)}
+              {i18n._(t`Approve`)}
             </Button>
           </div>
         </Tooltip>

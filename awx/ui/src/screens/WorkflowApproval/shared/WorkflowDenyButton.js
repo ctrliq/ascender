@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
 import { OutlinedThumbsDownIcon } from '@patternfly/react-icons';
 import { WorkflowApprovalsAPI } from 'api';
@@ -24,7 +24,7 @@ function WorkflowDenyButton({ isDetailView, workflowApproval, onHandleToast }) {
 
   const handleDeny = async () => {
     await denyWorkflowApprovals();
-    onHandleToast(workflowApproval.id, i18n._(msg`Successfully Denied`));
+    onHandleToast(workflowApproval.id, i18n._(t`Successfully Denied`));
   };
 
   const { error: denyError, dismissError: dismissDenyError } =
@@ -35,24 +35,24 @@ function WorkflowDenyButton({ isDetailView, workflowApproval, onHandleToast }) {
       <Button
         aria-label={
           hasBeenActedOn
-            ? i18n._(msg`This workflow has already been acted on`)
-            : i18n._(msg`Deny`)
+            ? i18n._(t`This workflow has already been acted on`)
+            : i18n._(t`Deny`)
         }
         ouiaId="workflow-deny-button"
         isDisabled={hasBeenActedOn}
         variant={isDetailView ? 'secondary' : 'plain'}
         onClick={() => handleDeny()}
       >
-        {isDetailView ? i18n._(msg`Deny`) : <OutlinedThumbsDownIcon />}
+        {isDetailView ? i18n._(t`Deny`) : <OutlinedThumbsDownIcon />}
       </Button>
       {denyError && (
         <AlertModal
           isOpen={denyError}
           variant="error"
-          title={i18n._(msg`Error!`)}
+          title={i18n._(t`Error!`)}
           onClose={dismissDenyError}
         >
-          {i18n._(msg`Failed to deny ${workflowApproval.name}.`)}
+          {i18n._(t`Failed to deny ${workflowApproval.name}.`)}
           <ErrorDetail error={denyError} />
         </AlertModal>
       )}

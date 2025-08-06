@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { Route, withRouter, Switch, useRouteMatch } from 'react-router-dom';
 
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 
 import { Config } from 'contexts/Config';
 import ScreenHeader from 'components/ScreenHeader/ScreenHeader';
@@ -15,8 +15,8 @@ function Organizations() {
   const { i18n } = useLingui();
   const match = useRouteMatch();
   const [breadcrumbConfig, setBreadcrumbConfig] = useState({
-    '/organizations': i18n._(msg`Organizations`),
-    '/organizations/add': i18n._(msg`Create New Organization`),
+    '/organizations': i18n._(t`Organizations`),
+    '/organizations/add': i18n._(t`Create New Organization`),
   });
 
   const setBreadcrumb = useCallback(
@@ -26,18 +26,18 @@ function Organizations() {
       }
 
       const breadcrumb = {
-        '/organizations': i18n._(msg`Organizations`),
-        '/organizations/add': i18n._(msg`Create New Organization`),
+        '/organizations': i18n._(t`Organizations`),
+        '/organizations/add': i18n._(t`Create New Organization`),
         [`/organizations/${organization.id}`]: `${organization.name}`,
-        [`/organizations/${organization.id}/edit`]: i18n._(msg`Edit Details`),
-        [`/organizations/${organization.id}/details`]: i18n._(msg`Details`),
-        [`/organizations/${organization.id}/access`]: i18n._(msg`Access`),
-        [`/organizations/${organization.id}/teams`]: i18n._(msg`Teams`),
+        [`/organizations/${organization.id}/edit`]: i18n._(t`Edit Details`),
+        [`/organizations/${organization.id}/details`]: i18n._(t`Details`),
+        [`/organizations/${organization.id}/access`]: i18n._(t`Access`),
+        [`/organizations/${organization.id}/teams`]: i18n._(t`Teams`),
         [`/organizations/${organization.id}/notifications`]: i18n._(
-          msg`Notifications`
+          t`Notifications`
         ),
         [`/organizations/${organization.id}/execution_environments`]: i18n._(
-          msg`Execution Environments`
+          t`Execution Environments`
         ),
       };
       setBreadcrumbConfig(breadcrumb);

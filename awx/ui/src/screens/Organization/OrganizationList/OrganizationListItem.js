@@ -1,7 +1,7 @@
 import React from 'react';
 import { string, bool, func } from 'prop-types';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { Button, Tooltip } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
 import { Link } from 'react-router-dom';
@@ -41,9 +41,9 @@ function OrganizationListItem({
           onSelect,
           disable: false,
         }}
-        dataLabel={i18n._(msg`Selected`)}
+        dataLabel={i18n._(t`Selected`)}
       />
-      <TdBreakWord id={labelId} dataLabel={i18n._(msg`Name`)}>
+      <TdBreakWord id={labelId} dataLabel={i18n._(t`Name`)}>
         <span>
           <Link to={`${detailUrl}`}>
             <b>{organization.name}</b>
@@ -54,7 +54,7 @@ function OrganizationListItem({
             <Tooltip
               className="missing-execution-environment"
               content={i18n._(
-                msg`Custom virtual environment ${organization.custom_virtualenv} must be replaced by an execution environment.`
+                t`Custom virtual environment ${organization.custom_virtualenv} must be replaced by an execution environment.`
               )}
               position="right"
             >
@@ -63,20 +63,20 @@ function OrganizationListItem({
           </span>
         )}
       </TdBreakWord>
-      <Td dataLabel={i18n._(msg`Members`)}>
+      <Td dataLabel={i18n._(t`Members`)}>
         {organization.summary_fields.related_field_counts.users}
       </Td>
-      <Td dataLabel={i18n._(msg`Teams`)}>
+      <Td dataLabel={i18n._(t`Teams`)}>
         {organization.summary_fields.related_field_counts.teams}
       </Td>
-      <ActionsTd dataLabel={i18n._(msg`Actions`)}>
+      <ActionsTd dataLabel={i18n._(t`Actions`)}>
         <ActionItem
           visible={organization.summary_fields.user_capabilities.edit}
-          tooltip={i18n._(msg`Edit Organization`)}
+          tooltip={i18n._(t`Edit Organization`)}
         >
           <Button
             ouiaId={`${organization.id}-edit-button`}
-            aria-label={i18n._(msg`Edit Organization`)}
+            aria-label={i18n._(t`Edit Organization`)}
             variant="plain"
             component={Link}
             to={`/organizations/${organization.id}/edit`}

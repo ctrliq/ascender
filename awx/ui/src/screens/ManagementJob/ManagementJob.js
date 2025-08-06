@@ -10,7 +10,7 @@ import {
 } from 'react-router-dom';
 
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card, PageSection } from '@patternfly/react-core';
 
@@ -97,7 +97,7 @@ function ManagementJob({ setBreadcrumb }) {
       name: (
         <>
           <CaretLeftIcon />
-          {i18n._(msg`Back to management jobs`)}
+          {i18n._(t`Back to management jobs`)}
         </>
       ),
       persistentFilterKey: 'managementJobs',
@@ -107,7 +107,7 @@ function ManagementJob({ setBreadcrumb }) {
   if (shouldShowSchedules) {
     tabsArray.push({
       id: 0,
-      name: i18n._(msg`Schedules`),
+      name: i18n._(t`Schedules`),
       link: `${match.url}/schedules`,
     });
   }
@@ -115,7 +115,7 @@ function ManagementJob({ setBreadcrumb }) {
   if (shouldShowNotifications) {
     tabsArray.push({
       id: 1,
-      name: i18n._(msg`Notifications`),
+      name: i18n._(t`Notifications`),
       link: `${match.url}/notifications`,
     });
   }
@@ -132,9 +132,9 @@ function ManagementJob({ setBreadcrumb }) {
           <ContentError error={error}>
             {error?.response?.status === 404 && (
               <span>
-                {i18n._(msg`Management job not found.`)}
+                {i18n._(t`Management job not found.`)}
                 <Link to={basePath}>
-                  {i18n._(msg`View all management jobs`)}
+                  {i18n._(t`View all management jobs`)}
                 </Link>
               </span>
             )}

@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { func, shape } from 'prop-types';
 import { Formik, useField } from 'formik';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import {
   Button,
   Tooltip,
@@ -39,14 +39,14 @@ function CredentialPluginWizard({ handleSubmit, onClose }) {
   const steps = [
     {
       id: 1,
-      name: i18n._(msg`Credential`),
+      name: i18n._(t`Credential`),
       key: 'credential',
       component: <CredentialsStep />,
       enableNext: !!selectedCredential.value,
     },
     {
       id: 2,
-      name: i18n._(msg`Metadata`),
+      name: i18n._(t`Metadata`),
       key: 'metadata',
       component: <MetadataStep />,
       canJumpTo: !!selectedCredential.value,
@@ -66,14 +66,14 @@ function CredentialPluginWizard({ handleSubmit, onClose }) {
               isDisabled={!selectedCredential.value}
             >
               {activeStep.key === 'metadata'
-                ? i18n._(msg`OK`)
-                : i18n._(msg`Next`)}
+                ? i18n._(t`OK`)
+                : i18n._(t`Next`)}
             </Button>
             {activeStep && activeStep.key === 'metadata' && (
               <>
                 <Tooltip
                   content={i18n._(
-                    msg`Click this button to verify connection to the secret management system using the selected credential and specified inputs.`
+                    t`Click this button to verify connection to the secret management system using the selected credential and specified inputs.`
                   )}
                   position="right"
                 >
@@ -83,7 +83,7 @@ function CredentialPluginWizard({ handleSubmit, onClose }) {
                     variant="secondary"
                     onClick={() => testPluginMetadata()}
                   >
-                    {i18n._(msg`Test`)}
+                    {i18n._(t`Test`)}
                   </Button>
                 </Tooltip>
 
@@ -93,7 +93,7 @@ function CredentialPluginWizard({ handleSubmit, onClose }) {
                   variant="secondary"
                   onClick={onBack}
                 >
-                  {i18n._(msg`Back`)}
+                  {i18n._(t`Back`)}
                 </Button>
               </>
             )}
@@ -103,7 +103,7 @@ function CredentialPluginWizard({ handleSubmit, onClose }) {
               variant="link"
               onClick={onClose}
             >
-              {i18n._(msg`Cancel`)}
+              {i18n._(t`Cancel`)}
             </Button>
           </>
         )}
@@ -116,7 +116,7 @@ function CredentialPluginWizard({ handleSubmit, onClose }) {
       <Wizard
         isOpen
         onClose={onClose}
-        title={i18n._(msg`External Secret Management System`)}
+        title={i18n._(t`External Secret Management System`)}
         steps={steps}
         onSave={handleSubmit}
         footer={CustomFooter}

@@ -13,7 +13,7 @@ import {
 } from '@patternfly/react-core';
 import { TimesIcon } from '@patternfly/react-icons';
 import styled from 'styled-components';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 
 const RemoveActionSection = styled(DataListAction)`
@@ -31,20 +31,20 @@ function DraggableSelectedList({ selected, onRemove, onRowDrag }) {
 
   const onDragStart = (newId) => {
     setId(newId);
-    setLiveText(i18n._(msg`Dragging started for item id: ${newId}.`));
+    setLiveText(i18n._(t`Dragging started for item id: ${newId}.`));
     setIsDragging(true);
   };
 
   const onDragMove = (oldIndex, newIndex) => {
     setLiveText(
       i18n._(
-        msg`Dragging item ${id}. Item with index ${oldIndex} in now ${newIndex}.`
+        t`Dragging item ${id}. Item with index ${oldIndex} in now ${newIndex}.`
       )
     );
   };
 
   const onDragCancel = () => {
-    setLiveText(i18n._(msg`Dragging cancelled. List is unchanged.`));
+    setLiveText(i18n._(t`Dragging cancelled. List is unchanged.`));
     setIsDragging(false);
   };
 
@@ -70,7 +70,7 @@ function DraggableSelectedList({ selected, onRemove, onRowDrag }) {
     <>
       <DataList
         aria-label={i18n._(
-          msg`Draggable list to reorder and remove selected items.`
+          t`Draggable list to reorder and remove selected items.`
         )}
         data-cy="draggable-list"
         itemOrder={orderedList}
@@ -86,9 +86,9 @@ function DraggableSelectedList({ selected, onRemove, onRowDrag }) {
               <DataListItemRow>
                 <DataListControl>
                   <DataListDragButton
-                    aria-label={i18n._(msg`Reorder`)}
+                    aria-label={i18n._(t`Reorder`)}
                     aria-labelledby={rowPosition}
-                    aria-describedby={i18n._(msg`Press space or enter to begin dragging,
+                    aria-describedby={i18n._(t`Press space or enter to begin dragging,
                     and use the arrow keys to navigate up or down.
                     Press enter to confirm the drag, or any other key to
                     cancel the drag operation.`)}
@@ -105,13 +105,13 @@ function DraggableSelectedList({ selected, onRemove, onRowDrag }) {
                   ]}
                 />
                 <RemoveActionSection
-                  aria-label={i18n._(msg`Actions`)}
+                  aria-label={i18n._(t`Actions`)}
                   id={rowPosition}
                 >
                   <Button
                     onClick={() => removeItem(label)}
                     variant="plain"
-                    aria-label={i18n._(msg`Remove`)}
+                    aria-label={i18n._(t`Remove`)}
                     ouiaId={`draggable-list-remove-${label}`}
                     isDisabled={isDragging}
                   >

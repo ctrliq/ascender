@@ -2,7 +2,7 @@ import 'styled-components/macro';
 import React, { useContext } from 'react';
 
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { Button as PFButton } from '@patternfly/react-core';
 import styled from 'styled-components';
 import { WorkflowDispatchContext } from 'contexts/Workflow';
@@ -40,21 +40,21 @@ function VisualizerStartScreen({ readOnly }) {
         <StartPanel>
           {readOnly ? (
             <p>
-              {i18n._(msg`This workflow does not have any nodes configured.`)}
+              {i18n._(t`This workflow does not have any nodes configured.`)}
             </p>
           ) : (
             <>
-              <p>{i18n._(msg`Please click the Start button to begin.`)}</p>
+              <p>{i18n._(t`Please click the Start button to begin.`)}</p>
               <Button
                 ouiaId="visualizer-start-button"
                 id="visualizer-start"
-                aria-label={i18n._(msg`Start`)}
+                aria-label={i18n._(t`Start`)}
                 onClick={() =>
                   dispatch({ type: 'START_ADD_NODE', sourceNodeId: 1 })
                 }
                 variant="primary"
               >
-                {i18n._(msg`Start`)}
+                {i18n._(t`Start`)}
               </Button>
             </>
           )}

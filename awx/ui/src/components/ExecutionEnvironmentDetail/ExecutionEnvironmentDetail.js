@@ -1,7 +1,7 @@
 import React from 'react';
 import { bool, string } from 'prop-types';
 import { Link } from 'react-router-dom';
-import { msg, Trans } from '@lingui/macro';
+import { t, Trans } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 
 import { Popover, Tooltip } from '@patternfly/react-core';
@@ -40,8 +40,8 @@ function ExecutionEnvironmentDetail({
     config
   )}/html/upgrade-migration-guide/upgrade_to_ees.html`;
   const label = isDefaultEnvironment
-    ? i18n._(msg`Default Execution Environment`)
-    : i18n._(msg`Execution Environment`);
+    ? i18n._(t`Default Execution Environment`)
+    : i18n._(t`Execution Environment`);
 
   if (executionEnvironment) {
     return (
@@ -66,12 +66,12 @@ function ExecutionEnvironmentDetail({
         helpText={helpText}
         value={
           <>
-            {i18n._(msg`Missing resource`)}
+            {i18n._(t`Missing resource`)}
             <span>
               <Popover
                 className="missing-execution-environment"
                 headerContent={
-                  <div>{i18n._(msg`Execution Environment Missing`)}</div>
+                  <div>{i18n._(t`Execution Environment Missing`)}</div>
                 }
                 bodyContent={
                   <div>
@@ -107,15 +107,15 @@ function ExecutionEnvironmentDetail({
   ) {
     return (
       <Detail
-        label={i18n._(msg`Execution Environment`)}
+        label={i18n._(t`Execution Environment`)}
         helpText={helpText}
         value={
           <>
-            {i18n._(msg`Missing resource`)}
+            {i18n._(t`Missing resource`)}
             <span>
               <Tooltip
                 content={i18n._(
-                  msg`Execution environment is missing or deleted.`
+                  t`Execution environment is missing or deleted.`
                 )}
               >
                 <ExclamationTriangleIcon />

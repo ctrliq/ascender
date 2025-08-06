@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { shape, string } from 'prop-types';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { i18n } from '@lingui/core';
 import { useField } from 'formik';
 import {
@@ -71,7 +71,7 @@ const SettingGroup = ({
       <>
         <Popover
           content={popoverContent}
-          ariaLabel={`${i18n._(msg`More information for`)} ${label}`}
+          ariaLabel={`${i18n._(t`More information for`)} ${label}`}
         />
         <RevertButton
           id={fieldId}
@@ -120,30 +120,30 @@ const BooleanField = ({
               ouiaId="confirm-misc-settings-modal"
               key="confirm"
               variant="danger"
-              aria-label={i18n._(msg`Confirm`)}
+              aria-label={i18n._(t`Confirm`)}
               onClick={() => {
                 helpers.setValue(true);
                 setIsModalOpen(false);
               }}
             >
-              {i18n._(msg`Confirm`)}
+              {i18n._(t`Confirm`)}
             </Button>,
             <Button
               ouiaId="cancel-misc-settings-modal"
               key="cancel"
               variant="link"
-              aria-label={i18n._(msg`Cancel`)}
+              aria-label={i18n._(t`Cancel`)}
               onClick={() => {
                 helpers.setValue(false);
                 setIsModalOpen(false);
               }}
             >
-              {i18n._(msg`Cancel`)}
+              {i18n._(t`Cancel`)}
             </Button>,
           ]}
         >
           {i18n._(
-            msg`Are you sure you want to disable local authentication?  Doing so could impact users' ability to log in and the system administrator's ability to reverse this change.`
+            t`Are you sure you want to disable local authentication?  Doing so could impact users' ability to log in and the system administrator's ability to reverse this change.`
           )}
         </AlertModal>
       )}
@@ -152,8 +152,8 @@ const BooleanField = ({
         ouiaId={name}
         isChecked={field.value}
         isDisabled={disabled}
-        label={i18n._(msg`On`)}
-        labelOff={i18n._(msg`Off`)}
+        label={i18n._(t`On`)}
+        labelOff={i18n._(t`Off`)}
         onChange={(isOn) => {
           if (needsConfirmationModal && isOn) {
             setIsModalOpen(true);
@@ -296,7 +296,7 @@ const InputAlertField = ({ name, config }) => {
         <Selected>
           {isDisable && (
             <Tooltip
-              content={i18n._(msg`Edit Login redirect override URL`)}
+              content={i18n._(t`Edit Login redirect override URL`)}
               position="top"
             >
               <Button
@@ -326,9 +326,9 @@ const InputAlertField = ({ name, config }) => {
       {isModalOpen && isDisable && (
         <AlertModal
           isOpen
-          title={i18n._(msg`Edit login redirect override URL`)}
+          title={i18n._(t`Edit login redirect override URL`)}
           variant="danger"
-          aria-label={i18n._(msg`Edit login redirect override URL`)}
+          aria-label={i18n._(t`Edit login redirect override URL`)}
           onClose={() => {
             setIsModalOpen(false);
           }}
@@ -336,28 +336,28 @@ const InputAlertField = ({ name, config }) => {
             <Button
               key="confirm"
               variant="danger"
-              aria-label={i18n._(msg`confirm edit login redirect`)}
+              aria-label={i18n._(t`confirm edit login redirect`)}
               onClick={() => {
                 handleEnableTextInput();
                 setIsModalOpen(false);
               }}
             >
-              {i18n._(msg`Confirm`)}
+              {i18n._(t`Confirm`)}
             </Button>,
             <Button
               key="cancel"
               variant="link"
-              aria-label={i18n._(msg`cancel edit login redirect`)}
+              aria-label={i18n._(t`cancel edit login redirect`)}
               onClick={() => {
                 setIsModalOpen(false);
               }}
             >
-              {i18n._(msg`Cancel`)}
+              {i18n._(t`Cancel`)}
             </Button>,
           ]}
         >
           {i18n._(
-            msg`Are you sure you want to edit login redirect override URL?  Doing so could impact users' ability to log in to the system once local authentication is also disabled.`
+            t`Are you sure you want to edit login redirect override URL?  Doing so could impact users' ability to log in to the system once local authentication is also disabled.`
           )}
         </AlertModal>
       )}

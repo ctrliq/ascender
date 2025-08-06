@@ -1,5 +1,5 @@
 import React from 'react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 
 import styled from 'styled-components';
@@ -32,7 +32,7 @@ const ContentLoading = ({ className, progress }) => {
       <Progress
         value={progress}
         measureLocation={ProgressMeasureLocation.inside}
-        aria-label={i18n._(msg`content-loading-in-progress`)}
+        aria-label={i18n._(t`content-loading-in-progress`)}
         style={{ margin: '20px' }}
       />
       <TextContent style={{ margin: '20px' }}>
@@ -40,7 +40,7 @@ const ContentLoading = ({ className, progress }) => {
           component={TextVariants.small}
           style={{ fontWeight: 'bold', color: 'black' }}
         >
-          {i18n._(msg`Please wait until the topology view is populated...`)}
+          {i18n._(t`Please wait until the topology view is populated...`)}
         </Text>
       </TextContent>
     </EmptyState>

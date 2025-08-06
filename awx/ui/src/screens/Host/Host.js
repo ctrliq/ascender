@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 
 import {
   Switch,
@@ -50,7 +50,7 @@ function Host({ setBreadcrumb }) {
       name: (
         <>
           <CaretLeftIcon />
-          {i18n._(msg`Back to Hosts`)}
+          {i18n._(t`Back to Hosts`)}
         </>
       ),
       link: `/hosts`,
@@ -58,22 +58,22 @@ function Host({ setBreadcrumb }) {
       persistentFilterKey: 'hosts',
     },
     {
-      name: i18n._(msg`Details`),
+      name: i18n._(t`Details`),
       link: `${match.url}/details`,
       id: 0,
     },
     {
-      name: i18n._(msg`Facts`),
+      name: i18n._(t`Facts`),
       link: `${match.url}/facts`,
       id: 1,
     },
     {
-      name: i18n._(msg`Groups`),
+      name: i18n._(t`Groups`),
       link: `${match.url}/groups`,
       id: 2,
     },
     {
-      name: i18n._(msg`Jobs`),
+      name: i18n._(t`Jobs`),
       link: `${match.url}/jobs`,
       id: 3,
     },
@@ -96,8 +96,8 @@ function Host({ setBreadcrumb }) {
           <ContentError error={error}>
             {error?.response?.status === 404 && (
               <span>
-                {i18n._(msg`Host not found.`)}{' '}
-                <Link to="/hosts">{i18n._(msg`View all Hosts.`)}</Link>
+                {i18n._(t`Host not found.`)}{' '}
+                <Link to="/hosts">{i18n._(t`View all Hosts.`)}</Link>
               </span>
             )}
           </ContentError>
@@ -138,7 +138,7 @@ function Host({ setBreadcrumb }) {
           <Route key="not-found" path="*">
             <ContentError isNotFound>
               <Link to={`${match.url}/details`}>
-                {i18n._(msg`View Host Details`)}
+                {i18n._(t`View Host Details`)}
               </Link>
             </ContentError>
           </Route>

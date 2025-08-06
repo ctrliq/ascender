@@ -5,7 +5,7 @@ import { SyncIcon } from '@patternfly/react-icons';
 
 import { number } from 'prop-types';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 
 import AlertModal from 'components/AlertModal';
@@ -35,12 +35,12 @@ function ProjectSyncButton({ projectId, lastJobStatus = null }) {
           <div>
             <Button
               ouiaId={`${projectId}-sync-button`}
-              aria-label={i18n._(msg`Sync Project`)}
+              aria-label={i18n._(t`Sync Project`)}
               variant={isDetailsView ? 'secondary' : 'plain'}
               isDisabled={isDisabled}
             >
               {match.url.endsWith('/details') ? (
-                i18n._(msg`Sync`)
+                i18n._(t`Sync`)
               ) : (
                 <SyncIcon />
               )}
@@ -50,22 +50,22 @@ function ProjectSyncButton({ projectId, lastJobStatus = null }) {
       ) : (
         <Button
           ouiaId={`${projectId}-sync-button`}
-          aria-label={i18n._(msg`Sync Project`)}
+          aria-label={i18n._(t`Sync Project`)}
           variant={isDetailsView ? 'secondary' : 'plain'}
           isDisabled={isDisabled}
           onClick={handleSync}
         >
-          {match.url.endsWith('/details') ? i18n._(msg`Sync`) : <SyncIcon />}
+          {match.url.endsWith('/details') ? i18n._(t`Sync`) : <SyncIcon />}
         </Button>
       )}
       {error && (
         <AlertModal
           isOpen={error}
           variant="error"
-          title={i18n._(msg`Error!`)}
+          title={i18n._(t`Error!`)}
           onClose={dismissError}
         >
-          {i18n._(msg`Failed to sync project.`)}
+          {i18n._(t`Failed to sync project.`)}
           <ErrorDetail error={error} />
         </AlertModal>
       )}

@@ -1,9 +1,9 @@
 import { isValidDate } from '@patternfly/react-core';
-import { msg, plural } from '@lingui/macro';
+import { t, plural } from '@lingui/react/macro';
 import { i18n } from '@lingui/core';
 
 export function required(message) {
-  const errorMessage = message || i18n._(msg`This field must not be blank`);
+  const errorMessage = message || i18n._(t`This field must not be blank`);
   return (value) => {
     if (typeof value === 'string' && !value.trim()) {
       return errorMessage;
@@ -31,7 +31,7 @@ export function validateTime() {
     date.setMinutes(parseInt(timeComponents[1], 10));
 
     if (!isValidDate(date) || !timeRegex.test(value)) {
-      message = i18n._(msg`Invalid time format`);
+      message = i18n._(t`Invalid time format`);
     }
 
     return message;
@@ -41,7 +41,7 @@ export function validateTime() {
 export function maxLength(max) {
   return (value) => {
     if (value.trim().length > max) {
-      return i18n._(msg`This field must not exceed ${max} characters`);
+      return i18n._(t`This field must not exceed ${max} characters`);
     }
     return undefined;
   };
@@ -50,7 +50,7 @@ export function maxLength(max) {
 export function minLength(min) {
   return (value) => {
     if (value.trim().length < min) {
-      return i18n._(msg`This field must be at least ${min} characters`);
+      return i18n._(t`This field must be at least ${min} characters`);
     }
     return undefined;
   };
@@ -60,17 +60,17 @@ export function minMaxValue(min, max) {
   return (value) => {
     if (!Number.isFinite(min) && value > max) {
       return i18n._(
-        msg`This field must be a number and have a value less than ${max}`
+        t`This field must be a number and have a value less than ${max}`
       );
     }
     if (!Number.isFinite(max) && value < min) {
       return i18n._(
-        msg`This field must be a number and have a value greater than ${min}`
+        t`This field must be a number and have a value greater than ${min}`
       );
     }
     if (value < min || value > max) {
       return i18n._(
-        msg`This field must be a number and have a value between ${min} and ${max}`
+        t`This field must be a number and have a value between ${min} and ${max}`
       );
     }
     return undefined;
@@ -80,7 +80,7 @@ export function minMaxValue(min, max) {
 export function requiredEmail() {
   return (value) => {
     if (!value) {
-      return i18n._(msg`This field must not be blank`);
+      return i18n._(t`This field must not be blank`);
     }
 
     // This isn't a perfect validator. It's likely to let a few
@@ -98,14 +98,14 @@ export function requiredEmail() {
       }
     }
 
-    return i18n._(msg`Invalid email address`);
+    return i18n._(t`Invalid email address`);
   };
 }
 
 export function noWhiteSpace() {
   return (value) => {
     if (/\s/.test(value)) {
-      return i18n._(msg`This field must not contain spaces`);
+      return i18n._(t`This field must not contain spaces`);
     }
     return undefined;
   };
@@ -115,7 +115,7 @@ export function integer() {
   return (value) => {
     const str = String(value);
     if (!Number.isInteger(value) && /[^0-9]/.test(str)) {
-      return i18n._(msg`This field must be an integer`);
+      return i18n._(t`This field must be an integer`);
     }
     return undefined;
   };
@@ -131,7 +131,7 @@ export function number() {
     if (/^-?[0-9]*e[+-][0-9]*$/.test(str)) {
       return undefined;
     }
-    return i18n._(msg`This field must be a number`);
+    return i18n._(t`This field must be a number`);
   };
 }
 
@@ -165,7 +165,7 @@ export function url() {
         value
       )
     ) {
-      return i18n._(msg`Please enter a valid URL`);
+      return i18n._(t`Please enter a valid URL`);
     }
     return undefined;
   };
@@ -189,7 +189,7 @@ export function regExp() {
     try {
       RegExp(value);
     } catch {
-      return i18n._(msg`This field must be a regular expression`);
+      return i18n._(t`This field must be a regular expression`);
     }
     return undefined;
   };
@@ -199,14 +199,14 @@ export function requiredPositiveInteger() {
   return (value) => {
     if (typeof value === 'number') {
       if (!Number.isInteger(value)) {
-        return i18n._(msg`This field must be an integer`);
+        return i18n._(t`This field must be an integer`);
       }
       if (value < 1) {
-        return i18n._(msg`This field must be greater than 0`);
+        return i18n._(t`This field must be greater than 0`);
       }
     }
     if (!value) {
-      return i18n._(msg`Select a value for this field`);
+      return i18n._(t`Select a value for this field`);
     }
     return undefined;
   };

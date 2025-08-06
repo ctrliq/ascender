@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { useParams, useRouteMatch } from 'react-router-dom';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import styled from 'styled-components';
 import useRequest from 'hooks/useRequest';
 import useSelected from 'hooks/useSelected';
@@ -76,7 +76,7 @@ function UserAndTeamAccessAdd({
   const steps = [
     {
       id: 1,
-      name: i18n._(msg`Add resource type`),
+      name: i18n._(t`Add resource type`),
       component: (
         <Grid>
           {getResourceAccessConfig(i18n).map((resource) => (
@@ -97,7 +97,7 @@ function UserAndTeamAccessAdd({
     },
     {
       id: 2,
-      name: i18n._(msg`Select items from list`),
+      name: i18n._(t`Select items from list`),
       component: selectedResourceType && (
         <SelectResourceStep
           searchColumns={selectedResourceType.searchColumns}
@@ -106,7 +106,7 @@ function UserAndTeamAccessAdd({
           onRowClick={handleResourceSelect}
           fetchItems={selectedResourceType.fetchItems}
           fetchOptions={selectedResourceType.fetchOptions}
-          selectedLabel={i18n._(msg`Selected`)}
+          selectedLabel={i18n._(t`Selected`)}
           selectedResourceRows={resourcesSelected}
           sortedColumnKey="username"
         />
@@ -116,7 +116,7 @@ function UserAndTeamAccessAdd({
     },
     {
       id: 3,
-      name: i18n._(msg`Select roles to apply`),
+      name: i18n._(t`Select roles to apply`),
       component: resourcesSelected?.length > 0 && (
         <SelectRoleStep
           onRolesClick={handleRoleSelect}
@@ -124,12 +124,12 @@ function UserAndTeamAccessAdd({
           selectedListKey={
             selectedResourceType === 'users' ? 'username' : 'name'
           }
-          selectedListLabel={i18n._(msg`Selected`)}
+          selectedListLabel={i18n._(t`Selected`)}
           selectedResourceRows={resourcesSelected}
           selectedRoleRows={rolesSelected}
         />
       ),
-      nextButtonText: i18n._(msg`Save`),
+      nextButtonText: i18n._(t`Save`),
       canJumpTo: stepIdReached >= 3,
     },
   ];

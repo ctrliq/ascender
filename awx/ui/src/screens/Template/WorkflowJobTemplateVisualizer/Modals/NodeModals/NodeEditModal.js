@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 
 import { WorkflowDispatchContext } from 'contexts/Workflow';
@@ -67,7 +67,7 @@ function NodeEditModal() {
     <NodeModal
       askLinkType={false}
       onSave={updateNode}
-      title={i18n._(msg`Edit Node`)}
+      title={i18n._(t`Edit Node`)}
     />
   );
 }

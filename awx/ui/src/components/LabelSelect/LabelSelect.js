@@ -7,7 +7,7 @@ import {
   SelectOption,
   SelectVariant,
 } from '@patternfly/react-core';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { LabelsAPI } from 'api';
 import useIsMounted from 'hooks/useIsMounted';
@@ -126,10 +126,10 @@ function LabelSelect({ value, placeholder, onChange, onError, createText }) {
       isDisabled={isLoading}
       selections={selections}
       isOpen={isExpanded}
-      typeAheadAriaLabel={i18n._(msg`Select Labels`)}
+      typeAheadAriaLabel={i18n._(t`Select Labels`)}
       placeholderText={placeholder}
       createText={createText}
-      noResultsFoundText={i18n._(msg`No results found`)}
+      noResultsFoundText={i18n._(t`No results found`)}
       ouiaId="template-label-select"
       chipGroupComponent={chipGroupComponent()}
     >

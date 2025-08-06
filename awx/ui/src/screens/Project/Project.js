@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import {
   Switch,
   Route,
@@ -95,30 +95,30 @@ function Project({ setBreadcrumb }) {
       name: (
         <>
           <CaretLeftIcon />
-          {i18n._(msg`Back to Projects`)}
+          {i18n._(t`Back to Projects`)}
         </>
       ),
       link: `/projects`,
       id: 99,
       persistentFilterKey: 'projects',
     },
-    { name: i18n._(msg`Details`), link: `/projects/${id}/details` },
-    { name: i18n._(msg`Access`), link: `/projects/${id}/access` },
+    { name: i18n._(t`Details`), link: `/projects/${id}/details` },
+    { name: i18n._(t`Access`), link: `/projects/${id}/access` },
     {
-      name: i18n._(msg`Job Templates`),
+      name: i18n._(t`Job Templates`),
       link: `/projects/${id}/job_templates`,
     },
   ];
 
   if (canSeeNotificationsTab) {
     tabsArray.push({
-      name: i18n._(msg`Notifications`),
+      name: i18n._(t`Notifications`),
       link: `/projects/${id}/notifications`,
     });
   }
   if (project?.scm_type) {
     tabsArray.push({
-      name: i18n._(msg`Schedules`),
+      name: i18n._(t`Schedules`),
       link: `/projects/${id}/schedules`,
     });
   }
@@ -134,8 +134,8 @@ function Project({ setBreadcrumb }) {
           <ContentError error={contentError}>
             {contentError.response.status === 404 && (
               <span>
-                {i18n._(msg`Project not found.`)}{' '}
-                <Link to="/projects">{i18n._(msg`View all Projects.`)}</Link>
+                {i18n._(t`Project not found.`)}{' '}
+                <Link to="/projects">{i18n._(t`View all Projects.`)}</Link>
               </span>
             )}
           </ContentError>
@@ -198,7 +198,7 @@ function Project({ setBreadcrumb }) {
               <ContentError isNotFound>
                 {id && (
                   <Link to={`/projects/${id}/details`}>
-                    {i18n._(msg`View Project Details`)}
+                    {i18n._(t`View Project Details`)}
                   </Link>
                 )}
               </ContentError>

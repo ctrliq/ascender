@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import {
   Card,
   CardHeader,
@@ -114,12 +114,12 @@ function SubscriptionUsageChart() {
       <Flex style={{ justifyContent: 'space-between' }}>
         <FlexItem>
           <ChartCardTitle>
-            {i18n._(msg`Subscription Compliance`)}
+            {i18n._(t`Subscription Compliance`)}
           </ChartCardTitle>
         </FlexItem>
         <FlexItem>
           <CardText component="small">
-            {i18n._(msg`Last recalculation date:`)}{' '}
+            {i18n._(t`Last recalculation date:`)}{' '}
             {userProfile.systemConfig.HOST_METRIC_SUMMARY_TASK_LAST_TS.slice(
               0,
               10
@@ -131,9 +131,9 @@ function SubscriptionUsageChart() {
         <GraphCardActions>
           <Select
             variant={SelectVariant.single}
-            placeholderText={i18n._(msg`Select period`)}
-            aria-label={i18n._(msg`Select period`)}
-            typeAheadAriaLabel={i18n._(msg`Select period`)}
+            placeholderText={i18n._(t`Select period`)}
+            aria-label={i18n._(t`Select period`)}
+            typeAheadAriaLabel={i18n._(t`Select period`)}
             className="periodSelect"
             onToggle={setIsPeriodDropdownOpen}
             onSelect={(event, selection) => {
@@ -142,17 +142,17 @@ function SubscriptionUsageChart() {
             }}
             selections={periodSelection}
             isOpen={isPeriodDropdownOpen}
-            noResultsFoundText={i18n._(msg`No results found`)}
+            noResultsFoundText={i18n._(t`No results found`)}
             ouiaId="subscription-usage-period-select"
           >
             <SelectOption key="year" value="year">
-              {i18n._(msg`Past year`)}
+              {i18n._(t`Past year`)}
             </SelectOption>
             <SelectOption key="two_years" value="two_years">
-              {i18n._(msg`Past two years`)}
+              {i18n._(t`Past two years`)}
             </SelectOption>
             <SelectOption key="three_years" value="three_years">
-              {i18n._(msg`Past three years`)}
+              {i18n._(t`Past three years`)}
             </SelectOption>
           </Select>
         </GraphCardActions>

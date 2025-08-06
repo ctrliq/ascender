@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { string, bool, func } from 'prop-types';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import 'styled-components/macro';
 import { Tr, Td } from '@patternfly/react-table';
@@ -36,15 +36,15 @@ function AdvancedInventoryHostListItem({
           onSelect,
         }}
       />
-      <Td dataLabel={i18n._(msg`Name`)}>
+      <Td dataLabel={i18n._(t`Name`)}>
         <Link to={`${detailUrl}`}>
           <b>{name}</b>
         </Link>
       </Td>
-      <Td dataLabel={i18n._(msg`Recent jobs`)}>
+      <Td dataLabel={i18n._(t`Recent jobs`)}>
         <Sparkline jobs={recentPlaybookJobs} />
       </Td>
-      <Td dataLabel={i18n._(msg`Inventory`)}>
+      <Td dataLabel={i18n._(t`Inventory`)}>
         <Link to={inventoryLink}>{inventory.name}</Link>
       </Td>
     </Tr>

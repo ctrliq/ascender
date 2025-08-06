@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 
 import { Card, PageSection } from '@patternfly/react-core';
 import { CaretLeftIcon } from '@patternfly/react-icons';
@@ -51,9 +51,9 @@ function WorkflowApproval({ setBreadcrumb }) {
           <ContentError error={error}>
             {error.response.status === 404 && (
               <span>
-                {i18n._(msg`Workflow Approval not found.`)}{' '}
+                {i18n._(t`Workflow Approval not found.`)}{' '}
                 <Link to="/workflow_approvals">
-                  {i18n._(msg`View all Workflow Approvals.`)}
+                  {i18n._(t`View all Workflow Approvals.`)}
                 </Link>
               </span>
             )}
@@ -68,7 +68,7 @@ function WorkflowApproval({ setBreadcrumb }) {
       name: (
         <>
           <CaretLeftIcon />
-          {i18n._(msg`Back to Workflow Approvals`)}
+          {i18n._(t`Back to Workflow Approvals`)}
         </>
       ),
       link: `/workflow_approvals`,
@@ -76,7 +76,7 @@ function WorkflowApproval({ setBreadcrumb }) {
       id: 99,
     },
     {
-      name: i18n._(msg`Details`),
+      name: i18n._(t`Details`),
       link: `${match.url}/details`,
       id: 0,
     },
@@ -104,7 +104,7 @@ function WorkflowApproval({ setBreadcrumb }) {
               <ContentError isNotFound>
                 {match.params.id && (
                   <Link to={`/workflow_approvals/${match.params.id}/details`}>
-                    {i18n._(msg`View Workflow Approval Details`)}
+                    {i18n._(t`View Workflow Approval Details`)}
                   </Link>
                 )}
               </ContentError>

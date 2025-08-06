@@ -1,5 +1,5 @@
 import React from 'react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { useField } from 'formik';
 import StepName from 'components/LaunchPrompt/steps/StepName';
@@ -25,7 +25,7 @@ export default function useNodeTypeStep(nodeToEdit) {
             !value?.ask_inventory_on_launch))
       ) {
         return i18n._(
-          msg`Job Templates with a missing inventory or project cannot be selected when creating or editing nodes.  Select another template or fix the missing fields to proceed.`
+          t`Job Templates with a missing inventory or project cannot be selected when creating or editing nodes.  Select another template or fix the missing fields to proceed.`
         );
       }
       return undefined;
@@ -78,7 +78,7 @@ function getStep(
     id: STEP_ID,
     name: (
       <StepName hasErrors={formError} id="node-type-step">
-        {i18n._(msg`Node type`)}
+        {i18n._(t`Node type`)}
       </StepName>
     ),
     component: (

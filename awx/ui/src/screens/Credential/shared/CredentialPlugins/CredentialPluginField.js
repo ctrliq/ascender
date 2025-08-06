@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useLocation, useHistory } from 'react-router-dom';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { useField } from 'formik';
 import {
@@ -64,7 +64,7 @@ function CredentialPluginInput(props) {
           })}
           <Tooltip
             content={i18n._(
-              msg`Populate field from an external secret management system`
+              t`Populate field from an external secret management system`
             )}
           >
             <Button
@@ -72,7 +72,7 @@ function CredentialPluginInput(props) {
               id={`credential-${fieldOptions.id}-external-button`}
               variant={ButtonVariant.control}
               aria-label={i18n._(
-                msg`Populate field from an external secret management system`
+                t`Populate field from an external secret management system`
               )}
               onClick={() => setShowPluginWizard(true)}
               isDisabled={isDisabled || disableFieldAndButtons}

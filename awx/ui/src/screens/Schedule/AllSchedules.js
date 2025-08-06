@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { PageSection, Card } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react';
 
@@ -20,7 +20,7 @@ function AllSchedules() {
       <ScreenHeader
         streamType="schedule"
         breadcrumbConfig={{
-          '/schedules': i18n._(msg`Schedules`),
+          '/schedules': i18n._(t`Schedules`),
         }}
       />
       <Switch>

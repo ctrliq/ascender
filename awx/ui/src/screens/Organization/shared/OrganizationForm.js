@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Formik, useField, useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react';
-import { msg, Trans } from '@lingui/macro';
+import { t, Trans } from '@lingui/react/macro';
 import { Form } from '@patternfly/react-core';
 
 import { OrganizationsAPI } from 'api';
@@ -54,7 +54,7 @@ function OrganizationFormFields({
         id="org-name"
         name="name"
         type="text"
-        label={i18n._(msg`Name`)}
+        label={i18n._(t`Name`)}
         validate={required(null)}
         isRequired
       />
@@ -62,15 +62,15 @@ function OrganizationFormFields({
         id="org-description"
         name="description"
         type="text"
-        label={i18n._(msg`Description`)}
+        label={i18n._(t`Description`)}
       />
       {license_info?.license_type !== 'open' && (
         <FormField
           id="org-max_hosts"
           name="max_hosts"
           type="number"
-          label={i18n._(msg`Max Hosts`)}
-          tooltip={i18n._(msg`The maximum number of hosts allowed to be managed by this organization.
+          label={i18n._(t`Max Hosts`)}
+          tooltip={i18n._(t`The maximum number of hosts allowed to be managed by this organization.
             Value defaults to 0 which means no limit. Refer to the Ansible
             documentation for more details.`)}
           validate={minMaxValue(0, Number.MAX_SAFE_INTEGER)}
@@ -82,7 +82,7 @@ function OrganizationFormFields({
         value={instanceGroups}
         onChange={setInstanceGroups}
         tooltip={i18n._(
-          msg`Select the Instance Groups for this Organization to run on.`
+          t`Select the Instance Groups for this Organization to run on.`
         )}
       />
       <ExecutionEnvironmentLookup
@@ -94,7 +94,7 @@ function OrganizationFormFields({
         value={executionEnvironmentField.value}
         onChange={(value) => executionEnvironmentHelpers.setValue(value)}
         popoverContent={i18n._(
-          msg`The execution environment that will be used for jobs inside of this organization. This will be used a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level.`
+          t`The execution environment that will be used for jobs inside of this organization. This will be used a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level.`
         )}
         globallyAvailable
         organizationId={organizationId}
@@ -103,7 +103,7 @@ function OrganizationFormFields({
       />
       <CredentialLookup
         credentialTypeNamespace="galaxy_api_token"
-        label={i18n._(msg`Galaxy Credentials`)}
+        label={i18n._(t`Galaxy Credentials`)}
         helperTextInvalid={galaxyCredentialsMeta.error}
         isValid={!galaxyCredentialsMeta.touched || !galaxyCredentialsMeta.error}
         onBlur={() => galaxyCredentialsHelpers.setTouched()}

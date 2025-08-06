@@ -9,7 +9,7 @@ import {
   oneOfType,
 } from 'prop-types';
 import styled from 'styled-components';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { QSConfig, SearchColumns, SortColumns } from 'types';
 import { SelectedList, DraggableSelectedList } from '../SelectedList';
@@ -56,7 +56,7 @@ function OptionsList({
           </HeaderCell>
         ))
       ) : (
-        <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
+        <HeaderCell sortKey="name">{i18n._(t`Name`)}</HeaderCell>
       )}
     </HeaderRow>
   );
@@ -73,7 +73,7 @@ function OptionsList({
     } else {
       selectionPreview = (
         <SelectedList
-          label={i18n._(msg`Selected`)}
+          label={i18n._(t`Selected`)}
           selected={value}
           onRemove={(item) => deselectItem(item)}
           isReadOnly={readOnly}

@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { Link, useHistory } from 'react-router-dom';
 import { Button, Label } from '@patternfly/react-core';
 
@@ -47,28 +47,28 @@ function ExecutionEnvironmentDetails({ executionEnvironment }) {
     <CardBody>
       <DetailList>
         <Detail
-          label={i18n._(msg`Name`)}
+          label={i18n._(t`Name`)}
           value={name}
           dataCy="execution-environment-detail-name"
         />
         <Detail
-          label={i18n._(msg`Image`)}
+          label={i18n._(t`Image`)}
           value={image}
           dataCy="execution-environment-detail-image"
           helpText={helpText.image}
         />
         <Detail
-          label={i18n._(msg`Description`)}
+          label={i18n._(t`Description`)}
           value={description}
           dataCy="execution-environment-detail-description"
         />
         <Detail
-          label={i18n._(msg`Managed`)}
-          value={managedByTower ? i18n._(msg`True`) : i18n._(msg`False`)}
+          label={i18n._(t`Managed`)}
+          value={managedByTower ? i18n._(t`True`) : i18n._(t`False`)}
           dataCy="execution-environment-managed-by-tower"
         />
         <Detail
-          label={i18n._(msg`Organization`)}
+          label={i18n._(t`Organization`)}
           value={
             organization ? (
               <Link
@@ -77,20 +77,20 @@ function ExecutionEnvironmentDetails({ executionEnvironment }) {
                 {summary_fields.organization.name}
               </Link>
             ) : (
-              i18n._(msg`Globally Available`)
+              i18n._(t`Globally Available`)
             )
           }
           dataCy="execution-environment-detail-organization"
         />
 
         <Detail
-          label={i18n._(msg`Pull`)}
-          value={pull === '' ? i18n._(msg`Missing`) : toTitleCase(pull)}
+          label={i18n._(t`Pull`)}
+          value={pull === '' ? i18n._(t`Missing`) : toTitleCase(pull)}
           dataCy="execution-environment-pull"
         />
         {executionEnvironment.summary_fields.credential && (
           <Detail
-            label={i18n._(msg`Registry credential`)}
+            label={i18n._(t`Registry credential`)}
             value={
               <Label variant="outline" color="blue">
                 {executionEnvironment.summary_fields.credential.name}
@@ -101,12 +101,12 @@ function ExecutionEnvironmentDetails({ executionEnvironment }) {
           />
         )}
         <UserDateDetail
-          label={i18n._(msg`Created`)}
+          label={i18n._(t`Created`)}
           date={executionEnvironment.created}
           user={executionEnvironment.summary_fields.created_by}
         />
         <UserDateDetail
-          label={i18n._(msg`Last Modified`)}
+          label={i18n._(t`Last Modified`)}
           date={executionEnvironment.modified}
           user={executionEnvironment.summary_fields.modified_by}
         />
@@ -115,26 +115,26 @@ function ExecutionEnvironmentDetails({ executionEnvironment }) {
         {summary_fields.user_capabilities?.edit && (
           <Button
             ouiaId="execution-environment-detail-edit-button"
-            aria-label={i18n._(msg`edit`)}
+            aria-label={i18n._(t`edit`)}
             component={Link}
             to={`/execution_environments/${id}/edit`}
           >
-            {i18n._(msg`Edit`)}
+            {i18n._(t`Edit`)}
           </Button>
         )}
         {summary_fields.user_capabilities?.delete && (
           <DeleteButton
             name={image}
-            modalTitle={i18n._(msg`Delete Execution Environment`)}
+            modalTitle={i18n._(t`Delete Execution Environment`)}
             onConfirm={deleteExecutionEnvironment}
             isDisabled={isLoading}
             ouiaId="delete-button"
             deleteDetailsRequests={deleteDetailsRequests}
             deleteMessage={i18n._(
-              msg`This execution environment is currently being used by other resources. Are you sure you want to delete it?`
+              t`This execution environment is currently being used by other resources. Are you sure you want to delete it?`
             )}
           >
-            {i18n._(msg`Delete`)}
+            {i18n._(t`Delete`)}
           </DeleteButton>
         )}
       </CardActionsRow>
@@ -143,7 +143,7 @@ function ExecutionEnvironmentDetails({ executionEnvironment }) {
         <AlertModal
           isOpen={error}
           onClose={dismissError}
-          title={i18n._(msg`Error`)}
+          title={i18n._(t`Error`)}
           variant="error"
         />
       )}

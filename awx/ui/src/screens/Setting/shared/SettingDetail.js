@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { Detail } from 'components/DetailList';
 import CodeDetail from 'components/DetailList/CodeDetail';
@@ -70,7 +70,7 @@ export default ({ helpText, id, label, type, unit = '', value }) => {
           label={label}
           value={
             !value ? (
-              i18n._(msg`Not configured`)
+              i18n._(t`Not configured`)
             ) : (
               <img src={value} alt={label} height="40" width="40" />
             )
@@ -86,7 +86,7 @@ export default ({ helpText, id, label, type, unit = '', value }) => {
           helpText={helpText}
           isEncrypted
           label={label}
-          value={i18n._(msg`Encrypted`)}
+          value={i18n._(t`Encrypted`)}
         />
       );
       break;
@@ -97,7 +97,7 @@ export default ({ helpText, id, label, type, unit = '', value }) => {
           dataCy={id}
           helpText={helpText}
           label={label}
-          value={value ? i18n._(msg`On`) : i18n._(msg`Off`)}
+          value={value ? i18n._(t`On`) : i18n._(t`Off`)}
         />
       );
       break;
@@ -111,7 +111,7 @@ export default ({ helpText, id, label, type, unit = '', value }) => {
           helpText={helpText}
           isNotConfigured={!value}
           label={label}
-          value={!value ? i18n._(msg`Not configured`) : value}
+          value={!value ? i18n._(t`Not configured`) : value}
         />
       );
       break;

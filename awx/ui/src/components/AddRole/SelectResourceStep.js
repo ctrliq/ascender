@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import useRequest from 'hooks/useRequest';
 import { SearchColumns, SortColumns } from 'types';
@@ -90,7 +90,7 @@ function SelectResourceStep({
     <>
       <div>
         {i18n._(
-          msg`Choose the resources that will be receiving new roles.  You'll be able to select the roles to apply in the next step.  Note that the resources chosen here will receive all roles chosen in the next step.`
+          t`Choose the resources that will be receiving new roles.  You'll be able to select the roles to apply in the next step.  Note that the resources chosen here will receive all roles chosen in the next step.`
         )}
       </div>
       {selectedResourceRows.length > 0 && (

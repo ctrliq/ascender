@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 
 import {
@@ -78,7 +78,7 @@ function NodeAddModal() {
     <NodeModal
       askLinkType={addNodeSource !== 1}
       onSave={addNode}
-      title={i18n._(msg`Add Node`)}
+      title={i18n._(t`Add Node`)}
     />
   );
 }

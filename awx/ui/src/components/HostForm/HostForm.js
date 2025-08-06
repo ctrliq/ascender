@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { bool, func, shape } from 'prop-types';
 import { Formik, useField, useFormikContext } from 'formik';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { Form, FormGroup, Tooltip } from '@patternfly/react-core';
 import { required } from 'util/validators';
@@ -31,14 +31,14 @@ const InventoryLookupField = ({ isDisabled }) => {
       fieldId="inventory-lookup"
       value={inventoryField.value}
       onBlur={() => inventoryHelpers.setTouched()}
-      tooltip={i18n._(msg`Select the inventory that this host will belong to.`)}
+      tooltip={i18n._(t`Select the inventory that this host will belong to.`)}
       isValid={!inventoryMeta.touched || !inventoryMeta.error}
       helperTextInvalid={inventoryMeta.error}
       onChange={handleInventoryUpdate}
       required
       touched={inventoryMeta.touched}
       error={inventoryMeta.error}
-      validate={required(i18n._(msg`Select a value for this field`))}
+      validate={required(i18n._(t`Select a value for this field`))}
       isDisabled={isDisabled}
       hideAdvancedInventories
       autoPopulate={!inventoryField.value?.id}
@@ -47,11 +47,11 @@ const InventoryLookupField = ({ isDisabled }) => {
 
   return (
     <FormGroup
-      label={i18n._(msg`Inventory`)}
+      label={i18n._(t`Inventory`)}
       labelIcon={
         <Popover
           content={i18n._(
-            msg`Select the inventory that this host will belong to.`
+            t`Select the inventory that this host will belong to.`
           )}
         />
       }
@@ -63,7 +63,7 @@ const InventoryLookupField = ({ isDisabled }) => {
       helperTextInvalid={inventoryMeta.error}
     >
       {isDisabled ? (
-        <Tooltip content={i18n._(msg`Unable to change inventory on a host`)}>
+        <Tooltip content={i18n._(t`Unable to change inventory on a host`)}>
           {renderInventoryLookup}
         </Tooltip>
       ) : (
@@ -99,7 +99,7 @@ const HostForm = ({
               id="host-name"
               name="name"
               type="text"
-              label={i18n._(msg`Name`)}
+              label={i18n._(t`Name`)}
               validate={required(null)}
               isRequired
             />
@@ -107,7 +107,7 @@ const HostForm = ({
               id="host-description"
               name="description"
               type="text"
-              label={i18n._(msg`Description`)}
+              label={i18n._(t`Description`)}
             />
             {isInventoryVisible && (
               <InventoryLookupField isDisabled={disableInventoryLookup} />
@@ -116,7 +116,7 @@ const HostForm = ({
               <VariablesField
                 id="host-variables"
                 name="variables"
-                label={i18n._(msg`Variables`)}
+                label={i18n._(t`Variables`)}
               />
             </FormFullWidthLayout>
             {submitError && <FormSubmitError error={submitError} />}

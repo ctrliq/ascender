@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 
 import { Config } from 'contexts/Config';
@@ -14,8 +14,8 @@ import Team from './Team';
 function Teams() {
   const { i18n } = useLingui();
   const [breadcrumbConfig, setBreadcrumbConfig] = useState({
-    '/teams': i18n._(msg`Teams`),
-    '/teams/add': i18n._(msg`Create New Team`),
+    '/teams': i18n._(t`Teams`),
+    '/teams/add': i18n._(t`Create New Team`),
   });
 
   const buildBreadcrumbConfig = useCallback(
@@ -25,14 +25,14 @@ function Teams() {
       }
 
       setBreadcrumbConfig({
-        '/teams': i18n._(msg`Teams`),
-        '/teams/add': i18n._(msg`Create New Team`),
+        '/teams': i18n._(t`Teams`),
+        '/teams/add': i18n._(t`Create New Team`),
         [`/teams/${team.id}`]: `${team.name}`,
-        [`/teams/${team.id}/edit`]: i18n._(msg`Edit Details`),
-        [`/teams/${team.id}/details`]: i18n._(msg`Details`),
-        [`/teams/${team.id}/users`]: i18n._(msg`Users`),
-        [`/teams/${team.id}/access`]: i18n._(msg`Access`),
-        [`/teams/${team.id}/roles`]: i18n._(msg`Roles`),
+        [`/teams/${team.id}/edit`]: i18n._(t`Edit Details`),
+        [`/teams/${team.id}/details`]: i18n._(t`Details`),
+        [`/teams/${team.id}/users`]: i18n._(t`Users`),
+        [`/teams/${team.id}/access`]: i18n._(t`Access`),
+        [`/teams/${team.id}/roles`]: i18n._(t`Roles`),
       });
     },
     [i18n]

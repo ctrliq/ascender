@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { PageSection, Card } from '@patternfly/react-core';
 import ContentError from 'components/ContentError';
 import SubscriptionDetail from './SubscriptionDetail';
@@ -28,7 +28,7 @@ function Subscription() {
           </Route>
           <Route key="not-found" path={`${baseURL}/*`}>
             <ContentError isNotFound>
-              <Link to={baseURL}>{i18n._(msg`View Settings`)}</Link>
+              <Link to={baseURL}>{i18n._(t`View Settings`)}</Link>
             </ContentError>
           </Route>
         </Switch>

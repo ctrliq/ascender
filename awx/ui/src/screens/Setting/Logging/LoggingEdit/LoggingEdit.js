@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { Formik } from 'formik';
 import { Form } from '@patternfly/react-core';
 import { CardBody } from 'components/Card';
@@ -129,14 +129,14 @@ function LoggingEdit() {
                               <br />
                               <br />
                               {i18n._(
-                                msg`Cannot enable log aggregator without providing logging aggregator host and logging aggregator type.`
+                                t`Cannot enable log aggregator without providing logging aggregator host and logging aggregator type.`
                               )}
                             </>
                           )}
                       </>
                     ),
                   }}
-                  ariaLabel={i18n._(msg`Enable external logging`)}
+                  ariaLabel={i18n._(t`Enable external logging`)}
                   disabled={
                     !formik.values.LOG_AGGREGATOR_ENABLED &&
                     (!formik.values.LOG_AGGREGATOR_HOST ||
@@ -169,7 +169,7 @@ function LoggingEdit() {
                 <BooleanField
                   name="LOG_AGGREGATOR_INDIVIDUAL_FACTS"
                   ariaLabel={i18n._(
-                    msg`Enable log system tracking facts individually`
+                    t`Enable log system tracking facts individually`
                   )}
                   config={logging.LOG_AGGREGATOR_INDIVIDUAL_FACTS}
                 />
@@ -195,7 +195,7 @@ function LoggingEdit() {
                   <BooleanField
                     name="LOG_AGGREGATOR_VERIFY_CERT"
                     ariaLabel={i18n._(
-                      msg`Enable HTTPS certificate verification`
+                      t`Enable HTTPS certificate verification`
                     )}
                     config={logging.LOG_AGGREGATOR_VERIFY_CERT}
                   />

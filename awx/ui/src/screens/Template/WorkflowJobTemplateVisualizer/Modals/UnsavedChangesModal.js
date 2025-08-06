@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Button, Modal } from '@patternfly/react-core';
 
-import { msg, Trans } from '@lingui/macro';
+import { t, Trans } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { func } from 'prop-types';
 import { WorkflowDispatchContext } from 'contexts/Workflow';
@@ -13,8 +13,8 @@ function UnsavedChangesModal({ onSaveAndExit, onExit }) {
     <Modal
       width={600}
       isOpen
-      title={i18n._(msg`Warning: Unsaved Changes`)}
-      aria-label={i18n._(msg`Unsaved changes modal`)}
+      title={i18n._(t`Warning: Unsaved Changes`)}
+      aria-label={i18n._(t`Unsaved changes modal`)}
       onClose={() => dispatch({ type: 'TOGGLE_UNSAVED_CHANGES_MODAL' })}
       actions={[
         <Button
@@ -22,20 +22,20 @@ function UnsavedChangesModal({ onSaveAndExit, onExit }) {
           id="confirm-exit-without-saving"
           key="exit"
           variant="danger"
-          aria-label={i18n._(msg`Exit Without Saving`)}
+          aria-label={i18n._(t`Exit Without Saving`)}
           onClick={onExit}
         >
-          {i18n._(msg`Exit Without Saving`)}
+          {i18n._(t`Exit Without Saving`)}
         </Button>,
         <Button
           ouiaId="unsaved-changes-save-exit-button"
           id="confirm-save-and-exit"
           key="save"
           variant="primary"
-          aria-label={i18n._(msg`Save & Exit`)}
+          aria-label={i18n._(t`Save & Exit`)}
           onClick={onSaveAndExit}
         >
-          {i18n._(msg`Save & Exit`)}
+          {i18n._(t`Save & Exit`)}
         </Button>,
       ]}
     >

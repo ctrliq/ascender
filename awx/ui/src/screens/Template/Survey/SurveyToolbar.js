@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRouteMatch } from 'react-router-dom';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 
 import styled from 'styled-components';
@@ -48,7 +48,7 @@ function SurveyToolbar({
             onChange={(isChecked) => {
               onSelectAll(isChecked);
             }}
-            aria-label={i18n._(msg`Select all`)}
+            aria-label={i18n._(t`Select all`)}
             id="select-all"
             ouiaId="select-all"
           />
@@ -64,7 +64,7 @@ function SurveyToolbar({
             <ToolbarItem>
               <Tooltip
                 content={i18n._(
-                  msg`Click to rearrange the order of the survey questions`
+                  t`Click to rearrange the order of the survey questions`
                 )}
               >
                 <Button
@@ -74,7 +74,7 @@ function SurveyToolbar({
                   variant="secondary"
                   ouiaId="edit-order"
                 >
-                  {i18n._(msg`Edit Order`)}
+                  {i18n._(t`Edit Order`)}
                 </Button>
               </Tooltip>
             </ToolbarItem>
@@ -83,8 +83,8 @@ function SurveyToolbar({
             <Tooltip
               content={
                 isDeleteDisabled
-                  ? i18n._(msg`Select a question to delete`)
-                  : i18n._(msg`Delete survey question`)
+                  ? i18n._(t`Select a question to delete`)
+                  : i18n._(t`Delete survey question`)
               }
             >
               <div>
@@ -94,7 +94,7 @@ function SurveyToolbar({
                   isDisabled={isDeleteDisabled}
                   onClick={() => onToggleDeleteModal(true)}
                 >
-                  {i18n._(msg`Delete`)}
+                  {i18n._(t`Delete`)}
                 </Button>
               </div>
             </Tooltip>
@@ -103,10 +103,10 @@ function SurveyToolbar({
         {!emptyList && (
           <SwitchWrapper>
             <Switch
-              aria-label={i18n._(msg`Survey Toggle`)}
+              aria-label={i18n._(t`Survey Toggle`)}
               id="survey-toggle"
-              label={i18n._(msg`Survey Enabled`)}
-              labelOff={i18n._(msg`Survey Disabled`)}
+              label={i18n._(t`Survey Enabled`)}
+              labelOff={i18n._(t`Survey Disabled`)}
               isChecked={surveyEnabled}
               isDisabled={!canEdit}
               onChange={() => onToggleSurvey(!surveyEnabled)}

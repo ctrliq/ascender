@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { Switch, Tooltip } from '@patternfly/react-core';
 import useRequest from 'hooks/useRequest';
@@ -48,7 +48,7 @@ function InstanceToggle({ className, fetchInstances, instance, onToggle }) {
     <>
       <Tooltip
         content={i18n._(
-          msg`Set the instance enabled or disabled. If disabled, jobs will not be assigned to this instance.`
+          t`Set the instance enabled or disabled. If disabled, jobs will not be assigned to this instance.`
         )}
         position="top"
       >
@@ -56,23 +56,23 @@ function InstanceToggle({ className, fetchInstances, instance, onToggle }) {
           className={className}
           css="display: inline-flex;"
           id={`host-${instance.id}-toggle`}
-          label={i18n._(msg`Enabled`)}
-          labelOff={i18n._(msg`Disabled`)}
+          label={i18n._(t`Enabled`)}
+          labelOff={i18n._(t`Disabled`)}
           isChecked={isEnabled}
           isDisabled={isLoading || !me?.is_superuser}
           onChange={toggleInstance}
           ouiaId={`host-${instance.id}-toggle`}
-          aria-label={i18n._(msg`Toggle instance`)}
+          aria-label={i18n._(t`Toggle instance`)}
         />
       </Tooltip>
       {showError && error && !isLoading && (
         <AlertModal
           variant="error"
-          title={i18n._(msg`Error!`)}
+          title={i18n._(t`Error!`)}
           isOpen={error && !isLoading}
           onClose={() => setShowError(false)}
         >
-          {i18n._(msg`Failed to toggle instance.`)}
+          {i18n._(t`Failed to toggle instance.`)}
           <ErrorDetail error={error} />
         </AlertModal>
       )}

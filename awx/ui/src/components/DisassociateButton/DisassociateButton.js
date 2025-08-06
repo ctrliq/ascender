@@ -9,7 +9,7 @@ import {
   node,
 } from 'prop-types';
 
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { Button, Tooltip, DropdownItem } from '@patternfly/react-core';
 import styled from 'styled-components';
@@ -31,7 +31,7 @@ function DisassociateButton({
 }) {
   const { i18n } = useLingui();
   if (!modalTitle) {
-    modalTitle = i18n._(msg`Disassociate?`);
+    modalTitle = i18n._(t`Disassociate?`);
   }
   const [isOpen, setIsOpen] = useState(false);
   const { isKebabified, onKebabModalChange } = useContext(KebabifiedContext);
@@ -77,7 +77,7 @@ function DisassociateButton({
         return (
           <div>
             {i18n._(
-              msg`You do not have permission to disassociate the following: ${itemsUnableToDisassociate}`
+              t`You do not have permission to disassociate the following: ${itemsUnableToDisassociate}`
             )}
           </div>
         );
@@ -85,9 +85,9 @@ function DisassociateButton({
     }
 
     if (itemsToDisassociate.length) {
-      return i18n._(msg`Disassociate`);
+      return i18n._(t`Disassociate`);
     }
-    return i18n._(msg`Select a row to disassociate`);
+    return i18n._(t`Select a row to disassociate`);
   }
 
   let isDisabled = false;
@@ -103,13 +103,13 @@ function DisassociateButton({
       {isKebabified ? (
         <DropdownItem
           key="add"
-          aria-label={i18n._(msg`disassociate`)}
+          aria-label={i18n._(t`disassociate`)}
           isDisabled={isDisabled || !itemsToDisassociate.length}
           component="button"
           ouiaId="disassociate-tooltip"
           onClick={() => setIsOpen(true)}
         >
-          {i18n._(msg`Disassociate`)}
+          {i18n._(t`Disassociate`)}
         </DropdownItem>
       ) : (
         <Tooltip
@@ -121,11 +121,11 @@ function DisassociateButton({
             <Button
               ouiaId="disassociate-button"
               variant="secondary"
-              aria-label={i18n._(msg`Disassociate`)}
+              aria-label={i18n._(t`Disassociate`)}
               onClick={() => setIsOpen(true)}
               isDisabled={isDisabled || !itemsToDisassociate.length}
             >
-              {i18n._(msg`Disassociate`)}
+              {i18n._(t`Disassociate`)}
             </Button>
           </div>
         </Tooltip>
@@ -142,25 +142,25 @@ function DisassociateButton({
               ouiaId="disassociate-modal-confirm"
               key="disassociate"
               variant="danger"
-              aria-label={i18n._(msg`confirm disassociate`)}
+              aria-label={i18n._(t`confirm disassociate`)}
               onClick={handleDisassociate}
             >
-              {i18n._(msg`Disassociate`)}
+              {i18n._(t`Disassociate`)}
             </Button>,
             <Button
               ouiaId="disassociate-modal-cancel"
               key="cancel"
               variant="link"
-              aria-label={i18n._(msg`Cancel`)}
+              aria-label={i18n._(t`Cancel`)}
               onClick={() => setIsOpen(false)}
             >
-              {i18n._(msg`Cancel`)}
+              {i18n._(t`Cancel`)}
             </Button>,
           ]}
         >
           {modalNote && <ModalNote>{modalNote}</ModalNote>}
 
-          <div>{i18n._(msg`This action will disassociate the following:`)}</div>
+          <div>{i18n._(t`This action will disassociate the following:`)}</div>
 
           {itemsToDisassociate.map((item) => (
             <span key={item.id}>

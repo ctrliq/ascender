@@ -1,5 +1,5 @@
 import React from 'react';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { Link } from 'react-router-dom';
 import {
@@ -35,12 +35,12 @@ function PromptWFJobTemplateDetail({ resource }) {
       <TextList component={TextListVariants.ul}>
         {allow_simultaneous && (
           <TextListItem component={TextListItemVariants.li}>
-            {i18n._(msg`Concurrent Jobs`)}
+            {i18n._(t`Concurrent Jobs`)}
           </TextListItem>
         )}
         {webhook_service && (
           <TextListItem component={TextListItemVariants.li}>
-            {i18n._(msg`Webhooks`)}
+            {i18n._(t`Webhooks`)}
           </TextListItem>
         )}
       </TextList>
@@ -60,13 +60,13 @@ function PromptWFJobTemplateDetail({ resource }) {
   return (
     <>
       <Detail
-        label={i18n._(msg`Activity`)}
+        label={i18n._(t`Activity`)}
         value={<Sparkline jobs={recentJobs} />}
         isEmpty={summary_fields?.recent_jobs?.length === 0}
       />
       {summary_fields?.organization && (
         <Detail
-          label={i18n._(msg`Organization`)}
+          label={i18n._(t`Organization`)}
           value={
             <Link
               to={`/organizations/${summary_fields.organization.id}/details`}
@@ -78,7 +78,7 @@ function PromptWFJobTemplateDetail({ resource }) {
       )}
       {summary_fields?.inventory && (
         <Detail
-          label={i18n._(msg`Inventory`)}
+          label={i18n._(t`Inventory`)}
           value={
             <Link
               to={`/${inventoryKind}/${summary_fields.inventory?.id}/details`}
@@ -88,26 +88,26 @@ function PromptWFJobTemplateDetail({ resource }) {
           }
         />
       )}
-      <Detail label={i18n._(msg`Source Control Branch`)} value={scm_branch} />
-      <Detail label={i18n._(msg`Limit`)} value={limit} />
+      <Detail label={i18n._(t`Source Control Branch`)} value={scm_branch} />
+      <Detail label={i18n._(t`Limit`)} value={limit} />
       <Detail
-        label={i18n._(msg`Webhook Service`)}
+        label={i18n._(t`Webhook Service`)}
         value={toTitleCase(webhook_service)}
       />
-      <Detail label={i18n._(msg`Webhook Key`)} value={webhook_key} />
+      <Detail label={i18n._(t`Webhook Key`)} value={webhook_key} />
       {related?.webhook_receiver && (
         <Detail
-          label={i18n._(msg`Webhook URL`)}
+          label={i18n._(t`Webhook URL`)}
           value={`${window.location.origin}${related.webhook_receiver}`}
         />
       )}
       {optionsList && (
-        <Detail label={i18n._(msg`Enabled Options`)} value={optionsList} />
+        <Detail label={i18n._(t`Enabled Options`)} value={optionsList} />
       )}
       {summary_fields?.webhook_credential && (
         <Detail
           fullWidth
-          label={i18n._(msg`Webhook Credential`)}
+          label={i18n._(t`Webhook Credential`)}
           value={
             <CredentialChip
               key={summary_fields.webhook_credential?.id}
@@ -120,7 +120,7 @@ function PromptWFJobTemplateDetail({ resource }) {
       {summary_fields?.labels?.results && (
         <Detail
           fullWidth
-          label={i18n._(msg`Labels`)}
+          label={i18n._(t`Labels`)}
           value={
             <ChipGroup
               numChips={5}
@@ -139,7 +139,7 @@ function PromptWFJobTemplateDetail({ resource }) {
       )}
       {extra_vars && (
         <VariablesDetail
-          label={i18n._(msg`Variables`)}
+          label={i18n._(t`Variables`)}
           rows={4}
           value={extra_vars}
           name="extra_vars"

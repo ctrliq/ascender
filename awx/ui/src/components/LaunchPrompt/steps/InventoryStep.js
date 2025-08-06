@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { msg } from '@lingui/macro';
+import { t } from '@lingui/react/macro';
 import { useLingui } from '@lingui/react';
 import { useField } from 'formik';
 import styled from 'styled-components';
@@ -82,28 +82,28 @@ function InventoryStep({ warningMessage = null }) {
         optionCount={count}
         searchColumns={[
           {
-            name: i18n._(msg`Name`),
+            name: i18n._(t`Name`),
             key: 'name__icontains',
             isDefault: true,
           },
           {
-            name: i18n._(msg`Created By (Username)`),
+            name: i18n._(t`Created By (Username)`),
             key: 'created_by__username__icontains',
           },
           {
-            name: i18n._(msg`Modified By (Username)`),
+            name: i18n._(t`Modified By (Username)`),
             key: 'modified_by__username__icontains',
           },
         ]}
         sortColumns={[
           {
-            name: i18n._(msg`Name`),
+            name: i18n._(t`Name`),
             key: 'name',
           },
         ]}
         searchableKeys={searchableKeys}
         relatedSearchableKeys={relatedSearchableKeys}
-        header={i18n._(msg`Inventory`)}
+        header={i18n._(t`Inventory`)}
         name="inventory"
         qsConfig={QS_CONFIG}
         readOnly
