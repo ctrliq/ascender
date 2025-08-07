@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { msg } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import {
   Card as _Card,
   CardHeader as _CardHeader,
@@ -47,113 +46,107 @@ const CardDescription = styled.div`
 function SettingList() {
   const config = useConfig();
   const brandName = useBrandName();
-  const { i18n } = useLingui();
+  const { t } = useLingui();
 
   const settingRoutes = [
     {
-      header: i18n._(msg`Authentication`),
-      description: i18n._(
-        msg`Enable simplified login for your ${brandName} applications`
-      ),
+      header: t`Authentication`,
+      description: t`Enable simplified login for your ${brandName} applications`,
       id: 'authentication',
       routes: [
         {
-          title: i18n._(msg`Azure AD settings`),
+          title: t`Azure AD settings`,
           path: '/settings/azure',
         },
         {
-          title: i18n._(msg`GitHub settings`),
+          title: t`GitHub settings`,
           path: '/settings/github',
         },
         {
-          title: i18n._(msg`Google OAuth 2 settings`),
+          title: t`Google OAuth 2 settings`,
           path: '/settings/google_oauth2',
         },
         {
-          title: i18n._(msg`LDAP settings`),
+          title: t`LDAP settings`,
           path: '/settings/ldap',
         },
         {
-          title: i18n._(msg`RADIUS settings`),
+          title: t`RADIUS settings`,
           path: '/settings/radius',
         },
         {
-          title: i18n._(msg`SAML settings`),
+          title: t`SAML settings`,
           path: '/settings/saml',
         },
         {
-          title: i18n._(msg`TACACS+ settings`),
+          title: t`TACACS+ settings`,
           path: '/settings/tacacs',
         },
         {
-          title: i18n._(msg`Generic OIDC settings`),
+          title: t`Generic OIDC settings`,
           path: '/settings/oidc',
         },
       ],
     },
     {
-      header: i18n._(msg`Jobs`),
-      description: i18n._(
-        msg`Update settings pertaining to Jobs within ${brandName}`
-      ),
+      header: t`Jobs`,
+      description: t`Update settings pertaining to Jobs within ${brandName}`,
       id: 'jobs',
       routes: [
         {
-          title: i18n._(msg`Jobs settings`),
+          title: t`Jobs settings`,
           path: '/settings/jobs',
         },
       ],
     },
     {
-      header: i18n._(msg`System`),
-      description: i18n._(msg`Define system-level features and functions`),
+      header: t`System`,
+      description: t`Define system-level features and functions`,
       id: 'system',
       routes: [
         {
-          title: i18n._(msg`Miscellaneous System settings`),
+          title: t`Miscellaneous System settings`,
           path: '/settings/miscellaneous_system',
         },
         {
-          title: i18n._(msg`Miscellaneous Authentication settings`),
+          title: t`Miscellaneous Authentication settings`,
           path: '/settings/miscellaneous_authentication',
         },
         {
-          title: i18n._(msg`Logging settings`),
+          title: t`Logging settings`,
           path: '/settings/logging',
         },
       ],
     },
     {
-      header: i18n._(msg`User Interface`),
-      description: i18n._(
-        msg`Set preferences for data collection, logos, and logins`
-      ),
+      header: t`User Interface`,
+      description: t`Set preferences for data collection, logos, and logins`,
       id: 'ui',
       routes: [
         {
-          title: i18n._(msg`User Interface settings`),
+          title: t`User Interface settings`,
           path: '/settings/ui',
         },
       ],
     },
     {
-      header: i18n._(msg`Subscription`),
-      description: i18n._(msg`View and edit your subscription information`),
+      header: t`Subscription`,
+      description: t`View and edit your subscription information`,
       id: 'subscription',
       routes: [
         {
-          title: i18n._(msg`Subscription settings`),
+          title: t`Subscription settings`,
           path: '/settings/subscription',
         },
       ],
     },
     {
-      header: i18n._(msg`Troubleshooting`),
-      description: i18n._(msg`View and edit debug options`),
+      header: t`Troubleshooting`,
+      description: t`View and edit debug options`,
       id: 'troubleshooting',
       routes: [
         {
-          title: i18n._(msg`Troubleshooting settings`),
+          title: t`Troubleshooting settings`,
           path: '/settings/troubleshooting',
         },
       ],

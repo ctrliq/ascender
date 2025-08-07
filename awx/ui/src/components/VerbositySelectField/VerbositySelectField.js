@@ -1,6 +1,5 @@
 import React from 'react';
-import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
 import { FormGroup } from '@patternfly/react-core';
 import Popover from 'components/Popover';
@@ -14,8 +13,18 @@ function VerbositySelectField({
   tooltip,
   isValid,
 }) {
-  const { i18n } = useLingui();
-  const VERBOSE_OPTIONS = Object.entries(VERBOSITY(i18n)).map(([k, v]) => ({
+  const { t } = useLingui();
+
+  const getVerbosityOptions = () => ({
+    0: t`0 (Normal)`,
+    1: t`1 (Verbose)`,
+    2: t`2 (More Verbose)`,
+    3: t`3 (Debug)`,
+    4: t`4 (Connection Debug)`,
+    5: t`5 (WinRM Debug)`,
+  });
+
+  const VERBOSE_OPTIONS = Object.entries(getVerbosityOptions()).map(([k, v]) => ({
     key: `${k}`,
     value: `${k}`,
     label: v,
@@ -24,7 +33,7 @@ function VerbositySelectField({
   return promptId ? (
     <FieldWithPrompt
       fieldId={fieldId}
-      label={i18n._(msg`Verbosity`)}
+      label={t`Verbosity`}
       promptId={promptId}
       promptName={promptName}
       tooltip={tooltip}
@@ -35,7 +44,7 @@ function VerbositySelectField({
     <FormGroup
       fieldId={fieldId}
       validated={isValid ? 'default' : 'error'}
-      label={i18n._(msg`Verbosity`)}
+      label={t`Verbosity`}
       labelIcon={<Popover content={tooltip} />}
     >
       <AnsibleSelect
@@ -48,14 +57,14 @@ function VerbositySelectField({
   );
 }
 
-export function VERBOSITY(i18n) {
+export function VERBOSITY(t) {
   return {
-    0: i18n._(msg`0 (Normal)`),
-    1: i18n._(msg`1 (Verbose)`),
-    2: i18n._(msg`2 (More Verbose)`),
-    3: i18n._(msg`3 (Debug)`),
-    4: i18n._(msg`4 (Connection Debug)`),
-    5: i18n._(msg`5 (WinRM Debug)`),
+    0: t ? t`0 (Normal)` : '0 (Normal)',
+    1: t ? t`1 (Verbose)` : '1 (Verbose)',
+    2: t ? t`2 (More Verbose)` : '2 (More Verbose)',
+    3: t ? t`3 (Debug)` : '3 (Debug)',
+    4: t ? t`4 (Connection Debug)` : '4 (Connection Debug)',
+    5: t ? t`5 (WinRM Debug)` : '5 (WinRM Debug)',
   };
 }
 

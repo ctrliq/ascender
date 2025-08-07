@@ -3,8 +3,7 @@ import { string, func } from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Button, DropdownItem, Tooltip } from '@patternfly/react-core';
 import CaretDownIcon from '@patternfly/react-icons/dist/js/icons/caret-down-icon';
-import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 import { useKebabifiedMenu } from 'contexts/Kebabified';
 
 function ToolbarAddButton({
@@ -15,7 +14,7 @@ function ToolbarAddButton({
   showToggleIndicator,
   ouiaId,
 }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const { isKebabified } = useKebabifiedMenu();
 
   if (!linkTo && !onClick) {
@@ -33,29 +32,29 @@ function ToolbarAddButton({
         to={linkTo}
         onClick={!onClick ? undefined : onClick}
       >
-        {defaultLabel || i18n._(msg`Add`)}
+        {defaultLabel || t`Add`}
       </DropdownItem>
     );
   }
   if (linkTo) {
     return (
-      <Tooltip content={defaultLabel || i18n._(msg`Add`)} position="top">
+      <Tooltip content={defaultLabel || t`Add`} position="top">
         <Button
           ouiaId={ouiaId}
           component={Link}
           to={linkTo}
           isDisabled={isDisabled}
         >
-          {defaultLabel || i18n._(msg`Add`)}
+          {defaultLabel || t`Add`}
           {showToggleIndicator && <CaretDownIcon />}
         </Button>
       </Tooltip>
     );
   }
   return (
-    <Tooltip content={defaultLabel || i18n._(msg`Add`)} position="top">
+    <Tooltip content={defaultLabel || t`Add`} position="top">
       <Button ouiaId={ouiaId} onClick={onClick} isDisabled={isDisabled}>
-        {defaultLabel || i18n._(msg`Add`)}
+        {defaultLabel || t`Add`}
         {showToggleIndicator && <CaretDownIcon />}
       </Button>
     </Tooltip>

@@ -227,7 +227,7 @@ describe('<InventoryRelatedGroupList />', () => {
       'InventoryRelatedGroupList',
       (el) => el.length > 0
     );
-    act(() => wrapper.find('Button[aria-label="Add"]').prop('onClick')());
+    act(() => wrapper.find('ToolbarAddButton').prop('onClick')());
     wrapper.update();
     await act(async () =>
       wrapper
@@ -242,12 +242,17 @@ describe('<InventoryRelatedGroupList />', () => {
       page_size: 5,
     });
     wrapper.update();
+    await waitForElement(
+      wrapper,
+      'AssociateModal',
+      (el) => el.length > 0
+    );
     act(() =>
       wrapper.find('CheckboxListItem[name="foo"]').prop('onSelect')({ id: 1 })
     );
     wrapper.update();
     await act(() =>
-      wrapper.find('button[aria-label="Save"]').prop('onClick')()
+      wrapper.find('Button[ouiaId="associate-modal-save"]').prop('onClick')()
     );
     expect(GroupsAPI.associateChildGroup).toBeCalledTimes(1);
   });

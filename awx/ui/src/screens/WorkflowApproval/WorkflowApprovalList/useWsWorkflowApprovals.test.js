@@ -34,6 +34,9 @@ describe('useWsWorkflowApprovals hook', () => {
   afterEach(() => {
     global.console.debug = debug;
     WS.clean();
+    if (wrapper) {
+      wrapper.unmount();
+    }
   });
 
   test('should return workflow approvals list', () => {

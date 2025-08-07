@@ -1,7 +1,6 @@
 import 'styled-components/macro';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { i18n } from '@lingui/core';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import { bool } from 'prop-types';
 import * as d3 from 'd3';
@@ -49,6 +48,7 @@ function VisualizerGraph({ readOnly }) {
     showLegend,
     showTools,
   } = useContext(WorkflowStateContext);
+  const { t } = useLingui();
   const dispatch = useContext(WorkflowDispatchContext);
 
   const drawPotentialLinkToNode = (node) => {
@@ -243,9 +243,7 @@ function VisualizerGraph({ readOnly }) {
             onMouseMove: (e) => drawPotentialLinkToCursor(e),
             onMouseOver: () =>
               setHelpText(
-                i18n._(
-                  msg`Click an available node to create a new link.  Click outside the graph to cancel.`
-                )
+                t`Click an available node to create a new link.  Click outside the graph to cancel.`
               ),
             onMouseOut: () => setHelpText(null),
             onClick: () => handleBackgroundClick(),

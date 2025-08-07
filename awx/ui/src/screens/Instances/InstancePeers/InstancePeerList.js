@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { msg } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import { CardBody } from 'components/Card';
 import PaginatedTable, {
   getSearchableKeys,
@@ -29,7 +28,7 @@ const QS_CONFIG = getQSConfig('peer', {
 });
 
 function InstancePeerList({ setBreadcrumb }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const location = useLocation();
   const { id } = useParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -169,14 +168,12 @@ function InstancePeerList({ setBreadcrumb }) {
         fetchPeers();
         addToast({
           id: instancesPeerToAssociate,
-          title: i18n._(
-            msg`Peers update on ${instance.hostname}.  Please be sure to run the install bundle for ${instance.hostname} again in order to see changes take effect.`
-          ),
+          title: t`Peers update on ${instance.hostname}.  Please be sure to run the install bundle for ${instance.hostname} again in order to see changes take effect.`,
           variant: AlertVariant.success,
           hasTimeout: true,
         });
       },
-      [instance, fetchPeers, addToast, i18n]
+      [instance, fetchPeers, addToast, t]
     )
   );
 
@@ -197,13 +194,11 @@ function InstancePeerList({ setBreadcrumb }) {
 
       fetchPeers();
       addToast({
-        title: i18n._(
-          msg`Peer removed. Please be sure to run the install bundle for ${instance.hostname} again in order to see changes take effect.`
-        ),
+        title: t`Peer removed. Please be sure to run the install bundle for ${instance.hostname} again in order to see changes take effect.`,
         variant: AlertVariant.success,
         hasTimeout: true,
       });
-    }, [instance, selected, fetchPeers, addToast, i18n])
+    }, [instance, selected, fetchPeers, addToast, t])
   );
 
   const { error, dismissError } = useDismissableError(
@@ -222,7 +217,7 @@ function InstancePeerList({ setBreadcrumb }) {
         }
         items={peers}
         itemCount={count}
-        pluralizedItemName={i18n._(msg`Peers`)}
+        pluralizedItemName={t`Peers`}
         qsConfig={QS_CONFIG}
         onRowClick={handleSelect}
         clearSelected={clearSelected}
@@ -230,32 +225,32 @@ function InstancePeerList({ setBreadcrumb }) {
         toolbarRelatedSearchableKeys={relatedSearchableKeys}
         toolbarSearchColumns={[
           {
-            name: i18n._(msg`Name`),
+            name: t`Name`,
             key: 'hostname__icontains',
             isDefault: true,
           },
         ]}
         toolbarSortColumns={[
           {
-            name: i18n._(msg`Name`),
+            name: t`Name`,
             key: 'hostname',
           },
         ]}
         headerRow={
           <HeaderRow qsConfig={QS_CONFIG} isExpandable>
             <HeaderCell
-              tooltip={i18n._(msg`Cannot run health check on hop nodes.`)}
+              tooltip={t`Cannot run health check on hop nodes.`}
               sortKey="hostname"
             >
-              {i18n._(msg`Instance Name`)}
+              {t`Instance Name`}
             </HeaderCell>
-            <HeaderCell sortKey="address">{i18n._(msg`Address`)}</HeaderCell>
-            <HeaderCell sortKey="port">{i18n._(msg`Port`)}</HeaderCell>
+            <HeaderCell sortKey="address">{t`Address`}</HeaderCell>
+            <HeaderCell sortKey="port">{t`Port`}</HeaderCell>
             <HeaderCell sortKey="node_type">
-              {i18n._(msg`Node Type`)}
+              {t`Node Type`}
             </HeaderCell>
             <HeaderCell sortKey="canonical">
-              {i18n._(msg`Canonical`)}
+              {t`Canonical`}
             </HeaderCell>
           </HeaderRow>
         }
@@ -272,7 +267,7 @@ function InstancePeerList({ setBreadcrumb }) {
                 <ToolbarAddButton
                   ouiaId="add-instance-peers-button"
                   key="associate"
-                  defaultLabel={i18n._(msg`Associate`)}
+                  defaultLabel={t`Associate`}
                   onClick={() => setIsModalOpen(true)}
                 />
               ),
@@ -282,7 +277,7 @@ function InstancePeerList({ setBreadcrumb }) {
                   key="disassociate"
                   onDisassociate={handlePeersDiassociate}
                   itemsToDisassociate={selected}
-                  modalTitle={i18n._(msg`Remove peers?`)}
+                  modalTitle={t`Remove peers?`}
                 />
               ),
             ]}
@@ -302,20 +297,20 @@ function InstancePeerList({ setBreadcrumb }) {
       />
       {isModalOpen && (
         <AssociateModal
-          header={i18n._(msg`Instances`)}
+          header={t`Instances`}
           fetchRequest={fetchPeersToAssociate}
           isModalOpen={isModalOpen}
           onAssociate={handlePeerAssociate}
           onClose={() => setIsModalOpen(false)}
-          title={i18n._(msg`Select Peer Addresses`)}
+          title={t`Select Peer Addresses`}
           optionsRequest={readInstancesOptions}
           displayKey="address"
           columns={[
-            { key: 'hostname', name: i18n._(msg`Name`) },
-            { key: 'address', name: i18n._(msg`Address`) },
-            { key: 'port', name: i18n._(msg`Port`) },
-            { key: 'node_type', name: i18n._(msg`Node Type`) },
-            { key: 'protocol', name: i18n._(msg`Protocol`) },
+            { key: 'hostname', name: t`Name` },
+            { key: 'address', name: t`Address` },
+            { key: 'port', name: t`Port` },
+            { key: 'node_type', name: t`Node Type` },
+            { key: 'protocol', name: t`Protocol` },
           ]}
         />
       )}
@@ -324,11 +319,11 @@ function InstancePeerList({ setBreadcrumb }) {
         <AlertModal
           isOpen={error}
           onClose={dismissError}
-          title={i18n._(msg`Error!`)}
+          title={t`Error!`}
           variant="error"
         >
-          {associateError && i18n._(msg`Failed to associate peer.`)}
-          {disassociateError && i18n._(msg`Failed to remove peers.`)}
+          {associateError && t`Failed to associate peer.`}
+          {disassociateError && t`Failed to remove peers.`}
           <ErrorDetail error={error} />
         </AlertModal>
       )}

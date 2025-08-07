@@ -23,7 +23,8 @@ describe('<WorkflowApprovalListItem />', () => {
         </tbody>
       </table>
     );
-    expect(wrapper.find('Label[children="Never expires"]').length).toBe(1);
+    // For pending status with no expiration, StatusLabel should show "Never expires"
+    expect(wrapper.find('StatusLabel').text()).toBe('Never expires');
   });
 
   test('should display timed out status', () => {

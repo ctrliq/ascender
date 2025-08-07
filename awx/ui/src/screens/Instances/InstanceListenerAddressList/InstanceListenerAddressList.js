@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { msg } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import { CardBody } from 'components/Card';
 import PaginatedTable, {
   getSearchableKeys,
@@ -24,7 +23,7 @@ const QS_CONFIG = getQSConfig('peer', {
 });
 
 function InstanceListenerAddressList({ setBreadcrumb }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const { id } = useParams();
   const { Toast, toastProps } = useToast();
   const {
@@ -102,7 +101,7 @@ function InstanceListenerAddressList({ setBreadcrumb }) {
         hasContentLoading={isLoading}
         items={listenerAddresses}
         itemCount={count}
-        pluralizedItemName={i18n._(msg`Listener Addresses`)}
+        pluralizedItemName={t`Listener Addresses`}
         qsConfig={QS_CONFIG}
         onRowClick={handleSelect}
         clearSelected={clearSelected}
@@ -110,24 +109,24 @@ function InstanceListenerAddressList({ setBreadcrumb }) {
         toolbarRelatedSearchableKeys={relatedSearchableKeys}
         toolbarSearchColumns={[
           {
-            name: i18n._(msg`Name`),
+            name: t`Name`,
             key: 'hostname__icontains',
             isDefault: true,
           },
         ]}
         toolbarSortColumns={[
           {
-            name: i18n._(msg`Name`),
+            name: t`Name`,
             key: 'hostname',
           },
         ]}
         headerRow={
           <HeaderRow qsConfig={QS_CONFIG}>
-            <HeaderCell sortKey="address">{i18n._(msg`Address`)}</HeaderCell>
-            <HeaderCell sortKey="port">{i18n._(msg`Port`)}</HeaderCell>
-            <HeaderCell sortKey="protocol">{i18n._(msg`Protocol`)}</HeaderCell>
+            <HeaderCell sortKey="address">{t`Address`}</HeaderCell>
+            <HeaderCell sortKey="port">{t`Port`}</HeaderCell>
+            <HeaderCell sortKey="protocol">{t`Protocol`}</HeaderCell>
             <HeaderCell sortKey="canonical">
-              {i18n._(msg`Canonical`)}
+              {t`Canonical`}
             </HeaderCell>
           </HeaderRow>
         }

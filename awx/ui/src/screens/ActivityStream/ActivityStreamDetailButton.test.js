@@ -73,8 +73,8 @@ describe('<ActivityStreamDetailButton />', () => {
     assertDetail('Setting name', 'INSIGHTS_TRACKING_STATE');
     assertDetail('Action', 'foo');
 
-    const input = wrapper.find('VariablesDetail___StyledCodeEditor');
-    expect(input).toHaveLength(1);
-    expect(input.prop('value')).toEqual('{\n  "value": false,\n  "id": 6\n}');
+    const codeEditor = wrapper.find('CodeEditor');
+    expect(codeEditor).toHaveLength(1);
+    expect(codeEditor.prop('value')).toEqual('{\n  "value": false,\n  "id": 6\n}');
   });
 });

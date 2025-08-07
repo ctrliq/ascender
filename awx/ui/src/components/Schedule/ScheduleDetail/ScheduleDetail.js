@@ -2,8 +2,7 @@ import 'styled-components/macro';
 import React, { useCallback, useEffect } from 'react';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import { msg } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import { Chip, Divider, Title, Button } from '@patternfly/react-core';
 import { Schedule } from 'types';
 import { formatDateString } from 'util/dates';
@@ -69,7 +68,7 @@ const FrequencyDetailsContainer = styled.div`
 `;
 
 function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const {
     id,
     created,
@@ -96,7 +95,7 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
     timezone,
     verbosity,
   } = schedule;
-  const helpText = getHelpText(i18n);
+  const helpText = getHelpText(t);
   const history = useHistory();
   const { pathname } = useLocation();
   const pathRoot = pathname.substr(0, pathname.indexOf('schedules'));
@@ -178,12 +177,12 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
   }, [fetchCredentialsAndPreview]);
 
   const frequencies = {
-    minute: i18n._(msg`Minute`),
-    hour: i18n._(msg`Hour`),
-    day: i18n._(msg`Day`),
-    week: i18n._(msg`Week`),
-    month: i18n._(msg`Month`),
-    year: i18n._(msg`Year`),
+    minute: t`Minute`,
+    hour: t`Hour`,
+    day: t`Day`,
+    week: t`Week`,
+    month: t`Month`,
+    year: t`Year`,
   };
   let rruleError;
   let frequency = [];
@@ -201,10 +200,10 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
 
   const repeatFrequency = frequency.length
     ? frequency.map((f) => frequencies[f]).join(', ')
-    : i18n._(msg`None (Run Once)`);
+    : t`None (Run Once)`;
   const exceptionRepeatFrequency = exceptionFrequency.length
     ? exceptionFrequency.map((f) => frequencies[f]).join(', ')
-    : i18n._(msg`None (Run Once)`);
+    : t`None (Run Once)`;
 
   const {
     ask_credential_on_launch,
@@ -278,7 +277,7 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
   const showJobTypeDetail = ask_job_type_on_launch && job_type;
   const showSCMBranchDetail = ask_scm_branch_on_launch && scm_branch;
   const showVerbosityDetail =
-    ask_verbosity_on_launch && VERBOSITY(i18n)[verbosity];
+    ask_verbosity_on_launch && VERBOSITY(t)[verbosity];
   const showExecutionEnvironmentDetail =
     ask_execution_environment_on_launch && execution_environment;
   const showLabelsDetail = ask_labels_on_launch && labels && labels.length > 0;
@@ -334,39 +333,39 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
         isDisabled={isDisabled}
       />
       <DetailList gutter="sm">
-        <Detail label={i18n._(msg`Name`)} value={name} dataCy="schedule-name" />
+        <Detail label={t`Name`} value={name} dataCy="schedule-name" />
         <Detail
-          label={i18n._(msg`Description`)}
+          label={t`Description`}
           value={description}
           dataCy="schedule-description"
         />
         <Detail
-          label={i18n._(msg`First Run`)}
+          label={t`First Run`}
           value={formatDateString(dtstart, timezone)}
           dataCy="schedule-first-run"
         />
         <Detail
-          label={i18n._(msg`Next Run`)}
+          label={t`Next Run`}
           value={formatDateString(next_run, timezone)}
           dataCy="schedule-next-run"
         />
         <Detail
-          label={i18n._(msg`Last Run`)}
+          label={t`Last Run`}
           value={formatDateString(dtend, timezone)}
         />
         <Detail
-          label={i18n._(msg`Local Time Zone`)}
+          label={t`Local Time Zone`}
           value={timezone}
           helpText={helpText.localTimeZone(config)}
           dataCy="schedule-timezone"
         />
         <Detail
-          label={i18n._(msg`Repeat Frequency`)}
+          label={t`Repeat Frequency`}
           value={repeatFrequency}
           dataCy="schedule-repeat-frequency"
         />
         <Detail
-          label={i18n._(msg`Exception Frequency`)}
+          label={t`Exception Frequency`}
           value={exceptionRepeatFrequency}
           dataCy="schedule-exception-frequency"
         />
@@ -375,7 +374,7 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
         <FrequencyDetailsContainer>
           <div ouia-component-id="schedule-frequency-details">
             <p>
-              <strong>{i18n._(msg`Frequency Details`)}</strong>
+              <strong>{t`Frequency Details`}</strong>
             </p>
             {frequency.map((freq) => (
               <FrequencyDetails
@@ -393,7 +392,7 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
         <FrequencyDetailsContainer>
           <div ouia-component-id="schedule-exception-details">
             <p css="border-top: 0">
-              <strong>{i18n._(msg`Frequency Exception Details`)}</strong>
+              <strong>{t`Frequency Exception Details`}</strong>
             </p>
             {exceptionFrequency.map((freq) => (
               <FrequencyDetails
@@ -411,19 +410,19 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
       <DetailList gutter="sm">
         {hasDaysToKeepField ? (
           <Detail
-            label={i18n._(msg`Days of Data to Keep`)}
+            label={t`Days of Data to Keep`}
             value={daysToKeep}
             dataCy="schedule-days-to-keep"
           />
         ) : null}
         <ScheduleOccurrences preview={preview} tz={timezone} />
         <UserDateDetail
-          label={i18n._(msg`Created`)}
+          label={t`Created`}
           date={created}
           user={summary_fields.created_by}
         />
         <UserDateDetail
-          label={i18n._(msg`Last Modified`)}
+          label={t`Last Modified`}
           date={modified}
           user={summary_fields.modified_by}
         />
@@ -431,20 +430,20 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
       {showPromptedFields && (
         <>
           <PromptTitle headingLevel="h2">
-            {i18n._(msg`Prompted Values`)}
+            {t`Prompted Values`}
           </PromptTitle>
           <PromptDivider />
           <PromptDetailList>
             {ask_job_type_on_launch && (
               <Detail
-                label={i18n._(msg`Job Type`)}
+                label={t`Job Type`}
                 value={job_type}
                 dataCy="shedule-job-type"
               />
             )}
             {showInventoryDetail && (
               <Detail
-                label={i18n._(msg`Inventory`)}
+                label={t`Inventory`}
                 value={
                   summary_fields?.inventory ? (
                     <Link
@@ -465,7 +464,7 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
             )}
             {showExecutionEnvironmentDetail && (
               <Detail
-                label={i18n._(msg`Execution Environment`)}
+                label={t`Execution Environment`}
                 value={
                   summary_fields?.execution_environment ? (
                     <Link
@@ -481,48 +480,48 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
             )}
             {ask_scm_branch_on_launch && (
               <Detail
-                label={i18n._(msg`Source Control Branch`)}
+                label={t`Source Control Branch`}
                 value={scm_branch}
                 dataCy="schedule-scm-branch"
               />
             )}
             {ask_limit_on_launch && (
               <Detail
-                label={i18n._(msg`Limit`)}
+                label={t`Limit`}
                 value={limit}
                 dataCy="schedule-limit"
               />
             )}
             {ask_forks_on_launch && (
-              <Detail label={i18n._(msg`Forks`)} value={forks} />
+              <Detail label={t`Forks`} value={forks} />
             )}
             {ask_verbosity_on_launch && (
               <Detail
-                label={i18n._(msg`Verbosity`)}
-                value={VERBOSITY(i18n)[verbosity]}
+                label={t`Verbosity`}
+                value={VERBOSITY(t)[verbosity]}
                 dataCy="schedule-verbosity"
               />
             )}
             {ask_timeout_on_launch && (
-              <Detail label={i18n._(msg`Timeout`)} value={timeout} />
+              <Detail label={t`Timeout`} value={timeout} />
             )}
             {showDiffModeDetail && (
               <Detail
-                label={i18n._(msg`Show Changes`)}
-                value={diff_mode ? i18n._(msg`On`) : i18n._(msg`Off`)}
+                label={t`Show Changes`}
+                value={diff_mode ? t`On` : t`Off`}
                 dataCy="schedule-show-changes"
               />
             )}
             {ask_job_slice_count_on_launch && (
               <Detail
-                label={i18n._(msg`Job Slicing`)}
+                label={t`Job Slicing`}
                 value={job_slice_count}
               />
             )}
             {showInstanceGroupsDetail && (
               <Detail
                 fullWidth
-                label={i18n._(msg`Instance Groups`)}
+                label={t`Instance Groups`}
                 value={
                   <InstanceGroupLabels labels={instanceGroups} isLinkable />
                 }
@@ -532,7 +531,7 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
             {showCredentialsDetail && (
               <Detail
                 fullWidth
-                label={i18n._(msg`Credentials`)}
+                label={t`Credentials`}
                 value={
                   <ChipGroup
                     numChips={5}
@@ -555,7 +554,7 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
             {showLabelsDetail && (
               <Detail
                 fullWidth
-                label={i18n._(msg`Labels`)}
+                label={t`Labels`}
                 value={
                   <ChipGroup
                     numChips={5}
@@ -575,7 +574,7 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
             {showTagsDetail && (
               <Detail
                 fullWidth
-                label={i18n._(msg`Job Tags`)}
+                label={t`Job Tags`}
                 value={
                   <ChipGroup
                     numChips={5}
@@ -599,7 +598,7 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
             {showSkipTagsDetail && (
               <Detail
                 fullWidth
-                label={i18n._(msg`Skip Tags`)}
+                label={t`Skip Tags`}
                 value={
                   <ChipGroup
                     numChips={5}
@@ -624,7 +623,7 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
               <VariablesDetail
                 value={jsonToYaml(JSON.stringify(extra_data))}
                 rows={4}
-                label={i18n._(msg`Variables`)}
+                label={t`Variables`}
                 name="extra_vars"
                 dataCy="schedule-detail-variables"
               />
@@ -637,21 +636,21 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
         {summary_fields?.user_capabilities?.edit && (
           <Button
             ouiaId="schedule-detail-edit-button"
-            aria-label={i18n._(msg`Edit`)}
+            aria-label={t`Edit`}
             component={Link}
             to={pathname.replace('details', 'edit')}
           >
-            {i18n._(msg`Edit`)}
+            {t`Edit`}
           </Button>
         )}
         {summary_fields?.user_capabilities?.delete && (
           <DeleteButton
             name={name}
-            modalTitle={i18n._(msg`Delete Schedule`)}
+            modalTitle={t`Delete Schedule`}
             onConfirm={deleteSchedule}
             isDisabled={isDeleteLoading}
           >
-            {i18n._(msg`Delete`)}
+            {t`Delete`}
           </DeleteButton>
         )}
       </CardActionsRow>
@@ -659,10 +658,10 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
         <AlertModal
           isOpen={error}
           variant="error"
-          title={i18n._(msg`Error!`)}
+          title={t`Error!`}
           onClose={dismissError}
         >
-          {i18n._(msg`Failed to delete schedule.`)}
+          {t`Failed to delete schedule.`}
           <ErrorDetail error={error} />
         </AlertModal>
       )}

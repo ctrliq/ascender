@@ -2,8 +2,7 @@ import 'styled-components/macro';
 import React, { useState, useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { func, bool, arrayOf } from 'prop-types';
-import { useLingui } from '@lingui/react';
-import { msg, Plural } from '@lingui/macro';
+import { Plural, useLingui } from '@lingui/react/macro';
 import { Button, Radio, DropdownItem } from '@patternfly/react-core';
 import styled from 'styled-components';
 import { KebabifiedContext } from 'contexts/Kebabified';
@@ -19,7 +18,7 @@ const ListItem = styled.li`
 `;
 
 const InventoryGroupsDeleteModal = ({ onAfterDelete, isDisabled, groups }) => {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const [radioOption, setRadioOption] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
@@ -63,21 +62,21 @@ const InventoryGroupsDeleteModal = ({ onAfterDelete, isDisabled, groups }) => {
           key="delete"
           isDisabled={isDisabled || isDeleteLoading}
           component="button"
-          aria-label={i18n._(msg`Delete`)}
+          aria-label={t`Delete`}
           onClick={() => setIsModalOpen(true)}
           ouiaId="group-delete-dropdown-item"
         >
-          {i18n._(msg`Delete`)}
+          {t`Delete`}
         </DropdownItem>
       ) : (
         <Button
           variant="secondary"
-          aria-label={i18n._(msg`Delete`)}
+          aria-label={t`Delete`}
           onClick={() => setIsModalOpen(true)}
           isDisabled={isDisabled || isDeleteLoading}
           ouiaId="group-delete-button"
         >
-          {i18n._(msg`Delete`)}
+          {t`Delete`}
         </Button>
       )}
       {isModalOpen && (
@@ -87,37 +86,37 @@ const InventoryGroupsDeleteModal = ({ onAfterDelete, isDisabled, groups }) => {
           title={
             <Plural
               value={groups.length}
-              one={i18n._(msg`Delete Group?`)}
-              other={i18n._(msg`Delete Groups?`)}
+              one={t`Delete Group?`}
+              other={t`Delete Groups?`}
             />
           }
           onClose={() => setIsModalOpen(false)}
           actions={[
             <Button
-              aria-label={i18n._(msg`Confirm Delete`)}
+              aria-label={t`Confirm Delete`}
               onClick={() => handleDelete(radioOption)}
               variant="danger"
               key="delete"
               isDisabled={radioOption === null}
               ouiaId="delete-modal-confirm-button"
             >
-              {i18n._(msg`Delete`)}
+              {t`Delete`}
             </Button>,
             <Button
-              aria-label={i18n._(msg`Close`)}
+              aria-label={t`Close`}
               onClick={() => setIsModalOpen(false)}
               variant="link"
               key="cancel"
               ouiaId="delete-modal-cancel-button"
             >
-              {i18n._(msg`Cancel`)}
+              {t`Cancel`}
             </Button>,
           ]}
         >
           <Plural
             value={groups.length}
-            one={i18n._(msg`Are you sure you want delete the group below?`)}
-            other={i18n._(msg`Are you sure you want delete the groups below?`)}
+            one={t`Are you sure you want delete the group below?`}
+            other={t`Are you sure you want delete the groups below?`}
           />
 
           <div css="padding: 24px 0;">
@@ -129,7 +128,7 @@ const InventoryGroupsDeleteModal = ({ onAfterDelete, isDisabled, groups }) => {
             <Radio
               id="radio-delete"
               key="radio-delete"
-              label={i18n._(msg`Delete All Groups and Hosts`)}
+              label={t`Delete All Groups and Hosts`}
               name="option"
               onChange={() => setRadioOption('delete')}
               ouiaId="delete-all-radio-button"
@@ -138,7 +137,7 @@ const InventoryGroupsDeleteModal = ({ onAfterDelete, isDisabled, groups }) => {
               css="margin-top: 5px;"
               id="radio-promote"
               key="radio-promote"
-              label={i18n._(msg`Promote Child Groups and Hosts`)}
+              label={t`Promote Child Groups and Hosts`}
               name="option"
               onChange={() => setRadioOption('promote')}
               ouiaId="promote-radio-button"
@@ -150,11 +149,11 @@ const InventoryGroupsDeleteModal = ({ onAfterDelete, isDisabled, groups }) => {
         <AlertModal
           isOpen={deletionError}
           variant="error"
-          aria-label={i18n._(msg`deletion error`)}
-          title={i18n._(msg`Error!`)}
+          aria-label={t`deletion error`}
+          title={t`Error!`}
           onClose={() => setDeletionError(null)}
         >
-          {i18n._(msg`Failed to delete one or more groups.`)}
+          {t`Failed to delete one or more groups.`}
           <ErrorDetail error={deletionError} />
         </AlertModal>
       )}

@@ -61,14 +61,14 @@ describe('dateToInputDateTime', () => {
 
 describe('getRRuleDayConstants', () => {
   test('it returns the expected value', () => {
-    expect(getRRuleDayConstants('monday', i18n)).toEqual(RRule.MO);
-    expect(getRRuleDayConstants('tuesday', i18n)).toEqual(RRule.TU);
-    expect(getRRuleDayConstants('wednesday', i18n)).toEqual(RRule.WE);
-    expect(getRRuleDayConstants('thursday', i18n)).toEqual(RRule.TH);
-    expect(getRRuleDayConstants('friday', i18n)).toEqual(RRule.FR);
-    expect(getRRuleDayConstants('saturday', i18n)).toEqual(RRule.SA);
-    expect(getRRuleDayConstants('sunday', i18n)).toEqual(RRule.SU);
-    expect(getRRuleDayConstants('day', i18n)).toEqual([
+    expect(getRRuleDayConstants('monday')).toEqual(RRule.MO);
+    expect(getRRuleDayConstants('tuesday')).toEqual(RRule.TU);
+    expect(getRRuleDayConstants('wednesday')).toEqual(RRule.WE);
+    expect(getRRuleDayConstants('thursday')).toEqual(RRule.TH);
+    expect(getRRuleDayConstants('friday')).toEqual(RRule.FR);
+    expect(getRRuleDayConstants('saturday')).toEqual(RRule.SA);
+    expect(getRRuleDayConstants('sunday')).toEqual(RRule.SU);
+    expect(getRRuleDayConstants('day')).toEqual([
       RRule.MO,
       RRule.TU,
       RRule.WE,
@@ -77,17 +77,17 @@ describe('getRRuleDayConstants', () => {
       RRule.SA,
       RRule.SU,
     ]);
-    expect(getRRuleDayConstants('weekday', i18n)).toEqual([
+    expect(getRRuleDayConstants('weekday')).toEqual([
       RRule.MO,
       RRule.TU,
       RRule.WE,
       RRule.TH,
       RRule.FR,
     ]);
-    expect(getRRuleDayConstants('weekendDay', i18n)).toEqual([
+    expect(getRRuleDayConstants('weekendDay')).toEqual([
       RRule.SA,
       RRule.SU,
     ]);
-    expect(() => getRRuleDayConstants('foobar', i18n)).toThrow();
+    expect(() => getRRuleDayConstants('foobar')).toThrow();
   });
 });

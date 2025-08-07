@@ -1,8 +1,7 @@
 import React from 'react';
 import { bool, string } from 'prop-types';
 import { Link } from 'react-router-dom';
-import { msg, Trans } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { Trans, useLingui } from '@lingui/react/macro';
 
 import { Popover, Tooltip } from '@patternfly/react-core';
 import styled from 'styled-components';
@@ -34,14 +33,14 @@ function ExecutionEnvironmentDetail({
   helpText,
   dataCy,
 }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const config = useConfig();
   const docsLink = `${getDocsBaseUrl(
     config
   )}/html/upgrade-migration-guide/upgrade_to_ees.html`;
   const label = isDefaultEnvironment
-    ? i18n._(msg`Default Execution Environment`)
-    : i18n._(msg`Execution Environment`);
+    ? t`Default Execution Environment`
+    : t`Execution Environment`;
 
   if (executionEnvironment) {
     return (
@@ -66,12 +65,12 @@ function ExecutionEnvironmentDetail({
         helpText={helpText}
         value={
           <>
-            {i18n._(msg`Missing resource`)}
+            {t`Missing resource`}
             <span>
               <Popover
                 className="missing-execution-environment"
                 headerContent={
-                  <div>{i18n._(msg`Execution Environment Missing`)}</div>
+                  <div>{t`Execution Environment Missing`}</div>
                 }
                 bodyContent={
                   <div>
@@ -107,16 +106,14 @@ function ExecutionEnvironmentDetail({
   ) {
     return (
       <Detail
-        label={i18n._(msg`Execution Environment`)}
+        label={t`Execution Environment`}
         helpText={helpText}
         value={
           <>
-            {i18n._(msg`Missing resource`)}
+            {t`Missing resource`}
             <span>
               <Tooltip
-                content={i18n._(
-                  msg`Execution environment is missing or deleted.`
-                )}
+                content={t`Execution environment is missing or deleted.`}
               >
                 <ExclamationTriangleIcon />
               </Tooltip>

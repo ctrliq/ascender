@@ -13,14 +13,14 @@ export const locales = {
 };
 
 i18n.loadLocaleData({
-  en: { plurals: en },
-  fr: { plurals: fr },
-  es: { plurals: es },
-  ko: { plurals: ko },
-  nl: { plurals: nl },
-  ja: { plurals: ja },
-  zh: { plurals: zh },
-  zu: { plurals: zu },
+  en: { en },
+  fr: { fr },
+  es: { es },
+  ko: { ko },
+  nl: { nl },
+  ja: { ja },
+  zh: { zh },
+  zu: { zu },
 });
 
 /**

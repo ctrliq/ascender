@@ -1,7 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLocation, useRouteMatch } from 'react-router-dom';
-import { msg, Plural } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { Plural, useLingui } from '@lingui/react/macro';
 import { Card, PageSection } from '@patternfly/react-core';
 
 import { OrganizationsAPI } from 'api';
@@ -101,11 +100,11 @@ function OrganizationsList() {
 
   const hasContentLoading = isDeleteLoading || isOrgsLoading;
   const canAdd = actions && actions.POST;
+  const { t } = useLingui();
 
-  const deleteDetailsRequests = relatedResourceDeleteRequests.organization(
+  const deleteDetailsRequests = relatedResourceDeleteRequests(t).organization(
     selected[0]
   );
-  const { i18n } = useLingui();
 
   return (
     <>
@@ -116,25 +115,25 @@ function OrganizationsList() {
             hasContentLoading={hasContentLoading}
             items={organizations}
             itemCount={organizationCount}
-            pluralizedItemName={i18n._(msg`Organizations`)}
+            pluralizedItemName={t`Organizations`}
             qsConfig={QS_CONFIG}
             clearSelected={clearSelected}
             toolbarSearchColumns={[
               {
-                name: i18n._(msg`Name`),
+                name: t`Name`,
                 key: 'name__icontains',
                 isDefault: true,
               },
               {
-                name: i18n._(msg`Description`),
+                name: t`Description`,
                 key: 'description__icontains',
               },
               {
-                name: i18n._(msg`Created By (Username)`),
+                name: t`Created By (Username)`,
                 key: 'created_by__username__icontains',
               },
               {
-                name: i18n._(msg`Modified By (Username)`),
+                name: t`Modified By (Username)`,
                 key: 'modified_by__username__icontains',
               },
             ]}
@@ -142,10 +141,10 @@ function OrganizationsList() {
             toolbarRelatedSearchableKeys={relatedSearchableKeys}
             headerRow={
               <HeaderRow qsConfig={QS_CONFIG}>
-                <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
-                <HeaderCell>{i18n._(msg`Members`)}</HeaderCell>
-                <HeaderCell>{i18n._(msg`Teams`)}</HeaderCell>
-                <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
+                <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
+                <HeaderCell>{t`Members`}</HeaderCell>
+                <HeaderCell>{t`Teams`}</HeaderCell>
+                <HeaderCell>{t`Actions`}</HeaderCell>
               </HeaderRow>
             }
             renderToolbar={(props) => (
@@ -162,7 +161,7 @@ function OrganizationsList() {
                     key="delete"
                     onDelete={handleOrgDelete}
                     itemsToDelete={selected}
-                    pluralizedItemName={i18n._(msg`Organizations`)}
+                    pluralizedItemName={t`Organizations`}
                     deleteDetailsRequests={deleteDetailsRequests}
                     deleteMessage={
                       <Plural
@@ -194,10 +193,10 @@ function OrganizationsList() {
       <AlertModal
         isOpen={deletionError}
         variant="error"
-        title={i18n._(msg`Error!`)}
+        title={t`Error!`}
         onClose={clearDeletionError}
       >
-        {i18n._(msg`Failed to delete one or more organizations.`)}
+        {t`Failed to delete one or more organizations.`}
         <ErrorDetail error={deletionError} />
       </AlertModal>
     </>

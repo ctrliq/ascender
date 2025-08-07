@@ -128,14 +128,25 @@ describe('<ApplicationTokenList/>', () => {
     expect(
       wrapper.find('.pf-c-table__check').at(0).find('input').prop('checked')
     ).toBe(true);
+    
+    const deleteButton = wrapper.find('Button').filterWhere(button => 
+      button.prop('aria-label') === 'Delete'
+    );
+    expect(deleteButton).toHaveLength(1);
+    
     await act(async () =>
-      wrapper.find('Button[aria-label="Delete"]').prop('onClick')()
+      deleteButton.prop('onClick')()
     );
 
     wrapper.update();
 
+    const confirmButton = wrapper.find('Button').filterWhere(button => 
+      button.prop('aria-label') === 'confirm delete'
+    );
+    expect(confirmButton).toHaveLength(1);
+    
     await act(async () =>
-      wrapper.find('Button[aria-label="confirm delete"]').prop('onClick')()
+      confirmButton.prop('onClick')()
     );
     expect(TokensAPI.destroy).toBeCalledWith(tokens.data.results[0].id);
   });
@@ -189,14 +200,25 @@ describe('<ApplicationTokenList/>', () => {
     expect(
       wrapper.find('.pf-c-table__check').at(0).find('input').prop('checked')
     ).toBe(true);
+    
+    const deleteButton = wrapper.find('Button').filterWhere(button => 
+      button.prop('aria-label') === 'Delete'
+    );
+    expect(deleteButton).toHaveLength(1);
+    
     await act(async () =>
-      wrapper.find('Button[aria-label="Delete"]').prop('onClick')()
+      deleteButton.prop('onClick')()
     );
 
     wrapper.update();
 
+    const confirmButton = wrapper.find('Button').filterWhere(button => 
+      button.prop('aria-label') === 'confirm delete'
+    );
+    expect(confirmButton).toHaveLength(1);
+    
     await act(async () =>
-      wrapper.find('Button[aria-label="confirm delete"]').prop('onClick')()
+      confirmButton.prop('onClick')()
     );
     wrapper.update();
 

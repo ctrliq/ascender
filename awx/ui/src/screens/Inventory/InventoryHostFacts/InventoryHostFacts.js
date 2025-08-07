@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 import { Host } from 'types';
 import { CardBody } from 'components/Card';
 import { DetailList } from 'components/DetailList';
@@ -20,7 +19,7 @@ function InventoryHostFacts({ host }) {
     null
   );
 
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   useEffect(() => {
     request();
   }, [request]);
@@ -37,7 +36,7 @@ function InventoryHostFacts({ host }) {
     <CardBody>
       <DetailList gutter="sm">
         <VariablesDetail
-          label={i18n._(msg`Facts`)}
+          label={t`Facts`}
           rows="auto"
           value={result}
           name="facts"

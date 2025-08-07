@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { msg } from '@lingui/macro';
 import {
   Card,
   CardHeader,
@@ -15,7 +14,7 @@ import {
   SelectOption,
   Text,
 } from '@patternfly/react-core';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 
 import useRequest from 'hooks/useRequest';
 import { SubscriptionUsageAPI } from 'api';
@@ -43,7 +42,7 @@ const GraphCardActions = styled(CardActions)`
 `;
 
 function SubscriptionUsageChart() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const [isPeriodDropdownOpen, setIsPeriodDropdownOpen] = useState(false);
   const [periodSelection, setPeriodSelection] = useState('year');
   const userProfile = useUserProfile();
@@ -114,12 +113,12 @@ function SubscriptionUsageChart() {
       <Flex style={{ justifyContent: 'space-between' }}>
         <FlexItem>
           <ChartCardTitle>
-            {i18n._(msg`Subscription Compliance`)}
+            {t`Subscription Compliance`}
           </ChartCardTitle>
         </FlexItem>
         <FlexItem>
           <CardText component="small">
-            {i18n._(msg`Last recalculation date:`)}{' '}
+            {t`Last recalculation date:`}{' '}
             {userProfile.systemConfig.HOST_METRIC_SUMMARY_TASK_LAST_TS.slice(
               0,
               10
@@ -131,9 +130,9 @@ function SubscriptionUsageChart() {
         <GraphCardActions>
           <Select
             variant={SelectVariant.single}
-            placeholderText={i18n._(msg`Select period`)}
-            aria-label={i18n._(msg`Select period`)}
-            typeAheadAriaLabel={i18n._(msg`Select period`)}
+            placeholderText={t`Select period`}
+            aria-label={t`Select period`}
+            typeAheadAriaLabel={t`Select period`}
             className="periodSelect"
             onToggle={setIsPeriodDropdownOpen}
             onSelect={(event, selection) => {
@@ -142,17 +141,17 @@ function SubscriptionUsageChart() {
             }}
             selections={periodSelection}
             isOpen={isPeriodDropdownOpen}
-            noResultsFoundText={i18n._(msg`No results found`)}
+            noResultsFoundText={t`No results found`}
             ouiaId="subscription-usage-period-select"
           >
             <SelectOption key="year" value="year">
-              {i18n._(msg`Past year`)}
+              {t`Past year`}
             </SelectOption>
             <SelectOption key="two_years" value="two_years">
-              {i18n._(msg`Past two years`)}
+              {t`Past two years`}
             </SelectOption>
             <SelectOption key="three_years" value="three_years">
-              {i18n._(msg`Past three years`)}
+              {t`Past three years`}
             </SelectOption>
           </Select>
         </GraphCardActions>

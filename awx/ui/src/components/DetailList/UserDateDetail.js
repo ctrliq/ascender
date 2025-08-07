@@ -1,6 +1,6 @@
 import React from 'react';
 import { node, string } from 'prop-types';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { formatDateString } from 'util/dates';

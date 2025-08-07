@@ -2,8 +2,7 @@ import 'styled-components/macro';
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-import { msg } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import { useLocation } from 'react-router-dom';
 import {
   Button,
@@ -48,7 +47,7 @@ function Search({
   handleIsAnsibleFactsSelected,
   isFilterCleared,
 }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const location = useLocation();
   const [isSearchDropdownOpen, setIsSearchDropdownOpen] = useState(false);
   const [searchKey, setSearchKey] = useState(
@@ -144,15 +143,15 @@ function Search({
           <Select
             variant={SelectVariant.single}
             className="simpleKeySelect"
-            aria-label={i18n._(msg`Simple key select`)}
-            typeAheadAriaLabel={i18n._(msg`Simple key select`)}
+            aria-label={t`Simple key select`}
+            typeAheadAriaLabel={t`Simple key select`}
             onToggle={setIsSearchDropdownOpen}
             onSelect={handleDropdownSelect}
             selections={searchColumnName}
             isOpen={isSearchDropdownOpen}
             ouiaId="simple-key-select"
             isDisabled={isDisabled}
-            noResultsFoundText={i18n._(msg`No results found`)}
+            noResultsFoundText={t`No results found`}
           >
             {searchOptions}
           </Select>
@@ -197,11 +196,11 @@ function Search({
                   return value.join(':');
                 })}
                 isOpen={isFilterDropdownOpen}
-                placeholderText={i18n._(msg`Filter By ${name}`)}
+                placeholderText={t`Filter By ${name}`}
                 ouiaId={`filter-by-${key}`}
                 isDisabled={isDisabled}
                 maxHeight={maxSelectHeight}
-                noResultsFoundText={i18n._(msg`No results found`)}
+                noResultsFoundText={t`No results found`}
               >
                 {options.map(([optionKey, optionLabel]) => (
                   <SelectOption
@@ -221,17 +220,17 @@ function Search({
                 onSelect={(event, selection) => onReplaceSearch(key, selection)}
                 selections={chipsByKey[key].chips[0]?.label}
                 isOpen={isFilterDropdownOpen}
-                placeholderText={i18n._(msg`Filter By ${name}`)}
+                placeholderText={t`Filter By ${name}`}
                 ouiaId={`filter-by-${key}`}
                 isDisabled={isDisabled}
                 maxHeight={maxSelectHeight}
-                noResultsFoundText={i18n._(msg`No results found`)}
+                noResultsFoundText={t`No results found`}
               >
                 <SelectOption key="true" value="true">
-                  {booleanLabels.true || i18n._(msg`Yes`)}
+                  {booleanLabels.true || t`Yes`}
                 </SelectOption>
                 <SelectOption key="false" value="false">
-                  {booleanLabels.false || i18n._(msg`No`)}
+                  {booleanLabels.false || t`No`}
                 </SelectOption>
               </Select>
             )) || (
@@ -247,7 +246,7 @@ function Search({
                       'number') ||
                     'search'
                   }
-                  aria-label={i18n._(msg`Search text input`)}
+                  aria-label={t`Search text input`}
                   value={searchValue}
                   onChange={setSearchValue}
                   onKeyDown={handleTextKeyDown}
@@ -258,7 +257,7 @@ function Search({
                     ouiaId="search-submit-button"
                     variant={ButtonVariant.control}
                     isDisabled={!searchValue || isDisabled}
-                    aria-label={i18n._(msg`Search submit button`)}
+                    aria-label={t`Search submit button`}
                     onClick={handleSearch}
                   >
                     <SearchIcon />

@@ -8,8 +8,7 @@ import 'ace-builds/src-noconflict/mode-yaml';
 import 'ace-builds/src-noconflict/mode-django';
 import 'ace-builds/src-noconflict/theme-github';
 
-import { msg } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 
 import styled from 'styled-components';
 import debounce from 'util/debounce';
@@ -81,7 +80,7 @@ function CodeEditor({
   fullHeight,
   className,
 }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   if (rows && typeof rows !== 'number' && rows !== 'auto') {
     // eslint-disable-next-line no-console
     console.warn(
@@ -128,6 +127,7 @@ function CodeEditor({
     javascript: 'json',
     yaml: 'yaml',
     jinja2: 'django',
+    json: 'json',
   };
 
   const numRows = rows === 'auto' ? value.split('\n').length : rows;
@@ -181,7 +181,7 @@ function CodeEditor({
           className="pf-c-form__helper-text keyboard-help-text"
           aria-live="polite"
         >
-          {i18n._(msg`Press Enter to edit. Press ESC to stop editing.`)}
+          {t`Press Enter to edit. Press ESC to stop editing.`}
         </div>
       )}
     </>
@@ -190,7 +190,7 @@ function CodeEditor({
 CodeEditor.propTypes = {
   value: string.isRequired,
   onChange: func,
-  mode: oneOf(['javascript', 'yaml', 'jinja2']).isRequired,
+  mode: oneOf(['javascript', 'yaml', 'jinja2', 'json']).isRequired,
   readOnly: bool,
   hasErrors: bool,
   fullHeight: bool,

@@ -14,7 +14,7 @@ import { SessionProvider } from '../src/contexts/Session';
 import { ConfigProvider } from '../src/contexts/Config';
 
 i18n.loadLocaleData({ en: { plurals: en } });
-i18n.load({ en: english });
+i18n.load({ en: english.messages });
 i18n.activate('en');
 
 const defaultContexts = {

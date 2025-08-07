@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { msg } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 
 import CheckboxCard from './CheckboxCard';
 import { SelectedList } from '../SelectedList';
@@ -15,21 +14,19 @@ function RolesStep({
   selectedResourceRows,
   selectedRoleRows,
 }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
 
   return (
     <>
       <div>
-        {i18n._(
-          msg`Choose roles to apply to the selected resources.  Note that all selected roles will be applied to all selected resources.`
-        )}
+        {t`Choose roles to apply to the selected resources.  Note that all selected roles will be applied to all selected resources.`}
       </div>
       <div>
         {selectedResourceRows.length > 0 && (
           <SelectedList
             displayKey={selectedListKey}
             isReadOnly
-            label={selectedListLabel || i18n._(msg`Selected`)}
+            label={selectedListLabel || t`Selected`}
             selected={selectedResourceRows}
           />
         )}

@@ -1,7 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { CardBody, CardActionsRow } from 'components/Card';
@@ -19,7 +18,7 @@ import { SettingDetail } from '../../shared';
 function JobsDetail() {
   const { me } = useConfig();
   const { GET: options } = useSettings();
-  const { i18n } = useLingui();
+  const { t } = useLingui();
 
   const {
     isLoading,
@@ -56,14 +55,14 @@ function JobsDetail() {
       name: (
         <>
           <CaretLeftIcon />
-          {i18n._(msg`Back to Settings`)}
+          {t`Back to Settings`}
         </>
       ),
       link: `/settings`,
       id: 99,
     },
     {
-      name: i18n._(msg`Details`),
+      name: t`Details`,
       link: `/settings/jobs/details`,
       id: 0,
     },
@@ -94,11 +93,11 @@ function JobsDetail() {
           <CardActionsRow>
             <Button
               ouiaId="jobs-detail-edit-button"
-              aria-label={i18n._(msg`Edit`)}
+              aria-label={t`Edit`}
               component={Link}
               to="/settings/jobs/edit"
             >
-              {i18n._(msg`Edit`)}
+              {t`Edit`}
             </Button>
           </CardActionsRow>
         )}

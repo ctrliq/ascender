@@ -11,7 +11,7 @@ jest.mock('../../api');
 
 describe('<Hosts />', () => {
   test('should display a breadcrumb heading', () => {
-    const wrapper = shallow(<Hosts />);
+    const wrapper = mountWithContexts(<Hosts />);
 
     const header = wrapper.find('ScreenHeader');
     expect(header.prop('streamType')).toEqual('host');

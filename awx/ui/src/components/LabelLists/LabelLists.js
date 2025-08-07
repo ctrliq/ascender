@@ -1,7 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { Card } from '@patternfly/react-core';
-import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 import { useLocation } from 'react-router-dom';
 import useRequest from 'hooks/useRequest';
 import { LabelsAPI } from 'api';
@@ -20,7 +19,7 @@ const qsConfig = getQSConfig(
 );
 
 function LabelLists() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const location = useLocation();
 
   const {
@@ -54,19 +53,19 @@ function LabelLists() {
         hasContentLoading={isLoading}
         items={results}
         itemCount={count}
-        pluralizedItemName={i18n._(msg`Labels`)}
+        pluralizedItemName={t`Labels`}
         qsConfig={qsConfig}
         toolbarSearchColumns={[
-          { name: i18n._(msg`Name`), key: 'name__icontains', isDefault: true },
+          { name: t`Name`, key: 'name__icontains', isDefault: true },
           {
-            name: i18n._(msg`Organization`),
+            name: t`Organization`,
             key: 'organization__name__icontains',
           },
         ]}
         headerRow={
           <HeaderRow qsConfig={qsConfig}>
-            <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
-            <HeaderCell>{i18n._(msg`Organization`)}</HeaderCell>
+            <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
+            <HeaderCell>{t`Organization`}</HeaderCell>
           </HeaderRow>
         }
         renderRow={(label) => (

@@ -132,8 +132,16 @@ describe('<InventoryForm />', () => {
   test('should render LabelsSelect', async () => {
     const select = wrapper.find('LabelSelect');
     expect(select).toHaveLength(1);
-    expect(select.prop('value')).toEqual(
-      inventory.summary_fields.labels.results
-    );
+    
+    // LabelSelect adds toString functions to objects, so we need to compare the core data
+    const expectedLabels = inventory.summary_fields.labels.results;
+    const actualLabels = select.prop('value');
+    
+    expect(actualLabels).toHaveLength(expectedLabels.length);
+    expectedLabels.forEach((expectedLabel, index) => {
+      expect(actualLabels[index].id).toEqual(expectedLabel.id);
+      expect(actualLabels[index].name).toEqual(expectedLabel.name);
+      expect(typeof actualLabels[index].toString).toBe('function');
+    });
   });
 });

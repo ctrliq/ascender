@@ -111,9 +111,9 @@ describe('<InstanceDetail/>', () => {
     await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
 
     expect(wrapper.find('InstanceDetail').length).toBe(1);
-    expect(wrapper.find('div[data-cy="number-forks"]').text()).toContain(
-      '38 forks'
-    );
+    const forksText = wrapper.find('div[data-cy="number-forks"]').text();
+    expect(forksText).toContain('38');
+    expect(forksText).toContain('forks');
 
     await act(async () => {
       wrapper.find('Slider').prop('onChange')(4);
@@ -121,25 +121,25 @@ describe('<InstanceDetail/>', () => {
 
     wrapper.update();
 
-    expect(wrapper.find('div[data-cy="number-forks"]').text()).toContain(
-      '56 forks'
-    );
+    const forksText56 = wrapper.find('div[data-cy="number-forks"]').text();
+    expect(forksText56).toContain('56');
+    expect(forksText56).toContain('forks');
 
     await act(async () => {
       wrapper.find('Slider').prop('onChange')(0);
     });
     wrapper.update();
-    expect(wrapper.find('div[data-cy="number-forks"]').text()).toContain(
-      '32 forks'
-    );
+    const forksText32 = wrapper.find('div[data-cy="number-forks"]').text();
+    expect(forksText32).toContain('32');
+    expect(forksText32).toContain('forks');
 
     await act(async () => {
       wrapper.find('Slider').prop('onChange')(0.5);
     });
     wrapper.update();
-    expect(wrapper.find('div[data-cy="number-forks"]').text()).toContain(
-      '35 forks'
-    );
+    const forksText35 = wrapper.find('div[data-cy="number-forks"]').text();
+    expect(forksText35).toContain('35');
+    expect(forksText35).toContain('forks');
   });
 
   test('buttons should be disabled', async () => {

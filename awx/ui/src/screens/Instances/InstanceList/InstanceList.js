@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { msg } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import { useLocation } from 'react-router-dom';
 import 'styled-components/macro';
 import { PageSection, Card } from '@patternfly/react-core';
@@ -35,7 +34,7 @@ const QS_CONFIG = getQSConfig('instance', {
 });
 
 function InstanceList() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const location = useLocation();
   const { me } = useConfig();
   const canReadSettings = me.is_superuser || me.is_system_auditor;
@@ -160,31 +159,31 @@ function InstanceList() {
             }
             items={instances}
             itemCount={count}
-            pluralizedItemName={i18n._(msg`Instances`)}
+            pluralizedItemName={t`Instances`}
             qsConfig={QS_CONFIG}
             clearSelected={clearSelected}
             toolbarSearchableKeys={searchableKeys}
             toolbarRelatedSearchableKeys={relatedSearchableKeys}
             toolbarSearchColumns={[
               {
-                name: i18n._(msg`Name`),
+                name: t`Name`,
                 key: 'hostname__icontains',
                 isDefault: true,
               },
               {
-                name: i18n._(msg`Node Type`),
+                name: t`Node Type`,
                 key: `or__node_type`,
                 options: [
-                  [`control`, i18n._(msg`Control`)],
-                  [`execution`, i18n._(msg`Execution`)],
-                  [`hybrid`, i18n._(msg`Hybrid`)],
-                  [`hop`, i18n._(msg`Hop`)],
+                  [`control`, t`Control`],
+                  [`execution`, t`Execution`],
+                  [`hybrid`, t`Hybrid`],
+                  [`hop`, t`Hop`],
                 ],
               },
             ]}
             toolbarSortColumns={[
               {
-                name: i18n._(msg`Name`),
+                name: t`Name`,
                 key: 'hostname',
               },
             ]}
@@ -225,20 +224,18 @@ function InstanceList() {
             headerRow={
               <HeaderRow qsConfig={QS_CONFIG} isExpandable>
                 <HeaderCell
-                  tooltip={i18n._(
-                    msg`Health checks can only be run on execution nodes.`
-                  )}
+                  tooltip={t`Health checks can only be run on execution nodes.`}
                   sortKey="hostname"
                 >
-                  {i18n._(msg`Name`)}
+                  {t`Name`}
                 </HeaderCell>
-                <HeaderCell sortKey="errors">{i18n._(msg`Status`)}</HeaderCell>
+                <HeaderCell sortKey="errors">{t`Status`}</HeaderCell>
                 <HeaderCell sortKey="node_type">
-                  {i18n._(msg`Node Type`)}
+                  {t`Node Type`}
                 </HeaderCell>
-                <HeaderCell>{i18n._(msg`Capacity Adjustment`)}</HeaderCell>
-                <HeaderCell>{i18n._(msg`Used Capacity`)}</HeaderCell>
-                <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
+                <HeaderCell>{t`Capacity Adjustment`}</HeaderCell>
+                <HeaderCell>{t`Used Capacity`}</HeaderCell>
+                <HeaderCell>{t`Actions`}</HeaderCell>
               </HeaderRow>
             }
             renderRow={(instance, index) => (
@@ -263,10 +260,10 @@ function InstanceList() {
         <AlertModal
           isOpen={error}
           onClose={dismissError}
-          title={i18n._(msg`Error!`)}
+          title={t`Error!`}
           variant="error"
         >
-          {i18n._(msg`Failed to run a health check on one or more instances.`)}
+          {t`Failed to run a health check on one or more instances.`}
           <ErrorDetail error={error} />
         </AlertModal>
       )}
@@ -274,11 +271,11 @@ function InstanceList() {
         <AlertModal
           isOpen={removeError}
           variant="error"
-          aria-label={i18n._(msg`Removal Error`)}
-          title={i18n._(msg`Error!`)}
+          aria-label={t`Removal Error`}
+          title={t`Error!`}
           onClose={clearDeletionError}
         >
-          {i18n._(msg`Failed to remove one or more instances.`)}
+          {t`Failed to remove one or more instances.`}
           <ErrorDetail error={removeError} />
         </AlertModal>
       )}

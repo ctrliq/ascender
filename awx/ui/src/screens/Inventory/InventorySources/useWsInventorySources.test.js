@@ -31,6 +31,11 @@ describe('useWsInventorySources hook', () => {
 
   afterEach(() => {
     global.console.debug = debug;
+    if (wrapper) {
+      wrapper.unmount();
+      wrapper = null;
+    }
+    WS.clean();
   });
 
   test('should return sources list', () => {
@@ -38,7 +43,6 @@ describe('useWsInventorySources hook', () => {
     wrapper = mountWithContexts(<Test sources={sources} />);
 
     expect(wrapper.find('TestInner').prop('sources')).toEqual(sources);
-    WS.clean();
   });
 
   test('should establish websocket connection', async () => {
@@ -60,7 +64,6 @@ describe('useWsInventorySources hook', () => {
         },
       })
     );
-    WS.clean();
   });
 
   test('should update current job status', async () => {

@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
-import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 import { OrganizationsAPI } from 'api';
 import PaginatedTable, {
   HeaderRow,
@@ -20,7 +19,7 @@ const QS_CONFIG = getQSConfig('team', {
 });
 
 function OrganizationTeamList({ id }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const location = useLocation();
 
   const {
@@ -62,20 +61,20 @@ function OrganizationTeamList({ id }) {
       hasContentLoading={isLoading}
       items={teams}
       itemCount={count}
-      pluralizedItemName={i18n._(msg`Teams`)}
+      pluralizedItemName={t`Teams`}
       qsConfig={QS_CONFIG}
       toolbarSearchColumns={[
         {
-          name: i18n._(msg`Name`),
+          name: t`Name`,
           key: 'name__icontains',
           isDefault: true,
         },
         {
-          name: i18n._(msg`Created by (username)`),
+          name: t`Created by (username)`,
           key: 'created_by__username__icontains',
         },
         {
-          name: i18n._(msg`Modified by (username)`),
+          name: t`Modified by (username)`,
           key: 'modified_by__username__icontains',
         },
       ]}
@@ -83,8 +82,8 @@ function OrganizationTeamList({ id }) {
       toolbarRelatedSearchableKeys={relatedSearchableKeys}
       headerRow={
         <HeaderRow qsConfig={QS_CONFIG} isSelectable={false}>
-          <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
-          <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
+          <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
+          <HeaderCell>{t`Actions`}</HeaderCell>
         </HeaderRow>
       }
       renderRow={(item) => (

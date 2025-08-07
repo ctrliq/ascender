@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { msg } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
 import { ExecutionEnvironmentsAPI } from 'api';
 import { getSearchableKeys } from 'components/PaginatedTable';
@@ -17,7 +16,7 @@ const QS_CONFIG = getQSConfig('execution_environment', {
 });
 
 function ExecutionEnvironmentStep() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const [field, , helpers] = useField('execution_environment');
 
   const history = useHistory();
@@ -75,38 +74,38 @@ function ExecutionEnvironmentStep() {
         optionCount={count}
         columns={[
           {
-            name: i18n._(msg`Name`),
+            name: t`Name`,
             key: 'name',
           },
           {
-            name: i18n._(msg`Image`),
+            name: t`Image`,
             key: 'image',
           },
         ]}
         searchColumns={[
           {
-            name: i18n._(msg`Name`),
+            name: t`Name`,
             key: 'name__icontains',
             isDefault: true,
           },
           {
-            name: i18n._(msg`Image`),
+            name: t`Image`,
             key: 'image__icontains',
           },
         ]}
         sortColumns={[
           {
-            name: i18n._(msg`Name`),
+            name: t`Name`,
             key: 'name',
           },
           {
-            name: i18n._(msg`Image`),
+            name: t`Image`,
             key: 'image',
           },
         ]}
         searchableKeys={searchableKeys}
         relatedSearchableKeys={relatedSearchableKeys}
-        header={i18n._(msg`Execution Environments`)}
+        header={t`Execution Environments`}
         name="execution_environment"
         qsConfig={QS_CONFIG}
         readOnly

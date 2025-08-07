@@ -1,9 +1,8 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLocation, useRouteMatch } from 'react-router-dom';
 
-import { msg } from '@lingui/macro';
 import { Card, PageSection } from '@patternfly/react-core';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 
 import { TeamsAPI } from 'api';
 import useRequest, { useDeleteItems } from 'hooks/useRequest';
@@ -29,7 +28,7 @@ const QS_CONFIG = getQSConfig('team', {
 });
 
 function TeamList() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const location = useLocation();
   const match = useRouteMatch();
 
@@ -111,29 +110,29 @@ function TeamList() {
             hasContentLoading={hasContentLoading}
             items={teams}
             itemCount={itemCount}
-            pluralizedItemName={i18n._(msg`Teams`)}
+            pluralizedItemName={t`Teams`}
             qsConfig={QS_CONFIG}
             clearSelected={clearSelected}
             toolbarSearchColumns={[
               {
-                name: i18n._(msg`Name`),
+                name: t`Name`,
                 key: 'name__icontains',
                 isDefault: true,
               },
               {
-                name: i18n._(msg`Description`),
+                name: t`Description`,
                 key: 'description__icontains',
               },
               {
-                name: i18n._(msg`Organization Name`),
+                name: t`Organization Name`,
                 key: 'organization__name__icontains',
               },
               {
-                name: i18n._(msg`Created By (Username)`),
+                name: t`Created By (Username)`,
                 key: 'created_by__username__icontains',
               },
               {
-                name: i18n._(msg`Modified By (Username)`),
+                name: t`Modified By (Username)`,
                 key: 'modified_by__username__icontains',
               },
             ]}
@@ -141,9 +140,9 @@ function TeamList() {
             toolbarRelatedSearchableKeys={relatedSearchableKeys}
             headerRow={
               <HeaderRow qsConfig={QS_CONFIG}>
-                <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
-                <HeaderCell>{i18n._(msg`Organization`)}</HeaderCell>
-                <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
+                <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
+                <HeaderCell>{t`Organization`}</HeaderCell>
+                <HeaderCell>{t`Actions`}</HeaderCell>
               </HeaderRow>
             }
             renderToolbar={(props) => (
@@ -165,7 +164,7 @@ function TeamList() {
                     key="delete"
                     onDelete={handleTeamDelete}
                     itemsToDelete={selected}
-                    pluralizedItemName={i18n._(msg`Teams`)}
+                    pluralizedItemName={t`Teams`}
                   />,
                 ]}
               />
@@ -191,10 +190,10 @@ function TeamList() {
       <AlertModal
         isOpen={deletionError}
         variant="error"
-        title={i18n._(msg`Error!`)}
+        title={t`Error!`}
         onClose={clearDeletionError}
       >
-        {i18n._(msg`Failed to delete one or more teams.`)}
+        {t`Failed to delete one or more teams.`}
         <ErrorDetail error={deletionError} />
       </AlertModal>
     </>

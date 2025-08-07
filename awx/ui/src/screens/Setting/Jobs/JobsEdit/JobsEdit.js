@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 import { useHistory } from 'react-router-dom';
 import { Formik } from 'formik';
 import { Form } from '@patternfly/react-core';
@@ -24,7 +23,7 @@ import {
 } from '../../shared';
 
 function JobsEdit() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const history = useHistory();
   const { isModalOpen, toggleModal, closeModal } = useModal();
   const { PUT: options } = useSettings();
@@ -132,7 +131,7 @@ function JobsEdit() {
   };
   jinja.choices = jobs?.ALLOW_JINJA_IN_EXTRA_VARS?.choices.map(
     ([value, label]) =>
-      value === 'template' ? [value, i18n._(msg`Template`)] : [value, label]
+      value === 'template' ? [value, t`Template`] : [value, label]
   );
 
   return (

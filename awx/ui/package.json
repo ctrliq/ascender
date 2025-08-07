@@ -6,7 +6,7 @@
     "node": ">=20.18.2"
   },
   "dependencies": {
-    "@lingui/react": "4.14.0",
+    "@lingui/react": "^5.4.0",
     "@patternfly/patternfly": "4.224.5",
     "@patternfly/react-core": "4.278.1",
     "@patternfly/react-icons": "4.93.7",
@@ -40,10 +40,9 @@
     "@babel/eslint-plugin": "^7.27.1",
     "@babel/plugin-syntax-jsx": "^7.27.1",
     "@babel/preset-react": "^7.27.1",
-    "@lingui/cli": "^4.14.0",
-    "@lingui/conf": "^4.14.0",
-    "@lingui/loader": "4.14.0",
-    "@lingui/macro": "^4.14.0",
+    "@lingui/cli": "^5.4.0",
+    "@lingui/conf": "^5.4.0",
+    "@lingui/loader": "^5.4.0",
     "@nteract/mockument": "^1.0.4",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.3",
     "@svgr/webpack": "^8.1.0",

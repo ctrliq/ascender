@@ -14,6 +14,9 @@ import {
   relatedResourceDeleteRequests,
 } from './getRelatedResourceDeleteDetails';
 
+// Mock t function for testing
+const t = (str) => str;
+
 jest.mock('../api/models/Credentials');
 jest.mock('../api/models/Inventories');
 jest.mock('../api/models/InventorySources');
@@ -34,7 +37,7 @@ describe('delete details', () => {
 
   test('should call api for credentials list', () => {
     getRelatedResourceDeleteCounts(
-      relatedResourceDeleteRequests.credential({ id: 1 })
+      relatedResourceDeleteRequests(t).credential({ id: 1 })
     );
     expect(InventorySourcesAPI.read).toBeCalledWith({
       credentials__id: 1,
@@ -45,7 +48,7 @@ describe('delete details', () => {
 
   test('should call api for projects list', () => {
     getRelatedResourceDeleteCounts(
-      relatedResourceDeleteRequests.project({ id: 1 })
+      relatedResourceDeleteRequests(t).project({ id: 1 })
     );
     expect(WorkflowJobTemplateNodesAPI.read).toBeCalledWith({
       unified_job_template: 1,
@@ -58,7 +61,7 @@ describe('delete details', () => {
 
   test('should call api for templates list', () => {
     getRelatedResourceDeleteCounts(
-      relatedResourceDeleteRequests.template({ id: 1 })
+      relatedResourceDeleteRequests(t).template({ id: 1 })
     );
     expect(WorkflowJobTemplateNodesAPI.read).toBeCalledWith({
       unified_job_template: 1,
@@ -67,7 +70,7 @@ describe('delete details', () => {
 
   test('should call api for credential type list', () => {
     getRelatedResourceDeleteCounts(
-      relatedResourceDeleteRequests.credentialType({ id: 1 })
+      relatedResourceDeleteRequests(t).credentialType({ id: 1 })
     );
     expect(CredentialsAPI.read).toBeCalledWith({
       credential_type__id: 1,
@@ -76,7 +79,7 @@ describe('delete details', () => {
 
   test('should call api for inventory list', () => {
     getRelatedResourceDeleteCounts(
-      relatedResourceDeleteRequests.inventory({ id: 1 })
+      relatedResourceDeleteRequests(t).inventory({ id: 1 })
     );
     expect(JobTemplatesAPI.read).toBeCalledWith({ inventory: 1 });
     expect(WorkflowJobTemplatesAPI.read).toBeCalledWith({
@@ -89,7 +92,7 @@ describe('delete details', () => {
       data: [{ inventory_source: 2 }],
     });
     await getRelatedResourceDeleteCounts(
-      relatedResourceDeleteRequests.inventorySource(1)
+      relatedResourceDeleteRequests(t).inventorySource(1)
     );
     expect(WorkflowJobTemplateNodesAPI.read).toBeCalledWith({
       unified_job_template: 1,
@@ -98,7 +101,7 @@ describe('delete details', () => {
 
   test('should call api for organization list', async () => {
     getRelatedResourceDeleteCounts(
-      relatedResourceDeleteRequests.organization({ id: 1 })
+      relatedResourceDeleteRequests(t).organization({ id: 1 })
     );
     expect(CredentialsAPI.read).toBeCalledWith({ organization: 1 });
   });
@@ -115,7 +118,7 @@ describe('delete details', () => {
       },
     });
     const { error } = await getRelatedResourceDeleteCounts(
-      relatedResourceDeleteRequests.inventorySource(1)
+      relatedResourceDeleteRequests(t).inventorySource(1)
     );
 
     expect(error).toBeDefined();
@@ -129,7 +132,7 @@ describe('delete details', () => {
     ProjectsAPI.read.mockResolvedValue({ data: { count: 2 } });
 
     const { results } = await getRelatedResourceDeleteCounts(
-      relatedResourceDeleteRequests.credential({ id: 1 })
+      relatedResourceDeleteRequests(t).credential({ id: 1 })
     );
     expect(results).toEqual({
       'Job Templates': 1,

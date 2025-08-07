@@ -1,4 +1,3 @@
-import { msg } from '@lingui/macro';
 import {
   JobTemplatesAPI,
   WorkflowJobTemplatesAPI,
@@ -9,33 +8,33 @@ import {
   InstanceGroupsAPI,
 } from 'api';
 
-export default function getResourceAccessConfig(i18n) {
+export default function getResourceAccessConfig(t) {
   return [
     {
       selectedResource: 'jobTemplate',
-      label: i18n._(msg`Job templates`),
+      label: t`Job templates`,
       searchColumns: [
         {
-          name: i18n._(msg`Name`),
+          name: t`Name`,
           key: 'name__icontains',
           isDefault: true,
         },
         {
-          name: i18n._(msg`Playbook name`),
+          name: t`Playbook name`,
           key: 'playbook__icontains',
         },
         {
-          name: i18n._(msg`Created By (Username)`),
+          name: t`Created By (Username)`,
           key: 'created_by__username__icontains',
         },
         {
-          name: i18n._(msg`Modified By (Username)`),
+          name: t`Modified By (Username)`,
           key: 'modified_by__username__icontains',
         },
       ],
       sortColumns: [
         {
-          name: i18n._(msg`Name`),
+          name: t`Name`,
           key: 'name',
         },
       ],
@@ -44,29 +43,29 @@ export default function getResourceAccessConfig(i18n) {
     },
     {
       selectedResource: 'workflowJobTemplate',
-      label: i18n._(msg`Workflow job templates`),
+      label: t`Workflow job templates`,
       searchColumns: [
         {
-          name: i18n._(msg`Name`),
+          name: t`Name`,
           key: 'name__icontains',
           isDefault: true,
         },
         {
-          name: i18n._(msg`Playbook name`),
+          name: t`Playbook name`,
           key: 'playbook__icontains',
         },
         {
-          name: i18n._(msg`Created By (Username)`),
+          name: t`Created By (Username)`,
           key: 'created_by__username__icontains',
         },
         {
-          name: i18n._(msg`Modified By (Username)`),
+          name: t`Modified By (Username)`,
           key: 'modified_by__username__icontains',
         },
       ],
       sortColumns: [
         {
-          name: i18n._(msg`Name`),
+          name: t`Name`,
           key: 'name',
         },
       ],
@@ -75,40 +74,40 @@ export default function getResourceAccessConfig(i18n) {
     },
     {
       selectedResource: 'credential',
-      label: i18n._(msg`Credentials`),
+      label: t`Credentials`,
       searchColumns: [
         {
-          name: i18n._(msg`Name`),
+          name: t`Name`,
           key: 'name__icontains',
           isDefault: true,
         },
         {
-          name: i18n._(msg`Type`),
+          name: t`Type`,
           key: 'or__scm_type',
           options: [
-            [``, i18n._(msg`Manual`)],
-            [`git`, i18n._(msg`Git`)],
-            [`svn`, i18n._(msg`Subversion`)],
-            [`archive`, i18n._(msg`Remote Archive`)],
-            [`insights`, i18n._(msg`Red Hat Insights`)],
+            [``, t`Manual`],
+            [`git`, t`Git`],
+            [`svn`, t`Subversion`],
+            [`archive`, t`Remote Archive`],
+            [`insights`, t`Red Hat Insights`],
           ],
         },
         {
-          name: i18n._(msg`Source Control URL`),
+          name: t`Source Control URL`,
           key: 'scm_url__icontains',
         },
         {
-          name: i18n._(msg`Modified By (Username)`),
+          name: t`Modified By (Username)`,
           key: 'modified_by__username__icontains',
         },
         {
-          name: i18n._(msg`Created By (Username)`),
+          name: t`Created By (Username)`,
           key: 'created_by__username__icontains',
         },
       ],
       sortColumns: [
         {
-          name: i18n._(msg`Name`),
+          name: t`Name`,
           key: 'name',
         },
       ],
@@ -117,25 +116,25 @@ export default function getResourceAccessConfig(i18n) {
     },
     {
       selectedResource: 'inventory',
-      label: i18n._(msg`Inventories`),
+      label: t`Inventories`,
       searchColumns: [
         {
-          name: i18n._(msg`Name`),
+          name: t`Name`,
           key: 'name__icontains',
           isDefault: true,
         },
         {
-          name: i18n._(msg`Created By (Username)`),
+          name: t`Created By (Username)`,
           key: 'created_by__username__icontains',
         },
         {
-          name: i18n._(msg`Modified By (Username)`),
+          name: t`Modified By (Username)`,
           key: 'modified_by__username__icontains',
         },
       ],
       sortColumns: [
         {
-          name: i18n._(msg`Name`),
+          name: t`Name`,
           key: 'name',
         },
       ],
@@ -144,40 +143,40 @@ export default function getResourceAccessConfig(i18n) {
     },
     {
       selectedResource: 'project',
-      label: i18n._(msg`Projects`),
+      label: t`Projects`,
       searchColumns: [
         {
-          name: i18n._(msg`Name`),
+          name: t`Name`,
           key: 'name__icontains',
           isDefault: true,
         },
         {
-          name: i18n._(msg`Type`),
+          name: t`Type`,
           key: 'or__scm_type',
           options: [
-            [``, i18n._(msg`Manual`)],
-            [`git`, i18n._(msg`Git`)],
-            [`svn`, i18n._(msg`Subversion`)],
-            [`archive`, i18n._(msg`Remote Archive`)],
-            [`insights`, i18n._(msg`Red Hat Insights`)],
+            [``, t`Manual`],
+            [`git`, t`Git`],
+            [`svn`, t`Subversion`],
+            [`archive`, t`Remote Archive`],
+            [`insights`, t`Red Hat Insights`],
           ],
         },
         {
-          name: i18n._(msg`Source Control URL`),
+          name: t`Source Control URL`,
           key: 'scm_url__icontains',
         },
         {
-          name: i18n._(msg`Modified By (Username)`),
+          name: t`Modified By (Username)`,
           key: 'modified_by__username__icontains',
         },
         {
-          name: i18n._(msg`Created By (Username)`),
+          name: t`Created By (Username)`,
           key: 'created_by__username__icontains',
         },
       ],
       sortColumns: [
         {
-          name: i18n._(msg`Name`),
+          name: t`Name`,
           key: 'name',
         },
       ],
@@ -186,25 +185,25 @@ export default function getResourceAccessConfig(i18n) {
     },
     {
       selectedResource: 'organization',
-      label: i18n._(msg`Organizations`),
+      label: t`Organizations`,
       searchColumns: [
         {
-          name: i18n._(msg`Name`),
+          name: t`Name`,
           key: 'name__icontains',
           isDefault: true,
         },
         {
-          name: i18n._(msg`Created By (Username)`),
+          name: t`Created By (Username)`,
           key: 'created_by__username__icontains',
         },
         {
-          name: i18n._(msg`Modified By (Username)`),
+          name: t`Modified By (Username)`,
           key: 'modified_by__username__icontains',
         },
       ],
       sortColumns: [
         {
-          name: i18n._(msg`Name`),
+          name: t`Name`,
           key: 'name',
         },
       ],
@@ -213,25 +212,25 @@ export default function getResourceAccessConfig(i18n) {
     },
     {
       selectedResource: 'Instance Groups',
-      label: i18n._(msg`Instance Groups`),
+      label: t`Instance Groups`,
       searchColumns: [
         {
-          name: i18n._(msg`Name`),
+          name: t`Name`,
           key: 'name__icontains',
           isDefault: true,
         },
         {
-          name: i18n._(msg`Created By (Username)`),
+          name: t`Created By (Username)`,
           key: 'created_by__username__icontains',
         },
         {
-          name: i18n._(msg`Modified By (Username)`),
+          name: t`Modified By (Username)`,
           key: 'modified_by__username__icontains',
         },
       ],
       sortColumns: [
         {
-          name: i18n._(msg`Name`),
+          name: t`Name`,
           key: 'name',
         },
       ],

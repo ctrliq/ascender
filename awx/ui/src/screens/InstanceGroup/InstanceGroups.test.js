@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { InstanceGroupsAPI } from 'api';
+import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
 import InstanceGroups from './InstanceGroups';
 import { useUserProfile } from 'contexts/Config';
 
@@ -29,7 +30,7 @@ describe('<InstanceGroups/>', () => {
   test('should set breadcrumbs', () => {
     mockUseLocationValue.pathname = '/instance_groups';
 
-    const wrapper = shallow(<InstanceGroups />);
+    const wrapper = mountWithContexts(<InstanceGroups />);
 
     const header = wrapper.find('ScreenHeader');
     expect(header.prop('streamType')).toEqual('instance_group');
@@ -48,7 +49,7 @@ describe('<InstanceGroups/>', () => {
       data: { actions: {} },
     });
 
-    const wrapper = shallow(<InstanceGroups />);
+    const wrapper = mountWithContexts(<InstanceGroups />);
 
     expect(wrapper.find('ScreenHeader').prop('streamType')).toEqual('instance');
   });

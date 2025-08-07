@@ -3,8 +3,7 @@
 //
 import React, { useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { CardBody, CardActionsRow } from 'components/Card';
@@ -25,7 +24,7 @@ import {
 } from '../../shared/settingUtils';
 
 function MiscSystemDetail() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const { me } = useConfig();
   const { GET: options } = useSettings();
 
@@ -83,14 +82,14 @@ function MiscSystemDetail() {
       name: (
         <>
           <CaretLeftIcon />
-          {i18n._(msg`Back to Settings`)}
+          {t`Back to Settings`}
         </>
       ),
       link: `/settings`,
       id: 99,
     },
     {
-      name: i18n._(msg`Details`),
+      name: t`Details`,
       link: `/settings/miscellaneous_system/details`,
       id: 0,
     },
@@ -145,11 +144,11 @@ function MiscSystemDetail() {
           <CardActionsRow>
             <Button
               ouiaId="system-detail-edit-button"
-              aria-label={i18n._(msg`Edit`)}
+              aria-label={t`Edit`}
               component={Link}
               to="/settings/miscellaneous_system/edit"
             >
-              {i18n._(msg`Edit`)}
+              {t`Edit`}
             </Button>
           </CardActionsRow>
         )}

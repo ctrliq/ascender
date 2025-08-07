@@ -1,6 +1,5 @@
 import React from 'react';
-import { msg } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import { Tooltip } from '@patternfly/react-core';
 import { ExclamationCircleIcon as PFExclamationCircleIcon } from '@patternfly/react-icons';
 import styled from 'styled-components';
@@ -23,7 +22,7 @@ const ErrorMessageWrapper = styled.div`
   margin-bottom: 10px;
 `;
 function AdHocPreviewStep({ hasErrors, values }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const { credential, execution_environment, extra_vars, verbosity } = values;
 
   const items = Object.entries(values);
@@ -31,10 +30,10 @@ function AdHocPreviewStep({ hasErrors, values }) {
     <>
       {hasErrors && (
         <ErrorMessageWrapper>
-          {i18n._(msg`Some of the previous step(s) have errors`)}
+          {t`Some of the previous step(s) have errors`}
           <Tooltip
             position="right"
-            content={i18n._(msg`See errors on the left`)}
+            content={t`See errors on the left`}
             trigger="click mouseenter focus"
           >
             <ExclamationCircleIcon />
@@ -53,25 +52,25 @@ function AdHocPreviewStep({ hasErrors, values }) {
             )
         )}
         {credential && (
-          <Detail label={i18n._(msg`Credential`)} value={credential[0]?.name} />
+          <Detail label={t`Credential`} value={credential[0]?.name} />
         )}
         {execution_environment && (
           <Detail
-            label={i18n._(msg`Execution Environment`)}
+            label={t`Execution Environment`}
             value={execution_environment[0]?.name}
           />
         )}
         {verbosity && (
           <Detail
-            label={i18n._(msg`Verbosity`)}
-            value={VERBOSITY(i18n)[values.verbosity]}
+            label={t`Verbosity`}
+            value={VERBOSITY(t)[values.verbosity]}
           />
         )}
         {extra_vars && (
           <VariablesDetail
             value={jsonToYaml(JSON.stringify(extra_vars))}
             rows={4}
-            label={i18n._(msg`Variables`)}
+            label={t`Variables`}
             name="extra_vars"
           />
         )}

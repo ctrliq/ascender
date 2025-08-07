@@ -19,6 +19,39 @@ jest.mock('react-router-dom', () => ({
   }),
 }));
 
+jest.mock('@lingui/react/macro', () => ({
+  ...jest.requireActual('@lingui/react/macro'),
+  useLingui: () => ({
+    t: (template, values) => {
+      // Handle template literals properly
+      if (typeof template === 'string') {
+        return template;
+      }
+      if (Array.isArray(template)) {
+        // Template literal: t`Never` becomes template = ['Never'], values = undefined
+        return template[0] || '';
+      }
+      return String(template) || '';
+    },
+  }),
+}));
+
+jest.mock('../shared/WorkflowApprovalUtils', () => ({
+  ...jest.requireActual('../shared/WorkflowApprovalUtils'),
+  getDetailPendingLabel: (workflowApproval, t) => {
+    if (!workflowApproval.approval_expiration) {
+      return 'Never';
+    }
+    return jest.requireActual('util/dates').formatDateString(workflowApproval.approval_expiration);
+  },
+  getStatus: (workflowApproval) => {
+    if (workflowApproval.status === 'successful') {
+      return 'approved';
+    }
+    return workflowApproval.status;
+  },
+}));
+
 const workflowJob = {
   id: 111,
   type: 'workflow_job',

@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
-import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 import { Tooltip } from '@patternfly/react-core';
 import { getQSConfig, parseQueryString } from 'util/qs';
 import useSelected from 'hooks/useSelected';
@@ -29,7 +28,7 @@ function cannotDelete(item) {
 }
 
 function InventoryGroupsList() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const location = useLocation();
   const { id: inventoryId, inventoryType } = useParams();
   const [isAdHocLaunchLoading, setIsAdHocLaunchLoading] = useState(false);
@@ -95,16 +94,14 @@ function InventoryGroupsList() {
     if (selected.some(cannotDelete)) {
       return (
         <div>
-          {i18n._(
-            msg`You do not have permission to delete the following Groups: ${itemsUnableToDelete}`
-          )}
+          {t`You do not have permission to delete the following Groups: ${itemsUnableToDelete}`}
         </div>
       );
     }
     if (selected.length) {
-      return i18n._(msg`Delete`);
+      return t`Delete`;
     }
-    return i18n._(msg`Select a row to delete`);
+    return t`Select a row to delete`;
   };
   const isNotConstructedInventory = inventoryType !== 'constructed_inventory';
   const canAdd =
@@ -122,21 +119,21 @@ function InventoryGroupsList() {
       clearSelected={clearSelected}
       toolbarSearchColumns={[
         {
-          name: i18n._(msg`Name`),
+          name: t`Name`,
           key: 'name__icontains',
           isDefault: true,
         },
         {
-          name: i18n._(msg`Group type`),
+          name: t`Group type`,
           key: 'parents__isnull',
-          options: [['true', i18n._(msg`Show only root groups`)]],
+          options: [['true', t`Show only root groups`]],
         },
         {
-          name: i18n._(msg`Created By (Username)`),
+          name: t`Created By (Username)`,
           key: 'created_by__username__icontains',
         },
         {
-          name: i18n._(msg`Modified By (Username)`),
+          name: t`Modified By (Username)`,
           key: 'modified_by__username__icontains',
         },
       ]}
@@ -144,9 +141,9 @@ function InventoryGroupsList() {
       toolbarRelatedSearchableKeys={relatedSearchableKeys}
       headerRow={
         <HeaderRow qsConfig={QS_CONFIG}>
-          <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
+          <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
           {isNotConstructedInventory && (
-            <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
+            <HeaderCell>{t`Actions`}</HeaderCell>
           )}
         </HeaderRow>
       }

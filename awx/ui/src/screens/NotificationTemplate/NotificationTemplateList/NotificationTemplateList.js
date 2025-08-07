@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { useLocation, useRouteMatch } from 'react-router-dom';
 
-import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 import { Card, PageSection } from '@patternfly/react-core';
 import { NotificationTemplatesAPI } from 'api';
 import PaginatedTable, {
@@ -30,7 +29,7 @@ const QS_CONFIG = getQSConfig('notification-templates', {
 function NotificationTemplatesList() {
   const location = useLocation();
   const match = useRouteMatch();
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   // const [testToasts, setTestToasts] = useState([]);
   const { addToast, Toast, toastProps } = useToast();
 
@@ -116,41 +115,41 @@ function NotificationTemplatesList() {
             hasContentLoading={isTemplatesLoading || isDeleteLoading}
             items={templates}
             itemCount={count}
-            pluralizedItemName={i18n._(msg`Notification Templates`)}
+            pluralizedItemName={t`Notification Templates`}
             qsConfig={QS_CONFIG}
             clearSelected={clearSelected}
             toolbarSearchColumns={[
               {
-                name: i18n._(msg`Name`),
+                name: t`Name`,
                 key: 'name__icontains',
                 isDefault: true,
               },
               {
-                name: i18n._(msg`Description`),
+                name: t`Description`,
                 key: 'description__icontains',
               },
               {
-                name: i18n._(msg`Notification type`),
+                name: t`Notification type`,
                 key: 'or__notification_type',
                 options: [
-                  ['email', i18n._(msg`Email`)],
-                  ['grafana', i18n._(msg`Grafana`)],
-                  ['hipchat', i18n._(msg`Hipchat`)],
-                  ['irc', i18n._(msg`IRC`)],
-                  ['mattermost', i18n._(msg`Mattermost`)],
-                  ['pagerduty', i18n._(msg`Pagerduty`)],
-                  ['rocketchat', i18n._(msg`Rocket.Chat`)],
-                  ['slack', i18n._(msg`Slack`)],
-                  ['twilio', i18n._(msg`Twilio`)],
-                  ['webhook', i18n._(msg`Webhook`)],
+                  ['email', t`Email`],
+                  ['grafana', t`Grafana`],
+                  ['hipchat', t`Hipchat`],
+                  ['irc', t`IRC`],
+                  ['mattermost', t`Mattermost`],
+                  ['pagerduty', t`Pagerduty`],
+                  ['rocketchat', t`Rocket.Chat`],
+                  ['slack', t`Slack`],
+                  ['twilio', t`Twilio`],
+                  ['webhook', t`Webhook`],
                 ],
               },
               {
-                name: i18n._(msg`Created by (username)`),
+                name: t`Created by (username)`,
                 key: 'created_by__username__icontains',
               },
               {
-                name: i18n._(msg`Modified by (username)`),
+                name: t`Modified by (username)`,
                 key: 'modified_by__username__icontains',
               },
             ]}
@@ -170,22 +169,22 @@ function NotificationTemplatesList() {
                     key="delete"
                     onDelete={handleDelete}
                     itemsToDelete={selected}
-                    pluralizedItemName={i18n._(msg`Notification Templates`)}
+                    pluralizedItemName={t`Notification Templates`}
                   />,
                 ]}
               />
             )}
             headerRow={
               <HeaderRow qsConfig={QS_CONFIG}>
-                <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
-                <HeaderCell>{i18n._(msg`Status`)}</HeaderCell>
+                <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
+                <HeaderCell>{t`Status`}</HeaderCell>
                 <HeaderCell sortKey="notification_type">
-                  {i18n._(msg`Type`)}
+                  {t`Type`}
                 </HeaderCell>
                 <HeaderCell sortKey="organization">
-                  {i18n._(msg`Organization`)}
+                  {t`Organization`}
                 </HeaderCell>
-                <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
+                <HeaderCell>{t`Actions`}</HeaderCell>
               </HeaderRow>
             }
             renderRow={(template, index) => (
@@ -197,11 +196,11 @@ function NotificationTemplatesList() {
 
                   let message;
                   if (notification.status === 'successful') {
-                    message = i18n._(msg`Notification sent successfully`);
+                    message = t`Notification sent successfully`;
                   }
                   if (notification.status === 'failed') {
                     if (notification?.error === 'timed out') {
-                      message = i18n._(msg`Notification timed out`);
+                      message = t`Notification timed out`;
                     } else {
                       message = notification.error;
                     }
@@ -237,10 +236,10 @@ function NotificationTemplatesList() {
       <AlertModal
         isOpen={deletionError}
         variant="error"
-        title={i18n._(msg`Error!`)}
+        title={t`Error!`}
         onClose={clearDeletionError}
       >
-        {i18n._(msg`Failed to delete one or more notification template.`)}
+        {t`Failed to delete one or more notification template.`}
         <ErrorDetail error={deletionError} />
       </AlertModal>
       <Toast {...toastProps} />

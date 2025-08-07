@@ -1,6 +1,5 @@
 import React from 'react';
-import { i18n } from '@lingui/core';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 import InstanceGroupsStep from './InstanceGroupsStep';
 import StepName from './StepName';
 
@@ -11,8 +10,9 @@ export default function useInstanceGroupsStep(
   resource,
   instanceGroups
 ) {
+  const { t } = useLingui();
   return {
-    step: getStep(launchConfig, resource),
+    step: getStep(launchConfig, resource, t),
     initialValues: getInitialValues(launchConfig, instanceGroups),
     isReady: true,
     contentError: null,
@@ -23,7 +23,7 @@ export default function useInstanceGroupsStep(
     validate: () => {},
   };
 }
-function getStep(launchConfig) {
+function getStep(launchConfig, resource, t) {
   if (!launchConfig.ask_instance_groups_on_launch) {
     return null;
   }
@@ -31,7 +31,7 @@ function getStep(launchConfig) {
     id: STEP_ID,
     name: (
       <StepName id="instance-groups-step">
-        {i18n._(msg`Instance Groups`)}
+        {t`Instance Groups`}
       </StepName>
     ),
     component: <InstanceGroupsStep />,

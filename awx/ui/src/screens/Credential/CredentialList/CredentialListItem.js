@@ -1,8 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { string, bool, func } from 'prop-types';
 
-import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router-dom';
 import { Button } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
@@ -23,7 +22,7 @@ function CredentialListItem({
   fetchCredentials,
   rowIndex,
 }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const [isDisabled, setIsDisabled] = useState(false);
 
   const labelId = `check-action-${credential.id}`;
@@ -55,22 +54,22 @@ function CredentialListItem({
           isSelected,
           onSelect,
         }}
-        dataLabel={i18n._(msg`Selected`)}
+        dataLabel={t`Selected`}
       />
-      <TdBreakWord id={labelId} dataLabel={i18n._(msg`Name`)}>
+      <TdBreakWord id={labelId} dataLabel={t`Name`}>
         <Link to={`${detailUrl}`}>
           <b>{credential.name}</b>
         </Link>
       </TdBreakWord>
-      <Td dataLabel={i18n._(msg`Type`)}>
+      <Td dataLabel={t`Type`}>
         {credential.summary_fields.credential_type.name}
       </Td>
-      <ActionsTd dataLabel={i18n._(msg`Actions`)}>
-        <ActionItem visible={canEdit} tooltip={i18n._(msg`Edit Credential`)}>
+      <ActionsTd dataLabel={t`Actions`}>
+        <ActionItem visible={canEdit} tooltip={t`Edit Credential`}>
           <Button
             ouiaId={`${credential.id}-edit-button`}
             isDisabled={isDisabled}
-            aria-label={i18n._(msg`Edit Credential`)}
+            aria-label={t`Edit Credential`}
             variant="plain"
             component={Link}
             to={`/credentials/${credential.id}/edit`}
@@ -79,7 +78,7 @@ function CredentialListItem({
           </Button>
         </ActionItem>
         <ActionItem
-          tooltip={i18n._(msg`Copy Credential`)}
+          tooltip={t`Copy Credential`}
           visible={credential.summary_fields.user_capabilities.copy}
         >
           <CopyButton
@@ -87,7 +86,7 @@ function CredentialListItem({
             onCopyStart={handleCopyStart}
             onCopyFinish={handleCopyFinish}
             copyItem={copyCredential}
-            errorMessage={i18n._(msg`Failed to copy credential.`)}
+            errorMessage={t`Failed to copy credential.`}
           />
         </ActionItem>
       </ActionsTd>

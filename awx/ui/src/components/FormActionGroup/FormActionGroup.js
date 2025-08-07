@@ -1,35 +1,34 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { msg } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import { ActionGroup, Button } from '@patternfly/react-core';
 import { FormFullWidthLayout } from '../FormLayout';
 
 const FormActionGroup = ({ onCancel, onSubmit, submitDisabled }) => {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   return (
     <FormFullWidthLayout>
       <ActionGroup>
         <Button
           ouiaId="form-save-button"
-          aria-label={i18n._(msg`Save`)}
+          aria-label={t`Save`}
           variant="primary"
           type="button"
           onClick={onSubmit}
           isDisabled={submitDisabled}
         >
-          {i18n._(msg`Save`)}
+          {t`Save`}
         </Button>
         <Button
           ouiaId="form-cancel-button"
-          aria-label={i18n._(msg`Cancel`)}
+          aria-label={t`Cancel`}
           variant="link"
           type="button"
           onMouseDown={(e) => e.preventDefault()}
           onClick={onCancel}
         >
-          {i18n._(msg`Cancel`)}
+          {t`Cancel`}
         </Button>
       </ActionGroup>
     </FormFullWidthLayout>

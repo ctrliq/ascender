@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 
 import { string, shape } from 'prop-types';
 import {
@@ -14,7 +13,7 @@ function CredentialPluginTestAlert({
   successResponse,
   errorResponse,
 }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const [testMessage, setTestMessage] = useState('');
   const [testVariant, setTestVariant] = useState(false);
   useEffect(() => {
@@ -38,17 +37,15 @@ function CredentialPluginTestAlert({
         }
       } else {
         setTestMessage(
-          i18n._(
-            msg`Something went wrong with the request to test this credential and metadata.`
-          )
+          t`Something went wrong with the request to test this credential and metadata.`
         );
       }
       setTestVariant('danger');
     } else if (successResponse) {
-      setTestMessage(i18n._(msg`Test passed`));
+      setTestMessage(t`Test passed`);
       setTestVariant('success');
     }
-  }, [successResponse, errorResponse, i18n]);
+  }, [successResponse, errorResponse, t]);
 
   return (
     <AlertGroup isToast>

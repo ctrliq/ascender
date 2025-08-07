@@ -28,7 +28,6 @@ import { getLanguageWithoutRegionCode } from 'util/language';
 import Metrics from 'screens/Metrics';
 import SubscriptionEdit from 'screens/Setting/Subscription/SubscriptionEdit';
 import useTitle from 'hooks/useTitle';
-import { msg } from '@lingui/macro';
 import { dynamicActivate, locales } from './i18nLoader';
 import getRouteConfig from './routeConfig';
 import { SESSION_REDIRECT_URL } from './constants';
@@ -169,7 +168,11 @@ function App() {
   }
 
   if (isLoading) {
-    return <div>{i18n._(msg`Loading...`)}</div>;
+    return (
+      // Don't render I18nProvider until i18n is activated
+      // eslint-disable-next-line i18next/no-literal-string
+      <div>Loading...</div>
+    );
   }
 
   return (

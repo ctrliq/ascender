@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { func, number, string, oneOfType } from 'prop-types';
 
-import { msg } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import { SelectVariant, Select, SelectOption } from '@patternfly/react-core';
 import { ProjectsAPI } from 'api';
 import useRequest from 'hooks/useRequest';
@@ -15,7 +14,7 @@ function PlaybookSelect({
   onError,
   onChange,
 }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const [isDisabled, setIsDisabled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const {
@@ -59,8 +58,8 @@ function PlaybookSelect({
       variant={SelectVariant.typeahead}
       selections={selected}
       onToggle={setIsOpen}
-      placeholderText={i18n._(msg`Select a playbook`)}
-      typeAheadAriaLabel={i18n._(msg`Select a playbook`)}
+      placeholderText={t`Select a playbook`}
+      typeAheadAriaLabel={t`Select a playbook`}
       isCreatable
       createText=""
       onSelect={(event, value) => {
@@ -72,7 +71,7 @@ function PlaybookSelect({
       onBlur={onBlur}
       isDisabled={isLoading || isDisabled}
       maxHeight="1000%"
-      noResultsFoundText={i18n._(msg`No results found`)}
+      noResultsFoundText={t`No results found`}
     >
       {options.map((opt) => (
         <SelectOption key={opt} value={opt} />

@@ -45,12 +45,23 @@ describe('useWsInventories hook', () => {
   afterEach(() => {
     global.console.debug = debug;
     WS.clean();
+    jest.clearAllMocks();
+    if (wrapper) {
+      wrapper.unmount();
+    }
   });
 
   test('should return inventories list', () => {
+    const fetchInventories = jest.fn(() => []);
+    const fetchInventoriesById = jest.fn(() => []);
     const inventories = [{ id: 1 }];
     wrapper = mountWithContexts(
-      <Test inventories={inventories} qsConfig={QS_CONFIG} />
+      <Test
+        inventories={inventories}
+        fetchInventories={fetchInventories}
+        fetchInventoriesById={fetchInventoriesById}
+        qsConfig={QS_CONFIG}
+      />
     );
 
     expect(wrapper.find('TestInner').prop('inventories')).toEqual(inventories);
@@ -59,11 +70,18 @@ describe('useWsInventories hook', () => {
   test('should establish websocket connection', async () => {
     global.document.cookie = 'csrftoken=abc123';
     const mockServer = new WS('ws://localhost/websocket/');
+    const fetchInventories = jest.fn(() => []);
+    const fetchInventoriesById = jest.fn(() => []);
 
     const inventories = [{ id: 1 }];
     await act(async () => {
       wrapper = await mountWithContexts(
-        <Test inventories={inventories} qsConfig={QS_CONFIG} />
+        <Test
+          inventories={inventories}
+          fetchInventories={fetchInventories}
+          fetchInventoriesById={fetchInventoriesById}
+          qsConfig={QS_CONFIG}
+        />
       );
     });
 
@@ -83,11 +101,18 @@ describe('useWsInventories hook', () => {
   test('should update inventory sync status', async () => {
     global.document.cookie = 'csrftoken=abc123';
     const mockServer = new WS('ws://localhost/websocket/');
+    const fetchInventories = jest.fn(() => []);
+    const fetchInventoriesById = jest.fn(() => []);
 
     const inventories = [{ id: 1 }];
     await act(async () => {
       wrapper = await mountWithContexts(
-        <Test inventories={inventories} qsConfig={QS_CONFIG} />
+        <Test
+          inventories={inventories}
+          fetchInventories={fetchInventories}
+          fetchInventoriesById={fetchInventoriesById}
+          qsConfig={QS_CONFIG}
+        />
       );
     });
 
@@ -123,7 +148,7 @@ describe('useWsInventories hook', () => {
     const mockServer = new WS('ws://localhost/websocket/');
     const inventories = [{ id: 1 }];
     const fetchInventories = jest.fn(() => []);
-    const fetchInventoriesById = jest.fn(() => []);
+    const fetchInventoriesById = jest.fn(() => Promise.resolve([{ id: 1, updated: true }]));
     await act(async () => {
       wrapper = await mountWithContexts(
         <Test
@@ -145,6 +170,7 @@ describe('useWsInventories hook', () => {
         })
       );
     });
+    wrapper.update();
 
     expect(fetchInventoriesById).toHaveBeenCalledWith([1]);
   });
@@ -152,11 +178,18 @@ describe('useWsInventories hook', () => {
   test('should update inventory pending_deletion', async () => {
     global.document.cookie = 'csrftoken=abc123';
     const mockServer = new WS('ws://localhost/websocket/');
+    const fetchInventories = jest.fn(() => []);
+    const fetchInventoriesById = jest.fn(() => []);
 
     const inventories = [{ id: 1, pending_deletion: false }];
     await act(async () => {
       wrapper = await mountWithContexts(
-        <Test inventories={inventories} qsConfig={QS_CONFIG} />
+        <Test
+          inventories={inventories}
+          fetchInventories={fetchInventories}
+          fetchInventoriesById={fetchInventoriesById}
+          qsConfig={QS_CONFIG}
+        />
       );
     });
 

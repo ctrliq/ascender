@@ -19,12 +19,15 @@ export default function useWsInventorySources(initialSources) {
       }
 
       const sourceId = lastMessage.inventory_source_id;
-      const index = sources.findIndex((s) => s.id === sourceId);
-      if (index > -1) {
-        setSources(updateSource(sources, index, lastMessage));
-      }
+      setSources((currentSources) => {
+        const index = currentSources.findIndex((s) => s.id === sourceId);
+        if (index > -1) {
+          return updateSource(currentSources, index, lastMessage);
+        }
+        return currentSources;
+      });
     },
-    [lastMessage] // eslint-disable-line react-hooks/exhaustive-deps
+    [lastMessage]
   );
 
   return sources;

@@ -9,8 +9,7 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 
-import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card, PageSection } from '@patternfly/react-core';
 
@@ -24,7 +23,7 @@ import { useConfig } from 'contexts/Config';
 import useRequest from 'hooks/useRequest';
 
 function ManagementJob({ setBreadcrumb }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const basePath = '/management_jobs';
 
   const match = useRouteMatch();
@@ -97,7 +96,7 @@ function ManagementJob({ setBreadcrumb }) {
       name: (
         <>
           <CaretLeftIcon />
-          {i18n._(msg`Back to management jobs`)}
+          {t`Back to management jobs`}
         </>
       ),
       persistentFilterKey: 'managementJobs',
@@ -107,7 +106,7 @@ function ManagementJob({ setBreadcrumb }) {
   if (shouldShowSchedules) {
     tabsArray.push({
       id: 0,
-      name: i18n._(msg`Schedules`),
+      name: t`Schedules`,
       link: `${match.url}/schedules`,
     });
   }
@@ -115,7 +114,7 @@ function ManagementJob({ setBreadcrumb }) {
   if (shouldShowNotifications) {
     tabsArray.push({
       id: 1,
-      name: i18n._(msg`Notifications`),
+      name: t`Notifications`,
       link: `${match.url}/notifications`,
     });
   }
@@ -132,9 +131,9 @@ function ManagementJob({ setBreadcrumb }) {
           <ContentError error={error}>
             {error?.response?.status === 404 && (
               <span>
-                {i18n._(msg`Management job not found.`)}
+                {t`Management job not found.`}
                 <Link to={basePath}>
-                  {i18n._(msg`View all management jobs`)}
+                  {t`View all management jobs`}
                 </Link>
               </span>
             )}

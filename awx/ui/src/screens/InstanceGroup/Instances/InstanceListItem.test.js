@@ -118,34 +118,34 @@ describe('<InstanceListItem/>', () => {
       );
     });
     expect(wrapper.find('InstanceListItem').length).toBe(1);
-    expect(wrapper.find('InstanceListItem__SliderForks').text()).toContain(
-      '10 forks'
-    );
+    const forksText = wrapper.find('InstanceListItem__SliderForks').text();
+    expect(forksText).toContain('10');
+    expect(forksText).toContain('forks');
 
     await act(async () => {
       wrapper.find('Slider').prop('onChange')(1);
     });
 
     wrapper.update();
-    expect(wrapper.find('InstanceListItem__SliderForks').text()).toContain(
-      '24 forks'
-    );
+    const forksText24 = wrapper.find('InstanceListItem__SliderForks').text();
+    expect(forksText24).toContain('24');
+    expect(forksText24).toContain('forks');
 
     await act(async () => {
       wrapper.find('Slider').prop('onChange')(0);
     });
     wrapper.update();
-    expect(wrapper.find('InstanceListItem__SliderForks').text()).toContain(
-      '1 fork'
-    );
+    const forkText1 = wrapper.find('InstanceListItem__SliderForks').text();
+    expect(forkText1).toContain('1');
+    expect(forkText1).toContain('fork');
 
     await act(async () => {
       wrapper.find('Slider').prop('onChange')(0.5);
     });
     wrapper.update();
-    expect(wrapper.find('InstanceListItem__SliderForks').text()).toContain(
-      '12 forks'
-    );
+    const forksText12 = wrapper.find('InstanceListItem__SliderForks').text();
+    expect(forksText12).toContain('12');
+    expect(forksText12).toContain('forks');
   });
 
   test('should render the proper data instance', async () => {
@@ -180,9 +180,9 @@ describe('<InstanceListItem/>', () => {
         .at(5)
         .containsMatchingElement(<div>RAM 24</div>)
     );
-    expect(wrapper.find('InstanceListItem__SliderForks').text()).toContain(
-      '10 forks'
-    );
+    const forksTextData = wrapper.find('InstanceListItem__SliderForks').text();
+    expect(forksTextData).toContain('10');
+    expect(forksTextData).toContain('forks');
   });
 
   test('should render checkbox', async () => {

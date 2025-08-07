@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 import { Route, useRouteMatch, Switch } from 'react-router-dom';
 
 import ScreenHeader from 'components/ScreenHeader/ScreenHeader';
@@ -11,10 +10,10 @@ import UserAdd from './UserAdd/UserAdd';
 import User from './User';
 
 function Users() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const [breadcrumbConfig, setBreadcrumbConfig] = useState({
-    '/users': i18n._(msg`Users`),
-    '/users/add': i18n._(msg`Create New User`),
+    '/users': t`Users`,
+    '/users/add': t`Create New User`,
   });
   const match = useRouteMatch();
 
@@ -25,22 +24,20 @@ function Users() {
       }
 
       setBreadcrumbConfig({
-        '/users': i18n._(msg`Users`),
-        '/users/add': i18n._(msg`Create New User`),
+        '/users': t`Users`,
+        '/users/add': t`Create New User`,
         [`/users/${user.id}`]: `${user.username}`,
-        [`/users/${user.id}/edit`]: i18n._(msg`Edit Details`),
-        [`/users/${user.id}/details`]: i18n._(msg`Details`),
-        [`/users/${user.id}/roles`]: i18n._(msg`Roles`),
-        [`/users/${user.id}/teams`]: i18n._(msg`Teams`),
-        [`/users/${user.id}/organizations`]: i18n._(msg`Organizations`),
-        [`/users/${user.id}/tokens`]: i18n._(msg`Tokens`),
-        [`/users/${user.id}/tokens/add`]: i18n._(msg`Create user token`),
-        [`/users/${user.id}/tokens/${token && token.id}/details`]: i18n._(
-          msg`Details`
-        ),
+        [`/users/${user.id}/edit`]: t`Edit Details`,
+        [`/users/${user.id}/details`]: t`Details`,
+        [`/users/${user.id}/roles`]: t`Roles`,
+        [`/users/${user.id}/teams`]: t`Teams`,
+        [`/users/${user.id}/organizations`]: t`Organizations`,
+        [`/users/${user.id}/tokens`]: t`Tokens`,
+        [`/users/${user.id}/tokens/add`]: t`Create user token`,
+        [`/users/${user.id}/tokens/${token && token.id}/details`]: t`Details`,
       });
     },
-    [i18n]
+    [t]
   );
   return (
     <>

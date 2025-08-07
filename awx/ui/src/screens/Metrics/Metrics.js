@@ -1,6 +1,5 @@
 import React, { useEffect, useCallback, useState, useRef } from 'react';
-import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 import {
   PageSection,
   Card,
@@ -45,7 +44,7 @@ function useInterval(callback, delay, instance, metric) {
   return { count };
 }
 function Metrics() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const [instanceIsOpen, setInstanceIsOpen] = useState(false);
   const [instance, setInstance] = useState(null);
   const [metric, setMetric] = useState(null);
@@ -81,11 +80,11 @@ function Metrics() {
       return {
         instances:
           instanceNames.length > 1
-            ? [...instanceNames, i18n._(msg`All`)]
+            ? [...instanceNames, t`All`]
             : instanceNames,
         metrics: metricOptions,
       };
-    }, [i18n]),
+    }, [t]),
     { instances: [], metrics: [] }
   );
 
@@ -179,7 +178,7 @@ function Metrics() {
   }
   return (
     <>
-      <ScreenHeader breadcrumbConfig={{ '/metrics': i18n._(msg`Metrics`) }} />
+      <ScreenHeader breadcrumbConfig={{ '/metrics': t`Metrics` }} />
 
       <PageSection>
         <Card>
@@ -187,7 +186,7 @@ function Metrics() {
             <Toolbar ouiaId="metrics-toolbar">
               <ToolbarContent>
                 <ToolbarGroup>
-                  <ToolbarItem>{i18n._(msg`Instance`)}</ToolbarItem>
+                  <ToolbarItem>{t`Instance`}</ToolbarItem>
                   <ToolbarItem>
                     <Select
                       ouiaId="Instance-select"
@@ -200,18 +199,18 @@ function Metrics() {
                         setRenderedData([]);
                       }}
                       selections={instance}
-                      placeholderText={i18n._(msg`Select an instance`)}
+                      placeholderText={t`Select an instance`}
                     >
                       {instances.map((inst) => (
                         <SelectOption value={inst} key={inst} />
                       ))}
                     </Select>
                   </ToolbarItem>
-                  <ToolbarItem>{i18n._(msg`Metric`)}</ToolbarItem>
+                  <ToolbarItem>{t`Metric`}</ToolbarItem>
                   <ToolbarItem>
                     <Select
                       ouiaId="Metric-select"
-                      placeholderText={i18n._(msg`Select a metric`)}
+                      placeholderText={t`Select a metric`}
                       isOpen={metricIsOpen}
                       onSelect={(e, value) => {
                         count = [0];
@@ -242,9 +241,7 @@ function Metrics() {
               )
             ) : (
               <ContentEmpty
-                title={i18n._(
-                  msg`Select an instance and a metric to show chart`
-                )}
+                title={t`Select an instance and a metric to show chart`}
               />
             )}
           </CardBody>

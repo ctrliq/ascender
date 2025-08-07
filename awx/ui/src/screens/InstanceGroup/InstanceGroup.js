@@ -8,8 +8,7 @@ import {
   useParams,
 } from 'react-router-dom';
 
-import { msg } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card, PageSection } from '@patternfly/react-core';
 
@@ -25,7 +24,7 @@ import InstanceGroupEdit from './InstanceGroupEdit';
 import Instances from './Instances/Instances';
 
 function InstanceGroup({ setBreadcrumb }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const { id } = useParams();
   const { pathname } = useLocation();
 
@@ -60,7 +59,7 @@ function InstanceGroup({ setBreadcrumb }) {
       name: (
         <>
           <CaretLeftIcon />
-          {i18n._(msg`Back to Instance Groups`)}
+          {t`Back to Instance Groups`}
         </>
       ),
       link: '/instance_groups',
@@ -68,17 +67,17 @@ function InstanceGroup({ setBreadcrumb }) {
       persistentFilterKey: 'instanceGroups',
     },
     {
-      name: i18n._(msg`Details`),
+      name: t`Details`,
       link: `/instance_groups/${id}/details`,
       id: 0,
     },
     {
-      name: i18n._(msg`Instances`),
+      name: t`Instances`,
       link: `/instance_groups/${id}/instances`,
       id: 1,
     },
     {
-      name: i18n._(msg`Jobs`),
+      name: t`Jobs`,
       link: `/instance_groups/${id}/jobs`,
       id: 2,
     },
@@ -91,10 +90,10 @@ function InstanceGroup({ setBreadcrumb }) {
           <ContentError error={contentError}>
             {contentError.response?.status === 404 && (
               <span>
-                {i18n._(msg`Instance group not found.`)}
+                {t`Instance group not found.`}
 
                 <Link to="/instance_groups">
-                  {i18n._(msg`View all instance groups`)}
+                  {t`View all instance groups`}
                 </Link>
               </span>
             )}

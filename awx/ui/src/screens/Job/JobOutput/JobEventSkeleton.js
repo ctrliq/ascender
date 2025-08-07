@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, forwardRef } from 'react';
 import {
   JobEventLine,
   JobEventLineToggle,
@@ -14,14 +14,14 @@ function JobEventSkeletonContent({ contentLength }) {
   );
 }
 
-function JobEventSkeleton({ counter, contentLength, style, measure }) {
+const JobEventSkeleton = forwardRef(({ counter, contentLength, style, measure }, ref) => {
   useEffect(() => {
     measure();
   }, [measure]);
 
   return (
     counter > 1 && (
-      <div style={style}>
+      <div style={style} ref={ref}>
         <JobEventLine key={counter}>
           <JobEventLineToggle />
           <JobEventLineNumber />
@@ -30,6 +30,6 @@ function JobEventSkeleton({ counter, contentLength, style, measure }) {
       </div>
     )
   );
-}
+});
 
 export default JobEventSkeleton;

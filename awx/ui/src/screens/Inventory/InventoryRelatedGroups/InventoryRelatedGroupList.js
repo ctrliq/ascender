@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { msg } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import { useParams, useLocation, Link } from 'react-router-dom';
 
 import { DropdownItem } from '@patternfly/react-core';
@@ -30,7 +29,7 @@ const QS_CONFIG = getQSConfig('group', {
   order_by: 'name',
 });
 function InventoryRelatedGroupList() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAdHocLaunchLoading, setIsAdHocLaunchLoading] = useState(false);
   const [associateError, setAssociateError] = useState(null);
@@ -140,8 +139,8 @@ function InventoryRelatedGroupList() {
 
   const addFormUrl = `/inventories/inventory/${inventoryId}/groups/${groupId}/nested_groups/add`;
 
-  const addExistingGroup = i18n._(msg`Add existing group`);
-  const addNewGroup = i18n._(msg`Add new group`);
+  const addExistingGroup = t`Add existing group`;
+  const addNewGroup = t`Add new group`;
   const addButton = (
     <AddDropDownButton
       key="add"
@@ -175,27 +174,27 @@ function InventoryRelatedGroupList() {
         hasContentLoading={isLoading || isAdHocLaunchLoading}
         items={groups}
         itemCount={itemCount}
-        pluralizedItemName={i18n._(msg`Related Groups`)}
+        pluralizedItemName={t`Related Groups`}
         qsConfig={QS_CONFIG}
         onRowClick={handleSelect}
         toolbarSearchColumns={[
           {
-            name: i18n._(msg`Name`),
+            name: t`Name`,
             key: 'name__icontains',
             isDefault: true,
           },
           {
-            name: i18n._(msg`Created By (Username)`),
+            name: t`Created By (Username)`,
             key: 'created_by__username__icontains',
           },
           {
-            name: i18n._(msg`Modified By (Username)`),
+            name: t`Modified By (Username)`,
             key: 'modified_by__username__icontains',
           },
         ]}
         toolbarSortColumns={[
           {
-            name: i18n._(msg`Name`),
+            name: t`Name`,
             key: 'name',
           },
         ]}
@@ -227,7 +226,7 @@ function InventoryRelatedGroupList() {
                       key="disassociate"
                       onDisassociate={disassociateGroups}
                       itemsToDisassociate={selected}
-                      modalTitle={i18n._(msg`Disassociate related group(s)?`)}
+                      modalTitle={t`Disassociate related group(s)?`}
                     />,
                   ]
                 : []),
@@ -236,9 +235,9 @@ function InventoryRelatedGroupList() {
         )}
         headerRow={
           <HeaderRow qsConfig={QS_CONFIG}>
-            <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
+            <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
             {isNotConstructedInventory && (
-              <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
+              <HeaderCell>{t`Actions`}</HeaderCell>
             )}
           </HeaderRow>
         }
@@ -257,25 +256,25 @@ function InventoryRelatedGroupList() {
       />
       {isModalOpen && (
         <AssociateModal
-          header={i18n._(msg`Groups`)}
+          header={t`Groups`}
           fetchRequest={fetchGroupsToAssociate}
           optionsRequest={fetchGroupsOptions}
           isModalOpen={isModalOpen}
           onAssociate={associateGroup}
           onClose={() => setIsModalOpen(false)}
-          title={i18n._(msg`Select Groups`)}
+          title={t`Select Groups`}
         />
       )}
       {error && (
         <AlertModal
           isOpen={error}
           onClose={dismissError}
-          title={i18n._(msg`Error!`)}
+          title={t`Error!`}
           variant="error"
         >
           {associateError
-            ? i18n._(msg`Failed to associate.`)
-            : i18n._(msg`Failed to disassociate one or more groups.`)}
+            ? t`Failed to associate.`
+            : t`Failed to disassociate one or more groups.`}
           <ErrorDetail error={error} />
         </AlertModal>
       )}

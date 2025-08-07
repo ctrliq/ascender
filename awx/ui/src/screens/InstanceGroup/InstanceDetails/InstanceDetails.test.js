@@ -19,6 +19,29 @@ jest.mock('react-router-dom', () => ({
   }),
 }));
 
+jest.mock('@lingui/react/macro', () => ({
+  ...jest.requireActual('@lingui/react/macro'),
+  t: (str) => str,
+  Trans: ({ children }) => children,
+  useLingui: () => ({
+    t: (str) => str,
+    i18n: {
+      _: (template, values) => {
+        // Handle plural templates like '{count, plural, one {# fork} other {# forks}}'
+        if (template.includes('plural')) {
+          const count = values?.count || 0;
+          if (count === 1) {
+            return template.replace(/.*one \{([^}]+)\}.*/, '$1').replace('#', count);
+          } else {
+            return template.replace(/.*other \{([^}]+)\}.*/, '$1').replace('#', count);
+          }
+        }
+        return template;
+      },
+    },
+  }),
+}));
+
 const instanceGroup = {
   id: 2,
   type: 'instance_group',

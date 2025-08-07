@@ -2,7 +2,25 @@ import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render, waitFor, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { I18nProvider } from '@lingui/react';
+import { i18n } from '@lingui/core';
+import { en } from 'make-plural/plurals';
+import english from '../../locales/en/messages';
 import MeshGraph from './MeshGraph';
+
+// Setup i18n for tests
+i18n.loadLocaleData({ en: { plurals: en } });
+i18n.load({ en: english.messages });
+i18n.activate('en');
+
+// Custom render function with I18n context
+const renderWithI18n = (component) => {
+  return render(
+    <I18nProvider i18n={i18n}>
+      {component}
+    </I18nProvider>
+  );
+};
 
 jest.mock('util/webWorker', () => {
   return {
@@ -70,7 +88,7 @@ describe('<MeshGraph />', () => {
     };
     const mockZoomFn = jest.fn();
     const mockSetZoomCtrFn = jest.fn();
-    render(
+    renderWithI18n(
       <MemoryRouter>
         <MeshGraph
           data={mockData}

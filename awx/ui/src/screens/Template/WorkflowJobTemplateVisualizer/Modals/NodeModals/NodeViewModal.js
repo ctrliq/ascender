@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useCallback } from 'react';
 import { Button, Modal } from '@patternfly/react-core';
-import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 import {
   WorkflowDispatchContext,
   WorkflowStateContext,
@@ -15,7 +14,7 @@ import { JobTemplatesAPI, WorkflowJobTemplatesAPI } from 'api';
 import getNodeType from '../../shared/WorkflowJobTemplateVisualizerUtils';
 
 function NodeViewModal({ readOnly }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const dispatch = useContext(WorkflowDispatchContext);
   const { nodeToView } = useContext(WorkflowStateContext);
   const {
@@ -130,10 +129,10 @@ function NodeViewModal({ readOnly }) {
   } else if (!fullUnifiedJobTemplate) {
     Content = (
       <p>
-        {i18n._(msg`The resource associated with this node has been deleted.`)}
+        {t`The resource associated with this node has been deleted.`}
         &nbsp;&nbsp;
         {!readOnly
-          ? i18n._(msg`Click the Edit button below to reconfigure the node.`)
+          ? t`Click the Edit button below to reconfigure the node.`
           : ''}
       </p>
     );
@@ -249,8 +248,8 @@ function NodeViewModal({ readOnly }) {
     <Modal
       variant="large"
       isOpen
-      title={fullUnifiedJobTemplate?.name || i18n._(msg`Resource deleted`)}
-      aria-label={i18n._(msg`Workflow node view modal`)}
+      title={fullUnifiedJobTemplate?.name || t`Resource deleted`}
+      aria-label={t`Workflow node view modal`}
       onClose={() => dispatch({ type: 'SET_NODE_TO_VIEW', value: null })}
       actions={
         readOnly
@@ -260,10 +259,10 @@ function NodeViewModal({ readOnly }) {
                 ouiaId="node-view-edit-button"
                 id="node-view-edit-button"
                 key="edit"
-                aria-label={i18n._(msg`Edit Node`)}
+                aria-label={t`Edit Node`}
                 onClick={handleEdit}
               >
-                {i18n._(msg`Edit`)}
+                {t`Edit`}
               </Button>,
             ]
       }

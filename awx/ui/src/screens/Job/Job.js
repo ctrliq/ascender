@@ -7,8 +7,7 @@ import {
   useParams,
   useRouteMatch,
 } from 'react-router-dom';
-import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card, PageSection } from '@patternfly/react-core';
 import { InventorySourcesAPI } from 'api';
@@ -36,7 +35,7 @@ export const JOB_URL_SEGMENT_MAP = {
 };
 
 function Job({ setBreadcrumb }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const { id, typeSegment } = useParams();
   const match = useRouteMatch();
 
@@ -120,15 +119,15 @@ function Job({ setBreadcrumb }) {
       name: (
         <>
           <CaretLeftIcon />
-          {i18n._(msg`Back to Jobs`)}
+          {t`Back to Jobs`}
         </>
       ),
       link: `/jobs`,
       persistentFilterKey: 'jobs',
       id: 99,
     },
-    { name: i18n._(msg`Details`), link: `${match.url}/details`, id: 0 },
-    { name: i18n._(msg`Output`), link: `${match.url}/output`, id: 1 },
+    { name: t`Details`, link: `${match.url}/details`, id: 0 },
+    { name: t`Output`, link: `${match.url}/output`, id: 1 },
   ];
   if (relatedJobs?.length > 0) {
     tabsArray.push({
@@ -158,8 +157,8 @@ function Job({ setBreadcrumb }) {
           <ContentError error={error}>
             {error.response?.status === 404 && (
               <span>
-                {i18n._(msg`The page you requested could not be found.`)}{' '}
-                <Link to="/jobs">{i18n._(msg`View all Jobs.`)}</Link>
+                {t`The page you requested could not be found.`}{' '}
+                <Link to="/jobs">{t`View all Jobs.`}</Link>
               </span>
             )}
           </ContentError>
@@ -209,7 +208,7 @@ function Job({ setBreadcrumb }) {
               <Route key="not-found" path="*">
                 <ContentError isNotFound>
                   <Link to={`/jobs/${typeSegment}/${id}/details`}>
-                    {i18n._(msg`View Job Details`)}
+                    {t`View Job Details`}
                   </Link>
                 </ContentError>
               </Route>,

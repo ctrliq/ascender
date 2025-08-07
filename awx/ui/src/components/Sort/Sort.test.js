@@ -1,6 +1,5 @@
 import React from 'react';
 import { act } from 'react-dom/test-utils';
-import { shallow } from 'enzyme';
 import {
   mountWithContexts,
   waitForElement,
@@ -167,7 +166,7 @@ describe('<Sort />', () => {
     };
     const numericColumns = [{ name: 'ID', key: 'id' }];
 
-    const wrapper = shallow(
+    const wrapper = mountWithContexts(
       <Sort
         qsConfig={qsConfigNumDown}
         columns={numericColumns}
@@ -186,7 +185,7 @@ describe('<Sort />', () => {
     };
     const numericColumns = [{ name: 'ID', key: 'id' }];
 
-    const wrapper = shallow(
+    const wrapper = mountWithContexts(
       <Sort
         qsConfig={qsConfigNumUp}
         columns={numericColumns}
@@ -205,7 +204,7 @@ describe('<Sort />', () => {
     };
     const alphaColumns = [{ name: 'Name', key: 'name' }];
 
-    const wrapper = shallow(
+    const wrapper = mountWithContexts(
       <Sort
         qsConfig={qsConfigAlphaDown}
         columns={alphaColumns}
@@ -224,7 +223,7 @@ describe('<Sort />', () => {
     };
     const alphaColumns = [{ name: 'Name', key: 'name' }];
 
-    const wrapper = shallow(
+    const wrapper = mountWithContexts(
       <Sort
         qsConfig={qsConfigAlphaDown}
         columns={alphaColumns}

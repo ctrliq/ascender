@@ -1,8 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 import { func, shape } from 'prop-types';
 import { ProjectsAPI } from 'api';
 import { getQSConfig, parseQueryString } from 'util/qs';
@@ -23,7 +22,7 @@ const QS_CONFIG = getQSConfig('projects', {
 
 function ProjectsList({ nodeResource, onUpdateNodeResource }) {
   const location = useLocation();
-  const { i18n } = useLingui();
+  const { t } = useLingui();
 
   const {
     result: { projects, count, relatedSearchableKeys, searchableKeys },
@@ -67,7 +66,7 @@ function ProjectsList({ nodeResource, onUpdateNodeResource }) {
       qsConfig={QS_CONFIG}
       headerRow={
         <HeaderRow isExpandable={false} qsConfig={QS_CONFIG}>
-          <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
+          <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
         </HeaderRow>
       }
       renderRow={(item, index) => (
@@ -87,31 +86,31 @@ function ProjectsList({ nodeResource, onUpdateNodeResource }) {
       showPageSizeOptions={false}
       toolbarSearchColumns={[
         {
-          name: i18n._(msg`Name`),
+          name: t`Name`,
           key: 'name__icontains',
           isDefault: true,
         },
         {
-          name: i18n._(msg`Type`),
+          name: t`Type`,
           key: 'or__scm_type',
           options: [
-            [``, i18n._(msg`Manual`)],
-            [`git`, i18n._(msg`Git`)],
-            [`svn`, i18n._(msg`Subversion`)],
-            [`archive`, i18n._(msg`Remote Archive`)],
-            [`insights`, i18n._(msg`Red Hat Insights`)],
+            [``, t`Manual`],
+            [`git`, t`Git`],
+            [`svn`, t`Subversion`],
+            [`archive`, t`Remote Archive`],
+            [`insights`, t`Red Hat Insights`],
           ],
         },
         {
-          name: i18n._(msg`Source Control URL`),
+          name: t`Source Control URL`,
           key: 'scm_url__icontains',
         },
         {
-          name: i18n._(msg`Modified By (Username)`),
+          name: t`Modified By (Username)`,
           key: 'modified_by__username__icontains',
         },
         {
-          name: i18n._(msg`Created By (Username)`),
+          name: t`Created By (Username)`,
           key: 'created_by__username__icontains',
         },
       ]}

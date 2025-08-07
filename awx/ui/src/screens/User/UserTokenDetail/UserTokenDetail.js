@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 
 import AlertModal from 'components/AlertModal';
 import { CardBody, CardActionsRow } from 'components/Card';
@@ -15,7 +14,7 @@ import { toTitleCase } from 'util/strings';
 import userHelpTextStrings from '../shared/User.helptext';
 
 function UserTokenDetail({ token }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const helptext = userHelpTextStrings();
   const { scope, description, created, modified, expires, summary_fields } =
     token;
@@ -37,34 +36,34 @@ function UserTokenDetail({ token }) {
     <CardBody>
       <DetailList>
         <Detail
-          label={i18n._(msg`Application`)}
+          label={t`Application`}
           value={summary_fields?.application?.name}
           dataCy="application-token-detail-name"
           helpText={helptext.application}
         />
         <Detail
-          label={i18n._(msg`Description`)}
+          label={t`Description`}
           value={description}
           dataCy="application-token-detail-description"
         />
         <Detail
-          label={i18n._(msg`Scope`)}
+          label={t`Scope`}
           value={toTitleCase(scope)}
           dataCy="application-token-detail-scope"
           helpText={helptext.scope}
         />
         <Detail
-          label={i18n._(msg`Expires`)}
+          label={t`Expires`}
           value={formatDateString(expires)}
           dataCy="application-token-detail-expires"
         />
         <UserDateDetail
-          label={i18n._(msg`Created`)}
+          label={t`Created`}
           date={created}
           user={summary_fields.user}
         />
         <UserDateDetail
-          label={i18n._(msg`Last Modified`)}
+          label={t`Last Modified`}
           date={modified}
           user={summary_fields.user}
         />
@@ -73,23 +72,23 @@ function UserTokenDetail({ token }) {
         <DeleteButton
           name={
             summary_fields?.application?.name ||
-            i18n._(msg`Personal Access Token`)
+            t`Personal Access Token`
           }
-          modalTitle={i18n._(msg`Delete User Token`)}
+          modalTitle={t`Delete User Token`}
           onConfirm={deleteToken}
           isDisabled={isLoading}
         >
-          {i18n._(msg`Delete`)}
+          {t`Delete`}
         </DeleteButton>
       </CardActionsRow>
       {error && (
         <AlertModal
           isOpen={error}
           variant="error"
-          title={i18n._(msg`Error!`)}
+          title={t`Error!`}
           onClose={dismissError}
         >
-          {i18n._(msg`Failed to user token.`)}
+          {t`Failed to user token.`}
           <ErrorDetail error={error} />
         </AlertModal>
       )}

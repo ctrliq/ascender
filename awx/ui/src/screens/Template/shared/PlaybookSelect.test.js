@@ -1,8 +1,26 @@
 import React from 'react';
 import { render, fireEvent, waitFor, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { I18nProvider } from '@lingui/react';
+import { i18n } from '@lingui/core';
+import { en } from 'make-plural/plurals';
+import english from '../../../locales/en/messages';
 import { ProjectsAPI } from 'api';
 import PlaybookSelect from './PlaybookSelect';
+
+// Setup i18n for tests
+i18n.loadLocaleData({ en: { plurals: en } });
+i18n.load({ en: english.messages });
+i18n.activate('en');
+
+// Custom render function with I18n context
+const renderWithI18n = (component) => {
+  return render(
+    <I18nProvider i18n={i18n}>
+      {component}
+    </I18nProvider>
+  );
+};
 
 jest.mock('api');
 
@@ -18,7 +36,7 @@ describe('<PlaybookSelect />', () => {
   });
 
   test('should reload playbooks when project value changes', async () => {
-    const { rerender } = render(
+    const { rerender } = renderWithI18n(
       <PlaybookSelect
         projectId={1}
         isValid
@@ -32,12 +50,14 @@ describe('<PlaybookSelect />', () => {
     });
 
     rerender(
-      <PlaybookSelect
-        projectId={15}
-        isValid
-        onChange={() => {}}
-        onError={() => {}}
-      />
+      <I18nProvider i18n={i18n}>
+        <PlaybookSelect
+          projectId={15}
+          isValid
+          onChange={() => {}}
+          onError={() => {}}
+        />
+      </I18nProvider>
     );
 
     await waitFor(() => {
@@ -49,7 +69,7 @@ describe('<PlaybookSelect />', () => {
   test('should trigger the onChange callback for the option selected from the list', async () => {
     const mockCallback = jest.fn();
 
-    const { container } = render(
+    const { container } = renderWithI18n(
       <PlaybookSelect
         projectId={1}
         isValid={true}
@@ -75,7 +95,7 @@ describe('<PlaybookSelect />', () => {
   test('should allow entering playbook file name manually', async () => {
     const mockCallback = jest.fn();
 
-    const { container } = render(
+    const { container } = renderWithI18n(
       <PlaybookSelect
         projectId={1}
         isValid={true}
