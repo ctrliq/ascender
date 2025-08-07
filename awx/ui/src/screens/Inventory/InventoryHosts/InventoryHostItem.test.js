@@ -10,6 +10,7 @@ import {
 import '@testing-library/jest-dom';
 import { HostsAPI } from 'api';
 import { i18n } from '@lingui/core';
+import { I18nProvider } from '@lingui/react';
 import { en } from 'make-plural/plurals';
 import InventoryHostItem from './InventoryHostItem';
 import { createMemoryHistory } from 'history';
@@ -66,20 +67,22 @@ describe('<InventoryHostItem />', () => {
   };
 
   const Component = (props) => (
-    <Router history={history}>
-      <table>
-        <tbody>
-          <InventoryHostItem
-            detailUrl="/host/1"
-            editUrl={`/inventories/inventory/1/hosts/1/edit`}
-            host={mockHost}
-            isSelected={false}
-            onSelect={() => {}}
-            {...props}
-          />
-        </tbody>
-      </table>
-    </Router>
+    <I18nProvider i18n={i18n}>
+      <Router history={history}>
+        <table>
+          <tbody>
+            <InventoryHostItem
+              detailUrl="/host/1"
+              editUrl={`/inventories/inventory/1/hosts/1/edit`}
+              host={mockHost}
+              isSelected={false}
+              onSelect={() => {}}
+              {...props}
+            />
+          </tbody>
+        </table>
+      </Router>
+    </I18nProvider>
   );
 
   beforeEach(() => {

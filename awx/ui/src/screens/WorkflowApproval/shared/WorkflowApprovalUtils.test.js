@@ -1,3 +1,4 @@
+import React from 'react';
 import { I18nProvider } from '@lingui/react';
 import { i18n } from '@lingui/core';
 import { en } from 'make-plural/plurals';
@@ -12,9 +13,6 @@ import mockWorkflowApprovals from '../data.workflowApprovals.json';
 const workflowApproval = mockWorkflowApprovals.results[0];
 i18n.loadLocaleData('en', { plurals: en });
 
-// Mock t function for testing
-const t = (str) => str;
-
 async function activate() {
   const { messages } = await import(`../../../locales/${'en'}/messages.js`);
   i18n.load('en', messages);
@@ -22,15 +20,24 @@ async function activate() {
 }
 activate();
 
+// Mock t function that handles template literals properly
+const mockT = (strings, ...values) => {
+  let result = strings[0];
+  for (let i = 0; i < values.length; i++) {
+    result += values[i] + strings[i + 1];
+  }
+  return result;
+};
+
 describe('<WorkflowApproval />', () => {
   test('shows no expiration when approval status is pending and no approval_expiration', () => {
-    expect(getPendingLabel(workflowApproval, t)).toEqual('Never expires');
+    expect(getPendingLabel(workflowApproval)).toEqual('Never expires');
   });
 
   test('shows expiration date/time when approval status is pending and approval_expiration present', () => {
     workflowApproval.approval_expiration = '2020-10-10T17:13:12.067947Z';
 
-    expect(getPendingLabel(workflowApproval, t)).toEqual(
+    expect(getPendingLabel(workflowApproval)).toEqual(
       `Expires on 10/10/2020, 5:13:12 PM`
     );
   });
@@ -38,14 +45,14 @@ describe('<WorkflowApproval />', () => {
   test('shows when an approval has timed out', () => {
     workflowApproval.status = 'failed';
     workflowApproval.timed_out = true;
-    expect(getStatus(workflowApproval, t)).toEqual('timedOut');
+    expect(getStatus(workflowApproval)).toEqual('timedOut');
   });
 
   test('shows when an approval has canceled', () => {
     workflowApproval.status = 'canceled';
     workflowApproval.canceled_on = '2020-10-10T17:13:12.067947Z';
     workflowApproval.timed_out = false;
-    expect(getStatus(workflowApproval, t)).toEqual('canceled');
+    expect(getStatus(workflowApproval)).toEqual('canceled');
   });
 
   test('shows when an approval has beeen approved', () => {
@@ -56,7 +63,7 @@ describe('<WorkflowApproval />', () => {
     workflowApproval.status = 'successful';
     workflowApproval.canceled_on = '';
     workflowApproval.finished = '';
-    expect(getStatus(workflowApproval, t)).toEqual('approved');
+    expect(getStatus(workflowApproval)).toEqual('approved');
   });
 
   test('shows when an approval has timed out', () => {
@@ -67,7 +74,7 @@ describe('<WorkflowApproval />', () => {
     workflowApproval.status = 'failed';
     workflowApproval.finished = '';
     workflowApproval.failed = true;
-    expect(getStatus(workflowApproval, t)).toEqual('denied');
+    expect(getStatus(workflowApproval)).toEqual('denied');
   });
 
   test('shows correct approved tooltip with user', () => {
@@ -77,7 +84,7 @@ describe('<WorkflowApproval />', () => {
     };
     workflowApproval.status = 'successful';
     workflowApproval.finished = '2020-10-10T17:13:12.067947Z';
-    expect(getTooltip(workflowApproval, t)).toEqual(
+    expect(getTooltip(workflowApproval, mockT)).toEqual(
       'Approved by Foobar - 10/10/2020, 5:13:12 PM'
     );
   });
@@ -88,7 +95,7 @@ describe('<WorkflowApproval />', () => {
     };
     workflowApproval.status = 'successful';
     workflowApproval.finished = '2020-10-10T17:13:12.067947Z';
-    expect(getTooltip(workflowApproval, t)).toEqual(
+    expect(getTooltip(workflowApproval, mockT)).toEqual(
       'Approved - 10/10/2020, 5:13:12 PM.  See the Activity Stream for more information.'
     );
   });
@@ -101,7 +108,7 @@ describe('<WorkflowApproval />', () => {
     workflowApproval.status = 'failed';
     workflowApproval.finished = '2020-10-10T17:13:12.067947Z';
     workflowApproval.failed = true;
-    expect(getTooltip(workflowApproval, t)).toEqual(
+    expect(getTooltip(workflowApproval, mockT)).toEqual(
       'Denied by Foobar - 10/10/2020, 5:13:12 PM'
     );
   });
@@ -113,7 +120,7 @@ describe('<WorkflowApproval />', () => {
     workflowApproval.status = 'failed';
     workflowApproval.finished = '2020-10-10T17:13:12.067947Z';
     workflowApproval.failed = true;
-    expect(getTooltip(workflowApproval, t)).toEqual(
+    expect(getTooltip(workflowApproval, mockT)).toEqual(
       'Denied - 10/10/2020, 5:13:12 PM.  See the Activity Stream for more information.'
     );
   });
