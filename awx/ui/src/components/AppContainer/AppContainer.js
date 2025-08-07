@@ -11,8 +11,7 @@ import {
   PageHeaderToolsItem,
   PageSidebar,
 } from '@patternfly/react-core';
-import { Plural, Trans } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { Plural, Trans, useLingui } from '@lingui/react/macro';
 
 import styled from 'styled-components';
 
@@ -35,7 +34,7 @@ const PageHeader = styled(PFPageHeader)`
 `;
 
 function AppContainer({ navRouteConfig = [], children }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const config = useConfig();
   const { logout, handleSessionContinue, sessionCountdown } = useSession();
 
@@ -112,7 +111,7 @@ function AppContainer({ navRouteConfig = [], children }) {
       nav={
         <Nav
           // eslint-disable-next-line i18next/no-literal-string
-          aria-label={i18n._('Navigation')}
+          aria-label={t`Navigation`}
           theme="dark"
           ouiaId="sidebar-navigation"
         >
@@ -148,7 +147,7 @@ function AppContainer({ navRouteConfig = [], children }) {
       <AlertModal
         ouiaId="session-expiration-modal"
         // eslint-disable-next-line i18next/no-literal-string
-        title={i18n._('Your session is about to expire')}
+        title={t`Your session is about to expire`}
         isOpen={sessionCountdown && sessionCountdown > 0}
         onClose={logout}
         showClose={false}

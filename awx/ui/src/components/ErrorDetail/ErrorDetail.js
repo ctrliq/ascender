@@ -3,8 +3,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import { t } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 
 import {
   Card as PFCard,
@@ -36,7 +35,7 @@ const Expandable = styled(PFExpandable)`
 `;
 
 function ErrorDetail({ error }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const { response } = error;
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -87,7 +86,7 @@ function ErrorDetail({ error }) {
 
   return (
     <Expandable
-      toggleText={i18n._(t`Details`)}
+      toggleText={t`Details`}
       onToggle={handleToggle}
       isExpanded={isExpanded}
     >

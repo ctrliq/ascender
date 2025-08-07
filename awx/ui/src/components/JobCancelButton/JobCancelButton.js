@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { t } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import { MinusCircleIcon } from '@patternfly/react-icons';
 import { Button, Tooltip } from '@patternfly/react-core';
 import { getJobModel } from 'util/jobs';
@@ -21,7 +20,7 @@ function JobCancelButton({
   cancelationMessage,
   onCancelWorkflow,
 }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const [isOpen, setIsOpen] = useState(false);
   const { error: cancelError, request: cancelJob } = useRequest(
     useCallback(async () => {
@@ -68,7 +67,7 @@ function JobCancelButton({
               onClick={() => setIsOpen(true)}
               style={style}
             >
-              {buttonText || i18n._(t`Cancel Job`)}
+              {buttonText || t`Cancel Job`}
             </Button>
           )}
         </div>
@@ -85,26 +84,26 @@ function JobCancelButton({
               id="cancel-job-confirm-button"
               key="delete"
               variant="danger"
-              aria-label={i18n._(t`Confirm cancel job`)}
+              aria-label={t`Confirm cancel job`}
               ouiaId="cancel-job-confirm-button"
               onClick={cancelJob}
             >
-              {i18n._(t`Confirm cancellation`)}
+              {t`Confirm cancellation`}
             </Button>,
             <Button
               id="cancel-job-return-button"
               key="cancel"
               ouiaId="return"
-              aria-label={i18n._(t`Return`)}
+              aria-label={t`Return`}
               variant="secondary"
               onClick={() => setIsOpen(false)}
             >
-              {i18n._(t`Return`)}
+              {t`Return`}
             </Button>,
           ]}
         >
           {cancelationMessage ??
-            i18n._(t`Are you sure you want to cancel this job?`)}
+            t`Are you sure you want to cancel this job?`}
         </AlertModal>
       )}
       {error && !isAlreadyCancelled && (

@@ -1,5 +1,4 @@
 import * as d3 from 'd3';
-import { t } from '@lingui/react/macro';
 import { i18n } from '@lingui/core';
 
 class Tooltip {
@@ -57,14 +56,14 @@ class Tooltip {
       .attr('y', 4)
       .attr('font-size', 12)
       .attr('fill', 'white')
-      .text(i18n._(t`Successful`));
+      .text(i18n._('Successful'));
     this.failText = this.toolTipBase
       .append('text')
       .attr('x', 43)
       .attr('y', 28)
       .attr('font-size', 12)
       .attr('fill', 'white')
-      .text(i18n._(t`Failed`));
+      .text(i18n._('Failed'));
     this.icon = this.toolTipBase
       .append('text')
       .attr('fill', 'white')
@@ -80,7 +79,7 @@ class Tooltip {
       .attr('y', -21)
       .attr('font-size', 12)
       .attr('text-anchor', 'end')
-      .text(i18n._(t`No Jobs`));
+      .text(i18n._('No Jobs'));
     this.successful = this.toolTipBase
       .append('text')
       .attr('fill', 'white')
@@ -104,7 +103,7 @@ class Tooltip {
       .attr('x', 20)
       .attr('y', -21)
       .attr('font-size', 12)
-      .text(i18n._(t`Never`));
+      .text(i18n._('Never'));
   }
 
   handleMouseOver = (event, data) => {

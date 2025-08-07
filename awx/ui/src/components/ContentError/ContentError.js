@@ -2,8 +2,7 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { bool, instanceOf } from 'prop-types';
-import { t } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 
 import {
   Title,
@@ -16,7 +15,7 @@ import { useSession } from 'contexts/Session';
 import ErrorDetail from '../ErrorDetail';
 
 function ContentError({ error, children, isNotFound }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const { logout } = useSession();
 
   if (error && error.response && error.response.status === 401) {
@@ -37,17 +36,15 @@ function ContentError({ error, children, isNotFound }) {
           <EmptyStateIcon icon={ExclamationTriangleIcon} />
           <Title size="lg" headingLevel="h3">
             {is404
-              ? i18n._(t`Not Found`)
-              : i18n._(t`Something went wrong...`)}
+              ? t`Not Found`
+              : t`Something went wrong...`}
           </Title>
           <EmptyStateBody>
             {is404
-              ? i18n._(t`The page you requested could not be found.`)
-              : i18n._(
-                  t`There was an error loading this content. Please reload the page.`
-                )}{' '}
+              ? t`The page you requested could not be found.`
+              : t`There was an error loading this content. Please reload the page.`}{' '}
             {children || (
-              <Link to="/home">{i18n._(t`Back to Dashboard.`)}</Link>
+              <Link to="/home">{t`Back to Dashboard.`}</Link>
             )}
           </EmptyStateBody>
           {error && <ErrorDetail error={error} />}
