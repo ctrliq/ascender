@@ -1,7 +1,6 @@
 import 'styled-components/macro';
 import React, { useState } from 'react';
-import { t, Trans } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { Trans, useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import { useField } from 'formik';
 import {
@@ -45,7 +44,7 @@ const TimeoutLabel = styled.p`
 `;
 
 function NodeTypeStep({ isIdentifierRequired }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const { isSuperUser } = useUserProfile();
   const [nodeTypeField, , nodeTypeHelpers] = useField('nodeType');
   const [nodeResourceField, nodeResourceMeta, nodeResourceHelpers] =
@@ -66,31 +65,31 @@ function NodeTypeStep({ isIdentifierRequired }) {
     {
       key: 'workflow_approval_template',
       value: 'workflow_approval_template',
-      label: i18n._(t`Approval`),
+      label: t`Approval`,
       isDisabled: false,
     },
     {
       key: 'inventory_source',
       value: 'inventory_source',
-      label: i18n._(t`Inventory Source Sync`),
+      label: t`Inventory Source Sync`,
       isDisabled: false,
     },
     {
       key: 'job_template',
       value: 'job_template',
-      label: i18n._(t`Job Template`),
+      label: t`Job Template`,
       isDisabled: false,
     },
     {
       key: 'project',
       value: 'project',
-      label: i18n._(t`Project Sync`),
+      label: t`Project Sync`,
       isDisabled: false,
     },
     {
       key: 'workflow_job_template',
       value: 'workflow_job_template',
-      label: i18n._(t`Workflow Job Template`),
+      label: t`Workflow Job Template`,
       isDisabled: false,
     },
   ];
@@ -101,7 +100,7 @@ function NodeTypeStep({ isIdentifierRequired }) {
         {
           key: 'system_job_template',
           value: 'system_job_template',
-          label: i18n._(t`Management Job`),
+          label: t`Management Job`,
           isDisabled: false,
         },
       ]
@@ -117,11 +116,11 @@ function NodeTypeStep({ isIdentifierRequired }) {
         />
       )}
       <div css="display: flex; align-items: center; margin-bottom: 20px;">
-        <b css="margin-right: 24px">{i18n._(t`Node Type`)}</b>
+        <b css="margin-right: 24px">{t`Node Type`}</b>
         <div>
           <AnsibleSelect
             id="nodeResource-select"
-            label={i18n._(t`Select a Node Type`)}
+            label={t`Select a Node Type`}
             data={modifiedNodeTypeChoices}
             value={nodeTypeField.value}
             onChange={(e, val) => {
@@ -177,22 +176,22 @@ function NodeTypeStep({ isIdentifierRequired }) {
                   isRequired
                   validate={required(null)}
                   validated={isValid ? 'default' : 'error'}
-                  label={i18n._(t`Name`)}
+                  label={t`Name`}
                 />
                 <FormField
                   name="approvalDescription"
                   id="approval-description"
-                  label={i18n._(t`Description`)}
+                  label={t`Description`}
                 />
                 <FormGroup
-                  label={i18n._(t`Timeout`)}
+                  label={t`Timeout`}
                   fieldId="approval-timeout"
                   name="timeout"
                 >
                   <div css="display: flex;align-items: center;">
                     <TimeoutInput
                       {...timeoutMinutesField}
-                      aria-label={i18n._(t`Timeout minutes`)}
+                      aria-label={t`Timeout minutes`}
                       id="approval-timeout-minutes"
                       min="0"
                       onChange={(value, event) => {
@@ -206,7 +205,7 @@ function NodeTypeStep({ isIdentifierRequired }) {
                     </TimeoutLabel>
                     <TimeoutInput
                       {...timeoutSecondsField}
-                      aria-label={i18n._(t`Timeout seconds`)}
+                      aria-label={t`Timeout seconds`}
                       id="approval-timeout-seconds"
                       min="0"
                       onChange={(value, event) => {
@@ -224,15 +223,13 @@ function NodeTypeStep({ isIdentifierRequired }) {
             )}
             <FormGroup
               fieldId="convergence"
-              label={i18n._(t`Convergence`)}
+              label={t`Convergence`}
               isRequired
               labelIcon={
                 <Popover
                   content={
                     <>
-                      {i18n._(
-                        t`Preconditions for running this node when there are multiple parents. Refer to the`
-                      )}{' '}
+                      {t`Preconditions for running this node when there are multiple parents. Refer to the`}{' '}
                       <a
                         href={`${getDocsBaseUrl(
                           config
@@ -240,9 +237,9 @@ function NodeTypeStep({ isIdentifierRequired }) {
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        {i18n._(t`documentation`)}
+                        {t`documentation`}
                       </a>{' '}
-                      {i18n._(t`for more info.`)}
+                      {t`for more info.`}
                     </>
                   }
                 />
@@ -257,28 +254,26 @@ function NodeTypeStep({ isIdentifierRequired }) {
                   convergenceFieldHelpers.setValue(selection);
                   setIsConvergenceOpen(false);
                 }}
-                aria-label={i18n._(t`Convergence select`)}
-                typeAheadAriaLabel={i18n._(t`Convergence select`)}
+                aria-label={t`Convergence select`}
+                typeAheadAriaLabel={t`Convergence select`}
                 className="convergenceSelect"
                 ouiaId="convergenceSelect"
-                noResultsFoundText={i18n._(t`No results found`)}
+                noResultsFoundText={t`No results found`}
               >
                 <SelectOption key="any" value="any" id="select-option-any">
-                  {i18n._(t`Any`)}
+                  {t`Any`}
                 </SelectOption>
                 <SelectOption key="all" value="all" id="select-option-all">
-                  {i18n._(t`All`)}
+                  {t`All`}
                 </SelectOption>
               </Select>
             </FormGroup>
             <FormField
               id="node-alias"
               name="identifier"
-              aria-label={i18n._(t`Node Alias`)}
-              label={i18n._(t`Node Alias`)}
-              tooltip={i18n._(
-                t`If specified, this field will be shown on the node instead of the resource name when viewing the workflow`
-              )}
+              aria-label={t`Node Alias`}
+              label={t`Node Alias`}
+              tooltip={t`If specified, this field will be shown on the node instead of the resource name when viewing the workflow`}
               isRequired={isIdentifierRequired}
               validate={isIdentifierRequired ? required(null) : null}
               validated={isValid ? 'default' : 'error'}

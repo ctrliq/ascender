@@ -1,7 +1,6 @@
 import React from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import { t } from '@lingui/react/macro';
 import {
   Toolbar,
   ToolbarContent,
@@ -19,7 +18,7 @@ import {
   updateQueryString,
 } from 'util/qs';
 import { isJobRunning } from 'util/jobs';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 
 const SearchToolbarContent = styled(ToolbarContent)`
   padding-left: 0px !important;
@@ -35,7 +34,7 @@ function JobOutputSearch({
   isFollowModeEnabled,
   setIsFollowModeEnabled,
 }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const location = useLocation();
   const history = useHistory();
 
@@ -90,7 +89,7 @@ function JobOutputSearch({
 
   const columns = [
     {
-      name: i18n._(t`Stdout`),
+      name: t`Stdout`,
       key: 'stdout__icontains',
       isDefault: true,
     },
@@ -98,44 +97,44 @@ function JobOutputSearch({
 
   if (job.type !== 'system_job' && job.type !== 'inventory_update') {
     columns.push({
-      name: i18n._(t`Event`),
+      name: t`Event`,
       key: 'or__event',
       options: [
-        ['debug', i18n._(t`Debug`)],
-        ['deprecated', i18n._(t`Deprecated`)],
-        ['error', i18n._(t`Error`)],
-        ['runner_on_file_diff', i18n._(t`File Difference`)],
-        ['playbook_on_setup', i18n._(t`Gathering Facts`)],
-        ['runner_on_async_failed', i18n._(t`Host Async Failure`)],
-        ['runner_on_async_ok', i18n._(t`Host Async OK`)],
-        ['runner_on_failed', i18n._(t`Host Failed`)],
-        ['runner_on_error', i18n._(t`Host Failure`)],
-        ['runner_on_ok', i18n._(t`Host OK`)],
-        ['runner_on_async_poll', i18n._(t`Host Polling`)],
-        ['runner_retry', i18n._(t`Host Retry`)],
-        ['runner_on_skipped', i18n._(t`Host Skipped`)],
-        ['runner_on_start', i18n._(t`Host Started`)],
-        ['runner_on_unreachable', i18n._(t`Host Unreachable`)],
-        ['playbook_on_include', i18n._(t`Including File`)],
-        ['runner_item_on_failed', i18n._(t`Item Failed`)],
-        ['runner_item_on_ok', i18n._(t`Item OK`)],
-        ['runner_item_on_skipped', i18n._(t`Item Skipped`)],
-        ['playbook_on_no_hosts_matched', i18n._(t`No Hosts Matched`)],
-        ['playbook_on_no_hosts_remaining', i18n._(t`No Hosts Remaining`)],
-        ['runner_on_no_hosts', i18n._(t`No Hosts Remaining`)],
-        ['playbook_on_play_start', i18n._(t`Play Started`)],
-        ['playbook_on_stats', i18n._(t`Playbook Complete`)],
-        ['playbook_on_start', i18n._(t`Playbook Started`)],
-        ['playbook_on_notify', i18n._(t`Running Handlers`)],
-        ['system_warning', i18n._(t`System Warning`)],
-        ['playbook_on_task_start', i18n._(t`Task Started`)],
-        ['playbook_on_vars_prompt', i18n._(t`Variables Prompted`)],
-        ['verbose', i18n._(t`Verbose`)],
-        ['warning', i18n._(t`Warning`)],
+        ['debug', t`Debug`],
+        ['deprecated', t`Deprecated`],
+        ['error', t`Error`],
+        ['runner_on_file_diff', t`File Difference`],
+        ['playbook_on_setup', t`Gathering Facts`],
+        ['runner_on_async_failed', t`Host Async Failure`],
+        ['runner_on_async_ok', t`Host Async OK`],
+        ['runner_on_failed', t`Host Failed`],
+        ['runner_on_error', t`Host Failure`],
+        ['runner_on_ok', t`Host OK`],
+        ['runner_on_async_poll', t`Host Polling`],
+        ['runner_retry', t`Host Retry`],
+        ['runner_on_skipped', t`Host Skipped`],
+        ['runner_on_start', t`Host Started`],
+        ['runner_on_unreachable', t`Host Unreachable`],
+        ['playbook_on_include', t`Including File`],
+        ['runner_item_on_failed', t`Item Failed`],
+        ['runner_item_on_ok', t`Item OK`],
+        ['runner_item_on_skipped', t`Item Skipped`],
+        ['playbook_on_no_hosts_matched', t`No Hosts Matched`],
+        ['playbook_on_no_hosts_remaining', t`No Hosts Remaining`],
+        ['runner_on_no_hosts', t`No Hosts Remaining`],
+        ['playbook_on_play_start', t`Play Started`],
+        ['playbook_on_stats', t`Playbook Complete`],
+        ['playbook_on_start', t`Playbook Started`],
+        ['playbook_on_notify', t`Running Handlers`],
+        ['system_warning', t`System Warning`],
+        ['playbook_on_task_start', t`Task Started`],
+        ['playbook_on_vars_prompt', t`Variables Prompted`],
+        ['verbose', t`Verbose`],
+        ['warning', t`Warning`],
       ],
     });
   }
-  columns.push({ name: i18n._(t`Advanced`), key: 'advanced' });
+  columns.push({ name: t`Advanced`, key: 'advanced' });
   const isDisabled = isJobRunning(job.status);
 
   return (
@@ -143,7 +142,7 @@ function JobOutputSearch({
       id="job_output-toolbar"
       clearAllFilters={handleRemoveAllSearchTerms}
       collapseListedFiltersBreakpoint="lg"
-      clearFiltersButtonText={i18n._(t`Clear all filters`)}
+      clearFiltersButtonText={t`Clear all filters`}
       ouiaId="job-output-toolbar"
     >
       <SearchToolbarContent>
@@ -151,9 +150,7 @@ function JobOutputSearch({
           <ToolbarItem variant="search-filter">
             {isDisabled ? (
               <Tooltip
-                content={i18n._(
-                  t`Search is disabled while the job is running`
-                )}
+                content={t`Search is disabled while the job is running`}
               >
                 <Search
                   qsConfig={qsConfig}
@@ -186,7 +183,7 @@ function JobOutputSearch({
             variant={isFollowModeEnabled ? 'secondary' : 'primary'}
             onClick={handleFollowToggle}
           >
-            {isFollowModeEnabled ? i18n._(t`Unfollow`) : i18n._(t`Follow`)}
+            {isFollowModeEnabled ? t`Unfollow` : t`Follow`}
           </Button>
         ) : null}
       </SearchToolbarContent>

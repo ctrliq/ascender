@@ -8,8 +8,7 @@ import {
   useParams,
 } from 'react-router-dom';
 
-import { useLingui } from '@lingui/react';
-import { t } from '@lingui/react/macro';
+import { useLingui } from '@lingui/react/macro';
 import { Card, PageSection } from '@patternfly/react-core';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 
@@ -24,7 +23,7 @@ import ExecutionEnvironmentEdit from './ExecutionEnvironmentEdit';
 import ExecutionEnvironmentTemplateList from './ExecutionEnvironmentTemplate';
 
 function ExecutionEnvironment({ setBreadcrumb }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const { id } = useParams();
   const { pathname } = useLocation();
 
@@ -56,7 +55,7 @@ function ExecutionEnvironment({ setBreadcrumb }) {
       name: (
         <>
           <CaretLeftIcon />
-          {i18n._(t`Back to execution environments`)}
+          {t`Back to execution environments`}
         </>
       ),
       link: '/execution_environments',
@@ -64,12 +63,12 @@ function ExecutionEnvironment({ setBreadcrumb }) {
       persistentFilterKey: 'executionEnvironments',
     },
     {
-      name: i18n._(t`Details`),
+      name: t`Details`,
       link: `/execution_environments/${id}/details`,
       id: 0,
     },
     {
-      name: i18n._(t`Templates`),
+      name: t`Templates`,
       link: `/execution_environments/${id}/templates`,
       id: 1,
     },
@@ -82,9 +81,9 @@ function ExecutionEnvironment({ setBreadcrumb }) {
           <ContentError error={contentError}>
             {contentError.response?.status === 404 && (
               <span>
-                {i18n._(t`Execution environment not found.`)}{' '}
+                {t`Execution environment not found.`}{' '}
                 <Link to="/execution_environments">
-                  {i18n._(t`View all execution environments`)}
+                  {t`View all execution environments`}
                 </Link>
               </span>
             )}

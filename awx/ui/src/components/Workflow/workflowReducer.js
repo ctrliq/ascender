@@ -1,6 +1,3 @@
-import { t } from '@lingui/react/macro';
-import { i18n } from '@lingui/core';
-
 export function initReducer() {
   return {
     addLinkSourceNode: null,
@@ -51,7 +48,7 @@ export default function visualizerReducer(state, action) {
     case 'DELETE_NODE':
       return deleteNode(state);
     case 'GENERATE_NODES_AND_LINKS':
-      return generateNodesAndLinks(state, action.nodes);
+      return generateNodesAndLinks(state, action.nodes, action.startLabel);
     case 'RESET':
       return initReducer();
     case 'SELECT_SOURCE_FOR_LINKING':
@@ -408,7 +405,7 @@ function deleteNode(state) {
   };
 }
 
-function generateNodes(workflowNodes) {
+function generateNodes(workflowNodes, startLabel = 'START') {
   const allNodeIds = [];
   const chartNodeIdToIndexMapping = {};
   const nodeIdToChartNodeIdMapping = {};
@@ -417,7 +414,7 @@ function generateNodes(workflowNodes) {
     {
       id: 1,
       fullUnifiedJobTemplate: {
-        name: i18n._(t`START`),
+        name: startLabel,
       },
     },
   ];
@@ -500,14 +497,14 @@ function generateLinks(
   return [arrayOfLinksForChart, nonRootNodeIds];
 }
 
-function generateNodesAndLinks(state, workflowNodes) {
+function generateNodesAndLinks(state, workflowNodes, startLabel = 'START') {
   const [
     arrayOfNodesForChart,
     allNodeIds,
     nodeIdToChartNodeIdMapping,
     chartNodeIdToIndexMapping,
     nodeIdCounter,
-  ] = generateNodes(workflowNodes);
+  ] = generateNodes(workflowNodes, startLabel);
   const [arrayOfLinksForChart, nonRootNodeIds] = generateLinks(
     workflowNodes,
     chartNodeIdToIndexMapping,

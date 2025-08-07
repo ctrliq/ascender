@@ -1,8 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { Route, withRouter, Switch, useRouteMatch } from 'react-router-dom';
 
-import { useLingui } from '@lingui/react';
-import { t } from '@lingui/react/macro';
+import { useLingui } from '@lingui/react/macro';
 
 import { Config } from 'contexts/Config';
 import ScreenHeader from 'components/ScreenHeader/ScreenHeader';
@@ -12,11 +11,11 @@ import OrganizationAdd from './OrganizationAdd/OrganizationAdd';
 import Organization from './Organization';
 
 function Organizations() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const match = useRouteMatch();
   const [breadcrumbConfig, setBreadcrumbConfig] = useState({
-    '/organizations': i18n._(t`Organizations`),
-    '/organizations/add': i18n._(t`Create New Organization`),
+    '/organizations': t`Organizations`,
+    '/organizations/add': t`Create New Organization`,
   });
 
   const setBreadcrumb = useCallback(
@@ -26,23 +25,19 @@ function Organizations() {
       }
 
       const breadcrumb = {
-        '/organizations': i18n._(t`Organizations`),
-        '/organizations/add': i18n._(t`Create New Organization`),
+        '/organizations': t`Organizations`,
+        '/organizations/add': t`Create New Organization`,
         [`/organizations/${organization.id}`]: `${organization.name}`,
-        [`/organizations/${organization.id}/edit`]: i18n._(t`Edit Details`),
-        [`/organizations/${organization.id}/details`]: i18n._(t`Details`),
-        [`/organizations/${organization.id}/access`]: i18n._(t`Access`),
-        [`/organizations/${organization.id}/teams`]: i18n._(t`Teams`),
-        [`/organizations/${organization.id}/notifications`]: i18n._(
-          t`Notifications`
-        ),
-        [`/organizations/${organization.id}/execution_environments`]: i18n._(
-          t`Execution Environments`
-        ),
+        [`/organizations/${organization.id}/edit`]: t`Edit Details`,
+        [`/organizations/${organization.id}/details`]: t`Details`,
+        [`/organizations/${organization.id}/access`]: t`Access`,
+        [`/organizations/${organization.id}/teams`]: t`Teams`,
+        [`/organizations/${organization.id}/notifications`]: t`Notifications`,
+        [`/organizations/${organization.id}/execution_environments`]: t`Execution Environments`,
       };
       setBreadcrumbConfig(breadcrumb);
     },
-    [i18n]
+    [t]
   );
 
   return (

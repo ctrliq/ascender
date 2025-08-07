@@ -1,6 +1,5 @@
 import React from 'react';
-import { t } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import {
   Alert,
   AlertActionLink,
@@ -30,14 +29,14 @@ import { useConfig } from 'contexts/Config';
 
 function ConstructedInventoryHint() {
   const config = useConfig();
-  const { i18n } = useLingui();
+  const { t } = useLingui();
 
   return (
     <Alert
       isExpandable
       isInline
       variant="info"
-      title={i18n._(t`How to use constructed inventory plugin`)}
+      title={t`How to use constructed inventory plugin`}
       actionLinks={
         <AlertActionLink
           href={`${getDocsBaseUrl(
@@ -47,75 +46,75 @@ function ConstructedInventoryHint() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          {i18n._(t`View constructed inventory documentation here`)}{' '}
+          {t`View constructed inventory documentation here`}{' '}
           <ExternalLinkAltIcon />
         </AlertActionLink>
       }
     >
       <span>
-        {i18n._(t`This table gives a few useful parameters of the constructed
-               inventory plugin. For the full list of parameters `)}{' '}
+        {t`This table gives a few useful parameters of the constructed
+               inventory plugin. For the full list of parameters `}{' '}
         <a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/constructed_inventory.html">
-          {i18n._(t`view the constructed inventory plugin docs here.`)}
+          {t`view the constructed inventory plugin docs here.`}
         </a>
       </span>
       <br />
       <br />
       <TableComposable
-        aria-label={i18n._(t`Constructed inventory parameters table`)}
+        aria-label={t`Constructed inventory parameters table`}
         variant="compact"
       >
         <Thead>
           <Tr>
-            <Th>{i18n._(t`Parameter`)}</Th>
-            <Th>{i18n._(t`Description`)}</Th>
+            <Th>{t`Parameter`}</Th>
+            <Th>{t`Description`}</Th>
           </Tr>
         </Thead>
         <Tbody>
           <Tr ouiaId="plugin-row">
-            <Td dataLabel={i18n._(t`name`)}>
+            <Td dataLabel={t`name`}>
               <code>plugin</code>
-              <p style={{ color: 'blue' }}>{i18n._(t`string`)}</p>
-              <p style={{ color: 'red' }}>{i18n._(t`required`)}</p>
+              <p style={{ color: 'blue' }}>{t`string`}</p>
+              <p style={{ color: 'red' }}>{t`required`}</p>
             </Td>
-            <Td dataLabel={i18n._(t`description`)}>
-              {i18n._(t`Token that ensures this is a source file
-              for the ‘constructed’ plugin.`)}
+            <Td dataLabel={t`description`}>
+              {t`Token that ensures this is a source file
+              for the ‘constructed’ plugin.`}
             </Td>
           </Tr>
           <Tr key="strict">
-            <Td dataLabel={i18n._(t`name`)}>
+            <Td dataLabel={t`name`}>
               <code>strict</code>
-              <p style={{ color: 'blue' }}>{i18n._(t`boolean`)}</p>
+              <p style={{ color: 'blue' }}>{t`boolean`}</p>
             </Td>
-            <Td dataLabel={i18n._(t`description`)}>
-              {i18n._(t`If yes make invalid entries a fatal error, otherwise skip and
-              continue.`)}{' '}
+            <Td dataLabel={t`description`}>
+              {t`If yes make invalid entries a fatal error, otherwise skip and
+              continue.`}{' '}
               <br />
-              {i18n._(t`If users need feedback about the correctness
+              {t`If users need feedback about the correctness
               of their constructed groups, it is highly recommended
-              to use strict: true in the plugin configuration.`)}
+              to use strict: true in the plugin configuration.`}
             </Td>
           </Tr>
           <Tr key="groups">
-            <Td dataLabel={i18n._(t`name`)}>
+            <Td dataLabel={t`name`}>
               <code>groups</code>
-              <p style={{ color: 'blue' }}>{i18n._(t`dictionary`)}</p>
+              <p style={{ color: 'blue' }}>{t`dictionary`}</p>
             </Td>
-            <Td dataLabel={i18n._(t`description`)}>
-              {i18n._(t`Add hosts to group based on Jinja2 conditionals.`)}
+            <Td dataLabel={t`description`}>
+              {t`Add hosts to group based on Jinja2 conditionals.`}
             </Td>
           </Tr>
           <Tr key="compose">
-            <Td dataLabel={i18n._(t`name`)}>
+            <Td dataLabel={t`name`}>
               <code>compose</code>
-              <p style={{ color: 'blue' }}>{i18n._(t`dictionary`)}</p>
+              <p style={{ color: 'blue' }}>{t`dictionary`}</p>
             </Td>
-            <Td dataLabel={i18n._(t`description`)}>
-              {i18n._(t`Create vars from jinja2 expressions. This can be useful
+            <Td dataLabel={t`description`}>
+              {t`Create vars from jinja2 expressions. This can be useful
               if the constructed groups you define do not contain the expected
               hosts. This can be used to add hostvars from expressions so
-              that you know what the resultant values of those expressions are.`)}
+              that you know what the resultant values of those expressions are.`}
             </Td>
           </Tr>
         </Tbody>
@@ -125,10 +124,10 @@ function ConstructedInventoryHint() {
       <Panel>
         <CardBody>
           <Form autoComplete="off">
-            <b>{i18n._(t`Constructed inventory examples`)}</b>
-            <LimitToIntersectionExample i18n={i18n} />
-            <FilterOnNestedGroupExample i18n={i18n} />
-            <HostsByProcessorTypeExample i18n={i18n} />
+            <b>{t`Constructed inventory examples`}</b>
+            <LimitToIntersectionExample t={t} />
+            <FilterOnNestedGroupExample t={t} />
+            <HostsByProcessorTypeExample t={t} />
           </Form>
         </CardBody>
       </Panel>
@@ -136,7 +135,7 @@ function ConstructedInventoryHint() {
   );
 }
 
-function LimitToIntersectionExample({ i18n }) {
+function LimitToIntersectionExample({ t }) {
   const [copied, setCopied] = React.useState(false);
   const clipboardCopyFunc = (event, text) => {
     navigator.clipboard.writeText(text.toString());
@@ -158,30 +157,30 @@ groups:
       header={
         <FormFieldGroupHeader
           titleText={{
-            text: i18n._(t`Construct 2 groups, limit to intersection`),
+            text: t`Construct 2 groups, limit to intersection`,
             id: 'intersection-example',
           }}
-          titleDescription={i18n._(t`This constructed inventory input 
+          titleDescription={t`This constructed inventory input 
             creates a group for both of the categories and uses 
             the limit (host pattern) to only return hosts that 
-            are in the intersection of those two groups.`)}
+            are in the intersection of those two groups.`}
         />
       }
     >
       <FormGroup
-        label={i18n._(t`Limit`)}
+        label={t`Limit`}
         fieldId="intersection-example-limit"
       >
         <ClipboardCopy
           isReadOnly
-          hoverTip={i18n._(t`Copy`)}
-          clickTip={i18n._(t`Copied`)}
+          hoverTip={t`Copy`}
+          clickTip={t`Copied`}
         >
           {limitToIntersectionLimit}
         </ClipboardCopy>
       </FormGroup>
       <FormGroup
-        label={i18n._(t`Source vars`)}
+        label={t`Source vars`}
         fieldId="intersection-example-source-vars"
       >
         <CodeBlock
@@ -190,7 +189,7 @@ groups:
               <ClipboardCopyButton
                 id="intersection-example-source-vars"
                 textId="intersection-example-source-vars"
-                aria-label={i18n._(t`Copy to clipboard`)}
+                aria-label={t`Copy to clipboard`}
                 onClick={(e) => onClick(e, limitToIntersectionCode)}
                 exitDelay={copied ? 1500 : 600}
                 maxWidth="110px"
@@ -198,8 +197,8 @@ groups:
                 onTooltipHidden={() => setCopied(false)}
               >
                 {copied
-                  ? i18n._(t`Successfully copied to clipboard!`)
-                  : i18n._(t`Copy to clipboard`)}
+                  ? t`Successfully copied to clipboard!`
+                  : t`Copy to clipboard`}
               </ClipboardCopyButton>
             </CodeBlockAction>
           }
@@ -212,7 +211,7 @@ groups:
     </FormFieldGroupExpandable>
   );
 }
-function FilterOnNestedGroupExample({ i18n }) {
+function FilterOnNestedGroupExample({ t }) {
   const [copied, setCopied] = React.useState(false);
   const clipboardCopyFunc = (event, text) => {
     navigator.clipboard.writeText(text.toString());
@@ -243,18 +242,18 @@ function FilterOnNestedGroupExample({ i18n }) {
       header={
         <FormFieldGroupHeader
           titleText={{
-            text: i18n._(t`Filter on nested group name`),
+            text: t`Filter on nested group name`,
             id: 'nested-groups-example',
           }}
-          titleDescription={i18n._(t`This constructed inventory input
+          titleDescription={t`This constructed inventory input
             creates a group for both of the categories and uses
             the limit (host pattern) to only return hosts that
-            are in the intersection of those two groups.`)}
+            are in the intersection of those two groups.`}
         />
       }
     >
       <FormGroup>
-        <p>{i18n._(t`Nested groups inventory definition:`)}</p>
+        <p>{t`Nested groups inventory definition:`}</p>
         <CodeBlock>
           <CodeBlockCode id="nested-groups-example-inventory">
             {nestedGroupsInventory}
@@ -262,19 +261,19 @@ function FilterOnNestedGroupExample({ i18n }) {
         </CodeBlock>
       </FormGroup>
       <FormGroup
-        label={i18n._(t`Limit`)}
+        label={t`Limit`}
         fieldId="nested-groups-example-limit"
       >
         <ClipboardCopy
           isReadOnly
-          hoverTip={i18n._(t`Copy`)}
-          clickTip={i18n._(t`Copied`)}
+          hoverTip={t`Copy`}
+          clickTip={t`Copied`}
         >
           {nestedGroupsInventoryLimit}
         </ClipboardCopy>
       </FormGroup>
       <FormGroup
-        label={i18n._(t`Source vars`)}
+        label={t`Source vars`}
         fieldId="nested-groups-example-source-vars"
       >
         <CodeBlock
@@ -283,7 +282,7 @@ function FilterOnNestedGroupExample({ i18n }) {
               <ClipboardCopyButton
                 id="nested-groups-example-source-vars"
                 textId="nested-groups-example-source-vars"
-                aria-label={i18n._(t`Copy to clipboard`)}
+                aria-label={t`Copy to clipboard`}
                 onClick={(e) => onClick(e, nestedGroupsInventorySourceVars)}
                 exitDelay={copied ? 1500 : 600}
                 maxWidth="110px"
@@ -291,8 +290,8 @@ function FilterOnNestedGroupExample({ i18n }) {
                 onTooltipHidden={() => setCopied(false)}
               >
                 {copied
-                  ? i18n._(t`Successfully copied to clipboard!`)
-                  : i18n._(t`Copy to clipboard`)}
+                  ? t`Successfully copied to clipboard!`
+                  : t`Copy to clipboard`}
               </ClipboardCopyButton>
             </CodeBlockAction>
           }
@@ -305,7 +304,7 @@ function FilterOnNestedGroupExample({ i18n }) {
     </FormFieldGroupExpandable>
   );
 }
-function HostsByProcessorTypeExample({ i18n }) {
+function HostsByProcessorTypeExample({ t }) {
   const [copied, setCopied] = React.useState(false);
   const clipboardCopyFunc = (event, text) => {
     navigator.clipboard.writeText(text.toString());
@@ -327,28 +326,28 @@ groups:
       header={
         <FormFieldGroupHeader
           titleText={{
-            text: i18n._(t`Hosts by processor type`),
+            text: t`Hosts by processor type`,
             id: 'processor-example',
           }}
-          titleDescription={i18n._(t`It is hard to give a specification for
+          titleDescription={t`It is hard to give a specification for
             the inventory for Ansible facts, because to populate
             the system facts you need to run a playbook against
             the inventory that has \`gather_facts: true\`. The
-            actual facts will differ system-to-system.`)}
+            actual facts will differ system-to-system.`}
         />
       }
     >
-      <FormGroup label={i18n._(t`Limit`)} fieldId="processor-example-limit">
+      <FormGroup label={t`Limit`} fieldId="processor-example-limit">
         <ClipboardCopy
           isReadOnly
-          hoverTip={i18n._(t`Copy`)}
-          clickTip={i18n._(t`Copied`)}
+          hoverTip={t`Copy`}
+          clickTip={t`Copied`}
         >
           {hostsByProcessorLimit}
         </ClipboardCopy>
       </FormGroup>
       <FormGroup
-        label={i18n._(t`Source vars`)}
+        label={t`Source vars`}
         fieldId="processor-example-source-vars"
       >
         <CodeBlock
@@ -357,7 +356,7 @@ groups:
               <ClipboardCopyButton
                 id="processor-example-source-vars"
                 textId="processor-example-source-vars"
-                aria-label={i18n._(t`Copy to clipboard`)}
+                aria-label={t`Copy to clipboard`}
                 onClick={(e) => onClick(e, hostsByProcessorSourceVars)}
                 exitDelay={copied ? 1500 : 600}
                 maxWidth="110px"
@@ -365,8 +364,8 @@ groups:
                 onTooltipHidden={() => setCopied(false)}
               >
                 {copied
-                  ? i18n._(t`Successfully copied to clipboard!`)
-                  : i18n._(t`Copy to clipboard`)}
+                  ? t`Successfully copied to clipboard!`
+                  : t`Copy to clipboard`}
               </ClipboardCopyButton>
             </CodeBlockAction>
           }

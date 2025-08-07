@@ -1,14 +1,13 @@
 import React from 'react';
 import { Link, Redirect, Route, Switch } from 'react-router-dom';
-import { useLingui } from '@lingui/react';
-import { t } from '@lingui/react/macro';
+import { useLingui } from '@lingui/react/macro';
 import { PageSection, Card } from '@patternfly/react-core';
 import ContentError from 'components/ContentError';
 import TroubleshootingDetail from './TroubleshootingDetail';
 import TroubleshootingEdit from './TroubleshootingEdit';
 
 function Troubleshooting() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const baseURL = '/settings/troubleshooting';
   return (
     <PageSection>
@@ -24,7 +23,7 @@ function Troubleshooting() {
           <Route key="not-found" path={`${baseURL}/*`}>
             <ContentError isNotFound>
               <Link to={`${baseURL}/details`}>
-                {i18n._(t`View Troubleshooting settings`)}
+                {t`View Troubleshooting settings`}
               </Link>
             </ContentError>
           </Route>

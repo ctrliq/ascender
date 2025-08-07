@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import {
   Button,
@@ -39,8 +39,8 @@ const Label = styled.span`
 `;
 
 function ProjectDetail({ project }) {
-  const { i18n } = useLingui();
-  const projectHelpText = getProjectHelpText(i18n);
+  const { t } = useLingui();
+  const projectHelpText = getProjectHelpText(t);
   const {
     allow_override,
     created,
@@ -79,7 +79,7 @@ function ProjectDetail({ project }) {
   const brandName = useBrandName();
 
   const { error, dismissError } = useDismissableError(deleteError);
-  const deleteDetailsRequests = relatedResourceDeleteRequests.project(project);
+  const deleteDetailsRequests = relatedResourceDeleteRequests(t).project(project);
   let optionsList = '';
   if (
     scm_clean ||
@@ -92,13 +92,13 @@ function ProjectDetail({ project }) {
       <TextList component={TextListVariants.ul}>
         {scm_clean && (
           <TextListItem component={TextListItemVariants.li}>
-            {i18n._(`Discard local changes before syncing`)}
+            {t`Discard local changes before syncing`}
             <Popover content={projectHelpText.options.clean} />
           </TextListItem>
         )}
         {scm_delete_on_update && (
           <TextListItem component={TextListItemVariants.li}>
-            {i18n._(`Delete the project before syncing`)}{' '}
+            {t`Delete the project before syncing`}{' '}
             <Popover
               content={projectHelpText.options.delete}
               id="scm-delete-on-update"
@@ -107,19 +107,19 @@ function ProjectDetail({ project }) {
         )}
         {scm_track_submodules && (
           <TextListItem component={TextListItemVariants.li}>
-            {i18n._(`Track submodules latest commit on branch`)}{' '}
+            {t`Track submodules latest commit on branch`}{' '}
             <Popover content={projectHelpText.options.trackSubModules} />
           </TextListItem>
         )}
         {scm_update_on_launch && (
           <TextListItem component={TextListItemVariants.li}>
-            {i18n._(`Update revision on job launch`)}{' '}
+            {t`Update revision on job launch`}{' '}
             <Popover content={projectHelpText.options.updateOnLaunch} />
           </TextListItem>
         )}
         {allow_override && (
           <TextListItem component={TextListItemVariants.li}>
-            {i18n._(`Allow branch override`)}{' '}
+            {t`Allow branch override`}{' '}
             <Popover content={projectHelpText.options.allowBranchOverride} />
           </TextListItem>
         )}
@@ -128,16 +128,16 @@ function ProjectDetail({ project }) {
   }
   const generateLastJobTooltip = (job) => (
     <>
-      <div>{i18n._(`MOST RECENT SYNC`)}</div>
+      <div>{t`MOST RECENT SYNC`}</div>
       <div>
-        {i18n._(`JOB ID:`)} {job.id}
+        {t`JOB ID:`} {job.id}
       </div>
       <div>
-        {i18n._(`STATUS:`)} {job.status.toUpperCase()}
+        {t`STATUS:`} {job.status.toUpperCase()}
       </div>
       {job.finished && (
         <div>
-          {i18n._(`FINISHED:`)} {formatDateString(job.finished)}
+          {t`FINISHED:`} {formatDateString(job.finished)}
         </div>
       )}
     </>
@@ -159,7 +159,7 @@ function ProjectDetail({ project }) {
     <CardBody>
       <DetailList gutter="sm">
         <Detail
-          label={i18n._(`Last Job Status`)}
+          label={t`Last Job Status`}
           value={
             job && (
               <Tooltip
@@ -175,14 +175,14 @@ function ProjectDetail({ project }) {
           }
         />
         <Detail
-          label={i18n._(`Name`)}
+          label={t`Name`}
           value={name}
           dataCy="project-detail-name"
         />
-        <Detail label={i18n._(`Description`)} value={description} />
+        <Detail label={t`Description`} value={description} />
         {summary_fields.organization && (
           <Detail
-            label={i18n._(`Organization`)}
+            label={t`Organization`}
             value={
               <Link
                 to={`/organizations/${summary_fields.organization.id}/details`}
@@ -193,20 +193,20 @@ function ProjectDetail({ project }) {
           />
         )}
         <Detail
-          label={i18n._(`Source Control Type`)}
+          label={t`Source Control Type`}
           value={
-            scm_type === '' ? i18n._(`Manual`) : toTitleCase(project.scm_type)
+            scm_type === '' ? t`Manual` : toTitleCase(project.scm_type)
           }
         />
         <Detail
-          label={i18n._(`Source Control Revision`)}
+          label={t`Source Control Revision`}
           value={
             scm_revision ? (
               <ClipboardCopy
                 data-cy="project-copy-revision"
                 variant="inline-compact"
-                clickTip={i18n._(`Successfully copied to clipboard!`)}
-                hoverTip={i18n._(`Copy full revision to clipboard.`)}
+                clickTip={t`Successfully copied to clipboard!`}
+                hoverTip={t`Copy full revision to clipboard.`}
                 onCopy={() =>
                   navigator.clipboard.writeText(scm_revision.toString())
                 }
@@ -215,11 +215,9 @@ function ProjectDetail({ project }) {
               </ClipboardCopy>
             ) : (
               <Label
-                aria-label={i18n._(
-                  `The project must be synced before a revision is available.`
-                )}
+                aria-label={t`The project must be synced before a revision is available.`}
               >
-                {i18n._(`Sync for revision`)}
+                {t`Sync for revision`}
               </Label>
             )
           }
@@ -231,22 +229,22 @@ function ProjectDetail({ project }) {
               ? getSourceControlUrlHelpText()
               : ''
           }
-          label={i18n._(`Source Control URL`)}
+          label={t`Source Control URL`}
           value={scm_url}
         />
         <Detail
           helpText={projectHelpText.branchFormField}
-          label={i18n._(`Source Control Branch`)}
+          label={t`Source Control Branch`}
           value={scm_branch}
         />
         <Detail
           helpText={projectHelpText.sourceControlRefspec(docsURL)}
-          label={i18n._(`Source Control Refspec`)}
+          label={t`Source Control Refspec`}
           value={scm_refspec}
         />
         {summary_fields.signature_validation_credential && (
           <Detail
-            label={i18n._(`Content Signature Validation Credential`)}
+            label={t`Content Signature Validation Credential`}
             helpText={projectHelpText.signatureValidation}
             value={
               <CredentialChip
@@ -262,7 +260,7 @@ function ProjectDetail({ project }) {
         )}
         {summary_fields.credential && (
           <Detail
-            label={i18n._(`Source Control Credential`)}
+            label={t`Source Control Credential`}
             value={
               <CredentialChip
                 key={summary_fields.credential.id}
@@ -274,8 +272,8 @@ function ProjectDetail({ project }) {
           />
         )}
         <Detail
-          label={i18n._(`Cache Timeout`)}
-          value={`${scm_update_cache_timeout} ${i18n._(`Seconds`)}`}
+          label={t`Cache Timeout`}
+          value={`${scm_update_cache_timeout} ${t`Seconds`}`}
         />
         <ExecutionEnvironmentDetail
           helpText={projectHelpText.executionEnvironment}
@@ -287,30 +285,30 @@ function ProjectDetail({ project }) {
           {({ project_base_dir }) => (
             <Detail
               helpText={projectHelpText.projectBasePath(brandName)}
-              label={i18n._(`Project Base Path`)}
+              label={t`Project Base Path`}
               value={project_base_dir}
             />
           )}
         </Config>
         <Detail
           helpText={projectHelpText.projectLocalPath}
-          label={i18n._(`Playbook Directory`)}
+          label={t`Playbook Directory`}
           value={local_path}
         />
         <UserDateDetail
-          label={i18n._(`Created`)}
+          label={t`Created`}
           date={created}
           user={summary_fields.created_by}
         />
         <UserDateDetail
-          label={i18n._(`Last Modified`)}
+          label={t`Last Modified`}
           date={modified}
           user={summary_fields.modified_by}
         />
         {optionsList && (
           <Detail
             fullWidth
-            label={i18n._(`Enabled Options`)}
+            label={t`Enabled Options`}
             value={optionsList}
           />
         )}
@@ -319,21 +317,21 @@ function ProjectDetail({ project }) {
         {summary_fields.user_capabilities?.edit && (
           <Button
             ouiaId="project-detail-edit-button"
-            aria-label={i18n._(`edit`)}
+            aria-label={t`edit`}
             component={Link}
             to={`/projects/${id}/edit`}
           >
-            {i18n._(`Edit`)}
+            {t`Edit`}
           </Button>
         )}
         {summary_fields.user_capabilities?.start &&
           (['running', 'pending', 'waiting'].includes(job?.status) ? (
             <JobCancelButton
               job={{ id: job.id, type: 'project_update' }}
-              errorTitle={i18n._(`Project Sync Error`)}
-              title={i18n._(`Cancel Project Sync`)}
-              errorMessage={i18n._(`Failed to cancel Project Sync`)}
-              buttonText={i18n._(`Cancel Sync`)}
+              errorTitle={t`Project Sync Error`}
+              title={t`Cancel Project Sync`}
+              errorMessage={t`Failed to cancel Project Sync`}
+              buttonText={t`Cancel Sync`}
             />
           ) : (
             <ProjectSyncButton
@@ -344,15 +342,13 @@ function ProjectDetail({ project }) {
         {summary_fields.user_capabilities?.delete && (
           <DeleteButton
             name={name}
-            modalTitle={i18n._(`Delete Project`)}
+            modalTitle={t`Delete Project`}
             onConfirm={deleteProject}
             isDisabled={isLoading || job?.status === 'running'}
             deleteDetailsRequests={deleteDetailsRequests}
-            deleteMessage={i18n._(
-              `This project is currently being used by other resources. Are you sure you want to delete it?`
-            )}
+            deleteMessage={t`This project is currently being used by other resources. Are you sure you want to delete it?`}
           >
-            {i18n._(`Delete`)}
+            {t`Delete`}
           </DeleteButton>
         )}
       </CardActionsRow>
@@ -360,10 +356,10 @@ function ProjectDetail({ project }) {
         <AlertModal
           isOpen={error}
           variant="error"
-          title={i18n._(`Error!`)}
+          title={t`Error!`}
           onClose={dismissError}
         >
-          {i18n._(`Failed to delete project.`)}
+          {t`Failed to delete project.`}
           <ErrorDetail error={error} />
         </AlertModal>
       )}

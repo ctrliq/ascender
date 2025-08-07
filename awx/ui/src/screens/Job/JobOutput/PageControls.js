@@ -1,8 +1,7 @@
 import React from 'react';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 
 import 'styled-components/macro';
-import { t } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
 import {
   AngleDoubleUpIcon,
@@ -43,7 +42,7 @@ const PageControls = ({
   isFlatMode,
   isTemplateJob,
 }) => {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   return (
     <ControllsWrapper>
       <ExpandCollapseWrapper>
@@ -51,8 +50,8 @@ const PageControls = ({
           <Button
             aria-label={
               isAllCollapsed
-                ? i18n._(t`Expand job events`)
-                : i18n._(t`Collapse all job events`)
+                ? t`Expand job events`
+                : t`Collapse all job events`
             }
             variant="plain"
             type="button"
@@ -65,7 +64,7 @@ const PageControls = ({
       <ScrollWrapper>
         <Button
           ouiaId="job-output-scroll-previous-button"
-          aria-label={i18n._(t`Scroll previous`)}
+          aria-label={t`Scroll previous`}
           onClick={onScrollPrevious}
           variant="plain"
         >
@@ -73,7 +72,7 @@ const PageControls = ({
         </Button>
         <Button
           ouiaId="job-output-scroll-next-button"
-          aria-label={i18n._(t`Scroll next`)}
+          aria-label={t`Scroll next`}
           onClick={onScrollNext}
           variant="plain"
         >
@@ -81,7 +80,7 @@ const PageControls = ({
         </Button>
         <Button
           ouiaId="job-output-scroll-first-button"
-          aria-label={i18n._(t`Scroll first`)}
+          aria-label={t`Scroll first`}
           onClick={onScrollFirst}
           variant="plain"
         >
@@ -89,7 +88,7 @@ const PageControls = ({
         </Button>
         <Button
           ouiaId="job-output-scroll-last-button"
-          aria-label={i18n._(t`Scroll last`)}
+          aria-label={t`Scroll last`}
           onClick={onScrollLast}
           variant="plain"
         >

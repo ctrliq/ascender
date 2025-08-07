@@ -1,19 +1,18 @@
 import React from 'react';
 
-import { t } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 
 import { ChipGroup as PFChipGroup } from '@patternfly/react-core';
 import { number } from 'prop-types';
 
 function ChipGroup({ numChips, totalChips, ...props }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   return (
     <PFChipGroup
       {...props}
       numChips={numChips}
-      expandedText={i18n._(t`Show less`)}
-      collapsedText={i18n._(t`${totalChips - numChips} more`)}
+      expandedText={t`Show less`}
+      collapsedText={t`${totalChips - numChips} more`}
     />
   );
 }

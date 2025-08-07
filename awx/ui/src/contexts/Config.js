@@ -1,8 +1,7 @@
 import React, { useCallback, useContext, useEffect, useMemo } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 
-import { t } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import { ConfigAPI, MeAPI, UsersAPI, OrganizationsAPI } from 'api';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import AlertModal from 'components/AlertModal';
@@ -112,18 +111,18 @@ export const ConfigProvider = ({ children }) => {
     [config, request, isLoading]
   );
 
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   return (
     <ConfigContext.Provider value={value}>
       {error && (
         <AlertModal
           isOpen={error}
           variant="error"
-          title={i18n._(t`Error!`)}
+          title={t`Error!`}
           onClose={dismissError}
           ouiaId="config-error-modal"
         >
-          {i18n._(t`Failed to retrieve configuration.`)}
+          {t`Failed to retrieve configuration.`}
           <ErrorDetail error={error} />
         </AlertModal>
       )}

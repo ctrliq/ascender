@@ -1,8 +1,7 @@
 import 'styled-components/macro';
 import React, { useState, useCallback, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { useLingui } from '@lingui/react';
-import { t } from '@lingui/react/macro';
+import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
 import styled from 'styled-components';
 import { Alert, ToolbarItem } from '@patternfly/react-core';
@@ -31,7 +30,7 @@ function CredentialsStep({
   allowCredentialsWithPasswords,
   defaultCredentials = [],
 }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const history = useHistory();
   const location = useLocation();
   const [field, meta, helpers] = useField({
@@ -40,6 +39,7 @@ function CredentialsStep({
       credentialsValidator(
         allowCredentialsWithPasswords,
         val,
+        t,
         defaultCredentials ?? []
       ),
   });
@@ -105,6 +105,7 @@ function CredentialsStep({
       credentialsValidator(
         allowCredentialsWithPasswords,
         field.value,
+        t,
         defaultCredentials ?? []
       )
     );
@@ -160,12 +161,12 @@ function CredentialsStep({
       {types && types.length > 0 && (
         <ToolbarItem css=" display: flex; align-items: center;">
           <div css="flex: 0 0 25%; margin-right: 32px">
-            {i18n._(t`Selected Category`)}
+            {t`Selected Category`}
           </div>
           <AnsibleSelect
             css="flex: 1 1 75%;"
             id="multiCredentialsLookUp-select"
-            label={i18n._(t`Selected Category`)}
+            label={t`Selected Category`}
             data={types.map((type) => ({
               key: type.id,
               value: type.id,
@@ -188,29 +189,29 @@ function CredentialsStep({
         optionCount={count}
         searchColumns={[
           {
-            name: i18n._(t`Name`),
+            name: t`Name`,
             key: 'name__icontains',
             isDefault: true,
           },
           {
-            name: i18n._(t`Created By (Username)`),
+            name: t`Created By (Username)`,
             key: 'created_by__username__icontains',
           },
           {
-            name: i18n._(t`Modified By (Username)`),
+            name: t`Modified By (Username)`,
             key: 'modified_by__username__icontains',
           },
         ]}
         sortColumns={[
           {
-            name: i18n._(t`Name`),
+            name: t`Name`,
             key: 'name',
           },
         ]}
         searchableKeys={searchableKeys}
         relatedSearchableKeys={relatedSearchableKeys}
         multiple={isVault}
-        header={i18n._(t`Credentials`)}
+        header={t`Credentials`}
         name="credentials"
         qsConfig={QS_CONFIG}
         readOnly={false}

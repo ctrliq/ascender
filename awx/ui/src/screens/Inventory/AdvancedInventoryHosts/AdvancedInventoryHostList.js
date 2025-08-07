@@ -1,7 +1,6 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { t } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 
 import DataListToolbar from 'components/DataListToolbar';
 import PaginatedTable, {
@@ -23,7 +22,7 @@ const QS_CONFIG = getQSConfig('host', {
 });
 
 function AdvancedInventoryHostList({ inventory }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const location = useLocation();
   const [isAdHocLaunchLoading, setIsAdHocLaunchLoading] = useState(false);
   const {
@@ -73,21 +72,21 @@ function AdvancedInventoryHostList({ inventory }) {
       hasContentLoading={isLoading || isAdHocLaunchLoading}
       items={hosts}
       itemCount={count}
-      pluralizedItemName={i18n._(t`Hosts`)}
+      pluralizedItemName={t`Hosts`}
       qsConfig={QS_CONFIG}
       clearSelected={clearSelected}
       toolbarSearchColumns={[
         {
-          name: i18n._(t`Name`),
+          name: t`Name`,
           key: 'name__icontains',
           isDefault: true,
         },
         {
-          name: i18n._(t`Created by (username)`),
+          name: t`Created by (username)`,
           key: 'created_by__username',
         },
         {
-          name: i18n._(t`Modified by (username)`),
+          name: t`Modified by (username)`,
           key: 'modified_by__username',
         },
       ]}
@@ -113,9 +112,9 @@ function AdvancedInventoryHostList({ inventory }) {
       )}
       headerRow={
         <HeaderRow qsConfig={QS_CONFIG}>
-          <HeaderCell sortKey="name">{i18n._(t`Name`)}</HeaderCell>
-          <HeaderCell>{i18n._(t`Recent jobs`)}</HeaderCell>
-          <HeaderCell>{i18n._(t`Inventory`)}</HeaderCell>
+          <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
+          <HeaderCell>{t`Recent jobs`}</HeaderCell>
+          <HeaderCell>{t`Inventory`}</HeaderCell>
         </HeaderRow>
       }
       renderRow={(host, index) => (

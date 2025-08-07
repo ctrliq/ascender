@@ -1,7 +1,6 @@
 import React, { useContext, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { t } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import { bool, func } from 'prop-types';
 import { PlusIcon } from '@patternfly/react-icons';
 import {
@@ -32,7 +31,7 @@ const StartDiv = styled.div`
 `;
 
 function WorkflowStartNode({ onUpdateHelpText, showActionTooltip }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const ref = useRef(null);
   const startNodeRef = useRef(null);
   const [hovering, setHovering] = useState(false);
@@ -59,7 +58,7 @@ function WorkflowStartNode({ onUpdateHelpText, showActionTooltip }) {
         y="10"
         style={{ overflow: 'visible' }}
       >
-        <StartDiv ref={startNodeRef}>{i18n._(t`START`)}</StartDiv>
+        <StartDiv ref={startNodeRef}>{t`START`}</StartDiv>
       </StartForeignObject>
       {showActionTooltip && hovering && (
         <WorkflowActionTooltip
@@ -67,7 +66,7 @@ function WorkflowStartNode({ onUpdateHelpText, showActionTooltip }) {
             <WorkflowActionTooltipItem
               id="node-add"
               key="add"
-              onMouseEnter={() => onUpdateHelpText(i18n._(t`Add a new node`))}
+              onMouseEnter={() => onUpdateHelpText(t`Add a new node`)}
               onMouseLeave={() => onUpdateHelpText(null)}
               onClick={() => {
                 onUpdateHelpText(null);

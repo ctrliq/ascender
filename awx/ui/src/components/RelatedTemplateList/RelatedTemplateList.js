@@ -1,8 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
-
-import { t, Plural } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { Plural, useLingui } from '@lingui/react/macro';
 import { Card } from '@patternfly/react-core';
 import { JobTemplatesAPI } from 'api';
 import AlertModal from 'components/AlertModal';
@@ -42,7 +40,7 @@ const resources = {
 };
 
 function RelatedTemplateList({ searchParams, resourceName = null }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const { id } = useParams();
   const location = useLocation();
   const { addToast, Toast, toastProps } = useToast();
@@ -120,12 +118,12 @@ function RelatedTemplateList({ searchParams, resourceName = null }) {
     (newTemplateId) => {
       addToast({
         id: newTemplateId,
-        title: i18n._(t`Template copied successfully`),
+        title: t`Template copied successfully`,
         variant: AlertVariant.success,
         hasTimeout: true,
       });
     },
-    [addToast, i18n]
+    [addToast, t]
   );
 
   const handleTemplateDelete = async () => {
@@ -156,7 +154,7 @@ function RelatedTemplateList({ searchParams, resourceName = null }) {
   }
   const addButton = <ToolbarAddButton key="add" linkTo={linkTo} />;
 
-  const deleteDetailsRequests = relatedResourceDeleteRequests.template(
+  const deleteDetailsRequests = relatedResourceDeleteRequests(t).template(
     selected[0]
   );
 
@@ -168,29 +166,29 @@ function RelatedTemplateList({ searchParams, resourceName = null }) {
           hasContentLoading={isDeleteLoading || isLoading}
           items={jobTemplates}
           itemCount={itemCount}
-          pluralizedItemName={i18n._(t`Job templates`)}
+          pluralizedItemName={t`Job templates`}
           qsConfig={QS_CONFIG}
           clearSelected={clearSelected}
           toolbarSearchColumns={[
             {
-              name: i18n._(t`Name`),
+              name: t`Name`,
               key: 'name__icontains',
               isDefault: true,
             },
             {
-              name: i18n._(t`Created By (Username)`),
+              name: t`Created By (Username)`,
               key: 'created_by__username__icontains',
             },
             {
-              name: i18n._(t`Modified By (Username)`),
+              name: t`Modified By (Username)`,
               key: 'modified_by__username__icontains',
             },
             {
-              name: i18n._(t`Playbook name`),
+              name: t`Playbook name`,
               key: 'job_template__playbook__icontains',
             },
             {
-              name: i18n._(t`Label`),
+              name: t`Label`,
               key: 'labels__name__icontains',
             },
           ]}
@@ -198,10 +196,10 @@ function RelatedTemplateList({ searchParams, resourceName = null }) {
           toolbarRelatedSearchableKeys={relatedSearchableKeys}
           headerRow={
             <HeaderRow qsConfig={QS_CONFIG} isExpandable>
-              <HeaderCell sortKey="name">{i18n._(t`Name`)}</HeaderCell>
-              <HeaderCell sortKey="type">{i18n._(t`Type`)}</HeaderCell>
-              <HeaderCell>{i18n._(t`Recent jobs`)}</HeaderCell>
-              <HeaderCell>{i18n._(t`Actions`)}</HeaderCell>
+              <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
+              <HeaderCell sortKey="type">{t`Type`}</HeaderCell>
+              <HeaderCell>{t`Recent jobs`}</HeaderCell>
+              <HeaderCell>{t`Actions`}</HeaderCell>
             </HeaderRow>
           }
           renderToolbar={(props) => (
@@ -218,17 +216,13 @@ function RelatedTemplateList({ searchParams, resourceName = null }) {
                   key="delete"
                   onDelete={handleTemplateDelete}
                   itemsToDelete={selected}
-                  pluralizedItemName={i18n._(t`Job templates`)}
+                  pluralizedItemName={t`Job templates`}
                   deleteDetailsRequests={deleteDetailsRequests}
                   deleteMessage={
                     <Plural
                       value={selected.length}
-                      one={i18n._(
-                        t`This template is currently being used by some workflow nodes. Are you sure you want to delete it?`
-                      )}
-                      other={i18n._(
-                        t`Deleting these templates could impact some workflow nodes that rely on them. Are you sure you want to delete anyway?`
-                      )}
+                      one={t`This template is currently being used by some workflow nodes. Are you sure you want to delete it?`}
+                      other={t`Deleting these templates could impact some workflow nodes that rely on them. Are you sure you want to delete anyway?`}
                     />
                   }
                 />,
@@ -257,10 +251,10 @@ function RelatedTemplateList({ searchParams, resourceName = null }) {
       <AlertModal
         isOpen={deletionError}
         variant="danger"
-        title={i18n._(t`Error!`)}
+        title={t`Error!`}
         onClose={clearDeletionError}
       >
-        {i18n._(t`Failed to delete one or more job templates.`)}
+        {t`Failed to delete one or more job templates.`}
         <ErrorDetail error={deletionError} />
       </AlertModal>
     </>

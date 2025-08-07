@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { useParams, useHistory } from 'react-router-dom';
-import { t, Trans, Plural } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { Trans, Plural, useLingui } from '@lingui/react/macro';
 
 import {
   Button,
@@ -65,7 +64,7 @@ function computeForks(memCapacity, cpuCapacity, selectedCapacityAdjustment) {
 }
 
 function InstanceDetails({ setBreadcrumb, instanceGroup }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const config = useConfig();
   const { id, instanceId } = useParams();
   const history = useHistory();
@@ -179,14 +178,14 @@ function InstanceDetails({ setBreadcrumb, instanceGroup }) {
       name: (
         <>
           <CaretLeftIcon />
-          {i18n._(t`Back to Instances`)}
+          {t`Back to Instances`}
         </>
       ),
       link: `/instance_groups/${id}/instances`,
       id: 99,
     },
     {
-      name: i18n._(t`Details`),
+      name: t`Details`,
       link: `/instance_groups/${id}/instances/${instanceId}/details`,
       id: 0,
     },
@@ -209,12 +208,12 @@ function InstanceDetails({ setBreadcrumb, instanceGroup }) {
       <CardBody>
         <DetailList gutter="sm">
           <Detail
-            label={i18n._(t`Host Name`)}
+            label={t`Host Name`}
             value={instance.hostname}
             dataCy="instance-detail-name"
           />
           <Detail
-            label={i18n._(t`Status`)}
+            label={t`Status`}
             value={
               instance.node_state ? (
                 <StatusLabel status={instance.node_state} />
@@ -222,23 +221,23 @@ function InstanceDetails({ setBreadcrumb, instanceGroup }) {
             }
           />
           <Detail
-            label={i18n._(t`Policy Type`)}
+            label={t`Policy Type`}
             value={
               instance.managed_by_policy
-                ? i18n._(t`Auto`)
-                : i18n._(t`Manual`)
+                ? t`Auto`
+                : t`Manual`
             }
           />
           <Detail
-            label={i18n._(t`Running Jobs`)}
+            label={t`Running Jobs`}
             value={instance.jobs_running}
           />
-          <Detail label={i18n._(t`Total Jobs`)} value={instance.jobs_total} />
+          <Detail label={t`Total Jobs`} value={instance.jobs_total} />
           <Detail
-            label={i18n._(t`Last Health Check`)}
+            label={t`Last Health Check`}
             helpText={
               <>
-                {i18n._(t`Health checks are asynchronous tasks. See the`)}{' '}
+                {t`Health checks are asynchronous tasks. See the`}{' '}
                 <a
                   href={`${getDocsBaseUrl(
                     config
@@ -246,29 +245,27 @@ function InstanceDetails({ setBreadcrumb, instanceGroup }) {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  {i18n._(t`documentation`)}
+                  {t`documentation`}
                 </a>{' '}
-                {i18n._(t`for more info.`)}
+                {t`for more info.`}
               </>
             }
             value={formatHealthCheckTimeStamp(instance.last_health_check)}
           />
-          <Detail label={i18n._(t`Node Type`)} value={instance.node_type} />
+          <Detail label={t`Node Type`} value={instance.node_type} />
           <Detail
-            label={i18n._(t`Capacity Adjustment`)}
+            label={t`Capacity Adjustment`}
             value={
               <SliderHolder data-cy="slider-holder">
                 <div data-cy="cpu-capacity">
-                  {i18n._(t`CPU ${instance.cpu_capacity}`, {
-                    cpu_capacity: instance.cpu_capacity,
-                  })}
+                  {t`CPU ${instance.cpu_capacity}`}
                 </div>
                 <SliderForks data-cy="slider-forks">
                   <div data-cy="number-forks">
                     <Plural
                       value={forks}
-                      one={i18n._(t`# fork`)}
-                      other={i18n._(t`# forks`)}
+                      one={t`# fork`}
+                      other={t`# forks`}
                     />
                   </div>
                   <Slider
@@ -283,33 +280,31 @@ function InstanceDetails({ setBreadcrumb, instanceGroup }) {
                   />
                 </SliderForks>
                 <div data-cy="mem-capacity">
-                  {i18n._(t`RAM ${instance.mem_capacity}`, {
-                    mem_capacity: instance.mem_capacity,
-                  })}
+                  {t`RAM ${instance.mem_capacity}`}
                 </div>
               </SliderHolder>
             }
           />
           <Detail
-            label={i18n._(t`Used Capacity`)}
+            label={t`Used Capacity`}
             value={
               instance.enabled ? (
                 <Progress
-                  title={i18n._(t`Used capacity`)}
+                  title={t`Used capacity`}
                   value={Math.round(100 - instance.percent_capacity_remaining)}
                   measureLocation={ProgressMeasureLocation.top}
                   size={ProgressSize.sm}
-                  aria-label={i18n._(t`Used capacity`)}
+                  aria-label={t`Used capacity`}
                 />
               ) : (
-                <Unavailable>{i18n._(t`Unavailable`)}</Unavailable>
+                <Unavailable>{t`Unavailable`}</Unavailable>
               )
             }
           />
           {healthCheck?.errors && (
             <Detail
               fullWidth
-              label={i18n._(t`Errors`)}
+              label={t`Errors`}
               value={
                 <CodeBlock>
                   <CodeBlockCode>{healthCheck?.errors}</CodeBlockCode>
@@ -320,7 +315,7 @@ function InstanceDetails({ setBreadcrumb, instanceGroup }) {
         </DetailList>
         <CardActionsRow>
           {isExecutionNode && (
-            <Tooltip content={i18n._(t`Run a health check on the instance`)}>
+            <Tooltip content={t`Run a health check on the instance`}>
               <Button
                 isDisabled={
                   !config?.me?.is_superuser || instance.health_check_pending
@@ -329,11 +324,11 @@ function InstanceDetails({ setBreadcrumb, instanceGroup }) {
                 ouiaId="health-check-button"
                 onClick={fetchHealthCheck}
                 isLoading={instance.health_check_pending}
-                spinnerAriaLabel={i18n._(t`Running health check`)}
+                spinnerAriaLabel={t`Running health check`}
               >
                 {instance.health_check_pending
-                  ? i18n._(t`Running health check`)
-                  : i18n._(t`Run health check`)}
+                  ? t`Running health check`
+                  : t`Run health check`}
               </Button>
             </Tooltip>
           )}
@@ -344,22 +339,18 @@ function InstanceDetails({ setBreadcrumb, instanceGroup }) {
               onDisassociate={disassociateInstance}
               itemsToDisassociate={[instance]}
               isProtectedInstanceGroup={instanceGroup.name === 'controlplane'}
-              modalTitle={i18n._(
-                t`Disassociate instance from instance group?`
-              )}
+              modalTitle={t`Disassociate instance from instance group?`}
               modalNote={
                 instance.managed_by_policy ? (
                   <Trans>
                     <b>
-                      {i18n._(
-                        t`Note: This instance may be re-associated with this instance group if it is managed by `
-                      )}
+                      {t`Note: This instance may be re-associated with this instance group if it is managed by `}
                       <a
                         href={policyRulesDocsLink}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        {i18n._(t`policy rules.`)}
+                        {t`policy rules.`}
                       </a>
                     </b>
                   </Trans>
@@ -377,12 +368,12 @@ function InstanceDetails({ setBreadcrumb, instanceGroup }) {
           <AlertModal
             isOpen={error}
             onClose={dismissError}
-            title={i18n._(t`Error!`)}
+            title={t`Error!`}
             variant="error"
           >
             {updateInstanceError
-              ? i18n._(t`Failed to update capacity adjustment.`)
-              : i18n._(t`Failed to disassociate one or more instances.`)}
+              ? t`Failed to update capacity adjustment.`
+              : t`Failed to disassociate one or more instances.`}
             <ErrorDetail error={error} />
           </AlertModal>
         )}

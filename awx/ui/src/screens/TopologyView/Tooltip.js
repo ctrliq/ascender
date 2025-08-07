@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { t, Plural } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { Plural, useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import { useConfig } from 'contexts/Config';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
@@ -108,18 +107,18 @@ function renderInstanceGroups(instanceGroups) {
   ));
 }
 
-function usedCapacity(instance, i18n) {
+function usedCapacity(instance, t) {
   if (instance.enabled) {
     return (
       <Progress
         value={Math.round(100 - instance.percent_capacity_remaining)}
         measureLocation={ProgressMeasureLocation.top}
         size={ProgressSize.sm}
-        title={i18n._(t`Used capacity`)}
+        title={t`Used capacity`}
       />
     );
   }
-  return <Unavailable>{i18n._(t`Unavailable`)}</Unavailable>;
+  return <Unavailable>{t`Unavailable`}</Unavailable>;
 }
 
 function Tooltip({
@@ -132,7 +131,7 @@ function Tooltip({
   redirectToDetailsPage,
 }) {
   const { me = {} } = useConfig();
-  const { i18n } = useLingui();
+  const { t } = useLingui();
 
   const [forks, setForks] = useState(
     computeForks(
@@ -185,11 +184,11 @@ function Tooltip({
             component={TextVariants.small}
             style={{ fontWeight: 'bold', color: 'black', marginTop: 0 }}
           >
-            {i18n._(t`Details`)}
+            {t`Details`}
           </Text>
           <Divider component="div" />
           <Text component={TextVariants.small}>
-            {i18n._(t`Click on a node icon to display the details.`)}
+            {t`Click on a node icon to display the details.`}
           </Text>
         </TextContent>
       ) : (
@@ -197,12 +196,12 @@ function Tooltip({
           {updateError && (
             <AlertModal
               variant="error"
-              title={i18n._(t`Error!`)}
+              title={t`Error!`}
               isOpen
               onClose={dismissUpdateError}
               dataCy="update-instance-alert"
             >
-              {i18n._(t`Failed to update instance.`)}
+              {t`Failed to update instance.`}
               <ErrorDetail error={updateError} />
             </AlertModal>
           )}
@@ -211,7 +210,7 @@ function Tooltip({
               component={TextVariants.small}
               style={{ fontWeight: 'bold', color: 'black' }}
             >
-              {i18n._(t`Details`)}
+              {t`Details`}
             </Text>
             <Divider component="div" />
           </TextContent>
@@ -233,7 +232,7 @@ function Tooltip({
               </DescriptionListGroup>
               <DescriptionListGroup>
                 <DescriptionListTerm>
-                  {i18n._(t`Instance status`)}
+                  {t`Instance status`}
                 </DescriptionListTerm>
                 <DescriptionListDescription dataCy="node-state">
                   <StatusLabel status={instanceDetail.node_state} />
@@ -241,7 +240,7 @@ function Tooltip({
               </DescriptionListGroup>
               <DescriptionListGroup>
                 <DescriptionListTerm>
-                  {i18n._(t`Instance type`)}
+                  {t`Instance type`}
                 </DescriptionListTerm>
                 <DescriptionListDescription dataCy="node-type">
                   {instanceDetail.node_type}
@@ -250,12 +249,12 @@ function Tooltip({
               {instanceDetail.related?.install_bundle && (
                 <DescriptionListGroup>
                   <DescriptionListTerm>
-                    {i18n._(t`Download bundle`)}
+                    {t`Download bundle`}
                   </DescriptionListTerm>
                   <DescriptionListDescription>
                     <PFButton
                       dataCy="install-bundle-download-button"
-                      aria-label={i18n._(t`Download Bundle`)}
+                      aria-label={t`Download Bundle`}
                       component="a"
                       isSmall
                       href={`${instanceDetail.related?.install_bundle}`}
@@ -271,7 +270,7 @@ function Tooltip({
               {instanceDetail.ip_address && (
                 <DescriptionListGroup>
                   <DescriptionListTerm>
-                    {i18n._(t`IP address`)}
+                    {t`IP address`}
                   </DescriptionListTerm>
                   <DescriptionListDescription>
                     {instanceDetail.ip_address}
@@ -281,7 +280,7 @@ function Tooltip({
               {instanceGroups && (
                 <DescriptionListGroup>
                   <DescriptionListTerm>
-                    {i18n._(t`Instance groups`)}
+                    {t`Instance groups`}
                   </DescriptionListTerm>
                   <DescriptionListDescription dataCy="instance-groups">
                     {renderInstanceGroups(instanceGroups.results)}
@@ -292,12 +291,12 @@ function Tooltip({
                 <>
                   <DescriptionListGroup>
                     <DescriptionListTerm>
-                      {i18n._(t`Forks`)}
+                      {t`Forks`}
                     </DescriptionListTerm>
                     <DescriptionListDescription>
                       <SliderHolder data-cy="slider-holder">
                         <div data-cy="cpu-capacity">
-                          {i18n._(t`CPU ${instanceDetail.cpu_capacity}`)}
+                          {t`CPU ${instanceDetail.cpu_capacity}`}
                         </div>
                         <SliderForks data-cy="slider-forks">
                           <div data-cy="number-forks">
@@ -321,17 +320,17 @@ function Tooltip({
                           />
                         </SliderForks>
                         <div data-cy="mem-capacity">
-                          {i18n._(t`RAM ${instanceDetail.mem_capacity}`)}
+                          {t`RAM ${instanceDetail.mem_capacity}`}
                         </div>
                       </SliderHolder>
                     </DescriptionListDescription>
                   </DescriptionListGroup>
                   <DescriptionListGroup>
                     <DescriptionListTerm>
-                      {i18n._(t`Capacity`)}
+                      {t`Capacity`}
                     </DescriptionListTerm>
                     <DescriptionListDescription dataCy="used-capacity">
-                      {usedCapacity(instanceDetail, i18n)}
+                      {usedCapacity(instanceDetail, t)}
                     </DescriptionListDescription>
                   </DescriptionListGroup>
                   <DescriptionListGroup>
@@ -349,7 +348,7 @@ function Tooltip({
 
               <DescriptionListGroup>
                 <DescriptionListTerm>
-                  {i18n._(t`Last modified`)}
+                  {t`Last modified`}
                 </DescriptionListTerm>
                 <DescriptionListDescription dataCy="last-modified">
                   {formatDateString(instanceDetail.modified)}
@@ -357,7 +356,7 @@ function Tooltip({
               </DescriptionListGroup>
               <DescriptionListGroup>
                 <DescriptionListTerm>
-                  {i18n._(t`Last seen`)}
+                  {t`Last seen`}
                 </DescriptionListTerm>
                 <DescriptionListDescription dataCy="last-seen">
                   {instanceDetail.last_seen

@@ -16,7 +16,7 @@ i18n.activate('en');
 describe('<TeamListItem />', () => {
   test('initially renders successfully', () => {
     mountWithContexts(
-      <I18nProvider i18n={i18n}>
+      <I18nProvider t={t}>
         <MemoryRouter initialEntries={['/teams']} initialIndex={0}>
           <table>
             <tbody>
@@ -42,7 +42,7 @@ describe('<TeamListItem />', () => {
   });
   test('edit button shown to users with edit capabilities', () => {
     const wrapper = mountWithContexts(
-      <I18nProvider i18n={i18n}>
+      <I18nProvider t={t}>
         <MemoryRouter initialEntries={['/teams']} initialIndex={0}>
           <table>
             <tbody>
@@ -69,7 +69,7 @@ describe('<TeamListItem />', () => {
   });
   test('edit button hidden from users without edit capabilities', () => {
     const wrapper = mountWithContexts(
-      <I18nProvider i18n={i18n}>
+      <I18nProvider t={t}>
         <MemoryRouter initialEntries={['/teams']} initialIndex={0}>
           <table>
             <tbody>

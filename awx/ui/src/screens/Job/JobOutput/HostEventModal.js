@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Tab, Tabs, TabTitleText } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
-import { t } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 
 import { encode } from 'html-entities';
 import { jsonToYaml } from 'util/yaml';
@@ -67,7 +66,7 @@ const getStdOutValue = (hostEvent) => {
 };
 
 function HostEventModal({ onClose, hostEvent = {}, isOpen = false }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const [hostStatus, setHostStatus] = useState(null);
   const [activeTabKey, setActiveTabKey] = useState(0);
   useEffect(() => {
@@ -86,62 +85,62 @@ function HostEventModal({ onClose, hostEvent = {}, isOpen = false }) {
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={i18n._(t`Host Details`)}
-      aria-label={i18n._(t`Host details modal`)}
+      title={t`Host Details`}
+      aria-label={t`Host details modal`}
       width="75%"
       ouiaId="host-event-modal"
     >
       <Tabs
-        aria-label={i18n._(t`Tabs`)}
+        aria-label={t`Tabs`}
         activeKey={activeTabKey}
         onSelect={handleTabClick}
         ouiaId="host-event-tabs"
       >
         <Tab
-          aria-label={i18n._(t`Details tab`)}
+          aria-label={t`Details tab`}
           ouiaId="details-tab"
           eventKey={0}
-          title={<TabTitleText>{i18n._(t`Details`)}</TabTitleText>}
+          title={<TabTitleText>{t`Details`}</TabTitleText>}
         >
           <DetailList
             style={{ alignItems: 'center', marginTop: '20px' }}
             gutter="sm"
           >
             <Detail
-              label={i18n._(t`Host`)}
+              label={t`Host`}
               value={hostEvent.event_data?.host}
             />
             {hostEvent.summary_fields?.host?.description ? (
               <Detail
-                label={i18n._(t`Description`)}
+                label={t`Description`}
                 value={hostEvent.summary_fields?.host?.description}
               />
             ) : null}
             {hostStatus ? (
               <Detail
-                label={i18n._(t`Status`)}
+                label={t`Status`}
                 value={<StatusLabel status={hostStatus} />}
               />
             ) : null}
-            <Detail label={i18n._(t`Play`)} value={hostEvent.play} />
-            <Detail label={i18n._(t`Task`)} value={hostEvent.task} />
+            <Detail label={t`Play`} value={hostEvent.play} />
+            <Detail label={t`Task`} value={hostEvent.task} />
             <Detail
-              label={i18n._(t`Module`)}
+              label={t`Module`}
               value={
                 hostEvent.event_data?.task_action ||
-                i18n._(t`No result found`)
+                t`No result found`
               }
             />
             <Detail
-              label={i18n._(t`Command`)}
+              label={t`Command`}
               value={hostEvent.event_data?.res?.cmd}
             />
           </DetailList>
         </Tab>
         <Tab
           eventKey={1}
-          title={<TabTitleText>{i18n._(t`JSON`)}</TabTitleText>}
-          aria-label={i18n._(t`JSON tab`)}
+          title={<TabTitleText>{t`JSON`}</TabTitleText>}
+          aria-label={t`JSON tab`}
           ouiaId="json-tab"
         >
           {activeTabKey === 1 && jsonObj ? (
@@ -154,13 +153,13 @@ function HostEventModal({ onClose, hostEvent = {}, isOpen = false }) {
               hasErrors={false}
             />
           ) : (
-            <ContentEmpty title={i18n._(t`No JSON Available`)} />
+            <ContentEmpty title={t`No JSON Available`} />
           )}
         </Tab>
         <Tab
           eventKey={2}
-          title={<TabTitleText>{i18n._(t`YAML`)}</TabTitleText>}
-          aria-label={i18n._(t`YAML tab`)}
+          title={<TabTitleText>{t`YAML`}</TabTitleText>}
+          aria-label={t`YAML tab`}
           ouiaId="yaml-tab"
         >
           {activeTabKey === 2 && jsonObj ? (
@@ -173,14 +172,14 @@ function HostEventModal({ onClose, hostEvent = {}, isOpen = false }) {
               hasErrors={false}
             />
           ) : (
-            <ContentEmpty title={i18n._(t`No YAML Available`)} />
+            <ContentEmpty title={t`No YAML Available`} />
           )}
         </Tab>
         {stdOut?.length ? (
           <Tab
             eventKey={3}
-            title={<TabTitleText>{i18n._(t`Output`)}</TabTitleText>}
-            aria-label={i18n._(t`Output tab`)}
+            title={<TabTitleText>{t`Output`}</TabTitleText>}
+            aria-label={t`Output tab`}
             ouiaId="standard-out-tab"
           >
             <CodeEditor
@@ -196,8 +195,8 @@ function HostEventModal({ onClose, hostEvent = {}, isOpen = false }) {
         {stdErr?.length ? (
           <Tab
             eventKey={4}
-            title={<TabTitleText>{i18n._(t`Standard Error`)}</TabTitleText>}
-            aria-label={i18n._(t`Standard error tab`)}
+            title={<TabTitleText>{t`Standard Error`}</TabTitleText>}
+            aria-label={t`Standard error tab`}
             ouiaId="standard-error-tab"
           >
             <CodeEditor

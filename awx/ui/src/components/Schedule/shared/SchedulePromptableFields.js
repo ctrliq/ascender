@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { ExpandableSection, Wizard } from '@patternfly/react-core';
-import { useLingui } from '@lingui/react';
-import { t } from '@lingui/react/macro';
+import { useLingui } from '@lingui/react/macro';
 import { useFormikContext } from 'formik';
 import { useDismissableError } from 'hooks/useRequest';
 import AlertModal from '../../AlertModal';
@@ -56,13 +55,13 @@ function SchedulePromptableFields({
     onCloseWizard();
   };
 
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   if (error) {
     return (
       <AlertModal
         isOpen={error}
         variant="error"
-        title={i18n._(t`Error!`)}
+        title={t`Error!`}
         onClose={() => {
           dismissError();
           onCloseWizard();
@@ -96,14 +95,14 @@ function SchedulePromptableFields({
           validateStep(nextStep.id);
         }
       }}
-      title={i18n._(t`Prompt | ${resource.name}`)}
+      title={t`Prompt | ${resource.name}`}
       description={
         resource.description.length > 512 ? (
           <ExpandableSection
             toggleText={
               showDescription
-                ? i18n._(t`Hide description`)
-                : i18n._(t`Show description`)
+                ? t`Hide description`
+                : t`Show description`
             }
             onToggle={() => {
               setShowDescription(!showDescription);
@@ -121,14 +120,14 @@ function SchedulePromptableFields({
           ? steps
           : [
               {
-                name: i18n._(t`Content Loading`),
+                name: t`Content Loading`,
                 component: <ContentLoading />,
               },
             ]
       }
-      backButtonText={i18n._(t`Back`)}
-      cancelButtonText={i18n._(t`Cancel`)}
-      nextButtonText={i18n._(t`Next`)}
+      backButtonText={t`Back`}
+      cancelButtonText={t`Cancel`}
+      nextButtonText={t`Next`}
     />
   );
 }

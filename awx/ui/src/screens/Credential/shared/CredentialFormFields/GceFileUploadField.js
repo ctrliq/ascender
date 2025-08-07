@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { useLingui } from '@lingui/react';
-import { t } from '@lingui/react/macro';
+import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
 import { FileUpload, FormGroup } from '@patternfly/react-core';
 
 function GceFileUploadField() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const [fileError, setFileError] = useState(null);
   const [filename, setFilename] = useState('');
   const [file, setFile] = useState('');
@@ -22,17 +21,15 @@ function GceFileUploadField() {
     <FormGroup
       fieldId="credential-gce-file"
       validated={!fileError ? 'default' : 'error'}
-      label={i18n._(t`Service account JSON file`)}
-      helperText={i18n._(
-        t`Select a JSON formatted service account key to autopopulate the following fields.`
-      )}
+      label={t`Service account JSON file`}
+      helperText={t`Select a JSON formatted service account key to autopopulate the following fields.`}
       helperTextInvalid={fileError}
     >
       <FileUpload
         id="credential-gce-file"
         value={file}
         filename={filename}
-        filenamePlaceholder={i18n._(t`Choose a .json file`)}
+        filenamePlaceholder={t`Choose a .json file`}
         onChange={async (value) => {
           if (value) {
             try {
@@ -46,9 +43,7 @@ function GceFileUploadField() {
                 !fileJSON.private_key
               ) {
                 setFileError(
-                  i18n._(
-                    t`Expected at least one of client_email, project_id or private_key to be present in the file.`
-                  )
+                  t`Expected at least one of client_email, project_id or private_key to be present in the file.`
                 );
               } else {
                 inputsUsernameHelpers.setValue(fileJSON.client_email || '');
@@ -58,9 +53,7 @@ function GceFileUploadField() {
               }
             } catch {
               setFileError(
-                i18n._(
-                  t`There was an error parsing the file. Please check the file formatting and try again.`
-                )
+                t`There was an error parsing the file. Please check the file formatting and try again.`
               );
             }
           } else {
@@ -76,9 +69,7 @@ function GceFileUploadField() {
           accept: '.json',
           onDropRejected: () => {
             setFileError(
-              i18n._(
-                t`File upload rejected. Please select a single .json file.`
-              )
+              t`File upload rejected. Please select a single .json file.`
             );
           },
         }}

@@ -4,8 +4,7 @@
 /* eslint no-nested-ternary: 0 */
 import React, { useCallback, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { t } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import { Formik, useField, useFormikContext } from 'formik';
 import { Form, FormGroup, Title } from '@patternfly/react-core';
 import { useConfig } from 'contexts/Config';
@@ -94,8 +93,8 @@ function ProjectFormFields({
   setScmSubFormState,
   scmSubFormState,
 }) {
-  const { i18n } = useLingui();
-  const projectHelpText = getProjectHelpText(i18n);
+  const { t } = useLingui();
+  const projectHelpText = getProjectHelpText(t);
   const scmFormFields = {
     scm_url: '',
     scm_branch: '',
@@ -113,7 +112,7 @@ function ProjectFormFields({
 
   const [scmTypeField, scmTypeMeta, scmTypeHelpers] = useField({
     name: 'scm_type',
-    validate: required(i18n._(t`Set a value for this field`)),
+    validate: required(t`Set a value for this field`),
   });
   const [organizationField, organizationMeta, organizationHelpers] =
     useField('organization');
@@ -215,7 +214,7 @@ function ProjectFormFields({
     <>
       <FormField
         id="project-name"
-        label={i18n._(t`Name`)}
+        label={t`Name`}
         name="name"
         type="text"
         validate={required(null)}
@@ -223,7 +222,7 @@ function ProjectFormFields({
       />
       <FormField
         id="project-description"
-        label={i18n._(t`Description`)}
+        label={t`Description`}
         name="description"
         type="text"
       />
@@ -235,7 +234,7 @@ function ProjectFormFields({
         value={organizationField.value}
         required
         autoPopulate={!project?.id}
-        validate={required(i18n._(t`Select a value for this field`))}
+        validate={required(t`Select a value for this field`)}
       />
       <ExecutionEnvironmentLookup
         helperTextInvalid={executionEnvironmentMeta.error}
@@ -246,9 +245,7 @@ function ProjectFormFields({
         value={executionEnvironmentField.value}
         popoverContent={projectHelpText.executionEnvironment}
         onChange={handleExecutionEnvironmentUpdate}
-        tooltip={i18n._(
-          t`Select an organization before editing the default execution environment.`
-        )}
+        tooltip={t`Select an organization before editing the default execution environment.`}
         globallyAvailable
         isDisabled={!organizationField.value}
         organizationId={organizationField.value?.id}
@@ -262,7 +259,7 @@ function ProjectFormFields({
         validated={
           !scmTypeMeta.touched || !scmTypeMeta.error ? 'default' : 'error'
         }
-        label={i18n._(t`Source Control Type`)}
+        label={t`Source Control Type`}
       >
         <AnsibleSelect
           {...scmTypeField}
@@ -271,7 +268,7 @@ function ProjectFormFields({
             {
               value: '',
               key: '',
-              label: i18n._(t`Choose a Source Control Type`),
+              label: t`Choose a Source Control Type`,
               isDisabled: true,
             },
             ...scmTypeOptions.map(([value, label]) => {
@@ -293,7 +290,7 @@ function ProjectFormFields({
       </FormGroup>
       <CredentialLookup
         credentialTypeId={signatureValidationCredentials.cryptography.typeId}
-        label={i18n._(t`Content Signature Validation Credential`)}
+        label={t`Content Signature Validation Credential`}
         onChange={handleSignatureValidationCredentialChange}
         value={signatureValidationCredentials.cryptography.value}
         tooltip={projectHelpText.signatureValidation}
@@ -301,7 +298,7 @@ function ProjectFormFields({
       {formik.values.scm_type !== '' && (
         <SubFormLayout>
           <Title size="md" headingLevel="h4">
-            {i18n._(t`Type Details`)}
+            {t`Type Details`}
           </Title>
           <FormColumnLayout>
             {

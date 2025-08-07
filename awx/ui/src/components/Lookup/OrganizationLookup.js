@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { node, func, bool, string } from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { t } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import { FormGroup } from '@patternfly/react-core';
 import { OrganizationsAPI } from 'api';
 import { Organization } from 'types';
@@ -35,7 +34,7 @@ function OrganizationLookup({
   validate,
   fieldName,
 }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const autoPopulateLookup = useAutoPopulateLookup(onChange);
 
   const {
@@ -100,13 +99,13 @@ function OrganizationLookup({
       helperTextInvalid={helperTextInvalid}
       isRequired={required}
       validated={isValid ? 'default' : 'error'}
-      label={i18n._(t`Organization`)}
+      label={t`Organization`}
       helperText={helperText}
     >
       <Lookup
         isDisabled={isDisabled}
         id={id}
-        header={i18n._(t`Organization`)}
+        header={t`Organization`}
         value={value}
         onBlur={onBlur}
         onChange={onChange}
@@ -123,27 +122,27 @@ function OrganizationLookup({
             options={organizations}
             optionCount={itemCount}
             multiple={state.multiple}
-            header={i18n._(t`Organization`)}
+            header={t`Organization`}
             name="organization"
             qsConfig={QS_CONFIG}
             searchColumns={[
               {
-                name: i18n._(t`Name`),
+                name: t`Name`,
                 key: 'name__icontains',
                 isDefault: true,
               },
               {
-                name: i18n._(t`Created By (Username)`),
+                name: t`Created By (Username)`,
                 key: 'created_by__username__icontains',
               },
               {
-                name: i18n._(t`Modified By (Username)`),
+                name: t`Modified By (Username)`,
                 key: 'modified_by__username__icontains',
               },
             ]}
             sortColumns={[
               {
-                name: i18n._(t`Name`),
+                name: t`Name`,
                 key: 'name',
               },
             ]}

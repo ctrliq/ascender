@@ -1,14 +1,13 @@
 import React from 'react';
 import { Link, Redirect, Route, Switch } from 'react-router-dom';
-import { useLingui } from '@lingui/react';
-import { t } from '@lingui/react/macro';
+import { useLingui } from '@lingui/react/macro';
 import { PageSection, Card } from '@patternfly/react-core';
 import ContentError from 'components/ContentError';
 import TACACSDetail from './TACACSDetail';
 import TACACSEdit from './TACACSEdit';
 
 function TACACS() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const baseURL = '/settings/tacacs';
   return (
     <PageSection>
@@ -24,7 +23,7 @@ function TACACS() {
           <Route key="not-found" path={`${baseURL}/*`}>
             <ContentError isNotFound>
               <Link to={`${baseURL}/details`}>
-                {i18n._(t`View TACACS+ settings`)}
+                {t`View TACACS+ settings`}
               </Link>
             </ContentError>
           </Route>

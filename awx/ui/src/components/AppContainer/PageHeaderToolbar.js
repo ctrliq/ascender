@@ -122,7 +122,7 @@ function PageHeaderToolbar({
                 ouiaId="help-dropdown-item"
                 rel="noopener noreferrer"
               >
-                {i18n._(t`Help`)}
+                {t`Help`}
               </DropdownItem>,
 */
               <DropdownItem

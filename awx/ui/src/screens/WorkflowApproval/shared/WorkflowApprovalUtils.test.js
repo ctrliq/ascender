@@ -12,6 +12,9 @@ import mockWorkflowApprovals from '../data.workflowApprovals.json';
 const workflowApproval = mockWorkflowApprovals.results[0];
 i18n.loadLocaleData('en', { plurals: en });
 
+// Mock t function for testing
+const t = (str) => str;
+
 async function activate() {
   const { messages } = await import(`../../../locales/${'en'}/messages.js`);
   i18n.load('en', messages);
@@ -21,13 +24,13 @@ activate();
 
 describe('<WorkflowApproval />', () => {
   test('shows no expiration when approval status is pending and no approval_expiration', () => {
-    expect(getPendingLabel(workflowApproval)).toEqual('Never expires');
+    expect(getPendingLabel(workflowApproval, t)).toEqual('Never expires');
   });
 
   test('shows expiration date/time when approval status is pending and approval_expiration present', () => {
     workflowApproval.approval_expiration = '2020-10-10T17:13:12.067947Z';
 
-    expect(getPendingLabel(workflowApproval)).toEqual(
+    expect(getPendingLabel(workflowApproval, t)).toEqual(
       `Expires on 10/10/2020, 5:13:12 PM`
     );
   });
@@ -35,14 +38,14 @@ describe('<WorkflowApproval />', () => {
   test('shows when an approval has timed out', () => {
     workflowApproval.status = 'failed';
     workflowApproval.timed_out = true;
-    expect(getStatus(workflowApproval, i18n)).toEqual('timedOut');
+    expect(getStatus(workflowApproval, t)).toEqual('timedOut');
   });
 
   test('shows when an approval has canceled', () => {
     workflowApproval.status = 'canceled';
     workflowApproval.canceled_on = '2020-10-10T17:13:12.067947Z';
     workflowApproval.timed_out = false;
-    expect(getStatus(workflowApproval, i18n)).toEqual('canceled');
+    expect(getStatus(workflowApproval, t)).toEqual('canceled');
   });
 
   test('shows when an approval has beeen approved', () => {
@@ -53,7 +56,7 @@ describe('<WorkflowApproval />', () => {
     workflowApproval.status = 'successful';
     workflowApproval.canceled_on = '';
     workflowApproval.finished = '';
-    expect(getStatus(workflowApproval, i18n)).toEqual('approved');
+    expect(getStatus(workflowApproval, t)).toEqual('approved');
   });
 
   test('shows when an approval has timed out', () => {
@@ -64,7 +67,7 @@ describe('<WorkflowApproval />', () => {
     workflowApproval.status = 'failed';
     workflowApproval.finished = '';
     workflowApproval.failed = true;
-    expect(getStatus(workflowApproval, i18n)).toEqual('denied');
+    expect(getStatus(workflowApproval, t)).toEqual('denied');
   });
 
   test('shows correct approved tooltip with user', () => {
@@ -74,7 +77,7 @@ describe('<WorkflowApproval />', () => {
     };
     workflowApproval.status = 'successful';
     workflowApproval.finished = '2020-10-10T17:13:12.067947Z';
-    expect(getTooltip(workflowApproval)).toEqual(
+    expect(getTooltip(workflowApproval, t)).toEqual(
       'Approved by Foobar - 10/10/2020, 5:13:12 PM'
     );
   });
@@ -85,7 +88,7 @@ describe('<WorkflowApproval />', () => {
     };
     workflowApproval.status = 'successful';
     workflowApproval.finished = '2020-10-10T17:13:12.067947Z';
-    expect(getTooltip(workflowApproval)).toEqual(
+    expect(getTooltip(workflowApproval, t)).toEqual(
       'Approved - 10/10/2020, 5:13:12 PM.  See the Activity Stream for more information.'
     );
   });
@@ -98,7 +101,7 @@ describe('<WorkflowApproval />', () => {
     workflowApproval.status = 'failed';
     workflowApproval.finished = '2020-10-10T17:13:12.067947Z';
     workflowApproval.failed = true;
-    expect(getTooltip(workflowApproval)).toEqual(
+    expect(getTooltip(workflowApproval, t)).toEqual(
       'Denied by Foobar - 10/10/2020, 5:13:12 PM'
     );
   });
@@ -110,7 +113,7 @@ describe('<WorkflowApproval />', () => {
     workflowApproval.status = 'failed';
     workflowApproval.finished = '2020-10-10T17:13:12.067947Z';
     workflowApproval.failed = true;
-    expect(getTooltip(workflowApproval)).toEqual(
+    expect(getTooltip(workflowApproval, t)).toEqual(
       'Denied - 10/10/2020, 5:13:12 PM.  See the Activity Stream for more information.'
     );
   });

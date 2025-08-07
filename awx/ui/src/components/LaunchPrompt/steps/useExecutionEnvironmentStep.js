@@ -1,14 +1,14 @@
 import React from 'react';
-import { i18n } from '@lingui/core';
-import { t } from '@lingui/react/macro';
+import { useLingui } from '@lingui/react/macro';
 import ExecutionEnvironmentStep from './ExecutionEnvironmentStep';
 import StepName from './StepName';
 
 const STEP_ID = 'executionEnvironment';
 
 export default function useExecutionEnvironmentStep(launchConfig, resource) {
+  const { t } = useLingui();
   return {
-    step: getStep(launchConfig, resource),
+    step: getStep(launchConfig, resource, t),
     initialValues: getInitialValues(launchConfig, resource),
     isReady: true,
     contentError: null,
@@ -19,7 +19,7 @@ export default function useExecutionEnvironmentStep(launchConfig, resource) {
     validate: () => {},
   };
 }
-function getStep(launchConfig) {
+function getStep(launchConfig, resource, t) {
   if (!launchConfig.ask_execution_environment_on_launch) {
     return null;
   }
@@ -27,7 +27,7 @@ function getStep(launchConfig) {
     id: STEP_ID,
     name: (
       <StepName id="execution-environment-step">
-        {i18n._(t`Execution Environment`)}
+        {t`Execution Environment`}
       </StepName>
     ),
     component: <ExecutionEnvironmentStep />,

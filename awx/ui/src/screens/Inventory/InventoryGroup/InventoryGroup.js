@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { t } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import {
   Switch,
   Route,
@@ -20,7 +19,7 @@ import InventoryGroupHosts from '../InventoryGroupHosts';
 import InventoryRelatedGroups from '../InventoryRelatedGroups';
 
 function InventoryGroup({ setBreadcrumb, inventory }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const [inventoryGroup, setInventoryGroup] = useState(null);
   const [contentLoading, setContentLoading] = useState(true);
   const [contentError, setContentError] = useState(null);
@@ -47,25 +46,25 @@ function InventoryGroup({ setBreadcrumb, inventory }) {
     {
       name: (
         <>
-          <CaretLeftIcon aria-label={i18n._(t`Back to Groups`)} />
-          {i18n._(t`Back to Groups`)}
+          <CaretLeftIcon aria-label={t`Back to Groups`} />
+          {t`Back to Groups`}
         </>
       ),
       link: `/inventories/${inventoryType}/${inventoryId}/groups`,
       id: 99,
     },
     {
-      name: i18n._(t`Details`),
+      name: t`Details`,
       link: `/inventories/${inventoryType}/${inventoryId}/groups/${inventoryGroup?.id}/details`,
       id: 0,
     },
     {
-      name: i18n._(t`Related Groups`),
+      name: t`Related Groups`,
       link: `/inventories/${inventoryType}/${inventoryId}/groups/${inventoryGroup?.id}/nested_groups`,
       id: 1,
     },
     {
-      name: i18n._(t`Hosts`),
+      name: t`Hosts`,
       link: `/inventories/${inventoryType}/${inventoryId}/groups/${inventoryGroup?.id}/nested_hosts`,
       id: 2,
     },
@@ -90,7 +89,7 @@ function InventoryGroup({ setBreadcrumb, inventory }) {
     return (
       <ContentError isNotFound>
         <Link to={`/inventories/inventory/${inventory.id}/groups`}>
-          {i18n._(t`View Inventory Groups`)}
+          {t`View Inventory Groups`}
         </Link>
       </ContentError>
     );
@@ -140,7 +139,7 @@ function InventoryGroup({ setBreadcrumb, inventory }) {
           <ContentError>
             {inventory && (
               <Link to={`/inventories/:inventoryType/${inventory.id}/details`}>
-                {i18n._(t`View Inventory Details`)}
+                {t`View Inventory Details`}
               </Link>
             )}
           </ContentError>

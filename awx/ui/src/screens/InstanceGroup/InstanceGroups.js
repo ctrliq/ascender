@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from 'react';
 
-import { t } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import { Route, Switch, useLocation } from 'react-router-dom';
 import ScreenHeader from 'components/ScreenHeader';
 import PersistentFilters from 'components/PersistentFilters';
@@ -12,14 +11,12 @@ import ContainerGroupAdd from './ContainerGroupAdd';
 import ContainerGroup from './ContainerGroup';
 
 function InstanceGroups() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const { pathname } = useLocation();
   const [breadcrumbConfig, setBreadcrumbConfig] = useState({
-    '/instance_groups': i18n._(t`Instance Groups`),
-    '/instance_groups/add': i18n._(t`Create new instance group`),
-    '/instance_groups/container_group/add': i18n._(
-      t`Create new container group`
-    ),
+    '/instance_groups': t`Instance Groups`,
+    '/instance_groups/add': t`Create new instance group`,
+    '/instance_groups/container_group/add': t`Create new container group`,
   });
 
   const buildBreadcrumbConfig = useCallback(
@@ -28,37 +25,27 @@ function InstanceGroups() {
         return;
       }
       setBreadcrumbConfig({
-        '/instance_groups': i18n._(t`Instance Groups`),
-        '/instance_groups/add': i18n._(t`Create new instance group`),
-        '/instance_groups/container_group/add': i18n._(
-          t`Create new container group`
-        ),
+        '/instance_groups': t`Instance Groups`,
+        '/instance_groups/add': t`Create new instance group`,
+        '/instance_groups/container_group/add': t`Create new container group`,
 
-        [`/instance_groups/${instanceGroups.id}/details`]: i18n._(t`Details`),
-        [`/instance_groups/${instanceGroups.id}/instances`]: i18n._(
-          t`Instances`
-        ),
+        [`/instance_groups/${instanceGroups.id}/details`]: t`Details`,
+        [`/instance_groups/${instanceGroups.id}/instances`]: t`Instances`,
         [`/instance_groups/${instanceGroups.id}/instances/${instance?.id}`]: `${instance?.hostname}`,
         [`/instance_groups/${instanceGroups.id}/instances/${instance?.id}/details`]:
-          i18n._(t`Instance details`),
-        [`/instance_groups/${instanceGroups.id}/jobs`]: i18n._(t`Jobs`),
-        [`/instance_groups/${instanceGroups.id}/edit`]: i18n._(
-          t`Edit details`
-        ),
+          t`Instance details`,
+        [`/instance_groups/${instanceGroups.id}/jobs`]: t`Jobs`,
+        [`/instance_groups/${instanceGroups.id}/edit`]: t`Edit details`,
         [`/instance_groups/${instanceGroups.id}`]: `${instanceGroups.name}`,
 
         [`/instance_groups/container_group/${instanceGroups.id}/details`]:
-          i18n._(t`Details`),
-        [`/instance_groups/container_group/${instanceGroups.id}/jobs`]: i18n._(
-          t`Jobs`
-        ),
-        [`/instance_groups/container_group/${instanceGroups.id}/edit`]: i18n._(
-          t`Edit details`
-        ),
+          t`Details`,
+        [`/instance_groups/container_group/${instanceGroups.id}/jobs`]: t`Jobs`,
+        [`/instance_groups/container_group/${instanceGroups.id}/edit`]: t`Edit details`,
         [`/instance_groups/container_group/${instanceGroups.id}`]: `${instanceGroups.name}`,
       });
     },
-    [i18n]
+    [t]
   );
 
   const streamType = pathname.includes('instances')

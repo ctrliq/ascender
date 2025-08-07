@@ -2,8 +2,7 @@ import React from 'react';
 import { bool, func, number, oneOfType, string } from 'prop-types';
 import { Button } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
-import { useLingui } from '@lingui/react';
-import { t } from '@lingui/react/macro';
+import { useLingui } from '@lingui/react/macro';
 
 import { Link } from 'react-router-dom';
 import { PencilAltIcon } from '@patternfly/react-icons';
@@ -17,7 +16,7 @@ function InventoryHostGroupItem({
   onSelect,
   rowIndex,
 }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const labelId = `check-action-${group.id}`;
   const detailUrl = `/inventories/inventory/${inventoryId}/groups/${group.id}/details`;
   const editUrl = `/inventories/inventory/${inventoryId}/groups/${group.id}/edit`;
@@ -35,15 +34,15 @@ function InventoryHostGroupItem({
           onSelect,
         }}
       />
-      <Td id={labelId} dataLabel={i18n._(t`Name`)}>
+      <Td id={labelId} dataLabel={t`Name`}>
         <Link to={`${detailUrl}`} id={labelId}>
           <b>{group.name}</b>
         </Link>
       </Td>
-      <ActionsTd dataLabel={i18n._(t`Actions`)} gridColumns="auto 40px">
+      <ActionsTd dataLabel={t`Actions`} gridColumns="auto 40px">
         <ActionItem
           visible={group.summary_fields.user_capabilities.edit}
-          tooltip={i18n._(t`Edit group`)}
+          tooltip={t`Edit group`}
         >
           <Button
             ouiaId={`${group.id}-edit-button`}

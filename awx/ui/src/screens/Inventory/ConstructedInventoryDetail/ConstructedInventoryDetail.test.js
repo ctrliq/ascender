@@ -78,7 +78,7 @@ describe('<ConstructedInventoryDetail />', () => {
   });
 
   const Component = (props) => (
-    <I18nProvider i18n={i18n}>
+    <I18nProvider t={t}>
       <Router history={history}>
         <ConstructedInventoryDetail inventory={mockInventory} {...props} />
       </Router>

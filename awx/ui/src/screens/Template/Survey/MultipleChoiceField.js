@@ -1,7 +1,6 @@
 import React from 'react';
 import { useField } from 'formik';
-import { t } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import {
   FormGroup,
   TextInput,
@@ -26,22 +25,22 @@ const CheckIcon = styled(PFCheckIcon)`
     props.selected && `color: var(--pf-c-button--m-secondary--active--Color)`};
 `;
 
-const validate = (i18n) => (value) => {
+const validate = (t) => (value) => {
   let message;
   const hasValue = value.find(({ choice }) =>
     choice.trim().length > 0 ? choice : undefined
   );
   if (!hasValue) {
-    message = i18n._(t`There must be a value in at least one input`);
+    message = t`There must be a value in at least one input`;
   }
   return message;
 };
 function MultipleChoiceField({ label, tooltip }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const [formattedChoicesField, formattedChoicesMeta, formattedChoicesHelpers] =
     useField({
       name: 'formattedChoices',
-      validate: validate(i18n),
+      validate: validate(t),
     });
 
   const [typeField] = useField('type');
@@ -55,11 +54,11 @@ function MultipleChoiceField({ label, tooltip }) {
       id="formattedChoices"
       helperText={
         <HelperTextWrapper>
-          {i18n._(t`Type answer then click checkbox on right to select answer as
-default.`)}
+          {t`Type answer then click checkbox on right to select answer as
+default.`}
           <br />
-          {i18n._(t`Press 'Enter' to add more answer choices. One answer
-choice per line.`)}
+          {t`Press 'Enter' to add more answer choices. One answer
+choice per line.`}
         </HelperTextWrapper>
       }
       helperTextInvalid={formattedChoicesMeta.error}
@@ -75,7 +74,7 @@ choice per line.`)}
         <InputGroup key={id}>
           <TextInput
             data-cy={choice ? `${choice}-input` : 'new-choice-input'}
-            aria-label={choice || i18n._(t`new choice`)}
+            aria-label={choice || t`new choice`}
             onKeyUp={(e) => {
               if (
                 e.key === 'Enter' &&
@@ -116,7 +115,7 @@ choice per line.`)}
           />
           <Button
             variant="control"
-            aria-label={i18n._(t`Click to toggle default value`)}
+            aria-label={t`Click to toggle default value`}
             ouiaId={choice ? `${choice}-button` : 'new-choice-button'}
             isDisabled={!choice.trim()}
             onClick={() => {

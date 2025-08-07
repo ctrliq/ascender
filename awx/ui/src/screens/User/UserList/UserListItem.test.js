@@ -19,7 +19,7 @@ let wrapper;
 describe('UserListItem with full permissions', () => {
   beforeEach(() => {
     wrapper = mountWithContexts(
-      <I18nProvider i18n={i18n}>
+      <I18nProvider t={t}>
         <MemoryRouter initialEntries={['/users']} initialIndex={0}>
           <table>
             <tbody>
@@ -57,7 +57,7 @@ describe('UserListItem with full permissions', () => {
 describe('UserListItem without full permissions', () => {
   test('edit button hidden from users without edit capabilities', () => {
     wrapper = mountWithContexts(
-      <I18nProvider i18n={i18n}>
+      <I18nProvider t={t}>
         <MemoryRouter initialEntries={['/users']} initialIndex={0}>
           <table>
             <tbody>

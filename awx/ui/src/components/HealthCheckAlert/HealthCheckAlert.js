@@ -1,6 +1,5 @@
 import React from 'react';
-import { t } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import {
   Alert as PFAlert,
   Button,
@@ -12,7 +11,7 @@ const Alert = styled(PFAlert)`
   z-index: 1;
 `;
 function HealthCheckAlert({ onSetHealthCheckAlert }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   return (
     <Alert
       variant="default"
@@ -21,15 +20,13 @@ function HealthCheckAlert({ onSetHealthCheckAlert }) {
       }
       title={
         <>
-          {i18n._(
-            t`Health check request(s) submitted. Please wait and reload the page.`
-          )}{' '}
+          {t`Health check request(s) submitted. Please wait and reload the page.`}{' '}
           <Button
             variant="link"
             isInline
             onClick={() => window.location.reload()}
           >
-            {i18n._(t`Reload`)}
+            {t`Reload`}
           </Button>
         </>
       }

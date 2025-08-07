@@ -1,6 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { t } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card, PageSection } from '@patternfly/react-core';
@@ -31,7 +30,7 @@ import TemplateSurvey from './TemplateSurvey';
 import { Visualizer } from './WorkflowJobTemplateVisualizer';
 
 function WorkflowJobTemplate({ setBreadcrumb }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const location = useLocation();
   const match = useRouteMatch();
   const { id: templateId } = useParams();
@@ -108,44 +107,44 @@ function WorkflowJobTemplate({ setBreadcrumb }) {
       name: (
         <>
           <CaretLeftIcon />
-          {i18n._(t`Back to Templates`)}
+          {t`Back to Templates`}
         </>
       ),
       link: `/templates`,
       persistentFilterKey: 'templates',
       id: 99,
     },
-    { name: i18n._(t`Details`), link: `${match.url}/details` },
-    { name: i18n._(t`Access`), link: `${match.url}/access` },
+    { name: t`Details`, link: `${match.url}/details` },
+    { name: t`Access`, link: `${match.url}/access` },
   ];
 
   if (canSeeNotificationsTab) {
     tabsArray.push({
-      name: i18n._(t`Notifications`),
+      name: t`Notifications`,
       link: `${match.url}/notifications`,
     });
   }
 
   if (template) {
     tabsArray.push({
-      name: i18n._(t`Schedules`),
+      name: t`Schedules`,
       link: `${match.url}/schedules`,
     });
   }
 
   tabsArray.push(
     {
-      name: i18n._(t`Visualizer`),
+      name: t`Visualizer`,
       link: `${match.url}/visualizer`,
     },
     {
-      name: i18n._(t`Jobs`),
+      name: t`Jobs`,
       link: `${match.url}/jobs`,
     },
     {
       name: canAddAndEditSurvey
-        ? i18n._(t`Survey`)
-        : i18n._(t`View Survey`),
+        ? t`Survey`
+        : t`View Survey`,
       link: `${match.url}/survey`,
     }
   );
@@ -175,8 +174,8 @@ function WorkflowJobTemplate({ setBreadcrumb }) {
           <ContentError error={contentError}>
             {contentError.response.status === 404 && (
               <span>
-                {i18n._(t`Template not found.`)}{' '}
-                <Link to="/templates">{i18n._(t`View all Templates.`)}</Link>
+                {t`Template not found.`}{' '}
+                <Link to="/templates">{t`View all Templates.`}</Link>
               </span>
             )}
           </ContentError>
@@ -275,7 +274,7 @@ function WorkflowJobTemplate({ setBreadcrumb }) {
                   <Link
                     to={`/templates/${match.params.templateType}/${match.params.id}/details`}
                   >
-                    {i18n._(t`View Template Details`)}
+                    {t`View Template Details`}
                   </Link>
                 )}
               </ContentError>

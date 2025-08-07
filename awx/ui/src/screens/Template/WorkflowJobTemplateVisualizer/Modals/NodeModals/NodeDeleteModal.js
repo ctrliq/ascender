@@ -1,9 +1,8 @@
 import 'styled-components/macro';
 import React, { useContext } from 'react';
 import { Button } from '@patternfly/react-core';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 
-import { t } from '@lingui/react/macro';
 import {
   WorkflowDispatchContext,
   WorkflowStateContext,
@@ -12,7 +11,7 @@ import AlertModal from 'components/AlertModal';
 import { stringIsUUID } from 'util/strings';
 
 function NodeDeleteModal() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const dispatch = useContext(WorkflowDispatchContext);
   const { nodeToDelete } = useContext(WorkflowStateContext);
   const identifier = nodeToDelete?.originalNodeObject?.identifier;
@@ -27,7 +26,7 @@ function NodeDeleteModal() {
   return (
     <AlertModal
       variant="danger"
-      title={i18n._(t`Remove Node ${nodeName}`)}
+      title={t`Remove Node ${nodeName}`}
       isOpen={nodeToDelete}
       onClose={() => dispatch({ type: 'SET_NODE_TO_DELETE', value: null })}
       actions={[
@@ -36,33 +35,33 @@ function NodeDeleteModal() {
           id="confirm-node-removal"
           key="remove"
           variant="danger"
-          aria-label={i18n._(t`Confirm node removal`)}
+          aria-label={t`Confirm node removal`}
           onClick={() => dispatch({ type: 'DELETE_NODE' })}
         >
-          {i18n._(t`Remove`)}
+          {t`Remove`}
         </Button>,
         <Button
           ouiaId="node-removal-cancel-button"
           id="cancel-node-removal"
           key="cancel"
           variant="link"
-          aria-label={i18n._(t`Cancel node removal`)}
+          aria-label={t`Cancel node removal`}
           onClick={() => dispatch({ type: 'SET_NODE_TO_DELETE', value: null })}
         >
-          {i18n._(t`Cancel`)}
+          {t`Cancel`}
         </Button>,
       ]}
     >
       {nodeToDelete && nodeToDelete.unifiedJobTemplate ? (
         <>
-          <p>{i18n._(t`Are you sure you want to remove the node below:`)}</p>
+          <p>{t`Are you sure you want to remove the node below:`}</p>
           <br />
           <strong css="color: var(--pf-global--danger-color--100)">
             {nodeToDelete.unifiedJobTemplate.name}
           </strong>
         </>
       ) : (
-        <p>{i18n._(t`Are you sure you want to remove this node?`)}</p>
+        <p>{t`Are you sure you want to remove this node?`}</p>
       )}
     </AlertModal>
   );

@@ -1,5 +1,4 @@
 import * as d3 from 'd3';
-import { t } from '@lingui/react/macro';
 
 class UsageChartTooltip {
   constructor(opts) {
@@ -57,14 +56,14 @@ class UsageChartTooltip {
       .attr('y', 4)
       .attr('font-size', 12)
       .attr('fill', 'white')
-      .text(this.i18n._(t`Subscriptions consumed`));
+      .text(this.t`Subscriptions consumed`);
     this.capacityText = this.toolTipBase
       .append('text')
       .attr('x', 43)
       .attr('y', 28)
       .attr('font-size', 12)
       .attr('fill', 'white')
-      .text(this.i18n._(t`Subscription capacity`));
+      .text(this.t`Subscription capacity`);
     this.icon = this.toolTipBase
       .append('text')
       .attr('fill', 'white')

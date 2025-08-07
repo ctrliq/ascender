@@ -6,13 +6,12 @@ import getDocsBaseUrl from 'util/getDocsBaseUrl';
 import { required } from 'util/validators';
 import FormField, { CheckboxField, PasswordField } from 'components/FormField';
 import { useConfig } from 'contexts/Config';
-import { useLingui } from '@lingui/react';
-import { Trans, t } from '@lingui/react/macro';
+import { Trans, useLingui } from '@lingui/react/macro';
 
 const ANALYTICSLINK = 'https://www.ansible.com/products/automation-analytics';
 
 function AnalyticsStep() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const config = useConfig();
   const [manifest] = useField('manifest_file');
   const [insights] = useField('insights');
@@ -50,7 +49,7 @@ function AnalyticsStep() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            {i18n._(t`this Tower documentation page`)}
+            {t`this Tower documentation page`}
           </Button>
           . Uncheck the following boxes to disable this feature.
         </Trans>
@@ -59,24 +58,24 @@ function AnalyticsStep() {
         <CheckboxField
           name="pendo"
           isDisabled={!config.me.is_superuser}
-          aria-label={i18n._(t`User analytics`)}
-          label={i18n._(t`User analytics`)}
+          aria-label={t`User analytics`}
+          label={t`User analytics`}
           id="pendo-field"
-          description={i18n._(t`This data is used to enhance
+          description={t`This data is used to enhance
                    future releases of the Tower Software and help
-                   streamline customer experience and success.`)}
+                   streamline customer experience and success.`}
         />
       </FormGroup>
       <FormGroup fieldId="insights">
         <CheckboxField
           name="insights"
           isDisabled={!config.me.is_superuser}
-          aria-label={i18n._(t`Automation Analytics`)}
-          label={i18n._(t`Automation Analytics`)}
+          aria-label={t`Automation Analytics`}
+          label={t`Automation Analytics`}
           id="insights-field"
-          description={i18n._(t`This data is used to enhance
+          description={t`This data is used to enhance
                    future releases of the Software and to provide
-                   Automation Analytics.`)}
+                   Automation Analytics.`}
         />
       </FormGroup>
       {requireCredentialFields && (
@@ -92,7 +91,7 @@ function AnalyticsStep() {
             id="username-field"
             isDisabled={!config.me.is_superuser}
             isRequired={requireCredentialFields}
-            label={i18n._(t`Username`)}
+            label={t`Username`}
             name="username"
             type="text"
             validate={required(null)}
@@ -101,7 +100,7 @@ function AnalyticsStep() {
             id="password-field"
             isDisabled={!config.me.is_superuser}
             isRequired={requireCredentialFields}
-            label={i18n._(t`Password`)}
+            label={t`Password`}
             name="password"
             validate={required(null)}
           />
@@ -111,7 +110,7 @@ function AnalyticsStep() {
         <img
           width="300"
           src="static/media/insights-analytics-dashboard.jpeg"
-          alt={i18n._(t`Automation Analytics dashboard`)}
+          alt={t`Automation Analytics dashboard`}
         />
         <Button
           component="a"

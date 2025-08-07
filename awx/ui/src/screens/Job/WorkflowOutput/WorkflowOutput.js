@@ -1,4 +1,5 @@
 import React, { useEffect, useReducer } from 'react';
+import { useLingui } from '@lingui/react/macro';
 
 import styled from 'styled-components';
 import { shape } from 'prop-types';
@@ -44,6 +45,7 @@ const fetchWorkflowNodes = async (jobId, pageNo = 1, nodes = []) => {
 };
 
 function WorkflowOutput({ job }) {
+  const { t } = useLingui();
   const [state, dispatch] = useReducer(workflowReducer, {}, initReducer);
   const { contentError, isLoading, links, nodePositions, nodes } = state;
 
@@ -54,6 +56,7 @@ function WorkflowOutput({ job }) {
         dispatch({
           type: 'GENERATE_NODES_AND_LINKS',
           nodes: workflowNodes,
+          startLabel: t`START`,
         });
       } catch (error) {
         dispatch({ type: 'SET_CONTENT_ERROR', value: error });
@@ -63,7 +66,7 @@ function WorkflowOutput({ job }) {
     }
     dispatch({ type: 'RESET' });
     fetchData();
-  }, [job.id]);
+  }, [job.id, t]);
 
   // Update positions of nodes/links
   useEffect(() => {

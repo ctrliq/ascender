@@ -1,6 +1,5 @@
 import React from 'react';
-import { i18n } from '@lingui/core';
-import { t } from '@lingui/react/macro';
+import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
 import styled from 'styled-components';
 import { Alert } from '@patternfly/react-core';
@@ -14,6 +13,7 @@ const InventoryAlert = styled(Alert)`
 const STEP_ID = 'inventory';
 
 export default function useInventoryStep(launchConfig, resource, visitedSteps) {
+  const { t } = useLingui();
   const [, meta, helpers] = useField('inventory');
   const formError =
     !resource || resource?.type === 'workflow_job_template'
@@ -23,7 +23,7 @@ export default function useInventoryStep(launchConfig, resource, visitedSteps) {
         !meta.value;
 
   return {
-    step: getStep(launchConfig, formError, resource),
+    step: getStep(launchConfig, formError, resource, t),
     initialValues: getInitialValues(launchConfig, resource),
     isReady: true,
     contentError: null,
@@ -33,12 +33,12 @@ export default function useInventoryStep(launchConfig, resource, visitedSteps) {
     },
     validate: () => {
       if (meta.touched && !meta.value && resource.type === 'job_template') {
-        helpers.setError(i18n._(t`An inventory must be selected`));
+        helpers.setError(t`An inventory must be selected`);
       }
     },
   };
 }
-function getStep(launchConfig, formError, resource) {
+function getStep(launchConfig, formError, resource, t) {
   if (!launchConfig.ask_inventory_on_launch) {
     return null;
   }
@@ -46,7 +46,7 @@ function getStep(launchConfig, formError, resource) {
     id: STEP_ID,
     name: (
       <StepName hasErrors={formError} id="inventory-step">
-        {i18n._(t`Inventory`)}
+        {t`Inventory`}
       </StepName>
     ),
     component: (
@@ -57,9 +57,7 @@ function getStep(launchConfig, formError, resource) {
               ouiaId="InventoryStep-alert"
               variant="warning"
               isInline
-              title={i18n._(
-                t`This inventory is applied to all workflow nodes within this workflow (${resource.name}) that prompt for an inventory.`
-              )}
+              title={t`This inventory is applied to all workflow nodes within this workflow (${resource.name}) that prompt for an inventory.`}
             />
           ) : null
         }

@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { t } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import {
   Button,
   EmptyState,
@@ -32,7 +31,7 @@ const QS_CONFIG = getQSConfig('roles', {
 });
 
 function TeamRolesList({ me, team }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const { search } = useLocation();
   const [roleToDisassociate, setRoleToDisassociate] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -127,12 +126,10 @@ function TeamRolesList({ me, team }) {
       <EmptyState variant="full">
         <EmptyStateIcon icon={CubesIcon} />
         <Title headingLevel="h5" size="lg">
-          {i18n._(t`System Administrator`)}
+          {t`System Administrator`}
         </Title>
         <EmptyStateBody>
-          {i18n._(
-            t`System administrators have unrestricted access to all resources.`
-          )}
+          {t`System administrators have unrestricted access to all resources.`}
         </EmptyStateBody>
       </EmptyState>
     );
@@ -145,18 +142,18 @@ function TeamRolesList({ me, team }) {
         hasContentLoading={isLoading || isDisassociateLoading}
         items={roles}
         itemCount={roleCount}
-        pluralizedItemName={i18n._(t`Team Roles`)}
+        pluralizedItemName={t`Team Roles`}
         qsConfig={QS_CONFIG}
         toolbarSearchColumns={[
           {
-            name: i18n._(t`Role`),
+            name: t`Role`,
             key: 'role_field__icontains',
             isDefault: true,
           },
         ]}
         toolbarSortColumns={[
           {
-            name: i18n._(t`ID`),
+            name: t`ID`,
             key: 'id',
           },
         ]}
@@ -181,9 +178,9 @@ function TeamRolesList({ me, team }) {
         )}
         headerRow={
           <HeaderRow qsConfig={QS_CONFIG} isSelectable={false}>
-            <HeaderCell>{i18n._(t`Resource Name`)}</HeaderCell>
-            <HeaderCell>{i18n._(t`Type`)}</HeaderCell>
-            <HeaderCell sortKey="id">{i18n._(t`Role`)}</HeaderCell>
+            <HeaderCell>{t`Resource Name`}</HeaderCell>
+            <HeaderCell>{t`Type`}</HeaderCell>
+            <HeaderCell sortKey="id">{t`Role`}</HeaderCell>
           </HeaderRow>
         }
         renderRow={(role, index) => (
@@ -203,43 +200,41 @@ function TeamRolesList({ me, team }) {
             setShowAddModal(false);
             fetchRoles();
           }}
-          title={i18n._(t`Add team permissions`)}
+          title={t`Add team permissions`}
           onClose={() => setShowAddModal(false)}
           onError={(err) => setAssociateError(err)}
         />
       )}
       {roleToDisassociate && (
         <AlertModal
-          aria-label={i18n._(t`Disassociate role`)}
+          aria-label={t`Disassociate role`}
           isOpen={roleToDisassociate}
           variant="error"
-          title={i18n._(t`Disassociate role!`)}
+          title={t`Disassociate role!`}
           onClose={() => setRoleToDisassociate(null)}
           actions={[
             <Button
               ouiaId="disassociate-confirm-button"
               key="disassociate"
               variant="danger"
-              aria-label={i18n._(t`confirm disassociate`)}
+              aria-label={t`confirm disassociate`}
               onClick={disassociateRole}
             >
-              {i18n._(t`Disassociate`)}
+              {t`Disassociate`}
             </Button>,
             <Button
               ouiaId="disassociate-cancel-button"
               key="cancel"
               variant="link"
-              aria-label={i18n._(t`Cancel`)}
+              aria-label={t`Cancel`}
               onClick={() => setRoleToDisassociate(null)}
             >
-              {i18n._(t`Cancel`)}
+              {t`Cancel`}
             </Button>,
           ]}
         >
           <div>
-            {i18n._(
-              t`This action will disassociate the following role from ${roleToDisassociate.summary_fields.resource_name}:`
-            )}
+            {t`This action will disassociate the following role from ${roleToDisassociate.summary_fields.resource_name}:`}
             <br />
             <strong>{roleToDisassociate.name}</strong>
           </div>
@@ -247,13 +242,13 @@ function TeamRolesList({ me, team }) {
       )}
       {associateError && (
         <AlertModal
-          aria-label={i18n._(t`Associate role error`)}
+          aria-label={t`Associate role error`}
           isOpen={associateError}
           variant="error"
-          title={i18n._(t`Error!`)}
+          title={t`Error!`}
           onClose={() => setAssociateError(null)}
         >
-          {i18n._(t`Failed to associate role`)}
+          {t`Failed to associate role`}
           <ErrorDetail error={associateError} />
         </AlertModal>
       )}
@@ -261,10 +256,10 @@ function TeamRolesList({ me, team }) {
         <AlertModal
           isOpen={disassociationError}
           variant="error"
-          title={i18n._(t`Error!`)}
+          title={t`Error!`}
           onClose={clearDisassociationError}
         >
-          {i18n._(t`Failed to delete role.`)}
+          {t`Failed to delete role.`}
           <ErrorDetail error={disassociationError} />
         </AlertModal>
       )}

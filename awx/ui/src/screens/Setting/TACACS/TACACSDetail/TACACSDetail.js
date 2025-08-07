@@ -1,7 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { useLingui } from '@lingui/react';
-import { t } from '@lingui/react/macro';
+import { useLingui } from '@lingui/react/macro';
 import { Button, Alert as PFAlert } from '@patternfly/react-core';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import styled from 'styled-components';
@@ -21,7 +20,7 @@ const Alert = styled(PFAlert)`
 `;
 
 function TACACSDetail() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const { me } = useConfig();
   const { GET: options } = useSettings();
 
@@ -47,14 +46,14 @@ function TACACSDetail() {
       name: (
         <>
           <CaretLeftIcon />
-          {i18n._(t`Back to Settings`)}
+          {t`Back to Settings`}
         </>
       ),
       link: `/settings`,
       id: 99,
     },
     {
-      name: i18n._(t`Details`),
+      name: t`Details`,
       link: `/settings/tacacs/details`,
       id: 0,
     },
@@ -77,9 +76,7 @@ function TACACSDetail() {
               variant="info"
               isInline
               data-cy="TACACS-deprecation-warning"
-              title={i18n._(
-                t`This feature is deprecated and will be removed in a future release.`
-              )}
+              title={t`This feature is deprecated and will be removed in a future release.`}
               ouiaId="tacacs-deprecation-alert"
             />
             <DetailList>
@@ -103,12 +100,12 @@ function TACACSDetail() {
         {me?.is_superuser && (
           <CardActionsRow>
             <Button
-              aria-label={i18n._(t`Edit`)}
+              aria-label={t`Edit`}
               component={Link}
               to="/settings/tacacs/edit"
               ouiaId="tacacs-detail-edit-button"
             >
-              {i18n._(t`Edit`)}
+              {t`Edit`}
             </Button>
           </CardActionsRow>
         )}

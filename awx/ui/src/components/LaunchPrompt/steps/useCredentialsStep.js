@@ -1,6 +1,5 @@
 import React from 'react';
-import { i18n } from '@lingui/core';
-import { t } from '@lingui/react/macro';
+import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
 import CredentialsStep from './CredentialsStep';
 import StepName from './StepName';
@@ -14,6 +13,7 @@ export default function useCredentialsStep(
   resourceDefaultCredentials = [],
   allowCredentialsWithPasswords = false
 ) {
+  const { t } = useLingui();
   const [field, meta, helpers] = useField('credentials');
   const formError =
     !resource || resource?.type === 'workflow_job_template'
@@ -24,7 +24,8 @@ export default function useCredentialsStep(
       launchConfig,
       allowCredentialsWithPasswords,
       formError,
-      resourceDefaultCredentials
+      resourceDefaultCredentials,
+      t
     ),
     initialValues: getInitialValues(launchConfig, resourceDefaultCredentials),
     isReady: true,
@@ -38,6 +39,7 @@ export default function useCredentialsStep(
         credentialsValidator(
           allowCredentialsWithPasswords,
           field.value,
+          t,
           resourceDefaultCredentials
         )
       );
@@ -50,7 +52,8 @@ function getStep(
 
   allowCredentialsWithPasswords,
   formError,
-  resourceDefaultCredentials
+  resourceDefaultCredentials,
+  t
 ) {
   if (!launchConfig.ask_credential_on_launch) {
     return null;
@@ -60,7 +63,7 @@ function getStep(
     key: 4,
     name: (
       <StepName hasErrors={formError} id="credentials-step">
-        {i18n._(t`Credentials`)}
+        {t`Credentials`}
       </StepName>
     ),
     component: (

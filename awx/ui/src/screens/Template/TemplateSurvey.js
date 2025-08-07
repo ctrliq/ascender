@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Switch, Route, useParams } from 'react-router-dom';
-import { useLingui } from '@lingui/react';
-import { t } from '@lingui/react/macro';
+import { useLingui } from '@lingui/react/macro';
 import { JobTemplatesAPI, WorkflowJobTemplatesAPI } from 'api';
 import ContentError from 'components/ContentError';
 import AlertModal from 'components/AlertModal';
@@ -10,7 +9,7 @@ import useRequest, { useDismissableError } from 'hooks/useRequest';
 import { SurveyList, SurveyQuestionAdd, SurveyQuestionEdit } from './Survey';
 
 function TemplateSurvey({ template, canEdit }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const [surveyEnabled, setSurveyEnabled] = useState(template.survey_enabled);
 
   const { templateType, id: templateId } = useParams();
@@ -128,10 +127,10 @@ function TemplateSurvey({ template, canEdit }) {
         <AlertModal
           isOpen={error}
           variant="error"
-          title={i18n._(t`Error!`)}
+          title={t`Error!`}
           onClose={dismissError}
         >
-          {i18n._(t`Failed to update survey.`)}
+          {t`Failed to update survey.`}
           <ErrorDetail error={error} />
         </AlertModal>
       )}

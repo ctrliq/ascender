@@ -1,6 +1,5 @@
 import React from 'react';
-import { t } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import useToast, { AlertVariant } from 'hooks/useToast';
 import { string, bool, func } from 'prop-types';
 import { Tr, Td } from '@patternfly/react-table';
@@ -25,7 +24,7 @@ function WorkflowApprovalListItem({
   detailUrl,
   rowIndex,
 }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const { addToast } = useToast();
   const hasBeenActedOn =
     workflowApproval.status === 'successful' ||
@@ -33,7 +32,7 @@ function WorkflowApprovalListItem({
     workflowApproval.status === 'canceled';
   const labelId = `check-action-${workflowApproval.id}`;
   const workflowJob = workflowApproval?.summary_fields?.source_workflow_job;
-  const status = getStatus(workflowApproval, i18n);
+  const status = getStatus(workflowApproval, t);
   // Toast handler for approve/deny actions (PatternFly style)
   const handleToast = (id, message) => {
     addToast({
@@ -51,15 +50,15 @@ function WorkflowApprovalListItem({
           isSelected,
           onSelect,
         }}
-        dataLabel={i18n._(t`Selected`)}
+        dataLabel={t`Selected`}
       />
-      <Td id={labelId} dataLabel={i18n._(t`Name`)}>
+      <Td id={labelId} dataLabel={t`Name`}>
         <Link to={`${detailUrl}`}>
           {workflowJob && workflowJob?.id ? (
             <b>{`${workflowJob?.id} - ${workflowApproval?.name}`}</b>
           ) : (
             <b>
-              {i18n._(t`Deleted`)} {`- ${workflowApproval?.name}`}
+              {t`Deleted`} {`- ${workflowApproval?.name}`}
             </b>
           )}
         </Link>
@@ -70,31 +69,31 @@ function WorkflowApprovalListItem({
             {`${workflowJob?.id} - ${workflowJob?.name}`}
           </Link>
         ) : (
-          i18n._(t`Deleted`)
+          t`Deleted`
         )}
       </Td>
-      <Td dataLabel={i18n._(t`Started`)}>
+      <Td dataLabel={t`Started`}>
         {formatDateString(workflowApproval.started)}
       </Td>
-      <Td dataLabel={i18n._(t`Status`)}>
+      <Td dataLabel={t`Status`}>
         {workflowApproval.status === 'pending' ? (
           <StatusLabel status={workflowApproval.status}>
-            {getPendingLabel(workflowApproval, i18n)}
+            {getPendingLabel(workflowApproval, t)}
           </StatusLabel>
         ) : (
           <StatusLabel
-            tooltipContent={getTooltip(workflowApproval, i18n)}
+            tooltipContent={getTooltip(workflowApproval, t)}
             status={status}
           />
         )}
       </Td>
-      <ActionsTd dataLabel={i18n._(t`Actions`)}>
+      <ActionsTd dataLabel={t`Actions`}>
         <ActionItem
           visible
           tooltip={
             hasBeenActedOn
-              ? i18n._(t`This has already been acted on`)
-              : i18n._(t`Approve`)
+              ? t`This has already been acted on`
+              : t`Approve`
           }
         >
           <WorkflowApprovalButton
@@ -106,8 +105,8 @@ function WorkflowApprovalListItem({
           visible
           tooltip={
             hasBeenActedOn
-              ? i18n._(t`This has already been acted on`)
-              : i18n._(t`Deny`)
+              ? t`This has already been acted on`
+              : t`Deny`
           }
         >
           <WorkflowDenyButton
@@ -117,22 +116,20 @@ function WorkflowApprovalListItem({
         </ActionItem>
         <ActionItem visible>
           <JobCancelButton
-            title={i18n._(t`Cancel Workflow`)}
+            title={t`Cancel Workflow`}
             showIconButton
             job={{
               ...workflowApproval.summary_fields.source_workflow_job,
               type: 'workflow_job',
             }}
-            buttonText={i18n._(t`Cancel Workflow`)}
+            buttonText={t`Cancel Workflow`}
             isDisabled={hasBeenActedOn}
             tooltip={
               hasBeenActedOn
-                ? i18n._(t`This has already been acted on`)
-                : i18n._(t`Cancel`)
+                ? t`This has already been acted on`
+                : t`Cancel`
             }
-            cancelationMessage={i18n._(
-              t`This will cancel all subsequent nodes in this workflow`
-            )}
+            cancelationMessage={t`This will cancel all subsequent nodes in this workflow`}
           />
         </ActionItem>
       </ActionsTd>

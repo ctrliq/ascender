@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { i18n } from '@lingui/core';
-import { t } from '@lingui/react/macro';
+import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
 import { jsonToYaml, yamlToJson } from 'util/yaml';
 import OtherPromptsStep from './OtherPromptsStep';
@@ -36,6 +35,7 @@ const FIELD_NAMES = [
 ];
 
 export default function useOtherPromptsStep(launchConfig, resource, labels) {
+  const { t } = useLingui();
   const [variablesField] = useField('extra_vars');
   const [variablesMode, setVariablesMode] = useState(null);
   const [isTouched, setIsTouched] = useState(false);
@@ -64,7 +64,7 @@ export default function useOtherPromptsStep(launchConfig, resource, labels) {
     : false;
 
   return {
-    step: getStep(launchConfig, hasError, variablesMode, handleModeChange),
+    step: getStep(launchConfig, hasError, variablesMode, handleModeChange, t),
     initialValues: getInitialValues(launchConfig, resource, labels),
     isReady: true,
     contentError: null,
@@ -79,7 +79,7 @@ export default function useOtherPromptsStep(launchConfig, resource, labels) {
   };
 }
 
-function getStep(launchConfig, hasError, variablesMode, handleModeChange) {
+function getStep(launchConfig, hasError, variablesMode, handleModeChange, t) {
   if (!shouldShowPrompt(launchConfig)) {
     return null;
   }
@@ -88,7 +88,7 @@ function getStep(launchConfig, hasError, variablesMode, handleModeChange) {
     key: 5,
     name: (
       <StepName hasErrors={hasError} id="other-prompts-step">
-        {i18n._(t`Other prompts`)}
+        {t`Other prompts`}
       </StepName>
     ),
     component: (

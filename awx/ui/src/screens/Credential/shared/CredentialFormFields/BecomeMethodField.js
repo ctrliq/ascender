@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useField } from 'formik';
 import { bool, shape, string } from 'prop-types';
-import { useLingui } from '@lingui/react';
-import { t } from '@lingui/react/macro';
+import { useLingui } from '@lingui/react/macro';
 import {
   FormGroup,
   Select,
@@ -12,7 +11,7 @@ import {
 import Popover from 'components/Popover';
 
 function BecomeMethodField({ fieldOptions, isRequired }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const [isOpen, setIsOpen] = useState(false);
   const [options, setOptions] = useState(
     [
@@ -64,8 +63,8 @@ function BecomeMethodField({ fieldOptions, isRequired }) {
         onCreateOption={(option) => {
           setOptions([...options, { value: option }]);
         }}
-        noResultsFoundText={i18n._(t`No results found`)}
-        createText={i18n._(t`Create`)}
+        noResultsFoundText={t`No results found`}
+        createText={t`Create`}
       >
         {options.map((option) => (
           <SelectOption key={option.value} value={option.value} />

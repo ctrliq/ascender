@@ -2,8 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useLocation, useHistory } from 'react-router-dom';
-import { t } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
 import {
   Button,
@@ -27,7 +26,7 @@ function CredentialPluginInput(props) {
   const [passwordPromptField] = useField(`passwordPrompts.${fieldOptions.id}`);
   const location = useLocation();
   const history = useHistory();
-  const { i18n } = useLingui();
+  const { t } = useLingui();
 
   const disableFieldAndButtons =
     !!passwordPromptField.value ||
@@ -63,17 +62,13 @@ function CredentialPluginInput(props) {
             },
           })}
           <Tooltip
-            content={i18n._(
-              t`Populate field from an external secret management system`
-            )}
+            content={t`Populate field from an external secret management system`}
           >
             <Button
               ouiaId={`credential-field-${fieldOptions.id}-external-button`}
               id={`credential-${fieldOptions.id}-external-button`}
               variant={ButtonVariant.control}
-              aria-label={i18n._(
-                t`Populate field from an external secret management system`
-              )}
+              aria-label={t`Populate field from an external secret management system`}
               onClick={() => setShowPluginWizard(true)}
               isDisabled={isDisabled || disableFieldAndButtons}
             >

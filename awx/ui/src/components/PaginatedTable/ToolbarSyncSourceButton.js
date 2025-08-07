@@ -1,13 +1,12 @@
 import React from 'react';
 import { func } from 'prop-types';
 import { Button, DropdownItem, Tooltip } from '@patternfly/react-core';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 
-import { t } from '@lingui/react/macro';
 import { useKebabifiedMenu } from 'contexts/Kebabified';
 
 function ToolbarSyncSourceButton({ onClick }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const { isKebabified } = useKebabifiedMenu();
 
   if (isKebabified) {
@@ -18,7 +17,7 @@ function ToolbarSyncSourceButton({ onClick }) {
         component="button"
         onClick={onClick}
       >
-        {i18n._(t`Sync all`)}
+        {t`Sync all`}
       </DropdownItem>
     );
   }
@@ -26,16 +25,16 @@ function ToolbarSyncSourceButton({ onClick }) {
   return (
     <Tooltip
       key="update"
-      content={i18n._(t`Sync all sources`)}
+      content={t`Sync all sources`}
       position="top"
     >
       <Button
         ouiaId="sync-all-button"
         onClick={onClick}
-        aria-label={i18n._(t`Sync all`)}
+        aria-label={t`Sync all`}
         variant="secondary"
       >
-        {i18n._(t`Sync all`)}
+        {t`Sync all`}
       </Button>
     </Tooltip>
   );

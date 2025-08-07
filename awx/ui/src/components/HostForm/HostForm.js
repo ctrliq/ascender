@@ -1,8 +1,7 @@
 import React, { useCallback } from 'react';
 import { bool, func, shape } from 'prop-types';
 import { Formik, useField, useFormikContext } from 'formik';
-import { t } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import { Form, FormGroup, Tooltip } from '@patternfly/react-core';
 import { required } from 'util/validators';
 import FormField, { FormSubmitError } from '../FormField';
@@ -13,7 +12,7 @@ import { FormColumnLayout, FormFullWidthLayout } from '../FormLayout';
 import Popover from '../Popover';
 
 const InventoryLookupField = ({ isDisabled }) => {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const { setFieldValue, setFieldTouched } = useFormikContext();
   const [inventoryField, inventoryMeta, inventoryHelpers] =
     useField('inventory');
@@ -31,14 +30,14 @@ const InventoryLookupField = ({ isDisabled }) => {
       fieldId="inventory-lookup"
       value={inventoryField.value}
       onBlur={() => inventoryHelpers.setTouched()}
-      tooltip={i18n._(t`Select the inventory that this host will belong to.`)}
+      tooltip={t`Select the inventory that this host will belong to.`}
       isValid={!inventoryMeta.touched || !inventoryMeta.error}
       helperTextInvalid={inventoryMeta.error}
       onChange={handleInventoryUpdate}
       required
       touched={inventoryMeta.touched}
       error={inventoryMeta.error}
-      validate={required(i18n._(t`Select a value for this field`))}
+      validate={required(t`Select a value for this field`)}
       isDisabled={isDisabled}
       hideAdvancedInventories
       autoPopulate={!inventoryField.value?.id}
@@ -47,12 +46,10 @@ const InventoryLookupField = ({ isDisabled }) => {
 
   return (
     <FormGroup
-      label={i18n._(t`Inventory`)}
+      label={t`Inventory`}
       labelIcon={
         <Popover
-          content={i18n._(
-            t`Select the inventory that this host will belong to.`
-          )}
+          content={t`Select the inventory that this host will belong to.`}
         />
       }
       isRequired
@@ -63,7 +60,7 @@ const InventoryLookupField = ({ isDisabled }) => {
       helperTextInvalid={inventoryMeta.error}
     >
       {isDisabled ? (
-        <Tooltip content={i18n._(t`Unable to change inventory on a host`)}>
+        <Tooltip content={t`Unable to change inventory on a host`}>
           {renderInventoryLookup}
         </Tooltip>
       ) : (
@@ -81,7 +78,7 @@ const HostForm = ({
   submitError,
   disableInventoryLookup,
 }) => {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   return (
     <Formik
       initialValues={{
@@ -99,7 +96,7 @@ const HostForm = ({
               id="host-name"
               name="name"
               type="text"
-              label={i18n._(t`Name`)}
+              label={t`Name`}
               validate={required(null)}
               isRequired
             />
@@ -107,7 +104,7 @@ const HostForm = ({
               id="host-description"
               name="description"
               type="text"
-              label={i18n._(t`Description`)}
+              label={t`Description`}
             />
             {isInventoryVisible && (
               <InventoryLookupField isDisabled={disableInventoryLookup} />
@@ -116,7 +113,7 @@ const HostForm = ({
               <VariablesField
                 id="host-variables"
                 name="variables"
-                label={i18n._(t`Variables`)}
+                label={t`Variables`}
               />
             </FormFullWidthLayout>
             {submitError && <FormSubmitError error={submitError} />}

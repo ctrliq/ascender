@@ -1,7 +1,6 @@
 import React from 'react';
 import { string, bool, func } from 'prop-types';
-import { useLingui } from '@lingui/react';
-import { t } from '@lingui/react/macro';
+import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router-dom';
 import { Button } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
@@ -16,7 +15,7 @@ function CredentialTypeListItem({
   onSelect,
   rowIndex,
 }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const labelId = `check-action-${credentialType.id}`;
 
   return (
@@ -30,21 +29,21 @@ function CredentialTypeListItem({
           isSelected,
           onSelect,
         }}
-        dataLabel={i18n._(t`Selected`)}
+        dataLabel={t`Selected`}
       />
-      <TdBreakWord id={labelId} dataLabel={i18n._(t`Name`)}>
+      <TdBreakWord id={labelId} dataLabel={t`Name`}>
         <Link to={`${detailUrl}`}>
           <b>{credentialType.name}</b>
         </Link>
       </TdBreakWord>
-      <ActionsTd dataLabel={i18n._(t`Actions`)}>
+      <ActionsTd dataLabel={t`Actions`}>
         <ActionItem
           visible={credentialType.summary_fields.user_capabilities.edit}
-          tooltip={i18n._(t`Edit credential type`)}
+          tooltip={t`Edit credential type`}
         >
           <Button
             ouiaId={`${credentialType.id}-edit-button`}
-            aria-label={i18n._(t`Edit credential type`)}
+            aria-label={t`Edit credential type`}
             variant="plain"
             component={Link}
             to={`/credential_types/${credentialType.id}/edit`}

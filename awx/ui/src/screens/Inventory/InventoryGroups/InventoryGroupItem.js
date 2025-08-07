@@ -1,7 +1,6 @@
 import React from 'react';
 import { bool, func } from 'prop-types';
-import { useLingui } from '@lingui/react';
-import { t } from '@lingui/react/macro';
+import { useLingui } from '@lingui/react/macro';
 
 import { Button } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
@@ -12,7 +11,7 @@ import { ActionsTd, ActionItem } from 'components/PaginatedTable';
 import { Group } from 'types';
 
 function InventoryGroupItem({ group, isSelected, onSelect, rowIndex }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const { id: inventoryId, inventoryType } = useParams();
   const labelId = `check-action-${group.id}`;
   const detailUrl = `/inventories/${inventoryType}/${inventoryId}/groups/${group.id}/details`;
@@ -28,20 +27,20 @@ function InventoryGroupItem({ group, isSelected, onSelect, rowIndex }) {
           onSelect,
         }}
       />
-      <Td id={labelId} dataLabel={i18n._(t`Name`)}>
+      <Td id={labelId} dataLabel={t`Name`}>
         <Link to={`${detailUrl}`} id={labelId}>
           <b>{group.name}</b>
         </Link>
       </Td>
       {inventoryType !== 'constructed_inventory' && (
-        <ActionsTd dataLabel={i18n._(t`Actions`)} gridColumns="auto 40px">
+        <ActionsTd dataLabel={t`Actions`} gridColumns="auto 40px">
           <ActionItem
             visible={group.summary_fields.user_capabilities.edit}
-            tooltip={i18n._(t`Edit group`)}
+            tooltip={t`Edit group`}
           >
             <Button
               ouiaId={`${group.id}-edit-button`}
-              aria-label={i18n._(t`Edit Group`)}
+              aria-label={t`Edit Group`}
               variant="plain"
               component={Link}
               to={editUrl}

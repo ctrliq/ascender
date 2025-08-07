@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
-import { t } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import PropTypes from 'prop-types';
 import { Button } from '@patternfly/react-core';
 import { CopyIcon } from '@patternfly/react-icons';
@@ -17,7 +16,7 @@ function CopyButton({
   errorMessage,
   ouiaId,
 }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const {
     isLoading,
     error: copyError,
@@ -39,7 +38,7 @@ function CopyButton({
         id={id}
         ouiaId={ouiaId}
         isDisabled={isLoading || isDisabled}
-        aria-label={i18n._(t`Copy`)}
+        aria-label={t`Copy`}
         variant="plain"
         onClick={copyItemToAPI}
       >
@@ -47,10 +46,10 @@ function CopyButton({
       </Button>
       {error && (
         <AlertModal
-          aria-label={i18n._(t`Copy Error`)}
+          aria-label={t`Copy Error`}
           isOpen={error}
           variant="error"
-          title={i18n._(t`Error!`)}
+          title={t`Error!`}
           onClose={dismissError}
         >
           {errorMessage}

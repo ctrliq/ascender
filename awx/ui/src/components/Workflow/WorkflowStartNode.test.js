@@ -23,7 +23,7 @@ describe('WorkflowStartNode', () => {
   test('mounts successfully', () => {
     const wrapper = mountWithContexts(
       <svg>
-        <I18nProvider i18n={i18n}>
+        <I18nProvider t={t}>
           <WorkflowStateContext.Provider value={{ nodePositions }}>
             <WorkflowStartNode
               nodePositions={nodePositions}
@@ -38,7 +38,7 @@ describe('WorkflowStartNode', () => {
   test('tooltip shown on hover', () => {
     const wrapper = mountWithContexts(
       <svg>
-        <I18nProvider i18n={i18n}>
+        <I18nProvider t={t}>
           <WorkflowStateContext.Provider value={{ nodePositions }}>
             <WorkflowStartNode
               nodePositions={nodePositions}

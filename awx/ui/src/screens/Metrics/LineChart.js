@@ -1,10 +1,9 @@
 import React, { useEffect, useCallback } from 'react';
-import { t } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import * as d3 from 'd3';
 
 function LineChart({ data, helpText }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const count = data[0]?.values.length;
   const draw = useCallback(() => {
     const margin = 80;
@@ -118,7 +117,7 @@ function LineChart({ data, helpText }) {
       .attr('class', 'legend-title')
       .attr('x', '100')
       .attr('y', '50')
-      .text(i18n._(t`Legend`));
+      .text(t`Legend`);
 
     legendContainer.data(data, (d, i) => {
       if (d?.name) {
@@ -230,7 +229,7 @@ function LineChart({ data, helpText }) {
       .call(xAxis);
 
     svg.append('g').attr('class', 'y axis').call(yAxis);
-  }, [data, helpText, i18n]);
+  }, [data, helpText, t]);
 
   useEffect(() => {
     draw();

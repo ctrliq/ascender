@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useField } from 'formik';
 import { FormGroup, Title } from '@patternfly/react-core';
-import { useLingui } from '@lingui/react';
-import { t } from '@lingui/react/macro';
+import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import 'styled-components/macro';
 import FormField from 'components/FormField';
@@ -28,27 +27,21 @@ export default function ScheduleFormFields({
   zoneOptions,
   zoneLinks,
 }) {
-  const { i18n } = useLingui();
-  const helpText = getHelpText(i18n);
+  const { t } = useLingui();
+  const helpText = getHelpText(t);
   const [timezone, timezoneMeta] = useField({
     name: 'timezone',
-    validate: required(i18n._(t`Select a value for this field`)),
+    validate: required(t`Select a value for this field`),
   });
   const [frequency, frequencyMeta, frequencyHelper] = useField({
     name: 'frequency',
-    validate: required(i18n._(t`Select a value for this field`)),
+    validate: required(t`Select a value for this field`),
   });
   const [timezoneMessage, setTimezoneMessage] = useState('');
   const warnLinkedTZ = (event, selectedValue) => {
     if (zoneLinks[selectedValue]) {
       setTimezoneMessage(
-        i18n._(
-          t`Warning: {selectedValue} is a link to {link} and will be saved as that.`,
-          {
-            selectedValue,
-            link: zoneLinks[selectedValue],
-          }
-        )
+        t`Warning: ${selectedValue} is a link to ${zoneLinks[selectedValue]} and will be saved as that.`
       );
     } else {
       setTimezoneMessage('');
@@ -66,7 +59,7 @@ export default function ScheduleFormFields({
   const [exceptionFrequency, exceptionFrequencyMeta, exceptionFrequencyHelper] =
     useField({
       name: 'exceptionFrequency',
-      validate: required(i18n._(t`Select a value for this field`)),
+      validate: required(t`Select a value for this field`),
     });
 
   const updateFrequency = (setFrequency) => (values) => {
@@ -77,7 +70,7 @@ export default function ScheduleFormFields({
     <>
       <FormField
         id="schedule-name"
-        label={i18n._(t`Name`)}
+        label={t`Name`}
         name="name"
         type="text"
         validate={required(null)}
@@ -85,14 +78,14 @@ export default function ScheduleFormFields({
       />
       <FormField
         id="schedule-description"
-        label={i18n._(t`Description`)}
+        label={t`Description`}
         name="description"
         type="text"
       />
       <DateTimePicker
         dateFieldName="startDate"
         timeFieldName="startTime"
-        label={i18n._(t`Start date/time`)}
+        label={t`Start date/time`}
       />
       <FormGroup
         name="timezone"
@@ -100,7 +93,7 @@ export default function ScheduleFormFields({
         helperTextInvalid={timezoneMeta.error || timezoneMessage}
         isRequired
         validated={timezoneValidatedStatus}
-        label={i18n._(t`Local time zone`)}
+        label={t`Local time zone`}
         helperText={timezoneMessage}
         labelIcon={<Popover content={helpText.localTimeZone(config)} />}
       >
@@ -118,7 +111,7 @@ export default function ScheduleFormFields({
         validated={
           !frequencyMeta.touched || !frequencyMeta.error ? 'default' : 'error'
         }
-        label={i18n._(t`Repeat frequency`)}
+        label={t`Repeat frequency`}
       >
         <FrequencySelect
           id="schedule-frequency"
@@ -126,26 +119,26 @@ export default function ScheduleFormFields({
           value={frequency.value}
           placeholderText={
             frequency.value.length
-              ? i18n._(t`Select frequency`)
-              : i18n._(t`None (run once)`)
+              ? t`Select frequency`
+              : t`None (run once)`
           }
           onBlur={frequencyHelper.setTouched}
         >
           <SelectClearOption value="none">
-            {i18n._(t`None (run once)`)}
+            {t`None (run once)`}
           </SelectClearOption>
-          <SelectOption value="minute">{i18n._(t`Minute`)}</SelectOption>
-          <SelectOption value="hour">{i18n._(t`Hour`)}</SelectOption>
-          <SelectOption value="day">{i18n._(t`Day`)}</SelectOption>
-          <SelectOption value="week">{i18n._(t`Week`)}</SelectOption>
-          <SelectOption value="month">{i18n._(t`Month`)}</SelectOption>
-          <SelectOption value="year">{i18n._(t`Year`)}</SelectOption>
+          <SelectOption value="minute">{t`Minute`}</SelectOption>
+          <SelectOption value="hour">{t`Hour`}</SelectOption>
+          <SelectOption value="day">{t`Day`}</SelectOption>
+          <SelectOption value="week">{t`Week`}</SelectOption>
+          <SelectOption value="month">{t`Month`}</SelectOption>
+          <SelectOption value="year">{t`Year`}</SelectOption>
         </FrequencySelect>
       </FormGroup>
       {hasDaysToKeepField ? (
         <FormField
           id="schedule-days-to-keep"
-          label={i18n._(t`Days of Data to Keep`)}
+          label={t`Days of Data to Keep`}
           name="daysToKeep"
           type="number"
           validate={required(null)}
@@ -155,7 +148,7 @@ export default function ScheduleFormFields({
       {frequency.value.length ? (
         <SubFormLayout>
           <Title size="md" headingLevel="h4">
-            {i18n._(t`Frequency Details`)}
+            {t`Frequency Details`}
           </Title>
           {frequency.value.map((val) => (
             <FormColumnLayout key={val} stacked>
@@ -170,7 +163,7 @@ export default function ScheduleFormFields({
             headingLevel="h4"
             css="margin-top: var(--pf-c-card--child--PaddingRight)"
           >
-            {i18n._(t`Exceptions`)}
+            {t`Exceptions`}
           </Title>
           <FormColumnLayout stacked>
             <FormGroup
@@ -182,7 +175,7 @@ export default function ScheduleFormFields({
                   ? 'default'
                   : 'error'
               }
-              label={i18n._(t`Add exceptions`)}
+              label={t`Add exceptions`}
             >
               <FrequencySelect
                 id="exception-frequency"
@@ -190,22 +183,22 @@ export default function ScheduleFormFields({
                 value={exceptionFrequency.value}
                 placeholderText={
                   exceptionFrequency.value.length
-                    ? i18n._(t`Select frequency`)
-                    : i18n._(t`None`)
+                    ? t`Select frequency`
+                    : t`None`
                 }
                 onBlur={exceptionFrequencyHelper.setTouched}
               >
                 <SelectClearOption value="none">
-                  {i18n._(t`None`)}
+                  {t`None`}
                 </SelectClearOption>
                 <SelectOption value="minute">
-                  {i18n._(t`Minute`)}
+                  {t`Minute`}
                 </SelectOption>
-                <SelectOption value="hour">{i18n._(t`Hour`)}</SelectOption>
-                <SelectOption value="day">{i18n._(t`Day`)}</SelectOption>
-                <SelectOption value="week">{i18n._(t`Week`)}</SelectOption>
-                <SelectOption value="month">{i18n._(t`Month`)}</SelectOption>
-                <SelectOption value="year">{i18n._(t`Year`)}</SelectOption>
+                <SelectOption value="hour">{t`Hour`}</SelectOption>
+                <SelectOption value="day">{t`Day`}</SelectOption>
+                <SelectOption value="week">{t`Week`}</SelectOption>
+                <SelectOption value="month">{t`Month`}</SelectOption>
+                <SelectOption value="year">{t`Year`}</SelectOption>
               </FrequencySelect>
             </FormGroup>
           </FormColumnLayout>

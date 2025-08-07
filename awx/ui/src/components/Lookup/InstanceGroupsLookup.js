@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { arrayOf, string, func, bool } from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { t, Trans } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { Trans, useLingui } from '@lingui/react/macro';
 import { FormGroup } from '@patternfly/react-core';
 import { InstanceGroupsAPI } from 'api';
 import { InstanceGroup } from 'types';
@@ -35,7 +34,7 @@ function InstanceGroupsLookup({
   promptId,
   promptName,
 }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const {
     result: { instanceGroups, count, relatedSearchableKeys, searchableKeys },
     request: fetchInstanceGroups,
@@ -73,7 +72,7 @@ function InstanceGroupsLookup({
     <>
       <Lookup
         id="org-instance-groups"
-        header={i18n._(t`Instance Groups`)}
+        header={t`Instance Groups`}
         value={value}
         onChange={onChange}
         onUpdate={fetchInstanceGroups}
@@ -102,25 +101,25 @@ function InstanceGroupsLookup({
             optionCount={count}
             searchColumns={[
               {
-                name: i18n._(t`Name`),
+                name: t`Name`,
                 key: 'name__icontains',
                 isDefault: true,
               },
               {
-                name: i18n._(t`Credential Name`),
+                name: t`Credential Name`,
                 key: 'credential__name__icontains',
               },
             ]}
             sortColumns={[
               {
-                name: i18n._(t`Name`),
+                name: t`Name`,
                 key: 'name',
               },
             ]}
             searchableKeys={searchableKeys}
             relatedSearchableKeys={relatedSearchableKeys}
             multiple={state.multiple}
-            header={i18n._(t`Instance Groups`)}
+            header={t`Instance Groups`}
             name="instanceGroups"
             qsConfig={QS_CONFIG}
             readOnly={!canDelete}
@@ -140,7 +139,7 @@ function InstanceGroupsLookup({
   return isPromptableField ? (
     <FieldWithPrompt
       fieldId={id}
-      label={i18n._(t`Instance Groups`)}
+      label={t`Instance Groups`}
       promptId={promptId}
       promptName={promptName}
       tooltip={tooltip}
@@ -150,7 +149,7 @@ function InstanceGroupsLookup({
   ) : (
     <FormGroup
       className={className}
-      label={i18n._(t`Instance Groups`)}
+      label={t`Instance Groups`}
       labelIcon={tooltip && <Popover content={tooltip} />}
       fieldId={id}
     >

@@ -1,7 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLocation, useRouteMatch } from 'react-router-dom';
-import { useLingui } from '@lingui/react';
-import { t } from '@lingui/react/macro';
+import { useLingui } from '@lingui/react/macro';
 import { Card, PageSection } from '@patternfly/react-core';
 
 import { ExecutionEnvironmentsAPI } from 'api';
@@ -29,7 +28,7 @@ const QS_CONFIG = getQSConfig('execution_environments', {
 });
 
 function ExecutionEnvironmentList() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const location = useLocation();
   const match = useRouteMatch();
   const { addToast, Toast, toastProps } = useToast();
@@ -102,12 +101,12 @@ function ExecutionEnvironmentList() {
     (newId) => {
       addToast({
         id: newId,
-        title: i18n._(t`Execution environment copied successfully`),
+        title: t`Execution environment copied successfully`,
         variant: AlertVariant.success,
         hasTimeout: true,
       });
     },
-    [addToast, i18n]
+    [addToast, t]
   );
 
   const handleDelete = async () => {
@@ -117,7 +116,7 @@ function ExecutionEnvironmentList() {
 
   const canAdd = actions && actions.POST;
   const deleteDetailsRequests =
-    relatedResourceDeleteRequests.executionEnvironment(selected[0]);
+    relatedResourceDeleteRequests(t).executionEnvironment(selected[0]);
   return (
     <>
       <PageSection>
@@ -128,46 +127,46 @@ function ExecutionEnvironmentList() {
             hasContentLoading={isLoading || deleteLoading}
             items={executionEnvironments}
             itemCount={executionEnvironmentsCount}
-            pluralizedItemName={i18n._(t`Execution Environments`)}
+            pluralizedItemName={t`Execution Environments`}
             qsConfig={QS_CONFIG}
             clearSelected={clearSelected}
             toolbarSearchableKeys={searchableKeys}
             toolbarRelatedSearchableKeys={relatedSearchableKeys}
             toolbarSearchColumns={[
               {
-                name: i18n._(t`Name`),
+                name: t`Name`,
                 key: 'name__icontains',
                 isDefault: true,
               },
               {
-                name: i18n._(t`Image`),
+                name: t`Image`,
                 key: 'image__icontains',
               },
             ]}
             toolbarSortColumns={[
               {
-                name: i18n._(t`Image`),
+                name: t`Image`,
                 key: 'image',
               },
               {
-                name: i18n._(t`Created`),
+                name: t`Created`,
                 key: 'created',
               },
               {
-                name: i18n._(t`Organization`),
+                name: t`Organization`,
                 key: 'organization',
               },
               {
-                name: i18n._(t`Description`),
+                name: t`Description`,
                 key: 'description',
               },
             ]}
             headerRow={
               <HeaderRow qsConfig={QS_CONFIG}>
-                <HeaderCell sortKey="name">{i18n._(t`Name`)}</HeaderCell>
-                <HeaderCell>{i18n._(t`Image`)}</HeaderCell>
-                <HeaderCell>{i18n._(t`Organization`)}</HeaderCell>
-                <HeaderCell>{i18n._(t`Actions`)}</HeaderCell>
+                <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
+                <HeaderCell>{t`Image`}</HeaderCell>
+                <HeaderCell>{t`Organization`}</HeaderCell>
+                <HeaderCell>{t`Actions`}</HeaderCell>
               </HeaderRow>
             }
             renderToolbar={(props) => (
@@ -190,16 +189,12 @@ function ExecutionEnvironmentList() {
                     key="delete"
                     onDelete={handleDelete}
                     itemsToDelete={selected}
-                    pluralizedItemName={i18n._(t`Execution Environments`)}
+                    pluralizedItemName={t`Execution Environments`}
                     deleteDetailsRequests={deleteDetailsRequests}
                     deleteMessage={
                       selected.length === 1
-                        ? i18n._(
-                            t`This execution environment is currently being used by other resources. Are you sure you want to delete it?`
-                          )
-                        : i18n._(
-                            t`These execution environments could be in use by other resources that rely on them. Are you sure you want to delete them anyway?`
-                          )
+                        ? t`This execution environment is currently being used by other resources. Are you sure you want to delete it?`
+                        : t`These execution environments could be in use by other resources that rely on them. Are you sure you want to delete them anyway?`
                     }
                   />,
                 ]}
@@ -228,13 +223,13 @@ function ExecutionEnvironmentList() {
         </Card>
       </PageSection>
       <AlertModal
-        aria-label={i18n._(t`Deletion error`)}
+        aria-label={t`Deletion error`}
         isOpen={deletionError}
         onClose={clearDeletionError}
-        title={i18n._(t`Error`)}
+        title={t`Error`}
         variant="error"
       >
-        {i18n._(t`Failed to delete one or more execution environments`)}
+        {t`Failed to delete one or more execution environments`}
         <ErrorDetail error={deletionError} />
       </AlertModal>
       <Toast {...toastProps} />

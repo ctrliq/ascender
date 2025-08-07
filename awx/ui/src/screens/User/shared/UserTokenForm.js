@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
-import { useLingui } from '@lingui/react';
-import { t } from '@lingui/react/macro';
+import { useLingui } from '@lingui/react/macro';
 import { Formik, useField, useFormikContext } from 'formik';
 import { Form, FormGroup } from '@patternfly/react-core';
 import AnsibleSelect from 'components/AnsibleSelect';
@@ -13,13 +12,13 @@ import { FormColumnLayout } from 'components/FormLayout';
 import helptext from './User.helptext';
 
 function UserTokenFormFields() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const { setFieldValue, setFieldTouched } = useFormikContext();
   const [applicationField, applicationMeta] = useField('application');
 
   const [scopeField, scopeMeta, scopeHelpers] = useField({
     name: 'scope',
-    validate: required(i18n._(t`Please enter a value.`)),
+    validate: required(t`Please enter a value.`),
   });
 
   const handleApplicationUpdate = useCallback(
@@ -47,7 +46,7 @@ function UserTokenFormFields() {
           onChange={handleApplicationUpdate}
           label={
             <span>
-              {i18n._(t`Application`)}
+              {t`Application`}
               <Popover content={helptext.application} />
             </span>
           }
@@ -58,7 +57,7 @@ function UserTokenFormFields() {
         id="token-description"
         name="description"
         type="text"
-        label={i18n._(t`Description`)}
+        label={t`Description`}
       />
 
       <FormGroup
@@ -67,7 +66,7 @@ function UserTokenFormFields() {
         helperTextInvalid={scopeMeta.error}
         isRequired
         validated={!scopeMeta.touched || !scopeMeta.error ? 'default' : 'error'}
-        label={i18n._(t`Scope`)}
+        label={t`Scope`}
         labelIcon={<Popover content={helptext.scope} />}
       >
         <AnsibleSelect
@@ -75,8 +74,8 @@ function UserTokenFormFields() {
           id="token-scope"
           data={[
             { key: 'default', label: '', value: '' },
-            { key: 'read', value: 'read', label: i18n._(t`Read`) },
-            { key: 'write', value: 'write', label: i18n._(t`Write`) },
+            { key: 'read', value: 'read', label: t`Read` },
+            { key: 'write', value: 'write', label: t`Write` },
           ]}
           onChange={(event, value) => {
             scopeHelpers.setValue(value);

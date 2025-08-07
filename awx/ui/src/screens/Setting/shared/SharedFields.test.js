@@ -22,7 +22,7 @@ describe('Setting form fields', () => {
     i18n.load({ en });
     i18n.activate('en');
     const wrapper = mountWithContexts(
-      <I18nProvider i18n={i18n}>
+      <I18nProvider t={t}>
         <Formik
           initialValues={{
             boolean: true,

@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useLingui } from '@lingui/react';
-import { t } from '@lingui/react/macro';
+import { useLingui } from '@lingui/react/macro';
 import { useParams, useLocation } from 'react-router-dom';
 import PaginatedTable, { getSearchableKeys } from 'components/PaginatedTable';
 import { getQSConfig, parseQueryString } from 'util/qs';
@@ -19,7 +18,7 @@ const QS_CONFIG = getQSConfig('applications', {
 });
 
 function ApplicationTokenList() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const { id } = useParams();
   const location = useLocation();
   const {
@@ -98,11 +97,11 @@ function ApplicationTokenList() {
         hasContentLoading={isLoading || deleteLoading}
         items={tokens}
         itemCount={itemCount}
-        pluralizedItemName={i18n._(t`Tokens`)}
+        pluralizedItemName={t`Tokens`}
         qsConfig={QS_CONFIG}
         toolbarSearchColumns={[
           {
-            name: i18n._(t`Name`),
+            name: t`Name`,
             key: 'user__username__icontains',
             isDefault: true,
           },
@@ -115,7 +114,7 @@ function ApplicationTokenList() {
             {...props}
             isAllSelected={isAllSelected}
             onSelectAll={selectAll}
-            deleteButtonText={i18n._(t`Delete selected tokens`)}
+            deleteButtonText={t`Delete selected tokens`}
             onDelete={handleDelete}
             isDeleteDisabled={!selected.length}
           />
@@ -134,7 +133,7 @@ function ApplicationTokenList() {
       <AlertModal
         isOpen={Boolean(deletionError)}
         variant="danger"
-        title={i18n._(t`Error deleting tokens`)}
+        title={t`Error deleting tokens`}
         onClose={clearDeletionError}
       >
         <ErrorDetail error={deletionError} />

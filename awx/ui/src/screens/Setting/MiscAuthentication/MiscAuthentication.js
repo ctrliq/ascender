@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link, Redirect, Route, Switch } from 'react-router-dom';
-import { t } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import { PageSection, Card } from '@patternfly/react-core';
 import ContentError from 'components/ContentError';
 import { useConfig } from 'contexts/Config';
@@ -11,7 +10,7 @@ import MiscAuthenticationEdit from './MiscAuthenticationEdit';
 function MiscAuthentication() {
   const baseURL = '/settings/miscellaneous_authentication';
   const { me } = useConfig();
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   return (
     <PageSection>
       <Card>
@@ -30,7 +29,7 @@ function MiscAuthentication() {
           <Route key="not-found" path={`${baseURL}/*`}>
             <ContentError isNotFound>
               <Link to={`${baseURL}/details`}>
-                {i18n._(t`View Miscellaneous Authentication settings`)}
+                {t`View Miscellaneous Authentication settings`}
               </Link>
             </ContentError>
           </Route>

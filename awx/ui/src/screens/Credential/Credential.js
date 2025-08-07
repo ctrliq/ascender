@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useLingui } from '@lingui/react';
-import { t } from '@lingui/react/macro';
+import { useLingui } from '@lingui/react/macro';
 
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card, PageSection } from '@patternfly/react-core';
@@ -39,7 +38,7 @@ const unacceptableCredentialTypes = [
 ];
 
 function Credential({ setBreadcrumb }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const { pathname } = useLocation();
 
   const match = useRouteMatch({
@@ -79,16 +78,16 @@ function Credential({ setBreadcrumb }) {
       name: (
         <>
           <CaretLeftIcon />
-          {i18n._(t`Back to Credentials`)}
+          {t`Back to Credentials`}
         </>
       ),
       link: `/credentials`,
       id: 99,
       persistentFilterKey: 'credentials',
     },
-    { name: i18n._(t`Details`), link: `/credentials/${id}/details`, id: 0 },
+    { name: t`Details`, link: `/credentials/${id}/details`, id: 0 },
     {
-      name: i18n._(t`Access`),
+      name: t`Access`,
       link: `/credentials/${id}/access`,
       id: 1,
     },
@@ -98,7 +97,7 @@ function Credential({ setBreadcrumb }) {
     credential !== null
   ) {
     tabsArray.push({
-      name: i18n._(t`Job Templates`),
+      name: t`Job Templates`,
       link: `/credentials/${id}/job_templates`,
       id: 2,
     });
@@ -116,9 +115,9 @@ function Credential({ setBreadcrumb }) {
           <ContentError error={contentError}>
             {contentError.response && contentError.response.status === 404 && (
               <span>
-                {i18n._(t`Credential not found.`)}{' '}
+                {t`Credential not found.`}{' '}
                 <Link to="/credentials">
-                  {i18n._(t`View all Credentials.`)}
+                  {t`View all Credentials.`}
                 </Link>
               </span>
             )}
@@ -166,7 +165,7 @@ function Credential({ setBreadcrumb }) {
                   <ContentError isNotFound>
                     {match.params.id && (
                       <Link to={`/credentials/${match.params.id}/details`}>
-                        {i18n._(t`View Credential Details`)}
+                        {t`View Credential Details`}
                       </Link>
                     )}
                   </ContentError>
@@ -178,7 +177,7 @@ function Credential({ setBreadcrumb }) {
                 <ContentError isNotFound>
                   {id && (
                     <Link to={`/credentials/${id}/details`}>
-                      {i18n._(t`View Credential Details`)}
+                      {t`View Credential Details`}
                     </Link>
                   )}
                 </ContentError>

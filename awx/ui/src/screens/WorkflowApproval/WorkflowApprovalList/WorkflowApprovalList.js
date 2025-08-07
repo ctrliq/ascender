@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useLocation, useRouteMatch } from 'react-router-dom';
-import { t, Plural } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { Plural, useLingui } from '@lingui/react/macro';
 import { Card, PageSection } from '@patternfly/react-core';
 import { WorkflowApprovalsAPI } from 'api';
 import PaginatedTable, {
@@ -33,7 +32,7 @@ const QS_CONFIG = getQSConfig('workflow_approvals', {
 function WorkflowApprovalsList() {
   const location = useLocation();
   const match = useRouteMatch();
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const {
     result: { results, count, relatedSearchableKeys },
     error: contentError,
@@ -166,17 +165,17 @@ function WorkflowApprovalsList() {
             hasContentLoading={isLoading}
             items={workflowApprovals}
             itemCount={count}
-            pluralizedItemName={i18n._(t`Workflow Approvals`)}
+            pluralizedItemName={t`Workflow Approvals`}
             qsConfig={QS_CONFIG}
             clearSelected={clearSelected}
             toolbarSearchColumns={[
               {
-                name: i18n._(t`Name`),
+                name: t`Name`,
                 key: 'name__icontains',
                 isDefault: true,
               },
               {
-                name: i18n._(t`Description`),
+                name: t`Description`,
                 key: 'description__icontains',
               },
             ]}
@@ -202,7 +201,7 @@ function WorkflowApprovalsList() {
                     key="delete"
                     onDelete={handleDelete}
                     itemsToDelete={selected}
-                    pluralizedItemName={i18n._(t`Workflow Approvals`)}
+                    pluralizedItemName={t`Workflow Approvals`}
                     cannotDelete={(item) =>
                       item.status === 'pending' ||
                       !item.summary_fields.user_capabilities.delete
@@ -220,13 +219,13 @@ function WorkflowApprovalsList() {
             )}
             headerRow={
               <HeaderRow qsConfig={QS_CONFIG}>
-                <HeaderCell sortKey="name">{i18n._(t`Name`)}</HeaderCell>
-                <HeaderCell>{i18n._(t`Workflow Job`)}</HeaderCell>
+                <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
+                <HeaderCell>{t`Workflow Job`}</HeaderCell>
                 <HeaderCell sortKey="started">
-                  {i18n._(t`Started`)}
+                  {t`Started`}
                 </HeaderCell>
-                <HeaderCell>{i18n._(t`Status`)}</HeaderCell>
-                <HeaderCell>{i18n._(t`Actions`)}</HeaderCell>
+                <HeaderCell>{t`Status`}</HeaderCell>
+                <HeaderCell>{t`Actions`}</HeaderCell>
               </HeaderRow>
             }
             renderRow={(workflowApproval, index) => (
@@ -248,12 +247,12 @@ function WorkflowApprovalsList() {
         <AlertModal
           isOpen={deletionError}
           variant="error"
-          title={i18n._(t`Error!`)}
+          title={t`Error!`}
           onClose={clearDeletionError}
         >
           {typeof deletionError === 'string'
-            ? i18n._(t`Failed to delete one or more workflow approval.`)
-            : i18n._(t`Failed to delete one or more workflow approval.`)}
+            ? t`Failed to delete one or more workflow approval.`
+            : t`Failed to delete one or more workflow approval.`}
           <ErrorDetail
             error={
               deletionError instanceof Error
@@ -267,12 +266,12 @@ function WorkflowApprovalsList() {
         <AlertModal
           isOpen={actionError}
           variant="error"
-          title={i18n._(t`Error!`)}
+          title={t`Error!`}
           onClose={dismissActionError}
         >
           {approveApprovalError
-            ? i18n._(t`Failed to approve one or more workflow approval.`)
-            : i18n._(t`Failed to deny one or more workflow approval.`)}
+            ? t`Failed to approve one or more workflow approval.`
+            : t`Failed to deny one or more workflow approval.`}
           <ErrorDetail
             error={
               actionError instanceof Error

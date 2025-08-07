@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { t } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import { Formik } from 'formik';
 import { Form } from '@patternfly/react-core';
 import { CardBody } from 'components/Card';
@@ -23,7 +22,7 @@ import { RevertAllAlert, RevertFormActionGroup } from '../../shared';
 import { formatJson, pluck } from '../../shared/settingUtils';
 
 function MiscAuthenticationEdit() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const history = useHistory();
   const { isModalOpen, toggleModal, closeModal } = useModal();
   const { PUT: options } = useSettings();
@@ -79,20 +78,20 @@ function MiscAuthenticationEdit() {
           ...OAUTH2_PROVIDER_OPTIONS,
           default: OAUTH2_PROVIDER_OPTIONS.default.ACCESS_TOKEN_EXPIRE_SECONDS,
           type: OAUTH2_PROVIDER_OPTIONS.child.type,
-          label: i18n._(t`Access Token Expiration`),
+          label: t`Access Token Expiration`,
         },
         REFRESH_TOKEN_EXPIRE_SECONDS: {
           ...OAUTH2_PROVIDER_OPTIONS,
           default: OAUTH2_PROVIDER_OPTIONS.default.REFRESH_TOKEN_EXPIRE_SECONDS,
           type: OAUTH2_PROVIDER_OPTIONS.child.type,
-          label: i18n._(t`Refresh Token Expiration`),
+          label: t`Refresh Token Expiration`,
         },
         AUTHORIZATION_CODE_EXPIRE_SECONDS: {
           ...OAUTH2_PROVIDER_OPTIONS,
           default:
             OAUTH2_PROVIDER_OPTIONS.default.AUTHORIZATION_CODE_EXPIRE_SECONDS,
           type: OAUTH2_PROVIDER_OPTIONS.child.type,
-          label: i18n._(t`Authorization Code Expiration`),
+          label: t`Authorization Code Expiration`,
         },
       };
 
@@ -107,7 +106,7 @@ function MiscAuthenticationEdit() {
       });
 
       return mergedData;
-    }, [options, i18n]),
+    }, [options, t]),
     null
   );
 
@@ -195,7 +194,7 @@ function MiscAuthenticationEdit() {
                 <BooleanField
                   name="DISABLE_LOCAL_AUTH"
                   needsConfirmationModal
-                  modalTitle={i18n._(t`Confirm Disable Local Authorization`)}
+                  modalTitle={t`Confirm Disable Local Authorization`}
                   config={authentication.DISABLE_LOCAL_AUTH}
                 />
                 <InputField

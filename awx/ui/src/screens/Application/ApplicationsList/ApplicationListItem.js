@@ -2,8 +2,7 @@ import React from 'react';
 import { string, bool, func } from 'prop-types';
 import { Button } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
-import { useLingui } from '@lingui/react';
-import { t } from '@lingui/react/macro';
+import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router-dom';
 import { PencilAltIcon } from '@patternfly/react-icons';
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
@@ -17,7 +16,7 @@ function ApplicationListItem({
   detailUrl,
   rowIndex,
 }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const labelId = `check-action-${application.id}`;
   return (
     <Tr
@@ -30,31 +29,31 @@ function ApplicationListItem({
           isSelected,
           onSelect,
         }}
-        dataLabel={i18n._(t`Selected`)}
+        dataLabel={t`Selected`}
       />
-      <TdBreakWord id={labelId} dataLabel={i18n._(t`Name`)}>
+      <TdBreakWord id={labelId} dataLabel={t`Name`}>
         <Link to={`${detailUrl}`}>
           <b>{application.name}</b>
         </Link>
       </TdBreakWord>
-      <TdBreakWord dataLabel={i18n._(t`Organization`)}>
+      <TdBreakWord dataLabel={t`Organization`}>
         <Link
           to={`/organizations/${application.summary_fields.organization.id}`}
         >
           <b>{application.summary_fields.organization.name}</b>
         </Link>
       </TdBreakWord>
-      <Td dataLabel={i18n._(t`Last Modified`)}>
+      <Td dataLabel={t`Last Modified`}>
         {formatDateString(application.modified)}
       </Td>
-      <ActionsTd dataLabel={i18n._(t`Actions`)}>
+      <ActionsTd dataLabel={t`Actions`}>
         <ActionItem
           visible={application.summary_fields.user_capabilities.edit}
-          tooltip={i18n._(t`Edit application`)}
+          tooltip={t`Edit application`}
         >
           <Button
             ouiaId={`${application.id}-edit-button`}
-            aria-label={i18n._(t`Edit application`)}
+            aria-label={t`Edit application`}
             variant="plain"
             component={Link}
             to={`/applications/${application.id}/edit`}

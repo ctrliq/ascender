@@ -2,8 +2,7 @@ import 'styled-components/macro';
 import React, { useState } from 'react';
 import { node, number, oneOfType, shape, string, arrayOf } from 'prop-types';
 
-import { t } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import {
   Split,
   SplitItem,
@@ -28,7 +27,7 @@ function VariablesDetail({
   fullHeight,
   name,
 }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
 
   const [mode, setMode] = useState(
     isJsonObject(value) || isJsonString(value) ? JSON_MODE : YAML_MODE
@@ -105,7 +104,7 @@ function VariablesDetail({
             css="color: var(--pf-global--danger-color--100);
             font-size: var(--pf-global--FontSize--sm)"
           >
-            {i18n._(t`Error:`)} {error.message}
+            {t`Error:`} {error.message}
           </div>
         )}
       </DetailValue>
@@ -117,13 +116,13 @@ function VariablesDetail({
         onClose={() => setIsExpanded(false)}
         actions={[
           <Button
-            aria-label={i18n._(t`Done`)}
+            aria-label={t`Done`}
             key="select"
             variant="primary"
             onClick={() => setIsExpanded(false)}
             ouiaId={`${dataCy}-unexpand`}
           >
-            {i18n._(t`Done`)}
+            {t`Done`}
           </Button>,
         ]}
       >
@@ -176,7 +175,7 @@ function ModeToggle({
   onExpand,
   name,
 }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   return (
     <Split hasGutter>
       <SplitItem isFilled>
@@ -213,7 +212,7 @@ function ModeToggle({
         <SplitItem>
           <Button
             variant="plain"
-            aria-label={i18n._(t`Expand input`)}
+            aria-label={t`Expand input`}
             onClick={onExpand}
             ouiaId={`${dataCy}-expand`}
           >

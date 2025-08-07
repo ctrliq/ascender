@@ -1,7 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { t } from '@lingui/react/macro';
 import { func, shape } from 'prop-types';
 import { InventorySourcesAPI } from 'api';
 import { getQSConfig, parseQueryString } from 'util/qs';
@@ -13,7 +12,7 @@ import PaginatedTable, {
   HeaderRow,
   getSearchableKeys,
 } from 'components/PaginatedTable';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 
 const QS_CONFIG = getQSConfig('inventory-sources', {
   page: 1,
@@ -22,7 +21,7 @@ const QS_CONFIG = getQSConfig('inventory-sources', {
 });
 
 function InventorySourcesList({ nodeResource, onUpdateNodeResource }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const location = useLocation();
 
   const {
@@ -68,7 +67,7 @@ function InventorySourcesList({ nodeResource, onUpdateNodeResource }) {
       showPageSizeOptions={false}
       headerRow={
         <HeaderRow isExpandable={false} qsConfig={QS_CONFIG}>
-          <HeaderCell sortKey="name">{i18n._(t`Name`)}</HeaderCell>
+          <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
         </HeaderRow>
       }
       renderRow={(item, index) => (
@@ -87,24 +86,24 @@ function InventorySourcesList({ nodeResource, onUpdateNodeResource }) {
       renderToolbar={(props) => <DataListToolbar {...props} fillWidth />}
       toolbarSearchColumns={[
         {
-          name: i18n._(t`Name`),
+          name: t`Name`,
           key: 'name__icontains',
           isDefault: true,
         },
         {
-          name: i18n._(t`Source`),
+          name: t`Source`,
           key: 'or__source',
           options: [
-            [`file`, i18n._(t`File, directory or script`)],
-            [`scm`, i18n._(t`Sourced from a project`)],
-            [`ec2`, i18n._(t`Amazon EC2`)],
-            [`gce`, i18n._(t`Google Compute Engine`)],
-            [`azure_rm`, i18n._(t`Microsoft Azure Resource Manager`)],
-            [`vmware`, i18n._(t`VMware vCenter`)],
-            [`satellite6`, i18n._(t`Red Hat Satellite 6`)],
-            [`openstack`, i18n._(t`OpenStack`)],
-            [`rhv`, i18n._(t`Red Hat Virtualization`)],
-            [`controller`, i18n._(t`Red Hat Ansible Automation Platform`)],
+            [`file`, t`File, directory or script`],
+            [`scm`, t`Sourced from a project`],
+            [`ec2`, t`Amazon EC2`],
+            [`gce`, t`Google Compute Engine`],
+            [`azure_rm`, t`Microsoft Azure Resource Manager`],
+            [`vmware`, t`VMware vCenter`],
+            [`satellite6`, t`Red Hat Satellite 6`],
+            [`openstack`, t`OpenStack`],
+            [`rhv`, t`Red Hat Virtualization`],
+            [`controller`, t`Red Hat Ansible Automation Platform`],
           ],
         },
       ]}

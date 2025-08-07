@@ -1,13 +1,12 @@
 import React from 'react';
-import { t } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import { useFormikContext } from 'formik';
 import StepName from '../LaunchPrompt/steps/StepName';
 import AdHocDetailsStep from './AdHocDetailsStep';
 
 const STEP_ID = 'details';
 export default function useAdHocDetailsStep(visited, moduleOptions) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const { values, touched, setFieldError } = useFormikContext();
 
   const hasError = () => {
@@ -34,12 +33,12 @@ export default function useAdHocDetailsStep(visited, moduleOptions) {
       key: 1,
       name: (
         <StepName hasErrors={hasError()} id="details-step">
-          {i18n._(t`Details`)}
+          {t`Details`}
         </StepName>
       ),
       component: <AdHocDetailsStep moduleOptions={moduleOptions} />,
       enableNext: true,
-      nextButtonText: i18n._(t`Next`),
+      nextButtonText: t`Next`,
     },
     hasError: hasError(),
     validate: () => {
@@ -47,7 +46,7 @@ export default function useAdHocDetailsStep(visited, moduleOptions) {
         if (!values.module_name) {
           setFieldError(
             'module_name',
-            i18n._(t`This field must not be blank.`)
+            t`This field must not be blank.`
           );
         }
         if (
@@ -56,7 +55,7 @@ export default function useAdHocDetailsStep(visited, moduleOptions) {
         ) {
           setFieldError(
             'module_args',
-            i18n._(t`This field must not be blank`)
+            t`This field must not be blank`
           );
         }
       }

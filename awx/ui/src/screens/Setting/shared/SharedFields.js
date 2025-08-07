@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { shape, string } from 'prop-types';
-import { t } from '@lingui/react/macro';
-import { i18n } from '@lingui/core';
+import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
 import {
   Button,
@@ -59,6 +58,7 @@ const SettingGroup = ({
   onRevertCallback,
   popoverContent,
   validated,
+  t,
 }) => (
   <FormGroup
     fieldId={fieldId}
@@ -71,7 +71,7 @@ const SettingGroup = ({
       <>
         <Popover
           content={popoverContent}
-          ariaLabel={`${i18n._(t`More information for`)} ${label}`}
+          ariaLabel={`${t`More information for`} ${label}`}
         />
         <RevertButton
           id={fieldId}
@@ -93,6 +93,7 @@ const BooleanField = ({
   needsConfirmationModal,
   modalTitle,
 }) => {
+  const { t } = useLingui();
   const [field, meta, helpers] = useField(name);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -104,7 +105,7 @@ const BooleanField = ({
       isDisabled={disabled}
       label={config.label}
       popoverContent={config.help_text}
-      i18n={i18n}
+      t={t}
     >
       {isModalOpen && (
         <AlertModal
@@ -120,31 +121,29 @@ const BooleanField = ({
               ouiaId="confirm-misc-settings-modal"
               key="confirm"
               variant="danger"
-              aria-label={i18n._(t`Confirm`)}
+              aria-label={t`Confirm`}
               onClick={() => {
                 helpers.setValue(true);
                 setIsModalOpen(false);
               }}
             >
-              {i18n._(t`Confirm`)}
+              {t`Confirm`}
             </Button>,
             <Button
               ouiaId="cancel-misc-settings-modal"
               key="cancel"
               variant="link"
-              aria-label={i18n._(t`Cancel`)}
+              aria-label={t`Cancel`}
               onClick={() => {
                 helpers.setValue(false);
                 setIsModalOpen(false);
               }}
             >
-              {i18n._(t`Cancel`)}
+              {t`Cancel`}
             </Button>,
           ]}
         >
-          {i18n._(
-            t`Are you sure you want to disable local authentication?  Doing so could impact users' ability to log in and the system administrator's ability to reverse this change.`
-          )}
+          {t`Are you sure you want to disable local authentication?  Doing so could impact users' ability to log in and the system administrator's ability to reverse this change.`}
         </AlertModal>
       )}
       <Switch
@@ -152,8 +151,8 @@ const BooleanField = ({
         ouiaId={name}
         isChecked={field.value}
         isDisabled={disabled}
-        label={i18n._(t`On`)}
-        labelOff={i18n._(t`Off`)}
+        label={t`On`}
+        labelOff={t`Off`}
         onChange={(isOn) => {
           if (needsConfirmationModal && isOn) {
             setIsModalOpen(true);
@@ -171,6 +170,7 @@ BooleanField.propTypes = {
 };
 
 const ChoiceField = ({ name, config, isRequired = false }) => {
+  const { t } = useLingui();
   const validate = isRequired ? required(null) : null;
   const [field, meta] = useField({ name, validate });
   const isValid = !meta.error || !meta.touched;
@@ -184,7 +184,7 @@ const ChoiceField = ({ name, config, isRequired = false }) => {
       label={config.label}
       popoverContent={config.help_text}
       validated={isValid ? 'default' : 'error'}
-      i18n={i18n}
+      t={t}
     >
       <AnsibleSelect
         id={name}
@@ -206,6 +206,7 @@ ChoiceField.propTypes = {
 };
 
 const EncryptedField = ({ name, config, isRequired = false }) => {
+  const { t } = useLingui();
   const validate = isRequired ? required(null) : null;
   const [, meta] = useField({ name, validate });
   const isValid = !(meta.touched && meta.error);
@@ -219,6 +220,7 @@ const EncryptedField = ({ name, config, isRequired = false }) => {
       label={config.label}
       popoverContent={config.help_text}
       validated={isValid ? 'default' : 'error'}
+      t={t}
     >
       <InputGroup>
         <PasswordInput
@@ -238,6 +240,7 @@ EncryptedField.propTypes = {
 };
 
 const ExecutionEnvField = ({ name, config, isRequired = false }) => {
+  const { t } = useLingui();
   const [field, meta, helpers] = useField({ name });
   return config ? (
     <SettingGroup
@@ -249,7 +252,7 @@ const ExecutionEnvField = ({ name, config, isRequired = false }) => {
       popoverContent={config.help_text}
       isDisabled={field.value === null}
       onRevertCallback={() => helpers.setValue(config.default)}
-      i18n={i18n}
+      t={t}
     >
       <ExecutionEnvironmentLookup
         value={field.value}
@@ -268,6 +271,7 @@ ExecutionEnvField.propTypes = {
 };
 
 const InputAlertField = ({ name, config }) => {
+  const { t } = useLingui();
   const [field, meta] = useField({ name });
   const isValid = !(meta.touched && meta.error);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -291,12 +295,12 @@ const InputAlertField = ({ name, config }) => {
         popoverContent={config.help_text}
         validated={isValid ? 'default' : 'error'}
         isDisabled={isDisable}
-        i18n={i18n}
+        t={t}
       >
         <Selected>
           {isDisable && (
             <Tooltip
-              content={i18n._(t`Edit Login redirect override URL`)}
+              content={t`Edit Login redirect override URL`}
               position="top"
             >
               <Button
@@ -326,9 +330,9 @@ const InputAlertField = ({ name, config }) => {
       {isModalOpen && isDisable && (
         <AlertModal
           isOpen
-          title={i18n._(t`Edit login redirect override URL`)}
+          title={t`Edit login redirect override URL`}
           variant="danger"
-          aria-label={i18n._(t`Edit login redirect override URL`)}
+          aria-label={t`Edit login redirect override URL`}
           onClose={() => {
             setIsModalOpen(false);
           }}
@@ -336,29 +340,27 @@ const InputAlertField = ({ name, config }) => {
             <Button
               key="confirm"
               variant="danger"
-              aria-label={i18n._(t`confirm edit login redirect`)}
+              aria-label={t`confirm edit login redirect`}
               onClick={() => {
                 handleEnableTextInput();
                 setIsModalOpen(false);
               }}
             >
-              {i18n._(t`Confirm`)}
+              {t`Confirm`}
             </Button>,
             <Button
               key="cancel"
               variant="link"
-              aria-label={i18n._(t`cancel edit login redirect`)}
+              aria-label={t`cancel edit login redirect`}
               onClick={() => {
                 setIsModalOpen(false);
               }}
             >
-              {i18n._(t`Cancel`)}
+              {t`Cancel`}
             </Button>,
           ]}
         >
-          {i18n._(
-            t`Are you sure you want to edit login redirect override URL?  Doing so could impact users' ability to log in to the system once local authentication is also disabled.`
-          )}
+          {t`Are you sure you want to edit login redirect override URL?  Doing so could impact users' ability to log in to the system once local authentication is also disabled.`}
         </AlertModal>
       )}
     </>
@@ -371,6 +373,7 @@ InputAlertField.propTypes = {
 };
 
 const InputField = ({ name, config, type = 'text', isRequired = false }) => {
+  const { t } = useLingui();
   const min_value = config?.min_value ?? Number.MIN_SAFE_INTEGER;
   const max_value = config?.max_value ?? Number.MAX_SAFE_INTEGER;
   const validators = [
@@ -390,7 +393,7 @@ const InputField = ({ name, config, type = 'text', isRequired = false }) => {
       label={config.label}
       popoverContent={config.help_text}
       validated={isValid ? 'default' : 'error'}
-      i18n={i18n}
+      t={t}
     >
       <TextInput
         type={type}
@@ -416,6 +419,7 @@ InputField.defaultProps = {
 };
 
 const TextAreaField = ({ name, config, isRequired = false }) => {
+  const { t } = useLingui();
   const validate = isRequired ? required(null) : null;
   const [field, meta] = useField({ name, validate });
   const isValid = !(meta.touched && meta.error);
@@ -429,7 +433,7 @@ const TextAreaField = ({ name, config, isRequired = false }) => {
       label={config.label}
       popoverContent={config.help_text}
       validated={isValid ? 'default' : 'error'}
-      i18n={i18n}
+      t={t}
     >
       <TextArea
         id={name}
@@ -452,6 +456,7 @@ TextAreaField.propTypes = {
 };
 
 const ObjectField = ({ name, config, revertValue, isRequired = false }) => {
+  const { t } = useLingui();
   const validate = isRequired ? required(null) : null;
   const [field, meta, helpers] = useField({ name, validate });
   const isValid = !(meta.touched && meta.error);
@@ -470,7 +475,7 @@ const ObjectField = ({ name, config, revertValue, isRequired = false }) => {
         label={config.label}
         popoverContent={config.help_text}
         validated={isValid ? 'default' : 'error'}
-        i18n={i18n}
+        t={t}
       >
         <CodeEditor
           {...field}
@@ -505,6 +510,7 @@ const FileUploadField = ({
   type = 'text',
   isRequired = false,
 }) => {
+  const { t } = useLingui();
   const validate = isRequired ? required(null) : null;
   const [filename, setFilename] = useState('');
   const [fileIsUploading, setFileIsUploading] = useState(false);
@@ -522,7 +528,7 @@ const FileUploadField = ({
         popoverContent={config.help_text}
         validated={isValid ? 'default' : 'error'}
         onRevertCallback={() => setFilename('')}
-        i18n={i18n}
+        t={t}
       >
         <FileUpload
           {...field}

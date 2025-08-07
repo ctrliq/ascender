@@ -1,8 +1,7 @@
 import React, { useEffect, useCallback, useState, useRef } from 'react';
 import { shape, func } from 'prop-types';
 import { DateTime } from 'luxon';
-import { t } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import { Formik } from 'formik';
 import { RRule } from 'rrule';
 import { Button, Form, ActionGroup } from '@patternfly/react-core';
@@ -40,7 +39,7 @@ function ScheduleForm({
   surveyConfig,
   resourceDefaultCredentials,
 }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const [isWizardOpen, setIsWizardOpen] = useState(false);
   const [isSaveDisabled, setIsSaveDisabled] = useState(false);
   const originalLabels = useRef([]);
@@ -393,7 +392,7 @@ function ScheduleForm({
       rruleError = error;
     }
   } else if (schedule.id) {
-    rruleError = new Error(i18n._(t`Schedule is missing rrule`));
+    rruleError = new Error(t`Schedule is missing rrule`);
   }
 
   if (contentError || rruleError) {
@@ -416,15 +415,11 @@ function ScheduleForm({
         options.runOn === 'day' &&
         (options.runOnDayNumber < 1 || options.runOnDayNumber > 31)
       ) {
-        freqErrors.runOn = i18n._(
-          t`Please select a day number between 1 and 31.`
-        );
+        freqErrors.runOn = t`Please select a day number between 1 and 31.`;
       }
 
       if (options.end === 'after' && !options.occurrences) {
-        freqErrors.occurrences = i18n._(
-          t`Please enter a number of occurrences.`
-        );
+        freqErrors.occurrences = t`Please enter a number of occurrences.`;
       }
 
       if (options.end === 'onDate') {
@@ -438,9 +433,7 @@ function ScheduleForm({
             'yyyy-LL-dd h:mm a'
           ).toMillis()
         ) {
-          freqErrors.endDate = i18n._(
-            t`Please select an end date/time that comes after the start date/time.`
-          );
+          freqErrors.endDate = t`Please select an end date/time that comes after the start date/time.`;
         }
 
         if (
@@ -457,12 +450,8 @@ function ScheduleForm({
             })
           );
           if (rule.all().length === 0) {
-            errors.startDate = i18n._(
-              t`Selected date range must have at least 1 schedule occurrence.`
-            );
-            freqErrors.endDate = i18n._(
-              t`Selected date range must have at least 1 schedule occurrence.`
-            );
+            errors.startDate = t`Selected date range must have at least 1 schedule occurrence.`;
+            freqErrors.endDate = t`Selected date range must have at least 1 schedule occurrence.`;
           }
         }
       }
@@ -475,9 +464,7 @@ function ScheduleForm({
     });
 
     if (values.exceptionFrequency.length > 0 && !scheduleHasInstances(values)) {
-      errors.exceptionFrequency = i18n._(
-        t`This schedule has no occurrences due to the selected exceptions.`
-      );
+      errors.exceptionFrequency = t`This schedule has no occurrences due to the selected exceptions.`;
     }
 
     return errors;
@@ -543,13 +530,13 @@ function ScheduleForm({
                   <ActionGroup>
                     <Button
                       ouiaId="schedule-form-save-button"
-                      aria-label={i18n._(t`Save`)}
+                      aria-label={t`Save`}
                       variant="primary"
                       type="button"
                       onClick={formik.handleSubmit}
                       isDisabled={isSaveDisabled}
                     >
-                      {i18n._(t`Save`)}
+                      {t`Save`}
                     </Button>
 
                     {isTemplate && showPromptButton && (
@@ -557,20 +544,20 @@ function ScheduleForm({
                         ouiaId="schedule-form-prompt-button"
                         variant="secondary"
                         type="button"
-                        aria-label={i18n._(t`Prompt`)}
+                        aria-label={t`Prompt`}
                         onClick={() => setIsWizardOpen(true)}
                       >
-                        {i18n._(t`Prompt`)}
+                        {t`Prompt`}
                       </Button>
                     )}
                     <Button
                       ouiaId="schedule-form-cancel-button"
-                      aria-label={i18n._(t`Cancel`)}
+                      aria-label={t`Cancel`}
                       variant="secondary"
                       type="button"
                       onClick={handleCancel}
                     >
-                      {i18n._(t`Cancel`)}
+                      {t`Cancel`}
                     </Button>
                   </ActionGroup>
                 </FormFullWidthLayout>

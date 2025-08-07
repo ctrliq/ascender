@@ -1,8 +1,7 @@
 import React from 'react';
 import { bool, node, string } from 'prop-types';
 
-import { t } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import { CheckboxField } from '../FormField';
 import Popover from '../Popover';
@@ -27,7 +26,7 @@ function FieldWithPrompt({
   tooltip,
   isDisabled,
 }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   return (
     <div className="pf-c-form__group" data-cy={`${fieldId}-form-group`}>
       <FieldHeader>
@@ -45,7 +44,7 @@ function FieldWithPrompt({
         <StyledCheckboxField
           isDisabled={isDisabled}
           id={promptId}
-          label={i18n._(t`Prompt on launch`)}
+          label={t`Prompt on launch`}
           name={promptName}
           ouiaId={`${promptId}-checkbox`}
         />

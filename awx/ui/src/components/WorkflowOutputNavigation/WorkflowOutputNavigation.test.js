@@ -67,7 +67,7 @@ describe('<WorkflowOuputNavigation/>', () => {
       initialEntries: ['jobs/playbook/2/output'],
     });
     render(
-      <I18nProvider i18n={i18n}>
+      <I18nProvider t={t}>
         <Router history={history}>
           <WorkflowOutputNavigation relatedJobs={jobs} parentRef={ref} />
         </Router>

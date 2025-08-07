@@ -2,9 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { shape } from 'prop-types';
 import { Formik, useField, useFormikContext } from 'formik';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 
-import { t } from '@lingui/react/macro';
 import {
   ActionGroup,
   Button,
@@ -37,13 +36,13 @@ const SelectOption = styled(PFSelectOption)`
 `;
 
 function CredentialFormFields({ initialTypeId, credentialTypes }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const { pathname } = useLocation();
   const { setFieldValue, initialValues, setFieldTouched } = useFormikContext();
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const [credTypeField, credTypeMeta, credTypeHelpers] = useField({
     name: 'credential_type',
-    validate: required(i18n._(t`Select a value for this field`)),
+    validate: required(t`Select a value for this field`),
   });
 
   const [credentialTypeId, setCredentialTypeId] = useState(initialTypeId);
@@ -127,8 +126,8 @@ function CredentialFormFields({ initialTypeId, credentialTypes }) {
     <Select
       isDisabled={isCredentialTypeDisabled}
       ouiaId="CredentialForm-credential_type"
-      aria-label={i18n._(t`Credential Type`)}
-      typeAheadAriaLabel={i18n._(t`Select Credential Type`)}
+      aria-label={t`Credential Type`}
+      typeAheadAriaLabel={t`Select Credential Type`}
       isOpen={isSelectOpen}
       variant={SelectVariant.typeahead}
       onToggle={setIsSelectOpen}
@@ -138,11 +137,11 @@ function CredentialFormFields({ initialTypeId, credentialTypes }) {
         setIsSelectOpen(false);
       }}
       selections={credTypeField.value}
-      placeholder={i18n._(t`Select a credential Type`)}
+      placeholder={t`Select a credential Type`}
       isCreatable={false}
       maxHeight="300px"
       width="100%"
-      noResultsFoundText={i18n._(t`No results found`)}
+      noResultsFoundText={t`No results found`}
     >
       {credentialTypeOptions.map((credType) => (
         <SelectOption
@@ -160,7 +159,7 @@ function CredentialFormFields({ initialTypeId, credentialTypes }) {
     <>
       <FormField
         id="credential-name"
-        label={i18n._(t`Name`)}
+        label={t`Name`}
         name="name"
         type="text"
         validate={required(null)}
@@ -168,7 +167,7 @@ function CredentialFormFields({ initialTypeId, credentialTypes }) {
       />
       <FormField
         id="credential-description"
-        label={i18n._(t`Description`)}
+        label={t`Description`}
         name="description"
         type="text"
       />
@@ -185,9 +184,7 @@ function CredentialFormFields({ initialTypeId, credentialTypes }) {
         validate={
           isGalaxyCredential
             ? required(
-                i18n._(
-                  t`Galaxy credentials must be owned by an Organization.`
-                )
+                t`Galaxy credentials must be owned by an Organization.`
               )
             : undefined
         }
@@ -199,13 +196,11 @@ function CredentialFormFields({ initialTypeId, credentialTypes }) {
         validated={
           !credTypeMeta.touched || !credTypeMeta.error ? 'default' : 'error'
         }
-        label={i18n._(t`Credential Type`)}
+        label={t`Credential Type`}
       >
         {isCredentialTypeDisabled ? (
           <Tooltip
-            content={i18n._(
-              t`You cannot change the credential type of a credential, as it may break the functionality of the resources using it.`
-            )}
+            content={t`You cannot change the credential type of a credential, as it may break the functionality of the resources using it.`}
           >
             {credentialTypeSelect}
           </Tooltip>
@@ -235,7 +230,7 @@ function CredentialForm({
   ...rest
 }) {
   const initialTypeId = credential?.credential_type;
-  const { i18n } = useLingui();
+  const { t } = useLingui();
 
   const [showExternalTestModal, setShowExternalTestModal] = useState(false);
   const initialValues = {
@@ -323,12 +318,12 @@ function CredentialForm({
                   <Button
                     ouiaId="credential-form-save-button"
                     id="credential-form-save-button"
-                    aria-label={i18n._(t`Save`)}
+                    aria-label={t`Save`}
                     variant="primary"
                     type="button"
                     onClick={formik.handleSubmit}
                   >
-                    {i18n._(t`Save`)}
+                    {t`Save`}
                   </Button>
                   {formik?.values?.credential_type &&
                     credentialTypes[formik.values.credential_type]?.kind ===
@@ -336,24 +331,24 @@ function CredentialForm({
                       <Button
                         ouiaId="credential-form-test-button"
                         id="credential-form-test-button"
-                        aria-label={i18n._(t`Test`)}
+                        aria-label={t`Test`}
                         variant="secondary"
                         type="button"
                         onClick={() => setShowExternalTestModal(true)}
                         isDisabled={!formik.isValid}
                       >
-                        {i18n._(t`Test`)}
+                        {t`Test`}
                       </Button>
                     )}
                   <Button
                     ouiaId="credential-form-cancel-button"
                     id="credential-form-cancel-button"
-                    aria-label={i18n._(t`Cancel`)}
+                    aria-label={t`Cancel`}
                     variant="link"
                     type="button"
                     onClick={onCancel}
                   >
-                    {i18n._(t`Cancel`)}
+                    {t`Cancel`}
                   </Button>
                 </ActionGroup>
               </FormFullWidthLayout>

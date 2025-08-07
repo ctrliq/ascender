@@ -1,8 +1,7 @@
 import 'styled-components/macro';
 import React from 'react';
 import { func } from 'prop-types';
-import { useLingui } from '@lingui/react';
-import { t } from '@lingui/react/macro';
+import { useLingui } from '@lingui/react/macro';
 import { Chip } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
 import { Link } from 'react-router-dom';
@@ -43,20 +42,20 @@ function ResourceAccessListItem({ accessRecord, onRoleDelete }) {
       }}
       isReadOnly={!role.user_capabilities.unattach}
       ouiaId={`${role.name}-${role.id}`}
-      closeBtnAriaLabel={i18n._(t`Remove ${role.name} chip`)}
+      closeBtnAriaLabel={t`Remove ${role.name} chip`}
     >
       {role.name}
     </Chip>
   );
 
   const [teamRoles, userRoles] = getRoleLists();
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   return (
     <Tr
       id={`access-item-row-${accessRecord.id}`}
       ouiaId={`access-item-row-${accessRecord.id}`}
     >
-      <Td id={`access-record-${accessRecord.id}`} dataLabel={i18n._(t`Name`)}>
+      <Td id={`access-record-${accessRecord.id}`} dataLabel={t`Name`}>
         {accessRecord.id ? (
           <Link to={{ pathname: `/users/${accessRecord.id}/details` }}>
             <b>{accessRecord.username}</b>
@@ -65,12 +64,12 @@ function ResourceAccessListItem({ accessRecord, onRoleDelete }) {
           <b>{accessRecord.username}</b>
         )}
       </Td>
-      <Td dataLabel={i18n._(t`First name`)}>{accessRecord.first_name}</Td>
-      <Td dataLabel={i18n._(t`Last name`)}>{accessRecord.last_name}</Td>
-      <Td dataLabel={i18n._(t`Roles`)}>
+      <Td dataLabel={t`First name`}>{accessRecord.first_name}</Td>
+      <Td dataLabel={t`Last name`}>{accessRecord.last_name}</Td>
+      <Td dataLabel={t`Roles`}>
         <DetailList stacked>
           <Detail
-            label={i18n._(t`User Roles`)}
+            label={t`User Roles`}
             value={
               <ChipGroup
                 numChips={5}
@@ -83,7 +82,7 @@ function ResourceAccessListItem({ accessRecord, onRoleDelete }) {
             isEmpty={userRoles.length === 0}
           />
           <Detail
-            label={i18n._(t`Team Roles`)}
+            label={t`Team Roles`}
             value={
               <ChipGroup
                 numChips={5}

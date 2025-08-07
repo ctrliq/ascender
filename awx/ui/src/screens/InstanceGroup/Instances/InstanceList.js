@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react';
-import { t, Trans } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { Trans, useLingui } from '@lingui/react/macro';
 import { useLocation, useParams } from 'react-router-dom';
 import 'styled-components/macro';
 
@@ -36,7 +35,7 @@ const QS_CONFIG = getQSConfig('instance', {
 });
 
 function InstanceList({ instanceGroup }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const config = useConfig();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showHealthCheckAlert, setShowHealthCheckAlert] = useState(false);
@@ -224,30 +223,30 @@ function InstanceList({ instanceGroup }) {
         }
         items={instances}
         itemCount={count}
-        pluralizedItemName={i18n._(t`Instances`)}
+        pluralizedItemName={t`Instances`}
         qsConfig={QS_CONFIG}
         clearSelected={clearSelected}
         toolbarSearchableKeys={searchableKeys}
         toolbarRelatedSearchableKeys={relatedSearchableKeys}
         toolbarSearchColumns={[
           {
-            name: i18n._(t`Name`),
+            name: t`Name`,
             key: 'hostname__icontains',
             isDefault: true,
           },
           {
-            name: i18n._(t`Node Type`),
+            name: t`Node Type`,
             key: `or__node_type`,
             options: [
-              [`control`, i18n._(t`Control`).toString()],
-              [`execution`, i18n._(t`Execution`).toString()],
-              [`hybrid`, i18n._(t`Hybrid`).toString()],
+              [`control`, t`Control`.toString()],
+              [`execution`, t`Execution`.toString()],
+              [`hybrid`, t`Hybrid`.toString()],
             ],
           },
         ]}
         toolbarSortColumns={[
           {
-            name: i18n._(t`Name`),
+            name: t`Name`,
             key: 'hostname',
           },
         ]}
@@ -265,7 +264,7 @@ function InstanceList({ instanceGroup }) {
                     <ToolbarAddButton
                       key="associate"
                       onClick={() => setIsModalOpen(true)}
-                      defaultLabel={i18n._(t`Associate`)}
+                      defaultLabel={t`Associate`}
                     />,
                   ]
                 : []),
@@ -277,9 +276,7 @@ function InstanceList({ instanceGroup }) {
                 key="disassociate"
                 onDisassociate={handleDisassociate}
                 itemsToDisassociate={selected}
-                modalTitle={i18n._(
-                  t`Disassociate instance from instance group?`
-                )}
+                modalTitle={t`Disassociate instance from instance group?`}
                 isProtectedInstanceGroup={instanceGroup.name === 'controlplane'}
                 modalNote={
                   selected.some(
@@ -321,20 +318,18 @@ function InstanceList({ instanceGroup }) {
         headerRow={
           <HeaderRow qsConfig={QS_CONFIG} isExpandable>
             <HeaderCell
-              tooltip={i18n._(
-                t`Health checks can only be run on execution nodes.`
-              )}
+              tooltip={t`Health checks can only be run on execution nodes.`}
               sortKey="hostname"
             >
-              {i18n._(t`Name`)}
+              {t`Name`}
             </HeaderCell>
-            <HeaderCell sortKey="errors">{i18n._(t`Status`)}</HeaderCell>
+            <HeaderCell sortKey="errors">{t`Status`}</HeaderCell>
             <HeaderCell sortKey="node_type">
-              {i18n._(t`Node Type`)}
+              {t`Node Type`}
             </HeaderCell>
-            <HeaderCell>{i18n._(t`Capacity Adjustment`)}</HeaderCell>
-            <HeaderCell>{i18n._(t`Used Capacity`)}</HeaderCell>
-            <HeaderCell>{i18n._(t`Actions`)}</HeaderCell>
+            <HeaderCell>{t`Capacity Adjustment`}</HeaderCell>
+            <HeaderCell>{t`Used Capacity`}</HeaderCell>
+            <HeaderCell>{t`Actions`}</HeaderCell>
           </HeaderRow>
         }
         renderRow={(instance, index) => (
@@ -353,17 +348,17 @@ function InstanceList({ instanceGroup }) {
       />
       {isModalOpen && (
         <AssociateModal
-          header={i18n._(t`Instances`)}
+          header={t`Instances`}
           fetchRequest={fetchInstancesToAssociate}
           isModalOpen={isModalOpen}
           onAssociate={handleAssociate}
           onClose={() => setIsModalOpen(false)}
-          title={i18n._(t`Select Instances`)}
+          title={t`Select Instances`}
           optionsRequest={readInstancesOptions}
           displayKey="hostname"
           columns={[
-            { key: 'hostname', name: i18n._(t`Name`) },
-            { key: 'node_type', name: i18n._(t`Node Type`) },
+            { key: 'hostname', name: t`Name` },
+            { key: 'node_type', name: t`Node Type` },
           ]}
           modalNote={
             <b>
@@ -389,14 +384,14 @@ function InstanceList({ instanceGroup }) {
         <AlertModal
           isOpen={error}
           onClose={dismissError}
-          title={i18n._(t`Error!`)}
+          title={t`Error!`}
           variant="error"
         >
-          {associateError && i18n._(t`Failed to associate.`)}
+          {associateError && t`Failed to associate.`}
           {disassociateError &&
-            i18n._(t`Failed to disassociate one or more instances.`)}
+            t`Failed to disassociate one or more instances.`}
           {healthCheckError &&
-            i18n._(t`Failed to run a health check on one or more instances.`)}
+            t`Failed to run a health check on one or more instances.`}
           <ErrorDetail error={error} />
         </AlertModal>
       )}

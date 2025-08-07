@@ -1,17 +1,16 @@
 import React from 'react';
 import { PageSection } from '@patternfly/react-core';
-import { t } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import ScreenHeader from 'components/ScreenHeader/ScreenHeader';
 import LabelLists from 'components/LabelLists/LabelLists';
 
 function Labels() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   return (
     <>
       <ScreenHeader
         streamType="label"
-        breadcrumbConfig={{ '/labels': i18n._(t`Labels`) }}
+        breadcrumbConfig={{ '/labels': t`Labels` }}
       />
       <PageSection>
         <LabelLists />

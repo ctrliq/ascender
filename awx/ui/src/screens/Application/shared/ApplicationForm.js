@@ -1,8 +1,7 @@
 import React, { useCallback } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 
-import { useLingui } from '@lingui/react';
-import { t } from '@lingui/react/macro';
+import { useLingui } from '@lingui/react/macro';
 import { Formik, useField, useFormikContext } from 'formik';
 import { Form, FormGroup } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
@@ -21,8 +20,8 @@ function ApplicationFormFields({
   authorizationOptions,
   clientTypeOptions,
 }) {
-  const { i18n } = useLingui();
-  const applicationHelpTextStrings = getApplicationHelpTextStrings();
+  const { t } = useLingui();
+  const applicationHelpTextStrings = getApplicationHelpTextStrings(t);
   const match = useRouteMatch();
   const { setFieldValue, setFieldTouched } = useFormikContext();
   const [organizationField, organizationMeta, organizationHelpers] =
@@ -53,7 +52,7 @@ function ApplicationFormFields({
     <>
       <FormField
         id="name"
-        label={i18n._(t`Name`)}
+        label={t`Name`}
         name="name"
         type="text"
         validate={required(null)}
@@ -61,7 +60,7 @@ function ApplicationFormFields({
       />
       <FormField
         id="description"
-        label={i18n._(t`Description`)}
+        label={t`Description`}
         name="description"
         type="text"
       />
@@ -84,7 +83,7 @@ function ApplicationFormFields({
             : 'error'
         }
         isRequired
-        label={i18n._(t`Authorization grant type`)}
+        label={t`Authorization grant type`}
         labelIcon={
           <Popover
             content={applicationHelpTextStrings.authorizationGrantType}
@@ -106,7 +105,7 @@ function ApplicationFormFields({
       </FormGroup>
       <FormField
         id="redirect_uris"
-        label={i18n._(t`Redirect URIs`)}
+        label={t`Redirect URIs`}
         name="redirect_uris"
         type="text"
         isRequired={Boolean(
@@ -126,7 +125,7 @@ function ApplicationFormFields({
           !clientTypeMeta.touched || !clientTypeMeta.error ? 'default' : 'error'
         }
         isRequired
-        label={i18n._(t`Client type`)}
+        label={t`Client type`}
         labelIcon={<Popover content={applicationHelpTextStrings.clientType} />}
       >
         <AnsibleSelect

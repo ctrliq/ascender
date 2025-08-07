@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 
-import { t } from '@lingui/react/macro';
 import { Formik, useField, useFormikContext } from 'formik';
 import { Form } from '@patternfly/react-core';
 import FormActionGroup from 'components/FormActionGroup/FormActionGroup';
@@ -9,10 +8,10 @@ import FormField, { FormSubmitError } from 'components/FormField';
 import OrganizationLookup from 'components/Lookup/OrganizationLookup';
 import { required } from 'util/validators';
 import { FormColumnLayout } from 'components/FormLayout';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 
 function TeamFormFields({ team }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const { setFieldValue, setFieldTouched } = useFormikContext();
   const [orgField, orgMeta, orgHelpers] = useField('organization');
 
@@ -28,7 +27,7 @@ function TeamFormFields({ team }) {
     <>
       <FormField
         id="team-name"
-        label={i18n._(t`Name`)}
+        label={t`Name`}
         name="name"
         type="text"
         validate={required(null)}
@@ -36,7 +35,7 @@ function TeamFormFields({ team }) {
       />
       <FormField
         id="team-description"
-        label={i18n._(t`Description`)}
+        label={t`Description`}
         name="description"
         type="text"
       />
@@ -48,7 +47,7 @@ function TeamFormFields({ team }) {
         value={orgField.value}
         required
         autoPopulate={!team?.id}
-        validate={required(i18n._(t`Select a value for this field`))}
+        validate={required(t`Select a value for this field`)}
       />
     </>
   );

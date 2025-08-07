@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from 'react';
 
-import { t } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import { Route, Switch } from 'react-router-dom';
 import ScreenHeader from 'components/ScreenHeader';
 import PersistentFilters from 'components/PersistentFilters';
@@ -11,10 +10,10 @@ import InstanceAdd from './InstanceAdd';
 import InstanceEdit from './InstanceEdit';
 
 function Instances() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const [breadcrumbConfig, setBreadcrumbConfig] = useState({
-    '/instances': i18n._(t`Instances`),
-    '/instances/add': i18n._(t`Create new Instance`),
+    '/instances': t`Instances`,
+    '/instances/add': t`Create new Instance`,
   });
 
   const buildBreadcrumbConfig = useCallback(
@@ -23,18 +22,16 @@ function Instances() {
         return;
       }
       setBreadcrumbConfig({
-        '/instances': i18n._(t`Instances`),
-        '/instances/add': i18n._(t`Create new Instance`),
+        '/instances': t`Instances`,
+        '/instances/add': t`Create new Instance`,
         [`/instances/${instance.id}`]: `${instance.hostname}`,
-        [`/instances/${instance.id}/details`]: i18n._(t`Details`),
-        [`/instances/${instance.id}/peers`]: i18n._(t`Peers`),
-        [`/instances/${instance.id}/listener_addresses`]: i18n._(
-          t`Listener Addresses`
-        ),
-        [`/instances/${instance.id}/edit`]: i18n._(t`Edit Instance`),
+        [`/instances/${instance.id}/details`]: t`Details`,
+        [`/instances/${instance.id}/peers`]: t`Peers`,
+        [`/instances/${instance.id}/listener_addresses`]: t`Listener Addresses`,
+        [`/instances/${instance.id}/edit`]: t`Edit Instance`,
       });
     },
-    [i18n]
+    [t]
   );
 
   return (

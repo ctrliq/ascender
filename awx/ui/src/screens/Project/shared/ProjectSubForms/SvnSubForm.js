@@ -1,7 +1,6 @@
 import 'styled-components/macro';
 import React from 'react';
-import { t } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import getProjectHelpStrings from '../Project.helptext';
 
 import {
@@ -16,12 +15,12 @@ const SvnSubForm = ({
   onCredentialSelection,
   scmUpdateOnLaunch,
 }) => {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const projectHelpStrings = getProjectHelpStrings();
   return (
     <>
       <UrlFormField tooltip={projectHelpStrings.svnSourceControlUrl} />
-      <BranchFormField label={i18n._(t`Revision #`)} />
+      <BranchFormField label={t`Revision #`} />
       <ScmCredentialFormField
         credential={credential}
         onCredentialSelection={onCredentialSelection}

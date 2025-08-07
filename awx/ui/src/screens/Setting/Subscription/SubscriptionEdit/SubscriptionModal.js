@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 
-import { t, Trans } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { Trans, useLingui } from '@lingui/react/macro';
 import {
   Button,
   EmptyState,
@@ -79,17 +78,17 @@ function SubscriptionModal({
       setSelected([selectedSubscription]);
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   return (
     <Modal
-      aria-label={i18n._(t`Subscription selection modal`)}
+      aria-label={t`Subscription selection modal`}
       isOpen
       onClose={onClose}
-      title={i18n._(t`Select a subscription`)}
+      title={t`Select a subscription`}
       width="50%"
       actions={[
         <Button
-          aria-label={i18n._(t`Confirm selection`)}
+          aria-label={t`Confirm selection`}
           isDisabled={selected.length === 0}
           key="confirm"
           onClick={handleConfirm}
@@ -99,7 +98,7 @@ function SubscriptionModal({
           <Trans>Select</Trans>
         </Button>,
         <Button
-          aria-label={i18n._(t`Cancel`)}
+          aria-label={t`Cancel`}
           key="cancel"
           onClick={onClose}
           variant="link"
@@ -121,7 +120,7 @@ function SubscriptionModal({
               We were unable to locate licenses associated with this account.
             </Trans>{' '}
             <Button
-              aria-label={i18n._(t`Close subscription modal`)}
+              aria-label={t`Close subscription modal`}
               onClick={onClose}
               variant="link"
               isInline
@@ -135,23 +134,21 @@ function SubscriptionModal({
       )}
       {!isLoading && !error && subscriptions?.length === 0 && (
         <ContentEmpty
-          title={i18n._(t`No subscriptions found`)}
-          message={i18n._(
-            t`We were unable to locate subscriptions associated with this account.`
-          )}
+          title={t`No subscriptions found`}
+          message={t`We were unable to locate subscriptions associated with this account.`}
         />
       )}
       {!isLoading && !error && subscriptions?.length > 0 && (
         <TableComposable
           variant="compact"
-          aria-label={i18n._(t`Subscriptions table`)}
+          aria-label={t`Subscriptions table`}
         >
           <Thead>
             <Tr ouiaId="subscription-table-header">
               <Th />
-              <Th>{i18n._(t`Name`)}</Th>
-              <Th modifier="fitContent">{i18n._(t`Managed nodes`)}</Th>
-              <Th modifier="fitContent">{i18n._(t`Expires`)}</Th>
+              <Th>{t`Name`}</Th>
+              <Th modifier="fitContent">{t`Managed nodes`}</Th>
+              <Th modifier="fitContent">{t`Expires`}</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -171,13 +168,13 @@ function SubscriptionModal({
                     rowIndex: `row-${subscription.id}`,
                   }}
                 />
-                <Td dataLabel={i18n._(t`Trial`)}>
+                <Td dataLabel={t`Trial`}>
                   {subscription.subscription_name}
                 </Td>
-                <Td dataLabel={i18n._(t`Managed nodes`)}>
+                <Td dataLabel={t`Managed nodes`}>
                   {subscription.instance_count}
                 </Td>
-                <Td dataLabel={i18n._(t`Expires`)} modifier="nowrap">
+                <Td dataLabel={t`Expires`} modifier="nowrap">
                   {formatDateString(
                     new Date(subscription.license_date * 1000).toISOString(),
                     'UTC'

@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { func, string } from 'prop-types';
-import { t } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import { Select, SelectOption, SelectVariant } from '@patternfly/react-core';
 import { arrayToString, stringToArray } from 'util/strings';
 
 function TagMultiSelect({ onChange, value }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const selections = stringToArray(value);
   const [options, setOptions] = useState(selections);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -58,10 +57,10 @@ function TagMultiSelect({ onChange, value }) {
       }}
       selections={selections}
       isOpen={isExpanded}
-      typeAheadAriaLabel={i18n._(t`Select tags`)}
-      noResultsFoundText={i18n._(t`No results found`)}
+      typeAheadAriaLabel={t`Select tags`}
+      noResultsFoundText={t`No results found`}
       ouiaId="tag-multiselect"
-      createText={i18n._(t`Create`)}
+      createText={t`Create`}
     >
       {renderOptions(options)}
     </Select>

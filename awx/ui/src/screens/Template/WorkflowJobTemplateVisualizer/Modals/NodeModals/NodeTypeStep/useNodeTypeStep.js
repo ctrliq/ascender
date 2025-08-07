@@ -1,6 +1,5 @@
 import React from 'react';
-import { t } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
 import StepName from 'components/LaunchPrompt/steps/StepName';
 import { stringIsUUID } from 'util/strings';
@@ -9,7 +8,7 @@ import NodeTypeStep from './NodeTypeStep';
 const STEP_ID = 'nodeType';
 
 export default function useNodeTypeStep(nodeToEdit) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const [, meta] = useField('nodeType');
   const [approvalNameField] = useField('approvalName');
   const [nodeTypeField, ,] = useField('nodeType');
@@ -24,9 +23,7 @@ export default function useNodeTypeStep(nodeToEdit) {
           ((!value?.inventory || value?.inventory === null) &&
             !value?.ask_inventory_on_launch))
       ) {
-        return i18n._(
-          t`Job Templates with a missing inventory or project cannot be selected when creating or editing nodes.  Select another template or fix the missing fields to proceed.`
-        );
+        return t`Job Templates with a missing inventory or project cannot be selected when creating or editing nodes.  Select another template or fix the missing fields to proceed.`;
       }
       return undefined;
     },
@@ -37,7 +34,7 @@ export default function useNodeTypeStep(nodeToEdit) {
 
   return {
     step: getStep(
-      i18n,
+      t,
       nodeTypeField,
       approvalNameField,
       nodeResourceField,
@@ -55,7 +52,7 @@ export default function useNodeTypeStep(nodeToEdit) {
   };
 }
 function getStep(
-  i18n,
+  t,
   nodeTypeField,
   approvalNameField,
   nodeResourceField,
@@ -78,7 +75,7 @@ function getStep(
     id: STEP_ID,
     name: (
       <StepName hasErrors={formError} id="node-type-step">
-        {i18n._(t`Node type`)}
+        {t`Node type`}
       </StepName>
     ),
     component: (

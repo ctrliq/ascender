@@ -63,7 +63,7 @@ describe('<RemoveInstanceButtton />', () => {
     const user = userEvent.setup();
     const onRemove = jest.fn();
     render(
-      <I18nProvider i18n={i18n}>
+      <I18nProvider t={t}>
         <RemoveInstanceButton
           isK8s={true}
           itemsToRemove={[instances[0]]}

@@ -1,7 +1,7 @@
 import React from 'react';
-import { Trans, t } from '@lingui/react/macro';
+import { Trans } from '@lingui/react/macro';
 
-function getHelpText(i18n) {
+function getHelpText(t) {
   return {
     image: (
       <span>
@@ -21,7 +21,7 @@ function getHelpText(i18n) {
         </ul>
       </span>
     ),
-    registryCredential: i18n._(t`Credential to authenticate with a protected container registry.`),
+    registryCredential: t`Credential to authenticate with a protected container registry.`,
   };
 }
 

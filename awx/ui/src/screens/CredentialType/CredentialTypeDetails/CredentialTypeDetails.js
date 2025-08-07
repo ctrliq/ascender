@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
 
-import { t } from '@lingui/react/macro';
 import { Link, useHistory } from 'react-router-dom';
 import { Button } from '@patternfly/react-core';
 
@@ -17,10 +16,10 @@ import {
   getRelatedResourceDeleteCounts,
 } from 'util/getRelatedResourceDeleteDetails';
 import ErrorDetail from 'components/ErrorDetail';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 
 function CredentialTypeDetails({ credentialType }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const { id, name, description, injectors, inputs } = credentialType;
   const history = useHistory();
 
@@ -43,7 +42,7 @@ function CredentialTypeDetails({ credentialType }) {
     useCallback(async () => {
       const { results: deleteDetails, error } =
         await getRelatedResourceDeleteCounts(
-          relatedResourceDeleteRequests.credentialType(credentialType)
+          relatedResourceDeleteRequests(t).credentialType(credentialType)
         );
       if (error) {
         throw new Error(error);
@@ -52,7 +51,7 @@ function CredentialTypeDetails({ credentialType }) {
         return { isDeleteDisabled: true };
       }
       return { isDeleteDisabled: false };
-    }, [credentialType]),
+    }, [credentialType, t]),
     { isDeleteDisabled: false }
   );
 
@@ -67,38 +66,34 @@ function CredentialTypeDetails({ credentialType }) {
     <CardBody>
       <DetailList>
         <Detail
-          label={i18n._(t`Name`)}
+          label={t`Name`}
           value={name}
           dataCy="credential-type-detail-name"
         />
-        <Detail label={i18n._(t`Description`)} value={description} />
+        <Detail label={t`Description`} value={description} />
         <VariablesDetail
-          label={i18n._(t`Input configuration`)}
+          label={t`Input configuration`}
           value={jsonToYaml(JSON.stringify(inputs))}
           rows={6}
           name="input"
           dataCy="credential-type-detail-input"
-          helpText={i18n._(
-            t`Input schema which defines a set of ordered fields for that type.`
-          )}
+          helpText={t`Input schema which defines a set of ordered fields for that type.`}
         />
         <VariablesDetail
-          label={i18n._(t`Injector configuration`)}
+          label={t`Injector configuration`}
           value={jsonToYaml(JSON.stringify(injectors))}
           rows={6}
           name="injector"
           dataCy="credential-type-detail-injector"
-          helpText={i18n._(
-            t`Environment variables or extra variables that specify the values a credential type can inject.`
-          )}
+          helpText={t`Environment variables or extra variables that specify the values a credential type can inject.`}
         />
         <UserDateDetail
-          label={i18n._(t`Created`)}
+          label={t`Created`}
           date={credentialType.created}
           user={credentialType.summary_fields.created_by}
         />
         <UserDateDetail
-          label={i18n._(t`Last Modified`)}
+          label={t`Last Modified`}
           date={credentialType.modified}
           user={credentialType.summary_fields.modified_by}
         />
@@ -108,28 +103,26 @@ function CredentialTypeDetails({ credentialType }) {
           credentialType.summary_fields.user_capabilities.edit && (
             <Button
               ouiaId="credential-type-detail-edit-button"
-              aria-label={i18n._(t`edit`)}
+              aria-label={t`edit`}
               component={Link}
               to={`/credential_types/${id}/edit`}
             >
-              {i18n._(t`Edit`)}
+              {t`Edit`}
             </Button>
           )}
         {credentialType.summary_fields.user_capabilities &&
           credentialType.summary_fields.user_capabilities.delete && (
             <DeleteButton
               name={name}
-              modalTitle={i18n._(t`Delete credential type`)}
+              modalTitle={t`Delete credential type`}
               onConfirm={deleteCredentialType}
               isDisabled={isLoading || isDeleteDisabled}
               disabledTooltip={
                 isDeleteDisabled &&
-                i18n._(
-                  t`This credential type is currently being used by some credentials and cannot be deleted`
-                )
+                t`This credential type is currently being used by some credentials and cannot be deleted`
               }
             >
-              {i18n._(t`Delete`)}
+              {t`Delete`}
             </DeleteButton>
           )}
       </CardActionsRow>
@@ -138,7 +131,7 @@ function CredentialTypeDetails({ credentialType }) {
         <AlertModal
           isOpen={error}
           onClose={dismissError}
-          title={i18n._(t`Error`)}
+          title={t`Error`}
           variant="error"
         >
           <ErrorDetail error={error} />

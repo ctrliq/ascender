@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link, Redirect, Route, Switch } from 'react-router-dom';
-import { t } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import { PageSection, Card } from '@patternfly/react-core';
 import ContentError from 'components/ContentError';
 import { useConfig } from 'contexts/Config';
@@ -9,7 +8,7 @@ import MiscSystemDetail from './MiscSystemDetail';
 import MiscSystemEdit from './MiscSystemEdit';
 
 function MiscSystem() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const baseURL = '/settings/miscellaneous_system';
   const { me } = useConfig();
 
@@ -31,7 +30,7 @@ function MiscSystem() {
           <Route key="not-found" path={`${baseURL}/*`}>
             <ContentError isNotFound>
               <Link to={`${baseURL}/details`}>
-                {i18n._(t`View Miscellaneous System settings`)}
+                {t`View Miscellaneous System settings`}
               </Link>
             </ContentError>
           </Route>

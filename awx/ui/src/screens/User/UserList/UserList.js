@@ -1,7 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLocation, useRouteMatch } from 'react-router-dom';
 
-import { t } from '@lingui/react/macro';
 import { Card, PageSection } from '@patternfly/react-core';
 import { UsersAPI } from 'api';
 import AlertModal from 'components/AlertModal';
@@ -17,7 +16,7 @@ import PaginatedTable, {
 import useRequest, { useDeleteItems } from 'hooks/useRequest';
 import useSelected from 'hooks/useSelected';
 import { getQSConfig, parseQueryString } from 'util/qs';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import UserListItem from './UserListItem';
 
 const QS_CONFIG = getQSConfig('user', {
@@ -29,7 +28,7 @@ const QS_CONFIG = getQSConfig('user', {
 function UserList() {
   const location = useLocation();
   const match = useRouteMatch();
-  const { i18n } = useLingui();
+  const { t } = useLingui();
 
   const {
     result: {
@@ -109,25 +108,25 @@ function UserList() {
             hasContentLoading={hasContentLoading}
             items={users}
             itemCount={itemCount}
-            pluralizedItemName={i18n._(t`Users`)}
+            pluralizedItemName={t`Users`}
             qsConfig={QS_CONFIG}
             clearSelected={clearSelected}
             toolbarSearchColumns={[
               {
-                name: i18n._(t`Email`),
+                name: t`Email`,
                 key: 'email__icontains',
                 isDefault: true,
               },
               {
-                name: i18n._(t`Username`),
+                name: t`Username`,
                 key: 'username__icontains',
               },
               {
-                name: i18n._(t`First Name`),
+                name: t`First Name`,
                 key: 'first_name__icontains',
               },
               {
-                name: i18n._(t`Last Name`),
+                name: t`Last Name`,
                 key: 'last_name__icontains',
               },
             ]}
@@ -152,7 +151,7 @@ function UserList() {
                     key="delete"
                     onDelete={handleUserDelete}
                     itemsToDelete={selected}
-                    pluralizedItemName={i18n._(t`Users`)}
+                    pluralizedItemName={t`Users`}
                   />,
                 ]}
               />
@@ -160,17 +159,17 @@ function UserList() {
             headerRow={
               <HeaderRow qsConfig={QS_CONFIG}>
                 <HeaderCell sortKey="username">
-                  {i18n._(t`Username`)}
+                  {t`Username`}
                 </HeaderCell>
                 <HeaderCell sortKey="first_name">
-                  {i18n._(t`First Name`)}
+                  {t`First Name`}
                 </HeaderCell>
                 <HeaderCell sortKey="last_name">
-                  {i18n._(t`Last Name`)}
+                  {t`Last Name`}
                 </HeaderCell>
-                <HeaderCell>{i18n._(t`Email`)}</HeaderCell>
-                <HeaderCell>{i18n._(t`Organization`)}</HeaderCell>
-                <HeaderCell>{i18n._(t`Actions`)}</HeaderCell>
+                <HeaderCell>{t`Email`}</HeaderCell>
+                <HeaderCell>{t`Organization`}</HeaderCell>
+                <HeaderCell>{t`Actions`}</HeaderCell>
               </HeaderRow>
             }
             renderRow={(user, index) => (

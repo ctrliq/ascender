@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 
-import { t } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 
 import {
   WorkflowDispatchContext,
@@ -11,7 +10,7 @@ import { getAddedAndRemoved } from 'util/lists';
 import NodeModal from './NodeModal';
 
 function NodeAddModal() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const dispatch = useContext(WorkflowDispatchContext);
   const { addNodeSource } = useContext(WorkflowStateContext);
 
@@ -78,7 +77,7 @@ function NodeAddModal() {
     <NodeModal
       askLinkType={addNodeSource !== 1}
       onSave={addNode}
-      title={i18n._(t`Add Node`)}
+      title={t`Add Node`}
     />
   );
 }

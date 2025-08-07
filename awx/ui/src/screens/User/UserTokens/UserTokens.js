@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { useLingui } from '@lingui/react';
-import { t } from '@lingui/react/macro';
+import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import { Switch, Route, useParams } from 'react-router-dom';
 import {
@@ -20,7 +19,7 @@ const TokenAlert = styled(Alert)`
 `;
 
 function UserTokens({ setBreadcrumb, user }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const [tokenModalSource, setTokenModalSource] = useState(null);
   const { id } = useParams();
 
@@ -48,23 +47,21 @@ function UserTokens({ setBreadcrumb, user }) {
       </Switch>
       {tokenModalSource && (
         <Modal
-          aria-label={i18n._(t`Token information`)}
+          aria-label={t`Token information`}
           isOpen
           variant="medium"
-          title={i18n._(t`Token information`)}
+          title={t`Token information`}
           onClose={() => setTokenModalSource(null)}
         >
           <TokenAlert
             variant="info"
             isInline
-            title={i18n._(
-              t`This is the only time the token value and associated refresh token value will be shown.`
-            )}
+            title={t`This is the only time the token value and associated refresh token value will be shown.`}
           />
           <DetailList stacked>
             {tokenModalSource.token && (
               <Detail
-                label={i18n._(t`Token`)}
+                label={t`Token`}
                 value={
                   <ClipboardCopy
                     isReadOnly
@@ -77,7 +74,7 @@ function UserTokens({ setBreadcrumb, user }) {
             )}
             {tokenModalSource.refresh_token && (
               <Detail
-                label={i18n._(t`Refresh Token`)}
+                label={t`Refresh Token`}
                 value={
                   <ClipboardCopy
                     isReadOnly
@@ -89,7 +86,7 @@ function UserTokens({ setBreadcrumb, user }) {
               />
             )}
             <Detail
-              label={i18n._(t`Expires`)}
+              label={t`Expires`}
               value={formatDateString(tokenModalSource.expires)}
             />
           </DetailList>

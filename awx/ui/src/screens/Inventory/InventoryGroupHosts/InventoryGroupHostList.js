@@ -1,8 +1,7 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import { useLocation, useParams, Link } from 'react-router-dom';
 
-import { t } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import { DropdownItem } from '@patternfly/react-core';
 import { getQSConfig, mergeParams, parseQueryString } from 'util/qs';
 import { GroupsAPI, InventoriesAPI } from 'api';
@@ -33,7 +32,7 @@ const QS_CONFIG = getQSConfig('host', {
 });
 
 function InventoryGroupHostList() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const [isAdHocLaunchLoading, setIsAdHocLaunchLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { id: inventoryId, groupId, inventoryType } = useParams();
@@ -153,8 +152,8 @@ function InventoryGroupHostList() {
     Object.prototype.hasOwnProperty.call(actions, 'POST') &&
     isNotConstructedInventory;
   const addFormUrl = `/inventories/inventory/${inventoryId}/groups/${groupId}/nested_hosts/add`;
-  const addExistingHost = i18n._(t`Add existing host`);
-  const addNewHost = i18n._(t`Add new host`);
+  const addExistingHost = t`Add existing host`;
+  const addNewHost = t`Add new host`;
 
   const addButton = (
     <AddDropDownButton
@@ -190,38 +189,38 @@ function InventoryGroupHostList() {
         }
         items={hosts}
         itemCount={hostCount}
-        pluralizedItemName={i18n._(t`Hosts`)}
+        pluralizedItemName={t`Hosts`}
         qsConfig={QS_CONFIG}
         onRowClick={handleSelect}
         toolbarSearchColumns={[
           {
-            name: i18n._(t`Name`),
+            name: t`Name`,
             key: 'name__icontains',
             isDefault: true,
           },
           {
-            name: i18n._(t`Created By (Username)`),
+            name: t`Created By (Username)`,
             key: 'created_by__username__icontains',
           },
           {
-            name: i18n._(t`Modified By (Username)`),
+            name: t`Modified By (Username)`,
             key: 'modified_by__username__icontains',
           },
         ]}
         toolbarSortColumns={[
           {
-            name: i18n._(t`Name`),
+            name: t`Name`,
             key: 'name',
           },
         ]}
         headerRow={
           <HeaderRow qsConfig={QS_CONFIG}>
-            <HeaderCell sortKey="name">{i18n._(t`Name`)}</HeaderCell>
+            <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
             <HeaderCell sortKey="description">
-              {i18n._(t`Description`)}
+              {t`Description`}
             </HeaderCell>
-            <HeaderCell>{i18n._(t`Activity`)}</HeaderCell>
-            <HeaderCell>{i18n._(t`Actions`)}</HeaderCell>
+            <HeaderCell>{t`Activity`}</HeaderCell>
+            <HeaderCell>{t`Actions`}</HeaderCell>
           </HeaderRow>
         }
         toolbarSearchableKeys={searchableKeys}
@@ -252,12 +251,12 @@ function InventoryGroupHostList() {
                       key="disassociate"
                       onDisassociate={handleDisassociate}
                       itemsToDisassociate={selected}
-                      modalTitle={i18n._(t`Disassociate host from group?`)}
-                      modalNote={i18n._(t`
+                      modalTitle={t`Disassociate host from group?`}
+                      modalNote={t`
                         Note that only hosts directly in this group can
                         be disassociated. Hosts in sub-groups must be disassociated
                         directly from the sub-group level that they belong.
-                      `)}
+                      `}
                     />,
                   ]
                 : []),
@@ -279,23 +278,23 @@ function InventoryGroupHostList() {
       />
       {isModalOpen && (
         <AssociateModal
-          header={i18n._(t`Hosts`)}
+          header={t`Hosts`}
           fetchRequest={fetchHostsToAssociate}
           optionsRequest={fetchHostsOptions}
           isModalOpen={isModalOpen}
           onAssociate={handleAssociate}
           onClose={() => setIsModalOpen(false)}
-          title={i18n._(t`Select Hosts`)}
+          title={t`Select Hosts`}
         />
       )}
       {associateError && (
         <AlertModal
           isOpen={associateError}
           onClose={dismissAssociateError}
-          title={i18n._(t`Error!`)}
+          title={t`Error!`}
           variant="error"
         >
-          {i18n._(t`Failed to associate.`)}
+          {t`Failed to associate.`}
           <ErrorDetail error={associateError} />
         </AlertModal>
       )}
@@ -303,10 +302,10 @@ function InventoryGroupHostList() {
         <AlertModal
           isOpen={disassociateError}
           onClose={dismissDisassociateError}
-          title={i18n._(t`Error!`)}
+          title={t`Error!`}
           variant="error"
         >
-          {i18n._(t`Failed to disassociate one or more hosts.`)}
+          {t`Failed to disassociate one or more hosts.`}
           <ErrorDetail error={disassociateError} />
         </AlertModal>
       )}

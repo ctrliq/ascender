@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useLingui } from '@lingui/react';
-import { t } from '@lingui/react/macro';
+import { useLingui } from '@lingui/react/macro';
 import ScreenHeader from 'components/ScreenHeader/ScreenHeader';
 import { HostMetricsAPI } from 'api';
 import useRequest from 'hooks/useRequest';
@@ -24,11 +23,11 @@ const QS_CONFIG = getQSConfig('host_metrics', {
 });
 
 function HostMetrics() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const location = useLocation();
 
   const [breadcrumbConfig] = useState({
-    '/host_metrics': i18n._(t`Host Metrics`),
+    '/host_metrics': t`Host Metrics`,
   });
   const {
     result: { count, results },
@@ -64,7 +63,7 @@ function HostMetrics() {
             hasContentLoading={isLoading}
             items={results}
             itemCount={count}
-            pluralizedItemName={i18n._(t`Host Metrics`)}
+            pluralizedItemName={t`Host Metrics`}
             renderRow={(item, index) => (
               <HostMetricsListItem
                 key={item.id}
@@ -79,7 +78,7 @@ function HostMetrics() {
             qsConfig={QS_CONFIG}
             toolbarSearchColumns={[
               {
-                name: i18n._(t`Hostname`),
+                name: t`Hostname`,
                 key: 'hostname__icontains',
                 isDefault: true,
               },
@@ -107,7 +106,7 @@ function HostMetrics() {
                       })
                     }
                     itemsToDelete={selected}
-                    pluralizedItemName={i18n._(t`Host Metrics`)}
+                    pluralizedItemName={t`Host Metrics`}
                   />,
                 ]}
               />
@@ -115,31 +114,31 @@ function HostMetrics() {
             headerRow={
               <HeaderRow qsConfig={QS_CONFIG}>
                 <HeaderCell sortKey="hostname">
-                  {i18n._(t`Hostname`)}
+                  {t`Hostname`}
                 </HeaderCell>
                 <HeaderCell
                   sortKey="first_automation"
-                  tooltip={i18n._(t`When was the host first automated`)}
+                  tooltip={t`When was the host first automated`}
                 >
-                  {i18n._(t`First automated`)}
+                  {t`First automated`}
                 </HeaderCell>
                 <HeaderCell
                   sortKey="last_automation"
-                  tooltip={i18n._(t`When was the host last automated`)}
+                  tooltip={t`When was the host last automated`}
                 >
-                  {i18n._(t`Last automated`)}
+                  {t`Last automated`}
                 </HeaderCell>
                 <HeaderCell
                   sortKey="automated_counter"
-                  tooltip={i18n._(t`How many times was the host automated`)}
+                  tooltip={t`How many times was the host automated`}
                 >
-                  {i18n._(t`Automation`)}
+                  {t`Automation`}
                 </HeaderCell>
                 <HeaderCell
                   sortKey="deleted_counter"
-                  tooltip={i18n._(t`How many times was the host deleted`)}
+                  tooltip={t`How many times was the host deleted`}
                 >
-                  {i18n._(t`Deleted`)}
+                  {t`Deleted`}
                 </HeaderCell>
               </HeaderRow>
             }

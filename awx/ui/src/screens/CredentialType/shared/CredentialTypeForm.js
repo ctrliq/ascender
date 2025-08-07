@@ -2,8 +2,7 @@ import React from 'react';
 import { func, shape } from 'prop-types';
 import { Formik } from 'formik';
 
-import { useLingui } from '@lingui/react';
-import { t } from '@lingui/react/macro';
+import { useLingui } from '@lingui/react/macro';
 
 import { Form } from '@patternfly/react-core';
 import { VariablesField } from 'components/CodeEditor';
@@ -15,12 +14,12 @@ import { FormColumnLayout, FormFullWidthLayout } from 'components/FormLayout';
 import { jsonToYaml } from 'util/yaml';
 
 function CredentialTypeFormFields() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   return (
     <>
       <FormField
         id="credential-type-name"
-        label={i18n._(t`Name`)}
+        label={t`Name`}
         name="name"
         type="text"
         validate={required(null)}
@@ -28,28 +27,24 @@ function CredentialTypeFormFields() {
       />
       <FormField
         id="credential-type-description"
-        label={i18n._(t`Description`)}
+        label={t`Description`}
         name="description"
         type="text"
       />
       <FormFullWidthLayout>
         <VariablesField
-          tooltip={i18n._(
-            t`Enter inputs using either JSON or YAML syntax. Refer to the Ansible Controller documentation for example syntax.`
-          )}
+          tooltip={t`Enter inputs using either JSON or YAML syntax. Refer to the Ansible Controller documentation for example syntax.`}
           id="credential-type-inputs-configuration"
           name="inputs"
-          label={i18n._(t`Input configuration`)}
+          label={t`Input configuration`}
         />
       </FormFullWidthLayout>
       <FormFullWidthLayout>
         <VariablesField
-          tooltip={i18n._(
-            t`Enter injectors using either JSON or YAML syntax. Refer to the Ansible Controller documentation for example syntax.`
-          )}
+          tooltip={t`Enter injectors using either JSON or YAML syntax. Refer to the Ansible Controller documentation for example syntax.`}
           id="credential-type-injectors-configuration"
           name="injectors"
-          label={i18n._(t`Injector configuration`)}
+          label={t`Injector configuration`}
         />
       </FormFullWidthLayout>
     </>

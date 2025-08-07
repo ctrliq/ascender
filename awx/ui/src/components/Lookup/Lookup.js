@@ -21,8 +21,7 @@ import {
   Modal,
   TextInput,
 } from '@patternfly/react-core';
-import { t } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import useDebounce from 'hooks/useDebounce';
 import { QSConfig } from 'types';
@@ -55,16 +54,14 @@ function Lookup(props) {
     modalDescription,
     onUpdate,
   } = props;
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const [typedText, setTypedText] = useState('');
   const debounceRequest = useDebounce(onDebounce, 1000);
   useField({
     name: fieldName,
     validate: (val) => {
       if (!multiple && !val && typedText && typedText !== '') {
-        return i18n._(
-          t`That value was not found. Please enter or select a valid value.`
-        );
+        return t`That value was not found. Please enter or select a valid value.`;
       }
       return validate(val);
     },
@@ -144,7 +141,7 @@ function Lookup(props) {
     <>
       <InputGroup onBlur={onBlur}>
         <Button
-          aria-label={i18n._(t`Search`)}
+          aria-label={t`Search`}
           id={`${id}-open`}
           ouiaId={`${id}-open`}
           onClick={onClick}
@@ -187,8 +184,8 @@ function Lookup(props) {
 
       <Modal
         variant="large"
-        title={i18n._(t`Select ${header || i18n._(t`Items`)}`)}
-        aria-label={i18n._(t`Lookup modal`)}
+        title={t`Select ${header || t`Items`}`}
+        aria-label={t`Lookup modal`}
         isOpen={isModalOpen}
         onClose={closeModal}
         description={state?.selectedItems?.length > 0 && modalDescription}
@@ -201,16 +198,16 @@ function Lookup(props) {
             onClick={save}
             isDisabled={required && selectedItems.length === 0}
           >
-            {i18n._(t`Select`)}
+            {t`Select`}
           </Button>,
           <Button
             ouiaId="modal-cancel-button"
             key="cancel"
             variant="link"
             onClick={closeModal}
-            aria-label={i18n._(t`Cancel lookup`)}
+            aria-label={t`Cancel lookup`}
           >
-            {i18n._(t`Cancel`)}
+            {t`Cancel`}
           </Button>,
         ]}
       >

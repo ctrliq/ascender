@@ -169,10 +169,9 @@ function App() {
 
   if (isLoading) {
     return (
-      <I18nProvider i18n={i18n}>
-        {/* eslint-disable-next-line i18next/no-literal-string */}
-        <div>Loading...</div>
-      </I18nProvider>
+      // Don't render I18nProvider until i18n is activated
+      // eslint-disable-next-line i18next/no-literal-string
+      <div>Loading...</div>
     );
   }
 

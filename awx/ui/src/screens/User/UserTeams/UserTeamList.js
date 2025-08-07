@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
-import { useLingui } from '@lingui/react';
-import { t } from '@lingui/react/macro';
+import { useLingui } from '@lingui/react/macro';
 import PaginatedTable, {
   HeaderRow,
   HeaderCell,
@@ -30,7 +29,7 @@ const QS_CONFIG = getQSConfig('teams', {
 });
 
 function UserTeamList() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const location = useLocation();
   const { id: userId } = useParams();
@@ -64,7 +63,6 @@ function UserTeamList() {
         teams: results,
         count: teamCount,
         userOptions: usersResponse.data.actions,
-        actions: actionsResponse.data.actions,
         relatedSearchableKeys: (
           actionsResponse?.data?.related_search_fields || []
         ).map((val) => val.slice(0, -8)),
@@ -74,7 +72,6 @@ function UserTeamList() {
     {
       teams: [],
       count: 0,
-      roles: {},
       userOptions: {},
       relatedSearchableKeys: [],
       searchableKeys: [],
@@ -173,14 +170,14 @@ function UserTeamList() {
         contentError={contentError}
         hasContentLoading={isLoading || isDisassociateLoading}
         itemCount={count}
-        pluralizedItemName={i18n._(t`Teams`)}
+        pluralizedItemName={t`Teams`}
         qsConfig={QS_CONFIG}
         clearSelected={clearSelected}
         headerRow={
           <HeaderRow qsConfig={QS_CONFIG}>
-            <HeaderCell sortKey="name">{i18n._(t`Name`)}</HeaderCell>
-            <HeaderCell>{i18n._(t`Organization`)}</HeaderCell>
-            <HeaderCell>{i18n._(t`Description`)}</HeaderCell>
+            <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
+            <HeaderCell>{t`Organization`}</HeaderCell>
+            <HeaderCell>{t`Description`}</HeaderCell>
           </HeaderRow>
         }
         renderRow={(team, index) => (
@@ -206,7 +203,7 @@ function UserTeamList() {
                     <ToolbarAddButton
                       key="associate"
                       onClick={() => setIsModalOpen(true)}
-                      defaultLabel={i18n._(t`Associate`)}
+                      defaultLabel={t`Associate`}
                     />,
                   ]
                 : []),
@@ -214,10 +211,8 @@ function UserTeamList() {
                 key="disassociate"
                 onDisassociate={handleDisassociate}
                 itemsToDisassociate={selected}
-                modalTitle={i18n._(t`Disassociate related team(s)?`)}
-                modalNote={i18n._(
-                  t`This action will disassociate all roles for this user from the selected teams.`
-                )}
+                modalTitle={t`Disassociate related team(s)?`}
+                modalNote={t`This action will disassociate all roles for this user from the selected teams.`}
               />,
             ]}
             emptyStateControls={
@@ -232,12 +227,12 @@ function UserTeamList() {
         )}
         toolbarSearchColumns={[
           {
-            name: i18n._(t`Name`),
+            name: t`Name`,
             key: 'name__icontains',
             isDefault: true,
           },
           {
-            name: i18n._(t`Organization`),
+            name: t`Organization`,
             key: 'organization__name__icontains',
           },
         ]}
@@ -246,12 +241,12 @@ function UserTeamList() {
       />
       {isModalOpen && (
         <AssociateModal
-          header={i18n._(t`Teams`)}
+          header={t`Teams`}
           fetchRequest={fetchTeamsToAssociate}
           isModalOpen={isModalOpen}
           onAssociate={handleAssociate}
           onClose={() => setIsModalOpen(false)}
-          title={i18n._(t`Select Teams`)}
+          title={t`Select Teams`}
           optionsRequest={readTeamOptions}
         />
       )}
@@ -259,12 +254,12 @@ function UserTeamList() {
         <AlertModal
           isOpen={error}
           onClose={dismissError}
-          title={i18n._(t`Error!`)}
+          title={t`Error!`}
           variant="error"
         >
           {associateError
-            ? i18n._(t`Failed to associate.`)
-            : i18n._(t`Failed to disassociate one or more teams.`)}
+            ? t`Failed to associate.`
+            : t`Failed to disassociate one or more teams.`}
           <ErrorDetail error={error} />
         </AlertModal>
       )}

@@ -1,8 +1,7 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 import 'styled-components/macro';
 import React from 'react';
-import { t } from '@lingui/react/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import { oneOf } from 'prop-types';
 import { Label, Tooltip } from '@patternfly/react-core';
 import icons from '../StatusIcon/icons';
@@ -36,33 +35,33 @@ const colors = {
 };
 
 export default function StatusLabel({ status, tooltipContent = '', children }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const upperCaseStatus = {
-    approved: i18n._(t`Approved`),
-    denied: i18n._(t`Denied`),
-    success: i18n._(t`Success`),
-    healthy: i18n._(t`Healthy`),
-    successful: i18n._(t`Successful`),
-    ok: i18n._(t`OK`),
-    failed: i18n._(t`Failed`),
-    error: i18n._(t`Error`),
-    unreachable: i18n._(t`Unreachable`),
-    running: i18n._(t`Running`),
-    pending: i18n._(t`Pending`),
-    skipped: i18n._(t`Skipped`),
-    timedOut: i18n._(t`Timed out`),
-    waiting: i18n._(t`Waiting`),
-    disabled: i18n._(t`Disabled`),
-    canceled: i18n._(t`Canceled`),
-    changed: i18n._(t`Changed`),
+    approved: t`Approved`,
+    denied: t`Denied`,
+    success: t`Success`,
+    healthy: t`Healthy`,
+    successful: t`Successful`,
+    ok: t`OK`,
+    failed: t`Failed`,
+    error: t`Error`,
+    unreachable: t`Unreachable`,
+    running: t`Running`,
+    pending: t`Pending`,
+    skipped: t`Skipped`,
+    timedOut: t`Timed out`,
+    waiting: t`Waiting`,
+    disabled: t`Disabled`,
+    canceled: t`Canceled`,
+    changed: t`Changed`,
     /* Instance statuses */
-    ready: i18n._(t`Ready`),
-    installed: i18n._(t`Installed`),
-    provisioning: i18n._(t`Provisioning`),
-    deprovisioning: i18n._(t`Deprovisioning`),
-    unavailable: i18n._(t`Unavailable`),
-    'provision-fail': i18n._(t`Provisioning fail`),
-    'deprovision-fail': i18n._(t`Deprovisioning fail`),
+    ready: t`Ready`,
+    installed: t`Installed`,
+    provisioning: t`Provisioning`,
+    deprovisioning: t`Deprovisioning`,
+    unavailable: t`Unavailable`,
+    'provision-fail': t`Provisioning fail`,
+    'deprovision-fail': t`Deprovisioning fail`,
   };
   const label = upperCaseStatus[status] || status;
   const color = colors[status] || 'grey';
