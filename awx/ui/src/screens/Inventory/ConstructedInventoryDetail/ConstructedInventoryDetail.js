@@ -170,7 +170,7 @@ function ConstructedInventoryDetail({ inventory }) {
           dataCy="constructed-inventory-type"
         />
         <Detail
-          label={actions.limit.label}
+          label={t`Limit`}
           value={inventory.limit}
           helpText={actions.limit.help_text}
           dataCy="constructed-inventory-limit"
@@ -187,37 +187,37 @@ function ConstructedInventoryDetail({ inventory }) {
           }
         />
         <Detail
-          label={actions.total_groups.label}
+          label={t`Total groups`}
           value={wsInventory.total_groups}
           helpText={actions.total_groups.help_text}
           dataCy="constructed-inventory-total-groups"
         />
         <Detail
-          label={actions.total_hosts.label}
+          label={t`Total hosts`}
           value={wsInventory.total_hosts}
           helpText={actions.total_hosts.help_text}
           dataCy="constructed-inventory-total-hosts"
         />
         <Detail
-          label={actions.total_inventory_sources.label}
+          label={t`Total inventory sources`}
           value={wsInventory.total_inventory_sources}
           helpText={actions.total_inventory_sources.help_text}
           dataCy="constructed-inventory-sources"
         />
         <Detail
-          label={actions.update_cache_timeout.label}
+          label={t`Update cache timeout`}
           value={inventory.update_cache_timeout}
           helpText={actions.update_cache_timeout.help_text}
           dataCy="constructed-inventory-cache-timeout"
         />
         <Detail
-          label={actions.inventory_sources_with_failures.label}
+          label={t`Inventory sources with failures`}
           value={wsInventory.inventory_sources_with_failures}
           helpText={actions.inventory_sources_with_failures.help_text}
           dataCy="constructed-inventory-sources-with-failures"
         />
         <Detail
-          label={actions.verbosity.label}
+          label={t`Verbosity`}
           value={inventory.verbosity}
           helpText={actions.verbosity.help_text}
           dataCy="constructed-inventory-verbosity"
@@ -297,7 +297,7 @@ function ConstructedInventoryDetail({ inventory }) {
           isEmpty={inputInventories?.length === 0}
         />
         <VariablesDetail
-          label={actions.source_vars.label}
+          label={t`Source vars`}
           helpText={helpText.variables()}
           value={inventory.source_vars}
           rows={4}
@@ -305,12 +305,12 @@ function ConstructedInventoryDetail({ inventory }) {
           dataCy="inventory-detail-variables"
         />
         <UserDateDetail
-          label={actions.created.label}
+          label={t`Created`}
           date={inventory.created}
           user={inventory.summary_fields.created_by}
         />
         <UserDateDetail
-          label={actions.modified.label}
+          label={t`Modified`}
           date={inventory.modified}
           user={inventory.summary_fields.modified_by}
         />

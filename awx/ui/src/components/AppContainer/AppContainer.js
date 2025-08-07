@@ -68,8 +68,8 @@ function AppContainer({ navRouteConfig = [], children }) {
 
   const brandName = config?.license_info?.product_name;
   const alt = brandName
-    ? `${brandName} logo`
-    : 'brand logo';
+    ? t`${brandName} logo`
+    : t`brand logo`;
   const customLogoMenu = config?.uiConfig?.CUSTOM_LOGO_MENU;
 
   const header = (

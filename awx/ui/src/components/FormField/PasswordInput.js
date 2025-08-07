@@ -52,7 +52,7 @@ function PasswordInput(props) {
       <TextInput
         autoComplete={autocomplete}
         id={id}
-        placeholder={field.value === '$encrypted$' ? 'ENCRYPTED' : undefined}
+        placeholder={field.value === '$encrypted$' ? t`ENCRYPTED` : undefined}
         {...field}
         value={field.value === '$encrypted$' ? '' : field.value}
         isDisabled={isDisabled}

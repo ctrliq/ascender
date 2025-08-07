@@ -80,8 +80,14 @@ function PaginatedTable({
       ];
   const queryParams = parseQueryString(qsConfig, history.location.search);
 
-  const dataListLabel = t`${pluralizedItemName} List`;
-  const emptyContentTitle = t`No ${pluralizedItemName} Found `;
+  const dataListLabel = t({
+    message: `${pluralizedItemName} List`,
+    comment: 'Aria label for paginated table list'
+  });
+  const emptyContentTitle = t({
+    message: `No ${pluralizedItemName} Found`,
+    comment: 'Title when no items are found'
+  });
 
   let Content;
   if (hasContentLoading && items.length <= 0) {
@@ -94,7 +100,10 @@ function PaginatedTable({
         title={emptyContentTitle}
         message={
           emptyContentMessage ||
-          t`Please add ${pluralizedItemName} to populate this list `
+          t({
+            message: `Please add ${pluralizedItemName} to populate this list`,
+            comment: 'Message when list is empty'
+          })
         }
       />
     );
