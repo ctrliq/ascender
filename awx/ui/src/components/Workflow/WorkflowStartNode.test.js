@@ -1,11 +1,7 @@
 import React from 'react';
 
-import { en } from 'make-plural/plurals';
-import { I18nProvider } from '@lingui/react';
-import { i18n } from '@lingui/core';
 import { WorkflowStateContext } from 'contexts/Workflow';
 import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
-import english from '../../locales/en/messages';
 import WorkflowStartNode from './WorkflowStartNode';
 
 const nodePositions = {
@@ -15,22 +11,16 @@ const nodePositions = {
   },
 };
 
-i18n.loadLocaleData({ en: { plurals: en } });
-i18n.load({ en: english });
-i18n.activate('en');
-
 describe('WorkflowStartNode', () => {
   test('mounts successfully', () => {
     const wrapper = mountWithContexts(
       <svg>
-        <I18nProvider t={t}>
-          <WorkflowStateContext.Provider value={{ nodePositions }}>
-            <WorkflowStartNode
-              nodePositions={nodePositions}
-              showActionTooltip={false}
-            />
-          </WorkflowStateContext.Provider>
-        </I18nProvider>
+        <WorkflowStateContext.Provider value={{ nodePositions }}>
+          <WorkflowStartNode
+            nodePositions={nodePositions}
+            showActionTooltip={false}
+          />
+        </WorkflowStateContext.Provider>
       </svg>
     );
     expect(wrapper).toHaveLength(1);
@@ -38,14 +28,12 @@ describe('WorkflowStartNode', () => {
   test('tooltip shown on hover', () => {
     const wrapper = mountWithContexts(
       <svg>
-        <I18nProvider t={t}>
-          <WorkflowStateContext.Provider value={{ nodePositions }}>
-            <WorkflowStartNode
-              nodePositions={nodePositions}
-              showActionTooltip
-            />
-          </WorkflowStateContext.Provider>
-        </I18nProvider>
+        <WorkflowStateContext.Provider value={{ nodePositions }}>
+          <WorkflowStartNode
+            nodePositions={nodePositions}
+            showActionTooltip
+          />
+        </WorkflowStateContext.Provider>
       </svg>
     );
     expect(wrapper.find('WorkflowActionTooltip')).toHaveLength(0);

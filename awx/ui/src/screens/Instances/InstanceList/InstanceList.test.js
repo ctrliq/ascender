@@ -143,7 +143,7 @@ describe('<InstanceList />, React testing library tests', () => {
     });
 
     return render(
-      <I18nProvider t={t}>
+      <I18nProvider i18n={i18n}>
         <Router history={history}>
           <Route path="/instances">{ui} </Route>
         </Router>
