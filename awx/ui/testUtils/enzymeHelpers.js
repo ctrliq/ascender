@@ -74,7 +74,7 @@ function wrapContexts(node, context) {
       const component = React.cloneElement(children, props);
       if (router.history) {
         return (
-          <I18nProvider t={t}>
+          <I18nProvider i18n={i18n}>
             <SessionProvider value={session}>
               <ConfigProvider value={config}>
                 <Router history={router.history}>{component}</Router>
@@ -84,7 +84,7 @@ function wrapContexts(node, context) {
         );
       }
       return (
-        <I18nProvider t={t}>
+        <I18nProvider i18n={i18n}>
           <SessionProvider value={session}>
             <ConfigProvider value={config}>
               <MemoryRouter>{component}</MemoryRouter>
