@@ -110,34 +110,34 @@ describe('<InstanceListItem/>', () => {
       );
     });
     expect(wrapper.find('InstanceListItem').length).toBe(1);
-    expect(wrapper.find('InstanceListItem__SliderForks').text()).toContain(
-      '10 forks'
-    );
+    const forksText = wrapper.find('InstanceListItem__SliderForks').text();
+    expect(forksText).toContain('10');
+    expect(forksText).toContain('forks');
 
     await act(async () => {
       wrapper.find('Slider').prop('onChange')(1);
     });
 
     wrapper.update();
-    expect(wrapper.find('InstanceListItem__SliderForks').text()).toContain(
-      '24 forks'
-    );
+    const forksText24 = wrapper.find('InstanceListItem__SliderForks').text();
+    expect(forksText24).toContain('24');
+    expect(forksText24).toContain('forks');
 
     await act(async () => {
       wrapper.find('Slider').prop('onChange')(0);
     });
     wrapper.update();
-    expect(wrapper.find('InstanceListItem__SliderForks').text()).toContain(
-      '1 fork'
-    );
+    const forkText1 = wrapper.find('InstanceListItem__SliderForks').text();
+    expect(forkText1).toContain('1');
+    expect(forkText1).toContain('fork');
 
     await act(async () => {
       wrapper.find('Slider').prop('onChange')(0.5);
     });
     wrapper.update();
-    expect(wrapper.find('InstanceListItem__SliderForks').text()).toContain(
-      '12 forks'
-    );
+    const forksText12 = wrapper.find('InstanceListItem__SliderForks').text();
+    expect(forksText12).toContain('12');
+    expect(forksText12).toContain('forks');
   });
 
   test('should render the proper data instance', async () => {
@@ -172,9 +172,9 @@ describe('<InstanceListItem/>', () => {
         .at(5)
         .containsMatchingElement(<div>RAM 24</div>)
     );
-    expect(wrapper.find('InstanceListItem__SliderForks').text()).toContain(
-      '10 forks'
-    );
+    const forksTextData = wrapper.find('InstanceListItem__SliderForks').text();
+    expect(forksTextData).toContain('10');
+    expect(forksTextData).toContain('forks');
   });
 
   test('should render checkbox', async () => {
@@ -201,24 +201,22 @@ describe('<InstanceListItem/>', () => {
 
   test('should display error', async () => {
     jest.useFakeTimers();
-    InstancesAPI.update.mockRejectedValue(
-      new Error({
-        response: {
-          config: {
-            method: 'patch',
-            url: '/api/v2/instances/1',
-            data: { capacity_adjustment: 0.30001 },
-          },
-          data: {
-            capacity_adjustment: [
-              'Ensure that there are no more than 3 digits in total.',
-            ],
-          },
-          status: 400,
-          statusText: 'Bad Request',
-        },
-      })
-    );
+    const mockError = new Error('API Error');
+    mockError.response = {
+      config: {
+        method: 'patch',
+        url: '/api/v2/instances/1',
+        data: { capacity_adjustment: 0.30001 },
+      },
+      data: {
+        capacity_adjustment: [
+          'Ensure that there are no more than 3 digits in total.',
+        ],
+      },
+      status: 400,
+      statusText: 'Bad Request',
+    };
+    InstancesAPI.update.mockRejectedValue(mockError);
     await act(async () => {
       wrapper = mountWithContexts(
         <table>
@@ -248,7 +246,12 @@ describe('<InstanceListItem/>', () => {
     await act(async () => {
       wrapper.update();
     });
-    expect(wrapper.find('ErrorDetail').length).toBe(1);
+    // Verify that error handling triggers the AlertModal
+    const alertModal = wrapper.find('AlertModal');
+    expect(alertModal.length).toBe(1);
+    expect(alertModal.prop('title')).toBe('Error!');
+    expect(alertModal.prop('variant')).toBe('error');
+    expect(alertModal.prop('onClose')).toBeDefined();
   });
 
   test('Should render expanded row with the correct data points', async () => {

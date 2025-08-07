@@ -167,8 +167,8 @@ function JobListCancelButton({ jobsToCancel, onCancel }) {
           <div>
             <Plural
               value={numJobsToCancel}
-              one="This action will cancel the following job:"
-              other="This action will cancel the following jobs:"
+              one={t`This action will cancel the following job:`}
+              other={t`This action will cancel the following jobs:`}
             />
           </div>
           {jobsToCancel.map((job) => (

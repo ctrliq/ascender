@@ -24,29 +24,29 @@ export function getTooltip(workflowApproval, t) {
   return '';
 }
 
-export function getStatus(workflowApproval, t) {
+export function getStatus(workflowApproval) {
   if (workflowApproval.timed_out) {
-    return t`timedOut`;
+    return 'timedOut';
   }
 
   if (workflowApproval.canceled_on) {
-    return t`canceled`;
+    return 'canceled';
   }
   if (workflowApproval.status === 'failed' && workflowApproval.failed) {
-    return t`denied`;
+    return 'denied';
   }
   if (workflowApproval.status === 'successful') {
-    return t`approved`;
+    return 'approved';
   }
   return workflowApproval.status;
 }
 
-export function getPendingLabel(workflowApproval, t) {
+export function getPendingLabel(workflowApproval) {
   if (!workflowApproval.approval_expiration) {
-    return t`Never expires`;
+    return 'Never expires';
   }
 
-  return t`Expires on ${formatDateString(workflowApproval.approval_expiration)}`;
+  return `Expires on ${formatDateString(workflowApproval.approval_expiration)}`;
 }
 
 export function getDetailPendingLabel(workflowApproval, t) {

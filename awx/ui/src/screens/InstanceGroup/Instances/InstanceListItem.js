@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { bool, func } from 'prop-types';
-import { Plural, useLingui } from '@lingui/react/macro';
+import { useLingui } from '@lingui/react/macro';
 
 import styled from 'styled-components';
 import 'styled-components/macro';
@@ -55,7 +55,7 @@ function InstanceListItem({
   fetchInstances,
   rowIndex,
 }) {
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
   const config = useConfig();
   const { id } = useParams();
   const [forks, setForks] = useState(
@@ -163,11 +163,7 @@ function InstanceListItem({
             </div>
             <SliderForks data-cy="slider-forks">
               <div data-cy="number-forks">
-                <Plural
-                  value={forks}
-                  one={t`# fork`}
-                  other={t`# forks`}
-                />
+                {i18n._('{count, plural, one {# fork} other {# forks}}', { count: forks })}
               </div>
               <Slider
                 areCustomStepsContinuous
