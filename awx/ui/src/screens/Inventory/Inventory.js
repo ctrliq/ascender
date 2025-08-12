@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { msg } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 
 import {
   Switch,
@@ -27,7 +26,7 @@ import InventorySources from './InventorySources';
 import { getInventoryPath } from './shared/utils';
 
 function Inventory({ setBreadcrumb }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const [contentError, setContentError] = useState(null);
   const [hasContentLoading, setHasContentLoading] = useState(true);
   const [inventory, setInventory] = useState(null);
@@ -57,25 +56,25 @@ function Inventory({ setBreadcrumb }) {
       name: (
         <>
           <CaretLeftIcon />
-          {i18n._(msg`Back to Inventories`)}
+          {t`Back to Inventories`}
         </>
       ),
       link: `/inventories`,
       id: 99,
       persistentFilterKey: 'inventories',
     },
-    { name: i18n._(msg`Details`), link: `${match.url}/details`, id: 0 },
-    { name: i18n._(msg`Access`), link: `${match.url}/access`, id: 1 },
-    { name: i18n._(msg`Groups`), link: `${match.url}/groups`, id: 2 },
-    { name: i18n._(msg`Hosts`), link: `${match.url}/hosts`, id: 3 },
-    { name: i18n._(msg`Sources`), link: `${match.url}/sources`, id: 4 },
+    { name: t`Details`, link: `${match.url}/details`, id: 0 },
+    { name: t`Access`, link: `${match.url}/access`, id: 1 },
+    { name: t`Groups`, link: `${match.url}/groups`, id: 2 },
+    { name: t`Hosts`, link: `${match.url}/hosts`, id: 3 },
+    { name: t`Sources`, link: `${match.url}/sources`, id: 4 },
     {
-      name: i18n._(msg`Jobs`),
+      name: t`Jobs`,
       link: `${match.url}/jobs`,
       id: 5,
     },
     {
-      name: i18n._(msg`Job Templates`),
+      name: t`Job Templates`,
       link: `${match.url}/job_templates`,
       id: 6,
     },
@@ -98,9 +97,9 @@ function Inventory({ setBreadcrumb }) {
           <ContentError error={contentError}>
             {contentError.response?.status === 404 && (
               <span>
-                {i18n._(msg`Inventory not found.`)}{' '}
+                {t`Inventory not found.`}{' '}
                 <Link to="/inventories">
-                  {i18n._(msg`View all Inventories.`)}
+                  {t`View all Inventories.`}
                 </Link>
               </span>
             )}
@@ -197,7 +196,7 @@ function Inventory({ setBreadcrumb }) {
                   <Link
                     to={`/inventories/inventory/${match.params.id}/details`}
                   >
-                    {i18n._(msg`View Inventory Details`)}
+                    {t`View Inventory Details`}
                   </Link>
                 )}
               </ContentError>

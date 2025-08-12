@@ -1,8 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { SyncAltIcon } from '@patternfly/react-icons';
 import { useParams, useLocation } from 'react-router-dom';
-import { msg } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 
 import {
   FormGroup,
@@ -26,8 +25,8 @@ import {
 import getHelpText from './WorkflowJobTemplate.helptext';
 
 function WebhookSubForm({ templateType }) {
-  const { i18n } = useLingui();
-  const helpText = getHelpText(i18n);
+  const { t } = useLingui();
+  const helpText = getHelpText(t);
   const { setFieldValue } = useFormikContext();
   const { id } = useParams();
   const { pathname } = useLocation();
@@ -99,25 +98,25 @@ function WebhookSubForm({ templateType }) {
     {
       value: '',
       key: '',
-      label: i18n._(msg`Choose a Webhook Service`),
+      label: t`Choose a Webhook Service`,
       isDisabled: true,
     },
     {
       value: 'github',
       key: 'github',
-      label: i18n._(msg`GitHub`),
+      label: t`GitHub`,
       isDisabled: false,
     },
     {
       value: 'gitlab',
       key: 'gitlab',
-      label: i18n._(msg`GitLab`),
+      label: t`GitLab`,
       isDisabled: false,
     },
     {
       value: 'bitbucket_dc',
       key: 'bitbucket_dc',
-      label: i18n._(msg`Bitbucket Data Center`),
+      label: t`Bitbucket Data Center`,
       isDisabled: false,
     },
   ];
@@ -134,7 +133,7 @@ function WebhookSubForm({ templateType }) {
         name="webhook_service"
         fieldId="webhook_service"
         helperTextInvalid={webhookServiceMeta.error}
-        label={i18n._(msg`Webhook Service`)}
+        label={t`Webhook Service`}
         labelIcon={<Popover content={helpText.webhookService} />}
       >
         <AnsibleSelect
@@ -145,9 +144,7 @@ function WebhookSubForm({ templateType }) {
             webhookServiceHelpers.setValue(val);
             webhookUrlHelpers.setValue(
               pathname.endsWith('/add')
-                ? i18n
-                    ._(msg`a new webhook url will be generated on save.`)
-                    .toUpperCase()
+                ? (t`a new webhook url will be generated on save.`).toUpperCase()
                 : `${origin}/api/v2/${templateType}s/${id}/${val}/`
             );
             if (val === webhookServiceMeta.initialValue || val === '') {
@@ -157,9 +154,7 @@ function WebhookSubForm({ templateType }) {
               );
             } else {
               webhookKeyHelpers.setValue(
-                i18n
-                  ._(msg`a new webhook key will be generated on save.`)
-                  .toUpperCase()
+                (t`a new webhook key will be generated on save.`).toUpperCase()
               );
               webhookCredentialHelpers.setValue(null);
             }
@@ -170,19 +165,19 @@ function WebhookSubForm({ templateType }) {
         <FormGroup
           type="text"
           fieldId="jt-webhookURL"
-          label={i18n._(msg`Webhook URL`)}
+          label={t`Webhook URL`}
           labelIcon={<Popover content={helpText.webhookURL} />}
           name="webhook_url"
         >
           <TextInput
             id="t-webhookURL"
-            aria-label={i18n._(msg`Webhook URL`)}
+            aria-label={t`Webhook URL`}
             value={webhookUrlField.value}
             isReadOnly
           />
         </FormGroup>
         <FormGroup
-          label={i18n._(msg`Webhook Key`)}
+          label={t`Webhook Key`}
           labelIcon={<Popover content={helpText.webhookKey} />}
           fieldId="template-webhook_key"
         >
@@ -190,14 +185,14 @@ function WebhookSubForm({ templateType }) {
             <TextInput
               id="template-webhook_key"
               isReadOnly
-              aria-label={i18n._(msg`workflow job template webhook key`)}
+              aria-label={t`workflow job template webhook key`}
               value={webhookKeyField.value}
             />
             <Button
               ouiaId="update-webhook-key-button"
               isDisabled={isUpdateKeyDisabled}
               variant="tertiary"
-              aria-label={i18n._(msg`Update webhook key`)}
+              aria-label={t`Update webhook key`}
               onClick={changeWebhookKey}
             >
               <SyncAltIcon />
@@ -208,7 +203,7 @@ function WebhookSubForm({ templateType }) {
 
       {credTypeId && (
         <CredentialLookup
-          label={i18n._(msg`Webhook Credential`)}
+          label={t`Webhook Credential`}
           tooltip={helpText.webhookCredential}
           credentialTypeId={credTypeId}
           onChange={onCredentialChange}

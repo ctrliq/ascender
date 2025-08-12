@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-import { msg } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import debounce from 'util/debounce';
 import * as d3 from 'd3';
@@ -49,7 +48,7 @@ function MeshGraph({
   setShowZoomControls,
   storedNodes,
 }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const [isNodeSelected, setIsNodeSelected] = useState(false);
   const [selectedNode, setSelectedNode] = useState(null);
   const [simulationProgress, setSimulationProgress] = useState(null);
@@ -416,11 +415,11 @@ function MeshGraph({
       {fetchInstanceError && (
         <AlertModal
           variant="error"
-          title={i18n._(msg`Error!`)}
+          title={t`Error!`}
           isOpen
           onClose={dismissError}
         >
-          {i18n._(msg`Failed to get instance.`)}
+          {t`Failed to get instance.`}
           <ErrorDetail error={fetchInstanceError} />
         </AlertModal>
       )}

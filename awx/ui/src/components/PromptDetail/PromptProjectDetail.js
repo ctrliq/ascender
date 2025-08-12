@@ -1,6 +1,5 @@
 import React from 'react';
-import { msg } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import {
   TextList,
   TextListItem,
@@ -15,7 +14,7 @@ import CredentialChip from '../CredentialChip';
 import ExecutionEnvironmentDetail from '../ExecutionEnvironmentDetail';
 
 function PromptProjectDetail({ resource }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const {
     allow_override,
     custom_virtualenv,
@@ -44,27 +43,27 @@ function PromptProjectDetail({ resource }) {
       <TextList component={TextListVariants.ul}>
         {scm_clean && (
           <TextListItem component={TextListItemVariants.li}>
-            {i18n._(msg`Discard local changes before syncing`)}
+            {t`Discard local changes before syncing`}
           </TextListItem>
         )}
         {scm_delete_on_update && (
           <TextListItem component={TextListItemVariants.li}>
-            {i18n._(msg`Delete the project before syncing`)}
+            {t`Delete the project before syncing`}
           </TextListItem>
         )}
         {scm_track_submodules && (
           <TextListItem component={TextListItemVariants.li}>
-            {i18n._(msg`Track submodules latest commit on branch`)}
+            {t`Track submodules latest commit on branch`}
           </TextListItem>
         )}
         {scm_update_on_launch && (
           <TextListItem component={TextListItemVariants.li}>
-            {i18n._(msg`Update revision on job launch`)}
+            {t`Update revision on job launch`}
           </TextListItem>
         )}
         {allow_override && (
           <TextListItem component={TextListItemVariants.li}>
-            {i18n._(msg`Allow branch override`)}
+            {t`Allow branch override`}
           </TextListItem>
         )}
       </TextList>
@@ -76,7 +75,7 @@ function PromptProjectDetail({ resource }) {
     <>
       {summary_fields?.organization ? (
         <Detail
-          label={i18n._(msg`Organization`)}
+          label={t`Organization`}
           dataCy={`${prefixCy}-organization`}
           value={
             <Link
@@ -87,7 +86,7 @@ function PromptProjectDetail({ resource }) {
           }
         />
       ) : (
-        <DeletedDetail label={i18n._(msg`Organization`)} />
+        <DeletedDetail label={t`Organization`} />
       )}
       <ExecutionEnvironmentDetail
         virtualEnvironment={custom_virtualenv}
@@ -95,28 +94,28 @@ function PromptProjectDetail({ resource }) {
         isDefaultEnvironment
       />
       <Detail
-        label={i18n._(msg`Source Control Type`)}
+        label={t`Source Control Type`}
         dataCy={`${prefixCy}-source-control-type`}
-        value={scm_type === '' ? i18n._(msg`Manual`) : toTitleCase(scm_type)}
+        value={scm_type === '' ? t`Manual` : toTitleCase(scm_type)}
       />
       <Detail
-        label={i18n._(msg`Source Control URL`)}
+        label={t`Source Control URL`}
         dataCy={`${prefixCy}-source-control-url`}
         value={scm_url}
       />
       <Detail
-        label={i18n._(msg`Source Control Branch`)}
+        label={t`Source Control Branch`}
         dataCy={`${prefixCy}-source-control-branch`}
         value={scm_branch}
       />
       <Detail
-        label={i18n._(msg`Source Control Refspec`)}
+        label={t`Source Control Refspec`}
         dataCy={`${prefixCy}-source-control-refspec`}
         value={scm_refspec}
       />
       {summary_fields?.credential?.id && (
         <Detail
-          label={i18n._(msg`Source Control Credential`)}
+          label={t`Source Control Credential`}
           dataCy={`${prefixCy}-source-control-credential`}
           value={
             <CredentialChip
@@ -129,7 +128,7 @@ function PromptProjectDetail({ resource }) {
       )}
       {summary_fields?.signature_validation_credential?.id && (
         <Detail
-          label={i18n._(msg`Content Signature Validation Credential`)}
+          label={t`Content Signature Validation Credential`}
           dataCy={`${prefixCy}-content-signature-validation-credential`}
           value={
             <CredentialChip
@@ -144,27 +143,27 @@ function PromptProjectDetail({ resource }) {
       )}
       {optionsList && (
         <Detail
-          label={i18n._(msg`Enabled Options`)}
+          label={t`Enabled Options`}
           dataCy={`${prefixCy}-enabled-options`}
           value={optionsList}
         />
       )}
       <Detail
-        label={i18n._(msg`Cache Timeout`)}
+        label={t`Cache Timeout`}
         dataCy={`${prefixCy}-cache-timeout`}
-        value={`${scm_update_cache_timeout} ${i18n._(msg`Seconds`)}`}
+        value={`${scm_update_cache_timeout} ${t`Seconds`}`}
       />
       <Config>
         {({ project_base_dir }) => (
           <Detail
-            label={i18n._(msg`Project Base Path`)}
+            label={t`Project Base Path`}
             dataCy={`${prefixCy}-project-base-path`}
             value={project_base_dir}
           />
         )}
       </Config>
       <Detail
-        label={i18n._(msg`Playbook Directory`)}
+        label={t`Playbook Directory`}
         dataCy={`${prefixCy}-playbook-directory`}
         value={local_path}
       />

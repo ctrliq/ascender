@@ -2,8 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { ExclamationCircleIcon as PFExclamationCircleIcon } from '@patternfly/react-icons';
 import { Tooltip } from '@patternfly/react-core';
-import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 import { useFormikContext } from 'formik';
 
 import yaml from 'js-yaml';
@@ -25,7 +24,7 @@ const ErrorMessageWrapper = styled.div`
 `;
 
 function PreviewStep({ resource, launchConfig, surveyConfig, formErrors }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const { values } = useFormikContext();
   const surveyValues = getSurveyValues(values);
 
@@ -57,10 +56,10 @@ function PreviewStep({ resource, launchConfig, surveyConfig, formErrors }) {
     <div data-cy="prompt-preview">
       {formErrors && (
         <ErrorMessageWrapper>
-          {i18n._(msg`Some of the previous step(s) have errors`)}
+          {t`Some of the previous step(s) have errors`}
           <Tooltip
             position="right"
-            content={i18n._(msg`See errors on the left`)}
+            content={t`See errors on the left`}
             trigger="click mouseenter focus"
           >
             <ExclamationCircleIcon />

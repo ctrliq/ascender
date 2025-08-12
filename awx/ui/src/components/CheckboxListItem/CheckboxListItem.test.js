@@ -1,11 +1,11 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
 
 import CheckboxListItem from './CheckboxListItem';
 
 describe('CheckboxListItem', () => {
   test('renders the expected content', () => {
-    const wrapper = mount(
+    const wrapper = mountWithContexts(
       <table>
         <tbody>
           <CheckboxListItem
@@ -23,7 +23,7 @@ describe('CheckboxListItem', () => {
   });
 
   test('should render row actions', () => {
-    const wrapper = mount(
+    const wrapper = mountWithContexts(
       <table>
         <tbody>
           <CheckboxListItem

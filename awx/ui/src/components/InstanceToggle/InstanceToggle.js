@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
-import { msg } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import { Switch, Tooltip } from '@patternfly/react-core';
 import useRequest from 'hooks/useRequest';
 import { InstancesAPI } from 'api';
@@ -10,7 +9,7 @@ import ErrorDetail from '../ErrorDetail';
 import AlertModal from '../AlertModal';
 
 function InstanceToggle({ className, fetchInstances, instance, onToggle }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const { me = {} } = useConfig();
   const [isEnabled, setIsEnabled] = useState(instance.enabled);
   const [showError, setShowError] = useState(false);
@@ -47,32 +46,30 @@ function InstanceToggle({ className, fetchInstances, instance, onToggle }) {
   return (
     <>
       <Tooltip
-        content={i18n._(
-          msg`Set the instance enabled or disabled. If disabled, jobs will not be assigned to this instance.`
-        )}
+        content={t`Set the instance enabled or disabled. If disabled, jobs will not be assigned to this instance.`}
         position="top"
       >
         <Switch
           className={className}
           css="display: inline-flex;"
           id={`host-${instance.id}-toggle`}
-          label={i18n._(msg`Enabled`)}
-          labelOff={i18n._(msg`Disabled`)}
+          label={t`Enabled`}
+          labelOff={t`Disabled`}
           isChecked={isEnabled}
           isDisabled={isLoading || !me?.is_superuser}
           onChange={toggleInstance}
           ouiaId={`host-${instance.id}-toggle`}
-          aria-label={i18n._(msg`Toggle instance`)}
+          aria-label={t`Toggle instance`}
         />
       </Tooltip>
       {showError && error && !isLoading && (
         <AlertModal
           variant="error"
-          title={i18n._(msg`Error!`)}
+          title={t`Error!`}
           isOpen={error && !isLoading}
           onClose={() => setShowError(false)}
         >
-          {i18n._(msg`Failed to toggle instance.`)}
+          {t`Failed to toggle instance.`}
           <ErrorDetail error={error} />
         </AlertModal>
       )}

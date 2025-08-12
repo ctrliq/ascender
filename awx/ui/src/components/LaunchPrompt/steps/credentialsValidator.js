@@ -1,6 +1,3 @@
-import { i18n } from '@lingui/core';
-import { msg } from '@lingui/macro';
-
 const credentialPromptsForPassword = (credential) =>
   credential?.inputs?.password === 'ASK' ||
   credential?.inputs?.ssh_key_unlock === 'ASK' ||
@@ -10,6 +7,7 @@ const credentialPromptsForPassword = (credential) =>
 export default function credentialsValidator(
   allowCredentialsWithPasswords,
   selectedCredentials,
+  t,
   defaultCredentials = []
 ) {
   if (defaultCredentials.length > 0 && selectedCredentials) {
@@ -36,11 +34,9 @@ export default function credentialsValidator(
     });
 
     if (missingCredentialTypes.length > 0) {
-      return i18n._(
-        msg`Job Template default credentials must be replaced with one of the same type.  Please select a credential for the following types in order to proceed: ${missingCredentialTypes.join(
+      return t`Job Template default credentials must be replaced with one of the same type.  Please select a credential for the following types in order to proceed: ${missingCredentialTypes.join(
           ', '
-        )}`
-      );
+        )}`;
     }
   }
 
@@ -52,11 +48,9 @@ export default function credentialsValidator(
       }
     });
     if (credentialsThatPrompt.length > 0) {
-      return i18n._(
-        msg`Credentials that require passwords on launch are not permitted.  Please remove or replace the following credentials with a credential of the same type in order to proceed: ${credentialsThatPrompt.join(
+      return t`Credentials that require passwords on launch are not permitted.  Please remove or replace the following credentials with a credential of the same type in order to proceed: ${credentialsThatPrompt.join(
           ', '
-        )}`
-      );
+        )}`;
     }
   }
 

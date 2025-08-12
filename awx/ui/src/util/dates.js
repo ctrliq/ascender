@@ -1,6 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-import { msg } from '@lingui/macro';
-import { i18n } from '@lingui/core';
+import { t } from '@lingui/react/macro';
 import { RRule } from 'rrule';
 import { DateTime, Duration } from 'luxon';
 
@@ -72,6 +71,6 @@ export function getRRuleDayConstants(dayString) {
     case 'weekendDay':
       return [RRule.SA, RRule.SU];
     default:
-      throw new Error(i18n._(msg`Unrecognized day string`));
+      throw new Error(t`Unrecognized day string`);
   }
 }

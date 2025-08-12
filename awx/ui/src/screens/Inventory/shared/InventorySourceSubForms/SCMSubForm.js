@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useField, useFormikContext } from 'formik';
-import { msg } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import {
   FormGroup,
   SelectVariant,
@@ -26,8 +25,8 @@ import {
 import getHelpText from '../Inventory.helptext';
 
 const SCMSubForm = ({ autoPopulateProject }) => {
-  const { i18n } = useLingui();
-  const helpText = getHelpText(i18n);
+  const { t } = useLingui();
+  const helpText = getHelpText(t);
   const [isOpen, setIsOpen] = useState(false);
   const [sourcePath, setSourcePath] = useState([]);
   const { setFieldValue, setFieldTouched } = useFormikContext();
@@ -37,7 +36,7 @@ const SCMSubForm = ({ autoPopulateProject }) => {
     useField('source_project');
   const [sourcePathField, sourcePathMeta, sourcePathHelpers] = useField({
     name: 'source_path',
-    validate: required(i18n._(msg`Select a value for this field`)),
+    validate: required(t`Select a value for this field`),
   });
   const { error: sourcePathError, request: fetchSourcePath } = useRequest(
     useCallback(async (projectId) => {
@@ -84,13 +83,13 @@ const SCMSubForm = ({ autoPopulateProject }) => {
           id="project-scm-branch"
           name="scm_branch"
           type="text"
-          label={i18n._(msg`Source Control Branch/Tag/Commit`)}
+          label={t`Source Control Branch/Tag/Commit`}
           tooltip={helpText.sourceControlBranch}
         />
       )}
       <CredentialLookup
         credentialTypeKind="cloud"
-        label={i18n._(msg`Credential`)}
+        label={t`Credential`}
         value={credentialField.value}
         onChange={handleCredentialUpdate}
       />
@@ -103,7 +102,7 @@ const SCMSubForm = ({ autoPopulateProject }) => {
         required
         autoPopulate={autoPopulateProject}
         fieldName="source_project"
-        validate={required(i18n._(msg`Select a value for this field`))}
+        validate={required(t`Select a value for this field`)}
       />
       <FormGroup
         fieldId="source_path"
@@ -115,7 +114,7 @@ const SCMSubForm = ({ autoPopulateProject }) => {
             : 'error'
         }
         isRequired
-        label={i18n._(msg`Inventory file`)}
+        label={t`Inventory file`}
         labelIcon={<Popover content={helpText.sourcePath} />}
       >
         <Select
@@ -134,16 +133,16 @@ const SCMSubForm = ({ autoPopulateProject }) => {
             value = value.trim();
             sourcePathHelpers.setValue(value);
           }}
-          aria-label={i18n._(msg`Select source path`)}
-          typeAheadAriaLabel={i18n._(msg`Select source path`)}
-          placeholder={i18n._(msg`Select source path`)}
-          createText={i18n._(msg`Set source path to`)}
+          aria-label={t`Select source path`}
+          typeAheadAriaLabel={t`Select source path`}
+          placeholder={t`Select source path`}
+          createText={t`Set source path to`}
           isCreatable
           onCreateOption={(value) => {
             value.trim();
             setSourcePath([...sourcePath, value]);
           }}
-          noResultsFoundText={i18n._(msg`No results found`)}
+          noResultsFoundText={t`No results found`}
         >
           {sourcePath.map((path) => (
             <SelectOption key={path} id={path} value={path} />

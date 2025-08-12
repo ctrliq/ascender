@@ -1,6 +1,5 @@
 import React from 'react';
-import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
 import { Form, FormGroup, Switch } from '@patternfly/react-core';
 import styled from 'styled-components';
@@ -25,7 +24,7 @@ const FieldHeader = styled.div`
 `;
 
 function OtherPromptsStep({ launchConfig, variablesMode, onVarModeChange }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const helpTextSource = launchConfig.job_template_data
     ? jobHelpText
     : workflowHelpText;
@@ -43,7 +42,7 @@ function OtherPromptsStep({ launchConfig, variablesMode, onVarModeChange }) {
           <FormField
             id="prompt-scm-branch"
             name="scm_branch"
-            label={i18n._(msg`Source Control Branch`)}
+            label={t`Source Control Branch`}
             tooltip={helpTextSource.sourceControlBranch}
           />
         )}
@@ -54,7 +53,7 @@ function OtherPromptsStep({ launchConfig, variablesMode, onVarModeChange }) {
           <FormField
             id="prompt-forks"
             name="forks"
-            label={i18n._(msg`Forks`)}
+            label={t`Forks`}
             type="number"
             min="0"
             tooltip={helpTextSource.forks}
@@ -64,7 +63,7 @@ function OtherPromptsStep({ launchConfig, variablesMode, onVarModeChange }) {
           <FormField
             id="prompt-limit"
             name="limit"
-            label={i18n._(msg`Limit`)}
+            label={t`Limit`}
             tooltip={helpTextSource.limit}
           />
         )}
@@ -75,7 +74,7 @@ function OtherPromptsStep({ launchConfig, variablesMode, onVarModeChange }) {
           <FormField
             id="prompt-job-slicing"
             name="job_slice_count"
-            label={i18n._(msg`Job Slicing`)}
+            label={t`Job Slicing`}
             type="number"
             min="1"
             tooltip={helpTextSource.jobSlicing}
@@ -85,7 +84,7 @@ function OtherPromptsStep({ launchConfig, variablesMode, onVarModeChange }) {
           <FormField
             id="prompt-timeout"
             name="timeout"
-            label={i18n._(msg`Timeout`)}
+            label={t`Timeout`}
             type="number"
             min="0"
             tooltip={helpTextSource.timeout}
@@ -96,8 +95,8 @@ function OtherPromptsStep({ launchConfig, variablesMode, onVarModeChange }) {
           <TagField
             id="prompt-job-tags"
             name="job_tags"
-            label={i18n._(msg`Job Tags`)}
-            aria-label={i18n._(msg`Job Tags`)}
+            label={t`Job Tags`}
+            aria-label={t`Job Tags`}
             tooltip={helpTextSource.jobTags}
           />
         )}
@@ -105,8 +104,8 @@ function OtherPromptsStep({ launchConfig, variablesMode, onVarModeChange }) {
           <TagField
             id="prompt-skip-tags"
             name="skip_tags"
-            label={i18n._(msg`Skip Tags`)}
-            aria-label={i18n._(msg`Skip Tags`)}
+            label={t`Skip Tags`}
+            aria-label={t`Skip Tags`}
             tooltip={helpTextSource.skipTags}
           />
         )}
@@ -114,7 +113,7 @@ function OtherPromptsStep({ launchConfig, variablesMode, onVarModeChange }) {
           <VariablesField
             id="prompt-variables"
             name="extra_vars"
-            label={i18n._(msg`Variables`)}
+            label={t`Variables`}
             initialMode={variablesMode}
             onModeChange={onVarModeChange}
           />
@@ -125,20 +124,20 @@ function OtherPromptsStep({ launchConfig, variablesMode, onVarModeChange }) {
 }
 
 function JobTypeField({ helpTextSource }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const [field, meta, helpers] = useField('job_type');
   const options = [
     {
       value: '',
       key: '',
-      label: i18n._(msg`Choose a job type`),
+      label: t`Choose a job type`,
       isDisabled: true,
     },
-    { value: 'run', key: 'run', label: i18n._(msg`Run`), isDisabled: false },
+    { value: 'run', key: 'run', label: t`Run`, isDisabled: false },
     {
       value: 'check',
       key: 'check',
-      label: i18n._(msg`Check`),
+      label: t`Check`,
       isDisabled: false,
     },
   ];
@@ -146,7 +145,7 @@ function JobTypeField({ helpTextSource }) {
   return (
     <FormGroup
       fieldId="prompt-job-type"
-      label={i18n._(msg`Job Type`)}
+      label={t`Job Type`}
       labelIcon={<Popover content={helpTextSource.jobType} />}
       isRequired
       validated={isValid ? 'default' : 'error'}
@@ -175,7 +174,7 @@ function VerbosityField({ helpTextSource }) {
 }
 
 function ShowChangesToggle() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const [field, , helpers] = useField('diff_mode');
   return (
     <FormGroup fieldId="prompt-show-changes">
@@ -183,20 +182,20 @@ function ShowChangesToggle() {
         {' '}
         <label className="pf-c-form__label" htmlFor="prompt-show-changes">
           <span className="pf-c-form__label-text">
-            {i18n._(msg`Show Changes`)}
+            {t`Show Changes`}
             <Popover
-              content={i18n._(msg`If enabled, show the changes made
+              content={t`If enabled, show the changes made
               by Ansible tasks, where supported. This is equivalent to Ansible’s
-              --diff mode.`)}
+              --diff mode.`}
             />
           </span>
         </label>
       </FieldHeader>
       <Switch
-        aria-label={field.value ? i18n._(msg`On`) : i18n._(msg`Off`)}
+        aria-label={field.value ? t`On` : t`Off`}
         id="prompt-show-changes"
-        label={i18n._(msg`On`)}
-        labelOff={i18n._(msg`Off`)}
+        label={t`On`}
+        labelOff={t`Off`}
         isChecked={field.value}
         onChange={helpers.setValue}
         ouiaId="prompt-show-changes"
@@ -219,13 +218,13 @@ function TagField({ id, name, label, tooltip }) {
 }
 
 function LabelsField({ helpTextSource }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const [field, meta, helpers] = useField('labels');
 
   return (
     <FormGroup
       fieldId="prompt-labels"
-      label={i18n._(msg`Labels`)}
+      label={t`Labels`}
       labelIcon={<Popover content={helpTextSource.labels} />}
       validated={!meta.touched || !meta.error ? 'default' : 'error'}
       helperTextInvalid={meta.error}
@@ -233,7 +232,7 @@ function LabelsField({ helpTextSource }) {
       <LabelSelect
         value={field.value}
         onChange={(labels) => helpers.setValue(labels)}
-        createText={i18n._(msg`Create`)}
+        createText={t`Create`}
         onError={(err) => helpers.setError(err)}
       />
     </FormGroup>

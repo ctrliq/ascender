@@ -1,16 +1,15 @@
 import React from 'react';
-import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 
 function LookupErrorMessage({ error }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   if (!error) {
     return null;
   }
 
   return (
     <div className="pf-c-form__helper-text pf-m-error" aria-live="polite">
-      {error.message || i18n._(msg`An error occurred`)}
+      {error.message || t`An error occurred`}
     </div>
   );
 }

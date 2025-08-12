@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { ExpandableSection, Wizard } from '@patternfly/react-core';
-import { msg } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import { Formik, useFormikContext } from 'formik';
 import { useDismissableError } from 'hooks/useRequest';
 import mergeExtraVars from 'util/prompt/mergeExtraVars';
@@ -22,7 +21,7 @@ function PromptModalForm({
   instanceGroups,
   resourceDefaultCredentials,
 }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const { setFieldTouched, values } = useFormikContext();
   const [showDescription, setShowDescription] = useState(false);
 
@@ -96,7 +95,7 @@ function PromptModalForm({
       <AlertModal
         isOpen={error}
         variant="error"
-        title={i18n._(msg`Error!`)}
+        title={t`Error!`}
         onClose={() => {
           dismissError();
         }}
@@ -130,14 +129,14 @@ function PromptModalForm({
           validateStep(nextStep.id);
         }
       }}
-      title={i18n._(msg`Launch | ${resource.name})`)}
+      title={t`Launch | ${resource.name}`}
       description={
         resource.description?.length > 512 ? (
           <ExpandableSection
             toggleText={
               showDescription
-                ? i18n._(msg`Hide description`)
-                : i18n._(msg`Show description`)
+                ? t`Hide description`
+                : t`Show description`
             }
             onToggle={() => {
               setShowDescription(!showDescription);
@@ -155,14 +154,14 @@ function PromptModalForm({
           ? steps
           : [
               {
-                name: i18n._(msg`Content Loading`),
+                name: t`Content Loading`,
                 component: <ContentLoading />,
               },
             ]
       }
-      backButtonText={i18n._(msg`Back`)}
-      cancelButtonText={i18n._(msg`Cancel`)}
-      nextButtonText={i18n._(msg`Next`)}
+      backButtonText={t`Back`}
+      cancelButtonText={t`Cancel`}
+      nextButtonText={t`Next`}
     />
   );
 }

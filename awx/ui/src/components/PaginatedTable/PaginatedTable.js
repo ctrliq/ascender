@@ -7,8 +7,7 @@ import PropTypes from 'prop-types';
 import { TableComposable, Tbody } from '@patternfly/react-table';
 import { useLocation, useHistory } from 'react-router-dom';
 
-import { msg } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 
 import { parseQueryString, updateQueryString } from 'util/qs';
 import { QSConfig, SearchColumns, SearchableKeys } from 'types';
@@ -39,12 +38,12 @@ function PaginatedTable({
   clearSelected,
   ouiaId,
 }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const { search, pathname } = useLocation();
   const history = useHistory();
   const location = useLocation();
   if (!pluralizedItemName) {
-    pluralizedItemName = i18n._(msg`Items`);
+    pluralizedItemName = t`Items`;
   }
 
   useEffect(() => {
@@ -74,15 +73,21 @@ function PaginatedTable({
     ? toolbarSearchColumns
     : [
         {
-          name: i18n._(msg`Name`),
+          name: t`Name`,
           key: 'name',
           isDefault: true,
         },
       ];
   const queryParams = parseQueryString(qsConfig, history.location.search);
 
-  const dataListLabel = i18n._(msg`${pluralizedItemName} List`);
-  const emptyContentTitle = i18n._(msg`No ${pluralizedItemName} Found `);
+  const dataListLabel = t({
+    message: `${pluralizedItemName} List`,
+    comment: 'Aria label for paginated table list'
+  });
+  const emptyContentTitle = t({
+    message: `No ${pluralizedItemName} Found`,
+    comment: 'Title when no items are found'
+  });
 
   let Content;
   if (hasContentLoading && items.length <= 0) {
@@ -95,7 +100,10 @@ function PaginatedTable({
         title={emptyContentTitle}
         message={
           emptyContentMessage ||
-          i18n._(msg`Please add ${pluralizedItemName} to populate this list `)
+          t({
+            message: `Please add ${pluralizedItemName} to populate this list`,
+            comment: 'Message when list is empty'
+          })
         }
       />
     );

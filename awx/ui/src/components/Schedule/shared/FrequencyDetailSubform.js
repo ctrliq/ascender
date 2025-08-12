@@ -3,8 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useField } from 'formik';
 
-import { msg, Trans, Plural } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { Trans, Plural, useLingui } from '@lingui/react/macro';
 
 import { RRule } from 'rrule';
 import {
@@ -48,7 +47,7 @@ const Checkbox = styled(_Checkbox)`
 `;
 
 const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const id = prefix.replace('.', '-');
   const [runOnDayMonth] = useField({
     name: `${prefix}.runOnDayMonth`,
@@ -71,7 +70,7 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
     name: `${prefix}.daysOfWeek`,
     validate: (val) => {
       if (frequency === 'week') {
-        return required(i18n._(msg`Select a value for this field`))(
+        return required(t`Select a value for this field`)(
           val?.length > 0
         );
       }
@@ -80,7 +79,7 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
   });
   const [end, endMeta] = useField({
     name: `${prefix}.end`,
-    validate: required(i18n._(msg`Select a value for this field`)),
+    validate: required(t`Select a value for this field`),
   });
   const [interval, intervalMeta] = useField({
     name: `${prefix}.interval`,
@@ -90,7 +89,7 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
     name: `${prefix}.runOn`,
     validate: (val) => {
       if (frequency === 'month' || frequency === 'year') {
-        return required(i18n._(msg`Select a value for this field`))(val);
+        return required(t`Select a value for this field`)(val);
       }
       return undefined;
     },
@@ -100,62 +99,62 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
     {
       key: 'january',
       value: 1,
-      label: i18n._(msg`January`),
+      label: t`January`,
     },
     {
       key: 'february',
       value: 2,
-      label: i18n._(msg`February`),
+      label: t`February`,
     },
     {
       key: 'march',
       value: 3,
-      label: i18n._(msg`March`),
+      label: t`March`,
     },
     {
       key: 'april',
       value: 4,
-      label: i18n._(msg`April`),
+      label: t`April`,
     },
     {
       key: 'may',
       value: 5,
-      label: i18n._(msg`May`),
+      label: t`May`,
     },
     {
       key: 'june',
       value: 6,
-      label: i18n._(msg`June`),
+      label: t`June`,
     },
     {
       key: 'july',
       value: 7,
-      label: i18n._(msg`July`),
+      label: t`July`,
     },
     {
       key: 'august',
       value: 8,
-      label: i18n._(msg`August`),
+      label: t`August`,
     },
     {
       key: 'september',
       value: 9,
-      label: i18n._(msg`September`),
+      label: t`September`,
     },
     {
       key: 'october',
       value: 10,
-      label: i18n._(msg`October`),
+      label: t`October`,
     },
     {
       key: 'november',
       value: 11,
-      label: i18n._(msg`November`),
+      label: t`November`,
     },
     {
       key: 'december',
       value: 12,
-      label: i18n._(msg`December`),
+      label: t`December`,
     },
   ];
 
@@ -175,19 +174,19 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
   const getPeriodLabel = () => {
     switch (frequency) {
       case 'minute':
-        return i18n._(msg`Minute`);
+        return t`Minute`;
       case 'hour':
-        return i18n._(msg`Hour`);
+        return t`Hour`;
       case 'day':
-        return i18n._(msg`Day`);
+        return t`Day`;
       case 'week':
-        return i18n._(msg`Week`);
+        return t`Week`;
       case 'month':
-        return i18n._(msg`Month`);
+        return t`Month`;
       case 'year':
-        return i18n._(msg`Year`);
+        return t`Year`;
       default:
-        throw new Error(i18n._(msg`Frequency did not match an expected value`));
+        throw new Error(t`Frequency did not match an expected value`);
     }
   };
 
@@ -208,7 +207,7 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
       case 'year':
         return <Plural value={intervalValue} one="year" other="years" />;
       default:
-        throw new Error(i18n._(msg`Frequency did not match an expected value`));
+        throw new Error(t`Frequency did not match an expected value`);
     }
   };
 
@@ -225,7 +224,7 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
         validated={
           !intervalMeta.touched || !intervalMeta.error ? 'default' : 'error'
         }
-        label={isException ? i18n._(msg`Skip every`) : i18n._(msg`Run every`)}
+        label={isException ? t`Skip every` : t`Run every`}
       >
         <div css="display: flex">
           <TextInput
@@ -253,82 +252,96 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
               ? 'default'
               : 'error'
           }
-          label={i18n._(msg`On days`)}
+          label={t`On days`}
         >
           <div css="display: flex">
             <Checkbox
-              label={i18n._(msg`Sun`)}
-              isChecked={daysOfWeek.value?.includes(RRule.SU)}
+              label={t`Sun`}
+              isChecked={daysOfWeek.value?.some(day =>
+                (day === RRule.SU) || (day.weekday === RRule.SU.weekday)
+              )}
               onChange={(checked) => {
                 updateDaysOfWeek(RRule.SU, checked);
               }}
-              aria-label={i18n._(msg`Sunday`)}
+              aria-label={t`Sunday`}
               id={`schedule-days-of-week-sun-${id}`}
               ouiaId={`schedule-days-of-week-sun-${id}`}
               name={`${prefix}.daysOfWeek`}
             />
             <Checkbox
-              label={i18n._(msg`Mon`)}
-              isChecked={daysOfWeek.value?.includes(RRule.MO)}
+              label={t`Mon`}
+              isChecked={daysOfWeek.value?.some(day =>
+                (day === RRule.MO) || (day.weekday === RRule.MO.weekday)
+              )}
               onChange={(checked) => {
                 updateDaysOfWeek(RRule.MO, checked);
               }}
-              aria-label={i18n._(msg`Monday`)}
+              aria-label={t`Monday`}
               id={`schedule-days-of-week-mon-${id}`}
               ouiaId={`schedule-days-of-week-mon-${id}`}
               name={`${prefix}.daysOfWeek`}
             />
             <Checkbox
-              label={i18n._(msg`Tue`)}
-              isChecked={daysOfWeek.value?.includes(RRule.TU)}
+              label={t`Tue`}
+              isChecked={daysOfWeek.value?.some(day =>
+                (day === RRule.TU) || (day.weekday === RRule.TU.weekday)
+              )}
               onChange={(checked) => {
                 updateDaysOfWeek(RRule.TU, checked);
               }}
-              aria-label={i18n._(msg`Tuesday`)}
+              aria-label={t`Tuesday`}
               id={`schedule-days-of-week-tue-${id}`}
               ouiaId={`schedule-days-of-week-tue-${id}`}
               name={`${prefix}.daysOfWeek`}
             />
             <Checkbox
-              label={i18n._(msg`Wed`)}
-              isChecked={daysOfWeek.value?.includes(RRule.WE)}
+              label={t`Wed`}
+              isChecked={daysOfWeek.value?.some(day =>
+                (day === RRule.WE) || (day.weekday === RRule.WE.weekday)
+              )}
               onChange={(checked) => {
                 updateDaysOfWeek(RRule.WE, checked);
               }}
-              aria-label={i18n._(msg`Wednesday`)}
+              aria-label={t`Wednesday`}
               id={`schedule-days-of-week-wed-${id}`}
               ouiaId={`schedule-days-of-week-wed-${id}`}
               name={`${prefix}.daysOfWeek`}
             />
             <Checkbox
-              label={i18n._(msg`Thu`)}
-              isChecked={daysOfWeek.value?.includes(RRule.TH)}
+              label={t`Thu`}
+              isChecked={daysOfWeek.value?.some(day =>
+                (day === RRule.TH) || (day.weekday === RRule.TH.weekday)
+              )}
               onChange={(checked) => {
                 updateDaysOfWeek(RRule.TH, checked);
               }}
-              aria-label={i18n._(msg`Thursday`)}
+              aria-label={t`Thursday`}
               id={`schedule-days-of-week-thu-${id}`}
               ouiaId={`schedule-days-of-week-thu-${id}`}
               name={`${prefix}.daysOfWeek`}
             />
             <Checkbox
-              label={i18n._(msg`Fri`)}
-              isChecked={daysOfWeek.value?.includes(RRule.FR)}
+              label={t`Fri`}
+              isChecked={daysOfWeek.value?.some(day =>
+                (day === RRule.FR) || (day.weekday === RRule.FR.weekday)
+              )}
               onChange={(checked) => {
                 updateDaysOfWeek(RRule.FR, checked);
               }}
-              aria-label={i18n._(msg`Friday`)}
+              aria-label={t`Friday`}
               id={`schedule-days-of-week-fri-${id}`}
               ouiaId={`schedule-days-of-week-fri-${id}`}
               name={`${prefix}.daysOfWeek`}
             />
             <Checkbox
-              label={i18n._(msg`Sat`)}
-              isChecked={daysOfWeek.value?.includes(RRule.SA)}
+              label={t`Sat`}
+              isChecked={daysOfWeek.value?.some(day =>
+                (day === RRule.SA) || (day.weekday === RRule.SA.weekday)
+              )}
               onChange={(checked) => {
                 updateDaysOfWeek(RRule.SA, checked);
               }}
-              aria-label={i18n._(msg`Saturday`)}
+              aria-label={t`Saturday`}
               id={`schedule-days-of-week-sat-${id}`}
               ouiaId={`schedule-days-of-week-sat-${id}`}
               name={`${prefix}.daysOfWeek`}
@@ -346,7 +359,7 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
             validated={
               !runOnMeta.touched || !runOnMeta.error ? 'default' : 'error'
             }
-            label={i18n._(msg`Run on`)}
+            label={t`Run on`}
           >
             <RunOnRadio
               id={`schedule-run-on-day-${id}`}
@@ -406,20 +419,20 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
                     id={`schedule-run-on-the-occurrence-${id}`}
                     isDisabled={runOn.value !== 'the'}
                     data={[
-                      { value: 1, key: 'first', label: i18n._(msg`First`) },
+                      { value: 1, key: 'first', label: t`First` },
                       {
                         value: 2,
                         key: 'second',
-                        label: i18n._(msg`Second`),
+                        label: t`Second`,
                       },
-                      { value: 3, key: 'third', label: i18n._(msg`Third`) },
+                      { value: 3, key: 'third', label: t`Third` },
                       {
                         value: 4,
                         key: 'fourth',
-                        label: i18n._(msg`Fourth`),
+                        label: t`Fourth`,
                       },
-                      { value: 5, key: 'fifth', label: i18n._(msg`Fifth`) },
-                      { value: -1, key: 'last', label: i18n._(msg`Last`) },
+                      { value: 5, key: 'fifth', label: t`Fifth` },
+                      { value: -1, key: 'last', label: t`Last` },
                     ]}
                     {...runOnTheOccurrence}
                   />
@@ -430,48 +443,48 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
                       {
                         value: 'sunday',
                         key: 'sunday',
-                        label: i18n._(msg`Sunday`),
+                        label: t`Sunday`,
                       },
                       {
                         value: 'monday',
                         key: 'monday',
-                        label: i18n._(msg`Monday`),
+                        label: t`Monday`,
                       },
                       {
                         value: 'tuesday',
                         key: 'tuesday',
-                        label: i18n._(msg`Tuesday`),
+                        label: t`Tuesday`,
                       },
                       {
                         value: 'wednesday',
                         key: 'wednesday',
-                        label: i18n._(msg`Wednesday`),
+                        label: t`Wednesday`,
                       },
                       {
                         value: 'thursday',
                         key: 'thursday',
-                        label: i18n._(msg`Thursday`),
+                        label: t`Thursday`,
                       },
                       {
                         value: 'friday',
                         key: 'friday',
-                        label: i18n._(msg`Friday`),
+                        label: t`Friday`,
                       },
                       {
                         value: 'saturday',
                         key: 'saturday',
-                        label: i18n._(msg`Saturday`),
+                        label: t`Saturday`,
                       },
-                      { value: 'day', key: 'day', label: i18n._(msg`Day`) },
+                      { value: 'day', key: 'day', label: t`Day` },
                       {
                         value: 'weekday',
                         key: 'weekday',
-                        label: i18n._(msg`Weekday`),
+                        label: t`Weekday`,
                       },
                       {
                         value: 'weekendDay',
                         key: 'weekendDay',
-                        label: i18n._(msg`Weekend day`),
+                        label: t`Weekend day`,
                       },
                     ]}
                     {...runOnTheDay}
@@ -509,12 +522,12 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
         helperTextInvalid={endMeta.error}
         isRequired
         validated={!endMeta.touched || !endMeta.error ? 'default' : 'error'}
-        label={i18n._(msg`End`)}
+        label={t`End`}
       >
         <Radio
           id={`end-never-${id}`}
           name={`${prefix}.end`}
-          label={i18n._(msg`Never`)}
+          label={t`Never`}
           value="never"
           isChecked={end.value === 'never'}
           onChange={(value, event) => {
@@ -526,7 +539,7 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
         <Radio
           id={`end-after-${id}`}
           name={`${prefix}.end`}
-          label={i18n._(msg`After number of occurrences`)}
+          label={t`After number of occurrences`}
           value="after"
           isChecked={end.value === 'after'}
           onChange={(value, event) => {
@@ -538,7 +551,7 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
         <Radio
           id={`end-on-date-${id}`}
           name={`${prefix}.end`}
-          label={i18n._(msg`On date`)}
+          label={t`On date`}
           value="onDate"
           isChecked={end.value === 'onDate'}
           onChange={(value, event) => {
@@ -551,7 +564,7 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
       {end?.value === 'after' && (
         <FormField
           id={`schedule-occurrences-${id}`}
-          label={i18n._(msg`Occurrences`)}
+          label={t`Occurrences`}
           name={`${prefix}.occurrences`}
           type="number"
           min="1"
@@ -563,7 +576,7 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
         <DateTimePicker
           dateFieldName={`${prefix}.endDate`}
           timeFieldName={`${prefix}.endTime`}
-          label={i18n._(msg`End date/time`)}
+          label={t`End date/time`}
         />
       )}
     </>

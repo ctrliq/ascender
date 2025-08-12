@@ -221,7 +221,7 @@ describe('<UserTeamList />', () => {
     });
     await act(async () => {
       wrapper
-        .find('ToolbarAddButton button[aria-label="Associate"]')
+        .find('ToolbarAddButton[defaultLabel="Associate"]')
         .prop('onClick')();
     });
     await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);

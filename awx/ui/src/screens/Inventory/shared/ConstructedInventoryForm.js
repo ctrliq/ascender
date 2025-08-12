@@ -1,8 +1,7 @@
 import React, { useCallback } from 'react';
 import { Formik, useField, useFormikContext } from 'formik';
 import { func, shape } from 'prop-types';
-import { msg } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import { minMaxValue, required } from 'util/validators';
 import { Form, FormGroup } from '@patternfly/react-core';
 import { VariablesField } from 'components/CodeEditor';
@@ -19,11 +18,11 @@ import ConstructedInventoryHint from './ConstructedInventoryHint';
 import getInventoryHelpTextStrings from './Inventory.helptext';
 
 function ConstructedInventoryFormFields({ inventory = {}, options }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const helpText = getInventoryHelpTextStrings();
   const { setFieldValue, setFieldTouched } = useFormikContext();
   const constructedPluginValidator = {
-    plugin: required(i18n._(msg`The plugin parameter is required.`)),
+    plugin: required(t`The plugin parameter is required.`),
   };
 
   const [instanceGroupsField, , instanceGroupsHelpers] =
@@ -35,7 +34,7 @@ function ConstructedInventoryFormFields({ inventory = {}, options }) {
       name: 'inputInventories',
       validate: (value) => {
         if (value.length === 0) {
-          return i18n._(msg`This field must not be blank`);
+          return t`This field must not be blank`;
         }
         return undefined;
       },
@@ -59,7 +58,7 @@ function ConstructedInventoryFormFields({ inventory = {}, options }) {
     <>
       <FormField
         id="name"
-        label={i18n._(msg`Name`)}
+        label={t`Name`}
         name="name"
         type="text"
         validate={required(null)}
@@ -67,7 +66,7 @@ function ConstructedInventoryFormFields({ inventory = {}, options }) {
       />
       <FormField
         id="description"
-        label={i18n._(msg`Description`)}
+        label={t`Description`}
         name="description"
         type="text"
       />
@@ -77,7 +76,7 @@ function ConstructedInventoryFormFields({ inventory = {}, options }) {
         isValid={!organizationMeta.touched || !organizationMeta.error}
         onBlur={() => organizationHelpers.setTouched()}
         onChange={handleOrganizationUpdate}
-        validate={required(i18n._(msg`Select a value for this field`))}
+        validate={required(t`Select a value for this field`)}
         value={organizationField.value}
         required
       />
@@ -86,21 +85,17 @@ function ConstructedInventoryFormFields({ inventory = {}, options }) {
         onChange={(value) => {
           instanceGroupsHelpers.setValue(value);
         }}
-        tooltip={i18n._(
-          msg`Select the Instance Groups for this Inventory to run on.`
-        )}
+        tooltip={t`Select the Instance Groups for this Inventory to run on.`}
       />
       <FormGroup
         isRequired
         fieldId="input-inventories-lookup"
         id="input-inventories-lookup"
         helperTextInvalid={inputInventoriesMeta.error}
-        label={i18n._(msg`Input Inventories`)}
+        label={t`Input Inventories`}
         labelIcon={
           <Popover
-            content={i18n._(
-              msg`Select Input Inventories for the constructed inventory plugin.`
-            )}
+            content={t`Select Input Inventories for the constructed inventory plugin.`}
           />
         }
         validated={
@@ -123,7 +118,7 @@ function ConstructedInventoryFormFields({ inventory = {}, options }) {
       </FormGroup>
       <FormField
         id="cache-timeout"
-        label={i18n._(msg`Cache timeout (seconds)`)}
+        label={t`Cache timeout (seconds)`}
         max="2147483647"
         min="0"
         name="update_cache_timeout"
@@ -140,7 +135,7 @@ function ConstructedInventoryFormFields({ inventory = {}, options }) {
       </FormFullWidthLayout>
       <FormField
         id="limit"
-        label={i18n._(msg`Limit`)}
+        label={t`Limit`}
         name="limit"
         type="text"
         tooltip={options.limit.help_text}
@@ -149,7 +144,7 @@ function ConstructedInventoryFormFields({ inventory = {}, options }) {
         <VariablesField
           id="source_vars"
           name="source_vars"
-          label={i18n._(msg`Source vars`)}
+          label={t`Source vars`}
           tooltip={helpText.constructedInventorySourceVars()}
           validators={constructedPluginValidator}
           isRequired

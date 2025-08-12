@@ -1,10 +1,10 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
 import TagMultiSelect from './TagMultiSelect';
 
 describe('<TagMultiSelect />', () => {
   it('should render Select', () => {
-    const wrapper = mount(
+    const wrapper = mountWithContexts(
       <TagMultiSelect value="foo,bar" onChange={jest.fn()} />
     );
     wrapper.find('input').simulate('focus');
@@ -15,7 +15,7 @@ describe('<TagMultiSelect />', () => {
   });
 
   it('should not treat empty string as an option', () => {
-    const wrapper = mount(<TagMultiSelect value="" onChange={jest.fn()} />);
+    const wrapper = mountWithContexts(<TagMultiSelect value="" onChange={jest.fn()} />);
     wrapper.find('SelectToggle').simulate('click');
     expect(wrapper.find('Select').prop('isOpen')).toEqual(true);
     expect(wrapper.find('Chip')).toHaveLength(0);
@@ -23,7 +23,7 @@ describe('<TagMultiSelect />', () => {
 
   it('should trigger onChange', () => {
     const onChange = jest.fn();
-    const wrapper = mount(
+    const wrapper = mountWithContexts(
       <TagMultiSelect value="foo,bar" onChange={onChange} />
     );
     wrapper.find('input').simulate('focus');

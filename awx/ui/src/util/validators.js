@@ -1,9 +1,7 @@
 import { isValidDate } from '@patternfly/react-core';
-import { msg, plural } from '@lingui/macro';
-import { i18n } from '@lingui/core';
 
-export function required(message) {
-  const errorMessage = message || i18n._(msg`This field must not be blank`);
+export function required(message, t) {
+  const errorMessage = message || (t ? t`This field must not be blank` : 'This field must not be blank');
   return (value) => {
     if (typeof value === 'string' && !value.trim()) {
       return errorMessage;
@@ -18,7 +16,7 @@ export function required(message) {
   };
 }
 
-export function validateTime() {
+export function validateTime(t) {
   return (value) => {
     const timeRegex = new RegExp(
       `^\\s*(\\d\\d?):([0-5])(\\d)\\s*([AaPp][Mm])?\\s*$`
@@ -31,56 +29,50 @@ export function validateTime() {
     date.setMinutes(parseInt(timeComponents[1], 10));
 
     if (!isValidDate(date) || !timeRegex.test(value)) {
-      message = i18n._(msg`Invalid time format`);
+      message = t ? t`Invalid time format` : 'Invalid time format';
     }
 
     return message;
   };
 }
 
-export function maxLength(max) {
+export function maxLength(max, t) {
   return (value) => {
     if (value.trim().length > max) {
-      return i18n._(msg`This field must not exceed ${max} characters`);
+      return t ? t`This field must not exceed ${max} characters` : `This field must not exceed ${max} characters`;
     }
     return undefined;
   };
 }
 
-export function minLength(min) {
+export function minLength(min, t) {
   return (value) => {
     if (value.trim().length < min) {
-      return i18n._(msg`This field must be at least ${min} characters`);
+      return t ? t`This field must be at least ${min} characters` : `This field must be at least ${min} characters`;
     }
     return undefined;
   };
 }
 
-export function minMaxValue(min, max) {
+export function minMaxValue(min, max, t) {
   return (value) => {
     if (!Number.isFinite(min) && value > max) {
-      return i18n._(
-        msg`This field must be a number and have a value less than ${max}`
-      );
+      return t ? t`This field must be a number and have a value less than ${max}` : `This field must be a number and have a value less than ${max}`;
     }
     if (!Number.isFinite(max) && value < min) {
-      return i18n._(
-        msg`This field must be a number and have a value greater than ${min}`
-      );
+      return t ? t`This field must be a number and have a value greater than ${min}` : `This field must be a number and have a value greater than ${min}`;
     }
     if (value < min || value > max) {
-      return i18n._(
-        msg`This field must be a number and have a value between ${min} and ${max}`
-      );
+      return t ? t`This field must be a number and have a value between ${min} and ${max}` : `This field must be a number and have a value between ${min} and ${max}`;
     }
     return undefined;
   };
 }
 
-export function requiredEmail() {
+export function requiredEmail(t) {
   return (value) => {
     if (!value) {
-      return i18n._(msg`This field must not be blank`);
+      return t ? t`This field must not be blank` : 'This field must not be blank';
     }
 
     // This isn't a perfect validator. It's likely to let a few
@@ -98,30 +90,30 @@ export function requiredEmail() {
       }
     }
 
-    return i18n._(msg`Invalid email address`);
+    return t ? t`Invalid email address` : 'Invalid email address';
   };
 }
 
-export function noWhiteSpace() {
+export function noWhiteSpace(t) {
   return (value) => {
     if (/\s/.test(value)) {
-      return i18n._(msg`This field must not contain spaces`);
+      return t ? t`This field must not contain spaces` : 'This field must not contain spaces';
     }
     return undefined;
   };
 }
 
-export function integer() {
+export function integer(t) {
   return (value) => {
     const str = String(value);
     if (!Number.isInteger(value) && /[^0-9]/.test(str)) {
-      return i18n._(msg`This field must be an integer`);
+      return t ? t`This field must be an integer` : 'This field must be an integer';
     }
     return undefined;
   };
 }
 
-export function number() {
+export function number(t) {
   return (value) => {
     const str = String(value);
     if (/^-?[0-9]*(\.[0-9]*)?$/.test(str)) {
@@ -131,21 +123,27 @@ export function number() {
     if (/^-?[0-9]*e[+-][0-9]*$/.test(str)) {
       return undefined;
     }
-    return i18n._(msg`This field must be a number`);
+    return t ? t`This field must be a number` : 'This field must be a number';
   };
 }
 
-export function twilioPhoneNumber() {
+export function twilioPhoneNumber(t, plural) {
   return (value) => {
     const phoneNumbers = Array.isArray(value) ? value : [value];
     let error;
     if (!error) {
       phoneNumbers.forEach((v) => {
         if (!/^\s*(?:\+?(\d{1,3}))?[. (]*(\d{7,12})$/.test(v)) {
-          error = plural(phoneNumbers.length, {
-            one: 'Please enter a valid phone number.',
-            other: 'Please enter valid phone numbers.',
-          });
+          if (plural) {
+            error = plural(phoneNumbers.length, {
+              one: 'Please enter a valid phone number.',
+              other: 'Please enter valid phone numbers.',
+            });
+          } else {
+            error = phoneNumbers.length === 1
+              ? 'Please enter a valid phone number.'
+              : 'Please enter valid phone numbers.';
+          }
         }
       });
     }
@@ -153,7 +151,7 @@ export function twilioPhoneNumber() {
   };
 }
 
-export function url() {
+export function url(t) {
   return (value) => {
     if (!value) {
       return undefined;
@@ -165,7 +163,7 @@ export function url() {
         value
       )
     ) {
-      return i18n._(msg`Please enter a valid URL`);
+      return t ? t`Please enter a valid URL` : 'Please enter a valid URL';
     }
     return undefined;
   };
@@ -184,29 +182,29 @@ export function combine(validators) {
   };
 }
 
-export function regExp() {
+export function regExp(t) {
   return (value) => {
     try {
       RegExp(value);
     } catch {
-      return i18n._(msg`This field must be a regular expression`);
+      return t ? t`This field must be a regular expression` : 'This field must be a regular expression';
     }
     return undefined;
   };
 }
 
-export function requiredPositiveInteger() {
+export function requiredPositiveInteger(t) {
   return (value) => {
     if (typeof value === 'number') {
       if (!Number.isInteger(value)) {
-        return i18n._(msg`This field must be an integer`);
+        return t ? t`This field must be an integer` : 'This field must be an integer';
       }
       if (value < 1) {
-        return i18n._(msg`This field must be greater than 0`);
+        return t ? t`This field must be greater than 0` : 'This field must be greater than 0';
       }
     }
     if (!value) {
-      return i18n._(msg`Select a value for this field`);
+      return t ? t`Select a value for this field` : 'Select a value for this field';
     }
     return undefined;
   };

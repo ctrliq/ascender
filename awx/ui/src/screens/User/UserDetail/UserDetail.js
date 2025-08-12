@@ -1,8 +1,7 @@
 import React, { useCallback } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
-import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 
 import { Button, Label } from '@patternfly/react-core';
 import AlertModal from 'components/AlertModal';
@@ -29,7 +28,7 @@ function UserDetail({ user }) {
     summary_fields,
   } = user;
   const history = useHistory();
-  const { i18n } = useLingui();
+  const { t } = useLingui();
 
   const {
     request: deleteUser,
@@ -46,53 +45,53 @@ function UserDetail({ user }) {
 
   let user_type;
   if (is_superuser) {
-    user_type = i18n._(msg`System Administrator`);
+    user_type = t`System Administrator`;
   } else if (is_system_auditor) {
-    user_type = i18n._(msg`System Auditor`);
+    user_type = t`System Auditor`;
   } else {
-    user_type = i18n._(msg`Normal User`);
+    user_type = t`Normal User`;
   }
 
   let userAuthType;
   if (user.ldap_dn) {
-    userAuthType = i18n._(msg`LDAP`);
+    userAuthType = t`LDAP`;
   } else if (user.auth.length > 0) {
-    userAuthType = i18n._(msg`SOCIAL`);
+    userAuthType = t`SOCIAL`;
   }
 
   return (
     <CardBody>
       <DetailList>
-        <Detail label={i18n._(msg`First Name`)} value={`${first_name}`} />
-        <Detail label={i18n._(msg`Last Name`)} value={`${last_name}`} />
-        <Detail label={i18n._(msg`Email`)} value={email} />
+        <Detail label={t`First Name`} value={`${first_name}`} />
+        <Detail label={t`Last Name`} value={`${last_name}`} />
+        <Detail label={t`Email`} value={email} />
         <Detail
-          label={i18n._(msg`Username`)}
+          label={t`Username`}
           value={username}
           dataCy="user-detail-username"
         />
-        <Detail label={i18n._(msg`User Type`)} value={`${user_type}`} />
+        <Detail label={t`User Type`} value={`${user_type}`} />
         {userAuthType && (
           <Detail
-            label={i18n._(msg`Type`)}
+            label={t`Type`}
             value={
-              <Label aria-label={i18n._(msg`login type`)}>{userAuthType}</Label>
+              <Label aria-label={t`login type`}>{userAuthType}</Label>
             }
           />
         )}
         {last_login && (
           <Detail
-            label={i18n._(msg`Last Login`)}
+            label={t`Last Login`}
             value={formatDateString(last_login)}
           />
         )}
         <Detail
-          label={i18n._(msg`Created`)}
+          label={t`Created`}
           value={formatDateString(created)}
         />
         {modified && (
           <Detail
-            label={i18n._(msg`Last Modified`)}
+            label={t`Last Modified`}
             value={formatDateString(modified)}
           />
         )}
@@ -102,22 +101,22 @@ function UserDetail({ user }) {
           summary_fields.user_capabilities.edit && (
             <Button
               ouiaId="user-detail-edit-button"
-              aria-label={i18n._(msg`edit`)}
+              aria-label={t`edit`}
               component={Link}
               to={`/users/${id}/edit`}
             >
-              {i18n._(msg`Edit`)}
+              {t`Edit`}
             </Button>
           )}
         {summary_fields.user_capabilities &&
           summary_fields.user_capabilities.delete && (
             <DeleteButton
               name={username}
-              modalTitle={i18n._(msg`Delete User`)}
+              modalTitle={t`Delete User`}
               onConfirm={deleteUser}
               isDisabled={isLoading}
             >
-              {i18n._(msg`Delete`)}
+              {t`Delete`}
             </DeleteButton>
           )}
       </CardActionsRow>
@@ -125,10 +124,10 @@ function UserDetail({ user }) {
         <AlertModal
           isOpen={error}
           variant="error"
-          title={i18n._(msg`Error!`)}
+          title={t`Error!`}
           onClose={dismissError}
         >
-          {i18n._(msg`Failed to delete user.`)}
+          {t`Failed to delete user.`}
           <ErrorDetail error={error} />
         </AlertModal>
       )}

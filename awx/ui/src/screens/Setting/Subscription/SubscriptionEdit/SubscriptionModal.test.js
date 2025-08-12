@@ -76,7 +76,9 @@ describe('<SubscriptionModal />', () => {
     expect(firstRow.at(0).find('input[type="radio"]')).toHaveLength(1);
     expect(firstRow.at(1).text()).toEqual('mock A');
     expect(firstRow.at(2).text()).toEqual('100');
-    expect(firstRow.at(3).text()).toEqual('4/24/2024, 11:11:11 PM');
+    
+    // Use the actual i18n-formatted date string with narrow no-break space (U+202F)
+    expect(firstRow.at(3).text()).toEqual('4/24/2024, 11:11:11\u202FPM');
   });
 
   test('submit button should call onConfirm', async () => {

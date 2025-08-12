@@ -1,14 +1,13 @@
 import React from 'react';
 import { Link, Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
-import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 import { PageSection, Card } from '@patternfly/react-core';
 import ContentError from 'components/ContentError';
 import LDAPDetail from './LDAPDetail';
 import LDAPEdit from './LDAPEdit';
 
 function LDAP() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const baseURL = '/settings/ldap';
   const baseRoute = useRouteMatch({ path: '/settings/ldap', exact: true });
   const categoryRoute = useRouteMatch({
@@ -36,7 +35,7 @@ function LDAP() {
           <Route key="not-found" path={`${baseURL}/*`}>
             <ContentError isNotFound>
               <Link to={`${baseURL}/default/details`}>
-                {i18n._(msg`View LDAP Settings`)}
+                {t`View LDAP Settings`}
               </Link>
             </ContentError>
           </Route>

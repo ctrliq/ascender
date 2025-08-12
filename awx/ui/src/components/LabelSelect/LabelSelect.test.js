@@ -1,7 +1,7 @@
 import React from 'react';
 import { act } from 'react-dom/test-utils';
-import { mount } from 'enzyme';
 import { LabelsAPI } from 'api';
+import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
 import LabelSelect from './LabelSelect';
 
 jest.mock('../../api');
@@ -22,7 +22,7 @@ describe('<LabelSelect />', () => {
     });
     let wrapper;
     await act(async () => {
-      wrapper = mount(
+      wrapper = mountWithContexts(
         <LabelSelect value={[]} onError={() => {}} onChange={() => {}} />
       );
     });
@@ -52,7 +52,7 @@ describe('<LabelSelect />', () => {
     });
     let wrapper;
     await act(async () => {
-      wrapper = mount(
+      wrapper = mountWithContexts(
         <LabelSelect value={[]} onError={() => {}} onChange={() => {}} />
       );
     });
@@ -72,7 +72,7 @@ describe('<LabelSelect />', () => {
       },
     });
     await act(async () => {
-      wrapper = mount(
+      wrapper = mountWithContexts(
         <LabelSelect value={[]} onError={() => {}} onChange={onChange} />
       );
     });
@@ -91,7 +91,7 @@ describe('<LabelSelect />', () => {
       },
     });
     await act(async () => {
-      wrapper = mount(
+      wrapper = mountWithContexts(
         <LabelSelect
           value={[
             { id: 1, name: 'read only', isReadOnly: true },

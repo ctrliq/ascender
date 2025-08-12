@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
-import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 import { getQSConfig, parseQueryString } from 'util/qs';
 import PaginatedTable, {
   HeaderRow,
@@ -24,7 +23,7 @@ const QS_CONFIG = getQSConfig('user', {
   order_by: 'application__name',
 });
 function UserTokenList() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const location = useLocation();
   const { id } = useParams();
 
@@ -103,7 +102,7 @@ function UserTokenList() {
     if (item.application === null) {
       return {
         ...item,
-        name: i18n._(msg`Personal Access Token`),
+        name: t`Personal Access Token`,
       };
     }
     return item;
@@ -116,43 +115,43 @@ function UserTokenList() {
         hasContentLoading={isLoading || isDeleteLoading}
         items={tokens}
         itemCount={itemCount}
-        pluralizedItemName={i18n._(msg`Tokens`)}
+        pluralizedItemName={t`Tokens`}
         qsConfig={QS_CONFIG}
         clearSelected={clearSelected}
         toolbarSearchColumns={[
           {
-            name: i18n._(msg`Application name`),
+            name: t`Application name`,
             key: 'application__name__icontains',
             isDefault: true,
           },
           {
-            name: i18n._(msg`Description`),
+            name: t`Description`,
             key: 'description__icontains',
           },
         ]}
         toolbarSortColumns={[
           {
-            name: i18n._(msg`Application name`),
+            name: t`Application name`,
             key: 'application__name',
           },
           {
-            name: i18n._(msg`Description`),
+            name: t`Description`,
             key: 'description',
           },
           {
-            name: i18n._(msg`Scope`),
+            name: t`Scope`,
             key: 'scope',
           },
           {
-            name: i18n._(msg`Expires`),
+            name: t`Expires`,
             key: 'expires',
           },
           {
-            name: i18n._(msg`Created`),
+            name: t`Created`,
             key: 'created',
           },
           {
-            name: i18n._(msg`Modified`),
+            name: t`Modified`,
             key: 'modified',
           },
         ]}
@@ -178,7 +177,7 @@ function UserTokenList() {
                 key="delete"
                 onDelete={handleDelete}
                 itemsToDelete={modifiedSelected}
-                pluralizedItemName={i18n._(msg`User tokens`)}
+                pluralizedItemName={t`User tokens`}
               />,
             ]}
           />
@@ -186,13 +185,13 @@ function UserTokenList() {
         headerRow={
           <HeaderRow qsConfig={QS_CONFIG}>
             <HeaderCell sortKey="application__name">
-              {i18n._(msg`Application Name`)}
+              {t`Application Name`}
             </HeaderCell>
             <HeaderCell sortKey="description">
-              {i18n._(msg`Description`)}
+              {t`Description`}
             </HeaderCell>
-            <HeaderCell sortKey="scope">{i18n._(msg`Scope`)}</HeaderCell>
-            <HeaderCell sortKey="expires">{i18n._(msg`Expires`)}</HeaderCell>
+            <HeaderCell sortKey="scope">{t`Scope`}</HeaderCell>
+            <HeaderCell sortKey="expires">{t`Expires`}</HeaderCell>
           </HeaderRow>
         }
         renderRow={(token, index) => (
@@ -216,10 +215,10 @@ function UserTokenList() {
         <AlertModal
           isOpen={deletionError}
           variant="danger"
-          title={i18n._(msg`Error!`)}
+          title={t`Error!`}
           onClose={clearDeletionError}
         >
-          {i18n._(msg`Failed to delete one or more user tokens.`)}
+          {t`Failed to delete one or more user tokens.`}
           <ErrorDetail error={deletionError} />
         </AlertModal>
       )}

@@ -3,7 +3,24 @@ import { MemoryRouter } from 'react-router-dom';
 import { MeshAPI } from 'api';
 import { render, waitFor, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { I18nProvider } from '@lingui/react';
+import { i18n } from '@lingui/core';
+import { en } from 'make-plural/plurals';
+import english from 'locales/en/messages';
 import TopologyView from './TopologyView';
+
+i18n.loadLocaleData({ en: { plurals: en } });
+i18n.load({ en: english.messages });
+i18n.activate('en');
+
+// Custom render function with I18n context
+const renderWithI18n = (component) => {
+  return render(
+    <I18nProvider i18n={i18n}>
+      {component}
+    </I18nProvider>
+  );
+};
 
 jest.mock('../../api');
 jest.mock('util/webWorker', () => {
@@ -79,7 +96,7 @@ describe('<TopologyView />', () => {
         links: [],
       },
     });
-    render(
+    renderWithI18n(
       <MemoryRouter>
         <TopologyView />
       </MemoryRouter>
@@ -97,7 +114,7 @@ describe('<TopologyView />', () => {
         links: [],
       },
     });
-    render(
+    renderWithI18n(
       <MemoryRouter>
         <TopologyView />
       </MemoryRouter>
@@ -121,7 +138,7 @@ describe('<TopologyView />', () => {
         },
       })
     );
-    render(
+    renderWithI18n(
       <MemoryRouter>
         <TopologyView />
       </MemoryRouter>

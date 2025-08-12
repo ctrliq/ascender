@@ -1,8 +1,7 @@
 import 'styled-components/macro';
 import React, { useState, useCallback, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
 import styled from 'styled-components';
 import { Alert, ToolbarItem } from '@patternfly/react-core';
@@ -31,17 +30,72 @@ function CredentialsStep({
   allowCredentialsWithPasswords,
   defaultCredentials = [],
 }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const history = useHistory();
   const location = useLocation();
+
+  // Create a wrapper for the validator that handles translation properly
+  const validateCredentials = useCallback((val) => {
+    const createTranslatedValidator = (
+      allowPasswordCredentials,
+      selectedCredentials,
+      defaultCreds
+    ) => {
+      if (defaultCreds.length > 0 && selectedCredentials) {
+        const missingCredentialTypes = [];
+        defaultCreds.forEach((defaultCredential) => {
+          if (
+            !selectedCredentials.find(
+              (selectedCredential) =>
+                (selectedCredential?.credential_type ===
+                  defaultCredential?.credential_type &&
+                  !selectedCredential.inputs?.vault_id &&
+                  !defaultCredential.inputs?.vault_id) ||
+                (defaultCredential.inputs?.vault_id &&
+                  selectedCredential.inputs?.vault_id ===
+                    defaultCredential.inputs?.vault_id)
+            )
+          ) {
+            missingCredentialTypes.push(
+              defaultCredential.inputs?.vault_id
+                ? `${defaultCredential.summary_fields.credential_type.name} | ${defaultCredential.inputs.vault_id}`
+                : defaultCredential.summary_fields.credential_type.name
+            );
+          }
+        });
+
+        if (missingCredentialTypes.length > 0) {
+          return `Job Template default credentials must be replaced with one of the same type.  Please select a credential for the following types in order to proceed: ${missingCredentialTypes.join(', ')}`;
+        }
+      }
+
+      if (!allowPasswordCredentials && selectedCredentials) {
+        const credentialsThatPrompt = [];
+        selectedCredentials.forEach((selectedCredential) => {
+          const credentialPromptsForPassword = (credential) =>
+            credential?.inputs?.password === 'ASK' ||
+            credential?.inputs?.ssh_key_unlock === 'ASK' ||
+            credential?.inputs?.become_password === 'ASK' ||
+            credential?.inputs?.vault_password === 'ASK';
+
+          if (credentialPromptsForPassword(selectedCredential)) {
+            credentialsThatPrompt.push(selectedCredential.name);
+          }
+        });
+        if (credentialsThatPrompt.length > 0) {
+          return `Credentials that require passwords on launch are not permitted.  Please remove or replace the following credentials with a credential of the same type in order to proceed: ${credentialsThatPrompt.join(', ')}`;
+        }
+      }
+
+      return undefined;
+    };
+
+    return createTranslatedValidator(allowCredentialsWithPasswords, val, defaultCredentials ?? []);
+  }, [allowCredentialsWithPasswords, defaultCredentials]);
+
   const [field, meta, helpers] = useField({
     name: 'credentials',
-    validate: (val) =>
-      credentialsValidator(
-        allowCredentialsWithPasswords,
-        val,
-        defaultCredentials ?? []
-      ),
+    validate: validateCredentials,
   });
   const [selectedType, setSelectedType] = useState(null);
   const {
@@ -105,6 +159,7 @@ function CredentialsStep({
       credentialsValidator(
         allowCredentialsWithPasswords,
         field.value,
+        t,
         defaultCredentials ?? []
       )
     );
@@ -160,12 +215,12 @@ function CredentialsStep({
       {types && types.length > 0 && (
         <ToolbarItem css=" display: flex; align-items: center;">
           <div css="flex: 0 0 25%; margin-right: 32px">
-            {i18n._(msg`Selected Category`)}
+            {t`Selected Category`}
           </div>
           <AnsibleSelect
             css="flex: 1 1 75%;"
             id="multiCredentialsLookUp-select"
-            label={i18n._(msg`Selected Category`)}
+            label={t`Selected Category`}
             data={types.map((type) => ({
               key: type.id,
               value: type.id,
@@ -188,29 +243,29 @@ function CredentialsStep({
         optionCount={count}
         searchColumns={[
           {
-            name: i18n._(msg`Name`),
+            name: t`Name`,
             key: 'name__icontains',
             isDefault: true,
           },
           {
-            name: i18n._(msg`Created By (Username)`),
+            name: t`Created By (Username)`,
             key: 'created_by__username__icontains',
           },
           {
-            name: i18n._(msg`Modified By (Username)`),
+            name: t`Modified By (Username)`,
             key: 'modified_by__username__icontains',
           },
         ]}
         sortColumns={[
           {
-            name: i18n._(msg`Name`),
+            name: t`Name`,
             key: 'name',
           },
         ]}
         searchableKeys={searchableKeys}
         relatedSearchableKeys={relatedSearchableKeys}
         multiple={isVault}
-        header={i18n._(msg`Credentials`)}
+        header={t`Credentials`}
         name="credentials"
         qsConfig={QS_CONFIG}
         readOnly={false}

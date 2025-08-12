@@ -7,8 +7,7 @@ import {
   useLocation,
   Link,
 } from 'react-router-dom';
-import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card, PageSection } from '@patternfly/react-core';
@@ -22,7 +21,7 @@ import ApplicationDetails from '../ApplicationDetails';
 import ApplicationTokens from '../ApplicationTokens';
 
 function Application({ setBreadcrumb }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const { id } = useParams();
   const { pathname } = useLocation();
   const {
@@ -71,15 +70,15 @@ function Application({ setBreadcrumb }) {
       name: (
         <>
           <CaretLeftIcon />
-          {i18n._(msg`Back to applications`)}
+          {t`Back to applications`}
         </>
       ),
       link: '/applications',
       id: 0,
       persistentFilterKey: 'applications',
     },
-    { name: i18n._(msg`Details`), link: `/applications/${id}/details`, id: 1 },
-    { name: i18n._(msg`Tokens`), link: `/applications/${id}/tokens`, id: 2 },
+    { name: t`Details`, link: `/applications/${id}/details`, id: 1 },
+    { name: t`Tokens`, link: `/applications/${id}/tokens`, id: 2 },
   ];
 
   let cardHeader = <RoutedTabs tabsArray={tabsArray} />;
@@ -94,9 +93,9 @@ function Application({ setBreadcrumb }) {
           <ContentError error={error}>
             {error.response?.status === 404 && (
               <span>
-                {i18n._(msg`Application not found.`)}{' '}
+                {t`Application not found.`}{' '}
                 <Link to="/applications">
-                  {i18n._(msg`View all applications.`)}
+                  {t`View all applications.`}
                 </Link>
               </span>
             )}

@@ -64,12 +64,11 @@ describe('<_AddResourceRole />', () => {
   });
 
   test('initially renders without crashing', () => {
-    shallow(
-      <_AddResourceRole
+    mountWithContexts(
+      <AddResourceRole
         onClose={() => {}}
         onSave={() => {}}
         roles={roles}
-        i18n={{ _: (val) => val.toString() }}
       />
     );
   });

@@ -36,21 +36,24 @@ export default function useWsWorkflowApprovals(
         return;
       }
 
-      const index = workflowApprovals.findIndex(
-        (p) => p.id === lastMessage.unified_job_id
-      );
+      setWorkflowApprovals((currentWorkflowApprovals) => {
+        const index = currentWorkflowApprovals.findIndex(
+          (p) => p.id === lastMessage.unified_job_id
+        );
 
-      if (
-        (index > -1 &&
-          !['new', 'pending', 'waiting', 'running'].includes(
-            lastMessage.status
-          )) ||
-        (index === -1 && lastMessage.status === 'pending')
-      ) {
-        setReloadEntireList(true);
-      }
+        if (
+          (index > -1 &&
+            !['new', 'pending', 'waiting', 'running'].includes(
+              lastMessage.status
+            )) ||
+          (index === -1 && lastMessage.status === 'pending')
+        ) {
+          setReloadEntireList(true);
+        }
+
+        return currentWorkflowApprovals;
+      });
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps,
     [lastMessage]
   );
 

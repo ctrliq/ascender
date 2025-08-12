@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import { msg } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import {
   Card,
   PageSection,
@@ -36,13 +35,13 @@ const Select = styled(PFSelect)`
 `;
 
 function ActivityStream() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const { light } = PageSectionVariants;
 
   const [isTypeDropdownOpen, setIsTypeDropdownOpen] = useState(false);
   const location = useLocation();
   const history = useHistory();
-  useTitle(i18n._(msg`Activity Stream`));
+  useTitle(t`Activity Stream`);
   const urlParams = new URLSearchParams(location.search);
 
   const activityStreamType = urlParams.get('type') || 'all';
@@ -120,15 +119,15 @@ function ActivityStream() {
         style={{ display: 'flex', justifyContent: 'space-between' }}
       >
         <Title size="2xl" headingLevel="h2" data-cy="screen-title">
-          {i18n._(msg`Activity Stream`)}
+          {t`Activity Stream`}
         </Title>
         <span id="grouped-type-select-id" hidden>
-          {i18n._(msg`Activity Stream type selector`)}
+          {t`Activity Stream type selector`}
         </span>
         <Select
           variant={SelectVariant.single}
           aria-labelledby="grouped-type-select-id"
-          typeAheadAriaLabel={i18n._(msg`Select an activity type`)}
+          typeAheadAriaLabel={t`Select an activity type`}
           className="activityTypeSelect"
           onToggle={setIsTypeDropdownOpen}
           onSelect={(event, selection) => {
@@ -141,86 +140,86 @@ function ActivityStream() {
           selections={activityStreamType}
           isOpen={isTypeDropdownOpen}
           isGrouped
-          noResultsFoundText={i18n._(msg`No results found`)}
+          noResultsFoundText={t`No results found`}
           ouiaId="activity-type-select"
         >
-          <SelectGroup label={i18n._(msg`Views`)} key="views">
+          <SelectGroup label={t`Views`} key="views">
             <SelectOption key="all_activity" value="all">
-              {i18n._(msg`Dashboard (all activity)`)}
+              {t`Dashboard (all activity)`}
             </SelectOption>
             <SelectOption key="jobs" value="job">
-              {i18n._(msg`Jobs`)}
+              {t`Jobs`}
             </SelectOption>
             <SelectOption key="schedules" value="schedule">
-              {i18n._(msg`Schedules`)}
+              {t`Schedules`}
             </SelectOption>
             <SelectOption key="workflow_approvals" value="workflow_approval">
-              {i18n._(msg`Workflow Approvals`)}
+              {t`Workflow Approvals`}
             </SelectOption>
           </SelectGroup>
-          <SelectGroup label={i18n._(msg`Resources`)} key="resources">
+          <SelectGroup label={t`Resources`} key="resources">
             <SelectOption
               key="templates"
               value="job_template,workflow_job_template,workflow_job_template_node"
             >
-              {i18n._(msg`Templates`)}
+              {t`Templates`}
             </SelectOption>
             <SelectOption key="credentials" value="credential">
-              {i18n._(msg`Credentials`)}
+              {t`Credentials`}
             </SelectOption>
             <SelectOption key="projects" value="project">
-              {i18n._(msg`Projects`)}
+              {t`Projects`}
             </SelectOption>
             <SelectOption key="inventories" value="inventory">
-              {i18n._(msg`Inventories`)}
+              {t`Inventories`}
             </SelectOption>
             <SelectOption key="hosts" value="host">
-              {i18n._(msg`Hosts`)}
+              {t`Hosts`}
             </SelectOption>
           </SelectGroup>
-          <SelectGroup label={i18n._(msg`Access`)} key="access">
+          <SelectGroup label={t`Access`} key="access">
             <SelectOption key="organizations" value="organization">
-              {i18n._(msg`Organizations`)}
+              {t`Organizations`}
             </SelectOption>
             <SelectOption key="users" value="user">
-              {i18n._(msg`Users`)}
+              {t`Users`}
             </SelectOption>
             <SelectOption key="teams" value="team">
-              {i18n._(msg`Teams`)}
+              {t`Teams`}
             </SelectOption>
           </SelectGroup>
-          <SelectGroup label={i18n._(msg`Administration`)} key="administration">
+          <SelectGroup label={t`Administration`} key="administration">
             <SelectOption key="credential_types" value="credential_type">
-              {i18n._(msg`Credential Types`)}
+              {t`Credential Types`}
             </SelectOption>
             <SelectOption
               key="notification_templates"
               value="notification_template"
             >
-              {i18n._(msg`Notification Templates`)}
+              {t`Notification Templates`}
             </SelectOption>
             <SelectOption key="instance" value="instance">
-              {i18n._(msg`Instances`)}
+              {t`Instances`}
             </SelectOption>
             <SelectOption key="instance_groups" value="instance_group">
-              {i18n._(msg`Instance Groups`)}
+              {t`Instance Groups`}
             </SelectOption>
             <SelectOption
               key="applications"
               value="o_auth2_application,o_auth2_access_token"
             >
-              {i18n._(msg`Applications & Tokens`)}
+              {t`Applications & Tokens`}
             </SelectOption>
             <SelectOption
               key="execution_environments"
               value="execution_environment"
             >
-              {i18n._(msg`Execution Environments`)}
+              {t`Execution Environments`}
             </SelectOption>
           </SelectGroup>
-          <SelectGroup label={i18n._(msg`Settings`)} key="settings">
+          <SelectGroup label={t`Settings`} key="settings">
             <SelectOption key="settings" value="setting">
-              {i18n._(msg`Settings`)}
+              {t`Settings`}
             </SelectOption>
           </SelectGroup>
         </Select>
@@ -232,26 +231,26 @@ function ActivityStream() {
             hasContentLoading={isLoading}
             items={results}
             itemCount={count}
-            pluralizedItemName={i18n._(msg`Events`)}
+            pluralizedItemName={t`Events`}
             qsConfig={QS_CONFIG}
             toolbarSearchColumns={[
               {
-                name: i18n._(msg`Keyword`),
+                name: t`Keyword`,
                 key: 'search',
                 isDefault: true,
               },
               {
-                name: i18n._(msg`Initiated by (username)`),
+                name: t`Initiated by (username)`,
                 key: 'actor__username__icontains',
               },
             ]}
             toolbarSortColumns={[
               {
-                name: i18n._(msg`Time`),
+                name: t`Time`,
                 key: 'timestamp',
               },
               {
-                name: i18n._(msg`Initiated by`),
+                name: t`Initiated by`,
                 key: 'actor__username',
               },
             ]}
@@ -259,12 +258,12 @@ function ActivityStream() {
             toolbarRelatedSearchableKeys={relatedSearchableKeys}
             headerRow={
               <HeaderRow qsConfig={QS_CONFIG}>
-                <HeaderCell sortKey="timestamp">{i18n._(msg`Time`)}</HeaderCell>
+                <HeaderCell sortKey="timestamp">{t`Time`}</HeaderCell>
                 <HeaderCell sortKey="actor__username">
-                  {i18n._(msg`Initiated by`)}
+                  {t`Initiated by`}
                 </HeaderCell>
-                <HeaderCell>{i18n._(msg`Event`)}</HeaderCell>
-                <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
+                <HeaderCell>{t`Event`}</HeaderCell>
+                <HeaderCell>{t`Actions`}</HeaderCell>
               </HeaderRow>
             }
             renderToolbar={(props) => (

@@ -16,6 +16,8 @@ function Test({ jobs, fetch }) {
 describe('useWsJobs hook', () => {
   let debug;
   let wrapper;
+  let mockServer;
+  
   beforeEach(() => {
     /*
       Jest mock timers don’t play well with jest-websocket-mock,
@@ -27,11 +29,26 @@ describe('useWsJobs hook', () => {
     }));
     debug = global.console.debug; // eslint-disable-line prefer-destructuring
     global.console.debug = () => {};
+    
+    // Clean up any existing websocket connections
+    WS.clean();
   });
 
   afterEach(() => {
     global.console.debug = debug;
     jest.clearAllMocks();
+    
+    // Clean up websocket connections
+    if (mockServer) {
+      mockServer.close();
+      mockServer = null;
+    }
+    WS.clean();
+    
+    if (wrapper) {
+      wrapper.unmount();
+      wrapper = null;
+    }
   });
 
   test('should return jobs list', () => {
@@ -44,7 +61,7 @@ describe('useWsJobs hook', () => {
 
   test('should establish websocket connection', async () => {
     global.document.cookie = 'csrftoken=abc123';
-    const mockServer = new WS('ws://localhost/websocket/');
+    mockServer = new WS('ws://localhost/websocket/');
 
     const jobs = [{ id: 1 }];
     await act(async () => {
@@ -62,12 +79,13 @@ describe('useWsJobs hook', () => {
         },
       })
     );
-    WS.clean();
+    mockServer.close();
+    mockServer = null;
   });
 
   test('should update job status', async () => {
     global.document.cookie = 'csrftoken=abc123';
-    const mockServer = new WS('ws://localhost/websocket/');
+    mockServer = new WS('ws://localhost/websocket/');
 
     const jobs = [{ id: 1, status: 'running' }];
     await act(async () => {
@@ -86,7 +104,8 @@ describe('useWsJobs hook', () => {
       })
     );
     expect(wrapper.find('TestInner').prop('jobs')[0].status).toEqual('running');
-    act(() => {
+    
+    await act(async () => {
       mockServer.send(
         JSON.stringify({
           unified_job_id: 1,
@@ -95,17 +114,19 @@ describe('useWsJobs hook', () => {
         })
       );
     });
+    
     wrapper.update();
 
     expect(wrapper.find('TestInner').prop('jobs')[0].status).toEqual(
       'successful'
     );
-    WS.clean();
+    mockServer.close();
+    mockServer = null;
   });
 
   test('should fetch new job', async () => {
     global.document.cookie = 'csrftoken=abc123';
-    const mockServer = new WS('ws://localhost/websocket/');
+    mockServer = new WS('ws://localhost/websocket/');
     const jobs = [{ id: 1 }];
     const fetch = jest.fn(() => []);
     await act(async () => {
@@ -124,6 +145,7 @@ describe('useWsJobs hook', () => {
     });
 
     expect(fetch).toHaveBeenCalledWith([2]);
-    WS.clean();
+    mockServer.close();
+    mockServer = null;
   });
 });

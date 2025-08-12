@@ -1,8 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 
 import { Config } from 'contexts/Config';
 import ScreenHeader from 'components/ScreenHeader/ScreenHeader';
@@ -12,10 +11,10 @@ import HostAdd from './HostAdd';
 import Host from './Host';
 
 function Hosts() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const [breadcrumbConfig, setBreadcrumbConfig] = useState({
-    '/hosts': i18n._(msg`Hosts`),
-    '/hosts/add': i18n._(msg`Create New Host`),
+    '/hosts': t`Hosts`,
+    '/hosts/add': t`Create New Host`,
   });
 
   const buildBreadcrumbConfig = useCallback(
@@ -24,17 +23,17 @@ function Hosts() {
         return;
       }
       setBreadcrumbConfig({
-        '/hosts': i18n._(msg`Hosts`),
-        '/hosts/add': i18n._(msg`Create New Host`),
+        '/hosts': t`Hosts`,
+        '/hosts/add': t`Create New Host`,
         [`/hosts/${host.id}`]: `${host.name}`,
-        [`/hosts/${host.id}/edit`]: i18n._(msg`Edit Details`),
-        [`/hosts/${host.id}/details`]: i18n._(msg`Details`),
-        [`/hosts/${host.id}/facts`]: i18n._(msg`Facts`),
-        [`/hosts/${host.id}/groups`]: i18n._(msg`Groups`),
-        [`/hosts/${host.id}/jobs`]: i18n._(msg`Jobs`),
+        [`/hosts/${host.id}/edit`]: t`Edit Details`,
+        [`/hosts/${host.id}/details`]: t`Details`,
+        [`/hosts/${host.id}/facts`]: t`Facts`,
+        [`/hosts/${host.id}/groups`]: t`Groups`,
+        [`/hosts/${host.id}/jobs`]: t`Jobs`,
       });
     },
-    [i18n]
+    [t]
   );
 
   return (

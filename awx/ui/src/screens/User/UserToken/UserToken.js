@@ -1,6 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 import {
   Link,
   Redirect,
@@ -18,7 +17,7 @@ import useRequest from 'hooks/useRequest';
 import UserTokenDetail from '../UserTokenDetail';
 
 function UserToken({ setBreadcrumb, user }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const location = useLocation();
   const { id, tokenId } = useParams();
   const {
@@ -45,14 +44,14 @@ function UserToken({ setBreadcrumb, user }) {
       name: (
         <>
           <CaretLeftIcon />
-          {i18n._(msg`Back to Tokens`)}
+          {t`Back to Tokens`}
         </>
       ),
       link: `/users/${id}/tokens`,
       id: 99,
     },
     {
-      name: i18n._(msg`Details`),
+      name: t`Details`,
       link: `/users/${id}/tokens/${tokenId}/details`,
       id: 0,
     },
@@ -71,9 +70,9 @@ function UserToken({ setBreadcrumb, user }) {
           <ContentError error={error}>
             {error.response.status === 404 && (
               <span>
-                {i18n._(msg`Token not found.`)}{' '}
+                {t`Token not found.`}{' '}
                 <Link to="/users/:id/tokens">
-                  {i18n._(msg`View all tokens.`)}
+                  {t`View all tokens.`}
                 </Link>
               </span>
             )}
@@ -102,7 +101,7 @@ function UserToken({ setBreadcrumb, user }) {
             <ContentError isNotFound>
               {id && (
                 <Link to={`/users/${id}/tokens`}>
-                  {i18n._(msg`View Tokens`)}
+                  {t`View Tokens`}
                 </Link>
               )}
             </ContentError>

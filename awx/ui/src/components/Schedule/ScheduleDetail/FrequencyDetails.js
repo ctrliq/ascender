@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { msg, SelectOrdinal } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { SelectOrdinal, useLingui } from '@lingui/react/macro';
 import { DateTime } from 'luxon';
 import { formatDateString } from 'util/dates';
 import { DetailList, Detail } from '../../DetailList';
@@ -18,51 +17,38 @@ export default function FrequencyDetails({
   timezone,
   isException,
 }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const getRunEveryLabel = () => {
     const { interval } = options;
     switch (type) {
       case 'minute':
-        return i18n._(
-          msg`{interval, plural, one {# minute} other {# minutes}}`,
-          { interval }
-        );
+        return interval === 1 ? t`${interval} minute` : t`${interval} minutes`;
       case 'hour':
-        return i18n._(msg`{interval, plural, one {# hour} other {# hours}}`, {
-          interval,
-        });
+        return interval === 1 ? t`${interval} hour` : t`${interval} hours`;
       case 'day':
-        return i18n._(msg`{interval, plural, one {# day} other {# days}}`, {
-          interval,
-        });
+        return interval === 1 ? t`${interval} day` : t`${interval} days`;
       case 'week':
-        return i18n._(msg`{interval, plural, one {# week} other {# weeks}}`, {
-          interval,
-        });
+        return interval === 1 ? t`${interval} week` : t`${interval} weeks`;
       case 'month':
-        return i18n._(msg`{interval, plural, one {# month} other {# months}}`, {
-          interval,
-        });
+        return interval === 1 ? t`${interval} month` : t`${interval} months`;
       case 'year':
-        return i18n._(msg`{interval, plural, one {# year} other {# years}}`, {
-          interval,
-        });
+        return interval === 1 ? t`${interval} year` : t`${interval} years`;
       default:
-        throw new Error(i18n._(msg`Frequency did not match an expected value`));
+        throw new Error(t`Frequency did not match an expected value`);
     }
   };
 
   const weekdays = React.useMemo(
     () => ({
-      0: i18n._(msg`Monday`),
-      1: i18n._(msg`Tuesday`),
-      2: i18n._(msg`Wednesday`),
-      3: i18n._(msg`Thursday`),
-      4: i18n._(msg`Friday`),
-      5: i18n._(msg`Saturday`),
-      6: i18n._(msg`Sunday`),
+      0: t`Monday`,
+      1: t`Tuesday`,
+      2: t`Wednesday`,
+      3: t`Thursday`,
+      4: t`Friday`,
+      5: t`Saturday`,
+      6: t`Sunday`,
     }),
-    [i18n]
+    [t]
   );
 
   const prefix = isException ? `exception-${type}` : `frequency-${type}`;
@@ -72,13 +58,13 @@ export default function FrequencyDetails({
       <Label>{label}</Label>
       <DetailList gutter="sm">
         <Detail
-          label={isException ? i18n._(msg`Skip every`) : i18n._(msg`Run every`)}
+          label={isException ? t`Skip every` : t`Run every`}
           value={getRunEveryLabel()}
           dataCy={`${prefix}-run-every`}
         />
         {type === 'week' && options.daysOfWeek ? (
           <Detail
-            label={i18n._(msg`On days`)}
+            label={t`On days`}
             value={options.daysOfWeek
               .sort(sortWeekday)
               .map((d) => weekdays[d.weekday])
@@ -90,11 +76,11 @@ export default function FrequencyDetails({
           type={type}
           options={options}
           prefix={prefix}
-          i18n={i18n}
+          t={t}
         />
         <Detail
-          label={i18n._(msg`End`)}
-          value={getEndValue(type, options, timezone, i18n)}
+          label={t`End`}
+          value={getEndValue(type, options, timezone, t)}
           dataCy={`${prefix}-end`}
         />
       </DetailList>
@@ -108,29 +94,29 @@ function sortWeekday(a, b) {
   return a.weekday - b.weekday;
 }
 
-function RunOnDetail({ type, options, prefix, i18n }) {
+function RunOnDetail({ type, options, prefix, t }) {
   const weekdays = React.useMemo(
     () => ({
-      sunday: i18n._(msg`Sunday`),
-      monday: i18n._(msg`Monday`),
-      tuesday: i18n._(msg`Tuesday`),
-      wednesday: i18n._(msg`Wednesday`),
-      thursday: i18n._(msg`Thursday`),
-      friday: i18n._(msg`Friday`),
-      saturday: i18n._(msg`Saturday`),
-      day: i18n._(msg`day`),
-      weekday: i18n._(msg`weekday`),
-      weekendDay: i18n._(msg`weekend day`),
+      sunday: t`Sunday`,
+      monday: t`Monday`,
+      tuesday: t`Tuesday`,
+      wednesday: t`Wednesday`,
+      thursday: t`Thursday`,
+      friday: t`Friday`,
+      saturday: t`Saturday`,
+      day: t`day`,
+      weekday: t`weekday`,
+      weekendDay: t`weekend day`,
     }),
-    [i18n]
+    [t]
   );
 
   if (type === 'month') {
     if (options.runOn === 'day') {
       return (
         <Detail
-          label={i18n._(msg`Run on`)}
-          value={i18n._(msg`Day {num}`, { num: options.runOnDayNumber })}
+          label={t`Run on`}
+          value={t`Day ${options.runOnDayNumber}`}
           dataCy={`${prefix}-run-on-day`}
         />
       );
@@ -138,10 +124,10 @@ function RunOnDetail({ type, options, prefix, i18n }) {
     const dayOfWeek = weekdays[options.runOnTheDay];
     return (
       <Detail
-        label={i18n._(msg`Run on`)}
+        label={t`Run on`}
         value={
           options.runOnTheOccurrence === -1 ? (
-            i18n._(msg`The last ${dayOfWeek}`)
+            t`The last ${dayOfWeek}`
           ) : (
             <SelectOrdinal
               value={options.runOnTheOccurrence}
@@ -159,23 +145,23 @@ function RunOnDetail({ type, options, prefix, i18n }) {
   }
   if (type === 'year') {
     const months = {
-      1: i18n._(msg`January`),
-      2: i18n._(msg`February`),
-      3: i18n._(msg`March`),
-      4: i18n._(msg`April`),
-      5: i18n._(msg`May`),
-      6: i18n._(msg`June`),
-      7: i18n._(msg`July`),
-      8: i18n._(msg`August`),
-      9: i18n._(msg`September`),
-      10: i18n._(msg`October`),
-      11: i18n._(msg`November`),
-      12: i18n._(msg`December`),
+      1: t`January`,
+      2: t`February`,
+      3: t`March`,
+      4: t`April`,
+      5: t`May`,
+      6: t`June`,
+      7: t`July`,
+      8: t`August`,
+      9: t`September`,
+      10: t`October`,
+      11: t`November`,
+      12: t`December`,
     };
     if (options.runOn === 'day') {
       return (
         <Detail
-          label={i18n._(msg`Run on`)}
+          label={t`Run on`}
           value={`${months[options.runOnTheMonth]} ${options.runOnDayMonth}`}
           dataCy={`${prefix}-run-on-day`}
         />
@@ -185,10 +171,10 @@ function RunOnDetail({ type, options, prefix, i18n }) {
     const month = months[options.runOnTheMonth];
     return (
       <Detail
-        label={i18n._(msg`Run on`)}
+        label={t`Run on`}
         value={
           options.runOnTheOccurrence === -1 ? (
-            i18n._(msg`The last ${weekday} of ${month}`)
+            t`The last ${weekday} of ${month}`
           ) : (
             <SelectOrdinal
               value={options.runOnTheOccurrence}
@@ -207,16 +193,13 @@ function RunOnDetail({ type, options, prefix, i18n }) {
   return null;
 }
 
-function getEndValue(type, options, timezone, i18n) {
+function getEndValue(type, options, timezone, t) {
   if (options.end === 'never') {
-    return i18n._(msg`Never`);
+    return t`Never`;
   }
   if (options.end === 'after') {
     const numOccurrences = options.occurrences;
-    return i18n._(
-      msg`After {numOccurrences, plural, one {# occurrence} other {# occurrences}}`,
-      { numOccurrences }
-    );
+    return t`After ${numOccurrences} ${numOccurrences === 1 ? 'occurrence' : 'occurrences'}`;
   }
   const date = DateTime.fromFormat(
     `${options.endDate} ${options.endTime}`,

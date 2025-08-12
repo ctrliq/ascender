@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 
-import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 import { getQSConfig, parseQueryString, mergeParams } from 'util/qs';
 import useRequest, {
   useDismissableError,
@@ -146,7 +145,7 @@ function HostGroupsList({ host }) {
   const canAdd =
     actions && Object.prototype.hasOwnProperty.call(actions, 'POST');
 
-  const { i18n } = useLingui();
+  const { t } = useLingui();
 
   return (
     <>
@@ -159,16 +158,16 @@ function HostGroupsList({ host }) {
         clearSelected={clearSelected}
         toolbarSearchColumns={[
           {
-            name: i18n._(msg`Name`),
+            name: t`Name`,
             key: 'name__icontains',
             isDefault: true,
           },
           {
-            name: i18n._(msg`Created By (Username)`),
+            name: t`Created By (Username)`,
             key: 'created_by__username__icontains',
           },
           {
-            name: i18n._(msg`Modified By (Username)`),
+            name: t`Modified By (Username)`,
             key: 'modified_by__username__icontains',
           },
         ]}
@@ -176,8 +175,8 @@ function HostGroupsList({ host }) {
         toolbarRelatedSearchableKeys={relatedSearchableKeys}
         headerRow={
           <HeaderRow qsConfig={QS_CONFIG}>
-            <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
-            <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
+            <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
+            <HeaderCell>{t`Actions`}</HeaderCell>
           </HeaderRow>
         }
         renderRow={(item, index) => (
@@ -211,13 +210,13 @@ function HostGroupsList({ host }) {
                 key="disassociate"
                 onDisassociate={handleDisassociate}
                 itemsToDisassociate={selected}
-                modalTitle={i18n._(msg`Disassociate group from host?`)}
-                modalNote={i18n._(msg`
+                modalTitle={t`Disassociate group from host?`}
+                modalNote={t`
                   Note that you may still see the group in the list after
                   disassociating if the host is also a member of that group’s
                   children.  This list shows all groups the host is associated
                   with directly and indirectly.
-                `)}
+                `}
               />,
             ]}
           />
@@ -231,25 +230,25 @@ function HostGroupsList({ host }) {
       {isModalOpen && (
         <AssociateModal
           ouiaId="associate-modal"
-          header={i18n._(msg`Groups`)}
+          header={t`Groups`}
           fetchRequest={fetchGroupsToAssociate}
           optionsRequest={fetchGroupsOptions}
           isModalOpen={isModalOpen}
           onAssociate={handleAssociate}
           onClose={() => setIsModalOpen(false)}
-          title={i18n._(msg`Select Groups`)}
+          title={t`Select Groups`}
         />
       )}
       {error && (
         <AlertModal
           isOpen={error}
           onClose={dismissError}
-          title={i18n._(msg`Error!`)}
+          title={t`Error!`}
           variant="error"
         >
           {associateError
-            ? i18n._(msg`Failed to associate.`)
-            : i18n._(msg`Failed to disassociate one or more groups.`)}
+            ? t`Failed to associate.`
+            : t`Failed to disassociate one or more groups.`}
           <ErrorDetail error={error} />
         </AlertModal>
       )}

@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useState, useContext } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { msg } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 
 import PropTypes from 'prop-types';
 import { Button, DropdownItem, Tooltip } from '@patternfly/react-core';
@@ -22,7 +21,7 @@ function AdHocCommands({
   onLaunchLoading,
   moduleOptions,
 }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const history = useHistory();
   const { id } = useParams();
 
@@ -104,7 +103,7 @@ function AdHocCommands({
       <AlertModal
         isOpen={error}
         variant="error"
-        title={i18n._(msg`Error!`)}
+        title={t`Error!`}
         onClose={() => {
           dismissError();
           setIsWizardOpen(false);
@@ -112,7 +111,7 @@ function AdHocCommands({
       >
         {launchError ? (
           <>
-            {i18n._(msg`Failed to launch job.`)}
+            {t`Failed to launch job.`}
             <ErrorDetail error={error} />
           </>
         ) : (
@@ -125,27 +124,27 @@ function AdHocCommands({
     // render buttons for drop down and for toolbar
     // if modal is open render the modal
     <>
-      <Tooltip content={i18n._(msg`Run ad hoc command`)}>
+      <Tooltip content={t`Run ad hoc command`}>
         {isKebabified ? (
           <DropdownItem
             key="cancel-job"
             isDisabled={!hasListItems}
             component="button"
-            aria-label={i18n._(msg`Run Command`)}
+            aria-label={t`Run Command`}
             onClick={() => setIsWizardOpen(true)}
             ouiaId="run-command-dropdown-item"
           >
-            {i18n._(msg`Run Command`)}
+            {t`Run Command`}
           </DropdownItem>
         ) : (
           <Button
             ouiaId="run-command-button"
             variant="secondary"
-            aria-label={i18n._(msg`Run Command`)}
+            aria-label={t`Run Command`}
             onClick={() => setIsWizardOpen(true)}
             isDisabled={!hasListItems}
           >
-            {i18n._(msg`Run Command`)}
+            {t`Run Command`}
           </Button>
         )}
       </Tooltip>

@@ -87,7 +87,7 @@ describe('<UserAndTeamAccessAdd/>', () => {
         .prop('isDisabled')
     ).toBe(true);
     await act(async () =>
-      wrapper.find('SelectableCard[label="Job templates"]').prop('onClick')({
+      wrapper.find('SelectableCard[dataCy="add-role-jobTemplate"]').prop('onClick')({
         fetchItems: JobTemplatesAPI.read,
         label: 'Job template',
         selectedResource: 'jobTemplate',
@@ -123,7 +123,7 @@ describe('<UserAndTeamAccessAdd/>', () => {
     JobTemplatesAPI.readOptions.mockResolvedValue(options);
     UsersAPI.associateRole.mockResolvedValue({});
     await act(async () =>
-      wrapper.find('SelectableCard[label="Job templates"]').prop('onClick')({
+      wrapper.find('SelectableCard[dataCy="add-role-jobTemplate"]').prop('onClick')({
         fetchItems: JobTemplatesAPI.read,
         fetchOptions: JobTemplatesAPI.readOptions,
         label: 'Job template',
@@ -200,7 +200,7 @@ describe('<UserAndTeamAccessAdd/>', () => {
     );
 
     await act(async () =>
-      wrapper.find('SelectableCard[label="Job templates"]').prop('onClick')({
+      wrapper.find('SelectableCard[dataCy="add-role-jobTemplate"]').prop('onClick')({
         fetchItems: JobTemplatesAPI.read,
         fetchOptions: JobTemplatesAPI.readOptions,
         label: 'Job template',

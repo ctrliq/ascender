@@ -1360,6 +1360,12 @@ describe('<ScheduleForm />', () => {
         );
       });
       wrapper.update();
+      
+      // Wait for async RRULE parsing and component updates
+      await act(async () => {
+        await new Promise(resolve => setTimeout(resolve, 100));
+      });
+      wrapper.update();
 
       expect(wrapper.find('ScheduleForm').length).toBe(1);
       defaultFieldsVisible(true);

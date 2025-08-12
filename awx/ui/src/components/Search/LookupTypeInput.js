@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { string, oneOfType, arrayOf, func } from 'prop-types';
-import { msg } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import { Select, SelectOption, SelectVariant } from '@patternfly/react-core';
 
 function Option({ show, ...props }) {
@@ -16,135 +15,129 @@ Option.defaultProps = {
 
 function LookupTypeInput({ value, type, setValue, maxSelectHeight }) {
   const [isOpen, setIsOpen] = useState(false);
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   return (
     <Select
       ouiaId="set-lookup-typeahead"
-      aria-label={i18n._(msg`Lookup select`)}
+      aria-label={t`Lookup select`}
       className="lookupSelect"
       variant={SelectVariant.typeahead}
-      typeAheadAriaLabel={i18n._(msg`Lookup typeahead`)}
+      typeAheadAriaLabel={t`Lookup typeahead`}
       onToggle={setIsOpen}
       onSelect={(event, selection) => setValue(selection)}
       onClear={() => setValue(null)}
       selections={value}
       isOpen={isOpen}
-      placeholderText={i18n._(msg`Lookup type`)}
+      placeholderText={t`Lookup type`}
       maxHeight={maxSelectHeight}
-      noResultsFoundText={i18n._(msg`No results found`)}
+      noResultsFoundText={t`No results found`}
     >
       <Option
         id="exact-option-select"
         key="exact"
         value="exact"
-        description={i18n._(
-          msg`Exact match (default lookup if not specified).`
-        )}
+        description={t`Exact match (default lookup if not specified).`}
       />
       <Option
         id="iexact-option-select"
         key="iexact"
         value="iexact"
-        description={i18n._(msg`Case-insensitive version of exact.`)}
+        description={t`Case-insensitive version of exact.`}
         show={type === 'string'}
       />
       <Option
         id="contains-option-select"
         key="contains"
         value="contains"
-        description={i18n._(msg`Field contains value.`)}
+        description={t`Field contains value.`}
         show={type === 'string'}
       />
       <Option
         id="icontains-option-select"
         key="icontains"
         value="icontains"
-        description={i18n._(msg`Case-insensitive version of contains`)}
+        description={t`Case-insensitive version of contains`}
         show={type === 'string'}
       />
       <Option
         id="startswith-option-select"
         key="startswith"
         value="startswith"
-        description={i18n._(msg`Field starts with value.`)}
+        description={t`Field starts with value.`}
         show={type !== 'datetime'}
       />
       <Option
         id="istartswith-option-select"
         key="istartswith"
         value="istartswith"
-        description={i18n._(msg`Case-insensitive version of startswith.`)}
+        description={t`Case-insensitive version of startswith.`}
         show={type !== 'datetime'}
       />
       <Option
         id="endswith-option-select"
         key="endswith"
         value="endswith"
-        description={i18n._(msg`Field ends with value.`)}
+        description={t`Field ends with value.`}
         show={type !== 'datetime'}
       />
       <Option
         id="iendswith-option-select"
         key="iendswith"
         value="iendswith"
-        description={i18n._(msg`Case-insensitive version of endswith.`)}
+        description={t`Case-insensitive version of endswith.`}
         show={type !== 'datetime'}
       />
       <Option
         id="regex-option-select"
         key="regex"
         value="regex"
-        description={i18n._(msg`Field matches the given regular expression.`)}
+        description={t`Field matches the given regular expression.`}
       />
       <Option
         id="iregex-option-select"
         key="iregex"
         value="iregex"
-        description={i18n._(msg`Case-insensitive version of regex.`)}
+        description={t`Case-insensitive version of regex.`}
       />
       <Option
         id="gt-option-select"
         key="gt"
         value="gt"
-        description={i18n._(msg`Greater than comparison.`)}
+        description={t`Greater than comparison.`}
         show={type !== 'json'}
       />
       <Option
         id="gte-option-select"
         key="gte"
         value="gte"
-        description={i18n._(msg`Greater than or equal to comparison.`)}
+        description={t`Greater than or equal to comparison.`}
         show={type !== 'json'}
       />
       <Option
         id="lt-option-select"
         key="lt"
         value="lt"
-        description={i18n._(msg`Less than comparison.`)}
+        description={t`Less than comparison.`}
         show={type !== 'json'}
       />
       <Option
         id="lte-option-select"
         key="lte"
         value="lte"
-        description={i18n._(msg`Less than or equal to comparison.`)}
+        description={t`Less than or equal to comparison.`}
         show={type !== 'json'}
       />
       <Option
         id="isnull-option-select"
         key="isnull"
         value="isnull"
-        description={i18n._(
-          msg`Check whether the given field or related object is null; expects a boolean value.`
-        )}
+        description={t`Check whether the given field or related object is null; expects a boolean value.`}
       />
       <Option
         id="in-option-select"
         key="in"
         value="in"
-        description={i18n._(
-          msg`Check whether the given field's value is present in the list provided; expects a comma-separated list of items.`
-        )}
+        description={t`Check whether the given field's value is present in the list provided; expects a comma-separated list of items.`}
       />
     </Select>
   );

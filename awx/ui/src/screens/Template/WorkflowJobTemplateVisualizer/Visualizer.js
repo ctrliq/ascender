@@ -2,8 +2,7 @@ import React, { useCallback, useEffect, useReducer } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { shape } from 'prop-types';
-import { i18n } from '@lingui/core';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 
 import {
   WorkflowDispatchContext,
@@ -131,6 +130,7 @@ const fetchWorkflowNodes = async (
 };
 
 function Visualizer({ template }) {
+  const { t } = useLingui();
   const history = useHistory();
   const [state, dispatch] = useReducer(workflowReducer, {
     addLinkSourceNode: null,
@@ -288,6 +288,7 @@ function Visualizer({ template }) {
         dispatch({
           type: 'GENERATE_NODES_AND_LINKS',
           nodes: workflowNodes,
+          startLabel: t`START`,
         });
       } catch (error) {
         dispatch({ type: 'SET_CONTENT_ERROR', value: error });
@@ -296,7 +297,7 @@ function Visualizer({ template }) {
       }
     }
     fetchData();
-  }, [template.id]);
+  }, [template.id, t]);
 
   // Update positions of nodes/links
   useEffect(() => {
@@ -701,11 +702,11 @@ function Visualizer({ template }) {
           <AlertModal
             isOpen
             variant="error"
-            title={i18n._(msg`Error saving the workflow!`)}
+            title={t`Error saving the workflow!`}
             onClose={dismissNodeRequestError}
-            aria-label={i18n._(msg`Error saving the workflow!`)}
+            aria-label={t`Error saving the workflow!`}
           >
-            {i18n._(msg`There was an error saving the workflow.`)}
+            {t`There was an error saving the workflow.`}
             <ErrorDetail error={nodeRequestError} />
           </AlertModal>
         )}

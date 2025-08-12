@@ -4,8 +4,7 @@ import {
   Pagination as PFPagination,
   DropdownDirection,
 } from '@patternfly/react-core';
-import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 
 const AWXPagination = styled(PFPagination)`
   ${(props) =>
@@ -19,24 +18,24 @@ const AWXPagination = styled(PFPagination)`
 `;
 
 export default (props) => {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   return (
     <AWXPagination
       ouiaId="pagination"
       titles={{
-        items: i18n._(msg`items`),
-        page: i18n._(msg`page`),
-        pages: i18n._(msg`pages`),
-        itemsPerPage: i18n._(msg`Items per page`),
-        perPageSuffix: i18n._(msg`per page`),
-        toFirstPage: i18n._(msg`Go to first page`),
-        toPreviousPage: i18n._(msg`Go to previous page`),
-        toLastPage: i18n._(msg`Go to last page`),
-        toNextPage: i18n._(msg`Go to next page`),
-        optionsToggle: i18n._(msg`Select`),
-        currPage: i18n._(msg`Current page`),
-        paginationTitle: i18n._(msg`Pagination`),
-        ofWord: i18n._(msg`of`),
+        items: t`items`,
+        page: t`page`,
+        pages: t`pages`,
+        itemsPerPage: t`Items per page`,
+        perPageSuffix: t`per page`,
+        toFirstPage: t`Go to first page`,
+        toPreviousPage: t`Go to previous page`,
+        toLastPage: t`Go to last page`,
+        toNextPage: t`Go to next page`,
+        optionsToggle: t`Select`,
+        currPage: t`Current page`,
+        paginationTitle: t`Pagination`,
+        ofWord: t`of`,
       }}
       dropDirection={DropdownDirection.up}
       {...props}

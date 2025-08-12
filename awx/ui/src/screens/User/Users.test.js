@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
 import Users from './Users';
 
 jest.mock('react-router-dom', () => ({
@@ -11,7 +11,7 @@ jest.mock('react-router-dom', () => ({
 
 describe('<Users />', () => {
   test('should set breadcrumbs', () => {
-    const wrapper = shallow(<Users />);
+    const wrapper = mountWithContexts(<Users />);
 
     const header = wrapper.find('ScreenHeader');
     expect(header.prop('streamType')).toBe('user');

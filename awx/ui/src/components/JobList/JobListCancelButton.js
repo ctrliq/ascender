@@ -1,7 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-
-import { msg, Plural } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { Plural, useLingui } from '@lingui/react/macro';
 import { arrayOf, func } from 'prop-types';
 import { Button, DropdownItem, Tooltip } from '@patternfly/react-core';
 import { KebabifiedContext } from 'contexts/Kebabified';
@@ -20,7 +18,7 @@ function cannotCancelBecauseNotRunning(job) {
 }
 
 function JobListCancelButton({ jobsToCancel, onCancel }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const { isKebabified, onKebabModalChange } = useContext(KebabifiedContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const numJobsToCancel = jobsToCancel.length;
@@ -92,12 +90,12 @@ function JobListCancelButton({ jobsToCancel, onCancel }) {
       return (
         <Plural
           value={numJobsToCancel}
-          one={i18n._(msg`Cancel selected job`)}
-          other={i18n._(msg`Cancel selected jobs`)}
+          one={t`Cancel selected job`}
+          other={t`Cancel selected jobs`}
         />
       );
     }
-    return i18n._(msg`Select a job to cancel`);
+    return t`Select a job to cancel`;
   };
 
   const isDisabled =
@@ -159,18 +157,18 @@ function JobListCancelButton({ jobsToCancel, onCancel }) {
               id="cancel-job-return-button"
               key="cancel"
               variant="secondary"
-              aria-label={i18n._(msg`Return`)}
+              aria-label={t`Return`}
               onClick={toggleModal}
             >
-              {i18n._(msg`Return`)}
+              {t`Return`}
             </Button>,
           ]}
         >
           <div>
             <Plural
               value={numJobsToCancel}
-              one="This action will cancel the following job:"
-              other="This action will cancel the following jobs:"
+              one={t`This action will cancel the following job:`}
+              other={t`This action will cancel the following jobs:`}
             />
           </div>
           {jobsToCancel.map((job) => (

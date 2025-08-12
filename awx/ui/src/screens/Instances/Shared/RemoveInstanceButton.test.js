@@ -53,10 +53,13 @@ const instances = [
   },
 ];
 describe('<RemoveInstanceButtton />', () => {
-  test('Should open modal and deprovision node', async () => {
+  beforeAll(() => {
     i18n.loadLocaleData({ en: { plurals: en } });
     i18n.load({ en: english });
     i18n.activate('en');
+  });
+
+  test('Should open modal and deprovision node', async () => {
     InstanceGroupsAPI.read.mockResolvedValue({
       data: { results: [{ id: 1 }], count: 1 },
     });
@@ -88,11 +91,13 @@ describe('<RemoveInstanceButtton />', () => {
   test('Should be disabled', async () => {
     const user = userEvent.setup();
     render(
-      <RemoveInstanceButton
-        isK8s={true}
-        itemsToRemove={[instances[1]]}
-        onRemove={jest.fn()}
-      />
+      <I18nProvider i18n={i18n}>
+        <RemoveInstanceButton
+          isK8s={true}
+          itemsToRemove={[instances[1]]}
+          onRemove={jest.fn()}
+        />
+      </I18nProvider>
     );
 
     const button = screen.getByRole('button');
@@ -118,11 +123,13 @@ describe('<RemoveInstanceButtton />', () => {
     const user = userEvent.setup();
     const onRemove = jest.fn();
     render(
-      <RemoveInstanceButton
-        isK8s={true}
-        itemsToRemove={[instances[0]]}
-        onRemove={onRemove}
-      />
+      <I18nProvider i18n={i18n}>
+        <RemoveInstanceButton
+          isK8s={true}
+          itemsToRemove={[instances[0]]}
+          onRemove={onRemove}
+        />
+      </I18nProvider>
     );
 
     const button = screen.getByRole('button');

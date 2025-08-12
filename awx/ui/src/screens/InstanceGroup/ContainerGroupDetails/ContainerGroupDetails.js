@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 
-import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 
 import { Link, useHistory } from 'react-router-dom';
 import { Button, Label } from '@patternfly/react-core';
@@ -23,7 +22,7 @@ import { InstanceGroupsAPI } from 'api';
 import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails';
 
 function ContainerGroupDetails({ instanceGroup }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const { id, name } = instanceGroup;
   const history = useHistory();
 
@@ -40,40 +39,38 @@ function ContainerGroupDetails({ instanceGroup }) {
 
   const { error, dismissError } = useDismissableError(deleteError);
   const deleteDetailsRequests =
-    relatedResourceDeleteRequests.instanceGroup(instanceGroup);
+    relatedResourceDeleteRequests(t).instanceGroup(instanceGroup);
   return (
     <CardBody>
       <DetailList>
         <Detail
-          label={i18n._(msg`Name`)}
+          label={t`Name`}
           value={instanceGroup.name}
           dataCy="container-group-detail-name"
         />
         <Detail
-          label={i18n._(msg`Type`)}
-          value={i18n._(msg`Container group`)}
+          label={t`Type`}
+          value={t`Container group`}
           dataCy="container-group-type"
         />
         <DetailBadge
-          label={i18n._(msg`Max concurrent jobs`)}
+          label={t`Max concurrent jobs`}
           dataCy="instance-group-max-concurrent-jobs"
-          helpText={i18n._(msg`Maximum number of jobs to run concurrently on this group.
-          Zero means no limit will be enforced.`)}
+          helpText={t`Maximum number of jobs to run concurrently on this group.
+          Zero means no limit will be enforced.`}
           content={instanceGroup.max_concurrent_jobs}
         />
         <DetailBadge
-          label={i18n._(msg`Max forks`)}
+          label={t`Max forks`}
           dataCy="instance-group-max-forks"
-          helpText={i18n._(msg`Maximum number of forks to allow across all jobs running concurrently on this group.
-          Zero means no limit will be enforced.`)}
+          helpText={t`Maximum number of forks to allow across all jobs running concurrently on this group.
+          Zero means no limit will be enforced.`}
           content={instanceGroup.max_forks}
         />
         {instanceGroup.summary_fields.credential && (
           <Detail
-            label={i18n._(msg`Credential`)}
-            helpText={i18n._(
-              msg`Credential to authenticate with Kubernetes or OpenShift`
-            )}
+            label={t`Credential`}
+            helpText={t`Credential to authenticate with Kubernetes or OpenShift`}
             value={
               <Link
                 to={`/credentials/${instanceGroup?.summary_fields?.credential?.id}`}
@@ -87,27 +84,25 @@ function ContainerGroupDetails({ instanceGroup }) {
           />
         )}
         <UserDateDetail
-          label={i18n._(msg`Created`)}
+          label={t`Created`}
           date={instanceGroup.created}
           user={instanceGroup.summary_fields.created_by}
         />
         <UserDateDetail
-          label={i18n._(msg`Last Modified`)}
+          label={t`Last Modified`}
           date={instanceGroup.modified}
           user={instanceGroup.summary_fields.modified_by}
         />
         {instanceGroup.pod_spec_override && (
           <VariablesDetail
-            label={i18n._(msg`Pod spec override`)}
+            label={t`Pod spec override`}
             value={
               isJsonString(instanceGroup.pod_spec_override)
                 ? jsonToYaml(instanceGroup.pod_spec_override)
                 : instanceGroup.pod_spec_override
             }
             rows={6}
-            helpText={i18n._(
-              msg`Custom Kubernetes or OpenShift Pod specification.`
-            )}
+            helpText={t`Custom Kubernetes or OpenShift Pod specification.`}
             name="pod_spec_override"
             dataCy="container-group-detail-pod-spec-override"
           />
@@ -118,11 +113,11 @@ function ContainerGroupDetails({ instanceGroup }) {
           instanceGroup.summary_fields.user_capabilities.edit && (
             <Button
               ouiaId="container-group-detail-edit-button"
-              aria-label={i18n._(msg`edit`)}
+              aria-label={t`edit`}
               component={Link}
               to={`/instance_groups/container_group/${id}/edit`}
             >
-              {i18n._(msg`Edit`)}
+              {t`Edit`}
             </Button>
           )}
         {instanceGroup.summary_fields.user_capabilities &&
@@ -130,15 +125,13 @@ function ContainerGroupDetails({ instanceGroup }) {
             <DeleteButton
               ouiaId="container-group-detail-delete-button"
               name={name}
-              modalTitle={i18n._(msg`Delete instance group`)}
+              modalTitle={t`Delete instance group`}
               onConfirm={deleteInstanceGroup}
               isDisabled={isLoading}
               deleteDetailsRequests={deleteDetailsRequests}
-              deleteMessage={i18n._(
-                msg`This container group is currently being by other resources. Are you sure you want to delete it?`
-              )}
+              deleteMessage={t`This container group is currently being by other resources. Are you sure you want to delete it?`}
             >
-              {i18n._(msg`Delete`)}
+              {t`Delete`}
             </DeleteButton>
           )}
       </CardActionsRow>
@@ -146,7 +139,7 @@ function ContainerGroupDetails({ instanceGroup }) {
         <AlertModal
           isOpen={error}
           onClose={dismissError}
-          title={i18n._(msg`Error`)}
+          title={t`Error`}
           variant="error"
         >
           <ErrorDetail error={error} />

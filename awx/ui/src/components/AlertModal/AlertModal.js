@@ -9,8 +9,7 @@ import {
   TimesCircleIcon,
 } from '@patternfly/react-icons';
 
-import { msg } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 
 const Header = styled.div`
@@ -28,7 +27,7 @@ function AlertModal({
   children,
   ...props
 }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const variantIcons = {
     danger: (
       <ExclamationCircleIcon
@@ -74,7 +73,7 @@ function AlertModal({
   return (
     <Modal
       header={customHeader}
-      aria-label={label || i18n._(msg`Alert modal`)}
+      aria-label={label || t`Alert modal`}
       aria-labelledby="alert-modal-header-label"
       isOpen={Boolean(isOpen)}
       variant="small"

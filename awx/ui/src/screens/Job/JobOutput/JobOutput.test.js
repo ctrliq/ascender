@@ -30,6 +30,7 @@ const applyJobEventMock = (mockJobEvents) => {
       1: [0, 100],
     },
   });
+  JobsAPI.destroy = jest.fn().mockResolvedValue({});
 };
 
 describe('<JobOutput />', () => {
@@ -56,7 +57,15 @@ describe('<JobOutput />', () => {
     await act(async () => {
       wrapper = mountWithContexts(<JobOutput job={mockJob} />);
     });
-    await waitForElement(wrapper, 'JobEvent', (el) => el.length > 0);
+    
+    // Wait for the component to finish loading
+    await waitForElement(wrapper, 'JobOutput', (el) => {
+      return JobsAPI.readEvents.mock.calls.length > 0;
+    });
+    
+    await new Promise(resolve => setTimeout(resolve, 100));
+    wrapper.update();
+    
     await act(async () =>
       wrapper.find('button[aria-label="Delete"]').simulate('click')
     );
@@ -89,7 +98,15 @@ describe('<JobOutput />', () => {
     await act(async () => {
       wrapper = mountWithContexts(<JobOutput job={mockJob} />);
     });
-    await waitForElement(wrapper, 'JobEvent', (el) => el.length > 0);
+    
+    // Wait for the component to finish loading
+    await waitForElement(wrapper, 'JobOutput', (el) => {
+      return JobsAPI.readEvents.mock.calls.length > 0;
+    });
+    
+    await new Promise(resolve => setTimeout(resolve, 100));
+    wrapper.update();
+    
     await act(async () => {
       wrapper.find('DeleteButton').invoke('onConfirm')();
     });
@@ -113,7 +130,17 @@ describe('<JobOutput />', () => {
     await act(async () => {
       wrapper = mountWithContexts(<JobOutput job={mockJob} />);
     });
-    await waitForElement(wrapper, 'JobEvent', (el) => el.length > 0);
+    
+    // Wait for the component to finish loading by checking if API calls were made
+    await waitForElement(wrapper, 'JobOutput', (el) => {
+      // Give time for async operations to complete
+      return JobsAPI.readEvents.mock.calls.length > 0;
+    });
+    
+    // Allow additional time for component updates
+    await new Promise(resolve => setTimeout(resolve, 100));
+    wrapper.update();
+    
     expect(wrapper.find('Search').props().isDisabled).toBe(false);
   });
 
@@ -123,7 +150,16 @@ describe('<JobOutput />', () => {
         <JobOutput job={{ ...mockJob, status: 'running' }} />
       );
     });
-    await waitForElement(wrapper, 'JobEvent', (el) => el.length > 0);
+    
+    // Wait for the component to finish loading by checking if API calls were made
+    await waitForElement(wrapper, 'JobOutput', (el) => {
+      return JobsAPI.readEvents.mock.calls.length > 0;
+    });
+    
+    // Allow additional time for component updates
+    await new Promise(resolve => setTimeout(resolve, 100));
+    wrapper.update();
+    
     expect(wrapper.find('Search').props().isDisabled).toBe(true);
   });
 

@@ -337,7 +337,7 @@ Internationalization leans on the [lingui](https://github.com/lingui/js-lingui) 
 
 The lingui library provides various React helpers for dealing with both marking strings for translation, and replacing strings that have been translated. For consistency and ease of use, we have consolidated on one pattern for the codebase. To set strings to be translated in the UI:
 
-- import the t template tag function from the @lingui/macro package.
+- import the t template tag function from the @lingui/react/macro package.
 - wrap your string using the following format: `` t`String to be translated` ``
 
 **Note:** If you have a variable string with text that needs translating, you must wrap it in `` t`${variable} string` `` where it is defined. Then you must run `npm run extract-strings` to generate new `.po` files and submit those files along with your pull request.

@@ -4,8 +4,7 @@ import { bool, func } from 'prop-types';
 import { Button, Label } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
 import { PencilAltIcon } from '@patternfly/react-icons';
-import { msg, Plural } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { Plural, useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router-dom';
 import { timeOfDay } from 'util/dates';
 import { InventoriesAPI } from 'api';
@@ -23,7 +22,7 @@ function InventoryListItem({
   onCopy,
   fetchInventories,
 }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   InventoryListItem.propTypes = {
     inventory: Inventory.isRequired,
     isSelected: bool.isRequired,
@@ -52,9 +51,9 @@ function InventoryListItem({
   const labelId = `check-action-${inventory.id}`;
 
   const typeLabel = {
-    '': i18n._(msg`Inventory`),
-    smart: i18n._(msg`Smart Inventory`),
-    constructed: i18n._(msg`Constructed Inventory`),
+    '': t`Inventory`,
+    smart: t`Smart Inventory`,
+    constructed: t`Constructed Inventory`,
   };
 
   let syncStatus = 'disabled';
@@ -71,15 +70,15 @@ function InventoryListItem({
       tooltipContent = (
         <Plural
           value={inventory.inventory_sources_with_failures}
-          one={i18n._(msg`# source with sync failures.`)}
-          other={i18n._(msg`# sources with sync failures.`)}
+          one={t`# source with sync failures.`}
+          other={t`# sources with sync failures.`}
         />
       );
     } else {
-      tooltipContent = i18n._(msg`No inventory sync failures.`);
+      tooltipContent = t`No inventory sync failures.`;
     }
   } else {
-    tooltipContent = i18n._(msg`Not configured for inventory sync.`);
+    tooltipContent = t`Not configured for inventory sync.`;
   }
 
   return (
@@ -94,9 +93,9 @@ function InventoryListItem({
           isSelected,
           onSelect,
         }}
-        dataLabel={i18n._(msg`Selected`)}
+        dataLabel={t`Selected`}
       />
-      <TdBreakWord id={labelId} dataLabel={i18n._(msg`Name`)}>
+      <TdBreakWord id={labelId} dataLabel={t`Name`}>
         {inventory.pending_deletion ? (
           <b>{inventory.name}</b>
         ) : (
@@ -105,7 +104,7 @@ function InventoryListItem({
           </Link>
         )}
       </TdBreakWord>
-      <Td dataLabel={i18n._(msg`Status`)}>
+      <Td dataLabel={t`Status`}>
         {inventory.kind === '' &&
           (inventory.has_inventory_sources ? (
             <Link
@@ -124,8 +123,8 @@ function InventoryListItem({
             <StatusLabel status={syncStatus} tooltipContent={tooltipContent} />
           ))}
       </Td>
-      <Td dataLabel={i18n._(msg`Type`)}>{typeLabel[inventory.kind]}</Td>
-      <TdBreakWord key="organization" dataLabel={i18n._(msg`Organization`)}>
+      <Td dataLabel={t`Type`}>{typeLabel[inventory.kind]}</Td>
+      <TdBreakWord key="organization" dataLabel={t`Organization`}>
         <Link
           to={`/organizations/${inventory?.summary_fields?.organization?.id}/details`}
         >
@@ -133,19 +132,19 @@ function InventoryListItem({
         </Link>
       </TdBreakWord>
       {inventory.pending_deletion ? (
-        <Td dataLabel={i18n._(msg`Groups`)}>
-          <Label color="red">{i18n._(msg`Pending delete`)}</Label>
+        <Td dataLabel={t`Groups`}>
+          <Label color="red">{t`Pending delete`}</Label>
         </Td>
       ) : (
-        <ActionsTd dataLabel={i18n._(msg`Actions`)}>
+        <ActionsTd dataLabel={t`Actions`}>
           <ActionItem
             visible={inventory.summary_fields.user_capabilities.edit}
-            tooltip={i18n._(msg`Edit Inventory`)}
+            tooltip={t`Edit Inventory`}
           >
             <Button
               ouiaId={`${inventory.id}-edit-button`}
               isDisabled={isCopying}
-              aria-label={i18n._(msg`Edit Inventory`)}
+              aria-label={t`Edit Inventory`}
               variant="plain"
               component={Link}
               to={`${getInventoryPath(inventory)}/edit`}
@@ -157,8 +156,8 @@ function InventoryListItem({
             visible={inventory.summary_fields.user_capabilities.copy}
             tooltip={
               inventory.has_inventory_sources
-                ? i18n._(msg`Inventories with sources cannot be copied`)
-                : i18n._(msg`Copy Inventory`)
+                ? t`Inventories with sources cannot be copied`
+                : t`Copy Inventory`
             }
           >
             <CopyButton
@@ -166,7 +165,7 @@ function InventoryListItem({
               isDisabled={isCopying || inventory.has_inventory_sources}
               onCopyStart={handleCopyStart}
               onCopyFinish={handleCopyFinish}
-              errorMessage={i18n._(msg`Failed to copy inventory.`)}
+              errorMessage={t`Failed to copy inventory.`}
               ouiaId={`${inventory.id}-copy-button`}
             />
           </ActionItem>

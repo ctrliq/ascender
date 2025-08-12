@@ -10,7 +10,7 @@ describe('<VariablesDetail>', () => {
     const wrapper = mountWithContexts(
       <VariablesDetail value="---foo: bar" label="Variables" name="test" />
     );
-    const input = wrapper.find('VariablesDetail___StyledCodeEditor');
+    const input = wrapper.find('CodeEditor');
     expect(input).toHaveLength(1);
     expect(input.prop('mode')).toEqual('yaml');
     expect(input.prop('value')).toEqual('---foo: bar');
@@ -21,7 +21,7 @@ describe('<VariablesDetail>', () => {
     const wrapper = mountWithContexts(
       <VariablesDetail value='{"foo": "bar"}' label="Variables" name="test" />
     );
-    const input = wrapper.find('VariablesDetail___StyledCodeEditor');
+    const input = wrapper.find('CodeEditor');
     expect(input).toHaveLength(1);
     expect(input.prop('mode')).toEqual('javascript');
   });
@@ -30,7 +30,7 @@ describe('<VariablesDetail>', () => {
     const wrapper = mountWithContexts(
       <VariablesDetail value='{"foo": "bar"}' label="Variables" name="test" />
     );
-    const input = wrapper.find('VariablesDetail___StyledCodeEditor');
+    const input = wrapper.find('CodeEditor');
     expect(input).toHaveLength(1);
     expect(input.prop('value')).toEqual('{\n  "foo": "bar"\n}');
   });
@@ -40,12 +40,12 @@ describe('<VariablesDetail>', () => {
       <VariablesDetail value="---foo: bar" label="Variables" name="test" />
     );
     wrapper.find('MultiButtonToggle').invoke('onChange')('javascript');
-    const input = wrapper.find('VariablesDetail___StyledCodeEditor');
+    const input = wrapper.find('CodeEditor');
     expect(input.prop('mode')).toEqual('javascript');
     expect(input.prop('value')).toEqual('{\n  "foo": "bar"\n}');
 
     wrapper.find('MultiButtonToggle').invoke('onChange')('yaml');
-    const input2 = wrapper.find('VariablesDetail___StyledCodeEditor');
+    const input2 = wrapper.find('CodeEditor');
     expect(input2.prop('mode')).toEqual('yaml');
     expect(input2.prop('value')).toEqual('---foo: bar');
   });
@@ -54,7 +54,7 @@ describe('<VariablesDetail>', () => {
     const wrapper = mountWithContexts(
       <VariablesDetail value="" label="Variables" name="test" />
     );
-    expect(wrapper.find('VariablesDetail___StyledCodeEditor').length).toBe(1);
+    expect(wrapper.find('CodeEditor').length).toBe(1);
     expect(wrapper.find('.pf-c-form__label').text()).toBe('Variables');
   });
 
@@ -69,7 +69,7 @@ describe('<VariablesDetail>', () => {
       value: '---bar: baz',
     });
     wrapper.update();
-    const input = wrapper.find('VariablesDetail___StyledCodeEditor');
+    const input = wrapper.find('CodeEditor');
     expect(input.prop('mode')).toEqual('javascript');
     expect(input.prop('value')).toEqual('{\n  "bar": "baz"\n}');
   });
@@ -78,7 +78,7 @@ describe('<VariablesDetail>', () => {
     const wrapper = mountWithContexts(
       <VariablesDetail value="" label="Variables" name="test" />
     );
-    const input = wrapper.find('VariablesDetail___StyledCodeEditor');
+    const input = wrapper.find('CodeEditor');
     expect(input.prop('value')).toEqual('---');
   });
 
@@ -90,7 +90,7 @@ describe('<VariablesDetail>', () => {
       wrapper.find('MultiButtonToggle').invoke('onChange')('javascript');
     });
     wrapper.setProps({ value: '' });
-    const input = wrapper.find('VariablesDetail___StyledCodeEditor');
+    const input = wrapper.find('CodeEditor');
     expect(input.prop('value')).toEqual('{}');
   });
 });

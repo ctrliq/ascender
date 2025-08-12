@@ -1,7 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 import { func, shape } from 'prop-types';
 import { WorkflowJobTemplatesAPI } from 'api';
 import { getQSConfig, parseQueryString } from 'util/qs';
@@ -22,7 +21,7 @@ const QS_CONFIG = getQSConfig('workflow-job-templates', {
 
 function WorkflowJobTemplatesList({ nodeResource, onUpdateNodeResource }) {
   const location = useLocation();
-  const { i18n } = useLingui();
+  const { t } = useLingui();
 
   const {
     result: {
@@ -73,7 +72,7 @@ function WorkflowJobTemplatesList({ nodeResource, onUpdateNodeResource }) {
       qsConfig={QS_CONFIG}
       headerRow={
         <HeaderRow isExpandable={false} qsConfig={QS_CONFIG}>
-          <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
+          <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
         </HeaderRow>
       }
       renderRow={(item, index) => (
@@ -93,24 +92,24 @@ function WorkflowJobTemplatesList({ nodeResource, onUpdateNodeResource }) {
       showPageSizeOptions={false}
       toolbarSearchColumns={[
         {
-          name: i18n._(msg`Name`),
+          name: t`Name`,
           key: 'name__icontains',
           isDefault: true,
         },
         {
-          name: i18n._(msg`Organization (Name)`),
+          name: t`Organization (Name)`,
           key: 'organization__name__icontains',
         },
         {
-          name: i18n._(msg`Inventory (Name)`),
+          name: t`Inventory (Name)`,
           key: 'inventory__name__icontains',
         },
         {
-          name: i18n._(msg`Created By (Username)`),
+          name: t`Created By (Username)`,
           key: 'created_by__username__icontains',
         },
         {
-          name: i18n._(msg`Modified By (Username)`),
+          name: t`Modified By (Username)`,
           key: 'modified_by__username__icontains',
         },
       ]}

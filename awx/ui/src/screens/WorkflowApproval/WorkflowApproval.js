@@ -1,6 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 
 import { Card, PageSection } from '@patternfly/react-core';
 import { CaretLeftIcon } from '@patternfly/react-icons';
@@ -20,7 +19,7 @@ import { WorkflowApprovalsAPI } from 'api';
 import WorkflowApprovalDetail from './WorkflowApprovalDetail';
 
 function WorkflowApproval({ setBreadcrumb }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const { id: workflowApprovalId } = useParams();
   const match = useRouteMatch();
   const location = useLocation();
@@ -51,9 +50,9 @@ function WorkflowApproval({ setBreadcrumb }) {
           <ContentError error={error}>
             {error.response.status === 404 && (
               <span>
-                {i18n._(msg`Workflow Approval not found.`)}{' '}
+                {t`Workflow Approval not found.`}{' '}
                 <Link to="/workflow_approvals">
-                  {i18n._(msg`View all Workflow Approvals.`)}
+                  {t`View all Workflow Approvals.`}
                 </Link>
               </span>
             )}
@@ -68,7 +67,7 @@ function WorkflowApproval({ setBreadcrumb }) {
       name: (
         <>
           <CaretLeftIcon />
-          {i18n._(msg`Back to Workflow Approvals`)}
+          {t`Back to Workflow Approvals`}
         </>
       ),
       link: `/workflow_approvals`,
@@ -76,7 +75,7 @@ function WorkflowApproval({ setBreadcrumb }) {
       id: 99,
     },
     {
-      name: i18n._(msg`Details`),
+      name: t`Details`,
       link: `${match.url}/details`,
       id: 0,
     },
@@ -104,7 +103,7 @@ function WorkflowApproval({ setBreadcrumb }) {
               <ContentError isNotFound>
                 {match.params.id && (
                   <Link to={`/workflow_approvals/${match.params.id}/details`}>
-                    {i18n._(msg`View Workflow Approval Details`)}
+                    {t`View Workflow Approval Details`}
                   </Link>
                 )}
               </ContentError>

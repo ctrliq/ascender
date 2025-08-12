@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { msg } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import {
@@ -46,7 +45,7 @@ const WFDetailList = styled(DetailList)`
 `;
 
 function WorkflowApprovalDetail({ workflowApproval, fetchWorkflowApproval }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const { id: workflowApprovalId } = useParams();
   const history = useHistory();
   const { addToast, Toast, toastProps } = useToast();
@@ -119,21 +118,21 @@ function WorkflowApprovalDetail({ workflowApproval, fetchWorkflowApproval }) {
     <CardBody>
       <DetailList gutter="sm">
         <Detail
-          label={i18n._(msg`Name`)}
+          label={t`Name`}
           value={workflowApproval.name}
           dataCy="wa-detail-name"
         />
         <Detail
-          label={i18n._(msg`Description`)}
+          label={t`Description`}
           value={workflowApproval.description}
           dataCy="wa-detail-description"
         />
         {workflowApproval.status === 'pending' && (
           <Detail
-            label={i18n._(msg`Expires`)}
+            label={t`Expires`}
             value={
               <StatusLabel status={workflowApproval.status}>
-                {getDetailPendingLabel(workflowApproval, i18n)}
+                {getDetailPendingLabel(workflowApproval, t)}
               </StatusLabel>
             }
             dataCy="wa-detail-expires"
@@ -141,14 +140,14 @@ function WorkflowApprovalDetail({ workflowApproval, fetchWorkflowApproval }) {
         )}
         {workflowApproval.status !== 'pending' && (
           <Detail
-            label={i18n._(msg`Status`)}
-            value={<StatusLabel status={getStatus(workflowApproval, i18n)} />}
+            label={t`Status`}
+            value={<StatusLabel status={getStatus(workflowApproval, t)} />}
             dataCy="wa-detail-status"
           />
         )}
         {workflowApproval.summary_fields.approved_or_denied_by && (
           <Detail
-            label={i18n._(msg`Actor`)}
+            label={t`Actor`}
             value={
               <Link
                 to={`/users/${workflowApproval.summary_fields.approved_or_denied_by.id}`}
@@ -160,12 +159,12 @@ function WorkflowApprovalDetail({ workflowApproval, fetchWorkflowApproval }) {
           />
         )}
         <Detail
-          label={i18n._(msg`Explanation`)}
+          label={t`Explanation`}
           value={workflowApproval.job_explanation}
           dataCy="wa-detail-explanation"
         />
         <Detail
-          label={i18n._(msg`Workflow Job Template`)}
+          label={t`Workflow Job Template`}
           value={
             sourceWorkflowJobTemplate && (
               <Link
@@ -178,60 +177,60 @@ function WorkflowApprovalDetail({ workflowApproval, fetchWorkflowApproval }) {
           dataCy="wa-detail-source-workflow"
         />
         <UserDateDetail
-          label={i18n._(msg`Created`)}
+          label={t`Created`}
           date={workflowApproval.created}
           user={workflowApproval.summary_fields.created_by}
         />
         <Detail
-          label={i18n._(msg`Last Modified`)}
+          label={t`Last Modified`}
           value={formatDateString(workflowApproval.modified)}
         />
         <Detail
-          label={i18n._(msg`Finished`)}
+          label={t`Finished`}
           value={formatDateString(workflowApproval.finished)}
         />
         <Detail
-          label={i18n._(msg`Canceled`)}
+          label={t`Canceled`}
           value={formatDateString(workflowApproval.canceled_on)}
         />
         <Detail
-          label={i18n._(msg`Elapsed`)}
+          label={t`Elapsed`}
           value={secondsToHHMMSS(workflowApproval.elapsed)}
         />
       </DetailList>
-      <Title headingLevel="h2">{i18n._(msg`Workflow job details`)}</Title>
+      <Title headingLevel="h2">{t`Workflow job details`}</Title>
       <Divider />
       <WFDetailList gutter="sm">
         <Detail
-          label={i18n._(msg`Workflow Job`)}
+          label={t`Workflow Job`}
           value={
             sourceWorkflowJob && sourceWorkflowJob?.id ? (
               <Link to={`/jobs/workflow/${sourceWorkflowJob?.id}`}>
                 {`${sourceWorkflowJob?.id} - ${sourceWorkflowJob?.name}`}
               </Link>
             ) : (
-              i18n._(msg`Deleted`)
+              t`Deleted`
             )
           }
           dataCy="wa-detail-source-job"
         />
         {workflowJob?.limit ? (
           <Detail
-            label={i18n._(msg`Limit`)}
+            label={t`Limit`}
             value={workflowJob.limit}
             dataCy="wa-detail-source-job-limit"
           />
         ) : null}
         {workflowJob?.scm_branch ? (
           <Detail
-            label={i18n._(msg`Source Control Branch`)}
+            label={t`Source Control Branch`}
             value={workflowJob.scm_branch}
             dataCy="wa-detail-source-job-scm"
           />
         ) : null}
         {workflowJob?.summary_fields?.inventory ? (
           <Detail
-            label={i18n._(msg`Inventory`)}
+            label={t`Inventory`}
             value={
               workflowJob.summary_fields.inventory ? (
                 <Link
@@ -252,7 +251,7 @@ function WorkflowApprovalDetail({ workflowApproval, fetchWorkflowApproval }) {
         ) : null}
         <Detail
           fullWidth
-          label={i18n._(msg`Labels`)}
+          label={t`Labels`}
           value={
             <ChipGroup
               numChips={5}
@@ -272,7 +271,7 @@ function WorkflowApprovalDetail({ workflowApproval, fetchWorkflowApproval }) {
           <VariablesDetail
             dataCy="wa-detail-variables"
             id="wa-detail-extra-vars"
-            label={i18n._(msg`Variables`)}
+            label={t`Variables`}
             name="extra_vars"
             rows={5}
             value={workflowJob.extra_vars}
@@ -298,29 +297,27 @@ function WorkflowApprovalDetail({ workflowApproval, fetchWorkflowApproval }) {
                 onCancelWorkflow={() =>
                   handleToast(
                     workflowApproval.summary_fields.source_workflow_job.id,
-                    i18n._(msg`Workflow Cancelled `)
+                    t`Workflow Cancelled `
                   )
                 }
-                title={i18n._(msg`Cancel Workflow`)}
+                title={t`Cancel Workflow`}
                 job={{
                   ...workflowApproval.summary_fields.source_workflow_job,
                   type: 'workflow_job',
                 }}
-                buttonText={i18n._(msg`Cancel Workflow`)}
-                cancelationMessage={i18n._(
-                  msg`This will cancel all subsequent nodes in this workflow.`
-                )}
+                buttonText={t`Cancel Workflow`}
+                cancelationMessage={t`This will cancel all subsequent nodes in this workflow.`}
               />
             </>
           )}
         {showDeleteButton && (
           <DeleteButton
             name={workflowApproval.name}
-            modalTitle={i18n._(msg`Delete Workflow Approval`)}
+            modalTitle={t`Delete Workflow Approval`}
             onConfirm={deleteWorkflowApproval}
             isDisabled={isLoading}
           >
-            {i18n._(msg`Delete`)}
+            {t`Delete`}
           </DeleteButton>
         )}
       </CardActionsRow>
@@ -328,10 +325,10 @@ function WorkflowApprovalDetail({ workflowApproval, fetchWorkflowApproval }) {
         <AlertModal
           isOpen={deleteError}
           variant="error"
-          title={i18n._(msg`Error!`)}
+          title={t`Error!`}
           onClose={dismissDeleteError}
         >
-          {i18n._(msg`Failed to delete workflow approval.`)}
+          {t`Failed to delete workflow approval.`}
           <ErrorDetail error={deleteError} />
         </AlertModal>
       )}

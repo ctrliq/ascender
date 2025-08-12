@@ -1,7 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { Link, Redirect, useRouteMatch } from 'react-router-dom';
-import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { CardBody, CardActionsRow } from 'components/Card';
@@ -16,7 +15,7 @@ import { SettingsAPI } from 'api';
 import { SettingDetail } from '../../shared';
 
 function GitHubDetail() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const { me } = useConfig();
   const { GET: options } = useSettings();
 
@@ -76,39 +75,39 @@ function GitHubDetail() {
       name: (
         <>
           <CaretLeftIcon />
-          {i18n._(msg`Back to Settings`)}
+          {t`Back to Settings`}
         </>
       ),
       link: `/settings`,
       id: 99,
     },
     {
-      name: i18n._(msg`GitHub Default`),
+      name: t`GitHub Default`,
       link: `${baseURL}/default/details`,
       id: 0,
     },
     {
-      name: i18n._(msg`GitHub Organization`),
+      name: t`GitHub Organization`,
       link: `${baseURL}/organization/details`,
       id: 1,
     },
     {
-      name: i18n._(msg`GitHub Team`),
+      name: t`GitHub Team`,
       link: `${baseURL}/team/details`,
       id: 2,
     },
     {
-      name: i18n._(msg`GitHub Enterprise`),
+      name: t`GitHub Enterprise`,
       link: `${baseURL}/enterprise/details`,
       id: 3,
     },
     {
-      name: i18n._(msg`GitHub Enterprise Organization`),
+      name: t`GitHub Enterprise Organization`,
       link: `${baseURL}/enterprise_organization/details`,
       id: 4,
     },
     {
-      name: i18n._(msg`GitHub Enterprise Team`),
+      name: t`GitHub Enterprise Team`,
       link: `${baseURL}/enterprise_team/details`,
       id: 5,
     },
@@ -146,11 +145,11 @@ function GitHubDetail() {
           <CardActionsRow>
             <Button
               ouiaId="github-detail-edit-button"
-              aria-label={i18n._(msg`Edit`)}
+              aria-label={t`Edit`}
               component={Link}
               to={`${baseURL}/${category}/edit`}
             >
-              {i18n._(msg`Edit`)}
+              {t`Edit`}
             </Button>
           </CardActionsRow>
         )}

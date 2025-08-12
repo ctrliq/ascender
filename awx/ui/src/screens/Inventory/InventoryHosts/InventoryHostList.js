@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
-import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 import { getQSConfig, parseQueryString } from 'util/qs';
 import { InventoriesAPI, HostsAPI } from 'api';
 import useRequest, { useDeleteItems } from 'hooks/useRequest';
@@ -26,7 +25,7 @@ const QS_CONFIG = getQSConfig('host', {
 });
 
 function InventoryHostList() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const [isAdHocLaunchLoading, setIsAdHocLaunchLoading] = useState(false);
   const { id } = useParams();
   const { search } = useLocation();
@@ -111,39 +110,39 @@ function InventoryHostList() {
         hasContentLoading={isLoading || isDeleteLoading || isAdHocLaunchLoading}
         items={hosts}
         itemCount={hostCount}
-        pluralizedItemName={i18n._(msg`Hosts`)}
+        pluralizedItemName={t`Hosts`}
         qsConfig={QS_CONFIG}
         clearSelected={clearSelected}
         toolbarSearchableKeys={searchableKeys}
         toolbarRelatedSearchableKeys={relatedSearchableKeys}
         toolbarSearchColumns={[
           {
-            name: i18n._(msg`Name`),
+            name: t`Name`,
             key: 'name__icontains',
             isDefault: true,
           },
           {
-            name: i18n._(msg`Description`),
+            name: t`Description`,
             key: 'description__icontains',
           },
           {
-            name: i18n._(msg`Created By (Username)`),
+            name: t`Created By (Username)`,
             key: 'created_by__username__icontains',
           },
           {
-            name: i18n._(msg`Modified By (Username)`),
+            name: t`Modified By (Username)`,
             key: 'modified_by__username__icontains',
           },
         ]}
         headerRow={
           <HeaderRow qsConfig={QS_CONFIG}>
-            <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
-            <HeaderCell>{i18n._(msg`Activity`)}</HeaderCell>
+            <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
+            <HeaderCell>{t`Activity`}</HeaderCell>
             <HeaderCell sortKey="description">
-              {i18n._(msg`Description`)}
+              {t`Description`}
             </HeaderCell>
-            <HeaderCell>{i18n._(msg`Related Groups`)}</HeaderCell>
-            <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
+            <HeaderCell>{t`Related Groups`}</HeaderCell>
+            <HeaderCell>{t`Actions`}</HeaderCell>
           </HeaderRow>
         }
         renderToolbar={(props) => (
@@ -175,7 +174,7 @@ function InventoryHostList() {
                 key="delete"
                 onDelete={handleDeleteHosts}
                 itemsToDelete={selected}
-                pluralizedItemName={i18n._(msg`Hosts`)}
+                pluralizedItemName={t`Hosts`}
               />,
             ]}
           />
@@ -204,10 +203,10 @@ function InventoryHostList() {
         <AlertModal
           isOpen={deletionError}
           variant="error"
-          title={i18n._(msg`Error!`)}
+          title={t`Error!`}
           onClose={clearDeletionError}
         >
-          {i18n._(msg`Failed to delete one or more hosts.`)}
+          {t`Failed to delete one or more hosts.`}
           <ErrorDetail error={deletionError} />
         </AlertModal>
       )}

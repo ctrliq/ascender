@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 
-import { msg } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import PropTypes from 'prop-types';
 import { Button, DropdownItem, Tooltip } from '@patternfly/react-core';
 import { KebabifiedContext } from 'contexts/Kebabified';
@@ -12,12 +11,12 @@ function cannotApprove(item) {
 }
 
 function WorkflowApprovalListApproveButton({ onApprove, selectedItems }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const { isKebabified } = useContext(KebabifiedContext);
 
   const renderTooltip = () => {
     if (selectedItems.length === 0) {
-      return i18n._(msg`Select a row to approve`);
+      return t`Select a row to approve`;
     }
 
     const itemsUnableToApprove = selectedItems
@@ -26,12 +25,10 @@ function WorkflowApprovalListApproveButton({ onApprove, selectedItems }) {
       .join(', ');
 
     if (selectedItems.some(cannotApprove)) {
-      return i18n._(
-        msg`You are unable to act on the following workflow approvals: ${itemsUnableToApprove}`
-      );
+      return t`You are unable to act on the following workflow approvals: ${itemsUnableToApprove}`;
     }
 
-    return i18n._(msg`Approve`);
+    return t`Approve`;
   };
 
   const isDisabled =
@@ -47,7 +44,7 @@ function WorkflowApprovalListApproveButton({ onApprove, selectedItems }) {
           component="button"
           onClick={onApprove}
         >
-          {i18n._(msg`Approve`)}
+          {t`Approve`}
         </DropdownItem>
       ) : (
         <Tooltip content={renderTooltip()} position="top">
@@ -55,11 +52,11 @@ function WorkflowApprovalListApproveButton({ onApprove, selectedItems }) {
             <Button
               ouiaId="workflow-approval-approve-button"
               isDisabled={isDisabled}
-              aria-label={i18n._(msg`Approve`)}
+              aria-label={t`Approve`}
               variant="primary"
               onClick={onApprove}
             >
-              {i18n._(msg`Approve`)}
+              {t`Approve`}
             </Button>
           </div>
         </Tooltip>

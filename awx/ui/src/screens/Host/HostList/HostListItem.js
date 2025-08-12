@@ -2,8 +2,7 @@ import 'styled-components/macro';
 import React from 'react';
 import { string, bool, func } from 'prop-types';
 
-import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 
 import { Button } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
@@ -15,7 +14,7 @@ import HostToggle from 'components/HostToggle';
 import Sparkline from 'components/Sparkline';
 
 function HostListItem({ host, isSelected, onSelect, detailUrl, rowIndex }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const labelId = `check-action-${host.id}`;
 
   const {
@@ -31,9 +30,9 @@ function HostListItem({ host, isSelected, onSelect, detailUrl, rowIndex }) {
           isSelected,
           onSelect,
         }}
-        dataLabel={i18n._(msg`Selected`)}
+        dataLabel={t`Selected`}
       />
-      <TdBreakWord id={labelId} dataLabel={i18n._(msg`Name`)}>
+      <TdBreakWord id={labelId} dataLabel={t`Name`}>
         <Link to={`${detailUrl}`}>
           <b>{host.name}</b>
         </Link>
@@ -42,16 +41,16 @@ function HostListItem({ host, isSelected, onSelect, detailUrl, rowIndex }) {
         {recentJobs.length > 0 ? (
           <Sparkline jobs={recentJobs} />
         ) : (
-          i18n._(msg`No job data available`)
+          t`No job data available`
         )}
       </Td>
       <TdBreakWord
         id={`host-description-${host.id}}`}
-        dataLabel={i18n._(msg`Description`)}
+        dataLabel={t`Description`}
       >
         {host.description}
       </TdBreakWord>
-      <TdBreakWord dataLabel={i18n._(msg`Inventory`)}>
+      <TdBreakWord dataLabel={t`Inventory`}>
         {host.summary_fields.inventory && (
           <Link
             to={`/inventories/inventory/${host.summary_fields.inventory.id}/details`}
@@ -60,15 +59,15 @@ function HostListItem({ host, isSelected, onSelect, detailUrl, rowIndex }) {
           </Link>
         )}
       </TdBreakWord>
-      <ActionsTd dataLabel={i18n._(msg`Actions`)} gridColumns="auto 40px">
+      <ActionsTd dataLabel={t`Actions`} gridColumns="auto 40px">
         <HostToggle host={host} />
         <ActionItem
           visible={host.summary_fields.user_capabilities.edit}
-          tooltip={i18n._(msg`Edit Host`)}
+          tooltip={t`Edit Host`}
         >
           <Button
             ouiaId={`${host.id}-edit-button}`}
-            aria-label={i18n._(msg`Edit Host`)}
+            aria-label={t`Edit Host`}
             variant="plain"
             component={Link}
             to={`/hosts/${host.id}/edit`}

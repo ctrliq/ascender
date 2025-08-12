@@ -171,16 +171,19 @@ describe('<InventoryGroupHostList />', () => {
     );
   });
 
-  test('should show associate host modal when adding an existing host', () => {
-    const dropdownToggle = wrapper.find(
-      'ToolbarAddButton button[aria-label="Add"]'
-    );
-    dropdownToggle.simulate('click');
+  test('should show associate host modal when adding an existing host', async () => {
+    const dropdownToggle = wrapper.find('ToolbarAddButton');
+    act(() => {
+      dropdownToggle.prop('onClick')();
+    });
+    wrapper.update();
 
-    wrapper
-      .find('DropdownItem[aria-label="Add existing host"]')
-      .simulate('click');
-    expect(wrapper.find('AssociateModal').length).toBe(1);
+    await act(async () => {
+      wrapper
+        .find('DropdownItem[aria-label="Add existing host"]')
+        .prop('onClick')();
+    });
+    await waitForElement(wrapper, 'AssociateModal', (el) => el.length === 1);
     wrapper.find('ModalBoxCloseButton').simulate('click');
     expect(wrapper.find('AssociateModal').length).toBe(0);
   });
@@ -193,11 +196,14 @@ describe('<InventoryGroupHostList />', () => {
         results: [{ id: 123, name: 'foo', url: '/api/v2/hosts/123/' }],
       },
     });
-    wrapper.find('ToolbarAddButton button[aria-label="Add"]').simulate('click');
+    act(() => {
+      wrapper.find('ToolbarAddButton').prop('onClick')();
+    });
+    wrapper.update();
     await act(async () => {
       wrapper
         .find('DropdownItem[aria-label="Add existing host"]')
-        .simulate('click');
+        .prop('onClick')();
     });
     await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
     await act(async () => {
@@ -263,11 +269,13 @@ describe('<InventoryGroupHostList />', () => {
       });
     });
     await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    const dropdownToggle = wrapper.find(
-      'ToolbarAddButton button[aria-label="Add"]'
-    );
-    dropdownToggle.simulate('click');
-    wrapper.find('DropdownItem[aria-label="Add new host"]').simulate('click');
+    await act(async () => {
+      wrapper.find('ToolbarAddButton').prop('onClick')();
+    });
+    wrapper.update();
+    await act(async () => {
+      wrapper.find('[ouiaId="add-new-host-dropdown-item"]').simulate('click');
+    });
     wrapper.update();
     expect(history.location.pathname).toEqual(
       '/inventories/inventory/1/groups/2/nested_hosts/add'

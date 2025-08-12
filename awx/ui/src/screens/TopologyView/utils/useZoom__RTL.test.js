@@ -1,8 +1,25 @@
 import React from 'react';
 import { render, fireEvent, waitFor, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { I18nProvider } from '@lingui/react';
+import { i18n } from '@lingui/core';
+import { en } from 'make-plural/plurals';
 import useZoom from './useZoom';
 import Header from '../Header';
+
+// Initialize i18n for tests
+i18n.loadLocaleData('en', { plurals: en });
+i18n.load('en', {});
+i18n.activate('en');
+
+// Helper function to render components with I18n context
+function renderWithI18n(component) {
+  return render(
+    <I18nProvider i18n={i18n}>
+      {component}
+    </I18nProvider>
+  );
+}
 
 afterEach(() => {
   jest.clearAllMocks();
@@ -26,7 +43,7 @@ describe('useZoom', () => {
   test('user can zoom in', async () => {
     const hook = useZoom('.parent', '.child');
     jest.spyOn(hook, 'zoomIn').mockReturnValueOnce(jest.fn());
-    render(
+    renderWithI18n(
       <>
         <Header
           title={`Topology View`}
@@ -53,7 +70,7 @@ describe('useZoom', () => {
   test('user can zoom out', async () => {
     const hook = useZoom('.parent', '.child');
     jest.spyOn(hook, 'zoomOut').mockReturnValueOnce(jest.fn());
-    render(
+    renderWithI18n(
       <>
         <Header
           title={`Topology View`}
@@ -80,7 +97,7 @@ describe('useZoom', () => {
   test('user can zoom fit', async () => {
     const hook = useZoom('.parent', '.child');
     jest.spyOn(hook, 'zoomFit').mockReturnValueOnce(jest.fn());
-    render(
+    renderWithI18n(
       <>
         <Header
           title={`Topology View`}
@@ -107,7 +124,7 @@ describe('useZoom', () => {
   test('user can reset zoom', async () => {
     const hook = useZoom('.parent', '.child');
     jest.spyOn(hook, 'resetZoom').mockReturnValueOnce(jest.fn());
-    render(
+    renderWithI18n(
       <>
         <Header
           title={`Topology View`}

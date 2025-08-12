@@ -219,7 +219,7 @@ describe('<UserRolesList />', () => {
     });
     wrapper.update();
     await act(async () =>
-      wrapper.find('Button[aria-label="Add"]').prop('onClick')()
+      wrapper.find('Button[ouiaId="role-add-button"]').prop('onClick')()
     );
     wrapper.update();
     expect(wrapper.find('PFWizard').length).toBe(1);

@@ -1,7 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLocation, useRouteMatch } from 'react-router-dom';
-import { useLingui } from '@lingui/react';
-import { msg, Plural } from '@lingui/macro';
+import { Plural, useLingui } from '@lingui/react/macro';
 import { Card, PageSection } from '@patternfly/react-core';
 
 import { CredentialTypesAPI } from 'api';
@@ -28,7 +27,7 @@ const QS_CONFIG = getQSConfig('credential-type', {
 });
 
 function CredentialTypeList() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const location = useLocation();
   const match = useRouteMatch();
 
@@ -103,7 +102,7 @@ function CredentialTypeList() {
 
   const canAdd = actions && actions.POST;
 
-  const deleteDetailsRequests = relatedResourceDeleteRequests.credentialType(
+  const deleteDetailsRequests = relatedResourceDeleteRequests(t).credentialType(
     selected[0]
   );
 
@@ -116,25 +115,25 @@ function CredentialTypeList() {
             hasContentLoading={isLoading || deleteLoading}
             items={credentialTypes}
             itemCount={credentialTypesCount}
-            pluralizedItemName={i18n._(msg`Credential Types`)}
+            pluralizedItemName={t`Credential Types`}
             qsConfig={QS_CONFIG}
             clearSelected={clearSelected}
             toolbarSearchColumns={[
               {
-                name: i18n._(msg`Name`),
+                name: t`Name`,
                 key: 'name__icontains',
                 isDefault: true,
               },
               {
-                name: i18n._(msg`Description`),
+                name: t`Description`,
                 key: 'description__icontains',
               },
               {
-                name: i18n._(msg`Created By (Username)`),
+                name: t`Created By (Username)`,
                 key: 'created_by__username__icontains',
               },
               {
-                name: i18n._(msg`Modified By (Username)`),
+                name: t`Modified By (Username)`,
                 key: 'modified_by__username__icontains',
               },
             ]}
@@ -159,7 +158,7 @@ function CredentialTypeList() {
                     key="delete"
                     onDelete={handleDelete}
                     itemsToDelete={selected}
-                    pluralizedItemName={i18n._(msg`Credential Types`)}
+                    pluralizedItemName={t`Credential Types`}
                     deleteDetailsRequests={deleteDetailsRequests}
                     deleteMessage={
                       <Plural
@@ -174,8 +173,8 @@ function CredentialTypeList() {
             )}
             headerRow={
               <HeaderRow qsConfig={QS_CONFIG}>
-                <HeaderCell sortKey="name">{i18n._(msg`Name`)}</HeaderCell>
-                <HeaderCell>{i18n._(msg`Actions`)}</HeaderCell>
+                <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
+                <HeaderCell>{t`Actions`}</HeaderCell>
               </HeaderRow>
             }
             renderRow={(credentialType, index) => (
@@ -200,13 +199,13 @@ function CredentialTypeList() {
         </Card>
       </PageSection>
       <AlertModal
-        aria-label={i18n._(msg`Deletion error`)}
+        aria-label={t`Deletion error`}
         isOpen={deletionError}
         onClose={clearDeletionError}
-        title={i18n._(msg`Error`)}
+        title={t`Error`}
         variant="error"
       >
-        {i18n._(msg`Failed to delete one or more credential types.`)}
+        {t`Failed to delete one or more credential types.`}
         <ErrorDetail error={deletionError} />
       </AlertModal>
     </>

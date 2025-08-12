@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useLingui } from '@lingui/react';
-import { msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react/macro';
 import { useParams, useLocation } from 'react-router-dom';
 import PaginatedTable, { getSearchableKeys } from 'components/PaginatedTable';
 import { getQSConfig, parseQueryString } from 'util/qs';
@@ -10,6 +9,7 @@ import AlertModal from 'components/AlertModal';
 import useRequest, { useDeleteItems } from 'hooks/useRequest';
 import useSelected from 'hooks/useSelected';
 import DatalistToolbar from 'components/DataListToolbar';
+import ToolbarDeleteButton from 'components/PaginatedTable/ToolbarDeleteButton';
 import ApplicationTokenListItem from './ApplicationTokenListItem';
 
 const QS_CONFIG = getQSConfig('applications', {
@@ -19,7 +19,7 @@ const QS_CONFIG = getQSConfig('applications', {
 });
 
 function ApplicationTokenList() {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const { id } = useParams();
   const location = useLocation();
   const {
@@ -98,11 +98,11 @@ function ApplicationTokenList() {
         hasContentLoading={isLoading || deleteLoading}
         items={tokens}
         itemCount={itemCount}
-        pluralizedItemName={i18n._(msg`Tokens`)}
+        pluralizedItemName={t`Tokens`}
         qsConfig={QS_CONFIG}
         toolbarSearchColumns={[
           {
-            name: i18n._(msg`Name`),
+            name: t`Name`,
             key: 'user__username__icontains',
             isDefault: true,
           },
@@ -115,9 +115,14 @@ function ApplicationTokenList() {
             {...props}
             isAllSelected={isAllSelected}
             onSelectAll={selectAll}
-            deleteButtonText={i18n._(msg`Delete selected tokens`)}
-            onDelete={handleDelete}
-            isDeleteDisabled={!selected.length}
+            additionalControls={[
+              <ToolbarDeleteButton
+                key="delete"
+                onDelete={handleDelete}
+                itemsToDelete={selected}
+                pluralizedItemName={t`Tokens`}
+              />,
+            ]}
           />
         )}
         renderRow={(token) => (
@@ -127,14 +132,14 @@ function ApplicationTokenList() {
             isSelected={selected.some((row) => row.id === token.id)}
             onSelect={() => handleSelect(token)}
             detailUrl={`/applications/${id}/tokens/${token.id}/details`}
-            rowIndex={tokens.findIndex((t) => t.id === token.id)}
+            rowIndex={tokens.findIndex((to) => to.id === token.id)}
           />
         )}
       />
       <AlertModal
         isOpen={Boolean(deletionError)}
         variant="danger"
-        title={i18n._(msg`Error deleting tokens`)}
+        title={t`Error deleting tokens`}
         onClose={clearDeletionError}
       >
         <ErrorDetail error={deletionError} />

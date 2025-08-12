@@ -9,8 +9,7 @@ import {
   bool,
 } from 'prop-types';
 
-import { msg } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { useLingui } from '@lingui/react/macro';
 import { FormSelect, FormSelectOption } from '@patternfly/react-core';
 
 function AnsibleSelect({
@@ -24,7 +23,7 @@ function AnsibleSelect({
   onChange,
   name,
 }) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
   const onSelectChange = (val, event) => {
     event.target.name = name;
     onChange(event, val);
@@ -37,7 +36,7 @@ function AnsibleSelect({
       value={value}
       onChange={onSelectChange}
       onBlur={onBlur}
-      aria-label={i18n._(msg`Select Input`)}
+      aria-label={t`Select Input`}
       validated={isValid ? 'default' : 'error'}
       className={className}
       isDisabled={isDisabled}
