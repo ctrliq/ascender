@@ -1,4 +1,8 @@
 import React from 'react';
+import { I18nProvider } from '@lingui/react';
+import { i18n } from '@lingui/core';
+import { en } from 'make-plural/plurals';
+import english from '../../../locales/en/messages';
 import { InventoriesAPI } from 'api';
 import ConstructedInventorySyncButton from './ConstructedInventorySyncButton';
 import { render, fireEvent, screen, waitFor } from '@testing-library/react';
@@ -10,8 +14,16 @@ const inventory = { id: 100, name: 'Constructed Inventory' };
 
 describe('<ConstructedInventorySyncButton />', () => {
   const Component = () => (
-    <ConstructedInventorySyncButton inventoryId={inventory.id} />
+    <I18nProvider i18n={i18n}>
+      <ConstructedInventorySyncButton inventoryId={inventory.id} />
+    </I18nProvider>
   );
+
+  beforeEach(() => {
+    i18n.loadLocaleData({ en: { plurals: en } });
+    i18n.load({ en: english });
+    i18n.activate('en');
+  });
 
   test('should render start sync button', () => {
     render(<Component />);

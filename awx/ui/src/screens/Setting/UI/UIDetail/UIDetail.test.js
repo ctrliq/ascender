@@ -56,10 +56,15 @@ describe('<UIDetail />', () => {
   test('should render expected details', () => {
     assertDetail(wrapper, 'User Analytics Tracking State', 'off');
     assertDetail(wrapper, 'Custom Login Info', 'mock info');
-    expect(wrapper.find('Detail[label="Custom Logo"] dt').text()).toBe(
-      'Custom Logo'
+    assertDetail(wrapper, 'Disable Menu Gradient', 'On');
+    expect(wrapper.find('Detail[label="Custom Login Logo"] dt').text()).toBe(
+      'Custom Login Logo'
     );
-    expect(wrapper.find('Detail[label="Custom Logo"] dd img').length).toBe(1);
+    expect(wrapper.find('Detail[label="Custom Login Logo"] dd img').length).toBe(1);
+    expect(wrapper.find('Detail[label="Custom Menu Logo"] dt').text()).toBe(
+      'Custom Menu Logo'
+    );
+    expect(wrapper.find('Detail[label="Custom Menu Logo"] dd img').length).toBe(1);
   });
 
   test('should hide edit button from non-superusers', async () => {

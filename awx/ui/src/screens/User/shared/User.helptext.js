@@ -1,4 +1,4 @@
-import { t } from '@lingui/react/macro';
+import { t } from '@lingui/core/macro';
 
 const userHelpTextStrings = () => ({
   application: t`The application that this token belongs to, or leave this field empty to create a Personal Access Token.`,

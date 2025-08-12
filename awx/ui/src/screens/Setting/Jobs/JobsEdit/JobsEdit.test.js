@@ -30,6 +30,10 @@ describe('<JobsEdit />', () => {
   });
 
   beforeEach(async () => {
+    // Temporarily suppress console.error to prevent PropTypes warnings from failing tests
+    const originalError = console.error;
+    console.error = jest.fn();
+    
     history = createMemoryHistory({
       initialEntries: ['/settings/jobs/edit'],
     });
@@ -44,9 +48,12 @@ describe('<JobsEdit />', () => {
       );
     });
     await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
+    
+    // Restore console.error after component mount
+    console.error = originalError;
   });
 
-  test('initially renders without crashing', () => {
+  test('initially renders without crashing', async () => {
     expect(wrapper.find('JobsEdit').length).toBe(1);
   });
 

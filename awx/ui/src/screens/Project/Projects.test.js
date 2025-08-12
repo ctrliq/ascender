@@ -1,10 +1,10 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
 import { _Projects as Projects } from './Projects';
 
 describe('<Projects />', () => {
   test('should display a breadcrumb heading', () => {
-    const wrapper = shallow(<Projects />);
+    const wrapper = mountWithContexts(<Projects />);
 
     const header = wrapper.find('ScreenHeader');
     expect(header.prop('streamType')).toBe('project');

@@ -156,16 +156,17 @@ describe('<DataListToolbar />', () => {
     const qsConfig = {
       namespace: 'organization',
       dateFields: ['modified', 'created'],
-      defaultParams: { page: 1, page_size: 5, order_by: 'id' },
+      defaultParams: { page: 1, page_size: 5, order_by: 'name' },
       integerFields: ['page', 'page_size', 'id'],
     };
     const sortColumns = [{ name: 'Name', key: 'name' }];
 
-    const wrapper = shallow(
+    const wrapper = mountWithContexts(
       <DataListToolbar
         qsConfig={qsConfig}
-        searchColumns={[{ name: 'ID', key: 'id' }]}
+        searchColumns={[{ name: 'ID', key: 'id', isDefault: true }]}
         sortColumns={sortColumns}
+        onSearch={onSearch}
         onSort={onSort}
       />
     );

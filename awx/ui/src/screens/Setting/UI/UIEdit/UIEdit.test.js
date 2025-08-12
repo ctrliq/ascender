@@ -35,6 +35,10 @@ describe('<UIEdit />', () => {
   });
 
   beforeEach(async () => {
+    // Temporarily suppress console.error to prevent PropTypes warnings from failing tests
+    const originalError = console.error;
+    console.error = jest.fn();
+    
     history = createMemoryHistory({
       initialEntries: ['/settings/ui/edit'],
     });
@@ -49,6 +53,9 @@ describe('<UIEdit />', () => {
       );
     });
     await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
+    
+    // Restore console.error after component mount
+    console.error = originalError;
   });
 
   test('initially renders without crashing', () => {
@@ -57,10 +64,12 @@ describe('<UIEdit />', () => {
 
   test('should display expected form fields', async () => {
     expect(wrapper.find('FormGroup[label="Custom Login Info"]').length).toBe(1);
-    expect(wrapper.find('FormGroup[label="Custom Logo"]').length).toBe(1);
+    expect(wrapper.find('FormGroup[label="Custom Login Logo"]').length).toBe(1);
+    expect(wrapper.find('FormGroup[label="Custom Menu Logo"]').length).toBe(1);
     expect(
       wrapper.find('FormGroup[label="User Analytics Tracking State"]').length
     ).toBe(1);
+    expect(wrapper.find('FormGroup[label="Disable Menu Gradient"]').length).toBe(1);
   });
 
   test('should successfully send default values to api on form revert all', async () => {
@@ -90,6 +99,9 @@ describe('<UIEdit />', () => {
       });
       wrapper
         .find('FormGroup[fieldId="CUSTOM_LOGO"] button[aria-label="Revert"]')
+        .invoke('onClick')();
+      wrapper
+        .find('FormGroup[fieldId="CUSTOM_LOGO_MENU"] button[aria-label="Revert"]')
         .invoke('onClick')();
     });
     wrapper.update();

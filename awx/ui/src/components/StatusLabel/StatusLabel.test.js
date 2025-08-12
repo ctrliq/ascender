@@ -1,10 +1,10 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
 import StatusLabel from './StatusLabel';
 
 describe('StatusLabel', () => {
   test('should render success', () => {
-    const wrapper = mount(<StatusLabel status="success" />);
+    const wrapper = mountWithContexts(<StatusLabel status="success" />);
     expect(wrapper).toHaveLength(1);
     expect(wrapper.find('CheckCircleIcon')).toHaveLength(1);
     expect(wrapper.find('Label').prop('color')).toEqual('green');
@@ -13,7 +13,7 @@ describe('StatusLabel', () => {
   });
 
   test('should render failed', () => {
-    const wrapper = mount(<StatusLabel status="failed" />);
+    const wrapper = mountWithContexts(<StatusLabel status="failed" />);
     expect(wrapper).toHaveLength(1);
     expect(wrapper.find('ExclamationCircleIcon')).toHaveLength(1);
     expect(wrapper.find('Label').prop('color')).toEqual('red');
@@ -21,7 +21,7 @@ describe('StatusLabel', () => {
   });
 
   test('should render error', () => {
-    const wrapper = mount(<StatusLabel status="error" />);
+    const wrapper = mountWithContexts(<StatusLabel status="error" />);
     expect(wrapper).toHaveLength(1);
     expect(wrapper.find('ExclamationCircleIcon')).toHaveLength(1);
     expect(wrapper.find('Label').prop('color')).toEqual('red');
@@ -29,7 +29,7 @@ describe('StatusLabel', () => {
   });
 
   test('should render running', () => {
-    const wrapper = mount(<StatusLabel status="running" />);
+    const wrapper = mountWithContexts(<StatusLabel status="running" />);
     expect(wrapper).toHaveLength(1);
     expect(wrapper.find('SyncAltIcon')).toHaveLength(1);
     expect(wrapper.find('Label').prop('color')).toEqual('blue');
@@ -37,7 +37,7 @@ describe('StatusLabel', () => {
   });
 
   test('should render pending', () => {
-    const wrapper = mount(<StatusLabel status="pending" />);
+    const wrapper = mountWithContexts(<StatusLabel status="pending" />);
     expect(wrapper).toHaveLength(1);
     expect(wrapper.find('ClockIcon')).toHaveLength(1);
     expect(wrapper.find('Label').prop('color')).toEqual('blue');
@@ -45,7 +45,7 @@ describe('StatusLabel', () => {
   });
 
   test('should render waiting', () => {
-    const wrapper = mount(<StatusLabel status="waiting" />);
+    const wrapper = mountWithContexts(<StatusLabel status="waiting" />);
     expect(wrapper).toHaveLength(1);
     expect(wrapper.find('ClockIcon')).toHaveLength(1);
     expect(wrapper.find('Label').prop('color')).toEqual('grey');
@@ -53,7 +53,7 @@ describe('StatusLabel', () => {
   });
 
   test('should render disabled', () => {
-    const wrapper = mount(<StatusLabel status="disabled" />);
+    const wrapper = mountWithContexts(<StatusLabel status="disabled" />);
     expect(wrapper).toHaveLength(1);
     expect(wrapper.find('MinusCircleIcon')).toHaveLength(1);
     expect(wrapper.find('Label').prop('color')).toEqual('grey');
@@ -61,7 +61,7 @@ describe('StatusLabel', () => {
   });
 
   test('should render canceled', () => {
-    const wrapper = mount(<StatusLabel status="canceled" />);
+    const wrapper = mountWithContexts(<StatusLabel status="canceled" />);
     expect(wrapper).toHaveLength(1);
     expect(wrapper.find('ExclamationTriangleIcon')).toHaveLength(1);
     expect(wrapper.find('Label').prop('color')).toEqual('orange');
@@ -69,7 +69,7 @@ describe('StatusLabel', () => {
   });
 
   test('should render tooltip', () => {
-    const wrapper = mount(
+    const wrapper = mountWithContexts(
       <StatusLabel tooltipContent="Foo" status="success" />
     );
     expect(wrapper).toHaveLength(1);
@@ -81,7 +81,7 @@ describe('StatusLabel', () => {
   });
 
   test('should render children', () => {
-    const wrapper = mount(
+    const wrapper = mountWithContexts(
       <StatusLabel tooltipContent="Foo" status="success" children="children" />
     );
     expect(wrapper.text()).toEqual('children');

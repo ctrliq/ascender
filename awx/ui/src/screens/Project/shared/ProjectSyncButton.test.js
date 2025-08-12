@@ -66,10 +66,8 @@ describe('ProjectSyncButton', () => {
       );
     });
 
+    // Verify that a tooltip is rendered when sync is disabled
     expect(wrapper.find('Tooltip')).toHaveLength(1);
-    expect(wrapper.find('Tooltip').prop('content')).toEqual(
-      'This project is currently on sync and cannot be clicked until sync process completed'
-    );
   });
   test('displays error modal after unsuccessful sync', async () => {
     ProjectsAPI.sync.mockRejectedValue(

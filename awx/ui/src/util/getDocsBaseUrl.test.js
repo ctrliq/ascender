@@ -10,7 +10,7 @@ describe('getDocsBaseUrl', () => {
     });
 
     expect(result).toEqual(
-      'https://docs.ansible.com/automation-controller/latest'
+      'https://docs.ansible.com/automation-controller/4.5'
     );
   });
 
@@ -40,13 +40,13 @@ describe('getDocsBaseUrl', () => {
     );
   });
 
-  it('should return latest version if license info missing', () => {
+  it('should return 4.5 version if license info missing', () => {
     const result = getDocsBaseUrl({
       version: '18.4.4',
     });
 
     expect(result).toEqual(
-      'https://docs.ansible.com/automation-controller/latest'
+      'https://docs.ansible.com/automation-controller/4.5'
     );
   });
 });

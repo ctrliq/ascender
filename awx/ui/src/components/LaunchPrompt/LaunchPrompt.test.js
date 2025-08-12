@@ -263,14 +263,16 @@ describe('LaunchPrompt', () => {
     const steps = wizard.prop('steps');
 
     expect(steps).toHaveLength(8);
-    expect(steps[0].name.props.children).toEqual('Inventory');
-    expect(steps[1].name.props.children).toEqual('Credentials');
-    expect(steps[2].name.props.children).toEqual('Credential passwords');
-    expect(steps[3].name.props.children).toEqual('Execution Environment');
-    expect(steps[4].name.props.children).toEqual('Instance Groups');
-    expect(steps[5].name.props.children).toEqual('Other prompts');
-    expect(steps[6].name.props.children).toEqual('Survey');
-    expect(steps[7].name.props.children).toEqual('Preview');
+    
+    // Test step names by checking the id prop instead of translated children
+    expect(steps[0].name.props.id).toEqual('inventory-step');
+    expect(steps[1].name.props.id).toEqual('credentials-step');
+    expect(steps[2].name.props.id).toEqual('credential-passwords-step');
+    expect(steps[3].name.props.id).toEqual('execution-environment-step');
+    expect(steps[4].name.props.id).toEqual('instance-groups-step');
+    expect(steps[5].name.props.id).toEqual('other-prompts-step');
+    expect(steps[6].name.props.id).toEqual('survey-step');
+    expect(steps[7].name.props.id).toEqual('preview-step');
     expect(wizard.find('WizardHeader').prop('title')).toBe('Launch | Foobar');
     expect(wizard.find('WizardHeader').prop('description')).toBe(
       'Foo Description'
@@ -296,7 +298,7 @@ describe('LaunchPrompt', () => {
     const steps = wizard.prop('steps');
 
     expect(steps).toHaveLength(2);
-    expect(steps[0].name.props.children).toEqual('Inventory');
+    expect(steps[0].name.props.id).toEqual('inventory-step');
     expect(isElementOfType(steps[0].component, InventoryStep)).toEqual(true);
     expect(isElementOfType(steps[1].component, PreviewStep)).toEqual(true);
   });
@@ -330,7 +332,7 @@ describe('LaunchPrompt', () => {
     const steps = wizard.prop('steps');
 
     expect(steps).toHaveLength(3);
-    expect(steps[0].name.props.children).toEqual('Credentials');
+    expect(steps[0].name.props.id).toEqual('credentials-step');
     expect(isElementOfType(steps[0].component, CredentialsStep)).toEqual(true);
     expect(
       isElementOfType(steps[1].component, CredentialPasswordsStep)
@@ -357,7 +359,7 @@ describe('LaunchPrompt', () => {
     const steps = wizard.prop('steps');
 
     expect(steps).toHaveLength(2);
-    expect(steps[0].name.props.children).toEqual('Execution Environment');
+    expect(steps[0].name.props.id).toEqual('execution-environment-step');
     expect(
       isElementOfType(steps[0].component, ExecutionEnvironmentStep)
     ).toEqual(true);
@@ -383,7 +385,7 @@ describe('LaunchPrompt', () => {
     const steps = wizard.prop('steps');
 
     expect(steps).toHaveLength(2);
-    expect(steps[0].name.props.children).toEqual('Instance Groups');
+    expect(steps[0].name.props.id).toEqual('instance-groups-step');
     expect(isElementOfType(steps[0].component, InstanceGroupsStep)).toEqual(
       true
     );
@@ -409,7 +411,7 @@ describe('LaunchPrompt', () => {
     const steps = wizard.prop('steps');
 
     expect(steps).toHaveLength(2);
-    expect(steps[0].name.props.children).toEqual('Other prompts');
+    expect(steps[0].name.props.id).toEqual('other-prompts-step');
     expect(isElementOfType(steps[0].component, OtherPromptsStep)).toEqual(true);
     expect(isElementOfType(steps[1].component, PreviewStep)).toEqual(true);
   });
@@ -451,7 +453,7 @@ describe('LaunchPrompt', () => {
     const steps = wizard.prop('steps');
 
     expect(steps).toHaveLength(2);
-    expect(steps[0].name.props.children).toEqual('Survey');
+    expect(steps[0].name.props.id).toEqual('survey-step');
     expect(isElementOfType(steps[0].component, SurveyStep)).toEqual(true);
     expect(isElementOfType(steps[1].component, PreviewStep)).toEqual(true);
   });
