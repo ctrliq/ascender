@@ -100,7 +100,8 @@ describe('PeersLookup', () => {
     wrapper.update();
     expect(InstancesAPI.read).toHaveBeenCalledTimes(1);
     expect(wrapper.find('PeersLookup')).toHaveLength(1);
-    expect(wrapper.find('FormGroup[label="Instances"]').length).toBe(1);
+    // Use fieldId selector instead of label due to Lingui v5 translation issues
+    expect(wrapper.find('FormGroup[fieldId="instances"]').length).toBe(1);
     expect(wrapper.find('Checkbox[aria-label="Prompt on launch"]').length).toBe(
       0
     );
@@ -129,7 +130,8 @@ describe('PeersLookup', () => {
     wrapper.update();
     expect(InstancesAPI.read).toHaveBeenCalledTimes(1);
     expect(wrapper.find('PeersLookup')).toHaveLength(1);
-    expect(wrapper.find('FormGroup[label="Instances"]').length).toBe(1);
+    // Use fieldId selector instead of label due to Lingui v5 translation issues
+    expect(wrapper.find('FormGroup[fieldId="instances"]').length).toBe(1);
     expect(wrapper.find('Checkbox[aria-label="Prompt on launch"]').length).toBe(
       0
     );

@@ -257,7 +257,9 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
           <div css="display: flex">
             <Checkbox
               label={t`Sun`}
-              isChecked={daysOfWeek.value?.includes(RRule.SU)}
+              isChecked={daysOfWeek.value?.some(day =>
+                (day === RRule.SU) || (day.weekday === RRule.SU.weekday)
+              )}
               onChange={(checked) => {
                 updateDaysOfWeek(RRule.SU, checked);
               }}
@@ -268,7 +270,9 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
             />
             <Checkbox
               label={t`Mon`}
-              isChecked={daysOfWeek.value?.includes(RRule.MO)}
+              isChecked={daysOfWeek.value?.some(day =>
+                (day === RRule.MO) || (day.weekday === RRule.MO.weekday)
+              )}
               onChange={(checked) => {
                 updateDaysOfWeek(RRule.MO, checked);
               }}
@@ -279,7 +283,9 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
             />
             <Checkbox
               label={t`Tue`}
-              isChecked={daysOfWeek.value?.includes(RRule.TU)}
+              isChecked={daysOfWeek.value?.some(day =>
+                (day === RRule.TU) || (day.weekday === RRule.TU.weekday)
+              )}
               onChange={(checked) => {
                 updateDaysOfWeek(RRule.TU, checked);
               }}
@@ -290,7 +296,9 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
             />
             <Checkbox
               label={t`Wed`}
-              isChecked={daysOfWeek.value?.includes(RRule.WE)}
+              isChecked={daysOfWeek.value?.some(day =>
+                (day === RRule.WE) || (day.weekday === RRule.WE.weekday)
+              )}
               onChange={(checked) => {
                 updateDaysOfWeek(RRule.WE, checked);
               }}
@@ -301,7 +309,9 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
             />
             <Checkbox
               label={t`Thu`}
-              isChecked={daysOfWeek.value?.includes(RRule.TH)}
+              isChecked={daysOfWeek.value?.some(day =>
+                (day === RRule.TH) || (day.weekday === RRule.TH.weekday)
+              )}
               onChange={(checked) => {
                 updateDaysOfWeek(RRule.TH, checked);
               }}
@@ -312,7 +322,9 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
             />
             <Checkbox
               label={t`Fri`}
-              isChecked={daysOfWeek.value?.includes(RRule.FR)}
+              isChecked={daysOfWeek.value?.some(day =>
+                (day === RRule.FR) || (day.weekday === RRule.FR.weekday)
+              )}
               onChange={(checked) => {
                 updateDaysOfWeek(RRule.FR, checked);
               }}
@@ -323,7 +335,9 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
             />
             <Checkbox
               label={t`Sat`}
-              isChecked={daysOfWeek.value?.includes(RRule.SA)}
+              isChecked={daysOfWeek.value?.some(day =>
+                (day === RRule.SA) || (day.weekday === RRule.SA.weekday)
+              )}
               onChange={(checked) => {
                 updateDaysOfWeek(RRule.SA, checked);
               }}

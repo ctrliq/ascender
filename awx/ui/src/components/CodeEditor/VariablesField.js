@@ -76,10 +76,11 @@ function VariablesField({
   useEffect(
     () => {
       if (shouldValidate) {
-        helpers.setError(validate(field.value));
+        const error = validate(field.value);
+        helpers.setError(error);
       }
     },
-    [shouldValidate, validate] // eslint-disable-line react-hooks/exhaustive-deps
+    [shouldValidate, field.value] // eslint-disable-line react-hooks/exhaustive-deps
   );
   const [lastYamlValue, setLastYamlValue] = useState(
     mode === YAML_MODE ? field.value : null
