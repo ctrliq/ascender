@@ -7,7 +7,8 @@ pg_database: 'awx'
 control_plane_node_count: 1
 minikube_container_group: false
 receptor_socket_file: /var/run/awx-receptor/receptor.sock
-receptor_image: quay.io/ansible/receptor:v1.5.7
+#receptor_image: quay.io/ansible/receptor:v1.5.7
+receptor_image: quay.io/ansible/receptor:devel
 ingress_path: /
 
 # Keys for signing work

@@ -58,7 +58,8 @@ DEV_DOCKER_OWNER_LOWER = $(shell echo $(DEV_DOCKER_OWNER) | tr A-Z a-z)
 DEV_DOCKER_TAG_BASE ?= ghcr.io/$(DEV_DOCKER_OWNER_LOWER)
 DEVEL_IMAGE_NAME ?= $(DEV_DOCKER_TAG_BASE)/ascender_devel:$(COMPOSE_TAG)
 
-RECEPTOR_IMAGE ?= quay.io/ansible/receptor:v1.5.7
+#RECEPTOR_IMAGE ?= quay.io/ansible/receptor:v1.5.7
+RECEPTOR_IMAGE ?= quay.io/ansible/receptor:devel
 
 # Python packages to install only from source (not from binary wheels)
 # Comma separated list

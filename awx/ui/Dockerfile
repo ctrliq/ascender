@@ -1,4 +1,4 @@
-FROM node:20.19.4-alpine
+FROM node:20.19.5-alpine
 ARG NPMRC_FILE=.npmrc
 ENV NPMRC_FILE=${NPMRC_FILE}
 ARG TARGET='https://awx:8043'
@@ -13,7 +13,7 @@ ADD public public
 ADD package.json package.json
 ADD package-lock.json package-lock.json
 COPY ${NPMRC_FILE} .npmrc
-RUN npm install
+RUN npm ci && npm cache clean --force
 ADD src src
 EXPOSE 3001
 CMD [ "npm", "start" ]
