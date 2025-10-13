@@ -49,7 +49,7 @@ pyparsing==2.4.6  # Upgrading to v3 of pyparsing introduce errors on smart host 
 python-daemon>3.0.0
 python-dsv-sdk>=1.0.4
 python-tss-sdk>=1.2.1
-python-ldap
+python-ldap>=3.4.5  # CVE-2025-61911 CVE-2025-61912
 pyyaml>=6.0.1
 receptorctl
 social-auth-core[openidconnect]==4.5.0  # see UPGRADE BLOCKERs

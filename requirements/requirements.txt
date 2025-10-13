@@ -360,7 +360,7 @@ python-dateutil==2.8.2
     #   receptorctl
 python-dsv-sdk==1.0.4
     # via -r /awx_devel/requirements/requirements.in
-python-ldap==3.4.4
+python-ldap==3.4.5
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   django-auth-ldap
