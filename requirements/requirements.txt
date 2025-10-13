@@ -120,7 +120,7 @@ defusedxml==0.7.1
     #   social-auth-core
 distro==1.9.0
     # via -r /awx_devel/requirements/requirements.in
-django==4.2.24
+django==4.2.25
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   channels
@@ -135,7 +135,7 @@ django==4.2.24
     #   django-solo
     #   djangorestframework
     #   social-auth-app-django
-# django-ansible-base @ git+https://github.com/ansible/django-ansible-base@devel  # git requirements installed separately
+# django-ansible-base @ git+https://github.com/ansible/django-ansible-base@3a7423435192b3042b264141291b35224b99c783  # git requirements installed separately
     # via -r /awx_devel/requirements/requirements_git.txt
 django-auth-ldap==4.6.0
     # via -r /awx_devel/requirements/requirements.in
