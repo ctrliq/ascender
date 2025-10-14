@@ -13,7 +13,7 @@ cryptography>=44.0.1  # GHSA-h4gh-qq45-vh27
 Cython<3 # this is needed as a build dependency, one day we may have separated build deps
 daphne
 distro
-django==4.2.24 # CVE-2025-57833
+django==4.2.25 # CVE-2025-59681
 django-auth-ldap
 django-cors-headers
 django-crum
@@ -49,7 +49,7 @@ pyparsing==2.4.6  # Upgrading to v3 of pyparsing introduce errors on smart host 
 python-daemon>3.0.0
 python-dsv-sdk>=1.0.4
 python-tss-sdk>=1.2.1
-python-ldap
+python-ldap>=3.4.5  # CVE-2025-61911 CVE-2025-61912
 pyyaml>=6.0.1
 receptorctl
 social-auth-core[openidconnect]==4.5.0  # see UPGRADE BLOCKERs
