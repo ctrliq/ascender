@@ -23,7 +23,7 @@ import {
   TextVariants,
   Label,
 } from '@patternfly/react-core';
-import { DownloadIcon } from '@patternfly/react-icons';
+import { LucideIconDownload as DownloadIcon } from '@ctrliq/quantic-react';
 import ContentLoading from 'components/ContentLoading';
 import InstanceToggle from 'components/InstanceToggle';
 import StatusLabel from 'components/StatusLabel';
@@ -34,11 +34,39 @@ import { formatDateString } from 'util/dates';
 const Wrapper = styled.div`
   position: absolute;
   right: 0;
-  padding: 0 10px;
+  padding: var(--quantic-spacing-4) var(--quantic-spacing-6);
   width: 25%;
-  background-color: rgba(255, 255, 255, 0.85);
+  background-color: var(--quantic-bg-secondary);
   overflow: auto;
   height: 100%;
+
+  .pf-c-description-list {
+    --pf-c-description-list__group--RowGap: var(--quantic-spacing-1);
+  }
+  .pf-c-description-list__text {
+    font-size: var(--quantic-font-size-body-xs);
+  }
+
+  .pf-c-switch {
+    --pf-c-switch__toggle--before--BackgroundColor: var(--quantic-bg-tertiary);
+    --pf-c-switch__label--PaddingLeft: var(--quantic-spacing-5);
+    --pf-c-switch__toggle--before--Top: 6px;
+    --pf-c-switch__input--checked__toggle--before--TranslateX: -6px;
+    --pf-c-switch__toggle--before--Width: var(--quantic-spacing-2);
+    --pf-c-switch__toggle--before--Height: var(--quantic-spacing-2);
+  }
+
+  .pf-c-switch__input:checked ~ .pf-c-switch__toggle::before {
+    --pf-c-switch__input--checked__toggle--before--TranslateX: -3px;
+    --pf-c-switch__toggle--before--BackgroundColor: var(
+      --quantic-color-brand-400
+    );
+  }
+
+  .pf-c-switch__label {
+    font-size: var(--quantic-font-size-body-xs);
+    --pf-c-switch__input--checked__label--Color: var(--quantic-text-primary);
+  }
 `;
 const Button = styled(PFButton)`
   &&& {
@@ -48,12 +76,12 @@ const Button = styled(PFButton)`
     padding: 0;
     font-size: 16px;
     background-color: white;
-    border: 1px solid #ccc;
+    border: 1px solid var(--quantic-border-primary);
     color: black;
   }
 `;
 const DescriptionList = styled(PFDescriptionList)`
-  gap: 0;
+  gap: var(--quantic-spacing-2);
 `;
 const DescriptionListGroup = styled(PFDescriptionListGroup)`
   align-items: center;
@@ -89,6 +117,7 @@ function renderInstanceGroups(instanceGroups) {
   return instanceGroups.map((ig) => (
     <React.Fragment key={ig.id}>
       <Label
+        variant="outline"
         color="blue"
         isTruncated
         render={({ className, content, componentRef }) => (
@@ -180,12 +209,7 @@ function Tooltip({
     <Wrapper className="tooltip" data-cy="tooltip">
       {isNodeSelected === false ? (
         <TextContent>
-          <Text
-            component={TextVariants.small}
-            style={{ fontWeight: 'bold', color: 'black', marginTop: 0 }}
-          >
-            {t`Details`}
-          </Text>
+          <Text component={TextVariants.small}>{t`Details`}</Text>
           <Divider component="div" />
           <Text component={TextVariants.small}>
             {t`Click on a node icon to display the details.`}
@@ -206,12 +230,7 @@ function Tooltip({
             </AlertModal>
           )}
           <TextContent>
-            <Text
-              component={TextVariants.small}
-              style={{ fontWeight: 'bold', color: 'black' }}
-            >
-              {t`Details`}
-            </Text>
+            <Text component={TextVariants.small}>{t`Details`}</Text>
             <Divider component="div" />
           </TextContent>
           {isLoading && <ContentLoading />}
@@ -231,17 +250,13 @@ function Tooltip({
                 </DescriptionListDescription>
               </DescriptionListGroup>
               <DescriptionListGroup>
-                <DescriptionListTerm>
-                  {t`Instance status`}
-                </DescriptionListTerm>
+                <DescriptionListTerm>{t`Instance status`}</DescriptionListTerm>
                 <DescriptionListDescription dataCy="node-state">
                   <StatusLabel status={instanceDetail.node_state} />
                 </DescriptionListDescription>
               </DescriptionListGroup>
               <DescriptionListGroup>
-                <DescriptionListTerm>
-                  {t`Instance type`}
-                </DescriptionListTerm>
+                <DescriptionListTerm>{t`Instance type`}</DescriptionListTerm>
                 <DescriptionListDescription dataCy="node-type">
                   {instanceDetail.node_type}
                 </DescriptionListDescription>
@@ -262,16 +277,17 @@ function Tooltip({
                       variant="secondary"
                       rel="noopener noreferrer"
                     >
-                      <DownloadIcon />
+                      <DownloadIcon
+                        size={16}
+                        data-original-icon="DownloadIcon"
+                      />
                     </PFButton>
                   </DescriptionListDescription>
                 </DescriptionListGroup>
               )}
               {instanceDetail.ip_address && (
                 <DescriptionListGroup>
-                  <DescriptionListTerm>
-                    {t`IP address`}
-                  </DescriptionListTerm>
+                  <DescriptionListTerm>{t`IP address`}</DescriptionListTerm>
                   <DescriptionListDescription>
                     {instanceDetail.ip_address}
                   </DescriptionListDescription>
@@ -290,9 +306,7 @@ function Tooltip({
               {instanceDetail.node_type !== 'hop' && (
                 <>
                   <DescriptionListGroup>
-                    <DescriptionListTerm>
-                      {t`Forks`}
-                    </DescriptionListTerm>
+                    <DescriptionListTerm>{t`Forks`}</DescriptionListTerm>
                     <DescriptionListDescription>
                       <SliderHolder data-cy="slider-holder">
                         <div data-cy="cpu-capacity">
@@ -326,9 +340,7 @@ function Tooltip({
                     </DescriptionListDescription>
                   </DescriptionListGroup>
                   <DescriptionListGroup>
-                    <DescriptionListTerm>
-                      {t`Capacity`}
-                    </DescriptionListTerm>
+                    <DescriptionListTerm>{t`Capacity`}</DescriptionListTerm>
                     <DescriptionListDescription dataCy="used-capacity">
                       {usedCapacity(instanceDetail, t)}
                     </DescriptionListDescription>
@@ -347,17 +359,13 @@ function Tooltip({
               )}
 
               <DescriptionListGroup>
-                <DescriptionListTerm>
-                  {t`Last modified`}
-                </DescriptionListTerm>
+                <DescriptionListTerm>{t`Last modified`}</DescriptionListTerm>
                 <DescriptionListDescription dataCy="last-modified">
                   {formatDateString(instanceDetail.modified)}
                 </DescriptionListDescription>
               </DescriptionListGroup>
               <DescriptionListGroup>
-                <DescriptionListTerm>
-                  {t`Last seen`}
-                </DescriptionListTerm>
+                <DescriptionListTerm>{t`Last seen`}</DescriptionListTerm>
                 <DescriptionListDescription dataCy="last-seen">
                   {instanceDetail.last_seen
                     ? formatDateString(instanceDetail.last_seen)

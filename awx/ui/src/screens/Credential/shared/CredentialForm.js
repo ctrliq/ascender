@@ -183,9 +183,7 @@ function CredentialFormFields({ initialTypeId, credentialTypes }) {
         isDisabled={initialValues.isOrgLookupDisabled}
         validate={
           isGalaxyCredential
-            ? required(
-                t`Galaxy credentials must be owned by an Organization.`
-              )
+            ? required(t`Galaxy credentials must be owned by an Organization.`)
             : undefined
         }
       />
@@ -344,7 +342,7 @@ function CredentialForm({
                     ouiaId="credential-form-cancel-button"
                     id="credential-form-cancel-button"
                     aria-label={t`Cancel`}
-                    variant="link"
+                    variant="secondary"
                     type="button"
                     onClick={onCancel}
                   >

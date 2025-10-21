@@ -9,7 +9,7 @@ import {
   DropdownSeparator,
   DropdownDirection,
 } from '@patternfly/react-core';
-import { RocketIcon } from '@patternfly/react-icons';
+import { LucideIconRocket } from '@ctrliq/quantic-react';
 
 function ReLaunchDropDown({
   isPrimary = false,
@@ -102,7 +102,7 @@ function ReLaunchDropDown({
           id={id}
           ouiaId="relaunch-job-toggle"
         >
-          <RocketIcon />
+          <LucideIconRocket size="xs" data-original-icon="RocketIcon" />
         </DropdownToggle>
       }
     />

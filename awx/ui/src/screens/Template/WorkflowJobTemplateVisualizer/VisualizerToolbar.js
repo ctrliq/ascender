@@ -10,13 +10,13 @@ import {
   Tooltip,
 } from '@patternfly/react-core';
 import {
-  BookIcon,
-  CompassIcon,
-  RocketIcon,
-  TimesIcon,
-  TrashAltIcon,
-  WrenchIcon,
-} from '@patternfly/react-icons';
+  LucideIconBook as BookIcon,
+  LucideIconCompass as CompassIcon,
+  LucideIconRocket as RocketIcon,
+  LucideIconX as TimesIcon,
+  LucideIconTrash as TrashAltIcon,
+  LucideIconWrench as WrenchIcon,
+} from '@ctrliq/quantic-react';
 import styled from 'styled-components';
 import { LaunchButton } from 'components/LaunchButton';
 import {
@@ -87,7 +87,7 @@ function VisualizerToolbar({
               onClick={() => dispatch({ type: 'TOGGLE_LEGEND' })}
               variant="plain"
             >
-              <CompassIcon />
+              <CompassIcon size={16} data-original-icon="CompassIcon" />
             </ActionButton>
           </Tooltip>
           <Tooltip content={t`Toggle tools`} position="bottom">
@@ -99,13 +99,10 @@ function VisualizerToolbar({
               onClick={() => dispatch({ type: 'TOGGLE_TOOLS' })}
               variant="plain"
             >
-              <WrenchIcon />
+              <WrenchIcon size={16} data-original-icon="WrenchIcon" />
             </ActionButton>
           </Tooltip>
-          <Tooltip
-            content={t`Workflow documentation`}
-            position="bottom"
-          >
+          <Tooltip content={t`Workflow documentation`} position="bottom">
             <ActionButton
               aria-label={t`Workflow documentation`}
               id="visualizer-documentation"
@@ -117,15 +114,12 @@ function VisualizerToolbar({
                 config
               )}/html/userguide/workflow_templates.html#ug-wf-editor`}
             >
-              <BookIcon />
+              <BookIcon size={16} data-original-icon="BookIcon" />
             </ActionButton>
           </Tooltip>
           {template.summary_fields?.user_capabilities?.start && (
             <Tooltip content={t`Launch workflow`} position="bottom">
-              <LaunchButton
-                resource={template}
-                aria-label={t`Launch workflow`}
-              >
+              <LaunchButton resource={template} aria-label={t`Launch workflow`}>
                 {({ handleLaunch, isLaunching }) => (
                   <ActionButton
                     id="visualizer-launch"
@@ -135,7 +129,7 @@ function VisualizerToolbar({
                     }
                     onClick={handleLaunch}
                   >
-                    <RocketIcon />
+                    <RocketIcon size={16} data-original-icon="RocketIcon" />
                   </ActionButton>
                 )}
               </LaunchButton>
@@ -143,10 +137,7 @@ function VisualizerToolbar({
           )}
           {!readOnly && (
             <>
-              <Tooltip
-                content={t`Delete all nodes`}
-                position="bottom"
-              >
+              <Tooltip content={t`Delete all nodes`} position="bottom">
                 <ActionButton
                   id="visualizer-delete-all"
                   aria-label={t`Delete all nodes`}
@@ -159,7 +150,7 @@ function VisualizerToolbar({
                   }
                   variant="plain"
                 >
-                  <TrashAltIcon />
+                  <TrashAltIcon size={16} data-original-icon="TrashAltIcon" />
                 </ActionButton>
               </Tooltip>
               <Button
@@ -181,7 +172,7 @@ function VisualizerToolbar({
             onClick={onClose}
             variant="plain"
           >
-            <TimesIcon />
+            <TimesIcon size={16} data-original-icon="TimesIcon" />
           </Button>
         </div>
       </div>

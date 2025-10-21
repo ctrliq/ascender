@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 
 import { useLingui } from '@lingui/react/macro';
 import { Popover } from '@patternfly/react-core';
-import { OutlinedQuestionCircleIcon } from '@patternfly/react-icons';
+import { LucideIconCircleHelp as OutlinedQuestionCircleIcon } from '@ctrliq/quantic-react';
 import { func, shape } from 'prop-types';
 import { JobTemplatesAPI } from 'api';
 import { getQSConfig, parseQueryString } from 'util/qs';
@@ -141,7 +141,7 @@ function JobTemplatesList({ nodeResource, onUpdateNodeResource }) {
                 id={`item-${item.id}-info-popover`}
                 position="right"
               >
-                <OutlinedQuestionCircleIcon />
+                <OutlinedQuestionCircleIcon size={16} data-original-icon="OutlinedQuestionCircleIcon" />
               </Popover>
             </ActionItem>,
           ]}

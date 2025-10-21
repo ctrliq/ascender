@@ -13,7 +13,7 @@ import {
   Tooltip,
   Slider,
 } from '@patternfly/react-core';
-import { CaretLeftIcon, OutlinedClockIcon } from '@patternfly/react-icons';
+import { LucideIconChevronLeft, LucideIconClock } from '@ctrliq/quantic-react';
 import styled from 'styled-components';
 
 import { useConfig } from 'contexts/Config';
@@ -163,7 +163,7 @@ function InstanceDetails({ setBreadcrumb, instanceGroup }) {
       {instance.health_check_pending ? (
         <>
           {' '}
-          <OutlinedClockIcon />
+          <LucideIconClock />
         </>
       ) : null}
     </>
@@ -177,7 +177,7 @@ function InstanceDetails({ setBreadcrumb, instanceGroup }) {
     {
       name: (
         <>
-          <CaretLeftIcon />
+          <LucideIconChevronLeft />
           {t`Back to Instances`}
         </>
       ),
@@ -222,16 +222,9 @@ function InstanceDetails({ setBreadcrumb, instanceGroup }) {
           />
           <Detail
             label={t`Policy Type`}
-            value={
-              instance.managed_by_policy
-                ? t`Auto`
-                : t`Manual`
-            }
+            value={instance.managed_by_policy ? t`Auto` : t`Manual`}
           />
-          <Detail
-            label={t`Running Jobs`}
-            value={instance.jobs_running}
-          />
+          <Detail label={t`Running Jobs`} value={instance.jobs_running} />
           <Detail label={t`Total Jobs`} value={instance.jobs_total} />
           <Detail
             label={t`Last Health Check`}
@@ -262,7 +255,9 @@ function InstanceDetails({ setBreadcrumb, instanceGroup }) {
                 </div>
                 <SliderForks data-cy="slider-forks">
                   <div data-cy="number-forks">
-                    {i18n._('{count, plural, one {# fork} other {# forks}}', { count: forks })}
+                    {i18n._('{count, plural, one {# fork} other {# forks}}', {
+                      count: forks,
+                    })}
                   </div>
                   <Slider
                     areCustomStepsContinuous

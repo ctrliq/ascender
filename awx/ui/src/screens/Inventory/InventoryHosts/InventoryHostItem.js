@@ -3,7 +3,7 @@ import { string, bool, func } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 import { Tr, Td } from '@patternfly/react-table';
 import { Link } from 'react-router-dom';
-import { PencilAltIcon } from '@patternfly/react-icons';
+import { LucideIconPencil } from '@ctrliq/quantic-react';
 import { Button, Chip } from '@patternfly/react-core';
 import { HostsAPI } from 'api';
 import AlertModal from 'components/AlertModal';
@@ -119,7 +119,7 @@ function InventoryHostItem({
               component={Link}
               to={`${editUrl}`}
             >
-              <PencilAltIcon />
+              <LucideIconPencil data-original-icon="PencilAltIcon" size="sm" />
             </Button>
           </ActionItem>
         </ActionsTd>

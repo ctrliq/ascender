@@ -189,10 +189,22 @@ function MeshGraph({
         .attr('orient', 'auto')
         .append('path')
         .attr('d', 'M0,-5L10,0L0,5');
-      mesh.select('#end').attr('refX', 23).attr('fill', '#6A6E73');
-      mesh.select('#end-removing').attr('refX', 23).attr('fill', '#C9190B');
-      mesh.select('#end-adding').attr('refX', 23).attr('fill', '#3E8635');
-      mesh.select('#end-active').attr('refX', 18).attr('fill', '#0066CC');
+      mesh
+        .select('#end')
+        .attr('refX', 23)
+        .attr('fill', 'var(--quantic-bg-secondary)');
+      mesh
+        .select('#end-removing')
+        .attr('refX', 23)
+        .attr('fill', 'var(--quantic-color-error-800)');
+      mesh
+        .select('#end-adding')
+        .attr('refX', 23)
+        .attr('fill', 'var(--quantic-color-brand-600)');
+      mesh
+        .select('#end-active')
+        .attr('refX', 18)
+        .attr('fill', 'var(--quantic-color-gray-blue-500)');
 
       // Add links
       mesh
@@ -339,7 +351,7 @@ function MeshGraph({
         immediate.forEach((s) => {
           svg
             .selectAll(`.link-${s.index}`)
-            .style('stroke', '#0066CC')
+            .style('stroke', 'var(--quantic-color-gray-blue-500)')
             .style('stroke-width', '3px')
             .attr('marker-end', 'url(#end-active)');
         });
@@ -386,8 +398,8 @@ function MeshGraph({
           .attr('stroke-width', null);
         svg
           .select(`circle.id-${n.id}`)
-          .attr('stroke-width', '5px')
-          .attr('stroke', '#0066CC');
+          .attr('stroke-width', '3px')
+          .attr('stroke', 'var(--quantic-color-brand-500)');
         setIsNodeSelected(true);
         setSelectedNode(n);
       }

@@ -4,7 +4,7 @@ import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router-dom';
 import { Button } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
-import { PencilAltIcon, BellIcon } from '@patternfly/react-icons';
+import { LucideIconPencil, LucideIconBell } from '@ctrliq/quantic-react';
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
 import { timeOfDay } from 'util/dates';
 import { NotificationTemplatesAPI, NotificationsAPI } from 'api';
@@ -137,7 +137,7 @@ function NotificationTemplateListItem({
               onClick={sendTestNotification}
               isDisabled={isLoading || status === 'running'}
             >
-              <BellIcon />
+              <LucideIconBell data-original-icon="BellIcon" />
             </Button>
           </ActionItem>
           <ActionItem
@@ -151,7 +151,7 @@ function NotificationTemplateListItem({
               component={Link}
               to={`/notification_templates/${template.id}/edit`}
             >
-              <PencilAltIcon />
+              <LucideIconPencil data-original-icon="PencilAltIcon" size="sm" />
             </Button>
           </ActionItem>
           <ActionItem

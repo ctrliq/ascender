@@ -2,7 +2,7 @@ import React from 'react';
 import { string, func } from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Button, DropdownItem, Tooltip } from '@patternfly/react-core';
-import CaretDownIcon from '@patternfly/react-icons/dist/js/icons/caret-down-icon';
+import { LucideIconChevronDown } from '@ctrliq/quantic-react';
 import { useLingui } from '@lingui/react/macro';
 import { useKebabifiedMenu } from 'contexts/Kebabified';
 
@@ -38,7 +38,7 @@ function ToolbarAddButton({
   }
   if (linkTo) {
     return (
-      <Tooltip content={defaultLabel || t`Add`} position="top">
+      <Tooltip content={defaultLabel || t`Add`} position="top" open>
         <Button
           ouiaId={ouiaId}
           component={Link}
@@ -46,16 +46,27 @@ function ToolbarAddButton({
           isDisabled={isDisabled}
         >
           {defaultLabel || t`Add`}
-          {showToggleIndicator && <CaretDownIcon />}
+          {showToggleIndicator && (
+            <LucideIconChevronDown
+              data-original-icon="CaretDownIcon"
+              size={16}
+            />
+          )}
         </Button>
       </Tooltip>
     );
   }
   return (
-    <Tooltip content={defaultLabel || t`Add`} position="top">
+    <Tooltip
+      content={defaultLabel || t`Add`}
+      position="top"
+      exitDelay={199999999}
+    >
       <Button ouiaId={ouiaId} onClick={onClick} isDisabled={isDisabled}>
         {defaultLabel || t`Add`}
-        {showToggleIndicator && <CaretDownIcon />}
+        {showToggleIndicator && (
+          <LucideIconChevronDown data-original-icon="CaretDownIcon" size={16} />
+        )}
       </Button>
     </Tooltip>
   );

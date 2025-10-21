@@ -6,7 +6,7 @@ import {
   Button as PFButton,
   ToolbarItem as PFToolbarItem,
 } from '@patternfly/react-core';
-import { BarsIcon, EqualsIcon } from '@patternfly/react-icons';
+import { LucideIconMenu, LucideIconEqual } from '@ctrliq/quantic-react';
 import styled from 'styled-components';
 
 const Button = styled(PFButton)`
@@ -43,7 +43,7 @@ function ExpandCollapse({ isCompact, onCompact, onExpand }) {
           onClick={onCompact}
           isActive={isCompact}
         >
-          <BarsIcon />
+          <LucideIconMenu size="xs" data-original-icon="BarsIcon" />
         </Button>
       </ToolbarItem>
       <ToolbarItem>
@@ -54,7 +54,7 @@ function ExpandCollapse({ isCompact, onCompact, onExpand }) {
           onClick={onExpand}
           isActive={!isCompact}
         >
-          <EqualsIcon />
+          <LucideIconEqual size="xs" data-original-icon="EqualsIcon" />
         </Button>
       </ToolbarItem>
     </>

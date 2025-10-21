@@ -8,7 +8,7 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';
-import { CaretLeftIcon } from '@patternfly/react-icons';
+import { LucideIconChevronLeft } from '@ctrliq/quantic-react';
 import { Card, PageSection } from '@patternfly/react-core';
 import { InventorySourcesAPI } from 'api';
 import ContentError from 'components/ContentError';
@@ -118,7 +118,7 @@ function Job({ setBreadcrumb }) {
     {
       name: (
         <>
-          <CaretLeftIcon />
+          <LucideIconChevronLeft />
           {t`Back to Jobs`}
         </>
       ),

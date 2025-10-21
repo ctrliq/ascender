@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import { DateTime, Duration } from 'luxon';
 import { bool, shape, func } from 'prop-types';
 import {
-  DownloadIcon,
-  RocketIcon,
-  TrashAltIcon,
-} from '@patternfly/react-icons';
+  LucideIconDownload,
+  LucideIconRocket,
+  LucideIconTrash,
+} from '@ctrliq/quantic-react';
 import { Badge as PFBadge, Button, Tooltip } from '@patternfly/react-core';
 import DeleteButton from 'components/DeleteButton';
 import { LaunchButton, ReLaunchDropDown } from 'components/LaunchButton';
@@ -199,7 +199,7 @@ const OutputToolbar = ({ job, onDelete, isDeleteDisabled, jobStatus }) => {
                   aria-label={t`Relaunch`}
                   isDisabled={isLaunching}
                 >
-                  <RocketIcon />
+                  <LucideIconRocket data-original-icon="RocketIcon" size={16} />
                 </Button>
               )}
             </LaunchButton>
@@ -215,7 +215,7 @@ const OutputToolbar = ({ job, onDelete, isDeleteDisabled, jobStatus }) => {
               variant="plain"
               aria-label={t`Download Output`}
             >
-              <DownloadIcon />
+              <LucideIconDownload data-original-icon="DownloadIcon" size={16} />
             </Button>
           </a>
         </Tooltip>
@@ -233,7 +233,7 @@ const OutputToolbar = ({ job, onDelete, isDeleteDisabled, jobStatus }) => {
               variant="plain"
               isDisabled={isDeleteDisabled}
             >
-              <TrashAltIcon />
+              <LucideIconTrash data-original-icon="TrashAltIcon" size={16} />
             </DeleteButton>
           </Tooltip>
         )}

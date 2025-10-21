@@ -5,16 +5,16 @@ import styled from 'styled-components';
 import { func, number } from 'prop-types';
 import { Button, Tooltip } from '@patternfly/react-core';
 import {
-  CaretDownIcon,
-  CaretLeftIcon,
-  CaretRightIcon,
-  CaretUpIcon,
-  DesktopIcon,
-  HomeIcon,
-  MinusIcon,
-  PlusIcon,
-  TimesIcon,
-} from '@patternfly/react-icons';
+  LucideIconChevronDown,
+  LucideIconChevronLeft,
+  LucideIconChevronRight,
+  LucideIconChevronUp,
+  LucideIconMonitor,
+  LucideIconHouse,
+  LucideIconMinus,
+  LucideIconPlus,
+  LucideIconX,
+} from '@ctrliq/quantic-react';
 import { WorkflowDispatchContext } from 'contexts/Workflow';
 
 const Wrapper = styled.div`
@@ -45,7 +45,7 @@ const Tools = styled.div`
   padding: 20px;
 `;
 
-const Close = styled(TimesIcon)`
+const Close = styled(LucideIconX)`
   cursor: pointer;
   position: absolute;
   right: 10px;
@@ -81,7 +81,10 @@ function WorkflowTools({
     <Wrapper>
       <Header>
         <b>{t`Tools`}</b>
-        <Close onClick={() => dispatch({ type: 'TOGGLE_TOOLS' })} />
+        <Close
+          onClick={() => dispatch({ type: 'TOGGLE_TOOLS' })}
+          data-original-icon="TimesIcon"
+        />
       </Header>
       <Tools>
         <Tooltip
@@ -94,7 +97,7 @@ function WorkflowTools({
             css="margin-right: 30px;"
             onClick={() => onFitGraph()}
           >
-            <DesktopIcon />
+            <LucideIconMonitor data-original-icon="DesktopIcon" size={16} />
           </Button>
         </Tooltip>
         <Tooltip content={t`Zoom Out`} position="bottom">
@@ -104,7 +107,7 @@ function WorkflowTools({
             css="margin-right: 10px;"
             onClick={() => zoomOut()}
           >
-            <MinusIcon />
+            <LucideIconMinus data-original-icon="MinusIcon" size={16} />
           </Button>
         </Tooltip>
         <input
@@ -125,7 +128,7 @@ function WorkflowTools({
             css="margin: 0px 25px 0px 10px;"
             onClick={() => zoomIn()}
           >
-            <PlusIcon />
+            <LucideIconPlus data-original-icon="PlusIcon" size={16} />
           </Button>
         </Tooltip>
         <Pan>
@@ -136,7 +139,10 @@ function WorkflowTools({
               css="margin-right: 10px;"
               onClick={() => onPan('left')}
             >
-              <CaretLeftIcon />
+              <LucideIconChevronLeft
+                data-original-icon="CaretLeftIcon"
+                size={16}
+              />
             </Button>
           </Tooltip>
           <PanCenter>
@@ -147,7 +153,10 @@ function WorkflowTools({
                 css="margin-bottom: 10px;"
                 onClick={() => onPan('up')}
               >
-                <CaretUpIcon />
+                <LucideIconChevronUp
+                  data-original-icon="CaretUpIcon"
+                  size={16}
+                />
               </Button>
             </Tooltip>
             <Tooltip
@@ -159,7 +168,7 @@ function WorkflowTools({
                 variant="tertiary"
                 onClick={() => onPanToMiddle()}
               >
-                <HomeIcon />
+                <LucideIconHouse data-original-icon="HomeIcon" size={16} />
               </Button>
             </Tooltip>
             <Tooltip content={t`Pan Down`} position="bottom">
@@ -169,7 +178,10 @@ function WorkflowTools({
                 css="margin-top: 10px;"
                 onClick={() => onPan('down')}
               >
-                <CaretDownIcon />
+                <LucideIconChevronDown
+                  data-original-icon="CaretDownIcon"
+                  size={16}
+                />
               </Button>
             </Tooltip>
           </PanCenter>
@@ -180,7 +192,10 @@ function WorkflowTools({
               css="margin-left: 10px;"
               onClick={() => onPan('right')}
             >
-              <CaretRightIcon />
+              <LucideIconChevronRight
+                data-original-icon="CaretRightIcon"
+                size={16}
+              />
             </Button>
           </Tooltip>
         </Pan>

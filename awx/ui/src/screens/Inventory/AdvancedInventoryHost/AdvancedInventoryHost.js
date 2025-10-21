@@ -2,7 +2,7 @@ import React, { useEffect, useCallback } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
 import { Link, Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
-import { CaretLeftIcon } from '@patternfly/react-icons';
+import { LucideIconChevronLeft } from '@ctrliq/quantic-react';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
 import RoutedTabs from 'components/RoutedTabs';
@@ -49,7 +49,7 @@ function AdvancedInventoryHost({ inventory, setBreadcrumb }) {
     {
       name: (
         <>
-          <CaretLeftIcon />
+          <LucideIconChevronLeft />
           {t`Back to Hosts`}
         </>
       ),

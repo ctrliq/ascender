@@ -4,12 +4,12 @@ import { useLingui } from '@lingui/react/macro';
 import 'styled-components/macro';
 import { Button } from '@patternfly/react-core';
 import {
-  AngleDoubleUpIcon,
-  AngleDoubleDownIcon,
-  AngleUpIcon,
-  AngleDownIcon,
-  AngleRightIcon,
-} from '@patternfly/react-icons';
+  LucideIconChevronsUp,
+  LucideIconChevronsDown,
+  LucideIconChevronUp,
+  LucideIconChevronDown,
+  LucideIconChevronRight,
+} from '@ctrliq/quantic-react';
 import styled from 'styled-components';
 
 const ControllsWrapper = styled.div`
@@ -49,15 +49,23 @@ const PageControls = ({
         {!isFlatMode && isTemplateJob && (
           <Button
             aria-label={
-              isAllCollapsed
-                ? t`Expand job events`
-                : t`Collapse all job events`
+              isAllCollapsed ? t`Expand job events` : t`Collapse all job events`
             }
             variant="plain"
             type="button"
             onClick={toggleExpandCollapseAll}
           >
-            {isAllCollapsed ? <AngleRightIcon /> : <AngleDownIcon />}
+            {isAllCollapsed ? (
+              <LucideIconChevronRight
+                data-original-icon="AngleRightIcon"
+                size={16}
+              />
+            ) : (
+              <LucideIconChevronDown
+                data-original-icon="AngleDownIcon"
+                size={16}
+              />
+            )}
           </Button>
         )}
       </ExpandCollapseWrapper>
@@ -68,7 +76,7 @@ const PageControls = ({
           onClick={onScrollPrevious}
           variant="plain"
         >
-          <AngleUpIcon />
+          <LucideIconChevronUp data-original-icon="AngleUpIcon" size={16} />
         </Button>
         <Button
           ouiaId="job-output-scroll-next-button"
@@ -76,7 +84,7 @@ const PageControls = ({
           onClick={onScrollNext}
           variant="plain"
         >
-          <AngleDownIcon />
+          <LucideIconChevronDown data-original-icon="AngleDownIcon" size={16} />
         </Button>
         <Button
           ouiaId="job-output-scroll-first-button"
@@ -84,7 +92,10 @@ const PageControls = ({
           onClick={onScrollFirst}
           variant="plain"
         >
-          <AngleDoubleUpIcon />
+          <LucideIconChevronsUp
+            data-original-icon="AngleDoubleUpIcon"
+            size={16}
+          />
         </Button>
         <Button
           ouiaId="job-output-scroll-last-button"
@@ -92,7 +103,10 @@ const PageControls = ({
           onClick={onScrollLast}
           variant="plain"
         >
-          <AngleDoubleDownIcon />
+          <LucideIconChevronsDown
+            data-original-icon="AngleDoubleDownIcon"
+            size={16}
+          />
         </Button>
       </ScrollWrapper>
     </ControllsWrapper>

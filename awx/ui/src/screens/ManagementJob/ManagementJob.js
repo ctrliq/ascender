@@ -10,7 +10,7 @@ import {
 } from 'react-router-dom';
 
 import { useLingui } from '@lingui/react/macro';
-import { CaretLeftIcon } from '@patternfly/react-icons';
+import { LucideIconChevronLeft } from '@ctrliq/quantic-react';
 import { Card, PageSection } from '@patternfly/react-core';
 
 import { SystemJobTemplatesAPI, OrganizationsAPI } from 'api';
@@ -95,7 +95,7 @@ function ManagementJob({ setBreadcrumb }) {
       link: basePath,
       name: (
         <>
-          <CaretLeftIcon />
+          <LucideIconChevronLeft />
           {t`Back to management jobs`}
         </>
       ),
@@ -132,9 +132,7 @@ function ManagementJob({ setBreadcrumb }) {
             {error?.response?.status === 404 && (
               <span>
                 {t`Management job not found.`}
-                <Link to={basePath}>
-                  {t`View all management jobs`}
-                </Link>
+                <Link to={basePath}>{t`View all management jobs`}</Link>
               </span>
             )}
           </ContentError>

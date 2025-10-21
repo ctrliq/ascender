@@ -6,7 +6,7 @@ import { Button } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
 
 import { Link, useParams } from 'react-router-dom';
-import { PencilAltIcon } from '@patternfly/react-icons';
+import { LucideIconPencil } from '@ctrliq/quantic-react';
 import { ActionsTd, ActionItem } from 'components/PaginatedTable';
 import { Group } from 'types';
 
@@ -45,7 +45,7 @@ function InventoryGroupItem({ group, isSelected, onSelect, rowIndex }) {
               component={Link}
               to={editUrl}
             >
-              <PencilAltIcon />
+              <LucideIconPencil data-original-icon="PencilAltIcon" size="sm" />
             </Button>
           </ActionItem>
         </ActionsTd>

@@ -41,6 +41,7 @@ function AppContainer({ navRouteConfig = [], children }) {
   const isReady = !!config.license_info;
   const isSidebarVisible = useAuthorizedPath();
   const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
+  const [expandedGroup, setExpandedGroup] = useState(null);
 
   const handleAboutModalOpen = () => setIsAboutModalOpen(true);
   const handleAboutModalClose = () => setIsAboutModalOpen(false);
@@ -122,6 +123,8 @@ function AppContainer({ navRouteConfig = [], children }) {
                 groupId={groupId}
                 groupTitle={groupTitle}
                 routes={routes}
+                isExpanded={expandedGroup === groupId}
+                onExpand={() => setExpandedGroup(groupId)}
               />
             ))}
           </NavList>

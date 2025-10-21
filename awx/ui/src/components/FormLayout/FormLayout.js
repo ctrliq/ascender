@@ -33,6 +33,7 @@ export const FormCheckboxLayout = styled.div`
   & > * {
     margin-bottom: 10px;
     margin-right: 30px;
+    align-items: center;
   }
 `;
 

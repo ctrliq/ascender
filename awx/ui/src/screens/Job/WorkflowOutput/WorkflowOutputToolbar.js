@@ -5,10 +5,10 @@ import { Badge as PFBadge, Button, Tooltip } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
 
 import {
-  CompassIcon,
-  WrenchIcon,
-  ProjectDiagramIcon,
-} from '@patternfly/react-icons';
+  LucideIconCompass,
+  LucideIconWrench,
+  LucideIconNetwork,
+} from '@ctrliq/quantic-react';
 import styled from 'styled-components';
 import StatusLabel from 'components/StatusLabel';
 import JobCancelButton from 'components/JobCancelButton';
@@ -100,7 +100,10 @@ function WorkflowOutputToolbar({ job }) {
           variant="plain"
           onClick={navToWorkflow}
         >
-          <ProjectDiagramIcon />
+          <LucideIconNetwork
+            data-original-icon="ProjectDiagramIcon"
+            size={16}
+          />
         </ActionButton>
         <div>{t`Total Nodes`}</div>
         <Badge isRead>{totalNodes}</Badge>
@@ -111,7 +114,7 @@ function WorkflowOutputToolbar({ job }) {
             onClick={() => dispatch({ type: 'TOGGLE_LEGEND' })}
             variant="plain"
           >
-            <CompassIcon />
+            <LucideIconCompass data-original-icon="CompassIcon" size={16} />
           </ActionButton>
         </Tooltip>
         <Tooltip content={t`Toggle Tools`} position="bottom">
@@ -121,7 +124,7 @@ function WorkflowOutputToolbar({ job }) {
             onClick={() => dispatch({ type: 'TOGGLE_TOOLS' })}
             variant="plain"
           >
-            <WrenchIcon />
+            <LucideIconWrench data-original-icon="WrenchIcon" size={16} />
           </ActionButton>
         </Tooltip>
       </ToolbarActions>

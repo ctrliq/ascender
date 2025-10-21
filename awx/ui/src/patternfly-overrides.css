@@ -63,14 +63,14 @@
   --pf-global--info-color--200: var(--quantic-utility-blue-600);
   
   /* === Spacing === */
-  --pf-global--spacer--xs: var(--quantic-spacing-xs);
-  --pf-global--spacer--sm: var(--quantic-spacing-sm);
-  --pf-global--spacer--md: var(--quantic-spacing-md);
-  --pf-global--spacer--lg: var(--quantic-spacing-lg);
-  --pf-global--spacer--xl: var(--quantic-spacing-xl);
-  --pf-global--spacer--2xl: var(--quantic-spacing-2xl);
-  --pf-global--spacer--3xl: var(--quantic-spacing-3xl);
-  --pf-global--spacer--4xl: var(--quantic-spacing-4xl);
+  --pf-global--spacer--xs: var(--quantic-spacing-sm);
+  --pf-global--spacer--sm: var(--quantic-spacing-md);
+  --pf-global--spacer--md: var(--quantic-spacing-lg);
+  --pf-global--spacer--lg: var(--quantic-spacing-xl);
+  --pf-global--spacer--xl: var(--quantic-spacing-2xl);
+  --pf-global--spacer--2xl: var(--quantic-spacing-3xl);
+  --pf-global--spacer--3xl: var(--quantic-spacing-4xl);
+  --pf-global--spacer--4xl: var(--quantic-spacing-5xl);
   
   /* Gutter spacing */
   --pf-global--gutter: var(--quantic-spacing-4);
@@ -101,7 +101,7 @@
 }
 
 :root {
-  color: var(--quantic-text-primary);
+  color: var(--quantic-text-secondary);
   background-color: var(--quantic-bg-primary);
   font-family: var(--quantic-font-family-body);
 }
@@ -113,12 +113,12 @@
 :root .pf-c-page {
   --pf-c-page--BackgroundColor: inherit;
   --pf-c-page__main-section--BackgroundColor: inherit;
-  --pf-c-page__main-section--PaddingTop: var(--quantic-spacing-lg);
+  --pf-c-page__main-section--PaddingTop: var(--quantic-spacing-xl);
   --pf-c-page__main-section--PaddingBottom: var(--quantic-spacing-lg);
-  --pf-c-page__main-section--xl--PaddingTop: var(--quantic-spacing-lg);
+  --pf-c-page__main-section--xl--PaddingTop: var(--quantic-spacing-xl);
   --pf-c-page__main-section--xl--PaddingBottom: var(--quantic-spacing-lg);
-  --pf-c-page__main-section--PaddingRight: var(--quantic-spacing-2xl);
-  --pf-c-page__main-section--PaddingLeft: var(--quantic-spacing-2xl);
+  --pf-c-page__main-section--PaddingRight: var(--quantic-spacing-3xl);
+  --pf-c-page__main-section--PaddingLeft: var(--quantic-spacing-3xl);
   --pf-c-page__main-section--xl--PaddingRight: var(--quantic-spacing-2xl);
   --pf-c-page__main-section--xl--PaddingLeft: var(--quantic-spacing-2xl);
 
@@ -133,6 +133,10 @@
 :root .pf-c-page__header {
   box-shadow: none;
   border-bottom: 1px solid var(--quantic-border-secondary);
+}
+
+:root .pf-c-breadcrumb__item-divider {
+  color: var(--quantic-bg-tertiary);
 }
 
 :root .pf-c-page__sidebar.pf-m-expanded {
@@ -178,11 +182,40 @@
   --pf-c-page__main-section--BackgroundColor: inherit;
 }
 
+:root .pf-c-toolbar__group {
+  gap: var(--quantic-spacing-2);
+  margin-right: 0;
+}
+
+:root .pf-c-toolbar__content-section {
+  gap: var(--quantic-spacing-2);
+}
+
+:root .pf-c-toolbar__item {
+  margin-right: 0;
+}
+
+:root .pf-c-tab-content {
+  padding-top: var(--quantic-spacing-6);
+  padding-bottom: var(--quantic-spacing-6);
+}
+
+:root .pf-c-tabs__item-text {
+  display: flex;
+  align-items: center;
+}
+
 :root .pf-c-table {
+  --pf-c-table__sort__button__text--Color: var(--quantic-text-tertiary);
+
   color: var(--quantic-text-tertiary);
   background-color: var(--quantic-bg-primary);
 }
 
+
+:root .pf-c-table thead {
+  --pf-c-table--cell--FontWeight: var(--quantic-font-weight-medium);
+}
 :root .pf-c-table tr > * {
   color: inherit;
 }
@@ -197,6 +230,26 @@
   --pf-global--BackgroundColor--100: inherit;
 }
 
+:root .pf-c-empty-state {
+  --pf-c-empty-state--PaddingTop: var(--quantic-spacing-16);
+  --pf-c-empty-state__body--Color: var(--quantic-text-tertiary);
+}
+
+:root .pf-c-title {
+  color: var(--quantic-text-primary);
+  --pf-c-title--m-2xl--FontWeight: var(--quantic-font-weight-semibold);
+  --pf-c-title--m-xl--FontWeight: var(--quantic-font-weight-semibold);
+  --pf-c-title--m-lg--FontWeight: var(--quantic-font-weight-semibold);
+}
+
+.pf-c-title.pf-m-2xl {
+  margin-top: var(--quantic-spacing-6);
+}
+
+:root .pf-c-card {
+  --pf-c-card--first-child--PaddingTop: var(--quantic-spacing-8);
+}
+
 :root .pf-c-card__title {
   --pf-c-card__title--FontSize: var(--quantic-font-size-body-lg);
   margin-bottom: var(--quantic-spacing-1);
@@ -209,6 +262,7 @@
   --pf-c-data-list__item--BorderBottomColor: var(--quantic-border-secondary);
   --pf-c-data-list__item--m-hover--BackgroundColor: var(--quantic-bg-tertiary);
 }
+
 
 :root .pf-c-dropdown {
   --pf-c-dropdown__menu--BackgroundColor: var(--quantic-bg-primary);
@@ -236,9 +290,12 @@
   --pf-c-select__toggle--Color: var(--quantic-text-primary);
   --pf-c-select__toggle--PaddingRight: var(--quantic-spacing-4);
   --pf-c-select__toggle--PaddingLeft: var(--quantic-spacing-4);
-  --pf-c-select__toggle--FontSize: var(--quantic-font-size-body-md);
-
+  --pf-c-select__toggle--FontSize: var(--quantic-font-size-body-sm);
+  --pf-c-select__toggle--disabled--BackgroundColor: var(--quantic-bg-disabled);
+  --pf-c-select__toggle-arrow--Color: var(--quantic-text-tertiary);
+  
   --pf-c-select__menu--BackgroundColor: var(--quantic-bg-primary);
+  --pf-c-select__menu-item--focus--BackgroundColor: var(--quantic-bg-tertiary);
   --pf-c-select__menu-item--hover--BackgroundColor: var(--quantic-bg-tertiary);
   --pf-c-select__menu-item--Color: var(--quantic-text-primary);
   --pf-c-select__menu-item--PaddingTop: var(--quantic-spacing-2);
@@ -289,6 +346,8 @@
 
   --pf-c-options-menu__menu-item-icon--Color: var(--quantic-text-tertiary);
   --pf-c-options-menu__menu-item--hover--BackgroundColor: var(--quantic-bg-tertiary);
+
+  --pf-c-options-menu__toggle--Color: var(--quantic-text-secondary);
 }
 
 :root .pf-c-options-menu__menu {
@@ -308,15 +367,40 @@
   --pf-c-tooltip_content--PaddingBottom: inherit;
   --pf-c-tooltip_content--PaddingLeft: inherit;
   --pf-c-tooltip_content--Color: inherit;
-  --pf-c-tooltip_content--BackgroundColor: var(--quantic-bg-secondary);
+  --pf-c-tooltip__content--BackgroundColor: var(--quantic-bg-tertiary);
+  --pf-c-tooltip__content--PaddingTop: var(--quantic-spacing-1);
+  --pf-c-tooltip__content--PaddingRight: var(--quantic-spacing-3);
+  --pf-c-tooltip__content--PaddingBottom: var(--quantic-spacing-1);
+  --pf-c-tooltip__content--PaddingLeft: var(--quantic-spacing-3);
   --pf-c-tooltip_content--FontSize: inherit;
   --pf-c-tooltip_arrow--Width: inherit;
   --pf-c-tooltip_arrow--Height: inherit;
   --pf-c-tooltip_arrow--m-top--TranslateX: inherit;
 }
 
+:root .pf-c-tooltip__content {
+  border-radius: var(--quantic-radius-xs);
+}
+
+:root .pf-c-popover {
+  --pf-c-popover__content--BackgroundColor: var(--quantic-bg-tertiary);
+  --pf-c-popover__arrow--BackgroundColor: var(--quantic-bg-tertiary);
+}
+
+:root .pf-c-popover__content {
+  border-radius: var(--quantic-radius-sm);
+  --pf-c-popover__content--PaddingRight: var(--quantic-spacing-5);
+  --pf-c-popover__content--PaddingLeft: var(--quantic-spacing-5);
+  --pf-c-popover__content--PaddingTop: var(--quantic-spacing-4);
+  --pf-c-popover__content--PaddingBottom: var(--quantic-spacing-5);
+}
+
+:root .pf-c-popover.pf-m-top {
+  --pf-c-popover__arrow--m-top--TranslateY: var(--quantic-spacing-1 );
+}
 :root .pf-c-form-control {
   --pf-c-form-control--BackgroundColor: var(--quantic-bg-primary);
+  --pf-c-form-control--disabled--BackgroundColor: var(--quantic-bg-disabled);
   --pf-c-form-control--BorderColor: var(--quantic-border-primary);
   --pf-c-form-control--Color: var(--quantic-text-primary);
   --pf-c-form-control--PlaceholderColor: var(--quantic-text-disabled);
@@ -339,12 +423,22 @@
   border-radius: var(--quantic-radius-sm);
   outline: 2px solid transparent;
   outline-offset: 2px;
+  
+}
+:root .pf-c-form-control:not(.ace_editor) {
   transition: all 0.15s ease-in-out;
 }
 
 :root .pf-c-button.pf-m-control {
   --pf-c-button--disabled--BackgroundColor: var(--quantic-bg-disabled);
-  --pf-c-button--BorderRadius: var(--quantic-radius-xs);
+  --pf-c-button--BorderRadius: var(--quantic-radius-sm);
+  --pf-c-button--m-control--BackgroundColor: var(--quantic-bg-brand-primary);
+}
+
+:root .pf-c-button.pf-m-plain,
+:root .pf-c-button.pf-m-plain:hover {
+  --pf-c-button--m-plain--Color: var(--quantic-text-secondary);
+  --pf-c-button--m-plain--disabled--Color: var(--quantic-text-tertiary);
 }
 
 :root .pf-c-button {
@@ -375,14 +469,64 @@
   --pf-c-form-control--BorderBottomColor: var(--quantic-border-primary);
 }
 
+:root .pf-c-check {
+  --pf-c-check__label--Color: var(--quantic-text-primary);
+}
+
 :root .pf-c-input-group {
   --pf-c-input-group--BackgroundColor: var(--quantic-bg-primary);
   border-radius: var(--quantic-radius-sm);
+  gap: var(--quantic-spacing-2);
 }
 
+:root .pf-c-progress {
+  --pf-c-progress__bar--BackgroundColor: var(--quantic-bg-tertiary);
+}
+
+:root .pf-c-progress__bar,
+:root .pf-c-progress__bar::before,
+:root .pf-c-progress__indicator {
+  border-radius: var(--quantic-radius-xs);
+}
+
+:root .pf-c-chip-group {
+  color: var(--quantic-text-primary);
+}
+
+:root .pf-c-chip {
+  --pf-c-chip--BackgroundColor: var(--quantic-bg-tertiary);
+  --pf-c-chip--Color: var(--quantic-text-primary);
+  --pf-c-chip__text--Color: var(--quantic-text-primary);
+  --pf-c-chip--BorderColor: var(--quantic-border-secondary);
+  --pf-c-chip--m-read--BackgroundColor: var(--quantic-bg-secondary);
+  --pf-c-chip--m-read--Color: var(--quantic-text-secondary);
+  --pf-c-chip--m-read--BorderColor: var(--quantic-border-secondary);
+  --pf-c-chip--m-read--close-button--Color: var(--quantic-text-tertiary);
+  --pf-c-chip--m-read--close-button--hover--Color: var(--quantic-text-primary);
+}
 
 .pf-c-nav__link {
   border-radius: var(--quantic-radius-sm);
+}
+
+.pf-c-nav__toggle-icon {
+  color: var(--quantic-text-tertiary);
+  opacity: .6;
+}
+
+:root .pf-c-pagination.pf-m-bottom {
+  justify-content: space-between;
+}
+
+:root .pf-c-slider {
+  --pf-c-slider__thumb--Height: var(--quantic-spacing-3);
+  --pf-c-slider__thumb--Width: var(--quantic-spacing-3);
+  --pf-c-slider__steps--FontSize: var(--quantic-font-size-body-xs);
+  --pf-c-slider__thumb--BoxShadow: none;
+  /* --pf-c-slider__rail-track--before--base--BackgroundColor: #12a66f; */
+  --pf-c-slider__rail-track--before--fill--BackgroundColor: #12a66f; 
+  /* --pf-c-slider__rail-track--before--fill--BackgroundColor--gradient-stop: transparent; */
+  /* */
 }
 
 .pf-c-nav__link:focus {
@@ -403,4 +547,18 @@
 
 .pf-c-nav__link.pf-m-current::after {
   border-color: rgba(51, 170, 51, .3);
+}
+
+.ace-monokai .ace_gutter {
+  background: var(--quantic-bg-secondary);
+  color: var(--quantic-text-tertiary);
+}
+
+.ace-monokai .ace_marker-layer .ace_active-line {
+  background: var(--quantic-bg-primary-alt);
+  color: var(--quantic-text-secondary);
+}
+
+.ace-monokai .ace_gutter-active-line {
+  background-color: var(--quantic-bg-tertiary);
 }

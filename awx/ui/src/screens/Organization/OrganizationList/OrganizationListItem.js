@@ -5,15 +5,12 @@ import { Button, Tooltip } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import {
-  ExclamationTriangleIcon as PFExclamationTriangleIcon,
-  PencilAltIcon,
-} from '@patternfly/react-icons';
+import { LucideIconCircleAlert, LucideIconPencil } from '@ctrliq/quantic-react';
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
 
 import { Organization } from 'types';
 
-const ExclamationTriangleIcon = styled(PFExclamationTriangleIcon)`
+const StyledTriangleAlert = styled(LucideIconCircleAlert)`
   color: var(--pf-global--warning-color--100);
   margin-left: 18px;
 `;
@@ -55,7 +52,7 @@ function OrganizationListItem({
               content={t`Custom virtual environment ${organization.custom_virtualenv} must be replaced by an execution environment.`}
               position="right"
             >
-              <ExclamationTriangleIcon />
+              <StyledTriangleAlert data-original-icon="ExclamationTriangleIcon" />
             </Tooltip>
           </span>
         )}
@@ -78,7 +75,7 @@ function OrganizationListItem({
             component={Link}
             to={`/organizations/${organization.id}/edit`}
           >
-            <PencilAltIcon />
+            <LucideIconPencil data-original-icon="PencilAltIcon" size="sm" />
           </Button>
         </ActionItem>
       </ActionsTd>

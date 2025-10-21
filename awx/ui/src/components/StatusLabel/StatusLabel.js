@@ -68,7 +68,11 @@ export default function StatusLabel({ status, tooltipContent = '', children }) {
   const Icon = icons[status];
 
   const renderLabel = () => (
-    <Label variant="outline" color={color} icon={Icon ? <Icon /> : null}>
+    <Label
+      variant="outline"
+      color={color}
+      icon={Icon ? <Icon size="xs" /> : null}
+    >
       {children || label}
     </Label>
   );

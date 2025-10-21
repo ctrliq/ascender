@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
-import { OutlinedThumbsUpIcon } from '@patternfly/react-icons';
+import { LucideIconThumbsUp as OutlinedThumbsUpIcon } from '@ctrliq/quantic-react';
 import { WorkflowApprovalsAPI } from 'api';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 
@@ -45,7 +45,7 @@ function WorkflowApprovalButton({
             : t`Approve`
         }
       >
-        {isDetailView ? t`Approve` : <OutlinedThumbsUpIcon />}
+        {isDetailView ? t`Approve` : <OutlinedThumbsUpIcon size={16} data-original-icon="OutlinedThumbsUpIcon" />}
       </Button>
       {approveError && (
         <AlertModal

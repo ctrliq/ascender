@@ -3,7 +3,7 @@ import { func } from 'prop-types';
 import { Trans, useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import { Button, ButtonVariant, Tooltip } from '@patternfly/react-core';
-import { KeyIcon } from '@patternfly/react-icons';
+import { LucideIconKey as KeyIcon } from '@ctrliq/quantic-react';
 import CredentialChip from 'components/CredentialChip';
 import { Credential } from 'types';
 
@@ -43,7 +43,7 @@ function CredentialPluginSelected({
             onClick={onEditPlugin}
             variant={ButtonVariant.control}
           >
-            <KeyIcon />
+            <KeyIcon size={16} data-original-icon="KeyIcon" />
           </Button>
         </Tooltip>
       </SelectedCredential>

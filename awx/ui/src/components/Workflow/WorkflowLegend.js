@@ -3,10 +3,10 @@ import React, { useContext } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import {
-  ExclamationTriangleIcon,
-  PauseIcon,
-  TimesIcon,
-} from '@patternfly/react-icons';
+  LucideIconCircleAlert,
+  LucideIconPause,
+  LucideIconX,
+} from '@ctrliq/quantic-react';
 import { WorkflowDispatchContext } from 'contexts/Workflow';
 
 const Wrapper = styled.div`
@@ -45,7 +45,7 @@ const NodeTypeLetter = styled.div`
   width: 20px;
 `;
 
-const StyledExclamationTriangleIcon = styled(ExclamationTriangleIcon)`
+const StyledTriangleAlert = styled(LucideIconCircleAlert)`
   color: #f0ad4d;
   height: 20px;
   margin-right: 10px;
@@ -70,7 +70,7 @@ const AlwaysLink = styled(Link)`
   background-color: #337ab7;
 `;
 
-const Close = styled(TimesIcon)`
+const Close = styled(LucideIconX)`
   cursor: pointer;
   position: absolute;
   right: 10px;
@@ -84,7 +84,10 @@ function WorkflowLegend() {
     <Wrapper>
       <Header>
         <b>{t`Legend`}</b>
-        <Close onClick={() => dispatch({ type: 'TOGGLE_LEGEND' })} />
+        <Close
+          onClick={() => dispatch({ type: 'TOGGLE_LEGEND' })}
+          data-original-icon="TimesIcon"
+        />
       </Header>
       <Legend>
         <li>
@@ -109,12 +112,12 @@ function WorkflowLegend() {
         </li>
         <li>
           <NodeTypeLetter>
-            <PauseIcon />
+            <LucideIconPause data-original-icon="PauseIcon" size={14} />
           </NodeTypeLetter>
           <span>{t`Approval`}</span>
         </li>
         <li>
-          <StyledExclamationTriangleIcon />
+          <StyledTriangleAlert data-original-icon="ExclamationTriangleIcon" />
           <span>{t`Warning`}</span>
         </li>
         <li>

@@ -12,7 +12,6 @@ import {
   Title,
   Tooltip,
 } from '@patternfly/react-core';
-import { HistoryIcon } from '@patternfly/react-icons';
 import { Link, Route, useRouteMatch, useLocation } from 'react-router-dom';
 import { LucideIconHistory } from '@ctrliq/quantic-react';
 
@@ -133,7 +132,7 @@ const Crumb = ({ breadcrumbConfig, showDivider }) => {
       <Route path={`${match.url}/:path`}>
         <Crumb
           breadcrumbConfig={breadcrumbConfig}
-          showDivider={false}
+          showDivider
           data-cy={crumb}
         />
       </Route>

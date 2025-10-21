@@ -2,7 +2,7 @@ import React, { useContext, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
 import { bool, func } from 'prop-types';
-import { PlusIcon } from '@patternfly/react-icons';
+import { LucideIconPlus } from '@ctrliq/quantic-react';
 import {
   WorkflowDispatchContext,
   WorkflowStateContext,
@@ -74,7 +74,7 @@ function WorkflowStartNode({ onUpdateHelpText, showActionTooltip }) {
                 dispatch({ type: 'START_ADD_NODE', sourceNodeId: 1 });
               }}
             >
-              <PlusIcon />
+              <LucideIconPlus data-original-icon="PlusIcon" size={16} />
             </WorkflowActionTooltipItem>,
           ]}
           pointX={startNodeRef.current.offsetWidth}

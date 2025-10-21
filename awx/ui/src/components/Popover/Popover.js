@@ -2,7 +2,7 @@ import React from 'react';
 import { node, string } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 import { Popover as PFPopover } from '@patternfly/react-core';
-import { HelpIcon } from '@patternfly/react-icons';
+import { LucideIconCircleHelp } from '@ctrliq/quantic-react';
 import styled from 'styled-components';
 
 const PopoverButton = styled.button`
@@ -35,7 +35,7 @@ function Popover({ ariaLabel, content, header, id, maxWidth, ...rest }) {
         onClick={(e) => e.preventDefault()}
         type="button"
       >
-        <HelpIcon noVerticalAlign />
+        <LucideIconCircleHelp data-original-icon="HelpIcon" size={16} />
       </PopoverButton>
     </PFPopover>
   );

@@ -5,8 +5,8 @@ import React, { useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
-import { CaretLeftIcon } from '@patternfly/react-icons';
 import { CardBody, CardActionsRow } from 'components/Card';
+import { LucideIconChevronLeft } from '@ctrliq/quantic-react';
 import CodeDetail from 'components/DetailList/CodeDetail';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
@@ -81,7 +81,7 @@ function MiscSystemDetail() {
     {
       name: (
         <>
-          <CaretLeftIcon />
+          <LucideIconChevronLeft />
           {t`Back to Settings`}
         </>
       ),

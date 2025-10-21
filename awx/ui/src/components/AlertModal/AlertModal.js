@@ -2,12 +2,12 @@ import 'styled-components/macro';
 import React from 'react';
 import { Modal, Title } from '@patternfly/react-core';
 import {
-  CheckCircleIcon,
-  ExclamationCircleIcon,
-  ExclamationTriangleIcon,
-  InfoCircleIcon,
-  TimesCircleIcon,
-} from '@patternfly/react-icons';
+  LucideIconCircleCheck,
+  LucideIconCircleAlert,
+  LucideIconTriangleAlert,
+  LucideIconInfo,
+  LucideIconCircleX,
+} from '@ctrliq/quantic-react';
 
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
@@ -30,33 +30,38 @@ function AlertModal({
   const { t } = useLingui();
   const variantIcons = {
     danger: (
-      <ExclamationCircleIcon
+      <LucideIconCircleAlert
         size="lg"
         css="color: var(--pf-global--danger-color--100)"
+        data-original-icon="ExclamationCircleIcon"
       />
     ),
     error: (
-      <TimesCircleIcon
+      <LucideIconCircleX
         size="lg"
         css="color: var(--pf-global--danger-color--100)"
+        data-original-icon="TimesCircleIcon"
       />
     ),
     info: (
-      <InfoCircleIcon
+      <LucideIconInfo
         size="lg"
         css="color: var(--pf-global--info-color--100)"
+        data-original-icon="InfoCircleIcon"
       />
     ),
     success: (
-      <CheckCircleIcon
+      <LucideIconCircleCheck
         size="lg"
         css="color: var(--pf-global--success-color--100)"
+        data-original-icon="CheckCircleIcon"
       />
     ),
     warning: (
-      <ExclamationTriangleIcon
+      <LucideIconTriangleAlert
         size="lg"
         css="color: var(--pf-global--warning-color--100)"
+        data-original-icon="ExclamationTriangleIcon"
       />
     ),
   };

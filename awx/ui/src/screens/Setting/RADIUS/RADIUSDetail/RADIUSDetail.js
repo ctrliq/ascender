@@ -2,8 +2,8 @@ import React, { useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';
 import { Button, Alert as PFAlert } from '@patternfly/react-core';
-import { CaretLeftIcon } from '@patternfly/react-icons';
 import styled from 'styled-components';
+import { LucideIconChevronLeft } from '@ctrliq/quantic-react';
 import { CardBody, CardActionsRow } from 'components/Card';
 import ContentLoading from 'components/ContentLoading';
 import ContentError from 'components/ContentError';
@@ -45,7 +45,7 @@ function RADIUSDetail() {
     {
       name: (
         <>
-          <CaretLeftIcon />
+          <LucideIconChevronLeft />
           {t`Back to Settings`}
         </>
       ),

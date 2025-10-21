@@ -8,7 +8,6 @@ import {
   EmptyStateIcon,
   Title,
 } from '@patternfly/react-core';
-import { CubesIcon } from '@patternfly/react-icons';
 import { TeamsAPI, RolesAPI, UsersAPI } from 'api';
 import useRequest, { useDeleteItems } from 'hooks/useRequest';
 import DataListToolbar from 'components/DataListToolbar';
@@ -23,6 +22,8 @@ import ErrorDetail from 'components/ErrorDetail';
 import AlertModal from 'components/AlertModal';
 import UserAndTeamAccessAdd from 'components/UserAndTeamAccessAdd/UserAndTeamAccessAdd';
 import TeamRoleListItem from './TeamRoleListItem';
+import { LucideIconBox as CubesIcon } from '@ctrliq/quantic-react';
+
 
 const QS_CONFIG = getQSConfig('roles', {
   page: 1,
@@ -124,7 +125,7 @@ function TeamRolesList({ me, team }) {
   if (isSysAdmin) {
     return (
       <EmptyState variant="full">
-        <EmptyStateIcon icon={CubesIcon} />
+        <EmptyStateIcon icon={() => <CubesIcon size={64} data-original-icon="CubesIcon" />} />
         <Title headingLevel="h5" size="lg">
           {t`System Administrator`}
         </Title>

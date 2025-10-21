@@ -24,12 +24,10 @@ import {
   Tooltip,
 } from '@patternfly/react-core';
 
-import {
-  AzureIcon,
-  GoogleIcon,
-  GithubIcon,
-  UserCircleIcon,
-} from '@patternfly/react-icons';
+import { LucideIconLoaderCircle as AzureIcon } from '@ctrliq/quantic-react';
+import { LucideIconLoaderCircle as GoogleIcon } from '@ctrliq/quantic-react';
+import { LucideIconGithub as GithubIcon } from '@ctrliq/quantic-react';
+import { LucideIconUserRound as UserCircleIcon } from '@ctrliq/quantic-react';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import { AuthAPI, RootAPI, MeAPI } from 'api';
 import { useSession } from 'contexts/Session';
@@ -251,7 +249,7 @@ function AWXLogin({ alt, isAuthenticated }) {
                       onClick={setSessionRedirect}
                     >
                       <Tooltip content={t`Sign in with Azure AD`}>
-                        <AzureIcon size="lg" />
+                        <AzureIcon size={24} data-original-icon="AzureIcon" />
                       </Tooltip>
                     </LoginMainFooterLinksItem>
                   );
@@ -265,7 +263,7 @@ function AWXLogin({ alt, isAuthenticated }) {
                       onClick={setSessionRedirect}
                     >
                       <Tooltip content={t`Sign in with GitHub`}>
-                        <GithubIcon size="lg" />
+                        <GithubIcon size={24} data-original-icon="GithubIcon" />
                       </Tooltip>
                     </LoginMainFooterLinksItem>
                   );
@@ -278,10 +276,8 @@ function AWXLogin({ alt, isAuthenticated }) {
                       key={authKey}
                       onClick={setSessionRedirect}
                     >
-                      <Tooltip
-                        content={t`Sign in with GitHub Organizations`}
-                      >
-                        <GithubIcon size="lg" />
+                      <Tooltip content={t`Sign in with GitHub Organizations`}>
+                        <GithubIcon size={24} data-original-icon="GithubIcon" />
                       </Tooltip>
                     </LoginMainFooterLinksItem>
                   );
@@ -295,7 +291,7 @@ function AWXLogin({ alt, isAuthenticated }) {
                       onClick={setSessionRedirect}
                     >
                       <Tooltip content={t`Sign in with GitHub Teams`}>
-                        <GithubIcon size="lg" />
+                        <GithubIcon size={24} data-original-icon="GithubIcon" />
                       </Tooltip>
                     </LoginMainFooterLinksItem>
                   );
@@ -308,10 +304,8 @@ function AWXLogin({ alt, isAuthenticated }) {
                       key={authKey}
                       onClick={setSessionRedirect}
                     >
-                      <Tooltip
-                        content={t`Sign in with GitHub Enterprise`}
-                      >
-                        <GithubIcon size="lg" />
+                      <Tooltip content={t`Sign in with GitHub Enterprise`}>
+                        <GithubIcon size={24} data-original-icon="GithubIcon" />
                       </Tooltip>
                     </LoginMainFooterLinksItem>
                   );
@@ -327,7 +321,7 @@ function AWXLogin({ alt, isAuthenticated }) {
                       <Tooltip
                         content={t`Sign in with GitHub Enterprise Organizations`}
                       >
-                        <GithubIcon size="lg" />
+                        <GithubIcon size={24} data-original-icon="GithubIcon" />
                       </Tooltip>
                     </LoginMainFooterLinksItem>
                   );
@@ -343,7 +337,7 @@ function AWXLogin({ alt, isAuthenticated }) {
                       <Tooltip
                         content={t`Sign in with GitHub Enterprise Teams`}
                       >
-                        <GithubIcon size="lg" />
+                        <GithubIcon size={24} data-original-icon="GithubIcon" />
                       </Tooltip>
                     </LoginMainFooterLinksItem>
                   );
@@ -357,7 +351,7 @@ function AWXLogin({ alt, isAuthenticated }) {
                       onClick={setSessionRedirect}
                     >
                       <Tooltip content={t`Sign in with Google`}>
-                        <GoogleIcon size="lg" />
+                        <GoogleIcon size={24} data-original-icon="GoogleIcon" />
                       </Tooltip>
                     </LoginMainFooterLinksItem>
                   );
@@ -371,7 +365,10 @@ function AWXLogin({ alt, isAuthenticated }) {
                       onClick={setSessionRedirect}
                     >
                       <Tooltip content={t`Sign in with OIDC`}>
-                        <UserCircleIcon size="lg" />
+                        <UserCircleIcon
+                          size={24}
+                          data-original-icon="UserCircleIcon"
+                        />
                       </Tooltip>
                     </LoginMainFooterLinksItem>
                   );
@@ -392,7 +389,10 @@ function AWXLogin({ alt, isAuthenticated }) {
                             : t`Sign in with SAML`
                         }
                       >
-                        <UserCircleIcon size="lg" />
+                        <UserCircleIcon
+                          size={24}
+                          data-original-icon="UserCircleIcon"
+                        />
                       </Tooltip>
                     </LoginMainFooterLinksItem>
                   );
