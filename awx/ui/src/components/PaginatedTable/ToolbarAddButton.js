@@ -57,11 +57,7 @@ function ToolbarAddButton({
     );
   }
   return (
-    <Tooltip
-      content={defaultLabel || t`Add`}
-      position="top"
-      exitDelay={199999999}
-    >
+    <Tooltip content={defaultLabel || t`Add`} position="top">
       <Button ouiaId={ouiaId} onClick={onClick} isDisabled={isDisabled}>
         {defaultLabel || t`Add`}
         {showToggleIndicator && (

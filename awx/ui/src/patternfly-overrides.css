@@ -281,6 +281,20 @@
   border-radius: var(--quantic-radius-md);
 }
 
+:root .pf-c-dropdown__toggle-icon {
+  color: var(--quantic-text-tertiary);
+  opacity: .6;
+}
+
+:root .pf-c-dropdown__toggle.pf-m-plain:not(.pf-m-text)  {
+  display: inline-flex;
+}
+
+:root .pf-c-dropdown__toggle-text{
+  display: flex;
+  align-items: center;
+}
+
 
 :root .pf-c-select {
   --pf-c-select__toggle--PaddingTop: var(--quantic-spacing-2);
@@ -291,6 +305,7 @@
   --pf-c-select__toggle--PaddingRight: var(--quantic-spacing-4);
   --pf-c-select__toggle--PaddingLeft: var(--quantic-spacing-4);
   --pf-c-select__toggle--FontSize: var(--quantic-font-size-body-sm);
+
   --pf-c-select__toggle--disabled--BackgroundColor: var(--quantic-bg-disabled);
   --pf-c-select__toggle-arrow--Color: var(--quantic-text-tertiary);
   
@@ -316,11 +331,14 @@
 }
 
 :root .pf-c-select__toggle {
+
   border-radius: var(--quantic-radius-sm);
   height: 42px;
 }
 
 :root .pf-c-select__toggle:before {
+  --pf-c-select__toggle--before--BorderBottomColor: var(--quantic-border-primary);
+  --pf-c-select__toggle--before--BorderBottomWidth: 1px;
   border-radius: var(--quantic-radius-sm);
 }
 
@@ -429,10 +447,23 @@
   transition: all 0.15s ease-in-out;
 }
 
+:root .pf-c-button {
+  --pf-c-button--FontSize: var(--quantic-font-size-body-xs);
+}
+
 :root .pf-c-button.pf-m-control {
+  vertical-align: middle;
   --pf-c-button--disabled--BackgroundColor: var(--quantic-bg-disabled);
-  --pf-c-button--BorderRadius: var(--quantic-radius-sm);
+  --pf-c-button--BorderRadius: var(--quantic-radius-md);
   --pf-c-button--m-control--BackgroundColor: var(--quantic-bg-brand-primary);
+}
+
+:root .pf-c-button.pf-m-control:hover {
+  --pf-c-button--m-control--BackgroundColor: var(--quantic-bg-brand-primary-hover);
+}
+
+:root .pf-m-control.pf-c-button::after {
+  display: none;
 }
 
 :root .pf-c-button.pf-m-plain,
@@ -503,6 +534,28 @@
   --pf-c-chip--m-read--BorderColor: var(--quantic-border-secondary);
   --pf-c-chip--m-read--close-button--Color: var(--quantic-text-tertiary);
   --pf-c-chip--m-read--close-button--hover--Color: var(--quantic-text-primary);
+}
+
+:root .pf-c-modal-box__header {
+  --pf-c-modal-box__header--PaddingTop: var(--quantic-spacing-8);
+  --pf-c-modal-box__header--PaddingBottom: var(--quantic-spacing-4);
+  --pf-c-modal-box__header--PaddingRight: var(--quantic-spacing-8);
+  --pf-c-modal-box__header--PaddingLeft: var(--quantic-spacing-8);
+}
+
+:root .pf-c-modal-box__footer {
+  --pf-c-modal-box__footer--PaddingTop: var(--quantic-spacing-4);
+  --pf-c-modal-box__footer--PaddingBottom: var(--quantic-spacing-6);
+  --pf-c-modal-box__footer--PaddingRight: var(--quantic-spacing-8);
+  --pf-c-modal-box__footer--PaddingLeft: var(--quantic-spacing-8);
+}
+
+:root .pf-c-modal-box__header + .pf-c-modal-box__body {
+  --pf-c-modal-box__body--PaddingTop: var(--quantic-spacing-8);
+  --pf-c-modal-box__body--PaddingBottom: var(--quantic-spacing-16);
+  --pf-c-modal-box__body--last-child--PaddingBottom: var(--quantic-spacing-12);
+  --pf-c-modal-box__body--PaddingRight: var(--quantic-spacing-8);
+  --pf-c-modal-box__body--PaddingLeft: var(--quantic-spacing-8);
 }
 
 .pf-c-nav__link {

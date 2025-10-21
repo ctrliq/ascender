@@ -137,7 +137,7 @@ function NotificationTemplateListItem({
               onClick={sendTestNotification}
               isDisabled={isLoading || status === 'running'}
             >
-              <LucideIconBell data-original-icon="BellIcon" />
+              <LucideIconBell size={16} data-original-icon="BellIcon" />
             </Button>
           </ActionItem>
           <ActionItem

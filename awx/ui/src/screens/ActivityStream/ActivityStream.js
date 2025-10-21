@@ -125,6 +125,7 @@ function ActivityStream() {
           {t`Activity Stream type selector`}
         </span>
         <Select
+          position="right"
           variant={SelectVariant.single}
           aria-labelledby="grouped-type-select-id"
           typeAheadAriaLabel={t`Select an activity type`}
@@ -140,6 +141,8 @@ function ActivityStream() {
           selections={activityStreamType}
           isOpen={isTypeDropdownOpen}
           isGrouped
+          maxHeight="400px"
+          width="250px"
           noResultsFoundText={t`No results found`}
           ouiaId="activity-type-select"
         >

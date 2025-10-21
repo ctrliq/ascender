@@ -113,7 +113,7 @@ function PageHeaderToolbar({
                 ouiaId="toolbar-info-dropdown-toggle"
               >
                 <LucideIconCircleHelp
-                  size="xs"
+                  size={16}
                   data-original-icon="QuestionCircleIcon"
                 />
               </DropdownToggle>
@@ -155,7 +155,7 @@ function PageHeaderToolbar({
                 onToggle={setIsUserOpen}
                 ouiaId="toolbar-user-dropdown-toggle"
               >
-                <LucideIconUser size="xs" data-original-icon="UserIcon" />
+                <LucideIconUser size={16} data-original-icon="UserIcon" />
                 {loggedInUser && <UserName>{loggedInUser.username}</UserName>}
               </DropdownToggle>
             }
