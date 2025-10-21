@@ -17,6 +17,7 @@ import { formatDateString } from 'util/dates';
 import { DetailList, Detail } from '../../DetailList';
 import { ActionsTd, ActionItem, TdBreakWord } from '../../PaginatedTable';
 import { ScheduleToggle } from '..';
+import { LucideIconPencil } from '@ctrliq/quantic-react';
 
 const ExclamationTriangleIcon = styled(PFExclamationTriangleIcon)`
   color: #c9190b;
@@ -141,7 +142,7 @@ function ScheduleListItem({
             component={Link}
             to={`${scheduleBaseUrl}/edit`}
           >
-            <PencilAltIcon />
+            <LucideIconPencil size="xs" />
           </Button>
         </ActionItem>
       </ActionsTd>

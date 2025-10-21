@@ -1,6 +1,7 @@
 'use strict';
 
 const fs = require('fs');
+const path = require('path');
 const evalSourceMapMiddleware = require('react-dev-utils/evalSourceMapMiddleware');
 const noopServiceWorkerMiddleware = require('react-dev-utils/noopServiceWorkerMiddleware');
 const ignoredFiles = require('react-dev-utils/ignoredFiles');
@@ -43,32 +44,39 @@ module.exports = function (proxy, allowedHost) {
     },
     // Enable gzip compression of generated files.
     compress: true,
-    static: {
-      // By default WebpackDevServer serves physical files from current directory
-      // in addition to all the virtual build products that it serves from memory.
-      // This is confusing because those files won’t automatically be available in
-      // production build folder unless we copy them. However, copying the whole
-      // project directory is dangerous because we may expose sensitive files.
-      // Instead, we establish a convention that only files in `public` directory
-      // get served. Our build script will copy `public` into the `build` folder.
-      // In `index.html`, you can get URL of `public` folder with %PUBLIC_URL%:
-      // <link rel="icon" href="%PUBLIC_URL%/favicon.ico">
-      // In JavaScript code, you can access it with `process.env.PUBLIC_URL`.
-      // Note that we only recommend to use `public` folder as an escape hatch
-      // for files like `favicon.ico`, `manifest.json`, and libraries that are
-      // for some reason broken when imported through webpack. If you just want to
-      // use an image, put it in `src` and `import` it from JavaScript instead.
-      directory: paths.appPublic,
-      publicPath: [paths.publicUrlOrPath],
-      // By default files from `contentBase` will not trigger a page reload.
-      watch: {
-        // Reportedly, this avoids CPU overload on some systems.
-        // https://github.com/facebook/create-react-app/issues/293
-        // src/node_modules is not ignored to support absolute imports
-        // https://github.com/facebook/create-react-app/issues/1065
-        ignored: ignoredFiles(paths.appSrc),
+    static: [
+      {
+        // By default WebpackDevServer serves physical files from current directory
+        // in addition to all the virtual build products that it serves from memory.
+        // This is confusing because those files won't automatically be available in
+        // production build folder unless we copy them. However, copying the whole
+        // project directory is dangerous because we may expose sensitive files.
+        // Instead, we establish a convention that only files in `public` directory
+        // get served. Our build script will copy `public` into the `build` folder.
+        // In `index.html`, you can get URL of `public` folder with %PUBLIC_URL%:
+        // <link rel="icon" href="%PUBLIC_URL%/favicon.ico">
+        // In JavaScript code, you can access it with `process.env.PUBLIC_URL`.
+        // Note that we only recommend to use `public` folder as an escape hatch
+        // for files like `favicon.ico`, `manifest.json`, and libraries that are
+        // for some reason broken when imported through webpack. If you just want to
+        // use an image, put it in `src` and `import` it from JavaScript instead.
+        directory: paths.appPublic,
+        publicPath: [paths.publicUrlOrPath],
+        // By default files from `contentBase` will not trigger a page reload.
+        watch: {
+          // Reportedly, this avoids CPU overload on some systems.
+          // https://github.com/facebook/create-react-app/issues/293
+          // src/node_modules is not ignored to support absolute imports
+          // https://github.com/facebook/create-react-app/issues/1065
+          ignored: ignoredFiles(paths.appSrc),
+        },
       },
-    },
+      {
+        // Serve quantic-fonts assets at /assets path
+        directory: path.resolve(__dirname, '../node_modules/@ctrliq/quantic-fonts/dist/assets'),
+        publicPath: '/assets',
+      },
+    ],
     client: {
       webSocketURL: {
         // Enable custom sockjs pathname for websocket connection to hot reloading server.
@@ -92,14 +100,19 @@ module.exports = function (proxy, allowedHost) {
     },
     server: {
       type: 'https', // Specify the server type as 'https'
-      ...getHttpsConfig()
+      ...getHttpsConfig(),
     },
     host,
     historyApiFallback: {
       // Paths with dots should still use the history fallback.
       // See https://github.com/facebook/create-react-app/issues/387.
-      disableDotRule: true,
+      disableDotRule: false,
       index: paths.publicUrlOrPath,
+      rewrites: [
+        // Exclude static assets from fallback to allow webpack to serve them
+        { from: /\.(woff|woff2|ttf|eot|otf)$/, to: (context) => context.parsedUrl.pathname },
+        { from: /\.(css|js|json|ico|png|jpg|jpeg|gif|svg)$/, to: (context) => context.parsedUrl.pathname },
+      ],
     },
     // `proxy` is run between `before` and `after` `webpack-dev-server` hooks
     proxy,
@@ -113,6 +126,13 @@ module.exports = function (proxy, allowedHost) {
         // This registers user provided middleware for proxy reasons
         require(paths.proxySetup)(devServer.app);
       }
+
+      devServer.app.use((req, res, next) => {
+        if (/\.(woff2)(\?|$)/i.test(req.url)) {
+          res.setHeader('Content-Type', 'font/woff2');
+        }
+        next();
+      });
 
       // Redirect to `PUBLIC_URL` or `homepage` from `package.json` if url not match
       devServer.app.use(redirectServedPath(paths.publicUrlOrPath));
