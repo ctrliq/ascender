@@ -3,12 +3,12 @@ import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
 import { bool, func, shape } from 'prop-types';
 import {
-  InfoIcon,
-  LinkIcon,
-  PencilAltIcon,
-  PlusIcon,
-  TrashAltIcon,
-} from '@patternfly/react-icons';
+  LucideIconInfo as InfoIcon,
+  LucideIconLink as LinkIcon,
+  LucideIconPencil as PencilAltIcon,
+  LucideIconPlus as PlusIcon,
+  LucideIconTrash as TrashAltIcon,
+} from '@ctrliq/quantic-react';
 import {
   WorkflowDispatchContext,
   WorkflowStateContext,
@@ -221,7 +221,7 @@ function VisualizerNode({
       onMouseEnter={() => updateHelpText(t`View node details`)}
       onMouseLeave={() => updateHelpText(null)}
     >
-      <InfoIcon />
+      <InfoIcon size={16} data-original-icon="InfoIcon" />
     </WorkflowActionTooltipItem>
   );
 
@@ -239,7 +239,7 @@ function VisualizerNode({
           onMouseEnter={() => updateHelpText(t`Add a new node`)}
           onMouseLeave={() => updateHelpText(null)}
         >
-          <PlusIcon />
+          <PlusIcon size={16} data-original-icon="PlusIcon" />
         </WorkflowActionTooltipItem>,
         viewDetailsAction,
         <WorkflowActionTooltipItem
@@ -249,7 +249,7 @@ function VisualizerNode({
           onMouseEnter={() => updateHelpText(t`Edit this node`)}
           onMouseLeave={() => updateHelpText(null)}
         >
-          <PencilAltIcon />
+          <PencilAltIcon size={16} data-original-icon="PencilAltIcon" />
         </WorkflowActionTooltipItem>,
         <WorkflowActionTooltipItem
           id="node-link"
@@ -259,12 +259,10 @@ function VisualizerNode({
             setHovering(false);
             dispatch({ type: 'SELECT_SOURCE_FOR_LINKING', node });
           }}
-          onMouseEnter={() =>
-            updateHelpText(t`Link to an available node`)
-          }
+          onMouseEnter={() => updateHelpText(t`Link to an available node`)}
           onMouseLeave={() => updateHelpText(null)}
         >
-          <LinkIcon />
+          <LinkIcon size={16} data-original-icon="LinkIcon" />
         </WorkflowActionTooltipItem>,
         <WorkflowActionTooltipItem
           id="node-delete"
@@ -277,7 +275,7 @@ function VisualizerNode({
           onMouseEnter={() => updateHelpText(t`Delete this node`)}
           onMouseLeave={() => updateHelpText(null)}
         >
-          <TrashAltIcon />
+          <TrashAltIcon size={16} data-original-icon="TrashAltIcon" />
         </WorkflowActionTooltipItem>,
       ];
 

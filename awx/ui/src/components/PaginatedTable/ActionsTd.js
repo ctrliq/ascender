@@ -26,6 +26,15 @@ export default function ActionsTd({ children, gridColumns, ...props }) {
       css={`
         text-align: right;
         --pf-c-table--cell--Width: ${width}px;
+
+        [role='presentation'] {
+          color: var(--quantic-text-tertiary);
+          opacity: 0.5;
+        }
+
+        &:hover [role='presentation'] {
+          opacity: 1;
+        }
       `}
       {...props}
     >

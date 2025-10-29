@@ -6,7 +6,7 @@ import { useLingui } from '@lingui/react/macro';
 import { Button, Label } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
 import { Link } from 'react-router-dom';
-import { PencilAltIcon } from '@patternfly/react-icons';
+import { LucideIconPencil } from '@ctrliq/quantic-react';
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
 
 import { User } from 'types';
@@ -42,16 +42,12 @@ function UserListItem({ user, isSelected, onSelect, detailUrl, rowIndex }) {
         </Link>
         {ldapUser && (
           <span css="margin-left: 12px">
-            <Label aria-label={t`ldap user`}>
-              {t`LDAP`}
-            </Label>
+            <Label aria-label={t`ldap user`}>{t`LDAP`}</Label>
           </span>
         )}
         {socialAuthUser && (
           <span css="margin-left: 12px">
-            <Label aria-label={t`social login`}>
-              {t`SOCIAL`}
-            </Label>
+            <Label aria-label={t`social login`}>{t`SOCIAL`}</Label>
           </span>
         )}
       </TdBreakWord>
@@ -70,7 +66,7 @@ function UserListItem({ user, isSelected, onSelect, detailUrl, rowIndex }) {
             component={Link}
             to={`/users/${user.id}/edit`}
           >
-            <PencilAltIcon />
+            <LucideIconPencil data-original-icon="PencilAltIcon" size="sm" />
           </Button>
         </ActionItem>
       </ActionsTd>

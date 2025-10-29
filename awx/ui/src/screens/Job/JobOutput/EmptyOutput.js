@@ -1,16 +1,13 @@
 import React, { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import 'styled-components/macro';
-import {
-  SearchIcon,
-  ExclamationCircleIcon as PFExclamationCircleIcon,
-} from '@patternfly/react-icons';
 import ContentEmpty from 'components/ContentEmpty';
 import { useLingui } from '@lingui/react/macro';
 
 import styled from 'styled-components';
+import { LucideIconCircleAlert, LucideIconSearch } from '@ctrliq/quantic-react';
 
-const ExclamationCircleIcon = styled(PFExclamationCircleIcon)`
+const ExclamationCircleIcon = styled(LucideIconCircleAlert)`
   color: var(--pf-global--danger-color--100);
 `;
 
@@ -31,7 +28,7 @@ export default function EmptyOutput({
   if (hasQueryParams) {
     title = t`The search filter did not produce any results…`;
     message = t`Please try another search using the filter above`;
-    icon = SearchIcon;
+    icon = LucideIconSearch;
   } else if (isJobRunning) {
     title = t`Waiting for job output…`;
   } else if (job.status === 'failed') {

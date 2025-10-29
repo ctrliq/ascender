@@ -6,18 +6,18 @@ import {
   EmptyStateIcon,
   EmptyStateBody,
 } from '@patternfly/react-core';
-import { CubesIcon } from '@patternfly/react-icons';
+import { LucideIconBox } from '@ctrliq/quantic-react';
 
 const ContentEmpty = ({
   title = '',
   message = '',
-  icon = CubesIcon,
+  icon = LucideIconBox,
   className = '',
 }) => {
   const { t } = useLingui();
   return (
     <EmptyState variant="full" className={className}>
-      <EmptyStateIcon icon={icon} />
+      <EmptyStateIcon size={64} icon={icon} />
       <Title size="lg" headingLevel="h3">
         {title || t`No items found.`}
       </Title>

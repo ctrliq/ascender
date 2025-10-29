@@ -7,7 +7,7 @@ import {
   Button,
   InputGroup as PFInputGroup,
 } from '@patternfly/react-core';
-import PFCheckIcon from '@patternfly/react-icons/dist/js/icons/check-icon';
+import { LucideIconCheck } from '@ctrliq/quantic-react';
 import styled from 'styled-components';
 import Popover from 'components/Popover';
 
@@ -19,7 +19,7 @@ const HelperTextWrapper = styled.div`
   font-size: var(--pf-c-form__label--FontSize);
 `;
 
-const CheckIcon = styled(PFCheckIcon)`
+const CheckIcon = styled(LucideIconCheck)`
   color: var(--pf-c-button--m-plain--disabled--Color);
   ${(props) =>
     props.selected && `color: var(--pf-c-button--m-secondary--active--Color)`};
@@ -148,7 +148,7 @@ choice per line.`}
                 : formattedChoicesHelpers.setValue(newValues);
             }}
           >
-            <CheckIcon selected={isDefault} />
+            <CheckIcon selected={isDefault} size={16} data-original-icon="CheckIcon" />
           </Button>
         </InputGroup>
       ))}

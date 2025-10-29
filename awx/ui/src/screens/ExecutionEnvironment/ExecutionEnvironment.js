@@ -10,7 +10,7 @@ import {
 
 import { useLingui } from '@lingui/react/macro';
 import { Card, PageSection } from '@patternfly/react-core';
-import { CaretLeftIcon } from '@patternfly/react-icons';
+import { LucideIconChevronLeft } from '@ctrliq/quantic-react';
 
 import useRequest from 'hooks/useRequest';
 import { ExecutionEnvironmentsAPI } from 'api';
@@ -54,7 +54,7 @@ function ExecutionEnvironment({ setBreadcrumb }) {
     {
       name: (
         <>
-          <CaretLeftIcon />
+          <LucideIconChevronLeft />
           {t`Back to execution environments`}
         </>
       ),

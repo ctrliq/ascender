@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 
 import { useLingui } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
-import { CaretLeftIcon } from '@patternfly/react-icons';
 import { CardBody, CardActionsRow } from 'components/Card';
+import { LucideIconChevronLeft } from '@ctrliq/quantic-react';
 import ContentLoading from 'components/ContentLoading';
 import ContentError from 'components/ContentError';
 import RoutedTabs from 'components/RoutedTabs';
@@ -66,7 +66,7 @@ function LoggingDetail() {
     {
       name: (
         <>
-          <CaretLeftIcon />
+          <LucideIconChevronLeft />
           {t`Back to Settings`}
         </>
       ),

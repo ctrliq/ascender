@@ -12,7 +12,7 @@ import {
 } from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { useField } from 'formik';
-import { SearchIcon } from '@patternfly/react-icons';
+import { LucideIconSearch } from '@ctrliq/quantic-react';
 import {
   Button,
   ButtonVariant,
@@ -148,7 +148,7 @@ function Lookup(props) {
           variant={ButtonVariant.control}
           isDisabled={isLoading || isDisabled}
         >
-          <SearchIcon />
+          <LucideIconSearch data-original-icon="SearchIcon" size={16} />
         </Button>
         {multiple ? (
           <ChipHolder isDisabled={isDisabled} className="pf-c-form-control">

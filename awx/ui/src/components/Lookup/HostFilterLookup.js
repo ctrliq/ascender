@@ -4,7 +4,7 @@ import { number, func, bool, string } from 'prop-types';
 
 import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
-import { SearchIcon } from '@patternfly/react-icons';
+import { LucideIconSearch } from '@ctrliq/quantic-react';
 import {
   Alert as PFAlert,
   Button,
@@ -295,7 +295,7 @@ function HostFilterLookup({
         onClick={handleOpenModal}
         variant={ButtonVariant.control}
       >
-        <SearchIcon />
+        <LucideIconSearch data-original-icon="SearchIcon" size={16} />
       </Button>
       <ChipHolder className="pf-c-form-control">
         {searchColumns.map(({ name, key }) => (
@@ -422,9 +422,7 @@ function HostFilterLookup({
             headerRow={
               <HeaderRow qsConfig={QS_CONFIG} isSelectable={false}>
                 <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
-                <HeaderCell sortKey="description">
-                  {t`Description`}
-                </HeaderCell>
+                <HeaderCell sortKey="description">{t`Description`}</HeaderCell>
                 <HeaderCell>{t`Inventory`}</HeaderCell>
               </HeaderRow>
             }

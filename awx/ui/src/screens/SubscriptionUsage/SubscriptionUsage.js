@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { Trans, useLingui } from '@lingui/react/macro';
 import { Banner, Card, PageSection } from '@patternfly/react-core';
-import { InfoCircleIcon } from '@patternfly/react-icons';
+import { LucideIconInfo as InfoCircleIcon } from '@ctrliq/quantic-react';
 
 import { useConfig } from 'contexts/Config';
 import useBrandName from 'hooks/useBrandName';
@@ -29,7 +29,7 @@ function SubscriptionUsage() {
         <Banner variant="info">
           <Trans>
             <p>
-              <InfoCircleIcon /> A tech preview of the new {brandName} user
+              <InfoCircleIcon size={16} data-original-icon="InfoCircleIcon" /> A tech preview of the new {brandName} user
               interface can be found <a href="/ui_next">here</a>.
             </p>
           </Trans>

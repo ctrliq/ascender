@@ -14,7 +14,7 @@ import {
   TextInput,
   Tooltip,
 } from '@patternfly/react-core';
-import { SearchIcon, QuestionCircleIcon } from '@patternfly/react-icons';
+import { LucideIconSearch, LucideIconCircleHelp } from '@ctrliq/quantic-react';
 import styled from 'styled-components';
 import { useLocation } from 'react-router-dom';
 import { useConfig } from 'contexts/Config';
@@ -25,10 +25,11 @@ import LookupTypeInput from './LookupTypeInput';
 
 const AdvancedGroup = styled.div`
   display: flex;
+  gap: var(--quantic-spacing-2);
 
   @media (max-width: 991px) {
     display: grid;
-    grid-gap: var(--pf-c-toolbar__expandable-content--m-expanded--GridRowGap);
+    grid-gap: var(--quantic-spacing-2);
   }
 
   & .pf-c-select {
@@ -211,9 +212,7 @@ function AdvancedSearch({
             type="search"
             aria-label={t`Advanced search value input`}
             isDisabled={!keySelection || isTextInputDisabled}
-            value={
-              (!keySelection && t`First, select a key`) || searchValue
-            }
+            value={(!keySelection && t`First, select a key`) || searchValue}
             onChange={setSearchValue}
             onKeyDown={handleAdvancedTextKeyDown}
           />
@@ -227,9 +226,7 @@ function AdvancedSearch({
         type="search"
         aria-label={t`Advanced search value input`}
         isDisabled={!keySelection}
-        value={
-          (!keySelection && t`First, select a key`) || searchValue
-        }
+        value={(!keySelection && t`First, select a key`) || searchValue}
         onChange={setSearchValue}
         onKeyDown={handleAdvancedTextKeyDown}
         placeholder={placeholderText}
@@ -289,10 +286,7 @@ function AdvancedSearch({
             : []),
           ...(relatedKeys.length
             ? [
-                <SelectGroup
-                  key="related keys"
-                  label={t`Related Keys`}
-                >
+                <SelectGroup key="related keys" label={t`Related Keys`}>
                   {relatedKeys.map((rKey) => (
                     <SelectOption
                       value={rKey}
@@ -319,14 +313,11 @@ function AdvancedSearch({
             aria-label={t`Search submit button`}
             onClick={handleAdvancedSearch}
           >
-            <SearchIcon />
+            <LucideIconSearch data-original-icon="SearchIcon" size={16} />
           </Button>
         </div>
       </InputGroup>
-      <Tooltip
-        content={t`Advanced search documentation`}
-        position="bottom"
-      >
+      <Tooltip content={t`Advanced search documentation`} position="bottom">
         <Button
           ouiaId="search-docs-button"
           component="a"
@@ -335,7 +326,10 @@ function AdvancedSearch({
           href={`${getDocsBaseUrl(config)}/html/userguide/search_sort.html`}
           rel="noopener noreferrer"
         >
-          <QuestionCircleIcon />
+          <LucideIconCircleHelp
+            data-original-icon="QuestionCircleIcon"
+            size={16}
+          />
         </Button>
       </Tooltip>
     </AdvancedGroup>

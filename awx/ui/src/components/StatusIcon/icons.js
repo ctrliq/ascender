@@ -1,14 +1,14 @@
 import styled, { keyframes } from 'styled-components';
 import {
-  CheckCircleIcon,
-  ExclamationCircleIcon,
-  SyncAltIcon,
-  ExclamationTriangleIcon,
-  ClockIcon,
-  MinusCircleIcon,
-  InfoCircleIcon,
-  PlusCircleIcon,
-} from '@patternfly/react-icons';
+  LucideIconCircleAlert,
+  LucideIconCircleCheck,
+  LucideIconClock,
+  LucideIconInfo,
+  LucideIconCircleMinus,
+  LucideIconCirclePlus,
+  LucideIconRefreshCw,
+  LucideIconTriangleAlert,
+} from '@ctrliq/quantic-react';
 
 const Spin = keyframes`
   from {
@@ -19,35 +19,35 @@ const Spin = keyframes`
   }
 `;
 
-const RunningIcon = styled(SyncAltIcon)`
+const RunningIcon = styled(LucideIconRefreshCw)`
   animation: ${Spin} 1.75s linear infinite;
 `;
 RunningIcon.displayName = 'RunningIcon';
 
 const icons = {
-  approved: CheckCircleIcon,
-  denied: InfoCircleIcon,
-  success: CheckCircleIcon,
-  healthy: CheckCircleIcon,
-  successful: CheckCircleIcon,
-  ok: CheckCircleIcon,
-  failed: ExclamationCircleIcon,
-  error: ExclamationCircleIcon,
-  unreachable: ExclamationCircleIcon,
+  approved: LucideIconCircleCheck,
+  denied: LucideIconInfo,
+  success: LucideIconCircleCheck,
+  healthy: LucideIconCircleCheck,
+  successful: LucideIconCircleCheck,
+  ok: LucideIconCircleCheck,
+  failed: LucideIconCircleAlert,
+  error: LucideIconCircleAlert,
+  unreachable: LucideIconCircleAlert,
   running: RunningIcon,
-  pending: ClockIcon,
-  waiting: ClockIcon,
-  disabled: MinusCircleIcon,
-  skipped: MinusCircleIcon,
-  canceled: ExclamationTriangleIcon,
-  changed: ExclamationTriangleIcon,
+  pending: LucideIconClock,
+  waiting: LucideIconClock,
+  disabled: LucideIconCircleMinus,
+  skipped: LucideIconCircleMinus,
+  canceled: LucideIconTriangleAlert,
+  changed: LucideIconTriangleAlert,
   /* Instance statuses */
-  ready: CheckCircleIcon,
-  installed: ClockIcon,
-  provisioning: PlusCircleIcon,
-  deprovisioning: MinusCircleIcon,
-  unavailable: ExclamationCircleIcon,
-  'provision-fail': ExclamationCircleIcon,
-  'deprovision-fail': ExclamationCircleIcon,
+  ready: LucideIconCircleCheck,
+  installed: LucideIconClock,
+  provisioning: LucideIconCirclePlus,
+  deprovisioning: LucideIconCircleMinus,
+  unavailable: LucideIconCircleAlert,
+  'provision-fail': LucideIconCircleAlert,
+  'deprovision-fail': LucideIconCircleAlert,
 };
 export default icons;

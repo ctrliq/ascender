@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { SyncAltIcon } from '@patternfly/react-icons';
+import { LucideIconRefreshCw as SyncAltIcon } from '@ctrliq/quantic-react';
 import { useParams, useLocation } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';
 
@@ -195,7 +195,7 @@ function WebhookSubForm({ templateType }) {
               aria-label={t`Update webhook key`}
               onClick={changeWebhookKey}
             >
-              <SyncAltIcon />
+              <SyncAltIcon size={16} data-original-icon="SyncAltIcon" />
             </Button>
           </InputGroup>
         </FormGroup>

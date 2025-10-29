@@ -3,7 +3,7 @@ import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import PropTypes from 'prop-types';
 import { Button, Tooltip } from '@patternfly/react-core';
-import { SyncIcon } from '@patternfly/react-icons';
+import { LucideIconRefreshCw as SyncIcon } from '@ctrliq/quantic-react';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import AlertModal from 'components/AlertModal/AlertModal';
 import ErrorDetail from 'components/ErrorDetail/ErrorDetail';
@@ -39,7 +39,7 @@ function InventorySourceSyncButton({ source, icon }) {
           variant={icon ? 'plain' : 'secondary'}
           onClick={startSyncProcess}
         >
-          {icon ? <SyncIcon /> : t`Sync`}
+          {icon ? <SyncIcon size={16} data-original-icon="SyncIcon" /> : t`Sync`}
         </Button>
       </Tooltip>
 

@@ -14,7 +14,7 @@ import {
   TextInput,
   Tooltip,
 } from '@patternfly/react-core';
-import { PficonHistoryIcon } from '@patternfly/react-icons';
+import { LucideIconHistory as PficonHistoryIcon } from '@ctrliq/quantic-react';
 import { PasswordInput } from 'components/FormField';
 import AnsibleSelect from 'components/AnsibleSelect';
 import Popover from 'components/Popover';
@@ -71,7 +71,7 @@ function CredentialInput({
                 }
               }}
             >
-              <PficonHistoryIcon />
+              <PficonHistoryIcon size={16} data-original-icon="PficonHistoryIcon" />
             </Button>
           </Tooltip>
         )}

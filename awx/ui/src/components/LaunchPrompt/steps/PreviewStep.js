@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ExclamationCircleIcon as PFExclamationCircleIcon } from '@patternfly/react-icons';
 import { Tooltip } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
 import { useFormikContext } from 'formik';
@@ -9,8 +8,9 @@ import yaml from 'js-yaml';
 import mergeExtraVars, { maskPasswords } from 'util/prompt/mergeExtraVars';
 import getSurveyValues from 'util/prompt/getSurveyValues';
 import PromptDetail from '../../PromptDetail';
+import { LucideIconCircleAlert } from '@ctrliq/quantic-react';
 
-const ExclamationCircleIcon = styled(PFExclamationCircleIcon)`
+const ExclamationCircleIcon = styled(LucideIconCircleAlert)`
   margin-left: 10px;
   margin-top: -2px;
 `;

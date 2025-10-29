@@ -9,7 +9,7 @@ import {
   TextInput,
   Tooltip,
 } from '@patternfly/react-core';
-import { EyeIcon, EyeSlashIcon } from '@patternfly/react-icons';
+import { LucideIconEye, LucideIconEyeOff } from '@ctrliq/quantic-react';
 
 function PasswordInput(props) {
   const { t } = useLingui();
@@ -33,11 +33,7 @@ function PasswordInput(props) {
 
   return (
     <>
-      <Tooltip
-        content={
-          inputType === 'password' ? t`Show` : t`Hide`
-        }
-      >
+      <Tooltip content={inputType === 'password' ? t`Show` : t`Hide`}>
         <Button
           ouiaId={`${id}-toggle`}
           variant={ButtonVariant.control}
@@ -45,8 +41,12 @@ function PasswordInput(props) {
           onClick={handlePasswordToggle}
           isDisabled={isDisabled}
         >
-          {inputType === 'password' && <EyeSlashIcon />}
-          {inputType === 'text' && <EyeIcon />}
+          {inputType === 'password' && (
+            <LucideIconEyeOff size={16} data-original-icon="EyeSlashIcon" />
+          )}
+          {inputType === 'text' && (
+            <LucideIconEye size={16} data-original-icon="EyeIcon" />
+          )}
         </Button>
       </Tooltip>
       <TextInput

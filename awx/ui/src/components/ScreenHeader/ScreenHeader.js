@@ -12,8 +12,8 @@ import {
   Title,
   Tooltip,
 } from '@patternfly/react-core';
-import { HistoryIcon } from '@patternfly/react-icons';
 import { Link, Route, useRouteMatch, useLocation } from 'react-router-dom';
+import { LucideIconHistory } from '@ctrliq/quantic-react';
 
 const ScreenHeader = ({ breadcrumbConfig, streamType }) => {
   const { light } = PageSectionVariants;
@@ -72,7 +72,7 @@ const ScreenHeader = ({ breadcrumbConfig, streamType }) => {
                   streamType ? `?type=${streamType}` : ''
                 }`}
               >
-                <HistoryIcon />
+                <LucideIconHistory />
               </Button>
             </Tooltip>
           </div>

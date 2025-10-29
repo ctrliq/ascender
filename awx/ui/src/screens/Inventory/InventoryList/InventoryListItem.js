@@ -3,7 +3,7 @@ import { bool, func } from 'prop-types';
 
 import { Button, Label } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
-import { PencilAltIcon } from '@patternfly/react-icons';
+import { LucideIconPencil } from '@ctrliq/quantic-react';
 import { Plural, useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router-dom';
 import { timeOfDay } from 'util/dates';
@@ -149,7 +149,7 @@ function InventoryListItem({
               component={Link}
               to={`${getInventoryPath(inventory)}/edit`}
             >
-              <PencilAltIcon />
+              <LucideIconPencil data-original-icon="PencilAltIcon" size="sm" />
             </Button>
           </ActionItem>
           <ActionItem
