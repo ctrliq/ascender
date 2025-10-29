@@ -374,7 +374,9 @@
 }
 
 :root .pf-c-form {
-  --pf-c-form__label-text--FontWeight: var(--quantic-font-weight-normal);
+  --pf-c-form--GridGap: var(--quantic-spacing-3);
+  --pf-c-form__label-text--FontWeight: var(--quantic-font-weight-regular);
+  --pf-c-form__group--m-action--MarginTop: var(--quantic-spacing-2);
 }
 
 :root .pf-c-tooltip {

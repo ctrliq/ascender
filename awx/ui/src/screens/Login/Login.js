@@ -34,11 +34,25 @@ import { useSession } from 'contexts/Session';
 import LoadingSpinner from 'components/LoadingSpinner';
 import { SESSION_REDIRECT_URL, SESSION_USER_ID } from '../../constants';
 
-const loginLogoSrc = 'static/media/AscenderAuto_logo_h_rev_M.png';
+const loginLogoSrc = 'static/media/Ascender_logo.svg';
 
 const Login = styled(PFLogin)`
+  & {
+    --pf-c-login__container--MaxWidth: var(--quantic-spacing-96);
+    --pf-c-login__main-body--PaddingRight: var(--quantic-spacing-8);
+    --pf-c-login__main-body--PaddingLeft: var(--quantic-spacing-8);
+  }
+
+  & .pf-c-login__main {
+    background-color: var(--quantic-bg-secondary);
+    border-radius: var(--quantic-radius-md);
+    border: 1px solid var(--quantic-border-primary);
+  }
+
   & .pf-c-brand {
-    max-height: 285px;
+    max-width: var(--quantic-spacing-48);
+    display: block;
+    margin: 0 auto;
   }
 `;
 
@@ -182,14 +196,7 @@ function AWXLogin({ alt, isAuthenticated }) {
     return <Redirect to={redirect} />;
   }
   return (
-    <Login header={Header} footer={Footer}>
-      <LoginMainHeader
-        data-cy="login-header"
-        /*        title={brandName ? t`Welcome to ${brandName}!` : ''} */
-        title=""
-        /*        subtitle={t`Please log in`} */
-        subtitle=""
-      />
+    <Login headerfooter={Footer}>
       <LoginMainBody>
         {isSessionExpired.current ? (
           <Alert
@@ -199,6 +206,7 @@ function AWXLogin({ alt, isAuthenticated }) {
             ouiaId="session-expired-warning-alert"
           />
         ) : null}
+        {Header}
         <Formik
           initialValues={{
             password: '',
@@ -211,7 +219,7 @@ function AWXLogin({ alt, isAuthenticated }) {
               autoComplete="off"
               data-cy="login-form"
               className={authError ? 'pf-m-error' : ''}
-              helperText={helperText}
+              helperText={authError ? helperText : null}
               isLoginButtonDisabled={isAuthenticating}
               isValidPassword={!authError}
               isValidUsername={!authError}
