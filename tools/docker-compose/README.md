@@ -256,12 +256,10 @@ $ make docker-compose
 
 - [Start a shell](#start-a-shell)
 - [Start AWX from the container shell](#start-awx-from-the-container-shell)
-- [Using Logstash](./docs/logstash.md)
 - [Start a Cluster](#start-a-cluster)
 - [Start with Minikube](#start-with-minikube)
 - [SAML and OIDC Integration](#saml-and-oidc-integration)
 - [OpenLDAP Integration](#openldap-integration)
-- [Splunk Integration](#splunk-integration)
 - [tacacs+ Integration](#tacacs+-integration)
 
 ### Start a Shell
@@ -459,36 +457,6 @@ Once the playbook is done running LDAP should now be setup in your development e
 The first account is a normal user. The second account will be a super user in AWX. The third account will be a system auditor in AWX. The fourth account is an org admin. All users belong to an org called "LDAP Organization". To log in with one of these users go to the AWX login screen enter the username/password.
 
 
-### Splunk Integration
-
-Splunk is a log aggregation tool that can be used to test AWX with external logging integration. This section describes how to build a reference Splunk instance and plumb it with your AWX for testing purposes.
-
-First, be sure that you have the awx.awx collection installed by running `make install_collection`.
-
-Next, install the splunk.es collection by running `ansible-galaxy collection install splunk.es`.
-
-Anytime you want to run a Splunk instance alongside AWX we can start docker-compose with the SPLUNK option to get a Splunk instance with the command:
-```bash
-SPLUNK=true make docker-compose
-```
-
-Once the containers come up three new ports (8000, 8089 and 9199) should be exposed and the Splunk server should be running on some of those ports (the 9199 will be created later by the plumbing playbook). The first port (8000) is the non-SSL admin port and you can log into splunk with the credentials admin/splunk_admin. The url will be like http://<server>:8000/ this will be referenced below. The 8089 is the API port that the ansible modules will use to connect to and configure splunk. The 9199 port will be used to construct a TCP listener in Splunk that AWX will forward messages to.
-
-Once the containers are up we are ready to configure and plumb Splunk with AWX. To do this we have provided a playbook which will:
-* Backup and configure the External Logging adapter in AWX. NOTE: this will back up your existing settings but the password fields can not be backed up through the API, you need a DB backup to recover this.
-* Create a TCP port in Splunk for log forwarding
-
-For routing traffic between AWX and Splunk we will use the internal docker compose network. The `Logging Aggregator` will be configured using the internal network machine name of `splunk`.
-
-Once you have have the collections installed (from above) you can run the playbook like:
-```bash
-export CONTROLLER_USERNAME=<your username>
-export CONTROLLER_PASSWORD=<your password>
-ansible-playbook tools/docker-compose/ansible/plumb_splunk.yml
-```
-
-Once the playbook is done running Splunk should now be setup in your development environment. You can log into the admin console (see above for username/password) and click on "Searching and Reporting" in the left hand navigation. In the search box enter `source="http:tower_logging_collections"` and click search.
-
 ### - tacacs+ Integration
 
 tacacs+ is an networking protocol that provides external authentication which can be used with AWX. This section describes how to build a reference tacacs+ instance and plumb it with your AWX for testing purposes.
@@ -610,6 +578,3 @@ docker exec -it -e VAULT_TOKEN=<token> tools_vault_1 vault kv get --address=http
 ```
 
 
-### Prometheus and Grafana integration
-
-See docs at https://github.com/ansible/awx/blob/devel/tools/grafana/README.md

@@ -35,12 +35,6 @@ PGBOUNCER ?= false
 KEYCLOAK ?= false
 # If set to true docker-compose will also start an ldap instance
 LDAP ?= false
-# If set to true docker-compose will also start a splunk instance
-SPLUNK ?= false
-# If set to true docker-compose will also start a prometheus instance
-PROMETHEUS ?= false
-# If set to true docker-compose will also start a grafana instance
-GRAFANA ?= false
 # If set to true docker-compose will also start a hashicorp vault instance
 VAULT ?= false
 # If set to true docker-compose will also start a hashicorp vault instance with TLS enabled
@@ -526,9 +520,6 @@ docker-compose-sources: .git/hooks/pre-commit
 	    -e enable_pgbouncer=$(PGBOUNCER) \
 	    -e enable_keycloak=$(KEYCLOAK) \
 	    -e enable_ldap=$(LDAP) \
-	    -e enable_splunk=$(SPLUNK) \
-	    -e enable_prometheus=$(PROMETHEUS) \
-	    -e enable_grafana=$(GRAFANA) \
 	    -e enable_vault=$(VAULT) \
 	    -e vault_tls=$(VAULT_TLS) \
 	    -e enable_tacacs=$(TACACS) \
@@ -613,27 +604,12 @@ docker-clean:
 	-$(foreach image_id,$(shell docker images --filter=reference='*/*/*ascender_devel*' --filter=reference='*/*ascender_devel*' --filter=reference='*ascender_devel*' -aq),docker rmi --force $(image_id);)
 
 docker-clean-volumes: docker-compose-clean docker-compose-container-group-clean
-	docker volume rm -f tools_var_lib_awx tools_awx_db tools_vault_1 tools_ldap_1 tools_grafana_storage tools_prometheus_storage $(docker volume ls --filter name=tools_redis_socket_ -q)
+	docker volume rm -f tools_var_lib_awx tools_awx_db tools_vault_1 tools_ldap_1 $(docker volume ls --filter name=tools_redis_socket_ -q)
 
 docker-refresh: docker-clean docker-compose
 
-## Docker Development Environment with Elastic Stack Connected
-docker-compose-elk: awx/projects docker-compose-sources
-	$(DOCKER_COMPOSE) -f tools/docker-compose/_sources/docker-compose.yml -f tools/elastic/docker-compose.logstash-link.yml -f tools/elastic/docker-compose.elastic-override.yml up --no-recreate
-
-docker-compose-cluster-elk: awx/projects docker-compose-sources
-	$(DOCKER_COMPOSE) -f tools/docker-compose/_sources/docker-compose.yml -f tools/elastic/docker-compose.logstash-link-cluster.yml -f tools/elastic/docker-compose.elastic-override.yml up --no-recreate
-
 docker-compose-container-group:
 	MINIKUBE_CONTAINER_GROUP=true $(MAKE) docker-compose
-
-clean-elk:
-	docker stop tools_kibana_1
-	docker stop tools_logstash_1
-	docker stop tools_elasticsearch_1
-	docker rm tools_logstash_1
-	docker rm tools_elasticsearch_1
-	docker rm tools_kibana_1
 
 VERSION:
 	@echo "awx: $(VERSION)"
