@@ -9,7 +9,7 @@ import {
   useLocation,
   useParams,
 } from 'react-router-dom';
-import { CaretLeftIcon } from '@patternfly/react-icons';
+import { LucideIconChevronLeft } from '@ctrliq/quantic-react';
 import { SchedulesAPI } from 'api';
 import useRequest from 'hooks/useRequest';
 import RoutedTabs from '../RoutedTabs';
@@ -61,7 +61,7 @@ function Schedule({
     {
       name: (
         <>
-          <CaretLeftIcon />
+          <LucideIconChevronLeft />
           {t`Back to Schedules`}
         </>
       ),
@@ -81,9 +81,7 @@ function Schedule({
         {error.response && error.response.status === 404 && (
           <span>
             {t`Schedule not found.`}{' '}
-            <Link to={`${pathRoot}schedules`}>
-              {t`View Schedules`}
-            </Link>
+            <Link to={`${pathRoot}schedules`}>{t`View Schedules`}</Link>
           </span>
         )}
       </ContentError>

@@ -4,7 +4,7 @@ import { useLingui } from '@lingui/react/macro';
 import { Link, useHistory } from 'react-router-dom';
 import { Button, Tooltip } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
-import { RocketIcon } from '@patternfly/react-icons';
+import { LucideIconRocket as RocketIcon } from '@ctrliq/quantic-react';
 
 import { SystemJobTemplatesAPI } from 'api';
 import AlertModal from 'components/AlertModal';
@@ -96,7 +96,7 @@ function ManagementJobListItem({
                       onClick={handleLaunch}
                       isDisabled={isLaunchLoading}
                     >
-                      <RocketIcon />
+                      <RocketIcon size={16} data-original-icon="RocketIcon" />
                     </Button>
                   </Tooltip>
                 )}{' '}

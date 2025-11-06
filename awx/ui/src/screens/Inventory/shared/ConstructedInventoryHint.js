@@ -23,7 +23,7 @@ import {
   Tbody,
   Td,
 } from '@patternfly/react-table';
-import { ExternalLinkAltIcon } from '@patternfly/react-icons';
+import { LucideIconExternalLink as ExternalLinkAltIcon } from '@ctrliq/quantic-react';
 import getDocsBaseUrl from 'util/getDocsBaseUrl';
 import { useConfig } from 'contexts/Config';
 
@@ -47,7 +47,7 @@ function ConstructedInventoryHint() {
           rel="noopener noreferrer"
         >
           {t`View constructed inventory documentation here`}{' '}
-          <ExternalLinkAltIcon />
+          <ExternalLinkAltIcon size={16} data-original-icon="ExternalLinkAltIcon" />
         </AlertActionLink>
       }
     >

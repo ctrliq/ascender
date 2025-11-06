@@ -9,18 +9,19 @@ const CountCard = styled(Card)`
   align-items: center;
   padding-top: var(--pf-global--spacer--sm);
   cursor: pointer;
+  color: var(--quantic-text-tertiary);
   text-align: center;
-  color: var(--pf-global--palette--black-1000);
   text-decoration: none;
 
   & h2 {
     font-size: var(--pf-global--FontSize--4xl);
-    color: var(--pf-global--palette--blue-400);
+    color: var(--quantic-text-primary);
     text-decoration: none;
+    margin-bottom: var(--quantic-spacing-4);
   }
 
   & h2.failed {
-    color: var(--pf-global--palette--red-200);
+    color: var(--quantic-text-tertiary);
   }
 `;
 

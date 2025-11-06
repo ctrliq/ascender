@@ -47,7 +47,11 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
     const y = d3.scaleLinear().range([height, 0]);
 
     // [success, fail, total]
-    const colors = d3.scaleOrdinal(['#6EC664', '#A30000', '#06C']);
+    const colors = d3.scaleOrdinal([
+      'var(--quantic-color-success-600)',
+      'var(--quantic-color-error-800)',
+      'var(--quantic-color-gray-blue-500)',
+    ]);
     const svg = d3
       .select(`#${id}`)
       .append('svg')
@@ -57,7 +61,8 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
       .attr('z', 100)
       .append('g')
       .attr('id', 'chart-container')
-      .attr('transform', `translate(${margin.left}, ${margin.top})`);
+      .attr('transform', `translate(${margin.left}, ${margin.top})`)
+      .attr('fill', 'var(--quantic-text-primary)');
     // Tooltip
     const tooltip = new ChartTooltip({
       svg: `#${id}`,
@@ -115,7 +120,7 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
           .tickFormat(d3.format('d'))
       )
       .selectAll('line')
-      .attr('stroke', '#d7d7d7');
+      .attr('stroke', 'var(--quantic-border-primary)');
     svg.selectAll('.y-axis .tick text').attr('x', -5);
 
     // text label for the y axis
@@ -140,7 +145,7 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
         .filter((item) => item);
     }
 
-    svg.select('.domain').attr('stroke', '#d7d7d7');
+    svg.select('.domain').attr('stroke', 'var(--quantic-border-primary)');
 
     svg
       .append('g')
@@ -154,7 +159,7 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
           .tickFormat(d3.timeFormat('%-m/%-d')) // "1/19"
       ) // "Jan-01"
       .selectAll('line')
-      .attr('stroke', '#d7d7d7');
+      .attr('stroke', 'var(--quantic-border-secondary)');
 
     svg.selectAll('.x-axis .tick text').attr('y', 10);
 
@@ -271,7 +276,14 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
     return () => window.removeEventListener('resize', handleResize);
   }, [draw]);
 
-  return <div id={id} />;
+  return (
+    <div
+      id={id}
+      style={{
+        marginTop: 'var(--quantic-spacing-12)',
+      }}
+    />
+  );
 }
 
 LineChart.propTypes = {

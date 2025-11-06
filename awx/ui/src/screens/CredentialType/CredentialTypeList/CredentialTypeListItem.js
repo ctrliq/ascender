@@ -4,7 +4,7 @@ import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router-dom';
 import { Button } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
-import { PencilAltIcon } from '@patternfly/react-icons';
+import { LucideIconPencil } from '@ctrliq/quantic-react';
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
 import { CredentialType } from 'types';
 
@@ -48,7 +48,7 @@ function CredentialTypeListItem({
             component={Link}
             to={`/credential_types/${credentialType.id}/edit`}
           >
-            <PencilAltIcon />
+            <LucideIconPencil data-original-icon="PencilAltIcon" size="sm" />
           </Button>
         </ActionItem>
       </ActionsTd>

@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { GripVerticalIcon } from '@patternfly/react-icons';
+import { LucideIconGripVertical as GripVerticalIcon } from '@ctrliq/quantic-react';
 import {
   Modal,
   TextInput,
@@ -238,7 +238,7 @@ function SurveyReorderModal({
             >
               <Td dataLabel={t`Order`}>
                 <Button variant="plain">
-                  <GripVerticalIcon />
+                  <GripVerticalIcon size={16} data-original-icon="GripVerticalIcon" />
                 </Button>
               </Td>
               <Td dataLabel={t`Name`} aria-label={q.question_name}>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { useField, useFormikContext } from 'formik';
 import styled from 'styled-components';
-import { TimesIcon } from '@patternfly/react-icons';
+import { LucideIconX } from '@ctrliq/quantic-react';
 import {
   Button,
   Divider,
@@ -259,7 +259,7 @@ function SubscriptionStep() {
                     aria-label={t`Clear subscription selection`}
                     ouiaId="clear-subscription-selection"
                   >
-                    <TimesIcon />
+                    <LucideIconX />
                   </Button>
                 </Tooltip>
               </FlexItem>

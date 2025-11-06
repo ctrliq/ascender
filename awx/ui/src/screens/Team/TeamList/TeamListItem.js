@@ -6,7 +6,7 @@ import { useLingui } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
 import { Link } from 'react-router-dom';
-import { PencilAltIcon } from '@patternfly/react-icons';
+import { LucideIconPencil } from '@ctrliq/quantic-react';
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
 import { Team } from 'types';
 
@@ -57,7 +57,7 @@ function TeamListItem({ team, isSelected, onSelect, detailUrl, rowIndex }) {
             component={Link}
             to={`/teams/${team.id}/edit`}
           >
-            <PencilAltIcon />
+            <LucideIconPencil data-original-icon="PencilAltIcon" size="sm" />
           </Button>
         </ActionItem>
       </ActionsTd>

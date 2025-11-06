@@ -9,7 +9,7 @@ import {
   useRouteMatch,
   useLocation,
 } from 'react-router-dom';
-import { CaretLeftIcon } from '@patternfly/react-icons';
+import { LucideIconChevronLeft } from '@ctrliq/quantic-react';
 import useRequest from 'hooks/useRequest';
 
 import { InventoriesAPI, InventorySourcesAPI, OrganizationsAPI } from 'api';
@@ -73,7 +73,7 @@ function InventorySource({ inventory, setBreadcrumb, me }) {
     {
       name: (
         <>
-          <CaretLeftIcon />
+          <LucideIconChevronLeft />
           {t`Back to Sources`}
         </>
       ),

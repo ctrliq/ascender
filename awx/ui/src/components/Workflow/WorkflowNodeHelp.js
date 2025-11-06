@@ -2,10 +2,11 @@ import 'styled-components/macro';
 import React from 'react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
-import { ExclamationTriangleIcon } from '@patternfly/react-icons';
 import { shape } from 'prop-types';
 import { secondsToHHMMSS } from 'util/dates';
 import { stringIsUUID } from 'util/strings';
+import { LucideIconTriangleAlert } from '@ctrliq/quantic-react';
+
 
 const GridDL = styled.dl`
   column-gap: 15px;
@@ -24,7 +25,7 @@ const ResourceDeleted = styled.p`
   margin-bottom: ${(props) => (props.job ? '10px' : '0px')};
 `;
 
-const StyledExclamationTriangleIcon = styled(ExclamationTriangleIcon)`
+const StyledExclamationTriangleIcon = styled(LucideIconTriangleAlert)`
   color: #f0ad4d;
   height: 20px;
   margin-right: 10px;

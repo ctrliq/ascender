@@ -7,7 +7,7 @@ import {
   useRouteMatch,
   useLocation,
 } from 'react-router-dom';
-import { CaretLeftIcon } from '@patternfly/react-icons';
+import { LucideIconChevronLeft } from '@ctrliq/quantic-react';
 import { Card, PageSection } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
 
@@ -58,7 +58,7 @@ function SmartInventory({ setBreadcrumb }) {
     {
       name: (
         <>
-          <CaretLeftIcon />
+          <LucideIconChevronLeft />
           {t`Back to Inventories`}
         </>
       ),
@@ -98,9 +98,7 @@ function SmartInventory({ setBreadcrumb }) {
             {contentError?.response?.status === 404 && (
               <span>
                 {t`Smart Inventory not found.`}{' '}
-                <Link to="/inventories">
-                  {t`View all Inventories.`}
-                </Link>
+                <Link to="/inventories">{t`View all Inventories.`}</Link>
               </span>
             )}
           </ContentError>

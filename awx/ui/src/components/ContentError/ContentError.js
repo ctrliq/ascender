@@ -10,7 +10,7 @@ import {
   EmptyStateIcon,
   EmptyStateBody,
 } from '@patternfly/react-core';
-import { ExclamationTriangleIcon } from '@patternfly/react-icons';
+import { LucideIconTriangleAlert } from '@ctrliq/quantic-react';
 import { useSession } from 'contexts/Session';
 import ErrorDetail from '../ErrorDetail';
 
@@ -33,7 +33,7 @@ function ContentError({ error, children, isNotFound }) {
         <Redirect to="/login" />
       ) : (
         <EmptyState variant="full">
-          <EmptyStateIcon icon={ExclamationTriangleIcon} />
+          <EmptyStateIcon icon={LucideIconTriangleAlert} />
           <Title size="lg" headingLevel="h3">
             {is404
               ? t`Not Found`

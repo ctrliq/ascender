@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { shape } from 'prop-types';
-import { PauseIcon } from '@patternfly/react-icons';
+import { LucideIconPause } from '@ctrliq/quantic-react';
 
 const NodeTypeLetter = styled.div`
   background-color: #393f43;
@@ -14,7 +14,7 @@ const NodeTypeLetter = styled.div`
   width: 20px;
 `;
 
-const CenteredPauseIcon = styled(PauseIcon)`
+const CenteredPauseIcon = styled(LucideIconPause)`
   vertical-align: middle !important;
 `;
 
@@ -63,7 +63,7 @@ function WorkflowNodeTypeLetter({ node }) {
         break;
       case 'workflow_approval_template':
       case 'workflow_approval':
-        nodeTypeLetter = <CenteredPauseIcon />;
+        nodeTypeLetter = <CenteredPauseIcon size="xs" data-original-icon="PauseIcon" />;
         break;
       default:
         nodeTypeLetter = '';

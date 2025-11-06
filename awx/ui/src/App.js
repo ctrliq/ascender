@@ -19,7 +19,6 @@ import {
 } from 'contexts/Config';
 import { SessionProvider, useSession } from 'contexts/Session';
 import AppContainer from 'components/AppContainer';
-import Background from 'components/Background';
 import ContentError from 'components/ContentError';
 import NotFound from 'screens/NotFound';
 import Login from 'screens/Login';
@@ -177,26 +176,24 @@ function App() {
 
   return (
     <I18nProvider i18n={i18n}>
-      <Background>
-        <SessionProvider>
-          <Switch>
-            <Route exact strict path="/*/">
-              <Redirect to={`${pathname.slice(0, -1)}${search}${hash}`} />
-            </Route>
-            <Route path="/login">
-              <Login isAuthenticated={isAuthenticated} />
-            </Route>
-            <Route exact path="/">
-              <Redirect to="/home" />
-            </Route>
-            <ProtectedRoute>
-              <ConfigProvider>
-                <RenderAppContainer />
-              </ConfigProvider>
-            </ProtectedRoute>
-          </Switch>
-        </SessionProvider>
-      </Background>
+      <SessionProvider>
+        <Switch>
+          <Route exact strict path="/*/">
+            <Redirect to={`${pathname.slice(0, -1)}${search}${hash}`} />
+          </Route>
+          <Route path="/login">
+            <Login isAuthenticated={isAuthenticated} />
+          </Route>
+          <Route exact path="/">
+            <Redirect to="/home" />
+          </Route>
+          <ProtectedRoute>
+            <ConfigProvider>
+              <RenderAppContainer />
+            </ConfigProvider>
+          </ProtectedRoute>
+        </Switch>
+      </SessionProvider>
     </I18nProvider>
   );
 }

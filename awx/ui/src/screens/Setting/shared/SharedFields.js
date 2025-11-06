@@ -13,8 +13,6 @@ import {
   Tooltip,
   ButtonVariant,
 } from '@patternfly/react-core';
-import FileUploadIcon from '@patternfly/react-icons/dist/js/icons/file-upload-icon';
-import { ExclamationCircleIcon as PFExclamationCircleIcon } from '@patternfly/react-icons';
 import styled from 'styled-components';
 import AnsibleSelect from 'components/AnsibleSelect';
 import { ExecutionEnvironmentLookup } from 'components/Lookup';
@@ -25,8 +23,9 @@ import Popover from 'components/Popover';
 import { combine, minMaxValue, required, url, number } from 'util/validators';
 import AlertModal from 'components/AlertModal';
 import RevertButton from './RevertButton';
+import { LucideIconUpload, LucideIconCircleAlert } from '@ctrliq/quantic-react';
 
-const ExclamationCircleIcon = styled(PFExclamationCircleIcon)`
+const ExclamationCircleIcon = styled(LucideIconCircleAlert)`
   && {
     color: var(--pf-global--danger-color--100);
   }
@@ -556,7 +555,7 @@ const FileUploadField = ({
                   width="200px"
                 />
               ) : (
-                <FileUploadIcon size="lg" />
+                <LucideIconUpload size="md" />
               )}
             </FileUploadIconWrapper>
           )}
