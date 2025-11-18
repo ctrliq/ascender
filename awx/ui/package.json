@@ -51,7 +51,7 @@
     "@testing-library/react": "^12.1.5",
     "@testing-library/user-event": "14.6.1",
     "@wojtekmaj/enzyme-adapter-react-17": "0.8.0",
-    "babel-jest": "^30.2.0",
+    "babel-jest": "^29.7.0",
     "babel-loader": "^8.2.3",
     "babel-plugin-macros": "3.1.0",
     "babel-plugin-named-asset-import": "^0.3.8",
