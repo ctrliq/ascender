@@ -46,7 +46,7 @@ function InventoryGroup({ setBreadcrumb, inventory }) {
     {
       name: (
         <>
-          <ChevronLeft aria-label={t`Back to Groups`} />
+          <LucideIconChevronLeft aria-label={t`Back to Groups`} />
           {t`Back to Groups`}
         </>
       ),

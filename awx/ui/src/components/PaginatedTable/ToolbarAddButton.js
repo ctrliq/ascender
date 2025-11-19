@@ -38,7 +38,7 @@ function ToolbarAddButton({
   }
   if (linkTo) {
     return (
-      <Tooltip content={defaultLabel || t`Add`} position="top" open>
+      <Tooltip content={defaultLabel || t`Add`} position="top">
         <Button
           ouiaId={ouiaId}
           component={Link}
