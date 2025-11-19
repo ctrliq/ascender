@@ -9,7 +9,7 @@ import {
   useLocation,
 } from 'react-router-dom';
 import { Card } from '@patternfly/react-core';
-import { CaretLeftIcon } from '@patternfly/react-icons';
+import { LucideIconChevronLeft } from '@ctrliq/quantic-react';
 import useRequest from 'hooks/useRequest';
 
 import { InventoriesAPI } from 'api';
@@ -62,7 +62,7 @@ function InventoryHost({ setBreadcrumb, inventory }) {
     {
       name: (
         <>
-          <CaretLeftIcon />
+          <LucideIconChevronLeft />
           {t`Back to Hosts`}
         </>
       ),
@@ -98,9 +98,7 @@ function InventoryHost({ setBreadcrumb, inventory }) {
           {contentError.response && contentError.response.status === 404 && (
             <span>
               {t`Host not found.`}{' '}
-              <Link to={hostListUrl}>
-                {t`View all Inventory Hosts.`}
-              </Link>
+              <Link to={hostListUrl}>{t`View all Inventory Hosts.`}</Link>
             </span>
           )}
         </ContentError>

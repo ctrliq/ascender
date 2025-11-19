@@ -4,7 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import { string, bool, func, number } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 import { Button, Tooltip } from '@patternfly/react-core';
-import { PencilAltIcon } from '@patternfly/react-icons';
+import { LucideIconPencil } from '@ctrliq/quantic-react';
 
 import { Td, Tr } from '@patternfly/react-table';
 import { ActionItem, ActionsTd } from 'components/PaginatedTable';
@@ -47,9 +47,7 @@ function InventoryGroupHostListItem({
           <b>{host.name}</b>
         </Link>
       </Td>
-      <Td dataLabel={t`host-description-${host.id}`}>
-        {host.description}
-      </Td>
+      <Td dataLabel={t`host-description-${host.id}`}>{host.description}</Td>
       <Td dataLabel={t`Activity`}>
         <Sparkline jobs={recentPlaybookJobs} />
       </Td>
@@ -73,7 +71,10 @@ function InventoryGroupHostListItem({
                 component={Link}
                 to={`${editUrl}`}
               >
-                <PencilAltIcon />
+                <LucideIconPencil
+                  data-original-icon="PencilAltIcon"
+                  size="sm"
+                />
               </Button>
             </Tooltip>
           </ActionItem>

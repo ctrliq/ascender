@@ -9,11 +9,12 @@ import { Button, Popover, Tooltip, Chip } from '@patternfly/react-core';
 import { Tr, Td, ExpandableRowContent } from '@patternfly/react-table';
 import { Trans, useLingui } from '@lingui/react/macro';
 import {
-  ExclamationTriangleIcon,
-  PencilAltIcon,
-  ProjectDiagramIcon,
-  RocketIcon,
-} from '@patternfly/react-icons';
+  LucideIconCircleAlert,
+  LucideIconTriangleAlert,
+  LucideIconPencil,
+  LucideIconNetwork,
+  LucideIconRocket,
+} from '@ctrliq/quantic-react';
 import styled from 'styled-components';
 import { timeOfDay, formatDateString } from 'util/dates';
 import { JobTemplatesAPI, WorkflowJobTemplatesAPI } from 'api';
@@ -29,13 +30,13 @@ import { LaunchButton } from '../LaunchButton';
 import Sparkline from '../Sparkline';
 import CopyButton from '../CopyButton';
 
-const ExclamationTriangleIconWarning = styled(ExclamationTriangleIcon)`
+const StyledTriangleAlert = styled(LucideIconCircleAlert)`
   color: var(--pf-global--warning-color--100);
   margin-left: 18px;
   cursor: pointer;
 `;
 
-ExclamationTriangleIconWarning.displayName = 'ExclamationTriangleIconWarning';
+StyledTriangleAlert.displayName = 'StyledTriangleAlert';
 
 function TemplateListItem({
   isExpanded,
@@ -154,7 +155,11 @@ function TemplateListItem({
                 content={t`Resources are missing from this template.`}
                 position="right"
               >
-                <ExclamationTriangleIcon css="color: #c9190b; margin-left: 20px;" />
+                <LucideIconTriangleAlert
+                  css="color: #c9190b; margin-left: 20px;"
+                  data-original-icon="ExclamationTriangleIcon"
+                  size={16}
+                />
               </Tooltip>
             </span>
           )}
@@ -162,9 +167,7 @@ function TemplateListItem({
             <span>
               <Popover
                 className="missing-execution-environment"
-                headerContent={
-                  <div>{t`Execution Environment Missing`}</div>
-                }
+                headerContent={<div>{t`Execution Environment Missing`}</div>}
                 bodyContent={
                   <div>
                     <Trans>
@@ -183,7 +186,10 @@ function TemplateListItem({
                 }
                 position="right"
               >
-                <ExclamationTriangleIconWarning />
+                <StyledTriangleAlert
+                  data-original-icon="ExclamationTriangleIcon"
+                  size={16}
+                />
               </Popover>
             </span>
           )}
@@ -209,7 +215,10 @@ function TemplateListItem({
               component={Link}
               to={`/templates/workflow_job_template/${template.id}/visualizer`}
             >
-              <ProjectDiagramIcon />
+              <LucideIconNetwork
+                data-original-icon="ProjectDiagramIcon"
+                size={16}
+              />
             </Button>
           </ActionItem>
           <ActionItem
@@ -226,7 +235,7 @@ function TemplateListItem({
                   variant="plain"
                   onClick={handleLaunch}
                 >
-                  <RocketIcon />
+                  <LucideIconRocket data-original-icon="RocketIcon" size={16} />
                 </Button>
               )}
             </LaunchButton>
@@ -244,7 +253,7 @@ function TemplateListItem({
               component={Link}
               to={`/templates/${template.type}/${template.id}/edit`}
             >
-              <PencilAltIcon />
+              <LucideIconPencil data-original-icon="PencilAltIcon" size="sm" />
             </Button>
           </ActionItem>
           <ActionItem

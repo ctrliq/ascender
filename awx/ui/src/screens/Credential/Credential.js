@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
-import { CaretLeftIcon } from '@patternfly/react-icons';
+import { LucideIconChevronLeft } from '@ctrliq/quantic-react';
 import { Card, PageSection } from '@patternfly/react-core';
 import {
   Switch,
@@ -77,7 +77,7 @@ function Credential({ setBreadcrumb }) {
     {
       name: (
         <>
-          <CaretLeftIcon />
+          <LucideIconChevronLeft />
           {t`Back to Credentials`}
         </>
       ),
@@ -116,9 +116,7 @@ function Credential({ setBreadcrumb }) {
             {contentError.response && contentError.response.status === 404 && (
               <span>
                 {t`Credential not found.`}{' '}
-                <Link to="/credentials">
-                  {t`View all Credentials.`}
-                </Link>
+                <Link to="/credentials">{t`View all Credentials.`}</Link>
               </span>
             )}
           </ContentError>

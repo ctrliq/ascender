@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
 import { Switch, Route, Redirect, Link, useRouteMatch } from 'react-router-dom';
-import { CaretLeftIcon } from '@patternfly/react-icons';
+import { LucideIconChevronLeft } from '@ctrliq/quantic-react';
 import { Card, PageSection } from '@patternfly/react-core';
 import { useConfig } from 'contexts/Config';
 import ContentError from 'components/ContentError';
@@ -24,7 +24,7 @@ function Instance({ setBreadcrumb }) {
     {
       name: (
         <>
-          <CaretLeftIcon />
+          <LucideIconChevronLeft />
           {t`Back to Instances`}
         </>
       ),

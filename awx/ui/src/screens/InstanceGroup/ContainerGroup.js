@@ -9,7 +9,7 @@ import {
 } from 'react-router-dom';
 
 import { useLingui } from '@lingui/react/macro';
-import { CaretLeftIcon } from '@patternfly/react-icons';
+import { LucideIconChevronLeft } from '@ctrliq/quantic-react';
 import { Card, PageSection } from '@patternfly/react-core';
 
 import useRequest from 'hooks/useRequest';
@@ -56,7 +56,7 @@ function ContainerGroup({ setBreadcrumb }) {
     {
       name: (
         <>
-          <CaretLeftIcon />
+          <LucideIconChevronLeft />
           {t`Back to instance groups`}
         </>
       ),
@@ -84,9 +84,7 @@ function ContainerGroup({ setBreadcrumb }) {
               <span>
                 {t`Container group not found.`}
 
-                <Link to="/instance_groups">
-                  {t`View all instance groups`}
-                </Link>
+                <Link to="/instance_groups">{t`View all instance groups`}</Link>
               </span>
             )}
           </ContentError>

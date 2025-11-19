@@ -12,12 +12,12 @@ import {
 } from '@patternfly/react-core';
 
 import {
-  SearchMinusIcon,
-  SearchPlusIcon,
-  ExpandArrowsAltIcon,
-  ExpandIcon,
-  RedoAltIcon,
-} from '@patternfly/react-icons';
+  LucideIconZoomIn as SearchPlusIcon,
+  LucideIconZoomOut as SearchMinusIcon,
+  LucideIconExpand as ExpandIcon,
+  LucideIconRedo as RedoAltIcon,
+  LucideIconFullscreen as ExpandArrowsAltIcon,
+} from '@ctrliq/quantic-react';
 
 const Header = ({
   title,

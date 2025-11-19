@@ -7,7 +7,7 @@ import { useLingui } from '@lingui/react/macro';
 
 import { Td, Tr } from '@patternfly/react-table';
 import { Button } from '@patternfly/react-core';
-import { PencilAltIcon } from '@patternfly/react-icons';
+import { LucideIconPencil } from '@ctrliq/quantic-react';
 
 import { Group } from 'types';
 import { ActionItem, ActionsTd } from 'components/PaginatedTable';
@@ -55,7 +55,7 @@ function InventoryRelatedGroupListItem({
               component={Link}
               to={`${editUrl}`}
             >
-              <PencilAltIcon />
+              <LucideIconPencil data-original-icon="PencilAltIcon" size="sm" />
             </Button>
           </ActionItem>
         </ActionsTd>

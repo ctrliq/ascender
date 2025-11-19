@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Button, TextInput, Tooltip } from '@patternfly/react-core';
-import { RocketIcon } from '@patternfly/react-icons';
+import { LucideIconRocket as RocketIcon } from '@ctrliq/quantic-react';
 
 import AlertModal from 'components/AlertModal';
 
@@ -36,7 +36,7 @@ function LaunchManagementPrompt({
           onClick={onClick}
           isDisabled={isLoading}
         >
-          <RocketIcon />
+          <RocketIcon size={16} data-original-icon="RocketIcon" />
         </Button>
       </Tooltip>
       <AlertModal

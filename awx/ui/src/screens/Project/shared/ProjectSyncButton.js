@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import { Button, Tooltip } from '@patternfly/react-core';
-import { SyncIcon } from '@patternfly/react-icons';
+import { LucideIconRefreshCw as SyncIcon } from '@ctrliq/quantic-react';
 
 import { number } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
@@ -41,7 +41,7 @@ function ProjectSyncButton({ projectId, lastJobStatus = null }) {
               {match.url.endsWith('/details') ? (
                 t`Sync`
               ) : (
-                <SyncIcon />
+                <SyncIcon size={16} data-original-icon="SyncIcon" />
               )}
             </Button>
           </div>
@@ -54,7 +54,7 @@ function ProjectSyncButton({ projectId, lastJobStatus = null }) {
           isDisabled={isDisabled}
           onClick={handleSync}
         >
-          {match.url.endsWith('/details') ? t`Sync` : <SyncIcon />}
+          {match.url.endsWith('/details') ? t`Sync` : <SyncIcon size={16} data-original-icon="SyncIcon" />}
         </Button>
       )}
       {error && (

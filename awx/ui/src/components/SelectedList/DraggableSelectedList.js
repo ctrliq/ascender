@@ -11,7 +11,7 @@ import {
   DataListDragButton,
   DataListItemCells,
 } from '@patternfly/react-core';
-import { TimesIcon } from '@patternfly/react-icons';
+import { LucideIconX } from '@ctrliq/quantic-react';
 import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
 
@@ -99,10 +99,7 @@ function DraggableSelectedList({ selected, onRemove, onRowDrag }) {
                     </DataListCell>,
                   ]}
                 />
-                <RemoveActionSection
-                  aria-label={t`Actions`}
-                  id={rowPosition}
-                >
+                <RemoveActionSection aria-label={t`Actions`} id={rowPosition}>
                   <Button
                     onClick={() => removeItem(label)}
                     variant="plain"
@@ -110,7 +107,7 @@ function DraggableSelectedList({ selected, onRemove, onRowDrag }) {
                     ouiaId={`draggable-list-remove-${label}`}
                     isDisabled={isDragging}
                   >
-                    <TimesIcon />
+                    <LucideIconX data-original-icon="TimesIcon" size={16} />
                   </Button>
                 </RemoveActionSection>
               </DataListItemRow>

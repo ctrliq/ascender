@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Tooltip } from '@patternfly/react-core';
-import { ExclamationCircleIcon as PFExclamationCircleIcon } from '@patternfly/react-icons';
+import { LucideIconCircleAlert } from '@ctrliq/quantic-react';
 import styled from 'styled-components';
 import { VERBOSITY } from '../VerbositySelectField';
 import { toTitleCase } from '../../util/strings';
@@ -9,7 +9,7 @@ import { VariablesDetail } from '../CodeEditor';
 import { jsonToYaml } from '../../util/yaml';
 import { DetailList, Detail } from '../DetailList';
 
-const ExclamationCircleIcon = styled(PFExclamationCircleIcon)`
+const ExclamationCircleIcon = styled(LucideIconCircleAlert)`
   margin-left: 10px;
   margin-top: -2px;
 `;
@@ -36,7 +36,10 @@ function AdHocPreviewStep({ hasErrors, values }) {
             content={t`See errors on the left`}
             trigger="click mouseenter focus"
           >
-            <ExclamationCircleIcon />
+            <ExclamationCircleIcon
+              size="xs"
+              data-original-icon="ExclamationCircleIcon"
+            />
           </Tooltip>
         </ErrorMessageWrapper>
       )}
@@ -61,10 +64,7 @@ function AdHocPreviewStep({ hasErrors, values }) {
           />
         )}
         {verbosity && (
-          <Detail
-            label={t`Verbosity`}
-            value={VERBOSITY(t)[values.verbosity]}
-          />
+          <Detail label={t`Verbosity`} value={VERBOSITY(t)[values.verbosity]} />
         )}
         {extra_vars && (
           <VariablesDetail

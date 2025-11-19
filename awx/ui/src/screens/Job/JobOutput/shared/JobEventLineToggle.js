@@ -1,7 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
-import { AngleDownIcon, AngleRightIcon } from '@patternfly/react-icons';
+import {
+  LucideIconChevronDown,
+  LucideIconChevronRight,
+} from '@ctrliq/quantic-react';
 
 const Wrapper = styled.div`
   background-color: #ebebeb;
@@ -35,9 +38,17 @@ export default function JobEventLineToggle({
     <Wrapper>
       <Button onClick={onToggle} type="button">
         {isCollapsed ? (
-          <AngleRightIcon size="sm" title={t`Expand section`} />
+          <LucideIconChevronRight
+            size={14}
+            title={t`Expand section`}
+            data-original-icon="AngleRightIcon"
+          />
         ) : (
-          <AngleDownIcon size="sm" title={t`Collapse section`} />
+          <LucideIconChevronDown
+            size={14}
+            title={t`Collapse section`}
+            data-original-icon="AngleDownIcon"
+          />
         )}
       </Button>
     </Wrapper>

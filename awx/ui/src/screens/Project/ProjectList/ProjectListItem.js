@@ -6,10 +6,10 @@ import { Tr, Td, ExpandableRowContent } from '@patternfly/react-table';
 import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router-dom';
 import {
-  PencilAltIcon,
-  ExclamationTriangleIcon as PFExclamationTriangleIcon,
-  UndoIcon,
-} from '@patternfly/react-icons';
+  LucideIconPencil,
+  LucideIconCircleAlert,
+  LucideIconUndo_2,
+} from '@ctrliq/quantic-react';
 import styled from 'styled-components';
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
 import { formatDateString, timeOfDay } from 'util/dates';
@@ -28,7 +28,7 @@ const Label = styled.span`
   color: var(--pf-global--disabled-color--100);
 `;
 
-const ExclamationTriangleIcon = styled(PFExclamationTriangleIcon)`
+const StyledTriangleAlert = styled(LucideIconCircleAlert)`
   color: var(--pf-global--warning-color--100);
   margin-left: 18px;
 `;
@@ -138,7 +138,7 @@ function ProjectListItem({
             variant="plain"
             onClick={() => onRefreshRow(project.id)}
           >
-            <UndoIcon />
+            <LucideIconUndo_2 data-original-icon="UndoIcon" />
           </Button>
         </Tooltip>
       </>
@@ -190,7 +190,7 @@ function ProjectListItem({
                 position="right"
                 className="missing-execution-environment"
               >
-                <ExclamationTriangleIcon />
+                <StyledTriangleAlert data-original-icon="ExclamationTriangleIcon" />
               </Tooltip>
             </span>
           )}
@@ -217,9 +217,7 @@ function ProjectListItem({
           )}
         </Td>
         <Td dataLabel={t`Type`}>
-          {project.scm_type === ''
-            ? t`Manual`
-            : toTitleCase(project.scm_type)}
+          {project.scm_type === '' ? t`Manual` : toTitleCase(project.scm_type)}
         </Td>
         <Td dataLabel={t`Revision`}>{renderRevision()}</Td>
         <ActionsTd dataLabel={t`Actions`}>
@@ -258,7 +256,7 @@ function ProjectListItem({
               component={Link}
               to={`/projects/${project.id}/edit`}
             >
-              <PencilAltIcon />
+              <LucideIconPencil data-original-icon="PencilAltIcon" size="sm" />
             </Button>
           </ActionItem>
           <ActionItem

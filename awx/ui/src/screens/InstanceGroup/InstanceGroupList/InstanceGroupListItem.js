@@ -12,7 +12,7 @@ import {
   ProgressSize,
 } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
-import { PencilAltIcon } from '@patternfly/react-icons';
+import { LucideIconPencil } from '@ctrliq/quantic-react';
 import styled from 'styled-components';
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
 import { InstanceGroup } from 'types';
@@ -70,9 +70,7 @@ function InstanceGroupListItem({
           ? t`Container group`.toString()
           : t`Instance group`.toString()}
       </Td>
-      <Td dataLabel={t`Running jobs`}>
-        {instanceGroup.jobs_running}
-      </Td>
+      <Td dataLabel={t`Running jobs`}>{instanceGroup.jobs_running}</Td>
       <Td dataLabel={t`Total jobs`}>{instanceGroup.jobs_total}</Td>
       <Td dataLabel={t`Instances`}>{instanceGroup.instances}</Td>
       <Td dataLabel={t`Capacity`}>{usedCapacity(instanceGroup)}</Td>
@@ -92,7 +90,7 @@ function InstanceGroupListItem({
                 : `/instance_groups/${instanceGroup.id}/edit`
             }
           >
-            <PencilAltIcon />
+            <LucideIconPencil data-original-icon="PencilAltIcon" size="xs" />
           </Button>
         </ActionItem>
       </ActionsTd>

@@ -6,6 +6,10 @@
     "node": ">=20.18.2"
   },
   "dependencies": {
+    "@ctrliq/quantic-css": "^1.5.5",
+    "@ctrliq/quantic-fonts": "^1.18.5",
+    "@ctrliq/quantic-react": "^1.18.5",
+    "@ctrliq/quantic-tokens": "^1.18.5",
     "@lingui/react": "^5.4.0",
     "@patternfly/patternfly": "4.224.5",
     "@patternfly/react-core": "4.278.1",

@@ -8,7 +8,7 @@ import {
   useLocation,
   useParams,
 } from 'react-router-dom';
-import { CaretLeftIcon } from '@patternfly/react-icons';
+import { LucideIconChevronLeft } from '@ctrliq/quantic-react';
 import RoutedTabs from 'components/RoutedTabs';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
@@ -46,7 +46,7 @@ function InventoryGroup({ setBreadcrumb, inventory }) {
     {
       name: (
         <>
-          <CaretLeftIcon aria-label={t`Back to Groups`} />
+          <LucideIconChevronLeft aria-label={t`Back to Groups`} />
           {t`Back to Groups`}
         </>
       ),

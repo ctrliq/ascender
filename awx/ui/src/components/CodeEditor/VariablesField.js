@@ -5,7 +5,7 @@ import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
 import styled from 'styled-components';
 import { Split, SplitItem, Button, Modal } from '@patternfly/react-core';
-import { ExpandArrowsAltIcon } from '@patternfly/react-icons';
+import { LucideIconExpand } from '@ctrliq/quantic-react';
 import {
   yamlToJson,
   jsonToYaml,
@@ -272,7 +272,7 @@ function VariablesFieldInternals({
             onClick={onExpand}
             ouiaId={`${id}-expand`}
           >
-            <ExpandArrowsAltIcon />
+            <LucideIconExpand size="xs" data-original-icon="ExpandArrowsAltIcon" />
           </Button>
         )}
       </FieldHeader>

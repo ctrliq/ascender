@@ -13,16 +13,11 @@ import {
   DropdownItem,
   InputGroup,
 } from '@patternfly/react-core';
-import {
-  SortAlphaDownIcon,
-  SortAlphaDownAltIcon,
-  SortNumericDownIcon,
-  SortNumericDownAltIcon,
-} from '@patternfly/react-icons';
-
 import styled from 'styled-components';
 import { parseQueryString } from 'util/qs';
 import { SortColumns, QSConfig } from 'types';
+import { LucideIconArrowDown10, LucideIconArrowDownAZ } from '@ctrliq/quantic-react';
+
 
 const NoOptionDropdown = styled.div`
   align-self: stretch;

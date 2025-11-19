@@ -9,7 +9,7 @@ import {
   useLocation,
   useParams,
 } from 'react-router-dom';
-import { CaretLeftIcon } from '@patternfly/react-icons';
+import { LucideIconChevronLeft } from '@ctrliq/quantic-react';
 import { Card, PageSection } from '@patternfly/react-core';
 import { Config } from 'contexts/Config';
 import RoutedTabs from 'components/RoutedTabs';
@@ -47,7 +47,7 @@ function Team({ setBreadcrumb }) {
     {
       name: (
         <>
-          <CaretLeftIcon />
+          <LucideIconChevronLeft />
           {t`Back to Teams`}
         </>
       ),

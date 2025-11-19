@@ -15,32 +15,37 @@ import {
 } from '@patternfly/react-core';
 
 import {
-  ExclamationIcon,
-  CheckIcon,
-  OutlinedClockIcon,
-  PlusIcon,
-  MinusIcon,
-} from '@patternfly/react-icons';
+  LucideIconTriangleAlert,
+  LucideIconCheck,
+  LucideIconClock,
+  LucideIconPlus,
+  LucideIconMinus,
+} from '@ctrliq/quantic-react';
 
 const Wrapper = styled.div`
   position: absolute;
   left: 0;
-  padding: 0 10px;
+  padding: var(--quantic-spacing-4) var(--quantic-spacing-6);
   min-width: 150px;
-  background-color: rgba(255, 255, 255, 0.85);
+  background-color: var(--quantic-bg-secondary);
+  border-radius: var(--quantic-radius-md);
   overflow: auto;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--quantic-spacing-3);
 `;
+
 const Button = styled(PFButton)`
   &&& {
-    width: 20px;
-    height: 20px;
-    border-radius: 10px;
+    width: var(--quantic-spacing-5);
+    height: var(--quantic-spacing-5);
+    border-radius: var(--quantic-radius-sm);
     padding: 0;
-    font-size: 11px;
-    background-color: white;
-    border: 1px solid #ccc;
-    color: black;
+    font-size: 10px;
+    background-color: var(--quantic-bg-tertiary);
+    line-height: 1;
+    color: var(--quantic-text-primary);
   }
 `;
 const DescriptionListDescription = styled(PFDescriptionListDescription)`
@@ -51,6 +56,11 @@ const DescriptionList = styled(PFDescriptionList)`
 `;
 const DescriptionListGroup = styled(PFDescriptionListGroup)`
   align-items: center;
+
+  .pf-c-button__icon.pf-m-start {
+    margin-right: 0;
+    vertical-align: middle;
+  }
 `;
 const Text = styled(PFText)`
   margin: 10px 0 5px;
@@ -63,7 +73,7 @@ function Legend() {
       <TextContent>
         <Text
           component={TextVariants.small}
-          style={{ fontWeight: 'bold', color: 'black', marginTop: 0 }}
+          style={{ fontWeight: 'bold', marginTop: 0 }}
         >
           {t`Legend`}
         </Text>
@@ -105,43 +115,29 @@ function Legend() {
               h
             </Button>
           </DescriptionListTerm>
-          <DescriptionListDescription>
-            {t`Hop node`}
-          </DescriptionListDescription>
+          <DescriptionListDescription>{t`Hop node`}</DescriptionListDescription>
         </DescriptionListGroup>
       </DescriptionList>
       <TextContent>
-        <Text component={TextVariants.small}>
-          {t`Node state types`}
-        </Text>
+        <Text component={TextVariants.small}>{t`Node state types`}</Text>
       </TextContent>
       <DescriptionList isHorizontal isFluid>
         <DescriptionListGroup>
           <DescriptionListTerm>
             <Button
-              icon={
-                <CheckIcon
-                  style={{ fill: 'white', marginLeft: '2px', marginTop: '3px' }}
-                />
-              }
+              icon={<LucideIconCheck size={16} />}
               isSmall
-              style={{ backgroundColor: '#3E8635' }}
+              style={{ backgroundColor: 'var(--quantic-color-brand-500)' }}
             />
           </DescriptionListTerm>
-          <DescriptionListDescription>
-            {t`Ready`}
-          </DescriptionListDescription>
+          <DescriptionListDescription>{t`Ready`}</DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
           <DescriptionListTerm>
             <Button
-              icon={
-                <OutlinedClockIcon
-                  style={{ fill: 'white', marginLeft: '3px', marginTop: '3px' }}
-                />
-              }
+              icon={<LucideIconClock size={16} />}
               isSmall
-              style={{ backgroundColor: '#0066CC' }}
+              style={{ backgroundColor: 'var(--quantic-color-gray-blue-500)' }}
             />
           </DescriptionListTerm>
           <DescriptionListDescription>
@@ -151,13 +147,9 @@ function Legend() {
         <DescriptionListGroup>
           <DescriptionListTerm>
             <Button
-              icon={
-                <PlusIcon
-                  style={{ fill: 'white', marginLeft: '3px', marginTop: '3px' }}
-                />
-              }
+              icon={<LucideIconPlus size={16} />}
               isSmall
-              style={{ backgroundColor: '#6A6E73' }}
+              style={{ backgroundColor: 'var(--quantic-bg-tertiary)' }}
             />
           </DescriptionListTerm>
           <DescriptionListDescription>
@@ -167,13 +159,9 @@ function Legend() {
         <DescriptionListGroup>
           <DescriptionListTerm>
             <Button
-              icon={
-                <MinusIcon
-                  style={{ fill: 'white', marginLeft: '3px', marginTop: '3px' }}
-                />
-              }
+              icon={<LucideIconMinus size={16} />}
               isSmall
-              style={{ backgroundColor: '#6A6E73' }}
+              style={{ backgroundColor: 'var(--quantic-bg-tertiary)' }}
             />
           </DescriptionListTerm>
           <DescriptionListDescription>
@@ -183,18 +171,12 @@ function Legend() {
         <DescriptionListGroup>
           <DescriptionListTerm>
             <Button
-              icon={
-                <ExclamationIcon
-                  style={{ fill: 'white', marginLeft: '3px', marginTop: '3px' }}
-                />
-              }
+              icon={<LucideIconTriangleAlert size={16} />}
               isSmall
-              style={{ backgroundColor: '#C9190B' }}
+              style={{ backgroundColor: 'var(--quantic-color-error-700)' }}
             />
           </DescriptionListTerm>
-          <DescriptionListDescription>
-            {t`Error`}
-          </DescriptionListDescription>
+          <DescriptionListDescription>{t`Error`}</DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
           <DescriptionListTerm>
@@ -212,7 +194,7 @@ function Legend() {
                 y="10"
                 textAnchor="middle"
                 dominantBaseline="central"
-                fill="black"
+                fill="currentColor"
                 fontSize="11px"
                 fontFamily="inherit"
                 fontWeight="400"
@@ -221,9 +203,7 @@ function Legend() {
               </text>
             </svg>
           </DescriptionListTerm>
-          <DescriptionListDescription>
-            {t`Enabled`}
-          </DescriptionListDescription>
+          <DescriptionListDescription>{t`Enabled`}</DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
           <DescriptionListTerm>
@@ -242,7 +222,7 @@ function Legend() {
                 y="10"
                 textAnchor="middle"
                 dominantBaseline="central"
-                fill="black"
+                fill="currentColor"
                 fontSize="11px"
                 fontFamily="inherit"
                 fontWeight="400"
@@ -251,15 +231,11 @@ function Legend() {
               </text>
             </svg>
           </DescriptionListTerm>
-          <DescriptionListDescription>
-            {t`Disabled`}
-          </DescriptionListDescription>
+          <DescriptionListDescription>{t`Disabled`}</DescriptionListDescription>
         </DescriptionListGroup>
       </DescriptionList>
       <TextContent>
-        <Text component={TextVariants.small}>
-          {t`Link state types`}
-        </Text>
+        <Text component={TextVariants.small}>{t`Link state types`}</Text>
       </TextContent>
       <DescriptionList isHorizontal isFluid>
         <DescriptionListGroup>
@@ -270,7 +246,7 @@ function Legend() {
                 y1="9"
                 x2="20"
                 y2="9"
-                stroke="#6A6E73"
+                stroke="var(--quantic-bg-tertiary)"
                 strokeWidth="4"
               />
             </svg>
@@ -287,15 +263,13 @@ function Legend() {
                 y1="9"
                 x2="20"
                 y2="9"
-                stroke="#3E8635"
+                stroke="var(--quantic-color-brand-500)"
                 strokeWidth="4"
                 strokeDasharray="6"
               />
             </svg>
           </DescriptionListTerm>
-          <DescriptionListDescription>
-            {t`Adding`}
-          </DescriptionListDescription>
+          <DescriptionListDescription>{t`Adding`}</DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
           <DescriptionListTerm>
@@ -305,15 +279,13 @@ function Legend() {
                 y1="9"
                 x2="20"
                 y2="9"
-                stroke="#C9190B"
+                stroke="var(--quantic-color-error-700)"
                 strokeWidth="4"
                 strokeDasharray="6"
               />
             </svg>
           </DescriptionListTerm>
-          <DescriptionListDescription>
-            {t`Removing`}
-          </DescriptionListDescription>
+          <DescriptionListDescription>{t`Removing`}</DescriptionListDescription>
         </DescriptionListGroup>
       </DescriptionList>
     </Wrapper>

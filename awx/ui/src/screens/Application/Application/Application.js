@@ -9,7 +9,7 @@ import {
 } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';
 
-import { CaretLeftIcon } from '@patternfly/react-icons';
+import { LucideIconChevronLeft } from '@ctrliq/quantic-react';
 import { Card, PageSection } from '@patternfly/react-core';
 
 import useRequest from 'hooks/useRequest';
@@ -69,7 +69,7 @@ function Application({ setBreadcrumb }) {
     {
       name: (
         <>
-          <CaretLeftIcon />
+          <LucideIconChevronLeft />
           {t`Back to applications`}
         </>
       ),
@@ -94,9 +94,7 @@ function Application({ setBreadcrumb }) {
             {error.response?.status === 404 && (
               <span>
                 {t`Application not found.`}{' '}
-                <Link to="/applications">
-                  {t`View all applications.`}
-                </Link>
+                <Link to="/applications">{t`View all applications.`}</Link>
               </span>
             )}
           </ContentError>
