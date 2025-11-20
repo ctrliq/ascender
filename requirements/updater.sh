@@ -41,7 +41,7 @@ main() {
   dest_requirements="${requirements}"
   input_requirements="${requirements_in} ${requirements_git}"
   command="${1:-}"
-  package_name="${2:-}"
+  shift || true  # Remove first argument, leave remaining as package names
 
   _tmp=$(python -c "import tempfile; print(tempfile.mkdtemp(suffix='.awx-requirements', dir='/tmp'))")
 
@@ -59,10 +59,12 @@ main() {
     ;;
     "upgrade")
       NEEDS_HELP=0
-      if [[ -z "$package_name" ]]; then
+      if [[ $# -eq 0 ]]; then
         pip_compile="${pip_compile} --upgrade"
       else
-        pip_compile="${pip_compile} --upgrade-package $package_name"
+        for package in "$@"; do
+          pip_compile="${pip_compile} --upgrade-package $package"
+        done
       fi
     ;;
     "help")
@@ -80,13 +82,13 @@ main() {
     echo "This script generates requirements.txt from requirements.in and requirements_git.in"
     echo "It should be run from within the awx container"
     echo ""
-    echo "Usage: $0 [run|upgrade [package-name]|dev]"
+    echo "Usage: $0 [run|upgrade [package-name...]|dev]"
     echo ""
     echo "Commands:"
-    echo "help                 Print this message"
-    echo "run                  Run the process only upgrading pinned libraries from requirements.in"
-    echo "upgrade [package]    Upgrade all libraries (or specific package if specified) to latest while respecting pinnings"
-    echo "dev                  Pin the development requirements file"
+    echo "help                   Print this message"
+    echo "run                    Run the process only upgrading pinned libraries from requirements.in"
+    echo "upgrade [package...]   Upgrade all libraries (or specific packages if specified) to latest while respecting pinnings"
+    echo "dev                    Pin the development requirements file"
     echo ""
     exit
   fi
