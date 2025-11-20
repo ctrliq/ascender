@@ -1,8 +1,8 @@
 import itertools
 import pytest
 
-# CRUM
-from crum import impersonate
+# AWX middleware for thread-local request/user
+from awx.main.middleware import impersonate
 
 # Django
 from django.contrib.contenttypes.models import ContentType

@@ -1,6 +1,7 @@
 # Copyright (c) 2015 Ansible, Inc.
 # All Rights Reserved.
 
+import contextlib
 import logging
 import threading
 import time
@@ -17,6 +18,7 @@ from django.apps import apps
 from django.utils.deprecation import MiddlewareMixin
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse, resolve
+from django.dispatch import Signal
 
 from awx.main import migrations
 from awx.main.utils.named_url_graph import generate_graph, GraphNode
@@ -28,6 +30,79 @@ from awx.main.utils.common import memoize
 logger = logging.getLogger('awx.main.middleware')
 perf_logger = logging.getLogger('awx.analytics.performance')
 
+
+# Thread-local storage for request and user
+_thread_locals = threading.local()
+
+# Signal for getting the current user (similar to crum's current_user_getter)
+current_user_getter = Signal()
+
+
+def get_current_request():
+    """
+    Get the current request from thread-local storage.
+    Returns None if no request is available.
+    """
+    return getattr(_thread_locals, 'request', None)
+
+
+def get_current_user():
+    """
+    Get the current user from thread-local storage.
+    First checks for impersonated user, then checks request.user.
+    Returns None if no user is available.
+    
+    Also fires the current_user_getter signal to allow customization
+    (e.g., for Django REST Framework compatibility).
+    """
+    # Check for impersonated user first
+    if hasattr(_thread_locals, 'impersonate_user'):
+        return _thread_locals.impersonate_user
+    
+    # Fire signal to allow custom user retrieval (e.g., DRF)
+    responses = current_user_getter.send(sender=None)
+    for receiver, (user, priority) in responses:
+        if user is not None:
+            return user
+    
+    # Fall back to request.user
+    request = get_current_request()
+    if request and hasattr(request, 'user'):
+        return request.user
+    
+    return None
+
+
+@contextlib.contextmanager
+def impersonate(user):
+    """
+    Context manager to temporarily impersonate a user.
+    
+    Usage:
+        with impersonate(some_user):
+            # Code here will see some_user as the current user
+            pass
+    """
+    previous_user = getattr(_thread_locals, 'impersonate_user', None)
+    _thread_locals.impersonate_user = user
+    try:
+        yield
+    finally:
+        if previous_user is None:
+            if hasattr(_thread_locals, 'impersonate_user'):
+                del _thread_locals.impersonate_user
+        else:
+            _thread_locals.impersonate_user = previous_user
+
+class ThreadLocalMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        _thread_locals.request = request
+        response = self.get_response(request)
+        del _thread_locals.request  # Clean up after the request
+        return response
 
 class SettingsCacheMiddleware(MiddlewareMixin):
     """

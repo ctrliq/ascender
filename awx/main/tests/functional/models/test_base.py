@@ -1,7 +1,7 @@
 from unittest import mock
 import pytest
 
-from crum import impersonate
+from awx.main.middleware import impersonate
 
 from awx.main.models import Host
 

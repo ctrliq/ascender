@@ -3,7 +3,7 @@ import pytest
 from unittest import mock
 from dateutil.parser import parse
 from dateutil.relativedelta import relativedelta
-from crum import impersonate
+from awx.main.middleware import impersonate
 import datetime
 
 # Django rest framework

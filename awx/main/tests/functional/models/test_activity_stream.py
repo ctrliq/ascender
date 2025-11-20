@@ -14,8 +14,8 @@ from awx.main.signals import model_serializer_mapping
 # Django
 from django.contrib.auth.models import AnonymousUser
 
-# Django-CRUM
-from crum import impersonate
+# AWX middleware for thread-local request/user
+from awx.main.middleware import impersonate
 
 
 class TestImplicitRolesOmitted:
@@ -171,7 +171,7 @@ def test_activity_stream_actor(admin_user):
 
 @pytest.mark.django_db
 def test_anon_user_action():
-    with mock.patch('awx.main.signals.get_current_user') as u_mock:
+    with mock.patch('awx.main.middleware.get_current_user') as u_mock:
         u_mock.return_value = AnonymousUser()
         inv = Inventory.objects.create(name='ainventory')
     entry = inv.activitystream_set.filter(operation='create').first()
