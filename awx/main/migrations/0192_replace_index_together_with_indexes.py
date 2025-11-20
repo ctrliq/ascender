@@ -18,60 +18,42 @@ def smart_index_transition(apps, schema_editor):
     This function ensures indexes exist regardless of the path taken.
     """
     
-    # Check if migration 0144 was applied with the OLD version (index_together)
-    # or NEW version (AddIndex) by checking if the indexes exist
-    migration_0144_ran_old_version = False
-    
     with connection.cursor() as cursor:
-        # Check if we have the migration recorder table
-        if connection.vendor == 'postgresql':
-            cursor.execute("""
-                SELECT 1 FROM pg_indexes 
-                WHERE indexname = 'main_jobevent_job_counter_idx'
-            """)
-            index_exists = cursor.fetchone() is not None
-            
-            # If migration 0144 was applied but indexes don't exist, 
-            # it means the old version (index_together) was run
-            # In that case, indexes might have been created with different names
-            # by index_together, so we skip creating them
-            
-            # If indexes DO exist with our expected names, the new version ran
-            # and we don't need to do anything
-            
-            # The safest approach: Only create if they definitely don't exist
-            if not index_exists:
-                # Indexes don't exist - this is likely impossible on existing DBs
-                # because index_together would have created them (with auto-generated names)
-                # But for new installs where migrations might be faked, create them
-                
-                indexes_to_create = [
-                    ('main_adhoccommandevent', 'ad_hoc_command_id', 'job_created', 'event', 'main_adhoccommandevent_adhoc_event_idx'),
-                    ('main_adhoccommandevent', 'ad_hoc_command_id', 'job_created', 'counter', 'main_adhoccommandevent_adhoc_counter_idx'),
-                    ('main_adhoccommandevent', 'ad_hoc_command_id', 'job_created', 'uuid', 'main_adhoccommandevent_adhoc_uuid_idx'),
-                    ('main_jobevent', 'job_id', 'job_created', 'counter', 'main_jobevent_job_counter_idx'),
-                    ('main_jobevent', 'job_id', 'job_created', 'uuid', 'main_jobevent_job_uuid_idx'),
-                    ('main_jobevent', 'job_id', 'job_created', 'event', 'main_jobevent_job_event_idx'),
-                    ('main_jobevent', 'job_id', 'job_created', 'parent_uuid', 'main_jobevent_job_parent_uuid_idx'),
-                    ('main_inventoryupdateevent', 'inventory_update_id', 'job_created', 'counter', 'main_inventoryupdateevent_inv_counter_idx'),
-                    ('main_inventoryupdateevent', 'inventory_update_id', 'job_created', 'uuid', 'main_inventoryupdateevent_inv_uuid_idx'),
-                    ('main_projectupdateevent', 'project_update_id', 'job_created', 'uuid', 'main_projectupdateevent_proj_uuid_idx'),
-                    ('main_projectupdateevent', 'project_update_id', 'job_created', 'event', 'main_projectupdateevent_proj_event_idx'),
-                    ('main_projectupdateevent', 'project_update_id', 'job_created', 'counter', 'main_projectupdateevent_proj_counter_idx'),
-                    ('main_systemjobevent', 'system_job_id', 'job_created', 'uuid', 'main_systemjobevent_sysjob_uuid_idx'),
-                    ('main_systemjobevent', 'system_job_id', 'job_created', 'counter', 'main_systemjobevent_sysjob_counter_idx'),
-                ]
-                
-                for table, field1, field2, field3, idx_name in indexes_to_create:
-                    cursor.execute(f'''
-                        CREATE INDEX IF NOT EXISTS "{idx_name}" 
-                        ON "{table}" ("{field1}", "{field2}", "{field3}")
-                    ''')
+        # Check if the indexes already exist with our expected names
+        cursor.execute("""
+            SELECT 1 FROM pg_indexes 
+            WHERE indexname = 'main_jobevent_job_counter_idx'
+        """)
+        index_exists = cursor.fetchone() is not None
         
-        elif connection.vendor == 'sqlite':
-            # For SQLite, indexes from index_together would have auto-generated names
-            # Just ensure our named indexes exist
-            pass
+        # Only create indexes if they definitely don't exist
+        if not index_exists:
+            # Indexes don't exist - this is likely impossible on existing DBs
+            # because index_together would have created them (with auto-generated names)
+            # But for new installs where migrations might be faked, create them
+            
+            indexes_to_create = [
+                ('main_adhoccommandevent', 'ad_hoc_command_id', 'job_created', 'event', 'main_adhoccommandevent_adhoc_event_idx'),
+                ('main_adhoccommandevent', 'ad_hoc_command_id', 'job_created', 'counter', 'main_adhoccommandevent_adhoc_counter_idx'),
+                ('main_adhoccommandevent', 'ad_hoc_command_id', 'job_created', 'uuid', 'main_adhoccommandevent_adhoc_uuid_idx'),
+                ('main_jobevent', 'job_id', 'job_created', 'counter', 'main_jobevent_job_counter_idx'),
+                ('main_jobevent', 'job_id', 'job_created', 'uuid', 'main_jobevent_job_uuid_idx'),
+                ('main_jobevent', 'job_id', 'job_created', 'event', 'main_jobevent_job_event_idx'),
+                ('main_jobevent', 'job_id', 'job_created', 'parent_uuid', 'main_jobevent_job_parent_uuid_idx'),
+                ('main_inventoryupdateevent', 'inventory_update_id', 'job_created', 'counter', 'main_inventoryupdateevent_inv_counter_idx'),
+                ('main_inventoryupdateevent', 'inventory_update_id', 'job_created', 'uuid', 'main_inventoryupdateevent_inv_uuid_idx'),
+                ('main_projectupdateevent', 'project_update_id', 'job_created', 'uuid', 'main_projectupdateevent_proj_uuid_idx'),
+                ('main_projectupdateevent', 'project_update_id', 'job_created', 'event', 'main_projectupdateevent_proj_event_idx'),
+                ('main_projectupdateevent', 'project_update_id', 'job_created', 'counter', 'main_projectupdateevent_proj_counter_idx'),
+                ('main_systemjobevent', 'system_job_id', 'job_created', 'uuid', 'main_systemjobevent_sysjob_uuid_idx'),
+                ('main_systemjobevent', 'system_job_id', 'job_created', 'counter', 'main_systemjobevent_sysjob_counter_idx'),
+            ]
+            
+            for table, field1, field2, field3, idx_name in indexes_to_create:
+                cursor.execute(f'''
+                    CREATE INDEX IF NOT EXISTS "{idx_name}" 
+                    ON "{table}" ("{field1}", "{field2}", "{field3}")
+                ''')
 
 
 class Migration(migrations.Migration):
