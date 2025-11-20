@@ -21,7 +21,7 @@ def smart_index_transition(apps, schema_editor):
         # Check if the indexes already exist with our expected names
         cursor.execute("""
             SELECT 1 FROM pg_indexes 
-            WHERE indexname = 'main_jobevent_job_counter_idx'
+            WHERE indexname = 'jobevent_job_counter_idx'
         """)
         index_exists = cursor.fetchone() is not None
         
@@ -32,20 +32,20 @@ def smart_index_transition(apps, schema_editor):
             # But for new installs where migrations might be faked, create them
             
             indexes_to_create = [
-                ('main_adhoccommandevent', 'ad_hoc_command_id', 'job_created', 'event', 'main_adhoccommandevent_adhoc_event_idx'),
-                ('main_adhoccommandevent', 'ad_hoc_command_id', 'job_created', 'counter', 'main_adhoccommandevent_adhoc_counter_idx'),
-                ('main_adhoccommandevent', 'ad_hoc_command_id', 'job_created', 'uuid', 'main_adhoccommandevent_adhoc_uuid_idx'),
-                ('main_jobevent', 'job_id', 'job_created', 'counter', 'main_jobevent_job_counter_idx'),
-                ('main_jobevent', 'job_id', 'job_created', 'uuid', 'main_jobevent_job_uuid_idx'),
-                ('main_jobevent', 'job_id', 'job_created', 'event', 'main_jobevent_job_event_idx'),
-                ('main_jobevent', 'job_id', 'job_created', 'parent_uuid', 'main_jobevent_job_parent_uuid_idx'),
-                ('main_inventoryupdateevent', 'inventory_update_id', 'job_created', 'counter', 'main_inventoryupdateevent_inv_counter_idx'),
-                ('main_inventoryupdateevent', 'inventory_update_id', 'job_created', 'uuid', 'main_inventoryupdateevent_inv_uuid_idx'),
-                ('main_projectupdateevent', 'project_update_id', 'job_created', 'uuid', 'main_projectupdateevent_proj_uuid_idx'),
-                ('main_projectupdateevent', 'project_update_id', 'job_created', 'event', 'main_projectupdateevent_proj_event_idx'),
-                ('main_projectupdateevent', 'project_update_id', 'job_created', 'counter', 'main_projectupdateevent_proj_counter_idx'),
-                ('main_systemjobevent', 'system_job_id', 'job_created', 'uuid', 'main_systemjobevent_sysjob_uuid_idx'),
-                ('main_systemjobevent', 'system_job_id', 'job_created', 'counter', 'main_systemjobevent_sysjob_counter_idx'),
+                ('main_adhoccommandevent', 'ad_hoc_command_id', 'job_created', 'event', 'adhoccmdevent_adhoc_event_idx'),
+                ('main_adhoccommandevent', 'ad_hoc_command_id', 'job_created', 'counter', 'adhoccmdevent_adhoc_cntr_idx'),
+                ('main_adhoccommandevent', 'ad_hoc_command_id', 'job_created', 'uuid', 'adhoccmdevent_adhoc_uuid_idx'),
+                ('main_jobevent', 'job_id', 'job_created', 'counter', 'jobevent_job_counter_idx'),
+                ('main_jobevent', 'job_id', 'job_created', 'uuid', 'jobevent_job_uuid_idx'),
+                ('main_jobevent', 'job_id', 'job_created', 'event', 'jobevent_job_event_idx'),
+                ('main_jobevent', 'job_id', 'job_created', 'parent_uuid', 'jobevent_job_parent_uuid_idx'),
+                ('main_inventoryupdateevent', 'inventory_update_id', 'job_created', 'counter', 'invupdevent_inv_counter_idx'),
+                ('main_inventoryupdateevent', 'inventory_update_id', 'job_created', 'uuid', 'invupdevent_inv_uuid_idx'),
+                ('main_projectupdateevent', 'project_update_id', 'job_created', 'uuid', 'projupdevent_proj_uuid_idx'),
+                ('main_projectupdateevent', 'project_update_id', 'job_created', 'event', 'projupdevent_proj_event_idx'),
+                ('main_projectupdateevent', 'project_update_id', 'job_created', 'counter', 'projupdevent_proj_counter_idx'),
+                ('main_systemjobevent', 'system_job_id', 'job_created', 'uuid', 'sysjobevent_sysjob_uuid_idx'),
+                ('main_systemjobevent', 'system_job_id', 'job_created', 'counter', 'sysjobevent_sysjob_cntr_idx'),
             ]
             
             for table, field1, field2, field3, idx_name in indexes_to_create:
