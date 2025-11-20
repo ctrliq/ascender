@@ -67,6 +67,10 @@ main() {
         done
       fi
     ;;
+    "outdated")
+      pip list --outdated
+      exit 0
+    ;;
     "help")
       NEEDS_HELP=1
     ;;
@@ -82,13 +86,14 @@ main() {
     echo "This script generates requirements.txt from requirements.in and requirements_git.in"
     echo "It should be run from within the awx container"
     echo ""
-    echo "Usage: $0 [run|upgrade [package-name...]|dev]"
+    echo "Usage: $0 [run|upgrade [package-name...]|dev|outdated]"
     echo ""
     echo "Commands:"
     echo "help                   Print this message"
     echo "run                    Run the process only upgrading pinned libraries from requirements.in"
     echo "upgrade [package...]   Upgrade all libraries (or specific packages if specified) to latest while respecting pinnings"
     echo "dev                    Pin the development requirements file"
+    echo "outdated               List all outdated packages"
     echo ""
     exit
   fi
