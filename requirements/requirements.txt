@@ -151,7 +151,7 @@ django-oauth-toolkit==1.7.1
     # via -r /awx_devel/requirements/requirements.in
 django-pglocks==1.0.4
     # via -r /awx_devel/requirements/requirements.in
-django-polymorphic==3.1.0
+django-polymorphic==4.1.0
     # via -r /awx_devel/requirements/requirements.in
 django-radius==1.5.1
     # via -r /awx_devel/requirements/requirements.in
