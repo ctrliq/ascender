@@ -181,7 +181,7 @@ gitpython==3.1.42
     # via -r /awx_devel/requirements/requirements.in
 google-auth==2.28.1
     # via kubernetes
-hiredis==3.0.0
+hiredis==3.3.0
     # via redis
 hyperlink==21.0.0
     # via
@@ -382,7 +382,7 @@ pyyaml==6.0.1
     #   receptorctl
 receptorctl==1.6.2
     # via -r /awx_devel/requirements/requirements.in
-redis[hiredis]==5.0.8
+redis[hiredis]==7.1.0
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   channels-redis
