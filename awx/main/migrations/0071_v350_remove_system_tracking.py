@@ -11,10 +11,8 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterIndexTogether(
-            name='fact',
-            index_together=set([]),
-        ),
+        # Note: Fact model indexes were already removed/empty before this migration
+        # No need to clear index_together as the model is being deleted
         migrations.RemoveField(
             model_name='fact',
             name='host',

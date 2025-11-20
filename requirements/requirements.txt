@@ -19,7 +19,7 @@ ansiconv==1.0.0
     # via -r /awx_devel/requirements/requirements.in
 asciichartpy==1.5.25
     # via -r /awx_devel/requirements/requirements.in
-asgiref==3.7.2
+asgiref==3.11.0
     # via
     #   channels
     #   channels-redis
@@ -120,7 +120,7 @@ defusedxml==0.7.1
     #   social-auth-core
 distro==1.9.0
     # via -r /awx_devel/requirements/requirements.in
-django==4.2.26
+django==5.2.8
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   channels
@@ -135,9 +135,9 @@ django==4.2.26
     #   django-solo
     #   djangorestframework
     #   social-auth-app-django
-# django-ansible-base @ git+https://github.com/ansible/django-ansible-base@3a7423435192b3042b264141291b35224b99c783  # git requirements installed separately
+# django-ansible-base @ git+https://github.com/ansible/django-ansible-base@devel  # git requirements installed separately
     # via -r /awx_devel/requirements/requirements_git.txt
-django-auth-ldap==4.6.0
+django-auth-ldap==5.2.0
     # via -r /awx_devel/requirements/requirements.in
 django-cors-headers==4.3.1
     # via -r /awx_devel/requirements/requirements.in
@@ -147,7 +147,7 @@ django-crum==0.7.9
     #   django-ansible-base
 django-extensions==3.2.3
     # via -r /awx_devel/requirements/requirements.in
-django-guid==3.2.1
+django-guid==3.5.2
     # via -r /awx_devel/requirements/requirements.in
 django-oauth-toolkit==1.7.1
     # via -r /awx_devel/requirements/requirements.in
@@ -293,6 +293,7 @@ packaging==24.2
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   ansible-runner
+    #   django-guid
     #   msal-extensions
     #   setuptools-scm
 pexpect==4.7.0
@@ -444,7 +445,7 @@ slack-sdk==3.27.0
     # via -r /awx_devel/requirements/requirements.in
 smmap==5.0.1
     # via gitdb
-social-auth-app-django==5.4.2
+social-auth-app-django==5.6.0
     # via -r /awx_devel/requirements/requirements.in
 social-auth-core[openidconnect]==4.5.0
     # via

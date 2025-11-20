@@ -188,10 +188,10 @@ class GithubWebhookReceiver(WebhookReceiverBase):
     }
 
     def get_event_type(self):
-        return self.request.META.get('HTTP_X_GITHUB_EVENT')
+        return self.request.headers.get('x-github-event')
 
     def get_event_guid(self):
-        return self.request.META.get('HTTP_X_GITHUB_DELIVERY')
+        return self.request.headers.get('x-github-delivery')
 
     def get_event_status_api(self):
         if self.get_event_type() != 'pull_request':
@@ -199,7 +199,7 @@ class GithubWebhookReceiver(WebhookReceiverBase):
         return self.request.data.get('pull_request', {}).get('statuses_url')
 
     def get_signature(self):
-        header_sig = self.request.META.get('HTTP_X_HUB_SIGNATURE')
+        header_sig = self.request.headers.get('x-hub-signature')
         if not header_sig:
             logger.debug("Expected signature missing from header key HTTP_X_HUB_SIGNATURE")
             raise PermissionDenied
@@ -216,7 +216,7 @@ class GitlabWebhookReceiver(WebhookReceiverBase):
     ref_keys = {'Push Hook': 'checkout_sha', 'Tag Push Hook': 'checkout_sha', 'Merge Request Hook': 'object_attributes.last_commit.id'}
 
     def get_event_type(self):
-        return self.request.META.get('HTTP_X_GITLAB_EVENT')
+        return self.request.headers.get('x-gitlab-event')
 
     def get_event_guid(self):
         # GitLab does not provide a unique identifier on events, so construct one.
@@ -239,7 +239,7 @@ class GitlabWebhookReceiver(WebhookReceiverBase):
         if not obj.webhook_key:
             raise PermissionDenied
 
-        token_from_request = force_bytes(self.request.META.get('HTTP_X_GITLAB_TOKEN') or '')
+        token_from_request = force_bytes(self.request.headers.get('x-gitlab-token') or '')
 
         # GitLab only returns the secret token, not an hmac hash.  Use
         # the hmac `compare_digest` helper function to prevent timing
@@ -260,10 +260,10 @@ class BitbucketDcWebhookReceiver(WebhookReceiverBase):
     }
 
     def get_event_type(self):
-        return self.request.META.get('HTTP_X_EVENT_KEY')
+        return self.request.headers.get('x-event-key')
 
     def get_event_guid(self):
-        return self.request.META.get('HTTP_X_REQUEST_ID')
+        return self.request.headers.get('x-request-id')
 
     def get_event_status_api(self):
         # https://<bitbucket-base-url>/rest/build-status/1.0/commits/<commit-hash>
@@ -299,7 +299,7 @@ class BitbucketDcWebhookReceiver(WebhookReceiverBase):
         return self.get_event_type() != 'diagnostics:ping'
 
     def get_signature(self):
-        header_sig = self.request.META.get('HTTP_X_HUB_SIGNATURE')
+        header_sig = self.request.headers.get('x-hub-signature')
         if not header_sig:
             logger.debug("Expected signature missing from header key HTTP_X_HUB_SIGNATURE")
             raise PermissionDenied

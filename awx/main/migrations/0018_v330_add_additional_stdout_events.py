@@ -130,17 +130,45 @@ class Migration(migrations.Migration):
                 'ordering': ('-pk',),
             },
         ),
-        migrations.AlterIndexTogether(
-            name='inventoryupdateevent',
-            index_together=set([('inventory_update', 'start_line'), ('inventory_update', 'uuid'), ('inventory_update', 'end_line')]),
+        migrations.AddIndex(
+            model_name='inventoryupdateevent',
+            index=models.Index(fields=['inventory_update', 'start_line'], name='main_invupdateevent_inv_startline_idx'),
         ),
-        migrations.AlterIndexTogether(
-            name='projectupdateevent',
-            index_together=set([('project_update', 'event'), ('project_update', 'end_line'), ('project_update', 'start_line'), ('project_update', 'uuid')]),
+        migrations.AddIndex(
+            model_name='inventoryupdateevent',
+            index=models.Index(fields=['inventory_update', 'uuid'], name='main_invupdateevent_inv_uuid_old_idx'),
         ),
-        migrations.AlterIndexTogether(
-            name='systemjobevent',
-            index_together=set([('system_job', 'end_line'), ('system_job', 'uuid'), ('system_job', 'start_line')]),
+        migrations.AddIndex(
+            model_name='inventoryupdateevent',
+            index=models.Index(fields=['inventory_update', 'end_line'], name='main_invupdateevent_inv_endline_idx'),
+        ),
+        migrations.AddIndex(
+            model_name='projectupdateevent',
+            index=models.Index(fields=['project_update', 'event'], name='main_projupdateevent_proj_event_old_idx'),
+        ),
+        migrations.AddIndex(
+            model_name='projectupdateevent',
+            index=models.Index(fields=['project_update', 'end_line'], name='main_projupdateevent_proj_endline_idx'),
+        ),
+        migrations.AddIndex(
+            model_name='projectupdateevent',
+            index=models.Index(fields=['project_update', 'start_line'], name='main_projupdateevent_proj_startline_idx'),
+        ),
+        migrations.AddIndex(
+            model_name='projectupdateevent',
+            index=models.Index(fields=['project_update', 'uuid'], name='main_projupdateevent_proj_uuid_old_idx'),
+        ),
+        migrations.AddIndex(
+            model_name='systemjobevent',
+            index=models.Index(fields=['system_job', 'end_line'], name='main_systemjobevent_sysjob_endline_idx'),
+        ),
+        migrations.AddIndex(
+            model_name='systemjobevent',
+            index=models.Index(fields=['system_job', 'uuid'], name='main_systemjobevent_sysjob_uuid_old_idx'),
+        ),
+        migrations.AddIndex(
+            model_name='systemjobevent',
+            index=models.Index(fields=['system_job', 'start_line'], name='main_systemjobevent_sysjob_startline_idx'),
         ),
         migrations.RemoveField(
             model_name='unifiedjob',

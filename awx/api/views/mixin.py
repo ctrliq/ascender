@@ -167,15 +167,15 @@ class OrganizationCountsMixin(object):
         jt_qs = JobTemplate.accessible_objects(self.request.user, 'read_role')
 
         # Produce counts of Foreign Key relationships
-        db_results['inventories'] = inv_qs.values('organization').annotate(Count('organization')).order_by('organization')
+        db_results['inventories'] = inv_qs.values('organization').annotate(count=Count('organization')).order_by('organization')
 
         db_results['teams'] = (
-            Team.accessible_objects(self.request.user, 'read_role').values('organization').annotate(Count('organization')).order_by('organization')
+            Team.accessible_objects(self.request.user, 'read_role').values('organization').annotate(count=Count('organization')).order_by('organization')
         )
 
-        db_results['job_templates'] = jt_qs.values('organization').annotate(Count('organization')).order_by('organization')
+        db_results['job_templates'] = jt_qs.values('organization').annotate(count=Count('organization')).order_by('organization')
 
-        db_results['projects'] = project_qs.values('organization').annotate(Count('organization')).order_by('organization')
+        db_results['projects'] = project_qs.values('organization').annotate(count=Count('organization')).order_by('organization')
 
         # Other members and admins of organization are always viewable
         db_results['users'] = org_qs.annotate(users=Count('member_role__members', distinct=True), admins=Count('admin_role__members', distinct=True)).values(
@@ -199,7 +199,7 @@ class OrganizationCountsMixin(object):
                         count_context[org_id]['admins'] = entry['admins']
                         count_context[org_id]['users'] = entry['users']
                         continue
-                    count_context[org_id][res] = entry['%s__count' % org_reference]
+                    count_context[org_id][res] = entry['count']
 
         full_context['related_field_counts'] = count_context
 

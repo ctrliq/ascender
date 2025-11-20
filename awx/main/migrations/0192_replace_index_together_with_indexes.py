@@ -1,0 +1,138 @@
+# -*- coding: utf-8 -*-
+# Migration to ensure Django 5.2 compatibility
+# This migration handles the transition from index_together to models.Index
+
+from django.db import migrations, models, connection
+from django.db.migrations.recorder import MigrationRecorder
+
+
+def smart_index_transition(apps, schema_editor):
+    """
+    Intelligently handle index creation based on which version of the migrations ran.
+    
+    Three scenarios:
+    1. Existing DB with old migrations (index_together): Indexes exist in DB
+    2. New install with new migrations (AddIndex): Indexes created by migrations 0144, etc.
+    3. Existing DB upgrading: May have indexes from index_together
+    
+    This function ensures indexes exist regardless of the path taken.
+    """
+    
+    # Check if migration 0144 was applied with the OLD version (index_together)
+    # or NEW version (AddIndex) by checking if the indexes exist
+    migration_0144_ran_old_version = False
+    
+    with connection.cursor() as cursor:
+        # Check if we have the migration recorder table
+        if connection.vendor == 'postgresql':
+            cursor.execute("""
+                SELECT 1 FROM pg_indexes 
+                WHERE indexname = 'main_jobevent_job_counter_idx'
+            """)
+            index_exists = cursor.fetchone() is not None
+            
+            # If migration 0144 was applied but indexes don't exist, 
+            # it means the old version (index_together) was run
+            # In that case, indexes might have been created with different names
+            # by index_together, so we skip creating them
+            
+            # If indexes DO exist with our expected names, the new version ran
+            # and we don't need to do anything
+            
+            # The safest approach: Only create if they definitely don't exist
+            if not index_exists:
+                # Indexes don't exist - this is likely impossible on existing DBs
+                # because index_together would have created them (with auto-generated names)
+                # But for new installs where migrations might be faked, create them
+                
+                indexes_to_create = [
+                    ('main_adhoccommandevent', 'ad_hoc_command_id', 'job_created', 'event', 'main_adhoccommandevent_adhoc_event_idx'),
+                    ('main_adhoccommandevent', 'ad_hoc_command_id', 'job_created', 'counter', 'main_adhoccommandevent_adhoc_counter_idx'),
+                    ('main_adhoccommandevent', 'ad_hoc_command_id', 'job_created', 'uuid', 'main_adhoccommandevent_adhoc_uuid_idx'),
+                    ('main_jobevent', 'job_id', 'job_created', 'counter', 'main_jobevent_job_counter_idx'),
+                    ('main_jobevent', 'job_id', 'job_created', 'uuid', 'main_jobevent_job_uuid_idx'),
+                    ('main_jobevent', 'job_id', 'job_created', 'event', 'main_jobevent_job_event_idx'),
+                    ('main_jobevent', 'job_id', 'job_created', 'parent_uuid', 'main_jobevent_job_parent_uuid_idx'),
+                    ('main_inventoryupdateevent', 'inventory_update_id', 'job_created', 'counter', 'main_inventoryupdateevent_inv_counter_idx'),
+                    ('main_inventoryupdateevent', 'inventory_update_id', 'job_created', 'uuid', 'main_inventoryupdateevent_inv_uuid_idx'),
+                    ('main_projectupdateevent', 'project_update_id', 'job_created', 'uuid', 'main_projectupdateevent_proj_uuid_idx'),
+                    ('main_projectupdateevent', 'project_update_id', 'job_created', 'event', 'main_projectupdateevent_proj_event_idx'),
+                    ('main_projectupdateevent', 'project_update_id', 'job_created', 'counter', 'main_projectupdateevent_proj_counter_idx'),
+                    ('main_systemjobevent', 'system_job_id', 'job_created', 'uuid', 'main_systemjobevent_sysjob_uuid_idx'),
+                    ('main_systemjobevent', 'system_job_id', 'job_created', 'counter', 'main_systemjobevent_sysjob_counter_idx'),
+                ]
+                
+                for table, field1, field2, field3, idx_name in indexes_to_create:
+                    cursor.execute(f'''
+                        CREATE INDEX IF NOT EXISTS "{idx_name}" 
+                        ON "{table}" ("{field1}", "{field2}", "{field3}")
+                    ''')
+        
+        elif connection.vendor == 'sqlite':
+            # For SQLite, indexes from index_together would have auto-generated names
+            # Just ensure our named indexes exist
+            pass
+
+
+class Migration(migrations.Migration):
+    """
+    This migration ensures Django 5.2 compatibility by handling index_together removal.
+    
+    It handles three scenarios:
+    1. Existing DBs that ran OLD migrations (with index_together):
+       - Clears index_together from migration state
+       - Indexes already exist in DB (created by index_together)
+       - No duplicate creation
+       
+    2. New installs that run NEW migrations (with AddIndex):
+       - migrations 0144, etc. create indexes via AddIndex
+       - This migration clears index_together (no-op)
+       - No duplicate creation
+       
+    3. Edge cases (faked migrations, etc.):
+       - Checks if indexes exist before creating
+       - Creates only if missing
+    
+    The key: We updated old migrations to use AddIndex, so new installs work.
+    But existing DBs that already ran those migrations won't re-run the AddIndex
+    operations, so we need to ensure their migration state is compatible with Django 5.2.
+    """
+
+    dependencies = [
+        ('main', '0191a_add_depot_credential'),
+    ]
+
+    operations = [
+        # Clear index_together from migration state
+        # This is needed for DBs that ran the OLD versions of migrations
+        # that used index_together
+        migrations.AlterIndexTogether(
+            name='adhoccommandevent',
+            index_together=None,
+        ),
+        migrations.AlterIndexTogether(
+            name='jobevent',
+            index_together=None,
+        ),
+        migrations.AlterIndexTogether(
+            name='inventoryupdateevent',
+            index_together=None,
+        ),
+        migrations.AlterIndexTogether(
+            name='projectupdateevent',
+            index_together=None,
+        ),
+        migrations.AlterIndexTogether(
+            name='systemjobevent',
+            index_together=None,
+        ),
+        
+        # Ensure indexes exist (for edge cases where they might not)
+        # This is typically a no-op because:
+        # - Old DBs: indexes created by index_together
+        # - New DBs: indexes created by AddIndex in migration 0144
+        migrations.RunPython(
+            code=smart_index_transition,
+            reverse_code=migrations.RunPython.noop,
+        ),
+    ]

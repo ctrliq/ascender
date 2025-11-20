@@ -508,13 +508,43 @@ class Migration(migrations.Migration):
             name='adhoccommandevent',
             unique_together=set([]),
         ),
-        migrations.AlterIndexTogether(
-            name='adhoccommandevent',
-            index_together=set([('ad_hoc_command', 'event'), ('ad_hoc_command', 'uuid'), ('ad_hoc_command', 'end_line'), ('ad_hoc_command', 'start_line')]),
+        # Add AdHocCommandEvent indexes (will be replaced in migration 0144)
+        migrations.AddIndex(
+            model_name='adhoccommandevent',
+            index=models.Index(fields=['ad_hoc_command', 'event'], name='main_adhoccommandevent_adhoc_event_old_idx'),
         ),
-        migrations.AlterIndexTogether(
-            name='jobevent',
-            index_together=set([('job', 'event'), ('job', 'parent_uuid'), ('job', 'start_line'), ('job', 'uuid'), ('job', 'end_line')]),
+        migrations.AddIndex(
+            model_name='adhoccommandevent',
+            index=models.Index(fields=['ad_hoc_command', 'uuid'], name='main_adhoccommandevent_adhoc_uuid_old_idx'),
+        ),
+        migrations.AddIndex(
+            model_name='adhoccommandevent',
+            index=models.Index(fields=['ad_hoc_command', 'end_line'], name='main_adhoccommandevent_adhoc_endline_idx'),
+        ),
+        migrations.AddIndex(
+            model_name='adhoccommandevent',
+            index=models.Index(fields=['ad_hoc_command', 'start_line'], name='main_adhoccommandevent_adhoc_startln_idx'),
+        ),
+        # Add JobEvent indexes (will be replaced in migration 0144)
+        migrations.AddIndex(
+            model_name='jobevent',
+            index=models.Index(fields=['job', 'event'], name='main_jobevent_job_event_old_idx'),
+        ),
+        migrations.AddIndex(
+            model_name='jobevent',
+            index=models.Index(fields=['job', 'parent_uuid'], name='main_jobevent_job_parent_uuid_old_idx'),
+        ),
+        migrations.AddIndex(
+            model_name='jobevent',
+            index=models.Index(fields=['job', 'start_line'], name='main_jobevent_job_start_line_idx'),
+        ),
+        migrations.AddIndex(
+            model_name='jobevent',
+            index=models.Index(fields=['job', 'uuid'], name='main_jobevent_job_uuid_old_idx'),
+        ),
+        migrations.AddIndex(
+            model_name='jobevent',
+            index=models.Index(fields=['job', 'end_line'], name='main_jobevent_job_end_line_idx'),
         ),
         # Tower state
         migrations.CreateModel(

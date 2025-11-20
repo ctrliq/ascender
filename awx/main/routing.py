@@ -2,7 +2,7 @@ import redis
 import logging
 
 from django.conf import settings
-from django.urls import re_path
+from django.urls import path
 
 from channels.routing import ProtocolTypeRouter, URLRouter
 
@@ -60,11 +60,11 @@ class MultipleURLRouterAdapter:
 
 
 websocket_urlpatterns = [
-    re_path(r'api/websocket/$', consumers.EventConsumer.as_asgi()),
-    re_path(r'websocket/$', consumers.EventConsumer.as_asgi()),
+    path('api/websocket/', consumers.EventConsumer.as_asgi()),
+    path('websocket/', consumers.EventConsumer.as_asgi()),
 ]
 websocket_relay_urlpatterns = [
-    re_path(r'websocket/relay/$', consumers.RelayConsumer.as_asgi()),
+    path('websocket/relay/', consumers.RelayConsumer.as_asgi()),
 ]
 
 
