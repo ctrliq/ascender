@@ -142,9 +142,7 @@ django-auth-ldap==4.6.0
 django-cors-headers==4.3.1
     # via -r /awx_devel/requirements/requirements.in
 django-crum==0.7.9
-    # via
-    #   -r /awx_devel/requirements/requirements.in
-    #   django-ansible-base
+    # via django-ansible-base
 django-extensions==3.2.3
     # via -r /awx_devel/requirements/requirements.in
 django-guid==3.2.1
