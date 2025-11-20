@@ -390,7 +390,7 @@ referencing==0.33.0
     # via
     #   jsonschema
     #   jsonschema-specifications
-requests==2.32.4
+requests==2.32.5
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   adal
@@ -486,13 +486,13 @@ urllib3==2.5.0
     #   botocore
     #   kubernetes
     #   requests
-uwsgi==2.0.26
+uwsgi==2.0.31
     # via -r /awx_devel/requirements/requirements.in
-uwsgitop==0.11
+uwsgitop==0.12
     # via -r /awx_devel/requirements/requirements.in
 websocket-client==1.7.0
     # via kubernetes
-wheel==0.42.0
+wheel==0.45.1
     # via -r /awx_devel/requirements/requirements.in
 xmlsec==1.3.13
     # via python3-saml
