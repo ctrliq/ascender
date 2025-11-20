@@ -40,12 +40,14 @@ main() {
   base_dir=$(pwd)
   dest_requirements="${requirements}"
   input_requirements="${requirements_in} ${requirements_git}"
+  command="${1:-}"
+  package_name="${2:-}"
 
   _tmp=$(python -c "import tempfile; print(tempfile.mkdtemp(suffix='.awx-requirements', dir='/tmp'))")
 
   trap _cleanup INT TERM EXIT
 
-  case $1 in
+  case $command in
     "run")
       NEEDS_HELP=0
     ;;
@@ -57,14 +59,18 @@ main() {
     ;;
     "upgrade")
       NEEDS_HELP=0
-      pip_compile="${pip_compile} --upgrade"
+      if [[ -z "$package_name" ]]; then
+        pip_compile="${pip_compile} --upgrade"
+      else
+        pip_compile="${pip_compile} --upgrade-package $package_name"
+      fi
     ;;
     "help")
       NEEDS_HELP=1
     ;;
     *)
       echo ""
-      echo "ERROR: Parameter $1 not valid"
+      echo "ERROR: Parameter $command not valid"
       echo ""
       NEEDS_HELP=1
     ;;
@@ -74,13 +80,13 @@ main() {
     echo "This script generates requirements.txt from requirements.in and requirements_git.in"
     echo "It should be run from within the awx container"
     echo ""
-    echo "Usage: $0 [run|upgrade|dev]"
+    echo "Usage: $0 [run|upgrade [package-name]|dev]"
     echo ""
     echo "Commands:"
-    echo "help      Print this message"
-    echo "run       Run the process only upgrading pinned libraries from requirements.in"
-    echo "upgrade   Upgrade all libraries to latest while respecting pinnings"
-    echo "dev       Pin the development requirements file"
+    echo "help                 Print this message"
+    echo "run                  Run the process only upgrading pinned libraries from requirements.in"
+    echo "upgrade [package]    Upgrade all libraries (or specific package if specified) to latest while respecting pinnings"
+    echo "dev                  Pin the development requirements file"
     echo ""
     exit
   fi
@@ -108,4 +114,4 @@ main() {
 }
 
 # set EVAL=1 in case you want to source this script
-test "${EVAL:-0}" -eq "1" || main "${1:-}"
+test "${EVAL:-0}" -eq "1" || main "$@"
