@@ -2,7 +2,7 @@ adal==1.2.7
     # via msrestazure
 aiohappyeyeballs==2.6.1
     # via aiohttp
-aiohttp==3.12.14
+aiohttp==3.13.2
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   aiohttp-retry
@@ -155,11 +155,11 @@ django-polymorphic==4.1.0
     # via -r /awx_devel/requirements/requirements.in
 django-radius==1.5.1
     # via -r /awx_devel/requirements/requirements.in
-django-solo==2.2.0
+django-solo==2.4.0
     # via -r /awx_devel/requirements/requirements.in
 django-split-settings==1.0.0
     # via -r /awx_devel/requirements/requirements.in
-djangorestframework==3.15.2
+djangorestframework==3.16.1
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   django-ansible-base
@@ -238,7 +238,7 @@ jmespath==1.0.1
     #   botocore
 json-log-formatter==0.5.2
     # via -r /awx_devel/requirements/requirements.in
-jsonschema==4.21.1
+jsonschema==4.25.1
     # via -r /awx_devel/requirements/requirements.in
 jsonschema-specifications==2023.12.1
     # via jsonschema
