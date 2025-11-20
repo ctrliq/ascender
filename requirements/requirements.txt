@@ -137,7 +137,7 @@ django==5.2.8
     # via -r /awx_devel/requirements/requirements_git.txt
 django-auth-ldap==5.2.0
     # via -r /awx_devel/requirements/requirements.in
-django-cors-headers==4.3.1
+django-cors-headers==4.9.0
     # via -r /awx_devel/requirements/requirements.in
 django-crum==0.7.9
     # via
