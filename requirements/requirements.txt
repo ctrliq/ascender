@@ -15,8 +15,6 @@ annotated-types==0.6.0
     # via pydantic
 # git+https://github.com/ansible/ansible-runner.git@devel  # git requirements installed separately
     # via -r /awx_devel/requirements/requirements_git.txt
-ansiconv==1.0.0
-    # via -r /awx_devel/requirements/requirements.in
 asciichartpy==1.5.25
     # via -r /awx_devel/requirements/requirements.in
 asgiref==3.11.0

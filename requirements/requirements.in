@@ -1,5 +1,4 @@
 aiohttp>=3.12.14  # CVE-2025-53643
-ansiconv==1.0.0  # UPGRADE BLOCKER: from 2013, consider replacing instead of upgrading
 asciichartpy
 asn1
 asyncpg
