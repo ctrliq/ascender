@@ -3,7 +3,6 @@
 # This migration handles the transition from index_together to models.Index
 
 from django.db import migrations, connection
-from psycopg2 import sql
 
 
 def smart_index_transition(apps, schema_editor):
@@ -50,15 +49,8 @@ def smart_index_transition(apps, schema_editor):
             ]
             
             for table, field1, field2, field3, idx_name in indexes_to_create:
-                query = sql.SQL(
-                    'CREATE INDEX IF NOT EXISTS {idx_name} ON {table} ({field1}, {field2}, {field3})'
-                ).format(
-                    idx_name=sql.Identifier(idx_name),
-                    table=sql.Identifier(table),
-                    field1=sql.Identifier(field1),
-                    field2=sql.Identifier(field2),
-                    field3=sql.Identifier(field3),
-                )
+                # Use string formatting instead of psycopg2.sql to avoid import dependency
+                query = f'CREATE INDEX IF NOT EXISTS "{idx_name}" ON "{table}" ("{field1}", "{field2}", "{field3}")'
                 cursor.execute(query)
 
 
