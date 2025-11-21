@@ -4018,6 +4018,7 @@ _ANSI_CURSOR_UP_PATTERN = re.compile(r'\x1b\[(\d*)A')
 
 # ANSI color code to CSS color mapping
 _ANSI_COLORS = {
+    # Foreground colors (standard)
     '30': 'color: #000000',  # Black
     '31': 'color: #cd0000',  # Red
     '32': 'color: #00cd00',  # Green
@@ -4026,6 +4027,7 @@ _ANSI_COLORS = {
     '35': 'color: #cd00cd',  # Magenta
     '36': 'color: #00cdcd',  # Cyan
     '37': 'color: #e5e5e5',  # White
+    # Foreground colors (bright)
     '90': 'color: #7f7f7f',  # Bright Black (Gray)
     '91': 'color: #ff0000',  # Bright Red
     '92': 'color: #00ff00',  # Bright Green
@@ -4034,6 +4036,25 @@ _ANSI_COLORS = {
     '95': 'color: #ff00ff',  # Bright Magenta
     '96': 'color: #00ffff',  # Bright Cyan
     '97': 'color: #ffffff',  # Bright White
+    # Background colors (standard)
+    '40': 'background-color: #000000',  # Black
+    '41': 'background-color: #cd0000',  # Red
+    '42': 'background-color: #00cd00',  # Green
+    '43': 'background-color: #cdcd00',  # Yellow
+    '44': 'background-color: #0000ee',  # Blue
+    '45': 'background-color: #cd00cd',  # Magenta
+    '46': 'background-color: #00cdcd',  # Cyan
+    '47': 'background-color: #e5e5e5',  # White
+    # Background colors (bright)
+    '100': 'background-color: #7f7f7f',  # Bright Black (Gray)
+    '101': 'background-color: #ff0000',  # Bright Red
+    '102': 'background-color: #00ff00',  # Bright Green
+    '103': 'background-color: #ffff00',  # Bright Yellow
+    '104': 'background-color: #5c5cff',  # Bright Blue
+    '105': 'background-color: #ff00ff',  # Bright Magenta
+    '106': 'background-color: #00ffff',  # Bright Cyan
+    '107': 'background-color: #ffffff',  # Bright White
+    # Text formatting
     '1': 'font-weight: bold',  # Bold
     '4': 'text-decoration: underline',  # Underline
 }
@@ -4108,9 +4129,11 @@ def ansi_to_html(text):
             for code in codes:
                 if code in _ANSI_COLORS:
                     style_value = _ANSI_COLORS[code]
-                    # Determine style type (color, bold, underline)
+                    # Determine style type (color, background-color, bold, underline)
                     if style_value.startswith('color:'):
                         current_styles['color'] = style_value
+                    elif style_value.startswith('background-color:'):
+                        current_styles['background'] = style_value
                     elif 'bold' in style_value:
                         current_styles['bold'] = style_value
                     elif 'underline' in style_value:
