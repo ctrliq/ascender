@@ -2,7 +2,6 @@
 # All Rights Reserved.
 
 from django.urls import path
-from django.urls import re_path
 
 from awx.api.views import (
     HostList,
@@ -26,7 +25,7 @@ urls = [
     path('<int:pk>/variable_data/', HostVariableData.as_view(), name='host_variable_data'),
     path('<int:pk>/groups/', HostGroupsList.as_view(), name='host_groups_list'),
     path('<int:pk>/all_groups/', HostAllGroupsList.as_view(), name='host_all_groups_list'),
-    re_path(r'^(?P<pk>[0-9]+)/job_events/', HostJobEventsList.as_view(), name='host_job_events_list'),
+    path('<int:pk>/job_events/', HostJobEventsList.as_view(), name='host_job_events_list'),
     path('<int:pk>/job_host_summaries/', HostJobHostSummariesList.as_view(), name='host_job_host_summaries_list'),
     path('<int:pk>/activity_stream/', HostActivityStreamList.as_view(), name='host_activity_stream_list'),
     path('<int:pk>/inventory_sources/', HostInventorySourcesList.as_view(), name='host_inventory_sources_list'),
