@@ -4054,12 +4054,16 @@ def ansi_to_html(text):
         # Check if this block starts with a cursor-up command
         cursor_up_match = _ANSI_CURSOR_UP_PATTERN.match(block)
         if cursor_up_match:
-            # Remove previous line(s) to emulate cursor movement
-            if processed_blocks:
-                processed_blocks.pop()
-                # Remove back to the previous newline
-                while processed_blocks and '\n' not in processed_blocks[-1]:
+            # Get the number of lines to move up (default to 1 if not specified)
+            lines_up = int(cursor_up_match.group(1) or '1')
+            
+            # Remove the specified number of previous line(s) to emulate cursor movement
+            for _ in range(lines_up):
+                if processed_blocks:
                     processed_blocks.pop()
+                    # Remove back to the previous newline
+                    while processed_blocks and '\n' not in processed_blocks[-1]:
+                        processed_blocks.pop()
             # Add the rest of the block after the command
             processed_blocks.append(block[cursor_up_match.end():])
         else:
