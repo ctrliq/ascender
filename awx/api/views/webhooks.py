@@ -201,7 +201,7 @@ class GithubWebhookReceiver(WebhookReceiverBase):
     def get_signature(self):
         header_sig = self.request.headers.get('x-hub-signature')
         if not header_sig:
-            logger.debug("Expected signature missing from header key HTTP_X_HUB_SIGNATURE")
+            logger.debug("Expected signature missing from header key 'x-hub-signature'")
             raise PermissionDenied
         hash_alg, signature = header_sig.split('=')
         if hash_alg != 'sha1':
