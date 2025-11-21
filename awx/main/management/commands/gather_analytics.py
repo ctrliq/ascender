@@ -4,7 +4,6 @@ from datetime import timezone
 from awx.main import analytics
 from dateutil import parser
 from django.core.management.base import BaseCommand
-from django.utils import timezone as django_timezone
 
 
 class Command(BaseCommand):
