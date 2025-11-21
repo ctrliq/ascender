@@ -4073,7 +4073,8 @@ def ansi_to_html(text):
                 processed_blocks.append(block)
             else:
                 # Subsequent blocks - restore ESC prefix
-                processed_blocks.append('\x1b' + block if block else '')
+                if block:
+                    processed_blocks.append('\x1b' + block)
     
     # Rejoin the processed text
     text = ''.join(processed_blocks)
@@ -4081,7 +4082,8 @@ def ansi_to_html(text):
     # Now convert color codes to HTML
     result = []
     last_end = 0
-    open_spans = 0
+    current_styles = {}  # Track active styles by type (color, bold, underline)
+    has_open_span = False
     
     for match in _ANSI_COLOR_PATTERN.finditer(text):
         # Add text before this escape sequence
@@ -4091,27 +4093,41 @@ def ansi_to_html(text):
         
         # Check if this is a reset code (0 or empty)
         if '0' in codes or codes == ['']:
-            # Close any open spans
-            result.append('</span>' * open_spans)
-            open_spans = 0
+            # Close current span if open and reset styles
+            if has_open_span:
+                result.append('</span>')
+                has_open_span = False
+            current_styles = {}
         else:
-            # Convert codes to styles
-            styles = []
+            # Update current styles based on codes
             for code in codes:
                 if code in _ANSI_COLORS:
-                    styles.append(_ANSI_COLORS[code])
+                    style_value = _ANSI_COLORS[code]
+                    # Determine style type (color, bold, underline)
+                    if style_value.startswith('color:'):
+                        current_styles['color'] = style_value
+                    elif 'bold' in style_value:
+                        current_styles['bold'] = style_value
+                    elif 'underline' in style_value:
+                        current_styles['underline'] = style_value
             
-            if styles:
-                result.append('<span style="{}">'.format('; '.join(styles)))
-                open_spans += 1
+            # Close previous span and open new one with combined styles
+            if has_open_span:
+                result.append('</span>')
+            
+            if current_styles:
+                combined_style = '; '.join(current_styles.values())
+                result.append('<span style="{}">'.format(combined_style))
+                has_open_span = True
         
         last_end = match.end()
     
     # Add remaining text
     result.append(text[last_end:])
     
-    # Close any remaining open spans
-    result.append('</span>' * open_spans)
+    # Close any open span
+    if has_open_span:
+        result.append('</span>')
     
     return ''.join(result)
 
