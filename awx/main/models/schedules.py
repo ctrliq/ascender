@@ -25,7 +25,6 @@ from awx.main.utils import ignore_inventory_computed_fields
 from awx.main.consumers import emit_channel_notification
 
 from datetime import timezone as dt_timezone
-from zoneinfo import available_timezones
 
 
 logger = logging.getLogger('awx.main.models.schedule')
