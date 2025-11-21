@@ -24,7 +24,8 @@ from awx.main.models.jobs import LaunchTimeConfig
 from awx.main.utils import ignore_inventory_computed_fields
 from awx.main.consumers import emit_channel_notification
 
-import pytz
+from datetime import timezone as dt_timezone
+from zoneinfo import available_timezones
 
 
 logger = logging.getLogger('awx.main.models.schedule')
@@ -186,7 +187,7 @@ class Schedule(PrimordialModel, LaunchTimeConfig):
 
                     # Coerce the datetime to UTC and format it as a string w/ Zulu format
                     # utc_until = UNTIL=20200601T220000Z
-                    utc_until = 'UNTIL=' + localized_until.astimezone(pytz.utc).strftime('%Y%m%dT%H%M%SZ')
+                    utc_until = 'UNTIL=' + localized_until.astimezone(dt_timezone.utc).strftime('%Y%m%dT%H%M%SZ')
 
                     # rule was:    DTSTART;TZID=America/New_York:20200601T120000 RRULE:...;UNTIL=20200601T170000
                     # rule is now: DTSTART;TZID=America/New_York:20200601T120000 RRULE:...;UNTIL=20200601T220000Z
@@ -256,7 +257,7 @@ class Schedule(PrimordialModel, LaunchTimeConfig):
         # If we made it this far we should have an end date and can ask the ruleset what the last date is
         # However, if the until/count is before dtstart we will get an IndexError when trying to get [-1]
         try:
-            return ruleset[-1].astimezone(pytz.utc)
+            return ruleset[-1].astimezone(dt_timezone.utc)
         except IndexError:
             return None
 
@@ -274,13 +275,13 @@ class Schedule(PrimordialModel, LaunchTimeConfig):
                 if not datetime_exists(next_run_actual):
                     # skip imaginary dates, like 2:30 on DST boundaries
                     next_run_actual = future_rs.after(next_run_actual)
-                next_run_actual = next_run_actual.astimezone(pytz.utc)
+                next_run_actual = next_run_actual.astimezone(dt_timezone.utc)
         else:
             next_run_actual = None
 
         self.next_run = next_run_actual
         try:
-            self.dtstart = future_rs[0].astimezone(pytz.utc)
+            self.dtstart = future_rs[0].astimezone(dt_timezone.utc)
         except IndexError:
             self.dtstart = None
         self.dtend = Schedule.get_end_date(future_rs)

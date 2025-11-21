@@ -54,7 +54,7 @@ from social_core.backends.utils import load_backends
 # Django OAuth Toolkit
 from oauth2_provider.models import get_access_token_model
 
-import pytz
+from datetime import timezone as dt_timezone
 from wsgiref.util import FileWrapper
 
 # AWX
@@ -602,7 +602,7 @@ class SchedulePreview(GenericAPIView):
                     continue
                 schedule.append(event)
 
-            return Response({'local': schedule, 'utc': [s.astimezone(pytz.utc) for s in schedule]})
+            return Response({'local': schedule, 'utc': [s.astimezone(dt_timezone.utc) for s in schedule]})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
