@@ -80,11 +80,11 @@ cachetools==5.3.2
     #   requests
 cffi==1.16.0
     # via cryptography
-channels==4.1.0
+channels==4.3.2
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   channels-redis
-channels-redis==4.2.0
+channels-redis==4.3.0
     # via -r /awx_devel/requirements/requirements.in
 charset-normalizer==3.3.2
     # via requests
