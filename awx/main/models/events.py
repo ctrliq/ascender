@@ -481,10 +481,10 @@ class JobEvent(BasePlaybookEvent):
         app_label = 'main'
         ordering = ('pk',)
         indexes = [
-            models.Index(fields=['job', 'job_created', 'event'], name='jobevent_job_event_idx'),
-            models.Index(fields=['job', 'job_created', 'uuid'], name='jobevent_job_uuid_idx'),
-            models.Index(fields=['job', 'job_created', 'parent_uuid'], name='jobevent_job_parent_uuid_idx'),
-            models.Index(fields=['job', 'job_created', 'counter'], name='jobevent_job_counter_idx'),
+            models.Index(fields=['job', 'job_created', 'event']),
+            models.Index(fields=['job', 'job_created', 'uuid']),
+            models.Index(fields=['job', 'job_created', 'parent_uuid']),
+            models.Index(fields=['job', 'job_created', 'counter']),
         ]
 
     id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
@@ -643,9 +643,9 @@ class ProjectUpdateEvent(BasePlaybookEvent):
         app_label = 'main'
         ordering = ('pk',)
         indexes = [
-            models.Index(fields=['project_update', 'job_created', 'event'], name='projupdevent_proj_event_idx'),
-            models.Index(fields=['project_update', 'job_created', 'uuid'], name='projupdevent_proj_uuid_idx'),
-            models.Index(fields=['project_update', 'job_created', 'counter'], name='projupdevent_proj_counter_idx'),
+            models.Index(fields=['project_update', 'job_created', 'event']),
+            models.Index(fields=['project_update', 'job_created', 'uuid']),
+            models.Index(fields=['project_update', 'job_created', 'counter']),
         ]
 
     id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
@@ -781,9 +781,9 @@ class AdHocCommandEvent(BaseCommandEvent):
         app_label = 'main'
         ordering = ('-pk',)
         indexes = [
-            models.Index(fields=['ad_hoc_command', 'job_created', 'event'], name='adhoccmdevent_adhoc_event_idx'),
-            models.Index(fields=['ad_hoc_command', 'job_created', 'uuid'], name='adhoccmdevent_adhoc_uuid_idx'),
-            models.Index(fields=['ad_hoc_command', 'job_created', 'counter'], name='adhoccmdevent_adhoc_cntr_idx'),
+            models.Index(fields=['ad_hoc_command', 'job_created', 'event']),
+            models.Index(fields=['ad_hoc_command', 'job_created', 'uuid']),
+            models.Index(fields=['ad_hoc_command', 'job_created', 'counter']),
         ]
 
     EVENT_TYPES = [
@@ -886,8 +886,8 @@ class InventoryUpdateEvent(BaseCommandEvent):
         app_label = 'main'
         ordering = ('-pk',)
         indexes = [
-            models.Index(fields=['inventory_update', 'job_created', 'uuid'], name='invupdevent_inv_uuid_idx'),
-            models.Index(fields=['inventory_update', 'job_created', 'counter'], name='invupdevent_inv_counter_idx'),
+            models.Index(fields=['inventory_update', 'job_created', 'uuid']),
+            models.Index(fields=['inventory_update', 'job_created', 'counter']),
         ]
 
     id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
@@ -931,8 +931,8 @@ class SystemJobEvent(BaseCommandEvent):
         app_label = 'main'
         ordering = ('-pk',)
         indexes = [
-            models.Index(fields=['system_job', 'job_created', 'uuid'], name='sysjobevent_sysjob_uuid_idx'),
-            models.Index(fields=['system_job', 'job_created', 'counter'], name='sysjobevent_sysjob_cntr_idx'),
+            models.Index(fields=['system_job', 'job_created', 'uuid']),
+            models.Index(fields=['system_job', 'job_created', 'counter']),
         ]
 
     id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')

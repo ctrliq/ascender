@@ -237,66 +237,37 @@ class Migration(migrations.Migration):
                 db_index=False, editable=False, on_delete=models.deletion.DO_NOTHING, related_name='system_job_events', to='main.SystemJob'
             ),
         ),
-        # Replace old indexes with new partitioned indexes
-        # AdHocCommandEvent indexes
-        migrations.AddIndex(
-            model_name='adhoccommandevent',
-            index=models.Index(fields=['ad_hoc_command', 'job_created', 'event'], name='main_adhoccommandevent_adhoc_event_idx'),
+        migrations.AlterIndexTogether(
+            name='adhoccommandevent',
+            index_together={
+                ('ad_hoc_command', 'job_created', 'event'),
+                ('ad_hoc_command', 'job_created', 'counter'),
+                ('ad_hoc_command', 'job_created', 'uuid'),
+            },
         ),
-        migrations.AddIndex(
-            model_name='adhoccommandevent',
-            index=models.Index(fields=['ad_hoc_command', 'job_created', 'counter'], name='main_adhoccommandevent_adhoc_counter_idx'),
+        migrations.AlterIndexTogether(
+            name='inventoryupdateevent',
+            index_together={('inventory_update', 'job_created', 'counter'), ('inventory_update', 'job_created', 'uuid')},
         ),
-        migrations.AddIndex(
-            model_name='adhoccommandevent',
-            index=models.Index(fields=['ad_hoc_command', 'job_created', 'uuid'], name='main_adhoccommandevent_adhoc_uuid_idx'),
+        migrations.AlterIndexTogether(
+            name='jobevent',
+            index_together={
+                ('job', 'job_created', 'counter'),
+                ('job', 'job_created', 'uuid'),
+                ('job', 'job_created', 'event'),
+                ('job', 'job_created', 'parent_uuid'),
+            },
         ),
-        # InventoryUpdateEvent indexes
-        migrations.AddIndex(
-            model_name='inventoryupdateevent',
-            index=models.Index(fields=['inventory_update', 'job_created', 'counter'], name='main_inventoryupdateevent_inv_counter_idx'),
+        migrations.AlterIndexTogether(
+            name='projectupdateevent',
+            index_together={
+                ('project_update', 'job_created', 'uuid'),
+                ('project_update', 'job_created', 'event'),
+                ('project_update', 'job_created', 'counter'),
+            },
         ),
-        migrations.AddIndex(
-            model_name='inventoryupdateevent',
-            index=models.Index(fields=['inventory_update', 'job_created', 'uuid'], name='main_inventoryupdateevent_inv_uuid_idx'),
-        ),
-        # JobEvent indexes
-        migrations.AddIndex(
-            model_name='jobevent',
-            index=models.Index(fields=['job', 'job_created', 'counter'], name='main_jobevent_job_counter_idx'),
-        ),
-        migrations.AddIndex(
-            model_name='jobevent',
-            index=models.Index(fields=['job', 'job_created', 'uuid'], name='main_jobevent_job_uuid_idx'),
-        ),
-        migrations.AddIndex(
-            model_name='jobevent',
-            index=models.Index(fields=['job', 'job_created', 'event'], name='main_jobevent_job_event_idx'),
-        ),
-        migrations.AddIndex(
-            model_name='jobevent',
-            index=models.Index(fields=['job', 'job_created', 'parent_uuid'], name='main_jobevent_job_parent_uuid_idx'),
-        ),
-        # ProjectUpdateEvent indexes
-        migrations.AddIndex(
-            model_name='projectupdateevent',
-            index=models.Index(fields=['project_update', 'job_created', 'uuid'], name='main_projectupdateevent_proj_uuid_idx'),
-        ),
-        migrations.AddIndex(
-            model_name='projectupdateevent',
-            index=models.Index(fields=['project_update', 'job_created', 'event'], name='main_projectupdateevent_proj_event_idx'),
-        ),
-        migrations.AddIndex(
-            model_name='projectupdateevent',
-            index=models.Index(fields=['project_update', 'job_created', 'counter'], name='main_projectupdateevent_proj_counter_idx'),
-        ),
-        # SystemJobEvent indexes
-        migrations.AddIndex(
-            model_name='systemjobevent',
-            index=models.Index(fields=['system_job', 'job_created', 'uuid'], name='main_systemjobevent_sysjob_uuid_idx'),
-        ),
-        migrations.AddIndex(
-            model_name='systemjobevent',
-            index=models.Index(fields=['system_job', 'job_created', 'counter'], name='main_systemjobevent_sysjob_counter_idx'),
+        migrations.AlterIndexTogether(
+            name='systemjobevent',
+            index_together={('system_job', 'job_created', 'uuid'), ('system_job', 'job_created', 'counter')},
         ),
     ]

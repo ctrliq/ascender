@@ -324,10 +324,9 @@ class Migration(migrations.Migration):
                 ),
             ],
         ),
-        # Add Fact model indexes (will be removed in later migration 0071)
-        migrations.AddIndex(
-            model_name='fact',
-            index=models.Index(fields=['timestamp', 'module', 'host'], name='main_fact_timestamp_module_host_idx'),
+        migrations.AlterIndexTogether(
+            name='fact',
+            index_together=set([('timestamp', 'module', 'host')]),
         ),
         # Active flag removal
         migrations.RemoveField(
@@ -490,23 +489,13 @@ class Migration(migrations.Migration):
             name='ancestors',
             field=models.ManyToManyField(related_name='descendents', through='main.RoleAncestorEntry', to='main.Role'),
         ),
-        # Add Role indexes
-        migrations.AddIndex(
-            model_name='role',
-            index=models.Index(fields=['content_type', 'object_id'], name='main_role_content_type_object_id_idx'),
+        migrations.AlterIndexTogether(
+            name='role',
+            index_together=set([('content_type', 'object_id')]),
         ),
-        # Add RoleAncestorEntry indexes
-        migrations.AddIndex(
-            model_name='roleancestorentry',
-            index=models.Index(fields=['ancestor', 'content_type_id', 'object_id'], name='main_roleancestorentry_anc_ct_oid_idx'),
-        ),
-        migrations.AddIndex(
-            model_name='roleancestorentry',
-            index=models.Index(fields=['ancestor', 'content_type_id', 'role_field'], name='main_roleancestorentry_anc_ct_rf_idx'),
-        ),
-        migrations.AddIndex(
-            model_name='roleancestorentry',
-            index=models.Index(fields=['ancestor', 'descendent'], name='main_roleancestorentry_anc_desc_idx'),
+        migrations.AlterIndexTogether(
+            name='roleancestorentry',
+            index_together=set([('ancestor', 'content_type_id', 'object_id'), ('ancestor', 'content_type_id', 'role_field'), ('ancestor', 'descendent')]),
         ),
         migrations.AddField(
             model_name='credential',
