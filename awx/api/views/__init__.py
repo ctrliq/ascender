@@ -4050,7 +4050,7 @@ def ansi_to_html(text):
     blocks = text.split('\x1b')
     processed_blocks = []
     
-    for block in blocks:
+    for i, block in enumerate(blocks):
         # Check if this block starts with a cursor-up command
         cursor_up_match = _ANSI_CURSOR_UP_PATTERN.match(block)
         if cursor_up_match:
@@ -4064,10 +4064,12 @@ def ansi_to_html(text):
             processed_blocks.append(block[cursor_up_match.end():])
         else:
             # No cursor command, keep the block (prepend ESC if not first block)
-            if processed_blocks or not block:  # Not the first block
-                processed_blocks.append('\x1b' + block if block else '')
-            else:
+            if i == 0:
+                # First block - no ESC prefix needed
                 processed_blocks.append(block)
+            else:
+                # Subsequent blocks - restore ESC prefix
+                processed_blocks.append('\x1b' + block if block else '')
     
     # Rejoin the processed text
     text = ''.join(processed_blocks)
