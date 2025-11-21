@@ -4098,7 +4098,7 @@ def ansi_to_html(text):
                     styles.append(_ANSI_COLORS[code])
             
             if styles:
-                result.append('<span style="{}"'.format('; '.join(styles)) + '>')
+                result.append('<span style="{}">'.format('; '.join(styles)))
                 open_spans += 1
         
         last_end = match.end()
