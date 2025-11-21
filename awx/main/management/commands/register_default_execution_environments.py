@@ -44,7 +44,7 @@ class Command(BaseCommand):
         )
         parser.add_argument(
             "--verify-ssl",
-            type=lambda x: str(x).lower() in ('true', '1', 'yes', 'y'),
+            type=lambda x: str(x).lower() in ('true', '1', 'yes', 'y', 'on', 't'),
             default=True,
             help="Verify SSL when authenticating with the container registry",
         )
