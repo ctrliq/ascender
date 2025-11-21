@@ -4059,11 +4059,16 @@ def ansi_to_html(text):
             
             # Remove the specified number of previous line(s) to emulate cursor movement
             for _ in range(lines_up):
+                if not processed_blocks:
+                    break
+                # Remove blocks back to and including the previous newline
+                while processed_blocks and '\n' not in processed_blocks[-1]:
+                    processed_blocks.pop()
+                    if not processed_blocks:
+                        break
+                # Now remove the block containing the newline
                 if processed_blocks:
                     processed_blocks.pop()
-                    # Remove back to the previous newline
-                    while processed_blocks and '\n' not in processed_blocks[-1]:
-                        processed_blocks.pop()
             # Add the rest of the block after the command
             processed_blocks.append(block[cursor_up_match.end():])
         else:
