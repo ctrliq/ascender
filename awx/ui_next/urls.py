@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.http import Http404
-from django.urls import re_path
+from django.urls import path
 from django.views.generic.base import TemplateView
 
 
@@ -16,4 +16,4 @@ class IndexView(TemplateView):
 
 app_name = 'ui_next'
 
-urlpatterns = [re_path(r'^$', IndexView.as_view(), name='index')]
+urlpatterns = [path('', IndexView.as_view(), name='index')]

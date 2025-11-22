@@ -1,4 +1,4 @@
 git+https://github.com/ansible/system-certifi.git@devel#egg=certifi
 git+https://github.com/ansible/ansible-runner.git@devel#egg=ansible-runner
 git+https://github.com/ansible/python3-saml.git@devel#egg=python3-saml
-django-ansible-base @ git+https://github.com/ansible/django-ansible-base@3a7423435192b3042b264141291b35224b99c783#egg=django-ansible-base[rest_filters,jwt_consumer,resource_registry]
+django-ansible-base @ git+https://github.com/ansible/django-ansible-base@devel#egg=django-ansible-base[rest_filters,jwt_consumer,resource_registry]

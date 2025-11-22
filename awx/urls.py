@@ -3,6 +3,7 @@
 # Modifications Copyright (c) 2024 Ctrl IQ, Inc.
 
 from django.conf import settings
+from django.urls import path
 from django.urls import re_path, include
 
 from ansible_base.resource_registry.urls import urlpatterns as resource_api_urls
@@ -11,11 +12,11 @@ from awx.main.views import handle_400, handle_403, handle_404, handle_500, handl
 
 
 urlpatterns = [
-    re_path(r'', include('awx.ui.urls', namespace='ui')),
-    re_path(r'^api/', include('awx.api.urls', namespace='api')),
-    re_path(r'^api/v2/', include(resource_api_urls)),
-    re_path(r'^sso/', include('awx.sso.urls', namespace='sso')),
-    re_path(r'^sso/', include('social_django.urls', namespace='social')),
+    path('', include('awx.ui.urls', namespace='ui')),
+    path('api/', include('awx.api.urls', namespace='api')),
+    path('api/v2/', include(resource_api_urls)),
+    path('sso/', include('awx.sso.urls', namespace='sso')),
+    path('sso/', include('social_django.urls', namespace='social')),
     re_path(r'^(?:api/)?400.html$', handle_400),
     re_path(r'^(?:api/)?403.html$', handle_403),
     re_path(r'^(?:api/)?404.html$', handle_404),
@@ -28,7 +29,7 @@ if settings.SETTINGS_MODULE == 'awx.settings.development':
     try:
         import debug_toolbar
 
-        urlpatterns += [re_path(r'^__debug__/', include(debug_toolbar.urls))]
+        urlpatterns += [path('__debug__/', include(debug_toolbar.urls))]
     except ImportError:
         pass
 

@@ -4,7 +4,7 @@ from datetime import timedelta
 
 from django.utils.timezone import now
 from django.conf import settings
-from django.urls import re_path
+from django.urls import path
 
 from oauthlib import oauth2
 from oauth2_provider import views
@@ -35,10 +35,10 @@ class TokenView(views.TokenView):
 
 
 urls = [
-    re_path(r'^$', ApiOAuthAuthorizationRootView.as_view(), name='oauth_authorization_root_view'),
-    re_path(r"^authorize/$", views.AuthorizationView.as_view(), name="authorize"),
-    re_path(r"^token/$", TokenView.as_view(), name="token"),
-    re_path(r"^revoke_token/$", views.RevokeTokenView.as_view(), name="revoke-token"),
+    path('', ApiOAuthAuthorizationRootView.as_view(), name='oauth_authorization_root_view'),
+    path("authorize/", views.AuthorizationView.as_view(), name="authorize"),
+    path("token/", TokenView.as_view(), name="token"),
+    path("revoke_token/", views.RevokeTokenView.as_view(), name="revoke-token"),
 ]
 
 

@@ -45,6 +45,6 @@ describe('RootAPI', () => {
   test('logout calls expected http method', async () => {
     await RootAPI.logout();
 
-    expect(mockHttp.get).toHaveBeenCalledTimes(1);
+    expect(mockHttp.post).toHaveBeenCalledTimes(1);
   });
 });

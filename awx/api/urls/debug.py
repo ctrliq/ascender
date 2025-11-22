@@ -1,4 +1,4 @@
-from django.urls import re_path
+from django.urls import path
 
 from awx.api.views.debug import (
     DebugRootView,
@@ -8,10 +8,10 @@ from awx.api.views.debug import (
 )
 
 urls = [
-    re_path(r'^$', DebugRootView.as_view(), name='debug'),
-    re_path(r'^task_manager/$', TaskManagerDebugView.as_view(), name='task_manager'),
-    re_path(r'^dependency_manager/$', DependencyManagerDebugView.as_view(), name='dependency_manager'),
-    re_path(r'^workflow_manager/$', WorkflowManagerDebugView.as_view(), name='workflow_manager'),
+    path('', DebugRootView.as_view(), name='debug'),
+    path('task_manager/', TaskManagerDebugView.as_view(), name='task_manager'),
+    path('dependency_manager/', DependencyManagerDebugView.as_view(), name='dependency_manager'),
+    path('workflow_manager/', WorkflowManagerDebugView.as_view(), name='workflow_manager'),
 ]
 
 __all__ = ['urls']

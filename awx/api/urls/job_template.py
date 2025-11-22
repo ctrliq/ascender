@@ -1,7 +1,8 @@
 # Copyright (c) 2017 Ansible, Inc.
 # All Rights Reserved.
 
-from django.urls import include, re_path
+from django.urls import path
+from django.urls import include
 
 from awx.api.views import (
     JobTemplateList,
@@ -25,36 +26,36 @@ from awx.api.views import (
 
 
 urls = [
-    re_path(r'^$', JobTemplateList.as_view(), name='job_template_list'),
-    re_path(r'^(?P<pk>[0-9]+)/$', JobTemplateDetail.as_view(), name='job_template_detail'),
-    re_path(r'^(?P<pk>[0-9]+)/launch/$', JobTemplateLaunch.as_view(), name='job_template_launch'),
-    re_path(r'^(?P<pk>[0-9]+)/jobs/$', JobTemplateJobsList.as_view(), name='job_template_jobs_list'),
-    re_path(r'^(?P<pk>[0-9]+)/slice_workflow_jobs/$', JobTemplateSliceWorkflowJobsList.as_view(), name='job_template_slice_workflow_jobs_list'),
-    re_path(r'^(?P<pk>[0-9]+)/callback/$', JobTemplateCallback.as_view(), name='job_template_callback'),
-    re_path(r'^(?P<pk>[0-9]+)/schedules/$', JobTemplateSchedulesList.as_view(), name='job_template_schedules_list'),
-    re_path(r'^(?P<pk>[0-9]+)/survey_spec/$', JobTemplateSurveySpec.as_view(), name='job_template_survey_spec'),
-    re_path(r'^(?P<pk>[0-9]+)/activity_stream/$', JobTemplateActivityStreamList.as_view(), name='job_template_activity_stream_list'),
-    re_path(
-        r'^(?P<pk>[0-9]+)/notification_templates_started/$',
+    path('', JobTemplateList.as_view(), name='job_template_list'),
+    path('<int:pk>/', JobTemplateDetail.as_view(), name='job_template_detail'),
+    path('<int:pk>/launch/', JobTemplateLaunch.as_view(), name='job_template_launch'),
+    path('<int:pk>/jobs/', JobTemplateJobsList.as_view(), name='job_template_jobs_list'),
+    path('<int:pk>/slice_workflow_jobs/', JobTemplateSliceWorkflowJobsList.as_view(), name='job_template_slice_workflow_jobs_list'),
+    path('<int:pk>/callback/', JobTemplateCallback.as_view(), name='job_template_callback'),
+    path('<int:pk>/schedules/', JobTemplateSchedulesList.as_view(), name='job_template_schedules_list'),
+    path('<int:pk>/survey_spec/', JobTemplateSurveySpec.as_view(), name='job_template_survey_spec'),
+    path('<int:pk>/activity_stream/', JobTemplateActivityStreamList.as_view(), name='job_template_activity_stream_list'),
+    path(
+        '<int:pk>/notification_templates_started/',
         JobTemplateNotificationTemplatesStartedList.as_view(),
         name='job_template_notification_templates_started_list',
     ),
-    re_path(
-        r'^(?P<pk>[0-9]+)/notification_templates_error/$',
+    path(
+        '<int:pk>/notification_templates_error/',
         JobTemplateNotificationTemplatesErrorList.as_view(),
         name='job_template_notification_templates_error_list',
     ),
-    re_path(
-        r'^(?P<pk>[0-9]+)/notification_templates_success/$',
+    path(
+        '<int:pk>/notification_templates_success/',
         JobTemplateNotificationTemplatesSuccessList.as_view(),
         name='job_template_notification_templates_success_list',
     ),
-    re_path(r'^(?P<pk>[0-9]+)/instance_groups/$', JobTemplateInstanceGroupsList.as_view(), name='job_template_instance_groups_list'),
-    re_path(r'^(?P<pk>[0-9]+)/access_list/$', JobTemplateAccessList.as_view(), name='job_template_access_list'),
-    re_path(r'^(?P<pk>[0-9]+)/object_roles/$', JobTemplateObjectRolesList.as_view(), name='job_template_object_roles_list'),
-    re_path(r'^(?P<pk>[0-9]+)/labels/$', JobTemplateLabelList.as_view(), name='job_template_label_list'),
-    re_path(r'^(?P<pk>[0-9]+)/copy/$', JobTemplateCopy.as_view(), name='job_template_copy'),
-    re_path(r'^(?P<pk>[0-9]+)/', include('awx.api.urls.webhooks'), {'model_kwarg': 'job_templates'}),
+    path('<int:pk>/instance_groups/', JobTemplateInstanceGroupsList.as_view(), name='job_template_instance_groups_list'),
+    path('<int:pk>/access_list/', JobTemplateAccessList.as_view(), name='job_template_access_list'),
+    path('<int:pk>/object_roles/', JobTemplateObjectRolesList.as_view(), name='job_template_object_roles_list'),
+    path('<int:pk>/labels/', JobTemplateLabelList.as_view(), name='job_template_label_list'),
+    path('<int:pk>/copy/', JobTemplateCopy.as_view(), name='job_template_copy'),
+    path('<int:pk>/', include('awx.api.urls.webhooks'), {'model_kwarg': 'job_templates'}),
 ]
 
 __all__ = ['urls']

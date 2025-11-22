@@ -1,7 +1,7 @@
 # Copyright (c) 2017 Ansible, Inc.
 # All Rights Reserved.
 
-from django.urls import re_path
+from django.urls import path
 
 from awx.api.views import (
     JobList,
@@ -21,19 +21,19 @@ from awx.api.views import (
 
 
 urls = [
-    re_path(r'^$', JobList.as_view(), name='job_list'),
-    re_path(r'^(?P<pk>[0-9]+)/$', JobDetail.as_view(), name='job_detail'),
-    re_path(r'^(?P<pk>[0-9]+)/cancel/$', JobCancel.as_view(), name='job_cancel'),
-    re_path(r'^(?P<pk>[0-9]+)/relaunch/$', JobRelaunch.as_view(), name='job_relaunch'),
-    re_path(r'^(?P<pk>[0-9]+)/create_schedule/$', JobCreateSchedule.as_view(), name='job_create_schedule'),
-    re_path(r'^(?P<pk>[0-9]+)/job_host_summaries/$', JobJobHostSummariesList.as_view(), name='job_job_host_summaries_list'),
-    re_path(r'^(?P<pk>[0-9]+)/job_events/$', JobJobEventsList.as_view(), name='job_job_events_list'),
-    re_path(r'^(?P<pk>[0-9]+)/job_events/children_summary/$', JobJobEventsChildrenSummary.as_view(), name='job_job_events_children_summary'),
-    re_path(r'^(?P<pk>[0-9]+)/activity_stream/$', JobActivityStreamList.as_view(), name='job_activity_stream_list'),
-    re_path(r'^(?P<pk>[0-9]+)/stdout/$', JobStdout.as_view(), name='job_stdout'),
-    re_path(r'^(?P<pk>[0-9]+)/notifications/$', JobNotificationsList.as_view(), name='job_notifications_list'),
-    re_path(r'^(?P<pk>[0-9]+)/labels/$', JobLabelList.as_view(), name='job_label_list'),
-    re_path(r'^(?P<pk>[0-9]+)/$', JobHostSummaryDetail.as_view(), name='job_host_summary_detail'),
+    path('', JobList.as_view(), name='job_list'),
+    path('<int:pk>/', JobDetail.as_view(), name='job_detail'),
+    path('<int:pk>/cancel/', JobCancel.as_view(), name='job_cancel'),
+    path('<int:pk>/relaunch/', JobRelaunch.as_view(), name='job_relaunch'),
+    path('<int:pk>/create_schedule/', JobCreateSchedule.as_view(), name='job_create_schedule'),
+    path('<int:pk>/job_host_summaries/', JobJobHostSummariesList.as_view(), name='job_job_host_summaries_list'),
+    path('<int:pk>/job_events/', JobJobEventsList.as_view(), name='job_job_events_list'),
+    path('<int:pk>/job_events/children_summary/', JobJobEventsChildrenSummary.as_view(), name='job_job_events_children_summary'),
+    path('<int:pk>/activity_stream/', JobActivityStreamList.as_view(), name='job_activity_stream_list'),
+    path('<int:pk>/stdout/', JobStdout.as_view(), name='job_stdout'),
+    path('<int:pk>/notifications/', JobNotificationsList.as_view(), name='job_notifications_list'),
+    path('<int:pk>/labels/', JobLabelList.as_view(), name='job_label_list'),
+    path('<int:pk>/', JobHostSummaryDetail.as_view(), name='job_host_summary_detail'),
 ]
 
 __all__ = ['urls']

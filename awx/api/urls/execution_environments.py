@@ -1,4 +1,4 @@
-from django.urls import re_path
+from django.urls import path
 
 from awx.api.views import (
     ExecutionEnvironmentList,
@@ -10,11 +10,11 @@ from awx.api.views import (
 
 
 urls = [
-    re_path(r'^$', ExecutionEnvironmentList.as_view(), name='execution_environment_list'),
-    re_path(r'^(?P<pk>[0-9]+)/$', ExecutionEnvironmentDetail.as_view(), name='execution_environment_detail'),
-    re_path(r'^(?P<pk>[0-9]+)/unified_job_templates/$', ExecutionEnvironmentJobTemplateList.as_view(), name='execution_environment_job_template_list'),
-    re_path(r'^(?P<pk>[0-9]+)/copy/$', ExecutionEnvironmentCopy.as_view(), name='execution_environment_copy'),
-    re_path(r'^(?P<pk>[0-9]+)/activity_stream/$', ExecutionEnvironmentActivityStreamList.as_view(), name='execution_environment_activity_stream_list'),
+    path('', ExecutionEnvironmentList.as_view(), name='execution_environment_list'),
+    path('<int:pk>/', ExecutionEnvironmentDetail.as_view(), name='execution_environment_detail'),
+    path('<int:pk>/unified_job_templates/', ExecutionEnvironmentJobTemplateList.as_view(), name='execution_environment_job_template_list'),
+    path('<int:pk>/copy/', ExecutionEnvironmentCopy.as_view(), name='execution_environment_copy'),
+    path('<int:pk>/activity_stream/', ExecutionEnvironmentActivityStreamList.as_view(), name='execution_environment_activity_stream_list'),
 ]
 
 __all__ = ['urls']

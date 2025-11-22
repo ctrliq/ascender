@@ -1,11 +1,12 @@
 from datetime import datetime, timedelta
+from datetime import timezone as dt_timezone
+from zoneinfo import ZoneInfo
 from contextlib import contextmanager
 
 from django.utils.timezone import now
 from django.db.utils import IntegrityError
 from unittest import mock
 import pytest
-import pytz
 
 from awx.main.models import JobTemplate, Schedule, ActivityStream
 
@@ -76,7 +77,7 @@ class TestComputedFields:
         with self.assert_no_unwanted_stuff(s):
             # force update of next_run, as if schedule re-calculation had not happened
             # since this time
-            old_next_run = datetime(2009, 3, 13, tzinfo=pytz.utc)
+            old_next_run = datetime(2009, 3, 13, tzinfo=dt_timezone.utc)
             Schedule.objects.filter(pk=s.pk).update(next_run=old_next_run)
             s.next_run = old_next_run
             prior_modified = s.modified
@@ -273,7 +274,7 @@ def test_utc_until_in_the_past(job_template):
 
 
 @pytest.mark.django_db
-@mock.patch('awx.main.models.schedules.now', lambda: datetime(2030, 3, 5, tzinfo=pytz.utc))
+@mock.patch('awx.main.models.schedules.now', lambda: datetime(2030, 3, 5, tzinfo=dt_timezone.utc))
 def test_dst_phantom_hour(job_template):
     # The DST period in the United States begins at 02:00 (2 am) local time, so
     # the hour from 2:00:00 to 2:59:59 does not exist in the night of the
@@ -470,7 +471,7 @@ def test_skip_sundays():
       RRULE:INTERVAL=1;FREQ=DAILY
       EXRULE:FREQ=WEEKLY;INTERVAL=1;BYDAY=SU
     '''
-    timezone = pytz.timezone("America/New_York")
+    timezone = ZoneInfo("America/New_York")
     friday_apr_29th = datetime(2022, 4, 29, 0, 0, 0, 0, timezone)
     monday_may_2nd = datetime(2022, 5, 2, 23, 59, 59, 999, timezone)
     ruleset = Schedule.rrulestr(rrule)
@@ -490,17 +491,17 @@ def test_skip_sundays():
     [
         pytest.param(
             'DTSTART;TZID=America/New_York:20210310T150000 RRULE:INTERVAL=1;FREQ=DAILY;UNTIL=20210430T150000Z EXRULE:FREQ=WEEKLY;INTERVAL=1;BYDAY=SU;COUNT=5',
-            datetime(2021, 4, 29, 19, 0, 0, tzinfo=pytz.utc),
+            datetime(2021, 4, 29, 19, 0, 0, tzinfo=dt_timezone.utc),
             id="Single rule in rule set with UTC TZ aware until",
         ),
         pytest.param(
             'DTSTART;TZID=America/New_York:20220310T150000 RRULE:INTERVAL=1;FREQ=DAILY;UNTIL=20220430T150000 EXRULE:FREQ=WEEKLY;INTERVAL=1;BYDAY=SU;COUNT=5',
-            datetime(2022, 4, 30, 19, 0, tzinfo=pytz.utc),
+            datetime(2022, 4, 30, 19, 0, tzinfo=dt_timezone.utc),
             id="Single rule in ruleset with naive until",
         ),
         pytest.param(
             'DTSTART;TZID=America/New_York:20220310T150000 RRULE:INTERVAL=1;FREQ=DAILY;COUNT=4 EXRULE:FREQ=WEEKLY;INTERVAL=1;BYDAY=SU;COUNT=5',
-            datetime(2022, 3, 12, 20, 0, tzinfo=pytz.utc),
+            datetime(2022, 3, 12, 20, 0, tzinfo=dt_timezone.utc),
             id="Single rule in ruleset with count",
         ),
         pytest.param(
@@ -515,12 +516,12 @@ def test_skip_sundays():
         ),
         pytest.param(
             'DTSTART;TZID=America/New_York:20220310T150000 RRULE:INTERVAL=1;FREQ=DAILY;UNTIL=20220430T150000Z',
-            datetime(2022, 4, 29, 19, 0, tzinfo=pytz.utc),
+            datetime(2022, 4, 29, 19, 0, tzinfo=dt_timezone.utc),
             id="Single rule in rule with UTZ TZ aware until",
         ),
         pytest.param(
             'DTSTART;TZID=America/New_York:20220310T150000 RRULE:INTERVAL=1;FREQ=DAILY;UNTIL=20220430T150000',
-            datetime(2022, 4, 30, 19, 0, tzinfo=pytz.utc),
+            datetime(2022, 4, 30, 19, 0, tzinfo=dt_timezone.utc),
             id="Single rule in rule with naive until",
         ),
         pytest.param(
@@ -535,12 +536,12 @@ def test_skip_sundays():
         ),
         pytest.param(
             'DTSTART;TZID=America/New_York:20220310T150000 RRULE:INTERVAL=1;FREQ=DAILY;BYDAY=SU;UNTIL=20220430T1500Z RRULE:INTERVAL=1;FREQ=DAILY;BYDAY=MO;COUNT=4',
-            datetime(2022, 4, 24, 19, 0, tzinfo=pytz.utc),
+            datetime(2022, 4, 24, 19, 0, tzinfo=dt_timezone.utc),
             id="Multi rule one with until and one with an count",
         ),
         pytest.param(
             'DTSTART;TZID=America/New_York:20010430T1500 RRULE:INTERVAL=1;FREQ=DAILY;BYDAY=SU;COUNT=1',
-            datetime(2001, 5, 6, 19, 0, tzinfo=pytz.utc),
+            datetime(2001, 5, 6, 19, 0, tzinfo=dt_timezone.utc),
             id="Rule with count but ends in the past",
         ),
         pytest.param(

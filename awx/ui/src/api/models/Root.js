@@ -29,7 +29,7 @@ class Root extends Base {
   }
 
   logout() {
-    return this.http.get(`${this.baseUrl}logout/`);
+    return this.http.post(`${this.baseUrl}logout/`);
   }
 
   readAssetVariables() {
