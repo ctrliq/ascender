@@ -1,5 +1,4 @@
 aiohttp>=3.12.14  # CVE-2025-53643
-ansiconv==1.0.0  # UPGRADE BLOCKER: from 2013, consider replacing instead of upgrading
 asciichartpy
 asn1
 asyncpg
@@ -13,12 +12,12 @@ cryptography>=44.0.1  # GHSA-h4gh-qq45-vh27
 Cython<3 # this is needed as a build dependency, one day we may have separated build deps
 daphne
 distro
-django==4.2.26 # CVE-2025-64459 CVE-2025-64458
+django>=5.2.8,<6.0 # CVE-2025-64459 CVE-2025-64458
 django-auth-ldap
 django-cors-headers
 django-crum
-django-extensions
-django-guid==3.2.1
+django-extensions==4.1
+django-guid==3.5.2
 django-oauth-toolkit<2.0.0      # Version 2.0.0 has breaking changes that will need to be worked out before upgrading
 django-polymorphic
 django-pglocks
@@ -53,10 +52,10 @@ python-ldap>=3.4.5  # CVE-2025-61911 CVE-2025-61912
 pyyaml>=6.0.1
 receptorctl
 social-auth-core[openidconnect]==4.5.0  # see UPGRADE BLOCKERs
-social-auth-app-django==5.4.2  # see UPGRADE BLOCKERs
+social-auth-app-django
 sqlparse>=0.5.0   # Required by django https://github.com/ansible/awx/security/dependabot/96
 redis[hiredis]
-requests>=2.32.4 # CVE-2024-47081
+requests>=2.32.5 # Fix unstable SSLContext caching feature
 slack-sdk
 tacacs_plus==1.0  # UPGRADE BLOCKER: auth does not work with later versions
 twilio

@@ -1,7 +1,6 @@
 # Copyright (c) 2015 Ansible, Inc.
 # All Rights Reserved
 import sys
-from distutils.util import strtobool
 from argparse import RawTextHelpFormatter
 
 from django.core.management.base import BaseCommand
@@ -45,7 +44,7 @@ class Command(BaseCommand):
         )
         parser.add_argument(
             "--verify-ssl",
-            type=lambda x: bool(strtobool(str(x))),
+            type=lambda x: str(x).lower() in ('true', '1', 'yes', 'y', 'on', 't'),
             default=True,
             help="Verify SSL when authenticating with the container registry",
         )

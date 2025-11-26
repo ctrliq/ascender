@@ -91,18 +91,6 @@ The various versions past 1.0.0 talk about adding and removing support for diffe
 This issue was not picked up by any existing QE testing, only when building in GitHub.
 
 
-### social-auth-app-django
-
-django-social keeps a list of backends in memory that it gathers
-based on the value of `settings.AUTHENTICATION_BACKENDS` *at import time*:
-https://github.com/python-social-auth/social-app-django/blob/c1e2795b00b753d58a81fa6a0261d8dae1d9c73d/social_django/utils.py#L13
-
-Our `settings.AUTHENTICATION_BACKENDS` can *change*
-dynamically as settings are changed (i.e., if somebody
-configures Github OAuth2 integration), so we need to
-_overwrite_ this in-memory value at the top of every request so
-that we have the latest version
-
 ### django-oauth-toolkit
 
 Versions later than 1.4.1 throw an error about id_token_id, due to the

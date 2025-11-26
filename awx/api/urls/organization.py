@@ -1,7 +1,7 @@
 # Copyright (c) 2017 Ansible, Inc.
 # All Rights Reserved.
 
-from django.urls import re_path
+from django.urls import path
 
 from awx.api.views.organization import (
     OrganizationList,
@@ -29,44 +29,44 @@ from awx.api.views import OrganizationCredentialList, OrganizationApplicationLis
 
 
 urls = [
-    re_path(r'^$', OrganizationList.as_view(), name='organization_list'),
-    re_path(r'^(?P<pk>[0-9]+)/$', OrganizationDetail.as_view(), name='organization_detail'),
-    re_path(r'^(?P<pk>[0-9]+)/users/$', OrganizationUsersList.as_view(), name='organization_users_list'),
-    re_path(r'^(?P<pk>[0-9]+)/admins/$', OrganizationAdminsList.as_view(), name='organization_admins_list'),
-    re_path(r'^(?P<pk>[0-9]+)/inventories/$', OrganizationInventoriesList.as_view(), name='organization_inventories_list'),
-    re_path(r'^(?P<pk>[0-9]+)/execution_environments/$', OrganizationExecutionEnvironmentsList.as_view(), name='organization_execution_environments_list'),
-    re_path(r'^(?P<pk>[0-9]+)/projects/$', OrganizationProjectsList.as_view(), name='organization_projects_list'),
-    re_path(r'^(?P<pk>[0-9]+)/job_templates/$', OrganizationJobTemplatesList.as_view(), name='organization_job_templates_list'),
-    re_path(r'^(?P<pk>[0-9]+)/workflow_job_templates/$', OrganizationWorkflowJobTemplatesList.as_view(), name='organization_workflow_job_templates_list'),
-    re_path(r'^(?P<pk>[0-9]+)/teams/$', OrganizationTeamsList.as_view(), name='organization_teams_list'),
-    re_path(r'^(?P<pk>[0-9]+)/credentials/$', OrganizationCredentialList.as_view(), name='organization_credential_list'),
-    re_path(r'^(?P<pk>[0-9]+)/activity_stream/$', OrganizationActivityStreamList.as_view(), name='organization_activity_stream_list'),
-    re_path(r'^(?P<pk>[0-9]+)/notification_templates/$', OrganizationNotificationTemplatesList.as_view(), name='organization_notification_templates_list'),
-    re_path(
-        r'^(?P<pk>[0-9]+)/notification_templates_started/$',
+    path('', OrganizationList.as_view(), name='organization_list'),
+    path('<int:pk>/', OrganizationDetail.as_view(), name='organization_detail'),
+    path('<int:pk>/users/', OrganizationUsersList.as_view(), name='organization_users_list'),
+    path('<int:pk>/admins/', OrganizationAdminsList.as_view(), name='organization_admins_list'),
+    path('<int:pk>/inventories/', OrganizationInventoriesList.as_view(), name='organization_inventories_list'),
+    path('<int:pk>/execution_environments/', OrganizationExecutionEnvironmentsList.as_view(), name='organization_execution_environments_list'),
+    path('<int:pk>/projects/', OrganizationProjectsList.as_view(), name='organization_projects_list'),
+    path('<int:pk>/job_templates/', OrganizationJobTemplatesList.as_view(), name='organization_job_templates_list'),
+    path('<int:pk>/workflow_job_templates/', OrganizationWorkflowJobTemplatesList.as_view(), name='organization_workflow_job_templates_list'),
+    path('<int:pk>/teams/', OrganizationTeamsList.as_view(), name='organization_teams_list'),
+    path('<int:pk>/credentials/', OrganizationCredentialList.as_view(), name='organization_credential_list'),
+    path('<int:pk>/activity_stream/', OrganizationActivityStreamList.as_view(), name='organization_activity_stream_list'),
+    path('<int:pk>/notification_templates/', OrganizationNotificationTemplatesList.as_view(), name='organization_notification_templates_list'),
+    path(
+        '<int:pk>/notification_templates_started/',
         OrganizationNotificationTemplatesStartedList.as_view(),
         name='organization_notification_templates_started_list',
     ),
-    re_path(
-        r'^(?P<pk>[0-9]+)/notification_templates_error/$',
+    path(
+        '<int:pk>/notification_templates_error/',
         OrganizationNotificationTemplatesErrorList.as_view(),
         name='organization_notification_templates_error_list',
     ),
-    re_path(
-        r'^(?P<pk>[0-9]+)/notification_templates_success/$',
+    path(
+        '<int:pk>/notification_templates_success/',
         OrganizationNotificationTemplatesSuccessList.as_view(),
         name='organization_notification_templates_success_list',
     ),
-    re_path(
-        r'^(?P<pk>[0-9]+)/notification_templates_approvals/$',
+    path(
+        '<int:pk>/notification_templates_approvals/',
         OrganizationNotificationTemplatesApprovalList.as_view(),
         name='organization_notification_templates_approvals_list',
     ),
-    re_path(r'^(?P<pk>[0-9]+)/instance_groups/$', OrganizationInstanceGroupsList.as_view(), name='organization_instance_groups_list'),
-    re_path(r'^(?P<pk>[0-9]+)/galaxy_credentials/$', OrganizationGalaxyCredentialsList.as_view(), name='organization_galaxy_credentials_list'),
-    re_path(r'^(?P<pk>[0-9]+)/object_roles/$', OrganizationObjectRolesList.as_view(), name='organization_object_roles_list'),
-    re_path(r'^(?P<pk>[0-9]+)/access_list/$', OrganizationAccessList.as_view(), name='organization_access_list'),
-    re_path(r'^(?P<pk>[0-9]+)/applications/$', OrganizationApplicationList.as_view(), name='organization_applications_list'),
+    path('<int:pk>/instance_groups/', OrganizationInstanceGroupsList.as_view(), name='organization_instance_groups_list'),
+    path('<int:pk>/galaxy_credentials/', OrganizationGalaxyCredentialsList.as_view(), name='organization_galaxy_credentials_list'),
+    path('<int:pk>/object_roles/', OrganizationObjectRolesList.as_view(), name='organization_object_roles_list'),
+    path('<int:pk>/access_list/', OrganizationAccessList.as_view(), name='organization_access_list'),
+    path('<int:pk>/applications/', OrganizationApplicationList.as_view(), name='organization_applications_list'),
 ]
 
 __all__ = ['urls']

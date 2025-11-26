@@ -1,7 +1,7 @@
 # Copyright (c) 2017 Ansible, Inc.
 # All Rights Reserved.
 
-from django.urls import re_path
+from django.urls import path
 
 from awx.api.views import (
     ProjectUpdateList,
@@ -15,13 +15,13 @@ from awx.api.views import (
 
 
 urls = [
-    re_path(r'^$', ProjectUpdateList.as_view(), name='project_update_list'),
-    re_path(r'^(?P<pk>[0-9]+)/$', ProjectUpdateDetail.as_view(), name='project_update_detail'),
-    re_path(r'^(?P<pk>[0-9]+)/cancel/$', ProjectUpdateCancel.as_view(), name='project_update_cancel'),
-    re_path(r'^(?P<pk>[0-9]+)/stdout/$', ProjectUpdateStdout.as_view(), name='project_update_stdout'),
-    re_path(r'^(?P<pk>[0-9]+)/scm_inventory_updates/$', ProjectUpdateScmInventoryUpdates.as_view(), name='project_update_scm_inventory_updates'),
-    re_path(r'^(?P<pk>[0-9]+)/notifications/$', ProjectUpdateNotificationsList.as_view(), name='project_update_notifications_list'),
-    re_path(r'^(?P<pk>[0-9]+)/events/$', ProjectUpdateEventsList.as_view(), name='project_update_events_list'),
+    path('', ProjectUpdateList.as_view(), name='project_update_list'),
+    path('<int:pk>/', ProjectUpdateDetail.as_view(), name='project_update_detail'),
+    path('<int:pk>/cancel/', ProjectUpdateCancel.as_view(), name='project_update_cancel'),
+    path('<int:pk>/stdout/', ProjectUpdateStdout.as_view(), name='project_update_stdout'),
+    path('<int:pk>/scm_inventory_updates/', ProjectUpdateScmInventoryUpdates.as_view(), name='project_update_scm_inventory_updates'),
+    path('<int:pk>/notifications/', ProjectUpdateNotificationsList.as_view(), name='project_update_notifications_list'),
+    path('<int:pk>/events/', ProjectUpdateEventsList.as_view(), name='project_update_events_list'),
 ]
 
 __all__ = ['urls']

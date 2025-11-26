@@ -73,7 +73,7 @@ class SessionTimeoutMiddleware(MiddlewareMixin):
     """
 
     def process_response(self, request, response):
-        should_skip = 'HTTP_X_WS_SESSION_QUIET' in request.META
+        should_skip = 'x-ws-session-quiet' in request.headers
         # Something went wrong, such as upgrade-in-progress page
         if not hasattr(request, 'session'):
             return response
