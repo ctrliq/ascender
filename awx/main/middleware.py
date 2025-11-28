@@ -113,7 +113,11 @@ class ThreadLocalMiddleware:
             return response
         finally:
             # Always clean up, even if an exception occurred
-            del _thread_locals.request
+            if hasattr(_thread_locals, 'request'):
+                del _thread_locals.request
+            # Also clean up any impersonation that wasn't properly closed
+            if hasattr(_thread_locals, 'impersonate_user'):
+                del _thread_locals.impersonate_user
 
 class SettingsCacheMiddleware(MiddlewareMixin):
     """
