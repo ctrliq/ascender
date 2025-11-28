@@ -48,16 +48,13 @@ from rest_framework import status
 from rest_framework_yaml.parsers import YAMLParser
 from rest_framework_yaml.renderers import YAMLRenderer
 
-# ANSIConv
-import ansiconv
-
 # Python Social Auth
 from social_core.backends.utils import load_backends
 
 # Django OAuth Toolkit
 from oauth2_provider.models import get_access_token_model
 
-import pytz
+from datetime import timezone as dt_timezone
 from wsgiref.util import FileWrapper
 
 # AWX
@@ -605,7 +602,7 @@ class SchedulePreview(GenericAPIView):
                     continue
                 schedule.append(event)
 
-            return Response({'local': schedule, 'utc': [s.astimezone(pytz.utc) for s in schedule]})
+            return Response({'local': schedule, 'utc': [s.astimezone(dt_timezone.utc) for s in schedule]})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -4015,6 +4012,154 @@ class UnifiedJobList(ListAPIView):
     search_fields = ('description', 'name', 'job__playbook')
 
 
+# Pre-compile ANSI patterns for performance
+_ANSI_COLOR_PATTERN = re.compile(r'\x1b\[(\d+(?:;\d+)*)m')
+_ANSI_CURSOR_UP_PATTERN = re.compile(r'\x1b\[(\d*)A')
+
+# ANSI color code to CSS color mapping
+_ANSI_COLORS = {
+    # Foreground colors (standard)
+    '30': 'color: #000000',  # Black
+    '31': 'color: #cd0000',  # Red
+    '32': 'color: #00cd00',  # Green
+    '33': 'color: #cdcd00',  # Yellow
+    '34': 'color: #0000ee',  # Blue
+    '35': 'color: #cd00cd',  # Magenta
+    '36': 'color: #00cdcd',  # Cyan
+    '37': 'color: #e5e5e5',  # White
+    # Foreground colors (bright)
+    '90': 'color: #7f7f7f',  # Bright Black (Gray)
+    '91': 'color: #ff0000',  # Bright Red
+    '92': 'color: #00ff00',  # Bright Green
+    '93': 'color: #ffff00',  # Bright Yellow
+    '94': 'color: #5c5cff',  # Bright Blue
+    '95': 'color: #ff00ff',  # Bright Magenta
+    '96': 'color: #00ffff',  # Bright Cyan
+    '97': 'color: #ffffff',  # Bright White
+    # Background colors (standard)
+    '40': 'background-color: #000000',  # Black
+    '41': 'background-color: #cd0000',  # Red
+    '42': 'background-color: #00cd00',  # Green
+    '43': 'background-color: #cdcd00',  # Yellow
+    '44': 'background-color: #0000ee',  # Blue
+    '45': 'background-color: #cd00cd',  # Magenta
+    '46': 'background-color: #00cdcd',  # Cyan
+    '47': 'background-color: #e5e5e5',  # White
+    # Background colors (bright)
+    '100': 'background-color: #7f7f7f',  # Bright Black (Gray)
+    '101': 'background-color: #ff0000',  # Bright Red
+    '102': 'background-color: #00ff00',  # Bright Green
+    '103': 'background-color: #ffff00',  # Bright Yellow
+    '104': 'background-color: #5c5cff',  # Bright Blue
+    '105': 'background-color: #ff00ff',  # Bright Magenta
+    '106': 'background-color: #00ffff',  # Bright Cyan
+    '107': 'background-color: #ffffff',  # Bright White
+    # Text formatting
+    '1': 'font-weight: bold',  # Bold
+    '4': 'text-decoration: underline',  # Underline
+}
+
+
+def ansi_to_html(text):
+    """Convert ANSI color codes to HTML spans with inline styles.
+    
+    Handles cursor-up commands (ESC[A) by removing the previous line,
+    emulating terminal behavior for progress indicators.
+    """
+    # First, handle cursor-up commands like the original ansiconv
+    # Split by ESC and process blocks
+    blocks = text.split('\x1b')
+    processed_blocks = []
+    
+    for i, block in enumerate(blocks):
+        # Check if this block starts with a cursor-up command
+        cursor_up_match = _ANSI_CURSOR_UP_PATTERN.match(block)
+        if cursor_up_match:
+            # Get the number of lines to move up (default to 1 if not specified)
+            lines_up = int(cursor_up_match.group(1) or '1')
+            
+            # Remove the specified number of previous line(s) to emulate cursor movement
+            for _ in range(lines_up):
+                if not processed_blocks:
+                    break
+                # Remove blocks back to and including the previous newline
+                while processed_blocks and '\n' not in processed_blocks[-1]:
+                    processed_blocks.pop()
+                    if not processed_blocks:
+                        break
+                # Now remove the block containing the newline
+                if processed_blocks:
+                    processed_blocks.pop()
+            # Add the rest of the block after the command
+            processed_blocks.append(block[cursor_up_match.end():])
+        else:
+            # No cursor command, keep the block (prepend ESC if not first block)
+            if i == 0:
+                # First block - no ESC prefix needed
+                processed_blocks.append(block)
+            else:
+                # Subsequent blocks - restore ESC prefix
+                if block:
+                    processed_blocks.append('\x1b' + block)
+    
+    # Rejoin the processed text
+    text = ''.join(processed_blocks)
+    
+    # Now convert color codes to HTML
+    result = []
+    last_end = 0
+    current_styles = {}  # Track active styles by type (color, bold, underline)
+    has_open_span = False
+    
+    for match in _ANSI_COLOR_PATTERN.finditer(text):
+        # Add text before this escape sequence
+        result.append(text[last_end:match.start()])
+        
+        codes = match.group(1).split(';')
+        
+        # Check if this is a reset code (0 or empty)
+        if '0' in codes or codes == ['']:
+            # Close current span if open and reset styles
+            if has_open_span:
+                result.append('</span>')
+                has_open_span = False
+            current_styles = {}
+        else:
+            # Update current styles based on codes
+            for code in codes:
+                if code in _ANSI_COLORS:
+                    style_value = _ANSI_COLORS[code]
+                    # Determine style type (color, background-color, bold, underline)
+                    if style_value.startswith('color:'):
+                        current_styles['color'] = style_value
+                    elif style_value.startswith('background-color:'):
+                        current_styles['background'] = style_value
+                    elif 'bold' in style_value:
+                        current_styles['bold'] = style_value
+                    elif 'underline' in style_value:
+                        current_styles['underline'] = style_value
+            
+            # Close previous span and open new one with combined styles
+            if has_open_span:
+                result.append('</span>')
+            
+            if current_styles:
+                combined_style = '; '.join(current_styles.values())
+                result.append('<span style="{}">'.format(combined_style))
+                has_open_span = True
+        
+        last_end = match.end()
+    
+    # Add remaining text
+    result.append(text[last_end:])
+    
+    # Close any open span
+    if has_open_span:
+        result.append('</span>')
+    
+    return ''.join(result)
+
+
 def redact_ansi(line):
     # Remove ANSI escape sequences used to embed event data.
     line = re.sub(r'\x1b\[K(?:[A-Za-z0-9+/=]+\x1b\[\d+D)+\x1b\[K', '', line)
@@ -4085,7 +4230,7 @@ class UnifiedJobStdout(RetrieveAPIView):
                 # Remove any ANSI escape sequences containing job event data.
                 content = re.sub(r'\x1b\[K(?:[A-Za-z0-9+/=]+\x1b\[\d+D)+\x1b\[K', '', content)
 
-                body = ansiconv.to_html(html.escape(content))
+                body = ansi_to_html(html.escape(content))
 
                 context = {'title': get_view_name(self.__class__), 'body': mark_safe(body), 'dark': dark_bg, 'content_only': content_only}
                 data = render_to_string('api/stdout.html', context).strip()

@@ -1,6 +1,6 @@
 # Modifications Copyright (c) 2024 Ctrl IQ, Inc.
 
-from django.urls import re_path
+from django.urls import path
 from django.utils.translation import gettext_lazy as _
 from django.views.generic.base import TemplateView
 
@@ -25,4 +25,4 @@ class MigrationsNotran(TemplateView):
 
 app_name = 'ui'
 
-urlpatterns = [re_path(r'^$', IndexView.as_view(), name='index'), re_path(r'^migrations_notran/$', MigrationsNotran.as_view(), name='migrations_notran')]
+urlpatterns = [path('', IndexView.as_view(), name='index'), path('migrations_notran/', MigrationsNotran.as_view(), name='migrations_notran')]

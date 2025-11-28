@@ -60,7 +60,7 @@ Cookie: awx_sessionid=lwan8l5ynhrqvps280rg5upp7n3yp6ds; ...
 ```
 
 User should use the `/api/logout/` endpoint to log out. In the API browser, a logged-in user can do that by
-simply clicking logout button on the nav bar. Under the hood, the click issues a GET to `/api/logout/`.
+simply clicking logout button on the nav bar. Under the hood, the click issues a POST to `/api/logout/`.
 Upon success, the server will invalidate the current session and the response header will indicate for the client
 to delete the session cookie. The user should no longer try using this invalid session.
 

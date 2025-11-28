@@ -2,7 +2,7 @@ adal==1.2.7
     # via msrestazure
 aiohappyeyeballs==2.6.1
     # via aiohttp
-aiohttp==3.12.14
+aiohttp==3.13.2
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   aiohttp-retry
@@ -15,11 +15,9 @@ annotated-types==0.6.0
     # via pydantic
 # git+https://github.com/ansible/ansible-runner.git@devel  # git requirements installed separately
     # via -r /awx_devel/requirements/requirements_git.txt
-ansiconv==1.0.0
-    # via -r /awx_devel/requirements/requirements.in
 asciichartpy==1.5.25
     # via -r /awx_devel/requirements/requirements.in
-asgiref==3.7.2
+asgiref==3.11.0
     # via
     #   channels
     #   channels-redis
@@ -28,9 +26,7 @@ asgiref==3.7.2
     #   django-cors-headers
 asn1==2.7.0
     # via -r /awx_devel/requirements/requirements.in
-async-timeout==4.0.3
-    # via asyncpg
-asyncpg==0.29.0
+asyncpg==0.30.0
     # via -r /awx_devel/requirements/requirements.in
 attrs==23.2.0
     # via
@@ -84,11 +80,11 @@ cachetools==5.3.2
     #   requests
 cffi==1.16.0
     # via cryptography
-channels==4.1.0
+channels==4.3.2
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   channels-redis
-channels-redis==4.2.0
+channels-redis==4.3.0
     # via -r /awx_devel/requirements/requirements.in
 charset-normalizer==3.3.2
     # via requests
@@ -120,7 +116,7 @@ defusedxml==0.7.1
     #   social-auth-core
 distro==1.9.0
     # via -r /awx_devel/requirements/requirements.in
-django==4.2.26
+django==5.2.8
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   channels
@@ -135,31 +131,33 @@ django==4.2.26
     #   django-solo
     #   djangorestframework
     #   social-auth-app-django
-# django-ansible-base @ git+https://github.com/ansible/django-ansible-base@3a7423435192b3042b264141291b35224b99c783  # git requirements installed separately
+# django-ansible-base @ git+https://github.com/ansible/django-ansible-base@devel  # git requirements installed separately
     # via -r /awx_devel/requirements/requirements_git.txt
-django-auth-ldap==4.6.0
+django-auth-ldap==5.2.0
     # via -r /awx_devel/requirements/requirements.in
-django-cors-headers==4.3.1
+django-cors-headers==4.9.0
     # via -r /awx_devel/requirements/requirements.in
 django-crum==0.7.9
-    # via django-ansible-base
-django-extensions==3.2.3
+    # via
+    #   -r /awx_devel/requirements/requirements.in
+    #   django-ansible-base
+django-extensions==4.1
     # via -r /awx_devel/requirements/requirements.in
-django-guid==3.2.1
+django-guid==3.5.2
     # via -r /awx_devel/requirements/requirements.in
 django-oauth-toolkit==1.7.1
     # via -r /awx_devel/requirements/requirements.in
 django-pglocks==1.0.4
     # via -r /awx_devel/requirements/requirements.in
-django-polymorphic==3.1.0
+django-polymorphic==4.1.0
     # via -r /awx_devel/requirements/requirements.in
 django-radius==1.5.1
     # via -r /awx_devel/requirements/requirements.in
-django-solo==2.2.0
+django-solo==2.4.0
     # via -r /awx_devel/requirements/requirements.in
 django-split-settings==1.0.0
     # via -r /awx_devel/requirements/requirements.in
-djangorestframework==3.15.2
+djangorestframework==3.16.1
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   django-ansible-base
@@ -183,7 +181,7 @@ gitpython==3.1.42
     # via -r /awx_devel/requirements/requirements.in
 google-auth==2.28.1
     # via kubernetes
-hiredis==3.0.0
+hiredis==3.3.0
     # via redis
 hyperlink==21.0.0
     # via
@@ -238,7 +236,7 @@ jmespath==1.0.1
     #   botocore
 json-log-formatter==0.5.2
     # via -r /awx_devel/requirements/requirements.in
-jsonschema==4.21.1
+jsonschema==4.25.1
     # via -r /awx_devel/requirements/requirements.in
 jsonschema-specifications==2023.12.1
     # via jsonschema
@@ -291,6 +289,7 @@ packaging==24.2
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   ansible-runner
+    #   django-guid
     #   msal-extensions
     #   setuptools-scm
 pexpect==4.7.0
@@ -381,9 +380,9 @@ pyyaml==6.0.1
     #   djangorestframework-yaml
     #   kubernetes
     #   receptorctl
-receptorctl==1.4.4
+receptorctl==1.6.2
     # via -r /awx_devel/requirements/requirements.in
-redis[hiredis]==5.0.8
+redis[hiredis]==7.1.0
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   channels-redis
@@ -391,7 +390,7 @@ referencing==0.33.0
     # via
     #   jsonschema
     #   jsonschema-specifications
-requests==2.32.4
+requests==2.32.5
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   adal
@@ -442,7 +441,7 @@ slack-sdk==3.27.0
     # via -r /awx_devel/requirements/requirements.in
 smmap==5.0.1
     # via gitdb
-social-auth-app-django==5.4.2
+social-auth-app-django==5.6.0
     # via -r /awx_devel/requirements/requirements.in
 social-auth-core[openidconnect]==4.5.0
     # via
@@ -487,13 +486,13 @@ urllib3==2.5.0
     #   botocore
     #   kubernetes
     #   requests
-uwsgi==2.0.26
+uwsgi==2.0.31
     # via -r /awx_devel/requirements/requirements.in
-uwsgitop==0.11
+uwsgitop==0.12
     # via -r /awx_devel/requirements/requirements.in
 websocket-client==1.7.0
     # via kubernetes
-wheel==0.42.0
+wheel==0.45.1
     # via -r /awx_devel/requirements/requirements.in
 xmlsec==1.3.13
     # via python3-saml

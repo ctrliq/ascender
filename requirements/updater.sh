@@ -40,12 +40,14 @@ main() {
   base_dir=$(pwd)
   dest_requirements="${requirements}"
   input_requirements="${requirements_in} ${requirements_git}"
+  command="${1:-}"
+  shift || true  # Remove first argument, leave remaining as package names
 
   _tmp=$(python -c "import tempfile; print(tempfile.mkdtemp(suffix='.awx-requirements', dir='/tmp'))")
 
   trap _cleanup INT TERM EXIT
 
-  case $1 in
+  case $command in
     "run")
       NEEDS_HELP=0
     ;;
@@ -57,14 +59,24 @@ main() {
     ;;
     "upgrade")
       NEEDS_HELP=0
-      pip_compile="${pip_compile} --upgrade"
+      if [[ $# -eq 0 ]]; then
+        pip_compile="${pip_compile} --upgrade"
+      else
+        for package in "$@"; do
+          pip_compile="${pip_compile} --upgrade-package $package"
+        done
+      fi
+    ;;
+    "outdated")
+      pip list --outdated
+      exit 0
     ;;
     "help")
       NEEDS_HELP=1
     ;;
     *)
       echo ""
-      echo "ERROR: Parameter $1 not valid"
+      echo "ERROR: Parameter $command not valid"
       echo ""
       NEEDS_HELP=1
     ;;
@@ -74,13 +86,14 @@ main() {
     echo "This script generates requirements.txt from requirements.in and requirements_git.in"
     echo "It should be run from within the awx container"
     echo ""
-    echo "Usage: $0 [run|upgrade|dev]"
+    echo "Usage: $0 [run|upgrade [package-name...]|dev|outdated]"
     echo ""
     echo "Commands:"
-    echo "help      Print this message"
-    echo "run       Run the process only upgrading pinned libraries from requirements.in"
-    echo "upgrade   Upgrade all libraries to latest while respecting pinnings"
-    echo "dev       Pin the development requirements file"
+    echo "help                   Print this message"
+    echo "run                    Run the process only upgrading pinned libraries from requirements.in"
+    echo "upgrade [package...]   Upgrade all libraries (or specific packages if specified) to latest while respecting pinnings"
+    echo "dev                    Pin the development requirements file"
+    echo "outdated               List all outdated packages"
     echo ""
     exit
   fi
@@ -108,4 +121,4 @@ main() {
 }
 
 # set EVAL=1 in case you want to source this script
-test "${EVAL:-0}" -eq "1" || main "${1:-}"
+test "${EVAL:-0}" -eq "1" || main "$@"

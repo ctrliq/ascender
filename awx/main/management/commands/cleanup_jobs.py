@@ -3,8 +3,8 @@
 
 # Python
 import datetime
+from datetime import timezone as dt_timezone
 import logging
-import pytz
 import re
 
 
@@ -43,7 +43,7 @@ def partition_name_dt(part_name):
     if not m:
         return m
     dt_str = f"{m.group(3)}_{m.group(4)}"
-    dt = datetime.datetime.strptime(dt_str, '%Y%m%d_%H').replace(tzinfo=pytz.UTC)
+    dt = datetime.datetime.strptime(dt_str, '%Y%m%d_%H').replace(tzinfo=dt_timezone.utc)
     return dt
 
 

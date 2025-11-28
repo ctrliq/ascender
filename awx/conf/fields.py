@@ -160,21 +160,38 @@ class StringListIsolatedPathField(StringListField):
 class URLField(CharField):
     # these lines set up a custom regex that allow numbers in the
     # top-level domain
+    # Unicode letters range (must not be a raw string) - copied from URLValidator
+    ul = "\u00a1-\uffff"
+    
+    # IP patterns - copied from URLValidator
+    ipv4_re = (
+        r"(?:0|25[0-5]|2[0-4][0-9]|1[0-9]?[0-9]?|[1-9][0-9]?)"
+        r"(?:\.(?:0|25[0-5]|2[0-4][0-9]|1[0-9]?[0-9]?|[1-9][0-9]?)){3}"
+    )
+    ipv6_re = r"\[[0-9a-f:.]+\]"
+    
+    # Host patterns - copied from URLValidator
+    hostname_re = (
+        r"[a-z" + ul + r"0-9](?:[a-z" + ul + r"0-9-]{0,61}[a-z" + ul + r"0-9])?"
+    )
+    domain_re = r"(?:\.(?!-)[a-z" + ul + r"0-9-]{1,63}(?<!-))*"
+    
+    # Custom TLD regex that allows numbers in the top-level domain
     tld_re = (
         r'\.'  # dot
         r'(?!-)'  # can't start with a dash
-        r'(?:[a-z' + URLValidator.ul + r'0-9' + '-]{2,63}'  # domain label, this line was changed from the original URLValidator
+        r'(?:[a-z' + ul + r'0-9' + '-]{2,63}'  # domain label, this line was changed from the original URLValidator
         r'|xn--[a-z0-9]{1,59})'  # or punycode label
         r'(?<!-)'  # can't end with a dash
         r'\.?'  # may have a trailing dot
     )
 
-    host_re = '(' + URLValidator.hostname_re + URLValidator.domain_re + tld_re + '|localhost)'
+    host_re = '(' + hostname_re + domain_re + tld_re + '|localhost)'
 
     regex = _lazy_re_compile(
         r'^(?:[a-z0-9\.\-\+]*)://'  # scheme is validated separately
         r'(?:[^\s:@/]+(?::[^\s:@/]*)?@)?'  # user:pass authentication
-        r'(?:' + URLValidator.ipv4_re + '|' + URLValidator.ipv6_re + '|' + host_re + ')'
+        r'(?:' + ipv4_re + '|' + ipv6_re + '|' + host_re + ')'
         r'(?::\d{2,5})?'  # port
         r'(?:[/?#][^\s]*)?'  # resource path
         r'\Z',
