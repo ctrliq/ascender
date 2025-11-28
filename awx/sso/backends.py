@@ -231,7 +231,7 @@ class TACACSPlusBackend(object):
                 timeout=django_settings.TACACSPLUS_SESSION_TIMEOUT,
             )
             auth_kwargs = {'authen_type': tacacs_plus.TAC_PLUS_AUTHEN_TYPES[django_settings.TACACSPLUS_AUTH_PROTOCOL]}
-            if django_settings.TACACSPLUS_AUTH_PROTOCOL:
+            if django_settings.TACACSPLUS_REM_ADDR:
                 client_ip = self._get_client_ip(request)
                 if client_ip:
                     auth_kwargs['rem_addr'] = client_ip
@@ -254,12 +254,13 @@ class TACACSPlusBackend(object):
         if not request or not hasattr(request, 'META'):
             return None
 
-        x_forwarded_for = request.headers.get('x-forwarded-for')
+        # Check X-Forwarded-For header first (comma-separated list)
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
         if x_forwarded_for:
-            ip = x_forwarded_for.split(',')[0]
-        else:
-            ip = request.META.get('REMOTE_ADDR')
-        return ip
+            return x_forwarded_for.split(',')[0].strip()
+        
+        # Fall back to REMOTE_ADDR
+        return request.META.get('REMOTE_ADDR')
 
 
 class TowerSAMLIdentityProvider(BaseSAMLIdentityProvider):

@@ -38,7 +38,7 @@ def test_create(post, project, machine_credential, inventory, alice, grant_proje
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize('kind', ['scm', 'insights'])
+@pytest.mark.parametrize('kind', ['scm'])
 def test_invalid_credential_kind_xfail(get, post, organization_factory, job_template_factory, kind):
     objs = organization_factory("org", superusers=['admin'])
     jt = job_template_factory("jt", organization=objs.organization, inventory='test_inv', project='test_proj').job_template

@@ -44,7 +44,7 @@ def test_prevent_multiple_machine_creds(get, post, job_template, admin, machine_
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize('kind', ['scm', 'insights'])
+@pytest.mark.parametrize('kind', ['scm'])
 def test_invalid_credential_type_at_launch(get, post, job_template, admin, kind):
     cred_type = CredentialType.defaults[kind]()
     cred_type.save()

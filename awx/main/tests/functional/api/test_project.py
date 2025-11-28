@@ -4,14 +4,6 @@ from awx.api.versioning import reverse
 from awx.main.models import Project, JobTemplate
 
 
-@pytest.mark.django_db
-class TestInsightsCredential:
-    def test_insights_credential(self, patch, insights_project, admin_user, insights_credential):
-        patch(insights_project.get_absolute_url(), {'credential': insights_credential.id}, admin_user, expect=200)
-
-    def test_non_insights_credential(self, patch, insights_project, admin_user, scm_credential):
-        patch(insights_project.get_absolute_url(), {'credential': scm_credential.id}, admin_user, expect=400)
-
 
 @pytest.mark.django_db
 def test_no_changing_overwrite_behavior_if_used(post, patch, organization, admin_user):

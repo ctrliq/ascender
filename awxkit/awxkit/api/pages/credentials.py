@@ -80,7 +80,7 @@ credential_type_name_to_config_kind_map = {
     'amazon web services': 'aws',
     'container registry': 'registry',
     'ansible galaxy/automation hub api token': 'galaxy',
-    'red hat ansible automation platform': 'controller',
+    'ciq ascender automation platform': 'ascender',
     'google compute engine': 'gce',
     'insights': 'insights',
     'openshift or kubernetes api bearer token': 'kubernetes',

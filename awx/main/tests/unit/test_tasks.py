@@ -1022,36 +1022,6 @@ class TestJobCredentials(TestJobExecution):
             ]
         )
 
-    @pytest.mark.parametrize("ca_file", [None, '/path/to/some/file'])
-    def test_rhv_credentials(self, private_data_dir, job, ca_file, mock_me):
-        rhv = CredentialType.defaults['rhv']()
-        inputs = {
-            'host': 'some-ovirt-host.example.org',
-            'username': 'bob',
-            'password': 'some-pass',
-        }
-        if ca_file:
-            inputs['ca_file'] = ca_file
-        credential = Credential(pk=1, credential_type=rhv, inputs=inputs)
-        credential.inputs['password'] = encrypt_field(credential, 'password')
-        job.credentials.add(credential)
-
-        env = {}
-        safe_env = {}
-        credential.credential_type.inject_credential(credential, env, safe_env, [], private_data_dir)
-
-        config = configparser.ConfigParser()
-        host_path = to_host_path(env['OVIRT_INI_PATH'], private_data_dir)
-        config.read(host_path)
-        assert config.get('ovirt', 'ovirt_url') == 'some-ovirt-host.example.org'
-        assert config.get('ovirt', 'ovirt_username') == 'bob'
-        assert config.get('ovirt', 'ovirt_password') == 'some-pass'
-        if ca_file:
-            assert config.get('ovirt', 'ovirt_ca_file') == ca_file
-        else:
-            with pytest.raises(configparser.NoOptionError):
-                config.get('ovirt', 'ovirt_ca_file')
-
     @pytest.mark.parametrize(
         'authorize, expected_authorize',
         [
@@ -1799,39 +1769,11 @@ class TestInventoryUpdateCredentials(TestJobExecution):
         assert env["FOREMAN_PASSWORD"] == "secret"
         assert safe_env["FOREMAN_PASSWORD"] == HIDDEN_PASSWORD
 
-    def test_insights_source(self, inventory_update, private_data_dir, mocker, mock_me):
-        task = jobs.RunInventoryUpdate()
-        task.instance = inventory_update
-        insights = CredentialType.defaults['insights']()
-        inventory_update.source = 'insights'
-
-        def get_cred():
-            cred = Credential(
-                pk=1,
-                credential_type=insights,
-                inputs={
-                    'username': 'bob',
-                    'password': 'secret',
-                },
-            )
-            cred.inputs['password'] = encrypt_field(cred, 'password')
-            return cred
-
-        inventory_update.get_cloud_credential = get_cred
-        inventory_update.get_extra_credentials = mocker.Mock(return_value=[])
-
-        env = task.build_env(inventory_update, private_data_dir, False)
-        safe_env = build_safe_env(env)
-
-        assert env["INSIGHTS_USER"] == "bob"
-        assert env["INSIGHTS_PASSWORD"] == "secret"
-        assert safe_env['INSIGHTS_PASSWORD'] == HIDDEN_PASSWORD
-
     @pytest.mark.parametrize('verify', [True, False])
     def test_tower_source(self, verify, inventory_update, private_data_dir, mocker, mock_me):
         task = jobs.RunInventoryUpdate()
         task.instance = inventory_update
-        tower = CredentialType.defaults['controller']()
+        tower = CredentialType.defaults['ascender']()
         inventory_update.source = 'controller'
         inputs = {'host': 'https://tower.example.org', 'username': 'bob', 'password': 'secret', 'verify_ssl': verify}
 
@@ -1859,7 +1801,7 @@ class TestInventoryUpdateCredentials(TestJobExecution):
     def test_tower_source_ssl_verify_empty(self, inventory_update, private_data_dir, mocker, mock_me):
         task = jobs.RunInventoryUpdate()
         task.instance = inventory_update
-        tower = CredentialType.defaults['controller']()
+        tower = CredentialType.defaults['ascender']()
         inventory_update.source = 'controller'
         inputs = {
             'host': 'https://tower.example.org',

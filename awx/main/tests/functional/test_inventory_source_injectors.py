@@ -46,6 +46,9 @@ def generate_fake_var(element):
 
 def credential_kind(source):
     """Given the inventory source kind, return expected credential kind"""
+    # Map inventory source types to credential type namespaces
+    if source == 'controller':
+        return 'ascender'  # inventory source is 'controller' but credential type namespace is 'ascender'
     return source.replace('ec2', 'aws')
 
 

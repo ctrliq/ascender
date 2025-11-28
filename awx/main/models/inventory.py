@@ -923,11 +923,11 @@ class InventorySourceOptions(BaseModel):
         ('gce', _('Google Compute Engine')),
         ('azure_rm', _('Microsoft Azure Resource Manager')),
         ('vmware', _('VMware vCenter')),
-        # ('satellite6', _('Red Hat Satellite 6')),
+        ('satellite6', _('Red Hat Satellite 6')),
         ('openstack', _('OpenStack')),
         ('terraform', _('Terraform State')),
         # ('rhv', _('Red Hat Virtualization')),
-        # ('controller', _('Red Hat Ansible Automation Platform')),
+        ('controller', _('CIQ Ascender Automation Platform')),
         # ('insights', _('Red Hat Insights')),
     ]
 
@@ -1599,19 +1599,6 @@ class openstack(PluginFileInjector):
         cred_data = private_data_files['credentials']
         env['OS_CLIENT_CONFIG_FILE'] = to_container_path(cred_data[credential], private_data_dir)
         return env
-
-
-class rhv(PluginFileInjector):
-    """ovirt uses the custom credential templating, and that is all"""
-
-    plugin_name = 'ovirt'
-    base_injector = 'template'
-    initial_version = '2.9'
-    namespace = 'ovirt'
-    collection = 'ovirt'
-    downstream_namespace = 'redhat'
-    downstream_collection = 'rhv'
-    use_fqcn = True
 
 
 class satellite6(PluginFileInjector):

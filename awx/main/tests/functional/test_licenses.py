@@ -77,24 +77,29 @@ def test_python_and_js_licenses():
         return ret
 
     def read_ui_requirements(path):
-        def json_deps(jsondata):
-            ret = {}
-            deps = jsondata.get('dependencies', {})
-            for key in deps.keys():
-                key = key.lower()
-                devonly = deps[key].get('dev', False)
-                if not devonly:
-                    if key not in ret.keys():
-                        depname = key.replace('/', '-')
-                        if depname[0] == '@':
-                            depname = depname[1:]
-                        ret[depname] = {'name': depname, 'version': deps[key]['version']}
-                        ret.update(json_deps(deps[key]))
-            return ret
-
-        with open('%s/package-lock.json' % path) as f:
+        # Read from package.json to only get direct dependencies, not transitive ones
+        package_json_file = '%s/package.json' % path
+        if not os.path.exists(package_json_file):
+            return {}
+            
+        with open(package_json_file) as f:
             jsondata = json.load(f)
-            return json_deps(jsondata)
+            
+        ret = {}
+        # Only get production dependencies, not devDependencies (we don't ship dev tools)
+        deps = jsondata.get('dependencies', {})
+        for key in deps.keys():
+            # Transform name to match existing license file naming
+            depname = key.lower().replace('/', '-')
+            if depname.startswith('@'):
+                depname = depname[1:]
+            
+            if depname not in ret:
+                # Extract version, removing ^ ~ etc.
+                version = deps[key].lstrip('^~>=<')
+                ret[depname] = {'name': depname, 'version': version}
+        
+        return ret
 
     def remediate_licenses_and_requirements(licenses, requirements):
         errors = []

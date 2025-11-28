@@ -50,7 +50,15 @@ from . import injectors as builtin_injectors
 __all__ = ['Credential', 'CredentialType', 'CredentialInputSource', 'build_safe_env']
 
 logger = logging.getLogger('awx.main.models.credential')
-credential_plugins = {entry_point.name: entry_point.load() for entry_point in entry_points(group='awx.credential_plugins')}
+
+# Load credential plugins, handling cases where Django settings aren't configured
+credential_plugins = {}
+for entry_point in entry_points(group='awx.credential_plugins'):
+    try:
+        credential_plugins[entry_point.name] = entry_point.load()
+    except Exception as e:
+        logger.debug(f"Failed to load credential plugin {entry_point.name}: {e}")
+        # Continue without this plugin
 
 HIDDEN_PASSWORD = '**********'
 
@@ -803,6 +811,31 @@ ManagedCredentialType(
                 'label': gettext_noop('VCenter Host'),
                 'type': 'string',
                 'help_text': gettext_noop('Enter the hostname or IP address that corresponds to your VMware vCenter.'),
+            },
+            {'id': 'username', 'label': gettext_noop('Username'), 'type': 'string'},
+            {
+                'id': 'password',
+                'label': gettext_noop('Password'),
+                'type': 'string',
+                'secret': True,
+            },
+        ],
+        'required': ['host', 'username', 'password'],
+    },
+)
+
+ManagedCredentialType(
+    namespace='satellite6',
+    kind='cloud',
+    name=gettext_noop('Red Hat Satellite 6'),
+    managed=True,
+    inputs={
+        'fields': [
+            {
+                'id': 'host',
+                'label': gettext_noop('Satellite 6 URL'),
+                'type': 'string',
+                'help_text': gettext_noop('Enter the URL that corresponds to your Red Hat Satellite 6 server. For example, https://satellite.example.org'),
             },
             {'id': 'username', 'label': gettext_noop('Username'), 'type': 'string'},
             {
