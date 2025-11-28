@@ -61,9 +61,12 @@ def get_current_user():
     
     # Fire signal to allow custom user retrieval (e.g., DRF)
     responses = current_user_getter.send(sender=None)
-    for receiver, (user, priority) in responses:
-        if user is not None:
-            return user
+    for receiver, response in responses:
+        # Expect response to be a tuple (user, priority), but handle gracefully
+        if isinstance(response, tuple) and len(response) == 2:
+            user, priority = response
+            if user is not None:
+                return user
     
     # Fall back to request.user
     request = get_current_request()
@@ -95,14 +98,22 @@ def impersonate(user):
             _thread_locals.impersonate_user = previous_user
 
 class ThreadLocalMiddleware:
+    """
+    Stores the current request in thread-local storage for access throughout
+    the request lifecycle. Automatically cleans up after each request completes,
+    even if an exception occurs.
+    """
     def __init__(self, get_response):
         self.get_response = get_response
 
     def __call__(self, request):
         _thread_locals.request = request
-        response = self.get_response(request)
-        del _thread_locals.request  # Clean up after the request
-        return response
+        try:
+            response = self.get_response(request)
+            return response
+        finally:
+            # Always clean up, even if an exception occurred
+            del _thread_locals.request
 
 class SettingsCacheMiddleware(MiddlewareMixin):
     """
