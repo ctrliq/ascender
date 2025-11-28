@@ -85,17 +85,33 @@ def impersonate(user):
         with impersonate(some_user):
             # Code here will see some_user as the current user
             pass
+        
+        with impersonate(None):
+            # Explicitly clear impersonation
+            pass
     """
-    previous_user = getattr(_thread_locals, 'impersonate_user', None)
-    _thread_locals.impersonate_user = user
+    # Save the previous impersonation state (None if not set)
+    had_previous = hasattr(_thread_locals, 'impersonate_user')
+    previous_user = getattr(_thread_locals, 'impersonate_user', None) if had_previous else None
+    
+    # Set the new impersonation state
+    if user is None:
+        # Explicitly clear impersonation
+        if had_previous:
+            del _thread_locals.impersonate_user
+    else:
+        _thread_locals.impersonate_user = user
+    
     try:
         yield
     finally:
-        if previous_user is None:
+        # Restore the previous state
+        if had_previous:
+            _thread_locals.impersonate_user = previous_user
+        else:
+            # No previous state, so clean up if we set anything
             if hasattr(_thread_locals, 'impersonate_user'):
                 del _thread_locals.impersonate_user
-        else:
-            _thread_locals.impersonate_user = previous_user
 
 class ThreadLocalMiddleware:
     """
@@ -115,7 +131,11 @@ class ThreadLocalMiddleware:
             # Always clean up, even if an exception occurred
             if hasattr(_thread_locals, 'request'):
                 del _thread_locals.request
-            # Also clean up any impersonation that wasn't properly closed
+            # Clean up any impersonation state to prevent cross-request leakage.
+            # Note: This only affects web requests. Celery tasks don't run through
+            # middleware, so task-level impersonation is unaffected.
+            # Within request handlers, always use the impersonate() context manager
+            # to ensure proper cleanup before this middleware cleanup runs.
             if hasattr(_thread_locals, 'impersonate_user'):
                 del _thread_locals.impersonate_user
 
