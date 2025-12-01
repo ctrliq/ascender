@@ -4061,7 +4061,7 @@ _ANSI_COLORS = {
 
 
 def ansi_to_html(text):
-    """Convert ANSI color codes to HTML spans with inline styles.
+    """Convert ANSI color codes to HTML spans with CSS classes.
     
     Handles cursor-up commands (ESC[A) by removing the previous line,
     emulating terminal behavior for progress indicators.
@@ -4105,10 +4105,10 @@ def ansi_to_html(text):
     # Rejoin the processed text
     text = ''.join(processed_blocks)
     
-    # Now convert color codes to HTML
+    # Now convert color codes to HTML with CSS classes
     result = []
     last_end = 0
-    current_styles = {}  # Track active styles by type (color, bold, underline)
+    current_classes = set()  # Track active CSS classes
     has_open_span = False
     
     for match in _ANSI_COLOR_PATTERN.finditer(text):
@@ -4117,36 +4117,36 @@ def ansi_to_html(text):
         
         codes = match.group(1).split(';')
         
-        # Check if this is a reset code (0 or empty)
-        if '0' in codes or codes == ['']:
-            # Close current span if open and reset styles
-            if has_open_span:
-                result.append('</span>')
-                has_open_span = False
-            current_styles = {}
-        else:
-            # Update current styles based on codes
-            for code in codes:
-                if code in _ANSI_COLORS:
-                    style_value = _ANSI_COLORS[code]
-                    # Determine style type (color, background-color, bold, underline)
-                    if style_value.startswith('color:'):
-                        current_styles['color'] = style_value
-                    elif style_value.startswith('background-color:'):
-                        current_styles['background'] = style_value
-                    elif 'bold' in style_value:
-                        current_styles['bold'] = style_value
-                    elif 'underline' in style_value:
-                        current_styles['underline'] = style_value
-            
-            # Close previous span and open new one with combined styles
-            if has_open_span:
-                result.append('</span>')
-            
-            if current_styles:
-                combined_style = '; '.join(current_styles.values())
-                result.append('<span style="{}">'.format(combined_style))
-                has_open_span = True
+        # Process codes in order
+        for code in codes:
+            if code == '0' or code == '':
+                # Reset all classes
+                if has_open_span:
+                    result.append('</span>')
+                    has_open_span = False
+                current_classes = set()
+            elif code in _ANSI_COLORS:
+                # Handle any supported ANSI code
+                if code in ['1', '4']:  # Bold and underline
+                    current_classes.add('ansi{}'.format(code))
+                elif code.isdigit() and (30 <= int(code) <= 37 or 90 <= int(code) <= 97):  # Foreground colors (30-37, 90-97)
+                    # Remove any existing foreground color class
+                    current_classes = {cls for cls in current_classes if not re.match(r'^ansi(3[0-7]|9[0-7])$', cls)}
+                    current_classes.add('ansi{}'.format(code))
+                elif code.isdigit() and (40 <= int(code) <= 47 or 100 <= int(code) <= 107):  # Background colors (40-47, 100-107)
+                    # Remove any existing background color class
+                    current_classes = {cls for cls in current_classes if not re.match(r'^ansi(4[0-7]|10[0-7])$', cls)}
+                    current_classes.add('ansi{}'.format(code))
+        
+        # After processing all codes, update the span
+        if has_open_span:
+            result.append('</span>')
+            has_open_span = False
+        
+        if current_classes:
+            class_str = ' '.join(sorted(current_classes))
+            result.append('<span class="{}">'.format(class_str))
+            has_open_span = True
         
         last_end = match.end()
     

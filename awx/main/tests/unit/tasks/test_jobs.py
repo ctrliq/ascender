@@ -32,10 +32,11 @@ def private_data_dir():
     shutil.rmtree(private_data, True)
 
 
-@mock.patch('awx.main.tasks.facts.update_hosts')
+@pytest.mark.django_db
+@mock.patch('awx.main.tasks.facts.finish_fact_cache')
 @mock.patch('awx.main.tasks.facts.settings')
 @mock.patch('awx.main.tasks.jobs.create_partition', return_value=True)
-def test_pre_post_run_hook_facts(mock_create_partition, mock_facts_settings, update_hosts, private_data_dir, execution_environment):
+def test_pre_post_run_hook_facts(mock_create_partition, mock_facts_settings, finish_fact_cache, private_data_dir, execution_environment):
     # creates inventory_object with two hosts
     inventory = Inventory(pk=1)
     mock_inventory = mock.MagicMock(spec=Inventory, wraps=inventory)
@@ -80,10 +81,11 @@ def test_pre_post_run_hook_facts(mock_create_partition, mock_facts_settings, upd
     assert mock_inventory.hosts[2].ansible_facts == {"added": True}
 
 
-@mock.patch('awx.main.tasks.facts.update_hosts')
+@pytest.mark.django_db
+@mock.patch('awx.main.tasks.facts.finish_fact_cache')
 @mock.patch('awx.main.tasks.facts.settings')
 @mock.patch('awx.main.tasks.jobs.create_partition', return_value=True)
-def test_pre_post_run_hook_facts_deleted_sliced(mock_create_partition, mock_facts_settings, update_hosts, private_data_dir, execution_environment):
+def test_pre_post_run_hook_facts_deleted_sliced(mock_create_partition, mock_facts_settings, finish_fact_cache, private_data_dir, execution_environment):
     # creates inventory_object with two hosts
     inventory = Inventory(pk=1)
     mock_inventory = mock.MagicMock(spec=Inventory, wraps=inventory)
@@ -135,9 +137,9 @@ def test_pre_post_run_hook_facts_deleted_sliced(mock_create_partition, mock_fact
     assert len(failures) > 0, f"Failures occurred for the following hosts: {failures}"
 
 
-@mock.patch('awx.main.tasks.facts.update_hosts')
+@mock.patch('awx.main.tasks.facts.finish_fact_cache')
 @mock.patch('awx.main.tasks.facts.settings')
-def test_invalid_host_facts(mock_facts_settings, update_hosts, private_data_dir, execution_environment):
+def test_invalid_host_facts(mock_facts_settings, finish_fact_cache, private_data_dir, execution_environment):
     inventory = Inventory(pk=1)
     mock_inventory = mock.MagicMock(spec=Inventory, wraps=inventory)
     mock_inventory._state = mock.MagicMock()
@@ -155,7 +157,7 @@ def test_invalid_host_facts(mock_facts_settings, update_hosts, private_data_dir,
             failures.append(host.name)
 
     mock_facts_settings.SOME_SETTING = True
-    update_hosts(mock_inventory.hosts)
+    finish_fact_cache(mock_inventory.hosts, private_data_dir, now(), {})
 
     with pytest.raises(pytest.fail.Exception):
         if failures:

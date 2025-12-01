@@ -18,6 +18,8 @@ import urllib.parse as urlparse
 # Django
 from django.conf import settings
 
+logger = logging.getLogger('awx.main.tasks.jobs')
+
 
 # Runner
 import ansible_runner
@@ -1646,7 +1648,10 @@ class RunInventoryUpdate(SourceControlMixin, BaseTask):
             return  # nothing to save, step out of the way to allow error reporting
 
         inventory_update.refresh_from_db()
-        private_data_dir = inventory_update.job_env['AWX_PRIVATE_DATA_DIR']
+        private_data_dir = inventory_update.job_env.get('AWX_PRIVATE_DATA_DIR')
+        if not private_data_dir:
+            logger.warning('AWX_PRIVATE_DATA_DIR not found in job_env, skipping inventory save')
+            return
         expected_output = os.path.join(private_data_dir, 'artifacts', str(inventory_update.id), 'output.json')
         with open(expected_output) as f:
             data = json.load(f)

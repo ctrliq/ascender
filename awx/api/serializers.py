@@ -3095,11 +3095,20 @@ class CredentialSerializerCreate(CredentialSerializer):
 
 class CredentialInputSourceSerializer(BaseSerializer):
     show_capabilities = ['delete']
+    
+    target_credential = serializers.PrimaryKeyRelatedField(
+        queryset=Credential.objects.all(),
+        required=True
+    )
+    source_credential = serializers.PrimaryKeyRelatedField(
+        queryset=Credential.objects.all(), 
+        required=True
+    )
 
     class Meta:
         model = CredentialInputSource
         fields = ('*', 'input_field_name', 'metadata', 'target_credential', 'source_credential', '-name')
-        extra_kwargs = {'input_field_name': {'required': True}, 'target_credential': {'required': True}, 'source_credential': {'required': True}}
+        extra_kwargs = {'input_field_name': {'required': True}}
 
     def get_related(self, obj):
         res = super(CredentialInputSourceSerializer, self).get_related(obj)

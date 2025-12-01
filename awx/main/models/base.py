@@ -308,7 +308,8 @@ class PrimordialModel(HasEditsMixin, CreatedModifiedModel):
     def save(self, *args, **kwargs):
         update_fields = kwargs.get('update_fields', [])
         user = get_current_user()
-        if user and not user.id:
+        # Ensure user is either None or a valid User instance
+        if not user or (user and not getattr(user, 'id', None)):
             user = None
         if (not self.pk) and (user is not None) and (not self.created_by):
             self.created_by = user

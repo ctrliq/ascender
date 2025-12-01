@@ -390,12 +390,16 @@ class SurveyJobMixin(models.Model):
         """
         Hides fields marked as passwords in survey.
         """
-        if self.survey_passwords:
-            extra_vars = json.loads(self.extra_vars)
-            for key, value in self.survey_passwords.items():
-                if key in extra_vars:
-                    extra_vars[key] = value
-            return json.dumps(extra_vars)
+        if self.survey_passwords and self.extra_vars:
+            try:
+                extra_vars = json.loads(self.extra_vars)
+                for key, value in self.survey_passwords.items():
+                    if key in extra_vars:
+                        extra_vars[key] = value
+                return json.dumps(extra_vars)
+            except (json.JSONDecodeError, TypeError, ValueError):
+                # If extra_vars is not valid JSON, return as-is
+                return self.extra_vars
         else:
             return self.extra_vars
 

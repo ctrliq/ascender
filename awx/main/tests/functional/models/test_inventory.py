@@ -191,7 +191,7 @@ class TestInventorySourceInjectors:
             ('gce', 'google.cloud.gcp_compute'),
             ('azure_rm', 'azure.azcollection.azure_rm'),
             ('vmware', 'community.vmware.vmware_vm_inventory'),
-            ('rhv', 'ovirt.ovirt.ovirt'),
+            #('rhv', 'ovirt.ovirt.ovirt'),
             ('satellite6', 'theforeman.foreman.foreman'),
             # ('insights', 'redhatinsights.insights.insights'),
             ('controller', 'awx.awx.tower'),

@@ -252,12 +252,6 @@ def credentialtype_scm():
     return scm_type
 
 
-@pytest.fixture
-def credentialtype_insights():
-    insights_type = CredentialType.defaults['insights']()
-    insights_type.save()
-    return insights_type
-
 
 @pytest.fixture
 def credentialtype_external():
@@ -305,12 +299,6 @@ def machine_credential(credentialtype_ssh):
 def scm_credential(credentialtype_scm):
     return Credential.objects.create(credential_type=credentialtype_scm, name='scm-cred', inputs={'username': 'optimus', 'password': 'prime'})
 
-
-@pytest.fixture
-def insights_credential(credentialtype_insights):
-    return Credential.objects.create(
-        credential_type=credentialtype_insights, name='insights-cred', inputs={'username': 'morocco_mole', 'password': 'secret_squirrel'}
-    )
 
 
 @pytest.fixture

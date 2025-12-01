@@ -895,7 +895,11 @@ class WorkflowApproval(UnifiedJob, JobNotificationMixin):
 
     def approve(self, request=None):
         self.status = 'successful'
-        self.approved_or_denied_by = get_current_user()
+        user = get_current_user()
+        # Ensure user is either None or a valid User instance
+        if not (user and getattr(user, 'id', None)):
+            user = None
+        self.approved_or_denied_by = user
         self.save()
         self.send_approval_notification('approved')
         self.websocket_emit_status(self.status)
@@ -904,7 +908,11 @@ class WorkflowApproval(UnifiedJob, JobNotificationMixin):
 
     def deny(self, request=None):
         self.status = 'failed'
-        self.approved_or_denied_by = get_current_user()
+        user = get_current_user()
+        # Ensure user is either None or a valid User instance
+        if not (user and getattr(user, 'id', None)):
+            user = None
+        self.approved_or_denied_by = user
         self.save()
         self.send_approval_notification('denied')
         self.websocket_emit_status(self.status)
