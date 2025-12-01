@@ -34,7 +34,7 @@ const ControllerSubForm = ({ autoPopulateCredential }) => {
   return (
     <>
       <CredentialLookup
-        credentialTypeNamespace="controller"
+        credentialTypeNamespace="ascender"
         label={t`Credential`}
         helperTextInvalid={credentialMeta.error}
         isValid={!credentialMeta.touched || !credentialMeta.error}
@@ -53,7 +53,7 @@ const ControllerSubForm = ({ autoPopulateCredential }) => {
       <SourceVarsField
         popoverContent={helpText.sourceVars(
           getDocsBaseUrl(config),
-          'controller'
+          'ascender'
         )}
       />
     </>

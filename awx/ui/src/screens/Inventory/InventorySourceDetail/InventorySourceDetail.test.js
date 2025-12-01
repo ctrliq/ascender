@@ -67,7 +67,7 @@ describe('InventorySourceDetail', () => {
                 ['satellite6', 'Red Hat Satellite 6'],
                 ['openstack', 'OpenStack'],
                 ['rhv', 'Red Hat Virtualization'],
-                ['controller', 'Red Hat Ansible Automation Platform'],
+                ['ascender', 'CIQ Ascender Automation Platform'],
               ],
             },
           },

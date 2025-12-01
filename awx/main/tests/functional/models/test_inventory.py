@@ -106,7 +106,7 @@ class TestActiveCount:
 
     def test_active_count_minus_tower(self, inventory):
         inventory.hosts.create(name='locally-managed-host')
-        source = inventory.inventory_sources.create(name='tower-source', source='controller')
+        source = inventory.inventory_sources.create(name='tower-source', source='ascender')
         source.hosts.create(name='remotely-managed-host', inventory=inventory)
         assert Host.objects.active_count() == 1
 
@@ -194,7 +194,7 @@ class TestInventorySourceInjectors:
             #('rhv', 'ovirt.ovirt.ovirt'),
             ('satellite6', 'theforeman.foreman.foreman'),
             # ('insights', 'redhatinsights.insights.insights'),
-            ('controller', 'awx.awx.tower'),
+            ('ascender', 'awx.awx.tower'),
             ('terraform', 'cloud.terraform.terraform_state'),
         ],
     )

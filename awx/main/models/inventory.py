@@ -927,7 +927,7 @@ class InventorySourceOptions(BaseModel):
         ('openstack', _('OpenStack')),
         ('terraform', _('Terraform State')),
         # ('rhv', _('Red Hat Virtualization')),
-        ('controller', _('CIQ Ascender Automation Platform')),
+        ('ascender', _('CIQ Ascender Automation Platform')),
         # ('insights', _('Red Hat Insights')),
     ]
 
@@ -1635,7 +1635,7 @@ class terraform(PluginFileInjector):
         return ret
 
 
-class controller(PluginFileInjector):
+class ascender(PluginFileInjector):
     plugin_name = 'tower'  # TODO: relying on routing for now, update after EEs pick up revised collection
     base_injector = 'template'
     namespace = 'awx'

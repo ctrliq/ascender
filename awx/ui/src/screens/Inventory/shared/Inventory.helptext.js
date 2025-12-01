@@ -7,7 +7,7 @@ const ansibleDocUrls = {
   ec2: 'https://docs.ansible.com/ansible/latest/collections/amazon/aws/aws_ec2_inventory.html',
   azure_rm:
     'https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_inventory.html',
-  controller:
+  ascender:
     'https://docs.ansible.com/ansible/latest/collections/awx/awx/tower_inventory.html',
   gce: 'https://docs.ansible.com/ansible/latest/collections/google/cloud/gcp_compute_inventory.html',
   insights:

@@ -209,10 +209,10 @@ const InventorySourceFormFields = ({
                     }
                   />
                 ),
-                controller: (
+                ascender: (
                   <ControllerSubForm
                     autoPopulateCredential={
-                      !source?.id || source?.source !== 'controller'
+                      !source?.id || source?.source !== 'ascender'
                     }
                   />
                 ),
