@@ -1773,7 +1773,7 @@ class TestInventoryUpdateCredentials(TestJobExecution):
         task = jobs.RunInventoryUpdate()
         task.instance = inventory_update
         tower = CredentialType.defaults['ascender']()
-        inventory_update.source = 'controller'
+        inventory_update.source = 'ascender'
         inputs = {'host': 'https://tower.example.org', 'username': 'bob', 'password': 'secret', 'verify_ssl': verify}
 
         def get_cred():
@@ -1801,7 +1801,7 @@ class TestInventoryUpdateCredentials(TestJobExecution):
         task = jobs.RunInventoryUpdate()
         task.instance = inventory_update
         tower = CredentialType.defaults['ascender']()
-        inventory_update.source = 'controller'
+        inventory_update.source = 'ascender'
         inputs = {
             'host': 'https://tower.example.org',
             'username': 'bob',

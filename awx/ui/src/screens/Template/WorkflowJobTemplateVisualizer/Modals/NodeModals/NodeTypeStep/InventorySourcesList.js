@@ -103,7 +103,7 @@ function InventorySourcesList({ nodeResource, onUpdateNodeResource }) {
             [`satellite6`, t`Red Hat Satellite 6`],
             [`openstack`, t`OpenStack`],
             [`rhv`, t`Red Hat Virtualization`],
-            [`controller`, t`Red Hat Ansible Automation Platform`],
+            [`ascender`, t`CIQ Ascender Automation Platform`],
           ],
         },
       ]}
