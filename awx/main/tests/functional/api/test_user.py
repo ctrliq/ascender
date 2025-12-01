@@ -1,8 +1,7 @@
-from datetime import date, datetime, timezone
+from datetime import datetime, timezone
 from unittest import mock
 
 import pytest
-from django.utils import timezone as django_timezone
 
 from django.contrib.sessions.middleware import SessionMiddleware
 

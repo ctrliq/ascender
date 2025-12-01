@@ -234,8 +234,7 @@ class TACACSPlusBackend(object):
             # Validate auth protocol before dictionary lookup
             auth_protocol = django_settings.TACACSPLUS_AUTH_PROTOCOL
             if auth_protocol not in tacacs_plus.TAC_PLUS_AUTHEN_TYPES:
-                logger.error("Invalid TACACSPLUS_AUTH_PROTOCOL: %s. Valid options: %s" % 
-                           (auth_protocol, list(tacacs_plus.TAC_PLUS_AUTHEN_TYPES.keys())))
+                logger.error(f"Invalid TACACSPLUS_AUTH_PROTOCOL: {auth_protocol}. Valid options: {list(tacacs_plus.TAC_PLUS_AUTHEN_TYPES.keys())}")
                 return None
                 
             auth_kwargs = {'authen_type': tacacs_plus.TAC_PLUS_AUTHEN_TYPES[auth_protocol]}

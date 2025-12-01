@@ -108,14 +108,17 @@ class TestKeyRegeneration:
         # Verify we can decrypt with current key
         assert json.loads(decrypt_field(job, field_name='start_args')) == {'foo': 'bar'}
         
-        # Store the old key and old encrypted value before regeneration
-        old_key = django_settings.SECRET_KEY
+        # Store the old encrypted value before regeneration
         old_encrypted_value = job.start_args
 
         # re-key the start_args
         new_key = regenerate_secret_key.Command().handle()
         new_job = models.Job.objects.get(pk=job.pk)
         assert new_job.start_args != old_encrypted_value
+        
+        # Verify the new job has valid encrypted data
+        assert new_job.start_args, f"Expected encrypted start_args, got: {repr(new_job.start_args)}"
+        assert new_job.start_args.startswith(PREFIX), f"Expected encrypted format, got: {new_job.start_args}"
 
         # verify that we can't decrypt old encrypted value with new key
         with pytest.raises(InvalidToken):
@@ -128,7 +131,9 @@ class TestKeyRegeneration:
 
         # verify that the new SECRET_KEY *does* work with new encrypted data
         with override_settings(SECRET_KEY=new_key):
-            assert json.loads(decrypt_field(new_job, field_name='start_args')) == {'foo': 'bar'}
+            decrypted_value = decrypt_field(new_job, field_name='start_args')
+            assert decrypted_value, f"Expected decrypted value, got: {repr(decrypted_value)}"
+            assert json.loads(decrypted_value) == {'foo': 'bar'}
 
     @pytest.mark.parametrize('cls', ('JobTemplate', 'WorkflowJobTemplate'))
     def test_survey_spec(self, inventory, project, survey_spec_factory, cls):

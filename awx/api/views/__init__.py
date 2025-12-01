@@ -4131,11 +4131,11 @@ def ansi_to_html(text):
                     current_classes.add('ansi{}'.format(code))
                 elif code.isdigit() and (30 <= int(code) <= 37 or 90 <= int(code) <= 97):  # Foreground colors (30-37, 90-97)
                     # Remove any existing foreground color class
-                    current_classes = {cls for cls in current_classes if not cls.startswith('ansi3') and not cls.startswith('ansi9')}
+                    current_classes = {cls for cls in current_classes if not re.match(r'^ansi(3[0-7]|9[0-7])$', cls)}
                     current_classes.add('ansi{}'.format(code))
                 elif code.isdigit() and (40 <= int(code) <= 47 or 100 <= int(code) <= 107):  # Background colors (40-47, 100-107)
                     # Remove any existing background color class
-                    current_classes = {cls for cls in current_classes if not cls.startswith('ansi4') and not cls.startswith('ansi10')}
+                    current_classes = {cls for cls in current_classes if not re.match(r'^ansi(4[0-7]|10[0-7])$', cls)}
                     current_classes.add('ansi{}'.format(code))
         
         # After processing all codes, update the span
