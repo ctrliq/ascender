@@ -18,7 +18,7 @@ from awx.main.models import (
     Label,
 )
 
-from crum import impersonate
+from awx.main.middleware import impersonate
 
 
 @pytest.fixture

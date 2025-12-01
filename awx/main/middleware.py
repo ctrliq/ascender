@@ -1,6 +1,7 @@
 # Copyright (c) 2015 Ansible, Inc.
 # All Rights Reserved.
 
+import contextlib
 import logging
 import threading
 import time
@@ -17,6 +18,7 @@ from django.apps import apps
 from django.utils.deprecation import MiddlewareMixin
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse, resolve
+from django.dispatch import Signal
 
 from awx.main import migrations
 from awx.main.utils.named_url_graph import generate_graph, GraphNode
@@ -28,6 +30,114 @@ from awx.main.utils.common import memoize
 logger = logging.getLogger('awx.main.middleware')
 perf_logger = logging.getLogger('awx.analytics.performance')
 
+
+# Thread-local storage for request and user
+_thread_locals = threading.local()
+
+# Signal for getting the current user (similar to crum's current_user_getter)
+current_user_getter = Signal()
+
+
+def get_current_request():
+    """
+    Get the current request from thread-local storage.
+    Returns None if no request is available.
+    """
+    return getattr(_thread_locals, 'request', None)
+
+
+def get_current_user():
+    """
+    Get the current user from thread-local storage.
+    First checks for impersonated user, then checks request.user.
+    Returns None if no user is available.
+    
+    Also fires the current_user_getter signal to allow customization
+    (e.g., for Django REST Framework compatibility).
+    """
+    # Check for impersonated user first
+    if hasattr(_thread_locals, 'impersonate_user'):
+        return _thread_locals.impersonate_user
+    
+    # Fire signal to allow custom user retrieval (e.g., DRF)
+    responses = current_user_getter.send(sender=None)
+    for receiver, response in responses:
+        # Expect response to be a tuple (user, priority), but handle gracefully
+        if isinstance(response, tuple) and len(response) == 2:
+            user, priority = response
+            if user is not None:
+                return user
+    
+    # Fall back to request.user
+    request = get_current_request()
+    if request and hasattr(request, 'user'):
+        return request.user
+    
+    return None
+
+
+@contextlib.contextmanager
+def impersonate(user):
+    """
+    Context manager to temporarily impersonate a user.
+    
+    Usage:
+        with impersonate(some_user):
+            # Code here will see some_user as the current user
+            pass
+        
+        with impersonate(None):
+            # Explicitly clear impersonation
+            pass
+    """
+    # Save the previous impersonation state (None if not set)
+    had_previous = hasattr(_thread_locals, 'impersonate_user')
+    previous_user = getattr(_thread_locals, 'impersonate_user', None) if had_previous else None
+    
+    # Set the new impersonation state
+    if user is None:
+        # Explicitly clear impersonation
+        if had_previous:
+            del _thread_locals.impersonate_user
+    else:
+        _thread_locals.impersonate_user = user
+    
+    try:
+        yield
+    finally:
+        # Restore the previous state
+        if had_previous:
+            _thread_locals.impersonate_user = previous_user
+        else:
+            # No previous state, so clean up if we set anything
+            if hasattr(_thread_locals, 'impersonate_user'):
+                del _thread_locals.impersonate_user
+
+class ThreadLocalMiddleware:
+    """
+    Stores the current request in thread-local storage for access throughout
+    the request lifecycle. Automatically cleans up after each request completes,
+    even if an exception occurs.
+    """
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        _thread_locals.request = request
+        try:
+            response = self.get_response(request)
+            return response
+        finally:
+            # Always clean up, even if an exception occurred
+            if hasattr(_thread_locals, 'request'):
+                del _thread_locals.request
+            # Clean up any impersonation state to prevent cross-request leakage.
+            # Note: This only affects web requests. Celery tasks don't run through
+            # middleware, so task-level impersonation is unaffected.
+            # Within request handlers, always use the impersonate() context manager
+            # to ensure proper cleanup before this middleware cleanup runs.
+            if hasattr(_thread_locals, 'impersonate_user'):
+                del _thread_locals.impersonate_user
 
 class SettingsCacheMiddleware(MiddlewareMixin):
     """

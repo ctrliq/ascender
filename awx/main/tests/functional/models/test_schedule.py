@@ -10,7 +10,7 @@ import pytest
 
 from awx.main.models import JobTemplate, Schedule, ActivityStream
 
-from crum import impersonate
+from awx.main.middleware import impersonate
 
 
 @pytest.fixture

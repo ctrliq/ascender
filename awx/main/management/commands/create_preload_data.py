@@ -4,7 +4,7 @@
 
 from django.core.management.base import BaseCommand
 from django.db import transaction
-from crum import impersonate
+from awx.main.middleware import impersonate
 from awx.main.models import User, Organization, CredentialType, Credential
 #from awx.main.models import User, Organization, Project, Inventory, CredentialType, Credential, Host, JobTemplate
 

@@ -23,10 +23,8 @@ from django.contrib.auth import SESSION_KEY
 from django.contrib.sessions.models import Session
 from django.utils import timezone
 
-# Django-CRUM
-from crum import get_current_request, get_current_user
-from crum.signals import current_user_getter
-
+# AWX middleware for thread-local request/user
+from awx.main.middleware import get_current_request, get_current_user, current_user_getter
 
 # AWX
 from awx.main.models import (
