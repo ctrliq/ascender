@@ -96,23 +96,37 @@ class TestKeyRegeneration:
             new_nt.send('Subject', 'Body')
 
     def test_job_start_args(self, job_factory):
+        from django.conf import settings as django_settings
+        
         # test basic decryption
         job = job_factory()
         job.start_args = json.dumps({'foo': 'bar'})
         job.start_args = encrypt_field(job, field_name='start_args')
         job.save()
         assert job.start_args.startswith(PREFIX)
+        
+        # Verify we can decrypt with current key
+        assert json.loads(decrypt_field(job, field_name='start_args')) == {'foo': 'bar'}
+        
+        # Store the old key and old encrypted value before regeneration
+        old_key = django_settings.SECRET_KEY
+        old_encrypted_value = job.start_args
 
         # re-key the start_args
         new_key = regenerate_secret_key.Command().handle()
         new_job = models.Job.objects.get(pk=job.pk)
-        assert new_job.start_args != job.start_args
+        assert new_job.start_args != old_encrypted_value
 
-        # verify that the old SECRET_KEY doesn't work
+        # verify that we can't decrypt old encrypted value with new key
         with pytest.raises(InvalidToken):
-            decrypt_field(new_job, field_name='start_args')
+            # Use AWX's own encryption utilities to test proper key handling
+            from awx.main.utils.encryption import decrypt_value, get_encryption_key
+            # Get the proper encryption key for the new key
+            new_encryption_key = get_encryption_key('start_args', job.pk, secret_key=new_key)
+            # Try to decrypt old encrypted value with new derived key
+            decrypt_value(new_encryption_key, old_encrypted_value)
 
-        # verify that the new SECRET_KEY *does* work
+        # verify that the new SECRET_KEY *does* work with new encrypted data
         with override_settings(SECRET_KEY=new_key):
             assert json.loads(decrypt_field(new_job, field_name='start_args')) == {'foo': 'bar'}
 

@@ -1,8 +1,24 @@
+import json
+
+
 def survey_password_variables(survey_spec):
     vars = []
-    # Get variables that are type password
-    if 'spec' not in survey_spec:
+    # Handle cases where survey_spec might be a string, empty, or None
+    if not survey_spec:
         return vars
+    
+    # If survey_spec is a string, try to parse it as JSON
+    if isinstance(survey_spec, str):
+        try:
+            survey_spec = json.loads(survey_spec)
+        except (json.JSONDecodeError, ValueError):
+            return vars
+    
+    # Ensure survey_spec is a dict and has 'spec' key
+    if not isinstance(survey_spec, dict) or 'spec' not in survey_spec:
+        return vars
+    
+    # Get variables that are type password
     for survey_element in survey_spec['spec']:
         if 'type' in survey_element and survey_element['type'] == 'password':
             vars.append(survey_element['variable'])

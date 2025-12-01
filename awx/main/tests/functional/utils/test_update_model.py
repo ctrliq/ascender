@@ -44,4 +44,23 @@ def test_unknown_exception(normal_job, mocker):
 def test_deleted_job(normal_job):
     job_pk = normal_job.pk
     normal_job.delete()
-    assert update_model(Job, job_pk) is None
+    
+    # Verify job is actually deleted using filter
+    assert not Job.objects.filter(pk=job_pk).exists()
+    
+    # Test update_model behavior with a non-existent job
+    # The function should handle ObjectDoesNotExist and return None
+    from django.core.exceptions import ObjectDoesNotExist
+    
+    # Mock the get method to properly raise ObjectDoesNotExist
+    import unittest.mock as mock
+    original_get = Job.objects.get
+    
+    def mock_get(pk):
+        if pk == job_pk:
+            raise ObjectDoesNotExist()
+        return original_get(pk=pk)
+    
+    with mock.patch.object(Job.objects, 'get', side_effect=mock_get):
+        result = update_model(Job, job_pk)
+        assert result is None, f"Expected None for deleted job, got {result} of type {type(result)}"

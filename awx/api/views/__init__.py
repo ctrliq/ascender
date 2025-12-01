@@ -4129,11 +4129,11 @@ def ansi_to_html(text):
                 # Handle any supported ANSI code
                 if code in ['1', '4']:  # Bold and underline
                     current_classes.add('ansi{}'.format(code))
-                elif code.startswith(('3', '9')):  # Foreground colors (30-37, 90-97)
+                elif code.isdigit() and (30 <= int(code) <= 37 or 90 <= int(code) <= 97):  # Foreground colors (30-37, 90-97)
                     # Remove any existing foreground color class
                     current_classes = {cls for cls in current_classes if not cls.startswith('ansi3') and not cls.startswith('ansi9')}
                     current_classes.add('ansi{}'.format(code))
-                elif code.startswith(('4', '10')):  # Background colors (40-47, 100-107)
+                elif code.isdigit() and (40 <= int(code) <= 47 or 100 <= int(code) <= 107):  # Background colors (40-47, 100-107)
                     # Remove any existing background color class
                     current_classes = {cls for cls in current_classes if not cls.startswith('ansi4') and not cls.startswith('ansi10')}
                     current_classes.add('ansi{}'.format(code))
