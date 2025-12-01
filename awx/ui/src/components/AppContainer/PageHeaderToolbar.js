@@ -19,7 +19,7 @@ import {
   PageHeaderToolsItem,
   Tooltip,
 } from '@patternfly/react-core';
-import { QuestionCircleIcon, UserIcon } from '@patternfly/react-icons';
+import { LucideIconCircleHelp, LucideIconUser } from '@ctrliq/quantic-react';
 import { WorkflowApprovalsAPI } from 'api';
 import useRequest from 'hooks/useRequest';
 /* import getDocsBaseUrl from 'util/getDocsBaseUrl'; */
@@ -31,6 +31,11 @@ const PendingWorkflowApprovals = styled.div`
   align-items: center;
   padding: 10px;
   margin-right: 10px;
+`;
+
+const UserName = styled.span`
+  margin-left: 10px;
+  font-size: var(--quantic-font-size-body-sm);
 `;
 
 function PageHeaderToolbar({
@@ -77,10 +82,7 @@ function PageHeaderToolbar({
   return (
     <PageHeaderTools>
       <PageHeaderToolsGroup>
-        <Tooltip
-          position="bottom"
-          content={t`Pending Workflow Approvals`}
-        >
+        <Tooltip position="bottom" content={t`Pending Workflow Approvals`}>
           <PageHeaderToolsItem>
             <Link to="/workflow_approvals?workflow_approvals.status=pending">
               <PendingWorkflowApprovals>
@@ -110,7 +112,10 @@ function PageHeaderToolbar({
                 aria-label={t`Info`}
                 ouiaId="toolbar-info-dropdown-toggle"
               >
-                <QuestionCircleIcon />
+                <LucideIconCircleHelp
+                  size={16}
+                  data-original-icon="QuestionCircleIcon"
+                />
               </DropdownToggle>
             }
             dropdownItems={[
@@ -150,12 +155,8 @@ function PageHeaderToolbar({
                 onToggle={setIsUserOpen}
                 ouiaId="toolbar-user-dropdown-toggle"
               >
-                <UserIcon />
-                {loggedInUser && (
-                  <span style={{ marginLeft: '10px' }}>
-                    {loggedInUser.username}
-                  </span>
-                )}
+                <LucideIconUser size={16} data-original-icon="UserIcon" />
+                {loggedInUser && <UserName>{loggedInUser.username}</UserName>}
               </DropdownToggle>
             }
             dropdownItems={[

@@ -9,10 +9,10 @@ import {
   Label,
 } from '@patternfly/react-core';
 import {
-  CaretLeftIcon,
-  CheckIcon,
-  ExclamationCircleIcon,
-} from '@patternfly/react-icons';
+  LucideIconChevronLeft,
+  LucideIconCheck,
+  LucideIconCircleAlert,
+} from '@ctrliq/quantic-react';
 import RoutedTabs from 'components/RoutedTabs';
 import { CardBody, CardActionsRow } from 'components/Card';
 import { DetailList, Detail } from 'components/DetailList';
@@ -31,7 +31,7 @@ function SubscriptionDetail() {
     {
       name: (
         <>
-          <CaretLeftIcon />
+          <LucideIconChevronLeft />
           {t`Back to Settings`}
         </>
       ),
@@ -65,7 +65,11 @@ function SubscriptionDetail() {
               value={
                 license_info.compliant ? (
                   <>
-                    <Label variant="outline" color="green" icon={<CheckIcon />}>
+                    <Label
+                      variant="outline"
+                      color="green"
+                      icon={<LucideIconCheck />}
+                    >
                       {t`Compliant`}
                     </Label>
                     <HelperText>
@@ -79,7 +83,7 @@ function SubscriptionDetail() {
                     <Label
                       variant="outline"
                       color="red"
-                      icon={<ExclamationCircleIcon />}
+                      icon={<LucideIconCircleAlert />}
                     >
                       {t`Out of compliance`}
                     </Label>

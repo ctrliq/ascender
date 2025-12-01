@@ -10,15 +10,15 @@ import {
   TextContent,
   TextVariants,
 } from '@patternfly/react-core';
+import { LucideIconNetwork } from '@ctrliq/quantic-react';
 
-import { TopologyIcon as PFTopologyIcon } from '@patternfly/react-icons';
 
 const EmptyState = styled(PFEmptyState)`
   --pf-c-empty-state--m-lg--MaxWidth: none;
   min-height: 250px;
 `;
 
-const TopologyIcon = styled(PFTopologyIcon)`
+const TopologyIcon = styled(LucideIconNetwork)`
   font-size: 3em;
   fill: #6a6e73;
 `;

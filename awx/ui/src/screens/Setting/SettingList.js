@@ -19,7 +19,7 @@ import useBrandName from 'hooks/useBrandName';
 
 const SplitLayout = styled(PageSection)`
   column-count: 1;
-  column-gap: 24px;
+  column-gap: var(--quantic-spacing-4xl);
   @media (min-width: 576px) {
     column-count: 2;
   }
@@ -36,11 +36,12 @@ const CardHeader = styled(_CardHeader)`
     align-items: flex-start;
     display: flex;
     flex-flow: column nowrap;
+    margin-bottom: var(--quantic-spacing-2);
   }
 `;
 const CardDescription = styled.div`
-  color: var(--pf-global--palette--black-600);
-  font-size: var(--pf-global--FontSize--xs);
+  color: var(--quantic-text-tertiary);
+  font-size: var(--pf-global--FontSize--sm);
 `;
 
 function SettingList() {

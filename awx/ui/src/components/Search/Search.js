@@ -16,7 +16,7 @@ import {
   ToolbarItem,
   ToolbarFilter,
 } from '@patternfly/react-core';
-import { SearchIcon } from '@patternfly/react-icons';
+import { LucideIconSearch as SearchIcon } from '@ctrliq/quantic-react';
 import styled from 'styled-components';
 import { parseQueryString } from 'util/qs';
 import { QSConfig, SearchColumns, SearchableKeys } from 'types';
@@ -252,17 +252,17 @@ function Search({
                   onKeyDown={handleTextKeyDown}
                   isDisabled={isDisabled}
                 />
-                <div css={!searchValue && `cursor:not-allowed`}>
-                  <Button
-                    ouiaId="search-submit-button"
-                    variant={ButtonVariant.control}
-                    isDisabled={!searchValue || isDisabled}
-                    aria-label={t`Search submit button`}
-                    onClick={handleSearch}
-                  >
-                    <SearchIcon />
-                  </Button>
-                </div>
+
+                <Button
+                  ouiaId="search-submit-button"
+                  variant={ButtonVariant.control}
+                  isDisabled={!searchValue || isDisabled}
+                  aria-label={t`Search submit button`}
+                  css={!searchValue && `cursor:not-allowed`}
+                  onClick={handleSearch}
+                >
+                  <SearchIcon data-original-icon="SearchIcon" size={16} />
+                </Button>
               </InputGroup>
             )}
         </ToolbarFilter>

@@ -13,8 +13,7 @@ export const FormColumnLayout = styled.div`
 
   ${(props) =>
     props.stacked &&
-    `border-bottom: 1px solid var(--pf-global--BorderColor--100);
-    padding: var(--pf-global--spacer--sm) 0 var(--pf-global--spacer--md) `}
+    `padding: var(--pf-global--spacer--lg) 0 var(--pf-global--spacer--md) `}
 `;
 
 export const FormFullWidthLayout = styled.div`
@@ -34,15 +33,17 @@ export const FormCheckboxLayout = styled.div`
   & > * {
     margin-bottom: 10px;
     margin-right: 30px;
+    align-items: center;
   }
 `;
 
 export const SubFormLayout = styled.div`
   grid-column: 1 / -1;
-  background-color: #f5f5f5;
+  background-color: var(--quantic-bg-secondary);
   margin-right: calc(var(--pf-c-card--child--PaddingRight) * -1);
   margin-left: calc(var(--pf-c-card--child--PaddingLeft) * -1);
-  padding: var(--pf-c-card--child--PaddingRight);
+  padding: var(--quantic-spacing-6);
+  border-radius: var(--quantic-radius-md);
 
   & > .pf-c-title {
     --pf-c-title--m-md--FontWeight: 700;

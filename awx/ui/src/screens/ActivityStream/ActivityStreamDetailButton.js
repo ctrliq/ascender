@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Button, Modal } from '@patternfly/react-core';
-import { SearchPlusIcon } from '@patternfly/react-icons';
+import { LucideIconZoomIn } from '@ctrliq/quantic-react';
 
 import { formatDateString } from 'util/dates';
 
@@ -27,7 +27,7 @@ function ActivityStreamDetailButton({ streamItem, user, description }) {
         component="button"
         onClick={() => setIsOpen(true)}
       >
-        <SearchPlusIcon />
+        <LucideIconZoomIn size="sm" data-original-icon="SearchPlusIcon" />
       </Button>
       <Modal
         variant="large"
@@ -46,10 +46,7 @@ function ActivityStreamDetailButton({ streamItem, user, description }) {
             label={t`Setting category`}
             value={setting && setting[0]?.category}
           />
-          <Detail
-            label={t`Setting name`}
-            value={setting && setting[0]?.name}
-          />
+          <Detail label={t`Setting name`} value={setting && setting[0]?.name} />
           <Detail fullWidth label={t`Action`} value={description} />
           {streamItem?.changes && (
             <VariablesDetail

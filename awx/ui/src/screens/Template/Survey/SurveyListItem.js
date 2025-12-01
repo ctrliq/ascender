@@ -5,7 +5,7 @@ import { Chip, Tooltip, Button } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
 
 import { Tr, Td } from '@patternfly/react-table';
-import { PencilAltIcon } from '@patternfly/react-icons';
+import { LucideIconPencil as PencilAltIcon } from '@ctrliq/quantic-react';
 import styled from 'styled-components';
 import ChipGroup from 'components/ChipGroup';
 import { ActionItem, ActionsTd } from 'components/PaginatedTable';
@@ -99,7 +99,7 @@ function SurveyListItem({ canEdit, question, isChecked, onSelect, rowIndex }) {
                 question.variable
               )}`}
             >
-              <PencilAltIcon />
+              <PencilAltIcon size={16} data-original-icon="PencilAltIcon" />
             </Button>
           </Tooltip>
         </ActionItem>

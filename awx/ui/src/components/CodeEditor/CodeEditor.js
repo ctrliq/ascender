@@ -6,7 +6,7 @@ import 'ace-builds/src-noconflict/mode-json';
 import 'ace-builds/src-noconflict/mode-javascript';
 import 'ace-builds/src-noconflict/mode-yaml';
 import 'ace-builds/src-noconflict/mode-django';
-import 'ace-builds/src-noconflict/theme-github';
+import 'ace-builds/src-noconflict/theme-monokai';
 
 import { useLingui } from '@lingui/react/macro';
 
@@ -139,7 +139,7 @@ function CodeEditor({
         <AceEditor
           mode={aceModes[mode] || 'text'}
           className={`pf-c-form-control ${className}`}
-          theme="github"
+          theme="monokai"
           onChange={debounce(onChange, 250)}
           value={value}
           onFocus={onFocus}

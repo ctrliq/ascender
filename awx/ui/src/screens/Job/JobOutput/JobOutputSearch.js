@@ -9,7 +9,7 @@ import {
   Tooltip,
   Button,
 } from '@patternfly/react-core';
-import { SearchIcon } from '@patternfly/react-icons';
+import { LucideIconSearch as SearchIcon } from '@ctrliq/quantic-react';
 import Search from 'components/Search';
 import {
   parseQueryString,
@@ -146,12 +146,13 @@ function JobOutputSearch({
       ouiaId="job-output-toolbar"
     >
       <SearchToolbarContent>
-        <ToolbarToggleGroup toggleIcon={<SearchIcon />} breakpoint="lg">
+        <ToolbarToggleGroup
+          toggleIcon={<SearchIcon data-original-icon="SearchIcon" size={16} />}
+          breakpoint="lg"
+        >
           <ToolbarItem variant="search-filter">
             {isDisabled ? (
-              <Tooltip
-                content={t`Search is disabled while the job is running`}
-              >
+              <Tooltip content={t`Search is disabled while the job is running`}>
                 <Search
                   qsConfig={qsConfig}
                   columns={columns}

@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Card, PageSection } from '@patternfly/react-core';
-import { CaretLeftIcon } from '@patternfly/react-icons';
+import { LucideIconChevronLeft } from '@ctrliq/quantic-react';
 import {
   Link,
   Switch,
@@ -72,7 +72,7 @@ function NotificationTemplate({ setBreadcrumb }) {
     {
       name: (
         <>
-          <CaretLeftIcon />
+          <LucideIconChevronLeft />
           {t`Back to Notifications`}
         </>
       ),

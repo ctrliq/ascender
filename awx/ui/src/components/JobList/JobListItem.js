@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';
 import { Button, Chip } from '@patternfly/react-core';
 import { Tr, Td, ExpandableRowContent } from '@patternfly/react-table';
-import { RocketIcon } from '@patternfly/react-icons';
+import { LucideIconRocket } from '@ctrliq/quantic-react';
 import styled from 'styled-components';
 import { formatDateString } from 'util/dates';
 import { isJobRunning } from 'util/jobs';
@@ -154,7 +154,7 @@ function JobListItem({
                     aria-label={t`Relaunch`}
                     isDisabled={isLaunching}
                   >
-                    <RocketIcon />
+                    <LucideIconRocket size="xs" data-original-icon="RocketIcon" />
                   </Button>
                 )}
               </LaunchButton>

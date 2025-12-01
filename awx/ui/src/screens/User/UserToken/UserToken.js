@@ -8,7 +8,7 @@ import {
   useLocation,
   useParams,
 } from 'react-router-dom';
-import { CaretLeftIcon } from '@patternfly/react-icons';
+import { LucideIconChevronLeft } from '@ctrliq/quantic-react';
 import { Card, PageSection } from '@patternfly/react-core';
 import RoutedTabs from 'components/RoutedTabs';
 import ContentError from 'components/ContentError';
@@ -43,7 +43,7 @@ function UserToken({ setBreadcrumb, user }) {
     {
       name: (
         <>
-          <CaretLeftIcon />
+          <LucideIconChevronLeft />
           {t`Back to Tokens`}
         </>
       ),
@@ -71,9 +71,7 @@ function UserToken({ setBreadcrumb, user }) {
             {error.response.status === 404 && (
               <span>
                 {t`Token not found.`}{' '}
-                <Link to="/users/:id/tokens">
-                  {t`View all tokens.`}
-                </Link>
+                <Link to="/users/:id/tokens">{t`View all tokens.`}</Link>
               </span>
             )}
           </ContentError>
@@ -99,11 +97,7 @@ function UserToken({ setBreadcrumb, user }) {
         <Route key="not-found" path="*">
           {!isLoading && (
             <ContentError isNotFound>
-              {id && (
-                <Link to={`/users/${id}/tokens`}>
-                  {t`View Tokens`}
-                </Link>
-              )}
+              {id && <Link to={`/users/${id}/tokens`}>{t`View Tokens`}</Link>}
             </ContentError>
           )}
         </Route>

@@ -11,7 +11,7 @@ import {
   InputGroup,
   Tooltip,
 } from '@patternfly/react-core';
-import { KeyIcon } from '@patternfly/react-icons';
+import { LucideIconKey as KeyIcon } from '@ctrliq/quantic-react';
 import styles from '@patternfly/react-styles/css/components/Form/form';
 import { css } from '@patternfly/react-styles';
 import FieldWithPrompt from 'components/FieldWithPrompt';
@@ -72,7 +72,7 @@ function CredentialPluginInput(props) {
               onClick={() => setShowPluginWizard(true)}
               isDisabled={isDisabled || disableFieldAndButtons}
             >
-              <KeyIcon />
+              <KeyIcon size={16} data-original-icon="KeyIcon" />
             </Button>
           </Tooltip>
         </InputGroup>

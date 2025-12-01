@@ -11,7 +11,9 @@ const DetailList = ({ children, stacked, ...props }) => (
 export default styled(DetailList)`
   display: grid;
   align-items: start;
-  ${(props) => (props.compact ? `column-gap: 20px;` : `grid-gap: 20px;`)}
+  font-size: var(--quantic-font-size-body-sm);
+  gap: ${(props) =>
+    props.compact ? `var(--quantic-spacing-4)` : `var(--quantic-spacing-8)`};
   ${(props) =>
     props.stacked
       ? `
@@ -19,7 +21,7 @@ export default styled(DetailList)`
   `
       : `
     --column-count: 1;
-    grid-template-columns: repeat(var(--column-count), auto minmax(10em, 1fr));
+    grid-template-columns: repeat(var(--column-count), 1fr);
 
     @media (min-width: 920px) {
       --column-count: 2;
@@ -31,6 +33,6 @@ export default styled(DetailList)`
   `}
 
   & + & {
-    margin-top: 20px;
+    margin-top: var(--quantic-spacing-6);
   }
 `;

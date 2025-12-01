@@ -10,7 +10,7 @@ import {
   Button,
   Modal,
 } from '@patternfly/react-core';
-import { ExpandArrowsAltIcon } from '@patternfly/react-icons';
+import { LucideIconExpand } from '@ctrliq/quantic-react';
 import { yamlToJson, jsonToYaml, isJsonObject, isJsonString } from 'util/yaml';
 import { DetailName, DetailValue } from '../DetailList';
 import MultiButtonToggle from '../MultiButtonToggle';
@@ -216,7 +216,7 @@ function ModeToggle({
             onClick={onExpand}
             ouiaId={`${dataCy}-expand`}
           >
-            <ExpandArrowsAltIcon />
+            <LucideIconExpand size="xs" data-original-icon="ExpandArrowsAltIcon" />
           </Button>
         </SplitItem>
       )}

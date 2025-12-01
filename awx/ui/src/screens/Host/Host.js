@@ -10,7 +10,7 @@ import {
   useRouteMatch,
   useLocation,
 } from 'react-router-dom';
-import { CaretLeftIcon } from '@patternfly/react-icons';
+import { LucideIconChevronLeft } from '@ctrliq/quantic-react';
 import { Card, PageSection } from '@patternfly/react-core';
 import RoutedTabs from 'components/RoutedTabs';
 import ContentError from 'components/ContentError';
@@ -48,7 +48,7 @@ function Host({ setBreadcrumb }) {
     {
       name: (
         <>
-          <CaretLeftIcon />
+          <LucideIconChevronLeft />
           {t`Back to Hosts`}
         </>
       ),
@@ -136,9 +136,7 @@ function Host({ setBreadcrumb }) {
           ]}
           <Route key="not-found" path="*">
             <ContentError isNotFound>
-              <Link to={`${match.url}/details`}>
-                {t`View Host Details`}
-              </Link>
+              <Link to={`${match.url}/details`}>{t`View Host Details`}</Link>
             </ContentError>
           </Route>
         </Switch>

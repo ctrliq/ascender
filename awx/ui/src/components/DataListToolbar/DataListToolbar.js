@@ -16,10 +16,10 @@ import {
   KebabToggle,
 } from '@patternfly/react-core';
 import {
-  AngleDownIcon,
-  AngleRightIcon,
-  SearchIcon,
-} from '@patternfly/react-icons';
+  LucideIconChevronDown,
+  LucideIconChevronRight,
+  LucideIconSearch as SearchIcon,
+} from '@ctrliq/quantic-react';
 import { SearchColumns, SortColumns, QSConfig, SearchableKeys } from 'types';
 import { KebabifiedProvider } from 'contexts/Kebabified';
 import ExpandCollapse from '../ExpandCollapse';
@@ -113,9 +113,17 @@ function DataListToolbar({
                 variant="plain"
               >
                 {isAllExpanded ? (
-                  <AngleDownIcon aria-label={t`Is expanded`} />
+                  <LucideIconChevronDown
+                    aria-label={t`Is expanded`}
+                    data-original-icon="AngleDownIcon"
+                    size={16}
+                  />
                 ) : (
-                  <AngleRightIcon aria-label={t`Is not expanded`} />
+                  <LucideIconChevronRight
+                    aria-label={t`Is not expanded`}
+                    data-original-icon="AngleRightIcon"
+                    size={16}
+                  />
                 )}
               </Button>
             </ToolbarItem>
@@ -136,7 +144,10 @@ function DataListToolbar({
             </ToolbarItem>
           </ToolbarGroup>
         )}
-        <ToolbarToggleGroup toggleIcon={<SearchIcon />} breakpoint="lg">
+        <ToolbarToggleGroup
+          toggleIcon={<SearchIcon data-original-icon="SearchIcon" size={16} />}
+          breakpoint="lg"
+        >
           <ToolbarItem>
             <Search
               qsConfig={qsConfig}

@@ -18,19 +18,19 @@ export const DEFAULT_FONT_SIZE = '12px';
 export const LABEL_TEXT_MAX_LENGTH = 15;
 export const MARGIN = 15;
 export const NODE_STATE_COLOR_KEY = {
-  ready: '#3E8635',
-  'provision-fail': '#C9190B',
-  'deprovision-fail': '#C9190B',
-  unavailable: '#C9190B',
-  installed: '#0066CC',
-  provisioning: '#666',
-  deprovisioning: '#666',
+  ready: 'var(--quantic-color-brand-500)',
+  'provision-fail': 'var(--quantic-color-error-700)',
+  'deprovision-fail': 'var(--quantic-color-error-700)',
+  unavailable: 'var(--quantic-color-error-700)',
+  installed: 'var(--quantic-color-gray-blue-500)',
+  provisioning: 'var(--quantic-bg-tertiary)',
+  deprovisioning: 'var(--quantic-bg-tertiary)',
 };
 
 export const LINK_STATE_COLOR_KEY = {
-  established: '#6A6E73',
-  adding: '#3E8635',
-  removing: '#C9190B',
+  established: 'var(--quantic-bg-tertiary)',
+  adding: 'var(--quantic-color-brand-500)',
+  removing: 'var(--quantic-color-error-700)',
 };
 
 export const NODE_TYPE_SYMBOL_KEY = {

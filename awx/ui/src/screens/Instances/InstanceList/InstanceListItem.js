@@ -11,7 +11,7 @@ import {
   Slider,
   Tooltip,
 } from '@patternfly/react-core';
-import { OutlinedClockIcon } from '@patternfly/react-icons';
+import { LucideIconAlarmClock } from '@ctrliq/quantic-react';
 import { Tr, Td, ExpandableRowContent } from '@patternfly/react-table';
 import getDocsBaseUrl from 'util/getDocsBaseUrl';
 import { formatDateString } from 'util/dates';
@@ -36,6 +36,7 @@ const SliderHolder = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  font-size: var(--quantic-font-size-body-xs);
 `;
 
 const SliderForks = styled.div`
@@ -108,7 +109,7 @@ function InstanceListItem({
       {instance.health_check_pending ? (
         <>
           {' '}
-          <OutlinedClockIcon />
+          <LucideIconAlarmClock data-original-icon="OutlinedClockIcon" />
         </>
       ) : null}
     </>
@@ -176,7 +177,9 @@ function InstanceListItem({
                 </div>
                 <SliderForks data-cy="slider-forks">
                   <div data-cy="number-forks">
-                    {i18n._('{count, plural, one {# fork} other {# forks}}', { count: forks })}
+                    {i18n._('{count, plural, one {# fork} other {# forks}}', {
+                      count: forks,
+                    })}
                   </div>
                   <Slider
                     areCustomStepsContinuous
@@ -239,11 +242,7 @@ function InstanceListItem({
                 <Detail
                   data-cy="policy-type"
                   label={t`Policy Type`}
-                  value={
-                    instance.managed_by_policy
-                      ? t`Auto`
-                      : t`Manual`
-                  }
+                  value={instance.managed_by_policy ? t`Auto` : t`Manual`}
                 />
                 <Detail
                   data-cy="last-health-check"

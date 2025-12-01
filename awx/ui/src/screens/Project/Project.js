@@ -8,7 +8,7 @@ import {
   useParams,
   useLocation,
 } from 'react-router-dom';
-import { CaretLeftIcon } from '@patternfly/react-icons';
+import { LucideIconChevronLeft } from '@ctrliq/quantic-react';
 import { Card, PageSection } from '@patternfly/react-core';
 import { useConfig } from 'contexts/Config';
 import useRequest from 'hooks/useRequest';
@@ -93,7 +93,7 @@ function Project({ setBreadcrumb }) {
     {
       name: (
         <>
-          <CaretLeftIcon />
+          <LucideIconChevronLeft />
           {t`Back to Projects`}
         </>
       ),

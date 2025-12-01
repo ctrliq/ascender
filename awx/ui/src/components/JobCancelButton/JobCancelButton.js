@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { MinusCircleIcon } from '@patternfly/react-icons';
+import { LucideIconCircleMinus } from '@ctrliq/quantic-react';
 import { Button, Tooltip } from '@patternfly/react-core';
 import { getJobModel } from 'util/jobs';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
@@ -56,7 +56,10 @@ function JobCancelButton({
               variant="plain"
               style={style}
             >
-              <MinusCircleIcon />
+              <LucideIconCircleMinus
+                size="xs"
+                data-original-icon="MinusCircleIcon"
+              />
             </Button>
           ) : (
             <Button
@@ -102,8 +105,7 @@ function JobCancelButton({
             </Button>,
           ]}
         >
-          {cancelationMessage ??
-            t`Are you sure you want to cancel this job?`}
+          {cancelationMessage ?? t`Are you sure you want to cancel this job?`}
         </AlertModal>
       )}
       {error && !isAlreadyCancelled && (

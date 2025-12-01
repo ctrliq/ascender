@@ -9,7 +9,7 @@ import {
   useLocation,
   useRouteMatch,
 } from 'react-router-dom';
-import { CaretLeftIcon } from '@patternfly/react-icons';
+import { LucideIconChevronLeft } from '@ctrliq/quantic-react';
 import { Card, PageSection } from '@patternfly/react-core';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
@@ -55,7 +55,7 @@ function Inventory({ setBreadcrumb }) {
     {
       name: (
         <>
-          <CaretLeftIcon />
+          <LucideIconChevronLeft />
           {t`Back to Inventories`}
         </>
       ),
@@ -98,9 +98,7 @@ function Inventory({ setBreadcrumb }) {
             {contentError.response?.status === 404 && (
               <span>
                 {t`Inventory not found.`}{' '}
-                <Link to="/inventories">
-                  {t`View all Inventories.`}
-                </Link>
+                <Link to="/inventories">{t`View all Inventories.`}</Link>
               </span>
             )}
           </ContentError>

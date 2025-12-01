@@ -3,7 +3,11 @@ import styled from 'styled-components';
 
 import { useLingui } from '@lingui/react/macro';
 import { bool, func, shape } from 'prop-types';
-import { PencilAltIcon, PlusIcon, TrashAltIcon } from '@patternfly/react-icons';
+import {
+  LucideIconPencil as PencilAltIcon,
+  LucideIconPlus as PlusIcon,
+  LucideIconTrash as TrashAltIcon,
+} from '@ctrliq/quantic-react';
 import {
   WorkflowDispatchContext,
   WorkflowStateContext,
@@ -51,7 +55,7 @@ function VisualizerLink({ link, updateLinkHelp, readOnly, updateHelpText }) {
       }
       onMouseLeave={() => updateHelpText(null)}
     >
-      <PlusIcon />
+      <PlusIcon size={16} data-original-icon="PlusIcon" />
     </WorkflowActionTooltipItem>
   );
 
@@ -71,7 +75,7 @@ function VisualizerLink({ link, updateLinkHelp, readOnly, updateHelpText }) {
             onMouseEnter={() => updateHelpText(t`Edit this link`)}
             onMouseLeave={() => updateHelpText(null)}
           >
-            <PencilAltIcon />
+            <PencilAltIcon size={16} data-original-icon="PencilAltIcon" />
           </WorkflowActionTooltipItem>,
           <WorkflowActionTooltipItem
             id="link-delete"
@@ -84,7 +88,7 @@ function VisualizerLink({ link, updateLinkHelp, readOnly, updateHelpText }) {
             onMouseEnter={() => updateHelpText(t`Delete this link`)}
             onMouseLeave={() => updateHelpText(null)}
           >
-            <TrashAltIcon />
+            <TrashAltIcon size={16} data-original-icon="TrashAltIcon" />
           </WorkflowActionTooltipItem>,
         ];
 

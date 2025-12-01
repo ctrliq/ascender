@@ -7,18 +7,15 @@ import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router-dom';
 import { Button, Tooltip } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
-import {
-  PencilAltIcon,
-  ExclamationTriangleIcon as PFExclamationTriangleIcon,
-} from '@patternfly/react-icons';
 import styled from 'styled-components';
 import { Schedule } from 'types';
 import { formatDateString } from 'util/dates';
 import { DetailList, Detail } from '../../DetailList';
 import { ActionsTd, ActionItem, TdBreakWord } from '../../PaginatedTable';
 import { ScheduleToggle } from '..';
+import { LucideIconPencil, LucideIconTriangleAlert } from '@ctrliq/quantic-react';
 
-const ExclamationTriangleIcon = styled(PFExclamationTriangleIcon)`
+const ExclamationTriangleIcon = styled(LucideIconTriangleAlert)`
   color: #c9190b;
   margin-left: 20px;
 `;
@@ -97,7 +94,7 @@ function ScheduleListItem({
               )}
               position="right"
             >
-              <ExclamationTriangleIcon />
+              <ExclamationTriangleIcon data-original-icon="ExclamationTriangleIcon" />
             </Tooltip>
           </span>
         )}
@@ -141,7 +138,7 @@ function ScheduleListItem({
             component={Link}
             to={`${scheduleBaseUrl}/edit`}
           >
-            <PencilAltIcon />
+            <LucideIconPencil data-original-icon="PencilAltIcon" size="xs" />
           </Button>
         </ActionItem>
       </ActionsTd>

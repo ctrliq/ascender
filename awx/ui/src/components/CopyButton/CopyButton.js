@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import PropTypes from 'prop-types';
 import { Button } from '@patternfly/react-core';
-import { CopyIcon } from '@patternfly/react-icons';
+import { LucideIconCopy } from '@ctrliq/quantic-react';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import AlertModal from '../AlertModal';
 import ErrorDetail from '../ErrorDetail';
@@ -42,7 +42,7 @@ function CopyButton({
         variant="plain"
         onClick={copyItemToAPI}
       >
-        <CopyIcon />
+        <LucideIconCopy size="xs" data-original-icon="CopyIcon" />
       </Button>
       {error && (
         <AlertModal

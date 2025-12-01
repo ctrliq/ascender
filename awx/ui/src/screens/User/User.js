@@ -9,7 +9,7 @@ import {
   useRouteMatch,
   useLocation,
 } from 'react-router-dom';
-import { CaretLeftIcon } from '@patternfly/react-icons';
+import { LucideIconChevronLeft } from '@ctrliq/quantic-react';
 import { Card, PageSection } from '@patternfly/react-core';
 import useRequest from 'hooks/useRequest';
 import { UsersAPI } from 'api';
@@ -54,7 +54,7 @@ function User({ setBreadcrumb, me }) {
     {
       name: (
         <>
-          <CaretLeftIcon />
+          <LucideIconChevronLeft />
           {t`Back to Users`}
         </>
       ),

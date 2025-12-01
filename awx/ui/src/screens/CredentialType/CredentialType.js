@@ -10,7 +10,7 @@ import {
 
 import { useLingui } from '@lingui/react/macro';
 import { Card, PageSection } from '@patternfly/react-core';
-import { CaretLeftIcon } from '@patternfly/react-icons';
+import { LucideIconChevronLeft } from '@ctrliq/quantic-react';
 
 import useRequest from 'hooks/useRequest';
 import { CredentialTypesAPI } from 'api';
@@ -52,7 +52,7 @@ function CredentialType({ setBreadcrumb }) {
     {
       name: (
         <>
-          <CaretLeftIcon />
+          <LucideIconChevronLeft />
           {t`Back to credential types`}
         </>
       ),

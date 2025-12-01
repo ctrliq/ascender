@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
-import { CaretLeftIcon } from '@patternfly/react-icons';
+import { LucideIconChevronLeft } from '@ctrliq/quantic-react';
 import { Card, PageSection } from '@patternfly/react-core';
 import {
   Switch,
@@ -106,7 +106,7 @@ function WorkflowJobTemplate({ setBreadcrumb }) {
     {
       name: (
         <>
-          <CaretLeftIcon />
+          <LucideIconChevronLeft />
           {t`Back to Templates`}
         </>
       ),
@@ -142,9 +142,7 @@ function WorkflowJobTemplate({ setBreadcrumb }) {
       link: `${match.url}/jobs`,
     },
     {
-      name: canAddAndEditSurvey
-        ? t`Survey`
-        : t`View Survey`,
+      name: canAddAndEditSurvey ? t`Survey` : t`View Survey`,
       link: `${match.url}/survey`,
     }
   );

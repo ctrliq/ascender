@@ -3,14 +3,14 @@ import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 
 import { Tooltip } from '@patternfly/react-core';
-import { ExclamationCircleIcon as PFExclamationCircleIcon } from '@patternfly/react-icons';
+import { LucideIconCircleAlert } from '@ctrliq/quantic-react';
 
 const AlertText = styled.div`
   color: var(--pf-global--danger-color--200);
   font-weight: var(--pf-global--FontWeight--bold);
 `;
 
-const ExclamationCircleIcon = styled(PFExclamationCircleIcon)`
+const ExclamationCircleIcon = styled(LucideIconCircleAlert)`
   margin-left: 10px;
 `;
 

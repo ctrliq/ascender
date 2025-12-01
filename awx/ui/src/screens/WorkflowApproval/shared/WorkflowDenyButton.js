@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
-import { OutlinedThumbsDownIcon } from '@patternfly/react-icons';
+import { LucideIconThumbsDown as OutlinedThumbsDownIcon } from '@ctrliq/quantic-react';
 import { WorkflowApprovalsAPI } from 'api';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 
@@ -42,7 +42,7 @@ function WorkflowDenyButton({ isDetailView, workflowApproval, onHandleToast }) {
         variant={isDetailView ? 'secondary' : 'plain'}
         onClick={() => handleDeny()}
       >
-        {isDetailView ? t`Deny` : <OutlinedThumbsDownIcon />}
+        {isDetailView ? t`Deny` : <OutlinedThumbsDownIcon size={16} data-original-icon="OutlinedThumbsDownIcon" />}
       </Button>
       {denyError && (
         <AlertModal

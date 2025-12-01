@@ -17,8 +17,6 @@ import {
   Thead,
   Tr,
 } from '@patternfly/react-table';
-import { ExclamationTriangleIcon } from '@patternfly/react-icons';
-
 import { ConfigAPI } from 'api';
 import { formatDateString } from 'util/dates';
 import useRequest from 'hooks/useRequest';
@@ -26,6 +24,8 @@ import useSelected from 'hooks/useSelected';
 import ErrorDetail from 'components/ErrorDetail';
 import ContentEmpty from 'components/ContentEmpty';
 import ContentLoading from 'components/ContentLoading';
+import { LucideIconTriangleAlert } from '@ctrliq/quantic-react';
+
 
 function SubscriptionModal({
   subscriptionCreds = {},
@@ -111,7 +111,7 @@ function SubscriptionModal({
       {isLoading && <ContentLoading />}
       {!isLoading && error && (
         <EmptyState variant="full">
-          <EmptyStateIcon icon={ExclamationTriangleIcon} />
+          <EmptyStateIcon icon={LucideIconTriangleAlert} />
           <Title size="lg" headingLevel="h3">
             <Trans>No subscriptions found</Trans>
           </Title>
