@@ -56,8 +56,11 @@ credential_plugins = {}
 for entry_point in entry_points(group='awx.credential_plugins'):
     try:
         credential_plugins[entry_point.name] = entry_point.load()
+    except (ImportError, AttributeError, ModuleNotFoundError) as e:
+        logger.warning(f"Failed to load credential plugin {entry_point.name}: {e}")
+        # Continue without this plugin
     except Exception as e:
-        logger.debug(f"Failed to load credential plugin {entry_point.name}: {e}")
+        logger.error(f"Unexpected error loading credential plugin {entry_point.name}: {e}")
         # Continue without this plugin
 
 HIDDEN_PASSWORD = '**********'

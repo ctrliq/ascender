@@ -897,7 +897,7 @@ class WorkflowApproval(UnifiedJob, JobNotificationMixin):
         self.status = 'successful'
         user = get_current_user()
         # Ensure user is either None or a valid User instance
-        if not user or (user and not getattr(user, 'id', None)):
+        if not user or not getattr(user, 'id', None):
             user = None
         self.approved_or_denied_by = user
         self.save()
@@ -910,7 +910,7 @@ class WorkflowApproval(UnifiedJob, JobNotificationMixin):
         self.status = 'failed'
         user = get_current_user()
         # Ensure user is either None or a valid User instance
-        if not user or (user and not getattr(user, 'id', None)):
+        if not user or not getattr(user, 'id', None):
             user = None
         self.approved_or_denied_by = user
         self.save()

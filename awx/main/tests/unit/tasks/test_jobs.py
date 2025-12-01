@@ -157,7 +157,7 @@ def test_invalid_host_facts(mock_facts_settings, finish_fact_cache, private_data
             failures.append(host.name)
 
     mock_facts_settings.SOME_SETTING = True
-    finish_fact_cache(mock_inventory.hosts, '/tmp', None, {})
+    finish_fact_cache(mock_inventory.hosts, private_data_dir, now(), {})
 
     with pytest.raises(pytest.fail.Exception):
         if failures:

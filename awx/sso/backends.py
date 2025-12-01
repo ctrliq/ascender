@@ -230,7 +230,15 @@ class TACACSPlusBackend(object):
                 django_settings.TACACSPLUS_SECRET,
                 timeout=django_settings.TACACSPLUS_SESSION_TIMEOUT,
             )
-            auth_kwargs = {'authen_type': tacacs_plus.TAC_PLUS_AUTHEN_TYPES[django_settings.TACACSPLUS_AUTH_PROTOCOL]}
+            
+            # Validate auth protocol before dictionary lookup
+            auth_protocol = django_settings.TACACSPLUS_AUTH_PROTOCOL
+            if auth_protocol not in tacacs_plus.TAC_PLUS_AUTHEN_TYPES:
+                logger.error("Invalid TACACSPLUS_AUTH_PROTOCOL: %s. Valid options: %s" % 
+                           (auth_protocol, list(tacacs_plus.TAC_PLUS_AUTHEN_TYPES.keys())))
+                return None
+                
+            auth_kwargs = {'authen_type': tacacs_plus.TAC_PLUS_AUTHEN_TYPES[auth_protocol]}
             if django_settings.TACACSPLUS_REM_ADDR:
                 client_ip = self._get_client_ip(request)
                 if client_ip:

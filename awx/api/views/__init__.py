@@ -4125,24 +4125,18 @@ def ansi_to_html(text):
                     result.append('</span>')
                     has_open_span = False
                 current_classes = set()
-            elif code in ['1', '4']:  # Bold and underline
-                current_classes.add('ansi{}'.format(code))
-            elif code in ['30', '31', '32', '33', '34', '35', '36', '37']:  # Foreground colors
-                # Remove any existing foreground color class
-                current_classes = {cls for cls in current_classes if not cls.startswith('ansi3')}
-                current_classes.add('ansi{}'.format(code))
-            elif code in ['40', '41', '42', '43', '44', '45', '46', '47']:  # Background colors
-                # Remove any existing background color class
-                current_classes = {cls for cls in current_classes if not cls.startswith('ansi4')}
-                current_classes.add('ansi{}'.format(code))
-            elif code in ['90', '91', '92', '93', '94', '95', '96', '97']:  # Bright foreground colors
-                # Remove any existing foreground color class
-                current_classes = {cls for cls in current_classes if not cls.startswith('ansi3') and not cls.startswith('ansi9')}
-                current_classes.add('ansi{}'.format(code))
-            elif code in ['100', '101', '102', '103', '104', '105', '106', '107']:  # Bright background colors
-                # Remove any existing background color class
-                current_classes = {cls for cls in current_classes if not cls.startswith('ansi4') and not cls.startswith('ansi10')}
-                current_classes.add('ansi{}'.format(code))
+            elif code in _ANSI_COLORS:
+                # Handle any supported ANSI code
+                if code in ['1', '4']:  # Bold and underline
+                    current_classes.add('ansi{}'.format(code))
+                elif code.startswith(('3', '9')):  # Foreground colors (30-37, 90-97)
+                    # Remove any existing foreground color class
+                    current_classes = {cls for cls in current_classes if not cls.startswith('ansi3') and not cls.startswith('ansi9')}
+                    current_classes.add('ansi{}'.format(code))
+                elif code.startswith(('4', '10')):  # Background colors (40-47, 100-107)
+                    # Remove any existing background color class
+                    current_classes = {cls for cls in current_classes if not cls.startswith('ansi4') and not cls.startswith('ansi10')}
+                    current_classes.add('ansi{}'.format(code))
         
         # After processing all codes, update the span
         if has_open_span:
