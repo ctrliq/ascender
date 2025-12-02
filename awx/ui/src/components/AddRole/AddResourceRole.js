@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';
+import { t } from '@lingui/core/macro';
 import { TeamsAPI, UsersAPI } from 'api';
 import useSelected from 'hooks/useSelected';
 import SelectableCard from '../SelectableCard';
@@ -18,7 +19,7 @@ const readTeams = async (queryParams) => TeamsAPI.read(queryParams);
 
 const readTeamsOptions = async () => TeamsAPI.readOptions();
 
-const userSearchColumns = (t) => [
+const userSearchColumns = [
   {
     name: t`Username`,
     key: 'username__icontains',
@@ -33,7 +34,7 @@ const userSearchColumns = (t) => [
     key: 'last_name__icontains',
   },
 ];
-const userSortColumns = (t) => [
+const userSortColumns = [
   {
     name: t`Username`,
     key: 'username',
@@ -47,7 +48,7 @@ const userSortColumns = (t) => [
     key: 'last_name',
   },
 ];
-const teamSearchColumns = (t) => [
+const teamSearchColumns = [
   {
     name: t`Name`,
     key: 'name__icontains',
@@ -63,7 +64,7 @@ const teamSearchColumns = (t) => [
   },
 ];
 
-const teamSortColumns = (t) => [
+const teamSortColumns = [
   {
     name: t`Name`,
     key: 'name',
@@ -204,8 +205,8 @@ function AddResourceRole({ onSave, onClose, roles, resource, onError }) {
         <>
           {resourceType === 'users' && (
             <SelectResourceStep
-              searchColumns={userSearchColumns(t)}
-              sortColumns={userSortColumns(t)}
+              searchColumns={userSearchColumns}
+              sortColumns={userSortColumns}
               displayKey="username"
               onRowClick={handleResourceSelect}
               fetchItems={readUsers}
@@ -217,8 +218,8 @@ function AddResourceRole({ onSave, onClose, roles, resource, onError }) {
           )}
           {resourceType === 'teams' && (
             <SelectResourceStep
-              searchColumns={teamSearchColumns(t)}
-              sortColumns={teamSortColumns(t)}
+              searchColumns={teamSearchColumns}
+              sortColumns={teamSortColumns}
               onRowClick={handleResourceSelect}
               fetchItems={readTeams}
               fetchOptions={readTeamsOptions}

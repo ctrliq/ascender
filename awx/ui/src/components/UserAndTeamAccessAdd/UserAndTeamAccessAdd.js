@@ -78,7 +78,7 @@ function UserAndTeamAccessAdd({
       name: t`Add resource type`,
       component: (
         <Grid>
-          {getResourceAccessConfig(t).map((resource) => (
+          {getResourceAccessConfig().map((resource) => (
             <SelectableCard
               key={resource.selectedResource}
               isSelected={
