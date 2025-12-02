@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { useParams, useRouteMatch } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
@@ -52,7 +52,7 @@ function UserAndTeamAccessAdd({
     clearSelected: clearRolesSelected,
   } = useSelected([]);
 
-  const resourceAccessConfig = [
+  const resourceAccessConfig = useMemo(() => [
     {
       selectedResource: 'jobTemplate',
       label: t`Job templates`,
@@ -254,7 +254,7 @@ function UserAndTeamAccessAdd({
       fetchOptions: () => OrganizationsAPI.readOptions(),
     },
     {
-      selectedResource: 'Instance Groups',
+      selectedResource: 'instanceGroup',
       label: t`Instance Groups`,
       searchColumns: [
         {
@@ -280,7 +280,7 @@ function UserAndTeamAccessAdd({
       fetchItems: (queryParams) => InstanceGroupsAPI.read(queryParams),
       fetchOptions: () => InstanceGroupsAPI.readOptions(),
     },
-  ];
+  ], [t]);
 
   const { request: handleWizardSave, error: saveError } = useRequest(
     useCallback(async () => {
