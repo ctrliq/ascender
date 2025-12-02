@@ -23,7 +23,6 @@ describe('<UIEdit />', () => {
       data: {
         CUSTOM_LOGIN_INFO: 'mock info',
         CUSTOM_LOGO: 'data:mock/jpeg;',
-        CUSTOM_LOGO_MENU: 'data:mock/jpeg;',
         PENDO_TRACKING_STATE: 'detailed',
       },
     });
@@ -99,9 +98,6 @@ describe('<UIEdit />', () => {
       wrapper
         .find('FormGroup[fieldId="CUSTOM_LOGO"] button[aria-label="Revert"]')
         .invoke('onClick')();
-      wrapper
-        .find('FormGroup[fieldId="CUSTOM_LOGO_MENU"] button[aria-label="Revert"]')
-        .invoke('onClick')();
     });
     wrapper.update();
     await act(async () => {
@@ -111,7 +107,6 @@ describe('<UIEdit />', () => {
     expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
       CUSTOM_LOGIN_INFO: 'new login info',
       CUSTOM_LOGO: '',
-      CUSTOM_LOGO_MENU: '',
       PENDO_TRACKING_STATE: 'detailed',
     });
   });

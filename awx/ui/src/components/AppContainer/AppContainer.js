@@ -56,12 +56,11 @@ function AppContainer({ navRouteConfig = [], children }) {
   const alt = brandName
     ? t`${brandName} logo`
     : t`brand logo`;
-  const customLogoMenu = config?.uiConfig?.CUSTOM_LOGO_MENU;
 
   const header = (
     <PageHeader
       showNavToggle
-      logo={<BrandLogo alt={alt} customLogoMenu={customLogoMenu} />}
+      logo={<BrandLogo alt={alt} />}
       logoProps={{ href: '/' }}
       headerTools={
         <PageHeaderToolbar
@@ -76,7 +75,7 @@ function AppContainer({ navRouteConfig = [], children }) {
 
   const simpleHeader = config.isLoading ? null : (
     <PageHeader
-      logo={<BrandLogo alt={alt} customLogoMenu={customLogoMenu} />}
+      logo={<BrandLogo alt={alt} />}
       headerTools={
         <PageHeaderTools>
           <PageHeaderToolsGroup>

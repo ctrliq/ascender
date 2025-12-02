@@ -20,7 +20,6 @@ describe('<UIDetail />', () => {
       data: {
         CUSTOM_LOGIN_INFO: 'mock info',
         CUSTOM_LOGO: 'data:image/png',
-        CUSTOM_LOGO_MENU: 'data:image/png',
         PENDO_TRACKING_STATE: 'off',
       },
     });

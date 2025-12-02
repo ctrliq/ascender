@@ -15,7 +15,6 @@ SettingsAPI.readCategory.mockResolvedValue({
   data: {
     CUSTOM_LOGIN_INFO: '',
     CUSTOM_LOGO: '',
-    CUSTOM_LOGO_MENU: '',
     PENDO_TRACKING_STATE: 'off',
   },
 });

@@ -106,7 +106,6 @@ function UIEdit() {
             PENDO_TRACKING_STATE: uiData?.PENDO_TRACKING_STATE?.value ?? 'off',
             CUSTOM_LOGIN_INFO: uiData?.CUSTOM_LOGIN_INFO?.value ?? '',
             CUSTOM_LOGO: uiData?.CUSTOM_LOGO?.value ?? '',
-            CUSTOM_LOGO_MENU: uiData?.CUSTOM_LOGO_MENU?.value ?? '',
           }}
           onSubmit={handleSubmit}
         >
@@ -125,11 +124,6 @@ function UIEdit() {
                 <FileUploadField
                   name="CUSTOM_LOGO"
                   config={uiData.CUSTOM_LOGO}
-                  type="dataURL"
-                />
-                <FileUploadField
-                  name="CUSTOM_LOGO_MENU"
-                  config={uiData.CUSTOM_LOGO_MENU}
                   type="dataURL"
                 />
                 {submitError && <FormSubmitError error={submitError} />}

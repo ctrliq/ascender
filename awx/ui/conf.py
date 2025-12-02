@@ -52,22 +52,6 @@ register(
 )
 
 register(
-    'CUSTOM_LOGO_MENU',
-    field_class=CustomLogoField,
-    allow_blank=True,
-    default='',
-    label=_('Custom Menu Logo'),
-    help_text=_(
-        'To set up a custom logo, provide a file that you create. For '
-        'the custom logo to look its best, use a .png file with a '
-        'transparent background. GIF, PNG and JPEG formats are supported.'
-    ),
-    placeholder='data:image/gif;base64,R0lGODlhAQABAIABAP///wAAACwAAAAAAQABAAACAkQBADs=',
-    category=_('UI'),
-    category_slug='ui',
-)
-
-register(
     'MAX_UI_JOB_EVENTS',
     field_class=fields.IntegerField,
     min_value=100,
