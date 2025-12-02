@@ -40,10 +40,10 @@ function UserAndTeamAccessAdd({
     exact: true,
   });
 
-  const { selected: resourcesSelected, handleSelect: handleResourceSelect } =
+  const { selected: resourcesSelected, handleSelect: handleResourceSelect, clearSelected: clearResourcesSelected } =
     useSelected([]);
 
-  const { selected: rolesSelected, handleSelect: handleRoleSelect } =
+  const { selected: rolesSelected, handleSelect: handleRoleSelect, clearSelected: clearRolesSelected } =
     useSelected([]);
 
   const resourceAccessConfig = [
@@ -325,7 +325,11 @@ function UserAndTeamAccessAdd({
               }
               label={resource.label}
               dataCy={`add-role-${resource.selectedResource}`}
-              onClick={() => setSelectedResourceType(resource)}
+              onClick={() => {
+                setSelectedResourceType(resource);
+                clearResourcesSelected();
+                clearRolesSelected();
+              }}
             />
           ))}
         </Grid>
