@@ -25,7 +25,6 @@ describe('<UIEdit />', () => {
         CUSTOM_LOGO: 'data:mock/jpeg;',
         CUSTOM_LOGO_MENU: 'data:mock/jpeg;',
         PENDO_TRACKING_STATE: 'detailed',
-        ASCENDER_DISABLE_GRADIENT: false,
       },
     });
   });
@@ -114,7 +113,6 @@ describe('<UIEdit />', () => {
       CUSTOM_LOGO: '',
       CUSTOM_LOGO_MENU: '',
       PENDO_TRACKING_STATE: 'detailed',
-      ASCENDER_DISABLE_GRADIENT: false,
     });
   });
 

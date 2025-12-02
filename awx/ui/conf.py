@@ -36,16 +36,6 @@ register(
 )
 
 register(
-    'ASCENDER_DISABLE_GRADIENT',
-    field_class=fields.BooleanField,
-    default=False,
-    label=_('Disable Menu Gradient'),
-    help_text=_('Disable loading the CSS file for custom UI appearance.'),
-    category=_('UI'),
-    category_slug='ui',
-)
-
-register(
     'CUSTOM_LOGO',
     field_class=CustomLogoField,
     allow_blank=True,
