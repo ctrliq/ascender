@@ -1,4 +1,3 @@
-import { t } from '@lingui/core/macro';
 import {
   JobTemplatesAPI,
   WorkflowJobTemplatesAPI,
@@ -9,7 +8,7 @@ import {
   InstanceGroupsAPI,
 } from 'api';
 
-export default function getResourceAccessConfig() {
+export default function getResourceAccessConfig(t) {
   return [
     {
       selectedResource: 'jobTemplate',

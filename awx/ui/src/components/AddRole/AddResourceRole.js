@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';
-import { t } from '@lingui/core/macro';
 import { TeamsAPI, UsersAPI } from 'api';
 import useSelected from 'hooks/useSelected';
 import SelectableCard from '../SelectableCard';
@@ -19,59 +18,62 @@ const readTeams = async (queryParams) => TeamsAPI.read(queryParams);
 
 const readTeamsOptions = async () => TeamsAPI.readOptions();
 
-const userSearchColumns = [
-  {
-    name: t`Username`,
-    key: 'username__icontains',
-    isDefault: true,
-  },
-  {
-    name: t`First Name`,
-    key: 'first_name__icontains',
-  },
-  {
-    name: t`Last Name`,
-    key: 'last_name__icontains',
-  },
-];
-const userSortColumns = [
-  {
-    name: t`Username`,
-    key: 'username',
-  },
-  {
-    name: t`First Name`,
-    key: 'first_name',
-  },
-  {
-    name: t`Last Name`,
-    key: 'last_name',
-  },
-];
-const teamSearchColumns = [
-  {
-    name: t`Name`,
-    key: 'name__icontains',
-    isDefault: true,
-  },
-  {
-    name: t`Created By (Username)`,
-    key: 'created_by__username',
-  },
-  {
-    name: t`Modified By (Username)`,
-    key: 'modified_by__username',
-  },
-];
-
-const teamSortColumns = [
-  {
-    name: t`Name`,
-    key: 'name',
-  },
-];
 function AddResourceRole({ onSave, onClose, roles, resource, onError }) {
   const { t } = useLingui();
+
+  const userSearchColumns = [
+    {
+      name: t`Username`,
+      key: 'username__icontains',
+      isDefault: true,
+    },
+    {
+      name: t`First Name`,
+      key: 'first_name__icontains',
+    },
+    {
+      name: t`Last Name`,
+      key: 'last_name__icontains',
+    },
+  ];
+
+  const userSortColumns = [
+    {
+      name: t`Username`,
+      key: 'username',
+    },
+    {
+      name: t`First Name`,
+      key: 'first_name',
+    },
+    {
+      name: t`Last Name`,
+      key: 'last_name',
+    },
+  ];
+
+  const teamSearchColumns = [
+    {
+      name: t`Name`,
+      key: 'name__icontains',
+      isDefault: true,
+    },
+    {
+      name: t`Created By (Username)`,
+      key: 'created_by__username',
+    },
+    {
+      name: t`Modified By (Username)`,
+      key: 'modified_by__username',
+    },
+  ];
+
+  const teamSortColumns = [
+    {
+      name: t`Name`,
+      key: 'name',
+    },
+  ];
   const history = useHistory();
 
   const {
