@@ -1636,13 +1636,13 @@ class terraform(PluginFileInjector):
 
 
 class ascender(PluginFileInjector):
-    plugin_name = 'tower'  # TODO: relying on routing for now, update after EEs pick up revised collection
+    plugin_name = 'controller'  # TODO: relying on routing for now, update after EEs pick up revised collection
     base_injector = 'template'
     namespace = 'awx'
     collection = 'awx'
     downstream_namespace = 'ansible'
     downstream_collection = 'controller'
-
+    use_fqcn = True
 
 # class insights(PluginFileInjector):
 #     plugin_name = 'insights'

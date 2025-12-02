@@ -745,6 +745,14 @@ CONTROLLER_EXCLUDE_EMPTY_GROUPS = True
 CONTROLLER_INSTANCE_ID_VAR = 'remote_tower_id'
 
 # ---------------------
+# ----- Ascender -----
+# ---------------------
+ASCENDER_ENABLED_VAR = 'remote_tower_enabled'
+ASCENDER_ENABLED_VALUE = 'true'
+ASCENDER_EXCLUDE_EMPTY_GROUPS = True
+ASCENDER_INSTANCE_ID_VAR = 'remote_tower_id'
+
+# ---------------------
 # ----- Foreman -----
 # ---------------------
 SATELLITE6_ENABLED_VAR = 'foreman_enabled,foreman.enabled'
