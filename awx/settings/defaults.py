@@ -737,12 +737,12 @@ RHV_EXCLUDE_EMPTY_GROUPS = True
 RHV_INSTANCE_ID_VAR = 'id'
 
 # ---------------------
-# ----- Controller     -----
+# ----- Ascender -----
 # ---------------------
-CONTROLLER_ENABLED_VAR = 'remote_tower_enabled'
-CONTROLLER_ENABLED_VALUE = 'true'
-CONTROLLER_EXCLUDE_EMPTY_GROUPS = True
-CONTROLLER_INSTANCE_ID_VAR = 'remote_tower_id'
+ASCENDER_ENABLED_VAR = 'remote_tower_enabled'
+ASCENDER_ENABLED_VALUE = 'true'
+ASCENDER_EXCLUDE_EMPTY_GROUPS = True
+ASCENDER_INSTANCE_ID_VAR = 'remote_tower_id'
 
 # ---------------------
 # ----- Foreman -----

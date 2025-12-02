@@ -52,30 +52,15 @@ function AppContainer({ navRouteConfig = [], children }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [config.analytics_status]);
 
-  // Dynamically load ascender.css based on ASCENDER_DISABLE_GRADIENT UI setting from config
-  useEffect(() => {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    if (
-      config &&
-      typeof config.uiConfig?.ASCENDER_DISABLE_GRADIENT !== 'undefined' &&
-      !config.uiConfig.ASCENDER_DISABLE_GRADIENT
-    ) {
-      link.href = '/static/css/ascender_gradient.css';
-    }
-    document.head.appendChild(link);
-  }, [config]);
-
   const brandName = config?.license_info?.product_name;
   const alt = brandName
     ? t`${brandName} logo`
     : t`brand logo`;
-  const customLogoMenu = config?.uiConfig?.CUSTOM_LOGO_MENU;
 
   const header = (
     <PageHeader
       showNavToggle
-      logo={<BrandLogo alt={alt} customLogoMenu={customLogoMenu} />}
+      logo={<BrandLogo alt={alt} />}
       logoProps={{ href: '/' }}
       headerTools={
         <PageHeaderToolbar
@@ -90,7 +75,7 @@ function AppContainer({ navRouteConfig = [], children }) {
 
   const simpleHeader = config.isLoading ? null : (
     <PageHeader
-      logo={<BrandLogo alt={alt} customLogoMenu={customLogoMenu} />}
+      logo={<BrandLogo alt={alt} />}
       headerTools={
         <PageHeaderTools>
           <PageHeaderToolsGroup>

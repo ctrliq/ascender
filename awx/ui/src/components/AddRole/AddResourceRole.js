@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';
@@ -18,59 +18,62 @@ const readTeams = async (queryParams) => TeamsAPI.read(queryParams);
 
 const readTeamsOptions = async () => TeamsAPI.readOptions();
 
-const userSearchColumns = (t) => [
-  {
-    name: t`Username`,
-    key: 'username__icontains',
-    isDefault: true,
-  },
-  {
-    name: t`First Name`,
-    key: 'first_name__icontains',
-  },
-  {
-    name: t`Last Name`,
-    key: 'last_name__icontains',
-  },
-];
-const userSortColumns = (t) => [
-  {
-    name: t`Username`,
-    key: 'username',
-  },
-  {
-    name: t`First Name`,
-    key: 'first_name',
-  },
-  {
-    name: t`Last Name`,
-    key: 'last_name',
-  },
-];
-const teamSearchColumns = (t) => [
-  {
-    name: t`Name`,
-    key: 'name__icontains',
-    isDefault: true,
-  },
-  {
-    name: t`Created By (Username)`,
-    key: 'created_by__username',
-  },
-  {
-    name: t`Modified By (Username)`,
-    key: 'modified_by__username',
-  },
-];
-
-const teamSortColumns = (t) => [
-  {
-    name: t`Name`,
-    key: 'name',
-  },
-];
 function AddResourceRole({ onSave, onClose, roles, resource, onError }) {
   const { t } = useLingui();
+
+  const userSearchColumns = useMemo(() => [
+    {
+      name: t`Username`,
+      key: 'username__icontains',
+      isDefault: true,
+    },
+    {
+      name: t`First Name`,
+      key: 'first_name__icontains',
+    },
+    {
+      name: t`Last Name`,
+      key: 'last_name__icontains',
+    },
+  ], [t]);
+
+  const userSortColumns = useMemo(() => [
+    {
+      name: t`Username`,
+      key: 'username',
+    },
+    {
+      name: t`First Name`,
+      key: 'first_name',
+    },
+    {
+      name: t`Last Name`,
+      key: 'last_name',
+    },
+  ], [t]);
+
+  const teamSearchColumns = useMemo(() => [
+    {
+      name: t`Name`,
+      key: 'name__icontains',
+      isDefault: true,
+    },
+    {
+      name: t`Created By (Username)`,
+      key: 'created_by__username',
+    },
+    {
+      name: t`Modified By (Username)`,
+      key: 'modified_by__username',
+    },
+  ], [t]);
+
+  const teamSortColumns = useMemo(() => [
+    {
+      name: t`Name`,
+      key: 'name',
+    },
+  ], [t]);
   const history = useHistory();
 
   const {
@@ -204,8 +207,8 @@ function AddResourceRole({ onSave, onClose, roles, resource, onError }) {
         <>
           {resourceType === 'users' && (
             <SelectResourceStep
-              searchColumns={userSearchColumns(t)}
-              sortColumns={userSortColumns(t)}
+              searchColumns={userSearchColumns}
+              sortColumns={userSortColumns}
               displayKey="username"
               onRowClick={handleResourceSelect}
               fetchItems={readUsers}
@@ -217,8 +220,8 @@ function AddResourceRole({ onSave, onClose, roles, resource, onError }) {
           )}
           {resourceType === 'teams' && (
             <SelectResourceStep
-              searchColumns={teamSearchColumns(t)}
-              sortColumns={teamSortColumns(t)}
+              searchColumns={teamSearchColumns}
+              sortColumns={teamSortColumns}
               onRowClick={handleResourceSelect}
               fetchItems={readTeams}
               fetchOptions={readTeamsOptions}

@@ -173,7 +173,7 @@ function ConstructedInventoryForm({
     organization: constructedInventory?.summary_fields?.organization || null,
     update_cache_timeout: constructedInventory?.update_cache_timeout || 0,
     verbosity: constructedInventory?.verbosity || 0,
-    source_vars: constructedInventory?.source_vars || '---',
+    source_vars: constructedInventory?.source_vars || '---\nplugin: constructed\nstrict: true',
   };
 
   return (

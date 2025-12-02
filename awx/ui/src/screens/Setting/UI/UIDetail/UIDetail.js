@@ -39,9 +39,7 @@ function UIDetail() {
         data,
         'PENDO_TRACKING_STATE',
         'CUSTOM_LOGIN_INFO',
-        'ASCENDER_DISABLE_GRADIENT',
         'CUSTOM_LOGO',
-        'CUSTOM_LOGO_MENU'
       );
 
       return uiData;
@@ -75,10 +73,6 @@ function UIDetail() {
   // to help SettingDetail render it as an <img>
   if (options?.CUSTOM_LOGO) {
     options.CUSTOM_LOGO.type = 'image';
-  }
-
-  if (options?.CUSTOM_LOGO_MENU) {
-    options.CUSTOM_LOGO_MENU.type = 'image';
   }
 
   return (

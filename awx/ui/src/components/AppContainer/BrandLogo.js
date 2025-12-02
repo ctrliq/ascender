@@ -15,10 +15,8 @@ const BrandImg = styled.img`
   pointer-events: none;
 `;
 
-const BrandLogo = ({ customLogoMenu }) => {
-  const src = customLogoMenu
-    ? `data:image/jpeg;${customLogoMenu}`
-    : 'static/media/AscenderAuto_logo_h_rev_S_side.png';
+const BrandLogo = () => {
+  const src = 'static/media/AscenderAuto_logo_h_rev_S_side.png';
   return <BrandImg src={src} />;
 };
 

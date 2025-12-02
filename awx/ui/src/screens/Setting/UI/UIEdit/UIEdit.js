@@ -13,7 +13,6 @@ import useModal from 'hooks/useModal';
 import useRequest from 'hooks/useRequest';
 import { SettingsAPI } from 'api';
 import {
-  BooleanField,
   ChoiceField,
   FileUploadField,
   TextAreaField,
@@ -107,9 +106,6 @@ function UIEdit() {
             PENDO_TRACKING_STATE: uiData?.PENDO_TRACKING_STATE?.value ?? 'off',
             CUSTOM_LOGIN_INFO: uiData?.CUSTOM_LOGIN_INFO?.value ?? '',
             CUSTOM_LOGO: uiData?.CUSTOM_LOGO?.value ?? '',
-            CUSTOM_LOGO_MENU: uiData?.CUSTOM_LOGO_MENU?.value ?? '',
-            ASCENDER_DISABLE_GRADIENT:
-              uiData?.ASCENDER_DISABLE_GRADIENT?.value ?? false,
           }}
           onSubmit={handleSubmit}
         >
@@ -125,18 +121,9 @@ function UIEdit() {
                   name="CUSTOM_LOGIN_INFO"
                   config={uiData.CUSTOM_LOGIN_INFO}
                 />
-                <BooleanField
-                  name="ASCENDER_DISABLE_GRADIENT"
-                  config={uiData.ASCENDER_DISABLE_GRADIENT}
-                />
                 <FileUploadField
                   name="CUSTOM_LOGO"
                   config={uiData.CUSTOM_LOGO}
-                  type="dataURL"
-                />
-                <FileUploadField
-                  name="CUSTOM_LOGO_MENU"
-                  config={uiData.CUSTOM_LOGO_MENU}
                   type="dataURL"
                 />
                 {submitError && <FormSubmitError error={submitError} />}

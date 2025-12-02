@@ -1507,7 +1507,7 @@ class RunInventoryUpdate(SourceControlMixin, BaseTask):
             raise NotImplementedError('Cannot update file sources through the task system.')
 
         if inventory_update.source == 'scm' and inventory_update.source_project_update:
-            env_key = 'ANSIBLE_COLLECTIONS_PATHS'
+            env_key = 'ANSIBLE_COLLECTIONS_PATH'
             config_setting = 'collections_paths'
             folder = 'requirements_collections'
             default = '~/.ansible/collections:/usr/share/ansible/collections'
@@ -1525,13 +1525,14 @@ class RunInventoryUpdate(SourceControlMixin, BaseTask):
                         paths = [config_values[config_setting]] + paths
             paths = [os.path.join(CONTAINER_ROOT, folder)] + paths
             env[env_key] = os.pathsep.join(paths)
-        if 'ANSIBLE_COLLECTIONS_PATHS' in env:
-            paths = env['ANSIBLE_COLLECTIONS_PATHS'].split(':')
+        if 'ANSIBLE_COLLECTIONS_PATH' in env:
+            paths = env['ANSIBLE_COLLECTIONS_PATH'].split(':')
         else:
             paths = ['~/.ansible/collections', '/usr/share/ansible/collections']
         paths.append('/usr/share/automation-controller/collections')
-        env['ANSIBLE_COLLECTIONS_PATHS'] = os.pathsep.join(paths)
-
+        env['ANSIBLE_COLLECTIONS_PATH'] = os.pathsep.join(paths)
+        if getattr(settings, 'ENABLE_ANSIBLE_29', False):
+            env['ANSIBLE_COLLECTIONS_PATHS'] = os.pathsep.join(paths)
         return env
 
     def write_args_file(self, private_data_dir, args):

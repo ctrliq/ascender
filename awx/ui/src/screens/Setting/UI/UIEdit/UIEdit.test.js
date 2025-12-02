@@ -23,9 +23,7 @@ describe('<UIEdit />', () => {
       data: {
         CUSTOM_LOGIN_INFO: 'mock info',
         CUSTOM_LOGO: 'data:mock/jpeg;',
-        CUSTOM_LOGO_MENU: 'data:mock/jpeg;',
         PENDO_TRACKING_STATE: 'detailed',
-        ASCENDER_DISABLE_GRADIENT: false,
       },
     });
   });
@@ -65,11 +63,9 @@ describe('<UIEdit />', () => {
   test('should display expected form fields', async () => {
     expect(wrapper.find('FormGroup[label="Custom Login Info"]').length).toBe(1);
     expect(wrapper.find('FormGroup[label="Custom Login Logo"]').length).toBe(1);
-    expect(wrapper.find('FormGroup[label="Custom Menu Logo"]').length).toBe(1);
     expect(
       wrapper.find('FormGroup[label="User Analytics Tracking State"]').length
     ).toBe(1);
-    expect(wrapper.find('FormGroup[label="Disable Menu Gradient"]').length).toBe(1);
   });
 
   test('should successfully send default values to api on form revert all', async () => {
@@ -100,9 +96,6 @@ describe('<UIEdit />', () => {
       wrapper
         .find('FormGroup[fieldId="CUSTOM_LOGO"] button[aria-label="Revert"]')
         .invoke('onClick')();
-      wrapper
-        .find('FormGroup[fieldId="CUSTOM_LOGO_MENU"] button[aria-label="Revert"]')
-        .invoke('onClick')();
     });
     wrapper.update();
     await act(async () => {
@@ -112,9 +105,7 @@ describe('<UIEdit />', () => {
     expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
       CUSTOM_LOGIN_INFO: 'new login info',
       CUSTOM_LOGO: '',
-      CUSTOM_LOGO_MENU: '',
       PENDO_TRACKING_STATE: 'detailed',
-      ASCENDER_DISABLE_GRADIENT: false,
     });
   });
 

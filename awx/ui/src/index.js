@@ -7,6 +7,7 @@ import './setupCSP';
 import '@patternfly/react-core/dist/styles/base.css';
 import './border.css';
 import './ascender.css';
+import './ascender_gradient.css';
 
 import App from './App';
 
