@@ -35,6 +35,41 @@ const buildSourceChoiceOptions = (options) => {
   return sourceChoices.filter(({ key }) => key !== 'file');
 };
 
+const getSourceDefaults = (sourceType) => {
+  const baseDefaults = {
+    credential: null,
+    overwrite: false,
+    overwrite_vars: false,
+    source: sourceType,
+    source_path: '',
+    source_project: null,
+    source_script: null,
+    source_vars: '---\n',
+    scm_branch: null,
+    update_cache_timeout: 0,
+    update_on_launch: false,
+    verbosity: 1,
+    enabled_var: '',
+    enabled_value: '',
+    host_filter: '',
+  };
+
+  const sourceSpecificDefaults = {
+    vmware: {
+      source_vars: '---\nhostnames:\n  - config.name',
+    },
+    // Add more source-specific defaults here as needed
+    // ec2: {
+    //   source_vars: '---\nhostnames:\n  - instance-id',
+    // },
+  };
+
+  return {
+    ...baseDefaults,
+    ...sourceSpecificDefaults[sourceType],
+  };
+};
+
 const InventorySourceFormFields = ({
   source,
   sourceOptions,
@@ -64,23 +99,7 @@ const InventorySourceFormFields = ({
         },
       });
     } else {
-      const defaults = {
-        credential: null,
-        overwrite: false,
-        overwrite_vars: false,
-        source: sourceType,
-        source_path: '',
-        source_project: null,
-        source_script: null,
-        source_vars: '---\n',
-        scm_branch: null,
-        update_cache_timeout: 0,
-        update_on_launch: false,
-        verbosity: 1,
-        enabled_var: '',
-        enabled_value: '',
-        host_filter: '',
-      };
+      const defaults = getSourceDefaults(sourceType);
       Object.keys(defaults).forEach((label) => {
         setFieldValue(label, defaults[label]);
         setFieldTouched(label, false);
