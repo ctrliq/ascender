@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';
@@ -21,7 +21,7 @@ const readTeamsOptions = async () => TeamsAPI.readOptions();
 function AddResourceRole({ onSave, onClose, roles, resource, onError }) {
   const { t } = useLingui();
 
-  const userSearchColumns = [
+  const userSearchColumns = useMemo(() => [
     {
       name: t`Username`,
       key: 'username__icontains',
@@ -35,9 +35,9 @@ function AddResourceRole({ onSave, onClose, roles, resource, onError }) {
       name: t`Last Name`,
       key: 'last_name__icontains',
     },
-  ];
+  ], [t]);
 
-  const userSortColumns = [
+  const userSortColumns = useMemo(() => [
     {
       name: t`Username`,
       key: 'username',
@@ -50,9 +50,9 @@ function AddResourceRole({ onSave, onClose, roles, resource, onError }) {
       name: t`Last Name`,
       key: 'last_name',
     },
-  ];
+  ], [t]);
 
-  const teamSearchColumns = [
+  const teamSearchColumns = useMemo(() => [
     {
       name: t`Name`,
       key: 'name__icontains',
@@ -66,14 +66,14 @@ function AddResourceRole({ onSave, onClose, roles, resource, onError }) {
       name: t`Modified By (Username)`,
       key: 'modified_by__username',
     },
-  ];
+  ], [t]);
 
-  const teamSortColumns = [
+  const teamSortColumns = useMemo(() => [
     {
       name: t`Name`,
       key: 'name',
     },
-  ];
+  ], [t]);
   const history = useHistory();
 
   const {
