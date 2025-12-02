@@ -125,9 +125,9 @@ function ConstructedInventoryHint() {
         <CardBody>
           <Form autoComplete="off">
             <b>{t`Constructed inventory examples`}</b>
-            <LimitToIntersectionExample t={t} />
-            <FilterOnNestedGroupExample t={t} />
-            <HostsByProcessorTypeExample t={t} />
+            <LimitToIntersectionExample />
+            <FilterOnNestedGroupExample />
+            <HostsByProcessorTypeExample />
           </Form>
         </CardBody>
       </Panel>
@@ -135,7 +135,8 @@ function ConstructedInventoryHint() {
   );
 }
 
-function LimitToIntersectionExample({ t }) {
+function LimitToIntersectionExample() {
+  const { t } = useLingui();
   const [copied, setCopied] = React.useState(false);
   const clipboardCopyFunc = (event, text) => {
     navigator.clipboard.writeText(text.toString());
@@ -211,7 +212,8 @@ groups:
     </FormFieldGroupExpandable>
   );
 }
-function FilterOnNestedGroupExample({ t }) {
+function FilterOnNestedGroupExample() {
+  const { t } = useLingui();
   const [copied, setCopied] = React.useState(false);
   const clipboardCopyFunc = (event, text) => {
     navigator.clipboard.writeText(text.toString());
@@ -304,7 +306,8 @@ function FilterOnNestedGroupExample({ t }) {
     </FormFieldGroupExpandable>
   );
 }
-function HostsByProcessorTypeExample({ t }) {
+function HostsByProcessorTypeExample() {
+  const { t } = useLingui();
   const [copied, setCopied] = React.useState(false);
   const clipboardCopyFunc = (event, text) => {
     navigator.clipboard.writeText(text.toString());
