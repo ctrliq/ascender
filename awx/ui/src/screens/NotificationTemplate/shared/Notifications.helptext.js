@@ -2,7 +2,7 @@ import React from 'react';
 
 // Accept t as an argument instead of using useLingui
 const helpText = (t) => ({
-  emailRecepients: t`Use one email address per line to create a recipient list for this type of notification.`,
+  emailRecipients: t`Use one email address per line to create a recipient list for this type of notification.`,
   emailTimeout: t`The amount of time (in seconds) before the email
         notification stops trying to reach the host and times out. Ranges
         from 1 to 120 seconds.`,

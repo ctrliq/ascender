@@ -32,7 +32,7 @@ const RETRY_TIMEOUT = 5000;
 function NotificationTemplateDetail({ template, defaultMessages }) {
   const { t } = useLingui();
   const helpText = {
-    emailRecepients: t`Use one email address per line to create a recipient list for this type of notification.`,
+    emailRecipients: t`Use one email address per line to create a recipient list for this type of notification.`,
     emailTimeout: t`The amount of time (in seconds) before the email
         notification stops trying to reach the host and times out. Ranges
         from 1 to 120 seconds.`,
@@ -198,7 +198,7 @@ function NotificationTemplateDetail({ template, defaultMessages }) {
             />
             <ArrayDetail
               label={t`Recipient List`}
-              helpText={helpText.emailRecepients}
+              helpText={helpText.emailRecipients}
               value={configuration.recipients}
               dataCy="nt-detail-recipients"
             />

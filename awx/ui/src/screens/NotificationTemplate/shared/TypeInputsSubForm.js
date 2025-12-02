@@ -60,7 +60,7 @@ export default TypeInputsSubForm;
 function EmailFields() {
   const { t } = useLingui();
   const helpText = useMemo(() => ({
-    emailRecepients: t`Use one email address per line to create a recipient list for this type of notification.`,
+    emailRecipients: t`Use one email address per line to create a recipient list for this type of notification.`,
     emailTimeout: t`The amount of time (in seconds) before the email
         notification stops trying to reach the host and times out. Ranges
         from 1 to 120 seconds.`,
@@ -107,7 +107,7 @@ function EmailFields() {
         validate={required(null)}
         isRequired
         rows={3}
-        tooltip={helpText.emailRecepients}
+        tooltip={helpText.emailRecipients}
       />
       <FormField
         id="email-sender"
