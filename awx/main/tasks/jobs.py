@@ -1531,7 +1531,8 @@ class RunInventoryUpdate(SourceControlMixin, BaseTask):
             paths = ['~/.ansible/collections', '/usr/share/ansible/collections']
         paths.append('/usr/share/automation-controller/collections')
         env['ANSIBLE_COLLECTIONS_PATH'] = os.pathsep.join(paths)
-
+        if getattr(settings, 'ENABLE_ANSIBLE_29', False):
+            env['ANSIBLE_COLLECTIONS_PATHS'] = os.pathsep.join(paths)
         return env
 
     def write_args_file(self, private_data_dir, args):
