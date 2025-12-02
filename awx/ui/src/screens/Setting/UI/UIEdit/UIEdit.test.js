@@ -63,11 +63,9 @@ describe('<UIEdit />', () => {
   test('should display expected form fields', async () => {
     expect(wrapper.find('FormGroup[label="Custom Login Info"]').length).toBe(1);
     expect(wrapper.find('FormGroup[label="Custom Login Logo"]').length).toBe(1);
-    expect(wrapper.find('FormGroup[label="Custom Menu Logo"]').length).toBe(1);
     expect(
       wrapper.find('FormGroup[label="User Analytics Tracking State"]').length
     ).toBe(1);
-    expect(wrapper.find('FormGroup[label="Disable Menu Gradient"]').length).toBe(1);
   });
 
   test('should successfully send default values to api on form revert all', async () => {

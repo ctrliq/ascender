@@ -92,7 +92,10 @@ describe('<ConstructedInventoryForm />', () => {
   test('should show field error when form is saved without constructed plugin parameter', async () => {
     expect(wrapper.find('VariablesField .pf-m-error').length).toBe(0);
     await act(async () => {
-      wrapper.find('VariablesField CodeEditor').invoke('onBlur')('');
+      wrapper.find('VariablesField CodeEditor').invoke('onChange')('---\nstrict: true\ngroups:\n  web: inventory_hostname in groups["webservers"]');
+    });
+    await act(async () => {
+      wrapper.find('VariablesField CodeEditor').invoke('onBlur')();
     });
     wrapper.update();
     expect(wrapper.find('VariablesField .pf-m-error').length).toBe(1);

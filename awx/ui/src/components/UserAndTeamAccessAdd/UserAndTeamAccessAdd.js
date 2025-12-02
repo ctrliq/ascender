@@ -2,12 +2,6 @@ import React, { useState, useCallback } from 'react';
 import { useParams, useRouteMatch } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
-import useRequest from 'hooks/useRequest';
-import useSelected from 'hooks/useSelected';
-import SelectableCard from '../SelectableCard';
-import Wizard from '../Wizard/Wizard';
-import SelectResourceStep from '../AddRole/SelectResourceStep';
-import SelectRoleStep from '../AddRole/SelectRoleStep';
 import {
   JobTemplatesAPI,
   WorkflowJobTemplatesAPI,
@@ -17,6 +11,12 @@ import {
   OrganizationsAPI,
   InstanceGroupsAPI,
 } from 'api';
+import useRequest from 'hooks/useRequest';
+import useSelected from 'hooks/useSelected';
+import SelectableCard from '../SelectableCard';
+import Wizard from '../Wizard/Wizard';
+import SelectResourceStep from '../AddRole/SelectResourceStep';
+import SelectRoleStep from '../AddRole/SelectRoleStep';
 
 const Grid = styled.div`
   display: grid;
@@ -40,11 +40,17 @@ function UserAndTeamAccessAdd({
     exact: true,
   });
 
-  const { selected: resourcesSelected, handleSelect: handleResourceSelect, clearSelected: clearResourcesSelected } =
-    useSelected([]);
+  const {
+    selected: resourcesSelected,
+    handleSelect: handleResourceSelect,
+    clearSelected: clearResourcesSelected,
+  } = useSelected([]);
 
-  const { selected: rolesSelected, handleSelect: handleRoleSelect, clearSelected: clearRolesSelected } =
-    useSelected([]);
+  const {
+    selected: rolesSelected,
+    handleSelect: handleRoleSelect,
+    clearSelected: clearRolesSelected,
+  } = useSelected([]);
 
   const resourceAccessConfig = [
     {
