@@ -52,7 +52,7 @@ pyyaml>=6.0.1
 receptorctl
 social-auth-core[openidconnect]==4.5.0  # see UPGRADE BLOCKERs
 social-auth-app-django
-sqlparse>=0.5.0   # Required by django https://github.com/ansible/awx/security/dependabot/96
+sqlparse>=0.5.4   # Required by django
 redis[hiredis]
 requests>=2.32.5 # Fix unstable SSLContext caching feature
 slack-sdk
