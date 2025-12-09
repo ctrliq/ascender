@@ -116,7 +116,7 @@ clean-api:
 	rm -rf build $(NAME)-$(VERSION) *.egg-info
 	rm -rf .tox
 	find . -type f -regex ".*\.py[co]$$" -delete
-	find . -type d -name "__pycache__" -exec rm -rf {} +
+	find . -depth -type d -name "__pycache__" -delete
 	rm -f awx/awx_test.sqlite3*
 	rm -rf requirements/vendor
 	rm -rf awx/projects
