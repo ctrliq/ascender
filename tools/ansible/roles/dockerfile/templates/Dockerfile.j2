@@ -10,7 +10,7 @@
 
 # Build container
 # FROM quay.io/centos/centos:stream9 as builder
-FROM rockylinux/rockylinux:9.6 AS builder
+FROM rockylinux/rockylinux:9-minimal AS builder
 
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
@@ -104,7 +104,7 @@ RUN AWX_SETTINGS_FILE=/dev/null SKIP_SECRET_KEY_CHECK=yes SKIP_PG_VERSION_CHECK=
 
 # Final container(s)
 # FROM quay.io/centos/centos:stream9
-FROM rockylinux/rockylinux:9.6
+FROM rockylinux/rockylinux:9-minimal
 
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
