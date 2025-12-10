@@ -591,6 +591,7 @@ def make_the_data():
             wfjt_idx = 0
             for n in spread(spread_type, n_nodes, n_wfjts):
                 wfjt = wfjts[wfjt_idx]
+                wfjt_idx += 1
                 if not wfjt._is_new:
                     continue
                 jt_gen = yield_choice(job_templates)
@@ -627,7 +628,6 @@ def make_the_data():
                         else:
                             parent_node.success_nodes.add(node)
                     parent_idx = (parent_idx + 7) % len(wfjt_nodes)
-                wfjt_idx += 1
                 if n:
                     print('')
 
@@ -675,26 +675,26 @@ def make_the_data():
             print('# Adding labels to job templates')
             jt_idx = 0
             for n in spread(spread_type, n_labels * 7, n_job_templates):
+                jt = job_templates[jt_idx]
+                jt_idx += 1
                 if n == 0:
                     continue
-                jt = job_templates[jt_idx]
                 if not jt._is_new:
                     continue
                 print('  Giving %d labels to %s JT' % (n, jt.name))
                 for i in range(n):
                     jt.labels.add(next(label_gen))
-                jt_idx += 1
 
             print('# Adding labels to workflow job templates')
             wfjt_idx = 0
             for n in spread(spread_type, n_labels * 3, n_wfjts):
                 wfjt = wfjts[wfjt_idx]
+                wfjt_idx += 1
                 if not wfjt._is_new:
                     continue
                 print('  Giving %d labels to %s WFJT' % (n, wfjt.name))
                 for i in range(n):
                     wfjt.labels.add(next(label_gen))
-                wfjt_idx += 1
 
             # Disable logging here, because it will mess up output format
             logger = logging.getLogger('awx.main')
@@ -758,6 +758,7 @@ def make_the_data():
             created_partitions = set()
             for n in spread(spread_type, n_job_events, n_jobs):
                 job = jobs[job_idx]
+                job_idx += 1
                 # Check if job already has events, for idempotence
                 if not job._is_new:
                     continue
@@ -776,7 +777,6 @@ def make_the_data():
                     sys.stdout.write('\r   Creating %d job events for job %d, subgroup: %d' % (n, job.id, j + 1))
                     sys.stdout.flush()
                     JobEvent.objects.bulk_create([JobEvent(created=now(), modified=now(), job=job, job_created=job.created, event='runner_on_ok') for i in range(n_subgroup)])
-                job_idx += 1
                 if n:
                     print('')
 
