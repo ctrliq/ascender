@@ -1,4 +1,5 @@
 import pytest
+import asyncio
 
 from django.contrib.auth.models import AnonymousUser
 
@@ -32,12 +33,11 @@ class TestWebsocketRelay:
     def websocket_relay_secret_generator(self, settings):
         def fn(secret, set_broadcast_websocket_secret=False):
             secret_backup = settings.BROADCAST_WEBSOCKET_SECRET
-            settings.BROADCAST_WEBSOCKET_SECRET = 'foobar'
-            res = ('secret'.encode('utf-8'), WebsocketSecretAuthHelper.construct_secret().encode('utf-8'))
+            settings.BROADCAST_WEBSOCKET_SECRET = secret
+            secret_value = WebsocketSecretAuthHelper.construct_secret()
             if set_broadcast_websocket_secret is False:
                 settings.BROADCAST_WEBSOCKET_SECRET = secret_backup
-            return res
-
+            return secret_value
         return fn
 
     @pytest.fixture
@@ -47,21 +47,40 @@ class TestWebsocketRelay:
     async def test_authorized(self, websocket_server_generator, websocket_relay_secret):
         server = websocket_server_generator('/websocket/relay/')
 
-        server.scope['headers'] = (websocket_relay_secret,)
-        connected, _ = await server.connect()
-        assert connected is True
+        # Set headers in the correct format: list of tuples with byte keys and values
+        server.scope['headers'] = [
+            (b'secret', websocket_relay_secret.encode('utf-8'))
+        ]
+        
+        # Add explicit timeout to prevent hanging
+        try:
+            connected, _ = await asyncio.wait_for(server.connect(), timeout=10.0)
+            assert connected is True
+        except asyncio.TimeoutError:
+            pytest.fail("WebSocket connection timed out after 10 seconds")
 
     async def test_not_authorized(self, websocket_server_generator):
         server = websocket_server_generator('/websocket/relay/')
-        connected, _ = await server.connect()
-        assert connected is False, "Connection to the relay websocket without auth. We expected the client to be denied."
+        
+        try:
+            connected, _ = await asyncio.wait_for(server.connect(), timeout=10.0)
+            assert connected is False, "Connection to the relay websocket without auth. We expected the client to be denied."
+        except asyncio.TimeoutError:
+            pytest.fail("WebSocket connection timed out after 10 seconds")
 
     async def test_wrong_secret(self, websocket_server_generator, websocket_relay_secret_generator):
         server = websocket_server_generator('/websocket/relay/')
 
-        server.scope['headers'] = (websocket_relay_secret_generator('foobar', set_broadcast_websocket_secret=False),)
-        connected, _ = await server.connect()
-        assert connected is False
+        wrong_secret = websocket_relay_secret_generator('wrongsecret', set_broadcast_websocket_secret=False)
+        server.scope['headers'] = [
+            (b'secret', wrong_secret.encode('utf-8'))
+        ]
+        
+        try:
+            connected, _ = await asyncio.wait_for(server.connect(), timeout=10.0)
+            assert connected is False
+        except asyncio.TimeoutError:
+            pytest.fail("WebSocket connection timed out after 10 seconds")
 
 
 @pytest.mark.asyncio
@@ -71,8 +90,12 @@ class TestWebsocketEventConsumer:
         server = websocket_server_generator('/websocket/')
 
         server.scope['user'] = AnonymousUser()
-        connected, _ = await server.connect()
-        assert connected is False, "Anonymous user should NOT be allowed to login."
+        
+        try:
+            connected, _ = await asyncio.wait_for(server.connect(), timeout=10.0)
+            assert connected is False, "Anonymous user should NOT be allowed to login."
+        except asyncio.TimeoutError:
+            pytest.fail("WebSocket connection timed out after 10 seconds")
 
     @pytest.mark.skip(reason="Ran out of coding time.")
     async def test_authorized(self, websocket_server_generator, application, admin):

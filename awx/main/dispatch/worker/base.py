@@ -5,7 +5,7 @@ import os
 import logging
 import signal
 import sys
-import redis
+import valkey
 import json
 import psycopg
 import time
@@ -57,7 +57,7 @@ class AWXConsumerBase(object):
         if pool is None:
             self.pool = WorkerPool()
         self.pool.init_workers(self.worker.work_loop)
-        self.redis = redis.Redis.from_url(settings.BROKER_URL)
+        self.valkey = valkey.Valkey.from_url(settings.BROKER_URL)
 
     @property
     def listening_on(self):
@@ -130,9 +130,9 @@ class AWXConsumerBase(object):
     def record_statistics(self):
         if time.time() - self.last_stats > 1:  # buffer stat recording to once per second
             try:
-                self.redis.set(f'awx_{self.name}_statistics', self.pool.debug())
+                self.valkey.set(f'awx_{self.name}_statistics', self.pool.debug())
             except Exception:
-                logger.exception(f"encountered an error communicating with redis to store {self.name} statistics")
+                logger.exception(f"encountered an error communicating with valkey to store {self.name} statistics")
             self.last_stats = time.time()
 
     def run(self, *args, **kwargs):
@@ -148,9 +148,9 @@ class AWXConsumerBase(object):
         raise SystemExit()
 
 
-class AWXConsumerRedis(AWXConsumerBase):
+class AWXConsumerValkey(AWXConsumerBase):
     def run(self, *args, **kwargs):
-        super(AWXConsumerRedis, self).run(*args, **kwargs)
+        super(AWXConsumerValkey, self).run(*args, **kwargs)
         self.worker.on_start()
         logger.info(f'Callback receiver started with pid={os.getpid()}')
         db.connection.close()  # logs use database, so close connection

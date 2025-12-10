@@ -14,7 +14,7 @@ from django.conf import settings
 from django.utils.timezone import now, timedelta
 from django.db.models import Sum, Q
 
-import redis
+import valkey
 from solo.models import SingletonModel
 
 from ansible_base.lib.utils.models import prevent_search
@@ -395,11 +395,11 @@ class Instance(HasPolicyEditsMixin, BaseModel):
         """Only call this method on the instance that this record represents"""
         errors = None
         try:
-            # if redis is down for some reason, that means we can't persist
+            # if valkey is down for some reason, that means we can't persist
             # playbook event data; we should consider this a zero capacity event
-            redis.Redis.from_url(settings.BROKER_URL).ping()
-        except redis.ConnectionError:
-            errors = _('Failed to connect to Redis')
+            valkey.Valkey.from_url(settings.BROKER_URL).ping()
+        except valkey.ConnectionError:
+            errors = _('Failed to connect to Valkey')
 
         self.save_health_data(awx_application_version, get_cpu_count(), get_mem_in_bytes(), update_last_seen=True, errors=errors)
 

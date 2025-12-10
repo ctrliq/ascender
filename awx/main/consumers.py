@@ -3,7 +3,7 @@ import logging
 import time
 import hmac
 import asyncio
-import redis
+import valkey
 
 from django.core.serializers.json import DjangoJSONEncoder
 from django.conf import settings
@@ -105,8 +105,8 @@ class RelayConsumer(AsyncJsonWebsocketConsumer):
         (group, message) = unwrap_broadcast_msg(data)
         if group == "metrics":
             message = json.loads(message['text'])
-            conn = redis.Redis.from_url(settings.BROKER_URL)
-            conn.set(settings.SUBSYSTEM_METRICS_REDIS_KEY_PREFIX + "-" + message['metrics_namespace'] + "_instance_" + message['instance'], message['metrics'])
+            conn = valkey.Valkey.from_url(settings.BROKER_URL)
+            conn.set(settings.SUBSYSTEM_METRICS_VALKEY_KEY_PREFIX + "-" + message['metrics_namespace'] + "_instance_" + message['instance'], message['metrics'])
         else:
             await self.channel_layer.group_send(group, message)
 

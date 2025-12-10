@@ -21,7 +21,7 @@ Ascender supports multi-node configurations. Here is an example configuration wi
 │ ├──────────┤ │           │ ├──────────┤ │
 │ │ awx-web  │ │           │ │ awx-web  │ │
 │ ├──────────┤ │           │ ├──────────┤ │
-│ │ redis    │ │           │ │ redis    │ │
+│ │ valkey   │ │           │ │ valkey   │ │
 │ └──────────┘ │           │ └──────────┘ │
 │              │           │              │
 └──────────────┴─────┬─────┴──────────────┘
@@ -39,7 +39,7 @@ There are two main deployment types, virtual machines (VM) or K8S. Ansible Autom
   - wsbroadcast
   - callback receiver
   - receptor (*managed under systemd)
-  - redis (*managed under systemd)
+  - valkey (*managed under systemd)
   - uwsgi
   - daphne
   - rsyslog
@@ -47,7 +47,7 @@ There are two main deployment types, virtual machines (VM) or K8S. Ansible Autom
   - `awx-ee`: receptor
   - `awx-web`: uwsgi, daphne, wsbroadcast, rsyslog
   - `awx-task`: dispatcher, callback receiver
-  - `redis`: redis
+  - `valkey`: valkey
 - Each control node is monolithic and contains all the necessary components for handling API requests and running jobs.
 - A load balancer in front of the cluster can handle incoming web requests and send them control nodes based on load balancing rules (e.g. round robin)
 - All control nodes on the cluster interact single, shared Postgres database

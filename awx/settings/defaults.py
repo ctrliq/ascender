@@ -238,8 +238,8 @@ JOB_EVENT_MAX_QUEUE_SIZE = 10000
 # The number of job events to migrate per-transaction when moving from int -> bigint
 JOB_EVENT_MIGRATION_CHUNK_SIZE = 1000000
 
-# The prefix of the redis key that stores metrics
-SUBSYSTEM_METRICS_REDIS_KEY_PREFIX = "awx_metrics"
+# The prefix of the valkey key that stores metrics
+SUBSYSTEM_METRICS_VALKEY_KEY_PREFIX = "awx_metrics"
 
 # Histogram buckets for the callback_receiver_batch_events_insert_db metric
 SUBSYSTEM_METRICS_BATCH_INSERT_BUCKETS = [10, 50, 150, 350, 650, 2000]
@@ -247,8 +247,8 @@ SUBSYSTEM_METRICS_BATCH_INSERT_BUCKETS = [10, 50, 150, 350, 650, 2000]
 # Interval in seconds for sending local metrics to other nodes
 SUBSYSTEM_METRICS_INTERVAL_SEND_METRICS = 3
 
-# Interval in seconds for saving local metrics to redis
-SUBSYSTEM_METRICS_INTERVAL_SAVE_TO_REDIS = 2
+# Interval in seconds for saving local metrics to valkey
+SUBSYSTEM_METRICS_INTERVAL_SAVE_TO_VALKEY = 2
 
 # Record task manager metrics at the following interval in seconds
 # If using Prometheus, it is recommended to be => the Prometheus scrape interval
@@ -472,7 +472,7 @@ EXECUTION_NODE_REMEDIATION_CHECKS = 60 * 30  # once every 30 minutes check if an
 # Amount of time dispatcher will try to reconnect to database for jobs and consuming new work
 DISPATCHER_DB_DOWNTIME_TOLERANCE = 40
 
-BROKER_URL = 'unix:///var/run/redis/redis.sock'
+BROKER_URL = 'unix:///var/run/valkey/valkey.sock?db=0'
 CELERYBEAT_SCHEDULE = {
     'tower_scheduler': {'task': 'awx.main.tasks.system.awx_periodic_scheduler', 'schedule': timedelta(seconds=30), 'options': {'expires': 20}},
     'cluster_heartbeat': {
@@ -492,8 +492,20 @@ CELERYBEAT_SCHEDULE = {
 }
 
 # Django Caching Configuration
-DJANGO_REDIS_IGNORE_EXCEPTIONS = True
-CACHES = {'default': {'BACKEND': 'awx.main.cache.AWXRedisCache', 'LOCATION': 'unix:///var/run/redis/redis.sock?db=1'}}
+DJANGO_CACHE_IGNORE_EXCEPTIONS = True
+CACHES = {
+    'default': {
+        'BACKEND': 'awx.main.cache.AWXValkeyCache',
+        'LOCATION': 'unix:///var/run/valkey/valkey.sock',
+        'OPTIONS': {
+            'CONNECTION_POOL_KWARGS': {
+                'socket_timeout': 30,
+                'socket_connect_timeout': 30,
+            },
+            'db': 1,
+        }
+    }
+}
 
 # Social Auth configuration.
 SOCIAL_AUTH_STRATEGY = 'social_django.strategy.DjangoStrategy'
@@ -831,7 +843,19 @@ API_400_ERROR_LOG_FORMAT = 'status {status_code} received by user {user_name} at
 ASGI_APPLICATION = "awx.main.routing.application"
 
 CHANNEL_LAYERS = {
-    "default": {"BACKEND": "channels_redis.core.RedisChannelLayer", "CONFIG": {"hosts": [BROKER_URL], "capacity": 10000, "group_expiry": 157784760}}  # 5 years
+    "default": {
+        "BACKEND": "channels_valkey.core.ValkeyChannelLayer",
+        "CONFIG": {
+            "hosts": [{
+                "address": BROKER_URL,
+                "socket_timeout": 60,
+                "socket_connect_timeout": 60,
+            }],
+            "capacity": 10000,
+            "group_expiry": 157784760,  # 5 years
+            "symmetric_encryption_keys": [SECRET_KEY],
+        }
+    }
 }
 
 # Logging configuration.

@@ -34,7 +34,7 @@ def test_wrapup_does_send_notifications(mocker):
     mock.assert_called_once_with('succeeded')
 
 
-class FakeRedis:
+class FakeValkey:
     def keys(self, *args, **kwargs):
         return []
 
@@ -59,7 +59,7 @@ class TestCallbackBrokerWorker(TransactionTestCase):
             yield
 
     def get_worker(self):
-        with mock.patch('redis.Redis', new=FakeRedis):  # turn off redis stuff
+        with mock.patch('valkey.Valkey', new=FakeValkey):  # turn off Valkey stuff
             return CallbackBrokerWorker()
 
     def event_create_kwargs(self):

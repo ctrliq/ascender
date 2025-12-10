@@ -340,7 +340,7 @@ class AutoscalePool(WorkerPool):
         self.task_manager_timeout = settings.TASK_MANAGER_TIMEOUT + settings.TASK_MANAGER_TIMEOUT_GRACE_PERIOD
 
         # initialize some things for subsystem metrics periodic gathering
-        # the AutoscalePool class does not save these to redis directly, but reports via produce_subsystem_metrics
+        # the AutoscalePool class does not save these to Valkey directly, but reports via produce_subsystem_metrics
         self.scale_up_ct = 0
         self.worker_count_max = 0
 

@@ -7,7 +7,7 @@ azure-keyvault
 boto3
 botocore
 channels
-channels-redis>=4.2.0
+channels-valkey
 cryptography>=44.0.1  # GHSA-h4gh-qq45-vh27
 Cython<3 # this is needed as a build dependency, one day we may have separated build deps
 daphne
@@ -23,6 +23,7 @@ django-pglocks
 django-radius
 django-solo
 django-split-settings==1.0.0    # We hit a strange issue where the release process errored when upgrading past 1.0.0 see UPGRADE BLOCKERS
+django-valkey
 djangorestframework>=3.15.2 # CVE-2024-21520
 djangorestframework-yaml
 filelock
@@ -53,7 +54,6 @@ receptorctl
 social-auth-core[openidconnect]==4.5.0  # see UPGRADE BLOCKERs
 social-auth-app-django
 sqlparse>=0.5.4   # Required by django
-redis[hiredis]
 requests>=2.32.5 # Fix unstable SSLContext caching feature
 slack-sdk
 tacacs_plus==1.0  # UPGRADE BLOCKER: auth does not work with later versions
@@ -62,6 +62,7 @@ twisted[tls]>=24.7.0   # CVE-2024-41671
 urllib3>=2.6.0 # CVE-2025-66471 CVE-2025-66418
 uWSGI>=2.0.22 # CVE-2023-27522
 uwsgitop
+valkey[libvalkey]
 wheel>=0.38.1  # CVE-2022-40898
 pip==25.3  # see CVE-2025-8869
 setuptools==78.1.1  # CVE-2025-47273
