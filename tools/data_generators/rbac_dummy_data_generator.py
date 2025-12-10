@@ -634,7 +634,7 @@ def make_the_data():
             print('# Creating %d Schedules' % n_schedules)
             jt_idx = 0
             for n in spread(spread_type, n_schedules, n_job_templates):
-                jt = job_templates[0]
+                jt = job_templates[jt_idx]
                 for i in range(n):
                     ids['schedules'] += 1
                     schedules_id = ids['schedules']
@@ -651,6 +651,7 @@ def make_the_data():
                     )
                     schedule._is_new = _
                     schedules.append(schedule)
+                jt_idx += 1
 
             print('# Creating %d Labels' % n_labels)
             org_idx = 0
