@@ -174,6 +174,10 @@ jobs = []
 
 def spread_evenly(n, m):
     ret = []
+    # Handle edge case where m is 0
+    if m == 0:
+        return ret
+    
     # Evenly distribute n items into m slots, with remainder distributed across first slots
     base_amount = n // m
     remainder = n % m
