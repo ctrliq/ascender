@@ -184,8 +184,8 @@ def spread_evenly(n, m):
         ret.append(n_in_this_slot)
     return ret
 
-def spread(type, n, m):
-    if type == 'expo':
+def spread(spread_type, n, m):
+    if spread_type == 'expo':
         return spread_expo(n, m)
     else:
         return spread_evenly(n, m)
