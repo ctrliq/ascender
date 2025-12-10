@@ -9,6 +9,7 @@ from collections import defaultdict
 from optparse import make_option, OptionParser
 from datetime import datetime
 import logging
+import json
 
 
 # Django
@@ -98,13 +99,16 @@ if len(sys.argv) == 1 or options.help:
     
     # Dynamically read available presets from the file
     try:
-        presets_filename = os.path.join(base_dir, 'tools', 'data_generators', 'presets.tsv')
+        presets_filename = os.path.join(base_dir, 'tools', 'data_generators', 'presets.json')
         with open(presets_filename) as f:
-            text = f.read()
-        split_lines = [line.split('\t') for line in text.split('\n')]
-        available_presets = split_lines[0][1:]  # Skip the first column which is "resource"
+            presets_data = json.load(f)
+        available_presets = list(presets_data['presets'].keys())
         print("Available presets: %s" % ', '.join(available_presets))
-    except (FileNotFoundError, IndexError):
+        print("")
+        # Show preset descriptions
+        for preset_name, preset_data in presets_data['presets'].items():
+            print(f"  {preset_name}: {preset_data['description']}")
+    except (FileNotFoundError, json.JSONDecodeError, KeyError):
         print("Available presets: Demo, small, medium, Jan2017, jobs1k, jobs10k, jobs50k, jobs100k, jobs200k, e2e")
     
     print("")
@@ -119,20 +123,20 @@ options = vars(options)
 if options['preset']:
     print(' Using preset data numbers set ' + str(options['preset']))
     # Read the numbers of resources from presets file, if provided
-    presets_filename = os.path.join(base_dir, 'tools', 'data_generators', 'presets.tsv')
+    presets_filename = os.path.join(base_dir, 'tools', 'data_generators', 'presets.json')
 
     with open(presets_filename) as f:
-        text = f.read()
+        presets_data = json.load(f)
 
-    split_lines = [line.split('\t') for line in text.split('\n')]
-    keys = split_lines[0][1:]
+    if options['preset'] not in presets_data['presets']:
+        available_presets = list(presets_data['presets'].keys())
+        raise Exception('Preset "%s" dataset not found, options are %s' % (options['preset'], available_presets))
 
-    try:
-        col = keys.index(options['preset'])
-    except ValueError:
-        raise Exception('Preset "%s" dataset not found, options are %s' % (options['preset'], keys))
-
-    options.update({cols[0]: cols[col + 1] for cols in split_lines if len(cols) > col + 1 and cols[0]})
+    preset_config = presets_data['presets'][options['preset']]
+    
+    # Update options with preset values
+    options.update(preset_config['resources'])
+    options['type'] = preset_config['spread_type']
 
     if not options['prefix']:
         options['prefix'] = options['preset']
