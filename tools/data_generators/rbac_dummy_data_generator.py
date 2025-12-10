@@ -689,7 +689,7 @@ def make_the_data():
             wfjt_idx = 0
             for n in spread(spread_type, n_labels * 3, n_wfjts):
                 wfjt = wfjts[wfjt_idx]
-                if not jt._is_new:
+                if not wfjt._is_new:
                     continue
                 print('  Giving %d labels to %s WFJT' % (n, wfjt.name))
                 for i in range(n):
