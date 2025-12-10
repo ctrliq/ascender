@@ -20,7 +20,7 @@ asciichartpy==1.5.25
 asgiref==3.11.0
     # via
     #   channels
-    #   channels-redis
+    #   channels-valkey
     #   daphne
     #   django
     #   django-cors-headers
@@ -83,8 +83,8 @@ cffi==1.16.0
 channels==4.3.2
     # via
     #   -r /awx_devel/requirements/requirements.in
-    #   channels-redis
-channels-redis==4.3.0
+    #   channels-valkey
+channels-valkey==0.3.0
     # via -r /awx_devel/requirements/requirements.in
 charset-normalizer==3.3.2
     # via requests
@@ -129,6 +129,7 @@ django==5.2.9
     #   django-oauth-toolkit
     #   django-polymorphic
     #   django-solo
+    #   django-valkey
     #   djangorestframework
     #   social-auth-app-django
 # django-ansible-base @ git+https://github.com/ansible/django-ansible-base@devel  # git requirements installed separately
@@ -155,6 +156,8 @@ django-solo==2.4.0
     # via -r /awx_devel/requirements/requirements.in
 django-split-settings==1.0.0
     # via -r /awx_devel/requirements/requirements.in
+django-valkey==0.3.2
+    # via -r /awx_devel/requirements/requirements.in
 djangorestframework==3.15.2
     # via
     #   -r /awx_devel/requirements/requirements.in
@@ -179,8 +182,6 @@ gitpython==3.1.42
     # via -r /awx_devel/requirements/requirements.in
 google-auth==2.28.1
     # via kubernetes
-hiredis==3.3.0
-    # via redis
 hyperlink==21.0.0
     # via
     #   autobahn
@@ -242,6 +243,8 @@ jwcrypto==1.5.6
     # via django-oauth-toolkit
 kubernetes==29.0.0
     # via openshift
+libvalkey==4.0.1
+    # via valkey
 lockfile==0.12.2
     # via python-daemon
 lxml==4.9.4
@@ -263,8 +266,8 @@ msal==1.28.0
     #   msal-extensions
 msal-extensions==1.1.0
     # via azure-identity
-msgpack==1.0.7
-    # via channels-redis
+msgpack==1.1.2
+    # via channels-valkey
 msrest==0.7.1
     # via msrestazure
 msrestazure==0.6.4
@@ -380,10 +383,6 @@ pyyaml==6.0.1
     #   receptorctl
 receptorctl==1.6.2
     # via -r /awx_devel/requirements/requirements.in
-redis[hiredis]==7.1.0
-    # via
-    #   -r /awx_devel/requirements/requirements.in
-    #   channels-redis
 referencing==0.33.0
     # via
     #   jsonschema
@@ -488,6 +487,11 @@ uwsgi==2.0.31
     # via -r /awx_devel/requirements/requirements.in
 uwsgitop==0.12
     # via -r /awx_devel/requirements/requirements.in
+valkey[libvalkey]==6.1.1
+    # via
+    #   -r /awx_devel/requirements/requirements.in
+    #   channels-valkey
+    #   django-valkey
 websocket-client==1.7.0
     # via kubernetes
 wheel==0.45.1

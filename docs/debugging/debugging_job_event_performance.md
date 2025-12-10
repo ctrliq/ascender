@@ -8,10 +8,10 @@ Job events start their life in Ansible, specifically in the Ascender Ansible cal
 
   1. Ansible
   2. The Ascender callback plugin (inside of `ansible-runner`)
-  3. A push to Redis; this ends the processing that happens in the Ansible playbook process space
-  4. The work then picks back up in the callback receiver process with a pop from Redis
+  3. A push to Valkey; this ends the processing that happens in the Ansible playbook process space
+  4. The work then picks back up in the callback receiver process with a pop from Valkey
   5. A bulk insert to `postgres` occurs
-  6. Events are emitted over websocket via Redis
+  6. Events are emitted over websocket via Valkey
   7. At this point, the handling of the event changes process space to deliver over the websocket(s) via `daphne` to the other Ascender nodes & to websocket browser clients
   8. The UI then gets the websocket event and displays it in the job details view
 
@@ -29,19 +29,19 @@ This is what we call the "critical path" for job events.
 
 ### Debugging the Websockets
 
-Ascender relies on Django channels and Redis for websockets. `channels_redis`, the connection plugin for channels to use Redis as the message backend, allows for setting per-group queue limits. By default, Ascender sets this limit to 10,000. It can be tricky to know when this limit is exceeded due to the asynchronous nature of Channels + ASGI + websockets.
+Ascender relies on Django channels and Valkey for websockets. `channels_valkey`, the connection plugin for channels to use Valkey as the message backend, allows for setting per-group queue limits. By default, Ascender sets this limit to 10,000. It can be tricky to know when this limit is exceeded due to the asynchronous nature of Channels + ASGI + websockets.
 
-One way to be notified of websocket queue reaching capacity is to hook into the `channels_redis.core` logger. Below is an example of how to enable the logging and an example of what capacity overflow messages look like:
+One way to be notified of websocket queue reaching capacity is to hook into the `channels_valkey.core` logger. Below is an example of how to enable the logging and an example of what capacity overflow messages look like:
 
 ```
-LOGGING['loggers']['channels_redis.core'] = {
+LOGGING['loggers']['channels_valkey.core'] = {
     'handlers': ['console', 'file', 'tower_warnings'],
     'level': 'DEBUG'
 }
 
 tail -f /var/log/tower/tower.log
-2021-04-28 20:53:51,230 INFO     channels_redis.core 1 of 4 channels over capacity in group broadcast-group_send
-2021-04-28 20:53:51,231 INFO     channels_redis.core 1 of 1 channels over capacity in group job_events-49
+2021-04-28 20:53:51,230 INFO     channels_valkey.core 1 of 4 channels over capacity in group broadcast-group_send
+2021-04-28 20:53:51,231 INFO     channels_valkey.core 1 of 1 channels over capacity in group job_events-49
 ```
 
 The two above log messages were not chosen randomly. They are representative of common groups that can overflow. Each Ascender node sends all events it processes locally to all other Ascender nodes. It does this via the `broadcast-group_send` group; all Ascender nodes are subscribed to this group. Under high load, this queue can overflow.
@@ -49,9 +49,9 @@ The two above log messages were not chosen randomly. They are representative of 
 The other log message above is an overflow in the `job_events-49` group. Overflow in this queue can happen when either Ascender or the websocket client cannot keep up with the event websocket messages.
 
 ```
-redis-cli -s /var/run/redis/redis.sock
+valkey-cli -s /var/run/valkey/valkey.sock
 
-redis /var/run/redis/redis.sock> keys *
+valkey /var/run/valkey/valkey.sock> keys *
 1) "awx_dispatcher_statistics"
 2) "callback_tasks"
 3) "broadcast_websocket_stats"
@@ -60,26 +60,26 @@ redis /var/run/redis/redis.sock> keys *
 6) "asgispecific.2061d193ea1c4dd487d8f455dfeabd6a!"
 ```
 
-Above is an example of all of the keys in Redis on an Ascender node. Let's focus on 3) and 6). 3) is the special group we mentioned above. The Redis `ZSET` object is created by `channels_redis` to track Django Channel clients subscribed to the `broadcast-group_send` group. 6) is the queue that holds websocket messages.
+Above is an example of all of the keys in Valkey on an Ascender node. Let's focus on 3) and 6). 3) is the special group we mentioned above. The Valkey `ZSET` object is created by `channels_valkey` to track Django Channel clients subscribed to the `broadcast-group_send` group. 6) is the queue that holds websocket messages.
 
 ```
-redis /var/run/redis/redis.sock> zrange asgi:group:broadcast-group_send 0 -1
+valkey /var/run/valkey/valkey.sock> zrange asgi:group:broadcast-group_send 0 -1
 1) "specific.2061d193ea1c4dd487d8f455dfeabd6a!20e9f507dd78489b89eb2aeb153d3834"
 2) "specific.2061d193ea1c4dd487d8f455dfeabd6a!ea4463175cbb4b04937b98941aae0731"
 3) "specific.2061d193ea1c4dd487d8f455dfeabd6a!8b5249bcb61c4026a9d4e341afe98a56"
 4) "specific.2061d193ea1c4dd487d8f455dfeabd6a!4854fb8c3d36442d95ff41a34fc5ee16"
 
-redis /var/run/redis/redis.sock> zcount asgispecific.2061d193ea1c4dd487d8f455dfeabd6a! -inf +inf
+valkey /var/run/valkey/valkey.sock> zcount asgispecific.2061d193ea1c4dd487d8f455dfeabd6a! -inf +inf
 (integer) 58
-redis /var/run/redis/redis.sock> zcount asgispecific.2061d193ea1c4dd487d8f455dfeabd6a! -inf +inf
+valkey /var/run/valkey/valkey.sock> zcount asgispecific.2061d193ea1c4dd487d8f455dfeabd6a! -inf +inf
 (integer) 29
-redis /var/run/redis/redis.sock> zcount asgispecific.2061d193ea1c4dd487d8f455dfeabd6a! -inf +inf
+valkey /var/run/valkey/valkey.sock> zcount asgispecific.2061d193ea1c4dd487d8f455dfeabd6a! -inf +inf
 (integer) 18
-redis /var/run/redis/redis.sock> zcount asgispecific.2061d193ea1c4dd487d8f455dfeabd6a! -inf +inf
+valkey /var/run/valkey/valkey.sock> zcount asgispecific.2061d193ea1c4dd487d8f455dfeabd6a! -inf +inf
 (integer) 3
-redis /var/run/redis/redis.sock> zcount asgispecific.2061d193ea1c4dd487d8f455dfeabd6a! -inf +inf
+valkey /var/run/valkey/valkey.sock> zcount asgispecific.2061d193ea1c4dd487d8f455dfeabd6a! -inf +inf
 (integer) 14
-redis /var/run/redis/redis.sock> zcount asgispecific.2061d193ea1c4dd487d8f455dfeabd6a! -inf +inf
+valkey /var/run/valkey/valkey.sock> zcount asgispecific.2061d193ea1c4dd487d8f455dfeabd6a! -inf +inf
 (integer) 15
 ```
 

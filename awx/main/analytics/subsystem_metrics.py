@@ -1,5 +1,5 @@
 import itertools
-import redis
+import valkey
 import json
 import time
 import logging
@@ -14,7 +14,7 @@ from rest_framework.request import Request
 from awx.main.consumers import emit_channel_notification
 from awx.main.utils import is_testing
 
-root_key = settings.SUBSYSTEM_METRICS_REDIS_KEY_PREFIX
+root_key = settings.SUBSYSTEM_METRICS_VALKEY_KEY_PREFIX
 logger = logging.getLogger('awx.main.analytics')
 
 
@@ -181,7 +181,7 @@ class Metrics(MetricsNamespace):
     # metric name, help_text
     METRICSLIST = []
     _METRICSLIST = [
-        FloatM('subsystem_metrics_pipe_execute_seconds', 'Time spent saving metrics to redis'),
+        FloatM('subsystem_metrics_pipe_execute_seconds', 'Time spent saving metrics to valkey'),
         IntM('subsystem_metrics_pipe_execute_calls', 'Number of calls to pipe_execute'),
         FloatM('subsystem_metrics_send_metrics_seconds', 'Time spent sending metrics to other nodes'),
     ]
@@ -189,15 +189,15 @@ class Metrics(MetricsNamespace):
     def __init__(self, namespace, auto_pipe_execute=False, instance_name=None, metrics_have_changed=True, **kwargs):
         MetricsNamespace.__init__(self, namespace)
 
-        self.pipe = redis.Redis.from_url(settings.BROKER_URL).pipeline()
-        self.conn = redis.Redis.from_url(settings.BROKER_URL)
+        self.pipe = valkey.Valkey.from_url(settings.BROKER_URL).pipeline()
+        self.conn = valkey.Valkey.from_url(settings.BROKER_URL)
         self.last_pipe_execute = time.time()
-        # track if metrics have been modified since last saved to redis
-        # start with True so that we get an initial save to redis
+        # track if metrics have been modified since last saved to valkey
+        # start with True so that we get an initial save to valkey
         self.metrics_have_changed = metrics_have_changed
-        self.pipe_execute_interval = settings.SUBSYSTEM_METRICS_INTERVAL_SAVE_TO_REDIS
+        self.pipe_execute_interval = settings.SUBSYSTEM_METRICS_INTERVAL_SAVE_TO_VALKEY
         self.send_metrics_interval = settings.SUBSYSTEM_METRICS_INTERVAL_SEND_METRICS
-        # auto pipe execute will commit transaction of metric data to redis
+        # auto pipe execute will commit transaction of metric data to valkey
         # at a regular interval (pipe_execute_interval). If set to False,
         # the calling function should call .pipe_execute() explicitly
         self.auto_pipe_execute = auto_pipe_execute
@@ -256,7 +256,7 @@ class Metrics(MetricsNamespace):
         return json.dumps(data)
 
     def load_local_metrics(self):
-        # generate python dictionary of key values from metrics stored in redis
+        # generate python dictionary of key values from metrics stored in valkey
         data = {}
         for field in self.METRICS:
             data[field] = self.METRICS[field].decode(self.conn)
@@ -289,7 +289,7 @@ class Metrics(MetricsNamespace):
 
     def send_metrics(self):
         # more than one thread could be calling this at the same time, so should
-        # acquire redis lock before sending metrics
+        # acquire valkey lock before sending metrics
         lock = self.conn.lock(root_key + '-' + self._namespace + '_lock')
         if not lock.acquire(blocking=False):
             return
@@ -312,9 +312,9 @@ class Metrics(MetricsNamespace):
             try:
                 lock.release()
             except Exception as exc:
-                # After system failures, we might throw redis.exceptions.LockNotOwnedError
+                # After system failures, we might throw valkey.exceptions.LockNotOwnedError
                 # this is to avoid print a Traceback, and importantly, avoid raising an exception into parent context
-                logger.warning(f'Error releasing subsystem metrics redis lock, error: {str(exc)}')
+                logger.warning(f'Error releasing subsystem metrics valkey lock, error: {str(exc)}')
 
     def load_other_metrics(self, request):
         # data received from other nodes are stored in their own keys
@@ -332,10 +332,10 @@ class Metrics(MetricsNamespace):
         instance_data = {}
         for instance in instance_names:
             if len(instances_filter) == 0 or instance in instances_filter:
-                instance_data_from_redis = self.conn.get(root_key + '-' + self._namespace + '_instance_' + instance)
+                instance_data_from_valkey = self.conn.get(root_key + '-' + self._namespace + '_instance_' + instance)
                 # data from other instances may not be available. That is OK.
-                if instance_data_from_redis:
-                    instance_data[instance] = json.loads(instance_data_from_redis.decode('UTF-8'))
+                if instance_data_from_valkey:
+                    instance_data[instance] = json.loads(instance_data_from_valkey.decode('UTF-8'))
         return instance_data
 
     def generate_metrics(self, request):
@@ -389,9 +389,9 @@ class DispatcherMetrics(Metrics):
 
 class CallbackReceiverMetrics(Metrics):
     METRICSLIST = [
-        SetIntM('callback_receiver_events_queue_size_redis', 'Current number of events in redis queue'),
-        IntM('callback_receiver_events_popped_redis', 'Number of events popped from redis'),
-        IntM('callback_receiver_events_in_memory', 'Current number of events in memory (in transfer from redis to db)'),
+        SetIntM('callback_receiver_events_queue_size_redis', 'Current number of events in valkey queue'),
+        IntM('callback_receiver_events_popped_redis', 'Number of events popped from valkey'),
+        IntM('callback_receiver_events_in_memory', 'Current number of events in memory (in transfer from valkey to db)'),
         IntM('callback_receiver_batch_events_errors', 'Number of times batch insertion failed'),
         FloatM('callback_receiver_events_insert_db_seconds', 'Total time spent saving events to database'),
         IntM('callback_receiver_events_insert_db', 'Number of events batch inserted into database'),
@@ -415,10 +415,10 @@ def metrics(request):
 
 class CustomToPrometheusMetricsCollector(prometheus_client.registry.Collector):
     """
-    Takes the metric data from redis -> our custom metric fields -> prometheus
+    Takes the metric data from valkey -> our custom metric fields -> prometheus
     library metric fields.
 
-    The plan is to get rid of the use of redis, our custom metric fields, and
+    The plan is to get rid of the use of valkey, our custom metric fields, and
     to switch fully to the prometheus library. At that point, this translation
     code will be deleted.
     """
@@ -432,14 +432,14 @@ class CustomToPrometheusMetricsCollector(prometheus_client.registry.Collector):
 
         instance_data = self._metrics.load_other_metrics(Request(HttpRequest()))
         if not instance_data:
-            logger.debug(f"No metric data not found in redis for metric namespace '{self._metrics._namespace}'")
+            logger.debug(f"No metric data not found in valkey for metric namespace '{self._metrics._namespace}'")
             return None
 
         host_metrics = instance_data.get(my_hostname)
         for _, metric in self._metrics.METRICS.items():
             entry = host_metrics.get(metric.field)
             if not entry:
-                logger.debug(f"{self._metrics._namespace} metric '{metric.field}' not found in redis data payload {json.dumps(instance_data, indent=2)}")
+                logger.debug(f"{self._metrics._namespace} metric '{metric.field}' not found in valkey data payload {json.dumps(instance_data, indent=2)}")
                 continue
             if isinstance(metric, HistogramM):
                 buckets = list(zip(metric.buckets, entry['counts']))

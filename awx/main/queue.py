@@ -4,7 +4,7 @@
 # Python
 import json
 import logging
-import redis
+import valkey
 
 # Django
 from django.conf import settings
@@ -26,7 +26,7 @@ class CallbackQueueDispatcher(object):
     def __init__(self):
         self.queue = getattr(settings, 'CALLBACK_QUEUE', '')
         self.logger = logging.getLogger('awx.main.queue.CallbackQueueDispatcher')
-        self.connection = redis.Redis.from_url(settings.BROKER_URL)
+        self.connection = valkey.Valkey.from_url(settings.BROKER_URL)
 
     def dispatch(self, obj):
         self.connection.rpush(self.queue, json.dumps(obj, cls=AnsibleJSONEncoder))

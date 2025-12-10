@@ -2,9 +2,10 @@ import functools
 
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
-from django.core.cache.backends.redis import RedisCache
+#from django.core.cache.backends.redis import RedisCache
+from django_valkey.cache import ValkeyCache
 
-from redis.exceptions import ConnectionError, ResponseError, TimeoutError
+from valkey.exceptions import ConnectionError, ResponseError, TimeoutError
 import socket
 
 # This list comes from what django-redis ignores and the behavior we are trying
@@ -23,16 +24,16 @@ def optionally_ignore_exceptions(func=None, return_value=None):
         try:
             return func(*args, **kwargs)
         except IGNORED_EXCEPTIONS as e:
-            if settings.DJANGO_REDIS_IGNORE_EXCEPTIONS:
+            if settings.DJANGO_CACHE_IGNORE_EXCEPTIONS:
                 return return_value
             raise e.__cause__ or e
 
     return wrapper
 
 
-class AWXRedisCache(RedisCache):
+class AWXValkeyCache(ValkeyCache):
     """
-    We just want to wrap the upstream RedisCache class so that we can ignore
+    We just want to wrap the upstream ValkeyCache class so that we can ignore
     the exceptions that it raises when the cache is unavailable.
     """
 
@@ -41,8 +42,8 @@ class AWXRedisCache(RedisCache):
         return super().add(key, value, timeout, version)
 
     @optionally_ignore_exceptions(return_value=CONNECTION_INTERRUPTED_SENTINEL)
-    def _get(self, key, default=None, version=None):
-        return super().get(key, default, version)
+    def _get(self, key, default=None, version=None, client=None):
+        return super()._get(key, default, version, client)
 
     def get(self, key, default=None, version=None):
         value = self._get(key, default, version)

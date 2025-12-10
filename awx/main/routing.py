@@ -1,4 +1,4 @@
-import redis
+import valkey
 import logging
 
 from django.conf import settings
@@ -18,12 +18,12 @@ _application = None
 class AWXProtocolTypeRouter(ProtocolTypeRouter):
     def __init__(self, *args, **kwargs):
         try:
-            r = redis.Redis.from_url(settings.BROKER_URL)
+            r = valkey.Valkey.from_url(settings.BROKER_URL)
             for k in r.scan_iter('asgi:*', 500):
-                logger.debug(f"cleaning up Redis key {k}")
+                logger.debug(f"cleaning up valkey key {k}")
                 r.delete(k)
-        except redis.exceptions.RedisError as e:
-            logger.warning("encountered an error communicating with redis.")
+        except valkey.exceptions.ValkeyError as e:
+            logger.warning("encountered an error communicating with valkey.")
             raise e
         super().__init__(*args, **kwargs)
 

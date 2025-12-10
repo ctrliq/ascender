@@ -13,11 +13,11 @@ Since the [web/task split](https://github.com/ansible/awx/pull/13423) landed,
 the websockets infrastructure needed to be reworked. As we will see below, the
 system makes use of
 [django-channels](https://channels.readthedocs.io/en/stable/) which in turn
-makes use of Redis. As we wanted to have separate deployments for the web (API)
+makes use of Valkey. As we wanted to have separate deployments for the web (API)
 component and the task backend component, we needed to no longer depend on a
-shared Redis between these pieces.
+shared Valkey between these pieces.
 
-When a message gets sent, it lands in Redis (which is used as a pub/sub server
+When a message gets sent, it lands in Valkey (which is used as a pub/sub server
 backend for django-channels), and django-channels acts on it and forwards it on
 to clients. (There is a concept of "groups" of clients that we will cover
 later.)
@@ -36,7 +36,7 @@ The notable modules for this component are:
 
   * This is also where `emit_channel_notification` is defined, which is what the
     task system calls to actually send out notifications. This sends a message
-    to the local Redis instance where wsrelay (discussed below) will pick it
+    to the local Valkey instance where wsrelay (discussed below) will pick it
     up and relay it out to the web nodes.
 
 * `awx/main/wsrelay.py` (formerly `awx/main/wsbroadcast.py`) - an asyncio
@@ -53,11 +53,11 @@ The notable modules for this component are:
 <img src="img/websockets-old.png">
 
 Consider a Kubernetes deployment of Ascender. Before the web task split, each pod had
-a web container, a task container, and a redis container (and possibly others,
+a web container, a task container, and a valkey container (and possibly others,
 not relevant here). A daemon existed called `wsbroadcast` which lived in the web
 container and ran once within each pod. When a websocket message was emitted
 (from some task system daemon, for example), the message would get sent to a
-django-channels "group" which would store it in the pod-local Redis before
+django-channels "group" which would store it in the pod-local Valkey before
 django-channels acted on it. It would also get sent to a special "broadcast"
 group.
 
@@ -69,20 +69,20 @@ added to the "broadcast" group on each pod and would thus receive a copy of each
 message being sent from each node.
 
 It would then "re-send" this message to its local clients by storing it in its
-own pod-local Redis for django-channels to process it.
+own pod-local Valkey for django-channels to process it.
 
 ## Current Implementation
 
 <img src="img/websockets-new.png">
 
 In the post web/task split world, web and task containers live in entirely
-independent pods, each with their own Redis. The former `wsbroadcast` has been
+independent pods, each with their own Valkey. The former `wsbroadcast` has been
 renamed to `wsrelay`, and we have moved to a kind of "fan-out" architecture.
 
 Messages (only) originate from the task system (container). The `wsrelay` daemon
 initiates a websocket connection to each web pod on its "relay" endpoint (which
 corresponds to the `RelayConsumer` class). As a task progresses and events are
-emitted, websocket messages get sent to Redis (via django-channels) and
+emitted, websocket messages get sent to Valkey (via django-channels) and
 `wsrelay` running in the same pod picks them up. It then takes each message and
 passes it along to every web pod, via the websocket connection it already has
 open.

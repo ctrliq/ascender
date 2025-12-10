@@ -314,7 +314,7 @@ awx-link:
 	[ -d "/awx_devel/awx.egg-info" ] || $(PYTHON) /awx_devel/tools/scripts/egg_info_dev
 
 TEST_DIRS ?= awx/main/tests/unit awx/main/tests/functional awx/conf/tests awx/sso/tests
-PYTEST_ARGS ?= -n auto
+PYTEST_ARGS ?= -n auto --dist=loadfile
 ## Run all API unit tests.
 test:
 	if [ "$(VENV_BASE)" ]; then \
@@ -322,7 +322,25 @@ test:
 	fi; \
 	PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider $(PYTEST_ARGS) $(TEST_DIRS)
 	cd awxkit && $(VENV_BASE)/awx/bin/tox -re py3
-	awx-manage check_migrations --dry-run --check  -n 'missing_migration_file'
+	awx-manage check_migrations --dry-run --check -n 'missing_migration_file'
+
+## Run all API unit tests without parallel execution (safer but slower).
+test-serial:
+	if [ "$(VENV_BASE)" ]; then \
+		. $(VENV_BASE)/awx/bin/activate; \
+	fi; \
+	PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider $(TEST_DIRS)
+	cd awxkit && $(VENV_BASE)/awx/bin/tox -re py3 
+	awx-manage check_migrations --dry-run --check -n 'missing_migration_file'
+
+## Run tests with limited parallel workers (safer than auto).
+test-safe:
+	if [ "$(VENV_BASE)" ]; then \
+		. $(VENV_BASE)/awx/bin/activate; \
+	fi; \
+	PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider -n 2 --dist=loadfile $(TEST_DIRS)
+	cd awxkit && $(VENV_BASE)/awx/bin/tox -re py3
+	awx-manage check_migrations --dry-run --check -n 'missing_migration_file'
 
 test_migrations:
 	if [ "$(VENV_BASE)" ]; then \
@@ -604,7 +622,7 @@ docker-clean:
 	-$(foreach image_id,$(shell docker images --filter=reference='*/*/*ascender_devel*' --filter=reference='*/*ascender_devel*' --filter=reference='*ascender_devel*' -aq),docker rmi --force $(image_id);)
 
 docker-clean-volumes: docker-compose-clean docker-compose-container-group-clean
-	docker volume rm -f tools_var_lib_awx tools_awx_db tools_vault_1 tools_ldap_1 $(docker volume ls --filter name=tools_redis_socket_ -q)
+	docker volume rm -f tools_var_lib_awx tools_awx_db tools_vault_1 tools_ldap_1 $(docker volume ls --filter name=tools_valkey_socket_ -q)
 
 docker-refresh: docker-clean docker-compose
 

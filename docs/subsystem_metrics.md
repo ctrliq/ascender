@@ -13,7 +13,7 @@ m.pipe_execute() # save the values to Redis
 The endpoint reflects whatever values are in Redis. The metrics are stored in a Redis hash set called `awx_metrics`, and each metric is a field in this hash set. When a POST or GET is made to the endpoint, the view will load the data stored in Redis, format it to be Prometheus-compatible, and return it as a response. You can view the metrics in Redis by connecting to an instance via a client.
 
 ```
-redis /run/redis/redis.sock> hget awx_metrics callback_receiver_events_insert_db
+valkey /run/valkey/valkey.sock> hget awx_metrics callback_receiver_events_insert_db
 "100"
 ```
 
@@ -58,7 +58,7 @@ Process                                                                     |   
 
 ## When to call pipe_execute
 
-As mentioned, it is best practice to ensure `pipe_execute` is not called too frequently. For convenience, the `should_pipe_execute` method can be used to determine whether enough time has elapsed since the last `pipe_execute` to warrant a new call. This interval is determined by the `SUBSYSTEM_METRICS_INTERVAL_SAVE_TO_REDIS` setting.
+As mentioned, it is best practice to ensure `pipe_execute` is not called too frequently. For convenience, the `should_pipe_execute` method can be used to determine whether enough time has elapsed since the last `pipe_execute` to warrant a new call. This interval is determined by the `SUBSYSTEM_METRICS_INTERVAL_SAVE_TO_VALKEY` setting.
 
 ```python
 m = Metrics()

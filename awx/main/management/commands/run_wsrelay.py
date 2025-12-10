@@ -4,7 +4,7 @@ import logging
 import asyncio
 import datetime
 import re
-import redis
+import valkey
 import time
 from datetime import datetime as dt
 
@@ -135,8 +135,8 @@ class Command(BaseCommand):
         if options.get('status'):
             try:
                 stats_all = RelayWebsocketStatsManager.get_stats_sync()
-            except redis.exceptions.ConnectionError as e:
-                print(f"Unable to get Relay Websocket Status. Failed to connect to redis {e}")
+            except valkey.exceptions.ConnectionError as e:
+                print(f"Unable to get Relay Websocket Status. Failed to connect to valkey {e}")
                 return
 
             data = {}

@@ -110,9 +110,9 @@ operation:
 
 -  PostgreSQL database
 
--  A Redis key/value store
+-  A Valkey key/value store
 
-The connection to redis is over a local unix socket, restricted to the awx service user.
+The connection to valkey is over a local unix socket, restricted to the awx service user.
 
 The connection to the PostgreSQL database is done via password authentication over TCP, either via localhost or remotely (external
 database). This connection can use PostgreSQL’s built in support for SSL/TLS, as natively configured by the installer support.

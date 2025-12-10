@@ -6,7 +6,7 @@ from django.core.management.base import BaseCommand
 from awx.main.analytics.subsystem_metrics import CallbackReceiverMetricsServer
 
 from awx.main.dispatch.control import Control
-from awx.main.dispatch.worker import AWXConsumerRedis, CallbackBrokerWorker
+from awx.main.dispatch.worker import AWXConsumerValkey, CallbackBrokerWorker
 
 
 class Command(BaseCommand):
@@ -30,7 +30,7 @@ class Command(BaseCommand):
         CallbackReceiverMetricsServer().start()
 
         try:
-            consumer = AWXConsumerRedis(
+            consumer = AWXConsumerValkey(
                 'callback_receiver',
                 CallbackBrokerWorker(),
                 queues=[getattr(settings, 'CALLBACK_QUEUE', '')],

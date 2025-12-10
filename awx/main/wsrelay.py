@@ -7,7 +7,7 @@ import ipaddress
 
 import aiohttp
 from aiohttp import client_exceptions
-import redis
+import valkey
 
 from channels.layers import get_channel_layer
 
@@ -66,7 +66,7 @@ class WebsocketRelayConnection:
 
         '''
         Can not put get_channel_layer() in the init code because it is in the init
-        path of channel layers i.e. RedisChannelLayer() calls our init code.
+        path of channel layers i.e. ValkeyChannelLayer() calls our init code.
         '''
         if not self.channel_layer:
             self.channel_layer = get_channel_layer()
@@ -172,7 +172,7 @@ class WebsocketRelayConnection:
                     msg = await asyncio.wait_for(self.channel_layer.receive(consumer_channel), timeout=10)
                     if not msg.get("needs_relay"):
                         # This is added in by emit_channel_notification(). It prevents us from looping
-                        # in the event that we are sharing a redis with a web instance. We'll see the
+                        # in the event that we are sharing a valkey with a web instance. We'll see the
                         # message once (it'll have needs_relay=True), we'll delete that, and then forward
                         # the message along. The web instance will add it back to the same channels group,
                         # but it won't have needs_relay=True, so we'll ignore it.
@@ -190,8 +190,8 @@ class WebsocketRelayConnection:
                         return
 
                     continue
-                except redis.exceptions.ConnectionError:
-                    logger.info(f"Producer {name} lost connection to Redis, shutting down.")
+                except valkey.exceptions.ConnectionError:
+                    logger.info(f"Producer {name} lost connection to Valkey, shutting down.")
                     return
 
                 await websocket.send_json(wrap_broadcast_msg(group, msg))
@@ -238,10 +238,10 @@ class WebSocketRelayManager(object):
                     continue
 
                 # Skip if the message comes from the same host we are running on
-                # In this case, we'll be sharing a redis, no need to relay.
+                # In this case, we'll be sharing a valkey, no need to relay.
                 if payload.get("hostname") == self.local_hostname:
                     hostname = payload.get("hostname")
-                    logger.debug(f"Received a heartbeat request for {hostname}. Skipping as we use redis for local host.")
+                    logger.debug(f"Received a heartbeat request for {hostname}. Skipping as we use valkey for local host.")
                     continue
 
                 action = payload.get("action")

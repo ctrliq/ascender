@@ -1,4 +1,4 @@
-import redis
+import valkey
 import pytest
 from unittest import mock
 import json
@@ -49,7 +49,7 @@ def test_job_capacity_and_with_inactive_node():
     i.enabled = False
     i.save()
     with override_settings(CLUSTER_HOST_ID=i.hostname):
-        with mock.patch.object(redis.client.Redis, 'ping', lambda self: True):
+        with mock.patch.object(valkey.client.Valkey, 'ping', lambda self: True):
             cluster_node_heartbeat()
         i = Instance.objects.get(id=i.id)
         assert i.capacity == 0
@@ -58,13 +58,13 @@ def test_job_capacity_and_with_inactive_node():
 @pytest.mark.django_db
 @mock.patch('awx.main.models.ha.get_cpu_effective_capacity', lambda cpu: 8)
 @mock.patch('awx.main.models.ha.get_mem_effective_capacity', lambda mem: 62)
-def test_job_capacity_with_redis_disabled():
+def test_job_capacity_with_valkey_disabled():
     i = Instance.objects.create(hostname='test-1')
 
     def _raise(self):
-        raise redis.ConnectionError()
+        raise valkey.ConnectionError()
 
-    with mock.patch.object(redis.client.Redis, 'ping', _raise):
+    with mock.patch.object(valkey.client.Valkey, 'ping', _raise):
         i.local_health_check()
     assert i.capacity == 0
 

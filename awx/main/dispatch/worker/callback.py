@@ -13,7 +13,7 @@ from django_guid import set_guid
 
 import psutil
 
-import redis
+import valkey
 
 from awx.main.consumers import emit_channel_notification
 from awx.main.models import JobEvent, AdHocCommandEvent, ProjectUpdateEvent, InventoryUpdateEvent, SystemJobEvent, UnifiedJob
@@ -71,13 +71,13 @@ class CallbackBrokerWorker(BaseWorker):
 
     def __init__(self):
         self.buff = {}
-        self.redis = redis.Redis.from_url(settings.BROKER_URL)
+        self.valkey = valkey.Valkey.from_url(settings.BROKER_URL)
         self.subsystem_metrics = s_metrics.CallbackReceiverMetrics(auto_pipe_execute=False)
         self.queue_pop = 0
         self.queue_name = settings.CALLBACK_QUEUE
         self.prof = AWXProfiler("CallbackBrokerWorker")
-        for key in self.redis.keys('awx_callback_receiver_statistics_*'):
-            self.redis.delete(key)
+        for key in self.valkey.keys('awx_callback_receiver_statistics_*'):
+            self.valkey.delete(key)
 
     @cached_property
     def pid(self):
@@ -86,7 +86,7 @@ class CallbackBrokerWorker(BaseWorker):
 
     def read(self, queue):
         try:
-            res = self.redis.blpop(self.queue_name, timeout=1)
+            res = self.valkey.blpop(self.queue_name, timeout=1)
             if res is None:
                 return {'event': 'FLUSH'}
             self.total += 1
@@ -94,11 +94,11 @@ class CallbackBrokerWorker(BaseWorker):
             self.subsystem_metrics.inc('callback_receiver_events_popped_redis', 1)
             self.subsystem_metrics.inc('callback_receiver_events_in_memory', 1)
             return json.loads(res[1])
-        except redis.exceptions.RedisError:
-            logger.exception("encountered an error communicating with redis")
+        except valkey.exceptions.ValkeyError:
+            logger.exception("encountered an error communicating with valkey")
             time.sleep(1)
         except (json.JSONDecodeError, KeyError):
-            logger.exception("failed to decode JSON message from redis")
+            logger.exception("failed to decode JSON message from valkey")
         finally:
             self.record_statistics()
             self.record_read_metrics()
@@ -109,7 +109,7 @@ class CallbackBrokerWorker(BaseWorker):
         if self.queue_pop == 0:
             return
         if self.subsystem_metrics.should_pipe_execute() is True:
-            queue_size = self.redis.llen(self.queue_name)
+            queue_size = self.valkey.llen(self.queue_name)
             self.subsystem_metrics.set('callback_receiver_events_queue_size_redis', queue_size)
             self.subsystem_metrics.pipe_execute()
             self.queue_pop = 0
@@ -118,10 +118,10 @@ class CallbackBrokerWorker(BaseWorker):
         # buffer stat recording to once per (by default) 5s
         if time.time() - self.last_stats > settings.JOB_EVENT_STATISTICS_INTERVAL:
             try:
-                self.redis.set(f'awx_callback_receiver_statistics_{self.pid}', self.debug())
+                self.valkey.set(f'awx_callback_receiver_statistics_{self.pid}', self.debug())
                 self.last_stats = time.time()
             except Exception:
-                logger.exception("encountered an error communicating with redis")
+                logger.exception("encountered an error communicating with valkey")
                 self.last_stats = time.time()
 
     def debug(self):
