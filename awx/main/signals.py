@@ -600,8 +600,16 @@ def delete_inventory_for_org(sender, instance, **kwargs):
 
 @receiver(pre_delete, sender=WorkflowJobTemplateNode)
 def delete_approval_templates(sender, instance, **kwargs):
-    if type(instance.unified_job_template) is WorkflowApprovalTemplate:
-        instance.unified_job_template.delete()
+    # Check if unified_job_template exists and is accessible
+    # Use unified_job_template_id to avoid triggering ORM fetch if object doesn't exist
+    if instance.unified_job_template_id is not None:
+        try:
+            unified_job_template = instance.unified_job_template
+            if type(unified_job_template) is WorkflowApprovalTemplate:
+                unified_job_template.delete()
+        except (AttributeError, UnifiedJobTemplate.DoesNotExist, WorkflowApprovalTemplate.DoesNotExist):
+            # unified_job_template has already been deleted or doesn't exist
+            pass
 
 
 @receiver(pre_save, sender=WorkflowJobTemplateNode)
@@ -612,8 +620,14 @@ def delete_approval_node_type_change(sender, instance, **kwargs):
         return
     if old.unified_job_template == instance.unified_job_template:
         return
-    if type(old.unified_job_template) is WorkflowApprovalTemplate:
-        old.unified_job_template.delete()
+    # Use unified_job_template_id to avoid triggering ORM fetch if object doesn't exist
+    if old.unified_job_template_id is not None:
+        try:
+            if type(old.unified_job_template) is WorkflowApprovalTemplate:
+                old.unified_job_template.delete()
+        except (AttributeError, UnifiedJobTemplate.DoesNotExist, WorkflowApprovalTemplate.DoesNotExist):
+            # unified_job_template has already been deleted or doesn't exist
+            pass
 
 
 @receiver(pre_delete, sender=WorkflowApprovalTemplate)
