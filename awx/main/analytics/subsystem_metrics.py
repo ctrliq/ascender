@@ -388,6 +388,7 @@ class DispatcherMetrics(Metrics):
 
 
 class CallbackReceiverMetrics(Metrics):
+    # Retain the redis names for backward compatibility
     METRICSLIST = [
         SetIntM('callback_receiver_events_queue_size_redis', 'Current number of events in valkey queue'),
         IntM('callback_receiver_events_popped_redis', 'Number of events popped from valkey'),

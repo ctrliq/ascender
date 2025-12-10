@@ -850,8 +850,8 @@ CHANNEL_LAYERS = {
                 "address": BROKER_URL,
                 "socket_timeout": 60,
                 "socket_connect_timeout": 60,
-            }], 
-            "capacity": 10000, 
+            }],
+            "capacity": 10000,
             "group_expiry": 157784760,  # 5 years
             "symmetric_encryption_keys": [SECRET_KEY],
         }
