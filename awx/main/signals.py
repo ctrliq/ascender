@@ -607,7 +607,7 @@ def delete_approval_templates(sender, instance, **kwargs):
             unified_job_template = instance.unified_job_template
             if type(unified_job_template) is WorkflowApprovalTemplate:
                 unified_job_template.delete()
-        except (AttributeError, UnifiedJobTemplate.DoesNotExist, WorkflowApprovalTemplate.DoesNotExist):
+        except (UnifiedJobTemplate.DoesNotExist, WorkflowApprovalTemplate.DoesNotExist):
             # unified_job_template has already been deleted or doesn't exist
             pass
 
@@ -625,7 +625,7 @@ def delete_approval_node_type_change(sender, instance, **kwargs):
         try:
             if type(old.unified_job_template) is WorkflowApprovalTemplate:
                 old.unified_job_template.delete()
-        except (AttributeError, UnifiedJobTemplate.DoesNotExist, WorkflowApprovalTemplate.DoesNotExist):
+        except (UnifiedJobTemplate.DoesNotExist, WorkflowApprovalTemplate.DoesNotExist):
             # unified_job_template has already been deleted or doesn't exist
             pass
 
