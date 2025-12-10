@@ -56,6 +56,7 @@ from awx.main.models import (  # noqa
 from awx.main.models.schedules import Schedule  # noqa
 
 from awx.main.signals import disable_activity_stream, disable_computed_fields  # noqa
+from awx.main.utils.common import create_partition  # noqa
 
 
 option_list = [
@@ -101,7 +102,7 @@ if options['preset']:
     except ValueError:
         raise Exception('Preset "%s" dataset not found, options are %s' % (options['preset'], keys))
 
-    options.update({cols[0]: cols[col + 1] for cols in split_lines})
+    options.update({cols[0]: cols[col + 1] for cols in split_lines if len(cols) > col + 1 and cols[0]})
 
     if not options['prefix']:
         options['prefix'] = options['preset']
@@ -122,6 +123,7 @@ n_nodes = int(options['nodes'])
 n_labels = int(options['labels'])
 n_jobs = int(options['jobs'])
 n_job_events = int(options['job_events'])
+spread_type = options.get('type', 'expo')  # Default to exponential if not specified
 prefix = options['prefix']
 
 organizations = []
@@ -140,8 +142,25 @@ labels = []
 jobs = []
 # job_events       = []
 
+def spread_evenly(n, m):
+    ret = []
+    # Evenly distribute n items into m slots, with remainder distributed across first slots
+    base_amount = n // m
+    remainder = n % m
+    
+    for i in range(m):
+        # First 'remainder' slots get one extra item
+        n_in_this_slot = base_amount + (1 if i < remainder else 0)
+        ret.append(n_in_this_slot)
+    return ret
 
-def spread(n, m):
+def spread(type, n, m):
+    if type == 'expo':
+        return spread_expo(n, m)
+    else:
+        return spread_evenly(n, m)
+
+def spread_expo(n, m):
     ret = []
     # At least one in each slot, split up the rest exponentially so the first
     # buckets contain a lot of entries
@@ -253,7 +272,7 @@ def make_the_data():
 
             print('# Creating %d users' % n_users)
             org_idx = 0
-            for n in spread(n_users, n_organizations):
+            for n in spread(spread_type, n_users, n_organizations):
                 for i in range(n):
                     ids['user'] += 1
                     user_id = ids['user']
@@ -272,7 +291,7 @@ def make_the_data():
 
             print('# Creating %d teams' % n_teams)
             org_idx = 0
-            for n in spread(n_teams, n_organizations):
+            for n in spread(spread_type, n_teams, n_organizations):
                 org = organizations[org_idx]
                 for i in range(n):
                     ids['team'] += 1
@@ -296,7 +315,7 @@ def make_the_data():
                 # Our normal spread for most users
                 cur_user_idx = 0
                 cur_team_idx = 0
-                for n in spread(len(org_users), len(org_teams)):
+                for n in spread(spread_type, len(org_users), len(org_teams)):
                     team = org_teams[cur_team_idx]
                     for i in range(n):
                         if cur_user_idx < len(org_users):
@@ -311,7 +330,7 @@ def make_the_data():
 
             print('# Creating %d credentials for users' % (n_credentials - n_credentials // 2))
             user_idx = 0
-            for n in spread(n_credentials - n_credentials // 2, n_users):
+            for n in spread(spread_type, n_credentials - n_credentials // 2, n_users):
                 user = users[user_idx]
                 for i in range(n):
                     ids['credential'] += 1
@@ -333,7 +352,7 @@ def make_the_data():
             print('# Creating %d credentials for teams' % (n_credentials // 2))
             team_idx = 0
             starting_credential_id = ids['credential']
-            for n in spread(n_credentials - n_credentials // 2, n_teams):
+            for n in spread(spread_type, n_credentials - n_credentials // 2, n_teams):
                 team = teams[team_idx]
                 for i in range(n):
                     ids['credential'] += 1
@@ -352,7 +371,7 @@ def make_the_data():
 
             print('# Creating %d projects' % n_projects)
             org_idx = 0
-            for n in spread(n_projects, n_organizations):
+            for n in spread(spread_type, n_projects, n_organizations):
                 org = organizations[org_idx]
                 for i in range(n):
                     ids['project'] += 1
@@ -394,7 +413,7 @@ def make_the_data():
 
             print('# Creating %d inventories' % n_inventories)
             org_idx = 0
-            for n in spread(n_inventories, min(n_inventories // 4 + 1, n_organizations)):
+            for n in spread(spread_type, n_inventories, min(n_inventories // 4 + 1, n_organizations)):
                 org = organizations[org_idx]
                 for i in range(n):
                     ids['inventory'] += 1
@@ -416,7 +435,7 @@ def make_the_data():
 
             print('# Creating %d inventory_groups' % n_inventory_groups)
             inv_idx = 0
-            for n in spread(n_inventory_groups, n_inventories):
+            for n in spread(spread_type, n_inventory_groups, n_inventories):
                 inventory = inventories[inv_idx]
                 parent_list = [None] * 3
                 for i in range(n):
@@ -444,7 +463,7 @@ def make_the_data():
 
             print('# Creating %d inventory_hosts' % n_inventory_hosts)
             group_idx = 0
-            for n in spread(n_inventory_hosts, n_inventory_groups):
+            for n in spread(spread_type, n_inventory_hosts, n_inventory_groups):
                 group = inventory_groups[group_idx]
                 for i in range(n):
                     ids['host'] += 1
@@ -470,7 +489,7 @@ def make_the_data():
             print('# Creating %d job_templates' % n_job_templates)
             project_idx = 0
             inv_idx = 0
-            for n in spread(n_job_templates, n_projects):
+            for n in spread(spread_type, n_job_templates, n_projects):
                 project = projects[project_idx]
                 for i in range(n):
                     ids['job_template'] += 1
@@ -511,7 +530,7 @@ def make_the_data():
 
             print('# Creating %d Workflow Job Templates' % n_wfjts)
             org_idx = 0
-            for n in spread(n_wfjts, n_organizations):
+            for n in spread(spread_type, n_wfjts, n_organizations):
                 org = organizations[org_idx]
                 for i in range(n):
                     ids['wfjts'] += 1
@@ -532,7 +551,7 @@ def make_the_data():
 
             print('# Creating %d Workflow Job Template nodes' % n_nodes)
             wfjt_idx = 0
-            for n in spread(n_nodes, n_wfjts):
+            for n in spread(spread_type, n_nodes, n_wfjts):
                 wfjt = wfjts[wfjt_idx]
                 if not wfjt._is_new:
                     continue
@@ -576,7 +595,7 @@ def make_the_data():
 
             print('# Creating %d Schedules' % n_schedules)
             jt_idx = 0
-            for n in spread(n_schedules, n_job_templates):
+            for n in spread(spread_type, n_schedules, n_job_templates):
                 jt = job_templates[0]
                 for i in range(n):
                     ids['schedules'] += 1
@@ -597,7 +616,7 @@ def make_the_data():
 
             print('# Creating %d Labels' % n_labels)
             org_idx = 0
-            for n in spread(n_labels, n_organizations):
+            for n in spread(spread_type, n_labels, n_organizations):
                 org = organizations[org_idx]
                 for i in range(n):
                     ids['labels'] += 1
@@ -617,7 +636,7 @@ def make_the_data():
 
             print('# Adding labels to job templates')
             jt_idx = 0
-            for n in spread(n_labels * 7, n_job_templates):
+            for n in spread(spread_type, n_labels * 7, n_job_templates):
                 if n == 0:
                     continue
                 jt = job_templates[jt_idx]
@@ -630,7 +649,7 @@ def make_the_data():
 
             print('# Adding labels to workflow job templates')
             wfjt_idx = 0
-            for n in spread(n_labels * 3, n_wfjts):
+            for n in spread(spread_type, n_labels * 3, n_wfjts):
                 wfjt = wfjts[wfjt_idx]
                 if not jt._is_new:
                     continue
@@ -647,7 +666,7 @@ def make_the_data():
             group_idx = 0
             job_template_idx = 0
             job_i = 0
-            for n in spread(n_jobs, n_job_templates):
+            for n in spread(spread_type, n_jobs, n_job_templates):
                 job_template = job_templates[job_template_idx]
                 for i in range(n):
                     sys.stdout.write('\r   Assigning %d to %s: %d     ' % (n, job_template.name, i + 1))
@@ -697,11 +716,18 @@ def make_the_data():
 
             print('# Creating %d job events' % n_job_events)
             job_idx = 0
-            for n in spread(n_job_events, n_jobs):
+            # Create partitions for job events based on job creation times
+            created_partitions = set()
+            for n in spread(spread_type, n_job_events, n_jobs):
                 job = jobs[job_idx]
                 # Check if job already has events, for idempotence
                 if not job._is_new:
                     continue
+                # Create partition for this job's creation time if not already created
+                partition_start = job.created.replace(minute=0, second=0, microsecond=0)
+                if partition_start not in created_partitions:
+                    create_partition('main_jobevent', partition_start)
+                    created_partitions.add(partition_start)
                 # Bulk create in chunks with maximum chunk size
                 MAX_BULK_CREATE = 100
                 for j in range((n // MAX_BULK_CREATE) + 1):
@@ -711,7 +737,7 @@ def make_the_data():
                         n_subgroup = n % MAX_BULK_CREATE
                     sys.stdout.write('\r   Creating %d job events for job %d, subgroup: %d' % (n, job.id, j + 1))
                     sys.stdout.flush()
-                    JobEvent.objects.bulk_create([JobEvent(created=now(), modified=now(), job=job, event='runner_on_ok') for i in range(n_subgroup)])
+                    JobEvent.objects.bulk_create([JobEvent(created=now(), modified=now(), job=job, job_created=job.created, event='runner_on_ok') for i in range(n_subgroup)])
                 job_idx += 1
                 if n:
                     print('')
