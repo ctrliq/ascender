@@ -1,0 +1,214 @@
+{
+  "presets": {
+    "Demo": {
+      "description": "Demo dataset for showcasing functionality",
+      "spread_type": "even",
+      "resources": {
+        "organizations": 5,
+        "users": 50,
+        "teams": 20,
+        "projects": 15,
+        "job_templates": 30,
+        "schedules": 5,
+        "credentials": 15,
+        "inventories": 15,
+        "inventory_groups": 70,
+        "inventory_hosts": 110,
+        "wfjts": 5,
+        "nodes": 100,
+        "labels": 100,
+        "jobs": 200,
+        "job_events": 4000
+      }
+    },
+    "small": {
+      "description": "Small test environment",
+      "spread_type": "expo",
+      "resources": {
+        "organizations": 50,
+        "users": 500,
+        "teams": 200,
+        "projects": 150,
+        "job_templates": 300,
+        "schedules": 50,
+        "credentials": 150,
+        "inventories": 150,
+        "inventory_groups": 700,
+        "inventory_hosts": 1100,
+        "wfjts": 50,
+        "nodes": 1000,
+        "labels": 1000,
+        "jobs": 2000,
+        "job_events": 40000
+      }
+    },
+    "medium": {
+      "description": "Medium test environment",
+      "spread_type": "expo",
+      "resources": {
+        "organizations": 500,
+        "users": 5000,
+        "teams": 500,
+        "projects": 1000,
+        "job_templates": 2000,
+        "schedules": 1,
+        "credentials": 2000,
+        "inventories": 2000,
+        "inventory_groups": 500,
+        "inventory_hosts": 2500,
+        "wfjts": 100,
+        "nodes": 1000,
+        "labels": 1000,
+        "jobs": 5000,
+        "job_events": 100000
+      }
+    },
+    "Jan2017": {
+      "description": "Historical dataset from January 2017",
+      "spread_type": "expo",
+      "resources": {
+        "organizations": 1,
+        "users": 3,
+        "teams": 2,
+        "projects": 30,
+        "job_templates": 127,
+        "schedules": 5,
+        "credentials": 50,
+        "inventories": 6,
+        "inventory_groups": 15,
+        "inventory_hosts": 15,
+        "wfjts": 0,
+        "nodes": 0,
+        "labels": 0,
+        "jobs": 157208,
+        "job_events": 3370942
+      }
+    },
+    "jobs1k": {
+      "description": "1K jobs focus dataset",
+      "spread_type": "expo",
+      "resources": {
+        "organizations": 1,
+        "users": 3,
+        "teams": 2,
+        "projects": 30,
+        "job_templates": 127,
+        "schedules": 8,
+        "credentials": 50,
+        "inventories": 6,
+        "inventory_groups": 15,
+        "inventory_hosts": 15,
+        "wfjts": 0,
+        "nodes": 0,
+        "labels": 0,
+        "jobs": 1000,
+        "job_events": 20000
+      }
+    },
+    "jobs10k": {
+      "description": "10K jobs focus dataset",
+      "spread_type": "expo",
+      "resources": {
+        "organizations": 1,
+        "users": 3,
+        "teams": 2,
+        "projects": 30,
+        "job_templates": 127,
+        "schedules": 1,
+        "credentials": 50,
+        "inventories": 6,
+        "inventory_groups": 15,
+        "inventory_hosts": 15,
+        "wfjts": 0,
+        "nodes": 0,
+        "labels": 0,
+        "jobs": 10000,
+        "job_events": 200000
+      }
+    },
+    "jobs50k": {
+      "description": "50K jobs focus dataset",
+      "spread_type": "expo",
+      "resources": {
+        "organizations": 1,
+        "users": 3,
+        "teams": 2,
+        "projects": 30,
+        "job_templates": 127,
+        "schedules": 1,
+        "credentials": 50,
+        "inventories": 6,
+        "inventory_groups": 15,
+        "inventory_hosts": 15,
+        "wfjts": 0,
+        "nodes": 0,
+        "labels": 0,
+        "jobs": 50000,
+        "job_events": 1000000
+      }
+    },
+    "jobs100k": {
+      "description": "100K jobs focus dataset",
+      "spread_type": "expo",
+      "resources": {
+        "organizations": 1,
+        "users": 3,
+        "teams": 2,
+        "projects": 30,
+        "job_templates": 127,
+        "schedules": 1,
+        "credentials": 50,
+        "inventories": 6,
+        "inventory_groups": 15,
+        "inventory_hosts": 15,
+        "wfjts": 0,
+        "nodes": 0,
+        "labels": 0,
+        "jobs": 100000,
+        "job_events": 2000000
+      }
+    },
+    "jobs200k": {
+      "description": "200K jobs focus dataset",
+      "spread_type": "expo",
+      "resources": {
+        "organizations": 1,
+        "users": 3,
+        "teams": 2,
+        "projects": 30,
+        "job_templates": 127,
+        "schedules": 1,
+        "credentials": 50,
+        "inventories": 6,
+        "inventory_groups": 15,
+        "inventory_hosts": 15,
+        "wfjts": 0,
+        "nodes": 0,
+        "labels": 0,
+        "jobs": 200000,
+        "job_events": 4000000
+      }
+    },
+    "e2e": {
+      "description": "End-to-end testing dataset",
+      "spread_type": "expo",
+      "resources": {
+        "organizations": 110,
+        "users": 110,
+        "teams": 100,
+        "projects": 110,
+        "job_templates": 110,
+        "schedules": 1,
+        "credentials": 110,
+        "inventories": 110,
+        "inventory_groups": 110,
+        "inventory_hosts": 110,
+        "wfjts": 0,
+        "nodes": 0,
+        "labels": 0,
+        "jobs": 1000,
+        "job_events": 20000
+      }
+    }
+  }
+}
