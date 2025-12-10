@@ -330,7 +330,7 @@ test-serial:
 		. $(VENV_BASE)/awx/bin/activate; \
 	fi; \
 	PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider $(TEST_DIRS)
-	cd awxkit && $(VENV_BASE)/awx/bin/tox -re py3 
+	cd awxkit && $(VENV_BASE)/awx/bin/tox -re py3
 	awx-manage check_migrations --dry-run --check -n 'missing_migration_file'
 
 ## Run tests with limited parallel workers (safer than auto).

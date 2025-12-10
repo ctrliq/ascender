@@ -495,7 +495,7 @@ CELERYBEAT_SCHEDULE = {
 DJANGO_CACHE_IGNORE_EXCEPTIONS = True
 CACHES = {
     'default': {
-        'BACKEND': 'awx.main.cache.AWXValkeyCache', 
+        'BACKEND': 'awx.main.cache.AWXValkeyCache',
         'LOCATION': 'unix:///var/run/valkey/valkey.sock',
         'OPTIONS': {
             'CONNECTION_POOL_KWARGS': {
@@ -844,7 +844,7 @@ ASGI_APPLICATION = "awx.main.routing.application"
 
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels_valkey.core.ValkeyChannelLayer", 
+        "BACKEND": "channels_valkey.core.ValkeyChannelLayer",
         "CONFIG": {
             "hosts": [{
                 "address": BROKER_URL,

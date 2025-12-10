@@ -841,7 +841,7 @@ def get_mem_effective_capacity(mem_bytes, is_control_node=False):
     memory_penalty_bytes = 2147483648
     if settings.IS_K8S:
         # In k8s, this is dealt with differently because
-        # valkeyValkey and the web containers have their own memory allocation
+        # valkey and the web containers have their own memory allocation
         memory_penalty_bytes = 0
 
     # convert memory to megabytes because our setting of how much memory we
