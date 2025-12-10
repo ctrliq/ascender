@@ -81,15 +81,45 @@ option_list = [
     # make_option('--spread-bias', action='store', type='string', default='exponential',
     #            help='"exponential" to bias associations exponentially front loaded for - for ex'),
 ]
-parser = OptionParser(option_list=option_list)
+parser = OptionParser(option_list=option_list, add_help_option=False)
+# Add custom help option
+parser.add_option('-h', '--help', action='store_true', help='Show this help message and exit')
 options, remainder = parser.parse_args()
+
+# Check for help flag and show custom help
+if len(sys.argv) == 1 or options.help:
+    print("Ascender RBAC Dummy Data Generator")
+    print("==================================")
+    print("This script generates test data for Ascender with configurable amounts of different resources.")
+    print("")
+    print("Quick start: Run with a preset to get started quickly")
+    print("  python rbac_dummy_data_generator.py --preset=Demo")
+    print("")
+    
+    # Dynamically read available presets from the file
+    try:
+        presets_filename = os.path.join(base_dir, 'tools', 'data_generators', 'presets.tsv')
+        with open(presets_filename) as f:
+            text = f.read()
+        split_lines = [line.split('\t') for line in text.split('\n')]
+        available_presets = split_lines[0][1:]  # Skip the first column which is "resource"
+        print("Available presets: %s" % ', '.join(available_presets))
+    except (FileNotFoundError, IndexError):
+        print("Available presets: Demo, small, medium, Jan2017, jobs1k, jobs10k, jobs50k, jobs100k, jobs200k, e2e")
+    
+    print("")
+    print("For all individual options, see below:")
+    print("")
+    parser.print_help()
+    sys.exit(0)
+
 options = vars(options)
 
 
 if options['preset']:
     print(' Using preset data numbers set ' + str(options['preset']))
     # Read the numbers of resources from presets file, if provided
-    presets_filename = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'presets.tsv'))
+    presets_filename = os.path.join(base_dir, 'tools', 'data_generators', 'presets.tsv')
 
     with open(presets_filename) as f:
         text = f.read()
