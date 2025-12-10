@@ -103,7 +103,7 @@ services:
       - "3000:3001"  # used by the UI dev env
 {% endif %}
   valkey_{{ container_postfix }}:
-    image: mirror.gcr.io/valkey/valkey:9-alpine
+    image: ghcr.io/valkey-io/valkey:9-alpine
     container_name: tools_valkey_{{ container_postfix }}
     volumes:
       - "../../valkey/valkey.conf:/usr/local/etc/valkey/valkey.conf:Z"
