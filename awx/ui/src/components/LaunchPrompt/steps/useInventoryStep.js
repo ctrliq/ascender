@@ -23,7 +23,29 @@ export default function useInventoryStep(launchConfig, resource, visitedSteps) {
         !meta.value;
 
   return {
-    step: getStep(launchConfig, formError, resource, t),
+    step: !launchConfig.ask_inventory_on_launch ? null : {
+      id: STEP_ID,
+      name: (
+        <StepName hasErrors={formError} id="inventory-step">
+          {t`Inventory`}
+        </StepName>
+      ),
+      component: (
+        <InventoryStep
+          warningMessage={
+            resource.type === 'workflow_job_template' ? (
+              <InventoryAlert
+                ouiaId="InventoryStep-alert"
+                variant="warning"
+                isInline
+                title={t`This inventory is applied to all workflow nodes within this workflow (${resource.name}) that prompt for an inventory.`}
+              />
+            ) : null
+          }
+        />
+      ),
+      enableNext: true,
+    },
     initialValues: getInitialValues(launchConfig, resource),
     isReady: true,
     contentError: null,
@@ -36,34 +58,6 @@ export default function useInventoryStep(launchConfig, resource, visitedSteps) {
         helpers.setError(t`An inventory must be selected`);
       }
     },
-  };
-}
-function getStep(launchConfig, formError, resource, t) {
-  if (!launchConfig.ask_inventory_on_launch) {
-    return null;
-  }
-  return {
-    id: STEP_ID,
-    name: (
-      <StepName hasErrors={formError} id="inventory-step">
-        {t`Inventory`}
-      </StepName>
-    ),
-    component: (
-      <InventoryStep
-        warningMessage={
-          resource.type === 'workflow_job_template' ? (
-            <InventoryAlert
-              ouiaId="InventoryStep-alert"
-              variant="warning"
-              isInline
-              title={t`This inventory is applied to all workflow nodes within this workflow (${resource.name}) that prompt for an inventory.`}
-            />
-          ) : null
-        }
-      />
-    ),
-    enableNext: true,
   };
 }
 
