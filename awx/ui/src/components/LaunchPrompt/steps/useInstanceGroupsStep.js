@@ -7,7 +7,6 @@ const STEP_ID = 'instanceGroups';
 
 export default function useInstanceGroupsStep(
   launchConfig,
-  resource,
   instanceGroups
 ) {
   const { t } = useLingui();
@@ -19,7 +18,7 @@ export default function useInstanceGroupsStep(
           {t`Instance Groups`}
         </StepName>
       ),
-      component: <InstanceGroupsStep instanceGroups={instanceGroups} />,
+      component: <InstanceGroupsStep />,
       enableNext: true,
     },
     initialValues: getInitialValues(launchConfig, instanceGroups),
