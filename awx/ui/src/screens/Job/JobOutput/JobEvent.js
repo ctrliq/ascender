@@ -7,6 +7,11 @@ import {
   JobEventEllipsis,
 } from './shared';
 
+const HIDDEN_PASSWORD_PROMPTS = [
+  "SSH password: ",
+  "BECOME password[defaults to SSH password]: "
+];
+
 const JobEvent = React.forwardRef(
   (
     {
@@ -43,6 +48,9 @@ const JobEvent = React.forwardRef(
       <div ref={ref} style={style} type={event.type}>
         {lineTextHtml.map(({ lineNumber, html }, index) => {
           if (lineNumber < 0) {
+            return null;
+          }
+          if (HIDDEN_PASSWORD_PROMPTS.includes(html)) {
             return null;
           }
           const canToggle = index === toggleLineIndex && !event.isTracebackOnly;
