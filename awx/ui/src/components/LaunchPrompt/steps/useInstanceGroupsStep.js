@@ -12,7 +12,16 @@ export default function useInstanceGroupsStep(
 ) {
   const { t } = useLingui();
   return {
-    step: getStep(launchConfig, resource, t),
+    step: !launchConfig.ask_instance_groups_on_launch ? null : {
+      id: STEP_ID,
+      name: (
+        <StepName id="instance-groups-step">
+          {t`Instance Groups`}
+        </StepName>
+      ),
+      component: <InstanceGroupsStep />,
+      enableNext: true,
+    },
     initialValues: getInitialValues(launchConfig, instanceGroups),
     isReady: true,
     contentError: null,
@@ -21,21 +30,6 @@ export default function useInstanceGroupsStep(
       setFieldTouched('instance_groups', true, false);
     },
     validate: () => {},
-  };
-}
-function getStep(launchConfig, resource, t) {
-  if (!launchConfig.ask_instance_groups_on_launch) {
-    return null;
-  }
-  return {
-    id: STEP_ID,
-    name: (
-      <StepName id="instance-groups-step">
-        {t`Instance Groups`}
-      </StepName>
-    ),
-    component: <InstanceGroupsStep />,
-    enableNext: true,
   };
 }
 

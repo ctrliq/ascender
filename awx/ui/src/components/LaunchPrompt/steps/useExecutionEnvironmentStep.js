@@ -8,7 +8,16 @@ const STEP_ID = 'executionEnvironment';
 export default function useExecutionEnvironmentStep(launchConfig, resource) {
   const { t } = useLingui();
   return {
-    step: getStep(launchConfig, resource, t),
+    step: !launchConfig.ask_execution_environment_on_launch ? null : {
+      id: STEP_ID,
+      name: (
+        <StepName id="execution-environment-step">
+          {t`Execution Environment`}
+        </StepName>
+      ),
+      component: <ExecutionEnvironmentStep />,
+      enableNext: true,
+    },
     initialValues: getInitialValues(launchConfig, resource),
     isReady: true,
     contentError: null,
@@ -17,21 +26,6 @@ export default function useExecutionEnvironmentStep(launchConfig, resource) {
       setFieldTouched('execution_environment', true, false);
     },
     validate: () => {},
-  };
-}
-function getStep(launchConfig, resource, t) {
-  if (!launchConfig.ask_execution_environment_on_launch) {
-    return null;
-  }
-  return {
-    id: STEP_ID,
-    name: (
-      <StepName id="execution-environment-step">
-        {t`Execution Environment`}
-      </StepName>
-    ),
-    component: <ExecutionEnvironmentStep />,
-    enableNext: true,
   };
 }
 
