@@ -7,6 +7,7 @@ const STEP_ID = 'instanceGroups';
 
 export default function useInstanceGroupsStep(
   launchConfig,
+  resource,
   instanceGroups
 ) {
   const { t } = useLingui();
