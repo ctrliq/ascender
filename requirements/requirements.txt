@@ -170,7 +170,7 @@ dynaconf==3.2.11
     # via django-ansible-base
 enum-compat==0.0.3
     # via asn1
-filelock==3.13.1
+filelock==3.20.1
     # via -r /awx_devel/requirements/requirements.in
 frozenlist==1.4.1
     # via
