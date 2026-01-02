@@ -1,11 +1,11 @@
 # Ascender
 Ascender provides a web-based user interface, REST API, and task engine built on top of [Ansible](https://github.com/ansible/ansible). It is based off the upstream project of [AWX](https://github.com/ansible/awx).
 
-A separate installer is being released to ease the burden of installing Ascender. This installer will allow you to test Ascender on a single VM with [k3s](https://k3s.io/) (which will be installed on your behalf), or onto an existing Kubernetes cluster, requiring the appropriate kubeconfig file and prescribed namespace.
+A separate installer is available to ease installing Ascender. It can deploy Ascender on a single VM using [k3s](https://k3s.io/) (installed automatically), or onto AKS, DKP, EKS, GKE, k3s, RKE2, or OCP using a provided kubeconfig and namespace. See the installer repository at https://github.com/ctrliq/ascender-install.
 
 Contributing
 ------------
-- It is recommended that all contributions be applied upstream first to [AWX](https://github.com/ansible/awx), to better support collaboration with the community.
+- See the contributing notes in [Running Development Environment in Docker](docs/development/docker.md) for guidance on setting up a development environment and contributing to Ascender.
 
 Reporting Issues
 ----------------
