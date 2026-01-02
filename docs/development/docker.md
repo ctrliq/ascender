@@ -26,8 +26,8 @@ systemctl start docker
 `dnf install -y git make ansible-core npm`
 
 ### !!!! Add your github ssh key to the box !!!!!
-### be sure its is chmod 600
-`https://github.com/settings/keys`
+### be sure it is chmod 600
+[https://github.com/settings/keys](https://github.com/settings/keys)
 
 ### Lets clone Ascender
 `git clone git@github.com:ctrliq/ascender.git`
@@ -51,14 +51,14 @@ make docker-compose
 EOF
 ```
 
-cat << EOF > ~/start_npm.sh
 ```
+cat << EOF > ~/start_npm.sh
 #!/bin/bash
 cd ascender
 #npm --prefix=awx/ui install
-# If using openssl-3.0.7 or earlier
+# If using openssl-3.0.7 or earlier, uncomment the next line and comment out the one after it.
 export NODE_OPTIONS=--openssl-legacy-provider; npm --prefix=awx/ui start
-npm --prefix=awx/ui start
+#npm --prefix=awx/ui start
 EOF
 ```
 
@@ -100,12 +100,12 @@ When you have python packages to update due to upstream or dependency CVE remedi
 6. While still in the container, run the `./updates.sh run` command to update the `requirements.txt`
 7. Exit the container
 8. Check the `Makefile` in the root of the ascender repo for required changes that align with your changes in requirements.in (for setuptools, etc...)
-9. Shutdown your `./start_containsers.sh` script by breaking out of the shell using `ctrl-C`
+9. Shutdown your `./start_containers.sh` script by breaking out of the shell using `ctrl-C`
 10. Restart the `./start_containers.sh` and once restarted, check for fatal errors, and perform a UI regression test.
 
 ## Package Update for the Ascender UI
 
-When you have pytnpmhon packages to update due to upstream or dependency CVE remediation, use the following procedure:
+When you have npm packages to update due to upstream or dependency CVE remediation, use the following procedure:
 
 1. Checkout the `main` branch in your docker environment
 2. From there, create a new branch to handle the CVE changes
