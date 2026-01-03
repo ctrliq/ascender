@@ -172,7 +172,10 @@ module.exports = function (webpackEnv) {
           loader: require.resolve('resolve-url-loader'),
           options: {
             sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
-            root: paths.appSrc,
+            root: [
+              paths.appSrc,
+              path.resolve(paths.appNodeModules, '@patternfly', 'patternfly', 'assets'),
+            ],
           },
         },
         {
@@ -292,6 +295,7 @@ module.exports = function (webpackEnv) {
         new CssMinimizerPlugin(),
       ],
     },
+    // compute aliases for PatternFly assets so CSS url() resolution works
     resolve: {
       // This allows you to set a fallback for where webpack should look for modules.
       // We placed these paths second because we want `node_modules` to "win"
@@ -309,17 +313,39 @@ module.exports = function (webpackEnv) {
       extensions: paths.moduleFileExtensions
         .map(ext => `.${ext}`)
         .filter(ext => useTypeScript || !ext.includes('ts')),
-      alias: {
-        // Support React Native Web
-        // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
-        'react-native': 'react-native-web',
-        // Allows for better profiling with ReactDevTools
-        ...(isEnvProductionProfile && {
-          'react-dom$': 'react-dom/profiling',
-          'scheduler/tracing': 'scheduler/tracing-profiling',
-        }),
-        ...(modules.webpackAliases || {}),
-      },
+      alias: (function() {
+        const aliases = {
+          // Support React Native Web
+          // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
+          'react-native': 'react-native-web',
+          // Allows for better profiling with ReactDevTools
+          ...(isEnvProductionProfile && {
+            'react-dom$': 'react-dom/profiling',
+            'scheduler/tracing': 'scheduler/tracing-profiling',
+          }),
+          ...(modules.webpackAliases || {}),
+        };
+        try {
+          const pfReactCoreAssets = path.resolve(
+            paths.appNodeModules,
+            '@patternfly',
+            'react-core',
+            'dist',
+            'styles',
+            'assets'
+          );
+          const pfAssets = path.resolve(
+            paths.appNodeModules,
+            '@patternfly',
+            'patternfly',
+            'assets'
+          );
+          aliases[pfReactCoreAssets] = pfAssets;
+        } catch (e) {
+          // ignore if resolution fails
+        }
+        return aliases;
+      })(),
       plugins: [
         // Prevents users from importing files from outside of src/ (or node_modules/).
         // This often causes confusion because we only process files within src/ with babel.
