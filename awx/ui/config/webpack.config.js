@@ -313,39 +313,17 @@ module.exports = function (webpackEnv) {
       extensions: paths.moduleFileExtensions
         .map(ext => `.${ext}`)
         .filter(ext => useTypeScript || !ext.includes('ts')),
-      alias: (function() {
-        const aliases = {
-          // Support React Native Web
-          // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
-          'react-native': 'react-native-web',
-          // Allows for better profiling with ReactDevTools
-          ...(isEnvProductionProfile && {
-            'react-dom$': 'react-dom/profiling',
-            'scheduler/tracing': 'scheduler/tracing-profiling',
-          }),
-          ...(modules.webpackAliases || {}),
-        };
-        try {
-          const pfReactCoreAssets = path.resolve(
-            paths.appNodeModules,
-            '@patternfly',
-            'react-core',
-            'dist',
-            'styles',
-            'assets'
-          );
-          const pfAssets = path.resolve(
-            paths.appNodeModules,
-            '@patternfly',
-            'patternfly',
-            'assets'
-          );
-          aliases[pfReactCoreAssets] = pfAssets;
-        } catch (e) {
-          // ignore if resolution fails
-        }
-        return aliases;
-      })(),
+      alias: {
+        // Support React Native Web
+        // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
+        'react-native': 'react-native-web',
+        // Allows for better profiling with ReactDevTools
+        ...(isEnvProductionProfile && {
+          'react-dom$': 'react-dom/profiling',
+          'scheduler/tracing': 'scheduler/tracing-profiling',
+        }),
+        ...(modules.webpackAliases || {}),
+      },
       plugins: [
         // Prevents users from importing files from outside of src/ (or node_modules/).
         // This often causes confusion because we only process files within src/ with babel.
@@ -706,6 +684,20 @@ module.exports = function (webpackEnv) {
           // See https://github.com/cra-template/pwa/issues/13#issuecomment-722667270
           maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         }),
+      // Redirect PatternFly React Core asset requests to PatternFly assets
+      new webpack.NormalModuleReplacementPlugin(
+        /^\.\/assets\/(fonts|pficon)\/.*\.(woff2?|ttf|eot)$/,
+        (resource) => {
+          if (resource.context && resource.context.includes('@patternfly/react-core/dist/styles')) {
+            const assetPath = resource.request.replace('./assets/', '');
+            resource.request = path.resolve(
+              paths.appNodeModules,
+              '@patternfly/patternfly/assets',
+              assetPath
+            );
+          }
+        }
+      ),
       // TypeScript type checking
       useTypeScript &&
         new ForkTsCheckerWebpackPlugin({
