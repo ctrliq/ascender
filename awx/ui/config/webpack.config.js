@@ -172,7 +172,10 @@ module.exports = function (webpackEnv) {
           loader: require.resolve('resolve-url-loader'),
           options: {
             sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
-            root: paths.appSrc,
+            root: [
+              paths.appSrc,
+              path.resolve(paths.appNodeModules, '@patternfly', 'patternfly', 'assets'),
+            ],
           },
         },
         {
@@ -292,6 +295,7 @@ module.exports = function (webpackEnv) {
         new CssMinimizerPlugin(),
       ],
     },
+    // compute aliases for PatternFly assets so CSS url() resolution works
     resolve: {
       // This allows you to set a fallback for where webpack should look for modules.
       // We placed these paths second because we want `node_modules` to "win"
@@ -680,6 +684,20 @@ module.exports = function (webpackEnv) {
           // See https://github.com/cra-template/pwa/issues/13#issuecomment-722667270
           maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         }),
+      // Redirect PatternFly React Core asset requests to PatternFly assets
+      new webpack.NormalModuleReplacementPlugin(
+        /^\.\/assets\/(fonts|pficon)\/.*\.(woff2?|ttf|eot)$/,
+        (resource) => {
+          if (resource.context && resource.context.includes('@patternfly/react-core/dist/styles')) {
+            const assetPath = resource.request.replace('./assets/', '');
+            resource.request = path.resolve(
+              paths.appNodeModules,
+              '@patternfly/patternfly/assets',
+              assetPath
+            );
+          }
+        }
+      ),
       // TypeScript type checking
       useTypeScript &&
         new ForkTsCheckerWebpackPlugin({
