@@ -2,7 +2,7 @@ adal==1.2.7
     # via msrestazure
 aiohappyeyeballs==2.6.1
     # via aiohttp
-aiohttp==3.13.2
+aiohttp==3.13.3
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   aiohttp-retry
