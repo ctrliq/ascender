@@ -21,6 +21,7 @@ msgstr ""
 msgid "{forks, plural, one {# fork} other {# forks}}"
 msgstr ""
 
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:189
 #: routeConfig.js:93
 #: screens/ActivityStream/ActivityStream.js:171
 #: screens/Dashboard/Dashboard.js:123
@@ -32,8 +33,8 @@ msgid "Projects"
 msgstr "Projets"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:48
-#: components/Schedule/shared/FrequencyDetailSubform.js:330
-#: components/Schedule/shared/FrequencyDetailSubform.js:462
+#: components/Schedule/shared/FrequencyDetailSubform.js:344
+#: components/Schedule/shared/FrequencyDetailSubform.js:476
 msgid "Saturday"
 msgstr "Samedi"
 
@@ -47,9 +48,9 @@ msgstr "Cliquez pour changer la valeur par défaut"
 
 #. placeholder {0}: instanceDetail.mem_capacity
 #. placeholder {0}: instance.mem_capacity
-#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:283
+#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:279
 #: screens/InstanceGroup/Instances/InstanceListItem.js:180
-#: screens/Instances/InstanceDetail/InstanceDetail.js:327
+#: screens/Instances/InstanceDetail/InstanceDetail.js:323
 #: screens/Instances/InstanceList/InstanceListItem.js:193
 #: screens/TopologyView/Tooltip.js:323
 msgid "RAM {0}"
@@ -59,7 +60,7 @@ msgstr "RAM {0}"
 msgid "The plugin parameter is required."
 msgstr "Le paramètre du plugin est requis."
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:302
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:328
 msgid "Pagerduty subdomain"
 msgstr "Sous-domaine Pagerduty"
 
@@ -67,10 +68,10 @@ msgstr "Sous-domaine Pagerduty"
 #: components/HealthCheckButton/HealthCheckButton.js:41
 #: components/HealthCheckButton/HealthCheckButton.js:56
 #: components/HealthCheckButton/HealthCheckButton.js:59
-#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:327
-#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:330
-#: screens/Instances/InstanceDetail/InstanceDetail.js:397
-#: screens/Instances/InstanceDetail/InstanceDetail.js:400
+#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:323
+#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:326
+#: screens/Instances/InstanceDetail/InstanceDetail.js:393
+#: screens/Instances/InstanceDetail/InstanceDetail.js:396
 msgid "Running health check"
 msgstr "Dernier bilan de fonctionnement"
 
@@ -86,7 +87,7 @@ msgstr "SAML"
 msgid "Scroll previous"
 msgstr "Faire défiler la page précédente"
 
-#: components/Schedule/shared/FrequencyDetailSubform.js:303
+#: components/Schedule/shared/FrequencyDetailSubform.js:311
 msgid "Thu"
 msgstr "Jeu."
 
@@ -168,7 +169,7 @@ msgstr "Cliquez pour télécharger l’ensemble (Bundle)"
 msgid "Failed to launch job."
 msgstr "Echec du lancement du Job."
 
-#: components/AddRole/AddResourceRole.js:237
+#: components/AddRole/AddResourceRole.js:240
 msgid "Select Roles to Apply"
 msgstr "Sélectionnez les rôles à appliquer"
 
@@ -182,6 +183,8 @@ msgstr "Sélectionnez les rôles à appliquer"
 #: components/TemplateList/TemplateList.js:219
 #: components/TemplateList/TemplateList.js:252
 #: components/TemplateList/TemplateListItem.js:197
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:128
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:197
 #: components/Workflow/WorkflowNodeHelp.js:160
 #: components/Workflow/WorkflowNodeHelp.js:196
 #: screens/Credential/CredentialList/CredentialList.js:166
@@ -226,14 +229,14 @@ msgstr "Impossible de basculer le calendrier."
 msgid "To reorder the survey questions drag and drop them in the desired location."
 msgstr "Pour réorganiser les questions de l'enquête, faites-les glisser et déposez-les à l'endroit souhaité."
 
-#: screens/Inventory/shared/ConstructedInventoryHint.js:186
-#: screens/Inventory/shared/ConstructedInventoryHint.js:195
-#: screens/Inventory/shared/ConstructedInventoryHint.js:272
-#: screens/Inventory/shared/ConstructedInventoryHint.js:281
-#: screens/Inventory/shared/ConstructedInventoryHint.js:339
-#: screens/Inventory/shared/ConstructedInventoryHint.js:348
-#~ msgid "Copy to clipboard"
-#~ msgstr "Copier dans le presse-papiers"
+#: screens/Inventory/shared/ConstructedInventoryHint.js:193
+#: screens/Inventory/shared/ConstructedInventoryHint.js:202
+#: screens/Inventory/shared/ConstructedInventoryHint.js:287
+#: screens/Inventory/shared/ConstructedInventoryHint.js:296
+#: screens/Inventory/shared/ConstructedInventoryHint.js:362
+#: screens/Inventory/shared/ConstructedInventoryHint.js:371
+msgid "Copy to clipboard"
+msgstr "Copier dans le presse-papiers"
 
 #: screens/Inventory/shared/ConstructedInventoryForm.js:98
 msgid "Select Input Inventories for the constructed inventory plugin."
@@ -245,7 +248,7 @@ msgstr "Sélectionnez Inventaires d'entrée pour le plugin d'inventaire construi
 #~ "Please complete the steps below to activate your subscription."
 #~ msgstr "Bienvenue sur la plate-forme Red Hat Ansible Automation ! Veuillez compléter les étapes ci-dessous pour activer votre abonnement."
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:621
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:663
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:222
 msgid "Workflow timed out message body"
 msgstr "Corps du message d’expiration de flux de travail"
@@ -318,7 +321,7 @@ msgstr ""
 msgid "Failed to cancel Inventory Source Sync"
 msgstr "N'a pas réussi à annuler la synchronisation des sources d'inventaire."
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:495
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:542
 msgid "Choose an HTTP method"
 msgstr "Choisissez une méthode HTTP"
 
@@ -478,6 +481,14 @@ msgstr "Variables utilisées pour configurer le plugin d'inventaire construit. P
 msgid "Input schema which defines a set of ordered fields for that type."
 msgstr "Schéma d'entrée qui définit un ensemble de champs ordonnés pour ce type."
 
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:39
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:166
+msgid ""
+"The base URL of the Grafana server - the\n"
+"      /api/annotations endpoint will be added automatically to the base\n"
+"      Grafana URL."
+msgstr ""
+
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerToolbar.js:147
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerToolbar.js:152
 msgid "Delete all nodes"
@@ -502,7 +513,7 @@ msgstr "{0, plural, one {You cannot cancel the following job because it is not r
 #~ msgid "For more information, refer to the"
 #~ msgstr "Pour plus d'informations, reportez-vous à"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:453
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:500
 msgid "Basic auth password"
 msgstr "Mot de passe d'auth de base"
 
@@ -514,7 +525,7 @@ msgstr "Options à choix multiples (sélection multiple)"
 msgid "Please select an end date/time that comes after the start date/time."
 msgstr "Veuillez choisir une date/heure de fin qui vient après la date/heure de début."
 
-#: components/Schedule/shared/FrequencyDetailSubform.js:292
+#: components/Schedule/shared/FrequencyDetailSubform.js:298
 msgid "Wed"
 msgstr "Mer."
 
@@ -543,11 +554,11 @@ msgstr "Une erreur s'est produite lors de la demande de test de ces informations
 msgid "Google OAuth 2 settings"
 msgstr "Paramètres de Google OAuth 2"
 
-#: components/AddRole/AddResourceRole.js:165
+#: components/AddRole/AddResourceRole.js:168
 msgid "Add Roles"
 msgstr "Ajouter des rôles"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:499
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:546
 msgid "PUT"
 msgstr "PLACER"
 
@@ -604,6 +615,8 @@ msgstr "Clé publique GPG"
 
 #: components/Lookup/ProjectLookup.js:144
 #: components/PromptDetail/PromptProjectDetail.js:102
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:139
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:208
 #: screens/Project/ProjectDetail/ProjectDetail.js:232
 #: screens/Project/ProjectList/ProjectList.js:206
 #: screens/Project/shared/ProjectSubForms/SharedFields.js:17
@@ -613,6 +626,9 @@ msgstr "URL Contrôle de la source"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:300
 #: screens/Inventory/shared/ConstructedInventoryForm.js:147
+#: screens/Inventory/shared/ConstructedInventoryHint.js:184
+#: screens/Inventory/shared/ConstructedInventoryHint.js:278
+#: screens/Inventory/shared/ConstructedInventoryHint.js:353
 msgid "Source vars"
 msgstr "source ./vars"
 
@@ -872,7 +888,7 @@ msgstr "Cette valeur ne correspond pas au mot de passe que vous avez entré pré
 msgid "Disassociate group from host?"
 msgstr "Dissocier le groupe de l'hôte ?"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:417
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:461
 msgid "Destination SMS number(s)"
 msgstr "Numéro(s) de SMS de destination"
 
@@ -891,8 +907,8 @@ msgid "View Template Details"
 msgstr "Voir les détails du modèle"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:47
-#: components/Schedule/shared/FrequencyDetailSubform.js:319
-#: components/Schedule/shared/FrequencyDetailSubform.js:457
+#: components/Schedule/shared/FrequencyDetailSubform.js:331
+#: components/Schedule/shared/FrequencyDetailSubform.js:471
 msgid "Friday"
 msgstr "Vendredi"
 
@@ -939,9 +955,13 @@ msgstr "Choisissez les ressources qui recevront de nouveaux rôles.  Vous pourre
 msgid "May"
 msgstr "Mai"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:369
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:408
 msgid "Destination channels"
 msgstr "Canaux de destination"
+
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.js:106
+msgid "CIQ Ascender Automation Platform"
+msgstr ""
 
 #: screens/Template/shared/JobTemplate.helptext.js:77
 #~ msgid "If enabled, the job template will prevent adding any inventory or organization instance groups to the list of preferred instances groups to run on.\\n      Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied."
@@ -1111,7 +1131,7 @@ msgstr "Certains modificateurs de recherche, comme not__ et __search, ne sont pa
 msgid "View Logging settings"
 msgstr "Voir les paramètres d'enregistrement"
 
-#: components/AddRole/AddResourceRole.js:202
+#: components/AddRole/AddResourceRole.js:205
 msgid "Select Items from List"
 msgstr "Sélectionnez les éléments de la liste"
 
@@ -1135,6 +1155,14 @@ msgstr "Contrôle si cette instance est gérée ou non par la stratégie. Si cet
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:189
 msgid "Finished"
 msgstr "Terminé"
+
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:36
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:64
+msgid ""
+"The amount of time (in seconds) before the email\n"
+"        notification stops trying to reach the host and times out. Ranges\n"
+"        from 1 to 120 seconds."
+msgstr ""
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/UnsavedChangesModal.js:34
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/UnsavedChangesModal.js:37
@@ -1245,6 +1273,10 @@ msgstr "Types de nœud"
 #: screens/InstanceGroup/Instances/InstanceListItem.js:243
 #: screens/Instances/InstanceDetail/InstanceDetail.js:288
 #: screens/Instances/InstanceList/InstanceListItem.js:261
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:51
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:72
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:75
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:396
 #: screens/Template/Survey/SurveyQuestionForm.js:271
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:240
 msgid "documentation"
@@ -1334,12 +1366,12 @@ msgstr "Rôles"
 msgid "Test Notification"
 msgstr "Notification test"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:258
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:310
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:380
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:255
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:334
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:458
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:300
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:352
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:422
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:281
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:360
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:505
 msgid "Target URL"
 msgstr "URL cible"
 
@@ -1473,7 +1505,8 @@ msgstr "Basculer la légende"
 
 #: screens/Application/Application/Application.js:81
 #: screens/Application/Applications.js:41
-#: screens/Application/ApplicationTokens/ApplicationTokenList.js:100
+#: screens/Application/ApplicationTokens/ApplicationTokenList.js:101
+#: screens/Application/ApplicationTokens/ApplicationTokenList.js:123
 #: screens/User/User.js:77
 #: screens/User/Users.js:35
 #: screens/User/UserTokenList/UserTokenList.js:118
@@ -1487,11 +1520,11 @@ msgstr "Jetons"
 msgid "Minute"
 msgstr "Minute"
 
-#: screens/Inventory/shared/ConstructedInventoryHint.js:172
-#: screens/Inventory/shared/ConstructedInventoryHint.js:258
-#: screens/Inventory/shared/ConstructedInventoryHint.js:328
-#~ msgid "Copied"
-#~ msgstr "Copié"
+#: screens/Inventory/shared/ConstructedInventoryHint.js:178
+#: screens/Inventory/shared/ConstructedInventoryHint.js:272
+#: screens/Inventory/shared/ConstructedInventoryHint.js:347
+msgid "Copied"
+msgstr "Copié"
 
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.js:105
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerToolbar.js:77
@@ -1505,6 +1538,8 @@ msgstr "Total Nœuds"
 msgid "Hour"
 msgstr "Heure"
 
+#: components/AddRole/AddResourceRole.js:57
+#: components/AddRole/AddResourceRole.js:73
 #: components/AdHocCommands/AdHocCredentialStep.js:119
 #: components/AdHocCommands/AdHocCredentialStep.js:134
 #: components/AdHocCommands/AdHocExecutionEnvironmentStep.js:108
@@ -1518,8 +1553,8 @@ msgstr "Heure"
 #: components/LabelLists/LabelListItem.js:19
 #: components/LabelLists/LabelLists.js:59
 #: components/LabelLists/LabelLists.js:67
-#: components/LaunchPrompt/steps/CredentialsStep.js:192
-#: components/LaunchPrompt/steps/CredentialsStep.js:207
+#: components/LaunchPrompt/steps/CredentialsStep.js:246
+#: components/LaunchPrompt/steps/CredentialsStep.js:261
 #: components/LaunchPrompt/steps/ExecutionEnvironmentStep.js:77
 #: components/LaunchPrompt/steps/ExecutionEnvironmentStep.js:87
 #: components/LaunchPrompt/steps/ExecutionEnvironmentStep.js:98
@@ -1565,12 +1600,26 @@ msgstr "Heure"
 #: components/TemplateList/TemplateList.js:210
 #: components/TemplateList/TemplateList.js:247
 #: components/TemplateList/TemplateListItem.js:147
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:61
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:80
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:92
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:111
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:123
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:153
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:165
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:180
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:192
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:222
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:234
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:249
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:261
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:276
 #: screens/Application/ApplicationDetails/ApplicationDetails.js:60
 #: screens/Application/Applications.js:85
 #: screens/Application/ApplicationsList/ApplicationListItem.js:34
 #: screens/Application/ApplicationsList/ApplicationsList.js:115
 #: screens/Application/ApplicationsList/ApplicationsList.js:152
-#: screens/Application/ApplicationTokens/ApplicationTokenList.js:104
+#: screens/Application/ApplicationTokens/ApplicationTokenList.js:105
 #: screens/Application/ApplicationTokens/ApplicationTokenListItem.js:29
 #: screens/Application/shared/ApplicationForm.js:55
 #: screens/Credential/CredentialDetail/CredentialDetail.js:218
@@ -1655,13 +1704,13 @@ msgstr "Heure"
 #: screens/Inventory/shared/ConstructedInventoryForm.js:61
 #: screens/Inventory/shared/InventoryForm.js:51
 #: screens/Inventory/shared/InventoryGroupForm.js:33
-#: screens/Inventory/shared/InventorySourceForm.js:103
+#: screens/Inventory/shared/InventorySourceForm.js:122
 #: screens/Inventory/shared/SmartInventoryForm.js:48
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:99
 #: screens/ManagementJob/ManagementJobList/ManagementJobList.js:91
 #: screens/ManagementJob/ManagementJobList/ManagementJobList.js:101
 #: screens/ManagementJob/ManagementJobList/ManagementJobListItem.js:68
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:108
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:150
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:123
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:179
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.js:112
@@ -1735,10 +1784,9 @@ msgstr "Clé de configuration de l’hôte"
 msgid "Stdout"
 msgstr "Stdout"
 
-#. placeholder {0}: resource.name
 #: components/LaunchPrompt/LaunchPrompt.js:132
-msgid "Launch | {0})"
-msgstr "Lancement 1"
+#~ msgid "Launch | {0})"
+#~ msgstr "Lancement 1"
 
 #: components/AdHocCommands/AdHocDetailsStep.js:202
 #: components/AdHocCommands/AdHocDetailsStep.js:205
@@ -1750,7 +1798,7 @@ msgstr "Activer l’élévation des privilèges"
 msgid "Related resource"
 msgstr "Ressource connexe"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:466
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:508
 msgid "Failed to delete notification."
 msgstr "N'a pas réussi à supprimer la notification."
 
@@ -1797,7 +1845,7 @@ msgstr "Voir les paramètres LDAP"
 #~ msgid "This schedule uses complex rules that are not supported in the\\n        UI.  Please use the API to manage this schedule."
 #~ msgstr "Cette planification utilise des règles complexes qui ne sont pas prises en charge dans\\n l'interface utilisateur.  Veuillez utiliser l'API pour gérer ce calendrier."
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:296
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:338
 msgid "API Service/Integration Key"
 msgstr "Service API/Clé d’intégration"
 
@@ -1826,7 +1874,7 @@ msgstr "N'a pas réussi à mettre à jour l'enquête."
 msgid "Failed"
 msgstr "Échec"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:197
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:239
 msgid "ID of the Dashboard"
 msgstr "ID du tableau de bord (facultatif)"
 
@@ -1974,17 +2022,19 @@ msgstr "Modifier les informations d’identification"
 msgid "Key"
 msgstr "Clé"
 
+#: components/AddRole/AddResourceRole.js:26
+#: components/AddRole/AddResourceRole.js:42
 #: components/ResourceAccessList/ResourceAccessList.js:145
 #: components/ResourceAccessList/ResourceAccessList.js:198
 #: screens/Login/Login.js:233
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:148
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:263
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:315
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:375
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:68
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:263
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:342
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:447
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:190
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:305
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:357
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:417
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:85
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:289
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:368
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:494
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:94
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:211
 #: screens/User/shared/UserForm.js:81
@@ -1995,7 +2045,7 @@ msgstr "Clé"
 msgid "Username"
 msgstr "Nom d'utilisateur"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:510
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:552
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:132
 msgid "Success message body"
 msgstr "Corps du message de réussite"
@@ -2055,12 +2105,12 @@ msgstr ""
 msgid "Failed to assign roles properly"
 msgstr "Impossible d'assigner les rôles correctement"
 
-#: components/AppContainer/AppContainer.js:72
+#: components/AppContainer/AppContainer.js:58
 msgid "brand logo"
 msgstr "logo de la marque"
 
 #: screens/Login/Login.js:230
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:74
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:91
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:103
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:219
 #: screens/Template/Survey/SurveyQuestionForm.js:83
@@ -2072,12 +2122,12 @@ msgstr "Mot de passe"
 msgid "View Miscellaneous System settings"
 msgstr "Voir les paramètres divers du système"
 
-#: components/LaunchPrompt/steps/useOtherPromptsStep.js:91
-#~ msgid "Other prompts"
-#~ msgstr "Autres invites"
+#: components/LaunchPrompt/steps/useOtherPromptsStep.js:72
+msgid "Other prompts"
+msgstr "Autres invites"
 
 #: screens/Credential/shared/TypeInputsSubForm.js:25
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:47
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:46
 #: screens/Project/shared/ProjectForm.js:301
 msgid "Type Details"
 msgstr "Détails sur le type"
@@ -2296,6 +2346,7 @@ msgstr "Cliquez sur un nœud disponible pour créer un nouveau lien.  Cliquez en
 
 #: components/RelatedTemplateList/RelatedTemplateList.js:169
 #: components/RelatedTemplateList/RelatedTemplateList.js:219
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:58
 msgid "Job templates"
 msgstr "Modèles de Jobs"
 
@@ -2343,6 +2394,14 @@ msgstr "Annuler"
 #: screens/Project/shared/ProjectSubForms/SharedFields.js:60
 msgid "Source Control Credential"
 msgstr "Identifiant Contrôle de la source"
+
+#: screens/Inventory/shared/ConstructedInventoryHint.js:164
+msgid ""
+"This constructed inventory input \n"
+"            creates a group for both of the categories and uses \n"
+"            the limit (host pattern) to only return hosts that \n"
+"            are in the intersection of those two groups."
+msgstr ""
 
 #: screens/ManagementJob/ManagementJobList/ManagementJobListItem.js:113
 #: screens/ManagementJob/ManagementJobList/ManagementJobListItem.js:114
@@ -2403,8 +2462,8 @@ msgstr "Vous n'avez pas l'autorisation de supprimer :  {pluralizedItemName}: {it
 
 #: screens/Instances/InstanceDetail/InstanceDetail.js:210
 #: screens/Job/JobOutput/HostEventModal.js:110
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:153
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:79
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:195
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:96
 msgid "Host"
 msgstr "Hôte"
 
@@ -2439,6 +2498,14 @@ msgstr "Les modèles de Job dont les informations d'identification demandent un 
 #: screens/Project/shared/ProjectSubForms/GitSubForm.js:33
 msgid "Source Control Refspec"
 msgstr "Refspec Contrôle de la source"
+
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:43
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:221
+msgid ""
+"Use one IRC channel or username per line. The pound\n"
+"        symbol (#) for channels, and the at (@) symbol for users, are not\n"
+"        required."
+msgstr ""
 
 #: routeConfig.js:155
 #: screens/ActivityStream/ActivityStream.js:202
@@ -2523,11 +2590,11 @@ msgstr "Hôte démarré"
 msgid "Upload a Red Hat Subscription Manifest containing your subscription. To generate your subscription manifest, go to <0>subscription allocations</0> on the Red Hat Customer Portal."
 msgstr "Téléchargez un manifeste d'abonnement Red Hat contenant votre abonnement. Pour générer votre manifeste d'abonnement, accédez à <0>subscription allocations</0> (octroi d’allocations) sur le portail client de Red Hat."
 
-#: components/AddRole/AddResourceRole.js:171
+#: components/AddRole/AddResourceRole.js:174
 msgid "Select a Resource Type"
 msgstr "Sélectionnez un type de ressource"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:501
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:543
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:123
 msgid "Success message"
 msgstr "Message de réussite"
@@ -2539,7 +2606,7 @@ msgstr "Message de réussite"
 msgid "Node Alias"
 msgstr "Alias de nœud"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:498
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:545
 msgid "POST"
 msgstr "PUBLICATION"
 
@@ -2550,6 +2617,8 @@ msgstr "Modèle copié"
 
 #: components/Lookup/ProjectLookup.js:136
 #: components/PromptDetail/PromptProjectDetail.js:99
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:131
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:200
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:228
 #: screens/InstanceGroup/Instances/InstanceListItem.js:227
 #: screens/Instances/InstanceDetail/InstanceDetail.js:252
@@ -2598,7 +2667,7 @@ msgid "Input Inventories"
 msgstr "Inventaires des intrants"
 
 #: components/Pagination/Pagination.js:38
-#: components/Schedule/shared/FrequencyDetailSubform.js:484
+#: components/Schedule/shared/FrequencyDetailSubform.js:498
 msgid "of"
 msgstr "de"
 
@@ -2664,8 +2733,8 @@ msgstr "N'a pas réussi à refuser {0}."
 msgid "Webhook details"
 msgstr "Détails de webhook"
 
-#: components/AddRole/AddResourceRole.js:189
-#: components/AddRole/AddResourceRole.js:190
+#: components/AddRole/AddResourceRole.js:192
+#: components/AddRole/AddResourceRole.js:193
 #: routeConfig.js:124
 #: screens/ActivityStream/ActivityStream.js:188
 #: screens/Organization/Organization.js:125
@@ -2737,6 +2806,13 @@ msgstr "Durée de conservation des données"
 #: screens/Template/shared/WorkflowJobTemplateForm.js:250
 msgid "Enable Webhook"
 msgstr "Activer le webhook"
+
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:58
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:436
+msgid ""
+"The number associated with the \"Messaging\n"
+"        Service\" in Twilio with the format +18005550199."
+msgstr ""
 
 #: screens/Template/Survey/SurveyQuestionForm.js:216
 msgid "Minimum"
@@ -2882,8 +2958,8 @@ msgid "At least one value must be selected for this field."
 msgstr "Au moins une valeur doit être sélectionnée pour ce champ."
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:49
-#: components/Schedule/shared/FrequencyDetailSubform.js:264
-#: components/Schedule/shared/FrequencyDetailSubform.js:432
+#: components/Schedule/shared/FrequencyDetailSubform.js:266
+#: components/Schedule/shared/FrequencyDetailSubform.js:446
 msgid "Sunday"
 msgstr "Dimanche"
 
@@ -2893,8 +2969,8 @@ msgstr "Août"
 
 #: components/HealthCheckButton/HealthCheckButton.js:42
 #: components/HealthCheckButton/HealthCheckButton.js:60
-#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:331
-#: screens/Instances/InstanceDetail/InstanceDetail.js:401
+#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:327
+#: screens/Instances/InstanceDetail/InstanceDetail.js:397
 msgid "Run health check"
 msgstr "Bilan de fonctionnement"
 
@@ -2937,8 +3013,8 @@ msgstr ""
 
 #: components/CodeEditor/VariablesDetail.js:119
 #: components/CodeEditor/VariablesDetail.js:125
-#: components/CodeEditor/VariablesField.js:145
-#: components/CodeEditor/VariablesField.js:151
+#: components/CodeEditor/VariablesField.js:146
+#: components/CodeEditor/VariablesField.js:152
 msgid "Done"
 msgstr "Terminé"
 
@@ -3019,7 +3095,7 @@ msgstr "Hôtes automatisés"
 msgid "Address"
 msgstr "Adresse"
 
-#: components/Schedule/shared/FrequencyDetailSubform.js:528
+#: components/Schedule/shared/FrequencyDetailSubform.js:542
 msgid "After number of occurrences"
 msgstr "Après le nombre d'occurrences"
 
@@ -3073,7 +3149,7 @@ msgstr "Synchronisation"
 msgid "Sourced from a project"
 msgstr "Provenance d'un projet"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:339
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:381
 msgid "Destination Channels"
 msgstr "Canaux de destination"
 
@@ -3085,7 +3161,7 @@ msgstr "N'a pas réussi à supprimer le modèle de flux de travail."
 msgid "View all Hosts."
 msgstr "Voir tous les hôtes."
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:207
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:249
 msgid "Tags for the Annotation"
 msgstr "Balises pour l'annotation"
 
@@ -3102,9 +3178,9 @@ msgstr "Groupes liés"
 msgid "SAML settings"
 msgstr "Paramètres SAML"
 
-#: components/UserAndTeamAccessAdd/getResourceAccessConfig.js:47
-#~ msgid "Workflow job templates"
-#~ msgstr "Modèles de Jobs de flux de travail"
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:89
+msgid "Workflow job templates"
+msgstr "Modèles de Jobs de flux de travail"
 
 #: screens/Inventory/InventoryList/InventoryList.js:295
 msgid "Failed to delete one or more inventories."
@@ -3213,9 +3289,9 @@ msgstr "Télécharger la sortie"
 msgid "Custom Kubernetes or OpenShift Pod specification."
 msgstr "Spécification pod Kubernetes ou OpenShift personnalisée."
 
-#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:375
+#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:371
 #: screens/InstanceGroup/Instances/InstanceListItem.js:261
-#: screens/Instances/InstanceDetail/InstanceDetail.js:423
+#: screens/Instances/InstanceDetail/InstanceDetail.js:419
 #: screens/Instances/InstanceList/InstanceListItem.js:279
 msgid "Failed to update capacity adjustment."
 msgstr "Échec de la mise à jour de l'ajustement des capacités."
@@ -3227,8 +3303,8 @@ msgid ""
 msgstr ""
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.js:106
-msgid "Red Hat Ansible Automation Platform"
-msgstr "Red Hat Ansible Automation Platform"
+#~ msgid "Red Hat Ansible Automation Platform"
+#~ msgstr "Red Hat Ansible Automation Platform"
 
 #: screens/User/Users.js:36
 msgid "Create user token"
@@ -3243,7 +3319,7 @@ msgstr "Cliquer sur un icône de noeud pour voir les détails."
 msgid "Automation"
 msgstr "Automatisation"
 
-#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:99
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:347
 msgid "Select items from list"
 msgstr "Sélectionnez les éléments de la liste"
 
@@ -3391,9 +3467,9 @@ msgid ""
 "          inventories and completed jobs."
 msgstr ""
 
-#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:289
+#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:285
 #: screens/InstanceGroup/Instances/InstanceList.js:331
-#: screens/Instances/InstanceDetail/InstanceDetail.js:333
+#: screens/Instances/InstanceDetail/InstanceDetail.js:329
 #: screens/Instances/InstanceList/InstanceList.js:237
 msgid "Used Capacity"
 msgstr "Capacité utilisée"
@@ -3402,7 +3478,7 @@ msgstr "Capacité utilisée"
 msgid "Clean"
 msgstr "Nettoyer"
 
-#: components/AddRole/AddResourceRole.js:159
+#: components/AddRole/AddResourceRole.js:162
 msgid "Add User Roles"
 msgstr "Ajouter des rôles d'utilisateur"
 
@@ -3430,8 +3506,8 @@ msgid "Edit Project"
 msgstr "Modifier le projet"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:44
-#: components/Schedule/shared/FrequencyDetailSubform.js:286
-#: components/Schedule/shared/FrequencyDetailSubform.js:442
+#: components/Schedule/shared/FrequencyDetailSubform.js:292
+#: components/Schedule/shared/FrequencyDetailSubform.js:456
 msgid "Tuesday"
 msgstr "Mardi"
 
@@ -3509,12 +3585,12 @@ msgstr "0 (Avertissement)"
 msgid "Jobs settings"
 msgstr "Paramètres Job"
 
-#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:318
-#: screens/Instances/InstanceDetail/InstanceDetail.js:386
+#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:314
+#: screens/Instances/InstanceDetail/InstanceDetail.js:382
 msgid "Run a health check on the instance"
 msgstr "Exécuter un contrôle de vérification de fonctionnement sur l'instance"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:310
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:336
 msgid "API service/integration key"
 msgstr "Service API/Clé d’intégration"
 
@@ -3550,7 +3626,7 @@ msgstr "Type d'informations d’identification non trouvé."
 msgid "Max Hosts"
 msgstr "Hôtes max."
 
-#: components/AppContainer/AppContainer.js:71
+#: components/AppContainer/AppContainer.js:57
 msgid "{brandName} logo"
 msgstr "{brandName} logo"
 
@@ -3605,8 +3681,8 @@ msgstr "Paramètres de l'interface utilisateur"
 
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:182
 #: components/Schedule/shared/FrequencyDetailSubform.js:181
-#: components/Schedule/shared/FrequencyDetailSubform.js:360
-#: components/Schedule/shared/FrequencyDetailSubform.js:464
+#: components/Schedule/shared/FrequencyDetailSubform.js:374
+#: components/Schedule/shared/FrequencyDetailSubform.js:478
 #: components/Schedule/shared/ScheduleFormFields.js:132
 #: components/Schedule/shared/ScheduleFormFields.js:198
 msgid "Day"
@@ -3631,13 +3707,15 @@ msgid "Update webhook key"
 msgstr "Mettre à jour la clé de webhook"
 
 #: components/JobList/JobListItem.js:268
-#: components/LaunchPrompt/steps/CredentialsStep.js:214
+#: components/LaunchPrompt/steps/CredentialsStep.js:268
+#: components/LaunchPrompt/steps/useCredentialsStep.js:28
 #: components/Lookup/MultiCredentialsLookup.js:139
 #: components/Lookup/MultiCredentialsLookup.js:216
 #: components/PromptDetail/PromptDetail.js:200
 #: components/PromptDetail/PromptJobTemplateDetail.js:205
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:534
 #: components/TemplateList/TemplateListItem.js:331
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:120
 #: routeConfig.js:88
 #: screens/ActivityStream/ActivityStream.js:168
 #: screens/Credential/CredentialList/CredentialList.js:196
@@ -3654,7 +3732,7 @@ msgstr "Informations d’identification"
 msgid "Unique Hosts"
 msgstr "Hôtes uniques"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:467
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:509
 msgid "Notification test failed."
 msgstr "Le test de notification a échoué."
 
@@ -3701,9 +3779,10 @@ msgstr "Configuration d'Injector"
 msgid "Month"
 msgstr "Mois"
 
-#: screens/NotificationTemplate/shared/Notifications.helptext.js:7
-#~ msgid "Use one email address per line to create a recipient list for this type of notification."
-#~ msgstr "Saisir une adresse email par ligne pour créer une liste des destinataires pour ce type de notification."
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:35
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:63
+msgid "Use one email address per line to create a recipient list for this type of notification."
+msgstr "Saisir une adresse email par ligne pour créer une liste des destinataires pour ce type de notification."
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:31
 msgid "{interval} weeks"
@@ -3713,8 +3792,8 @@ msgstr ""
 msgid "Failed to sync some or all inventory sources."
 msgstr "N'a pas réussi à synchroniser une partie ou la totalité des sources d'inventaire."
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:268
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:269
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:310
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:295
 msgid "Channel"
 msgstr "Canal"
 
@@ -3738,8 +3817,8 @@ msgstr "Annuler le retour"
 msgid "select module"
 msgstr "sélectionner un module"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:59
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:138
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:101
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:155
 msgid "Use TLS"
 msgstr "Utiliser TLS"
 
@@ -3751,7 +3830,7 @@ msgstr "Retourne des résultats qui satisfont à ce filtre ainsi qu'à d'autres 
 msgid "Reload"
 msgstr "Rechargez"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:345
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:387
 msgid "Notification Color"
 msgstr "Couleur des notifications"
 
@@ -3766,8 +3845,8 @@ msgstr "Téléchargement du Bundle"
 
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:268
 #: screens/Instances/InstanceDetail/InstanceDetail.js:308
-msgid "# forks"
-msgstr "Fourches"
+#~ msgid "# forks"
+#~ msgstr "Fourches"
 
 #: screens/Project/shared/ProjectSubForms/SharedFields.js:119
 msgid "Option Details"
@@ -3806,9 +3885,16 @@ msgstr "Faites défiler la page suivante"
 msgid "Back to applications"
 msgstr "Retour aux applications"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:233
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:259
 msgid "Destination channels or users"
 msgstr "Canaux ou utilisateurs de destination"
+
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:60
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:438
+msgid ""
+"Use one phone number per line to specify where to\n"
+"        route SMS messages. Phone numbers should be formatted +11231231234. For more information see Twilio documentation"
+msgstr ""
 
 #: screens/Template/Survey/SurveyToolbar.js:65
 msgid "Click to rearrange the order of the survey questions"
@@ -3899,6 +3985,7 @@ msgid ""
 msgstr ""
 
 #: components/LaunchPrompt/steps/InstanceGroupsStep.js:97
+#: components/LaunchPrompt/steps/useInstanceGroupsStep.js:19
 #: components/Lookup/InstanceGroupsLookup.js:75
 #: components/Lookup/InstanceGroupsLookup.js:122
 #: components/Lookup/InstanceGroupsLookup.js:142
@@ -3906,6 +3993,7 @@ msgstr ""
 #: components/PromptDetail/PromptDetail.js:235
 #: components/PromptDetail/PromptJobTemplateDetail.js:242
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:524
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:258
 #: routeConfig.js:150
 #: screens/ActivityStream/ActivityStream.js:205
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:108
@@ -4147,7 +4235,7 @@ msgstr "Pairs des nœuds de contrôle"
 msgid "This container group is currently being by other resources. Are you sure you want to delete it?"
 msgstr "Ce groupe de conteneurs est actuellement utilisé par d'autres ressources. Êtes-vous sûr de vouloir le supprimer ?"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:202
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:244
 msgid "ID of the Panel"
 msgstr "ID du panneau (facultatif)"
 
@@ -4166,9 +4254,9 @@ msgstr "Modèles de Jobs"
 msgid "First automation"
 msgstr "Première automatisation"
 
-#: screens/User/shared/User.helptext.js:6
-#~ msgid "Scope for the token's access"
-#~ msgstr "Spécifier le champ d'application du jeton"
+#: screens/User/shared/User.helptext.js:5
+msgid "Scope for the token's access"
+msgstr "Spécifier le champ d'application du jeton"
 
 #: screens/Application/ApplicationTokens/ApplicationTokenListItem.js:35
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionModal.js:151
@@ -4281,6 +4369,10 @@ msgstr "Projet non trouvé."
 msgid "Minimum number of instances that will be automatically assigned to this group when new instances come online."
 msgstr "Nombre minimum d'instances qui seront automatiquement attribuées à ce groupe lorsque de nouvelles instances seront mises en ligne."
 
+#: components/LaunchPrompt/LaunchPrompt.js:132
+#~ msgid "Launch | {0}"
+#~ msgstr ""
+
 #: screens/Organization/Organization.js:156
 msgid "View all Organizations."
 msgstr "Voir toutes les organisations."
@@ -4384,7 +4476,7 @@ msgstr "Accès"
 #~ msgid "If enabled, simultaneous runs of this job template will be allowed."
 #~ msgstr "Si activé, il sera possible d’avoir des exécutions de ce modèle de tâche en simultané."
 
-#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:347
+#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:343
 msgid "Note: This instance may be re-associated with this instance group if it is managed by "
 msgstr ""
 
@@ -4413,7 +4505,7 @@ msgstr "Informations d'identification introuvables."
 msgid "Are you sure you want to edit login redirect override URL?  Doing so could impact users' ability to log in to the system once local authentication is also disabled."
 msgstr "Êtes-vous sûr de vouloir modifier l'URL de substitution de la redirection de la connexion ?  Cela pourrait avoir un impact sur la capacité des utilisateurs à se connecter au système une fois que l'authentification locale est également désactivée."
 
-#: components/AppContainer/AppContainer.js:150
+#: components/AppContainer/AppContainer.js:135
 msgid "Your session is about to expire"
 msgstr "Votre session est sur le point d'expirer"
 
@@ -4487,7 +4579,7 @@ msgstr "N'a pas réussi à supprimer un ou plusieurs groupes."
 #~ msgid "Manual"
 #~ msgstr "Manuel"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:203
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:229
 msgid "IRC server password"
 msgstr "Mot de passe du serveur IRC"
 
@@ -4522,6 +4614,8 @@ msgstr "page"
 #~ msgstr "L'environnement d'exécution qui sera utilisé pour les jobs qui utilisent ce projet. Il sera utilisé comme solution de rechange lorsqu'un environnement d'exécution n'a pas été explicitement attribué au niveau du modèle de job ou du flux de travail."
 
 #: components/Lookup/ProjectLookup.js:137
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:132
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:201
 #: screens/Job/JobDetail/JobDetail.js:79
 #: screens/Project/ProjectList/ProjectList.js:199
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/ProjectsList.js:98
@@ -4631,7 +4725,7 @@ msgstr "Entier relatif"
 msgid "{interval} months"
 msgstr ""
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:181
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:203
 msgid "Tags for the annotation (optional)"
 msgstr "Balises pour l'annotation (facultatif)"
 
@@ -4687,7 +4781,7 @@ msgstr "Type de ressources"
 #: screens/Credential/shared/CredentialForm.js:334
 #: screens/Credential/shared/CredentialForm.js:340
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.js:83
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:443
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:485
 msgid "Test"
 msgstr "Test"
 
@@ -4769,13 +4863,13 @@ msgstr "Sync"
 #: screens/Inventory/shared/ConstructedInventoryHint.js:70
 #: screens/Inventory/shared/InventoryForm.js:59
 #: screens/Inventory/shared/InventoryGroupForm.js:41
-#: screens/Inventory/shared/InventorySourceForm.js:111
+#: screens/Inventory/shared/InventorySourceForm.js:130
 #: screens/Inventory/shared/SmartInventoryForm.js:56
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:105
 #: screens/Job/JobOutput/HostEventModal.js:115
 #: screens/ManagementJob/ManagementJobList/ManagementJobList.js:102
 #: screens/ManagementJob/ManagementJobList/ManagementJobListItem.js:73
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:113
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:155
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:128
 #: screens/NotificationTemplate/shared/NotificationTemplateForm.js:49
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:91
@@ -4859,9 +4953,9 @@ msgstr "Version non sensible à la casse de regex"
 msgid "Select an instance and a metric to show chart"
 msgstr "Sélectionnez une instance et une métrique pour afficher le graphique"
 
-#: screens/User/shared/User.helptext.js:5
-#~ msgid "The application that this token belongs to, or leave this field empty to create a Personal Access Token."
-#~ msgstr "Sélectionnez l'application à laquelle ce jeton appartiendra, ou laissez ce champ vide pour créer un jeton d'accès personnel."
+#: screens/User/shared/User.helptext.js:4
+msgid "The application that this token belongs to, or leave this field empty to create a Personal Access Token."
+msgstr "Sélectionnez l'application à laquelle ce jeton appartiendra, ou laissez ce champ vide pour créer un jeton d'accès personnel."
 
 #: screens/Instances/InstanceDetail/InstanceDetail.js:212
 #: screens/Instances/Shared/InstanceForm.js:54
@@ -4939,7 +5033,7 @@ msgstr "Hop"
 msgid "Confirm cancel job"
 msgstr "Confirmer l'annulation du job"
 
-#: screens/Instances/InstanceDetail/InstanceDetail.js:437
+#: screens/Instances/InstanceDetail/InstanceDetail.js:433
 #: screens/Instances/InstanceList/InstanceList.js:278
 msgid "Failed to remove one or more instances."
 msgstr "N'a pas réussi à supprimer une ou plusieurs instances."
@@ -4949,8 +5043,8 @@ msgstr "N'a pas réussi à supprimer une ou plusieurs instances."
 msgid "Arguments"
 msgstr "Arguments"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:191
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:153
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:233
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:175
 msgid "Grafana URL"
 msgstr "URL Grafana"
 
@@ -5003,7 +5097,7 @@ msgstr "Déboguer"
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.js:35
 #: screens/Setting/TACACS/TACACSDetail/TACACSDetail.js:49
 #: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.js:54
-#: screens/Setting/UI/UIDetail/UIDetail.js:61
+#: screens/Setting/UI/UIDetail/UIDetail.js:59
 msgid "Back to Settings"
 msgstr "Retour aux paramètres"
 
@@ -5102,11 +5196,11 @@ msgstr "Pair supprimé. Assurez-vous d'exécuter à nouveau le paquet d'installa
 msgid "Disassociate"
 msgstr "Dissocier"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:175
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:197
 msgid "ID of the panel (optional)"
 msgstr "ID du panneau (facultatif)"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:87
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:104
 msgid "Recipient list"
 msgstr "Liste de destinataires"
 
@@ -5119,7 +5213,7 @@ msgstr "Parent de tranche de job"
 msgid "Failed to sync constructed inventory source"
 msgstr "Échec de la synchronisation de la source d'inventaire construite"
 
-#: components/Schedule/shared/FrequencyDetailSubform.js:325
+#: components/Schedule/shared/FrequencyDetailSubform.js:337
 msgid "Sat"
 msgstr "Sam."
 
@@ -5134,6 +5228,13 @@ msgstr "DERNIÈRE SYNCHRONISATION"
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeDeleteModal.js:57
 msgid "Are you sure you want to remove the node below:"
 msgstr "Êtes-vous sûr de vouloir supprimer le nœud ci-dessous :"
+
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:62
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:483
+msgid ""
+"Specify HTTP Headers in JSON format. Refer to\n"
+"      the Ansible Controller documentation for example syntax."
+msgstr ""
 
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:289
@@ -5467,7 +5568,7 @@ msgstr "Informations d’identification copiées."
 msgid "Scroll last"
 msgstr "Défilement en dernier"
 
-#: components/Schedule/shared/FrequencyDetailSubform.js:421
+#: components/Schedule/shared/FrequencyDetailSubform.js:435
 msgid "Last"
 msgstr "Dernier"
 
@@ -5475,7 +5576,7 @@ msgstr "Dernier"
 #~ msgid "Enable webhook for this template."
 #~ msgstr "Activez le webhook pour ce modèle de tâche."
 
-#: components/Schedule/shared/FrequencyDetailSubform.js:540
+#: components/Schedule/shared/FrequencyDetailSubform.js:554
 msgid "On date"
 msgstr "À la date du"
 
@@ -5581,7 +5682,7 @@ msgstr "Mettre à jour les options"
 #~ msgid "Documentation."
 #~ msgstr "Documentation."
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:226
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:268
 msgid "IRC Server Port"
 msgstr "Port du serveur IRC"
 
@@ -5654,7 +5755,7 @@ msgstr "Job de flux de travail"
 msgid "Select an instance to run a health check."
 msgstr "Sélectionnez une instance pour effectuer un bilan de fonctionnement."
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:138
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:180
 msgid "Notification Type"
 msgstr "Type de notification"
 
@@ -5747,7 +5848,7 @@ msgstr ""
 #~ msgid "Successfully copied to clipboard!"
 #~ msgstr "Copie réussie dans le presse-papiers !"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:549
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:591
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:168
 msgid "Workflow approved message body"
 msgstr "Corps de message de flux de travail approuvé"
@@ -5756,7 +5857,7 @@ msgstr "Corps de message de flux de travail approuvé"
 msgid "Go to previous page"
 msgstr "Obtenir la page précédente"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:573
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:615
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:186
 msgid "Workflow denied message body"
 msgstr "Corps de message de flux de travail refusé"
@@ -5765,8 +5866,8 @@ msgstr "Corps de message de flux de travail refusé"
 msgid "Generic OIDC settings"
 msgstr "Paramètres génériques de l'OIDC"
 
-#: components/AddRole/AddResourceRole.js:179
-#: components/AddRole/AddResourceRole.js:180
+#: components/AddRole/AddResourceRole.js:182
+#: components/AddRole/AddResourceRole.js:183
 #: routeConfig.js:119
 #: screens/ActivityStream/ActivityStream.js:185
 #: screens/Team/Teams.js:32
@@ -5803,7 +5904,7 @@ msgstr "Forks"
 msgid "Parameter"
 msgstr "Paramètres"
 
-#: components/Schedule/shared/FrequencyDetailSubform.js:402
+#: components/Schedule/shared/FrequencyDetailSubform.js:416
 msgid "The"
 msgstr "Le"
 
@@ -5857,7 +5958,7 @@ msgstr "Obtenir des abonnements"
 msgid "Related search type"
 msgstr "Type de recherche connexe"
 
-#: components/AppContainer/AppContainer.js:174
+#: components/AppContainer/AppContainer.js:159
 msgid "{sessionCountdown, plural, one {You will be logged out in # second due to inactivity} other {You will be logged out in # seconds due to inactivity}}"
 msgstr "{sessionCountdown, plural, one {You will be logged out in # second due to inactivity} other {You will be logged out in # seconds due to inactivity}}"
 
@@ -5890,7 +5991,7 @@ msgstr "Insights - Information d’identification"
 msgid "View constructed inventory host details"
 msgstr "Afficher les détails de l'hôte de l'inventaire construit"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:378
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:417
 #: screens/User/UserTokens/UserTokens.js:64
 msgid "Token"
 msgstr "Jeton"
@@ -5910,7 +6011,7 @@ msgstr "Type de groupe"
 msgid "User Type"
 msgstr "Type d’utilisateur"
 
-#: components/LaunchPrompt/steps/useInventoryStep.js:36
+#: components/LaunchPrompt/steps/useInventoryStep.js:58
 msgid "An inventory must be selected"
 msgstr "Un inventaire doit être sélectionné"
 
@@ -6031,6 +6132,8 @@ msgid "View GitHub Settings"
 msgstr "Voir les paramètres de GitHub"
 
 #: components/Lookup/ProjectLookup.js:140
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:135
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:204
 #: screens/Job/JobDetail/JobDetail.js:81
 #: screens/Project/ProjectList/ProjectList.js:202
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/ProjectsList.js:101
@@ -6149,7 +6252,7 @@ msgstr "Version non sensible à la casse de endswith."
 #: screens/Setting/Settings.js:124
 #: screens/Setting/TACACS/TACACSDetail/TACACSDetail.js:56
 #: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.js:61
-#: screens/Setting/UI/UIDetail/UIDetail.js:68
+#: screens/Setting/UI/UIDetail/UIDetail.js:66
 #: screens/Team/Team.js:58
 #: screens/Team/Teams.js:31
 #: screens/Template/Template.js:136
@@ -6172,6 +6275,8 @@ msgstr "Détails"
 msgid "{0, plural, one {This credential is currently being used by other resources. Are you sure you want to delete it?} other {Deleting these credentials could impact other resources that rely on them. Are you sure you want to delete anyway?}}"
 msgstr "{0, plural, one {This credential is currently being used by other resources. Are you sure you want to delete it?} other {Deleting these credentials could impact other resources that rely on them. Are you sure you want to delete anyway?}}"
 
+#: components/AddRole/AddResourceRole.js:35
+#: components/AddRole/AddResourceRole.js:50
 #: components/ResourceAccessList/ResourceAccessList.js:154
 #: screens/User/shared/UserForm.js:69
 #: screens/User/UserDetail/UserDetail.js:66
@@ -6222,12 +6327,12 @@ msgstr "Basculer les outils"
 msgid "This inventory is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "Cet inventaire est actuellement utilisé par d'autres ressources. Êtes-vous sûr de vouloir le supprimer ?"
 
-#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:307
-#: screens/Instances/InstanceDetail/InstanceDetail.js:356
+#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:303
+#: screens/Instances/InstanceDetail/InstanceDetail.js:352
 msgid "Errors"
 msgstr "Erreurs"
 
-#: components/Schedule/shared/FrequencyDetailSubform.js:414
+#: components/Schedule/shared/FrequencyDetailSubform.js:428
 msgid "Third"
 msgstr "Troisième"
 
@@ -6248,7 +6353,7 @@ msgstr "L'environnement d'exécution est absent ou supprimé."
 msgid "Relaunch failed hosts"
 msgstr "Relancer les hôtes défaillants"
 
-#: components/AppContainer/AppContainer.js:114
+#: components/AppContainer/AppContainer.js:99
 msgid "Navigation"
 msgstr "Navigation"
 
@@ -6294,7 +6399,7 @@ msgstr "LDAP 3"
 msgid "Add Link"
 msgstr "Ajouter un lien"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:158
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:200
 msgid "Recipient List"
 msgstr "Liste de destinataires"
 
@@ -6312,8 +6417,8 @@ msgid "Create new container group"
 msgstr "Créer un nouveau groupe de conteneurs"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:45
-#: components/Schedule/shared/FrequencyDetailSubform.js:297
-#: components/Schedule/shared/FrequencyDetailSubform.js:447
+#: components/Schedule/shared/FrequencyDetailSubform.js:305
+#: components/Schedule/shared/FrequencyDetailSubform.js:461
 msgid "Wednesday"
 msgstr "Mercredi"
 
@@ -6363,8 +6468,8 @@ msgstr "Fourches max"
 
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:267
 #: screens/Instances/InstanceDetail/InstanceDetail.js:307
-msgid "# fork"
-msgstr "Fourchette"
+#~ msgid "# fork"
+#~ msgstr "Fourchette"
 
 #: components/Schedule/ScheduleToggle/ScheduleToggle.js:50
 msgid "Schedule is active"
@@ -6458,7 +6563,7 @@ msgstr "Impossible d’obtenir une instance."
 msgid "Launched By (Username)"
 msgstr "Lancé par (Nom d'utilisateur)"
 
-#: components/Schedule/shared/FrequencyDetailSubform.js:468
+#: components/Schedule/shared/FrequencyDetailSubform.js:482
 msgid "Weekday"
 msgstr "Jour de la semaine"
 
@@ -6487,7 +6592,7 @@ msgstr "Type de réponse"
 msgid "Key select"
 msgstr "Sélection de la clé"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:401
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:445
 msgid "Account token"
 msgstr "Token de compte"
 
@@ -6502,7 +6607,7 @@ msgstr "URL de remplacement pour la redirection de connexion"
 msgid "Subscription"
 msgstr "Abonnement"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:225
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:251
 msgid "IRC nick"
 msgstr "IRC nick"
 
@@ -6617,8 +6722,8 @@ msgstr "Les inventaires et les sources ne peuvent pas être copiés"
 msgid "Cloud"
 msgstr "Cloud"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:181
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:126
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:223
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:143
 msgid "Email Options"
 msgstr "Options d'email"
 
@@ -6687,8 +6792,8 @@ msgstr "Hôtes importés"
 msgid "Run every"
 msgstr "Exécutez tous les"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:54
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:133
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:96
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:150
 msgid "Use SSL"
 msgstr "Utiliser SSL"
 
@@ -6711,7 +6816,7 @@ msgstr "5 (Débogage WinRM)"
 msgid "name"
 msgstr "nom"
 
-#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:118
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:366
 msgid "Select roles to apply"
 msgstr "Sélectionner les rôles à pourvoir"
 
@@ -6806,6 +6911,8 @@ msgstr "Refusé avec succès"
 
 #: components/RelatedTemplateList/RelatedTemplateList.js:187
 #: components/TemplateList/TemplateList.js:227
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:66
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:97
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.js:159
 msgid "Playbook name"
 msgstr "Nom du playbook"
@@ -6818,14 +6925,10 @@ msgstr "Ajouter un inventaire construit"
 msgid "Select a module"
 msgstr "Sélectionnez un module"
 
-#. placeholder {0}: import React, { useCallback, useEffect, useState } from 'react'; import { useHistory, useParams, Link } from 'react-router-dom'; import { Plural, useLingui } from '@lingui/react/macro'; import { Button, Progress, ProgressMeasureLocation, ProgressSize, CodeBlock, CodeBlockCode, Tooltip, Slider, } from '@patternfly/react-core'; import { DownloadIcon, OutlinedClockIcon } from '@patternfly/react-icons'; import styled from 'styled-components'; import { useConfig } from 'contexts/Config'; import { InstancesAPI } from 'api'; import useDebounce from 'hooks/useDebounce'; import AlertModal from 'components/AlertModal'; import ErrorDetail from 'components/ErrorDetail'; import InstanceToggle from 'components/InstanceToggle'; import { CardBody, CardActionsRow } from 'components/Card'; import getDocsBaseUrl from 'util/getDocsBaseUrl'; import { formatDateString } from 'util/dates'; import ContentError from 'components/ContentError'; import ContentLoading from 'components/ContentLoading'; import { Detail, DetailList } from 'components/DetailList'; import StatusLabel from 'components/StatusLabel'; import useRequest, { useDeleteItems, useDismissableError, } from 'hooks/useRequest'; import HealthCheckAlert from 'components/HealthCheckAlert'; import InstanceGroupLabels from 'components/InstanceGroupLabels'; import RemoveInstanceButton from '../Shared/RemoveInstanceButton'; const Unavailable = styled.span` color: var(--pf-global--danger-color--200); `; const SliderHolder = styled.div` display: flex; align-items: center; justify-content: space-between; `; const SliderForks = styled.div` flex-grow: 1; margin-right: 8px; margin-left: 8px; text-align: center; `; function computeForks(memCapacity, cpuCapacity, selectedCapacityAdjustment) { const minCapacity = Math.min(memCapacity, cpuCapacity); const maxCapacity = Math.max(memCapacity, cpuCapacity); return Math.floor( minCapacity + (maxCapacity - minCapacity) * selectedCapacityAdjustment ); } function InstanceDetail({ setBreadcrumb, isK8s }) { const { t } = useLingui(); const config = useConfig(); const { id } = useParams(); const [forks, setForks] = useState(); const history = useHistory(); const [healthCheck, setHealthCheck] = useState({}); const [showHealthCheckAlert, setShowHealthCheckAlert] = useState(false); const { isLoading, error: contentError, request: fetchDetails, result: { instance, instanceGroups }, } = useRequest( useCallback(async () => { const [ { data: details }, { data: { results }, }, ] = await Promise.all([ InstancesAPI.readDetail(id), InstancesAPI.readInstanceGroup(id), ]); if (details.node_type === 'execution') { const { data: healthCheckData } = await InstancesAPI.readHealthCheckDetail(id); setHealthCheck(healthCheckData); } setForks( computeForks( details.mem_capacity, details.cpu_capacity, details.capacity_adjustment ) ); return { instance: details, instanceGroups: results, }; }, [id]), { instance: {}, instanceGroups: [] } ); useEffect(() => { fetchDetails(); }, [fetchDetails]); useEffect(() => { if (instance) { setBreadcrumb(instance); } }, [instance, setBreadcrumb]); const { error: healthCheckError, request: fetchHealthCheck } = useRequest( useCallback(async () => { const { status } = await InstancesAPI.healthCheck(id); if (status === 200) { setShowHealthCheckAlert(true); } }, [id]) ); const { error: updateInstanceError, request: updateInstance } = useRequest( useCallback( async (values) => { await InstancesAPI.update(id, values); }, [id] ) ); const debounceUpdateInstance = useDebounce(updateInstance, 200); const handleChangeValue = (value) => { const roundedValue = Math.round(value * 100) / 100; setForks( computeForks(instance.mem_capacity, instance.cpu_capacity, roundedValue) ); debounceUpdateInstance({ capacity_adjustment: roundedValue }); }; const formatHealthCheckTimeStamp = (last) => ( <> {formatDateString(last)} {instance.health_check_pending ? ( <> {' '} <OutlinedClockIcon /> </> ) : null} </> ); const { error, dismissError } = useDismissableError( updateInstanceError || healthCheckError ); const { isLoading: isRemoveLoading, deleteItems: removeInstances, deletionError: removeError, clearDeletionError, } = useDeleteItems( async () => { await InstancesAPI.deprovisionInstance(instance.id); history.push('/instances'); }, { fetchItems: fetchDetails, } ); if (contentError) { return <ContentError error={contentError} />; } if (isLoading || isRemoveLoading) { return <ContentLoading />; } const isHopNode = instance.node_type === 'hop'; const isExecutionNode = instance.node_type === 'execution'; const isManaged = instance.managed; return ( <> {showHealthCheckAlert ? ( <HealthCheckAlert onSetHealthCheckAlert={setShowHealthCheckAlert} /> ) : null} <CardBody> <DetailList gutter="sm"> <Detail label={t`Host Name`} value={instance.hostname} dataCy="instance-detail-name" /> <Detail label={t`Status`} dataCy="status" value={ instance.node_state ? ( <StatusLabel status={instance.node_state} /> ) : null } /> <Detail label={t`Node Type`} value={instance.node_type} /> <Detail label={t`Host`} value={instance.ip_address} /> <Detail label={t`Listener Port`} value={instance.listener_port} /> {!isManaged && instance.related?.install_bundle && ( <Detail label={t`Install Bundle`} value={ <Tooltip content={t`Click to download bundle`}> <Button component="a" isSmall href={`${instance.related?.install_bundle}`} target="_blank" variant="secondary" dataCy="install-bundle-download-button" rel="noopener noreferrer" > <DownloadIcon /> </Button> </Tooltip> } /> )} {(isExecutionNode || isHopNode) && ( <Detail label={t`Peers from control nodes`} value={ instance.peers_from_control_nodes ? t`On` : t`Off` } /> )} {!isHopNode && ( <> <Detail label={t`Policy Type`} value={ instance.managed_by_policy ? t`Auto` : t`Manual` } /> <Detail label={t`Running Jobs`} value={instance.jobs_running} /> <Detail label={t`Total Jobs`} value={instance.jobs_total} /> {instanceGroups && ( <Detail fullWidth label={t`Instance Groups`} dataCy="instance-groups" helpText={t`The Instance Groups to which this instance belongs.`} value={ <InstanceGroupLabels labels={instanceGroups} isLinkable /> } isEmpty={instanceGroups.length === 0} /> )} <Detail label={t`Last Health Check`} dataCy="last-health-check" helpText={ <> {t`Health checks are asynchronous tasks. See the`}{' '} <a href={`${getDocsBaseUrl( config )}/html/administration/instances.html#health-check`} target="_blank" rel="noopener noreferrer" > {t`documentation`} </a>{' '} {t`for more info.`} </> } value={formatHealthCheckTimeStamp(instance.last_health_check)} /> <Detail label={t`Capacity Adjustment`} dataCy="capacity-adjustment" value={ <SliderHolder data-cy="slider-holder"> <div data-cy="cpu-capacity"> {t`CPU ${instance.cpu_capacity}`} </div> <SliderForks data-cy="slider-forks"> <div data-cy="number-forks"> <Plural value={forks} one={t`# fork`} other={t`# forks`} /> </div> <Slider areCustomStepsContinuous max={1} min={0} step={0.1} value={instance.capacity_adjustment} onChange={handleChangeValue} isDisabled={ !config?.me?.is_superuser || !instance.enabled || !isManaged } data-cy="slider" /> </SliderForks> <div data-cy="mem-capacity"> {t`RAM ${instance.mem_capacity}`} </div> </SliderHolder> } /> <Detail label={t`Used Capacity`} dataCy="used-capacity" value={ instance.enabled ? ( <Progress title={t`Used capacity`} value={Math.round( 100 - instance.percent_capacity_remaining )} measureLocation={ProgressMeasureLocation.top} size={ProgressSize.sm} aria-label={t`Used capacity`} /> ) : ( <Unavailable>{t`Unavailable`}</Unavailable> ) } /> </> )} {healthCheck?.errors && ( <Detail fullWidth label={t`Errors`} dataCy="errors" value={ <CodeBlock> <CodeBlockCode>{healthCheck?.errors}</CodeBlockCode> </CodeBlock> } /> )} </DetailList> <CardActionsRow> {config?.me?.is_superuser && isK8s && !isManaged && ( <> <Button ouiaId="instance-detail-edit-button" aria-label={t`edit`} component={Link} to={`/instances/${id}/edit`} > {t`Edit`} </Button> <RemoveInstanceButton dataCy="remove-instance-button" itemsToRemove={[instance]} isK8s={isK8s} onRemove={removeInstances} /> </> )} {isExecutionNode && ( <Tooltip content={t`Run a health check on the instance`}> <Button isDisabled={ !config?.me?.is_superuser || instance.health_check_pending || instance.managed } variant="primary" ouiaId="health-check-button" onClick={fetchHealthCheck} isLoading={instance.health_check_pending} spinnerAriaLabel={t`Running health check`} > {instance.health_check_pending ? t`Running health check` : t`Run health check`} </Button> </Tooltip> )} {!isHopNode && ( <InstanceToggle css="display: inline-flex;" fetchInstances={fetchDetails} instance={instance} dataCy="enable-instance" /> )} </CardActionsRow> {error && ( <AlertModal isOpen={error} onClose={dismissError} title={t`Error!`} variant="error" > {updateInstanceError ? t`Failed to update capacity adjustment.` : t`Failed to disassociate one or more instances.`} <ErrorDetail error={error} /> </AlertModal> )} {removeError && ( <AlertModal isOpen={removeError} variant="error" aria-label={t`Removal Error`} title={t`Error!`} onClose={clearDeletionError} > {t`Failed to remove one or more instances.`} <ErrorDetail error={removeError} /> </AlertModal> )} </CardBody> </> ); } export default InstanceDetail; 
-#. placeholder {0}: import React, { useCallback, useEffect, useState } from 'react'; import { useParams, useHistory } from 'react-router-dom'; import { Trans, Plural, useLingui } from '@lingui/react/macro'; import { Button, Progress, ProgressMeasureLocation, ProgressSize, CodeBlock, CodeBlockCode, Tooltip, Slider, } from '@patternfly/react-core'; import { CaretLeftIcon, OutlinedClockIcon } from '@patternfly/react-icons'; import styled from 'styled-components'; import { useConfig } from 'contexts/Config'; import { InstancesAPI, InstanceGroupsAPI } from 'api'; import useDebounce from 'hooks/useDebounce'; import AlertModal from 'components/AlertModal'; import ErrorDetail from 'components/ErrorDetail'; import DisassociateButton from 'components/DisassociateButton'; import InstanceToggle from 'components/InstanceToggle'; import { CardBody, CardActionsRow } from 'components/Card'; import getDocsBaseUrl from 'util/getDocsBaseUrl'; import { formatDateString } from 'util/dates'; import RoutedTabs from 'components/RoutedTabs'; import ContentError from 'components/ContentError'; import ContentLoading from 'components/ContentLoading'; import { Detail, DetailList } from 'components/DetailList'; import HealthCheckAlert from 'components/HealthCheckAlert'; import StatusLabel from 'components/StatusLabel'; import useRequest, { useDeleteItems, useDismissableError, } from 'hooks/useRequest'; const Unavailable = styled.span` color: var(--pf-global--danger-color--200); `; const SliderHolder = styled.div` display: flex; align-items: center; justify-content: space-between; `; const SliderForks = styled.div` flex-grow: 1; margin-right: 8px; margin-left: 8px; text-align: center; `; function computeForks(memCapacity, cpuCapacity, selectedCapacityAdjustment) { const minCapacity = Math.min(memCapacity, cpuCapacity); const maxCapacity = Math.max(memCapacity, cpuCapacity); return Math.floor( minCapacity + (maxCapacity - minCapacity) * selectedCapacityAdjustment ); } function InstanceDetails({ setBreadcrumb, instanceGroup }) { const { t } = useLingui(); const config = useConfig(); const { id, instanceId } = useParams(); const history = useHistory(); const [healthCheck, setHealthCheck] = useState({}); const [showHealthCheckAlert, setShowHealthCheckAlert] = useState(false); const [forks, setForks] = useState(); const policyRulesDocsLink = `${getDocsBaseUrl( config )}/html/administration/containers_instance_groups.html#ag-instance-group-policies`; const { isLoading, error: contentError, request: fetchDetails, result: { instance }, } = useRequest( useCallback(async () => { const { data: { results }, } = await InstanceGroupsAPI.readInstances(instanceGroup.id); const isAssociated = results.some( ({ id: instId }) => instId === parseInt(instanceId, 10) ); if (isAssociated) { const { data: details } = await InstancesAPI.readDetail(instanceId); if (details.node_type === 'execution') { const { data: healthCheckData } = await InstancesAPI.readHealthCheckDetail(instanceId); setHealthCheck(healthCheckData); } setBreadcrumb(instanceGroup, details); setForks( computeForks( details.mem_capacity, details.cpu_capacity, details.capacity_adjustment ) ); return { instance: details }; } throw new Error( `This instance is not associated with this instance group` ); }, [instanceId, setBreadcrumb, instanceGroup]), { instance: {}, isLoading: true } ); useEffect(() => { fetchDetails(); }, [fetchDetails]); const { error: healthCheckError, request: fetchHealthCheck } = useRequest( useCallback(async () => { const { status } = await InstancesAPI.healthCheck(instanceId); if (status === 200) { setShowHealthCheckAlert(true); } }, [instanceId]) ); const { deleteItems: disassociateInstance, deletionError: disassociateError, } = useDeleteItems( useCallback(async () => { await InstanceGroupsAPI.disassociateInstance( instanceGroup.id, instance.id ); history.push(`/instance_groups/${instanceGroup.id}/instances`); }, [instanceGroup.id, instance.id, history]) ); const { error: updateInstanceError, request: updateInstance } = useRequest( useCallback( async (values) => { await InstancesAPI.update(instance.id, values); }, [instance] ) ); const debounceUpdateInstance = useDebounce(updateInstance, 200); const handleChangeValue = (value) => { const roundedValue = Math.round(value * 100) / 100; setForks( computeForks(instance.mem_capacity, instance.cpu_capacity, roundedValue) ); debounceUpdateInstance({ capacity_adjustment: roundedValue }); }; const formatHealthCheckTimeStamp = (last) => ( <> {formatDateString(last)} {instance.health_check_pending ? ( <> {' '} <OutlinedClockIcon /> </> ) : null} </> ); const { error, dismissError } = useDismissableError( disassociateError || updateInstanceError || healthCheckError ); const tabsArray = [ { name: ( <> <CaretLeftIcon /> {t`Back to Instances`} </> ), link: `/instance_groups/${id}/instances`, id: 99, }, { name: t`Details`, link: `/instance_groups/${id}/instances/${instanceId}/details`, id: 0, }, ]; if (contentError) { return <ContentError error={contentError} />; } if (isLoading) { return <ContentLoading />; } const isExecutionNode = instance.node_type === 'execution'; return ( <> <RoutedTabs tabsArray={tabsArray} /> {showHealthCheckAlert ? ( <HealthCheckAlert onSetHealthCheckAlert={setShowHealthCheckAlert} /> ) : null} <CardBody> <DetailList gutter="sm"> <Detail label={t`Host Name`} value={instance.hostname} dataCy="instance-detail-name" /> <Detail label={t`Status`} value={ instance.node_state ? ( <StatusLabel status={instance.node_state} /> ) : null } /> <Detail label={t`Policy Type`} value={ instance.managed_by_policy ? t`Auto` : t`Manual` } /> <Detail label={t`Running Jobs`} value={instance.jobs_running} /> <Detail label={t`Total Jobs`} value={instance.jobs_total} /> <Detail label={t`Last Health Check`} helpText={ <> {t`Health checks are asynchronous tasks. See the`}{' '} <a href={`${getDocsBaseUrl( config )}/html/administration/instances.html#health-check`} target="_blank" rel="noopener noreferrer" > {t`documentation`} </a>{' '} {t`for more info.`} </> } value={formatHealthCheckTimeStamp(instance.last_health_check)} /> <Detail label={t`Node Type`} value={instance.node_type} /> <Detail label={t`Capacity Adjustment`} value={ <SliderHolder data-cy="slider-holder"> <div data-cy="cpu-capacity"> {t`CPU ${instance.cpu_capacity}`} </div> <SliderForks data-cy="slider-forks"> <div data-cy="number-forks"> <Plural value={forks} one={t`# fork`} other={t`# forks`} /> </div> <Slider areCustomStepsContinuous max={1} min={0} step={0.1} value={instance.capacity_adjustment} onChange={handleChangeValue} isDisabled={!config?.me?.is_superuser || !instance.enabled} data-cy="slider" /> </SliderForks> <div data-cy="mem-capacity"> {t`RAM ${instance.mem_capacity}`} </div> </SliderHolder> } /> <Detail label={t`Used Capacity`} value={ instance.enabled ? ( <Progress title={t`Used capacity`} value={Math.round(100 - instance.percent_capacity_remaining)} measureLocation={ProgressMeasureLocation.top} size={ProgressSize.sm} aria-label={t`Used capacity`} /> ) : ( <Unavailable>{t`Unavailable`}</Unavailable> ) } /> {healthCheck?.errors && ( <Detail fullWidth label={t`Errors`} value={ <CodeBlock> <CodeBlockCode>{healthCheck?.errors}</CodeBlockCode> </CodeBlock> } /> )} </DetailList> <CardActionsRow> {isExecutionNode && ( <Tooltip content={t`Run a health check on the instance`}> <Button isDisabled={ !config?.me?.is_superuser || instance.health_check_pending } variant="primary" ouiaId="health-check-button" onClick={fetchHealthCheck} isLoading={instance.health_check_pending} spinnerAriaLabel={t`Running health check`} > {instance.health_check_pending ? t`Running health check` : t`Run health check`} </Button> </Tooltip> )} {config?.me?.is_superuser && instance.node_type !== 'control' && ( <DisassociateButton verifyCannotDisassociate={instanceGroup.name === 'controlplane'} key="disassociate" onDisassociate={disassociateInstance} itemsToDisassociate={[instance]} isProtectedInstanceGroup={instanceGroup.name === 'controlplane'} modalTitle={t`Disassociate instance from instance group?`} modalNote={ instance.managed_by_policy ? ( <Trans> <b> {t`Note: This instance may be re-associated with this instance group if it is managed by `} <a href={policyRulesDocsLink} target="_blank" rel="noopener noreferrer" > {t`policy rules.`} </a> </b> </Trans> ) : null } /> )} <InstanceToggle css="display: inline-flex;" fetchInstances={fetchDetails} instance={instance} /> </CardActionsRow> {error && ( <AlertModal isOpen={error} onClose={dismissError} title={t`Error!`} variant="error" > {updateInstanceError ? t`Failed to update capacity adjustment.` : t`Failed to disassociate one or more instances.`} <ErrorDetail error={error} /> </AlertModal> )} </CardBody> </> ); } export default InstanceDetails; 
-#. placeholder {1}: import React, { useCallback, useEffect, useState } from 'react'; import { useHistory, useParams, Link } from 'react-router-dom'; import { Plural, useLingui } from '@lingui/react/macro'; import { Button, Progress, ProgressMeasureLocation, ProgressSize, CodeBlock, CodeBlockCode, Tooltip, Slider, } from '@patternfly/react-core'; import { DownloadIcon, OutlinedClockIcon } from '@patternfly/react-icons'; import styled from 'styled-components'; import { useConfig } from 'contexts/Config'; import { InstancesAPI } from 'api'; import useDebounce from 'hooks/useDebounce'; import AlertModal from 'components/AlertModal'; import ErrorDetail from 'components/ErrorDetail'; import InstanceToggle from 'components/InstanceToggle'; import { CardBody, CardActionsRow } from 'components/Card'; import getDocsBaseUrl from 'util/getDocsBaseUrl'; import { formatDateString } from 'util/dates'; import ContentError from 'components/ContentError'; import ContentLoading from 'components/ContentLoading'; import { Detail, DetailList } from 'components/DetailList'; import StatusLabel from 'components/StatusLabel'; import useRequest, { useDeleteItems, useDismissableError, } from 'hooks/useRequest'; import HealthCheckAlert from 'components/HealthCheckAlert'; import InstanceGroupLabels from 'components/InstanceGroupLabels'; import RemoveInstanceButton from '../Shared/RemoveInstanceButton'; const Unavailable = styled.span` color: var(--pf-global--danger-color--200); `; const SliderHolder = styled.div` display: flex; align-items: center; justify-content: space-between; `; const SliderForks = styled.div` flex-grow: 1; margin-right: 8px; margin-left: 8px; text-align: center; `; function computeForks(memCapacity, cpuCapacity, selectedCapacityAdjustment) { const minCapacity = Math.min(memCapacity, cpuCapacity); const maxCapacity = Math.max(memCapacity, cpuCapacity); return Math.floor( minCapacity + (maxCapacity - minCapacity) * selectedCapacityAdjustment ); } function InstanceDetail({ setBreadcrumb, isK8s }) { const { t } = useLingui(); const config = useConfig(); const { id } = useParams(); const [forks, setForks] = useState(); const history = useHistory(); const [healthCheck, setHealthCheck] = useState({}); const [showHealthCheckAlert, setShowHealthCheckAlert] = useState(false); const { isLoading, error: contentError, request: fetchDetails, result: { instance, instanceGroups }, } = useRequest( useCallback(async () => { const [ { data: details }, { data: { results }, }, ] = await Promise.all([ InstancesAPI.readDetail(id), InstancesAPI.readInstanceGroup(id), ]); if (details.node_type === 'execution') { const { data: healthCheckData } = await InstancesAPI.readHealthCheckDetail(id); setHealthCheck(healthCheckData); } setForks( computeForks( details.mem_capacity, details.cpu_capacity, details.capacity_adjustment ) ); return { instance: details, instanceGroups: results, }; }, [id]), { instance: {}, instanceGroups: [] } ); useEffect(() => { fetchDetails(); }, [fetchDetails]); useEffect(() => { if (instance) { setBreadcrumb(instance); } }, [instance, setBreadcrumb]); const { error: healthCheckError, request: fetchHealthCheck } = useRequest( useCallback(async () => { const { status } = await InstancesAPI.healthCheck(id); if (status === 200) { setShowHealthCheckAlert(true); } }, [id]) ); const { error: updateInstanceError, request: updateInstance } = useRequest( useCallback( async (values) => { await InstancesAPI.update(id, values); }, [id] ) ); const debounceUpdateInstance = useDebounce(updateInstance, 200); const handleChangeValue = (value) => { const roundedValue = Math.round(value * 100) / 100; setForks( computeForks(instance.mem_capacity, instance.cpu_capacity, roundedValue) ); debounceUpdateInstance({ capacity_adjustment: roundedValue }); }; const formatHealthCheckTimeStamp = (last) => ( <> {formatDateString(last)} {instance.health_check_pending ? ( <> {' '} <OutlinedClockIcon /> </> ) : null} </> ); const { error, dismissError } = useDismissableError( updateInstanceError || healthCheckError ); const { isLoading: isRemoveLoading, deleteItems: removeInstances, deletionError: removeError, clearDeletionError, } = useDeleteItems( async () => { await InstancesAPI.deprovisionInstance(instance.id); history.push('/instances'); }, { fetchItems: fetchDetails, } ); if (contentError) { return <ContentError error={contentError} />; } if (isLoading || isRemoveLoading) { return <ContentLoading />; } const isHopNode = instance.node_type === 'hop'; const isExecutionNode = instance.node_type === 'execution'; const isManaged = instance.managed; return ( <> {showHealthCheckAlert ? ( <HealthCheckAlert onSetHealthCheckAlert={setShowHealthCheckAlert} /> ) : null} <CardBody> <DetailList gutter="sm"> <Detail label={t`Host Name`} value={instance.hostname} dataCy="instance-detail-name" /> <Detail label={t`Status`} dataCy="status" value={ instance.node_state ? ( <StatusLabel status={instance.node_state} /> ) : null } /> <Detail label={t`Node Type`} value={instance.node_type} /> <Detail label={t`Host`} value={instance.ip_address} /> <Detail label={t`Listener Port`} value={instance.listener_port} /> {!isManaged && instance.related?.install_bundle && ( <Detail label={t`Install Bundle`} value={ <Tooltip content={t`Click to download bundle`}> <Button component="a" isSmall href={`${instance.related?.install_bundle}`} target="_blank" variant="secondary" dataCy="install-bundle-download-button" rel="noopener noreferrer" > <DownloadIcon /> </Button> </Tooltip> } /> )} {(isExecutionNode || isHopNode) && ( <Detail label={t`Peers from control nodes`} value={ instance.peers_from_control_nodes ? t`On` : t`Off` } /> )} {!isHopNode && ( <> <Detail label={t`Policy Type`} value={ instance.managed_by_policy ? t`Auto` : t`Manual` } /> <Detail label={t`Running Jobs`} value={instance.jobs_running} /> <Detail label={t`Total Jobs`} value={instance.jobs_total} /> {instanceGroups && ( <Detail fullWidth label={t`Instance Groups`} dataCy="instance-groups" helpText={t`The Instance Groups to which this instance belongs.`} value={ <InstanceGroupLabels labels={instanceGroups} isLinkable /> } isEmpty={instanceGroups.length === 0} /> )} <Detail label={t`Last Health Check`} dataCy="last-health-check" helpText={ <> {t`Health checks are asynchronous tasks. See the`}{' '} <a href={`${getDocsBaseUrl( config )}/html/administration/instances.html#health-check`} target="_blank" rel="noopener noreferrer" > {t`documentation`} </a>{' '} {t`for more info.`} </> } value={formatHealthCheckTimeStamp(instance.last_health_check)} /> <Detail label={t`Capacity Adjustment`} dataCy="capacity-adjustment" value={ <SliderHolder data-cy="slider-holder"> <div data-cy="cpu-capacity"> {t`CPU ${instance.cpu_capacity}`} </div> <SliderForks data-cy="slider-forks"> <div data-cy="number-forks"> <Plural value={forks} one={t`# fork`} other={t`# forks`} /> </div> <Slider areCustomStepsContinuous max={1} min={0} step={0.1} value={instance.capacity_adjustment} onChange={handleChangeValue} isDisabled={ !config?.me?.is_superuser || !instance.enabled || !isManaged } data-cy="slider" /> </SliderForks> <div data-cy="mem-capacity"> {t`RAM ${instance.mem_capacity}`} </div> </SliderHolder> } /> <Detail label={t`Used Capacity`} dataCy="used-capacity" value={ instance.enabled ? ( <Progress title={t`Used capacity`} value={Math.round( 100 - instance.percent_capacity_remaining )} measureLocation={ProgressMeasureLocation.top} size={ProgressSize.sm} aria-label={t`Used capacity`} /> ) : ( <Unavailable>{t`Unavailable`}</Unavailable> ) } /> </> )} {healthCheck?.errors && ( <Detail fullWidth label={t`Errors`} dataCy="errors" value={ <CodeBlock> <CodeBlockCode>{healthCheck?.errors}</CodeBlockCode> </CodeBlock> } /> )} </DetailList> <CardActionsRow> {config?.me?.is_superuser && isK8s && !isManaged && ( <> <Button ouiaId="instance-detail-edit-button" aria-label={t`edit`} component={Link} to={`/instances/${id}/edit`} > {t`Edit`} </Button> <RemoveInstanceButton dataCy="remove-instance-button" itemsToRemove={[instance]} isK8s={isK8s} onRemove={removeInstances} /> </> )} {isExecutionNode && ( <Tooltip content={t`Run a health check on the instance`}> <Button isDisabled={ !config?.me?.is_superuser || instance.health_check_pending || instance.managed } variant="primary" ouiaId="health-check-button" onClick={fetchHealthCheck} isLoading={instance.health_check_pending} spinnerAriaLabel={t`Running health check`} > {instance.health_check_pending ? t`Running health check` : t`Run health check`} </Button> </Tooltip> )} {!isHopNode && ( <InstanceToggle css="display: inline-flex;" fetchInstances={fetchDetails} instance={instance} dataCy="enable-instance" /> )} </CardActionsRow> {error && ( <AlertModal isOpen={error} onClose={dismissError} title={t`Error!`} variant="error" > {updateInstanceError ? t`Failed to update capacity adjustment.` : t`Failed to disassociate one or more instances.`} <ErrorDetail error={error} /> </AlertModal> )} {removeError && ( <AlertModal isOpen={removeError} variant="error" aria-label={t`Removal Error`} title={t`Error!`} onClose={clearDeletionError} > {t`Failed to remove one or more instances.`} <ErrorDetail error={removeError} /> </AlertModal> )} </CardBody> </> ); } export default InstanceDetail; 
-#. placeholder {1}: import React, { useCallback, useEffect, useState } from 'react'; import { useParams, useHistory } from 'react-router-dom'; import { Trans, Plural, useLingui } from '@lingui/react/macro'; import { Button, Progress, ProgressMeasureLocation, ProgressSize, CodeBlock, CodeBlockCode, Tooltip, Slider, } from '@patternfly/react-core'; import { CaretLeftIcon, OutlinedClockIcon } from '@patternfly/react-icons'; import styled from 'styled-components'; import { useConfig } from 'contexts/Config'; import { InstancesAPI, InstanceGroupsAPI } from 'api'; import useDebounce from 'hooks/useDebounce'; import AlertModal from 'components/AlertModal'; import ErrorDetail from 'components/ErrorDetail'; import DisassociateButton from 'components/DisassociateButton'; import InstanceToggle from 'components/InstanceToggle'; import { CardBody, CardActionsRow } from 'components/Card'; import getDocsBaseUrl from 'util/getDocsBaseUrl'; import { formatDateString } from 'util/dates'; import RoutedTabs from 'components/RoutedTabs'; import ContentError from 'components/ContentError'; import ContentLoading from 'components/ContentLoading'; import { Detail, DetailList } from 'components/DetailList'; import HealthCheckAlert from 'components/HealthCheckAlert'; import StatusLabel from 'components/StatusLabel'; import useRequest, { useDeleteItems, useDismissableError, } from 'hooks/useRequest'; const Unavailable = styled.span` color: var(--pf-global--danger-color--200); `; const SliderHolder = styled.div` display: flex; align-items: center; justify-content: space-between; `; const SliderForks = styled.div` flex-grow: 1; margin-right: 8px; margin-left: 8px; text-align: center; `; function computeForks(memCapacity, cpuCapacity, selectedCapacityAdjustment) { const minCapacity = Math.min(memCapacity, cpuCapacity); const maxCapacity = Math.max(memCapacity, cpuCapacity); return Math.floor( minCapacity + (maxCapacity - minCapacity) * selectedCapacityAdjustment ); } function InstanceDetails({ setBreadcrumb, instanceGroup }) { const { t } = useLingui(); const config = useConfig(); const { id, instanceId } = useParams(); const history = useHistory(); const [healthCheck, setHealthCheck] = useState({}); const [showHealthCheckAlert, setShowHealthCheckAlert] = useState(false); const [forks, setForks] = useState(); const policyRulesDocsLink = `${getDocsBaseUrl( config )}/html/administration/containers_instance_groups.html#ag-instance-group-policies`; const { isLoading, error: contentError, request: fetchDetails, result: { instance }, } = useRequest( useCallback(async () => { const { data: { results }, } = await InstanceGroupsAPI.readInstances(instanceGroup.id); const isAssociated = results.some( ({ id: instId }) => instId === parseInt(instanceId, 10) ); if (isAssociated) { const { data: details } = await InstancesAPI.readDetail(instanceId); if (details.node_type === 'execution') { const { data: healthCheckData } = await InstancesAPI.readHealthCheckDetail(instanceId); setHealthCheck(healthCheckData); } setBreadcrumb(instanceGroup, details); setForks( computeForks( details.mem_capacity, details.cpu_capacity, details.capacity_adjustment ) ); return { instance: details }; } throw new Error( `This instance is not associated with this instance group` ); }, [instanceId, setBreadcrumb, instanceGroup]), { instance: {}, isLoading: true } ); useEffect(() => { fetchDetails(); }, [fetchDetails]); const { error: healthCheckError, request: fetchHealthCheck } = useRequest( useCallback(async () => { const { status } = await InstancesAPI.healthCheck(instanceId); if (status === 200) { setShowHealthCheckAlert(true); } }, [instanceId]) ); const { deleteItems: disassociateInstance, deletionError: disassociateError, } = useDeleteItems( useCallback(async () => { await InstanceGroupsAPI.disassociateInstance( instanceGroup.id, instance.id ); history.push(`/instance_groups/${instanceGroup.id}/instances`); }, [instanceGroup.id, instance.id, history]) ); const { error: updateInstanceError, request: updateInstance } = useRequest( useCallback( async (values) => { await InstancesAPI.update(instance.id, values); }, [instance] ) ); const debounceUpdateInstance = useDebounce(updateInstance, 200); const handleChangeValue = (value) => { const roundedValue = Math.round(value * 100) / 100; setForks( computeForks(instance.mem_capacity, instance.cpu_capacity, roundedValue) ); debounceUpdateInstance({ capacity_adjustment: roundedValue }); }; const formatHealthCheckTimeStamp = (last) => ( <> {formatDateString(last)} {instance.health_check_pending ? ( <> {' '} <OutlinedClockIcon /> </> ) : null} </> ); const { error, dismissError } = useDismissableError( disassociateError || updateInstanceError || healthCheckError ); const tabsArray = [ { name: ( <> <CaretLeftIcon /> {t`Back to Instances`} </> ), link: `/instance_groups/${id}/instances`, id: 99, }, { name: t`Details`, link: `/instance_groups/${id}/instances/${instanceId}/details`, id: 0, }, ]; if (contentError) { return <ContentError error={contentError} />; } if (isLoading) { return <ContentLoading />; } const isExecutionNode = instance.node_type === 'execution'; return ( <> <RoutedTabs tabsArray={tabsArray} /> {showHealthCheckAlert ? ( <HealthCheckAlert onSetHealthCheckAlert={setShowHealthCheckAlert} /> ) : null} <CardBody> <DetailList gutter="sm"> <Detail label={t`Host Name`} value={instance.hostname} dataCy="instance-detail-name" /> <Detail label={t`Status`} value={ instance.node_state ? ( <StatusLabel status={instance.node_state} /> ) : null } /> <Detail label={t`Policy Type`} value={ instance.managed_by_policy ? t`Auto` : t`Manual` } /> <Detail label={t`Running Jobs`} value={instance.jobs_running} /> <Detail label={t`Total Jobs`} value={instance.jobs_total} /> <Detail label={t`Last Health Check`} helpText={ <> {t`Health checks are asynchronous tasks. See the`}{' '} <a href={`${getDocsBaseUrl( config )}/html/administration/instances.html#health-check`} target="_blank" rel="noopener noreferrer" > {t`documentation`} </a>{' '} {t`for more info.`} </> } value={formatHealthCheckTimeStamp(instance.last_health_check)} /> <Detail label={t`Node Type`} value={instance.node_type} /> <Detail label={t`Capacity Adjustment`} value={ <SliderHolder data-cy="slider-holder"> <div data-cy="cpu-capacity"> {t`CPU ${instance.cpu_capacity}`} </div> <SliderForks data-cy="slider-forks"> <div data-cy="number-forks"> <Plural value={forks} one={t`# fork`} other={t`# forks`} /> </div> <Slider areCustomStepsContinuous max={1} min={0} step={0.1} value={instance.capacity_adjustment} onChange={handleChangeValue} isDisabled={!config?.me?.is_superuser || !instance.enabled} data-cy="slider" /> </SliderForks> <div data-cy="mem-capacity"> {t`RAM ${instance.mem_capacity}`} </div> </SliderHolder> } /> <Detail label={t`Used Capacity`} value={ instance.enabled ? ( <Progress title={t`Used capacity`} value={Math.round(100 - instance.percent_capacity_remaining)} measureLocation={ProgressMeasureLocation.top} size={ProgressSize.sm} aria-label={t`Used capacity`} /> ) : ( <Unavailable>{t`Unavailable`}</Unavailable> ) } /> {healthCheck?.errors && ( <Detail fullWidth label={t`Errors`} value={ <CodeBlock> <CodeBlockCode>{healthCheck?.errors}</CodeBlockCode> </CodeBlock> } /> )} </DetailList> <CardActionsRow> {isExecutionNode && ( <Tooltip content={t`Run a health check on the instance`}> <Button isDisabled={ !config?.me?.is_superuser || instance.health_check_pending } variant="primary" ouiaId="health-check-button" onClick={fetchHealthCheck} isLoading={instance.health_check_pending} spinnerAriaLabel={t`Running health check`} > {instance.health_check_pending ? t`Running health check` : t`Run health check`} </Button> </Tooltip> )} {config?.me?.is_superuser && instance.node_type !== 'control' && ( <DisassociateButton verifyCannotDisassociate={instanceGroup.name === 'controlplane'} key="disassociate" onDisassociate={disassociateInstance} itemsToDisassociate={[instance]} isProtectedInstanceGroup={instanceGroup.name === 'controlplane'} modalTitle={t`Disassociate instance from instance group?`} modalNote={ instance.managed_by_policy ? ( <Trans> <b> {t`Note: This instance may be re-associated with this instance group if it is managed by `} <a href={policyRulesDocsLink} target="_blank" rel="noopener noreferrer" > {t`policy rules.`} </a> </b> </Trans> ) : null } /> )} <InstanceToggle css="display: inline-flex;" fetchInstances={fetchDetails} instance={instance} /> </CardActionsRow> {error && ( <AlertModal isOpen={error} onClose={dismissError} title={t`Error!`} variant="error" > {updateInstanceError ? t`Failed to update capacity adjustment.` : t`Failed to disassociate one or more instances.`} <ErrorDetail error={error} /> </AlertModal> )} </CardBody> </> ); } export default InstanceDetails; 
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:265
 #: screens/Instances/InstanceDetail/InstanceDetail.js:305
-msgid "{forks, plural, one {{0}} other {{1}}}"
-msgstr "{forks, plural, one {{0}} other {{1}}}"
+#~ msgid "{forks, plural, one {{0}} other {{1}}}"
+#~ msgstr "{forks, plural, one {{0}} other {{1}}}"
 
 #: components/DisassociateButton/DisassociateButton.js:33
 msgid "Disassociate?"
@@ -6835,7 +6938,7 @@ msgstr "Dissocier ?"
 msgid "Instance type"
 msgstr "Type d'instance"
 
-#: components/AddRole/AddResourceRole.js:175
+#: components/AddRole/AddResourceRole.js:178
 msgid "Choose the type of resource that will be receiving new roles.  For example, if you'd like to add new roles to a set of users please choose Users and click Next.  You'll be able to select the specific resources in the next step."
 msgstr "Choisissez le type de ressource qui recevra de nouveaux rôles.  Par exemple, si vous souhaitez ajouter de nouveaux rôles à un ensemble d'utilisateurs, veuillez choisir Utilisateurs et cliquer sur Suivant.  Vous pourrez sélectionner les ressources spécifiques dans l'étape suivante."
 
@@ -6874,9 +6977,9 @@ msgstr "Retour aux environnements d'exécution"
 #~ "message. For more information, refer to the"
 #~ msgstr "Vous pouvez appliquer un certain nombre de variables possibles dans le message. Pour plus d'informations, reportez-vous au"
 
-#: screens/Inventory/shared/ConstructedInventoryHint.js:316
-#~ msgid "Hosts by processor type"
-#~ msgstr "Hôtes par type de processeur"
+#: screens/Inventory/shared/ConstructedInventoryHint.js:332
+msgid "Hosts by processor type"
+msgstr "Hôtes par type de processeur"
 
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:203
 msgid "Notification timed out"
@@ -6895,6 +6998,13 @@ msgstr "N'a pas réussi à supprimer la programmation."
 #~ "The number associated with the \"Messaging\n"
 #~ "Service\" in Twilio with the format +18005550199."
 #~ msgstr "Numéro associé au \"Service de messagerie\" de Twilio sous le format +18005550199."
+
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:48
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:393
+msgid ""
+"One Slack channel per line. The pound symbol (#)\n"
+"        is required for channels. To respond to or start a thread to a specific message add the parent message Id to the channel where the parent message Id is 16 digits. A dot (.) must be manually inserted after the 10th digit.  ie:#destination-channel, 1231257890.006423. See Slack"
+msgstr ""
 
 #: components/TemplateList/TemplateListItem.js:225
 msgid "Launch template"
@@ -6998,6 +7108,7 @@ msgid "{0} seconds"
 msgstr "{0} secondes"
 
 #: components/AdHocCommands/useAdHocPreviewStep.js:23
+#: components/LaunchPrompt/LaunchPrompt.js:132
 #: components/LaunchPrompt/steps/usePreviewStep.js:36
 #: screens/ManagementJob/ManagementJobList/LaunchManagementPrompt.js:54
 #: screens/ManagementJob/ManagementJobList/LaunchManagementPrompt.js:57
@@ -7021,7 +7132,7 @@ msgstr "Nœuds gérés"
 msgid "Create New Workflow Template"
 msgstr "Créer un nouveau modèle de flux de travail"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:231
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:273
 msgid "IRC Server Address"
 msgstr "Adresse du serveur IRC"
 
@@ -7057,7 +7168,7 @@ msgstr "Ce champ ne doit pas être vide."
 msgid "Confirm node removal"
 msgstr "Confirmer la suppression du nœud"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:354
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:396
 msgid "Source Phone Number"
 msgstr "Numéro de téléphone de la source"
 
@@ -7074,7 +7185,7 @@ msgstr "Sélectionnez un inventaire ou cochez l’option Me le demander au lance
 #~ msgid "{interval, plural, one {# week} other {# weeks}}"
 #~ msgstr "{interval, plural, one {# semaine} other {# semaines}}"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:528
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:570
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:150
 msgid "Error message body"
 msgstr "Corps du message d'erreur"
@@ -7088,10 +7199,11 @@ msgstr "Le nombre d'hôtes contre lesquels vous avez automatisé est inférieur 
 msgid "Failed to delete host."
 msgstr "N'a pas réussi à supprimer l'hôte."
 
+#: components/AddRole/AddResourceRole.js:62
 #: components/AdHocCommands/AdHocCredentialStep.js:124
 #: components/AdHocCommands/AdHocExecutionEnvironmentStep.js:113
 #: components/AssociateModal/AssociateModal.js:152
-#: components/LaunchPrompt/steps/CredentialsStep.js:197
+#: components/LaunchPrompt/steps/CredentialsStep.js:251
 #: components/LaunchPrompt/steps/InventoryStep.js:89
 #: components/Lookup/CredentialLookup.js:195
 #: components/Lookup/InventoryLookup.js:157
@@ -7103,6 +7215,13 @@ msgstr "N'a pas réussi à supprimer l'hôte."
 #: components/RelatedTemplateList/RelatedTemplateList.js:179
 #: components/Schedule/ScheduleList/ScheduleList.js:205
 #: components/TemplateList/TemplateList.js:231
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:70
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:101
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:147
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:170
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:216
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:239
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:266
 #: screens/Credential/CredentialList/CredentialList.js:151
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialsStep.js:96
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.js:132
@@ -7131,13 +7250,14 @@ msgstr "Créé par (nom d'utilisateur)"
 msgid "Peers update on {0}.  Please be sure to run the install bundle for {1} again in order to see changes take effect."
 msgstr "Mise à jour des pairs sur {0}.  Veuillez vous assurer d'exécuter à nouveau le paquet d'installation pour {1} afin de voir les modifications prendre effet."
 
-#: screens/Application/ApplicationTokens/ApplicationTokenList.js:136
+#: screens/Application/ApplicationTokens/ApplicationTokenList.js:142
 msgid "Error deleting tokens"
 msgstr "Erreur lors de la suppression des jetons"
 
 #: components/HostForm/HostForm.js:49
 #: components/JobList/JobListItem.js:231
 #: components/LaunchPrompt/steps/InventoryStep.js:105
+#: components/LaunchPrompt/steps/useInventoryStep.js:30
 #: components/Lookup/HostFilterLookup.js:428
 #: components/Lookup/HostListItem.js:11
 #: components/Lookup/InventoryLookup.js:124
@@ -7194,7 +7314,7 @@ msgstr "L'année dernière"
 msgid "Remove {0} chip"
 msgstr "Supprimer {0} chip"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:217
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:243
 msgid "IRC server address"
 msgstr "Adresse du serveur IRC"
 
@@ -7214,7 +7334,7 @@ msgstr "La version non sensible à la casse de contains"
 msgid "View Host Details"
 msgstr "Voir les détails de l'hôte"
 
-#: components/Schedule/shared/FrequencyDetailSubform.js:418
+#: components/Schedule/shared/FrequencyDetailSubform.js:432
 msgid "Fourth"
 msgstr "Quatrième"
 
@@ -7292,11 +7412,11 @@ msgstr "Inventaire auquel cet hôte appartiendra."
 msgid "{0} (deleted)"
 msgstr "{0} (supprimé)"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:385
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:424
 msgid "Notification color"
 msgstr "Couleur de la notification"
 
-#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:78
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:322
 msgid "Add resource type"
 msgstr "Ajouter un type de ressource"
 
@@ -7317,6 +7437,10 @@ msgstr "Détails de l'utilisateur"
 msgid "If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on. Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied."
 msgstr "Empêcher le repli des groupes d'instances : s'il est activé, l'inventaire empêchera l'ajout de tout groupe d'instances d'organisation à la liste des groupes d'instances préférés pour exécuter les modèles de tâches associés. Remarque : si ce paramètre est activé et que vous avez fourni une liste vide, les groupes d'instances globaux seront appliqués."
 
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:53
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:74
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:77
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:398
 #: screens/Template/Survey/SurveyQuestionForm.js:273
 msgid "for more information."
 msgstr "pour plus d'informations."
@@ -7386,8 +7510,8 @@ msgstr "ID du client"
 msgid "Select the port that Receptor will listen on for incoming connections, e.g. 27199."
 msgstr "Sélectionnez le port sur lequel le récepteur écoutera les connexions entrantes, par exemple 27199."
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:394
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:486
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:436
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:533
 msgid "HTTP Method"
 msgstr "Méthode HTTP"
 
@@ -7400,9 +7524,10 @@ msgstr "Flux de travail"
 msgid "Enabled Value"
 msgstr "Valeur activée"
 
-#: screens/NotificationTemplate/shared/Notifications.helptext.js:19
-#~ msgid "Use one Annotation Tag per line, without commas."
-#~ msgstr "Entrez une balise d'annotation par ligne, sans virgule."
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:42
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:169
+msgid "Use one Annotation Tag per line, without commas."
+msgstr "Entrez une balise d'annotation par ligne, sans virgule."
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:92
 msgid "Username / password"
@@ -7424,8 +7549,8 @@ msgstr "clé webhook de modèles de tâche flux de travail"
 msgid "4 (Connection Debug)"
 msgstr "4 (Débogage de la connexion)"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:399
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:473
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:441
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:520
 msgid "HTTP Headers"
 msgstr "En-têtes HTTP"
 
@@ -7437,10 +7562,10 @@ msgstr "Zoom arrière"
 msgid "Item OK"
 msgstr "Élément OK"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:273
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:320
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:275
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:348
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:315
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:362
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:301
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:374
 msgid "Icon URL"
 msgstr "Icône URL"
 
@@ -7500,7 +7625,7 @@ msgid "Create new credential type"
 msgstr "Créer un nouveau type d'informations d'identification."
 
 #: components/Schedule/ScheduleOccurrences/ScheduleOccurrences.js:44
-#: components/Schedule/shared/FrequencyDetailSubform.js:553
+#: components/Schedule/shared/FrequencyDetailSubform.js:567
 msgid "Occurrences"
 msgstr "Occurrences"
 
@@ -7508,7 +7633,7 @@ msgstr "Occurrences"
 #~ msgid "Select the inventory containing the hosts you want this workflow to manage."
 #~ msgstr "Sélectionnez l'inventaire contenant les hôtes que vous souhaitez que ce flux de travail gère."
 
-#: screens/Instances/InstanceDetail/InstanceDetail.js:433
+#: screens/Instances/InstanceDetail/InstanceDetail.js:429
 #: screens/Instances/InstanceList/InstanceList.js:274
 msgid "Removal Error"
 msgstr "Erreur de suppression"
@@ -7516,11 +7641,11 @@ msgstr "Erreur de suppression"
 #: components/JobList/JobListItem.js:329
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:66
 #: screens/Job/JobDetail/JobDetail.js:432
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:216
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:249
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:281
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:328
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:388
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:258
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:291
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:323
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:370
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:430
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.js:175
 msgid "True"
 msgstr "Vrai"
@@ -7577,7 +7702,7 @@ msgstr "Échec de l'hôte"
 msgid "Running Jobs"
 msgstr "Jobs en cours d'exécution"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:318
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:344
 msgid "Client identifier"
 msgstr "Identifiant client"
 
@@ -7659,14 +7784,14 @@ msgstr ""
 #~ msgid "Warning: {selectedValue} is a link to {link} and will be saved as that."
 #~ msgstr "Avertissement : {selectedValue} est un lien vers {link} et sera enregistré comme tel."
 
+#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:289
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:293
-#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:297
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:93
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:101
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupListItem.js:44
 #: screens/InstanceGroup/Instances/InstanceListItem.js:78
-#: screens/Instances/InstanceDetail/InstanceDetail.js:338
-#: screens/Instances/InstanceDetail/InstanceDetail.js:344
+#: screens/Instances/InstanceDetail/InstanceDetail.js:334
+#: screens/Instances/InstanceDetail/InstanceDetail.js:340
 #: screens/Instances/InstanceList/InstanceListItem.js:76
 msgid "Used capacity"
 msgstr "Capacité utilisée"
@@ -7698,7 +7823,7 @@ msgstr "Échec de désynchronisation des hôtes"
 msgid "Ready"
 msgstr "Prêt"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:450
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:492
 msgid "Delete Notification"
 msgstr "Supprimer la notification"
 
@@ -7738,7 +7863,7 @@ msgstr "Moins ou égal à la comparaison."
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:103
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:166
 #: screens/Job/JobDetail/JobDetail.js:668
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:454
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:496
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:177
 #: screens/Project/ProjectDetail/ProjectDetail.js:351
 #: screens/Project/shared/ProjectSubForms/SharedFields.js:88
@@ -7793,7 +7918,7 @@ msgstr "Établi"
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:301
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:138
 #: screens/Job/JobDetail/JobDetail.js:587
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:409
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:451
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:111
 #: screens/Project/ProjectDetail/ProjectDetail.js:299
 #: screens/Team/TeamDetail/TeamDetail.js:53
@@ -7858,7 +7983,7 @@ msgstr "Impossible de récupérer la configuration."
 msgid "Inventory not found."
 msgstr "Inventaire non trouvé."
 
-#: components/AddRole/AddResourceRole.js:269
+#: components/AddRole/AddResourceRole.js:272
 #: components/AdHocCommands/AdHocCommandsWizard.js:52
 #: components/AssociateModal/AssociateModal.js:121
 #: components/AssociateModal/AssociateModal.js:126
@@ -7977,6 +8102,8 @@ msgid "Control node"
 msgstr "Noeud de contrôle"
 
 #: components/Lookup/ProjectLookup.js:138
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:133
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:202
 #: screens/Job/JobDetail/JobDetail.js:80
 #: screens/Project/ProjectList/ProjectList.js:200
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/ProjectsList.js:99
@@ -7987,6 +8114,9 @@ msgstr "Subversion"
 msgid "Failed to delete one or more execution environments"
 msgstr "Échec de la suppression d'un ou plusieurs environnements d'exécution"
 
+#: screens/Inventory/shared/ConstructedInventoryHint.js:201
+#: screens/Inventory/shared/ConstructedInventoryHint.js:295
+#: screens/Inventory/shared/ConstructedInventoryHint.js:370
 #: screens/Project/ProjectDetail/ProjectDetail.js:208
 #: screens/Project/ProjectList/ProjectListItem.js:98
 msgid "Successfully copied to clipboard!"
@@ -8047,9 +8177,9 @@ msgstr "Variables d'environnement ou variables supplémentaires qui spécifient 
 #~ msgid "Workflow Job Templates"
 #~ msgstr "Modèles de Jobs de flux de travail"
 
-#. placeholder {0}: import React, { useCallback, useEffect, useState } from 'react'; import { useParams, useHistory } from 'react-router-dom'; import { Trans, Plural, useLingui } from '@lingui/react/macro'; import { Button, Progress, ProgressMeasureLocation, ProgressSize, CodeBlock, CodeBlockCode, Tooltip, Slider, } from '@patternfly/react-core'; import { CaretLeftIcon, OutlinedClockIcon } from '@patternfly/react-icons'; import styled from 'styled-components'; import { useConfig } from 'contexts/Config'; import { InstancesAPI, InstanceGroupsAPI } from 'api'; import useDebounce from 'hooks/useDebounce'; import AlertModal from 'components/AlertModal'; import ErrorDetail from 'components/ErrorDetail'; import DisassociateButton from 'components/DisassociateButton'; import InstanceToggle from 'components/InstanceToggle'; import { CardBody, CardActionsRow } from 'components/Card'; import getDocsBaseUrl from 'util/getDocsBaseUrl'; import { formatDateString } from 'util/dates'; import RoutedTabs from 'components/RoutedTabs'; import ContentError from 'components/ContentError'; import ContentLoading from 'components/ContentLoading'; import { Detail, DetailList } from 'components/DetailList'; import HealthCheckAlert from 'components/HealthCheckAlert'; import StatusLabel from 'components/StatusLabel'; import useRequest, { useDeleteItems, useDismissableError, } from 'hooks/useRequest'; const Unavailable = styled.span` color: var(--pf-global--danger-color--200); `; const SliderHolder = styled.div` display: flex; align-items: center; justify-content: space-between; `; const SliderForks = styled.div` flex-grow: 1; margin-right: 8px; margin-left: 8px; text-align: center; `; function computeForks(memCapacity, cpuCapacity, selectedCapacityAdjustment) { const minCapacity = Math.min(memCapacity, cpuCapacity); const maxCapacity = Math.max(memCapacity, cpuCapacity); return Math.floor( minCapacity + (maxCapacity - minCapacity) * selectedCapacityAdjustment ); } function InstanceDetails({ setBreadcrumb, instanceGroup }) { const { t } = useLingui(); const config = useConfig(); const { id, instanceId } = useParams(); const history = useHistory(); const [healthCheck, setHealthCheck] = useState({}); const [showHealthCheckAlert, setShowHealthCheckAlert] = useState(false); const [forks, setForks] = useState(); const policyRulesDocsLink = `${getDocsBaseUrl( config )}/html/administration/containers_instance_groups.html#ag-instance-group-policies`; const { isLoading, error: contentError, request: fetchDetails, result: { instance }, } = useRequest( useCallback(async () => { const { data: { results }, } = await InstanceGroupsAPI.readInstances(instanceGroup.id); const isAssociated = results.some( ({ id: instId }) => instId === parseInt(instanceId, 10) ); if (isAssociated) { const { data: details } = await InstancesAPI.readDetail(instanceId); if (details.node_type === 'execution') { const { data: healthCheckData } = await InstancesAPI.readHealthCheckDetail(instanceId); setHealthCheck(healthCheckData); } setBreadcrumb(instanceGroup, details); setForks( computeForks( details.mem_capacity, details.cpu_capacity, details.capacity_adjustment ) ); return { instance: details }; } throw new Error( `This instance is not associated with this instance group` ); }, [instanceId, setBreadcrumb, instanceGroup]), { instance: {}, isLoading: true } ); useEffect(() => { fetchDetails(); }, [fetchDetails]); const { error: healthCheckError, request: fetchHealthCheck } = useRequest( useCallback(async () => { const { status } = await InstancesAPI.healthCheck(instanceId); if (status === 200) { setShowHealthCheckAlert(true); } }, [instanceId]) ); const { deleteItems: disassociateInstance, deletionError: disassociateError, } = useDeleteItems( useCallback(async () => { await InstanceGroupsAPI.disassociateInstance( instanceGroup.id, instance.id ); history.push(`/instance_groups/${instanceGroup.id}/instances`); }, [instanceGroup.id, instance.id, history]) ); const { error: updateInstanceError, request: updateInstance } = useRequest( useCallback( async (values) => { await InstancesAPI.update(instance.id, values); }, [instance] ) ); const debounceUpdateInstance = useDebounce(updateInstance, 200); const handleChangeValue = (value) => { const roundedValue = Math.round(value * 100) / 100; setForks( computeForks(instance.mem_capacity, instance.cpu_capacity, roundedValue) ); debounceUpdateInstance({ capacity_adjustment: roundedValue }); }; const formatHealthCheckTimeStamp = (last) => ( <> {formatDateString(last)} {instance.health_check_pending ? ( <> {' '} <OutlinedClockIcon /> </> ) : null} </> ); const { error, dismissError } = useDismissableError( disassociateError || updateInstanceError || healthCheckError ); const tabsArray = [ { name: ( <> <CaretLeftIcon /> {t`Back to Instances`} </> ), link: `/instance_groups/${id}/instances`, id: 99, }, { name: t`Details`, link: `/instance_groups/${id}/instances/${instanceId}/details`, id: 0, }, ]; if (contentError) { return <ContentError error={contentError} />; } if (isLoading) { return <ContentLoading />; } const isExecutionNode = instance.node_type === 'execution'; return ( <> <RoutedTabs tabsArray={tabsArray} /> {showHealthCheckAlert ? ( <HealthCheckAlert onSetHealthCheckAlert={setShowHealthCheckAlert} /> ) : null} <CardBody> <DetailList gutter="sm"> <Detail label={t`Host Name`} value={instance.hostname} dataCy="instance-detail-name" /> <Detail label={t`Status`} value={ instance.node_state ? ( <StatusLabel status={instance.node_state} /> ) : null } /> <Detail label={t`Policy Type`} value={ instance.managed_by_policy ? t`Auto` : t`Manual` } /> <Detail label={t`Running Jobs`} value={instance.jobs_running} /> <Detail label={t`Total Jobs`} value={instance.jobs_total} /> <Detail label={t`Last Health Check`} helpText={ <> {t`Health checks are asynchronous tasks. See the`}{' '} <a href={`${getDocsBaseUrl( config )}/html/administration/instances.html#health-check`} target="_blank" rel="noopener noreferrer" > {t`documentation`} </a>{' '} {t`for more info.`} </> } value={formatHealthCheckTimeStamp(instance.last_health_check)} /> <Detail label={t`Node Type`} value={instance.node_type} /> <Detail label={t`Capacity Adjustment`} value={ <SliderHolder data-cy="slider-holder"> <div data-cy="cpu-capacity"> {t`CPU ${instance.cpu_capacity}`} </div> <SliderForks data-cy="slider-forks"> <div data-cy="number-forks"> <Plural value={forks} one={t`# fork`} other={t`# forks`} /> </div> <Slider areCustomStepsContinuous max={1} min={0} step={0.1} value={instance.capacity_adjustment} onChange={handleChangeValue} isDisabled={!config?.me?.is_superuser || !instance.enabled} data-cy="slider" /> </SliderForks> <div data-cy="mem-capacity"> {t`RAM ${instance.mem_capacity}`} </div> </SliderHolder> } /> <Detail label={t`Used Capacity`} value={ instance.enabled ? ( <Progress title={t`Used capacity`} value={Math.round(100 - instance.percent_capacity_remaining)} measureLocation={ProgressMeasureLocation.top} size={ProgressSize.sm} aria-label={t`Used capacity`} /> ) : ( <Unavailable>{t`Unavailable`}</Unavailable> ) } /> {healthCheck?.errors && ( <Detail fullWidth label={t`Errors`} value={ <CodeBlock> <CodeBlockCode>{healthCheck?.errors}</CodeBlockCode> </CodeBlock> } /> )} </DetailList> <CardActionsRow> {isExecutionNode && ( <Tooltip content={t`Run a health check on the instance`}> <Button isDisabled={ !config?.me?.is_superuser || instance.health_check_pending } variant="primary" ouiaId="health-check-button" onClick={fetchHealthCheck} isLoading={instance.health_check_pending} spinnerAriaLabel={t`Running health check`} > {instance.health_check_pending ? t`Running health check` : t`Run health check`} </Button> </Tooltip> )} {config?.me?.is_superuser && instance.node_type !== 'control' && ( <DisassociateButton verifyCannotDisassociate={instanceGroup.name === 'controlplane'} key="disassociate" onDisassociate={disassociateInstance} itemsToDisassociate={[instance]} isProtectedInstanceGroup={instanceGroup.name === 'controlplane'} modalTitle={t`Disassociate instance from instance group?`} modalNote={ instance.managed_by_policy ? ( <Trans> <b> {t`Note: This instance may be re-associated with this instance group if it is managed by `} <a href={policyRulesDocsLink} target="_blank" rel="noopener noreferrer" > {t`policy rules.`} </a> </b> </Trans> ) : null } /> )} <InstanceToggle css="display: inline-flex;" fetchInstances={fetchDetails} instance={instance} /> </CardActionsRow> {error && ( <AlertModal isOpen={error} onClose={dismissError} title={t`Error!`} variant="error" > {updateInstanceError ? t`Failed to update capacity adjustment.` : t`Failed to disassociate one or more instances.`} <ErrorDetail error={error} /> </AlertModal> )} </CardBody> </> ); } export default InstanceDetails; 
-#. placeholder {1}: import React, { useCallback, useEffect, useState } from 'react'; import { useParams, useHistory } from 'react-router-dom'; import { Trans, Plural, useLingui } from '@lingui/react/macro'; import { Button, Progress, ProgressMeasureLocation, ProgressSize, CodeBlock, CodeBlockCode, Tooltip, Slider, } from '@patternfly/react-core'; import { CaretLeftIcon, OutlinedClockIcon } from '@patternfly/react-icons'; import styled from 'styled-components'; import { useConfig } from 'contexts/Config'; import { InstancesAPI, InstanceGroupsAPI } from 'api'; import useDebounce from 'hooks/useDebounce'; import AlertModal from 'components/AlertModal'; import ErrorDetail from 'components/ErrorDetail'; import DisassociateButton from 'components/DisassociateButton'; import InstanceToggle from 'components/InstanceToggle'; import { CardBody, CardActionsRow } from 'components/Card'; import getDocsBaseUrl from 'util/getDocsBaseUrl'; import { formatDateString } from 'util/dates'; import RoutedTabs from 'components/RoutedTabs'; import ContentError from 'components/ContentError'; import ContentLoading from 'components/ContentLoading'; import { Detail, DetailList } from 'components/DetailList'; import HealthCheckAlert from 'components/HealthCheckAlert'; import StatusLabel from 'components/StatusLabel'; import useRequest, { useDeleteItems, useDismissableError, } from 'hooks/useRequest'; const Unavailable = styled.span` color: var(--pf-global--danger-color--200); `; const SliderHolder = styled.div` display: flex; align-items: center; justify-content: space-between; `; const SliderForks = styled.div` flex-grow: 1; margin-right: 8px; margin-left: 8px; text-align: center; `; function computeForks(memCapacity, cpuCapacity, selectedCapacityAdjustment) { const minCapacity = Math.min(memCapacity, cpuCapacity); const maxCapacity = Math.max(memCapacity, cpuCapacity); return Math.floor( minCapacity + (maxCapacity - minCapacity) * selectedCapacityAdjustment ); } function InstanceDetails({ setBreadcrumb, instanceGroup }) { const { t } = useLingui(); const config = useConfig(); const { id, instanceId } = useParams(); const history = useHistory(); const [healthCheck, setHealthCheck] = useState({}); const [showHealthCheckAlert, setShowHealthCheckAlert] = useState(false); const [forks, setForks] = useState(); const policyRulesDocsLink = `${getDocsBaseUrl( config )}/html/administration/containers_instance_groups.html#ag-instance-group-policies`; const { isLoading, error: contentError, request: fetchDetails, result: { instance }, } = useRequest( useCallback(async () => { const { data: { results }, } = await InstanceGroupsAPI.readInstances(instanceGroup.id); const isAssociated = results.some( ({ id: instId }) => instId === parseInt(instanceId, 10) ); if (isAssociated) { const { data: details } = await InstancesAPI.readDetail(instanceId); if (details.node_type === 'execution') { const { data: healthCheckData } = await InstancesAPI.readHealthCheckDetail(instanceId); setHealthCheck(healthCheckData); } setBreadcrumb(instanceGroup, details); setForks( computeForks( details.mem_capacity, details.cpu_capacity, details.capacity_adjustment ) ); return { instance: details }; } throw new Error( `This instance is not associated with this instance group` ); }, [instanceId, setBreadcrumb, instanceGroup]), { instance: {}, isLoading: true } ); useEffect(() => { fetchDetails(); }, [fetchDetails]); const { error: healthCheckError, request: fetchHealthCheck } = useRequest( useCallback(async () => { const { status } = await InstancesAPI.healthCheck(instanceId); if (status === 200) { setShowHealthCheckAlert(true); } }, [instanceId]) ); const { deleteItems: disassociateInstance, deletionError: disassociateError, } = useDeleteItems( useCallback(async () => { await InstanceGroupsAPI.disassociateInstance( instanceGroup.id, instance.id ); history.push(`/instance_groups/${instanceGroup.id}/instances`); }, [instanceGroup.id, instance.id, history]) ); const { error: updateInstanceError, request: updateInstance } = useRequest( useCallback( async (values) => { await InstancesAPI.update(instance.id, values); }, [instance] ) ); const debounceUpdateInstance = useDebounce(updateInstance, 200); const handleChangeValue = (value) => { const roundedValue = Math.round(value * 100) / 100; setForks( computeForks(instance.mem_capacity, instance.cpu_capacity, roundedValue) ); debounceUpdateInstance({ capacity_adjustment: roundedValue }); }; const formatHealthCheckTimeStamp = (last) => ( <> {formatDateString(last)} {instance.health_check_pending ? ( <> {' '} <OutlinedClockIcon /> </> ) : null} </> ); const { error, dismissError } = useDismissableError( disassociateError || updateInstanceError || healthCheckError ); const tabsArray = [ { name: ( <> <CaretLeftIcon /> {t`Back to Instances`} </> ), link: `/instance_groups/${id}/instances`, id: 99, }, { name: t`Details`, link: `/instance_groups/${id}/instances/${instanceId}/details`, id: 0, }, ]; if (contentError) { return <ContentError error={contentError} />; } if (isLoading) { return <ContentLoading />; } const isExecutionNode = instance.node_type === 'execution'; return ( <> <RoutedTabs tabsArray={tabsArray} /> {showHealthCheckAlert ? ( <HealthCheckAlert onSetHealthCheckAlert={setShowHealthCheckAlert} /> ) : null} <CardBody> <DetailList gutter="sm"> <Detail label={t`Host Name`} value={instance.hostname} dataCy="instance-detail-name" /> <Detail label={t`Status`} value={ instance.node_state ? ( <StatusLabel status={instance.node_state} /> ) : null } /> <Detail label={t`Policy Type`} value={ instance.managed_by_policy ? t`Auto` : t`Manual` } /> <Detail label={t`Running Jobs`} value={instance.jobs_running} /> <Detail label={t`Total Jobs`} value={instance.jobs_total} /> <Detail label={t`Last Health Check`} helpText={ <> {t`Health checks are asynchronous tasks. See the`}{' '} <a href={`${getDocsBaseUrl( config )}/html/administration/instances.html#health-check`} target="_blank" rel="noopener noreferrer" > {t`documentation`} </a>{' '} {t`for more info.`} </> } value={formatHealthCheckTimeStamp(instance.last_health_check)} /> <Detail label={t`Node Type`} value={instance.node_type} /> <Detail label={t`Capacity Adjustment`} value={ <SliderHolder data-cy="slider-holder"> <div data-cy="cpu-capacity"> {t`CPU ${instance.cpu_capacity}`} </div> <SliderForks data-cy="slider-forks"> <div data-cy="number-forks"> <Plural value={forks} one={t`# fork`} other={t`# forks`} /> </div> <Slider areCustomStepsContinuous max={1} min={0} step={0.1} value={instance.capacity_adjustment} onChange={handleChangeValue} isDisabled={!config?.me?.is_superuser || !instance.enabled} data-cy="slider" /> </SliderForks> <div data-cy="mem-capacity"> {t`RAM ${instance.mem_capacity}`} </div> </SliderHolder> } /> <Detail label={t`Used Capacity`} value={ instance.enabled ? ( <Progress title={t`Used capacity`} value={Math.round(100 - instance.percent_capacity_remaining)} measureLocation={ProgressMeasureLocation.top} size={ProgressSize.sm} aria-label={t`Used capacity`} /> ) : ( <Unavailable>{t`Unavailable`}</Unavailable> ) } /> {healthCheck?.errors && ( <Detail fullWidth label={t`Errors`} value={ <CodeBlock> <CodeBlockCode>{healthCheck?.errors}</CodeBlockCode> </CodeBlock> } /> )} </DetailList> <CardActionsRow> {isExecutionNode && ( <Tooltip content={t`Run a health check on the instance`}> <Button isDisabled={ !config?.me?.is_superuser || instance.health_check_pending } variant="primary" ouiaId="health-check-button" onClick={fetchHealthCheck} isLoading={instance.health_check_pending} spinnerAriaLabel={t`Running health check`} > {instance.health_check_pending ? t`Running health check` : t`Run health check`} </Button> </Tooltip> )} {config?.me?.is_superuser && instance.node_type !== 'control' && ( <DisassociateButton verifyCannotDisassociate={instanceGroup.name === 'controlplane'} key="disassociate" onDisassociate={disassociateInstance} itemsToDisassociate={[instance]} isProtectedInstanceGroup={instanceGroup.name === 'controlplane'} modalTitle={t`Disassociate instance from instance group?`} modalNote={ instance.managed_by_policy ? ( <Trans> <b> {t`Note: This instance may be re-associated with this instance group if it is managed by `} <a href={policyRulesDocsLink} target="_blank" rel="noopener noreferrer" > {t`policy rules.`} </a> </b> </Trans> ) : null } /> )} <InstanceToggle css="display: inline-flex;" fetchInstances={fetchDetails} instance={instance} /> </CardActionsRow> {error && ( <AlertModal isOpen={error} onClose={dismissError} title={t`Error!`} variant="error" > {updateInstanceError ? t`Failed to update capacity adjustment.` : t`Failed to disassociate one or more instances.`} <ErrorDetail error={error} /> </AlertModal> )} </CardBody> </> ); } export default InstanceDetails; 
-#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:345
+#. placeholder {0}: import React, { useCallback, useEffect, useState } from 'react'; import { useParams, useHistory } from 'react-router-dom'; import { Trans, useLingui } from '@lingui/react/macro'; import { Button, Progress, ProgressMeasureLocation, ProgressSize, CodeBlock, CodeBlockCode, Tooltip, Slider, } from '@patternfly/react-core'; import { CaretLeftIcon, OutlinedClockIcon } from '@patternfly/react-icons'; import styled from 'styled-components'; import { useConfig } from 'contexts/Config'; import { InstancesAPI, InstanceGroupsAPI } from 'api'; import useDebounce from 'hooks/useDebounce'; import AlertModal from 'components/AlertModal'; import ErrorDetail from 'components/ErrorDetail'; import DisassociateButton from 'components/DisassociateButton'; import InstanceToggle from 'components/InstanceToggle'; import { CardBody, CardActionsRow } from 'components/Card'; import getDocsBaseUrl from 'util/getDocsBaseUrl'; import { formatDateString } from 'util/dates'; import RoutedTabs from 'components/RoutedTabs'; import ContentError from 'components/ContentError'; import ContentLoading from 'components/ContentLoading'; import { Detail, DetailList } from 'components/DetailList'; import HealthCheckAlert from 'components/HealthCheckAlert'; import StatusLabel from 'components/StatusLabel'; import useRequest, { useDeleteItems, useDismissableError, } from 'hooks/useRequest'; const Unavailable = styled.span` color: var(--pf-global--danger-color--200); `; const SliderHolder = styled.div` display: flex; align-items: center; justify-content: space-between; `; const SliderForks = styled.div` flex-grow: 1; margin-right: 8px; margin-left: 8px; text-align: center; `; function computeForks(memCapacity, cpuCapacity, selectedCapacityAdjustment) { const minCapacity = Math.min(memCapacity, cpuCapacity); const maxCapacity = Math.max(memCapacity, cpuCapacity); return Math.floor( minCapacity + (maxCapacity - minCapacity) * selectedCapacityAdjustment ); } function InstanceDetails({ setBreadcrumb, instanceGroup }) { const { t, i18n } = useLingui(); const config = useConfig(); const { id, instanceId } = useParams(); const history = useHistory(); const [healthCheck, setHealthCheck] = useState({}); const [showHealthCheckAlert, setShowHealthCheckAlert] = useState(false); const [forks, setForks] = useState(); const policyRulesDocsLink = `${getDocsBaseUrl( config )}/html/administration/containers_instance_groups.html#ag-instance-group-policies`; const { isLoading, error: contentError, request: fetchDetails, result: { instance }, } = useRequest( useCallback(async () => { const { data: { results }, } = await InstanceGroupsAPI.readInstances(instanceGroup.id); const isAssociated = results.some( ({ id: instId }) => instId === parseInt(instanceId, 10) ); if (isAssociated) { const { data: details } = await InstancesAPI.readDetail(instanceId); if (details.node_type === 'execution') { const { data: healthCheckData } = await InstancesAPI.readHealthCheckDetail(instanceId); setHealthCheck(healthCheckData); } setBreadcrumb(instanceGroup, details); setForks( computeForks( details.mem_capacity, details.cpu_capacity, details.capacity_adjustment ) ); return { instance: details }; } throw new Error( `This instance is not associated with this instance group` ); }, [instanceId, setBreadcrumb, instanceGroup]), { instance: {}, isLoading: true } ); useEffect(() => { fetchDetails(); }, [fetchDetails]); const { error: healthCheckError, request: fetchHealthCheck } = useRequest( useCallback(async () => { const { status } = await InstancesAPI.healthCheck(instanceId); if (status === 200) { setShowHealthCheckAlert(true); } }, [instanceId]) ); const { deleteItems: disassociateInstance, deletionError: disassociateError, } = useDeleteItems( useCallback(async () => { await InstanceGroupsAPI.disassociateInstance( instanceGroup.id, instance.id ); history.push(`/instance_groups/${instanceGroup.id}/instances`); }, [instanceGroup.id, instance.id, history]) ); const { error: updateInstanceError, request: updateInstance } = useRequest( useCallback( async (values) => { await InstancesAPI.update(instance.id, values); }, [instance] ) ); const debounceUpdateInstance = useDebounce(updateInstance, 200); const handleChangeValue = (value) => { const roundedValue = Math.round(value * 100) / 100; setForks( computeForks(instance.mem_capacity, instance.cpu_capacity, roundedValue) ); debounceUpdateInstance({ capacity_adjustment: roundedValue }); }; const formatHealthCheckTimeStamp = (last) => ( <> {formatDateString(last)} {instance.health_check_pending ? ( <> {' '} <OutlinedClockIcon /> </> ) : null} </> ); const { error, dismissError } = useDismissableError( disassociateError || updateInstanceError || healthCheckError ); const tabsArray = [ { name: ( <> <CaretLeftIcon /> {t`Back to Instances`} </> ), link: `/instance_groups/${id}/instances`, id: 99, }, { name: t`Details`, link: `/instance_groups/${id}/instances/${instanceId}/details`, id: 0, }, ]; if (contentError) { return <ContentError error={contentError} />; } if (isLoading) { return <ContentLoading />; } const isExecutionNode = instance.node_type === 'execution'; return ( <> <RoutedTabs tabsArray={tabsArray} /> {showHealthCheckAlert ? ( <HealthCheckAlert onSetHealthCheckAlert={setShowHealthCheckAlert} /> ) : null} <CardBody> <DetailList gutter="sm"> <Detail label={t`Host Name`} value={instance.hostname} dataCy="instance-detail-name" /> <Detail label={t`Status`} value={ instance.node_state ? ( <StatusLabel status={instance.node_state} /> ) : null } /> <Detail label={t`Policy Type`} value={ instance.managed_by_policy ? t`Auto` : t`Manual` } /> <Detail label={t`Running Jobs`} value={instance.jobs_running} /> <Detail label={t`Total Jobs`} value={instance.jobs_total} /> <Detail label={t`Last Health Check`} helpText={ <> {t`Health checks are asynchronous tasks. See the`}{' '} <a href={`${getDocsBaseUrl( config )}/html/administration/instances.html#health-check`} target="_blank" rel="noopener noreferrer" > {t`documentation`} </a>{' '} {t`for more info.`} </> } value={formatHealthCheckTimeStamp(instance.last_health_check)} /> <Detail label={t`Node Type`} value={instance.node_type} /> <Detail label={t`Capacity Adjustment`} value={ <SliderHolder data-cy="slider-holder"> <div data-cy="cpu-capacity"> {t`CPU ${instance.cpu_capacity}`} </div> <SliderForks data-cy="slider-forks"> <div data-cy="number-forks"> {i18n._('{count, plural, one {# fork} other {# forks}}', { count: forks })} </div> <Slider areCustomStepsContinuous max={1} min={0} step={0.1} value={instance.capacity_adjustment} onChange={handleChangeValue} isDisabled={!config?.me?.is_superuser || !instance.enabled} data-cy="slider" /> </SliderForks> <div data-cy="mem-capacity"> {t`RAM ${instance.mem_capacity}`} </div> </SliderHolder> } /> <Detail label={t`Used Capacity`} value={ instance.enabled ? ( <Progress title={t`Used capacity`} value={Math.round(100 - instance.percent_capacity_remaining)} measureLocation={ProgressMeasureLocation.top} size={ProgressSize.sm} aria-label={t`Used capacity`} /> ) : ( <Unavailable>{t`Unavailable`}</Unavailable> ) } /> {healthCheck?.errors && ( <Detail fullWidth label={t`Errors`} value={ <CodeBlock> <CodeBlockCode>{healthCheck?.errors}</CodeBlockCode> </CodeBlock> } /> )} </DetailList> <CardActionsRow> {isExecutionNode && ( <Tooltip content={t`Run a health check on the instance`}> <Button isDisabled={ !config?.me?.is_superuser || instance.health_check_pending } variant="primary" ouiaId="health-check-button" onClick={fetchHealthCheck} isLoading={instance.health_check_pending} spinnerAriaLabel={t`Running health check`} > {instance.health_check_pending ? t`Running health check` : t`Run health check`} </Button> </Tooltip> )} {config?.me?.is_superuser && instance.node_type !== 'control' && ( <DisassociateButton verifyCannotDisassociate={instanceGroup.name === 'controlplane'} key="disassociate" onDisassociate={disassociateInstance} itemsToDisassociate={[instance]} isProtectedInstanceGroup={instanceGroup.name === 'controlplane'} modalTitle={t`Disassociate instance from instance group?`} modalNote={ instance.managed_by_policy ? ( <Trans> <b> {t`Note: This instance may be re-associated with this instance group if it is managed by `} <a href={policyRulesDocsLink} target="_blank" rel="noopener noreferrer" > {t`policy rules.`} </a> </b> </Trans> ) : null } /> )} <InstanceToggle css="display: inline-flex;" fetchInstances={fetchDetails} instance={instance} /> </CardActionsRow> {error && ( <AlertModal isOpen={error} onClose={dismissError} title={t`Error!`} variant="error" > {updateInstanceError ? t`Failed to update capacity adjustment.` : t`Failed to disassociate one or more instances.`} <ErrorDetail error={error} /> </AlertModal> )} </CardBody> </> ); } export default InstanceDetails; 
+#. placeholder {1}: import React, { useCallback, useEffect, useState } from 'react'; import { useParams, useHistory } from 'react-router-dom'; import { Trans, useLingui } from '@lingui/react/macro'; import { Button, Progress, ProgressMeasureLocation, ProgressSize, CodeBlock, CodeBlockCode, Tooltip, Slider, } from '@patternfly/react-core'; import { CaretLeftIcon, OutlinedClockIcon } from '@patternfly/react-icons'; import styled from 'styled-components'; import { useConfig } from 'contexts/Config'; import { InstancesAPI, InstanceGroupsAPI } from 'api'; import useDebounce from 'hooks/useDebounce'; import AlertModal from 'components/AlertModal'; import ErrorDetail from 'components/ErrorDetail'; import DisassociateButton from 'components/DisassociateButton'; import InstanceToggle from 'components/InstanceToggle'; import { CardBody, CardActionsRow } from 'components/Card'; import getDocsBaseUrl from 'util/getDocsBaseUrl'; import { formatDateString } from 'util/dates'; import RoutedTabs from 'components/RoutedTabs'; import ContentError from 'components/ContentError'; import ContentLoading from 'components/ContentLoading'; import { Detail, DetailList } from 'components/DetailList'; import HealthCheckAlert from 'components/HealthCheckAlert'; import StatusLabel from 'components/StatusLabel'; import useRequest, { useDeleteItems, useDismissableError, } from 'hooks/useRequest'; const Unavailable = styled.span` color: var(--pf-global--danger-color--200); `; const SliderHolder = styled.div` display: flex; align-items: center; justify-content: space-between; `; const SliderForks = styled.div` flex-grow: 1; margin-right: 8px; margin-left: 8px; text-align: center; `; function computeForks(memCapacity, cpuCapacity, selectedCapacityAdjustment) { const minCapacity = Math.min(memCapacity, cpuCapacity); const maxCapacity = Math.max(memCapacity, cpuCapacity); return Math.floor( minCapacity + (maxCapacity - minCapacity) * selectedCapacityAdjustment ); } function InstanceDetails({ setBreadcrumb, instanceGroup }) { const { t, i18n } = useLingui(); const config = useConfig(); const { id, instanceId } = useParams(); const history = useHistory(); const [healthCheck, setHealthCheck] = useState({}); const [showHealthCheckAlert, setShowHealthCheckAlert] = useState(false); const [forks, setForks] = useState(); const policyRulesDocsLink = `${getDocsBaseUrl( config )}/html/administration/containers_instance_groups.html#ag-instance-group-policies`; const { isLoading, error: contentError, request: fetchDetails, result: { instance }, } = useRequest( useCallback(async () => { const { data: { results }, } = await InstanceGroupsAPI.readInstances(instanceGroup.id); const isAssociated = results.some( ({ id: instId }) => instId === parseInt(instanceId, 10) ); if (isAssociated) { const { data: details } = await InstancesAPI.readDetail(instanceId); if (details.node_type === 'execution') { const { data: healthCheckData } = await InstancesAPI.readHealthCheckDetail(instanceId); setHealthCheck(healthCheckData); } setBreadcrumb(instanceGroup, details); setForks( computeForks( details.mem_capacity, details.cpu_capacity, details.capacity_adjustment ) ); return { instance: details }; } throw new Error( `This instance is not associated with this instance group` ); }, [instanceId, setBreadcrumb, instanceGroup]), { instance: {}, isLoading: true } ); useEffect(() => { fetchDetails(); }, [fetchDetails]); const { error: healthCheckError, request: fetchHealthCheck } = useRequest( useCallback(async () => { const { status } = await InstancesAPI.healthCheck(instanceId); if (status === 200) { setShowHealthCheckAlert(true); } }, [instanceId]) ); const { deleteItems: disassociateInstance, deletionError: disassociateError, } = useDeleteItems( useCallback(async () => { await InstanceGroupsAPI.disassociateInstance( instanceGroup.id, instance.id ); history.push(`/instance_groups/${instanceGroup.id}/instances`); }, [instanceGroup.id, instance.id, history]) ); const { error: updateInstanceError, request: updateInstance } = useRequest( useCallback( async (values) => { await InstancesAPI.update(instance.id, values); }, [instance] ) ); const debounceUpdateInstance = useDebounce(updateInstance, 200); const handleChangeValue = (value) => { const roundedValue = Math.round(value * 100) / 100; setForks( computeForks(instance.mem_capacity, instance.cpu_capacity, roundedValue) ); debounceUpdateInstance({ capacity_adjustment: roundedValue }); }; const formatHealthCheckTimeStamp = (last) => ( <> {formatDateString(last)} {instance.health_check_pending ? ( <> {' '} <OutlinedClockIcon /> </> ) : null} </> ); const { error, dismissError } = useDismissableError( disassociateError || updateInstanceError || healthCheckError ); const tabsArray = [ { name: ( <> <CaretLeftIcon /> {t`Back to Instances`} </> ), link: `/instance_groups/${id}/instances`, id: 99, }, { name: t`Details`, link: `/instance_groups/${id}/instances/${instanceId}/details`, id: 0, }, ]; if (contentError) { return <ContentError error={contentError} />; } if (isLoading) { return <ContentLoading />; } const isExecutionNode = instance.node_type === 'execution'; return ( <> <RoutedTabs tabsArray={tabsArray} /> {showHealthCheckAlert ? ( <HealthCheckAlert onSetHealthCheckAlert={setShowHealthCheckAlert} /> ) : null} <CardBody> <DetailList gutter="sm"> <Detail label={t`Host Name`} value={instance.hostname} dataCy="instance-detail-name" /> <Detail label={t`Status`} value={ instance.node_state ? ( <StatusLabel status={instance.node_state} /> ) : null } /> <Detail label={t`Policy Type`} value={ instance.managed_by_policy ? t`Auto` : t`Manual` } /> <Detail label={t`Running Jobs`} value={instance.jobs_running} /> <Detail label={t`Total Jobs`} value={instance.jobs_total} /> <Detail label={t`Last Health Check`} helpText={ <> {t`Health checks are asynchronous tasks. See the`}{' '} <a href={`${getDocsBaseUrl( config )}/html/administration/instances.html#health-check`} target="_blank" rel="noopener noreferrer" > {t`documentation`} </a>{' '} {t`for more info.`} </> } value={formatHealthCheckTimeStamp(instance.last_health_check)} /> <Detail label={t`Node Type`} value={instance.node_type} /> <Detail label={t`Capacity Adjustment`} value={ <SliderHolder data-cy="slider-holder"> <div data-cy="cpu-capacity"> {t`CPU ${instance.cpu_capacity}`} </div> <SliderForks data-cy="slider-forks"> <div data-cy="number-forks"> {i18n._('{count, plural, one {# fork} other {# forks}}', { count: forks })} </div> <Slider areCustomStepsContinuous max={1} min={0} step={0.1} value={instance.capacity_adjustment} onChange={handleChangeValue} isDisabled={!config?.me?.is_superuser || !instance.enabled} data-cy="slider" /> </SliderForks> <div data-cy="mem-capacity"> {t`RAM ${instance.mem_capacity}`} </div> </SliderHolder> } /> <Detail label={t`Used Capacity`} value={ instance.enabled ? ( <Progress title={t`Used capacity`} value={Math.round(100 - instance.percent_capacity_remaining)} measureLocation={ProgressMeasureLocation.top} size={ProgressSize.sm} aria-label={t`Used capacity`} /> ) : ( <Unavailable>{t`Unavailable`}</Unavailable> ) } /> {healthCheck?.errors && ( <Detail fullWidth label={t`Errors`} value={ <CodeBlock> <CodeBlockCode>{healthCheck?.errors}</CodeBlockCode> </CodeBlock> } /> )} </DetailList> <CardActionsRow> {isExecutionNode && ( <Tooltip content={t`Run a health check on the instance`}> <Button isDisabled={ !config?.me?.is_superuser || instance.health_check_pending } variant="primary" ouiaId="health-check-button" onClick={fetchHealthCheck} isLoading={instance.health_check_pending} spinnerAriaLabel={t`Running health check`} > {instance.health_check_pending ? t`Running health check` : t`Run health check`} </Button> </Tooltip> )} {config?.me?.is_superuser && instance.node_type !== 'control' && ( <DisassociateButton verifyCannotDisassociate={instanceGroup.name === 'controlplane'} key="disassociate" onDisassociate={disassociateInstance} itemsToDisassociate={[instance]} isProtectedInstanceGroup={instanceGroup.name === 'controlplane'} modalTitle={t`Disassociate instance from instance group?`} modalNote={ instance.managed_by_policy ? ( <Trans> <b> {t`Note: This instance may be re-associated with this instance group if it is managed by `} <a href={policyRulesDocsLink} target="_blank" rel="noopener noreferrer" > {t`policy rules.`} </a> </b> </Trans> ) : null } /> )} <InstanceToggle css="display: inline-flex;" fetchInstances={fetchDetails} instance={instance} /> </CardActionsRow> {error && ( <AlertModal isOpen={error} onClose={dismissError} title={t`Error!`} variant="error" > {updateInstanceError ? t`Failed to update capacity adjustment.` : t`Failed to disassociate one or more instances.`} <ErrorDetail error={error} /> </AlertModal> )} </CardBody> </> ); } export default InstanceDetails; 
+#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:341
 msgid "<0>{0}<1>{1}</1></0>"
 msgstr "<0>{0}<1>{1}</1></0>"
 
@@ -8086,7 +8216,7 @@ msgstr "Créer un nouveau modèle de notification"
 msgid "Delete Job Template"
 msgstr "Modèle de découpage de Job"
 
-#: screens/Inventory/shared/InventorySourceForm.js:155
+#: screens/Inventory/shared/InventorySourceForm.js:174
 msgid "Source details"
 msgstr "Détails de la source"
 
@@ -8100,7 +8230,7 @@ msgstr "Détails de la source"
 #: screens/Host/HostDetail/HostDetail.js:113
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:120
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:126
-#: screens/Instances/InstanceDetail/InstanceDetail.js:375
+#: screens/Instances/InstanceDetail/InstanceDetail.js:371
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:325
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:182
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:60
@@ -8109,8 +8239,8 @@ msgstr "Détails de la source"
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:318
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:128
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:156
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:434
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:436
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:476
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:478
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.js:145
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:160
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:164
@@ -8142,8 +8272,8 @@ msgstr "Détails de la source"
 #: screens/Setting/TACACS/TACACSDetail/TACACSDetail.js:108
 #: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.js:92
 #: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.js:96
-#: screens/Setting/UI/UIDetail/UIDetail.js:111
-#: screens/Setting/UI/UIDetail/UIDetail.js:116
+#: screens/Setting/UI/UIDetail/UIDetail.js:105
+#: screens/Setting/UI/UIDetail/UIDetail.js:110
 #: screens/Team/TeamDetail/TeamDetail.js:66
 #: screens/Team/TeamDetail/TeamDetail.js:70
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:502
@@ -8168,7 +8298,7 @@ msgstr "Installé"
 msgid "No timeout specified"
 msgstr "Aucun délai d'attente spécifié"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:360
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:402
 msgid "Destination SMS Number(s)"
 msgstr "Numéro(s) de SMS de destination"
 
@@ -8238,7 +8368,7 @@ msgstr "La suppression de ce lien rendra le reste de la branche orphelin et entr
 msgid "Soft delete {pluralizedItemName}?"
 msgstr "suppression réversible"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:162
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:184
 msgid "Grafana API key"
 msgstr "Clé API Grafana"
 
@@ -8349,11 +8479,11 @@ msgstr "Voir les détails de l'organisation"
 #: screens/Host/HostGroups/HostGroupsList.js:246
 #: screens/Host/HostList/HostList.js:231
 #: screens/HostMetrics/HostMetricsDeleteButton.js:109
-#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:371
+#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:367
 #: screens/InstanceGroup/Instances/InstanceList.js:387
 #: screens/InstanceGroup/Instances/InstanceListItem.js:257
-#: screens/Instances/InstanceDetail/InstanceDetail.js:419
-#: screens/Instances/InstanceDetail/InstanceDetail.js:434
+#: screens/Instances/InstanceDetail/InstanceDetail.js:415
+#: screens/Instances/InstanceDetail/InstanceDetail.js:430
 #: screens/Instances/InstanceList/InstanceList.js:263
 #: screens/Instances/InstanceList/InstanceList.js:275
 #: screens/Instances/InstanceList/InstanceListItem.js:276
@@ -8379,7 +8509,7 @@ msgstr "Voir les détails de l'organisation"
 #: screens/Inventory/shared/InventorySourceSyncButton.js:50
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:175
 #: screens/ManagementJob/ManagementJobList/ManagementJobList.js:126
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:462
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:504
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:239
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.js:176
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:186
@@ -8442,9 +8572,9 @@ msgid ""
 "                 retrieving renewal or expanded subscriptions."
 msgstr ""
 
-#: screens/Inventory/shared/ConstructedInventoryHint.js:239
-#~ msgid "Filter on nested group name"
-#~ msgstr "Filtrer par nom de groupe imbriqué"
+#: screens/Inventory/shared/ConstructedInventoryHint.js:247
+msgid "Filter on nested group name"
+msgstr "Filtrer par nom de groupe imbriqué"
 
 #: screens/TopologyView/Tooltip.js:303
 #~ msgid "{count, plural, one {# fork} other {# forks}}"
@@ -8454,7 +8584,7 @@ msgstr ""
 #~ msgid "Prompt for diff mode on launch."
 #~ msgstr "Invite pour le mode diff au lancement."
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:301
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:343
 msgid "Client Identifier"
 msgstr "Identifiant client"
 
@@ -8475,7 +8605,7 @@ msgstr "Toutes les tâches"
 #~ msgid "Optionally select the credential to use to send status updates back to the webhook service."
 #~ msgstr "En option, sélectionnez les informations d'identification à utiliser pour renvoyer les mises à jour de statut au service webhook."
 
-#: components/Schedule/shared/FrequencyDetailSubform.js:473
+#: components/Schedule/shared/FrequencyDetailSubform.js:487
 msgid "Weekend day"
 msgstr "Jour du week-end"
 
@@ -8483,7 +8613,7 @@ msgstr "Jour du week-end"
 msgid "content-loading-in-progress"
 msgstr "chargement-contenu-en-cours"
 
-#: components/Schedule/shared/FrequencyDetailSubform.js:270
+#: components/Schedule/shared/FrequencyDetailSubform.js:272
 msgid "Mon"
 msgstr "Lun."
 
@@ -8515,7 +8645,7 @@ msgstr "Impossible de changer d'hôte."
 msgid "Sign in with GitHub Enterprise Organizations"
 msgstr "Connectez-vous avec GitHub Enterprise Organizations"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:492
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:534
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:114
 msgid "Start message body"
 msgstr "Démarrer le corps du message"
@@ -8537,7 +8667,7 @@ msgstr "Modifier le lien"
 msgid "Maximum number of jobs to run concurrently on this group. Zero means no limit will be enforced."
 msgstr "Nombre maximum de tâches à exécuter simultanément sur ce groupe. Zéro signifie qu'aucune limite ne sera appliquée."
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:537
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:579
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:159
 msgid "Workflow approved message"
 msgstr "Message de flux de travail approuvé"
@@ -8634,7 +8764,7 @@ msgstr "Mise à jour du projet"
 msgid "Standard error tab"
 msgstr "Onglet Erreur standard"
 
-#: components/AddRole/AddResourceRole.js:162
+#: components/AddRole/AddResourceRole.js:165
 msgid "Add Team Roles"
 msgstr "Ajouter  des rôles d’équipe"
 
@@ -8644,8 +8774,8 @@ msgid "Edit Credential Plugin Configuration"
 msgstr "Modifier la configuration du plug-in Configuration"
 
 #: screens/Application/ApplicationTokens/ApplicationTokenList.js:117
-msgid "Delete selected tokens"
-msgstr "Supprimer les jetons sélectionnés"
+#~ msgid "Delete selected tokens"
+#~ msgstr "Supprimer les jetons sélectionnés"
 
 #: screens/Template/Survey/SurveyToolbar.js:83
 msgid "Select a question to delete"
@@ -8768,7 +8898,7 @@ msgid "Edit application"
 msgstr "Modifier l’application"
 
 #: screens/Instances/Shared/InstanceForm.js:24
-#: screens/Inventory/shared/InventorySourceForm.js:48
+#: screens/Inventory/shared/InventorySourceForm.js:83
 #: screens/Project/shared/ProjectForm.js:115
 msgid "Set a value for this field"
 msgstr "Définir une valeur pour ce champ"
@@ -8800,8 +8930,8 @@ msgstr "Ce travail a échoué et n'a pas de résultat."
 msgid "Frequency Details"
 msgstr "Informations sur la fréquence"
 
-#: components/AddRole/AddResourceRole.js:197
-#: components/AddRole/AddResourceRole.js:232
+#: components/AddRole/AddResourceRole.js:200
+#: components/AddRole/AddResourceRole.js:235
 #: components/AdHocCommands/AdHocCommandsWizard.js:53
 #: components/AdHocCommands/useAdHocCredentialStep.js:30
 #: components/AdHocCommands/useAdHocDetailsStep.js:41
@@ -8832,8 +8962,8 @@ msgstr "Créer"
 #: screens/Instances/InstancePeers/InstancePeerList.js:248
 #: screens/Instances/InstancePeers/InstancePeerList.js:311
 #: screens/Instances/InstancePeers/InstancePeerListItem.js:56
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:169
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:105
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:211
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:122
 msgid "Port"
 msgstr "Port"
 
@@ -8860,6 +8990,9 @@ msgid "Delete Job"
 msgstr "Supprimer Job"
 
 #: components/CopyButton/CopyButton.js:41
+#: screens/Inventory/shared/ConstructedInventoryHint.js:177
+#: screens/Inventory/shared/ConstructedInventoryHint.js:271
+#: screens/Inventory/shared/ConstructedInventoryHint.js:346
 msgid "Copy"
 msgstr "Copier"
 
@@ -8931,8 +9064,8 @@ msgstr "Job de gestion"
 #~ msgstr "Impossible de récupérer les paramètres de configuration de connexion personnalisés.  Les paramètres par défaut du système seront affichés à la place."
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:43
-#: components/Schedule/shared/FrequencyDetailSubform.js:275
-#: components/Schedule/shared/FrequencyDetailSubform.js:437
+#: components/Schedule/shared/FrequencyDetailSubform.js:279
+#: components/Schedule/shared/FrequencyDetailSubform.js:451
 msgid "Monday"
 msgstr "Lundi"
 
@@ -8957,7 +9090,7 @@ msgstr "Autoriser le remplacement de la branche"
 msgid "Create new source"
 msgstr "Créer une nouvelle source"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:561
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:603
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:177
 msgid "Workflow denied message"
 msgstr "Message de flux de travail refusé"
@@ -8978,7 +9111,7 @@ msgstr "Ajouter les permissions de l'équipe"
 msgid "This action will cancel the following job:"
 msgstr ""
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:408
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:452
 msgid "Source phone number"
 msgstr "Numéro de téléphone de la source"
 
@@ -9016,7 +9149,7 @@ msgstr "Lancer le flux de travail"
 msgid "system"
 msgstr "système"
 
-#: components/AddRole/AddResourceRole.js:268
+#: components/AddRole/AddResourceRole.js:271
 #: components/AdHocCommands/AdHocCommandsWizard.js:51
 #: components/LaunchPrompt/LaunchPrompt.js:162
 #: components/Schedule/shared/SchedulePromptableFields.js:128
@@ -9062,10 +9195,10 @@ msgstr ""
 msgid "Add smart inventory"
 msgstr "Ajouter un inventaire smart"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:213
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:278
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:325
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:385
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:255
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:320
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:367
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:427
 msgid "Disable SSL Verification"
 msgstr "Désactiver la vérification SSL"
 
@@ -9094,9 +9227,10 @@ msgstr "Cette étape contient des erreurs"
 msgid "View Inventory Details"
 msgstr "Voir les détails de l'inventaire"
 
-#: components/LaunchPrompt/steps/useInventoryStep.js:61
-#~ msgid "This inventory is applied to all workflow nodes within this workflow ({0}) that prompt for an inventory."
-#~ msgstr "Cet inventaire est appliqué à tous les nœuds de flux de travail de ce flux de travail ({0}) qui requiert un inventaire."
+#. placeholder {0}: resource.name
+#: components/LaunchPrompt/steps/useInventoryStep.js:41
+msgid "This inventory is applied to all workflow nodes within this workflow ({0}) that prompt for an inventory."
+msgstr "Cet inventaire est appliqué à tous les nœuds de flux de travail de ce flux de travail ({0}) qui requiert un inventaire."
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.js:42
 msgid "Subscription Details"
@@ -9155,9 +9289,9 @@ msgstr "Modifier l’hôte"
 msgid "cancel delete"
 msgstr "annuler supprimer"
 
-#: screens/Inventory/shared/ConstructedInventoryHint.js:250
-#~ msgid "Nested groups inventory definition:"
-#~ msgstr "Définition de l'inventaire des groupes imbriqués :"
+#: screens/Inventory/shared/ConstructedInventoryHint.js:258
+msgid "Nested groups inventory definition:"
+msgstr "Définition de l'inventaire des groupes imbriqués :"
 
 #: components/JobList/JobListCancelButton.js:93
 msgid "Cancel selected job"
@@ -9238,6 +9372,7 @@ msgstr ""
 msgid "This credential is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "Cette accréditation est actuellement utilisée par d'autres ressources. Êtes-vous sûr de vouloir la supprimer ?"
 
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:231
 #: routeConfig.js:114
 #: screens/ActivityStream/ActivityStream.js:182
 #: screens/Organization/OrganizationList/OrganizationList.js:118
@@ -9274,11 +9409,11 @@ msgid "here."
 msgstr "ici."
 
 #: components/StatusLabel/StatusLabel.js:62
-#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:300
+#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:296
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:102
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupListItem.js:48
 #: screens/InstanceGroup/Instances/InstanceListItem.js:82
-#: screens/Instances/InstanceDetail/InstanceDetail.js:347
+#: screens/Instances/InstanceDetail/InstanceDetail.js:343
 #: screens/Instances/InstanceList/InstanceListItem.js:80
 msgid "Unavailable"
 msgstr "Non disponible"
@@ -9318,8 +9453,8 @@ msgstr "Flux d’activité"
 msgid "Expires on UTC"
 msgstr "Expire UTC"
 
-#: components/LaunchPrompt/steps/CredentialsStep.js:164
-#: components/LaunchPrompt/steps/CredentialsStep.js:169
+#: components/LaunchPrompt/steps/CredentialsStep.js:218
+#: components/LaunchPrompt/steps/CredentialsStep.js:223
 #: components/Lookup/MultiCredentialsLookup.js:163
 #: components/Lookup/MultiCredentialsLookup.js:168
 msgid "Selected Category"
@@ -9349,7 +9484,7 @@ msgstr "Le champ se termine par une valeur."
 msgid "Initiated By"
 msgstr "Initié par"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:483
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:525
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:105
 msgid "Start message"
 msgstr "Message de départ"
@@ -9362,6 +9497,8 @@ msgstr "Type de recherche"
 msgid "Module Name"
 msgstr "Nom du module"
 
+#: components/AddRole/AddResourceRole.js:31
+#: components/AddRole/AddResourceRole.js:46
 #: components/ResourceAccessList/ResourceAccessList.js:150
 #: screens/User/shared/UserForm.js:63
 #: screens/User/UserDetail/UserDetail.js:65
@@ -9423,8 +9560,8 @@ msgid "More information"
 msgstr "Plus d'informations"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:46
-#: components/Schedule/shared/FrequencyDetailSubform.js:308
-#: components/Schedule/shared/FrequencyDetailSubform.js:452
+#: components/Schedule/shared/FrequencyDetailSubform.js:318
+#: components/Schedule/shared/FrequencyDetailSubform.js:466
 msgid "Thursday"
 msgstr "Jeudi"
 
@@ -9456,7 +9593,7 @@ msgstr "Exceptions"
 msgid "Refer to the"
 msgstr "Reportez-vous à "
 
-#: components/Schedule/shared/FrequencyDetailSubform.js:412
+#: components/Schedule/shared/FrequencyDetailSubform.js:426
 msgid "Second"
 msgstr "Deuxième"
 
@@ -9548,7 +9685,7 @@ msgstr "Supprimer l'hôte"
 #: screens/Host/HostDetail/HostDetail.js:109
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:116
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:122
-#: screens/Instances/InstanceDetail/InstanceDetail.js:371
+#: screens/Instances/InstanceDetail/InstanceDetail.js:367
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:102
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:315
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:153
@@ -9647,6 +9784,14 @@ msgstr "Retour aux hôtes"
 #~ msgid "Credential to authenticate with a protected container registry."
 #~ msgstr "Identifiant pour s'authentifier auprès d'un registre de conteneur protégé."
 
+#: screens/Inventory/shared/ConstructedInventoryHint.js:250
+msgid ""
+"This constructed inventory input\n"
+"            creates a group for both of the categories and uses\n"
+"            the limit (host pattern) to only return hosts that\n"
+"            are in the intersection of those two groups."
+msgstr ""
+
 #: components/LaunchPrompt/steps/OtherPromptsStep.js:188
 #~ msgid ""
 #~ "If enabled, show the changes made\n"
@@ -9699,7 +9844,7 @@ msgstr "Mot de passe pour l’élévation des privilèges"
 msgid "{minutes} min {seconds} sec"
 msgstr "{minutes} min {seconds} sec"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:295
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:321
 msgid "API Token"
 msgstr "Token API"
 
@@ -9707,7 +9852,7 @@ msgstr "Token API"
 msgid "Confirm delete"
 msgstr "Confirmer la suppression"
 
-#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:342
+#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:338
 #: screens/InstanceGroup/Instances/InstanceList.js:279
 msgid "Disassociate instance from instance group?"
 msgstr "Dissocier l'instance du groupe d'instances ?"
@@ -9720,10 +9865,11 @@ msgstr "Exécuter une commande ad hoc"
 msgid "Host Details"
 msgstr "Détails sur l'hôte"
 
+#: components/AddRole/AddResourceRole.js:66
 #: components/AdHocCommands/AdHocCredentialStep.js:128
 #: components/AdHocCommands/AdHocExecutionEnvironmentStep.js:117
 #: components/AssociateModal/AssociateModal.js:156
-#: components/LaunchPrompt/steps/CredentialsStep.js:201
+#: components/LaunchPrompt/steps/CredentialsStep.js:255
 #: components/LaunchPrompt/steps/InventoryStep.js:93
 #: components/Lookup/CredentialLookup.js:199
 #: components/Lookup/InventoryLookup.js:161
@@ -9735,6 +9881,13 @@ msgstr "Détails sur l'hôte"
 #: components/RelatedTemplateList/RelatedTemplateList.js:183
 #: components/Schedule/ScheduleList/ScheduleList.js:209
 #: components/TemplateList/TemplateList.js:235
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:74
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:105
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:143
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:174
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:212
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:243
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:270
 #: screens/Credential/CredentialList/CredentialList.js:155
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialsStep.js:100
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.js:136
@@ -9818,7 +9971,7 @@ msgstr "Impossible de charger les groupes associés."
 msgid "* This field will be retrieved from an external secret management system using the specified credential."
 msgstr "* Ce champ sera récupéré dans un système externe de gestion des secrets en utilisant le justificatif d'identité spécifié."
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:609
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:651
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:213
 msgid "Workflow timed out message"
 msgstr "Message d'expiration de flux de travail"
@@ -9878,8 +10031,8 @@ msgstr "L'environnement d'exécution qui sera utilisé pour les tâches au sein 
 msgid "Enabled Variable"
 msgstr "Variable activée"
 
-#: components/AppContainer/AppContainer.js:99
-#: components/AppContainer/AppContainer.js:170
+#: components/AppContainer/AppContainer.js:84
+#: components/AppContainer/AppContainer.js:155
 #: components/AppContainer/PageHeaderToolbar.js:179
 msgid "Logout"
 msgstr "Déconnexion"
@@ -9940,9 +10093,9 @@ msgstr "Avril"
 #~ "hôtes. Cela peut être utilisé pour ajouter des hostvars à partir d'expressions afin\n"
 #~ "que vous connaissez les valeurs résultantes de ces expressions."
 
-#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:376
+#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:372
 #: screens/InstanceGroup/Instances/InstanceList.js:392
-#: screens/Instances/InstanceDetail/InstanceDetail.js:424
+#: screens/Instances/InstanceDetail/InstanceDetail.js:420
 msgid "Failed to disassociate one or more instances."
 msgstr "N'a pas réussi à dissocier une ou plusieurs instances."
 
@@ -9967,7 +10120,7 @@ msgstr "Mot-clé "
 msgid "Please add survey questions."
 msgstr "Veuillez ajouter des questions d'enquête."
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:291
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:333
 msgid "Pagerduty Subdomain"
 msgstr "Sous-domaine Pagerduty"
 
@@ -10030,7 +10183,7 @@ msgstr "Connectez-vous à GitHub Enterprise"
 #: screens/Inventory/shared/SmartInventoryForm.js:68
 #: screens/NotificationTemplate/shared/NotificationTemplateForm.js:24
 #: screens/NotificationTemplate/shared/NotificationTemplateForm.js:61
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:441
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:488
 #: screens/Project/shared/ProjectForm.js:237
 #: screens/Project/shared/ProjectSubForms/InsightsSubForm.js:39
 #: screens/Project/shared/ProjectSubForms/ManualSubForm.js:38
@@ -10054,7 +10207,7 @@ msgstr "Saisie de la valeur de la recherche avancée"
 msgid "Specify the conditions under which this node should be executed"
 msgstr "Préciser les conditions dans lesquelles ce nœud doit être exécuté"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:247
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:289
 msgid "SSL Connection"
 msgstr "Connexion SSL"
 
@@ -10089,8 +10242,8 @@ msgid ""
 msgstr ""
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:161
-#~ msgid "Construct 2 groups, limit to intersection"
-#~ msgstr "Construire 2 groupes, limite à l'intersection"
+msgid "Construct 2 groups, limit to intersection"
+msgstr "Construire 2 groupes, limite à l'intersection"
 
 #: screens/Template/shared/WorkflowJobTemplate.helptext.js:30
 #~ msgid "Webhook URL for this workflow job template."
@@ -10108,7 +10261,7 @@ msgstr "Jamais mis à jour"
 msgid "# source with sync failures."
 msgstr "# source avec échecs de synchronisation."
 
-#: components/Schedule/shared/FrequencyDetailSubform.js:565
+#: components/Schedule/shared/FrequencyDetailSubform.js:579
 msgid "End date/time"
 msgstr "Date/Heure de fin"
 
@@ -10124,7 +10277,7 @@ msgstr "Retour aux Jobs de gestion"
 msgid "{interval} years"
 msgstr ""
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:164
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:206
 msgid "Sender Email"
 msgstr "E-mail de l’expéditeur"
 
@@ -10138,11 +10291,11 @@ msgid "{interval} hours"
 msgstr ""
 
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:66
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:217
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:249
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:282
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:329
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:389
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:259
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:291
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:324
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:371
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:431
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.js:175
 msgid "False"
 msgstr "Faux"
@@ -10266,7 +10419,7 @@ msgstr "Appuyez sur \"Entrée\" pour ajouter d'autres choix de réponses. Un cho
 msgid "This action will disassociate the following role from {0}:"
 msgstr "Cette action permettra de dissocier le rôle suivant de  {0} :"
 
-#: components/Schedule/shared/FrequencyDetailSubform.js:348
+#: components/Schedule/shared/FrequencyDetailSubform.js:362
 msgid "Run on"
 msgstr "Continuer"
 
@@ -10305,14 +10458,24 @@ msgid ""
 "              that you know what the resultant values of those expressions are."
 msgstr ""
 
+#: screens/Inventory/shared/ConstructedInventoryHint.js:335
+msgid ""
+"It is hard to give a specification for\n"
+"            the inventory for Ansible facts, because to populate\n"
+"            the system facts you need to run a playbook against\n"
+"            the inventory that has `gather_facts: true`. The\n"
+"            actual facts will differ system-to-system."
+msgstr ""
+
 #: components/NotificationList/NotificationList.js:200
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:141
 msgid "Rocket.Chat"
 msgstr "Rocket.Chat"
 
-#: screens/NotificationTemplate/shared/Notifications.helptext.js:55
-#~ msgid "See Django"
-#~ msgstr "Voir Django"
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:66
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:69
+msgid "See Django"
+msgstr "Voir Django"
 
 #: screens/Template/shared/WorkflowJobTemplate.helptext.js:16
 #~ msgid "Prompt for SCM branch on launch."
@@ -10360,7 +10523,7 @@ msgstr "Aucun hôte restant"
 msgid "First Run"
 msgstr "Première exécution"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:169
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:191
 msgid "ID of the dashboard (optional)"
 msgstr "ID du tableau de bord (facultatif)"
 
@@ -10378,7 +10541,7 @@ msgstr "Connectez-vous avec OIDC"
 msgid "Execution Environment Missing"
 msgstr "Environnement d'exécution manquant"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:241
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:283
 msgid "Destination Channels or Users"
 msgstr "Canaux ou utilisateurs de destination"
 
@@ -10422,6 +10585,8 @@ msgid "Inventory sync"
 msgstr "Synchronisation des inventaires"
 
 #: components/Lookup/ProjectLookup.js:139
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:134
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:203
 #: screens/Job/JobDetail/JobDetail.js:82
 #: screens/Project/ProjectList/ProjectList.js:201
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/ProjectsList.js:100
@@ -10441,7 +10606,7 @@ msgstr "C'est la seule fois où le secret du client sera révélé."
 msgid "approved"
 msgstr "approuvé"
 
-#: components/Schedule/shared/FrequencyDetailSubform.js:516
+#: components/Schedule/shared/FrequencyDetailSubform.js:530
 msgid "Never"
 msgstr "Jamais"
 
@@ -10575,12 +10740,12 @@ msgstr "Nom de variable de réponse"
 #~ msgid "Prompt for instance groups on launch."
 #~ msgstr "Invite par exemple les groupes au lancement."
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:597
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:639
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:204
 msgid "Workflow pending message body"
 msgstr "Corps du message d'exécution de flux de travail"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:236
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:278
 msgid "IRC Nick"
 msgstr "IRC Nick"
 
@@ -10616,6 +10781,7 @@ msgstr "Divers Authentification"
 msgid "Download bundle"
 msgstr "Téléchargement de l’ensemble (Bundle)"
 
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:162
 #: routeConfig.js:98
 #: screens/ActivityStream/ActivityStream.js:174
 #: screens/Dashboard/Dashboard.js:112
@@ -10656,6 +10822,7 @@ msgstr "Cet horaire n'a pas d'occurrences en raison des exceptions sélectionné
 #: components/AdHocCommands/useAdHocExecutionEnvironmentStep.js:16
 #: components/ExecutionEnvironmentDetail/ExecutionEnvironmentDetail.js:43
 #: components/ExecutionEnvironmentDetail/ExecutionEnvironmentDetail.js:109
+#: components/LaunchPrompt/steps/useExecutionEnvironmentStep.js:15
 #: components/Lookup/ExecutionEnvironmentLookup.js:160
 #: components/Lookup/ExecutionEnvironmentLookup.js:192
 #: components/Lookup/ExecutionEnvironmentLookup.js:209
@@ -10688,11 +10855,11 @@ msgstr "Paramètres de journalisation"
 msgid "View all Jobs."
 msgstr "Voir tous les Jobs."
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:189
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:242
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:282
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:355
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:466
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:211
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:268
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:308
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:381
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:513
 msgid "Disable SSL verification"
 msgstr "Désactiver la vérification SSL"
 
@@ -10784,7 +10951,7 @@ msgstr "Utilisateur non trouvé."
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:49
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:87
 #: screens/Job/JobDetail/JobDetail.js:592
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:414
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:456
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:116
 #: screens/Project/ProjectDetail/ProjectDetail.js:304
 #: screens/Team/TeamDetail/TeamDetail.js:57
@@ -10826,7 +10993,7 @@ msgstr "Avancé"
 msgid "Brand Image"
 msgstr "Image de marque"
 
-#: components/Schedule/shared/FrequencyDetailSubform.js:408
+#: components/Schedule/shared/FrequencyDetailSubform.js:422
 msgid "First"
 msgstr "Première"
 
@@ -10882,7 +11049,7 @@ msgstr "{0, plural, one {This template is currently being used by some workflow 
 msgid "Start"
 msgstr "Démarrer"
 
-#: components/AddRole/AddResourceRole.js:248
+#: components/AddRole/AddResourceRole.js:251
 #: components/AssociateModal/AssociateModal.js:111
 #: components/AssociateModal/AssociateModal.js:117
 #: components/FormActionGroup/FormActionGroup.js:15
@@ -10890,7 +11057,7 @@ msgstr "Démarrer"
 #: components/Schedule/shared/ScheduleForm.js:533
 #: components/Schedule/shared/ScheduleForm.js:539
 #: components/Schedule/shared/useSchedulePromptSteps.js:50
-#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:131
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:379
 #: screens/Credential/shared/CredentialForm.js:321
 #: screens/Credential/shared/CredentialForm.js:326
 #: screens/Setting/shared/RevertFormActionGroup.js:13
@@ -10925,7 +11092,7 @@ msgstr ""
 msgid "Reorder"
 msgstr "Réorganiser"
 
-#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:353
+#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:349
 msgid "policy rules."
 msgstr "Règles de politique"
 
@@ -11023,7 +11190,7 @@ msgstr "Erreur d'annulation d'un Job"
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:88
 #: screens/Job/JobDetail/JobDetail.js:237
 #: screens/Job/JobOutput/HostEventModal.js:121
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:119
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:161
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:180
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.js:117
 #: screens/Project/ProjectList/ProjectList.js:223
@@ -11043,7 +11210,7 @@ msgstr "Sources d'inventaire avec défaillances"
 msgid "Your session has expired. Please log in to continue where you left off."
 msgstr "Votre session a expiré. Veuillez vous connecter pour continuer là où vous vous êtes arrêté."
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:585
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:627
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:195
 msgid "Workflow pending message"
 msgstr "Message de flux de travail en attente"
@@ -11067,7 +11234,7 @@ msgstr "La recherche est désactivée pendant que le job est en cours"
 msgid "Cancel lookup"
 msgstr "Annuler la recherche"
 
-#: components/Schedule/shared/FrequencyDetailSubform.js:420
+#: components/Schedule/shared/FrequencyDetailSubform.js:434
 msgid "Fifth"
 msgstr "Cinquième"
 
@@ -11121,8 +11288,8 @@ msgstr "Créé par (nom d'utilisateur)"
 #: screens/Inventory/InventoryList/InventoryListItem.js:127
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:213
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:111
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:125
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:135
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:167
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:177
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:185
 #: screens/Project/ProjectDetail/ProjectDetail.js:185
 #: screens/Project/ProjectList/ProjectListItem.js:290
@@ -11165,7 +11332,7 @@ msgstr "À propos de "
 msgid "Back to Schedules"
 msgstr "Retour aux horaires"
 
-#: components/CodeEditor/VariablesField.js:263
+#: components/CodeEditor/VariablesField.js:264
 #: components/FieldWithPrompt/FieldWithPrompt.js:47
 #: screens/Credential/CredentialDetail/CredentialDetail.js:176
 msgid "Prompt on launch"
@@ -11339,7 +11506,7 @@ msgstr "Exemples :"
 msgid "Create a new Smart Inventory with the applied filter"
 msgstr "Créer un nouvel inventaire smart avec le filtre appliqué"
 
-#: components/Schedule/shared/FrequencyDetailSubform.js:281
+#: components/Schedule/shared/FrequencyDetailSubform.js:285
 msgid "Tue"
 msgstr "Mar."
 
@@ -11416,6 +11583,13 @@ msgstr "Location de fonds de terres Recours au travail à forfait Bail avec part
 msgid "Module Arguments"
 msgstr "Arguments du module"
 
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:56
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:401
+msgid ""
+"Specify a notification color. Acceptable colors are hex\n"
+"        color code (example: #3af or #789abc)."
+msgstr ""
+
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:65
 msgid "Managed"
 msgstr "Géré"
@@ -11423,7 +11597,7 @@ msgstr "Géré"
 #: components/JobList/JobListItem.js:177
 #: components/PromptDetail/PromptInventorySourceDetail.js:84
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:210
-#: screens/Inventory/shared/InventorySourceForm.js:133
+#: screens/Inventory/shared/InventorySourceForm.js:152
 #: screens/Job/JobDetail/JobDetail.js:187
 #: screens/Job/JobDetail/JobDetail.js:343
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.js:94
@@ -11531,7 +11705,7 @@ msgid "Clear"
 msgstr "Effacer"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:82
-#: components/Schedule/shared/FrequencyDetailSubform.js:511
+#: components/Schedule/shared/FrequencyDetailSubform.js:525
 msgid "End"
 msgstr "Fin"
 
@@ -11543,7 +11717,7 @@ msgstr "Mot de passe Archivage sécurisé"
 msgid "Add container group"
 msgstr "Ajouter un groupe de conteneurs"
 
-#: components/AppContainer/AppContainer.js:162
+#: components/AppContainer/AppContainer.js:147
 msgid "Continue"
 msgstr "Continuer"
 
@@ -11604,11 +11778,11 @@ msgstr "Conditions préalables à l'exécution de ce nœud lorsqu'il y a plusieu
 msgid "FINISHED:"
 msgstr "TERMINÉ :"
 
-#: screens/Inventory/shared/InventorySourceForm.js:142
+#: screens/Inventory/shared/InventorySourceForm.js:161
 msgid "Choose a source"
 msgstr "Choisissez une source"
 
-#: components/Schedule/shared/FrequencyDetailSubform.js:314
+#: components/Schedule/shared/FrequencyDetailSubform.js:324
 msgid "Fri"
 msgstr "Ven."
 
@@ -11621,8 +11795,8 @@ msgstr "Le modèle utilisé pour cibler les hôtes dans l'inventaire. En laissan
 #: components/PromptDetail/PromptDetail.js:359
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:506
 #: screens/Job/JobDetail/JobDetail.js:446
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:174
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:115
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:216
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:132
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:279
 #: screens/Template/shared/JobTemplateForm.js:477
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:187
@@ -11657,7 +11831,7 @@ msgstr "Outils"
 msgid "YAML tab"
 msgstr "Onglet YAML"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:208
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:234
 msgid "IRC server port"
 msgstr "Port du serveur IRC"
 
@@ -11675,7 +11849,7 @@ msgstr "LDAP1"
 msgid "The page you requested could not be found."
 msgstr "La page que vous avez demandée n'a pas été trouvée."
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:519
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:561
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:141
 msgid "Error message"
 msgstr "Message d'erreur"
@@ -11752,7 +11926,7 @@ msgstr ""
 msgid "Automation controller version"
 msgstr "Version de contrôleur d’Automation"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:97
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:114
 msgid "Sender e-mail"
 msgstr "E-mail de l'expéditeur"
 
@@ -11778,6 +11952,9 @@ msgstr "Veuillez ajouter un job pour remplir cette liste"
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:490
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:173
 #: screens/Inventory/shared/ConstructedInventoryForm.js:138
+#: screens/Inventory/shared/ConstructedInventoryHint.js:172
+#: screens/Inventory/shared/ConstructedInventoryHint.js:266
+#: screens/Inventory/shared/ConstructedInventoryHint.js:343
 #: screens/Job/JobDetail/JobDetail.js:374
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:267
 #: screens/Template/shared/JobTemplateForm.js:431
@@ -11853,21 +12030,21 @@ msgid "How many times was the host automated"
 msgstr "Combien de fois l'hôte a-t-il été automatisé"
 
 #: components/CodeEditor/VariablesDetail.js:215
-#: components/CodeEditor/VariablesField.js:270
+#: components/CodeEditor/VariablesField.js:271
 msgid "Expand input"
 msgstr "Développer l'entrée"
 
-#: components/AddRole/AddResourceRole.js:213
-#: components/AddRole/AddResourceRole.js:225
-#: components/AddRole/AddResourceRole.js:243
+#: components/AddRole/AddResourceRole.js:216
+#: components/AddRole/AddResourceRole.js:228
+#: components/AddRole/AddResourceRole.js:246
 #: components/AddRole/SelectRoleStep.js:29
 #: components/CheckboxListItem/CheckboxListItem.js:45
 #: components/Lookup/InstanceGroupsLookup.js:88
 #: components/OptionsList/OptionsList.js:75
 #: components/Schedule/ScheduleList/ScheduleListItem.js:86
 #: components/TemplateList/TemplateListItem.js:145
-#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:108
-#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:126
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:356
+#: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:374
 #: screens/Application/ApplicationsList/ApplicationListItem.js:32
 #: screens/Application/ApplicationTokens/ApplicationTokenListItem.js:27
 #: screens/Credential/CredentialList/CredentialListItem.js:57
@@ -12108,8 +12285,8 @@ msgstr "Groupes"
 msgid "Failed to cancel {0}"
 msgstr "Échec de l'annulation {0}"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:366
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:426
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:408
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.js:470
 msgid "Account SID"
 msgstr "SID de compte"
 
@@ -12165,7 +12342,9 @@ msgid "Success"
 msgstr "Réussite"
 
 #. js-lingui-explicit-id
+#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:265
 #: screens/InstanceGroup/Instances/InstanceListItem.js:166
+#: screens/Instances/InstanceDetail/InstanceDetail.js:305
 #: screens/Instances/InstanceList/InstanceListItem.js:179
 msgid "{count, plural, one {# fork} other {# forks}}"
 msgstr ""
