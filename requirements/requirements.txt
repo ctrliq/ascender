@@ -46,7 +46,7 @@ azure-common==1.1.28
     #   azure-keyvault-certificates
     #   azure-keyvault-keys
     #   azure-keyvault-secrets
-azure-core==1.30.0
+azure-core==1.38.0
     # via
     #   azure-identity
     #   azure-keyvault-certificates
@@ -424,7 +424,6 @@ setuptools-scm[toml]==8.0.4
     # via -r /awx_devel/requirements/requirements.in
 six==1.16.0
     # via
-    #   azure-core
     #   django-pglocks
     #   isodate
     #   kubernetes
