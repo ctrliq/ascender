@@ -83,6 +83,7 @@ function ExecutionEnvironmentListItem({
             case 'never':
               return t`Never`;
             default:
+              // eslint-disable-next-line prefer-template
               return '(' + t`Default` + ')';
           }
         })()}
