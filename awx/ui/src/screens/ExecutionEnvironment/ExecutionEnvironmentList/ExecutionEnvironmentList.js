@@ -165,6 +165,7 @@ function ExecutionEnvironmentList() {
               <HeaderRow qsConfig={QS_CONFIG}>
                 <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
                 <HeaderCell>{t`Image`}</HeaderCell>
+                <HeaderCell>{t`Pull`}</HeaderCell>
                 <HeaderCell>{t`Organization`}</HeaderCell>
                 <HeaderCell>{t`Actions`}</HeaderCell>
               </HeaderRow>
