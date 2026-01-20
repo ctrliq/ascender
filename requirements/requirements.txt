@@ -313,13 +313,13 @@ psycopg==3.1.18
     # via -r /awx_devel/requirements/requirements.in
 ptyprocess==0.7.0
     # via pexpect
-pyasn1==0.5.1
+pyasn1==0.6.2
     # via
     #   pyasn1-modules
     #   python-ldap
     #   rsa
     #   service-identity
-pyasn1-modules==0.3.0
+pyasn1-modules==0.4.2
     # via
     #   google-auth
     #   python-ldap
