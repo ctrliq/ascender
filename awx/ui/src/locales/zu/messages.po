@@ -532,6 +532,7 @@ msgstr ""
 
 #: components/Workflow/WorkflowLegend.js:130
 #: components/Workflow/WorkflowLinkHelp.js:25
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:80
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.js:60
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/RunStep.js:47
 msgid "Always"
@@ -985,7 +986,7 @@ msgid "1 (Info)"
 msgstr ""
 
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.js:202
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:226
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:227
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:220
 msgid "Deletion error"
 msgstr ""
@@ -1789,6 +1790,10 @@ msgstr ""
 #~ msgid "Launch | {0})"
 #~ msgstr ""
 
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:82
+msgid "Only if Missing"
+msgstr ""
+
 #: components/AdHocCommands/AdHocDetailsStep.js:202
 #: components/AdHocCommands/AdHocDetailsStep.js:205
 msgid "Enable privilege escalation"
@@ -1899,8 +1904,8 @@ msgstr ""
 #: screens/Credential/CredentialList/CredentialListItem.js:67
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.js:177
 #: screens/CredentialType/CredentialTypeList/CredentialTypeListItem.js:39
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:169
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:87
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:170
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:101
 #: screens/Host/HostGroups/HostGroupItem.js:35
 #: screens/Host/HostGroups/HostGroupsList.js:179
 #: screens/Host/HostList/HostList.js:174
@@ -2359,7 +2364,7 @@ msgid "Failed Hosts"
 msgstr ""
 
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:132
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:196
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:197
 msgid "This execution environment is currently being used by other resources. Are you sure you want to delete it?"
 msgstr ""
 
@@ -3887,8 +3892,8 @@ msgstr ""
 #~ msgid "Remove any local modifications prior to performing an update."
 #~ msgstr ""
 
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:90
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:94
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:104
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:108
 msgid "Edit Execution Environment"
 msgstr ""
 
@@ -5122,7 +5127,7 @@ msgstr ""
 msgid "Deprovisioning fail"
 msgstr ""
 
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:104
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:118
 msgid "Copy Execution Environment"
 msgstr ""
 
@@ -5211,7 +5216,7 @@ msgstr ""
 #~ msgid "Playbook Directory"
 #~ msgstr ""
 
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:112
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:126
 msgid "Failed to copy execution environment"
 msgstr ""
 
@@ -5742,7 +5747,7 @@ msgstr ""
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.js:134
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.js:205
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:143
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:229
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:230
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:142
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:148
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:223
@@ -8070,7 +8075,7 @@ msgstr ""
 msgid "Subversion"
 msgstr ""
 
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:232
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:233
 msgid "Failed to delete one or more execution environments"
 msgstr ""
 
@@ -8117,6 +8122,8 @@ msgid "Choose a Notification Type"
 msgstr ""
 
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:86
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:168
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:76
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironmentForm.js:115
 msgid "Pull"
 msgstr ""
@@ -8630,7 +8637,7 @@ msgstr ""
 #: routeConfig.js:165
 #: screens/ActivityStream/ActivityStream.js:217
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:130
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:192
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:193
 #: screens/ExecutionEnvironment/ExecutionEnvironments.js:13
 #: screens/ExecutionEnvironment/ExecutionEnvironments.js:23
 #: screens/Organization/Organization.js:127
@@ -9962,6 +9969,10 @@ msgstr ""
 #~ msgid "Enable a survey for this workflow job template."
 #~ msgstr ""
 
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:86
+#~ msgid "(Default)"
+#~ msgstr ""
+
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:265
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:126
 msgid "Enabled Variable"
@@ -9973,7 +9984,7 @@ msgstr ""
 msgid "Logout"
 msgstr ""
 
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:197
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:198
 msgid "These execution environments could be in use by other resources that rely on them. Are you sure you want to delete them anyway?"
 msgstr ""
 
@@ -10264,6 +10275,7 @@ msgstr ""
 msgid "Clear all filters"
 msgstr ""
 
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:86
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.js:102
 #: screens/Template/Survey/SurveyList.js:109
 #: screens/Template/Survey/SurveyList.js:109
@@ -10318,7 +10330,7 @@ msgid "Not Found"
 msgstr ""
 
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:79
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:84
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:98
 msgid "Globally Available"
 msgstr ""
 
@@ -10539,6 +10551,7 @@ msgid "approved"
 msgstr ""
 
 #: components/Schedule/shared/FrequencyDetailSubform.js:530
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:84
 msgid "Never"
 msgstr ""
 
@@ -11211,8 +11224,8 @@ msgstr ""
 #: screens/Credential/CredentialDetail/CredentialDetail.js:231
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:70
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:156
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:168
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:76
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:169
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:90
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:179
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:101
 #: screens/Inventory/InventoryList/InventoryList.js:203

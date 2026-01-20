@@ -73,6 +73,20 @@ function ExecutionEnvironmentListItem({
         </Link>
       </TdBreakWord>
       <Td dataLabel={t`Image`}>{executionEnvironment.image}</Td>
+      <Td dataLabel={t`Pull`}>
+        {(() => {
+          switch (executionEnvironment.pull) {
+            case 'always':
+              return t`Always`;
+            case 'missing':
+              return t`Only if Missing`;
+            case 'never':
+              return t`Never`;
+            default:
+              return '(' + t`Default` + ')';
+          }
+        })()}
+      </Td>
       <Td dataLabel={t`Organization`}>
         {executionEnvironment.organization ? (
           <Link

@@ -531,6 +531,7 @@ msgstr "수요일"
 
 #: components/Workflow/WorkflowLegend.js:130
 #: components/Workflow/WorkflowLinkHelp.js:25
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:80
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.js:60
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/RunStep.js:47
 msgid "Always"
@@ -984,7 +985,7 @@ msgid "1 (Info)"
 msgstr "1 (정보)"
 
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.js:202
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:226
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:227
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:220
 msgid "Deletion error"
 msgstr "삭제 오류"
@@ -1788,6 +1789,10 @@ msgstr "Stdout"
 #~ msgid "Launch | {0})"
 #~ msgstr "(1) 실행QShortcut"
 
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:82
+msgid "Only if Missing"
+msgstr ""
+
 #: components/AdHocCommands/AdHocDetailsStep.js:202
 #: components/AdHocCommands/AdHocDetailsStep.js:205
 msgid "Enable privilege escalation"
@@ -1903,8 +1908,8 @@ msgstr "질문 추가"
 #: screens/Credential/CredentialList/CredentialListItem.js:67
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.js:177
 #: screens/CredentialType/CredentialTypeList/CredentialTypeListItem.js:39
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:169
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:87
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:170
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:101
 #: screens/Host/HostGroups/HostGroupItem.js:35
 #: screens/Host/HostGroups/HostGroupsList.js:179
 #: screens/Host/HostList/HostList.js:174
@@ -2363,7 +2368,7 @@ msgid "Failed Hosts"
 msgstr "실패한 호스트"
 
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:132
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:196
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:197
 msgid "This execution environment is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "현재 다른 리소스에서 이 실행 환경이 사용되고 있습니다. 삭제하시겠습니까?"
 
@@ -3893,8 +3898,8 @@ msgstr "클릭하여 설문조사 질문의 순서를 다시 정렬합니다."
 #~ msgid "Remove any local modifications prior to performing an update."
 #~ msgstr "업데이트를 수행하기 전에 로컬 수정 사항을 제거합니다."
 
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:90
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:94
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:104
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:108
 msgid "Edit Execution Environment"
 msgstr "실행 환경 편집"
 
@@ -5136,7 +5141,7 @@ msgstr "빈도 예외 세부 정보"
 msgid "Deprovisioning fail"
 msgstr "프로비저닝 해제 실패"
 
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:104
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:118
 msgid "Copy Execution Environment"
 msgstr "실행 환경 복사"
 
@@ -5225,7 +5230,7 @@ msgstr ""
 #~ msgid "Playbook Directory"
 #~ msgstr ""
 
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:112
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:126
 msgid "Failed to copy execution environment"
 msgstr "실행 환경을 복사하지 못했습니다."
 
@@ -5763,7 +5768,7 @@ msgstr "인증 정보 이름"
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.js:134
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.js:205
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:143
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:229
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:230
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:142
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:148
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:223
@@ -8099,7 +8104,7 @@ msgstr "컨트롤 노드"
 msgid "Subversion"
 msgstr "Subversion"
 
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:232
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:233
 msgid "Failed to delete one or more execution environments"
 msgstr "하나 이상의 실행 환경을 삭제하지 못했습니다."
 
@@ -8146,6 +8151,8 @@ msgid "Choose a Notification Type"
 msgstr "알림 유형 선택"
 
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:86
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:168
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:76
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironmentForm.js:115
 msgid "Pull"
 msgstr "당기다"
@@ -8668,7 +8675,7 @@ msgstr "작업 템플릿 추가"
 #: routeConfig.js:165
 #: screens/ActivityStream/ActivityStream.js:217
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:130
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:192
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:193
 #: screens/ExecutionEnvironment/ExecutionEnvironments.js:13
 #: screens/ExecutionEnvironment/ExecutionEnvironments.js:23
 #: screens/Organization/Organization.js:127
@@ -10002,6 +10009,10 @@ msgstr "이 조직 내의 작업에 사용할 실행 환경입니다. 실행 환
 #~ msgid "Enable a survey for this workflow job template."
 #~ msgstr "이 워크플로 작업 템플릿에 대한 설문조사를 활성화합니다."
 
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:86
+#~ msgid "(Default)"
+#~ msgstr ""
+
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:265
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:126
 msgid "Enabled Variable"
@@ -10013,7 +10024,7 @@ msgstr "활성화된 변수"
 msgid "Logout"
 msgstr "로그 아웃"
 
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:197
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:198
 msgid "These execution environments could be in use by other resources that rely on them. Are you sure you want to delete them anyway?"
 msgstr "이러한 실행 환경은 해당 환경에 의존하는 다른 리소스에서 사용할 수 있습니다. 그래도 삭제하시겠습니까?"
 
@@ -10308,6 +10319,7 @@ msgstr "Azure AD 설정 보기"
 msgid "Clear all filters"
 msgstr "모든 필터 지우기"
 
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:86
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.js:102
 #: screens/Template/Survey/SurveyList.js:109
 #: screens/Template/Survey/SurveyList.js:109
@@ -10362,7 +10374,7 @@ msgid "Not Found"
 msgstr "찾을 수 없음"
 
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:79
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:84
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:98
 msgid "Globally Available"
 msgstr "전역적으로 사용 가능"
 
@@ -10583,6 +10595,7 @@ msgid "approved"
 msgstr "승인됨"
 
 #: components/Schedule/shared/FrequencyDetailSubform.js:530
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:84
 msgid "Never"
 msgstr "없음"
 
@@ -11255,8 +11268,8 @@ msgstr "(사용자 이름)에 의해 생성됨"
 #: screens/Credential/CredentialDetail/CredentialDetail.js:231
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:70
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:156
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:168
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:76
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:169
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:90
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:179
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:101
 #: screens/Inventory/InventoryList/InventoryList.js:203
