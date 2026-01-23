@@ -1,8 +1,7 @@
 build
-coreapi
 django-debug-toolbar==6.0.0
 django-test-migrations
-drf-yasg
+drf-spectacular>=0.27.0  # Modern OpenAPI 3.0 schema generator
 # pprofile - re-add once https://github.com/vpelletier/pprofile/issues/41 is addressed
 ipython>=7.31.1 # https://github.com/ansible/awx/security/dependabot/30
 unittest2

@@ -132,6 +132,7 @@ django==5.2.9
     #   django-solo
     #   django-valkey
     #   djangorestframework
+    #   drf-spectacular
     #   social-auth-app-django
 # django-ansible-base[jwt-consumer,resource-registry,rest-filters] @ git+https://github.com/ansible/django-ansible-base@devel  # git requirements installed separately
     # via -r /awx_devel/requirements/requirements_git.txt
@@ -163,10 +164,13 @@ djangorestframework==3.15.2
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   django-ansible-base
+    #   drf-spectacular
 djangorestframework-yaml==2.0.0
     # via -r /awx_devel/requirements/requirements.in
 docutils==0.20.1
     # via python-daemon
+drf-spectacular==0.29.0
+    # via -r /awx_devel/requirements/requirements.in
 dynaconf==3.2.11
     # via django-ansible-base
 enum-compat==0.0.3
@@ -200,7 +204,9 @@ incremental==24.7.2
 inflect==7.0.0
     # via jaraco-text
 inflection==0.5.1
-    # via django-ansible-base
+    # via
+    #   django-ansible-base
+    #   drf-spectacular
 irc==20.3.1
     # via -r /awx_devel/requirements/requirements.in
 isodate==0.6.1
@@ -237,7 +243,9 @@ jmespath==1.0.1
 json-log-formatter==0.5.2
     # via -r /awx_devel/requirements/requirements.in
 jsonschema==4.25.1
-    # via -r /awx_devel/requirements/requirements.in
+    # via
+    #   -r /awx_devel/requirements/requirements.in
+    #   drf-spectacular
 jsonschema-specifications==2023.12.1
     # via jsonschema
 jwcrypto==1.5.6
@@ -382,6 +390,7 @@ pyyaml==6.0.1
     #   -r /awx_devel/requirements/requirements.in
     #   ansible-runner
     #   djangorestframework-yaml
+    #   drf-spectacular
     #   kubernetes
     #   receptorctl
 receptorctl==1.6.2
@@ -480,6 +489,8 @@ typing-extensions==4.12.2
     #   pydantic-core
     #   setuptools-scm
     #   twisted
+uritemplate==4.2.0
+    # via drf-spectacular
 urllib3==2.6.3
     # via
     #   -r /awx_devel/requirements/requirements.in
