@@ -49,7 +49,7 @@ INSIGHTS_TRACKING_STATE = False
 
 # debug toolbar and swagger assume that requirements/requirements_dev.txt are installed
 
-INSTALLED_APPS += ['drf_yasg', 'debug_toolbar']  # NOQA
+INSTALLED_APPS += ['drf_spectacular', 'debug_toolbar']  # NOQA
 
 MIDDLEWARE = ['debug_toolbar.middleware.DebugToolbarMiddleware'] + MIDDLEWARE  # NOQA
 
