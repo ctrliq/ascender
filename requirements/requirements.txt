@@ -293,6 +293,7 @@ packaging==24.2
     #   django-guid
     #   msal-extensions
     #   setuptools-scm
+    #   wheel
 pexpect==4.7.0
     # via
     #   -r /awx_devel/requirements/requirements.in
@@ -493,7 +494,7 @@ valkey[libvalkey]==6.1.1
     #   django-valkey
 websocket-client==1.7.0
     # via kubernetes
-wheel==0.45.1
+wheel==0.46.3
     # via -r /awx_devel/requirements/requirements.in
 xmlsec==1.3.13
     # via python3-saml
