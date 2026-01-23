@@ -7,7 +7,7 @@ import functools
 import inspect
 import logging
 import os
-from importlib_metadata import entry_points
+from importlib.metadata import entry_points
 import re
 import stat
 import tempfile

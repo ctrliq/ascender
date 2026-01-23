@@ -19,7 +19,7 @@ import threading
 import contextlib
 import tempfile
 import functools
-from importlib_metadata import version as _get_version
+from importlib.metadata import version as _get_version
 
 # Django
 from django.core.exceptions import ObjectDoesNotExist, FieldDoesNotExist

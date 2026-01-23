@@ -5,42 +5,49 @@ requirements_in="$(readlink -f ./requirements.in)"
 requirements="$(readlink -f ./requirements.txt)"
 requirements_git="$(readlink -f ./requirements_git.txt)"
 requirements_dev="$(readlink -f ./requirements_dev.txt)"
-pip_compile="pip-compile --no-header --quiet -r --allow-unsafe"
+pip_compile="pip-compile --no-strip-extras --no-header --quiet -r --allow-unsafe"
 sanitize_git="1"
 
 _cleanup() {
   cd /
   test "${KEEP_TMP:-0}" = 1 || rm -rf "${_tmp}"
+  return 0
 }
 
 generate_requirements() {
-  venv="`pwd`/venv"
-  echo $venv
-  /usr/bin/python3.11 -m venv "${venv}"
+  local input_reqs="$1"
+  venv="$(pwd)/venv"
+  echo "$venv"
+  /usr/bin/python3.12 -m venv "${venv}"
   # shellcheck disable=SC1090
-  source ${venv}/bin/activate
+  source "${venv}/bin/activate"
 
-  # FIXME: https://github.com/jazzband/pip-tools/issues/1558
-  ${venv}/bin/python3 -m pip install -U 'pip<22.0' pip-tools
+  # pip / setuptools version must match the version used in AWX venv (see README.md UPGRADE BLOCKERs)
+  "${venv}/bin/python3" -m pip install -U 'pip==25.3' 'setuptools==80.9.0' pip-tools
 
-  ${pip_compile} $1 --output-file requirements.txt
+  ${pip_compile} ${input_reqs} --output-file requirements.txt
   # consider the git requirements for purposes of resolving deps
   # Then comment out any git+ lines from requirements.txt
   if [[ "$sanitize_git" == "1" ]] ; then
     while IFS= read -r line; do
       if [[ $line != \#* ]]; then  # ignore lines which are already comments
+        # Escape regex special characters for the search pattern
+        # Only escape BRE metacharacters: . * ^ $ [ \
+        escaped_pattern=$(printf '%s\n' "${line%#*}" | sed 's/[[\.*^$]/\\&/g')
         # Add # to the start of any line matched
-        sed -i "s!^.*${line%#*}!# ${line%#*}  # git requirements installed separately!g" requirements.txt
+        sed -i "s|^.*${escaped_pattern}|# ${line%#*}  # git requirements installed separately|g" requirements.txt
       fi
     done < "${requirements_git}"
   fi;
+  return 0
 }
 
 main() {
+  local command="${1:-}"
   base_dir=$(pwd)
   dest_requirements="${requirements}"
   input_requirements="${requirements_in} ${requirements_git}"
-  command="${1:-}"
+
   shift || true  # Remove first argument, leave remaining as package names
 
   _tmp=$(python -c "import tempfile; print(tempfile.mkdtemp(suffix='.awx-requirements', dir='/tmp'))")
@@ -75,9 +82,9 @@ main() {
       NEEDS_HELP=1
     ;;
     *)
-      echo ""
-      echo "ERROR: Parameter $command not valid"
-      echo ""
+      echo "" >&2
+      echo "ERROR: Parameter $command not valid" >&2
+      echo "" >&2
       NEEDS_HELP=1
     ;;
   esac
@@ -99,13 +106,13 @@ main() {
   fi
 
   if [[ ! -d /awx_devel ]] ; then
-      echo "This script should be run inside the awx container"
+      echo "This script should be run inside the awx container" >&2
       exit
   fi
 
   if [[ ! -z "$(tail -c 1 "${requirements_git}")" ]]
   then
-      echo "No newline at end of ${requirements_git}, please add one"
+      echo "No newline at end of ${requirements_git}, please add one" >&2
       exit
   fi
 
@@ -118,6 +125,7 @@ main() {
   cat requirements.txt | sed "s:$base_dir:/awx_devel/requirements:" > "${dest_requirements}"
 
   _cleanup
+  return 0
 }
 
 # set EVAL=1 in case you want to source this script

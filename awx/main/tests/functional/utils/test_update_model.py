@@ -17,9 +17,9 @@ class NewException(Exception):
 
 @pytest.mark.django_db
 def test_normal_get(normal_job):
-    mod_job = Job.objects.get(pk=normal_job.id)
+    mod_job = Job.objects.get(pk=normal_job.pk)
     mod_job.job_explanation = 'foobar'
-    mod_job.save(update_fields=['job_explanation'])
+    mod_job.save()
     new_job = update_model(Job, normal_job.pk)
     assert new_job.job_explanation == 'foobar'
 

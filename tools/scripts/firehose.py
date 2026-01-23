@@ -26,7 +26,7 @@
 
 import math
 import argparse
-import datetime
+from datetime import datetime, timezone
 import itertools
 import json
 import multiprocessing
@@ -310,12 +310,12 @@ if __name__ == '__main__':
                 if events > 0:
                     for k_id in created_job_ids:
                         generate_events(events, str(k_id), time_delta)
-                print(datetime.datetime.utcnow().isoformat())
+                print(datetime.datetime.now(timezone.utc).isoformat())
         conn.close()
 
     finally:
         # restore all indexes
-        print(datetime.datetime.utcnow().isoformat())
+        print(datetime.datetime.now(timezone.utc).isoformat())
         print('restoring indexes and constraints (this may take awhile)')
 
         workers = []
@@ -343,4 +343,4 @@ if __name__ == '__main__':
             sql = f'ALTER TABLE main_jobevent ADD CONSTRAINT {conname} {condef}'
             cleanup(sql)
 
-        print(datetime.datetime.utcnow().isoformat())
+        print(datetime.datetime.now(timezone.utc).isoformat())

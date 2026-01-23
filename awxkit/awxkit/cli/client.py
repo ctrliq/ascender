@@ -3,7 +3,7 @@ from __future__ import print_function
 import logging
 import os
 import sys
-from importlib_metadata import version as _get_version
+from importlib.metadata import version as _get_version
 
 from requests.exceptions import RequestException
 

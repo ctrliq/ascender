@@ -65,8 +65,8 @@ class TestJobTemplateLabelList:
             view = JobTemplateLabelList()
             mock_request = mock.MagicMock()
 
-            super(JobTemplateLabelList, view).unattach(mock_request, None, None)
-            assert mixin_unattach.called_with(mock_request, None, None)
+            view.unattach(mock_request, None, None)
+            mixin_unattach.assert_called_with(mock_request, None, None)
 
 
 class TestInventoryInventorySourcesUpdate:
