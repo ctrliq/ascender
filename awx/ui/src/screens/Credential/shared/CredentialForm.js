@@ -47,9 +47,6 @@ function CredentialFormFields({ initialTypeId, credentialTypes }) {
 
   const [credentialTypeId, setCredentialTypeId] = useState(initialTypeId);
 
-  const isGalaxyCredential =
-    !!credentialTypeId && credentialTypes[credentialTypeId]?.kind === 'galaxy';
-
   const [orgField, orgMeta, orgHelpers] = useField('organization');
 
   const credentialTypeOptions = Object.keys(credentialTypes)
@@ -179,15 +176,7 @@ function CredentialFormFields({ initialTypeId, credentialTypes }) {
         value={orgField.value}
         touched={orgMeta.touched}
         error={orgMeta.error}
-        required={isGalaxyCredential}
         isDisabled={initialValues.isOrgLookupDisabled}
-        validate={
-          isGalaxyCredential
-            ? required(
-                t`Galaxy credentials must be owned by an Organization.`
-              )
-            : undefined
-        }
       />
       <FormGroup
         fieldId="credential-Type"
