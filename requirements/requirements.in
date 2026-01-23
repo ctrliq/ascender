@@ -63,7 +63,7 @@ urllib3>=2.6.3 # CVE-2026-21441
 uWSGI>=2.0.22 # CVE-2023-27522
 uwsgitop
 valkey[libvalkey]
-wheel>=0.38.1  # CVE-2022-40898
+wheel>=0.46.2  # CVE-2026-24049
 pip==25.3  # see CVE-2025-8869
 setuptools==78.1.1  # CVE-2025-47273
 setuptools_scm[toml]  # see UPGRADE BLOCKERs, xmlsec build dep
