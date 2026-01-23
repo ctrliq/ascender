@@ -3,7 +3,7 @@ import sqlite3
 import sys
 import traceback
 import uuid
-from importlib_metadata import version as _get_version
+from importlib.metadata import version as _get_version
 
 from django.core.cache import cache
 from django.core.cache.backends.locmem import LocMemCache

@@ -1,6 +1,6 @@
 #!/usr/bin/awx-python
 import sys
-from importlib_metadata import distribution
+from importlib.metadata import distribution
 
 def load_entry_point(dist, group, name):
     dist_name, _, _ = dist.partition('==')

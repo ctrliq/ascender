@@ -6,7 +6,7 @@ import socket
 import logging
 import sys
 import traceback
-from datetime import datetime
+from datetime import datetime, timezone
 
 # Django
 from django.conf import settings
@@ -34,7 +34,7 @@ class RSysLogHandler(logging.handlers.SysLogHandler):
         # because the alternative is blocking the
         # socket.send() in the Python process, which we definitely don't
         # want to do)
-        dt = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
+        dt = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
         msg = f'{dt} ERROR rsyslogd was unresponsive: '
         exc = traceback.format_exc()
         try:

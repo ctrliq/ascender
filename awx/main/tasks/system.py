@@ -11,7 +11,7 @@ from io import StringIO
 from contextlib import redirect_stdout
 import shutil
 import time
-from distutils.version import LooseVersion as Version
+from packaging.version import Version
 from datetime import datetime
 
 # Django

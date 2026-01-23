@@ -1,6 +1,6 @@
 # Modifications Copyright (c) 2023 Ctrl IQ, Inc.
 
-PYTHON := $(notdir $(shell for i in python3.11 python3; do command -v $$i; done|sed 1q))
+PYTHON := $(notdir $(shell for i in python3.12 python3; do command -v $$i; done|sed 1q))
 SHELL := bash
 DOCKER_COMPOSE ?= docker compose
 OFFICIAL ?= no
@@ -60,7 +60,7 @@ RECEPTOR_IMAGE ?= quay.io/ansible/receptor:devel
 SRC_ONLY_PKGS ?= cffi,pycparser,psycopg,twilio
 # These should be upgraded in the AWX and Ansible venv before attempting
 # to install the actual requirements
-VENV_BOOTSTRAP ?= pip==25.3 setuptools==78.1.1 setuptools_scm[toml]==8.0.4 wheel==0.46.2
+VENV_BOOTSTRAP ?= pip==25.3 setuptools==80.9.0 setuptools_scm[toml]==9.2.2 wheel==0.46.2
 
 NAME ?= awx
 

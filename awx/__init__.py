@@ -5,7 +5,7 @@ from __future__ import absolute_import, unicode_literals
 import os
 import sys
 import warnings
-from importlib_metadata import PackageNotFoundError, version as _get_version
+from importlib.metadata import PackageNotFoundError, version as _get_version
 
 def get_version():
     version_from_file = get_version_from_file()

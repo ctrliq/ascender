@@ -39,7 +39,7 @@ msrestazure
 openshift
 packaging==24.2
 pexpect==4.7.0  # see library notes
-prometheus_client
+prometheus-client
 psycopg
 psutil
 pygerduty
@@ -56,7 +56,7 @@ social-auth-app-django
 sqlparse>=0.5.4   # Required by django
 requests>=2.32.5 # Fix unstable SSLContext caching feature
 slack-sdk
-tacacs_plus==1.0  # UPGRADE BLOCKER: auth does not work with later versions
+tacacs-plus==1.0  # UPGRADE BLOCKER: auth does not work with later versions
 twilio
 twisted[tls]>=24.7.0   # CVE-2024-41671
 urllib3>=2.6.3 # CVE-2026-21441
@@ -65,7 +65,7 @@ uwsgitop
 valkey[libvalkey]
 wheel>=0.46.2  # CVE-2026-24049
 pip==25.3  # see CVE-2025-8869
-setuptools==78.1.1  # CVE-2025-47273
-setuptools_scm[toml]  # see UPGRADE BLOCKERs, xmlsec build dep
+setuptools==80.9.0  # CVE-2025-47273
+setuptools-scm[toml]  # see UPGRADE BLOCKERs, xmlsec build dep
 setuptools-rust>=0.11.4  # cryptography build dep
 pkgconfig>=1.5.1  # xmlsec build dep - needed for offline build

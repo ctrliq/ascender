@@ -339,7 +339,7 @@ class Licenser(object):
                     end_date = parse(sub.get('endDate'))
                 except Exception:
                     continue
-                now = datetime.utcnow()
+                now = datetime.now(timezone.utc)
                 now = now.replace(tzinfo=end_date.tzinfo)
                 if end_date < now:
                     # If the sub has a past end date, skip it

@@ -13,7 +13,7 @@ aiosignal==1.4.0
     # via aiohttp
 annotated-types==0.6.0
     # via pydantic
-# git+https://github.com/ansible/ansible-runner.git@devel  # git requirements installed separately
+# ansible-runner @ git+https://github.com/ansible/ansible-runner.git@devel  # git requirements installed separately
     # via -r /awx_devel/requirements/requirements_git.txt
 asciichartpy==1.5.25
     # via -r /awx_devel/requirements/requirements.in
@@ -23,6 +23,7 @@ asgiref==3.11.0
     #   channels-valkey
     #   daphne
     #   django
+    #   django-ansible-base
     #   django-cors-headers
 asn1==2.7.0
     # via -r /awx_devel/requirements/requirements.in
@@ -72,7 +73,7 @@ botocore==1.39.1
     #   s3transfer
 cachetools==5.3.2
     # via google-auth
-# git+https://github.com/ansible/system-certifi.git@devel  # git requirements installed separately
+# certifi @ git+https://github.com/ansible/system-certifi.git@devel  # git requirements installed separately
     # via
     #   -r /awx_devel/requirements/requirements_git.txt
     #   kubernetes
@@ -132,7 +133,7 @@ django==5.2.9
     #   django-valkey
     #   djangorestframework
     #   social-auth-app-django
-# django-ansible-base @ git+https://github.com/ansible/django-ansible-base@devel  # git requirements installed separately
+# django-ansible-base[jwt-consumer,resource-registry,rest-filters] @ git+https://github.com/ansible/django-ansible-base@devel  # git requirements installed separately
     # via -r /awx_devel/requirements/requirements_git.txt
 django-auth-ldap==5.2.0
     # via -r /awx_devel/requirements/requirements.in
@@ -336,6 +337,7 @@ pygerduty==0.38.3
 pyjwt[crypto]==2.9.0
     # via
     #   adal
+    #   django-ansible-base
     #   msal
     #   social-auth-core
     #   twilio
@@ -369,7 +371,7 @@ python-tss-sdk==1.2.2
     # via -r /awx_devel/requirements/requirements.in
 python3-openid==3.2.0
     # via social-auth-core
-# git+https://github.com/ansible/python3-saml.git@devel  # git requirements installed separately
+# python3-saml @ git+https://github.com/ansible/python3-saml.git@devel  # git requirements installed separately
     # via -r /awx_devel/requirements/requirements_git.txt
 pytz==2024.1
     # via
@@ -393,6 +395,7 @@ requests==2.32.5
     #   -r /awx_devel/requirements/requirements.in
     #   adal
     #   azure-core
+    #   django-ansible-base
     #   django-oauth-toolkit
     #   kubernetes
     #   msal
@@ -481,6 +484,7 @@ urllib3==2.6.3
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   botocore
+    #   django-ansible-base
     #   kubernetes
     #   requests
 uwsgi==2.0.31
@@ -508,7 +512,7 @@ zope-interface==7.0.3
 # The following packages are considered to be unsafe in a requirements file:
 pip==25.3
     # via -r /awx_devel/requirements/requirements.in
-setuptools==78.1.1
+setuptools==80.9.0
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   asciichartpy
