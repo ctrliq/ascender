@@ -24,6 +24,7 @@ from awx.main.models import (
     WorkflowJobTemplateNode,
 )
 from awx.main.models.inventory import HostMetric, HostMetricSummaryMonthly
+from awx.main.models.jobs import JobTemplateMetric
 
 # mk methods should create only a single object of a single type.
 # they should also have the option of being persisted or not.
@@ -291,3 +292,18 @@ def mk_host_metric_summary(date, license_consumed=0, license_capacity=0, hosts_a
     if persisted:
         summary.save()
     return summary
+
+
+def mk_job_template_metric(job_template, first_automation, last_automation=None, last_deleted=None, deleted=False, automated_counter=0, persisted=True):
+    metric = JobTemplateMetric(
+        job_template=job_template,
+        name=job_template.name,
+        first_automation=first_automation,
+        last_automation=last_automation or first_automation,
+        last_deleted=last_deleted,
+        deleted=deleted,
+        automated_counter=automated_counter,
+    )
+    if persisted:
+        metric.save()
+    return metric

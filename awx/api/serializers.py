@@ -73,6 +73,8 @@ from awx.main.models import (
     JobLaunchConfig,
     JobNotificationMixin,
     JobTemplate,
+    JobTemplateMetric,
+    JobTemplateMetricsSummary,
     Label,
     Notification,
     NotificationTemplate,
@@ -5814,6 +5816,43 @@ class HostMetricSummaryMonthlySerializer(BaseSerializer):
         model = HostMetricSummaryMonthly
         read_only_fields = ("id", "date", "license_consumed", "license_capacity", "hosts_added", "hosts_deleted", "indirectly_managed_hosts")
         fields = read_only_fields
+
+
+class JobTemplateMetricSerializer(BaseSerializer):
+    class Meta:
+        model = JobTemplateMetric
+        fields = (
+            "name",
+            "url",
+            "id",
+            "first_job",
+            "last_job",
+            "total_jobs",
+            "total_seconds",
+            "successful_jobs",
+            "successful_seconds",
+            "failed_jobs",
+            "failed_seconds",
+            "canceled_jobs",
+            "canceled_seconds",
+        )
+
+
+class JobTemplateMetricsSummarySerializer(BaseSerializer):
+    class Meta:
+        model = JobTemplateMetricsSummary
+        fields = (
+            "first_job",
+            "last_job",
+            "total_jobs",
+            "total_seconds",
+            "successful_jobs",
+            "successful_seconds",
+            "failed_jobs",
+            "failed_seconds",
+            "canceled_jobs",
+            "canceled_seconds",
+        )
 
 
 class InstanceGroupSerializer(BaseSerializer):

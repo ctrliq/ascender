@@ -12,6 +12,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.functions import Cast
+from django.utils.timezone import now
 
 # from django.core.cache import cache
 from django.utils.translation import gettext_lazy as _
@@ -57,7 +58,7 @@ from awx.main.constants import JOB_VARIABLE_PREFIXES
 
 logger = logging.getLogger('awx.main.models.jobs')
 
-__all__ = ['JobTemplate', 'JobLaunchConfig', 'Job', 'JobHostSummary', 'SystemJobTemplate', 'SystemJob']
+__all__ = ['JobTemplate', 'JobLaunchConfig', 'Job', 'JobHostSummary', 'SystemJobTemplate', 'SystemJob', 'JobTemplateMetric', 'JobTemplateMetricsSummary']
 
 
 class JobOptions(BaseModel):
@@ -1296,3 +1297,132 @@ class SystemJob(UnifiedJob, SystemJobOptions, JobNotificationMixin):
 
     def get_notification_friendly_name(self):
         return "System Job"
+
+
+class JobTemplateMetric(models.Model):
+    """
+    Metrics tracking for Job Templates.
+    Tracks usage metrics per job template.
+    """
+
+    id = models.OneToOneField(
+        'JobTemplate',
+        on_delete=models.CASCADE,
+        related_name='job_template_metric',
+        primary_key=True,
+    )
+    name = models.CharField(
+        max_length=512,
+        unique=True,
+        help_text=_('Job template name for identification'),
+    )
+    first_job = models.DateTimeField(
+        auto_now_add=True,
+        null=False,
+        db_index=True,
+        help_text=_('When the job template was first used'),
+    )
+    last_job = models.DateTimeField(
+        db_index=True,
+        help_text=_('When the job template was last used'),
+    )
+    total_jobs = models.BigIntegerField(
+        default=0,
+        help_text=_('How many times the job template was used'),
+    )
+    total_seconds = models.BigIntegerField(
+        default=0,
+        help_text=_('Total seconds of all job executions'),
+    )
+    successful_jobs = models.BigIntegerField(
+        default=0,
+        help_text=_('How many times jobs from this template succeeded'),
+    )
+    successful_seconds = models.BigIntegerField(
+        default=0,
+        help_text=_('Total seconds of successful job executions'),
+    )
+    failed_jobs = models.BigIntegerField(
+        default=0,
+        help_text=_('How many times jobs from this template failed'),
+    )
+    failed_seconds = models.BigIntegerField(
+        default=0,
+        help_text=_('Total seconds of failed job executions'),
+    )
+    canceled_jobs = models.BigIntegerField(
+        default=0,
+        help_text=_('How many times jobs from this template were canceled'),
+    )
+    canceled_seconds = models.BigIntegerField(
+        default=0,
+        help_text=_('Total seconds of canceled job executions'),
+    )
+
+    objects = models.Manager()
+
+    class Meta:
+        ordering = ['-id']
+
+    def get_absolute_url(self, request=None):
+        return reverse('api:job_template_metric_detail', kwargs={'pk': self.pk}, request=request)
+
+
+class JobTemplateMetricsSummary(models.Model):
+    """
+    Aggregated metrics summary across all Job Templates.
+    Tracks combined usage metrics for all job templates.
+    """
+
+    id = models.AutoField(primary_key=True)
+    first_job = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text=_('When the first job template was first used'),
+    )
+    last_job = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text=_('When the last job template was last used'),
+    )
+    total_jobs = models.BigIntegerField(
+        default=0,
+        help_text=_('Total number of job template executions'),
+    )
+    total_seconds = models.BigIntegerField(
+        default=0,
+        help_text=_('Total seconds of all job executions across all templates'),
+    )
+    successful_jobs = models.BigIntegerField(
+        default=0,
+        help_text=_('Total successful jobs across all templates'),
+    )
+    successful_seconds = models.BigIntegerField(
+        default=0,
+        help_text=_('Total seconds of successful job executions across all templates'),
+    )
+    failed_jobs = models.BigIntegerField(
+        default=0,
+        help_text=_('Total failed jobs across all templates'),
+    )
+    failed_seconds = models.BigIntegerField(
+        default=0,
+        help_text=_('Total seconds of failed job executions across all templates'),
+    )
+    canceled_jobs = models.BigIntegerField(
+        default=0,
+        help_text=_('Total canceled jobs across all templates'),
+    )
+    canceled_seconds = models.BigIntegerField(
+        default=0,
+        help_text=_('Total seconds of canceled job executions across all templates'),
+    )
+
+    objects = models.Manager()
+
+    class Meta:
+        verbose_name = 'Job Template Metrics Summary'
+        verbose_name_plural = 'Job Template Metrics Summary'
+
+    def get_absolute_url(self, request=None):
+        return reverse('api:job_template_metrics_summary_view', request=request)

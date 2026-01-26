@@ -870,6 +870,11 @@ class UnifiedJob(
             self.started = now()
             if 'started' not in update_fields:
                 update_fields.append('started')
+            
+            # Update JobTemplateMetric for job templates
+            if hasattr(self, 'job_template') and self.job_template_id:
+                from awx.main.tasks.job_template_metrics import update_job_template_metric
+                update_job_template_metric(self.job_template_id, self.job_template.name)
 
         # Sanity check: Has the job just completed? If so, mark down its
         # completion time, and record its output to the database.
@@ -891,6 +896,12 @@ class UnifiedJob(
             self.elapsed = elapsed.quantize(dq)
             if 'elapsed' not in update_fields:
                 update_fields.append('elapsed')
+            
+            # Record job duration and status to JobTemplateMetric if this is a job with a template
+            if hasattr(self, 'job_template') and self.job_template_id:
+                from awx.main.tasks.job_template_metrics import record_job_template_metric_duration, record_job_template_metric_status
+                record_job_template_metric_duration(self.job_template_id, float(self.elapsed))
+                record_job_template_metric_status(self.job_template_id, self.status, float(self.elapsed))
 
         # Ensure that the job template information is current.
         if self.unified_job_template != self._get_parent_instance():

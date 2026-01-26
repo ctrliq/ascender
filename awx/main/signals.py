@@ -687,3 +687,17 @@ def create_access_token_user_if_missing(sender, **kwargs):
         post_save.disconnect(create_access_token_user_if_missing, sender=OAuth2AccessToken)
         obj.save()
         post_save.connect(create_access_token_user_if_missing, sender=OAuth2AccessToken)
+
+
+@receiver(post_save, sender=JobTemplate)
+def update_job_template_metric_name(sender, instance, **kwargs):
+    """Update JobTemplateMetric name when JobTemplate name is changed."""
+    try:
+        from awx.main.models.jobs import JobTemplateMetric
+        metric = JobTemplateMetric.objects.filter(id=instance.id).first()
+        if metric and metric.name != instance.name:
+            metric.name = instance.name
+            metric.save(update_fields=['name'])
+    except Exception:
+        # Fail silently if metric doesn't exist or other issues occur
+        pass

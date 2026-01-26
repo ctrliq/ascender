@@ -32,6 +32,8 @@ from awx.main.models.jobs import (  # noqa
     JobHostSummary,
     JobLaunchConfig,
     JobTemplate,
+    JobTemplateMetric,
+    JobTemplateMetricsSummary,
     SystemJob,
     SystemJobTemplate,
 )

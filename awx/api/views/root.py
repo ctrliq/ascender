@@ -110,6 +110,8 @@ class ApiVersionRootView(APIView):
         data['host_metrics'] = reverse('api:host_metric_list', request=request)
         data['host_metric_summary_monthly'] = reverse('api:host_metric_summary_monthly_list', request=request)
         data['job_templates'] = reverse('api:job_template_list', request=request)
+        data['job_template_metrics'] = reverse('api:job_template_metric_list', request=request)
+        data['job_template_metrics_summary'] = reverse('api:job_template_metrics_summary_view', request=request)
         data['jobs'] = reverse('api:job_list', request=request)
         data['ad_hoc_commands'] = reverse('api:ad_hoc_command_list', request=request)
         data['system_job_templates'] = reverse('api:system_job_template_list', request=request)

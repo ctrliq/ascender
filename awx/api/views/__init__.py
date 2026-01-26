@@ -1653,6 +1653,71 @@ class HostMetricSummaryMonthlyList(ListAPIView):
         return self.model.objects.all()
 
 
+class JobTemplateMetricList(ListAPIView):
+    name = _("Job Template Metrics List")
+    model = models.JobTemplateMetric
+    serializer_class = serializers.JobTemplateMetricSerializer
+    permission_classes = (IsSystemAdminOrAuditor,)
+    search_fields = ('name', 'deleted')
+
+    def get_queryset(self):
+        return self.model.objects.all()
+
+
+class JobTemplateMetricDetail(RetrieveAPIView):
+    name = _("Job Template Metric Detail")
+    model = models.JobTemplateMetric
+    serializer_class = serializers.JobTemplateMetricSerializer
+    permission_classes = (IsSystemAdminOrAuditor,)
+
+    def get_queryset(self):
+        return self.model.objects.all()
+
+
+class JobTemplateMetricsSummaryView(APIView):
+    name = _("Job Template Metrics Summary")
+
+    def get(self, request, *args, **kwargs):
+        """Return the aggregated metrics summary for all job templates."""
+        from django.core.exceptions import ObjectDoesNotExist
+        from django.db import ProgrammingError, IntegrityError
+        
+        try:
+            # Try to get the singleton summary record
+            try:
+                summary = models.JobTemplateMetricsSummary.objects.get(id=1)
+            except models.JobTemplateMetricsSummary.DoesNotExist:
+                # Create with no values specified - let database defaults apply
+                summary = models.JobTemplateMetricsSummary.objects.create(id=1)
+        except (ObjectDoesNotExist, ProgrammingError, IntegrityError):
+            # Table might not exist or has constraints - return empty data structure
+            return Response({
+                'first_job': None,
+                'last_job': None,
+                'total_jobs': 0,
+                'total_seconds': 0,
+                'successful_jobs': 0,
+                'successful_seconds': 0,
+                'failed_jobs': 0,
+                'failed_seconds': 0,
+                'canceled_jobs': 0,
+                'canceled_seconds': 0,
+            }, status=status.HTTP_200_OK)
+        
+        return Response({
+            'first_job': summary.first_job,
+            'last_job': summary.last_job,
+            'total_jobs': summary.total_jobs,
+            'total_seconds': summary.total_seconds,
+            'successful_jobs': summary.successful_jobs,
+            'successful_seconds': summary.successful_seconds,
+            'failed_jobs': summary.failed_jobs,
+            'failed_seconds': summary.failed_seconds,
+            'canceled_jobs': summary.canceled_jobs,
+            'canceled_seconds': summary.canceled_seconds,
+        }, status=status.HTTP_200_OK)
+
+
 class HostList(HostRelatedSearchMixin, ListCreateAPIView):
     always_allow_superuser = False
     model = models.Host

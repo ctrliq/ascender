@@ -54,6 +54,8 @@ from .execution_environments import urls as execution_environment_urls
 from .team import urls as team_urls
 from .host import urls as host_urls
 from .host_metric import urls as host_metric_urls
+from .job_template_metric import urls as job_template_metric_urls
+from .job_template_metrics_summary import urls as job_template_metrics_summary_urls
 from .group import urls as group_urls
 from .inventory_source import urls as inventory_source_urls
 from .inventory_update import urls as inventory_update_urls
@@ -126,6 +128,8 @@ v2_urls = [
     path('hosts/', include(host_urls)),
     path('host_metrics/', include(host_metric_urls)),
     path('host_metric_summary_monthly/', HostMetricSummaryMonthlyList.as_view(), name='host_metric_summary_monthly_list'),
+    path('job_template_metrics/', include(job_template_metric_urls)),
+    path('job_template_metrics_summary/', include(job_template_metrics_summary_urls)),
     path('groups/', include(group_urls)),
     path('inventory_sources/', include(inventory_source_urls)),
     path('inventory_updates/', include(inventory_update_urls)),
