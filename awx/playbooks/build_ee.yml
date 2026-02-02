@@ -65,9 +65,29 @@
       ignore_errors: true
       failed_when: false
 
-    - name: Install buildah if not installed
+    - name: Check for microdnf command
+      ansible.builtin.command: command -v microdnf
+      register: microdnf_check
+      ignore_errors: true
+      failed_when: false
+
+    - name: Check for dnf command
+      ansible.builtin.command: command -v dnf
+      register: dnf_check
+      ignore_errors: true
+      failed_when: false
+
+    - name: Install buildah via microdnf if not installed
       ansible.builtin.command: microdnf install -y buildah
-      when: buildah_check.rc != 0
+      when: 
+        - buildah_check.rc != 0
+        - microdnf_check.rc == 0
+
+    - name: Install buildah via dnf if not installed
+      ansible.builtin.command: dnf install -y buildah
+      when: 
+        - buildah_check.rc != 0
+        - dnf_check.rc == 0
 
     - name: Create execution environment definition file
       ansible.builtin.copy:
