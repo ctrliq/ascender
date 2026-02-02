@@ -1,9 +1,10 @@
 from awx.main.models import (
+    AdHocCommand,
+    ExecutionEnvironmentBuilderBuild,
     Job,
     ProjectUpdate,
     InventoryUpdate,
     SystemJob,
-    AdHocCommand,
     WorkflowJob,
 )
 
@@ -124,6 +125,9 @@ class DependencyGraph(object):
             return self.ad_hoc_command_blocked_by(job)
         elif type(job) is WorkflowJob:
             return self.workflow_job_blocked_by(job)
+        elif type(job) is ExecutionEnvironmentBuilderBuild:
+            # ExecutionEnvironmentBuilderBuild jobs have no blocking logic
+            return None
 
     def add_job(self, job):
         if type(job) is ProjectUpdate:
@@ -139,6 +143,9 @@ class DependencyGraph(object):
             self.mark_system_job(job)
         elif type(job) is AdHocCommand:
             self.mark_inventory_update(job)
+        elif type(job) is ExecutionEnvironmentBuilderBuild:
+            # ExecutionEnvironmentBuilderBuild jobs don't participate in blocking graph
+            pass
 
     def add_jobs(self, jobs):
         for j in jobs:
