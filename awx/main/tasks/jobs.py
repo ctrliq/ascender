@@ -50,11 +50,13 @@ from awx.main.models import (
     ProjectUpdate,
     InventoryUpdate,
     SystemJob,
+    ExecutionEnvironmentBuilderBuild,
     JobEvent,
     ProjectUpdateEvent,
     InventoryUpdateEvent,
     AdHocCommandEvent,
     SystemJobEvent,
+    ExecutionEnvironmentBuilderBuildEvent,
     build_safe_env,
 )
 from awx.main.tasks.callback import (
@@ -63,6 +65,7 @@ from awx.main.tasks.callback import (
     RunnerCallbackForInventoryUpdate,
     RunnerCallbackForProjectUpdate,
     RunnerCallbackForSystemJob,
+    RunnerCallbackForExecutionEnvironmentBuilderBuild,
 )
 from awx.main.tasks.signals import with_signal_handling, signal_callback
 from awx.main.tasks.receptor import AWXReceptorJob
@@ -155,6 +158,7 @@ class BaseTask(object):
             return {}
 
         image = instance.execution_environment.image
+        #image = "ghcr.io/ctrliq/ascender-ee:1b5b28d8c3d7fcae98a678b67d22c1b52d0dd152c8d1b924d3b8a9cb0907f71b"
         params = {
             "container_image": image,
             "process_isolation": True,
@@ -651,16 +655,19 @@ class BaseTask(object):
 
         # Field host_status_counts is used as a metric to check if event processing is finished
         # we send notifications if it is, if not, callback receiver will send them
-        if (self.instance.host_status_counts is not None) or (not self.runner_callback.wrapup_event_dispatched):
+        if self.instance and ((self.instance.host_status_counts is not None) or (not self.runner_callback.wrapup_event_dispatched)):
             self.instance.send_notification_templates('succeeded' if status == 'successful' else 'failed')
 
         try:
-            self.final_run_hook(self.instance, status, private_data_dir)
+            if self.instance:
+                self.final_run_hook(self.instance, status, private_data_dir)
         except Exception:
-            logger.exception('{} Final run hook errored.'.format(self.instance.log_format))
+            if self.instance:
+                logger.exception('{} Final run hook errored.'.format(self.instance.log_format))
 
-        self.instance.websocket_emit_status(status)
-        if status != 'successful':
+        if self.instance:
+            self.instance.websocket_emit_status(status)
+        if self.instance and status != 'successful':
             if status == 'canceled':
                 raise AwxTaskError.TaskCancel(self.instance, rc)
             else:
@@ -1919,3 +1926,108 @@ class RunSystemJob(BaseTask):
 
     def build_inventory(self, instance, private_data_dir):
         return None
+
+
+@task(queue=get_task_queuename)
+class RunExecutionEnvironmentBuilderBuild(BaseTask):
+    model = ExecutionEnvironmentBuilderBuild
+    event_model = ExecutionEnvironmentBuilderBuildEvent
+    callback_class = RunnerCallbackForExecutionEnvironmentBuilderBuild
+
+    def build_private_data(self, builder_build, private_data_dir):
+        """
+        Return credential data needed for this builder build.
+        """
+        private_data = {'credentials': {}}
+        if builder_build.execution_environment_builder.credential:
+            credential = builder_build.execution_environment_builder.credential
+            if credential.has_input('ssh_key_data'):
+                private_data['credentials'][credential] = credential.get_input('ssh_key_data', default='')
+        return private_data
+
+    def build_passwords(self, builder_build, runtime_passwords):
+        """
+        Build a dictionary of passwords for SSH private key unlock and registry auth.
+        """
+        passwords = super(RunExecutionEnvironmentBuilderBuild, self).build_passwords(builder_build, runtime_passwords)
+        if builder_build.execution_environment_builder.credential:
+            passwords['registry_key_unlock'] = builder_build.execution_environment_builder.credential.get_input('ssh_key_unlock', default='')
+            passwords['registry_username'] = builder_build.execution_environment_builder.credential.get_input('username', default='')
+            passwords['registry_password'] = builder_build.execution_environment_builder.credential.get_input('password', default='')
+        return passwords
+
+    def build_env(self, builder_build, private_data_dir, private_data_files=None):
+        """
+        Build environment dictionary for ansible-playbook.
+        """
+        env = super(RunExecutionEnvironmentBuilderBuild, self).build_env(builder_build, private_data_dir, private_data_files=private_data_files)
+        env['ANSIBLE_RETRY_FILES_ENABLED'] = str(False)
+        env['ANSIBLE_ASK_PASS'] = str(False)
+        env['ANSIBLE_BECOME_ASK_PASS'] = str(False)
+        env['DISPLAY'] = ''
+        env['TMP'] = settings.AWX_ISOLATION_BASE_PATH
+        env['EXECUTION_ENVIRONMENT_BUILDER_BUILD_ID'] = str(builder_build.pk)
+        return env
+
+    def build_inventory(self, instance, private_data_dir):
+        return 'localhost,'
+
+    def build_args(self, builder_build, private_data_dir, passwords):
+        """
+        Build command line argument list for running ansible-playbook.
+        """
+        args = []
+        if getattr(settings, 'EXECUTION_ENVIRONMENT_BUILDER_BUILD_VVV', False):
+            args.append('-vvv')
+        return args
+
+    def build_extra_vars_file(self, builder_build, private_data_dir):
+        extra_vars = {}
+        builder = builder_build.execution_environment_builder
+
+        extra_vars.update(
+            {
+                'execution_environment_builder_id': builder.pk,
+                'execution_environment_builder_build_id': builder_build.pk,
+                'execution_environment_name': builder.name,
+                'execution_environment_image': builder.image,
+                'execution_environment_tag': builder.tag,
+                'execution_environment_definition': builder.definition,
+            }
+        )
+
+        if builder.credential:
+            extra_vars['registry_credential'] = {
+                'url': builder.credential.get_input('host', default=''),
+                'username': builder.credential.get_input('username', default=''),
+                'password': builder.credential.get_input('password', default=''),
+                'verify_ssl': builder.credential.get_input('verify_ssl', default=True)
+            }
+
+        self._write_extra_vars_file(private_data_dir, extra_vars)
+
+    def build_playbook_path_relative_to_cwd(self, builder_build, private_data_dir):
+        return os.path.join('build_ee.yml')
+
+    def pre_run_hook(self, instance, private_data_dir):
+        super(RunExecutionEnvironmentBuilderBuild, self).pre_run_hook(instance, private_data_dir)
+
+    def build_execution_environment_params(self, instance, private_data_dir):
+        """
+        Return params structure to be executed by the container runtime.
+        For builder builds, we extend the base params to add security options.
+        """
+        params = super(RunExecutionEnvironmentBuilderBuild, self).build_execution_environment_params(instance, private_data_dir)
+        # Add security options for container builds
+        if params and 'container_options' in params:
+            params['container_options'].extend(['--privileged'])
+        return params
+
+    def build_project_dir(self, instance, private_data_dir):
+        # the build_ee playbook is not in a git repo, but uses a vendoring directory
+        # to be consistent with the ansible-runner model,
+        # that is moved into the runner project folder here
+        awx_playbooks = self.get_path_to('../../', 'playbooks')
+        import shutil
+        shutil.copytree(awx_playbooks, os.path.join(private_data_dir, 'project'))
+

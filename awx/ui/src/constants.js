@@ -5,6 +5,7 @@ export const JOB_TYPE_URL_SEGMENTS = {
   inventory_update: 'inventory',
   ad_hoc_command: 'command',
   workflow_job: 'workflow',
+  execution_environment_builder_build: 'build',
 };
 
 export const SESSION_TIMEOUT_KEY = 'awx-session-timeout';

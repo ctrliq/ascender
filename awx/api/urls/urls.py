@@ -51,6 +51,8 @@ from .project import urls as project_urls
 from .project_update import urls as project_update_urls
 from .inventory import urls as inventory_urls, constructed_inventory_urls
 from .execution_environments import urls as execution_environment_urls
+from .execution_environment_builder import urls as execution_environment_builder_urls
+from .execution_environment_builder_build import urls as execution_environment_builder_build_urls
 from .team import urls as team_urls
 from .host import urls as host_urls
 from .host_metric import urls as host_metric_urls
@@ -118,6 +120,8 @@ v2_urls = [
     path('organizations/', include(organization_urls)),
     path('users/', include(user_urls)),
     path('execution_environments/', include(execution_environment_urls)),
+    path('execution_environment_builders/', include(execution_environment_builder_urls)),
+    path('builds/', include(execution_environment_builder_build_urls)),
     path('projects/', include(project_urls)),
     path('project_updates/', include(project_update_urls)),
     path('teams/', include(team_urls)),

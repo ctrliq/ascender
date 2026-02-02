@@ -29,7 +29,7 @@ analytics_logger = logging.getLogger('awx.analytics.job_events')
 
 logger = logging.getLogger('awx.main.models.events')
 
-__all__ = ['JobEvent', 'ProjectUpdateEvent', 'AdHocCommandEvent', 'InventoryUpdateEvent', 'SystemJobEvent']
+__all__ = ['JobEvent', 'ProjectUpdateEvent', 'AdHocCommandEvent', 'InventoryUpdateEvent', 'SystemJobEvent', 'ExecutionEnvironmentBuilderBuildEvent']
 
 
 def sanitize_event_keys(kwargs, valid_keys):
@@ -71,6 +71,7 @@ def emit_event_detail(event):
         ProjectUpdateEvent: 'project_update_id',
         InventoryUpdateEvent: 'inventory_update_id',
         SystemJobEvent: 'system_job_id',
+        ExecutionEnvironmentBuilderBuildEvent: 'execution_environment_builder_build_id',
     }[cls]
     url = ''
     if isinstance(event, JobEvent):
@@ -416,11 +417,11 @@ class BasePlaybookEvent(CreatedModifiedModel):
         # Proceed with caution!
         #
         pk = None
-        for key in ('job_id', 'project_update_id'):
+        for key in ('job_id', 'project_update_id', 'ad_hoc_command_id', 'inventory_update_id', 'system_job_id', 'execution_environment_builder_build_id'):
             if key in kwargs:
                 pk = key
         if pk is None:
-            # payload must contain either a job_id or a project_update_id
+            # payload must contain a job reference ID
             return
 
         # Convert the datetime for the job event's creation appropriately,
@@ -964,3 +965,48 @@ class UnpartitionedSystemJobEvent(SystemJobEvent):
 
 
 UnpartitionedSystemJobEvent._meta.db_table = '_unpartitioned_' + SystemJobEvent._meta.db_table  # noqa
+
+
+class ExecutionEnvironmentBuilderBuildEvent(BasePlaybookEvent):
+    VALID_KEYS = BasePlaybookEvent.VALID_KEYS + ['execution_environment_builder_build_id', 'workflow_job_id', 'job_created']
+    JOB_REFERENCE = 'execution_environment_builder_build_id'
+
+    objects = DeferJobCreatedManager()
+
+    class Meta:
+        app_label = 'main'
+        ordering = ('pk',)
+        indexes = [
+            models.Index(fields=['execution_environment_builder_build', 'job_created', 'event']),
+            models.Index(fields=['execution_environment_builder_build', 'job_created', 'uuid']),
+            models.Index(fields=['execution_environment_builder_build', 'job_created', 'counter']),
+        ]
+
+    id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
+    execution_environment_builder_build = models.ForeignKey(
+        'ExecutionEnvironmentBuilderBuild',
+        related_name='execution_environment_builder_build_events',
+        null=True,
+        on_delete=models.DO_NOTHING,
+        editable=False,
+        db_index=False,
+        db_constraint=False,
+    )
+    parent_uuid = models.CharField(
+        max_length=1024,
+        default='',
+        editable=False,
+    )
+    job_created = models.DateTimeField(null=True, editable=False)
+
+    @property
+    def host_name(self):
+        return 'localhost'
+
+
+class UnpartitionedExecutionEnvironmentBuilderBuildEvent(ExecutionEnvironmentBuilderBuildEvent):
+    class Meta:
+        proxy = True
+
+
+UnpartitionedExecutionEnvironmentBuilderBuildEvent._meta.db_table = '_unpartitioned_' + ExecutionEnvironmentBuilderBuildEvent._meta.db_table  # noqa
