@@ -875,6 +875,118 @@ class ExecutionEnvironmentActivityStreamList(SubListAPIView):
     filter_read_permission = False
 
 
+class ExecutionEnvironmentBuilderList(ListCreateAPIView):
+    model = models.ExecutionEnvironmentBuilder
+    serializer_class = serializers.ExecutionEnvironmentBuilderSerializer
+
+
+class ExecutionEnvironmentBuilderDetail(RetrieveUpdateDestroyAPIView):
+    model = models.ExecutionEnvironmentBuilder
+    serializer_class = serializers.ExecutionEnvironmentBuilderSerializer
+
+
+class ExecutionEnvironmentBuilderAccessList(ResourceAccessList):
+    model = models.User
+    parent_model = models.ExecutionEnvironmentBuilder
+
+
+class ExecutionEnvironmentBuilderObjectRolesList(SubListAPIView):
+    model = models.Role
+    serializer_class = serializers.RoleSerializer
+    parent_model = models.ExecutionEnvironmentBuilder
+    search_fields = ('role_field', 'content_type__model')
+
+    def get_queryset(self):
+        parent = self.get_parent_object()
+        content_type = ContentType.objects.get_for_model(self.parent_model)
+        return models.Role.objects.filter(content_type=content_type, object_id=parent.pk)
+
+
+class ExecutionEnvironmentBuilderCopy(CopyAPIView):
+    model = models.ExecutionEnvironmentBuilder
+    copy_return_serializer_class = serializers.ExecutionEnvironmentBuilderSerializer
+
+
+class ExecutionEnvironmentBuilderLaunch(GenericAPIView):
+    model = models.ExecutionEnvironmentBuilder
+    serializer_class = serializers.EmptySerializer
+
+    def get(self, request, *args, **kwargs):
+        return Response({})
+
+    def post(self, request, *args, **kwargs):
+        obj = self.get_object()
+        new_build = models.ExecutionEnvironmentBuilderBuild.objects.create(
+            execution_environment_builder=obj,
+            name=request.data.get('name', f'{obj.name} Build'),
+        )
+        new_build.signal_start()
+        data = OrderedDict()
+        data['execution_environment_builder_build'] = new_build.id
+        return Response(data, status=status.HTTP_201_CREATED)
+
+
+class ExecutionEnvironmentBuilderBuildList(ListCreateAPIView):
+    model = models.ExecutionEnvironmentBuilderBuild
+    serializer_class = serializers.ExecutionEnvironmentBuilderBuildListSerializer
+
+    def perform_create(self, serializer):
+        obj = serializer.save()
+        obj.signal_start()
+
+class ExecutionEnvironmentBuilderBuildDetail(UnifiedJobDeletionMixin, RetrieveDestroyAPIView):
+    model = models.ExecutionEnvironmentBuilderBuild
+    serializer_class = serializers.ExecutionEnvironmentBuilderBuildDetailSerializer
+
+
+class ExecutionEnvironmentBuilderBuildCancel(GenericCancelView):
+    model = models.ExecutionEnvironmentBuilderBuild
+    serializer_class = serializers.ExecutionEnvironmentBuilderBuildCancelSerializer
+
+
+class ExecutionEnvironmentBuilderBuildRelaunch(GenericAPIView):
+    model = models.ExecutionEnvironmentBuilderBuild
+    serializer_class = serializers.ExecutionEnvironmentBuilderBuildRelaunchSerializer
+    obj_permission_type = 'start'
+
+    def get(self, request, *args, **kwargs):
+        obj = self.get_object()
+        return Response({})
+
+    def post(self, request, *args, **kwargs):
+        from django.utils.timezone import now
+        obj = self.get_object()
+        # Create a new build with the same configuration as the original
+        builder = obj.execution_environment_builder
+        current_date = now().strftime('%Y-%m-%d %H:%M:%S')
+        new_build = models.ExecutionEnvironmentBuilderBuild.objects.create(
+            execution_environment_builder=builder,
+            name=f"{builder.name if builder else ''}",
+            launch_type='relaunch',
+        )
+        new_build.signal_start()
+        return Response({'id': new_build.id})
+
+
+class ExecutionEnvironmentBuilderBuildEventsList(SubListAPIView):
+    model = models.ExecutionEnvironmentBuilderBuildEvent
+    serializer_class = serializers.ExecutionEnvironmentBuilderBuildEventSerializer
+    parent_model = models.ExecutionEnvironmentBuilderBuild
+    relationship = 'execution_environment_builder_build_events'
+    name = _('Execution Environment Builder Build Events List')
+    search_fields = ('stdout',)
+    pagination_class = UnifiedJobEventPagination
+
+    def finalize_response(self, request, response, *args, **kwargs):
+        response['X-UI-Max-Events'] = settings.MAX_UI_JOB_EVENTS
+        return super(ExecutionEnvironmentBuilderBuildEventsList, self).finalize_response(request, response, *args, **kwargs)
+
+    def get_queryset(self):
+        build = self.get_parent_object()
+        self.check_parent_access(build)
+        return build.get_event_queryset()
+
+
 class ProjectList(ListCreateAPIView):
     model = models.Project
     serializer_class = serializers.ProjectSerializer
@@ -4302,6 +4414,10 @@ class JobStdout(UnifiedJobStdout):
 
 class AdHocCommandStdout(UnifiedJobStdout):
     model = models.AdHocCommand
+
+
+class ExecutionEnvironmentBuilderBuildStdout(UnifiedJobStdout):
+    model = models.ExecutionEnvironmentBuilderBuild
 
 
 class NotificationTemplateList(ListCreateAPIView):

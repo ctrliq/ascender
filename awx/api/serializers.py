@@ -56,6 +56,9 @@ from awx.main.models import (
     CredentialInputSource,
     CredentialType,
     ExecutionEnvironment,
+    ExecutionEnvironmentBuilder,
+    ExecutionEnvironmentBuilderBuild,
+    ExecutionEnvironmentBuilderBuildEvent,
     Group,
     Host,
     HostMetric,
@@ -373,6 +376,7 @@ class BaseSerializer(serializers.ModelSerializer, metaclass=BaseSerializerMetacl
             'workflow_job': _('Workflow Job'),
             'workflow_job_template': _('Workflow Template'),
             'job_template': _('Job Template'),
+            'execution_environment_builder_build': _('EE Build'),
         }
         choices = []
         for t in self.get_types():
@@ -798,7 +802,7 @@ class UnifiedJobSerializer(BaseSerializer):
 
     def get_types(self):
         if type(self) is UnifiedJobSerializer:
-            return ['project_update', 'inventory_update', 'job', 'ad_hoc_command', 'system_job', 'workflow_job']
+            return ['project_update', 'inventory_update', 'job', 'ad_hoc_command', 'system_job', 'workflow_job', 'execution_environment_builder_build']
         else:
             return super(UnifiedJobSerializer, self).get_types()
 
@@ -907,7 +911,7 @@ class UnifiedJobListSerializer(UnifiedJobSerializer):
 
     def get_types(self):
         if type(self) is UnifiedJobListSerializer:
-            return ['project_update', 'inventory_update', 'job', 'ad_hoc_command', 'system_job', 'workflow_job']
+            return ['project_update', 'inventory_update', 'job', 'ad_hoc_command', 'system_job', 'workflow_job', 'execution_environment_builder_build']
         else:
             return super(UnifiedJobListSerializer, self).get_types()
 
@@ -928,6 +932,8 @@ class UnifiedJobListSerializer(UnifiedJobSerializer):
                 serializer_class = WorkflowJobListSerializer
             elif isinstance(obj, WorkflowApproval):
                 serializer_class = WorkflowApprovalListSerializer
+            elif isinstance(obj, ExecutionEnvironmentBuilderBuild):
+                serializer_class = ExecutionEnvironmentBuilderBuildListSerializer
         return serializer_class
 
     def to_representation(self, obj):
@@ -950,7 +956,7 @@ class UnifiedJobStdoutSerializer(UnifiedJobSerializer):
 
     def get_types(self):
         if type(self) is UnifiedJobStdoutSerializer:
-            return ['project_update', 'inventory_update', 'job', 'ad_hoc_command', 'system_job']
+            return ['project_update', 'inventory_update', 'job', 'ad_hoc_command', 'system_job', 'execution_environment_builder_build']
         else:
             return super(UnifiedJobStdoutSerializer, self).get_types()
 
@@ -1648,6 +1654,105 @@ class ProjectUpdateListSerializer(ProjectUpdateSerializer, UnifiedJobListSeriali
 
 class ProjectUpdateCancelSerializer(ProjectUpdateSerializer):
     can_cancel = serializers.BooleanField(read_only=True)
+
+    class Meta:
+        fields = ('can_cancel',)
+
+
+class ExecutionEnvironmentBuilderSerializer(BaseSerializer):
+    show_capabilities = ['edit', 'delete', 'copy']
+
+    class Meta:
+        model = ExecutionEnvironmentBuilder
+        fields = (
+            '*',
+            'organization',
+            'image',
+            'tag',
+            'credential',
+            'definition',
+        )
+
+    def get_related(self, obj):
+        res = super(ExecutionEnvironmentBuilderSerializer, self).get_related(obj)
+        res.update(
+            dict(
+                access_list=self.reverse('api:execution_environment_builder_access_list', kwargs={'pk': obj.pk}),
+                object_roles=self.reverse('api:execution_environment_builder_object_roles_list', kwargs={'pk': obj.pk}),
+            )
+        )
+        if obj.organization:
+            res['organization'] = self.reverse('api:organization_detail', kwargs={'pk': obj.organization.pk})
+        if obj.credential:
+            res['credential'] = self.reverse('api:credential_detail', kwargs={'pk': obj.credential.pk})
+        return res
+
+
+class ExecutionEnvironmentBuilderBuildSerializer(UnifiedJobSerializer):
+    type = serializers.SerializerMethodField()
+    execution_environment_builder = serializers.PrimaryKeyRelatedField(
+        queryset=ExecutionEnvironmentBuilder.objects.all(),
+        required=True,
+    )
+
+    class Meta:
+        model = ExecutionEnvironmentBuilderBuild
+        fields = (
+            '*',
+            'execution_environment_builder',
+            '-unified_job_template',
+        )
+
+    def get_type(self, obj):
+        return 'execution_environment_builder_build'
+
+
+class ExecutionEnvironmentBuilderBuildDetailSerializer(ExecutionEnvironmentBuilderBuildSerializer):
+    class Meta:
+        model = ExecutionEnvironmentBuilderBuild
+        fields = (
+            '*',
+            'execution_environment_builder',
+            '-unified_job_template',
+        )
+
+    def get_summary_fields(self, obj):
+        data = super().get_summary_fields(obj)
+        if obj.execution_environment_builder:
+            builder_summary = {
+                'id': obj.execution_environment_builder.id,
+                'name': obj.execution_environment_builder.name,
+                'image': obj.execution_environment_builder.image,
+                'tag': obj.execution_environment_builder.tag,
+            }
+            if obj.execution_environment_builder.credential:
+                builder_summary['summary_fields'] = {
+                    'credential': {
+                        'id': obj.execution_environment_builder.credential.id,
+                        'name': obj.execution_environment_builder.credential.name,
+                        'kind': obj.execution_environment_builder.credential.kind,
+                    }
+                }
+            data['execution_environment_builder'] = builder_summary
+        return data
+
+
+class ExecutionEnvironmentBuilderBuildListSerializer(ExecutionEnvironmentBuilderBuildSerializer, UnifiedJobListSerializer):
+    type = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = ExecutionEnvironmentBuilderBuild
+        fields = ('*', '-controller_node', '-unified_job_template')
+
+
+class ExecutionEnvironmentBuilderBuildCancelSerializer(ExecutionEnvironmentBuilderBuildSerializer):
+    can_cancel = serializers.BooleanField(read_only=True)
+
+
+class ExecutionEnvironmentBuilderBuildRelaunchSerializer(BaseSerializer):
+    class Meta:
+        model = ExecutionEnvironmentBuilderBuild
+        fields = ()
 
     class Meta:
         fields = ('can_cancel',)
@@ -4397,6 +4502,22 @@ class ProjectUpdateEventSerializer(JobEventSerializer):
                 return {}
         else:
             return obj.event_data
+
+
+class ExecutionEnvironmentBuilderBuildEventSerializer(JobEventSerializer):
+    stdout = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ExecutionEnvironmentBuilderBuildEvent
+        fields = ('*', '-name', '-description', '-job', '-job_id', '-parent_uuid', '-parent', '-host', 'execution_environment_builder_build')
+
+    def get_related(self, obj):
+        res = super(JobEventSerializer, self).get_related(obj)
+        res['execution_environment_builder_build'] = self.reverse('api:execution_environment_builder_build_detail', kwargs={'pk': obj.execution_environment_builder_build_id})
+        return res
+
+    def get_stdout(self, obj):
+        return UriCleaner.remove_sensitive(obj.stdout)
 
 
 class AdHocCommandEventSerializer(BaseSerializer):

@@ -1046,6 +1046,7 @@ class UnifiedJob(
             'main_projectupdate': 'project_update_id',
             'main_inventoryupdate': 'inventory_update_id',
             'main_systemjob': 'system_job_id',
+            'main_executionenvironmentbuilderbuild': 'execution_environment_builder_build_id',
         }[tablename]
 
     @property

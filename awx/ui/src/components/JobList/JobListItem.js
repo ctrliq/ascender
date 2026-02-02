@@ -49,6 +49,7 @@ function JobListItem({
     ad_hoc_command: t`Command`,
     system_job: t`Management Job`,
     workflow_job: t`Workflow Job`,
+    execution_environment_builder_build: t`Execution Environment Build`,
   };
 
   const {

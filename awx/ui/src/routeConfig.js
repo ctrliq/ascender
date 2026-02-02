@@ -7,6 +7,7 @@ import CredentialTypes from 'screens/CredentialType';
 import Credentials from 'screens/Credential';
 import Dashboard from 'screens/Dashboard';
 import ExecutionEnvironments from 'screens/ExecutionEnvironment';
+import ExecutionEnvironmentBuilder from 'screens/ExecutionEnvironmentBuilder';
 import Hosts from 'screens/Host';
 import Instances from 'screens/Instances';
 import InstanceGroups from 'screens/InstanceGroup';
@@ -128,6 +129,17 @@ function getRouteConfig(userProfile = {}) {
       ],
     },
     {
+      groupTitle: <Trans>Tools</Trans>,
+      groupId: 'tools_group',
+      routes: [
+        {
+          title: <Trans>Execution Environment Builder</Trans>,
+          path: '/execution_environment_builders',
+          screen: ExecutionEnvironmentBuilder,
+        },
+      ],
+    },
+    {
       groupTitle: <Trans>Administration</Trans>,
       groupId: 'administration_group',
       routes: [
@@ -211,6 +223,7 @@ function getRouteConfig(userProfile = {}) {
   deleteRoute('topology_view');
   deleteRoute('instances');
   deleteRoute('subscription_usage');
+  if (!userProfile?.isExecutionEnvironmentAdmin) deleteRouteGroup('tools_group');
   if (userProfile?.isOrgAdmin) return routeConfig;
   if (!userProfile?.isNotificationAdmin) deleteRoute('notification_templates');
 

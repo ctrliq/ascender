@@ -1,0 +1,106 @@
+- hosts: localhost
+  gather_facts: false
+  connection: local
+  name: Build the Execution Environment
+  tasks:
+    - name: Display EE build info
+      ansible.builtin.debug:
+        msg: "Building Execution Environment: {{ execution_environment_image }}:{{ execution_environment_tag }}"
+
+    - name: Set execution_environment_definition fact
+      ansible.builtin.set_fact:
+        eed: "{{ execution_environment_definition | from_yaml }}"
+
+    - name: Validate execution environment definition is provided
+      ansible.builtin.assert:
+        that:
+          - eed is defined
+          - eed | length > 0
+          - eed.version is defined
+          - eed.version == 3
+          - eed.images.base_image is defined
+          - eed.dependencies.ansible_core is defined
+          - eed.dependencies.ansible_runner is defined
+          - eed.dependencies.galaxy is defined
+        fail_msg: "Proper Execution environment v3 definition is required to build an execution environment."
+
+    - name: Validate execution environment definition is provided
+      ansible.builtin.assert:
+        that:
+          - eed.additional_build_files is not defined
+        fail_msg: "Ascender EE builder does not support additional build files."
+
+    - name: Ensure container config directories exists
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0700'
+      loop:
+        - ~/.docker
+        - ~/.config/containers
+
+    - name: Create Registries.conf
+      ansible.builtin.copy:
+        dest: ~/.config/containers/registries.conf
+        content: |
+          short-name-mode="permissive"
+          unqualified-search-registries = ["quay.io", "docker.io"]
+      become: true
+
+    - name: Check for ansible-builder command
+      ansible.builtin.command: command -v ansible-builder
+      register: ansible_builder_check
+      ignore_errors: true
+      failed_when: false
+
+    - name: Install ansible-builder via pip if not present
+      ansible.builtin.pip:
+        name: ansible-builder
+        state: present
+      when: ansible_builder_check.rc != 0
+
+    - name: Check for buildah
+      ansible.builtin.command: command -v buildah
+      register: buildah_check
+      ignore_errors: true
+      failed_when: false
+
+    - name: Install buildah if not installed
+      ansible.builtin.command: microdnf install -y buildah
+      when: buildah_check.rc != 0
+
+    - name: Create execution environment definition file
+      ansible.builtin.copy:
+        dest: ./execution-environment.yml
+        content: "{{ execution_environment_definition }}"
+
+    - name: Create registry login file
+      ansible.builtin.copy:
+        dest: ~/.docker/config.json
+        content: |
+          {
+            "auths": {
+              "{{ registry_credential.url }}": {
+                "auth": "{{ (registry_credential.username + ":" + registry_credential.password) | b64encode }}"
+              }
+            }
+          }
+      no_log: true
+      when: registry_credential is defined
+
+    - name: Run ansible-builder to create the EE context
+      ansible.builtin.command: ansible-builder create -v3 --context=./context
+
+    - name: Run buildah to build the EE image
+      ansible.builtin.command: >
+            buildah
+            --storage-driver=vfs
+            --network=host
+            {{ '--tls-verify=false' if registry_credential is defined and registry_credential.verify_ssl==False else '' }}
+            bud
+            -t
+            "{{ (execution_environment_image + ':' + execution_environment_tag) | quote }}"
+            ./context
+
+    # - pause:
+    #     minutes: 300
