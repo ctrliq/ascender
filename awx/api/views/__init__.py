@@ -1659,9 +1659,37 @@ class JobTemplateMetricList(ListAPIView):
     serializer_class = serializers.JobTemplateMetricSerializer
     permission_classes = (IsSystemAdminOrAuditor,)
     search_fields = ('name', 'deleted')
+    renderer_classes = [renderers.BrowsableAPIRenderer, renderers.PlainTextRenderer, JSONRenderer, renderers.PrometheusJSONRenderer]
 
     def get_queryset(self):
         return self.model.objects.all()
+    
+    def list(self, request, *args, **kwargs):
+        if settings.ALLOW_METRICS_FOR_ANONYMOUS_USERS or request.user.is_superuser or request.user.is_system_auditor:
+            """Override list to support Prometheus format via ?prometheus query param."""
+            if 'prometheus' in request.query_params:
+                metrics = self.get_queryset()
+                lines = []
+                for metric in metrics:
+                    # Format: awx_job_template{id="<id>"} <field>=<value>
+                    labels = f'id="{metric.id}"'
+                    lines.append('# HELP awx_job_template Job template metrics')
+                    lines.append('# TYPE awx_job_template counter')
+                    lines.append(f'awx_job_template{{{labels},type="total_jobs"}} {metric.total_jobs}')
+                    lines.append(f'awx_job_template{{{labels},type="total_seconds"}} {metric.total_seconds}')
+                    lines.append(f'awx_job_template{{{labels},type="successful_jobs"}} {metric.successful_jobs}')
+                    lines.append(f'awx_job_template{{{labels},type="successful_seconds"}} {metric.successful_seconds}')
+                    lines.append(f'awx_job_template{{{labels},type="failed_jobs"}} {metric.failed_jobs}')
+                    lines.append(f'awx_job_template{{{labels},type="failed_seconds"}} {metric.failed_seconds}')
+                    lines.append(f'awx_job_template{{{labels},type="canceled_jobs"}} {metric.canceled_jobs}')
+                    lines.append(f'awx_job_template{{{labels},type="canceled_seconds"}} {metric.canceled_seconds}')
+                
+                content = "\n".join(lines)
+
+                return Response(content)
+            
+            return super().list(request, *args, **kwargs)
+        raise PermissionDenied()
 
 
 class JobTemplateMetricDetail(RetrieveAPIView):
@@ -1669,53 +1697,78 @@ class JobTemplateMetricDetail(RetrieveAPIView):
     model = models.JobTemplateMetric
     serializer_class = serializers.JobTemplateMetricSerializer
     permission_classes = (IsSystemAdminOrAuditor,)
+    renderer_classes = [renderers.PlainTextRenderer, JSONRenderer, renderers.PrometheusJSONRenderer, renderers.BrowsableAPIRenderer]
 
     def get_queryset(self):
         return self.model.objects.all()
+    
+    def retrieve(self, request, *args, **kwargs):
+        if settings.ALLOW_METRICS_FOR_ANONYMOUS_USERS or request.user.is_superuser or request.user.is_system_auditor:
+            """Override retrieve to support Prometheus format via ?prometheus query param."""
+            if 'prometheus' in request.query_params:
+                metric = self.get_object()
+                lines = []
+                labels = f'id="{metric.id}"'
+                lines.append(f'awx_job_template{{{labels},type="total_jobs"}} {metric.total_jobs}')
+                lines.append(f'awx_job_template{{{labels},type="total_seconds"}} {metric.total_seconds}')
+                lines.append(f'awx_job_template{{{labels},type="successful_jobs"}} {metric.successful_jobs}')
+                lines.append(f'awx_job_template{{{labels},type="successful_seconds"}} {metric.successful_seconds}')
+                lines.append(f'awx_job_template{{{labels},type="failed_jobs"}} {metric.failed_jobs}')
+                lines.append(f'awx_job_template{{{labels},type="failed_seconds"}} {metric.failed_seconds}')
+                lines.append(f'awx_job_template{{{labels},type="canceled_jobs"}} {metric.canceled_jobs}')
+                lines.append(f'awx_job_template{{{labels},type="canceled_seconds"}} {metric.canceled_seconds}')
+                
+                content = "\n".join(lines)
+                return Response(content)
+            
+            return super().retrieve(request, *args, **kwargs)
+        raise PermissionDenied()
 
 
 class JobTemplateMetricsSummaryView(APIView):
     name = _("Job Template Metrics Summary")
 
     def get(self, request, *args, **kwargs):
-        """Return the aggregated metrics summary for all job templates."""
-        from django.core.exceptions import ObjectDoesNotExist
-        from django.db import ProgrammingError, IntegrityError
-        
-        try:
-            # Try to get the singleton summary record
+        if settings.ALLOW_METRICS_FOR_ANONYMOUS_USERS or request.user.is_superuser or request.user.is_system_auditor:
+            """Return the aggregated metrics summary for all job templates."""
+            from django.core.exceptions import ObjectDoesNotExist
+            from django.db import ProgrammingError, IntegrityError
+            
             try:
-                summary = models.JobTemplateMetricsSummary.objects.get(id=1)
-            except models.JobTemplateMetricsSummary.DoesNotExist:
-                # Create with no values specified - let database defaults apply
-                summary = models.JobTemplateMetricsSummary.objects.create(id=1)
-        except (ObjectDoesNotExist, ProgrammingError, IntegrityError):
-            # Table might not exist or has constraints - return empty data structure
+                # Try to get the singleton summary record
+                try:
+                    summary = models.JobTemplateMetricsSummary.objects.get(id=1)
+                except models.JobTemplateMetricsSummary.DoesNotExist:
+                    # Create with no values specified - let database defaults apply
+                    summary = models.JobTemplateMetricsSummary.objects.create(id=1)
+            except (ObjectDoesNotExist, ProgrammingError, IntegrityError):
+                # Table might not exist or has constraints - return empty data structure
+                return Response({
+                    'first_job': None,
+                    'last_job': None,
+                    'total_jobs': 0,
+                    'total_seconds': 0,
+                    'successful_jobs': 0,
+                    'successful_seconds': 0,
+                    'failed_jobs': 0,
+                    'failed_seconds': 0,
+                    'canceled_jobs': 0,
+                    'canceled_seconds': 0,
+                }, status=status.HTTP_200_OK)
+            
             return Response({
-                'first_job': None,
-                'last_job': None,
-                'total_jobs': 0,
-                'total_seconds': 0,
-                'successful_jobs': 0,
-                'successful_seconds': 0,
-                'failed_jobs': 0,
-                'failed_seconds': 0,
-                'canceled_jobs': 0,
-                'canceled_seconds': 0,
+                'first_job': summary.first_job,
+                'last_job': summary.last_job,
+                'total_jobs': summary.total_jobs,
+                'total_seconds': summary.total_seconds,
+                'successful_jobs': summary.successful_jobs,
+                'successful_seconds': summary.successful_seconds,
+                'failed_jobs': summary.failed_jobs,
+                'failed_seconds': summary.failed_seconds,
+                'canceled_jobs': summary.canceled_jobs,
+                'canceled_seconds': summary.canceled_seconds,
             }, status=status.HTTP_200_OK)
-        
-        return Response({
-            'first_job': summary.first_job,
-            'last_job': summary.last_job,
-            'total_jobs': summary.total_jobs,
-            'total_seconds': summary.total_seconds,
-            'successful_jobs': summary.successful_jobs,
-            'successful_seconds': summary.successful_seconds,
-            'failed_jobs': summary.failed_jobs,
-            'failed_seconds': summary.failed_seconds,
-            'canceled_jobs': summary.canceled_jobs,
-            'canceled_seconds': summary.canceled_seconds,
-        }, status=status.HTTP_200_OK)
+        raise PermissionDenied()
 
 
 class HostList(HostRelatedSearchMixin, ListCreateAPIView):
