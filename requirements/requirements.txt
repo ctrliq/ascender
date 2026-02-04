@@ -117,7 +117,7 @@ defusedxml==0.7.1
     #   social-auth-core
 distro==1.9.0
     # via -r /awx_devel/requirements/requirements.in
-django==5.2.9
+django==5.2.11
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   channels
