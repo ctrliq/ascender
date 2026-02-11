@@ -23,7 +23,7 @@ generate_requirements() {
   source "${venv}/bin/activate"
 
   # pip / setuptools version must match the version used in AWX venv (see README.md UPGRADE BLOCKERs)
-  "${venv}/bin/python3" -m pip install -U 'pip==25.3' 'setuptools==80.9.0' pip-tools
+  "${venv}/bin/python3" -m pip install -U 'pip==26.0.1' 'setuptools==80.9.0' pip-tools
 
   ${pip_compile} ${input_reqs} --output-file requirements.txt
   # consider the git requirements for purposes of resolving deps
