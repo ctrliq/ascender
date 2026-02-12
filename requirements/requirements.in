@@ -2,13 +2,13 @@ aiohttp>=3.13.3  # CVE-2025-69223 CVE-2025-69224 CVE-2025-69225 CVE-2025-69226 C
 asciichartpy
 asn1
 asyncpg
-azure-identity==1.16.1
+azure-identity>=1.25.2
 azure-keyvault
 boto3
 botocore
 channels
 channels-valkey
-cryptography>=44.0.1  # GHSA-h4gh-qq45-vh27
+cryptography>=46.0.5  # CVE-2026-26007
 Cython<3 # this is needed as a build dependency, one day we may have separated build deps
 daphne
 distro
@@ -44,7 +44,7 @@ prometheus-client
 psycopg
 psutil
 pygerduty
-pyopenssl>=24.3.0  # resolve dep conflict from cryptography pin above
+pyopenssl>=25.3.0  # resolve dep conflict from cryptography pin above
 pyparsing==2.4.6  # Upgrading to v3 of pyparsing introduce errors on smart host filtering: Expected 'or' term, found 'or'  (at char 15), (line:1, col:16)
 python-daemon>3.0.0
 python-dsv-sdk>=1.0.4
