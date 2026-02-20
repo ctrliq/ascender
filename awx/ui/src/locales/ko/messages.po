@@ -79,7 +79,7 @@ msgstr "실행 중인 상태 점검"
 msgid "Failed to copy inventory."
 msgstr "인벤토리를 복사하지 못했습니다."
 
-#: screens/Setting/Settings.js:111
+#: screens/Setting/Settings.js:115
 msgid "SAML"
 msgstr "SAML"
 
@@ -338,7 +338,7 @@ msgstr "검색 중..."
 msgid "Workflow Approval not found."
 msgstr "워크플로우 승인을 찾을 수 없습니다."
 
-#: screens/Setting/Settings.js:117
+#: screens/Setting/Settings.js:121
 msgid "TACACS+"
 msgstr "TACACS+"
 
@@ -537,7 +537,7 @@ msgstr "수요일"
 msgid "Always"
 msgstr "항상"
 
-#: screens/Credential/shared/CredentialForm.js:203
+#: screens/Credential/shared/CredentialForm.js:192
 msgid "You cannot change the credential type of a credential, as it may break the functionality of the resources using it."
 msgstr "자격 증명의 자격 증명 유형은 사용 중인 리소스의 기능이 손상될 수 있으므로 변경할 수 없습니다."
 
@@ -704,7 +704,7 @@ msgstr "캐시 제한 시간"
 msgid "No"
 msgstr "제공되지 않음"
 
-#: screens/Setting/Settings.js:105
+#: screens/Setting/Settings.js:109
 msgid "Miscellaneous System"
 msgstr "기타 시스템"
 
@@ -725,7 +725,7 @@ msgstr "성"
 msgid "Promote Child Groups and Hosts"
 msgstr "하위 그룹 및 호스트 승격"
 
-#: screens/Setting/Settings.js:71
+#: screens/Setting/Settings.js:75
 msgid "Google OAuth2"
 msgstr "Google OAuth2"
 
@@ -843,7 +843,7 @@ msgstr "토큰으로 돌아가기"
 #~ msgid "Webhooks: Enable webhook for this template."
 #~ msgstr "Webhook: 이 템플릿에 대한 Webhook을 활성화합니다."
 
-#: screens/Setting/Settings.js:86
+#: screens/Setting/Settings.js:90
 msgid "LDAP 5"
 msgstr "LDAP 5"
 
@@ -1111,7 +1111,7 @@ msgstr "클립보드에 전체 버전을 복사합니다."
 msgid "Error:"
 msgstr "오류:"
 
-#: screens/Setting/Settings.js:212
+#: screens/Setting/Settings.js:216
 msgid "View all settings"
 msgstr "모든 설정 보기"
 
@@ -1144,7 +1144,7 @@ msgid ""
 "          Zero means no limit will be enforced."
 msgstr ""
 
-#: screens/Credential/shared/CredentialForm.js:140
+#: screens/Credential/shared/CredentialForm.js:137
 msgid "Select a credential Type"
 msgstr "인증 정보 유형 선택"
 
@@ -1472,7 +1472,7 @@ msgstr "기존 그룹 추가"
 msgid "Deprovisioning these instances could impact other resources that rely on them. Are you sure you want to delete anyway?"
 msgstr "이러한 인스턴스의 프로비저닝을 해제하면 인스턴스에 의존하는 다른 리소스에 영향을 미칠 수 있습니다. 그래도 삭제하시겠습니까?"
 
-#: screens/Setting/Settings.js:85
+#: screens/Setting/Settings.js:89
 msgid "LDAP 4"
 msgstr "LDAP 4"
 
@@ -1627,7 +1627,7 @@ msgstr "시간"
 #: screens/Credential/CredentialList/CredentialList.js:142
 #: screens/Credential/CredentialList/CredentialList.js:165
 #: screens/Credential/CredentialList/CredentialListItem.js:59
-#: screens/Credential/shared/CredentialForm.js:162
+#: screens/Credential/shared/CredentialForm.js:159
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialsStep.js:71
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialsStep.js:91
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.js:69
@@ -1909,7 +1909,7 @@ msgstr "질문 추가"
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.js:177
 #: screens/CredentialType/CredentialTypeList/CredentialTypeListItem.js:39
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:170
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:101
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:102
 #: screens/Host/HostGroups/HostGroupItem.js:35
 #: screens/Host/HostGroups/HostGroupsList.js:179
 #: screens/Host/HostList/HostList.js:174
@@ -2271,8 +2271,8 @@ msgstr "총 작업"
 
 #: screens/Credential/CredentialDetail/CredentialDetail.js:242
 #: screens/Credential/CredentialList/CredentialList.js:159
-#: screens/Credential/shared/CredentialForm.js:129
-#: screens/Credential/shared/CredentialForm.js:199
+#: screens/Credential/shared/CredentialForm.js:126
+#: screens/Credential/shared/CredentialForm.js:188
 msgid "Credential Type"
 msgstr "인증 정보 유형"
 
@@ -2539,7 +2539,7 @@ msgstr "인스턴스"
 #: components/Search/Search.js:203
 #: components/Search/Search.js:227
 #: screens/ActivityStream/ActivityStream.js:143
-#: screens/Credential/shared/CredentialForm.js:144
+#: screens/Credential/shared/CredentialForm.js:141
 #: screens/Credential/shared/CredentialFormFields/BecomeMethodField.js:66
 #: screens/Dashboard/DashboardGraph.js:107
 #: screens/Inventory/shared/InventorySourceSubForms/SCMSubForm.js:145
@@ -2766,7 +2766,7 @@ msgstr "인스턴스 ID"
 msgid "Info"
 msgstr "정보"
 
-#: screens/Setting/Settings.js:82
+#: screens/Setting/Settings.js:86
 msgid "LDAP 1"
 msgstr "LDAP 1"
 
@@ -2932,7 +2932,7 @@ msgid "System"
 msgstr "시스템"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.js:95
-#: screens/Setting/Settings.js:59
+#: screens/Setting/Settings.js:63
 msgid "GitHub Team"
 msgstr "GitHub 팀"
 
@@ -3445,7 +3445,7 @@ msgstr "작업 취소"
 msgid "Instance State"
 msgstr "인스턴스 상태"
 
-#: screens/Setting/Settings.js:108
+#: screens/Setting/Settings.js:112
 msgid "RADIUS"
 msgstr "RADIUS"
 
@@ -3898,8 +3898,8 @@ msgstr "클릭하여 설문조사 질문의 순서를 다시 정렬합니다."
 #~ msgid "Remove any local modifications prior to performing an update."
 #~ msgstr "업데이트를 수행하기 전에 로컬 수정 사항을 제거합니다."
 
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:104
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:108
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:105
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:109
 msgid "Edit Execution Environment"
 msgstr "실행 환경 편집"
 
@@ -4769,8 +4769,8 @@ msgstr "드래그 앤 드롭 항목 ID: {newId} 가 시작되었습니다."
 msgid "Resource type"
 msgstr "리소스 유형"
 
-#: screens/Credential/shared/CredentialForm.js:334
-#: screens/Credential/shared/CredentialForm.js:340
+#: screens/Credential/shared/CredentialForm.js:323
+#: screens/Credential/shared/CredentialForm.js:329
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.js:83
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:485
 msgid "Test"
@@ -4827,7 +4827,7 @@ msgstr "동기화"
 #: screens/Application/shared/ApplicationForm.js:63
 #: screens/Credential/CredentialDetail/CredentialDetail.js:224
 #: screens/Credential/CredentialList/CredentialList.js:147
-#: screens/Credential/shared/CredentialForm.js:170
+#: screens/Credential/shared/CredentialForm.js:167
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.js:73
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.js:128
 #: screens/CredentialType/shared/CredentialTypeForm.js:30
@@ -4906,7 +4906,7 @@ msgid "Edit Team"
 msgstr "팀 편집"
 
 #: screens/Setting/SettingList.js:122
-#: screens/Setting/Settings.js:120
+#: screens/Setting/Settings.js:124
 msgid "User Interface"
 msgstr "사용자 인터페이스"
 
@@ -4919,7 +4919,7 @@ msgstr "사용자 인터페이스"
 msgid "View job {0}"
 msgstr "작업 {0} 보기 "
 
-#: screens/Login/Login.js:391
+#: screens/Login/Login.js:407
 msgid "Sign in with SAML {samlIDP}"
 msgstr "SAML {samlIDP}으로 로그인"
 
@@ -5039,7 +5039,7 @@ msgstr "인수"
 msgid "Grafana URL"
 msgstr "Grafana URL"
 
-#: screens/Login/Login.js:282
+#: screens/Login/Login.js:298
 msgid "Sign in with GitHub Organizations"
 msgstr "GitHub 조직으로 로그인"
 
@@ -5074,7 +5074,7 @@ msgstr "id 필드에서 정확한 검색"
 msgid "Debug"
 msgstr "디버그"
 
-#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.js:44
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.js:60
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.js:78
 #: screens/Setting/GoogleOAuth2/GoogleOAuth2Detail/GoogleOAuth2Detail.js:44
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.js:58
@@ -5141,7 +5141,7 @@ msgstr "빈도 예외 세부 정보"
 msgid "Deprovisioning fail"
 msgstr "프로비저닝 해제 실패"
 
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:118
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:119
 msgid "Copy Execution Environment"
 msgstr "실행 환경 복사"
 
@@ -5230,7 +5230,7 @@ msgstr ""
 #~ msgid "Playbook Directory"
 #~ msgstr ""
 
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:126
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:127
 msgid "Failed to copy execution environment"
 msgstr "실행 환경을 복사하지 못했습니다."
 
@@ -5352,7 +5352,7 @@ msgid "Setting name"
 msgstr "설정 이름"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.js:100
-#: screens/Setting/Settings.js:62
+#: screens/Setting/Settings.js:66
 msgid "GitHub Enterprise"
 msgstr "GitHub Enterprise"
 
@@ -5408,11 +5408,11 @@ msgstr "새 애플리케이션 만들기"
 msgid "Last Run"
 msgstr "마지막 실행"
 
-#: screens/Credential/shared/CredentialForm.js:130
+#: screens/Credential/shared/CredentialForm.js:127
 msgid "Select Credential Type"
 msgstr "인증 정보 유형 선택"
 
-#: screens/Setting/Settings.js:83
+#: screens/Setting/Settings.js:87
 msgid "LDAP 2"
 msgstr "LDAP 2"
 
@@ -5422,7 +5422,7 @@ msgstr "LDAP 2"
 msgid "Capacity"
 msgstr "용량"
 
-#: screens/Login/Login.js:392
+#: screens/Login/Login.js:408
 msgid "Sign in with SAML"
 msgstr "SAML으로 로그인"
 
@@ -5715,7 +5715,7 @@ msgstr "이전에 저장된 값으로 필드를 되돌리기"
 msgid "Edit Notification Template"
 msgstr "알림 템플릿 편집"
 
-#: screens/Setting/Settings.js:81
+#: screens/Setting/Settings.js:85
 msgid "LDAP Default"
 msgstr "LDAP 기본값"
 
@@ -5927,7 +5927,7 @@ msgid "Play"
 msgstr "플레이"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.js:110
-#: screens/Setting/Settings.js:68
+#: screens/Setting/Settings.js:72
 msgid "GitHub Enterprise Team"
 msgstr "GitHub Enterprise 팀"
 
@@ -6081,7 +6081,7 @@ msgstr "인증 정보 복사"
 #: screens/Job/Jobs.js:24
 #: screens/Job/Jobs.js:35
 #: screens/Setting/SettingList.js:92
-#: screens/Setting/Settings.js:77
+#: screens/Setting/Settings.js:81
 #: screens/Template/Template.js:156
 #: screens/Template/Templates.js:48
 #: screens/Template/WorkflowJobTemplate.js:141
@@ -6166,6 +6166,11 @@ msgstr "이러한 인스턴스 그룹을 삭제하면 인스턴스에 의존하�
 msgid "Source Control Revision"
 msgstr ""
 
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.js:67
+#: screens/Setting/Settings.js:50
+msgid "Azure AD Default"
+msgstr ""
+
 #: components/Search/LookupTypeInput.js:87
 msgid "Case-insensitive version of endswith."
 msgstr "마지막에 대소문자를 구분하지 않는 버전입니다."
@@ -6209,7 +6214,6 @@ msgstr "마지막에 대소문자를 구분하지 않는 버전입니다."
 #: screens/Organization/Organizations.js:32
 #: screens/Project/Project.js:104
 #: screens/Project/Projects.js:28
-#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.js:51
 #: screens/Setting/GoogleOAuth2/GoogleOAuth2Detail/GoogleOAuth2Detail.js:51
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.js:65
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.js:77
@@ -6219,31 +6223,32 @@ msgstr "마지막에 대소문자를 구분하지 않는 버전입니다."
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.js:56
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.js:52
 #: screens/Setting/Settings.js:47
-#: screens/Setting/Settings.js:50
+#: screens/Setting/Settings.js:51
 #: screens/Setting/Settings.js:54
-#: screens/Setting/Settings.js:57
-#: screens/Setting/Settings.js:60
-#: screens/Setting/Settings.js:63
-#: screens/Setting/Settings.js:66
-#: screens/Setting/Settings.js:69
-#: screens/Setting/Settings.js:72
-#: screens/Setting/Settings.js:75
-#: screens/Setting/Settings.js:78
-#: screens/Setting/Settings.js:87
-#: screens/Setting/Settings.js:88
-#: screens/Setting/Settings.js:89
-#: screens/Setting/Settings.js:90
+#: screens/Setting/Settings.js:58
+#: screens/Setting/Settings.js:61
+#: screens/Setting/Settings.js:64
+#: screens/Setting/Settings.js:67
+#: screens/Setting/Settings.js:70
+#: screens/Setting/Settings.js:73
+#: screens/Setting/Settings.js:76
+#: screens/Setting/Settings.js:79
+#: screens/Setting/Settings.js:82
 #: screens/Setting/Settings.js:91
 #: screens/Setting/Settings.js:92
-#: screens/Setting/Settings.js:100
-#: screens/Setting/Settings.js:103
-#: screens/Setting/Settings.js:106
-#: screens/Setting/Settings.js:109
-#: screens/Setting/Settings.js:112
-#: screens/Setting/Settings.js:115
-#: screens/Setting/Settings.js:118
-#: screens/Setting/Settings.js:121
-#: screens/Setting/Settings.js:124
+#: screens/Setting/Settings.js:93
+#: screens/Setting/Settings.js:94
+#: screens/Setting/Settings.js:95
+#: screens/Setting/Settings.js:96
+#: screens/Setting/Settings.js:104
+#: screens/Setting/Settings.js:107
+#: screens/Setting/Settings.js:110
+#: screens/Setting/Settings.js:113
+#: screens/Setting/Settings.js:116
+#: screens/Setting/Settings.js:119
+#: screens/Setting/Settings.js:122
+#: screens/Setting/Settings.js:125
+#: screens/Setting/Settings.js:128
 #: screens/Setting/TACACS/TACACSDetail/TACACSDetail.js:56
 #: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.js:61
 #: screens/Setting/UI/UIDetail/UIDetail.js:66
@@ -6330,6 +6335,10 @@ msgstr "오류"
 msgid "Third"
 msgstr "세 번째"
 
+#: screens/Login/Login.js:268
+msgid "Sign in with Azure AD Tenant"
+msgstr ""
+
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:116
 #~ msgid "Update revision on job launch"
@@ -6385,7 +6394,7 @@ msgstr "청취자 주소"
 msgid "If enabled, show the changes made by Ansible tasks, where supported. This is equivalent to Ansible’s --diff mode."
 msgstr "활성화된 경우 지원되는 Ansible 작업에서 변경한 내용을 표시합니다. 이는 Ansible의 --diff 모드와 동일합니다."
 
-#: screens/Setting/Settings.js:84
+#: screens/Setting/Settings.js:88
 msgid "LDAP 3"
 msgstr "LDAP 3"
 
@@ -6483,7 +6492,7 @@ msgid "Missing"
 msgstr "누락됨"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.js:90
-#: screens/Setting/Settings.js:56
+#: screens/Setting/Settings.js:60
 msgid "GitHub Organization"
 msgstr "GitHub 조직"
 
@@ -6595,7 +6604,7 @@ msgid "Edit Login redirect override URL"
 msgstr "로그인 리디렉션 덮어쓰기 URL 편집"
 
 #: screens/Setting/SettingList.js:133
-#: screens/Setting/Settings.js:114
+#: screens/Setting/Settings.js:118
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.js:169
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.js:197
 msgid "Subscription"
@@ -6856,31 +6865,32 @@ msgstr "항목 선택"
 #: screens/Project/Projects.js:27
 #: screens/Project/Projects.js:36
 #: screens/Setting/Settings.js:48
-#: screens/Setting/Settings.js:51
+#: screens/Setting/Settings.js:52
 #: screens/Setting/Settings.js:55
-#: screens/Setting/Settings.js:58
-#: screens/Setting/Settings.js:61
-#: screens/Setting/Settings.js:64
-#: screens/Setting/Settings.js:67
-#: screens/Setting/Settings.js:70
-#: screens/Setting/Settings.js:73
-#: screens/Setting/Settings.js:76
-#: screens/Setting/Settings.js:79
-#: screens/Setting/Settings.js:93
-#: screens/Setting/Settings.js:94
-#: screens/Setting/Settings.js:95
-#: screens/Setting/Settings.js:96
+#: screens/Setting/Settings.js:59
+#: screens/Setting/Settings.js:62
+#: screens/Setting/Settings.js:65
+#: screens/Setting/Settings.js:68
+#: screens/Setting/Settings.js:71
+#: screens/Setting/Settings.js:74
+#: screens/Setting/Settings.js:77
+#: screens/Setting/Settings.js:80
+#: screens/Setting/Settings.js:83
 #: screens/Setting/Settings.js:97
 #: screens/Setting/Settings.js:98
+#: screens/Setting/Settings.js:99
+#: screens/Setting/Settings.js:100
 #: screens/Setting/Settings.js:101
-#: screens/Setting/Settings.js:104
-#: screens/Setting/Settings.js:107
-#: screens/Setting/Settings.js:110
-#: screens/Setting/Settings.js:113
-#: screens/Setting/Settings.js:116
-#: screens/Setting/Settings.js:119
-#: screens/Setting/Settings.js:122
-#: screens/Setting/Settings.js:125
+#: screens/Setting/Settings.js:102
+#: screens/Setting/Settings.js:105
+#: screens/Setting/Settings.js:108
+#: screens/Setting/Settings.js:111
+#: screens/Setting/Settings.js:114
+#: screens/Setting/Settings.js:117
+#: screens/Setting/Settings.js:120
+#: screens/Setting/Settings.js:123
+#: screens/Setting/Settings.js:126
+#: screens/Setting/Settings.js:129
 #: screens/Team/Teams.js:30
 #: screens/Template/Templates.js:45
 #: screens/User/Users.js:30
@@ -7715,7 +7725,7 @@ msgstr "이 인벤토리 소스는 현재 이를 사용하는 다른 리소스�
 msgid "Deny"
 msgstr "거부"
 
-#: screens/Setting/Settings.js:74
+#: screens/Setting/Settings.js:78
 msgid "Generic OIDC"
 msgstr "일반 OIDC"
 
@@ -7997,8 +8007,8 @@ msgstr "인벤토리를 찾을 수 없음"
 #: components/Schedule/shared/SchedulePromptableFields.js:129
 #: components/Schedule/shared/UnsupportedScheduleForm.js:22
 #: components/Schedule/shared/UnsupportedScheduleForm.js:27
-#: screens/Credential/shared/CredentialForm.js:346
-#: screens/Credential/shared/CredentialForm.js:351
+#: screens/Credential/shared/CredentialForm.js:335
+#: screens/Credential/shared/CredentialForm.js:340
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.js:103
 #: screens/Credential/shared/ExternalTestModal.js:99
 #: screens/HostMetrics/HostMetricsDeleteButton.js:167
@@ -8030,6 +8040,11 @@ msgstr "인벤토리를 찾을 수 없음"
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListItem.js:130
 msgid "Cancel"
 msgstr "취소"
+
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.js:72
+#: screens/Setting/Settings.js:53
+msgid "Azure AD Tenant"
+msgstr ""
 
 #: screens/Application/Application/Application.js:98
 msgid "View all applications."
@@ -8075,7 +8090,7 @@ msgstr "이 프로젝트를 업데이트해야 합니다."
 msgid "Start sync process"
 msgstr "동기화 프로세스 시작"
 
-#: screens/Login/Login.js:359
+#: screens/Login/Login.js:375
 msgid "Sign in with Google"
 msgstr "Google로 로그인"
 
@@ -8239,8 +8254,8 @@ msgstr "소스 세부 정보"
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:160
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:164
 #: screens/Project/ProjectDetail/ProjectDetail.js:324
-#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.js:85
-#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.js:89
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.js:110
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.js:114
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.js:148
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.js:152
 #: screens/Setting/GoogleOAuth2/GoogleOAuth2Detail/GoogleOAuth2Detail.js:85
@@ -8635,7 +8650,7 @@ msgstr "상세 정보"
 msgid "Failed to toggle host."
 msgstr "호스트를 전환하지 못했습니다."
 
-#: screens/Login/Login.js:328
+#: screens/Login/Login.js:344
 msgid "Sign in with GitHub Enterprise Organizations"
 msgstr "GitHub Enterprise 조직으로 로그인"
 
@@ -8707,7 +8722,7 @@ msgstr "마지막 작업 상태"
 msgid "View User Interface settings"
 msgstr "사용자 인터페이스 설정 보기"
 
-#: screens/Login/Login.js:297
+#: screens/Login/Login.js:313
 msgid "Sign in with GitHub Teams"
 msgstr "GitHub 팀으로 로그인"
 
@@ -9592,8 +9607,8 @@ msgid "Health checks can only be run on execution nodes."
 msgstr "상태 검사는 실행 노드에서만 실행할 수 있습니다."
 
 #: screens/Setting/Settings.js:49
-msgid "Azure AD"
-msgstr "Azure AD"
+#~ msgid "Azure AD"
+#~ msgstr "Azure AD"
 
 #: screens/Metrics/Metrics.js:189
 msgid "Instance"
@@ -9900,7 +9915,7 @@ msgid "Modified By (Username)"
 msgstr "(사용자 이름)에 의해 수정됨"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.js:85
-#: screens/Setting/Settings.js:53
+#: screens/Setting/Settings.js:57
 msgid "GitHub Default"
 msgstr "GitHub 기본값"
 
@@ -10141,7 +10156,7 @@ msgstr "파일 업로드가 거부되었습니다. 단일 .json 파일을 선택
 msgid "No survey questions found."
 msgstr "설문 조사 질문을 찾을 수 없습니다."
 
-#: screens/Login/Login.js:312
+#: screens/Login/Login.js:328
 msgid "Sign in with GitHub Enterprise"
 msgstr "GitHub Enterprise로 로그인"
 
@@ -10287,7 +10302,7 @@ msgstr ""
 msgid "False"
 msgstr "False"
 
-#: screens/Login/Login.js:344
+#: screens/Login/Login.js:360
 msgid "Sign in with GitHub Enterprise Teams"
 msgstr "GitHub Enterprise 팀으로 로그인"
 
@@ -10310,7 +10325,7 @@ msgstr "인스턴스 그룹으로 돌아가기"
 msgid "Host OK"
 msgstr "호스트 확인"
 
-#: screens/Setting/AzureAD/AzureAD.js:26
+#: screens/Setting/AzureAD/AzureAD.js:42
 msgid "View Azure AD settings"
 msgstr "Azure AD 설정 보기"
 
@@ -10319,7 +10334,7 @@ msgstr "Azure AD 설정 보기"
 msgid "Clear all filters"
 msgstr "모든 필터 지우기"
 
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:86
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:87
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.js:102
 #: screens/Template/Survey/SurveyList.js:109
 #: screens/Template/Survey/SurveyList.js:109
@@ -10374,7 +10389,7 @@ msgid "Not Found"
 msgstr "찾을 수 없음"
 
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:79
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:98
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:99
 msgid "Globally Available"
 msgstr "전역적으로 사용 가능"
 
@@ -10520,7 +10535,7 @@ msgstr "대시보드 ID (선택 사항)"
 msgid "Inventory Source Sync Error"
 msgstr "인벤토리 소스 동기화 오류"
 
-#: screens/Login/Login.js:373
+#: screens/Login/Login.js:389
 msgid "Sign in with OIDC"
 msgstr "OIDC로 로그인"
 
@@ -10582,7 +10597,7 @@ msgid "Remote Archive"
 msgstr "원격 아카이브"
 
 #: screens/Setting/SettingList.js:144
-#: screens/Setting/Settings.js:123
+#: screens/Setting/Settings.js:127
 msgid "Troubleshooting"
 msgstr "문제 해결"
 
@@ -10762,7 +10777,7 @@ msgstr "총 호스트"
 msgid "Cancel Inventory Source Sync"
 msgstr "인벤토리 소스 동기화 취소"
 
-#: screens/Setting/Settings.js:102
+#: screens/Setting/Settings.js:106
 msgid "Miscellaneous Authentication"
 msgstr "기타 인증"
 
@@ -11047,8 +11062,8 @@ msgstr "시작"
 #: components/Schedule/shared/ScheduleForm.js:539
 #: components/Schedule/shared/useSchedulePromptSteps.js:50
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:379
-#: screens/Credential/shared/CredentialForm.js:321
-#: screens/Credential/shared/CredentialForm.js:326
+#: screens/Credential/shared/CredentialForm.js:310
+#: screens/Credential/shared/CredentialForm.js:315
 #: screens/Setting/shared/RevertFormActionGroup.js:13
 #: screens/Setting/shared/RevertFormActionGroup.js:19
 #: screens/Template/Survey/SurveyReorderModal.js:206
@@ -11269,7 +11284,7 @@ msgstr "(사용자 이름)에 의해 생성됨"
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:70
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:156
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:169
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:90
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:91
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:179
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:101
 #: screens/Inventory/InventoryList/InventoryList.js:203
@@ -11537,8 +11552,8 @@ msgid "Hosts automated"
 msgstr "자동화된 호스트"
 
 #: screens/Credential/shared/CredentialForm.js:187
-msgid "Galaxy credentials must be owned by an Organization."
-msgstr "Galaxy 인증 정보는 조직에 속해 있어야 합니다."
+#~ msgid "Galaxy credentials must be owned by an Organization."
+#~ msgstr "Galaxy 인증 정보는 조직에 속해 있어야 합니다."
 
 #: screens/Team/Team.js:119
 msgid "View Team Details"
@@ -11664,7 +11679,7 @@ msgstr "마지막으로 변경된 사항"
 msgid "Hosts available"
 msgstr "사용 가능한 호스트"
 
-#: screens/Setting/Settings.js:99
+#: screens/Setting/Settings.js:103
 msgid "Logging"
 msgstr "로깅"
 
@@ -11742,7 +11757,7 @@ msgstr "이러한 인벤토리를 삭제하면 인벤토리에 의존하는 일�
 msgid "Exact search on name field."
 msgstr "이름 필드에 대한 정확한 검색."
 
-#: screens/Login/Login.js:267
+#: screens/Login/Login.js:283
 msgid "Sign in with GitHub"
 msgstr "GitHub로 로그인"
 
@@ -11861,7 +11876,7 @@ msgid "Google Compute Engine"
 msgstr "Google Compute Engine"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.js:105
-#: screens/Setting/Settings.js:65
+#: screens/Setting/Settings.js:69
 msgid "GitHub Enterprise Organization"
 msgstr "GitHub Enterprise 조직"
 

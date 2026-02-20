@@ -185,6 +185,10 @@ class AuthenticationBackendsField(fields.StringListField):
             ),
             ('social_core.backends.azuread.AzureADOAuth2', ['SOCIAL_AUTH_AZUREAD_OAUTH2_KEY', 'SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET']),
             (
+                'social_core.backends.azuread_tenant.AzureADTenantOAuth2',
+                ['SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY', 'SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET', 'SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TENANT_ID'],
+            ),
+            (
                 'awx.sso.backends.SAMLAuth',
                 [
                     'SOCIAL_AUTH_SAML_SP_ENTITY_ID',

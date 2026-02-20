@@ -1224,6 +1224,83 @@ register(
 )
 
 ###############################################################################
+# MICROSOFT AZURE ACTIVE DIRECTORY TENANT SETTINGS
+###############################################################################
+
+register(
+    'SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_CALLBACK_URL',
+    field_class=fields.CharField,
+    read_only=True,
+    default=SocialAuthCallbackURL('azuread-tenant-oauth2'),
+    label=_('Azure AD Tenant OAuth2 Callback URL'),
+    help_text=_(
+        'Provide this URL as the callback URL for your application as part '
+        'of your registration process. Refer to the documentation for more detail.'
+    ),
+    category=_('Azure AD Tenant OAuth2'),
+    category_slug='azuread-oauth2-tenant',
+    depends_on=['TOWER_URL_BASE'],
+)
+
+register(
+    'SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY',
+    field_class=fields.CharField,
+    allow_blank=True,
+    default='',
+    label=_('Azure AD Tenant OAuth2 Key'),
+    help_text=_('The OAuth2 key (Client ID) from your Azure AD application.'),
+    category=_('Azure AD Tenant OAuth2'),
+    category_slug='azuread-oauth2-tenant',
+)
+
+register(
+    'SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET',
+    field_class=fields.CharField,
+    allow_blank=True,
+    default='',
+    label=_('Azure AD Tenant OAuth2 Secret'),
+    help_text=_('The OAuth2 secret (Client Secret) from your Azure AD application.'),
+    category=_('Azure AD Tenant OAuth2'),
+    category_slug='azuread-oauth2-tenant',
+    encrypted=True,
+)
+
+register(
+    'SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TENANT_ID',
+    field_class=fields.CharField,
+    allow_blank=True,
+    default='',
+    label=_('Azure AD Tenant ID'),
+    help_text=_('The directory/tenant ID of your Azure AD application. This limits authentication to a single tenant.'),
+    category=_('Azure AD Tenant OAuth2'),
+    category_slug='azuread-oauth2-tenant',
+)
+
+register(
+    'SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_ORGANIZATION_MAP',
+    field_class=SocialOrganizationMapField,
+    allow_null=True,
+    default=None,
+    label=_('Azure AD Tenant OAuth2 Organization Map'),
+    help_text=SOCIAL_AUTH_ORGANIZATION_MAP_HELP_TEXT,
+    category=_('Azure AD Tenant OAuth2'),
+    category_slug='azuread-oauth2-tenant',
+    placeholder=SOCIAL_AUTH_ORGANIZATION_MAP_PLACEHOLDER,
+)
+
+register(
+    'SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TEAM_MAP',
+    field_class=SocialTeamMapField,
+    allow_null=True,
+    default=None,
+    label=_('Azure AD Tenant OAuth2 Team Map'),
+    help_text=SOCIAL_AUTH_TEAM_MAP_HELP_TEXT,
+    category=_('Azure AD Tenant OAuth2'),
+    category_slug='azuread-oauth2-tenant',
+    placeholder=SOCIAL_AUTH_TEAM_MAP_PLACEHOLDER,
+)
+
+###############################################################################
 # Generic OIDC AUTHENTICATION SETTINGS
 ###############################################################################
 

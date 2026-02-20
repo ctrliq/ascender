@@ -13,6 +13,7 @@ from awx.sso.common import (
     is_remote_auth_enabled,
     get_external_account,
 )
+from awx.sso.fields import AuthenticationBackendsField
 
 
 class MicroMockObject(object):
@@ -375,3 +376,94 @@ class TestCommonFunctions:
         with override_settings(**{key_one: key_one_value}):
             with override_settings(**{key_two: key_two_value}):
                 assert is_remote_auth_enabled() == expected
+
+
+@pytest.mark.django_db
+class TestAzureADTenantOAuth2:
+    """Tests for Azure AD Tenant OAuth2 backend integration."""
+
+    def test_azuread_tenant_in_required_backend_settings(self):
+        """Verify the AzureAD Tenant backend is registered in REQUIRED_BACKEND_SETTINGS."""
+        backend_path = 'social_core.backends.azuread_tenant.AzureADTenantOAuth2'
+        assert backend_path in AuthenticationBackendsField.REQUIRED_BACKEND_SETTINGS
+
+    def test_azuread_tenant_required_settings(self):
+        """Verify the correct settings are required to enable the tenant backend."""
+        backend_path = 'social_core.backends.azuread_tenant.AzureADTenantOAuth2'
+        required = AuthenticationBackendsField.REQUIRED_BACKEND_SETTINGS[backend_path]
+        assert 'SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY' in required
+        assert 'SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET' in required
+        assert 'SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TENANT_ID' in required
+        assert len(required) == 3
+
+    def test_azuread_tenant_key_enables_remote_auth(self):
+        """Verify that setting the tenant key enables remote auth detection."""
+        with override_settings(SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY='test-key'):
+            assert is_remote_auth_enabled() is True
+
+    def test_azuread_tenant_key_absent_no_remote_auth(self):
+        """Verify that without any auth settings, remote auth is not enabled."""
+        with override_settings(JUNK_SETTING='test'):
+            assert is_remote_auth_enabled() is False
+
+    @pytest.mark.parametrize(
+        "setting, expected",
+        [
+            ('SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY', True),
+            ('SOCIAL_AUTH_AZUREAD_OAUTH2_KEY', True),
+        ],
+    )
+    def test_is_remote_auth_enabled_azuread_variants(self, setting, expected):
+        """Both Azure AD (common) and Azure AD Tenant keys should enable remote auth."""
+        with override_settings(**{setting: 'some-value'}):
+            assert is_remote_auth_enabled() == expected
+
+    def test_azuread_common_and_tenant_both_registered(self):
+        """Verify both Azure AD backends are in REQUIRED_BACKEND_SETTINGS."""
+        common_path = 'social_core.backends.azuread.AzureADOAuth2'
+        tenant_path = 'social_core.backends.azuread_tenant.AzureADTenantOAuth2'
+        assert common_path in AuthenticationBackendsField.REQUIRED_BACKEND_SETTINGS
+        assert tenant_path in AuthenticationBackendsField.REQUIRED_BACKEND_SETTINGS
+
+    def test_azuread_tenant_settings_in_all_required(self):
+        """Verify tenant settings appear in the aggregated set of all required settings."""
+        all_settings = AuthenticationBackendsField.get_all_required_settings()
+        assert 'SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY' in all_settings
+        assert 'SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET' in all_settings
+        assert 'SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TENANT_ID' in all_settings
+
+    def test_azuread_tenant_not_enabled_without_all_settings(self):
+        """Backend should not be enabled if only some required settings are provided."""
+        with override_settings(
+            SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY='test-key',
+            SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET='',
+            SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TENANT_ID='',
+        ):
+            field = AuthenticationBackendsField()
+            backends = field._default_from_required_settings()
+            assert 'social_core.backends.azuread_tenant.AzureADTenantOAuth2' not in backends
+
+    def test_azuread_tenant_enabled_with_all_settings(self):
+        """Backend should be enabled when all required settings are provided."""
+        with override_settings(
+            SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY='test-client-id',
+            SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET='test-client-secret',
+            SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TENANT_ID='test-tenant-id',
+        ):
+            field = AuthenticationBackendsField()
+            backends = field._default_from_required_settings()
+            assert 'social_core.backends.azuread_tenant.AzureADTenantOAuth2' in backends
+
+    def test_azuread_common_and_tenant_independent(self):
+        """Enabling one Azure AD backend should not affect the other."""
+        with override_settings(
+            SOCIAL_AUTH_AZUREAD_OAUTH2_KEY='common-key',
+            SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET='common-secret',
+            SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY='',
+            SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET='',
+            SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TENANT_ID='',
+        ):
+            field = AuthenticationBackendsField()
+            backends = field._default_from_required_settings()
+            assert 'social_core.backends.azuread.AzureADOAuth2' in backends
+            assert 'social_core.backends.azuread_tenant.AzureADTenantOAuth2' not in backends
