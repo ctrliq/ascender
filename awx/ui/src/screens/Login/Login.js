@@ -256,6 +256,22 @@ function AWXLogin({ alt, isAuthenticated }) {
                     </LoginMainFooterLinksItem>
                   );
                 }
+                if (authKey === 'azuread-tenant-oauth2') {
+                  return (
+                    <LoginMainFooterLinksItem
+                      data-cy="social-auth-azure-tenant"
+                      href={loginUrl}
+                      key={authKey}
+                      onClick={setSessionRedirect}
+                    >
+                      <Tooltip
+                        content={t`Sign in with Azure AD Tenant`}
+                      >
+                        <AzureIcon size="lg" />
+                      </Tooltip>
+                    </LoginMainFooterLinksItem>
+                  );
+                }
                 if (authKey === 'github') {
                   return (
                     <LoginMainFooterLinksItem

@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect, useRouteMatch } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
 import { CaretLeftIcon } from '@patternfly/react-icons';
@@ -19,17 +19,33 @@ function AzureADDetail() {
   const { me } = useConfig();
   const { GET: options } = useSettings();
 
+  const baseURL = '/settings/azure';
+  const {
+    path,
+    params: { category },
+  } = useRouteMatch(`${baseURL}/:category/details`);
+
   const {
     isLoading,
     error,
     request,
-    result: azure,
+    result: azureDetails,
   } = useRequest(
     useCallback(async () => {
-      const { data } = await SettingsAPI.readCategory('azuread-oauth2');
-      return data;
+      const [{ data: azureDefault }, { data: azureTenant }] =
+        await Promise.all([
+          SettingsAPI.readCategory('azuread-oauth2'),
+          SettingsAPI.readCategory('azuread-oauth2-tenant'),
+        ]);
+      return {
+        default: azureDefault,
+        tenant: azureTenant,
+      };
     }, []),
-    null
+    {
+      default: null,
+      tenant: null,
+    }
   );
 
   useEffect(() => {
@@ -48,11 +64,20 @@ function AzureADDetail() {
       id: 99,
     },
     {
-      name: t`Details`,
-      link: `/settings/azure/details`,
+      name: t`Azure AD Default`,
+      link: `${baseURL}/default/details`,
       id: 0,
     },
+    {
+      name: t`Azure AD Tenant`,
+      link: `${baseURL}/tenant/details`,
+      id: 1,
+    },
   ];
+
+  if (!Object.keys(azureDetails).includes(category)) {
+    return <Redirect from={path} to={`${baseURL}/default/details`} exact />;
+  }
 
   return (
     <>
@@ -60,9 +85,9 @@ function AzureADDetail() {
       <CardBody>
         {isLoading && <ContentLoading />}
         {!isLoading && error && <ContentError error={error} />}
-        {!isLoading && azure && (
+        {!isLoading && !Object.values(azureDetails)?.includes(null) && (
           <DetailList>
-            {Object.keys(azure).map((key) => {
+            {Object.keys(azureDetails[category]).map((key) => {
               const record = options?.[key];
               return (
                 <SettingDetail
@@ -72,7 +97,7 @@ function AzureADDetail() {
                   label={record?.label}
                   type={record?.type}
                   unit={record?.unit}
-                  value={azure?.[key]}
+                  value={azureDetails[category][key]}
                 />
               );
             })}
@@ -84,7 +109,7 @@ function AzureADDetail() {
               ouiaId="azure-detail-edit-button"
               aria-label={t`Edit`}
               component={Link}
-              to="/settings/azure/edit"
+              to={`${baseURL}/${category}/edit`}
             >
               {t`Edit`}
             </Button>

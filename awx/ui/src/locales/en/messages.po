@@ -79,7 +79,7 @@ msgstr "Running health check"
 msgid "Failed to copy inventory."
 msgstr "Failed to copy inventory."
 
-#: screens/Setting/Settings.js:111
+#: screens/Setting/Settings.js:115
 msgid "SAML"
 msgstr "SAML"
 
@@ -345,7 +345,7 @@ msgstr "Browse…"
 msgid "Workflow Approval not found."
 msgstr "Workflow Approval not found."
 
-#: screens/Setting/Settings.js:117
+#: screens/Setting/Settings.js:121
 msgid "TACACS+"
 msgstr "TACACS+"
 
@@ -551,7 +551,7 @@ msgstr "Wed"
 msgid "Always"
 msgstr "Always"
 
-#: screens/Credential/shared/CredentialForm.js:203
+#: screens/Credential/shared/CredentialForm.js:192
 msgid "You cannot change the credential type of a credential, as it may break the functionality of the resources using it."
 msgstr "You cannot change the credential type of a credential, as it may break the functionality of the resources using it."
 
@@ -720,7 +720,7 @@ msgstr "Cache timeout"
 msgid "No"
 msgstr "No"
 
-#: screens/Setting/Settings.js:105
+#: screens/Setting/Settings.js:109
 msgid "Miscellaneous System"
 msgstr "Miscellaneous System"
 
@@ -741,7 +741,7 @@ msgstr "Last name"
 msgid "Promote Child Groups and Hosts"
 msgstr "Promote Child Groups and Hosts"
 
-#: screens/Setting/Settings.js:71
+#: screens/Setting/Settings.js:75
 msgid "Google OAuth2"
 msgstr "Google OAuth2"
 
@@ -861,7 +861,7 @@ msgstr "Back to Tokens"
 #~ msgid "Webhooks: Enable webhook for this template."
 #~ msgstr "Webhooks: Enable webhook for this template."
 
-#: screens/Setting/Settings.js:86
+#: screens/Setting/Settings.js:90
 msgid "LDAP 5"
 msgstr "LDAP 5"
 
@@ -1140,7 +1140,7 @@ msgstr "Copy full revision to clipboard."
 msgid "Error:"
 msgstr "Error:"
 
-#: screens/Setting/Settings.js:212
+#: screens/Setting/Settings.js:216
 msgid "View all settings"
 msgstr "View all settings"
 
@@ -1175,7 +1175,7 @@ msgstr ""
 "Maximum number of jobs to run concurrently on this group.\n"
 "          Zero means no limit will be enforced."
 
-#: screens/Credential/shared/CredentialForm.js:140
+#: screens/Credential/shared/CredentialForm.js:137
 msgid "Select a credential Type"
 msgstr "Select a credential Type"
 
@@ -1514,7 +1514,7 @@ msgstr "Add existing group"
 msgid "Deprovisioning these instances could impact other resources that rely on them. Are you sure you want to delete anyway?"
 msgstr "Deprovisioning these instances could impact other resources that rely on them. Are you sure you want to delete anyway?"
 
-#: screens/Setting/Settings.js:85
+#: screens/Setting/Settings.js:89
 msgid "LDAP 4"
 msgstr "LDAP 4"
 
@@ -1669,7 +1669,7 @@ msgstr "Hour"
 #: screens/Credential/CredentialList/CredentialList.js:142
 #: screens/Credential/CredentialList/CredentialList.js:165
 #: screens/Credential/CredentialList/CredentialListItem.js:59
-#: screens/Credential/shared/CredentialForm.js:162
+#: screens/Credential/shared/CredentialForm.js:159
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialsStep.js:71
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialsStep.js:91
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.js:69
@@ -1951,7 +1951,7 @@ msgstr "Add Question"
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.js:177
 #: screens/CredentialType/CredentialTypeList/CredentialTypeListItem.js:39
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:170
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:101
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:102
 #: screens/Host/HostGroups/HostGroupItem.js:35
 #: screens/Host/HostGroups/HostGroupsList.js:179
 #: screens/Host/HostList/HostList.js:174
@@ -2313,8 +2313,8 @@ msgstr "Total jobs"
 
 #: screens/Credential/CredentialDetail/CredentialDetail.js:242
 #: screens/Credential/CredentialList/CredentialList.js:159
-#: screens/Credential/shared/CredentialForm.js:129
-#: screens/Credential/shared/CredentialForm.js:199
+#: screens/Credential/shared/CredentialForm.js:126
+#: screens/Credential/shared/CredentialForm.js:188
 msgid "Credential Type"
 msgstr "Credential Type"
 
@@ -2588,7 +2588,7 @@ msgstr "Instances"
 #: components/Search/Search.js:203
 #: components/Search/Search.js:227
 #: screens/ActivityStream/ActivityStream.js:143
-#: screens/Credential/shared/CredentialForm.js:144
+#: screens/Credential/shared/CredentialForm.js:141
 #: screens/Credential/shared/CredentialFormFields/BecomeMethodField.js:66
 #: screens/Dashboard/DashboardGraph.js:107
 #: screens/Inventory/shared/InventorySourceSubForms/SCMSubForm.js:145
@@ -2815,7 +2815,7 @@ msgstr "Instance ID"
 msgid "Info"
 msgstr ""
 
-#: screens/Setting/Settings.js:82
+#: screens/Setting/Settings.js:86
 msgid "LDAP 1"
 msgstr "LDAP 1"
 
@@ -2991,7 +2991,7 @@ msgid "System"
 msgstr ""
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.js:95
-#: screens/Setting/Settings.js:59
+#: screens/Setting/Settings.js:63
 msgid "GitHub Team"
 msgstr "GitHub Team"
 
@@ -3524,7 +3524,7 @@ msgstr "Cancel Job"
 msgid "Instance State"
 msgstr "Instance State"
 
-#: screens/Setting/Settings.js:108
+#: screens/Setting/Settings.js:112
 msgid "RADIUS"
 msgstr "RADIUS"
 
@@ -3993,8 +3993,8 @@ msgstr "Click to rearrange the order of the survey questions"
 #~ msgid "Remove any local modifications prior to performing an update."
 #~ msgstr "Remove any local modifications prior to performing an update."
 
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:104
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:108
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:105
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:109
 msgid "Edit Execution Environment"
 msgstr "Edit Execution Environment"
 
@@ -4888,8 +4888,8 @@ msgstr "Dragging started for item id: {newId}."
 msgid "Resource type"
 msgstr "Resource type"
 
-#: screens/Credential/shared/CredentialForm.js:334
-#: screens/Credential/shared/CredentialForm.js:340
+#: screens/Credential/shared/CredentialForm.js:323
+#: screens/Credential/shared/CredentialForm.js:329
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.js:83
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:485
 msgid "Test"
@@ -4946,7 +4946,7 @@ msgstr "Sync"
 #: screens/Application/shared/ApplicationForm.js:63
 #: screens/Credential/CredentialDetail/CredentialDetail.js:224
 #: screens/Credential/CredentialList/CredentialList.js:147
-#: screens/Credential/shared/CredentialForm.js:170
+#: screens/Credential/shared/CredentialForm.js:167
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.js:73
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.js:128
 #: screens/CredentialType/shared/CredentialTypeForm.js:30
@@ -5025,7 +5025,7 @@ msgid "Edit Team"
 msgstr "Edit Team"
 
 #: screens/Setting/SettingList.js:122
-#: screens/Setting/Settings.js:120
+#: screens/Setting/Settings.js:124
 msgid "User Interface"
 msgstr ""
 
@@ -5038,7 +5038,7 @@ msgstr ""
 msgid "View job {0}"
 msgstr "View job {0}"
 
-#: screens/Login/Login.js:391
+#: screens/Login/Login.js:407
 msgid "Sign in with SAML {samlIDP}"
 msgstr "Sign in with SAML {samlIDP}"
 
@@ -5158,7 +5158,7 @@ msgstr "Arguments"
 msgid "Grafana URL"
 msgstr "Grafana URL"
 
-#: screens/Login/Login.js:282
+#: screens/Login/Login.js:298
 msgid "Sign in with GitHub Organizations"
 msgstr "Sign in with GitHub Organizations"
 
@@ -5193,7 +5193,7 @@ msgstr "Exact search on id field."
 msgid "Debug"
 msgstr "Debug"
 
-#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.js:44
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.js:60
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.js:78
 #: screens/Setting/GoogleOAuth2/GoogleOAuth2Detail/GoogleOAuth2Detail.js:44
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.js:58
@@ -5262,7 +5262,7 @@ msgstr "Frequency Exception Details"
 msgid "Deprovisioning fail"
 msgstr "Deprovisioning fail"
 
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:118
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:119
 msgid "Copy Execution Environment"
 msgstr "Copy Execution Environment"
 
@@ -5356,7 +5356,7 @@ msgstr ""
 #~ msgid "Playbook Directory"
 #~ msgstr "Playbook Directory"
 
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:126
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:127
 msgid "Failed to copy execution environment"
 msgstr "Failed to copy execution environment"
 
@@ -5489,7 +5489,7 @@ msgid "Setting name"
 msgstr "Setting name"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.js:100
-#: screens/Setting/Settings.js:62
+#: screens/Setting/Settings.js:66
 msgid "GitHub Enterprise"
 msgstr "GitHub Enterprise"
 
@@ -5545,11 +5545,11 @@ msgstr "Create New Application"
 msgid "Last Run"
 msgstr "Last Run"
 
-#: screens/Credential/shared/CredentialForm.js:130
+#: screens/Credential/shared/CredentialForm.js:127
 msgid "Select Credential Type"
 msgstr "Select Credential Type"
 
-#: screens/Setting/Settings.js:83
+#: screens/Setting/Settings.js:87
 msgid "LDAP 2"
 msgstr "LDAP 2"
 
@@ -5559,7 +5559,7 @@ msgstr "LDAP 2"
 msgid "Capacity"
 msgstr "Capacity"
 
-#: screens/Login/Login.js:392
+#: screens/Login/Login.js:408
 msgid "Sign in with SAML"
 msgstr "Sign in with SAML"
 
@@ -5859,7 +5859,7 @@ msgstr "Revert field to previously saved value"
 msgid "Edit Notification Template"
 msgstr "Edit Notification Template"
 
-#: screens/Setting/Settings.js:81
+#: screens/Setting/Settings.js:85
 msgid "LDAP Default"
 msgstr "LDAP Default"
 
@@ -6067,7 +6067,7 @@ msgid "Play"
 msgstr "Play"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.js:110
-#: screens/Setting/Settings.js:68
+#: screens/Setting/Settings.js:72
 msgid "GitHub Enterprise Team"
 msgstr "GitHub Enterprise Team"
 
@@ -6225,7 +6225,7 @@ msgstr "Copy Credential"
 #: screens/Job/Jobs.js:24
 #: screens/Job/Jobs.js:35
 #: screens/Setting/SettingList.js:92
-#: screens/Setting/Settings.js:77
+#: screens/Setting/Settings.js:81
 #: screens/Template/Template.js:156
 #: screens/Template/Templates.js:48
 #: screens/Template/WorkflowJobTemplate.js:141
@@ -6310,6 +6310,11 @@ msgstr "Deleting these instance groups could impact other resources that rely on
 msgid "Source Control Revision"
 msgstr "Source Control Revision"
 
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.js:67
+#: screens/Setting/Settings.js:50
+msgid "Azure AD Default"
+msgstr "Azure AD Default"
+
 #: components/Search/LookupTypeInput.js:87
 msgid "Case-insensitive version of endswith."
 msgstr "Case-insensitive version of endswith."
@@ -6353,7 +6358,6 @@ msgstr "Case-insensitive version of endswith."
 #: screens/Organization/Organizations.js:32
 #: screens/Project/Project.js:104
 #: screens/Project/Projects.js:28
-#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.js:51
 #: screens/Setting/GoogleOAuth2/GoogleOAuth2Detail/GoogleOAuth2Detail.js:51
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.js:65
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.js:77
@@ -6363,31 +6367,32 @@ msgstr "Case-insensitive version of endswith."
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.js:56
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.js:52
 #: screens/Setting/Settings.js:47
-#: screens/Setting/Settings.js:50
+#: screens/Setting/Settings.js:51
 #: screens/Setting/Settings.js:54
-#: screens/Setting/Settings.js:57
-#: screens/Setting/Settings.js:60
-#: screens/Setting/Settings.js:63
-#: screens/Setting/Settings.js:66
-#: screens/Setting/Settings.js:69
-#: screens/Setting/Settings.js:72
-#: screens/Setting/Settings.js:75
-#: screens/Setting/Settings.js:78
-#: screens/Setting/Settings.js:87
-#: screens/Setting/Settings.js:88
-#: screens/Setting/Settings.js:89
-#: screens/Setting/Settings.js:90
+#: screens/Setting/Settings.js:58
+#: screens/Setting/Settings.js:61
+#: screens/Setting/Settings.js:64
+#: screens/Setting/Settings.js:67
+#: screens/Setting/Settings.js:70
+#: screens/Setting/Settings.js:73
+#: screens/Setting/Settings.js:76
+#: screens/Setting/Settings.js:79
+#: screens/Setting/Settings.js:82
 #: screens/Setting/Settings.js:91
 #: screens/Setting/Settings.js:92
-#: screens/Setting/Settings.js:100
-#: screens/Setting/Settings.js:103
-#: screens/Setting/Settings.js:106
-#: screens/Setting/Settings.js:109
-#: screens/Setting/Settings.js:112
-#: screens/Setting/Settings.js:115
-#: screens/Setting/Settings.js:118
-#: screens/Setting/Settings.js:121
-#: screens/Setting/Settings.js:124
+#: screens/Setting/Settings.js:93
+#: screens/Setting/Settings.js:94
+#: screens/Setting/Settings.js:95
+#: screens/Setting/Settings.js:96
+#: screens/Setting/Settings.js:104
+#: screens/Setting/Settings.js:107
+#: screens/Setting/Settings.js:110
+#: screens/Setting/Settings.js:113
+#: screens/Setting/Settings.js:116
+#: screens/Setting/Settings.js:119
+#: screens/Setting/Settings.js:122
+#: screens/Setting/Settings.js:125
+#: screens/Setting/Settings.js:128
 #: screens/Setting/TACACS/TACACSDetail/TACACSDetail.js:56
 #: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.js:61
 #: screens/Setting/UI/UIDetail/UIDetail.js:66
@@ -6474,6 +6479,10 @@ msgstr "Errors"
 msgid "Third"
 msgstr "Third"
 
+#: screens/Login/Login.js:268
+msgid "Sign in with Azure AD Tenant"
+msgstr "Sign in with Azure AD Tenant"
+
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:116
 #~ msgid "Update revision on job launch"
@@ -6529,7 +6538,7 @@ msgstr "Listener Addresses"
 msgid "If enabled, show the changes made by Ansible tasks, where supported. This is equivalent to Ansible’s --diff mode."
 msgstr "If enabled, show the changes made by Ansible tasks, where supported. This is equivalent to Ansible’s --diff mode."
 
-#: screens/Setting/Settings.js:84
+#: screens/Setting/Settings.js:88
 msgid "LDAP 3"
 msgstr "LDAP 3"
 
@@ -6627,7 +6636,7 @@ msgid "Missing"
 msgstr "Missing"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.js:90
-#: screens/Setting/Settings.js:56
+#: screens/Setting/Settings.js:60
 msgid "GitHub Organization"
 msgstr "GitHub Organization"
 
@@ -6743,7 +6752,7 @@ msgid "Edit Login redirect override URL"
 msgstr "Edit Login redirect override URL"
 
 #: screens/Setting/SettingList.js:133
-#: screens/Setting/Settings.js:114
+#: screens/Setting/Settings.js:118
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.js:169
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.js:197
 msgid "Subscription"
@@ -7007,31 +7016,32 @@ msgstr "Select Items"
 #: screens/Project/Projects.js:27
 #: screens/Project/Projects.js:36
 #: screens/Setting/Settings.js:48
-#: screens/Setting/Settings.js:51
+#: screens/Setting/Settings.js:52
 #: screens/Setting/Settings.js:55
-#: screens/Setting/Settings.js:58
-#: screens/Setting/Settings.js:61
-#: screens/Setting/Settings.js:64
-#: screens/Setting/Settings.js:67
-#: screens/Setting/Settings.js:70
-#: screens/Setting/Settings.js:73
-#: screens/Setting/Settings.js:76
-#: screens/Setting/Settings.js:79
-#: screens/Setting/Settings.js:93
-#: screens/Setting/Settings.js:94
-#: screens/Setting/Settings.js:95
-#: screens/Setting/Settings.js:96
+#: screens/Setting/Settings.js:59
+#: screens/Setting/Settings.js:62
+#: screens/Setting/Settings.js:65
+#: screens/Setting/Settings.js:68
+#: screens/Setting/Settings.js:71
+#: screens/Setting/Settings.js:74
+#: screens/Setting/Settings.js:77
+#: screens/Setting/Settings.js:80
+#: screens/Setting/Settings.js:83
 #: screens/Setting/Settings.js:97
 #: screens/Setting/Settings.js:98
+#: screens/Setting/Settings.js:99
+#: screens/Setting/Settings.js:100
 #: screens/Setting/Settings.js:101
-#: screens/Setting/Settings.js:104
-#: screens/Setting/Settings.js:107
-#: screens/Setting/Settings.js:110
-#: screens/Setting/Settings.js:113
-#: screens/Setting/Settings.js:116
-#: screens/Setting/Settings.js:119
-#: screens/Setting/Settings.js:122
-#: screens/Setting/Settings.js:125
+#: screens/Setting/Settings.js:102
+#: screens/Setting/Settings.js:105
+#: screens/Setting/Settings.js:108
+#: screens/Setting/Settings.js:111
+#: screens/Setting/Settings.js:114
+#: screens/Setting/Settings.js:117
+#: screens/Setting/Settings.js:120
+#: screens/Setting/Settings.js:123
+#: screens/Setting/Settings.js:126
+#: screens/Setting/Settings.js:129
 #: screens/Team/Teams.js:30
 #: screens/Template/Templates.js:45
 #: screens/User/Users.js:30
@@ -7890,7 +7900,7 @@ msgstr "This inventory source is currently being used by other resources that re
 msgid "Deny"
 msgstr "Deny"
 
-#: screens/Setting/Settings.js:74
+#: screens/Setting/Settings.js:78
 msgid "Generic OIDC"
 msgstr "Generic OIDC"
 
@@ -8182,8 +8192,8 @@ msgstr "Inventory not found."
 #: components/Schedule/shared/SchedulePromptableFields.js:129
 #: components/Schedule/shared/UnsupportedScheduleForm.js:22
 #: components/Schedule/shared/UnsupportedScheduleForm.js:27
-#: screens/Credential/shared/CredentialForm.js:346
-#: screens/Credential/shared/CredentialForm.js:351
+#: screens/Credential/shared/CredentialForm.js:335
+#: screens/Credential/shared/CredentialForm.js:340
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.js:103
 #: screens/Credential/shared/ExternalTestModal.js:99
 #: screens/HostMetrics/HostMetricsDeleteButton.js:167
@@ -8215,6 +8225,11 @@ msgstr "Inventory not found."
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListItem.js:130
 msgid "Cancel"
 msgstr ""
+
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.js:72
+#: screens/Setting/Settings.js:53
+msgid "Azure AD Tenant"
+msgstr "Azure AD Tenant"
 
 #: screens/Application/Application/Application.js:98
 msgid "View all applications."
@@ -8260,7 +8275,7 @@ msgstr "This Project needs to be updated"
 msgid "Start sync process"
 msgstr "Start sync process"
 
-#: screens/Login/Login.js:359
+#: screens/Login/Login.js:375
 msgid "Sign in with Google"
 msgstr "Sign in with Google"
 
@@ -8426,8 +8441,8 @@ msgstr "Source details"
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:160
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:164
 #: screens/Project/ProjectDetail/ProjectDetail.js:324
-#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.js:85
-#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.js:89
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.js:110
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.js:114
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.js:148
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.js:152
 #: screens/Setting/GoogleOAuth2/GoogleOAuth2Detail/GoogleOAuth2Detail.js:85
@@ -8826,7 +8841,7 @@ msgstr "Verbose"
 msgid "Failed to toggle host."
 msgstr "Failed to toggle host."
 
-#: screens/Login/Login.js:328
+#: screens/Login/Login.js:344
 msgid "Sign in with GitHub Enterprise Organizations"
 msgstr "Sign in with GitHub Enterprise Organizations"
 
@@ -8898,7 +8913,7 @@ msgstr "Last Job Status"
 msgid "View User Interface settings"
 msgstr "View User Interface settings"
 
-#: screens/Login/Login.js:297
+#: screens/Login/Login.js:313
 msgid "Sign in with GitHub Teams"
 msgstr "Sign in with GitHub Teams"
 
@@ -9799,8 +9814,8 @@ msgid "Health checks can only be run on execution nodes."
 msgstr "Health checks can only be run on execution nodes."
 
 #: screens/Setting/Settings.js:49
-msgid "Azure AD"
-msgstr "Azure AD"
+#~ msgid "Azure AD"
+#~ msgstr "Azure AD"
 
 #: screens/Metrics/Metrics.js:189
 msgid "Instance"
@@ -10114,7 +10129,7 @@ msgid "Modified By (Username)"
 msgstr "Modified By (Username)"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.js:85
-#: screens/Setting/Settings.js:53
+#: screens/Setting/Settings.js:57
 msgid "GitHub Default"
 msgstr "GitHub Default"
 
@@ -10365,7 +10380,7 @@ msgstr "File upload rejected. Please select a single .json file."
 msgid "No survey questions found."
 msgstr "No survey questions found."
 
-#: screens/Login/Login.js:312
+#: screens/Login/Login.js:328
 msgid "Sign in with GitHub Enterprise"
 msgstr "Sign in with GitHub Enterprise"
 
@@ -10513,7 +10528,7 @@ msgstr "{interval} hours"
 msgid "False"
 msgstr "False"
 
-#: screens/Login/Login.js:344
+#: screens/Login/Login.js:360
 msgid "Sign in with GitHub Enterprise Teams"
 msgstr "Sign in with GitHub Enterprise Teams"
 
@@ -10536,7 +10551,7 @@ msgstr "Back to Instance Groups"
 msgid "Host OK"
 msgstr "Host OK"
 
-#: screens/Setting/AzureAD/AzureAD.js:26
+#: screens/Setting/AzureAD/AzureAD.js:42
 msgid "View Azure AD settings"
 msgstr "View Azure AD settings"
 
@@ -10545,7 +10560,7 @@ msgstr "View Azure AD settings"
 msgid "Clear all filters"
 msgstr "Clear all filters"
 
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:86
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:87
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.js:102
 #: screens/Template/Survey/SurveyList.js:109
 #: screens/Template/Survey/SurveyList.js:109
@@ -10602,7 +10617,7 @@ msgid "Not Found"
 msgstr "Not Found"
 
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:79
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:98
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:99
 msgid "Globally Available"
 msgstr "Globally Available"
 
@@ -10759,7 +10774,7 @@ msgstr "ID of the dashboard (optional)"
 msgid "Inventory Source Sync Error"
 msgstr "Inventory Source Sync Error"
 
-#: screens/Login/Login.js:373
+#: screens/Login/Login.js:389
 msgid "Sign in with OIDC"
 msgstr "Sign in with OIDC"
 
@@ -10826,7 +10841,7 @@ msgid "Remote Archive"
 msgstr "Remote Archive"
 
 #: screens/Setting/SettingList.js:144
-#: screens/Setting/Settings.js:123
+#: screens/Setting/Settings.js:127
 msgid "Troubleshooting"
 msgstr "Troubleshooting"
 
@@ -11008,7 +11023,7 @@ msgstr "Total hosts"
 msgid "Cancel Inventory Source Sync"
 msgstr "Cancel Inventory Source Sync"
 
-#: screens/Setting/Settings.js:102
+#: screens/Setting/Settings.js:106
 msgid "Miscellaneous Authentication"
 msgstr "Miscellaneous Authentication"
 
@@ -11296,8 +11311,8 @@ msgstr "Start"
 #: components/Schedule/shared/ScheduleForm.js:539
 #: components/Schedule/shared/useSchedulePromptSteps.js:50
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:379
-#: screens/Credential/shared/CredentialForm.js:321
-#: screens/Credential/shared/CredentialForm.js:326
+#: screens/Credential/shared/CredentialForm.js:310
+#: screens/Credential/shared/CredentialForm.js:315
 #: screens/Setting/shared/RevertFormActionGroup.js:13
 #: screens/Setting/shared/RevertFormActionGroup.js:19
 #: screens/Template/Survey/SurveyReorderModal.js:206
@@ -11521,7 +11536,7 @@ msgstr "Created by (username)"
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:70
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:156
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:169
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:90
+#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:91
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:179
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:101
 #: screens/Inventory/InventoryList/InventoryList.js:203
@@ -11795,8 +11810,8 @@ msgid "Hosts automated"
 msgstr "Hosts automated"
 
 #: screens/Credential/shared/CredentialForm.js:187
-msgid "Galaxy credentials must be owned by an Organization."
-msgstr "Galaxy credentials must be owned by an Organization."
+#~ msgid "Galaxy credentials must be owned by an Organization."
+#~ msgstr "Galaxy credentials must be owned by an Organization."
 
 #: screens/Team/Team.js:119
 msgid "View Team Details"
@@ -11927,7 +11942,7 @@ msgstr "Last modified"
 msgid "Hosts available"
 msgstr "Hosts available"
 
-#: screens/Setting/Settings.js:99
+#: screens/Setting/Settings.js:103
 msgid "Logging"
 msgstr "Logging"
 
@@ -12005,7 +12020,7 @@ msgstr "Deleting these inventories could impact some templates that rely on them
 msgid "Exact search on name field."
 msgstr "Exact search on name field."
 
-#: screens/Login/Login.js:267
+#: screens/Login/Login.js:283
 msgid "Sign in with GitHub"
 msgstr "Sign in with GitHub"
 
@@ -12127,7 +12142,7 @@ msgid "Google Compute Engine"
 msgstr "Google Compute Engine"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.js:105
-#: screens/Setting/Settings.js:65
+#: screens/Setting/Settings.js:69
 msgid "GitHub Enterprise Organization"
 msgstr "GitHub Enterprise Organization"
 

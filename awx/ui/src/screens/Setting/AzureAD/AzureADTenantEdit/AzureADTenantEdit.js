@@ -19,7 +19,7 @@ import {
 } from '../../shared/SharedFields';
 import { formatJson } from '../../shared/settingUtils';
 
-function AzureADEdit() {
+function AzureADTenantEdit() {
   const history = useHistory();
   const { isModalOpen, toggleModal, closeModal } = useModal();
   const { PUT: options } = useSettings();
@@ -27,11 +27,11 @@ function AzureADEdit() {
   const {
     isLoading,
     error,
-    request: fetchAzureAD,
-    result: azure,
+    request: fetchAzureADTenant,
+    result: azureTenant,
   } = useRequest(
     useCallback(async () => {
-      const { data } = await SettingsAPI.readCategory('azuread-oauth2');
+      const { data } = await SettingsAPI.readCategory('azuread-oauth2-tenant');
       const mergedData = {};
       Object.keys(data).forEach((key) => {
         if (!options[key]) {
@@ -46,14 +46,14 @@ function AzureADEdit() {
   );
 
   useEffect(() => {
-    fetchAzureAD();
-  }, [fetchAzureAD]);
+    fetchAzureADTenant();
+  }, [fetchAzureADTenant]);
 
   const { error: submitError, request: submitForm } = useRequest(
     useCallback(
       async (values) => {
         await SettingsAPI.updateAll(values);
-        history.push('/settings/azure/default/details');
+        history.push('/settings/azure/tenant/details');
       },
       [history]
     ),
@@ -62,7 +62,7 @@ function AzureADEdit() {
 
   const { error: revertError, request: revertAll } = useRequest(
     useCallback(async () => {
-      await SettingsAPI.revertCategory('azuread-oauth2');
+      await SettingsAPI.revertCategory('azuread-oauth2-tenant');
     }, []),
     null
   );
@@ -70,11 +70,11 @@ function AzureADEdit() {
   const handleSubmit = async (form) => {
     await submitForm({
       ...form,
-      SOCIAL_AUTH_AZUREAD_OAUTH2_TEAM_MAP: formatJson(
-        form.SOCIAL_AUTH_AZUREAD_OAUTH2_TEAM_MAP
+      SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TEAM_MAP: formatJson(
+        form.SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TEAM_MAP
       ),
-      SOCIAL_AUTH_AZUREAD_OAUTH2_ORGANIZATION_MAP: formatJson(
-        form.SOCIAL_AUTH_AZUREAD_OAUTH2_ORGANIZATION_MAP
+      SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_ORGANIZATION_MAP: formatJson(
+        form.SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_ORGANIZATION_MAP
       ),
     });
   };
@@ -84,11 +84,11 @@ function AzureADEdit() {
 
     closeModal();
 
-    history.push('/settings/azure/default/details');
+    history.push('/settings/azure/tenant/details');
   };
 
   const handleCancel = () => {
-    history.push('/settings/azure/default/details');
+    history.push('/settings/azure/tenant/details');
   };
 
   const initialValues = (fields) =>
@@ -107,26 +107,43 @@ function AzureADEdit() {
     <CardBody>
       {isLoading && <ContentLoading />}
       {!isLoading && error && <ContentError error={error} />}
-      {!isLoading && azure && (
-        <Formik initialValues={initialValues(azure)} onSubmit={handleSubmit}>
+      {!isLoading && azureTenant && (
+        <Formik
+          initialValues={initialValues(azureTenant)}
+          onSubmit={handleSubmit}
+        >
           {(formik) => (
             <Form autoComplete="off" onSubmit={formik.handleSubmit}>
               <FormColumnLayout>
                 <InputField
-                  name="SOCIAL_AUTH_AZUREAD_OAUTH2_KEY"
-                  config={azure.SOCIAL_AUTH_AZUREAD_OAUTH2_KEY}
+                  name="SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY"
+                  config={
+                    azureTenant.SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY
+                  }
                 />
                 <EncryptedField
-                  name="SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET"
-                  config={azure.SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET}
+                  name="SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET"
+                  config={
+                    azureTenant.SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET
+                  }
+                />
+                <InputField
+                  name="SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TENANT_ID"
+                  config={
+                    azureTenant.SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TENANT_ID
+                  }
                 />
                 <ObjectField
-                  name="SOCIAL_AUTH_AZUREAD_OAUTH2_ORGANIZATION_MAP"
-                  config={azure.SOCIAL_AUTH_AZUREAD_OAUTH2_ORGANIZATION_MAP}
+                  name="SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_ORGANIZATION_MAP"
+                  config={
+                    azureTenant.SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_ORGANIZATION_MAP
+                  }
                 />
                 <ObjectField
-                  name="SOCIAL_AUTH_AZUREAD_OAUTH2_TEAM_MAP"
-                  config={azure.SOCIAL_AUTH_AZUREAD_OAUTH2_TEAM_MAP}
+                  name="SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TEAM_MAP"
+                  config={
+                    azureTenant.SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TEAM_MAP
+                  }
                 />
                 {submitError && <FormSubmitError error={submitError} />}
                 {revertError && <FormSubmitError error={revertError} />}
@@ -150,4 +167,4 @@ function AzureADEdit() {
   );
 }
 
-export default AzureADEdit;
+export default AzureADTenantEdit;
