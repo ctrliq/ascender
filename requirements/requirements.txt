@@ -80,7 +80,9 @@ cachetools==5.3.2
     #   msrest
     #   requests
 cffi==2.0.0
-    # via cryptography
+    # via
+    #   cryptography
+    #   pynacl
 channels==4.3.2
     # via
     #   -r /awx_devel/requirements/requirements.in
@@ -339,13 +341,18 @@ pydantic-core==2.16.2
     # via pydantic
 pygerduty==0.38.3
     # via -r /awx_devel/requirements/requirements.in
+pygithub==2.8.1
+    # via -r /awx_devel/requirements/requirements.in
 pyjwt[crypto]==2.9.0
     # via
     #   adal
     #   django-ansible-base
     #   msal
+    #   pygithub
     #   social-auth-core
     #   twilio
+pynacl==1.6.2
+    # via pygithub
 pyopenssl==25.3.0
     # via
     #   -r /awx_devel/requirements/requirements.in
@@ -406,6 +413,7 @@ requests==2.32.5
     #   kubernetes
     #   msal
     #   msrest
+    #   pygithub
     #   python-dsv-sdk
     #   python-tss-sdk
     #   requests-oauthlib
@@ -485,6 +493,7 @@ typing-extensions==4.12.2
     #   psycopg
     #   pydantic
     #   pydantic-core
+    #   pygithub
     #   pyopenssl
     #   setuptools-scm
     #   twisted
@@ -496,6 +505,7 @@ urllib3==2.6.3
     #   botocore
     #   django-ansible-base
     #   kubernetes
+    #   pygithub
     #   requests
 uwsgi==2.0.31
     # via -r /awx_devel/requirements/requirements.in

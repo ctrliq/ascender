@@ -44,6 +44,7 @@ prometheus-client
 psycopg
 psutil
 pygerduty
+pygithub
 pyopenssl>=25.3.0  # resolve dep conflict from cryptography pin above
 pyparsing==2.4.6  # Upgrading to v3 of pyparsing introduce errors on smart host filtering: Expected 'or' term, found 'or'  (at char 15), (line:1, col:16)
 python-daemon>3.0.0
