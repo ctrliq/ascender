@@ -184,7 +184,7 @@ def test_display_survey_spec_encrypts_default(survey_spec_factory):
         ("multiplechoice", "", 0, 0, False, False, 'N/A'),  # historical bug
         ("multiplechoice", "zeb", 0, 0, False, False, 'N/A'),  # zeb not in choices
         ("multiplechoice", "coffee", 0, 0, True, True, 'coffee'),
-        ("multiselect", None, 0, 0, False, False, 'N/A'),  # NOTE: Behavior is arguable, value of [] may be prefered
+        ("multiselect", None, 0, 0, False, False, 'N/A'),  # NOTE: Behavior is arguable, value of [] may be preferred
         ("multiselect", "", 0, 0, False, False, 'N/A'),
         ("multiselect", ["zeb"], 0, 0, False, False, 'N/A'),
         ("multiselect", ["milk"], 0, 0, True, True, ["milk"]),
@@ -215,7 +215,7 @@ def test_optional_survey_question_defaults(survey_spec_factory, question_type, d
     if expect_use:
         assert json.loads(defaulted_extra_vars['extra_vars'])['c'] == expect_value
     else:
-        assert 'c' not in defaulted_extra_vars['extra_vars']
+        assert 'c' not in json.loads(defaulted_extra_vars['extra_vars'])
 
 
 @pytest.mark.survey
