@@ -226,3 +226,218 @@ def test_send_messages_with_additional_headers():
             allow_redirects=False,
         )
         assert sent_messages == 1
+
+
+def test_send_messages_with_redirects_ok():
+    with mock.patch('awx.main.notifications.webhook_backend.requests') as requests_mock, mock.patch(
+        'awx.main.notifications.webhook_backend.get_awx_http_client_headers'
+    ) as version_mock:
+        # First two calls return redirects, third call returns 200
+        requests_mock.post.side_effect = [
+            mock.Mock(status_code=301, headers={"Location": "http://redirect1.com"}),
+            mock.Mock(status_code=307, headers={"Location": "http://redirect2.com"}),
+            mock.Mock(status_code=200),
+        ]
+        version_mock.return_value = {'Content-Type': 'application/json', 'User-Agent': 'AWX 0.0.1.dev (open)'}
+        backend = webhook_backend.WebhookBackend('POST', None)
+        message = EmailMessage(
+            'test subject',
+            {'text': 'test body'},
+            [],
+            [
+                'http://example.com',
+            ],
+        )
+        sent_messages = backend.send_messages(
+            [
+                message,
+            ]
+        )
+        assert requests_mock.post.call_count == 3
+        requests_mock.post.assert_called_with(
+            url='http://redirect2.com',
+            auth=None,
+            data=json.dumps({'text': 'test body'}, ensure_ascii=False).encode('utf-8'),
+            headers={'Content-Type': 'application/json', 'User-Agent': 'AWX 0.0.1.dev (open)'},
+            verify=True,
+            allow_redirects=False,
+        )
+        assert sent_messages == 1
+
+
+def test_send_messages_with_redirects_blank():
+    with mock.patch('awx.main.notifications.webhook_backend.requests') as requests_mock, mock.patch(
+        'awx.main.notifications.webhook_backend.get_awx_http_client_headers'
+    ) as version_mock, mock.patch('awx.main.notifications.webhook_backend.logger') as logger_mock:
+        # First call returns a redirect with Location header, second call returns 301 but NO Location header
+        requests_mock.post.side_effect = [
+            mock.Mock(status_code=301, headers={"Location": "http://redirect1.com"}),
+            mock.Mock(status_code=301, headers={}),  # 301 with no Location header
+        ]
+        version_mock.return_value = {'Content-Type': 'application/json', 'User-Agent': 'AWX 0.0.1.dev (open)'}
+        backend = webhook_backend.WebhookBackend('POST', None, fail_silently=True)
+        message = EmailMessage(
+            'test subject',
+            {'text': 'test body'},
+            [],
+            [
+                'http://example.com',
+            ],
+        )
+        sent_messages = backend.send_messages(
+            [
+                message,
+            ]
+        )
+        # Should make 2 requests (initial + 1 redirect attempt)
+        assert requests_mock.post.call_count == 2
+        # The error message should be logged
+        logger_mock.error.assert_called_once()
+        error_call_args = logger_mock.error.call_args[0][0]
+        assert "redirect to a blank URL" in error_call_args
+        assert sent_messages == 0
+
+
+def test_send_messages_with_redirects_max_retries_exceeded():
+    with mock.patch('awx.main.notifications.webhook_backend.requests') as requests_mock, mock.patch(
+        'awx.main.notifications.webhook_backend.get_awx_http_client_headers'
+    ) as version_mock, mock.patch('awx.main.notifications.webhook_backend.logger') as logger_mock:
+        # Return MAX_RETRIES (5) redirect responses to exceed the retry limit
+        requests_mock.post.side_effect = [
+            mock.Mock(status_code=301, headers={"Location": "http://redirect1.com"}),
+            mock.Mock(status_code=301, headers={"Location": "http://redirect2.com"}),
+            mock.Mock(status_code=307, headers={"Location": "http://redirect3.com"}),
+            mock.Mock(status_code=301, headers={"Location": "http://redirect4.com"}),
+            mock.Mock(status_code=307, headers={"Location": "http://redirect5.com"}),
+        ]
+        version_mock.return_value = {'Content-Type': 'application/json', 'User-Agent': 'AWX 0.0.1.dev (open)'}
+        backend = webhook_backend.WebhookBackend('POST', None, fail_silently=True)
+        message = EmailMessage(
+            'test subject',
+            {'text': 'test body'},
+            [],
+            [
+                'http://example.com',
+            ],
+        )
+        sent_messages = backend.send_messages(
+            [
+                message,
+            ]
+        )
+        # Should make exactly 5 requests (MAX_RETRIES)
+        assert requests_mock.post.call_count == 5
+        # The error message should be logged for exceeding max retries
+        logger_mock.error.assert_called_once()
+        error_call_args = logger_mock.error.call_args[0][0]
+        assert "max number of retries" in error_call_args
+        assert "[5]" in error_call_args
+        assert sent_messages == 0
+
+
+def test_send_messages_with_error_status_code():
+    with mock.patch('awx.main.notifications.webhook_backend.requests') as requests_mock, mock.patch(
+        'awx.main.notifications.webhook_backend.get_awx_http_client_headers'
+    ) as version_mock, mock.patch('awx.main.notifications.webhook_backend.logger') as logger_mock:
+        # Return a 404 error status code
+        requests_mock.post.return_value = mock.Mock(status_code=404)
+        version_mock.return_value = {'Content-Type': 'application/json', 'User-Agent': 'AWX 0.0.1.dev (open)'}
+        backend = webhook_backend.WebhookBackend('POST', None, fail_silently=True)
+        message = EmailMessage(
+            'test subject',
+            {'text': 'test body'},
+            [],
+            [
+                'http://example.com',
+            ],
+        )
+        sent_messages = backend.send_messages(
+            [
+                message,
+            ]
+        )
+        # Should make exactly 1 request
+        assert requests_mock.post.call_count == 1
+        # The error message should be logged
+        logger_mock.error.assert_called_once()
+        error_call_args = logger_mock.error.call_args[0][0]
+        assert "Error sending webhook notification: 404" in error_call_args
+        assert sent_messages == 0
+
+
+def test_send_messages_logs_base64_encoded_urls_in_redirects():
+    """Verify that URLs with special characters (newlines, etc.) are base64-encoded in logs for security."""
+    with mock.patch('awx.main.notifications.webhook_backend.requests') as requests_mock, mock.patch(
+        'awx.main.notifications.webhook_backend.get_awx_http_client_headers'
+    ) as version_mock, mock.patch('awx.main.notifications.webhook_backend.logger') as logger_mock:
+        # URL containing a newline character (log injection attack vector)
+        dangerous_url = 'http://example.com\nSet-Cookie: admin=true'
+        requests_mock.post.side_effect = [
+            mock.Mock(status_code=301, headers={"Location": dangerous_url}),
+            mock.Mock(status_code=200),  # Success on redirect attempt
+        ]
+        version_mock.return_value = {'Content-Type': 'application/json', 'User-Agent': 'AWX 0.0.1.dev (open)'}
+        backend = webhook_backend.WebhookBackend('POST', None, fail_silently=True)
+        message = EmailMessage(
+            'test subject',
+            {'text': 'test body'},
+            [],
+            [
+                'http://initial.com',
+            ],
+        )
+        sent_messages = backend.send_messages([message])
+        
+        # Should log the redirect warning
+        logger_mock.warning.assert_called_once()
+        warning_msg = logger_mock.warning.call_args[0][0]
+        
+        # The dangerous URL should NOT appear in raw form in the log
+        assert '\n' not in warning_msg, "Raw newline should not be in log message (log injection risk)"
+        assert 'Set-Cookie' not in warning_msg, "Dangerous content should not be in log message"
+        
+        # The URL should be base64-encoded
+        import base64
+        encoded_dangerous_url = base64.b64encode(dangerous_url.encode('utf-8')).decode('ascii')
+        assert encoded_dangerous_url in warning_msg, "Base64-encoded URL should be in log message"
+
+
+def test_send_messages_logs_base64_encoded_urls_on_max_retries():
+    """Verify that URLs with special characters are base64-encoded in max retries error message."""
+    with mock.patch('awx.main.notifications.webhook_backend.requests') as requests_mock, mock.patch(
+        'awx.main.notifications.webhook_backend.get_awx_http_client_headers'
+    ) as version_mock, mock.patch('awx.main.notifications.webhook_backend.logger') as logger_mock:
+        # URL containing newline and carriage return characters
+        dangerous_url_final = 'http://final-redirect.com\r\nX-Injected: true'
+        requests_mock.post.side_effect = [
+            mock.Mock(status_code=301, headers={"Location": "http://redirect1.com"}),
+            mock.Mock(status_code=301, headers={"Location": "http://redirect2.com"}),
+            mock.Mock(status_code=307, headers={"Location": "http://redirect3.com"}),
+            mock.Mock(status_code=301, headers={"Location": "http://redirect4.com"}),
+            mock.Mock(status_code=307, headers={"Location": dangerous_url_final}),
+        ]
+        version_mock.return_value = {'Content-Type': 'application/json', 'User-Agent': 'AWX 0.0.1.dev (open)'}
+        backend = webhook_backend.WebhookBackend('POST', None, fail_silently=True)
+        message = EmailMessage(
+            'test subject',
+            {'text': 'test body'},
+            [],
+            [
+                'http://example.com',
+            ],
+        )
+        sent_messages = backend.send_messages([message])
+        
+        # Should log error for max retries exceeded
+        logger_mock.error.assert_called_once()
+        error_msg = logger_mock.error.call_args[0][0]
+        
+        # The dangerous URL should NOT appear in raw form in the log
+        assert '\r' not in error_msg, "Raw carriage return should not be in log message (log injection risk)"
+        assert '\n' not in error_msg, "Raw newline should not be in log message (log injection risk)"
+        assert 'X-Injected' not in error_msg, "Dangerous content should not be in log message"
+        
+        # The final URL should be base64-encoded
+        import base64
+        encoded_dangerous_url = base64.b64encode(dangerous_url_final.encode('utf-8')).decode('ascii')
+        assert encoded_dangerous_url in error_msg, "Base64-encoded final URL should be in log message"
