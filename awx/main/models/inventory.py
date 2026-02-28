@@ -47,7 +47,6 @@ from awx.main.models.mixins import (
     ResourceMixin,
     TaskManagerInventoryUpdateMixin,
     RelatedJobsMixin,
-    CustomVirtualEnvMixin,
 )
 from awx.main.models.notifications import (
     NotificationTemplate,
@@ -1093,7 +1092,7 @@ class InventorySourceOptions(BaseModel):
     source_vars_dict = VarsDictProperty('source_vars')
 
 
-class InventorySource(UnifiedJobTemplate, InventorySourceOptions, CustomVirtualEnvMixin, RelatedJobsMixin):
+class InventorySource(UnifiedJobTemplate, InventorySourceOptions, RelatedJobsMixin):
     SOFT_UNIQUE_TOGETHER = [('polymorphic_ctype', 'name', 'inventory')]
 
     class Meta:
@@ -1269,7 +1268,7 @@ class InventorySource(UnifiedJobTemplate, InventorySourceOptions, CustomVirtualE
         return InventoryUpdate.objects.filter(inventory_source=self)
 
 
-class InventoryUpdate(UnifiedJob, InventorySourceOptions, JobNotificationMixin, TaskManagerInventoryUpdateMixin, CustomVirtualEnvMixin):
+class InventoryUpdate(UnifiedJob, InventorySourceOptions, JobNotificationMixin, TaskManagerInventoryUpdateMixin):
     """
     Internal job for tracking inventory updates from external sources.
     """

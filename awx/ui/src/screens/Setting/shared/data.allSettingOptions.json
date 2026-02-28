@@ -101,20 +101,6 @@
               "category_slug": "system",
               "default": null
           },
-          "CUSTOM_VENV_PATHS": {
-              "type": "list",
-              "required": false,
-              "label": "Custom virtual environment paths",
-              "help_text": "Paths where Tower will look for custom virtual environments (in addition to /var/lib/awx/venv/). Enter one path per line.",
-              "category": "System",
-              "category_slug": "system",
-              "default": [],
-              "child": {
-                  "type": "string",
-                  "required": true,
-                  "read_only": false
-              }
-          },
           "AD_HOC_COMMANDS": {
               "type": "list",
               "required": false,
@@ -4482,17 +4468,6 @@
               "category": "System",
               "category_slug": "system",
               "defined_in_file": false
-          },
-          "CUSTOM_VENV_PATHS": {
-              "type": "list",
-              "label": "Custom virtual environment paths",
-              "help_text": "Paths where Tower will look for custom virtual environments (in addition to /var/lib/awx/venv/). Enter one path per line.",
-              "category": "System",
-              "category_slug": "system",
-              "defined_in_file": false,
-              "child": {
-                  "type": "string"
-              }
           },
           "AD_HOC_COMMANDS": {
               "type": "list",
