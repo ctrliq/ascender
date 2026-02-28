@@ -433,18 +433,19 @@ class CustomToPrometheusMetricsCollector(prometheus_client.registry.Collector):
 
         instance_data = self._metrics.load_other_metrics(Request(HttpRequest()))
         if not instance_data:
-            logger.debug(f"No metric data not found in valkey for metric namespace '{self._metrics._namespace}'")
-            return None
+            logger.debug(f"Metric data not found in valkey for metric namespace '{self._metrics._namespace}'")
+            return
 
-        if not (host_metrics := instance_data.get(my_hostname)):
-            logger.debug(f"Metric data for this node '{my_hostname}' not found in valkey for metric namespace '{self._metrics._namespace}'")
-            return None
+        host_metrics = instance_data.get(my_hostname)
+        if host_metrics is None:
+            logger.debug(f"Metric data not found for host '{my_hostname}' in metric namespace '{self._metrics._namespace}'")
+            return
 
         for _, metric in self._metrics.METRICS.items():
-            entry = host_metrics.get(metric.field)
-            if not entry:
-                logger.debug(f"{self._metrics._namespace} metric '{metric.field}' not found in valkey data payload {json.dumps(instance_data, indent=2)}")
+            if metric.field not in host_metrics:
+                logger.debug(f"{self._metrics._namespace} metric '{metric.field}' not found in valkey data")
                 continue
+            entry = host_metrics[metric.field]
             if isinstance(metric, HistogramM):
                 buckets = list(zip(metric.buckets, entry['counts']))
                 buckets = [[str(i[0]), str(i[1])] for i in buckets]
