@@ -96,11 +96,11 @@ class WebhookBackend(AWXBaseEmailBackend, CustomNotificationBase):
                     break
 
                 # convert the url to a base64 encoded string for safe logging
-                url_log_safe = base64.b64encode(url.encode('UTF-8'))
+                url_log_safe = base64.b64encode(url.encode('utf-8')).decode('ascii')
 
                 # get the next URL to try
                 url_next = resp.headers.get("Location", None)
-                url_next_log_safe = base64.b64encode(url_next.encode('UTF-8')) if url_next else b'None'
+                url_next_log_safe = base64.b64encode(url_next.encode('utf-8')).decode('ascii') if url_next else 'None'
 
                 # we've hit a redirect. extract the redirect URL out of the first response header and try again
                 logger.warning(f"Received a {resp.status_code} from {url_log_safe}, trying to reach redirect url {url_next_log_safe}; attempt #{retries+1}")
@@ -113,6 +113,7 @@ class WebhookBackend(AWXBaseEmailBackend, CustomNotificationBase):
                     break
             else:
                 # no break condition in the loop encountered; therefore we have hit the maximum number of retries
+                url_log_safe = base64.b64encode(url.encode('utf-8')).decode('ascii')
                 err = f"Webhook notification max number of retries [{self.MAX_RETRIES}] exceeded. Failed to send webhook notification to {url_log_safe}"
 
             if resp.status_code >= 400:
