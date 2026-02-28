@@ -289,7 +289,7 @@ class Credential(PasswordFieldsModel, CommonModelNameNotUnique, ResourceMixin):
         :param field_name(str):        The name of the input field.
         :param default(optional[str]): A default return value to use.
         """
-        if self.credential_type.kind != 'external' and field_name in self.dynamic_input_fields:
+        if field_name in self.dynamic_input_fields:
             return self._get_dynamic_input(field_name)
         if field_name in self.credential_type.secret_fields:
             try:
@@ -1276,8 +1276,8 @@ class CredentialInputSource(PrimordialModel):
     metadata = DynamicCredentialInputField(blank=True, default=dict)
 
     def clean_target_credential(self):
-        if self.target_credential.credential_type.kind == 'external':
-            raise ValidationError(_('Target must be a non-external credential'))
+        if self.target_credential == self.source_credential:
+            raise ValidationError(_('Target and source credentials must be different'))
         return self.target_credential
 
     def clean_source_credential(self):
@@ -1299,6 +1299,12 @@ class CredentialInputSource(PrimordialModel):
                 backend_kwargs[field_name] = decrypt_field(self.source_credential, field_name)
             else:
                 backend_kwargs[field_name] = value
+
+        # Resolve any dynamic inputs on the source credential
+        # (e.g., a field sourced from another external credential like Azure KV)
+        for field_name in self.source_credential.dynamic_input_fields:
+            if field_name not in backend_kwargs:
+                backend_kwargs[field_name] = self.source_credential._get_dynamic_input(field_name)
 
         backend_kwargs.update(self.metadata)
 
