@@ -433,7 +433,7 @@ class CustomToPrometheusMetricsCollector(prometheus_client.registry.Collector):
 
         instance_data = self._metrics.load_other_metrics(Request(HttpRequest()))
         if not instance_data:
-            logger.debug(f"No metric data not found in valkey for metric namespace '{self._metrics._namespace}'")
+            logger.debug(f"Metric data not found in valkey for metric namespace '{self._metrics._namespace}'")
             return None
 
         host_metrics = instance_data.get(my_hostname)
