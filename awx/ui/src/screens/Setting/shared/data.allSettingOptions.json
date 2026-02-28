@@ -3878,6 +3878,99 @@
                   }
               }
           },
+          "SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY": {
+              "type": "string",
+              "required": false,
+              "label": "Azure AD Tenant OAuth2 Key",
+              "help_text": "The OAuth2 key (Client ID) from your Azure AD application.",
+              "category": "Azure AD Tenant OAuth2",
+              "category_slug": "azuread-oauth2-tenant",
+              "default": ""
+          },
+          "SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET": {
+              "type": "string",
+              "required": false,
+              "label": "Azure AD Tenant OAuth2 Secret",
+              "help_text": "The OAuth2 secret (Client Secret) from your Azure AD application.",
+              "category": "Azure AD Tenant OAuth2",
+              "category_slug": "azuread-oauth2-tenant",
+              "default": ""
+          },
+          "SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TENANT_ID": {
+              "type": "string",
+              "required": false,
+              "label": "Azure AD Tenant ID",
+              "help_text": "The directory/tenant ID of your Azure AD application. This limits authentication to a single tenant.",
+              "category": "Azure AD Tenant OAuth2",
+              "category_slug": "azuread-oauth2-tenant",
+              "default": ""
+          },
+          "SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_ORGANIZATION_MAP": {
+              "type": "nested object",
+              "required": false,
+              "label": "Azure AD Tenant OAuth2 Organization Map",
+              "help_text": "Mapping to organization admins/users from social auth accounts. This setting\ncontrols which users are placed into which organizations based on their\nusername and email address. Configuration details are available in the\ndocumentation.",
+              "category": "Azure AD Tenant OAuth2",
+              "category_slug": "azuread-oauth2-tenant",
+              "placeholder": {
+                  "Test Org": {
+                      "users": [
+                          "/^[^@]+?@test\\.example\\.com$/"
+                      ],
+                      "admins": [
+                          "/^admin@test\\.example\\.com$/"
+                      ]
+                  },
+                  "Test Org 2": {
+                      "users": "/^[^@]+?@test2\\.example\\.com$/i",
+                      "admins": "/^admin@test2\\.example\\.com$/i"
+                  }
+              },
+              "default": null,
+              "child": {
+                  "type": "nested object",
+                  "required": true,
+                  "read_only": false,
+                  "child": {
+                      "type": "field",
+                      "required": true,
+                      "read_only": false
+                  }
+              }
+          },
+          "SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TEAM_MAP": {
+              "type": "nested object",
+              "required": false,
+              "label": "Azure AD Tenant OAuth2 Team Map",
+              "help_text": "Mapping of team members (users) from social auth accounts. Configuration\ndetails are available in the documentation.",
+              "category": "Azure AD Tenant OAuth2",
+              "category_slug": "azuread-oauth2-tenant",
+              "placeholder": {
+                  "My Team": {
+                      "organization": "Test Org",
+                      "users": [
+                          "/^[^@]+?@test\\.example\\.com$/"
+                      ],
+                      "remove": true
+                  },
+                  "Other Team": {
+                      "organization": "Test Org 2",
+                      "users": "/^[^@]+?@test2\\.example\\.com$/i",
+                      "remove": false
+                  }
+              },
+              "default": null,
+              "child": {
+                  "type": "nested object",
+                  "required": true,
+                  "read_only": false,
+                  "child": {
+                      "type": "field",
+                      "required": true,
+                      "read_only": false
+                  }
+              }
+          },
           "SOCIAL_AUTH_OIDC_KEY": {
               "type": "string",
               "required": false,
@@ -7162,6 +7255,70 @@
               "help_text": "Mapping of team members (users) from social auth accounts. Configuration\ndetails are available in the documentation.",
               "category": "Azure AD OAuth2",
               "category_slug": "azuread-oauth2",
+              "defined_in_file": false,
+              "child": {
+                  "type": "nested object",
+                  "child": {
+                      "type": "field",
+                      "required": true,
+                      "read_only": false
+                  }
+              }
+          },
+          "SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_CALLBACK_URL": {
+              "type": "string",
+              "label": "Azure AD Tenant OAuth2 Callback URL",
+              "help_text": "Provide this URL as the callback URL for your application as part of your registration process. Refer to the documentation for more detail.",
+              "category": "Azure AD Tenant OAuth2",
+              "category_slug": "azuread-oauth2-tenant",
+              "defined_in_file": false
+          },
+          "SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY": {
+              "type": "string",
+              "label": "Azure AD Tenant OAuth2 Key",
+              "help_text": "The OAuth2 key (Client ID) from your Azure AD application.",
+              "category": "Azure AD Tenant OAuth2",
+              "category_slug": "azuread-oauth2-tenant",
+              "defined_in_file": false
+          },
+          "SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET": {
+              "type": "string",
+              "label": "Azure AD Tenant OAuth2 Secret",
+              "help_text": "The OAuth2 secret (Client Secret) from your Azure AD application.",
+              "category": "Azure AD Tenant OAuth2",
+              "category_slug": "azuread-oauth2-tenant",
+              "defined_in_file": false
+          },
+          "SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TENANT_ID": {
+              "type": "string",
+              "label": "Azure AD Tenant ID",
+              "help_text": "The directory/tenant ID of your Azure AD application. This limits authentication to a single tenant.",
+              "category": "Azure AD Tenant OAuth2",
+              "category_slug": "azuread-oauth2-tenant",
+              "defined_in_file": false
+          },
+          "SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_ORGANIZATION_MAP": {
+              "type": "nested object",
+              "label": "Azure AD Tenant OAuth2 Organization Map",
+              "help_text": "Mapping to organization admins/users from social auth accounts. This setting\ncontrols which users are placed into which organizations based on their\nusername and email address. Configuration details are available in the\ndocumentation.",
+              "category": "Azure AD Tenant OAuth2",
+              "category_slug": "azuread-oauth2-tenant",
+              "defined_in_file": false,
+              "child": {
+                  "type": "nested object",
+                  "child": {
+                      "type": "field",
+                      "required": true,
+                      "read_only": false
+                  }
+              }
+          },
+          "SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TEAM_MAP": {
+              "type": "nested object",
+              "label": "Azure AD Tenant OAuth2 Team Map",
+              "help_text": "Mapping of team members (users) from social auth accounts. Configuration\ndetails are available in the documentation.",
+              "category": "Azure AD Tenant OAuth2",
+              "category_slug": "azuread-oauth2-tenant",
               "defined_in_file": false,
               "child": {
                   "type": "nested object",

@@ -3,7 +3,9 @@ import { act } from 'react-dom/test-utils';
 import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import {
+  mountWithContexts,
+} from '../../../../testUtils/enzymeHelpers';
 import mockAllOptions from '../shared/data.allSettingOptions.json';
 import AzureAD from './AzureAD';
 
@@ -35,7 +37,7 @@ describe('<AzureAD />', () => {
 
   test('should render azure details', async () => {
     const history = createMemoryHistory({
-      initialEntries: ['/settings/azure/details'],
+      initialEntries: ['/settings/azure/default/details'],
     });
     await act(async () => {
       wrapper = mountWithContexts(
@@ -52,7 +54,7 @@ describe('<AzureAD />', () => {
 
   test('should render azure edit', async () => {
     const history = createMemoryHistory({
-      initialEntries: ['/settings/azure/edit'],
+      initialEntries: ['/settings/azure/default/edit'],
     });
     await act(async () => {
       wrapper = mountWithContexts(<AzureAD />, {
@@ -64,12 +66,17 @@ describe('<AzureAD />', () => {
 
   test('should show content error when user navigates to erroneous route', async () => {
     const history = createMemoryHistory({
-      initialEntries: ['/settings/azure/foo'],
+      initialEntries: ['/settings/azure/foo/bar/baz'],
     });
     await act(async () => {
-      wrapper = mountWithContexts(<AzureAD />, {
-        context: { router: { history } },
-      });
+      wrapper = mountWithContexts(
+        <SettingsProvider value={mockAllOptions.actions}>
+          <AzureAD />
+        </SettingsProvider>,
+        {
+          context: { router: { history } },
+        }
+      );
     });
     expect(wrapper.find('ContentError').length).toBe(1);
   });

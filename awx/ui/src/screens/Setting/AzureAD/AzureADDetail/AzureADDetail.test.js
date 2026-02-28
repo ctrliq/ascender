@@ -14,24 +14,32 @@ import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import AzureADDetail from './AzureADDetail';
 
 jest.mock('../../../../api');
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useRouteMatch: () => ({
+    path: '/settings/azure/default/details',
+    params: { category: 'default' },
+  }),
+}));
 
 describe('<AzureADDetail />', () => {
   let wrapper;
 
   beforeEach(async () => {
-    SettingsAPI.readCategory.mockResolvedValue({
-      data: {
-        SOCIAL_AUTH_AZUREAD_OAUTH2_CALLBACK_URL:
-          'https://towerhost/sso/complete/azuread-oauth2/',
-        SOCIAL_AUTH_AZUREAD_OAUTH2_KEY: 'mock key',
-        SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET: '$encrypted$',
-        SOCIAL_AUTH_AZUREAD_OAUTH2_ORGANIZATION_MAP: {},
-        SOCIAL_AUTH_AZUREAD_OAUTH2_TEAM_MAP: {
-          'My Team': {
-            users: [],
-          },
+    const mockData = {
+      SOCIAL_AUTH_AZUREAD_OAUTH2_CALLBACK_URL:
+        'https://towerhost/sso/complete/azuread-oauth2/',
+      SOCIAL_AUTH_AZUREAD_OAUTH2_KEY: 'mock key',
+      SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET: '$encrypted$',
+      SOCIAL_AUTH_AZUREAD_OAUTH2_ORGANIZATION_MAP: {},
+      SOCIAL_AUTH_AZUREAD_OAUTH2_TEAM_MAP: {
+        'My Team': {
+          users: [],
         },
       },
+    };
+    SettingsAPI.readCategory.mockResolvedValue({
+      data: mockData,
     });
     await act(async () => {
       wrapper = mountWithContexts(
@@ -52,7 +60,7 @@ describe('<AzureADDetail />', () => {
   });
 
   test('should render expected tabs', () => {
-    const expectedTabs = ['Back to Settings', 'Details'];
+    const expectedTabs = ['Back to Settings', 'Azure AD Default', 'Azure AD Tenant'];
     wrapper.find('RoutedTabs li').forEach((tab, index) => {
       expect(tab.text()).toEqual(expectedTabs[index]);
     });

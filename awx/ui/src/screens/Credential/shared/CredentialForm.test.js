@@ -395,7 +395,7 @@ describe('<CredentialForm />', () => {
       expect(wrapper.find('FormGroup[label="Organization"]').length).toBe(1);
       expect(
         wrapper.find('FormGroup[label="Organization"]').prop('isRequired')
-      ).toBe(true);
+      ).toBe(false);
       expect(wrapper.find('FormGroup[label="Credential Type"]').length).toBe(1);
     });
 
