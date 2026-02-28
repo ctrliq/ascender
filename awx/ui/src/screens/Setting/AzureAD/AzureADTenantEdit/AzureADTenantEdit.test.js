@@ -51,7 +51,7 @@ describe('<AzureADTenantEdit />', () => {
         unit: null,
       },
     };
-    
+  
     SettingsAPI.revertCategory.mockResolvedValue({});
     SettingsAPI.updateAll.mockResolvedValue({});
     SettingsAPI.readCategory.mockResolvedValue({

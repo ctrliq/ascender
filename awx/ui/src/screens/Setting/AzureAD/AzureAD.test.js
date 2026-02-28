@@ -5,7 +5,6 @@ import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
 import {
   mountWithContexts,
-  waitForElement,
 } from '../../../../testUtils/enzymeHelpers';
 import mockAllOptions from '../shared/data.allSettingOptions.json';
 import AzureAD from './AzureAD';
