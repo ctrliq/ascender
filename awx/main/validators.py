@@ -3,6 +3,7 @@
 
 # Python
 import base64
+import binascii
 import re
 
 # Django
@@ -106,7 +107,7 @@ def validate_pem(data, min_keys=0, max_keys=None, min_certs=0, max_certs=None):
                 raise TypeError
             pem_obj_info['b64'] = base64_data
             pem_obj_info['bin'] = decoded_data
-        except TypeError:
+        except (TypeError, binascii.Error):
             raise ValidationError(_('Invalid base64-encoded data'))
 
         # If private key, check whether it is encrypted.
@@ -181,6 +182,8 @@ def validate_ssh_private_key(data):
     certificates; should handle any valid options for ssh_private_key on a
     credential.
     """
+    # Strip leading and trailing whitespace/newlines to handle common copy-paste issues
+    data = data.strip()
     return validate_pem(data, min_keys=1)
 
 
