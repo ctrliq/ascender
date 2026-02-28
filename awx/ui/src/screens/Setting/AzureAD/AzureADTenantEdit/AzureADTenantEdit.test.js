@@ -8,27 +8,61 @@ import {
   waitForElement,
 } from '../../../../../testUtils/enzymeHelpers';
 import mockAllOptions from '../../shared/data.allSettingOptions.json';
-import AzureADEdit from './AzureADEdit';
+import AzureADTenantEdit from './AzureADTenantEdit';
 
 jest.mock('../../../../api');
 
-describe('<AzureADEdit />', () => {
+describe('<AzureADTenantEdit />', () => {
   let wrapper;
   let history;
+  let tenantSettings;
 
   beforeEach(() => {
+    tenantSettings = {
+      ...mockAllOptions.actions,
+      SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY: {
+        label: 'Azure AD Tenant OAuth2 Key',
+        help_text: 'The OAuth2 key',
+        type: 'string',
+        unit: null,
+      },
+      SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET: {
+        label: 'Azure AD Tenant OAuth2 Secret',
+        help_text: 'The OAuth2 secret',
+        type: 'password',
+        unit: null,
+      },
+      SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TENANT_ID: {
+        label: 'Azure AD Tenant OAuth2 Tenant ID',
+        help_text: 'The tenant ID',
+        type: 'string',
+        unit: null,
+      },
+      SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_ORGANIZATION_MAP: {
+        label: 'Azure AD Tenant OAuth2 Organization Map',
+        help_text: 'The organization map',
+        type: 'nested object',
+        unit: null,
+      },
+      SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TEAM_MAP: {
+        label: 'Azure AD Tenant OAuth2 Team Map',
+        help_text: 'The team map',
+        type: 'nested object',
+        unit: null,
+      },
+    };
+    
     SettingsAPI.revertCategory.mockResolvedValue({});
     SettingsAPI.updateAll.mockResolvedValue({});
     SettingsAPI.readCategory.mockResolvedValue({
       data: {
-        SOCIAL_AUTH_AZUREAD_OAUTH2_CALLBACK_URL:
-          'https://towerhost/sso/complete/azuread-oauth2/',
-        SOCIAL_AUTH_AZUREAD_OAUTH2_KEY: 'mock key',
-        SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET: '$encrypted$',
-        SOCIAL_AUTH_AZUREAD_OAUTH2_ORGANIZATION_MAP: {},
-        SOCIAL_AUTH_AZUREAD_OAUTH2_TEAM_MAP: {
-          'My Team': {
-            organization: 'foo',
+        SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY: 'mock tenant key',
+        SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET: '$encrypted$',
+        SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TENANT_ID: 'mock-tenant-id',
+        SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_ORGANIZATION_MAP: {},
+        SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TEAM_MAP: {
+          'My Tenant Team': {
+            organization: 'tenant-foo',
           },
         },
       },
@@ -41,12 +75,12 @@ describe('<AzureADEdit />', () => {
 
   beforeEach(async () => {
     history = createMemoryHistory({
-      initialEntries: ['/settings/azure/default/edit'],
+      initialEntries: ['/settings/azure/tenant/edit'],
     });
     await act(async () => {
       wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <AzureADEdit />
+        <SettingsProvider value={tenantSettings}>
+          <AzureADTenantEdit />
         </SettingsProvider>,
         {
           context: { router: { history } },
@@ -57,7 +91,7 @@ describe('<AzureADEdit />', () => {
   });
 
   test('initially renders without crashing', () => {
-    expect(wrapper.find('AzureADEdit').length).toBe(1);
+    expect(wrapper.find('AzureADTenantEdit').length).toBe(1);
   });
 
   test('should successfully send default values to api on form revert all', async () => {
@@ -77,7 +111,9 @@ describe('<AzureADEdit />', () => {
     });
     wrapper.update();
     expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(1);
-    expect(SettingsAPI.revertCategory).toHaveBeenCalledWith('azuread-oauth2');
+    expect(SettingsAPI.revertCategory).toHaveBeenCalledWith(
+      'azuread-oauth2-tenant'
+    );
   });
 
   test('should successfully send request to api on form submission', async () => {
@@ -85,30 +121,27 @@ describe('<AzureADEdit />', () => {
       wrapper.find('Form').invoke('onSubmit')();
     });
     expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1);
-    expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
-      SOCIAL_AUTH_AZUREAD_OAUTH2_KEY: 'mock key',
-      SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET: '$encrypted$',
-      SOCIAL_AUTH_AZUREAD_OAUTH2_ORGANIZATION_MAP: {},
-      SOCIAL_AUTH_AZUREAD_OAUTH2_TEAM_MAP: {
-        'My Team': {
-          organization: 'foo',
-        },
-      },
-    });
+    const callArgs = SettingsAPI.updateAll.mock.calls[0][0];
+    expect(callArgs.SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY).toEqual('mock tenant key');
+    expect(callArgs.SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET).toEqual('$encrypted$');
+    expect(callArgs.SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TENANT_ID).toEqual('mock-tenant-id');
+    // Nested objects should be properly formatted
+    expect(typeof callArgs.SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_ORGANIZATION_MAP).toEqual('object');
+    expect(typeof callArgs.SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TEAM_MAP).toEqual('object');
   });
 
-  test('should navigate to azure detail on successful submission', async () => {
+  test('should navigate to azure tenant detail on successful submission', async () => {
     await act(async () => {
       wrapper.find('Form').invoke('onSubmit')();
     });
-    expect(history.location.pathname).toEqual('/settings/azure/default/details');
+    expect(history.location.pathname).toEqual('/settings/azure/tenant/details');
   });
 
-  test('should navigate to azure detail when cancel is clicked', async () => {
+  test('should navigate to azure tenant detail when cancel is clicked', async () => {
     await act(async () => {
       wrapper.find('button[aria-label="Cancel"]').invoke('onClick')();
     });
-    expect(history.location.pathname).toEqual('/settings/azure/default/details');
+    expect(history.location.pathname).toEqual('/settings/azure/tenant/details');
   });
 
   test('should display error message on unsuccessful submission', async () => {
@@ -134,8 +167,8 @@ describe('<AzureADEdit />', () => {
     );
     await act(async () => {
       wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <AzureADEdit />
+        <SettingsProvider value={tenantSettings}>
+          <AzureADTenantEdit />
         </SettingsProvider>
       );
     });
