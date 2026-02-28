@@ -76,12 +76,7 @@ options:
       description:
         - Execution Environment name, ID, or named URL to use for the source.
       type: str
-    custom_virtualenv:
-      description:
-        - Local absolute file path containing a custom Python virtualenv to use.
-        - Only compatible with older versions of AWX/Controller
-        - Deprecated, will be removed in the future
-      type: str
+
     overwrite:
       description:
         - Delete child groups and hosts not found in source.
@@ -179,7 +174,7 @@ def main():
         limit=dict(),
         credential=dict(),
         execution_environment=dict(),
-        custom_virtualenv=dict(),
+
         organization=dict(),
         overwrite=dict(type='bool'),
         overwrite_vars=dict(type='bool'),
@@ -276,7 +271,7 @@ def main():
         'source_vars',
         'overwrite',
         'overwrite_vars',
-        'custom_virtualenv',
+
         'timeout',
         'verbosity',
         'update_on_launch',
