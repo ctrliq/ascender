@@ -65,7 +65,6 @@ from awx.main.models.rbac import (  # noqa
     ROLE_SINGLETON_SYSTEM_AUDITOR,
 )
 from awx.main.models.mixins import (  # noqa
-    CustomVirtualEnvMixin,
     ExecutionEnvironmentMixin,
     ResourceMixin,
     SurveyJobMixin,
