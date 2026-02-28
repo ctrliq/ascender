@@ -127,7 +127,7 @@ class WebhookReceiverBase(APIView):
             raise PermissionDenied
 
     @csrf_exempt
-    def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs_in):
         # Ensure that the full contents of the request are captured for multiple uses.
         request.body
 

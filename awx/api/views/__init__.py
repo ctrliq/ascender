@@ -1603,8 +1603,8 @@ class CredentialTypeExternalTest(SubDetailAPIView):
             return Response({'inputs': message}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as exc:
             message = exc.__class__.__name__
-            args = getattr(exc, 'args', [])
-            for a in args:
+            exc_args = getattr(exc, 'args', [])
+            for a in exc_args:
                 if isinstance(getattr(a, 'reason', None), ConnectTimeoutError):
                     message = str(a.reason)
             return Response({'inputs': message}, status=status.HTTP_400_BAD_REQUEST)
