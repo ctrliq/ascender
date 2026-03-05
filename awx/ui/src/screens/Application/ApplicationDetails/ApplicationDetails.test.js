@@ -148,7 +148,7 @@ describe('<ApplicationDetails/>', () => {
     });
     expect(ApplicationsAPI.destroy).toHaveBeenCalledTimes(1);
     expect(history.location.pathname).toBe('/applications');
-    expect(ApplicationsAPI.destroy).toBeCalledWith(10);
+    expect(ApplicationsAPI.destroy).toHaveBeenCalledWith(10);
   });
 
   test(' should not render delete button', async () => {

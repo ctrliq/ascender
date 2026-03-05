@@ -78,7 +78,7 @@ describe.skip('<DraggableSelectedList />', () => {
     wrapper
       .find('DataListItem[id="foo"] Button[aria-label="Remove"]')
       .simulate('click');
-    expect(onRemove).toBeCalledWith({
+    expect(onRemove).toHaveBeenCalledWith({
       id: 1,
       name: 'foo',
     });

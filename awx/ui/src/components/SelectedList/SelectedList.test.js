@@ -51,7 +51,7 @@ describe('<SelectedList />', () => {
       />
     );
     wrapper.find('.pf-c-chip button').first().simulate('click');
-    expect(onRemove).toBeCalledWith({
+    expect(onRemove).toHaveBeenCalledWith({
       id: 1,
       name: 'foo',
     });

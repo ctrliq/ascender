@@ -334,7 +334,7 @@ describe('<JobTemplateForm />', () => {
     await act(() =>
       wrapper.find('Button[aria-label="Update webhook key"]').prop('onClick')()
     );
-    expect(JobTemplatesAPI.updateWebhookKey).toBeCalledWith('1');
+    expect(JobTemplatesAPI.updateWebhookKey).toHaveBeenCalledWith('1');
     expect(
       wrapper.find('TextInputBase[aria-label="Webhook URL"]').prop('value')
     ).toContain('/api/v2/job_templates/57/gitlab/');
@@ -419,7 +419,7 @@ describe('<JobTemplateForm />', () => {
     await act(async () => {
       wrapper.find('button[aria-label="Save"]').simulate('click');
     });
-    expect(handleSubmit).toBeCalled();
+    expect(handleSubmit).toHaveBeenCalled();
   });
 
   test('should call handleCancel when Cancel button is clicked', async () => {
@@ -437,6 +437,6 @@ describe('<JobTemplateForm />', () => {
     await waitForElement(wrapper, 'EmptyStateBody', (el) => el.length === 0);
     expect(handleCancel).not.toHaveBeenCalled();
     wrapper.find('button[aria-label="Cancel"]').invoke('onClick')();
-    expect(handleCancel).toBeCalled();
+    expect(handleCancel).toHaveBeenCalled();
   });
 });

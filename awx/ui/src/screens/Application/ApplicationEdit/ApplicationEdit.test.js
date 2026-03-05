@@ -216,7 +216,7 @@ describe('<ApplicationEdit/>', () => {
       });
     });
 
-    expect(ApplicationsAPI.update).toBeCalledWith(1, {
+    expect(ApplicationsAPI.update).toHaveBeenCalledWith(1, {
       authorization_grant_type: 'authorization-code',
       client_type: 'confidential',
       description: 'bar',

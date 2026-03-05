@@ -67,7 +67,7 @@ describe('<Metrics/>', () => {
         .prop('onClick')({}, 'metric1');
     });
     wrapper.update();
-    expect(MetricsAPI.read).toBeCalledWith({
+    expect(MetricsAPI.read).toHaveBeenCalledWith({
       subsystemonly: 1,
       format: 'json',
       metric: 'metric1',

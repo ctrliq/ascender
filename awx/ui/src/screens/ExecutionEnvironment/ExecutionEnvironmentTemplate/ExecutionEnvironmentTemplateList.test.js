@@ -94,8 +94,8 @@ describe('<ExecutionEnvironmentTemplateList/>', () => {
     );
 
     expect(wrapper.find('ExecutionEnvironmentTemplateListItem').length).toBe(3);
-    expect(ExecutionEnvironmentsAPI.readUnifiedJobTemplates).toBeCalled();
-    expect(ExecutionEnvironmentsAPI.readUnifiedJobTemplateOptions).toBeCalled();
+    expect(ExecutionEnvironmentsAPI.readUnifiedJobTemplates).toHaveBeenCalled();
+    expect(ExecutionEnvironmentsAPI.readUnifiedJobTemplateOptions).toHaveBeenCalled();
   });
 
   test('should not render add button', async () => {

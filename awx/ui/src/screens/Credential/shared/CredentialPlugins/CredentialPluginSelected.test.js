@@ -24,11 +24,11 @@ describe('<CredentialPluginSelected />', () => {
 
   test('clearing plugin calls expected function', () => {
     wrapper.find('CredentialChip button').simulate('click');
-    expect(onClearPlugin).toBeCalledTimes(1);
+    expect(onClearPlugin).toHaveBeenCalledTimes(1);
   });
 
   test('editing plugin calls expected function', () => {
     wrapper.find('KeyIcon').simulate('click');
-    expect(onEditPlugin).toBeCalledTimes(1);
+    expect(onEditPlugin).toHaveBeenCalledTimes(1);
   });
 });

@@ -27,7 +27,7 @@ describe('<ContainerGroup/>', () => {
     });
     wrapper.update();
     expect(wrapper.find('ContainerGroup').length).toBe(1);
-    expect(InstanceGroupsAPI.readDetail).toBeCalledWith(42);
+    expect(InstanceGroupsAPI.readDetail).toHaveBeenCalledWith(42);
   });
 
   test('should render expected tabs', async () => {

@@ -1035,9 +1035,9 @@ describe('<ScheduleForm />', () => {
           />
         );
       });
-      expect(SchedulesAPI.readZoneInfo).toBeCalled();
-      expect(SchedulesAPI.readCredentials).toBeCalledWith(27);
-      expect(SchedulesAPI.readAllLabels).toBeCalledWith(27);
+      expect(SchedulesAPI.readZoneInfo).toHaveBeenCalled();
+      expect(SchedulesAPI.readCredentials).toHaveBeenCalledWith(27);
+      expect(SchedulesAPI.readAllLabels).toHaveBeenCalledWith(27);
     });
 
     test('should not call API to get credentials ', async () => {
@@ -1085,7 +1085,7 @@ describe('<ScheduleForm />', () => {
         );
       });
 
-      expect(SchedulesAPI.readCredentials).not.toBeCalled();
+      expect(SchedulesAPI.readCredentials).not.toHaveBeenCalled();
     });
 
     test('should render prompt button with enabled save button for project', async () => {

@@ -74,8 +74,8 @@ describe('<ManagementJobList/>', () => {
     await waitForElement(wrapper, 'ManagementJobList', (el) => el.length > 0);
 
     expect(wrapper.find('ManagementJobListItem').length).toBe(4);
-    expect(SystemJobTemplatesAPI.read).toBeCalled();
-    expect(SystemJobTemplatesAPI.readOptions).toBeCalled();
+    expect(SystemJobTemplatesAPI.read).toHaveBeenCalled();
+    expect(SystemJobTemplatesAPI.readOptions).toHaveBeenCalled();
   });
 
   test('should throw content error', async () => {

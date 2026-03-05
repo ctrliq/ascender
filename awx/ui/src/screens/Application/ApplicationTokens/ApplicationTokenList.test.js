@@ -108,7 +108,7 @@ describe('<ApplicationTokenList/>', () => {
     });
     wrapper.update();
     expect(wrapper.find('ApplicationTokenListItem').length).toBe(2);
-    expect(ApplicationsAPI.readTokens).toBeCalled();
+    expect(ApplicationsAPI.readTokens).toHaveBeenCalled();
   });
 
   test('should delete item successfully', async () => {
@@ -148,7 +148,7 @@ describe('<ApplicationTokenList/>', () => {
     await act(async () =>
       confirmButton.prop('onClick')()
     );
-    expect(TokensAPI.destroy).toBeCalledWith(tokens.data.results[0].id);
+    expect(TokensAPI.destroy).toHaveBeenCalledWith(tokens.data.results[0].id);
   });
 
   test('should throw content error', async () => {

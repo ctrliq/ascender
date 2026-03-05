@@ -49,7 +49,7 @@ describe('<InventoryAdd />', () => {
       organization: 2,
       labels: [{ name: 'label' }],
     });
-    expect(InventoriesAPI.associateLabel).toBeCalledWith(
+    expect(InventoriesAPI.associateLabel).toHaveBeenCalledWith(
       13,
       { name: 'label' },
       2

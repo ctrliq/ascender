@@ -51,7 +51,7 @@ describe('<Search />', () => {
     search.find(searchBtn).simulate('click');
 
     expect(onSearch).toHaveBeenCalledTimes(1);
-    expect(onSearch).toBeCalledWith('name__icontains', 'test-321');
+    expect(onSearch).toHaveBeenCalledWith('name__icontains', 'test-321');
   });
 
   test('changing key select updates which key is called for onSearch', () => {
@@ -90,7 +90,7 @@ describe('<Search />', () => {
     wrapper.find(searchButton).simulate('click');
 
     expect(onSearch).toHaveBeenCalledTimes(1);
-    expect(onSearch).toBeCalledWith('description__icontains', 'test-321');
+    expect(onSearch).toHaveBeenCalledWith('description__icontains', 'test-321');
   });
 
   test('changing key select to and from advanced causes onShowAdvancedSearch callback to be invoked', () => {
@@ -125,7 +125,7 @@ describe('<Search />', () => {
     });
     wrapper.update();
     expect(onShowAdvancedSearch).toHaveBeenCalledTimes(1);
-    expect(onShowAdvancedSearch).toBeCalledWith(true);
+    expect(onShowAdvancedSearch).toHaveBeenCalledWith(true);
     jest.clearAllMocks();
     act(() => {
       wrapper.find('Select[aria-label="Simple key select"]').invoke('onSelect')(
@@ -134,7 +134,7 @@ describe('<Search />', () => {
     });
     wrapper.update();
     expect(onShowAdvancedSearch).toHaveBeenCalledTimes(1);
-    expect(onShowAdvancedSearch).toBeCalledWith(false);
+    expect(onShowAdvancedSearch).toHaveBeenCalledWith(false);
   });
 
   test('attempt to search with empty string', () => {
@@ -193,7 +193,7 @@ describe('<Search />', () => {
     wrapper.find(searchButton).simulate('click');
 
     expect(onSearch).toHaveBeenCalledTimes(1);
-    expect(onSearch).toBeCalledWith('name__icontains', 'test-321');
+    expect(onSearch).toHaveBeenCalledWith('name__icontains', 'test-321');
   });
 
   test('filter keys are properly labeled', () => {
@@ -279,7 +279,7 @@ describe('<Search />', () => {
         .at(0)
         .simulate('click');
     });
-    expect(onRemove).toBeCalledWith('or__type', 'foo');
+    expect(onRemove).toHaveBeenCalledWith('or__type', 'foo');
   });
 
   test('should test handle remove of option-based with empty string value', async () => {
@@ -326,7 +326,7 @@ describe('<Search />', () => {
         .at(0)
         .simulate('click');
     });
-    expect(onRemove).toBeCalledWith('or__type', '');
+    expect(onRemove).toHaveBeenCalledWith('or__type', '');
   });
 
   test("ToolbarFilter added for any key that doesn't have search column", () => {

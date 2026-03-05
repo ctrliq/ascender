@@ -67,7 +67,7 @@ describe('<ToolbarDeleteButton />', () => {
       wrapper.find('button').prop('onClick')();
     });
     await waitForElement(wrapper, 'Modal', (el) => el.length > 0);
-    expect(CredentialsAPI.read).toBeCalled();
+    expect(CredentialsAPI.read).toHaveBeenCalled();
     expect(wrapper.find('Modal')).toHaveLength(1);
     expect(
       wrapper.find('div[aria-label="Workflow Job Template Node: 1"]')
@@ -109,7 +109,7 @@ describe('<ToolbarDeleteButton />', () => {
       wrapper.find('button').prop('onClick')();
     });
     await waitForElement(wrapper, 'Modal', (el) => el.length > 0);
-    expect(CredentialsAPI.read).not.toBeCalled();
+    expect(CredentialsAPI.read).not.toHaveBeenCalled();
     expect(wrapper.find('Modal')).toHaveLength(1);
     expect(
       wrapper.find('Button[aria-label="confirm delete"]').prop('isDisabled')
@@ -147,7 +147,7 @@ describe('<ToolbarDeleteButton />', () => {
       wrapper.find('button').prop('onClick')();
     });
     await waitForElement(wrapper, 'Modal', (el) => el.length > 0);
-    expect(CredentialsAPI.read).toBeCalled();
+    expect(CredentialsAPI.read).toHaveBeenCalled();
     expect(wrapper.find('Modal')).toHaveLength(1);
 
     expect(
@@ -190,7 +190,7 @@ describe('<ToolbarDeleteButton />', () => {
     expect(wrapper.find('Modal')).toHaveLength(0);
     await act(async () => wrapper.find('button').simulate('click'));
     await waitForElement(wrapper, 'Modal', (el) => el.length > 0);
-    expect(CredentialsAPI.read).toBeCalled();
+    expect(CredentialsAPI.read).toHaveBeenCalled();
 
     wrapper.update();
 

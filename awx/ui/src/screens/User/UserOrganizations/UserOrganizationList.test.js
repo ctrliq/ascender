@@ -66,12 +66,12 @@ describe('<UserOrganizationlist />', () => {
   });
 
   test('calls api to get organizations', () => {
-    expect(UsersAPI.readOrganizations).toBeCalledWith('1', {
+    expect(UsersAPI.readOrganizations).toHaveBeenCalledWith('1', {
       order_by: 'name',
       page: 1,
       page_size: 20,
       type: 'organization',
     });
-    expect(UsersAPI.readOrganizationOptions).toBeCalledWith('1');
+    expect(UsersAPI.readOrganizationOptions).toHaveBeenCalledWith('1');
   });
 });

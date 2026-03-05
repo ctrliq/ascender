@@ -262,7 +262,7 @@ describe('<UserRolesList />', () => {
         .find('button[aria-label="Confirm disassociate"]')
         .prop('onClick')()
     );
-    expect(RolesAPI.disassociateUserRole).toBeCalledWith(4, 18);
+    expect(RolesAPI.disassociateUserRole).toHaveBeenCalledWith(4, 18);
     wrapper.update();
     expect(
       wrapper.find('AlertModal[aria-label="Disassociate role"]').length

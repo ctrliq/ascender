@@ -475,7 +475,7 @@ describe('<ScheduleAdd />', () => {
     });
     wrapper.update();
 
-    expect(JobTemplatesAPI.createSchedule).toBeCalledWith(700, {
+    expect(JobTemplatesAPI.createSchedule).toHaveBeenCalledWith(700, {
       extra_data: {},
       inventory: 45,
       name: 'Schedule',
@@ -483,7 +483,7 @@ describe('<ScheduleAdd />', () => {
         'DTSTART;TZID=America/New_York:20210128T141500 RRULE:INTERVAL=1;COUNT=1;FREQ=MINUTELY',
       skip_tags: '',
     });
-    expect(SchedulesAPI.associateCredential).toBeCalledWith(3, 10);
+    expect(SchedulesAPI.associateCredential).toHaveBeenCalledWith(3, 10);
   });
 
   test('should submit survey with default values properly, without opening prompt wizard', async () => {

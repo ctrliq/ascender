@@ -62,7 +62,7 @@ describe('<InstanceForm />', () => {
     expect(handleCancel).not.toHaveBeenCalled();
     wrapper.find('button[aria-label="Cancel"]').invoke('onClick')();
     wrapper.update();
-    expect(handleCancel).toBeCalled();
+    expect(handleCancel).toHaveBeenCalled();
   });
 
   test('should call handleSubmit when Save button is clicked', async () => {
@@ -83,7 +83,7 @@ describe('<InstanceForm />', () => {
       wrapper.find('button[aria-label="Save"]').invoke('onClick')();
     });
 
-    expect(handleSubmit).toBeCalledWith({
+    expect(handleSubmit).toHaveBeenCalledWith({
       description: 'This is a repeat song',
       enabled: true,
       managed_by_policy: true,

@@ -58,7 +58,7 @@ describe('<WorkflowDenyButton/>, full mount', () => {
       );
     });
     await act(() => wrapper.find(denyButton).prop('onClick')());
-    expect(WorkflowApprovalsAPI.deny).toBeCalledWith(218);
+    expect(WorkflowApprovalsAPI.deny).toHaveBeenCalledWith(218);
   });
 
   test('Should handle deny error', async () => {

@@ -280,7 +280,7 @@ describe('<TeamRolesList />', () => {
         .find('button[aria-label="confirm disassociate"]')
         .prop('onClick')()
     );
-    expect(RolesAPI.disassociateTeamRole).toBeCalledWith(4, 18);
+    expect(RolesAPI.disassociateTeamRole).toHaveBeenCalledWith(4, 18);
     wrapper.update();
     expect(
       wrapper.find('AlertModal[aria-label="Disassociate role"]').length

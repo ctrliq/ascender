@@ -4,6 +4,7 @@ import { RootAPI } from 'api';
 import * as SessionContext from 'contexts/Session';
 import { shallow } from 'enzyme';
 import { mountWithContexts } from '../testUtils/enzymeHelpers';
+import * as navigation from 'util/navigation';
 import App, { ProtectedRoute } from './App';
 
 jest.mock('./api');
@@ -38,14 +39,11 @@ describe('<App />', () => {
   });
 
   test('redirect to login override', async () => {
-    const { location } = window;
-    delete window.location;
-    window.location = {
-      replace: jest.fn(),
-      href: '/',
-    };
+    const replaceSpy = jest
+      .spyOn(navigation, 'locationReplace')
+      .mockImplementation(() => {});
 
-    expect(window.location.replace).not.toHaveBeenCalled();
+    expect(replaceSpy).not.toHaveBeenCalled();
 
     const contextValues = {
       setAuthRedirectTo: jest.fn(),
@@ -65,7 +63,7 @@ describe('<App />', () => {
       );
     });
 
-    expect(window.location.replace).toHaveBeenCalled();
-    window.location = location;
+    expect(replaceSpy).toHaveBeenCalled();
+    replaceSpy.mockRestore();
   });
 });

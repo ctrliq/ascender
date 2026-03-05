@@ -283,11 +283,11 @@ describe('NodeModal', () => {
 
     wrapper.update();
 
-    expect(JobTemplatesAPI.readLaunch).toBeCalledWith(1);
-    expect(JobTemplatesAPI.readCredentials).toBeCalledWith(1, {
+    expect(JobTemplatesAPI.readLaunch).toHaveBeenCalledWith(1);
+    expect(JobTemplatesAPI.readCredentials).toHaveBeenCalledWith(1, {
       page_size: 200,
     });
-    expect(JobTemplatesAPI.readSurvey).toBeCalledWith(25);
+    expect(JobTemplatesAPI.readSurvey).toHaveBeenCalledWith(25);
     wrapper.update();
     expect(wrapper.find('NodeNextButton').prop('buttonText')).toBe('Next');
     act(() => {
@@ -307,7 +307,7 @@ describe('NodeModal', () => {
     await act(async () => {
       wrapper.find('button#next-node-modal').simulate('click');
     });
-    expect(onSave).toBeCalledWith(
+    expect(onSave).toHaveBeenCalledWith(
       {
         convergence: 'any',
         linkType: 'always',
@@ -347,7 +347,7 @@ describe('NodeModal', () => {
     await act(async () => {
       wrapper.find('button#next-node-modal').simulate('click');
     });
-    expect(onSave).toBeCalledWith(
+    expect(onSave).toHaveBeenCalledWith(
       {
         convergence: 'any',
         linkType: 'failure',
@@ -383,7 +383,7 @@ describe('NodeModal', () => {
     await act(async () => {
       wrapper.find('button#next-node-modal').simulate('click');
     });
-    expect(onSave).toBeCalledWith(
+    expect(onSave).toHaveBeenCalledWith(
       {
         convergence: 'any',
         linkType: 'failure',
@@ -425,7 +425,7 @@ describe('NodeModal', () => {
     await act(async () => {
       wrapper.find('button#next-node-modal').simulate('click');
     });
-    expect(onSave).toBeCalledWith(
+    expect(onSave).toHaveBeenCalledWith(
       {
         convergence: 'any',
         linkType: 'success',
@@ -510,7 +510,7 @@ describe('NodeModal', () => {
     await act(async () => {
       wrapper.find('button#next-node-modal').simulate('click');
     });
-    expect(onSave).toBeCalledWith(
+    expect(onSave).toHaveBeenCalledWith(
       {
         convergence: 'any',
         approvalDescription: 'Test Approval Description',
@@ -621,7 +621,7 @@ describe('Edit existing node', () => {
       newWrapper.find('button#next-node-modal').simulate('click');
     });
 
-    expect(onSave).toBeCalledWith(
+    expect(onSave).toHaveBeenCalledWith(
       {
         convergence: 'any',
         identifier: 'Foo',
@@ -693,7 +693,7 @@ describe('Edit existing node', () => {
     await act(async () => {
       newWrapper.find('button#next-node-modal').simulate('click');
     });
-    expect(onSave).toBeCalledWith(
+    expect(onSave).toHaveBeenCalledWith(
       {
         convergence: 'any',
         identifier: 'Foo',

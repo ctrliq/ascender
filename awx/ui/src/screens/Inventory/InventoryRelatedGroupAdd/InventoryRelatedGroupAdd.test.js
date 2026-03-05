@@ -37,12 +37,12 @@ describe('<InventoryRelatedGroupAdd/>', () => {
         description: 'bar',
       })
     );
-    expect(GroupsAPI.create).toBeCalledWith({
+    expect(GroupsAPI.create).toHaveBeenCalledWith({
       inventory: 1,
       name: 'foo',
       description: 'bar',
     });
-    expect(GroupsAPI.associateChildGroup).toBeCalledWith(2, 3);
+    expect(GroupsAPI.associateChildGroup).toHaveBeenCalledWith(2, 3);
   });
 
   test('cancel should navigate user to Inventory Groups List', async () => {
@@ -89,7 +89,7 @@ describe('<InventoryRelatedGroupAdd/>', () => {
         description: 'bar',
       })
     );
-    expect(GroupsAPI.create).toBeCalledWith({
+    expect(GroupsAPI.create).toHaveBeenCalledWith({
       inventory: 1,
       name: 'foo',
       description: 'bar',

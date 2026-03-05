@@ -77,7 +77,7 @@ describe('<LabelSelect />', () => {
       );
     });
     await wrapper.find('Select').invoke('onSelect')({}, 'foo');
-    expect(onChange).toBeCalledWith([{ id: 'foo', name: 'foo' }]);
+    expect(onChange).toHaveBeenCalledWith([{ id: 'foo', name: 'foo' }]);
   });
   test('should handle read-only labels', async () => {
     let wrapper;

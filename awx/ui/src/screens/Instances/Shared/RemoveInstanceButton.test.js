@@ -85,7 +85,7 @@ describe('<RemoveInstanceButtton />', () => {
 
     await user.click(removeButton);
 
-    await waitFor(() => expect(onRemove).toBeCalled());
+    await waitFor(() => expect(onRemove).toHaveBeenCalled());
   });
 
   test('Should be disabled', async () => {

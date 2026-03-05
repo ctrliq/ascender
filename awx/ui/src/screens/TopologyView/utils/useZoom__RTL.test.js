@@ -65,7 +65,7 @@ describe('useZoom', () => {
       'Topology View'
     );
     fireEvent.click(screen.getByLabelText(/zoom in/i));
-    expect(hook.zoomIn).toBeCalledTimes(1);
+    expect(hook.zoomIn).toHaveBeenCalledTimes(1);
   });
   test('user can zoom out', async () => {
     const hook = useZoom('.parent', '.child');
@@ -92,7 +92,7 @@ describe('useZoom', () => {
       'Topology View'
     );
     fireEvent.click(screen.getByLabelText(/zoom out/i));
-    expect(hook.zoomOut).toBeCalledTimes(1);
+    expect(hook.zoomOut).toHaveBeenCalledTimes(1);
   });
   test('user can zoom fit', async () => {
     const hook = useZoom('.parent', '.child');
@@ -119,7 +119,7 @@ describe('useZoom', () => {
       'Topology View'
     );
     fireEvent.click(screen.getByLabelText(/fit to screen/i));
-    expect(hook.zoomFit).toBeCalledTimes(1);
+    expect(hook.zoomFit).toHaveBeenCalledTimes(1);
   });
   test('user can reset zoom', async () => {
     const hook = useZoom('.parent', '.child');
@@ -146,6 +146,6 @@ describe('useZoom', () => {
       'Topology View'
     );
     fireEvent.click(screen.getByLabelText(/reset zoom/i));
-    expect(hook.resetZoom).toBeCalledTimes(1);
+    expect(hook.resetZoom).toHaveBeenCalledTimes(1);
   });
 });

@@ -92,7 +92,7 @@ describe('<InventoryEdit />', () => {
   });
 
   test('called InventoriesAPI.readInstanceGroups', async () => {
-    expect(InventoriesAPI.readInstanceGroups).toBeCalledWith(1);
+    expect(InventoriesAPI.readInstanceGroups).toHaveBeenCalledWith(1);
   });
 
   test('handleCancel returns the user to inventory detail', async () => {
@@ -129,12 +129,12 @@ describe('<InventoryEdit />', () => {
       organization: 1,
     });
 
-    expect(InventoriesAPI.associateLabel).toBeCalledWith(
+    expect(InventoriesAPI.associateLabel).toHaveBeenCalledWith(
       1,
       { name: 'label' },
       1
     );
-    expect(InventoriesAPI.disassociateLabel).toBeCalledWith(1, {
+    expect(InventoriesAPI.disassociateLabel).toHaveBeenCalledWith(1, {
       name: 'Sushi',
       id: 1,
     });

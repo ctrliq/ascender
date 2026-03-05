@@ -39,31 +39,31 @@ describe('delete details', () => {
     getRelatedResourceDeleteCounts(
       relatedResourceDeleteRequests(t).credential({ id: 1 })
     );
-    expect(InventorySourcesAPI.read).toBeCalledWith({
+    expect(InventorySourcesAPI.read).toHaveBeenCalledWith({
       credentials__id: 1,
     });
-    expect(JobTemplatesAPI.read).toBeCalledWith({ credentials: 1 });
-    expect(ProjectsAPI.read).toBeCalledWith({ credentials: 1 });
+    expect(JobTemplatesAPI.read).toHaveBeenCalledWith({ credentials: 1 });
+    expect(ProjectsAPI.read).toHaveBeenCalledWith({ credentials: 1 });
   });
 
   test('should call api for projects list', () => {
     getRelatedResourceDeleteCounts(
       relatedResourceDeleteRequests(t).project({ id: 1 })
     );
-    expect(WorkflowJobTemplateNodesAPI.read).toBeCalledWith({
+    expect(WorkflowJobTemplateNodesAPI.read).toHaveBeenCalledWith({
       unified_job_template: 1,
     });
-    expect(InventorySourcesAPI.read).toBeCalledWith({
+    expect(InventorySourcesAPI.read).toHaveBeenCalledWith({
       source_project: 1,
     });
-    expect(JobTemplatesAPI.read).toBeCalledWith({ project: 1 });
+    expect(JobTemplatesAPI.read).toHaveBeenCalledWith({ project: 1 });
   });
 
   test('should call api for templates list', () => {
     getRelatedResourceDeleteCounts(
       relatedResourceDeleteRequests(t).template({ id: 1 })
     );
-    expect(WorkflowJobTemplateNodesAPI.read).toBeCalledWith({
+    expect(WorkflowJobTemplateNodesAPI.read).toHaveBeenCalledWith({
       unified_job_template: 1,
     });
   });
@@ -72,7 +72,7 @@ describe('delete details', () => {
     getRelatedResourceDeleteCounts(
       relatedResourceDeleteRequests(t).credentialType({ id: 1 })
     );
-    expect(CredentialsAPI.read).toBeCalledWith({
+    expect(CredentialsAPI.read).toHaveBeenCalledWith({
       credential_type__id: 1,
     });
   });
@@ -81,8 +81,8 @@ describe('delete details', () => {
     getRelatedResourceDeleteCounts(
       relatedResourceDeleteRequests(t).inventory({ id: 1 })
     );
-    expect(JobTemplatesAPI.read).toBeCalledWith({ inventory: 1 });
-    expect(WorkflowJobTemplatesAPI.read).toBeCalledWith({
+    expect(JobTemplatesAPI.read).toHaveBeenCalledWith({ inventory: 1 });
+    expect(WorkflowJobTemplatesAPI.read).toHaveBeenCalledWith({
       inventory: 1,
     });
   });
@@ -94,7 +94,7 @@ describe('delete details', () => {
     await getRelatedResourceDeleteCounts(
       relatedResourceDeleteRequests(t).inventorySource(1)
     );
-    expect(WorkflowJobTemplateNodesAPI.read).toBeCalledWith({
+    expect(WorkflowJobTemplateNodesAPI.read).toHaveBeenCalledWith({
       unified_job_template: 1,
     });
   });
@@ -103,7 +103,7 @@ describe('delete details', () => {
     getRelatedResourceDeleteCounts(
       relatedResourceDeleteRequests(t).organization({ id: 1 })
     );
-    expect(CredentialsAPI.read).toBeCalledWith({ organization: 1 });
+    expect(CredentialsAPI.read).toHaveBeenCalledWith({ organization: 1 });
   });
 
   test('should call return error for inventory source list', async () => {

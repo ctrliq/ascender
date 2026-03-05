@@ -121,7 +121,7 @@ describe('<InventorySourceForm />', () => {
     await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
     expect(onCancel).not.toHaveBeenCalled();
     wrapper.find('button[aria-label="Cancel"]').prop('onClick')();
-    expect(onCancel).toBeCalled();
+    expect(onCancel).toHaveBeenCalled();
   });
 
   test('should display ContentError on throw', async () => {

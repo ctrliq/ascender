@@ -182,12 +182,12 @@ describe('<WorkflowJobTemplateEdit/>', () => {
       skip_tags: null,
     });
     wrapper.update();
-    await expect(WorkflowJobTemplatesAPI.disassociateLabel).toBeCalledWith(6, {
+    await expect(WorkflowJobTemplatesAPI.disassociateLabel).toHaveBeenCalledWith(6, {
       name: 'Label 1',
       id: 1,
     });
     wrapper.update();
-    await expect(WorkflowJobTemplatesAPI.associateLabel).toBeCalledTimes(1);
+    await expect(WorkflowJobTemplatesAPI.associateLabel).toHaveBeenCalledTimes(1);
   });
 
   test('handleCancel navigates the user to the /templates', () => {
@@ -275,8 +275,8 @@ describe('<WorkflowJobTemplateEdit/>', () => {
       await newWrapper.find('Button[aria-label="Save"]').simulate('click');
     });
     expect(newWrapper.find('WorkflowJobTemplateForm').length).toBe(1);
-    expect(OrganizationsAPI.read).toBeCalled();
-    expect(WorkflowJobTemplatesAPI.update).toBeCalledWith(6, {
+    expect(OrganizationsAPI.read).toHaveBeenCalled();
+    expect(WorkflowJobTemplatesAPI.update).toHaveBeenCalledWith(6, {
       allow_simultaneous: false,
       ask_inventory_on_launch: false,
       ask_labels_on_launch: false,

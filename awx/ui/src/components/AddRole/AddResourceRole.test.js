@@ -125,9 +125,9 @@ describe('<_AddResourceRole />', () => {
     await act(async () =>
       wrapper.find('Button[type="submit"]').prop('onClick')()
     );
-    expect(UsersAPI.associateRole).toBeCalledWith(1, 1);
-    expect(UsersAPI.associateRole).toBeCalledWith(2, 1);
-    expect(UsersAPI.associateRole).toBeCalledTimes(2);
+    expect(UsersAPI.associateRole).toHaveBeenCalledWith(1, 1);
+    expect(UsersAPI.associateRole).toHaveBeenCalledWith(2, 1);
+    expect(UsersAPI.associateRole).toHaveBeenCalledTimes(2);
   });
 
   test('should call on error properly', async () => {
@@ -193,8 +193,8 @@ describe('<_AddResourceRole />', () => {
     await act(async () =>
       wrapper.find('Button[type="submit"]').prop('onClick')()
     );
-    expect(UsersAPI.associateRole).toBeCalledWith(1, 1);
-    expect(onError).toBeCalled();
+    expect(UsersAPI.associateRole).toHaveBeenCalledWith(1, 1);
+    expect(onError).toHaveBeenCalled();
   });
 
   test('should update history properly', async () => {

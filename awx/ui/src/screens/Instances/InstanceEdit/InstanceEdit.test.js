@@ -97,7 +97,7 @@ describe('<InstanceEdit/>', () => {
         }
       );
     });
-    expect(InstancesAPI.readDetail).toBeCalledWith(42);
+    expect(InstancesAPI.readDetail).toHaveBeenCalledWith(42);
   });
 
   afterAll(() => {

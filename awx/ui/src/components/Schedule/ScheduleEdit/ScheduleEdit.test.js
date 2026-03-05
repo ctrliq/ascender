@@ -561,16 +561,16 @@ describe('<ScheduleEdit />', () => {
     });
     wrapper.update();
 
-    expect(SchedulesAPI.update).toBeCalledWith(27, {
+    expect(SchedulesAPI.update).toHaveBeenCalledWith(27, {
       extra_data: {},
       name: 'mock schedule',
       rrule:
         'DTSTART;TZID=America/New_York:20210128T141500 RRULE:INTERVAL=1;COUNT=1;FREQ=MINUTELY',
       skip_tags: '',
     });
-    expect(SchedulesAPI.disassociateCredential).toBeCalledWith(27, 75);
+    expect(SchedulesAPI.disassociateCredential).toHaveBeenCalledWith(27, 75);
 
-    expect(SchedulesAPI.associateCredential).toBeCalledWith(27, 3);
+    expect(SchedulesAPI.associateCredential).toHaveBeenCalledWith(27, 3);
   });
 
   test('should submit updated static form values, but original prompt form values', async () => {
@@ -629,7 +629,7 @@ describe('<ScheduleEdit />', () => {
       wrapper.find('Button[aria-label="Save"]').prop('onClick')()
     );
 
-    expect(SchedulesAPI.update).toBeCalledWith(27, {
+    expect(SchedulesAPI.update).toHaveBeenCalledWith(27, {
       endDateTime: undefined,
       startDateTime: undefined,
       description: '',

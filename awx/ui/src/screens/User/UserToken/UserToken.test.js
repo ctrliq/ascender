@@ -89,6 +89,6 @@ describe('<UserToken/>', () => {
         <UserToken setBreadcrumb={jest.fn()} user={user} />
       );
     });
-    expect(TokensAPI.readDetail).toBeCalledWith(2);
+    expect(TokensAPI.readDetail).toHaveBeenCalledWith(2);
   });
 });

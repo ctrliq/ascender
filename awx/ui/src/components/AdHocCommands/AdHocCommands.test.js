@@ -234,7 +234,7 @@ describe('<AdHocCommands />', () => {
       wrapper.find('Button[type="submit"]').prop('onClick')()
     );
 
-    expect(InventoriesAPI.launchAdHocCommands).toBeCalledWith(1, {
+    expect(InventoriesAPI.launchAdHocCommands).toHaveBeenCalledWith(1, {
       module_args: 'foo',
       diff_mode: false,
       credential: 4,

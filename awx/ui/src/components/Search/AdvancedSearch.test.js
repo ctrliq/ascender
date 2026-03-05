@@ -51,7 +51,7 @@ describe('<AdvancedSearch />', () => {
     wrapper
       .find('TextInputBase[aria-label="Advanced search value input"]')
       .prop('onKeyDown')({ key: 'Enter', preventDefault: jest.fn });
-    expect(advancedSearchMock).toBeCalledTimes(0);
+    expect(advancedSearchMock).toHaveBeenCalledTimes(0);
     act(() => {
       wrapper
         .find('TextInputBase[aria-label="Advanced search value input"]')
@@ -64,7 +64,7 @@ describe('<AdvancedSearch />', () => {
         .prop('onKeyDown')({ key: 'Enter', preventDefault: jest.fn });
     });
     wrapper.update();
-    expect(advancedSearchMock).toBeCalledTimes(1);
+    expect(advancedSearchMock).toHaveBeenCalledTimes(1);
   });
 
   test('Disable searchValue input until a key is set', () => {
@@ -121,7 +121,7 @@ describe('<AdvancedSearch />', () => {
         .prop('onKeyDown')({ key: 'Enter', preventDefault: jest.fn });
     });
     wrapper.update();
-    expect(advancedSearchMock).toBeCalledWith('foo', 'bar');
+    expect(advancedSearchMock).toHaveBeenCalledWith('foo', 'bar');
     jest.clearAllMocks();
     act(() => {
       wrapper.find('Select[aria-label="Set type select"]').invoke('onSelect')(
@@ -142,7 +142,7 @@ describe('<AdvancedSearch />', () => {
         .prop('onKeyDown')({ key: 'Enter', preventDefault: jest.fn });
     });
     wrapper.update();
-    expect(advancedSearchMock).toBeCalledWith('or__foo', 'bar');
+    expect(advancedSearchMock).toHaveBeenCalledWith('or__foo', 'bar');
   });
 
   test('Add __search lookup to key when applicable', () => {
@@ -172,7 +172,7 @@ describe('<AdvancedSearch />', () => {
         .prop('onKeyDown')({ key: 'Enter', preventDefault: jest.fn });
     });
     wrapper.update();
-    expect(advancedSearchMock).toBeCalledWith('foo', 'bar');
+    expect(advancedSearchMock).toHaveBeenCalledWith('foo', 'bar');
     jest.clearAllMocks();
     act(() => {
       wrapper.find('Select[aria-label="Key select"]').invoke('onCreateOption')(
@@ -189,7 +189,7 @@ describe('<AdvancedSearch />', () => {
         .prop('onKeyDown')({ key: 'Enter', preventDefault: jest.fn });
     });
     wrapper.update();
-    expect(advancedSearchMock).toBeCalledWith('bar', 'bar');
+    expect(advancedSearchMock).toHaveBeenCalledWith('bar', 'bar');
     jest.clearAllMocks();
     act(() => {
       wrapper.find('Select[aria-label="Key select"]').invoke('onCreateOption')(
@@ -206,7 +206,7 @@ describe('<AdvancedSearch />', () => {
         .prop('onKeyDown')({ key: 'Enter', preventDefault: jest.fn });
     });
     wrapper.update();
-    expect(advancedSearchMock).toBeCalledWith('baz__name__icontains', 'bar');
+    expect(advancedSearchMock).toHaveBeenCalledWith('baz__name__icontains', 'bar');
     jest.clearAllMocks();
     act(() => {
       wrapper.find('Select[aria-label="Key select"]').invoke('onCreateOption')(
@@ -229,7 +229,7 @@ describe('<AdvancedSearch />', () => {
         .prop('onKeyDown')({ key: 'Enter', preventDefault: jest.fn });
     });
     wrapper.update();
-    expect(advancedSearchMock).toBeCalledWith('baz__search', 'bar');
+    expect(advancedSearchMock).toHaveBeenCalledWith('baz__search', 'bar');
   });
 
   test('Key should be properly constructed from three typeaheads', () => {
@@ -268,7 +268,7 @@ describe('<AdvancedSearch />', () => {
         .prop('onKeyDown')({ key: 'Enter', preventDefault: jest.fn });
     });
     wrapper.update();
-    expect(advancedSearchMock).toBeCalledWith('or__foo__exact', 'bar');
+    expect(advancedSearchMock).toHaveBeenCalledWith('or__foo__exact', 'bar');
   });
 
   test('searchValue should clear after onSearch is called', () => {
@@ -306,7 +306,7 @@ describe('<AdvancedSearch />', () => {
         .prop('onKeyDown')({ key: 'Enter', preventDefault: jest.fn });
     });
     wrapper.update();
-    expect(advancedSearchMock).toBeCalledWith('or__foo__exact', 'bar');
+    expect(advancedSearchMock).toHaveBeenCalledWith('or__foo__exact', 'bar');
     expect(
       wrapper
         .find('TextInputBase[aria-label="Advanced search value input"]')
@@ -349,7 +349,7 @@ describe('<AdvancedSearch />', () => {
         .prop('onKeyDown')({ key: 'Enter', preventDefault: jest.fn });
     });
     wrapper.update();
-    expect(advancedSearchMock).toBeCalledWith('or__foo__exact', 'bar');
+    expect(advancedSearchMock).toHaveBeenCalledWith('or__foo__exact', 'bar');
     jest.clearAllMocks();
     act(() => {
       wrapper.find('Select[aria-label="Set type select"]').invoke('onClear')();
@@ -366,7 +366,7 @@ describe('<AdvancedSearch />', () => {
         .prop('onKeyDown')({ key: 'Enter', preventDefault: jest.fn });
     });
     wrapper.update();
-    expect(advancedSearchMock).toBeCalledWith('', 'baz');
+    expect(advancedSearchMock).toHaveBeenCalledWith('', 'baz');
   });
 
   test('Remove not operator from set type', () => {

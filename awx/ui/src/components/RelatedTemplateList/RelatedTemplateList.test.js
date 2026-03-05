@@ -79,7 +79,7 @@ describe('<TemplateList />', () => {
         <RelatedTemplateList searchParams={{ credentials__id: 1 }} />
       );
     });
-    expect(JobTemplatesAPI.read).toBeCalledWith({
+    expect(JobTemplatesAPI.read).toHaveBeenCalledWith({
       credentials__id: 1,
       order_by: 'name',
       page: 1,
@@ -220,7 +220,7 @@ describe('<TemplateList />', () => {
         .find('button[aria-label="confirm delete"]')
         .prop('onClick')();
     });
-    expect(JobTemplatesAPI.destroy).toBeCalledWith(2);
+    expect(JobTemplatesAPI.destroy).toHaveBeenCalledWith(2);
   });
 
   test('error is shown when template not successfully deleted from api', async () => {

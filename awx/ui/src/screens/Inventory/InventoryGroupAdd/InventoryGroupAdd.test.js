@@ -49,6 +49,6 @@ describe('<InventoryGroupAdd />', () => {
       });
     });
 
-    expect(GroupsAPI.create).toBeCalled();
+    expect(GroupsAPI.create).toHaveBeenCalled();
   });
 });

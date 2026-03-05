@@ -61,7 +61,7 @@ describe('<InventoryGroupsDeleteModal />', () => {
     await act(() =>
       wrapper.find('Button[aria-label="Confirm Delete"]').prop('onClick')()
     );
-    expect(InventoriesAPI.promoteGroup).toBeCalledWith(1, 1);
+    expect(InventoriesAPI.promoteGroup).toHaveBeenCalledWith(1, 1);
   });
 
   test('should throw deletion error ', async () => {
@@ -91,7 +91,7 @@ describe('<InventoryGroupsDeleteModal />', () => {
     await act(() =>
       wrapper.find('Button[aria-label="Confirm Delete"]').prop('onClick')()
     );
-    expect(InventoriesAPI.promoteGroup).toBeCalledWith(1, 1);
+    expect(InventoriesAPI.promoteGroup).toHaveBeenCalledWith(1, 1);
     wrapper.update();
     expect(wrapper.find('ErrorDetail').length).toBe(1);
   });

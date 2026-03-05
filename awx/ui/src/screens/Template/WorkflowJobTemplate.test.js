@@ -69,8 +69,8 @@ describe('<WorkflowJobTemplate />', () => {
         <WorkflowJobTemplate setBreadcrumb={() => {}} me={mockMe} />
       );
     });
-    expect(WorkflowJobTemplatesAPI.readDetail).toBeCalled();
-    expect(OrganizationsAPI.read).toBeCalled();
+    expect(WorkflowJobTemplatesAPI.readDetail).toHaveBeenCalled();
+    expect(OrganizationsAPI.read).toHaveBeenCalled();
   });
 
   test('notifications tab shown for admins', async () => {

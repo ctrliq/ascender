@@ -9,6 +9,7 @@ import {
   useHistory,
 } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
+import locationReplace from 'util/navigation';
 import { I18nProvider } from '@lingui/react';
 import { i18n } from '@lingui/core';
 import { Card, PageSection } from '@patternfly/react-core';
@@ -130,7 +131,7 @@ export function ProtectedRoute({ children, ...rest }) {
     !window.location.href.includes('/login') &&
     !isUserBeingLoggedOut
   ) {
-    window.location.replace(loginRedirectOverride);
+    locationReplace(loginRedirectOverride);
     return null;
   }
   return <Redirect to="/login" />;
