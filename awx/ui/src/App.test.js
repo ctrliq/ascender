@@ -40,7 +40,7 @@ describe('<App />', () => {
 
   test('redirect to login override', async () => {
     const replaceSpy = jest
-      .spyOn(navigation, 'locationReplace')
+      .spyOn(navigation, 'default')
       .mockImplementation(() => {});
 
     expect(replaceSpy).not.toHaveBeenCalled();
