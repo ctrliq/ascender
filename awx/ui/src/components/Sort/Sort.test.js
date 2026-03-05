@@ -48,7 +48,7 @@ describe('<Sort />', () => {
     wrapper.find(sortBtn).simulate('click');
 
     expect(onSort).toHaveBeenCalledTimes(1);
-    expect(onSort).toBeCalledWith('name', 'descending');
+    expect(onSort).toHaveBeenCalledWith('name', 'descending');
   });
 
   test('onSort properly passes back descending when ascending was passed as prop', () => {
@@ -155,7 +155,7 @@ describe('<Sort />', () => {
       wrapper.find('li').at(0).prop('onClick')({ target: { innerText: 'Bar' } })
     );
     wrapper.update();
-    expect(onSort).toBeCalledWith('bar', 'ascending');
+    expect(onSort).toHaveBeenCalledWith('bar', 'ascending');
   });
 
   test('should display numeric descending icon', () => {

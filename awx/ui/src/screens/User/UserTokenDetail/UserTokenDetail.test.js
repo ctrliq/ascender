@@ -68,7 +68,7 @@ describe('<UserTokenDetail/>', () => {
     );
     wrapper.update();
     await act(async () => wrapper.find('DeleteButton').prop('onConfirm')());
-    expect(TokensAPI.destroy).toBeCalledWith(2);
+    expect(TokensAPI.destroy).toHaveBeenCalledWith(2);
   });
   test('should display error on failed deletion', async () => {
     TokensAPI.destroy.mockRejectedValue(
@@ -91,7 +91,7 @@ describe('<UserTokenDetail/>', () => {
     );
     wrapper.update();
     await act(async () => wrapper.find('DeleteButton').prop('onConfirm')());
-    expect(TokensAPI.destroy).toBeCalledWith(2);
+    expect(TokensAPI.destroy).toHaveBeenCalledWith(2);
     wrapper.update();
     expect(wrapper.find('ErrorDetail').length).toBe(1);
   });

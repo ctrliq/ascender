@@ -59,7 +59,7 @@ describe('<SelectRoleStep />', () => {
     const CheckboxCards = wrapper.find('CheckboxCard');
     expect(CheckboxCards.length).toBe(2);
     CheckboxCards.first().prop('onSelect')();
-    expect(onRolesClick).toBeCalledWith({
+    expect(onRolesClick).toHaveBeenCalledWith({
       id: 1,
       name: 'Project Admin',
       description: 'Can manage all projects of the organization',

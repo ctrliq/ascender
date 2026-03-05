@@ -55,8 +55,8 @@ describe('<Application />', () => {
       wrapper = mountWithContexts(<Application setBreadcrumb={() => {}} />);
     });
     expect(wrapper.find('Application').length).toBe(1);
-    expect(ApplicationsAPI.readOptions).toBeCalled();
-    expect(ApplicationsAPI.readDetail).toBeCalledWith(1);
+    expect(ApplicationsAPI.readOptions).toHaveBeenCalled();
+    expect(ApplicationsAPI.readDetail).toHaveBeenCalledWith(1);
   });
   test('should throw error', async () => {
     ApplicationsAPI.readOptions.mockResolvedValue(options);
@@ -80,7 +80,7 @@ describe('<Application />', () => {
     expect(wrapper.find('ApplicationAdd').length).toBe(0);
     expect(wrapper.find('ApplicationDetails').length).toBe(0);
     expect(wrapper.find('Application').length).toBe(1);
-    expect(ApplicationsAPI.readOptions).toBeCalled();
-    expect(ApplicationsAPI.readDetail).toBeCalledWith(1);
+    expect(ApplicationsAPI.readOptions).toHaveBeenCalled();
+    expect(ApplicationsAPI.readDetail).toHaveBeenCalledWith(1);
   });
 });

@@ -57,8 +57,8 @@ describe('<ApplicationsList/>', () => {
     });
     await waitForElement(wrapper, 'ApplicationsList', (el) => el.length > 0);
     expect(wrapper.find('ApplicationListItem').length).toBe(2);
-    expect(ApplicationsAPI.read).toBeCalled();
-    expect(ApplicationsAPI.readOptions).toBeCalled();
+    expect(ApplicationsAPI.read).toHaveBeenCalled();
+    expect(ApplicationsAPI.readOptions).toHaveBeenCalled();
   });
 
   test('should delete item successfully', async () => {
@@ -89,7 +89,7 @@ describe('<ApplicationsList/>', () => {
     await act(async () =>
       wrapper.find('Button[aria-label="confirm delete"]').prop('onClick')()
     );
-    expect(ApplicationsAPI.destroy).toBeCalledWith(
+    expect(ApplicationsAPI.destroy).toHaveBeenCalledWith(
       applications.data.results[0].id
     );
   });

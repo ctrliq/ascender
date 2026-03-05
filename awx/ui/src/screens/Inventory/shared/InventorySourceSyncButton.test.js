@@ -43,7 +43,7 @@ describe('<InventorySourceSyncButton />', () => {
     await act(async () =>
       wrapper.find('Button[aria-label="Start sync source"]').simulate('click')
     );
-    expect(InventorySourcesAPI.createSyncStart).toBeCalledWith(1);
+    expect(InventorySourcesAPI.createSyncStart).toHaveBeenCalledWith(1);
   });
 
   test('should throw error on sync start properly', async () => {

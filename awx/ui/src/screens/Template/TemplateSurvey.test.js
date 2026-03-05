@@ -57,7 +57,7 @@ describe('<TemplateSurvey />', () => {
       );
     });
     wrapper.update();
-    expect(JobTemplatesAPI.readSurvey).toBeCalledWith('7');
+    expect(JobTemplatesAPI.readSurvey).toHaveBeenCalledWith('7');
 
     expect(wrapper.find('SurveyList').prop('survey')).toEqual(surveyData);
   });
@@ -168,7 +168,7 @@ describe('<TemplateSurvey />', () => {
     );
     wrapper.update();
 
-    expect(JobTemplatesAPI.update).toBeCalledWith('7', {
+    expect(JobTemplatesAPI.update).toHaveBeenCalledWith('7', {
       survey_enabled: false,
     });
   });
@@ -209,7 +209,7 @@ describe('<TemplateSurvey />', () => {
     );
 
     wrapper.update();
-    expect(WorkflowJobTemplatesAPI.update).toBeCalledWith('15', {
+    expect(WorkflowJobTemplatesAPI.update).toHaveBeenCalledWith('15', {
       survey_enabled: false,
     });
   });
@@ -253,7 +253,7 @@ describe('<TemplateSurvey />', () => {
       wrapper.find('Button[ouiaId="delete-confirm-button"]').simulate('click')
     );
     wrapper.update();
-    expect(JobTemplatesAPI.destroySurvey).toBeCalledWith('15');
+    expect(JobTemplatesAPI.destroySurvey).toHaveBeenCalledWith('15');
     expect(WorkflowJobTemplatesAPI.destroySurvey).toHaveBeenCalledTimes(0);
   });
 
@@ -296,7 +296,7 @@ describe('<TemplateSurvey />', () => {
       wrapper.find('Button[ouiaId="delete-confirm-button"]').simulate('click')
     );
     wrapper.update();
-    expect(WorkflowJobTemplatesAPI.destroySurvey).toBeCalledWith('15');
+    expect(WorkflowJobTemplatesAPI.destroySurvey).toHaveBeenCalledWith('15');
     expect(JobTemplatesAPI.destroySurvey).toHaveBeenCalledTimes(0);
   });
 });

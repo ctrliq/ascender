@@ -59,7 +59,7 @@ describe('<JobCancelButton/>', () => {
     await act(() =>
       wrapper.find('Button#cancel-job-confirm-button').prop('onClick')()
     );
-    expect(ProjectUpdatesAPI.cancel).toBeCalledWith(1);
+    expect(ProjectUpdatesAPI.cancel).toHaveBeenCalledWith(1);
   });
   test('should throw error', async () => {
     ProjectUpdatesAPI.cancel.mockRejectedValue(
@@ -113,7 +113,7 @@ describe('<JobCancelButton/>', () => {
     await act(() =>
       wrapper.find('Button#cancel-job-confirm-button').prop('onClick')()
     );
-    expect(AdHocCommandsAPI.cancel).toBeCalledWith(1);
+    expect(AdHocCommandsAPI.cancel).toHaveBeenCalledWith(1);
   });
 
   test('should cancel system job', async () => {
@@ -134,7 +134,7 @@ describe('<JobCancelButton/>', () => {
     await act(() =>
       wrapper.find('Button#cancel-job-confirm-button').prop('onClick')()
     );
-    expect(SystemJobsAPI.cancel).toBeCalledWith(1);
+    expect(SystemJobsAPI.cancel).toHaveBeenCalledWith(1);
   });
 
   test('should cancel workflow job', async () => {
@@ -155,7 +155,7 @@ describe('<JobCancelButton/>', () => {
     await act(() =>
       wrapper.find('Button#cancel-job-confirm-button').prop('onClick')()
     );
-    expect(WorkflowJobsAPI.cancel).toBeCalledWith(1);
+    expect(WorkflowJobsAPI.cancel).toHaveBeenCalledWith(1);
   });
   test('should cancel workflow job', async () => {
     act(() => {
@@ -175,6 +175,6 @@ describe('<JobCancelButton/>', () => {
     await act(() =>
       wrapper.find('Button#cancel-job-confirm-button').prop('onClick')()
     );
-    expect(JobsAPI.cancel).toBeCalledWith(1);
+    expect(JobsAPI.cancel).toHaveBeenCalledWith(1);
   });
 });

@@ -100,8 +100,8 @@ describe('<OrganizationExecEnvList/>', () => {
     );
 
     expect(wrapper.find('OrganizationExecEnvListItem').length).toBe(3);
-    expect(OrganizationsAPI.readExecutionEnvironments).toBeCalled();
-    expect(OrganizationsAPI.readExecutionEnvironmentsOptions).toBeCalled();
+    expect(OrganizationsAPI.readExecutionEnvironments).toHaveBeenCalled();
+    expect(OrganizationsAPI.readExecutionEnvironmentsOptions).toHaveBeenCalled();
   });
 
   test('should not render add button', async () => {

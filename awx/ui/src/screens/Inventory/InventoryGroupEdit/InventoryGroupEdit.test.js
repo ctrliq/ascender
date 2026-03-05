@@ -54,6 +54,6 @@ describe('<InventoryGroupEdit />', () => {
       description: 'Ansible',
       variables: 'ying: yang',
     });
-    expect(GroupsAPI.update).toBeCalled();
+    expect(GroupsAPI.update).toHaveBeenCalled();
   });
 });

@@ -53,7 +53,7 @@ describe('<ApplicationAdd/>', () => {
 
     expect(wrapper.find('ApplicationAdd').length).toBe(1);
     expect(wrapper.find('ApplicationForm').length).toBe(1);
-    expect(ApplicationsAPI.readOptions).toBeCalled();
+    expect(ApplicationsAPI.readOptions).toHaveBeenCalled();
   });
 
   test('expect values to be updated and submitted properly', async () => {
@@ -124,7 +124,7 @@ describe('<ApplicationAdd/>', () => {
       });
     });
 
-    expect(ApplicationsAPI.create).toBeCalledWith({
+    expect(ApplicationsAPI.create).toHaveBeenCalledWith({
       authorization_grant_type: 'authorization-code',
       client_type: 'confidential',
       description: 'bar',

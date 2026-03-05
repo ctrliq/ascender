@@ -143,7 +143,7 @@ describe('<ApplicationForm', () => {
       );
     });
     wrapper.find('Button[aria-label="Cancel"]').prop('onClick')();
-    expect(onCancel).toBeCalled();
+    expect(onCancel).toHaveBeenCalled();
   });
   test('should call onSubmit', async () => {
     OrganizationsAPI.read.mockResolvedValue({
@@ -170,7 +170,7 @@ describe('<ApplicationForm', () => {
       organization: 1,
       redirect_uris: 'http://www.google.com',
     });
-    expect(onSubmit).toBeCalledWith({
+    expect(onSubmit).toHaveBeenCalledWith({
       authorization_grant_type: 'authorization-code',
       client_type: 'confidential',
       description: 'bar',

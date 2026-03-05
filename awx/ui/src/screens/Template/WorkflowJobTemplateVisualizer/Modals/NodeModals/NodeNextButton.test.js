@@ -34,11 +34,11 @@ describe('NodeNextButton', () => {
 
   test('Clicking button makes expected callback', () => {
     wrapper.find('button').simulate('click');
-    expect(onClick).toBeCalledWith(activeStep);
+    expect(onClick).toHaveBeenCalledWith(activeStep);
   });
 
   test('onNext triggered when triggerNext counter incrimented', () => {
     wrapper.setProps({ triggerNext: 1 });
-    expect(onNext).toBeCalled();
+    expect(onNext).toHaveBeenCalled();
   });
 });

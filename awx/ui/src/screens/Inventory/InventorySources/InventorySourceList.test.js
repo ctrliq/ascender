@@ -278,7 +278,7 @@ describe('<InventorySourceList />', () => {
     await act(async () =>
       wrapper.find('Button[aria-label="Sync all"]').prop('onClick')()
     );
-    expect(InventoriesAPI.syncAllSources).toBeCalled();
+    expect(InventoriesAPI.syncAllSources).toHaveBeenCalled();
     wrapper.update();
     expect(wrapper.find("AlertModal[aria-label='Sync error']").length).toBe(1);
   });
@@ -287,8 +287,8 @@ describe('<InventorySourceList />', () => {
     const syncAllButton = wrapper.find('Button[aria-label="Sync all"]');
     expect(syncAllButton.length).toBe(1);
     await act(async () => syncAllButton.prop('onClick')());
-    expect(InventoriesAPI.syncAllSources).toBeCalled();
-    expect(InventoriesAPI.readSources).toBeCalled();
+    expect(InventoriesAPI.syncAllSources).toHaveBeenCalled();
+    expect(InventoriesAPI.readSources).toHaveBeenCalled();
   });
 });
 

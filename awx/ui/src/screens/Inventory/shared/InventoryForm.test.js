@@ -126,7 +126,7 @@ describe('<InventoryForm />', () => {
   test('should call handleCancel when Cancel button is clicked', async () => {
     expect(onCancel).not.toHaveBeenCalled();
     wrapper.find('button[aria-label="Cancel"]').invoke('onClick')();
-    expect(onCancel).toBeCalled();
+    expect(onCancel).toHaveBeenCalled();
   });
 
   test('should render LabelsSelect', async () => {

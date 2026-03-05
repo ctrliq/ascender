@@ -287,7 +287,7 @@ describe('<WorkflowJobTemplateForm/>', () => {
     await act(() =>
       wrapper.find('Button[aria-label="Update webhook key"]').prop('onClick')()
     );
-    expect(WorkflowJobTemplatesAPI.updateWebhookKey).toBeCalledWith('6');
+    expect(WorkflowJobTemplatesAPI.updateWebhookKey).toHaveBeenCalledWith('6');
     expect(
       wrapper.find('TextInputBase[aria-label="Webhook URL"]').prop('value')
     ).toContain('/api/v2/workflow_job_templates/57/gitlab/');
@@ -311,7 +311,7 @@ describe('<WorkflowJobTemplateForm/>', () => {
       wrapper.find('Formik').prop('onSubmit')({});
     });
     wrapper.update();
-    expect(handleSubmit).toBeCalled();
+    expect(handleSubmit).toHaveBeenCalled();
   });
 
   test('handleCancel is called on cancel button click', async () => {
@@ -319,7 +319,7 @@ describe('<WorkflowJobTemplateForm/>', () => {
       wrapper.find('button[aria-label="Cancel"]').simulate('click');
     });
 
-    expect(handleCancel).toBeCalled();
+    expect(handleCancel).toHaveBeenCalled();
   });
 
   test('should not show inventory field as required', () => {

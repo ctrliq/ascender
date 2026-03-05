@@ -234,7 +234,7 @@ describe('<InventoryRelatedGroupList />', () => {
         .find('DropdownItem[aria-label="Add existing group"]')
         .prop('onClick')()
     );
-    expect(GroupsAPI.readPotentialGroups).toBeCalledWith('2', {
+    expect(GroupsAPI.readPotentialGroups).toHaveBeenCalledWith('2', {
       not__id: '2',
       not__parents: '2',
       order_by: 'name',
@@ -254,7 +254,7 @@ describe('<InventoryRelatedGroupList />', () => {
     await act(() =>
       wrapper.find('Button[ouiaId="associate-modal-save"]').prop('onClick')()
     );
-    expect(GroupsAPI.associateChildGroup).toBeCalledTimes(1);
+    expect(GroupsAPI.associateChildGroup).toHaveBeenCalledTimes(1);
   });
 
   test('should not render Run Commands button', async () => {

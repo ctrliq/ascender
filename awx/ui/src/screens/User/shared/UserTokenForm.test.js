@@ -102,7 +102,7 @@ describe('<UserTokenForm />', () => {
       wrapper.find('button[aria-label="Save"]').prop('onClick')();
     });
 
-    expect(handleSubmit).toBeCalled();
+    expect(handleSubmit).toHaveBeenCalled();
   });
 
   test('should call handleCancel when Cancel button is clicked', async () => {
@@ -115,7 +115,7 @@ describe('<UserTokenForm />', () => {
     await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
     expect(handleCancel).not.toHaveBeenCalled();
     wrapper.find('button[aria-label="Cancel"]').invoke('onClick')();
-    expect(handleCancel).toBeCalled();
+    expect(handleCancel).toHaveBeenCalled();
   });
   test('should throw error on submit without scope value', async () => {
     ApplicationsAPI.read.mockResolvedValue(applications);
@@ -134,6 +134,6 @@ describe('<UserTokenForm />', () => {
     expect(
       wrapper.find('FormGroup[name="scope"]').prop('helperTextInvalid')
     ).toBe('Please enter a value.');
-    expect(handleSubmit).not.toBeCalled();
+    expect(handleSubmit).not.toHaveBeenCalled();
   });
 });

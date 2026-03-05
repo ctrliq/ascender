@@ -183,7 +183,7 @@ describe('<InstanceList />, React testing library tests', () => {
 
     await user.click(removeButton);
     await waitFor(() =>
-      expect(InstancesAPI.deprovisionInstance).toBeCalledWith(3)
+      expect(InstancesAPI.deprovisionInstance).toHaveBeenCalledWith(3)
     );
     screen.getByText('Error!');
   });

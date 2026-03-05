@@ -99,7 +99,7 @@ describe('<InventoryGroupDetail />', () => {
       await act(() =>
         wrapper.find('Button[aria-label="Confirm Delete"]').prop('onClick')()
       );
-      expect(GroupsAPI.destroy).toBeCalledWith(1);
+      expect(GroupsAPI.destroy).toHaveBeenCalledWith(1);
     });
 
     test('should navigate user to edit form on edit button click', async () => {

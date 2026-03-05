@@ -163,9 +163,9 @@ describe('<InstanceDetails/>', () => {
     await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
     expect(wrapper.find('InstanceDetails')).toHaveLength(1);
 
-    expect(InstanceGroupsAPI.readInstances).toBeCalledWith(2);
-    expect(InstancesAPI.readHealthCheckDetail).toBeCalledWith(1);
-    expect(InstancesAPI.readDetail).toBeCalledWith(1);
+    expect(InstanceGroupsAPI.readInstances).toHaveBeenCalledWith(2);
+    expect(InstancesAPI.readHealthCheckDetail).toHaveBeenCalledWith(1);
+    expect(InstancesAPI.readDetail).toHaveBeenCalledWith(1);
     expect(
       wrapper.find("Button[ouiaId='disassociate-button']").prop('isDisabled')
     ).toBe(false);
@@ -319,9 +319,9 @@ describe('<InstanceDetails/>', () => {
     });
     await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
     expect(wrapper.find('ContentError')).toHaveLength(1);
-    expect(InstanceGroupsAPI.readInstances).toBeCalledWith(2);
-    expect(InstancesAPI.readHealthCheckDetail).not.toBeCalled();
-    expect(InstancesAPI.readDetail).not.toBeCalled();
+    expect(InstanceGroupsAPI.readInstances).toHaveBeenCalledWith(2);
+    expect(InstancesAPI.readHealthCheckDetail).not.toHaveBeenCalled();
+    expect(InstancesAPI.readDetail).not.toHaveBeenCalled();
   });
 
   test('Should handle api error for health check', async () => {
@@ -367,7 +367,7 @@ describe('<InstanceDetails/>', () => {
     await act(async () => {
       wrapper.find("Button[ouiaId='health-check-button']").prop('onClick')();
     });
-    expect(InstancesAPI.healthCheck).toBeCalledWith(1);
+    expect(InstancesAPI.healthCheck).toHaveBeenCalledWith(1);
     wrapper.update();
     expect(wrapper.find('AlertModal')).toHaveLength(1);
     expect(wrapper.find('ErrorDetail')).toHaveLength(1);

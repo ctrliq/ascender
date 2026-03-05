@@ -119,8 +119,8 @@ describe('<InventorySource />', () => {
     OrganizationsAPI.read.mockResolvedValue({
       data: { results: [{ id: 1, name: 'isNotifAdmin' }] },
     });
-    expect(InventoriesAPI.readSourceDetail).toBeCalledWith(2, 123);
-    expect(OrganizationsAPI.read).toBeCalled();
+    expect(InventoriesAPI.readSourceDetail).toHaveBeenCalledWith(2, 123);
+    expect(OrganizationsAPI.read).toHaveBeenCalled();
   });
 
   test('should not render notifications tab', () => {

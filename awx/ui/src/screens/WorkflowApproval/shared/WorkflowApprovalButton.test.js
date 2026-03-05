@@ -60,6 +60,6 @@ describe('<WorkflowApprovalButton/>, full mount', () => {
       );
     });
     await act(() => wrapper.find(approveButton).prop('onClick')());
-    expect(WorkflowApprovalsAPI.approve).toBeCalledWith(218);
+    expect(WorkflowApprovalsAPI.approve).toHaveBeenCalledWith(218);
   });
 });

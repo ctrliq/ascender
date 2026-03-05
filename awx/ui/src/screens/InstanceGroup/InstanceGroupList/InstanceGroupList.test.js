@@ -87,8 +87,8 @@ describe('<InstanceGroupList />', () => {
     });
     await waitForElement(wrapper, 'InstanceGroupList', (el) => el.length > 0);
     expect(wrapper.find('InstanceGroupListItem').length).toBe(4);
-    expect(InstanceGroupsAPI.read).toBeCalled();
-    expect(InstanceGroupsAPI.readOptions).toBeCalled();
+    expect(InstanceGroupsAPI.read).toHaveBeenCalled();
+    expect(InstanceGroupsAPI.readOptions).toHaveBeenCalled();
   });
 
   test('should delete item successfully', async () => {
@@ -117,7 +117,7 @@ describe('<InstanceGroupList />', () => {
       wrapper.find('Button[aria-label="confirm delete"]').prop('onClick')()
     );
 
-    expect(InstanceGroupsAPI.destroy).toBeCalledWith(
+    expect(InstanceGroupsAPI.destroy).toHaveBeenCalledWith(
       instanceGroups.data.results[0].id
     );
   });

@@ -86,7 +86,7 @@ describe('<TeamForm />', () => {
     await act(async () => {
       wrapper.find('button[aria-label="Save"]').simulate('click');
     });
-    expect(handleSubmit).toBeCalled();
+    expect(handleSubmit).toHaveBeenCalled();
   });
 
   test('calls handleCancel when Cancel button is clicked', async () => {
@@ -104,6 +104,6 @@ describe('<TeamForm />', () => {
     });
     expect(handleCancel).not.toHaveBeenCalled();
     wrapper.find('button[aria-label="Cancel"]').prop('onClick')();
-    expect(handleCancel).toBeCalled();
+    expect(handleCancel).toHaveBeenCalled();
   });
 });

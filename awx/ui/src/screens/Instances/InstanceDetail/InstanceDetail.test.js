@@ -94,8 +94,8 @@ describe('<InstanceDetail/>', () => {
     await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
     expect(wrapper.find('InstanceDetail')).toHaveLength(1);
 
-    expect(InstancesAPI.readDetail).toBeCalledWith(1);
-    expect(InstancesAPI.readHealthCheckDetail).toBeCalledWith(1);
+    expect(InstancesAPI.readDetail).toHaveBeenCalledWith(1);
+    expect(InstancesAPI.readHealthCheckDetail).toHaveBeenCalledWith(1);
     expect(
       wrapper.find("Button[ouiaId='health-check-button']").prop('isDisabled')
     ).toBe(false);
@@ -193,7 +193,7 @@ describe('<InstanceDetail/>', () => {
     await act(async () => {
       wrapper.find("Button[ouiaId='health-check-button']").prop('onClick')();
     });
-    expect(InstancesAPI.healthCheck).toBeCalledWith(1);
+    expect(InstancesAPI.healthCheck).toHaveBeenCalledWith(1);
     wrapper.update();
     expect(wrapper.find('AlertModal')).toHaveLength(1);
     expect(wrapper.find('ErrorDetail')).toHaveLength(1);

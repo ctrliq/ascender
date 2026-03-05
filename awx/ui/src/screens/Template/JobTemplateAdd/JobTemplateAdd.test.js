@@ -291,7 +291,7 @@ describe('<JobTemplateAdd />', () => {
     await waitForElement(wrapper, 'EmptyStateBody', (el) => el.length === 0);
 
     expect(wrapper.find('input#project').prop('value')).toEqual('Demo Project');
-    expect(ProjectsAPI.readPlaybooks).toBeCalledWith(6);
+    expect(ProjectsAPI.readPlaybooks).toHaveBeenCalledWith(6);
   });
 
   test('should not call ProjectsAPI.readPlaybooks if there is no project', async () => {
@@ -303,6 +303,6 @@ describe('<JobTemplateAdd />', () => {
         context: { router: history },
       })
     );
-    expect(ProjectsAPI.readPlaybooks).not.toBeCalled();
+    expect(ProjectsAPI.readPlaybooks).not.toHaveBeenCalled();
   });
 });

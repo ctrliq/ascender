@@ -50,7 +50,7 @@ describe('<DataListToolbar />', () => {
 
     expect(onSelectAll).toHaveBeenCalledTimes(1);
     expect(onSort).toHaveBeenCalledTimes(1);
-    expect(onSort).toBeCalledWith('name', 'descending');
+    expect(onSort).toHaveBeenCalledWith('name', 'descending');
 
     expect(onSelectAll).toHaveBeenCalledTimes(1);
     expect(onSelectAll.mock.calls[0][0]).toBe(false);
@@ -60,7 +60,7 @@ describe('<DataListToolbar />', () => {
     toolbar.find(search).simulate('click');
 
     expect(onSearch).toHaveBeenCalledTimes(1);
-    expect(onSearch).toBeCalledWith('name__icontains', 'test-321');
+    expect(onSearch).toHaveBeenCalledWith('name__icontains', 'test-321');
   });
 
   test('dropdown items sortable/searchable columns work', () => {
@@ -315,7 +315,7 @@ describe('<DataListToolbar />', () => {
     );
     expect(newtoolbar.find('AngleRightIcon')).toHaveLength(1);
     expect(newtoolbar.find('AngleDownIcon')).toHaveLength(0);
-    expect(onExpandAll).toBeCalledWith(true);
+    expect(onExpandAll).toHaveBeenCalledWith(true);
   });
 
   test('should render angle down icon', async () => {

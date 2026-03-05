@@ -94,8 +94,8 @@ describe('<ExecutionEnvironmentList/>', () => {
     );
 
     expect(wrapper.find('ExecutionEnvironmentListItem').length).toBe(2);
-    expect(ExecutionEnvironmentsAPI.read).toBeCalled();
-    expect(ExecutionEnvironmentsAPI.readOptions).toBeCalled();
+    expect(ExecutionEnvironmentsAPI.read).toHaveBeenCalled();
+    expect(ExecutionEnvironmentsAPI.readOptions).toHaveBeenCalled();
   });
 
   test('should delete items successfully', async () => {

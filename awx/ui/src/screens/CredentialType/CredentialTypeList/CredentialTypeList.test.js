@@ -68,8 +68,8 @@ describe('<CredentialTypeList', () => {
     });
     await waitForElement(wrapper, 'CredentialTypeList', (el) => el.length > 0);
     expect(wrapper.find('CredentialTypeListItem').length).toBe(2);
-    expect(CredentialTypesAPI.read).toBeCalled();
-    expect(CredentialTypesAPI.readOptions).toBeCalled();
+    expect(CredentialTypesAPI.read).toHaveBeenCalled();
+    expect(CredentialTypesAPI.readOptions).toHaveBeenCalled();
   });
 
   test('should delete item successfully', async () => {
@@ -99,7 +99,7 @@ describe('<CredentialTypeList', () => {
       wrapper.find('Button[aria-label="confirm delete"]').prop('onClick')()
     );
 
-    expect(CredentialTypesAPI.destroy).toBeCalledWith(
+    expect(CredentialTypesAPI.destroy).toHaveBeenCalledWith(
       credentialTypes.data.results[0].id
     );
   });

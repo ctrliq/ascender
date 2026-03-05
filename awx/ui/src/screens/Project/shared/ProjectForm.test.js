@@ -310,7 +310,7 @@ describe('<ProjectForm />', () => {
     await act(async () => {
       wrapper.find('button[aria-label="Save"]').simulate('click');
     });
-    expect(handleSubmit).toBeCalled();
+    expect(handleSubmit).toHaveBeenCalled();
   });
 
   test('should call handleCancel when Cancel button is clicked', async () => {
@@ -327,7 +327,7 @@ describe('<ProjectForm />', () => {
     await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
     expect(handleCancel).not.toHaveBeenCalled();
     wrapper.find('button[aria-label="Cancel"]').invoke('onClick')();
-    expect(handleCancel).toBeCalled();
+    expect(handleCancel).toHaveBeenCalled();
   });
 
   test('should display ContentError on throw', async () => {

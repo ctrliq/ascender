@@ -79,8 +79,8 @@ describe('<Template />', () => {
         <Template setBreadcrumb={() => {}} me={mockMe} />
       );
     });
-    expect(JobTemplatesAPI.readDetail).toBeCalled();
-    expect(OrganizationsAPI.read).toBeCalled();
+    expect(JobTemplatesAPI.readDetail).toHaveBeenCalled();
+    expect(OrganizationsAPI.read).toHaveBeenCalled();
   });
   test('notifications tab shown for admins', async () => {
     await act(async () => {

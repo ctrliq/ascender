@@ -164,7 +164,7 @@ describe('<Formik><MultiCredentialsLookup /></Formik>', () => {
     await act(async () => {
       button.invoke('onClick')();
     });
-    expect(onChange).toBeCalledWith([
+    expect(onChange).toHaveBeenCalledWith([
       {
         id: 1,
         credential_type: 1,
@@ -313,7 +313,7 @@ describe('<Formik><MultiCredentialsLookup /></Formik>', () => {
     await act(async () => {
       wrapper.find('Button[variant="primary"]').invoke('onClick')();
     });
-    expect(onChange).toBeCalledWith([
+    expect(onChange).toHaveBeenCalledWith([
       {
         id: 1,
         credential_type: 1,
@@ -419,7 +419,7 @@ describe('<Formik><MultiCredentialsLookup /></Formik>', () => {
     await act(async () => {
       wrapper.find('Button[variant="primary"]').invoke('onClick')();
     });
-    expect(onChange).toBeCalledWith([
+    expect(onChange).toHaveBeenCalledWith([
       {
         id: 1,
         credential_type: 1,
@@ -489,7 +489,7 @@ describe('<Formik><MultiCredentialsLookup /></Formik>', () => {
     await act(async () => {
       wrapper.find('Button[variant="primary"]').invoke('onClick')();
     });
-    expect(onChange).toBeCalledWith([
+    expect(onChange).toHaveBeenCalledWith([
       {
         id: 1,
         credential_type: 1,
@@ -565,7 +565,7 @@ describe('<Formik><MultiCredentialsLookup /></Formik>', () => {
     await act(async () => {
       wrapper.find('Button[variant="primary"]').invoke('onClick')();
     });
-    expect(onChange).toBeCalledWith([
+    expect(onChange).toHaveBeenCalledWith([
       {
         id: 1,
         credential_type: 1,

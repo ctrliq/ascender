@@ -182,7 +182,7 @@ describe('<WorkflowJobTemplateAdd/>', () => {
       await wrapper.find('Button[aria-label="Save"]').simulate('click');
     });
     expect(wrapper.find('WorkflowJobTemplateForm').length).toBe(1);
-    expect(OrganizationsAPI.read).toBeCalled();
+    expect(OrganizationsAPI.read).toHaveBeenCalled();
     expect(history.location.pathname).toBe(
       '/templates/workflow_job_template/add'
     );

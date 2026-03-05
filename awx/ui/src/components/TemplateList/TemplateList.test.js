@@ -114,7 +114,7 @@ describe('<TemplateList />', () => {
     await act(async () => {
       wrapper = mountWithContexts(<TemplateList />);
     });
-    expect(UnifiedJobTemplatesAPI.read).toBeCalled();
+    expect(UnifiedJobTemplatesAPI.read).toHaveBeenCalled();
     await act(async () => {
       await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
     });
@@ -258,8 +258,8 @@ describe('<TemplateList />', () => {
         .find('button[aria-label="confirm delete"]')
         .prop('onClick')();
     });
-    expect(JobTemplatesAPI.destroy).toBeCalledWith(2);
-    expect(WorkflowJobTemplatesAPI.destroy).toBeCalledWith(4);
+    expect(JobTemplatesAPI.destroy).toHaveBeenCalledWith(2);
+    expect(WorkflowJobTemplatesAPI.destroy).toHaveBeenCalledWith(4);
   });
 
   test('error is shown when template not successfully deleted from api', async () => {

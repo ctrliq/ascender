@@ -360,6 +360,6 @@ describe('<OrganizationForm />', () => {
     await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
     expect(onCancel).not.toHaveBeenCalled();
     wrapper.find('button[aria-label="Cancel"]').prop('onClick')();
-    expect(onCancel).toBeCalled();
+    expect(onCancel).toHaveBeenCalled();
   });
 });

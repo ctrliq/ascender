@@ -27,7 +27,7 @@ describe('<CredentialType/>', () => {
     });
     wrapper.update();
     expect(wrapper.find('CredentialType').length).toBe(1);
-    expect(CredentialTypesAPI.readDetail).toBeCalledWith(42);
+    expect(CredentialTypesAPI.readDetail).toHaveBeenCalledWith(42);
   });
 
   test('should render expected tabs', async () => {

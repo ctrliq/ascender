@@ -1300,7 +1300,7 @@ describe('useJobEvents', () => {
     test('should not make call to get child events, because there are none for this job type', () => {
       wrapper = shallow(<HookTest />);
       wrapper.find('#test').prop('addEvents')(eventsList);
-      expect(callbacks.fetchChildrenSummary).not.toBeCalled();
+      expect(callbacks.fetchChildrenSummary).not.toHaveBeenCalled();
     });
 
     test('should get basic number of children', () => {
