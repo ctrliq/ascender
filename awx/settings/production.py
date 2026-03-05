@@ -30,10 +30,6 @@ SECRET_KEY = None
 # See https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = []
 
-# Ansible base virtualenv paths and enablement
-# only used for deprecated fields and management commands for them
-BASE_VENV_PATH = os.path.realpath("/var/lib/awx/venv")
-
 # Very important that this is editable (not read_only) in the API
 AWX_ISOLATION_SHOW_PATHS = [
     '/etc/pki/ca-trust:/etc/pki/ca-trust:O',
