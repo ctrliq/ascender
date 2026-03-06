@@ -262,7 +262,7 @@ lxml==4.9.4
     # via
     #   python3-saml
     #   xmlsec
-markdown==3.5.2
+markdown==3.10.2
     # via -r /awx_devel/requirements/requirements.in
 markupsafe==2.1.5
     # via jinja2
