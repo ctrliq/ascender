@@ -17,7 +17,6 @@ import {
 import { PficonHistoryIcon } from '@patternfly/react-icons';
 import { PasswordInput } from 'components/FormField';
 import AnsibleSelect from 'components/AnsibleSelect';
-import Popover from 'components/Popover';
 import { CredentialType } from 'types';
 import { required } from 'util/validators';
 import { CredentialPluginField } from '../CredentialPlugins';
@@ -216,32 +215,6 @@ function CredentialField({ credentialType, fieldOptions }) {
           onChange={(event, value) => {
             helpers.setValue(value);
           }}
-        />
-      </FormGroup>
-    );
-  }
-  if (credentialType.kind === 'external') {
-    return (
-      <FormGroup
-        fieldId={`credential-${fieldOptions.id}`}
-        helperTextInvalid={meta.error}
-        label={fieldOptions.label}
-        labelIcon={
-          fieldOptions.help_text && <Popover content={fieldOptions.help_text} />
-        }
-        isRequired={isRequired}
-        validated={isValid ? 'default' : 'error'}
-      >
-        <CredentialInput
-          credentialKind={credentialType.kind}
-          fieldOptions={fieldOptions}
-          isDisabled={
-            !!(
-              meta.initialValue &&
-              meta.initialValue !== '' &&
-              meta.value === meta.initialValue
-            )
-          }
         />
       </FormGroup>
     );
