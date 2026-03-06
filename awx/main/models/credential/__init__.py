@@ -1283,6 +1283,25 @@ class CredentialInputSource(PrimordialModel):
     def clean_source_credential(self):
         if self.source_credential.credential_type.kind != 'external':
             raise ValidationError(_('Source must be an external credential'))
+
+        # Cycle detection: check if adding this link would create a cycle
+        visited = set()
+        def has_cycle(cred_id, target_id):
+            if cred_id == target_id:
+                return True
+            if cred_id in visited:
+                return False
+            visited.add(cred_id)
+
+            # Check all sources that point to this credential
+            for input_source in CredentialInputSource.objects.filter(target_credential_id=cred_id):
+                if has_cycle(input_source.source_credential_id, target_id):
+                    return True
+            return False
+
+        if has_cycle(self.source_credential_id, self.target_credential_id):
+            raise ValidationError(_('This would create a circular dependency between credentials'))
+
         return self.source_credential
 
     def clean_input_field_name(self):

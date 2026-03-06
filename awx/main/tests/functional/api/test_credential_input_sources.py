@@ -84,7 +84,7 @@ def test_create_from_list(get, post, admin, vault_credential, external_credentia
 
 
 @pytest.mark.django_db
-def test_create_credential_input_source_with_external_target_returns_400(post, admin, external_credential, other_external_credential):
+def test_create_credential_input_source_with_external_target_returns_201(post, admin, external_credential, other_external_credential):
     list_url = reverse(
         'api:credential_input_source_list',
     )
@@ -95,8 +95,7 @@ def test_create_credential_input_source_with_external_target_returns_400(post, a
         'metadata': {'key': 'some_key'},
     }
     response = post(list_url, params, admin)
-    assert response.status_code == 400
-    assert response.data['target_credential'] == ['Target must be a non-external credential']
+    assert response.status_code == 201
 
 
 @pytest.mark.django_db
@@ -316,3 +315,117 @@ def test_create_credential_input_source_with_already_used_input_returns_400(post
     ]
     all_responses = [post(list_url, params, admin) for params in all_params]
     assert all_responses.pop().status_code == 400
+
+
+@pytest.mark.django_db
+def test_create_credential_input_source_same_target_and_source_returns_400(post, admin, external_credential):
+    """Target and source credential cannot be the same credential."""
+    list_url = reverse('api:credential_input_source_list')
+    params = {
+        'target_credential': external_credential.pk,
+        'source_credential': external_credential.pk,
+        'input_field_name': 'token',
+        'metadata': {'key': 'some_key'},
+    }
+    response = post(list_url, params, admin)
+    assert response.status_code == 400
+    assert b'Target and source credentials must be different' in response.content
+
+
+@pytest.mark.django_db
+def test_create_credential_input_source_circular_dependency_returns_400(post, admin, credentialtype_external, external_credential, other_external_credential):
+    """Creating an input source that would form a cycle between credentials should be rejected."""
+    from awx.main.models import Credential
+
+    third_external = Credential.objects.create(
+        credential_type=credentialtype_external,
+        name='third-external-cred',
+        inputs={'url': 'http://thirdhost.com', 'token': 'secret3'},
+    )
+    list_url = reverse('api:credential_input_source_list')
+
+    # Set up chain: external_credential -> other_external_credential -> third_external
+    response = post(
+        list_url,
+        {
+            'target_credential': external_credential.pk,
+            'source_credential': other_external_credential.pk,
+            'input_field_name': 'token',
+            'metadata': {'key': 'key1'},
+        },
+        admin,
+    )
+    assert response.status_code == 201
+
+    response = post(
+        list_url,
+        {
+            'target_credential': other_external_credential.pk,
+            'source_credential': third_external.pk,
+            'input_field_name': 'token',
+            'metadata': {'key': 'key2'},
+        },
+        admin,
+    )
+    assert response.status_code == 201
+
+    # Now try to close the cycle: third_external sourced from external_credential
+    response = post(
+        list_url,
+        {
+            'target_credential': third_external.pk,
+            'source_credential': external_credential.pk,
+            'input_field_name': 'token',
+            'metadata': {'key': 'key3'},
+        },
+        admin,
+    )
+    assert response.status_code == 400
+    assert b'circular dependency' in response.content
+
+
+@pytest.mark.django_db
+def test_external_credential_get_input_resolves_dynamic_input(external_credential, other_external_credential):
+    """get_input on any credential type should resolve dynamic (externally-sourced) inputs."""
+    input_source = CredentialInputSource.objects.create(
+        target_credential=external_credential,
+        source_credential=other_external_credential,
+        input_field_name='token',
+        metadata={'key': 'some_key'},
+    )
+    # The mock backend returns 'secret1', so the dynamic input should resolve
+    assert external_credential.get_input('token') == 'secret1'
+
+
+@pytest.mark.django_db
+def test_chained_external_credential_resolves_source_dynamic_inputs(credentialtype_external, external_credential, other_external_credential):
+    """When a source credential itself has dynamic inputs, get_input_value should resolve them."""
+    # Create a third external credential to act as the leaf source
+    from awx.main.models import Credential
+
+    third_external = Credential.objects.create(
+        credential_type=credentialtype_external,
+        name='third-external-cred',
+        inputs={'url': 'http://thirdhost.com', 'token': 'secret3'},
+    )
+
+    # Chain: other_external_credential.token is sourced from third_external
+    CredentialInputSource.objects.create(
+        target_credential=other_external_credential,
+        source_credential=third_external,
+        input_field_name='token',
+        metadata={'key': 'chained_key'},
+    )
+
+    # Now create an input source where other_external_credential is the source
+    input_source = CredentialInputSource.objects.create(
+        target_credential=external_credential,
+        source_credential=other_external_credential,
+        input_field_name='token',
+        metadata={'key': 'final_key'},
+    )
+
+    # get_input_value should succeed — the source credential's dynamic 'token'
+    # field should be resolved before being passed to the backend
+    result = input_source.get_input_value()
+    assert result == 'secret'
