@@ -26,7 +26,7 @@
 
 import math
 import argparse
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 import itertools
 import json
 import multiprocessing
@@ -213,8 +213,8 @@ def generate_events(events, job, time_delta):
     conn = psycopg.connect(dsn)
     cursor = conn.cursor()
 
-    created_time = datetime.datetime.today() - time_delta - datetime.timedelta(seconds=5)
-    modified_time = datetime.datetime.today() - time_delta
+    created_time = datetime.today() - time_delta - timedelta(seconds=5)
+    modified_time = datetime.today() - time_delta
     created_stamp = created_time.strftime("%Y-%m-%d %H:%M:%S")
     modified_stamp = modified_time.strftime("%Y-%m-%d %H:%M:%S")
 
@@ -305,17 +305,17 @@ if __name__ == '__main__':
 
         for i_day in range(days_delta, 0, -1):
             for j_hour in range(24):
-                time_delta = datetime.timedelta(days=i_day, hours=j_hour, seconds=0)
+                time_delta = timedelta(days=i_day, hours=j_hour, seconds=0)
                 created_job_ids = generate_jobs(jobs, batch_size=batch_size, time_delta=time_delta)
                 if events > 0:
                     for k_id in created_job_ids:
                         generate_events(events, str(k_id), time_delta)
-                print(datetime.datetime.now(timezone.utc).isoformat())
+                print(datetime.now(timezone.utc).isoformat())
         conn.close()
 
     finally:
         # restore all indexes
-        print(datetime.datetime.now(timezone.utc).isoformat())
+        print(datetime.now(timezone.utc).isoformat())
         print('restoring indexes and constraints (this may take awhile)')
 
         workers = []
@@ -343,4 +343,4 @@ if __name__ == '__main__':
             sql = f'ALTER TABLE main_jobevent ADD CONSTRAINT {conname} {condef}'
             cleanup(sql)
 
-        print(datetime.datetime.now(timezone.utc).isoformat())
+        print(datetime.now(timezone.utc).isoformat())
