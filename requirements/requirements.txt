@@ -343,7 +343,7 @@ pygerduty==0.38.3
     # via -r /awx_devel/requirements/requirements.in
 pygithub==2.8.1
     # via -r /awx_devel/requirements/requirements.in
-pyjwt[crypto]==2.9.0
+pyjwt[crypto]==2.12.1
     # via
     #   adal
     #   django-ansible-base
