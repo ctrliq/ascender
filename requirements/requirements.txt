@@ -353,7 +353,7 @@ pyjwt[crypto]==2.12.1
     #   twilio
 pynacl==1.6.2
     # via pygithub
-pyopenssl==25.3.0
+pyopenssl==26.0.0
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   twisted
