@@ -173,7 +173,7 @@ docutils==0.20.1
     # via python-daemon
 drf-spectacular==0.29.0
     # via -r /awx_devel/requirements/requirements.in
-dynaconf==3.2.11
+dynaconf==3.2.13
     # via django-ansible-base
 enum-compat==0.0.3
     # via asn1
