@@ -7,8 +7,7 @@ echo $venv
 # shellcheck disable=SC1090
 source ${venv}/bin/activate
 
-# FIXME: https://github.com/jazzband/pip-tools/issues/1558
-${venv}/bin/python3 -m pip install -U 'pip<22.0' pip-tools
+${venv}/bin/python3 -m pip install -U pip-tools
 
 pip-compile --upgrade --no-header --quiet -r --allow-unsafe requirements.in --output-file requirements.txt
 
