@@ -955,11 +955,9 @@ class ExecutionEnvironmentBuilderBuildRelaunch(GenericAPIView):
         return Response({})
 
     def post(self, request, *args, **kwargs):
-        from django.utils.timezone import now
         obj = self.get_object()
         # Create a new build with the same configuration as the original
         builder = obj.execution_environment_builder
-        current_date = now().strftime('%Y-%m-%d %H:%M:%S')
         new_build = models.ExecutionEnvironmentBuilderBuild.objects.create(
             execution_environment_builder=builder,
             name=f"{builder.name if builder else ''}",

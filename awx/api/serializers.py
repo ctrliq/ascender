@@ -1745,11 +1745,8 @@ class ExecutionEnvironmentBuilderBuildListSerializer(ExecutionEnvironmentBuilder
         fields = ('*', '-controller_node', '-unified_job_template')
 
 
-class ExecutionEnvironmentBuilderBuildCancelSerializer(ExecutionEnvironmentBuilderBuildSerializer):
+class ExecutionEnvironmentBuilderBuildCancelSerializer(serializers.Serializer):
     can_cancel = serializers.BooleanField(read_only=True)
-
-    class Meta:
-        fields = ('can_cancel',)
 
 
 class ExecutionEnvironmentBuilderBuildRelaunchSerializer(BaseSerializer):

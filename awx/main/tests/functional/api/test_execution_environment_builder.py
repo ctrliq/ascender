@@ -4,7 +4,7 @@ from unittest import mock
 
 # AWX
 from awx.api.versioning import reverse
-from awx.main.models import Organization, User
+from awx.main.models import Organization
 from awx.main.models.execution_environment_builders import ExecutionEnvironmentBuilder
 from awx.main.models.execution_environment_builder_builds import ExecutionEnvironmentBuilderBuild
 

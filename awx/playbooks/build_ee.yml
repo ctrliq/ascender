@@ -78,13 +78,13 @@
 
     - name: Install buildah via microdnf if not installed
       ansible.builtin.command: microdnf install -y buildah
-      when: 
+      when:
         - buildah_check.rc != 0
         - microdnf_check.rc == 0
 
     - name: Install buildah via dnf if not installed
       ansible.builtin.command: dnf install -y buildah
-      when: 
+      when:
         - buildah_check.rc != 0
         - dnf_check.rc == 0
 
@@ -118,7 +118,7 @@
             {{ '--tls-verify=false' if registry_credential is defined and registry_credential.verify_ssl==False else '' }}
             bud
             -t
-            "{{ (execution_environment_image + ':' + execution_environment_tag) | quote }}"
+            {{ (execution_environment_image + ':' + execution_environment_tag) | quote }}
             ./context
 
     # - pause:
