@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
-import { string, bool, func } from 'prop-types';
+import { string, bool, func, number } from 'prop-types';
+import { ExecutionEnvironmentBuilder } from 'types';
 import { useLingui } from '@lingui/react/macro';
 import { Link, useHistory } from 'react-router-dom';
 import { Button } from '@patternfly/react-core';
@@ -141,12 +142,12 @@ function ExecutionEnvironmentBuilderListItem({
 }
 
 ExecutionEnvironmentBuilderListItem.propTypes = {
-  executionEnvironmentBuilder: string.isRequired,
+  executionEnvironmentBuilder: ExecutionEnvironmentBuilder.isRequired,
   detailUrl: string.isRequired,
   isSelected: bool.isRequired,
   onSelect: func.isRequired,
   onCopy: func.isRequired,
-  rowIndex: func.isRequired,
+  rowIndex: number.isRequired,
   fetchExecutionEnvironmentBuilders: func.isRequired,
 };
 

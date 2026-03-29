@@ -158,7 +158,6 @@ class BaseTask(object):
             return {}
 
         image = instance.execution_environment.image
-        #image = "ghcr.io/ctrliq/ascender-ee:1b5b28d8c3d7fcae98a678b67d22c1b52d0dd152c8d1b924d3b8a9cb0907f71b"
         params = {
             "container_image": image,
             "process_isolation": True,

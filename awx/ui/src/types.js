@@ -276,6 +276,16 @@ export const SummaryFieldUser = shape({
   last_name: string,
 });
 
+export const ExecutionEnvironmentBuilder = shape({
+  id: number.isRequired,
+  name: string.isRequired,
+  image: string,
+  tag: string,
+  summary_fields: shape({
+    user_capabilities: objectOf(bool),
+  }),
+});
+
 export const Group = shape({
   id: number.isRequired,
   type: oneOf(['group']),

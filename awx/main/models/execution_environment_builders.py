@@ -63,7 +63,7 @@ class ExecutionEnvironmentBuilder(CommonModel):
 
     admin_role = ImplicitRoleField(
         parent_role=[
-            'organization.execution_environment_builder_admin_role',
+            'organization.execution_environment_admin_role',
             'singleton:' + ROLE_SINGLETON_SYSTEM_ADMINISTRATOR,
         ]
     )

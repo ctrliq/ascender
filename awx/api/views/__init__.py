@@ -910,6 +910,7 @@ class ExecutionEnvironmentBuilderCopy(CopyAPIView):
 class ExecutionEnvironmentBuilderLaunch(GenericAPIView):
     model = models.ExecutionEnvironmentBuilder
     serializer_class = serializers.EmptySerializer
+    obj_permission_type = 'start'
 
     def get(self, request, *args, **kwargs):
         return Response({})
