@@ -18,10 +18,9 @@ function ExecutionEnvironmentBuilderEdit({ builder, onUpdate }) {
         ...values,
         credential: values.credential?.id || null,
       };
-      const { data: updatedBuilder } =
-        await ExecutionEnvironmentBuildersAPI.update(builder.id, submitData);
+      await ExecutionEnvironmentBuildersAPI.update(builder.id, submitData);
       if (onUpdate) {
-        onUpdate(updatedBuilder);
+        onUpdate();
       }
       history.push(`/execution_environment_builders/${builder.id}`);
     } catch (error) {
