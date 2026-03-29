@@ -3,6 +3,7 @@ from django.utils.translation import gettext_lazy as _
 
 from awx.api.versioning import reverse
 from awx.main.models.base import CommonModel
+from awx.main.models.mixins import ResourceMixin
 from awx.main.fields import ImplicitRoleField
 from awx.main.models.rbac import (
     ROLE_SINGLETON_SYSTEM_ADMINISTRATOR,
@@ -13,7 +14,7 @@ from awx.main.models.rbac import (
 __all__ = ['ExecutionEnvironmentBuilder']
 
 
-class ExecutionEnvironmentBuilder(CommonModel):
+class ExecutionEnvironmentBuilder(CommonModel, ResourceMixin):
     """
     A ExecutionEnvironmentBuilder represents a configuration for building
     custom Execution Environments using ansible-builder.

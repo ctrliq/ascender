@@ -1660,7 +1660,8 @@ class ProjectUpdateCancelSerializer(ProjectUpdateSerializer):
 
 
 class ExecutionEnvironmentBuilderSerializer(BaseSerializer):
-    show_capabilities = ['edit', 'delete', 'copy']
+    show_capabilities = ['start', 'edit', 'delete', 'copy']
+    capabilities_prefetch = ['admin']
 
     class Meta:
         model = ExecutionEnvironmentBuilder

@@ -81,34 +81,22 @@ function ExecutionEnvironmentBuilderForm({
 }) {
   const defaultDefinition = `---
 version: 3
-
 images:
   base_image:
-    name: 'registry.access.redhat.com/ubi9/python-311:latest'
-
-options:
-  package_manager_path: /usr/bin/dnf
-
+    name: registry.fedoraproject.org/fedora:42
 dependencies:
+  python_interpreter:
+    package_system: python3
   ansible_core:
-    package_pip: ansible-core>=2.16.14,<2.17
+    package_pip: ansible-core
   ansible_runner:
     package_pip: ansible-runner
-  galaxy:  |
-    ---
+  system:
+    - openssh-clients
+    - sshpass
+  galaxy:
     collections:
-      - name: ansible.posix
       - name: community.general
-  system:  |
-    sshpass [platform:rpm]
-  python: |
-    requests>=2.25.1
-    jinja2>=3.0.0
-    jmespath>=1.0
-    PyYAML>=6.0
-
-additional_build_steps:
-  prepend_base:
 `;
 
   const initialValues = {

@@ -110,7 +110,7 @@ function ExecutionEnvironmentBuilderListItem({
           </Button>
         </ActionItem>
         <ActionItem
-          visible
+          visible={executionEnvironmentBuilder.summary_fields?.user_capabilities?.start}
           tooltip={t`Launch`}
         >
           <Button

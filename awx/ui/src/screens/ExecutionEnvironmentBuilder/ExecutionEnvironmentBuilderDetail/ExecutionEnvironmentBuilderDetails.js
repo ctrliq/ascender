@@ -107,14 +107,16 @@ function ExecutionEnvironmentBuilderDetails({ builder, isLoading }) {
             />
           </DetailList>
           <CardActionsRow>
-            <Button
-              onClick={launchBuilder}
-              isDisabled={isLaunchDisabled}
-              ouiaId="builder-detail-launch-button"
-              variant="primary"
-            >
-              {t`Launch`}
-            </Button>
+            {builder.summary_fields?.user_capabilities?.start && (
+              <Button
+                onClick={launchBuilder}
+                isDisabled={isLaunchDisabled}
+                ouiaId="builder-detail-launch-button"
+                variant="primary"
+              >
+                {t`Launch`}
+              </Button>
+            )}
             {builder.summary_fields?.user_capabilities?.edit && (
               <Button
                 component={Link}
