@@ -40,6 +40,7 @@ function ExecutionEnvironmentBuilderList() {
       relatedSearchableKeys,
       searchableKeys,
     },
+    error: contentError,
     isLoading,
     request: fetchBuilders,
   } = useRequest(
@@ -118,7 +119,7 @@ function ExecutionEnvironmentBuilderList() {
       <PageSection>
         <Card>
           <PaginatedTable
-            contentError={null}
+            contentError={contentError}
             hasContentLoading={isLoading || deleteLoading}
             items={results}
             itemCount={itemCount}

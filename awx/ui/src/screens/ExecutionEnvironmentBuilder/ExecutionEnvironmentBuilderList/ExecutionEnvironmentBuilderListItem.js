@@ -9,6 +9,8 @@ import { PencilAltIcon, RocketIcon } from '@patternfly/react-icons';
 
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
 import CopyButton from 'components/CopyButton';
+import AlertModal from 'components/AlertModal';
+import ErrorDetail from 'components/ErrorDetail';
 import { ExecutionEnvironmentBuildersAPI } from 'api';
 import { timeOfDay } from 'util/dates';
 
@@ -25,6 +27,7 @@ function ExecutionEnvironmentBuilderListItem({
   const history = useHistory();
   const [isDisabled, setIsDisabled] = useState(false);
   const [isLaunchDisabled, setIsLaunchDisabled] = useState(false);
+  const [launchError, setLaunchError] = useState(null);
 
   const copyExecutionEnvironmentBuilder = useCallback(async () => {
     const response = await ExecutionEnvironmentBuildersAPI.copy(
@@ -56,7 +59,9 @@ function ExecutionEnvironmentBuilderListItem({
       if (response.status === 201) {
         history.push(`/jobs/build/${response.data.execution_environment_builder_build}`);
       }
-    } catch (error) {
+    } catch (err) {
+      setLaunchError(err);
+    } finally {
       setIsLaunchDisabled(false);
     }
   }, [executionEnvironmentBuilder.id, executionEnvironmentBuilder.name, history]);
@@ -137,6 +142,17 @@ function ExecutionEnvironmentBuilderListItem({
           />
         </ActionItem>
       </ActionsTd>
+      {launchError && (
+        <AlertModal
+          isOpen={launchError}
+          onClose={() => setLaunchError(null)}
+          title={t`Error`}
+          variant="error"
+        >
+          {t`Failed to launch build.`}
+          <ErrorDetail error={launchError} />
+        </AlertModal>
+      )}
     </Tr>
   );
 }

@@ -920,6 +920,8 @@ class ExecutionEnvironmentBuilderLaunch(GenericAPIView):
         new_build = models.ExecutionEnvironmentBuilderBuild.objects.create(
             execution_environment_builder=obj,
             name=request.data.get('name', f'{obj.name} Build'),
+            created_by=request.user,
+            modified_by=request.user,
         )
         new_build.signal_start()
         data = OrderedDict()
@@ -932,7 +934,7 @@ class ExecutionEnvironmentBuilderBuildList(ListCreateAPIView):
     serializer_class = serializers.ExecutionEnvironmentBuilderBuildListSerializer
 
     def perform_create(self, serializer):
-        obj = serializer.save()
+        obj = serializer.save(created_by=self.request.user, modified_by=self.request.user)
         obj.signal_start()
 
 class ExecutionEnvironmentBuilderBuildDetail(UnifiedJobDeletionMixin, RetrieveDestroyAPIView):
@@ -962,6 +964,8 @@ class ExecutionEnvironmentBuilderBuildRelaunch(GenericAPIView):
             execution_environment_builder=builder,
             name=f"{builder.name if builder else ''}",
             launch_type='relaunch',
+            created_by=request.user,
+            modified_by=request.user,
         )
         new_build.signal_start()
         return Response({'id': new_build.id})
