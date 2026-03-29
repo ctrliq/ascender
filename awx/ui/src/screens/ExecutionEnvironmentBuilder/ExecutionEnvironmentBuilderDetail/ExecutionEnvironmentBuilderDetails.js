@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { useParams, Link, useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Card, PageSection, Button } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
 import { ExecutionEnvironmentBuildersAPI } from 'api';
@@ -14,7 +14,6 @@ import ErrorDetail from 'components/ErrorDetail';
 
 function ExecutionEnvironmentBuilderDetails({ builder, isLoading }) {
   const { t } = useLingui();
-  const { id } = useParams();
   const history = useHistory();
   const [isLaunchDisabled, setIsLaunchDisabled] = useState(false);
 
@@ -24,15 +23,15 @@ function ExecutionEnvironmentBuilderDetails({ builder, isLoading }) {
     error: deleteError,
   } = useRequest(
     useCallback(async () => {
-      await ExecutionEnvironmentBuildersAPI.destroy(id);
+      await ExecutionEnvironmentBuildersAPI.destroy(builder.id);
       history.push('/execution_environment_builders');
-    }, [id, history])
+    }, [builder?.id, history])
   );
 
   const launchBuilder = useCallback(async () => {
     try {
       setIsLaunchDisabled(true);
-      const response = await ExecutionEnvironmentBuildersAPI.launch(id, {
+      const response = await ExecutionEnvironmentBuildersAPI.launch(builder.id, {
         name: `${builder?.name}`,
       });
       if (response.status === 201) {
@@ -41,7 +40,7 @@ function ExecutionEnvironmentBuilderDetails({ builder, isLoading }) {
     } catch (error) {
       setIsLaunchDisabled(false);
     }
-  }, [id, builder?.name, history]);
+  }, [builder?.id, builder?.name, history]);
 
   const { error, dismissError } = useDismissableError(deleteError);
 
@@ -120,7 +119,7 @@ function ExecutionEnvironmentBuilderDetails({ builder, isLoading }) {
             {builder.summary_fields?.user_capabilities?.edit && (
               <Button
                 component={Link}
-                to={`/execution_environment_builders/${id}/edit`}
+                to={`/execution_environment_builders/${builder.id}/edit`}
               >
                 {t`Edit`}
               </Button>

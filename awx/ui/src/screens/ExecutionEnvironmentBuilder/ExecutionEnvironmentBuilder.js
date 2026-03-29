@@ -22,10 +22,9 @@ function ExecutionEnvironmentBuilder({ setBreadcrumb }) {
     fetchBuilder();
   }, [match.params.id, fetchBuilder]);
 
-  const handleBuilderUpdate = useCallback((updatedBuilder) => {
-    setBuilder(updatedBuilder);
-    setBreadcrumb(updatedBuilder);
-  }, [setBreadcrumb]);
+  const handleBuilderUpdate = useCallback(() => {
+    fetchBuilder();
+  }, [fetchBuilder]);
 
   return (
     <Switch>
