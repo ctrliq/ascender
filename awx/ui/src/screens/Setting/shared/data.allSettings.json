@@ -15,7 +15,6 @@
   "DEFAULT_CONTROL_PLANE_QUEUE_NAME": "controlplane",
   "DEFAULT_EXECUTION_QUEUE_NAME": "default",
   "DEFAULT_EXECUTION_ENVIRONMENT": null,
-  "CUSTOM_VENV_PATHS": [],
   "AD_HOC_COMMANDS": [
       "command"
   ],

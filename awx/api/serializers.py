@@ -1321,8 +1321,8 @@ class OrganizationSerializer(BaseSerializer):
 
     class Meta:
         model = Organization
-        fields = ('*', 'max_hosts', 'custom_virtualenv', 'default_environment')
-        read_only_fields = ('*', 'custom_virtualenv')
+        fields = ('*', 'max_hosts', 'default_environment')
+        read_only_fields = ('*',)
 
     def get_related(self, obj):
         res = super(OrganizationSerializer, self).get_related(obj)
@@ -1490,14 +1490,13 @@ class ProjectSerializer(UnifiedJobTemplateSerializer, ProjectOptionsSerializer):
             'scm_update_on_launch',
             'scm_update_cache_timeout',
             'allow_override',
-            'custom_virtualenv',
             'default_environment',
             'signature_validation_credential',
         ) + (
             'last_update_failed',
             'last_updated',
         )  # Backwards compatibility
-        read_only_fields = ('*', 'custom_virtualenv')
+        read_only_fields = ('*',)
 
     def get_related(self, obj):
         res = super(ProjectSerializer, self).get_related(obj)
@@ -2359,12 +2358,11 @@ class InventorySourceOptionsSerializer(BaseSerializer):
             'host_filter',
             'overwrite',
             'overwrite_vars',
-            'custom_virtualenv',
             'timeout',
             'verbosity',
             'limit',
         )
-        read_only_fields = ('*', 'custom_virtualenv')
+        read_only_fields = ('*',)
 
     def get_related(self, obj):
         res = super(InventorySourceOptionsSerializer, self).get_related(obj)
@@ -2568,8 +2566,6 @@ class InventorySourceUpdateSerializer(InventorySourceSerializer):
 
 
 class InventoryUpdateSerializer(UnifiedJobSerializer, InventorySourceOptionsSerializer):
-    custom_virtualenv = serializers.ReadOnlyField()
-
     class Meta:
         model = InventoryUpdate
         fields = (
@@ -2579,7 +2575,6 @@ class InventoryUpdateSerializer(UnifiedJobSerializer, InventorySourceOptionsSeri
             'license_error',
             'org_host_limit_error',
             'source_project_update',
-            'custom_virtualenv',
             'instance_group',
             'scm_revision',
         )
@@ -3288,13 +3283,12 @@ class JobTemplateSerializer(JobTemplateMixin, UnifiedJobTemplateSerializer, JobO
             'become_enabled',
             'diff_mode',
             'allow_simultaneous',
-            'custom_virtualenv',
             'job_slice_count',
             'webhook_service',
             'webhook_credential',
             'prevent_instance_group_fallback',
         )
-        read_only_fields = ('*', 'custom_virtualenv')
+        read_only_fields = ('*',)
 
     def get_related(self, obj):
         res = super(JobTemplateSerializer, self).get_related(obj)
@@ -3461,11 +3455,10 @@ class JobSerializer(UnifiedJobSerializer, JobOptionsSerializer):
 
 class JobDetailSerializer(JobSerializer):
     playbook_counts = serializers.SerializerMethodField(help_text=_('A count of all plays and tasks for the job run.'))
-    custom_virtualenv = serializers.ReadOnlyField()
 
     class Meta:
         model = Job
-        fields = ('*', 'host_status_counts', 'playbook_counts', 'custom_virtualenv')
+        fields = ('*', 'host_status_counts', 'playbook_counts')
 
     def get_playbook_counts(self, obj):
         task_count = obj.get_event_queryset().filter(event='playbook_on_task_start').count()
