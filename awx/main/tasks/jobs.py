@@ -2017,9 +2017,16 @@ class RunExecutionEnvironmentBuilderBuild(BaseTask):
         For builder builds, we extend the base params to add security options.
         """
         params = super(RunExecutionEnvironmentBuilderBuild, self).build_execution_environment_params(instance, private_data_dir)
-        # Add security options for container builds
+        # Add security options for container builds.
+        # EXECUTION_ENVIRONMENT_BUILDER_CONTAINER_OPTIONS overrides the default
+        # --privileged flag, allowing admins to supply a tighter capability set
+        # if their container runtime / kernel supports it.
         if params and 'container_options' in params:
-            params['container_options'].extend(['--privileged'])
+            custom_options = getattr(settings, 'EXECUTION_ENVIRONMENT_BUILDER_CONTAINER_OPTIONS', None)
+            if custom_options:
+                params['container_options'].extend(custom_options)
+            else:
+                params['container_options'].extend(['--privileged'])
         return params
 
     def build_project_dir(self, instance, private_data_dir):
