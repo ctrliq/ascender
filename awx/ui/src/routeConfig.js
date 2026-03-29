@@ -223,7 +223,7 @@ function getRouteConfig(userProfile = {}) {
   deleteRoute('topology_view');
   deleteRoute('instances');
   deleteRoute('subscription_usage');
-  if (!userProfile?.isExecutionEnvironmentAdmin) deleteRouteGroup('tools_group');
+  if (!userProfile?.isExecEnvAdmin) deleteRouteGroup('tools_group');
   if (userProfile?.isOrgAdmin) return routeConfig;
   if (!userProfile?.isNotificationAdmin) deleteRoute('notification_templates');
 

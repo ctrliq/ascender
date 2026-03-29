@@ -6,6 +6,8 @@ import django.db.models.deletion
 from django.conf import settings
 from django.db import migrations, models, connection
 
+from ._sqlite_helper import dbawaremigrations
+
 
 def setup_event_partitioning(apps, schema_editor):
     """Set up partitioning for ExecutionEnvironmentBuilderBuildEvent table"""
@@ -298,5 +300,5 @@ class Migration(migrations.Migration):
             model_name='executionenvironmentbuilderbuildevent',
             index=models.Index(fields=['execution_environment_builder_build', 'job_created', 'counter'], name='main_execut_executi_03d2ab_idx'),
         ),
-        migrations.RunPython(setup_event_partitioning, setup_event_partitioning_sqlite),
+        dbawaremigrations.RunPython(setup_event_partitioning, sqlite_code=setup_event_partitioning_sqlite),
     ]

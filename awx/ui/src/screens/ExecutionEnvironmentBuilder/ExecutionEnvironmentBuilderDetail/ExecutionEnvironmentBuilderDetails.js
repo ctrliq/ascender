@@ -78,12 +78,12 @@ function ExecutionEnvironmentBuilderDetails({ builder, isLoading }) {
                 dataCy="builder-detail-definition"
               />
             )}
-            {builder.organization && (
+            {builder.summary_fields?.organization && (
               <Detail
                 label={t`Organization`}
                 value={
-                  <Link to={`/organizations/${builder.organization.id}`}>
-                    {builder.organization.name}
+                  <Link to={`/organizations/${builder.summary_fields.organization.id}`}>
+                    {builder.summary_fields.organization.name}
                   </Link>
                 }
               />

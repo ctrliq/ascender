@@ -1754,9 +1754,6 @@ class ExecutionEnvironmentBuilderBuildRelaunchSerializer(BaseSerializer):
         model = ExecutionEnvironmentBuilderBuild
         fields = ()
 
-    class Meta:
-        fields = ('can_cancel',)
-
 
 class BaseSerializerWithVariables(BaseSerializer):
     def validate_variables(self, value):

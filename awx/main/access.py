@@ -1421,13 +1421,15 @@ class ExecutionEnvironmentBuilderAccess(BaseAccess):
     I can see an execution environment builder when:
      - I'm a superuser
      - I'm a member of the same organization
+     - it has no organization (global)
     I can create/change an execution environment builder when:
      - I'm a superuser
+     - I'm an execution environment admin for the organization
     """
 
     model = ExecutionEnvironmentBuilder
     select_related = ('organization',)
-    prefetch_related = ('organization__admin_role',)
+    prefetch_related = ('organization__admin_role', 'organization__execution_environment_admin_role')
 
     def filtered_queryset(self):
         return ExecutionEnvironmentBuilder.objects.filter(
@@ -1436,11 +1438,28 @@ class ExecutionEnvironmentBuilderAccess(BaseAccess):
 
     @check_superuser
     def can_add(self, data):
-        return True
+        if not data:
+            return Organization.accessible_objects(self.user, 'execution_environment_admin_role').exists()
+        return self.check_related('organization', Organization, data, mandatory=True, role_field='execution_environment_admin_role')
 
     @check_superuser
     def can_change(self, obj, data):
-        return True
+        if obj and obj.organization_id is None:
+            raise PermissionDenied
+        if self.user not in obj.organization.execution_environment_admin_role:
+            raise PermissionDenied
+        if data and 'organization' in data:
+            new_org = get_object_from_data('organization', Organization, data, obj=obj)
+            if not new_org or self.user not in new_org.execution_environment_admin_role:
+                return False
+        return self.check_related('organization', Organization, data, obj=obj, mandatory=True, role_field='execution_environment_admin_role')
+
+    @check_superuser
+    def can_start(self, obj, validate_license=True):
+        return obj and self.user in obj.admin_role
+
+    def can_delete(self, obj):
+        return self.can_change(obj, None)
 
 
 class ExecutionEnvironmentBuilderBuildAccess(BaseAccess):

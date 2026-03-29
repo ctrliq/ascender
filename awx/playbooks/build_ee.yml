@@ -45,7 +45,6 @@
         content: |
           short-name-mode="permissive"
           unqualified-search-registries = ["quay.io", "docker.io"]
-      become: true
 
     - name: Check for ansible-builder command
       ansible.builtin.command: command -v ansible-builder
