@@ -1748,6 +1748,9 @@ class ExecutionEnvironmentBuilderBuildListSerializer(ExecutionEnvironmentBuilder
 class ExecutionEnvironmentBuilderBuildCancelSerializer(ExecutionEnvironmentBuilderBuildSerializer):
     can_cancel = serializers.BooleanField(read_only=True)
 
+    class Meta:
+        fields = ('can_cancel',)
+
 
 class ExecutionEnvironmentBuilderBuildRelaunchSerializer(BaseSerializer):
     class Meta:

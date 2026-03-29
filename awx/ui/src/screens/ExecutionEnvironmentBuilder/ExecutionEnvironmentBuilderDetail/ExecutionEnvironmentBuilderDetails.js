@@ -10,6 +10,7 @@ import { Detail, DetailList, UserDateDetail } from 'components/DetailList';
 import { VariablesDetail } from 'components/CodeEditor';
 import DeleteButton from 'components/DeleteButton';
 import AlertModal from 'components/AlertModal';
+import ErrorDetail from 'components/ErrorDetail';
 
 function ExecutionEnvironmentBuilderDetails({ builder, isLoading }) {
   const { t } = useLingui();
@@ -139,7 +140,9 @@ function ExecutionEnvironmentBuilderDetails({ builder, isLoading }) {
               onClose={dismissError}
               title={t`Error`}
               variant="error"
-            />
+            >
+              <ErrorDetail error={error} />
+            </AlertModal>
           )}
         </CardBody>
       </Card>
