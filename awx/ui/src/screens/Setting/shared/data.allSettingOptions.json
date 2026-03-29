@@ -752,6 +752,20 @@
                   "read_only": false
               }
           },
+          "EXECUTION_ENVIRONMENT_BUILDER_CONTAINER_OPTIONS": {
+              "type": "list",
+              "required": false,
+              "label": "EE Builder Container Options",
+              "help_text": "List of container runtime options to use when running EE builder builds. When empty (the default), the builder runs with --privileged. Set this to override with a tighter capability set.",
+              "category": "Jobs",
+              "category_slug": "jobs",
+              "default": [],
+              "child": {
+                  "type": "string",
+                  "required": true,
+                  "read_only": false
+              }
+          },
           "RECEPTOR_RELEASE_WORK": {
               "type": "boolean",
               "required": false,
@@ -5120,6 +5134,17 @@
               "type": "list",
               "label": "Container Run Options",
               "help_text": "List of options to pass to podman run example: ['--network', 'slirp4netns:enable_ipv6=true', '--log-level', 'debug']",
+              "category": "Jobs",
+              "category_slug": "jobs",
+              "defined_in_file": false,
+              "child": {
+                  "type": "string"
+              }
+          },
+          "EXECUTION_ENVIRONMENT_BUILDER_CONTAINER_OPTIONS": {
+              "type": "list",
+              "label": "EE Builder Container Options",
+              "help_text": "List of container runtime options to use when running EE builder builds. When empty (the default), the builder runs with --privileged. Set this to override with a tighter capability set.",
               "category": "Jobs",
               "category_slug": "jobs",
               "defined_in_file": false,

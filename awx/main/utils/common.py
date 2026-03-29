@@ -577,7 +577,7 @@ def get_capacity_type(uj):
         return None
     elif model_name.startswith('unified'):
         raise RuntimeError(f'Capacity type is undefined for {model_name} model')
-    elif model_name in ('projectupdate', 'systemjob', 'project', 'systemjobtemplate'):
+    elif model_name in ('projectupdate', 'systemjob', 'project', 'systemjobtemplate', 'executionenvironmentbuilderbuild'):
         return 'control'
     raise RuntimeError(f'Capacity type does not apply to {model_name} model')
 
