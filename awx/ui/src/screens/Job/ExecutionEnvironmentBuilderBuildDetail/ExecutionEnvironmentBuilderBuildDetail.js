@@ -94,9 +94,9 @@ function ExecutionEnvironmentBuilderBuildDetail({ job }) {
           />
         )}
         <ExecutionEnvironmentDetail
-        dataCy="job-execution-environment"
-        executionEnvironment={executionEnvironment}
-        verifyMissingVirtualEnv={false}
+          dataCy="job-execution-environment"
+          executionEnvironment={executionEnvironment}
+          verifyMissingVirtualEnv={false}
         />
         <Detail
           dataCy="execution-environment-name"

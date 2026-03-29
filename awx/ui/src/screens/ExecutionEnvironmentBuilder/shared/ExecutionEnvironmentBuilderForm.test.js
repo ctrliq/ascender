@@ -2,8 +2,7 @@ import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { CredentialsAPI } from 'api';
 import {
-  mountWithContexts,
-  waitForElement,
+  mountWithContexts
 } from '../../../../testUtils/enzymeHelpers';
 
 import ExecutionEnvironmentBuilderForm from './ExecutionEnvironmentBuilderForm';

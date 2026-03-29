@@ -24,7 +24,7 @@
           - eed.dependencies.galaxy is defined
         fail_msg: "Proper Execution environment v3 definition is required to build an execution environment."
 
-    - name: Validate execution environment definition is provided
+    - name: Validate that no additional build files are included in the definition
       ansible.builtin.assert:
         that:
           - eed.additional_build_files is not defined

@@ -16,6 +16,7 @@ function ExecutionEnvironmentBuilderDetails({ builder, isLoading }) {
   const { t } = useLingui();
   const history = useHistory();
   const [isLaunchDisabled, setIsLaunchDisabled] = useState(false);
+  const [launchError, setLaunchError] = useState(null);
 
   const {
     request: deleteBuilder,
@@ -37,7 +38,9 @@ function ExecutionEnvironmentBuilderDetails({ builder, isLoading }) {
       if (response.status === 201) {
         history.push(`/jobs/build/${response.data.execution_environment_builder_build}`);
       }
-    } catch (error) {
+    } catch (err) {
+      setLaunchError(err);
+    } finally {
       setIsLaunchDisabled(false);
     }
   }, [builder?.id, builder?.name, history]);
@@ -143,6 +146,17 @@ function ExecutionEnvironmentBuilderDetails({ builder, isLoading }) {
               variant="error"
             >
               <ErrorDetail error={error} />
+            </AlertModal>
+          )}
+          {launchError && (
+            <AlertModal
+              isOpen={launchError}
+              onClose={() => setLaunchError(null)}
+              title={t`Error`}
+              variant="error"
+            >
+              {t`Failed to launch build.`}
+              <ErrorDetail error={launchError} />
             </AlertModal>
           )}
         </CardBody>
