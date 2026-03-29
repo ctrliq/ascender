@@ -34,8 +34,6 @@ function ExecutionEnvironmentBuilderAdd() {
       <Card>
         <CardBody>
           <ExecutionEnvironmentBuilderForm
-            handleCancel={handleCancel}
-            handleSubmit={handleSubmit}
             onCancel={handleCancel}
             onSubmit={handleSubmit}
             submitError={formSubmitError}

@@ -104,7 +104,7 @@ class Migration(migrations.Migration):
                         editable=False,
                         null='True',
                         on_delete=django.db.models.deletion.CASCADE,
-                        parent_role=['organization.execution_environment_builder_admin_role', 'singleton:system_administrator'],
+                        parent_role=['organization.execution_environment_admin_role', 'singleton:system_administrator'],
                         related_name='+',
                         to='main.role',
                     ),
