@@ -404,16 +404,19 @@ class Command(BaseCommand):
                 db_children_name_pk_map.pop(group_name, None)
             # Removal list is complete - now perform the removals
             del_child_group_pks = list(set(db_children_name_pk_map.values()))
+            pk_to_name = {pk: name for name, pk in db_children_name_pk_map.items()}
             for offset in range(0, len(del_child_group_pks), self._batch_size):
                 child_group_pks = del_child_group_pks[offset : (offset + self._batch_size)]
-                for db_child in db_children.filter(pk__in=child_group_pks):
-                    group_group_count += 1
-                    db_group.children.remove(db_child)
-                    logger.debug('Group "%s" removed from group "%s"', db_child.name, db_group.name)
+                if child_group_pks:
+                    group_group_count += len(child_group_pks)
+                    db_group.children.remove(*child_group_pks)
+                    for cpk in child_group_pks:
+                        logger.debug('Group "%s" removed from group "%s"', pk_to_name.get(cpk, cpk), db_group.name)
             # FIXME: Inventory source group relationships
             # Delete group/host relationships not present in imported data.
             db_hosts = db_group.hosts
-            del_host_pks = set(db_hosts.values_list('pk', flat=True))
+            db_host_pk_name_map = dict(db_hosts.values_list('pk', 'name'))
+            del_host_pks = set(db_host_pk_name_map.keys())
             # Exclude child hosts from removal list if they were not imported
             # by this specific inventory source, because
             # those relationships are outside of the dominion of this inventory source
@@ -438,12 +441,11 @@ class Command(BaseCommand):
             del_host_pks = list(del_host_pks)
             for offset in range(0, len(del_host_pks), self._batch_size):
                 del_pks = del_host_pks[offset : (offset + self._batch_size)]
-                for db_host in db_hosts.filter(pk__in=del_pks):
-                    group_host_count += 1
-                    if db_host not in db_group.hosts.all():
-                        continue
-                    db_group.hosts.remove(db_host)
-                    logger.debug('Host "%s" removed from group "%s"', db_host.name, db_group.name)
+                if del_pks:
+                    group_host_count += len(del_pks)
+                    db_group.hosts.remove(*del_pks)
+                    for hpk in del_pks:
+                        logger.debug('Host "%s" removed from group "%s"', db_host_pk_name_map.get(hpk, hpk), db_group.name)
         if settings.SQL_DEBUG:
             logger.warning(
                 'group-group and group-host deletions took %d queries for %d relationships',
