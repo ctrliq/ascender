@@ -38,15 +38,6 @@ global.console = {
   },
 };
 
-const logNetworkRequestError = (url) => {
-  networkRequestUrl = url || true;
-  return Promise.resolve({
-    data: {},
-    status: 200,
-    headers: {},
-  });
-};
-
 global.fetch = jest.fn((url) => {
   networkRequestUrl = url || true;
   return Promise.resolve({

@@ -88,7 +88,7 @@ function makeRequest(method, url, dataOrConfig, config) {
     if (typeof body === 'string') {
       fetchOptions.body = body;
     } else {
-      if (!headers['Content-Type']) {
+      if (!new Headers(headers).has('content-type')) {
         headers['Content-Type'] = 'application/json';
       }
       fetchOptions.body = JSON.stringify(body);
