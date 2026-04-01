@@ -268,6 +268,15 @@ describe('defaultHttp (fetch-based client)', () => {
     expect(response.data).toBe(null);
   });
 
+  test('GET with plain params object appends query string (compatibility)', async () => {
+    // Test backward compatibility: direct params object as second argument
+    await api.http.get('/api/test/', { page: 2, limit: 10 });
+
+    const [url] = global.fetch.mock.calls[0];
+    expect(url).toContain('page=2');
+    expect(url).toContain('limit=10');
+  });
+
   test('credentials are set to same-origin', async () => {
     await api.read();
 

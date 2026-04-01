@@ -77,7 +77,15 @@ function makeRequest(method, url, dataOrConfig, config) {
   const hasBody = ['POST', 'PUT', 'PATCH'].includes(method);
   const body = hasBody ? dataOrConfig : undefined;
   const reqConfig = hasBody ? config : dataOrConfig;
-  const params = reqConfig?.params;
+
+  // Compatibility shim: if reqConfig is a plain object without params/headers keys,
+  // treat it as the params object (for GET/DELETE/OPTIONS calls)
+  let params;
+  if (reqConfig && typeof reqConfig === 'object' && !reqConfig.params && !reqConfig.headers) {
+    params = reqConfig;
+  } else {
+    params = reqConfig?.params;
+  }
 
   const fetchUrl = buildUrl(url, params);
   const headers = { Accept: 'application/json, text/plain, */*' };
