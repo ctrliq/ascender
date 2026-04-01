@@ -2,12 +2,13 @@ import Base from './Base';
 
 function mockFetchResponse(overrides = {}) {
   const headers = new Headers(overrides.headers || {});
+  const text = overrides.text !== undefined ? overrides.text : JSON.stringify(overrides.json || {});
   return {
     ok: overrides.ok !== undefined ? overrides.ok : true,
     status: overrides.status || 200,
     headers,
-    json: jest.fn(() => Promise.resolve(overrides.json || {})),
-    text: jest.fn(() => Promise.resolve(overrides.text || '{}')),
+    json: jest.fn(() => Promise.resolve(JSON.parse(text))),
+    text: jest.fn(() => Promise.resolve(text)),
   };
 }
 
@@ -252,6 +253,19 @@ describe('defaultHttp (fetch-based client)', () => {
     const response = await api.readDetail(1);
 
     expect(response.data).toBe('<html>OK</html>');
+  });
+
+  test('empty JSON response body returns null', async () => {
+    global.fetch.mockResolvedValueOnce(
+      mockFetchResponse({
+        headers: { 'content-type': 'application/json' },
+        text: '',
+      })
+    );
+
+    const response = await api.readDetail(1);
+
+    expect(response.data).toBe(null);
   });
 
   test('credentials are set to same-origin', async () => {

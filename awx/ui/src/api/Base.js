@@ -29,7 +29,16 @@ async function handleResponse(fetchResponse) {
   let data;
   const contentType = headers['content-type'] || '';
   if (contentType.includes('application/json')) {
-    data = await fetchResponse.json();
+    const text = await fetchResponse.text();
+    if (text.trim()) {
+      try {
+        data = JSON.parse(text);
+      } catch {
+        data = text;
+      }
+    } else {
+      data = null;
+    }
   } else {
     const text = await fetchResponse.text();
     try {
