@@ -317,7 +317,7 @@ Concatenating terms in this way gives you the intersection of both terms (i.e. f
 
 #### Working with REST API
 
-The REST API is coupled with the qs util through the `paramsSerializer`, due to the fact we need axios to support the array for duplicate key values in the object representation of the params to pass to the get request. This is done where axios is configured in the Base.js file, so all requests and request types should support our array syntax for duplicate keys automatically.
+The REST API is coupled with the qs util through the `paramsSerializer` (the `encodeQueryString` function), due to the fact we need to support the array for duplicate key values in the object representation of the params to pass to the get request. This is done where the HTTP client is configured in the Base.js file, so all requests and request types should support our array syntax for duplicate keys automatically.
 
 # Advanced Search - this section is a mess, update eventually
 

@@ -40,27 +40,23 @@ global.console = {
 
 const logNetworkRequestError = (url) => {
   networkRequestUrl = url || true;
-  return {
-    status: 200,
+  return Promise.resolve({
     data: {},
-  };
+    status: 200,
+    headers: {},
+  });
 };
 
-jest.mock('axios', () => ({
-  create: () => ({
-    get: logNetworkRequestError,
-    post: logNetworkRequestError,
-    delete: logNetworkRequestError,
-    put: logNetworkRequestError,
-    patch: logNetworkRequestError,
-    options: logNetworkRequestError,
-    interceptors: {
-      response: {
-        use: () => {},
-      },
-    },
-  }),
-}));
+global.fetch = jest.fn((url) => {
+  networkRequestUrl = url || true;
+  return Promise.resolve({
+    ok: true,
+    status: 200,
+    headers: new Headers(),
+    json: () => Promise.resolve({}),
+    text: () => Promise.resolve('{}'),
+  });
+});
 jest.mock('hooks/useTitle');
 
 afterEach(() => {
