@@ -38,7 +38,7 @@ global.console = {
   },
 };
 
-global.fetch = jest.fn((url) => {
+const fetchSafeguard = (url) => {
   networkRequestUrl = url || true;
   return Promise.resolve({
     ok: true,
@@ -47,7 +47,16 @@ global.fetch = jest.fn((url) => {
     json: () => Promise.resolve({}),
     text: () => Promise.resolve('{}'),
   });
+};
+
+global.fetch = jest.fn(fetchSafeguard);
+
+// Re-apply fetch implementation before each test since resetMocks: true
+// clears jest.fn implementations between tests.
+beforeEach(() => {
+  global.fetch.mockImplementation(fetchSafeguard);
 });
+
 jest.mock('hooks/useTitle');
 
 afterEach(() => {
