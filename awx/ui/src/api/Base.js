@@ -70,22 +70,16 @@ async function handleResponse(fetchResponse) {
 function buildUrl(url, params) {
   if (!params) return url;
   const qs = encodeQueryString(params);
-  return qs ? `${url}?${qs}` : url;
+  if (!qs) return url;
+  const separator = url.includes('?') ? '&' : '?';
+  return `${url}${separator}${qs}`;
 }
 
 function makeRequest(method, url, dataOrConfig, config) {
   const hasBody = ['POST', 'PUT', 'PATCH'].includes(method);
   const body = hasBody ? dataOrConfig : undefined;
   const reqConfig = hasBody ? config : dataOrConfig;
-
-  // Compatibility shim: if reqConfig is a plain object without params/headers keys,
-  // treat it as the params object (for GET/DELETE/OPTIONS calls)
-  let params;
-  if (reqConfig && typeof reqConfig === 'object' && !reqConfig.params && !reqConfig.headers) {
-    params = reqConfig;
-  } else {
-    params = reqConfig?.params;
-  }
+  const params = reqConfig?.params;
 
   const fetchUrl = buildUrl(url, params);
   const headers = { Accept: 'application/json, text/plain, */*' };
@@ -100,6 +94,16 @@ function makeRequest(method, url, dataOrConfig, config) {
   }
 
   const fetchOptions = { method, headers, credentials: 'same-origin' };
+
+  // Pass through fetch-specific options
+  const fetchOptionKeys = ['signal', 'cache', 'redirect', 'referrer', 'referrerPolicy', 'mode', 'credentials'];
+  if (reqConfig) {
+    fetchOptionKeys.forEach(key => {
+      if (reqConfig[key] !== undefined) {
+        fetchOptions[key] = reqConfig[key];
+      }
+    });
+  }
 
   if (body !== undefined) {
     if (typeof body === 'string') {

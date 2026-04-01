@@ -146,6 +146,13 @@ describe('defaultHttp (fetch-based client)', () => {
     expect(url).toContain('page_size=5');
   });
 
+  test('GET appends params to URLs that already have query strings', async () => {
+    await api.http.get('/api/existing?a=1&b=2', { params: { c: 3, d: 4 } });
+
+    const [url] = global.fetch.mock.calls[0];
+    expect(url).toBe('/api/existing?a=1&b=2&c=3&d=4');
+  });
+
   test('GET without params does not append query string', async () => {
     await api.readDetail(42);
 
@@ -268,13 +275,12 @@ describe('defaultHttp (fetch-based client)', () => {
     expect(response.data).toBe(null);
   });
 
-  test('GET with plain params object appends query string (compatibility)', async () => {
-    // Test backward compatibility: direct params object as second argument
-    await api.http.get('/api/test/', { page: 2, limit: 10 });
+  test('fetch options like signal are passed through to fetch', async () => {
+    const abortController = new AbortController();
+    await api.http.get('/api/test/', { signal: abortController.signal });
 
-    const [url] = global.fetch.mock.calls[0];
-    expect(url).toContain('page=2');
-    expect(url).toContain('limit=10');
+    const [, options] = global.fetch.mock.calls[0];
+    expect(options.signal).toBe(abortController.signal);
   });
 
   test('credentials are set to same-origin', async () => {
