@@ -13,7 +13,9 @@ class Schedules extends InstanceGroupsMixin(LabelsMixin(Base)) {
   }
 
   readCredentials(resourceId, params) {
-    return this.http.get(`${this.baseUrl}${resourceId}/credentials/`, params);
+    return this.http.get(`${this.baseUrl}${resourceId}/credentials/`, {
+      params,
+    });
   }
 
   associateCredential(resourceId, credentialId) {

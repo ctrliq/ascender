@@ -38,29 +38,25 @@ global.console = {
   },
 };
 
-const logNetworkRequestError = (url) => {
+const fetchSafeguard = (url) => {
   networkRequestUrl = url || true;
-  return {
+  return Promise.resolve({
+    ok: true,
     status: 200,
-    data: {},
-  };
+    headers: new Headers(),
+    json: () => Promise.resolve({}),
+    text: () => Promise.resolve('{}'),
+  });
 };
 
-jest.mock('axios', () => ({
-  create: () => ({
-    get: logNetworkRequestError,
-    post: logNetworkRequestError,
-    delete: logNetworkRequestError,
-    put: logNetworkRequestError,
-    patch: logNetworkRequestError,
-    options: logNetworkRequestError,
-    interceptors: {
-      response: {
-        use: () => {},
-      },
-    },
-  }),
-}));
+global.fetch = jest.fn(fetchSafeguard);
+
+// Re-apply fetch implementation before each test since resetMocks: true
+// clears jest.fn implementations between tests.
+beforeEach(() => {
+  global.fetch.mockImplementation(fetchSafeguard);
+});
+
 jest.mock('hooks/useTitle');
 
 afterEach(() => {
@@ -68,7 +64,7 @@ afterEach(() => {
     const url = networkRequestUrl;
     networkRequestUrl = false;
     throw new Error(
-      `Network request was attempted to URL ${url} — API should be stubbed using jest.mock()`
+      `Network request was attempted to URL ${url} — API should be stubbed by mocking global.fetch (e.g., global.fetch.mockResolvedValueOnce(...))`
     );
   }
   if (hasConsoleError) {
