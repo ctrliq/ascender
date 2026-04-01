@@ -55,7 +55,7 @@ afterEach(() => {
     const url = networkRequestUrl;
     networkRequestUrl = false;
     throw new Error(
-      `Network request was attempted to URL ${url} — API should be stubbed using jest.mock()`
+      `Network request was attempted to URL ${url} — API should be stubbed by mocking global.fetch (e.g., global.fetch.mockResolvedValueOnce(...))`
     );
   }
   if (hasConsoleError) {
