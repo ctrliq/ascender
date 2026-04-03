@@ -137,7 +137,7 @@ function TemplateListItem({
               </Tooltip>
             </span>
           )}
-         </TdBreakWord>
+        </TdBreakWord>
         <Td dataLabel={t`Activity`}>
           {summaryFields.recent_jobs ? (
             <Sparkline jobs={summaryFields.recent_jobs} />
