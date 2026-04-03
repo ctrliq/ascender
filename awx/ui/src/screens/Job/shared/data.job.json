@@ -189,6 +189,5 @@
       "play_count": 1,
       "task_count": 1
   },
-  "custom_virtualenv": "/var/lib/awx/venv/ansible",
   "execution_environment": 1
 }

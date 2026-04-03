@@ -309,7 +309,6 @@ If you want to stub the value of a context, or assert actions taken on it, you c
 
 ```javascript
 const config = {
-  custom_virtualenvs: ['foo', 'bar'],
 };
 mountWithContexts(<OrganizationForm />, {
   context: { config },

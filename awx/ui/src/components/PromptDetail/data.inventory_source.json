@@ -101,7 +101,6 @@
   "group_by": "group1,group2,group3",
   "overwrite":true,
   "overwrite_vars":true,
-  "custom_virtualenv":null,
   "timeout":0,
   "verbosity":2,
   "last_job_run":null,

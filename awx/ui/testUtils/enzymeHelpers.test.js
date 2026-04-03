@@ -68,7 +68,6 @@ describe('mountWithContexts', () => {
         <Config>
           {value => (
             <div>
-              {value.custom_virtualenvs[0]}
               {value.version}
             </div>
           )}
@@ -80,14 +79,12 @@ describe('mountWithContexts', () => {
 
     it('should mount and render with custom Config value', () => {
       const config = {
-        custom_virtualenvs: ['Fizz', 'Buzz'],
         version: '1.1',
       };
       const Foo = () => (
         <Config>
           {value => (
             <div>
-              {value.custom_virtualenvs[0]}
               {value.version}
             </div>
           )}

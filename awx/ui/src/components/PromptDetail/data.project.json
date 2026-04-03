@@ -108,7 +108,6 @@
   "scm_update_on_launch":true,
   "scm_update_cache_timeout":3,
   "allow_override":true,
-  "custom_virtualenv": "mock virtual env",
   "last_update_failed":false,
   "last_updated":"2020-03-11T20:18:14Z",
   "default_environment": 1

@@ -47,20 +47,6 @@ describe('<ExecutionEnvironmentDetail/>', () => {
     );
   });
 
-  test('should display warning missing execution environment', async () => {
-    const wrapper = mountWithContexts(
-      <ExecutionEnvironmentDetail virtualEnvironment={virtualEnvironment} />
-    );
-    const executionEnvironment = wrapper.find('ExecutionEnvironmentDetail');
-    expect(executionEnvironment).toHaveLength(1);
-    expect(executionEnvironment.find('dt').text()).toEqual(
-      'Execution Environment'
-    );
-    expect(executionEnvironment.find('dd').text()).toEqual('Missing resource');
-    expect(wrapper.find('ExclamationTrianglePopover').length).toBe(1);
-    expect(wrapper.find('Popover').length).toBe(1);
-  });
-
   test('should display warning deleted execution environment', async () => {
     const wrapper = mountWithContexts(
       <ExecutionEnvironmentDetail verifyMissingVirtualEnv={false} />

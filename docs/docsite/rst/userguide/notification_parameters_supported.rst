@@ -13,7 +13,6 @@ This section describes the list of supported job attributes and the proper synta
 - ``allow_simultaneous`` - (boolean) indicates if multiple jobs can run simultaneously from the JT associated with this job
 - ``awx_node`` - (string) the instance that managed the isolated execution environment
 - ``created`` - (datetime) timestamp when this job was created
-- ``custom_virtualenv`` - (string) custom virtual environment used to execute job
 - ``description`` - (string) optional description of the job
 - ``diff_mode`` - (boolean) if enabled, textual changes made to any templated files on the host are shown in the standard output
 - ``elapsed`` - (decimal) elapsed time in seconds that the job ran

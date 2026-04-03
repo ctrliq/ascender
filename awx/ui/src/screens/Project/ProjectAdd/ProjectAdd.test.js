@@ -26,7 +26,6 @@ describe('<ProjectAdd />', () => {
     scm_update_on_launch: true,
     scm_update_cache_timeout: 3,
     allow_override: false,
-    custom_virtualenv: '/var/lib/awx/venv/custom-env',
     default_environment: { id: 1, name: 'Foo' },
   };
 

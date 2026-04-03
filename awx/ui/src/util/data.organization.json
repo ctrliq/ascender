@@ -116,6 +116,5 @@
   "modified": "2019-09-30T16:16:45.953010Z",
   "name": "Default",
   "description": "",
-  "max_hosts": 0,
-  "custom_virtualenv": null
+  "max_hosts": 0
 }

@@ -7,7 +7,6 @@ import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router-dom';
 import {
   PencilAltIcon,
-  ExclamationTriangleIcon as PFExclamationTriangleIcon,
   UndoIcon,
 } from '@patternfly/react-icons';
 import styled from 'styled-components';
@@ -26,11 +25,6 @@ import ProjectSyncButton from '../shared/ProjectSyncButton';
 
 const Label = styled.span`
   color: var(--pf-global--disabled-color--100);
-`;
-
-const ExclamationTriangleIcon = styled(PFExclamationTriangleIcon)`
-  color: var(--pf-global--warning-color--100);
-  margin-left: 18px;
 `;
 
 function ProjectListItem({
@@ -147,9 +141,6 @@ function ProjectListItem({
 
   const labelId = `check-action-${project.id}`;
 
-  const missingExecutionEnvironment =
-    project.custom_virtualenv && !project.default_environment;
-
   let job = null;
 
   if (project.summary_fields?.current_job) {
@@ -183,17 +174,6 @@ function ProjectListItem({
               <b>{project.name}</b>
             </Link>
           </span>
-          {missingExecutionEnvironment && (
-            <span>
-              <Tooltip
-                content={t`Custom virtual environment ${project.custom_virtualenv} must be replaced by an execution environment.`}
-                position="right"
-                className="missing-execution-environment"
-              >
-                <ExclamationTriangleIcon />
-              </Tooltip>
-            </span>
-          )}
         </TdBreakWord>
         <Td dataLabel={t`Status`}>
           {job ? (
@@ -301,7 +281,6 @@ function ProjectListItem({
                 <DeletedDetail label={t`Organization`} />
               )}
               <ExecutionEnvironmentDetail
-                virtualEnvironment={project.custom_virtualenv}
                 executionEnvironment={
                   project.summary_fields?.default_environment
                 }

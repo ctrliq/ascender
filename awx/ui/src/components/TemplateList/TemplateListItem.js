@@ -5,9 +5,9 @@
 import 'styled-components/macro';
 import React, { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Popover, Tooltip, Chip } from '@patternfly/react-core';
+import { Button, Tooltip, Chip } from '@patternfly/react-core';
 import { Tr, Td, ExpandableRowContent } from '@patternfly/react-table';
-import { Trans, useLingui } from '@lingui/react/macro';
+import { useLingui } from '@lingui/react/macro';
 import {
   ExclamationTriangleIcon,
   PencilAltIcon,
@@ -18,8 +18,6 @@ import styled from 'styled-components';
 import { timeOfDay, formatDateString } from 'util/dates';
 import { JobTemplatesAPI, WorkflowJobTemplatesAPI } from 'api';
 import { toTitleCase } from 'util/strings';
-import getDocsBaseUrl from 'util/getDocsBaseUrl';
-import { useConfig } from 'contexts/Config';
 import { ActionsTd, ActionItem, TdBreakWord } from '../PaginatedTable';
 import { DetailList, Detail, DeletedDetail } from '../DetailList';
 import ChipGroup from '../ChipGroup';
@@ -49,13 +47,8 @@ function TemplateListItem({
   rowIndex,
 }) {
   const { t } = useLingui();
-  const config = useConfig();
   const [isDisabled, setIsDisabled] = useState(false);
   const labelId = `check-action-${template.id}`;
-
-  const docsLink = `${getDocsBaseUrl(
-    config
-  )}/html/upgrade-migration-guide/upgrade_to_ees.html`;
 
   const copyTemplate = useCallback(async () => {
     let response;
@@ -91,11 +84,6 @@ function TemplateListItem({
     template.type === 'job_template' &&
     (!summaryFields.project ||
       (!summaryFields.inventory && !askInventoryOnLaunch));
-
-  const missingExecutionEnvironment =
-    template.type === 'job_template' &&
-    template.custom_virtualenv &&
-    !template.execution_environment;
 
   const inventoryValue = (kind, id) => {
     const inventorykind = kind === 'smart' ? 'smart_inventory' : 'inventory';
@@ -158,36 +146,7 @@ function TemplateListItem({
               </Tooltip>
             </span>
           )}
-          {missingExecutionEnvironment && (
-            <span>
-              <Popover
-                className="missing-execution-environment"
-                headerContent={
-                  <div>{t`Execution Environment Missing`}</div>
-                }
-                bodyContent={
-                  <div>
-                    <Trans>
-                      Custom virtual environment {template.custom_virtualenv}{' '}
-                      must be replaced by an execution environment. For more
-                      information about migrating to execution environments see{' '}
-                      <a
-                        href={docsLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        the documentation.
-                      </a>
-                    </Trans>
-                  </div>
-                }
-                position="right"
-              >
-                <ExclamationTriangleIconWarning />
-              </Popover>
-            </span>
-          )}
-        </TdBreakWord>
+         </TdBreakWord>
         <Td dataLabel={t`Activity`}>
           {summaryFields.recent_jobs ? (
             <Sparkline jobs={summaryFields.recent_jobs} />
@@ -316,7 +275,6 @@ function TemplateListItem({
               )}
               {template.type === 'job_template' && (
                 <ExecutionEnvironmentDetail
-                  virtualEnvironment={template.custom_virtualenv}
                   executionEnvironment={summaryFields?.execution_environment}
                 />
               )}

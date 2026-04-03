@@ -184,7 +184,6 @@
     "become_enabled": false,
     "diff_mode": false,
     "allow_simultaneous": false,
-    "custom_virtualenv": null,
     "execution_environment": 1,
     "job_slice_count": 1,
     "webhook_credential": 1,

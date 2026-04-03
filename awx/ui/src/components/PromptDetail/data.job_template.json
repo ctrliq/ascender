@@ -199,7 +199,6 @@
   "become_enabled": true,
   "diff_mode": false,
   "allow_simultaneous": true,
-  "custom_virtualenv": null,
   "job_slice_count": 1,
   "webhook_service": "github",
   "webhook_credential": 8,

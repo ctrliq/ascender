@@ -20,7 +20,6 @@ i18n.activate('en');
 const defaultContexts = {
   config: {
     ansible_version: null,
-    custom_virtualenvs: [],
     version: null,
     me: { is_superuser: true },
     toJSON: () => '/config/',
@@ -122,7 +121,6 @@ export function mountWithContexts(node, options = {}) {
   const childContextTypes = {
     config: shape({
       ansible_version: string,
-      custom_virtualenvs: arrayOf(string),
       version: string,
     }),
     router: shape({

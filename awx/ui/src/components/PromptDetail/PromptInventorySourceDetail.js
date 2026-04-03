@@ -17,7 +17,6 @@ import { VERBOSITY } from '../VerbositySelectField';
 
 function PromptInventorySourceDetail({ resource }) {
   const {
-    custom_virtualenv,
     group_by,
     instance_filters,
     overwrite,
@@ -93,7 +92,6 @@ function PromptInventorySourceDetail({ resource }) {
         />
       )}
       <ExecutionEnvironmentDetail
-        virtualEnvironment={custom_virtualenv}
         executionEnvironment={summary_fields?.execution_environment}
       />
       <Detail label={t`Inventory File`} value={source_path} />

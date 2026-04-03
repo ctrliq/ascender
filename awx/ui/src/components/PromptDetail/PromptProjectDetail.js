@@ -17,7 +17,6 @@ function PromptProjectDetail({ resource }) {
   const { t } = useLingui();
   const {
     allow_override,
-    custom_virtualenv,
     local_path,
     scm_branch,
     scm_clean,
@@ -89,7 +88,6 @@ function PromptProjectDetail({ resource }) {
         <DeletedDetail label={t`Organization`} />
       )}
       <ExecutionEnvironmentDetail
-        virtualEnvironment={custom_virtualenv}
         executionEnvironment={summary_fields?.default_environment}
         isDefaultEnvironment
       />

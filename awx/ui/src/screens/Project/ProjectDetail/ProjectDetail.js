@@ -44,7 +44,6 @@ function ProjectDetail({ project }) {
   const {
     allow_override,
     created,
-    custom_virtualenv,
     description,
     id,
     local_path,
@@ -277,7 +276,6 @@ function ProjectDetail({ project }) {
         />
         <ExecutionEnvironmentDetail
           helpText={projectHelpText.executionEnvironment}
-          virtualEnvironment={custom_virtualenv}
           executionEnvironment={summary_fields?.default_environment}
           isDefaultEnvironment
         />

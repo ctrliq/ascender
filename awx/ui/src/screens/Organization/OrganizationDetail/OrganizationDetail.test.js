@@ -16,7 +16,6 @@ describe('<OrganizationDetail />', () => {
     id: 12,
     name: 'Foo',
     description: 'Bar',
-    custom_virtualenv: 'Fizz',
     max_hosts: '0',
     created: '2015-07-07T17:21:26.429745Z',
     modified: '2019-08-11T19:47:37.980466Z',

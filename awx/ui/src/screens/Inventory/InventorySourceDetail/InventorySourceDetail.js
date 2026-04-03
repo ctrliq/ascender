@@ -56,7 +56,6 @@ function InventorySourceDetail({ inventorySource }) {
 
   const {
     created,
-    custom_virtualenv,
     description,
     id,
     modified,
@@ -219,7 +218,6 @@ function InventorySourceDetail({ inventorySource }) {
           />
         )}
         <ExecutionEnvironmentDetail
-          virtualEnvironment={custom_virtualenv}
           executionEnvironment={execution_environment}
         />
         {source_project && (
