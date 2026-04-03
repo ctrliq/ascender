@@ -14,7 +14,6 @@ import {
   ProjectDiagramIcon,
   RocketIcon,
 } from '@patternfly/react-icons';
-import styled from 'styled-components';
 import { timeOfDay, formatDateString } from 'util/dates';
 import { JobTemplatesAPI, WorkflowJobTemplatesAPI } from 'api';
 import { toTitleCase } from 'util/strings';
@@ -26,14 +25,6 @@ import ExecutionEnvironmentDetail from '../ExecutionEnvironmentDetail';
 import { LaunchButton } from '../LaunchButton';
 import Sparkline from '../Sparkline';
 import CopyButton from '../CopyButton';
-
-const ExclamationTriangleIconWarning = styled(ExclamationTriangleIcon)`
-  color: var(--pf-global--warning-color--100);
-  margin-left: 18px;
-  cursor: pointer;
-`;
-
-ExclamationTriangleIconWarning.displayName = 'ExclamationTriangleIconWarning';
 
 function TemplateListItem({
   isExpanded,
