@@ -86,7 +86,6 @@ options:
       description:
         - Execution Environment name, ID, or named URL to use for the job template.
       type: str
-
     instance_groups:
       description:
         - list of Instance Group names, IDs, or named URLs for this Organization to run on.
@@ -395,7 +394,6 @@ def main():
         vault_credential=dict(),
         credentials=dict(type='list', elements='str'),
         execution_environment=dict(),
-
         instance_groups=dict(type="list", elements='str'),
         forks=dict(type='int'),
         limit=dict(),
@@ -533,7 +531,6 @@ def main():
         'become_enabled',
         'diff_mode',
         'allow_simultaneous',
-
         'job_slice_count',
         'webhook_service',
         'prevent_instance_group_fallback',

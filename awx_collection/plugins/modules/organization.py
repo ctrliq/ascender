@@ -38,7 +38,6 @@ options:
       description:
         - Default Execution Environment name, ID, or named URL to use for jobs owned by the Organization.
       type: str
-
     max_hosts:
       description:
         - The max hosts allowed in this organizations
@@ -117,7 +116,6 @@ def main():
         new_name=dict(),
         description=dict(),
         default_environment=dict(),
-
         max_hosts=dict(type='int'),
         instance_groups=dict(type="list", elements='str'),
         notification_templates_started=dict(type="list", elements='str'),
@@ -136,7 +134,6 @@ def main():
     new_name = module.params.get("new_name")
     description = module.params.get('description')
     default_ee = module.params.get('default_environment')
-
     max_hosts = module.params.get('max_hosts')
     state = module.params.get('state')
 
@@ -193,7 +190,6 @@ def main():
         org_fields['description'] = description
     if default_ee is not None:
         org_fields['default_environment'] = module.resolve_name_to_id('execution_environments', default_ee)
-
     if max_hosts is not None:
         org_fields['max_hosts'] = max_hosts
 

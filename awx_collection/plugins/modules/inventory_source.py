@@ -76,7 +76,6 @@ options:
       description:
         - Execution Environment name, ID, or named URL to use for the source.
       type: str
-
     overwrite:
       description:
         - Delete child groups and hosts not found in source.
@@ -174,7 +173,6 @@ def main():
         limit=dict(),
         credential=dict(),
         execution_environment=dict(),
-
         organization=dict(),
         overwrite=dict(type='bool'),
         overwrite_vars=dict(type='bool'),
@@ -271,7 +269,6 @@ def main():
         'source_vars',
         'overwrite',
         'overwrite_vars',
-
         'timeout',
         'verbosity',
         'update_on_launch',
