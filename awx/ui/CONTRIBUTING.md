@@ -311,7 +311,7 @@ If you want to stub the value of a context, or assert actions taken on it, you c
 const config = {
   isDev: true,
 };
-mountWithContexts(<Organization />< {
+mountWithContexts(<OrganizationForm />, {
   context: { config },
 });
 ```
