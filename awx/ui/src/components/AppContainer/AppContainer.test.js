@@ -64,7 +64,6 @@ describe('<AppContainer />', () => {
             config: {
               analytics_status: 'detailed',
               ansible_version: null,
-              custom_virtualenvs: [],
               version: '9000',
               me: { is_superuser: true },
               toJSON: () => '/config/',
@@ -109,7 +108,6 @@ describe('<AppContainer />', () => {
           config: {
             analytics_status: 'detailed',
             ansible_version: null,
-            custom_virtualenvs: [],
             version: '9000',
             me: { is_superuser: true },
             toJSON: () => '/config/',
@@ -132,7 +130,6 @@ describe('<AppContainer />', () => {
           config: {
             analytics_status: 'off',
             ansible_version: null,
-            custom_virtualenvs: [],
             version: '9000',
             me: { is_superuser: true },
             toJSON: () => '/config/',

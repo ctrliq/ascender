@@ -33,7 +33,6 @@ describe('<MiscSystemDetail />', () => {
         LICENSE: null,
         INSTALL_UUID: 'db39b9ec-0c6e-4554-987d-42aw9c732ed8',
         DEFAULT_EXECUTION_ENVIRONMENT: 1,
-        CUSTOM_VENV_PATHS: [],
         AUTOMATION_ANALYTICS_LAST_ENTRIES:
           '{"foo": "2021-11-24R06:35:15.179Z"}',
       },

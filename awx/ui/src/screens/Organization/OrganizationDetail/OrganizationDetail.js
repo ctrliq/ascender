@@ -25,7 +25,6 @@ function OrganizationDetail({ organization }) {
   const {
     name,
     description,
-    custom_virtualenv,
     max_hosts,
     created,
     modified,
@@ -99,7 +98,6 @@ function OrganizationDetail({ organization }) {
           />
         )}
         <ExecutionEnvironmentDetail
-          virtualEnvironment={custom_virtualenv}
           executionEnvironment={summary_fields?.default_environment}
           isDefaultEnvironment
           helpText={t`The execution environment that will be used for jobs

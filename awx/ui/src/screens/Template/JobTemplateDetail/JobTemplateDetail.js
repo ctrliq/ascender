@@ -65,7 +65,6 @@ function JobTemplateDetail({ template }) {
     related: { webhook_receiver },
     webhook_key,
     prevent_instance_group_fallback,
-    custom_virtualenv,
   } = template;
   const { id: templateId } = useParams();
   const history = useHistory();
@@ -241,7 +240,6 @@ function JobTemplateDetail({ template }) {
           <DeletedDetail label={t`Project`} />
         )}
         <ExecutionEnvironmentDetail
-          virtualEnvironment={custom_virtualenv}
           executionEnvironment={summary_fields?.resolved_environment}
           helpText={helpText.executionEnvironmentDetail}
           dataCy="jt-detail-execution-environment"

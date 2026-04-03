@@ -189,7 +189,6 @@
   "become_enabled": false,
   "diff_mode": false,
   "allow_simultaneous": false,
-  "custom_virtualenv": null,
   "job_slice_count": 1,
   "webhook_credential": 1,
   "webhook_key": "asertdyuhjkhgfd234567kjgfds",

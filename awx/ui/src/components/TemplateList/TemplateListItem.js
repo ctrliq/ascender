@@ -5,21 +5,18 @@
 import 'styled-components/macro';
 import React, { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Popover, Tooltip, Chip } from '@patternfly/react-core';
+import { Button, Tooltip, Chip } from '@patternfly/react-core';
 import { Tr, Td, ExpandableRowContent } from '@patternfly/react-table';
-import { Trans, useLingui } from '@lingui/react/macro';
+import { useLingui } from '@lingui/react/macro';
 import {
   ExclamationTriangleIcon,
   PencilAltIcon,
   ProjectDiagramIcon,
   RocketIcon,
 } from '@patternfly/react-icons';
-import styled from 'styled-components';
 import { timeOfDay, formatDateString } from 'util/dates';
 import { JobTemplatesAPI, WorkflowJobTemplatesAPI } from 'api';
 import { toTitleCase } from 'util/strings';
-import getDocsBaseUrl from 'util/getDocsBaseUrl';
-import { useConfig } from 'contexts/Config';
 import { ActionsTd, ActionItem, TdBreakWord } from '../PaginatedTable';
 import { DetailList, Detail, DeletedDetail } from '../DetailList';
 import ChipGroup from '../ChipGroup';
@@ -28,14 +25,6 @@ import ExecutionEnvironmentDetail from '../ExecutionEnvironmentDetail';
 import { LaunchButton } from '../LaunchButton';
 import Sparkline from '../Sparkline';
 import CopyButton from '../CopyButton';
-
-const ExclamationTriangleIconWarning = styled(ExclamationTriangleIcon)`
-  color: var(--pf-global--warning-color--100);
-  margin-left: 18px;
-  cursor: pointer;
-`;
-
-ExclamationTriangleIconWarning.displayName = 'ExclamationTriangleIconWarning';
 
 function TemplateListItem({
   isExpanded,
@@ -49,13 +38,8 @@ function TemplateListItem({
   rowIndex,
 }) {
   const { t } = useLingui();
-  const config = useConfig();
   const [isDisabled, setIsDisabled] = useState(false);
   const labelId = `check-action-${template.id}`;
-
-  const docsLink = `${getDocsBaseUrl(
-    config
-  )}/html/upgrade-migration-guide/upgrade_to_ees.html`;
 
   const copyTemplate = useCallback(async () => {
     let response;
@@ -91,11 +75,6 @@ function TemplateListItem({
     template.type === 'job_template' &&
     (!summaryFields.project ||
       (!summaryFields.inventory && !askInventoryOnLaunch));
-
-  const missingExecutionEnvironment =
-    template.type === 'job_template' &&
-    template.custom_virtualenv &&
-    !template.execution_environment;
 
   const inventoryValue = (kind, id) => {
     const inventorykind = kind === 'smart' ? 'smart_inventory' : 'inventory';
@@ -156,35 +135,6 @@ function TemplateListItem({
               >
                 <ExclamationTriangleIcon css="color: #c9190b; margin-left: 20px;" />
               </Tooltip>
-            </span>
-          )}
-          {missingExecutionEnvironment && (
-            <span>
-              <Popover
-                className="missing-execution-environment"
-                headerContent={
-                  <div>{t`Execution Environment Missing`}</div>
-                }
-                bodyContent={
-                  <div>
-                    <Trans>
-                      Custom virtual environment {template.custom_virtualenv}{' '}
-                      must be replaced by an execution environment. For more
-                      information about migrating to execution environments see{' '}
-                      <a
-                        href={docsLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        the documentation.
-                      </a>
-                    </Trans>
-                  </div>
-                }
-                position="right"
-              >
-                <ExclamationTriangleIconWarning />
-              </Popover>
             </span>
           )}
         </TdBreakWord>
@@ -316,7 +266,6 @@ function TemplateListItem({
               )}
               {template.type === 'job_template' && (
                 <ExecutionEnvironmentDetail
-                  virtualEnvironment={template.custom_virtualenv}
                   executionEnvironment={summaryFields?.execution_environment}
                 />
               )}

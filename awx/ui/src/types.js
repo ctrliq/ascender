@@ -58,7 +58,6 @@ export const Application = shape({
 export const Organization = shape({
   id: number.isRequired,
   name: string.isRequired,
-  custom_virtualenv: string, // ?
   description: string,
   max_hosts: number,
   related: shape(),
@@ -182,7 +181,6 @@ export const Project = shape({
   scm_update_on_launch: bool,
   scm_update_cache_timeout: number,
   allow_override: bool,
-  custom_virtualenv: string,
 });
 
 export const Job = shape({

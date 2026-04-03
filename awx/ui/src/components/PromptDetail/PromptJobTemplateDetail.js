@@ -41,7 +41,6 @@ function PromptJobTemplateDetail({ resource }) {
     verbosity,
     webhook_key,
     webhook_service,
-    custom_virtualenv,
   } = resource;
 
   let optionsList = '';
@@ -144,7 +143,6 @@ function PromptJobTemplateDetail({ resource }) {
         <DeletedDetail label={t`Project`} />
       )}
       <ExecutionEnvironmentDetail
-        virtualEnvironment={custom_virtualenv}
         executionEnvironment={summary_fields?.execution_environment}
       />
       <Detail label={t`Source Control Branch`} value={scm_branch} />

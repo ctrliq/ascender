@@ -4,10 +4,8 @@ import { useLingui } from '@lingui/react/macro';
 import { Button, Tooltip } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
 import {
-  ExclamationTriangleIcon as PFExclamationTriangleIcon,
   PencilAltIcon,
 } from '@patternfly/react-icons';
-import styled from 'styled-components';
 
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
 import StatusLabel from 'components/StatusLabel';
@@ -15,11 +13,6 @@ import JobCancelButton from 'components/JobCancelButton';
 import { formatDateString } from 'util/dates';
 import { isJobRunning } from 'util/jobs';
 import InventorySourceSyncButton from '../shared/InventorySourceSyncButton';
-
-const ExclamationTriangleIcon = styled(PFExclamationTriangleIcon)`
-  color: var(--pf-global--warning-color--100);
-  margin-left: 18px;
-`;
 
 function InventorySourceListItem({
   source,
@@ -47,9 +40,6 @@ function InventorySourceListItem({
     </>
   );
 
-  const missingExecutionEnvironment =
-    source.custom_virtualenv && !source.execution_environment;
-
   let job = null;
 
   if (source.summary_fields?.current_job) {
@@ -73,17 +63,6 @@ function InventorySourceListItem({
         <Link to={`${detailUrl}/details`}>
           <b>{source.name}</b>
         </Link>
-        {missingExecutionEnvironment && (
-          <span>
-            <Tooltip
-              className="missing-execution-environment"
-              content={t`Custom virtual environment ${source.custom_virtualenv} must be replaced by an execution environment.`}
-              position="right"
-            >
-              <ExclamationTriangleIcon />
-            </Tooltip>
-          </span>
-        )}
       </TdBreakWord>
       <Td dataLabel={t`Status`}>
         {job && (

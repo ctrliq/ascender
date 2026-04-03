@@ -89,7 +89,6 @@ describe('<ProjectDetail />', () => {
     scm_update_on_launch: true,
     scm_update_cache_timeout: 5,
     allow_override: true,
-    custom_virtualenv: '/custom-venv',
     default_environment: 1,
   };
 

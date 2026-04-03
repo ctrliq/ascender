@@ -153,31 +153,6 @@ describe('<InventorySourceListItem />', () => {
     expect(wrapper.find('InventorySourceSyncButton').length).toBe(1);
   });
 
-  test('should render warning about missing execution environment', () => {
-    const onSelect = jest.fn();
-    wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <InventorySourceListItem
-            source={{
-              ...source,
-              custom_virtualenv: '/var/lib/awx/env',
-              execution_environment: null,
-            }}
-            isSelected={false}
-            onSelect={onSelect}
-            label="Source Bar"
-          />
-        </tbody>
-      </table>
-    );
-    expect(
-      wrapper.find('.missing-execution-environment').prop('content')
-    ).toEqual(
-      'Custom virtual environment /var/lib/awx/env must be replaced by an execution environment.'
-    );
-  });
-
   test('should render cancel button while job is running', () => {
     const onSelect = jest.fn();
     wrapper = mountWithContexts(
@@ -194,7 +169,6 @@ describe('<InventorySourceListItem />', () => {
                   status: 'running',
                 },
               },
-              custom_virtualenv: '/var/lib/awx/env',
               execution_environment: null,
             }}
             isSelected={false}

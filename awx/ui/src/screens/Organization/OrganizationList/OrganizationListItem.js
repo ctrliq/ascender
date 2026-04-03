@@ -1,22 +1,15 @@
 import React from 'react';
 import { string, bool, func } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
-import { Button, Tooltip } from '@patternfly/react-core';
+import { Button } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
 import {
-  ExclamationTriangleIcon as PFExclamationTriangleIcon,
   PencilAltIcon,
 } from '@patternfly/react-icons';
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
 
 import { Organization } from 'types';
-
-const ExclamationTriangleIcon = styled(PFExclamationTriangleIcon)`
-  color: var(--pf-global--warning-color--100);
-  margin-left: 18px;
-`;
 
 function OrganizationListItem({
   organization,
@@ -27,9 +20,6 @@ function OrganizationListItem({
 }) {
   const { t } = useLingui();
   const labelId = `check-action-${organization.id}`;
-
-  const missingExecutionEnvironment =
-    organization.custom_virtualenv && !organization.default_environment;
 
   return (
     <Tr id={`org-row-${organization.id}`} ouiaId={`org-row-${organization.id}`}>
@@ -48,17 +38,6 @@ function OrganizationListItem({
             <b>{organization.name}</b>
           </Link>
         </span>
-        {missingExecutionEnvironment && (
-          <span>
-            <Tooltip
-              className="missing-execution-environment"
-              content={t`Custom virtual environment ${organization.custom_virtualenv} must be replaced by an execution environment.`}
-              position="right"
-            >
-              <ExclamationTriangleIcon />
-            </Tooltip>
-          </span>
-        )}
       </TdBreakWord>
       <Td dataLabel={t`Members`}>
         {organization.summary_fields.related_field_counts.users}
