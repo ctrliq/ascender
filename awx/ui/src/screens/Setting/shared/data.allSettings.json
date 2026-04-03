@@ -80,6 +80,7 @@
       "--network",
       "slirp4netns:enable_ipv6=true"
   ],
+  "EXECUTION_ENVIRONMENT_BUILDER_CONTAINER_OPTIONS": [],
   "RECEPTOR_RELEASE_WORK": true,
   "SESSION_COOKIE_AGE": 1800,
   "SESSIONS_PER_USER": -1,
