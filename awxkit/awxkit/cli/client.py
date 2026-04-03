@@ -72,6 +72,7 @@ class CLI(object):
         self.stdout = stdout
         self.stderr = stderr
         self.stdin = stdin
+        self.verbose = False
 
     def get_config(self, key):
         """Helper method for looking up the value of a --conf.xyz flag"""
