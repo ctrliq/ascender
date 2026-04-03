@@ -308,15 +308,9 @@ We have several React contexts that wrap much of the app, including those from r
 If you want to stub the value of a context, or assert actions taken on it, you can customize a contexts value by passing a second parameter to `mountWithContexts`. For example, this provides a custom value for the `Config` context:
 
 ```javascript
-const config = {
-};
 mountWithContexts(<OrganizationForm />, {
-  context: { config },
 });
 ```
-
-Now that these custom virtual environments are available in this `OrganizationForm` test we can assert that the component that displays
-them is rendering properly.
 
 The object containing context values looks for five known contexts, identified by the keys `linguiPublisher`, `router`, `config`, `network`, and `dialog` — the latter three each referring to the contexts defined in `src/contexts`. You can pass `false` for any of these values, and the corresponding context will be omitted from your test. For example, this will mount your component without the dialog context:
 
