@@ -69,7 +69,7 @@ def setup_event_partitioning_sqlite(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('main', '0194_add_github_app_credential'),
+        ('main', '0195_remove_custom_virtualenv'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
