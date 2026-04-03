@@ -3,7 +3,7 @@
  * derived from https://lingui.js.org/guides/testing.html
  */
 import React from 'react';
-import { shape, string, arrayOf } from 'prop-types';
+import { shape, string } from 'prop-types';
 import { mount, shallow } from 'enzyme';
 import { MemoryRouter, Router } from 'react-router-dom';
 import { I18nProvider } from '@lingui/react';

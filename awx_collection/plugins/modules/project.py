@@ -361,7 +361,6 @@ def main():
         'scm_update_on_launch',
         'scm_update_cache_timeout',
         'timeout',
-        'scm_update_cache_timeout',
         'description',
         'allow_override',
     ):

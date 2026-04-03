@@ -308,7 +308,11 @@ We have several React contexts that wrap much of the app, including those from r
 If you want to stub the value of a context, or assert actions taken on it, you can customize a contexts value by passing a second parameter to `mountWithContexts`. For example, this provides a custom value for the `Config` context:
 
 ```javascript
-mountWithContexts(<OrganizationForm />, {
+const config = {
+  isDev: true,
+};
+mountWithContexts(<Organization />< {
+  context: { config },
 });
 ```
 
