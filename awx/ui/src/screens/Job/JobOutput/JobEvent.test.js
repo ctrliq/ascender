@@ -1,5 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
 import JobEvent from './JobEvent';
 
 const mockOnPlayStartEvent = {
@@ -95,5 +96,76 @@ describe('<JobEvent />', () => {
       <JobEvent lineTextHtml={[]} event={missingStdoutEvent} />
     );
     expect(wrapper.find('JobEventLineText')).toHaveLength(0);
+  });
+
+  describe('click handling with text selection', () => {
+    let originalGetSelection;
+
+    beforeEach(() => {
+      originalGetSelection = window.getSelection;
+    });
+
+    afterEach(() => {
+      window.getSelection = originalGetSelection;
+    });
+
+    test('click fires onJobEventClick when no text is selected', () => {
+      window.getSelection = jest.fn().mockReturnValue({
+        toString: () => '',
+      });
+      const onJobEventClick = jest.fn();
+      const wrapper = mountWithContexts(
+        <JobEvent
+          lineTextHtml={mockAnsiLineTextHtml}
+          event={mockRunnerOnOkEvent}
+          isClickable
+          onJobEventClick={onJobEventClick}
+          measure={jest.fn()}
+        />
+      );
+      // Find the clickable div rendered by the styled JobEventLine
+      const clickable = wrapper.find('div[onClick]');
+      expect(clickable.length).toBeGreaterThan(0);
+      clickable.first().simulate('click');
+      expect(onJobEventClick).toHaveBeenCalledTimes(1);
+      wrapper.unmount();
+    });
+
+    test('click is suppressed when text is selected', () => {
+      window.getSelection = jest.fn().mockReturnValue({
+        toString: () => 'selected text',
+      });
+      const onJobEventClick = jest.fn();
+      const wrapper = mountWithContexts(
+        <JobEvent
+          lineTextHtml={mockAnsiLineTextHtml}
+          event={mockRunnerOnOkEvent}
+          isClickable
+          onJobEventClick={onJobEventClick}
+          measure={jest.fn()}
+        />
+      );
+      const clickable = wrapper.find('div[onClick]');
+      expect(clickable.length).toBeGreaterThan(0);
+      clickable.first().simulate('click');
+      expect(onJobEventClick).not.toHaveBeenCalled();
+      wrapper.unmount();
+    });
+
+    test('no click handler when isClickable is false', () => {
+      const onJobEventClick = jest.fn();
+      const wrapper = mountWithContexts(
+        <JobEvent
+          lineTextHtml={mockAnsiLineTextHtml}
+          event={mockRunnerOnOkEvent}
+          isClickable={false}
+          onJobEventClick={onJobEventClick}
+          measure={jest.fn()}
+        />
+      );
+      const clickable = wrapper.find('div[onClick]');
+      expect(clickable).toHaveLength(0);
+      wrapper.unmount();
+    });
   });
 });
