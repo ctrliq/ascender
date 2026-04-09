@@ -363,7 +363,15 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
   // react-virtualized render range to cover those rows so they are not
   // unmounted (which would collapse the browser selection).
   useEffect(() => {
+    let rafId = null;
     const handleSelectionChange = () => {
+      if (rafId) return;
+      rafId = requestAnimationFrame(() => {
+        rafId = null;
+        handleSelectionChangeWork();
+      });
+    };
+    const handleSelectionChangeWork = () => {
       const selection = window.getSelection();
       if (
         !outputRef.current ||
@@ -422,8 +430,10 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
       }
     };
     document.addEventListener('selectionchange', handleSelectionChange);
-    return () =>
+    return () => {
       document.removeEventListener('selectionchange', handleSelectionChange);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const overscanIndicesGetter = useCallback(
