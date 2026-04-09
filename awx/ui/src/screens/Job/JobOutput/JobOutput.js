@@ -448,8 +448,23 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
           overscanStopIndex: defaultStop,
         };
       }
-      // Clamp the selection range around the current viewport so we never
-      // force react-virtualized to render an unbounded number of rows.
+      const selectionSpan = selectedRowRange.end - selectedRowRange.start;
+      if (selectionSpan <= MAX_SELECTION_OVERSCAN) {
+        // Selection fits within the render budget — always include it fully
+        // so highlighted rows survive scrolling away from them.
+        return {
+          overscanStartIndex: Math.min(
+            defaultStart,
+            Math.max(0, selectedRowRange.start)
+          ),
+          overscanStopIndex: Math.max(
+            defaultStop,
+            Math.min(cellCount - 1, selectedRowRange.end)
+          ),
+        };
+      }
+      // Selection exceeds budget — keep the nearest MAX_SELECTION_OVERSCAN
+      // rows centered on the current viewport to bound render cost.
       const viewMid = Math.floor((startIndex + stopIndex) / 2);
       const halfBudget = Math.floor(MAX_SELECTION_OVERSCAN / 2);
       const clampedStart = Math.max(selectedRowRange.start, viewMid - halfBudget);
