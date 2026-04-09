@@ -436,6 +436,8 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const MAX_SELECTION_OVERSCAN = 500;
+
   const overscanIndicesGetter = useCallback(
     ({ cellCount, overscanCellsCount, startIndex, stopIndex }) => {
       const defaultStart = Math.max(0, startIndex - overscanCellsCount);
@@ -446,14 +448,20 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
           overscanStopIndex: defaultStop,
         };
       }
+      // Clamp the selection range around the current viewport so we never
+      // force react-virtualized to render an unbounded number of rows.
+      const viewMid = Math.floor((startIndex + stopIndex) / 2);
+      const halfBudget = Math.floor(MAX_SELECTION_OVERSCAN / 2);
+      const clampedStart = Math.max(selectedRowRange.start, viewMid - halfBudget);
+      const clampedEnd = Math.min(selectedRowRange.end, viewMid + halfBudget);
       return {
         overscanStartIndex: Math.min(
           defaultStart,
-          Math.max(0, selectedRowRange.start)
+          Math.max(0, clampedStart)
         ),
         overscanStopIndex: Math.max(
           defaultStop,
-          Math.min(cellCount - 1, selectedRowRange.end)
+          Math.min(cellCount - 1, clampedEnd)
         ),
       };
     },
