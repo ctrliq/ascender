@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import {
   JobEventLine,
   JobEventLineToggle,
@@ -36,6 +36,14 @@ const JobEvent = React.forwardRef(
       };
     }, [numOutputLines, isCollapsed, measure, jobStatus]);
 
+    const handleClick = useCallback(() => {
+      const selection = window.getSelection();
+      if (selection && selection.toString().length > 0) {
+        return;
+      }
+      onJobEventClick();
+    }, [onJobEventClick]);
+
     let toggleLineIndex = -1;
     if (hasChildren) {
       lineTextHtml.forEach(({ html }, index) => {
@@ -56,7 +64,7 @@ const JobEvent = React.forwardRef(
           const canToggle = index === toggleLineIndex && !event.isTracebackOnly;
           return (
             <JobEventLine
-              onClick={isClickable ? onJobEventClick : undefined}
+              onClick={isClickable ? handleClick : undefined}
               key={`${event.counter}-${lineNumber}`}
               isFirst={lineNumber === 0}
               isClickable={isClickable}
