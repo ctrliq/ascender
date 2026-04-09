@@ -89,6 +89,53 @@ const cache = new CellMeasurerCache({
   defaultHeight: 25,
 });
 
+export const MAX_SELECTION_OVERSCAN = 500;
+
+export function computeOverscanIndices(
+  { cellCount, overscanCellsCount, startIndex, stopIndex },
+  selectedRowRange
+) {
+  const defaultStart = Math.max(0, startIndex - overscanCellsCount);
+  const defaultStop = Math.min(cellCount - 1, stopIndex + overscanCellsCount);
+  if (!selectedRowRange) {
+    return {
+      overscanStartIndex: defaultStart,
+      overscanStopIndex: defaultStop,
+    };
+  }
+  const selectionSpan = selectedRowRange.end - selectedRowRange.start;
+  if (selectionSpan <= MAX_SELECTION_OVERSCAN) {
+    const candidateStart = Math.min(
+      defaultStart,
+      Math.max(0, selectedRowRange.start)
+    );
+    const candidateStop = Math.max(
+      defaultStop,
+      Math.min(cellCount - 1, selectedRowRange.end)
+    );
+    if (candidateStop - candidateStart <= MAX_SELECTION_OVERSCAN) {
+      return {
+        overscanStartIndex: candidateStart,
+        overscanStopIndex: candidateStop,
+      };
+    }
+  }
+  const viewMid = Math.floor((startIndex + stopIndex) / 2);
+  const halfBudget = Math.floor(MAX_SELECTION_OVERSCAN / 2);
+  const clampedStart = Math.max(selectedRowRange.start, viewMid - halfBudget);
+  const clampedEnd = Math.min(selectedRowRange.end, viewMid + halfBudget);
+  return {
+    overscanStartIndex: Math.min(
+      defaultStart,
+      Math.max(0, clampedStart)
+    ),
+    overscanStopIndex: Math.max(
+      defaultStop,
+      Math.min(cellCount - 1, clampedEnd)
+    ),
+  };
+}
+
 function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
   const { t } = useLingui();
   const location = useLocation();
@@ -436,50 +483,8 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const MAX_SELECTION_OVERSCAN = 500;
-
   const overscanIndicesGetter = useCallback(
-    ({ cellCount, overscanCellsCount, startIndex, stopIndex }) => {
-      const defaultStart = Math.max(0, startIndex - overscanCellsCount);
-      const defaultStop = Math.min(cellCount - 1, stopIndex + overscanCellsCount);
-      if (!selectedRowRange) {
-        return {
-          overscanStartIndex: defaultStart,
-          overscanStopIndex: defaultStop,
-        };
-      }
-      const selectionSpan = selectedRowRange.end - selectedRowRange.start;
-      if (selectionSpan <= MAX_SELECTION_OVERSCAN) {
-        // Selection fits within the render budget — always include it fully
-        // so highlighted rows survive scrolling away from them.
-        return {
-          overscanStartIndex: Math.min(
-            defaultStart,
-            Math.max(0, selectedRowRange.start)
-          ),
-          overscanStopIndex: Math.max(
-            defaultStop,
-            Math.min(cellCount - 1, selectedRowRange.end)
-          ),
-        };
-      }
-      // Selection exceeds budget — keep the nearest MAX_SELECTION_OVERSCAN
-      // rows centered on the current viewport to bound render cost.
-      const viewMid = Math.floor((startIndex + stopIndex) / 2);
-      const halfBudget = Math.floor(MAX_SELECTION_OVERSCAN / 2);
-      const clampedStart = Math.max(selectedRowRange.start, viewMid - halfBudget);
-      const clampedEnd = Math.min(selectedRowRange.end, viewMid + halfBudget);
-      return {
-        overscanStartIndex: Math.min(
-          defaultStart,
-          Math.max(0, clampedStart)
-        ),
-        overscanStopIndex: Math.max(
-          defaultStop,
-          Math.min(cellCount - 1, clampedEnd)
-        ),
-      };
-    },
+    (params) => computeOverscanIndices(params, selectedRowRange),
     [selectedRowRange]
   );
 

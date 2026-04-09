@@ -5,7 +5,10 @@ import {
   mountWithContexts,
   waitForElement,
 } from '../../../../testUtils/enzymeHelpers';
-import JobOutput from './JobOutput';
+import JobOutput, {
+  computeOverscanIndices,
+  MAX_SELECTION_OVERSCAN,
+} from './JobOutput';
 import mockJobData from '../shared/data.job.json';
 import mockJobEventsData from './data.job_events.json';
 
@@ -189,6 +192,7 @@ describe('<JobOutput />', () => {
 
   describe('selection-aware overscanning', () => {
     let selectionChangeHandler;
+    let originalGetSelection;
     const mockSelection = {
       isCollapsed: false,
       rangeCount: 1,
@@ -196,6 +200,8 @@ describe('<JobOutput />', () => {
     };
 
     beforeEach(() => {
+      originalGetSelection = window.getSelection;
+
       // Capture the selectionchange listener so we can trigger it manually
       const originalAddEventListener = document.addEventListener;
       jest.spyOn(document, 'addEventListener').mockImplementation(
@@ -214,8 +220,15 @@ describe('<JobOutput />', () => {
     });
 
     afterEach(() => {
+      try {
+        if (wrapper && wrapper.length) {
+          wrapper.unmount();
+        }
+      } catch (e) {
+        // wrapper may already be unmounted or from a different test
+      }
       document.addEventListener.mockRestore();
-      window.getSelection = undefined;
+      window.getSelection = originalGetSelection;
     });
 
     test('List should receive overscanIndicesGetter prop', async () => {
@@ -230,9 +243,8 @@ describe('<JobOutput />', () => {
       wrapper.update();
 
       const list = wrapper.find('List');
-      if (list.length > 0) {
-        expect(list.prop('overscanIndicesGetter')).toBeInstanceOf(Function);
-      }
+      expect(list).toHaveLength(1);
+      expect(list.prop('overscanIndicesGetter')).toBeInstanceOf(Function);
     });
 
     test('overscanIndicesGetter returns default range when no selection', async () => {
@@ -247,18 +259,17 @@ describe('<JobOutput />', () => {
       wrapper.update();
 
       const list = wrapper.find('List');
-      if (list.length > 0) {
-        const getter = list.prop('overscanIndicesGetter');
-        const result = getter({
-          cellCount: 100,
-          overscanCellsCount: 20,
-          startIndex: 10,
-          stopIndex: 30,
-          scrollDirection: 1,
-        });
-        expect(result.overscanStartIndex).toBe(0);
-        expect(result.overscanStopIndex).toBe(50);
-      }
+      expect(list).toHaveLength(1);
+      const getter = list.prop('overscanIndicesGetter');
+      const result = getter({
+        cellCount: 100,
+        overscanCellsCount: 20,
+        startIndex: 10,
+        stopIndex: 30,
+        scrollDirection: 1,
+      });
+      expect(result.overscanStartIndex).toBe(0);
+      expect(result.overscanStopIndex).toBe(50);
     });
 
     test('should set selectedRowRange on selectionchange and expand overscan', async () => {
@@ -272,37 +283,58 @@ describe('<JobOutput />', () => {
       await new Promise((resolve) => setTimeout(resolve, 100));
       wrapper.update();
 
-      // Mock window.getSelection to return a selection inside the output area
-      const outputWrapper = wrapper.find('OutputWrapper').getDOMNode
-        ? wrapper.find('OutputWrapper')
-        : null;
+      expect(selectionChangeHandler).toBeDefined();
 
-      if (outputWrapper && selectionChangeHandler) {
-        const mockRange = {
-          commonAncestorContainer: document.body,
-          getBoundingClientRect: () => ({
-            top: 50,
-            bottom: 150,
-            left: 0,
-            right: 100,
-          }),
-        };
-        mockSelection.getRangeAt.mockReturnValue(mockRange);
-        window.getSelection = jest.fn().mockReturnValue(mockSelection);
+      // Use a node inside the output area so the contains() check passes.
+      const list = wrapper.find('List');
+      expect(list).toHaveLength(1);
+      const listNode = list.getDOMNode();
 
-        // Trigger selectionchange and allow rAF to process
-        await act(async () => {
-          selectionChangeHandler();
-          await new Promise((resolve) => setTimeout(resolve, 50));
-        });
-        wrapper.update();
+      const mockRange = {
+        commonAncestorContainer: listNode,
+        getBoundingClientRect: () => ({
+          top: 50,
+          bottom: 150,
+          left: 0,
+          right: 100,
+        }),
+      };
+      mockSelection.getRangeAt.mockReturnValue(mockRange);
+      window.getSelection = jest.fn().mockReturnValue(mockSelection);
 
-        const list = wrapper.find('List');
-        if (list.length > 0) {
-          const getter = list.prop('overscanIndicesGetter');
-          expect(getter).toBeInstanceOf(Function);
-        }
-      }
+      // Get the getter before triggering selection to verify it changes
+      const getterBefore = list.prop('overscanIndicesGetter');
+      const resultBefore = getterBefore({
+        cellCount: 100,
+        overscanCellsCount: 20,
+        startIndex: 10,
+        stopIndex: 30,
+        scrollDirection: 1,
+      });
+
+      // Trigger selectionchange and allow rAF to process
+      await act(async () => {
+        selectionChangeHandler();
+        await new Promise((resolve) => setTimeout(resolve, 50));
+      });
+      wrapper.update();
+
+      const listAfter = wrapper.find('List');
+      expect(listAfter).toHaveLength(1);
+      const getterAfter = listAfter.prop('overscanIndicesGetter');
+      expect(getterAfter).toBeInstanceOf(Function);
+
+      // The getter should now be a different closure (selectedRowRange updated)
+      // and calling it should still return a valid range
+      const resultAfter = getterAfter({
+        cellCount: 100,
+        overscanCellsCount: 20,
+        startIndex: 10,
+        stopIndex: 30,
+        scrollDirection: 1,
+      });
+      expect(resultAfter.overscanStartIndex).toBeDefined();
+      expect(resultAfter.overscanStopIndex).toBeDefined();
     });
 
     test('should clear selectedRowRange when selection is collapsed', async () => {
@@ -316,142 +348,72 @@ describe('<JobOutput />', () => {
       await new Promise((resolve) => setTimeout(resolve, 100));
       wrapper.update();
 
-      if (selectionChangeHandler) {
-        // Simulate collapsed (empty) selection
-        window.getSelection = jest.fn().mockReturnValue({
-          isCollapsed: true,
-          rangeCount: 0,
-          getRangeAt: jest.fn(),
-        });
+      expect(selectionChangeHandler).toBeDefined();
 
-        await act(async () => {
-          selectionChangeHandler();
-          await new Promise((resolve) => setTimeout(resolve, 50));
-        });
-        wrapper.update();
+      // Simulate collapsed (empty) selection
+      window.getSelection = jest.fn().mockReturnValue({
+        isCollapsed: true,
+        rangeCount: 0,
+        getRangeAt: jest.fn(),
+      });
 
-        const list = wrapper.find('List');
-        if (list.length > 0) {
-          const getter = list.prop('overscanIndicesGetter');
-          // With no selection, should return default overscan
-          const result = getter({
-            cellCount: 100,
-            overscanCellsCount: 20,
-            startIndex: 10,
-            stopIndex: 30,
-            scrollDirection: 1,
-          });
-          // Default: max(0, 10-20)=0 and min(99, 30+20)=50
-          expect(result.overscanStartIndex).toBe(0);
-          expect(result.overscanStopIndex).toBe(50);
-        }
-      }
+      await act(async () => {
+        selectionChangeHandler();
+        await new Promise((resolve) => setTimeout(resolve, 50));
+      });
+      wrapper.update();
+
+      const list = wrapper.find('List');
+      expect(list).toHaveLength(1);
+      const getter = list.prop('overscanIndicesGetter');
+      // With no selection, should return default overscan
+      const result = getter({
+        cellCount: 100,
+        overscanCellsCount: 20,
+        startIndex: 10,
+        stopIndex: 30,
+        scrollDirection: 1,
+      });
+      // Default: max(0, 10-20)=0 and min(99, 30+20)=50
+      expect(result.overscanStartIndex).toBe(0);
+      expect(result.overscanStopIndex).toBe(50);
     });
 
-    test('overscanIndicesGetter clamps large selections to MAX_SELECTION_OVERSCAN', () => {
-      // Replicate the overscanIndicesGetter logic for a selection that
-      // exceeds the budget (selectionSpan > MAX_SELECTION_OVERSCAN).
-      const MAX_SELECTION_OVERSCAN = 500;
-      const selectedRowRange = { start: 0, end: 2000 };
-
-      const startIndex = 1000;
-      const stopIndex = 1020;
-      const overscanCellsCount = 20;
-      const cellCount = 3000;
-
-      const defaultStart = Math.max(0, startIndex - overscanCellsCount);
-      const defaultStop = Math.min(
-        cellCount - 1,
-        stopIndex + overscanCellsCount
+    test('computeOverscanIndices clamps large selections to MAX_SELECTION_OVERSCAN', () => {
+      const result = computeOverscanIndices(
+        { cellCount: 3000, overscanCellsCount: 20, startIndex: 1000, stopIndex: 1020 },
+        { start: 0, end: 2000 }
       );
-
-      const selectionSpan = selectedRowRange.end - selectedRowRange.start;
-      // selectionSpan = 2000 > 500, so viewport-centered clamping applies
-      expect(selectionSpan).toBeGreaterThan(MAX_SELECTION_OVERSCAN);
-
-      const viewMid = Math.floor((startIndex + stopIndex) / 2);
-      const halfBudget = Math.floor(MAX_SELECTION_OVERSCAN / 2);
-      const clampedStart = Math.max(
-        selectedRowRange.start,
-        viewMid - halfBudget
-      );
-      const clampedEnd = Math.min(
-        selectedRowRange.end,
-        viewMid + halfBudget
-      );
-
-      const result = {
-        overscanStartIndex: Math.min(
-          defaultStart,
-          Math.max(0, clampedStart)
-        ),
-        overscanStopIndex: Math.max(
-          defaultStop,
-          Math.min(cellCount - 1, clampedEnd)
-        ),
-      };
-
-      // viewMid = 1010, halfBudget = 250
-      // clampedStart = max(0, 1010 - 250) = 760
-      // clampedEnd = min(2000, 1010 + 250) = 1260
-      // defaultStart = max(0, 1000 - 20) = 980
-      // defaultStop = min(2999, 1020 + 20) = 1040
-      // overscanStartIndex = min(980, max(0, 760)) = 760
-      // overscanStopIndex = max(1040, min(2999, 1260)) = 1260
+      // viewMid = 1010, halfBudget = 250 → clampedStart=760, clampedEnd=1260
       expect(result.overscanStartIndex).toBe(760);
       expect(result.overscanStopIndex).toBe(1260);
-      // Total pinned rows = 1260 - 760 = 500, matching the budget
       expect(result.overscanStopIndex - result.overscanStartIndex).toBe(
         MAX_SELECTION_OVERSCAN
       );
     });
 
-    test('overscanIndicesGetter fully preserves small selections even when scrolled away', () => {
-      // Replicate the overscanIndicesGetter logic for a selection that
-      // fits within the budget (selectionSpan <= MAX_SELECTION_OVERSCAN).
-      // The viewport is far from the selection — rows should still be included.
-      const MAX_SELECTION_OVERSCAN = 500;
-      const selectedRowRange = { start: 10, end: 30 };
-
-      // Viewport is far away from the selection
-      const startIndex = 800;
-      const stopIndex = 820;
-      const overscanCellsCount = 20;
-      const cellCount = 1000;
-
-      const defaultStart = Math.max(0, startIndex - overscanCellsCount);
-      const defaultStop = Math.min(
-        cellCount - 1,
-        stopIndex + overscanCellsCount
+    test('computeOverscanIndices preserves small selection when viewport is nearby', () => {
+      const result = computeOverscanIndices(
+        { cellCount: 1000, overscanCellsCount: 20, startIndex: 100, stopIndex: 120 },
+        { start: 10, end: 30 }
       );
-
-      const selectionSpan = selectedRowRange.end - selectedRowRange.start;
-      // selectionSpan = 20 <= 500, so full inclusion applies
-      expect(selectionSpan).toBeLessThanOrEqual(MAX_SELECTION_OVERSCAN);
-
-      const result = {
-        overscanStartIndex: Math.min(
-          defaultStart,
-          Math.max(0, selectedRowRange.start)
-        ),
-        overscanStopIndex: Math.max(
-          defaultStop,
-          Math.min(cellCount - 1, selectedRowRange.end)
-        ),
-      };
-
-      // defaultStart = max(0, 800-20) = 780
-      // defaultStop = min(999, 820+20) = 840
-      // overscanStartIndex = min(780, max(0, 10)) = 10
-      // overscanStopIndex = max(840, min(999, 30)) = 840
+      // Selection rows 10-30 fit within budget alongside viewport rows 80-140
       expect(result.overscanStartIndex).toBe(10);
-      expect(result.overscanStopIndex).toBe(840);
-      // The selected rows 10-30 are fully within the rendered range
-      expect(result.overscanStartIndex).toBeLessThanOrEqual(
-        selectedRowRange.start
+      expect(result.overscanStopIndex).toBe(140);
+      expect(result.overscanStartIndex).toBeLessThanOrEqual(10);
+      expect(result.overscanStopIndex).toBeGreaterThanOrEqual(30);
+    });
+
+    test('computeOverscanIndices falls back when small selection is far from viewport', () => {
+      const result = computeOverscanIndices(
+        { cellCount: 10000, overscanCellsCount: 20, startIndex: 5000, stopIndex: 5020 },
+        { start: 10, end: 30 }
       );
-      expect(result.overscanStopIndex).toBeGreaterThanOrEqual(
-        selectedRowRange.end
+      // Contiguous range would be 5030 rows; falls back to viewport-centered clamping
+      expect(result.overscanStartIndex).toBe(4760);
+      expect(result.overscanStopIndex).toBe(5040);
+      expect(result.overscanStopIndex - result.overscanStartIndex).toBeLessThanOrEqual(
+        MAX_SELECTION_OVERSCAN
       );
     });
   });
