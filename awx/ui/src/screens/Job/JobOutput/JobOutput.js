@@ -89,6 +89,53 @@ const cache = new CellMeasurerCache({
   defaultHeight: 25,
 });
 
+export const MAX_SELECTION_OVERSCAN = 500;
+
+export function computeOverscanIndices(
+  { cellCount, overscanCellsCount, startIndex, stopIndex },
+  selectedRowRange
+) {
+  const defaultStart = Math.max(0, startIndex - overscanCellsCount);
+  const defaultStop = Math.min(cellCount - 1, stopIndex + overscanCellsCount);
+  if (!selectedRowRange) {
+    return {
+      overscanStartIndex: defaultStart,
+      overscanStopIndex: defaultStop,
+    };
+  }
+  const selectionSpan = selectedRowRange.end - selectedRowRange.start;
+  if (selectionSpan <= MAX_SELECTION_OVERSCAN) {
+    const candidateStart = Math.min(
+      defaultStart,
+      Math.max(0, selectedRowRange.start)
+    );
+    const candidateStop = Math.max(
+      defaultStop,
+      Math.min(cellCount - 1, selectedRowRange.end)
+    );
+    if (candidateStop - candidateStart <= MAX_SELECTION_OVERSCAN) {
+      return {
+        overscanStartIndex: candidateStart,
+        overscanStopIndex: candidateStop,
+      };
+    }
+  }
+  const viewMid = Math.floor((startIndex + stopIndex) / 2);
+  const halfBudget = Math.floor(MAX_SELECTION_OVERSCAN / 2);
+  const clampedStart = Math.max(selectedRowRange.start, viewMid - halfBudget);
+  const clampedEnd = Math.min(selectedRowRange.end, viewMid + halfBudget);
+  return {
+    overscanStartIndex: Math.min(
+      defaultStart,
+      Math.max(0, clampedStart)
+    ),
+    overscanStopIndex: Math.max(
+      defaultStop,
+      Math.min(cellCount - 1, clampedEnd)
+    ),
+  };
+}
+
 function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
   const { t } = useLingui();
   const location = useLocation();
@@ -101,6 +148,8 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
   const history = useHistory();
   const eventByUuidRequests = useRef([]);
   const eventsProcessedDelay = useRef(250);
+  const outputRef = useRef(null);
+  const totalRowsRef = useRef(0);
 
   const fetchEventByUuid = async (uuid) => {
     let promise = eventByUuidRequests.current[uuid];
@@ -159,6 +208,7 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
   const [isMonitoringWebsocket, setIsMonitoringWebsocket] = useState(false);
   const [lastScrollPosition, setLastScrollPosition] = useState(0);
   const [showEventsRefresh, setShowEventsRefresh] = useState(false);
+  const [selectedRowRange, setSelectedRowRange] = useState(null);
 
   useEffect(() => {
     if (!isTreeReady || !onReadyEvents.length) {
@@ -177,6 +227,7 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
     remoteRowCount - getNumCollapsedEvents(),
     0
   );
+  totalRowsRef.current = totalNonCollapsedRows + wsEvents.length;
 
   useInterval(
     () => {
@@ -354,6 +405,88 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
 
   const { error: dismissableDeleteError, dismissError: dismissDeleteError } =
     useDismissableError(deleteError);
+
+  // When the user has text selected inside the output area, expand the
+  // react-virtualized render range to cover those rows so they are not
+  // unmounted (which would collapse the browser selection).
+  useEffect(() => {
+    let rafId = null;
+    const handleSelectionChange = () => {
+      if (rafId) return;
+      rafId = requestAnimationFrame(() => {
+        rafId = null;
+        handleSelectionChangeWork();
+      });
+    };
+    const handleSelectionChangeWork = () => {
+      const selection = window.getSelection();
+      if (
+        !outputRef.current ||
+        !selection ||
+        selection.isCollapsed ||
+        selection.rangeCount === 0
+      ) {
+        setSelectedRowRange(null);
+        return;
+      }
+      try {
+        const range = selection.getRangeAt(0);
+        if (!outputRef.current.contains(range.commonAncestorContainer)) {
+          setSelectedRowRange(null);
+          return;
+        }
+        const gridEl = outputRef.current.querySelector(
+          '.ReactVirtualized__Grid'
+        );
+        if (!gridEl) {
+          setSelectedRowRange(null);
+          return;
+        }
+        const containerRect = gridEl.getBoundingClientRect();
+        const selRect = range.getBoundingClientRect();
+        const currentScrollTop = scrollTop.current;
+        const topAbs = selRect.top - containerRect.top + currentScrollTop;
+        const bottomAbs = selRect.bottom - containerRect.top + currentScrollTop;
+
+        // Walk the cache's cumulative row heights to find which row indices
+        // correspond to the selection's top and bottom pixel offsets.
+        let startIdx = 0;
+        let endIdx = totalRowsRef.current - 1;
+        let cumHeight = 0;
+        let foundStart = false;
+        for (let i = 0; i < totalRowsRef.current; i++) {
+          const h = cache.rowHeight({ index: i });
+          if (!foundStart && cumHeight + h > topAbs) {
+            startIdx = Math.max(0, i - 1);
+            foundStart = true;
+          }
+          if (cumHeight + h > bottomAbs) {
+            endIdx = Math.min(totalRowsRef.current - 1, i + 1);
+            break;
+          }
+          cumHeight += h;
+        }
+        setSelectedRowRange((prev) => {
+          if (prev && prev.start === startIdx && prev.end === endIdx) {
+            return prev;
+          }
+          return { start: startIdx, end: endIdx };
+        });
+      } catch (_) {
+        setSelectedRowRange(null);
+      }
+    };
+    document.addEventListener('selectionchange', handleSelectionChange);
+    return () => {
+      document.removeEventListener('selectionchange', handleSelectionChange);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const overscanIndicesGetter = useCallback(
+    (params) => computeOverscanIndices(params, selectedRowRange),
+    [selectedRowRange]
+  );
 
   const monitorJobSocketCounter = () => {
     if (
@@ -750,7 +883,7 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
           isTemplateJob={job.type === 'job'}
           isAllCollapsed={isAllCollapsed}
         />
-        <OutputWrapper cssMap={cssMap}>
+        <OutputWrapper ref={outputRef} cssMap={cssMap}>
           <InfiniteLoader
             isRowLoaded={isRowLoaded}
             loadMoreRows={loadMoreRows}
@@ -797,6 +930,7 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
                           rowRenderer={rowRenderer}
                           width={width || 1}
                           overscanRowCount={20}
+                          overscanIndicesGetter={overscanIndicesGetter}
                           onScroll={handleScroll}
                         />
                       )}
