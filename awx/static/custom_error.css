@@ -1,11 +1,11 @@
 @font-face {
-    font-family: redhat-display-medium;
-    src: url('./RedHatDisplay-Medium.ttf');
+    font-family: inter-display-medium;
+    src: url('./Inter-Medium.woff2') format("woff2");
 } 
 
 @font-face {
-    font-family: redhat-display-regular;
-    src: url('./RedHatDisplay-Regular.ttf');
+    font-family: inter-display-regular;
+    src: url('./Inter-Regular.woff2') format("woff2");
 } 
 
 html, body {
@@ -61,7 +61,7 @@ body {
 .m1,.m2,.m3 {
     color: #151515;
     width: 100%;
-    font-family: redhat-display-medium, sans-serif;
+    font-family: inter-display-medium, sans-serif;
 }
 
 .m1 {
@@ -77,5 +77,5 @@ body {
 .m3 {
     font-size: 16px;
     padding-top: 20px;
-    font-family: redhat-display-regular, sans-serif;
+    font-family: inter-display-regular, sans-serif;
 }

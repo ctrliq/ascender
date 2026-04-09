@@ -1,5 +1,5 @@
 #page-sidebar {
-  line-height: 10px !important;
+  line-height: 9px !important;
 }
 
 #page-sidebar .pf-c-nav__link {
@@ -7,6 +7,69 @@
   padding-top: 8px !important;
 }
 
+/* https://github.com/rsms/inter/tree/v4.1 */
+@font-face {
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 700;
+  src: url(../public/static/css/assets/fonts/Inter/Inter-Bold.woff2) format("woff2");
+  font-display: swap;
+}
+@font-face {
+  font-family: Inter;
+  font-style: italic;
+  font-weight: 700;
+  src: url(../public/static/css/assets/fonts/Inter/Inter-BoldItalic.woff2) format("woff2");
+  font-display: swap;
+}
+@font-face {
+  font-family: Inter;
+  font-style: italic;
+  font-weight: 400;
+  src: url(../public/static/css/assets/fonts/Inter/Inter-Italic.woff2) format("woff2");
+  font-display: swap;
+}
+@font-face {
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 500;
+  src: url(../public/static/css/assets/fonts/Inter/Inter-Medium.woff2) format("woff2");
+  font-display: swap;
+}
+@font-face {
+  font-family: Inter;
+  font-style: italic;
+  font-weight: 500;
+  src: url(../public/static/css/assets/fonts/Inter/Inter-MediumItalic.woff2) format("woff2");
+  font-display: swap;
+}
+@font-face {
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 400;
+  src: url(../public/static/css/assets/fonts/Inter/Inter-Regular.woff2) format("woff2");
+  font-display: swap;
+}
+@font-face {
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 600;
+  src: url(../public/static/css/assets/fonts/Inter/Inter-SemiBold.woff2) format("woff2");
+  font-display: swap;
+}
+@font-face {
+  font-family: Inter;
+  font-style: italic;
+  font-weight: 600;
+  src: url(../public/static/css/assets/fonts/Inter/Inter-SemiBoldItalic.woff2) format("woff2");
+  font-display: swap;
+}
+
 body {
-  font-family: "Open SansVariable", sans-serif;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif;
+}
+
+.pf-c-title {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif !important;
+  font-weight: 500 !important;
 }
