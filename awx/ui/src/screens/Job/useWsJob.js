@@ -20,7 +20,7 @@ export default function useWsJob(initialJob) {
     }
 
     if (
-      ['successful', 'failed', 'error', 'cancelled', 'running'].includes(
+      ['successful', 'failed', 'error', 'canceled', 'running'].includes(
         message.status
       )
     ) {
