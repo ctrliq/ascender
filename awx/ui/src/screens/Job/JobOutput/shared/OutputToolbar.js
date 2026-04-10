@@ -42,6 +42,7 @@ const Wrapper = styled.div`
   font-size: 14px;
 `;
 const calculateElapsed = (started) => {
+  if (!started) return '00:00:00';
   const now = DateTime.now();
   const duration = now
     .diff(DateTime.fromISO(`${started}`), [
