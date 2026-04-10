@@ -169,6 +169,7 @@ function UserList() {
                 </HeaderCell>
                 <HeaderCell>{t`Email`}</HeaderCell>
                 <HeaderCell>{t`Organization`}</HeaderCell>
+                <HeaderCell>{t`Role`}</HeaderCell>
                 <HeaderCell>{t`Actions`}</HeaderCell>
               </HeaderRow>
             }

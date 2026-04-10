@@ -57,6 +57,8 @@ function UserListItem({ user, isSelected, onSelect, detailUrl, rowIndex }) {
       </TdBreakWord>
       <Td dataLabel={t`First Name`}>{user.first_name}</Td>
       <Td dataLabel={t`Last Name`}>{user.last_name}</Td>
+      <Td dataLabel={t`Email`}>{user.email}</Td>
+      <Td dataLabel={t`Organization`}>{user.summary_fields?.organization?.name || '—'}</Td>
       <Td dataLabel={t`Role`}>{user_type}</Td>
       <ActionsTd dataLabel={t`Actions`}>
         <ActionItem
