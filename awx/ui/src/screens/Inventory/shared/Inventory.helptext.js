@@ -130,7 +130,7 @@ function useInventoryHelpTextStrings() {
     enabledValue: t`This field is ignored unless an Enabled Variable is set. If the enabled variable matches this value, the host will be enabled on import.`,
     hostFilter: t`Regular expression where only matching host names will be imported. The filter is applied as a post-processing step after any inventory plugin filters are applied.`,
     sourceVars: (docsBaseUrl, source) => {
-      const docsUrl = `${docsBaseUrl}/html/userguide/inventories.html#inventory-plugins`;
+      const docsUrl = `${docsBaseUrl}/userguide/inventories.html#inventory-plugins`;
       let sourceType = '';
       if (source && source !== 'scm') {
         const type = ansibleDocUrls[source].split(/[/,.]/);

@@ -30,7 +30,7 @@ Things to know prior to submitting revisions
 
 	- Issue assignment will only be done for maintainers of the project. If you decide to work on an issue, please feel free to add a comment in the issue to let others know that you are working on it; but know that we will accept the first pull request from whomever is able to fix an issue. Once your PR is accepted we can add you as an assignee to an issue upon request. 
 
-	- If you work in a part of the docs that is going through active development, your changes may be rejected, or you may be asked to `rebase`. A good idea before starting work is to have a discussion with us and ask questions on Matrix at `#awx:ansible.com <https://matrix.to/#/#awx:ansible.com>`_ or discuss your ideas on the `Ansible Community Forum <https://forum.ansible.com/c/project/7/>`_.
+	- If you work in a part of the docs that is going through active development, your changes may be rejected, or you may be asked to `rebase`. A good idea before starting work is to have a discussion with us and ask questions on `Ascender Discussion Forum <https://github.com/ctrliq/ascender/discussions>`_.
 
 	- If you find an issue with the functions of the UI or API, please see the `Reporting Issues <github.com/ctrliq/ascender/blob/main/CONTRIBUTING.md#reporting-issues>`_ section to open an issue. 
 

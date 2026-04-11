@@ -1,0 +1,25 @@
+<!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+{% if theme_swift_id %}
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="{{ version }}">
+{% endif %}
+
+{%- if theme_tag_manager_id %}
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+{%- endif %}
+
+{% if theme_swift_id %}
+{# Ansible search with Swift - do not remove #}
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','https://s.swiftypecdn.com/install/v2/st.js','_st');
+
+_st('install','{{ theme_swift_id }}','2.0.0');
+</script>
+{% endif %}

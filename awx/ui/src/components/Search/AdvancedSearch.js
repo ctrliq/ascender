@@ -332,7 +332,7 @@ function AdvancedSearch({
           component="a"
           variant="plain"
           target="_blank"
-          href={`${getDocsBaseUrl(config)}/html/userguide/search_sort.html`}
+          href={`${getDocsBaseUrl(config)}/userguide/search_sort.html`}
           rel="noopener noreferrer"
         >
           <QuestionCircleIcon />

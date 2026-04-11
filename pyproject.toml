@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 # Do not uncomment the line below. We need to be able to override the version via a file, and this
 # causes the "version" key in setup.cfg to be ignored.
-# [tool.setuptools_scm]
+[tool.setuptools_scm]
 
 [tool.black]
 line-length = 160

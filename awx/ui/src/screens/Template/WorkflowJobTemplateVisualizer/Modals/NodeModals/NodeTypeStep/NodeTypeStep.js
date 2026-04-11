@@ -233,7 +233,7 @@ function NodeTypeStep({ isIdentifierRequired }) {
                       <a
                         href={`${getDocsBaseUrl(
                           config
-                        )}/html/userguide/workflow_templates.html#convergence-node`}
+                        )}/userguide/workflow_templates.html#convergence-node`}
                         target="_blank"
                         rel="noopener noreferrer"
                       >

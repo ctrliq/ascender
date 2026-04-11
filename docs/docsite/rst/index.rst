@@ -1,7 +1,7 @@
-Ansible Ascender Documentation
+Ascender Documentation
 =========================
 
-Ansible Ascender helps teams manage complex multi-tier deployments by adding control, knowledge, and delegation to Ansible-powered environments.
+Ascender helps teams manage complex multi-tier deployments by adding control, knowledge, and delegation to Ansible-powered environments.
 
 .. toctree::
    :maxdepth: 2

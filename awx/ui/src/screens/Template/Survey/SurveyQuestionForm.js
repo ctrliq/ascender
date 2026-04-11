@@ -264,7 +264,7 @@ function SurveyQuestionForm({
                     <a
                       href={`${getDocsBaseUrl(
                         config
-                      )}/html/userguide/job_templates.html#surveys`}
+                      )}/userguide/job_templates.html#surveys`}
                       target="_blank"
                       rel="noopener noreferrer"
                     >

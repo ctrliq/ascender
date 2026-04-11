@@ -8,20 +8,20 @@ from importlib import import_module
 sys.path.insert(0, os.path.abspath('./rst/rest_api/_swagger'))
 
 project = u'Ascender'
-copyright = u'2025, CtrlIQ, Inc.'
+copyright = u'2026, Red Hat, Inc. - 2026, CtrlIQ, Inc.'
 author = u'CtrlIQ'
 
-pubdateshort = '2023-08-04'
+pubdateshort = '2026-04-11'
 pubdate = datetime.strptime(pubdateshort, '%Y-%m-%d').strftime('%B %d, %Y')
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
 # html_title = None
-html_title = 'Ansible Ascender community documentation'
+html_title = 'Ascender Community Documentation'
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 # html_short_title = None
-html_short_title = 'Ascender community documentation'
+html_short_title = 'Ascender Community Documentation'
 
 htmlhelp_basename = 'Ascender_docs'
 
@@ -38,8 +38,8 @@ extensions = [
     'swagger',
 ]
 
-html_theme = 'sphinx_ansible_theme'
-html_theme_path = ["_static"]
+html_theme = 'sphinx_ascender_theme'
+html_theme_path = ["."]
 
 pygments_style = "ansible"
 highlight_language = "YAML+Jinja"
@@ -58,14 +58,14 @@ locale_dirs = ['locale/']  # path is example but recommended.
 gettext_compact = False  # optional.
 
 rst_epilog = """
-.. |atqi| replace:: *Ascender Quick Installation Guide*
-.. |atqs| replace:: *Ascender Quick Setup Guide*
-.. |atir| replace:: *Ascender Installation and Reference Guide*
-.. |ata| replace:: *Ascender Administration Guide*
-.. |atu| replace:: *Ascender User Guide*
-.. |atumg| replace:: *Ascender Upgrade and Migration Guide*
-.. |atapi| replace:: *Ascender API Guide*
-.. |atrn| replace:: *Ascender Release Notes*
+.. |atqi| replace:: *Quick Installation Guide*
+.. |atqs| replace:: *Quick Setup Guide*
+.. |atir| replace:: *Installation and Reference Guide*
+.. |ata| replace:: *Administration Guide*
+.. |atu| replace:: *User Guide*
+.. |atumg| replace:: *Upgrade and Migration Guide*
+.. |atapi| replace:: *API Guide*
+.. |atrn| replace:: *Release Notes*
 .. |aa| replace:: Ansible Automation
 .. |AA| replace:: Automation Analytics
 .. |aap| replace:: Ansible Automation Platform

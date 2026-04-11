@@ -41,7 +41,7 @@ function ConstructedInventoryHint() {
         <AlertActionLink
           href={`${getDocsBaseUrl(
             config
-          )}/html/userguide/inventories.html#constructed-inventories`}
+          )}/userguide/inventories.html#constructed-inventories`}
           component="a"
           target="_blank"
           rel="noopener noreferrer"

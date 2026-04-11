@@ -91,7 +91,7 @@ function CustomMessagesSubForm({ defaultMessages, type }) {
                 rel="noopener noreferrer"
                 href={`${getDocsBaseUrl(
                   config
-                )}/html/userguide/notifications.html#create-custom-notifications`}
+                )}/userguide/notifications.html#create-custom-notifications`}
               >
                 {t`Ansible Controller Documentation.`}
               </a>

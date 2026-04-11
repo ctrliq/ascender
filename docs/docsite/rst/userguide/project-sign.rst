@@ -48,7 +48,7 @@ Prerequisites
 
 
 Add a GPG key to Ascender
-----------------------
+---------------------------
 
 In order to use the GPG key for content singing and validation in Ascender, you must add it running the following command in the CLI:
 

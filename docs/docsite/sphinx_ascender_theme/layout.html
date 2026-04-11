@@ -1,0 +1,47 @@
+{#-
+    Declare logo and favicon fallbacks and
+    also set their Sphinx 4 `_url` counterparts:
+#}
+{%-
+    set ansible_logo_url = logo_url
+        or ('_static/' + (logo or 'images/AscenderAuto_icon_clr_S.png'))
+%}
+{%- set logo_url = '' %}{# Reset to prevent render in the RTD theme #}
+{%- set logo = logo_url %}
+{%-
+    set favicon_url = favicon_url
+        or ('_static/' + (favicon or 'images/AscenderAuto_icon_clr_S.png'))
+%}
+{%- set favicon = favicon_url | replace('_static/', '', 1) %}
+{%- set favicon_url = pathto(favicon_url, 1) if '//' not in favicon_url and not favicon_url.startswith('/') else favicon_url %}
+
+{%- extends "sphinx_rtd_theme/layout.html" %}
+
+{%- block extrahead %}
+  {%- include "extrahead.html" ignore missing %}
+{%- endblock %}
+
+{%- block extrabody %}
+  {%- include "extrabody.html" ignore missing %}
+{%- endblock %}
+
+{%- block document %}
+  {%- include "banner.html" ignore missing %}
+
+  {{ super() }}
+{%- endblock %}
+
+{%- block footer %}
+  {%- include "extrafooter.html" ignore missing %}
+{%- endblock %}
+
+{%- block menu %}
+  {{ super() }}
+
+  {%- if theme_show_extranav | tobool %}
+    {%- block extranav %}{% include "extranav.html" %}{% endblock %}
+  {%- endif %}
+  {%- block rtd_ethical_ads %}
+    {%- include "rtd-ethical-ads.html" %}
+  {%- endblock %}
+{%- endblock %}

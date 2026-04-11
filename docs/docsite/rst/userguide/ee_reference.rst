@@ -6,7 +6,7 @@ For detailed information about the |ee| definition,
 refer to the `Ansible Builder documentation <https://ansible.readthedocs.io/projects/builder/en/latest/definition/#execution-environment-definition>`_.
 
 Default execution environment for Ascender
---------------------------------------
+-------------------------------------------
 
 The example in ``test/data/pytz`` requires the ``awx.awx`` collection in the |ee| definition. The lookup plugin ``awx.awx.tower_schedule_rrule`` requires the PyPI ``pytz`` and another library to work. If ``test/data/pytz/execution-environment.yml`` file is provided to the ``ansible-builder build`` command, then it will install the collection inside the image, read the ``requirements.txt`` file inside of the collection, and then install ``pytz`` into the image.
 
