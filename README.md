@@ -7,6 +7,13 @@ Contributing
 ------------
 - See the contributing notes in [Running Development Environment in Docker](docs/development/docker.md) for guidance on setting up a development environment and contributing to Ascender.
 
+- Join us on our [forum](https://forum.ascender-automation.org) to discuss development topics.
+
+Documentation
+-------------
+
+- Documentation is available at [Ascender Documentation](https://docs.ascender-automation.org)
+
 Reporting Issues
 ----------------
 
