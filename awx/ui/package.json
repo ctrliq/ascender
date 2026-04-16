@@ -16,7 +16,7 @@
     "cheerio": "1.0.0-rc.12",
     "d3": "7.9.0",
     "dagre": "^0.8.5",
-    "dompurify": "^3.3.2",
+    "dompurify": "^3.4.0",
     "formik": "2.4.6",
     "has-ansi": "5.0.1",
     "html-entities": "2.6.0",
