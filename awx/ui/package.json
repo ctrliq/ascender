@@ -47,7 +47,7 @@
     "@rspack/core": "^1.7.11",
     "@svgr/webpack": "^8.1.0",
     "@testing-library/dom": "^8.20.1",
-    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^12.1.5",
     "@testing-library/user-event": "14.6.1",
     "@wojtekmaj/enzyme-adapter-react-17": "0.8.0",
