@@ -10,7 +10,9 @@ const PRECACHE_MANIFEST = self.INJECT_MANIFEST_PLUGIN;
 // whether the app is served at the root or a subpath.
 // Resolve to pathname so relative publicPaths (e.g. "./") are normalised.
 const INDEX_URL = (() => {
-  const entry = PRECACHE_MANIFEST.find(({ url }) => url.endsWith('/index.html'));
+  const entry = PRECACHE_MANIFEST.find(({ url }) =>
+    new URL(url, self.location).pathname.endsWith('/index.html')
+  );
   return entry ? new URL(entry.url, self.location).pathname : '/index.html';
 })();
 

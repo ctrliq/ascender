@@ -664,7 +664,7 @@ module.exports = function (webpackEnv) {
       isEnvProduction &&
         fs.existsSync(swSrc) &&
         new InjectManifestPlugin({
-          file: path.relative(paths.appPath, swSrc),
+          file: `./${path.relative(paths.appPath, swSrc)}`,
           exclude: ['**/*.map', 'asset-manifest.json', '**/LICENSE*'],
           removeHash: true,
         }),
