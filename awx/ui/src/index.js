@@ -17,3 +17,14 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('app') || document.createElement('div')
 );
+
+if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker
+      .register(`${process.env.PUBLIC_URL}/service-worker.js`)
+      .catch((err) => {
+        // eslint-disable-next-line no-console
+        console.error('Service worker registration failed:', err);
+      });
+  });
+}

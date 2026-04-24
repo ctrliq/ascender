@@ -1,10 +1,10 @@
-const { createProxyMiddleware } = require('http-proxy-middleware');
+const { legacyCreateProxyMiddleware } = require('http-proxy-middleware');
 
 const TARGET = process.env.TARGET || 'https://localhost:8043';
 
 module.exports = (app) => {
   app.use(
-    createProxyMiddleware(['/api', '/websocket', '/sso'], {
+    legacyCreateProxyMiddleware(['/api', '/websocket', '/sso'], {
       target: TARGET,
       secure: false,
       ws: true,
