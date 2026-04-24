@@ -3,7 +3,7 @@
   "homepage": ".",
   "private": true,
   "engines": {
-    "node": ">=20.18.2"
+    "node": ">=20.19.0"
   },
   "dependencies": {
     "@lingui/react": "^5.4.0",
