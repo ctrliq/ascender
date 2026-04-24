@@ -5,7 +5,7 @@ from pathlib import Path
 from django.http import FileResponse, Http404
 from django.urls import path
 from django.utils.translation import gettext_lazy as _
-from django.views import View
+from django.views.generic import View
 from django.views.generic.base import TemplateView
 
 
