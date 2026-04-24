@@ -20,10 +20,9 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       const urlsToCache = PRECACHE_MANIFEST.map(({ url }) => url);
-      return cache.addAll(urlsToCache);
+      return cache.addAll(urlsToCache).then(() => self.skipWaiting());
     })
   );
-  self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
