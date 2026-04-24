@@ -8,9 +8,11 @@ const PRECACHE_MANIFEST = self.INJECT_MANIFEST_PLUGIN;
 
 // Derive the index.html URL from the manifest so it works regardless of
 // whether the app is served at the root or a subpath.
-const INDEX_URL =
-  (PRECACHE_MANIFEST.find(({ url }) => url.endsWith('/index.html')) || {}).url ||
-  '/index.html';
+// Resolve to pathname so relative publicPaths (e.g. "./") are normalised.
+const INDEX_URL = (() => {
+  const entry = PRECACHE_MANIFEST.find(({ url }) => url.endsWith('/index.html'));
+  return entry ? new URL(entry.url, self.location).pathname : '/index.html';
+})();
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -23,7 +25,11 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('activate', (event) => {
-  const expectedUrls = new Set(PRECACHE_MANIFEST.map(({ url }) => url));
+  // Resolve every manifest URL to its pathname so that both sides of the
+  // comparison are in the same form regardless of a relative publicPath.
+  const expectedUrls = new Set(
+    PRECACHE_MANIFEST.map(({ url }) => new URL(url, self.location).pathname)
+  );
 
   event.waitUntil(
     caches
@@ -50,8 +56,8 @@ self.addEventListener('activate', (event) => {
           )
         )
       )
+      .then(() => self.clients.claim())
   );
-  self.clients.claim();
 });
 
 self.addEventListener('fetch', (event) => {
