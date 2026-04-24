@@ -383,8 +383,8 @@ python-tss-sdk==1.2.2
     # via -r /awx_devel/requirements/requirements.in
 python3-openid==3.2.0
     # via social-auth-core
-python3-saml==1.16.0
-    # via -r /awx_devel/requirements/requirements.in
+# python3-saml @ git+https://github.com/SAML-Toolkits/python3-saml.git@52d2ac8da3f35262755f6e1c32ba7c62a6011fe1  # git requirements installed separately
+    # via -r /awx_devel/requirements/requirements_git.txt
 pytz==2024.1
     # via
     #   irc
