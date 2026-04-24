@@ -19,5 +19,5 @@
 #
 certifi @ git+https://github.com/ansible/system-certifi.git@devel
 ansible-runner @ git+https://github.com/ansible/ansible-runner.git@devel
-python3-saml @ git+https://github.com/ansible/python3-saml.git@devel
+python3-saml @ git+https://github.com/SAML-Toolkits/python3-saml.git@52d2ac8da3f35262755f6e1c32ba7c62a6011fe1
 django-ansible-base[jwt-consumer,resource-registry,rest-filters] @ git+https://github.com/ansible/django-ansible-base@devel
