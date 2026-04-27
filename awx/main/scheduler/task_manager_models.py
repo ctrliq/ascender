@@ -151,7 +151,9 @@ class TaskManagerInstances:
         if execution_instance and execution_instance.node_type in ('hybrid', 'execution'):
             self.instances_by_hostname[task.execution_node].consume_capacity(task.task_impact, job_impact=True)
         if control_instance and control_instance.node_type in ('hybrid', 'control'):
-            self.instances_by_hostname[task.controller_node].consume_capacity(self.control_task_impact)
+            # Track jobs_running on the controller unless it was already counted as the execution node
+            count_as_job = (control_instance != execution_instance)
+            self.instances_by_hostname[task.controller_node].consume_capacity(self.control_task_impact, job_impact=count_as_job)
 
     def __getitem__(self, hostname):
         return self.instances_by_hostname.get(hostname)
@@ -220,7 +222,11 @@ class TaskManagerInstanceGroups:
             # hybrid nodes _always_ control their own tasks
             if add_hybrid_control_cost and i.node_type == 'hybrid':
                 would_be_remaining -= self.control_task_impact
-            if would_be_remaining >= 0 and (instance_most_capacity is None or would_be_remaining > most_remaining_capacity):
+            if would_be_remaining >= 0 and (
+                instance_most_capacity is None
+                or would_be_remaining > most_remaining_capacity
+                or (would_be_remaining == most_remaining_capacity and i.jobs_running < instance_most_capacity.jobs_running)
+            ):
                 instance_most_capacity = i
                 most_remaining_capacity = would_be_remaining
         return instance_most_capacity
