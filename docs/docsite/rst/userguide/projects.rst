@@ -8,7 +8,7 @@ Projects
 
 A :term:`Project` is a logical collection of Ansible playbooks.
 
-You can manage playbooks and playbook directories by either placing them manually under the Project Base Path on your server, or by placing your playbooks into a source code management (SCM) system supported by Ascender, including Git, Subversion, and Red Hat Insights. To create a Red Hat Insights project, refer to :ref:`insights`.
+You can manage playbooks and playbook directories by either placing them manually under the Project Base Path on your server, or by placing your playbooks into a source code management (SCM) system supported by Ascender, including Git, and Subversion.
 
 .. note::
 

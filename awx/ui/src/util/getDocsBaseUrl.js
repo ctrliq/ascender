@@ -5,6 +5,6 @@ export default function getDocsBaseUrl(config) {
   if (licenseType && licenseType !== 'open' && config?.version) {
     version = parseFloat(config?.version.split('-')[0]).toFixed(1);
   }
-
-  return `https://docs.ansible.com/automation-controller/${version}`;
+  return `https://docs.ascender-automation.org`;
+  // return `https://docs.ansible.com/automation-controller/${version}`;
 }

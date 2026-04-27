@@ -1,7 +1,7 @@
 
 
 Upgrading Ascender 
-==============
+===================
 
 .. index::
     single: upgrade considerations

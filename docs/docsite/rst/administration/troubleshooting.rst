@@ -1,8 +1,8 @@
 .. _admin_troubleshooting:
 
-***********************
+***************************
 Troubleshooting Ascender
-***********************
+***************************
 
 .. index:: 
    single: troubleshooting
@@ -84,7 +84,7 @@ If you are unable to run the ``helloworld.yml`` example playbook from the Quick 
 - Are your hostnames and IPs correctly added in your inventory file? (Check for typos.)
 
 Unable to login to Ascender via HTTP
-==================================
+====================================
 
 Access to Ascender is intentionally restricted through a secure protocol (HTTPS). In cases where your configuration is set up to run an Ascender node behind a load balancer or proxy as "HTTP only", and you only want to access it without SSL (for troubleshooting, for example), you may change the settings of the ``/etc/tower/conf.d`` of your Ascender instance. The operator has ``extra_settings`` that allows you to change a file-based setting in OCP. See :ref:`admin_troubleshooting_extra_settings` for detail.
 

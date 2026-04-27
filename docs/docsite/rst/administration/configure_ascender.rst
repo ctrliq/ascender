@@ -1,7 +1,7 @@
 .. _ag_configure_ascender:
 
 Ascender Configuration
-~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. index::
    single: configure Ascender

@@ -115,7 +115,7 @@ function VisualizerToolbar({
               rel="noopener noreferrer"
               href={`${getDocsBaseUrl(
                 config
-              )}/html/userguide/workflow_templates.html#ug-wf-editor`}
+              )}/userguide/workflow_templates.html#ug-wf-editor`}
             >
               <BookIcon />
             </ActionButton>

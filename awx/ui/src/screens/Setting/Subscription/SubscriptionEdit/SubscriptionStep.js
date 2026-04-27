@@ -143,7 +143,7 @@ function SubscriptionStep() {
                       component="a"
                       href={`${getDocsBaseUrl(
                         config
-                      )}/html/userguide/import_license.html`}
+                      )}/userguide/import_license.html`}
                       variant="link"
                       target="_blank"
                       rel="noopener noreferrer"

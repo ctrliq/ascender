@@ -63,7 +63,7 @@ function getHelpText(t) {
       <span>
         {t`Refer to the`}{' '}
         <a
-          href={`${getDocsBaseUrl(config)}/html/userguide/scheduling.html`}
+          href={`${getDocsBaseUrl(config)}/userguide/scheduling.html`}
           target="_blank"
           rel="noopener noreferrer"
         >

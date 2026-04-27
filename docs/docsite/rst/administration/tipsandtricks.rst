@@ -64,7 +64,7 @@ Once in a while you may find it helpful to create an admin (superuser) account f
 
 
 Setting up a jump host to use with Ascender
-========================================
+=============================================
 
 .. index::
     pair: jump host; ProxyCommand
@@ -95,7 +95,7 @@ You can also add a jump host to your Ascender instance through Inventory variabl
 
 
 View Ansible outputs for JSON commands when using Ascender
-==================================================================
+============================================================
 .. index::
    single: Ansible output for JSON commands
    single: JSON commands, Ansible output
@@ -183,7 +183,7 @@ New installations of Ascender should not have to set the hostname for notificati
 .. _launch_jobs_curl:
 
 Launching Jobs with curl
-===========================
+========================
 .. index::
    pair: tips; curl
 
@@ -236,7 +236,7 @@ Save and trigger an update of the group. You should now be able to see all of yo
 
 
 Filtering instances returned by the dynamic inventory sources in Ascender
-======================================================================
+=========================================================================
 .. index:: 
    pair: tips; filtering instances
    pair: tips; dynamic inventory and instance filtering
@@ -259,7 +259,7 @@ You may also create your own groups by copying the auto-generated groups into yo
 
 
 Using an unreleased module from Ansible source with Ascender
-==========================================================
+============================================================
 .. index:: 
    pair: tips; Ansible modules, unreleased
    pair: tips; unreleased modules 
@@ -275,7 +275,7 @@ Once this is created, copy the module you want to use and drop it into the ``/li
 
 
 Using callback plugins with Ascender
-================================
+====================================
 .. index:: 
    pair: tips; callback plugins
    pair: tips; plugins, callback
@@ -318,7 +318,7 @@ Once done, save your edits. If Ansible was previously attempting an SSH connecti
 
 
 Importing existing inventory files and host/group vars into Ascender
-================================================================
+====================================================================
 
 .. index::
     pair: tips; inventory import

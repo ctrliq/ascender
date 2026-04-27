@@ -1,0 +1,12 @@
+{% if show_built_with %}
+  {%- set sphinx_web = '<a href="https://www.sphinx-doc.org/">Sphinx</a>' %}
+  {%- set ascender_community_web = '<a href="https://docs.ansible.com/">Ascender Community</a>'  %}
+  {#- Translators: the variable "sphinx_web" is a link to the Sphinx project documentation with the text "Sphinx" #}
+  {%- trans sphinx_web=sphinx_web %}Built with {{ sphinx_web }} using a{% endtrans %}
+  {#- Translators: "theme" refers to a theme for Sphinx, which alters the appearance of the generated documenation #}
+  <a href="https://sphinx-ansible-theme.rtfd.io">{% trans %}Sphinx Ansible Theme{% endtrans %}</a>
+  {% trans %}that is based on the{% endtrans %}
+  <a href="https://github.com/readthedocs/sphinx_rtd_theme">{% trans %}Read the Docs theme{% endtrans %}</a>
+  {#- Translators: this is always used as "provided by Read the Docs", and should not imply Read the Docs is an author of the generated documentation. #}
+  {% trans ascender_community_web=ascender_community_web %}and is maintained by the {{ ascender_community_web }}{% endtrans %}.
+{% endif %}

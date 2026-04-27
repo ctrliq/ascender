@@ -12,7 +12,7 @@ Prerequisites
 
 
 Fork and clone the Ascender repo
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you have not done so already, you'll need to fork the Ascender repo on GitHub. For more on how to do this, see `Fork a Repo <https://help.github.com/articles/fork-a-repo/>`_.
 
@@ -71,6 +71,6 @@ To build the docs on your local machine, use the tox utility. In your forked bra
 
 
 Access the Ascender user interface
-------------------------------
+----------------------------------
 
 To access an instance of the Ascender interface, refer to `Build and run the development environment <github.com/ctrliq/ascender/blob/main/CONTRIBUTING.md#setting-up-your-development-environment>`_ for detail. Once you have your environment setup, you can access the Ascender UI by logging into it at `https://localhost:8043 <https://localhost:8043>`_, and access the API directly at `https://localhost:8043/api/ <https://localhost:8043/api/>`_.

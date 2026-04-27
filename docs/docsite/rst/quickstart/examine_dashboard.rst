@@ -1,5 +1,5 @@
 Examine the Ascender Dashboard
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. index::
    pair: dashboard; examine

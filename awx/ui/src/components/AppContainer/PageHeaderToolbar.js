@@ -22,8 +22,8 @@ import {
 import { QuestionCircleIcon, UserIcon } from '@patternfly/react-icons';
 import { WorkflowApprovalsAPI } from 'api';
 import useRequest from 'hooks/useRequest';
-/* import getDocsBaseUrl from 'util/getDocsBaseUrl'; */
-/* import { useConfig } from 'contexts/Config'; */
+import getDocsBaseUrl from 'util/getDocsBaseUrl';
+import { useConfig } from 'contexts/Config';
 import useWsPendingApprovalCount from './useWsPendingApprovalCount';
 
 const PendingWorkflowApprovals = styled.div`
@@ -42,7 +42,7 @@ function PageHeaderToolbar({
   const { t } = useLingui();
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [isUserOpen, setIsUserOpen] = useState(false);
-  /*   const config = useConfig(); */
+  const config = useConfig();
 
   const { request: fetchPendingApprovalCount, result: pendingApprovals } =
     useRequest(
@@ -114,17 +114,17 @@ function PageHeaderToolbar({
               </DropdownToggle>
             }
             dropdownItems={[
-              /*
+
               <DropdownItem
                 key="help"
                 target="_blank"
-                href={`${getDocsBaseUrl(config)}/html/userguide/index.html`}
+                href={`${getDocsBaseUrl(config)}/userguide/index.html`}
                 ouiaId="help-dropdown-item"
                 rel="noopener noreferrer"
               >
                 {t`Help`}
               </DropdownItem>,
-*/
+
               <DropdownItem
                 key="about"
                 component="button"

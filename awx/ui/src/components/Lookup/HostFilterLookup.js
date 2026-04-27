@@ -401,7 +401,7 @@ function HostFilterLookup({
                   <a
                     href={`${getDocsBaseUrl(
                       config
-                    )}/html/userguide/inventories.html#smart-host-filter`}
+                    )}/userguide/inventories.html#smart-host-filter`}
                     target="_blank"
                     rel="noopener noreferrer"
                   >

@@ -1,7 +1,7 @@
 .. _ag_restart_awx:
 
 Starting, Stopping, and Restarting Ascender
-----------------------------------------
+---------------------------------------------
 
 To install Ascender: https://github.com/ansible/awx-operator/tree/devel/docs/installation
 

@@ -314,7 +314,7 @@ By clicking on these items, where appropriate, you can view the corresponding jo
 .. _ug_job_concurrency:
 
 Ascender Capacity Determination and Job Impact
--------------------------------------------
+------------------------------------------------
 
 .. index::
    pair: jobs; capacity

@@ -21,7 +21,7 @@ const GitSubForm = ({
   const { t } = useLingui();
   const docsURL = `${getDocsBaseUrl(
     useConfig()
-  )}/html/userguide/projects.html#manage-playbooks-using-source-control`;
+  )}/userguide/projects.html#manage-playbooks-using-source-control`;
   const projectHelpStrings = getProjectHelpStrings(t);
 
   return (

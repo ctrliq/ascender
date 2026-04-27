@@ -63,7 +63,7 @@ function ProjectDetail({ project }) {
   } = useWsProject(project);
   const docsURL = `${getDocsBaseUrl(
     useConfig()
-  )}/html/userguide/projects.html#manage-playbooks-using-source-control`;
+  )}/userguide/projects.html#manage-playbooks-using-source-control`;
   const history = useHistory();
   const {
     request: deleteProject,

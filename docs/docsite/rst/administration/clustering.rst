@@ -58,49 +58,49 @@ These new replicas can be constrained in a similar manner to previous single dep
 .. _ag_assign_pods_to_nodes:
 
 Assigning Ascender pods to specific nodes
--------------------------------------
+-----------------------------------------
 
 You can constrain the Ascender pods created by the operator to run on a certain subset of nodes. ``node_selector`` and ``postgres_selector`` constrains the Ascender pods to run only on the nodes that match all the specified key/value pairs. ``tolerations`` and ``postgres_tolerations`` allow the Ascender pods to be scheduled onto nodes with matching taints. The ability to specify ``topologySpreadConstraints`` is also allowed through ``topology_spread_constraints`` If you want to use affinity rules for your Ascender pod, you can use the ``affinity`` option.
 
 If you want to constrain the web and task pods individually, you can do so by specifying the deployment type before the specific setting. For example, specifying ``task_tolerations`` will allow the Ascender task pod to be scheduled onto nodes with matching taints. 
 
-+----------------------------------+------------------------------------------+----------+
-| Name                             | Description                              | Default  |
-+----------------------------------+------------------------------------------+----------+
-| postgres_image                   | Path of the image to pull                | postgres |
-+----------------------------------+------------------------------------------+----------+
-| postgres_image_version           | Image version to pull                    | 13       |
-+----------------------------------+------------------------------------------+----------+
++----------------------------------+-----------------------------------------------+----------+
+| Name                             | Description                                   | Default  |
++----------------------------------+-----------------------------------------------+----------+
+| postgres_image                   | Path of the image to pull                     | postgres |
++----------------------------------+-----------------------------------------------+----------+
+| postgres_image_version           | Image version to pull                         | 13       |
++----------------------------------+-----------------------------------------------+----------+
 | node_selector                    | Ascender pods' nodeSelector                   | ''       |
-+----------------------------------+------------------------------------------+----------+
++----------------------------------+-----------------------------------------------+----------+
 | web_node_selector                | Ascender web pods' nodeSelector               | ''       |
-+----------------------------------+------------------------------------------+----------+
++----------------------------------+-----------------------------------------------+----------+
 | task_node_selector               | Ascender task pods' nodeSelector              | ''       |
-+----------------------------------+------------------------------------------+----------+
++----------------------------------+-----------------------------------------------+----------+
 | topology_spread_constraints      | Ascender pods' topologySpreadConstraints      | ''       |
-+----------------------------------+------------------------------------------+----------+
++----------------------------------+-----------------------------------------------+----------+
 | web_topology_spread_constraints  | Ascender web pods' topologySpreadConstraints  | ''       |
-+----------------------------------+------------------------------------------+----------+
++----------------------------------+-----------------------------------------------+----------+
 | task_topology_spread_constraints | Ascender task pods' topologySpreadConstraints | ''       |
-+----------------------------------+------------------------------------------+----------+
++----------------------------------+-----------------------------------------------+----------+
 | affinity                         | Ascender pods' affinity rules                 | ''       |
-+----------------------------------+------------------------------------------+----------+
++----------------------------------+-----------------------------------------------+----------+
 | web_affinity                     | Ascender web pods' affinity rules             | ''       |
-+----------------------------------+------------------------------------------+----------+
++----------------------------------+-----------------------------------------------+----------+
 | task_affinity                    | Ascender task pods' affinity rules            | ''       |
-+----------------------------------+------------------------------------------+----------+
++----------------------------------+-----------------------------------------------+----------+
 | tolerations                      | Ascender pods' tolerations                    | ''       |
-+----------------------------------+------------------------------------------+----------+
++----------------------------------+-----------------------------------------------+----------+
 | web_tolerations                  | Ascender web pods' tolerations                | ''       |
-+----------------------------------+------------------------------------------+----------+
++----------------------------------+-----------------------------------------------+----------+
 | task_tolerations                 | Ascender task pods' tolerations               | ''       |
-+----------------------------------+------------------------------------------+----------+
++----------------------------------+-----------------------------------------------+----------+
 | annotations                      | Ascender pods' annotations                    | ''       |
-+----------------------------------+------------------------------------------+----------+
-| postgres_selector                | Postgres pods' nodeSelector              | ''       |
-+----------------------------------+------------------------------------------+----------+
-| postgres_tolerations             | Postgres pods' tolerations               | ''       |
-+----------------------------------+------------------------------------------+----------+
++----------------------------------+-----------------------------------------------+----------+
+| postgres_selector                | Postgres pods' nodeSelector                   | ''       |
++----------------------------------+-----------------------------------------------+----------+
+| postgres_tolerations             | Postgres pods' tolerations                    | ''       |
++----------------------------------+-----------------------------------------------+----------+
 
 Example of customization could be:
 
