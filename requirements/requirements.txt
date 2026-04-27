@@ -185,7 +185,7 @@ frozenlist==1.4.1
     #   aiosignal
 gitdb==4.0.11
     # via gitpython
-gitpython==3.1.42
+gitpython==3.1.47
     # via -r /awx_devel/requirements/requirements.in
 google-auth==2.28.1
     # via kubernetes

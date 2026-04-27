@@ -28,7 +28,7 @@ django-valkey
 djangorestframework>=3.15.2 # CVE-2024-21520
 djangorestframework-yaml
 filelock
-GitPython>=3.1.37  # CVE-2023-41040
+GitPython>=3.1.47  # GHSA-rpm5-65cw-6hj4 GHSA-x2qx-6953-8485
 importlib-metadata==4.6.4
 irc
 jaraco.functools>= 4
