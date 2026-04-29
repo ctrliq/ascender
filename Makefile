@@ -446,6 +446,9 @@ clean-ui:
 	mkdir -p awx/ui/build/static
 
 awx/ui/node_modules:
+	NODE_OPTIONS=--max-old-space-size=6144 $(NPM_BIN) --prefix awx/ui --loglevel warn --force --omit=dev ci
+
+awx/ui/node_modules-dev:
 	NODE_OPTIONS=--max-old-space-size=6144 $(NPM_BIN) --prefix awx/ui --loglevel warn --force ci
 
 $(UI_BUILD_FLAG_FILE):
@@ -457,7 +460,7 @@ $(UI_BUILD_FLAG_FILE):
 
 ui-release: $(UI_BUILD_FLAG_FILE)
 
-ui-devel: awx/ui/node_modules
+ui-devel: awx/ui/node_modules-dev
 	@$(MAKE) -B $(UI_BUILD_FLAG_FILE)
 	@if [ -d "/var/lib/awx" ] ; then \
 		mkdir -p /var/lib/awx/public/static/css; \
@@ -468,7 +471,7 @@ ui-devel: awx/ui/node_modules
 		cp -r awx/ui/build/static/media/* /var/lib/awx/public/static/media; \
 	fi
 
-ui-devel-test: awx/ui/node_modules
+ui-devel-test: awx/ui/node_modules-dev
 	$(NPM_BIN) --prefix awx/ui --loglevel warn run start
 
 ui-lint:

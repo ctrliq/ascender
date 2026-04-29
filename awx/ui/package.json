@@ -118,7 +118,7 @@
     "pretest": "lingui compile",
     "pretest-watch": "lingui compile",
     "start": "GENERATE_SOURCEMAP=false ESLINT_NO_DEV_ERRORS=true PORT=3001 HTTPS=true DANGEROUSLY_DISABLE_HOST_CHECK=true node scripts/start.js",
-    "build": "NODE_ENV=production INLINE_RUNTIME_CHUNK=false node scripts/build.js",
+    "build": "INLINE_RUNTIME_CHUNK=false node scripts/build.js",
     "test": "TZ='UTC' node scripts/test.js --watchAll=false",
     "test-screens": "TZ='UTC' node scripts/test.js screens --watchAll=false",
     "test-general": "TZ='UTC' node scripts/test.js --testPathIgnorePatterns='<rootDir>/src/screens/' --watchAll=false",
