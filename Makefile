@@ -60,7 +60,7 @@ RECEPTOR_IMAGE ?= quay.io/ansible/receptor:devel
 SRC_ONLY_PKGS ?= cffi,pycparser,psycopg,twilio
 # These should be upgraded in the AWX and Ansible venv before attempting
 # to install the actual requirements
-VENV_BOOTSTRAP ?= pip==26.0.1 setuptools==80.9.0 setuptools_scm[toml]==9.2.2 wheel==0.46.2
+VENV_BOOTSTRAP ?= pip==26.1 setuptools==80.9.0 setuptools_scm[toml]==9.2.2 wheel==0.46.2
 
 NAME ?= awx
 
@@ -452,7 +452,7 @@ $(UI_BUILD_FLAG_FILE):
 	$(MAKE) awx/ui/node_modules
 	$(PYTHON) tools/scripts/compilemessages.py
 	$(NPM_BIN) --prefix awx/ui --loglevel warn run compile-strings
-	$(NPM_BIN) --prefix awx/ui --loglevel warn run build
+	$(NPM_BIN) --prefix awx/ui --loglevel warn run build 
 	touch $@
 
 ui-release: $(UI_BUILD_FLAG_FILE)
