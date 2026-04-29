@@ -452,7 +452,7 @@ $(UI_BUILD_FLAG_FILE):
 	$(MAKE) awx/ui/node_modules
 	$(PYTHON) tools/scripts/compilemessages.py
 	$(NPM_BIN) --prefix awx/ui --loglevel warn run compile-strings
-	$(NPM_BIN) --prefix awx/ui --loglevel warn run build 
+	$(NPM_BIN) --prefix awx/ui --loglevel warn run build
 	touch $@
 
 ui-release: $(UI_BUILD_FLAG_FILE)
