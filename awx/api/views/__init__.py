@@ -198,7 +198,7 @@ class DashboardView(APIView):
         groups_inventory_failed = models.Group.objects.filter(inventory_sources__last_job_failed=True).count()
         data['groups'] = {'url': reverse('api:group_list', request=request), 'total': user_groups.count(), 'inventory_failed': groups_inventory_failed}
 
-        user_hosts = get_user_queryset(request.user, models.Host)
+        user_hosts = get_user_queryset(request.user, models.Host).exclude(inventory__kind='constructed')
         user_hosts_failed = user_hosts.filter(last_job_host_summary__failed=True)
         data['hosts'] = {
             'url': reverse('api:host_list', request=request),
