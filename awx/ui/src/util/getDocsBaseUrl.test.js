@@ -40,7 +40,8 @@ describe('getDocsBaseUrl', () => {
 //     );
 //   });
 
-  it('should return 4.5 version if license info missing', () => {
+//   it('should return 4.5 version if license info missing', () => {
+  it('should return docs site', () => {
     const result = getDocsBaseUrl({
       version: '18.4.4',
     });
