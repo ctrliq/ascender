@@ -20,7 +20,7 @@ from urllib3.exceptions import ConnectTimeoutError
 # Django
 from django.conf import settings
 from django.core.exceptions import FieldError, ObjectDoesNotExist
-from django.db.models import Q, Sum, Count
+from django.db.models import Q, Sum, Count, Subquery, OuterRef
 from django.db import IntegrityError, ProgrammingError, transaction, connection
 from django.db.models.fields.related import ManyToManyField, ForeignKey
 from django.db.models.functions import Trunc
@@ -199,10 +199,10 @@ class DashboardView(APIView):
         data['groups'] = {'url': reverse('api:group_list', request=request), 'total': user_groups.count(), 'inventory_failed': groups_inventory_failed}
 
         user_hosts = get_user_queryset(request.user, models.Host).exclude(inventory__kind='constructed')
-        user_hosts_failed = user_hosts.filter(last_job_host_summary__failed=True)
+        latest_summary_failed = Subquery(models.JobHostSummary.objects.filter(host_id=OuterRef('pk')).order_by('-id').values('failed')[:1])
+        user_hosts_failed = user_hosts.annotate(_latest_failed=latest_summary_failed).filter(_latest_failed=True)
         data['hosts'] = {
             'url': reverse('api:host_list', request=request),
-            'failures_url': reverse('api:host_list', request=request) + "?last_job_host_summary__failed=True",
             'total': user_hosts.count(),
             'failed': user_hosts_failed.count(),
         }
@@ -1664,7 +1664,7 @@ class HostList(HostRelatedSearchMixin, ListCreateAPIView):
         if filter_string:
             filter_qs = SmartFilter.query_from_string(filter_string)
             qs &= filter_qs
-        return qs.distinct()
+        return qs.distinct().with_latest_summary_id()
 
     def list(self, *args, **kwargs):
         try:
@@ -1677,6 +1677,9 @@ class HostDetail(RelatedJobsPreventDeleteMixin, RetrieveUpdateDestroyAPIView):
     always_allow_superuser = False
     model = models.Host
     serializer_class = serializers.HostSerializer
+
+    def get_queryset(self):
+        return super().get_queryset().with_latest_summary_id()
 
     def delete(self, request, *args, **kwargs):
         if self.get_object().inventory.pending_deletion:
@@ -1706,6 +1709,9 @@ class InventoryHostsList(HostRelatedSearchMixin, SubListCreateAttachDetachAPIVie
     relationship = 'hosts'
     parent_key = 'inventory'
     filter_read_permission = False
+
+    def get_queryset(self):
+        return super().get_queryset().with_latest_summary_id()
 
 
 class HostGroupsList(SubListCreateAttachDetachAPIView):
@@ -1873,6 +1879,9 @@ class GroupHostsList(HostRelatedSearchMixin, SubListCreateAttachDetachAPIView):
     parent_model = models.Group
     relationship = 'hosts'
 
+    def get_queryset(self):
+        return super().get_queryset().with_latest_summary_id()
+
     def update_raw_data(self, data):
         data.pop('inventory', None)
         return super(GroupHostsList, self).update_raw_data(data)
@@ -1903,7 +1912,7 @@ class GroupAllHostsList(HostRelatedSearchMixin, SubListAPIView):
         self.check_parent_access(parent)
         qs = self.request.user.get_queryset(self.model).distinct()  # need distinct for '&' operator
         sublist_qs = parent.all_hosts.distinct()
-        return qs & sublist_qs
+        return (qs & sublist_qs).with_latest_summary_id()
 
 
 class GroupInventorySourcesList(SubListAPIView):
@@ -2191,6 +2200,9 @@ class InventorySourceGroupsList(SubListDestroyAPIView):
     parent_model = models.InventorySource
     relationship = 'groups'
     check_sub_obj_permission = False
+
+    def get_queryset(self):
+        return super().get_queryset().with_latest_summary_id()
 
     def perform_list_destroy(self, instance_list):
         inv_source = self.get_parent_object()
