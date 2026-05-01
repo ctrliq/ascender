@@ -116,8 +116,6 @@ USER root
 # Import the gpg key for DNF to work
 # RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial
 
-ADD https://copr.fedorainfracloud.org/coprs/ansible/Rsyslog/repo/epel-9/ansible-Rsyslog-epel-9.repo /etc/yum.repos.d/ansible-Rsyslog-epel-9.repo
-
 # Install runtime requirements
 RUN dnf -y update && dnf install -y 'dnf-command(config-manager)' && \
     dnf config-manager --set-enabled crb && \
@@ -136,8 +134,6 @@ RUN dnf -y update && dnf install -y 'dnf-command(config-manager)' && \
     "python3.12-packaging" \
     "python3.12-psycopg2" \
     rsync \
-#    rsyslog-8.2102.0-106.el9 \
-#    https://download.copr.fedorainfracloud.org/results/ansible/Rsyslog/epel-9-x86_64/06076718-rsyslog/rsyslog-8.2102.0-106.el9.x86_64.rpm \
     rsyslog \
     subversion \
     sudo \
@@ -147,9 +143,8 @@ RUN dnf -y update && dnf install -y 'dnf-command(config-manager)' && \
     xmlsec1-openssl && \
     dnf -y clean all
 
-RUN pip3.12 install -vv virtualenv supervisor dumb-init build
-
-RUN rm -rf /root/.cache && rm -rf /tmp/*
+RUN pip3.12 install --no-cache-dir -vv virtualenv supervisor dumb-init build && \
+    rm -rf /root/.cache /tmp/*
 
 {% if (build_dev|bool) or (kube_dev|bool) %}
 # Install development/test requirements
@@ -183,15 +178,17 @@ RUN dnf module reset nodejs -y && \
     npm install -g npm@10.9.3 && \
     dnf -y clean all
 
-RUN pip3.12 install -vv git+https://github.com/coderanger/supervisor-stdout.git@973ba19967cdaf46d9c1634d1675fc65b9574f6e
-RUN pip3.12 install -vv black setuptools-scm build
+RUN pip3.12 install --no-cache-dir -vv git+https://github.com/coderanger/supervisor-stdout.git@973ba19967cdaf46d9c1634d1675fc65b9574f6e && \
+    pip3.12 install --no-cache-dir -vv black setuptools-scm build && \
+    rm -rf /root/.cache /tmp/*
 
 # This package randomly fails to download.
 # It is nice to have in the dev env, but not necessary.
 # Add it back to the list above if the repo ever straighten up.
-RUN dnf --enablerepo=baseos-debug -y install python3-debuginfo || :
-#RUN dnf install -y epel-next-release && dnf install -y inotify-tools && dnf remove -y epel-next-release
-RUN dnf install -y epel-release && dnf install -y inotify-tools && dnf -y clean all
+RUN dnf --enablerepo=baseos-debug -y install python3-debuginfo || : && \
+    dnf install -y epel-release && \
+    dnf install -y inotify-tools && \
+    dnf -y clean all
 {% endif %}
 
 # Copy app from builder
@@ -224,7 +221,6 @@ RUN mkdir -p /etc/containers/registries.conf.d/ && echo "unqualified-search-regi
 ADD tools/ansible/roles/dockerfile/files/rsyslog.conf /var/lib/awx/rsyslog/rsyslog.conf
 ADD tools/ansible/roles/dockerfile/files/wait-for-migrations /usr/local/bin/wait-for-migrations
 ADD tools/ansible/roles/dockerfile/files/stop-supervisor /usr/local/bin/stop-supervisor
-
 ADD tools/ansible/roles/dockerfile/files/uwsgi.ini /etc/tower/uwsgi.ini
 
 ## File mappings
@@ -237,12 +233,12 @@ ADD tools/scripts/config-watcher /usr/bin/config-watcher
 ADD tools/docker-compose/containers.conf /etc/containers/containers.conf
 ADD tools/docker-compose/podman-containers.conf /var/lib/awx/.config/containers/containers.conf
 {% elif kube_dev|bool %}
-RUN ln -sf /awx_devel/tools/ansible/roles/dockerfile/files/launch_awx_web.sh /usr/bin/launch_awx_web.sh
-RUN ln -sf /awx_devel/tools/ansible/roles/dockerfile/files/launch_awx_task.sh /usr/bin/launch_awx_task.sh
-RUN ln -sf /awx_devel/tools/ansible/roles/dockerfile/files/launch_awx_rsyslog.sh /usr/bin/launch_awx_rsyslog.sh
-RUN ln -sf /awx_devel/{{ template_dest }}/supervisor_web.conf /etc/supervisord_web.conf
-RUN ln -sf /awx_devel/{{ template_dest }}/supervisor_task.conf /etc/supervisord_task.conf
-RUN ln -sf /awx_devel/{{ template_dest }}/supervisor_rsyslog.conf /etc/supervisord_rsyslog.conf
+RUN ln -sf /awx_devel/tools/ansible/roles/dockerfile/files/launch_awx_web.sh /usr/bin/launch_awx_web.sh && \
+    ln -sf /awx_devel/tools/ansible/roles/dockerfile/files/launch_awx_task.sh /usr/bin/launch_awx_task.sh && \
+    ln -sf /awx_devel/tools/ansible/roles/dockerfile/files/launch_awx_rsyslog.sh /usr/bin/launch_awx_rsyslog.sh && \
+    ln -sf /awx_devel/{{ template_dest }}/supervisor_web.conf /etc/supervisord_web.conf && \
+    ln -sf /awx_devel/{{ template_dest }}/supervisor_task.conf /etc/supervisord_task.conf && \
+    ln -sf /awx_devel/{{ template_dest }}/supervisor_rsyslog.conf /etc/supervisord_rsyslog.conf
 {% else %}
 ADD tools/ansible/roles/dockerfile/files/launch_awx_web.sh /usr/bin/launch_awx_web.sh
 ADD tools/ansible/roles/dockerfile/files/launch_awx_task.sh /usr/bin/launch_awx_task.sh
@@ -255,11 +251,11 @@ ADD tools/scripts/awx-python /usr/bin/awx-python
 {% endif %}
 
 {% if (build_dev|bool) or (kube_dev|bool) %}
-RUN echo /awx_devel > /var/lib/awx/venv/awx/lib/python3.12/site-packages/awx.egg-link
-RUN echo /awx_devel > /var/lib/awx/venv/awx/lib/python3.12/site-packages/awx.pth
-RUN ln -sf /awx_devel/tools/docker-compose/awx-manage /usr/local/bin/awx-manage
-RUN ln -sf /awx_devel/tools/scripts/awx-python /usr/bin/awx-python
-RUN ln -sf /awx_devel/tools/scripts/rsyslog-4xx-recovery /usr/bin/rsyslog-4xx-recovery
+RUN echo /awx_devel > /var/lib/awx/venv/awx/lib/python3.12/site-packages/awx.egg-link && \
+    echo /awx_devel > /var/lib/awx/venv/awx/lib/python3.12/site-packages/awx.pth && \
+    ln -sf /awx_devel/tools/docker-compose/awx-manage /usr/local/bin/awx-manage && \
+    ln -sf /awx_devel/tools/scripts/awx-python /usr/bin/awx-python && \
+    ln -sf /awx_devel/tools/scripts/rsyslog-4xx-recovery /usr/bin/rsyslog-4xx-recovery
 {% endif %}
 
 # Pre-create things we need to access
@@ -273,7 +269,8 @@ RUN for dir in \
       /var/lib/pgsql \
       /var/run/supervisor \
       /var/run/awx-receptor \
-      /var/lib/nginx ; \
+      /var/lib/nginx \
+      /var/log/tower ; \
     do mkdir -m 0775 -p $dir ; chmod g+rwx $dir ; chgrp root $dir ; done && \
     for file in \
       /etc/subuid \
