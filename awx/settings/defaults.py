@@ -275,7 +275,7 @@ SESSION_COOKIE_SECURE = True
 # When enabled, schedules remain stored as configured in the database, but
 # they are treated as disabled by the API and periodic scheduler. This is
 # intended for DR restore testing to prevent scheduled jobs from firing.
-DISABLE_ALL_SCHEDULES = True
+DISABLE_ALL_SCHEDULES = False
 
 # Seconds before sessions expire.
 # Note: This setting may be overridden by database settings.
