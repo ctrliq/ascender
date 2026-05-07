@@ -474,7 +474,7 @@ tempora==5.5.1
     #   jaraco-logging
 twilio==8.13.0
     # via -r /awx_devel/requirements/requirements.in
-twisted[tls]==24.7.0
+twisted[tls]==26.4.0rc2
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   daphne
