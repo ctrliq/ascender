@@ -5419,6 +5419,12 @@ class ScheduleSerializer(LaunchConfigurationBaseSerializer, SchedulePreviewSeria
     def get_until(self, obj):
         return obj.until
 
+    def to_representation(self, obj):
+        data = super(ScheduleSerializer, self).to_representation(obj)
+        if getattr(settings, 'DISABLE_ALL_SCHEDULES', False):
+            data['enabled'] = False
+        return data
+
     def get_related(self, obj):
         res = super(ScheduleSerializer, self).get_related(obj)
         res.update(dict(unified_jobs=self.reverse('api:schedule_unified_jobs_list', kwargs={'pk': obj.pk})))

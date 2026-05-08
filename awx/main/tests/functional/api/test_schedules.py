@@ -1,6 +1,7 @@
 import datetime
 import pytest
 
+from django.test import override_settings
 from django.utils.encoding import smart_str
 from django.utils.timezone import now
 
@@ -127,6 +128,19 @@ def test_survey_password_default(post, patch, admin_user, project, inventory, su
     # test an unrelated change
     patch(schedule.get_absolute_url(), data={'enabled': False}, user=admin_user, expect=200)
     patch(schedule.get_absolute_url(), data={'enabled': True}, user=admin_user, expect=200)
+
+
+@pytest.mark.django_db
+def test_schedule_detail_returns_disabled_when_all_schedules_are_globally_disabled(get, admin_user, project, inventory):
+    job_template = JobTemplate.objects.create(name='test-jt', project=project, playbook='helloworld.yml', inventory=inventory)
+    schedule = Schedule.objects.create(name='test sch', rrule=RRULE_EXAMPLE, unified_job_template=job_template, enabled=True)
+
+    with override_settings(DISABLE_ALL_SCHEDULES=True):
+        response = get(schedule.get_absolute_url(), admin_user, expect=200)
+
+    assert response.data['enabled'] is False
+    schedule.refresh_from_db()
+    assert schedule.enabled is True
 
 
 @pytest.mark.django_db

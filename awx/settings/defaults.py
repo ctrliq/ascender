@@ -272,6 +272,11 @@ K8S_POD_REAPER_GRACE_PERIOD = 60
 # Disallow sending session cookies over insecure connections
 SESSION_COOKIE_SECURE = True
 
+# When enabled, schedules remain stored as configured in the database, but
+# they are treated as disabled by the API and periodic scheduler. This is
+# intended for DR restore testing to prevent scheduled jobs from firing.
+DISABLE_ALL_SCHEDULES = False
+
 # Seconds before sessions expire.
 # Note: This setting may be overridden by database settings.
 SESSION_COOKIE_AGE = 1800
