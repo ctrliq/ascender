@@ -726,7 +726,7 @@ def awx_periodic_scheduler():
         state.save()
 
         if getattr(settings, 'DISABLE_ALL_SCHEDULES', False):
-            logger.info("Skipping periodic scheduler because DISABLE_ALL_SCHEDULES is enabled")
+            logger.debug("Skipping periodic scheduler because DISABLE_ALL_SCHEDULES is enabled")
             return
 
         old_schedules = Schedule.objects.enabled().before(last_run)
