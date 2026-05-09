@@ -151,14 +151,14 @@ virtualenv_awx:
 # this does not use system site packages intentionally
 requirements_awx: virtualenv_awx
 	if [[ "$(PIP_OPTIONS)" == *"--no-index"* ]]; then \
-	    cat requirements/requirements.txt requirements/requirements_local.txt | $(VENV_BASE)/awx/bin/pip install $(PIP_OPTIONS) -r /dev/stdin ; \
+	    cat requirements/requirements.txt requirements/requirements_local.txt | UWSGI_PROFILE_OVERRIDE=xml=false $(VENV_BASE)/awx/bin/pip install $(PIP_OPTIONS) -r /dev/stdin ; \
 	else \
-	    cat requirements/requirements.txt requirements/requirements_git.txt | $(VENV_BASE)/awx/bin/pip install $(PIP_OPTIONS) --no-binary $(SRC_ONLY_PKGS) -r /dev/stdin ; \
+	    cat requirements/requirements.txt requirements/requirements_git.txt | UWSGI_PROFILE_OVERRIDE=xml=false $(VENV_BASE)/awx/bin/pip install $(PIP_OPTIONS) --no-binary $(SRC_ONLY_PKGS) -r /dev/stdin ; \
 	fi
 	$(VENV_BASE)/awx/bin/pip uninstall --yes -r requirements/requirements_tower_uninstall.txt
 
 requirements_awx_dev:
-	$(VENV_BASE)/awx/bin/pip install -r requirements/requirements_dev.txt
+	UWSGI_PROFILE_OVERRIDE=xml=false $(VENV_BASE)/awx/bin/pip install -r requirements/requirements_dev.txt
 
 requirements: requirements_awx
 
