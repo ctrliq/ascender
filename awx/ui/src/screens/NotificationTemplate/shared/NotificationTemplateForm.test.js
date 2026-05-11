@@ -29,6 +29,22 @@ const template = {
   },
 };
 
+const emailTemplate = {
+  ...template,
+  notification_type: 'email',
+  notification_configuration: {
+    host: 'smtp.example.com',
+    port: 587,
+    recipients: ['ops@example.com'],
+    sender: 'alerts@example.com',
+    timeout: 30,
+    password: '$encrypted$',
+    username: 'smtp-user',
+    use_ssl: false,
+    use_tls: false,
+  },
+};
+
 const messageDef = {
   message: 'default message',
   body: 'default body',
@@ -49,6 +65,90 @@ const defaultMessages = {
   slack: defaults,
   twilio: defaults,
 };
+
+const allDefaultMessages = {
+  ...defaultMessages,
+  grafana: defaults,
+  irc: defaults,
+  mattermost: defaults,
+  pagerduty: defaults,
+  rocketchat: defaults,
+  webhook: defaults,
+};
+
+const buildTemplate = (notificationType, notificationConfiguration) => ({
+  ...template,
+  notification_type: notificationType,
+  notification_configuration: notificationConfiguration,
+});
+
+const secretTemplates = [
+  {
+    type: 'grafana',
+    fieldName: 'notification_configuration.grafana_key',
+    template: buildTemplate('grafana', {
+      grafana_url: 'https://grafana.example.com',
+      grafana_key: '$encrypted$',
+      dashboardId: '',
+      panelId: '',
+      annotation_tags: [],
+      grafana_no_verify_ssl: false,
+    }),
+  },
+  {
+    type: 'irc',
+    fieldName: 'notification_configuration.password',
+    template: buildTemplate('irc', {
+      password: '$encrypted$',
+      port: 6667,
+      server: 'irc.example.com',
+      nickname: 'awx',
+      targets: ['#alerts'],
+      use_ssl: false,
+    }),
+  },
+  {
+    type: 'pagerduty',
+    fieldName: 'notification_configuration.token',
+    template: buildTemplate('pagerduty', {
+      token: '$encrypted$',
+      subdomain: 'example',
+      service_key: 'service-key',
+      client_name: 'awx',
+    }),
+  },
+  {
+    type: 'slack',
+    fieldName: 'notification_configuration.token',
+    template: buildTemplate('slack', {
+      channels: ['#alerts'],
+      token: '$encrypted$',
+      hex_color: '',
+    }),
+  },
+  {
+    type: 'twilio',
+    fieldName: 'notification_configuration.account_token',
+    template: buildTemplate('twilio', {
+      account_token: '$encrypted$',
+      from_number: '+18005550199',
+      to_numbers: ['+11231231234'],
+      account_sid: 'AC123',
+    }),
+  },
+  {
+    type: 'webhook',
+    fieldName: 'notification_configuration.password',
+    template: buildTemplate('webhook', {
+      username: 'service-user',
+      password: '$encrypted$',
+      url: 'https://example.com/webhook',
+      disable_ssl_verification: false,
+      headers: {},
+      http_method: 'POST',
+    }),
+  },
+];
 
 describe('<NotificationTemplateForm />', () => {
   let wrapper;
@@ -168,4 +268,86 @@ describe('<NotificationTemplateForm />', () => {
       messages: null,
     });
   });
+
+  test('should clear the email password when reverted', async () => {
+    const handleSubmit = jest.fn();
+    await act(async () => {
+      wrapper = mountWithContexts(
+        <NotificationTemplateForm
+          template={emailTemplate}
+          defaultMessages={defaultMessages}
+          detailUrl="/notification_templates/3/detail"
+          onSubmit={handleSubmit}
+          onCancel={jest.fn()}
+        />
+      );
+    });
+
+    await act(async () => {
+      wrapper
+        .find('Button')
+        .filterWhere(
+          (node) => node.prop('ouiaId') === 'notification_configuration.password-revert'
+        )
+        .simulate('click');
+    });
+    wrapper.update();
+
+    await act(async () => {
+      wrapper.find('FormActionGroup').invoke('onSubmit')();
+    });
+    wrapper.update();
+
+    expect(handleSubmit).toHaveBeenCalledWith(
+      expect.objectContaining({
+        notification_configuration: expect.objectContaining({
+          password: '',
+        }),
+      })
+    );
+  });
+
+  test.each(secretTemplates)(
+    'should clear the $type secret when reverted',
+    async ({ template: secretTemplate, fieldName }) => {
+      const handleSubmit = jest.fn();
+      await act(async () => {
+        wrapper = mountWithContexts(
+          <NotificationTemplateForm
+            template={secretTemplate}
+            defaultMessages={allDefaultMessages}
+            detailUrl="/notification_templates/3/detail"
+            onSubmit={handleSubmit}
+            onCancel={jest.fn()}
+          />
+        );
+      });
+
+      const revertButton = wrapper
+        .find('Button')
+        .filterWhere(
+          (node) => node.prop('ouiaId') === `${fieldName}-revert`
+        );
+
+      expect(revertButton.exists()).toBe(true);
+
+      await act(async () => {
+        revertButton.simulate('click');
+      });
+      wrapper.update();
+
+      await act(async () => {
+        wrapper.find('FormActionGroup').invoke('onSubmit')();
+      });
+      wrapper.update();
+
+      expect(handleSubmit).toHaveBeenCalledWith(
+        expect.objectContaining({
+          notification_configuration: expect.objectContaining({
+            [fieldName.split('.').pop()]: '',
+          }),
+        })
+      );
+    }
+  );
 });
