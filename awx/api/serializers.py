@@ -958,6 +958,7 @@ class UnifiedJobStdoutSerializer(UnifiedJobSerializer):
 class UserSerializer(BaseSerializer):
     password = serializers.CharField(required=False, default='', help_text=_('Field used to change the password.'))
     ldap_dn = serializers.CharField(source='profile.ldap_dn', read_only=True)
+    preferred_language = serializers.CharField(required=False, allow_blank=True, default='')
     external_account = serializers.SerializerMethodField(help_text=_('Set if the account is managed by an external service'))
     is_system_auditor = serializers.BooleanField(default=False)
     show_capabilities = ['edit', 'delete']
@@ -976,6 +977,7 @@ class UserSerializer(BaseSerializer):
             'is_system_auditor',
             'password',
             'ldap_dn',
+            'preferred_language',
             'last_login',
             'external_account',
         )
@@ -991,11 +993,15 @@ class UserSerializer(BaseSerializer):
             ret['password'] = '$encrypted$'
         if obj and type(self) is UserSerializer:
             ret['auth'] = obj.social_auth.values('provider', 'uid')
+        try:
+            ret['preferred_language'] = obj.profile.language
+        except Exception:
+            ret['preferred_language'] = ''
         return ret
 
     def get_validation_exclusions(self, obj=None):
         ret = super(UserSerializer, self).get_validation_exclusions(obj)
-        ret.extend(['password', 'is_system_auditor'])
+        ret.extend(['password', 'is_system_auditor', 'preferred_language'])
         return ret
 
     def validate_password(self, value):
@@ -1043,22 +1049,32 @@ class UserSerializer(BaseSerializer):
     def get_external_account(self, obj):
         return get_external_account(obj)
 
+    def _update_preferred_language(self, obj, language):
+        obj.profile.language = language
+        obj.profile.save(update_fields=['language'])
+
     def create(self, validated_data):
+        preferred_language = validated_data.pop('preferred_language', None)
         new_password = validated_data.pop('password', None)
         is_system_auditor = validated_data.pop('is_system_auditor', None)
         obj = super(UserSerializer, self).create(validated_data)
         self._update_password(obj, new_password)
         if is_system_auditor is not None:
             obj.is_system_auditor = is_system_auditor
+        if preferred_language is not None:
+            self._update_preferred_language(obj, preferred_language)
         return obj
 
     def update(self, obj, validated_data):
+        preferred_language = validated_data.pop('preferred_language', None)
         new_password = validated_data.pop('password', None)
         is_system_auditor = validated_data.pop('is_system_auditor', None)
         obj = super(UserSerializer, self).update(obj, validated_data)
         self._update_password(obj, new_password)
         if is_system_auditor is not None:
             obj.is_system_auditor = is_system_auditor
+        if preferred_language is not None:
+            self._update_preferred_language(obj, preferred_language)
         return obj
 
     def get_related(self, obj):

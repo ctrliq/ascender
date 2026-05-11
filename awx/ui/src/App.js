@@ -145,7 +145,10 @@ function App() {
   const pseudolocalization =
     searchParams.pseudolocalization === 'true' || false;
   let language =
-    searchParams.lang || getLanguageWithoutRegionCode(navigator) || 'en';
+    searchParams.lang ||
+    localStorage.getItem('preferred_language') ||
+    getLanguageWithoutRegionCode(navigator) ||
+    'en';
 
   if (!Object.keys(locales).includes(language)) {
     // If there isn't a string catalog available for the browser's

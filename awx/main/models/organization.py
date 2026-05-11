@@ -170,6 +170,11 @@ class Profile(CreatedModifiedModel):
         max_length=1024,
         default='',
     )
+    language = models.CharField(
+        max_length=8,
+        default='',
+        blank=True,
+    )
 
 
 class UserSessionMembership(BaseModel):
