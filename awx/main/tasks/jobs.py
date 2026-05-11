@@ -1092,8 +1092,8 @@ class RunJob(SourceControlMixin, BaseTask):
         # where ansible expects to find it
         if self.should_use_fact_cache():
             job.log_lifecycle("start_job_fact_cache")
-            self.facts_write_time, self.hosts_with_facts_cached = start_fact_cache(
-                job.get_hosts_for_fact_cache(), os.path.join(private_data_dir, 'artifacts', str(job.id), 'fact_cache'), inventory_id=job.inventory_id
+            self.hosts_with_facts_cached = start_fact_cache(
+                job.get_hosts_for_fact_cache(), artifacts_dir=os.path.join(private_data_dir, 'artifacts', str(job.id)), inventory_id=job.inventory_id
             )
 
     def build_project_dir(self, job, private_data_dir):
@@ -1103,7 +1103,7 @@ class RunJob(SourceControlMixin, BaseTask):
         super(RunJob, self).post_run_hook(job, status)
         job.refresh_from_db(fields=['job_env'])
         private_data_dir = job.job_env.get('AWX_PRIVATE_DATA_DIR')
-        if (not private_data_dir) or (not hasattr(self, 'facts_write_time')):
+        if not private_data_dir:
             # If there's no private data dir, that means we didn't get into the
             # actual `run()` call; this _usually_ means something failed in
             # the pre_run_hook method
@@ -1111,9 +1111,7 @@ class RunJob(SourceControlMixin, BaseTask):
         if self.should_use_fact_cache() and self.runner_callback.artifacts_processed:
             job.log_lifecycle("finish_job_fact_cache")
             finish_fact_cache(
-                self.hosts_with_facts_cached,
-                os.path.join(private_data_dir, 'artifacts', str(job.id), 'fact_cache'),
-                facts_write_time=self.facts_write_time,
+                artifacts_dir=os.path.join(private_data_dir, 'artifacts', str(job.id)),
                 job_id=job.id,
                 inventory_id=job.inventory_id,
             )
@@ -1563,7 +1561,7 @@ class RunInventoryUpdate(SourceControlMixin, BaseTask):
                 # Include any facts from input inventories so they can be used in filters
                 start_fact_cache(
                     input_inventory.hosts.only(*HOST_FACTS_FIELDS),
-                    os.path.join(private_data_dir, 'artifacts', str(inventory_update.id), 'fact_cache'),
+                    artifacts_dir=os.path.join(private_data_dir, 'artifacts', str(inventory_update.id)),
                     inventory_id=input_inventory.id,
                 )
 
