@@ -1,7 +1,9 @@
 import React, { useMemo } from 'react';
+import PropTypes from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
-import { FormGroup, Title } from '@patternfly/react-core';
+import { FormGroup, InputGroup, Title } from '@patternfly/react-core';
+import styled from 'styled-components';
 import {
   FormCheckboxLayout,
   FormColumnLayout,
@@ -9,7 +11,7 @@ import {
   SubFormLayout,
 } from 'components/FormLayout';
 import FormField, {
-  PasswordField,
+  PasswordInput,
   CheckboxField,
   ArrayTextField,
 } from 'components/FormField';
@@ -25,6 +27,23 @@ import {
 } from 'util/validators';
 import { NotificationType } from 'types';
 import Popover from '../../../components/Popover/Popover';
+import RevertButton from '../../Setting/shared/RevertButton';
+
+const PasswordFormGroup = styled(FormGroup)`
+  .pf-c-form__group-label {
+    display: inline-flex;
+    align-items: center;
+    width: 100%;
+  }
+`;
+
+const editFieldPropTypes = {
+  isEdit: PropTypes.bool,
+};
+
+const editFieldDefaultProps = {
+  isEdit: false,
+};
 
 const TypeFields = {
   email: EmailFields,
@@ -37,7 +56,7 @@ const TypeFields = {
   twilio: TwilioFields,
   webhook: WebhookFields,
 };
-function TypeInputsSubForm({ type }) {
+function TypeInputsSubForm({ type, isEdit }) {
   const { t } = useLingui();
   const Fields = TypeFields[type];
   return (
@@ -46,18 +65,73 @@ function TypeInputsSubForm({ type }) {
         {t`Type Details`}
       </Title>
       <FormColumnLayout>
-        <Fields />
+        <Fields isEdit={isEdit} />
       </FormColumnLayout>
     </SubFormLayout>
   );
 }
 TypeInputsSubForm.propTypes = {
   type: NotificationType.isRequired,
+  isEdit: PropTypes.bool,
+};
+
+TypeInputsSubForm.defaultProps = {
+  isEdit: false,
 };
 
 export default TypeInputsSubForm;
 
-function EmailFields() {
+function SecretPasswordField({
+  id,
+  label,
+  name,
+  isEdit,
+  isRequiredOnCreate = false,
+}) {
+  const validate = isRequiredOnCreate && !isEdit ? required(null) : undefined;
+  const [, meta] = useField({ name, validate });
+  const isValid = !(meta.touched && meta.error);
+  const isRequired = isRequiredOnCreate && !isEdit;
+
+  return (
+    <PasswordFormGroup
+      fieldId={id}
+      helperTextInvalid={meta.error}
+      label={label}
+      validated={isValid ? 'default' : 'error'}
+      isRequired={isRequired}
+      labelIcon={
+        isEdit ? (
+          <RevertButton id={name} defaultValue="" />
+        ) : null
+      }
+    >
+      <InputGroup>
+        <PasswordInput
+          id={id}
+          name={name}
+          validate={validate}
+          isRequired={isRequired}
+        />
+      </InputGroup>
+    </PasswordFormGroup>
+  );
+}
+
+SecretPasswordField.propTypes = {
+  id: PropTypes.string.isRequired,
+  label: PropTypes.node.isRequired,
+  name: PropTypes.string.isRequired,
+  isEdit: PropTypes.bool,
+  isRequiredOnCreate: PropTypes.bool,
+};
+
+SecretPasswordField.defaultProps = {
+  isEdit: false,
+  isRequiredOnCreate: false,
+};
+
+function EmailFields({ isEdit }) {
   const { t } = useLingui();
   const helpText = useMemo(() => ({
     emailRecipients: t`Use one email address per line to create a recipient list for this type of notification.`,
@@ -86,10 +160,11 @@ function EmailFields() {
         name="notification_configuration.username"
         type="text"
       />
-      <PasswordField
+      <SecretPasswordField
         id="email-password"
         label={t`Password`}
         name="notification_configuration.password"
+        isEdit={isEdit}
       />
       <FormField
         id="email-host"
@@ -160,7 +235,7 @@ function EmailFields() {
   );
 }
 
-function GrafanaFields() {
+function GrafanaFields({ isEdit }) {
   const { t } = useLingui();
   const helpText = {
     grafanaUrl: t`The base URL of the Grafana server - the
@@ -179,12 +254,12 @@ function GrafanaFields() {
         isRequired
         tooltip={helpText.grafanaUrl}
       />
-      <PasswordField
+      <SecretPasswordField
         id="grafana-key"
         label={t`Grafana API key`}
         name="notification_configuration.grafana_key"
-        validate={required(null)}
-        isRequired
+        isEdit={isEdit}
+        isRequiredOnCreate
       />
       <FormField
         id="grafana-dashboard-id"
@@ -215,7 +290,15 @@ function GrafanaFields() {
   );
 }
 
-function IRCFields() {
+EmailFields.propTypes = editFieldPropTypes;
+
+EmailFields.defaultProps = editFieldDefaultProps;
+
+
+GrafanaFields.propTypes = editFieldPropTypes;
+
+GrafanaFields.defaultProps = editFieldDefaultProps;
+function IRCFields({ isEdit }) {
   const { t } = useLingui();
   const helpText = {
     ircTargets: t`Use one IRC channel or username per line. The pound
@@ -224,10 +307,11 @@ function IRCFields() {
   };
   return (
     <>
-      <PasswordField
+      <SecretPasswordField
         id="irc-password"
         label={t`IRC server password`}
         name="notification_configuration.password"
+        isEdit={isEdit}
       />
       <FormField
         id="irc-port"
@@ -272,6 +356,10 @@ function IRCFields() {
   );
 }
 
+IRCFields.propTypes = editFieldPropTypes;
+
+IRCFields.defaultProps = editFieldDefaultProps;
+
 function MattermostFields() {
   const { t } = useLingui();
   return (
@@ -312,16 +400,16 @@ function MattermostFields() {
   );
 }
 
-function PagerdutyFields() {
+function PagerdutyFields({ isEdit }) {
   const { t } = useLingui();
   return (
     <>
-      <PasswordField
+      <SecretPasswordField
         id="pagerduty-token"
         label={t`API Token`}
         name="notification_configuration.token"
-        validate={required(null)}
-        isRequired
+        isEdit={isEdit}
+        isRequiredOnCreate
       />
       <FormField
         id="pagerduty-subdomain"
@@ -350,6 +438,10 @@ function PagerdutyFields() {
     </>
   );
 }
+
+PagerdutyFields.propTypes = editFieldPropTypes;
+
+PagerdutyFields.defaultProps = editFieldDefaultProps;
 
 function RocketChatFields() {
   const { t } = useLingui();
@@ -385,7 +477,7 @@ function RocketChatFields() {
   );
 }
 
-function SlackFields() {
+function SlackFields({ isEdit }) {
   const { t } = useLingui();
   const helpText = useMemo(() => ({
     slackChannels: (
@@ -412,12 +504,12 @@ function SlackFields() {
         isRequired
         tooltip={helpText.slackChannels}
       />
-      <PasswordField
+      <SecretPasswordField
         id="slack-token"
         label={t`Token`}
         name="notification_configuration.token"
-        validate={required(null)}
-        isRequired
+        isEdit={isEdit}
+        isRequiredOnCreate
       />
       <FormField
         id="slack-color"
@@ -430,7 +522,11 @@ function SlackFields() {
   );
 }
 
-function TwilioFields() {
+SlackFields.propTypes = editFieldPropTypes;
+
+SlackFields.defaultProps = editFieldDefaultProps;
+
+function TwilioFields({ isEdit }) {
   const { t } = useLingui();
   const helpText = {
     twilioSourcePhoneNumber: t`The number associated with the "Messaging
@@ -440,12 +536,12 @@ function TwilioFields() {
   };
   return (
     <>
-      <PasswordField
+      <SecretPasswordField
         id="twilio-token"
         label={t`Account token`}
         name="notification_configuration.account_token"
-        validate={required(null)}
-        isRequired
+        isEdit={isEdit}
+        isRequiredOnCreate
       />
       <FormField
         id="twilio-from-phone"
@@ -477,7 +573,11 @@ function TwilioFields() {
   );
 }
 
-function WebhookFields() {
+TwilioFields.propTypes = editFieldPropTypes;
+
+TwilioFields.defaultProps = editFieldDefaultProps;
+
+function WebhookFields({ isEdit }) {
   const { t } = useLingui();
   const helpText = {
     webhookHeaders: t`Specify HTTP Headers in JSON format. Refer to
@@ -495,10 +595,11 @@ function WebhookFields() {
         name="notification_configuration.username"
         type="text"
       />
-      <PasswordField
+      <SecretPasswordField
         id="webhook-password"
         label={t`Basic auth password`}
         name="notification_configuration.password"
+        isEdit={isEdit}
       />
       <FormField
         id="webhook-url"
@@ -550,3 +651,7 @@ function WebhookFields() {
     </>
   );
 }
+
+WebhookFields.propTypes = editFieldPropTypes;
+
+WebhookFields.defaultProps = editFieldDefaultProps;
