@@ -294,7 +294,6 @@ EmailFields.propTypes = editFieldPropTypes;
 
 EmailFields.defaultProps = editFieldDefaultProps;
 
-
 GrafanaFields.propTypes = editFieldPropTypes;
 
 GrafanaFields.defaultProps = editFieldDefaultProps;
