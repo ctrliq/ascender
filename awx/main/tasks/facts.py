@@ -1,4 +1,3 @@
-import codecs
 import datetime
 import os
 import json
@@ -43,7 +42,7 @@ def start_fact_cache(hosts, destination, log_data, timeout=None, inventory_id=No
             continue
 
         try:
-            with codecs.open(filepath, 'w', encoding='utf-8') as f:
+            with open(filepath, 'w', encoding='utf-8') as f:
                 os.chmod(f.name, 0o600)
                 json.dump(host.ansible_facts, f)
                 log_data['written_ct'] += 1
@@ -82,7 +81,7 @@ def finish_fact_cache(hosts_cached, destination, facts_write_time, log_data, job
             # If the file changed since we wrote the last facts file, pre-playbook run...
             modified = os.path.getmtime(filepath)
             if (not facts_write_time) or modified > facts_write_time:
-                with codecs.open(filepath, 'r', encoding='utf-8') as f:
+                with open(filepath, 'r', encoding='utf-8') as f:
                     try:
                         ansible_facts = json.load(f)
                     except ValueError:

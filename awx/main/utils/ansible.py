@@ -2,7 +2,6 @@
 # All Rights Reserved.
 
 # Python
-import codecs
 import re
 import os
 import logging
@@ -48,7 +47,7 @@ def could_be_playbook(project_path, dir_path, filename):
     # show up.
     matched = False
     try:
-        for n, line in enumerate(codecs.open(playbook_path, 'r', encoding='utf-8', errors='ignore')):
+        for n, line in enumerate(open(playbook_path, 'r', encoding='utf-8', errors='ignore')):
             if valid_playbook_re.match(line):
                 matched = True
                 break
