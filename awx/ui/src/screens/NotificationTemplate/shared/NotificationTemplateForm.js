@@ -90,7 +90,9 @@ function NotificationTemplateFormFields({ defaultMessages, template }) {
           ]}
         />
       </FormGroup>
-      {typeField.value && <TypeInputsSubForm type={typeField.value} />}
+      {typeField.value && (
+        <TypeInputsSubForm type={typeField.value} isEdit={Boolean(template?.id)} />
+      )}
       <CustomMessagesSubForm
         defaultMessages={defaultMessages}
         type={typeField.value}

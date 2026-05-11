@@ -1,4 +1,3 @@
-import codecs
 import datetime
 import os
 import json
@@ -44,7 +43,7 @@ def start_fact_cache(hosts, artifacts_dir, timeout=None, inventory_id=None, log_
             continue
 
         try:
-            with codecs.open(filepath, 'w', encoding='utf-8') as f:
+            with open(filepath, 'w', encoding='utf-8') as f:
                 os.chmod(f.name, 0o600)
                 json.dump(host.ansible_facts, f)
                 log_data['written_ct'] += 1
@@ -108,7 +107,7 @@ def finish_fact_cache(artifacts_dir, job_id=None, inventory_id=None, log_data=No
             modified = os.path.getmtime(filepath)
             if not facts_write_time or modified >= facts_write_time:
                 try:
-                    with codecs.open(filepath, 'r', encoding='utf-8') as f:
+                    with open(filepath, 'r', encoding='utf-8') as f:
                         ansible_facts = json.load(f)
                 except ValueError:
                     continue
