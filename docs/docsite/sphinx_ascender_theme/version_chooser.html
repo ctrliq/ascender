@@ -6,9 +6,18 @@
       <script>
         function switchVersionTo(slug) {
           var current_url_path = window.location.pathname;
-          var url_version = current_url_path.search("/{{ current_version }}/") > -1
-            ? "/{{ current_version }}/"
-            : "/latest/";
+          var current_version = "{{ current_version }}";
+          if (!/^[a-zA-Z0-9_\/-]+$/.test(slug)) {
+            return;
+          }
+          var url_version = null;
+          if (/^[0-9]+\.[0-9]+\.[0-9]+$/.test(current_version) && current_url_path.indexOf("/" + current_version + "/") > -1) {
+            url_version = "/" + current_version + "/";
+          } else if (current_url_path.indexOf("/latest/") > -1) {
+            url_version = "/latest/";
+          } else {
+            return;
+          }
           var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
           window.location.replace(new_version_url);
         }
