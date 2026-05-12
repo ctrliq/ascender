@@ -39,7 +39,7 @@ const CardHeader = styled(_CardHeader)`
   }
 `;
 const CardDescription = styled.div`
-  color: var(--pf-global--palette--black-600);
+  color: var(--pf-global--Color--200);
   font-size: var(--pf-global--FontSize--xs);
 `;
 

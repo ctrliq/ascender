@@ -39,7 +39,7 @@ const Loader = styled(ContentLoading)`
   height: 100%;
   position: absolute;
   width: 100%;
-  background: white;
+  background: var(--pf-global--BackgroundColor--100);
 `;
 function MeshGraph({
   data,

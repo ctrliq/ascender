@@ -4,8 +4,8 @@ import { useLingui } from '@lingui/react/macro';
 import { AngleDownIcon, AngleRightIcon } from '@patternfly/react-icons';
 
 const Wrapper = styled.div`
-  background-color: #ebebeb;
-  color: #646972;
+  background-color: var(--pf-global--BackgroundColor--200);
+  color: var(--pf-global--Color--200);
   display: flex;
   flex: 0 0 30px;
   font-size: 18px;

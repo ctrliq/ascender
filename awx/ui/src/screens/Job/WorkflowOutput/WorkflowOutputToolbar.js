@@ -19,7 +19,7 @@ import {
 
 const Toolbar = styled.div`
   align-items: center;
-  border-bottom: 1px solid grey;
+  border-bottom: 1px solid var(--pf-global--BorderColor--100);
   display: flex;
   height: 56px;
 `;
@@ -53,13 +53,13 @@ const ActionButton = styled(Button)`
   margin: 0px 6px;
   padding: 6px 10px;
   &:hover {
-    background-color: #0066cc;
-    color: white;
+    background-color: var(--pf-global--primary-color--100);
+    color: #fff;
   }
 
   &.pf-m-active {
-    background-color: #0066cc;
-    color: white;
+    background-color: var(--pf-global--primary-color--100);
+    color: #fff;
   }
 `;
 function WorkflowOutputToolbar({ job }) {

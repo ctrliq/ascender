@@ -5,7 +5,7 @@ import { useLingui } from '@lingui/react/macro';
 import { Badge, Tooltip } from '@patternfly/react-core';
 
 const BarWrapper = styled.div`
-  background-color: #d7d7d7;
+  background-color: var(--pf-global--BackgroundColor--200);
   display: flex;
   height: 5px;
   margin-top: 16px;

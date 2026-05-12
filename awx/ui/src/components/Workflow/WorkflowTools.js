@@ -18,14 +18,14 @@ import {
 import { WorkflowDispatchContext } from 'contexts/Workflow';
 
 const Wrapper = styled.div`
-  background-color: white;
-  border: 1px solid #c7c7c7;
+  background-color: var(--pf-global--BackgroundColor--100);
+  border: 1px solid var(--pf-global--BorderColor--100);
   height: 215px;
   position: relative;
 `;
 
 const Header = styled.div`
-  border-bottom: 1px solid #c7c7c7;
+  border-bottom: 1px solid var(--pf-global--BorderColor--100);
   padding: 10px;
 `;
 

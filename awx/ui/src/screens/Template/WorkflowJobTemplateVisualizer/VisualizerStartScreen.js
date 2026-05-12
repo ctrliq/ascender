@@ -16,15 +16,15 @@ const Button = styled(PFButton)`
 `;
 
 const StartPanel = styled.div`
-  background-color: white;
-  border: 1px solid #c7c7c7;
+  background-color: var(--pf-global--BackgroundColor--100);
+  border: 1px solid var(--pf-global--BorderColor--100);
   padding: 60px 80px;
   text-align: center;
 `;
 
 const StartPanelWrapper = styled.div`
   align-items: center;
-  background-color: #f6f6f6;
+  background-color: var(--pf-global--BackgroundColor--200);
   display: flex;
   height: 100%;
   justify-content: center;

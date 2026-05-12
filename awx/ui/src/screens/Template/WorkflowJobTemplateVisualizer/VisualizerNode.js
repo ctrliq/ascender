@@ -34,7 +34,7 @@ const NodeContents = styled.div`
   font-size: 13px;
   padding: 0px 10px;
   background-color: ${(props) =>
-    props.isInvalidLinkTarget ? '#D7D7D7' : '#FFFFFF'};
+    props.isInvalidLinkTarget ? 'var(--pf-global--BackgroundColor--200)' : 'var(--pf-global--BackgroundColor--100)'};
   height: 100%;
   display: flex;
   justify-content: center;
@@ -302,21 +302,21 @@ function VisualizerNode({
           : node?.originalNodeObject?.all_parents_must_converge) && (
           <>
             <rect
-              fill={
-                hovering && addingLink && !node.isInvalidLinkTarget
-                  ? '#007ABC'
-                  : '#93969A'
-              }
+              style={{
+                fill:
+                  hovering && addingLink && !node.isInvalidLinkTarget
+                    ? 'var(--pf-global--primary-color--100)'
+                    : 'var(--pf-global--BorderColor--100)',
+                stroke:
+                  hovering && addingLink && !node.isInvalidLinkTarget
+                    ? 'var(--pf-global--primary-color--100)'
+                    : 'var(--pf-global--BorderColor--100)',
+              }}
               height={wfConstants.nodeH / 4}
               rx={2}
               ry={2}
               x={wfConstants.nodeW / 2 - wfConstants.nodeW / 10}
               y={-wfConstants.nodeH / 4 + 2}
-              stroke={
-                hovering && addingLink && !node.isInvalidLinkTarget
-                  ? '#007ABC'
-                  : '#93969A'
-              }
               strokeWidth="2px"
               width={wfConstants.nodeW / 5}
             />
@@ -333,15 +333,16 @@ function VisualizerNode({
           </>
         )}
         <rect
-          fill="#FFFFFF"
+          style={{
+            fill: 'var(--pf-global--BackgroundColor--100)',
+            stroke:
+              hovering && addingLink && !node.isInvalidLinkTarget
+                ? 'var(--pf-global--primary-color--100)'
+                : 'var(--pf-global--BorderColor--100)',
+          }}
           height={wfConstants.nodeH}
           rx="2"
           ry="2"
-          stroke={
-            hovering && addingLink && !node.isInvalidLinkTarget
-              ? '#007ABC'
-              : '#93969A'
-          }
           strokeWidth="2px"
           width={wfConstants.nodeW}
         />

@@ -28,7 +28,7 @@ const PotentialLink = styled.polyline`
   pointer-events: none;
 `;
 const WorkflowSVG = styled.svg`
-  background-color: #f6f6f6;
+  background-color: var(--pf-global--BackgroundColor--200);
   display: flex;
   height: 100%;
 `;
@@ -231,7 +231,7 @@ function VisualizerGraph({ readOnly }) {
             refX="10"
             viewBox="0 -5 10 10"
           >
-            <path d="M0,-5L10,0L0,5" fill="#93969A" />
+            <path d="M0,-5L10,0L0,5" style={{ fill: 'var(--pf-global--BorderColor--100)' }} />
           </marker>
         </defs>
         <rect
@@ -296,7 +296,7 @@ function VisualizerGraph({ readOnly }) {
             <PotentialLink
               id="workflow-potentialLink"
               markerEnd="url(#workflow-triangle)"
-              stroke="#93969A"
+              style={{ stroke: 'var(--pf-global--BorderColor--100)' }}
               strokeDasharray="5,5"
               strokeWidth="2"
             />

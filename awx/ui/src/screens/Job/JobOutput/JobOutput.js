@@ -64,13 +64,13 @@ const OutputHeader = styled.div`
 `;
 
 const OutputWrapper = styled.div`
-  background-color: #ffffff;
+  background-color: var(--pf-global--BackgroundColor--100);
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
   font-family: monospace;
   font-size: 15px;
-  outline: 1px solid #d7d7d7;
+  outline: 1px solid var(--pf-global--BorderColor--100);
   ${({ cssMap }) =>
     Object.keys(cssMap).map(
       (className) => `.${className}{${cssMap[className]}}`
@@ -78,8 +78,8 @@ const OutputWrapper = styled.div`
 `;
 
 const OutputFooter = styled.div`
-  background-color: #ebebeb;
-  border-right: 1px solid #d7d7d7;
+  background-color: var(--pf-global--BackgroundColor--200);
+  border-right: 1px solid var(--pf-global--BorderColor--100);
   width: 75px;
   flex: 1;
 `;

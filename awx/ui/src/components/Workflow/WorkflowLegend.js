@@ -10,15 +10,15 @@ import {
 import { WorkflowDispatchContext } from 'contexts/Workflow';
 
 const Wrapper = styled.div`
-  background-color: white;
-  border: 1px solid #c7c7c7;
+  background-color: var(--pf-global--BackgroundColor--100);
+  border: 1px solid var(--pf-global--BorderColor--100);
   margin-left: 20px;
   min-width: 100px;
   position: relative;
 `;
 
 const Header = styled.div`
-  border-bottom: 1px solid #c7c7c7;
+  border-bottom: 1px solid var(--pf-global--BorderColor--100);
   padding: 10px;
   position: relative;
 `;
@@ -46,7 +46,7 @@ const NodeTypeLetter = styled.div`
 `;
 
 const StyledExclamationTriangleIcon = styled(ExclamationTriangleIcon)`
-  color: #f0ad4d;
+  color: var(--pf-global--warning-color--100);
   height: 20px;
   margin-right: 10px;
   width: 20px;

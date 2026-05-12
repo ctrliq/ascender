@@ -10,17 +10,17 @@ const CountCard = styled(Card)`
   padding-top: var(--pf-global--spacer--sm);
   cursor: pointer;
   text-align: center;
-  color: var(--pf-global--palette--black-1000);
+  color: var(--pf-global--Color--100);
   text-decoration: none;
 
   & h2 {
     font-size: var(--pf-global--FontSize--4xl);
-    color: var(--pf-global--palette--blue-400);
+    color: var(--pf-global--primary-color--100);
     text-decoration: none;
   }
 
   & h2.failed {
-    color: var(--pf-global--palette--red-200);
+    color: var(--pf-global--danger-color--100);
   }
 `;
 

@@ -20,7 +20,7 @@ const EmptyState = styled(PFEmptyState)`
 
 const TopologyIcon = styled(PFTopologyIcon)`
   font-size: 3em;
-  fill: #6a6e73;
+  fill: var(--pf-global--Color--200);
 `;
 
 const ContentLoading = ({ className, progress }) => {
@@ -37,7 +37,7 @@ const ContentLoading = ({ className, progress }) => {
       <TextContent style={{ margin: '20px' }}>
         <Text
           component={TextVariants.small}
-          style={{ fontWeight: 'bold', color: 'black' }}
+          style={{ fontWeight: 'bold', color: 'var(--pf-global--Color--100)' }}
         >
           {t`Please wait until the topology view is populated...`}
         </Text>

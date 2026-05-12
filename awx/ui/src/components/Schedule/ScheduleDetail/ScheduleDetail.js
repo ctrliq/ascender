@@ -45,7 +45,7 @@ const PromptDetailList = styled(DetailList)`
 `;
 
 const FrequencyDetailsContainer = styled.div`
-  background-color: var(--pf-global--palette--black-150);
+  background-color: var(--pf-global--BackgroundColor--200);
   margin-top: var(--pf-global--spacer--lg);
   margin-bottom: var(--pf-global--spacer--lg);
   margin-right: calc(var(--pf-c-card--child--PaddingRight) * -1);
@@ -59,7 +59,7 @@ const FrequencyDetailsContainer = styled.div`
   & > *:not(:first-child):not(:last-child) {
     margin-bottom: var(--pf-global--spacer--md);
     padding-bottom: var(--pf-global--spacer--md);
-    border-bottom: 1px solid var(--pf-global--palette--black-300);
+    border-bottom: 1px solid var(--pf-global--BorderColor--100);
   }
 
   & + & {

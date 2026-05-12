@@ -74,8 +74,8 @@ function ConstructedInventoryHint() {
           <Tr ouiaId="plugin-row">
             <Td dataLabel={t`name`}>
               <code>plugin</code>
-              <p style={{ color: 'blue' }}>{t`string`}</p>
-              <p style={{ color: 'red' }}>{t`required`}</p>
+              <p style={{ color: 'var(--pf-global--primary-color--100)' }}>{t`string`}</p>
+              <p style={{ color: 'var(--pf-global--danger-color--100)' }}>{t`required`}</p>
             </Td>
             <Td dataLabel={t`description`}>
               {t`Token that ensures this is a source file
@@ -85,7 +85,7 @@ function ConstructedInventoryHint() {
           <Tr key="strict">
             <Td dataLabel={t`name`}>
               <code>strict</code>
-              <p style={{ color: 'blue' }}>{t`boolean`}</p>
+              <p style={{ color: 'var(--pf-global--primary-color--100)' }}>{t`boolean`}</p>
             </Td>
             <Td dataLabel={t`description`}>
               {t`If yes make invalid entries a fatal error, otherwise skip and
@@ -99,7 +99,7 @@ function ConstructedInventoryHint() {
           <Tr key="groups">
             <Td dataLabel={t`name`}>
               <code>groups</code>
-              <p style={{ color: 'blue' }}>{t`dictionary`}</p>
+              <p style={{ color: 'var(--pf-global--primary-color--100)' }}>{t`dictionary`}</p>
             </Td>
             <Td dataLabel={t`description`}>
               {t`Add hosts to group based on Jinja2 conditionals.`}
@@ -108,7 +108,7 @@ function ConstructedInventoryHint() {
           <Tr key="compose">
             <Td dataLabel={t`name`}>
               <code>compose</code>
-              <p style={{ color: 'blue' }}>{t`dictionary`}</p>
+              <p style={{ color: 'var(--pf-global--primary-color--100)' }}>{t`dictionary`}</p>
             </Td>
             <Td dataLabel={t`description`}>
               {t`Create vars from jinja2 expressions. This can be useful

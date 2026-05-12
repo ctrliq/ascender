@@ -36,7 +36,7 @@ const Wrapper = styled.div`
   right: 0;
   padding: 0 10px;
   width: 25%;
-  background-color: rgba(255, 255, 255, 0.85);
+  background-color: var(--pf-global--BackgroundColor--100);
   overflow: auto;
   height: 100%;
 `;
@@ -47,9 +47,9 @@ const Button = styled(PFButton)`
     border-radius: 15px;
     padding: 0;
     font-size: 16px;
-    background-color: white;
-    border: 1px solid #ccc;
-    color: black;
+    background-color: var(--pf-global--BackgroundColor--100);
+    border: 1px solid var(--pf-global--BorderColor--100);
+    color: var(--pf-global--Color--100);
   }
 `;
 const DescriptionList = styled(PFDescriptionList)`
@@ -182,7 +182,7 @@ function Tooltip({
         <TextContent>
           <Text
             component={TextVariants.small}
-            style={{ fontWeight: 'bold', color: 'black', marginTop: 0 }}
+            style={{ fontWeight: 'bold', color: 'var(--pf-global--Color--100)', marginTop: 0 }}
           >
             {t`Details`}
           </Text>
@@ -208,7 +208,7 @@ function Tooltip({
           <TextContent>
             <Text
               component={TextVariants.small}
-              style={{ fontWeight: 'bold', color: 'black' }}
+              style={{ fontWeight: 'bold', color: 'var(--pf-global--Color--100)' }}
             >
               {t`Details`}
             </Text>

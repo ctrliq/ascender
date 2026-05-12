@@ -38,13 +38,13 @@ const ActionButton = styled(Button)`
   margin: 0px 6px;
   border: none;
   &:hover {
-    background-color: #0066cc;
-    color: white;
+    background-color: var(--pf-global--primary-color--100);
+    color: #fff;
   }
 
   &.pf-m-active {
-    background-color: #0066cc;
-    color: white;
+    background-color: var(--pf-global--primary-color--100);
+    color: #fff;
   }
 `;
 ActionButton.displayName = 'ActionButton';
@@ -65,7 +65,7 @@ function VisualizerToolbar({
 
   return (
     <div id="visualizer-toolbar">
-      <div css="align-items: center; border-bottom: 1px solid grey; display: flex; height: 56px; padding: 0px 20px;">
+      <div css="align-items: center; border-bottom: 1px solid var(--pf-global--BorderColor--100); display: flex; height: 56px; padding: 0px 20px;">
         <Title
           headingLevel="h2"
           size="xl"

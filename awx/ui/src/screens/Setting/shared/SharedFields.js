@@ -43,7 +43,7 @@ const FormGroup = styled(PFFormGroup)`
 const Selected = styled.div`
   display: flex;
   justify-content: space-between;
-  background-color: white;
+  background-color: var(--pf-global--BackgroundColor--100);
   border-bottom-color: var(--pf-global--BorderColor--200);
 `;
 

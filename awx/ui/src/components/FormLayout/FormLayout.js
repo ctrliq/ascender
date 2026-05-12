@@ -39,7 +39,7 @@ export const FormCheckboxLayout = styled.div`
 
 export const SubFormLayout = styled.div`
   grid-column: 1 / -1;
-  background-color: #f5f5f5;
+  background-color: var(--pf-global--BackgroundColor--200);
   margin-right: calc(var(--pf-c-card--child--PaddingRight) * -1);
   margin-left: calc(var(--pf-c-card--child--PaddingLeft) * -1);
   padding: var(--pf-c-card--child--PaddingRight);
