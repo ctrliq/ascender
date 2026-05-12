@@ -8,6 +8,43 @@ from awx.api.serializers import UserSerializer
 from django.contrib.auth.models import User
 
 
+@pytest.mark.django_db
+def test_preferred_language_update_persists():
+    user = User.objects.create_user(username='languser1', password='Password1!')
+    serializer = UserSerializer(user, data={'preferred_language': 'fr'}, partial=True)
+    assert serializer.is_valid(), serializer.errors
+    serializer.save()
+    user.profile.refresh_from_db()
+    assert user.profile.language == 'fr'
+
+
+@pytest.mark.django_db
+def test_preferred_language_clear():
+    user = User.objects.create_user(username='languser2', password='Password1!')
+    user.profile.language = 'fr'
+    user.profile.save()
+    serializer = UserSerializer(user, data={'preferred_language': ''}, partial=True)
+    assert serializer.is_valid(), serializer.errors
+    serializer.save()
+    user.profile.refresh_from_db()
+    assert user.profile.language == ''
+
+
+def test_preferred_language_invalid_locale():
+    serializer = UserSerializer()
+    with pytest.raises(ValidationError):
+        serializer.validate_preferred_language('xx')
+
+
+@pytest.mark.django_db
+def test_preferred_language_in_representation():
+    user = User.objects.create_user(username='languser3', password='Password1!')
+    user.profile.language = 'ja'
+    user.profile.save()
+    data = UserSerializer(user).to_representation(user)
+    assert data['preferred_language'] == 'ja'
+
+
 @pytest.mark.parametrize(
     "password,min_length,min_digits,min_upper,min_special,expect_error",
     [

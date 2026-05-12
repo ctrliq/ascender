@@ -955,6 +955,9 @@ class UnifiedJobStdoutSerializer(UnifiedJobSerializer):
             return super(UnifiedJobStdoutSerializer, self).get_types()
 
 
+SUPPORTED_UI_LOCALES = frozenset(['', 'en', 'es', 'fr', 'ja', 'ko', 'nl', 'zh', 'zu'])
+
+
 class UserSerializer(BaseSerializer):
     password = serializers.CharField(required=False, default='', help_text=_('Field used to change the password.'))
     ldap_dn = serializers.CharField(source='profile.ldap_dn', read_only=True)
@@ -993,16 +996,18 @@ class UserSerializer(BaseSerializer):
             ret['password'] = '$encrypted$'
         if obj and type(self) is UserSerializer:
             ret['auth'] = obj.social_auth.values('provider', 'uid')
-        try:
-            ret['preferred_language'] = obj.profile.language
-        except Exception:
-            ret['preferred_language'] = ''
+        ret['preferred_language'] = obj.profile.language
         return ret
 
     def get_validation_exclusions(self, obj=None):
         ret = super(UserSerializer, self).get_validation_exclusions(obj)
         ret.extend(['password', 'is_system_auditor', 'preferred_language'])
         return ret
+
+    def validate_preferred_language(self, value):
+        if value not in SUPPORTED_UI_LOCALES:
+            raise serializers.ValidationError(_('Unsupported language code. Must be one of: {}.'.format(', '.join(sorted(SUPPORTED_UI_LOCALES - {''})))))
+        return value
 
     def validate_password(self, value):
         django_validate_password(value)
@@ -1041,7 +1046,7 @@ class UserSerializer(BaseSerializer):
             # the updated user to prevent logout. This is the logic used by
             # the Django admin's own user_change_password view.
             if self.instance and self.context['request'].user.username == obj.username:
-              update_session_auth_hash(self.context['request'], obj)
+                update_session_auth_hash(self.context['request'], obj)
         elif not obj.password:
             obj.set_unusable_password()
             obj.save(update_fields=['password'])
@@ -3116,15 +3121,9 @@ class CredentialSerializerCreate(CredentialSerializer):
 
 class CredentialInputSourceSerializer(BaseSerializer):
     show_capabilities = ['delete']
-    
-    target_credential = serializers.PrimaryKeyRelatedField(
-        queryset=Credential.objects.all(),
-        required=True
-    )
-    source_credential = serializers.PrimaryKeyRelatedField(
-        queryset=Credential.objects.all(), 
-        required=True
-    )
+
+    target_credential = serializers.PrimaryKeyRelatedField(queryset=Credential.objects.all(), required=True)
+    source_credential = serializers.PrimaryKeyRelatedField(queryset=Credential.objects.all(), required=True)
 
     class Meta:
         model = CredentialInputSource

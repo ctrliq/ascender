@@ -10,7 +10,6 @@ from django.contrib.sessions.models import Session
 from django.utils.timezone import now as tz_now
 from django.utils.translation import gettext_lazy as _
 
-
 # AWX
 from awx.api.versioning import reverse
 from awx.main.fields import AutoOneToOneField, ImplicitRoleField, OrderedManyToManyField
@@ -158,8 +157,8 @@ class Team(CommonModelNameNotUnique, ResourceMixin):
 
 class Profile(CreatedModifiedModel):
     """
-    Profile model related to User object. Currently stores LDAP DN for users
-    loaded from LDAP.
+    Profile model related to User object. Stores LDAP DN for users loaded from
+    LDAP and the user's preferred UI language.
     """
 
     class Meta:

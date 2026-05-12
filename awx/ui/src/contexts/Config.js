@@ -79,6 +79,10 @@ export const ConfigProvider = ({ children }) => {
       if (me?.preferred_language && Object.keys(locales).includes(me.preferred_language)) {
         localStorage.setItem('preferred_language', me.preferred_language);
         await dynamicActivate(me.preferred_language);
+      } else {
+        localStorage.removeItem('preferred_language');
+        const browserLang = (navigator.language || '').toLowerCase().split(/[_-]+/)[0];
+        await dynamicActivate(Object.keys(locales).includes(browserLang) ? browserLang : 'en');
       }
       return {
         ...data,
