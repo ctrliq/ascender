@@ -440,7 +440,7 @@ setuptools-rust==1.12.1
     # via -r /awx_devel/requirements/requirements.in
 setuptools-scm[toml]==8.0.4
     # via -r /awx_devel/requirements/requirements.in
-six==1.16.0
+six==1.17.0
     # via
     #   django-pglocks
     #   isodate
