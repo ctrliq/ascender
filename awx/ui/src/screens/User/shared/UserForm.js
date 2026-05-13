@@ -13,6 +13,7 @@ import FormField, {
 import OrganizationLookup from 'components/Lookup/OrganizationLookup';
 import { required } from 'util/validators';
 import { FormColumnLayout } from 'components/FormLayout';
+import { locales } from 'i18nLoader';
 
 function UserFormFields({ user }) {
   const { t } = useLingui();
@@ -47,6 +48,17 @@ function UserFormFields({ user }) {
     useField('organization');
 
   const [userTypeField, userTypeMeta] = useField('user_type');
+  const [languageField] = useField('preferred_language');
+
+  const languageOptions = [
+    { value: '', key: '', label: t`Use browser default`, isDisabled: false },
+    ...Object.entries(locales).map(([code, name]) => ({
+      value: code,
+      key: code,
+      label: name,
+      isDisabled: false,
+    })),
+  ];
 
   const handleOrganizationUpdate = useCallback(
     (value) => {
@@ -131,6 +143,13 @@ function UserFormFields({ user }) {
           />
         </FormGroup>
       )}
+      <FormGroup fieldId="user-preferred-language" label={t`Preferred Language`}>
+        <AnsibleSelect
+          id="user-preferred-language"
+          data={languageOptions}
+          {...languageField}
+        />
+      </FormGroup>
 
       {!user.id && (
         <OrganizationLookup
@@ -186,6 +205,7 @@ function UserForm({ user, handleCancel, handleSubmit, submitError }) {
         password: '',
         confirm_password: '',
         user_type: userType,
+        preferred_language: user.preferred_language || '',
       }}
       onSubmit={handleValidateAndSubmit}
     >

@@ -11,6 +11,7 @@ import { DetailList, Detail } from 'components/DetailList';
 import ErrorDetail from 'components/ErrorDetail';
 import { formatDateString } from 'util/dates';
 import { UsersAPI } from 'api';
+import { locales } from 'i18nLoader';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 
 function UserDetail({ user }) {
@@ -71,6 +72,10 @@ function UserDetail({ user }) {
           dataCy="user-detail-username"
         />
         <Detail label={t`User Type`} value={`${user_type}`} />
+        <Detail
+          label={t`Preferred Language`}
+          value={locales[user.preferred_language] || t`Browser default`}
+        />
         {userAuthType && (
           <Detail
             label={t`Type`}

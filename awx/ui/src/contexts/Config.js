@@ -6,6 +6,7 @@ import { ConfigAPI, MeAPI, UsersAPI, OrganizationsAPI } from 'api';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import AlertModal from 'components/AlertModal';
 import ErrorDetail from 'components/ErrorDetail';
+import { dynamicActivate, locales } from 'i18nLoader';
 import { useSession } from './Session';
 import { SettingsAPI } from '../api';
 
@@ -75,6 +76,14 @@ export const ConfigProvider = ({ children }) => {
           role_level: 'execution_environment_admin_role',
         }),
       ]);
+      if (me?.preferred_language && Object.keys(locales).includes(me.preferred_language)) {
+        localStorage.setItem('preferred_language', me.preferred_language);
+        await dynamicActivate(me.preferred_language);
+      } else {
+        localStorage.removeItem('preferred_language');
+        const browserLang = (navigator.language || '').toLowerCase().split(/[_-]+/)[0];
+        await dynamicActivate(Object.keys(locales).includes(browserLang) ? browserLang : 'en');
+      }
       return {
         ...data,
         me,
