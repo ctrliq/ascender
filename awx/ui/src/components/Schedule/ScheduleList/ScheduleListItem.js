@@ -19,7 +19,7 @@ import { ActionsTd, ActionItem, TdBreakWord } from '../../PaginatedTable';
 import { ScheduleToggle } from '..';
 
 const ExclamationTriangleIcon = styled(PFExclamationTriangleIcon)`
-  color: #c9190b;
+  color: var(--pf-global--danger-color--100);
   margin-left: 20px;
 `;
 

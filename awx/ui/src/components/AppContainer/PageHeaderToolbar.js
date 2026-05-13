@@ -19,7 +19,7 @@ import {
   PageHeaderToolsItem,
   Tooltip,
 } from '@patternfly/react-core';
-import { QuestionCircleIcon, UserIcon } from '@patternfly/react-icons';
+import { MoonIcon, QuestionCircleIcon, SunIcon, UserIcon } from '@patternfly/react-icons';
 import { WorkflowApprovalsAPI } from 'api';
 import useRequest from 'hooks/useRequest';
 import getDocsBaseUrl from 'util/getDocsBaseUrl';
@@ -42,6 +42,21 @@ function PageHeaderToolbar({
   const { t } = useLingui();
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [isUserOpen, setIsUserOpen] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(
+    () => localStorage.getItem('darkMode') === 'true'
+  );
+
+  const toggleDarkMode = () => {
+    const next = !isDarkMode;
+    setIsDarkMode(next);
+    if (next) {
+      document.documentElement.classList.add('pf-theme-dark');
+    } else {
+      document.documentElement.classList.remove('pf-theme-dark');
+    }
+    localStorage.setItem('darkMode', next);
+    window.dispatchEvent(new Event('resize'));
+  };
   const config = useConfig();
 
   const { request: fetchPendingApprovalCount, result: pendingApprovals } =
@@ -77,6 +92,27 @@ function PageHeaderToolbar({
   return (
     <PageHeaderTools>
       <PageHeaderToolsGroup>
+        <Tooltip position="bottom" content={isDarkMode ? t`Switch to light mode` : t`Switch to dark mode`}>
+          <PageHeaderToolsItem>
+            <button
+              type="button"
+              onClick={toggleDarkMode}
+              aria-label={isDarkMode ? t`Switch to light mode` : t`Switch to dark mode`}
+              style={{
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                padding: '10px',
+                color: 'var(--pf-global--Color--100)',
+                fontSize: '16px',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              {isDarkMode ? <SunIcon /> : <MoonIcon />}
+            </button>
+          </PageHeaderToolsItem>
+        </Tooltip>
         <Tooltip
           position="bottom"
           content={t`Pending Workflow Approvals`}

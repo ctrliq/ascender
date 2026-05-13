@@ -38,7 +38,7 @@ const Elapsed = styled.div`
   span {
     font-size: 12px;
     font-weight: bold;
-    background-color: #ededed;
+    background-color: var(--pf-global--BackgroundColor--200);
     padding: 3px 12px;
     border-radius: 14px;
   }
@@ -70,7 +70,7 @@ function WorkflowOutputNode({ mouseEnter, mouseLeave, node }) {
   const { nodePositions } = useContext(WorkflowStateContext);
   const job = node?.originalNodeObject?.summary_fields?.job;
 
-  let borderColor = '#93969A';
+  let borderColor = 'var(--pf-global--BorderColor--100)';
 
   if (job) {
     if (
@@ -78,10 +78,10 @@ function WorkflowOutputNode({ mouseEnter, mouseLeave, node }) {
       job.status === 'error' ||
       job.status === 'canceled'
     ) {
-      borderColor = '#d9534f';
+      borderColor = 'var(--pf-global--danger-color--100)';
     }
     if (job.status === 'successful' || job.status === 'ok') {
-      borderColor = '#5cb85c';
+      borderColor = 'var(--pf-global--success-color--100)';
     }
   }
 
@@ -146,7 +146,7 @@ function WorkflowOutputNode({ mouseEnter, mouseLeave, node }) {
         </>
       )}
       <rect
-        fill="#FFFFFF"
+        fill="var(--pf-global--BackgroundColor--100)"
         height={wfConstants.nodeH}
         rx="2"
         ry="2"

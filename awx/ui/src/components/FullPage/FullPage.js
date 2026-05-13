@@ -6,6 +6,6 @@ export default styled.div`
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: white;
+  background-color: var(--pf-global--BackgroundColor--100);
   z-index: 300;
 `;

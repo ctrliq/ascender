@@ -27,7 +27,7 @@ const Wrapper = styled.div`
   left: 0;
   padding: 0 10px;
   min-width: 150px;
-  background-color: rgba(255, 255, 255, 0.85);
+  background-color: var(--pf-global--BackgroundColor--100);
   overflow: auto;
   height: 100%;
 `;
@@ -38,9 +38,9 @@ const Button = styled(PFButton)`
     border-radius: 10px;
     padding: 0;
     font-size: 11px;
-    background-color: white;
-    border: 1px solid #ccc;
-    color: black;
+    background-color: var(--pf-global--BackgroundColor--100);
+    border: 1px solid var(--pf-global--BorderColor--100);
+    color: var(--pf-global--Color--100);
   }
 `;
 const DescriptionListDescription = styled(PFDescriptionListDescription)`
@@ -63,7 +63,7 @@ function Legend() {
       <TextContent>
         <Text
           component={TextVariants.small}
-          style={{ fontWeight: 'bold', color: 'black', marginTop: 0 }}
+          style={{ fontWeight: 'bold', color: 'var(--pf-global--Color--100)', marginTop: 0 }}
         >
           {t`Legend`}
         </Text>
@@ -205,14 +205,14 @@ function Legend() {
                 cy="10"
                 fill="transparent"
                 strokeWidth="1px"
-                stroke="#ccc"
+                style={{ stroke: 'var(--pf-global--BorderColor--100)' }}
               />
               <text
                 x="10"
                 y="10"
                 textAnchor="middle"
                 dominantBaseline="central"
-                fill="black"
+                style={{ fill: 'var(--pf-global--Color--100)' }}
                 fontSize="11px"
                 fontFamily="inherit"
                 fontWeight="400"
@@ -235,14 +235,14 @@ function Legend() {
                 fill="transparent"
                 strokeDasharray="5"
                 strokeWidth="1px"
-                stroke="#ccc"
+                style={{ stroke: 'var(--pf-global--BorderColor--100)' }}
               />
               <text
                 x="10"
                 y="10"
                 textAnchor="middle"
                 dominantBaseline="central"
-                fill="black"
+                style={{ fill: 'var(--pf-global--Color--100)' }}
                 fontSize="11px"
                 fontFamily="inherit"
                 fontWeight="400"

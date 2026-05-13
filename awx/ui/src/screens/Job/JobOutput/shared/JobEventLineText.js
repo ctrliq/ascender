@@ -10,7 +10,7 @@ const JobEventLineText = styled.div`
     font-size: 14px;
     font-weight: 600;
     user-select: none;
-    background-color: #ebebeb;
+    background-color: var(--pf-global--BackgroundColor--200);
     border-radius: 12px;
     padding: 2px 10px;
     margin-left: 15px;
@@ -20,9 +20,9 @@ const JobEventLineText = styled.div`
     background: var(--pf-global--disabled-color--200);
     background: linear-gradient(
       to right,
-      #f5f5f5 10%,
-      #e8e8e8 18%,
-      #f5f5f5 33%
+      var(--pf-global--BackgroundColor--100) 10%,
+      var(--pf-global--BackgroundColor--200) 18%,
+      var(--pf-global--BackgroundColor--100) 33%
     );
     border-radius: 5px;
   }

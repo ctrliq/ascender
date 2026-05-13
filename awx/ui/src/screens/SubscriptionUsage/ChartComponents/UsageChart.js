@@ -34,6 +34,15 @@ function UsageChart({ id, data, height, pageContext }) {
     d3.selectAll(`#${id} > *`).remove();
     const width = getWidth();
 
+    const gridColor =
+      getComputedStyle(document.documentElement)
+        .getPropertyValue('--pf-global--BorderColor--100')
+        .trim() || '#d7d7d7';
+    const textColor =
+      getComputedStyle(document.documentElement)
+        .getPropertyValue('--pf-global--Color--100')
+        .trim() || '#151515';
+
     function transition(path) {
       path.transition().duration(1000).attrTween('stroke-dasharray', tweenDash);
     }
@@ -117,8 +126,12 @@ function UsageChart({ id, data, height, pageContext }) {
           .tickFormat(d3.format('d'))
       )
       .selectAll('line')
-      .attr('stroke', '#d7d7d7');
-    svg.selectAll('.y-axis .tick text').attr('x', -5).attr('font-size', '14');
+      .attr('stroke', gridColor);
+    svg
+      .selectAll('.y-axis .tick text')
+      .attr('x', -5)
+      .attr('font-size', '14')
+      .style('fill', textColor);
 
     // text label for the y axis
     svg
@@ -128,6 +141,7 @@ function UsageChart({ id, data, height, pageContext }) {
       .attr('x', 0 - height / 2)
       .attr('dy', '1em')
       .style('text-anchor', 'middle')
+      .style('fill', textColor)
       .text(t`Unique Hosts`);
 
     // Add the X Axis
@@ -142,7 +156,7 @@ function UsageChart({ id, data, height, pageContext }) {
         .filter((item) => item);
     }
 
-    svg.select('.domain').attr('stroke', '#d7d7d7');
+    svg.select('.domain').attr('stroke', gridColor);
 
     svg
       .append('g')
@@ -156,13 +170,14 @@ function UsageChart({ id, data, height, pageContext }) {
           .tickFormat(d3.timeFormat('%m/%y'))
       )
       .selectAll('line')
-      .attr('stroke', '#d7d7d7');
+      .attr('stroke', gridColor);
 
     svg
       .selectAll('.x-axis .tick text')
       .attr('x', -25)
       .attr('font-size', '14')
-      .attr('transform', 'rotate(-65)');
+      .attr('transform', 'rotate(-65)')
+      .style('fill', textColor);
 
     // text label for the x axis
     svg
@@ -172,11 +187,12 @@ function UsageChart({ id, data, height, pageContext }) {
         `translate(${width / 2} , ${height + margin.top + 50})`
       )
       .style('text-anchor', 'middle')
+      .style('fill', textColor)
       .text(t`Month`);
     const vertical = svg
       .append('path')
       .attr('class', 'mouse-line')
-      .style('stroke', 'black')
+      .style('stroke', textColor)
       .style('stroke-width', '3px')
       .style('stroke-dasharray', '3, 3')
       .style('opacity', '0');
@@ -279,7 +295,8 @@ function UsageChart({ id, data, height, pageContext }) {
       .append('text')
       .text((d) => d)
       .attr('font-size', '14')
-      .attr('transform', 'translate(15,9)'); // align texts with boxes
+      .attr('transform', 'translate(15,9)') // align texts with boxes
+      .style('fill', textColor);
 
     lineLegend
       .append('rect')

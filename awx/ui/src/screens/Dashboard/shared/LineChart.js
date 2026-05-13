@@ -33,6 +33,15 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
     d3.selectAll(`#${id} > *`).remove();
     const width = getWidth();
 
+    const textColor =
+      getComputedStyle(document.documentElement)
+        .getPropertyValue('--pf-global--Color--100')
+        .trim() || '#151515';
+    const gridColor =
+      getComputedStyle(document.documentElement)
+        .getPropertyValue('--pf-global--BorderColor--100')
+        .trim() || '#d7d7d7';
+
     function transition(path) {
       path.transition().duration(1000).attrTween('stroke-dasharray', tweenDash);
     }
@@ -115,8 +124,8 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
           .tickFormat(d3.format('d'))
       )
       .selectAll('line')
-      .attr('stroke', '#d7d7d7');
-    svg.selectAll('.y-axis .tick text').attr('x', -5);
+      .attr('stroke', gridColor);
+    svg.selectAll('.y-axis .tick text').attr('x', -5).style('fill', textColor);
 
     // text label for the y axis
     svg
@@ -126,6 +135,7 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
       .attr('x', 0 - height / 2)
       .attr('dy', '1em')
       .style('text-anchor', 'middle')
+      .style('fill', textColor)
       .text(t`Job Runs`);
 
     // Add the X Axis
@@ -140,7 +150,7 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
         .filter((item) => item);
     }
 
-    svg.select('.domain').attr('stroke', '#d7d7d7');
+    svg.select('.domain').attr('stroke', gridColor);
 
     svg
       .append('g')
@@ -154,9 +164,9 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
           .tickFormat(d3.timeFormat('%-m/%-d')) // "1/19"
       ) // "Jan-01"
       .selectAll('line')
-      .attr('stroke', '#d7d7d7');
+      .attr('stroke', gridColor);
 
-    svg.selectAll('.x-axis .tick text').attr('y', 10);
+    svg.selectAll('.x-axis .tick text').attr('y', 10).style('fill', textColor);
 
     // text label for the x axis
     svg
@@ -166,11 +176,12 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
         `translate(${width / 2} , ${height + margin.top + 20})`
       )
       .style('text-anchor', 'middle')
+      .style('fill', textColor)
       .text(t`Date`);
     const vertical = svg
       .append('path')
       .attr('class', 'mouse-line')
-      .style('stroke', 'black')
+      .style('stroke', textColor)
       .style('stroke-width', '3px')
       .style('stroke-dasharray', '3, 3')
       .style('opacity', '0');

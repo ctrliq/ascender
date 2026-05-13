@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 
 const JobEventLineNumber = styled.div`
-  color: #161b1f;
-  background-color: #ebebeb;
+  color: var(--pf-global--Color--200);
+  background-color: var(--pf-global--BackgroundColor--200);
   flex: 0 0 45px;
   text-align: right;
   vertical-align: top;
   padding-right: 5px;
-  border-right: 1px solid #d7d7d7;
+  border-right: 1px solid var(--pf-global--BorderColor--100);
   user-select: none;
 `;
 

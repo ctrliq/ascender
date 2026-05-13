@@ -139,6 +139,12 @@ export function ProtectedRoute({ children, ...rest }) {
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (localStorage.getItem('darkMode') === 'true') {
+      document.documentElement.classList.add('pf-theme-dark');
+    }
+  }, []);
   const history = useHistory();
   const { hash, search, pathname } = useLocation();
   const searchParams = Object.fromEntries(new URLSearchParams(search));

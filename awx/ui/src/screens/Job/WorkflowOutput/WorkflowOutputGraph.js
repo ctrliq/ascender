@@ -142,7 +142,7 @@ function WorkflowOutputGraph() {
       <svg
         id="workflow-svg"
         ref={svgRef}
-        css="display: flex; height: 100%; background-color: #F6F6F6"
+        css="display: flex; height: 100%; background-color: var(--pf-global--BackgroundColor--200)"
       >
         <g id="workflow-g" ref={gRef}>
           {nodePositions && [
