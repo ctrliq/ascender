@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import {
   useRouteMatch,
   useLocation,
@@ -140,8 +140,15 @@ export function ProtectedRoute({ children, ...rest }) {
 function App() {
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    if (localStorage.getItem('darkMode') === 'true') {
+  useLayoutEffect(() => {
+    const storedDarkMode = localStorage.getItem('darkMode');
+    const prefersDarkMode =
+      storedDarkMode !== null
+        ? storedDarkMode === 'true'
+        : typeof window.matchMedia === 'function' &&
+          window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    if (prefersDarkMode) {
       document.documentElement.classList.add('pf-theme-dark');
     }
   }, []);

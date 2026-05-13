@@ -35,14 +35,30 @@ const AceEditor = styled(ReactAce)`
   font-family: var(--pf-global--FontFamily--monospace);
   max-height: 90vh;
 
-  & .ace_gutter,
+  & .ace_marker-layer .ace_active-line {
+    background: var(--pf-global--BorderColor--300) !important;
+  }
+
+  & .ace_gutter {
+    background: var(--pf-global--BackgroundColor--200);
+    color: var(--pf-global--Color--200);
+  }
+
   & .ace_scroller {
     padding-top: 4px;
     padding-bottom: 4px;
   }
 
+  & .ace_scrollbar {
+    scrollbar-width: thin;
+  }
+
   & .ace_mobile-menu {
     display: none;
+  }
+
+  & .ace_marker-layer .ace_selection {
+    background: var(--pf-global--BorderColor--100);
   }
 
   ${(props) =>
