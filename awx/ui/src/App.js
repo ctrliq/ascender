@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import {
   useRouteMatch,
   useLocation,
@@ -140,7 +140,7 @@ export function ProtectedRoute({ children, ...rest }) {
 function App() {
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (localStorage.getItem('darkMode') === 'true') {
       document.documentElement.classList.add('pf-theme-dark');
     }
