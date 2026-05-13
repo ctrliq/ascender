@@ -43,7 +43,14 @@ function PageHeaderToolbar({
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [isUserOpen, setIsUserOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(
-    () => localStorage.getItem('darkMode') === 'true'
+    () => {
+      const storedDarkMode = localStorage.getItem('darkMode');
+
+      return storedDarkMode !== null
+        ? storedDarkMode === 'true'
+        : typeof window.matchMedia === 'function' &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
   );
 
   const toggleDarkMode = () => {

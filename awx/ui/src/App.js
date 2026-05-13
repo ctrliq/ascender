@@ -141,7 +141,14 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   useLayoutEffect(() => {
-    if (localStorage.getItem('darkMode') === 'true') {
+    const storedDarkMode = localStorage.getItem('darkMode');
+    const prefersDarkMode =
+      storedDarkMode !== null
+        ? storedDarkMode === 'true'
+        : typeof window.matchMedia === 'function' &&
+          window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    if (prefersDarkMode) {
       document.documentElement.classList.add('pf-theme-dark');
     }
   }, []);
