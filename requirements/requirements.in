@@ -6,6 +6,7 @@ azure-identity>=1.25.2
 azure-keyvault
 boto3
 botocore
+cachetools
 channels
 channels-valkey
 cryptography>=46.0.7  # CVE-2026-39892
