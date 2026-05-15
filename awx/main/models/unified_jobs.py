@@ -873,10 +873,13 @@ class UnifiedJob(
         # Sanity check: Has the job just completed? If so, mark down its
         # completion time, and record its output to the database.
         if self.status in ('successful', 'failed', 'error', 'canceled') and not self.finished:
-            # Record the `finished` time.
-            self.finished = now()
-            if 'finished' not in update_fields:
-                update_fields.append('finished')
+            # Only record a finished time if the job actually started.
+            # Jobs canceled before starting (e.g. pending) should not
+            # have a finished timestamp. (Resolves #3988 from AWX main repo)
+            if self.started is not None:
+                self.finished = now()
+                if 'finished' not in update_fields:
+                    update_fields.append('finished')
 
         dq = decimal.Decimal('1.000')
         if self.elapsed is None:

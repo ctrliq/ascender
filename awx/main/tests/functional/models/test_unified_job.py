@@ -282,3 +282,51 @@ class TestTaskImpact:
         # recalculate task_impact
         jobs[0].task_impact = jobs[0]._get_task_impact()
         assert [job.task_impact for job in jobs] == [3, 2, 2]
+
+
+@pytest.mark.django_db
+class TestCanceledJobFinishedTime:
+    """Tests for ansible/awx#3988 — canceled pending jobs should not set finished."""
+
+    def test_cancel_pending_job_no_finished_time(self):
+        """A job canceled before it ever started should have finished=None."""
+        jt = JobTemplate.objects.create(name='test-jt-3988')
+        job = jt.create_unified_job()
+        assert job.started is None
+        job.status = 'canceled'
+        job.save()
+        job.refresh_from_db()
+        assert job.status == 'canceled'
+        assert job.started is None
+        assert job.finished is None
+
+    def test_cancel_running_job_sets_finished_time(self):
+        """A job canceled while running should record a finished time."""
+        from django.utils.timezone import now
+        jt = JobTemplate.objects.create(name='test-jt-3988-running')
+        job = jt.create_unified_job()
+        job.status = 'running'
+        job.started = now()
+        job.save()
+        job.status = 'canceled'
+        job.save()
+        job.refresh_from_db()
+        assert job.status == 'canceled'
+        assert job.started is not None
+        assert job.finished is not None
+        assert job.finished >= job.started
+
+    def test_successful_job_still_sets_finished(self):
+        """Regression: normal completion still sets finished correctly."""
+        from django.utils.timezone import now
+        jt = JobTemplate.objects.create(name='test-jt-3988-success')
+        job = jt.create_unified_job()
+        job.status = 'running'
+        job.started = now()
+        job.save()
+        job.status = 'successful'
+        job.save()
+        job.refresh_from_db()
+        assert job.finished is not None
+
+
