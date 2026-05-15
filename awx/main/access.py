@@ -36,6 +36,8 @@ from awx.main.models import (
     CredentialType,
     CredentialInputSource,
     ExecutionEnvironment,
+    ExecutionEnvironmentBuilder,
+    ExecutionEnvironmentBuilderBuild,
     Group,
     Host,
     Instance,
@@ -1410,6 +1412,117 @@ class ExecutionEnvironmentAccess(BaseAccess):
         if obj.managed:
             raise PermissionDenied
         return self.can_change(obj, None)
+
+
+class ExecutionEnvironmentBuilderAccess(BaseAccess):
+    """
+    I can see an execution environment builder when:
+     - I'm a superuser
+     - I'm a member of the same organization
+     - it has no organization (global)
+    I can create/change an execution environment builder when:
+     - I'm a superuser
+     - I'm an execution environment admin for the organization
+    """
+
+    model = ExecutionEnvironmentBuilder
+    select_related = ('organization',)
+    prefetch_related = ('organization__admin_role', 'organization__execution_environment_admin_role')
+
+    def filtered_queryset(self):
+        return ExecutionEnvironmentBuilder.objects.filter(
+            Q(organization__in=Organization.accessible_pk_qs(self.user, 'read_role')) | Q(organization__isnull=True)
+        ).distinct()
+
+    @check_superuser
+    def can_add(self, data):
+        if not data:
+            return Organization.accessible_objects(self.user, 'execution_environment_admin_role').exists()
+        return self.check_related('organization', Organization, data, mandatory=True, role_field='execution_environment_admin_role')
+
+    @check_superuser
+    def can_change(self, obj, data):
+        if obj and obj.organization_id is None:
+            raise PermissionDenied
+        if self.user not in obj.organization.execution_environment_admin_role:
+            raise PermissionDenied
+        if data and 'organization' in data:
+            new_org = get_object_from_data('organization', Organization, data, obj=obj)
+            if not new_org or self.user not in new_org.execution_environment_admin_role:
+                return False
+        return self.check_related('organization', Organization, data, obj=obj, mandatory=True, role_field='execution_environment_admin_role')
+
+    @check_superuser
+    def can_start(self, obj, validate_license=True):
+        return obj and self.user in obj.admin_role
+
+    def can_delete(self, obj):
+        return self.can_change(obj, None)
+
+
+class ExecutionEnvironmentBuilderBuildAccess(BaseAccess):
+    """
+    I can see execution environment builder builds when I can see the builder.
+    I can change when I can change the builder.
+    I can delete when I can change/delete the builder.
+    """
+
+    model = ExecutionEnvironmentBuilderBuild
+    select_related = (
+        'created_by',
+        'modified_by',
+        'execution_environment_builder',
+        'execution_environment_builder__organization',
+    )
+    prefetch_related = (
+        'unified_job_template',
+        'instance_group',
+    )
+
+    def filtered_queryset(self):
+        return self.model.objects.filter(
+            Q(execution_environment_builder__organization__in=Organization.accessible_pk_qs(self.user, 'read_role'))
+            | Q(execution_environment_builder__organization__isnull=True)
+        )
+
+    @check_superuser
+    def can_cancel(self, obj):
+        if not obj:
+            return False
+        # Allow the user who created the build to cancel it
+        if self.user == obj.created_by:
+            return True
+        # Allow organization admin to cancel
+        if obj.execution_environment_builder and obj.execution_environment_builder.organization:
+            if self.user in obj.execution_environment_builder.organization.admin_role:
+                return True
+        # Allow users who can change the builder to cancel it
+        if obj.execution_environment_builder:
+            return self.user.can_access(ExecutionEnvironmentBuilder, 'change', obj.execution_environment_builder, None)
+        return False
+
+    @check_superuser
+    def can_start(self, obj, validate_license=True):
+        # for relaunching
+        try:
+            if obj and obj.execution_environment_builder:
+                if obj.execution_environment_builder.organization:
+                    return self.user in obj.execution_environment_builder.organization.admin_role
+                # If no organization, allow the creator
+                return self.user == obj.created_by
+        except ObjectDoesNotExist:
+            pass
+        return False
+
+    @check_superuser
+    def can_delete(self, obj):
+        # Allow the user who created the build to delete it
+        if self.user == obj.created_by:
+            return True
+        # Allow organization admin to delete
+        if obj.execution_environment_builder and obj.execution_environment_builder.organization:
+            return self.user in obj.execution_environment_builder.organization.admin_role
+        return False
 
 
 class ProjectAccess(NotificationAttachMixin, BaseAccess):
