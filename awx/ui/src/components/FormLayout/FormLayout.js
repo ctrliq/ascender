@@ -34,6 +34,7 @@ export const FormCheckboxLayout = styled.div`
   & > * {
     margin-bottom: 10px;
     margin-right: 30px;
+    align-items: center;
   }
 `;
 
@@ -42,7 +43,8 @@ export const SubFormLayout = styled.div`
   background-color: var(--pf-global--BackgroundColor--200);
   margin-right: calc(var(--pf-c-card--child--PaddingRight) * -1);
   margin-left: calc(var(--pf-c-card--child--PaddingLeft) * -1);
-  padding: var(--pf-c-card--child--PaddingRight);
+  padding: 1.5rem;
+  border-radius: 0.5rem;
 
   & > .pf-c-title {
     --pf-c-title--m-md--FontWeight: 700;

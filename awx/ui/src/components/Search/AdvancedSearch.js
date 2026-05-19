@@ -28,7 +28,7 @@ const AdvancedGroup = styled.div`
 
   @media (max-width: 991px) {
     display: grid;
-    grid-gap: var(--pf-c-toolbar__expandable-content--m-expanded--GridRowGap);
+    grid-gap: 0.5rem;
   }
 
   & .pf-c-select {

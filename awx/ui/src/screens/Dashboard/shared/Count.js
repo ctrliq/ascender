@@ -15,12 +15,13 @@ const CountCard = styled(Card)`
 
   & h2 {
     font-size: var(--pf-global--FontSize--4xl);
-    color: var(--pf-global--primary-color--100);
+    color: #079455;
     text-decoration: none;
+    margin-bottom: 0.5rem;
   }
 
   & h2.failed {
-    color: var(--pf-global--danger-color--100);
+    color: #912018;
   }
 `;
 
