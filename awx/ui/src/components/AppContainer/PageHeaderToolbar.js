@@ -33,6 +33,11 @@ const PendingWorkflowApprovals = styled.div`
   margin-right: 10px;
 `;
 
+const UserName = styled.span`
+  margin-left: 10px;
+  font-size: 0.875rem;
+`;
+
 function PageHeaderToolbar({
   isAboutDisabled,
   onAboutClick,
@@ -194,11 +199,9 @@ function PageHeaderToolbar({
                 ouiaId="toolbar-user-dropdown-toggle"
               >
                 <UserIcon />
-                {loggedInUser && (
-                  <span style={{ marginLeft: '10px' }}>
-                    {loggedInUser.username}
-                  </span>
-                )}
+                {loggedInUser &&
+                    <UserName>{loggedInUser.username}</UserName>
+                }
               </DropdownToggle>
             }
             dropdownItems={[

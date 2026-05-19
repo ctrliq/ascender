@@ -18,7 +18,6 @@ import {
   Login as PFLogin,
   LoginHeader,
   LoginFooter,
-  LoginMainHeader,
   LoginMainBody,
   LoginMainFooter,
   Tooltip,
@@ -36,11 +35,25 @@ import { useSession } from 'contexts/Session';
 import LoadingSpinner from 'components/LoadingSpinner';
 import { SESSION_REDIRECT_URL, SESSION_USER_ID } from '../../constants';
 
-const loginLogoSrc = 'static/media/AscenderAuto_logo_h_rev_M.png';
+const loginLogoSrc = 'static/media/Ascender_logo.svg';
 
 const Login = styled(PFLogin)`
+  & {
+    --pf-c-login__container--MaxWidth: 24rem;
+    --pf-c-login__main-body--PaddingRight: 2rem;
+    --pf-c-login__main-body--PaddingLeft: 2rem;
+  }
+
+  & .pf-c-login__main {
+    background-color: #1a1e25;
+    border-radius: 0.5rem;
+    border: 1px solid #373a41;
+  }
+
   & .pf-c-brand {
-    max-height: 285px;
+    max-width: 12rem;
+    display: block;
+    margin: 0 auto;
   }
 `;
 
@@ -184,14 +197,7 @@ function AWXLogin({ alt, isAuthenticated }) {
     return <Redirect to={redirect} />;
   }
   return (
-    <Login header={Header} footer={Footer}>
-      <LoginMainHeader
-        data-cy="login-header"
-        /*        title={brandName ? t`Welcome to ${brandName}!` : ''} */
-        title=""
-        /*        subtitle={t`Please log in`} */
-        subtitle=""
-      />
+    <Login>
       <LoginMainBody>
         {isSessionExpired.current ? (
           <Alert
@@ -201,6 +207,7 @@ function AWXLogin({ alt, isAuthenticated }) {
             ouiaId="session-expired-warning-alert"
           />
         ) : null}
+        {Header}
         <Formik
           initialValues={{
             password: '',
@@ -213,7 +220,7 @@ function AWXLogin({ alt, isAuthenticated }) {
               autoComplete="off"
               data-cy="login-form"
               className={authError ? 'pf-m-error' : ''}
-              helperText={helperText}
+              helperText={authError ? helperText : null}
               isLoginButtonDisabled={isAuthenticating}
               isValidPassword={!authError}
               isValidUsername={!authError}
@@ -416,6 +423,7 @@ function AWXLogin({ alt, isAuthenticated }) {
 
                 return null;
               })}
+              {Footer}
           </>
         }
       />

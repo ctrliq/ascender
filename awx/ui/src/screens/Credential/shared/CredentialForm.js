@@ -333,7 +333,7 @@ function CredentialForm({
                     ouiaId="credential-form-cancel-button"
                     id="credential-form-cancel-button"
                     aria-label={t`Cancel`}
-                    variant="link"
+                    variant="secondary"
                     type="button"
                     onClick={onCancel}
                   >

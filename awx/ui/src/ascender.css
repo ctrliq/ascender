@@ -72,11 +72,655 @@
   font-display: swap;
 }
 
-body {
-  font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif;
-}
-
 .pf-c-title {
   font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif !important;
   font-weight: 500 !important;
+}
+
+
+/**
+* Quantic Design System Overrides for PatternFly
+*
+* This file overrides PatternFly's default design tokens with the values from Quantic
+* to maintain consistent theming across the application.
+*/
+
+:root {
+  /* === Typography === */
+  /* Font families */
+  --pf-global--FontFamily--sans-serif: Inter,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;
+  --pf-global--FontFamily--heading--sans-serif: Satoshi,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;
+  --pf-global--FontFamily--text: Inter,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;
+  
+  /* Font sizes */
+  --pf-global--FontSize--xs: 0.75rem;
+  --pf-global--FontSize--sm: 0.875rem;
+  --pf-global--FontSize--md: 1rem;
+  --pf-global--FontSize--lg: 1.125rem;
+  --pf-global--FontSize--xl: 1.25rem;
+  --pf-global--FontSize--2xl: 1.5rem;
+  --pf-global--FontSize--3xl: 1.875rem;
+  --pf-global--FontSize--4xl: 2.25rem;
+  
+  /* Font weights */
+  --pf-global--FontWeight--normal: 400;
+  --pf-global--FontWeight--semi-bold: 600;
+  --pf-global--FontWeight--bold: 700;
+  
+  /* Line heights */
+  --pf-global--LineHeight--sm: 1.25rem;
+  --pf-global--LineHeight--md: 1.5rem;
+  
+  /* === Colors === */
+  /* Text colors */
+  --pf-global--Color--100: #f7f7f7;
+  --pf-global--Color--200: #cecfd2;
+  --pf-global--Color--300: #94979c;
+  --pf-global--disabled-color--100: #85888e;
+  --pf-global--link--Color: #12a66f;
+  --pf-global--link--Color--hover: #cecfd2;
+  
+  /* Background colors */
+  --pf-global--BackgroundColor--100: #13161b;
+  --pf-global--BackgroundColor--200: #1a1e25;
+  --pf-global--BackgroundColor--dark-100: #1a1e25;
+  --pf-global--BackgroundColor--dark-200: #13161b;
+  
+  /* Primary/Brand colors */
+  --pf-global--primary-color--100: #12a66f;
+  --pf-global--primary-color--200: #17c484;
+  --pf-global--active-color--100: #12a66f;
+  --pf-global--active-color--200: #17c484;
+  
+  /* Status colors */
+  --pf-global--success-color--100: #17b26a;
+  --pf-global--success-color--200: #47cd89;
+  --pf-global--danger-color--100: #f04438;
+  --pf-global--danger-color--200: #f97066;
+  --pf-global--warning-color--100: #f79009;
+  --pf-global--warning-color--200: #fdb022;
+  --pf-global--info-color--100: #2e90fa;
+  --pf-global--info-color--200: #53b1fd;
+  
+  /* === Spacing === */
+  --pf-global--spacer--xs: 0.375rem;
+  --pf-global--spacer--sm: 0.5rem;
+  --pf-global--spacer--md: 0.75rem;
+  --pf-global--spacer--lg: 1rem;
+  --pf-global--spacer--xl: 1.25rem;
+  --pf-global--spacer--2xl: 1.5rem;
+  --pf-global--spacer--3xl: 2rem;
+  --pf-global--spacer--4xl: 2.5rem;
+  
+  /* Gutter spacing */
+  --pf-global--gutter: 1rem;
+  --pf-global--gutter--md: 1.5rem;
+  
+  /* === Borders === */
+  --pf-global--BorderColor--100: #373a41;
+  --pf-global--BorderColor--200: #22262f;
+  --pf-global--BorderColor--300: #22262f;
+  --pf-global--BorderColor--disabled: #373a41;
+  
+  /* Border radius */
+  --pf-global--BorderRadius--sm: 0.375rem;
+  --pf-global--BorderRadius--md: 0.5rem;
+  --pf-global--BorderRadius--lg: 0.625rem;
+  --pf-global--BorderRadius--xl: 0.75rem;
+  
+  /* === Focus === */
+  --pf-global--focus-ring-color: #0b8759;
+  
+  /* === Shadows === */
+  --pf-global--BoxShadow--sm: hsla(0,0%,100%,0);
+  --pf-global--BoxShadow--md: hsla(0,0%,100%,0);
+  --pf-global--BoxShadow--lg: hsla(0,0%,100%,0);
+  --pf-global--BoxShadow--xl: hsla(0,0%,100%,0);
+  
+  --pf-c-page__main-section--BackgroundColor: #13161b;
+}
+
+:root {
+  color: #cecfd2;
+  background-color: #13161b;
+  font-family: Inter,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;
+}
+
+:root b {
+  font-weight: normal;
+}
+
+:root .pf-c-page {
+  --pf-c-page--BackgroundColor: inherit;
+  --pf-c-page__main-section--BackgroundColor: inherit;
+  --pf-c-page__main-section--PaddingTop: 1rem;
+  --pf-c-page__main-section--PaddingBottom: 0.75rem;
+  --pf-c-page__main-section--xl--PaddingTop: 1rem;
+  --pf-c-page__main-section--xl--PaddingBottom: 0.75rem;
+  --pf-c-page__main-section--PaddingRight: 1.5rem;
+  --pf-c-page__main-section--PaddingLeft: 1.5rem;
+  --pf-c-page__main-section--xl--PaddingRight: 1.25rem;
+  --pf-c-page__main-section--xl--PaddingLeft: 1.25rem;
+
+  --pf-c-page__header--BackgroundColor: #13161b;
+  --pf-c-page__sidebar--Width: 20rem;
+  --pf-c-page__sidebar--BackgroundColor: #13161b;
+}
+
+:root .pf-c-login {
+  --pf-c-login__main--BackgroundColor: #1a1e25;
+}
+:root .pf-c-page__header {
+  box-shadow: none;
+  border-bottom: 1px solid #22262f;
+}
+
+:root .pf-c-breadcrumb__item-divider {
+  color: #373a41;
+}
+
+:root .pf-c-page__sidebar.pf-m-expanded {
+  box-shadow: none;
+  border-right: 1px solid #22262f;
+}
+
+:root .pf-c-nav {
+  --pf-c-nav--BackgroundColor: #1a1e25;
+  --pf-c-nav__link--Color: #cecfd2;
+  --pf-c-nav__link--m-current--BackgroundColor: #373a41;
+  --pf-c-nav__link--m-current--Color: #f7f7f7;
+  --pf-c-nav__link--PaddingTop: 0.5rem;
+  --pf-c-nav__link--PaddingBottom: 0.5rem;
+  --pf-c-nav__link--PaddingRight: 0.75rem;
+  --pf-c-nav__link--PaddingLeft: 0.75rem;
+  --pf-c-nav__link--FontSize: 1rem;
+  --pf-c-nav__link--m-current--after--BorderColor: transparent;
+
+  margin-inline: 1.25rem;
+}
+
+:root .pf-c-nav__subnav {
+  --pf-c-nav__link--PaddingTop: 0.25rem;
+  --pf-c-nav__link--PaddingBottom: 0.25rem;
+  --pf-c-nav__link--PaddingRight: inherit;
+  --pf-c-nav__link--PaddingBottom: inherit;
+  --pf-c-nav__link--PaddingLeft: inherit;
+  --pf-c-nav__link--FontSize: 0.875rem;
+  --pf-c-nav__link--hover--after--BorderColor: inherit;
+  --pf-c-nav__link--focus--after--BorderColor: inherit;
+  --pf-c-nav__link--active--after--BorderColor: inherit;
+  --pf-c-nav__link--m-current--after--BorderColor: inherit;
+  --pf-c-nav__link--hover--after--BorderLeftWidth: inherit;
+  --pf-c-nav__link--focus--after--BorderLeftWidth: inherit;
+  --pf-c-nav__link--active--after--BorderLeftWidth: inherit;
+  --pf-c-nav__link--m-current--after--BorderLeftWidth: inherit;
+  --pf-c-nav--c-divider--PaddingRight: inherit;
+  --pf-c-nav--c-divider--PaddingLeft: inherit;
+}
+
+:root .pf-c-page__main-section.pf-m-light {
+  --pf-c-page__main-section--BackgroundColor: inherit;
+}
+
+:root .pf-c-toolbar__group {
+  gap: 0.5rem;
+  margin-right: 0;
+}
+
+:root .pf-c-toolbar__content-section {
+  gap: 0.5rem;
+}
+
+:root .pf-c-toolbar__item {
+  margin-right: 0;
+}
+
+:root .pf-c-tab-content {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+:root .pf-c-tabs__item-text {
+  display: flex;
+  align-items: center;
+}
+
+:root .pf-c-table {
+  --pf-c-table__sort__button__text--Color: #94979c;
+
+  color: #94979c;
+  background-color: #13161b;
+}
+
+
+:root .pf-c-table thead {
+  --pf-c-table--cell--FontWeight: 500;
+}
+:root .pf-c-table tr > * {
+  color: inherit;
+}
+
+:root .pf-c-table {
+  --pf-global--Color--100: inherit;
+  --pf-global--Color--200: inherit;
+  --pf-global--BorderColor--100: #22262f;
+  --pf-global--primary-color--100: inherit;
+  --pf-global--link--Color: inherit;
+  --pf-global--link--Color--hover: inherit;
+  --pf-global--BackgroundColor--100: inherit;
+}
+
+:root .pf-c-empty-state {
+  --pf-c-empty-state--PaddingTop: 4rem;
+  --pf-c-empty-state__body--Color: #94979c;
+}
+
+:root .pf-c-title {
+  color: #f7f7f7;
+  --pf-c-title--m-2xl--FontWeight: 600;
+  --pf-c-title--m-xl--FontWeight: 600;
+  --pf-c-title--m-lg--FontWeight: 600;
+}
+
+.pf-c-title.pf-m-2xl {
+  margin-top: 1.5rem;
+}
+
+:root .pf-c-card {
+  --pf-c-card--first-child--PaddingTop: 2rem;
+}
+
+:root .pf-c-card__title {
+  --pf-c-card__title--FontSize: 1.125rem;
+  margin-bottom: 0.25rem;
+}
+
+:root .pf-c-data-list {
+  --pf-global--link--Color: inherit; 
+  --pf-c-data-list__item--BackgroundColor: #13161b;
+  --pf-c-data-list--BorderTopColor: #22262f;
+  --pf-c-data-list__item--BorderBottomColor: #22262f;
+  --pf-c-data-list__item--m-hover--BackgroundColor: #373a41;
+}
+
+
+:root .pf-c-dropdown {
+  --pf-c-dropdown__menu--BackgroundColor: #13161b;
+  --pf-c-dropdown__menu-item--Color: #f7f7f7;
+  --pf-c-dropdown__menu-item--FontSize: 0.875rem;
+  --pf-c-dropdown__menu-item--hover--BackgroundColor: #373a41;
+  --pf-c-dropdown__menu-item--hover--Color: #f7f7f7;
+  --pf-c-dropdown__menu-item--PaddingRight: 1rem;
+  --pf-c-dropdown__menu-item--PaddingLeft: 1rem;
+  --pf-c-dropdown__menu-item--PaddingTop: 0.5rem;
+  --pf-c-dropdown__menu-item--PaddingBottom: 0.5rem;
+}
+
+:root .pf-c-dropdown__menu {
+  border: 1px solid #373a41;
+  border-radius: 0.5rem;
+}
+
+:root .pf-c-dropdown__toggle-icon {
+  color: #94979c;
+  opacity: .6;
+}
+
+:root .pf-c-dropdown__toggle.pf-m-plain:not(.pf-m-text)  {
+  display: inline-flex;
+}
+
+:root .pf-c-dropdown__toggle-text{
+  display: flex;
+  align-items: center;
+}
+
+
+:root .pf-c-select {
+  --pf-c-select__toggle--PaddingTop: 0.5rem;
+  --pf-c-select__toggle--PaddingBottom: 0.5rem;
+  --pf-c-select__toggle--BackgroundColor: #13161b;
+  --pf-c-select__toggle--BorderColor: #373a41;
+  --pf-c-select__toggle--Color: #f7f7f7;
+  --pf-c-select__toggle--PaddingRight: 1rem;
+  --pf-c-select__toggle--PaddingLeft: 1rem;
+  --pf-c-select__toggle--FontSize: 0.875rem;
+
+  --pf-c-select__toggle--disabled--BackgroundColor: #22262f;
+  --pf-c-select__toggle-arrow--Color: #94979c;
+  
+  --pf-c-select__menu--BackgroundColor: #13161b;
+  --pf-c-select__menu-item--focus--BackgroundColor: #373a41;
+  --pf-c-select__menu-item--hover--BackgroundColor: #373a41;
+  --pf-c-select__menu-item--Color: #f7f7f7;
+  --pf-c-select__menu-item--PaddingTop: 0.5rem;
+  --pf-c-select__menu-item--PaddingRight: 1rem;
+  --pf-c-select__menu-item--PaddingBottom: 0.5rem;
+  --pf-c-select__menu-item--PaddingLeft: 1rem;
+  --pf-c-select__menu-item--FontSize: 0.875rem;
+
+  --pf-c-select__toggle--before--BorderTopWidth: 1px;
+  --pf-c-select__toggle--before--BorderRightWidth: 1px;
+  --pf-c-select__toggle--before--BorderBottomWidth: 1px;
+  --pf-c-select__toggle--before--BorderLeftWidth: 1px;
+  --pf-c-select__toggle--before--BorderWidth: 1px;
+  --pf-c-select__toggle--before--BorderTopColor: #373a41;
+  --pf-c-select__toggle--before--BorderRightColor: #373a41;
+  --pf-c-select__toggle--before--BorderBottomColor: #373a41;
+  --pf-c-select__toggle--before--BorderLeftColor: #373a41;
+}
+
+:root .pf-c-select__toggle {
+
+  border-radius: 0.375rem;
+  height: 42px;
+}
+
+:root .pf-c-select__toggle:before {
+  --pf-c-select__toggle--before--BorderBottomColor: #373a41;
+  --pf-c-select__toggle--before--BorderBottomWidth: 1px;
+  border-radius: 0.375rem;
+}
+
+:root .pf-c-select__toggle:focus {
+  --pf-c-select__toggle--before--BorderBottomColor: inherit;
+  border-bottom: inherit;
+  outline: 2px solid #0b8759;
+  outline-offset: 2px;
+}
+
+:root .pf-c-select__menu {
+  border: 1px solid #373a41;
+  border-radius: 0.5rem;
+}
+
+:root .pf-c-options-menu {
+  --pf-c-options-menu__menu-item--PaddingLeft: 1rem;
+  --pf-c-options-menu__menu-item--PaddingRight: 1rem;
+  --pf-c-options-menu__menu-item--PaddingTop: 0.5rem;
+  --pf-c-options-menu__menu-item--PaddingBottom: 0.5rem;
+  --pf-c-options-menu__menu-item--FontSize: 0.875rem;
+  --pf-c-options-menu__menu--BackgroundColor: #13161b;
+
+  --pf-c-options-menu__menu-item-icon--Color: #94979c;
+  --pf-c-options-menu__menu-item--hover--BackgroundColor: #373a41;
+
+  --pf-c-options-menu__toggle--Color: #cecfd2;
+}
+
+:root .pf-c-options-menu__menu {
+  border: 1px solid #373a41;
+  border-radius: 0.5rem;
+}
+
+:root .pf-c-form {
+  --pf-c-form--GridGap: 0.75rem;
+  --pf-c-form__label-text--FontWeight: 400;
+  --pf-c-form__group--m-action--MarginTop: 0.5rem;
+}
+
+:root .pf-c-tooltip {
+  --pf-c-tooltip--MaxWidth: inherit;
+  --pf-c-tooltip--BoxShadow: inherit;
+  --pf-c-tooltip_content--PaddingTop: inherit;
+  --pf-c-tooltip_content--PaddingRight: inherit;
+  --pf-c-tooltip_content--PaddingBottom: inherit;
+  --pf-c-tooltip_content--PaddingLeft: inherit;
+  --pf-c-tooltip_content--Color: inherit;
+  --pf-c-tooltip__content--BackgroundColor: #373a41;
+  --pf-c-tooltip__content--PaddingTop: 0.25rem;
+  --pf-c-tooltip__content--PaddingRight: 0.75rem;
+  --pf-c-tooltip__content--PaddingBottom: 0.25rem;
+  --pf-c-tooltip__content--PaddingLeft: 0.75rem;
+  --pf-c-tooltip_content--FontSize: inherit;
+  --pf-c-tooltip_arrow--Width: inherit;
+  --pf-c-tooltip_arrow--Height: inherit;
+  --pf-c-tooltip_arrow--m-top--TranslateX: inherit;
+}
+
+:root .pf-c-tooltip__content {
+  border-radius: 0.25rem;
+}
+
+:root .pf-c-popover {
+  --pf-c-popover__content--BackgroundColor: #373a41;
+  --pf-c-popover__arrow--BackgroundColor: #373a41;
+}
+
+:root .pf-c-popover__content {
+  border-radius: 0.375rem;
+  --pf-c-popover__content--PaddingRight: 1.25rem;
+  --pf-c-popover__content--PaddingLeft: 1.25rem;
+  --pf-c-popover__content--PaddingTop: 1rem;
+  --pf-c-popover__content--PaddingBottom: 1.25rem;
+}
+
+:root .pf-c-popover.pf-m-top {
+  --pf-c-popover__arrow--m-top--TranslateY: 0.25rem;
+}
+:root .pf-c-form-control {
+  --pf-c-form-control--BackgroundColor: #13161b;
+  --pf-c-form-control--disabled--BackgroundColor: #22262f;
+  --pf-c-form-control--BorderColor: #373a41;
+  --pf-c-form-control--Color: #f7f7f7;
+  --pf-c-form-control--PlaceholderColor: #85888e;
+
+  --pf-c-form-control--BorderTopColor: #373a41;
+  --pf-c-form-control--BorderRightColor: #373a41;
+  --pf-c-form-control--BorderBottomColor: #373a41;
+  --pf-c-form-control--BorderLeftColor: #373a41;
+
+  --pf-c-form-control--PaddingTop: 0.5rem;
+  --pf-c-form-control--PaddingRight: 0.75rem;
+  --pf-c-form-control--PaddingBottom: 0.5rem;
+  --pf-c-form-control--focus--PaddingBottom: 0.5rem;
+
+  --pf-c-button--BorderRadius: 0.375rem;
+  
+  --pf-c-form-control--focus--BorderBottomWidth: 1px;
+  --pf-c-form-control--PaddingLeft: 0.75rem;
+
+  border-radius: 0.375rem;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  
+}
+:root .pf-c-form-control:not(.ace_editor) {
+  transition: all 0.15s ease-in-out;
+}
+
+:root .pf-c-button {
+  --pf-c-button--FontSize: 0.75rem;
+  --pf-c-button--m-primary--BackgroundColor: #12a66f;
+  --pf-c-button--m-primary--focus--Color: #13161b;
+}
+
+:root .pf-c-button.pf-m-control {
+  vertical-align: middle;
+  --pf-c-button--disabled--BackgroundColor: #22262f;
+  --pf-c-button--BorderRadius: 0.5rem;
+  --pf-c-button--m-control--BackgroundColor: #12a66f;
+  --pf-c-button--m-control--Color: #13161b;
+
+}
+
+:root .pf-c-button.pf-m-control:hover {
+  --pf-c-button--m-control--BackgroundColor: #17c484;
+  --pf-c-button--m-control--Color: #22262f;
+}
+
+:root .pf-m-control.pf-c-button::after {
+  display: none;
+}
+
+:root .pf-c-button.pf-m-plain,
+:root .pf-c-button.pf-m-plain:hover {
+  --pf-c-button--m-plain--Color: #cecfd2;
+  --pf-c-button--m-plain--disabled--Color: #94979c;
+}
+
+:root .pf-c-button {
+  --pf-c-button--PaddingTop: 0.5rem;
+  --pf-c-button--PaddingBottom: 0.5rem;
+  --pf-c-button--PaddingRight: 1rem;
+  --pf-c-button--PaddingLeft: 1rem;
+  --pf-c-button--FontSize: 1rem;
+  --pf-c-button--FontWeight: 600;
+  --pf-c-button--disabled--BackgroundColor: #22262f;
+  --pf-c-button--disabled--Color: #85888e;
+  --pf-c-button--LineHeight: 1.625rem;
+
+  --pf-c-button--m-primary--Color: #13161b;
+  --pf-c-button--m-primary--hover--Color: #13161b;
+
+  text-transform: uppercase;
+}
+
+:root .pf-c-form-control:focus {
+  --pf-c-form-control--BorderColor: #0b8759;
+  --pf-c-form-control--BorderBottomColor: #373a41;
+
+  outline: 2px solid #0b8759;
+}
+
+:root .pf-c-form-control:hover {
+  --pf-c-form-control--BorderBottomColor: #373a41;
+}
+
+:root .pf-c-check {
+  --pf-c-check__label--Color: #f7f7f7;
+}
+
+:root .pf-c-input-group {
+  --pf-c-input-group--BackgroundColor: #13161b;
+  border-radius: 0.375rem;
+  gap: 0.5rem;
+}
+
+:root .pf-c-progress {
+  --pf-c-progress__bar--BackgroundColor: #373a41;
+}
+
+:root .pf-c-progress__bar,
+:root .pf-c-progress__bar::before,
+:root .pf-c-progress__indicator {
+  border-radius: 0.25rem;
+}
+
+:root .pf-c-chip-group {
+  color: #f7f7f7;
+}
+
+:root .pf-c-chip {
+  --pf-c-chip--BackgroundColor: #12a66f;
+  --pf-c-chip--Color: #13161b;
+  --pf-c-chip__text--Color: #13161b;
+  --pf-c-chip--BorderColor: #22262f;
+  --pf-c-chip--m-read--BackgroundColor: #1a1e25;
+  --pf-c-chip--m-read--Color: #cecfd2;
+  --pf-c-chip--m-read--BorderColor: #22262f;
+  --pf-c-chip--m-read--close-button--Color: #94979c;
+  --pf-c-chip--m-read--close-button--hover--Color: #f7f7f7;
+}
+
+:root .pf-c-alert {
+  --pf-c-alert--BorderTopColor: #0b8759;
+  --pf-c-alert__title--Color: #cecfd2;
+  --pf-c-alert__icon--Color: #0b8759;
+}
+
+:root .pf-c-modal-box__header {
+  --pf-c-modal-box__header--PaddingTop: 2rem;
+  --pf-c-modal-box__header--PaddingBottom: 1rem;
+  --pf-c-modal-box__header--PaddingRight: 2rem;
+  --pf-c-modal-box__header--PaddingLeft: 2rem;
+}
+
+:root .pf-c-modal-box__footer {
+  --pf-c-modal-box__footer--PaddingTop: 1rem;
+  --pf-c-modal-box__footer--PaddingBottom: 1.5rem;
+  --pf-c-modal-box__footer--PaddingRight: 2rem;
+  --pf-c-modal-box__footer--PaddingLeft: 2rem;
+}
+
+:root .pf-c-modal-box__header + .pf-c-modal-box__body {
+  --pf-c-modal-box__body--PaddingTop: 2rem;
+  --pf-c-modal-box__body--PaddingBottom: 4rem;
+  --pf-c-modal-box__body--last-child--PaddingBottom: 3rem;
+  --pf-c-modal-box__body--PaddingRight: 2rem;
+  --pf-c-modal-box__body--PaddingLeft: 2rem;
+}
+
+.pf-c-nav__link {
+  border-radius: 0.375rem;
+}
+
+.pf-c-nav__toggle-icon {
+  color: #94979c;
+  opacity: .6;
+}
+
+:root .pf-c-pagination.pf-m-bottom {
+  justify-content: space-between;
+}
+
+:root .pf-c-slider {
+  --pf-c-slider__thumb--Height: 0.75rem;
+  --pf-c-slider__thumb--Width: 0.75rem;
+  --pf-c-slider__steps--FontSize: 0.75rem;
+  --pf-c-slider__thumb--BoxShadow: none;
+  /* --pf-c-slider__rail-track--before--base--BackgroundColor: #12a66f; */
+  --pf-c-slider__rail-track--before--fill--BackgroundColor: #12a66f; 
+  /* --pf-c-slider__rail-track--before--fill--BackgroundColor--gradient-stop: transparent; */
+  /* */
+}
+
+.pf-c-nav__link:focus {
+  background-color: transparent;
+}
+
+.pf-c-nav__link:active {
+  background-color: transparent;
+}
+
+.pf-c-nav__link:hover {
+  background-color: rgba(51, 170, 51, .1);
+}
+
+.pf-c-nav__link.pf-m-current {
+  background-color: rgba(51, 170, 51, .2);
+}
+
+.pf-c-nav__link.pf-m-current::after {
+  border-color: rgba(51, 170, 51, .3);
+}
+
+.ace-monokai .ace_gutter {
+  background: #1a1e25;
+  color: #94979c;
+}
+
+.ace-monokai .ace_marker-layer .ace_active-line {
+  background: #1a1e25;
+  color: #cecfd2;
+}
+
+.ace-monokai .ace_gutter-active-line {
+  background-color: #373a41;
+}
+
+:root .pf-c-switch {
+  --pf-c-switch__toggle--before--BackgroundColor: #373a41;
+  --pf-c-switch__toggle--before--Top: 1px;
+  --pf-c-switch__toggle--before--Width: 1.0rem;
+  --pf-c-switch__toggle--before--Height: 1.0rem;
+  --pf-c-switch__toggle--Width: 40px;
+  --pf-c-switch__toggle--BorderRadius: 16px;
+  --pf-c-switch__toggle--Height: 18px;
+  --pf-c-switch__input--focus__toggle--OutlineColor: none;
+  --pf-c-switch__toggle--before--Left: 3px;
+}
+
+:root .pf-c-switch__input:checked ~ .pf-c-switch__toggle::before {
+  --pf-c-switch__toggle--before--BackgroundColor: #373a41;
 }
