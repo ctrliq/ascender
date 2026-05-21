@@ -68,6 +68,7 @@ function PageHeaderToolbar({
       document.documentElement.classList.remove('pf-theme-dark');
     }
     localStorage.setItem('darkMode', next);
+    window.dispatchEvent(new Event('resize'));
   };
   const config = useConfig();
 
