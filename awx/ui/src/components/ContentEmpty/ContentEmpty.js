@@ -17,7 +17,7 @@ const ContentEmpty = ({
   const { t } = useLingui();
   return (
     <EmptyState variant="full" className={className}>
-      <EmptyStateIcon icon={icon} />
+      <EmptyStateIcon size={64} icon={icon} />
       <Title size="lg" headingLevel="h3">
         {title || t`No items found.`}
       </Title>

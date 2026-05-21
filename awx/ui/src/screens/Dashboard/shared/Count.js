@@ -17,6 +17,7 @@ const CountCard = styled(Card)`
     font-size: var(--pf-global--FontSize--4xl);
     color: var(--pf-global--primary-color--100);
     text-decoration: none;
+    margin-bottom: 0.5rem;
   }
 
   & h2.failed {

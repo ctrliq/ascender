@@ -3,7 +3,7 @@ import { CardActions } from '@patternfly/react-core';
 import styled from 'styled-components';
 
 const CardActionsWrapper = styled.div`
-  margin-top: 20px;
+  margin-top: var(--pf-global--spacer--xl);
   --pf-c-card__actions--PaddingLeft: 0;
 `;
 

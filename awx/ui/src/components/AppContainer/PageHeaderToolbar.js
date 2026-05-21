@@ -29,8 +29,13 @@ import useWsPendingApprovalCount from './useWsPendingApprovalCount';
 const PendingWorkflowApprovals = styled.div`
   display: flex;
   align-items: center;
-  padding: 10px;
-  margin-right: 10px;
+  padding: var(--pf-global--spacer--md);
+  margin-right: var(--pf-global--spacer--md);
+`;
+
+const UserName = styled.span`
+  margin-left: var(--pf-global--spacer--md);
+  font-size: var(--pf-global--FontSize--sm);
 `;
 
 function PageHeaderToolbar({
@@ -58,6 +63,7 @@ function PageHeaderToolbar({
     setIsDarkMode(next);
     if (next) {
       document.documentElement.classList.add('pf-theme-dark');
+      import('../../darkmode.css');
     } else {
       document.documentElement.classList.remove('pf-theme-dark');
     }
@@ -109,9 +115,9 @@ function PageHeaderToolbar({
                 background: 'none',
                 border: 'none',
                 cursor: 'pointer',
-                padding: '10px',
+                padding: 'var(--pf-global--spacer--md)',
                 color: 'var(--pf-global--Color--100)',
-                fontSize: '16px',
+                fontSize: 'var(--pf-global--FontSize--md)',
                 display: 'flex',
                 alignItems: 'center',
               }}
@@ -194,11 +200,9 @@ function PageHeaderToolbar({
                 ouiaId="toolbar-user-dropdown-toggle"
               >
                 <UserIcon />
-                {loggedInUser && (
-                  <span style={{ marginLeft: '10px' }}>
-                    {loggedInUser.username}
-                  </span>
-                )}
+                {loggedInUser &&
+                    <UserName>{loggedInUser.username}</UserName>
+                }
               </DropdownToggle>
             }
             dropdownItems={[

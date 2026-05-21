@@ -40,7 +40,7 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
     const gridColor =
       getComputedStyle(document.documentElement)
         .getPropertyValue('--pf-global--BorderColor--100')
-        .trim() || '#d7d7d7';
+        .trim() || '#373a41';
 
     function transition(path) {
       path.transition().duration(1000).attrTween('stroke-dasharray', tweenDash);
@@ -56,7 +56,7 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
     const y = d3.scaleLinear().range([height, 0]);
 
     // [success, fail, total]
-    const colors = d3.scaleOrdinal(['#6EC664', '#A30000', '#06C']);
+    const colors = d3.scaleOrdinal(['#079455', '#912018', '#4e5ba6']);
     const svg = d3
       .select(`#${id}`)
       .append('svg')
@@ -66,7 +66,8 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
       .attr('z', 100)
       .append('g')
       .attr('id', 'chart-container')
-      .attr('transform', `translate(${margin.left}, ${margin.top})`);
+      .attr('transform', `translate(${margin.left}, ${margin.top})`)
+      .attr('fill', '#f7f7f7');
     // Tooltip
     const tooltip = new ChartTooltip({
       svg: `#${id}`,
@@ -282,7 +283,7 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
     return () => window.removeEventListener('resize', handleResize);
   }, [draw]);
 
-  return <div id={id} />;
+  return <div id={id} style={{ marginTop: '3rem' }} />;
 }
 
 LineChart.propTypes = {

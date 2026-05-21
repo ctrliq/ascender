@@ -7,7 +7,6 @@ import { Redirect, withRouter } from 'react-router-dom';
 
 import { useLingui } from '@lingui/react/macro';
 import { Formik } from 'formik';
-import styled from 'styled-components';
 import DOMPurify from 'dompurify';
 
 import {
@@ -18,7 +17,6 @@ import {
   Login as PFLogin,
   LoginHeader,
   LoginFooter,
-  LoginMainHeader,
   LoginMainBody,
   LoginMainFooter,
   Tooltip,
@@ -35,14 +33,11 @@ import { AuthAPI, RootAPI, MeAPI } from 'api';
 import { useSession } from 'contexts/Session';
 import LoadingSpinner from 'components/LoadingSpinner';
 import { SESSION_REDIRECT_URL, SESSION_USER_ID } from '../../constants';
+import '../../login.css';
 
-const loginLogoSrc = 'static/media/AscenderAuto_logo_h_rev_M.png';
+const loginLogoSrc = 'static/media/Ascender_logo.svg';
 
-const Login = styled(PFLogin)`
-  & .pf-c-brand {
-    max-height: 285px;
-  }
-`;
+const Login = PFLogin;
 
 function AWXLogin({ alt, isAuthenticated }) {
   const { t } = useLingui();
@@ -184,14 +179,7 @@ function AWXLogin({ alt, isAuthenticated }) {
     return <Redirect to={redirect} />;
   }
   return (
-    <Login header={Header} footer={Footer}>
-      <LoginMainHeader
-        data-cy="login-header"
-        /*        title={brandName ? t`Welcome to ${brandName}!` : ''} */
-        title=""
-        /*        subtitle={t`Please log in`} */
-        subtitle=""
-      />
+    <Login className="ascender-login">
       <LoginMainBody>
         {isSessionExpired.current ? (
           <Alert
@@ -201,6 +189,7 @@ function AWXLogin({ alt, isAuthenticated }) {
             ouiaId="session-expired-warning-alert"
           />
         ) : null}
+        {Header}
         <Formik
           initialValues={{
             password: '',
@@ -213,7 +202,7 @@ function AWXLogin({ alt, isAuthenticated }) {
               autoComplete="off"
               data-cy="login-form"
               className={authError ? 'pf-m-error' : ''}
-              helperText={helperText}
+              helperText={authError ? helperText : null}
               isLoginButtonDisabled={isAuthenticating}
               isValidPassword={!authError}
               isValidUsername={!authError}
@@ -416,6 +405,7 @@ function AWXLogin({ alt, isAuthenticated }) {
 
                 return null;
               })}
+              {Footer}
           </>
         }
       />

@@ -34,6 +34,7 @@ export const FormCheckboxLayout = styled.div`
   & > * {
     margin-bottom: 10px;
     margin-right: 30px;
+    align-items: center;
   }
 `;
 
@@ -42,11 +43,12 @@ export const SubFormLayout = styled.div`
   background-color: var(--pf-global--BackgroundColor--200);
   margin-right: calc(var(--pf-c-card--child--PaddingRight) * -1);
   margin-left: calc(var(--pf-c-card--child--PaddingLeft) * -1);
-  padding: var(--pf-c-card--child--PaddingRight);
+  padding: var(--pf-global--spacer--2xl);
+  border-radius: var(--pf-global--BorderRadius--md);
 
   & > .pf-c-title {
-    --pf-c-title--m-md--FontWeight: 700;
+    --pf-c-title--m-md--FontWeight: var(--pf-global--FontWeight--bold);
     grid-column: 1 / -1;
-    margin-bottom: 20px;
+    margin-bottom: var(--pf-global--spacer--xl);
   }
 `;

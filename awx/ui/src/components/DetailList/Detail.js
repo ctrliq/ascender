@@ -58,7 +58,7 @@ const Detail = ({
   const valueCy = dataCy ? `${dataCy}-value` : null;
 
   return (
-    <>
+    <div>
       <DetailName
         className={className}
         component={TextListItemVariants.dt}
@@ -79,7 +79,7 @@ const Detail = ({
       >
         {value}
       </DetailValue>
-    </>
+    </div>
   );
 };
 Detail.propTypes = {
