@@ -63,8 +63,8 @@ function PageHeaderToolbar({
     setIsDarkMode(next);
     if (next) {
       document.documentElement.classList.add('pf-theme-dark');
+      import('../../darkmode.css');
     } else {
-        import('../../darkmode.css');
       document.documentElement.classList.remove('pf-theme-dark');
     }
     localStorage.setItem('darkMode', next);
