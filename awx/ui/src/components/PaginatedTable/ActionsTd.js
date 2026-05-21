@@ -28,7 +28,7 @@ export default function ActionsTd({ children, gridColumns, ...props }) {
         --pf-c-table--cell--Width: ${width}px;
 
         [role='presentation'] {
-          color: #94979c;
+          color: var(--pf-global--Color--300);
           opacity: 0.5;
         }
 

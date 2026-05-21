@@ -28,7 +28,7 @@ const AdvancedGroup = styled.div`
 
   @media (max-width: 991px) {
     display: grid;
-    grid-gap: 0.5rem;
+    grid-gap: var(--pf-global--spacer--sm);
   }
 
   & .pf-c-select {

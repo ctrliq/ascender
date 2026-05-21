@@ -29,13 +29,13 @@ import useWsPendingApprovalCount from './useWsPendingApprovalCount';
 const PendingWorkflowApprovals = styled.div`
   display: flex;
   align-items: center;
-  padding: 10px;
-  margin-right: 10px;
+  padding: var(--pf-global--spacer--md);
+  margin-right: var(--pf-global--spacer--md);
 `;
 
 const UserName = styled.span`
-  margin-left: 10px;
-  font-size: 0.875rem;
+  margin-left: var(--pf-global--spacer--md);
+  font-size: var(--pf-global--FontSize--sm);
 `;
 
 function PageHeaderToolbar({
@@ -114,9 +114,9 @@ function PageHeaderToolbar({
                 background: 'none',
                 border: 'none',
                 cursor: 'pointer',
-                padding: '10px',
+                padding: 'var(--pf-global--spacer--md)',
                 color: 'var(--pf-global--Color--100)',
-                fontSize: '16px',
+                fontSize: 'var(--pf-global--FontSize--md)',
                 display: 'flex',
                 alignItems: 'center',
               }}

@@ -11,7 +11,7 @@ const DetailList = ({ children, stacked, ...props }) => (
 export default styled(DetailList)`
   display: grid;
   align-items: start;
-  font-size: 0.875rem;
+  font-size: var(--pf-global--FontSize--sm);
   gap: ${(props) =>
     props.compact ? `1rem` : `2rem`};
   ${(props) =>
@@ -33,6 +33,6 @@ export default styled(DetailList)`
   `}
 
   & + & {
-    margin-top: 1.5rem;
+    margin-top: var(--pf-global--spacer--2xl);
   }
 `;
