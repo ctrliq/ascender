@@ -145,7 +145,7 @@ describe('<Login />', () => {
     });
     const { loginHeaderLogo } = await findChildren(wrapper);
     const { alt, src } = loginHeaderLogo.props();
-    expect([alt, src]).toEqual(['AWX', 'static/media/logo-login.svg']);
+    expect([alt, src]).toEqual(['AWX', 'static/media/Ascender_logo.svg']);
   });
 
   test('custom login info handled correctly', async () => {
@@ -178,7 +178,7 @@ describe('<Login />', () => {
     });
     const { loginHeaderLogo } = await findChildren(wrapper);
     const { alt, src } = loginHeaderLogo.props();
-    expect([alt, src]).toEqual([null, 'static/media/logo-login.svg']);
+    expect([alt, src]).toEqual([null, 'static/media/Ascender_logo.svg']);
     expect(wrapper.find('AlertModal').length).toBe(1);
   });
 
