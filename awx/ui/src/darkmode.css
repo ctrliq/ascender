@@ -603,17 +603,17 @@ html.pf-theme-dark .pf-c-nav__link:active {
   background-color: transparent;
 }
 
-html.pf-theme-dark .ace-nord_dark .ace_gutter {
+html.pf-theme-dark .ace-github .ace_gutter {
   background: var(--pf-global--BackgroundColor--200);
   color: var(--pf-global--Color--300);
 }
 
-html.pf-theme-dark .ace-nord_dark .ace_marker-layer .ace_active-line {
+html.pf-theme-dark .ace-github .ace_marker-layer .ace_active-line {
   background: var(--pf-global--BackgroundColor--200);
   color: var(--pf-global--Color--200);
 }
 
-html.pf-theme-dark .ace-nord_dark .ace_gutter-active-line {
+html.pf-theme-dark .ace-github .ace_gutter-active-line {
   background-color: var(--pf-global--BorderColor--100);
 }
 
