@@ -218,7 +218,6 @@
   --pf-c-nav__link--PaddingTop: 0.25rem;
   --pf-c-nav__link--PaddingBottom: 0.25rem;
   --pf-c-nav__link--PaddingRight: inherit;
-  --pf-c-nav__link--PaddingBottom: inherit;
   --pf-c-nav__link--PaddingLeft: inherit;
   --pf-c-nav__link--FontSize: var(--pf-global--FontSize--sm);
   --pf-c-nav__link--hover--after--BorderColor: inherit;
