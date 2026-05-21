@@ -35,6 +35,7 @@ export const FormCheckboxLayout = styled.div`
     margin-bottom: 10px;
     margin-right: 30px;
     align-items: center;
+    accent-color: var(--pf-global--primary-color--100);
   }
 `;
 
