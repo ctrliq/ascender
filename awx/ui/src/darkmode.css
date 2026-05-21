@@ -596,7 +596,7 @@ html.pf-theme-dark .pf-c-slider {
 }
 
 html.pf-theme-dark .pf-c-nav__link:focus {
-  background-color: transparent;
+  background-color: var(--pf-global--BorderColor--100);
 }
 
 html.pf-theme-dark .pf-c-nav__link:active {
