@@ -7,7 +7,6 @@ import { Redirect, withRouter } from 'react-router-dom';
 
 import { useLingui } from '@lingui/react/macro';
 import { Formik } from 'formik';
-import styled from 'styled-components';
 import DOMPurify from 'dompurify';
 
 import {
@@ -34,28 +33,11 @@ import { AuthAPI, RootAPI, MeAPI } from 'api';
 import { useSession } from 'contexts/Session';
 import LoadingSpinner from 'components/LoadingSpinner';
 import { SESSION_REDIRECT_URL, SESSION_USER_ID } from '../../constants';
+import 'login.css';
 
 const loginLogoSrc = 'static/media/Ascender_logo.svg';
 
-const Login = styled(PFLogin)`
-  & {
-    --pf-c-login__container--MaxWidth: 24rem;
-    --pf-c-login__main-body--PaddingRight: 2rem;
-    --pf-c-login__main-body--PaddingLeft: 2rem;
-  }
-
-  & .pf-c-login__main {
-    background-color: #1a1e25;
-    border-radius: 0.5rem;
-    border: 1px solid #373a41;
-  }
-
-  & .pf-c-brand {
-    max-width: 12rem;
-    display: block;
-    margin: 0 auto;
-  }
-`;
+const Login = PFLogin;
 
 function AWXLogin({ alt, isAuthenticated }) {
   const { t } = useLingui();
@@ -197,7 +179,7 @@ function AWXLogin({ alt, isAuthenticated }) {
     return <Redirect to={redirect} />;
   }
   return (
-    <Login>
+    <Login className="ascender-login">
       <LoginMainBody>
         {isSessionExpired.current ? (
           <Alert

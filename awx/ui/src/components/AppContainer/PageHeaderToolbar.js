@@ -67,7 +67,9 @@ function PageHeaderToolbar({
       document.documentElement.classList.remove('pf-theme-dark');
     }
     localStorage.setItem('darkMode', next);
-    window.dispatchEvent(new Event('resize'));
+    // Reload the page to ensure all components re-render with the new theme
+    // otherwise we could do window.dispatchEvent(new Event('resize'));
+    window.location.reload();
   };
   const config = useConfig();
 

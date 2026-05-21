@@ -149,6 +149,7 @@ function App() {
 
     if (prefersDarkMode) {
       document.documentElement.classList.add('pf-theme-dark');
+      import('./darkmode.css');
     }
   }, []);
   const history = useHistory();

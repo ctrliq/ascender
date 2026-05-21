@@ -64,7 +64,7 @@ const OutputHeader = styled.div`
 `;
 
 const OutputWrapper = styled.div`
-  background-color: var(--pf-global--BackgroundColor--100);
+  background-color: var(--pf-global--BackgroundColor--200);
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;

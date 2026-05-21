@@ -1,0 +1,43 @@
+/* Change the login so it is always Dark Mode.  We can't just import in the darkmode.css as
+   it will leak over into the entire application
+*/
+
+.ascender-login {
+  --pf-global--FontFamily--sans-serif: Inter,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;
+  --pf-global--FontFamily--heading--sans-serif: Satoshi,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;
+  --pf-global--FontFamily--text: Inter,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;
+  --pf-global--Color--100: #f7f7f7;
+  --pf-global--Color--200: #cecfd2;
+  --pf-global--Color--300: #94979c;
+  --pf-global--disabled-color--100: #85888e;
+  --pf-global--link--Color: #12a66f;
+  --pf-global--link--Color--hover: #cecfd2;
+  --pf-global--BackgroundColor--100: #13161b;
+  --pf-global--BackgroundColor--200: #1a1e25;
+  --pf-global--BorderColor--100: #373a41;
+  --pf-global--BorderColor--200: #22262f;
+  --pf-global--primary-color--100: #12a66f;
+  --pf-global--primary-color--200: #17c484;
+  --pf-global--active-color--100: #12a66f;
+  --pf-global--active-color--200: #17c484;
+  --pf-c-login__main--BackgroundColor: var(--pf-global--BackgroundColor--200);
+  --pf-c-login__container--MaxWidth: 24rem;
+  --pf-c-login__main-body--PaddingRight: 2rem;
+  --pf-c-login__main-body--PaddingLeft: 2rem;
+
+  color: var(--pf-global--Color--100);
+  background-color: var(--pf-global--BackgroundColor--100);
+}
+
+.ascender-login .pf-c-login__main {
+  background-color: var(--pf-global--BackgroundColor--200);
+  color: var(--pf-global--Color--100);
+  border-radius: 0.5rem;
+  border: 1px solid var(--pf-global--BorderColor--100);
+}
+
+.ascender-login .pf-c-brand {
+  display: block;
+  margin: 0 auto;
+  max-width: 12rem;
+}

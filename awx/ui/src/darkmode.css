@@ -1,0 +1,650 @@
+
+/**
+* Quantic Design System Overrides for PatternFly
+*
+* This file overrides PatternFly's default design tokens with the values from Quantic
+* to maintain consistent theming across the application.
+*/
+
+:root {
+  /* === Typography === */
+  /* Font families */
+  --pf-global--FontFamily--sans-serif: Inter,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;
+  --pf-global--FontFamily--heading--sans-serif: Satoshi,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;
+  --pf-global--FontFamily--text: Inter,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;
+
+  /* Font sizes */
+  --pf-global--FontSize--xs: 0.75rem;
+  --pf-global--FontSize--sm: 0.875rem;
+  --pf-global--FontSize--md: 1rem;
+  --pf-global--FontSize--lg: 1.125rem;
+  --pf-global--FontSize--xl: 1.25rem;
+  --pf-global--FontSize--2xl: 1.5rem;
+  --pf-global--FontSize--3xl: 1.875rem;
+  --pf-global--FontSize--4xl: 2.25rem;
+
+  /* Font weights */
+  --pf-global--FontWeight--normal: 400;
+  --pf-global--FontWeight--semi-bold: 600;
+  --pf-global--FontWeight--bold: 700;
+
+  /* Line heights */
+  --pf-global--LineHeight--sm: 1.25rem;
+  --pf-global--LineHeight--md: 1.5rem;
+
+  /* === Colors === */
+  /* Text colors */
+  color: #cecfd2;
+  background-color: #13161b;
+  --pf-global--Color--100: #f7f7f7;
+  --pf-global--Color--200: #cecfd2;
+  --pf-global--Color--300: #94979c;
+  --pf-global--disabled-color--100: #85888e;
+  --pf-global--link--Color: #12a66f;
+  --pf-global--link--Color--hover: #cecfd2;
+  
+  /* Background colors */
+  --pf-global--BackgroundColor--100: #13161b;
+  --pf-global--BackgroundColor--200: #1a1e25;
+  --pf-global--BackgroundColor--dark-100: #1a1e25;
+  --pf-global--BackgroundColor--dark-200: #13161b;
+  
+  /* Primary/Brand colors */
+  --pf-global--primary-color--100: #12a66f;
+  --pf-global--primary-color--200: #17c484;
+  --pf-global--active-color--100: #12a66f;
+  --pf-global--active-color--200: #17c484;
+  
+  /* Status colors */
+  --pf-global--success-color--100: #17b26a;
+  --pf-global--success-color--200: #47cd89;
+  --pf-global--danger-color--100: #f04438;
+  --pf-global--danger-color--200: #f97066;
+  --pf-global--warning-color--100: #f79009;
+  --pf-global--warning-color--200: #fdb022;
+  --pf-global--info-color--100: #2e90fa;
+  --pf-global--info-color--200: #53b1fd;
+  
+  /* === Spacing === */
+  --pf-global--spacer--xs: 0.375rem;
+  --pf-global--spacer--sm: 0.5rem;
+  --pf-global--spacer--md: 0.75rem;
+  --pf-global--spacer--lg: 1rem;
+  --pf-global--spacer--xl: 1.25rem;
+  --pf-global--spacer--2xl: 1.5rem;
+  --pf-global--spacer--3xl: 2rem;
+  --pf-global--spacer--4xl: 2.5rem;
+  
+  /* Gutter spacing */
+  --pf-global--gutter: 1rem;
+  --pf-global--gutter--md: 1.5rem;
+  
+  /* === Borders === */
+  --pf-global--BorderColor--100: #373a41;
+  --pf-global--BorderColor--200: #22262f;
+  --pf-global--BorderColor--300: #22262f;
+  --pf-global--BorderColor--disabled: #373a41;
+  
+  /* Border radius */
+  --pf-global--BorderRadius--sm: 0.375rem;
+  --pf-global--BorderRadius--md: 0.5rem;
+  --pf-global--BorderRadius--lg: 0.625rem;
+  --pf-global--BorderRadius--xl: 0.75rem;
+  
+  /* === Focus === */
+  --pf-global--focus-ring-color: #0b8759;
+  
+  /* === Shadows === */
+  --pf-global--BoxShadow--sm: hsla(0,0%,100%,0);
+  --pf-global--BoxShadow--md: hsla(0,0%,100%,0);
+  --pf-global--BoxShadow--lg: hsla(0,0%,100%,0);
+  --pf-global--BoxShadow--xl: hsla(0,0%,100%,0);
+  
+}
+
+.pf-c-title {
+  color: var(--pf-global--Color--100);
+  font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif !important;
+  font-weight: 500 !important;
+}
+
+:root .pf-c-table {
+  --pf-c-table__sort__button__text--Color: var(--pf-global--Color--100);
+  color: var(--pf-global--Color--100);
+  background-color: var(--pf-global--BackgroundColor--100);
+}
+
+:root .pf-c-form-control {
+  --pf-c-form-control--BackgroundColor: var(--pf-global--BackgroundColor--100);
+  --pf-c-form-control--disabled--BackgroundColor: var(--pf-global--BorderColor--200);
+  --pf-c-form-control--BorderColor: var(--pf-global--BorderColor--100);
+  --pf-c-form-control--Color: var(--pf-global--Color--100);
+  --pf-c-form-control--PlaceholderColor: var(--pf-global--disabled-color--100);
+
+  --pf-c-form-control--BorderTopColor: var(--pf-global--BorderColor--100);
+  --pf-c-form-control--BorderRightColor: var(--pf-global--BorderColor--100);
+  --pf-c-form-control--BorderBottomColor: var(--pf-global--BorderColor--100);
+  --pf-c-form-control--BorderLeftColor: var(--pf-global--BorderColor--100);
+
+  --pf-c-form-control--PaddingTop: var(--pf-global--spacer--sm);
+  --pf-c-form-control--PaddingRight: var(--pf-global--spacer--md);
+  --pf-c-form-control--PaddingBottom: var(--pf-global--spacer--sm);
+  --pf-c-form-control--focus--PaddingBottom: var(--pf-global--spacer--sm);
+
+  --pf-c-button--BorderRadius: var(--pf-global--BorderRadius--sm);
+  
+  --pf-c-form-control--focus--BorderBottomWidth: 1px;
+  --pf-c-form-control--PaddingLeft: var(--pf-global--spacer--md);
+
+  border-radius: var(--pf-global--BorderRadius--sm);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+:root .pf-c-button {
+  --pf-c-button--FontSize: var(--pf-global--FontSize--xs);
+  --pf-c-button--m-primary--BackgroundColor: var(--pf-global--link--Color);
+  --pf-c-button--m-primary--focus--Color: var(--pf-global--BackgroundColor--100);
+  --pf-c-button--m-link--Color: var(--pf-global--link--Color);
+}
+
+:root .pf-c-button.pf-m-control {
+  vertical-align: middle;
+  --pf-c-button--disabled--BackgroundColor: var(--pf-global--BorderColor--200);
+  --pf-c-button--BorderRadius: 0.5rem;
+  --pf-c-button--m-control--BackgroundColor: var(--pf-global--link--Color);
+  --pf-c-button--m-control--Color: var(--pf-global--BackgroundColor--100);
+  background-color: #12a66f;
+  color: #13161b;
+}
+
+:root .pf-c-button.pf-m-link {
+  color: #12a66f;
+}
+
+:root b {
+  font-weight: normal;
+}
+
+:root .pf-c-page {
+  --pf-c-page--BackgroundColor: inherit;
+  --pf-c-page__main-section--BackgroundColor: inherit;
+  --pf-c-page__main-section--PaddingTop: var(--pf-global--spacer--lg);
+  --pf-c-page__main-section--PaddingBottom: var(--pf-global--spacer--md);
+  --pf-c-page__main-section--xl--PaddingTop: var(--pf-global--spacer--lg);
+  --pf-c-page__main-section--xl--PaddingBottom: var(--pf-global--spacer--md);
+  --pf-c-page__main-section--PaddingRight: var(--pf-global--spacer--2xl);
+  --pf-c-page__main-section--PaddingLeft: var(--pf-global--spacer--2xl);
+  --pf-c-page__main-section--xl--PaddingRight: var(--pf-global--spacer--xl);
+  --pf-c-page__main-section--xl--PaddingLeft: var(--pf-global--spacer--xl);
+
+  --pf-c-page__header--BackgroundColor: var(--pf-global--BackgroundColor--100);
+  --pf-c-page__sidebar--Width: 20rem;
+  --pf-c-page__sidebar--BackgroundColor: var(--pf-global--BackgroundColor--100);
+}
+
+:root .pf-c-login {
+  --pf-c-login__main--BackgroundColor: var(--pf-global--BackgroundColor--200);
+}
+:root .pf-c-page__header {
+  box-shadow: none;
+  border-bottom: 1px solid var(--pf-global--BorderColor--200);
+}
+
+:root .pf-c-breadcrumb__item-divider {
+  color: var(--pf-global--BorderColor--100);
+}
+
+:root .pf-c-page__sidebar.pf-m-expanded {
+  box-shadow: none;
+  border-right: 1px solid var(--pf-global--BorderColor--200);
+}
+
+:root .pf-c-nav {
+  --pf-c-nav--BackgroundColor: var(--pf-global--BackgroundColor--200);
+  --pf-c-nav__link--Color: var(--pf-global--Color--200);
+  --pf-c-nav__link--m-current--BackgroundColor: var(--pf-global--BorderColor--100);
+  --pf-c-nav__link--m-current--Color: var(--pf-global--Color--100);
+  --pf-c-nav__link--PaddingTop: var(--pf-global--spacer--sm);
+  --pf-c-nav__link--PaddingBottom: var(--pf-global--spacer--sm);
+  --pf-c-nav__link--PaddingRight: var(--pf-global--spacer--md);
+  --pf-c-nav__link--PaddingLeft: var(--pf-global--spacer--md);
+  --pf-c-nav__link--FontSize: var(--pf-global--spacer--lg);
+  --pf-c-nav__link--m-current--after--BorderColor: transparent;
+  margin-inline: var(--pf-global--spacer--xl);
+}
+
+:root .pf-c-nav__subnav {
+  --pf-c-nav__link--PaddingTop: 0.25rem;
+  --pf-c-nav__link--PaddingBottom: 0.25rem;
+  --pf-c-nav__link--PaddingRight: inherit;
+  --pf-c-nav__link--PaddingBottom: inherit;
+  --pf-c-nav__link--PaddingLeft: inherit;
+  --pf-c-nav__link--FontSize: var(--pf-global--FontSize--sm);
+  --pf-c-nav__link--hover--after--BorderColor: inherit;
+  --pf-c-nav__link--focus--after--BorderColor: inherit;
+  --pf-c-nav__link--active--after--BorderColor: inherit;
+  --pf-c-nav__link--m-current--after--BorderColor: inherit;
+  --pf-c-nav__link--hover--after--BorderLeftWidth: inherit;
+  --pf-c-nav__link--focus--after--BorderLeftWidth: inherit;
+  --pf-c-nav__link--active--after--BorderLeftWidth: inherit;
+  --pf-c-nav__link--m-current--after--BorderLeftWidth: inherit;
+  --pf-c-nav--c-divider--PaddingRight: inherit;
+  --pf-c-nav--c-divider--PaddingLeft: inherit;
+}
+
+:root .pf-c-page__main-section.pf-m-light {
+  --pf-c-page__main-section--BackgroundColor: inherit;
+}
+
+:root .pf-c-toolbar__group {
+  gap: var(--pf-global--spacer--sm);
+  margin-right: 0;
+}
+
+:root .pf-c-toolbar__content-section {
+  gap: var(--pf-global--spacer--sm);
+}
+
+:root .pf-c-toolbar__item {
+  margin-right: 0;
+}
+
+:root .pf-c-tab-content {
+  padding-top: var(--pf-global--spacer--2xl);
+  padding-bottom: var(--pf-global--spacer--2xl);
+}
+
+:root .pf-c-tabs__item-text {
+  display: flex;
+  align-items: center;
+}
+
+:root .pf-c-table thead {
+  --pf-c-table--cell--FontWeight: 500;
+}
+:root .pf-c-table tr > * {
+  color: inherit;
+}
+
+:root .pf-c-table {
+  --pf-global--Color--100: inherit;
+  --pf-global--Color--200: inherit;
+  --pf-global--BorderColor--100: var(--pf-global--BorderColor--200);
+  --pf-global--primary-color--100: inherit;
+  --pf-global--link--Color: inherit;
+  --pf-global--link--Color--hover: inherit;
+  --pf-global--BackgroundColor--100: inherit;
+}
+
+:root .pf-c-empty-state {
+  --pf-c-empty-state--PaddingTop: 4rem;
+  --pf-c-empty-state__body--Color: var(--pf-global--Color--300);
+}
+
+:root .pf-c-title {
+  --pf-c-title--m-2xl--FontWeight: var(--pf-global--FontWeight--semi-bold);
+  --pf-c-title--m-xl--FontWeight: var(--pf-global--FontWeight--semi-bold);
+  --pf-c-title--m-lg--FontWeight: var(--pf-global--FontWeight--semi-bold);
+}
+
+.pf-c-title.pf-m-2xl {
+  margin-top: 1.5rem;
+}
+
+:root .pf-c-card {
+  --pf-c-card--first-child--PaddingTop: var(--pf-global--spacer--3xl);
+}
+
+:root .pf-c-card__title {
+  --pf-c-card__title--FontSize: var(--pf-global--FontSize--lg);
+  margin-bottom: 0.25rem;
+}
+
+:root .pf-c-data-list {
+  --pf-global--link--Color: inherit; 
+  --pf-c-data-list__item--BackgroundColor: var(--pf-global--BackgroundColor--100);
+  --pf-c-data-list--BorderTopColor: var(--pf-global--BorderColor--200);
+  --pf-c-data-list__item--BorderBottomColor: var(--pf-global--BorderColor--200);
+  --pf-c-data-list__item--m-hover--BackgroundColor: var(--pf-global--BorderColor--100);
+}
+
+
+:root .pf-c-dropdown {
+  --pf-c-dropdown__menu--BackgroundColor: var(--pf-global--BackgroundColor--100);
+  --pf-c-dropdown__menu-item--Color: var(--pf-global--Color--100);
+  --pf-c-dropdown__menu-item--FontSize: 0.875rem;
+  --pf-c-dropdown__menu-item--hover--BackgroundColor: var(--pf-global--BorderColor--100);
+  --pf-c-dropdown__menu-item--hover--Color: var(--pf-global--Color--100);
+  --pf-c-dropdown__menu-item--PaddingRight: var(--pf-global--spacer--lg);
+  --pf-c-dropdown__menu-item--PaddingLeft: var(--pf-global--spacer--lg);
+  --pf-c-dropdown__menu-item--PaddingTop: var(--pf-global--spacer--sm);
+  --pf-c-dropdown__menu-item--PaddingBottom: var(--pf-global--spacer--sm);
+}
+
+:root .pf-c-dropdown__menu {
+  border: 1px solid var(--pf-global--BorderColor--100);
+  border-radius: var(--pf-global--BorderRadius--md);
+}
+
+:root .pf-c-dropdown__toggle-icon {
+  color: var(--pf-global--Color--300);
+  opacity: .6;
+}
+
+:root .pf-c-dropdown__toggle.pf-m-plain:not(.pf-m-text)  {
+  display: inline-flex;
+}
+
+:root .pf-c-dropdown__toggle-text{
+  display: flex;
+  align-items: center;
+}
+
+:root .pf-c-select {
+  --pf-c-select__toggle--PaddingTop: var(--pf-global--spacer--sm);
+  --pf-c-select__toggle--PaddingBottom: var(--pf-global--spacer--sm);
+  --pf-c-select__toggle--BackgroundColor: var(--pf-global--BackgroundColor--100);
+  --pf-c-select__toggle--BorderColor: var(--pf-global--BorderColor--100);
+  --pf-c-select__toggle--Color: var(--pf-global--Color--100);
+  --pf-c-select__toggle--PaddingRight: var(--pf-global--spacer--lg);
+  --pf-c-select__toggle--PaddingLeft: var(--pf-global--spacer--lg);
+  --pf-c-select__toggle--FontSize: var(--pf-global--FontSize--sm);
+  --pf-c-select__toggle--disabled--BackgroundColor: var(--pf-global--BorderColor--200);
+  --pf-c-select__toggle-arrow--Color: var(--pf-global--Color--300);
+  
+  --pf-c-select__menu--BackgroundColor: var(--pf-global--BackgroundColor--100);
+  --pf-c-select__menu-item--focus--BackgroundColor: var(--pf-global--BorderColor--100);
+  --pf-c-select__menu-item--hover--BackgroundColor: var(--pf-global--BorderColor--100);
+  --pf-c-select__menu-item--Color: var(--pf-global--Color--100);
+  --pf-c-select__menu-item--PaddingTop: var(--pf-global--spacer--sm);
+  --pf-c-select__menu-item--PaddingRight: var(--pf-global--spacer--lg);
+  --pf-c-select__menu-item--PaddingBottom: var(--pf-global--spacer--sm);
+  --pf-c-select__menu-item--PaddingLeft: var(--pf-global--spacer--lg);
+  --pf-c-select__menu-item--FontSize: var(--pf-global--FontSize--sm);
+
+  --pf-c-select__toggle--before--BorderTopWidth: 1px;
+  --pf-c-select__toggle--before--BorderRightWidth: 1px;
+  --pf-c-select__toggle--before--BorderBottomWidth: 1px;
+  --pf-c-select__toggle--before--BorderLeftWidth: 1px;
+  --pf-c-select__toggle--before--BorderWidth: 1px;
+  --pf-c-select__toggle--before--BorderTopColor: var(--pf-global--BorderColor--100);
+  --pf-c-select__toggle--before--BorderRightColor: var(--pf-global--BorderColor--100);
+  --pf-c-select__toggle--before--BorderBottomColor: var(--pf-global--BorderColor--100);
+  --pf-c-select__toggle--before--BorderLeftColor: var(--pf-global--BorderColor--100);
+}
+
+:root .pf-c-select__toggle {
+  border-radius: var(--pf-global--BorderRadius--sm);
+  height: 42px;
+}
+
+:root .pf-c-select__toggle:before {
+  --pf-c-select__toggle--before--BorderBottomColor: var(--pf-global--BorderColor--100);
+  --pf-c-select__toggle--before--BorderBottomWidth: 1px;
+  border-radius: var(--pf-global--BorderRadius--sm);
+}
+
+:root .pf-c-select__toggle:focus {
+  --pf-c-select__toggle--before--BorderBottomColor: inherit;
+  border-bottom: inherit;
+  outline: 2px solid var(--pf-global--focus-ring-color);
+  outline-offset: 2px;
+}
+
+:root .pf-c-select__menu {
+  border: 1px solid var(--pf-global--BorderColor--100);
+  border-radius: var(--pf-global--BorderRadius--md);
+}
+
+:root .pf-c-options-menu {
+  --pf-c-options-menu__menu-item--PaddingLeft: var(--pf-global--spacer--lg);
+  --pf-c-options-menu__menu-item--PaddingRight: var(--pf-global--spacer--lg);
+  --pf-c-options-menu__menu-item--PaddingTop: var(--pf-global--spacer--sm);
+  --pf-c-options-menu__menu-item--PaddingBottom: var(--pf-global--spacer--sm);
+  --pf-c-options-menu__menu-item--FontSize: var(--pf-global--FontSize--sm);
+  --pf-c-options-menu__menu-item-icon--Color: var(--pf-global--Color--300);
+  --pf-c-options-menu__menu-item--hover--BackgroundColor: var(--pf-global--BorderColor--100);
+  --pf-c-options-menu__menu--BackgroundColor: var(--pf-global--BackgroundColor--100);
+  --pf-c-options-menu__toggle--Color: var(--pf-global--Color--200);
+}
+
+:root .pf-c-options-menu__menu {
+  border: 1px solid var(--pf-global--BorderColor--100);
+  border-radius: var(--pf-global--BorderRadius--md);
+}
+
+:root .pf-c-form {
+  --pf-c-form--GridGap: var(--pf-global--spacer--md);
+  --pf-c-form__label-text--FontWeight: var(--pf-global--FontWeight--normal);
+  --pf-c-form__group--m-action--MarginTop: var(--pf-global--spacer--sm);
+}
+
+:root .pf-c-tooltip {
+  --pf-c-tooltip--MaxWidth: inherit;
+  --pf-c-tooltip--BoxShadow: inherit;
+  --pf-c-tooltip_content--PaddingTop: inherit;
+  --pf-c-tooltip_content--PaddingRight: inherit;
+  --pf-c-tooltip_content--PaddingBottom: inherit;
+  --pf-c-tooltip_content--PaddingLeft: inherit;
+  --pf-c-tooltip_content--Color: inherit;
+  --pf-c-tooltip__content--BackgroundColor: var(--pf-global--BorderColor--100);
+  --pf-c-tooltip__content--PaddingTop: var(--pf-global--spacer--xs);
+  --pf-c-tooltip__content--PaddingRight: var(--pf-global--spacer--md);
+  --pf-c-tooltip__content--PaddingBottom: var(--pf-global--spacer--xs);
+  --pf-c-tooltip__content--PaddingLeft: var(--pf-global--spacer--md);
+  --pf-c-tooltip_content--FontSize: inherit;
+  --pf-c-tooltip_arrow--Width: inherit;
+  --pf-c-tooltip_arrow--Height: inherit;
+  --pf-c-tooltip_arrow--m-top--TranslateX: inherit;
+}
+
+:root .pf-c-tooltip__content {
+  border-radius: 0.25rem;
+}
+
+:root .pf-c-popover {
+  --pf-c-popover__content--BackgroundColor: var(--pf-global--BorderColor--100);
+  --pf-c-popover__arrow--BackgroundColor: var(--pf-global--BorderColor--100);
+}
+
+:root .pf-c-popover__content {
+  border-radius: var(--pf-global--BorderRadius--sm);
+  --pf-c-popover__content--PaddingRight: var(--pf-global--spacer--xl);
+  --pf-c-popover__content--PaddingLeft: var(--pf-global--spacer--xl);
+  --pf-c-popover__content--PaddingTop: var(--pf-global--spacer--lg);
+  --pf-c-popover__content--PaddingBottom: var(--pf-global--spacer--xl);
+}
+
+:root .pf-c-popover.pf-m-top {
+  --pf-c-popover__arrow--m-top--TranslateY: 0.25rem;
+}
+
+:root .pf-c-form-control:not(.ace_editor) {
+  transition: all 0.15s ease-in-out;
+}
+
+:root .pf-c-button.pf-m-control:hover {
+  --pf-c-button--m-control--BackgroundColor: var(--pf-global--primary-color--200);
+  --pf-c-button--m-control--Color: var(--pf-global--BorderColor--200);
+}
+
+:root .pf-m-control.pf-c-button::after {
+  display: none;
+}
+
+:root .pf-c-button.pf-m-plain,
+:root .pf-c-button.pf-m-plain:hover {
+  --pf-c-button--m-plain--Color: var(--pf-global--Color--200);
+  --pf-c-button--m-plain--disabled--Color: var(--pf-global--Color--300);
+}
+
+:root .pf-c-button {
+  --pf-c-button--PaddingTop: var(--pf-global--spacer--sm);
+  --pf-c-button--PaddingBottom: var(--pf-global--spacer--sm);
+  --pf-c-button--PaddingRight: var(--pf-global--spacer--lg);
+  --pf-c-button--PaddingLeft: var(--pf-global--spacer--lg);
+  --pf-c-button--FontSize: var(--pf-global--FontSize--md);
+  --pf-c-button--FontWeight: var(--pf-global--FontWeight--semi-bold);
+  --pf-c-button--disabled--BackgroundColor: var(--pf-global--BorderColor--200);
+  --pf-c-button--disabled--Color: var(--pf-global--link--Color);
+  --pf-c-button--LineHeight: 1.625rem;
+
+  --pf-c-button--m-primary--Color: var(--pf-global--BackgroundColor--100);
+  --pf-c-button--m-primary--hover--Color: var(--pf-global--BackgroundColor--100);
+
+  text-transform: uppercase;
+}
+
+:root .pf-c-form-control:focus {
+  --pf-c-form-control--BorderColor: var(--pf-global--focus-ring-color);
+  --pf-c-form-control--BorderBottomColor: var(--pf-global--BorderColor--100);
+
+  outline: 2px solid var(--pf-global--focus-ring-color);
+}
+
+:root .pf-c-form-control:hover {
+  --pf-c-form-control--BorderBottomColor: var(--pf-global--BorderColor--100);
+}
+
+:root .pf-c-input-group {
+  /* Hardcoding the color here, as for some reason the gap doesn't proper change color
+     when using the var */
+  --pf-c-input-group--BackgroundColor: #13161b;
+  border-radius: var(--pf-global--BorderRadius--sm);
+  gap: var(--pf-global--spacer--sm);
+}
+
+:root .pf-c-input-group > * + * {
+  margin-left: 0;
+  border-left: none;
+}
+
+:root .pf-c-progress {
+  --pf-c-progress__bar--BackgroundColor: var(--pf-global--BorderColor--100);
+}
+
+:root .pf-c-progress__bar,
+:root .pf-c-progress__bar::before,
+:root .pf-c-progress__indicator {
+  border-radius: 0.25rem;
+}
+
+:root .pf-c-chip-group {
+  color: var(--pf-global--Color--100);
+}
+
+:root .pf-c-chip {
+  --pf-c-chip--BackgroundColor: var(--pf-global--primary-color--100);
+  --pf-c-chip--Color: var(--pf-global--BackgroundColor--100);
+  --pf-c-chip__text--Color: var(--pf-global--BackgroundColor--100);
+  --pf-c-chip--BorderColor: var(--pf-global--BorderColor--200);
+  --pf-c-chip--m-read--BackgroundColor: var(--pf-global--BackgroundColor--200);
+  --pf-c-chip--m-read--Color: var(--pf-global--Color--200);
+  --pf-c-chip--m-read--BorderColor: var(--pf-global--BorderColor--200);
+  --pf-c-chip--m-read--close-button--Color: var(--pf-global--Color--300);
+  --pf-c-chip--m-read--close-button--hover--Color: var(--pf-global--Color--100);
+  background-color: #12a66f;
+  padding: 0px 10px 0px 10px;
+}
+
+:root .pf-c-alert {
+  --pf-c-alert--BorderTopColor: var(--pf-global--focus-ring-color);
+  --pf-c-alert__title--Color: var(--pf-global--Color--200);
+  --pf-c-alert__icon--Color: var(--pf-global--focus-ring-color);
+}
+
+:root .pf-c-modal-box__header {
+  --pf-c-modal-box__header--PaddingTop: var(--pf-global--spacer--3xl);
+  --pf-c-modal-box__header--PaddingBottom: var(--pf-global--spacer--lg);
+  --pf-c-modal-box__header--PaddingRight: var(--pf-global--spacer--3xl);
+  --pf-c-modal-box__header--PaddingLeft: var(--pf-global--spacer--3xl);
+}
+
+:root .pf-c-modal-box__footer {
+  --pf-c-modal-box__footer--PaddingTop: var(--pf-global--spacer--lg);
+  --pf-c-modal-box__footer--PaddingBottom: var(--pf-global--spacer--2xl);
+  --pf-c-modal-box__footer--PaddingRight: var(--pf-global--spacer--3xl);
+  --pf-c-modal-box__footer--PaddingLeft: var(--pf-global--spacer--3xl);
+}
+
+:root .pf-c-modal-box__header + .pf-c-modal-box__body {
+  --pf-c-modal-box__body--PaddingTop: var(--pf-global--spacer--3xl);
+  --pf-c-modal-box__body--PaddingBottom: 4rem;
+  --pf-c-modal-box__body--last-child--PaddingBottom: 3rem;
+  --pf-c-modal-box__body--PaddingRight: var(--pf-global--spacer--3xl);
+  --pf-c-modal-box__body--PaddingLeft: var(--pf-global--spacer--3xl);
+}
+
+.pf-c-nav__link {
+  border-radius: var(--pf-global--BorderRadius--sm);
+}
+
+.pf-c-nav__toggle-icon {
+  color: var(--pf-global--Color--300);
+  opacity: .6;
+}
+
+:root .pf-c-pagination.pf-m-bottom {
+  justify-content: space-between;
+}
+
+:root .pf-c-slider {
+  --pf-c-slider__thumb--Height: var(--pf-global--spacer--md);
+  --pf-c-slider__thumb--Width: var(--pf-global--spacer--md);
+  --pf-c-slider__steps--FontSize: var(--pf-global--FontSize--xs);
+  --pf-c-slider__thumb--BoxShadow: none;
+  /* --pf-c-slider__rail-track--before--base--BackgroundColor: var(--pf-global--primary-color--100); */
+  --pf-c-slider__rail-track--before--fill--BackgroundColor: var(--pf-global--primary-color--100); 
+  /* --pf-c-slider__rail-track--before--fill--BackgroundColor--gradient-stop: transparent; */
+}
+
+.pf-c-nav__link:focus {
+  background-color: transparent;
+}
+
+.pf-c-nav__link:active {
+  background-color: transparent;
+}
+
+.pf-c-nav__link:hover {
+  background-color: rgba(51, 170, 51, .1);
+}
+
+.pf-c-nav__link.pf-m-current {
+  background-color: rgba(51, 170, 51, .2);
+}
+
+.pf-c-nav__link.pf-m-current::after {
+  border-color: rgba(51, 170, 51, .3);
+}
+
+.ace-nord_dark .ace_gutter {
+  background: var(--pf-global--BackgroundColor--200);
+  color: var(--pf-global--Color--300);
+}
+
+.ace-nord_dark .ace_marker-layer .ace_active-line {
+  background: var(--pf-global--BackgroundColor--200);
+  color: var(--pf-global--Color--200);
+}
+
+.ace-nord_dark .ace_gutter-active-line {
+  background-color: var(--pf-global--BorderColor--100);
+}
+
+:root .pf-c-switch {
+  --pf-c-switch__toggle--before--BackgroundColor: var(--pf-global--BorderColor--100);
+  --pf-c-switch__toggle--before--Top: 1px;
+  --pf-c-switch__toggle--before--Width: var(--pf-global--spacer--lg);
+  --pf-c-switch__toggle--before--Height: var(--pf-global--spacer--lg);
+  --pf-c-switch__toggle--Width: 40px;
+  --pf-c-switch__toggle--BorderRadius: 16px;
+  --pf-c-switch__toggle--Height: 18px;
+  --pf-c-switch__input--focus__toggle--OutlineColor: none;
+  --pf-c-switch__toggle--before--Left: 3px;
+}
+
+:root .pf-c-switch__input:checked ~ .pf-c-switch__toggle::before {
+  --pf-c-switch__toggle--before--BackgroundColor: var(--pf-global--BorderColor--100);
+}
