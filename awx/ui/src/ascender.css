@@ -80,3 +80,7 @@ body {
   font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif !important;
   font-weight: 500 !important;
 }
+
+input[type="checkbox"] {
+  accent-color: var(--pf-global--primary-color--100);
+}
