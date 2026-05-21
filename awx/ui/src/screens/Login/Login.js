@@ -33,7 +33,7 @@ import { AuthAPI, RootAPI, MeAPI } from 'api';
 import { useSession } from 'contexts/Session';
 import LoadingSpinner from 'components/LoadingSpinner';
 import { SESSION_REDIRECT_URL, SESSION_USER_ID } from '../../constants';
-import 'login.css';
+import '../../login.css';
 
 const loginLogoSrc = 'static/media/Ascender_logo.svg';
 
