@@ -299,6 +299,7 @@ body #footer {
   margin-bottom: 0;
   height: 40px;
   color: #f7f7f7;
+  padding-bottom: 50px;
 }
 body #footer .footer-logo {
   text-align: left;
@@ -317,7 +318,7 @@ body #footer .footer-copyright {
   padding-top: 10px;
 }
 body #footer .footer-copyright a {
-  color: #707070;
+  color: #17c484;
 }
 
 @media screen and (min-width: 768px) {
