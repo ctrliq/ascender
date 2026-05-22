@@ -296,7 +296,7 @@ body #push {
 body #footer {
   width: 100%;
   overflow: hidden;
-  margin-bottom: 50px;
+  margin-bottom: 0;
   height: 40px;
   color: #f7f7f7;
 }
