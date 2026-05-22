@@ -902,13 +902,16 @@ describe('<ScheduleForm />', () => {
     });
 
     test('should create schedule with the same start and end date provided that the end date is at a later time', async () => {
-      const today = DateTime.now().toFormat('yyyy-LL-dd');
-      const laterTime = DateTime.now().plus({ hours: 1 }).toFormat('h:mm a');
+      const startDate = wrapper.find('DatePicker[aria-label="Start date"]').prop('value');
+      const startTime = wrapper.find('TimePicker[aria-label="Start time"]').prop('time');
+      const laterTime = DateTime.fromFormat(startTime, 'h:mm a')
+        .plus({ minutes: 1 })
+        .toFormat('h:mm a');
       await act(async () => {
         wrapper.find('DatePicker[aria-label="End date"]').prop('onChange')(
           null,
-          today,
-          new Date(today)
+          startDate,
+          DateTime.fromFormat(startDate, 'yyyy-LL-dd').toJSDate()
         );
       });
       wrapper.update();
