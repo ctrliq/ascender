@@ -13,7 +13,8 @@ const sockHost = process.env.WDS_SOCKET_HOST;
 const sockPath = process.env.WDS_SOCKET_PATH; // default: '/ws'
 const sockPort = process.env.WDS_SOCKET_PORT;
 
-module.exports = function (proxy, allowedHost) {
+module.exports = function (proxy, allowedHost, proxyOptions = {}) {
+  const { createProxyMiddleware } = proxyOptions;
   const disableFirewall =
     !proxy || process.env.DANGEROUSLY_DISABLE_HOST_CHECK === 'true';
   return {
@@ -111,7 +112,7 @@ module.exports = function (proxy, allowedHost) {
 
       if (fs.existsSync(paths.proxySetup)) {
         // This registers user provided middleware for proxy reasons
-        require(paths.proxySetup)(devServer.app);
+        require(paths.proxySetup)(devServer.app, createProxyMiddleware);
       }
 
       // Redirect to `PUBLIC_URL` or `homepage` from `package.json` if url not match

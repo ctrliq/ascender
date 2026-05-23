@@ -27,7 +27,7 @@ USER root
 RUN dnf -y update && dnf install -y 'dnf-command(config-manager)' && \
     dnf config-manager --set-enabled crb && \
     dnf module reset nodejs -y && \
-    dnf module enable nodejs:20 -y && \
+    dnf module enable nodejs:22 -y && \
     dnf -y install \
     iputils \
     gcc \
@@ -40,6 +40,7 @@ RUN dnf -y update && dnf install -y 'dnf-command(config-manager)' && \
     make \
 {% if not headless|bool %}
     nodejs \
+    npm \
 {% endif %}
     nss \
     openldap-devel \
@@ -149,7 +150,7 @@ RUN pip3.12 install --no-cache-dir -vv virtualenv supervisor dumb-init build && 
 {% if (build_dev|bool) or (kube_dev|bool) %}
 # Install development/test requirements
 RUN dnf module reset nodejs -y && \
-    dnf module enable nodejs:20 -y && \
+    dnf module enable nodejs:22 -y && \
     dnf -y install \
     crun \
     gdb \
@@ -167,6 +168,7 @@ RUN dnf module reset nodejs -y && \
     libpq-devel \
     nodejs \
     nss \
+    npm \
     make \
     patch \
     socat \
