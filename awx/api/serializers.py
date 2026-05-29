@@ -2020,8 +2020,8 @@ class HostSerializer(BaseSerializerWithVariables):
         return value
 
     def validate_inventory(self, value):
-        if value.kind in ('constructed', 'smart'):
-            raise serializers.ValidationError({"detail": _("Cannot create Host for Smart or Constructed Inventories")})
+        if value.kind in ('constructed', 'smart', 'federated'):
+            raise serializers.ValidationError({"detail": _("Cannot create Host for Smart, Constructed, or Federated Inventories")})
         return value
 
     def validate_variables(self, value):

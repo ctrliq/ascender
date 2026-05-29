@@ -1718,6 +1718,15 @@ class InventoryHostsList(HostRelatedSearchMixin, SubListCreateAttachDetachAPIVie
             return self.request.user.get_queryset(self.model).filter(inventory_id__in=input_ids).with_latest_summary_id()
         return super().get_queryset().with_latest_summary_id()
 
+    def post(self, request, *args, **kwargs):
+        parent = self.get_parent_object()
+        if getattr(parent, 'kind', None) == 'federated':
+            return Response(
+                {"error": _("Cannot create or associate hosts directly to a federated inventory.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        return super().post(request, *args, **kwargs)
+
 
 class HostGroupsList(SubListCreateAttachDetachAPIView):
     '''the list of groups a host is directly a member of'''
@@ -1968,6 +1977,15 @@ class InventoryGroupsList(SubListCreateAttachDetachAPIView):
             return self.request.user.get_queryset(self.model).filter(inventory_id__in=input_ids)
         return super().get_queryset()
 
+    def post(self, request, *args, **kwargs):
+        parent = self.get_parent_object()
+        if getattr(parent, 'kind', None) == 'federated':
+            return Response(
+                {"error": _("Cannot create or associate groups directly to a federated inventory.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        return super().post(request, *args, **kwargs)
+
 
 class InventoryRootGroupsList(SubListCreateAttachDetachAPIView):
     model = models.Group
@@ -1986,6 +2004,15 @@ class InventoryRootGroupsList(SubListCreateAttachDetachAPIView):
             return qs.filter(inventory_id__in=input_ids, parents__isnull=True)
         qs = self.request.user.get_queryset(self.model).distinct()  # need distinct for '&' operator
         return qs & parent.root_groups
+
+    def post(self, request, *args, **kwargs):
+        parent = self.get_parent_object()
+        if getattr(parent, 'kind', None) == 'federated':
+            return Response(
+                {"error": _("Cannot create or associate groups directly to a federated inventory.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        return super().post(request, *args, **kwargs)
 
 
 class BaseVariableData(RetrieveUpdateAPIView):

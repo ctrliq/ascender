@@ -16,8 +16,7 @@ class FederatedInventories extends Base {
     }
 
     throw new Error(
-      `You have insufficient access to this Federated Inventory. 
-      Please contact your system administrator if there is an issue with your access.`
+      'You have insufficient access to this Federated Inventory. Please contact your system administrator if there is an issue with your access.'
     );
   }
 }

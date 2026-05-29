@@ -201,8 +201,8 @@ def _federated_inventory_has_matching_hosts(inv, limit):
     Handles:
     - No limit / 'all' / '*' → just checks that the inventory is non-empty.
     - 'ungrouped'            → checks for hosts with no group membership.
-    - Complex patterns (containing ':', '&', '!') → fail-safe: always include
-      the inventory so Ansible can resolve the full expression at run time.
+    - Complex patterns (containing ':', '&', '!') → delegates to Ansible at run time;
+      included only if the inventory is non-empty (same rule as the no-limit case).
     - Simple glob patterns   → fnmatch against host names then group names.
     """
     pat = (limit or '').strip()

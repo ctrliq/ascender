@@ -94,3 +94,80 @@ def test_federated_inventory_accepts_plain_source(post, admin_user, organization
     )
     assert resp.status_code == 204
 
+
+# ---------------------------------------------------------------------------
+# Federated inventory host creation/attach rejection
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.django_db
+def test_federated_inventory_rejects_direct_host_create(post, admin_user, organization):
+    """POST to /inventories/<fed>/hosts/ must be rejected — federated inventories hold no direct hosts."""
+    fed = Inventory.objects.create(name='fed-inv', kind='federated', organization=organization)
+    resp = post(
+        url=reverse('api:inventory_hosts_list', kwargs={'pk': fed.pk}),
+        data={'name': 'should-fail'},
+        user=admin_user,
+        expect=400,
+    )
+    assert resp.status_code == 400
+
+
+@pytest.mark.django_db
+def test_federated_inventory_rejects_host_attach(post, admin_user, organization):
+    """Attaching an existing host to a federated inventory via the hosts sub-list must be rejected."""
+    plain = Inventory.objects.create(name='plain-inv', kind='', organization=organization)
+    host = plain.hosts.create(name='realhost')
+    fed = Inventory.objects.create(name='fed-inv', kind='federated', organization=organization)
+    resp = post(
+        url=reverse('api:inventory_hosts_list', kwargs={'pk': fed.pk}),
+        data={'id': host.pk},
+        user=admin_user,
+        expect=400,
+    )
+    assert resp.status_code == 400
+    # The host must still belong only to the plain inventory
+    assert host.inventory_id == plain.id
+
+
+@pytest.mark.django_db
+def test_federated_inventory_rejects_direct_group_create(post, admin_user, organization):
+    """POST to /inventories/<fed>/groups/ must be rejected — federated inventories hold no direct groups."""
+    fed = Inventory.objects.create(name='fed-inv', kind='federated', organization=organization)
+    resp = post(
+        url=reverse('api:inventory_groups_list', kwargs={'pk': fed.pk}),
+        data={'name': 'should-fail'},
+        user=admin_user,
+        expect=400,
+    )
+    assert resp.status_code == 400
+
+
+@pytest.mark.django_db
+def test_federated_inventory_rejects_group_attach(post, admin_user, organization):
+    """Attaching an existing group to a federated inventory via the groups sub-list must be rejected."""
+    plain = Inventory.objects.create(name='plain-inv', kind='', organization=organization)
+    group = plain.groups.create(name='realgroup')
+    fed = Inventory.objects.create(name='fed-inv', kind='federated', organization=organization)
+    resp = post(
+        url=reverse('api:inventory_groups_list', kwargs={'pk': fed.pk}),
+        data={'id': group.pk},
+        user=admin_user,
+        expect=400,
+    )
+    assert resp.status_code == 400
+
+
+@pytest.mark.django_db
+def test_federated_inventory_rejects_root_group_create(post, admin_user, organization):
+    """POST to /inventories/<fed>/root_groups/ must be rejected."""
+    fed = Inventory.objects.create(name='fed-inv', kind='federated', organization=organization)
+    resp = post(
+        url=reverse('api:inventory_root_groups_list', kwargs={'pk': fed.pk}),
+        data={'name': 'should-fail'},
+        user=admin_user,
+        expect=400,
+    )
+    assert resp.status_code == 400
+
+
