@@ -259,6 +259,23 @@ class TestFederatedInventoryHasMatchingHosts:
         assert _federated_inventory_has_matching_hosts(inv, 'web*') is True
         assert _federated_inventory_has_matching_hosts(inv, 'app*') is False
 
+    def test_trailing_star_fast_path(self, organization):
+        """Trailing-star glob uses a DB startswith fast path; verify correctness
+        against the general fnmatch path for both matches and non-matches."""
+        inv = self._make_inv(organization, host_names=['web01', 'web02', 'db01'])
+        # Standard trailing-star: should match via startswith fast path
+        assert _federated_inventory_has_matching_hosts(inv, 'web*') is True
+        assert _federated_inventory_has_matching_hosts(inv, 'db*') is True
+        assert _federated_inventory_has_matching_hosts(inv, 'app*') is False
+        # Pattern with no prefix before the star matches anything non-empty
+        assert _federated_inventory_has_matching_hosts(inv, '*') is True
+        # Complex globs that must NOT take the fast path (fall through to fnmatch)
+        # mid-star
+        assert _federated_inventory_has_matching_hosts(inv, 'web*01') is True
+        # question-mark
+        assert _federated_inventory_has_matching_hosts(inv, 'web??') is True
+        assert _federated_inventory_has_matching_hosts(inv, 'xyz??') is False
+
     def test_ungrouped(self, organization):
         inv = Inventory.objects.create(name='test-src', kind='', organization=organization)
         grouped_host = inv.hosts.create(name='grouped')

@@ -216,7 +216,14 @@ def _federated_inventory_has_matching_hosts(inv, limit):
     # Exact match (no glob metacharacters) — resolved entirely in the DB via an index lookup.
     if not any(c in pat for c in ('*', '?', '[')):
         return inv.hosts.filter(name=pat).exists() or inv.groups.filter(name=pat).exists()
-    # Glob pattern — stream names one at a time so any() can short-circuit without
+    # Glob pattern.
+    # Fast path: trailing-star-only glob (e.g. "web*") — the prefix is a plain
+    # string so the DB can resolve it with an indexed startswith/LIKE query and
+    # short-circuit via EXISTS, avoiding a full table scan on large inventories.
+    if pat.endswith('*') and not any(c in pat[:-1] for c in ('*', '?', '[')):
+        prefix = pat[:-1]
+        return inv.hosts.filter(name__startswith=prefix).exists() or inv.groups.filter(name__startswith=prefix).exists()
+    # Arbitrary glob — stream names one at a time so any() can short-circuit without
     # materialising the full list into memory.
     if any(fnmatch.fnmatch(name, pat) for name in inv.hosts.values_list('name', flat=True).iterator()):
         return True
