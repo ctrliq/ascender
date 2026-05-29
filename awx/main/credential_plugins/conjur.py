@@ -7,7 +7,6 @@ import requests
 import base64
 import binascii
 
-
 conjur_inputs = {
     'fields': [
         {

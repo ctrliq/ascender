@@ -15,7 +15,6 @@ from awx.api.views import (
     TeamAccessList,
 )
 
-
 urls = [
     path('', TeamList.as_view(), name='team_list'),
     path('<int:pk>/', TeamDetail.as_view(), name='team_detail'),

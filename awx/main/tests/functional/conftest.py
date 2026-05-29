@@ -252,7 +252,6 @@ def credentialtype_scm():
     return scm_type
 
 
-
 @pytest.fixture
 def credentialtype_external():
     external_type_inputs = {
@@ -298,7 +297,6 @@ def machine_credential(credentialtype_ssh):
 @pytest.fixture
 def scm_credential(credentialtype_scm):
     return Credential.objects.create(credential_type=credentialtype_scm, name='scm-cred', inputs={'username': 'optimus', 'password': 'prime'})
-
 
 
 @pytest.fixture
@@ -496,7 +494,7 @@ def hosts(group_factory):
         hosts = []
         for i in range(0, host_count):
             name = '%s-host-%s' % (group1.name, i)
-            (host, created) = group1.inventory.hosts.get_or_create(name=name)
+            host, created = group1.inventory.hosts.get_or_create(name=name)
             if created:
                 group1.hosts.add(host)
             hosts.append(host)

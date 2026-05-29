@@ -7,6 +7,7 @@ from django.core.management.base import BaseCommand
 from django.conf import settings
 from awx.main.models import CredentialType, Credential, ExecutionEnvironment
 
+
 def strtobool(val):
     """Convert a string representation of truth to true (1) or false (0).
     True values are 'y', 'yes', 't', 'true', 'on', and '1'.

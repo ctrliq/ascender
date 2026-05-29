@@ -11,7 +11,6 @@ from awx.api.views import (
     NotificationTemplateCopy,
 )
 
-
 urls = [
     path('', NotificationTemplateList.as_view(), name='notification_template_list'),
     path('<int:pk>/', NotificationTemplateDetail.as_view(), name='notification_template_detail'),

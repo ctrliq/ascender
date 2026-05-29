@@ -7,7 +7,6 @@ import requests
 
 # Django
 from django.apps import apps
-from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.db.models.query import QuerySet
@@ -24,7 +23,6 @@ from awx.main.utils.encryption import decrypt_value, get_encryption_key, is_encr
 from awx.main.utils.polymorphic import build_polymorphic_ctypes_map
 from awx.main.fields import AskForField
 from awx.main.constants import ACTIVE_STATES
-
 
 logger = logging.getLogger('awx.main.models.mixins')
 

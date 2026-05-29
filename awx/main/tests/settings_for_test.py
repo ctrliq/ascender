@@ -23,11 +23,7 @@ DATABASES = {
 }
 
 # Use in-memory channel layer for tests to avoid Redis/Valkey connection issues
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer'
-    }
-}
+CHANNEL_LAYERS = {'default': {'BACKEND': 'channels.layers.InMemoryChannelLayer'}}
 
 # Ensure BROADCAST_WEBSOCKET_SECRET is set for websocket tests
 BROADCAST_WEBSOCKET_SECRET = 'test-secret-for-websockets'

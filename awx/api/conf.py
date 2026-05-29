@@ -10,7 +10,6 @@ from awx.api.fields import OAuth2ProviderField
 from oauth2_provider.settings import oauth2_settings
 from awx.sso.common import is_remote_auth_enabled
 
-
 register(
     'SESSION_COOKIE_AGE',
     field_class=fields.IntegerField,

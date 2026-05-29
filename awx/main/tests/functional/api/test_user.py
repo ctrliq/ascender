@@ -8,7 +8,6 @@ from django.contrib.sessions.middleware import SessionMiddleware
 from awx.main.models import User
 from awx.api.versioning import reverse
 
-
 #
 # user creation
 #
@@ -54,8 +53,6 @@ def test_updating_own_password_refreshes_session(patch, admin):
         assert update_session_auth_hash.called
 
 
-
-
 @pytest.mark.django_db
 def test_create_delete_create_user(post, delete, admin):
     response = post(reverse('api:user_list'), EXAMPLE_USER_DATA, admin, middleware=SessionMiddleware(mock.Mock()))
@@ -85,7 +82,7 @@ def test_user_verify_attribute_created(admin, get):
     # Use current time as reference - admin user should be created recently
     past = datetime(2020, 1, 1, tzinfo=timezone.utc).isoformat()
     future = datetime(2030, 1, 1, tzinfo=timezone.utc).isoformat()
-    
+
     # Test that admin user is created after 2020 (should find 1)
     resp = get(reverse('api:user_list') + f'?created__gt={past}', admin)
     if 'count' in resp.data:
@@ -96,7 +93,7 @@ def test_user_verify_attribute_created(admin, get):
             assert len(results) >= 1
         else:
             assert (1 if results else 0) >= 1
-    
+
     # Test that admin user is created before 2030 (should find 1)
     resp = get(reverse('api:user_list') + f'?created__lt={future}', admin)
     if 'count' in resp.data:

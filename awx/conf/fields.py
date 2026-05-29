@@ -162,20 +162,22 @@ class URLField(CharField):
     # top-level domain
     # Unicode letters range (must not be a raw string) - copied from URLValidator
     ul = "\u00a1-\uffff"
-    
+
+    # fmt: off
     # IP patterns - copied from URLValidator
     ipv4_re = (
         r"(?:0|25[0-5]|2[0-4][0-9]|1[0-9]?[0-9]?|[1-9][0-9]?)"
         r"(?:\.(?:0|25[0-5]|2[0-4][0-9]|1[0-9]?[0-9]?|[1-9][0-9]?)){3}"
     )
     ipv6_re = r"\[[0-9a-f:.]+\]"
-    
+
     # Host patterns - copied from URLValidator
     hostname_re = (
         r"[a-z" + ul + r"0-9](?:[a-z" + ul + r"0-9-]{0,61}[a-z" + ul + r"0-9])?"
     )
     domain_re = r"(?:\.(?!-)[a-z" + ul + r"0-9-]{1,63}(?<!-))*"
-    
+    # fmt: on
+
     # Custom TLD regex that allows numbers in the top-level domain
     tld_re = (
         r'\.'  # dot

@@ -12,7 +12,6 @@ from awx.api.views import (
     InstanceGroupObjectRolesList,
 )
 
-
 urls = [
     path('', InstanceGroupList.as_view(), name='instance_group_list'),
     path('<int:pk>/', InstanceGroupDetail.as_view(), name='instance_group_detail'),

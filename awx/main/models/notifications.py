@@ -32,7 +32,6 @@ from awx.main.notifications.grafana_backend import GrafanaBackend
 from awx.main.notifications.rocketchat_backend import RocketChatBackend
 from awx.main.notifications.irc_backend import IrcBackend
 
-
 logger = logging.getLogger('awx.main.models.notifications')
 
 __all__ = ['NotificationTemplate', 'Notification']
@@ -524,7 +523,7 @@ class JobNotificationMixin(object):
             return
 
         for nt in set(notification_templates.get(self.STATUS_TO_TEMPLATE_TYPE[status], [])):
-            (msg, body) = self.build_notification_message(nt, status)
+            msg, body = self.build_notification_message(nt, status)
 
             # Use kwargs to force late-binding
             # https://stackoverflow.com/a/3431699/10669572

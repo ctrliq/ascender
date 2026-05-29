@@ -10,7 +10,6 @@ from django.utils.timezone import now
 
 # AWX
 from awx.main.utils.common import log_excess_runtime
-from awx.main.models.inventory import Host
 from awx.main.utils.db import bulk_update_sorted_by_id
 from awx.main.models import Host
 

@@ -19,7 +19,6 @@ from awx.api.views import (
     JobHostSummaryDetail,
 )
 
-
 urls = [
     path('', JobList.as_view(), name='job_list'),
     path('<int:pk>/', JobDetail.as_view(), name='job_detail'),

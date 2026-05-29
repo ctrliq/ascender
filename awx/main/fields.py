@@ -47,7 +47,6 @@ from awx.main.validators import validate_ssh_private_key
 from awx.main.constants import ENV_BLOCKLIST
 from awx.main import utils
 
-
 __all__ = [
     'JSONBlob',
     'AutoOneToOneField',
@@ -832,7 +831,7 @@ class CredentialTypeInjectorField(JSONSchemaField):
                             'type': 'string',
                             # The environment variable _value_ can be any ascii,
                             # but pexpect will choke on any unicode
-                            'pattern': '^[\x00-\x7F]*$',
+                            'pattern': '^[\x00-\x7f]*$',
                         },
                     },
                     'additionalProperties': False,

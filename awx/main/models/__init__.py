@@ -89,11 +89,9 @@ from awx.api.versioning import reverse
 from awx.main.models.oauth import OAuth2AccessToken, OAuth2Application  # noqa
 from oauth2_provider.models import Grant, RefreshToken  # noqa -- needed django-oauth-toolkit model migrations
 
-
 # Add custom methods to User model for permissions checks.
 from django.contrib.auth.models import User  # noqa
 from awx.main.access import get_user_queryset, check_user_access, check_user_access_with_errors  # noqa
-
 
 User.add_to_class('get_queryset', get_user_queryset)
 User.add_to_class('can_access', check_user_access)

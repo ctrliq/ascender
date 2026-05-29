@@ -29,7 +29,6 @@ from awx.api.views import (
     InventoryVariableData,
 )
 
-
 urls = [
     path('', InventoryList.as_view(), name='inventory_list'),
     path('<int:pk>/', InventoryDetail.as_view(), name='inventory_detail'),

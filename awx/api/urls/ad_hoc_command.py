@@ -14,7 +14,6 @@ from awx.api.views import (
     AdHocCommandStdout,
 )
 
-
 urls = [
     path('', AdHocCommandList.as_view(), name='ad_hoc_command_list'),
     path('<int:pk>/', AdHocCommandDetail.as_view(), name='ad_hoc_command_detail'),

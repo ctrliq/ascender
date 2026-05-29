@@ -102,7 +102,6 @@ class HostManager(models.Manager.from_queryset(HostLatestSummaryQuerySet)):
             .count()
         )
 
-
     def org_active_count(self, org_id):
         """Return count of active, unique hosts used by an organization.
         Construction of query involves:

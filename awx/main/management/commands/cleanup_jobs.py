@@ -7,7 +7,6 @@ from datetime import timezone as dt_timezone
 import logging
 import re
 
-
 # Django
 from django.apps import apps
 from django.core.management.base import BaseCommand, CommandError

@@ -17,7 +17,6 @@ from oauthlib import oauth2
 from awx.sso.common import get_external_account
 from awx.main.fields import OAuth2ClientSecretField
 
-
 DATA_URI_RE = re.compile(r'.*')  # FIXME
 
 __all__ = ['OAuth2AccessToken', 'OAuth2Application']

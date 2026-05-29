@@ -319,13 +319,12 @@ class WebSocketRelayManager(object):
                     )
 
                     await async_conn.set_autocommit(True)
-                    
+
                     task = event_loop.create_task(self.on_ws_heartbeat(async_conn), name="on_ws_heartbeat")
                     logger.info("Creating `on_ws_heartbeat` task in event loop.")
 
                 except Exception as e:
                     logger.warning(f"Failed to connect to database for pg_notify: {e}")
-
 
             future_remote_hosts = self.known_hosts.keys()
             current_remote_hosts = self.relay_connections.keys()

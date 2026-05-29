@@ -26,7 +26,7 @@ class LabelSubListCreateAttachDetachView(SubListCreateAttachDetachAPIView):
     relationship = 'labels'
 
     def unattach(self, request, *args, **kwargs):
-        (sub_id, res) = super().unattach_validate(request)
+        sub_id, res = super().unattach_validate(request)
         if res:
             return res
 

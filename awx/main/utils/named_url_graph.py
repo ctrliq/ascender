@@ -7,7 +7,6 @@ from django.db import models
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 
-
 NAMED_URL_RES_DILIMITER = "++"
 NAMED_URL_RES_INNER_DILIMITER = "+"
 NAMED_URL_RES_DILIMITER_ENCODE = "%2B"

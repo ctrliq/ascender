@@ -2,7 +2,8 @@ import functools
 
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
-#from django.core.cache.backends.redis import RedisCache
+
+# from django.core.cache.backends.redis import RedisCache
 from django_valkey.cache import ValkeyCache
 
 from valkey.exceptions import ConnectionError, ResponseError, TimeoutError

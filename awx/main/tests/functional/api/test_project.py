@@ -4,7 +4,6 @@ from awx.api.versioning import reverse
 from awx.main.models import Project, JobTemplate
 
 
-
 @pytest.mark.django_db
 def test_no_changing_overwrite_behavior_if_used(post, patch, organization, admin_user):
     r1 = post(

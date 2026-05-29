@@ -386,18 +386,19 @@ def test_send_messages_logs_base64_encoded_urls_in_redirects():
                 'http://initial.com',
             ],
         )
-        sent_messages = backend.send_messages([message])
-        
+        backend.send_messages([message])
+
         # Should log the redirect warning
         logger_mock.warning.assert_called_once()
         warning_msg = logger_mock.warning.call_args[0][0]
-        
+
         # The dangerous URL should NOT appear in raw form in the log
         assert '\n' not in warning_msg, "Raw newline should not be in log message (log injection risk)"
         assert 'Set-Cookie' not in warning_msg, "Dangerous content should not be in log message"
-        
+
         # The URL should be base64-encoded
         import base64
+
         encoded_dangerous_url = base64.b64encode(dangerous_url.encode('utf-8')).decode('ascii')
         assert encoded_dangerous_url in warning_msg, "Base64-encoded URL should be in log message"
 
@@ -426,18 +427,19 @@ def test_send_messages_logs_base64_encoded_urls_on_max_retries():
                 'http://example.com',
             ],
         )
-        sent_messages = backend.send_messages([message])
-        
+        backend.send_messages([message])
+
         # Should log error for max retries exceeded
         logger_mock.error.assert_called_once()
         error_msg = logger_mock.error.call_args[0][0]
-        
+
         # The dangerous URL should NOT appear in raw form in the log
         assert '\r' not in error_msg, "Raw carriage return should not be in log message (log injection risk)"
         assert '\n' not in error_msg, "Raw newline should not be in log message (log injection risk)"
         assert 'X-Injected' not in error_msg, "Dangerous content should not be in log message"
-        
+
         # The final URL should be base64-encoded
         import base64
+
         encoded_dangerous_url = base64.b64encode(dangerous_url_final.encode('utf-8')).decode('ascii')
         assert encoded_dangerous_url in error_msg, "Base64-encoded final URL should be in log message"

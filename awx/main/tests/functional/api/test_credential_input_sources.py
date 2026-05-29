@@ -387,7 +387,7 @@ def test_create_credential_input_source_circular_dependency_returns_400(post, ad
 @pytest.mark.django_db
 def test_external_credential_get_input_resolves_dynamic_input(external_credential, other_external_credential):
     """get_input on any credential type should resolve dynamic (externally-sourced) inputs."""
-    input_source = CredentialInputSource.objects.create(
+    CredentialInputSource.objects.create(
         target_credential=external_credential,
         source_credential=other_external_credential,
         input_field_name='token',

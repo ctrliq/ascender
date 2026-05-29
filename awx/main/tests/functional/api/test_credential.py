@@ -699,6 +699,7 @@ def test_satellite6_create_ok(post, organization, admin):
 # RH Insights Credentials
 #
 
+
 #
 # AWS Credentials
 #

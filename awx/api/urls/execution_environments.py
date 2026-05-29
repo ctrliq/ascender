@@ -8,7 +8,6 @@ from awx.api.views import (
     ExecutionEnvironmentActivityStreamList,
 )
 
-
 urls = [
     path('', ExecutionEnvironmentList.as_view(), name='execution_environment_list'),
     path('<int:pk>/', ExecutionEnvironmentDetail.as_view(), name='execution_environment_detail'),

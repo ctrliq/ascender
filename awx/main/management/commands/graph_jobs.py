@@ -11,7 +11,6 @@ from django.core.management.base import BaseCommand
 # AWX
 from awx.main.models import Job, Instance
 
-
 DEFAULT_WIDTH = 100
 DEFAULT_HEIGHT = 30
 

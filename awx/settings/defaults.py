@@ -16,7 +16,6 @@ from datetime import timedelta
 import ldap
 from split_settings.tools import include
 
-
 DEBUG = True
 SQL_DEBUG = DEBUG
 
@@ -549,7 +548,7 @@ CACHES = {
                 'socket_connect_timeout': 30,
             },
             'db': 1,
-        }
+        },
     }
 }
 
@@ -896,15 +895,17 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_valkey.core.ValkeyChannelLayer",
         "CONFIG": {
-            "hosts": [{
-                "address": BROKER_URL,
-                "socket_timeout": 60,
-                "socket_connect_timeout": 60,
-            }],
+            "hosts": [
+                {
+                    "address": BROKER_URL,
+                    "socket_timeout": 60,
+                    "socket_connect_timeout": 60,
+                }
+            ],
             "capacity": 10000,
             "group_expiry": 157784760,  # 5 years
             "symmetric_encryption_keys": [SECRET_KEY],
-        }
+        },
     }
 }
 

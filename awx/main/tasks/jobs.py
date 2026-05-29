@@ -28,7 +28,6 @@ import ansible_runner
 import git
 from gitdb.exc import BadName as BadGitName
 
-
 # AWX
 from awx.main.dispatch.publish import task
 from awx.main.dispatch import get_task_queuename
@@ -933,7 +932,9 @@ class RunJob(SourceControlMixin, BaseTask):
             ('ANSIBLE_COLLECTIONS_PATH', 'collections_path', 'requirements_collections', '~/.ansible/collections:/usr/share/ansible/collections'),
         ]
         if getattr(settings, 'ENABLE_ANSIBLE_29', False):
-            path_vars.append(('ANSIBLE_COLLECTIONS_PATHS', 'collections_paths', 'requirements_collections', '~/.ansible/collections:/usr/share/ansible/collections'))
+            path_vars.append(
+                ('ANSIBLE_COLLECTIONS_PATHS', 'collections_paths', 'requirements_collections', '~/.ansible/collections:/usr/share/ansible/collections')
+            )
 
         config_values = read_ansible_config(os.path.join(private_data_dir, 'project'), list(map(lambda x: x[1], path_vars)))
 

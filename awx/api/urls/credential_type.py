@@ -5,7 +5,6 @@ from django.urls import path
 
 from awx.api.views import CredentialTypeList, CredentialTypeDetail, CredentialTypeCredentialList, CredentialTypeActivityStreamList, CredentialTypeExternalTest
 
-
 urls = [
     path('', CredentialTypeList.as_view(), name='credential_type_list'),
     path('<int:pk>/', CredentialTypeDetail.as_view(), name='credential_type_detail'),

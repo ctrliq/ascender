@@ -22,7 +22,6 @@ from awx.api.views import (
     ProjectCopy,
 )
 
-
 urls = [
     path('', ProjectList.as_view(), name='project_list'),
     path('<int:pk>/', ProjectDetail.as_view(), name='project_detail'),
@@ -34,9 +33,7 @@ urls = [
     path('<int:pk>/project_updates/', ProjectUpdatesList.as_view(), name='project_updates_list'),
     path('<int:pk>/activity_stream/', ProjectActivityStreamList.as_view(), name='project_activity_stream_list'),
     path('<int:pk>/schedules/', ProjectSchedulesList.as_view(), name='project_schedules_list'),
-    path(
-        '<int:pk>/notification_templates_error/', ProjectNotificationTemplatesErrorList.as_view(), name='project_notification_templates_error_list'
-    ),
+    path('<int:pk>/notification_templates_error/', ProjectNotificationTemplatesErrorList.as_view(), name='project_notification_templates_error_list'),
     path(
         '<int:pk>/notification_templates_success/',
         ProjectNotificationTemplatesSuccessList.as_view(),

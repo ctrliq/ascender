@@ -26,7 +26,6 @@ from awx.conf import fields, register
 from awx.main.utils.profiling import AWXProfiler
 from awx.main.utils.common import memoize
 
-
 logger = logging.getLogger('awx.main.middleware')
 perf_logger = logging.getLogger('awx.analytics.performance')
 
@@ -51,14 +50,14 @@ def get_current_user():
     Get the current user from thread-local storage.
     First checks for impersonated user, then checks request.user.
     Returns None if no user is available.
-    
+
     Also fires the current_user_getter signal to allow customization
     (e.g., for Django REST Framework compatibility).
     """
     # Check for impersonated user first
     if hasattr(_thread_locals, 'impersonate_user'):
         return _thread_locals.impersonate_user
-    
+
     # Fire signal to allow custom user retrieval (e.g., DRF)
     responses = current_user_getter.send(sender=None)
     for receiver, response in responses:
@@ -67,12 +66,12 @@ def get_current_user():
             user, priority = response
             if user is not None:
                 return user
-    
+
     # Fall back to request.user
     request = get_current_request()
     if request and hasattr(request, 'user'):
         return request.user
-    
+
     return None
 
 
@@ -80,12 +79,12 @@ def get_current_user():
 def impersonate(user):
     """
     Context manager to temporarily impersonate a user.
-    
+
     Usage:
         with impersonate(some_user):
             # Code here will see some_user as the current user
             pass
-        
+
         with impersonate(None):
             # Explicitly clear impersonation
             pass
@@ -93,7 +92,7 @@ def impersonate(user):
     # Save the previous impersonation state (None if not set)
     had_previous = hasattr(_thread_locals, 'impersonate_user')
     previous_user = getattr(_thread_locals, 'impersonate_user', None) if had_previous else None
-    
+
     # Set the new impersonation state
     if user is None:
         # Explicitly clear impersonation
@@ -101,7 +100,7 @@ def impersonate(user):
             del _thread_locals.impersonate_user
     else:
         _thread_locals.impersonate_user = user
-    
+
     try:
         yield
     finally:
@@ -113,12 +112,14 @@ def impersonate(user):
             if hasattr(_thread_locals, 'impersonate_user'):
                 del _thread_locals.impersonate_user
 
+
 class ThreadLocalMiddleware:
     """
     Stores the current request in thread-local storage for access throughout
     the request lifecycle. Automatically cleans up after each request completes,
     even if an exception occurs.
     """
+
     def __init__(self, get_response):
         self.get_response = get_response
 
@@ -138,6 +139,7 @@ class ThreadLocalMiddleware:
             # to ensure proper cleanup before this middleware cleanup runs.
             if hasattr(_thread_locals, 'impersonate_user'):
                 del _thread_locals.impersonate_user
+
 
 class SettingsCacheMiddleware(MiddlewareMixin):
     """

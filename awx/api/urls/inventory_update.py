@@ -15,7 +15,6 @@ from awx.api.views import (
     InventoryUpdateCredentialsList,
 )
 
-
 urls = [
     path('', InventoryUpdateList.as_view(), name='inventory_update_list'),
     path('<int:pk>/', InventoryUpdateDetail.as_view(), name='inventory_update_detail'),
