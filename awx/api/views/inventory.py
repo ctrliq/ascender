@@ -131,7 +131,10 @@ class InventoryInputInventoriesList(SubListAttachDetachAPIView):
     relationship = 'input_inventories'
 
     def is_valid_relation(self, parent, sub, created=False):
-        if sub.kind in ('constructed', 'federated'):
+        if parent.kind == 'federated':
+            if sub.kind != '':
+                raise serializers.ValidationError({'error': 'Federated inventories only accept plain inventories as input inventories.'})
+        elif sub.kind in ('constructed', 'federated'):
             raise serializers.ValidationError({'error': 'You cannot add a constructed or federated inventory as a source inventory.'})
 
 

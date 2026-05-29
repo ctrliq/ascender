@@ -59,3 +59,38 @@ def test_edit_constructed_inventory_source(patch, admin_user, inventory_source_f
         expect=400,
     )
     assert resp.status_code == 400
+
+
+# ---------------------------------------------------------------------------
+# Federated inventory input_inventories validation
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize('sub_kind', ['smart', 'constructed', 'federated'])
+def test_federated_inventory_rejects_non_plain_source(post, admin_user, organization, sub_kind):
+    """Attaching a smart/constructed/federated inventory as a source of a federated inventory is rejected."""
+    fed = Inventory.objects.create(name='fed-inv', kind='federated', organization=organization)
+    sub = Inventory.objects.create(name='sub-inv', kind=sub_kind, organization=organization)
+    resp = post(
+        url=reverse('api:inventory_input_inventories', kwargs={'pk': fed.pk}),
+        data={'id': sub.pk},
+        user=admin_user,
+        expect=400,
+    )
+    assert resp.status_code == 400
+
+
+@pytest.mark.django_db
+def test_federated_inventory_accepts_plain_source(post, admin_user, organization):
+    """Attaching a plain inventory as a source of a federated inventory is allowed."""
+    fed = Inventory.objects.create(name='fed-inv', kind='federated', organization=organization)
+    plain = Inventory.objects.create(name='plain-inv', kind='', organization=organization)
+    resp = post(
+        url=reverse('api:inventory_input_inventories', kwargs={'pk': fed.pk}),
+        data={'id': plain.pk},
+        user=admin_user,
+        expect=204,
+    )
+    assert resp.status_code == 204
+

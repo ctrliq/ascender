@@ -62,10 +62,11 @@ function AdvancedInventoryHostList({ inventory }) {
   useEffect(() => {
     fetchHosts();
   }, [fetchHosts]);
-  const inventoryType =
-    inventory.kind === 'constructed'
-      ? 'constructed_inventory'
-      : 'smart_inventory';
+  const kindToInventoryType = {
+    constructed: 'constructed_inventory',
+    federated: 'federated_inventory',
+  };
+  const inventoryType = kindToInventoryType[inventory.kind] || 'smart_inventory';
   return (
     <PaginatedTable
       contentError={contentError}

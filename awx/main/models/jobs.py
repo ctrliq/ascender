@@ -213,13 +213,14 @@ def _federated_inventory_has_matching_hosts(inv, limit):
         return inv.hosts.exists()
     if pat == 'ungrouped':
         return inv.hosts.filter(groups__isnull=True).exists()
-    # Simple glob / exact match against host names
-    host_names = list(inv.hosts.values_list('name', flat=True))
-    if any(fnmatch.fnmatch(name, pat) for name in host_names):
+    # Exact match (no glob metacharacters) — resolved entirely in the DB via an index lookup.
+    if not any(c in pat for c in ('*', '?', '[')):
+        return inv.hosts.filter(name=pat).exists() or inv.groups.filter(name=pat).exists()
+    # Glob pattern — stream names one at a time so any() can short-circuit without
+    # materialising the full list into memory.
+    if any(fnmatch.fnmatch(name, pat) for name in inv.hosts.values_list('name', flat=True).iterator()):
         return True
-    # Fall back to group names (limit may reference a group)
-    group_names = list(inv.groups.values_list('name', flat=True))
-    return any(fnmatch.fnmatch(name, pat) for name in group_names)
+    return any(fnmatch.fnmatch(name, pat) for name in inv.groups.values_list('name', flat=True).iterator())
 
 
 class JobTemplate(UnifiedJobTemplate, JobOptions, SurveyJobTemplateMixin, ResourceMixin, RelatedJobsMixin, WebhookTemplateMixin):
@@ -439,11 +440,9 @@ class JobTemplate(UnifiedJobTemplate, JobOptions, SurveyJobTemplateMixin, Resour
             kwargs.setdefault('_eager_fields', {})
             kwargs['_eager_fields'].setdefault('job_slice_count', 1)
         job = super(JobTemplate, self).create_unified_job(**kwargs)
-        if slice_event:
-            for idx in range(slice_ct):
-                create_kwargs = dict(workflow_job=job, unified_job_template=self, ancestor_artifacts=dict(job_slice=idx + 1))
-                WorkflowJobNode.objects.create(**create_kwargs)
-        elif federated_event:
+        if federated_event:
+            # NOTE: slice_event is always False here because federated inventories have no direct
+            # hosts, so get_effective_slice_ct() returns 0. Listed first to match the setup block above.
             effective_limit = (kwargs.get('limit') or self.limit or '').strip()
             for inv in actual_inventory.input_inventories.all():
                 if not _federated_inventory_has_matching_hosts(inv, effective_limit):
@@ -451,8 +450,12 @@ class JobTemplate(UnifiedJobTemplate, JobOptions, SurveyJobTemplateMixin, Resour
                 WorkflowJobNode.objects.create(
                     workflow_job=job,
                     unified_job_template=self,
-                    ancestor_artifacts=dict(federated_inventory_id=inv.id),
+                    ancestor_artifacts=dict(source_inventory_id=inv.id),
                 )
+        elif slice_event:
+            for idx in range(slice_ct):
+                create_kwargs = dict(workflow_job=job, unified_job_template=self, ancestor_artifacts=dict(job_slice=idx + 1))
+                WorkflowJobNode.objects.create(**create_kwargs)
         return job
 
     def get_absolute_url(self, request=None):
