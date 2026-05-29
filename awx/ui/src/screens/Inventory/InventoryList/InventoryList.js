@@ -137,6 +137,7 @@ function InventoryList() {
   const addInventory = t`Add inventory`;
   const addSmartInventory = t`Add smart inventory`;
   const addConstructedInventory = t`Add constructed inventory`;
+  const addFederatedInventory = t`Add federated inventory`;
   const addButton = (
     <AddDropDownButton
       ouiaId="add-inventory-button"
@@ -169,6 +170,15 @@ function InventoryList() {
         >
           {addConstructedInventory}
         </DropdownItem>,
+        <DropdownItem
+          ouiaId="add-federated-inventory-item"
+          to={`${match.url}/federated_inventory/add/`}
+          component={Link}
+          key={addFederatedInventory}
+          aria-label={addFederatedInventory}
+        >
+          {addFederatedInventory}
+        </DropdownItem>,
       ]}
     />
   );
@@ -197,6 +207,7 @@ function InventoryList() {
                   ['', t`Inventory`],
                   ['smart', t`Smart Inventory`],
                   ['constructed', t`Constructed Inventory`],
+                  ['federated', t`Federated Inventory`],
                 ],
               },
               {

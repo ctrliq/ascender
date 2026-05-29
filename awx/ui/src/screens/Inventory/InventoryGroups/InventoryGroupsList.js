@@ -103,7 +103,9 @@ function InventoryGroupsList() {
     }
     return t`Select a row to delete`;
   };
-  const isNotConstructedInventory = inventoryType !== 'constructed_inventory';
+  const isNotConstructedInventory =
+    inventoryType !== 'constructed_inventory' &&
+    inventoryType !== 'federated_inventory';
   const canAdd =
     actions &&
     Object.prototype.hasOwnProperty.call(actions, 'POST') &&

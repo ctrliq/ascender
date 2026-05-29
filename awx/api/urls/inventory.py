@@ -8,6 +8,8 @@ from awx.api.views.inventory import (
     InventoryDetail,
     ConstructedInventoryDetail,
     ConstructedInventoryList,
+    FederatedInventoryDetail,
+    FederatedInventoryList,
     InventoryActivityStreamList,
     InventoryInputInventoriesList,
     InventoryJobTemplateList,
@@ -57,4 +59,10 @@ constructed_inventory_urls = [
     path('<int:pk>/', ConstructedInventoryDetail.as_view(), name='constructed_inventory_detail'),
 ]
 
-__all__ = ['urls', 'constructed_inventory_urls']
+# Federated inventory special views
+federated_inventory_urls = [
+    path('', FederatedInventoryList.as_view(), name='federated_inventory_list'),
+    path('<int:pk>/', FederatedInventoryDetail.as_view(), name='federated_inventory_detail'),
+]
+
+__all__ = ['urls', 'constructed_inventory_urls', 'federated_inventory_urls']

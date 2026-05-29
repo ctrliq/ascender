@@ -1748,6 +1748,9 @@ class InventorySerializer(LabelsListMixin, BaseSerializerWithVariables):
         if obj.kind == 'constructed':
             res['input_inventories'] = self.reverse('api:inventory_input_inventories', kwargs={'pk': obj.pk})
             res['constructed_url'] = self.reverse('api:constructed_inventory_detail', kwargs={'pk': obj.pk})
+        if obj.kind == 'federated':
+            res['input_inventories'] = self.reverse('api:inventory_input_inventories', kwargs={'pk': obj.pk})
+            res['federated_url'] = self.reverse('api:federated_inventory_detail', kwargs={'pk': obj.pk})
         return res
 
     def to_representation(self, obj):
@@ -1872,6 +1875,17 @@ class ConstructedInventorySerializer(InventorySerializer):
         obj = super().update(obj, validated_data)
         self.apply_inv_src_data(obj, inv_src_data)
         return obj
+
+
+class FederatedInventorySerializer(InventorySerializer):
+    class Meta:
+        model = Inventory
+        fields = ('*', '-host_filter', '-instance_groups', '-prevent_instance_group_fallback')
+        read_only_fields = ('*', 'kind')
+
+    def create(self, validated_data):
+        validated_data['kind'] = 'federated'
+        return super().create(validated_data)
 
 
 class InventoryScriptSerializer(InventorySerializer):
@@ -2006,8 +2020,8 @@ class HostSerializer(BaseSerializerWithVariables):
         return value
 
     def validate_inventory(self, value):
-        if value.kind in ('constructed', 'smart'):
-            raise serializers.ValidationError({"detail": _("Cannot create Host for Smart or Constructed Inventories")})
+        if value.kind in ('constructed', 'smart', 'federated'):
+            raise serializers.ValidationError({"detail": _("Cannot create Host for Smart, Constructed, or Federated Inventories")})
         return value
 
     def validate_variables(self, value):

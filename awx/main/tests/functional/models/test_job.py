@@ -1,6 +1,7 @@
 import pytest
 
 from awx.main.models import JobTemplate, Job, JobHostSummary, WorkflowJob, Inventory, Project, Organization
+from awx.main.models.jobs import _federated_inventory_has_matching_hosts
 
 
 @pytest.mark.django_db
@@ -87,3 +88,209 @@ class TestSlicingModels:
 
         unified_job = job_template.create_unified_job(job_slice_count=2)
         assert isinstance(unified_job, Job)
+
+
+# ---------------------------------------------------------------------------
+# Federated inventory launch tests
+# ---------------------------------------------------------------------------
+
+
+@pytest.fixture
+def federated_inv_factory(organization):
+    """Return a helper that creates a federated inventory with N source inventories,
+    each pre-populated with one host named 'host<i>'."""
+
+    def _make(n_sources, host_prefix='host'):
+        fed = Inventory.objects.create(name='fed-inv', kind='federated', organization=organization)
+        sources = []
+        for i in range(n_sources):
+            src = Inventory.objects.create(name=f'src-inv-{i}', kind='', organization=organization)
+            src.hosts.create(name=f'{host_prefix}{i}')
+            fed.input_inventories.add(src)
+            sources.append(src)
+        return fed, sources
+
+    return _make
+
+
+@pytest.mark.django_db
+class TestFederatedInventoryLaunch:
+    def test_produces_workflow_job(self, federated_inv_factory, organization):
+        """Launching a JT against a federated inventory produces a WorkflowJob."""
+        fed, _ = federated_inv_factory(2)
+        jt = JobTemplate.objects.create(name='fed-jt', inventory=fed, organization=organization)
+        job = jt.create_unified_job()
+        assert isinstance(job, WorkflowJob)
+        assert job.is_sliced_job is True
+        assert job.job_template == jt
+
+    def test_one_node_per_source_inventory(self, federated_inv_factory, organization):
+        """One WorkflowJobNode is created per source inventory."""
+        fed, sources = federated_inv_factory(3)
+        jt = JobTemplate.objects.create(name='fed-jt', inventory=fed, organization=organization)
+        job = jt.create_unified_job()
+        assert job.workflow_nodes.count() == 3
+        node_inv_ids = {n.ancestor_artifacts['source_inventory_id'] for n in job.workflow_nodes.all()}
+        assert node_inv_ids == {s.id for s in sources}
+
+    def test_empty_source_inventory_skipped(self, organization):
+        """A source inventory with no hosts produces no node."""
+        fed = Inventory.objects.create(name='fed-inv', kind='federated', organization=organization)
+        src_with_hosts = Inventory.objects.create(name='src-with-hosts', kind='', organization=organization)
+        src_with_hosts.hosts.create(name='realhost')
+        src_empty = Inventory.objects.create(name='src-empty', kind='', organization=organization)
+        fed.input_inventories.add(src_with_hosts)
+        fed.input_inventories.add(src_empty)
+
+        jt = JobTemplate.objects.create(name='fed-jt', inventory=fed, organization=organization)
+        job = jt.create_unified_job()
+        assert job.workflow_nodes.count() == 1
+        assert job.workflow_nodes.first().ancestor_artifacts['source_inventory_id'] == src_with_hosts.id
+
+    def test_limit_skips_non_matching_inventory(self, organization):
+        """Source inventories whose hosts don't match the limit pattern are skipped."""
+        fed = Inventory.objects.create(name='fed-inv', kind='federated', organization=organization)
+        src_web = Inventory.objects.create(name='src-web', kind='', organization=organization)
+        src_web.hosts.create(name='web01')
+        src_db = Inventory.objects.create(name='src-db', kind='', organization=organization)
+        src_db.hosts.create(name='db01')
+        fed.input_inventories.add(src_web)
+        fed.input_inventories.add(src_db)
+
+        jt = JobTemplate.objects.create(name='fed-jt', inventory=fed, organization=organization)
+        job = jt.create_unified_job(limit='web*')
+        assert job.workflow_nodes.count() == 1
+        assert job.workflow_nodes.first().ancestor_artifacts['source_inventory_id'] == src_web.id
+
+    def test_limit_all_includes_all_non_empty(self, federated_inv_factory, organization):
+        """No limit (or 'all') includes every non-empty source inventory."""
+        fed, sources = federated_inv_factory(3)
+        jt = JobTemplate.objects.create(name='fed-jt', inventory=fed, organization=organization)
+        job = jt.create_unified_job()
+        assert job.workflow_nodes.count() == 3
+
+    def test_child_node_carries_source_inventory_id(self, federated_inv_factory, organization):
+        """Each node's ancestor_artifacts carries source_inventory_id, not the federated id."""
+        fed, sources = federated_inv_factory(2)
+        jt = JobTemplate.objects.create(name='fed-jt', inventory=fed, organization=organization)
+        job = jt.create_unified_job()
+        for node in job.workflow_nodes.all():
+            assert 'source_inventory_id' in node.ancestor_artifacts
+            assert node.ancestor_artifacts['source_inventory_id'] != fed.id
+            assert node.ancestor_artifacts['source_inventory_id'] in {s.id for s in sources}
+
+    def test_federation_takes_precedence_over_slicing(self, organization):
+        """When a JT has job_slice_count > 1 but uses a federated inventory,
+        federation wins: a WorkflowJob with per-source nodes is created, not slice nodes."""
+        fed = Inventory.objects.create(name='fed-inv', kind='federated', organization=organization)
+        for i in range(4):
+            src = Inventory.objects.create(name=f'src-{i}', kind='', organization=organization)
+            src.hosts.create(name=f'host{i}')
+            fed.input_inventories.add(src)
+
+        # job_slice_count=4, but inventory is federated
+        jt = JobTemplate.objects.create(name='fed-jt', inventory=fed, organization=organization, job_slice_count=4)
+        job = jt.create_unified_job()
+        assert isinstance(job, WorkflowJob)
+        # nodes must carry source_inventory_id, not job_slice
+        for node in job.workflow_nodes.all():
+            assert 'source_inventory_id' in node.ancestor_artifacts
+            assert 'job_slice' not in node.ancestor_artifacts
+
+    def test_prevent_federation_falls_through_to_normal_job(self, federated_inv_factory, organization):
+        """_prevent_federation bypasses federated handling; child jobs use it."""
+        fed, _ = federated_inv_factory(2)
+        jt = JobTemplate.objects.create(name='fed-jt', inventory=fed, organization=organization)
+        job = jt.create_unified_job(_prevent_federation=True)
+        # Without federation the JT has 0 hosts in the federated inv, so slicing → plain Job
+        assert isinstance(job, Job)
+
+    def test_prompted_federated_inventory(self, federated_inv_factory, organization):
+        """Federating via a prompted inventory (ask_inventory_on_launch) works."""
+        fed, sources = federated_inv_factory(2)
+        plain_inv = Inventory.objects.create(name='plain', kind='', organization=organization)
+        jt = JobTemplate.objects.create(name='fed-jt', inventory=plain_inv, organization=organization, ask_inventory_on_launch=True)
+        job = jt.create_unified_job(inventory=fed)
+        assert isinstance(job, WorkflowJob)
+        assert job.workflow_nodes.count() == 2
+
+
+@pytest.mark.django_db
+class TestFederatedInventoryHasMatchingHosts:
+    """Unit-style tests for _federated_inventory_has_matching_hosts()."""
+
+    def _make_inv(self, organization, host_names=(), group_names=()):
+        inv = Inventory.objects.create(name='test-src', kind='', organization=organization)
+        for name in host_names:
+            inv.hosts.create(name=name)
+        for name in group_names:
+            inv.groups.create(name=name)
+        return inv
+
+    def test_no_limit_empty_inventory(self, organization):
+        inv = self._make_inv(organization)
+        assert _federated_inventory_has_matching_hosts(inv, '') is False
+
+    def test_no_limit_non_empty_inventory(self, organization):
+        inv = self._make_inv(organization, host_names=['h1'])
+        assert _federated_inventory_has_matching_hosts(inv, '') is True
+
+    def test_all_star_patterns(self, organization):
+        inv = self._make_inv(organization, host_names=['h1'])
+        assert _federated_inventory_has_matching_hosts(inv, 'all') is True
+        assert _federated_inventory_has_matching_hosts(inv, '*') is True
+
+    def test_exact_host_match(self, organization):
+        inv = self._make_inv(organization, host_names=['web01', 'db01'])
+        assert _federated_inventory_has_matching_hosts(inv, 'web01') is True
+        assert _federated_inventory_has_matching_hosts(inv, 'missing') is False
+
+    def test_exact_group_match(self, organization):
+        inv = self._make_inv(organization, host_names=['h1'], group_names=['webservers'])
+        assert _federated_inventory_has_matching_hosts(inv, 'webservers') is True
+
+    def test_glob_host_match(self, organization):
+        inv = self._make_inv(organization, host_names=['web01', 'web02', 'db01'])
+        assert _federated_inventory_has_matching_hosts(inv, 'web*') is True
+        assert _federated_inventory_has_matching_hosts(inv, 'app*') is False
+
+    def test_glob_group_fallback(self, organization):
+        inv = self._make_inv(organization, host_names=['h1'], group_names=['webservers', 'dbservers'])
+        assert _federated_inventory_has_matching_hosts(inv, 'web*') is True
+        assert _federated_inventory_has_matching_hosts(inv, 'app*') is False
+
+    def test_trailing_star_fast_path(self, organization):
+        """Trailing-star glob uses a DB startswith fast path; verify correctness
+        against the general fnmatch path for both matches and non-matches."""
+        inv = self._make_inv(organization, host_names=['web01', 'web02', 'db01'])
+        # Standard trailing-star: should match via startswith fast path
+        assert _federated_inventory_has_matching_hosts(inv, 'web*') is True
+        assert _federated_inventory_has_matching_hosts(inv, 'db*') is True
+        assert _federated_inventory_has_matching_hosts(inv, 'app*') is False
+        # Pattern with no prefix before the star matches anything non-empty
+        assert _federated_inventory_has_matching_hosts(inv, '*') is True
+        # Complex globs that must NOT take the fast path (fall through to fnmatch)
+        # mid-star
+        assert _federated_inventory_has_matching_hosts(inv, 'web*01') is True
+        # question-mark
+        assert _federated_inventory_has_matching_hosts(inv, 'web??') is True
+        assert _federated_inventory_has_matching_hosts(inv, 'xyz??') is False
+
+    def test_ungrouped(self, organization):
+        inv = Inventory.objects.create(name='test-src', kind='', organization=organization)
+        grouped_host = inv.hosts.create(name='grouped')
+        ungrouped_host = inv.hosts.create(name='ungrouped')
+        grp = inv.groups.create(name='mygroup')
+        grp.hosts.add(grouped_host)
+        assert _federated_inventory_has_matching_hosts(inv, 'ungrouped') is True
+        # Remove ungrouped host; only grouped remains
+        ungrouped_host.delete()
+        assert _federated_inventory_has_matching_hosts(inv, 'ungrouped') is False
+
+    def test_complex_pattern_failsafe(self, organization):
+        """Complex operator patterns always include the inventory (fail-safe)."""
+        inv = self._make_inv(organization, host_names=['h1'])
+        assert _federated_inventory_has_matching_hosts(inv, 'web:db') is True
+        assert _federated_inventory_has_matching_hosts(inv, 'web&db') is True
+        assert _federated_inventory_has_matching_hosts(inv, '!web') is True
+

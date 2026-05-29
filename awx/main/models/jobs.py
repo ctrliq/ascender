@@ -2,6 +2,7 @@
 # All Rights Reserved.
 
 # Python
+import fnmatch
 import logging
 import time
 from urllib.parse import urljoin
@@ -189,6 +190,44 @@ class JobOptions(BaseModel):
         return needed
 
 
+def _federated_inventory_has_matching_hosts(inv, limit):
+    """Return True if *inv* has hosts that would be targeted by *limit*.
+
+    Used at WorkflowJobNode creation time to skip source inventories that
+    contribute no hosts to a federated job launch, avoiding spurious empty jobs.
+
+    Handles:
+    - No limit / 'all' / '*' → just checks that the inventory is non-empty.
+    - 'ungrouped'            → checks for hosts with no group membership.
+    - Complex patterns (containing ':', '&', '!') → delegates to Ansible at run time;
+      included only if the inventory is non-empty (same rule as the no-limit case).
+    - Simple glob patterns   → fnmatch against host names then group names.
+    """
+    pat = (limit or '').strip()
+    if not pat or pat in ('all', '*'):
+        return inv.hosts.exists()
+    # Complex operator patterns: let Ansible sort it out at run time
+    if any(c in pat for c in (':', '&', '!')):
+        return inv.hosts.exists()
+    if pat == 'ungrouped':
+        return inv.hosts.filter(groups__isnull=True).exists()
+    # Exact match (no glob metacharacters) — resolved entirely in the DB via an index lookup.
+    if not any(c in pat for c in ('*', '?', '[')):
+        return inv.hosts.filter(name=pat).exists() or inv.groups.filter(name=pat).exists()
+    # Glob pattern.
+    # Fast path: trailing-star-only glob (e.g. "web*") — the prefix is a plain
+    # string so the DB can resolve it with an indexed startswith/LIKE query and
+    # short-circuit via EXISTS, avoiding a full table scan on large inventories.
+    if pat.endswith('*') and not any(c in pat[:-1] for c in ('*', '?', '[')):
+        prefix = pat[:-1]
+        return inv.hosts.filter(name__startswith=prefix).exists() or inv.groups.filter(name__startswith=prefix).exists()
+    # Arbitrary glob — stream names one at a time so any() can short-circuit without
+    # materialising the full list into memory.
+    if any(fnmatch.fnmatch(name, pat) for name in inv.hosts.values_list('name', flat=True).iterator()):
+        return True
+    return any(fnmatch.fnmatch(name, pat) for name in inv.groups.values_list('name', flat=True).iterator())
+
+
 class JobTemplate(UnifiedJobTemplate, JobOptions, SurveyJobTemplateMixin, ResourceMixin, RelatedJobsMixin, WebhookTemplateMixin):
     """
     A job template is a reusable job definition for applying a project (with
@@ -371,9 +410,26 @@ class JobTemplate(UnifiedJobTemplate, JobOptions, SurveyJobTemplateMixin, Resour
 
     def create_unified_job(self, **kwargs):
         prevent_slicing = kwargs.pop('_prevent_slicing', False)
+        prevent_federation = kwargs.pop('_prevent_federation', False)
+
+        # Determine the effective inventory for federation detection
+        actual_inventory = self.inventory
+        if self.ask_inventory_on_launch and 'inventory' in kwargs:
+            actual_inventory = kwargs['inventory']
+        federated_event = bool(actual_inventory and getattr(actual_inventory, 'kind', None) == 'federated' and not prevent_federation)
+
         slice_ct = self.get_effective_slice_ct(kwargs)
         slice_event = bool(slice_ct > 1 and (not prevent_slicing))
-        if slice_event:
+        if federated_event:
+            # A Federated Inventory generates a WorkflowJob with one node per source inventory,
+            # each inheriting that inventory's instance groups for automatic IG routing.
+            from awx.main.models.workflow import WorkflowJobTemplate, WorkflowJobNode
+
+            kwargs['_unified_job_class'] = WorkflowJobTemplate._get_unified_job_class()
+            kwargs['_parent_field_name'] = "job_template"
+            kwargs.setdefault('_eager_fields', {})
+            kwargs['_eager_fields']['is_sliced_job'] = True
+        elif slice_event:
             # A Slice Job Template will generate a WorkflowJob rather than a Job
             from awx.main.models.workflow import WorkflowJobTemplate, WorkflowJobNode
 
@@ -389,7 +445,19 @@ class JobTemplate(UnifiedJobTemplate, JobOptions, SurveyJobTemplateMixin, Resour
             kwargs.setdefault('_eager_fields', {})
             kwargs['_eager_fields'].setdefault('job_slice_count', 1)
         job = super(JobTemplate, self).create_unified_job(**kwargs)
-        if slice_event:
+        if federated_event:
+            # NOTE: slice_event is always False here because federated inventories have no direct
+            # hosts, so get_effective_slice_ct() returns 0. Listed first to match the setup block above.
+            effective_limit = (kwargs.get('limit') or self.limit or '').strip()
+            for inv in actual_inventory.input_inventories.all():
+                if not _federated_inventory_has_matching_hosts(inv, effective_limit):
+                    continue
+                WorkflowJobNode.objects.create(
+                    workflow_job=job,
+                    unified_job_template=self,
+                    ancestor_artifacts=dict(source_inventory_id=inv.id),
+                )
+        elif slice_event:
             for idx in range(slice_ct):
                 create_kwargs = dict(workflow_job=job, unified_job_template=self, ancestor_artifacts=dict(job_slice=idx + 1))
                 WorkflowJobNode.objects.create(**create_kwargs)

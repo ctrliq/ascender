@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { func, bool, string, oneOfType, arrayOf } from 'prop-types';
+import { func, bool, string, number, oneOfType, arrayOf } from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';
 import { InventoriesAPI } from 'api';
@@ -21,6 +21,7 @@ const QS_CONFIG = getQSConfig('inventory', {
 
 function InventoryLookup({
   autoPopulate,
+  excludeIds,
   fieldId,
   fieldName,
   hideAdvancedInventories,
@@ -39,6 +40,8 @@ function InventoryLookup({
   const { t } = useLingui();
   const autoPopulateLookup = useAutoPopulateLookup(onChange);
 
+  const excludeIdsKey = (excludeIds || []).join(',');
+
   const {
     result: { inventories, count, relatedSearchableKeys, searchableKeys },
     request: fetchInventories,
@@ -48,12 +51,16 @@ function InventoryLookup({
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, history.location.search);
       const inventoryKindParams = hideAdvancedInventories
-        ? { not__kind: ['smart', 'constructed'] }
+        ? { not__kind: ['smart', 'constructed', 'federated'] }
+        : {};
+      const excludeParams = excludeIdsKey
+        ? { not__id__in: excludeIdsKey }
         : {};
       const [{ data }, actionsResponse] = await Promise.all([
         InventoriesAPI.read(
           mergeParams(params, {
             ...inventoryKindParams,
+            ...excludeParams,
           })
         ),
         InventoriesAPI.readOptions(),
@@ -85,7 +92,7 @@ function InventoryLookup({
           })),
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [autoPopulate, autoPopulateLookup, history.location]),
+    }, [autoPopulate, autoPopulateLookup, excludeIdsKey, history.location]),
     {
       inventories: [],
       count: 0,
@@ -247,6 +254,7 @@ function InventoryLookup({
 
 InventoryLookup.propTypes = {
   autoPopulate: bool,
+  excludeIds: arrayOf(number),
   fieldId: string,
   fieldName: string,
   hideAdvancedInventories: bool,
@@ -259,6 +267,7 @@ InventoryLookup.propTypes = {
 
 InventoryLookup.defaultProps = {
   autoPopulate: false,
+  excludeIds: [],
   fieldId: 'inventory',
   fieldName: 'inventory',
   hideAdvancedInventories: false,

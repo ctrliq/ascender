@@ -54,6 +54,7 @@ function InventoryListItem({
     '': t`Inventory`,
     smart: t`Smart Inventory`,
     constructed: t`Constructed Inventory`,
+    federated: t`Federated Inventory`,
   };
 
   let syncStatus = 'disabled';
