@@ -33,6 +33,7 @@ from awx.api.views.labels import LabelSubListCreateAttachDetachView
 from awx.api.serializers import (
     InventorySerializer,
     ConstructedInventorySerializer,
+    FederatedInventorySerializer,
     ActivityStreamSerializer,
     RoleSerializer,
     InstanceGroupSerializer,
@@ -82,7 +83,8 @@ class InventoryDetail(RelatedJobsPreventDeleteMixin, RetrieveUpdateDestroyAPIVie
         # Do not allow changes to an Inventory kind.
         if kind is not None and obj.kind != kind:
             return Response(
-                dict(error=_('You cannot turn a regular inventory into a "smart" or "constructed" inventory.')), status=status.HTTP_405_METHOD_NOT_ALLOWED
+                dict(error=_('You cannot turn a regular inventory into a "smart", "constructed", or "federated" inventory.')),
+                status=status.HTTP_405_METHOD_NOT_ALLOWED,
             )
         return super(InventoryDetail, self).update(request, *args, **kwargs)
 
@@ -110,6 +112,18 @@ class ConstructedInventoryList(InventoryList):
         return r.filter(kind='constructed')
 
 
+class FederatedInventoryDetail(InventoryDetail):
+    serializer_class = FederatedInventorySerializer
+
+
+class FederatedInventoryList(InventoryList):
+    serializer_class = FederatedInventorySerializer
+
+    def get_queryset(self):
+        r = super().get_queryset()
+        return r.filter(kind='federated')
+
+
 class InventoryInputInventoriesList(SubListAttachDetachAPIView):
     model = Inventory
     serializer_class = InventorySerializer
@@ -117,8 +131,8 @@ class InventoryInputInventoriesList(SubListAttachDetachAPIView):
     relationship = 'input_inventories'
 
     def is_valid_relation(self, parent, sub, created=False):
-        if sub.kind == 'constructed':
-            raise serializers.ValidationError({'error': 'You cannot add a constructed inventory to another constructed inventory.'})
+        if sub.kind in ('constructed', 'federated'):
+            raise serializers.ValidationError({'error': 'You cannot add a constructed or federated inventory as a source inventory.'})
 
 
 class InventoryActivityStreamList(SubListAPIView):

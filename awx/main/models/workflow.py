@@ -384,6 +384,12 @@ class WorkflowJobNode(WorkflowNodeBase):
             data['_eager_fields']['job_slice_number'] = self.ancestor_artifacts['job_slice']
             data['_eager_fields']['job_slice_count'] = self.workflow_job.workflow_job_nodes.count()
             data['_prevent_slicing'] = True
+        # Extra processing for federated inventory routing: override inventory so each
+        # slice runs against its source inventory and inherits its instance groups.
+        if 'federated_inventory_id' in self.ancestor_artifacts and is_root_node:
+            data['_eager_fields']['allow_simultaneous'] = True
+            data['_eager_fields']['inventory_id'] = self.ancestor_artifacts['federated_inventory_id']
+            data['_prevent_federation'] = True
         return data
 
 

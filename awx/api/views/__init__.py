@@ -1711,6 +1711,11 @@ class InventoryHostsList(HostRelatedSearchMixin, SubListCreateAttachDetachAPIVie
     filter_read_permission = False
 
     def get_queryset(self):
+        parent = self.get_parent_object()
+        if getattr(parent, 'kind', None) == 'federated':
+            self.check_parent_access(parent)
+            input_ids = parent.input_inventories.values_list('id', flat=True)
+            return self.request.user.get_queryset(self.model).filter(inventory_id__in=input_ids).with_latest_summary_id()
         return super().get_queryset().with_latest_summary_id()
 
 
@@ -1955,6 +1960,14 @@ class InventoryGroupsList(SubListCreateAttachDetachAPIView):
     relationship = 'groups'
     parent_key = 'inventory'
 
+    def get_queryset(self):
+        parent = self.get_parent_object()
+        if getattr(parent, 'kind', None) == 'federated':
+            self.check_parent_access(parent)
+            input_ids = parent.input_inventories.values_list('id', flat=True)
+            return self.request.user.get_queryset(self.model).filter(inventory_id__in=input_ids)
+        return super().get_queryset()
+
 
 class InventoryRootGroupsList(SubListCreateAttachDetachAPIView):
     model = models.Group
@@ -1966,6 +1979,11 @@ class InventoryRootGroupsList(SubListCreateAttachDetachAPIView):
     def get_queryset(self):
         parent = self.get_parent_object()
         self.check_parent_access(parent)
+        if getattr(parent, 'kind', None) == 'federated':
+            input_ids = parent.input_inventories.values_list('id', flat=True)
+            qs = self.request.user.get_queryset(self.model).distinct()
+            # Root groups: groups that have no parent within their own inventory
+            return qs.filter(inventory_id__in=input_ids, parents__isnull=True)
         qs = self.request.user.get_queryset(self.model).distinct()  # need distinct for '&' operator
         return qs & parent.root_groups
 

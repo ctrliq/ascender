@@ -84,6 +84,7 @@ class Inventory(CommonModelNameNotUnique, ResourceMixin, RelatedJobsMixin):
         ('', _('Hosts have a direct link to this inventory.')),
         ('smart', _('Hosts for inventory generated using the host_filter property.')),
         ('constructed', _('Parse list of source inventories with the constructed inventory plugin.')),
+        ('federated', _('Route jobs to source inventory instance groups automatically.')),
     ]
 
     class Meta:
@@ -214,11 +215,13 @@ class Inventory(CommonModelNameNotUnique, ResourceMixin, RelatedJobsMixin):
     def get_absolute_url(self, request=None):
         if request is not None:
             # circular import
-            from awx.api.urls.inventory import constructed_inventory_urls
+            from awx.api.urls.inventory import constructed_inventory_urls, federated_inventory_urls
 
             route = resolve(request.path_info)
             if any(route.url_name == url.name for url in constructed_inventory_urls):
                 return reverse('api:constructed_inventory_detail', kwargs={'pk': self.pk}, request=request)
+            if any(route.url_name == url.name for url in federated_inventory_urls):
+                return reverse('api:federated_inventory_detail', kwargs={'pk': self.pk}, request=request)
 
         return reverse('api:inventory_detail', kwargs={'pk': self.pk}, request=request)
 
@@ -484,6 +487,8 @@ class Inventory(CommonModelNameNotUnique, ResourceMixin, RelatedJobsMixin):
             # Minimal update of host_count for smart inventory host filter changes
             self.update_computed_fields()
         self._enforce_constructed_source()
+        # Federated inventories do not auto-create an inventory source; job routing
+        # is handled at launch time by splitting into per-inventory workflow nodes.
 
     def delete(self, *args, **kwargs):
         self._update_host_smart_inventory_memeberships()

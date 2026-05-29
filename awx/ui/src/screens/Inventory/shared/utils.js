@@ -15,6 +15,7 @@ export function getInventoryPath(inventory) {
     '': `/inventories/inventory/${inventory.id}`,
     smart: `/inventories/smart_inventory/${inventory.id}`,
     constructed: `/inventories/constructed_inventory/${inventory.id}`,
+    federated: `/inventories/federated_inventory/${inventory.id}`,
   };
   return url[inventory.kind];
 }

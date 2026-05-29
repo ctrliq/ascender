@@ -10,9 +10,11 @@ import { InventoryList } from './InventoryList';
 import Inventory from './Inventory';
 import SmartInventory from './SmartInventory';
 import ConstructedInventory from './ConstructedInventory';
+import FederatedInventory from './FederatedInventory';
 import InventoryAdd from './InventoryAdd';
 import SmartInventoryAdd from './SmartInventoryAdd';
 import ConstructedInventoryAdd from './ConstructedInventoryAdd';
+import FederatedInventoryAdd from './FederatedInventoryAdd';
 import { getInventoryPath } from './shared/utils';
 
 function Inventories() {
@@ -22,6 +24,7 @@ function Inventories() {
     '/inventories/inventory/add': t`Create new inventory`,
     '/inventories/smart_inventory/add': t`Create new smart inventory`,
     '/inventories/constructed_inventory/add': t`Create new constructed inventory`,
+    '/inventories/federated_inventory/add': t`Create new federated inventory`,
   });
 
   const [breadcrumbConfig, setScreenHeader] = useState(
@@ -116,6 +119,9 @@ function Inventories() {
         <Route path="/inventories/constructed_inventory/add">
           <ConstructedInventoryAdd />
         </Route>
+        <Route path="/inventories/federated_inventory/add">
+          <FederatedInventoryAdd />
+        </Route>
         <Route path="/inventories/inventory/:id">
           <Config>
             {({ me }) => (
@@ -128,6 +134,9 @@ function Inventories() {
         </Route>
         <Route path="/inventories/constructed_inventory/:id">
           <ConstructedInventory setBreadcrumb={setBreadcrumbConfig} />
+        </Route>
+        <Route path="/inventories/federated_inventory/:id">
+          <FederatedInventory setBreadcrumb={setBreadcrumbConfig} />
         </Route>
         <Route path="/inventories">
           <PersistentFilters pageKey="inventories">

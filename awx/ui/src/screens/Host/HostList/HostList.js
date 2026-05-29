@@ -69,7 +69,10 @@ function HostList() {
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
       const results = await Promise.all([
-        HostsAPI.read(params),
+        HostsAPI.read({
+          ...params,
+          not__inventory__kind__in: 'smart,constructed,federated',
+        }),
         HostsAPI.readOptions(),
       ]);
       return {
