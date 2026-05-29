@@ -226,9 +226,7 @@ class TestSelectBestInstanceForTask(object):
             Job(controller_node='ctrl-a', execution_node='', instance_group=ig),
             Job(controller_node='ctrl-b', execution_node='', instance_group=ig),
         ]
-        tm_models = TaskManagerModels.init_with_consumed_capacity(
-            tasks=tasks, instances=[ctrl_a, ctrl_b, ctrl_c], instance_groups=[ig]
-        )
+        tm_models = TaskManagerModels.init_with_consumed_capacity(tasks=tasks, instances=[ctrl_a, ctrl_b, ctrl_c], instance_groups=[ig])
 
         # ctrl-a: consumed=3, jobs_running=3, remaining=197
         # ctrl-b: consumed=1, jobs_running=1, remaining=199
@@ -252,9 +250,7 @@ class TestSelectBestInstanceForTask(object):
             Job(controller_node='ctrl-a', execution_node='', instance_group=ig),
             Job(controller_node='ctrl-b', execution_node='', instance_group=ig),
         ]
-        tm_models = TaskManagerModels.init_with_consumed_capacity(
-            tasks=tasks, instances=[ctrl_a, ctrl_b], instance_groups=[ig]
-        )
+        tm_models = TaskManagerModels.init_with_consumed_capacity(tasks=tasks, instances=[ctrl_a, ctrl_b], instance_groups=[ig])
         task = Job(task_impact=1, capacity_type='control')
         picked = tm_models.instance_groups.fit_task_to_most_remaining_capacity_instance(task, 'controlplane')
         # Both tied on capacity (199) and jobs_running (1) → first in iteration wins
@@ -262,9 +258,7 @@ class TestSelectBestInstanceForTask(object):
 
         # Now give ctrl-a one more job, making it 2 vs 1
         tasks.append(Job(controller_node='ctrl-a', execution_node='', instance_group=ig))
-        tm_models = TaskManagerModels.init_with_consumed_capacity(
-            tasks=tasks, instances=[ctrl_a, ctrl_b], instance_groups=[ig]
-        )
+        tm_models = TaskManagerModels.init_with_consumed_capacity(tasks=tasks, instances=[ctrl_a, ctrl_b], instance_groups=[ig])
         # ctrl-a: consumed=2, jobs_running=2, remaining=198
         # ctrl-b: consumed=1, jobs_running=1, remaining=199
         # ctrl-b wins by capacity (199 > 198)

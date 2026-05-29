@@ -5,7 +5,6 @@ from django.urls import path
 
 from awx.api.views import NotificationList, NotificationDetail
 
-
 urls = [
     path('', NotificationList.as_view(), name='notification_list'),
     path('<int:pk>/', NotificationDetail.as_view(), name='notification_detail'),

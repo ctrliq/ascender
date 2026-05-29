@@ -6,7 +6,6 @@ from .plugin import CredentialPlugin
 
 from django.utils.translation import gettext_lazy as _
 
-
 # https://github.com/Azure/msrestazure-for-python/blob/master/msrestazure/azure_cloud.py
 clouds = [vars(azure_cloud)[n] for n in dir(azure_cloud) if n.startswith("AZURE_") and n.endswith("_CLOUD")]
 default_cloud = vars(azure_cloud)["AZURE_PUBLIC_CLOUD"]

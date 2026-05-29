@@ -38,7 +38,7 @@ def test_python_and_js_licenses():
         for txt_file in glob.glob('%s/*.txt' % path):
             filename = txt_file.split('/')[-1]
             name = filename[:-4].lower()
-            (is_gpl, is_lgpl) = check_license(txt_file)
+            is_gpl, is_lgpl = check_license(txt_file)
             list[name] = {
                 'name': name,
                 'filename': filename,
@@ -62,9 +62,9 @@ def test_python_and_js_licenses():
                     version = version[2:]
                 if parsed_requirement.link:
                     if str(parsed_requirement.link).startswith(('http://', 'https://')):
-                        (name, version) = str(parsed_requirement.requirement).split('==', 1)
+                        name, version = str(parsed_requirement.requirement).split('==', 1)
                     else:
-                        (name, version) = parsed_requirement.link.filename.split('@', 1)
+                        name, version = parsed_requirement.link.filename.split('@', 1)
                     if name.endswith('.git'):
                         name = name[:-4]
                     if name == 'receptor':
@@ -81,10 +81,10 @@ def test_python_and_js_licenses():
         package_json_file = '%s/package.json' % path
         if not os.path.exists(package_json_file):
             return {}
-            
+
         with open(package_json_file) as f:
             jsondata = json.load(f)
-            
+
         ret = {}
         # Only get production dependencies, not devDependencies (we don't ship dev tools)
         deps = jsondata.get('dependencies', {})
@@ -93,12 +93,12 @@ def test_python_and_js_licenses():
             depname = key.lower().replace('/', '-')
             if depname.startswith('@'):
                 depname = depname[1:]
-            
+
             if depname not in ret:
                 # Extract version, removing ^ ~ etc.
                 version = deps[key].lstrip('^~>=<')
                 ret[depname] = {'name': depname, 'version': version}
-        
+
         return ret
 
     def remediate_licenses_and_requirements(licenses, requirements):

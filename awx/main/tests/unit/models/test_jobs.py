@@ -83,6 +83,7 @@ def test_start_job_fact_cache_past_timeout(hosts, tmpdir):
     ret = start_fact_cache(hosts, fact_cache, timeout=2)
     assert ret is None
 
+
 def test_start_job_fact_cache_within_timeout(hosts, tmpdir):
     artifacts_dir = tmpdir.mkdir("artifacts")
 
@@ -97,6 +98,7 @@ def test_start_job_fact_cache_within_timeout(hosts, tmpdir):
         with open(filepath, 'r') as f:
             assert json.load(f) == host.ansible_facts
 
+
 def test_finish_job_fact_cache_clear(hosts, mocker, ref_time, tmpdir):
     fact_cache = os.path.join(tmpdir, 'facts')
     start_fact_cache(hosts, fact_cache, timeout=0)
@@ -104,7 +106,7 @@ def test_finish_job_fact_cache_clear(hosts, mocker, ref_time, tmpdir):
     bulk_update = mocker.patch('awx.main.tasks.facts.bulk_update_sorted_by_id')
 
     # Mock the os.path.exists behavior for host deletion
-    # Let's assume the fact file for hosts[1] is missing.    
+    # Let's assume the fact file for hosts[1] is missing.
     mocker.patch('os.path.exists', side_effect=lambda path: hosts[1].name not in path)
 
     # Simulate one host's fact file getting deleted manually

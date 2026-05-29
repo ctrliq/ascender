@@ -12,7 +12,6 @@ from awx.conf.models import Setting
 from awx.main.management.commands import regenerate_secret_key
 from awx.main.utils.encryption import encrypt_field, decrypt_field, encrypt_value
 
-
 PREFIX = '$encrypted$UTF8$AESCBC$'
 
 
@@ -96,8 +95,6 @@ class TestKeyRegeneration:
             new_nt.send('Subject', 'Body')
 
     def test_job_start_args(self, job_factory):
-        from django.conf import settings as django_settings
-        
         # test basic decryption
         job = job_factory()
         original_data = {'foo': 'bar'}
@@ -105,11 +102,11 @@ class TestKeyRegeneration:
         job.start_args = encrypt_field(job, field_name='start_args')
         job.save()
         assert job.start_args.startswith(PREFIX)
-        
+
         # Verify we can decrypt with current key
         decrypted_value = decrypt_field(job, field_name='start_args')
         assert json.loads(decrypted_value) == original_data
-        
+
         # Store the old encrypted value before regeneration
         old_encrypted_value = job.start_args
 
@@ -117,7 +114,7 @@ class TestKeyRegeneration:
         new_key = regenerate_secret_key.Command().handle()
         new_job = models.Job.objects.get(pk=job.pk)
         assert new_job.start_args != old_encrypted_value
-        
+
         # Verify the new job has valid encrypted data
         assert new_job.start_args, f"Expected encrypted start_args, got: {repr(new_job.start_args)}"
         assert new_job.start_args.startswith(PREFIX), f"Expected encrypted format, got: {new_job.start_args}"
@@ -126,6 +123,7 @@ class TestKeyRegeneration:
         with pytest.raises(InvalidToken):
             # Use AWX's own encryption utilities to test proper key handling
             from awx.main.utils.encryption import decrypt_value, get_encryption_key
+
             # Get the proper encryption key for the new key
             new_encryption_key = get_encryption_key('start_args', job.pk, secret_key=new_key)
             # Try to decrypt old encrypted value with new derived key
@@ -150,7 +148,7 @@ class TestKeyRegeneration:
             name='Example Template',
             survey_spec=survey_spec_factory([{'variable': 'secret_key', 'default': encrypt_value('donttell', pk=None), 'type': 'password'}]),
             survey_enabled=True,
-            **params
+            **params,
         )
         job = jt.create_unified_job()
         assert jt.survey_spec['spec'][0]['default'].startswith(PREFIX)

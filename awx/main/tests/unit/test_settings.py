@@ -1,6 +1,5 @@
 from split_settings.tools import include
 
-
 LOCAL_SETTINGS = (
     'ALLOWED_HOSTS',
     'BROADCAST_WEBSOCKET_PORT',

@@ -6,7 +6,6 @@ import pytest
 
 from awx.main.utils.execution_environments import to_container_path
 
-
 private_data_dir = '/tmp/pdd_iso/awx_xxx'
 
 

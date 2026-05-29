@@ -5,7 +5,6 @@ from django.urls import path
 
 from awx.api.views import SystemJobList, SystemJobDetail, SystemJobCancel, SystemJobNotificationsList, SystemJobEventsList
 
-
 urls = [
     path('', SystemJobList.as_view(), name='system_job_list'),
     path('<int:pk>/', SystemJobDetail.as_view(), name='system_job_detail'),

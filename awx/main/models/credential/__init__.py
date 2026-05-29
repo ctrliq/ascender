@@ -1076,7 +1076,7 @@ ManagedCredentialType(
                 'label': gettext_noop('CIQ Depot Server'),
                 'type': 'string',
                 'help_text': gettext_noop('A CIQ Depot server.'),
-                'default': 'depot.ciq.com'
+                'default': 'depot.ciq.com',
             },
             {
                 'id': 'depot_user',
@@ -1094,13 +1094,7 @@ ManagedCredentialType(
         ],
         'required': ['depot_server', 'depot_user', 'depot_token'],
     },
-    injectors={
-        'env': {
-            'DEPOT_SERVER': '{{depot_server}}',
-            'DEPOT_USER': '{{depot_user}}',
-            'DEPOT_TOKEN': '{{depot_token}}'
-        }
-    },
+    injectors={'env': {'DEPOT_SERVER': '{{depot_server}}', 'DEPOT_USER': '{{depot_user}}', 'DEPOT_TOKEN': '{{depot_token}}'}},
 )
 
 ManagedCredentialType(
@@ -1286,6 +1280,7 @@ class CredentialInputSource(PrimordialModel):
 
         # Cycle detection: check if adding this link would create a cycle
         visited = set()
+
         def has_cycle(cred_id, target_id):
             if cred_id == target_id:
                 return True

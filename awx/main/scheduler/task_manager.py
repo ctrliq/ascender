@@ -47,7 +47,6 @@ from awx.main.scheduler.task_manager_models import TaskManagerModels
 import awx.main.analytics.subsystem_metrics as s_metrics
 from awx.main.utils import decrypt_field
 
-
 logger = logging.getLogger('awx.main.scheduler')
 
 
@@ -486,7 +485,7 @@ class TaskManager(TaskBase):
 
         task.status = 'waiting'
 
-        (start_status, opts) = task.pre_start()
+        start_status, opts = task.pre_start()
         if not start_status:
             task.status = 'failed'
             if task.job_explanation:

@@ -5,7 +5,6 @@ from django.urls import path
 
 from awx.api.views import ScheduleList, ScheduleDetail, ScheduleUnifiedJobsList, ScheduleCredentialsList, ScheduleLabelsList, ScheduleInstanceGroupList
 
-
 urls = [
     path('', ScheduleList.as_view(), name='schedule_list'),
     path('<int:pk>/', ScheduleDetail.as_view(), name='schedule_detail'),

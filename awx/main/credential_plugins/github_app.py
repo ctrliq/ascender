@@ -24,7 +24,6 @@ from github.GithubException import (
     UnknownObjectException,
 )
 
-
 github_app_inputs = {
     'fields': [
         {
@@ -69,8 +68,7 @@ github_app_inputs = {
             'secret': True,
             'multiline': True,
             'help_text': _(
-                'Paste the contents of the PEM file that the GitHub Admin '
-                'provided to you with the app and installation IDs.',
+                'Paste the contents of the PEM file that the GitHub Admin provided to you with the app and installation IDs.',
             ),
         },
     ],
@@ -109,13 +107,8 @@ def extract_github_app_install_token(
         base_url=github_api_url or PUBLIC_GH_API_URL,
     )
 
-    doc_url = (
-        'See https://docs.github.com/rest/reference/apps'
-        '#create-an-installation-access-token-for-an-app'
-    )
-    app_install_context = (
-        f'app_or_client_id: {app_or_client_id}, install_id: {install_id}'
-    )
+    doc_url = 'See https://docs.github.com/rest/reference/apps#create-an-installation-access-token-for-an-app'
+    app_install_context = f'app_or_client_id: {app_or_client_id}, install_id: {install_id}'
 
     try:
         return auth.token

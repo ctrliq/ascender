@@ -159,7 +159,7 @@ def create_org_and_teams(org_list, team_map, adapter, can_create=True):
 def get_or_create_org_with_default_galaxy_cred(**kwargs):
     from awx.main.models import Organization, Credential
 
-    (org, org_created) = Organization.objects.get_or_create(**kwargs)
+    org, org_created = Organization.objects.get_or_create(**kwargs)
     if org_created:
         logger.debug("Created org {} (id {}) from {}".format(org.name, org.id, kwargs))
         public_galaxy_credential = Credential.objects.filter(managed=True, name='Ansible Galaxy').first()

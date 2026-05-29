@@ -18,7 +18,6 @@ from awx.api.views import (
     GroupAdHocCommandsList,
 )
 
-
 urls = [
     path('', GroupList.as_view(), name='group_list'),
     path('<int:pk>/', GroupDetail.as_view(), name='group_detail'),

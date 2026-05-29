@@ -14,7 +14,6 @@ from awx.api.views import (
     WorkflowJobActivityStreamList,
 )
 
-
 urls = [
     path('', WorkflowJobList.as_view(), name='workflow_job_list'),
     path('<int:pk>/', WorkflowJobDetail.as_view(), name='workflow_job_detail'),

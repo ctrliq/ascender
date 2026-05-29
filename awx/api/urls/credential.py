@@ -16,7 +16,6 @@ from awx.api.views import (
     CredentialExternalTest,
 )
 
-
 urls = [
     path('', CredentialList.as_view(), name='credential_list'),
     path('<int:pk>/activity_stream/', CredentialActivityStreamList.as_view(), name='credential_activity_stream_list'),

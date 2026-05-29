@@ -38,6 +38,7 @@ class TestWebsocketRelay:
             if set_broadcast_websocket_secret is False:
                 settings.BROADCAST_WEBSOCKET_SECRET = secret_backup
             return secret_value
+
         return fn
 
     @pytest.fixture
@@ -48,10 +49,8 @@ class TestWebsocketRelay:
         server = websocket_server_generator('/websocket/relay/')
 
         # Set headers in the correct format: list of tuples with byte keys and values
-        server.scope['headers'] = [
-            (b'secret', websocket_relay_secret.encode('utf-8'))
-        ]
-        
+        server.scope['headers'] = [(b'secret', websocket_relay_secret.encode('utf-8'))]
+
         # Add explicit timeout to prevent hanging
         try:
             connected, _ = await asyncio.wait_for(server.connect(), timeout=10.0)
@@ -61,7 +60,7 @@ class TestWebsocketRelay:
 
     async def test_not_authorized(self, websocket_server_generator):
         server = websocket_server_generator('/websocket/relay/')
-        
+
         try:
             connected, _ = await asyncio.wait_for(server.connect(), timeout=10.0)
             assert connected is False, "Connection to the relay websocket without auth. We expected the client to be denied."
@@ -72,10 +71,8 @@ class TestWebsocketRelay:
         server = websocket_server_generator('/websocket/relay/')
 
         wrong_secret = websocket_relay_secret_generator('wrongsecret', set_broadcast_websocket_secret=False)
-        server.scope['headers'] = [
-            (b'secret', wrong_secret.encode('utf-8'))
-        ]
-        
+        server.scope['headers'] = [(b'secret', wrong_secret.encode('utf-8'))]
+
         try:
             connected, _ = await asyncio.wait_for(server.connect(), timeout=10.0)
             assert connected is False
@@ -90,7 +87,7 @@ class TestWebsocketEventConsumer:
         server = websocket_server_generator('/websocket/')
 
         server.scope['user'] = AnonymousUser()
-        
+
         try:
             connected, _ = await asyncio.wait_for(server.connect(), timeout=10.0)
             assert connected is False, "Anonymous user should NOT be allowed to login."

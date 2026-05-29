@@ -26,7 +26,6 @@ from awx.main.consumers import emit_channel_notification
 
 from datetime import timezone as dt_timezone
 
-
 logger = logging.getLogger('awx.main.models.schedule')
 
 __all__ = ['Schedule']

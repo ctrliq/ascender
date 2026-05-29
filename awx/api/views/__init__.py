@@ -33,7 +33,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import gettext_lazy as _
 
-
 # Django REST Framework
 from rest_framework.exceptions import APIException, PermissionDenied, ParseError, NotFound
 from rest_framework.parsers import FormParser
@@ -4090,7 +4089,7 @@ _ANSI_COLORS = {
 
 def ansi_to_html(text):
     """Convert ANSI color codes to HTML spans with CSS classes.
-    
+
     Handles cursor-up commands (ESC[A) by removing the previous line,
     emulating terminal behavior for progress indicators.
     """
@@ -4098,16 +4097,16 @@ def ansi_to_html(text):
     # Split by ESC and process blocks
     blocks = text.split('\x1b')
     processed_blocks = []
-    
+
     for i, block in enumerate(blocks):
         # Check if this block starts with a cursor-up command
         cursor_up_match = _ANSI_CURSOR_UP_PATTERN.match(block)
         if cursor_up_match:
             # Get the number of lines to move up (default to 1 if not specified)
             lines_up = int(cursor_up_match.group(1) or '1')
-            
+
             # Remove the specified number of previous line(s) to emulate cursor movement
-            for _ in range(lines_up):
+            for __ in range(lines_up):
                 if not processed_blocks:
                     break
                 # Remove blocks back to and including the previous newline
@@ -4119,7 +4118,7 @@ def ansi_to_html(text):
                 if processed_blocks:
                     processed_blocks.pop()
             # Add the rest of the block after the command
-            processed_blocks.append(block[cursor_up_match.end():])
+            processed_blocks.append(block[cursor_up_match.end() :])
         else:
             # No cursor command, keep the block (prepend ESC if not first block)
             if i == 0:
@@ -4129,22 +4128,22 @@ def ansi_to_html(text):
                 # Subsequent blocks - restore ESC prefix
                 if block:
                     processed_blocks.append('\x1b' + block)
-    
+
     # Rejoin the processed text
     text = ''.join(processed_blocks)
-    
+
     # Now convert color codes to HTML with CSS classes
     result = []
     last_end = 0
     current_classes = set()  # Track active CSS classes
     has_open_span = False
-    
+
     for match in _ANSI_COLOR_PATTERN.finditer(text):
         # Add text before this escape sequence
-        result.append(text[last_end:match.start()])
-        
+        result.append(text[last_end : match.start()])
+
         codes = match.group(1).split(';')
-        
+
         # Process codes in order
         for code in codes:
             if code == '0' or code == '':
@@ -4165,26 +4164,26 @@ def ansi_to_html(text):
                     # Remove any existing background color class
                     current_classes = {cls for cls in current_classes if not re.match(r'^ansi(4[0-7]|10[0-7])$', cls)}
                     current_classes.add('ansi{}'.format(code))
-        
+
         # After processing all codes, update the span
         if has_open_span:
             result.append('</span>')
             has_open_span = False
-        
+
         if current_classes:
             class_str = ' '.join(sorted(current_classes))
             result.append('<span class="{}">'.format(class_str))
             has_open_span = True
-        
+
         last_end = match.end()
-    
+
     # Add remaining text
     result.append(text[last_end:])
-    
+
     # Close any open span
     if has_open_span:
         result.append('</span>')
-    
+
     return ''.join(result)
 
 

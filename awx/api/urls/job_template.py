@@ -24,7 +24,6 @@ from awx.api.views import (
     JobTemplateCopy,
 )
 
-
 urls = [
     path('', JobTemplateList.as_view(), name='job_template_list'),
     path('<int:pk>/', JobTemplateDetail.as_view(), name='job_template_detail'),

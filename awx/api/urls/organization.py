@@ -27,7 +27,6 @@ from awx.api.views.organization import (
 )
 from awx.api.views import OrganizationCredentialList, OrganizationApplicationList
 
-
 urls = [
     path('', OrganizationList.as_view(), name='organization_list'),
     path('<int:pk>/', OrganizationDetail.as_view(), name='organization_detail'),

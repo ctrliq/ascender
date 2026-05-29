@@ -14,7 +14,6 @@ from awx.api.views import (
 )
 from awx.api.views.instance_install_bundle import InstanceInstallBundle
 
-
 urls = [
     path('', InstanceList.as_view(), name='instance_list'),
     path('<int:pk>/', InstanceDetail.as_view(), name='instance_detail'),

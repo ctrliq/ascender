@@ -10,7 +10,6 @@ from ansible_base.resource_registry.urls import urlpatterns as resource_api_urls
 
 from awx.main.views import handle_400, handle_403, handle_404, handle_500, handle_csp_violation, handle_login_redirect
 
-
 urlpatterns = [
     path('', include('awx.ui.urls', namespace='ui')),
     path('api/', include('awx.api.urls', namespace='api')),

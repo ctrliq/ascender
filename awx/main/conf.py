@@ -973,4 +973,5 @@ def csrf_trusted_origins_validate(serializer, attrs):
         raise serializers.ValidationError(_('\n'.join(error_messages)))
     return attrs
 
+
 register_validate('system', csrf_trusted_origins_validate)

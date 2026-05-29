@@ -152,7 +152,7 @@ class TaskManagerInstances:
             self.instances_by_hostname[task.execution_node].consume_capacity(task.task_impact, job_impact=True)
         if control_instance and control_instance.node_type in ('hybrid', 'control'):
             # Track jobs_running on the controller unless it was already counted as the execution node
-            count_as_job = (control_instance != execution_instance)
+            count_as_job = control_instance != execution_instance
             self.instances_by_hostname[task.controller_node].consume_capacity(self.control_task_impact, job_impact=count_as_job)
 
     def __getitem__(self, hostname):

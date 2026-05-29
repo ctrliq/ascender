@@ -6,7 +6,7 @@ dockerfile_dest: '../..'
 dockerfile_name: 'Dockerfile'
 template_dest: '_build'
 
-#receptor_image: quay.io/ansible/receptor:v1.5.7
+# receptor_image: quay.io/ansible/receptor:v1.5.7
 receptor_image: quay.io/ansible/receptor:devel
 
 # Helper vars to construct the proper download URL for the current architecture

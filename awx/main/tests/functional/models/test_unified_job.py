@@ -303,6 +303,7 @@ class TestCanceledJobFinishedTime:
     def test_cancel_running_job_sets_finished_time(self):
         """A job canceled while running should record a finished time."""
         from django.utils.timezone import now
+
         jt = JobTemplate.objects.create(name='test-jt-3988-running')
         job = jt.create_unified_job()
         job.status = 'running'
@@ -319,6 +320,7 @@ class TestCanceledJobFinishedTime:
     def test_successful_job_still_sets_finished(self):
         """Regression: normal completion still sets finished correctly."""
         from django.utils.timezone import now
+
         jt = JobTemplate.objects.create(name='test-jt-3988-success')
         job = jt.create_unified_job()
         job.status = 'running'
@@ -328,5 +330,3 @@ class TestCanceledJobFinishedTime:
         job.save()
         job.refresh_from_db()
         assert job.finished is not None
-
-

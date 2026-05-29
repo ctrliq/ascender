@@ -43,7 +43,6 @@ from awx.api.views.mixin import RelatedJobsPreventDeleteMixin
 
 from awx.api.pagination import UnifiedJobEventPagination
 
-
 logger = logging.getLogger('awx.api.views.organization')
 
 

@@ -8,7 +8,6 @@ from awx.api.views import (
     ReceptorAddressDetail,
 )
 
-
 urls = [
     path('', ReceptorAddressesList.as_view(), name='receptor_addresses_list'),
     path('<int:pk>/', ReceptorAddressDetail.as_view(), name='receptor_address_detail'),

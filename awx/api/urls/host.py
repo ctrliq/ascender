@@ -18,7 +18,6 @@ from awx.api.views import (
     HostAdHocCommandEventsList,
 )
 
-
 urls = [
     path('', HostList.as_view(), name='host_list'),
     path('<int:pk>/', HostDetail.as_view(), name='host_detail'),

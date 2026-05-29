@@ -5,7 +5,6 @@ from django.urls import path
 
 from awx.api.views import RoleList, RoleDetail, RoleUsersList, RoleTeamsList, RoleParentsList, RoleChildrenList
 
-
 urls = [
     path('', RoleList.as_view(), name='role_list'),
     path('<int:pk>/', RoleDetail.as_view(), name='role_detail'),

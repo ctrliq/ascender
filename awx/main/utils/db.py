@@ -9,6 +9,7 @@ from django.conf import settings
 def set_connection_name(function):
     set_application_name(settings.DATABASES, settings.CLUSTER_HOST_ID, function=function)
 
+
 def bulk_update_sorted_by_id(model, objects, fields, batch_size=1000):
     """
     Perform a sorted bulk update on model instances to avoid database deadlocks.
