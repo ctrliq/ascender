@@ -38,7 +38,7 @@ An example of inventories of various states, including one with detail for a dis
 
 .. image:: ../common/images/inventories-home-with-status.png
 
-- **Type**: Identifies whether it is a standard inventory, a Smart inventory, or a constructed inventory.
+- **Type**: Identifies whether it is a standard inventory, a Smart inventory, a constructed inventory, or a federated inventory.
 - **Organization**: The organization to which the inventory belongs.
 - **Actions**: The following actions are available for the selected inventory:
 
@@ -462,6 +462,102 @@ Example of a constructed inventory details view:
 
 
 
+.. _ug_inventories_federated:
+
+Federated Inventories
+======================
+
+.. index::
+   pair: inventories; federated
+
+A Federated Inventory is a type of inventory that combines multiple plain source inventories and automatically routes job execution to each source inventory's own Instance Groups. Where a constructed inventory merges hosts from multiple sources into a single combined inventory that runs as one job, a federated inventory dispatches a **separate child job per source inventory**, with each child job running on the Instance Groups belonging to that source. This makes federated inventories the correct tool when your inventories are segmented by region, cloud account, or network zone and you need each segment to execute on its own execution nodes.
+
+A Federated Inventory is identified by ``kind=federated``. It holds no hosts or groups of its own; all host and group data visible in the UI is aggregated from its input inventories for reference only.
+
+.. note::
+
+   Federated inventories require plain (standard) inventories as inputs. Smart inventories, constructed inventories, and other federated inventories cannot be used as input inventories.
+
+
+The routing problem federated inventories solve
+------------------------------------------------
+
+Consider two inventories pinned to regional Instance Groups:
+
++------------+------------------+----------------+
+| Inventory  | Hosts            | Instance Group |
++============+==================+================+
+| East       | host1, host2     | ig-east        |
++------------+------------------+----------------+
+| West       | host3, host4     | ig-west        |
++------------+------------------+----------------+
+
+Running a job template against a single combined inventory (plain, smart, or constructed) executes the entire job on whichever Instance Group is assigned to that combined inventory. The per-source Instance Group assignments are ignored.
+
+A federated inventory containing both East and West as inputs produces two simultaneous child jobs when launched: one running against the East inventory on ``ig-east``, and one running against the West inventory on ``ig-west``. Both appear as nodes under a single Workflow Job in the Jobs view.
+
+.. image:: ../common/images/inventory_federated_job_slice_output.png
+
+
+How federated job dispatch works
+---------------------------------
+
+When a job template backed by a federated inventory is launched, Ascender intercepts the launch and creates a **WorkflowJob** (with ``is_sliced_job=True``) in place of a single Job. One ``WorkflowJobNode`` is created for each input inventory that contains hosts matching the effective ``limit``. Each child job receives the source inventory directly and inherits its Instance Group assignments naturally.
+
+Key behaviors:
+
+- Child jobs run **simultaneously**.
+- Each child job uses its source inventory's Instance Groups, not those of the federated inventory itself (the federated inventory carries no Instance Group assignment).
+- Source inventories that contribute **no matching hosts or groups** for the effective ``limit`` are skipped — no empty child job is dispatched for them.
+- Simple glob patterns (e.g. ``web*``) are resolved against the database before dispatch using an indexed prefix query. Exact name patterns use a direct index lookup.
+- Complex limit patterns containing ``:``, ``&``, or ``!`` operators are passed through to all source inventories and resolved by Ansible at run time, since Ascender cannot pre-evaluate them. This means child jobs may be dispatched for inventories that end up matching no hosts after Ansible applies the full pattern.
+- The resulting Workflow Job appears in the Jobs list and shows individual per-source child jobs, exactly as sliced jobs do.
+
+.. image:: ../common/images/inventory_federated_edit.png
+
+
+Comparison with constructed and smart inventories
+--------------------------------------------------
+
++-------------------------------------------+------------------------------+-------------------------------------+
+| Feature                                   | Constructed Inventory        | Federated Inventory                 |
++===========================================+==============================+=====================================+
+| Combines multiple inventories             | Yes (via ``source_vars``     | Yes (direct input inventory list)   |
+|                                           | plugin)                      |                                     |
++-------------------------------------------+------------------------------+-------------------------------------+
+| Respects per-source Instance Groups       | No — uses combined IG        | Yes — routes each source to its own |
++-------------------------------------------+------------------------------+-------------------------------------+
+| Requires inventory sync                   | Yes (update-on-launch)       | No                                  |
++-------------------------------------------+------------------------------+-------------------------------------+
+| Supports hostvars composition             | Yes (``compose``, ``groups``)|  No                                 |
++-------------------------------------------+------------------------------+-------------------------------------+
+| Job output                                | Single job                   | Workflow Job with per-source nodes  |
++-------------------------------------------+------------------------------+-------------------------------------+
+
+
+Limitations
+-----------
+
+- **No ad hoc commands**: Ad hoc commands bypass the job template launch path and run directly against the inventory. Because a federated inventory holds no hosts, ad hoc commands will produce no results. Use a job template instead.
+- **No inventory sync**: The federated inventory has no inventory source and does not support syncing. Host and group data come entirely from the input inventories.
+- **Plain inputs only**: Input inventories must be plain (standard) inventories. Smart and constructed inventories are not supported as inputs.
+- **Complex limit patterns**: Patterns using ``:``, ``&``, or ``!`` are not pre-evaluated by Ascender and are forwarded to all source inventories.
+
+
+User interface
+--------------
+
+The Hosts and Groups tabs on a federated inventory aggregate data from all input inventories for read-only visibility. You cannot create or attach hosts or groups directly to a federated inventory through the UI or API; hosts and groups must be managed in the underlying source inventories.
+
+Follow the procedure described in :ref:`ug_inventories_add` to create a new federated inventory. Select **Add federated inventory** from the **Add** button dropdown.
+
+[IMAGE PLACEHOLDER: screenshot of the Add button dropdown showing the "Add federated inventory" option]
+.. image:: ../common/images/inventory_federated_add_dropdown.png
+
+.. image:: ../common/images/inventory_federated_create_new.png
+
+.. image:: ../common/images/inventory_federated_hosts_view.png
+
 .. _ug_inventories_plugins:
 
 Inventory Plugins
@@ -499,6 +595,7 @@ Add a new inventory
    pair: inventories; add new
    pair: smart inventories; add new
    pair: constructed inventories; add new
+   pair: federated inventories; add new
 
 Adding a new inventory involves several components:
 
@@ -508,7 +605,7 @@ Adding a new inventory involves several components:
 - :ref:`ug_inventories_add_source`
 - :ref:`ug_inventories_view_completed_jobs`
 
-To create a new standard inventory, Smart inventory, or constructed inventory:
+To create a new standard inventory, Smart inventory, constructed inventory, or federated inventory:
 
 1. Click the **Add** button, and select the type of inventory to create.
 
@@ -533,7 +630,10 @@ The type of inventory is identified at the top of the create form.
 
 - **Labels**: Optionally supply labels that describe this inventory, so they can be used to group and filter inventories and jobs.
 
-- **Input inventories**: (Only applicable to constructed inventories) Specify the source inventories to include in this constructed inventory. Click the |search| button to select from available inventories. Empty groups from input inventories will be copied into the constructed inventory.
+- **Input inventories**: Specify the source inventories to include in this inventory.
+
+  - For **constructed inventories**: click the |search| button to select from available inventories. Empty groups from input inventories will be copied into the constructed inventory.
+  - For **federated inventories**: click the |search| button to select the plain source inventories whose jobs should be dispatched separately. Smart, constructed, and other federated inventories are excluded from the picker.
 
 - **Cached timeout (seconds)**: (Only applicable to constructed inventories) Optionally set the length of time you want the cache plugin data to timeout.
 
@@ -999,28 +1099,6 @@ Red Hat Satellite 6
 If you encounter an issue with Ascender inventory not having the "related groups" from Satellite, you might need to define these variables in the inventory source. See the inventory plugins template example for :ref:`ir_plugin_satellite` in the |atir| for detail.
 
 
-.. _ug_source_insights:
-
-Red Hat Insights
-~~~~~~~~~~~~~~~~~
-
-.. index::
-   pair: inventories; Red Hat Insights
-
-1. To configure a Red Hat Insights-sourced inventory, select **Red Hat Insights** from the Source field.
-
-2. The Create Source window expands with the required **Credential** field. Choose from an existing Insights Credential. For more information, refer to :ref:`ug_credentials`.
-
-3. You can optionally specify the verbosity, host filter, enabled variable/value, and update options as described in the main procedure for :ref:`adding a source <ug_add_inv_common_fields>`.
-
-4. Use the **Source Variables** field to override variables used by the ``insights`` inventory plugin. Enter variables using either JSON or YAML syntax. Use the radio button to toggle between the two. For a detailed description of these variables, view the `insights inventory plugin <https://cloud.redhat.com/ansible/automation-hub/repo/published/redhat/insights/content/inventory/insights>`__.
-
-
-|Inventories - create source - RH Insights example|
-
-.. |Inventories - create source - RH Insights example| image:: ../common/images/inventories-create-source-insights-example.png
-
-
 .. _ug_source_openstack:
 
 OpenStack
@@ -1042,43 +1120,18 @@ OpenStack
 
 .. |Inventories - create source - OpenStack example| image:: ../common/images/inventories-create-source-openstack-example.png
 
-
-.. _ug_source_rhv:
-
-Red Hat Virtualization
-~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. index::
-   pair: inventories; Red Hat Virtualization
-
-1. To configure a Red Hat Virtualization-sourced inventory, select **Red Hat Virtualization** from the Source field.
-
-2. The Create Source window expands with the required **Credential** field. Choose from an existing Red Hat Virtualization Credential. For more information, refer to :ref:`ug_credentials`.
-
-3. You can optionally specify the verbosity, host filter, enabled variable/value, and update options as described in the main procedure for :ref:`adding a source <ug_add_inv_common_fields>`.
-
-4. Use the **Source Variables** field to override variables used by the ``ovirt`` inventory plugin. Enter variables using either JSON or YAML syntax. Use the radio button to toggle between the two. For a detailed description of these variables, view the `ovirt inventory plugin <https://cloud.redhat.com/ansible/automation-hub/repo/published/redhat/rhv/content/inventory/ovirt>`__.
-
-|Inventories - create source - RHV example|
-
-.. |Inventories - create source - RHV example| image:: ../common/images/inventories-create-source-rhv-example.png
-
-.. note::
-
-  Red Hat Virtualization (ovirt) inventory source requests are secure by default. To change this default setting, set the key ``ovirt_insecure`` to **true** in ``source_variables``, which is only available from the API details of the inventory source at the ``/api/v2/inventory_sources/N/`` endpoint.
-
 .. _ug_source_rhaap:
 
-Red Hat Ansible Automation Platform
+Ascender Automation Platform
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. index::
-   pair: inventories; Red Hat Ansible Automation Platform
+   pair: inventories; Ascender Automation Platform
 
 
-1. To configure this type of sourced inventory, select **Red Hat Ansible Automation Platform** from the Source field.
+1. To configure this type of sourced inventory, select **Ascender Automation Platform** from the Source field.
 
-2. The Create Source window expands with the required **Credential** field. Choose from an existing Ansible Automation Platform Credential. For more information, refer to :ref:`ug_credentials`.
+2. The Create Source window expands with the required **Credential** field. Choose from an existing Ascender Automation Platform Credential. For more information, refer to :ref:`ug_credentials`.
 
 3. You can optionally specify the verbosity, host filter, enabled variable/value, and update options as described in the main procedure for :ref:`adding a source <ug_add_inv_common_fields>`.
 
@@ -1119,43 +1172,6 @@ This inventory source uses the `terraform_state <https://github.com/ansible-coll
   .. image:: ../common/images/inventories-create-source-terraform-example.png
 
 6. To add hosts for AWS EC2, GCE, and Azure instances, the Terraform state file in the backend must contain state for resources already deployed to EC2, GCE, or Azure. Refer to each of the Terraform providers' respective documentation to provision instances.
-
-
-.. _ug_source_ocpv:
-
-OpenShift Virtualization
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. index::
-   pair: inventories; OpenShift
-   pair: inventories; OCP
-   pair: inventory source; OpenShift virtualization
-
-
-This inventory source uses a cluster that is able to deploy OpenShift (OCP) virtualization. In order to configure an OCP virtualization requires a virtual machine deployed in a specific namespace and an OpenShift or Kubernetes API Bearer Token credential.
-
-1. To configure this type of sourced inventory, select **OpenShift Virtualization** from the Source field.
-2. The Create new source window expands with the required **Credential** field. Choose from an existing Kubernetes API Bearer Token credential. For more information, refer to :ref:`ug_credentials_ocp_k8s`. In this example, the ``cmv2.engineering.redhat.com`` credential is used.
-
-3. You can optionally specify the verbosity, host filter, enabled variable/value, and update options as described in the main procedure for :ref:`adding a source <ug_add_inv_common_fields>`. 
-
-4. Use the **Source Variables** field to override variables used by the ``kubernetes`` inventory plugin. Enter variables using either JSON or YAML syntax. Use the radio button to toggle between the two. For more information on these variables, see the `kubevirt.core.kubevirt inventory source <https://kubevirt.io/kubevirt.core/main/plugins/kubevirt.html#parameters>`_ documentation for detail.
-
-  In the example below, the ``connections`` variable is used to specify access to a particular namespace in a cluster. 
-
-  ::
-
-    ---
-    connections:
-    - namespaces:
-      - hao-test
-
-
-  .. image:: ../common/images/inventories-create-source-ocpvirt-example.png
-
-5. Save the configuration and click the **Sync** button to sync the inventory.
-
-
 
 
 .. _ug_customscripts:
