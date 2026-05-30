@@ -516,7 +516,7 @@ Key behaviors:
 .. image:: ../common/images/inventory_federated_edit.png
 
 
-Comparison with constructed and smart inventories
+Comparison with constructed
 --------------------------------------------------
 
 +-------------------------------------------+------------------------------+-------------------------------------+
@@ -540,7 +540,7 @@ Limitations
 
 - **No ad hoc commands**: Ad hoc commands bypass the job template launch path and run directly against the inventory. Because a federated inventory holds no hosts, ad hoc commands will produce no results. Use a job template instead.
 - **No inventory sync**: The federated inventory has no inventory source and does not support syncing. Host and group data come entirely from the input inventories.
-- **Plain inputs only**: Input inventories must be plain (standard) inventories. Smart and constructed inventories are not supported as inputs.
+- **Plain inputs only**: Input inventories must be plain (standard) inventories. Smart, constructed, and federated inventories are not supported as inputs.
 - **Complex limit patterns**: Patterns using ``:``, ``&``, or ``!`` are not pre-evaluated by Ascender and are forwarded to all source inventories.
 
 
@@ -551,7 +551,6 @@ The Hosts and Groups tabs on a federated inventory aggregate data from all input
 
 Follow the procedure described in :ref:`ug_inventories_add` to create a new federated inventory. Select **Add federated inventory** from the **Add** button dropdown.
 
-[IMAGE PLACEHOLDER: screenshot of the Add button dropdown showing the "Add federated inventory" option]
 .. image:: ../common/images/inventory_federated_add_dropdown.png
 
 .. image:: ../common/images/inventory_federated_create_new.png
@@ -573,12 +572,9 @@ Inventory updates use dynamically-generated YAML files which are parsed by their
 - :ref:`ug_source_azure`
 - :ref:`ug_source_vmvcenter`
 - :ref:`ug_source_satellite`
-- :ref:`ug_source_insights`
 - :ref:`ug_source_openstack`
-- :ref:`ug_source_rhv`
-- :ref:`ug_source_rhaap`
+- :ref:`ug_source_aap`
 - :ref:`ug_source_terraform`
-- :ref:`ug_source_ocpv`
 
 
 Newly created configurations for inventory sources will contain the default plugin configuration values. If you want your newly created inventory sources to match the output of legacy sources, you must apply a specific set of configuration values for that source. To ensure backward compatibility, Ascender uses "templates" for each of these sources to force the output of inventory plugins into the legacy format. Refer to :ref:`ir_inv_plugin_templates_reference` section of this guide for each source and their respective templates to help you migrate to the new style inventory plugin output.
@@ -1120,7 +1116,7 @@ OpenStack
 
 .. |Inventories - create source - OpenStack example| image:: ../common/images/inventories-create-source-openstack-example.png
 
-.. _ug_source_rhaap:
+.. _ug_source_aap:
 
 Ascender Automation Platform
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
