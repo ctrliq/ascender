@@ -39,6 +39,7 @@ function UIDetail() {
         data,
         'PENDO_TRACKING_STATE',
         'CUSTOM_LOGIN_INFO',
+        'CUSTOM_TITLE',
         'CUSTOM_LOGO',
       );
 

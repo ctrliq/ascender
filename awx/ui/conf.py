@@ -35,6 +35,20 @@ register(
 )
 
 register(
+    'CUSTOM_TITLE',
+    field_class=fields.CharField,
+    allow_blank=True,
+    default='',
+    label=_('Custom Browser Title'),
+    help_text=_(
+        'If set, this text will replace the default brand name in the '
+        'browser tab title throughout the application.'
+    ),
+    category=_('UI'),
+    category_slug='ui',
+)
+
+register(
     'CUSTOM_LOGO',
     field_class=CustomLogoField,
     allow_blank=True,
