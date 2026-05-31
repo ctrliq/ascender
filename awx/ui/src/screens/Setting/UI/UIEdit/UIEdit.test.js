@@ -23,6 +23,8 @@ describe('<UIEdit />', () => {
       data: {
         CUSTOM_LOGIN_INFO: 'mock info',
         CUSTOM_LOGO: 'data:mock/jpeg;',
+        CUSTOM_TITLE: '',
+        CUSTOM_HEADER_LOGO: '',
         PENDO_TRACKING_STATE: 'detailed',
       },
     });
@@ -105,6 +107,8 @@ describe('<UIEdit />', () => {
     expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
       CUSTOM_LOGIN_INFO: 'new login info',
       CUSTOM_LOGO: '',
+      CUSTOM_TITLE: '',
+      CUSTOM_HEADER_LOGO: '',
       PENDO_TRACKING_STATE: 'detailed',
     });
   });
