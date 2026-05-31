@@ -2,27 +2,40 @@ import { useEffect } from 'react';
 import { useConfig } from 'contexts/Config';
 import useBrandName from './useBrandName';
 
+const TITLE_CACHE_KEY = 'awx_custom_title';
+
 export default function useTitle(title) {
   const { custom_title } = useConfig();
   const brandName = useBrandName();
-  // custom_title is undefined until the Config context has finished loading.
-  // Avoid a flash of the brandName by waiting until we know the final value.
+
+  // Once config has loaded, persist the resolved custom_title to localStorage so
+  // that subsequent page loads can use it immediately — before the config API
+  // call completes — avoiding a flash of the previous tab title.
+  useEffect(() => {
+    if (custom_title !== undefined) {
+      if (custom_title) {
+        localStorage.setItem(TITLE_CACHE_KEY, custom_title);
+      } else {
+        localStorage.removeItem(TITLE_CACHE_KEY);
+      }
+    }
+  }, [custom_title]);
+
   const configLoaded = custom_title !== undefined;
-  const effectiveName = custom_title || brandName;
+  const cachedTitle = localStorage.getItem(TITLE_CACHE_KEY);
+  // Allow the title to be set immediately when a cached value from a previous
+  // load is available, even while the current config fetch is in-flight.
+  const canSetTitle = configLoaded || cachedTitle !== null;
+  const effectiveName = configLoaded
+    ? custom_title || brandName
+    : cachedTitle || brandName;
 
   useEffect(() => {
-    if (!configLoaded) {
-      return undefined;
-    }
+    if (!canSetTitle || !effectiveName) return undefined;
     const prevTitle = document.title;
-    if (title) {
-      document.title = `${effectiveName} | ${title}`;
-    } else {
-      document.title = effectiveName;
-    }
-
+    document.title = title ? `${effectiveName} | ${title}` : effectiveName;
     return () => {
       document.title = prevTitle;
     };
-  }, [title, effectiveName, configLoaded]);
+  }, [title, effectiveName, canSetTitle]);
 }

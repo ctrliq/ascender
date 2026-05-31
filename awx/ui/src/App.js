@@ -27,7 +27,6 @@ import { isAuthenticated } from 'util/auth';
 import { getLanguageWithoutRegionCode } from 'util/language';
 import Metrics from 'screens/Metrics';
 import SubscriptionEdit from 'screens/Setting/Subscription/SubscriptionEdit';
-import useTitle from 'hooks/useTitle';
 import { dynamicActivate, locales } from './i18nLoader';
 import getRouteConfig from './routeConfig';
 import { SESSION_REDIRECT_URL } from './constants';
@@ -174,8 +173,6 @@ function App() {
       setIsLoading(false);
     });
   }, [language, pseudolocalization]);
-
-  useTitle();
 
   const redirectURL = window.sessionStorage.getItem(SESSION_REDIRECT_URL);
   if (redirectURL) {
