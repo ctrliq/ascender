@@ -18,6 +18,7 @@ import { InfoCircleIcon } from '@patternfly/react-icons';
 import { useConfig } from 'contexts/Config';
 import useBrandName from 'hooks/useBrandName';
 import useRequest from 'hooks/useRequest';
+import useTitle from 'hooks/useTitle';
 import { DashboardAPI } from 'api';
 import ScreenHeader from 'components/ScreenHeader';
 import JobList from 'components/JobList';
@@ -48,6 +49,7 @@ const MainPageSection = styled(PageSection)`
 
 function Dashboard() {
   const { t } = useLingui();
+  useTitle(t`Dashboard`);
   const config = useConfig();
   const brandName = useBrandName();
   const [activeTabId, setActiveTabId] = useState(0);

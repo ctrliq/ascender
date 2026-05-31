@@ -31,11 +31,7 @@ export default function useTitle(title) {
     : cachedTitle || brandName;
 
   useEffect(() => {
-    if (!canSetTitle || !effectiveName) return undefined;
-    const prevTitle = document.title;
+    if (!canSetTitle || !effectiveName) return;
     document.title = title ? `${effectiveName} | ${title}` : effectiveName;
-    return () => {
-      document.title = prevTitle;
-    };
   }, [title, effectiveName, canSetTitle]);
 }
