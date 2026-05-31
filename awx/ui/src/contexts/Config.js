@@ -94,6 +94,7 @@ export const ConfigProvider = ({ children }) => {
         systemConfig,
         uiConfig,
         custom_logo: uiConfig.CUSTOM_LOGO || rootData.custom_logo,
+        custom_header_logo: uiConfig.CUSTOM_HEADER_LOGO || rootData.custom_header_logo,
         custom_title: uiConfig.CUSTOM_TITLE || rootData.custom_title,
       };
     }, []),

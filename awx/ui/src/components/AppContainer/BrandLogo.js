@@ -19,8 +19,8 @@ const BrandImg = styled.img`
 const defaultSrc = 'static/media/Ascender_logo.svg';
 
 const BrandLogo = () => {
-  const { custom_logo } = useConfig();
-  const src = custom_logo || defaultSrc;
+  const { custom_header_logo } = useConfig();
+  const src = custom_header_logo || defaultSrc;
   return <BrandImg src={src} />;
 };
 

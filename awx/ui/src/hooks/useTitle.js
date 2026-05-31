@@ -11,7 +11,9 @@ export default function useTitle(title) {
   const effectiveName = custom_title || brandName;
 
   useEffect(() => {
-    if (!configLoaded) return;
+    if (!configLoaded) {
+      return undefined;
+    }
     const prevTitle = document.title;
     if (title) {
       document.title = `${effectiveName} | ${title}`;

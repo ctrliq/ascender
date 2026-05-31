@@ -107,6 +107,7 @@ function UIEdit() {
             CUSTOM_LOGIN_INFO: uiData?.CUSTOM_LOGIN_INFO?.value ?? '',
             CUSTOM_TITLE: uiData?.CUSTOM_TITLE?.value ?? '',
             CUSTOM_LOGO: uiData?.CUSTOM_LOGO?.value ?? '',
+            CUSTOM_HEADER_LOGO: uiData?.CUSTOM_HEADER_LOGO?.value ?? '',
           }}
           onSubmit={handleSubmit}
         >
@@ -129,6 +130,11 @@ function UIEdit() {
                 <FileUploadField
                   name="CUSTOM_LOGO"
                   config={uiData.CUSTOM_LOGO}
+                  type="dataURL"
+                />
+                <FileUploadField
+                  name="CUSTOM_HEADER_LOGO"
+                  config={uiData.CUSTOM_HEADER_LOGO}
                   type="dataURL"
                 />
                 {submitError && <FormSubmitError error={submitError} />}

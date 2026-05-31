@@ -41,6 +41,7 @@ function UIDetail() {
         'CUSTOM_LOGIN_INFO',
         'CUSTOM_TITLE',
         'CUSTOM_LOGO',
+        'CUSTOM_HEADER_LOGO',
       );
 
       return uiData;
@@ -70,10 +71,13 @@ function UIDetail() {
     },
   ];
 
-  // Change CUSTOM_LOGO type from string to image
+  // Change CUSTOM_LOGO / CUSTOM_HEADER_LOGO type from string to image
   // to help SettingDetail render it as an <img>
   if (options?.CUSTOM_LOGO) {
     options.CUSTOM_LOGO.type = 'image';
+  }
+  if (options?.CUSTOM_HEADER_LOGO) {
+    options.CUSTOM_HEADER_LOGO.type = 'image';
   }
 
   return (
