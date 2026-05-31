@@ -885,7 +885,8 @@
               "category_slug": "ui",
               "placeholder": "data:image/gif;base64,R0lGODlhAQABAIABAP///wAAACwAAAAAAQABAAACAkQBADs=",
               "default": ""
-          }, {
+          },
+          "MAX_UI_JOB_EVENTS": {
               "type": "integer",
               "required": true,
               "label": "Max Job Events Retrieved by UI",
