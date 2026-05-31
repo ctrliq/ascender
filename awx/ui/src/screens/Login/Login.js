@@ -66,9 +66,7 @@ function AWXLogin({ alt, isAuthenticated }) {
         RootAPI.readAssetVariables(),
         AuthAPI.read(),
       ]);
-      const logoSrc = custom_logo
-        ? `data:image/jpeg;${custom_logo}`
-        : loginLogoSrc;
+      const logoSrc = custom_logo || loginLogoSrc;
 
       return {
         brandName: BRAND_NAME,

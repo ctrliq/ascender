@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useEffect, useMemo } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 
 import { useLingui } from '@lingui/react/macro';
-import { ConfigAPI, MeAPI, UsersAPI, OrganizationsAPI } from 'api';
+import { ConfigAPI, MeAPI, RootAPI, UsersAPI, OrganizationsAPI } from 'api';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import AlertModal from 'components/AlertModal';
 import ErrorDetail from 'components/ErrorDetail';
@@ -40,7 +40,8 @@ export const ConfigProvider = ({ children }) => {
             results: [me],
           },
         },
-      ] = await Promise.all([ConfigAPI.read(), MeAPI.read()]);
+        { data: rootData },
+      ] = await Promise.all([ConfigAPI.read(), MeAPI.read(), RootAPI.read()]);
       let systemConfig = {};
       if (me?.is_superuser || me?.is_system_auditor) {
         const { data: systemConfigResults } = await SettingsAPI.readSystem();
@@ -92,6 +93,7 @@ export const ConfigProvider = ({ children }) => {
         execEnvAdminCount,
         systemConfig,
         uiConfig,
+        custom_logo: uiConfig.CUSTOM_LOGO || rootData.custom_logo,
       };
     }, []),
     {
