@@ -3,6 +3,7 @@ import { useLingui } from '@lingui/react/macro';
 import { PageSection, Card, CardBody } from '@patternfly/react-core';
 import ContentError from 'components/ContentError';
 import useRequest from 'hooks/useRequest';
+import useTitle from 'hooks/useTitle';
 import { MeshAPI } from 'api';
 import Header from './Header';
 import MeshGraph from './MeshGraph';
@@ -11,6 +12,7 @@ import { CHILDSELECTOR, PARENTSELECTOR } from './constants';
 
 function TopologyView() {
   const { t } = useLingui();
+  useTitle(t`Topology View`);
   const storedNodes = useRef(null);
   const [showLegend, setShowLegend] = useState(true);
   const [showZoomControls, setShowZoomControls] = useState(false);
