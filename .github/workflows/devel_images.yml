@@ -55,9 +55,9 @@ jobs:
 
       - name: Get current date
         id: date
-        uses: Kaven-Universe/github-action-current-date-time@7c1d8465d1bfd7d35466d2ee82a8e460780561ae # v1
+        uses: Kaven-Universe/github-action-current-date-time@7c1d8465d1bfd7d35466d2ee82a8e460780561ae  # v1.5.0
 
-      - uses: benjlevesque/short-sha@599815c8ee942a9616c92bcfb4f947a3b670ab0b # v3.0
+      - uses: benjlevesque/short-sha@dbe07338b37c456ce06d23409b35a56a7815eef4  # v4.0
         id: short-sha
         with:
           length: 6
