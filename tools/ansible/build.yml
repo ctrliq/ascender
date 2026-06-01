@@ -24,6 +24,3 @@
         name: dockerfile
     - include_role:
         name: image_build
-    - include_role:
-        name: image_push
-      when: push | default(false) | bool
