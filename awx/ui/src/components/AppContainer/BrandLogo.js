@@ -4,6 +4,7 @@
 import React from 'react';
 
 import styled from 'styled-components';
+import { useConfig } from 'contexts/Config';
 
 const BrandImg = styled.img`
   flex: initial;
@@ -15,9 +16,12 @@ const BrandImg = styled.img`
   pointer-events: none;
 `;
 
-const BrandLogo = () => {
-  const src = 'static/media/Ascender_logo.svg';
-  return <BrandImg src={src} />;
+const defaultSrc = 'static/media/Ascender_logo.svg';
+
+const BrandLogo = ({ alt }) => {
+  const { custom_header_logo } = useConfig();
+  const src = custom_header_logo || defaultSrc;
+  return <BrandImg src={src} alt={alt} />;
 };
 
 export default BrandLogo;

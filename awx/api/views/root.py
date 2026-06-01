@@ -53,7 +53,9 @@ class ApiRootView(APIView):
         data['available_versions'] = dict(v2=v2)
         data['oauth2'] = drf_reverse('api:oauth_authorization_root_view')
         data['custom_logo'] = settings.CUSTOM_LOGO
+        data['custom_header_logo'] = settings.CUSTOM_HEADER_LOGO
         data['custom_login_info'] = settings.CUSTOM_LOGIN_INFO
+        data['custom_title'] = settings.CUSTOM_TITLE
         data['login_redirect_override'] = settings.LOGIN_REDIRECT_OVERRIDE
         if MODE == 'development':
             data['swagger'] = drf_reverse('api:schema-swagger-ui')

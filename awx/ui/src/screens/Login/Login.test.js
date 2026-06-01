@@ -79,7 +79,7 @@ describe('<Login />', () => {
       data: {
         custom_login_info:
           '<div id="custom-button" onmouseover="alert()">TEST</div>',
-        custom_logo: 'images/foo.jpg',
+        custom_logo: 'data:image/jpeg;base64,abc123',
       },
     });
     Object.defineProperty(window, 'localStorage', {
@@ -133,7 +133,7 @@ describe('<Login />', () => {
     const { alt, src } = loginHeaderLogo.props();
     expect([alt, src]).toEqual([
       'Foo Application',
-      'data:image/jpeg;images/foo.jpg',
+      'data:image/jpeg;base64,abc123',
     ]);
   });
 

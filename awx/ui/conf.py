@@ -35,6 +35,20 @@ register(
 )
 
 register(
+    'CUSTOM_TITLE',
+    field_class=fields.CharField,
+    allow_blank=True,
+    default='',
+    label=_('Custom Browser Title'),
+    help_text=_(
+        'If set, this text will replace the default brand name in the '
+        'browser tab title throughout the application.'
+    ),
+    category=_('UI'),
+    category_slug='ui',
+)
+
+register(
     'CUSTOM_LOGO',
     field_class=CustomLogoField,
     allow_blank=True,
@@ -44,6 +58,22 @@ register(
         'To set up a custom logo, provide a file that you create. For '
         'the custom logo to look its best, use a .png file with a '
         'transparent background. GIF, PNG and JPEG formats are supported.'
+    ),
+    placeholder='data:image/gif;base64,R0lGODlhAQABAIABAP///wAAACwAAAAAAQABAAACAkQBADs=',
+    category=_('UI'),
+    category_slug='ui',
+)
+
+register(
+    'CUSTOM_HEADER_LOGO',
+    field_class=CustomLogoField,
+    allow_blank=True,
+    default='',
+    label=_('Custom Header Logo'),
+    help_text=_(
+        'To set up a custom logo for the application header, provide a file '
+        'that you create. For the custom logo to look its best, use a .png file '
+        'with a transparent background. GIF, PNG and JPEG formats are supported.'
     ),
     placeholder='data:image/gif;base64,R0lGODlhAQABAIABAP///wAAACwAAAAAAQABAAACAkQBADs=',
     category=_('UI'),

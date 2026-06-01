@@ -105,7 +105,9 @@ function UIEdit() {
           initialValues={{
             PENDO_TRACKING_STATE: uiData?.PENDO_TRACKING_STATE?.value ?? 'off',
             CUSTOM_LOGIN_INFO: uiData?.CUSTOM_LOGIN_INFO?.value ?? '',
+            CUSTOM_TITLE: uiData?.CUSTOM_TITLE?.value ?? '',
             CUSTOM_LOGO: uiData?.CUSTOM_LOGO?.value ?? '',
+            CUSTOM_HEADER_LOGO: uiData?.CUSTOM_HEADER_LOGO?.value ?? '',
           }}
           onSubmit={handleSubmit}
         >
@@ -121,9 +123,18 @@ function UIEdit() {
                   name="CUSTOM_LOGIN_INFO"
                   config={uiData.CUSTOM_LOGIN_INFO}
                 />
+                <TextAreaField
+                  name="CUSTOM_TITLE"
+                  config={uiData.CUSTOM_TITLE}
+                />
                 <FileUploadField
                   name="CUSTOM_LOGO"
                   config={uiData.CUSTOM_LOGO}
+                  type="dataURL"
+                />
+                <FileUploadField
+                  name="CUSTOM_HEADER_LOGO"
+                  config={uiData.CUSTOM_HEADER_LOGO}
                   type="dataURL"
                 />
                 {submitError && <FormSubmitError error={submitError} />}

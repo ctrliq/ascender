@@ -194,7 +194,9 @@ def test_ui_settings(get, put, patch, delete, admin):
     url = reverse('api:setting_singleton_detail', kwargs={'category_slug': 'ui'})
     response = get(url, user=admin, expect=200)
     assert not response.data['CUSTOM_LOGO']
+    assert not response.data['CUSTOM_HEADER_LOGO']
     assert not response.data['CUSTOM_LOGIN_INFO']
+    assert not response.data['CUSTOM_TITLE']
     put(url, user=admin, data=response.data, expect=200)
     patch(url, user=admin, data={'CUSTOM_LOGO': 'data:text/plain;base64,'}, expect=400)
     patch(url, user=admin, data={'CUSTOM_LOGO': 'data:image/png;base64,00'}, expect=400)
@@ -210,16 +212,39 @@ def test_ui_settings(get, put, patch, delete, admin):
     patch(url, user=admin, data={'CUSTOM_LOGO': ''}, expect=200)
     response = get(url, user=admin, expect=200)
     assert not response.data['CUSTOM_LOGO']
+    # CUSTOM_HEADER_LOGO uses the same CustomLogoField — validate identical rules
+    patch(url, user=admin, data={'CUSTOM_HEADER_LOGO': 'data:text/plain;base64,'}, expect=400)
+    patch(url, user=admin, data={'CUSTOM_HEADER_LOGO': 'data:image/png;base64,00'}, expect=400)
+    patch(url, user=admin, data={'CUSTOM_HEADER_LOGO': TEST_GIF_LOGO}, expect=200)
+    response = get(url, user=admin, expect=200)
+    assert response.data['CUSTOM_HEADER_LOGO'] == TEST_GIF_LOGO
+    patch(url, user=admin, data={'CUSTOM_HEADER_LOGO': TEST_PNG_LOGO}, expect=200)
+    response = get(url, user=admin, expect=200)
+    assert response.data['CUSTOM_HEADER_LOGO'] == TEST_PNG_LOGO
+    patch(url, user=admin, data={'CUSTOM_HEADER_LOGO': TEST_JPEG_LOGO}, expect=200)
+    response = get(url, user=admin, expect=200)
+    assert response.data['CUSTOM_HEADER_LOGO'] == TEST_JPEG_LOGO
+    patch(url, user=admin, data={'CUSTOM_HEADER_LOGO': ''}, expect=200)
+    response = get(url, user=admin, expect=200)
+    assert not response.data['CUSTOM_HEADER_LOGO']
     patch(url, user=admin, data={'CUSTOM_LOGIN_INFO': 'Customize Me!'}, expect=200)
     response = get(url, user=admin, expect=200)
     assert response.data['CUSTOM_LOGIN_INFO']
     patch(url, user=admin, data={'CUSTOM_LOGIN_INFO': ''}, expect=200)
     response = get(url, user=admin, expect=200)
     assert not response.data['CUSTOM_LOGIN_INFO']
+    patch(url, user=admin, data={'CUSTOM_TITLE': 'My Platform'}, expect=200)
+    response = get(url, user=admin, expect=200)
+    assert response.data['CUSTOM_TITLE'] == 'My Platform'
+    patch(url, user=admin, data={'CUSTOM_TITLE': ''}, expect=200)
+    response = get(url, user=admin, expect=200)
+    assert not response.data['CUSTOM_TITLE']
     delete(url, user=admin, expect=204)
     response = get(url, user=admin, expect=200)
     assert not response.data['CUSTOM_LOGO']
+    assert not response.data['CUSTOM_HEADER_LOGO']
     assert not response.data['CUSTOM_LOGIN_INFO']
+    assert not response.data['CUSTOM_TITLE']
 
 
 @pytest.mark.django_db

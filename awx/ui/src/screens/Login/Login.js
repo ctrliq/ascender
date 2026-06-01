@@ -50,12 +50,12 @@ function AWXLogin({ alt, isAuthenticated }) {
   const {
     isLoading: isCustomLoginInfoLoading,
     request: fetchCustomLoginInfo,
-    result: { brandName, logo, loginInfo, socialAuthOptions },
+    result: { brandName, logo, loginInfo, customTitle, socialAuthOptions },
   } = useRequest(
     useCallback(async () => {
       const [
         {
-          data: { custom_logo, custom_login_info },
+          data: { custom_logo, custom_login_info, custom_title },
         },
         {
           data: { BRAND_NAME },
@@ -66,14 +66,13 @@ function AWXLogin({ alt, isAuthenticated }) {
         RootAPI.readAssetVariables(),
         AuthAPI.read(),
       ]);
-      const logoSrc = custom_logo
-        ? `data:image/jpeg;${custom_logo}`
-        : loginLogoSrc;
+      const logoSrc = custom_logo || loginLogoSrc;
 
       return {
         brandName: BRAND_NAME,
         logo: logoSrc,
         loginInfo: custom_login_info,
+        customTitle: custom_title,
         socialAuthOptions: authData,
       };
     }, []),
@@ -81,6 +80,7 @@ function AWXLogin({ alt, isAuthenticated }) {
       brandName: null,
       logo: loginLogoSrc,
       loginInfo: null,
+      customTitle: null,
       socialAuthOptions: {},
     }
   );
@@ -88,6 +88,11 @@ function AWXLogin({ alt, isAuthenticated }) {
   useEffect(() => {
     fetchCustomLoginInfo();
   }, [fetchCustomLoginInfo]);
+
+  useEffect(() => {
+    if (brandName === null) return;
+    document.title = customTitle || brandName;
+  }, [brandName, customTitle]);
 
   const {
     isLoading: isAuthenticating,
