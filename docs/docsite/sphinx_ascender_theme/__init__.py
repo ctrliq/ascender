@@ -24,7 +24,7 @@ __version_full__ = __version__
 
 _TOP_LINKS_DEFAULTS = {
     "Blog": "https://ciq.com/blog/?search=&categories[0]=Ascender%20Pro&page=1&sortBy=date&sortDirection=desc",
-    "Ascender Discussion Forum": "https://github.com/ctrliq/ascender/discussions",
+    "Ascender Discussion Forum": "https://forum.ascender-automation.org",
 }
 
 
