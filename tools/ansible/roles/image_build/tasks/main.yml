@@ -12,19 +12,46 @@
     dest: "../../awx/ui/public/static/media/"
   when: awx_official|default(false)|bool
 
+- name: Authenticate with Docker registry before multi-arch build
+  shell: echo "{{ registry_password }}" | docker login {{ registry }} -u "{{ registry_username }}" --password-stdin
+  no_log: true
+  when:
+    - push | default(false) | bool
+    - registry is defined
+    - registry_username is defined
+    - registry_password is defined
+
 - set_fact:
-    command_to_run: |
-      docker build -t {{ awx_image }}:{{ awx_image_tag }} \
-        -f {{ dockerfile_name }} \
-        --build-arg VERSION={{ awx_version }} \
-        --build-arg SETUPTOOLS_SCM_PRETEND_VERSION={{ awx_version }} \
-        --build-arg HEADLESS={{ headless }} \
-        .
+    _image_ref: "{{ (registry + '/') if registry is defined else '' }}{{ awx_image }}"
+
+- set_fact:
+    command_to_run: >-
+      docker buildx build
+      -t {{ _image_ref }}:{{ awx_image_tag }}
+      {{ ('-t ' + _image_ref + ':latest') if (push | default(false) | bool) else '' }}
+      -f {{ dockerfile_name }}
+      --build-arg VERSION={{ awx_version }}
+      --build-arg SETUPTOOLS_SCM_PRETEND_VERSION={{ awx_version }}
+      --build-arg HEADLESS={{ headless }}
+      --platform={{ build_platforms if (push | default(false) | bool) else 'linux/' + (ansible_facts['architecture'] | replace('x86_64', 'amd64') | replace('aarch64', 'arm64')) }}
+      --provenance=false
+      {{ ('--cache-from ' + build_cache_from) if build_cache_from else '' }}
+      {{ ('--cache-to ' + build_cache_to) if build_cache_to else '' }}
+      {{ '--push' if (push | default(false) | bool) else '--load' }}
+      .
 
 # Calling Docker directly because docker-py doesnt support BuildKit
+- name: Create buildx builder
+  shell: docker buildx inspect awx-multiarch > /dev/null 2>&1 || docker buildx create --name awx-multiarch --use
+  args:
+    chdir: "{{ playbook_dir }}/../../"
+
+- name: Use buildx builder
+  shell: docker buildx use awx-multiarch
+  args:
+    chdir: "{{ playbook_dir }}/../../"
+
 - name: Build AWX image
   shell: "{{ command_to_run }}"
-  environment:
-    DOCKER_BUILDKIT: 1
   args:
     chdir: "{{ playbook_dir }}/../../"
