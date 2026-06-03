@@ -186,8 +186,8 @@ msgstr ""
 
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:189
 #: routeConfig.js:93
-#: screens/ActivityStream/ActivityStream.js:171
-#: screens/Dashboard/Dashboard.js:123
+#: screens/ActivityStream/ActivityStream.js:174
+#: screens/Dashboard/Dashboard.js:125
 #: screens/Project/ProjectList/ProjectList.js:181
 #: screens/Project/ProjectList/ProjectList.js:250
 #: screens/Project/Projects.js:13
@@ -201,7 +201,7 @@ msgstr "프로젝트"
 msgid "Saturday"
 msgstr "토요일"
 
-#: components/CodeEditor/CodeEditor.js:184
+#: components/CodeEditor/CodeEditor.js:200
 msgid "Press Enter to edit. Press ESC to stop editing."
 msgstr "Enter를 눌러 편집합니다. ESC를 눌러 편집을 중지합니다."
 
@@ -238,7 +238,7 @@ msgstr "PagerDuty 하위 도메인"
 msgid "Running health check"
 msgstr "실행 중인 상태 점검"
 
-#: screens/Inventory/InventoryList/InventoryListItem.js:168
+#: screens/Inventory/InventoryList/InventoryListItem.js:169
 msgid "Failed to copy inventory."
 msgstr "인벤토리를 복사하지 못했습니다."
 
@@ -360,9 +360,10 @@ msgstr "적용할 역할 선택"
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:196
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupListItem.js:68
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:168
+#: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:90
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:99
-#: screens/Inventory/InventoryList/InventoryList.js:232
-#: screens/Inventory/InventoryList/InventoryListItem.js:126
+#: screens/Inventory/InventoryList/InventoryList.js:243
+#: screens/Inventory/InventoryList/InventoryListItem.js:127
 #: screens/Inventory/InventorySources/InventorySourceList.js:214
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:80
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:107
@@ -384,7 +385,7 @@ msgstr "적용할 역할 선택"
 msgid "Type"
 msgstr "유형"
 
-#: screens/Inventory/InventoryList/InventoryListItem.js:160
+#: screens/Inventory/InventoryList/InventoryListItem.js:161
 msgid "Copy Inventory"
 msgstr "인벤토리 복사"
 
@@ -418,8 +419,8 @@ msgstr "시간 초과"
 msgid "Select {0}"
 msgstr "{0} 선택"
 
-#: screens/Inventory/Inventories.js:77
-#: screens/Inventory/Inventories.js:85
+#: screens/Inventory/Inventories.js:80
+#: screens/Inventory/Inventories.js:88
 msgid "Create new group"
 msgstr "새 그룹 만들기"
 
@@ -505,7 +506,7 @@ msgstr "하나 이상의 인스턴스에서 상태 확인을 실행하지 못했
 msgid "Launched By"
 msgstr "시작자"
 
-#: screens/ActivityStream/ActivityStream.js:265
+#: screens/ActivityStream/ActivityStream.js:268
 #: screens/ActivityStream/ActivityStreamListItem.js:46
 #: screens/Job/JobOutput/JobOutputSearch.js:100
 msgid "Event"
@@ -699,7 +700,7 @@ msgid "JSON:"
 msgstr "JSON:"
 
 #: routeConfig.js:33
-#: screens/ActivityStream/ActivityStream.js:146
+#: screens/ActivityStream/ActivityStream.js:149
 msgid "Views"
 msgstr "보기"
 
@@ -835,6 +836,7 @@ msgid ""
 msgstr ""
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:361
+#: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:203
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:205
 msgid "Failed to delete inventory."
 msgstr "인벤토리를 삭제하지 못했습니다."
@@ -884,7 +886,7 @@ msgstr "Hipchat"
 msgid "Refresh Token"
 msgstr "토큰 새로 고침"
 
-#: screens/Inventory/Inventories.js:71
+#: screens/Inventory/Inventories.js:74
 msgid "Host details"
 msgstr "호스트 세부 정보"
 
@@ -905,7 +907,7 @@ msgstr "대상 SMS 번호"
 msgid "Source control branch"
 msgstr "소스 제어 분기"
 
-#: screens/Dashboard/Dashboard.js:137
+#: screens/Dashboard/Dashboard.js:139
 #: screens/Job/JobOutput/HostEventModal.js:94
 msgid "Tabs"
 msgstr "탭"
@@ -1353,16 +1355,17 @@ msgstr "이 워크플로우 작업 템플릿은 현재 다른 리소스에서 �
 #~ msgstr "호스트가 해당 그룹의 하위 그룹의 멤버이기도 한 경우 연결 해제 후에도 목록에 그룹이 계속 표시됩니다. 이 목록에는 호스트가 직접 또는 간접적으로 연결된 모든 그룹이 표시됩니다."
 
 #: routeConfig.js:103
-#: screens/ActivityStream/ActivityStream.js:177
-#: screens/Dashboard/Dashboard.js:101
-#: screens/Host/HostList/HostList.js:142
-#: screens/Host/HostList/HostList.js:191
+#: screens/ActivityStream/ActivityStream.js:180
+#: screens/Dashboard/Dashboard.js:103
+#: screens/Host/HostList/HostList.js:145
+#: screens/Host/HostList/HostList.js:194
 #: screens/Host/Hosts.js:16
 #: screens/Host/Hosts.js:26
-#: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostList.js:75
+#: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostList.js:76
 #: screens/Inventory/ConstructedInventory.js:72
-#: screens/Inventory/Inventories.js:67
-#: screens/Inventory/Inventories.js:81
+#: screens/Inventory/FederatedInventory.js:72
+#: screens/Inventory/Inventories.js:70
+#: screens/Inventory/Inventories.js:84
 #: screens/Inventory/Inventory.js:69
 #: screens/Inventory/InventoryGroup/InventoryGroup.js:67
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.js:192
@@ -1371,7 +1374,7 @@ msgstr "이 워크플로우 작업 템플릿은 현재 다른 리소스에서 �
 #: screens/Inventory/InventoryHosts/InventoryHostList.js:177
 #: screens/Inventory/SmartInventory.js:70
 #: screens/Job/JobOutput/shared/OutputToolbar.js:124
-#: screens/SubscriptionUsage/ChartComponents/UsageChart.js:65
+#: screens/SubscriptionUsage/ChartComponents/UsageChart.js:74
 msgid "Hosts"
 msgstr "호스트"
 
@@ -1587,6 +1590,10 @@ msgstr "토큰"
 #~ "`gather_facts: true` 가 있는 인벤토리.\n"
 #~ "실제 사실은 시스템마다 다릅니다."
 
+#: screens/Inventory/shared/FederatedInventoryForm.js:81
+msgid "Select the source inventories for this federated inventory. When a job is launched, hosts will be routed to each source inventory's instance group automatically."
+msgstr ""
+
 #: components/Schedule/shared/UnsupportedRRuleAlert.js:25
 #~ msgid "This schedule uses complex rules that are not supported in the\\n        UI.  Please use the API to manage this schedule."
 #~ msgstr "이 일정은 UI에서 지원되지 않는 복잡한 규칙을 사용합니다. 이 일정을 관리하려면 API를 사용하십시오."
@@ -1624,6 +1631,10 @@ msgstr "총 노드"
 msgid "Hour"
 msgstr "시간"
 
+#: screens/Inventory/Inventories.js:27
+msgid "Create new federated inventory"
+msgstr ""
+
 #: components/AddRole/AddResourceRole.js:57
 #: components/AddRole/AddResourceRole.js:73
 #: components/AdHocCommands/AdHocCredentialStep.js:119
@@ -1659,10 +1670,10 @@ msgstr "시간"
 #: components/Lookup/HostListItem.js:9
 #: components/Lookup/InstanceGroupsLookup.js:104
 #: components/Lookup/InstanceGroupsLookup.js:115
-#: components/Lookup/InventoryLookup.js:152
-#: components/Lookup/InventoryLookup.js:167
-#: components/Lookup/InventoryLookup.js:208
-#: components/Lookup/InventoryLookup.js:223
+#: components/Lookup/InventoryLookup.js:159
+#: components/Lookup/InventoryLookup.js:174
+#: components/Lookup/InventoryLookup.js:215
+#: components/Lookup/InventoryLookup.js:230
 #: components/Lookup/MultiCredentialsLookup.js:194
 #: components/Lookup/MultiCredentialsLookup.js:209
 #: components/Lookup/OrganizationLookup.js:130
@@ -1732,8 +1743,8 @@ msgstr "시간"
 #: screens/Host/HostGroups/HostGroupItem.js:29
 #: screens/Host/HostGroups/HostGroupsList.js:161
 #: screens/Host/HostGroups/HostGroupsList.js:178
-#: screens/Host/HostList/HostList.js:147
-#: screens/Host/HostList/HostList.js:168
+#: screens/Host/HostList/HostList.js:150
+#: screens/Host/HostList/HostList.js:171
 #: screens/Host/HostList/HostListItem.js:35
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:47
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:50
@@ -1758,18 +1769,19 @@ msgstr "시간"
 #: screens/Instances/InstancePeers/InstancePeerList.js:309
 #: screens/Instances/InstancePeers/InstancePeerListItem.js:46
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.js:32
-#: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostList.js:80
-#: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostList.js:115
+#: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostList.js:81
+#: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostList.js:116
 #: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostListItem.js:38
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:150
+#: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:80
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:91
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:31
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.js:197
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.js:212
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.js:218
 #: screens/Inventory/InventoryGroups/InventoryGroupItem.js:30
-#: screens/Inventory/InventoryGroups/InventoryGroupsList.js:122
-#: screens/Inventory/InventoryGroups/InventoryGroupsList.js:144
+#: screens/Inventory/InventoryGroups/InventoryGroupsList.js:124
+#: screens/Inventory/InventoryGroups/InventoryGroupsList.js:146
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:73
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupItem.js:37
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.js:170
@@ -1777,10 +1789,10 @@ msgstr "시간"
 #: screens/Inventory/InventoryHosts/InventoryHostItem.js:69
 #: screens/Inventory/InventoryHosts/InventoryHostList.js:120
 #: screens/Inventory/InventoryHosts/InventoryHostList.js:139
-#: screens/Inventory/InventoryList/InventoryList.js:189
-#: screens/Inventory/InventoryList/InventoryList.js:221
-#: screens/Inventory/InventoryList/InventoryList.js:230
-#: screens/Inventory/InventoryList/InventoryListItem.js:98
+#: screens/Inventory/InventoryList/InventoryList.js:199
+#: screens/Inventory/InventoryList/InventoryList.js:232
+#: screens/Inventory/InventoryList/InventoryList.js:241
+#: screens/Inventory/InventoryList/InventoryListItem.js:99
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:182
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:197
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:238
@@ -1788,6 +1800,7 @@ msgstr "시간"
 #: screens/Inventory/InventorySources/InventorySourceList.js:212
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:62
 #: screens/Inventory/shared/ConstructedInventoryForm.js:61
+#: screens/Inventory/shared/FederatedInventoryForm.js:51
 #: screens/Inventory/shared/InventoryForm.js:51
 #: screens/Inventory/shared/InventoryGroupForm.js:33
 #: screens/Inventory/shared/InventorySourceForm.js:122
@@ -1929,7 +1942,7 @@ msgstr "승인됨"
 #: components/SelectedList/DraggableSelectedList.js:103
 #: components/TemplateList/TemplateList.js:253
 #: components/TemplateList/TemplateListItem.js:148
-#: screens/ActivityStream/ActivityStream.js:266
+#: screens/ActivityStream/ActivityStream.js:269
 #: screens/ActivityStream/ActivityStreamListItem.js:49
 #: screens/Application/ApplicationsList/ApplicationListItem.js:49
 #: screens/Application/ApplicationsList/ApplicationsList.js:157
@@ -1941,7 +1954,7 @@ msgstr "승인됨"
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:102
 #: screens/Host/HostGroups/HostGroupItem.js:35
 #: screens/Host/HostGroups/HostGroupsList.js:179
-#: screens/Host/HostList/HostList.js:174
+#: screens/Host/HostList/HostList.js:177
 #: screens/Host/HostList/HostListItem.js:62
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:201
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupListItem.js:79
@@ -1952,14 +1965,14 @@ msgstr "승인됨"
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.js:223
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.js:56
 #: screens/Inventory/InventoryGroups/InventoryGroupItem.js:36
-#: screens/Inventory/InventoryGroups/InventoryGroupsList.js:146
+#: screens/Inventory/InventoryGroups/InventoryGroupsList.js:148
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupItem.js:42
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.js:188
 #: screens/Inventory/InventoryHosts/InventoryHostItem.js:106
 #: screens/Inventory/InventoryHosts/InventoryHostItem.js:107
 #: screens/Inventory/InventoryHosts/InventoryHostList.js:145
-#: screens/Inventory/InventoryList/InventoryList.js:234
-#: screens/Inventory/InventoryList/InventoryListItem.js:139
+#: screens/Inventory/InventoryList/InventoryList.js:245
+#: screens/Inventory/InventoryList/InventoryListItem.js:140
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:240
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupListItem.js:46
 #: screens/Inventory/InventorySources/InventorySourceList.js:215
@@ -1991,7 +2004,8 @@ msgid "Event summary not available"
 msgstr "이벤트 요약을 사용할 수 없음"
 
 #: routeConfig.js:37
-#: screens/Dashboard/Dashboard.js:94
+#: screens/Dashboard/Dashboard.js:52
+#: screens/Dashboard/Dashboard.js:96
 msgid "Dashboard"
 msgstr "대시보드"
 
@@ -2017,7 +2031,7 @@ msgstr "키"
 #: components/AddRole/AddResourceRole.js:42
 #: components/ResourceAccessList/ResourceAccessList.js:145
 #: components/ResourceAccessList/ResourceAccessList.js:198
-#: screens/Login/Login.js:233
+#: screens/Login/Login.js:227
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:190
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:305
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:357
@@ -2081,7 +2095,7 @@ msgstr "팀 역할"
 #~ msgstr "이 프로젝트는 현재 동기화 상태에 있으며 동기화 프로세스가 완료될 때까지 클릭할 수 없습니다."
 
 #: routeConfig.js:131
-#: screens/ActivityStream/ActivityStream.js:191
+#: screens/ActivityStream/ActivityStream.js:194
 msgid "Administration"
 msgstr "관리"
 
@@ -2156,17 +2170,17 @@ msgstr "입력 구성"
 #. placeholder {0}: inventory.inventory_sources_with_failures
 #. placeholder {0}: itemsToRemove.length
 #. placeholder {1}: import 'styled-components/macro'; import React, { useState, useContext, useEffect } from 'react'; import { useParams } from 'react-router-dom'; import { func, bool, arrayOf } from 'prop-types'; import { Plural, useLingui } from '@lingui/react/macro'; import { Button, Radio, DropdownItem } from '@patternfly/react-core'; import styled from 'styled-components'; import { KebabifiedContext } from 'contexts/Kebabified'; import { GroupsAPI, InventoriesAPI } from 'api'; import { Group } from 'types'; import ErrorDetail from 'components/ErrorDetail'; import AlertModal from 'components/AlertModal'; const ListItem = styled.li` display: flex; font-weight: 600; color: var(--pf-global--danger-color--100); `; const InventoryGroupsDeleteModal = ({ onAfterDelete, isDisabled, groups }) => { const { t } = useLingui(); const [radioOption, setRadioOption] = useState(null); const [isModalOpen, setIsModalOpen] = useState(false); const [isDeleteLoading, setIsDeleteLoading] = useState(false); const [deletionError, setDeletionError] = useState(null); const { id: inventoryId } = useParams(); const { isKebabified, onKebabModalChange } = useContext(KebabifiedContext); useEffect(() => { if (isKebabified) { onKebabModalChange(isModalOpen); } }, [isKebabified, isModalOpen, onKebabModalChange]); const handleDelete = async (option) => { setIsDeleteLoading(true); try { /* eslint-disable no-await-in-loop */ /* Delete groups sequentially to avoid api integrity errors */ /* https://eslint.org/docs/rules/no-await-in-loop#when-not-to-use-it */ for (let i = 0; i < groups.length; i++) { const group = groups[i]; if (option === 'delete') { await GroupsAPI.destroy(+group.id); } else if (option === 'promote') { await InventoriesAPI.promoteGroup(inventoryId, +group.id); } } /* eslint-enable no-await-in-loop */ } catch (error) { setDeletionError(error); } finally { setIsModalOpen(false); setIsDeleteLoading(false); onAfterDelete(); } }; return ( <> {isKebabified ? ( <DropdownItem key="delete" isDisabled={isDisabled || isDeleteLoading} component="button" aria-label={t`Delete`} onClick={() => setIsModalOpen(true)} ouiaId="group-delete-dropdown-item" > {t`Delete`} </DropdownItem> ) : ( <Button variant="secondary" aria-label={t`Delete`} onClick={() => setIsModalOpen(true)} isDisabled={isDisabled || isDeleteLoading} ouiaId="group-delete-button" > {t`Delete`} </Button> )} {isModalOpen && ( <AlertModal isOpen={isModalOpen} variant="danger" title={ <Plural value={groups.length} one={t`Delete Group?`} other={t`Delete Groups?`} /> } onClose={() => setIsModalOpen(false)} actions={[ <Button aria-label={t`Confirm Delete`} onClick={() => handleDelete(radioOption)} variant="danger" key="delete" isDisabled={radioOption === null} ouiaId="delete-modal-confirm-button" > {t`Delete`} </Button>, <Button aria-label={t`Close`} onClick={() => setIsModalOpen(false)} variant="link" key="cancel" ouiaId="delete-modal-cancel-button" > {t`Cancel`} </Button>, ]} > <Plural value={groups.length} one={t`Are you sure you want delete the group below?`} other={t`Are you sure you want delete the groups below?`} /> <div css="padding: 24px 0;"> {groups.map((group) => ( <ListItem key={group.id}>{group.name}</ListItem> ))} </div> <div> <Radio id="radio-delete" key="radio-delete" label={t`Delete All Groups and Hosts`} name="option" onChange={() => setRadioOption('delete')} ouiaId="delete-all-radio-button" /> <Radio css="margin-top: 5px;" id="radio-promote" key="radio-promote" label={t`Promote Child Groups and Hosts`} name="option" onChange={() => setRadioOption('promote')} ouiaId="promote-radio-button" /> </div> </AlertModal> )} {deletionError && ( <AlertModal isOpen={deletionError} variant="error" aria-label={t`deletion error`} title={t`Error!`} onClose={() => setDeletionError(null)} > {t`Failed to delete one or more groups.`} <ErrorDetail error={deletionError} /> </AlertModal> )} </> ); }; InventoryGroupsDeleteModal.propTypes = { onAfterDelete: func.isRequired, groups: arrayOf(Group), isDisabled: bool.isRequired, }; InventoryGroupsDeleteModal.defaultProps = { groups: [], }; export default InventoryGroupsDeleteModal; 
-#. placeholder {1}: import React, { useCallback, useEffect } from 'react'; import { useLocation, useRouteMatch, Link } from 'react-router-dom'; import { Plural, useLingui } from '@lingui/react/macro'; import { Card, PageSection, DropdownItem } from '@patternfly/react-core'; import { InventoriesAPI } from 'api'; import useRequest, { useDeleteItems } from 'hooks/useRequest'; import useSelected from 'hooks/useSelected'; import useToast, { AlertVariant } from 'hooks/useToast'; import AlertModal from 'components/AlertModal'; import DatalistToolbar from 'components/DataListToolbar'; import ErrorDetail from 'components/ErrorDetail'; import PaginatedTable, { HeaderRow, HeaderCell, ToolbarDeleteButton, getSearchableKeys, } from 'components/PaginatedTable'; import { getQSConfig, parseQueryString } from 'util/qs'; import AddDropDownButton from 'components/AddDropDownButton'; import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails'; import useWsInventories from './useWsInventories'; import InventoryListItem from './InventoryListItem'; const QS_CONFIG = getQSConfig('inventory', { page: 1, page_size: 20, order_by: 'name', }); function InventoryList() { const location = useLocation(); const match = useRouteMatch(); const { addToast, Toast, toastProps } = useToast(); const { t } = useLingui(); const { result: { results, itemCount, actions, relatedSearchableKeys, searchableKeys, }, error: contentError, isLoading, request: fetchInventories, } = useRequest( useCallback(async () => { const params = parseQueryString(QS_CONFIG, location.search); const [response, actionsResponse] = await Promise.all([ InventoriesAPI.read(params), InventoriesAPI.readOptions(), ]); return { results: response.data.results, itemCount: response.data.count, actions: actionsResponse.data.actions, relatedSearchableKeys: ( actionsResponse?.data?.related_search_fields || [] ).map((val) => val.slice(0, -8)), searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET), }; }, [location]), { results: [], itemCount: 0, actions: {}, relatedSearchableKeys: [], searchableKeys: [], } ); useEffect(() => { fetchInventories(); }, [fetchInventories]); const fetchInventoriesById = useCallback( async (ids) => { const params = { ...parseQueryString(QS_CONFIG, location.search) }; params.id__in = ids.join(','); const { data } = await InventoriesAPI.read(params); return data.results; }, [location.search] // eslint-disable-line react-hooks/exhaustive-deps ); const inventories = useWsInventories( results, fetchInventories, fetchInventoriesById, QS_CONFIG ); const { selected, isAllSelected, handleSelect, selectAll, clearSelected } = useSelected(inventories); const { isLoading: isDeleteLoading, deleteItems: deleteInventories, deletionError, clearDeletionError, } = useDeleteItems( useCallback( () => Promise.all(selected.map((team) => InventoriesAPI.destroy(team.id))), [selected] ), { allItemsSelected: isAllSelected, } ); const handleInventoryDelete = async () => { await deleteInventories(); clearSelected(); }; const handleCopy = useCallback( (newInventoryId) => { addToast({ id: newInventoryId, title: t`Inventory copied successfully`, variant: AlertVariant.success, hasTimeout: true, }); }, [addToast, t] ); const hasContentLoading = isDeleteLoading || isLoading; const canAdd = actions && actions.POST; const deleteDetailsRequests = relatedResourceDeleteRequests(t).inventory( selected[0] ); const addInventory = t`Add inventory`; const addSmartInventory = t`Add smart inventory`; const addConstructedInventory = t`Add constructed inventory`; const addButton = ( <AddDropDownButton ouiaId="add-inventory-button" key="add" dropdownItems={[ <DropdownItem ouiaId="add-inventory-item" to={`${match.url}/inventory/add/`} component={Link} key={addInventory} aria-label={addInventory} > {addInventory} </DropdownItem>, <DropdownItem ouiaId="add-smart-inventory-item" to={`${match.url}/smart_inventory/add/`} component={Link} key={addSmartInventory} aria-label={addSmartInventory} > {addSmartInventory} </DropdownItem>, <DropdownItem ouiaId="add-constructed-inventory-item" to={`${match.url}/constructed_inventory/add/`} component={Link} key={addConstructedInventory} aria-label={addConstructedInventory} > {addConstructedInventory} </DropdownItem>, ]} /> ); return ( <> <PageSection> <Card> <PaginatedTable contentError={contentError} hasContentLoading={hasContentLoading} items={inventories} itemCount={itemCount} pluralizedItemName={t`Inventories`} qsConfig={QS_CONFIG} toolbarSearchColumns={[ { name: t`Name`, key: 'name__icontains', isDefault: true, }, { name: t`Inventory Type`, key: 'or__kind', options: [ ['', t`Inventory`], ['smart', t`Smart Inventory`], ['constructed', t`Constructed Inventory`], ], }, { name: t`Organization`, key: 'organization__name', }, { name: t`Description`, key: 'description__icontains', }, { name: t`Created By (Username)`, key: 'created_by__username__icontains', }, { name: t`Modified By (Username)`, key: 'modified_by__username__icontains', }, ]} toolbarSortColumns={[ { name: t`Name`, key: 'name', }, ]} toolbarSearchableKeys={searchableKeys} toolbarRelatedSearchableKeys={relatedSearchableKeys} clearSelected={clearSelected} headerRow={ <HeaderRow qsConfig={QS_CONFIG}> <HeaderCell sortKey="name">{t`Name`}</HeaderCell> <HeaderCell>{t`Sync Status`}</HeaderCell> <HeaderCell>{t`Type`}</HeaderCell> <HeaderCell>{t`Organization`}</HeaderCell> <HeaderCell>{t`Actions`}</HeaderCell> </HeaderRow> } renderToolbar={(props) => ( <DatalistToolbar {...props} isAllSelected={isAllSelected} onSelectAll={selectAll} qsConfig={QS_CONFIG} additionalControls={[ ...(canAdd ? [addButton] : []), <ToolbarDeleteButton key="delete" onDelete={handleInventoryDelete} itemsToDelete={selected} pluralizedItemName={t`Inventories`} deleteDetailsRequests={deleteDetailsRequests} deleteMessage={ <Plural value={selected.length} one={t`This inventory is currently being used by some templates. Are you sure you want to delete it?`} other={t`Deleting these inventories could impact some templates that rely on them. Are you sure you want to delete anyway?`} /> } warningMessage={ <Plural value={selected.length} one={t`The inventory will be in a pending status until the final delete is processed.`} other={t`The inventories will be in a pending status until the final delete is processed.`} /> } />, ]} /> )} renderRow={(inventory, index) => ( <InventoryListItem key={inventory.id} value={inventory.name} inventory={inventory} rowIndex={index} fetchInventories={fetchInventories} onSelect={() => { if (!inventory.pending_deletion) { handleSelect(inventory); } }} onCopy={handleCopy} isSelected={selected.some((row) => row.id === inventory.id)} /> )} emptyStateControls={canAdd && addButton} /> </Card> <AlertModal isOpen={deletionError} variant="error" aria-label={t`Deletion Error`} title={t`Error!`} onClose={clearDeletionError} > {t`Failed to delete one or more inventories.`} <ErrorDetail error={deletionError} /> </AlertModal> </PageSection> <Toast {...toastProps} /> </> ); } export default InventoryList; 
+#. placeholder {1}: import React, { useCallback, useEffect } from 'react'; import { useLocation, useRouteMatch, Link } from 'react-router-dom'; import { Plural, useLingui } from '@lingui/react/macro'; import { Card, PageSection, DropdownItem } from '@patternfly/react-core'; import { InventoriesAPI } from 'api'; import useRequest, { useDeleteItems } from 'hooks/useRequest'; import useSelected from 'hooks/useSelected'; import useToast, { AlertVariant } from 'hooks/useToast'; import AlertModal from 'components/AlertModal'; import DatalistToolbar from 'components/DataListToolbar'; import ErrorDetail from 'components/ErrorDetail'; import PaginatedTable, { HeaderRow, HeaderCell, ToolbarDeleteButton, getSearchableKeys, } from 'components/PaginatedTable'; import { getQSConfig, parseQueryString } from 'util/qs'; import AddDropDownButton from 'components/AddDropDownButton'; import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails'; import useWsInventories from './useWsInventories'; import InventoryListItem from './InventoryListItem'; const QS_CONFIG = getQSConfig('inventory', { page: 1, page_size: 20, order_by: 'name', }); function InventoryList() { const location = useLocation(); const match = useRouteMatch(); const { addToast, Toast, toastProps } = useToast(); const { t } = useLingui(); const { result: { results, itemCount, actions, relatedSearchableKeys, searchableKeys, }, error: contentError, isLoading, request: fetchInventories, } = useRequest( useCallback(async () => { const params = parseQueryString(QS_CONFIG, location.search); const [response, actionsResponse] = await Promise.all([ InventoriesAPI.read(params), InventoriesAPI.readOptions(), ]); return { results: response.data.results, itemCount: response.data.count, actions: actionsResponse.data.actions, relatedSearchableKeys: ( actionsResponse?.data?.related_search_fields || [] ).map((val) => val.slice(0, -8)), searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET), }; }, [location]), { results: [], itemCount: 0, actions: {}, relatedSearchableKeys: [], searchableKeys: [], } ); useEffect(() => { fetchInventories(); }, [fetchInventories]); const fetchInventoriesById = useCallback( async (ids) => { const params = { ...parseQueryString(QS_CONFIG, location.search) }; params.id__in = ids.join(','); const { data } = await InventoriesAPI.read(params); return data.results; }, [location.search] // eslint-disable-line react-hooks/exhaustive-deps ); const inventories = useWsInventories( results, fetchInventories, fetchInventoriesById, QS_CONFIG ); const { selected, isAllSelected, handleSelect, selectAll, clearSelected } = useSelected(inventories); const { isLoading: isDeleteLoading, deleteItems: deleteInventories, deletionError, clearDeletionError, } = useDeleteItems( useCallback( () => Promise.all(selected.map((team) => InventoriesAPI.destroy(team.id))), [selected] ), { allItemsSelected: isAllSelected, } ); const handleInventoryDelete = async () => { await deleteInventories(); clearSelected(); }; const handleCopy = useCallback( (newInventoryId) => { addToast({ id: newInventoryId, title: t`Inventory copied successfully`, variant: AlertVariant.success, hasTimeout: true, }); }, [addToast, t] ); const hasContentLoading = isDeleteLoading || isLoading; const canAdd = actions && actions.POST; const deleteDetailsRequests = relatedResourceDeleteRequests(t).inventory( selected[0] ); const addInventory = t`Add inventory`; const addSmartInventory = t`Add smart inventory`; const addConstructedInventory = t`Add constructed inventory`; const addFederatedInventory = t`Add federated inventory`; const addButton = ( <AddDropDownButton ouiaId="add-inventory-button" key="add" dropdownItems={[ <DropdownItem ouiaId="add-inventory-item" to={`${match.url}/inventory/add/`} component={Link} key={addInventory} aria-label={addInventory} > {addInventory} </DropdownItem>, <DropdownItem ouiaId="add-smart-inventory-item" to={`${match.url}/smart_inventory/add/`} component={Link} key={addSmartInventory} aria-label={addSmartInventory} > {addSmartInventory} </DropdownItem>, <DropdownItem ouiaId="add-constructed-inventory-item" to={`${match.url}/constructed_inventory/add/`} component={Link} key={addConstructedInventory} aria-label={addConstructedInventory} > {addConstructedInventory} </DropdownItem>, <DropdownItem ouiaId="add-federated-inventory-item" to={`${match.url}/federated_inventory/add/`} component={Link} key={addFederatedInventory} aria-label={addFederatedInventory} > {addFederatedInventory} </DropdownItem>, ]} /> ); return ( <> <PageSection> <Card> <PaginatedTable contentError={contentError} hasContentLoading={hasContentLoading} items={inventories} itemCount={itemCount} pluralizedItemName={t`Inventories`} qsConfig={QS_CONFIG} toolbarSearchColumns={[ { name: t`Name`, key: 'name__icontains', isDefault: true, }, { name: t`Inventory Type`, key: 'or__kind', options: [ ['', t`Inventory`], ['smart', t`Smart Inventory`], ['constructed', t`Constructed Inventory`], ['federated', t`Federated Inventory`], ], }, { name: t`Organization`, key: 'organization__name', }, { name: t`Description`, key: 'description__icontains', }, { name: t`Created By (Username)`, key: 'created_by__username__icontains', }, { name: t`Modified By (Username)`, key: 'modified_by__username__icontains', }, ]} toolbarSortColumns={[ { name: t`Name`, key: 'name', }, ]} toolbarSearchableKeys={searchableKeys} toolbarRelatedSearchableKeys={relatedSearchableKeys} clearSelected={clearSelected} headerRow={ <HeaderRow qsConfig={QS_CONFIG}> <HeaderCell sortKey="name">{t`Name`}</HeaderCell> <HeaderCell>{t`Sync Status`}</HeaderCell> <HeaderCell>{t`Type`}</HeaderCell> <HeaderCell>{t`Organization`}</HeaderCell> <HeaderCell>{t`Actions`}</HeaderCell> </HeaderRow> } renderToolbar={(props) => ( <DatalistToolbar {...props} isAllSelected={isAllSelected} onSelectAll={selectAll} qsConfig={QS_CONFIG} additionalControls={[ ...(canAdd ? [addButton] : []), <ToolbarDeleteButton key="delete" onDelete={handleInventoryDelete} itemsToDelete={selected} pluralizedItemName={t`Inventories`} deleteDetailsRequests={deleteDetailsRequests} deleteMessage={ <Plural value={selected.length} one={t`This inventory is currently being used by some templates. Are you sure you want to delete it?`} other={t`Deleting these inventories could impact some templates that rely on them. Are you sure you want to delete anyway?`} /> } warningMessage={ <Plural value={selected.length} one={t`The inventory will be in a pending status until the final delete is processed.`} other={t`The inventories will be in a pending status until the final delete is processed.`} /> } />, ]} /> )} renderRow={(inventory, index) => ( <InventoryListItem key={inventory.id} value={inventory.name} inventory={inventory} rowIndex={index} fetchInventories={fetchInventories} onSelect={() => { if (!inventory.pending_deletion) { handleSelect(inventory); } }} onCopy={handleCopy} isSelected={selected.some((row) => row.id === inventory.id)} /> )} emptyStateControls={canAdd && addButton} /> </Card> <AlertModal isOpen={deletionError} variant="error" aria-label={t`Deletion Error`} title={t`Error!`} onClose={clearDeletionError} > {t`Failed to delete one or more inventories.`} <ErrorDetail error={deletionError} /> </AlertModal> </PageSection> <Toast {...toastProps} /> </> ); } export default InventoryList; 
 #. placeholder {1}: import React, { useCallback, useEffect } from 'react'; import { useParams, useLocation } from 'react-router-dom'; import { Plural, useLingui } from '@lingui/react/macro'; import useRequest, { useDeleteItems, useDismissableError, } from 'hooks/useRequest'; import { getQSConfig, parseQueryString } from 'util/qs'; import { InventoriesAPI, InventorySourcesAPI } from 'api'; import PaginatedTable, { HeaderRow, HeaderCell, ToolbarAddButton, ToolbarDeleteButton, ToolbarSyncSourceButton, getSearchableKeys, } from 'components/PaginatedTable'; import useSelected from 'hooks/useSelected'; import DatalistToolbar from 'components/DataListToolbar'; import AlertModal from 'components/AlertModal/AlertModal'; import ErrorDetail from 'components/ErrorDetail/ErrorDetail'; import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails'; import InventorySourceListItem from './InventorySourceListItem'; import useWsInventorySources from './useWsInventorySources'; const QS_CONFIG = getQSConfig('inventory-sources', { page: 1, page_size: 20, order_by: 'name', }); function InventorySourceList() { const { t } = useLingui(); const { inventoryType, id } = useParams(); const { search } = useLocation(); const { isLoading, error: fetchError, result: { result, sourceCount, sourceChoices, sourceChoicesOptions, searchableKeys, relatedSearchableKeys, }, request: fetchSources, } = useRequest( useCallback(async () => { const params = parseQueryString(QS_CONFIG, search); const results = await Promise.all([ InventoriesAPI.readSources(id, params), InventorySourcesAPI.readOptions(), ]); return { result: results[0].data.results, sourceCount: results[0].data.count, sourceChoices: results[1].data.actions.GET.source.choices, sourceChoicesOptions: results[1].data.actions, searchableKeys: getSearchableKeys(results[1].data.actions?.GET), relatedSearchableKeys: ( results[1]?.data?.related_search_fields || [] ).map((val) => val.slice(0, -8)), }; }, [id, search]), { result: [], sourceCount: 0, sourceChoices: [], searchableKeys: [], relatedSearchableKeys: [], } ); const sources = useWsInventorySources(result); const canSyncSources = sources.length > 0 && sources.every((source) => source.summary_fields.user_capabilities.start); const { isLoading: isSyncAllLoading, error: syncAllError, request: syncAll, } = useRequest( useCallback(async () => { if (canSyncSources) { await InventoriesAPI.syncAllSources(id); } }, [id, canSyncSources]) ); useEffect(() => { fetchSources(); }, [fetchSources]); const { selected, isAllSelected, handleSelect, clearSelected, selectAll } = useSelected(sources); const { isLoading: isDeleteLoading, deleteItems: handleDeleteSources, deletionError, clearDeletionError, } = useDeleteItems( useCallback( () => Promise.all( selected.map(({ id: sourceId }) => InventorySourcesAPI.destroy(sourceId) ), [] ), [selected] ), { fetchItems: fetchSources, allItemsSelected: isAllSelected, qsConfig: QS_CONFIG, } ); const { error: syncError, dismissError } = useDismissableError(syncAllError); const deleteRelatedInventoryResources = (resourceId) => [ InventorySourcesAPI.destroyHosts(resourceId), InventorySourcesAPI.destroyGroups(resourceId), ]; const { isLoading: deleteRelatedResourcesLoading, deletionError: deleteRelatedResourcesError, deleteItems: handleDeleteRelatedResources, } = useDeleteItems( useCallback( async () => Promise.all( selected .map(({ id: resourceId }) => deleteRelatedInventoryResources(resourceId) ) .flat() ), [selected] ) ); const handleDelete = async () => { await handleDeleteRelatedResources(); if (!deleteRelatedResourcesError) { await handleDeleteSources(); } clearSelected(); }; const canAdd = sourceChoicesOptions && Object.prototype.hasOwnProperty.call(sourceChoicesOptions, 'POST'); const listUrl = `/inventories/${inventoryType}/${id}/sources/`; const deleteDetailsRequests = relatedResourceDeleteRequests(t).inventorySource( selected[0]?.id ); return ( <> <PaginatedTable contentError={fetchError} toolbarSearchableKeys={searchableKeys} toolbarRelatedSearchableKeys={relatedSearchableKeys} hasContentLoading={ isLoading || isDeleteLoading || isSyncAllLoading || deleteRelatedResourcesLoading } items={sources} itemCount={sourceCount} pluralizedItemName={t`Inventory Sources`} qsConfig={QS_CONFIG} clearSelected={clearSelected} renderToolbar={(props) => ( <DatalistToolbar {...props} isAllSelected={isAllSelected} onSelectAll={selectAll} qsConfig={QS_CONFIG} additionalControls={[ ...(canAdd ? [<ToolbarAddButton key="add" linkTo={`${listUrl}add`} />] : []), <ToolbarDeleteButton key="delete" onDelete={handleDelete} itemsToDelete={selected} pluralizedItemName={t`Inventory Sources`} deleteDetailsRequests={deleteDetailsRequests} deleteMessage={ <Plural value={selected.length} one={t`This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?`} other={t`Deleting these inventory sources could impact other resources that rely on them. Are you sure you want to delete anyway`} /> } />, ...(canSyncSources ? [<ToolbarSyncSourceButton onClick={syncAll} />] : []), ]} /> )} headerRow={ <HeaderRow qsConfig={QS_CONFIG}> <HeaderCell sortKey="name">{t`Name`}</HeaderCell> <HeaderCell>{t`Status`}</HeaderCell> <HeaderCell>{t`Type`}</HeaderCell> <HeaderCell>{t`Actions`}</HeaderCell> </HeaderRow> } renderRow={(inventorySource, index) => { const label = sourceChoices.find( ([scMatch]) => inventorySource.source === scMatch ); return ( <InventorySourceListItem key={inventorySource.id} source={inventorySource} onSelect={() => handleSelect(inventorySource)} label={label[1]} detailUrl={`${listUrl}${inventorySource.id}`} isSelected={selected.some((row) => row.id === inventorySource.id)} rowIndex={index} /> ); }} /> {syncError && ( <AlertModal aria-label={t`Sync error`} isOpen={syncError} variant="error" title={t`Error!`} onClose={dismissError} > {t`Failed to sync some or all inventory sources.`} <ErrorDetail error={syncError} /> </AlertModal> )} {(deletionError || deleteRelatedResourcesError) && ( <AlertModal aria-label={t`Delete error`} isOpen={deletionError || deleteRelatedResourcesError} variant="error" title={t`Error!`} onClose={clearDeletionError} > {t`Failed to delete one or more inventory sources.`} <ErrorDetail error={deletionError || deleteRelatedResourcesError} /> </AlertModal> )} </> ); } export default InventorySourceList; 
 #. placeholder {2}: import 'styled-components/macro'; import React, { useState, useContext, useEffect } from 'react'; import { useParams } from 'react-router-dom'; import { func, bool, arrayOf } from 'prop-types'; import { Plural, useLingui } from '@lingui/react/macro'; import { Button, Radio, DropdownItem } from '@patternfly/react-core'; import styled from 'styled-components'; import { KebabifiedContext } from 'contexts/Kebabified'; import { GroupsAPI, InventoriesAPI } from 'api'; import { Group } from 'types'; import ErrorDetail from 'components/ErrorDetail'; import AlertModal from 'components/AlertModal'; const ListItem = styled.li` display: flex; font-weight: 600; color: var(--pf-global--danger-color--100); `; const InventoryGroupsDeleteModal = ({ onAfterDelete, isDisabled, groups }) => { const { t } = useLingui(); const [radioOption, setRadioOption] = useState(null); const [isModalOpen, setIsModalOpen] = useState(false); const [isDeleteLoading, setIsDeleteLoading] = useState(false); const [deletionError, setDeletionError] = useState(null); const { id: inventoryId } = useParams(); const { isKebabified, onKebabModalChange } = useContext(KebabifiedContext); useEffect(() => { if (isKebabified) { onKebabModalChange(isModalOpen); } }, [isKebabified, isModalOpen, onKebabModalChange]); const handleDelete = async (option) => { setIsDeleteLoading(true); try { /* eslint-disable no-await-in-loop */ /* Delete groups sequentially to avoid api integrity errors */ /* https://eslint.org/docs/rules/no-await-in-loop#when-not-to-use-it */ for (let i = 0; i < groups.length; i++) { const group = groups[i]; if (option === 'delete') { await GroupsAPI.destroy(+group.id); } else if (option === 'promote') { await InventoriesAPI.promoteGroup(inventoryId, +group.id); } } /* eslint-enable no-await-in-loop */ } catch (error) { setDeletionError(error); } finally { setIsModalOpen(false); setIsDeleteLoading(false); onAfterDelete(); } }; return ( <> {isKebabified ? ( <DropdownItem key="delete" isDisabled={isDisabled || isDeleteLoading} component="button" aria-label={t`Delete`} onClick={() => setIsModalOpen(true)} ouiaId="group-delete-dropdown-item" > {t`Delete`} </DropdownItem> ) : ( <Button variant="secondary" aria-label={t`Delete`} onClick={() => setIsModalOpen(true)} isDisabled={isDisabled || isDeleteLoading} ouiaId="group-delete-button" > {t`Delete`} </Button> )} {isModalOpen && ( <AlertModal isOpen={isModalOpen} variant="danger" title={ <Plural value={groups.length} one={t`Delete Group?`} other={t`Delete Groups?`} /> } onClose={() => setIsModalOpen(false)} actions={[ <Button aria-label={t`Confirm Delete`} onClick={() => handleDelete(radioOption)} variant="danger" key="delete" isDisabled={radioOption === null} ouiaId="delete-modal-confirm-button" > {t`Delete`} </Button>, <Button aria-label={t`Close`} onClick={() => setIsModalOpen(false)} variant="link" key="cancel" ouiaId="delete-modal-cancel-button" > {t`Cancel`} </Button>, ]} > <Plural value={groups.length} one={t`Are you sure you want delete the group below?`} other={t`Are you sure you want delete the groups below?`} /> <div css="padding: 24px 0;"> {groups.map((group) => ( <ListItem key={group.id}>{group.name}</ListItem> ))} </div> <div> <Radio id="radio-delete" key="radio-delete" label={t`Delete All Groups and Hosts`} name="option" onChange={() => setRadioOption('delete')} ouiaId="delete-all-radio-button" /> <Radio css="margin-top: 5px;" id="radio-promote" key="radio-promote" label={t`Promote Child Groups and Hosts`} name="option" onChange={() => setRadioOption('promote')} ouiaId="promote-radio-button" /> </div> </AlertModal> )} {deletionError && ( <AlertModal isOpen={deletionError} variant="error" aria-label={t`deletion error`} title={t`Error!`} onClose={() => setDeletionError(null)} > {t`Failed to delete one or more groups.`} <ErrorDetail error={deletionError} /> </AlertModal> )} </> ); }; InventoryGroupsDeleteModal.propTypes = { onAfterDelete: func.isRequired, groups: arrayOf(Group), isDisabled: bool.isRequired, }; InventoryGroupsDeleteModal.defaultProps = { groups: [], }; export default InventoryGroupsDeleteModal; 
-#. placeholder {2}: import React, { useCallback, useEffect } from 'react'; import { useLocation, useRouteMatch, Link } from 'react-router-dom'; import { Plural, useLingui } from '@lingui/react/macro'; import { Card, PageSection, DropdownItem } from '@patternfly/react-core'; import { InventoriesAPI } from 'api'; import useRequest, { useDeleteItems } from 'hooks/useRequest'; import useSelected from 'hooks/useSelected'; import useToast, { AlertVariant } from 'hooks/useToast'; import AlertModal from 'components/AlertModal'; import DatalistToolbar from 'components/DataListToolbar'; import ErrorDetail from 'components/ErrorDetail'; import PaginatedTable, { HeaderRow, HeaderCell, ToolbarDeleteButton, getSearchableKeys, } from 'components/PaginatedTable'; import { getQSConfig, parseQueryString } from 'util/qs'; import AddDropDownButton from 'components/AddDropDownButton'; import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails'; import useWsInventories from './useWsInventories'; import InventoryListItem from './InventoryListItem'; const QS_CONFIG = getQSConfig('inventory', { page: 1, page_size: 20, order_by: 'name', }); function InventoryList() { const location = useLocation(); const match = useRouteMatch(); const { addToast, Toast, toastProps } = useToast(); const { t } = useLingui(); const { result: { results, itemCount, actions, relatedSearchableKeys, searchableKeys, }, error: contentError, isLoading, request: fetchInventories, } = useRequest( useCallback(async () => { const params = parseQueryString(QS_CONFIG, location.search); const [response, actionsResponse] = await Promise.all([ InventoriesAPI.read(params), InventoriesAPI.readOptions(), ]); return { results: response.data.results, itemCount: response.data.count, actions: actionsResponse.data.actions, relatedSearchableKeys: ( actionsResponse?.data?.related_search_fields || [] ).map((val) => val.slice(0, -8)), searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET), }; }, [location]), { results: [], itemCount: 0, actions: {}, relatedSearchableKeys: [], searchableKeys: [], } ); useEffect(() => { fetchInventories(); }, [fetchInventories]); const fetchInventoriesById = useCallback( async (ids) => { const params = { ...parseQueryString(QS_CONFIG, location.search) }; params.id__in = ids.join(','); const { data } = await InventoriesAPI.read(params); return data.results; }, [location.search] // eslint-disable-line react-hooks/exhaustive-deps ); const inventories = useWsInventories( results, fetchInventories, fetchInventoriesById, QS_CONFIG ); const { selected, isAllSelected, handleSelect, selectAll, clearSelected } = useSelected(inventories); const { isLoading: isDeleteLoading, deleteItems: deleteInventories, deletionError, clearDeletionError, } = useDeleteItems( useCallback( () => Promise.all(selected.map((team) => InventoriesAPI.destroy(team.id))), [selected] ), { allItemsSelected: isAllSelected, } ); const handleInventoryDelete = async () => { await deleteInventories(); clearSelected(); }; const handleCopy = useCallback( (newInventoryId) => { addToast({ id: newInventoryId, title: t`Inventory copied successfully`, variant: AlertVariant.success, hasTimeout: true, }); }, [addToast, t] ); const hasContentLoading = isDeleteLoading || isLoading; const canAdd = actions && actions.POST; const deleteDetailsRequests = relatedResourceDeleteRequests(t).inventory( selected[0] ); const addInventory = t`Add inventory`; const addSmartInventory = t`Add smart inventory`; const addConstructedInventory = t`Add constructed inventory`; const addButton = ( <AddDropDownButton ouiaId="add-inventory-button" key="add" dropdownItems={[ <DropdownItem ouiaId="add-inventory-item" to={`${match.url}/inventory/add/`} component={Link} key={addInventory} aria-label={addInventory} > {addInventory} </DropdownItem>, <DropdownItem ouiaId="add-smart-inventory-item" to={`${match.url}/smart_inventory/add/`} component={Link} key={addSmartInventory} aria-label={addSmartInventory} > {addSmartInventory} </DropdownItem>, <DropdownItem ouiaId="add-constructed-inventory-item" to={`${match.url}/constructed_inventory/add/`} component={Link} key={addConstructedInventory} aria-label={addConstructedInventory} > {addConstructedInventory} </DropdownItem>, ]} /> ); return ( <> <PageSection> <Card> <PaginatedTable contentError={contentError} hasContentLoading={hasContentLoading} items={inventories} itemCount={itemCount} pluralizedItemName={t`Inventories`} qsConfig={QS_CONFIG} toolbarSearchColumns={[ { name: t`Name`, key: 'name__icontains', isDefault: true, }, { name: t`Inventory Type`, key: 'or__kind', options: [ ['', t`Inventory`], ['smart', t`Smart Inventory`], ['constructed', t`Constructed Inventory`], ], }, { name: t`Organization`, key: 'organization__name', }, { name: t`Description`, key: 'description__icontains', }, { name: t`Created By (Username)`, key: 'created_by__username__icontains', }, { name: t`Modified By (Username)`, key: 'modified_by__username__icontains', }, ]} toolbarSortColumns={[ { name: t`Name`, key: 'name', }, ]} toolbarSearchableKeys={searchableKeys} toolbarRelatedSearchableKeys={relatedSearchableKeys} clearSelected={clearSelected} headerRow={ <HeaderRow qsConfig={QS_CONFIG}> <HeaderCell sortKey="name">{t`Name`}</HeaderCell> <HeaderCell>{t`Sync Status`}</HeaderCell> <HeaderCell>{t`Type`}</HeaderCell> <HeaderCell>{t`Organization`}</HeaderCell> <HeaderCell>{t`Actions`}</HeaderCell> </HeaderRow> } renderToolbar={(props) => ( <DatalistToolbar {...props} isAllSelected={isAllSelected} onSelectAll={selectAll} qsConfig={QS_CONFIG} additionalControls={[ ...(canAdd ? [addButton] : []), <ToolbarDeleteButton key="delete" onDelete={handleInventoryDelete} itemsToDelete={selected} pluralizedItemName={t`Inventories`} deleteDetailsRequests={deleteDetailsRequests} deleteMessage={ <Plural value={selected.length} one={t`This inventory is currently being used by some templates. Are you sure you want to delete it?`} other={t`Deleting these inventories could impact some templates that rely on them. Are you sure you want to delete anyway?`} /> } warningMessage={ <Plural value={selected.length} one={t`The inventory will be in a pending status until the final delete is processed.`} other={t`The inventories will be in a pending status until the final delete is processed.`} /> } />, ]} /> )} renderRow={(inventory, index) => ( <InventoryListItem key={inventory.id} value={inventory.name} inventory={inventory} rowIndex={index} fetchInventories={fetchInventories} onSelect={() => { if (!inventory.pending_deletion) { handleSelect(inventory); } }} onCopy={handleCopy} isSelected={selected.some((row) => row.id === inventory.id)} /> )} emptyStateControls={canAdd && addButton} /> </Card> <AlertModal isOpen={deletionError} variant="error" aria-label={t`Deletion Error`} title={t`Error!`} onClose={clearDeletionError} > {t`Failed to delete one or more inventories.`} <ErrorDetail error={deletionError} /> </AlertModal> </PageSection> <Toast {...toastProps} /> </> ); } export default InventoryList; 
+#. placeholder {2}: import React, { useCallback, useEffect } from 'react'; import { useLocation, useRouteMatch, Link } from 'react-router-dom'; import { Plural, useLingui } from '@lingui/react/macro'; import { Card, PageSection, DropdownItem } from '@patternfly/react-core'; import { InventoriesAPI } from 'api'; import useRequest, { useDeleteItems } from 'hooks/useRequest'; import useSelected from 'hooks/useSelected'; import useToast, { AlertVariant } from 'hooks/useToast'; import AlertModal from 'components/AlertModal'; import DatalistToolbar from 'components/DataListToolbar'; import ErrorDetail from 'components/ErrorDetail'; import PaginatedTable, { HeaderRow, HeaderCell, ToolbarDeleteButton, getSearchableKeys, } from 'components/PaginatedTable'; import { getQSConfig, parseQueryString } from 'util/qs'; import AddDropDownButton from 'components/AddDropDownButton'; import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails'; import useWsInventories from './useWsInventories'; import InventoryListItem from './InventoryListItem'; const QS_CONFIG = getQSConfig('inventory', { page: 1, page_size: 20, order_by: 'name', }); function InventoryList() { const location = useLocation(); const match = useRouteMatch(); const { addToast, Toast, toastProps } = useToast(); const { t } = useLingui(); const { result: { results, itemCount, actions, relatedSearchableKeys, searchableKeys, }, error: contentError, isLoading, request: fetchInventories, } = useRequest( useCallback(async () => { const params = parseQueryString(QS_CONFIG, location.search); const [response, actionsResponse] = await Promise.all([ InventoriesAPI.read(params), InventoriesAPI.readOptions(), ]); return { results: response.data.results, itemCount: response.data.count, actions: actionsResponse.data.actions, relatedSearchableKeys: ( actionsResponse?.data?.related_search_fields || [] ).map((val) => val.slice(0, -8)), searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET), }; }, [location]), { results: [], itemCount: 0, actions: {}, relatedSearchableKeys: [], searchableKeys: [], } ); useEffect(() => { fetchInventories(); }, [fetchInventories]); const fetchInventoriesById = useCallback( async (ids) => { const params = { ...parseQueryString(QS_CONFIG, location.search) }; params.id__in = ids.join(','); const { data } = await InventoriesAPI.read(params); return data.results; }, [location.search] // eslint-disable-line react-hooks/exhaustive-deps ); const inventories = useWsInventories( results, fetchInventories, fetchInventoriesById, QS_CONFIG ); const { selected, isAllSelected, handleSelect, selectAll, clearSelected } = useSelected(inventories); const { isLoading: isDeleteLoading, deleteItems: deleteInventories, deletionError, clearDeletionError, } = useDeleteItems( useCallback( () => Promise.all(selected.map((team) => InventoriesAPI.destroy(team.id))), [selected] ), { allItemsSelected: isAllSelected, } ); const handleInventoryDelete = async () => { await deleteInventories(); clearSelected(); }; const handleCopy = useCallback( (newInventoryId) => { addToast({ id: newInventoryId, title: t`Inventory copied successfully`, variant: AlertVariant.success, hasTimeout: true, }); }, [addToast, t] ); const hasContentLoading = isDeleteLoading || isLoading; const canAdd = actions && actions.POST; const deleteDetailsRequests = relatedResourceDeleteRequests(t).inventory( selected[0] ); const addInventory = t`Add inventory`; const addSmartInventory = t`Add smart inventory`; const addConstructedInventory = t`Add constructed inventory`; const addFederatedInventory = t`Add federated inventory`; const addButton = ( <AddDropDownButton ouiaId="add-inventory-button" key="add" dropdownItems={[ <DropdownItem ouiaId="add-inventory-item" to={`${match.url}/inventory/add/`} component={Link} key={addInventory} aria-label={addInventory} > {addInventory} </DropdownItem>, <DropdownItem ouiaId="add-smart-inventory-item" to={`${match.url}/smart_inventory/add/`} component={Link} key={addSmartInventory} aria-label={addSmartInventory} > {addSmartInventory} </DropdownItem>, <DropdownItem ouiaId="add-constructed-inventory-item" to={`${match.url}/constructed_inventory/add/`} component={Link} key={addConstructedInventory} aria-label={addConstructedInventory} > {addConstructedInventory} </DropdownItem>, <DropdownItem ouiaId="add-federated-inventory-item" to={`${match.url}/federated_inventory/add/`} component={Link} key={addFederatedInventory} aria-label={addFederatedInventory} > {addFederatedInventory} </DropdownItem>, ]} /> ); return ( <> <PageSection> <Card> <PaginatedTable contentError={contentError} hasContentLoading={hasContentLoading} items={inventories} itemCount={itemCount} pluralizedItemName={t`Inventories`} qsConfig={QS_CONFIG} toolbarSearchColumns={[ { name: t`Name`, key: 'name__icontains', isDefault: true, }, { name: t`Inventory Type`, key: 'or__kind', options: [ ['', t`Inventory`], ['smart', t`Smart Inventory`], ['constructed', t`Constructed Inventory`], ['federated', t`Federated Inventory`], ], }, { name: t`Organization`, key: 'organization__name', }, { name: t`Description`, key: 'description__icontains', }, { name: t`Created By (Username)`, key: 'created_by__username__icontains', }, { name: t`Modified By (Username)`, key: 'modified_by__username__icontains', }, ]} toolbarSortColumns={[ { name: t`Name`, key: 'name', }, ]} toolbarSearchableKeys={searchableKeys} toolbarRelatedSearchableKeys={relatedSearchableKeys} clearSelected={clearSelected} headerRow={ <HeaderRow qsConfig={QS_CONFIG}> <HeaderCell sortKey="name">{t`Name`}</HeaderCell> <HeaderCell>{t`Sync Status`}</HeaderCell> <HeaderCell>{t`Type`}</HeaderCell> <HeaderCell>{t`Organization`}</HeaderCell> <HeaderCell>{t`Actions`}</HeaderCell> </HeaderRow> } renderToolbar={(props) => ( <DatalistToolbar {...props} isAllSelected={isAllSelected} onSelectAll={selectAll} qsConfig={QS_CONFIG} additionalControls={[ ...(canAdd ? [addButton] : []), <ToolbarDeleteButton key="delete" onDelete={handleInventoryDelete} itemsToDelete={selected} pluralizedItemName={t`Inventories`} deleteDetailsRequests={deleteDetailsRequests} deleteMessage={ <Plural value={selected.length} one={t`This inventory is currently being used by some templates. Are you sure you want to delete it?`} other={t`Deleting these inventories could impact some templates that rely on them. Are you sure you want to delete anyway?`} /> } warningMessage={ <Plural value={selected.length} one={t`The inventory will be in a pending status until the final delete is processed.`} other={t`The inventories will be in a pending status until the final delete is processed.`} /> } />, ]} /> )} renderRow={(inventory, index) => ( <InventoryListItem key={inventory.id} value={inventory.name} inventory={inventory} rowIndex={index} fetchInventories={fetchInventories} onSelect={() => { if (!inventory.pending_deletion) { handleSelect(inventory); } }} onCopy={handleCopy} isSelected={selected.some((row) => row.id === inventory.id)} /> )} emptyStateControls={canAdd && addButton} /> </Card> <AlertModal isOpen={deletionError} variant="error" aria-label={t`Deletion Error`} title={t`Error!`} onClose={clearDeletionError} > {t`Failed to delete one or more inventories.`} <ErrorDetail error={deletionError} /> </AlertModal> </PageSection> <Toast {...toastProps} /> </> ); } export default InventoryList; 
 #. placeholder {2}: import React, { useCallback, useEffect } from 'react'; import { useParams, useLocation } from 'react-router-dom'; import { Plural, useLingui } from '@lingui/react/macro'; import useRequest, { useDeleteItems, useDismissableError, } from 'hooks/useRequest'; import { getQSConfig, parseQueryString } from 'util/qs'; import { InventoriesAPI, InventorySourcesAPI } from 'api'; import PaginatedTable, { HeaderRow, HeaderCell, ToolbarAddButton, ToolbarDeleteButton, ToolbarSyncSourceButton, getSearchableKeys, } from 'components/PaginatedTable'; import useSelected from 'hooks/useSelected'; import DatalistToolbar from 'components/DataListToolbar'; import AlertModal from 'components/AlertModal/AlertModal'; import ErrorDetail from 'components/ErrorDetail/ErrorDetail'; import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails'; import InventorySourceListItem from './InventorySourceListItem'; import useWsInventorySources from './useWsInventorySources'; const QS_CONFIG = getQSConfig('inventory-sources', { page: 1, page_size: 20, order_by: 'name', }); function InventorySourceList() { const { t } = useLingui(); const { inventoryType, id } = useParams(); const { search } = useLocation(); const { isLoading, error: fetchError, result: { result, sourceCount, sourceChoices, sourceChoicesOptions, searchableKeys, relatedSearchableKeys, }, request: fetchSources, } = useRequest( useCallback(async () => { const params = parseQueryString(QS_CONFIG, search); const results = await Promise.all([ InventoriesAPI.readSources(id, params), InventorySourcesAPI.readOptions(), ]); return { result: results[0].data.results, sourceCount: results[0].data.count, sourceChoices: results[1].data.actions.GET.source.choices, sourceChoicesOptions: results[1].data.actions, searchableKeys: getSearchableKeys(results[1].data.actions?.GET), relatedSearchableKeys: ( results[1]?.data?.related_search_fields || [] ).map((val) => val.slice(0, -8)), }; }, [id, search]), { result: [], sourceCount: 0, sourceChoices: [], searchableKeys: [], relatedSearchableKeys: [], } ); const sources = useWsInventorySources(result); const canSyncSources = sources.length > 0 && sources.every((source) => source.summary_fields.user_capabilities.start); const { isLoading: isSyncAllLoading, error: syncAllError, request: syncAll, } = useRequest( useCallback(async () => { if (canSyncSources) { await InventoriesAPI.syncAllSources(id); } }, [id, canSyncSources]) ); useEffect(() => { fetchSources(); }, [fetchSources]); const { selected, isAllSelected, handleSelect, clearSelected, selectAll } = useSelected(sources); const { isLoading: isDeleteLoading, deleteItems: handleDeleteSources, deletionError, clearDeletionError, } = useDeleteItems( useCallback( () => Promise.all( selected.map(({ id: sourceId }) => InventorySourcesAPI.destroy(sourceId) ), [] ), [selected] ), { fetchItems: fetchSources, allItemsSelected: isAllSelected, qsConfig: QS_CONFIG, } ); const { error: syncError, dismissError } = useDismissableError(syncAllError); const deleteRelatedInventoryResources = (resourceId) => [ InventorySourcesAPI.destroyHosts(resourceId), InventorySourcesAPI.destroyGroups(resourceId), ]; const { isLoading: deleteRelatedResourcesLoading, deletionError: deleteRelatedResourcesError, deleteItems: handleDeleteRelatedResources, } = useDeleteItems( useCallback( async () => Promise.all( selected .map(({ id: resourceId }) => deleteRelatedInventoryResources(resourceId) ) .flat() ), [selected] ) ); const handleDelete = async () => { await handleDeleteRelatedResources(); if (!deleteRelatedResourcesError) { await handleDeleteSources(); } clearSelected(); }; const canAdd = sourceChoicesOptions && Object.prototype.hasOwnProperty.call(sourceChoicesOptions, 'POST'); const listUrl = `/inventories/${inventoryType}/${id}/sources/`; const deleteDetailsRequests = relatedResourceDeleteRequests(t).inventorySource( selected[0]?.id ); return ( <> <PaginatedTable contentError={fetchError} toolbarSearchableKeys={searchableKeys} toolbarRelatedSearchableKeys={relatedSearchableKeys} hasContentLoading={ isLoading || isDeleteLoading || isSyncAllLoading || deleteRelatedResourcesLoading } items={sources} itemCount={sourceCount} pluralizedItemName={t`Inventory Sources`} qsConfig={QS_CONFIG} clearSelected={clearSelected} renderToolbar={(props) => ( <DatalistToolbar {...props} isAllSelected={isAllSelected} onSelectAll={selectAll} qsConfig={QS_CONFIG} additionalControls={[ ...(canAdd ? [<ToolbarAddButton key="add" linkTo={`${listUrl}add`} />] : []), <ToolbarDeleteButton key="delete" onDelete={handleDelete} itemsToDelete={selected} pluralizedItemName={t`Inventory Sources`} deleteDetailsRequests={deleteDetailsRequests} deleteMessage={ <Plural value={selected.length} one={t`This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?`} other={t`Deleting these inventory sources could impact other resources that rely on them. Are you sure you want to delete anyway`} /> } />, ...(canSyncSources ? [<ToolbarSyncSourceButton onClick={syncAll} />] : []), ]} /> )} headerRow={ <HeaderRow qsConfig={QS_CONFIG}> <HeaderCell sortKey="name">{t`Name`}</HeaderCell> <HeaderCell>{t`Status`}</HeaderCell> <HeaderCell>{t`Type`}</HeaderCell> <HeaderCell>{t`Actions`}</HeaderCell> </HeaderRow> } renderRow={(inventorySource, index) => { const label = sourceChoices.find( ([scMatch]) => inventorySource.source === scMatch ); return ( <InventorySourceListItem key={inventorySource.id} source={inventorySource} onSelect={() => handleSelect(inventorySource)} label={label[1]} detailUrl={`${listUrl}${inventorySource.id}`} isSelected={selected.some((row) => row.id === inventorySource.id)} rowIndex={index} /> ); }} /> {syncError && ( <AlertModal aria-label={t`Sync error`} isOpen={syncError} variant="error" title={t`Error!`} onClose={dismissError} > {t`Failed to sync some or all inventory sources.`} <ErrorDetail error={syncError} /> </AlertModal> )} {(deletionError || deleteRelatedResourcesError) && ( <AlertModal aria-label={t`Delete error`} isOpen={deletionError || deleteRelatedResourcesError} variant="error" title={t`Error!`} onClose={clearDeletionError} > {t`Failed to delete one or more inventory sources.`} <ErrorDetail error={deletionError || deleteRelatedResourcesError} /> </AlertModal> )} </> ); } export default InventorySourceList; 
 #: components/RelatedTemplateList/RelatedTemplateList.js:222
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:183
 #: screens/Instances/Shared/RemoveInstanceButton.js:87
-#: screens/Inventory/InventoryList/InventoryList.js:252
-#: screens/Inventory/InventoryList/InventoryList.js:259
-#: screens/Inventory/InventoryList/InventoryListItem.js:71
+#: screens/Inventory/InventoryList/InventoryList.js:263
+#: screens/Inventory/InventoryList/InventoryList.js:270
+#: screens/Inventory/InventoryList/InventoryListItem.js:72
 #: screens/Inventory/InventorySources/InventorySourceList.js:197
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:87
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:116
@@ -2206,7 +2220,7 @@ msgstr "필드는 지정된 정규식과 일치합니다."
 msgid "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 msgstr "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 
-#: screens/Login/Login.js:230
+#: screens/Login/Login.js:224
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:165
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:103
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:219
@@ -2218,6 +2232,10 @@ msgstr "암호"
 #: screens/Template/shared/WorkflowJobTemplate.helptext.js:13
 #~ msgid "Allow simultaneous runs of this workflow job template."
 #~ msgstr "이 워크플로 작업 템플릿의 동시 실행을 허용합니다."
+
+#: screens/Inventory/FederatedInventory.js:195
+msgid "View Federated Inventory Details"
+msgstr ""
 
 #: components/PromptDetail/PromptJobTemplateDetail.js:68
 #: components/PromptDetail/PromptWFJobTemplateDetail.js:37
@@ -2298,6 +2316,10 @@ msgstr "사용 가능한 노드를 클릭하여 새 링크를 생성합니다. �
 msgid "Total jobs"
 msgstr "총 작업"
 
+#: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:139
+msgid "Source inventories whose hosts will be routed to their respective instance groups when a job is launched against this federated inventory."
+msgstr ""
+
 #: components/RelatedTemplateList/RelatedTemplateList.js:169
 #: components/RelatedTemplateList/RelatedTemplateList.js:219
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:58
@@ -2338,7 +2360,7 @@ msgstr "현재 다른 리소스에서 이 실행 환경이 사용되고 있습�
 msgid "IRC"
 msgstr "IRC"
 
-#: screens/SubscriptionUsage/ChartComponents/UsageChart.js:262
+#: screens/SubscriptionUsage/ChartComponents/UsageChart.js:278
 msgid "Subscription capacity"
 msgstr "구독 용량"
 
@@ -2368,7 +2390,7 @@ msgstr "연결할 수 없는 호스트 수"
 msgid "Undo"
 msgstr "실행 취소"
 
-#: screens/Inventory/InventoryList/InventoryListItem.js:136
+#: screens/Inventory/InventoryList/InventoryListItem.js:137
 msgid "Pending delete"
 msgstr "삭제 보류 중"
 
@@ -2383,7 +2405,7 @@ msgid "Enable Fact Storage"
 msgstr "실제 스토리지 활성화"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:169
-#: screens/Inventory/InventoryList/InventoryList.js:199
+#: screens/Inventory/InventoryList/InventoryList.js:209
 #: screens/Inventory/InventoryList/InventoryListItem.js:56
 msgid "Constructed Inventory"
 msgstr "건설된 인벤토리"
@@ -2451,6 +2473,10 @@ msgstr "변경 사항"
 msgid "Case-insensitive version of contains"
 msgstr "대소문자를 구분하지 않는 버전을 포함합니다."
 
+#: screens/Inventory/InventoryList/InventoryList.js:140
+msgid "Add federated inventory"
+msgstr ""
+
 #: screens/Host/Host.js:140
 msgid "View Host Details"
 msgstr "호스트 세부 정보 보기"
@@ -2508,7 +2534,7 @@ msgstr "{0} (삭제됨)"
 msgid "The inventory that this host belongs to."
 msgstr "이 호스트가 속할 인벤토리입니다."
 
-#: screens/Login/Login.js:220
+#: screens/Login/Login.js:214
 msgid "Log In"
 msgstr "로그인"
 
@@ -2561,7 +2587,7 @@ msgstr "부울 방식"
 #~ msgid "Allow branch override"
 #~ msgstr "분기 덮어쓰기 허용"
 
-#: components/AppContainer/PageHeaderToolbar.js:170
+#: components/AppContainer/PageHeaderToolbar.js:217
 msgid "User Details"
 msgstr "사용자 세부 정보"
 
@@ -2603,6 +2629,7 @@ msgid "for more information."
 msgstr "자세한 내용"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:345
+#: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:187
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:188
 msgid "Delete Inventory"
 msgstr "인벤토리 삭제"
@@ -2659,7 +2686,7 @@ msgid "Zoom in"
 msgstr "확대"
 
 #: routeConfig.js:155
-#: screens/ActivityStream/ActivityStream.js:202
+#: screens/ActivityStream/ActivityStream.js:205
 #: screens/InstanceGroup/InstanceGroup.js:75
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:199
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupListItem.js:77
@@ -2696,7 +2723,7 @@ msgstr "{id} 항목을 드래그합니다. 색인이 {oldIndex} 인 항목은 �
 #: components/Search/Search.js:154
 #: components/Search/Search.js:203
 #: components/Search/Search.js:227
-#: screens/ActivityStream/ActivityStream.js:143
+#: screens/ActivityStream/ActivityStream.js:146
 #: screens/Credential/shared/CredentialForm.js:141
 #: screens/Credential/shared/CredentialFormFields/BecomeMethodField.js:66
 #: screens/Dashboard/DashboardGraph.js:107
@@ -2725,7 +2752,7 @@ msgstr "결과를 찾을 수 없음"
 msgid "Off"
 msgstr "Off"
 
-#: screens/Inventory/Inventories.js:23
+#: screens/Inventory/Inventories.js:25
 msgid "Create new smart inventory"
 msgstr "새 스마트 인벤토리 만들기"
 
@@ -2949,7 +2976,9 @@ msgid "Username / password"
 msgstr "사용자 이름 / 암호"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:275
+#: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:138
 #: screens/Inventory/shared/ConstructedInventoryForm.js:95
+#: screens/Inventory/shared/FederatedInventoryForm.js:78
 msgid "Input Inventories"
 msgstr "재고 입력"
 
@@ -3011,7 +3040,7 @@ msgstr "발생"
 #: screens/Host/Host.js:65
 #: screens/Host/HostFacts/HostFacts.js:46
 #: screens/Host/Hosts.js:31
-#: screens/Inventory/Inventories.js:73
+#: screens/Inventory/Inventories.js:76
 #: screens/Inventory/InventoryHost/InventoryHost.js:78
 #: screens/Inventory/InventoryHostFacts/InventoryHostFacts.js:39
 msgid "Facts"
@@ -3066,7 +3095,7 @@ msgstr "True"
 msgid "Fact Storage"
 msgstr "실제 스토리지"
 
-#: screens/Inventory/Inventories.js:22
+#: screens/Inventory/Inventories.js:24
 msgid "Create new inventory"
 msgstr "새 인벤토리 만들기"
 
@@ -3082,11 +3111,11 @@ msgstr "SSH 암호"
 msgid "View OIDC settings"
 msgstr "OIDC 설정 보기"
 
-#: components/AppContainer/PageHeaderToolbar.js:125
+#: components/AppContainer/PageHeaderToolbar.js:174
 msgid "Help"
 msgstr ""
 
-#: screens/Inventory/Inventories.js:96
+#: screens/Inventory/Inventories.js:99
 msgid "Schedule details"
 msgstr "일정 세부 정보"
 
@@ -3155,7 +3184,7 @@ msgstr "호스트 실패"
 #: components/AddRole/AddResourceRole.js:192
 #: components/AddRole/AddResourceRole.js:193
 #: routeConfig.js:124
-#: screens/ActivityStream/ActivityStream.js:188
+#: screens/ActivityStream/ActivityStream.js:191
 #: screens/Organization/Organization.js:125
 #: screens/Organization/OrganizationList/OrganizationList.js:146
 #: screens/Organization/OrganizationList/OrganizationListItem.js:45
@@ -3231,7 +3260,7 @@ msgstr "사용된 용량"
 msgid "Instance ID"
 msgstr "인스턴스 ID"
 
-#: components/AppContainer/PageHeaderToolbar.js:110
+#: components/AppContainer/PageHeaderToolbar.js:159
 msgid "Info"
 msgstr "정보"
 
@@ -3289,6 +3318,7 @@ msgstr "{intervalValue, plural, one {hour} other {hours}}"
 
 #: components/AdHocCommands/useAdHocDetailsStep.js:58
 #: screens/Inventory/shared/ConstructedInventoryForm.js:37
+#: screens/Inventory/shared/FederatedInventoryForm.js:25
 #: screens/Template/shared/JobTemplateForm.js:156
 #: screens/User/shared/UserForm.js:109
 #: screens/User/shared/UserForm.js:120
@@ -3311,6 +3341,7 @@ msgid "Instance Name"
 msgstr "ì¸ì¤í´ì¤ ì´ë¦"
 
 #: screens/Inventory/ConstructedInventory.js:105
+#: screens/Inventory/FederatedInventory.js:96
 #: screens/Inventory/Inventory.js:102
 #: screens/Inventory/SmartInventory.js:102
 msgid "View all Inventories."
@@ -3373,6 +3404,7 @@ msgstr "비교 값보다 적거나 같습니다."
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:134
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:140
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:350
+#: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:192
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:193
 #: screens/Inventory/InventoryGroups/InventoryGroupsList.js:102
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:340
@@ -3506,7 +3538,7 @@ msgstr "토큰 만료 새로 고침"
 msgid "Cannot run health check on hop nodes."
 msgstr "홉 노드에서 상태 점검을 실행할 수 없습니다."
 
-#: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostList.js:89
+#: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostList.js:90
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:152
 #: screens/Organization/OrganizationTeams/OrganizationTeamList.js:77
 msgid "Modified by (username)"
@@ -3546,6 +3578,7 @@ msgstr "GitHub 팀"
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:107
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.js:53
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:308
+#: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:164
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:165
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:44
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:82
@@ -3623,7 +3656,7 @@ msgstr "{nodeName} 노드 제거"
 msgid "Sun"
 msgstr "일요일"
 
-#: screens/Dashboard/Dashboard.js:143
+#: screens/Dashboard/Dashboard.js:145
 msgid "Job status graph tab"
 msgstr "작업 상태 그래프 탭"
 
@@ -3650,11 +3683,11 @@ msgstr "8월"
 msgid "View smart inventory host details"
 msgstr "스마트 인벤토리 호스트 세부 정보 보기"
 
-#: screens/Login/Login.js:375
+#: screens/Login/Login.js:369
 msgid "Sign in with Google"
 msgstr "Google로 로그인"
 
-#: contexts/Config.js:130
+#: contexts/Config.js:138
 msgid "Failed to retrieve configuration."
 msgstr "구성을 검색하지 못했습니다."
 
@@ -4099,7 +4132,8 @@ msgid "Delete Job Template"
 msgstr "작업 템플릿 삭제"
 
 #: routeConfig.js:170
-#: screens/TopologyView/TopologyView.js:43
+#: screens/TopologyView/TopologyView.js:15
+#: screens/TopologyView/TopologyView.js:45
 msgid "Topology View"
 msgstr "토폴로지 보기"
 
@@ -4165,7 +4199,7 @@ msgstr "모든 호스트 보기"
 msgid "Tags for the Annotation"
 msgstr "주석 태그"
 
-#: screens/Inventory/Inventories.js:83
+#: screens/Inventory/Inventories.js:86
 #: screens/Inventory/InventoryGroup/InventoryGroup.js:62
 #: screens/Inventory/InventoryHosts/InventoryHostItem.js:89
 #: screens/Inventory/InventoryHosts/InventoryHostItem.js:92
@@ -4194,6 +4228,7 @@ msgstr "인증 정보 삭제"
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:126
 #: screens/Instances/InstanceDetail/InstanceDetail.js:371
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:325
+#: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:181
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:182
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:60
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:67
@@ -4234,8 +4269,8 @@ msgstr "인증 정보 삭제"
 #: screens/Setting/TACACS/TACACSDetail/TACACSDetail.js:108
 #: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.js:92
 #: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.js:96
-#: screens/Setting/UI/UIDetail/UIDetail.js:105
 #: screens/Setting/UI/UIDetail/UIDetail.js:110
+#: screens/Setting/UI/UIDetail/UIDetail.js:115
 #: screens/Team/TeamDetail/TeamDetail.js:66
 #: screens/Team/TeamDetail/TeamDetail.js:70
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:500
@@ -4304,7 +4339,7 @@ msgstr "이 링크를 제거하면 나머지 분기가 분리되고 시작 시 �
 msgid "description"
 msgstr "설명"
 
-#: screens/Inventory/InventoryList/InventoryList.js:295
+#: screens/Inventory/InventoryList/InventoryList.js:306
 msgid "Failed to delete one or more inventories."
 msgstr "하나 이상의 인벤토리를 삭제하지 못했습니다."
 
@@ -4334,7 +4369,7 @@ msgstr "삭제됨"
 msgid "You do not have permission to remove instances: {itemsUnableToremove}"
 msgstr "인스턴스를 제거할 수 있는 권한이 없습니다. {itemsUnableToremove}"
 
-#: screens/Dashboard/Dashboard.js:163
+#: screens/Dashboard/Dashboard.js:165
 msgid "Recent Templates list tab"
 msgstr "최근 템플릿 목록 탭"
 
@@ -4502,7 +4537,7 @@ msgstr "목록에서 항목 선택"
 #~ "path used to locate playbooks."
 #~ msgstr "플레이북을 찾는 데 사용되는 기본 경로입니다. 이 경로 내에 있는 디렉터리가 플레이북 디렉터리 드롭다운에 나열됩니다. 기본 경로 및 선택한 플레이북 디렉터리를 사용하면 플레이북을 찾는 데 사용되는 전체 경로가 제공됩니다."
 
-#: screens/Dashboard/Dashboard.js:145
+#: screens/Dashboard/Dashboard.js:147
 msgid "Job status"
 msgstr "작업 상태"
 
@@ -4684,7 +4719,7 @@ msgstr "조직 세부 정보 보기"
 #: components/Schedule/ScheduleToggle/ScheduleToggle.js:75
 #: components/Schedule/shared/SchedulePromptableFields.js:64
 #: components/TemplateList/TemplateList.js:306
-#: contexts/Config.js:126
+#: contexts/Config.js:134
 #: screens/Application/ApplicationDetails/ApplicationDetails.js:142
 #: screens/Application/ApplicationsList/ApplicationsList.js:182
 #: screens/Credential/CredentialDetail/CredentialDetail.js:315
@@ -4692,7 +4727,7 @@ msgstr "조직 세부 정보 보기"
 #: screens/Host/HostDetail/HostDetail.js:57
 #: screens/Host/HostDetail/HostDetail.js:128
 #: screens/Host/HostGroups/HostGroupsList.js:246
-#: screens/Host/HostList/HostList.js:231
+#: screens/Host/HostList/HostList.js:234
 #: screens/HostMetrics/HostMetricsDeleteButton.js:109
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:367
 #: screens/InstanceGroup/Instances/InstanceList.js:387
@@ -4706,6 +4741,7 @@ msgstr "조직 세부 정보 보기"
 #: screens/Instances/Shared/RemoveInstanceButton.js:106
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:358
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventorySyncButton.js:45
+#: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:200
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:202
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:84
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.js:294
@@ -4715,7 +4751,7 @@ msgstr "조직 세부 정보 보기"
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.js:257
 #: screens/Inventory/InventoryHosts/InventoryHostItem.js:131
 #: screens/Inventory/InventoryHosts/InventoryHostList.js:206
-#: screens/Inventory/InventoryList/InventoryList.js:292
+#: screens/Inventory/InventoryList/InventoryList.js:303
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:272
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:347
 #: screens/Inventory/InventorySources/InventorySourceList.js:240
@@ -4743,7 +4779,7 @@ msgstr "조직 세부 정보 보기"
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:181
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:196
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:339
-#: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.js:378
+#: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.js:379
 #: screens/TopologyView/MeshGraph.js:418
 #: screens/TopologyView/Tooltip.js:199
 #: screens/User/UserDetail/UserDetail.js:132
@@ -4866,11 +4902,11 @@ msgstr "호스트를 전환하지 못했습니다."
 msgid "denied"
 msgstr "거부됨"
 
-#: screens/Login/Login.js:344
+#: screens/Login/Login.js:338
 msgid "Sign in with GitHub Enterprise Organizations"
 msgstr "GitHub Enterprise 조직으로 로그인"
 
-#: screens/ActivityStream/ActivityStream.js:199
+#: screens/ActivityStream/ActivityStream.js:202
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:118
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:172
 #: screens/NotificationTemplate/NotificationTemplates.js:15
@@ -4887,8 +4923,8 @@ msgstr "메시지 본문 시작"
 msgid "Branch to use on inventory sync. Project default used if blank. Only allowed if project allow_override field is set to true."
 msgstr "인벤토리 동기화 시 사용할 분기. 비어 있는 경우 프로젝트 기본값이 사용됩니다. 프로젝트 allow_override 필드가 true로 설정된 경우에만 허용됩니다."
 
-#: screens/ActivityStream/ActivityStream.js:253
-#: screens/ActivityStream/ActivityStream.js:263
+#: screens/ActivityStream/ActivityStream.js:256
+#: screens/ActivityStream/ActivityStream.js:266
 #: screens/ActivityStream/ActivityStreamDetailButton.js:44
 msgid "Initiated by"
 msgstr "초기자"
@@ -4999,8 +5035,8 @@ msgstr "워크플로우 승인 메시지"
 #: components/Schedule/ScheduleList/ScheduleList.js:166
 #: components/Schedule/ScheduleList/ScheduleList.js:236
 #: routeConfig.js:47
-#: screens/ActivityStream/ActivityStream.js:154
-#: screens/Inventory/Inventories.js:92
+#: screens/ActivityStream/ActivityStream.js:157
+#: screens/Inventory/Inventories.js:95
 #: screens/Inventory/InventorySource/InventorySource.js:89
 #: screens/ManagementJob/ManagementJob.js:109
 #: screens/ManagementJob/ManagementJobs.js:24
@@ -5032,7 +5068,7 @@ msgstr "시스템 경고"
 #: components/AdHocCommands/AdHocExecutionEnvironmentStep.js:104
 #: components/LaunchPrompt/steps/ExecutionEnvironmentStep.js:108
 #: routeConfig.js:165
-#: screens/ActivityStream/ActivityStream.js:217
+#: screens/ActivityStream/ActivityStream.js:220
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:130
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:193
 #: screens/ExecutionEnvironment/ExecutionEnvironments.js:13
@@ -5186,7 +5222,7 @@ msgstr "텍스트 영역"
 msgid "View User Interface settings"
 msgstr "사용자 인터페이스 설정 보기"
 
-#: screens/Login/Login.js:313
+#: screens/Login/Login.js:307
 msgid "Sign in with GitHub Teams"
 msgstr "GitHub 팀으로 로그인"
 
@@ -5251,6 +5287,7 @@ msgstr "접기"
 #: components/TemplateList/TemplateListItem.js:304
 #: routeConfig.js:78
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:258
+#: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:121
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:140
 #: screens/Inventory/shared/InventoryForm.js:84
 #: screens/Job/JobDetail/JobDetail.js:506
@@ -5280,7 +5317,7 @@ msgstr "상태 선택"
 #: components/Schedule/shared/FrequencyDetailSubform.js:185
 #: components/Schedule/shared/ScheduleFormFields.js:134
 #: components/Schedule/shared/ScheduleFormFields.js:200
-#: screens/SubscriptionUsage/ChartComponents/UsageChart.js:175
+#: screens/SubscriptionUsage/ChartComponents/UsageChart.js:191
 msgid "Month"
 msgstr "월"
 
@@ -5295,7 +5332,7 @@ msgstr "월"
 #: components/TemplateList/TemplateListItem.js:280
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:120
 #: routeConfig.js:88
-#: screens/ActivityStream/ActivityStream.js:168
+#: screens/ActivityStream/ActivityStream.js:171
 #: screens/Credential/CredentialList/CredentialList.js:196
 #: screens/Credential/Credentials.js:15
 #: screens/Credential/Credentials.js:26
@@ -5346,7 +5383,7 @@ msgstr "채널"
 msgid "Select a row to approve"
 msgstr "승인할 행 선택"
 
-#: screens/SubscriptionUsage/ChartComponents/UsageChart.js:131
+#: screens/SubscriptionUsage/ChartComponents/UsageChart.js:145
 msgid "Unique Hosts"
 msgstr "독특한 호스트"
 
@@ -5633,7 +5670,7 @@ msgstr "로컬 인증을 비활성화하시겠습니까? 이렇게 하면 로그
 msgid "Allow Branch Override"
 msgstr "분기 덮어쓰기 허용"
 
-#: screens/Inventory/Inventories.js:88
+#: screens/Inventory/Inventories.js:91
 msgid "Create new source"
 msgstr "새 소스 만들기"
 
@@ -5707,7 +5744,7 @@ msgstr "인증 정보 세부 정보보기"
 
 #: components/NotificationList/NotificationList.js:178
 #: routeConfig.js:140
-#: screens/Inventory/Inventories.js:97
+#: screens/Inventory/Inventories.js:100
 #: screens/Inventory/InventorySource/InventorySource.js:100
 #: screens/ManagementJob/ManagementJob.js:117
 #: screens/ManagementJob/ManagementJobs.js:23
@@ -5784,7 +5821,7 @@ msgstr "애플리케이션으로 돌아가기"
 msgid "login type"
 msgstr "로그인 유형"
 
-#: screens/Inventory/Inventories.js:80
+#: screens/Inventory/Inventories.js:83
 msgid "Group details"
 msgstr "그룹 세부 정보"
 
@@ -5893,7 +5930,7 @@ msgstr "링크 상태 유형"
 #: components/TemplateList/TemplateList.js:205
 #: components/TemplateList/TemplateList.js:270
 #: routeConfig.js:83
-#: screens/ActivityStream/ActivityStream.js:165
+#: screens/ActivityStream/ActivityStream.js:168
 #: screens/ExecutionEnvironment/ExecutionEnvironment.js:71
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateList.js:83
 #: screens/Template/Templates.js:18
@@ -5965,7 +6002,7 @@ msgstr ""
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:524
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:258
 #: routeConfig.js:150
-#: screens/ActivityStream/ActivityStream.js:205
+#: screens/ActivityStream/ActivityStream.js:208
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:108
 #: screens/InstanceGroup/InstanceGroups.js:17
 #: screens/InstanceGroup/InstanceGroups.js:28
@@ -6069,7 +6106,7 @@ msgstr "선택한 작업 취소"
 msgid "Started"
 msgstr "시작됨"
 
-#: components/AppContainer/PageHeaderToolbar.js:82
+#: components/AppContainer/PageHeaderToolbar.js:131
 msgid "Pending Workflow Approvals"
 msgstr "워크플로우 승인 보류 중"
 
@@ -6123,7 +6160,7 @@ msgstr "설문 조사"
 
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:231
 #: routeConfig.js:114
-#: screens/ActivityStream/ActivityStream.js:182
+#: screens/ActivityStream/ActivityStream.js:185
 #: screens/Organization/OrganizationList/OrganizationList.js:118
 #: screens/Organization/OrganizationList/OrganizationList.js:164
 #: screens/Organization/Organizations.js:17
@@ -6204,7 +6241,7 @@ msgstr ""
 msgid "Workflow Job 1/{0}"
 msgstr "워크플로 작업 1/{0}"
 
-#: screens/Inventory/InventoryList/InventoryList.js:262
+#: screens/Inventory/InventoryList/InventoryList.js:273
 msgid "The inventories will be in a pending status until the final delete is processed."
 msgstr "최종 삭제가 처리될 때까지 재고는 보류 중 상태가 됩니다."
 
@@ -6256,7 +6293,7 @@ msgstr "알 수 없는 완료일"
 msgid "toggle changes"
 msgstr "변경 사항 토글"
 
-#: screens/ActivityStream/ActivityStream.js:130
+#: screens/ActivityStream/ActivityStream.js:131
 msgid "Select an activity type"
 msgstr "활동 유형 선택"
 
@@ -6411,7 +6448,8 @@ msgstr "목요일"
 #: screens/Credential/Credential.js:100
 #: screens/Credential/Credentials.js:32
 #: screens/Inventory/ConstructedInventory.js:80
-#: screens/Inventory/Inventories.js:64
+#: screens/Inventory/FederatedInventory.js:75
+#: screens/Inventory/Inventories.js:67
 #: screens/Inventory/Inventory.js:77
 #: screens/Inventory/SmartInventory.js:77
 #: screens/Project/Project.js:107
@@ -6489,7 +6527,7 @@ msgstr "작업 취소"
 msgid "First Name"
 msgstr "이름"
 
-#: screens/Inventory/InventoryGroups/InventoryGroupsList.js:129
+#: screens/Inventory/InventoryGroups/InventoryGroupsList.js:131
 msgid "Show only root groups"
 msgstr "root 그룹만 표시"
 
@@ -6498,6 +6536,7 @@ msgid "Toggle instance"
 msgstr "인스턴스 전환"
 
 #: screens/Inventory/ConstructedInventory.js:64
+#: screens/Inventory/FederatedInventory.js:64
 #: screens/Inventory/Inventory.js:59
 #: screens/Inventory/SmartInventory.js:62
 msgid "Back to Inventories"
@@ -6519,12 +6558,12 @@ msgstr "구성된 인벤토리 플러그인 사용 방법"
 #~ msgid "This field must not contain spaces"
 #~ msgstr "이 필드에는 공백을 포함할 수 없습니다."
 
-#: screens/Inventory/InventoryList/InventoryList.js:254
+#: screens/Inventory/InventoryList/InventoryList.js:265
 msgid "This inventory is currently being used by some templates. Are you sure you want to delete it?"
 msgstr "이 인벤토리는 현재 일부 템플릿에서 사용되고 있습니다. 정말로 삭제하시겠습니까?"
 
 #: routeConfig.js:135
-#: screens/ActivityStream/ActivityStream.js:193
+#: screens/ActivityStream/ActivityStream.js:196
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.js:118
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.js:161
 #: screens/CredentialType/CredentialTypes.js:14
@@ -6746,8 +6785,8 @@ msgstr "템플릿을 찾을 수 없습니다."
 msgid "Trial"
 msgstr "평가판"
 
-#: screens/ActivityStream/ActivityStream.js:249
-#: screens/ActivityStream/ActivityStream.js:261
+#: screens/ActivityStream/ActivityStream.js:252
+#: screens/ActivityStream/ActivityStream.js:264
 #: screens/ActivityStream/ActivityStreamDetailButton.js:41
 #: screens/ActivityStream/ActivityStreamListItem.js:42
 msgid "Time"
@@ -6786,7 +6825,7 @@ msgstr "LDAP3"
 msgid "Note that you may still see the group in the list after disassociating if the host is also a member of that group’s children.  This list shows all groups the host is associated with directly and indirectly."
 msgstr "호스트도 해당 그룹의 자녀 중 하나인 경우, 연결 해제 후에도 목록에 그룹이 표시될 수 있습니다. 이 목록에는 호스트가 직간접적으로 연관된 모든 그룹이 표시됩니다."
 
-#: screens/Dashboard/Dashboard.js:84
+#: screens/Dashboard/Dashboard.js:86
 #: screens/SubscriptionUsage/SubscriptionUsage.js:30
 msgid "<0><1/> A tech preview of the new {brandName} user interface can be found <2>here</2>.</0>"
 msgstr "< 0 > < 1/> 새로운 {brandName} 사용자 인터페이스의 기술 미리보기는 < 2 > 여기 </2 > 에서 찾을 수 있습니다. </0 >"
@@ -6855,11 +6894,12 @@ msgid "Collapse section"
 msgstr "섹션 축소"
 
 #: routeConfig.js:110
-#: screens/ActivityStream/ActivityStream.js:180
+#: screens/ActivityStream/ActivityStream.js:183
 #: screens/Credential/Credential.js:90
 #: screens/Credential/Credentials.js:31
 #: screens/Inventory/ConstructedInventory.js:71
-#: screens/Inventory/Inventories.js:61
+#: screens/Inventory/FederatedInventory.js:71
+#: screens/Inventory/Inventories.js:64
 #: screens/Inventory/Inventory.js:67
 #: screens/Inventory/SmartInventory.js:69
 #: screens/Organization/Organization.js:124
@@ -6905,7 +6945,7 @@ msgstr "동시 작업 활성화"
 #: screens/Host/HostList/SmartInventoryButton.js:42
 #: screens/Host/HostList/SmartInventoryButton.js:51
 #: screens/Host/HostList/SmartInventoryButton.js:55
-#: screens/Inventory/InventoryList/InventoryList.js:198
+#: screens/Inventory/InventoryList/InventoryList.js:208
 #: screens/Inventory/InventoryList/InventoryListItem.js:55
 msgid "Smart Inventory"
 msgstr "스마트 인벤토리"
@@ -7096,8 +7136,8 @@ msgstr "팔로우"
 #: components/LaunchPrompt/steps/CredentialsStep.js:255
 #: components/LaunchPrompt/steps/InventoryStep.js:93
 #: components/Lookup/CredentialLookup.js:199
-#: components/Lookup/InventoryLookup.js:161
-#: components/Lookup/InventoryLookup.js:217
+#: components/Lookup/InventoryLookup.js:168
+#: components/Lookup/InventoryLookup.js:224
 #: components/Lookup/MultiCredentialsLookup.js:203
 #: components/Lookup/OrganizationLookup.js:139
 #: components/Lookup/ProjectLookup.js:148
@@ -7117,12 +7157,12 @@ msgstr "팔로우"
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.js:136
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateList.js:106
 #: screens/Host/HostGroups/HostGroupsList.js:170
-#: screens/Host/HostList/HostList.js:160
+#: screens/Host/HostList/HostList.js:163
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.js:206
-#: screens/Inventory/InventoryGroups/InventoryGroupsList.js:136
+#: screens/Inventory/InventoryGroups/InventoryGroupsList.js:138
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.js:179
 #: screens/Inventory/InventoryHosts/InventoryHostList.js:133
-#: screens/Inventory/InventoryList/InventoryList.js:215
+#: screens/Inventory/InventoryList/InventoryList.js:226
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:191
 #: screens/Organization/OrganizationExecEnvList/OrganizationExecEnvList.js:97
 #: screens/Organization/OrganizationList/OrganizationList.js:136
@@ -7175,7 +7215,7 @@ msgstr "최대"
 #~ msgid "MOST RECENT SYNC"
 #~ msgstr ""
 
-#: screens/Inventory/InventoryList/InventoryList.js:231
+#: screens/Inventory/InventoryList/InventoryList.js:242
 msgid "Sync Status"
 msgstr "동기화 상태"
 
@@ -7279,7 +7319,7 @@ msgstr "LDAP4"
 #~ "Grafana URL."
 #~ msgstr "Grafana 서버의 기본 URL - /api/annotations 엔드포인트가 기본 Grafana URL에 자동으로 추가됩니다."
 
-#: screens/Dashboard/shared/LineChart.js:169
+#: screens/Dashboard/shared/LineChart.js:181
 msgid "Date"
 msgstr "날짜"
 
@@ -7295,6 +7335,11 @@ msgstr "사용자 및 자동화 분석"
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:156
 msgid "Failed to delete one or more groups."
 msgstr "하나 이상의 그룹을 삭제하지 못했습니다."
+
+#: components/AppContainer/PageHeaderToolbar.js:108
+#: components/AppContainer/PageHeaderToolbar.js:113
+msgid "Switch to dark mode"
+msgstr ""
 
 #: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.js:197
 msgid "Confirm Disable Local Authorization"
@@ -7418,7 +7463,7 @@ msgid "Finish Time"
 msgstr "완료 시간"
 
 #: components/RelatedTemplateList/RelatedTemplateList.js:201
-#: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostList.js:116
+#: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostList.js:117
 #: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostListItem.js:43
 msgid "Recent jobs"
 msgstr "최근 작업"
@@ -7467,7 +7512,7 @@ msgstr "호스트 필터"
 #~ msgid "{numJobsToCancel, plural, one {This action will cancel the following job:} other {This action will cancel the following jobs:}}"
 #~ msgstr "{numJobsToCancel, plural, one {This action will cancel the following job:} other {This action will cancel the following jobs:}}"
 
-#: screens/ActivityStream/ActivityStream.js:238
+#: screens/ActivityStream/ActivityStream.js:241
 msgid "Keyword"
 msgstr "키워드"
 
@@ -7547,7 +7592,7 @@ msgstr "캐시 제한 시간 (초)"
 
 #: components/AppContainer/AppContainer.js:84
 #: components/AppContainer/AppContainer.js:155
-#: components/AppContainer/PageHeaderToolbar.js:179
+#: components/AppContainer/PageHeaderToolbar.js:226
 msgid "Logout"
 msgstr "로그 아웃"
 
@@ -7641,12 +7686,13 @@ msgstr "동기화"
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:160
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironmentForm.js:128
 #: screens/Host/HostDetail/HostDetail.js:76
-#: screens/Host/HostList/HostList.js:152
-#: screens/Host/HostList/HostList.js:171
+#: screens/Host/HostList/HostList.js:155
+#: screens/Host/HostList/HostList.js:174
 #: screens/Host/HostList/HostListItem.js:49
 #: screens/Instances/Shared/InstanceForm.js:40
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.js:38
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:163
+#: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:85
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:96
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:35
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.js:220
@@ -7654,10 +7700,11 @@ msgstr "동기화"
 #: screens/Inventory/InventoryHosts/InventoryHostItem.js:83
 #: screens/Inventory/InventoryHosts/InventoryHostList.js:125
 #: screens/Inventory/InventoryHosts/InventoryHostList.js:142
-#: screens/Inventory/InventoryList/InventoryList.js:207
+#: screens/Inventory/InventoryList/InventoryList.js:218
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:208
 #: screens/Inventory/shared/ConstructedInventoryForm.js:69
 #: screens/Inventory/shared/ConstructedInventoryHint.js:70
+#: screens/Inventory/shared/FederatedInventoryForm.js:59
 #: screens/Inventory/shared/InventoryForm.js:59
 #: screens/Inventory/shared/InventoryGroupForm.js:41
 #: screens/Inventory/shared/InventorySourceForm.js:130
@@ -7774,7 +7821,7 @@ msgstr "팀 편집"
 msgid "User Interface"
 msgstr "사용자 인터페이스"
 
-#: screens/Login/Login.js:328
+#: screens/Login/Login.js:322
 msgid "Sign in with GitHub Enterprise"
 msgstr "GitHub Enterprise로 로그인"
 
@@ -7788,6 +7835,7 @@ msgstr "GitHub Enterprise로 로그인"
 #: screens/Credential/shared/CredentialForm.js:45
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironmentForm.js:80
 #: screens/Inventory/shared/ConstructedInventoryForm.js:79
+#: screens/Inventory/shared/FederatedInventoryForm.js:69
 #: screens/Inventory/shared/InventoryForm.js:73
 #: screens/Inventory/shared/InventorySourceSubForms/AzureSubForm.js:47
 #: screens/Inventory/shared/InventorySourceSubForms/ControllerSubForm.js:46
@@ -7823,7 +7871,7 @@ msgstr "이 필드의 값을 선택"
 msgid "View job {0}"
 msgstr "작업 {0} 보기 "
 
-#: screens/Login/Login.js:407
+#: screens/Login/Login.js:401
 msgid "Sign in with SAML {samlIDP}"
 msgstr "SAML {samlIDP}으로 로그인"
 
@@ -7951,11 +7999,11 @@ msgstr "처음에 대소문자를 구분하지 않는 버전입니다."
 msgid "Unsaved changes modal"
 msgstr "저장되지 않은 변경 사항 모달"
 
-#: screens/Login/Login.js:360
+#: screens/Login/Login.js:354
 msgid "Sign in with GitHub Enterprise Teams"
 msgstr "GitHub Enterprise 팀으로 로그인"
 
-#: components/Lookup/InventoryLookup.js:128
+#: components/Lookup/InventoryLookup.js:135
 msgid ""
 "Select the inventory containing the hosts\n"
 "            you want this job to manage."
@@ -7970,7 +8018,7 @@ msgstr "인수"
 msgid "Construct 2 groups, limit to intersection"
 msgstr "2개 그룹 구성, 교차로로 제한"
 
-#: screens/Inventory/InventoryList/InventoryListItem.js:74
+#: screens/Inventory/InventoryList/InventoryListItem.js:75
 msgid "# sources with sync failures."
 msgstr "# sources 동기화 실패."
 
@@ -7991,7 +8039,7 @@ msgstr "Grafana URL"
 msgid "GitHub settings"
 msgstr "GitHub 설정"
 
-#: screens/Login/Login.js:298
+#: screens/Login/Login.js:292
 msgid "Sign in with GitHub Organizations"
 msgstr "GitHub 조직으로 로그인"
 
@@ -8015,7 +8063,7 @@ msgstr "하나 이상의 그룹을 연결 해제하지 못했습니다."
 msgid "Token information"
 msgstr "토큰 정보"
 
-#: screens/Inventory/InventoryList/InventoryListItem.js:73
+#: screens/Inventory/InventoryList/InventoryListItem.js:74
 msgid "# source with sync failures."
 msgstr "# source 동기화 실패."
 
@@ -8045,6 +8093,10 @@ msgstr "종료일/시간"
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:73
 msgid "Credential to authenticate with Kubernetes or OpenShift"
 msgstr "Kubernetes 또는 OpenShift로 인증하는 인증 정보"
+
+#: screens/Inventory/FederatedInventory.js:95
+msgid "Federated Inventory not found."
+msgstr ""
 
 #: components/JobList/JobList.js:223
 #: components/JobList/JobListItem.js:48
@@ -8118,7 +8170,7 @@ msgstr "모든 필터 지우기"
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.js:35
 #: screens/Setting/TACACS/TACACSDetail/TACACSDetail.js:49
 #: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.js:54
-#: screens/Setting/UI/UIDetail/UIDetail.js:59
+#: screens/Setting/UI/UIDetail/UIDetail.js:61
 msgid "Back to Settings"
 msgstr "설정으로 돌아가기"
 
@@ -8153,7 +8205,7 @@ msgstr "서브스크립션 설정"
 
 #: components/TemplateList/TemplateList.js:303
 #: screens/Credential/CredentialList/CredentialList.js:212
-#: screens/Inventory/InventoryList/InventoryList.js:291
+#: screens/Inventory/InventoryList/InventoryList.js:302
 #: screens/Project/ProjectList/ProjectList.js:291
 msgid "Deletion Error"
 msgstr "삭제 오류"
@@ -8400,7 +8452,7 @@ msgstr "인벤토리 파일"
 msgid "Refresh for revision"
 msgstr "버전 새로 고침"
 
-#: screens/Dashboard/Dashboard.js:129
+#: screens/Dashboard/Dashboard.js:131
 msgid "Project sync failures"
 msgstr "프로젝트 동기화 실패"
 
@@ -8470,6 +8522,11 @@ msgstr "패널 ID (선택 사항)"
 #: screens/Template/shared/JobTemplateForm.js:605
 msgid "Prevent Instance Group Fallback"
 msgstr "인스턴스 그룹 폴백 방지"
+
+#: components/AppContainer/PageHeaderToolbar.js:108
+#: components/AppContainer/PageHeaderToolbar.js:113
+msgid "Switch to light mode"
+msgstr ""
 
 #: screens/InstanceGroup/shared/InstanceGroupForm.js:59
 msgid "Maximum number of forks to allow across all jobs running concurrently on this group. Zero means no limit will be enforced."
@@ -8585,11 +8642,11 @@ msgstr "새 애플리케이션 만들기"
 msgid "Plays"
 msgstr "플레이"
 
-#: screens/ActivityStream/ActivityStream.js:243
+#: screens/ActivityStream/ActivityStream.js:246
 msgid "Initiated by (username)"
 msgstr "초기자 (사용자 이름)"
 
-#: screens/Inventory/InventoryList/InventoryListItem.js:78
+#: screens/Inventory/InventoryList/InventoryListItem.js:79
 msgid "No inventory sync failures."
 msgstr "인벤토리 동기화 실패 없음"
 
@@ -8601,7 +8658,7 @@ msgstr "참고: 선택한 순서에 따라 실행 우선 순위가 설정됩니�
 #~ msgid "Credentials that require passwords on launch are not permitted.  Please remove or replace the following credentials with a credential of the same type in order to proceed: {0}"
 #~ msgstr "시작 시 암호가 필요한 인증 정보는 허용되지 않습니다. 계속하려면 삭제하거나 동일한 유형의 인증 정보로 교체하십시오. {0}"
 
-#: screens/Login/Login.js:389
+#: screens/Login/Login.js:383
 msgid "Sign in with OIDC"
 msgstr "OIDC로 로그인"
 
@@ -8615,8 +8672,8 @@ msgstr "삭제 확인"
 msgid "Activity Stream type selector"
 msgstr "활동 스트림 유형 선택기"
 
-#: screens/Inventory/Inventories.js:68
-#: screens/Inventory/Inventories.js:82
+#: screens/Inventory/Inventories.js:71
+#: screens/Inventory/Inventories.js:85
 msgid "Create new host"
 msgstr "새 호스트 만들기"
 
@@ -8753,7 +8810,7 @@ msgstr "용량"
 msgid "Provisioning Callback details"
 msgstr "프로비저닝 호출 세부 정보"
 
-#: screens/Dashboard/Dashboard.js:153
+#: screens/Dashboard/Dashboard.js:155
 msgid "Recent Jobs"
 msgstr "최근 작업"
 
@@ -8771,8 +8828,8 @@ msgstr "다음은 {brandName}에서 명령 실행을 지원하는 모듈입니�
 msgid "Workflow link modal"
 msgstr "워크플로우 링크 모달"
 
-#: screens/Inventory/InventoryList/InventoryListItem.js:142
-#: screens/Inventory/InventoryList/InventoryListItem.js:147
+#: screens/Inventory/InventoryList/InventoryListItem.js:143
+#: screens/Inventory/InventoryList/InventoryListItem.js:148
 msgid "Edit Inventory"
 msgstr "인벤토리 편집"
 
@@ -8786,7 +8843,7 @@ msgstr "사용자 토큰에 실패했습니다."
 #~ "assigned to this group when new instances come online."
 #~ msgstr "새 인스턴스가 온라인 상태가 되면 이 그룹에 자동으로 할당되는 최소 인스턴스 수입니다."
 
-#: screens/Login/Login.js:408
+#: screens/Login/Login.js:402
 msgid "Sign in with SAML"
 msgstr "SAML으로 로그인"
 
@@ -8949,7 +9006,7 @@ msgstr "워크플로우 문서"
 msgid "January"
 msgstr "1월"
 
-#: screens/Login/Login.js:253
+#: screens/Login/Login.js:247
 msgid "Sign in with Azure AD"
 msgstr "Azure AD로 로그인"
 
@@ -8992,6 +9049,7 @@ msgid "Failed to sync project."
 msgstr "프로젝트를 동기화하지 못했습니다."
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:196
+#: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:106
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:109
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:123
 msgid "Total hosts"
@@ -9065,11 +9123,11 @@ msgstr "콘텐츠 로딩 중"
 
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:162
 #: routeConfig.js:98
-#: screens/ActivityStream/ActivityStream.js:174
-#: screens/Dashboard/Dashboard.js:112
-#: screens/Inventory/Inventories.js:21
-#: screens/Inventory/InventoryList/InventoryList.js:185
-#: screens/Inventory/InventoryList/InventoryList.js:249
+#: screens/ActivityStream/ActivityStream.js:177
+#: screens/Dashboard/Dashboard.js:114
+#: screens/Inventory/Inventories.js:23
+#: screens/Inventory/InventoryList/InventoryList.js:195
+#: screens/Inventory/InventoryList/InventoryList.js:260
 msgid "Inventories"
 msgstr "인벤토리"
 
@@ -9104,7 +9162,7 @@ msgid "START"
 msgstr "시작"
 
 #: routeConfig.js:74
-#: screens/ActivityStream/ActivityStream.js:160
+#: screens/ActivityStream/ActivityStream.js:163
 msgid "Resources"
 msgstr "리소스"
 
@@ -9226,7 +9284,7 @@ msgstr "연결 해제 확인"
 msgid "View all execution environments"
 msgstr "모든 실행 환경 보기"
 
-#: screens/Inventory/Inventories.js:87
+#: screens/Inventory/Inventories.js:90
 #: screens/Inventory/Inventory.js:70
 msgid "Sources"
 msgstr "소스"
@@ -9285,7 +9343,7 @@ msgstr "하이브리드 노드"
 msgid "Notification Type"
 msgstr "알림 유형"
 
-#: screens/ActivityStream/ActivityStream.js:148
+#: screens/ActivityStream/ActivityStream.js:151
 msgid "Dashboard (all activity)"
 msgstr "대시보드(모든 활동)"
 
@@ -9396,11 +9454,11 @@ msgstr "호스트 동기화 확인"
 #~ "호스트만 반환하는 제한 (호스트 패턴)\n"
 #~ "이 두 그룹의 교차점에 있습니다."
 
-#: screens/Dashboard/Dashboard.js:166
+#: screens/Dashboard/Dashboard.js:168
 msgid "Recent Templates"
 msgstr "최근 템플릿"
 
-#: screens/ActivityStream/ActivityStream.js:211
+#: screens/ActivityStream/ActivityStream.js:214
 msgid "Applications & Tokens"
 msgstr "애플리케이션 및 토큰"
 
@@ -9434,7 +9492,7 @@ msgstr "애플리케이션 및 토큰"
 #~ msgid "Source Control URL"
 #~ msgstr ""
 
-#: screens/Dashboard/shared/LineChart.js:129
+#: screens/Dashboard/shared/LineChart.js:140
 msgid "Job Runs"
 msgstr "작업 실행"
 
@@ -9548,7 +9606,7 @@ msgstr "고급"
 #: components/AddRole/AddResourceRole.js:182
 #: components/AddRole/AddResourceRole.js:183
 #: routeConfig.js:119
-#: screens/ActivityStream/ActivityStream.js:185
+#: screens/ActivityStream/ActivityStream.js:188
 #: screens/Team/Teams.js:32
 #: screens/User/UserList/UserList.js:111
 #: screens/User/UserList/UserList.js:154
@@ -9747,6 +9805,7 @@ msgid "Provisioning Callback URL"
 msgstr "콜백 URL 프로비저닝"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:313
+#: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:169
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:196
 #: screens/User/UserTokenList/UserTokenList.js:154
 msgid "Modified"
@@ -9771,7 +9830,7 @@ msgstr ""
 msgid "Related search type"
 msgstr "관련 검색 유형"
 
-#: components/AppContainer/PageHeaderToolbar.js:164
+#: components/AppContainer/PageHeaderToolbar.js:211
 msgid "User details"
 msgstr "사용자 세부 정보"
 
@@ -9811,8 +9870,8 @@ msgstr "Insights 인증 정보"
 #: components/JobList/JobList.js:201
 #: components/JobList/JobList.js:288
 #: routeConfig.js:42
-#: screens/ActivityStream/ActivityStream.js:151
-#: screens/Dashboard/shared/LineChart.js:65
+#: screens/ActivityStream/ActivityStream.js:154
+#: screens/Dashboard/shared/LineChart.js:75
 #: screens/Host/Host.js:75
 #: screens/Host/Hosts.js:33
 #: screens/InstanceGroup/ContainerGroup.js:72
@@ -9820,8 +9879,9 @@ msgstr "Insights 인증 정보"
 #: screens/InstanceGroup/InstanceGroups.js:37
 #: screens/InstanceGroup/InstanceGroups.js:43
 #: screens/Inventory/ConstructedInventory.js:75
-#: screens/Inventory/Inventories.js:62
-#: screens/Inventory/Inventories.js:72
+#: screens/Inventory/FederatedInventory.js:74
+#: screens/Inventory/Inventories.js:65
+#: screens/Inventory/Inventories.js:75
 #: screens/Inventory/Inventory.js:72
 #: screens/Inventory/InventoryHost/InventoryHost.js:88
 #: screens/Inventory/SmartInventory.js:72
@@ -9885,11 +9945,11 @@ msgstr "동료를 연결하지 못했습니다."
 #~ msgid "Tags are useful when you have a large playbook, and you want to run a specific part of a play or task. Use commas to separate multiple tags. Refer to the documentation for details on the usage of tags."
 #~ msgstr "태그는 대용량 플레이북이 있고 플레이 또는 작업의 특정 부분을 실행하려는 경우 유용합니다. 쉼표를 사용하여 여러 태그를 구분합니다. 태그 사용에 대한 자세한 내용은 문서를 참조하십시오."
 
-#: screens/ActivityStream/ActivityStream.js:234
+#: screens/ActivityStream/ActivityStream.js:237
 msgid "Events"
 msgstr "이벤트"
 
-#: screens/Inventory/InventoryGroups/InventoryGroupsList.js:127
+#: screens/Inventory/InventoryGroups/InventoryGroupsList.js:129
 msgid "Group type"
 msgstr "그룹 유형"
 
@@ -9956,8 +10016,8 @@ msgstr "시스템 관리자"
 
 #: routeConfig.js:177
 #: routeConfig.js:181
-#: screens/ActivityStream/ActivityStream.js:220
-#: screens/ActivityStream/ActivityStream.js:222
+#: screens/ActivityStream/ActivityStream.js:223
+#: screens/ActivityStream/ActivityStream.js:225
 #: screens/Setting/Settings.js:45
 msgid "Settings"
 msgstr "설정"
@@ -10055,7 +10115,7 @@ msgstr "실패가 있는 재고 소스"
 #: screens/Instances/InstanceDetail/InstanceDetail.js:201
 #: screens/Instances/InstanceList/InstanceList.js:232
 #: screens/Instances/InstanceList/InstanceListItem.js:153
-#: screens/Inventory/InventoryList/InventoryListItem.js:107
+#: screens/Inventory/InventoryList/InventoryListItem.js:108
 #: screens/Inventory/InventorySources/InventorySourceList.js:213
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:67
 #: screens/Job/JobDetail/JobDetail.js:237
@@ -10076,7 +10136,7 @@ msgstr "상태"
 msgid "Are you sure you want to delete:"
 msgstr "삭제하시겠습니까"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.js:381
+#: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.js:382
 msgid "Failed to retrieve full node resource object."
 msgstr "전체 노드 리소스 오브젝트를 검색하지 못했습니다."
 
@@ -10114,10 +10174,11 @@ msgstr "툴 전환"
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:169
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:91
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:179
+#: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:95
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:101
-#: screens/Inventory/InventoryList/InventoryList.js:203
-#: screens/Inventory/InventoryList/InventoryList.js:233
-#: screens/Inventory/InventoryList/InventoryListItem.js:127
+#: screens/Inventory/InventoryList/InventoryList.js:214
+#: screens/Inventory/InventoryList/InventoryList.js:244
+#: screens/Inventory/InventoryList/InventoryListItem.js:128
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:212
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:111
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:167
@@ -10140,25 +10201,26 @@ msgstr "툴 전환"
 msgid "Organization"
 msgstr "조직"
 
-#: screens/Login/Login.js:200
+#: screens/Login/Login.js:193
 msgid "Your session has expired. Please log in to continue where you left off."
 msgstr "세션이 만료되었습니다. 세션이 만료되기 전의 위치에서 계속하려면 로그인하십시오."
 
-#: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostList.js:85
+#: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostList.js:86
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:148
 #: screens/Organization/OrganizationTeams/OrganizationTeamList.js:73
 msgid "Created by (username)"
 msgstr "(사용자 이름)에 의해 생성됨"
 
-#: screens/SubscriptionUsage/ChartComponents/UsageChart.js:261
+#: screens/SubscriptionUsage/ChartComponents/UsageChart.js:277
 msgid "Subscriptions consumed"
 msgstr "사용한 구독"
 
-#: screens/Dashboard/Dashboard.js:118
+#: screens/Dashboard/Dashboard.js:120
 msgid "Inventory sync failures"
 msgstr "인벤토리 동기화 실패"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:348
+#: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:190
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:191
 msgid "This inventory is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "이 인벤토리는 현재 다른 리소스에서 사용하고 있습니다. 삭제하시겠습니까?"
@@ -10201,7 +10263,7 @@ msgstr "세 번째"
 #~ msgid "Note: This instance may be re-associated with this instance group if it is managed by"
 #~ msgstr "참고: 이 인스턴스가 에서 관리하는 경우 이 인스턴스 그룹과 다시 연결될 수 있습니다."
 
-#: screens/Login/Login.js:268
+#: screens/Login/Login.js:262
 msgid "Sign in with Azure AD Tenant"
 msgstr ""
 
@@ -10256,8 +10318,9 @@ msgstr "검색 취소"
 #: screens/Instances/Instances.js:28
 #: screens/Inventory/AdvancedInventoryHost/AdvancedInventoryHost.js:60
 #: screens/Inventory/ConstructedInventory.js:70
-#: screens/Inventory/Inventories.js:63
-#: screens/Inventory/Inventories.js:90
+#: screens/Inventory/FederatedInventory.js:70
+#: screens/Inventory/Inventories.js:66
+#: screens/Inventory/Inventories.js:93
 #: screens/Inventory/Inventory.js:66
 #: screens/Inventory/InventoryGroup/InventoryGroup.js:57
 #: screens/Inventory/InventoryHost/InventoryHost.js:73
@@ -10310,7 +10373,7 @@ msgstr "검색 취소"
 #: screens/Setting/Settings.js:128
 #: screens/Setting/TACACS/TACACSDetail/TACACSDetail.js:56
 #: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.js:61
-#: screens/Setting/UI/UIDetail/UIDetail.js:66
+#: screens/Setting/UI/UIDetail/UIDetail.js:68
 #: screens/Team/Team.js:58
 #: screens/Team/Teams.js:31
 #: screens/Template/Template.js:136
@@ -10387,7 +10450,7 @@ msgstr "활성화되면 제어 노드가 이 인스턴스를 자동으로 피어
 msgid "and click on Update Revision on Launch"
 msgstr "실행 시 버전 업데이트를 클릭합니다"
 
-#: components/AppContainer/PageHeaderToolbar.js:135
+#: components/AppContainer/PageHeaderToolbar.js:184
 msgid "About"
 msgstr "정보"
 
@@ -10536,7 +10599,7 @@ msgid "End user license agreement"
 msgstr "최종 사용자 라이센스 계약"
 
 #: routeConfig.js:57
-#: screens/ActivityStream/ActivityStream.js:157
+#: screens/ActivityStream/ActivityStream.js:160
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:168
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:204
 #: screens/WorkflowApproval/WorkflowApprovals.js:14
@@ -10567,10 +10630,10 @@ msgstr "SOCIAL"
 #: screens/ExecutionEnvironment/ExecutionEnvironments.js:26
 #: screens/InstanceGroup/InstanceGroups.js:38
 #: screens/InstanceGroup/InstanceGroups.js:44
-#: screens/Inventory/Inventories.js:65
-#: screens/Inventory/Inventories.js:70
-#: screens/Inventory/Inventories.js:79
-#: screens/Inventory/Inventories.js:91
+#: screens/Inventory/Inventories.js:68
+#: screens/Inventory/Inventories.js:73
+#: screens/Inventory/Inventories.js:82
+#: screens/Inventory/Inventories.js:94
 msgid "Edit details"
 msgstr "세부 정보 편집"
 
@@ -10598,7 +10661,7 @@ msgstr "UTC"
 msgid "Skip every"
 msgstr "모두 건너뛰기"
 
-#: screens/Inventory/Inventories.js:94
+#: screens/Inventory/Inventories.js:97
 #: screens/ManagementJob/ManagementJobs.js:25
 #: screens/Project/Projects.js:33
 #: screens/Template/Templates.js:53
@@ -11016,6 +11079,7 @@ msgid "Survey Toggle"
 msgstr "설문조사 토글"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:190
+#: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:112
 msgid "Total groups"
 msgstr "총 그룹"
 
@@ -11056,6 +11120,12 @@ msgstr "마지막으로 변경된 사항"
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeViewModal.js:135
 msgid "Click the Edit button below to reconfigure the node."
 msgstr "노드를 재구성하려면 아래의 편집 버튼을 클릭합니다."
+
+#: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:91
+#: screens/Inventory/InventoryList/InventoryList.js:210
+#: screens/Inventory/InventoryList/InventoryListItem.js:57
+msgid "Federated Inventory"
+msgstr ""
 
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:187
 msgid "Failed to delete organization."
@@ -11190,7 +11260,7 @@ msgstr "LDAP1"
 msgid "Add container group"
 msgstr "컨테이너 그룹 추가"
 
-#: screens/Inventory/InventoryList/InventoryList.js:261
+#: screens/Inventory/InventoryList/InventoryList.js:272
 msgid "The inventory will be in a pending status until the final delete is processed."
 msgstr "최종 삭제가 처리될 때까지 인벤토리는 보류 중 상태가 됩니다."
 
@@ -11240,7 +11310,7 @@ msgstr "인스턴스 그룹"
 #: components/TemplateList/TemplateList.js:248
 #: components/TemplateList/TemplateListItem.js:141
 #: screens/Host/HostDetail/HostDetail.js:72
-#: screens/Host/HostList/HostList.js:169
+#: screens/Host/HostList/HostList.js:172
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.js:34
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.js:222
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.js:53
@@ -11251,7 +11321,7 @@ msgstr "인스턴스 그룹"
 msgid "Activity"
 msgstr "활동"
 
-#: screens/Inventory/InventoryList/InventoryListItem.js:159
+#: screens/Inventory/InventoryList/InventoryListItem.js:160
 msgid "Inventories with sources cannot be copied"
 msgstr "소스와 함께 인벤토리를 복사할 수 없습니다."
 
@@ -11294,7 +11364,7 @@ msgstr "이름"
 msgid "Select roles to apply"
 msgstr "적용할 역할 선택"
 
-#: screens/Host/HostList/HostList.js:234
+#: screens/Host/HostList/HostList.js:237
 #: screens/Inventory/InventoryHosts/InventoryHostList.js:209
 msgid "Failed to delete one or more hosts."
 msgstr "하나 이상의 호스트를 삭제하지 못했습니다."
@@ -11324,7 +11394,7 @@ msgstr "변경 사항 표시"
 msgid "Exact search on name field."
 msgstr "이름 필드에 대한 정확한 검색."
 
-#: screens/Inventory/InventoryList/InventoryList.js:255
+#: screens/Inventory/InventoryList/InventoryList.js:266
 msgid "Deleting these inventories could impact some templates that rely on them. Are you sure you want to delete anyway?"
 msgstr "이러한 인벤토리를 삭제하면 인벤토리에 의존하는 일부 템플릿에 영향을 미칠 수 있습니다. 그래도 삭제하시겠습니까?"
 
@@ -11340,7 +11410,7 @@ msgstr "하나 이상의 인벤토리 소스를 삭제하지 못했습니다."
 msgid "If specified, this field will be shown on the node instead of the resource name when viewing the workflow"
 msgstr "지정된 경우 이 필드는 워크플로우를 볼 때 리소스 이름 대신 노드에 표시됩니다."
 
-#: screens/Login/Login.js:283
+#: screens/Login/Login.js:277
 msgid "Sign in with GitHub"
 msgstr "GitHub로 로그인"
 
@@ -11511,7 +11581,7 @@ msgstr "역할을 삭제하지 못했습니다"
 msgid "Successfully Denied"
 msgstr "성공적으로 거부됨"
 
-#: screens/Inventory/InventoryList/InventoryListItem.js:81
+#: screens/Inventory/InventoryList/InventoryListItem.js:82
 msgid "Not configured for inventory sync."
 msgstr "인벤토리 동기화에 대해 구성되지 않았습니다."
 
@@ -11581,7 +11651,7 @@ msgstr "인스턴스를 업데이트하지 못했습니다."
 msgid "Hosts by processor type"
 msgstr "프로세서 유형별 호스트"
 
-#: screens/Inventory/Inventories.js:24
+#: screens/Inventory/Inventories.js:26
 msgid "Create new constructed inventory"
 msgstr "새 인벤토리 생성"
 
@@ -11594,7 +11664,7 @@ msgid "Team not found."
 msgstr "팀을 찾을 수 없음"
 
 #: components/LaunchButton/ReLaunchDropDown.js:62
-#: screens/Dashboard/Dashboard.js:107
+#: screens/Dashboard/Dashboard.js:109
 msgid "Failed hosts"
 msgstr "실패한 호스트"
 
@@ -11678,7 +11748,7 @@ msgstr "새 역할을 받을 리소스 유형을 선택합니다. 예를 들어 
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressListItem.js:25
 #: screens/Instances/InstancePeers/InstancePeerListItem.js:43
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.js:43
-#: screens/Inventory/InventoryList/InventoryListItem.js:96
+#: screens/Inventory/InventoryList/InventoryListItem.js:97
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupListItem.js:38
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.js:110
 #: screens/Organization/OrganizationList/OrganizationListItem.js:33
@@ -11990,7 +12060,7 @@ msgstr "소스 전화 번호"
 msgid "{0} seconds"
 msgstr "{0} 초"
 
-#: screens/Inventory/InventoryList/InventoryList.js:194
+#: screens/Inventory/InventoryList/InventoryList.js:204
 msgid "Inventory Type"
 msgstr "인벤토리 유형"
 
@@ -12074,12 +12144,13 @@ msgstr "연결에 실패했습니다."
 #: screens/Host/HostGroups/HostGroupsList.js:233
 #: screens/Host/Hosts.js:32
 #: screens/Inventory/ConstructedInventory.js:73
-#: screens/Inventory/Inventories.js:74
-#: screens/Inventory/Inventories.js:76
+#: screens/Inventory/FederatedInventory.js:73
+#: screens/Inventory/Inventories.js:77
+#: screens/Inventory/Inventories.js:79
 #: screens/Inventory/Inventory.js:68
 #: screens/Inventory/InventoryHost/InventoryHost.js:83
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.js:244
-#: screens/Inventory/InventoryList/InventoryListItem.js:135
+#: screens/Inventory/InventoryList/InventoryListItem.js:136
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:259
 msgid "Groups"
 msgstr "그룹"
@@ -12127,8 +12198,8 @@ msgstr "관리형 노드"
 #: components/LaunchPrompt/steps/CredentialsStep.js:251
 #: components/LaunchPrompt/steps/InventoryStep.js:89
 #: components/Lookup/CredentialLookup.js:195
-#: components/Lookup/InventoryLookup.js:157
-#: components/Lookup/InventoryLookup.js:213
+#: components/Lookup/InventoryLookup.js:164
+#: components/Lookup/InventoryLookup.js:220
 #: components/Lookup/MultiCredentialsLookup.js:199
 #: components/Lookup/OrganizationLookup.js:135
 #: components/Lookup/ProjectLookup.js:152
@@ -12148,12 +12219,12 @@ msgstr "관리형 노드"
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.js:132
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateList.js:102
 #: screens/Host/HostGroups/HostGroupsList.js:166
-#: screens/Host/HostList/HostList.js:156
+#: screens/Host/HostList/HostList.js:159
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.js:202
-#: screens/Inventory/InventoryGroups/InventoryGroupsList.js:132
+#: screens/Inventory/InventoryGroups/InventoryGroupsList.js:134
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.js:175
 #: screens/Inventory/InventoryHosts/InventoryHostList.js:129
-#: screens/Inventory/InventoryList/InventoryList.js:211
+#: screens/Inventory/InventoryList/InventoryList.js:222
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:187
 #: screens/Organization/OrganizationExecEnvList/OrganizationExecEnvList.js:93
 #: screens/Organization/OrganizationList/OrganizationList.js:132
@@ -12274,11 +12345,11 @@ msgstr "알림 시작 전환"
 #: components/LaunchPrompt/steps/useInventoryStep.js:30
 #: components/Lookup/HostFilterLookup.js:428
 #: components/Lookup/HostListItem.js:11
-#: components/Lookup/InventoryLookup.js:124
-#: components/Lookup/InventoryLookup.js:133
-#: components/Lookup/InventoryLookup.js:174
-#: components/Lookup/InventoryLookup.js:189
-#: components/Lookup/InventoryLookup.js:230
+#: components/Lookup/InventoryLookup.js:131
+#: components/Lookup/InventoryLookup.js:140
+#: components/Lookup/InventoryLookup.js:181
+#: components/Lookup/InventoryLookup.js:196
+#: components/Lookup/InventoryLookup.js:237
 #: components/PromptDetail/PromptDetail.js:222
 #: components/PromptDetail/PromptInventorySourceDetail.js:75
 #: components/PromptDetail/PromptJobTemplateDetail.js:119
@@ -12288,13 +12359,13 @@ msgstr "알림 시작 전환"
 #: components/TemplateList/TemplateListItem.js:243
 #: components/TemplateList/TemplateListItem.js:253
 #: screens/Host/HostDetail/HostDetail.js:78
-#: screens/Host/HostList/HostList.js:173
+#: screens/Host/HostList/HostList.js:176
 #: screens/Host/HostList/HostListItem.js:53
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.js:40
-#: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostList.js:117
+#: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostList.js:118
 #: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostListItem.js:46
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:99
-#: screens/Inventory/InventoryList/InventoryList.js:197
+#: screens/Inventory/InventoryList/InventoryList.js:207
 #: screens/Inventory/InventoryList/InventoryListItem.js:54
 #: screens/Job/JobDetail/JobDetail.js:111
 #: screens/Job/JobDetail/JobDetail.js:131
@@ -12343,7 +12414,7 @@ msgstr "알림 승인 전환"
 msgid "Delete survey question"
 msgstr "설문 조사 질문 삭제"
 
-#: screens/Dashboard/Dashboard.js:151
+#: screens/Dashboard/Dashboard.js:153
 msgid "Recent Jobs list tab"
 msgstr "최근 작업 목록 탭"
 

@@ -191,8 +191,8 @@ msgstr ""
 
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:189
 #: routeConfig.js:93
-#: screens/ActivityStream/ActivityStream.js:171
-#: screens/Dashboard/Dashboard.js:123
+#: screens/ActivityStream/ActivityStream.js:174
+#: screens/Dashboard/Dashboard.js:125
 #: screens/Project/ProjectList/ProjectList.js:181
 #: screens/Project/ProjectList/ProjectList.js:250
 #: screens/Project/Projects.js:13
@@ -206,7 +206,7 @@ msgstr "Proyectos"
 msgid "Saturday"
 msgstr "Sábado"
 
-#: components/CodeEditor/CodeEditor.js:184
+#: components/CodeEditor/CodeEditor.js:200
 msgid "Press Enter to edit. Press ESC to stop editing."
 msgstr "Presione Intro para modificar. Presione ESC para detener la edición."
 
@@ -243,7 +243,7 @@ msgstr "Subdominio Pagerduty"
 msgid "Running health check"
 msgstr "Última comprobación de estado"
 
-#: screens/Inventory/InventoryList/InventoryListItem.js:168
+#: screens/Inventory/InventoryList/InventoryListItem.js:169
 msgid "Failed to copy inventory."
 msgstr "No se pudo copiar el inventario."
 
@@ -365,9 +365,10 @@ msgstr "Seleccionar los roles para aplicar"
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:196
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupListItem.js:68
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:168
+#: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:90
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:99
-#: screens/Inventory/InventoryList/InventoryList.js:232
-#: screens/Inventory/InventoryList/InventoryListItem.js:126
+#: screens/Inventory/InventoryList/InventoryList.js:243
+#: screens/Inventory/InventoryList/InventoryListItem.js:127
 #: screens/Inventory/InventorySources/InventorySourceList.js:214
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:80
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:107
@@ -389,7 +390,7 @@ msgstr "Seleccionar los roles para aplicar"
 msgid "Type"
 msgstr "Tipo"
 
-#: screens/Inventory/InventoryList/InventoryListItem.js:160
+#: screens/Inventory/InventoryList/InventoryListItem.js:161
 msgid "Copy Inventory"
 msgstr "Copiar inventario"
 
@@ -423,8 +424,8 @@ msgstr "Tiempo de espera agotado"
 msgid "Select {0}"
 msgstr "Seleccionar {0}"
 
-#: screens/Inventory/Inventories.js:77
-#: screens/Inventory/Inventories.js:85
+#: screens/Inventory/Inventories.js:80
+#: screens/Inventory/Inventories.js:88
 msgid "Create new group"
 msgstr "Crear nuevo grupo"
 
@@ -510,7 +511,7 @@ msgstr "No se ha podido ejecutar una comprobación de estado en una o más insta
 msgid "Launched By"
 msgstr "Ejecutado por"
 
-#: screens/ActivityStream/ActivityStream.js:265
+#: screens/ActivityStream/ActivityStream.js:268
 #: screens/ActivityStream/ActivityStreamListItem.js:46
 #: screens/Job/JobOutput/JobOutputSearch.js:100
 msgid "Event"
@@ -706,7 +707,7 @@ msgid "JSON:"
 msgstr "JSON:"
 
 #: routeConfig.js:33
-#: screens/ActivityStream/ActivityStream.js:146
+#: screens/ActivityStream/ActivityStream.js:149
 msgid "Views"
 msgstr "Vistas"
 
@@ -842,6 +843,7 @@ msgid ""
 msgstr ""
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:361
+#: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:203
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:205
 msgid "Failed to delete inventory."
 msgstr "No se pudo eliminar el inventario."
@@ -891,7 +893,7 @@ msgstr "HipChat"
 msgid "Refresh Token"
 msgstr "Actualizar token"
 
-#: screens/Inventory/Inventories.js:71
+#: screens/Inventory/Inventories.js:74
 msgid "Host details"
 msgstr "Detalles del host"
 
@@ -912,7 +914,7 @@ msgstr "Números SMS del destinatario"
 msgid "Source control branch"
 msgstr "Rama de fuente de control"
 
-#: screens/Dashboard/Dashboard.js:137
+#: screens/Dashboard/Dashboard.js:139
 #: screens/Job/JobOutput/HostEventModal.js:94
 msgid "Tabs"
 msgstr "Pestañas"
@@ -1368,16 +1370,17 @@ msgstr "Esta plantilla de trabajo del flujo de trabajo está siendo utilizada po
 #~ "directa e indirectamente."
 
 #: routeConfig.js:103
-#: screens/ActivityStream/ActivityStream.js:177
-#: screens/Dashboard/Dashboard.js:101
-#: screens/Host/HostList/HostList.js:142
-#: screens/Host/HostList/HostList.js:191
+#: screens/ActivityStream/ActivityStream.js:180
+#: screens/Dashboard/Dashboard.js:103
+#: screens/Host/HostList/HostList.js:145
+#: screens/Host/HostList/HostList.js:194
 #: screens/Host/Hosts.js:16
 #: screens/Host/Hosts.js:26
-#: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostList.js:75
+#: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostList.js:76
 #: screens/Inventory/ConstructedInventory.js:72
-#: screens/Inventory/Inventories.js:67
-#: screens/Inventory/Inventories.js:81
+#: screens/Inventory/FederatedInventory.js:72
+#: screens/Inventory/Inventories.js:70
+#: screens/Inventory/Inventories.js:84
 #: screens/Inventory/Inventory.js:69
 #: screens/Inventory/InventoryGroup/InventoryGroup.js:67
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.js:192
@@ -1386,7 +1389,7 @@ msgstr "Esta plantilla de trabajo del flujo de trabajo está siendo utilizada po
 #: screens/Inventory/InventoryHosts/InventoryHostList.js:177
 #: screens/Inventory/SmartInventory.js:70
 #: screens/Job/JobOutput/shared/OutputToolbar.js:124
-#: screens/SubscriptionUsage/ChartComponents/UsageChart.js:65
+#: screens/SubscriptionUsage/ChartComponents/UsageChart.js:74
 msgid "Hosts"
 msgstr "Servidores"
 
@@ -1604,6 +1607,10 @@ msgstr "Tokens"
 #~ "el inventario que tiene `collect_facts: true`. El\n"
 #~ "los hechos reales diferirán de un sistema a otro."
 
+#: screens/Inventory/shared/FederatedInventoryForm.js:81
+msgid "Select the source inventories for this federated inventory. When a job is launched, hosts will be routed to each source inventory's instance group automatically."
+msgstr ""
+
 #: components/Schedule/shared/UnsupportedRRuleAlert.js:25
 #~ msgid "This schedule uses complex rules that are not supported in the\\n        UI.  Please use the API to manage this schedule."
 #~ msgstr "Esta programación utiliza reglas complejas que no son compatibles con la\\n        interfaz de usuario.  Utilice la API para gestionar este programa."
@@ -1641,6 +1648,10 @@ msgstr "Nodos totales"
 msgid "Hour"
 msgstr "Hora"
 
+#: screens/Inventory/Inventories.js:27
+msgid "Create new federated inventory"
+msgstr ""
+
 #: components/AddRole/AddResourceRole.js:57
 #: components/AddRole/AddResourceRole.js:73
 #: components/AdHocCommands/AdHocCredentialStep.js:119
@@ -1676,10 +1687,10 @@ msgstr "Hora"
 #: components/Lookup/HostListItem.js:9
 #: components/Lookup/InstanceGroupsLookup.js:104
 #: components/Lookup/InstanceGroupsLookup.js:115
-#: components/Lookup/InventoryLookup.js:152
-#: components/Lookup/InventoryLookup.js:167
-#: components/Lookup/InventoryLookup.js:208
-#: components/Lookup/InventoryLookup.js:223
+#: components/Lookup/InventoryLookup.js:159
+#: components/Lookup/InventoryLookup.js:174
+#: components/Lookup/InventoryLookup.js:215
+#: components/Lookup/InventoryLookup.js:230
 #: components/Lookup/MultiCredentialsLookup.js:194
 #: components/Lookup/MultiCredentialsLookup.js:209
 #: components/Lookup/OrganizationLookup.js:130
@@ -1749,8 +1760,8 @@ msgstr "Hora"
 #: screens/Host/HostGroups/HostGroupItem.js:29
 #: screens/Host/HostGroups/HostGroupsList.js:161
 #: screens/Host/HostGroups/HostGroupsList.js:178
-#: screens/Host/HostList/HostList.js:147
-#: screens/Host/HostList/HostList.js:168
+#: screens/Host/HostList/HostList.js:150
+#: screens/Host/HostList/HostList.js:171
 #: screens/Host/HostList/HostListItem.js:35
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:47
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:50
@@ -1775,18 +1786,19 @@ msgstr "Hora"
 #: screens/Instances/InstancePeers/InstancePeerList.js:309
 #: screens/Instances/InstancePeers/InstancePeerListItem.js:46
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.js:32
-#: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostList.js:80
-#: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostList.js:115
+#: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostList.js:81
+#: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostList.js:116
 #: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostListItem.js:38
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:150
+#: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:80
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:91
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:31
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.js:197
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.js:212
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.js:218
 #: screens/Inventory/InventoryGroups/InventoryGroupItem.js:30
-#: screens/Inventory/InventoryGroups/InventoryGroupsList.js:122
-#: screens/Inventory/InventoryGroups/InventoryGroupsList.js:144
+#: screens/Inventory/InventoryGroups/InventoryGroupsList.js:124
+#: screens/Inventory/InventoryGroups/InventoryGroupsList.js:146
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:73
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupItem.js:37
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.js:170
@@ -1794,10 +1806,10 @@ msgstr "Hora"
 #: screens/Inventory/InventoryHosts/InventoryHostItem.js:69
 #: screens/Inventory/InventoryHosts/InventoryHostList.js:120
 #: screens/Inventory/InventoryHosts/InventoryHostList.js:139
-#: screens/Inventory/InventoryList/InventoryList.js:189
-#: screens/Inventory/InventoryList/InventoryList.js:221
-#: screens/Inventory/InventoryList/InventoryList.js:230
-#: screens/Inventory/InventoryList/InventoryListItem.js:98
+#: screens/Inventory/InventoryList/InventoryList.js:199
+#: screens/Inventory/InventoryList/InventoryList.js:232
+#: screens/Inventory/InventoryList/InventoryList.js:241
+#: screens/Inventory/InventoryList/InventoryListItem.js:99
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:182
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:197
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:238
@@ -1805,6 +1817,7 @@ msgstr "Hora"
 #: screens/Inventory/InventorySources/InventorySourceList.js:212
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:62
 #: screens/Inventory/shared/ConstructedInventoryForm.js:61
+#: screens/Inventory/shared/FederatedInventoryForm.js:51
 #: screens/Inventory/shared/InventoryForm.js:51
 #: screens/Inventory/shared/InventoryGroupForm.js:33
 #: screens/Inventory/shared/InventorySourceForm.js:122
@@ -1946,7 +1959,7 @@ msgstr "Aprobado"
 #: components/SelectedList/DraggableSelectedList.js:103
 #: components/TemplateList/TemplateList.js:253
 #: components/TemplateList/TemplateListItem.js:148
-#: screens/ActivityStream/ActivityStream.js:266
+#: screens/ActivityStream/ActivityStream.js:269
 #: screens/ActivityStream/ActivityStreamListItem.js:49
 #: screens/Application/ApplicationsList/ApplicationListItem.js:49
 #: screens/Application/ApplicationsList/ApplicationsList.js:157
@@ -1958,7 +1971,7 @@ msgstr "Aprobado"
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:102
 #: screens/Host/HostGroups/HostGroupItem.js:35
 #: screens/Host/HostGroups/HostGroupsList.js:179
-#: screens/Host/HostList/HostList.js:174
+#: screens/Host/HostList/HostList.js:177
 #: screens/Host/HostList/HostListItem.js:62
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:201
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupListItem.js:79
@@ -1969,14 +1982,14 @@ msgstr "Aprobado"
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.js:223
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.js:56
 #: screens/Inventory/InventoryGroups/InventoryGroupItem.js:36
-#: screens/Inventory/InventoryGroups/InventoryGroupsList.js:146
+#: screens/Inventory/InventoryGroups/InventoryGroupsList.js:148
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupItem.js:42
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.js:188
 #: screens/Inventory/InventoryHosts/InventoryHostItem.js:106
 #: screens/Inventory/InventoryHosts/InventoryHostItem.js:107
 #: screens/Inventory/InventoryHosts/InventoryHostList.js:145
-#: screens/Inventory/InventoryList/InventoryList.js:234
-#: screens/Inventory/InventoryList/InventoryListItem.js:139
+#: screens/Inventory/InventoryList/InventoryList.js:245
+#: screens/Inventory/InventoryList/InventoryListItem.js:140
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:240
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupListItem.js:46
 #: screens/Inventory/InventorySources/InventorySourceList.js:215
@@ -2008,7 +2021,8 @@ msgid "Event summary not available"
 msgstr "Resumen del evento no disponible."
 
 #: routeConfig.js:37
-#: screens/Dashboard/Dashboard.js:94
+#: screens/Dashboard/Dashboard.js:52
+#: screens/Dashboard/Dashboard.js:96
 msgid "Dashboard"
 msgstr "Panel de control"
 
@@ -2034,7 +2048,7 @@ msgstr "Clave"
 #: components/AddRole/AddResourceRole.js:42
 #: components/ResourceAccessList/ResourceAccessList.js:145
 #: components/ResourceAccessList/ResourceAccessList.js:198
-#: screens/Login/Login.js:233
+#: screens/Login/Login.js:227
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:190
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:305
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:357
@@ -2098,7 +2112,7 @@ msgstr "Roles de equipo"
 #~ msgstr "Este proyecto se está sincronizando y no se puede hacer clic en él hasta que el proceso de sincronización se haya completado"
 
 #: routeConfig.js:131
-#: screens/ActivityStream/ActivityStream.js:191
+#: screens/ActivityStream/ActivityStream.js:194
 msgid "Administration"
 msgstr "Administración"
 
@@ -2173,17 +2187,17 @@ msgstr "Configuración de entrada"
 #. placeholder {0}: inventory.inventory_sources_with_failures
 #. placeholder {0}: itemsToRemove.length
 #. placeholder {1}: import 'styled-components/macro'; import React, { useState, useContext, useEffect } from 'react'; import { useParams } from 'react-router-dom'; import { func, bool, arrayOf } from 'prop-types'; import { Plural, useLingui } from '@lingui/react/macro'; import { Button, Radio, DropdownItem } from '@patternfly/react-core'; import styled from 'styled-components'; import { KebabifiedContext } from 'contexts/Kebabified'; import { GroupsAPI, InventoriesAPI } from 'api'; import { Group } from 'types'; import ErrorDetail from 'components/ErrorDetail'; import AlertModal from 'components/AlertModal'; const ListItem = styled.li` display: flex; font-weight: 600; color: var(--pf-global--danger-color--100); `; const InventoryGroupsDeleteModal = ({ onAfterDelete, isDisabled, groups }) => { const { t } = useLingui(); const [radioOption, setRadioOption] = useState(null); const [isModalOpen, setIsModalOpen] = useState(false); const [isDeleteLoading, setIsDeleteLoading] = useState(false); const [deletionError, setDeletionError] = useState(null); const { id: inventoryId } = useParams(); const { isKebabified, onKebabModalChange } = useContext(KebabifiedContext); useEffect(() => { if (isKebabified) { onKebabModalChange(isModalOpen); } }, [isKebabified, isModalOpen, onKebabModalChange]); const handleDelete = async (option) => { setIsDeleteLoading(true); try { /* eslint-disable no-await-in-loop */ /* Delete groups sequentially to avoid api integrity errors */ /* https://eslint.org/docs/rules/no-await-in-loop#when-not-to-use-it */ for (let i = 0; i < groups.length; i++) { const group = groups[i]; if (option === 'delete') { await GroupsAPI.destroy(+group.id); } else if (option === 'promote') { await InventoriesAPI.promoteGroup(inventoryId, +group.id); } } /* eslint-enable no-await-in-loop */ } catch (error) { setDeletionError(error); } finally { setIsModalOpen(false); setIsDeleteLoading(false); onAfterDelete(); } }; return ( <> {isKebabified ? ( <DropdownItem key="delete" isDisabled={isDisabled || isDeleteLoading} component="button" aria-label={t`Delete`} onClick={() => setIsModalOpen(true)} ouiaId="group-delete-dropdown-item" > {t`Delete`} </DropdownItem> ) : ( <Button variant="secondary" aria-label={t`Delete`} onClick={() => setIsModalOpen(true)} isDisabled={isDisabled || isDeleteLoading} ouiaId="group-delete-button" > {t`Delete`} </Button> )} {isModalOpen && ( <AlertModal isOpen={isModalOpen} variant="danger" title={ <Plural value={groups.length} one={t`Delete Group?`} other={t`Delete Groups?`} /> } onClose={() => setIsModalOpen(false)} actions={[ <Button aria-label={t`Confirm Delete`} onClick={() => handleDelete(radioOption)} variant="danger" key="delete" isDisabled={radioOption === null} ouiaId="delete-modal-confirm-button" > {t`Delete`} </Button>, <Button aria-label={t`Close`} onClick={() => setIsModalOpen(false)} variant="link" key="cancel" ouiaId="delete-modal-cancel-button" > {t`Cancel`} </Button>, ]} > <Plural value={groups.length} one={t`Are you sure you want delete the group below?`} other={t`Are you sure you want delete the groups below?`} /> <div css="padding: 24px 0;"> {groups.map((group) => ( <ListItem key={group.id}>{group.name}</ListItem> ))} </div> <div> <Radio id="radio-delete" key="radio-delete" label={t`Delete All Groups and Hosts`} name="option" onChange={() => setRadioOption('delete')} ouiaId="delete-all-radio-button" /> <Radio css="margin-top: 5px;" id="radio-promote" key="radio-promote" label={t`Promote Child Groups and Hosts`} name="option" onChange={() => setRadioOption('promote')} ouiaId="promote-radio-button" /> </div> </AlertModal> )} {deletionError && ( <AlertModal isOpen={deletionError} variant="error" aria-label={t`deletion error`} title={t`Error!`} onClose={() => setDeletionError(null)} > {t`Failed to delete one or more groups.`} <ErrorDetail error={deletionError} /> </AlertModal> )} </> ); }; InventoryGroupsDeleteModal.propTypes = { onAfterDelete: func.isRequired, groups: arrayOf(Group), isDisabled: bool.isRequired, }; InventoryGroupsDeleteModal.defaultProps = { groups: [], }; export default InventoryGroupsDeleteModal; 
-#. placeholder {1}: import React, { useCallback, useEffect } from 'react'; import { useLocation, useRouteMatch, Link } from 'react-router-dom'; import { Plural, useLingui } from '@lingui/react/macro'; import { Card, PageSection, DropdownItem } from '@patternfly/react-core'; import { InventoriesAPI } from 'api'; import useRequest, { useDeleteItems } from 'hooks/useRequest'; import useSelected from 'hooks/useSelected'; import useToast, { AlertVariant } from 'hooks/useToast'; import AlertModal from 'components/AlertModal'; import DatalistToolbar from 'components/DataListToolbar'; import ErrorDetail from 'components/ErrorDetail'; import PaginatedTable, { HeaderRow, HeaderCell, ToolbarDeleteButton, getSearchableKeys, } from 'components/PaginatedTable'; import { getQSConfig, parseQueryString } from 'util/qs'; import AddDropDownButton from 'components/AddDropDownButton'; import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails'; import useWsInventories from './useWsInventories'; import InventoryListItem from './InventoryListItem'; const QS_CONFIG = getQSConfig('inventory', { page: 1, page_size: 20, order_by: 'name', }); function InventoryList() { const location = useLocation(); const match = useRouteMatch(); const { addToast, Toast, toastProps } = useToast(); const { t } = useLingui(); const { result: { results, itemCount, actions, relatedSearchableKeys, searchableKeys, }, error: contentError, isLoading, request: fetchInventories, } = useRequest( useCallback(async () => { const params = parseQueryString(QS_CONFIG, location.search); const [response, actionsResponse] = await Promise.all([ InventoriesAPI.read(params), InventoriesAPI.readOptions(), ]); return { results: response.data.results, itemCount: response.data.count, actions: actionsResponse.data.actions, relatedSearchableKeys: ( actionsResponse?.data?.related_search_fields || [] ).map((val) => val.slice(0, -8)), searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET), }; }, [location]), { results: [], itemCount: 0, actions: {}, relatedSearchableKeys: [], searchableKeys: [], } ); useEffect(() => { fetchInventories(); }, [fetchInventories]); const fetchInventoriesById = useCallback( async (ids) => { const params = { ...parseQueryString(QS_CONFIG, location.search) }; params.id__in = ids.join(','); const { data } = await InventoriesAPI.read(params); return data.results; }, [location.search] // eslint-disable-line react-hooks/exhaustive-deps ); const inventories = useWsInventories( results, fetchInventories, fetchInventoriesById, QS_CONFIG ); const { selected, isAllSelected, handleSelect, selectAll, clearSelected } = useSelected(inventories); const { isLoading: isDeleteLoading, deleteItems: deleteInventories, deletionError, clearDeletionError, } = useDeleteItems( useCallback( () => Promise.all(selected.map((team) => InventoriesAPI.destroy(team.id))), [selected] ), { allItemsSelected: isAllSelected, } ); const handleInventoryDelete = async () => { await deleteInventories(); clearSelected(); }; const handleCopy = useCallback( (newInventoryId) => { addToast({ id: newInventoryId, title: t`Inventory copied successfully`, variant: AlertVariant.success, hasTimeout: true, }); }, [addToast, t] ); const hasContentLoading = isDeleteLoading || isLoading; const canAdd = actions && actions.POST; const deleteDetailsRequests = relatedResourceDeleteRequests(t).inventory( selected[0] ); const addInventory = t`Add inventory`; const addSmartInventory = t`Add smart inventory`; const addConstructedInventory = t`Add constructed inventory`; const addButton = ( <AddDropDownButton ouiaId="add-inventory-button" key="add" dropdownItems={[ <DropdownItem ouiaId="add-inventory-item" to={`${match.url}/inventory/add/`} component={Link} key={addInventory} aria-label={addInventory} > {addInventory} </DropdownItem>, <DropdownItem ouiaId="add-smart-inventory-item" to={`${match.url}/smart_inventory/add/`} component={Link} key={addSmartInventory} aria-label={addSmartInventory} > {addSmartInventory} </DropdownItem>, <DropdownItem ouiaId="add-constructed-inventory-item" to={`${match.url}/constructed_inventory/add/`} component={Link} key={addConstructedInventory} aria-label={addConstructedInventory} > {addConstructedInventory} </DropdownItem>, ]} /> ); return ( <> <PageSection> <Card> <PaginatedTable contentError={contentError} hasContentLoading={hasContentLoading} items={inventories} itemCount={itemCount} pluralizedItemName={t`Inventories`} qsConfig={QS_CONFIG} toolbarSearchColumns={[ { name: t`Name`, key: 'name__icontains', isDefault: true, }, { name: t`Inventory Type`, key: 'or__kind', options: [ ['', t`Inventory`], ['smart', t`Smart Inventory`], ['constructed', t`Constructed Inventory`], ], }, { name: t`Organization`, key: 'organization__name', }, { name: t`Description`, key: 'description__icontains', }, { name: t`Created By (Username)`, key: 'created_by__username__icontains', }, { name: t`Modified By (Username)`, key: 'modified_by__username__icontains', }, ]} toolbarSortColumns={[ { name: t`Name`, key: 'name', }, ]} toolbarSearchableKeys={searchableKeys} toolbarRelatedSearchableKeys={relatedSearchableKeys} clearSelected={clearSelected} headerRow={ <HeaderRow qsConfig={QS_CONFIG}> <HeaderCell sortKey="name">{t`Name`}</HeaderCell> <HeaderCell>{t`Sync Status`}</HeaderCell> <HeaderCell>{t`Type`}</HeaderCell> <HeaderCell>{t`Organization`}</HeaderCell> <HeaderCell>{t`Actions`}</HeaderCell> </HeaderRow> } renderToolbar={(props) => ( <DatalistToolbar {...props} isAllSelected={isAllSelected} onSelectAll={selectAll} qsConfig={QS_CONFIG} additionalControls={[ ...(canAdd ? [addButton] : []), <ToolbarDeleteButton key="delete" onDelete={handleInventoryDelete} itemsToDelete={selected} pluralizedItemName={t`Inventories`} deleteDetailsRequests={deleteDetailsRequests} deleteMessage={ <Plural value={selected.length} one={t`This inventory is currently being used by some templates. Are you sure you want to delete it?`} other={t`Deleting these inventories could impact some templates that rely on them. Are you sure you want to delete anyway?`} /> } warningMessage={ <Plural value={selected.length} one={t`The inventory will be in a pending status until the final delete is processed.`} other={t`The inventories will be in a pending status until the final delete is processed.`} /> } />, ]} /> )} renderRow={(inventory, index) => ( <InventoryListItem key={inventory.id} value={inventory.name} inventory={inventory} rowIndex={index} fetchInventories={fetchInventories} onSelect={() => { if (!inventory.pending_deletion) { handleSelect(inventory); } }} onCopy={handleCopy} isSelected={selected.some((row) => row.id === inventory.id)} /> )} emptyStateControls={canAdd && addButton} /> </Card> <AlertModal isOpen={deletionError} variant="error" aria-label={t`Deletion Error`} title={t`Error!`} onClose={clearDeletionError} > {t`Failed to delete one or more inventories.`} <ErrorDetail error={deletionError} /> </AlertModal> </PageSection> <Toast {...toastProps} /> </> ); } export default InventoryList; 
+#. placeholder {1}: import React, { useCallback, useEffect } from 'react'; import { useLocation, useRouteMatch, Link } from 'react-router-dom'; import { Plural, useLingui } from '@lingui/react/macro'; import { Card, PageSection, DropdownItem } from '@patternfly/react-core'; import { InventoriesAPI } from 'api'; import useRequest, { useDeleteItems } from 'hooks/useRequest'; import useSelected from 'hooks/useSelected'; import useToast, { AlertVariant } from 'hooks/useToast'; import AlertModal from 'components/AlertModal'; import DatalistToolbar from 'components/DataListToolbar'; import ErrorDetail from 'components/ErrorDetail'; import PaginatedTable, { HeaderRow, HeaderCell, ToolbarDeleteButton, getSearchableKeys, } from 'components/PaginatedTable'; import { getQSConfig, parseQueryString } from 'util/qs'; import AddDropDownButton from 'components/AddDropDownButton'; import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails'; import useWsInventories from './useWsInventories'; import InventoryListItem from './InventoryListItem'; const QS_CONFIG = getQSConfig('inventory', { page: 1, page_size: 20, order_by: 'name', }); function InventoryList() { const location = useLocation(); const match = useRouteMatch(); const { addToast, Toast, toastProps } = useToast(); const { t } = useLingui(); const { result: { results, itemCount, actions, relatedSearchableKeys, searchableKeys, }, error: contentError, isLoading, request: fetchInventories, } = useRequest( useCallback(async () => { const params = parseQueryString(QS_CONFIG, location.search); const [response, actionsResponse] = await Promise.all([ InventoriesAPI.read(params), InventoriesAPI.readOptions(), ]); return { results: response.data.results, itemCount: response.data.count, actions: actionsResponse.data.actions, relatedSearchableKeys: ( actionsResponse?.data?.related_search_fields || [] ).map((val) => val.slice(0, -8)), searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET), }; }, [location]), { results: [], itemCount: 0, actions: {}, relatedSearchableKeys: [], searchableKeys: [], } ); useEffect(() => { fetchInventories(); }, [fetchInventories]); const fetchInventoriesById = useCallback( async (ids) => { const params = { ...parseQueryString(QS_CONFIG, location.search) }; params.id__in = ids.join(','); const { data } = await InventoriesAPI.read(params); return data.results; }, [location.search] // eslint-disable-line react-hooks/exhaustive-deps ); const inventories = useWsInventories( results, fetchInventories, fetchInventoriesById, QS_CONFIG ); const { selected, isAllSelected, handleSelect, selectAll, clearSelected } = useSelected(inventories); const { isLoading: isDeleteLoading, deleteItems: deleteInventories, deletionError, clearDeletionError, } = useDeleteItems( useCallback( () => Promise.all(selected.map((team) => InventoriesAPI.destroy(team.id))), [selected] ), { allItemsSelected: isAllSelected, } ); const handleInventoryDelete = async () => { await deleteInventories(); clearSelected(); }; const handleCopy = useCallback( (newInventoryId) => { addToast({ id: newInventoryId, title: t`Inventory copied successfully`, variant: AlertVariant.success, hasTimeout: true, }); }, [addToast, t] ); const hasContentLoading = isDeleteLoading || isLoading; const canAdd = actions && actions.POST; const deleteDetailsRequests = relatedResourceDeleteRequests(t).inventory( selected[0] ); const addInventory = t`Add inventory`; const addSmartInventory = t`Add smart inventory`; const addConstructedInventory = t`Add constructed inventory`; const addFederatedInventory = t`Add federated inventory`; const addButton = ( <AddDropDownButton ouiaId="add-inventory-button" key="add" dropdownItems={[ <DropdownItem ouiaId="add-inventory-item" to={`${match.url}/inventory/add/`} component={Link} key={addInventory} aria-label={addInventory} > {addInventory} </DropdownItem>, <DropdownItem ouiaId="add-smart-inventory-item" to={`${match.url}/smart_inventory/add/`} component={Link} key={addSmartInventory} aria-label={addSmartInventory} > {addSmartInventory} </DropdownItem>, <DropdownItem ouiaId="add-constructed-inventory-item" to={`${match.url}/constructed_inventory/add/`} component={Link} key={addConstructedInventory} aria-label={addConstructedInventory} > {addConstructedInventory} </DropdownItem>, <DropdownItem ouiaId="add-federated-inventory-item" to={`${match.url}/federated_inventory/add/`} component={Link} key={addFederatedInventory} aria-label={addFederatedInventory} > {addFederatedInventory} </DropdownItem>, ]} /> ); return ( <> <PageSection> <Card> <PaginatedTable contentError={contentError} hasContentLoading={hasContentLoading} items={inventories} itemCount={itemCount} pluralizedItemName={t`Inventories`} qsConfig={QS_CONFIG} toolbarSearchColumns={[ { name: t`Name`, key: 'name__icontains', isDefault: true, }, { name: t`Inventory Type`, key: 'or__kind', options: [ ['', t`Inventory`], ['smart', t`Smart Inventory`], ['constructed', t`Constructed Inventory`], ['federated', t`Federated Inventory`], ], }, { name: t`Organization`, key: 'organization__name', }, { name: t`Description`, key: 'description__icontains', }, { name: t`Created By (Username)`, key: 'created_by__username__icontains', }, { name: t`Modified By (Username)`, key: 'modified_by__username__icontains', }, ]} toolbarSortColumns={[ { name: t`Name`, key: 'name', }, ]} toolbarSearchableKeys={searchableKeys} toolbarRelatedSearchableKeys={relatedSearchableKeys} clearSelected={clearSelected} headerRow={ <HeaderRow qsConfig={QS_CONFIG}> <HeaderCell sortKey="name">{t`Name`}</HeaderCell> <HeaderCell>{t`Sync Status`}</HeaderCell> <HeaderCell>{t`Type`}</HeaderCell> <HeaderCell>{t`Organization`}</HeaderCell> <HeaderCell>{t`Actions`}</HeaderCell> </HeaderRow> } renderToolbar={(props) => ( <DatalistToolbar {...props} isAllSelected={isAllSelected} onSelectAll={selectAll} qsConfig={QS_CONFIG} additionalControls={[ ...(canAdd ? [addButton] : []), <ToolbarDeleteButton key="delete" onDelete={handleInventoryDelete} itemsToDelete={selected} pluralizedItemName={t`Inventories`} deleteDetailsRequests={deleteDetailsRequests} deleteMessage={ <Plural value={selected.length} one={t`This inventory is currently being used by some templates. Are you sure you want to delete it?`} other={t`Deleting these inventories could impact some templates that rely on them. Are you sure you want to delete anyway?`} /> } warningMessage={ <Plural value={selected.length} one={t`The inventory will be in a pending status until the final delete is processed.`} other={t`The inventories will be in a pending status until the final delete is processed.`} /> } />, ]} /> )} renderRow={(inventory, index) => ( <InventoryListItem key={inventory.id} value={inventory.name} inventory={inventory} rowIndex={index} fetchInventories={fetchInventories} onSelect={() => { if (!inventory.pending_deletion) { handleSelect(inventory); } }} onCopy={handleCopy} isSelected={selected.some((row) => row.id === inventory.id)} /> )} emptyStateControls={canAdd && addButton} /> </Card> <AlertModal isOpen={deletionError} variant="error" aria-label={t`Deletion Error`} title={t`Error!`} onClose={clearDeletionError} > {t`Failed to delete one or more inventories.`} <ErrorDetail error={deletionError} /> </AlertModal> </PageSection> <Toast {...toastProps} /> </> ); } export default InventoryList; 
 #. placeholder {1}: import React, { useCallback, useEffect } from 'react'; import { useParams, useLocation } from 'react-router-dom'; import { Plural, useLingui } from '@lingui/react/macro'; import useRequest, { useDeleteItems, useDismissableError, } from 'hooks/useRequest'; import { getQSConfig, parseQueryString } from 'util/qs'; import { InventoriesAPI, InventorySourcesAPI } from 'api'; import PaginatedTable, { HeaderRow, HeaderCell, ToolbarAddButton, ToolbarDeleteButton, ToolbarSyncSourceButton, getSearchableKeys, } from 'components/PaginatedTable'; import useSelected from 'hooks/useSelected'; import DatalistToolbar from 'components/DataListToolbar'; import AlertModal from 'components/AlertModal/AlertModal'; import ErrorDetail from 'components/ErrorDetail/ErrorDetail'; import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails'; import InventorySourceListItem from './InventorySourceListItem'; import useWsInventorySources from './useWsInventorySources'; const QS_CONFIG = getQSConfig('inventory-sources', { page: 1, page_size: 20, order_by: 'name', }); function InventorySourceList() { const { t } = useLingui(); const { inventoryType, id } = useParams(); const { search } = useLocation(); const { isLoading, error: fetchError, result: { result, sourceCount, sourceChoices, sourceChoicesOptions, searchableKeys, relatedSearchableKeys, }, request: fetchSources, } = useRequest( useCallback(async () => { const params = parseQueryString(QS_CONFIG, search); const results = await Promise.all([ InventoriesAPI.readSources(id, params), InventorySourcesAPI.readOptions(), ]); return { result: results[0].data.results, sourceCount: results[0].data.count, sourceChoices: results[1].data.actions.GET.source.choices, sourceChoicesOptions: results[1].data.actions, searchableKeys: getSearchableKeys(results[1].data.actions?.GET), relatedSearchableKeys: ( results[1]?.data?.related_search_fields || [] ).map((val) => val.slice(0, -8)), }; }, [id, search]), { result: [], sourceCount: 0, sourceChoices: [], searchableKeys: [], relatedSearchableKeys: [], } ); const sources = useWsInventorySources(result); const canSyncSources = sources.length > 0 && sources.every((source) => source.summary_fields.user_capabilities.start); const { isLoading: isSyncAllLoading, error: syncAllError, request: syncAll, } = useRequest( useCallback(async () => { if (canSyncSources) { await InventoriesAPI.syncAllSources(id); } }, [id, canSyncSources]) ); useEffect(() => { fetchSources(); }, [fetchSources]); const { selected, isAllSelected, handleSelect, clearSelected, selectAll } = useSelected(sources); const { isLoading: isDeleteLoading, deleteItems: handleDeleteSources, deletionError, clearDeletionError, } = useDeleteItems( useCallback( () => Promise.all( selected.map(({ id: sourceId }) => InventorySourcesAPI.destroy(sourceId) ), [] ), [selected] ), { fetchItems: fetchSources, allItemsSelected: isAllSelected, qsConfig: QS_CONFIG, } ); const { error: syncError, dismissError } = useDismissableError(syncAllError); const deleteRelatedInventoryResources = (resourceId) => [ InventorySourcesAPI.destroyHosts(resourceId), InventorySourcesAPI.destroyGroups(resourceId), ]; const { isLoading: deleteRelatedResourcesLoading, deletionError: deleteRelatedResourcesError, deleteItems: handleDeleteRelatedResources, } = useDeleteItems( useCallback( async () => Promise.all( selected .map(({ id: resourceId }) => deleteRelatedInventoryResources(resourceId) ) .flat() ), [selected] ) ); const handleDelete = async () => { await handleDeleteRelatedResources(); if (!deleteRelatedResourcesError) { await handleDeleteSources(); } clearSelected(); }; const canAdd = sourceChoicesOptions && Object.prototype.hasOwnProperty.call(sourceChoicesOptions, 'POST'); const listUrl = `/inventories/${inventoryType}/${id}/sources/`; const deleteDetailsRequests = relatedResourceDeleteRequests(t).inventorySource( selected[0]?.id ); return ( <> <PaginatedTable contentError={fetchError} toolbarSearchableKeys={searchableKeys} toolbarRelatedSearchableKeys={relatedSearchableKeys} hasContentLoading={ isLoading || isDeleteLoading || isSyncAllLoading || deleteRelatedResourcesLoading } items={sources} itemCount={sourceCount} pluralizedItemName={t`Inventory Sources`} qsConfig={QS_CONFIG} clearSelected={clearSelected} renderToolbar={(props) => ( <DatalistToolbar {...props} isAllSelected={isAllSelected} onSelectAll={selectAll} qsConfig={QS_CONFIG} additionalControls={[ ...(canAdd ? [<ToolbarAddButton key="add" linkTo={`${listUrl}add`} />] : []), <ToolbarDeleteButton key="delete" onDelete={handleDelete} itemsToDelete={selected} pluralizedItemName={t`Inventory Sources`} deleteDetailsRequests={deleteDetailsRequests} deleteMessage={ <Plural value={selected.length} one={t`This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?`} other={t`Deleting these inventory sources could impact other resources that rely on them. Are you sure you want to delete anyway`} /> } />, ...(canSyncSources ? [<ToolbarSyncSourceButton onClick={syncAll} />] : []), ]} /> )} headerRow={ <HeaderRow qsConfig={QS_CONFIG}> <HeaderCell sortKey="name">{t`Name`}</HeaderCell> <HeaderCell>{t`Status`}</HeaderCell> <HeaderCell>{t`Type`}</HeaderCell> <HeaderCell>{t`Actions`}</HeaderCell> </HeaderRow> } renderRow={(inventorySource, index) => { const label = sourceChoices.find( ([scMatch]) => inventorySource.source === scMatch ); return ( <InventorySourceListItem key={inventorySource.id} source={inventorySource} onSelect={() => handleSelect(inventorySource)} label={label[1]} detailUrl={`${listUrl}${inventorySource.id}`} isSelected={selected.some((row) => row.id === inventorySource.id)} rowIndex={index} /> ); }} /> {syncError && ( <AlertModal aria-label={t`Sync error`} isOpen={syncError} variant="error" title={t`Error!`} onClose={dismissError} > {t`Failed to sync some or all inventory sources.`} <ErrorDetail error={syncError} /> </AlertModal> )} {(deletionError || deleteRelatedResourcesError) && ( <AlertModal aria-label={t`Delete error`} isOpen={deletionError || deleteRelatedResourcesError} variant="error" title={t`Error!`} onClose={clearDeletionError} > {t`Failed to delete one or more inventory sources.`} <ErrorDetail error={deletionError || deleteRelatedResourcesError} /> </AlertModal> )} </> ); } export default InventorySourceList; 
 #. placeholder {2}: import 'styled-components/macro'; import React, { useState, useContext, useEffect } from 'react'; import { useParams } from 'react-router-dom'; import { func, bool, arrayOf } from 'prop-types'; import { Plural, useLingui } from '@lingui/react/macro'; import { Button, Radio, DropdownItem } from '@patternfly/react-core'; import styled from 'styled-components'; import { KebabifiedContext } from 'contexts/Kebabified'; import { GroupsAPI, InventoriesAPI } from 'api'; import { Group } from 'types'; import ErrorDetail from 'components/ErrorDetail'; import AlertModal from 'components/AlertModal'; const ListItem = styled.li` display: flex; font-weight: 600; color: var(--pf-global--danger-color--100); `; const InventoryGroupsDeleteModal = ({ onAfterDelete, isDisabled, groups }) => { const { t } = useLingui(); const [radioOption, setRadioOption] = useState(null); const [isModalOpen, setIsModalOpen] = useState(false); const [isDeleteLoading, setIsDeleteLoading] = useState(false); const [deletionError, setDeletionError] = useState(null); const { id: inventoryId } = useParams(); const { isKebabified, onKebabModalChange } = useContext(KebabifiedContext); useEffect(() => { if (isKebabified) { onKebabModalChange(isModalOpen); } }, [isKebabified, isModalOpen, onKebabModalChange]); const handleDelete = async (option) => { setIsDeleteLoading(true); try { /* eslint-disable no-await-in-loop */ /* Delete groups sequentially to avoid api integrity errors */ /* https://eslint.org/docs/rules/no-await-in-loop#when-not-to-use-it */ for (let i = 0; i < groups.length; i++) { const group = groups[i]; if (option === 'delete') { await GroupsAPI.destroy(+group.id); } else if (option === 'promote') { await InventoriesAPI.promoteGroup(inventoryId, +group.id); } } /* eslint-enable no-await-in-loop */ } catch (error) { setDeletionError(error); } finally { setIsModalOpen(false); setIsDeleteLoading(false); onAfterDelete(); } }; return ( <> {isKebabified ? ( <DropdownItem key="delete" isDisabled={isDisabled || isDeleteLoading} component="button" aria-label={t`Delete`} onClick={() => setIsModalOpen(true)} ouiaId="group-delete-dropdown-item" > {t`Delete`} </DropdownItem> ) : ( <Button variant="secondary" aria-label={t`Delete`} onClick={() => setIsModalOpen(true)} isDisabled={isDisabled || isDeleteLoading} ouiaId="group-delete-button" > {t`Delete`} </Button> )} {isModalOpen && ( <AlertModal isOpen={isModalOpen} variant="danger" title={ <Plural value={groups.length} one={t`Delete Group?`} other={t`Delete Groups?`} /> } onClose={() => setIsModalOpen(false)} actions={[ <Button aria-label={t`Confirm Delete`} onClick={() => handleDelete(radioOption)} variant="danger" key="delete" isDisabled={radioOption === null} ouiaId="delete-modal-confirm-button" > {t`Delete`} </Button>, <Button aria-label={t`Close`} onClick={() => setIsModalOpen(false)} variant="link" key="cancel" ouiaId="delete-modal-cancel-button" > {t`Cancel`} </Button>, ]} > <Plural value={groups.length} one={t`Are you sure you want delete the group below?`} other={t`Are you sure you want delete the groups below?`} /> <div css="padding: 24px 0;"> {groups.map((group) => ( <ListItem key={group.id}>{group.name}</ListItem> ))} </div> <div> <Radio id="radio-delete" key="radio-delete" label={t`Delete All Groups and Hosts`} name="option" onChange={() => setRadioOption('delete')} ouiaId="delete-all-radio-button" /> <Radio css="margin-top: 5px;" id="radio-promote" key="radio-promote" label={t`Promote Child Groups and Hosts`} name="option" onChange={() => setRadioOption('promote')} ouiaId="promote-radio-button" /> </div> </AlertModal> )} {deletionError && ( <AlertModal isOpen={deletionError} variant="error" aria-label={t`deletion error`} title={t`Error!`} onClose={() => setDeletionError(null)} > {t`Failed to delete one or more groups.`} <ErrorDetail error={deletionError} /> </AlertModal> )} </> ); }; InventoryGroupsDeleteModal.propTypes = { onAfterDelete: func.isRequired, groups: arrayOf(Group), isDisabled: bool.isRequired, }; InventoryGroupsDeleteModal.defaultProps = { groups: [], }; export default InventoryGroupsDeleteModal; 
-#. placeholder {2}: import React, { useCallback, useEffect } from 'react'; import { useLocation, useRouteMatch, Link } from 'react-router-dom'; import { Plural, useLingui } from '@lingui/react/macro'; import { Card, PageSection, DropdownItem } from '@patternfly/react-core'; import { InventoriesAPI } from 'api'; import useRequest, { useDeleteItems } from 'hooks/useRequest'; import useSelected from 'hooks/useSelected'; import useToast, { AlertVariant } from 'hooks/useToast'; import AlertModal from 'components/AlertModal'; import DatalistToolbar from 'components/DataListToolbar'; import ErrorDetail from 'components/ErrorDetail'; import PaginatedTable, { HeaderRow, HeaderCell, ToolbarDeleteButton, getSearchableKeys, } from 'components/PaginatedTable'; import { getQSConfig, parseQueryString } from 'util/qs'; import AddDropDownButton from 'components/AddDropDownButton'; import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails'; import useWsInventories from './useWsInventories'; import InventoryListItem from './InventoryListItem'; const QS_CONFIG = getQSConfig('inventory', { page: 1, page_size: 20, order_by: 'name', }); function InventoryList() { const location = useLocation(); const match = useRouteMatch(); const { addToast, Toast, toastProps } = useToast(); const { t } = useLingui(); const { result: { results, itemCount, actions, relatedSearchableKeys, searchableKeys, }, error: contentError, isLoading, request: fetchInventories, } = useRequest( useCallback(async () => { const params = parseQueryString(QS_CONFIG, location.search); const [response, actionsResponse] = await Promise.all([ InventoriesAPI.read(params), InventoriesAPI.readOptions(), ]); return { results: response.data.results, itemCount: response.data.count, actions: actionsResponse.data.actions, relatedSearchableKeys: ( actionsResponse?.data?.related_search_fields || [] ).map((val) => val.slice(0, -8)), searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET), }; }, [location]), { results: [], itemCount: 0, actions: {}, relatedSearchableKeys: [], searchableKeys: [], } ); useEffect(() => { fetchInventories(); }, [fetchInventories]); const fetchInventoriesById = useCallback( async (ids) => { const params = { ...parseQueryString(QS_CONFIG, location.search) }; params.id__in = ids.join(','); const { data } = await InventoriesAPI.read(params); return data.results; }, [location.search] // eslint-disable-line react-hooks/exhaustive-deps ); const inventories = useWsInventories( results, fetchInventories, fetchInventoriesById, QS_CONFIG ); const { selected, isAllSelected, handleSelect, selectAll, clearSelected } = useSelected(inventories); const { isLoading: isDeleteLoading, deleteItems: deleteInventories, deletionError, clearDeletionError, } = useDeleteItems( useCallback( () => Promise.all(selected.map((team) => InventoriesAPI.destroy(team.id))), [selected] ), { allItemsSelected: isAllSelected, } ); const handleInventoryDelete = async () => { await deleteInventories(); clearSelected(); }; const handleCopy = useCallback( (newInventoryId) => { addToast({ id: newInventoryId, title: t`Inventory copied successfully`, variant: AlertVariant.success, hasTimeout: true, }); }, [addToast, t] ); const hasContentLoading = isDeleteLoading || isLoading; const canAdd = actions && actions.POST; const deleteDetailsRequests = relatedResourceDeleteRequests(t).inventory( selected[0] ); const addInventory = t`Add inventory`; const addSmartInventory = t`Add smart inventory`; const addConstructedInventory = t`Add constructed inventory`; const addButton = ( <AddDropDownButton ouiaId="add-inventory-button" key="add" dropdownItems={[ <DropdownItem ouiaId="add-inventory-item" to={`${match.url}/inventory/add/`} component={Link} key={addInventory} aria-label={addInventory} > {addInventory} </DropdownItem>, <DropdownItem ouiaId="add-smart-inventory-item" to={`${match.url}/smart_inventory/add/`} component={Link} key={addSmartInventory} aria-label={addSmartInventory} > {addSmartInventory} </DropdownItem>, <DropdownItem ouiaId="add-constructed-inventory-item" to={`${match.url}/constructed_inventory/add/`} component={Link} key={addConstructedInventory} aria-label={addConstructedInventory} > {addConstructedInventory} </DropdownItem>, ]} /> ); return ( <> <PageSection> <Card> <PaginatedTable contentError={contentError} hasContentLoading={hasContentLoading} items={inventories} itemCount={itemCount} pluralizedItemName={t`Inventories`} qsConfig={QS_CONFIG} toolbarSearchColumns={[ { name: t`Name`, key: 'name__icontains', isDefault: true, }, { name: t`Inventory Type`, key: 'or__kind', options: [ ['', t`Inventory`], ['smart', t`Smart Inventory`], ['constructed', t`Constructed Inventory`], ], }, { name: t`Organization`, key: 'organization__name', }, { name: t`Description`, key: 'description__icontains', }, { name: t`Created By (Username)`, key: 'created_by__username__icontains', }, { name: t`Modified By (Username)`, key: 'modified_by__username__icontains', }, ]} toolbarSortColumns={[ { name: t`Name`, key: 'name', }, ]} toolbarSearchableKeys={searchableKeys} toolbarRelatedSearchableKeys={relatedSearchableKeys} clearSelected={clearSelected} headerRow={ <HeaderRow qsConfig={QS_CONFIG}> <HeaderCell sortKey="name">{t`Name`}</HeaderCell> <HeaderCell>{t`Sync Status`}</HeaderCell> <HeaderCell>{t`Type`}</HeaderCell> <HeaderCell>{t`Organization`}</HeaderCell> <HeaderCell>{t`Actions`}</HeaderCell> </HeaderRow> } renderToolbar={(props) => ( <DatalistToolbar {...props} isAllSelected={isAllSelected} onSelectAll={selectAll} qsConfig={QS_CONFIG} additionalControls={[ ...(canAdd ? [addButton] : []), <ToolbarDeleteButton key="delete" onDelete={handleInventoryDelete} itemsToDelete={selected} pluralizedItemName={t`Inventories`} deleteDetailsRequests={deleteDetailsRequests} deleteMessage={ <Plural value={selected.length} one={t`This inventory is currently being used by some templates. Are you sure you want to delete it?`} other={t`Deleting these inventories could impact some templates that rely on them. Are you sure you want to delete anyway?`} /> } warningMessage={ <Plural value={selected.length} one={t`The inventory will be in a pending status until the final delete is processed.`} other={t`The inventories will be in a pending status until the final delete is processed.`} /> } />, ]} /> )} renderRow={(inventory, index) => ( <InventoryListItem key={inventory.id} value={inventory.name} inventory={inventory} rowIndex={index} fetchInventories={fetchInventories} onSelect={() => { if (!inventory.pending_deletion) { handleSelect(inventory); } }} onCopy={handleCopy} isSelected={selected.some((row) => row.id === inventory.id)} /> )} emptyStateControls={canAdd && addButton} /> </Card> <AlertModal isOpen={deletionError} variant="error" aria-label={t`Deletion Error`} title={t`Error!`} onClose={clearDeletionError} > {t`Failed to delete one or more inventories.`} <ErrorDetail error={deletionError} /> </AlertModal> </PageSection> <Toast {...toastProps} /> </> ); } export default InventoryList; 
+#. placeholder {2}: import React, { useCallback, useEffect } from 'react'; import { useLocation, useRouteMatch, Link } from 'react-router-dom'; import { Plural, useLingui } from '@lingui/react/macro'; import { Card, PageSection, DropdownItem } from '@patternfly/react-core'; import { InventoriesAPI } from 'api'; import useRequest, { useDeleteItems } from 'hooks/useRequest'; import useSelected from 'hooks/useSelected'; import useToast, { AlertVariant } from 'hooks/useToast'; import AlertModal from 'components/AlertModal'; import DatalistToolbar from 'components/DataListToolbar'; import ErrorDetail from 'components/ErrorDetail'; import PaginatedTable, { HeaderRow, HeaderCell, ToolbarDeleteButton, getSearchableKeys, } from 'components/PaginatedTable'; import { getQSConfig, parseQueryString } from 'util/qs'; import AddDropDownButton from 'components/AddDropDownButton'; import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails'; import useWsInventories from './useWsInventories'; import InventoryListItem from './InventoryListItem'; const QS_CONFIG = getQSConfig('inventory', { page: 1, page_size: 20, order_by: 'name', }); function InventoryList() { const location = useLocation(); const match = useRouteMatch(); const { addToast, Toast, toastProps } = useToast(); const { t } = useLingui(); const { result: { results, itemCount, actions, relatedSearchableKeys, searchableKeys, }, error: contentError, isLoading, request: fetchInventories, } = useRequest( useCallback(async () => { const params = parseQueryString(QS_CONFIG, location.search); const [response, actionsResponse] = await Promise.all([ InventoriesAPI.read(params), InventoriesAPI.readOptions(), ]); return { results: response.data.results, itemCount: response.data.count, actions: actionsResponse.data.actions, relatedSearchableKeys: ( actionsResponse?.data?.related_search_fields || [] ).map((val) => val.slice(0, -8)), searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET), }; }, [location]), { results: [], itemCount: 0, actions: {}, relatedSearchableKeys: [], searchableKeys: [], } ); useEffect(() => { fetchInventories(); }, [fetchInventories]); const fetchInventoriesById = useCallback( async (ids) => { const params = { ...parseQueryString(QS_CONFIG, location.search) }; params.id__in = ids.join(','); const { data } = await InventoriesAPI.read(params); return data.results; }, [location.search] // eslint-disable-line react-hooks/exhaustive-deps ); const inventories = useWsInventories( results, fetchInventories, fetchInventoriesById, QS_CONFIG ); const { selected, isAllSelected, handleSelect, selectAll, clearSelected } = useSelected(inventories); const { isLoading: isDeleteLoading, deleteItems: deleteInventories, deletionError, clearDeletionError, } = useDeleteItems( useCallback( () => Promise.all(selected.map((team) => InventoriesAPI.destroy(team.id))), [selected] ), { allItemsSelected: isAllSelected, } ); const handleInventoryDelete = async () => { await deleteInventories(); clearSelected(); }; const handleCopy = useCallback( (newInventoryId) => { addToast({ id: newInventoryId, title: t`Inventory copied successfully`, variant: AlertVariant.success, hasTimeout: true, }); }, [addToast, t] ); const hasContentLoading = isDeleteLoading || isLoading; const canAdd = actions && actions.POST; const deleteDetailsRequests = relatedResourceDeleteRequests(t).inventory( selected[0] ); const addInventory = t`Add inventory`; const addSmartInventory = t`Add smart inventory`; const addConstructedInventory = t`Add constructed inventory`; const addFederatedInventory = t`Add federated inventory`; const addButton = ( <AddDropDownButton ouiaId="add-inventory-button" key="add" dropdownItems={[ <DropdownItem ouiaId="add-inventory-item" to={`${match.url}/inventory/add/`} component={Link} key={addInventory} aria-label={addInventory} > {addInventory} </DropdownItem>, <DropdownItem ouiaId="add-smart-inventory-item" to={`${match.url}/smart_inventory/add/`} component={Link} key={addSmartInventory} aria-label={addSmartInventory} > {addSmartInventory} </DropdownItem>, <DropdownItem ouiaId="add-constructed-inventory-item" to={`${match.url}/constructed_inventory/add/`} component={Link} key={addConstructedInventory} aria-label={addConstructedInventory} > {addConstructedInventory} </DropdownItem>, <DropdownItem ouiaId="add-federated-inventory-item" to={`${match.url}/federated_inventory/add/`} component={Link} key={addFederatedInventory} aria-label={addFederatedInventory} > {addFederatedInventory} </DropdownItem>, ]} /> ); return ( <> <PageSection> <Card> <PaginatedTable contentError={contentError} hasContentLoading={hasContentLoading} items={inventories} itemCount={itemCount} pluralizedItemName={t`Inventories`} qsConfig={QS_CONFIG} toolbarSearchColumns={[ { name: t`Name`, key: 'name__icontains', isDefault: true, }, { name: t`Inventory Type`, key: 'or__kind', options: [ ['', t`Inventory`], ['smart', t`Smart Inventory`], ['constructed', t`Constructed Inventory`], ['federated', t`Federated Inventory`], ], }, { name: t`Organization`, key: 'organization__name', }, { name: t`Description`, key: 'description__icontains', }, { name: t`Created By (Username)`, key: 'created_by__username__icontains', }, { name: t`Modified By (Username)`, key: 'modified_by__username__icontains', }, ]} toolbarSortColumns={[ { name: t`Name`, key: 'name', }, ]} toolbarSearchableKeys={searchableKeys} toolbarRelatedSearchableKeys={relatedSearchableKeys} clearSelected={clearSelected} headerRow={ <HeaderRow qsConfig={QS_CONFIG}> <HeaderCell sortKey="name">{t`Name`}</HeaderCell> <HeaderCell>{t`Sync Status`}</HeaderCell> <HeaderCell>{t`Type`}</HeaderCell> <HeaderCell>{t`Organization`}</HeaderCell> <HeaderCell>{t`Actions`}</HeaderCell> </HeaderRow> } renderToolbar={(props) => ( <DatalistToolbar {...props} isAllSelected={isAllSelected} onSelectAll={selectAll} qsConfig={QS_CONFIG} additionalControls={[ ...(canAdd ? [addButton] : []), <ToolbarDeleteButton key="delete" onDelete={handleInventoryDelete} itemsToDelete={selected} pluralizedItemName={t`Inventories`} deleteDetailsRequests={deleteDetailsRequests} deleteMessage={ <Plural value={selected.length} one={t`This inventory is currently being used by some templates. Are you sure you want to delete it?`} other={t`Deleting these inventories could impact some templates that rely on them. Are you sure you want to delete anyway?`} /> } warningMessage={ <Plural value={selected.length} one={t`The inventory will be in a pending status until the final delete is processed.`} other={t`The inventories will be in a pending status until the final delete is processed.`} /> } />, ]} /> )} renderRow={(inventory, index) => ( <InventoryListItem key={inventory.id} value={inventory.name} inventory={inventory} rowIndex={index} fetchInventories={fetchInventories} onSelect={() => { if (!inventory.pending_deletion) { handleSelect(inventory); } }} onCopy={handleCopy} isSelected={selected.some((row) => row.id === inventory.id)} /> )} emptyStateControls={canAdd && addButton} /> </Card> <AlertModal isOpen={deletionError} variant="error" aria-label={t`Deletion Error`} title={t`Error!`} onClose={clearDeletionError} > {t`Failed to delete one or more inventories.`} <ErrorDetail error={deletionError} /> </AlertModal> </PageSection> <Toast {...toastProps} /> </> ); } export default InventoryList; 
 #. placeholder {2}: import React, { useCallback, useEffect } from 'react'; import { useParams, useLocation } from 'react-router-dom'; import { Plural, useLingui } from '@lingui/react/macro'; import useRequest, { useDeleteItems, useDismissableError, } from 'hooks/useRequest'; import { getQSConfig, parseQueryString } from 'util/qs'; import { InventoriesAPI, InventorySourcesAPI } from 'api'; import PaginatedTable, { HeaderRow, HeaderCell, ToolbarAddButton, ToolbarDeleteButton, ToolbarSyncSourceButton, getSearchableKeys, } from 'components/PaginatedTable'; import useSelected from 'hooks/useSelected'; import DatalistToolbar from 'components/DataListToolbar'; import AlertModal from 'components/AlertModal/AlertModal'; import ErrorDetail from 'components/ErrorDetail/ErrorDetail'; import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails'; import InventorySourceListItem from './InventorySourceListItem'; import useWsInventorySources from './useWsInventorySources'; const QS_CONFIG = getQSConfig('inventory-sources', { page: 1, page_size: 20, order_by: 'name', }); function InventorySourceList() { const { t } = useLingui(); const { inventoryType, id } = useParams(); const { search } = useLocation(); const { isLoading, error: fetchError, result: { result, sourceCount, sourceChoices, sourceChoicesOptions, searchableKeys, relatedSearchableKeys, }, request: fetchSources, } = useRequest( useCallback(async () => { const params = parseQueryString(QS_CONFIG, search); const results = await Promise.all([ InventoriesAPI.readSources(id, params), InventorySourcesAPI.readOptions(), ]); return { result: results[0].data.results, sourceCount: results[0].data.count, sourceChoices: results[1].data.actions.GET.source.choices, sourceChoicesOptions: results[1].data.actions, searchableKeys: getSearchableKeys(results[1].data.actions?.GET), relatedSearchableKeys: ( results[1]?.data?.related_search_fields || [] ).map((val) => val.slice(0, -8)), }; }, [id, search]), { result: [], sourceCount: 0, sourceChoices: [], searchableKeys: [], relatedSearchableKeys: [], } ); const sources = useWsInventorySources(result); const canSyncSources = sources.length > 0 && sources.every((source) => source.summary_fields.user_capabilities.start); const { isLoading: isSyncAllLoading, error: syncAllError, request: syncAll, } = useRequest( useCallback(async () => { if (canSyncSources) { await InventoriesAPI.syncAllSources(id); } }, [id, canSyncSources]) ); useEffect(() => { fetchSources(); }, [fetchSources]); const { selected, isAllSelected, handleSelect, clearSelected, selectAll } = useSelected(sources); const { isLoading: isDeleteLoading, deleteItems: handleDeleteSources, deletionError, clearDeletionError, } = useDeleteItems( useCallback( () => Promise.all( selected.map(({ id: sourceId }) => InventorySourcesAPI.destroy(sourceId) ), [] ), [selected] ), { fetchItems: fetchSources, allItemsSelected: isAllSelected, qsConfig: QS_CONFIG, } ); const { error: syncError, dismissError } = useDismissableError(syncAllError); const deleteRelatedInventoryResources = (resourceId) => [ InventorySourcesAPI.destroyHosts(resourceId), InventorySourcesAPI.destroyGroups(resourceId), ]; const { isLoading: deleteRelatedResourcesLoading, deletionError: deleteRelatedResourcesError, deleteItems: handleDeleteRelatedResources, } = useDeleteItems( useCallback( async () => Promise.all( selected .map(({ id: resourceId }) => deleteRelatedInventoryResources(resourceId) ) .flat() ), [selected] ) ); const handleDelete = async () => { await handleDeleteRelatedResources(); if (!deleteRelatedResourcesError) { await handleDeleteSources(); } clearSelected(); }; const canAdd = sourceChoicesOptions && Object.prototype.hasOwnProperty.call(sourceChoicesOptions, 'POST'); const listUrl = `/inventories/${inventoryType}/${id}/sources/`; const deleteDetailsRequests = relatedResourceDeleteRequests(t).inventorySource( selected[0]?.id ); return ( <> <PaginatedTable contentError={fetchError} toolbarSearchableKeys={searchableKeys} toolbarRelatedSearchableKeys={relatedSearchableKeys} hasContentLoading={ isLoading || isDeleteLoading || isSyncAllLoading || deleteRelatedResourcesLoading } items={sources} itemCount={sourceCount} pluralizedItemName={t`Inventory Sources`} qsConfig={QS_CONFIG} clearSelected={clearSelected} renderToolbar={(props) => ( <DatalistToolbar {...props} isAllSelected={isAllSelected} onSelectAll={selectAll} qsConfig={QS_CONFIG} additionalControls={[ ...(canAdd ? [<ToolbarAddButton key="add" linkTo={`${listUrl}add`} />] : []), <ToolbarDeleteButton key="delete" onDelete={handleDelete} itemsToDelete={selected} pluralizedItemName={t`Inventory Sources`} deleteDetailsRequests={deleteDetailsRequests} deleteMessage={ <Plural value={selected.length} one={t`This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?`} other={t`Deleting these inventory sources could impact other resources that rely on them. Are you sure you want to delete anyway`} /> } />, ...(canSyncSources ? [<ToolbarSyncSourceButton onClick={syncAll} />] : []), ]} /> )} headerRow={ <HeaderRow qsConfig={QS_CONFIG}> <HeaderCell sortKey="name">{t`Name`}</HeaderCell> <HeaderCell>{t`Status`}</HeaderCell> <HeaderCell>{t`Type`}</HeaderCell> <HeaderCell>{t`Actions`}</HeaderCell> </HeaderRow> } renderRow={(inventorySource, index) => { const label = sourceChoices.find( ([scMatch]) => inventorySource.source === scMatch ); return ( <InventorySourceListItem key={inventorySource.id} source={inventorySource} onSelect={() => handleSelect(inventorySource)} label={label[1]} detailUrl={`${listUrl}${inventorySource.id}`} isSelected={selected.some((row) => row.id === inventorySource.id)} rowIndex={index} /> ); }} /> {syncError && ( <AlertModal aria-label={t`Sync error`} isOpen={syncError} variant="error" title={t`Error!`} onClose={dismissError} > {t`Failed to sync some or all inventory sources.`} <ErrorDetail error={syncError} /> </AlertModal> )} {(deletionError || deleteRelatedResourcesError) && ( <AlertModal aria-label={t`Delete error`} isOpen={deletionError || deleteRelatedResourcesError} variant="error" title={t`Error!`} onClose={clearDeletionError} > {t`Failed to delete one or more inventory sources.`} <ErrorDetail error={deletionError || deleteRelatedResourcesError} /> </AlertModal> )} </> ); } export default InventorySourceList; 
 #: components/RelatedTemplateList/RelatedTemplateList.js:222
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:183
 #: screens/Instances/Shared/RemoveInstanceButton.js:87
-#: screens/Inventory/InventoryList/InventoryList.js:252
-#: screens/Inventory/InventoryList/InventoryList.js:259
-#: screens/Inventory/InventoryList/InventoryListItem.js:71
+#: screens/Inventory/InventoryList/InventoryList.js:263
+#: screens/Inventory/InventoryList/InventoryList.js:270
+#: screens/Inventory/InventoryList/InventoryListItem.js:72
 #: screens/Inventory/InventorySources/InventorySourceList.js:197
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:87
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:116
@@ -2223,7 +2237,7 @@ msgstr "El campo coincide con la expresión regular dada."
 msgid "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 msgstr "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 
-#: screens/Login/Login.js:230
+#: screens/Login/Login.js:224
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:165
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:103
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:219
@@ -2235,6 +2249,10 @@ msgstr "Contraseña"
 #: screens/Template/shared/WorkflowJobTemplate.helptext.js:13
 #~ msgid "Allow simultaneous runs of this workflow job template."
 #~ msgstr "Permitir ejecuciones simultáneas de esta plantilla de trabajo de flujo de trabajo."
+
+#: screens/Inventory/FederatedInventory.js:195
+msgid "View Federated Inventory Details"
+msgstr ""
 
 #: components/PromptDetail/PromptJobTemplateDetail.js:68
 #: components/PromptDetail/PromptWFJobTemplateDetail.js:37
@@ -2315,6 +2333,10 @@ msgstr "Haga clic en un nodo disponible para crear un nuevo enlace. Haga clic fu
 msgid "Total jobs"
 msgstr "Tareas totales"
 
+#: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:139
+msgid "Source inventories whose hosts will be routed to their respective instance groups when a job is launched against this federated inventory."
+msgstr ""
+
 #: components/RelatedTemplateList/RelatedTemplateList.js:169
 #: components/RelatedTemplateList/RelatedTemplateList.js:219
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:58
@@ -2355,7 +2377,7 @@ msgstr "Este entorno de ejecución está siendo utilizado por otros recursos. ¿
 msgid "IRC"
 msgstr "IRC"
 
-#: screens/SubscriptionUsage/ChartComponents/UsageChart.js:262
+#: screens/SubscriptionUsage/ChartComponents/UsageChart.js:278
 msgid "Subscription capacity"
 msgstr "Capacidad de suscripción"
 
@@ -2385,7 +2407,7 @@ msgstr "Recuento de hosts inaccesibles"
 msgid "Undo"
 msgstr "Deshacer"
 
-#: screens/Inventory/InventoryList/InventoryListItem.js:136
+#: screens/Inventory/InventoryList/InventoryListItem.js:137
 msgid "Pending delete"
 msgstr "Eliminación pendiente"
 
@@ -2400,7 +2422,7 @@ msgid "Enable Fact Storage"
 msgstr "Habilitar almacenamiento de eventos"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:169
-#: screens/Inventory/InventoryList/InventoryList.js:199
+#: screens/Inventory/InventoryList/InventoryList.js:209
 #: screens/Inventory/InventoryList/InventoryListItem.js:56
 msgid "Constructed Inventory"
 msgstr "Inventario construido"
@@ -2470,6 +2492,10 @@ msgstr "Cambios"
 msgid "Case-insensitive version of contains"
 msgstr "Versión de contains que no distingue mayúsculas de minúsculas"
 
+#: screens/Inventory/InventoryList/InventoryList.js:140
+msgid "Add federated inventory"
+msgstr ""
+
 #: screens/Host/Host.js:140
 msgid "View Host Details"
 msgstr "Ver detalles del host"
@@ -2533,7 +2559,7 @@ msgstr "{0} (eliminado)"
 msgid "The inventory that this host belongs to."
 msgstr "Seleccione el inventario al que pertenecerá este host."
 
-#: screens/Login/Login.js:220
+#: screens/Login/Login.js:214
 msgid "Log In"
 msgstr "Iniciar sesión"
 
@@ -2586,7 +2612,7 @@ msgstr "boolean"
 #~ msgid "Allow branch override"
 #~ msgstr "Permitir la invalidación de la rama"
 
-#: components/AppContainer/PageHeaderToolbar.js:170
+#: components/AppContainer/PageHeaderToolbar.js:217
 msgid "User Details"
 msgstr "Detalles del usuario"
 
@@ -2628,6 +2654,7 @@ msgid "for more information."
 msgstr "para obtener más información."
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:345
+#: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:187
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:188
 msgid "Delete Inventory"
 msgstr "Eliminar inventario"
@@ -2684,7 +2711,7 @@ msgid "Zoom in"
 msgstr "Acercar"
 
 #: routeConfig.js:155
-#: screens/ActivityStream/ActivityStream.js:202
+#: screens/ActivityStream/ActivityStream.js:205
 #: screens/InstanceGroup/InstanceGroup.js:75
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:199
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupListItem.js:77
@@ -2721,7 +2748,7 @@ msgstr "Arrastrar elemento {id}. Elemento con índice {oldIndex} en ahora {newIn
 #: components/Search/Search.js:154
 #: components/Search/Search.js:203
 #: components/Search/Search.js:227
-#: screens/ActivityStream/ActivityStream.js:143
+#: screens/ActivityStream/ActivityStream.js:146
 #: screens/Credential/shared/CredentialForm.js:141
 #: screens/Credential/shared/CredentialFormFields/BecomeMethodField.js:66
 #: screens/Dashboard/DashboardGraph.js:107
@@ -2750,7 +2777,7 @@ msgstr "No se encontraron resultados"
 msgid "Off"
 msgstr "Off"
 
-#: screens/Inventory/Inventories.js:23
+#: screens/Inventory/Inventories.js:25
 msgid "Create new smart inventory"
 msgstr "Crear nuevo inventario inteligente"
 
@@ -2978,7 +3005,9 @@ msgid "Username / password"
 msgstr "Nombre de usuario/contraseña"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:275
+#: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:138
 #: screens/Inventory/shared/ConstructedInventoryForm.js:95
+#: screens/Inventory/shared/FederatedInventoryForm.js:78
 msgid "Input Inventories"
 msgstr "Existencias de insumos"
 
@@ -3040,7 +3069,7 @@ msgstr "Ocurrencias"
 #: screens/Host/Host.js:65
 #: screens/Host/HostFacts/HostFacts.js:46
 #: screens/Host/Hosts.js:31
-#: screens/Inventory/Inventories.js:73
+#: screens/Inventory/Inventories.js:76
 #: screens/Inventory/InventoryHost/InventoryHost.js:78
 #: screens/Inventory/InventoryHostFacts/InventoryHostFacts.js:39
 msgid "Facts"
@@ -3095,7 +3124,7 @@ msgstr "Verdadero"
 msgid "Fact Storage"
 msgstr "Almacenamiento de datos"
 
-#: screens/Inventory/Inventories.js:22
+#: screens/Inventory/Inventories.js:24
 msgid "Create new inventory"
 msgstr "Crear nuevo inventario"
 
@@ -3111,11 +3140,11 @@ msgstr "Contraseña de SSH"
 msgid "View OIDC settings"
 msgstr "Ver la configuración de OIDC"
 
-#: components/AppContainer/PageHeaderToolbar.js:125
+#: components/AppContainer/PageHeaderToolbar.js:174
 msgid "Help"
 msgstr ""
 
-#: screens/Inventory/Inventories.js:96
+#: screens/Inventory/Inventories.js:99
 msgid "Schedule details"
 msgstr "Detalles de la programación"
 
@@ -3184,7 +3213,7 @@ msgstr "Servidor fallido"
 #: components/AddRole/AddResourceRole.js:192
 #: components/AddRole/AddResourceRole.js:193
 #: routeConfig.js:124
-#: screens/ActivityStream/ActivityStream.js:188
+#: screens/ActivityStream/ActivityStream.js:191
 #: screens/Organization/Organization.js:125
 #: screens/Organization/OrganizationList/OrganizationList.js:146
 #: screens/Organization/OrganizationList/OrganizationListItem.js:45
@@ -3260,7 +3289,7 @@ msgstr "Capacidad usada"
 msgid "Instance ID"
 msgstr "ID de instancia"
 
-#: components/AppContainer/PageHeaderToolbar.js:110
+#: components/AppContainer/PageHeaderToolbar.js:159
 msgid "Info"
 msgstr "Información"
 
@@ -3318,6 +3347,7 @@ msgstr "{intervalValue, plural, one {hour} other {hours}}"
 
 #: components/AdHocCommands/useAdHocDetailsStep.js:58
 #: screens/Inventory/shared/ConstructedInventoryForm.js:37
+#: screens/Inventory/shared/FederatedInventoryForm.js:25
 #: screens/Template/shared/JobTemplateForm.js:156
 #: screens/User/shared/UserForm.js:109
 #: screens/User/shared/UserForm.js:120
@@ -3340,6 +3370,7 @@ msgid "Instance Name"
 msgstr "Nombre de la instancia"
 
 #: screens/Inventory/ConstructedInventory.js:105
+#: screens/Inventory/FederatedInventory.js:96
 #: screens/Inventory/Inventory.js:102
 #: screens/Inventory/SmartInventory.js:102
 msgid "View all Inventories."
@@ -3402,6 +3433,7 @@ msgstr "Menor o igual que la comparación."
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:134
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:140
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:350
+#: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:192
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:193
 #: screens/Inventory/InventoryGroups/InventoryGroupsList.js:102
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:340
@@ -3535,7 +3567,7 @@ msgstr "Actualizar expiración del token"
 msgid "Cannot run health check on hop nodes."
 msgstr "No se puede ejecutar la comprobación de estado en los nodos de salto."
 
-#: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostList.js:89
+#: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostList.js:90
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:152
 #: screens/Organization/OrganizationTeams/OrganizationTeamList.js:77
 msgid "Modified by (username)"
@@ -3575,6 +3607,7 @@ msgstr "Equipo GitHub"
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:107
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.js:53
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:308
+#: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:164
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:165
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:44
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:82
@@ -3658,7 +3691,7 @@ msgstr "Eliminar nodo {nodeName}"
 msgid "Sun"
 msgstr "Dom"
 
-#: screens/Dashboard/Dashboard.js:143
+#: screens/Dashboard/Dashboard.js:145
 msgid "Job status graph tab"
 msgstr "Pestaña del gráfico de estado de la tarea"
 
@@ -3685,11 +3718,11 @@ msgstr "Agosto"
 msgid "View smart inventory host details"
 msgstr "Ver detalles del host de inventario inteligente"
 
-#: screens/Login/Login.js:375
+#: screens/Login/Login.js:369
 msgid "Sign in with Google"
 msgstr "Iniciar sesión con Google"
 
-#: contexts/Config.js:130
+#: contexts/Config.js:138
 msgid "Failed to retrieve configuration."
 msgstr "No se pudo recuperar la configuración."
 
@@ -4140,7 +4173,8 @@ msgid "Delete Job Template"
 msgstr "Eliminar plantilla de trabajo"
 
 #: routeConfig.js:170
-#: screens/TopologyView/TopologyView.js:43
+#: screens/TopologyView/TopologyView.js:15
+#: screens/TopologyView/TopologyView.js:45
 msgid "Topology View"
 msgstr "Vista de topología"
 
@@ -4206,7 +4240,7 @@ msgstr "Ver todos los hosts."
 msgid "Tags for the Annotation"
 msgstr "Etiquetas para la anotación"
 
-#: screens/Inventory/Inventories.js:83
+#: screens/Inventory/Inventories.js:86
 #: screens/Inventory/InventoryGroup/InventoryGroup.js:62
 #: screens/Inventory/InventoryHosts/InventoryHostItem.js:89
 #: screens/Inventory/InventoryHosts/InventoryHostItem.js:92
@@ -4235,6 +4269,7 @@ msgstr "Eliminar credencial"
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:126
 #: screens/Instances/InstanceDetail/InstanceDetail.js:371
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:325
+#: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:181
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:182
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:60
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:67
@@ -4275,8 +4310,8 @@ msgstr "Eliminar credencial"
 #: screens/Setting/TACACS/TACACSDetail/TACACSDetail.js:108
 #: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.js:92
 #: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.js:96
-#: screens/Setting/UI/UIDetail/UIDetail.js:105
 #: screens/Setting/UI/UIDetail/UIDetail.js:110
+#: screens/Setting/UI/UIDetail/UIDetail.js:115
 #: screens/Team/TeamDetail/TeamDetail.js:66
 #: screens/Team/TeamDetail/TeamDetail.js:70
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:500
@@ -4345,7 +4380,7 @@ msgstr "Si quita este enlace, el resto de la rama quedará huérfano y hará que
 msgid "description"
 msgstr "descripción"
 
-#: screens/Inventory/InventoryList/InventoryList.js:295
+#: screens/Inventory/InventoryList/InventoryList.js:306
 msgid "Failed to delete one or more inventories."
 msgstr "No se pudo eliminar uno o más inventarios."
 
@@ -4375,7 +4410,7 @@ msgstr "ELIMINADO"
 msgid "You do not have permission to remove instances: {itemsUnableToremove}"
 msgstr "No tiene permisos para los recursos relacionados: {itemsUnableToremove}"
 
-#: screens/Dashboard/Dashboard.js:163
+#: screens/Dashboard/Dashboard.js:165
 msgid "Recent Templates list tab"
 msgstr "Pestaña de la lista de plantillas recientes"
 
@@ -4543,7 +4578,7 @@ msgstr "Seleccionar elementos de la lista"
 #~ "path used to locate playbooks."
 #~ msgstr "Directorio base utilizado para encontrar playbooks. Los directorios encontrados dentro de esta ruta se mostrarán en el menú desplegable del directorio de playbooks. Junto a la ruta base y el directorio de playbooks seleccionado, se creará la ruta completa utilizada para encontrar los playbooks."
 
-#: screens/Dashboard/Dashboard.js:145
+#: screens/Dashboard/Dashboard.js:147
 msgid "Job status"
 msgstr "Estado de la tarea"
 
@@ -4725,7 +4760,7 @@ msgstr "Ver detalles de la organización"
 #: components/Schedule/ScheduleToggle/ScheduleToggle.js:75
 #: components/Schedule/shared/SchedulePromptableFields.js:64
 #: components/TemplateList/TemplateList.js:306
-#: contexts/Config.js:126
+#: contexts/Config.js:134
 #: screens/Application/ApplicationDetails/ApplicationDetails.js:142
 #: screens/Application/ApplicationsList/ApplicationsList.js:182
 #: screens/Credential/CredentialDetail/CredentialDetail.js:315
@@ -4733,7 +4768,7 @@ msgstr "Ver detalles de la organización"
 #: screens/Host/HostDetail/HostDetail.js:57
 #: screens/Host/HostDetail/HostDetail.js:128
 #: screens/Host/HostGroups/HostGroupsList.js:246
-#: screens/Host/HostList/HostList.js:231
+#: screens/Host/HostList/HostList.js:234
 #: screens/HostMetrics/HostMetricsDeleteButton.js:109
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:367
 #: screens/InstanceGroup/Instances/InstanceList.js:387
@@ -4747,6 +4782,7 @@ msgstr "Ver detalles de la organización"
 #: screens/Instances/Shared/RemoveInstanceButton.js:106
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:358
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventorySyncButton.js:45
+#: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:200
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:202
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:84
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.js:294
@@ -4756,7 +4792,7 @@ msgstr "Ver detalles de la organización"
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.js:257
 #: screens/Inventory/InventoryHosts/InventoryHostItem.js:131
 #: screens/Inventory/InventoryHosts/InventoryHostList.js:206
-#: screens/Inventory/InventoryList/InventoryList.js:292
+#: screens/Inventory/InventoryList/InventoryList.js:303
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:272
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:347
 #: screens/Inventory/InventorySources/InventorySourceList.js:240
@@ -4784,7 +4820,7 @@ msgstr "Ver detalles de la organización"
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:181
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:196
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:339
-#: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.js:378
+#: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.js:379
 #: screens/TopologyView/MeshGraph.js:418
 #: screens/TopologyView/Tooltip.js:199
 #: screens/User/UserDetail/UserDetail.js:132
@@ -4910,11 +4946,11 @@ msgstr "No se pudo alternar el host."
 msgid "denied"
 msgstr "denegado"
 
-#: screens/Login/Login.js:344
+#: screens/Login/Login.js:338
 msgid "Sign in with GitHub Enterprise Organizations"
 msgstr "Iniciar sesión con organizaciones GitHub Enterprise"
 
-#: screens/ActivityStream/ActivityStream.js:199
+#: screens/ActivityStream/ActivityStream.js:202
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:118
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:172
 #: screens/NotificationTemplate/NotificationTemplates.js:15
@@ -4931,8 +4967,8 @@ msgstr "Iniciar cuerpo del mensaje"
 msgid "Branch to use on inventory sync. Project default used if blank. Only allowed if project allow_override field is set to true."
 msgstr "Rama para usar en la sincronización del inventario. Se utiliza el valor predeterminado del proyecto si está en blanco. Solo se permite si el campo allow_override del proyecto está establecido en true."
 
-#: screens/ActivityStream/ActivityStream.js:253
-#: screens/ActivityStream/ActivityStream.js:263
+#: screens/ActivityStream/ActivityStream.js:256
+#: screens/ActivityStream/ActivityStream.js:266
 #: screens/ActivityStream/ActivityStreamDetailButton.js:44
 msgid "Initiated by"
 msgstr "Inicializado por"
@@ -5043,8 +5079,8 @@ msgstr "Mensaje de flujo de trabajo aprobado"
 #: components/Schedule/ScheduleList/ScheduleList.js:166
 #: components/Schedule/ScheduleList/ScheduleList.js:236
 #: routeConfig.js:47
-#: screens/ActivityStream/ActivityStream.js:154
-#: screens/Inventory/Inventories.js:92
+#: screens/ActivityStream/ActivityStream.js:157
+#: screens/Inventory/Inventories.js:95
 #: screens/Inventory/InventorySource/InventorySource.js:89
 #: screens/ManagementJob/ManagementJob.js:109
 #: screens/ManagementJob/ManagementJobs.js:24
@@ -5076,7 +5112,7 @@ msgstr "Advertencia del sistema"
 #: components/AdHocCommands/AdHocExecutionEnvironmentStep.js:104
 #: components/LaunchPrompt/steps/ExecutionEnvironmentStep.js:108
 #: routeConfig.js:165
-#: screens/ActivityStream/ActivityStream.js:217
+#: screens/ActivityStream/ActivityStream.js:220
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:130
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:193
 #: screens/ExecutionEnvironment/ExecutionEnvironments.js:13
@@ -5230,7 +5266,7 @@ msgstr "Área de texto"
 msgid "View User Interface settings"
 msgstr "Ver la configuración de la interfaz de usuario"
 
-#: screens/Login/Login.js:313
+#: screens/Login/Login.js:307
 msgid "Sign in with GitHub Teams"
 msgstr "Iniciar sesión con equipos GitHub"
 
@@ -5297,6 +5333,7 @@ msgstr "Contraer"
 #: components/TemplateList/TemplateListItem.js:304
 #: routeConfig.js:78
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:258
+#: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:121
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:140
 #: screens/Inventory/shared/InventoryForm.js:84
 #: screens/Job/JobDetail/JobDetail.js:506
@@ -5326,7 +5363,7 @@ msgstr "Seleccionar estado"
 #: components/Schedule/shared/FrequencyDetailSubform.js:185
 #: components/Schedule/shared/ScheduleFormFields.js:134
 #: components/Schedule/shared/ScheduleFormFields.js:200
-#: screens/SubscriptionUsage/ChartComponents/UsageChart.js:175
+#: screens/SubscriptionUsage/ChartComponents/UsageChart.js:191
 msgid "Month"
 msgstr "Mes"
 
@@ -5341,7 +5378,7 @@ msgstr "Mes"
 #: components/TemplateList/TemplateListItem.js:280
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:120
 #: routeConfig.js:88
-#: screens/ActivityStream/ActivityStream.js:168
+#: screens/ActivityStream/ActivityStream.js:171
 #: screens/Credential/CredentialList/CredentialList.js:196
 #: screens/Credential/Credentials.js:15
 #: screens/Credential/Credentials.js:26
@@ -5394,7 +5431,7 @@ msgstr "Canal"
 msgid "Select a row to approve"
 msgstr "Selecciona una fila para aprobar"
 
-#: screens/SubscriptionUsage/ChartComponents/UsageChart.js:131
+#: screens/SubscriptionUsage/ChartComponents/UsageChart.js:145
 msgid "Unique Hosts"
 msgstr "Anfitriones únicos"
 
@@ -5684,7 +5721,7 @@ msgstr "¿Está seguro de que desea deshabilitar la autenticación local? Esto p
 msgid "Allow Branch Override"
 msgstr "Permitir la anulación de la rama"
 
-#: screens/Inventory/Inventories.js:88
+#: screens/Inventory/Inventories.js:91
 msgid "Create new source"
 msgstr "Crear nueva fuente"
 
@@ -5758,7 +5795,7 @@ msgstr "Ver detalles de la credencial"
 
 #: components/NotificationList/NotificationList.js:178
 #: routeConfig.js:140
-#: screens/Inventory/Inventories.js:97
+#: screens/Inventory/Inventories.js:100
 #: screens/Inventory/InventorySource/InventorySource.js:100
 #: screens/ManagementJob/ManagementJob.js:117
 #: screens/ManagementJob/ManagementJobs.js:23
@@ -5835,7 +5872,7 @@ msgstr "Volver a las aplicaciones"
 msgid "login type"
 msgstr "tipo de inicio de sesión"
 
-#: screens/Inventory/Inventories.js:80
+#: screens/Inventory/Inventories.js:83
 msgid "Group details"
 msgstr "Detalles del grupo"
 
@@ -5944,7 +5981,7 @@ msgstr "Tipos de estado de los enlaces"
 #: components/TemplateList/TemplateList.js:205
 #: components/TemplateList/TemplateList.js:270
 #: routeConfig.js:83
-#: screens/ActivityStream/ActivityStream.js:165
+#: screens/ActivityStream/ActivityStream.js:168
 #: screens/ExecutionEnvironment/ExecutionEnvironment.js:71
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateList.js:83
 #: screens/Template/Templates.js:18
@@ -6020,7 +6057,7 @@ msgstr ""
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:524
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:258
 #: routeConfig.js:150
-#: screens/ActivityStream/ActivityStream.js:205
+#: screens/ActivityStream/ActivityStream.js:208
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:108
 #: screens/InstanceGroup/InstanceGroups.js:17
 #: screens/InstanceGroup/InstanceGroups.js:28
@@ -6127,7 +6164,7 @@ msgstr "Cancelar la tarea seleccionada"
 msgid "Started"
 msgstr "Iniciado"
 
-#: components/AppContainer/PageHeaderToolbar.js:82
+#: components/AppContainer/PageHeaderToolbar.js:131
 msgid "Pending Workflow Approvals"
 msgstr "Aprobaciones de flujos de trabajo pendientes"
 
@@ -6181,7 +6218,7 @@ msgstr "Encuesta"
 
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:231
 #: routeConfig.js:114
-#: screens/ActivityStream/ActivityStream.js:182
+#: screens/ActivityStream/ActivityStream.js:185
 #: screens/Organization/OrganizationList/OrganizationList.js:118
 #: screens/Organization/OrganizationList/OrganizationList.js:164
 #: screens/Organization/Organizations.js:17
@@ -6262,7 +6299,7 @@ msgstr ""
 msgid "Workflow Job 1/{0}"
 msgstr "Tarea en flujo de trabajo 1/{0}"
 
-#: screens/Inventory/InventoryList/InventoryList.js:262
+#: screens/Inventory/InventoryList/InventoryList.js:273
 msgid "The inventories will be in a pending status until the final delete is processed."
 msgstr "Los inventarios estarán en un estado pendiente hasta que se procese la eliminación final."
 
@@ -6314,7 +6351,7 @@ msgstr "Fecha de finalización desconocida"
 msgid "toggle changes"
 msgstr "alternar cambios"
 
-#: screens/ActivityStream/ActivityStream.js:130
+#: screens/ActivityStream/ActivityStream.js:131
 msgid "Select an activity type"
 msgstr "Seleccionar un tipo de actividad"
 
@@ -6475,7 +6512,8 @@ msgstr "Jueves"
 #: screens/Credential/Credential.js:100
 #: screens/Credential/Credentials.js:32
 #: screens/Inventory/ConstructedInventory.js:80
-#: screens/Inventory/Inventories.js:64
+#: screens/Inventory/FederatedInventory.js:75
+#: screens/Inventory/Inventories.js:67
 #: screens/Inventory/Inventory.js:77
 #: screens/Inventory/SmartInventory.js:77
 #: screens/Project/Project.js:107
@@ -6556,7 +6594,7 @@ msgstr "Cancelar tarea"
 msgid "First Name"
 msgstr "Nombre"
 
-#: screens/Inventory/InventoryGroups/InventoryGroupsList.js:129
+#: screens/Inventory/InventoryGroups/InventoryGroupsList.js:131
 msgid "Show only root groups"
 msgstr "Mostrar solo los grupos raíz"
 
@@ -6565,6 +6603,7 @@ msgid "Toggle instance"
 msgstr "Alternar instancia"
 
 #: screens/Inventory/ConstructedInventory.js:64
+#: screens/Inventory/FederatedInventory.js:64
 #: screens/Inventory/Inventory.js:59
 #: screens/Inventory/SmartInventory.js:62
 msgid "Back to Inventories"
@@ -6586,12 +6625,12 @@ msgstr "Cómo usar el plugin de inventario construido"
 #~ msgid "This field must not contain spaces"
 #~ msgstr "Este campo no debe contener espacios"
 
-#: screens/Inventory/InventoryList/InventoryList.js:254
+#: screens/Inventory/InventoryList/InventoryList.js:265
 msgid "This inventory is currently being used by some templates. Are you sure you want to delete it?"
 msgstr "Este inventario está siendo utilizado actualmente por algunas plantillas. ¿Seguro que quieres eliminarlo?"
 
 #: routeConfig.js:135
-#: screens/ActivityStream/ActivityStream.js:193
+#: screens/ActivityStream/ActivityStream.js:196
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.js:118
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.js:161
 #: screens/CredentialType/CredentialTypes.js:14
@@ -6813,8 +6852,8 @@ msgstr "No se encontró la plantilla."
 msgid "Trial"
 msgstr "Prueba"
 
-#: screens/ActivityStream/ActivityStream.js:249
-#: screens/ActivityStream/ActivityStream.js:261
+#: screens/ActivityStream/ActivityStream.js:252
+#: screens/ActivityStream/ActivityStream.js:264
 #: screens/ActivityStream/ActivityStreamDetailButton.js:41
 #: screens/ActivityStream/ActivityStreamListItem.js:42
 msgid "Time"
@@ -6853,7 +6892,7 @@ msgstr "LDAP3"
 msgid "Note that you may still see the group in the list after disassociating if the host is also a member of that group’s children.  This list shows all groups the host is associated with directly and indirectly."
 msgstr "Ten en cuenta que es posible que sigas viendo el grupo en la lista después de disociarlo si el anfitrión también es miembro de los hijos de ese grupo.  Esta lista muestra todos los grupos con los que el anfitrión está asociado directa e indirectamente."
 
-#: screens/Dashboard/Dashboard.js:84
+#: screens/Dashboard/Dashboard.js:86
 #: screens/SubscriptionUsage/SubscriptionUsage.js:30
 msgid "<0><1/> A tech preview of the new {brandName} user interface can be found <2>here</2>.</0>"
 msgstr "<0><1/> Puede encontrar una vista previa técnica de la nueva interfaz de usuario de {brandName} <2>aquí</2>.</0>"
@@ -6925,11 +6964,12 @@ msgid "Collapse section"
 msgstr "Contraer sección"
 
 #: routeConfig.js:110
-#: screens/ActivityStream/ActivityStream.js:180
+#: screens/ActivityStream/ActivityStream.js:183
 #: screens/Credential/Credential.js:90
 #: screens/Credential/Credentials.js:31
 #: screens/Inventory/ConstructedInventory.js:71
-#: screens/Inventory/Inventories.js:61
+#: screens/Inventory/FederatedInventory.js:71
+#: screens/Inventory/Inventories.js:64
 #: screens/Inventory/Inventory.js:67
 #: screens/Inventory/SmartInventory.js:69
 #: screens/Organization/Organization.js:124
@@ -6975,7 +7015,7 @@ msgstr "Activar los trabajos concurrentes"
 #: screens/Host/HostList/SmartInventoryButton.js:42
 #: screens/Host/HostList/SmartInventoryButton.js:51
 #: screens/Host/HostList/SmartInventoryButton.js:55
-#: screens/Inventory/InventoryList/InventoryList.js:198
+#: screens/Inventory/InventoryList/InventoryList.js:208
 #: screens/Inventory/InventoryList/InventoryListItem.js:55
 msgid "Smart Inventory"
 msgstr "Inventario inteligente"
@@ -7166,8 +7206,8 @@ msgstr "Seguir"
 #: components/LaunchPrompt/steps/CredentialsStep.js:255
 #: components/LaunchPrompt/steps/InventoryStep.js:93
 #: components/Lookup/CredentialLookup.js:199
-#: components/Lookup/InventoryLookup.js:161
-#: components/Lookup/InventoryLookup.js:217
+#: components/Lookup/InventoryLookup.js:168
+#: components/Lookup/InventoryLookup.js:224
 #: components/Lookup/MultiCredentialsLookup.js:203
 #: components/Lookup/OrganizationLookup.js:139
 #: components/Lookup/ProjectLookup.js:148
@@ -7187,12 +7227,12 @@ msgstr "Seguir"
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.js:136
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateList.js:106
 #: screens/Host/HostGroups/HostGroupsList.js:170
-#: screens/Host/HostList/HostList.js:160
+#: screens/Host/HostList/HostList.js:163
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.js:206
-#: screens/Inventory/InventoryGroups/InventoryGroupsList.js:136
+#: screens/Inventory/InventoryGroups/InventoryGroupsList.js:138
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.js:179
 #: screens/Inventory/InventoryHosts/InventoryHostList.js:133
-#: screens/Inventory/InventoryList/InventoryList.js:215
+#: screens/Inventory/InventoryList/InventoryList.js:226
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:191
 #: screens/Organization/OrganizationExecEnvList/OrganizationExecEnvList.js:97
 #: screens/Organization/OrganizationList/OrganizationList.js:136
@@ -7248,7 +7288,7 @@ msgstr "Máximo"
 #~ msgid "MOST RECENT SYNC"
 #~ msgstr ""
 
-#: screens/Inventory/InventoryList/InventoryList.js:231
+#: screens/Inventory/InventoryList/InventoryList.js:242
 msgid "Sync Status"
 msgstr "Estado de sincronización"
 
@@ -7360,7 +7400,7 @@ msgstr "LDAP4"
 #~ "el punto de acceso /api/annotations se agregará automáticamente\n"
 #~ "a la URL base de Grafana."
 
-#: screens/Dashboard/shared/LineChart.js:169
+#: screens/Dashboard/shared/LineChart.js:181
 msgid "Date"
 msgstr "Fecha"
 
@@ -7378,6 +7418,11 @@ msgstr "Usuario y Automation Analytics"
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:156
 msgid "Failed to delete one or more groups."
 msgstr "No se pudo eliminar uno o varios grupos."
+
+#: components/AppContainer/PageHeaderToolbar.js:108
+#: components/AppContainer/PageHeaderToolbar.js:113
+msgid "Switch to dark mode"
+msgstr ""
 
 #: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.js:197
 msgid "Confirm Disable Local Authorization"
@@ -7501,7 +7546,7 @@ msgid "Finish Time"
 msgstr "Hora de finalización"
 
 #: components/RelatedTemplateList/RelatedTemplateList.js:201
-#: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostList.js:116
+#: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostList.js:117
 #: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostListItem.js:43
 msgid "Recent jobs"
 msgstr "Trabajos recientes"
@@ -7550,7 +7595,7 @@ msgstr "Filtro de host"
 #~ msgid "{numJobsToCancel, plural, one {This action will cancel the following job:} other {This action will cancel the following jobs:}}"
 #~ msgstr "{numJobsToCancel, plural, one {This action will cancel the following job:} other {This action will cancel the following jobs:}}"
 
-#: screens/ActivityStream/ActivityStream.js:238
+#: screens/ActivityStream/ActivityStream.js:241
 msgid "Keyword"
 msgstr "Palabra clave"
 
@@ -7630,7 +7675,7 @@ msgstr "Tiempo de espera de la caché (segundos)"
 
 #: components/AppContainer/AppContainer.js:84
 #: components/AppContainer/AppContainer.js:155
-#: components/AppContainer/PageHeaderToolbar.js:179
+#: components/AppContainer/PageHeaderToolbar.js:226
 msgid "Logout"
 msgstr "Finalización de la sesión"
 
@@ -7724,12 +7769,13 @@ msgstr "Sincronizar"
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:160
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironmentForm.js:128
 #: screens/Host/HostDetail/HostDetail.js:76
-#: screens/Host/HostList/HostList.js:152
-#: screens/Host/HostList/HostList.js:171
+#: screens/Host/HostList/HostList.js:155
+#: screens/Host/HostList/HostList.js:174
 #: screens/Host/HostList/HostListItem.js:49
 #: screens/Instances/Shared/InstanceForm.js:40
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.js:38
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:163
+#: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:85
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:96
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:35
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.js:220
@@ -7737,10 +7783,11 @@ msgstr "Sincronizar"
 #: screens/Inventory/InventoryHosts/InventoryHostItem.js:83
 #: screens/Inventory/InventoryHosts/InventoryHostList.js:125
 #: screens/Inventory/InventoryHosts/InventoryHostList.js:142
-#: screens/Inventory/InventoryList/InventoryList.js:207
+#: screens/Inventory/InventoryList/InventoryList.js:218
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:208
 #: screens/Inventory/shared/ConstructedInventoryForm.js:69
 #: screens/Inventory/shared/ConstructedInventoryHint.js:70
+#: screens/Inventory/shared/FederatedInventoryForm.js:59
 #: screens/Inventory/shared/InventoryForm.js:59
 #: screens/Inventory/shared/InventoryGroupForm.js:41
 #: screens/Inventory/shared/InventorySourceForm.js:130
@@ -7857,7 +7904,7 @@ msgstr "Modificar equipo"
 msgid "User Interface"
 msgstr "Interfaz de usuario"
 
-#: screens/Login/Login.js:328
+#: screens/Login/Login.js:322
 msgid "Sign in with GitHub Enterprise"
 msgstr "Iniciar sesión con GitHub Enterprise"
 
@@ -7871,6 +7918,7 @@ msgstr "Iniciar sesión con GitHub Enterprise"
 #: screens/Credential/shared/CredentialForm.js:45
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironmentForm.js:80
 #: screens/Inventory/shared/ConstructedInventoryForm.js:79
+#: screens/Inventory/shared/FederatedInventoryForm.js:69
 #: screens/Inventory/shared/InventoryForm.js:73
 #: screens/Inventory/shared/InventorySourceSubForms/AzureSubForm.js:47
 #: screens/Inventory/shared/InventorySourceSubForms/ControllerSubForm.js:46
@@ -7906,7 +7954,7 @@ msgstr "Seleccionar un valor para este campo"
 msgid "View job {0}"
 msgstr "Ver tarea {0}"
 
-#: screens/Login/Login.js:407
+#: screens/Login/Login.js:401
 msgid "Sign in with SAML {samlIDP}"
 msgstr "Iniciar sesión con SAML {samlIDP}"
 
@@ -8034,11 +8082,11 @@ msgstr "Versión de startswith que no distingue mayúsculas de minúsculas."
 msgid "Unsaved changes modal"
 msgstr "Modal de cambios no guardados"
 
-#: screens/Login/Login.js:360
+#: screens/Login/Login.js:354
 msgid "Sign in with GitHub Enterprise Teams"
 msgstr "Iniciar sesión con equipos de GitHub Enterprise"
 
-#: components/Lookup/InventoryLookup.js:128
+#: components/Lookup/InventoryLookup.js:135
 msgid ""
 "Select the inventory containing the hosts\n"
 "            you want this job to manage."
@@ -8053,7 +8101,7 @@ msgstr "Argumentos"
 msgid "Construct 2 groups, limit to intersection"
 msgstr "Construir 2 grupos, límite de intersección"
 
-#: screens/Inventory/InventoryList/InventoryListItem.js:74
+#: screens/Inventory/InventoryList/InventoryListItem.js:75
 msgid "# sources with sync failures."
 msgstr "# fuentes con fallos de sincronización."
 
@@ -8074,7 +8122,7 @@ msgstr "URL de Grafana"
 msgid "GitHub settings"
 msgstr "Configuración de GitHub"
 
-#: screens/Login/Login.js:298
+#: screens/Login/Login.js:292
 msgid "Sign in with GitHub Organizations"
 msgstr "Iniciar sesión con las organizaciones GitHub"
 
@@ -8098,7 +8146,7 @@ msgstr "No se pudo disociar uno o más grupos."
 msgid "Token information"
 msgstr "Información del token"
 
-#: screens/Inventory/InventoryList/InventoryListItem.js:73
+#: screens/Inventory/InventoryList/InventoryListItem.js:74
 msgid "# source with sync failures."
 msgstr "# source con errores de sincronización."
 
@@ -8130,6 +8178,10 @@ msgstr "Fecha/hora de finalización"
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:73
 msgid "Credential to authenticate with Kubernetes or OpenShift"
 msgstr "Credencial para autenticarse con Kubernetes u OpenShift"
+
+#: screens/Inventory/FederatedInventory.js:95
+msgid "Federated Inventory not found."
+msgstr ""
 
 #: components/JobList/JobList.js:223
 #: components/JobList/JobListItem.js:48
@@ -8203,7 +8255,7 @@ msgstr "Borrar todos los filtros"
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.js:35
 #: screens/Setting/TACACS/TACACSDetail/TACACSDetail.js:49
 #: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.js:54
-#: screens/Setting/UI/UIDetail/UIDetail.js:59
+#: screens/Setting/UI/UIDetail/UIDetail.js:61
 msgid "Back to Settings"
 msgstr "Volver a Configuración"
 
@@ -8238,7 +8290,7 @@ msgstr "Configuración de la suscripción"
 
 #: components/TemplateList/TemplateList.js:303
 #: screens/Credential/CredentialList/CredentialList.js:212
-#: screens/Inventory/InventoryList/InventoryList.js:291
+#: screens/Inventory/InventoryList/InventoryList.js:302
 #: screens/Project/ProjectList/ProjectList.js:291
 msgid "Deletion Error"
 msgstr "Error de eliminación"
@@ -8490,7 +8542,7 @@ msgstr "Archivo de inventario"
 msgid "Refresh for revision"
 msgstr "Actualizar para revisión"
 
-#: screens/Dashboard/Dashboard.js:129
+#: screens/Dashboard/Dashboard.js:131
 msgid "Project sync failures"
 msgstr "Errores de sincronización del proyecto"
 
@@ -8563,6 +8615,11 @@ msgstr "ID del panel (opcional)"
 #: screens/Template/shared/JobTemplateForm.js:605
 msgid "Prevent Instance Group Fallback"
 msgstr "Evitar el retroceso del grupo de instancias"
+
+#: components/AppContainer/PageHeaderToolbar.js:108
+#: components/AppContainer/PageHeaderToolbar.js:113
+msgid "Switch to light mode"
+msgstr ""
 
 #: screens/InstanceGroup/shared/InstanceGroupForm.js:59
 msgid "Maximum number of forks to allow across all jobs running concurrently on this group. Zero means no limit will be enforced."
@@ -8678,11 +8735,11 @@ msgstr "Crear una nueva aplicación"
 msgid "Plays"
 msgstr "Jugadas"
 
-#: screens/ActivityStream/ActivityStream.js:243
+#: screens/ActivityStream/ActivityStream.js:246
 msgid "Initiated by (username)"
 msgstr "Inicializado por (nombre de usuario)"
 
-#: screens/Inventory/InventoryList/InventoryListItem.js:78
+#: screens/Inventory/InventoryList/InventoryListItem.js:79
 msgid "No inventory sync failures."
 msgstr "No hay errores de sincronización de inventario."
 
@@ -8694,7 +8751,7 @@ msgstr "Nota: El orden en que se seleccionan establece la precedencia de ejecuci
 #~ msgid "Credentials that require passwords on launch are not permitted.  Please remove or replace the following credentials with a credential of the same type in order to proceed: {0}"
 #~ msgstr "No se permiten las credenciales que requieran contraseñas al iniciarse.  Por favor, elimine o reemplace las siguientes credenciales con una credencial del mismo tipo para poder proceder: {0}"
 
-#: screens/Login/Login.js:389
+#: screens/Login/Login.js:383
 msgid "Sign in with OIDC"
 msgstr "Iniciar sesión con SAML "
 
@@ -8708,8 +8765,8 @@ msgstr "confirmar eliminación"
 msgid "Activity Stream type selector"
 msgstr "Selector de tipo de flujo de actividad"
 
-#: screens/Inventory/Inventories.js:68
-#: screens/Inventory/Inventories.js:82
+#: screens/Inventory/Inventories.js:71
+#: screens/Inventory/Inventories.js:85
 msgid "Create new host"
 msgstr "Crear nuevo host"
 
@@ -8848,7 +8905,7 @@ msgstr "Capacidad"
 msgid "Provisioning Callback details"
 msgstr "Detalles de callback de aprovisionamiento"
 
-#: screens/Dashboard/Dashboard.js:153
+#: screens/Dashboard/Dashboard.js:155
 msgid "Recent Jobs"
 msgstr "Tareas recientes"
 
@@ -8868,8 +8925,8 @@ msgstr "Estos son los módulos que {brandName} admite para ejecutar comandos."
 msgid "Workflow link modal"
 msgstr "Modal de enlace del flujo de trabajo"
 
-#: screens/Inventory/InventoryList/InventoryListItem.js:142
-#: screens/Inventory/InventoryList/InventoryListItem.js:147
+#: screens/Inventory/InventoryList/InventoryListItem.js:143
+#: screens/Inventory/InventoryList/InventoryListItem.js:148
 msgid "Edit Inventory"
 msgstr "Editar inventario"
 
@@ -8883,7 +8940,7 @@ msgstr "Error en el token de usuario."
 #~ "assigned to this group when new instances come online."
 #~ msgstr "Cantidad mínima de instancias que se asignará automáticamente a este grupo cuando aparezcan nuevas instancias en línea."
 
-#: screens/Login/Login.js:408
+#: screens/Login/Login.js:402
 msgid "Sign in with SAML"
 msgstr "Iniciar sesión con SAML"
 
@@ -9050,7 +9107,7 @@ msgstr "Documentación del flujo de trabajo"
 msgid "January"
 msgstr "Enero"
 
-#: screens/Login/Login.js:253
+#: screens/Login/Login.js:247
 msgid "Sign in with Azure AD"
 msgstr "Iniciar sesión con Azure AD"
 
@@ -9095,6 +9152,7 @@ msgid "Failed to sync project."
 msgstr "No se pudo sincronizar el proyecto."
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:196
+#: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:106
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:109
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:123
 msgid "Total hosts"
@@ -9168,11 +9226,11 @@ msgstr "Carga de contenido"
 
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:162
 #: routeConfig.js:98
-#: screens/ActivityStream/ActivityStream.js:174
-#: screens/Dashboard/Dashboard.js:112
-#: screens/Inventory/Inventories.js:21
-#: screens/Inventory/InventoryList/InventoryList.js:185
-#: screens/Inventory/InventoryList/InventoryList.js:249
+#: screens/ActivityStream/ActivityStream.js:177
+#: screens/Dashboard/Dashboard.js:114
+#: screens/Inventory/Inventories.js:23
+#: screens/Inventory/InventoryList/InventoryList.js:195
+#: screens/Inventory/InventoryList/InventoryList.js:260
 msgid "Inventories"
 msgstr "Inventarios"
 
@@ -9207,7 +9265,7 @@ msgid "START"
 msgstr "INICIAR"
 
 #: routeConfig.js:74
-#: screens/ActivityStream/ActivityStream.js:160
+#: screens/ActivityStream/ActivityStream.js:163
 msgid "Resources"
 msgstr "Recursos"
 
@@ -9328,7 +9386,7 @@ msgstr "confirmar disociación"
 msgid "View all execution environments"
 msgstr "Ver todos los entornos de ejecución"
 
-#: screens/Inventory/Inventories.js:87
+#: screens/Inventory/Inventories.js:90
 #: screens/Inventory/Inventory.js:70
 msgid "Sources"
 msgstr "Fuentes"
@@ -9387,7 +9445,7 @@ msgstr "Nodo híbrido"
 msgid "Notification Type"
 msgstr "Tipo de notificación"
 
-#: screens/ActivityStream/ActivityStream.js:148
+#: screens/ActivityStream/ActivityStream.js:151
 msgid "Dashboard (all activity)"
 msgstr "Panel de control (toda la actividad)"
 
@@ -9498,11 +9556,11 @@ msgstr "Servidor Async OK"
 #~ "el límite (patrón de host) para devolver solo a los hosts que\n"
 #~ "están en la intersección de esos dos grupos."
 
-#: screens/Dashboard/Dashboard.js:166
+#: screens/Dashboard/Dashboard.js:168
 msgid "Recent Templates"
 msgstr "Plantillas recientes"
 
-#: screens/ActivityStream/ActivityStream.js:211
+#: screens/ActivityStream/ActivityStream.js:214
 msgid "Applications & Tokens"
 msgstr "Aplicaciones y tokens"
 
@@ -9536,7 +9594,7 @@ msgstr "Aplicaciones y tokens"
 #~ msgid "Source Control URL"
 #~ msgstr ""
 
-#: screens/Dashboard/shared/LineChart.js:129
+#: screens/Dashboard/shared/LineChart.js:140
 msgid "Job Runs"
 msgstr "Ejecuciones de trabajo"
 
@@ -9650,7 +9708,7 @@ msgstr "Avanzado"
 #: components/AddRole/AddResourceRole.js:182
 #: components/AddRole/AddResourceRole.js:183
 #: routeConfig.js:119
-#: screens/ActivityStream/ActivityStream.js:185
+#: screens/ActivityStream/ActivityStream.js:188
 #: screens/Team/Teams.js:32
 #: screens/User/UserList/UserList.js:111
 #: screens/User/UserList/UserList.js:154
@@ -9851,6 +9909,7 @@ msgid "Provisioning Callback URL"
 msgstr "Dirección URL para las llamadas callback"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:313
+#: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:169
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:196
 #: screens/User/UserTokenList/UserTokenList.js:154
 msgid "Modified"
@@ -9875,7 +9934,7 @@ msgstr ""
 msgid "Related search type"
 msgstr "Tipo de búsqueda relacionada"
 
-#: components/AppContainer/PageHeaderToolbar.js:164
+#: components/AppContainer/PageHeaderToolbar.js:211
 msgid "User details"
 msgstr "Detalles del usuario"
 
@@ -9917,8 +9976,8 @@ msgstr "Credencial de Insights"
 #: components/JobList/JobList.js:201
 #: components/JobList/JobList.js:288
 #: routeConfig.js:42
-#: screens/ActivityStream/ActivityStream.js:151
-#: screens/Dashboard/shared/LineChart.js:65
+#: screens/ActivityStream/ActivityStream.js:154
+#: screens/Dashboard/shared/LineChart.js:75
 #: screens/Host/Host.js:75
 #: screens/Host/Hosts.js:33
 #: screens/InstanceGroup/ContainerGroup.js:72
@@ -9926,8 +9985,9 @@ msgstr "Credencial de Insights"
 #: screens/InstanceGroup/InstanceGroups.js:37
 #: screens/InstanceGroup/InstanceGroups.js:43
 #: screens/Inventory/ConstructedInventory.js:75
-#: screens/Inventory/Inventories.js:62
-#: screens/Inventory/Inventories.js:72
+#: screens/Inventory/FederatedInventory.js:74
+#: screens/Inventory/Inventories.js:65
+#: screens/Inventory/Inventories.js:75
 #: screens/Inventory/Inventory.js:72
 #: screens/Inventory/InventoryHost/InventoryHost.js:88
 #: screens/Inventory/SmartInventory.js:72
@@ -9991,11 +10051,11 @@ msgstr "Error al asociar a un compañero."
 #~ msgid "Tags are useful when you have a large playbook, and you want to run a specific part of a play or task. Use commas to separate multiple tags. Refer to the documentation for details on the usage of tags."
 #~ msgstr "Etiquetas son útiles cuando se tiene un playbook largo y se desea especificar una parte específica de una jugada o tarea. Utilice comas para separar varias etiquetas. Consulte la documentación para más detalles sobre el uso de las etiquetas."
 
-#: screens/ActivityStream/ActivityStream.js:234
+#: screens/ActivityStream/ActivityStream.js:237
 msgid "Events"
 msgstr "Eventos"
 
-#: screens/Inventory/InventoryGroups/InventoryGroupsList.js:127
+#: screens/Inventory/InventoryGroups/InventoryGroupsList.js:129
 msgid "Group type"
 msgstr "Tipo de grupo"
 
@@ -10062,8 +10122,8 @@ msgstr "Administrador del sistema"
 
 #: routeConfig.js:177
 #: routeConfig.js:181
-#: screens/ActivityStream/ActivityStream.js:220
-#: screens/ActivityStream/ActivityStream.js:222
+#: screens/ActivityStream/ActivityStream.js:223
+#: screens/ActivityStream/ActivityStream.js:225
 #: screens/Setting/Settings.js:45
 msgid "Settings"
 msgstr "Ajustes"
@@ -10161,7 +10221,7 @@ msgstr "Fuentes de inventario con fallas"
 #: screens/Instances/InstanceDetail/InstanceDetail.js:201
 #: screens/Instances/InstanceList/InstanceList.js:232
 #: screens/Instances/InstanceList/InstanceListItem.js:153
-#: screens/Inventory/InventoryList/InventoryListItem.js:107
+#: screens/Inventory/InventoryList/InventoryListItem.js:108
 #: screens/Inventory/InventorySources/InventorySourceList.js:213
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:67
 #: screens/Job/JobDetail/JobDetail.js:237
@@ -10182,7 +10242,7 @@ msgstr "Estado"
 msgid "Are you sure you want to delete:"
 msgstr "¿Está seguro de que desea eliminar:"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.js:381
+#: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.js:382
 msgid "Failed to retrieve full node resource object."
 msgstr "No se pudo recuperar el objeto de recurso de nodo completo."
 
@@ -10220,10 +10280,11 @@ msgstr "Alternar herramientas"
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:169
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:91
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:179
+#: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:95
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:101
-#: screens/Inventory/InventoryList/InventoryList.js:203
-#: screens/Inventory/InventoryList/InventoryList.js:233
-#: screens/Inventory/InventoryList/InventoryListItem.js:127
+#: screens/Inventory/InventoryList/InventoryList.js:214
+#: screens/Inventory/InventoryList/InventoryList.js:244
+#: screens/Inventory/InventoryList/InventoryListItem.js:128
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:212
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:111
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:167
@@ -10246,25 +10307,26 @@ msgstr "Alternar herramientas"
 msgid "Organization"
 msgstr "Organización"
 
-#: screens/Login/Login.js:200
+#: screens/Login/Login.js:193
 msgid "Your session has expired. Please log in to continue where you left off."
 msgstr "Su sesión ha expirado. Inicie sesión para continuar."
 
-#: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostList.js:85
+#: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostList.js:86
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:148
 #: screens/Organization/OrganizationTeams/OrganizationTeamList.js:73
 msgid "Created by (username)"
 msgstr "Creado por (nombre de usuario)"
 
-#: screens/SubscriptionUsage/ChartComponents/UsageChart.js:261
+#: screens/SubscriptionUsage/ChartComponents/UsageChart.js:277
 msgid "Subscriptions consumed"
 msgstr "Suscripciones consumidas"
 
-#: screens/Dashboard/Dashboard.js:118
+#: screens/Dashboard/Dashboard.js:120
 msgid "Inventory sync failures"
 msgstr "Errores de sincronización de inventario"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:348
+#: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:190
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:191
 msgid "This inventory is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "Este inventario está siendo utilizado por otros recursos. ¿Está seguro de que desea eliminarlo?"
@@ -10307,7 +10369,7 @@ msgstr "Tercero"
 #~ msgid "Note: This instance may be re-associated with this instance group if it is managed by"
 #~ msgstr "Nota: Esta instancia puede volver a asociarse con este grupo de instancias si es administrada por"
 
-#: screens/Login/Login.js:268
+#: screens/Login/Login.js:262
 msgid "Sign in with Azure AD Tenant"
 msgstr ""
 
@@ -10365,8 +10427,9 @@ msgstr "Cancelar búsqueda"
 #: screens/Instances/Instances.js:28
 #: screens/Inventory/AdvancedInventoryHost/AdvancedInventoryHost.js:60
 #: screens/Inventory/ConstructedInventory.js:70
-#: screens/Inventory/Inventories.js:63
-#: screens/Inventory/Inventories.js:90
+#: screens/Inventory/FederatedInventory.js:70
+#: screens/Inventory/Inventories.js:66
+#: screens/Inventory/Inventories.js:93
 #: screens/Inventory/Inventory.js:66
 #: screens/Inventory/InventoryGroup/InventoryGroup.js:57
 #: screens/Inventory/InventoryHost/InventoryHost.js:73
@@ -10419,7 +10482,7 @@ msgstr "Cancelar búsqueda"
 #: screens/Setting/Settings.js:128
 #: screens/Setting/TACACS/TACACSDetail/TACACSDetail.js:56
 #: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.js:61
-#: screens/Setting/UI/UIDetail/UIDetail.js:66
+#: screens/Setting/UI/UIDetail/UIDetail.js:68
 #: screens/Team/Team.js:58
 #: screens/Team/Teams.js:31
 #: screens/Template/Template.js:136
@@ -10496,7 +10559,7 @@ msgstr "Si está habilitado, los nodos de control examinarán esta instancia aut
 msgid "and click on Update Revision on Launch"
 msgstr "y haga clic en Actualizar revisión al ejecutar"
 
-#: components/AppContainer/PageHeaderToolbar.js:135
+#: components/AppContainer/PageHeaderToolbar.js:184
 msgid "About"
 msgstr "Acerca de"
 
@@ -10645,7 +10708,7 @@ msgid "End user license agreement"
 msgstr "Acuerdo de licencia de usuario final"
 
 #: routeConfig.js:57
-#: screens/ActivityStream/ActivityStream.js:157
+#: screens/ActivityStream/ActivityStream.js:160
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:168
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:204
 #: screens/WorkflowApproval/WorkflowApprovals.js:14
@@ -10676,10 +10739,10 @@ msgstr "SOCIAL"
 #: screens/ExecutionEnvironment/ExecutionEnvironments.js:26
 #: screens/InstanceGroup/InstanceGroups.js:38
 #: screens/InstanceGroup/InstanceGroups.js:44
-#: screens/Inventory/Inventories.js:65
-#: screens/Inventory/Inventories.js:70
-#: screens/Inventory/Inventories.js:79
-#: screens/Inventory/Inventories.js:91
+#: screens/Inventory/Inventories.js:68
+#: screens/Inventory/Inventories.js:73
+#: screens/Inventory/Inventories.js:82
+#: screens/Inventory/Inventories.js:94
 msgid "Edit details"
 msgstr "Modificar detalles"
 
@@ -10707,7 +10770,7 @@ msgstr "UTC"
 msgid "Skip every"
 msgstr "Saltar cada"
 
-#: screens/Inventory/Inventories.js:94
+#: screens/Inventory/Inventories.js:97
 #: screens/ManagementJob/ManagementJobs.js:25
 #: screens/Project/Projects.js:33
 #: screens/Template/Templates.js:53
@@ -11131,6 +11194,7 @@ msgid "Survey Toggle"
 msgstr "Alternancia de encuestas"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:190
+#: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:112
 msgid "Total groups"
 msgstr "Grupos totales"
 
@@ -11176,6 +11240,12 @@ msgstr "Última modificación"
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeViewModal.js:135
 msgid "Click the Edit button below to reconfigure the node."
 msgstr "Haga clic en el botón Edit (Modificar) para volver a configurar el nodo."
+
+#: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:91
+#: screens/Inventory/InventoryList/InventoryList.js:210
+#: screens/Inventory/InventoryList/InventoryListItem.js:57
+msgid "Federated Inventory"
+msgstr ""
 
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:187
 msgid "Failed to delete organization."
@@ -11312,7 +11382,7 @@ msgstr "LDAP1"
 msgid "Add container group"
 msgstr "Agregar grupo de contenedores"
 
-#: screens/Inventory/InventoryList/InventoryList.js:261
+#: screens/Inventory/InventoryList/InventoryList.js:272
 msgid "The inventory will be in a pending status until the final delete is processed."
 msgstr "El inventario estará en estado pendiente hasta que se procese la eliminación final."
 
@@ -11362,7 +11432,7 @@ msgstr "Grupo de instancias"
 #: components/TemplateList/TemplateList.js:248
 #: components/TemplateList/TemplateListItem.js:141
 #: screens/Host/HostDetail/HostDetail.js:72
-#: screens/Host/HostList/HostList.js:169
+#: screens/Host/HostList/HostList.js:172
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.js:34
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.js:222
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.js:53
@@ -11373,7 +11443,7 @@ msgstr "Grupo de instancias"
 msgid "Activity"
 msgstr "Actividad"
 
-#: screens/Inventory/InventoryList/InventoryListItem.js:159
+#: screens/Inventory/InventoryList/InventoryListItem.js:160
 msgid "Inventories with sources cannot be copied"
 msgstr "No se pueden copiar los inventarios con fuentes"
 
@@ -11416,7 +11486,7 @@ msgstr "nombre"
 msgid "Select roles to apply"
 msgstr "Seleccionar los roles para aplicar"
 
-#: screens/Host/HostList/HostList.js:234
+#: screens/Host/HostList/HostList.js:237
 #: screens/Inventory/InventoryHosts/InventoryHostList.js:209
 msgid "Failed to delete one or more hosts."
 msgstr "No se pudo eliminar uno o más hosts."
@@ -11446,7 +11516,7 @@ msgstr "Mostrar cambios"
 msgid "Exact search on name field."
 msgstr "Búsqueda exacta en el campo de nombre."
 
-#: screens/Inventory/InventoryList/InventoryList.js:255
+#: screens/Inventory/InventoryList/InventoryList.js:266
 msgid "Deleting these inventories could impact some templates that rely on them. Are you sure you want to delete anyway?"
 msgstr "La eliminación de estos inventarios podría afectar a algunas plantillas que dependen de ellos. ¿Está seguro de que desea eliminar de todos modos?"
 
@@ -11462,7 +11532,7 @@ msgstr "No se pudo eliminar una o más fuentes de inventario."
 msgid "If specified, this field will be shown on the node instead of the resource name when viewing the workflow"
 msgstr "Si se especifica, este campo se mostrará en el nodo en lugar del nombre del recurso cuando se vea el flujo de trabajo"
 
-#: screens/Login/Login.js:283
+#: screens/Login/Login.js:277
 msgid "Sign in with GitHub"
 msgstr "Iniciar sesión con GitHub"
 
@@ -11633,7 +11703,7 @@ msgstr "No se pudo eliminar el rol"
 msgid "Successfully Denied"
 msgstr "Denegado con éxito"
 
-#: screens/Inventory/InventoryList/InventoryListItem.js:81
+#: screens/Inventory/InventoryList/InventoryListItem.js:82
 msgid "Not configured for inventory sync."
 msgstr "No configurado para la sincronización de inventario."
 
@@ -11709,7 +11779,7 @@ msgstr "No se pudo actualizar la encuesta."
 msgid "Hosts by processor type"
 msgstr "Anfitriones por tipo de procesador"
 
-#: screens/Inventory/Inventories.js:24
+#: screens/Inventory/Inventories.js:26
 msgid "Create new constructed inventory"
 msgstr "Crear nuevo inventario construido"
 
@@ -11722,7 +11792,7 @@ msgid "Team not found."
 msgstr "No se encontró la tarea."
 
 #: components/LaunchButton/ReLaunchDropDown.js:62
-#: screens/Dashboard/Dashboard.js:107
+#: screens/Dashboard/Dashboard.js:109
 msgid "Failed hosts"
 msgstr "Hosts fallidos"
 
@@ -11808,7 +11878,7 @@ msgstr "Elija el tipo de recurso que recibirá los nuevos roles. Por ejemplo, si
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressListItem.js:25
 #: screens/Instances/InstancePeers/InstancePeerListItem.js:43
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.js:43
-#: screens/Inventory/InventoryList/InventoryListItem.js:96
+#: screens/Inventory/InventoryList/InventoryListItem.js:97
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupListItem.js:38
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.js:110
 #: screens/Organization/OrganizationList/OrganizationListItem.js:33
@@ -12122,7 +12192,7 @@ msgstr "Número de teléfono de la fuente"
 msgid "{0} seconds"
 msgstr "{0} segundos"
 
-#: screens/Inventory/InventoryList/InventoryList.js:194
+#: screens/Inventory/InventoryList/InventoryList.js:204
 msgid "Inventory Type"
 msgstr "Tipo de inventario"
 
@@ -12206,12 +12276,13 @@ msgstr "No se pudo asociar."
 #: screens/Host/HostGroups/HostGroupsList.js:233
 #: screens/Host/Hosts.js:32
 #: screens/Inventory/ConstructedInventory.js:73
-#: screens/Inventory/Inventories.js:74
-#: screens/Inventory/Inventories.js:76
+#: screens/Inventory/FederatedInventory.js:73
+#: screens/Inventory/Inventories.js:77
+#: screens/Inventory/Inventories.js:79
 #: screens/Inventory/Inventory.js:68
 #: screens/Inventory/InventoryHost/InventoryHost.js:83
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.js:244
-#: screens/Inventory/InventoryList/InventoryListItem.js:135
+#: screens/Inventory/InventoryList/InventoryListItem.js:136
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:259
 msgid "Groups"
 msgstr "Grupos"
@@ -12259,8 +12330,8 @@ msgstr "Nodos gestionados"
 #: components/LaunchPrompt/steps/CredentialsStep.js:251
 #: components/LaunchPrompt/steps/InventoryStep.js:89
 #: components/Lookup/CredentialLookup.js:195
-#: components/Lookup/InventoryLookup.js:157
-#: components/Lookup/InventoryLookup.js:213
+#: components/Lookup/InventoryLookup.js:164
+#: components/Lookup/InventoryLookup.js:220
 #: components/Lookup/MultiCredentialsLookup.js:199
 #: components/Lookup/OrganizationLookup.js:135
 #: components/Lookup/ProjectLookup.js:152
@@ -12280,12 +12351,12 @@ msgstr "Nodos gestionados"
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.js:132
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateList.js:102
 #: screens/Host/HostGroups/HostGroupsList.js:166
-#: screens/Host/HostList/HostList.js:156
+#: screens/Host/HostList/HostList.js:159
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.js:202
-#: screens/Inventory/InventoryGroups/InventoryGroupsList.js:132
+#: screens/Inventory/InventoryGroups/InventoryGroupsList.js:134
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.js:175
 #: screens/Inventory/InventoryHosts/InventoryHostList.js:129
-#: screens/Inventory/InventoryList/InventoryList.js:211
+#: screens/Inventory/InventoryList/InventoryList.js:222
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:187
 #: screens/Organization/OrganizationExecEnvList/OrganizationExecEnvList.js:93
 #: screens/Organization/OrganizationList/OrganizationList.js:132
@@ -12412,11 +12483,11 @@ msgstr "Iniciar alternancia de notificaciones"
 #: components/LaunchPrompt/steps/useInventoryStep.js:30
 #: components/Lookup/HostFilterLookup.js:428
 #: components/Lookup/HostListItem.js:11
-#: components/Lookup/InventoryLookup.js:124
-#: components/Lookup/InventoryLookup.js:133
-#: components/Lookup/InventoryLookup.js:174
-#: components/Lookup/InventoryLookup.js:189
-#: components/Lookup/InventoryLookup.js:230
+#: components/Lookup/InventoryLookup.js:131
+#: components/Lookup/InventoryLookup.js:140
+#: components/Lookup/InventoryLookup.js:181
+#: components/Lookup/InventoryLookup.js:196
+#: components/Lookup/InventoryLookup.js:237
 #: components/PromptDetail/PromptDetail.js:222
 #: components/PromptDetail/PromptInventorySourceDetail.js:75
 #: components/PromptDetail/PromptJobTemplateDetail.js:119
@@ -12426,13 +12497,13 @@ msgstr "Iniciar alternancia de notificaciones"
 #: components/TemplateList/TemplateListItem.js:243
 #: components/TemplateList/TemplateListItem.js:253
 #: screens/Host/HostDetail/HostDetail.js:78
-#: screens/Host/HostList/HostList.js:173
+#: screens/Host/HostList/HostList.js:176
 #: screens/Host/HostList/HostListItem.js:53
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.js:40
-#: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostList.js:117
+#: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostList.js:118
 #: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostListItem.js:46
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:99
-#: screens/Inventory/InventoryList/InventoryList.js:197
+#: screens/Inventory/InventoryList/InventoryList.js:207
 #: screens/Inventory/InventoryList/InventoryListItem.js:54
 #: screens/Job/JobDetail/JobDetail.js:111
 #: screens/Job/JobDetail/JobDetail.js:131
@@ -12481,7 +12552,7 @@ msgstr "Aprobaciones para alternar las notificaciones"
 msgid "Delete survey question"
 msgstr "Eliminar la pregunta de la encuesta"
 
-#: screens/Dashboard/Dashboard.js:151
+#: screens/Dashboard/Dashboard.js:153
 msgid "Recent Jobs list tab"
 msgstr "Pestaña de la lista de tareas recientes"
 
