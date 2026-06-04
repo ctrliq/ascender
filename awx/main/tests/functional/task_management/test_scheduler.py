@@ -371,6 +371,36 @@ def test_single_job_dependencies_inventory_update_launch(controlplane_instance_g
 
 
 @pytest.mark.django_db
+def test_generate_dependencies_are_scoped_to_each_job(controlplane_instance_group, job_template_factory, inventory_source_factory):
+    first_objects = job_template_factory('jt-one', organization='org-one', project='proj-one', inventory='inv-one', credential='cred-one')
+    second_objects = job_template_factory('jt-two', organization='org-two', project='proj-two', inventory='inv-two', credential='cred-two')
+
+    first_job = create_job(first_objects.job_template, dependencies_processed=False)
+    second_job = create_job(second_objects.job_template, dependencies_processed=False)
+
+    first_inventory_source = inventory_source_factory('ec2-one', source='ec2', inventory=first_objects.inventory)
+    second_inventory_source = inventory_source_factory('ec2-two', source='ec2', inventory=second_objects.inventory)
+
+    first_inventory_source.update_on_launch = True
+    first_inventory_source.update_cache_timeout = 0
+    first_inventory_source.save()
+    second_inventory_source.update_on_launch = True
+    second_inventory_source.update_cache_timeout = 0
+    second_inventory_source.save()
+
+    with mock.patch('awx.main.scheduler.TaskManager.start_task'):
+        DependencyManager().schedule()
+
+    first_deps = list(first_job.dependent_jobs.all())
+    second_deps = list(second_job.dependent_jobs.all())
+
+    assert len(first_deps) == 1
+    assert first_deps[0].inventory_source_id == first_inventory_source.id
+    assert len(second_deps) == 1
+    assert second_deps[0].inventory_source_id == second_inventory_source.id
+
+
+@pytest.mark.django_db
 def test_inventory_update_launches_project_update(controlplane_instance_group, scm_inventory_source):
     ii = scm_inventory_source
     project = scm_inventory_source.source_project
