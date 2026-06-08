@@ -2,7 +2,7 @@ adal==1.2.7
     # via msrestazure
 aiohappyeyeballs==2.6.1
     # via aiohttp
-aiohttp==3.13.5
+aiohttp==3.14.0
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   aiohttp-retry
@@ -484,6 +484,7 @@ txaio==23.1.1
     # via autobahn
 typing-extensions==4.12.2
     # via
+    #   aiohttp
     #   aiosignal
     #   azure-core
     #   azure-identity
