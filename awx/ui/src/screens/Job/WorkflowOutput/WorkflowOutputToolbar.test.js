@@ -10,8 +10,13 @@ let wrapper;
 const dispatch = jest.fn();
 const job = {
   id: 1,
+  name: 'Workflow Job',
   status: 'running',
   summary_fields: {
+    workflow_job_template: {
+      id: 7,
+      name: 'Workflow Job Template',
+    },
     user_capabilities: {
       start: true,
     },
@@ -70,5 +75,38 @@ describe('WorkflowOutputToolbar', () => {
   test('Toggle Tools button dispatches as expected', () => {
     wrapper.find('WrenchIcon').simulate('click');
     expect(dispatch).toHaveBeenCalledWith({ type: 'TOGGLE_TOOLS' });
+  });
+
+  test('does not render the visualizer button when no workflow template exists', () => {
+    const nodes = [
+      {
+        id: 1,
+      },
+      {
+        id: 2,
+      },
+      {
+        id: 3,
+        isDeleted: true,
+      },
+    ];
+    const slicedJob = {
+      ...job,
+      summary_fields: {
+        ...job.summary_fields,
+        workflow_job_template: null,
+      },
+    };
+    const slicedWrapper = mountWithContexts(
+      <WorkflowDispatchContext.Provider value={dispatch}>
+        <WorkflowStateContext.Provider value={{ ...workflowContext, nodes }}>
+          <WorkflowOutputToolbar job={slicedJob} />
+        </WorkflowStateContext.Provider>
+      </WorkflowDispatchContext.Provider>
+    );
+
+    expect(slicedWrapper.find('Button[ouiaId="edit-workflow"]')).toHaveLength(
+      0
+    );
   });
 });
