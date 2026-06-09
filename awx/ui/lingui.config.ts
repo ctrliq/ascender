@@ -10,7 +10,7 @@ export default defineConfig({
    compileNamespace: "cjs",
    fallbackLocales: { "default": "en"},
    format: "po",
-   locales: ["en","es","fr","ko","nl","zh","ja","zu"],
+   locales: ["en","es","fr","de","it","ko","nl","zh","ja","zu"],
    orderBy: "messageId",
    rootDir: "./src",
    runtimeConfigModule: ["@lingui/core", "i18n"],
