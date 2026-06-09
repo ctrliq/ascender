@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.9\n"
 
 #. js-lingui-explicit-id
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:265
@@ -19,7 +19,7 @@ msgstr ""
 #: screens/Instances/InstanceDetail/InstanceDetail.js:305
 #: screens/Instances/InstanceList/InstanceListItem.js:179
 msgid "{count, plural, one {# fork} other {# forks}}"
-msgstr ""
+msgstr "{数え方、複数形、1本 {# フォーク} 他の {# フォーク}}"
 
 #: components/Schedule/ScheduleToggle/ScheduleToggle.js:79
 msgid "Failed to toggle schedule."
@@ -133,10 +133,11 @@ msgstr "{selectedItemsCount, plural, one {Click to run a health check on the sel
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:66
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:87
 #: screens/InstanceGroup/shared/ContainerGroupForm.js:77
-msgid ""
-"Maximum number of forks to allow across all jobs running concurrently on this group.\n"
+msgid "Maximum number of forks to allow across all jobs running concurrently on this group.\n"
 "          Zero means no limit will be enforced."
-msgstr ""
+msgstr "このグループで同時に実行されるすべてのジョブにおいて、許可されるフォークの最大数。\n"
+"\n"
+"0を指定すると、制限は適用されません。"
 
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:325
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:91
@@ -145,11 +146,11 @@ msgstr "インベントリーソースの同期の取り消しに失敗しまし
 
 #: screens/Project/ProjectDetail/ProjectDetail.js:343
 msgid "Delete Project"
-msgstr ""
+msgstr "プロジェクトを削除"
 
 #: screens/TopologyView/Tooltip.js:303
 msgid "{forks, plural, one {# fork} other {# forks}}"
-msgstr ""
+msgstr "{フォーク、複数形、1本{#フォーク}、もう1本{#フォーク}}"
 
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:189
 #: routeConfig.js:93
@@ -491,11 +492,14 @@ msgstr "ロールの追加"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:39
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:241
-msgid ""
-"The base URL of the Grafana server - the\n"
+msgid "The base URL of the Grafana server - the\n"
 "      /api/annotations endpoint will be added automatically to the base\n"
 "      Grafana URL."
-msgstr ""
+msgstr "GrafanaサーバーのベースURL -\n"
+"\n"
+"/api/annotationsエンドポイントは、ベースGrafana URLに自動的に追加されます。\n"
+"\n"
+"GrafanaのURL。"
 
 #: screens/InstanceGroup/Instances/InstanceListItem.js:185
 #: screens/Instances/InstanceList/InstanceListItem.js:199
@@ -773,10 +777,11 @@ msgid "The Instance Groups to which this instance belongs."
 msgstr "このインスタンスが属するインスタンスグループ。"
 
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:87
-msgid ""
-"You may apply a number of possible variables in the\n"
+msgid "You may apply a number of possible variables in the\n"
 "                message. For more information, refer to the"
-msgstr ""
+msgstr "メッセージには、さまざまな変数を適用できます。\n"
+"\n"
+"詳細については、以下を参照してください。"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:361
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:205
@@ -801,11 +806,13 @@ msgid "Lookup modal"
 msgstr "ルックアップモーダル"
 
 #: components/HostToggle/HostToggle.js:21
-msgid ""
-"Indicates if a host is available and should be included in running\n"
+msgid "Indicates if a host is available and should be included in running\n"
 "    jobs.  For hosts that are part of an external inventory, this may be\n"
 "    reset by the inventory sync process."
-msgstr ""
+msgstr "ホストが利用可能で、実行中のジョブに含めるべきかどうかを示します。\n"
+"\n"
+"外部インベントリに含まれるホストの場合、これは\n"
+"インベントリ同期プロセスによってリセットされる可能性があります。"
 
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:99
 msgid "Workflow Nodes"
@@ -901,10 +908,11 @@ msgid "new choice"
 msgstr "新しい選択"
 
 #: components/Schedule/shared/UnsupportedScheduleForm.js:13
-msgid ""
-"This schedule uses complex rules that are not supported in the\n"
+msgid "This schedule uses complex rules that are not supported in the\n"
 "  UI.  Please use the API to manage this schedule."
-msgstr ""
+msgstr "このスケジュールは、UIではサポートされていない複雑なルールを使用しています。\n"
+"\n"
+"このスケジュールを管理するには、APIをご利用ください。"
 
 #: components/LaunchPrompt/steps/OtherPromptsStep.js:136
 #: components/Workflow/WorkflowLinkHelp.js:40
@@ -929,7 +937,7 @@ msgstr "送信先チャネル"
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.js:106
 msgid "CIQ Ascender Automation Platform"
-msgstr ""
+msgstr "CIQ Ascenderオートメーションプラットフォーム"
 
 #: components/TemplateList/TemplateListItem.js:206
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.js:167
@@ -993,7 +1001,7 @@ msgstr "アーティファクト"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:35
 msgid "{interval} year"
-msgstr ""
+msgstr "{interval}年"
 
 #: components/Pagination/Pagination.js:34
 msgid "Go to next page"
@@ -1028,10 +1036,11 @@ msgstr "完全なリビジョンをクリップボードにコピーします。
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:59
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:80
 #: screens/InstanceGroup/shared/ContainerGroupForm.js:68
-msgid ""
-"Maximum number of jobs to run concurrently on this group.\n"
+msgid "Maximum number of jobs to run concurrently on this group.\n"
 "          Zero means no limit will be enforced."
-msgstr ""
+msgstr "このグループで同時に実行できるジョブの最大数。\n"
+"\n"
+"0を指定すると、制限は適用されません。"
 
 #: screens/Credential/shared/CredentialForm.js:137
 msgid "Select a credential Type"
@@ -1052,11 +1061,12 @@ msgstr "終了日時"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:36
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:138
-msgid ""
-"The amount of time (in seconds) before the email\n"
+msgid "The amount of time (in seconds) before the email\n"
 "        notification stops trying to reach the host and times out. Ranges\n"
 "        from 1 to 120 seconds."
-msgstr ""
+msgstr "メール通知がホストへの到達を試みなくなり、タイムアウトするまでの時間（秒単位）。\n"
+"\n"
+"1秒から120秒までの範囲です。"
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/UnsavedChangesModal.js:34
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/UnsavedChangesModal.js:37
@@ -1074,7 +1084,7 @@ msgstr "コンプライアンス違反"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:25
 msgid "{interval} minute"
-msgstr ""
+msgstr "{interval}分"
 
 #: screens/Job/JobOutput/EmptyOutput.js:54
 msgid "Failure Explanation:"
@@ -1287,10 +1297,9 @@ msgid "There was a problem logging in. Please try again."
 msgstr "ログインに問題がありました。もう一度やり直してください。"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:81
-msgid ""
-"Token that ensures this is a source file\n"
+msgid "Token that ensures this is a source file\n"
 "              for the ‘constructed’ plugin."
-msgstr ""
+msgstr "これが「構築済み」プラグインのソースファイルであることを保証するトークン。\n"
 
 #: screens/NotificationTemplate/NotificationTemplate.js:76
 msgid "Back to Notifications"
@@ -1361,7 +1370,7 @@ msgstr "Stdout"
 
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:82
 msgid "Only if Missing"
-msgstr ""
+msgstr "欠落している場合のみ"
 
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.js:48
 msgid "Metadata"
@@ -1717,7 +1726,7 @@ msgstr "残りのホスト"
 
 #: components/About/About.js:42
 msgid "Ctrl IQ, Inc."
-msgstr ""
+msgstr "Ctrl IQ, Inc."
 
 #: screens/Template/TemplateSurvey.js:133
 msgid "Failed to update survey."
@@ -1920,7 +1929,7 @@ msgstr "管理"
 
 #: screens/Project/ProjectDetail/ProjectDetail.js:360
 msgid "Failed to delete project."
-msgstr ""
+msgstr "プロジェクトの削除に失敗しました。"
 
 #: components/RelatedTemplateList/RelatedTemplateList.js:191
 #: components/TemplateList/TemplateList.js:239
@@ -1951,7 +1960,7 @@ msgstr "他のプロンプト"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:33
 msgid "{interval} month"
-msgstr ""
+msgstr "{interval}ヶ月"
 
 #: components/JobList/JobListItem.js:199
 #: components/TemplateList/TemplateList.js:222
@@ -1980,12 +1989,12 @@ msgstr "入力の設定"
 #. placeholder {0}: groups.length
 #. placeholder {0}: inventory.inventory_sources_with_failures
 #. placeholder {0}: itemsToRemove.length
-#. placeholder {1}: import 'styled-components/macro'; import React, { useState, useContext, useEffect } from 'react'; import { useParams } from 'react-router-dom'; import { func, bool, arrayOf } from 'prop-types'; import { Plural, useLingui } from '@lingui/react/macro'; import { Button, Radio, DropdownItem } from '@patternfly/react-core'; import styled from 'styled-components'; import { KebabifiedContext } from 'contexts/Kebabified'; import { GroupsAPI, InventoriesAPI } from 'api'; import { Group } from 'types'; import ErrorDetail from 'components/ErrorDetail'; import AlertModal from 'components/AlertModal'; const ListItem = styled.li` display: flex; font-weight: 600; color: var(--pf-global--danger-color--100); `; const InventoryGroupsDeleteModal = ({ onAfterDelete, isDisabled, groups }) => { const { t } = useLingui(); const [radioOption, setRadioOption] = useState(null); const [isModalOpen, setIsModalOpen] = useState(false); const [isDeleteLoading, setIsDeleteLoading] = useState(false); const [deletionError, setDeletionError] = useState(null); const { id: inventoryId } = useParams(); const { isKebabified, onKebabModalChange } = useContext(KebabifiedContext); useEffect(() => { if (isKebabified) { onKebabModalChange(isModalOpen); } }, [isKebabified, isModalOpen, onKebabModalChange]); const handleDelete = async (option) => { setIsDeleteLoading(true); try { /* eslint-disable no-await-in-loop */ /* Delete groups sequentially to avoid api integrity errors */ /* https://eslint.org/docs/rules/no-await-in-loop#when-not-to-use-it */ for (let i = 0; i < groups.length; i++) { const group = groups[i]; if (option === 'delete') { await GroupsAPI.destroy(+group.id); } else if (option === 'promote') { await InventoriesAPI.promoteGroup(inventoryId, +group.id); } } /* eslint-enable no-await-in-loop */ } catch (error) { setDeletionError(error); } finally { setIsModalOpen(false); setIsDeleteLoading(false); onAfterDelete(); } }; return ( <> {isKebabified ? ( <DropdownItem key="delete" isDisabled={isDisabled || isDeleteLoading} component="button" aria-label={t`Delete`} onClick={() => setIsModalOpen(true)} ouiaId="group-delete-dropdown-item" > {t`Delete`} </DropdownItem> ) : ( <Button variant="secondary" aria-label={t`Delete`} onClick={() => setIsModalOpen(true)} isDisabled={isDisabled || isDeleteLoading} ouiaId="group-delete-button" > {t`Delete`} </Button> )} {isModalOpen && ( <AlertModal isOpen={isModalOpen} variant="danger" title={ <Plural value={groups.length} one={t`Delete Group?`} other={t`Delete Groups?`} /> } onClose={() => setIsModalOpen(false)} actions={[ <Button aria-label={t`Confirm Delete`} onClick={() => handleDelete(radioOption)} variant="danger" key="delete" isDisabled={radioOption === null} ouiaId="delete-modal-confirm-button" > {t`Delete`} </Button>, <Button aria-label={t`Close`} onClick={() => setIsModalOpen(false)} variant="link" key="cancel" ouiaId="delete-modal-cancel-button" > {t`Cancel`} </Button>, ]} > <Plural value={groups.length} one={t`Are you sure you want delete the group below?`} other={t`Are you sure you want delete the groups below?`} /> <div css="padding: 24px 0;"> {groups.map((group) => ( <ListItem key={group.id}>{group.name}</ListItem> ))} </div> <div> <Radio id="radio-delete" key="radio-delete" label={t`Delete All Groups and Hosts`} name="option" onChange={() => setRadioOption('delete')} ouiaId="delete-all-radio-button" /> <Radio css="margin-top: 5px;" id="radio-promote" key="radio-promote" label={t`Promote Child Groups and Hosts`} name="option" onChange={() => setRadioOption('promote')} ouiaId="promote-radio-button" /> </div> </AlertModal> )} {deletionError && ( <AlertModal isOpen={deletionError} variant="error" aria-label={t`deletion error`} title={t`Error!`} onClose={() => setDeletionError(null)} > {t`Failed to delete one or more groups.`} <ErrorDetail error={deletionError} /> </AlertModal> )} </> ); }; InventoryGroupsDeleteModal.propTypes = { onAfterDelete: func.isRequired, groups: arrayOf(Group), isDisabled: bool.isRequired, }; InventoryGroupsDeleteModal.defaultProps = { groups: [], }; export default InventoryGroupsDeleteModal; 
-#. placeholder {1}: import React, { useCallback, useEffect } from 'react'; import { useLocation, useRouteMatch, Link } from 'react-router-dom'; import { Plural, useLingui } from '@lingui/react/macro'; import { Card, PageSection, DropdownItem } from '@patternfly/react-core'; import { InventoriesAPI } from 'api'; import useRequest, { useDeleteItems } from 'hooks/useRequest'; import useSelected from 'hooks/useSelected'; import useToast, { AlertVariant } from 'hooks/useToast'; import AlertModal from 'components/AlertModal'; import DatalistToolbar from 'components/DataListToolbar'; import ErrorDetail from 'components/ErrorDetail'; import PaginatedTable, { HeaderRow, HeaderCell, ToolbarDeleteButton, getSearchableKeys, } from 'components/PaginatedTable'; import { getQSConfig, parseQueryString } from 'util/qs'; import AddDropDownButton from 'components/AddDropDownButton'; import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails'; import useWsInventories from './useWsInventories'; import InventoryListItem from './InventoryListItem'; const QS_CONFIG = getQSConfig('inventory', { page: 1, page_size: 20, order_by: 'name', }); function InventoryList() { const location = useLocation(); const match = useRouteMatch(); const { addToast, Toast, toastProps } = useToast(); const { t } = useLingui(); const { result: { results, itemCount, actions, relatedSearchableKeys, searchableKeys, }, error: contentError, isLoading, request: fetchInventories, } = useRequest( useCallback(async () => { const params = parseQueryString(QS_CONFIG, location.search); const [response, actionsResponse] = await Promise.all([ InventoriesAPI.read(params), InventoriesAPI.readOptions(), ]); return { results: response.data.results, itemCount: response.data.count, actions: actionsResponse.data.actions, relatedSearchableKeys: ( actionsResponse?.data?.related_search_fields || [] ).map((val) => val.slice(0, -8)), searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET), }; }, [location]), { results: [], itemCount: 0, actions: {}, relatedSearchableKeys: [], searchableKeys: [], } ); useEffect(() => { fetchInventories(); }, [fetchInventories]); const fetchInventoriesById = useCallback( async (ids) => { const params = { ...parseQueryString(QS_CONFIG, location.search) }; params.id__in = ids.join(','); const { data } = await InventoriesAPI.read(params); return data.results; }, [location.search] // eslint-disable-line react-hooks/exhaustive-deps ); const inventories = useWsInventories( results, fetchInventories, fetchInventoriesById, QS_CONFIG ); const { selected, isAllSelected, handleSelect, selectAll, clearSelected } = useSelected(inventories); const { isLoading: isDeleteLoading, deleteItems: deleteInventories, deletionError, clearDeletionError, } = useDeleteItems( useCallback( () => Promise.all(selected.map((team) => InventoriesAPI.destroy(team.id))), [selected] ), { allItemsSelected: isAllSelected, } ); const handleInventoryDelete = async () => { await deleteInventories(); clearSelected(); }; const handleCopy = useCallback( (newInventoryId) => { addToast({ id: newInventoryId, title: t`Inventory copied successfully`, variant: AlertVariant.success, hasTimeout: true, }); }, [addToast, t] ); const hasContentLoading = isDeleteLoading || isLoading; const canAdd = actions && actions.POST; const deleteDetailsRequests = relatedResourceDeleteRequests(t).inventory( selected[0] ); const addInventory = t`Add inventory`; const addSmartInventory = t`Add smart inventory`; const addConstructedInventory = t`Add constructed inventory`; const addButton = ( <AddDropDownButton ouiaId="add-inventory-button" key="add" dropdownItems={[ <DropdownItem ouiaId="add-inventory-item" to={`${match.url}/inventory/add/`} component={Link} key={addInventory} aria-label={addInventory} > {addInventory} </DropdownItem>, <DropdownItem ouiaId="add-smart-inventory-item" to={`${match.url}/smart_inventory/add/`} component={Link} key={addSmartInventory} aria-label={addSmartInventory} > {addSmartInventory} </DropdownItem>, <DropdownItem ouiaId="add-constructed-inventory-item" to={`${match.url}/constructed_inventory/add/`} component={Link} key={addConstructedInventory} aria-label={addConstructedInventory} > {addConstructedInventory} </DropdownItem>, ]} /> ); return ( <> <PageSection> <Card> <PaginatedTable contentError={contentError} hasContentLoading={hasContentLoading} items={inventories} itemCount={itemCount} pluralizedItemName={t`Inventories`} qsConfig={QS_CONFIG} toolbarSearchColumns={[ { name: t`Name`, key: 'name__icontains', isDefault: true, }, { name: t`Inventory Type`, key: 'or__kind', options: [ ['', t`Inventory`], ['smart', t`Smart Inventory`], ['constructed', t`Constructed Inventory`], ], }, { name: t`Organization`, key: 'organization__name', }, { name: t`Description`, key: 'description__icontains', }, { name: t`Created By (Username)`, key: 'created_by__username__icontains', }, { name: t`Modified By (Username)`, key: 'modified_by__username__icontains', }, ]} toolbarSortColumns={[ { name: t`Name`, key: 'name', }, ]} toolbarSearchableKeys={searchableKeys} toolbarRelatedSearchableKeys={relatedSearchableKeys} clearSelected={clearSelected} headerRow={ <HeaderRow qsConfig={QS_CONFIG}> <HeaderCell sortKey="name">{t`Name`}</HeaderCell> <HeaderCell>{t`Sync Status`}</HeaderCell> <HeaderCell>{t`Type`}</HeaderCell> <HeaderCell>{t`Organization`}</HeaderCell> <HeaderCell>{t`Actions`}</HeaderCell> </HeaderRow> } renderToolbar={(props) => ( <DatalistToolbar {...props} isAllSelected={isAllSelected} onSelectAll={selectAll} qsConfig={QS_CONFIG} additionalControls={[ ...(canAdd ? [addButton] : []), <ToolbarDeleteButton key="delete" onDelete={handleInventoryDelete} itemsToDelete={selected} pluralizedItemName={t`Inventories`} deleteDetailsRequests={deleteDetailsRequests} deleteMessage={ <Plural value={selected.length} one={t`This inventory is currently being used by some templates. Are you sure you want to delete it?`} other={t`Deleting these inventories could impact some templates that rely on them. Are you sure you want to delete anyway?`} /> } warningMessage={ <Plural value={selected.length} one={t`The inventory will be in a pending status until the final delete is processed.`} other={t`The inventories will be in a pending status until the final delete is processed.`} /> } />, ]} /> )} renderRow={(inventory, index) => ( <InventoryListItem key={inventory.id} value={inventory.name} inventory={inventory} rowIndex={index} fetchInventories={fetchInventories} onSelect={() => { if (!inventory.pending_deletion) { handleSelect(inventory); } }} onCopy={handleCopy} isSelected={selected.some((row) => row.id === inventory.id)} /> )} emptyStateControls={canAdd && addButton} /> </Card> <AlertModal isOpen={deletionError} variant="error" aria-label={t`Deletion Error`} title={t`Error!`} onClose={clearDeletionError} > {t`Failed to delete one or more inventories.`} <ErrorDetail error={deletionError} /> </AlertModal> </PageSection> <Toast {...toastProps} /> </> ); } export default InventoryList; 
-#. placeholder {1}: import React, { useCallback, useEffect } from 'react'; import { useParams, useLocation } from 'react-router-dom'; import { Plural, useLingui } from '@lingui/react/macro'; import useRequest, { useDeleteItems, useDismissableError, } from 'hooks/useRequest'; import { getQSConfig, parseQueryString } from 'util/qs'; import { InventoriesAPI, InventorySourcesAPI } from 'api'; import PaginatedTable, { HeaderRow, HeaderCell, ToolbarAddButton, ToolbarDeleteButton, ToolbarSyncSourceButton, getSearchableKeys, } from 'components/PaginatedTable'; import useSelected from 'hooks/useSelected'; import DatalistToolbar from 'components/DataListToolbar'; import AlertModal from 'components/AlertModal/AlertModal'; import ErrorDetail from 'components/ErrorDetail/ErrorDetail'; import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails'; import InventorySourceListItem from './InventorySourceListItem'; import useWsInventorySources from './useWsInventorySources'; const QS_CONFIG = getQSConfig('inventory-sources', { page: 1, page_size: 20, order_by: 'name', }); function InventorySourceList() { const { t } = useLingui(); const { inventoryType, id } = useParams(); const { search } = useLocation(); const { isLoading, error: fetchError, result: { result, sourceCount, sourceChoices, sourceChoicesOptions, searchableKeys, relatedSearchableKeys, }, request: fetchSources, } = useRequest( useCallback(async () => { const params = parseQueryString(QS_CONFIG, search); const results = await Promise.all([ InventoriesAPI.readSources(id, params), InventorySourcesAPI.readOptions(), ]); return { result: results[0].data.results, sourceCount: results[0].data.count, sourceChoices: results[1].data.actions.GET.source.choices, sourceChoicesOptions: results[1].data.actions, searchableKeys: getSearchableKeys(results[1].data.actions?.GET), relatedSearchableKeys: ( results[1]?.data?.related_search_fields || [] ).map((val) => val.slice(0, -8)), }; }, [id, search]), { result: [], sourceCount: 0, sourceChoices: [], searchableKeys: [], relatedSearchableKeys: [], } ); const sources = useWsInventorySources(result); const canSyncSources = sources.length > 0 && sources.every((source) => source.summary_fields.user_capabilities.start); const { isLoading: isSyncAllLoading, error: syncAllError, request: syncAll, } = useRequest( useCallback(async () => { if (canSyncSources) { await InventoriesAPI.syncAllSources(id); } }, [id, canSyncSources]) ); useEffect(() => { fetchSources(); }, [fetchSources]); const { selected, isAllSelected, handleSelect, clearSelected, selectAll } = useSelected(sources); const { isLoading: isDeleteLoading, deleteItems: handleDeleteSources, deletionError, clearDeletionError, } = useDeleteItems( useCallback( () => Promise.all( selected.map(({ id: sourceId }) => InventorySourcesAPI.destroy(sourceId) ), [] ), [selected] ), { fetchItems: fetchSources, allItemsSelected: isAllSelected, qsConfig: QS_CONFIG, } ); const { error: syncError, dismissError } = useDismissableError(syncAllError); const deleteRelatedInventoryResources = (resourceId) => [ InventorySourcesAPI.destroyHosts(resourceId), InventorySourcesAPI.destroyGroups(resourceId), ]; const { isLoading: deleteRelatedResourcesLoading, deletionError: deleteRelatedResourcesError, deleteItems: handleDeleteRelatedResources, } = useDeleteItems( useCallback( async () => Promise.all( selected .map(({ id: resourceId }) => deleteRelatedInventoryResources(resourceId) ) .flat() ), [selected] ) ); const handleDelete = async () => { await handleDeleteRelatedResources(); if (!deleteRelatedResourcesError) { await handleDeleteSources(); } clearSelected(); }; const canAdd = sourceChoicesOptions && Object.prototype.hasOwnProperty.call(sourceChoicesOptions, 'POST'); const listUrl = `/inventories/${inventoryType}/${id}/sources/`; const deleteDetailsRequests = relatedResourceDeleteRequests(t).inventorySource( selected[0]?.id ); return ( <> <PaginatedTable contentError={fetchError} toolbarSearchableKeys={searchableKeys} toolbarRelatedSearchableKeys={relatedSearchableKeys} hasContentLoading={ isLoading || isDeleteLoading || isSyncAllLoading || deleteRelatedResourcesLoading } items={sources} itemCount={sourceCount} pluralizedItemName={t`Inventory Sources`} qsConfig={QS_CONFIG} clearSelected={clearSelected} renderToolbar={(props) => ( <DatalistToolbar {...props} isAllSelected={isAllSelected} onSelectAll={selectAll} qsConfig={QS_CONFIG} additionalControls={[ ...(canAdd ? [<ToolbarAddButton key="add" linkTo={`${listUrl}add`} />] : []), <ToolbarDeleteButton key="delete" onDelete={handleDelete} itemsToDelete={selected} pluralizedItemName={t`Inventory Sources`} deleteDetailsRequests={deleteDetailsRequests} deleteMessage={ <Plural value={selected.length} one={t`This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?`} other={t`Deleting these inventory sources could impact other resources that rely on them. Are you sure you want to delete anyway`} /> } />, ...(canSyncSources ? [<ToolbarSyncSourceButton onClick={syncAll} />] : []), ]} /> )} headerRow={ <HeaderRow qsConfig={QS_CONFIG}> <HeaderCell sortKey="name">{t`Name`}</HeaderCell> <HeaderCell>{t`Status`}</HeaderCell> <HeaderCell>{t`Type`}</HeaderCell> <HeaderCell>{t`Actions`}</HeaderCell> </HeaderRow> } renderRow={(inventorySource, index) => { const label = sourceChoices.find( ([scMatch]) => inventorySource.source === scMatch ); return ( <InventorySourceListItem key={inventorySource.id} source={inventorySource} onSelect={() => handleSelect(inventorySource)} label={label[1]} detailUrl={`${listUrl}${inventorySource.id}`} isSelected={selected.some((row) => row.id === inventorySource.id)} rowIndex={index} /> ); }} /> {syncError && ( <AlertModal aria-label={t`Sync error`} isOpen={syncError} variant="error" title={t`Error!`} onClose={dismissError} > {t`Failed to sync some or all inventory sources.`} <ErrorDetail error={syncError} /> </AlertModal> )} {(deletionError || deleteRelatedResourcesError) && ( <AlertModal aria-label={t`Delete error`} isOpen={deletionError || deleteRelatedResourcesError} variant="error" title={t`Error!`} onClose={clearDeletionError} > {t`Failed to delete one or more inventory sources.`} <ErrorDetail error={deletionError || deleteRelatedResourcesError} /> </AlertModal> )} </> ); } export default InventorySourceList; 
-#. placeholder {2}: import 'styled-components/macro'; import React, { useState, useContext, useEffect } from 'react'; import { useParams } from 'react-router-dom'; import { func, bool, arrayOf } from 'prop-types'; import { Plural, useLingui } from '@lingui/react/macro'; import { Button, Radio, DropdownItem } from '@patternfly/react-core'; import styled from 'styled-components'; import { KebabifiedContext } from 'contexts/Kebabified'; import { GroupsAPI, InventoriesAPI } from 'api'; import { Group } from 'types'; import ErrorDetail from 'components/ErrorDetail'; import AlertModal from 'components/AlertModal'; const ListItem = styled.li` display: flex; font-weight: 600; color: var(--pf-global--danger-color--100); `; const InventoryGroupsDeleteModal = ({ onAfterDelete, isDisabled, groups }) => { const { t } = useLingui(); const [radioOption, setRadioOption] = useState(null); const [isModalOpen, setIsModalOpen] = useState(false); const [isDeleteLoading, setIsDeleteLoading] = useState(false); const [deletionError, setDeletionError] = useState(null); const { id: inventoryId } = useParams(); const { isKebabified, onKebabModalChange } = useContext(KebabifiedContext); useEffect(() => { if (isKebabified) { onKebabModalChange(isModalOpen); } }, [isKebabified, isModalOpen, onKebabModalChange]); const handleDelete = async (option) => { setIsDeleteLoading(true); try { /* eslint-disable no-await-in-loop */ /* Delete groups sequentially to avoid api integrity errors */ /* https://eslint.org/docs/rules/no-await-in-loop#when-not-to-use-it */ for (let i = 0; i < groups.length; i++) { const group = groups[i]; if (option === 'delete') { await GroupsAPI.destroy(+group.id); } else if (option === 'promote') { await InventoriesAPI.promoteGroup(inventoryId, +group.id); } } /* eslint-enable no-await-in-loop */ } catch (error) { setDeletionError(error); } finally { setIsModalOpen(false); setIsDeleteLoading(false); onAfterDelete(); } }; return ( <> {isKebabified ? ( <DropdownItem key="delete" isDisabled={isDisabled || isDeleteLoading} component="button" aria-label={t`Delete`} onClick={() => setIsModalOpen(true)} ouiaId="group-delete-dropdown-item" > {t`Delete`} </DropdownItem> ) : ( <Button variant="secondary" aria-label={t`Delete`} onClick={() => setIsModalOpen(true)} isDisabled={isDisabled || isDeleteLoading} ouiaId="group-delete-button" > {t`Delete`} </Button> )} {isModalOpen && ( <AlertModal isOpen={isModalOpen} variant="danger" title={ <Plural value={groups.length} one={t`Delete Group?`} other={t`Delete Groups?`} /> } onClose={() => setIsModalOpen(false)} actions={[ <Button aria-label={t`Confirm Delete`} onClick={() => handleDelete(radioOption)} variant="danger" key="delete" isDisabled={radioOption === null} ouiaId="delete-modal-confirm-button" > {t`Delete`} </Button>, <Button aria-label={t`Close`} onClick={() => setIsModalOpen(false)} variant="link" key="cancel" ouiaId="delete-modal-cancel-button" > {t`Cancel`} </Button>, ]} > <Plural value={groups.length} one={t`Are you sure you want delete the group below?`} other={t`Are you sure you want delete the groups below?`} /> <div css="padding: 24px 0;"> {groups.map((group) => ( <ListItem key={group.id}>{group.name}</ListItem> ))} </div> <div> <Radio id="radio-delete" key="radio-delete" label={t`Delete All Groups and Hosts`} name="option" onChange={() => setRadioOption('delete')} ouiaId="delete-all-radio-button" /> <Radio css="margin-top: 5px;" id="radio-promote" key="radio-promote" label={t`Promote Child Groups and Hosts`} name="option" onChange={() => setRadioOption('promote')} ouiaId="promote-radio-button" /> </div> </AlertModal> )} {deletionError && ( <AlertModal isOpen={deletionError} variant="error" aria-label={t`deletion error`} title={t`Error!`} onClose={() => setDeletionError(null)} > {t`Failed to delete one or more groups.`} <ErrorDetail error={deletionError} /> </AlertModal> )} </> ); }; InventoryGroupsDeleteModal.propTypes = { onAfterDelete: func.isRequired, groups: arrayOf(Group), isDisabled: bool.isRequired, }; InventoryGroupsDeleteModal.defaultProps = { groups: [], }; export default InventoryGroupsDeleteModal; 
-#. placeholder {2}: import React, { useCallback, useEffect } from 'react'; import { useLocation, useRouteMatch, Link } from 'react-router-dom'; import { Plural, useLingui } from '@lingui/react/macro'; import { Card, PageSection, DropdownItem } from '@patternfly/react-core'; import { InventoriesAPI } from 'api'; import useRequest, { useDeleteItems } from 'hooks/useRequest'; import useSelected from 'hooks/useSelected'; import useToast, { AlertVariant } from 'hooks/useToast'; import AlertModal from 'components/AlertModal'; import DatalistToolbar from 'components/DataListToolbar'; import ErrorDetail from 'components/ErrorDetail'; import PaginatedTable, { HeaderRow, HeaderCell, ToolbarDeleteButton, getSearchableKeys, } from 'components/PaginatedTable'; import { getQSConfig, parseQueryString } from 'util/qs'; import AddDropDownButton from 'components/AddDropDownButton'; import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails'; import useWsInventories from './useWsInventories'; import InventoryListItem from './InventoryListItem'; const QS_CONFIG = getQSConfig('inventory', { page: 1, page_size: 20, order_by: 'name', }); function InventoryList() { const location = useLocation(); const match = useRouteMatch(); const { addToast, Toast, toastProps } = useToast(); const { t } = useLingui(); const { result: { results, itemCount, actions, relatedSearchableKeys, searchableKeys, }, error: contentError, isLoading, request: fetchInventories, } = useRequest( useCallback(async () => { const params = parseQueryString(QS_CONFIG, location.search); const [response, actionsResponse] = await Promise.all([ InventoriesAPI.read(params), InventoriesAPI.readOptions(), ]); return { results: response.data.results, itemCount: response.data.count, actions: actionsResponse.data.actions, relatedSearchableKeys: ( actionsResponse?.data?.related_search_fields || [] ).map((val) => val.slice(0, -8)), searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET), }; }, [location]), { results: [], itemCount: 0, actions: {}, relatedSearchableKeys: [], searchableKeys: [], } ); useEffect(() => { fetchInventories(); }, [fetchInventories]); const fetchInventoriesById = useCallback( async (ids) => { const params = { ...parseQueryString(QS_CONFIG, location.search) }; params.id__in = ids.join(','); const { data } = await InventoriesAPI.read(params); return data.results; }, [location.search] // eslint-disable-line react-hooks/exhaustive-deps ); const inventories = useWsInventories( results, fetchInventories, fetchInventoriesById, QS_CONFIG ); const { selected, isAllSelected, handleSelect, selectAll, clearSelected } = useSelected(inventories); const { isLoading: isDeleteLoading, deleteItems: deleteInventories, deletionError, clearDeletionError, } = useDeleteItems( useCallback( () => Promise.all(selected.map((team) => InventoriesAPI.destroy(team.id))), [selected] ), { allItemsSelected: isAllSelected, } ); const handleInventoryDelete = async () => { await deleteInventories(); clearSelected(); }; const handleCopy = useCallback( (newInventoryId) => { addToast({ id: newInventoryId, title: t`Inventory copied successfully`, variant: AlertVariant.success, hasTimeout: true, }); }, [addToast, t] ); const hasContentLoading = isDeleteLoading || isLoading; const canAdd = actions && actions.POST; const deleteDetailsRequests = relatedResourceDeleteRequests(t).inventory( selected[0] ); const addInventory = t`Add inventory`; const addSmartInventory = t`Add smart inventory`; const addConstructedInventory = t`Add constructed inventory`; const addButton = ( <AddDropDownButton ouiaId="add-inventory-button" key="add" dropdownItems={[ <DropdownItem ouiaId="add-inventory-item" to={`${match.url}/inventory/add/`} component={Link} key={addInventory} aria-label={addInventory} > {addInventory} </DropdownItem>, <DropdownItem ouiaId="add-smart-inventory-item" to={`${match.url}/smart_inventory/add/`} component={Link} key={addSmartInventory} aria-label={addSmartInventory} > {addSmartInventory} </DropdownItem>, <DropdownItem ouiaId="add-constructed-inventory-item" to={`${match.url}/constructed_inventory/add/`} component={Link} key={addConstructedInventory} aria-label={addConstructedInventory} > {addConstructedInventory} </DropdownItem>, ]} /> ); return ( <> <PageSection> <Card> <PaginatedTable contentError={contentError} hasContentLoading={hasContentLoading} items={inventories} itemCount={itemCount} pluralizedItemName={t`Inventories`} qsConfig={QS_CONFIG} toolbarSearchColumns={[ { name: t`Name`, key: 'name__icontains', isDefault: true, }, { name: t`Inventory Type`, key: 'or__kind', options: [ ['', t`Inventory`], ['smart', t`Smart Inventory`], ['constructed', t`Constructed Inventory`], ], }, { name: t`Organization`, key: 'organization__name', }, { name: t`Description`, key: 'description__icontains', }, { name: t`Created By (Username)`, key: 'created_by__username__icontains', }, { name: t`Modified By (Username)`, key: 'modified_by__username__icontains', }, ]} toolbarSortColumns={[ { name: t`Name`, key: 'name', }, ]} toolbarSearchableKeys={searchableKeys} toolbarRelatedSearchableKeys={relatedSearchableKeys} clearSelected={clearSelected} headerRow={ <HeaderRow qsConfig={QS_CONFIG}> <HeaderCell sortKey="name">{t`Name`}</HeaderCell> <HeaderCell>{t`Sync Status`}</HeaderCell> <HeaderCell>{t`Type`}</HeaderCell> <HeaderCell>{t`Organization`}</HeaderCell> <HeaderCell>{t`Actions`}</HeaderCell> </HeaderRow> } renderToolbar={(props) => ( <DatalistToolbar {...props} isAllSelected={isAllSelected} onSelectAll={selectAll} qsConfig={QS_CONFIG} additionalControls={[ ...(canAdd ? [addButton] : []), <ToolbarDeleteButton key="delete" onDelete={handleInventoryDelete} itemsToDelete={selected} pluralizedItemName={t`Inventories`} deleteDetailsRequests={deleteDetailsRequests} deleteMessage={ <Plural value={selected.length} one={t`This inventory is currently being used by some templates. Are you sure you want to delete it?`} other={t`Deleting these inventories could impact some templates that rely on them. Are you sure you want to delete anyway?`} /> } warningMessage={ <Plural value={selected.length} one={t`The inventory will be in a pending status until the final delete is processed.`} other={t`The inventories will be in a pending status until the final delete is processed.`} /> } />, ]} /> )} renderRow={(inventory, index) => ( <InventoryListItem key={inventory.id} value={inventory.name} inventory={inventory} rowIndex={index} fetchInventories={fetchInventories} onSelect={() => { if (!inventory.pending_deletion) { handleSelect(inventory); } }} onCopy={handleCopy} isSelected={selected.some((row) => row.id === inventory.id)} /> )} emptyStateControls={canAdd && addButton} /> </Card> <AlertModal isOpen={deletionError} variant="error" aria-label={t`Deletion Error`} title={t`Error!`} onClose={clearDeletionError} > {t`Failed to delete one or more inventories.`} <ErrorDetail error={deletionError} /> </AlertModal> </PageSection> <Toast {...toastProps} /> </> ); } export default InventoryList; 
-#. placeholder {2}: import React, { useCallback, useEffect } from 'react'; import { useParams, useLocation } from 'react-router-dom'; import { Plural, useLingui } from '@lingui/react/macro'; import useRequest, { useDeleteItems, useDismissableError, } from 'hooks/useRequest'; import { getQSConfig, parseQueryString } from 'util/qs'; import { InventoriesAPI, InventorySourcesAPI } from 'api'; import PaginatedTable, { HeaderRow, HeaderCell, ToolbarAddButton, ToolbarDeleteButton, ToolbarSyncSourceButton, getSearchableKeys, } from 'components/PaginatedTable'; import useSelected from 'hooks/useSelected'; import DatalistToolbar from 'components/DataListToolbar'; import AlertModal from 'components/AlertModal/AlertModal'; import ErrorDetail from 'components/ErrorDetail/ErrorDetail'; import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails'; import InventorySourceListItem from './InventorySourceListItem'; import useWsInventorySources from './useWsInventorySources'; const QS_CONFIG = getQSConfig('inventory-sources', { page: 1, page_size: 20, order_by: 'name', }); function InventorySourceList() { const { t } = useLingui(); const { inventoryType, id } = useParams(); const { search } = useLocation(); const { isLoading, error: fetchError, result: { result, sourceCount, sourceChoices, sourceChoicesOptions, searchableKeys, relatedSearchableKeys, }, request: fetchSources, } = useRequest( useCallback(async () => { const params = parseQueryString(QS_CONFIG, search); const results = await Promise.all([ InventoriesAPI.readSources(id, params), InventorySourcesAPI.readOptions(), ]); return { result: results[0].data.results, sourceCount: results[0].data.count, sourceChoices: results[1].data.actions.GET.source.choices, sourceChoicesOptions: results[1].data.actions, searchableKeys: getSearchableKeys(results[1].data.actions?.GET), relatedSearchableKeys: ( results[1]?.data?.related_search_fields || [] ).map((val) => val.slice(0, -8)), }; }, [id, search]), { result: [], sourceCount: 0, sourceChoices: [], searchableKeys: [], relatedSearchableKeys: [], } ); const sources = useWsInventorySources(result); const canSyncSources = sources.length > 0 && sources.every((source) => source.summary_fields.user_capabilities.start); const { isLoading: isSyncAllLoading, error: syncAllError, request: syncAll, } = useRequest( useCallback(async () => { if (canSyncSources) { await InventoriesAPI.syncAllSources(id); } }, [id, canSyncSources]) ); useEffect(() => { fetchSources(); }, [fetchSources]); const { selected, isAllSelected, handleSelect, clearSelected, selectAll } = useSelected(sources); const { isLoading: isDeleteLoading, deleteItems: handleDeleteSources, deletionError, clearDeletionError, } = useDeleteItems( useCallback( () => Promise.all( selected.map(({ id: sourceId }) => InventorySourcesAPI.destroy(sourceId) ), [] ), [selected] ), { fetchItems: fetchSources, allItemsSelected: isAllSelected, qsConfig: QS_CONFIG, } ); const { error: syncError, dismissError } = useDismissableError(syncAllError); const deleteRelatedInventoryResources = (resourceId) => [ InventorySourcesAPI.destroyHosts(resourceId), InventorySourcesAPI.destroyGroups(resourceId), ]; const { isLoading: deleteRelatedResourcesLoading, deletionError: deleteRelatedResourcesError, deleteItems: handleDeleteRelatedResources, } = useDeleteItems( useCallback( async () => Promise.all( selected .map(({ id: resourceId }) => deleteRelatedInventoryResources(resourceId) ) .flat() ), [selected] ) ); const handleDelete = async () => { await handleDeleteRelatedResources(); if (!deleteRelatedResourcesError) { await handleDeleteSources(); } clearSelected(); }; const canAdd = sourceChoicesOptions && Object.prototype.hasOwnProperty.call(sourceChoicesOptions, 'POST'); const listUrl = `/inventories/${inventoryType}/${id}/sources/`; const deleteDetailsRequests = relatedResourceDeleteRequests(t).inventorySource( selected[0]?.id ); return ( <> <PaginatedTable contentError={fetchError} toolbarSearchableKeys={searchableKeys} toolbarRelatedSearchableKeys={relatedSearchableKeys} hasContentLoading={ isLoading || isDeleteLoading || isSyncAllLoading || deleteRelatedResourcesLoading } items={sources} itemCount={sourceCount} pluralizedItemName={t`Inventory Sources`} qsConfig={QS_CONFIG} clearSelected={clearSelected} renderToolbar={(props) => ( <DatalistToolbar {...props} isAllSelected={isAllSelected} onSelectAll={selectAll} qsConfig={QS_CONFIG} additionalControls={[ ...(canAdd ? [<ToolbarAddButton key="add" linkTo={`${listUrl}add`} />] : []), <ToolbarDeleteButton key="delete" onDelete={handleDelete} itemsToDelete={selected} pluralizedItemName={t`Inventory Sources`} deleteDetailsRequests={deleteDetailsRequests} deleteMessage={ <Plural value={selected.length} one={t`This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?`} other={t`Deleting these inventory sources could impact other resources that rely on them. Are you sure you want to delete anyway`} /> } />, ...(canSyncSources ? [<ToolbarSyncSourceButton onClick={syncAll} />] : []), ]} /> )} headerRow={ <HeaderRow qsConfig={QS_CONFIG}> <HeaderCell sortKey="name">{t`Name`}</HeaderCell> <HeaderCell>{t`Status`}</HeaderCell> <HeaderCell>{t`Type`}</HeaderCell> <HeaderCell>{t`Actions`}</HeaderCell> </HeaderRow> } renderRow={(inventorySource, index) => { const label = sourceChoices.find( ([scMatch]) => inventorySource.source === scMatch ); return ( <InventorySourceListItem key={inventorySource.id} source={inventorySource} onSelect={() => handleSelect(inventorySource)} label={label[1]} detailUrl={`${listUrl}${inventorySource.id}`} isSelected={selected.some((row) => row.id === inventorySource.id)} rowIndex={index} /> ); }} /> {syncError && ( <AlertModal aria-label={t`Sync error`} isOpen={syncError} variant="error" title={t`Error!`} onClose={dismissError} > {t`Failed to sync some or all inventory sources.`} <ErrorDetail error={syncError} /> </AlertModal> )} {(deletionError || deleteRelatedResourcesError) && ( <AlertModal aria-label={t`Delete error`} isOpen={deletionError || deleteRelatedResourcesError} variant="error" title={t`Error!`} onClose={clearDeletionError} > {t`Failed to delete one or more inventory sources.`} <ErrorDetail error={deletionError || deleteRelatedResourcesError} /> </AlertModal> )} </> ); } export default InventorySourceList; 
+#. placeholder {1}: import 'styled-components/macro'; import React, { useState, useContext, useEffect } from 'react'; import { useParams } from 'react-router-dom'; import { func, bool, arrayOf } from 'prop-types'; import { Plural, useLingui } from '@lingui/react/macro'; import { Button, Radio, DropdownItem } from '@patternfly/react-core'; import styled from 'styled-components'; import { KebabifiedContext } from 'contexts/Kebabified'; import { GroupsAPI, InventoriesAPI } from 'api'; import { Group } from 'types'; import ErrorDetail from 'components/ErrorDetail'; import AlertModal from 'components/AlertModal'; const ListItem = styled.li` display: flex; font-weight: 600; color: var(--pf-global--danger-color--100); `; const InventoryGroupsDeleteModal = ({ onAfterDelete, isDisabled, groups }) => { const { t } = useLingui(); const [radioOption, setRadioOption] = useState(null); const [isModalOpen, setIsModalOpen] = useState(false); const [isDeleteLoading, setIsDeleteLoading] = useState(false); const [deletionError, setDeletionError] = useState(null); const { id: inventoryId } = useParams(); const { isKebabified, onKebabModalChange } = useContext(KebabifiedContext); useEffect(() => { if (isKebabified) { onKebabModalChange(isModalOpen); } }, [isKebabified, isModalOpen, onKebabModalChange]); const handleDelete = async (option) => { setIsDeleteLoading(true); try { /* eslint-disable no-await-in-loop */ /* Delete groups sequentially to avoid api integrity errors */ /* https://eslint.org/docs/rules/no-await-in-loop#when-not-to-use-it */ for (let i = 0; i < groups.length; i++) { const group = groups[i]; if (option === 'delete') { await GroupsAPI.destroy(+group.id); } else if (option === 'promote') { await InventoriesAPI.promoteGroup(inventoryId, +group.id); } } /* eslint-enable no-await-in-loop */ } catch (error) { setDeletionError(error); } finally { setIsModalOpen(false); setIsDeleteLoading(false); onAfterDelete(); } }; return ( <> {isKebabified ? ( <DropdownItem key="delete" isDisabled={isDisabled || isDeleteLoading} component="button" aria-label={t`Delete`} onClick={() => setIsModalOpen(true)} ouiaId="group-delete-dropdown-item" > {t`Delete`} </DropdownItem> ) : ( <Button variant="secondary" aria-label={t`Delete`} onClick={() => setIsModalOpen(true)} isDisabled={isDisabled || isDeleteLoading} ouiaId="group-delete-button" > {t`Delete`} </Button> )} {isModalOpen && ( <AlertModal isOpen={isModalOpen} variant="danger" title={ <Plural value={groups.length} one={t`Delete Group?`} other={t`Delete Groups?`} /> } onClose={() => setIsModalOpen(false)} actions={[ <Button aria-label={t`Confirm Delete`} onClick={() => handleDelete(radioOption)} variant="danger" key="delete" isDisabled={radioOption === null} ouiaId="delete-modal-confirm-button" > {t`Delete`} </Button>, <Button aria-label={t`Close`} onClick={() => setIsModalOpen(false)} variant="link" key="cancel" ouiaId="delete-modal-cancel-button" > {t`Cancel`} </Button>, ]} > <Plural value={groups.length} one={t`Are you sure you want delete the group below?`} other={t`Are you sure you want delete the groups below?`} /> <div css="padding: 24px 0;"> {groups.map((group) => ( <ListItem key={group.id}>{group.name}</ListItem> ))} </div> <div> <Radio id="radio-delete" key="radio-delete" label={t`Delete All Groups and Hosts`} name="option" onChange={() => setRadioOption('delete')} ouiaId="delete-all-radio-button" /> <Radio css="margin-top: 5px;" id="radio-promote" key="radio-promote" label={t`Promote Child Groups and Hosts`} name="option" onChange={() => setRadioOption('promote')} ouiaId="promote-radio-button" /> </div> </AlertModal> )} {deletionError && ( <AlertModal isOpen={deletionError} variant="error" aria-label={t`deletion error`} title={t`Error!`} onClose={() => setDeletionError(null)} > {t`Failed to delete one or more groups.`} <ErrorDetail error={deletionError} /> </AlertModal> )} </> ); }; InventoryGroupsDeleteModal.propTypes = { onAfterDelete: func.isRequired, groups: arrayOf(Group), isDisabled: bool.isRequired, }; InventoryGroupsDeleteModal.defaultProps = { groups: [], }; export default InventoryGroupsDeleteModal;
+#. placeholder {1}: import React, { useCallback, useEffect } from 'react'; import { useLocation, useRouteMatch, Link } from 'react-router-dom'; import { Plural, useLingui } from '@lingui/react/macro'; import { Card, PageSection, DropdownItem } from '@patternfly/react-core'; import { InventoriesAPI } from 'api'; import useRequest, { useDeleteItems } from 'hooks/useRequest'; import useSelected from 'hooks/useSelected'; import useToast, { AlertVariant } from 'hooks/useToast'; import AlertModal from 'components/AlertModal'; import DatalistToolbar from 'components/DataListToolbar'; import ErrorDetail from 'components/ErrorDetail'; import PaginatedTable, { HeaderRow, HeaderCell, ToolbarDeleteButton, getSearchableKeys, } from 'components/PaginatedTable'; import { getQSConfig, parseQueryString } from 'util/qs'; import AddDropDownButton from 'components/AddDropDownButton'; import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails'; import useWsInventories from './useWsInventories'; import InventoryListItem from './InventoryListItem'; const QS_CONFIG = getQSConfig('inventory', { page: 1, page_size: 20, order_by: 'name', }); function InventoryList() { const location = useLocation(); const match = useRouteMatch(); const { addToast, Toast, toastProps } = useToast(); const { t } = useLingui(); const { result: { results, itemCount, actions, relatedSearchableKeys, searchableKeys, }, error: contentError, isLoading, request: fetchInventories, } = useRequest( useCallback(async () => { const params = parseQueryString(QS_CONFIG, location.search); const [response, actionsResponse] = await Promise.all([ InventoriesAPI.read(params), InventoriesAPI.readOptions(), ]); return { results: response.data.results, itemCount: response.data.count, actions: actionsResponse.data.actions, relatedSearchableKeys: ( actionsResponse?.data?.related_search_fields || [] ).map((val) => val.slice(0, -8)), searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET), }; }, [location]), { results: [], itemCount: 0, actions: {}, relatedSearchableKeys: [], searchableKeys: [], } ); useEffect(() => { fetchInventories(); }, [fetchInventories]); const fetchInventoriesById = useCallback( async (ids) => { const params = { ...parseQueryString(QS_CONFIG, location.search) }; params.id__in = ids.join(','); const { data } = await InventoriesAPI.read(params); return data.results; }, [location.search] // eslint-disable-line react-hooks/exhaustive-deps ); const inventories = useWsInventories( results, fetchInventories, fetchInventoriesById, QS_CONFIG ); const { selected, isAllSelected, handleSelect, selectAll, clearSelected } = useSelected(inventories); const { isLoading: isDeleteLoading, deleteItems: deleteInventories, deletionError, clearDeletionError, } = useDeleteItems( useCallback( () => Promise.all(selected.map((team) => InventoriesAPI.destroy(team.id))), [selected] ), { allItemsSelected: isAllSelected, } ); const handleInventoryDelete = async () => { await deleteInventories(); clearSelected(); }; const handleCopy = useCallback( (newInventoryId) => { addToast({ id: newInventoryId, title: t`Inventory copied successfully`, variant: AlertVariant.success, hasTimeout: true, }); }, [addToast, t] ); const hasContentLoading = isDeleteLoading || isLoading; const canAdd = actions && actions.POST; const deleteDetailsRequests = relatedResourceDeleteRequests(t).inventory( selected[0] ); const addInventory = t`Add inventory`; const addSmartInventory = t`Add smart inventory`; const addConstructedInventory = t`Add constructed inventory`; const addButton = ( <AddDropDownButton ouiaId="add-inventory-button" key="add" dropdownItems={[ <DropdownItem ouiaId="add-inventory-item" to={`${match.url}/inventory/add/`} component={Link} key={addInventory} aria-label={addInventory} > {addInventory} </DropdownItem>, <DropdownItem ouiaId="add-smart-inventory-item" to={`${match.url}/smart_inventory/add/`} component={Link} key={addSmartInventory} aria-label={addSmartInventory} > {addSmartInventory} </DropdownItem>, <DropdownItem ouiaId="add-constructed-inventory-item" to={`${match.url}/constructed_inventory/add/`} component={Link} key={addConstructedInventory} aria-label={addConstructedInventory} > {addConstructedInventory} </DropdownItem>, ]} /> ); return ( <> <PageSection> <Card> <PaginatedTable contentError={contentError} hasContentLoading={hasContentLoading} items={inventories} itemCount={itemCount} pluralizedItemName={t`Inventories`} qsConfig={QS_CONFIG} toolbarSearchColumns={[ { name: t`Name`, key: 'name__icontains', isDefault: true, }, { name: t`Inventory Type`, key: 'or__kind', options: [ ['', t`Inventory`], ['smart', t`Smart Inventory`], ['constructed', t`Constructed Inventory`], ], }, { name: t`Organization`, key: 'organization__name', }, { name: t`Description`, key: 'description__icontains', }, { name: t`Created By (Username)`, key: 'created_by__username__icontains', }, { name: t`Modified By (Username)`, key: 'modified_by__username__icontains', }, ]} toolbarSortColumns={[ { name: t`Name`, key: 'name', }, ]} toolbarSearchableKeys={searchableKeys} toolbarRelatedSearchableKeys={relatedSearchableKeys} clearSelected={clearSelected} headerRow={ <HeaderRow qsConfig={QS_CONFIG}> <HeaderCell sortKey="name">{t`Name`}</HeaderCell> <HeaderCell>{t`Sync Status`}</HeaderCell> <HeaderCell>{t`Type`}</HeaderCell> <HeaderCell>{t`Organization`}</HeaderCell> <HeaderCell>{t`Actions`}</HeaderCell> </HeaderRow> } renderToolbar={(props) => ( <DatalistToolbar {...props} isAllSelected={isAllSelected} onSelectAll={selectAll} qsConfig={QS_CONFIG} additionalControls={[ ...(canAdd ? [addButton] : []), <ToolbarDeleteButton key="delete" onDelete={handleInventoryDelete} itemsToDelete={selected} pluralizedItemName={t`Inventories`} deleteDetailsRequests={deleteDetailsRequests} deleteMessage={ <Plural value={selected.length} one={t`This inventory is currently being used by some templates. Are you sure you want to delete it?`} other={t`Deleting these inventories could impact some templates that rely on them. Are you sure you want to delete anyway?`} /> } warningMessage={ <Plural value={selected.length} one={t`The inventory will be in a pending status until the final delete is processed.`} other={t`The inventories will be in a pending status until the final delete is processed.`} /> } />, ]} /> )} renderRow={(inventory, index) => ( <InventoryListItem key={inventory.id} value={inventory.name} inventory={inventory} rowIndex={index} fetchInventories={fetchInventories} onSelect={() => { if (!inventory.pending_deletion) { handleSelect(inventory); } }} onCopy={handleCopy} isSelected={selected.some((row) => row.id === inventory.id)} /> )} emptyStateControls={canAdd && addButton} /> </Card> <AlertModal isOpen={deletionError} variant="error" aria-label={t`Deletion Error`} title={t`Error!`} onClose={clearDeletionError} > {t`Failed to delete one or more inventories.`} <ErrorDetail error={deletionError} /> </AlertModal> </PageSection> <Toast {...toastProps} /> </> ); } export default InventoryList;
+#. placeholder {1}: import React, { useCallback, useEffect } from 'react'; import { useParams, useLocation } from 'react-router-dom'; import { Plural, useLingui } from '@lingui/react/macro'; import useRequest, { useDeleteItems, useDismissableError, } from 'hooks/useRequest'; import { getQSConfig, parseQueryString } from 'util/qs'; import { InventoriesAPI, InventorySourcesAPI } from 'api'; import PaginatedTable, { HeaderRow, HeaderCell, ToolbarAddButton, ToolbarDeleteButton, ToolbarSyncSourceButton, getSearchableKeys, } from 'components/PaginatedTable'; import useSelected from 'hooks/useSelected'; import DatalistToolbar from 'components/DataListToolbar'; import AlertModal from 'components/AlertModal/AlertModal'; import ErrorDetail from 'components/ErrorDetail/ErrorDetail'; import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails'; import InventorySourceListItem from './InventorySourceListItem'; import useWsInventorySources from './useWsInventorySources'; const QS_CONFIG = getQSConfig('inventory-sources', { page: 1, page_size: 20, order_by: 'name', }); function InventorySourceList() { const { t } = useLingui(); const { inventoryType, id } = useParams(); const { search } = useLocation(); const { isLoading, error: fetchError, result: { result, sourceCount, sourceChoices, sourceChoicesOptions, searchableKeys, relatedSearchableKeys, }, request: fetchSources, } = useRequest( useCallback(async () => { const params = parseQueryString(QS_CONFIG, search); const results = await Promise.all([ InventoriesAPI.readSources(id, params), InventorySourcesAPI.readOptions(), ]); return { result: results[0].data.results, sourceCount: results[0].data.count, sourceChoices: results[1].data.actions.GET.source.choices, sourceChoicesOptions: results[1].data.actions, searchableKeys: getSearchableKeys(results[1].data.actions?.GET), relatedSearchableKeys: ( results[1]?.data?.related_search_fields || [] ).map((val) => val.slice(0, -8)), }; }, [id, search]), { result: [], sourceCount: 0, sourceChoices: [], searchableKeys: [], relatedSearchableKeys: [], } ); const sources = useWsInventorySources(result); const canSyncSources = sources.length > 0 && sources.every((source) => source.summary_fields.user_capabilities.start); const { isLoading: isSyncAllLoading, error: syncAllError, request: syncAll, } = useRequest( useCallback(async () => { if (canSyncSources) { await InventoriesAPI.syncAllSources(id); } }, [id, canSyncSources]) ); useEffect(() => { fetchSources(); }, [fetchSources]); const { selected, isAllSelected, handleSelect, clearSelected, selectAll } = useSelected(sources); const { isLoading: isDeleteLoading, deleteItems: handleDeleteSources, deletionError, clearDeletionError, } = useDeleteItems( useCallback( () => Promise.all( selected.map(({ id: sourceId }) => InventorySourcesAPI.destroy(sourceId) ), [] ), [selected] ), { fetchItems: fetchSources, allItemsSelected: isAllSelected, qsConfig: QS_CONFIG, } ); const { error: syncError, dismissError } = useDismissableError(syncAllError); const deleteRelatedInventoryResources = (resourceId) => [ InventorySourcesAPI.destroyHosts(resourceId), InventorySourcesAPI.destroyGroups(resourceId), ]; const { isLoading: deleteRelatedResourcesLoading, deletionError: deleteRelatedResourcesError, deleteItems: handleDeleteRelatedResources, } = useDeleteItems( useCallback( async () => Promise.all( selected .map(({ id: resourceId }) => deleteRelatedInventoryResources(resourceId) ) .flat() ), [selected] ) ); const handleDelete = async () => { await handleDeleteRelatedResources(); if (!deleteRelatedResourcesError) { await handleDeleteSources(); } clearSelected(); }; const canAdd = sourceChoicesOptions && Object.prototype.hasOwnProperty.call(sourceChoicesOptions, 'POST'); const listUrl = `/inventories/${inventoryType}/${id}/sources/`; const deleteDetailsRequests = relatedResourceDeleteRequests(t).inventorySource( selected[0]?.id ); return ( <> <PaginatedTable contentError={fetchError} toolbarSearchableKeys={searchableKeys} toolbarRelatedSearchableKeys={relatedSearchableKeys} hasContentLoading={ isLoading || isDeleteLoading || isSyncAllLoading || deleteRelatedResourcesLoading } items={sources} itemCount={sourceCount} pluralizedItemName={t`Inventory Sources`} qsConfig={QS_CONFIG} clearSelected={clearSelected} renderToolbar={(props) => ( <DatalistToolbar {...props} isAllSelected={isAllSelected} onSelectAll={selectAll} qsConfig={QS_CONFIG} additionalControls={[ ...(canAdd ? [<ToolbarAddButton key="add" linkTo={`${listUrl}add`} />] : []), <ToolbarDeleteButton key="delete" onDelete={handleDelete} itemsToDelete={selected} pluralizedItemName={t`Inventory Sources`} deleteDetailsRequests={deleteDetailsRequests} deleteMessage={ <Plural value={selected.length} one={t`This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?`} other={t`Deleting these inventory sources could impact other resources that rely on them. Are you sure you want to delete anyway`} /> } />, ...(canSyncSources ? [<ToolbarSyncSourceButton onClick={syncAll} />] : []), ]} /> )} headerRow={ <HeaderRow qsConfig={QS_CONFIG}> <HeaderCell sortKey="name">{t`Name`}</HeaderCell> <HeaderCell>{t`Status`}</HeaderCell> <HeaderCell>{t`Type`}</HeaderCell> <HeaderCell>{t`Actions`}</HeaderCell> </HeaderRow> } renderRow={(inventorySource, index) => { const label = sourceChoices.find( ([scMatch]) => inventorySource.source === scMatch ); return ( <InventorySourceListItem key={inventorySource.id} source={inventorySource} onSelect={() => handleSelect(inventorySource)} label={label[1]} detailUrl={`${listUrl}${inventorySource.id}`} isSelected={selected.some((row) => row.id === inventorySource.id)} rowIndex={index} /> ); }} /> {syncError && ( <AlertModal aria-label={t`Sync error`} isOpen={syncError} variant="error" title={t`Error!`} onClose={dismissError} > {t`Failed to sync some or all inventory sources.`} <ErrorDetail error={syncError} /> </AlertModal> )} {(deletionError || deleteRelatedResourcesError) && ( <AlertModal aria-label={t`Delete error`} isOpen={deletionError || deleteRelatedResourcesError} variant="error" title={t`Error!`} onClose={clearDeletionError} > {t`Failed to delete one or more inventory sources.`} <ErrorDetail error={deletionError || deleteRelatedResourcesError} /> </AlertModal> )} </> ); } export default InventorySourceList;
+#. placeholder {2}: import 'styled-components/macro'; import React, { useState, useContext, useEffect } from 'react'; import { useParams } from 'react-router-dom'; import { func, bool, arrayOf } from 'prop-types'; import { Plural, useLingui } from '@lingui/react/macro'; import { Button, Radio, DropdownItem } from '@patternfly/react-core'; import styled from 'styled-components'; import { KebabifiedContext } from 'contexts/Kebabified'; import { GroupsAPI, InventoriesAPI } from 'api'; import { Group } from 'types'; import ErrorDetail from 'components/ErrorDetail'; import AlertModal from 'components/AlertModal'; const ListItem = styled.li` display: flex; font-weight: 600; color: var(--pf-global--danger-color--100); `; const InventoryGroupsDeleteModal = ({ onAfterDelete, isDisabled, groups }) => { const { t } = useLingui(); const [radioOption, setRadioOption] = useState(null); const [isModalOpen, setIsModalOpen] = useState(false); const [isDeleteLoading, setIsDeleteLoading] = useState(false); const [deletionError, setDeletionError] = useState(null); const { id: inventoryId } = useParams(); const { isKebabified, onKebabModalChange } = useContext(KebabifiedContext); useEffect(() => { if (isKebabified) { onKebabModalChange(isModalOpen); } }, [isKebabified, isModalOpen, onKebabModalChange]); const handleDelete = async (option) => { setIsDeleteLoading(true); try { /* eslint-disable no-await-in-loop */ /* Delete groups sequentially to avoid api integrity errors */ /* https://eslint.org/docs/rules/no-await-in-loop#when-not-to-use-it */ for (let i = 0; i < groups.length; i++) { const group = groups[i]; if (option === 'delete') { await GroupsAPI.destroy(+group.id); } else if (option === 'promote') { await InventoriesAPI.promoteGroup(inventoryId, +group.id); } } /* eslint-enable no-await-in-loop */ } catch (error) { setDeletionError(error); } finally { setIsModalOpen(false); setIsDeleteLoading(false); onAfterDelete(); } }; return ( <> {isKebabified ? ( <DropdownItem key="delete" isDisabled={isDisabled || isDeleteLoading} component="button" aria-label={t`Delete`} onClick={() => setIsModalOpen(true)} ouiaId="group-delete-dropdown-item" > {t`Delete`} </DropdownItem> ) : ( <Button variant="secondary" aria-label={t`Delete`} onClick={() => setIsModalOpen(true)} isDisabled={isDisabled || isDeleteLoading} ouiaId="group-delete-button" > {t`Delete`} </Button> )} {isModalOpen && ( <AlertModal isOpen={isModalOpen} variant="danger" title={ <Plural value={groups.length} one={t`Delete Group?`} other={t`Delete Groups?`} /> } onClose={() => setIsModalOpen(false)} actions={[ <Button aria-label={t`Confirm Delete`} onClick={() => handleDelete(radioOption)} variant="danger" key="delete" isDisabled={radioOption === null} ouiaId="delete-modal-confirm-button" > {t`Delete`} </Button>, <Button aria-label={t`Close`} onClick={() => setIsModalOpen(false)} variant="link" key="cancel" ouiaId="delete-modal-cancel-button" > {t`Cancel`} </Button>, ]} > <Plural value={groups.length} one={t`Are you sure you want delete the group below?`} other={t`Are you sure you want delete the groups below?`} /> <div css="padding: 24px 0;"> {groups.map((group) => ( <ListItem key={group.id}>{group.name}</ListItem> ))} </div> <div> <Radio id="radio-delete" key="radio-delete" label={t`Delete All Groups and Hosts`} name="option" onChange={() => setRadioOption('delete')} ouiaId="delete-all-radio-button" /> <Radio css="margin-top: 5px;" id="radio-promote" key="radio-promote" label={t`Promote Child Groups and Hosts`} name="option" onChange={() => setRadioOption('promote')} ouiaId="promote-radio-button" /> </div> </AlertModal> )} {deletionError && ( <AlertModal isOpen={deletionError} variant="error" aria-label={t`deletion error`} title={t`Error!`} onClose={() => setDeletionError(null)} > {t`Failed to delete one or more groups.`} <ErrorDetail error={deletionError} /> </AlertModal> )} </> ); }; InventoryGroupsDeleteModal.propTypes = { onAfterDelete: func.isRequired, groups: arrayOf(Group), isDisabled: bool.isRequired, }; InventoryGroupsDeleteModal.defaultProps = { groups: [], }; export default InventoryGroupsDeleteModal;
+#. placeholder {2}: import React, { useCallback, useEffect } from 'react'; import { useLocation, useRouteMatch, Link } from 'react-router-dom'; import { Plural, useLingui } from '@lingui/react/macro'; import { Card, PageSection, DropdownItem } from '@patternfly/react-core'; import { InventoriesAPI } from 'api'; import useRequest, { useDeleteItems } from 'hooks/useRequest'; import useSelected from 'hooks/useSelected'; import useToast, { AlertVariant } from 'hooks/useToast'; import AlertModal from 'components/AlertModal'; import DatalistToolbar from 'components/DataListToolbar'; import ErrorDetail from 'components/ErrorDetail'; import PaginatedTable, { HeaderRow, HeaderCell, ToolbarDeleteButton, getSearchableKeys, } from 'components/PaginatedTable'; import { getQSConfig, parseQueryString } from 'util/qs'; import AddDropDownButton from 'components/AddDropDownButton'; import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails'; import useWsInventories from './useWsInventories'; import InventoryListItem from './InventoryListItem'; const QS_CONFIG = getQSConfig('inventory', { page: 1, page_size: 20, order_by: 'name', }); function InventoryList() { const location = useLocation(); const match = useRouteMatch(); const { addToast, Toast, toastProps } = useToast(); const { t } = useLingui(); const { result: { results, itemCount, actions, relatedSearchableKeys, searchableKeys, }, error: contentError, isLoading, request: fetchInventories, } = useRequest( useCallback(async () => { const params = parseQueryString(QS_CONFIG, location.search); const [response, actionsResponse] = await Promise.all([ InventoriesAPI.read(params), InventoriesAPI.readOptions(), ]); return { results: response.data.results, itemCount: response.data.count, actions: actionsResponse.data.actions, relatedSearchableKeys: ( actionsResponse?.data?.related_search_fields || [] ).map((val) => val.slice(0, -8)), searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET), }; }, [location]), { results: [], itemCount: 0, actions: {}, relatedSearchableKeys: [], searchableKeys: [], } ); useEffect(() => { fetchInventories(); }, [fetchInventories]); const fetchInventoriesById = useCallback( async (ids) => { const params = { ...parseQueryString(QS_CONFIG, location.search) }; params.id__in = ids.join(','); const { data } = await InventoriesAPI.read(params); return data.results; }, [location.search] // eslint-disable-line react-hooks/exhaustive-deps ); const inventories = useWsInventories( results, fetchInventories, fetchInventoriesById, QS_CONFIG ); const { selected, isAllSelected, handleSelect, selectAll, clearSelected } = useSelected(inventories); const { isLoading: isDeleteLoading, deleteItems: deleteInventories, deletionError, clearDeletionError, } = useDeleteItems( useCallback( () => Promise.all(selected.map((team) => InventoriesAPI.destroy(team.id))), [selected] ), { allItemsSelected: isAllSelected, } ); const handleInventoryDelete = async () => { await deleteInventories(); clearSelected(); }; const handleCopy = useCallback( (newInventoryId) => { addToast({ id: newInventoryId, title: t`Inventory copied successfully`, variant: AlertVariant.success, hasTimeout: true, }); }, [addToast, t] ); const hasContentLoading = isDeleteLoading || isLoading; const canAdd = actions && actions.POST; const deleteDetailsRequests = relatedResourceDeleteRequests(t).inventory( selected[0] ); const addInventory = t`Add inventory`; const addSmartInventory = t`Add smart inventory`; const addConstructedInventory = t`Add constructed inventory`; const addButton = ( <AddDropDownButton ouiaId="add-inventory-button" key="add" dropdownItems={[ <DropdownItem ouiaId="add-inventory-item" to={`${match.url}/inventory/add/`} component={Link} key={addInventory} aria-label={addInventory} > {addInventory} </DropdownItem>, <DropdownItem ouiaId="add-smart-inventory-item" to={`${match.url}/smart_inventory/add/`} component={Link} key={addSmartInventory} aria-label={addSmartInventory} > {addSmartInventory} </DropdownItem>, <DropdownItem ouiaId="add-constructed-inventory-item" to={`${match.url}/constructed_inventory/add/`} component={Link} key={addConstructedInventory} aria-label={addConstructedInventory} > {addConstructedInventory} </DropdownItem>, ]} /> ); return ( <> <PageSection> <Card> <PaginatedTable contentError={contentError} hasContentLoading={hasContentLoading} items={inventories} itemCount={itemCount} pluralizedItemName={t`Inventories`} qsConfig={QS_CONFIG} toolbarSearchColumns={[ { name: t`Name`, key: 'name__icontains', isDefault: true, }, { name: t`Inventory Type`, key: 'or__kind', options: [ ['', t`Inventory`], ['smart', t`Smart Inventory`], ['constructed', t`Constructed Inventory`], ], }, { name: t`Organization`, key: 'organization__name', }, { name: t`Description`, key: 'description__icontains', }, { name: t`Created By (Username)`, key: 'created_by__username__icontains', }, { name: t`Modified By (Username)`, key: 'modified_by__username__icontains', }, ]} toolbarSortColumns={[ { name: t`Name`, key: 'name', }, ]} toolbarSearchableKeys={searchableKeys} toolbarRelatedSearchableKeys={relatedSearchableKeys} clearSelected={clearSelected} headerRow={ <HeaderRow qsConfig={QS_CONFIG}> <HeaderCell sortKey="name">{t`Name`}</HeaderCell> <HeaderCell>{t`Sync Status`}</HeaderCell> <HeaderCell>{t`Type`}</HeaderCell> <HeaderCell>{t`Organization`}</HeaderCell> <HeaderCell>{t`Actions`}</HeaderCell> </HeaderRow> } renderToolbar={(props) => ( <DatalistToolbar {...props} isAllSelected={isAllSelected} onSelectAll={selectAll} qsConfig={QS_CONFIG} additionalControls={[ ...(canAdd ? [addButton] : []), <ToolbarDeleteButton key="delete" onDelete={handleInventoryDelete} itemsToDelete={selected} pluralizedItemName={t`Inventories`} deleteDetailsRequests={deleteDetailsRequests} deleteMessage={ <Plural value={selected.length} one={t`This inventory is currently being used by some templates. Are you sure you want to delete it?`} other={t`Deleting these inventories could impact some templates that rely on them. Are you sure you want to delete anyway?`} /> } warningMessage={ <Plural value={selected.length} one={t`The inventory will be in a pending status until the final delete is processed.`} other={t`The inventories will be in a pending status until the final delete is processed.`} /> } />, ]} /> )} renderRow={(inventory, index) => ( <InventoryListItem key={inventory.id} value={inventory.name} inventory={inventory} rowIndex={index} fetchInventories={fetchInventories} onSelect={() => { if (!inventory.pending_deletion) { handleSelect(inventory); } }} onCopy={handleCopy} isSelected={selected.some((row) => row.id === inventory.id)} /> )} emptyStateControls={canAdd && addButton} /> </Card> <AlertModal isOpen={deletionError} variant="error" aria-label={t`Deletion Error`} title={t`Error!`} onClose={clearDeletionError} > {t`Failed to delete one or more inventories.`} <ErrorDetail error={deletionError} /> </AlertModal> </PageSection> <Toast {...toastProps} /> </> ); } export default InventoryList;
+#. placeholder {2}: import React, { useCallback, useEffect } from 'react'; import { useParams, useLocation } from 'react-router-dom'; import { Plural, useLingui } from '@lingui/react/macro'; import useRequest, { useDeleteItems, useDismissableError, } from 'hooks/useRequest'; import { getQSConfig, parseQueryString } from 'util/qs'; import { InventoriesAPI, InventorySourcesAPI } from 'api'; import PaginatedTable, { HeaderRow, HeaderCell, ToolbarAddButton, ToolbarDeleteButton, ToolbarSyncSourceButton, getSearchableKeys, } from 'components/PaginatedTable'; import useSelected from 'hooks/useSelected'; import DatalistToolbar from 'components/DataListToolbar'; import AlertModal from 'components/AlertModal/AlertModal'; import ErrorDetail from 'components/ErrorDetail/ErrorDetail'; import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails'; import InventorySourceListItem from './InventorySourceListItem'; import useWsInventorySources from './useWsInventorySources'; const QS_CONFIG = getQSConfig('inventory-sources', { page: 1, page_size: 20, order_by: 'name', }); function InventorySourceList() { const { t } = useLingui(); const { inventoryType, id } = useParams(); const { search } = useLocation(); const { isLoading, error: fetchError, result: { result, sourceCount, sourceChoices, sourceChoicesOptions, searchableKeys, relatedSearchableKeys, }, request: fetchSources, } = useRequest( useCallback(async () => { const params = parseQueryString(QS_CONFIG, search); const results = await Promise.all([ InventoriesAPI.readSources(id, params), InventorySourcesAPI.readOptions(), ]); return { result: results[0].data.results, sourceCount: results[0].data.count, sourceChoices: results[1].data.actions.GET.source.choices, sourceChoicesOptions: results[1].data.actions, searchableKeys: getSearchableKeys(results[1].data.actions?.GET), relatedSearchableKeys: ( results[1]?.data?.related_search_fields || [] ).map((val) => val.slice(0, -8)), }; }, [id, search]), { result: [], sourceCount: 0, sourceChoices: [], searchableKeys: [], relatedSearchableKeys: [], } ); const sources = useWsInventorySources(result); const canSyncSources = sources.length > 0 && sources.every((source) => source.summary_fields.user_capabilities.start); const { isLoading: isSyncAllLoading, error: syncAllError, request: syncAll, } = useRequest( useCallback(async () => { if (canSyncSources) { await InventoriesAPI.syncAllSources(id); } }, [id, canSyncSources]) ); useEffect(() => { fetchSources(); }, [fetchSources]); const { selected, isAllSelected, handleSelect, clearSelected, selectAll } = useSelected(sources); const { isLoading: isDeleteLoading, deleteItems: handleDeleteSources, deletionError, clearDeletionError, } = useDeleteItems( useCallback( () => Promise.all( selected.map(({ id: sourceId }) => InventorySourcesAPI.destroy(sourceId) ), [] ), [selected] ), { fetchItems: fetchSources, allItemsSelected: isAllSelected, qsConfig: QS_CONFIG, } ); const { error: syncError, dismissError } = useDismissableError(syncAllError); const deleteRelatedInventoryResources = (resourceId) => [ InventorySourcesAPI.destroyHosts(resourceId), InventorySourcesAPI.destroyGroups(resourceId), ]; const { isLoading: deleteRelatedResourcesLoading, deletionError: deleteRelatedResourcesError, deleteItems: handleDeleteRelatedResources, } = useDeleteItems( useCallback( async () => Promise.all( selected .map(({ id: resourceId }) => deleteRelatedInventoryResources(resourceId) ) .flat() ), [selected] ) ); const handleDelete = async () => { await handleDeleteRelatedResources(); if (!deleteRelatedResourcesError) { await handleDeleteSources(); } clearSelected(); }; const canAdd = sourceChoicesOptions && Object.prototype.hasOwnProperty.call(sourceChoicesOptions, 'POST'); const listUrl = `/inventories/${inventoryType}/${id}/sources/`; const deleteDetailsRequests = relatedResourceDeleteRequests(t).inventorySource( selected[0]?.id ); return ( <> <PaginatedTable contentError={fetchError} toolbarSearchableKeys={searchableKeys} toolbarRelatedSearchableKeys={relatedSearchableKeys} hasContentLoading={ isLoading || isDeleteLoading || isSyncAllLoading || deleteRelatedResourcesLoading } items={sources} itemCount={sourceCount} pluralizedItemName={t`Inventory Sources`} qsConfig={QS_CONFIG} clearSelected={clearSelected} renderToolbar={(props) => ( <DatalistToolbar {...props} isAllSelected={isAllSelected} onSelectAll={selectAll} qsConfig={QS_CONFIG} additionalControls={[ ...(canAdd ? [<ToolbarAddButton key="add" linkTo={`${listUrl}add`} />] : []), <ToolbarDeleteButton key="delete" onDelete={handleDelete} itemsToDelete={selected} pluralizedItemName={t`Inventory Sources`} deleteDetailsRequests={deleteDetailsRequests} deleteMessage={ <Plural value={selected.length} one={t`This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?`} other={t`Deleting these inventory sources could impact other resources that rely on them. Are you sure you want to delete anyway`} /> } />, ...(canSyncSources ? [<ToolbarSyncSourceButton onClick={syncAll} />] : []), ]} /> )} headerRow={ <HeaderRow qsConfig={QS_CONFIG}> <HeaderCell sortKey="name">{t`Name`}</HeaderCell> <HeaderCell>{t`Status`}</HeaderCell> <HeaderCell>{t`Type`}</HeaderCell> <HeaderCell>{t`Actions`}</HeaderCell> </HeaderRow> } renderRow={(inventorySource, index) => { const label = sourceChoices.find( ([scMatch]) => inventorySource.source === scMatch ); return ( <InventorySourceListItem key={inventorySource.id} source={inventorySource} onSelect={() => handleSelect(inventorySource)} label={label[1]} detailUrl={`${listUrl}${inventorySource.id}`} isSelected={selected.some((row) => row.id === inventorySource.id)} rowIndex={index} /> ); }} /> {syncError && ( <AlertModal aria-label={t`Sync error`} isOpen={syncError} variant="error" title={t`Error!`} onClose={dismissError} > {t`Failed to sync some or all inventory sources.`} <ErrorDetail error={syncError} /> </AlertModal> )} {(deletionError || deleteRelatedResourcesError) && ( <AlertModal aria-label={t`Delete error`} isOpen={deletionError || deleteRelatedResourcesError} variant="error" title={t`Error!`} onClose={clearDeletionError} > {t`Failed to delete one or more inventory sources.`} <ErrorDetail error={deletionError || deleteRelatedResourcesError} /> </AlertModal> )} </> ); } export default InventorySourceList;
 #: components/RelatedTemplateList/RelatedTemplateList.js:222
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:183
 #: screens/Instances/Shared/RemoveInstanceButton.js:87
@@ -2067,7 +2076,7 @@ msgstr "新規 Webhook キーは保存時に生成されます。"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:31
 msgid "{interval} week"
-msgstr ""
+msgstr "{interval}週"
 
 #: components/LabelSelect/LabelSelect.js:128
 msgid "Select Labels"
@@ -2210,12 +2219,14 @@ msgid "Toggle Password"
 msgstr "パスワードの切り替え"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:164
-msgid ""
-"This constructed inventory input \n"
+msgid "This constructed inventory input \n"
 "            creates a group for both of the categories and uses \n"
 "            the limit (host pattern) to only return hosts that \n"
 "            are in the intersection of those two groups."
-msgstr ""
+msgstr "この構築されたインベントリ入力は、\n"
+"両方のカテゴリに対してグループを作成し、\n"
+"制限（ホストパターン）を使用して、\n"
+"それら2つのグループの共通部分に含まれるホストのみを返します。"
 
 #: screens/Project/ProjectList/ProjectListItem.js:115
 msgid "The project is currently syncing and the revision will be available after the sync is complete."
@@ -2409,11 +2420,12 @@ msgstr "ソースコントロールの Refspec"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:43
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:303
-msgid ""
-"Use one IRC channel or username per line. The pound\n"
+msgid "Use one IRC channel or username per line. The pound\n"
 "        symbol (#) for channels, and the at (@) symbol for users, are not\n"
 "        required."
-msgstr ""
+msgstr "1行につき1つのIRCチャンネルまたはユーザー名を使用してください。チャンネルを示すハッシュ記号（#）とユーザー名を示すアットマーク（@）は\n"
+"\n"
+"必須ではありません。"
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.js:101
 msgid "Microsoft Azure Resource Manager"
@@ -2674,7 +2686,7 @@ msgstr "トークンの表示"
 
 #: components/FormField/PasswordInput.js:55
 msgid "ENCRYPTED"
-msgstr ""
+msgstr "暗号化済み"
 
 #: components/Workflow/WorkflowLegend.js:96
 msgid "Workflow"
@@ -2841,7 +2853,7 @@ msgstr "OIDC 設定の表示"
 
 #: components/AppContainer/PageHeaderToolbar.js:168
 msgid "Help"
-msgstr ""
+msgstr "ヘルプ"
 
 #: screens/Inventory/Inventories.js:96
 msgid "Schedule details"
@@ -2934,11 +2946,13 @@ msgid "Select the credential you want to use when accessing the remote hosts to 
 msgstr "そのコマンドを実行するためにリモートホストへのアクセス時に使用する認証情報を選択します。Ansible がリモートホストにログインするために必要なユーザー名および SSH キーまたはパスワードが含まれる認証情報を選択してください。"
 
 #: screens/Template/Survey/SurveyQuestionForm.js:182
-msgid ""
-"The suggested format for variable names is lowercase and\n"
+msgid "The suggested format for variable names is lowercase and\n"
 "                underscore-separated (for example, foo_bar, user_id, host_name,\n"
 "                etc.). Variable names with spaces are not allowed."
-msgstr ""
+msgstr "変数名の推奨形式は小文字で、\n"
+"\n"
+"アンダースコアで区切ることです（例：foo_bar、user_id、host_name、\n"
+"など）。スペースを含む変数名は使用できません。"
 
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:529
 msgid "This job template is currently being used by other resources. Are you sure you want to delete it?"
@@ -3034,15 +3048,23 @@ msgid "This field must not be blank"
 msgstr "このフィールドを空欄にすることはできません"
 
 #: screens/Project/shared/ProjectSubForms/ManualSubForm.js:51
-msgid ""
-"\n"
+msgid "\n"
 "            There are no available playbook directories in {project_base_dir}.\n"
 "            Either that directory is empty, or all of the contents are already\n"
 "            assigned to other projects. Create a new directory there and make\n"
 "            sure the playbook files can be read by the \"awx\" system user,\n"
 "            or have {brandName} directly retrieve your playbooks from\n"
 "            source control using the Source Control Type option above."
-msgstr ""
+msgstr "{project_base_dir} には利用可能なプレイブックディレクトリがありません。\n"
+"\n"
+"そのディレクトリが空であるか、またはすべてのコンテンツが既に他のプロジェクトに割り当てられています。\n"
+"\n"
+"そこに新しいディレクトリを作成し、\n"
+"\n"
+"プレイブックファイルがシステムユーザー「awx」によって読み取れることを確認してください。\n"
+"\n"
+"または、上記の「ソース管理タイプ」オプションを使用して、{brandName} からソース管理から直接プレイブックを取得してください。\n"
+"\n"
 
 #: screens/Instances/InstancePeers/InstancePeerList.js:245
 msgid "Instance Name"
@@ -3072,8 +3094,7 @@ msgid "Ready"
 msgstr "準備"
 
 #: screens/Template/Survey/MultipleChoiceField.js:57
-msgid ""
-"Type answer then click checkbox on right to select answer as\n"
+msgid "Type answer then click checkbox on right to select answer as\n"
 "default."
 msgstr "回答を入力し、右側のチェックボックスをクリックして、回答をデフォルトとして選択します。"
 
@@ -3136,7 +3157,7 @@ msgstr "Less than or equal to の比較条件"
 msgid "Delete"
 msgstr "削除"
 
-#. placeholder {0}: import React, { useEffect } from 'react'; import { useField } from 'formik'; import { Button, Flex, FormGroup } from '@patternfly/react-core'; import getDocsBaseUrl from 'util/getDocsBaseUrl'; import { required } from 'util/validators'; import FormField, { CheckboxField, PasswordField } from 'components/FormField'; import { useConfig } from 'contexts/Config'; import { Trans, useLingui } from '@lingui/react/macro'; const ANALYTICSLINK = 'https://www.ansible.com/products/automation-analytics'; function AnalyticsStep() { const { t } = useLingui(); const config = useConfig(); const [manifest] = useField('manifest_file'); const [insights] = useField('insights'); const [, , usernameHelpers] = useField('username'); const [, , passwordHelpers] = useField('password'); const requireCredentialFields = manifest.value && insights.value; useEffect(() => { if (!requireCredentialFields) { usernameHelpers.setValue(''); passwordHelpers.setValue(''); } // eslint-disable-next-line react-hooks/exhaustive-deps }, [requireCredentialFields]); return ( <Flex spaceItems={{ default: 'spaceItemsMd' }} direction={{ default: 'column' }} > <Trans>User and Automation Analytics</Trans> <p> <Trans> By default, we collect and transmit analytics data on the service usage to Red Hat. There are two categories of data collected by the service. For more information, see{' '} <Button component="a" href={`${getDocsBaseUrl( config )}/html/administration/usability_data_collection.html#automation-analytics`} variant="link" isInline ouiaId="tower-documentation-link" target="_blank" rel="noopener noreferrer" > {t`this Tower documentation page`} </Button> . Uncheck the following boxes to disable this feature. </Trans> </p> <FormGroup fieldId="pendo"> <CheckboxField name="pendo" isDisabled={!config.me.is_superuser} aria-label={t`User analytics`} label={t`User analytics`} id="pendo-field" description={t`This data is used to enhance future releases of the Tower Software and help streamline customer experience and success.`} /> </FormGroup> <FormGroup fieldId="insights"> <CheckboxField name="insights" isDisabled={!config.me.is_superuser} aria-label={t`Automation Analytics`} label={t`Automation Analytics`} id="insights-field" description={t`This data is used to enhance future releases of the Software and to provide Automation Analytics.`} /> </FormGroup> {requireCredentialFields && ( <> <br /> <p> <Trans> Provide your Red Hat or Red Hat Satellite credentials to enable Automation Analytics. </Trans> </p> <FormField id="username-field" isDisabled={!config.me.is_superuser} isRequired={requireCredentialFields} label={t`Username`} name="username" type="text" validate={required(null)} /> <PasswordField id="password-field" isDisabled={!config.me.is_superuser} isRequired={requireCredentialFields} label={t`Password`} name="password" validate={required(null)} /> </> )} <Flex alignItems={{ default: 'alignItemsCenter' }}> <img width="300" src="static/media/insights-analytics-dashboard.jpeg" alt={t`Automation Analytics dashboard`} /> <Button component="a" href={ANALYTICSLINK} target="_blank" variant="secondary" ouiaId="analytics-link" rel="noopener noreferrer" > <Trans>Learn more about Automation Analytics</Trans> </Button> </Flex> </Flex> ); } export default AnalyticsStep; 
+#. placeholder {0}: import React, { useEffect } from 'react'; import { useField } from 'formik'; import { Button, Flex, FormGroup } from '@patternfly/react-core'; import getDocsBaseUrl from 'util/getDocsBaseUrl'; import { required } from 'util/validators'; import FormField, { CheckboxField, PasswordField } from 'components/FormField'; import { useConfig } from 'contexts/Config'; import { Trans, useLingui } from '@lingui/react/macro'; const ANALYTICSLINK = 'https://www.ansible.com/products/automation-analytics'; function AnalyticsStep() { const { t } = useLingui(); const config = useConfig(); const [manifest] = useField('manifest_file'); const [insights] = useField('insights'); const [, , usernameHelpers] = useField('username'); const [, , passwordHelpers] = useField('password'); const requireCredentialFields = manifest.value && insights.value; useEffect(() => { if (!requireCredentialFields) { usernameHelpers.setValue(''); passwordHelpers.setValue(''); } // eslint-disable-next-line react-hooks/exhaustive-deps }, [requireCredentialFields]); return ( <Flex spaceItems={{ default: 'spaceItemsMd' }} direction={{ default: 'column' }} > <Trans>User and Automation Analytics</Trans> <p> <Trans> By default, we collect and transmit analytics data on the service usage to Red Hat. There are two categories of data collected by the service. For more information, see{' '} <Button component="a" href={`${getDocsBaseUrl( config )}/html/administration/usability_data_collection.html#automation-analytics`} variant="link" isInline ouiaId="tower-documentation-link" target="_blank" rel="noopener noreferrer" > {t`this Tower documentation page`} </Button> . Uncheck the following boxes to disable this feature. </Trans> </p> <FormGroup fieldId="pendo"> <CheckboxField name="pendo" isDisabled={!config.me.is_superuser} aria-label={t`User analytics`} label={t`User analytics`} id="pendo-field" description={t`This data is used to enhance future releases of the Tower Software and help streamline customer experience and success.`} /> </FormGroup> <FormGroup fieldId="insights"> <CheckboxField name="insights" isDisabled={!config.me.is_superuser} aria-label={t`Automation Analytics`} label={t`Automation Analytics`} id="insights-field" description={t`This data is used to enhance future releases of the Software and to provide Automation Analytics.`} /> </FormGroup> {requireCredentialFields && ( <> <br /> <p> <Trans> Provide your Red Hat or Red Hat Satellite credentials to enable Automation Analytics. </Trans> </p> <FormField id="username-field" isDisabled={!config.me.is_superuser} isRequired={requireCredentialFields} label={t`Username`} name="username" type="text" validate={required(null)} /> <PasswordField id="password-field" isDisabled={!config.me.is_superuser} isRequired={requireCredentialFields} label={t`Password`} name="password" validate={required(null)} /> </> )} <Flex alignItems={{ default: 'alignItemsCenter' }}> <img width="300" src="static/media/insights-analytics-dashboard.jpeg" alt={t`Automation Analytics dashboard`} /> <Button component="a" href={ANALYTICSLINK} target="_blank" variant="secondary" ouiaId="analytics-link" rel="noopener noreferrer" > <Trans>Learn more about Automation Analytics</Trans> </Button> </Flex> </Flex> ); } export default AnalyticsStep;
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:37
 msgid "By default, we collect and transmit analytics data on the service usage to Red Hat. There are two categories of data collected by the service. For more information, see <0>{0}</0>. Uncheck the following boxes to disable this feature."
 msgstr "デフォルトでは、サービスの使用に関する分析データを収集し、Red Hatに送信します。サービスによって収集されるデータには2つのカテゴリがあります。詳細については、< 0 >{ 1 }</ 0 >を参照してください。この機能を無効にするには、次のチェックボックスをオフにします。"
@@ -3155,14 +3176,18 @@ msgid "This workflow does not have any nodes configured."
 msgstr "このワークフローには、ノードが構成されていません。"
 
 #: screens/Host/HostGroups/HostGroupsList.js:214
-msgid ""
-"\n"
+msgid "\n"
 "                  Note that you may still see the group in the list after\n"
 "                  disassociating if the host is also a member of that group’s\n"
 "                  children.  This list shows all groups the host is associated\n"
 "                  with directly and indirectly.\n"
 "                "
-msgstr ""
+msgstr "ホストが関連グループから離脱した後も、そのグループがリストに表示される場合があります。\n"
+"\n"
+"ホストがそのグループの子グループにも所属している場合、\n"
+"\n"
+"このリストには、ホストが直接的および間接的に関連付けられているすべてのグループが表示されます。\n"
+"\n"
 
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.js:74
 msgid "Click this button to verify connection to the secret management system using the selected credential and specified inputs."
@@ -3200,10 +3225,9 @@ msgstr "ここに構築されたインベントリプラグインのドキュメ
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:58
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:531
-msgid ""
-"The number associated with the \"Messaging\n"
+msgid "The number associated with the \"Messaging\n"
 "        Service\" in Twilio with the format +18005550199."
-msgstr ""
+msgstr "Twilioの「メッセージングサービス」に関連付けられた番号。形式は+18005550199です。"
 
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginSelected.js:51
 msgid "This field will be retrieved from an external secret management system using the specified credential."
@@ -3298,14 +3322,14 @@ msgstr "システム"
 msgid "This action will delete the following:"
 msgstr "このアクションにより、以下が削除されます。"
 
-#. placeholder {0}: import React, { useState } from 'react'; import { useField, useFormikContext } from 'formik'; import styled from 'styled-components'; import { TimesIcon } from '@patternfly/react-icons'; import { Button, Divider, FileUpload, Flex, FlexItem, FormGroup, ToggleGroup, ToggleGroupItem, Tooltip, } from '@patternfly/react-core'; import { useConfig } from 'contexts/Config'; import getDocsBaseUrl from 'util/getDocsBaseUrl'; import useModal from 'hooks/useModal'; import FormField, { PasswordField } from 'components/FormField'; import Popover from 'components/Popover'; import { Trans, useLingui } from '@lingui/react/macro'; import SubscriptionModal from './SubscriptionModal'; const LICENSELINK = 'https://www.ansible.com/license'; const FileUploadField = styled(FormGroup)` && { max-width: 500px; width: 100%; } `; function SubscriptionStep() { const { t } = useLingui(); const config = useConfig(); const hasValidKey = Boolean(config?.license_info?.valid_key); const { values } = useFormikContext(); const [isSelected, setIsSelected] = useState( values.subscription ? 'selectSubscription' : 'uploadManifest' ); const { isModalOpen, toggleModal, closeModal } = useModal(); const [manifest, manifestMeta, manifestHelpers] = useField('manifest_file'); const [manifestFilename, , manifestFilenameHelpers] = useField('manifest_filename'); const [subscription, , subscriptionHelpers] = useField('subscription'); const [username, usernameMeta, usernameHelpers] = useField('username'); const [password, passwordMeta, passwordHelpers] = useField('password'); return ( <Flex direction={{ default: 'column' }} spaceItems={{ default: 'spaceItemsMd' }} alignItems={{ default: 'alignItemsBaseline' }} > {!hasValidKey && ( <> <b> {t`Welcome to Red Hat Ansible Automation Platform! Please complete the steps below to activate your subscription.`} </b> <p> {t`If you do not have a subscription, you can visit Red Hat to obtain a trial subscription.`} </p> <Button aria-label={t`Request subscription`} component="a" href={LICENSELINK} ouiaId="request-subscription-button" target="_blank" variant="secondary" rel="noopener noreferrer" > {t`Request subscription`} </Button> <Divider /> </> )} <p> {t`Select your Ansible Automation Platform subscription to use.`} </p> <ToggleGroup> <ToggleGroupItem text={t`Subscription manifest`} isSelected={isSelected === 'uploadManifest'} onChange={() => setIsSelected('uploadManifest')} id="subscription-manifest" /> <ToggleGroupItem text={t`Username / password`} isSelected={isSelected === 'selectSubscription'} onChange={() => setIsSelected('selectSubscription')} id="username-password" /> </ToggleGroup> {isSelected === 'uploadManifest' ? ( <> <p> <Trans> Upload a Red Hat Subscription Manifest containing your subscription. To generate your subscription manifest, go to{' '} <Button component="a" href="https://access.redhat.com/management/subscription_allocations" variant="link" target="_blank" ouiaId="subscription-allocations-link" rel="noopener noreferrer" isInline > subscription allocations </Button>{' '} on the Red Hat Customer Portal. </Trans> </p> <FileUploadField fieldId="subscription-manifest" validated={manifestMeta.error ? 'error' : 'default'} helperTextInvalid={t`Invalid file format. Please upload a valid Red Hat Subscription Manifest.`} label={t`Red Hat subscription manifest`} helperText={t`Upload a .zip file`} labelIcon={ <Popover content={ <Trans> A subscription manifest is an export of a Red Hat Subscription. To generate a subscription manifest, go to{' '} <Button component="a" href="https://access.redhat.com/management/subscription_allocations" variant="link" target="_blank" rel="noopener noreferrer" isInline ouiaId="subscription-allocations-link" > access.redhat.com </Button> . For more information, see the{' '} <Button component="a" href={`${getDocsBaseUrl( config )}/userguide/import_license.html`} variant="link" target="_blank" rel="noopener noreferrer" ouiaId="import-license-link" isInline > {t`User Guide`} </Button> . </Trans> } /> } > <FileUpload id="upload-manifest" value={manifest.value} filename={manifestFilename.value} browseButtonText={t`Browse`} isDisabled={!config?.me?.is_superuser} dropzoneProps={{ accept: '.zip', onDropRejected: () => manifestHelpers.setError(true), }} onChange={(value, filename) => { if (!value) { manifestHelpers.setValue(null); manifestFilenameHelpers.setValue(''); usernameHelpers.setValue(usernameMeta.initialValue); passwordHelpers.setValue(passwordMeta.initialValue); return; } try { const raw = new FileReader(); raw.readAsBinaryString(value); raw.onload = () => { const rawValue = btoa(raw.result); manifestHelpers.setValue(rawValue); manifestFilenameHelpers.setValue(filename); }; } catch (err) { manifestHelpers.setError(err); } }} /> </FileUploadField> </> ) : ( <> <p> {t`Provide your Red Hat or Red Hat Satellite credentials below and you can choose from a list of your available subscriptions. The credentials you use will be stored for future use in retrieving renewal or expanded subscriptions.`} </p> <Flex direction={{ default: 'column', md: 'row' }} spaceItems={{ default: 'spaceItemsMd' }} alignItems={{ md: 'alignItemsFlexEnd' }} fullWidth={{ default: 'fullWidth' }} > <FormField id="username-field" label={t`Username`} name="username" type="text" isDisabled={!config.me.is_superuser} /> <PasswordField id="password-field" name="password" label={t`Password`} isDisabled={!config.me.is_superuser} /> <Button aria-label={t`Get subscriptions`} ouiaId="subscription-modal-button" onClick={toggleModal} style={{ maxWidth: 'fit-content' }} isDisabled={!(username.value && password.value)} > {t`Get subscription`} </Button> {isModalOpen && ( <SubscriptionModal subscriptionCreds={{ username: username.value, password: password.value, }} selectedSubscription={subscription?.value} onClose={closeModal} onConfirm={(value) => subscriptionHelpers.setValue(value)} /> )} </Flex> {subscription.value && ( <Flex id="selected-subscription" alignSelf={{ default: 'alignSelfFlexStart' }} spaceItems={{ default: 'spaceItemsMd' }} > <b>{t`Selected`}</b> <FlexItem> <i>{subscription?.value?.subscription_name}</i> <Tooltip trigger="mouseenter focus click" content={t`Clear subscription`} > <Button onClick={() => subscriptionHelpers.setValue(null)} variant="plain" aria-label={t`Clear subscription selection`} ouiaId="clear-subscription-selection" > <TimesIcon /> </Button> </Tooltip> </FlexItem> </Flex> )} </> )} </Flex> ); } export default SubscriptionStep; 
+#. placeholder {0}: import React, { useState } from 'react'; import { useField, useFormikContext } from 'formik'; import styled from 'styled-components'; import { TimesIcon } from '@patternfly/react-icons'; import { Button, Divider, FileUpload, Flex, FlexItem, FormGroup, ToggleGroup, ToggleGroupItem, Tooltip, } from '@patternfly/react-core'; import { useConfig } from 'contexts/Config'; import getDocsBaseUrl from 'util/getDocsBaseUrl'; import useModal from 'hooks/useModal'; import FormField, { PasswordField } from 'components/FormField'; import Popover from 'components/Popover'; import { Trans, useLingui } from '@lingui/react/macro'; import SubscriptionModal from './SubscriptionModal'; const LICENSELINK = 'https://www.ansible.com/license'; const FileUploadField = styled(FormGroup)` && { max-width: 500px; width: 100%; } `; function SubscriptionStep() { const { t } = useLingui(); const config = useConfig(); const hasValidKey = Boolean(config?.license_info?.valid_key); const { values } = useFormikContext(); const [isSelected, setIsSelected] = useState( values.subscription ? 'selectSubscription' : 'uploadManifest' ); const { isModalOpen, toggleModal, closeModal } = useModal(); const [manifest, manifestMeta, manifestHelpers] = useField('manifest_file'); const [manifestFilename, , manifestFilenameHelpers] = useField('manifest_filename'); const [subscription, , subscriptionHelpers] = useField('subscription'); const [username, usernameMeta, usernameHelpers] = useField('username'); const [password, passwordMeta, passwordHelpers] = useField('password'); return ( <Flex direction={{ default: 'column' }} spaceItems={{ default: 'spaceItemsMd' }} alignItems={{ default: 'alignItemsBaseline' }} > {!hasValidKey && ( <> <b> {t`Welcome to Red Hat Ansible Automation Platform! Please complete the steps below to activate your subscription.`} </b> <p> {t`If you do not have a subscription, you can visit Red Hat to obtain a trial subscription.`} </p> <Button aria-label={t`Request subscription`} component="a" href={LICENSELINK} ouiaId="request-subscription-button" target="_blank" variant="secondary" rel="noopener noreferrer" > {t`Request subscription`} </Button> <Divider /> </> )} <p> {t`Select your Ansible Automation Platform subscription to use.`} </p> <ToggleGroup> <ToggleGroupItem text={t`Subscription manifest`} isSelected={isSelected === 'uploadManifest'} onChange={() => setIsSelected('uploadManifest')} id="subscription-manifest" /> <ToggleGroupItem text={t`Username / password`} isSelected={isSelected === 'selectSubscription'} onChange={() => setIsSelected('selectSubscription')} id="username-password" /> </ToggleGroup> {isSelected === 'uploadManifest' ? ( <> <p> <Trans> Upload a Red Hat Subscription Manifest containing your subscription. To generate your subscription manifest, go to{' '} <Button component="a" href="https://access.redhat.com/management/subscription_allocations" variant="link" target="_blank" ouiaId="subscription-allocations-link" rel="noopener noreferrer" isInline > subscription allocations </Button>{' '} on the Red Hat Customer Portal. </Trans> </p> <FileUploadField fieldId="subscription-manifest" validated={manifestMeta.error ? 'error' : 'default'} helperTextInvalid={t`Invalid file format. Please upload a valid Red Hat Subscription Manifest.`} label={t`Red Hat subscription manifest`} helperText={t`Upload a .zip file`} labelIcon={ <Popover content={ <Trans> A subscription manifest is an export of a Red Hat Subscription. To generate a subscription manifest, go to{' '} <Button component="a" href="https://access.redhat.com/management/subscription_allocations" variant="link" target="_blank" rel="noopener noreferrer" isInline ouiaId="subscription-allocations-link" > access.redhat.com </Button> . For more information, see the{' '} <Button component="a" href={`${getDocsBaseUrl( config )}/userguide/import_license.html`} variant="link" target="_blank" rel="noopener noreferrer" ouiaId="import-license-link" isInline > {t`User Guide`} </Button> . </Trans> } /> } > <FileUpload id="upload-manifest" value={manifest.value} filename={manifestFilename.value} browseButtonText={t`Browse`} isDisabled={!config?.me?.is_superuser} dropzoneProps={{ accept: '.zip', onDropRejected: () => manifestHelpers.setError(true), }} onChange={(value, filename) => { if (!value) { manifestHelpers.setValue(null); manifestFilenameHelpers.setValue(''); usernameHelpers.setValue(usernameMeta.initialValue); passwordHelpers.setValue(passwordMeta.initialValue); return; } try { const raw = new FileReader(); raw.readAsBinaryString(value); raw.onload = () => { const rawValue = btoa(raw.result); manifestHelpers.setValue(rawValue); manifestFilenameHelpers.setValue(filename); }; } catch (err) { manifestHelpers.setError(err); } }} /> </FileUploadField> </> ) : ( <> <p> {t`Provide your Red Hat or Red Hat Satellite credentials below and you can choose from a list of your available subscriptions. The credentials you use will be stored for future use in retrieving renewal or expanded subscriptions.`} </p> <Flex direction={{ default: 'column', md: 'row' }} spaceItems={{ default: 'spaceItemsMd' }} alignItems={{ md: 'alignItemsFlexEnd' }} fullWidth={{ default: 'fullWidth' }} > <FormField id="username-field" label={t`Username`} name="username" type="text" isDisabled={!config.me.is_superuser} /> <PasswordField id="password-field" name="password" label={t`Password`} isDisabled={!config.me.is_superuser} /> <Button aria-label={t`Get subscriptions`} ouiaId="subscription-modal-button" onClick={toggleModal} style={{ maxWidth: 'fit-content' }} isDisabled={!(username.value && password.value)} > {t`Get subscription`} </Button> {isModalOpen && ( <SubscriptionModal subscriptionCreds={{ username: username.value, password: password.value, }} selectedSubscription={subscription?.value} onClose={closeModal} onConfirm={(value) => subscriptionHelpers.setValue(value)} /> )} </Flex> {subscription.value && ( <Flex id="selected-subscription" alignSelf={{ default: 'alignSelfFlexStart' }} spaceItems={{ default: 'spaceItemsMd' }} > <b>{t`Selected`}</b> <FlexItem> <i>{subscription?.value?.subscription_name}</i> <Tooltip trigger="mouseenter focus click" content={t`Clear subscription`} > <Button onClick={() => subscriptionHelpers.setValue(null)} variant="plain" aria-label={t`Clear subscription selection`} ouiaId="clear-subscription-selection" > <TimesIcon /> </Button> </Tooltip> </FlexItem> </Flex> )} </> )} </Flex> ); } export default SubscriptionStep;
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:127
 msgid "A subscription manifest is an export of a Red Hat Subscription. To generate a subscription manifest, go to <0>access.redhat.com</0>. For more information, see the <1>{0}</1>."
 msgstr "サブスクリプションマニフェストは、Red Hatサブスクリプションのエクスポートです。サブスクリプションマニフェストを生成するには、< 0 > access.redhat.com </ 0 >に移動します。詳細については、< 1 >{ 1 }</ 1 >を参照してください。"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:25
 msgid "{interval} minutes"
-msgstr ""
+msgstr "{interval}分"
 
 #: screens/Setting/SettingList.js:112
 msgid "Miscellaneous Authentication settings"
@@ -3460,7 +3484,7 @@ msgstr "すべてを同期"
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.js:72
 #: screens/Setting/Settings.js:53
 msgid "Azure AD Tenant"
-msgstr ""
+msgstr "Azure AD テナント"
 
 #: screens/Instances/Instances.js:16
 #: screens/Instances/Instances.js:26
@@ -3534,10 +3558,11 @@ msgid "Revert settings"
 msgstr "設定を元に戻す"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:55
-msgid ""
-"This table gives a few useful parameters of the constructed\n"
+msgid "This table gives a few useful parameters of the constructed\n"
 "               inventory plugin. For the full list of parameters "
-msgstr ""
+msgstr "この表は、構築された在庫管理プラグインのいくつかの便利なパラメータを示しています。\n"
+"\n"
+"パラメータの全リストについては、"
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:257
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:258
@@ -3653,8 +3678,8 @@ msgstr "プル"
 msgid "Environment variables or extra variables that specify the values a credential type can inject."
 msgstr "認証情報タイプが挿入できる値を指定する環境変数または追加変数。"
 
-#. placeholder {0}: import React, { useCallback, useEffect, useState } from 'react'; import { useParams, useHistory } from 'react-router-dom'; import { Trans, useLingui } from '@lingui/react/macro'; import { Button, Progress, ProgressMeasureLocation, ProgressSize, CodeBlock, CodeBlockCode, Tooltip, Slider, } from '@patternfly/react-core'; import { CaretLeftIcon, OutlinedClockIcon } from '@patternfly/react-icons'; import styled from 'styled-components'; import { useConfig } from 'contexts/Config'; import { InstancesAPI, InstanceGroupsAPI } from 'api'; import useDebounce from 'hooks/useDebounce'; import AlertModal from 'components/AlertModal'; import ErrorDetail from 'components/ErrorDetail'; import DisassociateButton from 'components/DisassociateButton'; import InstanceToggle from 'components/InstanceToggle'; import { CardBody, CardActionsRow } from 'components/Card'; import getDocsBaseUrl from 'util/getDocsBaseUrl'; import { formatDateString } from 'util/dates'; import RoutedTabs from 'components/RoutedTabs'; import ContentError from 'components/ContentError'; import ContentLoading from 'components/ContentLoading'; import { Detail, DetailList } from 'components/DetailList'; import HealthCheckAlert from 'components/HealthCheckAlert'; import StatusLabel from 'components/StatusLabel'; import useRequest, { useDeleteItems, useDismissableError, } from 'hooks/useRequest'; const Unavailable = styled.span` color: var(--pf-global--danger-color--200); `; const SliderHolder = styled.div` display: flex; align-items: center; justify-content: space-between; `; const SliderForks = styled.div` flex-grow: 1; margin-right: 8px; margin-left: 8px; text-align: center; `; function computeForks(memCapacity, cpuCapacity, selectedCapacityAdjustment) { const minCapacity = Math.min(memCapacity, cpuCapacity); const maxCapacity = Math.max(memCapacity, cpuCapacity); return Math.floor( minCapacity + (maxCapacity - minCapacity) * selectedCapacityAdjustment ); } function InstanceDetails({ setBreadcrumb, instanceGroup }) { const { t, i18n } = useLingui(); const config = useConfig(); const { id, instanceId } = useParams(); const history = useHistory(); const [healthCheck, setHealthCheck] = useState({}); const [showHealthCheckAlert, setShowHealthCheckAlert] = useState(false); const [forks, setForks] = useState(); const policyRulesDocsLink = `${getDocsBaseUrl( config )}/html/administration/containers_instance_groups.html#ag-instance-group-policies`; const { isLoading, error: contentError, request: fetchDetails, result: { instance }, } = useRequest( useCallback(async () => { const { data: { results }, } = await InstanceGroupsAPI.readInstances(instanceGroup.id); const isAssociated = results.some( ({ id: instId }) => instId === parseInt(instanceId, 10) ); if (isAssociated) { const { data: details } = await InstancesAPI.readDetail(instanceId); if (details.node_type === 'execution') { const { data: healthCheckData } = await InstancesAPI.readHealthCheckDetail(instanceId); setHealthCheck(healthCheckData); } setBreadcrumb(instanceGroup, details); setForks( computeForks( details.mem_capacity, details.cpu_capacity, details.capacity_adjustment ) ); return { instance: details }; } throw new Error( `This instance is not associated with this instance group` ); }, [instanceId, setBreadcrumb, instanceGroup]), { instance: {}, isLoading: true } ); useEffect(() => { fetchDetails(); }, [fetchDetails]); const { error: healthCheckError, request: fetchHealthCheck } = useRequest( useCallback(async () => { const { status } = await InstancesAPI.healthCheck(instanceId); if (status === 200) { setShowHealthCheckAlert(true); } }, [instanceId]) ); const { deleteItems: disassociateInstance, deletionError: disassociateError, } = useDeleteItems( useCallback(async () => { await InstanceGroupsAPI.disassociateInstance( instanceGroup.id, instance.id ); history.push(`/instance_groups/${instanceGroup.id}/instances`); }, [instanceGroup.id, instance.id, history]) ); const { error: updateInstanceError, request: updateInstance } = useRequest( useCallback( async (values) => { await InstancesAPI.update(instance.id, values); }, [instance] ) ); const debounceUpdateInstance = useDebounce(updateInstance, 200); const handleChangeValue = (value) => { const roundedValue = Math.round(value * 100) / 100; setForks( computeForks(instance.mem_capacity, instance.cpu_capacity, roundedValue) ); debounceUpdateInstance({ capacity_adjustment: roundedValue }); }; const formatHealthCheckTimeStamp = (last) => ( <> {formatDateString(last)} {instance.health_check_pending ? ( <> {' '} <OutlinedClockIcon /> </> ) : null} </> ); const { error, dismissError } = useDismissableError( disassociateError || updateInstanceError || healthCheckError ); const tabsArray = [ { name: ( <> <CaretLeftIcon /> {t`Back to Instances`} </> ), link: `/instance_groups/${id}/instances`, id: 99, }, { name: t`Details`, link: `/instance_groups/${id}/instances/${instanceId}/details`, id: 0, }, ]; if (contentError) { return <ContentError error={contentError} />; } if (isLoading) { return <ContentLoading />; } const isExecutionNode = instance.node_type === 'execution'; return ( <> <RoutedTabs tabsArray={tabsArray} /> {showHealthCheckAlert ? ( <HealthCheckAlert onSetHealthCheckAlert={setShowHealthCheckAlert} /> ) : null} <CardBody> <DetailList gutter="sm"> <Detail label={t`Host Name`} value={instance.hostname} dataCy="instance-detail-name" /> <Detail label={t`Status`} value={ instance.node_state ? ( <StatusLabel status={instance.node_state} /> ) : null } /> <Detail label={t`Policy Type`} value={ instance.managed_by_policy ? t`Auto` : t`Manual` } /> <Detail label={t`Running Jobs`} value={instance.jobs_running} /> <Detail label={t`Total Jobs`} value={instance.jobs_total} /> <Detail label={t`Last Health Check`} helpText={ <> {t`Health checks are asynchronous tasks. See the`}{' '} <a href={`${getDocsBaseUrl( config )}/html/administration/instances.html#health-check`} target="_blank" rel="noopener noreferrer" > {t`documentation`} </a>{' '} {t`for more info.`} </> } value={formatHealthCheckTimeStamp(instance.last_health_check)} /> <Detail label={t`Node Type`} value={instance.node_type} /> <Detail label={t`Capacity Adjustment`} value={ <SliderHolder data-cy="slider-holder"> <div data-cy="cpu-capacity"> {t`CPU ${instance.cpu_capacity}`} </div> <SliderForks data-cy="slider-forks"> <div data-cy="number-forks"> {i18n._('{count, plural, one {# fork} other {# forks}}', { count: forks })} </div> <Slider areCustomStepsContinuous max={1} min={0} step={0.1} value={instance.capacity_adjustment} onChange={handleChangeValue} isDisabled={!config?.me?.is_superuser || !instance.enabled} data-cy="slider" /> </SliderForks> <div data-cy="mem-capacity"> {t`RAM ${instance.mem_capacity}`} </div> </SliderHolder> } /> <Detail label={t`Used Capacity`} value={ instance.enabled ? ( <Progress title={t`Used capacity`} value={Math.round(100 - instance.percent_capacity_remaining)} measureLocation={ProgressMeasureLocation.top} size={ProgressSize.sm} aria-label={t`Used capacity`} /> ) : ( <Unavailable>{t`Unavailable`}</Unavailable> ) } /> {healthCheck?.errors && ( <Detail fullWidth label={t`Errors`} value={ <CodeBlock> <CodeBlockCode>{healthCheck?.errors}</CodeBlockCode> </CodeBlock> } /> )} </DetailList> <CardActionsRow> {isExecutionNode && ( <Tooltip content={t`Run a health check on the instance`}> <Button isDisabled={ !config?.me?.is_superuser || instance.health_check_pending } variant="primary" ouiaId="health-check-button" onClick={fetchHealthCheck} isLoading={instance.health_check_pending} spinnerAriaLabel={t`Running health check`} > {instance.health_check_pending ? t`Running health check` : t`Run health check`} </Button> </Tooltip> )} {config?.me?.is_superuser && instance.node_type !== 'control' && ( <DisassociateButton verifyCannotDisassociate={instanceGroup.name === 'controlplane'} key="disassociate" onDisassociate={disassociateInstance} itemsToDisassociate={[instance]} isProtectedInstanceGroup={instanceGroup.name === 'controlplane'} modalTitle={t`Disassociate instance from instance group?`} modalNote={ instance.managed_by_policy ? ( <Trans> <b> {t`Note: This instance may be re-associated with this instance group if it is managed by `} <a href={policyRulesDocsLink} target="_blank" rel="noopener noreferrer" > {t`policy rules.`} </a> </b> </Trans> ) : null } /> )} <InstanceToggle css="display: inline-flex;" fetchInstances={fetchDetails} instance={instance} /> </CardActionsRow> {error && ( <AlertModal isOpen={error} onClose={dismissError} title={t`Error!`} variant="error" > {updateInstanceError ? t`Failed to update capacity adjustment.` : t`Failed to disassociate one or more instances.`} <ErrorDetail error={error} /> </AlertModal> )} </CardBody> </> ); } export default InstanceDetails; 
-#. placeholder {1}: import React, { useCallback, useEffect, useState } from 'react'; import { useParams, useHistory } from 'react-router-dom'; import { Trans, useLingui } from '@lingui/react/macro'; import { Button, Progress, ProgressMeasureLocation, ProgressSize, CodeBlock, CodeBlockCode, Tooltip, Slider, } from '@patternfly/react-core'; import { CaretLeftIcon, OutlinedClockIcon } from '@patternfly/react-icons'; import styled from 'styled-components'; import { useConfig } from 'contexts/Config'; import { InstancesAPI, InstanceGroupsAPI } from 'api'; import useDebounce from 'hooks/useDebounce'; import AlertModal from 'components/AlertModal'; import ErrorDetail from 'components/ErrorDetail'; import DisassociateButton from 'components/DisassociateButton'; import InstanceToggle from 'components/InstanceToggle'; import { CardBody, CardActionsRow } from 'components/Card'; import getDocsBaseUrl from 'util/getDocsBaseUrl'; import { formatDateString } from 'util/dates'; import RoutedTabs from 'components/RoutedTabs'; import ContentError from 'components/ContentError'; import ContentLoading from 'components/ContentLoading'; import { Detail, DetailList } from 'components/DetailList'; import HealthCheckAlert from 'components/HealthCheckAlert'; import StatusLabel from 'components/StatusLabel'; import useRequest, { useDeleteItems, useDismissableError, } from 'hooks/useRequest'; const Unavailable = styled.span` color: var(--pf-global--danger-color--200); `; const SliderHolder = styled.div` display: flex; align-items: center; justify-content: space-between; `; const SliderForks = styled.div` flex-grow: 1; margin-right: 8px; margin-left: 8px; text-align: center; `; function computeForks(memCapacity, cpuCapacity, selectedCapacityAdjustment) { const minCapacity = Math.min(memCapacity, cpuCapacity); const maxCapacity = Math.max(memCapacity, cpuCapacity); return Math.floor( minCapacity + (maxCapacity - minCapacity) * selectedCapacityAdjustment ); } function InstanceDetails({ setBreadcrumb, instanceGroup }) { const { t, i18n } = useLingui(); const config = useConfig(); const { id, instanceId } = useParams(); const history = useHistory(); const [healthCheck, setHealthCheck] = useState({}); const [showHealthCheckAlert, setShowHealthCheckAlert] = useState(false); const [forks, setForks] = useState(); const policyRulesDocsLink = `${getDocsBaseUrl( config )}/html/administration/containers_instance_groups.html#ag-instance-group-policies`; const { isLoading, error: contentError, request: fetchDetails, result: { instance }, } = useRequest( useCallback(async () => { const { data: { results }, } = await InstanceGroupsAPI.readInstances(instanceGroup.id); const isAssociated = results.some( ({ id: instId }) => instId === parseInt(instanceId, 10) ); if (isAssociated) { const { data: details } = await InstancesAPI.readDetail(instanceId); if (details.node_type === 'execution') { const { data: healthCheckData } = await InstancesAPI.readHealthCheckDetail(instanceId); setHealthCheck(healthCheckData); } setBreadcrumb(instanceGroup, details); setForks( computeForks( details.mem_capacity, details.cpu_capacity, details.capacity_adjustment ) ); return { instance: details }; } throw new Error( `This instance is not associated with this instance group` ); }, [instanceId, setBreadcrumb, instanceGroup]), { instance: {}, isLoading: true } ); useEffect(() => { fetchDetails(); }, [fetchDetails]); const { error: healthCheckError, request: fetchHealthCheck } = useRequest( useCallback(async () => { const { status } = await InstancesAPI.healthCheck(instanceId); if (status === 200) { setShowHealthCheckAlert(true); } }, [instanceId]) ); const { deleteItems: disassociateInstance, deletionError: disassociateError, } = useDeleteItems( useCallback(async () => { await InstanceGroupsAPI.disassociateInstance( instanceGroup.id, instance.id ); history.push(`/instance_groups/${instanceGroup.id}/instances`); }, [instanceGroup.id, instance.id, history]) ); const { error: updateInstanceError, request: updateInstance } = useRequest( useCallback( async (values) => { await InstancesAPI.update(instance.id, values); }, [instance] ) ); const debounceUpdateInstance = useDebounce(updateInstance, 200); const handleChangeValue = (value) => { const roundedValue = Math.round(value * 100) / 100; setForks( computeForks(instance.mem_capacity, instance.cpu_capacity, roundedValue) ); debounceUpdateInstance({ capacity_adjustment: roundedValue }); }; const formatHealthCheckTimeStamp = (last) => ( <> {formatDateString(last)} {instance.health_check_pending ? ( <> {' '} <OutlinedClockIcon /> </> ) : null} </> ); const { error, dismissError } = useDismissableError( disassociateError || updateInstanceError || healthCheckError ); const tabsArray = [ { name: ( <> <CaretLeftIcon /> {t`Back to Instances`} </> ), link: `/instance_groups/${id}/instances`, id: 99, }, { name: t`Details`, link: `/instance_groups/${id}/instances/${instanceId}/details`, id: 0, }, ]; if (contentError) { return <ContentError error={contentError} />; } if (isLoading) { return <ContentLoading />; } const isExecutionNode = instance.node_type === 'execution'; return ( <> <RoutedTabs tabsArray={tabsArray} /> {showHealthCheckAlert ? ( <HealthCheckAlert onSetHealthCheckAlert={setShowHealthCheckAlert} /> ) : null} <CardBody> <DetailList gutter="sm"> <Detail label={t`Host Name`} value={instance.hostname} dataCy="instance-detail-name" /> <Detail label={t`Status`} value={ instance.node_state ? ( <StatusLabel status={instance.node_state} /> ) : null } /> <Detail label={t`Policy Type`} value={ instance.managed_by_policy ? t`Auto` : t`Manual` } /> <Detail label={t`Running Jobs`} value={instance.jobs_running} /> <Detail label={t`Total Jobs`} value={instance.jobs_total} /> <Detail label={t`Last Health Check`} helpText={ <> {t`Health checks are asynchronous tasks. See the`}{' '} <a href={`${getDocsBaseUrl( config )}/html/administration/instances.html#health-check`} target="_blank" rel="noopener noreferrer" > {t`documentation`} </a>{' '} {t`for more info.`} </> } value={formatHealthCheckTimeStamp(instance.last_health_check)} /> <Detail label={t`Node Type`} value={instance.node_type} /> <Detail label={t`Capacity Adjustment`} value={ <SliderHolder data-cy="slider-holder"> <div data-cy="cpu-capacity"> {t`CPU ${instance.cpu_capacity}`} </div> <SliderForks data-cy="slider-forks"> <div data-cy="number-forks"> {i18n._('{count, plural, one {# fork} other {# forks}}', { count: forks })} </div> <Slider areCustomStepsContinuous max={1} min={0} step={0.1} value={instance.capacity_adjustment} onChange={handleChangeValue} isDisabled={!config?.me?.is_superuser || !instance.enabled} data-cy="slider" /> </SliderForks> <div data-cy="mem-capacity"> {t`RAM ${instance.mem_capacity}`} </div> </SliderHolder> } /> <Detail label={t`Used Capacity`} value={ instance.enabled ? ( <Progress title={t`Used capacity`} value={Math.round(100 - instance.percent_capacity_remaining)} measureLocation={ProgressMeasureLocation.top} size={ProgressSize.sm} aria-label={t`Used capacity`} /> ) : ( <Unavailable>{t`Unavailable`}</Unavailable> ) } /> {healthCheck?.errors && ( <Detail fullWidth label={t`Errors`} value={ <CodeBlock> <CodeBlockCode>{healthCheck?.errors}</CodeBlockCode> </CodeBlock> } /> )} </DetailList> <CardActionsRow> {isExecutionNode && ( <Tooltip content={t`Run a health check on the instance`}> <Button isDisabled={ !config?.me?.is_superuser || instance.health_check_pending } variant="primary" ouiaId="health-check-button" onClick={fetchHealthCheck} isLoading={instance.health_check_pending} spinnerAriaLabel={t`Running health check`} > {instance.health_check_pending ? t`Running health check` : t`Run health check`} </Button> </Tooltip> )} {config?.me?.is_superuser && instance.node_type !== 'control' && ( <DisassociateButton verifyCannotDisassociate={instanceGroup.name === 'controlplane'} key="disassociate" onDisassociate={disassociateInstance} itemsToDisassociate={[instance]} isProtectedInstanceGroup={instanceGroup.name === 'controlplane'} modalTitle={t`Disassociate instance from instance group?`} modalNote={ instance.managed_by_policy ? ( <Trans> <b> {t`Note: This instance may be re-associated with this instance group if it is managed by `} <a href={policyRulesDocsLink} target="_blank" rel="noopener noreferrer" > {t`policy rules.`} </a> </b> </Trans> ) : null } /> )} <InstanceToggle css="display: inline-flex;" fetchInstances={fetchDetails} instance={instance} /> </CardActionsRow> {error && ( <AlertModal isOpen={error} onClose={dismissError} title={t`Error!`} variant="error" > {updateInstanceError ? t`Failed to update capacity adjustment.` : t`Failed to disassociate one or more instances.`} <ErrorDetail error={error} /> </AlertModal> )} </CardBody> </> ); } export default InstanceDetails; 
+#. placeholder {0}: import React, { useCallback, useEffect, useState } from 'react'; import { useParams, useHistory } from 'react-router-dom'; import { Trans, useLingui } from '@lingui/react/macro'; import { Button, Progress, ProgressMeasureLocation, ProgressSize, CodeBlock, CodeBlockCode, Tooltip, Slider, } from '@patternfly/react-core'; import { CaretLeftIcon, OutlinedClockIcon } from '@patternfly/react-icons'; import styled from 'styled-components'; import { useConfig } from 'contexts/Config'; import { InstancesAPI, InstanceGroupsAPI } from 'api'; import useDebounce from 'hooks/useDebounce'; import AlertModal from 'components/AlertModal'; import ErrorDetail from 'components/ErrorDetail'; import DisassociateButton from 'components/DisassociateButton'; import InstanceToggle from 'components/InstanceToggle'; import { CardBody, CardActionsRow } from 'components/Card'; import getDocsBaseUrl from 'util/getDocsBaseUrl'; import { formatDateString } from 'util/dates'; import RoutedTabs from 'components/RoutedTabs'; import ContentError from 'components/ContentError'; import ContentLoading from 'components/ContentLoading'; import { Detail, DetailList } from 'components/DetailList'; import HealthCheckAlert from 'components/HealthCheckAlert'; import StatusLabel from 'components/StatusLabel'; import useRequest, { useDeleteItems, useDismissableError, } from 'hooks/useRequest'; const Unavailable = styled.span` color: var(--pf-global--danger-color--200); `; const SliderHolder = styled.div` display: flex; align-items: center; justify-content: space-between; `; const SliderForks = styled.div` flex-grow: 1; margin-right: 8px; margin-left: 8px; text-align: center; `; function computeForks(memCapacity, cpuCapacity, selectedCapacityAdjustment) { const minCapacity = Math.min(memCapacity, cpuCapacity); const maxCapacity = Math.max(memCapacity, cpuCapacity); return Math.floor( minCapacity + (maxCapacity - minCapacity) * selectedCapacityAdjustment ); } function InstanceDetails({ setBreadcrumb, instanceGroup }) { const { t, i18n } = useLingui(); const config = useConfig(); const { id, instanceId } = useParams(); const history = useHistory(); const [healthCheck, setHealthCheck] = useState({}); const [showHealthCheckAlert, setShowHealthCheckAlert] = useState(false); const [forks, setForks] = useState(); const policyRulesDocsLink = `${getDocsBaseUrl( config )}/html/administration/containers_instance_groups.html#ag-instance-group-policies`; const { isLoading, error: contentError, request: fetchDetails, result: { instance }, } = useRequest( useCallback(async () => { const { data: { results }, } = await InstanceGroupsAPI.readInstances(instanceGroup.id); const isAssociated = results.some( ({ id: instId }) => instId === parseInt(instanceId, 10) ); if (isAssociated) { const { data: details } = await InstancesAPI.readDetail(instanceId); if (details.node_type === 'execution') { const { data: healthCheckData } = await InstancesAPI.readHealthCheckDetail(instanceId); setHealthCheck(healthCheckData); } setBreadcrumb(instanceGroup, details); setForks( computeForks( details.mem_capacity, details.cpu_capacity, details.capacity_adjustment ) ); return { instance: details }; } throw new Error( `This instance is not associated with this instance group` ); }, [instanceId, setBreadcrumb, instanceGroup]), { instance: {}, isLoading: true } ); useEffect(() => { fetchDetails(); }, [fetchDetails]); const { error: healthCheckError, request: fetchHealthCheck } = useRequest( useCallback(async () => { const { status } = await InstancesAPI.healthCheck(instanceId); if (status === 200) { setShowHealthCheckAlert(true); } }, [instanceId]) ); const { deleteItems: disassociateInstance, deletionError: disassociateError, } = useDeleteItems( useCallback(async () => { await InstanceGroupsAPI.disassociateInstance( instanceGroup.id, instance.id ); history.push(`/instance_groups/${instanceGroup.id}/instances`); }, [instanceGroup.id, instance.id, history]) ); const { error: updateInstanceError, request: updateInstance } = useRequest( useCallback( async (values) => { await InstancesAPI.update(instance.id, values); }, [instance] ) ); const debounceUpdateInstance = useDebounce(updateInstance, 200); const handleChangeValue = (value) => { const roundedValue = Math.round(value * 100) / 100; setForks( computeForks(instance.mem_capacity, instance.cpu_capacity, roundedValue) ); debounceUpdateInstance({ capacity_adjustment: roundedValue }); }; const formatHealthCheckTimeStamp = (last) => ( <> {formatDateString(last)} {instance.health_check_pending ? ( <> {' '} <OutlinedClockIcon /> </> ) : null} </> ); const { error, dismissError } = useDismissableError( disassociateError || updateInstanceError || healthCheckError ); const tabsArray = [ { name: ( <> <CaretLeftIcon /> {t`Back to Instances`} </> ), link: `/instance_groups/${id}/instances`, id: 99, }, { name: t`Details`, link: `/instance_groups/${id}/instances/${instanceId}/details`, id: 0, }, ]; if (contentError) { return <ContentError error={contentError} />; } if (isLoading) { return <ContentLoading />; } const isExecutionNode = instance.node_type === 'execution'; return ( <> <RoutedTabs tabsArray={tabsArray} /> {showHealthCheckAlert ? ( <HealthCheckAlert onSetHealthCheckAlert={setShowHealthCheckAlert} /> ) : null} <CardBody> <DetailList gutter="sm"> <Detail label={t`Host Name`} value={instance.hostname} dataCy="instance-detail-name" /> <Detail label={t`Status`} value={ instance.node_state ? ( <StatusLabel status={instance.node_state} /> ) : null } /> <Detail label={t`Policy Type`} value={ instance.managed_by_policy ? t`Auto` : t`Manual` } /> <Detail label={t`Running Jobs`} value={instance.jobs_running} /> <Detail label={t`Total Jobs`} value={instance.jobs_total} /> <Detail label={t`Last Health Check`} helpText={ <> {t`Health checks are asynchronous tasks. See the`}{' '} <a href={`${getDocsBaseUrl( config )}/html/administration/instances.html#health-check`} target="_blank" rel="noopener noreferrer" > {t`documentation`} </a>{' '} {t`for more info.`} </> } value={formatHealthCheckTimeStamp(instance.last_health_check)} /> <Detail label={t`Node Type`} value={instance.node_type} /> <Detail label={t`Capacity Adjustment`} value={ <SliderHolder data-cy="slider-holder"> <div data-cy="cpu-capacity"> {t`CPU ${instance.cpu_capacity}`} </div> <SliderForks data-cy="slider-forks"> <div data-cy="number-forks"> {i18n._('{count, plural, one {# fork} other {# forks}}', { count: forks })} </div> <Slider areCustomStepsContinuous max={1} min={0} step={0.1} value={instance.capacity_adjustment} onChange={handleChangeValue} isDisabled={!config?.me?.is_superuser || !instance.enabled} data-cy="slider" /> </SliderForks> <div data-cy="mem-capacity"> {t`RAM ${instance.mem_capacity}`} </div> </SliderHolder> } /> <Detail label={t`Used Capacity`} value={ instance.enabled ? ( <Progress title={t`Used capacity`} value={Math.round(100 - instance.percent_capacity_remaining)} measureLocation={ProgressMeasureLocation.top} size={ProgressSize.sm} aria-label={t`Used capacity`} /> ) : ( <Unavailable>{t`Unavailable`}</Unavailable> ) } /> {healthCheck?.errors && ( <Detail fullWidth label={t`Errors`} value={ <CodeBlock> <CodeBlockCode>{healthCheck?.errors}</CodeBlockCode> </CodeBlock> } /> )} </DetailList> <CardActionsRow> {isExecutionNode && ( <Tooltip content={t`Run a health check on the instance`}> <Button isDisabled={ !config?.me?.is_superuser || instance.health_check_pending } variant="primary" ouiaId="health-check-button" onClick={fetchHealthCheck} isLoading={instance.health_check_pending} spinnerAriaLabel={t`Running health check`} > {instance.health_check_pending ? t`Running health check` : t`Run health check`} </Button> </Tooltip> )} {config?.me?.is_superuser && instance.node_type !== 'control' && ( <DisassociateButton verifyCannotDisassociate={instanceGroup.name === 'controlplane'} key="disassociate" onDisassociate={disassociateInstance} itemsToDisassociate={[instance]} isProtectedInstanceGroup={instanceGroup.name === 'controlplane'} modalTitle={t`Disassociate instance from instance group?`} modalNote={ instance.managed_by_policy ? ( <Trans> <b> {t`Note: This instance may be re-associated with this instance group if it is managed by `} <a href={policyRulesDocsLink} target="_blank" rel="noopener noreferrer" > {t`policy rules.`} </a> </b> </Trans> ) : null } /> )} <InstanceToggle css="display: inline-flex;" fetchInstances={fetchDetails} instance={instance} /> </CardActionsRow> {error && ( <AlertModal isOpen={error} onClose={dismissError} title={t`Error!`} variant="error" > {updateInstanceError ? t`Failed to update capacity adjustment.` : t`Failed to disassociate one or more instances.`} <ErrorDetail error={error} /> </AlertModal> )} </CardBody> </> ); } export default InstanceDetails;
+#. placeholder {1}: import React, { useCallback, useEffect, useState } from 'react'; import { useParams, useHistory } from 'react-router-dom'; import { Trans, useLingui } from '@lingui/react/macro'; import { Button, Progress, ProgressMeasureLocation, ProgressSize, CodeBlock, CodeBlockCode, Tooltip, Slider, } from '@patternfly/react-core'; import { CaretLeftIcon, OutlinedClockIcon } from '@patternfly/react-icons'; import styled from 'styled-components'; import { useConfig } from 'contexts/Config'; import { InstancesAPI, InstanceGroupsAPI } from 'api'; import useDebounce from 'hooks/useDebounce'; import AlertModal from 'components/AlertModal'; import ErrorDetail from 'components/ErrorDetail'; import DisassociateButton from 'components/DisassociateButton'; import InstanceToggle from 'components/InstanceToggle'; import { CardBody, CardActionsRow } from 'components/Card'; import getDocsBaseUrl from 'util/getDocsBaseUrl'; import { formatDateString } from 'util/dates'; import RoutedTabs from 'components/RoutedTabs'; import ContentError from 'components/ContentError'; import ContentLoading from 'components/ContentLoading'; import { Detail, DetailList } from 'components/DetailList'; import HealthCheckAlert from 'components/HealthCheckAlert'; import StatusLabel from 'components/StatusLabel'; import useRequest, { useDeleteItems, useDismissableError, } from 'hooks/useRequest'; const Unavailable = styled.span` color: var(--pf-global--danger-color--200); `; const SliderHolder = styled.div` display: flex; align-items: center; justify-content: space-between; `; const SliderForks = styled.div` flex-grow: 1; margin-right: 8px; margin-left: 8px; text-align: center; `; function computeForks(memCapacity, cpuCapacity, selectedCapacityAdjustment) { const minCapacity = Math.min(memCapacity, cpuCapacity); const maxCapacity = Math.max(memCapacity, cpuCapacity); return Math.floor( minCapacity + (maxCapacity - minCapacity) * selectedCapacityAdjustment ); } function InstanceDetails({ setBreadcrumb, instanceGroup }) { const { t, i18n } = useLingui(); const config = useConfig(); const { id, instanceId } = useParams(); const history = useHistory(); const [healthCheck, setHealthCheck] = useState({}); const [showHealthCheckAlert, setShowHealthCheckAlert] = useState(false); const [forks, setForks] = useState(); const policyRulesDocsLink = `${getDocsBaseUrl( config )}/html/administration/containers_instance_groups.html#ag-instance-group-policies`; const { isLoading, error: contentError, request: fetchDetails, result: { instance }, } = useRequest( useCallback(async () => { const { data: { results }, } = await InstanceGroupsAPI.readInstances(instanceGroup.id); const isAssociated = results.some( ({ id: instId }) => instId === parseInt(instanceId, 10) ); if (isAssociated) { const { data: details } = await InstancesAPI.readDetail(instanceId); if (details.node_type === 'execution') { const { data: healthCheckData } = await InstancesAPI.readHealthCheckDetail(instanceId); setHealthCheck(healthCheckData); } setBreadcrumb(instanceGroup, details); setForks( computeForks( details.mem_capacity, details.cpu_capacity, details.capacity_adjustment ) ); return { instance: details }; } throw new Error( `This instance is not associated with this instance group` ); }, [instanceId, setBreadcrumb, instanceGroup]), { instance: {}, isLoading: true } ); useEffect(() => { fetchDetails(); }, [fetchDetails]); const { error: healthCheckError, request: fetchHealthCheck } = useRequest( useCallback(async () => { const { status } = await InstancesAPI.healthCheck(instanceId); if (status === 200) { setShowHealthCheckAlert(true); } }, [instanceId]) ); const { deleteItems: disassociateInstance, deletionError: disassociateError, } = useDeleteItems( useCallback(async () => { await InstanceGroupsAPI.disassociateInstance( instanceGroup.id, instance.id ); history.push(`/instance_groups/${instanceGroup.id}/instances`); }, [instanceGroup.id, instance.id, history]) ); const { error: updateInstanceError, request: updateInstance } = useRequest( useCallback( async (values) => { await InstancesAPI.update(instance.id, values); }, [instance] ) ); const debounceUpdateInstance = useDebounce(updateInstance, 200); const handleChangeValue = (value) => { const roundedValue = Math.round(value * 100) / 100; setForks( computeForks(instance.mem_capacity, instance.cpu_capacity, roundedValue) ); debounceUpdateInstance({ capacity_adjustment: roundedValue }); }; const formatHealthCheckTimeStamp = (last) => ( <> {formatDateString(last)} {instance.health_check_pending ? ( <> {' '} <OutlinedClockIcon /> </> ) : null} </> ); const { error, dismissError } = useDismissableError( disassociateError || updateInstanceError || healthCheckError ); const tabsArray = [ { name: ( <> <CaretLeftIcon /> {t`Back to Instances`} </> ), link: `/instance_groups/${id}/instances`, id: 99, }, { name: t`Details`, link: `/instance_groups/${id}/instances/${instanceId}/details`, id: 0, }, ]; if (contentError) { return <ContentError error={contentError} />; } if (isLoading) { return <ContentLoading />; } const isExecutionNode = instance.node_type === 'execution'; return ( <> <RoutedTabs tabsArray={tabsArray} /> {showHealthCheckAlert ? ( <HealthCheckAlert onSetHealthCheckAlert={setShowHealthCheckAlert} /> ) : null} <CardBody> <DetailList gutter="sm"> <Detail label={t`Host Name`} value={instance.hostname} dataCy="instance-detail-name" /> <Detail label={t`Status`} value={ instance.node_state ? ( <StatusLabel status={instance.node_state} /> ) : null } /> <Detail label={t`Policy Type`} value={ instance.managed_by_policy ? t`Auto` : t`Manual` } /> <Detail label={t`Running Jobs`} value={instance.jobs_running} /> <Detail label={t`Total Jobs`} value={instance.jobs_total} /> <Detail label={t`Last Health Check`} helpText={ <> {t`Health checks are asynchronous tasks. See the`}{' '} <a href={`${getDocsBaseUrl( config )}/html/administration/instances.html#health-check`} target="_blank" rel="noopener noreferrer" > {t`documentation`} </a>{' '} {t`for more info.`} </> } value={formatHealthCheckTimeStamp(instance.last_health_check)} /> <Detail label={t`Node Type`} value={instance.node_type} /> <Detail label={t`Capacity Adjustment`} value={ <SliderHolder data-cy="slider-holder"> <div data-cy="cpu-capacity"> {t`CPU ${instance.cpu_capacity}`} </div> <SliderForks data-cy="slider-forks"> <div data-cy="number-forks"> {i18n._('{count, plural, one {# fork} other {# forks}}', { count: forks })} </div> <Slider areCustomStepsContinuous max={1} min={0} step={0.1} value={instance.capacity_adjustment} onChange={handleChangeValue} isDisabled={!config?.me?.is_superuser || !instance.enabled} data-cy="slider" /> </SliderForks> <div data-cy="mem-capacity"> {t`RAM ${instance.mem_capacity}`} </div> </SliderHolder> } /> <Detail label={t`Used Capacity`} value={ instance.enabled ? ( <Progress title={t`Used capacity`} value={Math.round(100 - instance.percent_capacity_remaining)} measureLocation={ProgressMeasureLocation.top} size={ProgressSize.sm} aria-label={t`Used capacity`} /> ) : ( <Unavailable>{t`Unavailable`}</Unavailable> ) } /> {healthCheck?.errors && ( <Detail fullWidth label={t`Errors`} value={ <CodeBlock> <CodeBlockCode>{healthCheck?.errors}</CodeBlockCode> </CodeBlock> } /> )} </DetailList> <CardActionsRow> {isExecutionNode && ( <Tooltip content={t`Run a health check on the instance`}> <Button isDisabled={ !config?.me?.is_superuser || instance.health_check_pending } variant="primary" ouiaId="health-check-button" onClick={fetchHealthCheck} isLoading={instance.health_check_pending} spinnerAriaLabel={t`Running health check`} > {instance.health_check_pending ? t`Running health check` : t`Run health check`} </Button> </Tooltip> )} {config?.me?.is_superuser && instance.node_type !== 'control' && ( <DisassociateButton verifyCannotDisassociate={instanceGroup.name === 'controlplane'} key="disassociate" onDisassociate={disassociateInstance} itemsToDisassociate={[instance]} isProtectedInstanceGroup={instanceGroup.name === 'controlplane'} modalTitle={t`Disassociate instance from instance group?`} modalNote={ instance.managed_by_policy ? ( <Trans> <b> {t`Note: This instance may be re-associated with this instance group if it is managed by `} <a href={policyRulesDocsLink} target="_blank" rel="noopener noreferrer" > {t`policy rules.`} </a> </b> </Trans> ) : null } /> )} <InstanceToggle css="display: inline-flex;" fetchInstances={fetchDetails} instance={instance} /> </CardActionsRow> {error && ( <AlertModal isOpen={error} onClose={dismissError} title={t`Error!`} variant="error" > {updateInstanceError ? t`Failed to update capacity adjustment.` : t`Failed to disassociate one or more instances.`} <ErrorDetail error={error} /> </AlertModal> )} </CardBody> </> ); } export default InstanceDetails;
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:341
 msgid "<0>{0}<1>{1}</1></0>"
 msgstr "< 0 >{ 2 }< 1 >{ 3 }</ 1 ></ 0 >"
@@ -4008,10 +4033,10 @@ msgid "Failed to update capacity adjustment."
 msgstr "容量調整の更新に失敗しました。"
 
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:72
-msgid ""
-"Minimum percentage of all instances that will be automatically\n"
+msgid "Minimum percentage of all instances that will be automatically\n"
 "          assigned to this group when new instances come online."
-msgstr ""
+msgstr "新規インスタンスがオンラインになった際に、自動的にこのグループに割り当てられる全インスタンスの最小割合。\n"
+"\n"
 
 #: components/JobCancelButton/JobCancelButton.js:91
 msgid "Confirm cancellation"
@@ -4024,7 +4049,7 @@ msgstr "並び替え"
 #. js-lingui-explicit-id
 #: screens/Dashboard/shared/ChartTooltip.js:66
 msgid "Failed"
-msgstr ""
+msgstr "失敗"
 
 #: screens/Job/JobOutput/JobOutputSearch.js:131
 msgid "Variables Prompted"
@@ -4043,12 +4068,16 @@ msgid "Create user token"
 msgstr "ユーザートークンの作成"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:198
-msgid ""
-"Provide your Red Hat or Red Hat Satellite credentials\n"
+msgid "Provide your Red Hat or Red Hat Satellite credentials\n"
 "                 below and you can choose from a list of your available subscriptions.\n"
 "                 The credentials you use will be stored for future use in\n"
 "                 retrieving renewal or expanded subscriptions."
-msgstr ""
+msgstr "Red HatまたはRed Hat Satelliteの認証情報を下記に入力してください。\n"
+"\n"
+"すると、利用可能なサブスクリプションの一覧から選択できます。\n"
+"\n"
+"入力された認証情報は、今後のサブスクリプションの更新または拡張時に使用するために保存されます。\n"
+"\n"
 
 #: screens/InstanceGroup/ContainerGroup.js:88
 #: screens/InstanceGroup/InstanceGroup.js:96
@@ -4156,11 +4185,14 @@ msgid "All jobs"
 msgstr "すべてのジョブ"
 
 #: components/LaunchPrompt/steps/OtherPromptsStep.js:187
-msgid ""
-"If enabled, show the changes made\n"
+msgid "If enabled, show the changes made\n"
 "              by Ansible tasks, where supported. This is equivalent to Ansible’s\n"
 "              --diff mode."
-msgstr ""
+msgstr "有効にすると、サポートされている場合、Ansibleタスクによって行われた変更を表示します。\n"
+"\n"
+"これはAnsibleの\n"
+"\n"
+"--diffモードと同等です。"
 
 #: screens/InstanceGroup/Instances/InstanceList.js:365
 msgid "<0>Note: Manually associated instances may be automatically disassociated from an instance group if the instance is managed by <1>policy rules.</1></0>"
@@ -4205,11 +4237,13 @@ msgid "Weekend day"
 msgstr "週末"
 
 #: screens/Inventory/shared/Inventory.helptext.js:31
-msgid ""
-"Optional labels that describe this inventory,\n"
+msgid "Optional labels that describe this inventory,\n"
 "          such as 'dev' or 'test'. Labels can be used to group and filter\n"
 "          inventories and completed jobs."
-msgstr ""
+msgstr "このインベントリを説明するオプションのラベル（例：「開発」や「テスト」）。\n"
+"\n"
+"ラベルは、インベントリや完了したジョブをグループ化およびフィルタリングするために使用できます。\n"
+"\n"
 
 #: screens/TopologyView/ContentLoading.js:34
 msgid "content-loading-in-progress"
@@ -4352,11 +4386,12 @@ msgid "This field may not be blank"
 msgstr "このフィールドは空白ではありません"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:94
-msgid ""
-"If users need feedback about the correctness\n"
+msgid "If users need feedback about the correctness\n"
 "              of their constructed groups, it is highly recommended\n"
 "              to use strict: true in the plugin configuration."
-msgstr ""
+msgstr "ユーザーが作成したグループの正確性に関するフィードバックを必要とする場合、\n"
+"\n"
+"プラグインの設定で strict: true を使用することを強くお勧めします。"
 
 #: screens/User/UserRoles/UserRolesList.js:217
 msgid "Confirm disassociate"
@@ -4380,11 +4415,13 @@ msgid "Failed to delete one or more projects."
 msgstr "1 つ以上のプロジェクトを削除できませんでした。"
 
 #: screens/Template/Survey/SurveyQuestionForm.js:47
-msgid ""
-"Choose an answer type or format you want as the prompt for the user.\n"
+msgid "Choose an answer type or format you want as the prompt for the user.\n"
 "          Refer to the Ansible Controller Documentation for more additional\n"
 "          information about each option."
-msgstr ""
+msgstr "ユーザーへのプロンプトとして表示する回答の種類または形式を選択してください。\n"
+"\n"
+"各オプションの詳細については、Ansible Controllerのドキュメントを参照してください。\n"
+"\n"
 
 #: screens/Inventory/shared/InventorySourceSubForms/SCMSubForm.js:139
 msgid "Set source path to"
@@ -4754,10 +4791,11 @@ msgid "User Interface settings"
 msgstr "ユーザーインターフェースの設定"
 
 #: components/AdHocCommands/AdHocDetailsStep.js:248
-msgid ""
-"Provide key/value pairs using either\n"
+msgid "Provide key/value pairs using either\n"
 "                  YAML or JSON."
-msgstr ""
+msgstr "キーと値のペアは、YAMLまたはJSONのいずれかを使用して指定してください。\n"
+"\n"
+"YAMLまたはJSON"
 
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:182
 #: components/Schedule/shared/FrequencyDetailSubform.js:181
@@ -4843,14 +4881,14 @@ msgid "Use one email address per line to create a recipient list for this type o
 msgstr "1 行ごとに 1 つのメールアドレスを指定して、この通知タイプの受信者リストを作成します。"
 
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:66
-msgid ""
-"Minimum number of instances that will be automatically\n"
+msgid "Minimum number of instances that will be automatically\n"
 "          assigned to this group when new instances come online."
-msgstr ""
+msgstr "新しいインスタンスがオンラインになった際に、このグループに自動的に割り当てられるインスタンスの最小数。\n"
+"\n"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:31
 msgid "{interval} weeks"
-msgstr ""
+msgstr "{interval}週間"
 
 #: components/LaunchPrompt/steps/OtherPromptsStep.js:98
 #: components/LaunchPrompt/steps/OtherPromptsStep.js:99
@@ -4990,7 +5028,7 @@ msgstr "モジュールの選択"
 
 #: components/JobList/JobListCancelButton.js:171
 msgid "This action will cancel the following jobs:"
-msgstr ""
+msgstr "この操作により、以下のジョブがキャンセルされます。"
 
 #: components/PromptDetail/PromptProjectDetail.js:129
 #: screens/Project/ProjectDetail/ProjectDetail.js:246
@@ -5172,7 +5210,7 @@ msgstr "チームパーミッションの追加"
 
 #: components/JobList/JobListCancelButton.js:170
 msgid "This action will cancel the following job:"
-msgstr ""
+msgstr "この操作により、以下のジョブがキャンセルされます。"
 
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:547
 msgid "Source phone number"
@@ -5301,10 +5339,10 @@ msgstr "インスタンスグループ"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:60
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:533
-msgid ""
-"Use one phone number per line to specify where to\n"
+msgid "Use one phone number per line to specify where to\n"
 "        route SMS messages. Phone numbers should be formatted +11231231234. For more information see Twilio documentation"
-msgstr ""
+msgstr "SMSメッセージの送信先を指定するには、1行につき1つの電話番号を使用してください。\n"
+"電話番号は+11231231234の形式で入力してください。詳細については、Twilioのドキュメントを参照してください。"
 
 #: screens/Template/Survey/SurveyToolbar.js:65
 msgid "Click to rearrange the order of the survey questions"
@@ -5315,10 +5353,11 @@ msgid "Subscription Details"
 msgstr "サブスクリプションの詳細"
 
 #: components/Schedule/shared/UnsupportedRRuleAlert.js:24
-msgid ""
-"This schedule uses complex rules that are not supported in the\n"
+msgid "This schedule uses complex rules that are not supported in the\n"
 "        UI.  Please use the API to manage this schedule."
-msgstr ""
+msgstr "このスケジュールは、UIではサポートされていない複雑なルールを使用しています。\n"
+"\n"
+"このスケジュールを管理するには、APIをご利用ください。"
 
 #: screens/Inventory/InventoryList/InventoryList.js:138
 msgid "Add smart inventory"
@@ -5420,12 +5459,16 @@ msgid "source control branch"
 msgstr "ソースコントロールのブランチ"
 
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:103
-msgid ""
-"The execution environment that will be used for jobs\n"
+msgid "The execution environment that will be used for jobs\n"
 "          inside of this organization. This will be used a fallback when\n"
 "          an execution environment has not been explicitly assigned at the\n"
 "          project, job template or workflow level."
-msgstr ""
+msgstr "この組織内でジョブに使用される実行環境。\n"
+"\n"
+"これは、\n"
+"プロジェクト、ジョブテンプレート、またはワークフローレベルで実行環境が明示的に割り当てられていない場合のフォールバックとして使用されます。\n"
+"\n"
+"プロジェクト、ジョブテンプレート、またはワークフローレベルで実行環境が明示的に割り当てられていない場合。"
 
 #: components/LaunchPrompt/steps/InstanceGroupsStep.js:97
 #: components/LaunchPrompt/steps/useInstanceGroupsStep.js:19
@@ -5480,7 +5523,7 @@ msgstr "Red Hat, Inc."
 
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:300
 msgid "Workflow Cancelled "
-msgstr ""
+msgstr "ワークフローがキャンセルされました"
 
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:85
 msgid "Workflow Statuses"
@@ -5501,11 +5544,14 @@ msgid "{0} more"
 msgstr "{0} 以上"
 
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:64
-msgid ""
-"This data is used to enhance\n"
+msgid "This data is used to enhance\n"
 "                   future releases of the Tower Software and help\n"
 "                   streamline customer experience and success."
-msgstr ""
+msgstr "このデータは、\n"
+"\n"
+"Tower Softwareの今後のリリースを強化し、\n"
+"\n"
+"顧客体験と顧客成功を効率化するために使用されます。"
 
 #: components/PaginatedTable/ToolbarDeleteButton.js:280
 #: screens/HostMetrics/HostMetricsDeleteButton.js:164
@@ -5627,7 +5673,7 @@ msgstr "1 つ以上のスケジュールを削除できませんでした。"
 #. placeholder {0}: zoneLinks[selectedValue]
 #: components/Schedule/shared/ScheduleFormFields.js:44
 msgid "Warning: {selectedValue} is a link to {0} and will be saved as that."
-msgstr ""
+msgstr "警告: {selectedValue} は {0} へのリンクであり、そのように保存されます。"
 
 #. placeholder {0}: relevantResults.length
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:75
@@ -5968,7 +6014,7 @@ msgstr "組み込みファイル"
 
 #: screens/Inventory/shared/Inventory.helptext.js:82
 msgid "If checked, any hosts and groups that were previously present on the external source but are now removed will be removed from the inventory. Hosts and groups that were not managed by the inventory source will be promoted to the next manually created group or if there is no manually created group to promote them into, they will be left in the \"all\" default group for the inventory."
-msgstr ""
+msgstr "チェックを入れると、外部ソースに以前存在していたものの、現在は削除されているホストとグループがインベントリから削除されます。インベントリソースで管理されていなかったホストとグループは、次に手動で作成されたグループに昇格されます。昇格させる手動作成グループがない場合は、インベントリのデフォルトグループである「すべて」に残されます。"
 
 #: components/LaunchPrompt/steps/CredentialPasswordsStep.js:123
 msgid "Vault password | {credId}"
@@ -6256,7 +6302,7 @@ msgstr "インスタンスグループが見つかりません。"
 
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:343
 msgid "Note: This instance may be re-associated with this instance group if it is managed by "
-msgstr ""
+msgstr "注: このインスタンスは、以下の方法で管理されている場合、このインスタンスグループに再関連付けされる可能性があります。"
 
 #: screens/Instances/Shared/RemoveInstanceButton.js:171
 msgid "cancel remove"
@@ -6358,12 +6404,14 @@ msgid "Confirm delete"
 msgstr "削除の確認"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:250
-msgid ""
-"This constructed inventory input\n"
+msgid "This constructed inventory input\n"
 "            creates a group for both of the categories and uses\n"
 "            the limit (host pattern) to only return hosts that\n"
 "            are in the intersection of those two groups."
-msgstr ""
+msgstr "この構築されたインベントリ入力は、\n"
+"両方のカテゴリに対してグループを作成し、\n"
+"制限（ホストパターン）を使用して、\n"
+"それら2つのグループの共通部分に含まれるホストのみを返します。"
 
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:338
 #: screens/InstanceGroup/Instances/InstanceList.js:279
@@ -6376,7 +6424,7 @@ msgstr "キー先行入力"
 
 #: components/PromptDetail/PromptJobTemplateDetail.js:165
 msgid " Job Slicing"
-msgstr ""
+msgstr "ジョブスライシング"
 
 #: components/AdHocCommands/AdHocCommands.js:127
 msgid "Run ad hoc command"
@@ -6524,13 +6572,20 @@ msgid "2 (More Verbose)"
 msgstr "2 (より詳細)"
 
 #: components/Lookup/HostFilterLookup.js:351
-msgid ""
-"Populate the hosts for this inventory by using a search\n"
+msgid "Populate the hosts for this inventory by using a search\n"
 "              filter. Example: ansible_facts__ansible_distribution:\"RedHat\".\n"
 "              Refer to the documentation for further syntax and\n"
 "              examples.  Refer to the Ansible Controller documentation for further syntax and\n"
 "              examples."
-msgstr ""
+msgstr "検索フィルターを使用して、このインベントリのホストを設定します。\n"
+"\n"
+"例：ansible_facts__ansible_distribution:\"RedHat\"。\n"
+"\n"
+"構文と例の詳細については、ドキュメントを参照してください。\n"
+"\n"
+"Ansible Controller の構文と例の詳細については、ドキュメントを参照してください。\n"
+"\n"
+"Ansible Controller のドキュメントを参照してください。"
 
 #: components/Schedule/ScheduleList/ScheduleList.js:149
 msgid "This schedule is missing required survey values"
@@ -6556,7 +6611,7 @@ msgstr "1 つ以上のグループを削除できませんでした。"
 #: components/AppContainer/PageHeaderToolbar.js:102
 #: components/AppContainer/PageHeaderToolbar.js:107
 msgid "Switch to dark mode"
-msgstr ""
+msgstr "ダークモードに切り替える"
 
 #: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.js:197
 msgid "Confirm Disable Local Authorization"
@@ -6641,12 +6696,17 @@ msgid "Are you sure you want delete the group below?"
 msgstr "以下のグループを削除してもよろしいですか？"
 
 #: components/AdHocCommands/AdHocDetailsStep.js:210
-msgid ""
-"Enables creation of a provisioning\n"
+msgid "Enables creation of a provisioning\n"
 "                              callback URL. Using the URL a host can contact {brandName}\n"
 "                              and request a configuration update using this job\n"
 "                              template"
-msgstr ""
+msgstr "プロビジョニングコールバックURLの作成を可能にします。\n"
+"\n"
+"ホストはこのURLを使用して{brandName}に接続し、\n"
+"\n"
+"このジョブテンプレートを使用して構成の更新を要求できます。\n"
+"\n"
+"テンプレート"
 
 #: components/JobList/JobList.js:261
 #: components/JobList/JobListItem.js:108
@@ -6684,7 +6744,7 @@ msgstr "構築されたインベントリ文書をここで表示"
 #. js-lingui-explicit-id
 #: screens/Dashboard/shared/ChartTooltip.js:106
 msgid "Never"
-msgstr ""
+msgstr "決して"
 
 #: screens/Team/TeamList/TeamList.js:127
 msgid "Organization Name"
@@ -6753,7 +6813,7 @@ msgstr "Pagerduty サブドメイン"
 #. js-lingui-explicit-id
 #: screens/Dashboard/shared/ChartTooltip.js:82
 msgid "No Jobs"
-msgstr ""
+msgstr "求人はありません"
 
 #: screens/User/UserTokenList/UserTokenList.js:123
 #: screens/User/UserTokenList/UserTokenList.js:134
@@ -6803,7 +6863,7 @@ msgstr "サブスクリプション選択モーダル"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:33
 msgid "{interval} months"
-msgstr ""
+msgstr "{interval}ヶ月"
 
 #: screens/Job/JobOutput/shared/OutputToolbar.js:139
 msgid "Failed Host Count"
@@ -6942,10 +7002,11 @@ msgid "1 (Verbose)"
 msgstr "1 (詳細)"
 
 #: screens/Setting/shared/RevertAllAlert.js:38
-msgid ""
-"This will revert all configuration values on this page to\n"
+msgid "This will revert all configuration values on this page to\n"
 "      their factory defaults. Are you sure you want to proceed?"
-msgstr ""
+msgstr "これにより、このページ上のすべての設定値が工場出荷時のデフォルト値に戻ります。\n"
+"\n"
+"続行してもよろしいですか？"
 
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:57
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:78
@@ -7156,10 +7217,10 @@ msgid "Sign in with GitHub Enterprise Teams"
 msgstr "GitHub Enterprise チームでサインイン"
 
 #: components/Lookup/InventoryLookup.js:128
-msgid ""
-"Select the inventory containing the hosts\n"
+msgid "Select the inventory containing the hosts\n"
 "            you want this job to manage."
-msgstr ""
+msgstr "このジョブで管理するホストを含むインベントリを選択してください。\n"
+"\n"
 
 #: components/AdHocCommands/AdHocDetailsStep.js:103
 #: components/AdHocCommands/AdHocDetailsStep.js:105
@@ -7262,7 +7323,7 @@ msgstr "ホスト OK"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:35
 msgid "{interval} years"
-msgstr ""
+msgstr "{interval}年"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.js:200
 msgid "Days remaining"
@@ -7342,7 +7403,7 @@ msgstr "コマンドの実行"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:27
 msgid "{interval} hours"
-msgstr ""
+msgstr "{interval}時間"
 
 #: screens/Credential/shared/CredentialFormFields/CredentialField.js:96
 #: screens/Credential/shared/CredentialFormFields/CredentialField.js:117
@@ -7376,7 +7437,7 @@ msgstr "認証"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:29
 msgid "{interval} days"
-msgstr ""
+msgstr "{interval}日"
 
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:179
 msgid "Recipient list"
@@ -7405,25 +7466,35 @@ msgid "ALL"
 msgstr "すべて"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:114
-msgid ""
-"Create vars from jinja2 expressions. This can be useful\n"
+msgid "Create vars from jinja2 expressions. This can be useful\n"
 "              if the constructed groups you define do not contain the expected\n"
 "              hosts. This can be used to add hostvars from expressions so\n"
 "              that you know what the resultant values of those expressions are."
-msgstr ""
+msgstr "Jinja2式から変数を作成します。これは、\n"
+"\n"
+"定義した構築済みグループに期待されるホストが含まれていない場合に役立ちます。\n"
+"\n"
+"式からホスト変数を追加することで、\n"
+"\n"
+"それらの式の結果値を把握できます。"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.js:141
 msgid "Active hosts previously deleted"
 msgstr "以前に削除されたアクティブなホスト"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:335
-msgid ""
-"It is hard to give a specification for\n"
+msgid "It is hard to give a specification for\n"
 "            the inventory for Ansible facts, because to populate\n"
 "            the system facts you need to run a playbook against\n"
 "            the inventory that has `gather_facts: true`. The\n"
 "            actual facts will differ system-to-system."
-msgstr ""
+msgstr "Ansibleファクトのインベントリに関する仕様を示すのは困難です。\n"
+"\n"
+"システムファクトを生成するには、\n"
+"\n"
+"`gather_facts: true`が設定されたインベントリに対してプレイブックを実行する必要があるためです。\n"
+"\n"
+"実際のファクトはシステムごとに異なります。"
 
 #: components/JobList/JobListItem.js:328
 #: screens/Job/JobDetail/JobDetail.js:431
@@ -7475,10 +7546,9 @@ msgstr "{0, selectordinal, one {The first {weekday} of {month}} two {The second 
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:62
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:582
-msgid ""
-"Specify HTTP Headers in JSON format. Refer to\n"
+msgid "Specify HTTP Headers in JSON format. Refer to\n"
 "      the Ansible Controller documentation for example syntax."
-msgstr ""
+msgstr "HTTPヘッダーはJSON形式で指定してください。構文例については、Ansibleコントローラーのドキュメントを参照してください。"
 
 #: components/NotificationList/NotificationList.js:200
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:141
@@ -7503,8 +7573,7 @@ msgid "Failed to copy execution environment"
 msgstr "実行環境をコピーできませんでした"
 
 #: screens/Template/Survey/MultipleChoiceField.js:60
-msgid ""
-"Press 'Enter' to add more answer choices. One answer\n"
+msgid "Press 'Enter' to add more answer choices. One answer\n"
 "choice per line."
 msgstr "Enter キーを押して、回答の選択肢をさらに追加します。回答の選択肢は、1 行に 1 つです。"
 
@@ -7603,7 +7672,7 @@ msgstr "インスタンスグループのフォールバックを防止する"
 #: components/AppContainer/PageHeaderToolbar.js:102
 #: components/AppContainer/PageHeaderToolbar.js:107
 msgid "Switch to light mode"
-msgstr ""
+msgstr "ライトモードに切り替える"
 
 #: screens/InstanceGroup/shared/InstanceGroupForm.js:59
 msgid "Maximum number of forks to allow across all jobs running concurrently on this group. Zero means no limit will be enforced."
@@ -7669,13 +7738,17 @@ msgid "Inventory Source Sync Error"
 msgstr "インベントリーソース同期エラー"
 
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.js:255
-msgid ""
-"\n"
+msgid "\n"
 "                        Note that only hosts directly in this group can\n"
 "                        be disassociated. Hosts in sub-groups must be disassociated\n"
 "                        directly from the sub-group level that they belong.\n"
 "                      "
-msgstr ""
+msgstr "このグループに直接属するホストのみが関連付け解除できることに注意してください。\n"
+"\n"
+"サブグループに属するホストは、\n"
+"\n"
+"所属するサブグループレベルから直接関連付け解除する必要があります。\n"
+"\n"
 
 #: components/AdHocCommands/AdHocPreviewStep.js:65
 #: components/PromptDetail/PromptDetail.js:254
@@ -7835,11 +7908,14 @@ msgid "Source Control Update"
 msgstr "ソースコントロールの更新"
 
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:76
-msgid ""
-"This data is used to enhance\n"
+msgid "This data is used to enhance\n"
 "                   future releases of the Software and to provide\n"
 "                   Automation Analytics."
-msgstr ""
+msgstr "このデータは、\n"
+"\n"
+"ソフトウェアの今後のリリースを強化するため、および\n"
+"\n"
+"自動化分析を提供するために使用されます。"
 
 #: components/PromptDetail/PromptProjectDetail.js:55
 #: screens/Project/ProjectDetail/ProjectDetail.js:109
@@ -7979,14 +8055,17 @@ msgstr "カスタム仮想環境 {virtualEnvironment} は、実行環境に置�
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:27
 msgid "{interval} hour"
-msgstr ""
+msgstr "{interval}時間"
 
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:95
-msgid ""
-"The maximum number of hosts allowed to be managed by\n"
+msgid "The maximum number of hosts allowed to be managed by\n"
 "            this organization. Value defaults to 0 which means no limit.\n"
 "            Refer to the Ansible documentation for more details."
-msgstr ""
+msgstr "この組織が管理できるホストの最大数。\n"
+"\n"
+"デフォルト値は0で、制限なしを意味します。\n"
+"\n"
+"詳細はAnsibleのドキュメントを参照してください。"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:278
 msgid "IRC Nick"
@@ -8285,11 +8364,12 @@ msgid "Workflow Job"
 msgstr "ワークフロージョブ"
 
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:72
-msgid ""
-"Use custom messages to change the content of\n"
+msgid "Use custom messages to change the content of\n"
 "                notifications sent when a job starts, succeeds, or fails. Use\n"
 "                curly braces to access information about the job:"
-msgstr ""
+msgstr "カスタムメッセージを使用して、ジョブの開始、成功、または失敗時に送信される通知の内容を変更できます。\n"
+"\n"
+"中括弧を使用して、ジョブに関する情報にアクセスします。"
 
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:98
 msgid "Pod spec override"
@@ -8448,7 +8528,7 @@ msgstr "拒否する行を選択"
 #. js-lingui-explicit-id
 #: screens/Dashboard/shared/ChartTooltip.js:59
 msgid "Successful"
-msgstr ""
+msgstr "成功"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.js:261
 msgid "Redirecting to dashboard"
@@ -8693,7 +8773,7 @@ msgstr "変更日時"
 
 #: screens/Project/shared/ProjectSubForms/ManualSubForm.js:45
 msgid "WARNING: "
-msgstr ""
+msgstr "警告 : "
 
 #: components/Search/RelatedLookupTypeInput.js:16
 #: components/Search/RelatedLookupTypeInput.js:24
@@ -9080,7 +9160,7 @@ msgstr "これらのインスタンスグループを削除すると、それら
 
 #: screens/Project/ProjectDetail/ProjectDetail.js:201
 msgid "Source Control Revision"
-msgstr ""
+msgstr "ソース管理リビジョン"
 
 #: screens/Job/JobOutput/JobOutputSearch.js:153
 msgid "Search is disabled while the job is running"
@@ -9096,12 +9176,12 @@ msgstr "第 3"
 
 #: screens/Login/Login.js:268
 msgid "Sign in with Azure AD Tenant"
-msgstr ""
+msgstr "Azure ADテナントでサインインする"
 
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.js:67
 #: screens/Setting/Settings.js:50
 msgid "Azure AD Default"
-msgstr ""
+msgstr "Azure AD の既定の設定"
 
 #: screens/Template/Survey/SurveyToolbar.js:106
 msgid "Survey Disabled"
@@ -9226,7 +9306,7 @@ msgstr "待機中"
 #: screens/Inventory/shared/Inventory.helptext.js:104
 #: screens/Inventory/shared/Inventory.helptext.js:119
 msgid "If you want the Inventory Source to update on launch , click on Update on Launch, and also go to "
-msgstr ""
+msgstr "起動時に在庫ソースを更新したい場合は、「起動時に更新」をクリックし、さらに次のページに移動してください。"
 
 #: components/Search/AdvancedSearch.js:141
 msgid "Set type select"
@@ -9312,10 +9392,10 @@ msgid "User analytics"
 msgstr "ユーザーアナリティクス"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:64
-msgid ""
-"If you do not have a subscription, you can visit\n"
+msgid "If you do not have a subscription, you can visit\n"
 "            Red Hat to obtain a trial subscription."
-msgstr ""
+msgstr "サブスクリプションをお持ちでない場合は、\n"
+"Red Hatのウェブサイトにアクセスして、トライアルサブスクリプションを取得できます。"
 
 #: components/Schedule/shared/FrequencyDetailSubform.js:202
 msgid "{intervalValue, plural, one {day} other {days}}"
@@ -9420,7 +9500,7 @@ msgstr "ワークフローの承認"
 #. placeholder {0}: moduleNameField.value
 #: components/AdHocCommands/AdHocDetailsStep.js:112
 msgid "These arguments are used with the specified module. You can find information about {0} by clicking "
-msgstr ""
+msgstr "これらの引数は指定されたモジュールで使用されます。{0} に関する情報は、こちらをクリックしてください。"
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/RunStep.js:34
 msgid "Execute when the parent node results in a successful state."
@@ -9540,12 +9620,17 @@ msgid "Confirm revert all"
 msgstr "すべて元に戻すことを確認"
 
 #: components/SelectedList/DraggableSelectedList.js:86
-msgid ""
-"Press space or enter to begin dragging,\n"
+msgid "Press space or enter to begin dragging,\n"
 "                    and use the arrow keys to navigate up or down.\n"
 "                    Press enter to confirm the drag, or any other key to\n"
 "                    cancel the drag operation."
-msgstr ""
+msgstr "スペースキーまたはエンターキーを押してドラッグを開始します。\n"
+"\n"
+"矢印キーで上下に移動します。\n"
+"\n"
+"エンターキーを押してドラッグを確定します。\n"
+"\n"
+"ドラッグ操作をキャンセルするには、他のキーを押してください。"
 
 #: screens/Inventory/shared/Inventory.helptext.js:90
 msgid "If checked, all variables for child groups and hosts will be removed and replaced by those found on the external source."
@@ -9622,7 +9707,7 @@ msgstr "ホップノード"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:29
 msgid "{interval} day"
-msgstr ""
+msgstr "{interval}日"
 
 #: screens/Project/ProjectList/ProjectListItem.js:245
 msgid "Copy Project"
@@ -9722,8 +9807,8 @@ msgstr "新規スマートインベントリーを作成するために 1 つ以
 msgid "Filter By {name}"
 msgstr "{name} 別にフィルター"
 
-#. placeholder {0}: import React, { useContext, useEffect, useState } from 'react'; import { Plural, useLingui } from '@lingui/react/macro'; import { arrayOf, func } from 'prop-types'; import { Button, DropdownItem, Tooltip } from '@patternfly/react-core'; import { KebabifiedContext } from 'contexts/Kebabified'; import { isJobRunning } from 'util/jobs'; import { Job } from 'types'; import AlertModal from '../AlertModal'; function cannotCancelBecausePermissions(job) { return ( !job.summary_fields.user_capabilities.start && isJobRunning(job.status) ); } function cannotCancelBecauseNotRunning(job) { return !isJobRunning(job.status); } function JobListCancelButton({ jobsToCancel, onCancel }) { const { t } = useLingui(); const { isKebabified, onKebabModalChange } = useContext(KebabifiedContext); const [isModalOpen, setIsModalOpen] = useState(false); const numJobsToCancel = jobsToCancel.length; const handleCancelJob = () => { onCancel(); toggleModal(); }; const toggleModal = () => { setIsModalOpen(!isModalOpen); }; useEffect(() => { if (isKebabified) { onKebabModalChange(isModalOpen); } }, [isKebabified, isModalOpen, onKebabModalChange]); const renderTooltip = () => { const cannotCancelPermissions = jobsToCancel .filter(cannotCancelBecausePermissions) .map((job) => job.name); const cannotCancelNotRunning = jobsToCancel .filter(cannotCancelBecauseNotRunning) .map((job) => job.name); const numJobsUnableToCancel = cannotCancelPermissions.concat( cannotCancelNotRunning ).length; if (numJobsUnableToCancel > 0) { return ( <div> {cannotCancelPermissions.length > 0 && ( <div> <Plural value={cannotCancelPermissions.length} one="You do not have permission to cancel the following job:" other="You do not have permission to cancel the following jobs:" /> {cannotCancelPermissions.map((job, i) => ( <strong key={job}> {' '} {job} {i !== cannotCancelPermissions.length - 1 ? ',' : ''} </strong> ))} </div> )} {cannotCancelNotRunning.length > 0 && ( <div> <Plural value={cannotCancelNotRunning.length} one="You cannot cancel the following job because it is not running:" other="You cannot cancel the following jobs because they are not running:" /> {cannotCancelNotRunning.map((job, i) => ( <strong key={job}> {' '} {job} {i !== cannotCancelNotRunning.length - 1 ? ',' : ''} </strong> ))} </div> )} </div> ); } if (numJobsToCancel > 0) { return ( <Plural value={numJobsToCancel} one={t`Cancel selected job`} other={t`Cancel selected jobs`} /> ); } return t`Select a job to cancel`; }; const isDisabled = jobsToCancel.length === 0 || jobsToCancel.some(cannotCancelBecausePermissions) || jobsToCancel.some(cannotCancelBecauseNotRunning); const cancelJobText = ( <Plural value={numJobsToCancel} one="Cancel job" other="Cancel jobs" /> ); return ( <> {isKebabified ? ( <DropdownItem key="cancel-job" isDisabled={isDisabled} component="button" aria-labelledby="jobs-list-cancel-button" onClick={toggleModal} ouiaId="cancel-job-dropdown-item" > {cancelJobText} </DropdownItem> ) : ( <Tooltip content={renderTooltip()} position="top"> <div> <Button id="jobs-list-cancel-button" ouiaId="cancel-job-button" variant="secondary" aria-labelledby="jobs-list-cancel-button" onClick={toggleModal} isDisabled={isDisabled} > {cancelJobText} </Button> </div> </Tooltip> )} {isModalOpen && ( <AlertModal variant="danger" title={cancelJobText} isOpen={isModalOpen} onClose={toggleModal} actions={[ <Button ouiaId="cancel-job-confirm-button" id="cancel-job-confirm-button" key="delete" variant="danger" aria-labelledby="cancel-job-confirm-button" onClick={handleCancelJob} > {cancelJobText} </Button>, <Button ouiaId="cancel-job-return-button" id="cancel-job-return-button" key="cancel" variant="secondary" aria-label={t`Return`} onClick={toggleModal} > {t`Return`} </Button>, ]} > <div> <Plural value={numJobsToCancel} one={t`This action will cancel the following job:`} other={t`This action will cancel the following jobs:`} /> </div> {jobsToCancel.map((job) => ( <span key={job.id}> <strong>{job.name}</strong> <br /> </span> ))} </AlertModal> )} </> ); } JobListCancelButton.propTypes = { jobsToCancel: arrayOf(Job), onCancel: func, }; JobListCancelButton.defaultProps = { jobsToCancel: [], onCancel: () => {}, }; export default JobListCancelButton; 
-#. placeholder {1}: import React, { useContext, useEffect, useState } from 'react'; import { Plural, useLingui } from '@lingui/react/macro'; import { arrayOf, func } from 'prop-types'; import { Button, DropdownItem, Tooltip } from '@patternfly/react-core'; import { KebabifiedContext } from 'contexts/Kebabified'; import { isJobRunning } from 'util/jobs'; import { Job } from 'types'; import AlertModal from '../AlertModal'; function cannotCancelBecausePermissions(job) { return ( !job.summary_fields.user_capabilities.start && isJobRunning(job.status) ); } function cannotCancelBecauseNotRunning(job) { return !isJobRunning(job.status); } function JobListCancelButton({ jobsToCancel, onCancel }) { const { t } = useLingui(); const { isKebabified, onKebabModalChange } = useContext(KebabifiedContext); const [isModalOpen, setIsModalOpen] = useState(false); const numJobsToCancel = jobsToCancel.length; const handleCancelJob = () => { onCancel(); toggleModal(); }; const toggleModal = () => { setIsModalOpen(!isModalOpen); }; useEffect(() => { if (isKebabified) { onKebabModalChange(isModalOpen); } }, [isKebabified, isModalOpen, onKebabModalChange]); const renderTooltip = () => { const cannotCancelPermissions = jobsToCancel .filter(cannotCancelBecausePermissions) .map((job) => job.name); const cannotCancelNotRunning = jobsToCancel .filter(cannotCancelBecauseNotRunning) .map((job) => job.name); const numJobsUnableToCancel = cannotCancelPermissions.concat( cannotCancelNotRunning ).length; if (numJobsUnableToCancel > 0) { return ( <div> {cannotCancelPermissions.length > 0 && ( <div> <Plural value={cannotCancelPermissions.length} one="You do not have permission to cancel the following job:" other="You do not have permission to cancel the following jobs:" /> {cannotCancelPermissions.map((job, i) => ( <strong key={job}> {' '} {job} {i !== cannotCancelPermissions.length - 1 ? ',' : ''} </strong> ))} </div> )} {cannotCancelNotRunning.length > 0 && ( <div> <Plural value={cannotCancelNotRunning.length} one="You cannot cancel the following job because it is not running:" other="You cannot cancel the following jobs because they are not running:" /> {cannotCancelNotRunning.map((job, i) => ( <strong key={job}> {' '} {job} {i !== cannotCancelNotRunning.length - 1 ? ',' : ''} </strong> ))} </div> )} </div> ); } if (numJobsToCancel > 0) { return ( <Plural value={numJobsToCancel} one={t`Cancel selected job`} other={t`Cancel selected jobs`} /> ); } return t`Select a job to cancel`; }; const isDisabled = jobsToCancel.length === 0 || jobsToCancel.some(cannotCancelBecausePermissions) || jobsToCancel.some(cannotCancelBecauseNotRunning); const cancelJobText = ( <Plural value={numJobsToCancel} one="Cancel job" other="Cancel jobs" /> ); return ( <> {isKebabified ? ( <DropdownItem key="cancel-job" isDisabled={isDisabled} component="button" aria-labelledby="jobs-list-cancel-button" onClick={toggleModal} ouiaId="cancel-job-dropdown-item" > {cancelJobText} </DropdownItem> ) : ( <Tooltip content={renderTooltip()} position="top"> <div> <Button id="jobs-list-cancel-button" ouiaId="cancel-job-button" variant="secondary" aria-labelledby="jobs-list-cancel-button" onClick={toggleModal} isDisabled={isDisabled} > {cancelJobText} </Button> </div> </Tooltip> )} {isModalOpen && ( <AlertModal variant="danger" title={cancelJobText} isOpen={isModalOpen} onClose={toggleModal} actions={[ <Button ouiaId="cancel-job-confirm-button" id="cancel-job-confirm-button" key="delete" variant="danger" aria-labelledby="cancel-job-confirm-button" onClick={handleCancelJob} > {cancelJobText} </Button>, <Button ouiaId="cancel-job-return-button" id="cancel-job-return-button" key="cancel" variant="secondary" aria-label={t`Return`} onClick={toggleModal} > {t`Return`} </Button>, ]} > <div> <Plural value={numJobsToCancel} one={t`This action will cancel the following job:`} other={t`This action will cancel the following jobs:`} /> </div> {jobsToCancel.map((job) => ( <span key={job.id}> <strong>{job.name}</strong> <br /> </span> ))} </AlertModal> )} </> ); } JobListCancelButton.propTypes = { jobsToCancel: arrayOf(Job), onCancel: func, }; JobListCancelButton.defaultProps = { jobsToCancel: [], onCancel: () => {}, }; export default JobListCancelButton; 
+#. placeholder {0}: import React, { useContext, useEffect, useState } from 'react'; import { Plural, useLingui } from '@lingui/react/macro'; import { arrayOf, func } from 'prop-types'; import { Button, DropdownItem, Tooltip } from '@patternfly/react-core'; import { KebabifiedContext } from 'contexts/Kebabified'; import { isJobRunning } from 'util/jobs'; import { Job } from 'types'; import AlertModal from '../AlertModal'; function cannotCancelBecausePermissions(job) { return ( !job.summary_fields.user_capabilities.start && isJobRunning(job.status) ); } function cannotCancelBecauseNotRunning(job) { return !isJobRunning(job.status); } function JobListCancelButton({ jobsToCancel, onCancel }) { const { t } = useLingui(); const { isKebabified, onKebabModalChange } = useContext(KebabifiedContext); const [isModalOpen, setIsModalOpen] = useState(false); const numJobsToCancel = jobsToCancel.length; const handleCancelJob = () => { onCancel(); toggleModal(); }; const toggleModal = () => { setIsModalOpen(!isModalOpen); }; useEffect(() => { if (isKebabified) { onKebabModalChange(isModalOpen); } }, [isKebabified, isModalOpen, onKebabModalChange]); const renderTooltip = () => { const cannotCancelPermissions = jobsToCancel .filter(cannotCancelBecausePermissions) .map((job) => job.name); const cannotCancelNotRunning = jobsToCancel .filter(cannotCancelBecauseNotRunning) .map((job) => job.name); const numJobsUnableToCancel = cannotCancelPermissions.concat( cannotCancelNotRunning ).length; if (numJobsUnableToCancel > 0) { return ( <div> {cannotCancelPermissions.length > 0 && ( <div> <Plural value={cannotCancelPermissions.length} one="You do not have permission to cancel the following job:" other="You do not have permission to cancel the following jobs:" /> {cannotCancelPermissions.map((job, i) => ( <strong key={job}> {' '} {job} {i !== cannotCancelPermissions.length - 1 ? ',' : ''} </strong> ))} </div> )} {cannotCancelNotRunning.length > 0 && ( <div> <Plural value={cannotCancelNotRunning.length} one="You cannot cancel the following job because it is not running:" other="You cannot cancel the following jobs because they are not running:" /> {cannotCancelNotRunning.map((job, i) => ( <strong key={job}> {' '} {job} {i !== cannotCancelNotRunning.length - 1 ? ',' : ''} </strong> ))} </div> )} </div> ); } if (numJobsToCancel > 0) { return ( <Plural value={numJobsToCancel} one={t`Cancel selected job`} other={t`Cancel selected jobs`} /> ); } return t`Select a job to cancel`; }; const isDisabled = jobsToCancel.length === 0 || jobsToCancel.some(cannotCancelBecausePermissions) || jobsToCancel.some(cannotCancelBecauseNotRunning); const cancelJobText = ( <Plural value={numJobsToCancel} one="Cancel job" other="Cancel jobs" /> ); return ( <> {isKebabified ? ( <DropdownItem key="cancel-job" isDisabled={isDisabled} component="button" aria-labelledby="jobs-list-cancel-button" onClick={toggleModal} ouiaId="cancel-job-dropdown-item" > {cancelJobText} </DropdownItem> ) : ( <Tooltip content={renderTooltip()} position="top"> <div> <Button id="jobs-list-cancel-button" ouiaId="cancel-job-button" variant="secondary" aria-labelledby="jobs-list-cancel-button" onClick={toggleModal} isDisabled={isDisabled} > {cancelJobText} </Button> </div> </Tooltip> )} {isModalOpen && ( <AlertModal variant="danger" title={cancelJobText} isOpen={isModalOpen} onClose={toggleModal} actions={[ <Button ouiaId="cancel-job-confirm-button" id="cancel-job-confirm-button" key="delete" variant="danger" aria-labelledby="cancel-job-confirm-button" onClick={handleCancelJob} > {cancelJobText} </Button>, <Button ouiaId="cancel-job-return-button" id="cancel-job-return-button" key="cancel" variant="secondary" aria-label={t`Return`} onClick={toggleModal} > {t`Return`} </Button>, ]} > <div> <Plural value={numJobsToCancel} one={t`This action will cancel the following job:`} other={t`This action will cancel the following jobs:`} /> </div> {jobsToCancel.map((job) => ( <span key={job.id}> <strong>{job.name}</strong> <br /> </span> ))} </AlertModal> )} </> ); } JobListCancelButton.propTypes = { jobsToCancel: arrayOf(Job), onCancel: func, }; JobListCancelButton.defaultProps = { jobsToCancel: [], onCancel: () => {}, }; export default JobListCancelButton;
+#. placeholder {1}: import React, { useContext, useEffect, useState } from 'react'; import { Plural, useLingui } from '@lingui/react/macro'; import { arrayOf, func } from 'prop-types'; import { Button, DropdownItem, Tooltip } from '@patternfly/react-core'; import { KebabifiedContext } from 'contexts/Kebabified'; import { isJobRunning } from 'util/jobs'; import { Job } from 'types'; import AlertModal from '../AlertModal'; function cannotCancelBecausePermissions(job) { return ( !job.summary_fields.user_capabilities.start && isJobRunning(job.status) ); } function cannotCancelBecauseNotRunning(job) { return !isJobRunning(job.status); } function JobListCancelButton({ jobsToCancel, onCancel }) { const { t } = useLingui(); const { isKebabified, onKebabModalChange } = useContext(KebabifiedContext); const [isModalOpen, setIsModalOpen] = useState(false); const numJobsToCancel = jobsToCancel.length; const handleCancelJob = () => { onCancel(); toggleModal(); }; const toggleModal = () => { setIsModalOpen(!isModalOpen); }; useEffect(() => { if (isKebabified) { onKebabModalChange(isModalOpen); } }, [isKebabified, isModalOpen, onKebabModalChange]); const renderTooltip = () => { const cannotCancelPermissions = jobsToCancel .filter(cannotCancelBecausePermissions) .map((job) => job.name); const cannotCancelNotRunning = jobsToCancel .filter(cannotCancelBecauseNotRunning) .map((job) => job.name); const numJobsUnableToCancel = cannotCancelPermissions.concat( cannotCancelNotRunning ).length; if (numJobsUnableToCancel > 0) { return ( <div> {cannotCancelPermissions.length > 0 && ( <div> <Plural value={cannotCancelPermissions.length} one="You do not have permission to cancel the following job:" other="You do not have permission to cancel the following jobs:" /> {cannotCancelPermissions.map((job, i) => ( <strong key={job}> {' '} {job} {i !== cannotCancelPermissions.length - 1 ? ',' : ''} </strong> ))} </div> )} {cannotCancelNotRunning.length > 0 && ( <div> <Plural value={cannotCancelNotRunning.length} one="You cannot cancel the following job because it is not running:" other="You cannot cancel the following jobs because they are not running:" /> {cannotCancelNotRunning.map((job, i) => ( <strong key={job}> {' '} {job} {i !== cannotCancelNotRunning.length - 1 ? ',' : ''} </strong> ))} </div> )} </div> ); } if (numJobsToCancel > 0) { return ( <Plural value={numJobsToCancel} one={t`Cancel selected job`} other={t`Cancel selected jobs`} /> ); } return t`Select a job to cancel`; }; const isDisabled = jobsToCancel.length === 0 || jobsToCancel.some(cannotCancelBecausePermissions) || jobsToCancel.some(cannotCancelBecauseNotRunning); const cancelJobText = ( <Plural value={numJobsToCancel} one="Cancel job" other="Cancel jobs" /> ); return ( <> {isKebabified ? ( <DropdownItem key="cancel-job" isDisabled={isDisabled} component="button" aria-labelledby="jobs-list-cancel-button" onClick={toggleModal} ouiaId="cancel-job-dropdown-item" > {cancelJobText} </DropdownItem> ) : ( <Tooltip content={renderTooltip()} position="top"> <div> <Button id="jobs-list-cancel-button" ouiaId="cancel-job-button" variant="secondary" aria-labelledby="jobs-list-cancel-button" onClick={toggleModal} isDisabled={isDisabled} > {cancelJobText} </Button> </div> </Tooltip> )} {isModalOpen && ( <AlertModal variant="danger" title={cancelJobText} isOpen={isModalOpen} onClose={toggleModal} actions={[ <Button ouiaId="cancel-job-confirm-button" id="cancel-job-confirm-button" key="delete" variant="danger" aria-labelledby="cancel-job-confirm-button" onClick={handleCancelJob} > {cancelJobText} </Button>, <Button ouiaId="cancel-job-return-button" id="cancel-job-return-button" key="cancel" variant="secondary" aria-label={t`Return`} onClick={toggleModal} > {t`Return`} </Button>, ]} > <div> <Plural value={numJobsToCancel} one={t`This action will cancel the following job:`} other={t`This action will cancel the following jobs:`} /> </div> {jobsToCancel.map((job) => ( <span key={job.id}> <strong>{job.name}</strong> <br /> </span> ))} </AlertModal> )} </> ); } JobListCancelButton.propTypes = { jobsToCancel: arrayOf(Job), onCancel: func, }; JobListCancelButton.defaultProps = { jobsToCancel: [], onCancel: () => {}, }; export default JobListCancelButton;
 #: components/JobList/JobListCancelButton.js:91
 #: components/JobList/JobListCancelButton.js:168
 msgid "{numJobsToCancel, plural, one {{0}} other {{1}}}"
@@ -9781,7 +9866,7 @@ msgstr "キー選択"
 
 #: components/AdHocCommands/AdHocDetailsStep.js:244
 msgid "Pass extra command line changes. There are two ansible command line parameters: "
-msgstr ""
+msgstr "追加のコマンドライン変更を渡します。Ansibleのコマンドラインパラメータは2つあります。"
 
 #: screens/Inventory/shared/Inventory.helptext.js:85
 msgid "When not checked, local child hosts and groups not found on the external source will remain untouched by the inventory update process."
@@ -9816,10 +9901,11 @@ msgstr "モジュール引数"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:56
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:492
-msgid ""
-"Specify a notification color. Acceptable colors are hex\n"
+msgid "Specify a notification color. Acceptable colors are hex\n"
 "        color code (example: #3af or #789abc)."
-msgstr ""
+msgstr "通知色を指定してください。使用可能な色は16進数カラーコードです。\n"
+"\n"
+"（例：#3af または #789abc）"
 
 #: components/NotificationList/NotificationList.js:202
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:143
@@ -10430,10 +10516,11 @@ msgstr "認証情報タイプの編集"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:48
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:484
-msgid ""
-"One Slack channel per line. The pound symbol (#)\n"
+msgid "One Slack channel per line. The pound symbol (#)\n"
 "        is required for channels. To respond to or start a thread to a specific message add the parent message Id to the channel where the parent message Id is 16 digits. A dot (.) must be manually inserted after the 10th digit.  ie:#destination-channel, 1231257890.006423. See Slack"
-msgstr ""
+msgstr "1行に1つのSlackチャンネルを指定します。チャンネルにはハッシュ記号（#）が必要です。\n"
+"\n"
+"特定のメッセージに返信したり、スレッドを開始したりするには、親メッセージIDをチャンネルに追加します。親メッセージIDは16桁です。10桁目の後にドット（.）を手動で挿入する必要があります。例：#宛先チャンネル、1231257890.006423。詳細はSlackを参照してください。"
 
 #: components/TemplateList/TemplateListItem.js:175
 msgid "Launch template"
@@ -10444,10 +10531,11 @@ msgid "Sender e-mail"
 msgstr "送信者のメール"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:60
-msgid ""
-"Welcome to Red Hat Ansible Automation Platform!\n"
+msgid "Welcome to Red Hat Ansible Automation Platform!\n"
 "              Please complete the steps below to activate your subscription."
-msgstr ""
+msgstr "Red Hat Ansible Automation Platformへようこそ！\n"
+"\n"
+"サブスクリプションを有効化するには、以下の手順を完了してください。"
 
 #: components/StatusLabel/StatusLabel.js:63
 msgid "Provisioning fail"
@@ -10532,7 +10620,7 @@ msgstr "インベントリソース詳細の表示"
 
 #: screens/Project/ProjectDetail/ProjectDetail.js:347
 msgid "This project is currently being used by other resources. Are you sure you want to delete it?"
-msgstr ""
+msgstr "このプロジェクトは現在、他のリソースで使用されています。削除してもよろしいですか？"
 
 #: screens/InstanceGroup/Instances/InstanceList.js:267
 #: screens/Instances/InstancePeers/InstancePeerList.js:270
@@ -10558,11 +10646,13 @@ msgid "Failed to delete one or more workflow approval."
 msgstr "1 つ以上のワークフロー承認を削除できませんでした。"
 
 #: screens/Organization/shared/OrganizationForm.js:72
-msgid ""
-"The maximum number of hosts allowed to be managed by this organization.\n"
+msgid "The maximum number of hosts allowed to be managed by this organization.\n"
 "            Value defaults to 0 which means no limit. Refer to the Ansible\n"
 "            documentation for more details."
-msgstr ""
+msgstr "この組織が管理できるホストの最大数。\n"
+"\n"
+"デフォルト値は0で、制限なしを意味します。詳細はAnsibleのドキュメントを参照してください。\n"
+"\n"
 
 #: screens/Team/TeamRoles/TeamRolesList.js:245
 #: screens/User/UserRoles/UserRolesList.js:242
@@ -10921,10 +11011,10 @@ msgid "Schedule not found."
 msgstr "スケジュールが見つかりません。"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:91
-msgid ""
-"If yes make invalid entries a fatal error, otherwise skip and\n"
+msgid "If yes make invalid entries a fatal error, otherwise skip and\n"
 "              continue."
-msgstr ""
+msgstr "はいの場合、無効な入力は致命的なエラーとして扱います。そうでない場合はスキップして続行します。\n"
+"\n"
 
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupListItem.js:73
 msgid "Running jobs"
@@ -11036,3 +11126,4 @@ msgstr "週"
 #: components/StatusLabel/StatusLabel.js:42
 msgid "Success"
 msgstr "成功"
+
