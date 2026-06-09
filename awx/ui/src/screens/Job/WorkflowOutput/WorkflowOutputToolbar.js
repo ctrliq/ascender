@@ -67,12 +67,17 @@ function WorkflowOutputToolbar({ job }) {
   const dispatch = useContext(WorkflowDispatchContext);
   const history = useHistory();
   const { nodes, showLegend, showTools } = useContext(WorkflowStateContext);
+  const workflowTemplateId =
+    job.summary_fields?.workflow_job_template?.id ??
+    job.summary_fields?.workflow_job_template?.[0]?.id;
 
   const totalNodes = nodes.reduce((n, node) => n + !node.isDeleted, 0) - 1;
   const navToWorkflow = () => {
-    history.push(
-      `/templates/workflow_job_template/${job.unified_job_template}/visualizer`
-    );
+    if (workflowTemplateId) {
+      history.push(
+        `/templates/workflow_job_template/${workflowTemplateId}/visualizer`
+      );
+    }
   };
   return (
     <Toolbar id="workflow-output-toolbar" ouiaId="workflow-output-toolbar">
@@ -93,15 +98,17 @@ function WorkflowOutputToolbar({ job }) {
           />
         ) : null}
 
-        <ActionButton
-          ouiaId="edit-workflow"
-          aria-label={t`Edit workflow`}
-          id="edit-workflow"
-          variant="plain"
-          onClick={navToWorkflow}
-        >
-          <ProjectDiagramIcon />
-        </ActionButton>
+        {workflowTemplateId && (
+          <ActionButton
+            ouiaId="edit-workflow"
+            aria-label={t`Edit workflow`}
+            id="edit-workflow"
+            variant="plain"
+            onClick={navToWorkflow}
+          >
+            <ProjectDiagramIcon />
+          </ActionButton>
+        )}
         <div>{t`Total Nodes`}</div>
         <Badge isRead>{totalNodes}</Badge>
         <Tooltip content={t`Toggle Legend`} position="bottom">
