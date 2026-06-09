@@ -207,7 +207,7 @@ msgstr "プロジェクト"
 msgid "Saturday"
 msgstr "土曜"
 
-#: components/CodeEditor/CodeEditor.js:184
+#: components/CodeEditor/CodeEditor.js:200
 msgid "Press Enter to edit. Press ESC to stop editing."
 msgstr "Enter キーを押して編集します。編集を終了するには、ESC キーを押します。"
 
@@ -1377,7 +1377,7 @@ msgstr "このワークフロージョブテンプレートは、現在他のリ
 #: screens/Inventory/InventoryHosts/InventoryHostList.js:177
 #: screens/Inventory/SmartInventory.js:70
 #: screens/Job/JobOutput/shared/OutputToolbar.js:124
-#: screens/SubscriptionUsage/ChartComponents/UsageChart.js:65
+#: screens/SubscriptionUsage/ChartComponents/UsageChart.js:74
 msgid "Hosts"
 msgstr "ホスト"
 
@@ -2344,7 +2344,7 @@ msgstr "この実行環境は、現在他のリソースで使用されていま
 msgid "IRC"
 msgstr "IRC"
 
-#: screens/SubscriptionUsage/ChartComponents/UsageChart.js:262
+#: screens/SubscriptionUsage/ChartComponents/UsageChart.js:278
 msgid "Subscription capacity"
 msgstr "サブスクリプション容量"
 
@@ -2567,7 +2567,7 @@ msgstr "ブーリアン"
 #~ msgid "Allow branch override"
 #~ msgstr "ブランチの上書き許可"
 
-#: components/AppContainer/PageHeaderToolbar.js:170
+#: components/AppContainer/PageHeaderToolbar.js:213
 msgid "User Details"
 msgstr "ユーザーの詳細"
 
@@ -3092,7 +3092,7 @@ msgstr "SSH パスワード"
 msgid "View OIDC settings"
 msgstr "OIDC 設定の表示"
 
-#: components/AppContainer/PageHeaderToolbar.js:125
+#: components/AppContainer/PageHeaderToolbar.js:168
 msgid "Help"
 msgstr ""
 
@@ -3241,7 +3241,7 @@ msgstr "使用済み容量"
 msgid "Instance ID"
 msgstr "インスタンス ID"
 
-#: components/AppContainer/PageHeaderToolbar.js:110
+#: components/AppContainer/PageHeaderToolbar.js:153
 msgid "Info"
 msgstr "情報"
 
@@ -3664,7 +3664,7 @@ msgstr "スマートインベントリーホストの詳細の表示"
 msgid "Sign in with Google"
 msgstr "Google でサインイン"
 
-#: contexts/Config.js:130
+#: contexts/Config.js:134
 msgid "Failed to retrieve configuration."
 msgstr "構成を取得できませんでした。"
 
@@ -4700,7 +4700,7 @@ msgstr "組織の詳細の表示"
 #: components/Schedule/ScheduleToggle/ScheduleToggle.js:75
 #: components/Schedule/shared/SchedulePromptableFields.js:64
 #: components/TemplateList/TemplateList.js:306
-#: contexts/Config.js:126
+#: contexts/Config.js:130
 #: screens/Application/ApplicationDetails/ApplicationDetails.js:142
 #: screens/Application/ApplicationsList/ApplicationsList.js:182
 #: screens/Credential/CredentialDetail/CredentialDetail.js:315
@@ -4759,7 +4759,7 @@ msgstr "組織の詳細の表示"
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:181
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:196
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:339
-#: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.js:378
+#: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.js:379
 #: screens/TopologyView/MeshGraph.js:418
 #: screens/TopologyView/Tooltip.js:199
 #: screens/User/UserDetail/UserDetail.js:132
@@ -5296,7 +5296,7 @@ msgstr "状態の選択"
 #: components/Schedule/shared/FrequencyDetailSubform.js:185
 #: components/Schedule/shared/ScheduleFormFields.js:134
 #: components/Schedule/shared/ScheduleFormFields.js:200
-#: screens/SubscriptionUsage/ChartComponents/UsageChart.js:175
+#: screens/SubscriptionUsage/ChartComponents/UsageChart.js:191
 msgid "Month"
 msgstr "月"
 
@@ -5362,7 +5362,7 @@ msgstr "チャネル"
 msgid "Select a row to approve"
 msgstr "承認する行を選択"
 
-#: screens/SubscriptionUsage/ChartComponents/UsageChart.js:131
+#: screens/SubscriptionUsage/ChartComponents/UsageChart.js:145
 msgid "Unique Hosts"
 msgstr "ユニークなホスト"
 
@@ -6087,7 +6087,7 @@ msgstr "選択したジョブの取り消し"
 msgid "Started"
 msgstr "開始"
 
-#: components/AppContainer/PageHeaderToolbar.js:82
+#: components/AppContainer/PageHeaderToolbar.js:125
 msgid "Pending Workflow Approvals"
 msgstr "保留中のワークフロー承認"
 
@@ -7301,7 +7301,7 @@ msgstr "LDAP4"
 #~ "Grafana サーバーのベース URL。/api/annotations エンドポイントは、ベース Grafana URL に自動的に\n"
 #~ "追加されます。"
 
-#: screens/Dashboard/shared/LineChart.js:169
+#: screens/Dashboard/shared/LineChart.js:180
 msgid "Date"
 msgstr "日付"
 
@@ -7317,6 +7317,11 @@ msgstr "ユーザーおよび自動化アナリティクス"
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:156
 msgid "Failed to delete one or more groups."
 msgstr "1 つ以上のグループを削除できませんでした。"
+
+#: components/AppContainer/PageHeaderToolbar.js:102
+#: components/AppContainer/PageHeaderToolbar.js:107
+msgid "Switch to dark mode"
+msgstr ""
 
 #: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.js:197
 msgid "Confirm Disable Local Authorization"
@@ -7569,7 +7574,7 @@ msgstr "キャッシュのタイムアウト (秒)"
 
 #: components/AppContainer/AppContainer.js:84
 #: components/AppContainer/AppContainer.js:155
-#: components/AppContainer/PageHeaderToolbar.js:179
+#: components/AppContainer/PageHeaderToolbar.js:222
 msgid "Logout"
 msgstr "ログアウト"
 
@@ -8494,6 +8499,11 @@ msgstr "パネル ID (オプション)"
 #: screens/Template/shared/JobTemplateForm.js:605
 msgid "Prevent Instance Group Fallback"
 msgstr "インスタンスグループのフォールバックを防止する"
+
+#: components/AppContainer/PageHeaderToolbar.js:102
+#: components/AppContainer/PageHeaderToolbar.js:107
+msgid "Switch to light mode"
+msgstr ""
 
 #: screens/InstanceGroup/shared/InstanceGroupForm.js:59
 msgid "Maximum number of forks to allow across all jobs running concurrently on this group. Zero means no limit will be enforced."
@@ -9461,7 +9471,7 @@ msgstr "アプリケーションおよびトークン"
 #~ msgid "Source Control URL"
 #~ msgstr ""
 
-#: screens/Dashboard/shared/LineChart.js:129
+#: screens/Dashboard/shared/LineChart.js:139
 msgid "Job Runs"
 msgstr "ジョブの実行"
 
@@ -9796,7 +9806,7 @@ msgstr ""
 msgid "Related search type"
 msgstr "関連する検索タイプ"
 
-#: components/AppContainer/PageHeaderToolbar.js:164
+#: components/AppContainer/PageHeaderToolbar.js:207
 msgid "User details"
 msgstr "ユーザーの詳細"
 
@@ -9837,7 +9847,7 @@ msgstr "Insights 認証情報"
 #: components/JobList/JobList.js:288
 #: routeConfig.js:42
 #: screens/ActivityStream/ActivityStream.js:151
-#: screens/Dashboard/shared/LineChart.js:65
+#: screens/Dashboard/shared/LineChart.js:74
 #: screens/Host/Host.js:75
 #: screens/Host/Hosts.js:33
 #: screens/InstanceGroup/ContainerGroup.js:72
@@ -10101,7 +10111,7 @@ msgstr "ステータス"
 msgid "Are you sure you want to delete:"
 msgstr "次を削除してもよろしいですか:"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.js:381
+#: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.js:382
 msgid "Failed to retrieve full node resource object."
 msgstr "フルノードリソースオブジェクトを取得できませんでした。"
 
@@ -10175,7 +10185,7 @@ msgstr "セッションの期限が切れました。中断したところから
 msgid "Created by (username)"
 msgstr "作成者 (ユーザー名)"
 
-#: screens/SubscriptionUsage/ChartComponents/UsageChart.js:261
+#: screens/SubscriptionUsage/ChartComponents/UsageChart.js:277
 msgid "Subscriptions consumed"
 msgstr "消費されたサブスクリプション"
 
@@ -10415,7 +10425,7 @@ msgstr "有効にすると、コントロールノードはこのインスタン
 msgid "and click on Update Revision on Launch"
 msgstr "そして、起動時のリビジョン更新をクリックします"
 
-#: components/AppContainer/PageHeaderToolbar.js:135
+#: components/AppContainer/PageHeaderToolbar.js:178
 msgid "About"
 msgstr "情報"
 
