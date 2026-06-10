@@ -18,7 +18,6 @@ import en from '../../../locales/en/messages';
 
 describe('Setting form fields', () => {
   test('BooleanField renders the expected content', async () => {
-    i18n.loadLocaleData({ en: { plurals: en } });
     i18n.load({ en });
     i18n.activate('en');
     const wrapper = mountWithContexts(

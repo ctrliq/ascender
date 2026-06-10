@@ -10,7 +10,6 @@ import '@testing-library/jest-dom';
 import { createMemoryHistory } from 'history';
 import { I18nProvider } from '@lingui/react';
 import { i18n } from '@lingui/core';
-import { en } from 'make-plural/plurals';
 import english from '../../../locales/en/messages';
 import ConstructedInventoryDetail from './ConstructedInventoryDetail';
 
@@ -86,7 +85,6 @@ describe('<ConstructedInventoryDetail />', () => {
   );
 
   beforeEach(() => {
-    i18n.loadLocaleData({ en: { plurals: en } });
     i18n.load({ en: english });
     i18n.activate('en');
 
