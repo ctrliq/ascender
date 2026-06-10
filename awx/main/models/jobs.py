@@ -715,7 +715,9 @@ class Job(UnifiedJob, JobOptions, SurveyJobMixin, JobNotificationMixin, TaskMana
         # Needed for job slice relaunch consistency, do no re-spawn workflow job
         # target same slice as original job
         new_prompts['_prevent_slicing'] = True
+        new_prompts['_prevent_federation'] = True
         new_prompts.setdefault('_eager_fields', {})
+        new_prompts['_eager_fields']['inventory_id'] = self.inventory_id
         new_prompts['_eager_fields']['job_slice_number'] = self.job_slice_number
         new_prompts['_eager_fields']['job_slice_count'] = self.job_slice_count
         return super(Job, self).copy_unified_job(**new_prompts)
