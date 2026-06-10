@@ -6,6 +6,7 @@ aiohttp==3.14.0
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   aiohttp-retry
+    #   kubernetes
     #   twilio
 aiohttp-retry==2.8.3
     # via twilio
@@ -72,9 +73,7 @@ botocore==1.39.1
     #   boto3
     #   s3transfer
 cachetools==5.3.2
-    # via
-    #   -r /awx_devel/requirements/requirements.in
-    #   google-auth
+    # via -r /awx_devel/requirements/requirements.in
 # certifi @ git+https://github.com/ansible/system-certifi.git@devel  # git requirements installed separately
     # via
     #   -r /awx_devel/requirements/requirements_git.txt
@@ -111,7 +110,7 @@ cryptography==46.0.7
     #   pyopenssl
     #   service-identity
     #   social-auth-core
-cython==0.29.37
+cython==3.2.5
     # via -r /awx_devel/requirements/requirements.in
 daphne==4.1.2
     # via -r /awx_devel/requirements/requirements.in
@@ -121,7 +120,7 @@ defusedxml==0.7.1
     #   social-auth-core
 distro==1.9.0
     # via -r /awx_devel/requirements/requirements.in
-django==5.2.14
+django==5.2.15
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   channels
@@ -175,6 +174,8 @@ docutils==0.20.1
     # via python-daemon
 drf-spectacular==0.29.0
     # via -r /awx_devel/requirements/requirements.in
+durationpy==0.10
+    # via kubernetes
 dynaconf==3.2.13
     # via django-ansible-base
 enum-compat==0.0.3
@@ -189,8 +190,6 @@ gitdb==4.0.11
     # via gitpython
 gitpython==3.1.50
     # via -r /awx_devel/requirements/requirements.in
-google-auth==2.28.1
-    # via kubernetes
 hyperlink==21.0.0
     # via
     #   autobahn
@@ -254,7 +253,7 @@ jsonschema-specifications==2023.12.1
     # via jsonschema
 jwcrypto==1.5.7
     # via django-oauth-toolkit
-kubernetes==29.0.0
+kubernetes==36.0.2
     # via openshift
 libvalkey==4.0.1
     # via valkey
@@ -294,7 +293,6 @@ netaddr==1.2.1
 oauthlib==3.2.2
     # via
     #   django-oauth-toolkit
-    #   kubernetes
     #   requests-oauthlib
     #   social-auth-core
 openshift==0.13.2
@@ -328,11 +326,9 @@ pyasn1==0.6.3
     # via
     #   pyasn1-modules
     #   python-ldap
-    #   rsa
     #   service-identity
 pyasn1-modules==0.4.2
     # via
-    #   google-auth
     #   python-ldap
     #   service-identity
 pycparser==2.21
@@ -391,7 +387,7 @@ pytz==2024.1
     # via
     #   irc
     #   tempora
-pyyaml==6.0.1
+pyyaml==6.0.3
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   ansible-runner
@@ -430,8 +426,6 @@ rpds-py==0.18.0
     # via
     #   jsonschema
     #   referencing
-rsa==4.9
-    # via google-auth
 s3transfer==0.13.0
     # via boto3
 semantic-version==2.10.0
@@ -476,7 +470,7 @@ tempora==5.5.1
     #   jaraco-logging
 twilio==8.13.0
     # via -r /awx_devel/requirements/requirements.in
-twisted[tls]==26.4.0rc2
+twisted[tls]==26.4.0
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   daphne
