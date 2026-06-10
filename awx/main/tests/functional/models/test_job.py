@@ -214,6 +214,21 @@ class TestFederatedInventoryLaunch:
         assert isinstance(job, WorkflowJob)
         assert job.workflow_nodes.count() == 2
 
+    def test_relaunch_child_job_stays_job(self, federated_inv_factory, organization):
+        """Relaunching a workflow child job should not re-enter federated workflow creation."""
+        fed, _ = federated_inv_factory(2)
+        jt = JobTemplate.objects.create(name='fed-jt', inventory=fed, organization=organization)
+        workflow_job = jt.create_unified_job()
+        node = workflow_job.workflow_nodes.first()
+        child_job = node.unified_job_template.create_unified_job(**node.get_job_kwargs())
+
+        relaunched_job = child_job.copy_unified_job()
+
+        assert isinstance(relaunched_job, Job)
+        assert not isinstance(relaunched_job, WorkflowJob)
+        assert relaunched_job.inventory_id == child_job.inventory_id
+        assert relaunched_job.preferred_instance_groups_cache == child_job.preferred_instance_groups_cache
+
 
 @pytest.mark.django_db
 class TestFederatedInventoryHasMatchingHosts:

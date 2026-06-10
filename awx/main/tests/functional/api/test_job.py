@@ -115,6 +115,14 @@ def test_job_relaunch_without_creds(post, inventory, project, admin_user):
 
 
 @pytest.mark.django_db
+def test_job_relaunch_slice_workflow_job(post, admin_user, project, slice_job_factory):
+    workflow_job = slice_job_factory(3, jt_kwargs={'project': project}, spawn=True)
+    job = workflow_job.workflow_nodes.first().job
+
+    post(url=reverse('api:job_relaunch', kwargs={'pk': job.pk}), data={}, user=admin_user, expect=201)
+
+
+@pytest.mark.django_db
 @pytest.mark.parametrize(
     "status,hosts",
     [
