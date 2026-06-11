@@ -18,7 +18,7 @@ import valkey
 from awx.main.consumers import emit_channel_notification
 from awx.main.models import JobEvent, AdHocCommandEvent, ProjectUpdateEvent, InventoryUpdateEvent, SystemJobEvent, UnifiedJob
 from awx.main.constants import ACTIVE_STATES
-from awx.main.models.events import emit_event_detail
+from awx.main.models.events import emit_event_detail, ExecutionEnvironmentBuilderBuildEvent
 from awx.main.utils.profiling import AWXProfiler
 import awx.main.analytics.subsystem_metrics as s_metrics
 from .base import BaseWorker
@@ -233,7 +233,7 @@ class CallbackBrokerWorker(BaseWorker):
                 self.last_event = ''
             if not flush:
                 job_identifier = 'unknown job'
-                for cls in (JobEvent, AdHocCommandEvent, ProjectUpdateEvent, InventoryUpdateEvent, SystemJobEvent):
+                for cls in (JobEvent, AdHocCommandEvent, ProjectUpdateEvent, InventoryUpdateEvent, ExecutionEnvironmentBuilderBuildEvent, SystemJobEvent):
                     if cls.JOB_REFERENCE in body:
                         job_identifier = body[cls.JOB_REFERENCE]
                         break
