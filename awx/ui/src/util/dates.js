@@ -21,6 +21,20 @@ export function secondsToHHMMSS(seconds) {
   return Duration.fromObject({ seconds }).toFormat('hh:mm:ss');
 }
 
+export function calculateElapsed(started) {
+  if (!started) return '00:00:00';
+  const duration = DateTime.now()
+    .diff(DateTime.fromISO(`${started}`), [
+      'milliseconds',
+      'seconds',
+      'minutes',
+      'hours',
+    ])
+    .toObject();
+
+  return Duration.fromObject({ ...duration }).toFormat('hh:mm:ss');
+}
+
 export function secondsToDays(seconds) {
   return Duration.fromObject({ seconds }).toFormat('d');
 }

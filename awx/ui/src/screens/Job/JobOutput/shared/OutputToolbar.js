@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
-import { DateTime, Duration } from 'luxon';
+import { calculateElapsed, secondsToHHMMSS } from 'util/dates';
 import { bool, shape, func } from 'prop-types';
 import {
   DownloadIcon,
@@ -41,21 +41,6 @@ const Wrapper = styled.div`
   flex-flow: row wrap;
   font-size: 14px;
 `;
-const calculateElapsed = (started) => {
-  if (!started) return '00:00:00';
-  const now = DateTime.now();
-  const duration = now
-    .diff(DateTime.fromISO(`${started}`), [
-      'milliseconds',
-      'seconds',
-      'minutes',
-      'hours',
-    ])
-    .toObject();
-
-  return Duration.fromObject({ ...duration }).toFormat('hh:mm:ss');
-};
-
 const OUTPUT_NO_COUNT_JOB_TYPES = [
   'ad_hoc_command',
   'system_job',
@@ -153,9 +138,7 @@ const OutputToolbar = ({ job, onDelete, isDeleteDisabled, jobStatus }) => {
         <Tooltip content={t`Elapsed time that the job ran`}>
           <Badge isRead>
             {job.finished
-              ? Duration.fromObject({ seconds: job.elapsed }).toFormat(
-                  'hh:mm:ss'
-                )
+              ? secondsToHHMMSS(job.elapsed)
               : activeJobElapsedTime}
           </Badge>
         </Tooltip>

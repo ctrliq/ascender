@@ -1,4 +1,5 @@
 import React from 'react';
+import { act } from 'react-dom/test-utils';
 import {
   WorkflowDispatchContext,
   WorkflowStateContext,
@@ -57,14 +58,14 @@ describe('WorkflowOutputToolbar', () => {
   test('should render correct toolbar item', () => {
     shouldFind(`Button[ouiaId="edit-workflow"]`);
     shouldFind('Button#workflow-output-toggle-legend');
-    shouldFind('Badge');
+    expect(wrapper.find('Badge')).toHaveLength(2);
     shouldFind('Button#workflow-output-toggle-tools');
     shouldFind('JobCancelButton');
   });
 
   test('Shows correct number of nodes', () => {
     // The start node (id=1) and deleted nodes (isDeleted=true) should be ignored
-    expect(wrapper.find('Badge').text()).toBe('1');
+    expect(wrapper.find('Badge').last().text()).toBe('1');
   });
 
   test('Toggle Legend button dispatches as expected', () => {
@@ -108,5 +109,62 @@ describe('WorkflowOutputToolbar', () => {
     expect(slicedWrapper.find('Button[ouiaId="edit-workflow"]')).toHaveLength(
       0
     );
+  });
+
+  describe('elapsed timer', () => {
+    beforeEach(() => {
+      jest.useFakeTimers('modern');
+      jest.setSystemTime(new Date('2021-09-01T12:30:45.000Z'));
+    });
+
+    afterEach(() => {
+      jest.useRealTimers();
+    });
+
+    function mountToolbar(jobOverrides) {
+      return mountWithContexts(
+        <WorkflowDispatchContext.Provider value={dispatch}>
+          <WorkflowStateContext.Provider value={workflowContext}>
+            <WorkflowOutputToolbar job={{ ...job, ...jobOverrides }} />
+          </WorkflowStateContext.Provider>
+        </WorkflowDispatchContext.Provider>
+      );
+    }
+
+    test('should show live elapsed time while running', () => {
+      const runningWrapper = mountToolbar({
+        started: '2021-09-01T12:30:40.000Z',
+        finished: null,
+      });
+      expect(
+        runningWrapper.find('Badge#workflow-elapsed-badge').text()
+      ).toBe('00:00:05');
+      act(() => {
+        jest.advanceTimersByTime(2000);
+      });
+      runningWrapper.update();
+      expect(
+        runningWrapper.find('Badge#workflow-elapsed-badge').text()
+      ).toBe('00:00:07');
+    });
+
+    test('should show final elapsed time once finished', () => {
+      const finishedWrapper = mountToolbar({
+        status: 'successful',
+        started: '2021-09-01T11:00:00.000Z',
+        finished: '2021-09-01T12:01:01.000Z',
+        elapsed: 3661,
+      });
+      expect(
+        finishedWrapper.find('Badge#workflow-elapsed-badge').text()
+      ).toBe('01:01:01');
+      act(() => {
+        jest.advanceTimersByTime(2000);
+      });
+      finishedWrapper.update();
+      expect(
+        finishedWrapper.find('Badge#workflow-elapsed-badge').text()
+      ).toBe('01:01:01');
+    });
   });
 });
