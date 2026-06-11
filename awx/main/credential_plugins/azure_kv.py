@@ -1,14 +1,21 @@
 from azure.keyvault.secrets import SecretClient
 from azure.identity import ClientSecretCredential
-from msrestazure import azure_cloud
 
 from .plugin import CredentialPlugin
 
 from django.utils.translation import gettext_lazy as _
 
-# https://github.com/Azure/msrestazure-for-python/blob/master/msrestazure/azure_cloud.py
-clouds = [vars(azure_cloud)[n] for n in dir(azure_cloud) if n.startswith("AZURE_") and n.endswith("_CLOUD")]
-default_cloud = vars(azure_cloud)["AZURE_PUBLIC_CLOUD"]
+# Cloud environment names as previously provided by msrestazure.azure_cloud
+# (https://github.com/Azure/msrestazure-for-python/blob/master/msrestazure/azure_cloud.py).
+# msrestazure is EOL (and pulled in the abandoned adal package); the backend
+# only ever used these names to populate the cloud_name choices.
+DEFAULT_CLOUD_NAME = 'AzureCloud'
+CLOUD_NAMES = [
+    'AzureChinaCloud',
+    'AzureGermanCloud',
+    DEFAULT_CLOUD_NAME,
+    'AzureUSGovernment',
+]
 
 
 azure_keyvault_inputs = {
@@ -31,8 +38,8 @@ azure_keyvault_inputs = {
             'id': 'cloud_name',
             'label': _('Cloud Environment'),
             'help_text': _('Specify which azure cloud environment to use.'),
-            'choices': list(set([default_cloud.name] + [c.name for c in clouds])),
-            'default': default_cloud.name,
+            'choices': CLOUD_NAMES,
+            'default': DEFAULT_CLOUD_NAME,
         },
     ],
     'metadata': [

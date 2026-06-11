@@ -3,13 +3,14 @@ from unittest import mock
 from awx.main.credential_plugins import hashivault
 
 
-def test_imported_azure_cloud_sdk_vars():
+def test_azure_cloud_name_choices():
     from awx.main.credential_plugins import azure_kv
 
-    assert len(azure_kv.clouds) > 0
-    assert all([hasattr(c, 'name') for c in azure_kv.clouds])
-    assert all([hasattr(c, 'suffixes') for c in azure_kv.clouds])
-    assert all([hasattr(c.suffixes, 'keyvault_dns') for c in azure_kv.clouds])
+    assert len(azure_kv.CLOUD_NAMES) > 0
+    assert azure_kv.DEFAULT_CLOUD_NAME in azure_kv.CLOUD_NAMES
+    cloud_field = [f for f in azure_kv.azure_keyvault_inputs['fields'] if f['id'] == 'cloud_name'][0]
+    assert cloud_field['choices'] == azure_kv.CLOUD_NAMES
+    assert cloud_field['default'] == azure_kv.DEFAULT_CLOUD_NAME
 
 
 def test_hashivault_approle_auth():
