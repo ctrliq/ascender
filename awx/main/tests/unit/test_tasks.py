@@ -461,7 +461,7 @@ class TestExtraVarSanitation(TestJobExecution):
 
 
 class TestGenericRun:
-    def test_generic_failure(self, patch_Job, execution_environment, mock_me, mock_create_partition):
+    def test_generic_failure(self, patch_Job, execution_environment, mock_me, mock_create_partition, mocker):
         job = Job(status='running', inventory=Inventory(), project=Project(local_path='/projects/_23_foo'))
         job.websocket_emit_status = mock.Mock()
         job.execution_environment = execution_environment
@@ -469,7 +469,7 @@ class TestGenericRun:
         task = jobs.RunJob()
         task.instance = job
         task.update_model = mock.Mock(return_value=job)
-        task.model.objects.get = mock.Mock(return_value=job)
+        mocker.patch.object(task.model.objects, 'get', return_value=job)
         task.build_private_data_files = mock.Mock(side_effect=OSError())
 
         with mock.patch('awx.main.tasks.jobs.shutil.copytree'):
@@ -481,7 +481,7 @@ class TestGenericRun:
         assert update_model_call['status'] == 'error'
         assert update_model_call['emitted_events'] == 0
 
-    def test_cancel_flag(self, job, update_model_wrapper, execution_environment, mock_me, mock_create_partition):
+    def test_cancel_flag(self, job, update_model_wrapper, execution_environment, mock_me, mock_create_partition, mocker):
         job.status = 'running'
         job.cancel_flag = True
         job.websocket_emit_status = mock.Mock()
@@ -491,7 +491,7 @@ class TestGenericRun:
         task = jobs.RunJob()
         task.instance = job
         task.update_model = mock.Mock(wraps=update_model_wrapper)
-        task.model.objects.get = mock.Mock(return_value=job)
+        mocker.patch.object(task.model.objects, 'get', return_value=job)
         task.build_private_data_files = mock.Mock()
 
         with mock.patch('awx.main.tasks.jobs.shutil.copytree'):
@@ -580,7 +580,7 @@ class TestGenericRun:
 
 @pytest.mark.django_db
 class TestAdhocRun(TestJobExecution):
-    def test_options_jinja_usage(self, adhoc_job, adhoc_update_model_wrapper, mock_me, mock_create_partition):
+    def test_options_jinja_usage(self, adhoc_job, adhoc_update_model_wrapper, mock_me, mock_create_partition, mocker):
         ExecutionEnvironment.objects.create(name='Control Plane EE', managed=True)
         ExecutionEnvironment.objects.create(name='Default Job EE', managed=False)
 
@@ -590,7 +590,7 @@ class TestAdhocRun(TestJobExecution):
 
         task = jobs.RunAdHocCommand()
         task.update_model = mock.Mock(wraps=adhoc_update_model_wrapper)
-        task.model.objects.get = mock.Mock(return_value=adhoc_job)
+        mocker.patch.object(task.model.objects, 'get', return_value=adhoc_job)
         task.build_inventory = mock.Mock()
 
         with pytest.raises(Exception):
@@ -1926,7 +1926,7 @@ def test_managed_injector_redaction(injector_cls):
     assert 'very_secret_value' not in str(build_safe_env(env))
 
 
-def test_job_run_no_ee(mock_me, mock_create_partition):
+def test_job_run_no_ee(mock_me, mock_create_partition, mocker):
     org = Organization(pk=1)
     proj = Project(pk=1, organization=org)
     job = Job(project=proj, organization=org, inventory=Inventory(pk=1))
@@ -1934,7 +1934,7 @@ def test_job_run_no_ee(mock_me, mock_create_partition):
     task = jobs.RunJob()
     task.instance = job
     task.update_model = mock.Mock(return_value=job)
-    task.model.objects.get = mock.Mock(return_value=job)
+    mocker.patch.object(task.model.objects, 'get', return_value=job)
 
     with mock.patch('awx.main.tasks.jobs.shutil.copytree'):
         with pytest.raises(RuntimeError) as e:
