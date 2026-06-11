@@ -751,8 +751,9 @@ module.exports = function (webpackEnv) {
           ),
           // ESLint class options
           cwd: paths.appPath,
+          // flat config: eslint.config.mjs at the repo root is picked up
+          // automatically; only layer the jsx-runtime guard on top.
           baseConfig: {
-            extends: [require.resolve('eslint-config-react-app/base')],
             rules: {
               ...(!hasJsxRuntime && {
                 'react/react-in-jsx-scope': 'error',

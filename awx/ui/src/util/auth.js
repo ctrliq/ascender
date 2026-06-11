@@ -1,4 +1,4 @@
-// eslint-disable-next-line import/prefer-default-export
+
 export function isAuthenticated(cookie) {
   if (!cookie) {
     return false;

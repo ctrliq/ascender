@@ -68,19 +68,17 @@
     "dotenv-expand": "^13.0.0",
     "enzyme": "^3.11.0",
     "enzyme-to-json": "^3.6.2",
-    "eslint": "^8.57.0",
-    "eslint-config-airbnb": "19.0.4",
+    "eslint": "^9.39.4",
+    "eslint-config-airbnb-extended": "^3.1.0",
     "eslint-config-prettier": "10.1.8",
-    "eslint-config-react-app": "^7.0.1",
-    "eslint-import-resolver-webpack": "0.13.11",
-    "eslint-plugin-i18next": "5.2.1",
-    "eslint-plugin-import": "2.32.0",
+    "eslint-plugin-i18next": "^6.1.4",
     "eslint-plugin-jsx-a11y": "6.10.2",
     "eslint-plugin-react": "7.37.5",
-    "eslint-plugin-react-hooks": "4.6.0",
-    "eslint-webpack-plugin": "^4.2.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-webpack-plugin": "^6.0.0",
     "file-loader": "^6.2.0",
     "fs-extra": "^11.3.5",
+    "globals": "^17.4.0",
     "html-webpack-plugin": "^5.6.7",
     "http-proxy-middleware": "4.0.0",
     "inject-manifest-plugin": "^0.6.5",
@@ -129,7 +127,7 @@
     "test-screens": "TZ='UTC' node scripts/test.js screens --watchAll=false",
     "test-general": "TZ='UTC' node scripts/test.js --testPathIgnorePatterns='<rootDir>/src/screens/' --watchAll=false",
     "test-watch": "TZ='UTC' node scripts/test.js",
-    "lint": "NODE_ENV=development eslint --ext .js --ext .jsx .",
+    "lint": "NODE_ENV=development eslint .",
     "extract-strings": "lingui extract",
     "extract-template": "lingui extract-template",
     "compile-strings": "lingui compile",
@@ -212,8 +210,5 @@
     "presets": [
       "react-app"
     ]
-  },
-  "eslintConfig": {
-    "extends": "react-app"
   }
 }

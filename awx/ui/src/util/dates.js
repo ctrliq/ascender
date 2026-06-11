@@ -1,4 +1,4 @@
-/* eslint-disable import/prefer-default-export */
+
 import { t } from '@lingui/react/macro';
 import { RRule } from 'rrule';
 import { DateTime, Duration } from 'luxon';

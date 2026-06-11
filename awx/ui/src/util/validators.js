@@ -158,7 +158,7 @@ export function url(t) {
     }
     // URL regex from https://urlregex.com/
     if (
-      // eslint-disable-next-line max-len
+      // eslint-disable-next-line @stylistic/max-len
       !/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www\.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%/.\w\-_]*)?\??(?:[-+=&;%@.\w_]*)#?(?:[.!/\\\w]*))?)/.test(
         value
       )

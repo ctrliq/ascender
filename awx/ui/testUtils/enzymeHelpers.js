@@ -68,7 +68,7 @@ function wrapContexts(node, context) {
   const { config, router, session } = context;
   class Wrap extends React.Component {
     render() {
-      // eslint-disable-next-line react/no-this-in-sfc
+
       const { children, ...props } = this.props;
       const component = React.cloneElement(children, props);
       if (router.history) {

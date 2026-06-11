@@ -466,7 +466,7 @@ function Visualizer({ template }) {
                   });
                 }
                 if (node.promptValues?.instance_groups?.length > 0)
-                  /* eslint-disable no-await-in-loop, no-restricted-syntax */
+                  /* eslint-disable no-restricted-syntax */
                   for (const group of node.promptValues.instance_groups) {
                     instanceGroupRequests.push(
                       WorkflowJobTemplateNodesAPI.associateInstanceGroup(

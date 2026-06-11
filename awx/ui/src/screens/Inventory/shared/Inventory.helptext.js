@@ -1,4 +1,4 @@
-/* eslint-disable react/destructuring-assignment */
+
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router-dom';

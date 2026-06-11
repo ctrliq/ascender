@@ -1,4 +1,4 @@
-/* eslint-disable import/prefer-default-export */
+
 import * as d3 from 'd3';
 import * as dagre from 'dagre';
 
