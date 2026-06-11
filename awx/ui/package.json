@@ -15,7 +15,7 @@
     "ansi-to-html": "0.7.2",
     "cheerio": "1.0.0-rc.12",
     "d3": "7.9.0",
-    "dagre": "^0.8.5",
+    "@dagrejs/dagre": "^3.0.0",
     "dompurify": "^3.4.2",
     "formik": "2.4.9",
     "has-ansi": "5.0.1",
