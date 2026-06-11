@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory, useParams, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import {
   Button,
@@ -67,7 +68,7 @@ function InstanceDetail({ setBreadcrumb, isK8s }) {
 
   const { id } = useParams();
   const [forks, setForks] = useState();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [healthCheck, setHealthCheck] = useState({});
   const [showHealthCheckAlert, setShowHealthCheckAlert] = useState(false);
 
@@ -168,7 +169,7 @@ function InstanceDetail({ setBreadcrumb, isK8s }) {
   } = useDeleteItems(
     async () => {
       await InstancesAPI.deprovisionInstance(instance.id);
-      history.push('/instances');
+      navigate('/instances');
     },
     {
       fetchItems: fetchDetails,

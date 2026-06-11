@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { CardBody } from 'components/Card';
 import HostForm from 'components/HostForm';
 import { HostsAPI } from 'api';
@@ -8,7 +8,7 @@ import { HostsAPI } from 'api';
 function HostEdit({ host }) {
   const [formError, setFormError] = useState(null);
   const detailsUrl = `/hosts/${host.id}/details`;
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
     try {
@@ -17,14 +17,14 @@ function HostEdit({ host }) {
         dataToSend.inventory = dataToSend.inventory.id;
       }
       await HostsAPI.update(host.id, dataToSend);
-      history.push(detailsUrl);
+      navigate(detailsUrl);
     } catch (error) {
       setFormError(error);
     }
   };
 
   const handleCancel = () => {
-    history.push(detailsUrl);
+    navigate(detailsUrl);
   };
 
   return (

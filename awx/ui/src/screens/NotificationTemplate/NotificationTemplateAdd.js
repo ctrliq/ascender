@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 
 import { Card, PageSection } from '@patternfly/react-core';
@@ -11,7 +12,7 @@ import NotificationTemplateForm from './shared/NotificationTemplateForm';
 
 function NotificationTemplateAdd() {
   const { t } = useLingui();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [formError, setFormError] = useState(null);
   const {
     result: defaultMessages,
@@ -31,14 +32,14 @@ function NotificationTemplateAdd() {
   const handleSubmit = async (values) => {
     try {
       const { data } = await NotificationTemplatesAPI.create(values);
-      history.push(`/notification_templates/${data.id}`);
+      navigate(`/notification_templates/${data.id}`);
     } catch (err) {
       setFormError(err);
     }
   };
 
   const handleCancel = () => {
-    history.push('/notification_templates');
+    navigate('/notification_templates');
   };
 
   if (error) {

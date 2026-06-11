@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useRef } from 'react';
 
-import { Route, withRouter, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { PageSection } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
 
@@ -91,4 +91,4 @@ function Templates() {
 }
 
 export { Templates as _Templates };
-export default withRouter(Templates);
+export default Templates;

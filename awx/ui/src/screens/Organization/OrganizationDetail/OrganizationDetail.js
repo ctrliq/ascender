@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Link, useHistory, useRouteMatch } from 'react-router-dom';
+import { Link, useRouteMatch } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
 import { OrganizationsAPI } from 'api';
@@ -34,7 +35,7 @@ function OrganizationDetail({ organization }) {
   const [contentError, setContentError] = useState(null);
   const [hasContentLoading, setHasContentLoading] = useState(true);
   const [instanceGroups, setInstanceGroups] = useState([]);
-  const history = useHistory();
+  const navigate = useNavigate();
   const { license_info = {} } = useConfig();
   const { t } = useLingui();
 
@@ -62,8 +63,8 @@ function OrganizationDetail({ organization }) {
   } = useRequest(
     useCallback(async () => {
       await OrganizationsAPI.destroy(id);
-      history.push(`/organizations`);
-    }, [id, history])
+      navigate(`/organizations`);
+    }, [id, navigate])
   );
 
   const { error, dismissError } = useDismissableError(deleteError);

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { CardBody } from 'components/Card';
 import { OrganizationsAPI } from 'api';
 import OrganizationForm from '../shared/OrganizationForm';
@@ -11,7 +11,7 @@ const isEqual = (array1, array2) =>
 
 function OrganizationEdit({ organization }) {
   const detailsUrl = `/organizations/${organization.id}/details`;
-  const history = useHistory();
+  const navigate = useNavigate();
   const [formError, setFormError] = useState(null);
 
   const handleSubmit = async (
@@ -49,14 +49,14 @@ function OrganizationEdit({ organization }) {
         }
       }
       /* eslint-enable no-await-in-loop, no-restricted-syntax */
-      history.push(detailsUrl);
+      navigate(detailsUrl);
     } catch (error) {
       setFormError(error);
     }
   };
 
   const handleCancel = () => {
-    history.push(detailsUrl);
+    navigate(detailsUrl);
   };
 
   return (

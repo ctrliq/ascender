@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Card, PageSection } from '@patternfly/react-core';
-import { useHistory } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom-v5-compat';
 
 import { ExecutionEnvironmentsAPI } from 'api';
 import { Config } from 'contexts/Config';
@@ -8,7 +8,8 @@ import { CardBody } from 'components/Card';
 import ExecutionEnvironmentForm from '../shared/ExecutionEnvironmentForm';
 
 function ExecutionEnvironmentAdd() {
-  const history = useHistory();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [submitError, setSubmitError] = useState(null);
 
   const handleSubmit = async (values) => {
@@ -18,14 +19,14 @@ function ExecutionEnvironmentAdd() {
         credential: values.credential?.id,
         organization: values.organization?.id,
       });
-      history.push(`/execution_environments/${response.id}/details`);
+      navigate(`/execution_environments/${response.id}/details`);
     } catch (error) {
       setSubmitError(error);
     }
   };
 
   const handleCancel = () => {
-    history.push(`/execution_environments`);
+    navigate(`/execution_environments`);
   };
 
   const hubParams = {
@@ -34,7 +35,7 @@ function ExecutionEnvironmentAdd() {
     name: '',
   };
 
-  history.location.search
+  location.search
     .replace(/^\?/, '')
     .split('&')
     .map((s) => s.split('='))

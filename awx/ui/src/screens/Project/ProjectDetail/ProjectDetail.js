@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import {
@@ -64,7 +65,7 @@ function ProjectDetail({ project }) {
   const docsURL = `${getDocsBaseUrl(
     useConfig()
   )}/userguide/projects.html#manage-playbooks-using-source-control`;
-  const history = useHistory();
+  const navigate = useNavigate();
   const {
     request: deleteProject,
     isLoading,
@@ -72,8 +73,8 @@ function ProjectDetail({ project }) {
   } = useRequest(
     useCallback(async () => {
       await ProjectsAPI.destroy(id);
-      history.push(`/projects`);
-    }, [id, history])
+      navigate(`/projects`);
+    }, [id, navigate])
   );
   const brandName = useBrandName();
 

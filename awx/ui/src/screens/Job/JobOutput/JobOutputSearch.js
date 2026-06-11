@@ -1,5 +1,6 @@
 import React from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import styled from 'styled-components';
 import {
   Toolbar,
@@ -36,7 +37,7 @@ function JobOutputSearch({
 }) {
   const { t } = useLingui();
   const location = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleSearch = (key, value) => {
     const params = parseQueryString(qsConfig, location.search);
@@ -74,8 +75,8 @@ function JobOutputSearch({
   };
 
   const pushHistoryState = (qs) => {
-    const { pathname } = history.location;
-    history.push(qs ? `${pathname}?${qs}` : pathname);
+    const { pathname } = location;
+    navigate(qs ? `${pathname}?${qs}` : pathname);
   };
 
   const handleFollowToggle = () => {

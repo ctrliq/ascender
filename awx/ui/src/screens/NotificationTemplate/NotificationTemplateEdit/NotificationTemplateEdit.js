@@ -1,26 +1,26 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { CardBody } from 'components/Card';
 import { NotificationTemplatesAPI } from 'api';
 import NotificationTemplateForm from '../shared/NotificationTemplateForm';
 
 function NotificationTemplateEdit({ template, defaultMessages }) {
   const detailsUrl = `/notification_templates/${template.id}/details`;
-  const history = useHistory();
+  const navigate = useNavigate();
   const [formError, setFormError] = useState(null);
 
   const handleSubmit = async (values) => {
     try {
       await NotificationTemplatesAPI.update(template.id, values);
-      history.push(detailsUrl);
+      navigate(detailsUrl);
     } catch (error) {
       setFormError(error);
     }
   };
 
   const handleCancel = () => {
-    history.push(detailsUrl);
+    navigate(detailsUrl);
   };
 
   return (

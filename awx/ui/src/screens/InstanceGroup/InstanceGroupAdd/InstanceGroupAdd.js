@@ -1,26 +1,26 @@
 import React, { useState } from 'react';
 import { Card, PageSection } from '@patternfly/react-core';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 
 import { CardBody } from 'components/Card';
 import { InstanceGroupsAPI } from 'api';
 import InstanceGroupForm from '../shared/InstanceGroupForm';
 
 function InstanceGroupAdd() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [submitError, setSubmitError] = useState(null);
 
   const handleSubmit = async (values) => {
     try {
       const { data: response } = await InstanceGroupsAPI.create(values);
-      history.push(`/instance_groups/${response.id}/details`);
+      navigate(`/instance_groups/${response.id}/details`);
     } catch (error) {
       setSubmitError(error);
     }
   };
 
   const handleCancel = () => {
-    history.push(`/instance_groups`);
+    navigate(`/instance_groups`);
   };
 
   return (

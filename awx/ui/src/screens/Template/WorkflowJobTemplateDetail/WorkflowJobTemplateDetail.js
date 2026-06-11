@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import {
   Chip,
@@ -46,7 +47,7 @@ function WorkflowJobTemplateDetail({ template }) {
   const { t } = useLingui();
   const helpText = getHelpText(t);
   const urlOrigin = window.location.origin;
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const renderOptionsField =
     template.allow_simultaneous || template.webhook_service;
@@ -73,8 +74,8 @@ function WorkflowJobTemplateDetail({ template }) {
   } = useRequest(
     useCallback(async () => {
       await WorkflowJobTemplatesAPI.destroy(id);
-      history.push(`/templates`);
-    }, [id, history])
+      navigate(`/templates`);
+    }, [id, navigate])
   );
 
   const { error, dismissError } = useDismissableError(deleteError);
