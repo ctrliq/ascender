@@ -1,16 +1,16 @@
 import React from 'react';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { screen } from '@testing-library/react';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import ToolbarSyncSourceButton from './ToolbarSyncSourceButton';
 
 describe('<ToolbarSyncSourceButton />', () => {
-  test('should render button', () => {
+  test('should render button and invoke onClick', async () => {
     const onClick = jest.fn();
-    const wrapper = mountWithContexts(
+    const { user } = renderWithContexts(
       <ToolbarSyncSourceButton onClick={onClick} />
     );
-    const button = wrapper.find('button');
-    expect(button).toHaveLength(1);
-    button.simulate('click');
+    const button = screen.getByRole('button');
+    await user.click(button);
     expect(onClick).toHaveBeenCalled();
   });
 });
