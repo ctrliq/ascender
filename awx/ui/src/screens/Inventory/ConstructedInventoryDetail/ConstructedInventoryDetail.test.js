@@ -1,5 +1,6 @@
 import React from 'react';
 import { Router } from 'react-router-dom';
+import { Router as RouterV6 } from 'react-router-dom-v5-compat';
 import { InventoriesAPI, ConstructedInventoriesAPI } from 'api';
 import {
   render,
@@ -80,7 +81,9 @@ describe('<ConstructedInventoryDetail />', () => {
   const Component = (props) => (
     <I18nProvider i18n={i18n}>
       <Router history={history}>
+        <RouterV6 location={history.location} navigator={history}>
         <ConstructedInventoryDetail inventory={mockInventory} {...props} />
+        </RouterV6>
       </Router>
     </I18nProvider>
   );

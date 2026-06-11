@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { Inventory } from 'types';
 import useRequest from 'hooks/useRequest';
 import { InventoriesAPI } from 'api';
@@ -10,7 +10,7 @@ import SmartInventoryForm from '../shared/SmartInventoryForm';
 import parseHostFilter from '../shared/utils';
 
 function SmartInventoryEdit({ inventory }) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const detailsUrl = `/inventories/smart_inventory/${inventory.id}/details`;
 
   const {
@@ -53,12 +53,14 @@ function SmartInventoryEdit({ inventory }) {
 
   useEffect(() => {
     if (submitResult) {
-      history.push({
+      navigate({
         pathname: detailsUrl,
         search: '',
       });
     }
-  }, [submitResult, detailsUrl, history]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- navigate is not
+    // referentially stable in react-router-dom-v5-compat
+  }, [submitResult, detailsUrl]);
 
   const handleSubmit = async (form) => {
     const modifiedForm = parseHostFilter(form);
@@ -75,7 +77,7 @@ function SmartInventoryEdit({ inventory }) {
   };
 
   const handleCancel = () => {
-    history.push({
+    navigate({
       pathname: detailsUrl,
       search: '',
     });

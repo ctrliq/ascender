@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { Formik } from 'formik';
 import { Form } from '@patternfly/react-core';
 import { CardBody } from 'components/Card';
@@ -21,7 +21,7 @@ import {
 import { formatJson } from '../../shared/settingUtils';
 
 function SAMLEdit() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { isModalOpen, toggleModal, closeModal } = useModal();
   const { PUT: options } = useSettings();
 
@@ -54,9 +54,9 @@ function SAMLEdit() {
     useCallback(
       async (values) => {
         await SettingsAPI.updateAll(values);
-        history.push('/settings/saml/details');
+        navigate('/settings/saml/details');
       },
-      [history]
+      [navigate]
     ),
     null
   );
@@ -105,11 +105,11 @@ function SAMLEdit() {
 
     closeModal();
 
-    history.push('/settings/saml/details');
+    navigate('/settings/saml/details');
   };
 
   const handleCancel = () => {
-    history.push('/settings/saml/details');
+    navigate('/settings/saml/details');
   };
 
   const initialValues = (fields) =>

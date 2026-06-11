@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { Card, PageSection } from '@patternfly/react-core';
 import { Inventory } from 'types';
 import { FederatedInventoriesAPI, InventoriesAPI } from 'api';
@@ -10,7 +10,7 @@ import useRequest from 'hooks/useRequest';
 import FederatedInventoryForm from '../shared/FederatedInventoryForm';
 
 function FederatedInventoryEdit({ inventory }) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [submitError, setSubmitError] = useState(null);
 
   const {
@@ -38,7 +38,7 @@ function FederatedInventoryEdit({ inventory }) {
   }, [fetchRelatedDetails]);
 
   const handleCancel = () => {
-    history.push(
+    navigate(
       `/inventories/federated_inventory/${inventory.id}/details`
     );
   };
@@ -73,7 +73,7 @@ function FederatedInventoryEdit({ inventory }) {
       }
       /* eslint-enable no-await-in-loop, no-restricted-syntax */
 
-      history.push(
+      navigate(
         `/inventories/federated_inventory/${inventory.id}/details`
       );
     } catch (error) {

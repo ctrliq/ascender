@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { Card, PageSection } from '@patternfly/react-core';
 import { ConstructedInventoriesAPI, InventoriesAPI } from 'api';
 import useRequest from 'hooks/useRequest';
@@ -9,7 +9,7 @@ import ContentLoading from 'components/ContentLoading';
 import ConstructedInventoryForm from '../shared/ConstructedInventoryForm';
 
 function ConstructedInventoryAdd() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [submitError, setSubmitError] = useState(null);
 
   const {
@@ -39,7 +39,7 @@ function ConstructedInventoryAdd() {
   }
 
   const handleCancel = () => {
-    history.push('/inventories');
+    navigate('/inventories');
   };
 
   const handleSubmit = async (values) => {
@@ -63,7 +63,7 @@ function ConstructedInventoryAdd() {
       }
       /* eslint-enable no-await-in-loop, no-restricted-syntax */
 
-      history.push(`/inventories/constructed_inventory/${inventoryId}/details`);
+      navigate(`/inventories/constructed_inventory/${inventoryId}/details`);
     } catch (error) {
       setSubmitError(error);
     }

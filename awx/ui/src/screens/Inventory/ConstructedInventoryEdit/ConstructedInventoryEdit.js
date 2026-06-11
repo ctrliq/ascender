@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { ConstructedInventoriesAPI, InventoriesAPI } from 'api';
 import useRequest from 'hooks/useRequest';
 import { CardBody } from 'components/Card';
@@ -15,7 +15,7 @@ function isEqual(array1, array2) {
 }
 
 function ConstructedInventoryEdit({ inventory }) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [submitError, setSubmitError] = useState(null);
   const detailsUrl = `/inventories/constructed_inventory/${inventory.id}/details`;
   const constructedInventoryId = inventory.id;
@@ -111,7 +111,7 @@ function ConstructedInventoryEdit({ inventory }) {
       }
       /* eslint-enable no-await-in-loop, no-restricted-syntax */
 
-      history.push(
+      navigate(
         `/inventories/constructed_inventory/${constructedInventoryId}/details`
       );
     } catch (error) {
@@ -119,7 +119,7 @@ function ConstructedInventoryEdit({ inventory }) {
     }
   };
 
-  const handleCancel = () => history.push(detailsUrl);
+  const handleCancel = () => navigate(detailsUrl);
 
   if (contentError || optionsError) {
     return <ContentError error={contentError || optionsError} />;
