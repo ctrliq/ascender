@@ -1,6 +1,7 @@
 import 'styled-components/macro';
 import React, { useState, useCallback, useEffect } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
 import styled from 'styled-components';
@@ -31,7 +32,7 @@ function CredentialsStep({
   defaultCredentials = [],
 }) {
   const { t } = useLingui();
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
 
   // Create a wrapper for the validator that handles translation properly
@@ -130,7 +131,7 @@ function CredentialsStep({
       if (!selectedType) {
         return { credentials: [], count: 0 };
       }
-      const params = parseQueryString(QS_CONFIG, history.location.search);
+      const params = parseQueryString(QS_CONFIG, location.search);
       const [{ data }, actionsResponse] = await Promise.all([
         CredentialsAPI.read({
           ...params,
@@ -146,7 +147,7 @@ function CredentialsStep({
         ).map((val) => val.slice(0, -8)),
         searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET),
       };
-    }, [selectedType, history.location.search]),
+    }, [selectedType, location.search]),
     { credentials: [], count: 0, relatedSearchableKeys: [], searchableKeys: [] }
   );
 
@@ -182,8 +183,8 @@ function CredentialsStep({
   };
 
   const pushHistoryState = (qs) => {
-    const { pathname } = history.location;
-    history.push(qs ? `${pathname}?${qs}` : pathname);
+    const { pathname } = location;
+    navigate(qs ? `${pathname}?${qs}` : pathname);
   };
 
   if (isTypesLoading) {

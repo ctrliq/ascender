@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { PageSection, Card } from '@patternfly/react-core';
 
 import { TeamsAPI } from 'api';
@@ -9,7 +9,7 @@ import TeamForm from '../shared/TeamForm';
 
 function TeamAdd() {
   const [submitError, setSubmitError] = useState(null);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
     try {
@@ -20,14 +20,14 @@ function TeamAdd() {
       } = values;
       const valuesToSend = { name, description, organization: id };
       const { data: response } = await TeamsAPI.create(valuesToSend);
-      history.push(`/teams/${response.id}`);
+      navigate(`/teams/${response.id}`);
     } catch (error) {
       setSubmitError(error);
     }
   };
 
   const handleCancel = () => {
-    history.push('/teams');
+    navigate('/teams');
   };
 
   return (

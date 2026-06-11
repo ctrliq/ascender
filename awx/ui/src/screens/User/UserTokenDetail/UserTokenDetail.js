@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 
 import AlertModal from 'components/AlertModal';
@@ -18,7 +19,7 @@ function UserTokenDetail({ token }) {
   const helptext = userHelpTextStrings();
   const { scope, description, created, modified, expires, summary_fields } =
     token;
-  const history = useHistory();
+  const navigate = useNavigate();
   const { id, tokenId } = useParams();
   const {
     request: deleteToken,
@@ -27,8 +28,8 @@ function UserTokenDetail({ token }) {
   } = useRequest(
     useCallback(async () => {
       await TokensAPI.destroy(tokenId);
-      history.push(`/users/${id}/tokens`);
-    }, [tokenId, id, history])
+      navigate(`/users/${id}/tokens`);
+    }, [tokenId, id, navigate])
   );
   const { error, dismissError } = useDismissableError(deleteError);
 

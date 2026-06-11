@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 
 import { Card } from '@patternfly/react-core';
 import { ApplicationsAPI } from 'api';
@@ -11,7 +12,7 @@ function ApplicationEdit({
   authorizationOptions,
   clientTypeOptions,
 }) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { id } = useParams();
   const [submitError, setSubmitError] = useState(null);
 
@@ -19,14 +20,14 @@ function ApplicationEdit({
     values.organization = values.organization.id;
     try {
       await ApplicationsAPI.update(id, values);
-      history.push(`/applications/${id}/details`);
+      navigate(`/applications/${id}/details`);
     } catch (err) {
       setSubmitError(err);
     }
   };
 
   const handleCancel = () => {
-    history.push(`/applications/${id}/details`);
+    navigate(`/applications/${id}/details`);
   };
   return (
     <Card>

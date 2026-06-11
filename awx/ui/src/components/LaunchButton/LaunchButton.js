@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { number, shape } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 import {
@@ -39,7 +39,7 @@ function canLaunchWithoutPrompt(launchData) {
 
 function LaunchButton({ resource, children }) {
   const { t } = useLingui();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [showLaunchPrompt, setShowLaunchPrompt] = useState(false);
   const [launchConfig, setLaunchConfig] = useState(null);
   const [surveyConfig, setSurveyConfig] = useState(null);
@@ -158,7 +158,7 @@ function LaunchButton({ resource, children }) {
       }
 
       const { data: job } = await jobPromise;
-      if (isMounted.current) history.push(`/jobs/${job.id}/output`);
+      if (isMounted.current) navigate(`/jobs/${job.id}/output`);
     } catch (launchError) {
       if (isMounted.current) setError(launchError);
     } finally {
@@ -212,7 +212,7 @@ function LaunchButton({ resource, children }) {
           relaunch = JobsAPI.relaunch(resource.id, params || {});
         }
         const { data: job } = await relaunch;
-        if (isMounted.current) history.push(`/jobs/${job.id}/output`);
+        if (isMounted.current) navigate(`/jobs/${job.id}/output`);
       } else if (isMounted.current) {
         setShowLaunchPrompt(true);
       }

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { Formik } from 'formik';
 import { Form } from '@patternfly/react-core';
 import { CardBody } from 'components/Card';
@@ -20,7 +20,7 @@ import {
 import { RevertAllAlert, RevertFormActionGroup } from '../../shared';
 
 function TACACSEdit() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { isModalOpen, toggleModal, closeModal } = useModal();
   const { PUT: options } = useSettings();
 
@@ -50,9 +50,9 @@ function TACACSEdit() {
     useCallback(
       async (values) => {
         await SettingsAPI.updateAll(values);
-        history.push('/settings/tacacs/details');
+        navigate('/settings/tacacs/details');
       },
-      [history]
+      [navigate]
     ),
     null
   );
@@ -73,11 +73,11 @@ function TACACSEdit() {
 
     closeModal();
 
-    history.push('/settings/tacacs/details');
+    navigate('/settings/tacacs/details');
   };
 
   const handleCancel = () => {
-    history.push('/settings/tacacs/details');
+    navigate('/settings/tacacs/details');
   };
 
   const initialValues = (fields) =>

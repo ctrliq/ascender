@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
+
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import debounce from 'util/debounce';
@@ -52,7 +53,8 @@ function MeshGraph({
   const [isNodeSelected, setIsNodeSelected] = useState(false);
   const [selectedNode, setSelectedNode] = useState(null);
   const [simulationProgress, setSimulationProgress] = useState(null);
-  const history = useHistory();
+  const navigate = useNavigate();
+
   const {
     result: { instance = {}, instanceGroups },
     error: fetchError,
@@ -407,7 +409,7 @@ function MeshGraph({
           instanceDetail={instance}
           isLoading={isLoading}
           redirectToDetailsPage={() =>
-            redirectToDetailsPage(selectedNode, history)
+            redirectToDetailsPage(selectedNode, navigate)
           }
         />
       )}

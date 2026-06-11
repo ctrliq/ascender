@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { CardBody } from 'components/Card';
 import HostForm from 'components/HostForm';
 
@@ -8,7 +8,7 @@ import { HostsAPI } from 'api';
 function InventoryHostAdd({ inventory }) {
   const [formError, setFormError] = useState(null);
   const hostsUrl = `/inventories/inventory/${inventory.id}/hosts`;
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleSubmit = async (formData) => {
     try {
@@ -17,14 +17,14 @@ function InventoryHostAdd({ inventory }) {
         inventory: inventory.id,
       };
       const { data: response } = await HostsAPI.create(values);
-      history.push(`${hostsUrl}/${response.id}/details`);
+      navigate(`${hostsUrl}/${response.id}/details`);
     } catch (error) {
       setFormError(error);
     }
   };
 
   const handleCancel = () => {
-    history.push(hostsUrl);
+    navigate(hostsUrl);
   };
 
   return (

@@ -1,17 +1,13 @@
 import React, { useState } from 'react';
-import {
-  Redirect,
-  useHistory,
-  useLocation,
-  useRouteMatch,
-} from 'react-router-dom';
+import { useLocation, useRouteMatch } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom-v5-compat';
 import ContentLoading from 'components/ContentLoading';
 import { CardBody } from 'components/Card';
 import SurveyQuestionForm from './SurveyQuestionForm';
 
 export default function SurveyQuestionEdit({ survey, updateSurvey }) {
   const [formError, setFormError] = useState(null);
-  const history = useHistory();
+  const navigate = useNavigate();
   const match = useRouteMatch();
   const { search } = useLocation();
   const queryParams = new URLSearchParams(search);
@@ -27,7 +23,7 @@ export default function SurveyQuestionEdit({ survey, updateSurvey }) {
 
   if (!question) {
     return (
-      <Redirect
+      <Navigate
         to={`/templates/${match.params.templateType}/${match.params.id}/survey`}
       />
     );
@@ -35,7 +31,7 @@ export default function SurveyQuestionEdit({ survey, updateSurvey }) {
 
   const navigateToList = () => {
     const index = match.url.indexOf('/edit');
-    history.push(match.url.substr(0, index));
+    navigate(match.url.substr(0, index));
   };
 
   const handleSubmit = async (formData) => {

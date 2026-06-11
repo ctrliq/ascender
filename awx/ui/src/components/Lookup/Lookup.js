@@ -10,7 +10,7 @@ import {
   node,
   object,
 } from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom-v5-compat';
 import { useField } from 'formik';
 import { SearchIcon } from '@patternfly/react-icons';
 import {
@@ -46,7 +46,6 @@ function Lookup(props) {
     qsConfig,
     renderItemChip,
     renderOptionsList,
-    history,
     isDisabled,
     onDebounce,
     fieldName,
@@ -55,6 +54,8 @@ function Lookup(props) {
     onUpdate,
   } = props;
   const { t } = useLingui();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [typedText, setTypedText] = useState('');
   const debounceRequest = useDebounce(onDebounce, 1000);
   useField({
@@ -93,15 +94,15 @@ function Lookup(props) {
   }, [state.selectedItems, multiple]);
 
   const clearQSParams = () => {
-    if (!history.location.search) {
+    if (!location.search) {
       // This prevents "Warning: Hash history cannot PUSH the same path;
       // a new entry will not be added to the history stack" from appearing in the console.
       return;
     }
-    const parts = history.location.search.replace(/^\?/, '').split('&');
+    const parts = location.search.replace(/^\?/, '').split('&');
     const ns = qsConfig.namespace;
     const otherParts = parts.filter((param) => !param.startsWith(`${ns}.`));
-    history.push(`${history.location.pathname}?${otherParts.join('&')}`);
+    navigate(`${location.pathname}?${otherParts.join('&')}`);
   };
 
   const save = () => {
@@ -278,4 +279,4 @@ Lookup.defaultProps = {
 };
 
 export { Lookup as _Lookup };
-export default withRouter(Lookup);
+export default Lookup;

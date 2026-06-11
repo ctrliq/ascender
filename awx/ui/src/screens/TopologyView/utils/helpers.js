@@ -83,11 +83,11 @@ export function renderIconPosition(nodeState, bbox) {
   return false;
 }
 
-export function redirectToDetailsPage(selectedNode, history) {
-  if (selectedNode && history) {
+export function redirectToDetailsPage(selectedNode, navigate) {
+  if (selectedNode && navigate) {
     const { id: nodeId } = selectedNode;
     const constructedURL = `/instances/${nodeId}/details`;
-    history.push(constructedURL);
+    navigate(constructedURL);
   }
   return false;
 }

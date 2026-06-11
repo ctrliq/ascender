@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import {
@@ -145,7 +146,7 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
   const isMounted = useIsMounted();
   const scrollTop = useRef(0);
   const scrollHeight = useRef(0);
-  const history = useHistory();
+  const navigate = useNavigate();
   const eventByUuidRequests = useRef([]);
   const eventsProcessedDelay = useRef(250);
   const outputRef = useRef(null);
@@ -399,8 +400,8 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
     useCallback(async () => {
       await getJobModel(job.type).destroy(job.id);
 
-      history.push('/jobs');
-    }, [job.type, job.id, history])
+      navigate('/jobs');
+    }, [job.type, job.id, navigate])
   );
 
   const { error: dismissableDeleteError, dismissError: dismissDeleteError } =

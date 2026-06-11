@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { parseQueryString, updateQueryString } from 'util/qs';
 import useWebsocket from 'hooks/useWebsocket';
 import useThrottle from 'hooks/useThrottle';
@@ -11,7 +12,7 @@ export default function useWsInventories(
   qsConfig
 ) {
   const location = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [inventories, setInventories] = useState(initialInventories);
   const [inventoriesToFetch, setInventoriesToFetch] = useState([]);
   const throttledInventoriesToFetch = useThrottle(inventoriesToFetch, 5000);
@@ -89,7 +90,7 @@ export default function useWsInventories(
         const qs = updateQueryString(qsConfig, location.search, {
           page: params.page - 1,
         });
-        history.push(`${location.pathname}?${qs}`);
+        navigate(`${location.pathname}?${qs}`);
         return;
       }
 

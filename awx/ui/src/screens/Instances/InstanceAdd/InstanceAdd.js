@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { Card, PageSection } from '@patternfly/react-core';
 import { InstancesAPI } from 'api';
 import InstanceForm from '../Shared/InstanceForm';
 
 function InstanceAdd() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [formError, setFormError] = useState();
   const handleSubmit = async (values) => {
     try {
@@ -17,14 +17,14 @@ function InstanceAdd() {
         data: { id },
       } = await InstancesAPI.create(values);
 
-      history.push(`/instances/${id}/details`);
+      navigate(`/instances/${id}/details`);
     } catch (err) {
       setFormError(err);
     }
   };
 
   const handleCancel = () => {
-    history.push('/instances');
+    navigate('/instances');
   };
 
   return (

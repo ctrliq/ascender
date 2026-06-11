@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { Formik } from 'formik';
 import { Form } from '@patternfly/react-core';
 import { CardBody } from 'components/Card';
@@ -20,7 +20,7 @@ import {
 import { RevertAllAlert, RevertFormActionGroup } from '../../shared';
 
 function UIEdit() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { isModalOpen, toggleModal, closeModal } = useModal();
   const { PUT: options } = useSettings();
   const { license_info } = useConfig();
@@ -57,15 +57,14 @@ function UIEdit() {
         if (
           values?.PENDO_TRACKING_STATE !== uiData?.PENDO_TRACKING_STATE?.value
         ) {
-          history.push({
-            pathname: '/settings/ui/details',
-            hardReload: true,
+          navigate('/settings/ui/details', {
+            state: { hardReload: true },
           });
         } else {
-          history.push('/settings/ui/details');
+          navigate('/settings/ui/details');
         }
       },
-      [history, uiData]
+      [navigate, uiData]
     ),
     null
   );
@@ -86,14 +85,13 @@ function UIEdit() {
 
     closeModal();
 
-    history.push({
-      pathname: '/settings/ui/details',
-      hardReload: true,
+    navigate('/settings/ui/details', {
+      state: { hardReload: true },
     });
   };
 
   const handleCancel = () => {
-    history.push('/settings/ui/details');
+    navigate('/settings/ui/details');
   };
 
   return (

@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { CardBody } from 'components/Card';
 import {
   CredentialsAPI,
@@ -16,7 +17,7 @@ import { Credential } from 'types';
 import CredentialForm from '../shared/CredentialForm';
 
 function CredentialEdit({ credential }) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { id: credId } = useParams();
   const { me = {} } = useConfig();
   const [isOrgLookupDisabled, setIsOrgLookupDisabled] = useState(false);
@@ -111,9 +112,11 @@ function CredentialEdit({ credential }) {
 
   useEffect(() => {
     if (result) {
-      history.push(`/credentials/${result.id}/details`);
+      navigate(`/credentials/${result.id}/details`);
     }
-  }, [result, history]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- navigate is not
+    // referentially stable in react-router-dom-v5-compat
+  }, [result]);
   const {
     isLoading,
     error,
@@ -171,7 +174,7 @@ function CredentialEdit({ credential }) {
 
   const handleCancel = () => {
     const url = `/credentials/${credId}/details`;
-    history.push(`${url}`);
+    navigate(`${url}`);
   };
 
   const handleSubmit = async (values) => {

@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import {
   Button,
   TextList,
@@ -75,7 +76,7 @@ function NotificationTemplateDetail({ template, defaultMessages }) {
       </>
     ),
   };
-  const history = useHistory();
+  const navigate = useNavigate();
   const [testStatus, setTestStatus] = useState(
     template.summary_fields?.recent_notifications[0]?.status ?? undefined
   );
@@ -111,8 +112,8 @@ function NotificationTemplateDetail({ template, defaultMessages }) {
   } = useRequest(
     useCallback(async () => {
       await NotificationTemplatesAPI.destroy(template.id);
-      history.push(`/notification_templates`);
-    }, [template.id, history])
+      navigate(`/notification_templates`);
+    }, [template.id, navigate])
   );
 
   const { request: sendTestNotification, error: testError } = useRequest(

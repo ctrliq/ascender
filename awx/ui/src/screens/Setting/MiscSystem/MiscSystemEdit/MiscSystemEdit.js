@@ -2,7 +2,7 @@
 // Modifications Copyright (c) 2023 Ctrl IQ, Inc.
 //
 import React, { useCallback, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { Formik } from 'formik';
 import { Form } from '@patternfly/react-core';
 import { CardBody } from 'components/Card';
@@ -26,7 +26,7 @@ import {
 import { pluck, formatJson } from '../../shared/settingUtils';
 
 function MiscSystemEdit() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { isModalOpen, toggleModal, closeModal } = useModal();
   const { PUT: options } = useSettings();
 
@@ -72,9 +72,9 @@ function MiscSystemEdit() {
     useCallback(
       async (values) => {
         await SettingsAPI.updateAll(values);
-        history.push('/settings/miscellaneous_system/details');
+        navigate('/settings/miscellaneous_system/details');
       },
-      [history]
+      [navigate]
     ),
     null
   );
@@ -102,11 +102,11 @@ function MiscSystemEdit() {
 
     closeModal();
 
-    history.push('/settings/miscellaneous_system/details');
+    navigate('/settings/miscellaneous_system/details');
   };
 
   const handleCancel = () => {
-    history.push('/settings/miscellaneous_system/details');
+    navigate('/settings/miscellaneous_system/details');
   };
 
   const initialValues = (fields) =>

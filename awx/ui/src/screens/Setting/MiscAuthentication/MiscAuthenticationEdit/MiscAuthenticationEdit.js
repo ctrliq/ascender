@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import { Formik } from 'formik';
 import { Form } from '@patternfly/react-core';
@@ -23,7 +23,7 @@ import { formatJson, pluck } from '../../shared/settingUtils';
 
 function MiscAuthenticationEdit() {
   const { t } = useLingui();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { isModalOpen, toggleModal, closeModal } = useModal();
   const { PUT: options } = useSettings();
 
@@ -118,9 +118,9 @@ function MiscAuthenticationEdit() {
     useCallback(
       async (values) => {
         await SettingsAPI.updateAll(values);
-        history.push('/settings/miscellaneous_authentication/details');
+        navigate('/settings/miscellaneous_authentication/details');
       },
-      [history]
+      [navigate]
     ),
     null
   );
@@ -160,11 +160,11 @@ function MiscAuthenticationEdit() {
 
     closeModal();
 
-    history.push('/settings/miscellaneous_authentication/details');
+    navigate('/settings/miscellaneous_authentication/details');
   };
 
   const handleCancel = () => {
-    history.push('/settings/miscellaneous_authentication/details');
+    navigate('/settings/miscellaneous_authentication/details');
   };
 
   const initialValues = (fields) =>

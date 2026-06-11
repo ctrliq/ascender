@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { Trans, useLingui } from '@lingui/react/macro';
 
 import {
@@ -67,7 +68,7 @@ function InstanceDetails({ setBreadcrumb, instanceGroup }) {
   const { t, i18n } = useLingui();
   const config = useConfig();
   const { id, instanceId } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [healthCheck, setHealthCheck] = useState({});
   const [showHealthCheckAlert, setShowHealthCheckAlert] = useState(false);
@@ -135,8 +136,8 @@ function InstanceDetails({ setBreadcrumb, instanceGroup }) {
         instanceGroup.id,
         instance.id
       );
-      history.push(`/instance_groups/${instanceGroup.id}/instances`);
-    }, [instanceGroup.id, instance.id, history])
+      navigate(`/instance_groups/${instanceGroup.id}/instances`);
+    }, [instanceGroup.id, instance.id, navigate])
   );
 
   const { error: updateInstanceError, request: updateInstance } = useRequest(

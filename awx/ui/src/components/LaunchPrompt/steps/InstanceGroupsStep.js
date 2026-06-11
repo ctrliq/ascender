@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
 import { InstanceGroupsAPI } from 'api';
@@ -22,7 +22,7 @@ function InstanceGroupsStep() {
   const [field, , helpers] = useField('instance_groups');
   const { selected, handleSelect, setSelected } = useSelected([], field.value);
 
-  const history = useHistory();
+  const location = useLocation();
 
   const {
     result: { instance_groups, count, relatedSearchableKeys, searchableKeys },
@@ -31,7 +31,7 @@ function InstanceGroupsStep() {
     isLoading,
   } = useRequest(
     useCallback(async () => {
-      const params = parseQueryString(QS_CONFIG, history.location.search);
+      const params = parseQueryString(QS_CONFIG, location.search);
       const [{ data }, actionsResponse] = await Promise.all([
         InstanceGroupsAPI.read(params),
         InstanceGroupsAPI.readOptions(),
@@ -44,7 +44,7 @@ function InstanceGroupsStep() {
         ).map((val) => val.slice(0, -8)),
         searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET),
       };
-    }, [history.location]),
+    }, [location]),
     {
       instance_groups: [],
       count: 0,

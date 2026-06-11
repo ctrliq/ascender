@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { PageSection, Card } from '@patternfly/react-core';
 import useRequest from 'hooks/useRequest';
 import { CredentialsAPI, OrganizationsAPI } from 'api';
@@ -9,7 +9,7 @@ import ContentLoading from 'components/ContentLoading';
 import OrganizationForm from '../shared/OrganizationForm';
 
 function OrganizationAdd() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [formError, setFormError] = useState(null);
 
   const {
@@ -54,14 +54,14 @@ function OrganizationAdd() {
       }
       /* eslint-enable no-await-in-loop, no-restricted-syntax */
 
-      history.push(`/organizations/${response.id}`);
+      navigate(`/organizations/${response.id}`);
     } catch (error) {
       setFormError(error);
     }
   };
 
   const handleCancel = () => {
-    history.push('/organizations');
+    navigate('/organizations');
   };
 
   if (defaultGalaxyCredentialError) {

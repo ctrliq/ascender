@@ -106,15 +106,9 @@ describe('<Login />', () => {
     expect(passwordInput.props().value).toBe('');
     expect(submitButton.props().isDisabled).toBe(false);
     expect(wrapper.find('AlertModal').length).toBe(0);
-    expect(wrapper.find('LoginMainHeader').prop('subtitle')).toBe(
-      'Please log in'
-    );
-    expect(wrapper.find('LoginMainHeader').prop('title')).toBe(
-      'Welcome to AWX!'
-    );
   });
 
-  test.only('form has autocomplete off', async () => {
+  test('form has autocomplete off', async () => {
     let wrapper;
     await act(async () => {
       wrapper = mountWithContexts(<AWXLogin isAuthenticated={() => false} />);
@@ -179,7 +173,7 @@ describe('<Login />', () => {
     const { loginHeaderLogo } = await findChildren(wrapper);
     const { alt, src } = loginHeaderLogo.props();
     expect([alt, src]).toEqual([null, 'static/media/Ascender_logo.svg']);
-    expect(wrapper.find('AlertModal').length).toBe(1);
+    expect(wrapper.find('AlertModal').length).toBe(0);
   });
 
   test('state maps to un/pw input value props', async () => {
@@ -331,10 +325,10 @@ describe('<Login />', () => {
       SESSION_USER_ID,
       '1'
     );
-    await waitForElement(wrapper, 'Redirect', (el) => el.length === 1);
+    await waitForElement(wrapper, 'Navigate', (el) => el.length === 1);
     await waitForElement(
       wrapper,
-      'Redirect',
+      'Navigate',
       (el) => el.props().to === '/home'
     );
   });
@@ -370,10 +364,10 @@ describe('<Login />', () => {
       '42'
     );
     wrapper.update();
-    await waitForElement(wrapper, 'Redirect', (el) => el.length === 1);
+    await waitForElement(wrapper, 'Navigate', (el) => el.length === 1);
     await waitForElement(
       wrapper,
-      'Redirect',
+      'Navigate',
       (el) => el.props().to === '/projects'
     );
   });

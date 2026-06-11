@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { GroupsAPI } from 'api';
 import InventoryGroupForm from '../shared/InventoryGroupForm';
 
 function InventoryRelatedGroupAdd() {
   const [error, setError] = useState(null);
-  const history = useHistory();
+  const navigate = useNavigate();
   const { id, groupId } = useParams();
   const associateInventoryGroup = async (values) => {
     values.inventory = id;
     try {
       const { data } = await GroupsAPI.create(values);
       await GroupsAPI.associateChildGroup(groupId, data.id);
-      history.push(`/inventories/inventory/${id}/groups/${data.id}/details`, {
+      navigate(`/inventories/inventory/${id}/groups/${data.id}/details`, {
         prevGroupId: groupId,
       });
     } catch (err) {
@@ -21,7 +22,7 @@ function InventoryRelatedGroupAdd() {
   };
 
   const handleCancel = () => {
-    history.push(
+    navigate(
       `/inventories/inventory/${id}/groups/${groupId}/nested_groups`
     );
   };

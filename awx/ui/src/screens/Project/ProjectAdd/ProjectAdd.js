@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { Card, PageSection } from '@patternfly/react-core';
 import { CardBody } from 'components/Card';
 import { ProjectsAPI } from 'api';
@@ -7,7 +7,7 @@ import ProjectForm from '../shared/ProjectForm';
 
 function ProjectAdd() {
   const [formSubmitError, setFormSubmitError] = useState(null);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
     if (values.scm_type === 'manual') {
@@ -37,14 +37,14 @@ function ProjectAdd() {
         organization: values.organization.id,
         default_environment: values.default_environment?.id,
       });
-      history.push(`/projects/${id}/details`);
+      navigate(`/projects/${id}/details`);
     } catch (error) {
       setFormSubmitError(error);
     }
   };
 
   const handleCancel = () => {
-    history.push(`/projects`);
+    navigate(`/projects`);
   };
 
   return (

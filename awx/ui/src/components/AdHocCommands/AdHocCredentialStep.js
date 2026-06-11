@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
@@ -29,7 +29,7 @@ const QS_CONFIG = getQSConfig('credentials', {
 function AdHocCredentialStep({ credentialTypeId }) {
   const { t } = useLingui();
 
-  const history = useHistory();
+  const location = useLocation();
   const {
     error,
     isLoading,
@@ -42,7 +42,7 @@ function AdHocCredentialStep({ credentialTypeId }) {
     },
   } = useRequest(
     useCallback(async () => {
-      const params = parseQueryString(QS_CONFIG, history.location.search);
+      const params = parseQueryString(QS_CONFIG, location.search);
 
       const [
         {
@@ -64,7 +64,7 @@ function AdHocCredentialStep({ credentialTypeId }) {
         ).map((val) => val.slice(0, -8)),
         searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET),
       };
-    }, [credentialTypeId, history.location.search]),
+    }, [credentialTypeId, location.search]),
     {
       credentials: [],
       credentialCount: 0,

@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import {
   Button,
   Chip,
@@ -67,7 +68,7 @@ function JobTemplateDetail({ template }) {
     prevent_instance_group_fallback,
   } = template;
   const { id: templateId } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const brandName = useBrandName();
   const {
     isLoading: isLoadingInstanceGroups,
@@ -95,8 +96,8 @@ function JobTemplateDetail({ template }) {
   } = useRequest(
     useCallback(async () => {
       await JobTemplatesAPI.destroy(templateId);
-      history.push(`/templates`);
-    }, [templateId, history])
+      navigate(`/templates`);
+    }, [templateId, navigate])
   );
 
   const { error, dismissError } = useDismissableError(deleteError);

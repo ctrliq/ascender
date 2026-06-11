@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { CardBody } from 'components/Card';
 import HostForm from 'components/HostForm';
 
@@ -8,7 +8,7 @@ import { GroupsAPI } from 'api';
 function InventoryGroupHostAdd({ inventoryGroup }) {
   const [formError, setFormError] = useState(null);
   const baseUrl = `/inventories/inventory/${inventoryGroup.inventory}`;
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleSubmit = async (formData) => {
     try {
@@ -21,14 +21,14 @@ function InventoryGroupHostAdd({ inventoryGroup }) {
         inventoryGroup.id,
         values
       );
-      history.push(`${baseUrl}/hosts/${response.id}/details`);
+      navigate(`${baseUrl}/hosts/${response.id}/details`);
     } catch (error) {
       setFormError(error);
     }
   };
 
   const handleCancel = () => {
-    history.push(`${baseUrl}/groups/${inventoryGroup.id}/nested_hosts`);
+    navigate(`${baseUrl}/groups/${inventoryGroup.id}/nested_hosts`);
   };
 
   return (

@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
 import { Form, FormGroup } from '@patternfly/react-core';
@@ -20,7 +20,7 @@ const QS_CONFIG = getQSConfig('execution_environments', {
 });
 function AdHocExecutionEnvironmentStep({ organizationId }) {
   const { t } = useLingui();
-  const history = useHistory();
+  const location = useLocation();
   const [executionEnvironmentField, , executionEnvironmentHelpers] = useField(
     'execution_environment'
   );
@@ -36,7 +36,7 @@ function AdHocExecutionEnvironmentStep({ organizationId }) {
     },
   } = useRequest(
     useCallback(async () => {
-      const params = parseQueryString(QS_CONFIG, history.location.search);
+      const params = parseQueryString(QS_CONFIG, location.search);
       const globallyAvailableParams = { or__organization__isnull: 'True' };
       const organizationIdParams = organizationId
         ? { or__organization__id: organizationId }
@@ -64,7 +64,7 @@ function AdHocExecutionEnvironmentStep({ organizationId }) {
         ).map((val) => val.slice(0, -8)),
         searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET),
       };
-    }, [history.location.search, organizationId]),
+    }, [location.search, organizationId]),
     {
       executionEnvironments: [],
       executionEnvironmentsCount: 0,

@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { Card, PageSection } from '@patternfly/react-core';
 import { FederatedInventoriesAPI, InventoriesAPI } from 'api';
 import { CardBody } from 'components/Card';
 import FederatedInventoryForm from '../shared/FederatedInventoryForm';
 
 function FederatedInventoryAdd() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [submitError, setSubmitError] = useState(null);
 
   const handleCancel = () => {
-    history.push('/inventories');
+    navigate('/inventories');
   };
 
   const handleSubmit = async (values) => {
@@ -29,7 +29,7 @@ function FederatedInventoryAdd() {
       }
       /* eslint-enable no-await-in-loop, no-restricted-syntax */
 
-      history.push(`/inventories/federated_inventory/${inventoryId}/details`);
+      navigate(`/inventories/federated_inventory/${inventoryId}/details`);
     } catch (error) {
       setSubmitError(error);
     }

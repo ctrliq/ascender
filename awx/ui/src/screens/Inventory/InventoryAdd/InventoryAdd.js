@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom-v5-compat';
 import { PageSection, Card } from '@patternfly/react-core';
 import { CardBody } from 'components/Card';
 
@@ -8,10 +8,11 @@ import InventoryForm from '../shared/InventoryForm';
 
 function InventoryAdd() {
   const [error, setError] = useState(null);
-  const history = useHistory();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const handleCancel = () => {
-    history.push('/inventories');
+    navigate('/inventories');
   };
 
   async function submitLabels(inventoryId, orgId, labels = []) {
@@ -39,13 +40,13 @@ function InventoryAdd() {
         await InventoriesAPI.associateInstanceGroup(inventoryId, group.id);
       }
       /* eslint-enable no-await-in-loop, no-restricted-syntax */
-      const url = history.location.pathname.startsWith(
+      const url = location.pathname.startsWith(
         '/inventories/smart_inventory'
       )
         ? `/inventories/smart_inventory/${inventoryId}/details`
         : `/inventories/inventory/${inventoryId}/details`;
 
-      history.push(`${url}`);
+      navigate(`${url}`);
     } catch (err) {
       setError(err);
     }

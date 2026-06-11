@@ -1,6 +1,7 @@
 import 'styled-components/macro';
 import React, { useCallback, useEffect } from 'react';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
 import { Chip, Divider, Title, Button } from '@patternfly/react-core';
@@ -96,7 +97,7 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
     verbosity,
   } = schedule;
   const helpText = getHelpText(t);
-  const history = useHistory();
+  const navigate = useNavigate();
   const { pathname } = useLocation();
   const pathRoot = pathname.substr(0, pathname.indexOf('schedules'));
   const config = useConfig();
@@ -108,8 +109,8 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
   } = useRequest(
     useCallback(async () => {
       await SchedulesAPI.destroy(id);
-      history.push(`${pathRoot}schedules`);
-    }, [id, history, pathRoot])
+      navigate(`${pathRoot}schedules`);
+    }, [id, navigate, pathRoot])
   );
 
   const { error, dismissError } = useDismissableError(deleteError);

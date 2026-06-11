@@ -1,6 +1,7 @@
 import 'styled-components/macro';
 import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
 import { Host } from 'types';
@@ -33,13 +34,13 @@ function InventoryHostDetail({ host }) {
   const { t } = useLingui();
   const [isLoading, setIsloading] = useState(false);
   const [deletionError, setDeletionError] = useState(false);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleHostDelete = async () => {
     setIsloading(true);
     try {
       await HostsAPI.destroy(id);
-      history.push(`/inventories/inventory/${inventory.id}/hosts`);
+      navigate(`/inventories/inventory/${inventory.id}/hosts`);
     } catch (err) {
       setDeletionError(err);
     } finally {

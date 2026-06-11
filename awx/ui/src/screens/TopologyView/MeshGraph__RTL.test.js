@@ -1,5 +1,6 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
+import { CompatRouter } from 'react-router-dom-v5-compat';
 import { render, waitFor, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { I18nProvider } from '@lingui/react';
@@ -90,12 +91,14 @@ describe('<MeshGraph />', () => {
     const mockSetZoomCtrFn = jest.fn();
     renderWithI18n(
       <MemoryRouter>
+      <CompatRouter>
         <MeshGraph
           data={mockData}
           showLegend={true}
           zoom={mockZoomFn}
           setShowZoomControls={mockSetZoomCtrFn}
         />
+      </CompatRouter>
       </MemoryRouter>
     );
     await waitFor(() => screen.getByLabelText('mesh-svg'));

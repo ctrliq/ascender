@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { Formik } from 'formik';
 import { Form } from '@patternfly/react-core';
 import { CardBody } from 'components/Card';
@@ -20,7 +20,7 @@ import {
 import { formatJson } from '../../shared/settingUtils';
 
 function GoogleOAuth2Edit() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { isModalOpen, toggleModal, closeModal } = useModal();
   const { PUT: options } = useSettings();
 
@@ -53,9 +53,9 @@ function GoogleOAuth2Edit() {
     useCallback(
       async (values) => {
         await SettingsAPI.updateAll(values);
-        history.push('/settings/google_oauth2/details');
+        navigate('/settings/google_oauth2/details');
       },
-      [history]
+      [navigate]
     ),
     null
   );
@@ -90,11 +90,11 @@ function GoogleOAuth2Edit() {
 
     closeModal();
 
-    history.push('/settings/google_oauth2/details');
+    navigate('/settings/google_oauth2/details');
   };
 
   const handleCancel = () => {
-    history.push('/settings/google_oauth2/details');
+    navigate('/settings/google_oauth2/details');
   };
 
   const initialValues = (fields) =>

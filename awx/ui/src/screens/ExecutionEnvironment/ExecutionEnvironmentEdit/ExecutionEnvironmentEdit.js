@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 
 import { CardBody } from 'components/Card';
 import { ExecutionEnvironmentsAPI } from 'api';
@@ -7,7 +7,7 @@ import { Config } from 'contexts/Config';
 import ExecutionEnvironmentForm from '../shared/ExecutionEnvironmentForm';
 
 function ExecutionEnvironmentEdit({ executionEnvironment }) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [submitError, setSubmitError] = useState(null);
   const detailsUrl = `/execution_environments/${executionEnvironment.id}/details`;
 
@@ -18,14 +18,14 @@ function ExecutionEnvironmentEdit({ executionEnvironment }) {
         credential: values.credential ? values.credential.id : null,
         organization: values.organization ? values.organization.id : null,
       });
-      history.push(detailsUrl);
+      navigate(detailsUrl);
     } catch (error) {
       setSubmitError(error);
     }
   };
 
   const handleCancel = () => {
-    history.push(detailsUrl);
+    navigate(detailsUrl);
   };
   return (
     <CardBody>

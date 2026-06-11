@@ -1,5 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import {
@@ -49,7 +50,7 @@ function CredentialDetail({ credential }) {
       user_capabilities,
     },
   } = credential;
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const {
     result: { fields, managedByTower, inputSources },
@@ -95,8 +96,8 @@ function CredentialDetail({ credential }) {
   } = useRequest(
     useCallback(async () => {
       await CredentialsAPI.destroy(credentialId);
-      history.push('/credentials');
-    }, [credentialId, history])
+      navigate('/credentials');
+    }, [credentialId, navigate])
   );
 
   const { error, dismissError } = useDismissableError(deleteError);

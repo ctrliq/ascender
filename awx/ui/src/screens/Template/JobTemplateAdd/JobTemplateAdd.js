@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom-v5-compat';
 import { Card, PageSection } from '@patternfly/react-core';
 import { CardBody } from 'components/Card';
 import { JobTemplatesAPI, OrganizationsAPI } from 'api';
@@ -7,7 +7,8 @@ import JobTemplateForm from '../shared/JobTemplateForm';
 
 function JobTemplateAdd() {
   const [formSubmitError, setFormSubmitError] = useState(null);
-  const history = useHistory();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const resourceParams = {
     resource_id: null,
@@ -15,7 +16,7 @@ function JobTemplateAdd() {
     resource_type: null,
     resource_kind: null,
   };
-  history.location.search
+  location.search
     .replace(/^\?/, '')
     .split('&')
     .map((s) => s.split('='))
@@ -28,7 +29,7 @@ function JobTemplateAdd() {
 
   let resourceValues = null;
 
-  if (history.location.search.includes('resource_id' && 'resource_name')) {
+  if (location.search.includes('resource_id' && 'resource_name')) {
     resourceValues = {
       id: resourceParams.resource_id,
       name: resourceParams.resource_name,
@@ -71,7 +72,7 @@ function JobTemplateAdd() {
         submitInstanceGroups(id, instanceGroups),
         submitCredentials(id, credentials),
       ]);
-      history.push(`/templates/${type}/${id}/details`);
+      navigate(`/templates/${type}/${id}/details`);
     } catch (error) {
       setFormSubmitError(error);
     }
@@ -113,7 +114,7 @@ function JobTemplateAdd() {
   }
 
   const handleCancel = () => {
-    history.push(`/templates`);
+    navigate(`/templates`);
   };
 
   return (

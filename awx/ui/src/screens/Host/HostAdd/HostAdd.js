@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { PageSection, Card } from '@patternfly/react-core';
 import HostForm from 'components/HostForm';
 import { CardBody } from 'components/Card';
@@ -7,7 +7,7 @@ import { HostsAPI } from 'api';
 
 function HostAdd() {
   const [formError, setFormError] = useState(null);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleSubmit = async (formData) => {
     try {
@@ -16,14 +16,14 @@ function HostAdd() {
         dataToSend.inventory = dataToSend.inventory.id;
       }
       const { data: response } = await HostsAPI.create(dataToSend);
-      history.push(`/hosts/${response.id}/details`);
+      navigate(`/hosts/${response.id}/details`);
     } catch (error) {
       setFormError(error);
     }
   };
 
   const handleCancel = () => {
-    history.push(`/hosts`);
+    navigate(`/hosts`);
   };
 
   return (

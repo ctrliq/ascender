@@ -1,7 +1,8 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
 import {
@@ -25,7 +26,7 @@ function CredentialPluginInput(props) {
   const [inputField, meta, helpers] = useField(`inputs.${fieldOptions.id}`);
   const [passwordPromptField] = useField(`passwordPrompts.${fieldOptions.id}`);
   const location = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { t } = useLingui();
 
   const disableFieldAndButtons =
@@ -38,7 +39,7 @@ function CredentialPluginInput(props) {
 
   const handlePluginWizardClose = () => {
     setShowPluginWizard(false);
-    history.push(location.pathname);
+    navigate(location.pathname);
   };
 
   return (
