@@ -1,6 +1,5 @@
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
-import 'styled-components/macro';
 import { Tr, Td } from '@patternfly/react-table';
 
 function InstanceListenerAddressListItem({

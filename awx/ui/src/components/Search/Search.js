@@ -1,4 +1,3 @@
-import 'styled-components/macro';
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
@@ -22,6 +21,11 @@ import { parseQueryString } from 'util/qs';
 import { QSConfig, SearchColumns, SearchableKeys } from 'types';
 import AdvancedSearch from './AdvancedSearch';
 import getChipsByKey from './getChipsByKey';
+
+const SubmitButtonWrapper = styled.div`
+  ${(props) => (props.$disabled ? 'cursor: not-allowed;' : '')}
+`;
+SubmitButtonWrapper.displayName = 'SubmitButtonWrapper';
 
 const NoOptionDropdown = styled.div`
   align-self: stretch;
@@ -252,7 +256,7 @@ function Search({
                   onKeyDown={handleTextKeyDown}
                   isDisabled={isDisabled}
                 />
-                <div css={!searchValue && `cursor:not-allowed`}>
+                <SubmitButtonWrapper $disabled={!searchValue}>
                   <Button
                     ouiaId="search-submit-button"
                     variant={ButtonVariant.control}
@@ -262,7 +266,7 @@ function Search({
                   >
                     <SearchIcon />
                   </Button>
-                </div>
+                </SubmitButtonWrapper>
               </InputGroup>
             )}
         </ToolbarFilter>

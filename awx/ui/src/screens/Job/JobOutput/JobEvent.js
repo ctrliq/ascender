@@ -66,8 +66,7 @@ const JobEvent = React.forwardRef(
             <JobEventLine
               onClick={isClickable ? handleClick : undefined}
               key={`${event.counter}-${lineNumber}`}
-              isFirst={lineNumber === 0}
-              isClickable={isClickable}
+              $isClickable={isClickable}
             >
               <JobEventLineToggle
                 canToggle={canToggle}

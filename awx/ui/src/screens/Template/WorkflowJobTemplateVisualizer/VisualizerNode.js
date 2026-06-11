@@ -26,7 +26,7 @@ import {
 import getNodeType from './shared/WorkflowJobTemplateVisualizerUtils';
 
 const NodeG = styled.g`
-  pointer-events: ${(props) => (props.noPointerEvents ? 'none' : 'initial')};
+  pointer-events: ${(props) => (props.$noPointerEvents ? 'none' : 'initial')};
   cursor: ${(props) => (props.job ? 'pointer' : 'default')};
 `;
 
@@ -286,7 +286,7 @@ function VisualizerNode({
       <NodeG
         id={`node-${node.id}`}
         job={node.job}
-        noPointerEvents={isAddLinkSourceNode}
+        $noPointerEvents={isAddLinkSourceNode}
         onMouseEnter={handleNodeMouseEnter}
         onMouseLeave={handleNodeMouseLeave}
         ref={ref}

@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { string, bool, func } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
-import 'styled-components/macro';
 import { Tr, Td } from '@patternfly/react-table';
 import Sparkline from 'components/Sparkline';
 import { Host } from 'types';

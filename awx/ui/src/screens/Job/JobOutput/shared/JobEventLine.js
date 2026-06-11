@@ -4,7 +4,7 @@ export default styled.div`
   display: flex;
 
   &:hover {
-    cursor: ${(props) => (props.isClickable ? 'pointer' : 'default')};
+    cursor: ${(props) => (props.$isClickable ? 'pointer' : 'default')};
   }
 
   &--hidden {

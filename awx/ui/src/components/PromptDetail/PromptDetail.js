@@ -1,4 +1,3 @@
-import 'styled-components/macro';
 import React from 'react';
 import { shape } from 'prop-types';
 import { Trans, useLingui } from '@lingui/react/macro';

@@ -3,7 +3,6 @@ import { useField } from 'formik';
 import { FormGroup, Title } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
-import 'styled-components/macro';
 import FormField from 'components/FormField';
 import { required } from 'util/validators';
 import { useConfig } from 'contexts/Config';
@@ -151,7 +150,7 @@ export default function ScheduleFormFields({
             {t`Frequency Details`}
           </Title>
           {frequency.value.map((val) => (
-            <FormColumnLayout key={val} stacked>
+            <FormColumnLayout key={val} $stacked>
               <FrequencyDetailSubform
                 frequency={val}
                 prefix={`frequencyOptions.${val}`}
@@ -165,7 +164,7 @@ export default function ScheduleFormFields({
           >
             {t`Exceptions`}
           </Title>
-          <FormColumnLayout stacked>
+          <FormColumnLayout $stacked>
             <FormGroup
               name="exceptions"
               fieldId="exception-frequency"
@@ -203,7 +202,7 @@ export default function ScheduleFormFields({
             </FormGroup>
           </FormColumnLayout>
           {exceptionFrequency.value.map((val) => (
-            <FormColumnLayout key={val} stacked>
+            <FormColumnLayout key={val} $stacked>
               <FrequencyDetailSubform
                 frequency={val}
                 prefix={`exceptionOptions.${val}`}

@@ -1,4 +1,3 @@
-import 'styled-components/macro';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';

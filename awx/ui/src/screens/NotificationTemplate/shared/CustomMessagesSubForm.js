@@ -1,4 +1,3 @@
-import 'styled-components/macro';
 import React, { useEffect, useRef } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useField, useFormikContext } from 'formik';

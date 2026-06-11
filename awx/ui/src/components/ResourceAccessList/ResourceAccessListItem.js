@@ -1,4 +1,3 @@
-import 'styled-components/macro';
 import React from 'react';
 import { func } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';

@@ -1,4 +1,3 @@
-import 'styled-components/macro';
 import React, { useState, useEffect, useCallback } from 'react';
 
 import { useLingui } from '@lingui/react/macro';

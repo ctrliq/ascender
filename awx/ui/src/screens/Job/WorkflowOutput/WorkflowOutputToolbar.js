@@ -80,7 +80,7 @@ function WorkflowOutputToolbar({ job }) {
     }
   };
   return (
-    <Toolbar id="workflow-output-toolbar" ouiaId="workflow-output-toolbar">
+    <Toolbar id="workflow-output-toolbar">
       <ToolbarJob>
         <h1>{job.name}</h1>
         <StatusLabel status={job.status} />

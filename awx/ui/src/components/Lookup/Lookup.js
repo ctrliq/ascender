@@ -31,7 +31,7 @@ import reducer, { initReducer } from './shared/reducer';
 const ChipHolder = styled.div`
   --pf-c-form-control--Height: auto;
   background-color: ${(props) =>
-    props.isDisabled ? 'var(--pf-global--disabled-color--300)' : null};
+    props.$isDisabled ? 'var(--pf-global--disabled-color--300)' : null};
 `;
 function Lookup(props) {
   const {
@@ -151,7 +151,7 @@ function Lookup(props) {
           <SearchIcon />
         </Button>
         {multiple ? (
-          <ChipHolder isDisabled={isDisabled} className="pf-c-form-control">
+          <ChipHolder $isDisabled={isDisabled} className="pf-c-form-control">
             <ChipGroup
               numChips={5}
               totalChips={items.length}

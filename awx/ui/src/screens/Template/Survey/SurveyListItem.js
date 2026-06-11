@@ -1,4 +1,3 @@
-import 'styled-components/macro';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Chip, Tooltip, Button } from '@patternfly/react-core';

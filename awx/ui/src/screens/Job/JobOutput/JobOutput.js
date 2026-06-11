@@ -71,9 +71,9 @@ const OutputWrapper = styled.div`
   font-family: monospace;
   font-size: 15px;
   outline: 1px solid var(--pf-global--BorderColor--100);
-  ${({ cssMap }) =>
-    Object.keys(cssMap).map(
-      (className) => `.${className}{${cssMap[className]}}`
+  ${({ $cssMap }) =>
+    Object.keys($cssMap).map(
+      (className) => `.${className}{${$cssMap[className]}}`
     )}
 `;
 
@@ -883,7 +883,7 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
           isTemplateJob={job.type === 'job'}
           isAllCollapsed={isAllCollapsed}
         />
-        <OutputWrapper ref={outputRef} cssMap={cssMap}>
+        <OutputWrapper ref={outputRef} $cssMap={cssMap}>
           <InfiniteLoader
             isRowLoaded={isRowLoaded}
             loadMoreRows={loadMoreRows}

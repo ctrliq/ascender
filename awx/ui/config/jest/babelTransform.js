@@ -24,6 +24,11 @@ module.exports = babelJest.createTransformer({
       },
     ],
   ],
+  plugins: [
+    // styled-components v6 removed the babel macro; the plugin provides
+    // the css-prop transform the codebase relies on.
+    require.resolve('babel-plugin-styled-components'),
+  ],
   babelrc: false,
   configFile: false,
 });

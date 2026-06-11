@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { bool, func } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
-import 'styled-components/macro';
 import {
   Progress,
   ProgressMeasureLocation,
