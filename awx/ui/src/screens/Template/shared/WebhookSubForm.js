@@ -4,6 +4,7 @@ import { useParams, useLocation } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';
 
 import {
+  Alert,
   FormGroup,
   TextInput,
   InputGroup,
@@ -122,7 +123,7 @@ function WebhookSubForm({ templateType }) {
   ];
 
   if (error || webhookKeyError) {
-    return <ContentError error={error} />;
+    return <ContentError error={error || webhookKeyError} />;
   }
   if (isLoading) {
     return <ContentLoading />;
@@ -211,6 +212,14 @@ function WebhookSubForm({ templateType }) {
           helperTextInvalid={webhookCredentialMeta.error}
           value={webhookCredentialField.value}
           fieldName="webhook_credential"
+        />
+      )}
+      {!credTypeId && !isLoading && webhookServiceField.value && (
+        <Alert
+          variant="warning"
+          isInline
+          ouiaId="webhook-credential-type-missing"
+          title={t`Unable to look up the credential type for this webhook service, so the webhook credential field is unavailable.`}
         />
       )}
     </FormColumnLayout>
