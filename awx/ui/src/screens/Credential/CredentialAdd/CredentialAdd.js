@@ -89,7 +89,9 @@ function CredentialAdd({ me }) {
     if (credentialId) {
       navigate(`/credentials/${credentialId}/details`);
     }
-  }, [credentialId, navigate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- navigate is not
+    // referentially stable in react-router-dom-v5-compat
+  }, [credentialId]);
 
   const {
     isLoading,

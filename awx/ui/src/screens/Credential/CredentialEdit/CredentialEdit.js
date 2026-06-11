@@ -114,7 +114,9 @@ function CredentialEdit({ credential }) {
     if (result) {
       navigate(`/credentials/${result.id}/details`);
     }
-  }, [result, navigate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- navigate is not
+    // referentially stable in react-router-dom-v5-compat
+  }, [result]);
   const {
     isLoading,
     error,
