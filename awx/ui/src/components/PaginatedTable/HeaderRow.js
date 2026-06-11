@@ -1,4 +1,3 @@
-import 'styled-components/macro';
 import React from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import { Thead, Tr, Th as PFTh } from '@patternfly/react-table';
@@ -8,6 +7,7 @@ import { parseQueryString, updateQueryString } from 'util/qs';
 const Th = styled(PFTh)`
   --pf-c-table--cell--Overflow: initial;
   --pf-c-table--cell--MaxWidth: none;
+  ${(props) => (props.$alignRight ? 'text-align: right;' : '')}
 `;
 
 export default function HeaderRow({
@@ -89,7 +89,7 @@ export function HeaderCell({
       id={sortKey ? `${idPrefix}-${sortKey}` : null}
       className={className}
       sort={sort}
-      css={children === 'Actions' ? 'text-align: right' : null}
+      $alignRight={children === 'Actions'}
     >
       {children}
     </Th>

@@ -11,7 +11,7 @@ import WorkflowActionTooltip from './WorkflowActionTooltip';
 import WorkflowActionTooltipItem from './WorkflowActionTooltipItem';
 
 const StartG = styled.g`
-  pointer-events: ${(props) => (props.ignorePointerEvents ? 'none' : 'auto')};
+  pointer-events: ${(props) => (props.$ignorePointerEvents ? 'none' : 'auto')};
 `;
 
 const StartForeignObject = styled.foreignObject`
@@ -46,7 +46,7 @@ function WorkflowStartNode({ onUpdateHelpText, showActionTooltip }) {
   return (
     <StartG
       id="node-1"
-      ignorePointerEvents={addingLink}
+      $ignorePointerEvents={addingLink}
       onMouseEnter={handleNodeMouseEnter}
       onMouseLeave={() => setHovering(false)}
       ref={ref}

@@ -1,4 +1,3 @@
-import 'styled-components/macro';
 import React, { useState, useCallback, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';

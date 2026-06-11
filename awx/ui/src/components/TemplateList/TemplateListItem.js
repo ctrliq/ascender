@@ -2,7 +2,6 @@
   Modifications Copyright (c) 2023 Ctrl IQ, Inc.
 */
 
-import 'styled-components/macro';
 import React, { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Tooltip, Chip } from '@patternfly/react-core';

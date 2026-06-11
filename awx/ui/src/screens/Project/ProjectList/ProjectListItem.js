@@ -1,4 +1,3 @@
-import 'styled-components/macro';
 import React, { useState, useCallback } from 'react';
 import { string, bool, func } from 'prop-types';
 import { Button, ClipboardCopy, Tooltip } from '@patternfly/react-core';

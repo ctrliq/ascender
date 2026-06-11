@@ -242,7 +242,7 @@ function WorkflowJobTemplateForm({
         </FieldWithPrompt>
       </FormFullWidthLayout>
       <FormGroup fieldId="options" label={t`Options`}>
-        <FormCheckboxLayout isInline>
+        <FormCheckboxLayout>
           <Checkbox
             aria-label={t`Enable Webhook`}
             label={

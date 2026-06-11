@@ -418,6 +418,9 @@ module.exports = function (webpackEnv) {
                 ],
                 
                 plugins: [
+                  // styled-components v6 removed the babel macro; the plugin
+                  // provides the css-prop transform the codebase relies on.
+                  require.resolve('babel-plugin-styled-components'),
                   isEnvDevelopment &&
                     shouldUseReactRefresh &&
                     require.resolve('react-refresh/babel'),

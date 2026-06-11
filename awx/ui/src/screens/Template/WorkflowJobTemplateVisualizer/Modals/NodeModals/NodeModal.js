@@ -1,5 +1,4 @@
 /* eslint-disable react/jsx-no-useless-fragment */
-import 'styled-components/macro';
 import React, { useContext, useState, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';

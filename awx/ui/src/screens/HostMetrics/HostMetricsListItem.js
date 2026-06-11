@@ -1,4 +1,3 @@
-import 'styled-components/macro';
 import React from 'react';
 import { Tr, Td } from '@patternfly/react-table';
 import { formatDateString } from 'util/dates';
