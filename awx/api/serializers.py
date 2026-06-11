@@ -6059,6 +6059,9 @@ class ActivityStreamSerializer(BaseSerializer):
         summary_dict = copy.copy(SUMMARIZABLE_FK_FIELDS)
         # Special requests
         summary_dict['group'] = summary_dict['group'] + ('inventory_id',)
+        # the UI builds inventory-source schedule urls from the activity
+        # stream and needs the parent inventory id to do so
+        summary_dict['inventory_source'] = summary_dict['inventory_source'] + ('inventory_id',)
         for key in summary_dict.keys():
             if 'id' not in summary_dict[key]:
                 summary_dict[key] = summary_dict[key] + ('id',)
@@ -6213,12 +6216,17 @@ class ActivityStreamSerializer(BaseSerializer):
         item = {}
         fields = SUMMARIZABLE_FK_FIELDS[summary_keys[fk]]
         if related_obj is not None:
-            summary_fields[get_type_for_model(related_obj)] = []
+            related_type = get_type_for_model(related_obj)
+            if related_type == 'inventory_source':
+                # the UI builds inventory-source schedule urls from the
+                # activity stream and needs the parent inventory id to do so
+                fields = fields + ('inventory_id',)
+            summary_fields[related_type] = []
             for field in fields:
                 fval = getattr(related_obj, field, None)
                 if fval is not None:
                     item[field] = fval
-            summary_fields[get_type_for_model(related_obj)].append(item)
+            summary_fields[related_type].append(item)
 
     def get_summary_fields(self, obj):
         summary_fields = OrderedDict()
