@@ -1,17 +1,14 @@
 import React from 'react';
-import { MemoryRouter, withRouter } from 'react-router-dom';
-import { mount } from 'enzyme';
+import { createMemoryHistory } from 'history';
 
 import { Nav } from '@patternfly/react-core';
-import _NavExpandableGroup from './NavExpandableGroup';
-
-const NavExpandableGroup = withRouter(_NavExpandableGroup);
+import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import NavExpandableGroup from './NavExpandableGroup';
 
 describe('NavExpandableGroup', () => {
   test('initialization and render', () => {
-    const component = mount(
-      <MemoryRouter initialEntries={['/foo']}>
-        <Nav aria-label="Test Navigation">
+    const component = mountWithContexts(
+      <Nav aria-label="Test Navigation">
           <NavExpandableGroup
             groupId="test"
             groupTitle="Test"
@@ -21,8 +18,12 @@ describe('NavExpandableGroup', () => {
               { path: '/fiz', title: 'Fiz' },
             ]}
           />
-        </Nav>
-      </MemoryRouter>
+        </Nav>,
+      {
+        context: {
+          router: { history: createMemoryHistory({ initialEntries: ['/foo'] }) },
+        },
+      }
     ).find('NavExpandableGroup');
 
     expect(component.find('NavItem').length).toEqual(3);
@@ -40,9 +41,8 @@ describe('NavExpandableGroup', () => {
   });
 
   test('when location is /foo/1/bar/fiz isActive returns false', () => {
-    const component = mount(
-      <MemoryRouter initialEntries={['/foo/1/bar/fiz']}>
-        <Nav aria-label="Test Navigation">
+    const component = mountWithContexts(
+      <Nav aria-label="Test Navigation">
           <NavExpandableGroup
             groupId="test"
             groupTitle="Test"
@@ -52,8 +52,12 @@ describe('NavExpandableGroup', () => {
               { path: '/fiz', title: 'Fiz' },
             ]}
           />
-        </Nav>
-      </MemoryRouter>
+        </Nav>,
+      {
+        context: {
+          router: { history: createMemoryHistory({ initialEntries: ['/foo/1/bar/fiz'] }) },
+        },
+      }
     ).find('NavExpandableGroup');
 
     expect(component.find('NavItem').length).toEqual(3);
@@ -63,9 +67,8 @@ describe('NavExpandableGroup', () => {
   });
 
   test('when location is /fo isActive returns false', () => {
-    const component = mount(
-      <MemoryRouter initialEntries={['/fo']}>
-        <Nav aria-label="Test Navigation">
+    const component = mountWithContexts(
+      <Nav aria-label="Test Navigation">
           <NavExpandableGroup
             groupId="test"
             groupTitle="Test"
@@ -75,8 +78,12 @@ describe('NavExpandableGroup', () => {
               { path: '/fiz', title: 'Fiz' },
             ]}
           />
-        </Nav>
-      </MemoryRouter>
+        </Nav>,
+      {
+        context: {
+          router: { history: createMemoryHistory({ initialEntries: ['/fo'] }) },
+        },
+      }
     ).find('NavExpandableGroup');
 
     expect(component.find('NavItem').length).toEqual(3);
@@ -86,9 +93,8 @@ describe('NavExpandableGroup', () => {
   });
 
   test('when location is /foo isActive returns true', () => {
-    const component = mount(
-      <MemoryRouter initialEntries={['/foo']}>
-        <Nav aria-label="Test Navigation">
+    const component = mountWithContexts(
+      <Nav aria-label="Test Navigation">
           <NavExpandableGroup
             groupId="test"
             groupTitle="Test"
@@ -98,8 +104,12 @@ describe('NavExpandableGroup', () => {
               { path: '/fiz', title: 'Fiz' },
             ]}
           />
-        </Nav>
-      </MemoryRouter>
+        </Nav>,
+      {
+        context: {
+          router: { history: createMemoryHistory({ initialEntries: ['/foo'] }) },
+        },
+      }
     ).find('NavExpandableGroup');
 
     expect(component.find('NavItem').length).toEqual(3);

@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom-v5-compat';
 
 import { useLingui } from '@lingui/react/macro';
 
@@ -31,7 +31,8 @@ function AssociateModal({
   modalNote,
 }) {
   const { t } = useLingui();
-  const history = useHistory();
+  const location = useLocation();
+  const navigate = useNavigate();
   const { selected, handleSelect } = useSelected([]);
 
   // Set default values for header and title after i18n is available
@@ -47,7 +48,7 @@ function AssociateModal({
     useCallback(async () => {
       const params = parseQueryString(
         QS_CONFIG(displayKey),
-        history.location.search
+        location.search
       );
       const [
         {
@@ -64,7 +65,7 @@ function AssociateModal({
         ).map((val) => val.slice(0, -8)),
         searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET),
       };
-    }, [fetchRequest, optionsRequest, history.location.search, displayKey]),
+    }, [fetchRequest, optionsRequest, location.search, displayKey]),
     {
       items: [],
       itemCount: 0,
@@ -78,12 +79,12 @@ function AssociateModal({
   }, [fetchItems]);
 
   const clearQSParams = () => {
-    const parts = history.location.search.replace(/^\?/, '').split('&');
+    const parts = location.search.replace(/^\?/, '').split('&');
     const { namespace } = QS_CONFIG(displayKey);
     const otherParts = parts.filter(
       (param) => !param.startsWith(`${namespace}.`)
     );
-    history.replace(`${history.location.pathname}?${otherParts.join('&')}`);
+    navigate(`${location.pathname}?${otherParts.join('&')}`, { replace: true });
   };
 
   const handleSave = async () => {

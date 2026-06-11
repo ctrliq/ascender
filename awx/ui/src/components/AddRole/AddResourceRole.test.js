@@ -14,10 +14,6 @@ import AddResourceRole, { _AddResourceRole } from './AddResourceRole';
 jest.mock('../../api/models/Teams');
 jest.mock('../../api/models/Users');
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useHistory: () => ({ push: jest.fn(), location: { pathname: {} } }),
-}));
 // TODO: Once error handling is functional in
 // this component write tests for it
 
@@ -200,7 +196,7 @@ describe('<_AddResourceRole />', () => {
   test('should update history properly', async () => {
     let wrapper;
     const history = createMemoryHistory({
-      initialEntries: ['organizations/2/access?resource.order_by=-username'],
+      initialEntries: ['/organizations/2/access?resource.order_by=-username'],
     });
     act(() => {
       wrapper = mountWithContexts(
@@ -233,7 +229,7 @@ describe('<_AddResourceRole />', () => {
       wrapper.find('PFWizard').prop('onGoToStep')({ id: 1 })
     );
     wrapper.update();
-    expect(history.location.pathname).toEqual('organizations/2/access');
+    expect(history.location.pathname).toEqual('/organizations/2/access');
   });
 
   test('should successfuly click user/team cards', async () => {

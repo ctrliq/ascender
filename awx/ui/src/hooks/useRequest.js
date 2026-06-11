@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { parseQueryString, updateQueryString } from 'util/qs';
 import useIsMounted from './useIsMounted';
 
@@ -93,7 +94,7 @@ export function useDeleteItems(
   { qsConfig = null, allItemsSelected = false, fetchItems = null } = {}
 ) {
   const location = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const {
     error: requestError,
     isLoading,
@@ -111,7 +112,7 @@ export function useDeleteItems(
       const qs = updateQueryString(qsConfig, location.search, {
         page: params.page - 1,
       });
-      history.push(`${location.pathname}?${qs}`);
+      navigate(`${location.pathname}?${qs}`);
     } else {
       fetchItems();
     }

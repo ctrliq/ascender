@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import { TeamsAPI, UsersAPI } from 'api';
 import useSelected from 'hooks/useSelected';
@@ -74,7 +74,8 @@ function AddResourceRole({ onSave, onClose, roles, resource, onError }) {
       key: 'name',
     },
   ], [t]);
-  const history = useHistory();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const {
     selected: resourcesSelected,
@@ -93,9 +94,9 @@ function AddResourceRole({ onSave, onClose, roles, resource, onError }) {
 
   useEffect(() => {
     if (currentStepId === 1 && maxEnabledStep > 1) {
-      history.push(history.location.pathname);
+      navigate(location.pathname);
     }
-  }, [currentStepId, history, maxEnabledStep]);
+  }, [currentStepId, location.pathname, navigate, maxEnabledStep]);
 
   const handleResourceTypeSelect = (type) => {
     setResourceType(type);

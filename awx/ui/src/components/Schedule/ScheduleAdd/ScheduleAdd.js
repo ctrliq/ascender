@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { func, shape } from 'prop-types';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { Card } from '@patternfly/react-core';
 import yaml from 'js-yaml';
 import { parseVariableField } from 'util/yaml';
@@ -21,7 +22,7 @@ function ScheduleAdd({
   resourceDefaultCredentials,
 }) {
   const [formSubmitError, setFormSubmitError] = useState(null);
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
   const { pathname } = location;
   const pathRoot = pathname.substr(0, pathname.indexOf('schedules'));
@@ -139,7 +140,7 @@ function ScheduleAdd({
         }
       }
 
-      history.push(`${pathRoot}schedules/${scheduleId}`);
+      navigate(`${pathRoot}schedules/${scheduleId}`);
     } catch (err) {
       setFormSubmitError(err);
     }
@@ -150,7 +151,7 @@ function ScheduleAdd({
       <CardBody>
         <ScheduleForm
           hasDaysToKeepField={hasDaysToKeepField}
-          handleCancel={() => history.push(`${pathRoot}schedules`)}
+          handleCancel={() => navigate(`${pathRoot}schedules`)}
           handleSubmit={handleSubmit}
           submitError={formSubmitError}
           launchConfig={launchConfig}

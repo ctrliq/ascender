@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { node, string, func, bool, object, oneOfType } from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import { useLocation } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import { FormGroup } from '@patternfly/react-core';
 import { ProjectsAPI } from 'api';
@@ -30,11 +30,11 @@ function ProjectLookup({
   tooltip,
   value,
   onBlur,
-  history,
   isOverrideDisabled,
   validate,
   fieldName,
 }) {
+  const location = useLocation();
   const { t } = useLingui();
   const autoPopulateLookup = useAutoPopulateLookup(onChange);
   const {
@@ -44,7 +44,7 @@ function ProjectLookup({
     isLoading,
   } = useRequest(
     useCallback(async () => {
-      const params = parseQueryString(QS_CONFIG, history.location.search);
+      const params = parseQueryString(QS_CONFIG, location.search);
       const [{ data }, actionsResponse] = await Promise.all([
         ProjectsAPI.read(params),
         ProjectsAPI.readOptions(),
@@ -63,7 +63,7 @@ function ProjectLookup({
           Boolean(actionsResponse.data.actions.POST) || isOverrideDisabled,
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [autoPopulate, autoPopulateLookup, history.location.search]),
+    }, [autoPopulate, autoPopulateLookup, location.search]),
     {
       count: 0,
       projects: [],
@@ -206,4 +206,4 @@ ProjectLookup.defaultProps = {
 };
 
 export { ProjectLookup as _ProjectLookup };
-export default withRouter(ProjectLookup);
+export default ProjectLookup;

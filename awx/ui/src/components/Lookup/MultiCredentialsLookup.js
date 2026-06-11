@@ -1,6 +1,6 @@
 import 'styled-components/macro';
 import React, { useState, useCallback, useEffect } from 'react';
-import { withRouter } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom-v5-compat';
 import PropTypes from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 import { ToolbarItem, Alert } from '@patternfly/react-core';
@@ -30,10 +30,11 @@ function MultiCredentialsLookup({
   value,
   onChange,
   onError,
-  history,
   fieldName,
   validate,
 }) {
+  const location = useLocation();
+  const navigate = useNavigate();
   const { t } = useLingui();
   const [selectedType, setSelectedType] = useState(null);
   const isMounted = useIsMounted();
@@ -81,7 +82,7 @@ function MultiCredentialsLookup({
         };
       }
 
-      const params = parseQueryString(QS_CONFIG, history.location.search);
+      const params = parseQueryString(QS_CONFIG, location.search);
       const [{ results, count }, actionsResponse] = await Promise.all([
         loadCredentials(params, selectedType.id),
         CredentialsAPI.readOptions(),
@@ -104,7 +105,7 @@ function MultiCredentialsLookup({
         ).map((val) => val.slice(0, -8)),
         searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET),
       };
-    }, [selectedType, history.location]),
+    }, [selectedType, location]),
     {
       credentials: [],
       credentialsCount: 0,
@@ -175,9 +176,11 @@ function MultiCredentialsLookup({
                 value={selectedType && selectedType.id}
                 onChange={(e, id) => {
                   // Reset query params when the category of credentials is changed
-                  history.replace({
+                  navigate(
+{
                     search: '',
-                  });
+                  },
+                  { replace: true });
                   setSelectedType(
                     credentialTypes.find((o) => o.id === parseInt(id, 10))
                   );
@@ -265,4 +268,4 @@ MultiCredentialsLookup.defaultProps = {
 };
 
 export { MultiCredentialsLookup as _MultiCredentialsLookup };
-export default withRouter(MultiCredentialsLookup);
+export default MultiCredentialsLookup;

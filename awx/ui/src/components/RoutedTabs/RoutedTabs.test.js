@@ -1,8 +1,7 @@
 /* eslint-disable react/jsx-pascal-case */
 import React from 'react';
-import { mount } from 'enzyme';
-import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
+import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
 import RoutedTabs from './RoutedTabs';
 
 let wrapper;
@@ -20,11 +19,9 @@ describe('<RoutedTabs />', () => {
     history = createMemoryHistory({
       initialEntries: ['/organizations/19/teams'],
     });
-    wrapper = mount(
-      <Router history={history}>
-        <RoutedTabs tabsArray={tabs} />
-      </Router>
-    );
+    wrapper = mountWithContexts(<RoutedTabs tabsArray={tabs} />, {
+      context: { router: { history } },
+    });
   });
 
   test('RoutedTabs renders successfully', () => {

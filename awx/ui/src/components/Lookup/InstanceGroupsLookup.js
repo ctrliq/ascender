@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { arrayOf, string, func, bool } from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import { useLocation } from 'react-router-dom-v5-compat';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { FormGroup } from '@patternfly/react-core';
 import { InstanceGroupsAPI } from 'api';
@@ -27,13 +27,13 @@ function InstanceGroupsLookup({
   tooltip,
   className,
   required,
-  history,
   fieldName,
   validate,
   isPromptableField,
   promptId,
   promptName,
 }) {
+  const location = useLocation();
   const { t } = useLingui();
   const {
     result: { instanceGroups, count, relatedSearchableKeys, searchableKeys },
@@ -42,7 +42,7 @@ function InstanceGroupsLookup({
     isLoading,
   } = useRequest(
     useCallback(async () => {
-      const params = parseQueryString(QS_CONFIG, history.location.search);
+      const params = parseQueryString(QS_CONFIG, location.search);
       const [{ data }, actionsResponse] = await Promise.all([
         InstanceGroupsAPI.read(params),
         InstanceGroupsAPI.readOptions(),
@@ -55,7 +55,7 @@ function InstanceGroupsLookup({
         ).map((val) => val.slice(0, -8)),
         searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET),
       };
-    }, [history.location]),
+    }, [location]),
     {
       instanceGroups: [],
       count: 0,
@@ -178,4 +178,4 @@ InstanceGroupsLookup.defaultProps = {
   fieldName: 'instance_groups',
 };
 
-export default withRouter(InstanceGroupsLookup);
+export default InstanceGroupsLookup;

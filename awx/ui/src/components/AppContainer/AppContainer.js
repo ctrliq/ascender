@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { withRouter } from 'react-router-dom';
+
 import {
   Button,
   Nav,
@@ -167,4 +167,4 @@ function AppContainer({ navRouteConfig = [], children }) {
 }
 
 export { AppContainer as _AppContainer };
-export default withRouter(AppContainer);
+export default AppContainer;
