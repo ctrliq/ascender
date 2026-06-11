@@ -36,7 +36,7 @@ def private_data_dir():
 @mock.patch('awx.main.tasks.facts.finish_fact_cache')
 @mock.patch('awx.main.tasks.facts.settings')
 @mock.patch('awx.main.tasks.jobs.create_partition', return_value=True)
-def test_pre_post_run_hook_facts(mock_create_partition, mock_facts_settings, finish_fact_cache, private_data_dir, execution_environment):
+def test_pre_post_run_hook_facts(mock_create_partition, mock_facts_settings, finish_fact_cache, private_data_dir, execution_environment, mocker):
     # creates inventory_object with two hosts
     inventory = Inventory(pk=1)
     mock_inventory = mock.MagicMock(spec=Inventory, wraps=inventory)
@@ -65,7 +65,7 @@ def test_pre_post_run_hook_facts(mock_create_partition, mock_facts_settings, fin
     task = jobs.RunJob()
     task.instance = job
     task.update_model = mock.Mock(return_value=job)
-    task.model.objects.get = mock.Mock(return_value=job)
+    mocker.patch.object(task.model.objects, 'get', return_value=job)
 
     # run pre_run_hook
     task.facts_write_time = task.pre_run_hook(job, private_data_dir)
@@ -85,7 +85,7 @@ def test_pre_post_run_hook_facts(mock_create_partition, mock_facts_settings, fin
 @mock.patch('awx.main.tasks.facts.finish_fact_cache')
 @mock.patch('awx.main.tasks.facts.settings')
 @mock.patch('awx.main.tasks.jobs.create_partition', return_value=True)
-def test_pre_post_run_hook_facts_deleted_sliced(mock_create_partition, mock_facts_settings, finish_fact_cache, private_data_dir, execution_environment):
+def test_pre_post_run_hook_facts_deleted_sliced(mock_create_partition, mock_facts_settings, finish_fact_cache, private_data_dir, execution_environment, mocker):
     # creates inventory_object with two hosts
     inventory = Inventory(pk=1)
     mock_inventory = mock.MagicMock(spec=Inventory, wraps=inventory)
@@ -112,7 +112,7 @@ def test_pre_post_run_hook_facts_deleted_sliced(mock_create_partition, mock_fact
     task = jobs.RunJob()
     task.instance = job
     task.update_model = mock.Mock(return_value=job)
-    task.model.objects.get = mock.Mock(return_value=job)
+    mocker.patch.object(task.model.objects, 'get', return_value=job)
 
     # run pre_run_hook
     task.facts_write_time = task.pre_run_hook(job, private_data_dir)
