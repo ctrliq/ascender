@@ -11,7 +11,6 @@ import '@testing-library/jest-dom';
 import { HostsAPI } from 'api';
 import { i18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
-import { en } from 'make-plural/plurals';
 import InventoryHostItem from './InventoryHostItem';
 import { createMemoryHistory } from 'history';
 import english from '../../../locales/en/messages';
@@ -86,7 +85,6 @@ describe('<InventoryHostItem />', () => {
   );
 
   beforeEach(() => {
-    i18n.loadLocaleData({ en: { plurals: en } });
     i18n.load({ en: english });
     i18n.activate('en');
   });

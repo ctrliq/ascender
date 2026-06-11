@@ -1,11 +1,9 @@
 import React from 'react';
 import { i18n } from '@lingui/core';
-import { en } from 'make-plural/plurals';
 import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
 import UserTeamListItem from './UserTeamListItem';
 import english from '../../../locales/en/messages';
 
-i18n.loadLocaleData({ en: { plurals: en } });
 i18n.load({ en: english });
 i18n.activate('en');
 

@@ -2,14 +2,12 @@ import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { I18nProvider } from '@lingui/react';
 
-import { en } from 'make-plural/plurals';
 import { i18n } from '@lingui/core';
 import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
 
 import english from '../../../locales/en/messages';
 import OrganizationListItem from './OrganizationListItem';
 
-i18n.loadLocaleData({ en: { plurals: en } });
 i18n.load({ en: english });
 i18n.activate('en');
 

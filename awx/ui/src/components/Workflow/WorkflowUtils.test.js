@@ -187,12 +187,30 @@ describe('layoutGraph', () => {
     },
   ];
   test('returns the correct dimensions and positions for the nodes', () => {
-    expect(layoutGraph(nodes, links)._nodes).toEqual({
-      1: { height: 40, label: '', width: 72, x: 36, y: 75 },
-      2: { height: 60, label: '', width: 180, x: 282, y: 30 },
-      3: { height: 60, label: '', width: 180, x: 582, y: 75 },
-      4: { height: 60, label: '', width: 180, x: 282, y: 120 },
+    const laidOut = layoutGraph(nodes, links)._nodes;
+    // assert geometry only: @dagrejs/dagre also leaves internal rank/order
+    // metadata on the nodes, and sibling order within a rank (which of
+    // nodes 2/4 sits on top) is an arbitrary layout decision
+    expect(laidOut[1]).toMatchObject({
+      height: 40,
+      label: '',
+      width: 72,
+      x: 36,
+      y: 75,
     });
+    expect(laidOut[3]).toMatchObject({
+      height: 60,
+      label: '',
+      width: 180,
+      x: 582,
+      y: 75,
+    });
+    [laidOut[2], laidOut[4]].forEach((node) => {
+      expect(node).toMatchObject({ height: 60, label: '', width: 180, x: 282 });
+    });
+    expect([laidOut[2].y, laidOut[4].y].sort((a, b) => a - b)).toEqual([
+      30, 120,
+    ]);
   });
 });
 

@@ -16,7 +16,6 @@ import {
 
 describe('validators', () => {
   beforeAll(() => {
-    i18n.loadLocaleData({ en: { plurals: en } });
     i18n.load({ en });
     i18n.activate('en');
   });
