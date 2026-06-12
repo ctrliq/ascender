@@ -27,6 +27,18 @@ const SubmitButtonWrapper = styled.div`
 `;
 SubmitButtonWrapper.displayName = 'SubmitButtonWrapper';
 
+const DateInputGroup = styled(InputGroup)`
+  /* keep the operator select at its natural width so the date input
+     next to it stays visible */
+  & > .pf-c-select {
+    width: auto;
+    flex: 0 0 auto;
+  }
+  & > .pf-c-form-control {
+    flex: 1 1 auto;
+  }
+`;
+
 const NoOptionDropdown = styled.div`
   align-self: stretch;
   border: 1px solid var(--pf-global--BorderColor--300);
@@ -266,7 +278,7 @@ function Search({
               </Select>
             )) ||
             ((qsConfig.dateFields || []).includes(key) && (
-              <InputGroup>
+              <DateInputGroup>
                 <Select
                   variant={SelectVariant.single}
                   className="dateOperatorSelect"
@@ -314,7 +326,7 @@ function Search({
                     <SearchIcon />
                   </Button>
                 </SubmitButtonWrapper>
-              </InputGroup>
+              </DateInputGroup>
             )) || (
               <InputGroup>
                 <TextInput
