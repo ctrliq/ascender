@@ -22,6 +22,19 @@ import english from '../src/locales/en/messages';
 import { SessionProvider } from '../src/contexts/Session';
 import { ConfigProvider } from '../src/contexts/Config';
 
+// Match mountWithContexts' i18n defaults. Lingui v5 needs explicit plural
+// rules (loadLocaleData); Lingui v6 derives them from Intl.PluralRules and
+// removes both the API and the make-plural dependency, so this block is
+// guarded to degrade cleanly once the toolchain upgrade lands.
+try {
+  if (typeof i18n.loadLocaleData === 'function') {
+    // eslint-disable-next-line global-require, import/no-extraneous-dependencies
+    const { en } = require('make-plural/plurals');
+    i18n.loadLocaleData({ en: { plurals: en } });
+  }
+} catch {
+  // make-plural is gone (Lingui v6); Intl.PluralRules covers plurals.
+}
 i18n.load({ en: english.messages });
 i18n.activate('en');
 

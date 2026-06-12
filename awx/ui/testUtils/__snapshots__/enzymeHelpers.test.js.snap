@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`mountWithContexts injected ConfigProvider should mount and render with custom Config value 1`] = `
+<Foo>
+  <div>
+    1.1
+  </div>
+</Foo>
+`;
+
+exports[`mountWithContexts injected ConfigProvider should mount and render with default values 1`] = `
+<Foo>
+  <div />
+</Foo>
+`;
+
+exports[`mountWithContexts injected I18nProvider should mount and render 1`] = `
+<div>
+  <span>
+    Text content
+  </span>
+</div>
+`;
+
+exports[`mountWithContexts injected I18nProvider should mount and render deeply nested consumer 1`] = `
+<Parent>
+  <Child>
+    <div>
+      Text content
+    </div>
+  </Child>
+</Parent>
+`;
+
+exports[`mountWithContexts injected Router should mount and render 1`] = `
+<div>
+  <Link
+    to="/"
+  >
+    <LinkAnchor
+      href="/"
+      navigate={[Function]}
+    >
+      <a
+        href="/"
+        onClick={[Function]}
+      >
+        home
+      </a>
+    </LinkAnchor>
+  </Link>
+</div>
+`;

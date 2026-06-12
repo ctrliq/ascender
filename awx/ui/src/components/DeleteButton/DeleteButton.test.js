@@ -68,11 +68,11 @@ describe('<DeleteButton />', () => {
           {
             label: 'job',
             request: CredentialsAPI.read.mockRejectedValue(
-              new Error({
+              Object.assign(new Error('An error occurred'), {
                 response: {
                   config: {
                     method: 'get',
-                    url: '/api/v2/credentals',
+                    url: '/api/v2/credentials',
                   },
                   data: 'An error occurred',
                   status: 403,

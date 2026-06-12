@@ -9,7 +9,7 @@ describe('<ToolbarSyncSourceButton />', () => {
     const { user } = renderWithContexts(
       <ToolbarSyncSourceButton onClick={onClick} />
     );
-    const button = screen.getByRole('button');
+    const button = screen.getByRole('button', { name: 'Sync all' });
     await user.click(button);
     expect(onClick).toHaveBeenCalled();
   });
