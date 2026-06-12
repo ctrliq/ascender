@@ -99,6 +99,11 @@ function Search({
     onShowAdvancedSearch(actualSearchKey === 'advanced');
     setIsFilterDropdownOpen(false);
     setSearchKey(actualSearchKey);
+    // a value typed for the previous key must not leak into the next one -
+    // a controlled date input renders a stale text value as an empty field
+    // while leaving the submit button enabled, allowing a non-date value
+    // through to the API
+    setSearchValue('');
   };
 
   const handleSearch = (e) => {

@@ -446,6 +446,41 @@ describe('<Search />', () => {
       expect(onSearch).toHaveBeenCalledWith('created__lt', '2026-06-30');
     });
 
+    test('a value typed for a text column does not leak into a date search', () => {
+      const onSearch = jest.fn();
+      search = mountSearch(onSearch);
+      const textInput = 'input[aria-label="Search text input"]';
+      search.find(textInput).instance().value = 'foo';
+      search.find(textInput).simulate('change');
+      act(() => {
+        search.find('Select[aria-label="Simple key select"]').prop('onSelect')(
+          { target: { innerText: 'Created' } }
+        );
+      });
+      search.update();
+      expect(search.find(dateInput).prop('value')).toBe('');
+      expect(
+        search.find('button[aria-label="Search submit button"]').prop(
+          'disabled'
+        )
+      ).toBe(true);
+    });
+
+    test('Enter in the date input submits the search', () => {
+      const onSearch = jest.fn();
+      search = mountSearch(onSearch);
+      act(() => {
+        search.find('Select[aria-label="Simple key select"]').prop('onSelect')(
+          { target: { innerText: 'Created' } }
+        );
+      });
+      search.update();
+      search.find(dateInput).instance().value = '2026-06-15';
+      search.find(dateInput).simulate('change');
+      search.find(dateInput).simulate('keydown', { key: 'Enter' });
+      expect(onSearch).toHaveBeenCalledWith('created__gte', '2026-06-15');
+    });
+
     test('non-date columns keep the plain text input', () => {
       search = mountSearch(jest.fn());
       expect(search.find(dateInput)).toHaveLength(0);
