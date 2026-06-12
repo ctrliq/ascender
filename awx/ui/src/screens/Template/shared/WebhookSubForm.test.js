@@ -164,6 +164,15 @@ describe('<WebhookSubForm />', () => {
     CredentialTypesAPI.read.mockResolvedValue({
       data: { results: [{ id: 9, name: 'GitHub Personal Access Token' }] },
     });
+    CredentialsAPI.read.mockResolvedValue({
+      data: { results: [{ id: 12, name: 'Github credential' }], count: 1 },
+    });
+    CredentialsAPI.readOptions.mockResolvedValue({
+      data: {
+        actions: { GET: {}, POST: {} },
+        related_search_fields: [],
+      },
+    });
     let newWrapper;
     await act(async () => {
       newWrapper = mountWithContexts(
@@ -185,7 +194,7 @@ describe('<WebhookSubForm />', () => {
         }
       );
     });
-    newWrapper.update();
+    await waitForElement(newWrapper, 'ContentLoading', (el) => el.length === 0);
     expect(newWrapper.find('CredentialLookup')).toHaveLength(1);
     expect(
       newWrapper.find('Alert[ouiaId="webhook-credential-type-missing"]')
@@ -215,7 +224,7 @@ describe('<WebhookSubForm />', () => {
         }
       );
     });
-    newWrapper.update();
+    await waitForElement(newWrapper, 'ContentLoading', (el) => el.length === 0);
     expect(newWrapper.find('CredentialLookup')).toHaveLength(0);
     expect(
       newWrapper.find('Alert[ouiaId="webhook-credential-type-missing"]')
