@@ -49,6 +49,12 @@ const Badge = styled(PFBadge)`
   margin-left: 10px;
 `;
 
+const ElapsedBadge = styled(Badge)`
+  margin-right: 20px;
+  min-width: 70px;
+  font-variant-numeric: tabular-nums;
+`;
+
 const ActionButton = styled(Button)`
   border: none;
   margin: 0px 6px;
@@ -126,11 +132,11 @@ function WorkflowOutputToolbar({ job }) {
         )}
         <div>{t`Elapsed`}</div>
         <Tooltip content={t`Elapsed time that the job ran`}>
-          <Badge isRead id="workflow-elapsed-badge">
+          <ElapsedBadge isRead id="workflow-elapsed-badge">
             {job.finished && job.elapsed != null
               ? secondsToHHMMSS(job.elapsed)
               : activeJobElapsedTime}
-          </Badge>
+          </ElapsedBadge>
         </Tooltip>
         <div>{t`Total Nodes`}</div>
         <Badge isRead>{totalNodes}</Badge>

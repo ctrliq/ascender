@@ -35,6 +35,11 @@ const Badge = styled(PFBadge)`
       : null}
 `;
 
+const ElapsedBadge = styled(Badge)`
+  min-width: 70px;
+  font-variant-numeric: tabular-nums;
+`;
+
 const Wrapper = styled.div`
   align-items: center;
   display: flex;
@@ -136,11 +141,11 @@ const OutputToolbar = ({ job, onDelete, isDeleteDisabled, jobStatus }) => {
       <BadgeGroup aria-label={t`Elapsed Time`}>
         <div>{t`Elapsed`}</div>
         <Tooltip content={t`Elapsed time that the job ran`}>
-          <Badge isRead>
+          <ElapsedBadge isRead>
             {job.finished && job.elapsed != null
               ? secondsToHHMMSS(job.elapsed)
               : activeJobElapsedTime}
-          </Badge>
+          </ElapsedBadge>
         </Tooltip>
       </BadgeGroup>
       {['pending', 'waiting', 'running'].includes(jobStatus) &&
