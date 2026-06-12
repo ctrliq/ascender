@@ -481,6 +481,39 @@ describe('<Search />', () => {
       expect(onSearch).toHaveBeenCalledWith('created__gte', '2026-06-15');
     });
 
+    test('operator dropdown does not stay open across column switches', () => {
+      search = mountSearch(jest.fn());
+      act(() => {
+        search.find('Select[aria-label="Simple key select"]').prop('onSelect')(
+          { target: { innerText: 'Created' } }
+        );
+      });
+      search.update();
+      act(() => {
+        search
+          .find('Select[aria-label="Date operator select"]')
+          .prop('onToggle')(true);
+      });
+      search.update();
+      expect(
+        search.find('Select[aria-label="Date operator select"]').prop('isOpen')
+      ).toBe(true);
+      act(() => {
+        search.find('Select[aria-label="Simple key select"]').prop('onSelect')(
+          { target: { innerText: 'Name' } }
+        );
+      });
+      act(() => {
+        search.find('Select[aria-label="Simple key select"]').prop('onSelect')(
+          { target: { innerText: 'Created' } }
+        );
+      });
+      search.update();
+      expect(
+        search.find('Select[aria-label="Date operator select"]').prop('isOpen')
+      ).toBe(false);
+    });
+
     test('non-date columns keep the plain text input', () => {
       search = mountSearch(jest.fn());
       expect(search.find(dateInput)).toHaveLength(0);

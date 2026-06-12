@@ -110,6 +110,7 @@ function Search({
     );
     onShowAdvancedSearch(actualSearchKey === 'advanced');
     setIsFilterDropdownOpen(false);
+    setIsDateOperatorOpen(false);
     setSearchKey(actualSearchKey);
     // a value typed for the previous key must not leak into the next one -
     // a controlled date input renders a stale text value as an empty field
