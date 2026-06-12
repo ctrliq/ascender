@@ -95,4 +95,24 @@ describe('getChipsByKey', () => {
       },
     });
   });
+
+  test('should label date-operator params with the base column name', () => {
+    const columns = [
+      { name: 'Name', key: 'name__icontains', isDefault: true },
+      { name: 'Created', key: 'created' },
+    ];
+    const queryParams = { created__gte: '2026-06-01', created__lt: '2026-06-30' };
+    const config = {
+      namespace: 'item',
+      defaultParams: { page: 1, page_size: 5, order_by: 'name' },
+      integerFields: ['page', 'page_size'],
+      dateFields: ['modified', 'created'],
+    };
+    const chips = getChipsByKey(queryParams, columns, config);
+    expect(chips.created__gte.label).toBe('Created (created__gte)');
+    expect(chips.created__lt.label).toBe('Created (created__lt)');
+    expect(chips.created__gte.chips).toEqual([
+      { key: 'created__gte:2026-06-01', node: '2026-06-01' },
+    ]);
+  });
 });

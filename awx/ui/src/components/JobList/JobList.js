@@ -41,7 +41,8 @@ function JobList({
       not__launch_type: 'sync',
       ...defaultParams,
     },
-    ['id', 'page', 'page_size']
+    ['id', 'page', 'page_size'],
+    ['created', 'modified', 'finished']
   );
 
   const { me } = useConfig();
@@ -247,6 +248,14 @@ function JobList({
             {
               name: t`Limit`,
               key: 'job__limit',
+            },
+            {
+              name: t`Created`,
+              key: 'created',
+            },
+            {
+              name: t`Finished`,
+              key: 'finished',
             },
           ]}
           headerRow={

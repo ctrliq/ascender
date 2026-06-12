@@ -62,7 +62,8 @@ function ActivityStream() {
       page_size: 20,
       order_by: '-timestamp',
     },
-    ['id', 'page', 'page_size']
+    ['id', 'page', 'page_size'],
+    ['timestamp']
   );
 
   const {
@@ -245,6 +246,10 @@ function ActivityStream() {
               {
                 name: t`Initiated by (username)`,
                 key: 'actor__username__icontains',
+              },
+              {
+                name: t`Time`,
+                key: 'timestamp',
               },
             ]}
             toolbarSortColumns={[

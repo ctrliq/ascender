@@ -28,13 +28,22 @@ export default function getChipsByKey(queryParams, columns, qsConfig) {
 
   nonDefaultParams.forEach((key) => {
     const columnKey = key;
-    const label = columns.filter(
-      ({ key: keyToCheck }) => columnKey === keyToCheck
-    ).length
-      ? `${
-          columns.find(({ key: keyToCheck }) => columnKey === keyToCheck).name
-        } (${key})`
-      : columnKey;
+    let label = columnKey;
+    if (columns.some(({ key: keyToCheck }) => columnKey === keyToCheck)) {
+      label = `${
+        columns.find(({ key: keyToCheck }) => columnKey === keyToCheck).name
+      } (${key})`;
+    } else {
+      // date filters are submitted as <column>__gte / <column>__lt etc.;
+      // label them with the base column's name
+      const baseKey = columnKey.replace(/__(gte?|lte?)$/, '');
+      const baseColumn = columns.find(
+        ({ key: keyToCheck }) => baseKey === keyToCheck
+      );
+      if (baseColumn) {
+        label = `${baseColumn.name} (${key})`;
+      }
+    }
 
     queryParamsByKey[columnKey] = { key, label, chips: [] };
 
