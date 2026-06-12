@@ -29,7 +29,10 @@ function JobTemplateAdd() {
 
   let resourceValues = null;
 
-  if (location.search.includes('resource_id' && 'resource_name')) {
+  if (
+    location.search.includes('resource_id') &&
+    location.search.includes('resource_name')
+  ) {
     resourceValues = {
       id: resourceParams.resource_id,
       name: resourceParams.resource_name,

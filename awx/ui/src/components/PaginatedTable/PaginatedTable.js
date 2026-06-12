@@ -40,9 +40,9 @@ function PaginatedTable({
   ouiaId,
 }) {
   const { t } = useLingui();
-  const { search, pathname } = useLocation();
-  const navigate = useNavigate();
   const location = useLocation();
+  const { search, pathname } = location;
+  const navigate = useNavigate();
   if (!pluralizedItemName) {
     pluralizedItemName = t`Items`;
   }
