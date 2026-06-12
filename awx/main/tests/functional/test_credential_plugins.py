@@ -8,9 +8,31 @@ def test_azure_cloud_name_choices():
 
     assert len(azure_kv.CLOUD_NAMES) > 0
     assert azure_kv.DEFAULT_CLOUD_NAME in azure_kv.CLOUD_NAMES
-    cloud_field = [f for f in azure_kv.azure_keyvault_inputs['fields'] if f['id'] == 'cloud_name'][0]
+    cloud_field = next((f for f in azure_kv.azure_keyvault_inputs['fields'] if f['id'] == 'cloud_name'), None)
+    assert cloud_field is not None, 'cloud_name field missing from azure_keyvault_inputs'
     assert cloud_field['choices'] == azure_kv.CLOUD_NAMES
     assert cloud_field['default'] == azure_kv.DEFAULT_CLOUD_NAME
+
+
+@pytest.mark.parametrize(
+    'cloud_name, expected_authority',
+    [
+        (None, 'login.microsoftonline.com'),
+        ('AzureCloud', 'login.microsoftonline.com'),
+        ('AzureUSGovernment', 'login.microsoftonline.us'),
+        ('AzureChinaCloud', 'login.chinacloudapi.cn'),
+        ('AzureGermanCloud', 'login.microsoftonline.de'),
+    ],
+)
+def test_azure_backend_authority(cloud_name, expected_authority):
+    from awx.main.credential_plugins import azure_kv
+
+    kwargs = {'tenant': 't', 'client': 'c', 'secret': 's', 'url': 'https://example.vault.azure.net', 'secret_field': 'foo'}
+    if cloud_name is not None:
+        kwargs['cloud_name'] = cloud_name
+    with mock.patch.object(azure_kv, 'ClientSecretCredential') as csc, mock.patch.object(azure_kv, 'SecretClient'):
+        azure_kv.azure_keyvault_backend(**kwargs)
+    assert csc.call_args.kwargs['authority'] == expected_authority
 
 
 def test_hashivault_approle_auth():

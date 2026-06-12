@@ -1,5 +1,5 @@
 from azure.keyvault.secrets import SecretClient
-from azure.identity import ClientSecretCredential
+from azure.identity import AzureAuthorityHosts, ClientSecretCredential
 
 from .plugin import CredentialPlugin
 
@@ -7,15 +7,19 @@ from django.utils.translation import gettext_lazy as _
 
 # Cloud environment names as previously provided by msrestazure.azure_cloud
 # (https://github.com/Azure/msrestazure-for-python/blob/master/msrestazure/azure_cloud.py).
-# msrestazure is EOL (and pulled in the abandoned adal package); the backend
-# only ever used these names to populate the cloud_name choices.
+# msrestazure is EOL (and pulled in the abandoned adal package); the AAD
+# authority hosts now come from azure.identity. Microsoft Cloud Germany closed
+# in 2021 - its literal host is kept (instead of the deprecated
+# AzureAuthorityHosts.AZURE_GERMANY constant, which warns on access) so
+# existing credentials keep validating.
 DEFAULT_CLOUD_NAME = 'AzureCloud'
-CLOUD_NAMES = [
-    'AzureChinaCloud',
-    'AzureGermanCloud',
-    DEFAULT_CLOUD_NAME,
-    'AzureUSGovernment',
-]
+AUTHORITY_HOSTS = {
+    'AzureChinaCloud': AzureAuthorityHosts.AZURE_CHINA,
+    'AzureGermanCloud': 'login.microsoftonline.de',
+    DEFAULT_CLOUD_NAME: AzureAuthorityHosts.AZURE_PUBLIC_CLOUD,
+    'AzureUSGovernment': AzureAuthorityHosts.AZURE_GOVERNMENT,
+}
+CLOUD_NAMES = sorted(AUTHORITY_HOSTS)
 
 
 azure_keyvault_inputs = {
@@ -61,7 +65,12 @@ azure_keyvault_inputs = {
 
 
 def azure_keyvault_backend(**kwargs):
-    csc = ClientSecretCredential(tenant_id=kwargs['tenant'], client_id=kwargs['client'], client_secret=kwargs['secret'])
+    csc = ClientSecretCredential(
+        tenant_id=kwargs['tenant'],
+        client_id=kwargs['client'],
+        client_secret=kwargs['secret'],
+        authority=AUTHORITY_HOSTS.get(kwargs.get('cloud_name', DEFAULT_CLOUD_NAME), AzureAuthorityHosts.AZURE_PUBLIC_CLOUD),
+    )
     kv = SecretClient(credential=csc, vault_url=kwargs['url'])
     return kv.get_secret(name=kwargs['secret_field'], version=kwargs.get('secret_version', '')).value
 
