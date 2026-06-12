@@ -1,11 +1,12 @@
 import React from 'react';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { screen } from '@testing-library/react';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import ContentEmpty from './ContentEmpty';
 
 describe('ContentEmpty', () => {
   test('renders the expected content', () => {
-    const wrapper = mountWithContexts(<ContentEmpty />);
-    expect(wrapper).toHaveLength(1);
+    renderWithContexts(<ContentEmpty />);
+    expect(screen.getByText('No items found.')).toBeInTheDocument();
   });
 });
