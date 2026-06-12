@@ -56,8 +56,6 @@ function WebhookSubForm({ templateType }) {
         results = await CredentialTypesAPI.read({
           namespace: `${webhookServiceField.value}_token`,
         });
-        // TODO: Consider how to handle the situation where the results returns
-        // and empty array, or any of the other values is undefined or null (data, results, id)
       }
       return results?.data?.results[0]?.id;
     }, [webhookServiceField.value])
