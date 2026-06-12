@@ -127,7 +127,7 @@ function WorkflowOutputToolbar({ job }) {
         <div>{t`Elapsed`}</div>
         <Tooltip content={t`Elapsed time that the job ran`}>
           <Badge isRead id="workflow-elapsed-badge">
-            {job.finished
+            {job.finished && job.elapsed != null
               ? secondsToHHMMSS(job.elapsed)
               : activeJobElapsedTime}
           </Badge>

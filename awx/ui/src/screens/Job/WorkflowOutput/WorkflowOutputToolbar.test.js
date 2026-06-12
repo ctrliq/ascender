@@ -58,14 +58,19 @@ describe('WorkflowOutputToolbar', () => {
   test('should render correct toolbar item', () => {
     shouldFind(`Button[ouiaId="edit-workflow"]`);
     shouldFind('Button#workflow-output-toggle-legend');
-    expect(wrapper.find('Badge')).toHaveLength(2);
+    shouldFind('Badge#workflow-elapsed-badge');
     shouldFind('Button#workflow-output-toggle-tools');
     shouldFind('JobCancelButton');
   });
 
   test('Shows correct number of nodes', () => {
     // The start node (id=1) and deleted nodes (isDeleted=true) should be ignored
-    expect(wrapper.find('Badge').last().text()).toBe('1');
+    expect(
+      wrapper
+        .find('Badge')
+        .filterWhere((b) => b.prop('id') !== 'workflow-elapsed-badge')
+        .text()
+    ).toBe('1');
   });
 
   test('Toggle Legend button dispatches as expected', () => {
@@ -146,6 +151,18 @@ describe('WorkflowOutputToolbar', () => {
       expect(
         runningWrapper.find('Badge#workflow-elapsed-badge').text()
       ).toBe('00:00:07');
+    });
+
+    test('should keep the live value while finished is set but elapsed has not arrived yet', () => {
+      const wsWindowWrapper = mountToolbar({
+        status: 'successful',
+        started: '2021-09-01T12:30:40.000Z',
+        finished: '2021-09-01T12:30:45.000Z',
+        elapsed: undefined,
+      });
+      expect(
+        wsWindowWrapper.find('Badge#workflow-elapsed-badge').text()
+      ).toBe('00:00:05');
     });
 
     test('should show final elapsed time once finished', () => {

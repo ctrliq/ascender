@@ -137,7 +137,7 @@ const OutputToolbar = ({ job, onDelete, isDeleteDisabled, jobStatus }) => {
         <div>{t`Elapsed`}</div>
         <Tooltip content={t`Elapsed time that the job ran`}>
           <Badge isRead>
-            {job.finished
+            {job.finished && job.elapsed != null
               ? secondsToHHMMSS(job.elapsed)
               : activeJobElapsedTime}
           </Badge>
