@@ -60,6 +60,11 @@ const buildAnchor = (obj, resource, activity) => {
           url = `/projects/${activity.summary_fields.project[0].id}/schedules/${obj.id}/`;
         } else if (activity.summary_fields.system_job_template) {
           url = null;
+        } else if (activity.summary_fields.inventory_source) {
+          const invSource = activity.summary_fields.inventory_source[0];
+          url = invSource.inventory_id
+            ? `/inventories/inventory/${invSource.inventory_id}/sources/${invSource.id}/schedules/${obj.id}/`
+            : null;
         } else {
           // urls for inventory sync schedules currently depend on having
           // an inventory id and group id
