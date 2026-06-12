@@ -93,7 +93,7 @@ setup(
         'setuptools',
     ],
     python_requires=">=3.11",
-    extras_require={'formatting': ['jq'], 'websockets': ['websocket-client==0.57.0'], 'crypto': ['cryptography']},
+    extras_require={'formatting': ['jq'], 'websockets': ['websocket-client>=1.0.0'], 'crypto': ['cryptography']},
     license='Apache 2.0',
     classifiers=[
         'Development Status :: 5 - Production/Stable',

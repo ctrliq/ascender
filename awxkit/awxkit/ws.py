@@ -105,7 +105,7 @@ class WSClient(object):
         self._add_received_time = add_received_time
 
     def connect(self):
-        wst = threading.Thread(target=self._ws_run_forever, args=(self.ws, {"cert_reqs": ssl.CERT_NONE}))
+        wst = threading.Thread(target=self._ws_run_forever, args=({"cert_reqs": ssl.CERT_NONE},))
         wst.daemon = True
         wst.start()
         atexit.register(self.close)
@@ -205,7 +205,7 @@ class WSClient(object):
         else:
             self._send(json.dumps(dict(groups={}, xrftoken=self.csrftoken)))
 
-    def _on_message(self, message):
+    def _on_message(self, ws, message):
         message = json.loads(message)
         log.debug('received message: {}'.format(message))
         if self._add_received_time:
@@ -230,17 +230,17 @@ class WSClient(object):
         self.subscribe(**subscription)
         self._should_subscribe_to_pending_job = False
 
-    def _on_open(self):
+    def _on_open(self, ws):
         self._ws_connected_flag.set()
 
-    def _on_error(self, error):
+    def _on_error(self, ws, error):
         log.info('Error received: {}'.format(error))
 
-    def _on_close(self):
+    def _on_close(self, ws, close_status_code, close_msg):
         log.info('Successfully closed ws.')
         self._ws_closed = True
 
-    def _ws_run_forever(self, sockopt=None, sslopt=None):
+    def _ws_run_forever(self, sslopt=None):
         self.ws.run_forever(sslopt=sslopt)
         log.debug('ws.run_forever finished')
 
