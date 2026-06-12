@@ -2,15 +2,20 @@ import React, { useCallback, useContext, useEffect, useMemo } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 
 import { useLingui } from '@lingui/react/macro';
-import { ConfigAPI, MeAPI, RootAPI, UsersAPI, OrganizationsAPI } from 'api';
+import {
+  ConfigAPI,
+  MeAPI,
+  RootAPI,
+  SettingsAPI,
+  UsersAPI,
+  OrganizationsAPI,
+} from 'api';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import AlertModal from 'components/AlertModal';
 import ErrorDetail from 'components/ErrorDetail';
 import { dynamicActivate, locales } from 'i18nLoader';
 import { useSession } from './Session';
-import { SettingsAPI } from '../api';
 
-// eslint-disable-next-line import/prefer-default-export
 export const ConfigContext = React.createContext({});
 ConfigContext.displayName = 'ConfigContext';
 

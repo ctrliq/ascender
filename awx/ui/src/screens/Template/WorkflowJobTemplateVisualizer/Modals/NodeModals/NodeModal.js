@@ -319,7 +319,6 @@ const NodeModalInner = ({ title, ...rest }) => {
         labels: defaultLabels,
       };
 
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [values.nodeResource, values.nodeType]),
     {}
   );

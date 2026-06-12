@@ -1,6 +1,6 @@
-/* eslint-disable import/prefer-default-export */
+
 import * as d3 from 'd3';
-import * as dagre from 'dagre';
+import * as dagre from '@dagrejs/dagre';
 
 const normalizeY = (nodePositions, y) => y - nodePositions[1].y;
 

@@ -81,7 +81,7 @@ function InventoryList() {
       const { data } = await InventoriesAPI.read(params);
       return data.results;
     },
-    [location.search] // eslint-disable-line react-hooks/exhaustive-deps
+    [location.search]
   );
 
   const inventories = useWsInventories(

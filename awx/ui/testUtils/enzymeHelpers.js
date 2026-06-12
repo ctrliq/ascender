@@ -8,12 +8,10 @@ import { mount, shallow } from 'enzyme';
 import { MemoryRouter, Router } from 'react-router-dom';
 import { I18nProvider } from '@lingui/react';
 import { i18n } from '@lingui/core';
-import { en } from 'make-plural/plurals';
 import english from '../src/locales/en/messages';
 import { SessionProvider } from '../src/contexts/Session';
 import { ConfigProvider } from '../src/contexts/Config';
 
-i18n.loadLocaleData({ en: { plurals: en } });
 i18n.load({ en: english.messages });
 i18n.activate('en');
 
@@ -68,7 +66,7 @@ function wrapContexts(node, context) {
   const { config, router, session } = context;
   class Wrap extends React.Component {
     render() {
-      // eslint-disable-next-line react/no-this-in-sfc
+
       const { children, ...props } = this.props;
       const component = React.cloneElement(children, props);
       if (router.history) {

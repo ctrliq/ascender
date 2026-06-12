@@ -1,4 +1,4 @@
-/* eslint-disable react/jsx-no-useless-fragment */
+
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';
@@ -481,7 +481,7 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
       document.removeEventListener('selectionchange', handleSelectionChange);
       if (rafId) cancelAnimationFrame(rafId);
     };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   const overscanIndicesGetter = useCallback(
     (params) => computeOverscanIndices(params, selectedRowRange),

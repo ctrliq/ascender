@@ -9,7 +9,6 @@ import { InstanceGroupsAPI, InstancesAPI, SettingsAPI } from 'api';
 
 import { I18nProvider } from '@lingui/react';
 import { i18n } from '@lingui/core';
-import { en } from 'make-plural/plurals';
 import english from '../../../../src/locales/en/messages';
 import InstanceList from './InstanceList';
 
@@ -121,7 +120,6 @@ describe('<InstanceList />, React testing library tests', () => {
     initialEntries: ['/instances'],
   });
 
-  i18n.loadLocaleData({ en: { plurals: en } });
   i18n.load({ en: english });
   i18n.activate('en');
 

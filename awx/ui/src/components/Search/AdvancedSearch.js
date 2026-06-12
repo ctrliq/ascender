@@ -112,7 +112,7 @@ function AdvancedSearch({
     if (lookupSelection === 'search') {
       setPrefixSelection(null);
     }
-  }, [lookupSelection]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [lookupSelection]);
 
   const handleAdvancedSearch = (e) => {
     // keeps page from fully reloading

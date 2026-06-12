@@ -1,5 +1,4 @@
 import { i18n } from '@lingui/core';
-import { en, fr, es, ko, nl, ja, zh, zu } from 'make-plural/plurals';
 
 export const locales = {
   en: 'English',
@@ -11,17 +10,6 @@ export const locales = {
   zh: 'Chinese',
   nl: 'Dutch',
 };
-
-i18n.loadLocaleData({
-  en: { en },
-  fr: { fr },
-  es: { es },
-  ko: { ko },
-  nl: { nl },
-  ja: { ja },
-  zh: { zh },
-  zu: { zu },
-});
 
 /**
  * We do a dynamic import of just the catalog that we need
