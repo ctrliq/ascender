@@ -13,9 +13,8 @@ describe('ContentLoading', () => {
   });
 
   test('renders skeleton placeholder lines', () => {
-    const { container } = renderWithContexts(<ContentLoading />);
-    expect(
-      container.querySelectorAll('.pf-c-skeleton').length
-    ).toBeGreaterThan(0);
+    renderWithContexts(<ContentLoading />);
+    const indicator = screen.getByRole('progressbar', { name: 'Loading' });
+    expect(indicator.children).toHaveLength(4);
   });
 });

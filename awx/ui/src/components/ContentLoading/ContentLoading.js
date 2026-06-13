@@ -21,8 +21,8 @@ const ContentLoading = ({ className }) => {
   const { t } = useLingui();
   return (
     <EmptyState variant="full" className={className}>
-      {/* role/aria match the indeterminate spinner this replaces, so screen
-          readers (and tests) still see a loading indicator */}
+      {/* indeterminate progressbar: the same accessible contract as the
+          spinner this replaces */}
       <SkeletonStack role="progressbar" aria-label={t`Loading`}>
         <Skeleton width="80%" fontSize="md" />
         <Skeleton width="100%" fontSize="md" />
