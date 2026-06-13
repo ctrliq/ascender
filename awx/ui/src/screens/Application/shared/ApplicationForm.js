@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { useRouteMatch } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import { useLingui } from '@lingui/react/macro';
 import { Formik, useField, useFormikContext } from 'formik';
@@ -22,7 +22,7 @@ function ApplicationFormFields({
 }) {
   const { t } = useLingui();
   const applicationHelpTextStrings = getApplicationHelpTextStrings(t);
-  const match = useRouteMatch();
+  const { pathname } = useLocation();
   const { setFieldValue, setFieldTouched } = useFormikContext();
   const [organizationField, organizationMeta, organizationHelpers] =
     useField('organization');
@@ -95,7 +95,7 @@ function ApplicationFormFields({
           isValid={
             !authorizationTypeMeta.touched || !authorizationTypeMeta.error
           }
-          isDisabled={match.url.endsWith('edit')}
+          isDisabled={pathname.endsWith('edit')}
           id="authType"
           data={[{ label: '', key: 1, value: '' }, ...authorizationOptions]}
           onChange={(event, value) => {

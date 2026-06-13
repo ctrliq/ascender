@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { useLocation, useRouteMatch } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Card, PageSection } from '@patternfly/react-core';
 import { getQSConfig, parseQueryString } from 'util/qs';
 import useRequest, { useDeleteItems } from 'hooks/useRequest';
@@ -26,7 +26,8 @@ const QS_CONFIG = getQSConfig('applications', {
 function ApplicationsList() {
   const { t } = useLingui();
   const location = useLocation();
-  const match = useRouteMatch();
+  // this list always renders at /applications (see Applications.js routes)
+  const listUrl = '/applications';
 
   const {
     isLoading,
@@ -134,7 +135,7 @@ function ApplicationsList() {
                     ? [
                         <ToolbarAddButton
                           key="add"
-                          linkTo={`${match.url}/add`}
+                          linkTo={`${listUrl}/add`}
                         />,
                       ]
                     : []),
@@ -162,7 +163,7 @@ function ApplicationsList() {
                 key={application.id}
                 value={application.name}
                 application={application}
-                detailUrl={`${match.url}/${application.id}/details`}
+                detailUrl={`${listUrl}/${application.id}/details`}
                 onSelect={() => handleSelect(application)}
                 isSelected={selected.some((row) => row.id === application.id)}
                 rowIndex={index}
@@ -170,7 +171,7 @@ function ApplicationsList() {
             )}
             emptyStateControls={
               canAdd && (
-                <ToolbarAddButton key="add" linkTo={`${match.url}/add`} />
+                <ToolbarAddButton key="add" linkTo={`${listUrl}/add`} />
               )
             }
           />
