@@ -1,88 +1,83 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { OrganizationsAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import UserAdd from './UserAdd';
 
 jest.mock('../../../api');
-let wrapper;
 
 describe('<UserAdd />', () => {
-  test('handleSubmit should post to api', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(<UserAdd />);
-    });
-    OrganizationsAPI.createUser.mockResolvedValueOnce({ data: {} });
-    const updatedUserData = {
-      username: 'sysadmin',
-      email: 'sysadmin@ansible.com',
-      first_name: 'System',
-      last_name: 'Administrator',
-      password: 'password',
-      organization: {
-        id: 1,
-        name: 'Default',
+  beforeEach(() => {
+    // the OrganizationLookup auto-populates from the only available org
+    OrganizationsAPI.read.mockResolvedValue({
+      data: {
+        count: 1,
+        results: [{ id: 1, name: 'Default' }],
       },
-      is_superuser: true,
-      is_system_auditor: false,
-    };
-    await act(async () => {
-      wrapper.find('UserForm').prop('handleSubmit')(updatedUserData);
     });
+  });
 
-    const { organization, ...userData } = updatedUserData;
-    expect(OrganizationsAPI.createUser.mock.calls).toEqual([
-      [organization.id, userData],
-    ]);
+  async function fillRequiredFields(user) {
+    await user.type(
+      screen.getByRole('textbox', { name: 'Username' }),
+      'sysadmin'
+    );
+    // required-field labels render as "Password *", so anchor instead of exact
+    await user.type(screen.getByLabelText(/^Password/), 'password');
+    await user.type(screen.getByLabelText(/^Confirm Password/), 'password');
+  }
+
+  test('handleSubmit should post to api', async () => {
+    OrganizationsAPI.createUser.mockResolvedValueOnce({ data: {} });
+    const { user } = renderWithContexts(<UserAdd />);
+    await screen.findByRole('textbox', { name: 'Username' });
+
+    await fillRequiredFields(user);
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+
+    await waitFor(() =>
+      expect(OrganizationsAPI.createUser).toHaveBeenCalledWith(1, {
+        first_name: '',
+        last_name: '',
+        email: '',
+        username: 'sysadmin',
+        password: 'password',
+        user_type: 'normal',
+        preferred_language: '',
+        is_superuser: false,
+        is_system_auditor: false,
+      })
+    );
   });
 
   test('should navigate to users list when cancel is clicked', async () => {
     const history = createMemoryHistory({});
-    await act(async () => {
-      wrapper = mountWithContexts(<UserAdd />, {
-        context: { router: { history } },
-      });
+    const { user } = renderWithContexts(<UserAdd />, {
+      context: { router: { history } },
     });
-    await act(async () => {
-      wrapper.find('button[aria-label="Cancel"]').prop('onClick')();
-    });
+    await screen.findByRole('button', { name: 'Cancel' });
+
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
+
     expect(history.location.pathname).toEqual('/users');
   });
 
   test('successful form submission should trigger redirect', async () => {
     const history = createMemoryHistory({});
-    const userData = {
-      username: 'sysadmin',
-      email: 'sysadmin@ansible.com',
-      first_name: 'System',
-      last_name: 'Administrator',
-      password: 'password',
-      organization: {
-        id: 1,
-        name: 'Default',
-      },
-      is_superuser: true,
-      is_system_auditor: false,
-    };
     OrganizationsAPI.createUser.mockResolvedValueOnce({
-      data: {
-        id: 5,
-        ...userData,
-      },
+      data: { id: 5 },
     });
-    await act(async () => {
-      wrapper = mountWithContexts(<UserAdd />, {
-        context: { router: { history } },
-      });
+    const { user } = renderWithContexts(<UserAdd />, {
+      context: { router: { history } },
     });
-    await waitForElement(wrapper, 'button[aria-label="Save"]');
-    await act(async () => {
-      wrapper.find('UserForm').prop('handleSubmit')(userData);
-    });
-    expect(history.location.pathname).toEqual('/users/5/details');
+    await screen.findByRole('button', { name: 'Save' });
+
+    await fillRequiredFields(user);
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual('/users/5/details')
+    );
   });
 });

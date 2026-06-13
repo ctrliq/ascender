@@ -1,7 +1,10 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { TokensAPI } from 'api';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import {
+  renderWithContexts,
+  assertDetail,
+} from '../../../../testUtils/rtlContexts';
 import UserTokenDetail from './UserTokenDetail';
 
 jest.mock('../../../api/models/Tokens');
@@ -13,13 +16,12 @@ jest.mock('react-router-dom', () => ({
     tokenId: 2,
   }),
 }));
+
 describe('<UserTokenDetail/>', () => {
-  let wrapper;
   const token = {
     id: 2,
     type: 'o_auth2_access_token',
     url: '/api/v2/tokens/2/',
-
     summary_fields: {
       user: {
         id: 1,
@@ -37,41 +39,32 @@ describe('<UserTokenDetail/>', () => {
     description: 'cdfsg',
     scope: 'read',
   };
-  test('should render properly', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(<UserTokenDetail token={token} />);
-    });
 
-    expect(wrapper.find('UserTokenDetail').length).toBe(1);
+  test('should render properly', () => {
+    renderWithContexts(<UserTokenDetail token={token} />);
 
-    expect(wrapper.find('Detail[label="Application"]').prop('value')).toBe(
-      'hg'
-    );
-    expect(wrapper.find('Detail[label="Description"]').prop('value')).toBe(
-      'cdfsg'
-    );
-    expect(wrapper.find('Detail[label="Scope"]').prop('value')).toBe('Read');
-    expect(wrapper.find('UserDateDetail[label="Created"]').prop('date')).toBe(
-      '2020-06-23T19:56:38.422053Z'
-    );
-    expect(
-      wrapper.find('UserDateDetail[label="Last Modified"]').prop('date')
-    ).toBe('2020-06-23T19:56:38.441353Z');
-    expect(wrapper.find('Button[aria-label="Delete"]').length).toBe(1);
+    assertDetail('Application', 'hg');
+    assertDetail('Description', 'cdfsg');
+    assertDetail('Scope', 'Read');
+    assertDetail('Created', '6/23/2020, 7:56:38 PM');
+    assertDetail('Last Modified', '6/23/2020, 7:56:38 PM');
+    expect(screen.getByRole('button', { name: 'Delete' })).toBeInTheDocument();
   });
+
   test('should delete token properly', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(<UserTokenDetail token={token} />);
-    });
-    await act(async () =>
-      wrapper.find('Button[aria-label="Delete"]').prop('onClick')()
+    TokensAPI.destroy.mockResolvedValueOnce({});
+    const { user } = renderWithContexts(<UserTokenDetail token={token} />);
+
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'Confirm Delete' })
     );
-    wrapper.update();
-    await act(async () => wrapper.find('DeleteButton').prop('onConfirm')());
-    expect(TokensAPI.destroy).toHaveBeenCalledWith(2);
+
+    await waitFor(() => expect(TokensAPI.destroy).toHaveBeenCalledWith(2));
   });
+
   test('should display error on failed deletion', async () => {
-    TokensAPI.destroy.mockRejectedValue(
+    TokensAPI.destroy.mockRejectedValueOnce(
       new Error({
         response: {
           config: {
@@ -83,16 +76,19 @@ describe('<UserTokenDetail/>', () => {
         },
       })
     );
-    await act(async () => {
-      wrapper = mountWithContexts(<UserTokenDetail token={token} />);
-    });
-    await act(async () =>
-      wrapper.find('Button[aria-label="Delete"]').prop('onClick')()
+    const { user } = renderWithContexts(<UserTokenDetail token={token} />);
+
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'Confirm Delete' })
     );
-    wrapper.update();
-    await act(async () => wrapper.find('DeleteButton').prop('onConfirm')());
-    expect(TokensAPI.destroy).toHaveBeenCalledWith(2);
-    wrapper.update();
-    expect(wrapper.find('ErrorDetail').length).toBe(1);
+
+    await waitFor(() => expect(TokensAPI.destroy).toHaveBeenCalledWith(2));
+    expect(await screen.findByText('Error!')).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Close' }));
+    await waitFor(() =>
+      expect(screen.queryByText('Error!')).not.toBeInTheDocument()
+    );
   });
 });

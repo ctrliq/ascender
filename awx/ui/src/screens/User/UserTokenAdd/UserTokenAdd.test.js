@@ -1,79 +1,82 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import { UsersAPI, TokensAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+import { UsersAPI, TokensAPI, ApplicationsAPI } from 'api';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import UserTokenAdd from './UserTokenAdd';
 
 jest.mock('../../../api');
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  history: () => ({
-    location: '/user',
-  }),
   useParams: () => ({ id: 1 }),
 }));
-let wrapper;
-
-const onSuccessfulAdd = jest.fn();
 
 describe('<UserTokenAdd />', () => {
+  let onSuccessfulAdd;
+
+  beforeEach(() => {
+    onSuccessfulAdd = jest.fn();
+    ApplicationsAPI.read.mockResolvedValue({
+      data: {
+        count: 1,
+        results: [
+          {
+            id: 1,
+            name: 'app',
+            description: '',
+            url: '/api/v2/applications/1/',
+          },
+        ],
+      },
+    });
+  });
+
   afterEach(() => {
     jest.clearAllMocks();
   });
 
+  async function selectApplication(user) {
+    await user.click(await screen.findByRole('button', { name: 'Search' }));
+    await user.click(await screen.findByText('app'));
+    await user.click(screen.getByRole('button', { name: 'Select' }));
+  }
+
   test('handleSubmit should post to api', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <UserTokenAdd onSuccessfulAdd={onSuccessfulAdd} />
-      );
-    });
     UsersAPI.createToken.mockResolvedValueOnce({ data: { id: 1 } });
-    const tokenData = {
-      application: {
-        id: 1,
-      },
-      description: 'foo',
-      scope: 'read',
-    };
-    await act(async () => {
-      wrapper.find('UserTokenForm').prop('handleSubmit')(tokenData);
-    });
-    expect(UsersAPI.createToken).toHaveBeenCalledWith(1, {
-      application: 1,
-      description: 'foo',
-      scope: 'read',
-    });
+    const { user } = renderWithContexts(
+      <UserTokenAdd onSuccessfulAdd={onSuccessfulAdd} />
+    );
+
+    await selectApplication(user);
+    await user.type(screen.getByLabelText('Description'), 'foo');
+    await user.selectOptions(screen.getByLabelText('Select Input'), 'read');
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+
+    await waitFor(() =>
+      expect(UsersAPI.createToken).toHaveBeenCalledWith(1, {
+        application: 1,
+        description: 'foo',
+        scope: 'read',
+      })
+    );
   });
 
   test('should navigate to tokens list when cancel is clicked', async () => {
     const history = createMemoryHistory({});
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <UserTokenAdd onSuccessfulAdd={onSuccessfulAdd} />,
-        {
-          context: { router: { history } },
-        }
-      );
-    });
-    await act(async () => {
-      wrapper.find('button[aria-label="Cancel"]').prop('onClick')();
-    });
+    const { user } = renderWithContexts(
+      <UserTokenAdd onSuccessfulAdd={onSuccessfulAdd} />,
+      {
+        context: { router: { history } },
+      }
+    );
+
+    await user.click(await screen.findByRole('button', { name: 'Cancel' }));
+
     expect(history.location.pathname).toEqual('/users/1/tokens');
   });
 
   test('successful form submission with application', async () => {
     const history = createMemoryHistory({});
-    const tokenData = {
-      application: {
-        id: 1,
-      },
-      description: 'foo',
-      scope: 'read',
-    };
     const rtnData = {
       id: 2,
       token: 'abc',
@@ -83,27 +86,25 @@ describe('<UserTokenAdd />', () => {
     UsersAPI.createToken.mockResolvedValueOnce({
       data: rtnData,
     });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <UserTokenAdd onSuccessfulAdd={onSuccessfulAdd} />,
-        {
-          context: { router: { history } },
-        }
-      );
-    });
-    await waitForElement(wrapper, 'button[aria-label="Save"]');
-    await act(async () => {
-      wrapper.find('UserTokenForm').prop('handleSubmit')(tokenData);
-    });
-    expect(history.location.pathname).toEqual('/users/1/tokens/2/details');
+    const { user } = renderWithContexts(
+      <UserTokenAdd onSuccessfulAdd={onSuccessfulAdd} />,
+      {
+        context: { router: { history } },
+      }
+    );
+
+    await selectApplication(user);
+    await user.selectOptions(screen.getByLabelText('Select Input'), 'read');
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual('/users/1/tokens/2/details')
+    );
     expect(onSuccessfulAdd).toHaveBeenCalledWith(rtnData);
   });
 
   test('successful form submission without application', async () => {
     const history = createMemoryHistory({});
-    const tokenData = {
-      scope: 'read',
-    };
     const rtnData = {
       id: 2,
       token: 'abc',
@@ -113,19 +114,22 @@ describe('<UserTokenAdd />', () => {
     TokensAPI.create.mockResolvedValueOnce({
       data: rtnData,
     });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <UserTokenAdd onSuccessfulAdd={onSuccessfulAdd} />,
-        {
-          context: { router: { history } },
-        }
-      );
-    });
-    await waitForElement(wrapper, 'button[aria-label="Save"]');
-    await act(async () => {
-      wrapper.find('UserTokenForm').prop('handleSubmit')(tokenData);
-    });
-    expect(history.location.pathname).toEqual('/users/1/tokens/2/details');
+    const { user } = renderWithContexts(
+      <UserTokenAdd onSuccessfulAdd={onSuccessfulAdd} />,
+      {
+        context: { router: { history } },
+      }
+    );
+
+    await user.selectOptions(
+      await screen.findByLabelText('Select Input'),
+      'read'
+    );
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual('/users/1/tokens/2/details')
+    );
     expect(onSuccessfulAdd).toHaveBeenCalledWith(rtnData);
   });
 });

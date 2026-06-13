@@ -1,11 +1,20 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { screen } from '@testing-library/react';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import UserOrganizations from './UserOrganizations';
 
+jest.mock('./UserOrganizationList', () => {
+  const React = require('react');
+  return {
+    __esModule: true,
+    default: () => React.createElement('div', null, 'UserOrganizationList'),
+  };
+});
+
 describe('<UserOrganizations />', () => {
   test('should render UserOrganizationList', () => {
-    const wrapper = shallow(<UserOrganizations />);
-    expect(wrapper.find('UserOrganizationList')).toHaveLength(1);
+    renderWithContexts(<UserOrganizations />);
+    expect(screen.getByText('UserOrganizationList')).toBeInTheDocument();
   });
 });

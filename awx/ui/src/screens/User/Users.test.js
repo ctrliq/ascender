@@ -1,5 +1,5 @@
 import React from 'react';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import Users from './Users';
 
 jest.mock('react-router-dom', () => ({
@@ -9,13 +9,28 @@ jest.mock('react-router-dom', () => ({
   }),
 }));
 
-describe('<Users />', () => {
-  test('should set breadcrumbs', () => {
-    const wrapper = mountWithContexts(<Users />);
+// resetMocks: true strips jest.fn implementations between tests, so capture
+// the props with a plain function instead of asserting on mock.calls.
+let mockScreenHeaderProps;
+jest.mock('components/ScreenHeader/ScreenHeader', () => ({
+  __esModule: true,
+  default: (props) => {
+    mockScreenHeaderProps = props;
+    return null;
+  },
+}));
 
-    const header = wrapper.find('ScreenHeader');
-    expect(header.prop('streamType')).toBe('user');
-    expect(header.prop('breadcrumbConfig')).toEqual({
+describe('<Users />', () => {
+  beforeEach(() => {
+    mockScreenHeaderProps = undefined;
+  });
+
+  test('should set breadcrumbs', () => {
+    renderWithContexts(<Users />);
+
+    const props = mockScreenHeaderProps;
+    expect(props.streamType).toBe('user');
+    expect(props.breadcrumbConfig).toEqual({
       '/users': 'Users',
       '/users/add': 'Create New User',
     });

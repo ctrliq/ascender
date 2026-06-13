@@ -1,6 +1,6 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { screen } from '@testing-library/react';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import UserTokenListItem from './UserTokenListItem';
 
 const token = {
@@ -36,75 +36,74 @@ const token = {
 };
 
 describe('<UserTokenListItem />', () => {
-  let wrapper;
-  test('should mount properly', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <table>
-          <tbody>
-            <UserTokenListItem token={token} />
-          </tbody>
-        </table>
-      );
-    });
-    expect(wrapper.find('UserTokenListItem').length).toBe(1);
+  test('should mount properly', () => {
+    renderWithContexts(
+      <table>
+        <tbody>
+          <UserTokenListItem token={token} rowIndex={0} />
+        </tbody>
+      </table>
+    );
+    expect(screen.getByRole('row')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Foobar app' })).toBeInTheDocument();
   });
 
-  test('should render application access token row properly', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <table>
-          <tbody>
-            <UserTokenListItem isSelected={false} token={token} />
-          </tbody>
-        </table>
-      );
-    });
-    expect(wrapper.find('Td').first().prop('select').isSelected).toBe(false);
-    expect(wrapper.find('Td').at(1).text()).toBe('Foobar app');
-    expect(wrapper.find('Td').at(2).text()).toBe('Foobar-token');
-    expect(wrapper.find('Td').at(3).text()).toContain('Read');
-    expect(wrapper.find('Td').at(4).text()).toContain('10/25/3019, 3:06:43 PM');
+  test('should render application access token row properly', () => {
+    renderWithContexts(
+      <table>
+        <tbody>
+          <UserTokenListItem isSelected={false} token={token} rowIndex={0} />
+        </tbody>
+      </table>
+    );
+    expect(
+      screen.getByRole('checkbox', { name: 'Select row 0' })
+    ).not.toBeChecked();
+    expect(screen.getByRole('link', { name: 'Foobar app' })).toBeInTheDocument();
+    expect(screen.getByText('Foobar-token')).toBeInTheDocument();
+    expect(screen.getByText('Read')).toBeInTheDocument();
+    expect(screen.getByText('10/25/3019, 3:06:43 PM')).toBeInTheDocument();
   });
 
-  test('should render personal access token row properly', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <table>
-          <tbody>
-            <UserTokenListItem
-              isSelected={false}
-              token={{
-                ...token,
-                refresh_token: null,
-                application: null,
-                scope: 'write',
-                summary_fields: {
-                  user: token.summary_fields.user,
-                },
-              }}
-            />
-          </tbody>
-        </table>
-      );
-    });
-    expect(wrapper.find('Td').first().prop('select').isSelected).toBe(false);
-    expect(wrapper.find('Td').at(1).text()).toEqual('Personal access token');
-    expect(wrapper.find('Td').at(2).text()).toEqual('Foobar-token');
-    expect(wrapper.find('Td').at(3).text()).toEqual('Write');
-    expect(wrapper.find('Td').at(4).text()).toContain('10/25/3019, 3:06:43 PM');
+  test('should render personal access token row properly', () => {
+    renderWithContexts(
+      <table>
+        <tbody>
+          <UserTokenListItem
+            isSelected={false}
+            token={{
+              ...token,
+              refresh_token: null,
+              application: null,
+              scope: 'write',
+              summary_fields: {
+                user: token.summary_fields.user,
+              },
+            }}
+            rowIndex={0}
+          />
+        </tbody>
+      </table>
+    );
+    expect(
+      screen.getByRole('checkbox', { name: 'Select row 0' })
+    ).not.toBeChecked();
+    expect(
+      screen.getByRole('link', { name: 'Personal access token' })
+    ).toBeInTheDocument();
+    expect(screen.getByText('Foobar-token')).toBeInTheDocument();
+    expect(screen.getByText('Write')).toBeInTheDocument();
+    expect(screen.getByText('10/25/3019, 3:06:43 PM')).toBeInTheDocument();
   });
 
-  test('should be checked', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <table>
-          <tbody>
-            <UserTokenListItem isSelected token={token} />
-          </tbody>
-        </table>
-      );
-    });
-    expect(wrapper.find('Td').first().prop('select').isSelected).toBe(true);
+  test('should be checked', () => {
+    renderWithContexts(
+      <table>
+        <tbody>
+          <UserTokenListItem isSelected token={token} rowIndex={0} />
+        </tbody>
+      </table>
+    );
+    expect(screen.getByRole('checkbox', { name: 'Select row 0' })).toBeChecked();
   });
 });

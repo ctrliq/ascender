@@ -1,11 +1,11 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { UsersAPI } from 'api';
 import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+  renderWithContexts,
+  assertDetail,
+} from '../../../../testUtils/rtlContexts';
 import UserDetail from './UserDetail';
 import mockDetails from '../data.user.json';
 
@@ -13,30 +13,26 @@ jest.mock('../../../api');
 
 describe('<UserDetail />', () => {
   test('initially renders successfully', () => {
-    mountWithContexts(<UserDetail user={mockDetails} />);
+    renderWithContexts(<UserDetail user={mockDetails} />);
+    expect(screen.getByText('Username')).toBeInTheDocument();
   });
 
   test('should render Details', () => {
-    const wrapper = mountWithContexts(<UserDetail user={mockDetails} />);
-    function assertDetail(label, value) {
-      expect(wrapper.find(`Detail[label="${label}"] dt`).text()).toBe(label);
-      expect(wrapper.find(`Detail[label="${label}"] dd`).text()).toBe(value);
-    }
+    renderWithContexts(<UserDetail user={mockDetails} />);
 
     assertDetail('Username', mockDetails.username);
     assertDetail('Email', mockDetails.email);
     assertDetail('First Name', mockDetails.first_name);
     assertDetail('Last Name', mockDetails.last_name);
     assertDetail('User Type', 'System Administrator');
-    assertDetail('Last Login', `11/4/2019, 11:12:36 PM`);
-    assertDetail('Created', `10/28/2019, 3:01:07 PM`);
-    assertDetail('Last Modified', `7/12/2021, 7:08:33 PM`);
-    assertDetail('Type', `SOCIAL`);
+    assertDetail('Last Login', '11/4/2019, 11:12:36 PM');
+    assertDetail('Created', '10/28/2019, 3:01:07 PM');
+    assertDetail('Last Modified', '7/12/2021, 7:08:33 PM');
+    assertDetail('Type', 'SOCIAL');
   });
 
-  test('User Type Detail should render expected strings', async () => {
-    let wrapper;
-    wrapper = mountWithContexts(
+  test('User Type Detail should render expected strings', () => {
+    const { unmount } = renderWithContexts(
       <UserDetail
         user={{
           ...mockDetails,
@@ -45,11 +41,10 @@ describe('<UserDetail />', () => {
         }}
       />
     );
-    expect(wrapper.find(`Detail[label="User Type"] dd`).text()).toBe(
-      'System Auditor'
-    );
+    assertDetail('User Type', 'System Auditor');
+    unmount();
 
-    wrapper = mountWithContexts(
+    renderWithContexts(
       <UserDetail
         user={{
           ...mockDetails,
@@ -58,23 +53,18 @@ describe('<UserDetail />', () => {
         }}
       />
     );
-    expect(wrapper.find(`Detail[label="User Type"] dd`).text()).toBe(
-      'Normal User'
-    );
+    assertDetail('User Type', 'Normal User');
   });
 
-  test('should show edit button for users with edit permission', async () => {
-    const wrapper = mountWithContexts(<UserDetail user={mockDetails} />);
-    const editButton = await waitForElement(
-      wrapper,
-      'UserDetail Button[aria-label="edit"]'
-    );
-    expect(editButton.text()).toEqual('Edit');
-    expect(editButton.prop('to')).toBe(`/users/${mockDetails.id}/edit`);
+  test('should show edit button for users with edit permission', () => {
+    renderWithContexts(<UserDetail user={mockDetails} />);
+
+    const editLink = screen.getByRole('link', { name: 'edit' });
+    expect(editLink).toHaveAttribute('href', `/users/${mockDetails.id}/edit`);
   });
 
-  test('should hide edit button for users without edit permission', async () => {
-    const wrapper = mountWithContexts(
+  test('should hide edit button for users without edit permission', () => {
+    renderWithContexts(
       <UserDetail
         user={{
           ...mockDetails,
@@ -86,50 +76,47 @@ describe('<UserDetail />', () => {
         }}
       />
     );
-    await waitForElement(wrapper, 'UserDetail');
-    expect(wrapper.find('UserDetail Button[aria-label="edit"]').length).toBe(0);
+    expect(screen.queryByRole('link', { name: 'edit' })).not.toBeInTheDocument();
   });
 
-  test('edit button should navigate to user edit', () => {
+  test('edit button should navigate to user edit', async () => {
     const history = createMemoryHistory();
-    const wrapper = mountWithContexts(<UserDetail user={mockDetails} />, {
+    const { user } = renderWithContexts(<UserDetail user={mockDetails} />, {
       context: { router: { history } },
     });
-    expect(wrapper.find('Button[aria-label="edit"]').length).toBe(1);
-    wrapper
-      .find('Button[aria-label="edit"] Link')
-      .simulate('click', { button: 0 });
+
+    await user.click(screen.getByRole('link', { name: 'edit' }));
+
     expect(history.location.pathname).toEqual('/users/1/edit');
   });
 
   test('expected api call is made for delete', async () => {
-    const wrapper = mountWithContexts(<UserDetail user={mockDetails} />);
-    await waitForElement(wrapper, 'UserDetail Button[aria-label="Delete"]');
-    await act(async () => {
-      wrapper.find('DeleteButton').invoke('onConfirm')();
-    });
-    expect(UsersAPI.destroy).toHaveBeenCalledTimes(1);
+    UsersAPI.destroy.mockResolvedValueOnce({});
+    const { user } = renderWithContexts(<UserDetail user={mockDetails} />);
+
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'Confirm Delete' })
+    );
+
+    await waitFor(() => expect(UsersAPI.destroy).toHaveBeenCalledTimes(1));
   });
 
   test('Error dialog shown for failed deletion', async () => {
-    UsersAPI.destroy.mockImplementationOnce(() => Promise.reject(new Error()));
-    const wrapper = mountWithContexts(<UserDetail user={mockDetails} />);
-    await waitForElement(wrapper, 'UserDetail Button[aria-label="Delete"]');
-    await act(async () => {
-      wrapper.find('DeleteButton').invoke('onConfirm')();
-    });
-    await waitForElement(
-      wrapper,
-      'Modal[title="Error!"]',
-      (el) => el.length === 1
+    UsersAPI.destroy.mockRejectedValueOnce(new Error());
+    const { user } = renderWithContexts(<UserDetail user={mockDetails} />);
+
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'Confirm Delete' })
     );
-    await act(async () => {
-      wrapper.find('Modal[title="Error!"]').invoke('onClose')();
-    });
-    await waitForElement(
-      wrapper,
-      'Modal[title="Error!"]',
-      (el) => el.length === 0
+
+    expect(await screen.findByText('Error!')).toBeInTheDocument();
+    expect(screen.getByText('Failed to delete user.')).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Close' }));
+    await waitFor(() =>
+      expect(screen.queryByText('Error!')).not.toBeInTheDocument()
     );
   });
 });

@@ -1,9 +1,9 @@
 import React from 'react';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { screen } from '@testing-library/react';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import UserRolesListItem from './UserRolesListItem';
 
 describe('<UserRolesListItem/>', () => {
-  let wrapper;
   const role = {
     id: 1,
     name: 'Admin',
@@ -18,7 +18,7 @@ describe('<UserRolesListItem/>', () => {
     },
   };
   test('should mount properly', () => {
-    wrapper = mountWithContexts(
+    renderWithContexts(
       <table>
         <tbody>
           <UserRolesListItem
@@ -28,11 +28,11 @@ describe('<UserRolesListItem/>', () => {
         </tbody>
       </table>
     );
-    expect(wrapper.length).toBe(1);
+    expect(screen.getByRole('row')).toBeInTheDocument();
   });
 
   test('should render proper list item data', () => {
-    wrapper = mountWithContexts(
+    renderWithContexts(
       <table>
         <tbody>
           <UserRolesListItem
@@ -42,14 +42,14 @@ describe('<UserRolesListItem/>', () => {
         </tbody>
       </table>
     );
-    const cells = wrapper.find('Td');
-    expect(cells.at(0).text()).toBe('template delete project');
-    expect(cells.at(1).text()).toContain('Job Template');
-    expect(cells.at(2).text()).toContain('Admin');
+    const cells = screen.getAllByRole('cell');
+    expect(cells[0]).toHaveTextContent('template delete project');
+    expect(cells[1]).toHaveTextContent('Job Template');
+    expect(cells[2]).toHaveTextContent('Admin');
   });
 
   test('should render deletable chip', () => {
-    wrapper = mountWithContexts(
+    renderWithContexts(
       <table>
         <tbody>
           <UserRolesListItem
@@ -59,12 +59,12 @@ describe('<UserRolesListItem/>', () => {
         </tbody>
       </table>
     );
-    expect(wrapper.find('Chip').prop('isReadOnly')).toBe(false);
+    expect(screen.getByRole('button', { name: /close/i })).toBeInTheDocument();
   });
 
   test('should render read only chip', () => {
     role.summary_fields.user_capabilities.unattach = false;
-    wrapper = mountWithContexts(
+    renderWithContexts(
       <table>
         <tbody>
           <UserRolesListItem
@@ -74,11 +74,13 @@ describe('<UserRolesListItem/>', () => {
         </tbody>
       </table>
     );
-    expect(wrapper.find('Chip').prop('isReadOnly')).toBe(true);
+    expect(
+      screen.queryByRole('button', { name: /close/i })
+    ).not.toBeInTheDocument();
   });
 
   test('should display System as name when no resource_name is present in summary_fields', () => {
-    wrapper = mountWithContexts(
+    renderWithContexts(
       <table>
         <tbody>
           <UserRolesListItem
@@ -92,6 +94,6 @@ describe('<UserRolesListItem/>', () => {
         </tbody>
       </table>
     );
-    expect(wrapper.find('Td').at(0).text()).toBe('System');
+    expect(screen.getAllByRole('cell')[0]).toHaveTextContent('System');
   });
 });

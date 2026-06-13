@@ -1,10 +1,10 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, within } from '@testing-library/react';
 import { UsersAPI, TokensAPI } from 'api';
 import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+  renderWithContexts,
+  settleTooltips,
+} from '../../../../testUtils/rtlContexts';
 import UserTokenList from './UserTokenList';
 
 jest.mock('../../../api/models/Users');
@@ -121,75 +121,55 @@ const tokens = {
   },
 };
 
-describe('<UserTokenList />', () => {
-  let wrapper;
+async function selectThirdTokenAndDelete(user) {
+  // the third token is the one described as 'fgds' (title-cased to 'Fgds') (id 3)
+  const row = screen.getByText('Fgds').closest('tr');
+  await user.click(within(row).getByRole('checkbox'));
 
-  beforeEach(() => {
+  const deleteButton = screen.getByRole('button', { name: 'Delete' });
+  expect(deleteButton).not.toBeDisabled();
+  await user.click(deleteButton);
+  await user.click(
+    await screen.findByRole('button', { name: 'confirm delete' })
+  );
+}
+
+describe('<UserTokenList />', () => {
+  let user;
+
+  beforeEach(async () => {
     UsersAPI.readTokens.mockResolvedValue(tokens);
     UsersAPI.readTokenOptions.mockResolvedValue({
       data: { related_search_fields: [] },
     });
+
+    ({ user } = renderWithContexts(<UserTokenList />));
+    await screen.findByText('Fgds');
   });
 
-  test('should mount properly, and fetch tokens', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(<UserTokenList />);
-    });
+  test('should mount properly, and fetch tokens', () => {
     expect(UsersAPI.readTokens).toHaveBeenCalledWith(1, {
       order_by: 'application__name',
       page: 1,
       page_size: 20,
     });
-    expect(wrapper.find('UserTokenList').length).toBe(1);
   });
 
-  test('delete button should be disabled', async () => {
-    UsersAPI.readTokens.mockResolvedValue(tokens);
-    await act(async () => {
-      wrapper = mountWithContexts(<UserTokenList />);
-    });
-    waitForElement(wrapper, 'ContentEmpty', (el) => el.length === 0);
-    expect(wrapper.find('Button[aria-label="Delete"]').prop('isDisabled')).toBe(
-      true
-    );
+  test('delete button should be disabled', () => {
+    expect(screen.getByRole('button', { name: 'Delete' })).toBeDisabled();
   });
 
   test('should select and then delete item properly', async () => {
-    UsersAPI.readTokens.mockResolvedValue(tokens);
-    await act(async () => {
-      wrapper = mountWithContexts(<UserTokenList />);
-    });
-    waitForElement(wrapper, 'ContentEmpty', (el) => el.length === 0);
-    expect(wrapper.find('Button[aria-label="Delete"]').prop('isDisabled')).toBe(
-      true
-    );
-    await act(async () => {
-      wrapper.find('.pf-c-table__check').at(2).find('input').prop('onChange')(
-        tokens.data.results[0]
-      );
-    });
-    wrapper.update();
-    expect(
-      wrapper.find('.pf-c-table__check').at(2).find('input').prop('checked')
-    ).toBe(true);
-    expect(wrapper.find('Button[aria-label="Delete"]').prop('isDisabled')).toBe(
-      false
-    );
-    await act(async () =>
-      wrapper.find('Button[aria-label="Delete"]').prop('onClick')()
-    );
-    wrapper.update();
-    await act(async () => expect(wrapper.find('AlertModal').length).toBe(1));
-    await act(async () =>
-      wrapper.find('Button[aria-label="confirm delete"]').prop('onClick')()
-    );
-    wrapper.update();
-    expect(TokensAPI.destroy).toHaveBeenCalledWith(3);
+    TokensAPI.destroy.mockResolvedValueOnce({});
+
+    expect(screen.getByRole('button', { name: 'Delete' })).toBeDisabled();
+    await selectThirdTokenAndDelete(user);
+
+    await waitFor(() => expect(TokensAPI.destroy).toHaveBeenCalledWith(3));
   });
 
-  test('should select and then delete item properly', async () => {
-    UsersAPI.readTokens.mockResolvedValue(tokens);
-    TokensAPI.destroy.mockRejectedValue(
+  test('should show error dialog when deletion fails', async () => {
+    TokensAPI.destroy.mockRejectedValueOnce(
       new Error({
         response: {
           config: {
@@ -201,36 +181,18 @@ describe('<UserTokenList />', () => {
         },
       })
     );
-    await act(async () => {
-      wrapper = mountWithContexts(<UserTokenList />);
-    });
-    waitForElement(wrapper, 'ContentEmpty', (el) => el.length === 0);
-    expect(wrapper.find('Button[aria-label="Delete"]').prop('isDisabled')).toBe(
-      true
+
+    expect(screen.getByRole('button', { name: 'Delete' })).toBeDisabled();
+    await selectThirdTokenAndDelete(user);
+
+    await waitFor(() => expect(TokensAPI.destroy).toHaveBeenCalledWith(3));
+    expect(await screen.findByText('Error!')).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Close' }));
+    await waitFor(() =>
+      expect(screen.queryByText('Error!')).not.toBeInTheDocument()
     );
-    await act(async () => {
-      wrapper.find('.pf-c-table__check').at(2).find('input').prop('onChange')(
-        tokens.data.results[0]
-      );
-    });
-    wrapper.update();
-    expect(
-      wrapper.find('.pf-c-table__check').at(2).find('input').prop('checked')
-    ).toBe(true);
-    expect(wrapper.find('Button[aria-label="Delete"]').prop('isDisabled')).toBe(
-      false
-    );
-    await act(async () =>
-      wrapper.find('Button[aria-label="Delete"]').prop('onClick')()
-    );
-    wrapper.update();
-    await act(async () => expect(wrapper.find('AlertModal').length).toBe(1));
-    await act(async () =>
-      wrapper.find('Button[aria-label="confirm delete"]').prop('onClick')()
-    );
-    wrapper.update();
-    expect(TokensAPI.destroy).toHaveBeenCalledWith(3);
-    wrapper.update();
-    expect(wrapper.find('ErrorDetail').length).toBe(1);
+    // closing the modal refocuses the Tooltip-wrapped toolbar Delete button
+    await settleTooltips();
   });
 });

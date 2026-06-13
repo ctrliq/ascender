@@ -1,40 +1,38 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { screen } from '@testing-library/react';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import UserOrganizationListItem from './UserOrganizationListItem';
 
 describe('<UserOrganizationListItem />', () => {
   test('mounts correctly', () => {
-    let wrapper;
-    act(() => {
-      wrapper = mountWithContexts(
-        <table>
-          <tbody>
-            <UserOrganizationListItem
-              organization={{ name: 'foo', id: 1, description: 'Bar' }}
-            />
-          </tbody>
-        </table>
-      );
-    });
-    expect(wrapper.find('UserOrganizationListItem').length).toBe(1);
+    renderWithContexts(
+      <table>
+        <tbody>
+          <UserOrganizationListItem
+            organization={{ name: 'foo', id: 1, description: 'Bar' }}
+          />
+        </tbody>
+      </table>
+    );
+    expect(screen.getByRole('row')).toBeInTheDocument();
   });
   test('render correct information', () => {
-    let wrapper;
-    act(() => {
-      wrapper = mountWithContexts(
-        <table>
-          <tbody>
-            <UserOrganizationListItem
-              organization={{ name: 'foo', id: 1, description: 'Bar' }}
-            />
-          </tbody>
-        </table>
-      );
-    });
-    expect(wrapper.find('Td').at(0).text()).toBe('foo');
-    expect(wrapper.find('Td').at(1).text()).toBe('Bar');
-    expect(wrapper.find('Link').prop('to')).toBe('/organizations/1/details');
+    renderWithContexts(
+      <table>
+        <tbody>
+          <UserOrganizationListItem
+            organization={{ name: 'foo', id: 1, description: 'Bar' }}
+          />
+        </tbody>
+      </table>
+    );
+    const cells = screen.getAllByRole('cell');
+    expect(cells[0]).toHaveTextContent('foo');
+    expect(cells[1]).toHaveTextContent('Bar');
+    expect(screen.getByRole('link', { name: 'foo' })).toHaveAttribute(
+      'href',
+      '/organizations/1/details'
+    );
   });
 });
