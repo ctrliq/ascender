@@ -53,7 +53,7 @@ export default function useWsWorkflowOutput(workflowJobId, initialNodes) {
 
       if (
         lastMessage?.unified_job_id === workflowJobId &&
-        ['successful', 'failed', 'error', 'cancelled'].includes(
+        ['successful', 'failed', 'error', 'canceled'].includes(
           lastMessage.status
         )
       ) {

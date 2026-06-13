@@ -24,7 +24,7 @@ export default function useWsInventorySourcesDetails(initialSource) {
       }
 
       if (
-        ['successful', 'failed', 'error', 'cancelled'].includes(
+        ['successful', 'failed', 'error', 'canceled'].includes(
           lastMessage.status
         )
       ) {
