@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { Card } from '@patternfly/react-core';
 import { GroupsAPI } from 'api';
 
@@ -9,20 +10,20 @@ import InventoryGroupForm from '../shared/InventoryGroupForm';
 function InventoryGroupsAdd() {
   const [error, setError] = useState(null);
   const { id } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
     values.inventory = id;
     try {
       const { data } = await GroupsAPI.create(values);
-      history.push(`/inventories/inventory/${id}/groups/${data.id}`);
+      navigate(`/inventories/inventory/${id}/groups/${data.id}`);
     } catch (err) {
       setError(err);
     }
   };
 
   const handleCancel = () => {
-    history.push(`/inventories/inventory/${id}/groups`);
+    navigate(`/inventories/inventory/${id}/groups`);
   };
 
   return (

@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { Button, Label } from '@patternfly/react-core';
 
 import AlertModal from 'components/AlertModal';
@@ -16,7 +17,7 @@ import executionEnvironmentHelpTextStrings from '../shared/ExecutionEnvironment.
 function ExecutionEnvironmentDetails({ executionEnvironment }) {
   const { t } = useLingui();
   const helpText = executionEnvironmentHelpTextStrings;
-  const history = useHistory();
+  const navigate = useNavigate();
   const {
     id,
     name,
@@ -35,8 +36,8 @@ function ExecutionEnvironmentDetails({ executionEnvironment }) {
   } = useRequest(
     useCallback(async () => {
       await ExecutionEnvironmentsAPI.destroy(id);
-      history.push(`/execution_environments`);
-    }, [id, history])
+      navigate(`/execution_environments`);
+    }, [id, navigate])
   );
 
   const { error, dismissError } = useDismissableError(deleteError);

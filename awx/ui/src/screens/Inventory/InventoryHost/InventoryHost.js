@@ -1,13 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import {
-  Switch,
-  Route,
-  Redirect,
-  Link,
-  useRouteMatch,
-  useLocation,
-} from 'react-router-dom';
+import { Switch, Route, Redirect, Link, useRouteMatch, useLocation } from 'react-router-dom';
 import { Card } from '@patternfly/react-core';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import useRequest from 'hooks/useRequest';

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { Formik } from 'formik';
 import { Form } from '@patternfly/react-core';
 import { CardBody } from 'components/Card';
@@ -15,7 +15,7 @@ import { EncryptedField, InputField } from '../../shared/SharedFields';
 import { RevertAllAlert, RevertFormActionGroup } from '../../shared';
 
 function RADIUSEdit() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { isModalOpen, toggleModal, closeModal } = useModal();
   const { PUT: options } = useSettings();
 
@@ -45,9 +45,9 @@ function RADIUSEdit() {
     useCallback(
       async (values) => {
         await SettingsAPI.updateAll(values);
-        history.push('/settings/radius/details');
+        navigate('/settings/radius/details');
       },
-      [history]
+      [navigate]
     ),
     null
   );
@@ -68,11 +68,11 @@ function RADIUSEdit() {
 
     closeModal();
 
-    history.push('/settings/radius/details');
+    navigate('/settings/radius/details');
   };
 
   const handleCancel = () => {
-    history.push('/settings/radius/details');
+    navigate('/settings/radius/details');
   };
 
   const initialValues = (fields) =>

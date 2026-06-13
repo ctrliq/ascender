@@ -2,7 +2,8 @@ import React, { useCallback } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
 
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import styled from 'styled-components';
 import { Button } from '@patternfly/react-core';
 
@@ -27,7 +28,7 @@ const Unavailable = styled.span`
 function InstanceGroupDetails({ instanceGroup }) {
   const { t } = useLingui();
   const { id, name } = instanceGroup;
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const {
     request: deleteInstanceGroup,
@@ -36,8 +37,8 @@ function InstanceGroupDetails({ instanceGroup }) {
   } = useRequest(
     useCallback(async () => {
       await InstanceGroupsAPI.destroy(id);
-      history.push(`/instance_groups`);
-    }, [id, history])
+      navigate(`/instance_groups`);
+    }, [id, navigate])
   );
 
   const { error, dismissError } = useDismissableError(deleteError);

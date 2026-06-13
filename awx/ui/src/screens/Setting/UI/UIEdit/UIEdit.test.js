@@ -118,7 +118,7 @@ describe('<UIEdit />', () => {
       wrapper.find('Form').invoke('onSubmit')();
     });
     expect(history.location.pathname).toEqual('/settings/ui/details');
-    expect(history.location.hardReload).toEqual(undefined);
+    expect(history.location.state?.hardReload).toEqual(undefined);
   });
 
   test('should navigate to ui detail with reload param on successful submission where PENDO_TRACKING_STATE changes', async () => {
@@ -132,7 +132,7 @@ describe('<UIEdit />', () => {
       wrapper.find('Form').invoke('onSubmit')();
     });
     expect(history.location.pathname).toEqual('/settings/ui/details');
-    expect(history.location.hardReload).toEqual(true);
+    expect(history.location.state?.hardReload).toEqual(true);
   });
 
   test('should navigate to ui detail when cancel is clicked', async () => {

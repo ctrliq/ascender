@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 
 import { Button, Chip } from '@patternfly/react-core';
 import styled from 'styled-components';
@@ -59,7 +60,7 @@ function JobDetail({ job, inventorySourceLabels }) {
   } = job.summary_fields;
   const { scm_branch: scmBranch } = job;
   const [errorMsg, setErrorMsg] = useState();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const jobTypes = {
     project_update: t`Source Control Update`,
@@ -84,7 +85,7 @@ function JobDetail({ job, inventorySourceLabels }) {
   const deleteJob = async () => {
     try {
       await getJobModel(job.type).destroy(job.id);
-      history.push('/jobs');
+      navigate('/jobs');
     } catch (err) {
       setErrorMsg(err);
     }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 
 import { CardBody } from 'components/Card';
 import { CredentialTypesAPI } from 'api';
@@ -7,7 +7,7 @@ import { parseVariableField } from 'util/yaml';
 import CredentialTypeForm from '../shared/CredentialTypeForm';
 
 function CredentialTypeEdit({ credentialType }) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [submitError, setSubmitError] = useState(null);
   const detailsUrl = `/credential_types/${credentialType.id}/details`;
 
@@ -18,14 +18,14 @@ function CredentialTypeEdit({ credentialType }) {
         injectors: parseVariableField(values.injectors),
         inputs: parseVariableField(values.inputs),
       });
-      history.push(detailsUrl);
+      navigate(detailsUrl);
     } catch (error) {
       setSubmitError(error);
     }
   };
 
   const handleCancel = () => {
-    history.push(detailsUrl);
+    navigate(detailsUrl);
   };
   return (
     <CardBody>

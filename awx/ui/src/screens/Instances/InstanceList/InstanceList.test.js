@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route, Router } from 'react-router-dom';
+import { Router as RouterV6 } from 'react-router-dom-v5-compat';
 import { createMemoryHistory } from 'history';
 import * as ConfigContext from 'contexts/Config';
 import { within, render, waitFor, screen } from '@testing-library/react';
@@ -143,7 +144,9 @@ describe('<InstanceList />, React testing library tests', () => {
     return render(
       <I18nProvider i18n={i18n}>
         <Router history={history}>
-          <Route path="/instances">{ui} </Route>
+          <RouterV6 location={history.location} navigator={history}>
+            <Route path="/instances">{ui} </Route>
+          </RouterV6>
         </Router>
       </I18nProvider>
     );

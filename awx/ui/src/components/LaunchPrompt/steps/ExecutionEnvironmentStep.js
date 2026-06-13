@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
 import { ExecutionEnvironmentsAPI } from 'api';
@@ -19,7 +19,7 @@ function ExecutionEnvironmentStep() {
   const { t } = useLingui();
   const [field, , helpers] = useField('execution_environment');
 
-  const history = useHistory();
+  const location = useLocation();
 
   const {
     isLoading,
@@ -33,7 +33,7 @@ function ExecutionEnvironmentStep() {
     request: fetchExecutionEnvironments,
   } = useRequest(
     useCallback(async () => {
-      const params = parseQueryString(QS_CONFIG, history.location.search);
+      const params = parseQueryString(QS_CONFIG, location.search);
       const [{ data }, actionsResponse] = await Promise.all([
         ExecutionEnvironmentsAPI.read(params),
         ExecutionEnvironmentsAPI.readOptions(),
@@ -46,7 +46,7 @@ function ExecutionEnvironmentStep() {
         ).map((val) => val.slice(0, -8)),
         searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET),
       };
-    }, [history.location]),
+    }, [location]),
     {
       count: 0,
       execution_environments: [],

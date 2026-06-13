@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useRouteMatch } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { CardBody } from 'components/Card';
 import SurveyQuestionForm from './SurveyQuestionForm';
 
 export default function SurveyQuestionAdd({ survey, updateSurvey }) {
   const [formError, setFormError] = useState(null);
-  const history = useHistory();
+  const navigate = useNavigate();
   const match = useRouteMatch();
 
   const handleSubmit = async (question) => {
@@ -40,14 +41,14 @@ export default function SurveyQuestionAdd({ survey, updateSurvey }) {
       delete formData.formattedChoices;
       const newSpec = survey?.spec ? survey.spec.concat(formData) : [formData];
       await updateSurvey(newSpec);
-      history.push(match.url.replace('/add', ''));
+      navigate(match.url.replace('/add', ''));
     } catch (err) {
       setFormError(err);
     }
   };
 
   const handleCancel = () => {
-    history.push(match.url.replace('/add', ''));
+    navigate(match.url.replace('/add', ''));
   };
 
   return (

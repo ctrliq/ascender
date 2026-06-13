@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { Card, PageSection } from '@patternfly/react-core';
 
 import { CardBody } from 'components/Card';
@@ -10,7 +10,7 @@ import ContentLoading from 'components/ContentLoading';
 import ContainerGroupForm from '../shared/ContainerGroupForm';
 
 function ContainerGroupEdit({ instanceGroup }) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [submitError, setSubmitError] = useState(null);
   const detailsIUrl = `/instance_groups/container_group/${instanceGroup.id}/details`;
 
@@ -47,13 +47,13 @@ function ContainerGroupEdit({ instanceGroup }) {
           : 0,
         is_container_group: true,
       });
-      history.push(detailsIUrl);
+      navigate(detailsIUrl);
     } catch (error) {
       setSubmitError(error);
     }
   };
   const handleCancel = () => {
-    history.push(detailsIUrl);
+    navigate(detailsIUrl);
   };
 
   if (fetchError) {

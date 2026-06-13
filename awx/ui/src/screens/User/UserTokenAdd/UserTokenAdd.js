@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 
 import { CardBody } from 'components/Card';
 import { TokensAPI, UsersAPI } from 'api';
@@ -7,7 +8,7 @@ import useRequest from 'hooks/useRequest';
 import UserTokenForm from '../shared/UserTokenForm';
 
 function UserTokenAdd({ onSuccessfulAdd }) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { id: userId } = useParams();
   const { error: submitError, request: handleSubmit } = useRequest(
     useCallback(
@@ -24,14 +25,14 @@ function UserTokenAdd({ onSuccessfulAdd }) {
 
         onSuccessfulAdd(response.data);
 
-        history.push(`/users/${userId}/tokens/${response.data.id}/details`);
+        navigate(`/users/${userId}/tokens/${response.data.id}/details`);
       },
-      [history, userId, onSuccessfulAdd]
+      [navigate, userId, onSuccessfulAdd]
     )
   );
 
   const handleCancel = () => {
-    history.push(`/users/${userId}/tokens`);
+    navigate(`/users/${userId}/tokens`);
   };
 
   return (

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { Button, Tooltip } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
 import { RocketIcon } from '@patternfly/react-icons';
@@ -24,7 +25,7 @@ function ManagementJobListItem({
   const { t } = useLingui();
   const detailsUrl = `/management_jobs/${id}`;
 
-  const history = useHistory();
+  const navigate = useNavigate();
   const [isLaunchLoading, setIsLaunchLoading] = useState(false);
 
   const [isManagementPromptOpen, setIsManagementPromptOpen] = useState(false);
@@ -40,7 +41,7 @@ function ManagementJobListItem({
       const { data } = await SystemJobTemplatesAPI.launch(id, {
         extra_vars: { days },
       });
-      history.push(`/jobs/management/${data.id}/output`);
+      navigate(`/jobs/management/${data.id}/output`);
     } catch (error) {
       setManagementPromptError(error);
     } finally {
@@ -52,7 +53,7 @@ function ManagementJobListItem({
     setIsLaunchLoading(true);
     try {
       const { data } = await SystemJobTemplatesAPI.launch(id);
-      history.push(`/jobs/management/${data.id}/output`);
+      navigate(`/jobs/management/${data.id}/output`);
     } catch (error) {
       onLaunchError(error);
     } finally {

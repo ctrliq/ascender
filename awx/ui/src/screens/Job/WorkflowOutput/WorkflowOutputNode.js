@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
@@ -66,7 +66,7 @@ Elapsed.displayName = 'Elapsed';
 
 function WorkflowOutputNode({ mouseEnter, mouseLeave, node }) {
   const { t } = useLingui();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { nodePositions } = useContext(WorkflowStateContext);
   const job = node?.originalNodeObject?.summary_fields?.job;
 
@@ -89,7 +89,7 @@ function WorkflowOutputNode({ mouseEnter, mouseLeave, node }) {
     if (job) {
       const basePath =
         job.type !== 'workflow_approval' ? 'jobs' : 'workflow_approvals';
-      history.push(`/${basePath}/${job.id}/details`);
+      navigate(`/${basePath}/${job.id}/details`);
     }
   };
 

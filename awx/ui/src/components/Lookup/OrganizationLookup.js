@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { node, func, bool, string } from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import { useLocation } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import { FormGroup } from '@patternfly/react-core';
 import { OrganizationsAPI } from 'api';
@@ -27,13 +27,13 @@ function OrganizationLookup({
   onChange,
   required,
   value,
-  history,
   autoPopulate,
   isDisabled,
   helperText,
   validate,
   fieldName,
 }) {
+  const location = useLocation();
   const { t } = useLingui();
   const autoPopulateLookup = useAutoPopulateLookup(onChange);
 
@@ -43,7 +43,7 @@ function OrganizationLookup({
     request: fetchOrganizations,
   } = useRequest(
     useCallback(async () => {
-      const params = parseQueryString(QS_CONFIG, history.location.search);
+      const params = parseQueryString(QS_CONFIG, location.search);
       const [response, actionsResponse] = await Promise.all([
         OrganizationsAPI.read(params),
         OrganizationsAPI.readOptions(),
@@ -61,7 +61,7 @@ function OrganizationLookup({
         ).map((val) => val.slice(0, -8)),
         searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET),
       };
-    }, [autoPopulate, autoPopulateLookup, history.location.search]),
+    }, [autoPopulate, autoPopulateLookup, location.search]),
     {
       organizations: [],
       itemCount: 0,
@@ -187,4 +187,4 @@ OrganizationLookup.defaultProps = {
 };
 
 export { OrganizationLookup as _OrganizationLookup };
-export default withRouter(OrganizationLookup);
+export default OrganizationLookup;

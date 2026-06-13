@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { Formik } from 'formik';
 import { Form } from '@patternfly/react-core';
 import { CardBody } from 'components/Card';
@@ -20,7 +20,7 @@ import {
 import { formatJson } from '../../shared/settingUtils';
 
 function GitHubEdit() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { isModalOpen, toggleModal, closeModal } = useModal();
   const { PUT: options } = useSettings();
 
@@ -53,9 +53,9 @@ function GitHubEdit() {
     useCallback(
       async (values) => {
         await SettingsAPI.updateAll(values);
-        history.push('/settings/github/details');
+        navigate('/settings/github/details');
       },
-      [history]
+      [navigate]
     ),
     null
   );
@@ -82,11 +82,11 @@ function GitHubEdit() {
 
     closeModal();
 
-    history.push('/settings/github/details');
+    navigate('/settings/github/details');
   };
 
   const handleCancel = () => {
-    history.push('/settings/github/details');
+    navigate('/settings/github/details');
   };
 
   const initialValues = (fields) =>

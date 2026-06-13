@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Card, PageSection } from '@patternfly/react-core';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 
 import { CardBody } from 'components/Card';
 import { InstanceGroupsAPI } from 'api';
@@ -12,7 +12,7 @@ import { jsonToYaml, isJsonString } from 'util/yaml';
 import ContainerGroupForm from '../shared/ContainerGroupForm';
 
 function ContainerGroupAdd() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [submitError, setSubmitError] = useState(null);
 
   const getPodSpecValue = (value) => {
@@ -39,14 +39,14 @@ function ContainerGroupAdd() {
           : null,
         is_container_group: true,
       });
-      history.push(`/instance_groups/container_group/${response.id}/details`);
+      navigate(`/instance_groups/container_group/${response.id}/details`);
     } catch (error) {
       setSubmitError(error);
     }
   };
 
   const handleCancel = () => {
-    history.push(`/instance_groups`);
+    navigate(`/instance_groups`);
   };
 
   const {

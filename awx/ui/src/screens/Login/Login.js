@@ -3,7 +3,7 @@
 //
 
 import React, { useCallback, useState, useEffect, useRef } from 'react';
-import { Redirect, withRouter } from 'react-router-dom';
+import { Navigate } from 'react-router-dom-v5-compat';
 
 import { useLingui } from '@lingui/react/macro';
 import { Formik } from 'formik';
@@ -181,7 +181,7 @@ function AWXLogin({ alt, isAuthenticated }) {
     const redirect =
       isNewUser.current && !isRedirectLinkReceived ? '/home' : authRedirectTo;
 
-    return <Redirect to={redirect} />;
+    return <Navigate to={redirect} />;
   }
   return (
     <Login className="ascender-login">
@@ -418,5 +418,5 @@ function AWXLogin({ alt, isAuthenticated }) {
   );
 }
 
-export default withRouter(AWXLogin);
+export default AWXLogin;
 export { AWXLogin as _AWXLogin };

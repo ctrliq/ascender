@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router-dom-v5-compat';
 import {
   arrayOf,
   bool,
@@ -50,7 +50,7 @@ function CredentialLookup({
   value,
 }) {
   const { t } = useLingui();
-  const history = useHistory();
+  const location = useLocation();
   const autoPopulateLookup = useAutoPopulateLookup(onChange);
   const {
     result: { count, credentials, relatedSearchableKeys, searchableKeys },
@@ -58,7 +58,7 @@ function CredentialLookup({
     request: fetchCredentials,
   } = useRequest(
     useCallback(async () => {
-      const params = parseQueryString(QS_CONFIG, history.location.search);
+      const params = parseQueryString(QS_CONFIG, location.search);
       const typeIdParams = credentialTypeId
         ? { credential_type: credentialTypeId }
         : {};
@@ -104,7 +104,7 @@ function CredentialLookup({
       credentialTypeId,
       credentialTypeKind,
       credentialTypeNamespace,
-      history.location.search,
+      location.search,
     ]),
     {
       count: 0,

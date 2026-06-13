@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 
 import { useLingui } from '@lingui/react/macro';
 import { Button, Label } from '@patternfly/react-core';
@@ -21,7 +22,7 @@ import InstanceGroupLabels from 'components/InstanceGroupLabels';
 
 function SmartInventoryDetail({ inventory }) {
   const { t } = useLingui();
-  const history = useHistory();
+  const navigate = useNavigate();
   const {
     created,
     description,
@@ -78,8 +79,8 @@ function SmartInventoryDetail({ inventory }) {
   } = useRequest(
     useCallback(async () => {
       await InventoriesAPI.destroy(id);
-      history.push(`/inventories`);
-    }, [id, history])
+      navigate(`/inventories`);
+    }, [id, navigate])
   );
 
   const { error, dismissError } = useDismissableError(deleteError);

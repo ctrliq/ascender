@@ -2,7 +2,8 @@ import React, { useCallback } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
 
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { Button, Label } from '@patternfly/react-core';
 
 import { VariablesDetail } from 'components/CodeEditor';
@@ -24,7 +25,7 @@ import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDeta
 function ContainerGroupDetails({ instanceGroup }) {
   const { t } = useLingui();
   const { id, name } = instanceGroup;
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const {
     request: deleteInstanceGroup,
@@ -33,8 +34,8 @@ function ContainerGroupDetails({ instanceGroup }) {
   } = useRequest(
     useCallback(async () => {
       await InstanceGroupsAPI.destroy(id);
-      history.push(`/instance_groups`);
-    }, [id, history])
+      navigate(`/instance_groups`);
+    }, [id, navigate])
   );
 
   const { error, dismissError } = useDismissableError(deleteError);

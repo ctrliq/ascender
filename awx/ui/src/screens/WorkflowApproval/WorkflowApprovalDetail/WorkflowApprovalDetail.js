@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import styled from 'styled-components';
 import {
   Divider as PFDivider,
@@ -47,7 +48,7 @@ const WFDetailList = styled(DetailList)`
 function WorkflowApprovalDetail({ workflowApproval, fetchWorkflowApproval }) {
   const { t } = useLingui();
   const { id: workflowApprovalId } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { addToast, Toast, toastProps } = useToast();
 
   const {
@@ -57,8 +58,8 @@ function WorkflowApprovalDetail({ workflowApproval, fetchWorkflowApproval }) {
   } = useRequest(
     useCallback(async () => {
       await WorkflowApprovalsAPI.destroy(workflowApprovalId);
-      history.push(`/workflow_approvals`);
-    }, [workflowApprovalId, history])
+      navigate(`/workflow_approvals`);
+    }, [workflowApprovalId, navigate])
   );
 
   const { error: deleteError, dismissError: dismissDeleteError } =

@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { Route, withRouter, Switch, useRouteMatch } from 'react-router-dom';
+import { Route, Switch, useRouteMatch } from 'react-router-dom';
 
 import { useLingui } from '@lingui/react/macro';
 
@@ -68,4 +68,4 @@ function Organizations() {
 }
 
 export { Organizations as _Organizations };
-export default withRouter(Organizations);
+export default Organizations;

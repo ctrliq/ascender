@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { Formik } from 'formik';
 import { Form } from '@patternfly/react-core';
 import { CardBody } from 'components/Card';
@@ -24,7 +24,7 @@ import {
 
 function JobsEdit() {
   const { t } = useLingui();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { isModalOpen, toggleModal, closeModal } = useModal();
   const { PUT: options } = useSettings();
 
@@ -63,9 +63,9 @@ function JobsEdit() {
     useCallback(
       async (values) => {
         await SettingsAPI.updateAll(values);
-        history.push('/settings/jobs/details');
+        navigate('/settings/jobs/details');
       },
-      [history]
+      [navigate]
     ),
     null
   );
@@ -98,11 +98,11 @@ function JobsEdit() {
 
     closeModal();
 
-    history.push('/settings/jobs/details');
+    navigate('/settings/jobs/details');
   };
 
   const handleCancel = () => {
-    history.push('/settings/jobs/details');
+    navigate('/settings/jobs/details');
   };
 
   const initialValues = (fields) =>

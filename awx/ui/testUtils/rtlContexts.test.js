@@ -2,6 +2,10 @@ import React from 'react';
 import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { useHistory, useLocation } from 'react-router-dom';
+import {
+  useNavigate,
+  useLocation as useLocationV6,
+} from 'react-router-dom-v5-compat';
 import { Plural } from '@lingui/react/macro';
 import { useConfig } from '../src/contexts/Config';
 import { useSession } from '../src/contexts/Session';
@@ -27,6 +31,16 @@ function RouterProbe() {
   const history = useHistory();
   return (
     <button type="button" onClick={() => history.push('/somewhere-else')}>
+      {location.pathname}
+    </button>
+  );
+}
+
+function CompatRouterProbe() {
+  const location = useLocationV6();
+  const navigate = useNavigate();
+  return (
+    <button type="button" onClick={() => navigate('/compat-target')}>
       {location.pathname}
     </button>
   );
@@ -64,6 +78,14 @@ describe('renderWithContexts', () => {
     const history = createMemoryHistory({ initialEntries: ['/credentials'] });
     renderWithContexts(<RouterProbe />, { context: { router: { history } } });
     expect(screen.getByRole('button')).toHaveTextContent('/credentials');
+  });
+
+  test('supports the react-router-dom-v5-compat hooks', async () => {
+    const { history, user } = renderWithContexts(<CompatRouterProbe />);
+    expect(screen.getByRole('button')).toHaveTextContent('/');
+    await user.click(screen.getByRole('button'));
+    expect(history.location.pathname).toBe('/compat-target');
+    expect(screen.getByRole('button')).toHaveTextContent('/compat-target');
   });
 
   test('renders plural messages without console errors', () => {

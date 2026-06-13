@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 
 import { useLingui } from '@lingui/react/macro';
 import { Formik } from 'formik';
@@ -25,7 +25,7 @@ import {
 } from '../../shared';
 
 function LoggingEdit() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { isModalOpen, toggleModal, closeModal } = useModal();
   const { PUT: options } = useSettings();
   const { t } = useLingui();
@@ -59,9 +59,9 @@ function LoggingEdit() {
     useCallback(
       async (values) => {
         await SettingsAPI.updateAll(values);
-        history.push('/settings/logging/details');
+        navigate('/settings/logging/details');
       },
-      [history]
+      [navigate]
     ),
     null
   );
@@ -88,11 +88,11 @@ function LoggingEdit() {
 
     closeModal();
 
-    history.push('/settings/logging/details');
+    navigate('/settings/logging/details');
   };
 
   const handleCancel = () => {
-    history.push('/settings/logging/details');
+    navigate('/settings/logging/details');
   };
 
   const initialValues = (fields) =>

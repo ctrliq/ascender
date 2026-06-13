@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
 import styled from 'styled-components';
@@ -27,7 +27,7 @@ function InventoryStep({ warningMessage = null }) {
   const { t } = useLingui();
   const [field, meta, helpers] = useField('inventory');
 
-  const history = useHistory();
+  const location = useLocation();
 
   const {
     isLoading,
@@ -36,7 +36,7 @@ function InventoryStep({ warningMessage = null }) {
     request: fetchInventories,
   } = useRequest(
     useCallback(async () => {
-      const params = parseQueryString(QS_CONFIG, history.location.search);
+      const params = parseQueryString(QS_CONFIG, location.search);
       const [{ data }, actionsResponse] = await Promise.all([
         InventoriesAPI.read(params),
         InventoriesAPI.readOptions(),
@@ -49,7 +49,7 @@ function InventoryStep({ warningMessage = null }) {
         ).map((val) => val.slice(0, -8)),
         searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET),
       };
-    }, [history.location]),
+    }, [location]),
     {
       count: 0,
       inventories: [],

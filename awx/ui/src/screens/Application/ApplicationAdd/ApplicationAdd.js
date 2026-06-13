@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 
 import { Card, PageSection } from '@patternfly/react-core';
 import useRequest from 'hooks/useRequest';
@@ -9,7 +9,7 @@ import { CardBody } from 'components/Card';
 import ApplicationForm from '../shared/ApplicationForm';
 
 function ApplicationAdd({ onSuccessfulAdd }) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [submitError, setSubmitError] = useState(null);
 
   const {
@@ -55,14 +55,14 @@ function ApplicationAdd({ onSuccessfulAdd }) {
     try {
       const { data } = await ApplicationsAPI.create(values);
       onSuccessfulAdd(data);
-      history.push(`/applications/${data.id}/details`);
+      navigate(`/applications/${data.id}/details`);
     } catch (err) {
       setSubmitError(err);
     }
   };
 
   const handleCancel = () => {
-    history.push(`/applications`);
+    navigate(`/applications`);
   };
 
   useEffect(() => {

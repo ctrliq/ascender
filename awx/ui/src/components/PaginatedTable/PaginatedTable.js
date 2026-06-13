@@ -4,7 +4,8 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { TableComposable, Tbody } from '@patternfly/react-table';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 
 import { useLingui } from '@lingui/react/macro';
 
@@ -38,9 +39,9 @@ function PaginatedTable({
   ouiaId,
 }) {
   const { t } = useLingui();
-  const { search, pathname } = useLocation();
-  const history = useHistory();
   const location = useLocation();
+  const { search, pathname } = location;
+  const navigate = useNavigate();
   if (!pluralizedItemName) {
     pluralizedItemName = t`Items`;
   }
@@ -50,7 +51,7 @@ function PaginatedTable({
   }, [location.search, clearSelected]);
 
   const pushHistoryState = (qs) => {
-    history.push(qs ? `${pathname}?${qs}` : pathname);
+    navigate(qs ? `${pathname}?${qs}` : pathname);
   };
 
   const handleSetPage = (event, pageNumber) => {
@@ -77,7 +78,7 @@ function PaginatedTable({
           isDefault: true,
         },
       ];
-  const queryParams = parseQueryString(qsConfig, history.location.search);
+  const queryParams = parseQueryString(qsConfig, location.search);
 
   const dataListLabel = t({
     message: `${pluralizedItemName} List`,

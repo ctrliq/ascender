@@ -1,5 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
 import { CaretLeftIcon } from '@patternfly/react-icons';
@@ -19,11 +20,12 @@ function UIDetail() {
   const { t } = useLingui();
   const { me } = useConfig();
   const { GET: options } = useSettings();
-  const history = useHistory();
-  const { hardReload } = useLocation();
+  const navigate = useNavigate();
+  const { state: locationState } = useLocation();
+  const hardReload = locationState?.hardReload;
 
   if (hardReload) {
-    history.go();
+    navigate(0);
   }
 
   const {

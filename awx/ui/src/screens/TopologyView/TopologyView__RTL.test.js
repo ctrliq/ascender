@@ -1,5 +1,6 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
+import { CompatRouter } from 'react-router-dom-v5-compat';
 import { MeshAPI } from 'api';
 import { render, waitFor, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
@@ -96,7 +97,9 @@ describe('<TopologyView />', () => {
     });
     renderWithI18n(
       <MemoryRouter>
+      <CompatRouter>
         <TopologyView />
+      </CompatRouter>
       </MemoryRouter>
     );
     await waitFor(() => screen.getByRole('heading', { level: 2 }));
@@ -114,7 +117,9 @@ describe('<TopologyView />', () => {
     });
     renderWithI18n(
       <MemoryRouter>
+      <CompatRouter>
         <TopologyView />
+      </CompatRouter>
       </MemoryRouter>
     );
     await waitFor(() => screen.getByRole('heading', { level: 2 }));
@@ -138,7 +143,9 @@ describe('<TopologyView />', () => {
     );
     renderWithI18n(
       <MemoryRouter>
+      <CompatRouter>
         <TopologyView />
+      </CompatRouter>
       </MemoryRouter>
     );
     await waitFor(() => screen.getByRole('heading', { level: 2 }));

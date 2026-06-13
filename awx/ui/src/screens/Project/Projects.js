@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { Route, withRouter, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';
 import ScreenHeader from 'components/ScreenHeader/ScreenHeader';
 import PersistentFilters from 'components/PersistentFilters';
@@ -60,4 +60,4 @@ function Projects() {
 }
 
 export { Projects as _Projects };
-export default withRouter(Projects);
+export default Projects;

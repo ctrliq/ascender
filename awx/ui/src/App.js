@@ -8,6 +8,7 @@ import {
   Redirect,
   useHistory,
 } from 'react-router-dom';
+import { CompatRouter } from 'react-router-dom-v5-compat';
 import { ErrorBoundary } from 'react-error-boundary';
 import locationReplace from 'util/navigation';
 import { I18nProvider } from '@lingui/react';
@@ -215,6 +216,8 @@ function App() {
 
 export default () => (
   <HashRouter>
-    <App />
+    <CompatRouter>
+      <App />
+    </CompatRouter>
   </HashRouter>
 );

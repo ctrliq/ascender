@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
 import { CredentialsAPI } from 'api';
@@ -25,7 +25,7 @@ function CredentialsStep() {
   const { t } = useLingui();
   const [selectedCredential, , selectedCredentialHelper] =
     useField('credential');
-  const history = useHistory();
+  const location = useLocation();
 
   const {
     result: { credentials, count, relatedSearchableKeys, searchableKeys },
@@ -34,7 +34,7 @@ function CredentialsStep() {
     request: fetchCredentials,
   } = useRequest(
     useCallback(async () => {
-      const params = parseQueryString(QS_CONFIG, history.location.search);
+      const params = parseQueryString(QS_CONFIG, location.search);
       const [{ data }, actionsResponse] = await Promise.all([
         CredentialsAPI.read({ ...params }),
         CredentialsAPI.readOptions(),
@@ -47,7 +47,7 @@ function CredentialsStep() {
         ).map((val) => val.slice(0, -8)),
         searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET),
       };
-    }, [history.location.search]),
+    }, [location.search]),
     { credentials: [], count: 0, relatedSearchableKeys: [], searchableKeys: [] }
   );
 

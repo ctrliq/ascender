@@ -5,7 +5,9 @@
 import React from 'react';
 import { shape, string } from 'prop-types';
 import { mount, shallow } from 'enzyme';
-import { MemoryRouter, Router } from 'react-router-dom';
+import { Router, useLocation } from 'react-router-dom';
+import { Router as RouterV6 } from 'react-router-dom-v5-compat';
+import { createMemoryHistory } from 'history';
 import { I18nProvider } from '@lingui/react';
 import { i18n } from '@lingui/core';
 import english from '../src/locales/en/messages';
@@ -62,29 +64,34 @@ const defaultContexts = {
   },
 };
 
+// The v5 Router above subscribes to history and drives re-renders; this
+// nested v6 Router is fully controlled (location comes from v5's context,
+// the navigator is the shared history object) so components migrated to
+// the react-router-dom-v5-compat APIs work without a second subscription.
+function CompatV6Layer({ history, children }) {
+  const location = useLocation();
+  return (
+    <RouterV6 location={location} navigator={history}>
+      {children}
+    </RouterV6>
+  );
+}
+
 function wrapContexts(node, context) {
   const { config, router, session } = context;
+  const history = router.history || createMemoryHistory();
   class Wrap extends React.Component {
     render() {
 
       const { children, ...props } = this.props;
       const component = React.cloneElement(children, props);
-      if (router.history) {
-        return (
-          <I18nProvider i18n={i18n}>
-            <SessionProvider value={session}>
-              <ConfigProvider value={config}>
-                <Router history={router.history}>{component}</Router>
-              </ConfigProvider>
-            </SessionProvider>
-          </I18nProvider>
-        );
-      }
       return (
         <I18nProvider i18n={i18n}>
           <SessionProvider value={session}>
             <ConfigProvider value={config}>
-              <MemoryRouter>{component}</MemoryRouter>
+              <Router history={history}>
+                <CompatV6Layer history={history}>{component}</CompatV6Layer>
+              </Router>
             </ConfigProvider>
           </SessionProvider>
         </I18nProvider>

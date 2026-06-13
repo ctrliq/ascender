@@ -6,7 +6,11 @@ import React, {
   useCallback,
   useMemo,
 } from 'react';
-import { useHistory, Redirect } from 'react-router-dom';
+import {
+  Navigate,
+  useLocation,
+  useNavigationType,
+} from 'react-router-dom-v5-compat';
 import { DateTime } from 'luxon';
 import { RootAPI, MeAPI } from 'api';
 import { isAuthenticated } from 'util/auth';
@@ -67,7 +71,9 @@ const SessionContext = React.createContext({});
 SessionContext.displayName = 'SessionContext';
 
 function SessionProvider({ children }) {
-  const history = useHistory();
+  const location = useLocation();
+  const navigationType = useNavigationType();
+  const isFirstLocationUpdate = useRef(true);
   const isSessionExpired = useRef(false);
   const sessionTimeoutId = useRef(null);
   const sessionIntervalId = useRef(null);
@@ -111,23 +117,23 @@ function SessionProvider({ children }) {
     setSessionCountdown(0);
     clearTimeout(sessionTimeoutId.current);
     clearInterval(sessionIntervalId.current);
-    return <Redirect to="/login" />;
+    return <Navigate to="/login" />;
   }, [setSessionTimeout, setSessionCountdown]);
 
   useEffect(() => {
-    const isRedirectCondition = (location, histLength) =>
-      location.pathname === '/login' && histLength === 2;
+    // history.listen() only fired on navigation; skip the initial render to
+    // keep the v5 semantics.
+    if (isFirstLocationUpdate.current) {
+      isFirstLocationUpdate.current = false;
+      return;
+    }
+    const isRedirectCondition =
+      location.pathname === '/login' && window.history.length === 2;
 
-    const unlisten = history.listen((location, action) => {
-      if (action === 'POP' || isRedirectCondition(location, history.length)) {
-        setIsRedirectLinkReceived(true);
-      }
-    });
-
-    return () => {
-      unlisten(); // ensure that the listener is removed when the component unmounts
-    };
-  }, [history]);
+    if (navigationType === 'POP' || isRedirectCondition) {
+      setIsRedirectLinkReceived(true);
+    }
+  }, [location, navigationType]);
 
   useEffect(() => {
     if (!isAuthenticated(document.cookie)) {
@@ -174,7 +180,7 @@ function SessionProvider({ children }) {
       clearInterval(sessionIntervalId.current);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [history, sessionTimeout]);
+  }, [location, sessionTimeout]);
 
   const handleSessionContinue = useCallback(async () => {
     await MeAPI.read();

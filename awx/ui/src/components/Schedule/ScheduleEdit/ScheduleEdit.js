@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { shape } from 'prop-types';
 import { Card } from '@patternfly/react-core';
 import yaml from 'js-yaml';
@@ -22,7 +23,7 @@ function ScheduleEdit({
   resourceDefaultCredentials,
 }) {
   const [formSubmitError, setFormSubmitError] = useState(null);
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
   const { pathname } = location;
   const pathRoot = pathname.substring(0, pathname.indexOf('schedules'));
@@ -169,7 +170,7 @@ function ScheduleEdit({
         ),
       ]);
 
-      history.push(`${pathRoot}schedules/${scheduleId}/details`);
+      navigate(`${pathRoot}schedules/${scheduleId}/details`);
     } catch (err) {
       setFormSubmitError(err);
     }
@@ -182,7 +183,7 @@ function ScheduleEdit({
           schedule={schedule}
           hasDaysToKeepField={hasDaysToKeepField}
           handleCancel={() =>
-            history.push(`${pathRoot}schedules/${schedule.id}/details`)
+            navigate(`${pathRoot}schedules/${schedule.id}/details`)
           }
           handleSubmit={handleSubmit}
           submitError={formSubmitError}
