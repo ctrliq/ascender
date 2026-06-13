@@ -3,7 +3,10 @@ asciichartpy
 asn1
 asyncpg
 azure-identity>=1.25.2
-azure-keyvault
+# only azure.keyvault.secrets is used (credential_plugins/azure_kv.py); the
+# azure-keyvault meta-package also pulled unused certificates/keys. >=4.11
+# additionally drops the deprecated azure-common transitive dep.
+azure-keyvault-secrets>=4.11.0
 boto3
 botocore
 cachetools

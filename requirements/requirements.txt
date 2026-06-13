@@ -41,27 +41,14 @@ autocommand==2.2.2
     # via jaraco-text
 automat==24.8.1
     # via twisted
-azure-common==1.1.28
-    # via
-    #   azure-keyvault-certificates
-    #   azure-keyvault-keys
-    #   azure-keyvault-secrets
 azure-core==1.38.0
     # via
     #   azure-identity
-    #   azure-keyvault-certificates
-    #   azure-keyvault-keys
     #   azure-keyvault-secrets
 azure-identity==1.25.2
     # via -r /awx_devel/requirements/requirements.in
-azure-keyvault==4.2.0
+azure-keyvault-secrets==4.11.0
     # via -r /awx_devel/requirements/requirements.in
-azure-keyvault-certificates==4.7.0
-    # via azure-keyvault
-azure-keyvault-keys==4.8.0
-    # via azure-keyvault
-azure-keyvault-secrets==4.7.0
-    # via azure-keyvault
 boto3==1.39.1
     # via -r /awx_devel/requirements/requirements.in
 botocore==1.39.1
@@ -97,7 +84,6 @@ cryptography==46.0.7
     #   -r /awx_devel/requirements/requirements.in
     #   autobahn
     #   azure-identity
-    #   azure-keyvault-keys
     #   django-ansible-base
     #   jwcrypto
     #   msal
@@ -209,8 +195,6 @@ irc==20.3.1
     # via -r /awx_devel/requirements/requirements.in
 isodate==0.6.1
     # via
-    #   azure-keyvault-certificates
-    #   azure-keyvault-keys
     #   azure-keyvault-secrets
     #   python3-saml
 jaraco-collections==5.0.0
@@ -466,8 +450,6 @@ typing-extensions==4.12.2
     #   aiosignal
     #   azure-core
     #   azure-identity
-    #   azure-keyvault-certificates
-    #   azure-keyvault-keys
     #   azure-keyvault-secrets
     #   inflect
     #   jwcrypto
