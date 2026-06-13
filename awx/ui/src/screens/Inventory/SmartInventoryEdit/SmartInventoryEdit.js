@@ -58,8 +58,8 @@ function SmartInventoryEdit({ inventory }) {
         search: '',
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- navigate is not
-    // referentially stable in react-router-dom-v5-compat
+    // navigate is not referentially stable in react-router-dom-v5-compat
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [submitResult, detailsUrl]);
 
   const handleSubmit = async (form) => {

@@ -96,9 +96,9 @@ function AddResourceRole({ onSave, onClose, roles, resource, onError }) {
     if (currentStepId === 1 && maxEnabledStep > 1) {
       navigate(location.pathname);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- navigate is not
-    // referentially stable in react-router-dom-v5-compat; including it refires
-    // this effect after unrelated navigations
+    // navigate is not referentially stable in react-router-dom-v5-compat;
+    // including it refires this effect after unrelated navigations
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentStepId, location.pathname, maxEnabledStep]);
 
   const handleResourceTypeSelect = (type) => {
