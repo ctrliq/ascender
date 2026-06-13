@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { func, bool, string, number, oneOfType, arrayOf } from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import { useLocation } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import { InventoriesAPI } from 'api';
 import { Inventory } from 'types';
@@ -25,7 +25,6 @@ function InventoryLookup({
   fieldId,
   fieldName,
   hideAdvancedInventories,
-  history,
   isDisabled,
   isPromptableField,
   onBlur,
@@ -37,6 +36,7 @@ function InventoryLookup({
   value,
   multiple,
 }) {
+  const location = useLocation();
   const { t } = useLingui();
   const autoPopulateLookup = useAutoPopulateLookup(onChange);
 
@@ -49,7 +49,7 @@ function InventoryLookup({
     isLoading,
   } = useRequest(
     useCallback(async () => {
-      const params = parseQueryString(QS_CONFIG, history.location.search);
+      const params = parseQueryString(QS_CONFIG, location.search);
       const inventoryKindParams = hideAdvancedInventories
         ? { not__kind: ['smart', 'constructed', 'federated'] }
         : {};
@@ -92,7 +92,7 @@ function InventoryLookup({
           })),
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [autoPopulate, autoPopulateLookup, excludeIdsKey, history.location]),
+    }, [autoPopulate, autoPopulateLookup, excludeIdsKey, location]),
     {
       inventories: [],
       count: 0,
@@ -277,4 +277,4 @@ InventoryLookup.defaultProps = {
   value: null,
 };
 
-export default withRouter(InventoryLookup);
+export default InventoryLookup;

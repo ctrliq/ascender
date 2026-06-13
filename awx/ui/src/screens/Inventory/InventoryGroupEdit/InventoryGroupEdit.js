@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { GroupsAPI } from 'api';
 
 import InventoryGroupForm from '../shared/InventoryGroupForm';
@@ -8,19 +9,19 @@ import InventoryGroupForm from '../shared/InventoryGroupForm';
 function InventoryGroupEdit({ inventoryGroup }) {
   const [error, setError] = useState(null);
   const { id, groupId } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
     try {
       await GroupsAPI.update(groupId, values);
-      history.push(`/inventories/inventory/${id}/groups/${groupId}/details`);
+      navigate(`/inventories/inventory/${id}/groups/${groupId}/details`);
     } catch (err) {
       setError(err);
     }
   };
 
   const handleCancel = () => {
-    history.push(`/inventories/inventory/${id}/groups/${groupId}`);
+    navigate(`/inventories/inventory/${id}/groups/${groupId}`);
   };
 
   return (

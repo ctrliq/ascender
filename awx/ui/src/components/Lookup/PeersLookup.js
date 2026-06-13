@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { arrayOf, string, func, bool, shape } from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import { useLocation } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import { FormGroup, Chip } from '@patternfly/react-core';
 import { InstancesAPI } from 'api';
@@ -27,7 +27,6 @@ function PeersLookup({
   tooltip,
   className,
   required,
-  history,
   fieldName,
   multiple,
   validate,
@@ -39,6 +38,7 @@ function PeersLookup({
   typePeers,
   instance_details,
 }) {
+  const location = useLocation();
   const { t } = useLingui();
   const {
     result: { instances, count, relatedSearchableKeys, searchableKeys },
@@ -47,7 +47,7 @@ function PeersLookup({
     isLoading,
   } = useRequest(
     useCallback(async () => {
-      const params = parseQueryString(QS_CONFIG, history.location.search);
+      const params = parseQueryString(QS_CONFIG, location.search);
       const peersFilter = {};
       if (typePeers) {
         peersFilter.not__node_type = ['control', 'hybrid'];
@@ -75,7 +75,7 @@ function PeersLookup({
         ).map((val) => val.slice(0, -8)),
         searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET),
       };
-    }, [history.location, typePeers, instance_details]),
+    }, [location, typePeers, instance_details]),
     {
       instances: [],
       count: 0,
@@ -201,4 +201,4 @@ PeersLookup.defaultProps = {
   typePeers: false,
 };
 
-export default withRouter(PeersLookup);
+export default PeersLookup;

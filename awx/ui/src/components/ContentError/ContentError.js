@@ -1,6 +1,7 @@
 
 import React from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { Navigate } from 'react-router-dom-v5-compat';
 import { bool, instanceOf } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 
@@ -30,7 +31,7 @@ function ContentError({ error, children, isNotFound }) {
   return (
     <>
       {is401 ? (
-        <Redirect to="/login" />
+        <Navigate to="/login" />
       ) : (
         <EmptyState variant="full">
           <EmptyStateIcon icon={ExclamationTriangleIcon} />

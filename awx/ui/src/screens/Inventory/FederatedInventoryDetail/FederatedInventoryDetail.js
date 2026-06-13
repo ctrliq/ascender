@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 
 import {
@@ -23,7 +24,7 @@ import ErrorDetail from 'components/ErrorDetail';
 
 function FederatedInventoryDetail({ inventory }) {
   const { t } = useLingui();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const {
     result: { inputInventories, actions },
@@ -56,8 +57,8 @@ function FederatedInventoryDetail({ inventory }) {
   const { request: deleteInventory, error: deleteError } = useRequest(
     useCallback(async () => {
       await InventoriesAPI.destroy(inventory.id);
-      history.push(`/inventories`);
-    }, [inventory.id, history])
+      navigate(`/inventories`);
+    }, [inventory.id, navigate])
   );
 
   const { error, dismissError } = useDismissableError(deleteError);

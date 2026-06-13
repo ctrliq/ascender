@@ -14,7 +14,8 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Router } from 'react-router-dom';
+import { Router, useLocation } from 'react-router-dom';
+import { Router as RouterV6 } from 'react-router-dom-v5-compat';
 import { createMemoryHistory } from 'history';
 import { I18nProvider } from '@lingui/react';
 import { i18n } from '@lingui/core';
@@ -59,6 +60,20 @@ function applyDefaultContexts(context) {
   return newContext;
 }
 
+// The v5 Router subscribes to history and drives re-renders; this nested v6
+// Router is fully controlled (location comes from v5's context, the navigator
+// is the shared history object) so components migrated to the
+// react-router-dom-v5-compat APIs work without a second subscription. Mirrors
+// the CompatV6Layer in enzymeHelpers.
+function CompatV6Layer({ history, children }) {
+  const location = useLocation();
+  return (
+    <RouterV6 location={location} navigator={history}>
+      {children}
+    </RouterV6>
+  );
+}
+
 export function renderWithContexts(ui, options = {}) {
   const { context: userContext, ...renderOptions } = options;
   const { config, router, session } = applyDefaultContexts(userContext);
@@ -69,7 +84,9 @@ export function renderWithContexts(ui, options = {}) {
       <I18nProvider i18n={i18n}>
         <SessionProvider value={session}>
           <ConfigProvider value={config}>
-            <Router history={history}>{children}</Router>
+            <Router history={history}>
+              <CompatV6Layer history={history}>{children}</CompatV6Layer>
+            </Router>
           </ConfigProvider>
         </SessionProvider>
       </I18nProvider>

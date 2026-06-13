@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useReducer } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import styled from 'styled-components';
 import { shape } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
@@ -131,7 +131,7 @@ const fetchWorkflowNodes = async (
 
 function Visualizer({ template }) {
   const { t } = useLingui();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [state, dispatch] = useReducer(workflowReducer, {
     addLinkSourceNode: null,
     addLinkTargetNode: null,
@@ -180,7 +180,7 @@ function Visualizer({ template }) {
     if (unsavedChanges) {
       dispatch({ type: 'TOGGLE_UNSAVED_CHANGES_MODAL' });
     } else {
-      history.push(`/templates/workflow_job_template/${template.id}/details`);
+      navigate(`/templates/workflow_job_template/${template.id}/details`);
     }
   };
 
@@ -638,8 +638,8 @@ function Visualizer({ template }) {
         ...instanceGroupRequests,
       ]);
 
-      history.push(`/templates/workflow_job_template/${template.id}/details`);
-    }, [links, nodes, history, defaultOrganization, template.id]),
+      navigate(`/templates/workflow_job_template/${template.id}/details`);
+    }, [links, nodes, navigate, defaultOrganization, template.id]),
     {}
   );
 
@@ -689,7 +689,7 @@ function Visualizer({ template }) {
         {showUnsavedChangesModal && (
           <UnsavedChangesModal
             onExit={() =>
-              history.push(
+              navigate(
                 `/templates/workflow_job_template/${template.id}/details`
               )
             }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom-v5-compat';
 import { object } from 'prop-types';
 
 import { CardBody } from 'components/Card';
@@ -13,7 +13,8 @@ function InventoryEdit({ inventory }) {
   const [error, setError] = useState(null);
   const [associatedInstanceGroups, setInstanceGroups] = useState(null);
   const [contentLoading, setContentLoading] = useState(true);
-  const history = useHistory();
+  const location = useLocation();
+  const navigate = useNavigate();
   const isMounted = useIsMounted();
 
   useEffect(() => {
@@ -44,7 +45,7 @@ function InventoryEdit({ inventory }) {
         ? `/inventories/smart_inventory/${inventory.id}/details`
         : `/inventories/inventory/${inventory.id}/details`;
 
-    history.push(`${url}`);
+    navigate(`${url}`);
   };
 
   const handleSubmit = async (values) => {
@@ -62,10 +63,10 @@ function InventoryEdit({ inventory }) {
       await submitLabels(values.organization.id, values.labels);
 
       const url =
-        history.location.pathname.search('smart') > -1
+        location.pathname.search('smart') > -1
           ? `/inventories/smart_inventory/${inventory.id}/details`
           : `/inventories/inventory/${inventory.id}/details`;
-      history.push(`${url}`);
+      navigate(`${url}`);
     } catch (err) {
       setError(err);
     }

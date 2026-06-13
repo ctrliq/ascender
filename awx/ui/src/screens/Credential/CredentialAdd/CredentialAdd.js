@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { PageSection, Card } from '@patternfly/react-core';
 import { CardBody } from 'components/Card';
 import ContentError from 'components/ContentError';
@@ -27,7 +27,7 @@ const fetchCredentialTypes = async (pageNo = 1, credentialTypes = []) => {
 };
 
 function CredentialAdd({ me }) {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const {
     error: submitError,
@@ -87,9 +87,11 @@ function CredentialAdd({ me }) {
 
   useEffect(() => {
     if (credentialId) {
-      history.push(`/credentials/${credentialId}/details`);
+      navigate(`/credentials/${credentialId}/details`);
     }
-  }, [credentialId, history]);
+    // navigate is not referentially stable in react-router-dom-v5-compat
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [credentialId]);
 
   const {
     isLoading,
@@ -112,7 +114,7 @@ function CredentialAdd({ me }) {
   }, [loadData]);
 
   const handleCancel = () => {
-    history.push('/credentials');
+    navigate('/credentials');
   };
 
   const handleSubmit = async (values) => {

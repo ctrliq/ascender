@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { number, func, bool, string } from 'prop-types';
 
 import styled from 'styled-components';
@@ -101,7 +102,7 @@ function HostFilterLookup({
   enableRelatedFuzzyFiltering,
 }) {
   const { t } = useLingui();
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
   const [chips, setChips] = useState({});
   const [queryString, setQueryString] = useState('');
@@ -220,10 +221,12 @@ function HostFilterLookup({
     const hostFilterString = qsToHostFilter(location.search);
     onChange(hostFilterString);
     closeModal();
-    history.replace({
+    navigate(
+{
       pathname: `${location.pathname}`,
       search: '',
-    });
+    },
+    { replace: true });
   };
 
   const removeHostFilter = (filter) => {
@@ -269,20 +272,24 @@ function HostFilterLookup({
   }
 
   const handleOpenModal = () => {
-    history.replace({
+    navigate(
+{
       pathname: `${location.pathname}`,
       search: queryString,
-    });
+    },
+    { replace: true });
     fetchHosts(organizationId);
     toggleModal();
   };
 
   const handleClose = () => {
     closeModal();
-    history.replace({
+    navigate(
+{
       pathname: `${location.pathname}`,
       search: '',
-    });
+    },
+    { replace: true });
   };
 
   const renderLookup = () => (

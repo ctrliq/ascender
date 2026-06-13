@@ -75,7 +75,10 @@ function parseValue(config, key, rawValue) {
   if (config.integerFields && config.integerFields.some((v) => v === key)) {
     return parseInt(rawValue, 10);
   }
-  // TODO: parse dateFields into date format?
+  // dateFields stay strings on purpose: filter values are submitted as
+  // ISO dates (e.g. created__gte=2026-06-01), which is exactly what the
+  // API expects - parsing into Date objects would only force formatting
+  // them back
   return decodeURIComponent(rawValue);
 }
 

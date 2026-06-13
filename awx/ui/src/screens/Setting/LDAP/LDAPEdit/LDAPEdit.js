@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useRouteMatch } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { Formik } from 'formik';
 import { Form } from '@patternfly/react-core';
 import { CardBody } from 'components/Card';
@@ -31,7 +32,7 @@ function filterByPrefix(data, prefix) {
 }
 
 function LDAPEdit() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { isModalOpen, toggleModal, closeModal } = useModal();
   const { PUT: options } = useSettings();
   const {
@@ -89,9 +90,9 @@ function LDAPEdit() {
     useCallback(
       async (values) => {
         await SettingsAPI.updateAll(values);
-        history.push(`/settings/ldap/${category}/details`);
+        navigate(`/settings/ldap/${category}/details`);
       },
-      [history, category]
+      [navigate, category]
     ),
     null
   );
@@ -140,7 +141,7 @@ function LDAPEdit() {
   };
 
   const handleCancel = () => {
-    history.push(`/settings/ldap/${category}/details`);
+    navigate(`/settings/ldap/${category}/details`);
   };
 
   const initialValues = (fields) =>

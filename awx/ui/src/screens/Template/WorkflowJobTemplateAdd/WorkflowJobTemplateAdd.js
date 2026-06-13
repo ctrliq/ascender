@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { Card, PageSection } from '@patternfly/react-core';
 import { CardBody } from 'components/Card';
 import { WorkflowJobTemplatesAPI, OrganizationsAPI, UsersAPI } from 'api';
@@ -11,7 +11,7 @@ import WorkflowJobTemplateForm from '../shared/WorkflowJobTemplateForm';
 
 function WorkflowJobTemplateAdd() {
   const { me = {} } = useConfig();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [formSubmitError, setFormSubmitError] = useState(null);
 
   const handleSubmit = async (values) => {
@@ -41,7 +41,7 @@ function WorkflowJobTemplateAdd() {
         data: { id },
       } = await WorkflowJobTemplatesAPI.create(templatePayload);
       await Promise.all(await submitLabels(id, organizationId, labels));
-      history.push(`/templates/workflow_job_template/${id}/visualizer`);
+      navigate(`/templates/workflow_job_template/${id}/visualizer`);
     } catch (err) {
       setFormSubmitError(err);
     }
@@ -66,7 +66,7 @@ function WorkflowJobTemplateAdd() {
   };
 
   const handleCancel = () => {
-    history.push(`/templates`);
+    navigate(`/templates`);
   };
 
   const {

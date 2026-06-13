@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 
 import { CardBody } from 'components/Card';
 import { getAddedAndRemoved } from 'util/lists';
@@ -17,7 +17,7 @@ import { WorkflowJobTemplateForm } from '../shared';
 
 function WorkflowJobTemplateEdit({ template }) {
   const { me = {} } = useConfig();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [formSubmitError, setFormSubmitError] = useState(null);
 
   const handleSubmit = async (values) => {
@@ -48,7 +48,7 @@ function WorkflowJobTemplateEdit({ template }) {
         await submitLabels(formOrgId, template.organization, labels)
       );
       await WorkflowJobTemplatesAPI.update(template.id, templatePayload);
-      history.push(`/templates/workflow_job_template/${template.id}/details`);
+      navigate(`/templates/workflow_job_template/${template.id}/details`);
     } catch (err) {
       setFormSubmitError(err);
     }
@@ -83,7 +83,7 @@ function WorkflowJobTemplateEdit({ template }) {
   };
 
   const handleCancel = () => {
-    history.push(`/templates/workflow_job_template/${template.id}/details`);
+    navigate(`/templates/workflow_job_template/${template.id}/details`);
   };
 
   const {

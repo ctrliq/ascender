@@ -1,5 +1,6 @@
 import React from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { Thead, Tr, Th as PFTh } from '@patternfly/react-table';
 import styled from 'styled-components';
 import { parseQueryString, updateQueryString } from 'util/qs';
@@ -17,7 +18,7 @@ export default function HeaderRow({
   children,
 }) {
   const location = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const params = parseQueryString(qsConfig, location.search);
 
@@ -26,7 +27,7 @@ export default function HeaderRow({
       order_by: order === 'asc' ? key : `-${key}`,
       page: null,
     });
-    history.push(qs ? `${location.pathname}?${qs}` : location.pathname);
+    navigate(qs ? `${location.pathname}?${qs}` : location.pathname);
   };
 
   const sortKey = params.order_by?.replace('-', '');

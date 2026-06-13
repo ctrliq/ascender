@@ -1,7 +1,8 @@
 
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import styled from 'styled-components';
 import { Toolbar, ToolbarContent } from '@patternfly/react-core';
 
@@ -28,7 +29,7 @@ const EmptyStateControlsWrapper = styled.div`
 function ListHeader(props) {
   const { search, pathname } = useLocation();
   const [isFilterCleared, setIsFilterCleared] = useState(false);
-  const history = useHistory();
+  const navigate = useNavigate();
   const {
     emptyStateControls,
     itemCount,
@@ -87,7 +88,7 @@ function ListHeader(props) {
   };
 
   const pushHistoryState = (queryString) => {
-    history.push(queryString ? `${pathname}?${queryString}` : pathname);
+    navigate(queryString ? `${pathname}?${queryString}` : pathname);
   };
 
   const params = parseQueryString(qsConfig, search);

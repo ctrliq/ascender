@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { Card, PageSection } from '@patternfly/react-core';
 import { CardBody } from 'components/Card';
 import { OrganizationsAPI } from 'api';
@@ -7,7 +7,7 @@ import UserForm from '../shared/UserForm';
 
 function UserAdd() {
   const [formSubmitError, setFormSubmitError] = useState(null);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
     setFormSubmitError(null);
@@ -16,14 +16,14 @@ function UserAdd() {
       const {
         data: { id },
       } = await OrganizationsAPI.createUser(organization.id, userValues);
-      history.push(`/users/${id}/details`);
+      navigate(`/users/${id}/details`);
     } catch (error) {
       setFormSubmitError(error);
     }
   };
 
   const handleCancel = () => {
-    history.push(`/users`);
+    navigate(`/users`);
   };
 
   return (

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { shape } from 'prop-types';
 import { Badge as PFBadge, Button, Tooltip } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
@@ -72,7 +72,7 @@ const ActionButton = styled(Button)`
 function WorkflowOutputToolbar({ job }) {
   const { t } = useLingui();
   const dispatch = useContext(WorkflowDispatchContext);
-  const history = useHistory();
+  const navigate = useNavigate();
   const { nodes, showLegend, showTools } = useContext(WorkflowStateContext);
   const workflowTemplateId =
     job.summary_fields?.workflow_job_template?.id ??
@@ -95,7 +95,7 @@ function WorkflowOutputToolbar({ job }) {
   const totalNodes = nodes.reduce((n, node) => n + !node.isDeleted, 0) - 1;
   const navToWorkflow = () => {
     if (workflowTemplateId) {
-      history.push(
+      navigate(
         `/templates/workflow_job_template/${workflowTemplateId}/visualizer`
       );
     }

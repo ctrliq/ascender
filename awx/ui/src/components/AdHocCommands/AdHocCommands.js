@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState, useContext } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 
 import { useLingui } from '@lingui/react/macro';
 
@@ -22,7 +23,7 @@ function AdHocCommands({
   moduleOptions,
 }) {
   const { t } = useLingui();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { id } = useParams();
 
   const [isWizardOpen, setIsWizardOpen] = useState(false);
@@ -63,10 +64,10 @@ function AdHocCommands({
     useCallback(
       async (values) => {
         const { data } = await InventoriesAPI.launchAdHocCommands(id, values);
-        history.push(`/jobs/command/${data.id}/output`);
+        navigate(`/jobs/command/${data.id}/output`);
       },
 
-      [id, history]
+      [id, navigate]
     )
   );
 

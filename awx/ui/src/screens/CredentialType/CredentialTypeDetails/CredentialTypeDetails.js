@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { Button } from '@patternfly/react-core';
 
 import { VariablesDetail } from 'components/CodeEditor';
@@ -21,7 +22,7 @@ import { useLingui } from '@lingui/react/macro';
 function CredentialTypeDetails({ credentialType }) {
   const { t } = useLingui();
   const { id, name, description, injectors, inputs } = credentialType;
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const {
     request: deleteCredentialType,
@@ -30,8 +31,8 @@ function CredentialTypeDetails({ credentialType }) {
   } = useRequest(
     useCallback(async () => {
       await CredentialTypesAPI.destroy(id);
-      history.push(`/credential_types`);
-    }, [id, history])
+      navigate(`/credential_types`);
+    }, [id, navigate])
   );
 
   const {

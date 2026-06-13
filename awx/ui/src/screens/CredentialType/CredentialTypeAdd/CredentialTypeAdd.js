@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Card, PageSection } from '@patternfly/react-core';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 
 import { CardBody } from 'components/Card';
 import { CredentialTypesAPI } from 'api';
@@ -8,7 +8,7 @@ import { parseVariableField } from 'util/yaml';
 import CredentialTypeForm from '../shared/CredentialTypeForm';
 
 function CredentialTypeAdd() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [submitError, setSubmitError] = useState(null);
 
   const handleSubmit = async (values) => {
@@ -19,14 +19,14 @@ function CredentialTypeAdd() {
         inputs: parseVariableField(values.inputs),
         kind: 'cloud',
       });
-      history.push(`/credential_types/${response.id}/details`);
+      navigate(`/credential_types/${response.id}/details`);
     } catch (error) {
       setSubmitError(error);
     }
   };
 
   const handleCancel = () => {
-    history.push(`/credential_types`);
+    navigate(`/credential_types`);
   };
 
   return (

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 
 import { useLingui } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
@@ -34,13 +35,13 @@ function HostDetail({ host }) {
 
   const [isLoading, setIsloading] = useState(false);
   const [deletionError, setDeletionError] = useState(false);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleHostDelete = async () => {
     setIsloading(true);
     try {
       await HostsAPI.destroy(id);
-      history.push('/hosts');
+      navigate('/hosts');
     } catch (err) {
       setDeletionError(err);
     } finally {

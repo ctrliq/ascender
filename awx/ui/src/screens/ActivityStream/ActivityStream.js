@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
 import {
@@ -40,7 +41,7 @@ function ActivityStream() {
 
   const [isTypeDropdownOpen, setIsTypeDropdownOpen] = useState(false);
   const location = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
   useTitle(t`Activity Stream`);
   const urlParams = new URLSearchParams(location.search);
 
@@ -62,7 +63,8 @@ function ActivityStream() {
       page_size: 20,
       order_by: '-timestamp',
     },
-    ['id', 'page', 'page_size']
+    ['id', 'page', 'page_size'],
+    ['timestamp']
   );
 
   const {
@@ -108,7 +110,7 @@ function ActivityStream() {
       type: urlParamsToAdd.get('type'),
     });
 
-    history.push(qs ? `${location.pathname}?${qs}` : location.pathname);
+    navigate(qs ? `${location.pathname}?${qs}` : location.pathname);
   };
 
   return (
@@ -245,6 +247,10 @@ function ActivityStream() {
               {
                 name: t`Initiated by (username)`,
                 key: 'actor__username__icontains',
+              },
+              {
+                name: t`Time`,
+                key: 'timestamp',
               },
             ]}
             toolbarSortColumns={[

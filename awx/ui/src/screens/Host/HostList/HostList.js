@@ -1,5 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
-import { useHistory, useLocation, useRouteMatch } from 'react-router-dom';
+import { useLocation, useRouteMatch } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 
 import { useLingui } from '@lingui/react/macro';
 
@@ -30,7 +31,7 @@ const QS_CONFIG = getQSConfig('host', {
 
 function HostList() {
   const { t } = useLingui();
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
   const match = useRouteMatch();
   const parsedQueryStrings = parseQueryString(QS_CONFIG, location.search);
@@ -124,7 +125,7 @@ function HostList() {
   };
 
   const handleSmartInventoryClick = () => {
-    history.push(
+    navigate(
       `/inventories/smart_inventory/add?host_filter=${encodeURIComponent(
         encodeQueryString(nonDefaultSearchParams)
       )}`

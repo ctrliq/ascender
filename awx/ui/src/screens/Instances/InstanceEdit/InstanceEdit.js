@@ -1,7 +1,8 @@
 import React, { useState, useCallback, useEffect } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
-import { useHistory, useParams, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { Card, PageSection } from '@patternfly/react-core';
 import useRequest from 'hooks/useRequest';
 import ContentError from 'components/ContentError';
@@ -12,7 +13,7 @@ import InstanceForm from '../Shared/InstanceForm';
 
 function InstanceEdit({ setBreadcrumb }) {
   const { t } = useLingui();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { id } = useParams();
   const [formError, setFormError] = useState();
 
@@ -21,14 +22,14 @@ function InstanceEdit({ setBreadcrumb }) {
   const handleSubmit = async (values) => {
     try {
       await InstancesAPI.update(id, values);
-      history.push(detailsUrl);
+      navigate(detailsUrl);
     } catch (err) {
       setFormError(err);
     }
   };
 
   const handleCancel = () => {
-    history.push(detailsUrl);
+    navigate(detailsUrl);
   };
 
   const {

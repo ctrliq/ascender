@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 
 import { CardBody } from 'components/Card';
 import { UsersAPI } from 'api';
@@ -10,7 +10,7 @@ import UserForm from '../shared/UserForm';
 function UserEdit({ user }) {
   const [formSubmitError, setFormSubmitError] = useState(null);
   const { me } = useConfig();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
     setFormSubmitError(null);
@@ -28,14 +28,14 @@ function UserEdit({ user }) {
           await dynamicActivate(Object.keys(locales).includes(browserLang) ? browserLang : 'en');
         }
       }
-      history.push(`/users/${user.id}/details`);
+      navigate(`/users/${user.id}/details`);
     } catch (error) {
       setFormSubmitError(error);
     }
   };
 
   const handleCancel = () => {
-    history.push(`/users/${user.id}/details`);
+    navigate(`/users/${user.id}/details`);
   };
 
   return (

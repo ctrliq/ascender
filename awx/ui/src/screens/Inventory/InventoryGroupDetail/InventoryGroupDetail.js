@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { Button } from '@patternfly/react-core';
 
 import { VariablesDetail } from 'components/CodeEditor';
@@ -22,7 +23,7 @@ function InventoryGroupDetail({ inventoryGroup }) {
     variables,
   } = inventoryGroup;
   const [error, setError] = useState(false);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   return (
     <CardBody>
@@ -59,7 +60,7 @@ function InventoryGroupDetail({ inventoryGroup }) {
               variant="primary"
               aria-label={t`Edit`}
               onClick={() =>
-                history.push(
+                navigate(
                   `/inventories/inventory/${id}/groups/${groupId}/edit`
                 )
               }
@@ -72,7 +73,7 @@ function InventoryGroupDetail({ inventoryGroup }) {
               groups={[inventoryGroup]}
               isDisabled={false}
               onAfterDelete={() =>
-                history.push(`/inventories/inventory/${id}/groups`)
+                navigate(`/inventories/inventory/${id}/groups`)
               }
             />
           )}

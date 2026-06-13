@@ -27,6 +27,18 @@ const SubmitButtonWrapper = styled.div`
 `;
 SubmitButtonWrapper.displayName = 'SubmitButtonWrapper';
 
+const DateInputGroup = styled(InputGroup)`
+  /* keep the operator select at its natural width so the date input
+     next to it stays visible */
+  & > .pf-c-select {
+    width: auto;
+    flex: 0 0 auto;
+  }
+  & > .pf-c-form-control {
+    flex: 1 1 auto;
+  }
+`;
+
 const NoOptionDropdown = styled.div`
   align-self: stretch;
   border: 1px solid var(--pf-global--BorderColor--300);
@@ -69,6 +81,8 @@ function Search({
   );
   const [searchValue, setSearchValue] = useState('');
   const [isFilterDropdownOpen, setIsFilterDropdownOpen] = useState(false);
+  const [dateOperator, setDateOperator] = useState('gte');
+  const [isDateOperatorOpen, setIsDateOperatorOpen] = useState(false);
 
   const params = parseQueryString(qsConfig, location.search);
   if (params?.host_filter) {
@@ -96,7 +110,13 @@ function Search({
     );
     onShowAdvancedSearch(actualSearchKey === 'advanced');
     setIsFilterDropdownOpen(false);
+    setIsDateOperatorOpen(false);
     setSearchKey(actualSearchKey);
+    // a value typed for the previous key must not leak into the next one -
+    // a controlled date input renders a stale text value as an empty field
+    // while leaving the submit button enabled, allowing a non-date value
+    // through to the API
+    setSearchValue('');
   };
 
   const handleSearch = (e) => {
@@ -112,6 +132,26 @@ function Search({
   const handleTextKeyDown = (e) => {
     if (e.key && e.key === 'Enter') {
       handleSearch(e);
+    }
+  };
+
+  const dateOperators = [
+    ['gte', t`On or after`],
+    ['lt', t`Before`],
+  ];
+
+  const handleDateSearch = (e) => {
+    e.preventDefault();
+
+    if (searchValue) {
+      onSearch(`${searchKey}__${dateOperator}`, searchValue);
+      setSearchValue('');
+    }
+  };
+
+  const handleDateKeyDown = (e) => {
+    if (e.key && e.key === 'Enter') {
+      handleDateSearch(e);
     }
   };
 
@@ -237,10 +277,59 @@ function Search({
                   {booleanLabels.false || t`No`}
                 </SelectOption>
               </Select>
+            )) ||
+            ((qsConfig.dateFields || []).includes(key) && (
+              <DateInputGroup>
+                <Select
+                  variant={SelectVariant.single}
+                  className="dateOperatorSelect"
+                  aria-label={t`Date operator select`}
+                  typeAheadAriaLabel={t`Date operator select`}
+                  onToggle={setIsDateOperatorOpen}
+                  onSelect={(event, selection) => {
+                    const [op] = dateOperators.find(
+                      ([, label]) => label === selection
+                    );
+                    setDateOperator(op);
+                    setIsDateOperatorOpen(false);
+                  }}
+                  selections={
+                    dateOperators.find(([op]) => op === dateOperator)[1]
+                  }
+                  isOpen={isDateOperatorOpen}
+                  ouiaId={`date-operator-select-${key}`}
+                  isDisabled={isDisabled}
+                  noResultsFoundText={t`No results found`}
+                >
+                  {dateOperators.map(([op, label]) => (
+                    <SelectOption key={op} value={label}>
+                      {label}
+                    </SelectOption>
+                  ))}
+                </Select>
+                <TextInput
+                  data-cy="date-search-input"
+                  type="date"
+                  aria-label={t`Date search input`}
+                  value={searchValue}
+                  onChange={setSearchValue}
+                  onKeyDown={handleDateKeyDown}
+                  isDisabled={isDisabled}
+                />
+                <SubmitButtonWrapper $disabled={!searchValue}>
+                  <Button
+                    ouiaId="date-search-submit-button"
+                    variant={ButtonVariant.control}
+                    isDisabled={!searchValue || isDisabled}
+                    aria-label={t`Search submit button`}
+                    onClick={handleDateSearch}
+                  >
+                    <SearchIcon />
+                  </Button>
+                </SubmitButtonWrapper>
+              </DateInputGroup>
             )) || (
               <InputGroup>
-                {/* TODO: add support for dates:
-          qsConfig.dateFields.filter(field => field === key).length && "date" */}
                 <TextInput
                   data-cy="search-text-input"
                   type={

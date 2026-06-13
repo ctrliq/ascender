@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { Button } from '@patternfly/react-core';
 
 import useRequest, { useDismissableError } from 'hooks/useRequest';
@@ -19,7 +20,7 @@ function ApplicationDetails({
 }) {
   const { t } = useLingui();
   const applicationHelpTextStrings = getApplicationHelpTextStrings(t);
-  const history = useHistory();
+  const navigate = useNavigate();
   const {
     isLoading: deleteLoading,
     error: deletionError,
@@ -27,8 +28,8 @@ function ApplicationDetails({
   } = useRequest(
     useCallback(async () => {
       await ApplicationsAPI.destroy(application.id);
-      history.push('/applications');
-    }, [application.id, history])
+      navigate('/applications');
+    }, [application.id, navigate])
   );
 
   const { error, dismissError } = useDismissableError(deletionError);

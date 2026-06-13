@@ -5,8 +5,16 @@ import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import ContentLoading from './ContentLoading';
 
 describe('ContentLoading', () => {
-  test('renders the expected content', () => {
+  test('renders an accessible loading indicator', () => {
     renderWithContexts(<ContentLoading />);
-    expect(screen.getByRole('progressbar')).toBeInTheDocument();
+    expect(
+      screen.getByRole('progressbar', { name: 'Loading' })
+    ).toBeInTheDocument();
+  });
+
+  test('renders skeleton placeholder lines', () => {
+    renderWithContexts(<ContentLoading />);
+    const indicator = screen.getByRole('progressbar', { name: 'Loading' });
+    expect(indicator.children).toHaveLength(4);
   });
 });

@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 import React, { useContext, useState, useEffect, useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import { Formik, useFormikContext } from 'formik';
 import yaml from 'js-yaml';
@@ -40,7 +40,8 @@ function NodeModalForm({
   labels,
   instanceGroups,
 }) {
-  const history = useHistory();
+  const location = useLocation();
+  const navigate = useNavigate();
   const dispatch = useContext(WorkflowDispatchContext);
   const { values, setFieldTouched } = useFormikContext();
   const { t } = useLingui();
@@ -48,13 +49,13 @@ function NodeModalForm({
   const [triggerNext, setTriggerNext] = useState(0);
 
   const clearQueryParams = () => {
-    const parts = history.location.search.replace(/^\?/, '').split('&');
+    const parts = location.search.replace(/^\?/, '').split('&');
     const otherParts = parts.filter((param) =>
       /^!(job_templates\.|projects\.|inventory_sources\.|workflow_job_templates\.)/.test(
         param
       )
     );
-    history.replace(`${history.location.pathname}?${otherParts.join('&')}`);
+    navigate(`${location.pathname}?${otherParts.join('&')}`, { replace: true });
   };
 
   const {

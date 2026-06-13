@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import {
   Button,
@@ -37,7 +38,7 @@ function InventorySourceDetail({ inventorySource }) {
   const { t } = useLingui();
   const [isI18nLoading, setIsI18nLoading] = useState(true);
   const [deletionError, setDeletionError] = useState(false);
-  const history = useHistory();
+  const navigate = useNavigate();
   const isMounted = useIsMounted();
 
   const {
@@ -104,7 +105,7 @@ function InventorySourceDetail({ inventorySource }) {
         InventorySourcesAPI.destroyGroups(id),
         InventorySourcesAPI.destroy(id),
       ]);
-      history.push(`/inventories/inventory/${inventory.id}/sources`);
+      navigate(`/inventories/inventory/${inventory.id}/sources`);
     } catch (err) {
       if (isMounted.current) {
         setDeletionError(err);

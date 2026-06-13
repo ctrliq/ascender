@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
-import { useHistory, Link, useRouteMatch } from 'react-router-dom';
+import { Link, useRouteMatch } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { Formik, useFormikContext } from 'formik';
 import {
@@ -25,7 +26,7 @@ const CustomFooter = ({ isSubmitLoading }) => {
   const { t } = useLingui();
   const { values, errors } = useFormikContext();
   const { me, license_info } = useConfig();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   return (
     <WizardFooter>
@@ -76,7 +77,7 @@ const CustomFooter = ({ isSubmitLoading }) => {
                 ouiaId="subscription-wizard-cancel"
                 variant="link"
                 aria-label={t`Cancel subscription edit`}
-                onClick={() => history.push('/settings/subscription/details')}
+                onClick={() => navigate('/settings/subscription/details')}
               >
                 <Trans>Cancel</Trans>
               </Button>
@@ -90,7 +91,7 @@ const CustomFooter = ({ isSubmitLoading }) => {
 
 function SubscriptionEdit() {
   const { t } = useLingui();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { request: updateConfig, license_info } = useConfig();
   const hasValidKey = Boolean(license_info?.valid_key);
   const subscriptionMgmtRoute = useRouteMatch({
@@ -118,7 +119,7 @@ function SubscriptionEdit() {
 
   useEffect(() => {
     if (subscriptionMgmtRoute && hasValidKey) {
-      history.push('/settings/subscription/edit');
+      navigate('/settings/subscription/edit');
     }
     fetchContent();
   }, [fetchContent]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -169,12 +170,14 @@ function SubscriptionEdit() {
   useEffect(() => {
     if (submitSuccessful) {
       setTimeout(() => {
-        history.push(
+        navigate(
           subscriptionMgmtRoute ? '/home' : '/settings/subscription/details'
         );
       }, 3000);
     }
-  }, [submitSuccessful, history, subscriptionMgmtRoute]);
+    // navigate is not referentially stable in react-router-dom-v5-compat
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [submitSuccessful, subscriptionMgmtRoute]);
 
   const { error, dismissError } = useDismissableError(submitError);
   const handleSubmit = async (values) => {

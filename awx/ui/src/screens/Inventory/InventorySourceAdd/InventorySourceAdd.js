@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { Card } from '@patternfly/react-core';
 import { InventorySourcesAPI } from 'api';
 import useRequest from 'hooks/useRequest';
@@ -7,7 +7,7 @@ import { CardBody } from 'components/Card';
 import InventorySourceForm from '../shared/InventorySourceForm';
 
 function InventorySourceAdd({ inventory }) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { id, organization } = inventory;
 
   const { error, request, result } = useRequest(
@@ -19,11 +19,13 @@ function InventorySourceAdd({ inventory }) {
 
   useEffect(() => {
     if (result) {
-      history.push(
+      navigate(
         `/inventories/inventory/${result.inventory}/sources/${result.id}/details`
       );
     }
-  }, [result, history]);
+    // navigate is not referentially stable in react-router-dom-v5-compat
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [result]);
 
   const handleSubmit = async (form) => {
     const {
@@ -55,7 +57,7 @@ function InventorySourceAdd({ inventory }) {
   };
 
   const handleCancel = () => {
-    history.push(`/inventories/inventory/${id}/sources`);
+    navigate(`/inventories/inventory/${id}/sources`);
   };
 
   return (

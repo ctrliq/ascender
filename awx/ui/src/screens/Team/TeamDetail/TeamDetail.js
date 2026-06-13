@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 
 import { Button } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
@@ -16,7 +17,7 @@ import useRequest, { useDismissableError } from 'hooks/useRequest';
 function TeamDetail({ team }) {
   const { t } = useLingui();
   const { name, description, created, modified, summary_fields } = team;
-  const history = useHistory();
+  const navigate = useNavigate();
   const { id } = useParams();
 
   const {
@@ -26,8 +27,8 @@ function TeamDetail({ team }) {
   } = useRequest(
     useCallback(async () => {
       await TeamsAPI.destroy(id);
-      history.push(`/teams`);
-    }, [id, history])
+      navigate(`/teams`);
+    }, [id, navigate])
   );
 
   const { error, dismissError } = useDismissableError(deleteError);

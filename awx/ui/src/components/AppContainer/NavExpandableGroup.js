@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes, { oneOfType, string, arrayOf } from 'prop-types';
-import { matchPath, Link, useHistory } from 'react-router-dom';
+import { matchPath, Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom-v5-compat';
 import { NavExpandable, NavItem } from '@patternfly/react-core';
 
 function NavExpandableGroup(props) {
-  const history = useHistory();
+  const location = useLocation();
   const { groupId, groupTitle, routes } = props;
 
   // Extract a list of paths from the route params and store them for later. This creates
@@ -14,7 +15,7 @@ function NavExpandableGroup(props) {
   const isActive = navItemPaths.some(isActivePath);
 
   function isActivePath(path) {
-    return Boolean(matchPath(history.location.pathname, { path }));
+    return Boolean(matchPath(location.pathname, { path }));
   }
 
   if (routes.length === 1 && groupId === 'settings') {

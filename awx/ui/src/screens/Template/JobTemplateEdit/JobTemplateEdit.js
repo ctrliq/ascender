@@ -1,6 +1,6 @@
 /* eslint react/no-unused-state: 0 */
 import React, { useState, useCallback, useEffect } from 'react';
-import { Redirect, useHistory } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom-v5-compat';
 
 import { JobTemplate } from 'types';
 import { JobTemplatesAPI, ProjectsAPI } from 'api';
@@ -11,7 +11,7 @@ import { CardBody } from 'components/Card';
 import JobTemplateForm from '../shared/JobTemplateForm';
 
 function JobTemplateEdit({ template, reloadTemplate }) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [formSubmitError, setFormSubmitError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
@@ -69,7 +69,7 @@ function JobTemplateEdit({ template, reloadTemplate }) {
         ),
       ]);
       reloadTemplate();
-      history.push(detailsUrl);
+      navigate(detailsUrl);
     } catch (error) {
       setFormSubmitError(error);
     } finally {
@@ -113,12 +113,12 @@ function JobTemplateEdit({ template, reloadTemplate }) {
     return Promise.all([disassociatePromise, associatePromise]);
   };
 
-  const handleCancel = () => history.push(detailsUrl);
+  const handleCancel = () => navigate(detailsUrl);
 
   const canEdit = template?.summary_fields?.user_capabilities?.edit;
 
   if (!canEdit) {
-    return <Redirect to={detailsUrl} />;
+    return <Navigate to={detailsUrl} />;
   }
   if (isLoading) {
     return <ContentLoading />;

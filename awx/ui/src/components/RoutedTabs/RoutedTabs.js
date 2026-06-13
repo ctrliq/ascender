@@ -5,7 +5,8 @@ import {
   Tabs as PFTabs,
   TabTitleText,
 } from '@patternfly/react-core';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import styled from 'styled-components';
 import { getPersistentFilters } from 'components/PersistentFilters';
 
@@ -20,7 +21,7 @@ const Tab = styled(PFTab)`
 `;
 
 function RoutedTabs({ tabsArray }) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
 
   const getActiveTabId = () => {
@@ -44,7 +45,7 @@ function RoutedTabs({ tabsArray }) {
       const link = match.persistentFilterKey
         ? `${match.link}${getPersistentFilters(match.persistentFilterKey)}`
         : match.link;
-      history.push(link);
+      navigate(link);
     }
   };
   return (
