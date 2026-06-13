@@ -23,6 +23,17 @@ describe('CredentialLookup', () => {
         count: 5,
       },
     });
+    CredentialsAPI.readOptions.mockResolvedValue({
+      data: {
+        actions: {
+          GET: {
+            name: { type: 'string', filterable: true },
+            type: { type: 'choice', filterable: true },
+          },
+        },
+        related_search_fields: ['credential_type__search'],
+      },
+    });
   });
 
   afterEach(() => {
