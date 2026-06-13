@@ -365,4 +365,161 @@ describe('<Search />', () => {
     const fooFilterWrapper = wrapper.find('ToolbarFilter[categoryName="foo"]');
     expect(fooFilterWrapper.prop('chips')[0].key).toEqual('foo:bar');
   });
+
+  describe('date fields', () => {
+    const dateColumns = [
+      { name: 'Name', key: 'name__icontains', isDefault: true },
+      { name: 'Created', key: 'created' },
+    ];
+    const dateInput = 'input[aria-label="Date search input"]';
+    const dateSubmitBtn = 'button[aria-label="Search submit button"]';
+
+    function mountSearch(onSearch) {
+      return mountWithContexts(
+        <Toolbar
+          id={`${QS_CONFIG.namespace}-list-toolbar`}
+          clearAllFilters={() => {}}
+          collapseListedFiltersBreakpoint="lg"
+        >
+          <ToolbarContent>
+            <Search
+              qsConfig={QS_CONFIG}
+              columns={dateColumns}
+              onSearch={onSearch}
+              onShowAdvancedSearch={jest.fn}
+            />
+          </ToolbarContent>
+        </Toolbar>
+      );
+    }
+
+    test('renders date input and operator select for a date column', () => {
+      search = mountSearch(jest.fn());
+      act(() => {
+        search.find('Select[aria-label="Simple key select"]').prop('onSelect')(
+          { target: { innerText: 'Created' } }
+        );
+      });
+      search.update();
+      expect(search.find(dateInput)).toHaveLength(1);
+      expect(search.find(dateInput).prop('type')).toBe('date');
+      expect(
+        search.find('Select[aria-label="Date operator select"]')
+      ).toHaveLength(1);
+    });
+
+    test('searching submits the column key with the default operator', () => {
+      const onSearch = jest.fn();
+      search = mountSearch(onSearch);
+      act(() => {
+        search.find('Select[aria-label="Simple key select"]').prop('onSelect')(
+          { target: { innerText: 'Created' } }
+        );
+      });
+      search.update();
+      search.find(dateInput).instance().value = '2026-06-01';
+      search.find(dateInput).simulate('change');
+      search.find(dateSubmitBtn).simulate('click');
+      expect(onSearch).toHaveBeenCalledTimes(1);
+      expect(onSearch).toHaveBeenCalledWith('created__gte', '2026-06-01');
+    });
+
+    test('switching the operator changes the submitted parameter', () => {
+      const onSearch = jest.fn();
+      search = mountSearch(onSearch);
+      act(() => {
+        search.find('Select[aria-label="Simple key select"]').prop('onSelect')(
+          { target: { innerText: 'Created' } }
+        );
+      });
+      search.update();
+      act(() => {
+        search
+          .find('Select[aria-label="Date operator select"]')
+          .prop('onSelect')(null, 'Before');
+      });
+      search.update();
+      search.find(dateInput).instance().value = '2026-06-30';
+      search.find(dateInput).simulate('change');
+      search.find(dateSubmitBtn).simulate('click');
+      expect(onSearch).toHaveBeenCalledTimes(1);
+      expect(onSearch).toHaveBeenCalledWith('created__lt', '2026-06-30');
+    });
+
+    test('a value typed for a text column does not leak into a date search', () => {
+      const onSearch = jest.fn();
+      search = mountSearch(onSearch);
+      const textInput = 'input[aria-label="Search text input"]';
+      search.find(textInput).instance().value = 'foo';
+      search.find(textInput).simulate('change');
+      act(() => {
+        search.find('Select[aria-label="Simple key select"]').prop('onSelect')(
+          { target: { innerText: 'Created' } }
+        );
+      });
+      search.update();
+      expect(search.find(dateInput).prop('value')).toBe('');
+      expect(
+        search.find('button[aria-label="Search submit button"]').prop(
+          'disabled'
+        )
+      ).toBe(true);
+    });
+
+    test('Enter in the date input submits the search', () => {
+      const onSearch = jest.fn();
+      search = mountSearch(onSearch);
+      act(() => {
+        search.find('Select[aria-label="Simple key select"]').prop('onSelect')(
+          { target: { innerText: 'Created' } }
+        );
+      });
+      search.update();
+      search.find(dateInput).instance().value = '2026-06-15';
+      search.find(dateInput).simulate('change');
+      search.find(dateInput).simulate('keydown', { key: 'Enter' });
+      expect(onSearch).toHaveBeenCalledWith('created__gte', '2026-06-15');
+    });
+
+    test('operator dropdown does not stay open across column switches', () => {
+      search = mountSearch(jest.fn());
+      act(() => {
+        search.find('Select[aria-label="Simple key select"]').prop('onSelect')(
+          { target: { innerText: 'Created' } }
+        );
+      });
+      search.update();
+      act(() => {
+        search
+          .find('Select[aria-label="Date operator select"]')
+          .prop('onToggle')(true);
+      });
+      search.update();
+      expect(
+        search.find('Select[aria-label="Date operator select"]').prop('isOpen')
+      ).toBe(true);
+      act(() => {
+        search.find('Select[aria-label="Simple key select"]').prop('onSelect')(
+          { target: { innerText: 'Name' } }
+        );
+      });
+      act(() => {
+        search.find('Select[aria-label="Simple key select"]').prop('onSelect')(
+          { target: { innerText: 'Created' } }
+        );
+      });
+      search.update();
+      expect(
+        search.find('Select[aria-label="Date operator select"]').prop('isOpen')
+      ).toBe(false);
+    });
+
+    test('non-date columns keep the plain text input', () => {
+      search = mountSearch(jest.fn());
+      expect(search.find(dateInput)).toHaveLength(0);
+      expect(
+        search.find('input[aria-label="Search text input"]')
+      ).toHaveLength(1);
+    });
+  });
 });
