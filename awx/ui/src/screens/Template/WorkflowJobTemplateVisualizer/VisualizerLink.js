@@ -19,7 +19,7 @@ import {
 } from 'components/Workflow';
 
 const LinkG = styled.g`
-  pointer-events: ${(props) => (props.ignorePointerEvents ? 'none' : 'auto')};
+  pointer-events: ${(props) => (props.$ignorePointerEvents ? 'none' : 'auto')};
 `;
 
 function VisualizerLink({ link, updateLinkHelp, readOnly, updateHelpText }) {
@@ -121,7 +121,7 @@ function VisualizerLink({ link, updateLinkHelp, readOnly, updateHelpText }) {
   return (
     <LinkG
       id={`link-${link.source.id}-${link.target.id}`}
-      ignorePointerEvents={addingLink}
+      $ignorePointerEvents={addingLink}
       onMouseEnter={handleLinkMouseEnter}
       onMouseLeave={handleLinkMouseLeave}
       ref={ref}

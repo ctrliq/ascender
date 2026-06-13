@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
-import { DateTime, Duration } from 'luxon';
+import { calculateElapsed, secondsToHHMMSS } from 'util/dates';
 import { bool, shape, func } from 'prop-types';
 import {
   DownloadIcon,
@@ -35,27 +35,17 @@ const Badge = styled(PFBadge)`
       : null}
 `;
 
+const ElapsedBadge = styled(Badge)`
+  min-width: 70px;
+  font-variant-numeric: tabular-nums;
+`;
+
 const Wrapper = styled.div`
   align-items: center;
   display: flex;
   flex-flow: row wrap;
   font-size: 14px;
 `;
-const calculateElapsed = (started) => {
-  if (!started) return '00:00:00';
-  const now = DateTime.now();
-  const duration = now
-    .diff(DateTime.fromISO(`${started}`), [
-      'milliseconds',
-      'seconds',
-      'minutes',
-      'hours',
-    ])
-    .toObject();
-
-  return Duration.fromObject({ ...duration }).toFormat('hh:mm:ss');
-};
-
 const OUTPUT_NO_COUNT_JOB_TYPES = [
   'ad_hoc_command',
   'system_job',
@@ -151,13 +141,11 @@ const OutputToolbar = ({ job, onDelete, isDeleteDisabled, jobStatus }) => {
       <BadgeGroup aria-label={t`Elapsed Time`}>
         <div>{t`Elapsed`}</div>
         <Tooltip content={t`Elapsed time that the job ran`}>
-          <Badge isRead>
-            {job.finished
-              ? Duration.fromObject({ seconds: job.elapsed }).toFormat(
-                  'hh:mm:ss'
-                )
+          <ElapsedBadge isRead>
+            {job.finished && job.elapsed != null
+              ? secondsToHHMMSS(job.elapsed)
               : activeJobElapsedTime}
-          </Badge>
+          </ElapsedBadge>
         </Tooltip>
       </BadgeGroup>
       {['pending', 'waiting', 'running'].includes(jobStatus) &&

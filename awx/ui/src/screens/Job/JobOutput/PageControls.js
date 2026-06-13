@@ -1,7 +1,6 @@
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 
-import 'styled-components/macro';
 import { Button } from '@patternfly/react-core';
 import {
   AngleDoubleUpIcon,

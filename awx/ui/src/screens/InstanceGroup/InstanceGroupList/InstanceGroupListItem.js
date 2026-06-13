@@ -4,7 +4,6 @@ import { string, bool, func } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 
 import { Link } from 'react-router-dom';
-import 'styled-components/macro';
 import {
   Button,
   Progress,

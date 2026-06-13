@@ -1,4 +1,3 @@
-import 'styled-components/macro';
 import React, { useCallback, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom-v5-compat';

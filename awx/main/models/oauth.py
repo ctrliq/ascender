@@ -69,6 +69,9 @@ class OAuth2Application(AbstractApplication):
         db_index=True,
         help_text=_('Used for more stringent verification of access to an application when creating a token.'),
     )
+    # AWX stores client secrets encrypted (reversible) via OAuth2ClientSecretField,
+    # not hashed; django-oauth-toolkit's validator must use constant-time comparison.
+    hash_client_secret = models.BooleanField(default=False, editable=False)
     client_type = models.CharField(
         max_length=32, choices=CLIENT_TYPES, help_text=_('Set to Public or Confidential depending on how secure the client device is.')
     )

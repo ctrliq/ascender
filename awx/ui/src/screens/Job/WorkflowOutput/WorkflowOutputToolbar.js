@@ -11,6 +11,7 @@ import {
 } from '@patternfly/react-icons';
 import styled from 'styled-components';
 import StatusLabel from 'components/StatusLabel';
+import { calculateElapsed, secondsToHHMMSS } from 'util/dates';
 import JobCancelButton from 'components/JobCancelButton';
 import {
   WorkflowDispatchContext,
@@ -48,6 +49,12 @@ const Badge = styled(PFBadge)`
   margin-left: 10px;
 `;
 
+const ElapsedBadge = styled(Badge)`
+  margin-right: 20px;
+  min-width: 70px;
+  font-variant-numeric: tabular-nums;
+`;
+
 const ActionButton = styled(Button)`
   border: none;
   margin: 0px 6px;
@@ -71,6 +78,20 @@ function WorkflowOutputToolbar({ job }) {
     job.summary_fields?.workflow_job_template?.id ??
     job.summary_fields?.workflow_job_template?.[0]?.id;
 
+  const [activeJobElapsedTime, setActiveJobElapsedTime] = React.useState(
+    calculateElapsed(job.started)
+  );
+
+  React.useEffect(() => {
+    let secTimer;
+    if (job.started && !job.finished) {
+      secTimer = setInterval(() => {
+        setActiveJobElapsedTime(calculateElapsed(job.started));
+      }, 1000);
+    }
+    return () => clearInterval(secTimer);
+  }, [job.started, job.finished]);
+
   const totalNodes = nodes.reduce((n, node) => n + !node.isDeleted, 0) - 1;
   const navToWorkflow = () => {
     if (workflowTemplateId) {
@@ -80,7 +101,7 @@ function WorkflowOutputToolbar({ job }) {
     }
   };
   return (
-    <Toolbar id="workflow-output-toolbar" ouiaId="workflow-output-toolbar">
+    <Toolbar id="workflow-output-toolbar">
       <ToolbarJob>
         <h1>{job.name}</h1>
         <StatusLabel status={job.status} />
@@ -109,6 +130,14 @@ function WorkflowOutputToolbar({ job }) {
             <ProjectDiagramIcon />
           </ActionButton>
         )}
+        <div>{t`Elapsed`}</div>
+        <Tooltip content={t`Elapsed time that the job ran`}>
+          <ElapsedBadge isRead id="workflow-elapsed-badge">
+            {job.finished && job.elapsed != null
+              ? secondsToHHMMSS(job.elapsed)
+              : activeJobElapsedTime}
+          </ElapsedBadge>
+        </Tooltip>
         <div>{t`Total Nodes`}</div>
         <Badge isRead>{totalNodes}</Badge>
         <Tooltip content={t`Toggle Legend`} position="bottom">

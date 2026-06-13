@@ -41,6 +41,26 @@ def test_basic_fields(monkeypatch, organization, get, user, settings):
 
 
 @pytest.mark.django_db
+def test_inventory_source_schedule_summary_fields(monkeypatch, inventory, get, user, settings):
+    settings.ACTIVITY_STREAM_ENABLED = True
+    from awx.main.models import InventorySource, Schedule
+
+    inv_src = InventorySource.objects.create(name='test-inv-src', inventory=inventory, source='ec2')
+    schedule = Schedule.objects.create(name='test-sched', unified_job_template=inv_src, rrule='DTSTART:20300112T210000Z RRULE:FREQ=DAILY;INTERVAL=1')
+
+    aspk = ActivityStream.objects.filter(schedule__pk=schedule.pk, operation='create').latest('pk').pk
+    url = reverse('api:activity_stream_detail', kwargs={'pk': aspk})
+    response = get(url, user('admin', True))
+
+    assert response.status_code == 200
+    summary = response.data['summary_fields']['inventory_source'][0]
+    assert summary['id'] == inv_src.id
+    # the UI builds /inventories/inventory/<inventory_id>/sources/<id>/schedules/<schedule_id>/
+    # links from the activity stream, so the parent inventory id must be serialized
+    assert summary['inventory_id'] == inventory.id
+
+
+@pytest.mark.django_db
 def test_ctint_activity_stream(monkeypatch, get, user, settings):
     Setting.objects.create(key="FOO", value="bar")
     settings.ACTIVITY_STREAM_ENABLED = True

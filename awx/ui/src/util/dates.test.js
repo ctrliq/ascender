@@ -1,5 +1,6 @@
 import { RRule } from 'rrule';
 import {
+  calculateElapsed,
   dateToInputDateTime,
   formatDateString,
   getRRuleDayConstants,
@@ -41,6 +42,29 @@ describe('secondsToDays', () => {
   test('it returns the expected value', () => {
     expect(secondsToDays(604800)).toEqual('7');
     expect(secondsToDays(0)).toEqual('0');
+  });
+});
+
+describe('calculateElapsed', () => {
+  beforeEach(() => {
+    jest.useFakeTimers('modern');
+    jest.setSystemTime(new Date('2021-09-01T12:30:45.000Z'));
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
+  test('should return zero when not started', () => {
+    expect(calculateElapsed(null)).toEqual('00:00:00');
+    expect(calculateElapsed(undefined)).toEqual('00:00:00');
+    expect(calculateElapsed('')).toEqual('00:00:00');
+  });
+
+  test('should compute elapsed time from start timestamp', () => {
+    expect(calculateElapsed('2021-09-01T12:30:44.000Z')).toEqual('00:00:01');
+    expect(calculateElapsed('2021-09-01T12:29:45.000Z')).toEqual('00:01:00');
+    expect(calculateElapsed('2021-09-01T10:00:00.000Z')).toEqual('02:30:45');
   });
 });
 

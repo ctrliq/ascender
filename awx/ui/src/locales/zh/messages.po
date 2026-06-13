@@ -13,14 +13,6 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: Poedit 3.6\n"
 
-#. js-lingui-explicit-id
-#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:265
-#: screens/InstanceGroup/Instances/InstanceListItem.js:166
-#: screens/Instances/InstanceDetail/InstanceDetail.js:305
-#: screens/Instances/InstanceList/InstanceListItem.js:179
-msgid "{count, plural, one {# fork} other {# forks}}"
-msgstr ""
-
 #: components/Schedule/ScheduleToggle/ScheduleToggle.js:79
 msgid "Failed to toggle schedule."
 msgstr "切换调度失败。"
@@ -51,8 +43,7 @@ msgid "Select an instance"
 msgstr "选择一个实例"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:61
-#~ msgid ""
-#~ "Welcome to Red Hat Ansible Automation Platform!\n"
+#~ msgid "Welcome to Red Hat Ansible Automation Platform!\n"
 #~ "Please complete the steps below to activate your subscription."
 #~ msgstr "欢迎使用 Red Hat Ansible Automation Platform！请完成以下步骤以激活订阅。"
 
@@ -121,8 +112,7 @@ msgid "Add a new node between these two nodes"
 msgstr "在这两个节点间添加新节点"
 
 #: screens/Project/shared/Project.helptext.js:93
-#~ msgid ""
-#~ "The first fetches all references. The second\n"
+#~ msgid "The first fetches all references. The second\n"
 #~ "fetches the Github pull request number 62, in this example\n"
 #~ "the branch needs to be \"pull/62/head\"."
 #~ msgstr "第一次获取所有引用。第二次获取 Github 拉取请求号 62，在本示例中，分支需要为 \"pull/62/head\"。"
@@ -144,8 +134,7 @@ msgid "Advanced search documentation"
 msgstr "高级搜索文档"
 
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:106
-#~ msgid ""
-#~ "The execution environment that will be used for jobs\n"
+#~ msgid "The execution environment that will be used for jobs\n"
 #~ "inside of this organization. This will be used a fallback when\n"
 #~ "an execution environment has not been explicitly assigned at the\n"
 #~ "project, job template or workflow level."
@@ -166,8 +155,7 @@ msgstr "{selectedItemsCount, plural, one {Click to run a health check on the sel
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:66
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:87
 #: screens/InstanceGroup/shared/ContainerGroupForm.js:77
-msgid ""
-"Maximum number of forks to allow across all jobs running concurrently on this group.\n"
+msgid "Maximum number of forks to allow across all jobs running concurrently on this group.\n"
 "          Zero means no limit will be enforced."
 msgstr ""
 
@@ -385,6 +373,14 @@ msgstr "选择要应用的角色"
 msgid "Type"
 msgstr "类型"
 
+#. js-lingui-explicit-id
+#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:265
+#: screens/InstanceGroup/Instances/InstanceListItem.js:166
+#: screens/Instances/InstanceDetail/InstanceDetail.js:305
+#: screens/Instances/InstanceList/InstanceListItem.js:179
+msgid "{count, plural, one {# fork} other {# forks}}"
+msgstr ""
+
 #: screens/Inventory/InventoryList/InventoryListItem.js:161
 msgid "Copy Inventory"
 msgstr "复制清单"
@@ -538,8 +534,7 @@ msgstr "添加角色"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:39
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:241
-msgid ""
-"The base URL of the Grafana server - the\n"
+msgid "The base URL of the Grafana server - the\n"
 "      /api/annotations endpoint will be added automatically to the base\n"
 "      Grafana URL."
 msgstr ""
@@ -629,8 +624,7 @@ msgid "Source Control URL"
 msgstr "源控制 URL"
 
 #: screens/Project/shared/Project.helptext.js:124
-#~ msgid ""
-#~ "Each time a job runs using this project, update the\n"
+#~ msgid "Each time a job runs using this project, update the\n"
 #~ "revision of the project prior to starting the job."
 #~ msgstr "每次使用此项目运行作业时，请在启动该作业前更新项目的修订。"
 
@@ -830,8 +824,7 @@ msgid "The Instance Groups to which this instance belongs."
 msgstr "此实例所属的实例组。"
 
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:87
-msgid ""
-"You may apply a number of possible variables in the\n"
+msgid "You may apply a number of possible variables in the\n"
 "                message. For more information, refer to the"
 msgstr ""
 
@@ -863,8 +856,7 @@ msgid "Lookup modal"
 msgstr "查找模式"
 
 #: components/HostToggle/HostToggle.js:21
-msgid ""
-"Indicates if a host is available and should be included in running\n"
+msgid "Indicates if a host is available and should be included in running\n"
 "    jobs.  For hosts that are part of an external inventory, this may be\n"
 "    reset by the inventory sync process."
 msgstr ""
@@ -951,8 +943,7 @@ msgid "Elapsed Time"
 msgstr "过期的时间"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:197
-#~ msgid ""
-#~ "Provide your Red Hat or Red Hat Satellite credentials\n"
+#~ msgid "Provide your Red Hat or Red Hat Satellite credentials\n"
 #~ "below and you can choose from a list of your available subscriptions.\n"
 #~ "The credentials you use will be stored for future use in\n"
 #~ "retrieving renewal or expanded subscriptions."
@@ -975,8 +966,7 @@ msgid "new choice"
 msgstr "新选择"
 
 #: components/Schedule/shared/UnsupportedScheduleForm.js:13
-msgid ""
-"This schedule uses complex rules that are not supported in the\n"
+msgid "This schedule uses complex rules that are not supported in the\n"
 "  UI.  Please use the API to manage this schedule."
 msgstr ""
 
@@ -1048,8 +1038,7 @@ msgid "End User License Agreement"
 msgstr "最终用户许可证协议"
 
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:73
-#~ msgid ""
-#~ "Minimum percentage of all instances that will be automatically\n"
+#~ msgid "Minimum percentage of all instances that will be automatically\n"
 #~ "assigned to this group when new instances come online."
 #~ msgstr "新实例上线时将自动分配给此组的所有实例的最小百分比。"
 
@@ -1120,8 +1109,7 @@ msgstr "将完整修订复制到剪贴板。"
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:59
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:80
 #: screens/InstanceGroup/shared/ContainerGroupForm.js:68
-msgid ""
-"Maximum number of jobs to run concurrently on this group.\n"
+msgid "Maximum number of jobs to run concurrently on this group.\n"
 "          Zero means no limit will be enforced."
 msgstr ""
 
@@ -1144,8 +1132,7 @@ msgstr "完成"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:36
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:138
-msgid ""
-"The amount of time (in seconds) before the email\n"
+msgid "The amount of time (in seconds) before the email\n"
 "        notification stops trying to reach the host and times out. Ranges\n"
 "        from 1 to 120 seconds."
 msgstr ""
@@ -1347,8 +1334,7 @@ msgid "This workflow job template is currently being used by other resources. Ar
 msgstr "其他资源目前正在使用此工作流作业模板。确定要删除它吗？"
 
 #: screens/Host/HostGroups/HostGroupsList.js:215
-#~ msgid ""
-#~ "Note that you may still see the group in the list after\n"
+#~ msgid "Note that you may still see the group in the list after\n"
 #~ "disassociating if the host is also a member of that group’s\n"
 #~ "children.  This list shows all groups the host is associated\n"
 #~ "with directly and indirectly."
@@ -1417,8 +1403,7 @@ msgid "There was a problem logging in. Please try again."
 msgstr "登录时有问题。请重试。"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:81
-msgid ""
-"Token that ensures this is a source file\n"
+msgid "Token that ensures this is a source file\n"
 "              for the ‘constructed’ plugin."
 msgstr ""
 
@@ -1449,11 +1434,9 @@ msgid "Past week"
 msgstr "过去一周"
 
 #: components/AdHocCommands/AdHocDetailsStep.js:249
-#~ msgid ""
-#~ "Provide key/value pairs using either\n"
+#~ msgid "Provide key/value pairs using either\n"
 #~ "YAML or JSON."
-#~ msgstr ""
-#~ "使用 YAML 或 JSON 提供\n"
+#~ msgstr "使用 YAML 或 JSON 提供\n"
 #~ "键/值对。"
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.js:34
@@ -1579,14 +1562,12 @@ msgid "Tokens"
 msgstr "令牌"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:319
-#~ msgid ""
-#~ "It is hard to give a specification for\n"
+#~ msgid "It is hard to give a specification for\n"
 #~ "the inventory for Ansible facts, because to populate\n"
 #~ "the system facts you need to run a playbook against\n"
 #~ "the inventory that has `gather_facts: true`. The\n"
 #~ "actual facts will differ system-to-system."
-#~ msgstr ""
-#~ "很难给出\n"
+#~ msgstr "很难给出\n"
 #~ "ansible事实的清单，因为要填充\n"
 #~ "运行剧本所需的系统事实\n"
 #~ "包含“gather_facts: true”的清单。\n"
@@ -1621,7 +1602,7 @@ msgstr "复制"
 msgid "Failed to cancel one or more jobs."
 msgstr "取消一个或多个作业失败。"
 
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.js:105
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.js:112
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerToolbar.js:77
 msgid "Total Nodes"
 msgstr "节点总数"
@@ -2417,8 +2398,7 @@ msgid "Toggle Password"
 msgstr "切换密码"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:164
-msgid ""
-"This constructed inventory input \n"
+msgid "This constructed inventory input \n"
 "            creates a group for both of the categories and uses \n"
 "            the limit (host pattern) to only return hosts that \n"
 "            are in the intersection of those two groups."
@@ -2505,8 +2485,7 @@ msgid "Execution environment copied successfully"
 msgstr "执行环境复制成功"
 
 #: screens/Project/shared/Project.helptext.js:128
-#~ msgid ""
-#~ "Time in seconds to consider a project\n"
+#~ msgid "Time in seconds to consider a project\n"
 #~ "to be current. During job runs and callbacks the task\n"
 #~ "system will evaluate the timestamp of the latest project\n"
 #~ "update. If it is older than Cache Timeout, it is not\n"
@@ -2644,8 +2623,7 @@ msgstr "源控制 Refspec"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:43
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:303
-msgid ""
-"Use one IRC channel or username per line. The pound\n"
+msgid "Use one IRC channel or username per line. The pound\n"
 "        symbol (#) for channels, and the at (@) symbol for users, are not\n"
 "        required."
 msgstr ""
@@ -2809,8 +2787,7 @@ msgstr "在左侧查看错误"
 #~ msgstr "由 {0} - {1} 批准"
 
 #: screens/Project/shared/Project.helptext.js:114
-#~ msgid ""
-#~ "Delete the local repository in its entirety prior to\n"
+#~ msgid "Delete the local repository in its entirety prior to\n"
 #~ "performing an update. Depending on the size of the\n"
 #~ "repository this may significantly increase the amount\n"
 #~ "of time required to complete an update."
@@ -2956,11 +2933,9 @@ msgstr "每行使用一个注解标签，不带逗号。"
 
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:60
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:81
-#~ msgid ""
-#~ "Maximum number of jobs to run concurrently on this group.\n"
+#~ msgid "Maximum number of jobs to run concurrently on this group.\n"
 #~ "Zero means no limit will be enforced."
-#~ msgstr ""
-#~ "在此组上同时运行的最大作业数。\n"
+#~ msgstr "在此组上同时运行的最大作业数。\n"
 #~ "零意味着不会强制执行任何限制。"
 
 #: components/StatusLabel/StatusLabel.js:48
@@ -3223,8 +3198,7 @@ msgid "Select the credential you want to use when accessing the remote hosts to 
 msgstr "选择要在访问远程主机时用来运行命令的凭证。选择包含 Ansbile 登录远程主机所需的用户名和 SSH 密钥或密码的凭证。"
 
 #: screens/Template/Survey/SurveyQuestionForm.js:182
-msgid ""
-"The suggested format for variable names is lowercase and\n"
+msgid "The suggested format for variable names is lowercase and\n"
 "                underscore-separated (for example, foo_bar, user_id, host_name,\n"
 "                etc.). Variable names with spaces are not allowed."
 msgstr ""
@@ -3367,8 +3341,7 @@ msgid "Ready"
 msgstr "就绪"
 
 #: screens/Template/Survey/MultipleChoiceField.js:57
-msgid ""
-"Type answer then click checkbox on right to select answer as\n"
+msgid "Type answer then click checkbox on right to select answer as\n"
 "default."
 msgstr "键入回答，然后点右侧选择回答作为默认选项。"
 
@@ -3511,8 +3484,7 @@ msgstr "在此处查看构建的清单插件文档。"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:58
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:531
-msgid ""
-"The number associated with the \"Messaging\n"
+msgid "The number associated with the \"Messaging\n"
 "        Service\" in Twilio with the format +18005550199."
 msgstr ""
 
@@ -3620,8 +3592,7 @@ msgid "{interval} minutes"
 msgstr ""
 
 #: screens/Project/shared/Project.helptext.js:35
-#~ msgid ""
-#~ "Note: When using SSH protocol for GitHub or\n"
+#~ msgid "Note: When using SSH protocol for GitHub or\n"
 #~ "Bitbucket, enter an SSH key only, do not enter a username\n"
 #~ "(other than git). Additionally, GitHub and Bitbucket do\n"
 #~ "not support password authentication when using SSH. GIT\n"
@@ -3890,8 +3861,7 @@ msgid "Revert settings"
 msgstr "恢复设置"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:55
-msgid ""
-"This table gives a few useful parameters of the constructed\n"
+msgid "This table gives a few useful parameters of the constructed\n"
 "               inventory plugin. For the full list of parameters "
 msgstr ""
 
@@ -3943,11 +3913,9 @@ msgid "dictionary"
 msgstr "词典"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:92
-#~ msgid ""
-#~ "If yes make invalid entries a fatal error, otherwise skip and\n"
+#~ msgid "If yes make invalid entries a fatal error, otherwise skip and\n"
 #~ "continue."
-#~ msgstr ""
-#~ "如果是，则将无效条目设置为致命错误，否则跳过并\n"
+#~ msgstr "如果是，则将无效条目设置为致命错误，否则跳过并\n"
 #~ "继续。"
 
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressList.js:125
@@ -4026,8 +3994,7 @@ msgid "Pull"
 msgstr "拉取"
 
 #: screens/Setting/shared/RevertAllAlert.js:39
-#~ msgid ""
-#~ "This will revert all configuration values on this page to\n"
+#~ msgid "This will revert all configuration values on this page to\n"
 #~ "their factory defaults. Are you sure you want to proceed?"
 #~ msgstr "这会将此页中的所有配置值重置为其工厂默认值。确定要继续？"
 
@@ -4049,7 +4016,7 @@ msgstr "< 0 > {0} < 1 > {1} </1 > </0 >"
 msgid "Invalid file format. Please upload a valid Red Hat Subscription Manifest."
 msgstr "无效的文件格式。请上传有效的红帽订阅清单。"
 
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.js:107
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.js:114
 msgid "Toggle Legend"
 msgstr "切换图例"
 
@@ -4420,8 +4387,7 @@ msgid "Failed to update capacity adjustment."
 msgstr "更新容量调整失败。"
 
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:72
-msgid ""
-"Minimum percentage of all instances that will be automatically\n"
+msgid "Minimum percentage of all instances that will be automatically\n"
 "          assigned to this group when new instances come online."
 msgstr ""
 
@@ -4439,20 +4405,16 @@ msgstr "排序"
 
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:67
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:88
-#~ msgid ""
-#~ "Maximum number of forks to allow across all jobs running concurrently on this group.\n"
+#~ msgid "Maximum number of forks to allow across all jobs running concurrently on this group.\n"
 #~ "Zero means no limit will be enforced."
-#~ msgstr ""
-#~ "此组上同时运行的所有作业允许的最大分叉数。\n"
+#~ msgstr "此组上同时运行的所有作业允许的最大分叉数。\n"
 #~ "零意味着不会强制执行任何限制。"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:95
-#~ msgid ""
-#~ "If users need feedback about the correctness\n"
+#~ msgid "If users need feedback about the correctness\n"
 #~ "of their constructed groups, it is highly recommended\n"
 #~ "to use strict: true in the plugin configuration."
-#~ msgstr ""
-#~ "如果用户需要有关正确性的反馈\n"
+#~ msgstr "如果用户需要有关正确性的反馈\n"
 #~ "他们建造的团队，强烈建议\n"
 #~ "在插件配置中使用strict: true。"
 
@@ -4488,8 +4450,7 @@ msgid "Create user token"
 msgstr "创建用户令牌"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:198
-msgid ""
-"Provide your Red Hat or Red Hat Satellite credentials\n"
+msgid "Provide your Red Hat or Red Hat Satellite credentials\n"
 "                 below and you can choose from a list of your available subscriptions.\n"
 "                 The credentials you use will be stored for future use in\n"
 "                 retrieving renewal or expanded subscriptions."
@@ -4532,8 +4493,7 @@ msgid "Select items from list"
 msgstr "从列表中选择项"
 
 #: screens/Project/shared/Project.helptext.js:8
-#~ msgid ""
-#~ "Base path used for locating playbooks. Directories\n"
+#~ msgid "Base path used for locating playbooks. Directories\n"
 #~ "found inside this path will be listed in the playbook directory drop-down.\n"
 #~ "Together the base path and selected playbook directory provide the full\n"
 #~ "path used to locate playbooks."
@@ -4627,8 +4587,7 @@ msgid "All jobs"
 msgstr "所有作业"
 
 #: components/LaunchPrompt/steps/OtherPromptsStep.js:187
-msgid ""
-"If enabled, show the changes made\n"
+msgid "If enabled, show the changes made\n"
 "              by Ansible tasks, where supported. This is equivalent to Ansible’s\n"
 "              --diff mode."
 msgstr ""
@@ -4684,8 +4643,7 @@ msgid "Weekend day"
 msgstr "周末日"
 
 #: screens/Inventory/shared/Inventory.helptext.js:31
-msgid ""
-"Optional labels that describe this inventory,\n"
+msgid "Optional labels that describe this inventory,\n"
 "          such as 'dev' or 'test'. Labels can be used to group and filter\n"
 "          inventories and completed jobs."
 msgstr ""
@@ -4836,8 +4794,7 @@ msgid "This field may not be blank"
 msgstr "此字段不得为空白"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:94
-msgid ""
-"If users need feedback about the correctness\n"
+msgid "If users need feedback about the correctness\n"
 "              of their constructed groups, it is highly recommended\n"
 "              to use strict: true in the plugin configuration."
 msgstr ""
@@ -4864,15 +4821,13 @@ msgid "Failed to delete one or more projects."
 msgstr "删除一个或多个项目失败。"
 
 #: screens/Template/Survey/SurveyQuestionForm.js:183
-#~ msgid ""
-#~ "The suggested format for variable names is lowercase and\n"
+#~ msgid "The suggested format for variable names is lowercase and\n"
 #~ "underscore-separated (for example, foo_bar, user_id, host_name,\n"
 #~ "etc.). Variable names with spaces are not allowed."
 #~ msgstr "变量名称的建议格式为小写字母并用下划线分隔（例如：foo_bar、user_id、host_name 等等）。不允许使用带空格的变量名称。"
 
 #: screens/Template/Survey/SurveyQuestionForm.js:47
-msgid ""
-"Choose an answer type or format you want as the prompt for the user.\n"
+msgid "Choose an answer type or format you want as the prompt for the user.\n"
 "          Refer to the Ansible Controller Documentation for more additional\n"
 "          information about each option."
 msgstr ""
@@ -5261,8 +5216,7 @@ msgid "User Interface settings"
 msgstr "用户界面设置"
 
 #: components/AdHocCommands/AdHocDetailsStep.js:248
-msgid ""
-"Provide key/value pairs using either\n"
+msgid "Provide key/value pairs using either\n"
 "                  YAML or JSON."
 msgstr ""
 
@@ -5351,8 +5305,7 @@ msgid "Use one email address per line to create a recipient list for this type o
 msgstr "每行一个电子邮件地址，为这类通知创建一个接收者列表。"
 
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:66
-msgid ""
-"Minimum number of instances that will be automatically\n"
+msgid "Minimum number of instances that will be automatically\n"
 "          assigned to this group when new instances come online."
 msgstr ""
 
@@ -5640,11 +5593,9 @@ msgid "Are you sure you want to submit the request to cancel this job?"
 msgstr "您确定要提交取消此任务的请求吗？"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:56
-#~ msgid ""
-#~ "This table gives a few useful parameters of the constructed\n"
+#~ msgid "This table gives a few useful parameters of the constructed\n"
 #~ "inventory plugin. For the full list of parameters"
-#~ msgstr ""
-#~ "下表给出了构造的一些有用参数\n"
+#~ msgstr "下表给出了构造的一些有用参数\n"
 #~ "库存插件。有关参数的完整列表"
 
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressList.js:126
@@ -5662,8 +5613,7 @@ msgid "Are you sure you want to disable local authentication?  Doing so could im
 msgstr "您确定要禁用本地身份验证吗？这样做可能会影响用户登录的能力，以及系统管理员撤销此更改的能力。"
 
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:65
-#~ msgid ""
-#~ "This data is used to enhance\n"
+#~ msgid "This data is used to enhance\n"
 #~ "future releases of the Tower Software and help\n"
 #~ "streamline customer experience and success."
 #~ msgstr "这些数据用于增强未来的 Tower 软件发行版本，并帮助简化客户体验和成功。"
@@ -5850,8 +5800,7 @@ msgstr "实例组"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:60
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:533
-msgid ""
-"Use one phone number per line to specify where to\n"
+msgid "Use one phone number per line to specify where to\n"
 "        route SMS messages. Phone numbers should be formatted +11231231234. For more information see Twilio documentation"
 msgstr ""
 
@@ -5864,8 +5813,7 @@ msgid "Subscription Details"
 msgstr "订阅详情"
 
 #: components/Schedule/shared/UnsupportedRRuleAlert.js:24
-msgid ""
-"This schedule uses complex rules that are not supported in the\n"
+msgid "This schedule uses complex rules that are not supported in the\n"
 "        UI.  Please use the API to manage this schedule."
 msgstr ""
 
@@ -5977,8 +5925,7 @@ msgid "source control branch"
 msgstr "源控制分支"
 
 #: components/Lookup/HostFilterLookup.js:352
-#~ msgid ""
-#~ "Populate the hosts for this inventory by using a search\n"
+#~ msgid "Populate the hosts for this inventory by using a search\n"
 #~ "filter. Example: ansible_facts__ansible_distribution:\"RedHat\".\n"
 #~ "Refer to the documentation for further syntax and\n"
 #~ "examples.  Refer to the Ansible Controller documentation for further syntax and\n"
@@ -5986,8 +5933,7 @@ msgstr "源控制分支"
 #~ msgstr "使用搜索过滤器填充此清单的主机。例如：ansible_facts__ansible_distribution:\"RedHat\"。如需语法和实例的更多信息，请参阅相关文档。请参阅 Ansible 控制器文档来获得更多信息。"
 
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:103
-msgid ""
-"The execution environment that will be used for jobs\n"
+msgid "The execution environment that will be used for jobs\n"
 "          inside of this organization. This will be used a fallback when\n"
 "          an execution environment has not been explicitly assigned at the\n"
 "          project, job template or workflow level."
@@ -6071,8 +6017,7 @@ msgid "{0} more"
 msgstr "{0} 更多"
 
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:64
-msgid ""
-"This data is used to enhance\n"
+msgid "This data is used to enhance\n"
 "                   future releases of the Tower Software and help\n"
 "                   streamline customer experience and success."
 msgstr ""
@@ -6088,8 +6033,7 @@ msgid "Nested groups inventory definition:"
 msgstr "嵌套组清单定义："
 
 #: screens/NotificationTemplate/shared/Notifications.helptext.js:10
-#~ msgid ""
-#~ "The amount of time (in seconds) before the email\n"
+#~ msgid "The amount of time (in seconds) before the email\n"
 #~ "notification stops trying to reach the host and times out. Ranges\n"
 #~ "from 1 to 120 seconds."
 #~ msgstr "电子邮件通知停止尝试到达主机并超时之前所经过的时间（以秒为单位）。范围为 1 秒到 120 秒。"
@@ -6183,13 +6127,11 @@ msgstr "无（运行一次）"
 #~ msgstr "防止实例组 Fallback：如果启用，则作业模板将阻止将任何清单或机构实例组添加到要运行的首选实例组列表中。"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:164
-#~ msgid ""
-#~ "This constructed inventory input \n"
+#~ msgid "This constructed inventory input \n"
 #~ "creates a group for both of the categories and uses \n"
 #~ "the limit (host pattern) to only return hosts that \n"
 #~ "are in the intersection of those two groups."
-#~ msgstr ""
-#~ "此构建的库存输入 \n"
+#~ msgstr "此构建的库存输入 \n"
 #~ "为类别和用途创建一个组 \n"
 #~ "仅返回主机的限制（主机模式） \n"
 #~ "在这两组的交叉点。"
@@ -6305,8 +6247,7 @@ msgid "Multiple Choice"
 msgstr "多选"
 
 #: screens/Project/shared/Project.helptext.js:14
-#~ msgid ""
-#~ "Change PROJECTS_ROOT when deploying\n"
+#~ msgid "Change PROJECTS_ROOT when deploying\n"
 #~ "{brandName} to change this location."
 #~ msgstr "部署 {brandName} 时更改 PROJECTS_ROOT 以更改此位置。"
 
@@ -6322,8 +6263,7 @@ msgid "Back to Dashboard."
 msgstr "返回到仪表盘。"
 
 #: components/Lookup/InventoryLookup.js:129
-#~ msgid ""
-#~ "Select the inventory containing the hosts\n"
+#~ msgid "Select the inventory containing the hosts\n"
 #~ "you want this job to manage."
 #~ msgstr "选择包含此作业要管理的主机的清单。"
 
@@ -6502,8 +6442,7 @@ msgstr "过期"
 #~ msgstr "描述此任务模板的可选标签，如 'dev' 或 'test'。标签可用于对任务模板和完成的任务进行分组和过滤。"
 
 #: components/SelectedList/DraggableSelectedList.js:87
-#~ msgid ""
-#~ "Press space or enter to begin dragging,\n"
+#~ msgid "Press space or enter to begin dragging,\n"
 #~ "and use the arrow keys to navigate up or down.\n"
 #~ "Press enter to confirm the drag, or any other key to\n"
 #~ "cancel the drag operation."
@@ -6841,8 +6780,7 @@ msgid "Pan Down"
 msgstr "向下平移"
 
 #: screens/NotificationTemplate/shared/Notifications.helptext.js:21
-#~ msgid ""
-#~ "Use one IRC channel or username per line. The pound\n"
+#~ msgid "Use one IRC channel or username per line. The pound\n"
 #~ "symbol (#) for channels, and the at (@) symbol for users, are not\n"
 #~ "required."
 #~ msgstr "每行使用一个 IRC 频道或用户名。频道不需要输入 # 号，用户不需要输入 @ 符号。"
@@ -7082,8 +7020,7 @@ msgid "Confirm delete"
 msgstr "确认删除"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:250
-msgid ""
-"This constructed inventory input\n"
+msgid "This constructed inventory input\n"
 "            creates a group for both of the categories and uses\n"
 "            the limit (host pattern) to only return hosts that\n"
 "            are in the intersection of those two groups."
@@ -7177,8 +7114,7 @@ msgid "Modified By (Username)"
 msgstr "修改者（用户名）"
 
 #: components/LaunchPrompt/steps/OtherPromptsStep.js:188
-#~ msgid ""
-#~ "If enabled, show the changes made\n"
+#~ msgid "If enabled, show the changes made\n"
 #~ "by Ansible tasks, where supported. This is equivalent to Ansible’s\n"
 #~ "--diff mode."
 #~ msgstr "如果启用，显示 Ansible 任务所做的更改（在支持的情况下）。这等同于 Ansible 的 --diff mode。"
@@ -7280,8 +7216,7 @@ msgid "{0, plural, one {This approval cannot be deleted due to insufficient perm
 msgstr "{0, plural, one {This approval cannot be deleted due to insufficient permissions or a pending job status} other {These approvals cannot be deleted due to insufficient permissions or a pending job status}}"
 
 #: screens/Project/shared/Project.helptext.js:118
-#~ msgid ""
-#~ "Submodules will track the latest commit on\n"
+#~ msgid "Submodules will track the latest commit on\n"
 #~ "their master branch (or other branch specified in\n"
 #~ ".gitmodules). If no, submodules will be kept at\n"
 #~ "the revision specified by the main project.\n"
@@ -7298,8 +7233,7 @@ msgstr "2（更多详细内容）"
 #~ msgstr "此工作流作业模板的Webhook凭据。"
 
 #: components/Lookup/HostFilterLookup.js:351
-msgid ""
-"Populate the hosts for this inventory by using a search\n"
+msgid "Populate the hosts for this inventory by using a search\n"
 "              filter. Example: ansible_facts__ansible_distribution:\"RedHat\".\n"
 "              Refer to the documentation for further syntax and\n"
 "              examples.  Refer to the Ansible Controller documentation for further syntax and\n"
@@ -7315,8 +7249,7 @@ msgid "LDAP4"
 msgstr "LDAP4"
 
 #: screens/NotificationTemplate/shared/Notifications.helptext.js:15
-#~ msgid ""
-#~ "The base URL of the Grafana server - the\n"
+#~ msgid "The base URL of the Grafana server - the\n"
 #~ "/api/annotations endpoint will be added automatically to the base\n"
 #~ "Grafana URL."
 #~ msgstr "Grafana 服务器的基本 URL - /api/annotations 端点将自动添加到基本 Grafana URL。"
@@ -7440,20 +7373,17 @@ msgid "Are you sure you want delete the group below?"
 msgstr "您确定要删除群组吗？"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:115
-#~ msgid ""
-#~ "Create vars from jinja2 expressions. This can be useful\n"
+#~ msgid "Create vars from jinja2 expressions. This can be useful\n"
 #~ "if the constructed groups you define do not contain the expected\n"
 #~ "hosts. This can be used to add hostvars from expressions so\n"
 #~ "that you know what the resultant values of those expressions are."
-#~ msgstr ""
-#~ "从jinja2表达式创建vars。 这可能很有用\n"
+#~ msgstr "从jinja2表达式创建vars。 这可能很有用\n"
 #~ "如果您定义的构造组不包含预期的\n"
 #~ "host。这可用于从表达式中添加hostvars ，因此\n"
 #~ "您知道这些表达式的结果值是什么。"
 
 #: components/AdHocCommands/AdHocDetailsStep.js:210
-msgid ""
-"Enables creation of a provisioning\n"
+msgid "Enables creation of a provisioning\n"
 "                              callback URL. Using the URL a host can contact {brandName}\n"
 "                              and request a configuration update using this job\n"
 "                              template"
@@ -7771,8 +7701,7 @@ msgid "1 (Verbose)"
 msgstr "1（详细）"
 
 #: screens/Setting/shared/RevertAllAlert.js:38
-msgid ""
-"This will revert all configuration values on this page to\n"
+msgid "This will revert all configuration values on this page to\n"
 "      their factory defaults. Are you sure you want to proceed?"
 msgstr ""
 
@@ -7922,13 +7851,11 @@ msgid "Listener Port"
 msgstr "侦听器端口"
 
 #: screens/Project/shared/Project.helptext.js:108
-#~ msgid ""
-#~ "Enable content signing to verify that the content\n"
+#~ msgid "Enable content signing to verify that the content\n"
 #~ "has remained secure when a project is synced.\n"
 #~ "If the content has been tampered with, the\n"
 #~ "job will not run."
-#~ msgstr ""
-#~ "启用内容签名以验证内容\n"
+#~ msgstr "启用内容签名以验证内容\n"
 #~ "在项目同步时保持安全。\n"
 #~ "如果内容已被篡改，\n"
 #~ "作业将不会运行。"
@@ -8006,8 +7933,7 @@ msgid "Sign in with GitHub Enterprise Teams"
 msgstr "使用 GitHub Enterprise Teams 登录"
 
 #: components/Lookup/InventoryLookup.js:135
-msgid ""
-"Select the inventory containing the hosts\n"
+msgid "Select the inventory containing the hosts\n"
 "            you want this job to manage."
 msgstr ""
 
@@ -8234,8 +8160,7 @@ msgid "string"
 msgstr "字符串"
 
 #: screens/NotificationTemplate/shared/Notifications.helptext.js:28
-#~ msgid ""
-#~ "One Slack channel per line. The pound symbol (#)\n"
+#~ msgid "One Slack channel per line. The pound symbol (#)\n"
 #~ "is required for channels. To respond to or start a thread to a specific message add the parent message Id to the channel where the parent message Id is 16 digits. A dot (.) must be manually inserted after the 10th digit.  ie:#destination-channel, 1231257890.006423. See Slack"
 #~ msgstr "每行一个 Slack 频道。频道需要一个井号(#)。要响应一个特点信息或启动一个特定消息，将父信息 Id 添加到频道中，父信息 Id 为 16 位。在第 10 位数字后需要手动插入一个点(.)。例如：#destination-channel, 1231257890.006423。请参阅 Slack"
 
@@ -8253,8 +8178,7 @@ msgid "Back to Templates"
 msgstr "返回到模板"
 
 #: screens/NotificationTemplate/shared/Notifications.helptext.js:38
-#~ msgid ""
-#~ "Specify a notification color. Acceptable colors are hex\n"
+#~ msgid "Specify a notification color. Acceptable colors are hex\n"
 #~ "color code (example: #3af or #789abc)."
 #~ msgstr "指定通知颜色。可接受的颜色为十六进制颜色代码（示例：#3af 或者 #789abc）。"
 
@@ -8293,8 +8217,7 @@ msgid "ALL"
 msgstr "所有"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:114
-msgid ""
-"Create vars from jinja2 expressions. This can be useful\n"
+msgid "Create vars from jinja2 expressions. This can be useful\n"
 "              if the constructed groups you define do not contain the expected\n"
 "              hosts. This can be used to add hostvars from expressions so\n"
 "              that you know what the resultant values of those expressions are."
@@ -8305,8 +8228,7 @@ msgid "Active hosts previously deleted"
 msgstr "先前已删除的活跃房东"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:335
-msgid ""
-"It is hard to give a specification for\n"
+msgid "It is hard to give a specification for\n"
 "            the inventory for Ansible facts, because to populate\n"
 "            the system facts you need to run a playbook against\n"
 "            the inventory that has `gather_facts: true`. The\n"
@@ -8363,8 +8285,7 @@ msgstr "{0, selectordinal, one {The first {weekday} of {month}} two {The second 
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:62
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:582
-msgid ""
-"Specify HTTP Headers in JSON format. Refer to\n"
+msgid "Specify HTTP Headers in JSON format. Refer to\n"
 "      the Ansible Controller documentation for example syntax."
 msgstr ""
 
@@ -8396,8 +8317,7 @@ msgid "Failed to copy execution environment"
 msgstr "复制执行环境失败"
 
 #: screens/Template/Survey/MultipleChoiceField.js:60
-msgid ""
-"Press 'Enter' to add more answer choices. One answer\n"
+msgid "Press 'Enter' to add more answer choices. One answer\n"
 "choice per line."
 msgstr "按 'Enter' 添加更多回答选择。每行一个回答选择。"
 
@@ -8434,8 +8354,7 @@ msgid "Inventory file"
 msgstr "清单文件"
 
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.js:254
-#~ msgid ""
-#~ "Note that only hosts directly in this group can\n"
+#~ msgid "Note that only hosts directly in this group can\n"
 #~ "be disassociated. Hosts in sub-groups must be disassociated\n"
 #~ "directly from the sub-group level that they belong."
 #~ msgstr "请注意，只有直接属于此组的主机才能解除关联。子组中的主机必须与其所属的子组级别直接解除关联。"
@@ -8463,8 +8382,7 @@ msgid "Run on"
 msgstr "运行于"
 
 #: components/HostToggle/HostToggle.js:21
-#~ msgid ""
-#~ "Indicates if a host is available and should be included in running\n"
+#~ msgid "Indicates if a host is available and should be included in running\n"
 #~ "jobs.  For hosts that are part of an external inventory, this may be\n"
 #~ "reset by the inventory sync process."
 #~ msgstr "指明主机是否可用且应该包含在正在运行的作业中。对于作为外部清单一部分的主机，可能会被清单同步过程重置。"
@@ -8698,8 +8616,7 @@ msgid "Troubleshooting"
 msgstr "故障排除"
 
 #: screens/Project/shared/Project.helptext.js:76
-#~ msgid ""
-#~ "A refspec to fetch (passed to the Ansible git\n"
+#~ msgid "A refspec to fetch (passed to the Ansible git\n"
 #~ "module). This parameter allows access to references via\n"
 #~ "the branch field not otherwise available."
 #~ msgstr "要获取的 refspec（传递至 Ansible git 模块）。此参数允许通过分支字段访问原本不可用的引用。"
@@ -8787,8 +8704,7 @@ msgid "Source Control Update"
 msgstr "源控制更新"
 
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:76
-msgid ""
-"This data is used to enhance\n"
+msgid "This data is used to enhance\n"
 "                   future releases of the Software and to provide\n"
 "                   Automation Analytics."
 msgstr ""
@@ -8821,8 +8737,7 @@ msgid "These are the modules that {brandName} supports running commands against.
 msgstr "这些是 {brandName} 支持运行命令的模块。"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:65
-#~ msgid ""
-#~ "If you do not have a subscription, you can visit\n"
+#~ msgid "If you do not have a subscription, you can visit\n"
 #~ "Red Hat to obtain a trial subscription."
 #~ msgstr "如果您还没有订阅，请联系红帽来获得一个试用订阅。"
 
@@ -8840,8 +8755,7 @@ msgid "Failed to user token."
 msgstr "用户令牌失败。"
 
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:67
-#~ msgid ""
-#~ "Minimum number of instances that will be automatically\n"
+#~ msgid "Minimum number of instances that will be automatically\n"
 #~ "assigned to this group when new instances come online."
 #~ msgstr "新实例上线时自动分配给此组的最小实例数量。"
 
@@ -8958,8 +8872,7 @@ msgid "{interval} hour"
 msgstr ""
 
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:95
-msgid ""
-"The maximum number of hosts allowed to be managed by\n"
+msgid "The maximum number of hosts allowed to be managed by\n"
 "            this organization. Value defaults to 0 which means no limit.\n"
 "            Refer to the Ansible documentation for more details."
 msgstr ""
@@ -8977,8 +8890,7 @@ msgid "Each time a job runs using this inventory, refresh the inventory from the
 msgstr "每次使用此清单运行作业时，请在执行作业任务之前刷新选定来源的清单。"
 
 #: screens/Project/shared/Project.helptext.js:104
-#~ msgid ""
-#~ "Branch to checkout. In addition to branches,\n"
+#~ msgid "Branch to checkout. In addition to branches,\n"
 #~ "you can input tags, commit hashes, and arbitrary refs. Some\n"
 #~ "commit hashes and refs may not be available unless you also\n"
 #~ "provide a custom refspec."
@@ -9179,12 +9091,10 @@ msgid "Greater than comparison."
 msgstr "大于比较。"
 
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:77
-#~ msgid ""
-#~ "This data is used to enhance\n"
+#~ msgid "This data is used to enhance\n"
 #~ "future releases of the Software and to provide\n"
 #~ "Automation Analytics."
-#~ msgstr ""
-#~ "这些用户用于增强\n"
+#~ msgstr "这些用户用于增强\n"
 #~ "以后发行的软件并提供\n"
 #~ "Automation Analytics。"
 
@@ -9323,8 +9233,7 @@ msgstr "工作流任务"
 #~ msgstr ""
 
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:72
-msgid ""
-"Use custom messages to change the content of\n"
+msgid "Use custom messages to change the content of\n"
 "                notifications sent when a job starts, succeeds, or fails. Use\n"
 "                curly braces to access information about the job:"
 msgstr ""
@@ -9445,13 +9354,11 @@ msgid "Host Async OK"
 msgstr "主机异步正常"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:242
-#~ msgid ""
-#~ "This constructed inventory input\n"
+#~ msgid "This constructed inventory input\n"
 #~ "creates a group for both of the categories and uses\n"
 #~ "the limit (host pattern) to only return hosts that\n"
 #~ "are in the intersection of those two groups."
-#~ msgstr ""
-#~ "此构建的库存输入\n"
+#~ msgstr "此构建的库存输入\n"
 #~ "为类别和用途创建一个组\n"
 #~ "仅返回主机的限制（主机模式）\n"
 #~ "在这两组的交叉点。"
@@ -9762,8 +9669,7 @@ msgid "Get subscriptions"
 msgstr "获取订阅"
 
 #: screens/Project/shared/Project.helptext.js:126
-#~ msgid ""
-#~ "Allow changing the Source Control branch or revision in a job\n"
+#~ msgid "Allow changing the Source Control branch or revision in a job\n"
 #~ "template that uses this project."
 #~ msgstr "允许在使用此项目的作业模板中更改 Source Control 分支或修订版本。"
 
@@ -9851,8 +9757,7 @@ msgid "Set type typeahead"
 msgstr "设置类型 typeahead"
 
 #: screens/NotificationTemplate/shared/Notifications.helptext.js:50
-#~ msgid ""
-#~ "Specify HTTP Headers in JSON format. Refer to\n"
+#~ msgid "Specify HTTP Headers in JSON format. Refer to\n"
 #~ "the Ansible Controller documentation for example syntax."
 #~ msgstr "以 JSON 格式指定 HTTP 标头。示例语法请参阅 Ansible 控制器文档。"
 
@@ -10056,11 +9961,9 @@ msgid "Last seen"
 msgstr "最后看到"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:82
-#~ msgid ""
-#~ "Token that ensures this is a source file\n"
+#~ msgid "Token that ensures this is a source file\n"
 #~ "for the ‘constructed’ plugin."
-#~ msgstr ""
-#~ "确保这是一个源文件的令牌\n"
+#~ msgstr "确保这是一个源文件的令牌\n"
 #~ "用于“构造”插件。"
 
 #: components/Schedule/shared/FrequencyDetailSubform.js:132
@@ -10092,7 +9995,7 @@ msgstr "未选中时，将执行合并，将局部变量与外部源上的局部
 #: screens/Job/JobOutput/JobOutput.js:994
 #: screens/Job/JobOutput/JobOutput.js:995
 #: screens/Job/JobOutput/shared/OutputToolbar.js:169
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.js:89
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.js:94
 msgid "Job Cancel Error"
 msgstr "作业取消错误"
 
@@ -10144,7 +10047,7 @@ msgstr "获取完整节点资源对象失败。"
 msgid "Pending"
 msgstr "待处理"
 
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.js:117
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.js:124
 msgid "Toggle Tools"
 msgstr "切换工具"
 
@@ -10284,8 +10187,7 @@ msgid "Case-insensitive version of endswith."
 msgstr "结尾不区分大小写的版本。"
 
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:97
-#~ msgid ""
-#~ "The maximum number of hosts allowed to be managed by\n"
+#~ msgid "The maximum number of hosts allowed to be managed by\n"
 #~ "this organization. Value defaults to 0 which means no limit.\n"
 #~ "Refer to the Ansible documentation for more details."
 #~ msgstr "允许由此机构管理的最大主机数。默认值为 0，表示无限制。请参阅 Ansible 文档以了解更多详情。"
@@ -10500,8 +10402,7 @@ msgstr "用户分析"
 #~ msgstr "这些参数与指定的模块一起使用。点击可以找到有关 {moduleName} 的信息"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:64
-msgid ""
-"If you do not have a subscription, you can visit\n"
+msgid "If you do not have a subscription, you can visit\n"
 "            Red Hat to obtain a trial subscription."
 msgstr ""
 
@@ -10694,8 +10595,7 @@ msgstr "启动同步源"
 #: screens/Job/Job.helptext.js:14
 #: screens/Template/shared/JobTemplate.helptext.js:30
 #~ msgid "Pass extra command line variables to the playbook. This is the -e or --extra-vars command line parameter for ansible-playbook. Provide key/value pairs using either YAML or JSON. Refer to the documentation for example syntax."
-#~ msgstr ""
-#~ "向 playbook 传递额外的命令行变量。这是 ansible-playbook 的 -e 或 --extra-vars 命令行参数。使用 YAML \n"
+#~ msgstr "向 playbook 传递额外的命令行变量。这是 ansible-playbook 的 -e 或 --extra-vars 命令行参数。使用 YAML \n"
 #~ "或 JSON 提供键/值对。示例语法请参阅相关文档。"
 
 #: components/FormField/PasswordInput.js:38
@@ -10723,8 +10623,7 @@ msgid "Examples:"
 msgstr "示例："
 
 #: components/AdHocCommands/AdHocDetailsStep.js:211
-#~ msgid ""
-#~ "Enables creation of a provisioning\n"
+#~ msgid "Enables creation of a provisioning\n"
 #~ "callback URL. Using the URL a host can contact {brandName}\n"
 #~ "and request a configuration update using this job\n"
 #~ "template"
@@ -10756,8 +10655,7 @@ msgid "Confirm revert all"
 msgstr "确认全部恢复"
 
 #: components/SelectedList/DraggableSelectedList.js:86
-msgid ""
-"Press space or enter to begin dragging,\n"
+msgid "Press space or enter to begin dragging,\n"
 "                    and use the arrow keys to navigate up or down.\n"
 "                    Press enter to confirm the drag, or any other key to\n"
 "                    cancel the drag operation."
@@ -11025,8 +10923,7 @@ msgid "Pass extra command line changes. There are two ansible command line param
 msgstr ""
 
 #: screens/Template/Survey/SurveyQuestionForm.js:48
-#~ msgid ""
-#~ "Choose an answer type or format you want as the prompt for the user.\n"
+#~ msgid "Choose an answer type or format you want as the prompt for the user.\n"
 #~ "Refer to the Ansible Controller Documentation for more additional\n"
 #~ "information about each option."
 #~ msgstr "选择您想要作为用户提示的回答类型或格式。请参阅 Ansible 控制器文档来了解每个选项的更多其他信息。"
@@ -11064,8 +10961,7 @@ msgstr "模块参数"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:56
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:492
-msgid ""
-"Specify a notification color. Acceptable colors are hex\n"
+msgid "Specify a notification color. Acceptable colors are hex\n"
 "        color code (example: #3af or #789abc)."
 msgstr ""
 
@@ -11099,8 +10995,7 @@ msgid "Please enter a value."
 msgstr "请输入一个值。"
 
 #: screens/Organization/shared/OrganizationForm.js:73
-#~ msgid ""
-#~ "The maximum number of hosts allowed to be managed by this organization.\n"
+#~ msgid "The maximum number of hosts allowed to be managed by this organization.\n"
 #~ "Value defaults to 0 which means no limit. Refer to the Ansible\n"
 #~ "documentation for more details."
 #~ msgstr "允许由此机构管理的最大主机数。默认值为 0，表示无限制。请参阅 Ansible 文档以了解更多详情。"
@@ -11153,7 +11048,7 @@ msgstr "选择作业类型"
 #: components/JobList/JobListItem.js:121
 #: screens/Job/JobDetail/JobDetail.js:656
 #: screens/Job/JobOutput/shared/OutputToolbar.js:170
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.js:90
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.js:95
 msgid "Cancel {0}"
 msgstr "取消 {0}"
 
@@ -11180,8 +11075,7 @@ msgid "Total inventory sources"
 msgstr "总库存来源"
 
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:73
-#~ msgid ""
-#~ "Use custom messages to change the content of\n"
+#~ msgid "Use custom messages to change the content of\n"
 #~ "notifications sent when a job starts, succeeds, or fails. Use\n"
 #~ "curly braces to access information about the job:"
 #~ msgstr "当一个作业开始、成功或失败时使用的自定义消息来更改通知的内容。使用大括号来访问该作业的信息："
@@ -11190,7 +11084,7 @@ msgstr "总库存来源"
 #~ msgid "Provide a host pattern to further constrain the list of hosts that will be managed or affected by the workflow."
 #~ msgstr "提供主机模式，以进一步限制将受工作流程管理或影响的主机列表。"
 
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.js:98
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.js:104
 msgid "Edit workflow"
 msgstr "编辑工作流"
 
@@ -11606,8 +11500,7 @@ msgid "Select a module"
 msgstr "选择一个模块"
 
 #: screens/Project/shared/ProjectSubForms/ManualSubForm.js:52
-#~ msgid ""
-#~ "There are no available playbook directories in {project_base_dir}.\n"
+#~ msgid "There are no available playbook directories in {project_base_dir}.\n"
 #~ "Either that directory is empty, or all of the contents are already\n"
 #~ "assigned to other projects. Create a new directory there and make\n"
 #~ "sure the playbook files can be read by the \"awx\" system user,\n"
@@ -11616,8 +11509,7 @@ msgstr "选择一个模块"
 #~ msgstr "{project_base_dir} 中没有可用的 playbook 目录。该目录可能是空目录，或所有内容都已被分配给其他项目。创建一个新目录并确保 playbook 文件可以被 \"awx\" 系统用户读取，或者使用上述的 Source Control Type 选项从源控制控制选项直接获取 {brandName}。"
 
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:88
-#~ msgid ""
-#~ "You may apply a number of possible variables in the\n"
+#~ msgid "You may apply a number of possible variables in the\n"
 #~ "message. For more information, refer to the"
 #~ msgstr "您可以在消息中应用多个可能的变量。如需更多信息，请参阅"
 
@@ -11718,8 +11610,7 @@ msgid "Choose the type of resource that will be receiving new roles.  For exampl
 msgstr "选择将获得新角色的资源类型。例如，如果您想为一组用户添加新角色，请选择用户并点击下一步。您可以选择下一步中的具体资源。"
 
 #: screens/NotificationTemplate/shared/Notifications.helptext.js:42
-#~ msgid ""
-#~ "The number associated with the \"Messaging\n"
+#~ msgid "The number associated with the \"Messaging\n"
 #~ "Service\" in Twilio with the format +18005550199."
 #~ msgstr "在 Twilio 中与“信息服务”关联的号码，格式为 +18005550199。"
 
@@ -11769,8 +11660,7 @@ msgstr "编辑凭证类型"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:48
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:484
-msgid ""
-"One Slack channel per line. The pound symbol (#)\n"
+msgid "One Slack channel per line. The pound symbol (#)\n"
 "        is required for channels. To respond to or start a thread to a specific message add the parent message Id to the channel where the parent message Id is 16 digits. A dot (.) must be manually inserted after the 10th digit.  ie:#destination-channel, 1231257890.006423. See Slack"
 msgstr ""
 
@@ -11783,8 +11673,7 @@ msgid "Sender e-mail"
 msgstr "发件人电子邮件"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:60
-msgid ""
-"Welcome to Red Hat Ansible Automation Platform!\n"
+msgid "Welcome to Red Hat Ansible Automation Platform!\n"
 "              Please complete the steps below to activate your subscription."
 msgstr ""
 
@@ -11913,8 +11802,7 @@ msgid "Failed to delete one or more workflow approval."
 msgstr "无法删除一个或多个工作流批准。"
 
 #: screens/Organization/shared/OrganizationForm.js:72
-msgid ""
-"The maximum number of hosts allowed to be managed by this organization.\n"
+msgid "The maximum number of hosts allowed to be managed by this organization.\n"
 "            Value defaults to 0 which means no limit. Refer to the Ansible\n"
 "            documentation for more details."
 msgstr ""
@@ -12168,7 +12056,7 @@ msgstr "错误消息正文"
 #: components/JobList/JobListItem.js:122
 #: screens/Job/JobDetail/JobDetail.js:657
 #: screens/Job/JobOutput/shared/OutputToolbar.js:171
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.js:91
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.js:96
 msgid "Failed to cancel {0}"
 msgstr "取消 {0} 失败"
 
@@ -12269,8 +12157,7 @@ msgid "IRC Server Address"
 msgstr "IRC 服务器地址"
 
 #: screens/Inventory/shared/Inventory.helptext.js:32
-#~ msgid ""
-#~ "Optional labels that describe this inventory,\n"
+#~ msgid "Optional labels that describe this inventory,\n"
 #~ "such as 'dev' or 'test'. Labels can be used to group and filter\n"
 #~ "inventories and completed jobs."
 #~ msgstr "描述此清单的可选标签，如 'dev' 或 'test'。标签可用于对清单和完成的作业进行分组和过滤。"
@@ -12302,8 +12189,7 @@ msgid "Schedule not found."
 msgstr "未找到调度。"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:91
-msgid ""
-"If yes make invalid entries a fatal error, otherwise skip and\n"
+msgid "If yes make invalid entries a fatal error, otherwise skip and\n"
 "              continue."
 msgstr ""
 
@@ -12312,8 +12198,7 @@ msgid "Running jobs"
 msgstr "运行作业"
 
 #: screens/Project/shared/Project.helptext.js:18
-#~ msgid ""
-#~ "Select from the list of directories found in\n"
+#~ msgid "Select from the list of directories found in\n"
 #~ "the Project Base Path. Together the base path and the playbook\n"
 #~ "directory provide the full path used to locate playbooks."
 #~ msgstr "从位于项目基本路径的目录列表中进行选择。基本路径和 playbook 目录一起提供了用于定位 playbook 的完整路径。"
@@ -12405,8 +12290,7 @@ msgid "Toggle notification approvals"
 msgstr "切换通知批准"
 
 #: screens/NotificationTemplate/shared/Notifications.helptext.js:46
-#~ msgid ""
-#~ "Use one phone number per line to specify where to\n"
+#~ msgid "Use one phone number per line to specify where to\n"
 #~ "route SMS messages. Phone numbers should be formatted +11231231234. For more information see Twilio documentation"
 #~ msgstr "每行一个电话号码以指定路由 SMS 消息的位置。电话号的格式化为 +11231231234。如需更多信息，请参阅 Twilio 文档"
 

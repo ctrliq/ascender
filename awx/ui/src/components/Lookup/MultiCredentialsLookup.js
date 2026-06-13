@@ -1,4 +1,3 @@
-import 'styled-components/macro';
 import React, { useState, useCallback, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom-v5-compat';
 import PropTypes from 'prop-types';

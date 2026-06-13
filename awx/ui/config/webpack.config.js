@@ -344,6 +344,14 @@ module.exports = function (webpackEnv) {
       strictExportPresence: true,
       rules: [
         {
+          // ESM packages (e.g. @lingui v6) import 'react/jsx-runtime' without
+          // an extension; react 17 has no exports map, so relax webpack's
+          // fully-specified ESM resolution for packages in node_modules.
+          test: /\.m?js$/,
+          include: /node_modules/,
+          resolve: { fullySpecified: false },
+        },
+        {
           // "oneOf" will traverse all following loaders until one will
           // match the requirements. When no loader matches it will fall
           // back to the "file" loader at the end of the loader list.
@@ -418,6 +426,9 @@ module.exports = function (webpackEnv) {
                 ],
                 
                 plugins: [
+                  // styled-components v6 removed the babel macro; the plugin
+                  // provides the css-prop transform the codebase relies on.
+                  require.resolve('babel-plugin-styled-components'),
                   isEnvDevelopment &&
                     shouldUseReactRefresh &&
                     require.resolve('react-refresh/babel'),
@@ -751,8 +762,9 @@ module.exports = function (webpackEnv) {
           ),
           // ESLint class options
           cwd: paths.appPath,
+          // flat config: eslint.config.mjs at the repo root is picked up
+          // automatically; only layer the jsx-runtime guard on top.
           baseConfig: {
-            extends: [require.resolve('eslint-config-react-app/base')],
             rules: {
               ...(!hasJsxRuntime && {
                 'react/react-in-jsx-scope': 'error',

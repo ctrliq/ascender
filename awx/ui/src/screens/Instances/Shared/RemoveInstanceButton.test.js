@@ -5,7 +5,6 @@ import { InstanceGroupsAPI } from 'api';
 import RemoveInstanceButton from './RemoveInstanceButton';
 import { I18nProvider } from '@lingui/react';
 import { i18n } from '@lingui/core';
-import { en } from 'make-plural/plurals';
 import english from '../../../../src/locales/en/messages';
 
 jest.mock('api');
@@ -54,7 +53,6 @@ const instances = [
 ];
 describe('<RemoveInstanceButtton />', () => {
   beforeAll(() => {
-    i18n.loadLocaleData({ en: { plurals: en } });
     i18n.load({ en: english });
     i18n.activate('en');
   });

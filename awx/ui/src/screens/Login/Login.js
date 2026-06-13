@@ -1,7 +1,7 @@
 //
 // Modifications Copyright (c) 2023 Ctrl IQ, Inc.
 //
-/* eslint-disable react/jsx-no-useless-fragment */
+
 import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { Navigate } from 'react-router-dom-v5-compat';
 

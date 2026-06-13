@@ -95,7 +95,7 @@ function AppContainer({ navRouteConfig = [], children }) {
       theme="dark"
       nav={
         <Nav
-          // eslint-disable-next-line i18next/no-literal-string
+
           aria-label={t`Navigation`}
           theme="dark"
           ouiaId="sidebar-navigation"
@@ -131,7 +131,7 @@ function AppContainer({ navRouteConfig = [], children }) {
       />
       <AlertModal
         ouiaId="session-expiration-modal"
-        // eslint-disable-next-line i18next/no-literal-string
+
         title={t`Your session is about to expire`}
         isOpen={sessionCountdown && sessionCountdown > 0}
         onClose={logout}

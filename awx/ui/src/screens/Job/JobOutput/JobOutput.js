@@ -1,4 +1,4 @@
-/* eslint-disable react/jsx-no-useless-fragment */
+
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom-v5-compat';
@@ -72,9 +72,9 @@ const OutputWrapper = styled.div`
   font-family: monospace;
   font-size: 15px;
   outline: 1px solid var(--pf-global--BorderColor--100);
-  ${({ cssMap }) =>
-    Object.keys(cssMap).map(
-      (className) => `.${className}{${cssMap[className]}}`
+  ${({ $cssMap }) =>
+    Object.keys($cssMap).map(
+      (className) => `.${className}{${$cssMap[className]}}`
     )}
 `;
 
@@ -482,7 +482,7 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
       document.removeEventListener('selectionchange', handleSelectionChange);
       if (rafId) cancelAnimationFrame(rafId);
     };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   const overscanIndicesGetter = useCallback(
     (params) => computeOverscanIndices(params, selectedRowRange),
@@ -884,7 +884,7 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
           isTemplateJob={job.type === 'job'}
           isAllCollapsed={isAllCollapsed}
         />
-        <OutputWrapper ref={outputRef} cssMap={cssMap}>
+        <OutputWrapper ref={outputRef} $cssMap={cssMap}>
           <InfiniteLoader
             isRowLoaded={isRowLoaded}
             loadMoreRows={loadMoreRows}

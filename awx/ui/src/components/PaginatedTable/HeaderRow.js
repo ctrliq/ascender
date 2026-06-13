@@ -1,4 +1,3 @@
-import 'styled-components/macro';
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom-v5-compat';
@@ -9,6 +8,7 @@ import { parseQueryString, updateQueryString } from 'util/qs';
 const Th = styled(PFTh)`
   --pf-c-table--cell--Overflow: initial;
   --pf-c-table--cell--MaxWidth: none;
+  ${(props) => (props.$alignRight ? 'text-align: right;' : '')}
 `;
 
 export default function HeaderRow({
@@ -90,7 +90,7 @@ export function HeaderCell({
       id={sortKey ? `${idPrefix}-${sortKey}` : null}
       className={className}
       sort={sort}
-      css={children === 'Actions' ? 'text-align: right' : null}
+      $alignRight={children === 'Actions'}
     >
       {children}
     </Th>

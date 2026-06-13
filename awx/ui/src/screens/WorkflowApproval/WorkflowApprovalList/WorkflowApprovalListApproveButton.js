@@ -35,7 +35,7 @@ function WorkflowApprovalListApproveButton({ onApprove, selectedItems }) {
     selectedItems.length === 0 || selectedItems.some(cannotApprove);
 
   return (
-    /* eslint-disable-next-line react/jsx-no-useless-fragment */
+
     <>
       {isKebabified ? (
         <DropdownItem

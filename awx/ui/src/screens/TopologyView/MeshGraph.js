@@ -314,7 +314,7 @@ function MeshGraph({
       badges.each(function drawStateBadge() {
         // eslint-disable-next-line react/no-this-in-sfc
         const bbox = this.parentNode.getBBox();
-        // eslint-disable-next-line react/no-this-in-sfc
+
         d3.select(this)
           .append('circle')
           .attr('r', 9)

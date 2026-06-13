@@ -1,7 +1,6 @@
 import React from 'react';
 import { I18nProvider } from '@lingui/react';
 import { i18n } from '@lingui/core';
-import { en } from 'make-plural/plurals';
 import { formatDateString } from 'util/dates';
 import {
   getPendingLabel,
@@ -11,7 +10,6 @@ import {
 import mockWorkflowApprovals from '../data.workflowApprovals.json';
 
 const workflowApproval = mockWorkflowApprovals.results[0];
-i18n.loadLocaleData('en', { plurals: en });
 
 async function activate() {
   const { messages } = await import(`../../../locales/${'en'}/messages.js`);

@@ -1,3 +1,4 @@
+import '@testing-library/jest-dom';
 import React from 'react';
 import { configure } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
@@ -11,8 +12,11 @@ jest.setTimeout(120000);
 // apply polyfills for jsdom
 require('@nteract/mockument');
 
-// eslint-disable-next-line import/prefer-default-export
-export const asyncFlush = () => new Promise((resolve) => setImmediate(resolve));
+// eslint-disable-next-line import-x/prefer-default-export
+export const asyncFlush = () =>
+  new Promise((resolve) => {
+    setImmediate(resolve);
+  });
 
 let hasConsoleError = false;
 let hasConsoleWarn = false;

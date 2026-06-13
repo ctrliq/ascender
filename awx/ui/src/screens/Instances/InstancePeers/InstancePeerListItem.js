@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';
-import 'styled-components/macro';
 import { Tr, Td, ExpandableRowContent } from '@patternfly/react-table';
 import { formatDateString } from 'util/dates';
 import { Detail, DetailList } from 'components/DetailList';

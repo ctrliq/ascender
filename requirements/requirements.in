@@ -10,15 +10,15 @@ cachetools
 channels
 channels-valkey
 cryptography>=46.0.7  # CVE-2026-39892
-Cython<3 # this is needed as a build dependency, one day we may have separated build deps
+Cython>=3 # this is needed as a build dependency, one day we may have separated build deps; <3 cap removed once pyyaml>=6.0.1 supported Cython 3
 daphne
 distro
-django>=5.2.14,<6.0 # CVE-2026-5766 CVE-2026-35192 CVE-2026-6907
+django>=5.2.14,<6.0 # CVE-2026-5766 CVE-2026-35192 CVE-2026-6907; <6.0 also enforced by django-ansible-base (Django<6.0, djangorestframework<3.16)
 django-auth-ldap
 django-cors-headers
 django-extensions==4.1
 django-guid==3.5.2
-django-oauth-toolkit<2.0.0      # Version 2.0.0 has breaking changes that will need to be worked out before upgrading
+django-oauth-toolkit>=3.3.0
 django-polymorphic
 django-pglocks
 django-radius
@@ -37,7 +37,6 @@ jinja2>=3.1.6  # CVE-2025-27516
 JSON-log-formatter
 jsonschema
 Markdown>=3.8.1  # CVE-2025-69534 # used for formatting API help
-msrestazure
 openshift
 packaging==24.2
 pexpect==4.7.0  # see library notes
@@ -61,7 +60,7 @@ requests>=2.33.0 # CVE-2026-25645
 slack-sdk
 tacacs-plus==1.0  # UPGRADE BLOCKER: auth does not work with later versions
 twilio
-twisted[tls]>=26.4.0rc2   # CVE-2026-42304
+twisted[tls]>=26.4.0   # CVE-2026-42304
 urllib3>=2.7.0 # CVE-2026-44431 CVE-2026-44432
 uWSGI>=2.0.22 # CVE-2023-27522
 uwsgitop

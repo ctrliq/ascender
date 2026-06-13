@@ -13,14 +13,6 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: Poedit 3.6\n"
 
-#. js-lingui-explicit-id
-#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:265
-#: screens/InstanceGroup/Instances/InstanceListItem.js:166
-#: screens/Instances/InstanceDetail/InstanceDetail.js:305
-#: screens/Instances/InstanceList/InstanceListItem.js:179
-msgid "{count, plural, one {# fork} other {# forks}}"
-msgstr "{count, plural, one {# tenedor} other {# tenedores}}"
-
 #: components/Schedule/ScheduleToggle/ScheduleToggle.js:79
 msgid "Failed to toggle schedule."
 msgstr "No se pudo alternar la programación."
@@ -51,11 +43,9 @@ msgid "Select an instance"
 msgstr "Seleccione una instancia"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:61
-#~ msgid ""
-#~ "Welcome to Red Hat Ansible Automation Platform!\n"
+#~ msgid "Welcome to Red Hat Ansible Automation Platform!\n"
 #~ "Please complete the steps below to activate your subscription."
-#~ msgstr ""
-#~ "¡Bienvenido a Red Hat Ansible Automation Platform!\n"
+#~ msgstr "¡Bienvenido a Red Hat Ansible Automation Platform!\n"
 #~ "Complete los pasos a continuación para activar su suscripción."
 
 #: screens/WorkflowApproval/WorkflowApproval.js:53
@@ -123,12 +113,10 @@ msgid "Add a new node between these two nodes"
 msgstr "Agregar un nuevo nodo entre estos dos nodos"
 
 #: screens/Project/shared/Project.helptext.js:93
-#~ msgid ""
-#~ "The first fetches all references. The second\n"
+#~ msgid "The first fetches all references. The second\n"
 #~ "fetches the Github pull request number 62, in this example\n"
 #~ "the branch needs to be \"pull/62/head\"."
-#~ msgstr ""
-#~ "El primero extrae todas las referencias. El segundo\n"
+#~ msgstr "El primero extrae todas las referencias. El segundo\n"
 #~ "extrae el número de solicitud de extracción 62 de Github; en este ejemplo,\n"
 #~ "la rama debe ser \"pull/62/head\"."
 
@@ -149,8 +137,7 @@ msgid "Advanced search documentation"
 msgstr "Documentación de búsqueda avanzada"
 
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:106
-#~ msgid ""
-#~ "The execution environment that will be used for jobs\n"
+#~ msgid "The execution environment that will be used for jobs\n"
 #~ "inside of this organization. This will be used a fallback when\n"
 #~ "an execution environment has not been explicitly assigned at the\n"
 #~ "project, job template or workflow level."
@@ -171,8 +158,7 @@ msgstr "{selectedItemsCount, plural, one {Click to run a health check on the sel
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:66
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:87
 #: screens/InstanceGroup/shared/ContainerGroupForm.js:77
-msgid ""
-"Maximum number of forks to allow across all jobs running concurrently on this group.\n"
+msgid "Maximum number of forks to allow across all jobs running concurrently on this group.\n"
 "          Zero means no limit will be enforced."
 msgstr ""
 
@@ -390,6 +376,14 @@ msgstr "Seleccionar los roles para aplicar"
 msgid "Type"
 msgstr "Tipo"
 
+#. js-lingui-explicit-id
+#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:265
+#: screens/InstanceGroup/Instances/InstanceListItem.js:166
+#: screens/Instances/InstanceDetail/InstanceDetail.js:305
+#: screens/Instances/InstanceList/InstanceListItem.js:179
+msgid "{count, plural, one {# fork} other {# forks}}"
+msgstr "{count, plural, one {# tenedor} other {# tenedores}}"
+
 #: screens/Inventory/InventoryList/InventoryListItem.js:161
 msgid "Copy Inventory"
 msgstr "Copiar inventario"
@@ -543,8 +537,7 @@ msgstr "Agregar roles"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:39
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:241
-msgid ""
-"The base URL of the Grafana server - the\n"
+msgid "The base URL of the Grafana server - the\n"
 "      /api/annotations endpoint will be added automatically to the base\n"
 "      Grafana URL."
 msgstr ""
@@ -634,11 +627,9 @@ msgid "Source Control URL"
 msgstr "URL de fuente de control"
 
 #: screens/Project/shared/Project.helptext.js:124
-#~ msgid ""
-#~ "Each time a job runs using this project, update the\n"
+#~ msgid "Each time a job runs using this project, update the\n"
 #~ "revision of the project prior to starting the job."
-#~ msgstr ""
-#~ "Cada vez que una tarea se ejecute con este proyecto,\n"
+#~ msgstr "Cada vez que una tarea se ejecute con este proyecto,\n"
 #~ "actualice la revisión del proyecto antes de iniciar dicha tarea."
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:300
@@ -837,8 +828,7 @@ msgid "The Instance Groups to which this instance belongs."
 msgstr "Los grupos de instancias a los que pertenece esta instancia."
 
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:87
-msgid ""
-"You may apply a number of possible variables in the\n"
+msgid "You may apply a number of possible variables in the\n"
 "                message. For more information, refer to the"
 msgstr ""
 
@@ -870,8 +860,7 @@ msgid "Lookup modal"
 msgstr "Modal de búsqueda"
 
 #: components/HostToggle/HostToggle.js:21
-msgid ""
-"Indicates if a host is available and should be included in running\n"
+msgid "Indicates if a host is available and should be included in running\n"
 "    jobs.  For hosts that are part of an external inventory, this may be\n"
 "    reset by the inventory sync process."
 msgstr ""
@@ -958,13 +947,11 @@ msgid "Elapsed Time"
 msgstr "Tiempo transcurrido"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:197
-#~ msgid ""
-#~ "Provide your Red Hat or Red Hat Satellite credentials\n"
+#~ msgid "Provide your Red Hat or Red Hat Satellite credentials\n"
 #~ "below and you can choose from a list of your available subscriptions.\n"
 #~ "The credentials you use will be stored for future use in\n"
 #~ "retrieving renewal or expanded subscriptions."
-#~ msgstr ""
-#~ "A continuación, proporcione sus credenciales de Red Hat o de Red Hat Satellite\n"
+#~ msgstr "A continuación, proporcione sus credenciales de Red Hat o de Red Hat Satellite\n"
 #~ "para poder elegir de una lista de sus suscripciones disponibles.\n"
 #~ "Las credenciales que utilice se almacenarán para su uso futuro\n"
 #~ "en la recuperación de las suscripciones de renovación o ampliadas."
@@ -986,8 +973,7 @@ msgid "new choice"
 msgstr "nueva elección"
 
 #: components/Schedule/shared/UnsupportedScheduleForm.js:13
-msgid ""
-"This schedule uses complex rules that are not supported in the\n"
+msgid "This schedule uses complex rules that are not supported in the\n"
 "  UI.  Please use the API to manage this schedule."
 msgstr ""
 
@@ -1059,11 +1045,9 @@ msgid "End User License Agreement"
 msgstr "Acuerdo de licencia de usuario final"
 
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:73
-#~ msgid ""
-#~ "Minimum percentage of all instances that will be automatically\n"
+#~ msgid "Minimum percentage of all instances that will be automatically\n"
 #~ "assigned to this group when new instances come online."
-#~ msgstr ""
-#~ "Porcentaje mínimo de todas las instancias que se asignará automáticamente\n"
+#~ msgstr "Porcentaje mínimo de todas las instancias que se asignará automáticamente\n"
 #~ "a este grupo cuando aparezcan nuevas instancias en línea."
 
 #: screens/ActivityStream/ActivityStreamDetailButton.js:46
@@ -1133,8 +1117,7 @@ msgstr "Copie la revisión completa al portapapeles."
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:59
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:80
 #: screens/InstanceGroup/shared/ContainerGroupForm.js:68
-msgid ""
-"Maximum number of jobs to run concurrently on this group.\n"
+msgid "Maximum number of jobs to run concurrently on this group.\n"
 "          Zero means no limit will be enforced."
 msgstr ""
 
@@ -1157,8 +1140,7 @@ msgstr "Finalizado"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:36
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:138
-msgid ""
-"The amount of time (in seconds) before the email\n"
+msgid "The amount of time (in seconds) before the email\n"
 "        notification stops trying to reach the host and times out. Ranges\n"
 "        from 1 to 120 seconds."
 msgstr ""
@@ -1360,13 +1342,11 @@ msgid "This workflow job template is currently being used by other resources. Ar
 msgstr "Esta plantilla de trabajo del flujo de trabajo está siendo utilizada por otros recursos. ¿Está seguro de que desea eliminarla?"
 
 #: screens/Host/HostGroups/HostGroupsList.js:215
-#~ msgid ""
-#~ "Note that you may still see the group in the list after\n"
+#~ msgid "Note that you may still see the group in the list after\n"
 #~ "disassociating if the host is also a member of that group’s\n"
 #~ "children.  This list shows all groups the host is associated\n"
 #~ "with directly and indirectly."
-#~ msgstr ""
-#~ "Tenga en cuenta que puede seguir viendo el grupo en la lista después de la disociación si el host también es un miembro de los elementos secundarios de ese grupo. Esta lista muestra todos los grupos a los que está asociado el host\n"
+#~ msgstr "Tenga en cuenta que puede seguir viendo el grupo en la lista después de la disociación si el host también es un miembro de los elementos secundarios de ese grupo. Esta lista muestra todos los grupos a los que está asociado el host\n"
 #~ "directa e indirectamente."
 
 #: routeConfig.js:103
@@ -1432,8 +1412,7 @@ msgid "There was a problem logging in. Please try again."
 msgstr "Hubo un problema al iniciar sesión. Inténtelo de nuevo."
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:81
-msgid ""
-"Token that ensures this is a source file\n"
+msgid "Token that ensures this is a source file\n"
 "              for the ‘constructed’ plugin."
 msgstr ""
 
@@ -1464,11 +1443,9 @@ msgid "Past week"
 msgstr "Semana pasada"
 
 #: components/AdHocCommands/AdHocDetailsStep.js:249
-#~ msgid ""
-#~ "Provide key/value pairs using either\n"
+#~ msgid "Provide key/value pairs using either\n"
 #~ "YAML or JSON."
-#~ msgstr ""
-#~ "Proporcione pares de clave/valor utilizando\n"
+#~ msgstr "Proporcione pares de clave/valor utilizando\n"
 #~ "YAML o JSON."
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.js:34
@@ -1594,14 +1571,12 @@ msgid "Tokens"
 msgstr "Tokens"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:319
-#~ msgid ""
-#~ "It is hard to give a specification for\n"
+#~ msgid "It is hard to give a specification for\n"
 #~ "the inventory for Ansible facts, because to populate\n"
 #~ "the system facts you need to run a playbook against\n"
 #~ "the inventory that has `gather_facts: true`. The\n"
 #~ "actual facts will differ system-to-system."
-#~ msgstr ""
-#~ "Es difícil dar una especificación para\n"
+#~ msgstr "Es difícil dar una especificación para\n"
 #~ "el inventario de hechos Ansible, porque para rellenar\n"
 #~ "los hechos del sistema que necesita para ejecutar un libro de jugadas contra\n"
 #~ "el inventario que tiene `collect_facts: true`. El\n"
@@ -1636,7 +1611,7 @@ msgstr "Copiado"
 msgid "Failed to cancel one or more jobs."
 msgstr "No se pudo cancelar una o varias tareas."
 
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.js:105
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.js:112
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerToolbar.js:77
 msgid "Total Nodes"
 msgstr "Nodos totales"
@@ -2432,8 +2407,7 @@ msgid "Toggle Password"
 msgstr "Alternar contraseña"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:164
-msgid ""
-"This constructed inventory input \n"
+msgid "This constructed inventory input \n"
 "            creates a group for both of the categories and uses \n"
 "            the limit (host pattern) to only return hosts that \n"
 "            are in the intersection of those two groups."
@@ -2480,8 +2454,7 @@ msgstr "confirmar la redirección del acceso a la edición"
 
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:122
 msgid "The Instance Groups for this Organization to run on."
-msgstr ""
-"Seleccione los grupos de instancias en los que se ejecutará\n"
+msgstr "Seleccione los grupos de instancias en los que se ejecutará\n"
 "esta organización."
 
 #: screens/ActivityStream/ActivityStreamDetailButton.js:56
@@ -2522,15 +2495,13 @@ msgid "Execution environment copied successfully"
 msgstr "El entorno de ejecución se copió correctamente"
 
 #: screens/Project/shared/Project.helptext.js:128
-#~ msgid ""
-#~ "Time in seconds to consider a project\n"
+#~ msgid "Time in seconds to consider a project\n"
 #~ "to be current. During job runs and callbacks the task\n"
 #~ "system will evaluate the timestamp of the latest project\n"
 #~ "update. If it is older than Cache Timeout, it is not\n"
 #~ "considered current, and a new project update will be\n"
 #~ "performed."
-#~ msgstr ""
-#~ "Tiempo en segundos para considerar que\n"
+#~ msgstr "Tiempo en segundos para considerar que\n"
 #~ "un proyecto es actual. Durante la ejecución de trabajos y callbacks,\n"
 #~ "la tarea del sistema evaluará la marca de tiempo de la última\n"
 #~ "actualización del proyecto. Si es anterior al tiempo de espera\n"
@@ -2667,8 +2638,7 @@ msgstr "Refspec de fuente de control"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:43
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:303
-msgid ""
-"Use one IRC channel or username per line. The pound\n"
+msgid "Use one IRC channel or username per line. The pound\n"
 "        symbol (#) for channels, and the at (@) symbol for users, are not\n"
 "        required."
 msgstr ""
@@ -2832,13 +2802,11 @@ msgstr "Ver errores a la izquierda"
 #~ msgstr "Aprobado por {0} - {1}"
 
 #: screens/Project/shared/Project.helptext.js:114
-#~ msgid ""
-#~ "Delete the local repository in its entirety prior to\n"
+#~ msgid "Delete the local repository in its entirety prior to\n"
 #~ "performing an update. Depending on the size of the\n"
 #~ "repository this may significantly increase the amount\n"
 #~ "of time required to complete an update."
-#~ msgstr ""
-#~ "Elimine el repositorio local por completo antes de realizar\n"
+#~ msgstr "Elimine el repositorio local por completo antes de realizar\n"
 #~ "una actualización. Según el tamaño del repositorio, esto\n"
 #~ "podría incrementar significativamente el tiempo necesario\n"
 #~ "para completar una actualización."
@@ -2983,11 +2951,9 @@ msgstr "Ingrese una etiqueta de anotación por línea sin comas."
 
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:60
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:81
-#~ msgid ""
-#~ "Maximum number of jobs to run concurrently on this group.\n"
+#~ msgid "Maximum number of jobs to run concurrently on this group.\n"
 #~ "Zero means no limit will be enforced."
-#~ msgstr ""
-#~ "Número máximo de trabajos que se ejecutarán simultáneamente en este grupo.\n"
+#~ msgstr "Número máximo de trabajos que se ejecutarán simultáneamente en este grupo.\n"
 #~ "Cero significa que no se aplicará ningún límite."
 
 #: components/StatusLabel/StatusLabel.js:48
@@ -3250,8 +3216,7 @@ msgid "Select the credential you want to use when accessing the remote hosts to 
 msgstr "Seleccione la credencial que desea utilizar cuando acceda a los hosts remotos para ejecutar el comando. Elija una credencial que contenga el nombre de usuario y la clave SSH o la contraseña que Ansible necesitará para iniciar sesión en los hosts remotos."
 
 #: screens/Template/Survey/SurveyQuestionForm.js:182
-msgid ""
-"The suggested format for variable names is lowercase and\n"
+msgid "The suggested format for variable names is lowercase and\n"
 "                underscore-separated (for example, foo_bar, user_id, host_name,\n"
 "                etc.). Variable names with spaces are not allowed."
 msgstr ""
@@ -3394,8 +3359,7 @@ msgid "Ready"
 msgstr "Listo"
 
 #: screens/Template/Survey/MultipleChoiceField.js:57
-msgid ""
-"Type answer then click checkbox on right to select answer as\n"
+msgid "Type answer then click checkbox on right to select answer as\n"
 "default."
 msgstr "Escriba la respuesta y marque la casilla de verificación a la derecha para seleccionar la respuesta predeterminada."
 
@@ -3538,8 +3502,7 @@ msgstr "ver los documentos del plugin de inventario construido aquí."
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:58
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:531
-msgid ""
-"The number associated with the \"Messaging\n"
+msgid "The number associated with the \"Messaging\n"
 "        Service\" in Twilio with the format +18005550199."
 msgstr ""
 
@@ -3647,15 +3610,13 @@ msgid "{interval} minutes"
 msgstr ""
 
 #: screens/Project/shared/Project.helptext.js:35
-#~ msgid ""
-#~ "Note: When using SSH protocol for GitHub or\n"
+#~ msgid "Note: When using SSH protocol for GitHub or\n"
 #~ "Bitbucket, enter an SSH key only, do not enter a username\n"
 #~ "(other than git). Additionally, GitHub and Bitbucket do\n"
 #~ "not support password authentication when using SSH. GIT\n"
 #~ "read only protocol (git://) does not use username or\n"
 #~ "password information."
-#~ msgstr ""
-#~ "Note: Si utiliza el protocolo SSH para GitHub o Bitbucket,\n"
+#~ msgstr "Note: Si utiliza el protocolo SSH para GitHub o Bitbucket,\n"
 #~ "ingrese solo la clave de SSH; no ingrese un nombre de usuario\n"
 #~ "(distinto de git). Además, GitHub y Bitbucket no admiten\n"
 #~ "la autenticación de contraseña cuando se utiliza SSH. El protocolo\n"
@@ -3809,8 +3770,7 @@ msgstr "Cancelar"
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:101
 #~ msgid "Delete the project before syncing"
-#~ msgstr ""
-#~ "Eliminar el proyecto antes de la sincronización#-#-#-#-#  catalog.po  #-#-#-#-#\n"
+#~ msgstr "Eliminar el proyecto antes de la sincronización#-#-#-#-#  catalog.po  #-#-#-#-#\n"
 #~ "Eliminar el proyecto antes de la sincronización\n"
 #~ "#-#-#-#-#  catalog.po  #-#-#-#-#\n"
 #~ "Eliminar el proyecto antes de la sincronización."
@@ -3927,8 +3887,7 @@ msgid "Revert settings"
 msgstr "Revertir configuración"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:55
-msgid ""
-"This table gives a few useful parameters of the constructed\n"
+msgid "This table gives a few useful parameters of the constructed\n"
 "               inventory plugin. For the full list of parameters "
 msgstr ""
 
@@ -3980,11 +3939,9 @@ msgid "dictionary"
 msgstr "diccionario"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:92
-#~ msgid ""
-#~ "If yes make invalid entries a fatal error, otherwise skip and\n"
+#~ msgid "If yes make invalid entries a fatal error, otherwise skip and\n"
 #~ "continue."
-#~ msgstr ""
-#~ "En caso afirmativo, haga que las entradas no válidas sean un error fatal, de lo contrario omita y\n"
+#~ msgstr "En caso afirmativo, haga que las entradas no válidas sean un error fatal, de lo contrario omita y\n"
 #~ "continuar."
 
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressList.js:125
@@ -4063,11 +4020,9 @@ msgid "Pull"
 msgstr "Extraer"
 
 #: screens/Setting/shared/RevertAllAlert.js:39
-#~ msgid ""
-#~ "This will revert all configuration values on this page to\n"
+#~ msgid "This will revert all configuration values on this page to\n"
 #~ "their factory defaults. Are you sure you want to proceed?"
-#~ msgstr ""
-#~ "Esta operación revertirá todos los valores de configuración\n"
+#~ msgstr "Esta operación revertirá todos los valores de configuración\n"
 #~ "a los valores predeterminados de fábrica. ¿Está seguro de desea continuar?"
 
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.js:88
@@ -4088,7 +4043,7 @@ msgstr "<0>{0}<1>{1}</1></0>"
 msgid "Invalid file format. Please upload a valid Red Hat Subscription Manifest."
 msgstr "Formato de archivo no válido. Cargue un manifiesto de suscripción de Red Hat válido."
 
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.js:107
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.js:114
 msgid "Toggle Legend"
 msgstr "Alternar leyenda"
 
@@ -4459,8 +4414,7 @@ msgid "Failed to update capacity adjustment."
 msgstr "No se pudo actualizar el ajuste de capacidad."
 
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:72
-msgid ""
-"Minimum percentage of all instances that will be automatically\n"
+msgid "Minimum percentage of all instances that will be automatically\n"
 "          assigned to this group when new instances come online."
 msgstr ""
 
@@ -4478,20 +4432,16 @@ msgstr "Ordenar"
 
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:67
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:88
-#~ msgid ""
-#~ "Maximum number of forks to allow across all jobs running concurrently on this group.\n"
+#~ msgid "Maximum number of forks to allow across all jobs running concurrently on this group.\n"
 #~ "Zero means no limit will be enforced."
-#~ msgstr ""
-#~ "Número máximo de horquillas para permitir que todos los trabajos se ejecuten simultáneamente en este grupo.\n"
+#~ msgstr "Número máximo de horquillas para permitir que todos los trabajos se ejecuten simultáneamente en este grupo.\n"
 #~ "Cero significa que no se aplicará ningún límite."
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:95
-#~ msgid ""
-#~ "If users need feedback about the correctness\n"
+#~ msgid "If users need feedback about the correctness\n"
 #~ "of their constructed groups, it is highly recommended\n"
 #~ "to use strict: true in the plugin configuration."
-#~ msgstr ""
-#~ "Si los usuarios necesitan comentarios sobre la corrección\n"
+#~ msgstr "Si los usuarios necesitan comentarios sobre la corrección\n"
 #~ "de sus grupos construidos, es muy recomendable\n"
 #~ "para usar strict: true en la configuración del plugin."
 
@@ -4527,8 +4477,7 @@ msgid "Create user token"
 msgstr "Crear token de usuario"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:198
-msgid ""
-"Provide your Red Hat or Red Hat Satellite credentials\n"
+msgid "Provide your Red Hat or Red Hat Satellite credentials\n"
 "                 below and you can choose from a list of your available subscriptions.\n"
 "                 The credentials you use will be stored for future use in\n"
 "                 retrieving renewal or expanded subscriptions."
@@ -4571,8 +4520,7 @@ msgid "Select items from list"
 msgstr "Seleccionar elementos de la lista"
 
 #: screens/Project/shared/Project.helptext.js:8
-#~ msgid ""
-#~ "Base path used for locating playbooks. Directories\n"
+#~ msgid "Base path used for locating playbooks. Directories\n"
 #~ "found inside this path will be listed in the playbook directory drop-down.\n"
 #~ "Together the base path and selected playbook directory provide the full\n"
 #~ "path used to locate playbooks."
@@ -4666,8 +4614,7 @@ msgid "All jobs"
 msgstr "Todas las tareas"
 
 #: components/LaunchPrompt/steps/OtherPromptsStep.js:187
-msgid ""
-"If enabled, show the changes made\n"
+msgid "If enabled, show the changes made\n"
 "              by Ansible tasks, where supported. This is equivalent to Ansible’s\n"
 "              --diff mode."
 msgstr ""
@@ -4723,8 +4670,7 @@ msgid "Weekend day"
 msgstr "Día del fin de semana"
 
 #: screens/Inventory/shared/Inventory.helptext.js:31
-msgid ""
-"Optional labels that describe this inventory,\n"
+msgid "Optional labels that describe this inventory,\n"
 "          such as 'dev' or 'test'. Labels can be used to group and filter\n"
 "          inventories and completed jobs."
 msgstr ""
@@ -4875,8 +4821,7 @@ msgid "This field may not be blank"
 msgstr "Este campo no puede estar en blanco"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:94
-msgid ""
-"If users need feedback about the correctness\n"
+msgid "If users need feedback about the correctness\n"
 "              of their constructed groups, it is highly recommended\n"
 "              to use strict: true in the plugin configuration."
 msgstr ""
@@ -4903,18 +4848,15 @@ msgid "Failed to delete one or more projects."
 msgstr "No se pudo eliminar uno o más proyectos."
 
 #: screens/Template/Survey/SurveyQuestionForm.js:183
-#~ msgid ""
-#~ "The suggested format for variable names is lowercase and\n"
+#~ msgid "The suggested format for variable names is lowercase and\n"
 #~ "underscore-separated (for example, foo_bar, user_id, host_name,\n"
 #~ "etc.). Variable names with spaces are not allowed."
-#~ msgstr ""
-#~ "El formato sugerido para los nombres de variables es minúsculas y\n"
+#~ msgstr "El formato sugerido para los nombres de variables es minúsculas y\n"
 #~ "separados por guiones bajos (por ejemplo, foo_bar, user_id, host_name,\n"
 #~ "etc.). No se permiten los nombres de variables con espacios."
 
 #: screens/Template/Survey/SurveyQuestionForm.js:47
-msgid ""
-"Choose an answer type or format you want as the prompt for the user.\n"
+msgid "Choose an answer type or format you want as the prompt for the user.\n"
 "          Refer to the Ansible Controller Documentation for more additional\n"
 "          information about each option."
 msgstr ""
@@ -5276,8 +5218,7 @@ msgstr "El inventario se copió correctamente"
 
 #: screens/Template/shared/JobTemplate.helptext.js:80
 #~ msgid "If enabled, this will store gathered facts so they can be viewed at the host level. Facts are persisted and injected into the fact cache at runtime."
-#~ msgstr ""
-#~ "Si se habilita esta opción, se almacenarán los eventos recopilados para que estén visibles en el nivel de host. Los eventos persisten y\n"
+#~ msgstr "Si se habilita esta opción, se almacenarán los eventos recopilados para que estén visibles en el nivel de host. Los eventos persisten y\n"
 #~ "se insertan en la caché de eventos en tiempo de ejecución."
 
 #: screens/Instances/InstanceEdit/InstanceEdit.js:82
@@ -5305,8 +5246,7 @@ msgid "User Interface settings"
 msgstr "Configuración de la interfaz de usuario"
 
 #: components/AdHocCommands/AdHocDetailsStep.js:248
-msgid ""
-"Provide key/value pairs using either\n"
+msgid "Provide key/value pairs using either\n"
 "                  YAML or JSON."
 msgstr ""
 
@@ -5392,13 +5332,11 @@ msgstr "Credenciales"
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:35
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:137
 msgid "Use one email address per line to create a recipient list for this type of notification."
-msgstr ""
-"Ingrese una dirección de correo electrónico por línea\n"
+msgstr "Ingrese una dirección de correo electrónico por línea\n"
 "para crear una lista de destinatarios para este tipo de notificación."
 
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:66
-msgid ""
-"Minimum number of instances that will be automatically\n"
+msgid "Minimum number of instances that will be automatically\n"
 "          assigned to this group when new instances come online."
 msgstr ""
 
@@ -5686,11 +5624,9 @@ msgid "Are you sure you want to submit the request to cancel this job?"
 msgstr "¿Está seguro de que desea enviar la solicitud para cancelar este trabajo?"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:56
-#~ msgid ""
-#~ "This table gives a few useful parameters of the constructed\n"
+#~ msgid "This table gives a few useful parameters of the constructed\n"
 #~ "inventory plugin. For the full list of parameters"
-#~ msgstr ""
-#~ "Esta tabla proporciona algunos parámetros útiles de la estructura\n"
+#~ msgstr "Esta tabla proporciona algunos parámetros útiles de la estructura\n"
 #~ "plugin de inventario. Para la lista completa de parámetros"
 
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressList.js:126
@@ -5708,12 +5644,10 @@ msgid "Are you sure you want to disable local authentication?  Doing so could im
 msgstr "¿Está seguro de que desea deshabilitar la autenticación local? Esto podría afectar la capacidad de los usuarios para iniciar sesión y la capacidad del administrador del sistema para revertir este cambio."
 
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:65
-#~ msgid ""
-#~ "This data is used to enhance\n"
+#~ msgid "This data is used to enhance\n"
 #~ "future releases of the Tower Software and help\n"
 #~ "streamline customer experience and success."
-#~ msgstr ""
-#~ "Estos datos se utilizan para mejorar futuras versiones\n"
+#~ msgstr "Estos datos se utilizan para mejorar futuras versiones\n"
 #~ "del software Tower y para ayudar a optimizar el éxito\n"
 #~ "y la experiencia del cliente."
 
@@ -5899,8 +5833,7 @@ msgstr "Grupos de instancias"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:60
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:533
-msgid ""
-"Use one phone number per line to specify where to\n"
+msgid "Use one phone number per line to specify where to\n"
 "        route SMS messages. Phone numbers should be formatted +11231231234. For more information see Twilio documentation"
 msgstr ""
 
@@ -5913,8 +5846,7 @@ msgid "Subscription Details"
 msgstr "Detalles de la suscripción"
 
 #: components/Schedule/shared/UnsupportedRRuleAlert.js:24
-msgid ""
-"This schedule uses complex rules that are not supported in the\n"
+msgid "This schedule uses complex rules that are not supported in the\n"
 "        UI.  Please use the API to manage this schedule."
 msgstr ""
 
@@ -6026,21 +5958,18 @@ msgid "source control branch"
 msgstr "rama de fuente de control"
 
 #: components/Lookup/HostFilterLookup.js:352
-#~ msgid ""
-#~ "Populate the hosts for this inventory by using a search\n"
+#~ msgid "Populate the hosts for this inventory by using a search\n"
 #~ "filter. Example: ansible_facts__ansible_distribution:\"RedHat\".\n"
 #~ "Refer to the documentation for further syntax and\n"
 #~ "examples.  Refer to the Ansible Controller documentation for further syntax and\n"
 #~ "examples."
-#~ msgstr ""
-#~ "Complete los hosts para este inventario utilizando un filtro de búsqueda\n"
+#~ msgstr "Complete los hosts para este inventario utilizando un filtro de búsqueda\n"
 #~ "de búsqueda. Ejemplo: ansible_facts.ansible_distribution: \"RedHat\".\n"
 #~ "Consulte la documentación para obtener más sintaxis y ejemplos. Consulte la documentación de Ansible Tower para obtener más sintaxis y\n"
 #~ "ejemplos."
 
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:103
-msgid ""
-"The execution environment that will be used for jobs\n"
+msgid "The execution environment that will be used for jobs\n"
 "          inside of this organization. This will be used a fallback when\n"
 "          an execution environment has not been explicitly assigned at the\n"
 "          project, job template or workflow level."
@@ -6124,8 +6053,7 @@ msgid "{0} more"
 msgstr "{0} más"
 
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:64
-msgid ""
-"This data is used to enhance\n"
+msgid "This data is used to enhance\n"
 "                   future releases of the Tower Software and help\n"
 "                   streamline customer experience and success."
 msgstr ""
@@ -6141,12 +6069,10 @@ msgid "Nested groups inventory definition:"
 msgstr "Definición de inventario de grupos anidados:"
 
 #: screens/NotificationTemplate/shared/Notifications.helptext.js:10
-#~ msgid ""
-#~ "The amount of time (in seconds) before the email\n"
+#~ msgid "The amount of time (in seconds) before the email\n"
 #~ "notification stops trying to reach the host and times out. Ranges\n"
 #~ "from 1 to 120 seconds."
-#~ msgstr ""
-#~ "La cantidad de tiempo (en segundos) antes de que la notificación\n"
+#~ msgstr "La cantidad de tiempo (en segundos) antes de que la notificación\n"
 #~ "de correo electrónico deje de intentar conectarse con el host\n"
 #~ "y caduque el tiempo de espera. Rangos de 1 a 120 segundos."
 
@@ -6239,13 +6165,11 @@ msgstr "Ninguno (se ejecuta una vez)"
 #~ msgstr "Impedir el retroceso del grupo de instancias: Si está activada, la plantilla de trabajo impedirá que se añada cualquier grupo de instancias del inventario o de la organización a la lista de grupos de instancias preferidos para ejecutar."
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:164
-#~ msgid ""
-#~ "This constructed inventory input \n"
+#~ msgid "This constructed inventory input \n"
 #~ "creates a group for both of the categories and uses \n"
 #~ "the limit (host pattern) to only return hosts that \n"
 #~ "are in the intersection of those two groups."
-#~ msgstr ""
-#~ "Esta entrada de inventario construida \n"
+#~ msgstr "Esta entrada de inventario construida \n"
 #~ "crea un grupo para ambas categorías y usos \n"
 #~ "el límite (patrón de host) para devolver solo a los hosts que \n"
 #~ "están en la intersección de esos dos grupos."
@@ -6361,11 +6285,9 @@ msgid "Multiple Choice"
 msgstr "Selección múltiple"
 
 #: screens/Project/shared/Project.helptext.js:14
-#~ msgid ""
-#~ "Change PROJECTS_ROOT when deploying\n"
+#~ msgid "Change PROJECTS_ROOT when deploying\n"
 #~ "{brandName} to change this location."
-#~ msgstr ""
-#~ "Cambie PROJECTS_ROOT al implementar {brandName}\n"
+#~ msgstr "Cambie PROJECTS_ROOT al implementar {brandName}\n"
 #~ "para cambiar esta ubicación."
 
 #: components/AdHocCommands/AdHocCredentialStep.js:99
@@ -6380,11 +6302,9 @@ msgid "Back to Dashboard."
 msgstr "Volver al panel de control."
 
 #: components/Lookup/InventoryLookup.js:129
-#~ msgid ""
-#~ "Select the inventory containing the hosts\n"
+#~ msgid "Select the inventory containing the hosts\n"
 #~ "you want this job to manage."
-#~ msgstr ""
-#~ "Seleccione el inventario que contenga los hosts que desea\n"
+#~ msgstr "Seleccione el inventario que contenga los hosts que desea\n"
 #~ "que gestione esta tarea."
 
 #: screens/Setting/shared/SharedFields.js:354
@@ -6425,8 +6345,7 @@ msgstr "Eliminar equipo"
 #: screens/Job/Job.helptext.js:10
 #: screens/Template/shared/JobTemplate.helptext.js:20
 #~ msgid "The execution environment that will be used when launching this job template. The resolved execution environment can be overridden by explicitly assigning a different one to this job template."
-#~ msgstr ""
-#~ "El entorno de ejecución que se utilizará al lanzar\n"
+#~ msgstr "El entorno de ejecución que se utilizará al lanzar\n"
 #~ "esta plantilla de trabajo. El entorno de ejecución resuelto puede anularse asignando asignando explícitamente uno diferente a esta plantilla de trabajo."
 
 #: components/JobList/JobList.js:214
@@ -6564,13 +6483,11 @@ msgstr "Expira"
 #~ msgstr "Etiquetas opcionales que describen esta plantilla de trabajo, como puede ser 'dev' o 'test'. Las etiquetas pueden ser utilizadas para agrupar y filtrar plantillas de trabajo y tareas completadas."
 
 #: components/SelectedList/DraggableSelectedList.js:87
-#~ msgid ""
-#~ "Press space or enter to begin dragging,\n"
+#~ msgid "Press space or enter to begin dragging,\n"
 #~ "and use the arrow keys to navigate up or down.\n"
 #~ "Press enter to confirm the drag, or any other key to\n"
 #~ "cancel the drag operation."
-#~ msgstr ""
-#~ "Pulse la barra espaciadora o Intro para empezar a arrastrar,\n"
+#~ msgstr "Pulse la barra espaciadora o Intro para empezar a arrastrar,\n"
 #~ "y utilice las teclas de flecha para desplazarse hacia arriba o hacia abajo.\n"
 #~ "Pulse Intro para confirmar el arrastre, o cualquier otra tecla para cancelar la operación de arrastre."
 
@@ -6906,12 +6823,10 @@ msgid "Pan Down"
 msgstr "Desplazar hacia abajo"
 
 #: screens/NotificationTemplate/shared/Notifications.helptext.js:21
-#~ msgid ""
-#~ "Use one IRC channel or username per line. The pound\n"
+#~ msgid "Use one IRC channel or username per line. The pound\n"
 #~ "symbol (#) for channels, and the at (@) symbol for users, are not\n"
 #~ "required."
-#~ msgstr ""
-#~ "Ingrese un canal de IRC o nombre de usuario por línea. El símbolo numeral (#)\n"
+#~ msgstr "Ingrese un canal de IRC o nombre de usuario por línea. El símbolo numeral (#)\n"
 #~ "para canales y el símbolo arroba (@) para usuarios no son\n"
 #~ "necesarios."
 
@@ -7150,8 +7065,7 @@ msgid "Confirm delete"
 msgstr "Confirmar eliminación"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:250
-msgid ""
-"This constructed inventory input\n"
+msgid "This constructed inventory input\n"
 "            creates a group for both of the categories and uses\n"
 "            the limit (host pattern) to only return hosts that\n"
 "            are in the intersection of those two groups."
@@ -7245,12 +7159,10 @@ msgid "Modified By (Username)"
 msgstr "Modificado por (nombre de usuario)"
 
 #: components/LaunchPrompt/steps/OtherPromptsStep.js:188
-#~ msgid ""
-#~ "If enabled, show the changes made\n"
+#~ msgid "If enabled, show the changes made\n"
 #~ "by Ansible tasks, where supported. This is equivalent to Ansible’s\n"
 #~ "--diff mode."
-#~ msgstr ""
-#~ "Si se habilita esta opción, muestre los cambios realizados\n"
+#~ msgstr "Si se habilita esta opción, muestre los cambios realizados\n"
 #~ "por las tareas de Ansible, donde sea compatible. Esto es equivalente\n"
 #~ "al modo --diff de Ansible."
 
@@ -7351,15 +7263,13 @@ msgid "{0, plural, one {This approval cannot be deleted due to insufficient perm
 msgstr "{0, plural, one {This approval cannot be deleted due to insufficient permissions or a pending job status} other {These approvals cannot be deleted due to insufficient permissions or a pending job status}}"
 
 #: screens/Project/shared/Project.helptext.js:118
-#~ msgid ""
-#~ "Submodules will track the latest commit on\n"
+#~ msgid "Submodules will track the latest commit on\n"
 #~ "their master branch (or other branch specified in\n"
 #~ ".gitmodules). If no, submodules will be kept at\n"
 #~ "the revision specified by the main project.\n"
 #~ "This is equivalent to specifying the --remote\n"
 #~ "flag to git submodule update."
-#~ msgstr ""
-#~ "Los submódulos realizarán el seguimiento del último commit en\n"
+#~ msgstr "Los submódulos realizarán el seguimiento del último commit en\n"
 #~ "su rama maestra (u otra rama especificada en\n"
 #~ ".gitmodules). De lo contrario, el proyecto principal mantendrá los submódulos en\n"
 #~ "la revisión especificada.\n"
@@ -7374,8 +7284,7 @@ msgstr "2 (Más nivel de detalle)"
 #~ msgstr "Credencial de webhook para esta plantilla de trabajo de flujo de trabajo."
 
 #: components/Lookup/HostFilterLookup.js:351
-msgid ""
-"Populate the hosts for this inventory by using a search\n"
+msgid "Populate the hosts for this inventory by using a search\n"
 "              filter. Example: ansible_facts__ansible_distribution:\"RedHat\".\n"
 "              Refer to the documentation for further syntax and\n"
 "              examples.  Refer to the Ansible Controller documentation for further syntax and\n"
@@ -7391,12 +7300,10 @@ msgid "LDAP4"
 msgstr "LDAP4"
 
 #: screens/NotificationTemplate/shared/Notifications.helptext.js:15
-#~ msgid ""
-#~ "The base URL of the Grafana server - the\n"
+#~ msgid "The base URL of the Grafana server - the\n"
 #~ "/api/annotations endpoint will be added automatically to the base\n"
 #~ "Grafana URL."
-#~ msgstr ""
-#~ "La URL base del servidor de Grafana:\n"
+#~ msgstr "La URL base del servidor de Grafana:\n"
 #~ "el punto de acceso /api/annotations se agregará automáticamente\n"
 #~ "a la URL base de Grafana."
 
@@ -7411,8 +7318,7 @@ msgstr "Usuario y Automation Analytics"
 
 #: screens/Template/shared/JobTemplate.helptext.js:96
 #~ msgid "Privilege escalation: If enabled, run this playbook as an administrator."
-#~ msgstr ""
-#~ "Si se habilita esta opción, ejecute este playbook\n"
+#~ msgstr "Si se habilita esta opción, ejecute este playbook\n"
 #~ "como administrador."
 
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:156
@@ -7521,20 +7427,17 @@ msgid "Are you sure you want delete the group below?"
 msgstr "¿Está seguro de que quiere eliminar el grupo?"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:115
-#~ msgid ""
-#~ "Create vars from jinja2 expressions. This can be useful\n"
+#~ msgid "Create vars from jinja2 expressions. This can be useful\n"
 #~ "if the constructed groups you define do not contain the expected\n"
 #~ "hosts. This can be used to add hostvars from expressions so\n"
 #~ "that you know what the resultant values of those expressions are."
-#~ msgstr ""
-#~ "Crear vars a partir de expresiones jinja2. Esto puede ser útil\n"
+#~ msgstr "Crear vars a partir de expresiones jinja2. Esto puede ser útil\n"
 #~ "si los grupos construidos que define no contienen la\n"
 #~ "hosts. Esto se puede usar para añadir hostvars de expresiones para\n"
 #~ "que sabes cuáles son los valores resultantes de esas expresiones."
 
 #: components/AdHocCommands/AdHocDetailsStep.js:210
-msgid ""
-"Enables creation of a provisioning\n"
+msgid "Enables creation of a provisioning\n"
 "                              callback URL. Using the URL a host can contact {brandName}\n"
 "                              and request a configuration update using this job\n"
 "                              template"
@@ -7852,8 +7755,7 @@ msgid "1 (Verbose)"
 msgstr "1 (Nivel de detalle)"
 
 #: screens/Setting/shared/RevertAllAlert.js:38
-msgid ""
-"This will revert all configuration values on this page to\n"
+msgid "This will revert all configuration values on this page to\n"
 "      their factory defaults. Are you sure you want to proceed?"
 msgstr ""
 
@@ -8003,13 +7905,11 @@ msgid "Listener Port"
 msgstr "Puerto de escucha"
 
 #: screens/Project/shared/Project.helptext.js:108
-#~ msgid ""
-#~ "Enable content signing to verify that the content\n"
+#~ msgid "Enable content signing to verify that the content\n"
 #~ "has remained secure when a project is synced.\n"
 #~ "If the content has been tampered with, the\n"
 #~ "job will not run."
-#~ msgstr ""
-#~ "Habilitar la firma de contenido para verificar que el contenido\n"
+#~ msgstr "Habilitar la firma de contenido para verificar que el contenido\n"
 #~ "ha permanecido seguro cuando se sincroniza un proyecto.\n"
 #~ "Si el contenido ha sido manipulado, el\n"
 #~ "el trabajo no se ejecutará."
@@ -8087,8 +7987,7 @@ msgid "Sign in with GitHub Enterprise Teams"
 msgstr "Iniciar sesión con equipos de GitHub Enterprise"
 
 #: components/Lookup/InventoryLookup.js:135
-msgid ""
-"Select the inventory containing the hosts\n"
+msgid "Select the inventory containing the hosts\n"
 "            you want this job to manage."
 msgstr ""
 
@@ -8163,8 +8062,7 @@ msgstr "Correctamente"
 
 #: screens/Template/shared/JobTemplate.helptext.js:86
 #~ msgid "Concurrent jobs: If enabled, simultaneous runs of this job template will be allowed."
-#~ msgstr ""
-#~ "Si se habilita esta opción, se permitirá la ejecución\n"
+#~ msgstr "Si se habilita esta opción, se permitirá la ejecución\n"
 #~ "simultánea de esta plantilla de trabajo."
 
 #: screens/Job/JobOutput/JobOutputSearch.js:130
@@ -8317,8 +8215,7 @@ msgid "string"
 msgstr "cadena"
 
 #: screens/NotificationTemplate/shared/Notifications.helptext.js:28
-#~ msgid ""
-#~ "One Slack channel per line. The pound symbol (#)\n"
+#~ msgid "One Slack channel per line. The pound symbol (#)\n"
 #~ "is required for channels. To respond to or start a thread to a specific message add the parent message Id to the channel where the parent message Id is 16 digits. A dot (.) must be manually inserted after the 10th digit.  ie:#destination-channel, 1231257890.006423. See Slack"
 #~ msgstr "Ingrese un canal de Slack por línea. Se requiere el símbolo numeral (#) para los canales. Para responder a una conversación o iniciar una en un mensaje específico, agregue el Id. del mensaje principal al canal donde se encuentra el mensaje principal de 16 dígitos. Debe insertarse un punto (.) manualmente después del décimo dígito.  por ejemplo:#destino-canal, 1231257890.006423. Consulte Slack"
 
@@ -8336,11 +8233,9 @@ msgid "Back to Templates"
 msgstr "Volver a Plantillas"
 
 #: screens/NotificationTemplate/shared/Notifications.helptext.js:38
-#~ msgid ""
-#~ "Specify a notification color. Acceptable colors are hex\n"
+#~ msgid "Specify a notification color. Acceptable colors are hex\n"
 #~ "color code (example: #3af or #789abc)."
-#~ msgstr ""
-#~ "Especifique un color para la notificación. Los colores aceptables son\n"
+#~ msgstr "Especifique un color para la notificación. Los colores aceptables son\n"
 #~ "el código de color hexadecimal (ejemplo: #3af o #789abc)."
 
 #: screens/Setting/SettingList.js:53
@@ -8378,8 +8273,7 @@ msgid "ALL"
 msgstr "TODOS"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:114
-msgid ""
-"Create vars from jinja2 expressions. This can be useful\n"
+msgid "Create vars from jinja2 expressions. This can be useful\n"
 "              if the constructed groups you define do not contain the expected\n"
 "              hosts. This can be used to add hostvars from expressions so\n"
 "              that you know what the resultant values of those expressions are."
@@ -8390,8 +8284,7 @@ msgid "Active hosts previously deleted"
 msgstr "Anfitriones activos eliminados anteriormente"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:335
-msgid ""
-"It is hard to give a specification for\n"
+msgid "It is hard to give a specification for\n"
 "            the inventory for Ansible facts, because to populate\n"
 "            the system facts you need to run a playbook against\n"
 "            the inventory that has `gather_facts: true`. The\n"
@@ -8448,8 +8341,7 @@ msgstr "{0, selectordinal, one {The first {weekday} de {month}} two {The second 
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:62
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:582
-msgid ""
-"Specify HTTP Headers in JSON format. Refer to\n"
+msgid "Specify HTTP Headers in JSON format. Refer to\n"
 "      the Ansible Controller documentation for example syntax."
 msgstr ""
 
@@ -8481,8 +8373,7 @@ msgid "Failed to copy execution environment"
 msgstr "No se pudo copiar el entorno de ejecución"
 
 #: screens/Template/Survey/MultipleChoiceField.js:60
-msgid ""
-"Press 'Enter' to add more answer choices. One answer\n"
+msgid "Press 'Enter' to add more answer choices. One answer\n"
 "choice per line."
 msgstr "Presione 'Intro' para agregar más opciones de respuesta. Una opción de respuesta por línea."
 
@@ -8519,12 +8410,10 @@ msgid "Inventory file"
 msgstr "Archivo de inventario"
 
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.js:254
-#~ msgid ""
-#~ "Note that only hosts directly in this group can\n"
+#~ msgid "Note that only hosts directly in this group can\n"
 #~ "be disassociated. Hosts in sub-groups must be disassociated\n"
 #~ "directly from the sub-group level that they belong."
-#~ msgstr ""
-#~ "Tenga en cuenta que solo se pueden disociar los hosts asociados\n"
+#~ msgstr "Tenga en cuenta que solo se pueden disociar los hosts asociados\n"
 #~ "directamente a este grupo. Los hosts en subgrupos deben ser disociados\n"
 #~ "del nivel de subgrupo al que pertenecen."
 
@@ -8551,12 +8440,10 @@ msgid "Run on"
 msgstr "Ejecutar el"
 
 #: components/HostToggle/HostToggle.js:21
-#~ msgid ""
-#~ "Indicates if a host is available and should be included in running\n"
+#~ msgid "Indicates if a host is available and should be included in running\n"
 #~ "jobs.  For hosts that are part of an external inventory, this may be\n"
 #~ "reset by the inventory sync process."
-#~ msgstr ""
-#~ "Indica si un host está disponible y debe ser incluido en la ejecución de\n"
+#~ msgstr "Indica si un host está disponible y debe ser incluido en la ejecución de\n"
 #~ "tareas. Para los hosts que forman parte de un inventario externo, esto se puede\n"
 #~ "restablecer mediante el proceso de sincronización del inventario."
 
@@ -8789,8 +8676,7 @@ msgid "Troubleshooting"
 msgstr "Solución de problemas"
 
 #: screens/Project/shared/Project.helptext.js:76
-#~ msgid ""
-#~ "A refspec to fetch (passed to the Ansible git\n"
+#~ msgid "A refspec to fetch (passed to the Ansible git\n"
 #~ "module). This parameter allows access to references via\n"
 #~ "the branch field not otherwise available."
 #~ msgstr "Un refspec para extraer (pasado al módulo git de Ansible). Este parámetro permite el acceso a las referencias a través del campo de rama no disponible de otra manera."
@@ -8856,8 +8742,7 @@ msgstr "Revisión de actualización durante el lanzamiento"
 
 #: screens/Job/Job.helptext.js:8
 #~ msgid "The project containing the playbook this job will execute."
-#~ msgstr ""
-#~ "Seleccione el proyecto que contiene el playbook\n"
+#~ msgstr "Seleccione el proyecto que contiene el playbook\n"
 #~ "que desea que ejecute esta tarea."
 
 #: screens/Credential/shared/CredentialForm.js:127
@@ -8880,8 +8765,7 @@ msgid "Source Control Update"
 msgstr "Actualización de fuente de control"
 
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:76
-msgid ""
-"This data is used to enhance\n"
+msgid "This data is used to enhance\n"
 "                   future releases of the Software and to provide\n"
 "                   Automation Analytics."
 msgstr ""
@@ -8914,11 +8798,9 @@ msgid "These are the modules that {brandName} supports running commands against.
 msgstr "Estos son los módulos que {brandName} admite para ejecutar comandos."
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:65
-#~ msgid ""
-#~ "If you do not have a subscription, you can visit\n"
+#~ msgid "If you do not have a subscription, you can visit\n"
 #~ "Red Hat to obtain a trial subscription."
-#~ msgstr ""
-#~ "Si no tiene una suscripción, puede visitar\n"
+#~ msgstr "Si no tiene una suscripción, puede visitar\n"
 #~ "Red Hat para obtener una suscripción de prueba."
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.js:26
@@ -8935,8 +8817,7 @@ msgid "Failed to user token."
 msgstr "Error en el token de usuario."
 
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:67
-#~ msgid ""
-#~ "Minimum number of instances that will be automatically\n"
+#~ msgid "Minimum number of instances that will be automatically\n"
 #~ "assigned to this group when new instances come online."
 #~ msgstr "Cantidad mínima de instancias que se asignará automáticamente a este grupo cuando aparezcan nuevas instancias en línea."
 
@@ -9053,8 +8934,7 @@ msgid "{interval} hour"
 msgstr ""
 
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:95
-msgid ""
-"The maximum number of hosts allowed to be managed by\n"
+msgid "The maximum number of hosts allowed to be managed by\n"
 "            this organization. Value defaults to 0 which means no limit.\n"
 "            Refer to the Ansible documentation for more details."
 msgstr ""
@@ -9072,13 +8952,11 @@ msgid "Each time a job runs using this inventory, refresh the inventory from the
 msgstr "Cada vez que se ejecute un trabajo utilizando este inventario, actualice el inventario de la fuente seleccionada antes de ejecutar las tareas del trabajo."
 
 #: screens/Project/shared/Project.helptext.js:104
-#~ msgid ""
-#~ "Branch to checkout. In addition to branches,\n"
+#~ msgid "Branch to checkout. In addition to branches,\n"
 #~ "you can input tags, commit hashes, and arbitrary refs. Some\n"
 #~ "commit hashes and refs may not be available unless you also\n"
 #~ "provide a custom refspec."
-#~ msgstr ""
-#~ "Rama para realizar la comprobación. Además de las ramas, puede\n"
+#~ msgstr "Rama para realizar la comprobación. Además de las ramas, puede\n"
 #~ "introducir etiquetas, hashes de commit y referencias arbitrarias. Es posible\n"
 #~ "que algunos hashes y referencias de commit no estén disponibles,\n"
 #~ "a menos que usted también proporcione un refspec personalizado."
@@ -9117,8 +8995,7 @@ msgstr "Volver a ejecutar todos los hosts"
 
 #: screens/Template/shared/JobTemplate.helptext.js:91
 #~ msgid "Fact storage: If enabled, this will store gathered facts so they can be viewed at the host level. Facts are persisted and injected into the fact cache at runtime.."
-#~ msgstr ""
-#~ "Si se habilita esta opción, se almacenarán los eventos recopilados para que estén visibles en el nivel de host. Los eventos persisten y\n"
+#~ msgstr "Si se habilita esta opción, se almacenarán los eventos recopilados para que estén visibles en el nivel de host. Los eventos persisten y\n"
 #~ "se insertan en la caché de eventos en tiempo de ejecución."
 
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.js:117
@@ -9280,12 +9157,10 @@ msgid "Greater than comparison."
 msgstr "Mayor que la comparación."
 
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:77
-#~ msgid ""
-#~ "This data is used to enhance\n"
+#~ msgid "This data is used to enhance\n"
 #~ "future releases of the Software and to provide\n"
 #~ "Automation Analytics."
-#~ msgstr ""
-#~ "Estos datos se utilizan para mejorar\n"
+#~ msgstr "Estos datos se utilizan para mejorar\n"
 #~ "futuras versiones del software y para proporcionar Automation Analytics."
 
 #: components/PromptDetail/PromptInventorySourceDetail.js:45
@@ -9423,8 +9298,7 @@ msgstr "Tarea en flujo de trabajo"
 #~ msgstr ""
 
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:72
-msgid ""
-"Use custom messages to change the content of\n"
+msgid "Use custom messages to change the content of\n"
 "                notifications sent when a job starts, succeeds, or fails. Use\n"
 "                curly braces to access information about the job:"
 msgstr ""
@@ -9545,13 +9419,11 @@ msgid "Host Async OK"
 msgstr "Servidor Async OK"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:242
-#~ msgid ""
-#~ "This constructed inventory input\n"
+#~ msgid "This constructed inventory input\n"
 #~ "creates a group for both of the categories and uses\n"
 #~ "the limit (host pattern) to only return hosts that\n"
 #~ "are in the intersection of those two groups."
-#~ msgstr ""
-#~ "Esta entrada de inventario construida\n"
+#~ msgstr "Esta entrada de inventario construida\n"
 #~ "crea un grupo para ambas categorías y usos\n"
 #~ "el límite (patrón de host) para devolver solo a los hosts que\n"
 #~ "están en la intersección de esos dos grupos."
@@ -9642,8 +9514,7 @@ msgstr ""
 #. js-lingui-explicit-id
 #: screens/Project/ProjectDetail/ProjectDetail.js:202
 #~ msgid "Successfully copied to clipboard!"
-#~ msgstr ""
-#~ "¡Copiado correctamente en el portapapeles!#-#-#-#-#  catalog.po  #-#-#-#-#\n"
+#~ msgstr "¡Copiado correctamente en el portapapeles!#-#-#-#-#  catalog.po  #-#-#-#-#\n"
 #~ "¡Copiado correctamente en el portapapeles!\n"
 #~ "#-#-#-#-#  catalog.po  #-#-#-#-#\n"
 #~ "Copiado correctamente en el portapapeles"
@@ -9866,11 +9737,9 @@ msgid "Get subscriptions"
 msgstr "Obtener suscripciones"
 
 #: screens/Project/shared/Project.helptext.js:126
-#~ msgid ""
-#~ "Allow changing the Source Control branch or revision in a job\n"
+#~ msgid "Allow changing the Source Control branch or revision in a job\n"
 #~ "template that uses this project."
-#~ msgstr ""
-#~ "Permitir el cambio de la rama o revisión de la fuente de control\n"
+#~ msgstr "Permitir el cambio de la rama o revisión de la fuente de control\n"
 #~ "en una plantilla de trabajo que utilice este proyecto."
 
 #: components/AddRole/AddResourceRole.js:251
@@ -9957,11 +9826,9 @@ msgid "Set type typeahead"
 msgstr "Establecer escritura anticipada del tipo"
 
 #: screens/NotificationTemplate/shared/Notifications.helptext.js:50
-#~ msgid ""
-#~ "Specify HTTP Headers in JSON format. Refer to\n"
+#~ msgid "Specify HTTP Headers in JSON format. Refer to\n"
 #~ "the Ansible Controller documentation for example syntax."
-#~ msgstr ""
-#~ "Especifique los encabezados HTTP en formato JSON. Consulte la\n"
+#~ msgstr "Especifique los encabezados HTTP en formato JSON. Consulte la\n"
 #~ "documentación de Ansible Tower para obtener ejemplos de sintaxis."
 
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginField.js:65
@@ -10164,11 +10031,9 @@ msgid "Last seen"
 msgstr "Última sincronización"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:82
-#~ msgid ""
-#~ "Token that ensures this is a source file\n"
+#~ msgid "Token that ensures this is a source file\n"
 #~ "for the ‘constructed’ plugin."
-#~ msgstr ""
-#~ "Token que garantiza que se trata de un archivo de origen\n"
+#~ msgstr "Token que garantiza que se trata de un archivo de origen\n"
 #~ "para el plugin ‘construido’."
 
 #: components/Schedule/shared/FrequencyDetailSubform.js:132
@@ -10200,7 +10065,7 @@ msgstr "Si no se marca, se realizará una fusión, combinando las variables loca
 #: screens/Job/JobOutput/JobOutput.js:994
 #: screens/Job/JobOutput/JobOutput.js:995
 #: screens/Job/JobOutput/shared/OutputToolbar.js:169
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.js:89
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.js:94
 msgid "Job Cancel Error"
 msgstr "Error en la cancelación de tarea"
 
@@ -10252,7 +10117,7 @@ msgstr "No se pudo recuperar el objeto de recurso de nodo completo."
 msgid "Pending"
 msgstr "Pendiente"
 
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.js:117
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.js:124
 msgid "Toggle Tools"
 msgstr "Alternar herramientas"
 
@@ -10392,12 +10257,10 @@ msgid "Case-insensitive version of endswith."
 msgstr "Versión de endswith que no distingue mayúsculas de minúsculas."
 
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:97
-#~ msgid ""
-#~ "The maximum number of hosts allowed to be managed by\n"
+#~ msgid "The maximum number of hosts allowed to be managed by\n"
 #~ "this organization. Value defaults to 0 which means no limit.\n"
 #~ "Refer to the Ansible documentation for more details."
-#~ msgstr ""
-#~ "La cantidad máxima de hosts que puede administrar esta organización.\n"
+#~ msgstr "La cantidad máxima de hosts que puede administrar esta organización.\n"
 #~ "El valor predeterminado es 0, que significa sin límite. Consulte\n"
 #~ "la documentación de Ansible para obtener más información detallada."
 
@@ -10611,8 +10474,7 @@ msgstr "Análisis de usuarios"
 #~ msgstr "Estos argumentos se utilizan con el módulo especificado. Para encontrar información sobre {moduleName}, haga clic en"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:64
-msgid ""
-"If you do not have a subscription, you can visit\n"
+msgid "If you do not have a subscription, you can visit\n"
 "            Red Hat to obtain a trial subscription."
 msgstr ""
 
@@ -10805,8 +10667,7 @@ msgstr "Iniciar fuente de sincronización"
 #: screens/Job/Job.helptext.js:14
 #: screens/Template/shared/JobTemplate.helptext.js:30
 #~ msgid "Pass extra command line variables to the playbook. This is the -e or --extra-vars command line parameter for ansible-playbook. Provide key/value pairs using either YAML or JSON. Refer to the documentation for example syntax."
-#~ msgstr ""
-#~ "Traslade variables de línea de comando adicionales al playbook. Este es el\n"
+#~ msgstr "Traslade variables de línea de comando adicionales al playbook. Este es el\n"
 #~ "parámetro de línea de comando -e o --extra-vars para el playbook de Ansible.\n"
 #~ "Proporcione pares de claves/valores utilizando YAML o JSON. Consulte la\n"
 #~ "documentación para ver ejemplos de sintaxis."
@@ -10836,13 +10697,11 @@ msgid "Examples:"
 msgstr "Ejemplos:"
 
 #: components/AdHocCommands/AdHocDetailsStep.js:211
-#~ msgid ""
-#~ "Enables creation of a provisioning\n"
+#~ msgid "Enables creation of a provisioning\n"
 #~ "callback URL. Using the URL a host can contact {brandName}\n"
 #~ "and request a configuration update using this job\n"
 #~ "template"
-#~ msgstr ""
-#~ "Permite la creación de una URL de\n"
+#~ msgstr "Permite la creación de una URL de\n"
 #~ "de aprovisionamiento. A través de esta URL, un host puede ponerse en contacto con {brandName} y solicitar una actualización de la configuración utilizando esta plantilla"
 
 #: screens/Project/shared/ProjectSubForms/SvnSubForm.js:23
@@ -10871,8 +10730,7 @@ msgid "Confirm revert all"
 msgstr "Confirmar la reversión de todo"
 
 #: components/SelectedList/DraggableSelectedList.js:86
-msgid ""
-"Press space or enter to begin dragging,\n"
+msgid "Press space or enter to begin dragging,\n"
 "                    and use the arrow keys to navigate up or down.\n"
 "                    Press enter to confirm the drag, or any other key to\n"
 "                    cancel the drag operation."
@@ -11140,8 +10998,7 @@ msgid "Pass extra command line changes. There are two ansible command line param
 msgstr ""
 
 #: screens/Template/Survey/SurveyQuestionForm.js:48
-#~ msgid ""
-#~ "Choose an answer type or format you want as the prompt for the user.\n"
+#~ msgid "Choose an answer type or format you want as the prompt for the user.\n"
 #~ "Refer to the Ansible Controller Documentation for more additional\n"
 #~ "information about each option."
 #~ msgstr "Elija el tipo o formato de respuesta que desee como indicador para el usuario. Consulte la documentación de Ansible Tower para obtener más información sobre cada una de las opciones."
@@ -11179,8 +11036,7 @@ msgstr "Argumentos del módulo"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:56
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:492
-msgid ""
-"Specify a notification color. Acceptable colors are hex\n"
+msgid "Specify a notification color. Acceptable colors are hex\n"
 "        color code (example: #3af or #789abc)."
 msgstr ""
 
@@ -11207,8 +11063,7 @@ msgstr "Credencial de Webhook"
 
 #: screens/Template/shared/JobTemplate.helptext.js:101
 #~ msgid "Provisioning callbacks: Enables creation of a provisioning callback URL. Using the URL a host can contact Ansible AWX and request a configuration update using this job template."
-#~ msgstr ""
-#~ "Permite la creación de una URL de\n"
+#~ msgstr "Permite la creación de una URL de\n"
 #~ "de aprovisionamiento. A través de esta URL, un host puede ponerse en contacto con  y solicitar una actualización de la configuración utilizando esta plantilla de trabajo."
 
 #: screens/User/shared/UserTokenForm.js:21
@@ -11216,12 +11071,10 @@ msgid "Please enter a value."
 msgstr "Por favor introduzca un valor."
 
 #: screens/Organization/shared/OrganizationForm.js:73
-#~ msgid ""
-#~ "The maximum number of hosts allowed to be managed by this organization.\n"
+#~ msgid "The maximum number of hosts allowed to be managed by this organization.\n"
 #~ "Value defaults to 0 which means no limit. Refer to the Ansible\n"
 #~ "documentation for more details."
-#~ msgstr ""
-#~ "La cantidad máxima de hosts que puede administrar esta organización.\n"
+#~ msgstr "La cantidad máxima de hosts que puede administrar esta organización.\n"
 #~ "El valor predeterminado es 0, que significa sin límite. Consulte\n"
 #~ "la documentación de Ansible para obtener más información detallada."
 
@@ -11273,7 +11126,7 @@ msgstr "Seleccionar un tipo de tarea"
 #: components/JobList/JobListItem.js:121
 #: screens/Job/JobDetail/JobDetail.js:656
 #: screens/Job/JobOutput/shared/OutputToolbar.js:170
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.js:90
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.js:95
 msgid "Cancel {0}"
 msgstr "Cancelar {0}"
 
@@ -11300,19 +11153,17 @@ msgid "Total inventory sources"
 msgstr "Fuentes de inventario total"
 
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:73
-#~ msgid ""
-#~ "Use custom messages to change the content of\n"
+#~ msgid "Use custom messages to change the content of\n"
 #~ "notifications sent when a job starts, succeeds, or fails. Use\n"
 #~ "curly braces to access information about the job:"
-#~ msgstr ""
-#~ "Utilice los mensajes personalizados para cambiar el contenido de las notificaciones enviadas cuando una tarea se inicie, se realice correctamente o falle. Utilice llaves\n"
+#~ msgstr "Utilice los mensajes personalizados para cambiar el contenido de las notificaciones enviadas cuando una tarea se inicie, se realice correctamente o falle. Utilice llaves\n"
 #~ "para acceder a la información sobre la tarea:"
 
 #: screens/Template/shared/WorkflowJobTemplate.helptext.js:10
 #~ msgid "Provide a host pattern to further constrain the list of hosts that will be managed or affected by the workflow."
 #~ msgstr "Proporciona un patrón de host para restringir aún más la lista de hosts que se gestionarán o se verán afectados por el flujo de trabajo."
 
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.js:98
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.js:104
 msgid "Edit workflow"
 msgstr "Editar el flujo de trabajo"
 
@@ -11728,25 +11579,21 @@ msgid "Select a module"
 msgstr "Seleccionar un módulo"
 
 #: screens/Project/shared/ProjectSubForms/ManualSubForm.js:52
-#~ msgid ""
-#~ "There are no available playbook directories in {project_base_dir}.\n"
+#~ msgid "There are no available playbook directories in {project_base_dir}.\n"
 #~ "Either that directory is empty, or all of the contents are already\n"
 #~ "assigned to other projects. Create a new directory there and make\n"
 #~ "sure the playbook files can be read by the \"awx\" system user,\n"
 #~ "or have {brandName} directly retrieve your playbooks from\n"
 #~ "source control using the Source Control Type option above."
-#~ msgstr ""
-#~ "No hay directorios de playbook disponibles en {project_base_dir}.\n"
+#~ msgstr "No hay directorios de playbook disponibles en {project_base_dir}.\n"
 #~ "O bien ese directorio está vacío, o todo el contenido ya está\n"
 #~ "asignado a otros proyectos. Cree un nuevo directorio allí y asegúrese de que los archivos de playbook puedan ser leídos por el usuario del sistema \"awx\", o haga que {brandName} recupere directamente sus playbooks desde\n"
 #~ "control de fuentes utilizando la opción de tipo de control de fuentes anterior."
 
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:88
-#~ msgid ""
-#~ "You may apply a number of possible variables in the\n"
+#~ msgid "You may apply a number of possible variables in the\n"
 #~ "message. For more information, refer to the"
-#~ msgstr ""
-#~ "Puede aplicar una serie de posibles variables en el\n"
+#~ msgstr "Puede aplicar una serie de posibles variables en el\n"
 #~ "mensaje. Para obtener más información, consulte"
 
 #: screens/User/UserDetail/UserDetail.js:58
@@ -11846,11 +11693,9 @@ msgid "Choose the type of resource that will be receiving new roles.  For exampl
 msgstr "Elija el tipo de recurso que recibirá los nuevos roles. Por ejemplo, si desea agregar nuevos roles a un conjunto de usuarios, elija Users (Usuarios) y haga clic en Next (Siguiente). Podrá seleccionar los recursos específicos en el siguiente paso."
 
 #: screens/NotificationTemplate/shared/Notifications.helptext.js:42
-#~ msgid ""
-#~ "The number associated with the \"Messaging\n"
+#~ msgid "The number associated with the \"Messaging\n"
 #~ "Service\" in Twilio with the format +18005550199."
-#~ msgstr ""
-#~ "Ingrese el número asociado con el \"Servicio de mensajería\"\n"
+#~ msgstr "Ingrese el número asociado con el \"Servicio de mensajería\"\n"
 #~ "en Twilio con el formato +18005550199."
 
 #: components/AddRole/AddResourceRole.js:216
@@ -11899,8 +11744,7 @@ msgstr "Editar el tipo de credencial"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:48
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:484
-msgid ""
-"One Slack channel per line. The pound symbol (#)\n"
+msgid "One Slack channel per line. The pound symbol (#)\n"
 "        is required for channels. To respond to or start a thread to a specific message add the parent message Id to the channel where the parent message Id is 16 digits. A dot (.) must be manually inserted after the 10th digit.  ie:#destination-channel, 1231257890.006423. See Slack"
 msgstr ""
 
@@ -11913,8 +11757,7 @@ msgid "Sender e-mail"
 msgstr "Correo electrónico del remitente"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:60
-msgid ""
-"Welcome to Red Hat Ansible Automation Platform!\n"
+msgid "Welcome to Red Hat Ansible Automation Platform!\n"
 "              Please complete the steps below to activate your subscription."
 msgstr ""
 
@@ -12043,8 +11886,7 @@ msgid "Failed to delete one or more workflow approval."
 msgstr "No se pudo eliminar una o más aprobaciones del flujo de trabajo."
 
 #: screens/Organization/shared/OrganizationForm.js:72
-msgid ""
-"The maximum number of hosts allowed to be managed by this organization.\n"
+msgid "The maximum number of hosts allowed to be managed by this organization.\n"
 "            Value defaults to 0 which means no limit. Refer to the Ansible\n"
 "            documentation for more details."
 msgstr ""
@@ -12136,8 +11978,7 @@ msgstr "Servicio de Webhook"
 
 #: screens/Template/shared/JobTemplate.helptext.js:69
 #~ msgid "Enables creation of a provisioning callback URL. Using the URL a host can contact {brandName} and request a configuration update using this job template."
-#~ msgstr ""
-#~ "Permite la creación de una URL de\n"
+#~ msgstr "Permite la creación de una URL de\n"
 #~ "de aprovisionamiento. A través de esta URL, un host puede ponerse en contacto con {brandName} y solicitar una actualización de la configuración utilizando esta plantilla de trabajo."
 
 #: components/AdHocCommands/AdHocDetailsStep.js:189
@@ -12300,7 +12141,7 @@ msgstr "Cuerpo del mensaje de error"
 #: components/JobList/JobListItem.js:122
 #: screens/Job/JobDetail/JobDetail.js:657
 #: screens/Job/JobOutput/shared/OutputToolbar.js:171
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.js:91
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.js:96
 msgid "Failed to cancel {0}"
 msgstr "No se ha podido cancelar {0}"
 
@@ -12401,12 +12242,10 @@ msgid "IRC Server Address"
 msgstr "Dirección del servidor IRC"
 
 #: screens/Inventory/shared/Inventory.helptext.js:32
-#~ msgid ""
-#~ "Optional labels that describe this inventory,\n"
+#~ msgid "Optional labels that describe this inventory,\n"
 #~ "such as 'dev' or 'test'. Labels can be used to group and filter\n"
 #~ "inventories and completed jobs."
-#~ msgstr ""
-#~ "Etiquetas opcionales que describen este inventario,\n"
+#~ msgstr "Etiquetas opcionales que describen este inventario,\n"
 #~ "como 'dev' o 'test'. Las etiquetas se pueden usar para agrupar\n"
 #~ "y filtrar inventarios y tareas completadas."
 
@@ -12437,8 +12276,7 @@ msgid "Schedule not found."
 msgstr "Programación no encontrada."
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:91
-msgid ""
-"If yes make invalid entries a fatal error, otherwise skip and\n"
+msgid "If yes make invalid entries a fatal error, otherwise skip and\n"
 "              continue."
 msgstr ""
 
@@ -12447,12 +12285,10 @@ msgid "Running jobs"
 msgstr "Tareas en ejecución"
 
 #: screens/Project/shared/Project.helptext.js:18
-#~ msgid ""
-#~ "Select from the list of directories found in\n"
+#~ msgid "Select from the list of directories found in\n"
 #~ "the Project Base Path. Together the base path and the playbook\n"
 #~ "directory provide the full path used to locate playbooks."
-#~ msgstr ""
-#~ "Seleccione de la lista de directorios que se encuentran en\n"
+#~ msgstr "Seleccione de la lista de directorios que se encuentran en\n"
 #~ "la ruta base del proyecto. La ruta base y el directorio del playbook\n"
 #~ "proporcionan la ruta completa utilizada para encontrar los playbooks."
 
@@ -12543,8 +12379,7 @@ msgid "Toggle notification approvals"
 msgstr "Aprobaciones para alternar las notificaciones"
 
 #: screens/NotificationTemplate/shared/Notifications.helptext.js:46
-#~ msgid ""
-#~ "Use one phone number per line to specify where to\n"
+#~ msgid "Use one phone number per line to specify where to\n"
 #~ "route SMS messages. Phone numbers should be formatted +11231231234. For more information see Twilio documentation"
 #~ msgstr "Introduzca un número de teléfono por línea para especificar a dónde enviar los mensajes SMS. Los números de teléfono deben tener el formato +11231231234. Para más información, consulte la documentación de Twilio."
 

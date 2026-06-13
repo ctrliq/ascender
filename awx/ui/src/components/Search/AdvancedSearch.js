@@ -1,4 +1,3 @@
-import 'styled-components/macro';
 import React, { useEffect, useState } from 'react';
 import { string, func, bool, arrayOf } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
@@ -22,6 +21,11 @@ import getDocsBaseUrl from 'util/getDocsBaseUrl';
 import { SearchableKeys } from 'types';
 import RelatedLookupTypeInput from './RelatedLookupTypeInput';
 import LookupTypeInput from './LookupTypeInput';
+
+const SubmitButtonWrapper = styled.div`
+  ${(props) => (props.$disabled ? 'cursor: not-allowed;' : '')}
+`;
+SubmitButtonWrapper.displayName = 'SubmitButtonWrapper';
 
 const AdvancedGroup = styled.div`
   display: flex;
@@ -108,7 +112,7 @@ function AdvancedSearch({
     if (lookupSelection === 'search') {
       setPrefixSelection(null);
     }
-  }, [lookupSelection]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [lookupSelection]);
 
   const handleAdvancedSearch = (e) => {
     // keeps page from fully reloading
@@ -311,7 +315,7 @@ function AdvancedSearch({
 
       <InputGroup>
         {renderTextInput()}
-        <div css={!searchValue && `cursor:not-allowed`}>
+        <SubmitButtonWrapper $disabled={!searchValue}>
           <Button
             ouiaId="advanced-search-text-input"
             variant={ButtonVariant.control}
@@ -321,7 +325,7 @@ function AdvancedSearch({
           >
             <SearchIcon />
           </Button>
-        </div>
+        </SubmitButtonWrapper>
       </InputGroup>
       <Tooltip
         content={t`Advanced search documentation`}

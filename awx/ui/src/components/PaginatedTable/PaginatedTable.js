@@ -1,7 +1,6 @@
 //
 // Modifications Copyright (c) 2023 Ctrl IQ, Inc.
 //
-import 'styled-components/macro';
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { TableComposable, Tbody } from '@patternfly/react-table';

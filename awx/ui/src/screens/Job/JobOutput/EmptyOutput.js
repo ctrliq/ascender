@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import 'styled-components/macro';
 import {
   SearchIcon,
   ExclamationCircleIcon as PFExclamationCircleIcon,

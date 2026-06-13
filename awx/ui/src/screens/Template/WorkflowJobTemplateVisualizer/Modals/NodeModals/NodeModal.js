@@ -1,5 +1,4 @@
 /* eslint-disable react/jsx-no-useless-fragment */
-import 'styled-components/macro';
 import React, { useContext, useState, useEffect, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
@@ -321,7 +320,6 @@ const NodeModalInner = ({ title, ...rest }) => {
         labels: defaultLabels,
       };
 
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [values.nodeResource, values.nodeType]),
     {}
   );

@@ -51,7 +51,7 @@ function WorkflowApprovalsList() {
         relatedSearchableKeys: (
           actionsResponse?.data?.related_search_fields || []
         ).map((val) => val.slice(0, -8)),
-        // eslint-disable-next-line max-len
+
         searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET),
       };
     }, [location]),
@@ -59,7 +59,7 @@ function WorkflowApprovalsList() {
       results: [],
       count: 0,
       relatedSearchableKeys: [],
-      // eslint-disable-next-line max-len
+
       searchableKeys: [],
     }
   );
@@ -75,7 +75,7 @@ function WorkflowApprovalsList() {
       const { data } = await WorkflowApprovalsAPI.read(params);
       return data.results;
     },
-    [location.search] // eslint-disable-line react-hooks/exhaustive-deps
+    [location.search]
   );
 
   const workflowApprovals = useWsWorkflowApprovals(

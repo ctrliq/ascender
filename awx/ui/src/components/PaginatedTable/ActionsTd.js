@@ -1,4 +1,3 @@
-import 'styled-components/macro';
 import React from 'react';
 import { Td } from '@patternfly/react-table';
 import styled, { css } from 'styled-components';
@@ -10,7 +9,7 @@ const ActionsGrid = styled.div`
   padding-right: 20px
     ${(props) => {
       const columns =
-        props.gridColumns || '40px '.repeat(props.numActions || 1);
+        props.$gridColumns || '40px '.repeat(props.$numActions || 1);
       return css`
         grid-template-columns: ${columns};
       `;
@@ -18,27 +17,27 @@ const ActionsGrid = styled.div`
 `;
 ActionsGrid.displayName = 'ActionsGrid';
 
+const ActionsCell = styled(Td)`
+  text-align: right;
+  --pf-c-table--cell--Width: ${(props) => props.$width}px;
+
+  [role='presentation'] {
+    color: var(--pf-global--Color--300);
+    opacity: 0.5;
+  }
+
+  &:hover [role='presentation'] {
+    opacity: 1;
+  }
+`;
+ActionsCell.displayName = 'ActionsCell';
+
 export default function ActionsTd({ children, gridColumns, ...props }) {
   const numActions = children.length || 1;
   const width = numActions * 40;
   return (
-    <Td
-      css={`
-        text-align: right;
-        --pf-c-table--cell--Width: ${width}px;
-
-        [role='presentation'] {
-          color: var(--pf-global--Color--300);
-          opacity: 0.5;
-        }
-
-        &:hover [role='presentation'] {
-          opacity: 1;
-        }
-      `}
-      {...props}
-    >
-      <ActionsGrid numActions={numActions} gridColumns={gridColumns}>
+    <ActionsCell $width={width} {...props}>
+      <ActionsGrid $numActions={numActions} $gridColumns={gridColumns}>
         {React.Children.map(children, (child, i) =>
           child
             ? React.cloneElement(child, {
@@ -47,6 +46,6 @@ export default function ActionsTd({ children, gridColumns, ...props }) {
             : null
         )}
       </ActionsGrid>
-    </Td>
+    </ActionsCell>
   );
 }

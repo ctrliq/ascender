@@ -1,5 +1,4 @@
 import React from 'react';
-import 'styled-components/macro';
 import { string, bool, func } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 

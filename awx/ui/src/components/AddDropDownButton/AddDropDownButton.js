@@ -1,4 +1,4 @@
-/* eslint-disable react/jsx-no-useless-fragment */
+
 import React, { useState, useRef, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import PropTypes from 'prop-types';

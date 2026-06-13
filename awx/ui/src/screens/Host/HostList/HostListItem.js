@@ -1,4 +1,3 @@
-import 'styled-components/macro';
 import React from 'react';
 import { string, bool, func } from 'prop-types';
 

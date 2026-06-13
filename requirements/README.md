@@ -93,10 +93,12 @@ This issue was not picked up by any existing QE testing, only when building in G
 
 ### django-oauth-toolkit
 
-Versions later than 1.4.1 throw an error about id_token_id, due to the
-OpenID Connect work that was done in
-https://github.com/jazzband/django-oauth-toolkit/pull/915.  This may
-be fixable by creating a migration on our end?
+Upgraded to 3.x. The id_token_id / OpenID Connect schema changes from
+https://github.com/jazzband/django-oauth-toolkit/pull/915 (and the later
+token_checksum / hash_client_secret work) are handled by migration
+`awx/main/migrations/0198_oauth2accesstoken_token_checksum_and_more.py`.
+Note that AWX stores client secrets encrypted (reversible) rather than
+hashed, so `OAuth2Application.hash_client_secret` defaults to False.
 
 ### pip, setuptools and setuptools_scm
 

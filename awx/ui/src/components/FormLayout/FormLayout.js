@@ -12,7 +12,7 @@ export const FormColumnLayout = styled.div`
   }
 
   ${(props) =>
-    props.stacked &&
+    props.$stacked &&
     `border-bottom: 1px solid var(--pf-global--BorderColor--100);
     padding: var(--pf-global--spacer--sm) 0 var(--pf-global--spacer--md) `}
 `;
