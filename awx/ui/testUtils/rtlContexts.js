@@ -14,7 +14,8 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Router } from 'react-router-dom';
+import { Router, useLocation } from 'react-router-dom';
+import { Router as RouterV6 } from 'react-router-dom-v5-compat';
 import { createMemoryHistory } from 'history';
 import { I18nProvider } from '@lingui/react';
 import { i18n } from '@lingui/core';
@@ -22,19 +23,8 @@ import english from '../src/locales/en/messages';
 import { SessionProvider } from '../src/contexts/Session';
 import { ConfigProvider } from '../src/contexts/Config';
 
-// Match mountWithContexts' i18n defaults. Lingui v5 needs explicit plural
-// rules (loadLocaleData); Lingui v6 derives them from Intl.PluralRules and
-// removes both the API and the make-plural dependency, so this block is
-// guarded to degrade cleanly once the toolchain upgrade lands.
-try {
-  if (typeof i18n.loadLocaleData === 'function') {
-    // eslint-disable-next-line global-require, import/no-extraneous-dependencies
-    const { en } = require('make-plural/plurals');
-    i18n.loadLocaleData({ en: { plurals: en } });
-  }
-} catch {
-  // make-plural is gone (Lingui v6); Intl.PluralRules covers plurals.
-}
+// Match mountWithContexts' i18n defaults. Lingui v6 derives plural rules
+// from Intl.PluralRules, so no loadLocaleData step is needed.
 i18n.load({ en: english.messages });
 i18n.activate('en');
 
@@ -70,7 +60,21 @@ function applyDefaultContexts(context) {
   return newContext;
 }
 
-// eslint-disable-next-line import/prefer-default-export
+// The v5 Router subscribes to history and drives re-renders; this nested v6
+// Router is fully controlled (location comes from v5's context, the navigator
+// is the shared history object) so components migrated to the
+// react-router-dom-v5-compat APIs work without a second subscription. Mirrors
+// the CompatV6Layer in enzymeHelpers.
+function CompatV6Layer({ history, children }) {
+  const location = useLocation();
+  return (
+    <RouterV6 location={location} navigator={history}>
+      {children}
+    </RouterV6>
+  );
+}
+
+// eslint-disable-next-line import-x/prefer-default-export
 export function renderWithContexts(ui, options = {}) {
   const { context: userContext, ...renderOptions } = options;
   const { config, router, session } = applyDefaultContexts(userContext);
@@ -81,7 +85,9 @@ export function renderWithContexts(ui, options = {}) {
       <I18nProvider i18n={i18n}>
         <SessionProvider value={session}>
           <ConfigProvider value={config}>
-            <Router history={history}>{children}</Router>
+            <Router history={history}>
+              <CompatV6Layer history={history}>{children}</CompatV6Layer>
+            </Router>
           </ConfigProvider>
         </SessionProvider>
       </I18nProvider>
