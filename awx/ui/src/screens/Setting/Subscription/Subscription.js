@@ -1,5 +1,6 @@
 import React from 'react';
-import { Link, Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import { PageSection, Card } from '@patternfly/react-core';
 import ContentError from 'components/ContentError';
@@ -9,28 +10,29 @@ import SubscriptionEdit from './SubscriptionEdit';
 function Subscription() {
   const { t } = useLingui();
   const baseURL = '/settings/subscription';
-  const baseRoute = useRouteMatch({
-    path: '/settings/subscription',
-    exact: true,
-  });
 
   return (
     <PageSection>
       <Card>
-        {baseRoute && <Redirect to={`${baseURL}/details`} />}
-        <Switch>
-          <Route path={`${baseURL}/details`}>
-            <SubscriptionDetail />
-          </Route>
-          <Route path={`${baseURL}/edit`}>
-            <SubscriptionEdit />
-          </Route>
-          <Route key="not-found" path={`${baseURL}/*`}>
-            <ContentError isNotFound>
-              <Link to={baseURL}>{t`View Settings`}</Link>
-            </ContentError>
-          </Route>
-        </Switch>
+        <Routes>
+          <Route
+            path={baseURL}
+            element={<Navigate to={`${baseURL}/details`} replace />}
+          />
+          <Route
+            path={`${baseURL}/details`}
+            element={<SubscriptionDetail />}
+          />
+          <Route path={`${baseURL}/edit`} element={<SubscriptionEdit />} />
+          <Route
+            path={`${baseURL}/*`}
+            element={
+              <ContentError isNotFound>
+                <Link to={baseURL}>{t`View Settings`}</Link>
+              </ContentError>
+            }
+          />
+        </Routes>
       </Card>
     </PageSection>
   );
