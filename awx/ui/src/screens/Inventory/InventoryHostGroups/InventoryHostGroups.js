@@ -1,16 +1,17 @@
 import React from 'react';
 
-import { Switch, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 
 import InventoryHostGroupsList from './InventoryHostGroupsList';
 
 function InventoryHostGroups() {
   return (
-    <Switch>
-      <Route key="list" path="/inventories/inventory/:id/hosts/:hostId/groups">
-        <InventoryHostGroupsList />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route
+        path="/inventories/inventory/:id/hosts/:hostId/groups"
+        element={<InventoryHostGroupsList />}
+      />
+    </Routes>
   );
 }
 
