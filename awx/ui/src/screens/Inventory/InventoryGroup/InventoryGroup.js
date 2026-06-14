@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { Switch, Route, Link, Redirect, useLocation, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import {
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+  useParams,
+} from 'react-router-dom-v5-compat';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import RoutedTabs from 'components/RoutedTabs';
 import ContentError from 'components/ContentError';
@@ -96,48 +103,57 @@ function InventoryGroup({ setBreadcrumb, inventory }) {
   return (
     <>
       {showCardHeader && <RoutedTabs tabsArray={tabsArray} />}
-      <Switch>
-        <Redirect
-          from="/inventories/:inventoryType/:id/groups/:groupId"
-          to="/inventories/:inventoryType/:id/groups/:groupId/details"
-          exact
+      <Routes>
+        <Route
+          path="/inventories/:inventoryType/:id/groups/:groupId"
+          element={
+            <Navigate
+              to={`/inventories/${inventoryType}/${inventoryId}/groups/${groupId}/details`}
+              replace
+            />
+          }
         />
-        {inventoryGroup && [
+        {inventoryGroup && (
           <Route
-            key="edit"
             path="/inventories/:inventoryType/:id/groups/:groupId/edit"
-          >
-            <InventoryGroupEdit inventoryGroup={inventoryGroup} />
-          </Route>,
+            element={<InventoryGroupEdit inventoryGroup={inventoryGroup} />}
+          />
+        )}
+        {inventoryGroup && (
           <Route
-            key="details"
             path="/inventories/:inventoryType/:id/groups/:groupId/details"
-          >
-            <InventoryGroupDetail inventoryGroup={inventoryGroup} />
-          </Route>,
+            element={<InventoryGroupDetail inventoryGroup={inventoryGroup} />}
+          />
+        )}
+        {/* /* so the nested <InventoryGroupHosts> route tree can match */}
+        {inventoryGroup && (
           <Route
-            key="hosts"
-            path="/inventories/:inventoryType/:id/groups/:groupId/nested_hosts"
-          >
-            <InventoryGroupHosts inventoryGroup={inventoryGroup} />
-          </Route>,
+            path="/inventories/:inventoryType/:id/groups/:groupId/nested_hosts/*"
+            element={<InventoryGroupHosts inventoryGroup={inventoryGroup} />}
+          />
+        )}
+        {/* /* so the nested <InventoryRelatedGroups> route tree can match */}
+        {inventoryGroup && (
           <Route
-            key="relatedGroups"
-            path="/inventories/:inventoryType/:id/groups/:groupId/nested_groups"
-          >
-            <InventoryRelatedGroups />
-          </Route>,
-        ]}
-        <Route key="not-found" path="*">
-          <ContentError>
-            {inventory && (
-              <Link to={`/inventories/:inventoryType/${inventory.id}/details`}>
-                {t`View Inventory Details`}
-              </Link>
-            )}
-          </ContentError>
-        </Route>
-      </Switch>
+            path="/inventories/:inventoryType/:id/groups/:groupId/nested_groups/*"
+            element={<InventoryRelatedGroups />}
+          />
+        )}
+        <Route
+          path="*"
+          element={
+            <ContentError>
+              {inventory && (
+                <Link
+                  to={`/inventories/:inventoryType/${inventory.id}/details`}
+                >
+                  {t`View Inventory Details`}
+                </Link>
+              )}
+            </ContentError>
+          }
+        />
+      </Routes>
     </>
   );
 }

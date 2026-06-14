@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 
 import InventoryHost from '../InventoryHost';
 import InventoryHostAdd from '../InventoryHostAdd';
@@ -7,17 +7,23 @@ import InventoryHostList from './InventoryHostList';
 
 function InventoryHosts({ setBreadcrumb, inventory }) {
   return (
-    <Switch>
-      <Route key="host-add" path="/inventories/inventory/:id/hosts/add">
-        <InventoryHostAdd inventory={inventory} />
-      </Route>
-      <Route key="host" path="/inventories/inventory/:id/hosts/:hostId">
-        <InventoryHost setBreadcrumb={setBreadcrumb} inventory={inventory} />
-      </Route>
-      <Route key="host-list" path="/inventories/inventory/:id/hosts">
-        <InventoryHostList />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route
+        path="/inventories/inventory/:id/hosts/add"
+        element={<InventoryHostAdd inventory={inventory} />}
+      />
+      {/* /* so the nested <InventoryHost> route tree can match */}
+      <Route
+        path="/inventories/inventory/:id/hosts/:hostId/*"
+        element={
+          <InventoryHost setBreadcrumb={setBreadcrumb} inventory={inventory} />
+        }
+      />
+      <Route
+        path="/inventories/inventory/:id/hosts"
+        element={<InventoryHostList />}
+      />
+    </Routes>
   );
 }
 

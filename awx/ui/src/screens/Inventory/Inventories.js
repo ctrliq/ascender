@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useRef } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
-import { Route, Switch } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 
 import { Config } from 'contexts/Config';
 import ScreenHeader from 'components/ScreenHeader/ScreenHeader';
@@ -109,41 +109,52 @@ function Inventories() {
         streamType="inventory"
         breadcrumbConfig={breadcrumbConfig}
       />
-      <Switch>
-        <Route path="/inventories/inventory/add">
-          <InventoryAdd />
-        </Route>
-        <Route path="/inventories/smart_inventory/add">
-          <SmartInventoryAdd />
-        </Route>
-        <Route path="/inventories/constructed_inventory/add">
-          <ConstructedInventoryAdd />
-        </Route>
-        <Route path="/inventories/federated_inventory/add">
-          <FederatedInventoryAdd />
-        </Route>
-        <Route path="/inventories/inventory/:id">
-          <Config>
-            {({ me }) => (
-              <Inventory setBreadcrumb={setBreadcrumbConfig} me={me || {}} />
-            )}
-          </Config>
-        </Route>
-        <Route path="/inventories/smart_inventory/:id">
-          <SmartInventory setBreadcrumb={setBreadcrumbConfig} />
-        </Route>
-        <Route path="/inventories/constructed_inventory/:id">
-          <ConstructedInventory setBreadcrumb={setBreadcrumbConfig} />
-        </Route>
-        <Route path="/inventories/federated_inventory/:id">
-          <FederatedInventory setBreadcrumb={setBreadcrumbConfig} />
-        </Route>
-        <Route path="/inventories">
-          <PersistentFilters pageKey="inventories">
-            <InventoryList />
-          </PersistentFilters>
-        </Route>
-      </Switch>
+      <Routes>
+        <Route path="/inventories/inventory/add" element={<InventoryAdd />} />
+        <Route
+          path="/inventories/smart_inventory/add"
+          element={<SmartInventoryAdd />}
+        />
+        <Route
+          path="/inventories/constructed_inventory/add"
+          element={<ConstructedInventoryAdd />}
+        />
+        <Route
+          path="/inventories/federated_inventory/add"
+          element={<FederatedInventoryAdd />}
+        />
+        {/* /* on each detail so its own nested <Routes> can match */}
+        <Route
+          path="/inventories/inventory/:id/*"
+          element={
+            <Config>
+              {({ me }) => (
+                <Inventory setBreadcrumb={setBreadcrumbConfig} me={me || {}} />
+              )}
+            </Config>
+          }
+        />
+        <Route
+          path="/inventories/smart_inventory/:id/*"
+          element={<SmartInventory setBreadcrumb={setBreadcrumbConfig} />}
+        />
+        <Route
+          path="/inventories/constructed_inventory/:id/*"
+          element={<ConstructedInventory setBreadcrumb={setBreadcrumbConfig} />}
+        />
+        <Route
+          path="/inventories/federated_inventory/:id/*"
+          element={<FederatedInventory setBreadcrumb={setBreadcrumbConfig} />}
+        />
+        <Route
+          path="/inventories"
+          element={
+            <PersistentFilters pageKey="inventories">
+              <InventoryList />
+            </PersistentFilters>
+          }
+        />
+      </Routes>
     </>
   );
 }
