@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 
 import { useLingui } from '@lingui/react/macro';
 
@@ -40,21 +40,24 @@ function Teams() {
   return (
     <>
       <ScreenHeader streamType="team" breadcrumbConfig={breadcrumbConfig} />
-      <Switch>
-        <Route path="/teams/add">
-          <TeamAdd />
-        </Route>
-        <Route path="/teams/:id">
-          <Team setBreadcrumb={buildBreadcrumbConfig} />
-        </Route>
-        <Route path="/teams">
-          <PersistentFilters pageKey="teams">
-            <Config>
-              {({ me }) => <TeamList path="/teams" me={me || {}} />}
-            </Config>
-          </PersistentFilters>
-        </Route>
-      </Switch>
+      <Routes>
+        <Route path="/teams/add" element={<TeamAdd />} />
+        {/* /* so the nested <Team> route tree can match the rest */}
+        <Route
+          path="/teams/:id/*"
+          element={<Team setBreadcrumb={buildBreadcrumbConfig} />}
+        />
+        <Route
+          path="/teams"
+          element={
+            <PersistentFilters pageKey="teams">
+              <Config>
+                {({ me }) => <TeamList path="/teams" me={me || {}} />}
+              </Config>
+            </PersistentFilters>
+          }
+        />
+      </Routes>
     </>
   );
 }
