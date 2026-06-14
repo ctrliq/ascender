@@ -1,8 +1,8 @@
 import React, { useState, useCallback, useEffect } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
-import { useParams, Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom-v5-compat';
+import { Link } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom-v5-compat';
 import { Card, PageSection } from '@patternfly/react-core';
 import useRequest from 'hooks/useRequest';
 import ContentError from 'components/ContentError';
