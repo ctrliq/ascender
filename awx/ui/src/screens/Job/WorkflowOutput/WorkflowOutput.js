@@ -1,4 +1,5 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useCallback, useEffect, useReducer } from 'react';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 
 import styled from 'styled-components';
@@ -9,8 +10,11 @@ import {
   WorkflowStateContext,
 } from 'contexts/Workflow';
 import { layoutGraph } from 'components/Workflow/WorkflowUtils';
+import AlertModal from 'components/AlertModal';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
+import ErrorDetail from 'components/ErrorDetail';
+import useRequest, { useDismissableError } from 'hooks/useRequest';
 import workflowReducer, {
   initReducer,
 } from 'components/Workflow/workflowReducer';
@@ -46,8 +50,22 @@ const fetchWorkflowNodes = async (jobId, pageNo = 1, nodes = []) => {
 
 function WorkflowOutput({ job }) {
   const { t } = useLingui();
+  const navigate = useNavigate();
   const [state, dispatch] = useReducer(workflowReducer, {}, initReducer);
   const { contentError, isLoading, links, nodePositions, nodes } = state;
+
+  const {
+    request: deleteJob,
+    isLoading: isDeleting,
+    error: deleteError,
+  } = useRequest(
+    useCallback(async () => {
+      await WorkflowJobsAPI.destroy(job.id);
+      navigate('/jobs');
+    }, [job.id, navigate])
+  );
+  const { error: dismissableDeleteError, dismissError: dismissDeleteError } =
+    useDismissableError(deleteError);
 
   useEffect(() => {
     async function fetchData() {
@@ -109,11 +127,26 @@ function WorkflowOutput({ job }) {
       <WorkflowDispatchContext.Provider value={dispatch}>
         <CardBody>
           <Wrapper>
-            <WorkflowOutputToolbar job={job} />
+            <WorkflowOutputToolbar
+              job={job}
+              onDelete={deleteJob}
+              isDeleteDisabled={isDeleting}
+            />
             {nodePositions && <WorkflowOutputGraph />}
           </Wrapper>
         </CardBody>
       </WorkflowDispatchContext.Provider>
+      {dismissableDeleteError && (
+        <AlertModal
+          isOpen={dismissableDeleteError}
+          variant="error"
+          title={t`Job Delete Error`}
+          onClose={dismissDeleteError}
+        >
+          {t`Failed to delete job.`}
+          <ErrorDetail error={dismissableDeleteError} />
+        </AlertModal>
+      )}
     </WorkflowStateContext.Provider>
   );
 }

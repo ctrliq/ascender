@@ -20,6 +20,7 @@ const job = {
     },
     user_capabilities: {
       start: true,
+      delete: true,
     },
   },
 };
@@ -61,6 +62,61 @@ describe('WorkflowOutputToolbar', () => {
     shouldFind('Badge#workflow-elapsed-badge');
     shouldFind('Button#workflow-output-toggle-tools');
     shouldFind('JobCancelButton');
+    // a runnable (non-failed) workflow shows a plain relaunch button
+    shouldFind('Button[ouiaId="workflow-output-relaunch-button"]');
+  });
+
+  test('failed workflow shows the relaunch-from-failed dropdown', () => {
+    const failedJob = { ...job, status: 'failed' };
+    const failedWrapper = mountWithContexts(
+      <WorkflowDispatchContext.Provider value={dispatch}>
+        <WorkflowStateContext.Provider
+          value={{ ...workflowContext, nodes: [{ id: 1 }] }}
+        >
+          <WorkflowOutputToolbar job={failedJob} />
+        </WorkflowStateContext.Provider>
+      </WorkflowDispatchContext.Provider>
+    );
+    expect(failedWrapper.find('WorkflowReLaunchDropDown')).toHaveLength(1);
+    expect(
+      failedWrapper.find('Button[ouiaId="workflow-output-relaunch-button"]')
+    ).toHaveLength(0);
+  });
+
+  ['error', 'canceled'].forEach((status) => {
+    test(`${status} workflow also shows the relaunch-from-failed dropdown`, () => {
+      const wrapper2 = mountWithContexts(
+        <WorkflowDispatchContext.Provider value={dispatch}>
+          <WorkflowStateContext.Provider
+            value={{ ...workflowContext, nodes: [{ id: 1 }] }}
+          >
+            <WorkflowOutputToolbar job={{ ...job, status }} />
+          </WorkflowStateContext.Provider>
+        </WorkflowDispatchContext.Provider>
+      );
+      const dropdown = wrapper2.find('WorkflowReLaunchDropDown');
+      expect(dropdown).toHaveLength(1);
+      expect(dropdown.prop('status')).toBe(status);
+      expect(
+        wrapper2.find('Button[ouiaId="workflow-output-relaunch-button"]')
+      ).toHaveLength(0);
+    });
+  });
+
+  test('shows a delete button when the workflow is finished and deletable', () => {
+    const finishedJob = { ...job, status: 'successful' };
+    const finishedWrapper = mountWithContexts(
+      <WorkflowDispatchContext.Provider value={dispatch}>
+        <WorkflowStateContext.Provider
+          value={{ ...workflowContext, nodes: [{ id: 1 }] }}
+        >
+          <WorkflowOutputToolbar job={finishedJob} onDelete={() => {}} />
+        </WorkflowStateContext.Provider>
+      </WorkflowDispatchContext.Provider>
+    );
+    expect(
+      finishedWrapper.find('DeleteButton[ouiaId="workflow-output-delete-button"]')
+    ).toHaveLength(1);
   });
 
   test('Shows correct number of nodes', () => {

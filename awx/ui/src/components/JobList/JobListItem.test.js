@@ -1,4 +1,5 @@
 import React from 'react';
+import { act } from 'react-dom/test-utils';
 import { createMemoryHistory } from 'history';
 
 import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
@@ -273,12 +274,15 @@ describe('<JobListItem with failed job />', () => {
     expect(wrapper.find('LaunchButton').length).toBe(1);
   });
 
-  test('dropdown should be displayed in case of failed job', () => {
+  test('dropdown should be displayed in case of failed job', async () => {
     expect(wrapper.find('LaunchButton').length).toBe(1);
     const dropdown = wrapper.find('Dropdown');
     expect(dropdown).toHaveLength(1);
     expect(dropdown.find('DropdownItem')).toHaveLength(0);
-    dropdown.find('button').simulate('click');
+    // the menu renders in a popper, whose async positioning must be flushed
+    await act(async () => {
+      dropdown.find('button').simulate('click');
+    });
     wrapper.update();
     expect(wrapper.find('DropdownItem')).toHaveLength(3);
   });

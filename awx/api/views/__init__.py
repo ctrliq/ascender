@@ -3216,13 +3216,26 @@ class WorkflowJobRelaunch(GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         obj = self.get_object()
+        from_failed = request.data.get('nodes') == 'failed'
         if obj.is_sliced_job:
+            if from_failed:
+                raise ParseError(_('Cannot relaunch a sliced workflow job from failed nodes.'))
             jt = obj.job_template
             if not jt:
                 raise ParseError(_('Cannot relaunch slice workflow job orphaned from job template.'))
             elif not obj.inventory or min(obj.inventory.hosts.count(), jt.job_slice_count) != obj.workflow_nodes.count():
                 raise ParseError(_('Cannot relaunch sliced workflow job after slice count has changed.'))
-        new_workflow_job = obj.create_relaunch_workflow_job()
+        if from_failed:
+            if not obj.workflow_nodes.filter(job__status__in=['failed', 'error', 'canceled']).exists():
+                # A workflow can be in a failed state with no failed job node if a
+                # reached node's template was deleted; relaunching cannot fix that,
+                # so reject with an accurate message rather than "no failed nodes".
+                if obj.workflow_nodes.filter(do_not_run=False, job__isnull=True, unified_job_template__isnull=True).exists():
+                    raise ParseError(
+                        _('Cannot relaunch from failed nodes: this workflow failed because a node has no job template, which relaunching cannot recover.')
+                    )
+                raise ParseError(_('This workflow job has no failed nodes to relaunch from.'))
+        new_workflow_job = obj.create_relaunch_workflow_job(from_failed=from_failed)
         new_workflow_job.signal_start()
 
         data = serializers.WorkflowJobSerializer(new_workflow_job, context=self.get_serializer_context()).data

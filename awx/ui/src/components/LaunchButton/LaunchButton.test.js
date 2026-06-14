@@ -193,7 +193,7 @@ describe('LaunchButton', () => {
     const button = wrapper.find('button');
     await act(() => button.prop('onClick')());
     expect(WorkflowJobsAPI.readRelaunch).toHaveBeenCalledWith(1);
-    expect(WorkflowJobsAPI.relaunch).toHaveBeenCalledWith(1);
+    expect(WorkflowJobsAPI.relaunch).toHaveBeenCalledWith(1, {});
     expect(history.location.pathname).toEqual('/jobs/9000/output');
   });
 
