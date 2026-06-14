@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Routes, Route } from 'react-router-dom-v5-compat';
+import { Routes, Route, Navigate } from 'react-router-dom-v5-compat';
 import { PageSection, Card } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
 
@@ -37,6 +37,7 @@ function AllSchedules() {
             </PageSection>
           }
         />
+        <Route path="*" element={<Navigate to="/schedules" replace />} />
       </Routes>
     </>
   );

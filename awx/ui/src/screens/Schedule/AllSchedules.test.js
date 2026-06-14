@@ -42,6 +42,7 @@ describe('<AllSchedules />', () => {
   test('renders the schedule list and sets the breadcrumb config at /schedules', async () => {
     renderAt('/schedules');
     expect(await screen.findByText('ScheduleList')).toBeInTheDocument();
+    expect(mockScreenHeaderProps).toBeDefined();
     expect(mockScreenHeaderProps.streamType).toBe('schedule');
     expect(mockScreenHeaderProps.breadcrumbConfig).toEqual({
       '/schedules': 'Schedules',
