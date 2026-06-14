@@ -54,12 +54,13 @@ const Wrapper = styled.div`
     margin: 0px 6px;
     padding: 6px 10px;
   }
-  button:hover {
+  /* only on enabled buttons, so disabled controls don't look interactive */
+  button:not(:disabled):not([aria-disabled='true']):hover {
     background-color: var(--pf-global--primary-color--100);
     color: #fff;
   }
   /* whiten the icon; the dropdown toggle colors its icon separately */
-  button:hover svg {
+  button:not(:disabled):not([aria-disabled='true']):hover svg {
     fill: #fff;
   }
 `;

@@ -50,13 +50,15 @@ const ToolbarActions = styled.div`
     margin: 0px 6px;
     padding: 6px 10px;
   }
-  /* hover background on every action button (badges aren't buttons; modals portal out) */
-  button:hover {
+  /* hover background only on enabled action buttons, so disabled controls
+     (relaunch while launching, delete while disabled) don't look interactive
+     (badges aren't buttons; modals portal out) */
+  button:not(:disabled):not([aria-disabled='true']):hover {
     background-color: var(--pf-global--primary-color--100);
     color: #fff;
   }
   /* whiten the icon; the dropdown toggle colors its icon separately */
-  button:hover svg {
+  button:not(:disabled):not([aria-disabled='true']):hover svg {
     fill: #fff;
   }
 `;
