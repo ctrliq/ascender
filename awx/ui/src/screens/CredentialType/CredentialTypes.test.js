@@ -5,7 +5,6 @@ import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import CredentialTypes from './CredentialTypes';
 
-jest.mock('../../api/models/CredentialTypes');
 
 // Replace the routed children with markers so the assertions are purely about
 // which branch of the v6 <Routes> tree resolves for a given URL.

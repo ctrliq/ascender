@@ -38,7 +38,7 @@ function CredentialTypes() {
       />
       <Routes>
         <Route path="/credential_types/add" element={<CredentialTypeAdd />} />
-        {/* /* so the nested <CredentialType> route tree can match the rest */}
+        {/* so the nested <CredentialType> route tree can match the rest */}
         <Route
           path="/credential_types/:id/*"
           element={<CredentialType setBreadcrumb={buildBreadcrumbConfig} />}
