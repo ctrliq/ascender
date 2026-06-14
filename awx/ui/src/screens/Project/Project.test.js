@@ -140,4 +140,11 @@ describe('<Project />', () => {
     });
     await waitForElement(wrapper, 'ContentError', (el) => el.length === 1);
   });
+
+  test('redirects the bare /projects/:id to the details tab', async () => {
+    await act(async () => {
+      wrapper = renderProject('/projects/1');
+    });
+    await waitForElement(wrapper, 'ProjectDetail', (el) => el.length === 1);
+  });
 });
