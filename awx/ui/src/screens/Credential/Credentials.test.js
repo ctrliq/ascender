@@ -6,6 +6,17 @@ import Credentials from './Credentials';
 
 jest.mock('../../api/models/Credentials');
 
+// Capture the ScreenHeader props so we can assert the breadcrumb/title
+// mapping that the previous enzyme suite covered.
+let mockScreenHeaderProps;
+jest.mock('components/ScreenHeader', () => ({
+  __esModule: true,
+  default: (props) => {
+    mockScreenHeaderProps = props;
+    return null;
+  },
+}));
+
 // Replace the routed children with markers so the assertions are purely about
 // which branch of the v6 <Routes> tree resolves for a given URL.
 jest.mock('./CredentialList', () => {
@@ -53,5 +64,16 @@ describe('<Credentials />', () => {
     renderAt('/credentials/2/details');
     expect(await screen.findByText('Credential detail')).toBeInTheDocument();
     expect(screen.queryByText('CredentialList')).not.toBeInTheDocument();
+  });
+
+  test('sets the ScreenHeader stream type and breadcrumb config', async () => {
+    renderAt('/credentials');
+    expect(await screen.findByText('CredentialList')).toBeInTheDocument();
+    expect(mockScreenHeaderProps).toBeDefined();
+    expect(mockScreenHeaderProps.streamType).toBe('credential');
+    expect(mockScreenHeaderProps.breadcrumbConfig).toEqual({
+      '/credentials': 'Credentials',
+      '/credentials/add': 'Create New Credential',
+    });
   });
 });
