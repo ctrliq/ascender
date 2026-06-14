@@ -47,7 +47,7 @@ function Organizations() {
       />
       <Routes>
         <Route path="/organizations/add" element={<OrganizationAdd />} />
-        {/* /* so the nested <Organization> route tree can match the rest */}
+        {/* so the nested <Organization> route tree can match the rest */}
         <Route
           path="/organizations/:id/*"
           element={
