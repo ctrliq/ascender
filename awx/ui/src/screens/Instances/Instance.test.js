@@ -70,7 +70,7 @@ describe('<Instance />', () => {
     );
   });
 
-  test('renders the peers and listener-address tabs only on K8s', async () => {
+  test('renders the peers tab only on K8s', async () => {
     SettingsAPI.readCategory.mockResolvedValue({ data: { IS_K8S: true } });
     renderAt('/instances/1/peers');
     expect(await screen.findByText('InstancePeerList')).toBeInTheDocument();

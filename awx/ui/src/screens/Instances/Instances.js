@@ -46,7 +46,7 @@ function Instances() {
           path="/instances/:id/edit"
           element={<InstanceEdit setBreadcrumb={buildBreadcrumbConfig} />}
         />
-        {/* /* so the nested <Instance> route tree can match the rest */}
+        {/* so the nested <Instance> route tree can match the rest */}
         <Route
           path="/instances/:id/*"
           element={<Instance setBreadcrumb={buildBreadcrumbConfig} />}
