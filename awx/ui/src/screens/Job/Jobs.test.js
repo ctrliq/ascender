@@ -26,7 +26,9 @@ jest.mock('./JobTypeRedirect', () => {
   const ReactLib = require('react');
   return {
     __esModule: true,
-    default: ({ view }) =>
+    // Mirror the real component's default of view='output' so the bare
+    // /jobs/:id route resolves to the output view in the test too.
+    default: ({ view = 'output' }) =>
       ReactLib.createElement('div', null, `JobTypeRedirect:${view}`),
   };
 });
@@ -50,11 +52,13 @@ describe('<Jobs />', () => {
     expect(screen.queryByText('JobList')).not.toBeInTheDocument();
   });
 
-  test('routes an untyped /jobs/:id to the type redirect', async () => {
+  test('routes an untyped /jobs/:id to the type redirect defaulting to output', async () => {
     renderAt('/jobs/5');
-    // the bare route renders <TypeRedirect /> with no explicit view (the real
-    // component defaults it to 'output' via defaultProps)
-    expect(await screen.findByText(/^JobTypeRedirect:/)).toBeInTheDocument();
+    // the bare route renders <JobTypeRedirect /> with no explicit view, which
+    // defaults to 'output'
+    expect(
+      await screen.findByText('JobTypeRedirect:output')
+    ).toBeInTheDocument();
     expect(screen.queryByText('JobList')).not.toBeInTheDocument();
   });
 
@@ -69,6 +73,14 @@ describe('<Jobs />', () => {
     const { history } = renderAt('/jobs/system/5');
     await waitFor(() =>
       expect(history.location.pathname).toBe('/jobs/management/5')
+    );
+    expect(await screen.findByText('Job detail')).toBeInTheDocument();
+  });
+
+  test('preserves the trailing sub-path when redirecting /jobs/system/:id/*', async () => {
+    const { history } = renderAt('/jobs/system/5/output');
+    await waitFor(() =>
+      expect(history.location.pathname).toBe('/jobs/management/5/output')
     );
     expect(await screen.findByText('Job detail')).toBeInTheDocument();
   });
