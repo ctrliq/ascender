@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
-import { Routes, Route, useParams } from 'react-router-dom-v5-compat';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import {
   Alert,
   ClipboardCopy,
@@ -21,7 +21,6 @@ const TokenAlert = styled(Alert)`
 function UserTokens({ setBreadcrumb, user }) {
   const { t } = useLingui();
   const [tokenModalSource, setTokenModalSource] = useState(null);
-  const { id } = useParams();
 
   const onSuccessfulAdd = useCallback(
     (token) => setTokenModalSource(token),
@@ -33,22 +32,14 @@ function UserTokens({ setBreadcrumb, user }) {
       <Routes>
         <Route
           path="add"
-          element={
-            <UserTokenAdd id={Number(id)} onSuccessfulAdd={onSuccessfulAdd} />
-          }
+          element={<UserTokenAdd onSuccessfulAdd={onSuccessfulAdd} />}
         />
-        {/* /* so the nested <UserToken> route tree can match the rest */}
+        {/* so the nested <UserToken> route tree can match the rest */}
         <Route
           path=":tokenId/*"
-          element={
-            <UserToken
-              user={user}
-              setBreadcrumb={setBreadcrumb}
-              id={Number(id)}
-            />
-          }
+          element={<UserToken user={user} setBreadcrumb={setBreadcrumb} />}
         />
-        <Route index element={<UserTokenList id={Number(id)} />} />
+        <Route index element={<UserTokenList />} />
       </Routes>
       {tokenModalSource && (
         <Modal

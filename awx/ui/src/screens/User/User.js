@@ -128,11 +128,7 @@ function User({ setBreadcrumb, me }) {
             <Route
               path="tokens/*"
               element={
-                <UserTokens
-                  user={user}
-                  setBreadcrumb={setBreadcrumb}
-                  id={Number(id)}
-                />
+                <UserTokens user={user} setBreadcrumb={setBreadcrumb} />
               }
             />
           )}
