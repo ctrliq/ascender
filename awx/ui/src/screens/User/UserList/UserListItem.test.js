@@ -1,71 +1,62 @@
 import React from 'react';
-import { MemoryRouter } from 'react-router-dom';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { screen } from '@testing-library/react';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import mockDetails from '../data.user.json';
 import UserListItem from './UserListItem';
 
-let wrapper;
-
 describe('UserListItem with full permissions', () => {
   beforeEach(() => {
-    wrapper = mountWithContexts(
-      <MemoryRouter initialEntries={['/users']} initialIndex={0}>
-        <table>
-          <tbody>
-            <UserListItem
-              user={mockDetails}
-              detailUrl="/user/1"
-              isSelected
-              onSelect={() => {}}
-            />
-          </tbody>
-        </table>
-      </MemoryRouter>
+    renderWithContexts(
+      <table>
+        <tbody>
+          <UserListItem
+            user={mockDetails}
+            detailUrl="/user/1"
+            isSelected
+            onSelect={() => {}}
+          />
+        </tbody>
+      </table>
     );
   });
 
   test('initially renders successfully', () => {
-    expect(wrapper.length).toBe(1);
+    expect(screen.getByRole('row')).toBeInTheDocument();
+    expect(screen.getByText('admin')).toBeInTheDocument();
   });
 
   test('edit button shown to users with edit capabilities', () => {
-    expect(wrapper.find('PencilAltIcon').exists()).toBeTruthy();
+    expect(screen.getByLabelText('Edit User')).toBeInTheDocument();
   });
 
   test('should display user data', () => {
-    expect(wrapper.find('td[data-label="Role"]').prop('children')).toEqual(
-      'System Administrator'
-    );
-    expect(
-      wrapper.find('Label[aria-label="social login"]').prop('children')
-    ).toEqual('SOCIAL');
+    expect(screen.getByText('System Administrator')).toBeInTheDocument();
+    expect(screen.getByLabelText('social login')).toHaveTextContent('SOCIAL');
   });
 });
 
 describe('UserListItem without full permissions', () => {
   test('edit button hidden from users without edit capabilities', () => {
-    wrapper = mountWithContexts(
-      <MemoryRouter initialEntries={['/users']} initialIndex={0}>
-        <table>
-          <tbody>
-            <UserListItem
-              user={{
-                ...mockDetails,
-                summary_fields: {
-                  user_capabilities: {
-                    edit: false,
-                  },
+    renderWithContexts(
+      <table>
+        <tbody>
+          <UserListItem
+            user={{
+              ...mockDetails,
+              summary_fields: {
+                user_capabilities: {
+                  edit: false,
                 },
-              }}
-              detailUrl="/user/1"
-              isSelected
-              onSelect={() => {}}
-            />
-          </tbody>
-        </table>
-      </MemoryRouter>
+              },
+            }}
+            detailUrl="/user/1"
+            isSelected
+            onSelect={() => {}}
+          />
+        </tbody>
+      </table>
     );
-    expect(wrapper.find('PencilAltIcon').exists()).toBeFalsy();
+    expect(screen.queryByLabelText('Edit User')).not.toBeInTheDocument();
   });
 });

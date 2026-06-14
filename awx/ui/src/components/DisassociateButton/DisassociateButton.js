@@ -109,11 +109,7 @@ function DisassociateButton({
           {t`Disassociate`}
         </DropdownItem>
       ) : (
-        <Tooltip
-          content={renderTooltip()}
-          ouiaId="disassociate-tooltip"
-          position="top"
-        >
+        <Tooltip content={renderTooltip()} position="top">
           <div>
             <Button
               ouiaId="disassociate-button"

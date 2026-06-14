@@ -12,7 +12,7 @@
  *   await user.click(screen.getByRole('button', { name: 'Save' }));
  */
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Router, useLocation } from 'react-router-dom';
 import { Router as RouterV6 } from 'react-router-dom-v5-compat';
@@ -74,7 +74,6 @@ function CompatV6Layer({ history, children }) {
   );
 }
 
-// eslint-disable-next-line import-x/prefer-default-export
 export function renderWithContexts(ui, options = {}) {
   const { context: userContext, ...renderOptions } = options;
   const { config, router, session } = applyDefaultContexts(userContext);
@@ -99,4 +98,41 @@ export function renderWithContexts(ui, options = {}) {
     user: userEvent.setup(),
     ...render(ui, { wrapper: Wrapper, ...renderOptions }),
   };
+}
+
+/*
+ * Settle PF4 tooltips before a test ends.
+ *
+ * Closing a PF Modal restores focus (on a timeout) to the element that opened
+ * it; when that element is wrapped in a PF Tooltip, the tooltip engages after
+ * its 300ms entry delay. A tooltip pending or visible when the test unmounts
+ * leaves async Popper work that logs "state update on unmounted component"
+ * into the NEXT test, which the setupTests console-error trap turns into an
+ * order-dependent failure. Call this as the last step of any test that ends
+ * shortly after closing a modal.
+ */
+export async function settleTooltips() {
+  // the focus restore is setTimeout(0) and the tooltip entry delay is 300ms,
+  // so 700ms comfortably covers "tooltip will appear"; when none is coming
+  // this caps the dead wait well below findByRole's 1s default
+  const tooltip = await screen
+    .findByRole('tooltip', {}, { timeout: 700 })
+    .catch(() => null);
+  if (!tooltip) {
+    return;
+  }
+  document.activeElement.blur();
+  await waitFor(
+    () => expect(screen.queryByRole('tooltip')).not.toBeInTheDocument(),
+    { timeout: 2000 }
+  );
+}
+
+/*
+ * Assert a <Detail label={...} value={...} /> rendered the expected pair.
+ * Detail renders <div><dt>label</dt><dd>value</dd></div> (components/DetailList).
+ */
+export function assertDetail(label, value) {
+  const term = screen.getByText(label);
+  expect(term.nextElementSibling).toHaveTextContent(value);
 }

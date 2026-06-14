@@ -1,136 +1,55 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { UsersAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import mockDetails from './data.user.json';
 import User from './User';
 
 jest.mock('../../api');
 
-async function getUsers() {
-  return {
-    count: 1,
-    next: null,
-    previous: null,
-    data: {
-      results: [mockDetails],
-    },
-  };
+function renderUser(initialEntry, props = {}) {
+  const history = createMemoryHistory({
+    initialEntries: [initialEntry],
+  });
+  return renderWithContexts(<User setBreadcrumb={() => {}} {...props} />, {
+    context: { router: { history } },
+  });
 }
 
 describe('<User />', () => {
   beforeEach(() => {
     UsersAPI.readDetail.mockResolvedValue({ data: mockDetails });
-    UsersAPI.read.mockImplementation(getUsers);
+    UsersAPI.read.mockResolvedValue({
+      data: { count: 1, results: [mockDetails] },
+    });
   });
+
   test('initially renders successfully', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/users/1'],
-    });
-    await act(async () => {
-      mountWithContexts(<User setBreadcrumb={() => {}} />, {
-        context: {
-          router: {
-            history,
-            route: {
-              location: history.location,
-              match: {
-                params: { id: 1 },
-                url: '/users/1',
-                path: '/users/1',
-              },
-            },
-          },
-        },
-      });
-    });
+    renderUser('/users/1');
+    expect(await screen.findByRole('tab', { name: 'Details' })).toBeInTheDocument();
   });
 
   test('tabs shown for users', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/users/1'],
-    });
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <User me={{ id: 1 }} setBreadcrumb={() => {}} />,
-        {
-          context: {
-            router: {
-              history,
-              route: {
-                location: history.location,
-                match: {
-                  params: { id: 1 },
-                  url: '/users/1',
-                  path: '/users/1',
-                },
-              },
-            },
-          },
-        }
-      );
-    });
-    await waitForElement(wrapper, '.pf-c-tabs__item', (el) => el.length === 6);
+    renderUser('/users/1', { me: { id: 1 } });
+    await screen.findByRole('tab', { name: 'Details' });
 
-    /* eslint-disable react/button-has-type */
-    expect(wrapper.find('Tabs TabButton').length).toEqual(6);
+    expect(screen.getAllByRole('tab')).toHaveLength(6);
+    expect(screen.getByRole('tab', { name: 'Tokens' })).toBeInTheDocument();
   });
 
   test('should not show Tokens tab', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/users/1'],
-    });
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <User me={{ id: 2 }} setBreadcrumb={() => {}} />,
-        {
-          context: {
-            router: {
-              history,
-              route: {
-                location: history.location,
-                match: {
-                  params: { id: 1 },
-                  url: '/users/1',
-                  path: '/users/1',
-                },
-              },
-            },
-          },
-        }
-      );
-    });
-    expect(wrapper.find('button[aria-label="Tokens"]').length).toBe(0);
+    renderUser('/users/1', { me: { id: 2 } });
+    await screen.findByRole('tab', { name: 'Details' });
+
+    expect(
+      screen.queryByRole('tab', { name: 'Tokens' })
+    ).not.toBeInTheDocument();
   });
 
   test('should show content error when user attempts to navigate to erroneous route', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/users/1/foobar'],
-    });
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<User setBreadcrumb={() => {}} />, {
-        context: {
-          router: {
-            history,
-            route: {
-              location: history.location,
-              match: {
-                params: { id: 1 },
-                url: '/users/1/foobar',
-                path: '/users/1/foobar',
-              },
-            },
-          },
-        },
-      });
-    });
-    await waitForElement(wrapper, 'ContentError', (el) => el.length === 1);
+    renderUser('/users/1/foobar');
+
+    expect(await screen.findByText('Not Found')).toBeInTheDocument();
   });
 });

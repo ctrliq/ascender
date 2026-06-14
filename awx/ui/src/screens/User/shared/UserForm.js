@@ -175,12 +175,15 @@ function UserForm({ user, handleCancel, handleSubmit, submitError }) {
         confirm_password: t`This value does not match the password you entered previously. Please confirm that password.`,
       });
     } else {
-      values.is_superuser = values.user_type === 'administrator';
-      values.is_system_auditor = values.user_type === 'auditor';
-      if (!values.password || values.password === '') {
-        delete values.password;
-      }
+      // Build the payload from a copy — mutating Formik's `values` object
+      // (e.g. deleting password) flips the still-mounted password field from
+      // controlled to uncontrolled after submit, which React warns about.
       const { confirm_password, ...submitValues } = values;
+      submitValues.is_superuser = submitValues.user_type === 'administrator';
+      submitValues.is_system_auditor = submitValues.user_type === 'auditor';
+      if (!submitValues.password) {
+        delete submitValues.password;
+      }
       handleSubmit(submitValues);
     }
   };

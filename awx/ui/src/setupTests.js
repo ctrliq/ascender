@@ -12,6 +12,19 @@ jest.setTimeout(120000);
 // apply polyfills for jsdom
 require('@nteract/mockument');
 
+// mockument replaces document.createRange with a stub that lacks cloneRange,
+// selectNodeContents and the rest of the Range API, which breaks
+// @testing-library/user-event's pointer/selection handling. Restore jsdom's
+// real Range and graft on the rect methods jsdom doesn't implement (the part
+// of the stub the ace/CodeMirror components actually need).
+const nativeCreateRange = Document.prototype.createRange;
+global.window.document.createRange = function createRange() {
+  const range = nativeCreateRange.call(this);
+  range.getBoundingClientRect = () => ({ right: 0 });
+  range.getClientRects = () => [];
+  return range;
+};
+
 // eslint-disable-next-line import-x/prefer-default-export
 export const asyncFlush = () =>
   new Promise((resolve) => {

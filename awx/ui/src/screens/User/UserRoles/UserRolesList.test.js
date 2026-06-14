@@ -1,10 +1,7 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { act, screen, waitFor } from '@testing-library/react';
 import { UsersAPI, RolesAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import UserRolesList from './UserRolesList';
 
 jest.mock('../../../api');
@@ -94,7 +91,6 @@ const roles = {
 };
 
 describe('<UserRolesList />', () => {
-  let wrapper;
   beforeEach(() => {
     UsersAPI.readOptions.mockResolvedValue({
       data: {
@@ -111,37 +107,38 @@ describe('<UserRolesList />', () => {
   test('should render properly', async () => {
     UsersAPI.readRoles.mockResolvedValue(roles);
 
-    await act(async () => {
-      wrapper = mountWithContexts(<UserRolesList user={user} />);
-    });
+    renderWithContexts(<UserRolesList user={user} />);
 
-    expect(wrapper.find('UserRolesList').length).toBe(1);
+    expect(await screen.findByText('Credential Bar')).toBeInTheDocument();
   });
 
   test('should create proper detailUrl', async () => {
     UsersAPI.readRoles.mockResolvedValue(roles);
 
-    await act(async () => {
-      wrapper = mountWithContexts(<UserRolesList user={user} />);
+    renderWithContexts(<UserRolesList user={user} />);
+
+    const templateLinks = await screen.findAllByRole('link', {
+      name: 'template delete project',
     });
-
-    wrapper.update();
-
-    expect(wrapper.find(`Link#userRole-2`).prop('to')).toBe(
+    expect(templateLinks[0]).toHaveAttribute(
+      'href',
       '/templates/job_template/15/details'
     );
-    expect(wrapper.find(`Link#userRole-3`).prop('to')).toBe(
+    expect(templateLinks[1]).toHaveAttribute(
+      'href',
       '/templates/workflow_job_template/16/details'
     );
-    expect(wrapper.find('Link#userRole-4').prop('to')).toBe(
+    expect(screen.getByRole('link', { name: 'Credential Bar' })).toHaveAttribute(
+      'href',
       '/credentials/75/details'
     );
-    expect(wrapper.find('Link#userRole-5').prop('to')).toBe(
+    expect(screen.getByRole('link', { name: 'Inventory Foo' })).toHaveAttribute(
+      'href',
       '/inventories/inventory/76/details'
     );
-    expect(wrapper.find('Link#userRole-6').prop('to')).toBe(
-      '/inventories/smart_inventory/77/details'
-    );
+    expect(
+      screen.getByRole('link', { name: 'Smart Inventory Foo' })
+    ).toHaveAttribute('href', '/inventories/smart_inventory/77/details');
   });
   test('should not render add button when user cannot create other users and user cannot edit this user', async () => {
     UsersAPI.readRoleOptions.mockResolvedValueOnce({
@@ -190,83 +187,65 @@ describe('<UserRolesList />', () => {
         count: 1,
       },
     });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <UserRolesList
-          user={{
-            ...user,
-            summary_fields: {
-              user_capabilities: {
-                edit: false,
-                delete: false,
-              },
+    renderWithContexts(
+      <UserRolesList
+        user={{
+          ...user,
+          summary_fields: {
+            user_capabilities: {
+              edit: false,
+              delete: false,
             },
-          }}
-        />
-      );
-    });
-
-    wrapper.update();
-
-    expect(wrapper.find('Button[aria-label="Add resource roles"]').length).toBe(
-      0
+          },
+        }}
+      />
     );
+
+    await screen.findByText('template delete project');
+
+    expect(
+      screen.queryByRole('button', { name: 'Add resource roles' })
+    ).not.toBeInTheDocument();
   });
   test('should open and close wizard', async () => {
     UsersAPI.readRoles.mockResolvedValue(roles);
-    await act(async () => {
-      wrapper = mountWithContexts(<UserRolesList user={user} />);
+    const { user: events } = renderWithContexts(<UserRolesList user={user} />);
+
+    await screen.findByText('Credential Bar');
+    await events.click(screen.getByRole('button', { name: 'Add' }));
+    expect(await screen.findByRole('dialog')).toBeInTheDocument();
+    await events.click(screen.getByRole('button', { name: 'Close' }));
+    await waitFor(() => {
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     });
-    wrapper.update();
-    await act(async () =>
-      wrapper.find('Button[ouiaId="role-add-button"]').prop('onClick')()
-    );
-    wrapper.update();
-    expect(wrapper.find('PFWizard').length).toBe(1);
-    await act(async () =>
-      wrapper.find("Button[aria-label='Close']").prop('onClick')()
-    );
-    wrapper.update();
-    expect(wrapper.find('PFWizard').length).toBe(0);
+    // let the Add button tooltip's show/hide/transition timers (300ms each)
+    // settle before unmount to avoid a state-update-on-unmounted warning
+    await act(async () => {
+      await new Promise((resolve) => {
+        setTimeout(resolve, 1000);
+      });
+    });
   });
   test('should render disassociate modal', async () => {
     UsersAPI.readRoles.mockResolvedValue(roles);
 
-    await act(async () => {
-      wrapper = mountWithContexts(<UserRolesList user={user} />);
-    });
+    const { user: events } = renderWithContexts(<UserRolesList user={user} />);
 
-    wrapper.update();
+    await screen.findByText('Credential Bar');
 
-    await act(async () =>
-      wrapper.find('Chip[aria-label="Execute"]').prop('onClick')({
-        id: 4,
-        name: 'Execute',
-        type: 'role',
-        url: '/api/v2/roles/258/',
-        summary_fields: {
-          resource_name: 'Credential Bar',
-          resource_id: 75,
-          resource_type: 'credential',
-          resource_type_display_name: 'Credential',
-          user_capabilities: { unattach: true },
-        },
-      })
-    );
-    wrapper.update();
+    await events.click(screen.getByRole('button', { name: /close Execute/ }));
     expect(
-      wrapper.find('AlertModal[aria-label="Disassociate role"]').length
-    ).toBe(1);
-    await act(async () =>
-      wrapper
-        .find('button[aria-label="Confirm disassociate"]')
-        .prop('onClick')()
+      await screen.findByRole('dialog', { name: /Disassociate role!/ })
+    ).toBeInTheDocument();
+    await events.click(
+      screen.getByRole('button', { name: 'Confirm disassociate' })
     );
     expect(RolesAPI.disassociateUserRole).toHaveBeenCalledWith(4, 18);
-    wrapper.update();
-    expect(
-      wrapper.find('AlertModal[aria-label="Disassociate role"]').length
-    ).toBe(0);
+    await waitFor(() => {
+      expect(
+        screen.queryByRole('dialog', { name: /Disassociate role!/ })
+      ).not.toBeInTheDocument();
+    });
   });
   test('should throw disassociation error', async () => {
     UsersAPI.readRoles.mockResolvedValue(roles);
@@ -283,38 +262,18 @@ describe('<UserRolesList />', () => {
       })
     );
 
-    await act(async () => {
-      wrapper = mountWithContexts(<UserRolesList user={user} />);
-    });
+    const { user: events } = renderWithContexts(<UserRolesList user={user} />);
 
-    wrapper.update();
+    await screen.findByText('Credential Bar');
 
-    await act(async () =>
-      wrapper.find('Chip[aria-label="Execute"]').prop('onClick')({
-        id: 4,
-        name: 'Execute',
-        type: 'role',
-        url: '/api/v2/roles/258/',
-        summary_fields: {
-          resource_name: 'Credential Bar',
-          resource_id: 75,
-          resource_type: 'credential',
-          resource_type_display_name: 'Credential',
-          user_capabilities: { unattach: true },
-        },
-      })
-    );
-    wrapper.update();
+    await events.click(screen.getByRole('button', { name: /close Execute/ }));
     expect(
-      wrapper.find('AlertModal[aria-label="Disassociate role"]').length
-    ).toBe(1);
-    await act(async () =>
-      wrapper
-        .find('button[aria-label="Confirm disassociate"]')
-        .prop('onClick')()
+      await screen.findByRole('dialog', { name: /Disassociate role!/ })
+    ).toBeInTheDocument();
+    await events.click(
+      screen.getByRole('button', { name: 'Confirm disassociate' })
     );
-    wrapper.update();
-    expect(wrapper.find('AlertModal[title="Error!"]').length).toBe(1);
+    expect(await screen.findByText('Error!')).toBeInTheDocument();
   });
   test('user with sys admin privilege should show empty state', async () => {
     UsersAPI.readRoles.mockResolvedValue({
@@ -338,14 +297,10 @@ describe('<UserRolesList />', () => {
       },
     });
 
-    await act(async () => {
-      wrapper = mountWithContexts(<UserRolesList user={user} />);
-    });
+    renderWithContexts(<UserRolesList user={user} />);
 
-    waitForElement(
-      wrapper,
-      'EmptyState[title="System Administrator"]',
-      (el) => el.length === 1
-    );
+    expect(
+      await screen.findByText('System Administrator')
+    ).toBeInTheDocument();
   });
 });

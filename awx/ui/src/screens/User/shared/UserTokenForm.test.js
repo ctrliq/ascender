@@ -1,10 +1,7 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { ApplicationsAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import UserTokenForm from './UserTokenForm';
 
 jest.mock('../../../api');
@@ -16,124 +13,95 @@ const applications = {
         id: 1,
         name: 'app',
         description: '',
+        url: '/api/v2/applications/1/',
       },
       {
         id: 4,
         name: 'application that should not crach',
         description: '',
+        url: '/api/v2/applications/4/',
       },
     ],
   },
 };
 describe('<UserTokenForm />', () => {
-  let wrapper;
   afterEach(() => {
     jest.clearAllMocks();
   });
 
   test('initially renders successfully', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <UserTokenForm handleSubmit={jest.fn()} handleCancel={jest.fn()} />
-      );
-    });
+    renderWithContexts(
+      <UserTokenForm handleSubmit={jest.fn()} handleCancel={jest.fn()} />
+    );
 
-    expect(wrapper.find('UserTokenForm').length).toBe(1);
+    expect(
+      await screen.findByRole('button', { name: 'Save' })
+    ).toBeInTheDocument();
   });
 
   test('add form displays all form fields', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <UserTokenForm handleSubmit={jest.fn()} handleCancel={jest.fn()} />
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('FormGroup[name="application"]').length).toBe(1);
-    expect(wrapper.find('FormField[name="description"]').length).toBe(1);
-    expect(wrapper.find('FormGroup[name="scope"]').length).toBe(1);
+    renderWithContexts(
+      <UserTokenForm handleSubmit={jest.fn()} handleCancel={jest.fn()} />
+    );
+    expect(await screen.findByText('Application')).toBeInTheDocument();
+    expect(screen.getByLabelText('Description')).toBeInTheDocument();
+    expect(screen.getByText('Scope')).toBeInTheDocument();
   });
 
   test('inputs should update form value on change', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <UserTokenForm handleSubmit={jest.fn()} handleCancel={jest.fn()} />
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('ApplicationLookup').invoke('onChange')({
-        id: 1,
-        name: 'application',
-      });
-      wrapper.find('input[name="description"]').simulate('change', {
-        target: { value: 'new Bar', name: 'description' },
-      });
-      wrapper.find('AnsibleSelect[name="scope"]').prop('onChange')({}, 'read');
-    });
-    wrapper.update();
-    expect(wrapper.find('ApplicationLookup').prop('value')).toEqual({
-      id: 1,
-      name: 'application',
-    });
-    expect(wrapper.find('input[name="description"]').prop('value')).toBe(
-      'new Bar'
+    ApplicationsAPI.read.mockResolvedValue(applications);
+    const { user } = renderWithContexts(
+      <UserTokenForm handleSubmit={jest.fn()} handleCancel={jest.fn()} />
     );
-    expect(wrapper.find('AnsibleSelect#token-scope').prop('value')).toBe(
-      'read'
-    );
+    await user.click(await screen.findByRole('button', { name: 'Search' }));
+    await user.click(await screen.findByText('app'));
+    await user.click(screen.getByRole('button', { name: 'Select' }));
+    expect(screen.getByDisplayValue('app')).toBeInTheDocument();
+
+    await user.type(screen.getByLabelText('Description'), 'new Bar');
+    expect(screen.getByLabelText('Description')).toHaveValue('new Bar');
+
+    await user.selectOptions(screen.getByLabelText('Select Input'), 'read');
+    expect(screen.getByLabelText('Select Input')).toHaveValue('read');
   });
 
   test('should call handleSubmit when Submit button is clicked', async () => {
     ApplicationsAPI.read.mockResolvedValue(applications);
     const handleSubmit = jest.fn();
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <UserTokenForm handleSubmit={handleSubmit} handleCancel={jest.fn()} />
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
+    const { user } = renderWithContexts(
+      <UserTokenForm handleSubmit={handleSubmit} handleCancel={jest.fn()} />
+    );
 
-    await act(async () => {
-      wrapper.find('AnsibleSelect[name="scope"]').prop('onChange')({}, 'read');
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('button[aria-label="Save"]').prop('onClick')();
-    });
+    await user.selectOptions(
+      await screen.findByLabelText('Select Input'),
+      'read'
+    );
+    await user.click(screen.getByRole('button', { name: 'Save' }));
 
-    expect(handleSubmit).toHaveBeenCalled();
+    await waitFor(() => expect(handleSubmit).toHaveBeenCalled());
   });
 
   test('should call handleCancel when Cancel button is clicked', async () => {
     const handleCancel = jest.fn();
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <UserTokenForm handleSubmit={jest.fn()} handleCancel={handleCancel} />
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
+    const { user } = renderWithContexts(
+      <UserTokenForm handleSubmit={jest.fn()} handleCancel={handleCancel} />
+    );
     expect(handleCancel).not.toHaveBeenCalled();
-    wrapper.find('button[aria-label="Cancel"]').invoke('onClick')();
+    await user.click(await screen.findByRole('button', { name: 'Cancel' }));
     expect(handleCancel).toHaveBeenCalled();
   });
   test('should throw error on submit without scope value', async () => {
     ApplicationsAPI.read.mockResolvedValue(applications);
     const handleSubmit = jest.fn();
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <UserTokenForm handleSubmit={handleSubmit} handleCancel={jest.fn()} />
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
+    const { user } = renderWithContexts(
+      <UserTokenForm handleSubmit={handleSubmit} handleCancel={jest.fn()} />
+    );
 
-    await act(async () => {
-      wrapper.find('button[aria-label="Save"]').prop('onClick')();
-    });
-    wrapper.update();
+    await user.click(await screen.findByRole('button', { name: 'Save' }));
+
     expect(
-      wrapper.find('FormGroup[name="scope"]').prop('helperTextInvalid')
-    ).toBe('Please enter a value.');
+      await screen.findByText('Please enter a value.')
+    ).toBeInTheDocument();
     expect(handleSubmit).not.toHaveBeenCalled();
   });
 });

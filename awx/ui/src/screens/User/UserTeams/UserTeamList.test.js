@@ -1,12 +1,12 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 
 import { UsersAPI, TeamsAPI } from 'api';
 import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+  renderWithContexts,
+  settleTooltips,
+} from '../../../../testUtils/rtlContexts';
 
 import UserTeamList from './UserTeamList';
 
@@ -91,7 +91,7 @@ const mockAPIUserTeamList = [
 const options = { data: { actions: { POST: true } } };
 
 describe('<UserTeamList />', () => {
-  let wrapper;
+  let user;
 
   beforeEach(async () => {
     UsersAPI.readTeams.mockResolvedValue({
@@ -106,14 +106,12 @@ describe('<UserTeamList />', () => {
     const history = createMemoryHistory({
       initialEntries: ['/users/1/teams'],
     });
-    await act(async () => {
-      wrapper = mountWithContexts(<UserTeamList />, {
-        context: {
-          router: { history, route: { location: history.location } },
-        },
-      });
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
+    ({ user } = renderWithContexts(<UserTeamList />, {
+      context: {
+        router: { history },
+      },
+    }));
+    await screen.findByRole('link', { name: 'Team 0' });
   });
 
   afterEach(() => {
@@ -121,62 +119,66 @@ describe('<UserTeamList />', () => {
   });
 
   test('should load and render teams', async () => {
-    expect(wrapper.find('UserTeamListItem')).toHaveLength(3);
+    expect(screen.getAllByRole('link', { name: /^Team \d$/ })).toHaveLength(3);
   });
 
   test('should fetch teams from the api and render them in the list', () => {
     expect(UsersAPI.readTeams).toHaveBeenCalled();
     expect(UsersAPI.readTeamsOptions).toHaveBeenCalled();
-    expect(wrapper.find('UserTeamListItem').length).toBe(3);
+    expect(screen.getAllByRole('link', { name: /^Team \d$/ })).toHaveLength(3);
   });
 
-  test('should show associate team modal when adding an existing team', () => {
-    wrapper.find('ToolbarAddButton').simulate('click');
-    expect(wrapper.find('AssociateModal').length).toBe(1);
-    wrapper.find('ModalBoxCloseButton').simulate('click');
-    expect(wrapper.find('AssociateModal').length).toBe(0);
+  test('should show associate team modal when adding an existing team', async () => {
+    TeamsAPI.read.mockResolvedValue({
+      data: { count: 0, results: [] },
+    });
+    await user.click(screen.getByRole('button', { name: 'Associate' }));
+    expect(await screen.findByRole('dialog')).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Close' }));
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    await settleTooltips();
   });
 
   test('should show error modal for failed disassociation', async () => {
     UsersAPI.disassociateRole.mockRejectedValue(new Error());
-    await act(async () => {
-      wrapper.find('Checkbox#select-all').invoke('onChange')(true);
-    });
-    wrapper.update();
-    wrapper.find('button[aria-label="Disassociate"]').invoke('onClick')();
-    expect(wrapper.find('AlertModal Title').text()).toEqual(
-      'Disassociate related team(s)?'
+    await user.click(screen.getByRole('checkbox', { name: 'Select all' }));
+    await user.click(screen.getByRole('button', { name: 'Disassociate' }));
+    expect(
+      await screen.findByText('Disassociate related team(s)?')
+    ).toBeInTheDocument();
+    await user.click(
+      screen.getByRole('button', { name: 'confirm disassociate' })
     );
-    await act(async () => {
-      wrapper
-        .find('button[aria-label="confirm disassociate"]')
-        .invoke('onClick')();
-    });
-    wrapper.update();
-    expect(wrapper.find('AlertModal ErrorDetail').length).toBe(1);
-    expect(wrapper.find('AlertModal ModalBoxBody').text()).toEqual(
-      expect.stringContaining('Failed to disassociate one or more teams.')
+    expect(await screen.findByText('Error!')).toBeInTheDocument();
+    expect(
+      screen.getByText('Failed to disassociate one or more teams.')
+    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Details' })).toBeInTheDocument();
+    await waitFor(() => expect(UsersAPI.readTeams).toHaveBeenCalledTimes(2));
+    // Close the error modal while still mounted (unmounting through an open
+    // focus trap re-engages a toolbar tooltip), then settle.
+    await user.click(screen.getByRole('button', { name: 'Close' }));
+    await waitFor(() =>
+      expect(screen.queryByText('Error!')).not.toBeInTheDocument()
     );
+    await settleTooltips();
   });
 
   test('expected api calls are made for multi-delete', async () => {
     expect(UsersAPI.disassociateRole).toHaveBeenCalledTimes(0);
     expect(UsersAPI.readTeams).toHaveBeenCalledTimes(1);
-    await act(async () => {
-      wrapper.find('Checkbox#select-all').invoke('onChange')(true);
-    });
-    wrapper.update();
-    wrapper.find('button[aria-label="Disassociate"]').invoke('onClick')();
-    expect(wrapper.find('AlertModal Title').text()).toEqual(
-      'Disassociate related team(s)?'
+    await user.click(screen.getByRole('checkbox', { name: 'Select all' }));
+    await user.click(screen.getByRole('button', { name: 'Disassociate' }));
+    expect(
+      await screen.findByText('Disassociate related team(s)?')
+    ).toBeInTheDocument();
+    await user.click(
+      screen.getByRole('button', { name: 'confirm disassociate' })
     );
-    await act(async () => {
-      wrapper
-        .find('button[aria-label="confirm disassociate"]')
-        .invoke('onClick')();
-    });
-    expect(UsersAPI.disassociateRole).toHaveBeenCalledTimes(9);
-    expect(UsersAPI.readTeams).toHaveBeenCalledTimes(2);
+    await waitFor(() =>
+      expect(UsersAPI.disassociateRole).toHaveBeenCalledTimes(9)
+    );
+    await waitFor(() => expect(UsersAPI.readTeams).toHaveBeenCalledTimes(2));
   });
 
   test('should make expected api request when associating teams', async () => {
@@ -219,22 +221,14 @@ describe('<UserTeamList />', () => {
         ],
       },
     });
-    await act(async () => {
-      wrapper
-        .find('ToolbarAddButton[defaultLabel="Associate"]')
-        .prop('onClick')();
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('CheckboxListItem').first().prop('onSelect')();
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('button[aria-label="Save"]').prop('onClick')();
-    });
-    await waitForElement(wrapper, 'AssociateModal', (el) => el.length === 0);
+    await user.click(screen.getByRole('button', { name: 'Associate' }));
+    await user.click(await screen.findByText('Baz'));
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    await waitFor(() =>
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    );
     expect(UsersAPI.associateRole).toHaveBeenCalledTimes(1);
     expect(TeamsAPI.read).toHaveBeenCalledTimes(1);
+    await waitFor(() => expect(UsersAPI.readTeams).toHaveBeenCalledTimes(2));
   });
 });

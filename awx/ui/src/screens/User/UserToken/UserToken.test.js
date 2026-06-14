@@ -1,7 +1,7 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen } from '@testing-library/react';
 import { TokensAPI } from 'api';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import UserToken from './UserToken';
 
 jest.mock('../../../api/models/Tokens');
@@ -13,8 +13,8 @@ jest.mock('react-router-dom', () => ({
     tokenId: 2,
   }),
 }));
+
 describe('<UserToken/>', () => {
-  let wrapper;
   const user = {
     id: 1,
     type: 'user',
@@ -31,64 +31,45 @@ describe('<UserToken/>', () => {
     last_name: 'Corey',
     email: 'a@g.com',
   };
-  test('should call api for token details and actions', async () => {
-    TokensAPI.readDetail.mockResolvedValue({
-      id: 2,
-      type: 'o_auth2_access_token',
-      url: '/api/v2/tokens/2/',
 
-      summary_fields: {
-        user: {
-          id: 1,
-          username: 'admin',
-          first_name: 'Alex',
-          last_name: 'Corey',
+  beforeEach(() => {
+    TokensAPI.readDetail.mockResolvedValue({
+      data: {
+        id: 2,
+        type: 'o_auth2_access_token',
+        url: '/api/v2/tokens/2/',
+        summary_fields: {
+          user: {
+            id: 1,
+            username: 'admin',
+            first_name: 'Alex',
+            last_name: 'Corey',
+          },
+          application: {
+            id: 3,
+            name: 'hg',
+          },
         },
-        application: {
-          id: 3,
-          name: 'hg',
-        },
+        created: '2020-06-23T19:56:38.422053Z',
+        modified: '2020-06-23T19:56:38.441353Z',
+        description: 'cdfsg',
+        scope: 'read',
       },
-      created: '2020-06-23T19:56:38.422053Z',
-      modified: '2020-06-23T19:56:38.441353Z',
-      description: 'cdfsg',
-      scope: 'read',
     });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <UserToken setBreadcrumb={jest.fn()} user={user} />
-      );
-    });
-    expect(wrapper.find('UserToken').length).toBe(1);
   });
-  test('should call api for token details and actions', async () => {
-    TokensAPI.readDetail.mockResolvedValue({
-      id: 2,
-      type: 'o_auth2_access_token',
-      url: '/api/v2/tokens/2/',
 
-      summary_fields: {
-        user: {
-          id: 1,
-          username: 'admin',
-          first_name: 'Alex',
-          last_name: 'Corey',
-        },
-        application: {
-          id: 3,
-          name: 'hg',
-        },
-      },
-      created: '2020-06-23T19:56:38.422053Z',
-      modified: '2020-06-23T19:56:38.441353Z',
-      description: 'cdfsg',
-      scope: 'read',
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <UserToken setBreadcrumb={jest.fn()} user={user} />
-      );
-    });
+  test('should render token tabs', async () => {
+    renderWithContexts(<UserToken setBreadcrumb={jest.fn()} user={user} />);
+
+    expect(
+      await screen.findByRole('tab', { name: 'Details' })
+    ).toBeInTheDocument();
+  });
+
+  test('should call api for token details', async () => {
+    renderWithContexts(<UserToken setBreadcrumb={jest.fn()} user={user} />);
+
+    await screen.findByRole('tab', { name: 'Details' });
     expect(TokensAPI.readDetail).toHaveBeenCalledWith(2);
   });
 });
