@@ -192,8 +192,6 @@ EXAMPLES = '''
     state: present
 '''
 
-import time
-
 from ..module_utils.controller_api import ControllerAPIModule
 
 
@@ -208,16 +206,23 @@ def wait_for_project_update(module, last_request):
     scm_revision_original = last_request['scm_revision']
 
     if 'current_update' in last_request['summary_fields']:
-        running = True
-        while running:
-            result = module.get_endpoint('/project_updates/{0}/'.format(last_request['summary_fields']['current_update']['id']))['json']
+        # A project update is already in progress (e.g. the automatic update that
+        # fires when a project is first created). Wait on it through the same
+        # interval/timeout-aware helper used by the explicit-update path below,
+        # rather than polling in a tight loop with no delay (see ansible/awx#12850).
+        if wait:
+            result_final = module.wait_on_url(
+                url='/project_updates/{0}/'.format(last_request['summary_fields']['current_update']['id']),
+                object_name=module.get_item_name(last_request),
+                object_type='Project Update',
+                timeout=timeout,
+                interval=interval,
+            )
 
-            if module.is_job_done(result['status']):
-                time.sleep(1)
-                running = False
-
-        if result['status'] != 'successful':
-            module.fail_json(msg="Project update failed")
+            # Set Changed to correct value depending on if hash changed
+            module.json_output['changed'] = True
+            if result_final['json']['scm_revision'] == scm_revision_original:
+                module.json_output['changed'] = False
     elif update_project:
         result = module.post_endpoint(last_request['related']['update'])
 
