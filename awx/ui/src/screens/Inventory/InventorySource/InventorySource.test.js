@@ -15,10 +15,7 @@ jest.mock('../../../api/models/InventorySources');
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useRouteMatch: () => ({
-    url: '/inventories/inventory/2/sources/123',
-    params: { id: 2, sourceId: 123 },
-  }),
+  useParams: () => ({ id: 2, sourceId: 123 }),
 }));
 
 const mockInventory = {
