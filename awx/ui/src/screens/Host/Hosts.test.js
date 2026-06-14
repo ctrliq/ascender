@@ -1,44 +1,57 @@
 import React from 'react';
+import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import { shallow } from 'enzyme';
-import { act } from 'react-dom/test-utils';
-
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
-
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import Hosts from './Hosts';
 
-jest.mock('../../api');
+jest.mock('../../api/models/Hosts');
+
+// Replace the routed children with markers so the assertions are purely about
+// which branch of the v6 <Routes> tree resolves for a given URL.
+jest.mock('./HostList', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: () => ReactLib.createElement('div', null, 'HostList'),
+  };
+});
+jest.mock('./HostAdd', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: () => ReactLib.createElement('div', null, 'HostAdd'),
+  };
+});
+jest.mock('./Host', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: () => ReactLib.createElement('div', null, 'Host detail'),
+  };
+});
+
+function renderAt(path) {
+  const history = createMemoryHistory({ initialEntries: [path] });
+  return renderWithContexts(<Hosts />, {
+    context: { router: { history } },
+  });
+}
 
 describe('<Hosts />', () => {
-  test('should display a breadcrumb heading', () => {
-    const wrapper = mountWithContexts(<Hosts />);
-
-    const header = wrapper.find('ScreenHeader');
-    expect(header.prop('streamType')).toEqual('host');
-    expect(header.prop('breadcrumbConfig')).toEqual({
-      '/hosts': 'Hosts',
-      '/hosts/add': 'Create New Host',
-    });
+  test('renders the list at /hosts', async () => {
+    renderAt('/hosts');
+    expect(await screen.findByText('HostList')).toBeInTheDocument();
   });
 
-  test('should render Host component', async () => {
-    let wrapper;
-    const history = createMemoryHistory({
-      initialEntries: ['/hosts/1'],
-    });
+  test('renders the add form at /hosts/add', async () => {
+    renderAt('/hosts/add');
+    expect(await screen.findByText('HostAdd')).toBeInTheDocument();
+    expect(screen.queryByText('HostList')).not.toBeInTheDocument();
+  });
 
-    const match = {
-      path: '/hosts/:id',
-      url: '/hosts/1',
-      isExact: true,
-    };
-
-    await act(async () => {
-      wrapper = await mountWithContexts(<Hosts />, {
-        context: { router: { history, route: { match } } },
-      });
-    });
-
-    expect(wrapper.find('Host').length).toBe(1);
+  test('renders the detail subtree at /hosts/:id', async () => {
+    renderAt('/hosts/1/details');
+    expect(await screen.findByText('Host detail')).toBeInTheDocument();
+    expect(screen.queryByText('HostList')).not.toBeInTheDocument();
   });
 });

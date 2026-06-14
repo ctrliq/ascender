@@ -1,35 +1,42 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { Routes, Route } from 'react-router-dom-v5-compat';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import HostGroups from './HostGroups';
 
-jest.mock('../../../api');
+jest.mock('./HostGroupsList', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: () => ReactLib.createElement('div', null, 'HostGroupsList'),
+  };
+});
+
+const host = {
+  id: 1,
+  name: 'Foo',
+  summary_fields: { inventory: { id: 1 } },
+};
+
+// HostGroups uses paths relative to its parent route, so mount it under the
+// same /hosts/:id/groups/* route that Host.js gives it in the app.
+function renderAt(path) {
+  const history = createMemoryHistory({ initialEntries: [path] });
+  return renderWithContexts(
+    <Routes>
+      <Route
+        path="/hosts/:id/groups/*"
+        element={<HostGroups setBreadcrumb={() => {}} host={host} />}
+      />
+    </Routes>,
+    { context: { router: { history } } }
+  );
+}
 
 describe('<HostGroups />', () => {
-  test('initially renders successfully', async () => {
-    let wrapper;
-    const history = createMemoryHistory({
-      initialEntries: ['/hosts/1/groups'],
-    });
-    const host = {
-      id: 1,
-      name: 'Foo',
-      summary_fields: { inventory: { id: 1 } },
-    };
-
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <HostGroups setBreadcrumb={() => {}} host={host} />,
-
-        {
-          context: {
-            router: { history, route: { location: history.location } },
-          },
-        }
-      );
-    });
-    expect(wrapper.length).toBe(1);
-    expect(wrapper.find('HostGroupsList').length).toBe(1);
+  test('renders the host groups list at the index path', async () => {
+    renderAt('/hosts/1/groups');
+    expect(await screen.findByText('HostGroupsList')).toBeInTheDocument();
   });
 });
