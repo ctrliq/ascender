@@ -15,7 +15,6 @@ from requests.models import Response, PreparedRequest
 
 import pytest
 
-from ansible.module_utils.six import raise_from
 
 from awx.main.tests.functional.conftest import _request
 from awx.main.tests.functional.conftest import credentialtype_scm, credentialtype_ssh  # noqa: F401; pylint: disable=unused-variable
@@ -199,7 +198,17 @@ def run_module(request, collection_import):
         else:
             raise RuntimeError("The module has neither a ControllerAWXKitModule or a ControllerAPIModule")
 
-        with mock.patch.object(resource_class, '_load_params', new=mock_load_params):
+        # The collection-vs-server version compatibility check warns whenever the
+        # source _COLLECTION_VERSION placeholder ("0.0.1-devel") does not match the
+        # connected server version, which would pollute the warning-count
+        # assertions in the module tests. That check has dedicated coverage in
+        # test_module_utils.py, so suppress it for the general module invocations.
+        if hasattr(resource_class, 'version_checked'):
+            version_check_patch = mock.patch.object(resource_class, 'version_checked', True)
+        else:
+            version_check_patch = suppress()
+
+        with version_check_patch, mock.patch.object(resource_class, '_load_params', new=mock_load_params):
             # Call the test utility (like a mock server) instead of issuing HTTP requests
             with mock.patch('ansible.module_utils.urls.Request.open', new=new_open):
                 if HAS_TOWER_CLI:
@@ -224,7 +233,7 @@ def run_module(request, collection_import):
         try:
             result = json.loads(module_stdout)
         except Exception as e:
-            raise_from(Exception('Module did not write valid JSON, error: {0}, stdout:\n{1}'.format(str(e), module_stdout)), e)
+            raise Exception('Module did not write valid JSON, error: {0}, stdout:\n{1}'.format(str(e), module_stdout)) from e
         # A module exception should never be a test expectation
         if 'exception' in result:
             if "ModuleNotFoundError: No module named 'tower_cli'" in result['exception']:
