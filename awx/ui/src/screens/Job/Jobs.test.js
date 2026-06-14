@@ -1,35 +1,75 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { screen, waitFor } from '@testing-library/react';
+import { createMemoryHistory } from 'history';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import Jobs from './Jobs';
 
 jest.mock('../../api');
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useRouteMatch: () => ({
-    path: '/',
-  }),
-}));
+// Replace the routed children with markers so the assertions are purely about
+// which branch of the v6 <Routes> tree resolves for a given URL.
+jest.mock('components/JobList', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: () => ReactLib.createElement('div', null, 'JobList'),
+  };
+});
+jest.mock('./Job', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: () => ReactLib.createElement('div', null, 'Job detail'),
+  };
+});
+jest.mock('./JobTypeRedirect', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: ({ view }) =>
+      ReactLib.createElement('div', null, `JobTypeRedirect:${view}`),
+  };
+});
+
+function renderAt(path) {
+  const history = createMemoryHistory({ initialEntries: [path] });
+  return renderWithContexts(<Jobs />, {
+    context: { router: { history } },
+  });
+}
 
 describe('<Jobs />', () => {
-  test('initially renders successfully', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<Jobs />);
-    });
-    expect(wrapper.find('JobList')).toHaveLength(1);
+  test('renders the list at /jobs', async () => {
+    renderAt('/jobs');
+    expect(await screen.findByText('JobList')).toBeInTheDocument();
   });
 
-  test('should display a breadcrumb heading', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<Jobs />);
-    });
-    const screenHeader = wrapper.find('ScreenHeader');
-    expect(screenHeader).toHaveLength(1);
-    expect(screenHeader.prop('breadcrumbConfig')).toEqual({
-      '/jobs': 'Jobs',
-    });
+  test('renders the typed detail subtree at /jobs/:typeSegment/:id', async () => {
+    renderAt('/jobs/playbook/5/output');
+    expect(await screen.findByText('Job detail')).toBeInTheDocument();
+    expect(screen.queryByText('JobList')).not.toBeInTheDocument();
+  });
+
+  test('routes an untyped /jobs/:id to the type redirect', async () => {
+    renderAt('/jobs/5');
+    // the bare route renders <TypeRedirect /> with no explicit view (the real
+    // component defaults it to 'output' via defaultProps)
+    expect(await screen.findByText(/^JobTypeRedirect:/)).toBeInTheDocument();
+    expect(screen.queryByText('JobList')).not.toBeInTheDocument();
+  });
+
+  test('routes an untyped /jobs/:id/details to the details type redirect', async () => {
+    renderAt('/jobs/5/details');
+    expect(
+      await screen.findByText('JobTypeRedirect:details')
+    ).toBeInTheDocument();
+  });
+
+  test('redirects legacy /jobs/system/:id to /jobs/management/:id', async () => {
+    const { history } = renderAt('/jobs/system/5');
+    await waitFor(() =>
+      expect(history.location.pathname).toBe('/jobs/management/5')
+    );
+    expect(await screen.findByText('Job detail')).toBeInTheDocument();
   });
 });

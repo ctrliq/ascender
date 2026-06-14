@@ -1,12 +1,11 @@
 import React, { useEffect, useCallback, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import {
+  Routes,
   Route,
-  Switch,
-  Redirect,
-  Link,
+  Navigate,
   useParams,
-  useRouteMatch,
-} from 'react-router-dom';
+} from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card, PageSection } from '@patternfly/react-core';
@@ -37,7 +36,6 @@ export const JOB_URL_SEGMENT_MAP = {
 function Job({ setBreadcrumb }) {
   const { t } = useLingui();
   const { id, typeSegment } = useParams();
-  const match = useRouteMatch();
 
   const type = JOB_URL_SEGMENT_MAP[typeSegment];
 
@@ -126,8 +124,12 @@ function Job({ setBreadcrumb }) {
       persistentFilterKey: 'jobs',
       id: 99,
     },
-    { name: t`Details`, link: `${match.url}/details`, id: 0 },
-    { name: t`Output`, link: `${match.url}/output`, id: 1 },
+    {
+      name: t`Details`,
+      link: `/jobs/${typeSegment}/${id}/details`,
+      id: 0,
+    },
+    { name: t`Output`, link: `/jobs/${typeSegment}/${id}/output`, id: 1 },
   ];
   if (relatedJobs?.length > 0) {
     tabsArray.push({
@@ -172,48 +174,49 @@ function Job({ setBreadcrumb }) {
       <div ref={ref}>
         <Card>
           <RoutedTabs
-            isWorkflow={match.url.startsWith('/jobs/workflow')}
+            isWorkflow={typeSegment === 'workflow'}
             tabsArray={tabsArray}
           />
-          <Switch>
-            <Redirect from="/jobs/system/:id" to="/jobs/management/:id" exact />
-            <Redirect
-              from="/jobs/:typeSegment/:id"
-              to="/jobs/:typeSegment/:id/output"
-              exact
-            />
-            {job && [
+          <Routes>
+            <Route index element={<Navigate to="output" replace />} />
+            {job && (
               <Route
-                key={
-                  job.type === 'workflow_job' ? 'workflow-details' : 'details'
-                }
-                path="/jobs/:typeSegment/:id/details"
-              >
-                <JobDetail
-                  job={job}
-                  inventorySourceLabels={inventorySourceChoices}
-                />
-              </Route>,
-              <Route key="output" path="/jobs/:typeSegment/:id/output">
-                {job.type === 'workflow_job' ? (
-                  <WorkflowOutput job={job} />
-                ) : (
-                  <JobOutput
+                path="details"
+                element={
+                  <JobDetail
                     job={job}
-                    eventRelatedSearchableKeys={eventRelatedSearchableKeys}
-                    eventSearchableKeys={eventSearchableKeys}
+                    inventorySourceLabels={inventorySourceChoices}
                   />
-                )}
-              </Route>,
-              <Route key="not-found" path="*">
+                }
+              />
+            )}
+            {job && (
+              <Route
+                path="output"
+                element={
+                  job.type === 'workflow_job' ? (
+                    <WorkflowOutput job={job} />
+                  ) : (
+                    <JobOutput
+                      job={job}
+                      eventRelatedSearchableKeys={eventRelatedSearchableKeys}
+                      eventSearchableKeys={eventSearchableKeys}
+                    />
+                  )
+                }
+              />
+            )}
+            <Route
+              path="*"
+              element={
                 <ContentError isNotFound>
                   <Link to={`/jobs/${typeSegment}/${id}/details`}>
                     {t`View Job Details`}
                   </Link>
                 </ContentError>
-              </Route>,
-            ]}
-          </Switch>
+              }
+            />
+          </Routes>
         </Card>
       </div>
     </PageSection>
