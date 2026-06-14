@@ -196,7 +196,7 @@ function App() {
   const redirectURL = window.sessionStorage.getItem(SESSION_REDIRECT_URL);
   if (redirectURL) {
     window.sessionStorage.removeItem(SESSION_REDIRECT_URL);
-    if (redirectURL !== '/' || redirectURL !== '/home')
+    if (redirectURL !== '/' && redirectURL !== '/home')
       navigate(redirectURL, { replace: true });
   }
 
