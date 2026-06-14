@@ -1,7 +1,8 @@
 import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { createMemoryHistory } from 'history';
-import { OrganizationsAPI, ProjectsAPI } from 'api';
+import { Routes, Route } from 'react-router-dom-v5-compat';
+import { OrganizationsAPI, ProjectsAPI, RootAPI } from 'api';
 import mockOrganization from 'util/data.organization.json';
 import {
   mountWithContexts,
@@ -11,14 +12,6 @@ import mockDetails from './data.project.json';
 import Project from './Project';
 
 jest.mock('../../api');
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useRouteMatch: () => ({
-    pathname: '/projects/1/details',
-    url: '/projects/1',
-  }),
-  useParams: () => ({ id: 1 }),
-}));
 
 const mockMe = {
   is_super_user: true,
@@ -36,6 +29,21 @@ async function getOrganizations() {
   };
 }
 
+// Mount under the same /projects/:id/* route that Projects.js gives it, so the
+// nested v6 <Routes> resolve and useParams sees the id.
+function renderProject(initialEntry = '/projects/1/details') {
+  const history = createMemoryHistory({ initialEntries: [initialEntry] });
+  return mountWithContexts(
+    <Routes>
+      <Route
+        path="/projects/:id/*"
+        element={<Project setBreadcrumb={() => {}} me={mockMe} />}
+      />
+    </Routes>,
+    { context: { router: { history } } }
+  );
+}
+
 describe('<Project />', () => {
   let wrapper;
 
@@ -44,19 +52,21 @@ describe('<Project />', () => {
     ProjectsAPI.readDetail = jest.fn();
     ProjectsAPI.readDetail.mockResolvedValue({ data: mockDetails });
     OrganizationsAPI.read.mockImplementation(getOrganizations);
+    // the resolved detail route mounts components that read the brand name
+    RootAPI.readAssetVariables = jest
+      .fn()
+      .mockResolvedValue({ data: { BRAND_NAME: 'AWX' } });
   });
 
   test('initially renders successfully', async () => {
     await act(async () => {
-      mountWithContexts(<Project setBreadcrumb={() => {}} me={mockMe} />);
+      renderProject();
     });
   });
 
   test('notifications tab shown for admins', async () => {
     await act(async () => {
-      wrapper = mountWithContexts(
-        <Project setBreadcrumb={() => {}} me={mockMe} />
-      );
+      wrapper = renderProject();
     });
     const tabs = await waitForElement(
       wrapper,
@@ -74,9 +84,7 @@ describe('<Project />', () => {
       data: { results: [] },
     });
     await act(async () => {
-      wrapper = mountWithContexts(
-        <Project setBreadcrumb={() => {}} me={mockMe} />
-      );
+      wrapper = renderProject();
     });
     const tabs = await waitForElement(
       wrapper,
@@ -95,9 +103,7 @@ describe('<Project />', () => {
     });
 
     await act(async () => {
-      wrapper = mountWithContexts(
-        <Project setBreadcrumb={() => {}} me={mockMe} />
-      );
+      wrapper = renderProject();
     });
     const tabs = await waitForElement(
       wrapper,
@@ -118,9 +124,7 @@ describe('<Project />', () => {
     });
 
     await act(async () => {
-      wrapper = mountWithContexts(
-        <Project setBreadcrumb={() => {}} me={mockMe} />
-      );
+      wrapper = renderProject();
     });
     const tabs = await waitForElement(
       wrapper,
@@ -131,28 +135,8 @@ describe('<Project />', () => {
   });
 
   test('should show content error when user attempts to navigate to erroneous route', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/projects/1/foobar'],
-    });
     await act(async () => {
-      wrapper = mountWithContexts(
-        <Project setBreadcrumb={() => {}} me={mockMe} />,
-        {
-          context: {
-            router: {
-              history,
-              route: {
-                location: history.location,
-                match: {
-                  params: { id: 1 },
-                  url: '/projects/1/foobar',
-                  path: '/project/1/foobar',
-                },
-              },
-            },
-          },
-        }
-      );
+      wrapper = renderProject('/projects/1/foobar');
     });
     await waitForElement(wrapper, 'ContentError', (el) => el.length === 1);
   });

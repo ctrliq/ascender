@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import ScreenHeader from 'components/ScreenHeader/ScreenHeader';
 import PersistentFilters from 'components/PersistentFilters';
@@ -42,19 +42,22 @@ function Projects() {
   return (
     <>
       <ScreenHeader streamType="project" breadcrumbConfig={breadcrumbConfig} />
-      <Switch>
-        <Route path="/projects/add">
-          <ProjectAdd />
-        </Route>
-        <Route path="/projects/:id">
-          <Project setBreadcrumb={buildBreadcrumbConfig} />
-        </Route>
-        <Route path="/projects">
-          <PersistentFilters pageKey="projects">
-            <ProjectsList />
-          </PersistentFilters>
-        </Route>
-      </Switch>
+      <Routes>
+        <Route path="/projects/add" element={<ProjectAdd />} />
+        {/* /* so the nested <Project> route tree can match */}
+        <Route
+          path="/projects/:id/*"
+          element={<Project setBreadcrumb={buildBreadcrumbConfig} />}
+        />
+        <Route
+          path="/projects"
+          element={
+            <PersistentFilters pageKey="projects">
+              <ProjectsList />
+            </PersistentFilters>
+          }
+        />
+      </Routes>
     </>
   );
 }
