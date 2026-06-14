@@ -112,7 +112,7 @@ function Application({ setBreadcrumb }) {
         <Routes>
           <Route
             index
-            element={<Navigate to={`/applications/${id}/details`} replace />}
+            element={<Navigate to="details" replace />}
           />
           {application && (
             <>
