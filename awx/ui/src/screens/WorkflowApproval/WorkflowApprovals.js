@@ -35,7 +35,7 @@ function WorkflowApprovals() {
         breadcrumbConfig={breadcrumbConfig}
       />
       <Routes>
-        {/* /* so the nested <WorkflowApproval> route tree can match the rest */}
+        {/* so the nested <WorkflowApproval> route tree can match the rest */}
         <Route
           path="/workflow_approvals/:id/*"
           element={<WorkflowApproval setBreadcrumb={updateBreadcrumbConfig} />}
