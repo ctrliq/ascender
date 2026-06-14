@@ -1,22 +1,70 @@
 import React from 'react';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { screen } from '@testing-library/react';
+import { createMemoryHistory } from 'history';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import NotificationTemplates from './NotificationTemplates';
 
+jest.mock('../../api/models/NotificationTemplates');
+
+// Replace the routed children with markers so the assertions are purely about
+// which branch of the v6 <Routes> tree resolves for a given URL.
 jest.mock('./NotificationTemplateList', () => {
-  const NotificationTemplateList = () => <div />;
+  const ReactLib = require('react');
   return {
     __esModule: true,
-    default: NotificationTemplateList,
+    default: () =>
+      ReactLib.createElement('div', null, 'NotificationTemplateList'),
+  };
+});
+jest.mock('./NotificationTemplateAdd', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: () =>
+      ReactLib.createElement('div', null, 'NotificationTemplateAdd'),
+  };
+});
+jest.mock('./NotificationTemplate', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: () =>
+      ReactLib.createElement('div', null, 'NotificationTemplate detail'),
   };
 });
 
-describe('<NotificationTemplates />', () => {
-  test('initially renders without crashing', () => {
-    const wrapper = mountWithContexts(<NotificationTemplates />);
+function renderAt(path) {
+  const history = createMemoryHistory({ initialEntries: [path] });
+  return renderWithContexts(<NotificationTemplates />, {
+    context: { router: { history } },
+  });
+}
 
-    const pageSections = wrapper.find('PageSection');
-    expect(pageSections).toHaveLength(1);
-    expect(pageSections.first().props().variant).toBe('light');
-    expect(wrapper.find('NotificationTemplateList')).toHaveLength(1);
+describe('<NotificationTemplates />', () => {
+  test('renders the list at /notification_templates', async () => {
+    renderAt('/notification_templates');
+    expect(
+      await screen.findByText('NotificationTemplateList')
+    ).toBeInTheDocument();
+  });
+
+  test('renders the add form at /notification_templates/add', async () => {
+    renderAt('/notification_templates/add');
+    expect(
+      await screen.findByText('NotificationTemplateAdd')
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByText('NotificationTemplateList')
+    ).not.toBeInTheDocument();
+  });
+
+  test('renders the detail subtree at /notification_templates/:id', async () => {
+    renderAt('/notification_templates/42/details');
+    expect(
+      await screen.findByText('NotificationTemplate detail')
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByText('NotificationTemplateList')
+    ).not.toBeInTheDocument();
   });
 });
