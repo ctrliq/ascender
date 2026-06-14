@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { Route, Switch, useRouteMatch } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 
 import ScreenHeader from 'components/ScreenHeader/ScreenHeader';
@@ -8,7 +8,6 @@ import WorkflowApprovalList from './WorkflowApprovalList';
 import WorkflowApproval from './WorkflowApproval';
 
 function WorkflowApprovals() {
-  const match = useRouteMatch();
   const { t } = useLingui();
   const [breadcrumbConfig, setBreadcrumbConfig] = useState({
     '/workflow_approvals': t`Workflow Approvals`,
@@ -35,16 +34,21 @@ function WorkflowApprovals() {
         streamType="workflow_approval"
         breadcrumbConfig={breadcrumbConfig}
       />
-      <Switch>
-        <Route path={`${match.url}/:id`}>
-          <WorkflowApproval setBreadcrumb={updateBreadcrumbConfig} />
-        </Route>
-        <Route path={`${match.url}`}>
-          <PersistentFilters pageKey="workflowApprovals">
-            <WorkflowApprovalList />
-          </PersistentFilters>
-        </Route>
-      </Switch>
+      <Routes>
+        {/* /* so the nested <WorkflowApproval> route tree can match the rest */}
+        <Route
+          path="/workflow_approvals/:id/*"
+          element={<WorkflowApproval setBreadcrumb={updateBreadcrumbConfig} />}
+        />
+        <Route
+          path="/workflow_approvals"
+          element={
+            <PersistentFilters pageKey="workflowApprovals">
+              <WorkflowApprovalList />
+            </PersistentFilters>
+          }
+        />
+      </Routes>
     </>
   );
 }

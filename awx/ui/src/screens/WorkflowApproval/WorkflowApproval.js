@@ -3,15 +3,14 @@ import { useLingui } from '@lingui/react/macro';
 
 import { Card, PageSection } from '@patternfly/react-core';
 import { CaretLeftIcon } from '@patternfly/react-icons';
+import { Link } from 'react-router-dom';
 import {
-  Link,
-  Switch,
+  Routes,
   Route,
-  Redirect,
+  Navigate,
   useParams,
-  useRouteMatch,
   useLocation,
-} from 'react-router-dom';
+} from 'react-router-dom-v5-compat';
 import useRequest from 'hooks/useRequest';
 import RoutedTabs from 'components/RoutedTabs';
 import ContentError from 'components/ContentError';
@@ -21,7 +20,6 @@ import WorkflowApprovalDetail from './WorkflowApprovalDetail';
 function WorkflowApproval({ setBreadcrumb }) {
   const { t } = useLingui();
   const { id: workflowApprovalId } = useParams();
-  const match = useRouteMatch();
   const location = useLocation();
   const {
     result: { workflowApproval },
@@ -76,7 +74,7 @@ function WorkflowApproval({ setBreadcrumb }) {
     },
     {
       name: t`Details`,
-      link: `${match.url}/details`,
+      link: `/workflow_approvals/${workflowApprovalId}/details`,
       id: 0,
     },
   ];
@@ -84,32 +82,36 @@ function WorkflowApproval({ setBreadcrumb }) {
     <PageSection>
       <Card>
         <RoutedTabs tabsArray={tabs} />
-        <Switch>
-          <Redirect
-            from="/workflow_approvals/:id"
-            to="/workflow_approvals/:id/details"
-            exact
-          />
+        <Routes>
+          <Route index element={<Navigate to="details" replace />} />
           {workflowApproval && (
-            <Route path="/workflow_approvals/:id/details">
-              <WorkflowApprovalDetail
-                fetchWorkflowApproval={fetchWorkflowApproval}
-                workflowApproval={workflowApproval}
-              />
-            </Route>
+            <Route
+              path="details"
+              element={
+                <WorkflowApprovalDetail
+                  fetchWorkflowApproval={fetchWorkflowApproval}
+                  workflowApproval={workflowApproval}
+                />
+              }
+            />
           )}
-          <Route key="not-found" path="*">
-            {!isLoading && (
-              <ContentError isNotFound>
-                {match.params.id && (
-                  <Link to={`/workflow_approvals/${match.params.id}/details`}>
-                    {t`View Workflow Approval Details`}
-                  </Link>
-                )}
-              </ContentError>
-            )}
-          </Route>
-        </Switch>
+          <Route
+            path="*"
+            element={
+              !isLoading ? (
+                <ContentError isNotFound>
+                  {workflowApprovalId && (
+                    <Link
+                      to={`/workflow_approvals/${workflowApprovalId}/details`}
+                    >
+                      {t`View Workflow Approval Details`}
+                    </Link>
+                  )}
+                </ContentError>
+              ) : null
+            }
+          />
+        </Routes>
       </Card>
     </PageSection>
   );
