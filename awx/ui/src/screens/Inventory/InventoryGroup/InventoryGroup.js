@@ -145,7 +145,7 @@ function InventoryGroup({ setBreadcrumb, inventory }) {
             <ContentError>
               {inventory && (
                 <Link
-                  to={`/inventories/:inventoryType/${inventory.id}/details`}
+                  to={`/inventories/${inventoryType}/${inventory.id}/details`}
                 >
                   {t`View Inventory Details`}
                 </Link>
