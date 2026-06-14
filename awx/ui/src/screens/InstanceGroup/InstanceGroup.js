@@ -125,7 +125,7 @@ function InstanceGroup({ setBreadcrumb }) {
               path="details"
               element={<InstanceGroupDetails instanceGroup={instanceGroup} />}
             />
-            {/* /* so the nested <Instances> route tree can match the rest */}
+            {/* so the nested <Instances> route tree can match the rest */}
             <Route
               path="instances/*"
               element={
@@ -142,6 +142,16 @@ function InstanceGroup({ setBreadcrumb }) {
                   showTypeColumn
                   defaultParams={{ instance_group: instanceGroup.id }}
                 />
+              }
+            />
+            <Route
+              path="*"
+              element={
+                <ContentError isNotFound>
+                  <Link to="/instance_groups">
+                    {t`View all instance groups`}
+                  </Link>
+                </ContentError>
               }
             />
           </Routes>

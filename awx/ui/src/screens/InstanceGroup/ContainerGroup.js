@@ -125,6 +125,16 @@ function ContainerGroup({ setBreadcrumb }) {
                 />
               }
             />
+            <Route
+              path="*"
+              element={
+                <ContentError isNotFound>
+                  <Link to="/instance_groups">
+                    {t`View all instance groups`}
+                  </Link>
+                </ContentError>
+              }
+            />
           </Routes>
         )}
       </Card>
