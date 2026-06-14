@@ -193,7 +193,7 @@ function Project({ setBreadcrumb }) {
                 />
               }
             />
-            {/* /* so the nested <Schedules> route tree can match */}
+            {/* so the nested <Schedules> route tree can match */}
             {project?.scm_type && project.scm_type !== '' && (
               <Route
                 path="schedules/*"

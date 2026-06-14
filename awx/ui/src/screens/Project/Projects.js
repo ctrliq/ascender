@@ -44,7 +44,7 @@ function Projects() {
       <ScreenHeader streamType="project" breadcrumbConfig={breadcrumbConfig} />
       <Routes>
         <Route path="/projects/add" element={<ProjectAdd />} />
-        {/* /* so the nested <Project> route tree can match */}
+        {/* so the nested <Project> route tree can match */}
         <Route
           path="/projects/:id/*"
           element={<Project setBreadcrumb={buildBreadcrumbConfig} />}
