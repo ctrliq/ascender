@@ -216,7 +216,7 @@ describe('<TemplateSurvey />', () => {
 
   test('should successfully delete jt survey', async () => {
     const history = createMemoryHistory({
-      initialEntries: ['/templates/job_template/15/survey'],
+      initialEntries: ['/templates/job_template/7/survey'],
     });
 
     JobTemplatesAPI.readSurvey.mockResolvedValueOnce({
