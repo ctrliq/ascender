@@ -20,10 +20,14 @@ function Schedules({
   // location so the routes are base-agnostic and resolve whether the parent
   // screen is still on v5 or already on v6.
   const { pathname } = useLocation();
-  const baseUrl = `${pathname.substr(
-    0,
-    pathname.indexOf('schedules')
-  )}schedules`;
+  // Schedules is always mounted under a ".../schedules" path; if that segment
+  // is somehow absent, fall back to the full pathname so baseUrl stays an
+  // absolute path rather than collapsing to the relative "schedules".
+  const schedulesIndex = pathname.indexOf('schedules');
+  const baseUrl =
+    schedulesIndex === -1
+      ? pathname
+      : `${pathname.substring(0, schedulesIndex)}schedules`;
 
   // For some management jobs that delete data, we want to provide an additional
   // field on the scheduler for configuring the number of days to retain.
@@ -48,7 +52,7 @@ function Schedules({
           />
         }
       />
-      {/* /* so the nested <Schedule> route tree can match */}
+      {/* so the nested <Schedule> route tree can match */}
       <Route
         path={`${baseUrl}/:scheduleId/*`}
         element={
