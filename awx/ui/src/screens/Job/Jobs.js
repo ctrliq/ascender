@@ -1,5 +1,10 @@
 import React, { useState, useCallback } from 'react';
-import { Route, Switch, useParams, useRouteMatch } from 'react-router-dom';
+import {
+  Routes,
+  Route,
+  Navigate,
+  useParams,
+} from 'react-router-dom-v5-compat';
 
 import { useLingui } from '@lingui/react/macro';
 import { PageSection } from '@patternfly/react-core';
@@ -13,13 +18,23 @@ import { JOB_TYPE_URL_SEGMENTS } from '../../constants';
 
 function TypeRedirect({ view }) {
   const { id } = useParams();
-  const { path } = useRouteMatch();
-  return <JobTypeRedirect id={id} path={path} view={view} />;
+  return <JobTypeRedirect id={id} view={view} />;
+}
+
+// Legacy /jobs/system/:id URLs map to the canonical /jobs/management/:id;
+// preserve any trailing sub-path (the splat) on the redirect.
+function SystemRedirect() {
+  const { id, '*': rest } = useParams();
+  return (
+    <Navigate
+      to={`/jobs/management/${id}${rest ? `/${rest}` : ''}`}
+      replace
+    />
+  );
 }
 
 function Jobs() {
   const { t } = useLingui();
-  const match = useRouteMatch();
   const [breadcrumbConfig, setBreadcrumbConfig] = useState({
     '/jobs': t`Jobs`,
   });
@@ -44,27 +59,33 @@ function Jobs() {
   return (
     <>
       <ScreenHeader streamType="job" breadcrumbConfig={breadcrumbConfig} />
-      <Switch>
-        <Route exact path={match.path}>
-          <PageSection>
-            <PersistentFilters pageKey="jobs">
-              <JobList showTypeColumn />
-            </PersistentFilters>
-          </PageSection>
-        </Route>
-        <Route path={`${match.path}/:id/details`}>
-          <TypeRedirect view="details" />
-        </Route>
-        <Route path={`${match.path}/:id/output`}>
-          <TypeRedirect view="output" />
-        </Route>
-        <Route path={`${match.path}/:typeSegment/:id`}>
-          <Job setBreadcrumb={buildBreadcrumbConfig} />
-        </Route>
-        <Route path={`${match.path}/:id`}>
-          <TypeRedirect />
-        </Route>
-      </Switch>
+      <Routes>
+        <Route
+          path="/jobs"
+          element={
+            <PageSection>
+              <PersistentFilters pageKey="jobs">
+                <JobList showTypeColumn />
+              </PersistentFilters>
+            </PageSection>
+          }
+        />
+        <Route path="/jobs/system/:id/*" element={<SystemRedirect />} />
+        <Route
+          path="/jobs/:id/details"
+          element={<TypeRedirect view="details" />}
+        />
+        <Route
+          path="/jobs/:id/output"
+          element={<TypeRedirect view="output" />}
+        />
+        {/* /* so the nested <Job> route tree can match details/output */}
+        <Route
+          path="/jobs/:typeSegment/:id/*"
+          element={<Job setBreadcrumb={buildBreadcrumbConfig} />}
+        />
+        <Route path="/jobs/:id" element={<TypeRedirect />} />
+      </Routes>
     </>
   );
 }
