@@ -54,6 +54,9 @@ class WorkflowDAG(SimpleDAG):
         for p in parent_nodes:
             if p.do_not_run is True:
                 continue
+            # carried forward from a relaunch-from-failed: already finished (successful)
+            elif p.prior_run_succeeded:
+                continue
             elif p.unified_job_template is None:
                 continue
             # do_not_run is False, node might still run a job and thus blocks children
@@ -71,12 +74,17 @@ class WorkflowDAG(SimpleDAG):
         obj = node['node_object']
         parent_nodes = [p['node_object'] for p in self.get_parents(obj)]
         for p in parent_nodes:
+            status = None
             # node has a status
             if p.job and p.job.status in ["successful", "failed"]:
                 if p.job and p.job.status == "successful":
                     status = "success_nodes"
                 elif p.job and p.job.status == "failed":
                     status = "failure_nodes"
+            # carried forward from a relaunch-from-failed counts as a successful parent
+            elif p.prior_run_succeeded:
+                status = "success_nodes"
+            if status is not None:
                 # check that the nodes status matches either a pathway of the same status or is an always path.
                 if p not in [node['node_object'] for node in self.get_parents(obj, status)] and p not in [
                     node['node_object'] for node in self.get_parents(obj, "always_nodes")
@@ -95,6 +103,10 @@ class WorkflowDAG(SimpleDAG):
             node_ids_visited.add(obj.id)
             if obj.do_not_run is True:
                 continue
+            # carried forward from a relaunch-from-failed: do not run, but traverse
+            # its success/always paths as though the job had succeeded
+            elif obj.prior_run_succeeded:
+                nodes.extend(self.get_children(obj, 'success_nodes') + self.get_children(obj, 'always_nodes'))
             elif obj.job:
                 if obj.job.status in ['failed', 'error', 'canceled']:
                     nodes.extend(self.get_children(obj, 'failure_nodes') + self.get_children(obj, 'always_nodes'))
@@ -129,7 +141,7 @@ class WorkflowDAG(SimpleDAG):
     def is_workflow_done(self):
         for node in self.nodes:
             obj = node['node_object']
-            if obj.do_not_run is False and not obj.job and obj.unified_job_template:
+            if obj.do_not_run is False and not obj.prior_run_succeeded and not obj.job and obj.unified_job_template:
                 return False
             elif obj.job and obj.job.status not in ['successful', 'failed', 'canceled', 'error']:
                 return False
@@ -143,7 +155,7 @@ class WorkflowDAG(SimpleDAG):
 
         for node in self.nodes:
             obj = node['node_object']
-            if obj.do_not_run is False and obj.unified_job_template is None:
+            if obj.do_not_run is False and not obj.prior_run_succeeded and obj.unified_job_template is None:
                 failed_nodes.append(node)
             elif obj.job and obj.job.status in ['failed', 'canceled', 'error']:
                 failed_nodes.append(node)
@@ -187,7 +199,7 @@ class WorkflowDAG(SimpleDAG):
 
     def _are_all_nodes_dnr_decided(self, workflow_nodes):
         for n in workflow_nodes:
-            if n.do_not_run is False and not n.job and n.unified_job_template:
+            if n.do_not_run is False and not n.prior_run_succeeded and not n.job and n.unified_job_template:
                 return False
         return True
 
@@ -205,6 +217,10 @@ class WorkflowDAG(SimpleDAG):
         for p in parent_nodes:
             if p.do_not_run is True:
                 pass
+            # carried forward from a relaunch-from-failed counts as a successful parent
+            elif p.prior_run_succeeded:
+                if node in (self.get_children(p, 'success_nodes') + self.get_children(p, 'always_nodes')):
+                    return False
             elif p.job:
                 if p.job.status == 'successful':
                     if node in (self.get_children(p, 'success_nodes') + self.get_children(p, 'always_nodes')):
@@ -237,6 +253,10 @@ class WorkflowDAG(SimpleDAG):
         for node in self.sort_nodes_topological():
             obj = node['node_object']
             parent_nodes = [p['node_object'] for p in self.get_parents(obj)]
+            # A carried-forward node (prior_run_succeeded) is NOT exempt from DNR:
+            # if the branch that reached it is no longer taken in this run (e.g. a
+            # re-run parent now succeeds instead of failing), it and its subtree
+            # must still be marked do_not_run or the workflow never completes.
             if not obj.do_not_run and not obj.job and node not in root_nodes:
                 if obj.all_parents_must_converge:
                     if any(p.do_not_run for p in parent_nodes) or not self._all_parents_met_convergence_criteria(node):

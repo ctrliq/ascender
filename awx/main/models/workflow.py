@@ -269,6 +269,21 @@ class WorkflowJobNode(WorkflowNodeBase):
             "decidedly not be ran. A value of False means the node may not run."
         ),
     )
+    prior_run_succeeded = models.BooleanField(
+        default=False,
+        help_text=_(
+            "Set when a workflow is relaunched from a failed node: the node's job "
+            "succeeded in the prior run, so it is carried forward as already-successful. "
+            "It spawns no new job, but the scheduler treats it as a successful parent "
+            "so its success/always paths are still traversed."
+        ),
+    )
+    prior_run_elapsed = models.FloatField(
+        null=True,
+        default=None,
+        editable=False,
+        help_text=_("Elapsed time (seconds) of this node's job in the run it was carried forward from."),
+    )
     identifier = models.CharField(
         max_length=512,
         blank=True,  # blank denotes pre-migration job nodes
@@ -444,15 +459,74 @@ class WorkflowJobOptions(LaunchTimeConfigBase):
                     new_manager = getattr(new_node, relationship)
                     new_manager.add(new_child_node)
 
-    def copy_nodes_from_original(self, original=None, user=None):
+    @staticmethod
+    def _carried_forward_node_state(node):
+        """For relaunch-from-failed: decide whether an original-run node should be
+        carried forward (it succeeded, or was already carried in an earlier
+        relaunch) and, if so, return the (prior_run_elapsed, ancestor_artifacts)
+        to copy onto the new node. The artifacts matter because a carried node
+        spawns no job of its own, so without this its set_stats output would be
+        invisible to downstream re-run nodes (which read it from the parent's
+        ancestor_artifacts). Return None for nodes that should run again."""
+        if node.prior_run_succeeded:
+            # Already carried once; its ancestor_artifacts already holds the full
+            # upstream set captured the first time it was carried forward.
+            return node.prior_run_elapsed, dict(node.ancestor_artifacts or {})
+        if node.job_id and node.job.status == 'successful':
+            artifacts = dict(node.ancestor_artifacts or {})
+            artifacts.update(node.job.get_effective_artifacts(parents_set=set([node.workflow_job_id])))
+            return node.job.elapsed, artifacts
+        return None
+
+    def copy_nodes_from_original(self, original=None, user=None, mark_succeeded_as_prior=False):
         old_node_list = original.workflow_nodes.prefetch_related('always_nodes', 'success_nodes', 'failure_nodes').all()
         node_links = self._create_workflow_nodes(old_node_list, user=user)
         self._inherit_node_relationships(old_node_list, node_links)
+        if mark_succeeded_as_prior:
+            # Relaunch-from-failed (non-template path): carry forward nodes whose
+            # job already succeeded so the scheduler treats them as done-successful
+            # and only the failed node(s) and everything downstream run again.
+            for old_node in old_node_list:
+                state = WorkflowJob._carried_forward_node_state(old_node)
+                if state is None:
+                    continue
+                elapsed, artifacts = state
+                new_node = node_links[old_node.pk]
+                new_node.prior_run_succeeded = True
+                new_node.prior_run_elapsed = elapsed
+                new_node.ancestor_artifacts = artifacts
+                new_node.save(update_fields=['prior_run_succeeded', 'prior_run_elapsed', 'ancestor_artifacts'])
 
-    def create_relaunch_workflow_job(self):
+    def mark_prior_succeeded_nodes_from(self, original):
+        # Relaunch-from-failed (template path): the new nodes were rebuilt from the
+        # workflow job template, so map them back to the original run by identifier
+        # and carry forward the ones whose job succeeded.
+        carried = {}
+        # NB: do not select_related('job') here — that returns the base UnifiedJob
+        # instance, whose get_effective_artifacts() is a no-op; we need the concrete
+        # polymorphic Job (lazy .job access) so set_stats artifacts are captured.
+        for node in original.workflow_nodes.all():
+            if not node.identifier:
+                continue
+            state = WorkflowJob._carried_forward_node_state(node)
+            if state is not None:
+                carried[node.identifier] = state
+        if not carried:
+            return
+        for new_node in self.workflow_nodes.all():
+            if new_node.identifier in carried:
+                elapsed, artifacts = carried[new_node.identifier]
+                new_node.prior_run_succeeded = True
+                new_node.prior_run_elapsed = elapsed
+                new_node.ancestor_artifacts = artifacts
+                new_node.save(update_fields=['prior_run_succeeded', 'prior_run_elapsed', 'ancestor_artifacts'])
+
+    def create_relaunch_workflow_job(self, from_failed=False):
         new_workflow_job = self.copy_unified_job()
         if self.unified_job_template_id is None:
-            new_workflow_job.copy_nodes_from_original(original=self)
+            new_workflow_job.copy_nodes_from_original(original=self, mark_succeeded_as_prior=from_failed)
+        elif from_failed:
+            new_workflow_job.mark_prior_succeeded_nodes_from(original=self)
         return new_workflow_job
 
 

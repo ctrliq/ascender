@@ -14,10 +14,11 @@ class Job:
 
 
 class WorkflowNode(object):
-    def __init__(self, id=None, job=None, do_not_run=False, unified_job_template=None):
+    def __init__(self, id=None, job=None, do_not_run=False, unified_job_template=None, prior_run_succeeded=False):
         self.id = id if id is not None else uuid.uuid4()
         self.job = job
         self.do_not_run = do_not_run
+        self.prior_run_succeeded = prior_run_succeeded
         self.unified_job_template = unified_job_template
         self.all_parents_must_converge = False
 
