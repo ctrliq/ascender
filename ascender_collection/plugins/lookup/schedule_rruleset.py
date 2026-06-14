@@ -128,7 +128,6 @@ _raw:
 """
 import re
 
-from ansible.module_utils.six import raise_from
 from ansible.plugins.lookup import LookupBase
 from ansible.errors import AnsibleError
 from datetime import datetime
@@ -146,7 +145,7 @@ class LookupModule(LookupBase):
     # plugin constructor
     def __init__(self, *args, **kwargs):
         if LIBRARY_IMPORT_ERROR:
-            raise_from(AnsibleError('{0}'.format(LIBRARY_IMPORT_ERROR)), LIBRARY_IMPORT_ERROR)
+            raise AnsibleError('{0}'.format(LIBRARY_IMPORT_ERROR)) from LIBRARY_IMPORT_ERROR
         super().__init__(*args, **kwargs)
 
         self.frequencies = {
@@ -228,7 +227,7 @@ class LookupModule(LookupBase):
         try:
             start_date = LookupModule.parse_date_time(terms[0])
         except Exception as e:
-            raise_from(AnsibleError('The start date must be in the format YYYY-MM-DD [HH:MM:SS]'), e)
+            raise AnsibleError('The start date must be in the format YYYY-MM-DD [HH:MM:SS]') from e
 
         if not kwargs.get('rules', None):
             raise AnsibleError('You must include rules to be in the ruleset via the rules parameter')
@@ -288,9 +287,9 @@ class LookupModule(LookupBase):
                         try:
                             rrule_kwargs['until'] = LookupModule.parse_date_time(end_on)
                         except Exception as e:
-                            raise_from(
-                                AnsibleError('In rule {0} end_on must either be an integer or in the format YYYY-MM-DD [HH:MM:SS]'.format(rule_number)), e
-                            )
+                            raise AnsibleError(
+                                'In rule {0} end_on must either be an integer or in the format YYYY-MM-DD [HH:MM:SS]'.format(rule_number)
+                            ) from e
 
             if 'bysetpos' in rule:
                 rrule_kwargs['bysetpos'] = self.process_list('bysetpos', rule, self.set_positions, rule_number)
@@ -319,7 +318,7 @@ class LookupModule(LookupBase):
             try:
                 generated_rule = str(rrule.rrule(**rrule_kwargs))
             except Exception as e:
-                raise_from(AnsibleError('Failed to parse rrule for rule {0} {1}: {2}'.format(rule_number, str(rrule_kwargs), e)), e)
+                raise AnsibleError('Failed to parse rrule for rule {0} {1}: {2}'.format(rule_number, str(rrule_kwargs), e)) from e
 
             # AWX requires an interval. rrule will not add interval if it's set to 1
             if rule.get('interval', 1) == 1:
@@ -349,7 +348,7 @@ class LookupModule(LookupBase):
         try:
             rules = rrule.rrulestr(rruleset_str)
         except Exception as e:
-            raise_from(AnsibleError("Failed to parse generated rule set via rruleset {0}".format(e)), e)
+            raise AnsibleError("Failed to parse generated rule set via rruleset {0}".format(e)) from e
 
         # return self.get_rrule(frequency, kwargs)
         return rruleset_str

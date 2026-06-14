@@ -5,13 +5,11 @@ __metaclass__ = type
 from ansible.module_utils.basic import AnsibleModule, env_fallback
 from ansible.module_utils.urls import Request, SSLValidationError, ConnectionError
 from ansible.module_utils.parsing.convert_bool import boolean as strtobool
-from ansible.module_utils.six import PY2
-from ansible.module_utils.six import raise_from, string_types
-from ansible.module_utils.six.moves import StringIO
-from ansible.module_utils.six.moves.urllib.error import HTTPError
-from ansible.module_utils.six.moves.http_cookiejar import CookieJar
-from ansible.module_utils.six.moves.urllib.parse import urlparse, urlencode, quote
-from ansible.module_utils.six.moves.configparser import ConfigParser, NoOptionError
+from io import StringIO
+from urllib.error import HTTPError
+from http.cookiejar import CookieJar
+from urllib.parse import urlparse, urlencode, quote
+from configparser import ConfigParser, NoOptionError
 from socket import getaddrinfo, IPPROTO_TCP
 import time
 import re
@@ -112,7 +110,7 @@ class ControllerModule(AnsibleModule):
                     self.oauth_token = self.params.get('controller_oauthtoken')['token']
                 else:
                     self.fail_json(msg="The provided dict in controller_oauthtoken did not properly contain the token entry")
-            elif isinstance(token_param, string_types):
+            elif isinstance(token_param, str):
                 self.oauth_token = self.params.get('controller_oauthtoken')
             else:
                 error_msg = "The provided controller_oauthtoken type was not valid ({0}). Valid options are str or dict.".format(type(token_param).__name__)
@@ -247,10 +245,10 @@ class ControllerModule(AnsibleModule):
                             pass
 
                 except Exception as e:
-                    raise_from(ConfigFileException("An unknown exception occured trying to ini load config file: {0}".format(e)), e)
+                    raise ConfigFileException("An unknown exception occured trying to ini load config file: {0}".format(e)) from e
 
         except Exception as e:
-            raise_from(ConfigFileException("An unknown exception occured trying to load config file: {0}".format(e)), e)
+            raise ConfigFileException("An unknown exception occured trying to load config file: {0}".format(e)) from e
 
         # If we made it here, we have a dict which has values in it from our config, any final settings logic can be performed here
         for honorred_setting in self.short_params:
@@ -554,14 +552,8 @@ class ControllerAPIModule(ControllerModule):
             self.fail_json(msg="There was an unknown error when trying to connect to {2}: {0} {1}".format(type(e).__name__, e, url.geturl()))
 
         if not self.version_checked:
-            # In PY2 we get back an HTTPResponse object but PY2 is returning an addinfourl
-            # First try to get the headers in PY3 format and then drop down to PY2.
-            try:
-                controller_type = response.getheader('X-API-Product-Name', None)
-                controller_version = response.getheader('X-API-Product-Version', None)
-            except Exception:
-                controller_type = response.info().getheader('X-API-Product-Name', None)
-                controller_version = response.info().getheader('X-API-Product-Version', None)
+            controller_type = response.getheader('X-API-Product-Name', None)
+            controller_version = response.getheader('X-API-Product-Version', None)
 
             parsed_collection_version = Version(self._COLLECTION_VERSION).version
             if controller_version:
@@ -597,10 +589,7 @@ class ControllerAPIModule(ControllerModule):
             except (Exception) as e:
                 self.fail_json(msg="Failed to parse the response json: {0}".format(e))
 
-        if PY2:
-            status_code = response.getcode()
-        else:
-            status_code = response.status
+        status_code = response.status
         return {'status_code': status_code, 'json': response_json}
 
     def authenticate(self, **kwargs):

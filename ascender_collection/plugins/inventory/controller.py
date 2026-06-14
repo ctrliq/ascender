@@ -65,13 +65,11 @@ inventory_id: the_ID_of_targeted_automation_controller_inventory
 
 import os
 
-from ansible.module_utils import six
-from ansible.module_utils._text import to_text, to_native
+from ansible.module_utils.common.text.converters import to_text, to_native
 from ansible.errors import AnsibleParserError, AnsibleOptionsError
 from ansible.plugins.inventory import BaseInventoryPlugin
 from ansible.config.manager import ensure_type
 
-from ansible.module_utils.six import raise_from
 from ..module_utils.controller_api import ControllerAPIModule
 
 
@@ -130,9 +128,9 @@ class InventoryModule(BaseInventoryPlugin):
             try:
                 inventory_id = ensure_type(inventory_id, 'str')
             except ValueError as e:
-                raise_from(AnsibleOptionsError(
+                raise AnsibleOptionsError(
                     'Invalid type for configuration option inventory_id, ' 'not integer, and cannot convert to string: {err}'.format(err=to_native(e))
-                ), e)
+                ) from e
         inventory_id = inventory_id.replace('/', '')
         inventory_url = '/api/v2/inventories/{inv_id}/script/'.format(inv_id=inventory_id)
 
@@ -145,13 +143,13 @@ class InventoryModule(BaseInventoryPlugin):
 
         # Then, create all hosts and add the host vars.
         all_hosts = inventory['_meta']['hostvars']
-        for host_name, host_vars in six.iteritems(all_hosts):
+        for host_name, host_vars in all_hosts.items():
             self.inventory.add_host(host_name)
-            for var_name, var_value in six.iteritems(host_vars):
+            for var_name, var_value in host_vars.items():
                 self.inventory.set_variable(host_name, var_name, var_value)
 
         # Lastly, create to group-host and group-group relationships, and set group vars.
-        for group_name, group_content in six.iteritems(inventory):
+        for group_name, group_content in inventory.items():
             if group_name != 'all' and group_name != '_meta':
                 # First add hosts to groups
                 for host_name in group_content.get('hosts', []):
@@ -163,7 +161,7 @@ class InventoryModule(BaseInventoryPlugin):
                     self.inventory.add_child(group_name, child_group_name)
             # Set the group vars. Note we should set group var for 'all', but not '_meta'.
             if group_name != '_meta':
-                for var_name, var_value in six.iteritems(group_content.get('vars', {})):
+                for var_name, var_value in group_content.get('vars', {}).items():
                     self.inventory.set_variable(group_name, var_name, var_value)
 
         # Fetch extra variables if told to do so

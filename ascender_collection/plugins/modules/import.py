@@ -51,7 +51,7 @@ EXAMPLES = '''
 from ..module_utils.awxkit import ControllerAWXKitModule
 
 # These two lines are not needed if awxkit changes to do programatic notifications on issues
-from ansible.module_utils.six.moves import StringIO
+from io import StringIO
 import logging
 
 # In this module we don't use EXPORTABLE_RESOURCES, we just want to validate that our installed awxkit has import/export
