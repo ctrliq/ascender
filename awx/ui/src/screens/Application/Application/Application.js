@@ -136,8 +136,10 @@ function Application({ setBreadcrumb }) {
                   />
                 }
               />
+              {/* /* so token detail URLs (tokens/:tokenId/details) still
+                  resolve to the list, matching the old non-exact v5 route */}
               <Route
-                path="tokens"
+                path="tokens/*"
                 element={<ApplicationTokens application={application} />}
               />
             </>

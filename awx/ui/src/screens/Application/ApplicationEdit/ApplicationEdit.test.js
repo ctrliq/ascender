@@ -10,11 +10,11 @@ import ApplicationEdit from './ApplicationEdit';
 jest.mock('../../../api/models/Applications');
 jest.mock('../../../api/models/Organizations');
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  history: () => ({
-    location: '/applications/1/edit',
-  }),
+// The component reads useParams from react-router-dom-v5-compat (the route
+// tree is v6); mock it there, keeping useNavigate real so the cancel/submit
+// navigation assertions still exercise history.
+jest.mock('react-router-dom-v5-compat', () => ({
+  ...jest.requireActual('react-router-dom-v5-compat'),
   useParams: () => ({ id: 1 }),
 }));
 
