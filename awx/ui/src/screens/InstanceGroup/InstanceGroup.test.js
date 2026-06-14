@@ -1,63 +1,112 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { InstanceGroupsAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../testUtils/enzymeHelpers';
-
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import InstanceGroup from './InstanceGroup';
 
-jest.mock('../../api');
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useRouteMatch: () => ({
-    url: '/instance_groups',
-  }),
-  useParams: () => ({ id: 42 }),
-}));
+jest.mock('../../api/models/InstanceGroups');
 
-describe('<InstanceGroup/>', () => {
-  let wrapper;
-  test('should render details properly', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(<InstanceGroup setBreadcrumb={() => {}} />);
-    });
-    wrapper.update();
-    expect(wrapper.find('InstanceGroup').length).toBe(1);
-    expect(InstanceGroupsAPI.readDetail).toHaveBeenCalledWith(42);
+// Markers for the routed tab panels, so assertions are about which branch of
+// the nested v6 <Routes> tree resolves.
+jest.mock('./InstanceGroupDetails', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: () => ReactLib.createElement('div', null, 'InstanceGroupDetails'),
+  };
+});
+jest.mock('./InstanceGroupEdit', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: () => ReactLib.createElement('div', null, 'InstanceGroupEdit'),
+  };
+});
+jest.mock('./Instances/Instances', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: () => ReactLib.createElement('div', null, 'Instances subtree'),
+  };
+});
+jest.mock('components/JobList', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: () => ReactLib.createElement('div', null, 'JobList'),
+  };
+});
+
+const instanceGroup = {
+  id: 42,
+  name: 'Foo',
+  summary_fields: { user_capabilities: { edit: true, delete: true } },
+};
+
+// InstanceGroup uses paths relative to its parent route, so mount it under the
+// same /instance_groups/:id/* route that InstanceGroups.js gives it in the app.
+function renderAt(path) {
+  const history = createMemoryHistory({ initialEntries: [path] });
+  return renderWithContexts(
+    <Routes>
+      <Route
+        path="/instance_groups/:id/*"
+        element={<InstanceGroup setBreadcrumb={() => {}} />}
+      />
+    </Routes>,
+    { context: { router: { history } } }
+  );
+}
+
+describe('<InstanceGroup />', () => {
+  beforeEach(() => {
+    InstanceGroupsAPI.readDetail.mockResolvedValue({ data: instanceGroup });
   });
 
-  test('should render expected tabs', async () => {
-    const expectedTabs = [
-      'Back to Instance Groups',
-      'Details',
-      'Instances',
-      'Jobs',
-    ];
-    await act(async () => {
-      wrapper = mountWithContexts(<InstanceGroup setBreadcrumb={() => {}} />);
-    });
-    wrapper.find('RoutedTabs li').forEach((tab, index) => {
-      expect(tab.text()).toEqual(expectedTabs[index]);
-    });
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
-  test('should show content error when user attempts to navigate to erroneous route', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/instance_groups/42/foobar'],
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(<InstanceGroup setBreadcrumb={() => {}} />, {
-        context: {
-          router: {
-            history,
-          },
-        },
-      });
-    });
-    await waitForElement(wrapper, 'ContentError', (el) => el.length === 1);
+  test('fetches the instance group detail', async () => {
+    renderAt('/instance_groups/42/details');
+    expect(await screen.findByText('InstanceGroupDetails')).toBeInTheDocument();
+    // real route params are strings (the old enzyme test mocked a number)
+    expect(InstanceGroupsAPI.readDetail).toHaveBeenCalledWith('42');
+  });
+
+  test('renders the edit panel at /edit', async () => {
+    renderAt('/instance_groups/42/edit');
+    expect(await screen.findByText('InstanceGroupEdit')).toBeInTheDocument();
+  });
+
+  test('renders the instances subtree at /instances', async () => {
+    renderAt('/instance_groups/42/instances');
+    expect(await screen.findByText('Instances subtree')).toBeInTheDocument();
+  });
+
+  test('renders the jobs panel at /jobs', async () => {
+    renderAt('/instance_groups/42/jobs');
+    expect(await screen.findByText('JobList')).toBeInTheDocument();
+  });
+
+  test('redirects the index path to details', async () => {
+    const { history } = renderAt('/instance_groups/42');
+    expect(await screen.findByText('InstanceGroupDetails')).toBeInTheDocument();
+    await waitFor(() =>
+      expect(history.location.pathname).toBe('/instance_groups/42/details')
+    );
+  });
+
+  test('shows a not-found error when the detail request 404s', async () => {
+    const err = new Error('not found');
+    err.response = { status: 404 };
+    InstanceGroupsAPI.readDetail.mockRejectedValue(err);
+    renderAt('/instance_groups/42/details');
+    expect(
+      await screen.findByText('Instance group not found.')
+    ).toBeInTheDocument();
+    expect(screen.queryByText('InstanceGroupDetails')).not.toBeInTheDocument();
   });
 });
