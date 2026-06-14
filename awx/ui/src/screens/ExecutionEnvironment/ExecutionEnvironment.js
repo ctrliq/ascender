@@ -1,12 +1,12 @@
 import React, { useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import {
-  Link,
-  Redirect,
+  Routes,
   Route,
-  Switch,
+  Navigate,
   useLocation,
   useParams,
-} from 'react-router-dom';
+} from 'react-router-dom-v5-compat';
 
 import { useLingui } from '@lingui/react/macro';
 import { Card, PageSection } from '@patternfly/react-core';
@@ -104,32 +104,33 @@ function ExecutionEnvironment({ setBreadcrumb }) {
         {cardHeader}
         {isLoading && <ContentLoading />}
         {!isLoading && executionEnvironment && (
-          <Switch>
-            <Redirect
-              from="/execution_environments/:id"
-              to="/execution_environments/:id/details"
-              exact
+          <Routes>
+            <Route index element={<Navigate to="details" replace />} />
+            <Route
+              path="edit"
+              element={
+                <ExecutionEnvironmentEdit
+                  executionEnvironment={executionEnvironment}
+                />
+              }
             />
-            {executionEnvironment && (
-              <>
-                <Route path="/execution_environments/:id/edit">
-                  <ExecutionEnvironmentEdit
-                    executionEnvironment={executionEnvironment}
-                  />
-                </Route>
-                <Route path="/execution_environments/:id/details">
-                  <ExecutionEnvironmentDetails
-                    executionEnvironment={executionEnvironment}
-                  />
-                </Route>
-                <Route path="/execution_environments/:id/templates">
-                  <ExecutionEnvironmentTemplateList
-                    executionEnvironment={executionEnvironment}
-                  />
-                </Route>
-              </>
-            )}
-          </Switch>
+            <Route
+              path="details"
+              element={
+                <ExecutionEnvironmentDetails
+                  executionEnvironment={executionEnvironment}
+                />
+              }
+            />
+            <Route
+              path="templates"
+              element={
+                <ExecutionEnvironmentTemplateList
+                  executionEnvironment={executionEnvironment}
+                />
+              }
+            />
+          </Routes>
         )}
       </Card>
     </PageSection>
