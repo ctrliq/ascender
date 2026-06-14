@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
-import { Route, Switch } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import {
   Alert,
@@ -50,21 +50,29 @@ function Applications() {
         streamType="o_auth2_application,o_auth2_access_token"
         breadcrumbConfig={breadcrumbConfig}
       />
-      <Switch>
-        <Route path="/applications/add">
-          <ApplicationAdd
-            onSuccessfulAdd={(app) => setApplicationModalSource(app)}
-          />
-        </Route>
-        <Route path="/applications/:id">
-          <Application setBreadcrumb={buildBreadcrumbConfig} />
-        </Route>
-        <Route path="/applications">
-          <PersistentFilters pageKey="applications">
-            <ApplicationsList />
-          </PersistentFilters>
-        </Route>
-      </Switch>
+      <Routes>
+        <Route
+          path="/applications/add"
+          element={
+            <ApplicationAdd
+              onSuccessfulAdd={(app) => setApplicationModalSource(app)}
+            />
+          }
+        />
+        {/* /* so the nested <Application> route tree can match the rest */}
+        <Route
+          path="/applications/:id/*"
+          element={<Application setBreadcrumb={buildBreadcrumbConfig} />}
+        />
+        <Route
+          path="/applications"
+          element={
+            <PersistentFilters pageKey="applications">
+              <ApplicationsList />
+            </PersistentFilters>
+          }
+        />
+      </Routes>
       {applicationModalSource && (
         <Modal
           aria-label={t`Application information`}

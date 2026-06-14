@@ -1,20 +1,36 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
+import { createMemoryHistory } from 'history';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { ApplicationsAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import Application from './Application';
 
 jest.mock('../../../api/models/Applications');
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  history: () => ({
-    location: '/applications',
-  }),
-  useParams: () => ({ id: 1 }),
-}));
+
+// Markers for the routed tab panels, so assertions are about which branch of
+// the nested v6 <Routes> tree resolves.
+jest.mock('../ApplicationDetails', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: () => ReactLib.createElement('div', null, 'ApplicationDetails'),
+  };
+});
+jest.mock('../ApplicationEdit', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: () => ReactLib.createElement('div', null, 'ApplicationEdit'),
+  };
+});
+jest.mock('../ApplicationTokens', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: () => ReactLib.createElement('div', null, 'ApplicationTokens'),
+  };
+});
 
 const options = {
   data: {
@@ -46,41 +62,66 @@ const application = {
   url: '',
   organization: 10,
 };
+
+// Application uses paths relative to its parent route, so mount it under the
+// same /applications/:id/* route that Applications.js gives it in the app.
+function renderAt(path) {
+  const history = createMemoryHistory({ initialEntries: [path] });
+  return renderWithContexts(
+    <Routes>
+      <Route
+        path="/applications/:id/*"
+        element={<Application setBreadcrumb={() => {}} />}
+      />
+    </Routes>,
+    { context: { router: { history } } }
+  );
+}
+
 describe('<Application />', () => {
-  let wrapper;
-  test('mounts properly', async () => {
+  beforeEach(() => {
     ApplicationsAPI.readOptions.mockResolvedValue(options);
-    ApplicationsAPI.readDetail.mockResolvedValue(application);
-    await act(async () => {
-      wrapper = mountWithContexts(<Application setBreadcrumb={() => {}} />);
-    });
-    expect(wrapper.find('Application').length).toBe(1);
-    expect(ApplicationsAPI.readOptions).toHaveBeenCalled();
-    expect(ApplicationsAPI.readDetail).toHaveBeenCalledWith(1);
+    ApplicationsAPI.readDetail.mockResolvedValue({ data: application });
   });
-  test('should throw error', async () => {
-    ApplicationsAPI.readOptions.mockResolvedValue(options);
-    ApplicationsAPI.readDetail.mockRejectedValue(
-      new Error({
-        response: {
-          config: {
-            method: 'get',
-            url: '/api/v2/applications/1',
-          },
-          data: 'An error occurred',
-          status: 404,
-        },
-      })
-    );
-    await act(async () => {
-      wrapper = mountWithContexts(<Application setBreadcrumb={() => {}} />);
-    });
-    await waitForElement(wrapper, 'ContentError', (el) => el.length > 0);
-    expect(wrapper.find('ContentError').length).toBe(1);
-    expect(wrapper.find('ApplicationAdd').length).toBe(0);
-    expect(wrapper.find('ApplicationDetails').length).toBe(0);
-    expect(wrapper.find('Application').length).toBe(1);
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('fetches the application detail and options', async () => {
+    renderAt('/applications/1/details');
+    expect(await screen.findByText('ApplicationDetails')).toBeInTheDocument();
     expect(ApplicationsAPI.readOptions).toHaveBeenCalled();
-    expect(ApplicationsAPI.readDetail).toHaveBeenCalledWith(1);
+    // real route params are strings (the old enzyme test mocked a number)
+    expect(ApplicationsAPI.readDetail).toHaveBeenCalledWith('1');
+  });
+
+  test('renders the edit panel at /edit', async () => {
+    renderAt('/applications/1/edit');
+    expect(await screen.findByText('ApplicationEdit')).toBeInTheDocument();
+  });
+
+  test('renders the tokens panel at /tokens', async () => {
+    renderAt('/applications/1/tokens');
+    expect(await screen.findByText('ApplicationTokens')).toBeInTheDocument();
+  });
+
+  test('redirects the index path to details', async () => {
+    const { history } = renderAt('/applications/1');
+    expect(await screen.findByText('ApplicationDetails')).toBeInTheDocument();
+    await waitFor(() =>
+      expect(history.location.pathname).toBe('/applications/1/details')
+    );
+  });
+
+  test('shows a not-found error when the detail request 404s', async () => {
+    const err = new Error('not found');
+    err.response = { status: 404 };
+    ApplicationsAPI.readDetail.mockRejectedValue(err);
+    renderAt('/applications/1/details');
+    expect(
+      await screen.findByText('Application not found.')
+    ).toBeInTheDocument();
+    expect(screen.queryByText('ApplicationDetails')).not.toBeInTheDocument();
   });
 });
