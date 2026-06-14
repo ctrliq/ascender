@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route, useRouteMatch } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom-v5-compat';
 
 import Schedule from './Schedule';
 import ScheduleAdd from './ScheduleAdd';
@@ -15,7 +15,15 @@ function Schedules({
   resource,
   resourceDefaultCredentials,
 }) {
-  const match = useRouteMatch();
+  // This component is mounted at several different base paths (templates,
+  // projects, inventory sources, management jobs). Derive the base from the
+  // location so the routes are base-agnostic and resolve whether the parent
+  // screen is still on v5 or already on v6.
+  const { pathname } = useLocation();
+  const baseUrl = `${pathname.substr(
+    0,
+    pathname.indexOf('schedules')
+  )}schedules`;
 
   // For some management jobs that delete data, we want to provide an additional
   // field on the scheduler for configuring the number of days to retain.
@@ -26,37 +34,47 @@ function Schedules({
   ].includes(resource?.job_type);
 
   return (
-    <Switch>
-      <Route path={`${match.path}/add`}>
-        <ScheduleAdd
-          hasDaysToKeepField={hasDaysToKeepField}
-          apiModel={apiModel}
-          resource={resource}
-          launchConfig={launchConfig}
-          surveyConfig={surveyConfig}
-          resourceDefaultCredentials={resourceDefaultCredentials}
-        />
-      </Route>
-      <Route key="details" path={`${match.path}/:scheduleId`}>
-        <Schedule
-          hasDaysToKeepField={hasDaysToKeepField}
-          setBreadcrumb={setBreadcrumb}
-          resource={resource}
-          launchConfig={launchConfig}
-          surveyConfig={surveyConfig}
-          resourceDefaultCredentials={resourceDefaultCredentials}
-        />
-      </Route>
-      <Route key="list" path={`${match.path}`}>
-        <ScheduleList
-          resource={resource}
-          loadSchedules={loadSchedules}
-          launchConfig={launchConfig}
-          surveyConfig={surveyConfig}
-          loadScheduleOptions={loadScheduleOptions}
-        />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route
+        path={`${baseUrl}/add`}
+        element={
+          <ScheduleAdd
+            hasDaysToKeepField={hasDaysToKeepField}
+            apiModel={apiModel}
+            resource={resource}
+            launchConfig={launchConfig}
+            surveyConfig={surveyConfig}
+            resourceDefaultCredentials={resourceDefaultCredentials}
+          />
+        }
+      />
+      {/* /* so the nested <Schedule> route tree can match */}
+      <Route
+        path={`${baseUrl}/:scheduleId/*`}
+        element={
+          <Schedule
+            hasDaysToKeepField={hasDaysToKeepField}
+            setBreadcrumb={setBreadcrumb}
+            resource={resource}
+            launchConfig={launchConfig}
+            surveyConfig={surveyConfig}
+            resourceDefaultCredentials={resourceDefaultCredentials}
+          />
+        }
+      />
+      <Route
+        path={baseUrl}
+        element={
+          <ScheduleList
+            resource={resource}
+            loadSchedules={loadSchedules}
+            launchConfig={launchConfig}
+            surveyConfig={surveyConfig}
+            loadScheduleOptions={loadScheduleOptions}
+          />
+        }
+      />
+    </Routes>
   );
 }
 
