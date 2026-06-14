@@ -37,7 +37,7 @@ function NotificationTemplates() {
           path="/notification_templates/add"
           element={<NotificationTemplateAdd />}
         />
-        {/* /* so the nested <NotificationTemplate> route tree can match the rest */}
+        {/* so the nested <NotificationTemplate> route tree can match the rest */}
         <Route
           path="/notification_templates/:id/*"
           element={

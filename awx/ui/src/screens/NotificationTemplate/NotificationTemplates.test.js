@@ -4,7 +4,6 @@ import { createMemoryHistory } from 'history';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import NotificationTemplates from './NotificationTemplates';
 
-jest.mock('../../api/models/NotificationTemplates');
 
 // Replace the routed children with markers so the assertions are purely about
 // which branch of the v6 <Routes> tree resolves for a given URL.
