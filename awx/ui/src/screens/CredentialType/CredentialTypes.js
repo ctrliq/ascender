@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
-import { Route, Switch } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import PersistentFilters from 'components/PersistentFilters';
 import ScreenHeader from 'components/ScreenHeader';
 import CredentialTypeAdd from './CredentialTypeAdd';
@@ -36,19 +36,22 @@ function CredentialTypes() {
         streamType="credential_type"
         breadcrumbConfig={breadcrumbConfig}
       />
-      <Switch>
-        <Route path="/credential_types/add">
-          <CredentialTypeAdd />
-        </Route>
-        <Route path="/credential_types/:id">
-          <CredentialType setBreadcrumb={buildBreadcrumbConfig} />
-        </Route>
-        <Route path="/credential_types">
-          <PersistentFilters pageKey="credentialTypes">
-            <CredentialTypeList />
-          </PersistentFilters>
-        </Route>
-      </Switch>
+      <Routes>
+        <Route path="/credential_types/add" element={<CredentialTypeAdd />} />
+        {/* /* so the nested <CredentialType> route tree can match the rest */}
+        <Route
+          path="/credential_types/:id/*"
+          element={<CredentialType setBreadcrumb={buildBreadcrumbConfig} />}
+        />
+        <Route
+          path="/credential_types"
+          element={
+            <PersistentFilters pageKey="credentialTypes">
+              <CredentialTypeList />
+            </PersistentFilters>
+          }
+        />
+      </Routes>
     </>
   );
 }
