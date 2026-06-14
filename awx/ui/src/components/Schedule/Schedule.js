@@ -1,8 +1,14 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
-import { Link, useLocation, useParams } from 'react-router-dom';
-import { Routes, Route, Navigate } from 'react-router-dom-v5-compat';
+import { Link } from 'react-router-dom';
+import {
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+  useParams,
+} from 'react-router-dom-v5-compat';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { SchedulesAPI } from 'api';
 import useRequest from 'hooks/useRequest';
@@ -25,7 +31,7 @@ function Schedule({
 
   const { pathname } = useLocation();
 
-  const pathRoot = pathname.substr(0, pathname.indexOf('schedules'));
+  const pathRoot = pathname.substring(0, pathname.indexOf('schedules'));
 
   const {
     isLoading,
@@ -126,7 +132,7 @@ function Schedule({
         />
         {schedule && (
           <Route
-            path={`${pathRoot}schedules/:id/edit`}
+            path={`${pathRoot}schedules/:scheduleId/edit`}
             element={
               <ScheduleEdit
                 hasDaysToKeepField={hasDaysToKeepField}
