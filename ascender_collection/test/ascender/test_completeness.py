@@ -3,7 +3,6 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 from awx.main.tests.functional.conftest import _request
-from ansible.module_utils.six import string_types
 import yaml
 import os
 import re
@@ -191,7 +190,7 @@ def determine_state(module_id, endpoint, module, parameter, api_option, module_o
         # Check for deprecated in the node, if its deprecated and has no api option we are ok, otherwise we have a problem
         if module_option and module_option.get('description'):
             description = ''
-            if isinstance(module_option.get('description'), string_types):
+            if isinstance(module_option.get('description'), str):
                 description = module_option.get('description')
             else:
                 description = " ".join(module_option.get('description'))

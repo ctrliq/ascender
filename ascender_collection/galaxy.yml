@@ -32,6 +32,7 @@ tags:
 version: 0.0.1-devel
 build_ignore:
   - tools
+  - test
   - setup.cfg
   - galaxy.yml.j2
   - template_galaxy.yml

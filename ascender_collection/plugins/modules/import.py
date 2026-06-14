@@ -48,6 +48,11 @@ EXAMPLES = '''
     assets: "{{ lookup('file', 'org.json') | from_json() }}"
 '''
 
+RETURN = '''
+# This module returns only the standard module result keys (changed, failed, msg).
+'''
+
+
 from ..module_utils.awxkit import ControllerAWXKitModule
 
 # These two lines are not needed if awxkit changes to do programatic notifications on issues

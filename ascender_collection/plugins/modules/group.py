@@ -99,6 +99,15 @@ EXAMPLES = '''
     preserve_existing_children: True
 '''
 
+RETURN = '''
+id:
+    description: The numeric database ID of the group.
+    returned: on successful create or update
+    type: int
+    sample: 42
+'''
+
+
 from ..module_utils.controller_api import ControllerAPIModule
 import json
 

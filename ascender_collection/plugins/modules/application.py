@@ -93,6 +93,15 @@ EXAMPLES = '''
       - http://tower.com/api/v2/
 '''
 
+RETURN = '''
+id:
+    description: The numeric database ID of the application.
+    returned: on successful create or update
+    type: int
+    sample: 42
+'''
+
+
 from ..module_utils.controller_api import ControllerAPIModule
 
 

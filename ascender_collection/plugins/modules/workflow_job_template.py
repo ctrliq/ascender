@@ -577,6 +577,15 @@ EXAMPLES = '''
 
 '''
 
+RETURN = '''
+id:
+    description: The numeric database ID of the workflow job template.
+    returned: on successful create or update
+    type: int
+    sample: 42
+'''
+
+
 from ..module_utils.controller_api import ControllerAPIModule
 
 import json

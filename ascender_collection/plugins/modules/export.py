@@ -124,6 +124,14 @@ EXAMPLES = '''
 
 import logging
 from io import StringIO
+RETURN = '''
+assets:
+    description: The exported assets, in a structure suitable for the import module.
+    returned: when not writing the export to a file
+    type: dict
+'''
+
+
 from ..module_utils.awxkit import ControllerAWXKitModule
 
 try:

@@ -69,6 +69,18 @@ EXAMPLES = '''
         last_name: "surname"
 '''
 
+RETURN = '''
+old_values:
+    description: The previous values of the settings that were changed.
+    returned: success
+    type: dict
+new_values:
+    description: The new values of the settings that were changed.
+    returned: success
+    type: dict
+'''
+
+
 from ..module_utils.controller_api import ControllerAPIModule
 
 try:

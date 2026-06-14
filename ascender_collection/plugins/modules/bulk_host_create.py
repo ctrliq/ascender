@@ -63,6 +63,11 @@ EXAMPLES = '''
       - name: 127.0.0.1
 '''
 
+RETURN = '''
+# This module returns only the standard module result keys (changed, failed, msg).
+'''
+
+
 from ..module_utils.controller_api import ControllerAPIModule
 import json
 

@@ -35,6 +35,11 @@ EXAMPLES = '''
       - 2
 '''
 
+RETURN = '''
+# This module returns only the standard module result keys (changed, failed, msg).
+'''
+
+
 from ..module_utils.controller_api import ControllerAPIModule
 
 
