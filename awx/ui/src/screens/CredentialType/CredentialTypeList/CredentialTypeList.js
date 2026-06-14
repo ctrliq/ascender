@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { useLocation, useRouteMatch } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Plural, useLingui } from '@lingui/react/macro';
 import { Card, PageSection } from '@patternfly/react-core';
 
@@ -29,7 +29,6 @@ const QS_CONFIG = getQSConfig('credential-type', {
 function CredentialTypeList() {
   const { t } = useLingui();
   const location = useLocation();
-  const match = useRouteMatch();
 
   const {
     error: contentError,
@@ -150,7 +149,7 @@ function CredentialTypeList() {
                     ? [
                         <ToolbarAddButton
                           key="add"
-                          linkTo={`${match.url}/add`}
+                          linkTo="/credential_types/add"
                         />,
                       ]
                     : []),
@@ -182,7 +181,7 @@ function CredentialTypeList() {
                 key={credentialType.id}
                 value={credentialType.name}
                 credentialType={credentialType}
-                detailUrl={`${match.url}/${credentialType.id}/details`}
+                detailUrl={`/credential_types/${credentialType.id}/details`}
                 onSelect={() => handleSelect(credentialType)}
                 isSelected={selected.some(
                   (row) => row.id === credentialType.id
@@ -192,7 +191,7 @@ function CredentialTypeList() {
             )}
             emptyStateControls={
               canAdd && (
-                <ToolbarAddButton key="add" linkTo={`${match.url}/add`} />
+                <ToolbarAddButton key="add" linkTo="/credential_types/add" />
               )
             }
           />
