@@ -1,23 +1,57 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
-
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { screen } from '@testing-library/react';
+import { createMemoryHistory } from 'history';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import Organizations from './Organizations';
 
-jest.mock('../../api');
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-}));
+jest.mock('../../api/models/Organizations');
+
+// Replace the routed children with markers so the assertions are purely about
+// which branch of the v6 <Routes> tree resolves for a given URL.
+jest.mock('./OrganizationList/OrganizationList', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: () => ReactLib.createElement('div', null, 'OrganizationList'),
+  };
+});
+jest.mock('./OrganizationAdd/OrganizationAdd', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: () => ReactLib.createElement('div', null, 'OrganizationAdd'),
+  };
+});
+jest.mock('./Organization', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: () => ReactLib.createElement('div', null, 'Organization detail'),
+  };
+});
+
+function renderAt(path) {
+  const history = createMemoryHistory({ initialEntries: [path] });
+  return renderWithContexts(<Organizations />, {
+    context: { router: { history } },
+  });
+}
 
 describe('<Organizations />', () => {
-  test('initially renders successfully', async () => {
-    await act(async () => {
-      mountWithContexts(
-        <Organizations
-          match={{ path: '/organizations', url: '/organizations' }}
-          location={{ search: '', pathname: '/organizations' }}
-        />
-      );
-    });
+  test('renders the list at /organizations', async () => {
+    renderAt('/organizations');
+    expect(await screen.findByText('OrganizationList')).toBeInTheDocument();
+  });
+
+  test('renders the add form at /organizations/add', async () => {
+    renderAt('/organizations/add');
+    expect(await screen.findByText('OrganizationAdd')).toBeInTheDocument();
+    expect(screen.queryByText('OrganizationList')).not.toBeInTheDocument();
+  });
+
+  test('renders the detail subtree at /organizations/:id', async () => {
+    renderAt('/organizations/1/details');
+    expect(await screen.findByText('Organization detail')).toBeInTheDocument();
+    expect(screen.queryByText('OrganizationList')).not.toBeInTheDocument();
   });
 });

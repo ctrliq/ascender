@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { useLocation, useRouteMatch } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Plural, useLingui } from '@lingui/react/macro';
 import { Card, PageSection } from '@patternfly/react-core';
 
@@ -28,9 +28,8 @@ const QS_CONFIG = getQSConfig('organization', {
 
 function OrganizationsList() {
   const location = useLocation();
-  const match = useRouteMatch();
 
-  const addUrl = `${match.url}/add`;
+  const addUrl = '/organizations/add';
 
   const {
     result: {
@@ -179,7 +178,7 @@ function OrganizationsList() {
                 key={o.id}
                 organization={o}
                 rowIndex={index}
-                detailUrl={`${match.url}/${o.id}`}
+                detailUrl={`/organizations/${o.id}`}
                 isSelected={selected.some((row) => row.id === o.id)}
                 onSelect={() => handleSelect(o)}
               />
