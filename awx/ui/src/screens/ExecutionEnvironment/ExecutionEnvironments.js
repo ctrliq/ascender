@@ -40,7 +40,7 @@ function ExecutionEnvironments() {
           path="/execution_environments/add"
           element={<ExecutionEnvironmentAdd />}
         />
-        {/* /* so the nested <ExecutionEnvironment> route tree can match the rest */}
+        {/* so the nested <ExecutionEnvironment> route tree can match the rest */}
         <Route
           path="/execution_environments/:id/*"
           element={
