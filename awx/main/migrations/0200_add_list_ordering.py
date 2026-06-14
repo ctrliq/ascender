@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('main', '0198_oauth2accesstoken_token_checksum_and_more'),
+        ('main', '0199_workflowjobnode_prior_run_elapsed_and_more'),
     ]
 
     operations = [
