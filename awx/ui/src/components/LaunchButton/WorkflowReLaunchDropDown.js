@@ -11,12 +11,13 @@ import {
 } from '@patternfly/react-core';
 import { RocketIcon } from '@patternfly/react-icons';
 
-function ReLaunchDropDown({
+function WorkflowReLaunchDropDown({
   isPrimary = false,
   handleRelaunch,
   isLaunching,
-  id = 'relaunch-job',
+  id = 'relaunch-workflow',
   ouiaId,
+  status,
 }) {
   const { t } = useLingui();
   const [isOpen, setIsOpen] = useState(false);
@@ -25,41 +26,48 @@ function ReLaunchDropDown({
     setIsOpen((prev) => !prev);
   };
 
+  // The "from failed" option re-runs every node that did not succeed and carries
+  // the successful ones forward; word it to match how the workflow ended.
+  const isCanceled = status === 'canceled';
+  const failedNodeLabel = isCanceled ? t`Canceled node` : t`Failed node`;
+  const failedNodeAriaLabel = isCanceled
+    ? t`Relaunch from canceled node`
+    : t`Relaunch from failed node`;
+
   const dropdownItems = [
     <DropdownItem
-      ouiaId={`${ouiaId}-on`}
-      aria-label={t`Relaunch on`}
-      key="relaunch_on"
+      ouiaId={`${ouiaId}-relaunch-from`}
+      aria-label={t`Relaunch from:`}
+      key="relaunch_from"
       component="div"
       isPlainText
     >
-      {t`Relaunch on`}
+      {t`Relaunch from:`}
     </DropdownItem>,
     <DropdownSeparator key="separator" />,
     <DropdownItem
-      ouiaId={`${ouiaId}-all`}
-      key="relaunch_all"
-      aria-label={t`Relaunch all hosts`}
+      ouiaId={`${ouiaId}-first`}
+      key="relaunch_first"
+      aria-label={t`Relaunch from first node`}
       component="button"
       onClick={() => {
-        handleRelaunch({ hosts: 'all' });
+        handleRelaunch({});
       }}
       isDisabled={isLaunching}
     >
-      {t`All`}
+      {t`First node`}
     </DropdownItem>,
-
     <DropdownItem
       ouiaId={`${ouiaId}-failed`}
       key="relaunch_failed"
-      aria-label={t`Relaunch failed hosts`}
+      aria-label={failedNodeAriaLabel}
       component="button"
       onClick={() => {
-        handleRelaunch({ hosts: 'failed' });
+        handleRelaunch({ nodes: 'failed' });
       }}
       isDisabled={isLaunching}
     >
-      {t`Failed hosts`}
+      {failedNodeLabel}
     </DropdownItem>,
   ];
 
@@ -71,18 +79,18 @@ function ReLaunchDropDown({
         direction={DropdownDirection.up}
         isOpen={isOpen}
         dropdownItems={dropdownItems}
-        toggle={
+        toggle={(
           <DropdownToggle
             toggleIndicator={null}
             onToggle={onToggle}
-            aria-label={t`relaunch jobs`}
+            aria-label={t`relaunch workflow`}
             id={id}
             isPrimary
-            ouiaId="relaunch-job-toggle"
+            ouiaId="relaunch-workflow-toggle"
           >
             {t`Relaunch`}
           </DropdownToggle>
-        }
+        )}
       />
     );
   }
@@ -98,19 +106,19 @@ function ReLaunchDropDown({
       menuAppendTo={() => document.body}
       isOpen={isOpen}
       dropdownItems={dropdownItems}
-      toggle={
+      toggle={(
         <DropdownToggle
           toggleIndicator={null}
           onToggle={onToggle}
-          aria-label={t`relaunch jobs`}
+          aria-label={t`relaunch workflow`}
           id={id}
-          ouiaId="relaunch-job-toggle"
+          ouiaId="relaunch-workflow-toggle"
         >
           <RocketIcon />
         </DropdownToggle>
-      }
+      )}
     />
   );
 }
 
-export default ReLaunchDropDown;
+export default WorkflowReLaunchDropDown;

@@ -205,7 +205,7 @@ function LaunchButton({ resource, children }) {
         } else if (resource.type === 'project_update') {
           relaunch = ProjectsAPI.launchUpdate(resource.project);
         } else if (resource.type === 'workflow_job') {
-          relaunch = WorkflowJobsAPI.relaunch(resource.id);
+          relaunch = WorkflowJobsAPI.relaunch(resource.id, params || {});
         } else if (resource.type === 'ad_hoc_command') {
           relaunch = AdHocCommandsAPI.relaunch(resource.id);
         } else if (resource.type === 'job') {

@@ -26,6 +26,8 @@ const Badge = styled(PFBadge)`
   display: flex;
   justify-content: center;
   margin-left: 10px;
+  /* enlarge the badge value from PatternFly's small default */
+  font-size: 14px;
   ${(props) =>
     props.color
       ? `
@@ -36,6 +38,7 @@ const Badge = styled(PFBadge)`
 `;
 
 const ElapsedBadge = styled(Badge)`
+  margin-right: 20px;
   min-width: 70px;
   font-variant-numeric: tabular-nums;
 `;
@@ -45,6 +48,20 @@ const Wrapper = styled.div`
   display: flex;
   flex-flow: row wrap;
   font-size: 14px;
+
+  /* compact action icons + hover background, matching the workflow toolbar */
+  button {
+    margin: 0px 6px;
+    padding: 6px 10px;
+  }
+  button:hover {
+    background-color: var(--pf-global--primary-color--100);
+    color: #fff;
+  }
+  /* whiten the icon; the dropdown toggle colors its icon separately */
+  button:hover svg {
+    fill: #fff;
+  }
 `;
 const OUTPUT_NO_COUNT_JOB_TYPES = [
   'ad_hoc_command',
