@@ -17,12 +17,12 @@ COLLECTION_VERSION ?= $(shell $(PYTHON) tools/scripts/scm_version.py | cut -d . 
 # args for the ansible-test sanity command
 COLLECTION_SANITY_ARGS ?= --docker
 # collection unit testing directories
-COLLECTION_TEST_DIRS ?= awx_collection/test/awx
+COLLECTION_TEST_DIRS ?= ascender_collection/test/ascender
 # collection integration test directories (defaults to all)
 COLLECTION_TEST_TARGET ?=
 # args for collection install
-COLLECTION_PACKAGE ?= awx
-COLLECTION_NAMESPACE ?= awx
+COLLECTION_PACKAGE ?= ascender
+COLLECTION_NAMESPACE ?= ctrliq
 COLLECTION_INSTALL = ~/.ansible/collections/ansible_collections/$(COLLECTION_NAMESPACE)/$(COLLECTION_PACKAGE)
 COLLECTION_TEMPLATE_VERSION ?= false
 
@@ -284,7 +284,7 @@ reports:
 
 black: reports
 	@command -v black >/dev/null 2>&1 || { echo "could not find black on your PATH, you may need to \`pip install black\`, or set AWX_IGNORE_BLACK=1" && exit 1; }
-	@(set -o pipefail && $@ $(BLACK_ARGS) awx awxkit awx_collection | tee reports/$@.report)
+	@(set -o pipefail && $@ $(BLACK_ARGS) awx awxkit ascender_collection | tee reports/$@.report)
 
 ../../.git/hooks/pre-commit:
 	@echo "if [ -x pre-commit.sh ]; then" > .git/hooks/pre-commit
@@ -373,24 +373,24 @@ test_collection_all: test_collection
 symlink_collection:
 	rm -rf $(COLLECTION_INSTALL)
 	mkdir -p ~/.ansible/collections/ansible_collections/$(COLLECTION_NAMESPACE)  # in case it does not exist
-	ln -s $(shell pwd)/awx_collection $(COLLECTION_INSTALL)
+	ln -s $(shell pwd)/ascender_collection $(COLLECTION_INSTALL)
 
-awx_collection_build: $(shell find awx_collection -type f)
-	ansible-playbook -i localhost, awx_collection/tools/template_galaxy.yml \
+ascender_collection_build: $(shell find ascender_collection -type f)
+	ansible-playbook -i localhost, ascender_collection/tools/template_galaxy.yml \
 	  -e collection_package=$(COLLECTION_PACKAGE) \
 	  -e collection_namespace=$(COLLECTION_NAMESPACE) \
 	  -e collection_version=$(COLLECTION_VERSION) \
 	  -e '{"awx_template_version": $(COLLECTION_TEMPLATE_VERSION)}'
-	ansible-galaxy collection build awx_collection_build --force --output-path=awx_collection_build
+	ansible-galaxy collection build ascender_collection_build --force --output-path=ascender_collection_build
 
-build_collection: awx_collection_build
+build_collection: ascender_collection_build
 
 install_collection: build_collection
 	rm -rf $(COLLECTION_INSTALL)
-	ansible-galaxy collection install awx_collection_build/$(COLLECTION_NAMESPACE)-$(COLLECTION_PACKAGE)-$(COLLECTION_VERSION).tar.gz
+	ansible-galaxy collection install ascender_collection_build/$(COLLECTION_NAMESPACE)-$(COLLECTION_PACKAGE)-$(COLLECTION_VERSION).tar.gz
 
 test_collection_sanity:
-	rm -rf awx_collection_build/
+	rm -rf ascender_collection_build/
 	rm -rf $(COLLECTION_INSTALL)
 	if ! [ -x "$(shell command -v ansible-test)" ]; then pip install ansible-core; fi
 	ansible --version

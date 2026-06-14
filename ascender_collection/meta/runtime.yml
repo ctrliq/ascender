@@ -1,0 +1,264 @@
+---
+requires_ansible: '>=2.9.10'
+action_groups:
+  controller:
+    - ad_hoc_command
+    - ad_hoc_command_cancel
+    - ad_hoc_command_wait
+    - application
+    - bulk_job_launch
+    - bulk_host_create
+    - bulk_host_delete
+    - controller_meta
+    - credential_input_source
+    - credential
+    - credential_type
+    - execution_environment
+    - export
+    - group
+    - host
+    - import
+    - instance
+    - instance_group
+    - inventory
+    - inventory_source
+    - inventory_source_update
+    - job_cancel
+    - job_launch
+    - job_list
+    - job_template
+    - job_wait
+    - label
+    - license
+    - notification_template
+    - organization
+    - project
+    - project_update
+    - role
+    - schedule
+    - settings
+    - subscriptions
+    - team
+    - token
+    - user
+    - workflow_approval
+    - workflow_job_template_node
+    - workflow_job_template
+    - workflow_launch
+    - workflow_node_wait
+plugin_routing:
+  inventory:
+    tower:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* plugins have been deprecated, use ctrliq.ascender.controller instead.
+      redirect: ctrliq.ascender.controller
+  lookup:
+    tower_api:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* plugins have been deprecated, use ctrliq.ascender.controller_api instead.
+      redirect: ctrliq.ascender.controller_api
+    tower_schedule_rrule:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* plugins have been deprecated, use ctrliq.ascender.schedule_rrule instead.
+      redirect: ctrliq.ascender.schedule_rrule
+  modules:
+    tower_ad_hoc_command_cancel:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.ad_hoc_command_cancel instead.
+      redirect: ctrliq.ascender.ad_hoc_command_cancel
+    tower_ad_hoc_command_wait:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.ad_hoc_command_wait instead.
+      redirect: ctrliq.ascender.ad_hoc_command_wait
+    tower_ad_hoc_command:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.ad_hoc_command instead.
+      redirect: ctrliq.ascender.ad_hoc_command
+    tower_application:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.application instead.
+      redirect: ctrliq.ascender.application
+    tower_meta:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.controller_meta instead.
+      redirect: ctrliq.ascender.controller_meta
+    tower_credential_input_source:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.credential_input_source instead.
+      redirect: ctrliq.ascender.credential_input_source
+    tower_credential_type:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.credential_type instead.
+      redirect: ctrliq.ascender.credential_type
+    tower_credential:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.credential instead.
+      redirect: ctrliq.ascender.credential
+    tower_execution_environment:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.execution_environment instead.
+      redirect: ctrliq.ascender.execution_environment
+    tower_export:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.export instead.
+      redirect: ctrliq.ascender.export
+    tower_group:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.group instead.
+      redirect: ctrliq.ascender.group
+    tower_host:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.host instead.
+      redirect: ctrliq.ascender.host
+    tower_import:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.import instead.
+      redirect: ctrliq.ascender.import
+    tower_instance_group:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.instance_group instead.
+      redirect: ctrliq.ascender.instance_group
+    tower_inventory_source_update:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.inventory_source_update instead.
+      redirect: ctrliq.ascender.inventory_source_update
+    tower_inventory_source:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.inventory_source instead.
+      redirect: ctrliq.ascender.inventory_source
+    tower_inventory:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.inventory instead.
+      redirect: ctrliq.ascender.inventory
+    tower_job_cancel:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.job_cancel instead.
+      redirect: ctrliq.ascender.job_cancel
+    tower_job_launch:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.job_launch instead.
+      redirect: ctrliq.ascender.job_launch
+    tower_job_list:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.job_list instead.
+      redirect: ctrliq.ascender.job_list
+    tower_job_template:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.job_template instead.
+      redirect: ctrliq.ascender.job_template
+    tower_job_wait:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.job_wait instead.
+      redirect: ctrliq.ascender.job_wait
+    tower_label:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.label instead.
+      redirect: ctrliq.ascender.label
+    tower_license:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.license instead.
+      redirect: ctrliq.ascender.license
+    tower_notification_template:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.notification_template instead.
+      redirect: ctrliq.ascender.notification_template
+    tower_notification:
+      redirect: ctrliq.ascender.notification_template
+    tower_organization:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.organization instead.
+      redirect: ctrliq.ascender.organization
+    tower_project_update:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.project_update instead.
+      redirect: ctrliq.ascender.project_update
+    tower_project:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.project instead.
+      redirect: ctrliq.ascender.project
+    tower_role:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.role instead.
+      redirect: ctrliq.ascender.role
+    tower_schedule:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.schedule instead.
+      redirect: ctrliq.ascender.schedule
+    tower_settings:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.settings instead.
+      redirect: ctrliq.ascender.settings
+    tower_team:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.team instead.
+      redirect: ctrliq.ascender.team
+    tower_token:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.token instead.
+      redirect: ctrliq.ascender.token
+    tower_user:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.user instead.
+      redirect: ctrliq.ascender.user
+    tower_workflow_approval:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.workflow_approval instead.
+      redirect: ctrliq.ascender.workflow_approval
+    tower_workflow_job_template_node:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.workflow_job_template_node instead.
+      redirect: ctrliq.ascender.workflow_job_template_node
+    tower_workflow_job_template:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.workflow_job_template instead.
+      redirect: ctrliq.ascender.workflow_job_template
+    tower_workflow_launch:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.workflow_launch instead.
+      redirect: ctrliq.ascender.workflow_launch
+    tower_workflow_node_wait:
+      deprecation:
+        removal_date: '2022-01-23'
+        warning_text: The tower_* modules have been deprecated, use ctrliq.ascender.workflow_node_wait instead.
+      redirect: ctrliq.ascender.workflow_node_wait
