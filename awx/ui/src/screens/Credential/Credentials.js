@@ -48,7 +48,7 @@ function Credentials() {
             <Config>{({ me }) => <CredentialAdd me={me || {}} />}</Config>
           }
         />
-        {/* /* so the nested <Credential> route tree can match the rest */}
+        {/* so the nested <Credential> route tree can match the rest */}
         <Route
           path="/credentials/:id/*"
           element={<Credential setBreadcrumb={buildBreadcrumbConfig} />}
