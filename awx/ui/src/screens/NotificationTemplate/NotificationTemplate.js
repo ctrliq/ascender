@@ -2,15 +2,14 @@ import React, { useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Card, PageSection } from '@patternfly/react-core';
 import { CaretLeftIcon } from '@patternfly/react-icons';
+import { Link } from 'react-router-dom';
 import {
-  Link,
-  Switch,
+  Routes,
   Route,
-  Redirect,
+  Navigate,
   useParams,
-  useRouteMatch,
   useLocation,
-} from 'react-router-dom';
+} from 'react-router-dom-v5-compat';
 import useRequest from 'hooks/useRequest';
 import RoutedTabs from 'components/RoutedTabs';
 import ContentError from 'components/ContentError';
@@ -22,7 +21,6 @@ import NotificationTemplateEdit from './NotificationTemplateEdit';
 function NotificationTemplate({ setBreadcrumb }) {
   const { t } = useLingui();
   const { id: templateId } = useParams();
-  const match = useRouteMatch();
   const location = useLocation();
   const {
     result: { template, defaultMessages },
@@ -82,7 +80,7 @@ function NotificationTemplate({ setBreadcrumb }) {
     },
     {
       name: t`Details`,
-      link: `${match.url}/details`,
+      link: `/notification_templates/${templateId}/details`,
       id: 0,
     },
   ];
@@ -90,30 +88,30 @@ function NotificationTemplate({ setBreadcrumb }) {
     <PageSection>
       <Card>
         {showCardHeader && <RoutedTabs tabsArray={tabs} />}
-        <Switch>
-          <Redirect
-            from="/notification_templates/:id"
-            to="/notification_templates/:id/details"
-            exact
-          />
-          {isLoading && <ContentLoading />}
-          {template && (
-            <>
-              <Route path="/notification_templates/:id/edit">
+        {isLoading && <ContentLoading />}
+        {template && (
+          <Routes>
+            <Route index element={<Navigate to="details" replace />} />
+            <Route
+              path="edit"
+              element={
                 <NotificationTemplateEdit
                   template={template}
                   defaultMessages={defaultMessages}
                 />
-              </Route>
-              <Route path="/notification_templates/:id/details">
+              }
+            />
+            <Route
+              path="details"
+              element={
                 <NotificationTemplateDetail
                   template={template}
                   defaultMessages={defaultMessages}
                 />
-              </Route>
-            </>
-          )}
-        </Switch>
+              }
+            />
+          </Routes>
+        )}
       </Card>
     </PageSection>
   );
