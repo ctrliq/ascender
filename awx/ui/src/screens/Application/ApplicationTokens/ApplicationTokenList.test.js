@@ -1,5 +1,7 @@
 import React from 'react';
 import { act } from 'react-dom/test-utils';
+import { createMemoryHistory } from 'history';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 
 import { ApplicationsAPI, TokensAPI } from 'api';
 import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
@@ -99,6 +101,31 @@ describe('<ApplicationTokenList/>', () => {
     });
     wrapper.update();
     expect(wrapper.find('ApplicationTokenList')).toHaveLength(1);
+  });
+
+  // Regression: the application id must come from the v6 route params. When the
+  // route tree moved to v6 <Routes>, reading useParams from plain react-router-dom
+  // returned {} and tokens were fetched for /applications/undefined/tokens.
+  test('fetches tokens for the application id from the v6 route params', async () => {
+    ApplicationsAPI.readTokens.mockResolvedValue(tokens);
+    const history = createMemoryHistory({
+      initialEntries: ['/applications/5/tokens'],
+    });
+    await act(async () => {
+      wrapper = mountWithContexts(
+        <Routes>
+          <Route
+            path="/applications/:id/tokens/*"
+            element={<ApplicationTokenList />}
+          />
+        </Routes>,
+        { context: { router: { history } } }
+      );
+    });
+    expect(ApplicationsAPI.readTokens).toHaveBeenCalledWith(
+      '5',
+      expect.any(Object)
+    );
   });
 
   test('should have data fetched and render 2 rows', async () => {

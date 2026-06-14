@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import {
+  Routes,
   Route,
-  Switch,
-  Redirect,
+  Navigate,
   useParams,
   useLocation,
-  Link,
-} from 'react-router-dom';
+} from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 
 import { CaretLeftIcon } from '@patternfly/react-icons';
@@ -109,34 +109,42 @@ function Application({ setBreadcrumb }) {
     <PageSection>
       <Card>
         {cardHeader}
-        <Switch>
-          <Redirect
-            from="/applications/:id"
-            to="/applications/:id/details"
-            exact
+        <Routes>
+          <Route
+            index
+            element={<Navigate to="details" replace />}
           />
           {application && (
             <>
-              <Route path="/applications/:id/edit">
-                <ApplicationEdit
-                  authorizationOptions={authorizationOptions}
-                  clientTypeOptions={clientTypeOptions}
-                  application={application}
-                />
-              </Route>
-              <Route path="/applications/:id/details">
-                <ApplicationDetails
-                  application={application}
-                  authorizationOptions={authorizationOptions}
-                  clientTypeOptions={clientTypeOptions}
-                />
-              </Route>
-              <Route path="/applications/:id/tokens">
-                <ApplicationTokens application={application} />
-              </Route>
+              <Route
+                path="edit"
+                element={
+                  <ApplicationEdit
+                    authorizationOptions={authorizationOptions}
+                    clientTypeOptions={clientTypeOptions}
+                    application={application}
+                  />
+                }
+              />
+              <Route
+                path="details"
+                element={
+                  <ApplicationDetails
+                    application={application}
+                    authorizationOptions={authorizationOptions}
+                    clientTypeOptions={clientTypeOptions}
+                  />
+                }
+              />
+              {/* /* so token detail URLs (tokens/:tokenId/details) still
+                  resolve to the list, matching the old non-exact v5 route */}
+              <Route
+                path="tokens/*"
+                element={<ApplicationTokens application={application} />}
+              />
             </>
           )}
-        </Switch>
+        </Routes>
       </Card>
     </PageSection>
   );
