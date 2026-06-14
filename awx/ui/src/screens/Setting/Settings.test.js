@@ -49,7 +49,7 @@ describe('<Settings />', () => {
       });
     });
     await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('Redirect').length).toBe(1);
+    expect(history.location.pathname).toBe('/');
     expect(wrapper.find('SettingList').length).toBe(0);
   });
 
