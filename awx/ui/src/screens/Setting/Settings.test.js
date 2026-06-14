@@ -29,7 +29,7 @@ describe('<Settings />', () => {
     jest.clearAllMocks();
   });
 
-  test('should render Redirect for users without system admin or auditor permissions', async () => {
+  test('should redirect users without system admin or auditor permissions', async () => {
     const history = createMemoryHistory({
       initialEntries: ['/settings'],
     });
