@@ -1,12 +1,12 @@
 import React, { useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import {
-  Link,
-  Redirect,
+  Routes,
   Route,
-  Switch,
+  Navigate,
   useLocation,
   useParams,
-} from 'react-router-dom';
+} from 'react-router-dom-v5-compat';
 
 import { useLingui } from '@lingui/react/macro';
 import { Card, PageSection } from '@patternfly/react-core';
@@ -97,23 +97,19 @@ function CredentialType({ setBreadcrumb }) {
         {cardHeader}
         {isLoading && <ContentLoading />}
         {!isLoading && credentialType && (
-          <Switch>
-            <Redirect
-              from="/credential_types/:id"
-              to="/credential_types/:id/details"
-              exact
+          <Routes>
+            <Route index element={<Navigate to="details" replace />} />
+            <Route
+              path="edit"
+              element={<CredentialTypeEdit credentialType={credentialType} />}
             />
-            {credentialType && (
-              <>
-                <Route path="/credential_types/:id/edit">
-                  <CredentialTypeEdit credentialType={credentialType} />
-                </Route>
-                <Route path="/credential_types/:id/details">
-                  <CredentialTypeDetails credentialType={credentialType} />
-                </Route>
-              </>
-            )}
-          </Switch>
+            <Route
+              path="details"
+              element={
+                <CredentialTypeDetails credentialType={credentialType} />
+              }
+            />
+          </Routes>
         )}
       </Card>
     </PageSection>

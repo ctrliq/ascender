@@ -1,58 +1,96 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { CredentialTypesAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../testUtils/enzymeHelpers';
-
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import CredentialType from './CredentialType';
 
-jest.mock('../../api');
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useRouteMatch: () => ({
-    url: '/credential_types',
-  }),
-  useParams: () => ({ id: 42 }),
-}));
+jest.mock('../../api/models/CredentialTypes');
 
-describe('<CredentialType/>', () => {
-  let wrapper;
-  test('should render details properly', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(<CredentialType setBreadcrumb={() => {}} />);
-    });
-    wrapper.update();
-    expect(wrapper.find('CredentialType').length).toBe(1);
-    expect(CredentialTypesAPI.readDetail).toHaveBeenCalledWith(42);
+// Markers for the routed tab panels, so assertions are about which branch of
+// the nested v6 <Routes> tree resolves.
+jest.mock('./CredentialTypeDetails', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: () => ReactLib.createElement('div', null, 'CredentialTypeDetails'),
+  };
+});
+jest.mock('./CredentialTypeEdit', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: () => ReactLib.createElement('div', null, 'CredentialTypeEdit'),
+  };
+});
+
+const credentialType = {
+  id: 42,
+  name: 'Foo',
+  summary_fields: { user_capabilities: { edit: true, delete: true } },
+};
+
+// CredentialType uses paths relative to its parent route, so mount it under the
+// same /credential_types/:id/* route that CredentialTypes.js gives it.
+function renderAt(path) {
+  const history = createMemoryHistory({ initialEntries: [path] });
+  return renderWithContexts(
+    <Routes>
+      <Route
+        path="/credential_types/:id/*"
+        element={<CredentialType setBreadcrumb={() => {}} />}
+      />
+    </Routes>,
+    { context: { router: { history } } }
+  );
+}
+
+describe('<CredentialType />', () => {
+  beforeEach(() => {
+    CredentialTypesAPI.readDetail.mockResolvedValue({ data: credentialType });
   });
 
-  test('should render expected tabs', async () => {
-    const expectedTabs = ['Back to credential types', 'Details'];
-    await act(async () => {
-      wrapper = mountWithContexts(<CredentialType setBreadcrumb={() => {}} />);
-    });
-    wrapper.find('RoutedTabs li').forEach((tab, index) => {
-      expect(tab.text()).toEqual(expectedTabs[index]);
-    });
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
-  test('should show content error when user attempts to navigate to erroneous route', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/credential_types/42/foobar'],
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(<CredentialType setBreadcrumb={() => {}} />, {
-        context: {
-          router: {
-            history,
-          },
-        },
-      });
-    });
-    await waitForElement(wrapper, 'ContentError', (el) => el.length === 1);
+  test('fetches the credential type detail', async () => {
+    renderAt('/credential_types/42/details');
+    expect(await screen.findByText('CredentialTypeDetails')).toBeInTheDocument();
+    // real route params are strings (the old enzyme test mocked a number)
+    expect(CredentialTypesAPI.readDetail).toHaveBeenCalledWith('42');
+  });
+
+  test('renders the expected tabs', async () => {
+    renderAt('/credential_types/42/details');
+    expect(
+      await screen.findByText('Back to credential types')
+    ).toBeInTheDocument();
+    expect(screen.getByText('Details')).toBeInTheDocument();
+  });
+
+  test('renders the edit panel at /edit', async () => {
+    renderAt('/credential_types/42/edit');
+    expect(await screen.findByText('CredentialTypeEdit')).toBeInTheDocument();
+  });
+
+  test('redirects the index path to details', async () => {
+    const { history } = renderAt('/credential_types/42');
+    expect(await screen.findByText('CredentialTypeDetails')).toBeInTheDocument();
+    await waitFor(() =>
+      expect(history.location.pathname).toBe('/credential_types/42/details')
+    );
+  });
+
+  test('shows a not-found error when the detail request 404s', async () => {
+    const err = new Error('not found');
+    err.response = { status: 404 };
+    CredentialTypesAPI.readDetail.mockRejectedValue(err);
+    renderAt('/credential_types/42/details');
+    expect(
+      await screen.findByText('Credential type not found.')
+    ).toBeInTheDocument();
+    expect(screen.queryByText('CredentialTypeDetails')).not.toBeInTheDocument();
   });
 });
