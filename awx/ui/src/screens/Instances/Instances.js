@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
-import { Route, Switch } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import ScreenHeader from 'components/ScreenHeader';
 import PersistentFilters from 'components/PersistentFilters';
 import { InstanceList } from './InstanceList';
@@ -37,22 +37,29 @@ function Instances() {
   return (
     <>
       <ScreenHeader streamType="instance" breadcrumbConfig={breadcrumbConfig} />
-      <Switch>
-        <Route path="/instances/add">
-          <InstanceAdd setBreadcrumb={buildBreadcrumbConfig} />
-        </Route>
-        <Route path="/instances/:id/edit" key="edit">
-          <InstanceEdit setBreadcrumb={buildBreadcrumbConfig} />
-        </Route>
-        <Route path="/instances/:id">
-          <Instance setBreadcrumb={buildBreadcrumbConfig} />
-        </Route>
-        <Route path="/instances">
-          <PersistentFilters pageKey="instances">
-            <InstanceList />
-          </PersistentFilters>
-        </Route>
-      </Switch>
+      <Routes>
+        <Route
+          path="/instances/add"
+          element={<InstanceAdd setBreadcrumb={buildBreadcrumbConfig} />}
+        />
+        <Route
+          path="/instances/:id/edit"
+          element={<InstanceEdit setBreadcrumb={buildBreadcrumbConfig} />}
+        />
+        {/* /* so the nested <Instance> route tree can match the rest */}
+        <Route
+          path="/instances/:id/*"
+          element={<Instance setBreadcrumb={buildBreadcrumbConfig} />}
+        />
+        <Route
+          path="/instances"
+          element={
+            <PersistentFilters pageKey="instances">
+              <InstanceList />
+            </PersistentFilters>
+          }
+        />
+      </Routes>
     </>
   );
 }

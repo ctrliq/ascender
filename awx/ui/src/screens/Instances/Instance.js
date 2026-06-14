@@ -1,7 +1,13 @@
 import React, { useCallback, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
-import { Switch, Route, Redirect, Link, useRouteMatch } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import {
+  Routes,
+  Route,
+  Navigate,
+  useParams,
+} from 'react-router-dom-v5-compat';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card, PageSection } from '@patternfly/react-core';
 import { useConfig } from 'contexts/Config';
@@ -19,7 +25,7 @@ function Instance({ setBreadcrumb }) {
   const { me } = useConfig();
   const canReadSettings = me.is_superuser || me.is_system_auditor;
 
-  const match = useRouteMatch();
+  const { id } = useParams();
   const tabsArray = [
     {
       name: (
@@ -32,7 +38,7 @@ function Instance({ setBreadcrumb }) {
       id: 99,
       persistentFilterKey: 'instances',
     },
-    { name: t`Details`, link: `${match.url}/details`, id: 0 },
+    { name: t`Details`, link: `/instances/${id}/details`, id: 0 },
   ];
 
   const {
@@ -58,12 +64,12 @@ function Instance({ setBreadcrumb }) {
   if (isK8s) {
     tabsArray.push({
       name: t`Listener Addresses`,
-      link: `${match.url}/listener_addresses`,
+      link: `/instances/${id}/listener_addresses`,
       id: 1,
     });
     tabsArray.push({
       name: t`Peers`,
-      link: `${match.url}/peers`,
+      link: `/instances/${id}/peers`,
       id: 2,
     });
   }
@@ -78,34 +84,41 @@ function Instance({ setBreadcrumb }) {
     <PageSection>
       <Card>
         <RoutedTabs tabsArray={tabsArray} />
-        <Switch>
-          <Redirect from="/instances/:id" to="/instances/:id/details" exact />
-          <Route path="/instances/:id/details" key="details">
-            <InstanceDetail isK8s={isK8s} setBreadcrumb={setBreadcrumb} />
-          </Route>
+        <Routes>
+          <Route index element={<Navigate to="details" replace />} />
+          <Route
+            path="details"
+            element={
+              <InstanceDetail isK8s={isK8s} setBreadcrumb={setBreadcrumb} />
+            }
+          />
           {isK8s && (
             <Route
-              path="/instances/:id/listener_addresses"
-              key="listener_addresses"
-            >
-              <InstanceListenerAddressList setBreadcrumb={setBreadcrumb} />
-            </Route>
+              path="listener_addresses"
+              element={
+                <InstanceListenerAddressList setBreadcrumb={setBreadcrumb} />
+              }
+            />
           )}
           {isK8s && (
-            <Route path="/instances/:id/peers" key="peers">
-              <InstancePeerList setBreadcrumb={setBreadcrumb} />
-            </Route>
+            <Route
+              path="peers"
+              element={<InstancePeerList setBreadcrumb={setBreadcrumb} />}
+            />
           )}
-          <Route path="*" key="not-found">
-            <ContentError isNotFound>
-              {match.params.id && (
-                <Link to={`/instances/${match.params.id}/details`}>
-                  {t`View Instance Details`}
-                </Link>
-              )}
-            </ContentError>
-          </Route>
-        </Switch>
+          <Route
+            path="*"
+            element={
+              <ContentError isNotFound>
+                {id && (
+                  <Link to={`/instances/${id}/details`}>
+                    {t`View Instance Details`}
+                  </Link>
+                )}
+              </ContentError>
+            }
+          />
+        </Routes>
       </Card>
     </PageSection>
   );
