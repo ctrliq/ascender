@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { useLocation, useRouteMatch, Link } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 
 import { Plural, useLingui } from '@lingui/react/macro';
 
@@ -30,7 +30,6 @@ const QS_CONFIG = getQSConfig('instance-group', {
 function InstanceGroupList() {
   const { t } = useLingui();
   const location = useLocation();
-  const match = useRouteMatch();
 
   const {
     error: contentError,
@@ -138,8 +137,8 @@ function InstanceGroupList() {
 
   const getDetailUrl = (item) =>
     item.is_container_group
-      ? `${match.url}/container_group/${item.id}/details`
-      : `${match.url}/${item.id}/details`;
+      ? `/instance_groups/container_group/${item.id}/details`
+      : `/instance_groups/${item.id}/details`;
   const deleteDetailsRequests = relatedResourceDeleteRequests(t).instanceGroup(
     selected[0]
   );

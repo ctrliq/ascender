@@ -1,12 +1,12 @@
 import React, { useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import {
-  Link,
-  Redirect,
+  Routes,
   Route,
-  Switch,
+  Navigate,
   useLocation,
   useParams,
-} from 'react-router-dom';
+} from 'react-router-dom-v5-compat';
 
 import { useLingui } from '@lingui/react/macro';
 import { CaretLeftIcon } from '@patternfly/react-icons';
@@ -115,35 +115,36 @@ function InstanceGroup({ setBreadcrumb }) {
         {cardHeader}
         {isLoading && <ContentLoading />}
         {!isLoading && instanceGroup && (
-          <Switch>
-            <Redirect
-              from="/instance_groups/:id"
-              to="/instance_groups/:id/details"
-              exact
+          <Routes>
+            <Route index element={<Navigate to="details" replace />} />
+            <Route
+              path="edit"
+              element={<InstanceGroupEdit instanceGroup={instanceGroup} />}
             />
-            {instanceGroup && (
-              <>
-                <Route path="/instance_groups/:id/edit">
-                  <InstanceGroupEdit instanceGroup={instanceGroup} />
-                </Route>
-                <Route path="/instance_groups/:id/details">
-                  <InstanceGroupDetails instanceGroup={instanceGroup} />
-                </Route>
-                <Route path="/instance_groups/:id/instances">
-                  <Instances
-                    instanceGroup={instanceGroup}
-                    setBreadcrumb={setBreadcrumb}
-                  />
-                </Route>
-                <Route path="/instance_groups/:id/jobs">
-                  <JobList
-                    showTypeColumn
-                    defaultParams={{ instance_group: instanceGroup.id }}
-                  />
-                </Route>
-              </>
-            )}
-          </Switch>
+            <Route
+              path="details"
+              element={<InstanceGroupDetails instanceGroup={instanceGroup} />}
+            />
+            {/* /* so the nested <Instances> route tree can match the rest */}
+            <Route
+              path="instances/*"
+              element={
+                <Instances
+                  instanceGroup={instanceGroup}
+                  setBreadcrumb={setBreadcrumb}
+                />
+              }
+            />
+            <Route
+              path="jobs"
+              element={
+                <JobList
+                  showTypeColumn
+                  defaultParams={{ instance_group: instanceGroup.id }}
+                />
+              }
+            />
+          </Routes>
         )}
       </Card>
     </PageSection>
