@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { Route, useRouteMatch, Switch } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 
 import ScreenHeader from 'components/ScreenHeader/ScreenHeader';
 import PersistentFilters from 'components/PersistentFilters';
@@ -15,7 +15,6 @@ function Users() {
     '/users': t`Users`,
     '/users/add': t`Create New User`,
   });
-  const match = useRouteMatch();
 
   const addUserBreadcrumb = useCallback(
     (user, token) => {
@@ -42,23 +41,28 @@ function Users() {
   return (
     <>
       <ScreenHeader streamType="user" breadcrumbConfig={breadcrumbConfig} />
-      <Switch>
-        <Route path={`${match.path}/add`}>
-          <UserAdd />
-        </Route>
-        <Route path={`${match.path}/:id`}>
-          <Config>
-            {({ me }) => (
-              <User setBreadcrumb={addUserBreadcrumb} me={me || {}} />
-            )}
-          </Config>
-        </Route>
-        <Route path={`${match.path}`}>
-          <PersistentFilters pageKey="users">
-            <UsersList />
-          </PersistentFilters>
-        </Route>
-      </Switch>
+      <Routes>
+        <Route path="/users/add" element={<UserAdd />} />
+        {/* /* so the nested <User> route tree can match the rest */}
+        <Route
+          path="/users/:id/*"
+          element={
+            <Config>
+              {({ me }) => (
+                <User setBreadcrumb={addUserBreadcrumb} me={me || {}} />
+              )}
+            </Config>
+          }
+        />
+        <Route
+          path="/users"
+          element={
+            <PersistentFilters pageKey="users">
+              <UsersList />
+            </PersistentFilters>
+          }
+        />
+      </Routes>
     </>
   );
 }

@@ -1,13 +1,13 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
+import { Link } from 'react-router-dom';
 import {
-  Link,
-  Redirect,
+  Routes,
   Route,
-  Switch,
+  Navigate,
   useLocation,
   useParams,
-} from 'react-router-dom';
+} from 'react-router-dom-v5-compat';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card, PageSection } from '@patternfly/react-core';
 import RoutedTabs from 'components/RoutedTabs';
@@ -85,29 +85,27 @@ function UserToken({ setBreadcrumb, user }) {
   return (
     <>
       {showCardHeader && <RoutedTabs tabsArray={tabsArray} />}
-      <Switch>
-        <Redirect
-          from="/users/:id/tokens/:tokenId"
-          to="/users/:id/tokens/:tokenId/details"
-          exact
-        />
+      <Routes>
+        <Route index element={<Navigate to="details" replace />} />
         {token && (
-          <Route path="/users/:id/tokens/:tokenId/details">
-            <UserTokenDetail token={token} />
-          </Route>
+          <Route
+            path="details"
+            element={<UserTokenDetail token={token} />}
+          />
         )}
-        <Route key="not-found" path="*">
-          {!isLoading && (
-            <ContentError isNotFound>
-              {id && (
-                <Link to={`/users/${id}/tokens`}>
-                  {t`View Tokens`}
-                </Link>
-              )}
-            </ContentError>
-          )}
-        </Route>
-      </Switch>
+        <Route
+          path="*"
+          element={
+            !isLoading ? (
+              <ContentError isNotFound>
+                {id && (
+                  <Link to={`/users/${id}/tokens`}>{t`View Tokens`}</Link>
+                )}
+              </ContentError>
+            ) : null
+          }
+        />
+      </Routes>
     </>
   );
 }
