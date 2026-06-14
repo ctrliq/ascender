@@ -22,6 +22,7 @@ function NotificationTemplate({ setBreadcrumb }) {
   const { t } = useLingui();
   const { id: templateId } = useParams();
   const location = useLocation();
+  const baseUrl = `/notification_templates/${templateId}`;
   const {
     result: { template, defaultMessages },
     isLoading,
@@ -43,8 +44,13 @@ function NotificationTemplate({ setBreadcrumb }) {
   );
 
   useEffect(() => {
+    // The bare /:id route immediately redirects to /:id/details, so skip the
+    // fetch there; otherwise we would fetch once on /:id and again after the
+    // redirect changes the pathname. Real navigation (e.g. edit -> details)
+    // still re-fetches so the detail reflects saved changes.
+    if (location.pathname === baseUrl) return;
     fetchTemplate();
-  }, [fetchTemplate, location.pathname]);
+  }, [fetchTemplate, location.pathname, baseUrl]);
 
   if (!isLoading && error) {
     return (
@@ -88,30 +94,35 @@ function NotificationTemplate({ setBreadcrumb }) {
     <PageSection>
       <Card>
         {showCardHeader && <RoutedTabs tabsArray={tabs} />}
-        {isLoading && <ContentLoading />}
-        {template && (
-          <Routes>
-            <Route index element={<Navigate to="details" replace />} />
-            <Route
-              path="edit"
-              element={
+        <Routes>
+          <Route index element={<Navigate to="details" replace />} />
+          <Route
+            path="edit"
+            element={
+              template ? (
                 <NotificationTemplateEdit
                   template={template}
                   defaultMessages={defaultMessages}
                 />
-              }
-            />
-            <Route
-              path="details"
-              element={
+              ) : (
+                <ContentLoading />
+              )
+            }
+          />
+          <Route
+            path="details"
+            element={
+              template ? (
                 <NotificationTemplateDetail
                   template={template}
                   defaultMessages={defaultMessages}
                 />
-              }
-            />
-          </Routes>
-        )}
+              ) : (
+                <ContentLoading />
+              )
+            }
+          />
+        </Routes>
       </Card>
     </PageSection>
   );
