@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import {
-  Link,
-  Redirect,
+  Routes,
   Route,
-  Switch,
+  Navigate,
   useLocation,
   useParams,
-  useRouteMatch,
-} from 'react-router-dom';
+} from 'react-router-dom-v5-compat';
 
 import { useLingui } from '@lingui/react/macro';
 import { CaretLeftIcon } from '@patternfly/react-icons';
@@ -26,9 +25,9 @@ function ManagementJob({ setBreadcrumb }) {
   const { t } = useLingui();
   const basePath = '/management_jobs';
 
-  const match = useRouteMatch();
   const { id } = useParams();
   const { pathname } = useLocation();
+  const detailUrl = `${basePath}/${id}`;
   const { me } = useConfig();
 
   const [isNotificationAdmin, setIsNotificationAdmin] = useState(false);
@@ -107,7 +106,7 @@ function ManagementJob({ setBreadcrumb }) {
     tabsArray.push({
       id: 0,
       name: t`Schedules`,
-      link: `${match.url}/schedules`,
+      link: `${detailUrl}/schedules`,
     });
   }
 
@@ -115,7 +114,7 @@ function ManagementJob({ setBreadcrumb }) {
     tabsArray.push({
       id: 1,
       name: t`Notifications`,
-      link: `${match.url}/notifications`,
+      link: `${detailUrl}/notifications`,
     });
   }
 
@@ -158,34 +157,40 @@ function ManagementJob({ setBreadcrumb }) {
     <PageSection>
       <Card>
         {Tabs}
-        <Switch>
-          <Redirect
-            exact
-            from={`${basePath}/:id`}
-            to={`${basePath}/:id/schedules`}
+        <Routes>
+          <Route
+            path={`${basePath}/:id`}
+            element={<Navigate to={`${detailUrl}/schedules`} replace />}
           />
           {shouldShowNotifications ? (
-            <Route path={`${basePath}/:id/notifications`}>
-              <NotificationList
-                id={Number(result?.systemJobTemplate?.id)}
-                canToggleNotifications={isNotificationAdmin}
-                apiModel={SystemJobTemplatesAPI}
-              />
-            </Route>
+            <Route
+              path={`${basePath}/:id/notifications`}
+              element={
+                <NotificationList
+                  id={Number(result?.systemJobTemplate?.id)}
+                  canToggleNotifications={isNotificationAdmin}
+                  apiModel={SystemJobTemplatesAPI}
+                />
+              }
+            />
           ) : null}
+          {/* /* so the nested <Schedules> route tree can match */}
           {shouldShowSchedules ? (
-            <Route path={`${basePath}/:id/schedules`}>
-              <Schedules
-                apiModel={SystemJobTemplatesAPI}
-                resource={result.systemJobTemplate}
-                createSchedule={createSchedule}
-                loadSchedules={loadSchedules}
-                loadScheduleOptions={loadScheduleOptions}
-                setBreadcrumb={setBreadcrumb}
-              />
-            </Route>
+            <Route
+              path={`${basePath}/:id/schedules/*`}
+              element={
+                <Schedules
+                  apiModel={SystemJobTemplatesAPI}
+                  resource={result.systemJobTemplate}
+                  createSchedule={createSchedule}
+                  loadSchedules={loadSchedules}
+                  loadScheduleOptions={loadScheduleOptions}
+                  setBreadcrumb={setBreadcrumb}
+                />
+              }
+            />
           ) : null}
-        </Switch>
+        </Routes>
       </Card>
     </PageSection>
   );
