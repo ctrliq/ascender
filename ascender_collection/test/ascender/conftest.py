@@ -176,6 +176,21 @@ def run_module(request, collection_import):
         # this short circuits within the AnsibleModule interface
         def mock_load_params(self):
             self.params = module_params
+            # Normally AnsibleModule._load_params() sets these module globals.
+            # We bypass _load_params, so set them ourselves: _PARSED_MODULE_ARGS
+            # is read by exit_json/fail_json, and _ANSIBLE_PROFILE selects the
+            # module->controller result encoder (ansible-core >= 2.19 picks the
+            # "module_<profile>_m2c" serialization profile; without it the name
+            # resolves to "module_None_m2c" which does not exist).
+            from ansible.module_utils import basic
+
+            # _ansible_inject_invocation makes exit_json/fail_json echo the
+            # 'invocation' block (module_args). ansible-core historically always
+            # did this; since 2.21 it is opt-in via this flag, and the module
+            # result assertions here expect the invocation block to be present.
+            basic._PARSED_MODULE_ARGS = dict(module_params, _ansible_inject_invocation=True)
+            if getattr(basic, '_ANSIBLE_PROFILE', 'set') is None:
+                basic._ANSIBLE_PROFILE = 'legacy'
 
         if getattr(resource_module, 'ControllerAWXKitModule', None):
             resource_class = resource_module.ControllerAWXKitModule
