@@ -1,107 +1,129 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { CredentialsAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import mockMachineCredential from './shared/data.machineCredential.json';
-import mockSCMCredential from './shared/data.scmCredential.json';
 import mockCyberArkCredential from './shared/data.cyberArkCredential.json';
 import Credential from './Credential';
 
-jest.mock('../../api');
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useRouteMatch: () => ({
-    url: '/credentials/2',
-    params: { id: 2 },
-  }),
-}));
+jest.mock('../../api/models/Credentials');
+
+// Markers for the routed tab panels, so assertions are about which branch of
+// the nested v6 <Routes> tree resolves.
+jest.mock('./CredentialDetail', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: () => ReactLib.createElement('div', null, 'CredentialDetail'),
+  };
+});
+jest.mock('./CredentialEdit', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: () => ReactLib.createElement('div', null, 'CredentialEdit'),
+  };
+});
+jest.mock('components/RelatedTemplateList', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: () => ReactLib.createElement('div', null, 'RelatedTemplateList'),
+  };
+});
+jest.mock('components/ResourceAccessList', () => {
+  const ReactLib = require('react');
+  return {
+    ResourceAccessList: () =>
+      ReactLib.createElement('div', null, 'ResourceAccessList'),
+  };
+});
+
+// Credential uses paths relative to its parent route, so mount it under the
+// same /credentials/:id/* route that Credentials.js gives it in the app.
+function renderAt(path) {
+  const history = createMemoryHistory({ initialEntries: [path] });
+  return renderWithContexts(
+    <Routes>
+      <Route
+        path="/credentials/:id/*"
+        element={<Credential setBreadcrumb={() => {}} />}
+      />
+    </Routes>,
+    { context: { router: { history } } }
+  );
+}
 
 describe('<Credential />', () => {
-  let wrapper;
+  beforeEach(() => {
+    CredentialsAPI.readDetail.mockResolvedValue({ data: mockMachineCredential });
+  });
+
   afterEach(() => {
     jest.clearAllMocks();
-
-    wrapper.unmount();
   });
 
-  test('initially renders user-based machine credential successfully', async () => {
-    CredentialsAPI.readDetail.mockResolvedValueOnce({
-      data: mockMachineCredential,
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(<Credential setBreadcrumb={() => {}} />);
-    });
-    wrapper.update();
-    expect(wrapper.find('Credential').length).toBe(1);
-    expect(wrapper.find('RoutedTabs li').length).toBe(4);
+  test('fetches the credential detail', async () => {
+    renderAt('/credentials/2/details');
+    expect(await screen.findByText('CredentialDetail')).toBeInTheDocument();
+    // real route params are strings (the old enzyme test mocked a number)
+    expect(CredentialsAPI.readDetail).toHaveBeenCalledWith('2');
   });
 
-  test('initially renders user-based SCM credential successfully', async () => {
-    CredentialsAPI.readDetail.mockResolvedValueOnce({
-      data: mockSCMCredential,
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(<Credential setBreadcrumb={() => {}} />);
-    });
-    wrapper.update();
-    expect(wrapper.find('Credential').length).toBe(1);
-    expect(wrapper.find('RoutedTabs li').length).toBe(3);
+  test('renders the edit panel at /edit', async () => {
+    renderAt('/credentials/2/edit');
+    expect(await screen.findByText('CredentialEdit')).toBeInTheDocument();
   });
 
-  test('should render expected tabs', async () => {
-    const expectedTabs = [
-      'Back to Credentials',
-      'Details',
-      'Access',
-      'Job Templates',
-    ];
-    await act(async () => {
-      wrapper = mountWithContexts(<Credential setBreadcrumb={() => {}} />);
-    });
-    wrapper.find('RoutedTabs li').forEach((tab, index) => {
-      expect(tab.text()).toEqual(expectedTabs[index]);
-    });
+  test('renders the access panel at /access', async () => {
+    renderAt('/credentials/2/access');
+    expect(await screen.findByText('ResourceAccessList')).toBeInTheDocument();
   });
 
-  test('should not render job template tab', async () => {
-    CredentialsAPI.readDetail.mockResolvedValueOnce({
+  test('renders the job templates panel at /job_templates', async () => {
+    renderAt('/credentials/2/job_templates');
+    expect(await screen.findByText('RelatedTemplateList')).toBeInTheDocument();
+  });
+
+  test('redirects the index path to details', async () => {
+    const { history } = renderAt('/credentials/2');
+    expect(await screen.findByText('CredentialDetail')).toBeInTheDocument();
+    await waitFor(() =>
+      expect(history.location.pathname).toBe('/credentials/2/details')
+    );
+  });
+
+  test('shows the Job Templates tab for an acceptable credential kind', async () => {
+    renderAt('/credentials/2/details');
+    expect(await screen.findByText('CredentialDetail')).toBeInTheDocument();
+    expect(screen.getByText('Job Templates')).toBeInTheDocument();
+  });
+
+  test('hides the Job Templates tab for a registry credential', async () => {
+    CredentialsAPI.readDetail.mockResolvedValue({
       data: { ...mockCyberArkCredential, kind: 'registry' },
     });
-    const expectedTabs = ['Back to Credentials', 'Details', 'Access'];
-    await act(async () => {
-      wrapper = mountWithContexts(<Credential setBreadcrumb={() => {}} />);
-    });
-    wrapper.find('RoutedTabs li').forEach((tab, index) => {
-      expect(tab.text()).toEqual(expectedTabs[index]);
-    });
+    renderAt('/credentials/2/details');
+    expect(await screen.findByText('CredentialDetail')).toBeInTheDocument();
+    expect(screen.queryByText('Job Templates')).not.toBeInTheDocument();
   });
 
-  test('should show content error when user attempts to navigate to erroneous route', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/credentials/2/foobar'],
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(<Credential setBreadcrumb={() => {}} />, {
-        context: {
-          router: {
-            history,
-            route: {
-              location: history.location,
-              match: {
-                params: { id: 1 },
-                url: '/credentials/2/foobar',
-                path: '/credentials/2/foobar',
-              },
-            },
-          },
-        },
-      });
-    });
-    await waitForElement(wrapper, 'ContentError', (el) => el.length === 1);
+  test('shows a not-found error on an unknown sub-route', async () => {
+    renderAt('/credentials/2/foobar');
+    expect(
+      await screen.findByText('View Credential Details')
+    ).toBeInTheDocument();
+    expect(screen.queryByText('CredentialDetail')).not.toBeInTheDocument();
+  });
+
+  test('shows a not-found error when the detail request 404s', async () => {
+    const err = new Error('not found');
+    err.response = { status: 404 };
+    CredentialsAPI.readDetail.mockRejectedValue(err);
+    renderAt('/credentials/2/details');
+    expect(await screen.findByText('Credential not found.')).toBeInTheDocument();
+    expect(screen.queryByText('CredentialDetail')).not.toBeInTheDocument();
   });
 });
-describe('<Credential> should not show job template tab', () => {});
