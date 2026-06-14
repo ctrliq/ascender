@@ -194,6 +194,7 @@ class WorkflowJobTemplateNode(WorkflowNodeBase):
 
     class Meta:
         app_label = 'main'
+        ordering = ('id',)
         unique_together = (("identifier", "workflow_job_template"),)
         indexes = [
             models.Index(fields=['identifier']),

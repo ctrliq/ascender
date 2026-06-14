@@ -13,6 +13,7 @@ class Protocols(models.TextChoices):
 class ReceptorAddress(models.Model):
     class Meta:
         app_label = 'main'
+        ordering = ('id',)
         constraints = [
             models.UniqueConstraint(
                 fields=["address"],
