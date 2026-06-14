@@ -1,5 +1,6 @@
 import React from 'react';
-import { Link, Redirect, Route, Switch } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import { PageSection, Card } from '@patternfly/react-core';
 import ContentError from 'components/ContentError';
@@ -12,22 +13,24 @@ function TACACS() {
   return (
     <PageSection>
       <Card>
-        <Switch>
-          <Redirect from={baseURL} to={`${baseURL}/details`} exact />
-          <Route path={`${baseURL}/details`}>
-            <TACACSDetail />
-          </Route>
-          <Route path={`${baseURL}/edit`}>
-            <TACACSEdit />
-          </Route>
-          <Route key="not-found" path={`${baseURL}/*`}>
-            <ContentError isNotFound>
-              <Link to={`${baseURL}/details`}>
-                {t`View TACACS+ settings`}
-              </Link>
-            </ContentError>
-          </Route>
-        </Switch>
+        <Routes>
+          <Route
+            path={baseURL}
+            element={<Navigate to={`${baseURL}/details`} replace />}
+          />
+          <Route path={`${baseURL}/details`} element={<TACACSDetail />} />
+          <Route path={`${baseURL}/edit`} element={<TACACSEdit />} />
+          <Route
+            path={`${baseURL}/*`}
+            element={
+              <ContentError isNotFound>
+                <Link to={`${baseURL}/details`}>
+                  {t`View TACACS+ settings`}
+                </Link>
+              </ContentError>
+            }
+          />
+        </Routes>
       </Card>
     </PageSection>
   );

@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
-import { Link, Route, Switch, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import { PageSection, Card } from '@patternfly/react-core';
 import ContentError from 'components/ContentError';
@@ -150,75 +151,61 @@ function Settings() {
   }
 
   if (!me?.is_superuser && !me?.is_system_auditor) {
-    return <Redirect to="/" />;
+    return <Navigate to="/" replace />;
   }
 
   return (
     <SettingsProvider value={result}>
       <ScreenHeader streamType="setting" breadcrumbConfig={breadcrumbConfig} />
-      <Switch>
-        <Route path="/settings/azure">
-          <AzureAD />
-        </Route>
-        <Route path="/settings/github">
-          <GitHub />
-        </Route>
-        <Route path="/settings/google_oauth2">
-          <GoogleOAuth2 />
-        </Route>
-        <Route path="/settings/oidc">
-          <OIDC />
-        </Route>
-        <Route path="/settings/jobs">
-          <Jobs />
-        </Route>
-        <Route path="/settings/ldap">
-          <LDAP />
-        </Route>
-        <Route path="/settings/subscription">
-          {license_info?.license_type === 'open' ? (
-            <Redirect to="/settings" />
-          ) : (
-            <Subscription />
-          )}
-        </Route>
-        <Route path="/settings/logging">
-          <Logging />
-        </Route>
-        <Route path="/settings/miscellaneous_authentication">
-          <MiscAuthentication />
-        </Route>
-        <Route path="/settings/miscellaneous_system">
-          <MiscSystem />
-        </Route>
-        <Route path="/settings/radius">
-          <RADIUS />
-        </Route>
-        <Route path="/settings/saml">
-          <SAML />
-        </Route>
-        <Route path="/settings/tacacs">
-          <TACACS />
-        </Route>
-        <Route path="/settings/troubleshooting">
-          <Troubleshooting />
-        </Route>
-        <Route path="/settings/ui">
-          <UI />
-        </Route>
-        <Route path="/settings" exact>
-          <SettingList />
-        </Route>
-        <Route key="not-found" path="*">
-          <PageSection>
-            <Card>
-              <ContentError isNotFound>
-                <Link to="/settings">{t`View all settings`}</Link>
-              </ContentError>
-            </Card>
-          </PageSection>
-        </Route>
-      </Switch>
+      <Routes>
+        {/* /* on each sub-screen so its own nested <Routes> can match */}
+        <Route path="/settings/azure/*" element={<AzureAD />} />
+        <Route path="/settings/github/*" element={<GitHub />} />
+        <Route path="/settings/google_oauth2/*" element={<GoogleOAuth2 />} />
+        <Route path="/settings/oidc/*" element={<OIDC />} />
+        <Route path="/settings/jobs/*" element={<Jobs />} />
+        <Route path="/settings/ldap/*" element={<LDAP />} />
+        <Route
+          path="/settings/subscription/*"
+          element={
+            license_info?.license_type === 'open' ? (
+              <Navigate to="/settings" replace />
+            ) : (
+              <Subscription />
+            )
+          }
+        />
+        <Route path="/settings/logging/*" element={<Logging />} />
+        <Route
+          path="/settings/miscellaneous_authentication/*"
+          element={<MiscAuthentication />}
+        />
+        <Route
+          path="/settings/miscellaneous_system/*"
+          element={<MiscSystem />}
+        />
+        <Route path="/settings/radius/*" element={<RADIUS />} />
+        <Route path="/settings/saml/*" element={<SAML />} />
+        <Route path="/settings/tacacs/*" element={<TACACS />} />
+        <Route
+          path="/settings/troubleshooting/*"
+          element={<Troubleshooting />}
+        />
+        <Route path="/settings/ui/*" element={<UI />} />
+        <Route path="/settings" element={<SettingList />} />
+        <Route
+          path="*"
+          element={
+            <PageSection>
+              <Card>
+                <ContentError isNotFound>
+                  <Link to="/settings">{t`View all settings`}</Link>
+                </ContentError>
+              </Card>
+            </PageSection>
+          }
+        />
+      </Routes>
     </SettingsProvider>
   );
 }
