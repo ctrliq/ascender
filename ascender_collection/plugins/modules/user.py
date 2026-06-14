@@ -42,6 +42,10 @@ options:
       description:
         - Email address of the user.
       type: str
+    preferred_language:
+      description:
+        - The preferred language for the user, used by the UI.
+      type: str
     organization:
       description:
         - The user will be created as a member of that organization name, ID, or named URL (needed for organization admins to create new organization users).
@@ -132,6 +136,7 @@ def main():
         first_name=dict(),
         last_name=dict(),
         email=dict(),
+        preferred_language=dict(),
         is_superuser=dict(type='bool', aliases=['superuser']),
         is_system_auditor=dict(type='bool', aliases=['auditor']),
         password=dict(no_log=True),
@@ -149,6 +154,7 @@ def main():
     first_name = module.params.get('first_name')
     last_name = module.params.get('last_name')
     email = module.params.get('email')
+    preferred_language = module.params.get('preferred_language')
     is_superuser = module.params.get('is_superuser')
     is_system_auditor = module.params.get('is_system_auditor')
     password = module.params.get('password')
@@ -174,6 +180,8 @@ def main():
         new_fields['last_name'] = last_name
     if email is not None:
         new_fields['email'] = email
+    if preferred_language is not None:
+        new_fields['preferred_language'] = preferred_language
     if is_superuser is not None:
         new_fields['is_superuser'] = is_superuser
     if is_system_auditor is not None:
