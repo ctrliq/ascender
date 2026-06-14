@@ -1,69 +1,120 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { HostsAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import mockHost from './data.host.json';
 import Host from './Host';
 
-jest.mock('../../api');
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useRouteMatch: () => ({
-    url: '/hosts/1',
-    params: { id: 1 },
-  }),
-}));
+jest.mock('../../api/models/Hosts');
 
-HostsAPI.readDetail.mockResolvedValue({
-  data: { ...mockHost },
+// Markers for the routed tab panels, so assertions are about which branch of
+// the nested v6 <Routes> tree resolves.
+jest.mock('./HostDetail', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: () => ReactLib.createElement('div', null, 'HostDetail'),
+  };
+});
+jest.mock('./HostEdit', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: () => ReactLib.createElement('div', null, 'HostEdit'),
+  };
+});
+jest.mock('./HostFacts', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: () => ReactLib.createElement('div', null, 'HostFacts'),
+  };
+});
+jest.mock('./HostGroups', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: () => ReactLib.createElement('div', null, 'HostGroups subtree'),
+  };
+});
+jest.mock('components/JobList', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: () => ReactLib.createElement('div', null, 'JobList'),
+  };
 });
 
+// Host uses paths relative to its parent route, so mount it under the same
+// /hosts/:id/* route that Hosts.js gives it in the app.
+function renderAt(path) {
+  const history = createMemoryHistory({ initialEntries: [path] });
+  return renderWithContexts(
+    <Routes>
+      <Route path="/hosts/:id/*" element={<Host setBreadcrumb={() => {}} />} />
+    </Routes>,
+    { context: { router: { history } } }
+  );
+}
+
 describe('<Host />', () => {
-  let wrapper;
-  let history;
-
-  beforeEach(async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Route path="/hosts/:id/details">
-          <Host setBreadcrumb={() => {}} />
-        </Route>
-      );
-    });
+  beforeEach(() => {
+    HostsAPI.readDetail.mockResolvedValue({ data: { ...mockHost } });
   });
 
-  test('should render expected tabs', async () => {
-    const expectedTabs = ['Details', 'Facts', 'Groups', 'Completed Jobs'];
-    wrapper.find('RoutedTabs li').forEach((tab, index) => {
-      expect(tab.text()).toEqual(expectedTabs[index]);
-    });
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
-  test('should show content error when api throws error on initial render', async () => {
-    HostsAPI.readDetail.mockRejectedValueOnce(new Error());
-    await act(async () => {
-      wrapper = mountWithContexts(<Host setBreadcrumb={() => {}} />, {
-        context: { router: { history } },
-      });
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    await waitForElement(wrapper, 'ContentError', (el) => el.length === 1);
+  test('fetches the host detail', async () => {
+    renderAt('/hosts/1/details');
+    expect(await screen.findByText('HostDetail')).toBeInTheDocument();
+    // real route params are strings (the old enzyme test mocked a number)
+    expect(HostsAPI.readDetail).toHaveBeenCalledWith('1');
   });
 
-  test('should show content error when user attempts to navigate to erroneous route', async () => {
-    history = createMemoryHistory({
-      initialEntries: ['/hosts/1/foobar'],
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(<Host setBreadcrumb={() => {}} />, {
-        context: { router: { history } },
-      });
-    });
-    await waitForElement(wrapper, 'ContentError', (el) => el.length === 1);
+  test('renders the edit panel at /edit', async () => {
+    renderAt('/hosts/1/edit');
+    expect(await screen.findByText('HostEdit')).toBeInTheDocument();
+  });
+
+  test('renders the facts panel at /facts', async () => {
+    renderAt('/hosts/1/facts');
+    expect(await screen.findByText('HostFacts')).toBeInTheDocument();
+  });
+
+  test('renders the groups subtree at /groups', async () => {
+    renderAt('/hosts/1/groups');
+    expect(await screen.findByText('HostGroups subtree')).toBeInTheDocument();
+  });
+
+  test('renders the jobs panel at /jobs', async () => {
+    renderAt('/hosts/1/jobs');
+    expect(await screen.findByText('JobList')).toBeInTheDocument();
+  });
+
+  test('redirects the index path to details', async () => {
+    const { history } = renderAt('/hosts/1');
+    expect(await screen.findByText('HostDetail')).toBeInTheDocument();
+    await waitFor(() =>
+      expect(history.location.pathname).toBe('/hosts/1/details')
+    );
+  });
+
+  test('shows a not-found error on an unknown sub-route', async () => {
+    renderAt('/hosts/1/foobar');
+    expect(await screen.findByText('View Host Details')).toBeInTheDocument();
+    expect(screen.queryByText('HostDetail')).not.toBeInTheDocument();
+  });
+
+  test('shows a not-found error when the detail request 404s', async () => {
+    const err = new Error('not found');
+    err.response = { status: 404 };
+    HostsAPI.readDetail.mockRejectedValue(err);
+    renderAt('/hosts/1/details');
+    expect(await screen.findByText('Host not found.')).toBeInTheDocument();
+    expect(screen.queryByText('HostDetail')).not.toBeInTheDocument();
   });
 });

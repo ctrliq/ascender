@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 
 import { useLingui } from '@lingui/react/macro';
 
@@ -39,23 +39,28 @@ function Hosts() {
   return (
     <>
       <ScreenHeader streamType="host" breadcrumbConfig={breadcrumbConfig} />
-      <Switch>
-        <Route path="/hosts/add">
-          <HostAdd />
-        </Route>
-        <Route path="/hosts/:id">
-          <Config>
-            {({ me }) => (
-              <Host setBreadcrumb={buildBreadcrumbConfig} me={me || {}} />
-            )}
-          </Config>
-        </Route>
-        <Route path="/hosts">
-          <PersistentFilters pageKey="hosts">
-            <HostList />
-          </PersistentFilters>
-        </Route>
-      </Switch>
+      <Routes>
+        <Route path="/hosts/add" element={<HostAdd />} />
+        {/* /* so the nested <Host> route tree can match the rest */}
+        <Route
+          path="/hosts/:id/*"
+          element={
+            <Config>
+              {({ me }) => (
+                <Host setBreadcrumb={buildBreadcrumbConfig} me={me || {}} />
+              )}
+            </Config>
+          }
+        />
+        <Route
+          path="/hosts"
+          element={
+            <PersistentFilters pageKey="hosts">
+              <HostList />
+            </PersistentFilters>
+          }
+        />
+      </Routes>
     </>
   );
 }
