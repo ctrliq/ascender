@@ -85,9 +85,13 @@ function CredentialLookup({
       }
 
       const searchKeys = getSearchableKeys(actionsResponse.data.actions?.GET);
-      const item = searchKeys.find((k) => k.key === 'type');
-      if (item) {
-        item.key = 'credential_type__kind';
+      // Expose the credential_type__kind filter (coarse enum: ssh, cloud, …)
+      // as a searchable key, mirroring CredentialList. Searching by the actual
+      // credential type name is handled by the credential_type__search column
+      // below, which queries the credential types over REST rather than the
+      // hardcoded kind enum.
+      if (actionsResponse.data.actions?.GET.type) {
+        searchKeys.push({ key: 'credential_type__kind', type: 'string' });
       }
 
       return {
@@ -152,8 +156,6 @@ function CredentialLookup({
     fetchCredentials();
   }, [fetchCredentials]);
 
-  // TODO: replace credential type search with REST-based grabbing of cred types
-
   return (
     <FormGroup
       fieldId="credential"
@@ -198,6 +200,10 @@ function CredentialLookup({
               {
                 name: t`Modified By (Username)`,
                 key: 'modified_by__username__icontains',
+              },
+              {
+                name: t`Credential Type`,
+                key: 'credential_type__search',
               },
             ]}
             sortColumns={[
