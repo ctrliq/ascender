@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Link, useRouteMatch } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom-v5-compat';
+import { Link } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
 import { OrganizationsAPI } from 'api';
@@ -20,9 +20,7 @@ import InstanceGroupLabels from 'components/InstanceGroupLabels';
 import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails';
 
 function OrganizationDetail({ organization }) {
-  const {
-    params: { id },
-  } = useRouteMatch();
+  const { id } = useParams();
   const {
     name,
     description,
