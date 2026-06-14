@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
-import { Switch, Route, useParams } from 'react-router-dom';
+import { Routes, Route, useParams } from 'react-router-dom-v5-compat';
 import {
   Alert,
   ClipboardCopy,
@@ -30,21 +30,26 @@ function UserTokens({ setBreadcrumb, user }) {
 
   return (
     <>
-      <Switch>
-        <Route key="add" path="/users/:id/tokens/add">
-          <UserTokenAdd id={Number(id)} onSuccessfulAdd={onSuccessfulAdd} />
-        </Route>
-        <Route key="token" path="/users/:id/tokens/:tokenId">
-          <UserToken
-            user={user}
-            setBreadcrumb={setBreadcrumb}
-            id={Number(id)}
-          />
-        </Route>
-        <Route key="list" path="/users/:id/tokens">
-          <UserTokenList id={Number(id)} />
-        </Route>
-      </Switch>
+      <Routes>
+        <Route
+          path="add"
+          element={
+            <UserTokenAdd id={Number(id)} onSuccessfulAdd={onSuccessfulAdd} />
+          }
+        />
+        {/* /* so the nested <UserToken> route tree can match the rest */}
+        <Route
+          path=":tokenId/*"
+          element={
+            <UserToken
+              user={user}
+              setBreadcrumb={setBreadcrumb}
+              id={Number(id)}
+            />
+          }
+        />
+        <Route index element={<UserTokenList id={Number(id)} />} />
+      </Routes>
       {tokenModalSource && (
         <Modal
           aria-label={t`Token information`}

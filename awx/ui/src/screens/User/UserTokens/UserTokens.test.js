@@ -1,6 +1,7 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import UserTokens from './UserTokens';
@@ -32,9 +33,14 @@ describe('<UserTokens />', () => {
     const history = createMemoryHistory({
       initialEntries: ['/users/1/tokens/add'],
     });
-    const { user } = renderWithContexts(<UserTokens />, {
-      context: { router: { history } },
-    });
+    const { user } = renderWithContexts(
+      <Routes>
+        <Route path="/users/:id/tokens/*" element={<UserTokens />} />
+      </Routes>,
+      {
+        context: { router: { history } },
+      }
+    );
     expect(
       screen.queryByRole('dialog', { name: /Token information/ })
     ).not.toBeInTheDocument();

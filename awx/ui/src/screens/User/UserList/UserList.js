@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { useLocation, useRouteMatch } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import { Card, PageSection } from '@patternfly/react-core';
 import { UsersAPI } from 'api';
@@ -27,7 +27,6 @@ const QS_CONFIG = getQSConfig('user', {
 
 function UserList() {
   const location = useLocation();
-  const match = useRouteMatch();
   const { t } = useLingui();
 
   const {
@@ -143,7 +142,7 @@ function UserList() {
                     ? [
                         <ToolbarAddButton
                           key="add"
-                          linkTo={`${match.url}/add`}
+                          linkTo="/users/add"
                         />,
                       ]
                     : []),
@@ -177,7 +176,7 @@ function UserList() {
               <UserListItem
                 key={user.id}
                 user={user}
-                detailUrl={`${match.url}/${user.id}/details`}
+                detailUrl={`/users/${user.id}/details`}
                 isSelected={selected.some((row) => row.id === user.id)}
                 onSelect={() => handleSelect(user)}
                 rowIndex={index}
@@ -185,7 +184,7 @@ function UserList() {
             )}
             emptyStateControls={
               canAdd ? (
-                <ToolbarAddButton key="add" linkTo={`${match.url}/add`} />
+                <ToolbarAddButton key="add" linkTo="/users/add" />
               ) : null
             }
           />

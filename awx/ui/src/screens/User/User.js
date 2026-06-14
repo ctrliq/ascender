@@ -1,14 +1,14 @@
 import React, { useEffect, useCallback } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
+import { Link } from 'react-router-dom';
 import {
-  Switch,
+  Routes,
   Route,
-  Redirect,
-  Link,
-  useRouteMatch,
+  Navigate,
+  useParams,
   useLocation,
-} from 'react-router-dom';
+} from 'react-router-dom-v5-compat';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card, PageSection } from '@patternfly/react-core';
 import useRequest from 'hooks/useRequest';
@@ -25,7 +25,7 @@ import UserRolesList from './UserRoles/UserRolesList';
 function User({ setBreadcrumb, me }) {
   const { t } = useLingui();
   const location = useLocation();
-  const match = useRouteMatch('/users/:id');
+  const { id } = useParams();
   const userListUrl = `/users`;
   const {
     result: user,
@@ -34,9 +34,9 @@ function User({ setBreadcrumb, me }) {
     request: fetchUser,
   } = useRequest(
     useCallback(async () => {
-      const { data } = await UsersAPI.readDetail(match.params.id);
+      const { data } = await UsersAPI.readDetail(id);
       return data;
-    }, [match.params.id]),
+    }, [id]),
     null
   );
 
@@ -62,20 +62,20 @@ function User({ setBreadcrumb, me }) {
       id: 99,
       persistentFilterKey: 'users',
     },
-    { name: t`Details`, link: `${match.url}/details`, id: 0 },
+    { name: t`Details`, link: `/users/${id}/details`, id: 0 },
     {
       name: t`Organizations`,
-      link: `${match.url}/organizations`,
+      link: `/users/${id}/organizations`,
       id: 1,
     },
-    { name: t`Teams`, link: `${match.url}/teams`, id: 2 },
-    { name: t`Roles`, link: `${match.url}/roles`, id: 3 },
+    { name: t`Teams`, link: `/users/${id}/teams`, id: 2 },
+    { name: t`Roles`, link: `/users/${id}/roles`, id: 3 },
   ];
 
-  if (me?.id === Number(match.params.id)) {
+  if (me?.id === Number(id)) {
     tabsArray.push({
       name: t`Tokens`,
-      link: `${match.url}/tokens`,
+      link: `/users/${id}/tokens`,
       id: 4,
     });
   }
@@ -108,44 +108,49 @@ function User({ setBreadcrumb, me }) {
     <PageSection>
       <Card>
         {showCardHeader && <RoutedTabs tabsArray={tabsArray} />}
-        <Switch>
-          <Redirect from="/users/:id" to="/users/:id/details" exact />
-          {user && [
-            <Route path="/users/:id/edit" key="edit">
-              <UserEdit user={user} />
-            </Route>,
-            <Route path="/users/:id/details" key="details">
-              <UserDetail user={user} />
-            </Route>,
-            <Route path="/users/:id/organizations" key="organizations">
-              <UserOrganizations id={Number(match.params.id)} />
-            </Route>,
-            <Route path="/users/:id/teams" key="teams">
-              <UserTeams />
-            </Route>,
-            <Route path="/users/:id/roles" key="roles">
-              <UserRolesList user={user} />
-            </Route>,
-            <Route path="/users/:id/tokens" key="tokens">
-              <UserTokens
-                user={user}
-                setBreadcrumb={setBreadcrumb}
-                id={Number(match.params.id)}
-              />
-            </Route>,
-          ]}
-          <Route key="not-found" path="*">
-            {!isLoading && (
-              <ContentError isNotFound>
-                {match.params.id && (
-                  <Link to={`/users/${match.params.id}/details`}>
-                    {t`View User Details`}
-                  </Link>
-                )}
-              </ContentError>
-            )}
-          </Route>
-        </Switch>
+        <Routes>
+          <Route index element={<Navigate to="details" replace />} />
+          {user && <Route path="edit" element={<UserEdit user={user} />} />}
+          {user && (
+            <Route path="details" element={<UserDetail user={user} />} />
+          )}
+          {user && (
+            <Route
+              path="organizations"
+              element={<UserOrganizations id={Number(id)} />}
+            />
+          )}
+          {user && <Route path="teams" element={<UserTeams />} />}
+          {user && (
+            <Route path="roles" element={<UserRolesList user={user} />} />
+          )}
+          {user && (
+            <Route
+              path="tokens/*"
+              element={
+                <UserTokens
+                  user={user}
+                  setBreadcrumb={setBreadcrumb}
+                  id={Number(id)}
+                />
+              }
+            />
+          )}
+          <Route
+            path="*"
+            element={
+              !isLoading ? (
+                <ContentError isNotFound>
+                  {id && (
+                    <Link to={`/users/${id}/details`}>
+                      {t`View User Details`}
+                    </Link>
+                  )}
+                </ContentError>
+              ) : null
+            }
+          />
+        </Routes>
       </Card>
     </PageSection>
   );
