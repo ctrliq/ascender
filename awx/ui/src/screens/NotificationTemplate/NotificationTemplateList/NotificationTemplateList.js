@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useLocation, useRouteMatch } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import { useLingui } from '@lingui/react/macro';
 import { Card, PageSection } from '@patternfly/react-core';
@@ -28,12 +28,11 @@ const QS_CONFIG = getQSConfig('notification-templates', {
 
 function NotificationTemplatesList() {
   const location = useLocation();
-  const match = useRouteMatch();
   const { t } = useLingui();
   // const [testToasts, setTestToasts] = useState([]);
   const { addToast, Toast, toastProps } = useToast();
 
-  const addUrl = `${match.url}/add`;
+  const addUrl = '/notification_templates/add';
 
   const {
     result: {
@@ -221,7 +220,7 @@ function NotificationTemplatesList() {
                 key={template.id}
                 fetchTemplates={fetchTemplates}
                 template={template}
-                detailUrl={`${match.url}/${template.id}`}
+                detailUrl={`/notification_templates/${template.id}`}
                 isSelected={selected.some((row) => row.id === template.id)}
                 onSelect={() => handleSelect(template)}
                 rowIndex={index}

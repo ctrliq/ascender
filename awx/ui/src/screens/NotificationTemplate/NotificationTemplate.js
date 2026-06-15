@@ -2,15 +2,14 @@ import React, { useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Card, PageSection } from '@patternfly/react-core';
 import { CaretLeftIcon } from '@patternfly/react-icons';
+import { Link } from 'react-router-dom';
 import {
-  Link,
-  Switch,
+  Routes,
   Route,
-  Redirect,
+  Navigate,
   useParams,
-  useRouteMatch,
   useLocation,
-} from 'react-router-dom';
+} from 'react-router-dom-v5-compat';
 import useRequest from 'hooks/useRequest';
 import RoutedTabs from 'components/RoutedTabs';
 import ContentError from 'components/ContentError';
@@ -22,8 +21,8 @@ import NotificationTemplateEdit from './NotificationTemplateEdit';
 function NotificationTemplate({ setBreadcrumb }) {
   const { t } = useLingui();
   const { id: templateId } = useParams();
-  const match = useRouteMatch();
   const location = useLocation();
+  const baseUrl = `/notification_templates/${templateId}`;
   const {
     result: { template, defaultMessages },
     isLoading,
@@ -45,8 +44,13 @@ function NotificationTemplate({ setBreadcrumb }) {
   );
 
   useEffect(() => {
+    // The bare /:id route immediately redirects to /:id/details, so skip the
+    // fetch there; otherwise we would fetch once on /:id and again after the
+    // redirect changes the pathname. Real navigation (e.g. edit -> details)
+    // still re-fetches so the detail reflects saved changes.
+    if (location.pathname === baseUrl) return;
     fetchTemplate();
-  }, [fetchTemplate, location.pathname]);
+  }, [fetchTemplate, location.pathname, baseUrl]);
 
   if (!isLoading && error) {
     return (
@@ -82,7 +86,7 @@ function NotificationTemplate({ setBreadcrumb }) {
     },
     {
       name: t`Details`,
-      link: `${match.url}/details`,
+      link: `/notification_templates/${templateId}/details`,
       id: 0,
     },
   ];
@@ -90,30 +94,35 @@ function NotificationTemplate({ setBreadcrumb }) {
     <PageSection>
       <Card>
         {showCardHeader && <RoutedTabs tabsArray={tabs} />}
-        <Switch>
-          <Redirect
-            from="/notification_templates/:id"
-            to="/notification_templates/:id/details"
-            exact
-          />
-          {isLoading && <ContentLoading />}
-          {template && (
-            <>
-              <Route path="/notification_templates/:id/edit">
+        <Routes>
+          <Route index element={<Navigate to="details" replace />} />
+          <Route
+            path="edit"
+            element={
+              template ? (
                 <NotificationTemplateEdit
                   template={template}
                   defaultMessages={defaultMessages}
                 />
-              </Route>
-              <Route path="/notification_templates/:id/details">
+              ) : (
+                <ContentLoading />
+              )
+            }
+          />
+          <Route
+            path="details"
+            element={
+              template ? (
                 <NotificationTemplateDetail
                   template={template}
                   defaultMessages={defaultMessages}
                 />
-              </Route>
-            </>
-          )}
-        </Switch>
+              ) : (
+                <ContentLoading />
+              )
+            }
+          />
+        </Routes>
       </Card>
     </PageSection>
   );

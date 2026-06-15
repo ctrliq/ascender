@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { Route, Switch, useRouteMatch } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 
 import { useLingui } from '@lingui/react/macro';
 import ScreenHeader from 'components/ScreenHeader/ScreenHeader';
@@ -10,7 +10,6 @@ import NotificationTemplate from './NotificationTemplate';
 
 function NotificationTemplates() {
   const { t } = useLingui();
-  const match = useRouteMatch();
   const [breadcrumbConfig, setBreadcrumbConfig] = useState({
     '/notification_templates': t`Notification Templates`,
     '/notification_templates/add': t`Create New Notification Template`,
@@ -33,19 +32,27 @@ function NotificationTemplates() {
         streamType="notification_template"
         breadcrumbConfig={breadcrumbConfig}
       />
-      <Switch>
-        <Route path={`${match.url}/add`}>
-          <NotificationTemplateAdd />
-        </Route>
-        <Route path={`${match.url}/:id`}>
-          <NotificationTemplate setBreadcrumb={updateBreadcrumbConfig} />
-        </Route>
-        <Route path={`${match.url}`}>
-          <PersistentFilters pageKey="notificationTemplates">
-            <NotificationTemplateList />
-          </PersistentFilters>
-        </Route>
-      </Switch>
+      <Routes>
+        <Route
+          path="/notification_templates/add"
+          element={<NotificationTemplateAdd />}
+        />
+        {/* so the nested <NotificationTemplate> route tree can match the rest */}
+        <Route
+          path="/notification_templates/:id/*"
+          element={
+            <NotificationTemplate setBreadcrumb={updateBreadcrumbConfig} />
+          }
+        />
+        <Route
+          path="/notification_templates"
+          element={
+            <PersistentFilters pageKey="notificationTemplates">
+              <NotificationTemplateList />
+            </PersistentFilters>
+          }
+        />
+      </Routes>
     </>
   );
 }
