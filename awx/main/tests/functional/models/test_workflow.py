@@ -115,6 +115,308 @@ class TestWorkflowDAGFunctional(TransactionTestCase):
         self.assertFalse(has_failed)
         assert reason is None
 
+    def test_relaunch_from_failed_carries_succeeded_nodes(self):
+        # node[0] succeeded, node[1] failed (success path), rest never ran.
+        wfj = self.workflow_job(states=['successful', 'failed', None, None, None])
+        relaunched = wfj.create_relaunch_workflow_job(from_failed=True)
+
+        nodes = list(relaunched.workflow_nodes.all())
+        carried = [n for n in nodes if n.prior_run_succeeded]
+        # exactly the one originally-successful node is carried forward
+        assert len(carried) == 1
+        root = carried[0]
+        # a carried-forward node spawns no job of its own
+        assert root.job is None
+        assert root.success_nodes.count() == 1
+        failed_node = root.success_nodes.first()
+        assert failed_node.prior_run_succeeded is False
+        assert failed_node.job is None
+
+        dag = WorkflowDAG(workflow_job=relaunched)
+        dag.mark_dnr_nodes()
+        to_run = dag.bfs_nodes_to_run()
+        # the previously-failed node is ready to run again...
+        assert failed_node in to_run
+        # ...but the carried (already-successful) node is not re-run
+        assert root not in to_run
+        # and the workflow is not considered done while the failed node is pending
+        assert dag.is_workflow_done() is False
+
+    def test_relaunch_full_does_not_carry_nodes(self):
+        # a normal (full) relaunch must not mark anything as prior_run_succeeded
+        wfj = self.workflow_job(states=['successful', 'failed', None, None, None])
+        relaunched = wfj.create_relaunch_workflow_job()
+        assert not any(n.prior_run_succeeded for n in relaunched.workflow_nodes.all())
+
+    def test_relaunch_from_failed_twice_keeps_carrying_nodes(self):
+        # Relaunching a job that was ITSELF a relaunch-from-failed must keep
+        # carrying the already-succeeded node forward. That node has no job of
+        # its own (only prior_run_succeeded set), so detecting carry-forward by
+        # job status alone misses it and the whole workflow re-runs from the top.
+        wfj = self.workflow_job(states=['successful', 'failed', None, None, None])
+        succ = wfj.workflow_nodes.get(job__status='successful')
+        succ.job.elapsed = 12.5
+        succ.job.save()
+
+        relaunch1 = wfj.create_relaunch_workflow_job(from_failed=True)
+        carried1 = relaunch1.workflow_nodes.get(prior_run_succeeded=True)
+        assert carried1.job is None
+        assert carried1.prior_run_elapsed == 12.5
+
+        # Make relaunch1 look like a completed-with-failure run: its previously
+        # failed node (the carried node's success child) fails again.
+        failed1 = carried1.success_nodes.first()
+        failed1.job = failed1.unified_job_template.create_job()
+        failed1.job.status = 'failed'
+        failed1.job.save()
+        failed1.save()
+
+        relaunch2 = relaunch1.create_relaunch_workflow_job(from_failed=True)
+        carried2 = relaunch2.workflow_nodes.filter(prior_run_succeeded=True)
+        # the originally-successful node is still carried, with its elapsed intact
+        assert carried2.count() == 1
+        assert carried2.first().job is None
+        assert carried2.first().prior_run_elapsed == 12.5
+
+        dag = WorkflowDAG(workflow_job=relaunch2)
+        dag.mark_dnr_nodes()
+        to_run = dag.bfs_nodes_to_run()
+        # the carried node is not re-run; its failed child is ready to run again
+        assert carried2.first() not in to_run
+        assert carried2.first().success_nodes.first() in to_run
+
+    def test_relaunch_from_failed_carries_set_stats_artifacts(self):
+        # A carried node spawns no job, so the set_stats artifacts it produced
+        # must be preserved on the new node, otherwise downstream re-run nodes
+        # (which read a parent's artifacts from ancestor_artifacts) lose them.
+        wfj = self.workflow_job(states=['successful', 'failed', None, None, None])
+        root = wfj.workflow_nodes.get(job__status='successful')
+        root.job.artifacts = {'build_id': '42'}
+        root.job.save()
+
+        relaunched = wfj.create_relaunch_workflow_job(from_failed=True)
+        carried = relaunched.workflow_nodes.get(prior_run_succeeded=True)
+        # the carried root's set_stats output is captured on the new node
+        assert carried.ancestor_artifacts == {'build_id': '42'}
+
+        # and the re-run child inherits it when it builds its job kwargs
+        child = carried.success_nodes.first()
+        child.get_job_kwargs()
+        child.refresh_from_db()
+        assert child.ancestor_artifacts.get('build_id') == '42'
+
+    def test_template_path_carries_set_stats_artifacts(self):
+        # The WFJT relaunch path maps nodes by identifier. Regression: it must read
+        # the concrete polymorphic Job's set_stats artifacts, not the base
+        # UnifiedJob's (a select_related('job') there silently dropped them).
+        jt = JobTemplate.objects.create(name='art-jt')
+        original = WorkflowJob.objects.create()
+        onode = WorkflowJobNode.objects.create(workflow_job=original, unified_job_template=jt, identifier='n1')
+        onode.job = jt.create_job()
+        onode.job.status = 'successful'
+        onode.job.artifacts = {'carried_var': 'x'}
+        onode.job.save()
+        onode.save()
+
+        new = WorkflowJob.objects.create()
+        nnode = WorkflowJobNode.objects.create(workflow_job=new, unified_job_template=jt, identifier='n1')
+        new.mark_prior_succeeded_nodes_from(original=original)
+        nnode.refresh_from_db()
+        assert nnode.prior_run_succeeded is True
+        assert nnode.ancestor_artifacts == {'carried_var': 'x'}
+
+    def test_relaunch_from_failed_reevaluates_branches(self):
+        # The prior run had the root fail, so its failure branch ran and its
+        # success branch was do-not-run. On relaunch the root re-runs; the
+        # do_not_run decision must be recomputed fresh, not inherited, so that
+        # if the root now succeeds the success branch runs and the (previously
+        # live) failure branch is pruned.
+        wfj = self.workflow_job(states=['failed', None, None, 'failed', 'failed'])
+        relaunched = wfj.create_relaunch_workflow_job(from_failed=True)
+        # nothing carried, and no node starts out do_not_run
+        assert not any(n.prior_run_succeeded for n in relaunched.workflow_nodes.all())
+        assert not any(n.do_not_run for n in relaunched.workflow_nodes.all())
+
+        root = next(n for n in relaunched.workflow_nodes.all() if not n.get_parent_nodes())
+        success_child = root.success_nodes.first()
+        failure_child = root.failure_nodes.first()
+
+        # simulate the re-run root now SUCCEEDING (it failed in the prior run)
+        root.job = root.unified_job_template.create_job()
+        root.job.status = 'successful'
+        root.job.save()
+        root.save()
+
+        dag = WorkflowDAG(workflow_job=relaunched)
+        dnr_pks = {n.id for n in dag.mark_dnr_nodes()}
+        # the failure branch is pruned now that the root succeeded...
+        assert failure_child.id in dnr_pks
+        # ...and the success branch is not
+        assert success_child.id not in dnr_pks
+        assert success_child in dag.bfs_nodes_to_run()
+
+    def test_relaunch_from_failed_convergence_with_carried_parent(self):
+        # diamond: root -s-> a, root -s-> b ; a,b -s-> conv (all_parents_converge).
+        # prior run: root and a succeeded, b failed, conv never ran.
+        wfj = WorkflowJob.objects.create()
+        jt = JobTemplate.objects.create(name='conv-jt')
+        root, node_a, node_b, conv = [WorkflowJobNode.objects.create(workflow_job=wfj, unified_job_template=jt) for _ in range(4)]
+        root.success_nodes.add(node_a, node_b)
+        node_a.success_nodes.add(conv)
+        node_b.success_nodes.add(conv)
+        conv.all_parents_must_converge = True
+        conv.save()
+        for node, state in [(root, 'successful'), (node_a, 'successful'), (node_b, 'failed')]:
+            node.job = jt.create_job()
+            node.job.status = state
+            node.job.save()
+            node.save()
+
+        relaunched = wfj.create_relaunch_workflow_job(from_failed=True)
+        # root and a (both succeeded) are carried; b re-runs, conv waits
+        assert relaunched.workflow_nodes.filter(prior_run_succeeded=True).count() == 2
+        new_conv = relaunched.workflow_nodes.get(all_parents_must_converge=True)
+        new_b = relaunched.workflow_nodes.get(prior_run_succeeded=False, all_parents_must_converge=False)
+
+        dag = WorkflowDAG(workflow_job=relaunched)
+        dag.mark_dnr_nodes()
+        to_run = dag.bfs_nodes_to_run()
+        # b is ready to re-run; conv must wait until b finishes (a is carried-success)
+        assert new_b in to_run
+        assert new_conv not in to_run
+        assert dag.is_workflow_done() is False
+
+        # once b succeeds, conv converges (carried a + freshly-successful b)
+        new_b.job = jt.create_job()
+        new_b.job.status = 'successful'
+        new_b.job.save()
+        new_b.save()
+        dag = WorkflowDAG(workflow_job=relaunched)
+        dag.mark_dnr_nodes()
+        assert new_conv in dag.bfs_nodes_to_run()
+
+    def test_relaunch_from_failed_prunes_carried_node_on_abandoned_branch(self):
+        # root FAILED --failure--> handler SUCCEEDED --success--> leaf FAILED.
+        # Relaunch carries handler; on re-run root now SUCCEEDS, so root's whole
+        # failure branch (handler + leaf) must be pruned. If the carried handler
+        # were exempt from do_not_run, leaf would never run and the workflow would
+        # hang (never marked done).
+        wfj = WorkflowJob.objects.create()
+        jt = JobTemplate.objects.create(name='abandon-jt')
+        root, handler, leaf = [WorkflowJobNode.objects.create(workflow_job=wfj, unified_job_template=jt) for _ in range(3)]
+        root.failure_nodes.add(handler)
+        handler.success_nodes.add(leaf)
+        for node, state in [(root, 'failed'), (handler, 'successful'), (leaf, 'failed')]:
+            node.job = jt.create_job()
+            node.job.status = state
+            node.job.save()
+            node.save()
+
+        relaunched = wfj.create_relaunch_workflow_job(from_failed=True)
+        new_root = next(n for n in relaunched.workflow_nodes.all() if not n.get_parent_nodes())
+        new_handler = relaunched.workflow_nodes.get(prior_run_succeeded=True)
+        new_leaf = new_handler.success_nodes.first()
+
+        # the re-run root now succeeds (it failed in the prior run)
+        new_root.job = jt.create_job()
+        new_root.job.status = 'successful'
+        new_root.job.save()
+        new_root.save()
+
+        dag = WorkflowDAG(workflow_job=relaunched)
+        dnr = {n.id for n in dag.mark_dnr_nodes()}
+        # the carried handler and its leaf are on root's now-untaken failure path
+        assert new_handler.id in dnr
+        assert new_leaf.id in dnr
+        # so nothing remains to run and the workflow completes (no hang)
+        assert dag.bfs_nodes_to_run() == []
+        assert dag.is_workflow_done() is True
+
+    def test_relaunch_from_failed_does_not_prune_always_carried_node(self):
+        # root FAILED, root --always--> mid SUCCEEDED, mid --success--> leaf FAILED.
+        # Relaunch carries mid; on re-run root now SUCCEEDS. The always edge is
+        # taken regardless of root's outcome, so mid must stay reached (NOT pruned)
+        # and its previously-failed leaf must re-run. Guards the DNR fix against
+        # over-pruning carried nodes on always paths.
+        wfj = WorkflowJob.objects.create()
+        jt = JobTemplate.objects.create(name='always-jt')
+        root, mid, leaf = [WorkflowJobNode.objects.create(workflow_job=wfj, unified_job_template=jt) for _ in range(3)]
+        root.always_nodes.add(mid)
+        mid.success_nodes.add(leaf)
+        for node, state in [(root, 'failed'), (mid, 'successful'), (leaf, 'failed')]:
+            node.job = jt.create_job()
+            node.job.status = state
+            node.job.save()
+            node.save()
+
+        relaunched = wfj.create_relaunch_workflow_job(from_failed=True)
+        new_root = next(n for n in relaunched.workflow_nodes.all() if not n.get_parent_nodes())
+        new_mid = relaunched.workflow_nodes.get(prior_run_succeeded=True)
+        new_leaf = new_mid.success_nodes.first()
+        new_root.job = jt.create_job()
+        new_root.job.status = 'successful'
+        new_root.job.save()
+        new_root.save()
+
+        dag = WorkflowDAG(workflow_job=relaunched)
+        dnr = {n.id for n in dag.mark_dnr_nodes()}
+        # reached via the always edge regardless of root's outcome -> not pruned
+        assert new_mid.id not in dnr
+        assert new_leaf in dag.bfs_nodes_to_run()
+
+    def test_carried_node_with_deleted_template_does_not_fail_workflow(self):
+        # a carried (already-succeeded) node whose template was deleted between
+        # runs must not be classified as a failed node. Use separate templates so
+        # deleting the carried node's does not also null the re-run node's.
+        wfj = WorkflowJob.objects.create()
+        jt_carried = JobTemplate.objects.create(name='carried-jt')
+        jt_rerun = JobTemplate.objects.create(name='rerun-jt')
+        node0 = WorkflowJobNode.objects.create(workflow_job=wfj, unified_job_template=jt_carried)
+        node1 = WorkflowJobNode.objects.create(workflow_job=wfj, unified_job_template=jt_rerun)
+        node0.success_nodes.add(node1)
+        node0.job = jt_carried.create_job()
+        node0.job.status = 'successful'
+        node0.job.save()
+        node0.save()
+        node1.job = jt_rerun.create_job()
+        node1.job.status = 'failed'
+        node1.job.save()
+        node1.save()
+
+        relaunched = wfj.create_relaunch_workflow_job(from_failed=True)
+        carried = relaunched.workflow_nodes.get(prior_run_succeeded=True)
+        jt_carried.delete()
+        carried.refresh_from_db()
+        assert carried.unified_job_template is None
+
+        dag = WorkflowDAG(workflow_job=relaunched)
+        dag.mark_dnr_nodes()
+        failed, _reason = dag.has_workflow_failed()
+        assert failed is False
+
+    def test_relaunch_from_failed_preserves_extra_vars(self):
+        # launch-time variables on the workflow survive the relaunch
+        wfj = self.workflow_job(states=['successful', 'failed', None, None, None])
+        wfj.extra_vars = '{"my_var": "carried-value"}'
+        wfj.save()
+        relaunched = wfj.create_relaunch_workflow_job(from_failed=True)
+        assert relaunched.extra_vars == '{"my_var": "carried-value"}'
+
+    def test_relaunch_from_failed_reruns_canceled_node(self):
+        # a node canceled in the prior run (status 'canceled') is treated like a
+        # failure: it re-runs while the successful node is carried forward
+        wfj = self.workflow_job(states=['successful', 'canceled', None, None, None])
+        relaunched = wfj.create_relaunch_workflow_job(from_failed=True)
+        carried = [n for n in relaunched.workflow_nodes.all() if n.prior_run_succeeded]
+        assert len(carried) == 1
+        canceled_node = carried[0].success_nodes.first()
+        assert canceled_node.prior_run_succeeded is False
+        assert canceled_node.job is None
+
+        dag = WorkflowDAG(workflow_job=relaunched)
+        dag.mark_dnr_nodes()
+        assert canceled_node in dag.bfs_nodes_to_run()
+
 
 @pytest.mark.django_db
 class TestWorkflowDNR:

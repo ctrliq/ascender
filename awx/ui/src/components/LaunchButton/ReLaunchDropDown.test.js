@@ -1,4 +1,5 @@
 import React from 'react';
+import { act } from 'react-dom/test-utils';
 import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
 import ReLaunchDropDown from './ReLaunchDropDown';
 
@@ -13,12 +14,15 @@ describe('ReLaunchDropDown', () => {
     expect(wrapper.find('Dropdown')).toHaveLength(1);
   });
 
-  test('dropdown have expected items and callbacks', () => {
+  test('dropdown have expected items and callbacks', async () => {
     const wrapper = mountWithContexts(
       <ReLaunchDropDown handleRelaunch={handleRelaunch} />
     );
     expect(wrapper.find('DropdownItem')).toHaveLength(0);
-    wrapper.find('button').simulate('click');
+    // the menu renders in a popper, whose async positioning must be flushed
+    await act(async () => {
+      wrapper.find('button').simulate('click');
+    });
     wrapper.update();
     expect(wrapper.find('DropdownItem')).toHaveLength(3);
 

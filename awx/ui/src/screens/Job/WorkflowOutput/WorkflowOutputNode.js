@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom-v5-compat';
 
 import { useLingui } from '@lingui/react/macro';
@@ -69,20 +69,51 @@ function WorkflowOutputNode({ mouseEnter, mouseLeave, node }) {
   const navigate = useNavigate();
   const { nodePositions } = useContext(WorkflowStateContext);
   const job = node?.originalNodeObject?.summary_fields?.job;
+  // A node carried forward by "relaunch from failed" succeeded in the prior
+  // run and spawns no job of its own; show it as successful (green).
+  const priorRunSucceeded = node?.originalNodeObject?.prior_run_succeeded;
+  const priorRunElapsed = node?.originalNodeObject?.prior_run_elapsed;
+
+  // Live-ticking elapsed time while the node runs. Use the job's started time
+  // when known; for a node that starts while watching (its websocket message
+  // carries no started) count from when it was first seen running.
+  const isRunning = job?.status === 'running';
+  const jobStarted = job?.started;
+  const [runningElapsed, setRunningElapsed] = useState(null);
+  useEffect(() => {
+    if (!isRunning) {
+      setRunningElapsed(null);
+      return undefined;
+    }
+    const startedAt = jobStarted ? new Date(jobStarted).getTime() : Date.now();
+    const tick = () => {
+      const seconds = Math.max(0, Math.floor((Date.now() - startedAt) / 1000));
+      setRunningElapsed(secondsToHHMMSS(seconds));
+    };
+    tick();
+    const timer = setInterval(tick, 1000);
+    return () => clearInterval(timer);
+  }, [isRunning, jobStarted]);
 
   let borderColor = 'var(--pf-global--BorderColor--100)';
 
   if (job) {
-    if (
-      job.status === 'failed' ||
-      job.status === 'error' ||
-      job.status === 'canceled'
-    ) {
+    if (job.status === 'failed' || job.status === 'error') {
       borderColor = 'var(--pf-global--danger-color--100)';
+    }
+    if (job.status === 'canceled') {
+      // match the orange of the canceled status icon
+      borderColor = 'var(--pf-global--palette--orange-300)';
     }
     if (job.status === 'successful' || job.status === 'ok') {
       borderColor = 'var(--pf-global--success-color--100)';
     }
+    if (job.status === 'running') {
+      // match the blue of the running status icon
+      borderColor = 'var(--pf-global--primary-color--100)';
+    }
+  } else if (priorRunSucceeded) {
+    borderColor = 'var(--pf-global--success-color--100)';
   }
 
   const handleNodeClick = () => {
@@ -156,24 +187,48 @@ function WorkflowOutputNode({ mouseEnter, mouseLeave, node }) {
       />
       <foreignObject height="58" width="178" x="1" y="1">
         <NodeContents>
-          {job ? (
-            <>
-              <JobTopLine>
-                {job.status !== 'pending' && <StatusIcon status={job.status} />}
-                <p>{nodeName}</p>
-              </JobTopLine>
-              {!!job?.elapsed && (
-                <Elapsed>{secondsToHHMMSS(job.elapsed)}</Elapsed>
-              )}
-            </>
-          ) : (
-            <NodeDefaultLabel>{nodeName}</NodeDefaultLabel>
-          )}
+          {(() => {
+            if (job) {
+              let elapsedText = null;
+              if (isRunning && runningElapsed) {
+                elapsedText = runningElapsed;
+              } else if (job.elapsed) {
+                elapsedText = secondsToHHMMSS(job.elapsed);
+              }
+              return (
+                <>
+                  <JobTopLine>
+                    {job.status !== 'pending' && (
+                      <StatusIcon status={job.status} />
+                    )}
+                    <p>{nodeName}</p>
+                  </JobTopLine>
+                  {elapsedText && <Elapsed>{elapsedText}</Elapsed>}
+                </>
+              );
+            }
+            if (priorRunSucceeded) {
+              return (
+                <>
+                  <JobTopLine>
+                    <StatusIcon status="successful" />
+                    <p>{nodeName}</p>
+                  </JobTopLine>
+                  {priorRunElapsed != null && (
+                    <Elapsed>{secondsToHHMMSS(priorRunElapsed)}</Elapsed>
+                  )}
+                </>
+              );
+            }
+            return <NodeDefaultLabel>{nodeName}</NodeDefaultLabel>;
+          })()}
         </NodeContents>
       </foreignObject>
-      {(node.unifiedJobTemplate || job) && (
-        <WorkflowNodeTypeLetter node={node} />
-      )}
+      {(node.unifiedJobTemplate ||
+        node.fullUnifiedJobTemplate ||
+        node?.originalNodeObject?.summary_fields?.unified_job_template ||
+        job ||
+        priorRunSucceeded) && <WorkflowNodeTypeLetter node={node} />}
     </NodeG>
   );
 }

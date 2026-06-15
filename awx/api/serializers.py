@@ -4234,6 +4234,8 @@ class WorkflowJobNodeSerializer(LaunchConfigurationBaseSerializer):
             'always_nodes',
             'all_parents_must_converge',
             'do_not_run',
+            'prior_run_succeeded',
+            'prior_run_elapsed',
             'identifier',
         )
 

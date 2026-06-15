@@ -10,7 +10,11 @@ import { formatDateString } from 'util/dates';
 import { isJobRunning } from 'util/jobs';
 import getScheduleUrl from 'util/getScheduleUrl';
 import { ActionsTd, ActionItem, TdBreakWord } from '../PaginatedTable';
-import { LaunchButton, ReLaunchDropDown } from '../LaunchButton';
+import {
+  LaunchButton,
+  ReLaunchDropDown,
+  WorkflowReLaunchDropDown,
+} from '../LaunchButton';
 import StatusLabel from '../StatusLabel';
 import {
   DetailList,
@@ -38,6 +42,11 @@ function JobListItem({
 }) {
   const { t } = useLingui();
   const labelId = `check-action-${job.id}`;
+  // a workflow that did not fully succeed (failed / errored / canceled) offers
+  // the relaunch-from-failed dropdown so successful nodes can be skipped
+  const isWorkflowFromFailed =
+    job.type === 'workflow_job' &&
+    ['failed', 'error', 'canceled'].includes(job.status);
 
   const jobTypes = {
     project_update: t`Source Control Update`,
@@ -128,13 +137,14 @@ function JobListItem({
               job.type !== 'system_job' &&
               job.summary_fields?.user_capabilities?.start
             }
-            tooltip={
-              job.status === 'failed' && job.type === 'job'
-                ? t`Relaunch using host parameters`
-                : t`Relaunch Job`
-            }
+            tooltip={(() => {
+              if (job.status === 'failed' && job.type === 'job') {
+                return t`Relaunch using host parameters`;
+              }
+              return t`Relaunch Job`;
+            })()}
           >
-            {job.status === 'failed' && job.type === 'job' ? (
+            {job.status === 'failed' && job.type === 'job' && (
               <LaunchButton resource={job}>
                 {({ handleRelaunch, isLaunching }) => (
                   <ReLaunchDropDown
@@ -144,7 +154,24 @@ function JobListItem({
                   />
                 )}
               </LaunchButton>
-            ) : (
+            )}
+            {isWorkflowFromFailed && (
+              <LaunchButton resource={job}>
+                {({ handleRelaunch, isLaunching }) => (
+                  <WorkflowReLaunchDropDown
+                    handleRelaunch={handleRelaunch}
+                    isLaunching={isLaunching}
+                    id={`relaunch-workflow-${job.id}`}
+                    ouiaId={`relaunch-workflow-${job.id}`}
+                    status={job.status}
+                  />
+                )}
+              </LaunchButton>
+            )}
+            {!(
+              (job.status === 'failed' && job.type === 'job') ||
+              isWorkflowFromFailed
+            ) && (
               <LaunchButton resource={job}>
                 {({ handleRelaunch, isLaunching }) => (
                   <Button
