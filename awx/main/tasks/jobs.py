@@ -1428,7 +1428,7 @@ class RunProjectUpdate(BaseTask):
                     # copy project folder before resetting to default branch
                     self.make_local_copy(instance, self.job_private_data_dir)
         finally:
-            if instance.launch_type != 'sync':
+            if instance.launch_type != 'sync' and self.lock_fd is not None:
                 self.release_lock(instance.project)
 
         p = instance.project

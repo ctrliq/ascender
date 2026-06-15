@@ -1904,6 +1904,132 @@ def test_acquire_lock_acquisition_fail_logged(fcntl_lockf, logger, os_close, os_
     logger.error.assert_called_with("I/O error({0}) while trying to acquire lock on file [{1}]: {2}".format(3, 'this_file_does_not_exist', 'dummy message'))
 
 
+@mock.patch('os.open')
+@mock.patch('os.close')
+@mock.patch('fcntl.lockf')
+def test_acquire_lock_returns_false_on_cancel(fcntl_lockf, os_close, os_open, mock_me):
+    """acquire_lock returns False and cleans up fd when cancel_flag is set while waiting."""
+    import errno
+
+    err = IOError()
+    err.errno = errno.EAGAIN
+    err.strerror = 'Resource temporarily unavailable'
+
+    os_open.return_value = 3
+    fcntl_lockf.side_effect = err
+
+    task = jobs.RunProjectUpdate()
+    instance = mock.Mock()
+    instance.get_lock_file.return_value = '/tmp/test.lock'
+    instance.cancel_flag = True
+    instance.id = 42
+    task.instance = instance
+
+    result = task.acquire_lock(instance)
+    assert result is False
+    assert task.lock_fd is None
+    os_close.assert_called_with(3)
+
+
+@mock.patch('os.open')
+@mock.patch('os.close')
+@mock.patch('fcntl.lockf')
+@mock.patch('awx.main.tasks.jobs.signal_callback', return_value=True)
+def test_acquire_lock_returns_false_on_signal(signal_cb, fcntl_lockf, os_close, os_open, mock_me):
+    """acquire_lock returns False and cleans up fd when signal_callback returns True."""
+    import errno
+
+    err = IOError()
+    err.errno = errno.EAGAIN
+    err.strerror = 'Resource temporarily unavailable'
+
+    os_open.return_value = 5
+    fcntl_lockf.side_effect = err
+
+    task = jobs.RunProjectUpdate()
+    instance = mock.Mock()
+    instance.get_lock_file.return_value = '/tmp/test.lock'
+    instance.cancel_flag = False
+    instance.id = 99
+    task.instance = instance
+
+    result = task.acquire_lock(instance)
+    assert result is False
+    assert task.lock_fd is None
+    os_close.assert_called_with(5)
+
+
+@mock.patch('os.open')
+@mock.patch('os.close')
+@mock.patch('fcntl.lockf')
+def test_acquire_lock_returns_true_on_success(fcntl_lockf, os_close, os_open, mock_me):
+    """acquire_lock returns True when lock is acquired successfully."""
+    os_open.return_value = 7
+    # lockf succeeds (no exception)
+    fcntl_lockf.return_value = None
+
+    task = jobs.RunProjectUpdate()
+    instance = mock.Mock()
+    instance.get_lock_file.return_value = '/tmp/test.lock'
+    task.instance = instance
+
+    result = task.acquire_lock(instance)
+    assert result is True
+    assert task.lock_fd == 7
+
+
+def test_sync_and_copy_returns_on_cancel(mock_me):
+    """sync_and_copy returns gracefully when acquire_lock fails due to cancel."""
+    task = jobs.RunJob()
+    task.instance = mock.Mock()
+    task.instance.id = 1
+    task.instance.cancel_flag = True
+
+    project = mock.Mock()
+    project.id = 10
+
+    with mock.patch.object(task, 'acquire_lock', return_value=False):
+        # Should return without raising
+        result = task.sync_and_copy(project, '/tmp/pdd')
+        assert result is None
+
+
+def test_sync_and_copy_raises_on_signal_interrupt(mock_me):
+    """sync_and_copy raises RuntimeError when acquire_lock fails due to signal (not cancel)."""
+    task = jobs.RunJob()
+    task.instance = mock.Mock()
+    task.instance.id = 1
+    task.instance.cancel_flag = False
+
+    project = mock.Mock()
+    project.id = 10
+
+    with mock.patch.object(task, 'acquire_lock', return_value=False):
+        with pytest.raises(RuntimeError, match='Could not acquire lock for project 10'):
+            task.sync_and_copy(project, '/tmp/pdd')
+
+
+def test_project_update_post_run_hook_skips_release_when_no_lock(mock_me):
+    """post_run_hook does not call release_lock when lock_fd is None (lock was never acquired)."""
+    task = jobs.RunProjectUpdate()
+    task.lock_fd = None
+    task.runner_callback = mock.Mock()
+    task.runner_callback.playbook_new_revision = None
+    task.job_private_data_dir = None
+
+    instance = mock.Mock()
+    instance.launch_type = 'manual'
+    instance.job_type = 'run'
+    instance.job_tags = ''
+    instance.get_cache_path.return_value = '/tmp/nonexistent_cache_path'
+
+    with mock.patch('os.path.exists', return_value=False):
+        task.post_run_hook(instance, 'failed')
+
+    # release_lock should never have been called
+    assert task.lock_fd is None
+
+
 @pytest.mark.parametrize('injector_cls', [cls for cls in ManagedCredentialType.registry.values() if cls.injectors])
 def test_managed_injector_redaction(injector_cls):
     """See awx.main.models.inventory.PluginFileInjector._get_shared_env
