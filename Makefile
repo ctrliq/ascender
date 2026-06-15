@@ -24,7 +24,7 @@ COLLECTION_TEST_TARGET ?=
 COLLECTION_PACKAGE ?= ascender
 COLLECTION_NAMESPACE ?= ctrliq
 COLLECTION_INSTALL = ~/.ansible/collections/ansible_collections/$(COLLECTION_NAMESPACE)/$(COLLECTION_PACKAGE)
-COLLECTION_TEMPLATE_VERSION ?= false
+COLLECTION_TEMPLATE_VERSION ?= true
 
 # NOTE: This defaults the container image version to the branch that's active
 COMPOSE_TAG ?= $(GIT_BRANCH)
