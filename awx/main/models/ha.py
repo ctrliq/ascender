@@ -484,6 +484,7 @@ class InstanceGroup(HasPolicyEditsMixin, BaseModel, RelatedJobsMixin, ResourceMi
 
     class Meta:
         app_label = 'main'
+        ordering = ('id',)
 
     def set_default_policy_fields(self):
         self.policy_instance_list = []
