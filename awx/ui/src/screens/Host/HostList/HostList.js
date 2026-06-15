@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { useLocation, useRouteMatch } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom-v5-compat';
 
 import { useLingui } from '@lingui/react/macro';
@@ -33,7 +33,6 @@ function HostList() {
   const { t } = useLingui();
   const navigate = useNavigate();
   const location = useLocation();
-  const match = useRouteMatch();
   const parsedQueryStrings = parseQueryString(QS_CONFIG, location.search);
   const nonDefaultSearchParams = {};
 
@@ -186,7 +185,7 @@ function HostList() {
               qsConfig={QS_CONFIG}
               additionalControls={[
                 ...(canAdd
-                  ? [<ToolbarAddButton key="add" linkTo={`${match.url}/add`} />]
+                  ? [<ToolbarAddButton key="add" linkTo="/hosts/add" />]
                   : []),
                 <ToolbarDeleteButton
                   key="delete"
@@ -215,7 +214,7 @@ function HostList() {
             <HostListItem
               key={host.id}
               host={host}
-              detailUrl={`${match.url}/${host.id}/details`}
+              detailUrl={`/hosts/${host.id}/details`}
               isSelected={selected.some((row) => row.id === host.id)}
               onSelect={() => handleSelect(host)}
               rowIndex={index}
@@ -223,7 +222,7 @@ function HostList() {
           )}
           emptyStateControls={
             canAdd ? (
-              <ToolbarAddButton key="add" linkTo={`${match.url}/add`} />
+              <ToolbarAddButton key="add" linkTo="/hosts/add" />
             ) : null
           }
         />

@@ -1,15 +1,15 @@
 import React from 'react';
 
-import { Switch, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom-v5-compat';
+import ContentError from 'components/ContentError';
 import HostGroupsList from './HostGroupsList';
 
 function HostGroups({ host }) {
   return (
-    <Switch>
-      <Route key="list" path="/hosts/:id/groups">
-        <HostGroupsList host={host} />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route index element={<HostGroupsList host={host} />} />
+      <Route path="*" element={<ContentError isNotFound />} />
+    </Routes>
   );
 }
 
