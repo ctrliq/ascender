@@ -1,6 +1,6 @@
 import pytest
 
-from awx.main.models import Inventory, WorkflowJobNode
+from awx.main.models import Inventory
 from awx.api.versioning import reverse
 
 
