@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom-v5-compat';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 
 import Schedule from './Schedule';
 import ScheduleAdd from './ScheduleAdd';
@@ -15,15 +15,9 @@ function Schedules({
   resource,
   resourceDefaultCredentials,
 }) {
-  // This component is mounted at several different base paths (templates,
-  // projects, inventory sources, management jobs). Derive the base from the
-  // location so the routes are base-agnostic and resolve whether the parent
-  // screen is still on v5 or already on v6.
-  const { pathname } = useLocation();
-  const baseUrl = `${pathname.substr(
-    0,
-    pathname.indexOf('schedules')
-  )}schedules`;
+  // This component is mounted under a ".../schedules/*" route on several
+  // screens (templates, projects, inventory sources, management jobs), so its
+  // routes are relative to that parent and resolve under any of them.
 
   // For some management jobs that delete data, we want to provide an additional
   // field on the scheduler for configuring the number of days to retain.
@@ -36,7 +30,7 @@ function Schedules({
   return (
     <Routes>
       <Route
-        path={`${baseUrl}/add`}
+        path="add"
         element={
           <ScheduleAdd
             hasDaysToKeepField={hasDaysToKeepField}
@@ -48,9 +42,9 @@ function Schedules({
           />
         }
       />
-      {/* /* so the nested <Schedule> route tree can match */}
+      {/* so the nested <Schedule> route tree can match */}
       <Route
-        path={`${baseUrl}/:scheduleId/*`}
+        path=":scheduleId/*"
         element={
           <Schedule
             hasDaysToKeepField={hasDaysToKeepField}
@@ -63,7 +57,7 @@ function Schedules({
         }
       />
       <Route
-        path={baseUrl}
+        index
         element={
           <ScheduleList
             resource={resource}
