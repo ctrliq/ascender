@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { useLocation, useRouteMatch } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import { Card, PageSection } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
@@ -30,7 +30,6 @@ const QS_CONFIG = getQSConfig('team', {
 function TeamList() {
   const { t } = useLingui();
   const location = useLocation();
-  const match = useRouteMatch();
 
   const {
     result: {
@@ -156,7 +155,7 @@ function TeamList() {
                     ? [
                         <ToolbarAddButton
                           key="add"
-                          linkTo={`${match.url}/add`}
+                          linkTo="/teams/add"
                         />,
                       ]
                     : []),
@@ -173,7 +172,7 @@ function TeamList() {
               <TeamListItem
                 key={team.id}
                 team={team}
-                detailUrl={`${match.url}/${team.id}`}
+                detailUrl={`/teams/${team.id}`}
                 isSelected={selected.some((row) => row.id === team.id)}
                 onSelect={() => handleSelect(team)}
                 rowIndex={index}
@@ -181,7 +180,7 @@ function TeamList() {
             )}
             emptyStateControls={
               canAdd ? (
-                <ToolbarAddButton key="add" linkTo={`${match.url}/add`} />
+                <ToolbarAddButton key="add" linkTo="/teams/add" />
               ) : null
             }
           />

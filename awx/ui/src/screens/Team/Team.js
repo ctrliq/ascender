@@ -1,14 +1,14 @@
 
 import React, { useState, useEffect } from 'react';
 
+import { Link } from 'react-router-dom';
 import {
-  Link,
-  Redirect,
+  Routes,
   Route,
-  Switch,
+  Navigate,
   useLocation,
   useParams,
-} from 'react-router-dom';
+} from 'react-router-dom-v5-compat';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card, PageSection } from '@patternfly/react-core';
 import { Config } from 'contexts/Config';
@@ -87,42 +87,47 @@ function Team({ setBreadcrumb }) {
     <PageSection>
       <Card>
         {showCardHeader && <RoutedTabs tabsArray={tabsArray} />}
-        <Switch>
-          <Redirect from="/teams/:id" to="/teams/:id/details" exact />
+        <Routes>
+          <Route index element={<Navigate to="details" replace />} />
           {team && (
-            <Route path="/teams/:id/details">
-              <TeamDetail team={team} />
-            </Route>
+            <Route path="details" element={<TeamDetail team={team} />} />
+          )}
+          {team && <Route path="edit" element={<TeamEdit team={team} />} />}
+          {team && (
+            <Route
+              path="access"
+              element={
+                <ResourceAccessList resource={team} apiModel={TeamsAPI} />
+              }
+            />
           )}
           {team && (
-            <Route path="/teams/:id/edit">
-              <TeamEdit team={team} />
-            </Route>
+            <Route
+              path="roles"
+              element={
+                <Config>
+                  {({ me }) => (
+                    <>{me && <TeamRolesList me={me} team={team} />}</>
+                  )}
+                </Config>
+              }
+            />
           )}
-          {team && (
-            <Route path="/teams/:id/access">
-              <ResourceAccessList resource={team} apiModel={TeamsAPI} />
-            </Route>
-          )}
-          {team && (
-            <Route path="/teams/:id/roles">
-              <Config>
-                {({ me }) => <>{me && <TeamRolesList me={me} team={team} />}</>}
-              </Config>
-            </Route>
-          )}
-          <Route key="not-found" path="*">
-            {!hasContentLoading && (
-              <ContentError isNotFound>
-                {id && (
-                  <Link to={`/teams/${id}/details`}>
-                    {t`View Team Details`}
-                  </Link>
-                )}
-              </ContentError>
-            )}
-          </Route>
-        </Switch>
+          <Route
+            path="*"
+            element={
+              !hasContentLoading ? (
+                <ContentError isNotFound>
+                  {id && (
+                    <Link to={`/teams/${id}/details`}>
+                      {t`View Team Details`}
+                    </Link>
+                  )}
+                </ContentError>
+              ) : null
+            }
+          />
+        </Routes>
       </Card>
     </PageSection>
   );

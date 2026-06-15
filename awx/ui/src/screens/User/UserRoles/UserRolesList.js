@@ -193,6 +193,7 @@ function UserRolesList({ user }) {
       {showAddModal && (
         <UserAndTeamAccessAdd
           apiModel={UsersAPI}
+          resourceId={user.id}
           onFetchData={() => {
             setShowAddModal(false);
             fetchRoles();
