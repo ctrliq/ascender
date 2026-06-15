@@ -1,6 +1,6 @@
 import pytest
 
-
+from awx.main.models import Inventory
 from awx.api.versioning import reverse
 
 
@@ -36,6 +36,33 @@ def test_workflow_job_relaunch_not_inventory_failure(workflow_job, post, admin_u
     workflow_job.save()
     url = reverse("api:workflow_job_relaunch", kwargs={'pk': workflow_job.pk})
     post(url, user=admin_user, expect=400)
+
+
+@pytest.mark.django_db
+def test_workflow_job_relaunch_federated_inventory(organization, job_template, post, admin_user):
+    """Relaunching a sliced workflow spawned from a federated inventory must not
+    be blocked by the stale-slice-count check (federated inventories have no
+    direct hosts, so hosts.count() is always 0)."""
+    fed_inv = Inventory.objects.create(name='fed-inv', kind='federated', organization=organization)
+    inv_a = Inventory.objects.create(name='inv-a', organization=organization)
+    inv_b = Inventory.objects.create(name='inv-b', organization=organization)
+    inv_a.hosts.create(name='host-a')
+    inv_b.hosts.create(name='host-b')
+    fed_inv.input_inventories.add(inv_a)
+    fed_inv.input_inventories.add(inv_b)
+
+    job_template.inventory = fed_inv
+    job_template.organization = organization
+    job_template.save()
+
+    wfj = job_template.create_unified_job()
+    wfj.status = 'successful'
+    wfj.save()
+    assert wfj.is_sliced_job
+    assert wfj.workflow_nodes.count() == 2
+
+    url = reverse("api:workflow_job_relaunch", kwargs={'pk': wfj.pk})
+    post(url, user=admin_user, expect=201)
 
 
 @pytest.mark.django_db
