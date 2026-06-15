@@ -159,12 +159,12 @@ function ManagementJob({ setBreadcrumb }) {
         {Tabs}
         <Routes>
           <Route
-            path={`${basePath}/:id`}
+            index
             element={<Navigate to={`${detailUrl}/schedules`} replace />}
           />
           {shouldShowNotifications ? (
             <Route
-              path={`${basePath}/:id/notifications`}
+              path="notifications"
               element={
                 <NotificationList
                   id={Number(result?.systemJobTemplate?.id)}
@@ -177,7 +177,7 @@ function ManagementJob({ setBreadcrumb }) {
           {/* /* so the nested <Schedules> route tree can match */}
           {shouldShowSchedules ? (
             <Route
-              path={`${basePath}/:id/schedules/*`}
+              path="schedules/*"
               element={
                 <Schedules
                   apiModel={SystemJobTemplatesAPI}
