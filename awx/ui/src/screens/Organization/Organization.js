@@ -1,14 +1,13 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { useLingui } from '@lingui/react/macro';
+import { Link } from 'react-router-dom';
 import {
-  Switch,
+  Routes,
   Route,
-  Redirect,
-  Link,
+  Navigate,
   useLocation,
   useParams,
-  useRouteMatch,
-} from 'react-router-dom';
+} from 'react-router-dom-v5-compat';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card, PageSection } from '@patternfly/react-core';
 import useRequest from 'hooks/useRequest';
@@ -25,7 +24,6 @@ import OrganizationExecEnvList from './OrganizationExecEnvList';
 function Organization({ setBreadcrumb, me }) {
   const location = useLocation();
   const { id: organizationId } = useParams();
-  const match = useRouteMatch();
   const initialUpdate = useRef(true);
 
   const {
@@ -120,12 +118,20 @@ function Organization({ setBreadcrumb, me }) {
       id: 99,
       persistentFilterKey: 'organizations',
     },
-    { name: t`Details`, link: `${match.url}/details`, id: 0 },
-    { name: t`Access`, link: `${match.url}/access`, id: 1 },
-    { name: t`Teams`, link: `${match.url}/teams`, id: 2 },
+    {
+      name: t`Details`,
+      link: `/organizations/${organizationId}/details`,
+      id: 0,
+    },
+    {
+      name: t`Access`,
+      link: `/organizations/${organizationId}/access`,
+      id: 1,
+    },
+    { name: t`Teams`, link: `/organizations/${organizationId}/teams`, id: 2 },
     {
       name: t`Execution Environments`,
-      link: `${match.url}/execution_environments`,
+      link: `/organizations/${organizationId}/execution_environments`,
       id: 4,
     },
   ];
@@ -133,7 +139,7 @@ function Organization({ setBreadcrumb, me }) {
   if (canSeeNotificationsTab) {
     tabsArray.push({
       name: t`Notifications`,
-      link: `${match.url}/notifications`,
+      link: `/organizations/${organizationId}/notifications`,
       id: 3,
     });
   }
@@ -177,61 +183,69 @@ function Organization({ setBreadcrumb, me }) {
     <PageSection>
       <Card>
         {showCardHeader && <RoutedTabs tabsArray={tabsArray} />}
-        <Switch>
-          <Redirect
-            from="/organizations/:id"
-            to="/organizations/:id/details"
-            exact
+        <Routes>
+          <Route index element={<Navigate to="details" replace />} />
+          {organization && (
+            <Route
+              path="edit"
+              element={<OrganizationEdit organization={organization} />}
+            />
+          )}
+          {organization && (
+            <Route
+              path="details"
+              element={<OrganizationDetail organization={organization} />}
+            />
+          )}
+          {organization && (
+            <Route
+              path="access"
+              element={
+                <ResourceAccessList
+                  resource={organization}
+                  apiModel={OrganizationsAPI}
+                />
+              }
+            />
+          )}
+          <Route
+            path="teams"
+            element={<OrganizationTeams id={Number(organizationId)} />}
           />
-          {organization && (
-            <Route path="/organizations/:id/edit">
-              <OrganizationEdit organization={organization} />
-            </Route>
-          )}
-          {organization && (
-            <Route path="/organizations/:id/details">
-              <OrganizationDetail organization={organization} />
-            </Route>
-          )}
-          {organization && (
-            <Route path="/organizations/:id/access">
-              <ResourceAccessList
-                resource={organization}
-                apiModel={OrganizationsAPI}
-              />
-            </Route>
-          )}
-          <Route path="/organizations/:id/teams">
-            <OrganizationTeams id={Number(match.params.id)} />
-          </Route>
           {canSeeNotificationsTab && (
-            <Route path="/organizations/:id/notifications">
-              <NotificationList
-                id={Number(match.params.id)}
-                canToggleNotifications={canToggleNotifications}
-                apiModel={OrganizationsAPI}
-                showApprovalsToggle
-              />
-            </Route>
+            <Route
+              path="notifications"
+              element={
+                <NotificationList
+                  id={Number(organizationId)}
+                  canToggleNotifications={canToggleNotifications}
+                  apiModel={OrganizationsAPI}
+                  showApprovalsToggle
+                />
+              }
+            />
           )}
           {organization && (
-            <Route path="/organizations/:id/execution_environments">
-              <OrganizationExecEnvList organization={organization} />
-            </Route>
+            <Route
+              path="execution_environments"
+              element={<OrganizationExecEnvList organization={organization} />}
+            />
           )}
-          <Route key="not-found" path="*">
-            {!organizationLoading && !rolesLoading && (
-              <ContentError isNotFound>
-                {match.params.id && (
-                  <Link to={`/organizations/${match.params.id}/details`}>
-                    {t`View Organization Details`}
-                  </Link>
-                )}
-              </ContentError>
-            )}
-          </Route>
-          ,
-        </Switch>
+          <Route
+            path="*"
+            element={
+              !organizationLoading && !rolesLoading ? (
+                <ContentError isNotFound>
+                  {organizationId && (
+                    <Link to={`/organizations/${organizationId}/details`}>
+                      {t`View Organization Details`}
+                    </Link>
+                  )}
+                </ContentError>
+              ) : null
+            }
+          />
+        </Routes>
       </Card>
     </PageSection>
   );

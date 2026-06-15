@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { Route, Switch, useRouteMatch } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 
 import { useLingui } from '@lingui/react/macro';
 
@@ -12,7 +12,6 @@ import Organization from './Organization';
 
 function Organizations() {
   const { t } = useLingui();
-  const match = useRouteMatch();
   const [breadcrumbConfig, setBreadcrumbConfig] = useState({
     '/organizations': t`Organizations`,
     '/organizations/add': t`Create New Organization`,
@@ -46,23 +45,28 @@ function Organizations() {
         streamType="organization"
         breadcrumbConfig={breadcrumbConfig}
       />
-      <Switch>
-        <Route path={`${match.path}/add`}>
-          <OrganizationAdd />
-        </Route>
-        <Route path={`${match.path}/:id`}>
-          <Config>
-            {({ me }) => (
-              <Organization setBreadcrumb={setBreadcrumb} me={me || {}} />
-            )}
-          </Config>
-        </Route>
-        <Route path={`${match.path}`}>
-          <PersistentFilters pageKey="organizations">
-            <OrganizationsList />
-          </PersistentFilters>
-        </Route>
-      </Switch>
+      <Routes>
+        <Route path="/organizations/add" element={<OrganizationAdd />} />
+        {/* so the nested <Organization> route tree can match the rest */}
+        <Route
+          path="/organizations/:id/*"
+          element={
+            <Config>
+              {({ me }) => (
+                <Organization setBreadcrumb={setBreadcrumb} me={me || {}} />
+              )}
+            </Config>
+          }
+        />
+        <Route
+          path="/organizations"
+          element={
+            <PersistentFilters pageKey="organizations">
+              <OrganizationsList />
+            </PersistentFilters>
+          }
+        />
+      </Routes>
     </>
   );
 }
