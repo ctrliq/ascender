@@ -15,13 +15,13 @@ function RADIUS() {
       <Card>
         <Routes>
           <Route
-            path={baseURL}
+            index
             element={<Navigate to={`${baseURL}/details`} replace />}
           />
-          <Route path={`${baseURL}/details`} element={<RADIUSDetail />} />
-          <Route path={`${baseURL}/edit`} element={<RADIUSEdit />} />
+          <Route path="details" element={<RADIUSDetail />} />
+          <Route path="edit" element={<RADIUSEdit />} />
           <Route
-            path={`${baseURL}/*`}
+            path="*"
             element={
               <ContentError isNotFound>
                 <Link to={`${baseURL}/details`}>

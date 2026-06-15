@@ -15,13 +15,13 @@ function TACACS() {
       <Card>
         <Routes>
           <Route
-            path={baseURL}
+            index
             element={<Navigate to={`${baseURL}/details`} replace />}
           />
-          <Route path={`${baseURL}/details`} element={<TACACSDetail />} />
-          <Route path={`${baseURL}/edit`} element={<TACACSEdit />} />
+          <Route path="details" element={<TACACSDetail />} />
+          <Route path="edit" element={<TACACSEdit />} />
           <Route
-            path={`${baseURL}/*`}
+            path="*"
             element={
               <ContentError isNotFound>
                 <Link to={`${baseURL}/details`}>

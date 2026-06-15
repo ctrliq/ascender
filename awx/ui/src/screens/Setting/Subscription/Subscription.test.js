@@ -6,6 +6,7 @@ import {
   mountWithContexts,
   waitForElement,
 } from '../../../../testUtils/enzymeHelpers';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import mockAllSettings from '../shared/data.allSettings.json';
 import Subscription from './Subscription';
 
@@ -32,7 +33,7 @@ describe('<Subscription />', () => {
       initialEntries: ['/settings/subscription'],
     });
     await act(async () => {
-      wrapper = mountWithContexts(<Subscription />, {
+      wrapper = mountWithContexts(<Routes><Route path="/settings/subscription/*" element={<Subscription />} /></Routes>, {
         context: {
           router: {
             history,

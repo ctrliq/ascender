@@ -6,6 +6,7 @@ import { SettingsAPI } from 'api';
 import {
   mountWithContexts,
 } from '../../../../testUtils/enzymeHelpers';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import mockAllOptions from '../shared/data.allSettingOptions.json';
 import AzureAD from './AzureAD';
 
@@ -42,7 +43,7 @@ describe('<AzureAD />', () => {
     await act(async () => {
       wrapper = mountWithContexts(
         <SettingsProvider value={mockAllOptions.actions}>
-          <AzureAD />
+          <Routes><Route path="/settings/azure/*" element={<AzureAD />} /></Routes>
         </SettingsProvider>,
         {
           context: { router: { history } },
@@ -57,7 +58,7 @@ describe('<AzureAD />', () => {
       initialEntries: ['/settings/azure/default/edit'],
     });
     await act(async () => {
-      wrapper = mountWithContexts(<AzureAD />, {
+      wrapper = mountWithContexts(<Routes><Route path="/settings/azure/*" element={<AzureAD />} /></Routes>, {
         context: { router: { history } },
       });
     });
@@ -71,7 +72,7 @@ describe('<AzureAD />', () => {
     await act(async () => {
       wrapper = mountWithContexts(
         <SettingsProvider value={mockAllOptions.actions}>
-          <AzureAD />
+          <Routes><Route path="/settings/azure/*" element={<AzureAD />} /></Routes>
         </SettingsProvider>,
         {
           context: { router: { history } },

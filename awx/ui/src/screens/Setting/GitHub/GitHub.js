@@ -32,37 +32,37 @@ function GitHub() {
       <Card>
         <Routes>
           <Route
-            path={baseURL}
+            index
             element={<Navigate to={`${baseURL}/default/details`} replace />}
           />
           <Route
-            path={`${baseURL}/:category`}
+            path=":category"
             element={<CategoryRedirect baseURL={baseURL} />}
           />
           <Route
-            path={`${baseURL}/:category/details`}
+            path=":category/details"
             element={<GitHubDetail />}
           />
-          <Route path={`${baseURL}/default/edit`} element={<GitHubEdit />} />
+          <Route path="default/edit" element={<GitHubEdit />} />
           <Route
-            path={`${baseURL}/organization/edit`}
+            path="organization/edit"
             element={<GitHubOrgEdit />}
           />
-          <Route path={`${baseURL}/team/edit`} element={<GitHubTeamEdit />} />
+          <Route path="team/edit" element={<GitHubTeamEdit />} />
           <Route
-            path={`${baseURL}/enterprise/edit`}
+            path="enterprise/edit"
             element={<GitHubEnterpriseEdit />}
           />
           <Route
-            path={`${baseURL}/enterprise_organization/edit`}
+            path="enterprise_organization/edit"
             element={<GitHubEnterpriseOrgEdit />}
           />
           <Route
-            path={`${baseURL}/enterprise_team/edit`}
+            path="enterprise_team/edit"
             element={<GitHubEnterpriseTeamEdit />}
           />
           <Route
-            path={`${baseURL}/*`}
+            path="*"
             element={
               <ContentError isNotFound>
                 <Link to={`${baseURL}/default/details`}>

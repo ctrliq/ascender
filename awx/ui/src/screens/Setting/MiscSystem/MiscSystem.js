@@ -18,12 +18,12 @@ function MiscSystem() {
       <Card>
         <Routes>
           <Route
-            path={baseURL}
+            index
             element={<Navigate to={`${baseURL}/details`} replace />}
           />
-          <Route path={`${baseURL}/details`} element={<MiscSystemDetail />} />
+          <Route path="details" element={<MiscSystemDetail />} />
           <Route
-            path={`${baseURL}/edit`}
+            path="edit"
             element={
               me?.is_superuser ? (
                 <MiscSystemEdit />
@@ -33,7 +33,7 @@ function MiscSystem() {
             }
           />
           <Route
-            path={`${baseURL}/*`}
+            path="*"
             element={
               <ContentError isNotFound>
                 <Link to={`${baseURL}/details`}>{t`View Miscellaneous System settings`}</Link>

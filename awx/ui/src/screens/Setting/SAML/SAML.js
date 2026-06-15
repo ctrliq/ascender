@@ -15,13 +15,13 @@ function SAML() {
       <Card>
         <Routes>
           <Route
-            path={baseURL}
+            index
             element={<Navigate to={`${baseURL}/details`} replace />}
           />
-          <Route path={`${baseURL}/details`} element={<SAMLDetail />} />
-          <Route path={`${baseURL}/edit`} element={<SAMLEdit />} />
+          <Route path="details" element={<SAMLDetail />} />
+          <Route path="edit" element={<SAMLEdit />} />
           <Route
-            path={`${baseURL}/*`}
+            path="*"
             element={
               <ContentError isNotFound>
                 <Link to={`${baseURL}/details`}>

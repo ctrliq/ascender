@@ -7,6 +7,7 @@ import {
   mountWithContexts,
   waitForElement,
 } from '../../../../testUtils/enzymeHelpers';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import mockAllOptions from '../shared/data.allSettingOptions.json';
 import GitHub from './GitHub';
 
@@ -99,7 +100,9 @@ describe('<GitHub />', () => {
     await act(async () => {
       wrapper = mountWithContexts(
         <SettingsProvider value={mockAllOptions.actions}>
-          <GitHub />
+          <Routes>
+            <Route path="/settings/github/*" element={<GitHub />} />
+          </Routes>
         </SettingsProvider>,
         {
           context: { router: { history } },
@@ -118,7 +121,9 @@ describe('<GitHub />', () => {
     await act(async () => {
       wrapper = mountWithContexts(
         <SettingsProvider value={mockAllOptions.actions}>
-          <GitHub />
+          <Routes>
+            <Route path="/settings/github/*" element={<GitHub />} />
+          </Routes>
         </SettingsProvider>,
         {
           context: { router: { history } },
@@ -139,7 +144,9 @@ describe('<GitHub />', () => {
     await act(async () => {
       wrapper = mountWithContexts(
         <SettingsProvider value={mockAllOptions.actions}>
-          <GitHub />
+          <Routes>
+            <Route path="/settings/github/*" element={<GitHub />} />
+          </Routes>
         </SettingsProvider>,
         {
           context: { router: { history } },
@@ -157,7 +164,9 @@ describe('<GitHub />', () => {
     await act(async () => {
       wrapper = mountWithContexts(
         <SettingsProvider value={mockAllOptions.actions}>
-          <GitHub />
+          <Routes>
+            <Route path="/settings/github/*" element={<GitHub />} />
+          </Routes>
         </SettingsProvider>,
         {
           context: { router: { history } },

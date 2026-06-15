@@ -16,16 +16,16 @@ function Subscription() {
       <Card>
         <Routes>
           <Route
-            path={baseURL}
+            index
             element={<Navigate to={`${baseURL}/details`} replace />}
           />
           <Route
-            path={`${baseURL}/details`}
+            path="details"
             element={<SubscriptionDetail />}
           />
-          <Route path={`${baseURL}/edit`} element={<SubscriptionEdit />} />
+          <Route path="edit" element={<SubscriptionEdit />} />
           <Route
-            path={`${baseURL}/*`}
+            path="*"
             element={
               <ContentError isNotFound>
                 <Link to={baseURL}>{t`View Settings`}</Link>

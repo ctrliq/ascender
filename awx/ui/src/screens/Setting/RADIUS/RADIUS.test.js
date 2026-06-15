@@ -4,6 +4,7 @@ import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
 import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import mockAllOptions from '../shared/data.allSettingOptions.json';
 import RADIUS from './RADIUS';
 
@@ -33,7 +34,7 @@ describe('<RADIUS />', () => {
     await act(async () => {
       wrapper = mountWithContexts(
         <SettingsProvider value={mockAllOptions.actions}>
-          <RADIUS />
+          <Routes><Route path="/settings/radius/*" element={<RADIUS />} /></Routes>
         </SettingsProvider>,
         {
           context: { router: { history } },
@@ -50,7 +51,7 @@ describe('<RADIUS />', () => {
     await act(async () => {
       wrapper = mountWithContexts(
         <SettingsProvider value={mockAllOptions.actions}>
-          <RADIUS />
+          <Routes><Route path="/settings/radius/*" element={<RADIUS />} /></Routes>
         </SettingsProvider>,
         {
           context: { router: { history } },
@@ -65,7 +66,7 @@ describe('<RADIUS />', () => {
       initialEntries: ['/settings/radius/foo'],
     });
     await act(async () => {
-      wrapper = mountWithContexts(<RADIUS />, {
+      wrapper = mountWithContexts(<Routes><Route path="/settings/radius/*" element={<RADIUS />} /></Routes>, {
         context: { router: { history } },
       });
     });

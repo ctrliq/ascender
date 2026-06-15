@@ -15,13 +15,13 @@ function GoogleOAuth2() {
       <Card>
         <Routes>
           <Route
-            path={baseURL}
+            index
             element={<Navigate to={`${baseURL}/details`} replace />}
           />
-          <Route path={`${baseURL}/details`} element={<GoogleOAuth2Detail />} />
-          <Route path={`${baseURL}/edit`} element={<GoogleOAuth2Edit />} />
+          <Route path="details" element={<GoogleOAuth2Detail />} />
+          <Route path="edit" element={<GoogleOAuth2Edit />} />
           <Route
-            path={`${baseURL}/*`}
+            path="*"
             element={
               <ContentError isNotFound>
                 <Link to={`${baseURL}/details`}>

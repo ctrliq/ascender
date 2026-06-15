@@ -4,6 +4,7 @@ import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
 import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import mockAllOptions from '../shared/data.allSettingOptions.json';
 import TACACS from './TACACS';
 
@@ -33,7 +34,7 @@ describe('<TACACS />', () => {
     await act(async () => {
       wrapper = mountWithContexts(
         <SettingsProvider value={mockAllOptions.actions}>
-          <TACACS />
+          <Routes><Route path="/settings/tacacs/*" element={<TACACS />} /></Routes>
         </SettingsProvider>,
         {
           context: { router: { history } },
@@ -50,7 +51,7 @@ describe('<TACACS />', () => {
     await act(async () => {
       wrapper = mountWithContexts(
         <SettingsProvider value={mockAllOptions.actions}>
-          <TACACS />
+          <Routes><Route path="/settings/tacacs/*" element={<TACACS />} /></Routes>
         </SettingsProvider>,
         {
           context: { router: { history } },
@@ -65,7 +66,7 @@ describe('<TACACS />', () => {
       initialEntries: ['/settings/tacacs/foo'],
     });
     await act(async () => {
-      wrapper = mountWithContexts(<TACACS />, {
+      wrapper = mountWithContexts(<Routes><Route path="/settings/tacacs/*" element={<TACACS />} /></Routes>, {
         context: { router: { history } },
       });
     });

@@ -17,12 +17,12 @@ function MiscAuthentication() {
       <Card>
         <Routes>
           <Route
-            path={baseURL}
+            index
             element={<Navigate to={`${baseURL}/details`} replace />}
           />
-          <Route path={`${baseURL}/details`} element={<MiscAuthenticationDetail />} />
+          <Route path="details" element={<MiscAuthenticationDetail />} />
           <Route
-            path={`${baseURL}/edit`}
+            path="edit"
             element={
               me?.is_superuser ? (
                 <MiscAuthenticationEdit />
@@ -32,7 +32,7 @@ function MiscAuthentication() {
             }
           />
           <Route
-            path={`${baseURL}/*`}
+            path="*"
             element={
               <ContentError isNotFound>
                 <Link to={`${baseURL}/details`}>{t`View Miscellaneous Authentication settings`}</Link>

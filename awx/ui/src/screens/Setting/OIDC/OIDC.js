@@ -15,13 +15,13 @@ function OIDC() {
       <Card>
         <Routes>
           <Route
-            path={baseURL}
+            index
             element={<Navigate to={`${baseURL}/details`} replace />}
           />
-          <Route path={`${baseURL}/details`} element={<OIDCDetail />} />
-          <Route path={`${baseURL}/edit`} element={<OIDCEdit />} />
+          <Route path="details" element={<OIDCDetail />} />
+          <Route path="edit" element={<OIDCEdit />} />
           <Route
-            path={`${baseURL}/*`}
+            path="*"
             element={
               <ContentError isNotFound>
                 <Link to={`${baseURL}/details`}>

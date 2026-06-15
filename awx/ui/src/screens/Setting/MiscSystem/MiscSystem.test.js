@@ -6,6 +6,7 @@ import {
   mountWithContexts,
   waitForElement,
 } from '../../../../testUtils/enzymeHelpers';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import MiscSystem from './MiscSystem';
 
 jest.mock('../../../api');
@@ -28,7 +29,7 @@ describe('<MiscSystem />', () => {
       initialEntries: ['/settings/miscellaneous_system/details'],
     });
     await act(async () => {
-      wrapper = mountWithContexts(<MiscSystem />, {
+      wrapper = mountWithContexts(<Routes><Route path="/settings/miscellaneous_system/*" element={<MiscSystem />} /></Routes>, {
         context: { router: { history } },
       });
     });
@@ -41,7 +42,7 @@ describe('<MiscSystem />', () => {
       initialEntries: ['/settings/miscellaneous_system/edit'],
     });
     await act(async () => {
-      wrapper = mountWithContexts(<MiscSystem />, {
+      wrapper = mountWithContexts(<Routes><Route path="/settings/miscellaneous_system/*" element={<MiscSystem />} /></Routes>, {
         context: { router: { history } },
       });
     });
@@ -54,7 +55,7 @@ describe('<MiscSystem />', () => {
       initialEntries: ['/settings/miscellaneous_system/foo'],
     });
     await act(async () => {
-      wrapper = mountWithContexts(<MiscSystem />, {
+      wrapper = mountWithContexts(<Routes><Route path="/settings/miscellaneous_system/*" element={<MiscSystem />} /></Routes>, {
         context: { router: { history } },
       });
     });
@@ -66,7 +67,7 @@ describe('<MiscSystem />', () => {
       initialEntries: ['/settings/miscellaneous_system/edit'],
     });
     await act(async () => {
-      wrapper = mountWithContexts(<MiscSystem />, {
+      wrapper = mountWithContexts(<Routes><Route path="/settings/miscellaneous_system/*" element={<MiscSystem />} /></Routes>, {
         context: {
           router: {
             history,

@@ -27,20 +27,20 @@ function LDAP() {
       <Card>
         <Routes>
           <Route
-            path={baseURL}
+            index
             element={<Navigate to={`${baseURL}/default/details`} replace />}
           />
           <Route
-            path={`${baseURL}/:category`}
+            path=":category"
             element={<CategoryRedirect baseURL={baseURL} />}
           />
           <Route
-            path={`${baseURL}/:category/details`}
+            path=":category/details"
             element={<LDAPDetail />}
           />
-          <Route path={`${baseURL}/:category/edit`} element={<LDAPEdit />} />
+          <Route path=":category/edit" element={<LDAPEdit />} />
           <Route
-            path={`${baseURL}/*`}
+            path="*"
             element={
               <ContentError isNotFound>
                 <Link to={`${baseURL}/default/details`}>

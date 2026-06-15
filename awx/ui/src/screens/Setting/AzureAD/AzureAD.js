@@ -28,24 +28,24 @@ function AzureAD() {
       <Card>
         <Routes>
           <Route
-            path={baseURL}
+            index
             element={<Navigate to={`${baseURL}/default/details`} replace />}
           />
           <Route
-            path={`${baseURL}/:category`}
+            path=":category"
             element={<CategoryRedirect baseURL={baseURL} />}
           />
           <Route
-            path={`${baseURL}/:category/details`}
+            path=":category/details"
             element={<AzureADDetail />}
           />
-          <Route path={`${baseURL}/default/edit`} element={<AzureADEdit />} />
+          <Route path="default/edit" element={<AzureADEdit />} />
           <Route
-            path={`${baseURL}/tenant/edit`}
+            path="tenant/edit"
             element={<AzureADTenantEdit />}
           />
           <Route
-            path={`${baseURL}/*`}
+            path="*"
             element={
               <ContentError isNotFound>
                 <Link to={`${baseURL}/default/details`}>

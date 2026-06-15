@@ -15,13 +15,13 @@ function Troubleshooting() {
       <Card>
         <Routes>
           <Route
-            path={baseURL}
+            index
             element={<Navigate to={`${baseURL}/details`} replace />}
           />
-          <Route path={`${baseURL}/details`} element={<TroubleshootingDetail />} />
-          <Route path={`${baseURL}/edit`} element={<TroubleshootingEdit />} />
+          <Route path="details" element={<TroubleshootingDetail />} />
+          <Route path="edit" element={<TroubleshootingEdit />} />
           <Route
-            path={`${baseURL}/*`}
+            path="*"
             element={
               <ContentError isNotFound>
                 <Link to={`${baseURL}/details`}>{t`View Troubleshooting settings`}</Link>

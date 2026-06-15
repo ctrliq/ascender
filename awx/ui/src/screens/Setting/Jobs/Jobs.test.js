@@ -3,6 +3,7 @@ import { act } from 'react-dom/test-utils';
 import { createMemoryHistory } from 'history';
 import { SettingsAPI } from 'api';
 import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import mockJobSettings from '../shared/data.jobSettings.json';
 import Jobs from './Jobs';
 
@@ -26,7 +27,7 @@ describe('<Jobs />', () => {
       initialEntries: ['/settings/jobs/details'],
     });
     await act(async () => {
-      wrapper = mountWithContexts(<Jobs />, {
+      wrapper = mountWithContexts(<Routes><Route path="/settings/jobs/*" element={<Jobs />} /></Routes>, {
         context: { router: { history } },
       });
     });
@@ -38,7 +39,7 @@ describe('<Jobs />', () => {
       initialEntries: ['/settings/jobs/edit'],
     });
     await act(async () => {
-      wrapper = mountWithContexts(<Jobs />, {
+      wrapper = mountWithContexts(<Routes><Route path="/settings/jobs/*" element={<Jobs />} /></Routes>, {
         context: { router: { history } },
       });
     });
@@ -50,7 +51,7 @@ describe('<Jobs />', () => {
       initialEntries: ['/settings/jobs/foo'],
     });
     await act(async () => {
-      wrapper = mountWithContexts(<Jobs />, {
+      wrapper = mountWithContexts(<Routes><Route path="/settings/jobs/*" element={<Jobs />} /></Routes>, {
         context: { router: { history } },
       });
     });

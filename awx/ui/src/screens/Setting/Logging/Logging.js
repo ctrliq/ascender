@@ -17,12 +17,12 @@ function Logging() {
       <Card>
         <Routes>
           <Route
-            path={baseURL}
+            index
             element={<Navigate to={`${baseURL}/details`} replace />}
           />
-          <Route path={`${baseURL}/details`} element={<LoggingDetail />} />
+          <Route path="details" element={<LoggingDetail />} />
           <Route
-            path={`${baseURL}/edit`}
+            path="edit"
             element={
               me?.is_superuser ? (
                 <LoggingEdit />
@@ -32,7 +32,7 @@ function Logging() {
             }
           />
           <Route
-            path={`${baseURL}/*`}
+            path="*"
             element={
               <ContentError isNotFound>
                 <Link to={`${baseURL}/details`}>{t`View Logging settings`}</Link>

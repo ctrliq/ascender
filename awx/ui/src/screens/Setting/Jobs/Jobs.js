@@ -15,13 +15,13 @@ function Jobs() {
       <Card>
         <Routes>
           <Route
-            path={baseURL}
+            index
             element={<Navigate to={`${baseURL}/details`} replace />}
           />
-          <Route path={`${baseURL}/details`} element={<JobsDetail />} />
-          <Route path={`${baseURL}/edit`} element={<JobsEdit />} />
+          <Route path="details" element={<JobsDetail />} />
+          <Route path="edit" element={<JobsEdit />} />
           <Route
-            path={`${baseURL}/*`}
+            path="*"
             element={
               <ContentError isNotFound>
                 <Link to={`${baseURL}/details`}>{t`View Jobs settings`}</Link>

@@ -15,13 +15,13 @@ function UI() {
       <Card>
         <Routes>
           <Route
-            path={baseURL}
+            index
             element={<Navigate to={`${baseURL}/details`} replace />}
           />
-          <Route path={`${baseURL}/details`} element={<UIDetail />} />
-          <Route path={`${baseURL}/edit`} element={<UIEdit />} />
+          <Route path="details" element={<UIDetail />} />
+          <Route path="edit" element={<UIEdit />} />
           <Route
-            path={`${baseURL}/*`}
+            path="*"
             element={
               <ContentError isNotFound>
                 <Link to={`${baseURL}/details`}>{t`View User Interface settings`}</Link>
