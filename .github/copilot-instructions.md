@@ -125,7 +125,7 @@ Migration files live in `awx/main/migrations/` (218 existing files).
 | `awx/ui/` | UI / React frontend (npm) |
 | `awx/ui_next/` | New UI (not currently used, built separately via `make ui-next`) |
 | `awxkit/` | Python client library for the AWX API (own tox suite) |
-| `ascender_collection/` | Ansible Galaxy collection (`awx.awx`) |
+| `ascender_collection/` | Ansible Galaxy collection (`ctrliq.ascender`) |
 | `requirements/` | Pinned deps: `requirements.txt`, `requirements_dev.txt`, `requirements_git.txt` |
 | `tools/` | Docker Compose, Ansible build playbooks, dev scripts |
 | `docs/` | Project documentation |
