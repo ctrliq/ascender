@@ -411,11 +411,14 @@ class BaseTask(object):
             self.instance.refresh_from_db(fields=['cancel_flag'])
             if self.instance.cancel_flag or signal_callback():
                 logger.debug(f"Unified job {self.instance.id} was canceled while waiting for project file lock")
-                return
+                os.close(self.lock_fd)
+                self.lock_fd = None
+                return False
         waiting_time = time.time() - start_time
 
         if waiting_time > 1.0:
             logger.info(f'Job {unified_job_id} waited {waiting_time} to acquire lock for local source tree for path {lock_path}.')
+        return True
 
     def pre_run_hook(self, instance, private_data_dir):
         """
@@ -770,7 +773,12 @@ class SourceControlMixin(BaseTask):
             RunProjectUpdate.make_local_copy(project, private_data_dir)
 
     def sync_and_copy(self, project, private_data_dir, scm_branch=None):
-        self.acquire_lock(project, self.instance.id)
+        lock_acquired = self.acquire_lock(project, self.instance.id)
+        if not lock_acquired:
+            self.instance.refresh_from_db()
+            if self.instance.cancel_flag:
+                return
+            raise RuntimeError(f'Could not acquire lock for project {project.id}, job was interrupted')
         is_commit = False
         try:
             original_branch = None
@@ -1331,7 +1339,9 @@ class RunProjectUpdate(BaseTask):
         project_path = instance.project.get_project_path(check_if_exists=False)
 
         if instance.launch_type != 'sync':
-            self.acquire_lock(instance.project, instance.id)
+            lock_acquired = self.acquire_lock(instance.project, instance.id)
+            if not lock_acquired:
+                raise RuntimeError(f'Could not acquire lock for project {instance.project.id}, job was interrupted')
 
         if not os.path.exists(project_path):
             os.makedirs(project_path)  # used as container mount
@@ -1418,7 +1428,7 @@ class RunProjectUpdate(BaseTask):
                     # copy project folder before resetting to default branch
                     self.make_local_copy(instance, self.job_private_data_dir)
         finally:
-            if instance.launch_type != 'sync':
+            if instance.launch_type != 'sync' and self.lock_fd is not None:
                 self.release_lock(instance.project)
 
         p = instance.project
