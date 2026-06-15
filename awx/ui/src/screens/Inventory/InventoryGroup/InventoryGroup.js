@@ -105,7 +105,7 @@ function InventoryGroup({ setBreadcrumb, inventory }) {
       {showCardHeader && <RoutedTabs tabsArray={tabsArray} />}
       <Routes>
         <Route
-          path="/inventories/:inventoryType/:id/groups/:groupId"
+          index
           element={
             <Navigate
               to={`/inventories/${inventoryType}/${inventoryId}/groups/${groupId}/details`}
@@ -115,27 +115,27 @@ function InventoryGroup({ setBreadcrumb, inventory }) {
         />
         {inventoryGroup && (
           <Route
-            path="/inventories/:inventoryType/:id/groups/:groupId/edit"
+            path="edit"
             element={<InventoryGroupEdit inventoryGroup={inventoryGroup} />}
           />
         )}
         {inventoryGroup && (
           <Route
-            path="/inventories/:inventoryType/:id/groups/:groupId/details"
+            path="details"
             element={<InventoryGroupDetail inventoryGroup={inventoryGroup} />}
           />
         )}
         {/* /* so the nested <InventoryGroupHosts> route tree can match */}
         {inventoryGroup && (
           <Route
-            path="/inventories/:inventoryType/:id/groups/:groupId/nested_hosts/*"
+            path="nested_hosts/*"
             element={<InventoryGroupHosts inventoryGroup={inventoryGroup} />}
           />
         )}
         {/* /* so the nested <InventoryRelatedGroups> route tree can match */}
         {inventoryGroup && (
           <Route
-            path="/inventories/:inventoryType/:id/groups/:groupId/nested_groups/*"
+            path="nested_groups/*"
             element={<InventoryRelatedGroups />}
           />
         )}

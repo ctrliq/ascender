@@ -130,24 +130,24 @@ function ConstructedInventory({ setBreadcrumb }) {
         {showCardHeader && <RoutedTabs tabsArray={tabsArray} />}
         <Routes>
           <Route
-            path="/inventories/constructed_inventory/:id"
+            index
             element={<Navigate to={`${constructedBaseUrl}/details`} replace />}
           />
           {inventory && (
             <Route
-              path="/inventories/constructed_inventory/:id/details"
+              path="details"
               element={<ConstructedInventoryDetail inventory={inventory} />}
             />
           )}
           {inventory && (
             <Route
-              path="/inventories/constructed_inventory/:id/edit"
+              path="edit"
               element={<ConstructedInventoryEdit inventory={inventory} />}
             />
           )}
           {inventory && (
             <Route
-              path="/inventories/constructed_inventory/:id/access"
+              path="access"
               element={
                 <ResourceAccessList
                   resource={inventory}
@@ -159,7 +159,7 @@ function ConstructedInventory({ setBreadcrumb }) {
           {/* /* so the nested <AdvancedInventoryHosts> route tree can match */}
           {inventory && (
             <Route
-              path="/inventories/constructed_inventory/:id/hosts/*"
+              path="hosts/*"
               element={
                 <AdvancedInventoryHosts
                   inventory={inventory}
@@ -171,7 +171,7 @@ function ConstructedInventory({ setBreadcrumb }) {
           {/* /* so the nested <InventoryGroups> route tree can match */}
           {inventory && (
             <Route
-              path="/inventories/constructed_inventory/:id/groups/*"
+              path="groups/*"
               element={
                 <InventoryGroups
                   inventory={inventory}
@@ -182,7 +182,7 @@ function ConstructedInventory({ setBreadcrumb }) {
           )}
           {inventory && (
             <Route
-              path="/inventories/constructed_inventory/:id/jobs"
+              path="jobs"
               element={
                 <JobList
                   defaultParams={{
@@ -198,7 +198,7 @@ function ConstructedInventory({ setBreadcrumb }) {
           )}
           {inventory && (
             <Route
-              path="/inventories/constructed_inventory/:id/job_templates"
+              path="job_templates"
               element={
                 <RelatedTemplateList
                   searchParams={{ inventory__id: inventory.id }}

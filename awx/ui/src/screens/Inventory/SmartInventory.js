@@ -126,12 +126,12 @@ function SmartInventory({ setBreadcrumb }) {
         {showCardHeader && <RoutedTabs tabsArray={tabsArray} />}
         <Routes>
           <Route
-            path="/inventories/smart_inventory/:id"
+            index
             element={<Navigate to={`${smartBaseUrl}/details`} replace />}
           />
           {inventory && (
             <Route
-              path="/inventories/smart_inventory/:id/details"
+              path="details"
               element={
                 <SmartInventoryDetail
                   isLoading={hasContentLoading}
@@ -142,13 +142,13 @@ function SmartInventory({ setBreadcrumb }) {
           )}
           {inventory && (
             <Route
-              path="/inventories/smart_inventory/:id/edit"
+              path="edit"
               element={<SmartInventoryEdit inventory={inventory} />}
             />
           )}
           {inventory && (
             <Route
-              path="/inventories/smart_inventory/:id/access"
+              path="access"
               element={
                 <ResourceAccessList
                   resource={inventory}
@@ -160,7 +160,7 @@ function SmartInventory({ setBreadcrumb }) {
           {/* /* so the nested <AdvancedInventoryHosts> route tree can match */}
           {inventory && (
             <Route
-              path="/inventories/smart_inventory/:id/hosts/*"
+              path="hosts/*"
               element={
                 <AdvancedInventoryHosts
                   inventory={inventory}
@@ -171,7 +171,7 @@ function SmartInventory({ setBreadcrumb }) {
           )}
           {inventory && (
             <Route
-              path="/inventories/smart_inventory/:id/jobs"
+              path="jobs"
               element={
                 <JobList
                   defaultParams={{
@@ -187,7 +187,7 @@ function SmartInventory({ setBreadcrumb }) {
           )}
           {inventory && (
             <Route
-              path="/inventories/smart_inventory/:id/job_templates"
+              path="job_templates"
               element={
                 <RelatedTemplateList
                   searchParams={{ inventory__id: inventory.id }}

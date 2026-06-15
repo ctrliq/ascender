@@ -1,6 +1,7 @@
 import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { createMemoryHistory } from 'history';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { InventoriesAPI } from 'api';
 import {
   mountWithContexts,
@@ -10,13 +11,21 @@ import mockSmartInventory from './shared/data.smart_inventory.json';
 import SmartInventory from './SmartInventory';
 
 jest.mock('../../api');
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useRouteMatch: () => ({
-    url: '/inventories/smart_inventory/1',
-    params: { id: 1 },
-  }),
-}));
+
+// SmartInventory uses relative routes and reads the id from useParams, so mount
+// it under its v6 parent route at a concrete URL.
+function renderAt(initialEntry) {
+  const history = createMemoryHistory({ initialEntries: [initialEntry] });
+  return mountWithContexts(
+    <Routes>
+      <Route
+        path="/inventories/smart_inventory/:id/*"
+        element={<SmartInventory setBreadcrumb={() => {}} />}
+      />
+    </Routes>,
+    { context: { router: { history } } }
+  );
+}
 
 describe('<SmartInventory />', () => {
   let wrapper;
@@ -30,7 +39,7 @@ describe('<SmartInventory />', () => {
       data: mockSmartInventory,
     });
     await act(async () => {
-      wrapper = mountWithContexts(<SmartInventory setBreadcrumb={() => {}} />);
+      wrapper = renderAt('/inventories/smart_inventory/1/details');
     });
     wrapper.update();
     expect(wrapper.find('SmartInventory').length).toBe(1);
@@ -38,6 +47,9 @@ describe('<SmartInventory />', () => {
   });
 
   test('should render expected tabs', async () => {
+    InventoriesAPI.readDetail.mockResolvedValue({
+      data: mockSmartInventory,
+    });
     const expectedTabs = [
       'Back to Inventories',
       'Details',
@@ -47,8 +59,9 @@ describe('<SmartInventory />', () => {
       'Job Templates',
     ];
     await act(async () => {
-      wrapper = mountWithContexts(<SmartInventory setBreadcrumb={() => {}} />);
+      wrapper = renderAt('/inventories/smart_inventory/1/details');
     });
+    wrapper.update();
     wrapper.find('RoutedTabs li').forEach((tab, index) => {
       expect(tab.text()).toEqual(expectedTabs[index]);
     });
@@ -59,7 +72,7 @@ describe('<SmartInventory />', () => {
     error.response = { status: 404 };
     InventoriesAPI.readDetail.mockRejectedValueOnce(error);
     await act(async () => {
-      wrapper = mountWithContexts(<SmartInventory setBreadcrumb={() => {}} />);
+      wrapper = renderAt('/inventories/smart_inventory/1/details');
     });
     expect(InventoriesAPI.readDetail).toHaveBeenCalledTimes(1);
     await waitForElement(wrapper, 'ContentError', (el) => el.length === 1);
@@ -67,25 +80,11 @@ describe('<SmartInventory />', () => {
   });
 
   test('should show content error when user attempts to navigate to erroneous route', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/inventories/smart_inventory/1/foobar'],
+    InventoriesAPI.readDetail.mockResolvedValue({
+      data: mockSmartInventory,
     });
     await act(async () => {
-      wrapper = mountWithContexts(<SmartInventory setBreadcrumb={() => {}} />, {
-        context: {
-          router: {
-            history,
-            route: {
-              location: history.location,
-              match: {
-                params: { id: 1 },
-                url: '/inventories/smart_inventory/1/foobar',
-                path: '/inventories/smart_inventory/1/foobar',
-              },
-            },
-          },
-        },
-      });
+      wrapper = renderAt('/inventories/smart_inventory/1/foobar');
     });
     await waitForElement(wrapper, 'ContentError', (el) => el.length === 1);
   });

@@ -8,7 +8,7 @@ function InventoryHostGroups() {
   return (
     <Routes>
       <Route
-        path="/inventories/inventory/:id/hosts/:hostId/groups"
+        index
         element={<InventoryHostGroupsList />}
       />
     </Routes>

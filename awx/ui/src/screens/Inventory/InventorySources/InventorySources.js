@@ -9,12 +9,12 @@ function InventorySources({ inventory, setBreadcrumb }) {
   return (
     <Routes>
       <Route
-        path="/inventories/inventory/:id/sources/add"
+        path="add"
         element={<InventorySourceAdd inventory={inventory} />}
       />
       {/* /* so the nested <InventorySource> route tree can match */}
       <Route
-        path="/inventories/inventory/:id/sources/:sourceId/*"
+        path=":sourceId/*"
         element={
           <Config>
             {({ me }) => (
@@ -28,7 +28,7 @@ function InventorySources({ inventory, setBreadcrumb }) {
         }
       />
       <Route
-        path="/inventories/:inventoryType/:id/sources"
+        index
         element={<InventorySourceList />}
       />
     </Routes>

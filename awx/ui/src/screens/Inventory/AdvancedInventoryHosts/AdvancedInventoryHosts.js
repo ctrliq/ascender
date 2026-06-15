@@ -9,7 +9,7 @@ function AdvancedInventoryHosts({ inventory, setBreadcrumb }) {
     <Routes>
       {/* /* so the nested <AdvancedInventoryHost> route tree can match */}
       <Route
-        path="/inventories/:inventoryType/:id/hosts/:hostId/*"
+        path=":hostId/*"
         element={
           <AdvancedInventoryHost
             setBreadcrumb={setBreadcrumb}
@@ -18,7 +18,7 @@ function AdvancedInventoryHosts({ inventory, setBreadcrumb }) {
         }
       />
       <Route
-        path="/inventories/:inventoryType/:id/hosts"
+        index
         element={<AdvancedInventoryHostList inventory={inventory} />}
       />
     </Routes>

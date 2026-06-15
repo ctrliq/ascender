@@ -77,11 +77,11 @@ function AdvancedInventoryHost({ inventory, setBreadcrumb }) {
       {!isLoading && host && (
         <Routes>
           <Route
-            path="/inventories/:inventoryType/:id/hosts/:hostId"
+            index
             element={<Navigate to={`${hostBaseUrl}/details`} replace />}
           />
           <Route
-            path="/inventories/:inventoryType/:id/hosts/:hostId/details"
+            path="details"
             element={<AdvancedInventoryHostDetail host={host} />}
           />
           <Route

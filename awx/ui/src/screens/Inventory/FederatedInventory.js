@@ -120,24 +120,24 @@ function FederatedInventory({ setBreadcrumb }) {
         {showCardHeader && <RoutedTabs tabsArray={tabsArray} />}
         <Routes>
           <Route
-            path="/inventories/federated_inventory/:id"
+            index
             element={<Navigate to={`${federatedBaseUrl}/details`} replace />}
           />
           {inventory && (
             <Route
-              path="/inventories/federated_inventory/:id/details"
+              path="details"
               element={<FederatedInventoryDetail inventory={inventory} />}
             />
           )}
           {inventory && (
             <Route
-              path="/inventories/federated_inventory/:id/edit"
+              path="edit"
               element={<FederatedInventoryEdit inventory={inventory} />}
             />
           )}
           {inventory && (
             <Route
-              path="/inventories/federated_inventory/:id/access"
+              path="access"
               element={
                 <ResourceAccessList
                   resource={inventory}
@@ -149,7 +149,7 @@ function FederatedInventory({ setBreadcrumb }) {
           {/* /* so the nested <AdvancedInventoryHosts> route tree can match */}
           {inventory && (
             <Route
-              path="/inventories/federated_inventory/:id/hosts/*"
+              path="hosts/*"
               element={
                 <AdvancedInventoryHosts
                   inventory={inventory}
@@ -161,7 +161,7 @@ function FederatedInventory({ setBreadcrumb }) {
           {/* /* so the nested <InventoryGroups> route tree can match */}
           {inventory && (
             <Route
-              path="/inventories/federated_inventory/:id/groups/*"
+              path="groups/*"
               element={
                 <InventoryGroups
                   inventory={inventory}
@@ -172,7 +172,7 @@ function FederatedInventory({ setBreadcrumb }) {
           )}
           {inventory && (
             <Route
-              path="/inventories/federated_inventory/:id/jobs"
+              path="jobs"
               element={
                 <JobList
                   defaultParams={{
@@ -186,7 +186,7 @@ function FederatedInventory({ setBreadcrumb }) {
           )}
           {inventory && (
             <Route
-              path="/inventories/federated_inventory/:id/job_templates"
+              path="job_templates"
               element={
                 <RelatedTemplateList
                   searchParams={{ inventory__id: inventory.id }}

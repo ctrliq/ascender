@@ -128,12 +128,12 @@ function Inventory({ setBreadcrumb }) {
         {showCardHeader && <RoutedTabs tabsArray={tabsArray} />}
         <Routes>
           <Route
-            path="/inventories/inventory/:id"
+            index
             element={<Navigate to={`${inventoryBaseUrl}/details`} replace />}
           />
           {inventory && (
             <Route
-              path="/inventories/inventory/:id/details"
+              path="details"
               element={
                 <InventoryDetail
                   inventory={inventory}
@@ -144,14 +144,14 @@ function Inventory({ setBreadcrumb }) {
           )}
           {inventory && (
             <Route
-              path="/inventories/inventory/:id/edit"
+              path="edit"
               element={<InventoryEdit inventory={inventory} />}
             />
           )}
           {/* /* so the nested <InventoryHosts> route tree can match */}
           {inventory && (
             <Route
-              path="/inventories/inventory/:id/hosts/*"
+              path="hosts/*"
               element={
                 <InventoryHosts
                   inventory={inventory}
@@ -162,7 +162,7 @@ function Inventory({ setBreadcrumb }) {
           )}
           {inventory && (
             <Route
-              path="/inventories/inventory/:id/access"
+              path="access"
               element={
                 <ResourceAccessList
                   resource={inventory}
@@ -174,7 +174,7 @@ function Inventory({ setBreadcrumb }) {
           {/* /* so the nested <InventoryGroups> route tree can match */}
           {inventory && (
             <Route
-              path="/inventories/inventory/:id/groups/*"
+              path="groups/*"
               element={
                 <InventoryGroups
                   inventory={inventory}
@@ -186,7 +186,7 @@ function Inventory({ setBreadcrumb }) {
           {/* /* so the nested <InventorySources> route tree can match */}
           {inventory && (
             <Route
-              path="/inventories/inventory/:id/sources/*"
+              path="sources/*"
               element={
                 <InventorySources
                   inventory={inventory}
@@ -197,7 +197,7 @@ function Inventory({ setBreadcrumb }) {
           )}
           {inventory && (
             <Route
-              path="/inventories/inventory/:id/jobs"
+              path="jobs"
               element={
                 <JobList
                   defaultParams={{
@@ -216,7 +216,7 @@ function Inventory({ setBreadcrumb }) {
           )}
           {inventory && (
             <Route
-              path="/inventories/inventory/:id/job_templates"
+              path="job_templates"
               element={
                 <RelatedTemplateList
                   searchParams={{ inventory__id: inventory.id }}

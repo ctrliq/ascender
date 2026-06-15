@@ -123,28 +123,28 @@ function InventoryHost({ setBreadcrumb, inventory }) {
       {!isLoading && host && (
         <Routes>
           <Route
-            path="/inventories/inventory/:id/hosts/:hostId"
+            index
             element={<Navigate to={`${hostBaseUrl}/details`} replace />}
           />
           <Route
-            path="/inventories/inventory/:id/hosts/:hostId/details"
+            path="details"
             element={<InventoryHostDetail host={host} />}
           />
           <Route
-            path="/inventories/inventory/:id/hosts/:hostId/edit"
+            path="edit"
             element={<InventoryHostEdit host={host} inventory={inventory} />}
           />
           <Route
-            path="/inventories/inventory/:id/hosts/:hostId/facts"
+            path="facts"
             element={<InventoryHostFacts host={host} />}
           />
           {/* /* so the nested <InventoryHostGroups> route tree can match */}
           <Route
-            path="/inventories/inventory/:id/hosts/:hostId/groups/*"
+            path="groups/*"
             element={<InventoryHostGroups />}
           />
           <Route
-            path="/inventories/inventory/:id/hosts/:hostId/jobs"
+            path="jobs"
             element={<JobList defaultParams={{ job__hosts: host.id }} />}
           />
           <Route

@@ -7,11 +7,11 @@ function InventoryRelatedGroups() {
   return (
     <Routes>
       <Route
-        path="/inventories/:inventoryType/:id/groups/:groupId/nested_groups/add"
+        path="add"
         element={<InventoryRelatedGroupAdd />}
       />
       <Route
-        path="/inventories/:inventoryType/:id/groups/:groupId/nested_groups"
+        index
         element={<InventoryRelatedGroupList />}
       />
     </Routes>

@@ -121,19 +121,19 @@ function InventorySource({ inventory, setBreadcrumb, me }) {
           />
           <Route
             key="details"
-            path="/inventories/inventory/:id/sources/:sourceId/details"
+            path="details"
           >
             <InventorySourceDetail inventorySource={source} />
           </Route>
           <Route
             key="edit"
-            path="/inventories/inventory/:id/sources/:sourceId/edit"
+            path="edit"
           >
             <InventorySourceEdit source={source} inventory={inventory} />
           </Route>
           <Route
             key="notifications"
-            path="/inventories/inventory/:id/sources/:sourceId/notifications"
+            path="notifications"
           >
             <NotificationList
               id={Number(match.params.sourceId)}
@@ -143,7 +143,7 @@ function InventorySource({ inventory, setBreadcrumb, me }) {
           </Route>
           <Route
             key="schedules"
-            path="/inventories/inventory/:id/sources/:sourceId/schedules"
+            path="schedules"
           >
             <Schedules
               apiModel={InventorySourcesAPI}

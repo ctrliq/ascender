@@ -7,11 +7,11 @@ function InventoryGroupHosts({ inventoryGroup }) {
   return (
     <Routes>
       <Route
-        path="/inventories/inventory/:id/groups/:groupId/nested_hosts/add"
+        path="add"
         element={<InventoryGroupHostAdd inventoryGroup={inventoryGroup} />}
       />
       <Route
-        path="/inventories/:inventoryType/:id/groups/:groupId/nested_hosts"
+        index
         element={<InventoryGroupHostList />}
       />
     </Routes>

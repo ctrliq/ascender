@@ -11,7 +11,7 @@ function InventoryGroups({ setBreadcrumb, inventory }) {
   return (
     <Routes>
       <Route
-        path="/inventories/inventory/:id/groups/add"
+        path="add"
         element={
           <InventoryGroupAdd
             setBreadcrumb={setBreadcrumb}
@@ -21,13 +21,13 @@ function InventoryGroups({ setBreadcrumb, inventory }) {
       />
       {/* /* so the nested <InventoryGroup> route tree can match */}
       <Route
-        path="/inventories/:inventoryType/:id/groups/:groupId/*"
+        path=":groupId/*"
         element={
           <InventoryGroup inventory={inventory} setBreadcrumb={setBreadcrumb} />
         }
       />
       <Route
-        path="/inventories/:inventoryType/:id/groups"
+        index
         element={<InventoryGroupsList inventory={inventory} />}
       />
     </Routes>
