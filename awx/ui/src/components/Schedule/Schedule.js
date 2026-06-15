@@ -121,18 +121,10 @@ function Schedule({
     <>
       {showCardHeader && <RoutedTabs tabsArray={tabsArray} />}
       <Routes>
-        <Route
-          path={`${pathRoot}schedules/:scheduleId`}
-          element={
-            <Navigate
-              to={`${pathRoot}schedules/${scheduleId}/details`}
-              replace
-            />
-          }
-        />
+        <Route index element={<Navigate to="details" replace />} />
         {schedule && (
           <Route
-            path={`${pathRoot}schedules/:scheduleId/edit`}
+            path="edit"
             element={
               <ScheduleEdit
                 hasDaysToKeepField={hasDaysToKeepField}
@@ -147,7 +139,7 @@ function Schedule({
         )}
         {schedule && (
           <Route
-            path={`${pathRoot}schedules/:scheduleId/details`}
+            path="details"
             element={
               <ScheduleDetail
                 hasDaysToKeepField={hasDaysToKeepField}
