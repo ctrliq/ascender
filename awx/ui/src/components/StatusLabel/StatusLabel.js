@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-no-useless-fragment */
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { oneOf } from 'prop-types';
