@@ -1,16 +1,50 @@
 import React from 'react';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { screen } from '@testing-library/react';
+import { createMemoryHistory } from 'history';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import AllSchedules from './AllSchedules';
 
 jest.mock('../../api');
 
-describe('<AllSchedules />', () => {
-  test('should set breadcrumb config', () => {
-    const wrapper = mountWithContexts(<AllSchedules />);
+// resetMocks strips jest.fn implementations between tests, so capture the
+// props with a plain function instead of asserting on mock.calls.
+let mockScreenHeaderProps;
+jest.mock('components/ScreenHeader', () => ({
+  __esModule: true,
+  default: (props) => {
+    mockScreenHeaderProps = props;
+    return null;
+  },
+}));
 
-    const header = wrapper.find('ScreenHeader');
-    expect(header.prop('streamType')).toEqual('schedule');
-    expect(header.prop('breadcrumbConfig')).toEqual({
+// Marker for the routed list so the assertion is about which branch of the
+// v6 <Routes> tree resolves.
+jest.mock('components/Schedule', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    ScheduleList: () => ReactLib.createElement('div', null, 'ScheduleList'),
+  };
+});
+
+function renderAt(path) {
+  const history = createMemoryHistory({ initialEntries: [path] });
+  return renderWithContexts(<AllSchedules />, {
+    context: { router: { history } },
+  });
+}
+
+describe('<AllSchedules />', () => {
+  beforeEach(() => {
+    mockScreenHeaderProps = undefined;
+  });
+
+  test('renders the schedule list and sets the breadcrumb config at /schedules', async () => {
+    renderAt('/schedules');
+    expect(await screen.findByText('ScheduleList')).toBeInTheDocument();
+    expect(mockScreenHeaderProps).toBeDefined();
+    expect(mockScreenHeaderProps.streamType).toBe('schedule');
+    expect(mockScreenHeaderProps.breadcrumbConfig).toEqual({
       '/schedules': 'Schedules',
     });
   });
