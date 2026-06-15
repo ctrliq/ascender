@@ -1,14 +1,14 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
+import { Link } from 'react-router-dom';
 import {
-  Switch,
+  Routes,
   Route,
-  Link,
-  Redirect,
+  Navigate,
   useLocation,
   useParams,
-} from 'react-router-dom';
+} from 'react-router-dom-v5-compat';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { SchedulesAPI } from 'api';
 import useRequest from 'hooks/useRequest';
@@ -31,7 +31,7 @@ function Schedule({
 
   const { pathname } = useLocation();
 
-  const pathRoot = pathname.substr(0, pathname.indexOf('schedules'));
+  const pathRoot = pathname.substring(0, pathname.indexOf('schedules'));
 
   const {
     isLoading,
@@ -120,42 +120,46 @@ function Schedule({
   return (
     <>
       {showCardHeader && <RoutedTabs tabsArray={tabsArray} />}
-      <Switch>
-        <Redirect
-          from={`${pathRoot}schedules/:scheduleId`}
-          to={`${pathRoot}schedules/:scheduleId/details`}
-          exact
-        />
-        {schedule && [
-          <Route key="edit" path={`${pathRoot}schedules/:id/edit`}>
-            <ScheduleEdit
-              hasDaysToKeepField={hasDaysToKeepField}
-              schedule={schedule}
-              resource={resource}
-              launchConfig={launchConfig}
-              surveyConfig={surveyConfig}
-              resourceDefaultCredentials={resourceDefaultCredentials}
-            />
-          </Route>,
+      <Routes>
+        <Route index element={<Navigate to="details" replace />} />
+        {schedule && (
           <Route
-            key="details"
-            path={`${pathRoot}schedules/:scheduleId/details`}
-          >
-            <ScheduleDetail
-              hasDaysToKeepField={hasDaysToKeepField}
-              schedule={schedule}
-              surveyConfig={surveyConfig}
-            />
-          </Route>,
-        ]}
-        <Route key="not-found" path="*">
-          <ContentError>
-            {resource && (
-              <Link to={`${pathRoot}details`}>{t`View Details`}</Link>
-            )}
-          </ContentError>
-        </Route>
-      </Switch>
+            path="edit"
+            element={
+              <ScheduleEdit
+                hasDaysToKeepField={hasDaysToKeepField}
+                schedule={schedule}
+                resource={resource}
+                launchConfig={launchConfig}
+                surveyConfig={surveyConfig}
+                resourceDefaultCredentials={resourceDefaultCredentials}
+              />
+            }
+          />
+        )}
+        {schedule && (
+          <Route
+            path="details"
+            element={
+              <ScheduleDetail
+                hasDaysToKeepField={hasDaysToKeepField}
+                schedule={schedule}
+                surveyConfig={surveyConfig}
+              />
+            }
+          />
+        )}
+        <Route
+          path="*"
+          element={
+            <ContentError>
+              {resource && (
+                <Link to={`${pathRoot}details`}>{t`View Details`}</Link>
+              )}
+            </ContentError>
+          }
+        />
+      </Routes>
     </>
   );
 }
