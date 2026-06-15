@@ -11,7 +11,7 @@
     file: "{{ admin_password_file }}"
 
 - name: Create a HashiCorp Vault Credential
-  awx.awx.credential:
+  ctrliq.ascender.credential:
     credential_type: HashiCorp Vault Secret Lookup
     name: Vault Lookup Cred
     organization: Default
@@ -32,7 +32,7 @@
   register: vault_cred
 
 - name: Create a custom credential type
-  awx.awx.credential_type:
+  ctrliq.ascender.credential_type:
     name: Vault Custom Cred Type
     kind: cloud
     controller_host: "{{ awx_host }}"
@@ -51,7 +51,7 @@
   register: custom_vault_cred_type
 
 - name: Create a credential of the custom type for token auth
-  awx.awx.credential:
+  ctrliq.ascender.credential:
     credential_type: "{{ custom_vault_cred_type.id }}"
     controller_host: "{{ awx_host }}"
     controller_username: admin
@@ -63,7 +63,7 @@
   register: custom_credential_via_token
 
 - name: Use the Token Vault Credential For the new credential
-  awx.awx.credential_input_source:
+  ctrliq.ascender.credential_input_source:
     input_field_name: password
     target_credential: "{{ custom_credential_via_token.id }}"
     source_credential: "{{ vault_cred.id }}"
@@ -79,7 +79,7 @@
       secret_version: ""
 
 - name: Create a HashiCorp Vault Credential for LDAP
-  awx.awx.credential:
+  ctrliq.ascender.credential:
     credential_type: HashiCorp Vault Secret Lookup
     name: Vault LDAP Lookup Cred
     organization: Default
@@ -99,7 +99,7 @@
   when: enable_ldap | bool
 
 - name: Create a credential from the Vault LDAP Custom Cred Type
-  awx.awx.credential:
+  ctrliq.ascender.credential:
     credential_type: "{{ custom_vault_cred_type.id }}"
     controller_host: "{{ awx_host }}"
     controller_username: admin
@@ -112,7 +112,7 @@
   when: enable_ldap | bool
 
 - name: Use the Vault LDAP Credential  the new credential
-  awx.awx.credential_input_source:
+  ctrliq.ascender.credential_input_source:
     input_field_name: password
     target_credential: "{{ custom_credential_via_ldap.id }}"
     source_credential: "{{ vault_ldap_cred.id }}"
@@ -129,7 +129,7 @@
   when: enable_ldap | bool
 
 - name: Create a HashiCorp Vault Credential for UserPass
-  awx.awx.credential:
+  ctrliq.ascender.credential:
     credential_type: HashiCorp Vault Secret Lookup
     name: Vault UserPass Lookup Cred
     organization: Default
@@ -148,7 +148,7 @@
   register: vault_userpass_cred
 
 - name: Create a credential from the Vault UserPass Custom Cred Type
-  awx.awx.credential:
+  ctrliq.ascender.credential:
     credential_type: "{{ custom_vault_cred_type.id }}"
     controller_host: "{{ awx_host }}"
     controller_username: admin
@@ -160,7 +160,7 @@
   register: custom_credential_via_userpass
 
 - name: Use the Vault UserPass Credential  the new credential
-  awx.awx.credential_input_source:
+  ctrliq.ascender.credential_input_source:
     input_field_name: password
     target_credential: "{{ custom_credential_via_userpass.id }}"
     source_credential: "{{ vault_userpass_cred.id }}"
