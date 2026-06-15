@@ -5,8 +5,10 @@ import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
 import Job from './Job';
 
 jest.mock('../../api');
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+// Job reads useParams from react-router-dom-v5-compat (the route tree is v6);
+// mock it there, keeping the rest of the module real.
+jest.mock('react-router-dom-v5-compat', () => ({
+  ...jest.requireActual('react-router-dom-v5-compat'),
   useParams: () => ({
     id: 1,
     typeSegment: 'project',

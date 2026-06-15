@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
-import { Redirect, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { Navigate } from 'react-router-dom-v5-compat';
 import { PageSection, Card } from '@patternfly/react-core';
 
 import { useLingui } from '@lingui/react/macro';
@@ -12,7 +13,7 @@ import { JOB_TYPE_URL_SEGMENTS } from '../../constants';
 
 const NOT_FOUND = 'not found';
 
-function JobTypeRedirect({ id, path, view }) {
+function JobTypeRedirect({ id, view }) {
   const { t } = useLingui();
   const {
     isLoading,
@@ -58,7 +59,9 @@ function JobTypeRedirect({ id, path, view }) {
     );
   }
   const typeSegment = JOB_TYPE_URL_SEGMENTS[job.type];
-  return <Redirect from={path} to={`/jobs/${typeSegment}/${job.id}/${view}`} />;
+  return (
+    <Navigate to={`/jobs/${typeSegment}/${job.id}/${view}`} replace />
+  );
 }
 
 JobTypeRedirect.defaultProps = {
