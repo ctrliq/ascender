@@ -3,15 +3,14 @@ import { useLingui } from '@lingui/react/macro';
 
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card, PageSection } from '@patternfly/react-core';
+import { Link } from 'react-router-dom';
 import {
-  Switch,
+  Routes,
+  Route,
+  Navigate,
   useParams,
   useLocation,
-  useRouteMatch,
-  Route,
-  Redirect,
-  Link,
-} from 'react-router-dom';
+} from 'react-router-dom-v5-compat';
 import useRequest from 'hooks/useRequest';
 import { ResourceAccessList } from 'components/ResourceAccessList';
 import ContentError from 'components/ContentError';
@@ -40,10 +39,6 @@ const unacceptableCredentialTypes = [
 function Credential({ setBreadcrumb }) {
   const { t } = useLingui();
   const { pathname } = useLocation();
-
-  const match = useRouteMatch({
-    path: '/credentials/:id',
-  });
   const { id } = useParams();
 
   const {
@@ -135,45 +130,37 @@ function Credential({ setBreadcrumb }) {
       <Card>
         {showCardHeader && <RoutedTabs tabsArray={tabsArray} />}
         {!hasContentLoading && credential && (
-          <Switch>
-            <Redirect
-              from="/credentials/:id"
-              to="/credentials/:id/details"
-              exact
+          <Routes>
+            <Route index element={<Navigate to="details" replace />} />
+            <Route
+              path="details"
+              element={<CredentialDetail credential={credential} />}
             />
-            {credential && [
-              <Route key="details" path="/credentials/:id/details">
-                <CredentialDetail credential={credential} />
-              </Route>,
-              <Route key="edit" path="/credentials/:id/edit">
-                <CredentialEdit credential={credential} />
-              </Route>,
-              <Route key="access" path="/credentials/:id/access">
+            <Route
+              path="edit"
+              element={<CredentialEdit credential={credential} />}
+            />
+            <Route
+              path="access"
+              element={
                 <ResourceAccessList
                   resource={credential}
                   apiModel={CredentialsAPI}
                 />
-              </Route>,
-              <Route key="job_templates" path="/credentials/:id/job_templates">
+              }
+            />
+            <Route
+              path="job_templates"
+              element={
                 <RelatedTemplateList
                   searchParams={{ credentials__id: credential.id }}
                   resourceName={[credential.name, credential.kind]}
                 />
-              </Route>,
-              <Route key="not-found" path="*">
-                {!hasContentLoading && (
-                  <ContentError isNotFound>
-                    {match.params.id && (
-                      <Link to={`/credentials/${match.params.id}/details`}>
-                        {t`View Credential Details`}
-                      </Link>
-                    )}
-                  </ContentError>
-                )}
-              </Route>,
-            ]}
-            <Route key="not-found" path="*">
-              {!hasContentLoading && (
+              }
+            />
+            <Route
+              path="*"
+              element={
                 <ContentError isNotFound>
                   {id && (
                     <Link to={`/credentials/${id}/details`}>
@@ -181,9 +168,9 @@ function Credential({ setBreadcrumb }) {
                     </Link>
                   )}
                 </ContentError>
-              )}
-            </Route>
-          </Switch>
+              }
+            />
+          </Routes>
         )}
       </Card>
     </PageSection>

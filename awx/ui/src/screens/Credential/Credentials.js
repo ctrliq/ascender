@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 
 import { useLingui } from '@lingui/react/macro';
 import { Config } from 'contexts/Config';
@@ -41,19 +41,27 @@ function Credentials() {
         streamType="credential"
         breadcrumbConfig={breadcrumbConfig}
       />
-      <Switch>
-        <Route path="/credentials/add">
-          <Config>{({ me }) => <CredentialAdd me={me || {}} />}</Config>
-        </Route>
-        <Route path="/credentials/:id">
-          <Credential setBreadcrumb={buildBreadcrumbConfig} />
-        </Route>
-        <Route path="/credentials">
-          <PersistentFilters pageKey="credentials">
-            <CredentialList />
-          </PersistentFilters>
-        </Route>
-      </Switch>
+      <Routes>
+        <Route
+          path="/credentials/add"
+          element={
+            <Config>{({ me }) => <CredentialAdd me={me || {}} />}</Config>
+          }
+        />
+        {/* so the nested <Credential> route tree can match the rest */}
+        <Route
+          path="/credentials/:id/*"
+          element={<Credential setBreadcrumb={buildBreadcrumbConfig} />}
+        />
+        <Route
+          path="/credentials"
+          element={
+            <PersistentFilters pageKey="credentials">
+              <CredentialList />
+            </PersistentFilters>
+          }
+        />
+      </Routes>
     </>
   );
 }
