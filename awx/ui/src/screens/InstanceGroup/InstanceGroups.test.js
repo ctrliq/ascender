@@ -1,56 +1,86 @@
 import React from 'react';
-import { shallow } from 'enzyme';
-import { InstanceGroupsAPI } from 'api';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { screen } from '@testing-library/react';
+import { createMemoryHistory } from 'history';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import InstanceGroups from './InstanceGroups';
-import { useUserProfile } from 'contexts/Config';
 
-const mockUseLocationValue = {
-  pathname: '',
-};
-jest.mock('api');
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useLocation: () => mockUseLocationValue,
-}));
+jest.mock('../../api/models/InstanceGroups');
 
-beforeEach(() => {
-  useUserProfile.mockImplementation(() => {
-    return {
-      isSuperUser: true,
-      isSystemAuditor: false,
-      isOrgAdmin: false,
-      isNotificationAdmin: false,
-      isExecEnvAdmin: false,
-    };
-  });
+// Replace the routed children with markers so the assertions are purely about
+// which branch of the v6 <Routes> tree resolves for a given URL.
+jest.mock('./InstanceGroupList', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: () => ReactLib.createElement('div', null, 'InstanceGroupList'),
+  };
+});
+jest.mock('./InstanceGroupAdd', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: () => ReactLib.createElement('div', null, 'InstanceGroupAdd'),
+  };
+});
+jest.mock('./ContainerGroupAdd', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: () => ReactLib.createElement('div', null, 'ContainerGroupAdd'),
+  };
+});
+jest.mock('./InstanceGroup', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: () => ReactLib.createElement('div', null, 'InstanceGroup detail'),
+  };
+});
+jest.mock('./ContainerGroup', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: () => ReactLib.createElement('div', null, 'ContainerGroup detail'),
+  };
 });
 
-describe('<InstanceGroups/>', () => {
-  test('should set breadcrumbs', () => {
-    mockUseLocationValue.pathname = '/instance_groups';
-
-    const wrapper = mountWithContexts(<InstanceGroups />);
-
-    const header = wrapper.find('ScreenHeader');
-    expect(header.prop('streamType')).toEqual('instance_group');
-    expect(header.prop('breadcrumbConfig')).toEqual({
-      '/instance_groups': 'Instance Groups',
-      '/instance_groups/add': 'Create new instance group',
-      '/instance_groups/container_group/add': 'Create new container group',
-    });
+function renderAt(path) {
+  const history = createMemoryHistory({ initialEntries: [path] });
+  return renderWithContexts(<InstanceGroups />, {
+    context: { router: { history } },
   });
-  test('should set breadcrumbs', async () => {
-    mockUseLocationValue.pathname = '/instance_groups/1/instances';
-    InstanceGroupsAPI.readInstances.mockResolvedValue({
-      data: { results: [{ hostname: 'EC2', id: 1 }] },
-    });
-    InstanceGroupsAPI.readInstanceOptions.mockResolvedValue({
-      data: { actions: {} },
-    });
+}
 
-    const wrapper = mountWithContexts(<InstanceGroups />);
+describe('<InstanceGroups />', () => {
+  test('renders the list at /instance_groups', async () => {
+    renderAt('/instance_groups');
+    expect(await screen.findByText('InstanceGroupList')).toBeInTheDocument();
+  });
 
-    expect(wrapper.find('ScreenHeader').prop('streamType')).toEqual('instance');
+  test('renders the instance group add form at /instance_groups/add', async () => {
+    renderAt('/instance_groups/add');
+    expect(await screen.findByText('InstanceGroupAdd')).toBeInTheDocument();
+    expect(screen.queryByText('InstanceGroupList')).not.toBeInTheDocument();
+  });
+
+  test('renders the container group add form at /instance_groups/container_group/add', async () => {
+    renderAt('/instance_groups/container_group/add');
+    expect(await screen.findByText('ContainerGroupAdd')).toBeInTheDocument();
+  });
+
+  test('renders the instance group detail subtree at /instance_groups/:id', async () => {
+    renderAt('/instance_groups/5/details');
+    expect(
+      await screen.findByText('InstanceGroup detail')
+    ).toBeInTheDocument();
+    expect(screen.queryByText('InstanceGroupList')).not.toBeInTheDocument();
+  });
+
+  test('renders the container group detail subtree at /instance_groups/container_group/:id', async () => {
+    renderAt('/instance_groups/container_group/5/details');
+    expect(
+      await screen.findByText('ContainerGroup detail')
+    ).toBeInTheDocument();
+    expect(screen.queryByText('InstanceGroup detail')).not.toBeInTheDocument();
   });
 });

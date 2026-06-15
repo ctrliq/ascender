@@ -1,12 +1,12 @@
 import React, { useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import {
-  Link,
-  Redirect,
+  Routes,
   Route,
-  Switch,
+  Navigate,
   useLocation,
   useParams,
-} from 'react-router-dom';
+} from 'react-router-dom-v5-compat';
 
 import { useLingui } from '@lingui/react/macro';
 import { CaretLeftIcon } from '@patternfly/react-icons';
@@ -106,29 +106,36 @@ function ContainerGroup({ setBreadcrumb }) {
         {cardHeader}
         {isLoading && <ContentLoading />}
         {!isLoading && instanceGroup && (
-          <Switch>
-            <Redirect
-              from="/instance_groups/container_group/:id"
-              to="/instance_groups/container_group/:id/details"
-              exact
+          <Routes>
+            <Route index element={<Navigate to="details" replace />} />
+            <Route
+              path="edit"
+              element={<ContainerGroupEdit instanceGroup={instanceGroup} />}
             />
-            {instanceGroup && (
-              <>
-                <Route path="/instance_groups/container_group/:id/edit">
-                  <ContainerGroupEdit instanceGroup={instanceGroup} />
-                </Route>
-                <Route path="/instance_groups/container_group/:id/details">
-                  <ContainerGroupDetails instanceGroup={instanceGroup} />
-                </Route>
-                <Route path="/instance_groups/container_group/:id/jobs">
-                  <JobList
-                    showTypeColumn
-                    defaultParams={{ instance_group: instanceGroup.id }}
-                  />
-                </Route>
-              </>
-            )}
-          </Switch>
+            <Route
+              path="details"
+              element={<ContainerGroupDetails instanceGroup={instanceGroup} />}
+            />
+            <Route
+              path="jobs"
+              element={
+                <JobList
+                  showTypeColumn
+                  defaultParams={{ instance_group: instanceGroup.id }}
+                />
+              }
+            />
+            <Route
+              path="*"
+              element={
+                <ContentError isNotFound>
+                  <Link to="/instance_groups">
+                    {t`View all instance groups`}
+                  </Link>
+                </ContentError>
+              }
+            />
+          </Routes>
         )}
       </Card>
     </PageSection>

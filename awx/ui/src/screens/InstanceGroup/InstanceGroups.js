@@ -1,7 +1,8 @@
 import React, { useCallback, useState } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
-import { Route, Switch, useLocation } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom-v5-compat';
+import { useLocation } from 'react-router-dom';
 import ScreenHeader from 'components/ScreenHeader';
 import PersistentFilters from 'components/PersistentFilters';
 import InstanceGroupAdd from './InstanceGroupAdd';
@@ -58,25 +59,34 @@ function InstanceGroups() {
         streamType={streamType}
         breadcrumbConfig={breadcrumbConfig}
       />
-      <Switch>
-        <Route path="/instance_groups/container_group/add">
-          <ContainerGroupAdd />
-        </Route>
-        <Route path="/instance_groups/container_group/:id">
-          <ContainerGroup setBreadcrumb={buildBreadcrumbConfig} />
-        </Route>
-        <Route path="/instance_groups/add">
-          <InstanceGroupAdd />
-        </Route>
-        <Route path="/instance_groups/:id">
-          <InstanceGroup setBreadcrumb={buildBreadcrumbConfig} />
-        </Route>
-        <Route path="/instance_groups">
-          <PersistentFilters pageKey="instanceGroups">
-            <InstanceGroupList />
-          </PersistentFilters>
-        </Route>
-      </Switch>
+      <Routes>
+        <Route
+          path="/instance_groups/container_group/add"
+          element={<ContainerGroupAdd />}
+        />
+        {/* /* so the nested <ContainerGroup> route tree can match the rest */}
+        <Route
+          path="/instance_groups/container_group/:id/*"
+          element={<ContainerGroup setBreadcrumb={buildBreadcrumbConfig} />}
+        />
+        <Route
+          path="/instance_groups/add"
+          element={<InstanceGroupAdd />}
+        />
+        {/* /* so the nested <InstanceGroup> route tree can match the rest */}
+        <Route
+          path="/instance_groups/:id/*"
+          element={<InstanceGroup setBreadcrumb={buildBreadcrumbConfig} />}
+        />
+        <Route
+          path="/instance_groups"
+          element={
+            <PersistentFilters pageKey="instanceGroups">
+              <InstanceGroupList />
+            </PersistentFilters>
+          }
+        />
+      </Routes>
     </>
   );
 }

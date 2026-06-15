@@ -1,29 +1,23 @@
 import React from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom-v5-compat';
 import InstanceList from './InstanceList';
 import InstanceDetails from '../InstanceDetails';
 
 function Instances({ setBreadcrumb, instanceGroup }) {
   return (
-    <Switch>
-      <Redirect
-        from="/instance_groups/:id/instances/:instanceId"
-        to="/instance_groups/:id/instances/:instanceId/details"
-        exact
-      />
+    <Routes>
+      <Route index element={<InstanceList instanceGroup={instanceGroup} />} />
       <Route
-        key="details"
-        path="/instance_groups/:id/instances/:instanceId/details"
-      >
-        <InstanceDetails
-          instanceGroup={instanceGroup}
-          setBreadcrumb={setBreadcrumb}
-        />
-      </Route>
-      <Route key="instanceList" path="/instance_groups/:id/instances">
-        <InstanceList instanceGroup={instanceGroup} />
-      </Route>
-    </Switch>
+        path=":instanceId/details"
+        element={
+          <InstanceDetails
+            instanceGroup={instanceGroup}
+            setBreadcrumb={setBreadcrumb}
+          />
+        }
+      />
+      <Route path=":instanceId" element={<Navigate to="details" replace />} />
+    </Routes>
   );
 }
 
