@@ -59,6 +59,7 @@ describe('<UserAndTeamAccessAdd/>', () => {
       wrapper = mountWithContexts(
         <UserAndTeamAccessAdd
           apiModel={UsersAPI}
+          resourceId={99}
           onFetchData={() => {}}
           onClose={onClose}
           title="Add user permissions"
@@ -171,7 +172,12 @@ describe('<UserAndTeamAccessAdd/>', () => {
       wrapper.find('Button[type="submit"]').prop('onClick')()
     );
 
-    await expect(UsersAPI.associateRole).toHaveBeenCalled();
+    // associate must use the resourceId passed by the parent screen, not a
+    // route param (which is empty when the parent screen uses react-router v6)
+    await expect(UsersAPI.associateRole).toHaveBeenCalledWith(
+      99,
+      expect.any(Number)
+    );
   });
 
   test('should close wizard on cancel', async () => {

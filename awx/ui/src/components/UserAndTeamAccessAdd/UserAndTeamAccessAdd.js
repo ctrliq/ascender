@@ -30,11 +30,15 @@ function UserAndTeamAccessAdd({
   apiModel,
   onClose,
   onError,
+  resourceId,
 }) {
   const { t } = useLingui();
   const [selectedResourceType, setSelectedResourceType] = useState(null);
   const [stepIdReached, setStepIdReached] = useState(1);
-  const { id: userId } = useParams();
+  const { id: routeId } = useParams();
+  // The caller passes the resource id explicitly (works whether the parent
+  // screen uses react-router v5 or v6); fall back to the v5 route param.
+  const associationId = resourceId ?? routeId;
   const teamsRouteMatch = useRouteMatch({
     path: '/teams/:id/roles',
     exact: true,
@@ -292,14 +296,16 @@ function UserAndTeamAccessAdd({
       rolesSelected.map((role) =>
         resourceRolesTypes.forEach((rolename) => {
           if (rolename.name === role.name) {
-            roleRequests.push(apiModel.associateRole(userId, rolename.id));
+            roleRequests.push(
+              apiModel.associateRole(associationId, rolename.id)
+            );
           }
         })
       );
 
       await Promise.all(roleRequests);
       onFetchData();
-    }, [onFetchData, rolesSelected, apiModel, userId, resourcesSelected]),
+    }, [onFetchData, rolesSelected, apiModel, associationId, resourcesSelected]),
     {}
   );
 

@@ -196,6 +196,7 @@ function TeamRolesList({ me, team }) {
       {showAddModal && (
         <UserAndTeamAccessAdd
           apiModel={TeamsAPI}
+          resourceId={team.id}
           onFetchData={() => {
             setShowAddModal(false);
             fetchRoles();
