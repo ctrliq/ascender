@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { Route, Switch } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import PersistentFilters from 'components/PersistentFilters';
 import ScreenHeader from 'components/ScreenHeader/ScreenHeader';
 import ExecutionEnvironment from './ExecutionEnvironment';
@@ -35,19 +35,27 @@ function ExecutionEnvironments() {
         streamType="execution_environment"
         breadcrumbConfig={breadcrumbConfig}
       />
-      <Switch>
-        <Route path="/execution_environments/add">
-          <ExecutionEnvironmentAdd />
-        </Route>
-        <Route path="/execution_environments/:id">
-          <ExecutionEnvironment setBreadcrumb={buildBreadcrumbConfig} />
-        </Route>
-        <Route path="/execution_environments">
-          <PersistentFilters pageKey="executionEnvironments">
-            <ExecutionEnvironmentList />
-          </PersistentFilters>
-        </Route>
-      </Switch>
+      <Routes>
+        <Route
+          path="/execution_environments/add"
+          element={<ExecutionEnvironmentAdd />}
+        />
+        {/* so the nested <ExecutionEnvironment> route tree can match the rest */}
+        <Route
+          path="/execution_environments/:id/*"
+          element={
+            <ExecutionEnvironment setBreadcrumb={buildBreadcrumbConfig} />
+          }
+        />
+        <Route
+          path="/execution_environments"
+          element={
+            <PersistentFilters pageKey="executionEnvironments">
+              <ExecutionEnvironmentList />
+            </PersistentFilters>
+          }
+        />
+      </Routes>
     </>
   );
 }

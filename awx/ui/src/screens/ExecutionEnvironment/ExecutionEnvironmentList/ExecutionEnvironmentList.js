@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { useLocation, useRouteMatch } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';
 import { Card, PageSection } from '@patternfly/react-core';
 
@@ -30,7 +30,6 @@ const QS_CONFIG = getQSConfig('execution_environments', {
 function ExecutionEnvironmentList() {
   const { t } = useLingui();
   const location = useLocation();
-  const match = useRouteMatch();
   const { addToast, Toast, toastProps } = useToast();
 
   const {
@@ -182,7 +181,7 @@ function ExecutionEnvironmentList() {
                         <ToolbarAddButton
                           ouiaId="add-execution-environment"
                           key="add"
-                          linkTo={`${match.url}/add`}
+                          linkTo="/execution_environments/add"
                         />,
                       ]
                     : []),
@@ -206,7 +205,7 @@ function ExecutionEnvironmentList() {
                 key={executionEnvironment.id}
                 rowIndex={index}
                 executionEnvironment={executionEnvironment}
-                detailUrl={`${match.url}/${executionEnvironment.id}/details`}
+                detailUrl={`/execution_environments/${executionEnvironment.id}/details`}
                 onSelect={() => handleSelect(executionEnvironment)}
                 onCopy={handleCopy}
                 isSelected={selected.some(
@@ -217,7 +216,7 @@ function ExecutionEnvironmentList() {
             )}
             emptyStateControls={
               canAdd && (
-                <ToolbarAddButton key="add" linkTo={`${match.url}/add`} />
+                <ToolbarAddButton key="add" linkTo="/execution_environments/add" />
               )
             }
           />
