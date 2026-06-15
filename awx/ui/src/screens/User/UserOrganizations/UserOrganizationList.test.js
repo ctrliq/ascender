@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { UsersAPI } from 'api';
@@ -33,10 +33,12 @@ describe('<UserOrganizationlist />', () => {
       data: { actions: { GET: {} } },
     });
     renderWithContexts(
-      <Route
-        path="/users/:id/organizations"
-        component={() => <UserOrganizationList />}
-      />,
+      <Routes>
+        <Route
+          path="/users/:id/organizations"
+          element={<UserOrganizationList />}
+        />
+      </Routes>,
       {
         context: {
           router: {

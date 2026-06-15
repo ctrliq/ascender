@@ -1,6 +1,7 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { UsersAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import mockDetails from './data.user.json';
@@ -8,13 +9,23 @@ import User from './User';
 
 jest.mock('../../api');
 
+// Mount under the same /users/:id/* route that Users.js gives it, so the
+// nested v6 <Routes> resolve and useParams sees the id.
 function renderUser(initialEntry, props = {}) {
   const history = createMemoryHistory({
     initialEntries: [initialEntry],
   });
-  return renderWithContexts(<User setBreadcrumb={() => {}} {...props} />, {
-    context: { router: { history } },
-  });
+  return renderWithContexts(
+    <Routes>
+      <Route
+        path="/users/:id/*"
+        element={<User setBreadcrumb={() => {}} {...props} />}
+      />
+    </Routes>,
+    {
+      context: { router: { history } },
+    }
+  );
 }
 
 describe('<User />', () => {
