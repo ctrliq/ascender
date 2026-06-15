@@ -3223,7 +3223,9 @@ class WorkflowJobRelaunch(GenericAPIView):
             jt = obj.job_template
             if not jt:
                 raise ParseError(_('Cannot relaunch slice workflow job orphaned from job template.'))
-            elif not obj.inventory or min(obj.inventory.hosts.count(), jt.job_slice_count) != obj.workflow_nodes.count():
+            elif getattr(obj.inventory, 'kind', None) != 'federated' and (
+                not obj.inventory or min(obj.inventory.hosts.count(), jt.job_slice_count) != obj.workflow_nodes.count()
+            ):
                 raise ParseError(_('Cannot relaunch sliced workflow job after slice count has changed.'))
         if from_failed:
             if not obj.workflow_nodes.filter(job__status__in=['failed', 'error', 'canceled']).exists():
