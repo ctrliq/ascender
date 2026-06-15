@@ -1,21 +1,59 @@
 import React from 'react';
-
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { screen } from '@testing-library/react';
+import { createMemoryHistory } from 'history';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import CredentialTypes from './CredentialTypes';
 
-describe('<CredentialTypes/>', () => {
-  let pageWrapper;
-  let pageSections;
 
-  beforeEach(() => {
-    pageWrapper = mountWithContexts(<CredentialTypes />);
-    pageSections = pageWrapper.find('PageSection');
+// Replace the routed children with markers so the assertions are purely about
+// which branch of the v6 <Routes> tree resolves for a given URL.
+jest.mock('./CredentialTypeList', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: () => ReactLib.createElement('div', null, 'CredentialTypeList'),
+  };
+});
+jest.mock('./CredentialTypeAdd', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: () => ReactLib.createElement('div', null, 'CredentialTypeAdd'),
+  };
+});
+jest.mock('./CredentialType', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: () => ReactLib.createElement('div', null, 'CredentialType detail'),
+  };
+});
+
+function renderAt(path) {
+  const history = createMemoryHistory({ initialEntries: [path] });
+  return renderWithContexts(<CredentialTypes />, {
+    context: { router: { history } },
+  });
+}
+
+describe('<CredentialTypes />', () => {
+  test('renders the list at /credential_types', async () => {
+    renderAt('/credential_types');
+    expect(await screen.findByText('CredentialTypeList')).toBeInTheDocument();
   });
 
-  test('initially renders without crashing', () => {
-    expect(pageWrapper.length).toBe(1);
-    expect(pageSections.length).toBe(1);
-    expect(pageSections.first().props().variant).toBe('light');
+  test('renders the add form at /credential_types/add', async () => {
+    renderAt('/credential_types/add');
+    expect(await screen.findByText('CredentialTypeAdd')).toBeInTheDocument();
+    expect(screen.queryByText('CredentialTypeList')).not.toBeInTheDocument();
+  });
+
+  test('renders the detail subtree at /credential_types/:id', async () => {
+    renderAt('/credential_types/42/details');
+    expect(
+      await screen.findByText('CredentialType detail')
+    ).toBeInTheDocument();
+    expect(screen.queryByText('CredentialTypeList')).not.toBeInTheDocument();
   });
 });
