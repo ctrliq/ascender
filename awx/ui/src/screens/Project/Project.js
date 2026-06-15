@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
+import { Link } from 'react-router-dom';
 import {
-  Switch,
+  Routes,
   Route,
-  Redirect,
-  Link,
+  Navigate,
   useParams,
   useLocation,
-} from 'react-router-dom';
+} from 'react-router-dom-v5-compat';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card, PageSection } from '@patternfly/react-core';
 import { useConfig } from 'contexts/Config';
@@ -154,55 +154,73 @@ function Project({ setBreadcrumb }) {
         {showCardHeader && <RoutedTabs tabsArray={tabsArray} />}
         {hasContentLoading && <ContentLoading />}
         {!hasContentLoading && project && (
-          <Switch>
-            <Redirect from="/projects/:id" to="/projects/:id/details" exact />
-            <Route path="/projects/:id/edit">
-              <ProjectEdit project={project} />
-            </Route>
-            <Route path="/projects/:id/details">
-              <ProjectDetail project={project} />
-            </Route>
-            <Route path="/projects/:id/access">
-              <ResourceAccessList resource={project} apiModel={ProjectsAPI} />
-            </Route>
+          <Routes>
+            <Route index element={<Navigate to="details" replace />} />
+            <Route
+              path="edit"
+              element={<ProjectEdit project={project} />}
+            />
+            <Route
+              path="details"
+              element={<ProjectDetail project={project} />}
+            />
+            <Route
+              path="access"
+              element={
+                <ResourceAccessList resource={project} apiModel={ProjectsAPI} />
+              }
+            />
             {canSeeNotificationsTab && (
-              <Route path="/projects/:id/notifications">
-                <NotificationList
-                  id={Number(id)}
-                  canToggleNotifications={canToggleNotifications}
-                  apiModel={ProjectsAPI}
-                />
-              </Route>
-            )}
-            <Route path="/projects/:id/job_templates">
-              <RelatedTemplateList
-                searchParams={{
-                  project__id: project.id,
-                }}
-                resourceName={project.name}
+              <Route
+                path="notifications"
+                element={
+                  <NotificationList
+                    id={Number(id)}
+                    canToggleNotifications={canToggleNotifications}
+                    apiModel={ProjectsAPI}
+                  />
+                }
               />
-            </Route>
-            {project?.scm_type && project.scm_type !== '' && (
-              <Route path="/projects/:id/schedules">
-                <Schedules
-                  setBreadcrumb={setBreadcrumb}
-                  resource={project}
-                  apiModel={ProjectsAPI}
-                  loadSchedules={loadSchedules}
-                  loadScheduleOptions={loadScheduleOptions}
-                />
-              </Route>
             )}
-            <Route key="not-found" path="*">
-              <ContentError isNotFound>
-                {id && (
-                  <Link to={`/projects/${id}/details`}>
-                    {t`View Project Details`}
-                  </Link>
-                )}
-              </ContentError>
-            </Route>
-          </Switch>
+            <Route
+              path="job_templates"
+              element={
+                <RelatedTemplateList
+                  searchParams={{
+                    project__id: project.id,
+                  }}
+                  resourceName={project.name}
+                />
+              }
+            />
+            {/* so the nested <Schedules> route tree can match */}
+            {project?.scm_type && project.scm_type !== '' && (
+              <Route
+                path="schedules/*"
+                element={
+                  <Schedules
+                    setBreadcrumb={setBreadcrumb}
+                    resource={project}
+                    apiModel={ProjectsAPI}
+                    loadSchedules={loadSchedules}
+                    loadScheduleOptions={loadScheduleOptions}
+                  />
+                }
+              />
+            )}
+            <Route
+              path="*"
+              element={
+                <ContentError isNotFound>
+                  {id && (
+                    <Link to={`/projects/${id}/details`}>
+                      {t`View Project Details`}
+                    </Link>
+                  )}
+                </ContentError>
+              }
+            />
+          </Routes>
         )}
       </Card>
     </PageSection>

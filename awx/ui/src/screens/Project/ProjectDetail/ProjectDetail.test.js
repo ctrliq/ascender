@@ -205,7 +205,14 @@ describe('<ProjectDetail />', () => {
   });
 
   test('should show edit and sync button for users with edit permission', async () => {
-    const wrapper = mountWithContexts(<ProjectDetail project={mockProject} />);
+    // the Sync button shows its "Sync" label only on the details view
+    const history = createMemoryHistory({
+      initialEntries: [`/projects/${mockProject.id}/details`],
+    });
+    const wrapper = mountWithContexts(
+      <ProjectDetail project={mockProject} />,
+      { context: { router: { history } } }
+    );
     const editButton = await waitForElement(
       wrapper,
       'ProjectDetail Button[aria-label="edit"]'

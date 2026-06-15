@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { useRouteMatch } from 'react-router-dom';
+import { useLocation } from 'react-router-dom-v5-compat';
 import { Button, Tooltip } from '@patternfly/react-core';
 import { SyncIcon } from '@patternfly/react-icons';
 
@@ -15,7 +15,7 @@ import getProjectHelpStrings from './Project.helptext';
 function ProjectSyncButton({ projectId, lastJobStatus = null }) {
   const { t } = useLingui();
   const projectHelpStrings = getProjectHelpStrings(t);
-  const match = useRouteMatch();
+  const { pathname } = useLocation();
 
   const { request: handleSync, error: syncError } = useRequest(
     useCallback(async () => {
@@ -24,7 +24,7 @@ function ProjectSyncButton({ projectId, lastJobStatus = null }) {
     null
   );
   const { error, dismissError } = useDismissableError(syncError);
-  const isDetailsView = match.url.endsWith('/details');
+  const isDetailsView = pathname.endsWith('/details');
   const isDisabled = ['pending', 'waiting', 'running'].includes(lastJobStatus);
 
   return (
@@ -38,7 +38,7 @@ function ProjectSyncButton({ projectId, lastJobStatus = null }) {
               variant={isDetailsView ? 'secondary' : 'plain'}
               isDisabled={isDisabled}
             >
-              {match.url.endsWith('/details') ? (
+              {pathname.endsWith('/details') ? (
                 t`Sync`
               ) : (
                 <SyncIcon />
@@ -54,7 +54,7 @@ function ProjectSyncButton({ projectId, lastJobStatus = null }) {
           isDisabled={isDisabled}
           onClick={handleSync}
         >
-          {match.url.endsWith('/details') ? t`Sync` : <SyncIcon />}
+          {pathname.endsWith('/details') ? t`Sync` : <SyncIcon />}
         </Button>
       )}
       {error && (
