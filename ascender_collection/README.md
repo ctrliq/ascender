@@ -12,131 +12,182 @@
 [comment]: # (*  upon build of the collection                       *)
 [comment]: # (*******************************************************)
 
-This Ansible collection allows for easy interaction with an Ascender server via Ansible playbooks.
+The `ctrliq.ascender` collection lets you manage an Ascender controller from Ansible playbooks: organizations, inventories, projects, job templates, credentials, schedules, workflows, and the rest of the controller API are all exposed as modules, alongside a dynamic inventory plugin and a set of lookup plugins.
 
-This source for this collection lives in the `ascender_collection` folder inside of the
-Ascender GitHub repository.
-The previous home for this collection was inside the folder [lib/ansible/modules/web_infrastructure/ansible_tower](https://github.com/ansible/ansible/tree/stable-2.9/lib/ansible/modules/web_infrastructure/ansible_tower) in the Ansible repo,
-as well as other places for the inventory plugin, module utils, and
-doc fragment.
+The source for this collection lives in the `ascender_collection` folder of the
+[Ascender repository](https://github.com/ctrliq/ascender). It traces back to the
+modules that once shipped in Ansible core under
+`lib/ansible/modules/web_infrastructure/ansible_tower`, plus the inventory
+plugin, module utilities, and doc fragments that lived elsewhere in that repo.
 
-## Building and Installing
+## Requirements
 
-This collection templates the `galaxy.yml` file it uses.
-Run `make build_collection` from the root folder of the Ascender source tree.
-This will create the `tar.gz` file inside the `ascender_collection` folder
-with the current Ascender version, for example: `ascender_collection/ctrliq-ascender-9.2.0.tar.gz`.
+- `ansible-core` >= 2.17
+- Python 3.10+ on the controller node running the modules
+- [awxkit](https://pypi.org/project/awxkit/) — only required by a handful of
+  modules (notably `export` and `import`). The `DOCUMENTATION` block of each
+  module states whether it needs awxkit; the rest have no extra Python
+  dependencies.
 
-Installing the `tar.gz` involves no special instructions.
+## Installation
 
-## Running
+The collection templates its own `galaxy.yml` at build time. From the root of
+the Ascender source tree, run:
 
-Non-deprecated modules in this collection have no Python requirements, but
-may require the official [AWX CLI](https://docs.ansible.com/ansible-tower/latest/html/towercli/index.html)
-in the future. The `DOCUMENTATION` for each module will report this.
-
-You can specify authentication by a combination of either:
-
- - host, username, password
- - host, OAuth2 token
-
-The OAuth2 token is the preferred method. You can obtain a token via the
-AWX CLI [login](https://docs.ansible.com/ansible-tower/latest/html/towercli/reference.html#awx-login)
-command.
-
-These can be specified via (from highest to lowest precedence):
-
- - direct module parameters
- - environment variables (most useful when running against localhost)
- - a config file path specified by the `tower_config_file` parameter
- - a config file at `~/.tower_cli.cfg`
- - a config file at `/etc/tower/tower_cli.cfg`
-
-Config file syntax looks like this:
-
+```bash
+make build_collection
 ```
+
+This produces a versioned artifact in the `ascender_collection` folder, for
+example `ascender_collection/ctrliq-ascender-25.4.0.tar.gz`.
+Install it with:
+
+```bash
+ansible-galaxy collection install ctrliq-ascender-25.4.0.tar.gz
+```
+
+## Using the collection
+
+Reference modules, the inventory plugin, and lookups by their fully qualified
+collection name, `ctrliq.ascender.<name>`:
+
+```yaml
+- name: Create a project and launch a job
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Add a project
+      ctrliq.ascender.project:
+        name: My Project
+        organization: Default
+        scm_type: git
+        scm_url: https://github.com/ansible/test-playbooks.git
+
+    - name: Launch a job template
+      ctrliq.ascender.job_launch:
+        job_template: My Job Template
+      register: job
+
+    - name: Wait for it to finish
+      ctrliq.ascender.job_wait:
+        job_id: "{{ job.id }}"
+```
+
+To use the dynamic inventory plugin, add a `*.controller.yml` (or
+`*.controller.yaml`) inventory source:
+
+```yaml
+plugin: ctrliq.ascender.controller
+host: https://controller.example.com
+```
+
+## Authentication
+
+Every module accepts the same connection options. You can authenticate with
+either:
+
+- host, username, and password, or
+- host and an OAuth2 token (preferred).
+
+Connection settings are resolved from highest to lowest precedence:
+
+1. Direct module parameters (`controller_host`, `controller_username`,
+   `controller_password`, `controller_oauthtoken`, `controller_verify_ssl`).
+2. Environment variables (`CONTROLLER_HOST`, `CONTROLLER_USERNAME`,
+   `CONTROLLER_PASSWORD`, `CONTROLLER_OAUTH_TOKEN`, `CONTROLLER_VERIFY_SSL`) —
+   most convenient when targeting `localhost`.
+3. A config file passed via the `controller_config_file` parameter.
+
+The config file may be written as INI, YAML, or JSON. INI form:
+
+```ini
 [general]
 host = https://localhost:8043
 verify_ssl = true
 oauth_token = LEdCpKVKc4znzffcpQL5vLG8oyeku6
 ```
 
-## Release and Upgrade Notes
+## Included content
 
-Notable releases of the `ctrliq.ascender` collection:
+- **44 modules** covering controller resources (organizations, teams,
+  users, inventories, hosts, groups, projects, credentials, job/workflow
+  templates, schedules, notifications, settings, tokens, and more), plus
+  `export`/`import` for bulk configuration.
+- **Inventory plugin:** `ctrliq.ascender.controller`.
+- **Lookup plugins:** `controller_api`, `schedule_rrule`, and `schedule_rruleset`.
 
- - 7.0.0 is intended to be identical to the content prior to the migration, aside from changes necessary to function as a collection.
- - 11.0.0 has no non-deprecated modules that depend on the deprecated `tower-cli` [PyPI](https://pypi.org/project/ansible-tower-cli/).
- - 19.2.1 large renaming purged "tower" names (like options and module names), adding redirects for old names
- - X.X.X added support of named URLs to all modules. Anywhere that previously accepted name or id can also support named URLs
- - 0.0.1-devel is the version you should see if installing from source, which is intended for development and expected to be unstable.
+Per-plugin documentation is available with `ansible-doc`, e.g.
+`ansible-doc ctrliq.ascender.job_launch`.
 
-The following notes are changes that may require changes to playbooks:
+## Release and upgrade notes
 
- - The `credential` module no longer allows `kind` as a parameter; additionally, `inputs` must now be used with a variety of key/value parameters to go with it (e.g., `become_method`)
- - The `job_wait` module no longer allows `min_interval`/ `max_interval` parameters; use `interval` instead
- - The `notification_template` requires various notification configuration information to be listed as a dictionary under the `notification_configuration` parameter (e.g., `use_ssl`)
- - In the `inventory_source` module, the `source_project` (when provided) lookup defaults to the specified organization in the same way the inventory is looked up
- - The module `tower_notification` was renamed `tower_notification_template`. In `ansible >= 2.10` there is a seamless redirect. Ansible 2.9 does not respect the redirect.
- - When a project is created, it will wait for the update/sync to finish by default; this can be turned off with the `wait` parameter, if desired.
- - Creating a "scan" type job template is no longer supported.
- - Specifying a custom certificate via the `TOWER_CERTIFICATE` environment variable no longer works.
- - Type changes of variable fields:
+Notable points in the history of the `ctrliq.ascender` collection:
 
-   - `extra_vars` in the `tower_job_launch` module worked with a `list` previously, but now only works with a `dict` type
-   - `extra_vars` in the `tower_workflow_job_template` module worked with a `string` previously but now expects a `dict`
-   - When the `extra_vars` parameter is used with the `tower_job_launch` module, the launch will fail unless `ask_extra_vars` or `survey_enabled` is explicitly set to `True` on the Job Template
-   - The `variables` parameter in the `tower_group`, `tower_host` and `tower_inventory` modules now expects a `dict` type and no longer supports the use of `@` syntax for a file
+- It descends from the `awx.awx` collection; every module previously named
+  `tower_*` is now unprefixed (for example, `tower_inventory` is `inventory`).
+- All modules support named URLs anywhere a name or id is accepted.
+- `0.0.1-devel` is the version reported when installing from source. It is meant
+  for development and is expected to be unstable; build a release artifact for
+  production use.
 
+Behaviours worth knowing when writing playbooks:
 
- - Type changes of other types of fields:
+- `credential`: `kind` is no longer a parameter; supply the credential's fields
+  under `inputs` (for example, `become_method`).
+- `job_wait`: use `interval` instead of the removed `min_interval`/`max_interval`.
+- `notification_template`: notification settings go in the
+  `notification_configuration` dict; use a `lookup` to load one from a file.
+- `inventory_source`: when `source_project` is given, it is looked up within the
+  same organization as the inventory.
+- `project`: creation waits for the initial sync by default; set `wait: false`
+  to skip it.
+- `extra_vars` is always a dict. Launching with `extra_vars` requires
+  `ask_extra_vars` or `survey_enabled` to be enabled on the job template.
+- `variables` on `group`, `host`, and `inventory` must be a dict; the `@file`
+  syntax is no longer supported (use a `lookup`).
+- `inputs`/`injectors` on `credential_type`, and `schema` on
+  `workflow_job_template`, are structured data (dict / list of dicts), not
+  strings.
+- Config files must be INI, YAML, or JSON — single-line `k=v` content is no
+  longer accepted.
+- Removed: "scan" job templates, the `TOWER_CERTIFICATE` env var, the HipChat
+  notification type, `extra_vars_path` on `job_template`, and passing a filename
+  to `ssh_key_data` on `credential`.
 
-   - `inputs` or `injectors` in the `tower_credential_type` module worked with a string previously but now expects a `dict`
-   - `schema` in the `tower_workflow_job_template` module worked with a `string` previously but not expects a `list` of `dict`s
+## Testing
 
- - `tower_group` used to also service inventory sources, but this functionality has been removed from this module; use `tower_inventory_source` instead.
- - Specified `tower_config` file used to handle `k=v` pairs on a single line; this is no longer supported. Please use a file formatted as `yaml`, `json` or `ini` only.
- - Some return values (e.g., `credential_type`) have been removed. Use of `id` is recommended.
- - `tower_job_template` no longer supports the deprecated `extra_vars_path` parameter, please use `extra_vars` with the lookup plugin to replace this functionality.
- - The `notification_configuration` parameter of `tower_notification_template` has changed from a string to a dict. Please use the `lookup` plugin to read an existing file into a dict.
- - `tower_credential` no longer supports passing a file name to `ssh_key_data`.
- - The HipChat `notification_type` has been removed and can no longer be created using the `tower_notification_template` module.
+The collection is verified three ways:
 
-## Running Unit Tests
+- **Sanity** — from an installed copy of the collection:
+  `ansible-test sanity`.
+- **Unit** — compatibility tests against the current controller code live in
+  `ascender_collection/test/ascender` and run with `make test_collection` inside
+  the development container. To run them outside the container against an Ansible
+  checkout, use a dedicated virtualenv:
 
-Tests to verify compatibility with the most recent AWX code are in `ascender_collection/test/ascender`.
-These can be ran via the `make test_collection` command in the development container.
+  ```bash
+  mkvirtualenv my_new_venv
+  # you may need to swap psycopg for psycopg-binary in requirements/requirements.txt
+  pip install -r requirements/requirements.txt -r requirements/requirements_dev.txt -r requirements/requirements_git.txt
+  make clean-api
+  pip install -e <path to your Ansible>
+  pip install -e .
+  pip install -e awxkit
+  py.test ascender_collection/test/ascender/
+  ```
 
-To run tests outside of the development container, or to run against
-Ansible source, set up a dedicated virtual environment:
+- **Integration** — require a virtualenv with `ansible-core >= 2.17` and
+  `awxkit`, a running controller, and an installed collection
+  (`make install_collection`) plus a config file as described under
+  [Authentication](#authentication):
 
-```
-mkvirtualenv my_new_venv
-# may need to replace psycopg2 with psycopg2-binary in requirements/requirements.txt
-pip install -r requirements/requirements.txt -r requirements/requirements_dev.txt -r requirements/requirements_git.txt
-make clean-api
-pip install -e <path to your Ansible>
-pip install -e .
-pip install -e awxkit
-py.test ascender_collection/test/ascender/
-```
-
-## Running Integration Tests
-
-The integration tests require a virtualenv with `ansible >= 2.17` and `awxkit`.
-The collection must first be installed, which can be done using `make install_collection`.
-You also need a configuration file, as described in the [Running](https://github.com/ctrliq/ascender/blob/devel/ascender_collection/README.md#running) section.
-
-How to run the tests:
-
-```
-# ansible-test must be run from the directory in which the collection is installed
-cd ~/.ansible/collections/ansible_collections/ctrliq/ascender/
-ansible-test integration
-```
+  ```bash
+  # ansible-test must run from where the collection is installed
+  cd ~/.ansible/collections/ansible_collections/ctrliq/ascender/
+  ansible-test integration
+  ```
 
 ## Licensing
 
-All content in this folder is licensed under the same license as Ansible,
-which is the same as the license that applied before the split into an
-independent collection.
+This collection is licensed under the **GNU General Public License v3.0 or
+later**. See [COPYING](./COPYING) for the full text.
