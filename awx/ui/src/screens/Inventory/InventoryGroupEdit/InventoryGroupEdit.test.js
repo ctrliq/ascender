@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { createMemoryHistory } from 'history';
 import { act } from 'react-dom/test-utils';
 import { GroupsAPI } from 'api';
@@ -25,9 +25,13 @@ describe('<InventoryGroupEdit />', () => {
     });
     await act(async () => {
       wrapper = mountWithContexts(
-        <Route path="/inventories/inventory/:id/groups/:groupId/edit">
-          <InventoryGroupEdit inventoryGroup={{ id: 2 }} />
-        </Route>,
+        <Routes>
+          <Route
+            path="/inventories/inventory/:id/groups/:groupId/edit/*"
+            element={<InventoryGroupEdit inventoryGroup={{ id: 2 }} />}
+          />
+          <Route path="*" element={null} />
+        </Routes>,
         {
           context: {
             router: {

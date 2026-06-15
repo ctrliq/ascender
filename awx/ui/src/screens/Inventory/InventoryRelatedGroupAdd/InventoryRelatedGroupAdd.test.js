@@ -1,28 +1,31 @@
 import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { createMemoryHistory } from 'history';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { GroupsAPI } from 'api';
 import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
 import InventoryRelatedGroupAdd from './InventoryRelatedGroupAdd';
 
 jest.mock('../../../api');
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => ({
-    id: 1,
-    groupId: 2,
-  }),
-  useHistory: () => ({ push: jest.fn() }),
-}));
 
 describe('<InventoryRelatedGroupAdd/>', () => {
   let wrapper;
-  const history = createMemoryHistory({
-    initialEntries: ['/inventories/inventory/1/groups/2/nested_groups'],
-  });
+  let history;
 
   beforeEach(() => {
-    wrapper = mountWithContexts(<InventoryRelatedGroupAdd />);
+    history = createMemoryHistory({
+      initialEntries: ['/inventories/inventory/1/groups/2/nested_groups/add'],
+    });
+    wrapper = mountWithContexts(
+      <Routes>
+        <Route
+          path="/inventories/inventory/:id/groups/:groupId/nested_groups/add/*"
+          element={<InventoryRelatedGroupAdd />}
+        />
+        <Route path="*" element={null} />
+      </Routes>,
+      { context: { router: { history } } }
+    );
   });
 
   test('should render properly', () => {
@@ -38,11 +41,11 @@ describe('<InventoryRelatedGroupAdd/>', () => {
       })
     );
     expect(GroupsAPI.create).toHaveBeenCalledWith({
-      inventory: 1,
+      inventory: '1',
       name: 'foo',
       description: 'bar',
     });
-    expect(GroupsAPI.associateChildGroup).toHaveBeenCalledWith(2, 3);
+    expect(GroupsAPI.associateChildGroup).toHaveBeenCalledWith('2', 3);
   });
 
   test('cancel should navigate user to Inventory Groups List', async () => {
@@ -90,7 +93,7 @@ describe('<InventoryRelatedGroupAdd/>', () => {
       })
     );
     expect(GroupsAPI.create).toHaveBeenCalledWith({
-      inventory: 1,
+      inventory: '1',
       name: 'foo',
       description: 'bar',
     });

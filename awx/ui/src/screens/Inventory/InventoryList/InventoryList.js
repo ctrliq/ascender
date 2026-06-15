@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useLocation, useRouteMatch, Link } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { Plural, useLingui } from '@lingui/react/macro';
 import { Card, PageSection, DropdownItem } from '@patternfly/react-core';
 import { InventoriesAPI } from 'api';
@@ -29,7 +29,6 @@ const QS_CONFIG = getQSConfig('inventory', {
 
 function InventoryList() {
   const location = useLocation();
-  const match = useRouteMatch();
   const { addToast, Toast, toastProps } = useToast();
   const { t } = useLingui();
 
@@ -145,7 +144,7 @@ function InventoryList() {
       dropdownItems={[
         <DropdownItem
           ouiaId="add-inventory-item"
-          to={`${match.url}/inventory/add/`}
+          to="/inventories/inventory/add/"
           component={Link}
           key={addInventory}
           aria-label={addInventory}
@@ -154,7 +153,7 @@ function InventoryList() {
         </DropdownItem>,
         <DropdownItem
           ouiaId="add-smart-inventory-item"
-          to={`${match.url}/smart_inventory/add/`}
+          to="/inventories/smart_inventory/add/"
           component={Link}
           key={addSmartInventory}
           aria-label={addSmartInventory}
@@ -163,7 +162,7 @@ function InventoryList() {
         </DropdownItem>,
         <DropdownItem
           ouiaId="add-constructed-inventory-item"
-          to={`${match.url}/constructed_inventory/add/`}
+          to="/inventories/constructed_inventory/add/"
           component={Link}
           key={addConstructedInventory}
           aria-label={addConstructedInventory}
@@ -172,7 +171,7 @@ function InventoryList() {
         </DropdownItem>,
         <DropdownItem
           ouiaId="add-federated-inventory-item"
-          to={`${match.url}/federated_inventory/add/`}
+          to="/inventories/federated_inventory/add/"
           component={Link}
           key={addFederatedInventory}
           aria-label={addFederatedInventory}

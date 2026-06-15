@@ -1,7 +1,7 @@
 import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { createMemoryHistory } from 'history';
-import { Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { GroupsAPI, InventoriesAPI } from 'api';
 import {
   mountWithContexts,
@@ -13,6 +13,20 @@ import mockRelatedGroups from '../shared/data.relatedGroups.json';
 jest.mock('../../../api/models/Groups');
 jest.mock('../../../api/models/Inventories');
 jest.mock('../../../api/models/CredentialTypes');
+
+function renderUnder(url) {
+  const history = createMemoryHistory({ initialEntries: [url] });
+  const wrapper = mountWithContexts(
+    <Routes>
+      <Route
+        path="/inventories/:inventoryType/:id/groups/:groupId/nested_groups/*"
+        element={<InventoryRelatedGroupList />}
+      />
+    </Routes>,
+    { context: { router: { history } } }
+  );
+  return { wrapper, history };
+}
 
 const mockGroups = [
   {
@@ -57,15 +71,8 @@ const mockGroups = [
 ];
 
 describe('<InventoryRelatedGroupList />', () => {
+  const url = '/inventories/inventory/2/groups/2/nested_groups';
   let wrapper;
-  jest.mock('react-router-dom', () => ({
-    ...jest.requireActual('react-router-dom'),
-    useParams: () => ({
-      id: 2,
-      groupId: 2,
-      inventoryType: 'inventory',
-    }),
-  }));
 
   beforeEach(async () => {
     GroupsAPI.readChildren.mockResolvedValue({
@@ -104,7 +111,7 @@ describe('<InventoryRelatedGroupList />', () => {
       },
     });
     await act(async () => {
-      wrapper = mountWithContexts(<InventoryRelatedGroupList />);
+      ({ wrapper } = renderUnder(url));
     });
     await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
   });
@@ -175,7 +182,7 @@ describe('<InventoryRelatedGroupList />', () => {
       Promise.reject(new Error())
     );
     await act(async () => {
-      wrapper = mountWithContexts(<InventoryRelatedGroupList />);
+      ({ wrapper } = renderUnder(url));
     });
     await waitForElement(wrapper, 'ContentError', (el) => el.length === 1);
   });
@@ -201,7 +208,7 @@ describe('<InventoryRelatedGroupList />', () => {
       },
     });
     await act(async () => {
-      wrapper = mountWithContexts(<InventoryRelatedGroupList />);
+      ({ wrapper } = renderUnder(url));
     });
     await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
     expect(wrapper.find('AddDropdown').length).toBe(0);
@@ -211,16 +218,8 @@ describe('<InventoryRelatedGroupList />', () => {
     GroupsAPI.readPotentialGroups.mockResolvedValue({
       data: { count: mockGroups.length, results: mockGroups },
     });
-    const history = createMemoryHistory({
-      initialEntries: ['/inventories/inventory/2/groups/2/nested_groups'],
-    });
     await act(async () => {
-      wrapper = mountWithContexts(
-        <Route path="/inventories/:inventoryType/:id/groups/:groupId/nested_groups">
-          <InventoryRelatedGroupList />
-        </Route>,
-        { context: { router: { history } } }
-      );
+      ({ wrapper } = renderUnder(url));
     });
     await waitForElement(
       wrapper,
@@ -273,21 +272,13 @@ describe('<InventoryRelatedGroupList />', () => {
       },
     });
     await act(async () => {
-      wrapper = mountWithContexts(<InventoryRelatedGroupList />);
+      ({ wrapper } = renderUnder(url));
     });
     expect(wrapper.find('AdHocCommands')).toHaveLength(0);
   });
 });
 
 describe('<InventoryRelatedGroupList> for constructed inventories', () => {
-  jest.mock('react-router-dom', () => ({
-    ...jest.requireActual('react-router-dom'),
-    useParams: () => ({
-      id: 1,
-      groupId: 2,
-      inventoryType: 'constructed_inventory',
-    }),
-  }));
   let wrapper;
 
   beforeEach(async () => {
@@ -326,18 +317,10 @@ describe('<InventoryRelatedGroupList> for constructed inventories', () => {
         },
       },
     });
-    const history = createMemoryHistory({
-      initialEntries: [
-        '/inventories/constructed_inventory/1/groups/2/nested_groups',
-      ],
-    });
     await act(async () => {
-      wrapper = mountWithContexts(
-        <Route path="/inventories/:inventoryType/:id/groups/:groupId/nested_groups">
-          <InventoryRelatedGroupList />
-        </Route>,
-        { context: { router: { history } } }
-      );
+      ({ wrapper } = renderUnder(
+        '/inventories/constructed_inventory/1/groups/2/nested_groups'
+      ));
     });
     await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
   });

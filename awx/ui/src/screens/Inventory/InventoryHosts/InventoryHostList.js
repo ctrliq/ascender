@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import { getQSConfig, parseQueryString } from 'util/qs';
 import { InventoriesAPI, HostsAPI } from 'api';
