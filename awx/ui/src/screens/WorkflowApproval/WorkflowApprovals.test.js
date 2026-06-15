@@ -1,70 +1,47 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import { WorkflowApprovalsAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import WorkflowApprovals from './WorkflowApprovals';
-import mockWorkflowApprovals from './data.workflowApprovals.json';
 
-jest.mock('../../api');
+jest.mock('../../api/models/WorkflowApprovals');
+
+// Replace the routed children with markers so the assertions are purely about
+// which branch of the v6 <Routes> tree resolves for a given URL.
+jest.mock('./WorkflowApprovalList', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: () => ReactLib.createElement('div', null, 'WorkflowApprovalList'),
+  };
+});
+jest.mock('./WorkflowApproval', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: () =>
+      ReactLib.createElement('div', null, 'WorkflowApproval detail'),
+  };
+});
+
+function renderAt(path) {
+  const history = createMemoryHistory({ initialEntries: [path] });
+  return renderWithContexts(<WorkflowApprovals />, {
+    context: { router: { history } },
+  });
+}
 
 describe('<WorkflowApprovals />', () => {
-  beforeEach(() => {
-    WorkflowApprovalsAPI.read.mockResolvedValue({
-      data: {
-        count: mockWorkflowApprovals.results.length,
-        results: mockWorkflowApprovals.results,
-      },
-    });
-
-    WorkflowApprovalsAPI.readOptions.mockResolvedValue({
-      data: {
-        actions: {
-          GET: {},
-          POST: {},
-        },
-        related_search_fields: [],
-      },
-    });
+  test('renders the list at /workflow_approvals', async () => {
+    renderAt('/workflow_approvals');
+    expect(await screen.findByText('WorkflowApprovalList')).toBeInTheDocument();
   });
 
-  test('initially renders successfully', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<WorkflowApprovals />);
-    });
-    expect(wrapper.find('WorkflowApprovals').length).toBe(1);
-  });
-
-  test('should display a breadcrumb heading', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/workflow_approvals'],
-    });
-    const match = {
-      path: '/workflow_approvals',
-      url: '/workflow_approvals',
-      isExact: true,
-    };
-
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<WorkflowApprovals />, {
-        context: {
-          router: {
-            history,
-            route: {
-              location: history.location,
-              match,
-            },
-          },
-        },
-      });
-    });
-
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('Title').length).toBe(1);
+  test('renders the detail subtree at /workflow_approvals/:id', async () => {
+    renderAt('/workflow_approvals/1/details');
+    expect(
+      await screen.findByText('WorkflowApproval detail')
+    ).toBeInTheDocument();
+    expect(screen.queryByText('WorkflowApprovalList')).not.toBeInTheDocument();
   });
 });
