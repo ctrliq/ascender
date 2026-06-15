@@ -7,6 +7,7 @@ import {
   mountWithContexts,
   waitForElement,
 } from '../../../../testUtils/enzymeHelpers';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import mockAllOptions from '../shared/data.allSettingOptions.json';
 import UI from './UI';
 
@@ -33,7 +34,7 @@ describe('<UI />', () => {
     await act(async () => {
       wrapper = mountWithContexts(
         <SettingsProvider value={mockAllOptions.actions}>
-          <UI />
+          <Routes><Route path="/settings/ui/*" element={<UI />} /></Routes>
         </SettingsProvider>,
         {
           context: { router: { history } },
@@ -51,7 +52,7 @@ describe('<UI />', () => {
     await act(async () => {
       wrapper = mountWithContexts(
         <SettingsProvider value={mockAllOptions.actions}>
-          <UI />
+          <Routes><Route path="/settings/ui/*" element={<UI />} /></Routes>
         </SettingsProvider>,
         {
           context: { router: { history } },
@@ -67,7 +68,7 @@ describe('<UI />', () => {
       initialEntries: ['/settings/ui/foo'],
     });
     await act(async () => {
-      wrapper = mountWithContexts(<UI />, {
+      wrapper = mountWithContexts(<Routes><Route path="/settings/ui/*" element={<UI />} /></Routes>, {
         context: { router: { history } },
       });
     });

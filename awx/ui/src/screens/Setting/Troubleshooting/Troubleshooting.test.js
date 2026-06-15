@@ -3,6 +3,7 @@ import { act } from 'react-dom/test-utils';
 import { createMemoryHistory } from 'history';
 import { SettingsAPI } from 'api';
 import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import mockJobSettings from '../shared/data.jobSettings.json';
 import Jobs from './Troubleshooting';
 import Troubleshooting from './Troubleshooting';
@@ -27,7 +28,7 @@ describe('<Troubleshooting />', () => {
       initialEntries: ['/settings/troubleshooting/details'],
     });
     await act(async () => {
-      wrapper = mountWithContexts(<Jobs />, {
+      wrapper = mountWithContexts(<Routes><Route path="/settings/troubleshooting/*" element={<Jobs />} /></Routes>, {
         context: { router: { history } },
       });
     });
@@ -39,7 +40,7 @@ describe('<Troubleshooting />', () => {
       initialEntries: ['/settings/troubleshooting/edit'],
     });
     await act(async () => {
-      wrapper = mountWithContexts(<Jobs />, {
+      wrapper = mountWithContexts(<Routes><Route path="/settings/troubleshooting/*" element={<Jobs />} /></Routes>, {
         context: { router: { history } },
       });
     });
@@ -51,7 +52,7 @@ describe('<Troubleshooting />', () => {
       initialEntries: ['/settings/troubleshooting/foo'],
     });
     await act(async () => {
-      wrapper = mountWithContexts(<Troubleshooting />, {
+      wrapper = mountWithContexts(<Routes><Route path="/settings/troubleshooting/*" element={<Troubleshooting />} /></Routes>, {
         context: { router: { history } },
       });
     });

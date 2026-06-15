@@ -4,6 +4,7 @@ import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
 import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import mockAllOptions from '../shared/data.allSettingOptions.json';
 import OIDC from './OIDC';
 
@@ -34,7 +35,7 @@ describe('<OIDC />', () => {
     await act(async () => {
       wrapper = mountWithContexts(
         <SettingsProvider value={mockAllOptions.actions}>
-          <OIDC />
+          <Routes><Route path="/settings/oidc/*" element={<OIDC />} /></Routes>
         </SettingsProvider>,
         {
           context: { router: { history } },
@@ -51,7 +52,7 @@ describe('<OIDC />', () => {
     await act(async () => {
       wrapper = mountWithContexts(
         <SettingsProvider value={mockAllOptions.actions}>
-          <OIDC />
+          <Routes><Route path="/settings/oidc/*" element={<OIDC />} /></Routes>
         </SettingsProvider>,
         {
           context: { router: { history } },
@@ -66,7 +67,7 @@ describe('<OIDC />', () => {
       initialEntries: ['/settings/oidc/foo'],
     });
     await act(async () => {
-      wrapper = mountWithContexts(<OIDC />, {
+      wrapper = mountWithContexts(<Routes><Route path="/settings/oidc/*" element={<OIDC />} /></Routes>, {
         context: { router: { history } },
       });
     });

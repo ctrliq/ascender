@@ -6,6 +6,7 @@ import {
   mountWithContexts,
   waitForElement,
 } from '../../../../testUtils/enzymeHelpers';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import MiscAuthentication from './MiscAuthentication';
 
 jest.mock('../../../api');
@@ -28,7 +29,7 @@ describe('<MiscAuthentication />', () => {
       initialEntries: ['/settings/miscellaneous_authentication/details'],
     });
     await act(async () => {
-      wrapper = mountWithContexts(<MiscAuthentication />, {
+      wrapper = mountWithContexts(<Routes><Route path="/settings/miscellaneous_authentication/*" element={<MiscAuthentication />} /></Routes>, {
         context: { router: { history } },
       });
     });
@@ -41,7 +42,7 @@ describe('<MiscAuthentication />', () => {
       initialEntries: ['/settings/miscellaneous_authentication/edit'],
     });
     await act(async () => {
-      wrapper = mountWithContexts(<MiscAuthentication />, {
+      wrapper = mountWithContexts(<Routes><Route path="/settings/miscellaneous_authentication/*" element={<MiscAuthentication />} /></Routes>, {
         context: { router: { history } },
       });
     });
@@ -54,7 +55,7 @@ describe('<MiscAuthentication />', () => {
       initialEntries: ['/settings/miscellaneous_authentication/foo'],
     });
     await act(async () => {
-      wrapper = mountWithContexts(<MiscAuthentication />, {
+      wrapper = mountWithContexts(<Routes><Route path="/settings/miscellaneous_authentication/*" element={<MiscAuthentication />} /></Routes>, {
         context: { router: { history } },
       });
     });
@@ -66,7 +67,7 @@ describe('<MiscAuthentication />', () => {
       initialEntries: ['/settings/miscellaneous_authentication/edit'],
     });
     await act(async () => {
-      wrapper = mountWithContexts(<MiscAuthentication />, {
+      wrapper = mountWithContexts(<Routes><Route path="/settings/miscellaneous_authentication/*" element={<MiscAuthentication />} /></Routes>, {
         context: {
           router: {
             history,

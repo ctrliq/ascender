@@ -1,5 +1,6 @@
 import React from 'react';
-import { Link, Redirect, Route, Switch } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import { PageSection, Card } from '@patternfly/react-core';
 import ContentError from 'components/ContentError';
@@ -12,22 +13,22 @@ function UI() {
   return (
     <PageSection>
       <Card>
-        <Switch>
-          <Redirect from={baseURL} to={`${baseURL}/details`} exact />
-          <Route path={`${baseURL}/details`}>
-            <UIDetail />
-          </Route>
-          <Route path={`${baseURL}/edit`}>
-            <UIEdit />
-          </Route>
-          <Route key="not-found" path={`${baseURL}/*`}>
-            <ContentError isNotFound>
-              <Link to={`${baseURL}/details`}>
-                {t`View User Interface settings`}
-              </Link>
-            </ContentError>
-          </Route>
-        </Switch>
+        <Routes>
+          <Route
+            index
+            element={<Navigate to={`${baseURL}/details`} replace />}
+          />
+          <Route path="details" element={<UIDetail />} />
+          <Route path="edit" element={<UIEdit />} />
+          <Route
+            path="*"
+            element={
+              <ContentError isNotFound>
+                <Link to={`${baseURL}/details`}>{t`View User Interface settings`}</Link>
+              </ContentError>
+            }
+          />
+        </Routes>
       </Card>
     </PageSection>
   );

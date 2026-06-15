@@ -1,5 +1,11 @@
 import React from 'react';
-import { Link, Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import {
+  Routes,
+  Route,
+  Navigate,
+  useParams,
+} from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import { PageSection, Card } from '@patternfly/react-core';
 import ContentError from 'components/ContentError';
@@ -7,43 +13,48 @@ import AzureADDetail from './AzureADDetail';
 import AzureADEdit from './AzureADEdit';
 import AzureADTenantEdit from './AzureADTenantEdit';
 
+// /settings/azure/:category (no sub-view) redirects to that category's details
+function CategoryRedirect({ baseURL }) {
+  const { category } = useParams();
+  return <Navigate to={`${baseURL}/${category}/details`} replace />;
+}
+
 function AzureAD() {
   const { t } = useLingui();
   const baseURL = '/settings/azure';
-  const baseRoute = useRouteMatch({ path: '/settings/azure', exact: true });
-  const categoryRoute = useRouteMatch({
-    path: '/settings/azure/:category',
-    exact: true,
-  });
 
   return (
     <PageSection>
       <Card>
-        <Switch>
-          {baseRoute && <Redirect to={`${baseURL}/default/details`} exact />}
-          {categoryRoute && (
-            <Redirect
-              to={`${baseURL}/${categoryRoute.params.category}/details`}
-              exact
-            />
-          )}
-          <Route path={`${baseURL}/:category/details`}>
-            <AzureADDetail />
-          </Route>
-          <Route path={`${baseURL}/default/edit`}>
-            <AzureADEdit />
-          </Route>
-          <Route path={`${baseURL}/tenant/edit`}>
-            <AzureADTenantEdit />
-          </Route>
-          <Route key="not-found" path={`${baseURL}/*`}>
-            <ContentError isNotFound>
-              <Link to={`${baseURL}/default/details`}>
-                {t`View Azure AD settings`}
-              </Link>
-            </ContentError>
-          </Route>
-        </Switch>
+        <Routes>
+          <Route
+            index
+            element={<Navigate to={`${baseURL}/default/details`} replace />}
+          />
+          <Route
+            path=":category"
+            element={<CategoryRedirect baseURL={baseURL} />}
+          />
+          <Route
+            path=":category/details"
+            element={<AzureADDetail />}
+          />
+          <Route path="default/edit" element={<AzureADEdit />} />
+          <Route
+            path="tenant/edit"
+            element={<AzureADTenantEdit />}
+          />
+          <Route
+            path="*"
+            element={
+              <ContentError isNotFound>
+                <Link to={`${baseURL}/default/details`}>
+                  {t`View Azure AD settings`}
+                </Link>
+              </ContentError>
+            }
+          />
+        </Routes>
       </Card>
     </PageSection>
   );

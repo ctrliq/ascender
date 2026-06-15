@@ -4,6 +4,7 @@ import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
 import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import mockAllOptions from '../shared/data.allSettingOptions.json';
 import GoogleOAuth2 from './GoogleOAuth2';
 
@@ -43,7 +44,7 @@ describe('<GoogleOAuth2 />', () => {
     await act(async () => {
       wrapper = mountWithContexts(
         <SettingsProvider value={mockAllOptions.actions}>
-          <GoogleOAuth2 />
+          <Routes><Route path="/settings/google_oauth2/*" element={<GoogleOAuth2 />} /></Routes>
         </SettingsProvider>,
         {
           context: { router: { history } },
@@ -60,7 +61,7 @@ describe('<GoogleOAuth2 />', () => {
     await act(async () => {
       wrapper = mountWithContexts(
         <SettingsProvider value={mockAllOptions.actions}>
-          <GoogleOAuth2 />
+          <Routes><Route path="/settings/google_oauth2/*" element={<GoogleOAuth2 />} /></Routes>
         </SettingsProvider>,
         {
           context: { router: { history } },
@@ -75,7 +76,7 @@ describe('<GoogleOAuth2 />', () => {
       initialEntries: ['/settings/google_oauth2/foo'],
     });
     await act(async () => {
-      wrapper = mountWithContexts(<GoogleOAuth2 />, {
+      wrapper = mountWithContexts(<Routes><Route path="/settings/google_oauth2/*" element={<GoogleOAuth2 />} /></Routes>, {
         context: { router: { history } },
       });
     });

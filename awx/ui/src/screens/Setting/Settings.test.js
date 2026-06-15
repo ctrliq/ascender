@@ -29,7 +29,7 @@ describe('<Settings />', () => {
     jest.clearAllMocks();
   });
 
-  test('should render Redirect for users without system admin or auditor permissions', async () => {
+  test('should redirect users without system admin or auditor permissions', async () => {
     const history = createMemoryHistory({
       initialEntries: ['/settings'],
     });
@@ -49,7 +49,7 @@ describe('<Settings />', () => {
       });
     });
     await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('Redirect').length).toBe(1);
+    expect(history.location.pathname).toBe('/');
     expect(wrapper.find('SettingList').length).toBe(0);
   });
 

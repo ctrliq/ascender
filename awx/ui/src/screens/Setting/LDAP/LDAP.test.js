@@ -7,6 +7,7 @@ import {
   mountWithContexts,
   waitForElement,
 } from '../../../../testUtils/enzymeHelpers';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import mockAllOptions from '../shared/data.allSettingOptions.json';
 import mockLDAP from '../shared/data.ldapSettings.json';
 import LDAP from './LDAP';
@@ -26,7 +27,7 @@ describe('<LDAP />', () => {
       initialEntries: ['/settings/ldap/'],
     });
     await act(async () => {
-      wrapper = mountWithContexts(<LDAP />, {
+      wrapper = mountWithContexts(<Routes><Route path="/settings/ldap/*" element={<LDAP />} /></Routes>, {
         context: { router: { history } },
       });
     });
@@ -41,7 +42,7 @@ describe('<LDAP />', () => {
     await act(async () => {
       wrapper = mountWithContexts(
         <SettingsProvider value={mockAllOptions.actions}>
-          <LDAP />
+          <Routes><Route path="/settings/ldap/*" element={<LDAP />} /></Routes>
         </SettingsProvider>,
         {
           context: { router: { history } },
@@ -57,7 +58,7 @@ describe('<LDAP />', () => {
       initialEntries: ['/settings/ldap/foo/bar'],
     });
     await act(async () => {
-      wrapper = mountWithContexts(<LDAP />, {
+      wrapper = mountWithContexts(<Routes><Route path="/settings/ldap/*" element={<LDAP />} /></Routes>, {
         context: { router: { history } },
       });
     });

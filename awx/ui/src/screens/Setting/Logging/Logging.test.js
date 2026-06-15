@@ -6,6 +6,7 @@ import {
   mountWithContexts,
   waitForElement,
 } from '../../../../testUtils/enzymeHelpers';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import Logging from './Logging';
 
 jest.mock('../../../api/models/Settings');
@@ -50,7 +51,7 @@ describe('<Logging />', () => {
       initialEntries: ['/settings/logging/details'],
     });
     await act(async () => {
-      wrapper = mountWithContexts(<Logging />, {
+      wrapper = mountWithContexts(<Routes><Route path="/settings/logging/*" element={<Logging />} /></Routes>, {
         context: { router: { history } },
       });
     });
@@ -63,7 +64,7 @@ describe('<Logging />', () => {
       initialEntries: ['/settings/logging/edit'],
     });
     await act(async () => {
-      wrapper = mountWithContexts(<Logging />, {
+      wrapper = mountWithContexts(<Routes><Route path="/settings/logging/*" element={<Logging />} /></Routes>, {
         context: { router: { history } },
       });
     });
@@ -76,7 +77,7 @@ describe('<Logging />', () => {
       initialEntries: ['/settings/logging/foo'],
     });
     await act(async () => {
-      wrapper = mountWithContexts(<Logging />, {
+      wrapper = mountWithContexts(<Routes><Route path="/settings/logging/*" element={<Logging />} /></Routes>, {
         context: { router: { history } },
       });
     });
@@ -88,7 +89,7 @@ describe('<Logging />', () => {
       initialEntries: ['/settings/logging/edit'],
     });
     await act(async () => {
-      wrapper = mountWithContexts(<Logging />, {
+      wrapper = mountWithContexts(<Routes><Route path="/settings/logging/*" element={<Logging />} /></Routes>, {
         context: {
           router: {
             history,

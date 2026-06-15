@@ -4,6 +4,7 @@ import { createMemoryHistory } from 'history';
 import { SettingsAPI } from 'api';
 import { SettingsProvider } from 'contexts/Settings';
 import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import mockAllOptions from '../shared/data.allSettingOptions.json';
 import SAML from './SAML';
 
@@ -48,7 +49,7 @@ describe('<SAML />', () => {
     await act(async () => {
       wrapper = mountWithContexts(
         <SettingsProvider value={mockAllOptions.actions}>
-          <SAML />
+          <Routes><Route path="/settings/saml/*" element={<SAML />} /></Routes>
         </SettingsProvider>,
         {
           context: { router: { history } },
@@ -65,7 +66,7 @@ describe('<SAML />', () => {
     await act(async () => {
       wrapper = mountWithContexts(
         <SettingsProvider value={mockAllOptions.actions}>
-          <SAML />
+          <Routes><Route path="/settings/saml/*" element={<SAML />} /></Routes>
         </SettingsProvider>,
         {
           context: { router: { history } },
@@ -80,7 +81,7 @@ describe('<SAML />', () => {
       initialEntries: ['/settings/saml/foo'],
     });
     await act(async () => {
-      wrapper = mountWithContexts(<SAML />, {
+      wrapper = mountWithContexts(<Routes><Route path="/settings/saml/*" element={<SAML />} /></Routes>, {
         context: { router: { history } },
       });
     });
