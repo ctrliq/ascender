@@ -1,12 +1,35 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 
 import { InstanceGroupsAPI, CredentialsAPI } from 'api';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ContainerGroupEdit from './ContainerGroupEdit';
 
 jest.mock('../../../api');
+
+// Prefixed `mock` so the jest.mock factory below may reference it.
+const mockUpdatedInstanceGroup = {
+  name: 'Bar',
+  credential: { id: 12, name: 'CGX' },
+};
+
+// Mock the shared form so the test drives ContainerGroupEdit's own submit/cancel
+// handlers directly. The form itself is covered by ContainerGroupForm.test.js.
+jest.mock('../shared/ContainerGroupForm', () => ({ onSubmit, onCancel, submitError }) => (
+  <div>
+    {submitError && <div>FormSubmitError</div>}
+    <button
+      type="button"
+      onClick={() => onSubmit({ ...mockUpdatedInstanceGroup, override: false })}
+    >
+      mock submit
+    </button>
+    <button type="button" aria-label="Cancel" onClick={onCancel}>
+      Cancel
+    </button>
+  </div>
+));
 
 const instanceGroup = {
   id: 123,
@@ -54,11 +77,6 @@ const instanceGroup = {
   },
 };
 
-const updatedInstanceGroup = {
-  name: 'Bar',
-  credential: { id: 12, name: 'CGX' },
-};
-
 const initialPodSpec = {
   default: {
     apiVersion: 'v1',
@@ -80,36 +98,26 @@ const initialPodSpec = {
   },
 };
 
-InstanceGroupsAPI.readOptions.mockResolvedValue({
-  data: {
-    results: initialPodSpec,
-  },
-});
-
-CredentialsAPI.read.mockResolvedValue({
-  data: {
-    results: [
-      {
-        id: 71,
-        name: 'Test',
-      },
-    ],
-  },
-});
-
 describe('<ContainerGroupEdit/>', () => {
-  let wrapper;
   let history;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     history = createMemoryHistory({ initialEntries: ['/instance_groups'] });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ContainerGroupEdit instanceGroup={instanceGroup} />,
-        {
-          context: { router: { history } },
-        }
-      );
+    InstanceGroupsAPI.update.mockResolvedValue({ data: {} });
+    InstanceGroupsAPI.readInstanceGroupOptions.mockResolvedValue({
+      data: {
+        actions: { PUT: { pod_spec_override: { default: initialPodSpec } } },
+      },
+    });
+    CredentialsAPI.read.mockResolvedValue({
+      data: {
+        results: [
+          {
+            id: 71,
+            name: 'Test',
+          },
+        ],
+      },
     });
   });
 
@@ -117,39 +125,44 @@ describe('<ContainerGroupEdit/>', () => {
     jest.clearAllMocks();
   });
 
-  test('initially renders successfully', async () => {
-    expect(wrapper.find('ContainerGroupEdit').length).toBe(1);
-  });
-
-  test('called InstanceGroupsAPI.readOptions', async () => {
-    expect(InstanceGroupsAPI.readOptions).toHaveBeenCalled();
+  test('called InstanceGroupsAPI.readInstanceGroupOptions', async () => {
+    renderWithContexts(<ContainerGroupEdit instanceGroup={instanceGroup} />, {
+      context: { router: { history } },
+    });
+    await waitFor(() =>
+      expect(InstanceGroupsAPI.readInstanceGroupOptions).toHaveBeenCalledWith(
+        123
+      )
+    );
   });
 
   test('handleCancel returns the user to container group detail', async () => {
-    await act(async () => {
-      wrapper.find('Button[aria-label="Cancel"]').simulate('click');
-    });
+    const { user } = renderWithContexts(
+      <ContainerGroupEdit instanceGroup={instanceGroup} />,
+      { context: { router: { history } } }
+    );
+    await user.click(await screen.findByRole('button', { name: 'Cancel' }));
     expect(history.location.pathname).toEqual(
       '/instance_groups/container_group/123/details'
     );
   });
 
   test('handleSubmit should call the api and redirect to details page', async () => {
-    await act(async () => {
-      wrapper.find('ContainerGroupForm').prop('onSubmit')({
-        ...updatedInstanceGroup,
-        override: false,
-      });
-    });
-    wrapper.update();
-    expect(InstanceGroupsAPI.update).toHaveBeenCalledWith(123, {
-      ...updatedInstanceGroup,
-      credential: 12,
-      pod_spec_override: null,
-      max_concurrent_jobs: 0,
-      max_forks: 0,
-      is_container_group: true,
-    });
+    const { user } = renderWithContexts(
+      <ContainerGroupEdit instanceGroup={instanceGroup} />,
+      { context: { router: { history } } }
+    );
+    await user.click(await screen.findByRole('button', { name: 'mock submit' }));
+    await waitFor(() =>
+      expect(InstanceGroupsAPI.update).toHaveBeenCalledWith(123, {
+        ...mockUpdatedInstanceGroup,
+        credential: 12,
+        pod_spec_override: null,
+        max_concurrent_jobs: 0,
+        max_forks: 0,
+        is_container_group: true,
+      })
+    );
     expect(history.location.pathname).toEqual(
       '/instance_groups/container_group/123/details'
     );

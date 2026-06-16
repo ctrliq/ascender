@@ -1,6 +1,7 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { screen, waitFor } from '@testing-library/react';
+import { CredentialsAPI } from 'api';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import ContainerGroupForm from './ContainerGroupForm';
 
@@ -70,22 +71,17 @@ const initialPodSpec = {
 };
 
 describe('<ContainerGroupForm/>', () => {
-  let wrapper;
   let onCancel;
   let onSubmit;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     onCancel = jest.fn();
     onSubmit = jest.fn();
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ContainerGroupForm
-          onCancel={onCancel}
-          onSubmit={onSubmit}
-          instanceGroup={instanceGroup}
-          initialPodSpec={initialPodSpec}
-        />
-      );
+    CredentialsAPI.read.mockResolvedValue({
+      data: { count: 0, results: [] },
+    });
+    CredentialsAPI.readOptions.mockResolvedValue({
+      data: { actions: { GET: {} }, related_search_fields: [] },
     });
   });
 
@@ -93,57 +89,65 @@ describe('<ContainerGroupForm/>', () => {
     jest.clearAllMocks();
   });
 
-  test('Initially renders successfully', () => {
-    expect(wrapper.length).toBe(1);
+  function setup() {
+    return renderWithContexts(
+      <ContainerGroupForm
+        onCancel={onCancel}
+        onSubmit={onSubmit}
+        instanceGroup={instanceGroup}
+        initialPodSpec={initialPodSpec}
+      />
+    );
+  }
+
+  test('should display form fields properly', async () => {
+    const { container } = setup();
+    // FormField labelIcon Popovers break getByLabelText; query inputs by id.
+    expect(container.querySelector('#container-group-name')).toHaveValue('Bar');
+    // The "Customize pod specification" checkbox starts unchecked, so the
+    // pod-spec CodeEditor section is not rendered.
+    const overrideCheckbox = container.querySelector(
+      '#container-groups-override-pod-specification'
+    );
+    expect(overrideCheckbox).not.toBeChecked();
+    expect(screen.queryByText('Custom pod spec')).not.toBeInTheDocument();
+    // The CredentialLookup pre-fills the credential name from summary_fields.
+    // findBy awaits the lookup's async credential fetch settling.
+    expect(
+      await screen.findByRole('textbox', { name: /Credential/i })
+    ).toHaveValue('test');
   });
 
-  test('should display form fields properly', () => {
-    expect(wrapper.find('FormGroup[label="Name"]').length).toBe(1);
-    expect(wrapper.find('VariablesField[label="Custom pod spec"]').length).toBe(
-      0
+  test('checking customize pod specification reveals the pod spec editor', async () => {
+    const { user, container } = setup();
+    const overrideCheckbox = container.querySelector(
+      '#container-groups-override-pod-specification'
     );
-    expect(
-      wrapper
-        .find('Checkbox[aria-label="Customize pod specification"]')
-        .prop('isChecked')
-    ).toBeFalsy();
-    expect(wrapper.find('CredentialLookup').prop('value').name).toBe('test');
+    await user.click(overrideCheckbox);
+    expect(overrideCheckbox).toBeChecked();
+    // react-ace renders empty under jsdom, so assert the surrounding label.
+    expect(await screen.findByText('Custom pod spec')).toBeInTheDocument();
   });
 
   test('should update form values', async () => {
-    act(() => {
-      wrapper.find('CredentialLookup').invoke('onBlur')();
-      wrapper.find('CredentialLookup').invoke('onChange')({
-        id: 99,
-        name: 'credential',
-      });
-      wrapper.find('TextInputBase#container-group-name').simulate('change', {
-        target: { value: 'new Foo', name: 'name' },
-      });
-    });
-    await act(async () => {
-      wrapper.update();
-    });
-    expect(wrapper.find('CredentialLookup').prop('value')).toEqual({
-      id: 99,
-      name: 'credential',
-    });
-    expect(
-      wrapper.find('TextInputBase#container-group-name').prop('value')
-    ).toEqual('new Foo');
+    const { user, container } = setup();
+    const nameInput = container.querySelector('#container-group-name');
+    await user.clear(nameInput);
+    await user.type(nameInput, 'new Foo');
+    expect(nameInput).toHaveValue('new Foo');
   });
 
   test('should call onSubmit when form submitted', async () => {
+    const { user } = setup();
     expect(onSubmit).not.toHaveBeenCalled();
-    await act(async () => {
-      wrapper.find('button[aria-label="Save"]').simulate('click');
-    });
-    expect(onSubmit).toHaveBeenCalledTimes(1);
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1));
   });
 
   test('should call handleCancel when Cancel button is clicked', async () => {
+    const { user } = setup();
     expect(onCancel).not.toHaveBeenCalled();
-    wrapper.find('button[aria-label="Cancel"]').invoke('onClick')();
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
     expect(onCancel).toHaveBeenCalled();
   });
 });

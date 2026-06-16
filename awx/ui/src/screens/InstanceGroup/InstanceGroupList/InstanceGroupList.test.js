@@ -1,25 +1,17 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, within } from '@testing-library/react';
 
 import {
   InstanceGroupsAPI,
   OrganizationsAPI,
   InventoriesAPI,
   UnifiedJobTemplatesAPI,
-  SettingsAPI,
 } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import InstanceGroupList from './InstanceGroupList';
 
-jest.mock('../../../api/models/InstanceGroups');
-jest.mock('../../../api/models/Organizations');
-jest.mock('../../../api/models/Inventories');
-jest.mock('../../../api/models/UnifiedJobTemplates');
-jest.mock('../../../api/models/Settings');
+jest.mock('../../../api');
 
 const instanceGroups = {
   data: {
@@ -62,167 +54,101 @@ const instanceGroups = {
 };
 
 const options = { data: { actions: { POST: true } } };
-const settings = {
-  data: {
-    DEFAULT_CONTROL_PLANE_QUEUE_NAME: 'controlplan',
-    DEFAULT_EXECUTION_QUEUE_NAME: 'default',
-  },
-};
 
 describe('<InstanceGroupList />', () => {
-  let wrapper;
-
   beforeEach(() => {
     OrganizationsAPI.read.mockResolvedValue({ data: { count: 0 } });
     InventoriesAPI.read.mockResolvedValue({ data: { count: 0 } });
     UnifiedJobTemplatesAPI.read.mockResolvedValue({ data: { count: 0 } });
     InstanceGroupsAPI.read.mockResolvedValue(instanceGroups);
     InstanceGroupsAPI.readOptions.mockResolvedValue(options);
-    SettingsAPI.readAll.mockResolvedValue(settings);
   });
 
-  test('should have data fetched and render 3 rows', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(<InstanceGroupList />);
-    });
-    await waitForElement(wrapper, 'InstanceGroupList', (el) => el.length > 0);
-    expect(wrapper.find('InstanceGroupListItem').length).toBe(4);
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('should have data fetched and render all rows', async () => {
+    renderWithContexts(<InstanceGroupList />);
+    await screen.findByRole('link', { name: 'Foo' });
+
     expect(InstanceGroupsAPI.read).toHaveBeenCalled();
     expect(InstanceGroupsAPI.readOptions).toHaveBeenCalled();
+    expect(
+      screen.getAllByRole('link', {
+        name: /^(Foo|controlplan|default|Bar)$/,
+      })
+    ).toHaveLength(4);
   });
 
   test('should delete item successfully', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(<InstanceGroupList />);
-    });
-    await waitForElement(wrapper, 'InstanceGroupList', (el) => el.length > 0);
+    InstanceGroupsAPI.destroy.mockResolvedValue({});
+    const { user } = renderWithContexts(<InstanceGroupList />);
+    await screen.findByRole('link', { name: 'Foo' });
 
-    wrapper
-      .find('.pf-c-table__check')
-      .first()
-      .find('input')
-      .simulate('change', instanceGroups);
-    wrapper.update();
+    const row = screen.getByRole('link', { name: 'Foo' }).closest('tr');
+    await user.click(within(row).getByRole('checkbox'));
+
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'confirm delete' })
+    );
+
+    await waitFor(() =>
+      expect(InstanceGroupsAPI.destroy).toHaveBeenCalledWith(
+        instanceGroups.data.results[0].id
+      )
+    );
+  });
+
+  test('delete button is disabled when a protected (non-deletable) group is selected', async () => {
+    const { user } = renderWithContexts(<InstanceGroupList />);
+    await screen.findByRole('link', { name: 'Foo' });
+
+    // Select all rows; "Bar" has delete=false, which disables the toolbar Delete.
+    await user.click(screen.getByRole('checkbox', { name: 'Select all' }));
+
+    expect(screen.getByRole('button', { name: 'Delete' })).toBeDisabled();
+  });
+
+  test('should show content error', async () => {
+    InstanceGroupsAPI.read.mockRejectedValue(new Error());
+    renderWithContexts(<InstanceGroupList />);
 
     expect(
-      wrapper.find('.pf-c-table__check').first().find('input').prop('checked')
-    ).toBe(true);
-
-    await act(async () => {
-      wrapper.find('Button[aria-label="Delete"]').prop('onClick')();
-    });
-    wrapper.update();
-
-    await act(async () =>
-      wrapper.find('Button[aria-label="confirm delete"]').prop('onClick')()
-    );
-
-    expect(InstanceGroupsAPI.destroy).toHaveBeenCalledWith(
-      instanceGroups.data.results[0].id
-    );
-  });
-
-  test('should not be able to delete controlplan or default instance group', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(<InstanceGroupList />);
-    });
-    await waitForElement(wrapper, 'InstanceGroupList', (el) => el.length > 0);
-
-    const instanceGroupIndex = [0, 1, 2, 3];
-
-    instanceGroupIndex.forEach((element) => {
-      wrapper
-        .find('.pf-c-table__check')
-        .at(element)
-        .find('input')
-        .simulate('change', instanceGroups);
-      wrapper.update();
-
-      expect(
-        wrapper
-          .find('.pf-c-table__check')
-          .at(element)
-          .find('input')
-          .prop('checked')
-      ).toBe(true);
-    });
-
-    expect(wrapper.find('Button[aria-label="Delete"]').prop('isDisabled')).toBe(
-      true
-    );
-  });
-
-  test('should thrown content error', async () => {
-    InstanceGroupsAPI.read = jest.fn();
-    InstanceGroupsAPI.read.mockRejectedValue(
-      new Error({
-        response: {
-          config: {
-            method: 'GET',
-            url: '/api/v2/instance_groups',
-          },
-          data: 'An error occurred',
-        },
-      })
-    );
-    await act(async () => {
-      wrapper = mountWithContexts(<InstanceGroupList />);
-    });
-    await waitForElement(wrapper, 'InstanceGroupList', (el) => el.length > 0);
-    expect(wrapper.find('ContentError').length).toBe(1);
+      await screen.findByText('Something went wrong...')
+    ).toBeInTheDocument();
   });
 
   test('should render deletion error modal', async () => {
-    InstanceGroupsAPI.destroy = jest.fn();
-    InstanceGroupsAPI.destroy.mockRejectedValue(
-      new Error({
-        response: {
-          config: {
-            method: 'DELETE',
-            url: '/api/v2/instance_groups',
-          },
-          data: 'An error occurred',
-        },
-      })
-    );
-    await act(async () => {
-      wrapper = mountWithContexts(<InstanceGroupList />);
-    });
-    waitForElement(wrapper, 'InstanceGroupList', (el) => el.length > 0);
+    InstanceGroupsAPI.destroy.mockRejectedValue(new Error());
+    const { user } = renderWithContexts(<InstanceGroupList />);
+    await screen.findByRole('link', { name: 'Foo' });
 
-    wrapper
-      .find('.pf-c-table__check')
-      .first()
-      .find('input')
-      .simulate('change', 'a');
-    wrapper.update();
+    const row = screen.getByRole('link', { name: 'Foo' }).closest('tr');
+    await user.click(within(row).getByRole('checkbox'));
+
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'confirm delete' })
+    );
+
     expect(
-      wrapper.find('.pf-c-table__check').first().find('input').prop('checked')
-    ).toBe(true);
-
-    await act(async () =>
-      wrapper.find('Button[aria-label="Delete"]').prop('onClick')()
-    );
-    wrapper.update();
-
-    await act(async () =>
-      wrapper.find('Button[aria-label="confirm delete"]').prop('onClick')()
-    );
-    wrapper.update();
-    expect(wrapper.find('ErrorDetail').length).toBe(1);
+      await screen.findByText(
+        'Failed to delete one or more instance groups.'
+      )
+    ).toBeInTheDocument();
   });
 
   test('should not render add button', async () => {
-    InstanceGroupsAPI.read.mockResolvedValue(instanceGroups);
     InstanceGroupsAPI.readOptions.mockResolvedValue({
       data: { actions: { POST: false } },
     });
-    await act(async () => {
-      wrapper = mountWithContexts(<InstanceGroupList />);
-    });
-    waitForElement(wrapper, 'InstanceGroupList', (el) => el.length > 0);
-    expect(wrapper.find('ToolbarAddButton').length).toBe(0);
+    renderWithContexts(<InstanceGroupList />);
+    await screen.findByRole('link', { name: 'Foo' });
+
+    expect(
+      screen.queryByRole('button', { name: /Add/ })
+    ).not.toBeInTheDocument();
   });
 });
-
-describe('modifyInstanceGroups', () => {});
