@@ -1,63 +1,64 @@
 import React from 'react';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { screen } from '@testing-library/react';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import PageControls from './PageControls';
-
-let wrapper;
-let AngleDoubleUpIcon;
-let AngleDoubleDownIcon;
-let AngleUpIcon;
-let AngleDownIcon;
-
-const findChildren = () => {
-  AngleDoubleUpIcon = wrapper.find('AngleDoubleUpIcon');
-  AngleDoubleDownIcon = wrapper.find('AngleDoubleDownIcon');
-  AngleUpIcon = wrapper.find('AngleUpIcon');
-  AngleDownIcon = wrapper.find('AngleDownIcon');
-};
 
 describe('PageControls', () => {
   test('should render successfully', () => {
-    wrapper = mountWithContexts(<PageControls />);
-    expect(wrapper).toHaveLength(1);
+    renderWithContexts(<PageControls />);
+    expect(
+      screen.getByRole('button', { name: 'Scroll previous' })
+    ).toBeInTheDocument();
   });
 
   test('should render menu control icons', () => {
-    wrapper = mountWithContexts(<PageControls isFlatMode />);
-    findChildren();
-    expect(AngleDoubleUpIcon.length).toBe(1);
-    expect(AngleDoubleDownIcon.length).toBe(1);
-    expect(AngleUpIcon.length).toBe(1);
-    expect(AngleDownIcon.length).toBe(1);
+    renderWithContexts(<PageControls isFlatMode />);
+    // The four scroll buttons each wrap one angle icon.
+    expect(
+      screen.getByRole('button', { name: 'Scroll previous' })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Scroll next' })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Scroll first' })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Scroll last' })
+    ).toBeInTheDocument();
   });
 
   test('should render expand/collapse all', () => {
-    wrapper = mountWithContexts(
-      <PageControls isFlatMode={false} isTemplateJob />
-    );
-    const expandCollapse = wrapper.find('PageControls__ExpandCollapseWrapper');
-    expect(expandCollapse).toHaveLength(1);
-    expect(expandCollapse.find('AngleDownIcon')).toHaveLength(1);
-    expect(expandCollapse.find('AngleRightIcon')).toHaveLength(0);
+    renderWithContexts(<PageControls isFlatMode={false} isTemplateJob />);
+    // Expanded state uses the "Collapse all job events" label (AngleDownIcon).
+    expect(
+      screen.getByRole('button', { name: 'Collapse all job events' })
+    ).toBeInTheDocument();
   });
 
   test('should render correct expand/collapse angle icon', () => {
-    wrapper = mountWithContexts(
+    renderWithContexts(
       <PageControls isFlatMode={false} isAllCollapsed isTemplateJob />
     );
-
-    const expandCollapse = wrapper.find('PageControls__ExpandCollapseWrapper');
-    expect(expandCollapse).toHaveLength(1);
-    expect(expandCollapse.find('AngleDownIcon')).toHaveLength(0);
-    expect(expandCollapse.find('AngleRightIcon')).toHaveLength(1);
+    // Collapsed state uses the "Expand job events" label (AngleRightIcon).
+    expect(
+      screen.getByRole('button', { name: 'Expand job events' })
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Collapse all job events' })
+    ).not.toBeInTheDocument();
   });
 
   test('Should not render expand/collapse all', () => {
-    wrapper = mountWithContexts(
+    renderWithContexts(
       <PageControls isFlatMode={false} isAllCollapsed isTemplateJob={false} />
     );
 
-    const expandCollapse = wrapper.find('PageControls__ExpandCollapseWrapper');
-    expect(expandCollapse.find('AngleDownIcon')).toHaveLength(0);
-    expect(expandCollapse.find('AngleRightIcon')).toHaveLength(0);
+    expect(
+      screen.queryByRole('button', { name: 'Expand job events' })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Collapse all job events' })
+    ).not.toBeInTheDocument();
   });
 });

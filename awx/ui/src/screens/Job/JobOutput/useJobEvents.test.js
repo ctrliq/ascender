@@ -1,18 +1,27 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
-import { shallow, mount } from 'enzyme';
+import { render, act } from '@testing-library/react';
 import useJobEvents, {
   jobEventsReducer,
   ADD_EVENTS,
   TOGGLE_NODE_COLLAPSED,
 } from './useJobEvents';
 
+// The hook returns an imperative API; capture the latest value on every render
+// so tests can call it directly (RTL 12 has no renderHook).
+let latestApi;
+
 function Child() {
   return <div />;
 }
 function HookTest({
-  fetchEventByUuid = () => {},
-  fetchChildrenSummary = () => {},
+  // Unlike enzyme's shallow render, RTL mounts and runs effects (the hook's
+  // fetch queue). The default callbacks return never-settling promises so the
+  // sync getter tests see the synchronously-built reducer state without an
+  // un-acted async setState firing after act() returns (matching the original
+  // shallow behaviour where effects never completed). Tests that exercise the
+  // fetch paths pass their own resolving mocks and await act().
+  fetchEventByUuid = () => new Promise(() => {}),
+  fetchChildrenSummary = () => new Promise(() => {}),
   setForceFlatMode = () => {},
   setJobTreeReady = () => {},
   jobId = 1,
@@ -28,7 +37,38 @@ function HookTest({
     jobId,
     isFlatMode
   );
+  latestApi = hookFuncs;
   return <Child id="test" {...hookFuncs} />;
+}
+
+// State-mutating API methods dispatch into the hook's reducer, so they must run
+// inside act(). Getters are pure reads and stay raw.
+const MUTATORS = ['addEvents', 'toggleNodeIsCollapsed'];
+function makeWrapper(wrapMutators) {
+  const propFn = (name) => {
+    if (wrapMutators && MUTATORS.includes(name)) {
+      return (...args) => {
+        let result;
+        act(() => {
+          result = latestApi[name](...args);
+        });
+        return result;
+      };
+    }
+    return (...args) => latestApi[name](...args);
+  };
+  return { find: () => ({ prop: propFn }), update: () => {} };
+}
+// Sync tests: mutators are auto-wrapped in act().
+function mountSync(element) {
+  render(element);
+  return makeWrapper(true);
+}
+// Async tests: the test body already wraps calls in `await act(async () => ...)`,
+// so mutators stay raw to avoid nested act().
+function mountAsync(element) {
+  render(element);
+  return makeWrapper(false);
 }
 
 const eventsList = [
@@ -830,7 +870,7 @@ describe('useJobEvents', () => {
   describe('getNodeByUuid', () => {
     let wrapper;
     beforeEach(() => {
-      wrapper = shallow(<HookTest />);
+      wrapper = mountSync(<HookTest />);
       wrapper.find('#test').prop('addEvents')(eventsList);
     });
 
@@ -908,7 +948,7 @@ describe('useJobEvents', () => {
   describe('getNodeForRow', () => {
     let wrapper;
     beforeEach(() => {
-      wrapper = shallow(<HookTest />);
+      wrapper = mountSync(<HookTest />);
       wrapper.find('#test').prop('addEvents')(eventsList);
     });
 
@@ -971,7 +1011,7 @@ describe('useJobEvents', () => {
     });
 
     test('should return null if no nodes loaded', () => {
-      wrapper = shallow(<HookTest />);
+      wrapper = mountSync(<HookTest />);
       const node = wrapper.find('#test').prop('getNodeForRow')(5);
 
       expect(node).toEqual(null);
@@ -999,7 +1039,7 @@ describe('useJobEvents', () => {
     });
 
     test('should skip deeply-nested collapsed nodes', () => {
-      wrapper = shallow(<HookTest />);
+      wrapper = mountSync(<HookTest />);
       wrapper.find('#test').prop('addEvents')([
         { id: 101, counter: 1, rowNumber: 0, uuid: 'abc-001', event_level: 0 },
         {
@@ -1085,7 +1125,7 @@ describe('useJobEvents', () => {
     });
 
     test('should skip full sub-tree of collapsed node', () => {
-      wrapper = shallow(<HookTest />);
+      wrapper = mountSync(<HookTest />);
       wrapper.find('#test').prop('addEvents')([
         { id: 101, counter: 1, rowNumber: 0, uuid: 'abc-001', event_level: 0 },
         {
@@ -1181,7 +1221,7 @@ describe('useJobEvents', () => {
         },
       });
 
-      wrapper = mount(<HookTest fetchChildrenSummary={fetchChildrenSummary} />);
+      wrapper = mountAsync(<HookTest fetchChildrenSummary={fetchChildrenSummary} />);
       const laterEvents = [
         {
           id: 151,
@@ -1247,7 +1287,7 @@ describe('useJobEvents', () => {
   describe('getNumCollapsedEvents', () => {
     let wrapper;
     beforeEach(() => {
-      wrapper = shallow(<HookTest />);
+      wrapper = mountSync(<HookTest />);
       wrapper.find('#test').prop('addEvents')(eventsList);
     });
 
@@ -1262,7 +1302,7 @@ describe('useJobEvents', () => {
   describe('getEventforRow', () => {
     let wrapper;
     beforeEach(() => {
-      wrapper = shallow(<HookTest />);
+      wrapper = mountSync(<HookTest />);
       wrapper.find('#test').prop('addEvents')(eventsList);
     });
 
@@ -1284,7 +1324,7 @@ describe('useJobEvents', () => {
   describe('getEvent', () => {
     let wrapper;
     beforeEach(() => {
-      wrapper = shallow(<HookTest />);
+      wrapper = mountSync(<HookTest />);
       wrapper.find('#test').prop('addEvents')(eventsList);
     });
 
@@ -1298,13 +1338,13 @@ describe('useJobEvents', () => {
     let wrapper;
 
     test('should not make call to get child events, because there are none for this job type', () => {
-      wrapper = shallow(<HookTest />);
+      wrapper = mountSync(<HookTest />);
       wrapper.find('#test').prop('addEvents')(eventsList);
       expect(callbacks.fetchChildrenSummary).not.toHaveBeenCalled();
     });
 
     test('should get basic number of children', () => {
-      wrapper = shallow(<HookTest />);
+      wrapper = mountSync(<HookTest />);
       wrapper.find('#test').prop('addEvents')(eventsList);
       expect(
         wrapper.find('#test').prop('getTotalNumChildren')('abc-002')
@@ -1312,7 +1352,7 @@ describe('useJobEvents', () => {
     });
 
     test('should get total number of nested children', () => {
-      wrapper = shallow(<HookTest />);
+      wrapper = mountSync(<HookTest />);
       wrapper.find('#test').prop('addEvents')(eventsList);
       expect(
         wrapper.find('#test').prop('getTotalNumChildren')('abc-001')
@@ -1322,14 +1362,14 @@ describe('useJobEvents', () => {
 
   describe('getCounterForRow', () => {
     test('should return exact counter when no nodes are collapsed', () => {
-      const wrapper = shallow(<HookTest />);
+      const wrapper = mountSync(<HookTest />);
       wrapper.find('#test').prop('addEvents')(eventsList);
       const getCounterForRow = wrapper.find('#test').prop('getCounterForRow');
       expect(getCounterForRow(8)).toEqual(9);
     });
 
     test('should return estimated counter when node not loaded', () => {
-      const wrapper = shallow(<HookTest />);
+      const wrapper = mountSync(<HookTest />);
       wrapper.find('#test').prop('addEvents')(eventsList);
       const getCounterForRow = wrapper.find('#test').prop('getCounterForRow');
       expect(getCounterForRow(12)).toEqual(13);
@@ -1343,7 +1383,7 @@ describe('useJobEvents', () => {
           6: { rowNumber: 5, numChidren: 23 },
         },
       });
-      const wrapper = mount(<HookTest {...callbacks} />);
+      const wrapper = mountAsync(<HookTest {...callbacks} />);
       wrapper.update();
       await act(async () => {
         wrapper.find('#test').prop('addEvents')(eventsList);
@@ -1366,7 +1406,7 @@ describe('useJobEvents', () => {
     });
 
     test('should skip over collapsed subtree', () => {
-      const wrapper = shallow(<HookTest />);
+      const wrapper = mountSync(<HookTest />);
       wrapper.find('#test').prop('addEvents')(eventsList);
       wrapper.find('#test').prop('toggleNodeIsCollapsed')('abc-002');
       const getCounterForRow = wrapper.find('#test').prop('getCounterForRow');
@@ -1384,7 +1424,7 @@ describe('useJobEvents', () => {
           meta_event_nested_uuid: {},
         },
       });
-      const wrapper = mount(<HookTest {...callbacks} />);
+      const wrapper = mountAsync(<HookTest {...callbacks} />);
       await act(async () => {
         wrapper.find('#test').prop('addEvents')([
           eventsList[0],
@@ -1418,7 +1458,7 @@ describe('useJobEvents', () => {
           meta_event_nested_uuid: {},
         },
       });
-      const wrapper = mount(<HookTest {...callbacks} />);
+      const wrapper = mountAsync(<HookTest {...callbacks} />);
       await act(async () => {
         wrapper.find('#test').prop('addEvents')([
           eventsList[0],
@@ -1479,7 +1519,7 @@ describe('useJobEvents', () => {
           meta_event_nested_uuid: {},
         },
       });
-      const wrapper = mount(<HookTest {...callbacks} />);
+      const wrapper = mountAsync(<HookTest {...callbacks} />);
       await act(async () => {
         wrapper.find('#test').prop('addEvents')([
           eventsList[0],
@@ -1524,7 +1564,7 @@ describe('useJobEvents', () => {
           meta_event_nested_uuid: {},
         },
       });
-      const wrapper = mount(<HookTest {...callbacks} />);
+      const wrapper = mountAsync(<HookTest {...callbacks} />);
       await act(async () => {
         wrapper.find('#test').prop('addEvents')([
           eventsList[0],

@@ -1,7 +1,7 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { waitFor } from '@testing-library/react';
 import { WorkflowJobsAPI } from 'api';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import WorkflowOutput from './WorkflowOutput';
 
 jest.mock('../../../api');
@@ -76,7 +76,6 @@ const mockWorkflowJobNodes = [
 ];
 
 describe('WorkflowOutput', () => {
-  let wrapper;
   beforeEach(() => {
     WorkflowJobsAPI.readNodes.mockResolvedValue({
       data: {
@@ -122,30 +121,43 @@ describe('WorkflowOutput', () => {
   });
 
   test('renders successfully', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <svg>
-          <WorkflowOutput job={job} />
-        </svg>
-      );
-    });
-    wrapper.update();
-    expect(wrapper.find('ContentError')).toHaveLength(0);
-    expect(wrapper.find('WorkflowStartNode')).toHaveLength(1);
-    expect(wrapper.find('WorkflowOutputNode')).toHaveLength(4);
-    expect(wrapper.find('WorkflowOutputLink')).toHaveLength(5);
+    const { container } = renderWithContexts(
+      <svg>
+        <WorkflowOutput job={job} />
+      </svg>
+    );
+
+    // The graph is laid out into <g id="workflow-g"> once nodes load.
+    await waitFor(() =>
+      expect(container.querySelector('#workflow-g')).toBeInTheDocument()
+    );
+
+    expect(container.querySelector('.pf-c-empty-state')).not.toBeInTheDocument();
+    // WorkflowStartNode renders a <g id="node-1">.
+    expect(container.querySelector('#node-1')).toBeInTheDocument();
+    // Each WorkflowOutputNode renders <g id="node-N"> for N > 1 (4 nodes).
+    const outputNodes = Array.from(
+      container.querySelectorAll('g[id^="node-"]')
+    ).filter((g) => g.id !== 'node-1' && g.id !== 'node-add');
+    expect(outputNodes).toHaveLength(4);
+    // Each WorkflowOutputLink renders <g id="link-source-target"> (5 links).
+    const links = Array.from(
+      container.querySelectorAll('g[id^="link-"]')
+    ).filter((g) => !g.id.endsWith('-overlay'));
+    expect(links).toHaveLength(5);
   });
 
   test('error shown to user when error thrown fetching workflow job nodes', async () => {
     WorkflowJobsAPI.readNodes.mockRejectedValue(new Error());
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <svg>
-          <WorkflowOutput job={job} />
-        </svg>
-      );
-    });
-    wrapper.update();
-    expect(wrapper.find('ContentError')).toHaveLength(1);
+    const { container } = renderWithContexts(
+      <svg>
+        <WorkflowOutput job={job} />
+      </svg>
+    );
+
+    // ContentError renders a PF empty state with the error heading.
+    await waitFor(() =>
+      expect(container.querySelector('.pf-c-empty-state')).toBeInTheDocument()
+    );
   });
 });

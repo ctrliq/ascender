@@ -1,5 +1,5 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { render } from '@testing-library/react';
 import { WorkflowStateContext } from 'contexts/Workflow';
 import WorkflowOutputLink from './WorkflowOutputLink';
 
@@ -29,7 +29,7 @@ const nodePositions = {
 
 describe('WorkflowOutputLink', () => {
   test('mounts successfully', () => {
-    const wrapper = mount(
+    const { container } = render(
       <svg>
         <WorkflowStateContext.Provider value={{ nodePositions }}>
           <WorkflowOutputLink
@@ -41,6 +41,6 @@ describe('WorkflowOutputLink', () => {
         </WorkflowStateContext.Provider>
       </svg>
     );
-    expect(wrapper).toHaveLength(1);
+    expect(container.querySelector('#link-1-2')).toBeInTheDocument();
   });
 });

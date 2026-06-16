@@ -1,6 +1,7 @@
 import React from 'react';
+import { fireEvent } from '@testing-library/react';
 import { WorkflowStateContext } from 'contexts/Workflow';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import WorkflowOutputGraph from './WorkflowOutputGraph';
 
 const workflowContext = {
@@ -94,6 +95,18 @@ const workflowContext = {
   showTools: false,
 };
 
+function renderGraph(contextOverride) {
+  return renderWithContexts(
+    <svg>
+      <WorkflowStateContext.Provider
+        value={{ ...workflowContext, ...contextOverride }}
+      >
+        <WorkflowOutputGraph />
+      </WorkflowStateContext.Provider>
+    </svg>
+  );
+}
+
 describe('WorkflowOutputGraph', () => {
   beforeEach(() => {
     window.SVGElement.prototype.height = {
@@ -133,110 +146,85 @@ describe('WorkflowOutputGraph', () => {
   });
 
   test('mounts successfully', () => {
-    const wrapper = mountWithContexts(
-      <svg>
-        <WorkflowStateContext.Provider value={workflowContext}>
-          <WorkflowOutputGraph />
-        </WorkflowStateContext.Provider>
-      </svg>
-    );
-    expect(wrapper).toHaveLength(1);
+    const { container } = renderGraph();
+    expect(container.querySelector('#workflow-svg')).toBeInTheDocument();
   });
 
   test('tools and legend are shown when flags are true', () => {
-    const wrapper = mountWithContexts(
-      <svg>
-        <WorkflowStateContext.Provider
-          value={{ ...workflowContext, showLegend: true, showTools: true }}
-        >
-          <WorkflowOutputGraph />
-        </WorkflowStateContext.Provider>
-      </svg>
-    );
-
-    expect(wrapper.find('WorkflowLegend')).toHaveLength(1);
-    expect(wrapper.find('WorkflowTools')).toHaveLength(1);
+    const { container, getByText } = renderGraph({
+      showLegend: true,
+      showTools: true,
+    });
+    // WorkflowTools renders the zoom controls; WorkflowLegend its header.
+    expect(
+      container.querySelector(
+        '[data-ouia-component-id="visualizer-zoom-to-fit-button"]'
+      )
+    ).toBeInTheDocument();
+    expect(getByText('Legend')).toBeInTheDocument();
   });
 
   test('nodes and links are properly rendered', () => {
-    const wrapper = mountWithContexts(
-      <svg>
-        <WorkflowStateContext.Provider value={workflowContext}>
-          <WorkflowOutputGraph />
-        </WorkflowStateContext.Provider>
-      </svg>
-    );
+    const { container } = renderGraph();
 
-    expect(wrapper.find('WorkflowStartNode')).toHaveLength(1);
-    expect(wrapper.find('WorkflowOutputNode')).toHaveLength(4);
-    expect(wrapper.find('WorkflowOutputLink')).toHaveLength(5);
-    expect(wrapper.find('#link-2-4')).toHaveLength(1);
-    expect(wrapper.find('#link-2-3')).toHaveLength(1);
-    expect(wrapper.find('#link-5-3')).toHaveLength(1);
-    expect(wrapper.find('#link-1-2')).toHaveLength(1);
-    expect(wrapper.find('#link-1-5')).toHaveLength(1);
+    // WorkflowStartNode -> #node-1; WorkflowOutputNode -> #node-N (N > 1).
+    expect(container.querySelector('#node-1')).toBeInTheDocument();
+    const outputNodes = Array.from(
+      container.querySelectorAll('g[id^="node-"]')
+    ).filter((g) => g.id !== 'node-1' && g.id !== 'node-add');
+    expect(outputNodes).toHaveLength(4);
+
+    const links = Array.from(
+      container.querySelectorAll('g[id^="link-"]')
+    ).filter((g) => !g.id.endsWith('-overlay'));
+    expect(links).toHaveLength(5);
+    expect(container.querySelector('#link-2-4')).toBeInTheDocument();
+    expect(container.querySelector('#link-2-3')).toBeInTheDocument();
+    expect(container.querySelector('#link-5-3')).toBeInTheDocument();
+    expect(container.querySelector('#link-1-2')).toBeInTheDocument();
+    expect(container.querySelector('#link-1-5')).toBeInTheDocument();
   });
 
   test('proper help text is shown when hovering over links and nodes', () => {
-    const wrapper = mountWithContexts(
-      <svg>
-        <WorkflowStateContext.Provider value={workflowContext}>
-          <WorkflowOutputGraph />
-        </WorkflowStateContext.Provider>
-      </svg>
+    const { container } = renderGraph();
+
+    expect(
+      container.querySelector('#workflow-node-help-name')
+    ).not.toBeInTheDocument();
+    expect(
+      container.querySelector('#workflow-link-help-type')
+    ).not.toBeInTheDocument();
+
+    fireEvent.mouseEnter(container.querySelector('g#node-2'));
+    expect(container.querySelector('#workflow-node-help-alias')).toHaveTextContent(
+      'Node identifier'
+    );
+    expect(container.querySelector('#workflow-node-help-name')).toHaveTextContent(
+      'Foo JT'
+    );
+    expect(container.querySelector('#workflow-node-help-type')).toHaveTextContent(
+      'Job Template'
+    );
+    expect(
+      container.querySelector('#workflow-node-help-status')
+    ).toHaveTextContent('Successful');
+    expect(
+      container.querySelector('#workflow-node-help-elapsed')
+    ).toHaveTextContent('00:01:00');
+
+    fireEvent.mouseLeave(container.querySelector('g#node-2'));
+    expect(
+      container.querySelector('#workflow-node-help-name')
+    ).not.toBeInTheDocument();
+
+    fireEvent.mouseEnter(container.querySelector('g#link-2-3'));
+    expect(container.querySelector('#workflow-link-help-type')).toHaveTextContent(
+      'Always'
     );
 
-    expect(wrapper.find('WorkflowNodeHelp')).toHaveLength(0);
-    expect(wrapper.find('WorkflowLinkHelp')).toHaveLength(0);
-    wrapper.find('g#node-2').simulate('mouseenter');
-    expect(wrapper.find('WorkflowNodeHelp')).toHaveLength(1);
+    fireEvent.mouseLeave(container.querySelector('g#link-2-3'));
     expect(
-      wrapper.find('WorkflowNodeHelp').contains(<b>Node Alias</b>)
-    ).toEqual(true);
-    expect(
-      wrapper
-        .find('WorkflowNodeHelp')
-        .containsMatchingElement(<dd>Node identifier</dd>)
-    ).toEqual(true);
-    expect(
-      wrapper.find('WorkflowNodeHelp').contains(<b>Resource Name</b>)
-    ).toEqual(true);
-    expect(
-      wrapper.find('WorkflowNodeHelp').containsMatchingElement(<dd>Foo JT</dd>)
-    ).toEqual(true);
-    expect(wrapper.find('WorkflowNodeHelp').contains(<b>Type</b>)).toEqual(
-      true
-    );
-    expect(
-      wrapper
-        .find('WorkflowNodeHelp')
-        .containsMatchingElement(<dd>Job Template</dd>)
-    ).toEqual(true);
-    expect(
-      wrapper.find('WorkflowNodeHelp').contains(<b>Job Status</b>)
-    ).toEqual(true);
-    expect(
-      wrapper
-        .find('WorkflowNodeHelp')
-        .containsMatchingElement(<dd>Successful</dd>)
-    ).toEqual(true);
-    expect(wrapper.find('WorkflowNodeHelp').contains(<b>Elapsed</b>)).toEqual(
-      true
-    );
-    expect(
-      wrapper
-        .find('WorkflowNodeHelp')
-        .containsMatchingElement(<dd>00:01:00</dd>)
-    ).toEqual(true);
-    wrapper.find('g#node-2').simulate('mouseleave');
-    expect(wrapper.find('WorkflowNodeHelp')).toHaveLength(0);
-    wrapper.find('g#link-2-3').simulate('mouseenter');
-    expect(wrapper.find('WorkflowLinkHelp')).toHaveLength(1);
-    expect(wrapper.find('WorkflowLinkHelp').contains(<b>Run</b>)).toEqual(true);
-    expect(
-      wrapper.find('WorkflowLinkHelp').containsMatchingElement(<dd>Always</dd>)
-    ).toEqual(true);
-    wrapper.find('g#link-2-3').simulate('mouseleave');
-    expect(wrapper.find('WorkflowLinkHelp')).toHaveLength(0);
+      container.querySelector('#workflow-link-help-type')
+    ).not.toBeInTheDocument();
   });
 });
