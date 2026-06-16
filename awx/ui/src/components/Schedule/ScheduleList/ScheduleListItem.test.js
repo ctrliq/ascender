@@ -1,5 +1,6 @@
 import React from 'react';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { screen, within } from '@testing-library/react';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ScheduleListItem from './ScheduleListItem';
 
 const mockSchedule = {
@@ -45,159 +46,154 @@ const mockSchedule = {
 
 const onSelect = jest.fn();
 
-describe('ScheduleListItem', () => {
-  let wrapper;
-  describe('User has edit permissions', () => {
-    beforeAll(() => {
-      wrapper = mountWithContexts(
-        <table>
-          <tbody>
-            <ScheduleListItem
-              isSelected={false}
-              onSelect={onSelect}
-              schedule={mockSchedule}
-              isMissingSurvey={false}
-              isMissingInventory={false}
-            />
-          </tbody>
-        </table>
-      );
-    });
+function renderItem(props) {
+  return renderWithContexts(
+    <table>
+      <tbody>
+        <ScheduleListItem
+          isSelected={false}
+          onSelect={onSelect}
+          schedule={mockSchedule}
+          isMissingSurvey={false}
+          isMissingInventory={false}
+          {...props}
+        />
+      </tbody>
+    </table>
+  );
+}
 
+const cellByLabel = (label) =>
+  document.querySelector(`td[data-label="${label}"]`);
+
+describe('ScheduleListItem', () => {
+  beforeEach(() => {
+    onSelect.mockClear();
+  });
+
+  describe('User has edit permissions', () => {
     test('Name correctly shown with correct link', () => {
-      expect(wrapper.find('Td').at(1).prop('dataLabel')).toBe('Name');
-      expect(wrapper.find('Td').at(1).text()).toBe('Mock Schedule');
-      expect(wrapper.find('Td').at(1).find('Link').props().to).toBe(
+      renderItem();
+      const link = screen.getByRole('link', { name: 'Mock Schedule' });
+      expect(link).toHaveAttribute(
+        'href',
         '/templates/job_template/12/schedules/6/details'
       );
     });
 
     test('Related resource correctly shown', () => {
-      expect(wrapper.find('Td').at(2).prop('dataLabel')).toBe(
-        'Related resource'
-      );
-      expect(wrapper.find('Td').at(2).text()).toBe('Mock JT');
+      renderItem();
+      const cell = cellByLabel('Related resource');
+      expect(cell).toHaveTextContent('Mock JT');
     });
 
     test('Resource type correctly shown', () => {
-      expect(wrapper.find('Td').at(3).prop('dataLabel')).toBe('Resource type');
-      expect(wrapper.find('Td').at(3).text()).toBe('Playbook Run');
+      renderItem();
+      const cell = cellByLabel('Resource type');
+      expect(cell).toHaveTextContent('Playbook Run');
     });
 
     test('Next run correctly shown', () => {
-      expect(wrapper.find('Td').at(4).prop('dataLabel')).toBe('Next Run');
-      expect(wrapper.find('Td').at(4).text()).toBe(
-        'Next Run2/20/2020, 12:00:00 AM'
-      );
+      renderItem();
+      const cell = cellByLabel('Next Run');
+      expect(cell).toHaveTextContent('2/20/2020, 12:00:00 AM');
     });
 
     test('Edit button shown with correct link', () => {
-      expect(wrapper.find('PencilAltIcon').length).toBe(1);
-      expect(wrapper.find('Button').find('Link').props().to).toBe(
+      renderItem();
+      const editLink = screen.getByRole('link', { name: 'Edit Schedule' });
+      expect(editLink).toHaveAttribute(
+        'href',
         '/templates/job_template/12/schedules/6/edit'
       );
     });
 
     test('Toggle button enabled', () => {
-      expect(wrapper.find('Switch').first().props().isDisabled).toBe(false);
+      renderItem();
+      expect(
+        screen.getByRole('checkbox', { name: 'Toggle schedule' })
+      ).toBeEnabled();
     });
 
-    test('Clicking checkbox selects item', () => {
-      wrapper.find('Td').first().find('input').simulate('change');
+    test('Clicking checkbox selects item', async () => {
+      const { user } = renderItem();
+      const selectCell = cellByLabel('Selected');
+      await user.click(within(selectCell).getByRole('checkbox'));
       expect(onSelect).toHaveBeenCalledTimes(1);
-    });
-    test('Toggle button is enabled', () => {
-      expect(wrapper.find('ScheduleToggle').prop('isDisabled')).toBe(false);
     });
   });
 
   describe('User has read-only permissions', () => {
-    beforeAll(() => {
-      wrapper = mountWithContexts(
-        <table>
-          <tbody>
-            <ScheduleListItem
-              isSelected={false}
-              onSelect={onSelect}
-              schedule={{
-                ...mockSchedule,
-                summary_fields: {
-                  ...mockSchedule.summary_fields,
-                  user_capabilities: {
-                    edit: false,
-                    delete: false,
-                  },
-                },
-              }}
-            />
-          </tbody>
-        </table>
-      );
-    });
+    const readOnlySchedule = {
+      ...mockSchedule,
+      summary_fields: {
+        ...mockSchedule.summary_fields,
+        user_capabilities: {
+          edit: false,
+          delete: false,
+        },
+      },
+    };
 
     test('Name correctly shown with correct link', () => {
-      expect(wrapper.find('Td').at(1).prop('dataLabel')).toBe('Name');
-      expect(wrapper.find('Td').at(1).text()).toBe('Mock Schedule');
-      expect(wrapper.find('Td').at(1).find('Link').props().to).toBe(
+      renderItem({ schedule: readOnlySchedule });
+      expect(
+        screen.getByRole('link', { name: 'Mock Schedule' })
+      ).toHaveAttribute(
+        'href',
         '/templates/job_template/12/schedules/6/details'
       );
     });
 
     test('Related resource correctly shown', () => {
-      expect(wrapper.find('Td').at(2).prop('dataLabel')).toBe(
-        'Related resource'
-      );
-      expect(wrapper.find('Td').at(2).text()).toBe('Mock JT');
+      renderItem({ schedule: readOnlySchedule });
+      expect(cellByLabel('Related resource')).toHaveTextContent('Mock JT');
     });
 
     test('Resource type correctly shown', () => {
-      expect(wrapper.find('Td').at(3).prop('dataLabel')).toBe('Resource type');
-      expect(wrapper.find('Td').at(3).text()).toBe('Playbook Run');
+      renderItem({ schedule: readOnlySchedule });
+      expect(cellByLabel('Resource type')).toHaveTextContent('Playbook Run');
     });
 
     test('Next run correctly shown', () => {
-      expect(wrapper.find('Td').at(4).prop('dataLabel')).toBe('Next Run');
-      expect(wrapper.find('Td').at(4).text()).toBe(
-        'Next Run2/20/2020, 12:00:00 AM'
-      );
+      renderItem({ schedule: readOnlySchedule });
+      expect(cellByLabel('Next Run')).toHaveTextContent('2/20/2020, 12:00:00 AM');
     });
+
     test('Edit button hidden', () => {
-      expect(wrapper.find('PencilAltIcon').length).toBe(0);
+      renderItem({ schedule: readOnlySchedule });
+      expect(
+        screen.queryByRole('link', { name: 'Edit Schedule' })
+      ).not.toBeInTheDocument();
     });
 
     test('Toggle button disabled', () => {
-      expect(wrapper.find('Switch').first().props().isDisabled).toBe(true);
+      renderItem({ schedule: readOnlySchedule });
+      expect(
+        screen.getByRole('checkbox', { name: 'Toggle schedule' })
+      ).toBeDisabled();
     });
   });
-  describe('schedule has missing prompt data', () => {
-    beforeAll(() => {
-      wrapper = mountWithContexts(
-        <table>
-          <tbody>
-            <ScheduleListItem
-              isSelected={false}
-              onSelect={onSelect}
-              schedule={{
-                ...mockSchedule,
-                summary_fields: {
-                  ...mockSchedule.summary_fields,
-                  user_capabilities: {
-                    edit: false,
-                    delete: false,
-                  },
-                },
-              }}
-              isMissingInventory="Inventory Error"
-              isMissingSurvey="Survey Error"
-            />
-          </tbody>
-        </table>
-      );
-    });
 
-    test('should show missing resource icon', () => {
-      expect(wrapper.find('ExclamationTriangleIcon').length).toBe(1);
-      expect(wrapper.find('ScheduleToggle').prop('isDisabled')).toBe(true);
+  describe('schedule has missing prompt data', () => {
+    test('should show missing resource icon and disable the toggle', () => {
+      renderItem({
+        schedule: {
+          ...mockSchedule,
+          summary_fields: {
+            ...mockSchedule.summary_fields,
+            user_capabilities: { edit: false, delete: false },
+          },
+        },
+        isMissingInventory: 'Inventory Error',
+        isMissingSurvey: 'Survey Error',
+      });
+      // ExclamationTriangleIcon renders an svg inside the Name cell tooltip wrapper
+      const nameCell = cellByLabel('Name');
+      expect(nameCell.querySelector('svg')).toBeInTheDocument();
+      expect(
+        screen.getByRole('checkbox', { name: 'Toggle schedule' })
+      ).toBeDisabled();
     });
   });
 });
