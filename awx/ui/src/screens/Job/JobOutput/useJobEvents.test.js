@@ -8,7 +8,7 @@ import useJobEvents, {
 
 // The hook returns an imperative API; capture the latest value on every render
 // so tests can call it directly (RTL 12 has no renderHook).
-let latestApi;
+const hookRef = { current: null };
 
 function Child() {
   return <div />;
@@ -37,7 +37,7 @@ function HookTest({
     jobId,
     isFlatMode
   );
-  latestApi = hookFuncs;
+  hookRef.current = hookFuncs;
   return <Child id="test" {...hookFuncs} />;
 }
 
@@ -50,12 +50,12 @@ function makeWrapper(wrapMutators) {
       return (...args) => {
         let result;
         act(() => {
-          result = latestApi[name](...args);
+          result = hookRef.current[name](...args);
         });
         return result;
       };
     }
-    return (...args) => latestApi[name](...args);
+    return (...args) => hookRef.current[name](...args);
   };
   return { find: () => ({ prop: propFn }), update: () => {} };
 }
