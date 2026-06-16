@@ -15,7 +15,7 @@ releases:
           ``ctrliq.ascender.job_launch``). The collection source folder is now
           ``ascender_collection``.
         - >-
-          Raised the minimum required ansible-core to 2.17. The modules and
+          Raised the minimum required ansible-core to 2.16. The modules and
           plugins are now Python 3 only; the legacy ``six`` based Python 2
           compatibility shims have been removed.
         - >-
