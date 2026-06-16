@@ -1,8 +1,8 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { Formik } from 'formik';
 import { ExecutionEnvironmentsAPI } from 'api';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ExecutionEnvironmentStep from './ExecutionEnvironmentStep';
 
 jest.mock('../../../api/models/ExecutionEnvironments');
@@ -33,20 +33,20 @@ describe('ExecutionEnvironmentStep', () => {
     });
   });
 
-  test('should load execution environments', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <ExecutionEnvironmentStep />
-        </Formik>
-      );
-    });
-    wrapper.update();
+  afterEach(() => jest.clearAllMocks());
 
-    expect(ExecutionEnvironmentsAPI.read).toHaveBeenCalled();
-    expect(wrapper.find('OptionsList').prop('options')).toEqual(
-      execution_environments
+  test('should load execution environments', async () => {
+    renderWithContexts(
+      <Formik>
+        <ExecutionEnvironmentStep />
+      </Formik>
     );
+
+    await waitFor(() =>
+      expect(ExecutionEnvironmentsAPI.read).toHaveBeenCalled()
+    );
+    expect(await screen.findByText('ee one')).toBeInTheDocument();
+    expect(screen.getByText('ee two')).toBeInTheDocument();
+    expect(screen.getByText('ee three')).toBeInTheDocument();
   });
 });

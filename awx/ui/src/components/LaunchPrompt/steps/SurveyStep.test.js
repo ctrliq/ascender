@@ -1,88 +1,58 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, within } from '@testing-library/react';
 import { Formik } from 'formik';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import SurveyStep from './SurveyStep';
+
+function makeConfig(choices) {
+  return {
+    name: 'survey',
+    description: '',
+    spec: [
+      {
+        question_name: 'q1',
+        question_description: '',
+        required: true,
+        type: 'multiplechoice',
+        variable: 'q1',
+        min: null,
+        max: null,
+        default: '',
+        choices,
+      },
+    ],
+  };
+}
+
+async function openAndAssertOptions(user) {
+  // The typeahead toggle is the button inside the PF Select.
+  const toggle = screen.getByRole('button', { name: 'Options menu' });
+  await user.click(toggle);
+
+  const listbox = screen.getByRole('listbox');
+  ['1', '2', '3', '4', '5', '6'].forEach((value) => {
+    expect(within(listbox).getByText(value)).toBeInTheDocument();
+  });
+}
 
 describe('SurveyStep', () => {
   test('should handle choices as a string', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik initialValues={{ job_type: 'run' }}>
-          <SurveyStep
-            surveyConfig={{
-              name: 'survey',
-              description: '',
-              spec: [
-                {
-                  question_name: 'q1',
-                  question_description: '',
-                  required: true,
-                  type: 'multiplechoice',
-                  variable: 'q1',
-                  min: null,
-                  max: null,
-                  default: '',
-                  choices: '1\n2\n3\n4\n5\n6',
-                },
-              ],
-            }}
-          />
-        </Formik>
-      );
-    });
+    const { user } = renderWithContexts(
+      <Formik initialValues={{ job_type: 'run' }}>
+        <SurveyStep surveyConfig={makeConfig('1\n2\n3\n4\n5\n6')} />
+      </Formik>
+    );
 
-    await act(async () => {
-      wrapper.find('SelectToggle').simulate('click');
-    });
-    wrapper.update();
-    const selectOptions = wrapper.find('SelectOption');
-    expect(selectOptions.at(0).prop('value')).toEqual('1');
-    expect(selectOptions.at(1).prop('value')).toEqual('2');
-    expect(selectOptions.at(2).prop('value')).toEqual('3');
-    expect(selectOptions.at(3).prop('value')).toEqual('4');
-    expect(selectOptions.at(4).prop('value')).toEqual('5');
-    expect(selectOptions.at(5).prop('value')).toEqual('6');
+    await openAndAssertOptions(user);
   });
-  test('should handle choices as an array', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik initialValues={{ job_type: 'run' }}>
-          <SurveyStep
-            surveyConfig={{
-              name: 'survey',
-              description: '',
-              spec: [
-                {
-                  question_name: 'q1',
-                  question_description: '',
-                  required: true,
-                  type: 'multiplechoice',
-                  variable: 'q1',
-                  min: null,
-                  max: null,
-                  default: '',
-                  choices: ['1', '2', '3', '4', '5', '6'],
-                },
-              ],
-            }}
-          />
-        </Formik>
-      );
-    });
 
-    await act(async () => {
-      wrapper.find('SelectToggle').simulate('click');
-    });
-    wrapper.update();
-    const selectOptions = wrapper.find('SelectOption');
-    expect(selectOptions.at(0).prop('value')).toEqual('1');
-    expect(selectOptions.at(1).prop('value')).toEqual('2');
-    expect(selectOptions.at(2).prop('value')).toEqual('3');
-    expect(selectOptions.at(3).prop('value')).toEqual('4');
-    expect(selectOptions.at(4).prop('value')).toEqual('5');
-    expect(selectOptions.at(5).prop('value')).toEqual('6');
+  test('should handle choices as an array', async () => {
+    const { user } = renderWithContexts(
+      <Formik initialValues={{ job_type: 'run' }}>
+        <SurveyStep surveyConfig={makeConfig(['1', '2', '3', '4', '5', '6'])} />
+      </Formik>
+    );
+
+    await openAndAssertOptions(user);
   });
 });

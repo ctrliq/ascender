@@ -1,8 +1,8 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { Formik } from 'formik';
 import { InventoriesAPI } from 'api';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryStep from './InventoryStep';
 
 jest.mock('../../../api/models/Inventories');
@@ -33,34 +33,30 @@ describe('InventoryStep', () => {
     });
   });
 
-  test('should load inventories', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <InventoryStep />
-        </Formik>
-      );
-    });
-    wrapper.update();
+  afterEach(() => jest.clearAllMocks());
 
-    expect(InventoriesAPI.read).toHaveBeenCalled();
-    expect(wrapper.find('OptionsList').prop('options')).toEqual(inventories);
+  test('should load inventories', async () => {
+    renderWithContexts(
+      <Formik>
+        <InventoryStep />
+      </Formik>
+    );
+
+    await waitFor(() => expect(InventoriesAPI.read).toHaveBeenCalled());
+    expect(await screen.findByText('inv one')).toBeInTheDocument();
+    expect(screen.getByText('inv two')).toBeInTheDocument();
+    expect(screen.getByText('inv three')).toBeInTheDocument();
   });
 
   test('should show warning message when one is passed in', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <InventoryStep
-            warningMessage={<div id="test-warning-message">TEST</div>}
-          />
-        </Formik>
-      );
-    });
-    wrapper.update();
+    renderWithContexts(
+      <Formik>
+        <InventoryStep
+          warningMessage={<div id="test-warning-message">TEST</div>}
+        />
+      </Formik>
+    );
 
-    expect(wrapper.find('div#test-warning-message').length).toBe(1);
+    expect(await screen.findByText('TEST')).toBeInTheDocument();
   });
 });
