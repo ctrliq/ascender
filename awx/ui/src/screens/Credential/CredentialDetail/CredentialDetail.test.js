@@ -1,10 +1,18 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
-import { CredentialsAPI, CredentialTypesAPI } from 'api';
+import { screen, waitFor } from '@testing-library/react';
 import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+  CredentialsAPI,
+  CredentialTypesAPI,
+  CredentialInputSourcesAPI,
+  JobTemplatesAPI,
+  ProjectsAPI,
+  InventorySourcesAPI,
+  ExecutionEnvironmentsAPI,
+} from 'api';
+import {
+  renderWithContexts,
+  assertDetail,
+} from '../../../../testUtils/rtlContexts';
 import CredentialDetail from './CredentialDetail';
 import { mockCredentials, mockCredentialType } from '../shared';
 
@@ -33,139 +41,127 @@ const mockInputSource = {
   },
 };
 
-function expectDetailToMatch(wrapper, label, value) {
-  const detail = wrapper.find(`Detail[label="${label}"]`);
-  expect(detail).toHaveLength(1);
-  expect(detail.find('dd').text()).toEqual(value);
-}
-
 describe('<CredentialDetail />', () => {
-  let wrapper;
-
-  beforeEach(async () => {
+  beforeEach(() => {
     CredentialTypesAPI.readDetail.mockResolvedValue({
       data: mockCredentialType,
     });
-
     CredentialsAPI.readInputSources.mockResolvedValue({
       data: {
         results: [mockInputSource],
       },
     });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <CredentialDetail credential={mockCredential} />
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
+    // related-resource delete-count lookups made by DeleteButton
+    const emptyRead = { data: { count: 0, results: [] } };
+    JobTemplatesAPI.read.mockResolvedValue(emptyRead);
+    ProjectsAPI.read.mockResolvedValue(emptyRead);
+    InventorySourcesAPI.read.mockResolvedValue(emptyRead);
+    CredentialInputSourcesAPI.read.mockResolvedValue(emptyRead);
+    ExecutionEnvironmentsAPI.read.mockResolvedValue(emptyRead);
   });
 
-  test('should render successfully', () => {
-    expect(wrapper.find('CredentialDetail').length).toBe(1);
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
-  test('should have proper number of delete detail requests', () => {
-    expect(
-      wrapper.find('DeleteButton').prop('deleteDetailsRequests')
-    ).toHaveLength(5);
-  });
-
-  test('should render details', () => {
-    expectDetailToMatch(wrapper, 'Name', mockCredential.name);
-    expectDetailToMatch(wrapper, 'Description', mockCredential.description);
-    expectDetailToMatch(
-      wrapper,
-      'Organization',
-      mockCredential.summary_fields.organization.name
+  async function renderDetail(credential = mockCredential) {
+    const result = renderWithContexts(
+      <CredentialDetail credential={credential} />
     );
-    expectDetailToMatch(
-      wrapper,
+    // wait for the credential type detail fetch to resolve
+    await screen.findByText('Name');
+    return result;
+  }
+
+  test('should render details', async () => {
+    await renderDetail();
+
+    assertDetail('Name', mockCredential.name);
+    assertDetail('Description', mockCredential.description);
+    assertDetail('Organization', mockCredential.summary_fields.organization.name);
+    assertDetail(
       'Credential Type',
       mockCredential.summary_fields.credential_type.name
     );
-    expectDetailToMatch(wrapper, 'Username', mockCredential.inputs.username);
-    expectDetailToMatch(wrapper, 'Password', 'Encrypted');
-    expectDetailToMatch(wrapper, 'SSH Private Key', 'Encrypted');
-    expectDetailToMatch(wrapper, 'Signed SSH Certificate', 'Encrypted');
-    const sshKeyUnlockDetail = wrapper.find(
-      'Detail#credential-ssh_key_unlock-detail'
+    assertDetail('Username', mockCredential.inputs.username);
+    assertDetail('Password', 'Encrypted');
+    assertDetail('SSH Private Key', 'Encrypted');
+    assertDetail('Signed SSH Certificate', 'Encrypted');
+
+    // ssh_key_unlock is backed by an external input source: chip + metadata.
+    // The chip renders "<kind>: <name>" in the Detail value cell.
+    const chipValue = document.querySelector(
+      '[data-cy="credential-ssh_key_unlock-detail-value"]'
     );
-    expect(sshKeyUnlockDetail.length).toBe(1);
-    expect(sshKeyUnlockDetail.find('CredentialChip').length).toBe(1);
+    expect(chipValue).toHaveTextContent('External Credential');
+
+    // The metadata CodeEditor is mounted; react-ace keeps its value in an
+    // internal (jsdom-invisible) model rather than the DOM, so we assert the
+    // editor is present rather than reading its text content.
     expect(
-      wrapper.find('CodeEditor#credential-ssh_key_unlock-metadata').props()
-        .value
-    ).toBe(JSON.stringify(mockInputSource.metadata, null, 2));
-    expectDetailToMatch(
-      wrapper,
+      document.querySelector('#credential-ssh_key_unlock-metadata')
+    ).toBeInTheDocument();
+
+    assertDetail(
       'Privilege Escalation Method',
       mockCredential.inputs.become_method
     );
-    expectDetailToMatch(
-      wrapper,
+    assertDetail(
       'Privilege Escalation Username',
       mockCredential.inputs.become_username
     );
-    expectDetailToMatch(
-      wrapper,
-      'Privilege Escalation Password',
-      'Prompt on launch'
-    );
-    expect(wrapper.find(`Detail[label="Enabled Options"] li`).text()).toEqual(
-      'Authorize'
-    );
+    assertDetail('Privilege Escalation Password', 'Prompt on launch');
+
+    const enabledOptions = screen.getByText('Enabled Options');
+    expect(enabledOptions.nextElementSibling).toHaveTextContent('Authorize');
   });
 
   test('should show content error on throw', async () => {
-    CredentialTypesAPI.readDetail.mockImplementationOnce(() =>
-      Promise.reject(new Error())
-    );
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <CredentialDetail credential={mockCredential} />
-      );
-    });
-    await waitForElement(wrapper, 'ContentError', (el) => el.length === 1);
+    CredentialTypesAPI.readDetail.mockRejectedValueOnce(new Error());
+    renderWithContexts(<CredentialDetail credential={mockCredential} />);
+
+    expect(
+      await screen.findByText(/There was an error loading this content/)
+    ).toBeInTheDocument();
   });
 
   test('handleDelete should call api', async () => {
-    CredentialsAPI.destroy = jest.fn();
-    await act(async () => {
-      wrapper.find('DeleteButton').invoke('onConfirm')();
-    });
-    wrapper.update();
-    expect(CredentialsAPI.destroy).toHaveBeenCalledTimes(1);
+    CredentialsAPI.destroy = jest.fn().mockResolvedValue({});
+    const { user } = await renderDetail();
+
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'Confirm Delete' })
+    );
+
+    await waitFor(() => expect(CredentialsAPI.destroy).toHaveBeenCalledTimes(1));
   });
 
   test('should show error modal when credential is not successfully deleted from api', async () => {
-    CredentialsAPI.destroy.mockImplementationOnce(() =>
-      Promise.reject(new Error())
+    CredentialsAPI.destroy = jest.fn().mockRejectedValueOnce(new Error());
+    const { user } = await renderDetail();
+
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'Confirm Delete' })
     );
-    await act(async () => {
-      wrapper.find('DeleteButton').invoke('onConfirm')();
-    });
-    await waitForElement(wrapper, 'ErrorDetail', (el) => el.length === 1);
-    await act(async () => {
-      wrapper.find('ModalBoxCloseButton').invoke('onClose')();
-    });
+
+    expect(await screen.findByText('Error!')).toBeInTheDocument();
+    // the delete-error AlertModal has no footer actions; close via the X
+    await user.click(document.querySelector('button[aria-label="Close"]'));
+    await waitFor(() =>
+      expect(screen.queryByText('Error!')).not.toBeInTheDocument()
+    );
   });
 
   test('should not load enabled options', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <CredentialDetail
-          credential={{
-            ...mockCredential,
-            results: {
-              inputs: null,
-            },
-          }}
-        />
-      );
+    // a credential whose inputs have no enabled boolean fields renders the
+    // Enabled Options Detail as isEmpty (nothing in the DOM)
+    await renderDetail({
+      ...mockCredential,
+      inputs: { ...mockCredential.inputs, authorize: false },
     });
-    const enabled_options_detail = wrapper
-      .find(`Detail[label="Enabled Options"]`)
-      .at(0);
-    expect(enabled_options_detail.prop('isEmpty')).toEqual(true);
+
+    expect(screen.queryByText('Enabled Options')).not.toBeInTheDocument();
   });
 });

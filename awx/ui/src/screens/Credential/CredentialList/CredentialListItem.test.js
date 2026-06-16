@@ -1,105 +1,68 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { CredentialsAPI } from 'api';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import { CredentialListItem } from '.';
 import { mockCredentials } from '../shared';
 
 jest.mock('../../../api');
 
+function renderItem(credential) {
+  return renderWithContexts(
+    <table>
+      <tbody>
+        <CredentialListItem
+          credential={credential}
+          detailUrl="/foo/bar"
+          isSelected={false}
+          onSelect={() => {}}
+          onCopy={() => {}}
+          fetchCredentials={() => {}}
+        />
+      </tbody>
+    </table>
+  );
+}
+
 describe('<CredentialListItem />', () => {
-  let wrapper;
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
   test('edit button shown to users with edit capabilities', () => {
-    wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <CredentialListItem
-            credential={mockCredentials.results[0]}
-            detailUrl="/foo/bar"
-            isSelected={false}
-            onSelect={() => {}}
-          />
-        </tbody>
-      </table>
-    );
-    expect(wrapper.find('PencilAltIcon').exists()).toBeTruthy();
+    renderItem(mockCredentials.results[0]);
+    expect(
+      screen.getByRole('link', { name: 'Edit Credential' })
+    ).toBeInTheDocument();
   });
 
   test('edit button hidden from users without edit capabilities', () => {
-    wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <CredentialListItem
-            credential={mockCredentials.results[1]}
-            detailUrl="/foo/bar"
-            isSelected={false}
-            onSelect={() => {}}
-          />
-        </tbody>
-      </table>
-    );
-    expect(wrapper.find('PencilAltIcon').exists()).toBeFalsy();
+    renderItem(mockCredentials.results[1]);
+    expect(
+      screen.queryByRole('link', { name: 'Edit Credential' })
+    ).not.toBeInTheDocument();
   });
+
   test('should call api to copy template', async () => {
-    CredentialsAPI.copy.mockResolvedValue();
+    CredentialsAPI.copy.mockResolvedValue({ status: 201, data: { id: 2 } });
+    const { user } = renderItem(mockCredentials.results[0]);
 
-    wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <CredentialListItem
-            isSelected={false}
-            detailUrl="/foo/bar"
-            credential={mockCredentials.results[0]}
-            onSelect={() => {}}
-          />
-        </tbody>
-      </table>
-    );
-
-    await act(async () =>
-      wrapper.find('Button[aria-label="Copy"]').prop('onClick')()
-    );
-    expect(CredentialsAPI.copy).toHaveBeenCalled();
-    jest.clearAllMocks();
+    await user.click(screen.getByRole('button', { name: 'Copy' }));
+    await waitFor(() => expect(CredentialsAPI.copy).toHaveBeenCalled());
   });
 
   test('should render proper alert modal on copy error', async () => {
     CredentialsAPI.copy.mockRejectedValue(new Error());
+    const { user } = renderItem(mockCredentials.results[0]);
 
-    wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <CredentialListItem
-            isSelected={false}
-            detailUrl="/foo/bar"
-            onSelect={() => {}}
-            credential={mockCredentials.results[0]}
-          />
-        </tbody>
-      </table>
-    );
-    await act(async () =>
-      wrapper.find('Button[aria-label="Copy"]').prop('onClick')()
-    );
-    wrapper.update();
-    expect(wrapper.find('Modal').prop('isOpen')).toBe(true);
-    jest.clearAllMocks();
+    await user.click(screen.getByRole('button', { name: 'Copy' }));
+    expect(await screen.findByText('Error!')).toBeInTheDocument();
   });
 
-  test('should not render copy button', async () => {
-    wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <CredentialListItem
-            isSelected={false}
-            detailUrl="/foo/bar"
-            onSelect={() => {}}
-            credential={mockCredentials.results[1]}
-          />
-        </tbody>
-      </table>
-    );
-    expect(wrapper.find('CopyButton').length).toBe(0);
+  test('should not render copy button', () => {
+    renderItem(mockCredentials.results[1]);
+    expect(
+      screen.queryByRole('button', { name: 'Copy' })
+    ).not.toBeInTheDocument();
   });
 });

@@ -1,7 +1,7 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen } from '@testing-library/react';
 import { Formik } from 'formik';
-import { mountWithContexts } from '../../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import BecomeMethodField from './BecomeMethodField';
 
 const fieldOptions = {
@@ -11,30 +11,28 @@ const fieldOptions = {
   label: 'Privilege Escalation Method',
   type: 'string',
 };
-describe('<BecomeMethodField>', () => {
-  let wrapper;
 
-  test('should mount properly', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <BecomeMethodField fieldOptions={fieldOptions} isRequired />
-        </Formik>
-      );
-    });
-    expect(wrapper.find('BecomeMethodField').length).toBe(1);
+describe('<BecomeMethodField>', () => {
+  test('should mount properly', () => {
+    renderWithContexts(
+      <Formik>
+        <BecomeMethodField fieldOptions={fieldOptions} isRequired />
+      </Formik>
+    );
+    expect(
+      screen.getByText('Privilege Escalation Method')
+    ).toBeInTheDocument();
   });
 
   test('should open privilege escalation properly', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <BecomeMethodField fieldOptions={fieldOptions} isRequired />
-        </Formik>
-      );
-    });
-    act(() => wrapper.find('Select').prop('onToggle')(true));
-    wrapper.update();
-    expect(wrapper.find('SelectOption').length).toBe(12);
+    const { user } = renderWithContexts(
+      <Formik>
+        <BecomeMethodField fieldOptions={fieldOptions} isRequired />
+      </Formik>
+    );
+    await user.click(
+      screen.getByRole('button', { name: 'Options menu' })
+    );
+    expect(screen.getAllByRole('option')).toHaveLength(12);
   });
 });

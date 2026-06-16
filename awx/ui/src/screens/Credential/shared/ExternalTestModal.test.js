@@ -1,7 +1,7 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { CredentialsAPI, CredentialTypesAPI } from 'api';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ExternalTestModal from './ExternalTestModal';
 import credentialTypesArr from './data.credentialTypes.json';
 
@@ -28,27 +28,57 @@ const credential = {
   credential_type: credentialType.id,
 };
 
-describe('<ExternalTestModal />', () => {
-  let wrapper;
+// The modal is rendered in a portal; query its fields/buttons against document.
+const getInput = (id) => document.querySelector(`input#credential-${id}`);
+const getRunButton = () =>
+  screen.getByRole('button', { name: 'Run' });
 
-  test('should display metadata fields correctly', async () => {
-    wrapper = mountWithContexts(
+const expectedPayload = {
+  inputs: {
+    api_version: 'v2',
+    cacert: undefined,
+    role_id: undefined,
+    secret_id: undefined,
+    token: '$encrypted$',
+    url: 'http://hashivault:8200',
+  },
+  metadata: {
+    auth_path: '',
+    secret_backend: '',
+    secret_key: 'password',
+    secret_path: '/secret/foo/bar/baz',
+    secret_version: '',
+  },
+};
+
+async function fillAndRun(user) {
+  await user.type(getInput('secret_path'), '/secret/foo/bar/baz');
+  await user.type(getInput('secret_key'), 'password');
+  await user.click(getRunButton());
+}
+
+describe('<ExternalTestModal />', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('should display metadata fields correctly', () => {
+    renderWithContexts(
       <ExternalTestModal
         credentialType={credentialType}
         credentialFormValues={credentialFormValues}
         onClose={jest.fn()}
       />
     );
-    expect(wrapper.find('FormField').length).toBe(5);
-    expect(wrapper.find('input#credential-secret_backend').length).toBe(1);
-    expect(wrapper.find('input#credential-secret_path').length).toBe(1);
-    expect(wrapper.find('input#credential-auth_path').length).toBe(1);
-    expect(wrapper.find('input#credential-secret_key').length).toBe(1);
-    expect(wrapper.find('input#credential-secret_version').length).toBe(1);
+    expect(getInput('secret_backend')).toBeInTheDocument();
+    expect(getInput('secret_path')).toBeInTheDocument();
+    expect(getInput('auth_path')).toBeInTheDocument();
+    expect(getInput('secret_key')).toBeInTheDocument();
+    expect(getInput('secret_version')).toBeInTheDocument();
   });
 
   test('should make the test request correctly when testing an existing credential', async () => {
-    wrapper = mountWithContexts(
+    const { user } = renderWithContexts(
       <ExternalTestModal
         credential={credential}
         credentialType={credentialType}
@@ -56,129 +86,66 @@ describe('<ExternalTestModal />', () => {
         onClose={jest.fn()}
       />
     );
-    await act(async () => {
-      wrapper.find('input#credential-secret_path').simulate('change', {
-        target: { value: '/secret/foo/bar/baz', name: 'secret_path' },
-      });
-      wrapper.find('input#credential-secret_key').simulate('change', {
-        target: { value: 'password', name: 'secret_key' },
-      });
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('Button[children="Run"]').simulate('click');
-    });
-    expect(CredentialsAPI.test).toHaveBeenCalledWith(1, {
-      inputs: {
-        api_version: 'v2',
-        cacert: undefined,
-        role_id: undefined,
-        secret_id: undefined,
-        token: '$encrypted$',
-        url: 'http://hashivault:8200',
-      },
-      metadata: {
-        auth_path: '',
-        secret_backend: '',
-        secret_key: 'password',
-        secret_path: '/secret/foo/bar/baz',
-        secret_version: '',
-      },
-    });
+    await fillAndRun(user);
+
+    await waitFor(() =>
+      expect(CredentialsAPI.test).toHaveBeenCalledWith(1, expectedPayload)
+    );
   });
 
   test('should make the test request correctly when testing a new credential', async () => {
-    wrapper = mountWithContexts(
+    const { user } = renderWithContexts(
       <ExternalTestModal
         credentialType={credentialType}
         credentialFormValues={credentialFormValues}
         onClose={jest.fn()}
       />
     );
-    await act(async () => {
-      wrapper.find('input#credential-secret_path').simulate('change', {
-        target: { value: '/secret/foo/bar/baz', name: 'secret_path' },
-      });
-      wrapper.find('input#credential-secret_key').simulate('change', {
-        target: { value: 'password', name: 'secret_key' },
-      });
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('Button[children="Run"]').simulate('click');
-    });
-    expect(CredentialTypesAPI.test).toHaveBeenCalledWith(21, {
-      inputs: {
-        api_version: 'v2',
-        cacert: undefined,
-        role_id: undefined,
-        secret_id: undefined,
-        token: '$encrypted$',
-        url: 'http://hashivault:8200',
-      },
-      metadata: {
-        auth_path: '',
-        secret_backend: '',
-        secret_key: 'password',
-        secret_path: '/secret/foo/bar/baz',
-        secret_version: '',
-      },
-    });
+    await fillAndRun(user);
+
+    await waitFor(() =>
+      expect(CredentialTypesAPI.test).toHaveBeenCalledWith(21, expectedPayload)
+    );
   });
 
   test('should display the alert after a successful test', async () => {
     CredentialTypesAPI.test.mockResolvedValue({});
-    wrapper = mountWithContexts(
+    const { user } = renderWithContexts(
       <ExternalTestModal
         credentialType={credentialType}
         credentialFormValues={credentialFormValues}
         onClose={jest.fn()}
       />
     );
-    await act(async () => {
-      wrapper.find('input#credential-secret_path').simulate('change', {
-        target: { value: '/secret/foo/bar/baz', name: 'secret_path' },
-      });
-      wrapper.find('input#credential-secret_key').simulate('change', {
-        target: { value: 'password', name: 'secret_key' },
-      });
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('Button[children="Run"]').simulate('click');
-    });
-    wrapper.update();
-    expect(wrapper.find('Alert').length).toBe(1);
-    expect(wrapper.find('Alert').props().variant).toBe('success');
+    await fillAndRun(user);
+
+    // CredentialPluginTestAlert shows "Test passed" on success
+    expect(await screen.findByText('Test passed')).toBeInTheDocument();
   });
 
   test('should display the alert after a failed test', async () => {
     CredentialTypesAPI.test.mockRejectedValue({
-      inputs: `HTTP 404
+      response: {
+        data: {
+          inputs: `HTTP 404
         {"errors":["no handler for route '/secret/foo/bar/baz'"]}
       `,
+        },
+      },
     });
-    wrapper = mountWithContexts(
+    const { user } = renderWithContexts(
       <ExternalTestModal
         credentialType={credentialType}
         credentialFormValues={credentialFormValues}
         onClose={jest.fn()}
       />
     );
-    await act(async () => {
-      wrapper.find('input#credential-secret_path').simulate('change', {
-        target: { value: '/secret/foo/bar/baz', name: 'secret_path' },
-      });
-      wrapper.find('input#credential-secret_key').simulate('change', {
-        target: { value: 'password', name: 'secret_key' },
-      });
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('Button[children="Run"]').simulate('click');
-    });
-    wrapper.update();
-    expect(wrapper.find('Alert').length).toBe(1);
-    expect(wrapper.find('Alert').props().variant).toBe('danger');
+    await fillAndRun(user);
+
+    expect(
+      await screen.findByText(
+        "HTTP 404: no handler for route '/secret/foo/bar/baz'"
+      )
+    ).toBeInTheDocument();
   });
 });
