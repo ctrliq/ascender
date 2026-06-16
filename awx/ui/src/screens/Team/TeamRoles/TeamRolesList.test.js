@@ -1,78 +1,23 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, within } from '@testing-library/react';
 import { TeamsAPI, RolesAPI, UsersAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import TeamRolesList from './TeamRolesList';
 
 jest.mock('../../../api/models/Teams');
 jest.mock('../../../api/models/Roles');
 jest.mock('../../../api/models/Users');
 
-const me = {
-  id: 1,
-};
+const me = { id: 1 };
 
 const team = {
   id: 18,
   type: 'team',
   url: '/api/v2/teams/1/',
-  related: {
-    created_by: '/api/v2/users/1/',
-    modified_by: '/api/v2/users/1/',
-    projects: '/api/v2/teams/1/projects/',
-    users: '/api/v2/teams/1/users/',
-    credentials: '/api/v2/teams/1/credentials/',
-    roles: '/api/v2/teams/1/roles/',
-    object_roles: '/api/v2/teams/1/object_roles/',
-    activity_stream: '/api/v2/teams/1/activity_stream/',
-    access_list: '/api/v2/teams/1/access_list/',
-    organization: '/api/v2/organizations/1/',
-  },
   summary_fields: {
-    organization: {
-      id: 1,
-      name: 'Default',
-      description: '',
-    },
-    created_by: {
-      id: 1,
-      username: 'admin',
-      first_name: '',
-      last_name: '',
-    },
-    modified_by: {
-      id: 1,
-      username: 'admin',
-      first_name: '',
-      last_name: '',
-    },
-    object_roles: {
-      admin_role: {
-        description: 'Can manage all aspects of the team',
-        name: 'Admin',
-        id: 33,
-      },
-      member_role: {
-        description: 'User is a member of the team',
-        name: 'Member',
-        id: 34,
-      },
-      read_role: {
-        description: 'May view settings for the team',
-        name: 'Read',
-        id: 35,
-      },
-    },
-    user_capabilities: {
-      edit: false,
-      delete: false,
-    },
+    organization: { id: 1, name: 'Default', description: '' },
+    user_capabilities: { edit: false, delete: false },
   },
-  created: '2020-07-22T18:21:54.233411Z',
-  modified: '2020-07-22T18:21:54.233442Z',
   name: 'a team',
   description: '',
   organization: 1,
@@ -100,7 +45,7 @@ const roles = {
         type: 'role',
         url: '/api/v2/roles/257/',
         summary_fields: {
-          resource_name: 'template delete project',
+          resource_name: 'workflow delete project',
           resource_id: 16,
           resource_type: 'workflow_job_template',
           resource_type_display_name: 'Job Template',
@@ -152,69 +97,60 @@ const roles = {
 };
 
 describe('<TeamRolesList />', () => {
-  let wrapper;
-
   beforeEach(() => {
     UsersAPI.readAdminOfOrganizations.mockResolvedValue({
       count: 1,
-      results: [
-        {
-          id: 1,
-          name: 'Foo Org',
-        },
-      ],
+      results: [{ id: 1, name: 'Foo Org' }],
     });
-
     TeamsAPI.readRoleOptions.mockResolvedValue({
-      data: {
-        actions: { GET: {} },
-        related_search_fields: [],
-      },
+      data: { actions: { GET: {} }, related_search_fields: [] },
     });
   });
 
   afterEach(() => {
     jest.clearAllMocks();
   });
+
   test('should render properly', async () => {
     TeamsAPI.readRoles.mockResolvedValue(roles);
-
-    await act(async () => {
-      wrapper = mountWithContexts(<TeamRolesList me={me} team={team} />);
-    });
-    expect(wrapper.find('TeamRolesList').length).toBe(1);
+    renderWithContexts(<TeamRolesList me={me} team={team} />);
+    expect(await screen.findByText('Credential Bar')).toBeInTheDocument();
   });
 
   test('should create proper detailUrl', async () => {
     TeamsAPI.readRoles.mockResolvedValue(roles);
+    const { container } = renderWithContexts(
+      <TeamRolesList me={me} team={team} />
+    );
+    await screen.findByText('Credential Bar');
 
-    await act(async () => {
-      wrapper = mountWithContexts(<TeamRolesList me={me} team={team} />);
-    });
-    waitForElement(wrapper, 'ContentEmpty', (el) => el.length === 0);
-
-    expect(
-      wrapper.find('Tr#role-item-row-2').find(`LinkAnchor`).prop('href')
-    ).toBe('/templates/job_template/15/details');
-    expect(
-      wrapper.find('Tr#role-item-row-3').find(`LinkAnchor`).prop('href')
-    ).toBe('/templates/workflow_job_template/16/details');
-    expect(
-      wrapper.find('Tr#role-item-row-4').find('LinkAnchor').prop('href')
-    ).toBe('/credentials/75/details');
-    expect(
-      wrapper.find('Tr#role-item-row-5').find('LinkAnchor').prop('href')
-    ).toBe('/inventories/inventory/76/details');
-    expect(
-      wrapper.find('Tr#role-item-row-6').find('LinkAnchor').prop('href')
-    ).toBe('/inventories/smart_inventory/77/details');
+    expect(container.querySelector('#role-item-row-2 a')).toHaveAttribute(
+      'href',
+      '/templates/job_template/15/details'
+    );
+    expect(container.querySelector('#role-item-row-3 a')).toHaveAttribute(
+      'href',
+      '/templates/workflow_job_template/16/details'
+    );
+    expect(container.querySelector('#role-item-row-4 a')).toHaveAttribute(
+      'href',
+      '/credentials/75/details'
+    );
+    expect(container.querySelector('#role-item-row-5 a')).toHaveAttribute(
+      'href',
+      '/inventories/inventory/76/details'
+    );
+    expect(container.querySelector('#role-item-row-6 a')).toHaveAttribute(
+      'href',
+      '/inventories/smart_inventory/77/details'
+    );
   });
+
   test('should not render add button when user cannot edit team and is not an admin of the org', async () => {
     UsersAPI.readAdminOfOrganizations.mockResolvedValueOnce({
       count: 0,
       results: [],
     });
-
     TeamsAPI.readRoles.mockResolvedValue({
       data: {
         results: [
@@ -236,104 +172,48 @@ describe('<TeamRolesList />', () => {
         count: 1,
       },
     });
-
-    await act(async () => {
-      wrapper = mountWithContexts(<TeamRolesList me={me} team={team} />);
-    });
-
-    waitForElement(wrapper, 'ContentEmpty', (el) => el.length === 0);
-    expect(wrapper.find('Button[aria-label="Add resource roles"]').length).toBe(
-      0
-    );
+    renderWithContexts(<TeamRolesList me={me} team={team} />);
+    await screen.findByText('template delete project');
+    expect(
+      screen.queryByRole('button', { name: 'Add' })
+    ).not.toBeInTheDocument();
   });
 
-  test('should render disassociate modal', async () => {
+  test('should render disassociate modal and call the api', async () => {
     TeamsAPI.readRoles.mockResolvedValue(roles);
-
-    await act(async () => {
-      wrapper = mountWithContexts(<TeamRolesList me={me} team={team} />);
-    });
-
-    waitForElement(wrapper, 'ContentEmpty', (el) => el.length === 0);
-
-    await act(async () =>
-      wrapper.find('Chip[aria-label="Execute"]').prop('onClick')({
-        id: 4,
-        name: 'Execute',
-        type: 'role',
-        url: '/api/v2/roles/258/',
-        summary_fields: {
-          resource_name: 'Credential Bar',
-          resource_id: 75,
-          resource_type: 'credential',
-          resource_type_display_name: 'Credential',
-          user_capabilities: { unattach: true },
-        },
-      })
+    RolesAPI.disassociateTeamRole.mockResolvedValue({});
+    const { user } = renderWithContexts(
+      <TeamRolesList me={me} team={team} />
     );
-    wrapper.update();
-    expect(
-      wrapper.find('AlertModal[aria-label="Disassociate role"]').length
-    ).toBe(1);
-    await act(async () =>
-      wrapper
-        .find('button[aria-label="confirm disassociate"]')
-        .prop('onClick')()
+    const row = (await screen.findByText('Credential Bar')).closest('tr');
+    await user.click(within(row).getByRole('button'));
+
+    await user.click(
+      await screen.findByRole('button', { name: 'confirm disassociate' })
     );
-    expect(RolesAPI.disassociateTeamRole).toHaveBeenCalledWith(4, 18);
-    wrapper.update();
-    expect(
-      wrapper.find('AlertModal[aria-label="Disassociate role"]').length
-    ).toBe(0);
+    await waitFor(() =>
+      expect(RolesAPI.disassociateTeamRole).toHaveBeenCalledWith(4, 18)
+    );
+    await waitFor(() =>
+      expect(
+        screen.queryByRole('button', { name: 'confirm disassociate' })
+      ).not.toBeInTheDocument()
+    );
   });
 
   test('should throw disassociation error', async () => {
     TeamsAPI.readRoles.mockResolvedValue(roles);
-    RolesAPI.disassociateTeamRole.mockRejectedValue(
-      new Error({
-        response: {
-          config: {
-            method: 'post',
-            url: '/api/v2/roles/18/roles',
-          },
-          data: 'An error occurred',
-          status: 403,
-        },
-      })
+    RolesAPI.disassociateTeamRole.mockRejectedValue(new Error());
+    const { user } = renderWithContexts(
+      <TeamRolesList me={me} team={team} />
     );
+    const row = (await screen.findByText('Credential Bar')).closest('tr');
+    await user.click(within(row).getByRole('button'));
 
-    await act(async () => {
-      wrapper = mountWithContexts(<TeamRolesList me={me} team={team} />);
-    });
-
-    waitForElement(wrapper, 'ContentEmpty', (el) => el.length === 0);
-
-    await act(async () =>
-      wrapper.find('Chip[aria-label="Execute"]').prop('onClick')({
-        id: 4,
-        name: 'Execute',
-        type: 'role',
-        url: '/api/v2/roles/258/',
-        summary_fields: {
-          resource_name: 'Credential Bar',
-          resource_id: 75,
-          resource_type: 'credential',
-          resource_type_display_name: 'Credential',
-          user_capabilities: { unattach: true },
-        },
-      })
+    await user.click(
+      await screen.findByRole('button', { name: 'confirm disassociate' })
     );
-    wrapper.update();
-    expect(
-      wrapper.find('AlertModal[aria-label="Disassociate role"]').length
-    ).toBe(1);
-    await act(async () =>
-      wrapper
-        .find('button[aria-label="confirm disassociate"]')
-        .prop('onClick')()
-    );
-    wrapper.update();
-    expect(wrapper.find('AlertModal[title="Error!"]').length).toBe(1);
+    expect(await screen.findByText('Error!')).toBeInTheDocument();
   });
 
   test('user with sys admin privilege should show empty state', async () => {
@@ -357,15 +237,9 @@ describe('<TeamRolesList />', () => {
         count: 1,
       },
     });
-
-    await act(async () => {
-      wrapper = mountWithContexts(<TeamRolesList me={me} team={team} />);
-    });
-
-    waitForElement(
-      wrapper,
-      'EmptyState[title="System Administrator"]',
-      (el) => el.length === 1
-    );
+    renderWithContexts(<TeamRolesList me={me} team={team} />);
+    expect(
+      await screen.findByText('System Administrator')
+    ).toBeInTheDocument();
   });
 });

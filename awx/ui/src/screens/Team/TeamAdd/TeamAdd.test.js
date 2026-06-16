@@ -1,82 +1,78 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
 import { createMemoryHistory } from 'history';
+import { screen, waitFor } from '@testing-library/react';
+
 import { TeamsAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import TeamAdd from './TeamAdd';
 
 jest.mock('../../../api');
 
+jest.mock('../shared/TeamForm', () =>
+  function MockTeamForm({ handleSubmit, handleCancel, submitError }) {
+    return (
+      <div>
+        {submitError ? <div data-testid="form-submit-error" /> : null}
+        <button
+          type="button"
+          onClick={() =>
+            handleSubmit({
+              name: 'new name',
+              description: 'new description',
+              organization: { id: 1, name: 'Default' },
+            })
+          }
+        >
+          Submit
+        </button>
+        <button type="button" aria-label="Cancel" onClick={handleCancel}>
+          Cancel
+        </button>
+      </div>
+    );
+  }
+);
+
 describe('<TeamAdd />', () => {
-  test('handleSubmit should post to api', async () => {
-    const history = createMemoryHistory({});
-    const updatedTeamData = {
-      name: 'new name',
-      description: 'new description',
-      organization: {
-        id: 1,
-        name: 'Default',
-      },
-    };
-    TeamsAPI.create.mockResolvedValueOnce({ data: {} });
-    const wrapper = mountWithContexts(<TeamAdd />, {
+  let history;
+
+  const renderAdd = () => {
+    history = createMemoryHistory({});
+    return renderWithContexts(<TeamAdd />, {
       context: { router: { history } },
     });
-    await act(async () => {
-      wrapper.find('TeamForm').invoke('handleSubmit')(updatedTeamData);
-    });
-    expect(TeamsAPI.create).toHaveBeenCalledWith({
-      ...updatedTeamData,
-      organization: 1,
-    });
+  };
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('handleSubmit posts to the api and redirects', async () => {
+    TeamsAPI.create.mockResolvedValue({ data: { id: 5 } });
+    const { user } = renderAdd();
+    await user.click(screen.getByRole('button', { name: 'Submit' }));
+    await waitFor(() =>
+      expect(TeamsAPI.create).toHaveBeenCalledWith({
+        name: 'new name',
+        description: 'new description',
+        organization: 1,
+      })
+    );
+    expect(history.location.pathname).toEqual('/teams/5');
   });
 
   test('should navigate to teams list when cancel is clicked', async () => {
-    const history = createMemoryHistory({});
-    const wrapper = mountWithContexts(<TeamAdd />, {
-      context: { router: { history } },
-    });
-    await act(async () => {
-      wrapper.find('button[aria-label="Cancel"]').invoke('onClick')();
-    });
+    const { user } = renderAdd();
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
     expect(history.location.pathname).toEqual('/teams');
   });
 
-  test('successful form submission should trigger redirect', async () => {
-    const history = createMemoryHistory({});
-    const teamData = {
-      name: 'new name',
-      description: 'new description',
-      organization: {
-        id: 1,
-        name: 'Default',
-      },
-    };
-    TeamsAPI.create.mockResolvedValueOnce({
-      data: {
-        id: 5,
-        ...teamData,
-        summary_fields: {
-          organization: {
-            id: 1,
-            name: 'Default',
-          },
-        },
-      },
+  test('failed form submission shows an error message', async () => {
+    TeamsAPI.create.mockRejectedValue({
+      response: { data: { detail: 'An error occurred' } },
     });
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<TeamAdd />, {
-        context: { router: { history } },
-      });
-    });
-    await waitForElement(wrapper, 'button[aria-label="Save"]');
-    await act(async () => {
-      await wrapper.find('TeamForm').invoke('handleSubmit')(teamData);
-    });
-    expect(history.location.pathname).toEqual('/teams/5');
+    const { user } = renderAdd();
+    await user.click(screen.getByRole('button', { name: 'Submit' }));
+    expect(await screen.findByTestId('form-submit-error')).toBeInTheDocument();
   });
 });
