@@ -1,13 +1,14 @@
 import React from 'react';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { screen } from '@testing-library/react';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import ActivityStreamDescription from './ActivityStreamDescription';
 
 describe('ActivityStreamDescription', () => {
   test('initially renders successfully', () => {
-    const description = mountWithContexts(
+    const { container } = renderWithContexts(
       <ActivityStreamDescription activity={{}} />
     );
-    expect(description.find('span').length).toBe(1);
+    expect(container.querySelectorAll('span')).toHaveLength(1);
   });
 
   test('builds a link for an inventory source sync schedule', () => {
@@ -23,13 +24,12 @@ describe('ActivityStreamDescription', () => {
         inventory_source: [{ id: 3, name: 'src', inventory_id: 7 }],
       },
     };
-    const description = mountWithContexts(
-      <ActivityStreamDescription activity={activity} />
+    renderWithContexts(<ActivityStreamDescription activity={activity} />);
+    const link = screen.getByRole('link', { name: 'Sync Schedule' });
+    expect(link).toHaveAttribute(
+      'href',
+      '/inventories/inventory/7/sources/3/schedules/5/'
     );
-    const link = description.find('Link');
-    expect(link).toHaveLength(1);
-    expect(link.prop('to')).toBe('/inventories/inventory/7/sources/3/schedules/5/');
-    expect(link.text()).toBe('Sync Schedule');
   });
 
   test('falls back to plain text for a schedule with an unknown parent', () => {
@@ -44,10 +44,8 @@ describe('ActivityStreamDescription', () => {
         schedule: [{ id: 5, name: 'Mystery Schedule' }],
       },
     };
-    const description = mountWithContexts(
-      <ActivityStreamDescription activity={activity} />
-    );
-    expect(description.find('Link')).toHaveLength(0);
-    expect(description.text()).toContain('Mystery Schedule');
+    renderWithContexts(<ActivityStreamDescription activity={activity} />);
+    expect(screen.queryByRole('link')).not.toBeInTheDocument();
+    expect(screen.getByText(/Mystery Schedule/)).toBeInTheDocument();
   });
 });

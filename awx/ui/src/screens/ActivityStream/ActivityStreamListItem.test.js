@@ -1,12 +1,13 @@
 import React from 'react';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { screen } from '@testing-library/react';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import ActivityStreamListItem from './ActivityStreamListItem';
 
 jest.mock('../../api/models/ActivityStream');
 
 describe('<ActivityStreamListItem />', () => {
   test('initially renders successfully', () => {
-    mountWithContexts(
+    renderWithContexts(
       <table>
         <tbody>
           <ActivityStreamListItem
@@ -18,5 +19,6 @@ describe('<ActivityStreamListItem />', () => {
         </tbody>
       </table>
     );
+    expect(screen.getByRole('row')).toBeInTheDocument();
   });
 });
