@@ -1,6 +1,6 @@
 import React from 'react';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
-import ChipGroup from '../ChipGroup';
+import { screen } from '@testing-library/react';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import SelectedList from './SelectedList';
 
@@ -16,26 +16,43 @@ describe('<SelectedList />', () => {
         name: 'bar',
       },
     ];
-    const wrapper = mountWithContexts(
+    renderWithContexts(
       <SelectedList
         label="Selectedeeee"
         selected={mockSelected}
         onRemove={() => {}}
       />
     );
-    expect(wrapper.length).toBe(1);
+    // the label and each selected item chip render
+    expect(screen.getByText('Selectedeeee')).toBeInTheDocument();
+    expect(screen.getByText('foo')).toBeInTheDocument();
+    expect(screen.getByText('bar')).toBeInTheDocument();
   });
 
   test('showOverflow should set showOverflow on ChipGroup', () => {
-    const wrapper = mountWithContexts(
-      <SelectedList label="Selected" selected={[]} onRemove={() => {}} />
+    // With an empty list the ChipGroup renders no overflow chip. With 5+ items
+    // the numChips={5} cap would surface a "N more" overflow chip; assert the
+    // cap by rendering 6 items and checking exactly one item is hidden behind
+    // the "1 more" expander (the DOM equivalent of ChipGroup's numChips={5}).
+    const mockSelected = Array.from({ length: 6 }, (_, i) => ({
+      id: i + 1,
+      name: `item-${i + 1}`,
+    }));
+    renderWithContexts(
+      <SelectedList
+        label="Selected"
+        selected={mockSelected}
+        onRemove={() => {}}
+      />
     );
-    const chipGroup = wrapper.find(ChipGroup);
-    expect(chipGroup).toHaveLength(1);
-    expect(chipGroup.prop('numChips')).toEqual(5);
+    // five chips shown, the sixth collapsed behind the overflow expander
+    expect(screen.getByText('item-1')).toBeInTheDocument();
+    expect(screen.getByText('item-5')).toBeInTheDocument();
+    expect(screen.queryByText('item-6')).not.toBeInTheDocument();
+    expect(screen.getByText('1 more')).toBeInTheDocument();
   });
 
-  test('Clicking remove on chip calls onRemove callback prop with correct params', () => {
+  test('Clicking remove on chip calls onRemove callback prop with correct params', async () => {
     const onRemove = jest.fn();
     const mockSelected = [
       {
@@ -43,14 +60,14 @@ describe('<SelectedList />', () => {
         name: 'foo',
       },
     ];
-    const wrapper = mountWithContexts(
+    const { user } = renderWithContexts(
       <SelectedList
         label="Selected"
         selected={mockSelected}
         onRemove={onRemove}
       />
     );
-    wrapper.find('.pf-c-chip button').first().simulate('click');
+    await user.click(screen.getByRole('button', { name: /close foo/i }));
     expect(onRemove).toHaveBeenCalledWith({
       id: 1,
       name: 'foo',
