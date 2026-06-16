@@ -1,7 +1,7 @@
 import React from 'react';
-
+import { fireEvent, waitFor } from '@testing-library/react';
 import { WorkflowStateContext } from 'contexts/Workflow';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import WorkflowStartNode from './WorkflowStartNode';
 
 const nodePositions = {
@@ -13,7 +13,7 @@ const nodePositions = {
 
 describe('WorkflowStartNode', () => {
   test('mounts successfully', () => {
-    const wrapper = mountWithContexts(
+    const { container } = renderWithContexts(
       <svg>
         <WorkflowStateContext.Provider value={{ nodePositions }}>
           <WorkflowStartNode
@@ -23,23 +23,25 @@ describe('WorkflowStartNode', () => {
         </WorkflowStateContext.Provider>
       </svg>
     );
-    expect(wrapper).toHaveLength(1);
+    expect(container.querySelector('#node-1')).toBeInTheDocument();
   });
-  test('tooltip shown on hover', () => {
-    const wrapper = mountWithContexts(
+  test('tooltip shown on hover', async () => {
+    const { container } = renderWithContexts(
       <svg>
         <WorkflowStateContext.Provider value={{ nodePositions }}>
-          <WorkflowStartNode
-            nodePositions={nodePositions}
-            showActionTooltip
-          />
+          <WorkflowStartNode nodePositions={nodePositions} showActionTooltip />
         </WorkflowStateContext.Provider>
       </svg>
     );
-    expect(wrapper.find('WorkflowActionTooltip')).toHaveLength(0);
-    wrapper.find('WorkflowStartNode').simulate('mouseenter');
-    expect(wrapper.find('WorkflowActionTooltip')).toHaveLength(1);
-    wrapper.find('WorkflowStartNode').simulate('mouseleave');
-    expect(wrapper.find('WorkflowActionTooltip')).toHaveLength(0);
+    const startNode = container.querySelector('#node-1');
+    expect(container.querySelector('#node-add')).not.toBeInTheDocument();
+    fireEvent.mouseEnter(startNode);
+    await waitFor(() =>
+      expect(container.querySelector('#node-add')).toBeInTheDocument()
+    );
+    fireEvent.mouseLeave(startNode);
+    await waitFor(() =>
+      expect(container.querySelector('#node-add')).not.toBeInTheDocument()
+    );
   });
 });

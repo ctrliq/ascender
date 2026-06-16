@@ -1,5 +1,5 @@
 import React from 'react';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import WorkflowNodeHelp from './WorkflowNodeHelp';
 
 const node = {
@@ -26,17 +26,21 @@ const node = {
 
 describe('WorkflowNodeHelp', () => {
   test('renders the expected content for a completed job template job', () => {
-    const wrapper = mountWithContexts(<WorkflowNodeHelp node={node} />);
-    expect(wrapper.find('#workflow-node-help-alias').text()).toBe('Foo');
-    expect(wrapper.find('#workflow-node-help-name').text()).toBe(
-      'Foo Job Template'
-    );
-    expect(wrapper.find('#workflow-node-help-type').text()).toBe(
-      'Job Template'
-    );
-    expect(wrapper.find('#workflow-node-help-status').text()).toBe(
-      'Successful'
-    );
-    expect(wrapper.find('#workflow-node-help-elapsed').text()).toBe('02:30:00');
+    const { container } = renderWithContexts(<WorkflowNodeHelp node={node} />);
+    expect(
+      container.querySelector('#workflow-node-help-alias')
+    ).toHaveTextContent('Foo');
+    expect(
+      container.querySelector('#workflow-node-help-name')
+    ).toHaveTextContent('Foo Job Template');
+    expect(
+      container.querySelector('#workflow-node-help-type')
+    ).toHaveTextContent('Job Template');
+    expect(
+      container.querySelector('#workflow-node-help-status')
+    ).toHaveTextContent('Successful');
+    expect(
+      container.querySelector('#workflow-node-help-elapsed')
+    ).toHaveTextContent('02:30:00');
   });
 });
