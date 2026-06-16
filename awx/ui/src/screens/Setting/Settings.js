@@ -159,14 +159,14 @@ function Settings() {
       <ScreenHeader streamType="setting" breadcrumbConfig={breadcrumbConfig} />
       <Routes>
         {/* /* on each sub-screen so its own nested <Routes> can match */}
-        <Route path="/settings/azure/*" element={<AzureAD />} />
-        <Route path="/settings/github/*" element={<GitHub />} />
-        <Route path="/settings/google_oauth2/*" element={<GoogleOAuth2 />} />
-        <Route path="/settings/oidc/*" element={<OIDC />} />
-        <Route path="/settings/jobs/*" element={<Jobs />} />
-        <Route path="/settings/ldap/*" element={<LDAP />} />
+        <Route path="azure/*" element={<AzureAD />} />
+        <Route path="github/*" element={<GitHub />} />
+        <Route path="google_oauth2/*" element={<GoogleOAuth2 />} />
+        <Route path="oidc/*" element={<OIDC />} />
+        <Route path="jobs/*" element={<Jobs />} />
+        <Route path="ldap/*" element={<LDAP />} />
         <Route
-          path="/settings/subscription/*"
+          path="subscription/*"
           element={
             license_info?.license_type === 'open' ? (
               <Navigate to="/settings" replace />
@@ -175,24 +175,18 @@ function Settings() {
             )
           }
         />
-        <Route path="/settings/logging/*" element={<Logging />} />
+        <Route path="logging/*" element={<Logging />} />
         <Route
-          path="/settings/miscellaneous_authentication/*"
+          path="miscellaneous_authentication/*"
           element={<MiscAuthentication />}
         />
-        <Route
-          path="/settings/miscellaneous_system/*"
-          element={<MiscSystem />}
-        />
-        <Route path="/settings/radius/*" element={<RADIUS />} />
-        <Route path="/settings/saml/*" element={<SAML />} />
-        <Route path="/settings/tacacs/*" element={<TACACS />} />
-        <Route
-          path="/settings/troubleshooting/*"
-          element={<Troubleshooting />}
-        />
-        <Route path="/settings/ui/*" element={<UI />} />
-        <Route path="/settings" element={<SettingList />} />
+        <Route path="miscellaneous_system/*" element={<MiscSystem />} />
+        <Route path="radius/*" element={<RADIUS />} />
+        <Route path="saml/*" element={<SAML />} />
+        <Route path="tacacs/*" element={<TACACS />} />
+        <Route path="troubleshooting/*" element={<Troubleshooting />} />
+        <Route path="ui/*" element={<UI />} />
+        <Route index element={<SettingList />} />
         <Route
           path="*"
           element={

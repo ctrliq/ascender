@@ -1,5 +1,6 @@
 import React from 'react';
 import { createMemoryHistory } from 'history';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 
 import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
 
@@ -21,9 +22,14 @@ describe('<ManagementJobs />', () => {
     const history = createMemoryHistory({
       initialEntries: ['/management_jobs'],
     });
-    pageWrapper = mountWithContexts(<ManagementJobs />, {
-      context: { router: { history } },
-    });
+    pageWrapper = mountWithContexts(
+      <Routes>
+        <Route path="/management_jobs/*" element={<ManagementJobs />} />
+      </Routes>,
+      {
+        context: { router: { history } },
+      }
+    );
   });
 
   test('renders the list at /management_jobs', () => {

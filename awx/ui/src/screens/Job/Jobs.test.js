@@ -1,6 +1,7 @@
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import Jobs from './Jobs';
 
@@ -35,9 +36,12 @@ jest.mock('./JobTypeRedirect', () => {
 
 function renderAt(path) {
   const history = createMemoryHistory({ initialEntries: [path] });
-  return renderWithContexts(<Jobs />, {
-    context: { router: { history } },
-  });
+  return renderWithContexts(
+    <Routes>
+      <Route path="/jobs/*" element={<Jobs />} />
+    </Routes>,
+    { context: { router: { history } } }
+  );
 }
 
 describe('<Jobs />', () => {
