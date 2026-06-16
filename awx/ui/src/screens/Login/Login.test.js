@@ -1,14 +1,10 @@
 import React from 'react';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import { act } from 'react-dom/test-utils';
 import { AuthAPI, RootAPI, MeAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import AWXLogin from './Login';
-import { getCurrentUserId } from 'util/auth';
 
 import { SESSION_USER_ID } from '../../constants';
 
@@ -30,41 +26,23 @@ AuthAPI.read.mockResolvedValue({
   data: {},
 });
 
-describe('<Login />', () => {
-  async function findChildren(wrapper) {
-    const [
-      awxLogin,
-      loginForm,
-      usernameInput,
-      passwordInput,
-      submitButton,
-      loginHeaderLogo,
-    ] = await Promise.all([
-      waitForElement(wrapper, 'AWXLogin', (el) => el.length === 1),
-      waitForElement(wrapper, 'LoginForm', (el) => el.length === 1),
-      waitForElement(
-        wrapper,
-        'input#pf-login-username-id',
-        (el) => el.length === 1
-      ),
-      waitForElement(
-        wrapper,
-        'input#pf-login-password-id',
-        (el) => el.length === 1
-      ),
-      waitForElement(wrapper, 'Button[type="submit"]', (el) => el.length === 1),
-      waitForElement(wrapper, 'img', (el) => el.length === 1),
-    ]);
-    return {
-      awxLogin,
-      loginForm,
-      usernameInput,
-      passwordInput,
-      submitButton,
-      loginHeaderLogo,
-    };
-  }
+function getUsernameInput(container) {
+  return container.querySelector('#pf-login-username-id');
+}
 
+function getPasswordInput(container) {
+  return container.querySelector('#pf-login-password-id');
+}
+
+function getSubmitButton() {
+  return screen.getByRole('button', { name: 'Log In' });
+}
+
+async function waitForLoginForm(container) {
+  await waitFor(() => expect(getUsernameInput(container)).toBeInTheDocument());
+}
+
+describe('<Login />', () => {
   beforeEach(() => {
     RootAPI.readAssetVariables.mockResolvedValue({
       data: {
@@ -96,59 +74,54 @@ describe('<Login />', () => {
   });
 
   test('initially renders without crashing', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<AWXLogin isAuthenticated={() => false} />);
-    });
-    const { usernameInput, passwordInput, submitButton } =
-      await findChildren(wrapper);
-    expect(usernameInput.props().value).toBe('');
-    expect(passwordInput.props().value).toBe('');
-    expect(submitButton.props().isDisabled).toBe(false);
-    expect(wrapper.find('AlertModal').length).toBe(0);
+    const { container } = renderWithContexts(
+      <AWXLogin isAuthenticated={() => false} />
+    );
+    await waitForLoginForm(container);
+
+    expect(getUsernameInput(container).value).toBe('');
+    expect(getPasswordInput(container).value).toBe('');
+    expect(getSubmitButton()).not.toBeDisabled();
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
   test('form has autocomplete off', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<AWXLogin isAuthenticated={() => false} />);
-    });
-    expect(wrapper.find('form[autoComplete="off"]').length).toBe(1);
+    const { container } = renderWithContexts(
+      <AWXLogin isAuthenticated={() => false} />
+    );
+    await waitForLoginForm(container);
+    expect(
+      container.querySelectorAll('form[autocomplete="off"]')
+    ).toHaveLength(1);
   });
 
   test('custom logo renders Brand component with correct src and alt', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <AWXLogin alt="Foo Application" isAuthenticated={() => false} />
-      );
-    });
-    const { loginHeaderLogo } = await findChildren(wrapper);
-    const { alt, src } = loginHeaderLogo.props();
-    expect([alt, src]).toEqual([
-      'Foo Application',
-      'data:image/jpeg;base64,abc123',
-    ]);
+    const { container } = renderWithContexts(
+      <AWXLogin alt="Foo Application" isAuthenticated={() => false} />
+    );
+    await waitForLoginForm(container);
+    const logo = container.querySelector('img');
+    expect(logo.getAttribute('alt')).toBe('Foo Application');
+    expect(logo.getAttribute('src')).toBe('data:image/jpeg;base64,abc123');
   });
 
   test('default logo renders Brand component with correct src and alt', async () => {
     RootAPI.read.mockResolvedValue({ data: {} });
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<AWXLogin isAuthenticated={() => false} />);
-    });
-    const { loginHeaderLogo } = await findChildren(wrapper);
-    const { alt, src } = loginHeaderLogo.props();
-    expect([alt, src]).toEqual(['AWX', 'static/media/Ascender_logo.svg']);
+    const { container } = renderWithContexts(
+      <AWXLogin isAuthenticated={() => false} />
+    );
+    await waitForLoginForm(container);
+    const logo = container.querySelector('img');
+    expect(logo.getAttribute('alt')).toBe('AWX');
+    expect(logo.getAttribute('src')).toBe('static/media/Ascender_logo.svg');
   });
 
   test('custom login info handled correctly', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<AWXLogin isAuthenticated={() => false} />);
-    });
-    await findChildren(wrapper);
-    expect(wrapper.find('footer').html()).toContain(
+    const { container } = renderWithContexts(
+      <AWXLogin isAuthenticated={() => false} />
+    );
+    await waitForLoginForm(container);
+    expect(container.querySelector('footer').outerHTML).toContain(
       '<footer class="pf-c-login__footer" data-cy="login-footer"><div id="custom-button">TEST</div></footer>'
     );
   });
@@ -166,33 +139,27 @@ describe('<Login />', () => {
         },
       })
     );
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<AWXLogin isAuthenticated={() => false} />);
-    });
-    const { loginHeaderLogo } = await findChildren(wrapper);
-    const { alt, src } = loginHeaderLogo.props();
-    expect([alt, src]).toEqual([null, 'static/media/Ascender_logo.svg']);
-    expect(wrapper.find('AlertModal').length).toBe(0);
+    const { container } = renderWithContexts(
+      <AWXLogin isAuthenticated={() => false} />
+    );
+    await waitForLoginForm(container);
+    const logo = container.querySelector('img');
+    expect(logo.getAttribute('alt')).toBe(null);
+    expect(logo.getAttribute('src')).toBe('static/media/Ascender_logo.svg');
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
   test('state maps to un/pw input value props', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<AWXLogin isAuthenticated={() => false} />);
-    });
-    await waitForElement(wrapper, 'LoginForm', (el) => el.length === 1);
-    await act(async () => {
-      wrapper.find('TextInputBase#pf-login-username-id').prop('onChange')('un');
-      wrapper.find('TextInputBase#pf-login-password-id').prop('onChange')('pw');
-    });
-    wrapper.update();
-    expect(
-      wrapper.find('TextInputBase#pf-login-username-id').prop('value')
-    ).toEqual('un');
-    expect(
-      wrapper.find('TextInputBase#pf-login-password-id').prop('value')
-    ).toEqual('pw');
+    const { container, user } = renderWithContexts(
+      <AWXLogin isAuthenticated={() => false} />
+    );
+    await waitForLoginForm(container);
+
+    await user.type(getUsernameInput(container), 'un');
+    await user.type(getPasswordInput(container), 'pw');
+
+    expect(getUsernameInput(container).value).toEqual('un');
+    expect(getPasswordInput(container).value).toEqual('pw');
   });
 
   test('handles input validation errors and clears on input value change', async () => {
@@ -209,90 +176,67 @@ describe('<Login />', () => {
       })
     );
 
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<AWXLogin isAuthenticated={() => false} />);
-    });
-    await waitForElement(wrapper, 'LoginForm', (el) => el.length === 1);
+    const { container, user } = renderWithContexts(
+      <AWXLogin isAuthenticated={() => false} />
+    );
+    await waitForLoginForm(container);
 
+    expect(getUsernameInput(container).value).toEqual('');
+    expect(getPasswordInput(container).value).toEqual('');
     expect(
-      wrapper.find('TextInputBase#pf-login-username-id').prop('value')
-    ).toEqual('');
-    expect(
-      wrapper.find('TextInputBase#pf-login-password-id').prop('value')
-    ).toEqual('');
-    expect(wrapper.find('FormHelperText').prop('isHidden')).toEqual(true);
+      container.querySelector('.pf-c-form__helper-text')
+    ).toHaveClass('pf-m-hidden');
 
-    await act(async () => {
-      wrapper.find('TextInputBase#pf-login-username-id').prop('onChange')('un');
-      wrapper.find('TextInputBase#pf-login-password-id').prop('onChange')('pw');
-    });
-    wrapper.update();
+    await user.type(getUsernameInput(container), 'un');
+    await user.type(getPasswordInput(container), 'pw');
 
-    expect(
-      wrapper.find('TextInputBase#pf-login-username-id').prop('value')
-    ).toEqual('un');
-    expect(
-      wrapper.find('TextInputBase#pf-login-password-id').prop('value')
-    ).toEqual('pw');
+    expect(getUsernameInput(container).value).toEqual('un');
+    expect(getPasswordInput(container).value).toEqual('pw');
 
-    await act(async () => {
-      wrapper.find('Button[type="submit"]').invoke('onClick')();
-    });
-    wrapper.update();
+    await user.click(getSubmitButton());
 
-    expect(wrapper.find('FormHelperText').prop('isHidden')).toEqual(false);
-    expect(
-      wrapper.find('TextInput#pf-login-username-id').prop('validated')
-    ).toEqual('error');
-    expect(
-      wrapper.find('TextInput#pf-login-password-id').prop('validated')
-    ).toEqual('error');
+    await waitFor(() =>
+      expect(
+        container.querySelector('.pf-c-form__helper-text')
+      ).not.toHaveClass('pf-m-hidden')
+    );
+    expect(getUsernameInput(container)).toHaveAttribute('aria-invalid', 'true');
+    expect(getPasswordInput(container)).toHaveAttribute('aria-invalid', 'true');
 
-    await act(async () => {
-      wrapper.find('TextInputBase#pf-login-username-id').prop('onChange')(
-        'foo'
-      );
-      wrapper.find('TextInputBase#pf-login-password-id').prop('onChange')(
-        'bar'
-      );
-    });
-    wrapper.update();
+    await user.clear(getUsernameInput(container));
+    await user.type(getUsernameInput(container), 'foo');
+    await user.clear(getPasswordInput(container));
+    await user.type(getPasswordInput(container), 'bar');
 
-    expect(
-      wrapper.find('TextInputBase#pf-login-username-id').prop('value')
-    ).toEqual('foo');
-    expect(
-      wrapper.find('TextInputBase#pf-login-password-id').prop('value')
-    ).toEqual('bar');
-    expect(wrapper.find('FormHelperText').prop('isHidden')).toEqual(true);
-    expect(
-      wrapper.find('TextInput#pf-login-username-id').prop('validated')
-    ).toEqual('default');
-    expect(
-      wrapper.find('TextInput#pf-login-password-id').prop('validated')
-    ).toEqual('default');
+    expect(getUsernameInput(container).value).toEqual('foo');
+    expect(getPasswordInput(container).value).toEqual('bar');
+    await waitFor(() =>
+      expect(
+        container.querySelector('.pf-c-form__helper-text')
+      ).toHaveClass('pf-m-hidden')
+    );
+    expect(getUsernameInput(container)).toHaveAttribute(
+      'aria-invalid',
+      'false'
+    );
+    expect(getPasswordInput(container)).toHaveAttribute(
+      'aria-invalid',
+      'false'
+    );
   });
 
   test('submit calls api.login successfully', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<AWXLogin isAuthenticated={() => false} />);
-    });
-    await waitForElement(wrapper, 'LoginForm', (el) => el.length === 1);
+    const { container, user } = renderWithContexts(
+      <AWXLogin isAuthenticated={() => false} />
+    );
+    await waitForLoginForm(container);
 
-    await act(async () => {
-      wrapper.find('TextInputBase#pf-login-username-id').prop('onChange')('un');
-      wrapper.find('TextInputBase#pf-login-password-id').prop('onChange')('pw');
-    });
-    wrapper.update();
+    await user.type(getUsernameInput(container), 'un');
+    await user.type(getPasswordInput(container), 'pw');
 
-    await act(async () => {
-      wrapper.find('Button[type="submit"]').invoke('onClick')();
-    });
-    wrapper.update();
+    await user.click(getSubmitButton());
 
-    expect(RootAPI.login).toHaveBeenCalledTimes(1);
+    await waitFor(() => expect(RootAPI.login).toHaveBeenCalledTimes(1));
     expect(RootAPI.login).toHaveBeenCalledWith('un', 'pw');
   });
 
@@ -301,36 +245,28 @@ describe('<Login />', () => {
     const history = createMemoryHistory({
       initialEntries: ['/login'],
     });
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<AWXLogin isAuthenticated={() => true} />, {
-        context: {
-          router: { history },
-          session: {
-            authRedirectTo: '/projects',
-            handleSessionContinue: () => {},
-            isSessionExpired: false,
-            isUserBeingLoggedOut: false,
-            loginRedirectOverride: null,
-            logout: () => {},
-            sessionCountdown: 60,
-            setAuthRedirectTo: () => {},
-          },
+    renderWithContexts(<AWXLogin isAuthenticated={() => true} />, {
+      context: {
+        router: { history },
+        session: {
+          authRedirectTo: '/projects',
+          handleSessionContinue: () => {},
+          isSessionExpired: false,
+          isUserBeingLoggedOut: false,
+          loginRedirectOverride: null,
+          logout: () => {},
+          sessionCountdown: 60,
+          setAuthRedirectTo: () => {},
         },
-      });
+      },
     });
-    expect(MeAPI.read).toHaveBeenCalled();
+    await waitFor(() => expect(MeAPI.read).toHaveBeenCalled());
     expect(window.localStorage.getItem).toHaveBeenCalledWith(SESSION_USER_ID);
     expect(window.localStorage.setItem).toHaveBeenCalledWith(
       SESSION_USER_ID,
       '1'
     );
-    await waitForElement(wrapper, 'Navigate', (el) => el.length === 1);
-    await waitForElement(
-      wrapper,
-      'Navigate',
-      (el) => el.props().to === '/home'
-    );
+    await waitFor(() => expect(history.location.pathname).toEqual('/home'));
   });
 
   test('render redirect to authRedirectTo when authenticated as a previous user', async () => {
@@ -338,38 +274,30 @@ describe('<Login />', () => {
     const history = createMemoryHistory({
       initialEntries: ['/login'],
     });
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<AWXLogin isAuthenticated={() => true} />, {
-        context: {
-          router: { history },
-          session: {
-            authRedirectTo: '/projects',
-            handleSessionContinue: () => {},
-            isSessionExpired: false,
-            isUserBeingLoggedOut: false,
-            loginRedirectOverride: null,
-            logout: () => {},
-            sessionCountdown: 60,
-            setAuthRedirectTo: () => {},
-          },
+    renderWithContexts(<AWXLogin isAuthenticated={() => true} />, {
+      context: {
+        router: { history },
+        session: {
+          authRedirectTo: '/projects',
+          handleSessionContinue: () => {},
+          isSessionExpired: false,
+          isUserBeingLoggedOut: false,
+          loginRedirectOverride: null,
+          logout: () => {},
+          sessionCountdown: 60,
+          setAuthRedirectTo: () => {},
         },
-      });
+      },
     });
 
-    wrapper.update();
-    expect(window.localStorage.getItem).toHaveBeenCalledWith(SESSION_USER_ID);
+    await waitFor(() =>
+      expect(window.localStorage.getItem).toHaveBeenCalledWith(SESSION_USER_ID)
+    );
     expect(window.localStorage.setItem).toHaveBeenCalledWith(
       SESSION_USER_ID,
       '42'
     );
-    wrapper.update();
-    await waitForElement(wrapper, 'Navigate', (el) => el.length === 1);
-    await waitForElement(
-      wrapper,
-      'Navigate',
-      (el) => el.props().to === '/projects'
-    );
+    await waitFor(() => expect(history.location.pathname).toEqual('/projects'));
   });
 
   test('GitHub auth buttons shown', async () => {
@@ -390,15 +318,24 @@ describe('<Login />', () => {
       },
     });
 
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<AWXLogin isAuthenticated={() => false} />);
-    });
-    wrapper.update();
-    expect(wrapper.find('GithubIcon').length).toBe(3);
-    expect(wrapper.find('AzureIcon').length).toBe(0);
-    expect(wrapper.find('GoogleIcon').length).toBe(0);
-    expect(wrapper.find('UserCircleIcon').length).toBe(0);
+    const { container } = renderWithContexts(
+      <AWXLogin isAuthenticated={() => false} />
+    );
+    await waitForLoginForm(container);
+    await waitFor(() =>
+      expect(
+        container.querySelectorAll('[data-cy^="social-auth-github"]')
+      ).toHaveLength(3)
+    );
+    expect(
+      container.querySelectorAll('[data-cy="social-auth-azure"]')
+    ).toHaveLength(0);
+    expect(
+      container.querySelectorAll('[data-cy="social-auth-google"]')
+    ).toHaveLength(0);
+    expect(
+      container.querySelectorAll('[data-cy="social-auth-saml"]')
+    ).toHaveLength(0);
   });
 
   test('Google auth button shown', async () => {
@@ -411,15 +348,24 @@ describe('<Login />', () => {
       },
     });
 
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<AWXLogin isAuthenticated={() => false} />);
-    });
-    wrapper.update();
-    expect(wrapper.find('GithubIcon').length).toBe(0);
-    expect(wrapper.find('AzureIcon').length).toBe(0);
-    expect(wrapper.find('GoogleIcon').length).toBe(1);
-    expect(wrapper.find('UserCircleIcon').length).toBe(0);
+    const { container } = renderWithContexts(
+      <AWXLogin isAuthenticated={() => false} />
+    );
+    await waitForLoginForm(container);
+    await waitFor(() =>
+      expect(
+        container.querySelectorAll('[data-cy="social-auth-google"]')
+      ).toHaveLength(1)
+    );
+    expect(
+      container.querySelectorAll('[data-cy^="social-auth-github"]')
+    ).toHaveLength(0);
+    expect(
+      container.querySelectorAll('[data-cy="social-auth-azure"]')
+    ).toHaveLength(0);
+    expect(
+      container.querySelectorAll('[data-cy="social-auth-saml"]')
+    ).toHaveLength(0);
   });
 
   test('Azure AD auth button shown', async () => {
@@ -432,15 +378,24 @@ describe('<Login />', () => {
       },
     });
 
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<AWXLogin isAuthenticated={() => false} />);
-    });
-    wrapper.update();
-    expect(wrapper.find('GithubIcon').length).toBe(0);
-    expect(wrapper.find('AzureIcon').length).toBe(1);
-    expect(wrapper.find('GoogleIcon').length).toBe(0);
-    expect(wrapper.find('UserCircleIcon').length).toBe(0);
+    const { container } = renderWithContexts(
+      <AWXLogin isAuthenticated={() => false} />
+    );
+    await waitForLoginForm(container);
+    await waitFor(() =>
+      expect(
+        container.querySelectorAll('[data-cy="social-auth-azure"]')
+      ).toHaveLength(1)
+    );
+    expect(
+      container.querySelectorAll('[data-cy^="social-auth-github"]')
+    ).toHaveLength(0);
+    expect(
+      container.querySelectorAll('[data-cy="social-auth-google"]')
+    ).toHaveLength(0);
+    expect(
+      container.querySelectorAll('[data-cy="social-auth-saml"]')
+    ).toHaveLength(0);
   });
 
   test('SAML auth buttons shown', async () => {
@@ -464,14 +419,23 @@ describe('<Login />', () => {
       },
     });
 
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<AWXLogin isAuthenticated={() => false} />);
-    });
-    wrapper.update();
-    expect(wrapper.find('GithubIcon').length).toBe(0);
-    expect(wrapper.find('AzureIcon').length).toBe(0);
-    expect(wrapper.find('GoogleIcon').length).toBe(0);
-    expect(wrapper.find('UserCircleIcon').length).toBe(3);
+    const { container } = renderWithContexts(
+      <AWXLogin isAuthenticated={() => false} />
+    );
+    await waitForLoginForm(container);
+    await waitFor(() =>
+      expect(
+        container.querySelectorAll('[data-cy="social-auth-saml"]')
+      ).toHaveLength(3)
+    );
+    expect(
+      container.querySelectorAll('[data-cy^="social-auth-github"]')
+    ).toHaveLength(0);
+    expect(
+      container.querySelectorAll('[data-cy="social-auth-azure"]')
+    ).toHaveLength(0);
+    expect(
+      container.querySelectorAll('[data-cy="social-auth-google"]')
+    ).toHaveLength(0);
   });
 });
