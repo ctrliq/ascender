@@ -1,10 +1,7 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { HostMetricsAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import HostMetrics from './HostMetrics';
 
@@ -23,14 +20,6 @@ const mockHostMetrics = [
   },
 ];
 
-function waitForLoaded(wrapper) {
-  return waitForElement(
-    wrapper,
-    'HostList',
-    (el) => el.find('ContentLoading').length === 0
-  );
-}
-
 describe('<HostMetrics />', () => {
   beforeEach(() => {
     HostMetricsAPI.read.mockResolvedValue({
@@ -46,24 +35,27 @@ describe('<HostMetrics />', () => {
   });
 
   test('initially renders successfully', async () => {
-    await act(async () => {
-      mountWithContexts(
-        <HostMetrics
-          match={{ path: '/hosts', url: '/hosts' }}
-          location={{ search: '', pathname: '/hosts' }}
-        />
-      );
-    });
+    renderWithContexts(
+      <HostMetrics
+        match={{ path: '/hosts', url: '/hosts' }}
+        location={{ search: '', pathname: '/hosts' }}
+      />
+    );
+    await waitFor(() =>
+      expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
+    );
   });
 
   test('HostMetrics are retrieved from the api and the components finishes loading', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<HostMetrics />);
-    });
-    await waitForLoaded(wrapper);
+    renderWithContexts(<HostMetrics />);
+    await waitFor(() =>
+      expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
+    );
 
     expect(HostMetricsAPI.read).toHaveBeenCalled();
-    expect(wrapper.find('HostMetricsListItem')).toHaveLength(1);
+    expect(screen.getByText('Host name')).toBeInTheDocument();
+    expect(
+      document.querySelectorAll('[id^="host_metrics-row-"]')
+    ).toHaveLength(1);
   });
 });
