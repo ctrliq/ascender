@@ -1,11 +1,8 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen } from '@testing-library/react';
 
 import { OrganizationsAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import OrganizationTeamList from './OrganizationTeamList';
 
@@ -67,24 +64,10 @@ describe('<OrganizationTeamList />', () => {
     jest.clearAllMocks();
   });
 
-  test('renders successfully', async () => {
-    await act(async () => {
-      mountWithContexts(
-        <OrganizationTeamList
-          id={1}
-          searchString=""
-          location={{ search: '', pathname: '/organizations/1/teams' }}
-        />
-      );
-    });
-  });
+  test('should load teams on mount with expected query params', async () => {
+    renderWithContexts(<OrganizationTeamList id={1} searchString="" />);
+    await screen.findByRole('link', { name: 'one' });
 
-  test('should load teams on mount', async () => {
-    await act(async () => {
-      mountWithContexts(<OrganizationTeamList id={1} searchString="" />).find(
-        'OrganizationTeamList'
-      );
-    });
     expect(OrganizationsAPI.readTeams).toHaveBeenCalledWith(1, {
       page: 1,
       page_size: 5,
@@ -92,38 +75,22 @@ describe('<OrganizationTeamList />', () => {
     });
   });
 
-  test('should pass fetched teams to PaginatedTable', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <OrganizationTeamList id={1} searchString="" />
-      );
-    });
-    wrapper.update();
+  test('should render the fetched teams', async () => {
+    renderWithContexts(<OrganizationTeamList id={1} searchString="" />);
 
-    const list = wrapper.find('PaginatedTable');
-    expect(list.prop('items')).toEqual(listData.data.results);
-    expect(list.prop('itemCount')).toEqual(listData.data.count);
-    expect(list.prop('qsConfig')).toEqual({
-      namespace: 'team',
-      dateFields: ['modified', 'created'],
-      defaultParams: {
-        page: 1,
-        page_size: 5,
-        order_by: 'name',
-      },
-      integerFields: ['page', 'page_size'],
+    expect(await screen.findByRole('link', { name: 'one' })).toBeInTheDocument();
+    ['two', 'three', 'four', 'five'].forEach((name) => {
+      expect(screen.getByRole('link', { name })).toBeInTheDocument();
     });
   });
 
-  test('should show content error for failed instance group fetch', async () => {
+  test('should show content error for failed team fetch', async () => {
     OrganizationsAPI.readTeams.mockImplementationOnce(() =>
       Promise.reject(new Error())
     );
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<OrganizationTeamList id={1} />);
-    });
-    await waitForElement(wrapper, 'ContentError', (el) => el.length === 1);
+    renderWithContexts(<OrganizationTeamList id={1} />);
+    expect(
+      await screen.findByText('Something went wrong...')
+    ).toBeInTheDocument();
   });
 });

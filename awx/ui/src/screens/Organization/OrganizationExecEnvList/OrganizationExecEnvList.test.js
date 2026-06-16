@@ -1,11 +1,8 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen } from '@testing-library/react';
 
 import { OrganizationsAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import OrganizationExecEnvList from './OrganizationExecEnvList';
 
@@ -64,53 +61,41 @@ const mockOrganization = {
 const options = { data: { actions: { POST: {}, GET: {} } } };
 
 describe('<OrganizationExecEnvList/>', () => {
-  let wrapper;
-
-  test('should mount successfully', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <OrganizationExecEnvList organization={mockOrganization} />
-      );
-    });
-    await waitForElement(
-      wrapper,
-      'OrganizationExecEnvList',
-      (el) => el.length > 0
-    );
-  });
-
-  test('should have data fetched and render 3 rows', async () => {
+  beforeEach(() => {
     OrganizationsAPI.readExecutionEnvironments.mockResolvedValue(
       executionEnvironments
     );
+    OrganizationsAPI.readExecutionEnvironmentsOptions.mockResolvedValue(options);
+  });
 
-    OrganizationsAPI.readExecutionEnvironmentsOptions.mockResolvedValue(
-      options
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('should have data fetched and render 3 rows', async () => {
+    renderWithContexts(
+      <OrganizationExecEnvList organization={mockOrganization} />
     );
 
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <OrganizationExecEnvList organization={mockOrganization} />
-      );
-    });
-    await waitForElement(
-      wrapper,
-      'OrganizationExecEnvList',
-      (el) => el.length > 0
-    );
-
-    expect(wrapper.find('OrganizationExecEnvListItem').length).toBe(3);
+    expect(
+      await screen.findByText('https://localhost.com/image/disk')
+    ).toBeInTheDocument();
+    expect(screen.getByText('test/image123')).toBeInTheDocument();
+    expect(screen.getByText('test/test')).toBeInTheDocument();
     expect(OrganizationsAPI.readExecutionEnvironments).toHaveBeenCalled();
-    expect(OrganizationsAPI.readExecutionEnvironmentsOptions).toHaveBeenCalled();
+    expect(
+      OrganizationsAPI.readExecutionEnvironmentsOptions
+    ).toHaveBeenCalled();
   });
 
   test('should not render add button', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <OrganizationExecEnvList organization={mockOrganization} />
-      );
-    });
-    waitForElement(wrapper, 'OrganizationExecEnvList', (el) => el.length > 0);
-    expect(wrapper.find('ToolbarAddButton').length).toBe(0);
+    renderWithContexts(
+      <OrganizationExecEnvList organization={mockOrganization} />
+    );
+    await screen.findByText('https://localhost.com/image/disk');
+    expect(screen.queryByRole('link', { name: 'Add' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Add' })
+    ).not.toBeInTheDocument();
   });
 });

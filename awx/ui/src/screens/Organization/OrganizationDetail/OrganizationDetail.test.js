@@ -1,11 +1,12 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 
 import { OrganizationsAPI, CredentialsAPI } from 'api';
+import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails';
 import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+  renderWithContexts,
+  assertDetail,
+} from '../../../../testUtils/rtlContexts';
 
 import OrganizationDetail from './OrganizationDetail';
 
@@ -53,120 +54,78 @@ describe('<OrganizationDetail />', () => {
   });
 
   test('initially renders successfully', async () => {
-    await act(async () => {
-      mountWithContexts(<OrganizationDetail organization={mockOrganization} />);
-    });
+    renderWithContexts(<OrganizationDetail organization={mockOrganization} />);
+    expect(await screen.findByText('Name')).toBeInTheDocument();
   });
 
   test('should request instance groups from api', async () => {
-    await act(async () => {
-      mountWithContexts(<OrganizationDetail organization={mockOrganization} />);
-    });
+    renderWithContexts(<OrganizationDetail organization={mockOrganization} />);
+    await screen.findByText('Name');
     expect(OrganizationsAPI.readInstanceGroups).toHaveBeenCalledTimes(1);
   });
 
-  test('should have proper number of delete detail requests', async () => {
-    let component;
-    await act(async () => {
-      component = mountWithContexts(
-        <OrganizationDetail organization={mockOrganization} />
-      );
-    });
-    await waitForElement(component, 'ContentLoading', (el) => el.length === 0);
-
-    expect(
-      component.find('DeleteButton').prop('deleteDetailsRequests')
-    ).toHaveLength(7);
+  test('should build the proper number of delete detail requests', () => {
+    const deleteDetailsRequests =
+      relatedResourceDeleteRequests((str) => str).organization(mockOrganization);
+    expect(deleteDetailsRequests).toHaveLength(7);
   });
 
   test('should render the expected instance group', async () => {
-    let component;
-    await act(async () => {
-      component = mountWithContexts(
-        <OrganizationDetail organization={mockOrganization} />
-      );
-    });
-    await waitForElement(component, 'ContentLoading', (el) => el.length === 0);
-    expect(
-      component
-        .find('Label')
-        .findWhere((el) => el.text() === 'One')
-        .exists()
-    ).toBe(true);
+    renderWithContexts(<OrganizationDetail organization={mockOrganization} />);
+    expect(await screen.findByText('One')).toBeInTheDocument();
+    expect(screen.getByText('Two')).toBeInTheDocument();
   });
 
   test('should render Details', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <OrganizationDetail organization={mockOrganization} />
-      );
-    });
-    const testParams = [
-      { label: 'Name', value: 'Foo' },
-      { label: 'Description', value: 'Bar' },
-      { label: 'Created', value: '7/7/2015, 5:21:26 PM' },
-      { label: 'Last Modified', value: '8/11/2019, 7:47:37 PM' },
-      { label: 'Max Hosts', value: '0' },
-      { label: 'Default Execution Environment', value: 'Default EE' },
-    ];
-    for (let i = 0; i < testParams.length; i++) {
-      const { label, value } = testParams[i];
-      // eslint-disable-next-line no-await-in-loop
-      const detail = await waitForElement(wrapper, `Detail[label="${label}"]`);
-      expect(detail.find('dt').text()).toBe(label);
-      expect(detail.find('dd').text()).toBe(value);
-    }
+    renderWithContexts(<OrganizationDetail organization={mockOrganization} />);
+    await screen.findByText('Name');
+
+    assertDetail('Name', 'Foo');
+    assertDetail('Description', 'Bar');
+    assertDetail('Created', '7/7/2015, 5:21:26 PM');
+    assertDetail('Last Modified', '8/11/2019, 7:47:37 PM');
+    assertDetail('Max Hosts', '0');
+    assertDetail('Default Execution Environment', 'Default EE');
   });
 
   test('should show edit button for users with edit permission', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <OrganizationDetail organization={mockOrganization} />
-      );
-    });
-    const editButton = await waitForElement(
-      wrapper,
-      'OrganizationDetail Button[aria-label="Edit"]'
-    );
-    expect(editButton.text()).toEqual('Edit');
-    expect(editButton.prop('to')).toBe('/organizations/undefined/edit');
+    renderWithContexts(<OrganizationDetail organization={mockOrganization} />);
+    const editButton = await screen.findByRole('link', { name: 'Edit' });
+    expect(editButton).toHaveTextContent('Edit');
+    expect(editButton).toHaveAttribute('href', '/organizations/undefined/edit');
   });
 
   test('should hide edit button for users without edit permission', async () => {
-    const readOnlyOrg = { ...mockOrganization };
-    readOnlyOrg.summary_fields.user_capabilities.edit = false;
+    const readOnlyOrg = {
+      ...mockOrganization,
+      summary_fields: {
+        ...mockOrganization.summary_fields,
+        user_capabilities: {
+          ...mockOrganization.summary_fields.user_capabilities,
+          edit: false,
+        },
+      },
+    };
 
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <OrganizationDetail organization={readOnlyOrg} />
-      );
-    });
-    await waitForElement(wrapper, 'OrganizationDetail');
-    expect(
-      wrapper.find('OrganizationDetail Button[aria-label="Edit"]').length
-    ).toBe(0);
+    renderWithContexts(<OrganizationDetail organization={readOnlyOrg} />);
+    await screen.findByText('Name');
+    expect(screen.queryByRole('link', { name: 'Edit' })).not.toBeInTheDocument();
   });
 
   test('expected api calls are made for delete', async () => {
     OrganizationsAPI.readInstanceGroups.mockResolvedValue({ data: {} });
+    OrganizationsAPI.destroy.mockResolvedValueOnce({});
 
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <OrganizationDetail organization={mockOrganization} />
-      );
-    });
-    await waitForElement(
-      wrapper,
-      'OrganizationDetail Button[aria-label="Delete"]'
+    const { user } = renderWithContexts(
+      <OrganizationDetail organization={mockOrganization} />
     );
-    await act(async () => {
-      wrapper.find('DeleteButton').invoke('onConfirm')();
-    });
-    expect(OrganizationsAPI.destroy).toHaveBeenCalledTimes(1);
+
+    await user.click(await screen.findByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'Confirm Delete' })
+    );
+
+    await waitFor(() => expect(OrganizationsAPI.destroy).toHaveBeenCalledTimes(1));
   });
 
   test('should show content error for failed instance group fetch', async () => {
@@ -174,13 +133,10 @@ describe('<OrganizationDetail />', () => {
       Promise.reject(new Error())
     );
 
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <OrganizationDetail organization={mockOrganization} />
-      );
-    });
-    await waitForElement(wrapper, 'ContentError', (el) => el.length === 1);
+    renderWithContexts(<OrganizationDetail organization={mockOrganization} />);
+    expect(
+      await screen.findByText('Something went wrong...')
+    ).toBeInTheDocument();
   });
 
   test('Error dialog shown for failed deletion', async () => {
@@ -188,31 +144,20 @@ describe('<OrganizationDetail />', () => {
       Promise.reject(new Error())
     );
 
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <OrganizationDetail organization={mockOrganization} />
-      );
-    });
-    await waitForElement(
-      wrapper,
-      'OrganizationDetail Button[aria-label="Delete"]'
+    const { user } = renderWithContexts(
+      <OrganizationDetail organization={mockOrganization} />
     );
-    await act(async () => {
-      wrapper.find('DeleteButton').invoke('onConfirm')();
-    });
-    await waitForElement(
-      wrapper,
-      'Modal[title="Error!"]',
-      (el) => el.length === 1
+
+    await user.click(await screen.findByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'Confirm Delete' })
     );
-    await act(async () => {
-      wrapper.find('Modal[title="Error!"]').invoke('onClose')();
-    });
-    await waitForElement(
-      wrapper,
-      'Modal[title="Error!"]',
-      (el) => el.length === 0
+
+    expect(await screen.findByText('Error!')).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Close' }));
+    await waitFor(() =>
+      expect(screen.queryByText('Error!')).not.toBeInTheDocument()
     );
   });
 
@@ -223,36 +168,25 @@ describe('<OrganizationDetail />', () => {
       },
     });
 
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <OrganizationDetail organization={mockOrganization} />
-      );
-    });
-    wrapper.update();
-    const instance_groups_detail = wrapper
-      .find(`Detail[label="Instance Groups"]`)
-      .at(0);
-    expect(instance_groups_detail.prop('isEmpty')).toEqual(true);
+    renderWithContexts(<OrganizationDetail organization={mockOrganization} />);
+    await screen.findByText('Name');
+    // an empty Instance Groups detail is not rendered at all
+    expect(screen.queryByText('Instance Groups')).not.toBeInTheDocument();
   });
 
   test('should not load galaxy credentials', async () => {
     OrganizationsAPI.readInstanceGroups.mockResolvedValue({ data: {} });
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <OrganizationDetail
-          organization={{
-            ...mockOrganization,
-            credential: [],
-          }}
-        />
-      );
-    });
-    wrapper.update();
-    const galaxy_credentials_detail = wrapper
-      .find(`Detail[label="Galaxy Credentials"]`)
-      .at(0);
-    expect(galaxy_credentials_detail.prop('isEmpty')).toEqual(true);
+
+    renderWithContexts(
+      <OrganizationDetail
+        organization={{
+          ...mockOrganization,
+          galaxy_credentials: [],
+        }}
+      />
+    );
+    await screen.findByText('Name');
+    // an empty Galaxy Credentials detail is not rendered at all
+    expect(screen.queryByText('Galaxy Credentials')).not.toBeInTheDocument();
   });
 });

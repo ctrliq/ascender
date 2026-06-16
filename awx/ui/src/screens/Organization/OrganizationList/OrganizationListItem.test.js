@@ -1,109 +1,50 @@
 import React from 'react';
-import { MemoryRouter } from 'react-router-dom';
-import { I18nProvider } from '@lingui/react';
+import { screen } from '@testing-library/react';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
-import { i18n } from '@lingui/core';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
-
-import english from '../../../locales/en/messages';
 import OrganizationListItem from './OrganizationListItem';
 
-i18n.load({ en: english });
-i18n.activate('en');
+function renderItem(edit) {
+  return renderWithContexts(
+    <table>
+      <tbody>
+        <OrganizationListItem
+          organization={{
+            id: 1,
+            name: 'Org',
+            summary_fields: {
+              related_field_counts: {
+                users: 1,
+                teams: 1,
+              },
+              user_capabilities: {
+                edit,
+              },
+            },
+          }}
+          detailUrl="/organization/1"
+          isSelected
+          onSelect={() => {}}
+        />
+      </tbody>
+    </table>
+  );
+}
 
 describe('<OrganizationListItem />', () => {
   test('initially renders successfully', () => {
-    mountWithContexts(
-      <I18nProvider i18n={i18n}>
-        <MemoryRouter initialEntries={['/organizations']} initialIndex={0}>
-          <table>
-            <tbody>
-              <OrganizationListItem
-                organization={{
-                  id: 1,
-                  name: 'Org',
-                  summary_fields: {
-                    related_field_counts: {
-                      users: 1,
-                      teams: 1,
-                    },
-                    user_capabilities: {
-                      edit: true,
-                    },
-                  },
-                }}
-                detailUrl="/organization/1"
-                isSelected
-                onSelect={() => {}}
-              />
-            </tbody>
-          </table>
-        </MemoryRouter>
-      </I18nProvider>
-    );
+    renderItem(true);
+    expect(screen.getByRole('row')).toBeInTheDocument();
+    expect(screen.getByText('Org')).toBeInTheDocument();
   });
 
   test('edit button shown to users with edit capabilities', () => {
-    const wrapper = mountWithContexts(
-      <I18nProvider i18n={i18n}>
-        <MemoryRouter initialEntries={['/organizations']} initialIndex={0}>
-          <table>
-            <tbody>
-              <OrganizationListItem
-                organization={{
-                  id: 1,
-                  name: 'Org',
-                  summary_fields: {
-                    related_field_counts: {
-                      users: 1,
-                      teams: 1,
-                    },
-                    user_capabilities: {
-                      edit: true,
-                    },
-                  },
-                }}
-                detailUrl="/organization/1"
-                isSelected
-                onSelect={() => {}}
-              />
-            </tbody>
-          </table>
-        </MemoryRouter>
-      </I18nProvider>
-    );
-    expect(wrapper.find('PencilAltIcon').exists()).toBeTruthy();
+    renderItem(true);
+    expect(screen.getByLabelText('Edit Organization')).toBeInTheDocument();
   });
 
   test('edit button hidden from users without edit capabilities', () => {
-    const wrapper = mountWithContexts(
-      <I18nProvider i18n={i18n}>
-        <MemoryRouter initialEntries={['/organizations']} initialIndex={0}>
-          <table>
-            <tbody>
-              <OrganizationListItem
-                organization={{
-                  id: 1,
-                  name: 'Org',
-                  summary_fields: {
-                    related_field_counts: {
-                      users: 1,
-                      teams: 1,
-                    },
-                    user_capabilities: {
-                      edit: false,
-                    },
-                  },
-                }}
-                detailUrl="/organization/1"
-                isSelected
-                onSelect={() => {}}
-              />
-            </tbody>
-          </table>
-        </MemoryRouter>
-      </I18nProvider>
-    );
-    expect(wrapper.find('PencilAltIcon').exists()).toBeFalsy();
+    renderItem(false);
+    expect(screen.queryByLabelText('Edit Organization')).not.toBeInTheDocument();
   });
 });

@@ -1,57 +1,41 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen } from '@testing-library/react';
 
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import OrganizationTeamListItem from './OrganizationTeamListItem';
 
-const team = {
+const buildTeam = (edit = true) => ({
   id: 1,
   name: 'one',
   url: '/org/team/1',
-  summary_fields: { user_capabilities: { edit: true, delete: true } },
-};
+  summary_fields: { user_capabilities: { edit, delete: true } },
+});
+
+function renderItem(team) {
+  return renderWithContexts(
+    <table>
+      <tbody>
+        <OrganizationTeamListItem team={team} detailUrl="/teams/1" />
+      </tbody>
+    </table>
+  );
+}
 
 describe('<OrganizationTeamListItem />', () => {
-  let wrapper;
-  test('should mount properly', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <table>
-          <tbody>
-            <OrganizationTeamListItem team={team} detailUrl="/teams/1" />
-          </tbody>
-        </table>
-      );
-    });
-    expect(wrapper.find('OrganizationTeamListItem').length).toBe(1);
+  test('should mount properly', () => {
+    renderItem(buildTeam());
+    expect(screen.getByRole('row')).toBeInTheDocument();
   });
 
-  test('should render proper data', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <table>
-          <tbody>
-            <OrganizationTeamListItem team={team} detailUrl="/teams/1" />
-          </tbody>
-        </table>
-      );
-    });
-    expect(wrapper.find(`Td`).first().text()).toBe('one');
-    expect(wrapper.find('PencilAltIcon').length).toBe(1);
+  test('should render proper data', () => {
+    renderItem(buildTeam());
+    expect(screen.getByRole('link', { name: 'one' })).toBeInTheDocument();
+    expect(screen.getByLabelText('Edit Team')).toBeInTheDocument();
   });
 
-  test('should not render edit button', async () => {
-    team.summary_fields.user_capabilities.edit = false;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <table>
-          <tbody>
-            <OrganizationTeamListItem team={team} detailUrl="/teams/1" />
-          </tbody>
-        </table>
-      );
-    });
-    expect(wrapper.find('PencilAltIcon').length).toBe(0);
+  test('should not render edit button', () => {
+    renderItem(buildTeam(false));
+    expect(screen.queryByLabelText('Edit Team')).not.toBeInTheDocument();
   });
 });

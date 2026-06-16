@@ -1,14 +1,36 @@
 import React from 'react';
 import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { OrganizationsAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import OrganizationEdit from './OrganizationEdit';
 
 jest.mock('../../../api');
+
+// Drive only OrganizationEdit's handleSubmit/handleCancel; the form's own
+// fields are covered by OrganizationForm's suite.
+let formProps;
+jest.mock('../shared/OrganizationForm', () => {
+  const MockOrganizationForm = (props) => {
+    formProps = props;
+    return (
+      <div data-testid="organization-form">
+        <button
+          type="button"
+          aria-label="Save"
+          onClick={() => props.onSubmit({}, [], [])}
+        >
+          Save
+        </button>
+        <button type="button" aria-label="Cancel" onClick={props.onCancel}>
+          Cancel
+        </button>
+      </div>
+    );
+  };
+  return MockOrganizationForm;
+});
 
 describe('<OrganizationEdit />', () => {
   const mockData = {
@@ -28,11 +50,14 @@ describe('<OrganizationEdit />', () => {
     },
   };
 
+  afterEach(() => {
+    jest.clearAllMocks();
+    formProps = undefined;
+  });
+
   test('onSubmit should call api update', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<OrganizationEdit organization={mockData} />);
-    });
+    renderWithContexts(<OrganizationEdit organization={mockData} />);
+    await screen.findByTestId('organization-form');
 
     const updatedOrgData = {
       name: 'new name',
@@ -40,17 +65,15 @@ describe('<OrganizationEdit />', () => {
       default_environment: null,
     };
     await act(async () => {
-      wrapper.find('OrganizationForm').prop('onSubmit')(updatedOrgData, [], []);
+      formProps.onSubmit(updatedOrgData, [], []);
     });
 
     expect(OrganizationsAPI.update).toHaveBeenCalledWith(1, updatedOrgData);
   });
 
   test('onSubmit associates and disassociates instance groups', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<OrganizationEdit organization={mockData} />);
-    });
+    renderWithContexts(<OrganizationEdit organization={mockData} />);
+    await screen.findByTestId('organization-form');
 
     const updatedOrgData = {
       name: 'new name',
@@ -74,12 +97,9 @@ describe('<OrganizationEdit />', () => {
     ];
 
     await act(async () => {
-      wrapper.find('OrganizationForm').invoke('onSubmit')(
-        updatedOrgData,
-        newInstanceGroups,
-        oldInstanceGroups
-      );
+      formProps.onSubmit(updatedOrgData, newInstanceGroups, oldInstanceGroups);
     });
+
     expect(OrganizationsAPI.orderInstanceGroups).toHaveBeenCalledWith(
       mockData.id,
       newInstanceGroups,
@@ -98,17 +118,14 @@ describe('<OrganizationEdit />', () => {
       },
     });
     const history = createMemoryHistory({});
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <OrganizationEdit organization={mockData} />,
-        { context: { router: { history } } }
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    await act(async () => {
-      wrapper.find('button[aria-label="Cancel"]').invoke('onClick')();
-    });
+    const { user } = renderWithContexts(
+      <OrganizationEdit organization={mockData} />,
+      { context: { router: { history } } }
+    );
+    await screen.findByTestId('organization-form');
+
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
+
     expect(history.location.pathname).toEqual('/organizations/1/details');
   });
 });
