@@ -1,7 +1,7 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, within } from '@testing-library/react';
 import { LabelsAPI } from 'api';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import LabelSelect from './LabelSelect';
 
 jest.mock('../../api');
@@ -11,38 +11,47 @@ const options = [
   { id: 2, name: 'two' },
 ];
 
+// Open the typeahead by clicking its toggle (the Select renders a toggle
+// button labelled "Options menu"), then return the listbox's option nodes.
+async function openAndGetOptions(user) {
+  await user.click(screen.getByRole('button', { name: 'Options menu' }));
+  const listbox = await screen.findByRole('listbox');
+  return within(listbox).getAllByRole('option');
+}
+
 describe('<LabelSelect />', () => {
   afterEach(() => {
     jest.resetAllMocks();
   });
 
   test('should fetch labels', async () => {
-    LabelsAPI.read.mockReturnValue({
+    LabelsAPI.read.mockResolvedValue({
       data: { results: options },
     });
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <LabelSelect value={[]} onError={() => {}} onChange={() => {}} />
-      );
-    });
+    const { user } = renderWithContexts(
+      <LabelSelect value={[]} onError={() => {}} onChange={() => {}} />
+    );
 
+    // the toggle is disabled until the labels load
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'Options menu' })).toBeEnabled()
+    );
     expect(LabelsAPI.read).toHaveBeenCalledTimes(1);
-    wrapper.find('SelectToggle').simulate('click');
-    const selectOptions = wrapper.find('SelectOption');
+
+    const selectOptions = await openAndGetOptions(user);
     expect(selectOptions).toHaveLength(2);
-    expect(selectOptions.at(0).prop('value')).toEqual(options[0]);
-    expect(selectOptions.at(1).prop('value')).toEqual(options[1]);
+    expect(selectOptions[0]).toHaveTextContent('one');
+    expect(selectOptions[1]).toHaveTextContent('two');
   });
 
   test('should fetch two pages labels if present', async () => {
-    await LabelsAPI.read.mockResolvedValueOnce({
+    LabelsAPI.read.mockResolvedValueOnce({
       data: {
         results: options,
         next: '/foo?page=2',
       },
     });
-    await LabelsAPI.read.mockResolvedValueOnce({
+    LabelsAPI.read.mockResolvedValueOnce({
       data: {
         results: [
           { id: 3, name: 'three' },
@@ -50,39 +59,47 @@ describe('<LabelSelect />', () => {
         ],
       },
     });
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <LabelSelect value={[]} onError={() => {}} onChange={() => {}} />
-      );
-    });
-    wrapper.update();
+    const { user } = renderWithContexts(
+      <LabelSelect value={[]} onError={() => {}} onChange={() => {}} />
+    );
 
-    expect(LabelsAPI.read).toHaveBeenCalledTimes(2);
-    wrapper.find('SelectToggle').simulate('click');
-    const selectOptions = wrapper.find('SelectOption');
+    await waitFor(() => expect(LabelsAPI.read).toHaveBeenCalledTimes(2));
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'Options menu' })).toBeEnabled()
+    );
+
+    const selectOptions = await openAndGetOptions(user);
     expect(selectOptions).toHaveLength(4);
   });
+
   test('Generate a label', async () => {
-    let wrapper;
     const onChange = jest.fn();
-    LabelsAPI.read.mockReturnValue({
+    LabelsAPI.read.mockResolvedValue({
       data: {
-        options,
+        results: options,
       },
     });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <LabelSelect value={[]} onError={() => {}} onChange={onChange} />
-      );
-    });
-    await wrapper.find('Select').invoke('onSelect')({}, 'foo');
+    const { user } = renderWithContexts(
+      <LabelSelect value={[]} onError={() => {}} onChange={onChange} />
+    );
+
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'Options menu' })).toBeEnabled()
+    );
+
+    // typing a non-matching value surfaces an isCreatable "create" option;
+    // selecting it calls onChange with the new {id, name} label
+    const input = screen.getByRole('textbox');
+    await user.type(input, 'foo');
+    const createOption = await screen.findByText(/foo/);
+    await user.click(createOption);
+
     expect(onChange).toHaveBeenCalledWith([{ id: 'foo', name: 'foo' }]);
   });
+
   test('should handle read-only labels', async () => {
-    let wrapper;
     const onChange = jest.fn();
-    LabelsAPI.read.mockReturnValue({
+    LabelsAPI.read.mockResolvedValue({
       data: {
         results: [
           { id: 1, name: 'read only' },
@@ -90,22 +107,26 @@ describe('<LabelSelect />', () => {
         ],
       },
     });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <LabelSelect
-          value={[
-            { id: 1, name: 'read only', isReadOnly: true },
-            { id: 2, name: 'not read only' },
-          ]}
-          onError={() => {}}
-          onChange={onChange}
-        />
-      );
-    });
-    wrapper.find('SelectToggle').simulate('click');
-    const selectOptions = wrapper.find('SelectOption');
+    const { user } = renderWithContexts(
+      <LabelSelect
+        value={[
+          { id: 1, name: 'read only', isReadOnly: true },
+          { id: 2, name: 'not read only' },
+        ]}
+        onError={() => {}}
+        onChange={onChange}
+      />
+    );
+
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'Options menu' })).toBeEnabled()
+    );
+
+    const selectOptions = await openAndGetOptions(user);
     expect(selectOptions).toHaveLength(2);
-    expect(selectOptions.at(0).prop('isDisabled')).toBe(true);
-    expect(selectOptions.at(1).prop('isDisabled')).toBe(false);
+    // PF renders a disabled SelectOption with the pf-m-disabled modifier class
+    // (and a disabled checkbox); the enabled option lacks it
+    expect(selectOptions[0]).toHaveClass('pf-m-disabled');
+    expect(selectOptions[1]).not.toHaveClass('pf-m-disabled');
   });
 });

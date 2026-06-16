@@ -1,34 +1,48 @@
 import React from 'react';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { screen, within } from '@testing-library/react';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import TagMultiSelect from './TagMultiSelect';
 
+function getChipGroup() {
+  return screen.getByRole('group', { name: 'Chip group category' });
+}
+
 describe('<TagMultiSelect />', () => {
-  it('should render Select', () => {
-    const wrapper = mountWithContexts(
-      <TagMultiSelect value="foo,bar" onChange={jest.fn()} />
+  it('should render Select with a chip per value', () => {
+    renderWithContexts(<TagMultiSelect value="foo,bar" onChange={jest.fn()} />);
+    const chips = within(getChipGroup()).getAllByRole('listitem');
+    expect(chips).toHaveLength(2);
+    expect(chips[0]).toHaveTextContent('foo');
+    expect(chips[1]).toHaveTextContent('bar');
+  });
+
+  it('should not treat empty string as an option', async () => {
+    const { user } = renderWithContexts(
+      <TagMultiSelect value="" onChange={jest.fn()} />
     );
-    wrapper.find('input').simulate('focus');
-    const options = wrapper.find('Chip');
-    expect(options).toHaveLength(2);
-    expect(options.at(0).text()).toEqual('foo');
-    expect(options.at(1).text()).toEqual('bar');
+    expect(screen.queryByRole('group', { name: 'Chip group category' })).toBeNull();
+
+    await user.click(screen.getByRole('button', { name: 'Options menu' }));
+    expect(
+      screen.getByRole('button', { name: 'Options menu' })
+    ).toHaveAttribute('aria-expanded', 'true');
+    expect(
+      screen.queryByRole('group', { name: 'Chip group category' })
+    ).toBeNull();
   });
 
-  it('should not treat empty string as an option', () => {
-    const wrapper = mountWithContexts(<TagMultiSelect value="" onChange={jest.fn()} />);
-    wrapper.find('SelectToggle').simulate('click');
-    expect(wrapper.find('Select').prop('isOpen')).toEqual(true);
-    expect(wrapper.find('Chip')).toHaveLength(0);
-  });
-
-  it('should trigger onChange', () => {
+  it('should trigger onChange when an existing option is selected', async () => {
     const onChange = jest.fn();
-    const wrapper = mountWithContexts(
+    const { user } = renderWithContexts(
       <TagMultiSelect value="foo,bar" onChange={onChange} />
     );
-    wrapper.find('input').simulate('focus');
 
-    wrapper.find('Select').invoke('onSelect')(null, 'baz');
+    await user.click(screen.getByRole('button', { name: 'Options menu' }));
+    // selecting an unselected typed option adds it to the value string
+    const input = screen.getByRole('textbox');
+    await user.type(input, 'baz');
+    await user.click(screen.getByRole('option', { name: /Create.*baz/ }));
+
     expect(onChange).toHaveBeenCalledWith('foo,bar,baz');
   });
 });

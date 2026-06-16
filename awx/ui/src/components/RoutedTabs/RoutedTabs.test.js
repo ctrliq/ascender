@@ -1,11 +1,10 @@
-/* eslint-disable react/jsx-pascal-case */
-import React from 'react';
-import { createMemoryHistory } from 'history';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
-import RoutedTabs from './RoutedTabs';
 
-let wrapper;
-let history;
+import React from 'react';
+import { screen, waitFor } from '@testing-library/react';
+import { createMemoryHistory } from 'history';
+import { Routes, Route } from 'react-router-dom-v5-compat';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
+import RoutedTabs from './RoutedTabs';
 
 const tabs = [
   { name: 'Details', link: '/organizations/19/details', id: 1 },
@@ -14,35 +13,54 @@ const tabs = [
   { name: 'Notification', link: '/organizations/19/notification', id: 4 },
 ];
 
-describe('<RoutedTabs />', () => {
-  beforeEach(() => {
-    history = createMemoryHistory({
-      initialEntries: ['/organizations/19/teams'],
-    });
-    wrapper = mountWithContexts(<RoutedTabs tabsArray={tabs} />, {
+function renderTabs(initialEntry) {
+  const history = createMemoryHistory({
+    initialEntries: [initialEntry],
+  });
+  const utils = renderWithContexts(
+    <Routes>
+      <Route
+        path="/organizations/19/*"
+        element={<RoutedTabs tabsArray={tabs} />}
+      />
+    </Routes>,
+    {
       context: { router: { history } },
-    });
-  });
+    }
+  );
+  return { ...utils, history };
+}
 
+describe('<RoutedTabs />', () => {
   test('RoutedTabs renders successfully', () => {
-    expect(wrapper.find('Tabs li')).toHaveLength(4);
+    renderTabs('/organizations/19/teams');
+    expect(screen.getAllByRole('tab')).toHaveLength(4);
   });
 
-  test('Given a URL the correct tab is active', async () => {
+  test('Given a URL the correct tab is active', () => {
+    const { history } = renderTabs('/organizations/19/teams');
     expect(history.location.pathname).toEqual('/organizations/19/teams');
-    expect(wrapper.find('Tabs').prop('activeKey')).toBe(3);
+    expect(screen.getByRole('tab', { name: 'Teams' })).toHaveAttribute(
+      'aria-selected',
+      'true'
+    );
+    expect(screen.getByRole('tab', { name: 'Access' })).toHaveAttribute(
+      'aria-selected',
+      'false'
+    );
   });
 
   test('should update history when new tab selected', async () => {
-    wrapper.find('Tabs').invoke('onSelect')(
-      {
-        preventDefault: () => {},
-      },
-      2
-    );
-    wrapper.update();
+    const { history, user } = renderTabs('/organizations/19/teams');
 
-    expect(history.location.pathname).toEqual('/organizations/19/access');
-    expect(wrapper.find('Tabs').prop('activeKey')).toBe(2);
+    await user.click(screen.getByRole('tab', { name: 'Access' }));
+
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual('/organizations/19/access')
+    );
+    expect(screen.getByRole('tab', { name: 'Access' })).toHaveAttribute(
+      'aria-selected',
+      'true'
+    );
   });
 });

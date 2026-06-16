@@ -1,144 +1,141 @@
 import React from 'react';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { screen, waitFor, within } from '@testing-library/react';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import DisassociateButton from './DisassociateButton';
 
 describe('<DisassociateButton />', () => {
   describe('User has disassociate permissions', () => {
-    let wrapper;
-    const handleDisassociate = jest.fn();
     const mockHosts = [
       {
         id: 1,
         name: 'foo',
-        summary_fields: {
-          user_capabilities: {
-            delete: true,
-          },
-        },
+        summary_fields: { user_capabilities: { delete: true } },
       },
       {
         id: 2,
         name: 'bar',
-        summary_fields: {
-          user_capabilities: {
-            delete: true,
-          },
-        },
+        summary_fields: { user_capabilities: { delete: true } },
       },
     ];
 
-    beforeAll(() => {
-      wrapper = mountWithContexts(
+    test('should render an enabled disassociate button', () => {
+      renderWithContexts(
         <DisassociateButton
-          onDisassociate={handleDisassociate}
+          onDisassociate={() => {}}
           itemsToDisassociate={mockHosts}
           modalNote="custom note"
           modalTitle="custom title"
         />
       );
+      const button = screen.getByRole('button', { name: 'Disassociate' });
+      expect(button).toBeEnabled();
     });
 
-    afterAll(() => {
-      jest.clearAllMocks();
-    });
+    test('should open confirmation modal and render expected content', async () => {
+      const { user } = renderWithContexts(
+        <DisassociateButton
+          onDisassociate={() => {}}
+          itemsToDisassociate={mockHosts}
+          modalNote="custom note"
+          modalTitle="custom title"
+        />
+      );
 
-    test('should render button', () => {
-      expect(wrapper.find('button')).toHaveLength(1);
-      expect(wrapper.find('button').text()).toEqual('Disassociate');
-    });
+      await user.click(screen.getByRole('button', { name: 'Disassociate' }));
 
-    test('should open confirmation modal', () => {
-      wrapper.find('button').simulate('click');
-      expect(wrapper.find('AlertModal')).toHaveLength(1);
-    });
-
-    test('cancel button should close confirmation modal', () => {
-      expect(wrapper.find('AlertModal')).toHaveLength(1);
-      wrapper.find('button[aria-label="Cancel"]').simulate('click');
-      expect(wrapper.find('AlertModal')).toHaveLength(0);
-    });
-
-    test('should render expected modal content', () => {
-      wrapper.find('button').simulate('click');
+      const dialog = await screen.findByRole('dialog');
+      expect(within(dialog).getByText('custom title')).toBeInTheDocument();
+      expect(within(dialog).getByText('custom note')).toBeInTheDocument();
       expect(
-        wrapper
-          .find('AlertModal')
-          .containsMatchingElement(<div>custom note</div>)
-      ).toEqual(true);
-      expect(
-        wrapper
-          .find('AlertModal')
-          .containsMatchingElement(
-            <div>This action will disassociate the following:</div>
-          )
-      ).toEqual(true);
-      expect(wrapper.find('Title').text()).toEqual('custom title');
-      wrapper.find('button[aria-label="Close"]').simulate('click');
+        within(dialog).getByText('This action will disassociate the following:')
+      ).toBeInTheDocument();
+      expect(within(dialog).getByText('foo')).toBeInTheDocument();
+      expect(within(dialog).getByText('bar')).toBeInTheDocument();
     });
 
-    test('disassociate button should call handleDisassociate on click', () => {
-      wrapper.find('button').simulate('click');
+    test('cancel button should close confirmation modal', async () => {
+      const { user } = renderWithContexts(
+        <DisassociateButton
+          onDisassociate={() => {}}
+          itemsToDisassociate={mockHosts}
+          modalTitle="custom title"
+        />
+      );
+
+      await user.click(screen.getByRole('button', { name: 'Disassociate' }));
+      const dialog = await screen.findByRole('dialog');
+      await user.click(
+        within(dialog).getByRole('button', { name: 'Cancel' })
+      );
+      await waitFor(() => {
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+      });
+    });
+
+    test('confirm button should call onDisassociate and close the modal', async () => {
+      const handleDisassociate = jest.fn();
+      const { user } = renderWithContexts(
+        <DisassociateButton
+          onDisassociate={handleDisassociate}
+          itemsToDisassociate={mockHosts}
+          modalTitle="custom title"
+        />
+      );
+
+      await user.click(screen.getByRole('button', { name: 'Disassociate' }));
+      const dialog = await screen.findByRole('dialog');
       expect(handleDisassociate).toHaveBeenCalledTimes(0);
-      wrapper
-        .find('button[aria-label="confirm disassociate"]')
-        .simulate('click');
+
+      await user.click(
+        within(dialog).getByRole('button', { name: 'confirm disassociate' })
+      );
       expect(handleDisassociate).toHaveBeenCalledTimes(1);
+      await waitFor(() => {
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+      });
     });
   });
 
   describe('User does not have disassociate permissions', () => {
-    const readOnlyHost = [
-      {
-        id: 1,
-        name: 'foo',
-        summary_fields: {
-          user_capabilities: {
-            delete: false,
-          },
-        },
-      },
-    ];
-
     test('should disable button when no delete permissions', () => {
-      const wrapper = mountWithContexts(
+      renderWithContexts(
         <DisassociateButton
           onDisassociate={() => {}}
-          itemsToDelete={readOnlyHost}
+          itemsToDisassociate={[
+            {
+              id: 1,
+              name: 'foo',
+              summary_fields: { user_capabilities: { delete: false } },
+            },
+          ]}
         />
       );
-      expect(wrapper.find('button[disabled]')).toHaveLength(1);
+      expect(screen.getByRole('button', { name: 'Disassociate' })).toBeDisabled();
     });
 
     test('should disable button for control instance', () => {
-      const wrapper = mountWithContexts(
+      renderWithContexts(
         <DisassociateButton
           onDisassociate={() => {}}
-          itemsToDelete={[
-            {
-              id: 1,
-              hostname: 'awx',
-              node_type: 'control',
-            },
+          itemsToDisassociate={[
+            { id: 1, type: 'instance', hostname: 'awx', node_type: 'control' },
           ]}
         />
       );
-      expect(wrapper.find('button[disabled]')).toHaveLength(1);
+      expect(screen.getByRole('button', { name: 'Disassociate' })).toBeDisabled();
     });
-    test('should disable button when selected items contain instances thaat are hybrid and are inside a protected instances', () => {
-      const wrapper = mountWithContexts(
+
+    test('should disable button for a hybrid instance inside a protected instance group', () => {
+      renderWithContexts(
         <DisassociateButton
           onDisassociate={() => {}}
-          isProectedInstanceGroup
-          itemsToDelete={[
-            {
-              id: 1,
-              hostname: 'awx',
-              node_type: 'control',
-            },
+          isProtectedInstanceGroup
+          itemsToDisassociate={[
+            { id: 1, type: 'instance', hostname: 'awx', node_type: 'hybrid' },
           ]}
         />
       );
-      expect(wrapper.find('button[disabled]')).toHaveLength(1);
+      expect(screen.getByRole('button', { name: 'Disassociate' })).toBeDisabled();
     });
   });
 });

@@ -1,13 +1,12 @@
 import React from 'react';
+import { screen } from '@testing-library/react';
 import { Field, Formik } from 'formik';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import FieldWithPrompt from './FieldWithPrompt';
 
 describe('FieldWithPrompt', () => {
-  let wrapper;
-
   test('Required asterisk and Popover hidden when not required and tooltip not provided', () => {
-    wrapper = mountWithContexts(
+    const { container } = renderWithContexts(
       <Formik
         initialValues={{
           ask_limit_on_launch: false,
@@ -28,12 +27,21 @@ describe('FieldWithPrompt', () => {
         )}
       </Formik>
     );
-    expect(wrapper.find('.pf-c-form__label-required')).toHaveLength(0);
-    expect(wrapper.find('Popover')).toHaveLength(0);
+
+    // the prompt-on-launch checkbox is always rendered
+    expect(screen.getByLabelText('Prompt on launch')).toBeInTheDocument();
+    // no required asterisk
+    expect(
+      container.querySelector('.pf-c-form__label-required')
+    ).not.toBeInTheDocument();
+    // no tooltip Popover trigger
+    expect(
+      screen.queryByRole('button', { name: 'More information' })
+    ).not.toBeInTheDocument();
   });
 
   test('Required asterisk and Popover shown when required and tooltip provided', () => {
-    wrapper = mountWithContexts(
+    const { container } = renderWithContexts(
       <Formik
         initialValues={{
           ask_limit_on_launch: false,
@@ -56,9 +64,15 @@ describe('FieldWithPrompt', () => {
         )}
       </Formik>
     );
-    expect(wrapper.find('.pf-c-form__label-required')).toHaveLength(1);
+
+    expect(screen.getByLabelText('Prompt on launch')).toBeInTheDocument();
+    // required asterisk present
     expect(
-      wrapper.find('Popover[data-cy="job-template-limit-tooltip"]').length
-    ).toBe(1);
+      container.querySelector('.pf-c-form__label-required')
+    ).toBeInTheDocument();
+    // the tooltip Popover renders its trigger button
+    expect(
+      screen.getByRole('button', { name: 'More information' })
+    ).toBeInTheDocument();
   });
 });

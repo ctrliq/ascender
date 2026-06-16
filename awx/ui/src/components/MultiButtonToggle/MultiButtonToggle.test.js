@@ -1,35 +1,41 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import MultiButtonToggle from './MultiButtonToggle';
 
 describe('<MultiButtonToggle />', () => {
-  let wrapper;
   const onChange = jest.fn();
 
-  beforeAll(() => {
-    wrapper = shallow(
+  const renderToggle = (value = 'yaml') =>
+    render(
       <MultiButtonToggle
         buttons={[
           ['yaml', 'YAML'],
           ['json', 'JSON'],
         ]}
-        value="yaml"
+        value={value}
         onChange={onChange}
         name="the-button"
       />
     );
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('should render buttons successfully', () => {
-    const buttons = wrapper.find('SmallButton');
-    expect(buttons.length).toBe(2);
-    expect(buttons.at(0).props().variant).toBe('primary');
-    expect(buttons.at(1).props().variant).toBe('secondary');
+    renderToggle();
+    const yamlButton = screen.getByRole('button', { name: 'YAML' });
+    const jsonButton = screen.getByRole('button', { name: 'JSON' });
+    // variant="primary" renders the pf-m-primary modifier; "secondary" the pf-m-secondary one
+    expect(yamlButton).toHaveClass('pf-m-primary');
+    expect(jsonButton).toHaveClass('pf-m-secondary');
   });
 
-  it('should call onChange function when button clicked', () => {
-    const buttons = wrapper.find('SmallButton');
-    buttons.at(1).simulate('click');
+  it('should call onChange function when button clicked', async () => {
+    const user = userEvent.setup();
+    renderToggle();
+    await user.click(screen.getByRole('button', { name: 'JSON' }));
     expect(onChange).toHaveBeenCalledWith('json');
   });
 });
