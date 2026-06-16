@@ -1,18 +1,13 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
 import { createMemoryHistory } from 'history';
+import { screen, waitFor } from '@testing-library/react';
 
-import { ExecutionEnvironmentsAPI, CredentialTypesAPI } from 'api';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { ExecutionEnvironmentsAPI } from 'api';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import ExecutionEnvironmentEdit from './ExecutionEnvironmentEdit';
 
 jest.mock('../../../api');
-
-const mockMe = {
-  is_superuser: true,
-  is_system_auditor: false,
-};
 
 const executionEnvironmentData = {
   id: 42,
@@ -28,117 +23,72 @@ const updateExecutionEnvironmentData = {
   description: 'Updated new description',
 };
 
-const mockOptions = {
-  data: {
-    actions: {
-      POST: {
-        pull: {
-          choices: [
-            ['one', 'One'],
-            ['two', 'Two'],
-            ['three', 'Three'],
-          ],
-        },
-      },
-    },
-  },
-};
-
-const containerRegistryCredentialResolve = {
-  data: {
-    results: [
-      {
-        id: 4,
-        name: 'Container Registry',
-        kind: 'registry',
-      },
-    ],
-    count: 1,
-  },
-};
+jest.mock('../shared/ExecutionEnvironmentForm', () =>
+  function MockExecutionEnvironmentForm({ onSubmit, onCancel, submitError }) {
+    return (
+      <div>
+        {submitError ? <div data-testid="form-submit-error" /> : null}
+        <button
+          type="button"
+          onClick={() => onSubmit(updateExecutionEnvironmentData)}
+        >
+          Submit
+        </button>
+        <button type="button" aria-label="Cancel" onClick={onCancel}>
+          Cancel
+        </button>
+      </div>
+    );
+  }
+);
 
 describe('<ExecutionEnvironmentEdit/>', () => {
-  let wrapper;
   let history;
 
-  beforeAll(async () => {
-    ExecutionEnvironmentsAPI.readOptions.mockResolvedValue(mockOptions);
-    CredentialTypesAPI.read.mockResolvedValue(
-      containerRegistryCredentialResolve
-    );
+  const renderEdit = () => {
     history = createMemoryHistory();
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ExecutionEnvironmentEdit
-          executionEnvironment={executionEnvironmentData}
-          me={mockMe}
-        />,
-        {
-          context: { router: { history } },
-        }
-      );
-    });
-  });
+    return renderWithContexts(
+      <ExecutionEnvironmentEdit
+        executionEnvironment={executionEnvironmentData}
+      />,
+      { context: { router: { history } } }
+    );
+  };
 
-  afterAll(() => {
+  afterEach(() => {
     jest.clearAllMocks();
   });
 
   test('handleSubmit should call the api and redirect to details page', async () => {
-    await act(async () => {
-      wrapper.find('ExecutionEnvironmentForm').invoke('onSubmit')(
-        updateExecutionEnvironmentData
-      );
-      wrapper.update();
+    ExecutionEnvironmentsAPI.update.mockResolvedValue({});
+    const { user } = renderEdit();
+    await user.click(screen.getByRole('button', { name: 'Submit' }));
+    await waitFor(() =>
       expect(ExecutionEnvironmentsAPI.update).toHaveBeenCalledWith(42, {
         ...updateExecutionEnvironmentData,
         credential: null,
         organization: null,
-      });
-    });
-
+      })
+    );
     expect(history.location.pathname).toEqual(
       '/execution_environments/42/details'
     );
   });
 
-  test('should navigate to execution environments details when cancel is clicked', async () => {
-    await act(async () => {
-      wrapper.find('button[aria-label="Cancel"]').prop('onClick')();
-    });
-    expect(history.location.pathname).toEqual(
-      '/execution_environments/42/details'
-    );
-  });
-
-  test('should navigate to execution environments detail after successful submission', async () => {
-    await act(async () => {
-      wrapper.find('ExecutionEnvironmentForm').invoke('onSubmit')({
-        updateExecutionEnvironmentData,
-      });
-    });
-    wrapper.update();
-    expect(wrapper.find('FormSubmitError').length).toBe(0);
+  test('should navigate to details when cancel is clicked', async () => {
+    const { user } = renderEdit();
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
     expect(history.location.pathname).toEqual(
       '/execution_environments/42/details'
     );
   });
 
   test('failed form submission should show an error message', async () => {
-    const error = {
-      response: {
-        data: { detail: 'An error occurred' },
-      },
-    };
-    ExecutionEnvironmentsAPI.update.mockImplementationOnce(() =>
-      Promise.reject(error)
-    );
-    await act(async () => {
-      wrapper.find('ExecutionEnvironmentForm').invoke('onSubmit')(
-        updateExecutionEnvironmentData
-      );
+    ExecutionEnvironmentsAPI.update.mockRejectedValue({
+      response: { data: { detail: 'An error occurred' } },
     });
-    wrapper.update();
-    expect(wrapper.find('FormSubmitError').length).toBe(1);
+    const { user } = renderEdit();
+    await user.click(screen.getByRole('button', { name: 'Submit' }));
+    expect(await screen.findByTestId('form-submit-error')).toBeInTheDocument();
   });
 });

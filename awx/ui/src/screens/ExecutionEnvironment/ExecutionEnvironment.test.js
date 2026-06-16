@@ -74,7 +74,7 @@ describe('<ExecutionEnvironment />', () => {
     expect(
       await screen.findByText('ExecutionEnvironmentDetails')
     ).toBeInTheDocument();
-    // real route params are strings (the old enzyme test mocked a number)
+    // real route params are strings (the previous test mocked a number)
     expect(ExecutionEnvironmentsAPI.readDetail).toHaveBeenCalledWith('42');
   });
 
