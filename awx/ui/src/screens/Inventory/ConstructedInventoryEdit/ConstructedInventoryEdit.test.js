@@ -1,206 +1,159 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
 import { ConstructedInventoriesAPI, InventoriesAPI } from 'api';
-
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ConstructedInventoryEdit from './ConstructedInventoryEdit';
-jest.mock('api');
+
+jest.mock('../../../api');
+
+const mockInv = {
+  name: 'Mock',
+  id: 7,
+  description: 'Foo',
+  organization: { id: 1 },
+  kind: 'constructed',
+  source_vars: 'plugin: constructed',
+  limit: 'product_dev',
+};
+
+const associatedInstanceGroups = [{ id: 1, name: 'Foo' }];
+const associatedInputInventories = [
+  { id: 123, name: 'input_inventory_123' },
+  { id: 456, name: 'input_inventory_456' },
+];
+
+const mockFormValues = {
+  kind: 'constructed',
+  name: 'new constructed inventory',
+  description: '',
+  organization: { id: 1, name: 'mock organization' },
+  instanceGroups: associatedInstanceGroups,
+  source_vars: 'plugin: constructed',
+  inputInventories: associatedInputInventories,
+};
+
+jest.mock(
+  '../shared/ConstructedInventoryForm',
+  () =>
+    function ConstructedInventoryForm({ onSubmit, onCancel, submitError }) {
+      return (
+        <div>
+          <button
+            type="button"
+            aria-label="mock-submit"
+            onClick={() => onSubmit(mockFormValues)}
+          />
+          <button type="button" aria-label="mock-cancel" onClick={onCancel} />
+          {submitError ? <div data-testid="mock-submit-error" /> : null}
+        </div>
+      );
+    }
+);
 
 describe('<ConstructedInventoryEdit />', () => {
-  let wrapper;
-  let history;
-
-  const mockInv = {
-    name: 'Mock',
-    id: 7,
-    description: 'Foo',
-    organization: { id: 1 },
-    kind: 'constructed',
-    source_vars: 'plugin: constructed',
-    limit: 'product_dev',
-  };
-  const associatedInstanceGroups = [
-    {
-      id: 1,
-      name: 'Foo',
-    },
-  ];
-  const associatedInputInventories = [
-    {
-      id: 123,
-      name: 'input_inventory_123',
-    },
-    {
-      id: 456,
-      name: 'input_inventory_456',
-    },
-  ];
-  const mockFormValues = {
-    kind: 'constructed',
-    name: 'new constructed inventory',
-    description: '',
-    organization: { id: 1, name: 'mock organization' },
-    instanceGroups: associatedInstanceGroups,
-    source_vars: 'plugin: constructed',
-    inputInventories: associatedInputInventories,
-  };
-
-  beforeEach(async () => {
-    ConstructedInventoriesAPI.readConstructedInventoryOptions.mockResolvedValue(
-      {
-        limit: {
-          label: 'Limit',
-          help_text: '',
-        },
-        update_cache_timeout: {
-          label: 'Update cache timeout',
-          help_text: 'help',
-        },
-        verbosity: {
-          label: 'Verbosity',
-          help_text: '',
-        },
-      }
-    );
-    InventoriesAPI.readInstanceGroups.mockResolvedValue({
-      data: {
-        results: associatedInstanceGroups,
+  beforeEach(() => {
+    ConstructedInventoriesAPI.readConstructedInventoryOptions.mockResolvedValue({
+      limit: { label: 'Limit', help_text: '' },
+      update_cache_timeout: {
+        label: 'Update cache timeout',
+        help_text: 'help',
       },
+      verbosity: { label: 'Verbosity', help_text: '' },
+    });
+    InventoriesAPI.readInstanceGroups.mockResolvedValue({
+      data: { results: associatedInstanceGroups },
     });
     InventoriesAPI.readInputInventories.mockResolvedValue({
-      data: {
-        results: [
-          {
-            id: 456,
-            name: 'input_inventory_456',
-          },
-        ],
-      },
+      data: { results: [{ id: 456, name: 'input_inventory_456' }] },
     });
-    history = createMemoryHistory({
-      initialEntries: ['/inventories/constructed_inventory/7/edit'],
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ConstructedInventoryEdit inventory={mockInv} />,
-        {
-          context: { router: { history } },
-        }
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
+    ConstructedInventoriesAPI.update.mockResolvedValue({ data: { id: 1 } });
+    InventoriesAPI.orderInstanceGroups.mockResolvedValue();
+    InventoriesAPI.disassociateInventory.mockResolvedValue();
+    InventoriesAPI.associateInventory.mockResolvedValue();
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    jest.clearAllMocks();
   });
 
   test('should navigate to inventories details on cancel', async () => {
-    expect(history.location.pathname).toEqual(
-      '/inventories/constructed_inventory/7/edit'
-    );
-    await act(async () => {
-      wrapper.find('button[aria-label="Cancel"]').invoke('onClick')();
+    const history = createMemoryHistory({
+      initialEntries: ['/inventories/constructed_inventory/7/edit'],
     });
+    const { user } = renderWithContexts(
+      <ConstructedInventoryEdit inventory={mockInv} />,
+      { context: { router: { history } } }
+    );
+    await user.click(await screen.findByRole('button', { name: 'mock-cancel' }));
+
     expect(history.location.pathname).toEqual(
       '/inventories/constructed_inventory/7/details'
     );
   });
 
   test('should navigate to constructed inventory detail after successful submission', async () => {
-    ConstructedInventoriesAPI.update.mockResolvedValueOnce({ data: { id: 1 } });
-    expect(history.location.pathname).toEqual(
-      '/inventories/constructed_inventory/7/edit'
-    );
-    await act(async () => {
-      wrapper.find('ConstructedInventoryForm').invoke('onSubmit')(
-        mockFormValues
-      );
+    const history = createMemoryHistory({
+      initialEntries: ['/inventories/constructed_inventory/7/edit'],
     });
-    wrapper.update();
-    expect(history.location.pathname).toEqual(
-      '/inventories/constructed_inventory/7/details'
+    const { user } = renderWithContexts(
+      <ConstructedInventoryEdit inventory={mockInv} />,
+      { context: { router: { history } } }
+    );
+    await user.click(await screen.findByRole('button', { name: 'mock-submit' }));
+
+    await waitFor(() =>
+      expect(history.location.pathname).toBe(
+        '/inventories/constructed_inventory/7/details'
+      )
     );
   });
 
   test('should make expected api requests on submit', async () => {
-    await act(async () => {
-      wrapper.find('ConstructedInventoryForm').invoke('onSubmit')(
-        mockFormValues
-      );
-    });
-    expect(ConstructedInventoriesAPI.update).toHaveBeenCalledTimes(1);
+    const { user } = renderWithContexts(
+      <ConstructedInventoryEdit inventory={mockInv} />
+    );
+    await user.click(await screen.findByRole('button', { name: 'mock-submit' }));
+
+    await waitFor(() =>
+      expect(ConstructedInventoriesAPI.update).toHaveBeenCalledTimes(1)
+    );
     expect(InventoriesAPI.associateInstanceGroup).not.toHaveBeenCalled();
-    expect(InventoriesAPI.disassociateInventory).toHaveBeenCalledTimes(1);
+    await waitFor(() =>
+      expect(InventoriesAPI.disassociateInventory).toHaveBeenCalledTimes(1)
+    );
     expect(InventoriesAPI.associateInventory).toHaveBeenCalledTimes(2);
-    expect(InventoriesAPI.associateInventory).toHaveBeenNthCalledWith(
-      1,
-      7,
-      123
-    );
-    expect(InventoriesAPI.associateInventory).toHaveBeenNthCalledWith(
-      2,
-      7,
-      456
-    );
+    expect(InventoriesAPI.associateInventory).toHaveBeenNthCalledWith(1, 7, 123);
+    expect(InventoriesAPI.associateInventory).toHaveBeenNthCalledWith(2, 7, 456);
   });
 
   test('should throw content error', async () => {
-    expect(wrapper.find('ContentError').length).toBe(0);
-    InventoriesAPI.readInstanceGroups.mockImplementationOnce(() =>
-      Promise.reject(new Error())
-    );
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ConstructedInventoryEdit inventory={mockInv} />
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('ContentError').length).toBe(1);
+    InventoriesAPI.readInstanceGroups.mockRejectedValueOnce(new Error());
+    renderWithContexts(<ConstructedInventoryEdit inventory={mockInv} />);
+
+    expect(
+      await screen.findByText(/There was an error loading this content/i)
+    ).toBeInTheDocument();
   });
 
   test('should throw content error if user has insufficient options permissions', async () => {
-    expect(wrapper.find('ContentError').length).toBe(0);
-    ConstructedInventoriesAPI.readConstructedInventoryOptions.mockImplementationOnce(
-      () => Promise.reject(new Error())
+    ConstructedInventoriesAPI.readConstructedInventoryOptions.mockRejectedValueOnce(
+      new Error()
     );
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ConstructedInventoryEdit inventory={mockInv} />
-      );
-    });
+    renderWithContexts(<ConstructedInventoryEdit inventory={mockInv} />);
 
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('ContentError').length).toBe(1);
+    expect(
+      await screen.findByText(/There was an error loading this content/i)
+    ).toBeInTheDocument();
   });
 
   test('unsuccessful form submission should show an error message', async () => {
-    const error = {
-      response: {
-        data: { detail: 'An error occurred' },
-      },
-    };
-    ConstructedInventoriesAPI.update.mockImplementationOnce(() =>
-      Promise.reject(error)
+    ConstructedInventoriesAPI.update.mockRejectedValueOnce(new Error('boom'));
+    const { user } = renderWithContexts(
+      <ConstructedInventoryEdit inventory={mockInv} />
     );
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ConstructedInventoryEdit inventory={mockInv} />
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('FormSubmitError').length).toBe(0);
-    await act(async () => {
-      wrapper.find('ConstructedInventoryForm').invoke('onSubmit')(
-        mockFormValues
-      );
-    });
-    wrapper.update();
-    expect(wrapper.find('FormSubmitError').length).toBe(1);
+    await user.click(await screen.findByRole('button', { name: 'mock-submit' }));
+
+    expect(await screen.findByTestId('mock-submit-error')).toBeInTheDocument();
   });
 });

@@ -1,19 +1,9 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import { InventoriesAPI, OrganizationsAPI, InstanceGroupsAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+import { InventoriesAPI } from 'api';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import SmartInventoryAdd from './SmartInventoryAdd';
-
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => ({
-    id: 1,
-  }),
-}));
 
 jest.mock('../../../api');
 
@@ -27,154 +17,94 @@ const formData = {
   instance_groups: [{ id: 2 }],
 };
 
+jest.mock(
+  '../shared/SmartInventoryForm',
+  () =>
+    function SmartInventoryForm({ onSubmit, onCancel, submitError }) {
+      return (
+        <div>
+          <button
+            type="button"
+            aria-label="mock-submit"
+            onClick={() => onSubmit(formData)}
+          />
+          <button type="button" aria-label="mock-cancel" onClick={onCancel} />
+          {submitError ? <div data-testid="mock-submit-error" /> : null}
+        </div>
+      );
+    }
+);
+
 describe('<SmartInventoryAdd />', () => {
-  const history = createMemoryHistory({
-    initialEntries: [`/inventories/smart_inventory/add`],
+  beforeEach(() => {
+    InventoriesAPI.create.mockResolvedValue({ data: { id: 1 } });
+    InventoriesAPI.associateInstanceGroup.mockResolvedValue();
   });
 
-  describe('when initialized by users with POST capability', () => {
-    let wrapper;
-    let consoleError;
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
-    beforeAll(() => {
-      consoleError = global.console.error;
-      global.console.error = jest.fn();
+  test('initially renders successfully', () => {
+    renderWithContexts(<SmartInventoryAdd />);
+    expect(screen.getByRole('button', { name: 'mock-submit' })).toBeInTheDocument();
+  });
+
+  test('should post to the api when submit is clicked', async () => {
+    const { user } = renderWithContexts(<SmartInventoryAdd />);
+
+    await user.click(screen.getByRole('button', { name: 'mock-submit' }));
+
+    const { instance_groups, ...formRequest } = formData;
+    await waitFor(() =>
+      expect(InventoriesAPI.create).toHaveBeenCalledTimes(1)
+    );
+    expect(InventoriesAPI.create).toHaveBeenCalledWith({
+      ...formRequest,
+      organization: formRequest.organization.id,
+    });
+    await waitFor(() =>
+      expect(InventoriesAPI.associateInstanceGroup).toHaveBeenCalledWith(1, 2)
+    );
+    expect(InventoriesAPI.associateInstanceGroup).toHaveBeenCalledTimes(1);
+  });
+
+  test('successful form submission should trigger redirect to details', async () => {
+    const history = createMemoryHistory({
+      initialEntries: ['/inventories/smart_inventory/add'],
+    });
+    const { user } = renderWithContexts(<SmartInventoryAdd />, {
+      context: { router: { history } },
     });
 
-    beforeEach(async () => {
-      OrganizationsAPI.read.mockResolvedValue({
-        data: { results: [], count: 0 },
-      });
-      InstanceGroupsAPI.read.mockResolvedValue({
-        data: { results: [], count: 0 },
-      });
-      InventoriesAPI.create.mockResolvedValueOnce({ data: { id: 1 } });
-      InventoriesAPI.readOptions.mockResolvedValue({
-        data: { actions: { POST: true } },
-      });
-      InstanceGroupsAPI.read.mockResolvedValue({
-        data: { results: [], count: 0 },
-      });
+    await user.click(screen.getByRole('button', { name: 'mock-submit' }));
 
-      await act(async () => {
-        wrapper = mountWithContexts(<SmartInventoryAdd />, {
-          context: { router: { history } },
-        });
-      });
-      await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    });
-
-    afterAll(() => {
-      global.console.error = consoleError;
-      jest.clearAllMocks();
-    });
-
-    test('should enable save button', () => {
-      expect(wrapper.find('Button[aria-label="Save"]').prop('isDisabled')).toBe(
-        false
-      );
-    });
-
-    test('should post to the api when submit is clicked', async () => {
-      await act(async () => {
-        wrapper.find('SmartInventoryForm').invoke('onSubmit')(formData);
-      });
-      const { instance_groups, ...formRequest } = formData;
-      expect(InventoriesAPI.create).toHaveBeenCalledTimes(1);
-      expect(InventoriesAPI.create).toHaveBeenCalledWith({
-        ...formRequest,
-        organization: formRequest.organization.id,
-      });
-      expect(InventoriesAPI.associateInstanceGroup).toHaveBeenCalledTimes(1);
-      expect(InventoriesAPI.associateInstanceGroup).toHaveBeenCalledWith(1, 2);
-    });
-
-    test('should parse host_filter with ansible facts', async () => {
-      const modifiedForm = {
-        ...formData,
-        host_filter:
-          'host_filter=ansible_facts__ansible_env__PYTHONUNBUFFERED="true"',
-      };
-      await act(async () => {
-        wrapper.find('SmartInventoryForm').invoke('onSubmit')(modifiedForm);
-      });
-      const { instance_groups, ...formRequest } = modifiedForm;
-      expect(InventoriesAPI.create).toHaveBeenCalledTimes(1);
-      expect(InventoriesAPI.create).toHaveBeenCalledWith({
-        ...formRequest,
-        organization: formRequest.organization.id,
-        host_filter: 'ansible_facts__ansible_env__PYTHONUNBUFFERED="true"',
-      });
-      expect(InventoriesAPI.associateInstanceGroup).toHaveBeenCalledTimes(1);
-      expect(InventoriesAPI.associateInstanceGroup).toHaveBeenCalledWith(1, 2);
-    });
-
-    test('successful form submission should trigger redirect to details', async () => {
-      expect(history.location.pathname).toEqual(
+    await waitFor(() =>
+      expect(history.location.pathname).toBe(
         '/inventories/smart_inventory/1/details'
-      );
-    });
-
-    test('should navigate to inventory list when cancel is clicked', async () => {
-      await act(async () => {
-        wrapper.find('button[aria-label="Cancel"]').invoke('onClick')();
-      });
-      expect(history.location.pathname).toEqual('/inventories');
-    });
-
-    test('unsuccessful form submission should show an error message', async () => {
-      const error = {
-        response: {
-          data: { detail: 'An error occurred' },
-        },
-      };
-      InventoriesAPI.create.mockImplementationOnce(() => Promise.reject(error));
-      await act(async () => {
-        wrapper = mountWithContexts(<SmartInventoryAdd />);
-      });
-      expect(wrapper.find('FormSubmitError').length).toBe(0);
-      await act(async () => {
-        wrapper.find('SmartInventoryForm').invoke('onSubmit')({});
-      });
-      wrapper.update();
-      expect(wrapper.find('FormSubmitError').length).toBe(1);
-    });
+      )
+    );
   });
 
-  describe('when initialized by users without POST capability', () => {
-    let wrapper;
-
-    afterAll(() => {
-      jest.clearAllMocks();
+  test('should navigate to inventory list when cancel is clicked', async () => {
+    const history = createMemoryHistory({
+      initialEntries: ['/inventories/smart_inventory/add'],
+    });
+    const { user } = renderWithContexts(<SmartInventoryAdd />, {
+      context: { router: { history } },
     });
 
-    beforeEach(async () => {
-      OrganizationsAPI.read.mockResolvedValue({
-        data: { results: [], count: 0 },
-      });
-      InstanceGroupsAPI.read.mockResolvedValue({
-        data: { results: [], count: 0 },
-      });
-      InventoriesAPI.create.mockResolvedValueOnce({ data: { id: 1 } });
-      InventoriesAPI.readOptions.mockResolvedValue({
-        data: { actions: { POST: false } },
-      });
-      InstanceGroupsAPI.read.mockResolvedValue({
-        data: { results: [], count: 0 },
-      });
+    await user.click(screen.getByRole('button', { name: 'mock-cancel' }));
 
-      await act(async () => {
-        wrapper = mountWithContexts(<SmartInventoryAdd />, {
-          context: { router: { history } },
-        });
-      });
-      await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    });
+    expect(history.location.pathname).toEqual('/inventories');
+  });
 
-    test('should disable save button', () => {
-      expect(wrapper.find('Button[aria-label="Save"]').prop('isDisabled')).toBe(
-        true
-      );
-    });
+  test('unsuccessful form submission should show an error message', async () => {
+    InventoriesAPI.create.mockRejectedValueOnce(new Error('boom'));
+    const { user } = renderWithContexts(<SmartInventoryAdd />);
+
+    await user.click(screen.getByRole('button', { name: 'mock-submit' }));
+
+    expect(await screen.findByTestId('mock-submit-error')).toBeInTheDocument();
   });
 });

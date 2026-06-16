@@ -1,12 +1,8 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { LabelsAPI, InventoriesAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
-
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryEdit from './InventoryEdit';
 
 jest.mock('../../../api');
@@ -60,11 +56,38 @@ const associatedInstanceGroups = [
   },
 ];
 
-describe('<InventoryEdit />', () => {
-  let wrapper;
-  let history;
+const submitInstanceGroups = [
+  { name: 'Bizz', id: 2 },
+  { name: 'Buzz', id: 3 },
+];
+const submitLabels = [{ name: 'label' }, { name: 'Major', id: 2 }];
 
-  beforeEach(async () => {
+jest.mock(
+  '../shared/InventoryForm',
+  () =>
+    ({ onSubmit, onCancel, submitError }) => (
+      <div>
+        <button
+          type="button"
+          aria-label="mock-submit"
+          onClick={() =>
+            onSubmit({
+              name: 'Foo',
+              id: 13,
+              organization: { id: 1 },
+              instanceGroups: submitInstanceGroups,
+              labels: submitLabels,
+            })
+          }
+        />
+        <button type="button" aria-label="mock-cancel" onClick={onCancel} />
+        {submitError ? <div data-testid="mock-submit-error" /> : null}
+      </div>
+    )
+);
+
+describe('<InventoryEdit />', () => {
+  beforeEach(() => {
     LabelsAPI.read.mockResolvedValue({
       data: {
         results: [
@@ -73,61 +96,58 @@ describe('<InventoryEdit />', () => {
         ],
       },
     });
-
     InventoriesAPI.readInstanceGroups.mockResolvedValue({
       data: {
         results: associatedInstanceGroups,
       },
     });
-    history = createMemoryHistory({ initialEntries: ['/inventories'] });
-    await act(async () => {
-      wrapper = mountWithContexts(<InventoryEdit inventory={mockInventory} />, {
-        context: { router: { history } },
-      });
-    });
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   test('initially renders successfully', async () => {
-    expect(wrapper.find('InventoryEdit').length).toBe(1);
+    const history = createMemoryHistory({ initialEntries: ['/inventories'] });
+    renderWithContexts(<InventoryEdit inventory={mockInventory} />, {
+      context: { router: { history } },
+    });
+    expect(await screen.findByRole('button', { name: 'mock-submit' })).toBeInTheDocument();
   });
 
   test('called InventoriesAPI.readInstanceGroups', async () => {
-    expect(InventoriesAPI.readInstanceGroups).toHaveBeenCalledWith(1);
+    renderWithContexts(<InventoryEdit inventory={mockInventory} />);
+    await waitFor(() =>
+      expect(InventoriesAPI.readInstanceGroups).toHaveBeenCalledWith(1)
+    );
   });
 
   test('handleCancel returns the user to inventory detail', async () => {
-    await waitForElement(wrapper, 'isLoading', (el) => el.length === 0);
-    await act(async () => {
-      wrapper.find('Button[aria-label="Cancel"]').simulate('click');
-    });
+    const history = createMemoryHistory({ initialEntries: ['/inventories'] });
+    const { user } = renderWithContexts(
+      <InventoryEdit inventory={mockInventory} />,
+      { context: { router: { history } } }
+    );
+    await user.click(await screen.findByRole('button', { name: 'mock-cancel' }));
     expect(history.location.pathname).toEqual(
       '/inventories/inventory/1/details'
     );
   });
 
   test('handleSubmit should post to the api', async () => {
-    await waitForElement(wrapper, 'isLoading', (el) => el.length === 0);
-    const instanceGroups = [
-      { name: 'Bizz', id: 2 },
-      { name: 'Buzz', id: 3 },
-    ];
-    const labels = [{ name: 'label' }, { name: 'Major', id: 2 }];
-    await act(async () => {
-      wrapper.find('InventoryForm').prop('onSubmit')({
-        name: 'Foo',
-        id: 13,
-        organization: { id: 1 },
-        instanceGroups,
-        labels,
-      });
-    });
+    const { user } = renderWithContexts(
+      <InventoryEdit inventory={mockInventory} />
+    );
+    await user.click(await screen.findByRole('button', { name: 'mock-submit' }));
 
-    expect(InventoriesAPI.update).toHaveBeenCalledWith(1, {
-      id: 13,
-      labels: [{ name: 'label' }, { name: 'Major', id: 2 }],
-      name: 'Foo',
-      organization: 1,
-    });
+    await waitFor(() =>
+      expect(InventoriesAPI.update).toHaveBeenCalledWith(1, {
+        id: 13,
+        labels: [{ name: 'label' }, { name: 'Major', id: 2 }],
+        name: 'Foo',
+        organization: 1,
+      })
+    );
 
     expect(InventoriesAPI.associateLabel).toHaveBeenCalledWith(
       1,
@@ -140,7 +160,7 @@ describe('<InventoryEdit />', () => {
     });
     expect(InventoriesAPI.orderInstanceGroups).toHaveBeenCalledWith(
       mockInventory.id,
-      instanceGroups,
+      submitInstanceGroups,
       associatedInstanceGroups
     );
   });

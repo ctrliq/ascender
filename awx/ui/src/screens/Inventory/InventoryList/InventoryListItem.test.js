@@ -1,155 +1,123 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, within } from '@testing-library/react';
 import { InventoriesAPI } from 'api';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryListItem from './InventoryListItem';
 
 jest.mock('../../../api/models/Inventories');
 
-describe('<InventoryListItem />', () => {
-  const inventory = {
-    id: 1,
-    name: 'Inventory',
-    kind: '',
-    has_active_failures: true,
-    total_hosts: 10,
-    hosts_with_active_failures: 4,
-    has_inventory_sources: true,
-    total_inventory_sources: 4,
-    inventory_sources_with_failures: 5,
-    summary_fields: {
-      organization: {
-        id: 1,
-        name: 'Default',
-      },
-      user_capabilities: {
-        edit: true,
-      },
+const baseInventory = {
+  id: 1,
+  name: 'Inventory',
+  kind: '',
+  has_active_failures: true,
+  total_hosts: 10,
+  hosts_with_active_failures: 4,
+  has_inventory_sources: true,
+  total_inventory_sources: 4,
+  inventory_sources_with_failures: 5,
+  summary_fields: {
+    organization: {
+      id: 1,
+      name: 'Default',
     },
-  };
+    user_capabilities: {
+      edit: true,
+    },
+  },
+};
+
+function renderItem(inventory) {
+  return renderWithContexts(
+    <table>
+      <tbody>
+        <InventoryListItem
+          inventory={inventory}
+          detailUrl="/inventories/inventory/1"
+          isSelected
+          onSelect={() => {}}
+          rowIndex={0}
+        />
+      </tbody>
+    </table>
+  );
+}
+
+describe('<InventoryListItem />', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
   test('initially renders successfully', () => {
-    mountWithContexts(
-      <table>
-        <tbody>
-          <InventoryListItem
-            inventory={inventory}
-            detailUrl="/inventories/inventory/1"
-            isSelected
-            onSelect={() => {}}
-          />
-        </tbody>
-      </table>
-    );
+    renderItem(baseInventory);
+    expect(screen.getByRole('link', { name: 'Inventory' })).toBeInTheDocument();
   });
 
-  test('should render not configured tooltip', () => {
-    const wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <InventoryListItem
-            inventory={{ ...inventory, has_inventory_sources: false }}
-            detailUrl="/inventories/inventory/1"
-            isSelected
-            onSelect={() => {}}
-          />
-        </tbody>
-      </table>
-    );
-
-    expect(wrapper.find('StatusLabel').prop('tooltipContent')).toBe(
-      'Not configured for inventory sync.'
-    );
+  test('should render not configured tooltip', async () => {
+    const { user } = renderItem({
+      ...baseInventory,
+      has_inventory_sources: false,
+    });
+    await user.hover(screen.getByText('Disabled'));
+    expect(
+      await screen.findByText('Not configured for inventory sync.')
+    ).toBeInTheDocument();
   });
 
-  test('should render success tooltip', () => {
-    const wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <InventoryListItem
-            inventory={{ ...inventory, inventory_sources_with_failures: 0 }}
-            detailUrl="/inventories/inventory/1"
-            isSelected
-            onSelect={() => {}}
-          />
-        </tbody>
-      </table>
-    );
-
-    expect(wrapper.find('StatusLabel').prop('tooltipContent')).toBe(
-      'No inventory sync failures.'
-    );
+  test('should render success tooltip', async () => {
+    const { user } = renderItem({
+      ...baseInventory,
+      inventory_sources_with_failures: 0,
+    });
+    await user.hover(screen.getByText('Success'));
+    expect(
+      await screen.findByText('No inventory sync failures.')
+    ).toBeInTheDocument();
   });
 
   test('should render prompt list item data', () => {
-    const wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <InventoryListItem
-            inventory={inventory}
-            detailUrl="/inventories/inventory/1"
-            isSelected
-            onSelect={() => {}}
-          />
-        </tbody>
-      </table>
+    renderItem(baseInventory);
+    const row = screen.getByRole('link', { name: 'Inventory' }).closest('tr');
+    const cells = within(row).getAllByRole('cell');
+    const nameCell = cells.find((c) => c.getAttribute('data-label') === 'Name');
+    const statusCell = cells.find(
+      (c) => c.getAttribute('data-label') === 'Status'
     );
-    expect(wrapper.find('StatusLabel').length).toBe(1);
-    expect(wrapper.find('StatusLabel').prop('status')).toBe('error');
-    expect(wrapper.find('Td').at(1).text()).toBe('Inventory');
-    expect(wrapper.find('Td').at(2).text()).toBe('Error');
-    expect(wrapper.find('Td').at(3).text()).toBe('Inventory');
-    expect(wrapper.find('Td').at(4).text()).toBe('Default');
+    const typeCell = cells.find((c) => c.getAttribute('data-label') === 'Type');
+    const orgCell = cells.find(
+      (c) => c.getAttribute('data-label') === 'Organization'
+    );
+    expect(nameCell).toHaveTextContent('Inventory');
+    expect(statusCell).toHaveTextContent('Error');
+    expect(typeCell).toHaveTextContent('Inventory');
+    expect(orgCell).toHaveTextContent('Default');
   });
 
   test('edit button shown to users with edit capabilities', () => {
-    const wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <InventoryListItem
-            inventory={inventory}
-            detailUrl="/inventories/inventory/1"
-            isSelected
-            onSelect={() => {}}
-          />
-        </tbody>
-      </table>
-    );
-    expect(wrapper.find('PencilAltIcon').exists()).toBeTruthy();
+    renderItem(baseInventory);
+    expect(
+      screen.getByRole('link', { name: 'Edit Inventory' })
+    ).toBeInTheDocument();
   });
 
   test('edit button hidden from users without edit capabilities', () => {
-    const wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <InventoryListItem
-            inventory={{
-              id: 1,
-              name: 'Inventory',
-              summary_fields: {
-                organization: {
-                  id: 1,
-                  name: 'Default',
-                },
-                user_capabilities: {
-                  edit: false,
-                },
-              },
-            }}
-            detailUrl="/inventories/inventory/1"
-            isSelected
-            onSelect={() => {}}
-          />
-        </tbody>
-      </table>
-    );
-    expect(wrapper.find('PencilAltIcon').exists()).toBeFalsy();
+    renderItem({
+      id: 1,
+      name: 'Inventory',
+      summary_fields: {
+        organization: { id: 1, name: 'Default' },
+        user_capabilities: { edit: false },
+      },
+    });
+    expect(
+      screen.queryByRole('link', { name: 'Edit Inventory' })
+    ).not.toBeInTheDocument();
   });
 
   test('should call api to copy inventory', async () => {
     InventoriesAPI.copy.mockResolvedValue();
 
-    const wrapper = mountWithContexts(
+    const { user } = renderWithContexts(
       <table>
         <tbody>
           <InventoryListItem
@@ -157,35 +125,29 @@ describe('<InventoryListItem />', () => {
               id: 1,
               name: 'Inventory',
               summary_fields: {
-                organization: {
-                  id: 1,
-                  name: 'Default',
-                },
-                user_capabilities: {
-                  edit: false,
-                  copy: true,
-                },
+                organization: { id: 1, name: 'Default' },
+                user_capabilities: { edit: false, copy: true },
               },
             }}
             detailUrl="/inventories/inventory/1"
             isSelected
             onSelect={() => {}}
+            onCopy={() => {}}
+            fetchInventories={() => {}}
+            rowIndex={0}
           />
         </tbody>
       </table>
     );
 
-    await act(async () =>
-      wrapper.find('Button[aria-label="Copy"]').prop('onClick')()
-    );
-    expect(InventoriesAPI.copy).toHaveBeenCalled();
-    jest.clearAllMocks();
+    await user.click(screen.getByRole('button', { name: 'Copy' }));
+    await waitFor(() => expect(InventoriesAPI.copy).toHaveBeenCalled());
   });
 
   test('should render proper alert modal on copy error', async () => {
     InventoriesAPI.copy.mockRejectedValue(new Error());
 
-    const wrapper = mountWithContexts(
+    const { user } = renderWithContexts(
       <table>
         <tbody>
           <InventoryListItem
@@ -193,57 +155,35 @@ describe('<InventoryListItem />', () => {
               id: 1,
               name: 'Inventory',
               summary_fields: {
-                organization: {
-                  id: 1,
-                  name: 'Default',
-                },
-                user_capabilities: {
-                  edit: false,
-                  copy: true,
-                },
+                organization: { id: 1, name: 'Default' },
+                user_capabilities: { edit: false, copy: true },
               },
             }}
             detailUrl="/inventories/inventory/1"
             isSelected
             onSelect={() => {}}
+            onCopy={() => {}}
+            fetchInventories={() => {}}
+            rowIndex={0}
           />
         </tbody>
       </table>
     );
-    await act(async () =>
-      wrapper.find('Button[aria-label="Copy"]').prop('onClick')()
-    );
-    wrapper.update();
-    expect(wrapper.find('Modal').prop('isOpen')).toBe(true);
-    jest.clearAllMocks();
+    await user.click(screen.getByRole('button', { name: 'Copy' }));
+    expect(await screen.findByText('Error!')).toBeInTheDocument();
   });
 
-  test('should not render copy button', async () => {
-    const wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <InventoryListItem
-            inventory={{
-              id: 1,
-              name: 'Inventory',
-              summary_fields: {
-                organization: {
-                  id: 1,
-                  name: 'Default',
-                },
-                user_capabilities: {
-                  edit: false,
-                  copy: false,
-                },
-              },
-            }}
-            detailUrl="/inventories/inventory/1"
-            isSelected
-            onSelect={() => {}}
-          />
-        </tbody>
-      </table>
-    );
-    expect(wrapper.find('CopyButton').length).toBe(0);
+  test('should not render copy button', () => {
+    renderItem({
+      id: 1,
+      name: 'Inventory',
+      summary_fields: {
+        organization: { id: 1, name: 'Default' },
+        user_capabilities: { edit: false, copy: false },
+      },
+    });
+    expect(
+      screen.queryByRole('button', { name: 'Copy' })
+    ).not.toBeInTheDocument();
   });
 });

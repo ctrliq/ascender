@@ -1,68 +1,93 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { HostsAPI } from 'api';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryHostAdd from './InventoryHostAdd';
 import mockHost from '../shared/data.host.json';
 
 jest.mock('../../../api');
 
-describe('<InventoryHostAdd />', () => {
-  let wrapper;
-  let history;
+const submitValues = {
+  name: 'new name',
+  description: 'new description',
+  variables: '---\nfoo: bar',
+};
 
-  beforeEach(async () => {
-    history = createMemoryHistory();
-    HostsAPI.create.mockResolvedValue({
-      data: {
-        ...mockHost,
-      },
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(<InventoryHostAdd inventory={{ id: 3 }} />, {
-        context: { router: { history } },
-      });
-    });
+jest.mock(
+  'components/HostForm',
+  () =>
+    ({ handleSubmit, handleCancel, submitError }) =>
+      (
+        <div>
+          <button
+            type="button"
+            aria-label="mock-submit"
+            onClick={() => handleSubmit(submitValues)}
+          />
+          <button
+            type="button"
+            aria-label="mock-cancel"
+            onClick={handleCancel}
+          />
+          {submitError ? <div aria-label="mock-submit-error" /> : null}
+        </div>
+      )
+);
+
+describe('<InventoryHostAdd />', () => {
+  beforeEach(() => {
+    HostsAPI.create.mockResolvedValue({ data: { ...mockHost } });
   });
 
-  afterAll(() => {
+  afterEach(() => {
     jest.clearAllMocks();
   });
 
   test('handleSubmit should post to api', async () => {
-    await act(async () => {
-      wrapper.find('HostForm').prop('handleSubmit')(mockHost);
-    });
-    expect(HostsAPI.create).toHaveBeenCalledWith(mockHost);
+    const { user } = renderWithContexts(
+      <InventoryHostAdd inventory={{ id: 3 }} />
+    );
+    await user.click(screen.getByRole('button', { name: 'mock-submit' }));
+    await waitFor(() =>
+      expect(HostsAPI.create).toHaveBeenCalledWith({
+        ...submitValues,
+        inventory: 3,
+      })
+    );
   });
 
-  test('should navigate to hosts list when cancel is clicked', () => {
-    wrapper.find('button[aria-label="Cancel"]').invoke('onClick')();
+  test('should navigate to hosts list when cancel is clicked', async () => {
+    const history = createMemoryHistory();
+    const { user } = renderWithContexts(
+      <InventoryHostAdd inventory={{ id: 3 }} />,
+      { context: { router: { history } } }
+    );
+    await user.click(screen.getByRole('button', { name: 'mock-cancel' }));
     expect(history.location.pathname).toEqual('/inventories/inventory/3/hosts');
   });
 
   test('successful form submission should trigger redirect', async () => {
-    await act(async () => {
-      wrapper.find('HostForm').invoke('handleSubmit')(mockHost);
-    });
-    expect(wrapper.find('FormSubmitError').length).toBe(0);
-    expect(history.location.pathname).toEqual(
-      '/inventories/inventory/3/hosts/2/details'
+    const history = createMemoryHistory();
+    const { user } = renderWithContexts(
+      <InventoryHostAdd inventory={{ id: 3 }} />,
+      { context: { router: { history } } }
     );
+    await user.click(screen.getByRole('button', { name: 'mock-submit' }));
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual(
+        '/inventories/inventory/3/hosts/2/details'
+      )
+    );
+    expect(screen.queryByLabelText('mock-submit-error')).not.toBeInTheDocument();
   });
 
   test('failed form submission should show an error message', async () => {
-    const error = {
-      response: {
-        data: { detail: 'An error occurred' },
-      },
-    };
-    HostsAPI.create.mockImplementationOnce(() => Promise.reject(error));
-    await act(async () => {
-      wrapper.find('HostForm').invoke('handleSubmit')(mockHost);
-    });
-    wrapper.update();
-    expect(wrapper.find('FormSubmitError').length).toBe(1);
+    HostsAPI.create.mockImplementationOnce(() => Promise.reject(new Error()));
+    const { user } = renderWithContexts(
+      <InventoryHostAdd inventory={{ id: 3 }} />
+    );
+    await user.click(screen.getByRole('button', { name: 'mock-submit' }));
+    expect(await screen.findByLabelText('mock-submit-error')).toBeInTheDocument();
   });
 });

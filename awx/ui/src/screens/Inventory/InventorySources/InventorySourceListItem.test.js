@@ -1,5 +1,6 @@
 import React from 'react';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { screen, within } from '@testing-library/react';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventorySourceListItem from './InventorySourceListItem';
 
 const source = {
@@ -20,164 +21,124 @@ const source = {
     },
   },
 };
+
+function renderItem(props) {
+  return renderWithContexts(
+    <table>
+      <tbody>
+        <InventorySourceListItem
+          source={source}
+          isSelected={false}
+          onSelect={() => {}}
+          label="Source Bar"
+          rowIndex={0}
+          {...props}
+        />
+      </tbody>
+    </table>
+  );
+}
+
 describe('<InventorySourceListItem />', () => {
-  let wrapper;
   afterEach(() => {
     jest.clearAllMocks();
   });
 
   test('should mount properly', () => {
-    const onSelect = jest.fn();
-    wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <InventorySourceListItem
-            source={source}
-            isSelected={false}
-            onSelect={onSelect}
-            label="Source Bar"
-          />
-        </tbody>
-      </table>
-    );
-    expect(wrapper.find('InventorySourceListItem').length).toBe(1);
+    renderItem();
+    expect(screen.getByText('Foo')).toBeInTheDocument();
   });
 
   test('all buttons and text fields should render properly', () => {
-    const onSelect = jest.fn();
-    wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <InventorySourceListItem
-            source={source}
-            isSelected={false}
-            onSelect={onSelect}
-            label="Source Bar"
-          />
-        </tbody>
-      </table>
-    );
-    expect(wrapper.find('StatusLabel').length).toBe(1);
-    expect(wrapper.find('Link').at(1).prop('to')).toBe('/jobs/inventory/664');
-    expect(wrapper.find('.pf-c-table__check').length).toBe(1);
-    expect(wrapper.find('Td').at(1).text()).toBe('Foo');
-    expect(wrapper.find('Td').at(3).text()).toBe('Source Bar');
-    expect(wrapper.find('InventorySourceSyncButton').length).toBe(1);
-    expect(wrapper.find('PencilAltIcon').length).toBe(1);
+    renderItem();
+    // StatusLabel rendered inside a link to the last job
+    expect(screen.getByText('Canceled')).toBeInTheDocument();
+    const jobLink = screen
+      .getAllByRole('link')
+      .find((link) => link.getAttribute('href') === '/jobs/inventory/664');
+    expect(jobLink).toBeDefined();
+    expect(screen.getByRole('checkbox')).toBeInTheDocument();
+    const row = screen.getByText('Foo').closest('tr');
+    const cells = within(row).getAllByRole('cell');
+    const nameCell = cells.find((c) => c.getAttribute('data-label') === 'Name');
+    const typeCell = cells.find((c) => c.getAttribute('data-label') === 'Type');
+    expect(nameCell).toHaveTextContent('Foo');
+    expect(typeCell).toHaveTextContent('Source Bar');
+    // Sync button (InventorySourceSyncButton) + edit pencil link
+    expect(screen.getByRole('link', { name: 'Edit Source' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Start sync source' })
+    ).toBeInTheDocument();
   });
 
   test('item should be checked', () => {
-    const onSelect = jest.fn();
-    wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <InventorySourceListItem
-            source={source}
-            isSelected
-            onSelect={onSelect}
-            label="Source Bar"
-          />
-        </tbody>
-      </table>
-    );
-    wrapper.update();
-    expect(wrapper.find('.pf-c-table__check').length).toBe(1);
-    expect(wrapper.find('Td').first().prop('select').isSelected).toEqual(true);
+    renderItem({ isSelected: true });
+    expect(screen.getByRole('checkbox')).toBeChecked();
   });
 
   test('should not render status icon', () => {
-    const onSelect = jest.fn();
-    wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <InventorySourceListItem
-            source={{
-              ...source,
-              summary_fields: {
-                user_capabilities: { start: true, edit: true },
-                last_job: null,
-              },
-            }}
-            isSelected={false}
-            onSelect={onSelect}
-            label="Source Bar"
-          />
-        </tbody>
-      </table>
-    );
-    expect(wrapper.find('StatusIcon').length).toBe(0);
+    renderItem({
+      source: {
+        ...source,
+        summary_fields: {
+          user_capabilities: { start: true, edit: true },
+          last_job: null,
+        },
+      },
+    });
+    expect(screen.queryByText('Canceled')).not.toBeInTheDocument();
   });
 
-  test('should not render sync buttons', async () => {
-    const onSelect = jest.fn();
-    wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <InventorySourceListItem
-            source={{
-              ...source,
-              summary_fields: {
-                user_capabilities: { start: false, edit: true },
-              },
-            }}
-            isSelected={false}
-            onSelect={onSelect}
-          />
-        </tbody>
-      </table>
-    );
-    expect(wrapper.find('InventorySourceSyncButton').length).toBe(0);
-    expect(wrapper.find('Button[aria-label="Edit Source"]').length).toBe(1);
+  test('should not render sync buttons', () => {
+    renderItem({
+      source: {
+        ...source,
+        summary_fields: {
+          user_capabilities: { start: false, edit: true },
+        },
+      },
+      label: undefined,
+    });
+    expect(
+      screen.queryByRole('button', { name: 'Start sync source' })
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Edit Source' })).toBeInTheDocument();
   });
 
-  test('should not render edit buttons', async () => {
-    const onSelect = jest.fn();
-    wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <InventorySourceListItem
-            source={{
-              ...source,
-              summary_fields: {
-                user_capabilities: { start: true, edit: false },
-              },
-            }}
-            isSelected={false}
-            onSelect={onSelect}
-            label="Source Bar"
-          />
-        </tbody>
-      </table>
-    );
-    expect(wrapper.find('Button[aria-label="Edit Source"]').length).toBe(0);
-    expect(wrapper.find('InventorySourceSyncButton').length).toBe(1);
+  test('should not render edit buttons', () => {
+    renderItem({
+      source: {
+        ...source,
+        summary_fields: {
+          user_capabilities: { start: true, edit: false },
+        },
+      },
+    });
+    expect(
+      screen.queryByRole('link', { name: 'Edit Source' })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Start sync source' })
+    ).toBeInTheDocument();
   });
 
   test('should render cancel button while job is running', () => {
-    const onSelect = jest.fn();
-    wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <InventorySourceListItem
-            source={{
-              ...source,
-              status: 'running',
-              summary_fields: {
-                ...source.summary_fields,
-                current_job: {
-                  id: 1000,
-                  status: 'running',
-                },
-              },
-              execution_environment: null,
-            }}
-            isSelected={false}
-            onSelect={onSelect}
-            label="Source Bar"
-          />
-        </tbody>
-      </table>
-    );
-    expect(wrapper.find('JobCancelButton').length).toBe(1);
+    renderItem({
+      source: {
+        ...source,
+        status: 'running',
+        summary_fields: {
+          ...source.summary_fields,
+          current_job: {
+            id: 1000,
+            status: 'running',
+          },
+        },
+        execution_environment: null,
+      },
+    });
+    expect(
+      screen.getByRole('button', { name: 'Cancel Inventory Source Sync' })
+    ).toBeInTheDocument();
   });
 });

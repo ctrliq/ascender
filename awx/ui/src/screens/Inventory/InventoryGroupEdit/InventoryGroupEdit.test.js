@@ -1,18 +1,50 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom-v5-compat';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import { act } from 'react-dom/test-utils';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { GroupsAPI } from 'api';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
-
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryGroupEdit from './InventoryGroupEdit';
 
 jest.mock('../../../api');
 
+jest.mock('../shared/InventoryGroupForm', () => ({
+  handleSubmit,
+  handleCancel,
+  error,
+}) => (
+  <div>
+    <button
+      type="button"
+      aria-label="mock-submit"
+      onClick={() =>
+        handleSubmit({
+          name: 'Bar',
+          description: 'Ansible',
+          variables: 'ying: yang',
+        })
+      }
+    />
+    <button type="button" aria-label="mock-cancel" onClick={handleCancel} />
+    {error ? <div data-testid="mock-submit-error" /> : null}
+  </div>
+));
+
+function renderEdit(history) {
+  return renderWithContexts(
+    <Routes>
+      <Route
+        path="/inventories/inventory/:id/groups/:groupId/edit/*"
+        element={<InventoryGroupEdit inventoryGroup={{ id: 2 }} />}
+      />
+      <Route path="*" element={null} />
+    </Routes>,
+    { context: { router: { history } } }
+  );
+}
+
 describe('<InventoryGroupEdit />', () => {
-  let wrapper;
-  let history;
-  beforeEach(async () => {
+  beforeEach(() => {
     GroupsAPI.readDetail.mockResolvedValue({
       data: {
         name: 'Foo',
@@ -20,44 +52,57 @@ describe('<InventoryGroupEdit />', () => {
         variables: 'bizz: buzz',
       },
     });
-    history = createMemoryHistory({
-      initialEntries: ['/inventories/inventory/1/groups/2/edit'],
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Routes>
-          <Route
-            path="/inventories/inventory/:id/groups/:groupId/edit/*"
-            element={<InventoryGroupEdit inventoryGroup={{ id: 2 }} />}
-          />
-          <Route path="*" element={null} />
-        </Routes>,
-        {
-          context: {
-            router: {
-              history,
-            },
-          },
-        }
-      );
-    });
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   test('InventoryGroupEdit renders successfully', () => {
-    expect(wrapper.length).toBe(1);
+    const history = createMemoryHistory({
+      initialEntries: ['/inventories/inventory/1/groups/2/edit'],
+    });
+    renderEdit(history);
+    expect(
+      screen.getByRole('button', { name: 'mock-submit' })
+    ).toBeInTheDocument();
   });
+
   test('cancel should navigate user to Inventory Groups List', async () => {
-    wrapper.find('button[aria-label="Cancel"]').simulate('click');
-    expect(history.location.pathname).toEqual(
-      '/inventories/inventory/1/groups/2'
+    const history = createMemoryHistory({
+      initialEntries: ['/inventories/inventory/1/groups/2/edit'],
+    });
+    const { user } = renderEdit(history);
+
+    await user.click(screen.getByRole('button', { name: 'mock-cancel' }));
+
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual(
+        '/inventories/inventory/1/groups/2'
+      )
     );
   });
+
   test('handleSubmit should call api', async () => {
-    wrapper.find('InventoryGroupForm').prop('handleSubmit')({
-      name: 'Bar',
-      description: 'Ansible',
-      variables: 'ying: yang',
+    GroupsAPI.update.mockResolvedValue({ data: {} });
+    const history = createMemoryHistory({
+      initialEntries: ['/inventories/inventory/1/groups/2/edit'],
     });
-    expect(GroupsAPI.update).toHaveBeenCalled();
+    const { user } = renderEdit(history);
+
+    await user.click(screen.getByRole('button', { name: 'mock-submit' }));
+
+    await waitFor(() =>
+      expect(GroupsAPI.update).toHaveBeenCalledWith('2', {
+        name: 'Bar',
+        description: 'Ansible',
+        variables: 'ying: yang',
+      })
+    );
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual(
+        '/inventories/inventory/1/groups/2/details'
+      )
+    );
   });
 });

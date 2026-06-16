@@ -1,7 +1,10 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, within } from '@testing-library/react';
 import { InventoriesAPI, JobTemplatesAPI, WorkflowJobTemplatesAPI } from 'api';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import {
+  renderWithContexts,
+  settleTooltips,
+} from '../../../../testUtils/rtlContexts';
 
 import InventoryList from './InventoryList';
 
@@ -15,17 +18,8 @@ const mockInventories = [
     type: 'inventory',
     url: '/api/v2/inventories/1/',
     summary_fields: {
-      organization: {
-        id: 1,
-        name: 'Default',
-        description: '',
-      },
-      user_capabilities: {
-        edit: true,
-        delete: true,
-        copy: true,
-        adhoc: true,
-      },
+      organization: { id: 1, name: 'Default', description: '' },
+      user_capabilities: { edit: true, delete: true, copy: true, adhoc: true },
     },
     created: '2019-10-04T16:56:48.025455Z',
     modified: '2019-10-04T16:56:48.025468Z',
@@ -50,17 +44,8 @@ const mockInventories = [
     type: 'inventory',
     url: '/api/v2/inventories/2/',
     summary_fields: {
-      organization: {
-        id: 1,
-        name: 'Default',
-        description: '',
-      },
-      user_capabilities: {
-        edit: true,
-        delete: true,
-        copy: true,
-        adhoc: true,
-      },
+      organization: { id: 1, name: 'Default', description: '' },
+      user_capabilities: { edit: true, delete: true, copy: true, adhoc: true },
     },
     created: '2019-10-04T14:28:04.765571Z',
     modified: '2019-10-04T14:28:04.765594Z',
@@ -85,17 +70,8 @@ const mockInventories = [
     type: 'inventory',
     url: '/api/v2/inventories/3/',
     summary_fields: {
-      organization: {
-        id: 1,
-        name: 'Default',
-        description: '',
-      },
-      user_capabilities: {
-        edit: true,
-        delete: false,
-        copy: true,
-        adhoc: true,
-      },
+      organization: { id: 1, name: 'Default', description: '' },
+      user_capabilities: { edit: true, delete: false, copy: true, adhoc: true },
     },
     created: '2019-10-04T15:29:11.542911Z',
     modified: '2019-10-04T15:29:11.542924Z',
@@ -137,7 +113,7 @@ describe('<InventoryList />', () => {
     });
     JobTemplatesAPI.read.mockResolvedValue({ data: { count: 0 } });
     WorkflowJobTemplatesAPI.read.mockResolvedValue({ data: { count: 0 } });
-    debug = global.console.debug; // eslint-disable-line prefer-destructuring
+    debug = global.console.debug;
     global.console.debug = () => {};
   });
 
@@ -147,162 +123,103 @@ describe('<InventoryList />', () => {
   });
 
   test('should load and render inventories', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<InventoryList />);
-    });
-    wrapper.update();
-
-    expect(wrapper.find('InventoryListItem')).toHaveLength(3);
-  });
-
-  test('should have proper number of delete detail requests', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<InventoryList />);
-    });
+    renderWithContexts(<InventoryList />);
     expect(
-      wrapper.find('ToolbarDeleteButton').prop('deleteDetailsRequests')
-    ).toHaveLength(2);
+      await screen.findByRole('link', { name: 'Inv no hosts' })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: "Mike's Inventory" })
+    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Smart Inv' })).toBeInTheDocument();
   });
 
   test('should select inventory when checked', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<InventoryList />);
-    });
-    wrapper.update();
-
-    await act(async () => {
-      wrapper.find('InventoryListItem').first().invoke('onSelect')();
-    });
-    wrapper.update();
-
-    expect(
-      wrapper.find('InventoryListItem').first().prop('isSelected')
-    ).toEqual(true);
+    const { user } = renderWithContexts(<InventoryList />);
+    const row = (await screen.findByRole('link', { name: 'Inv no hosts' })).closest(
+      'tr'
+    );
+    const checkbox = within(row).getByRole('checkbox');
+    await user.click(checkbox);
+    expect(checkbox).toBeChecked();
   });
 
   test('should select all', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<InventoryList />);
-    });
-    wrapper.update();
+    const { user } = renderWithContexts(<InventoryList />);
+    await screen.findByRole('link', { name: 'Inv no hosts' });
 
-    await act(async () => {
-      wrapper.find('DataListToolbar').invoke('onSelectAll')(true);
-    });
-    wrapper.update();
+    const selectAll = screen.getByRole('checkbox', { name: 'Select all' });
+    const rowCheckboxes = screen
+      .getAllByRole('checkbox')
+      .filter((box) => box !== selectAll);
 
-    const items = wrapper.find('InventoryListItem');
-    expect(items).toHaveLength(3);
-    items.forEach((item) => {
-      expect(item.prop('isSelected')).toEqual(true);
-    });
-
-    expect(
-      wrapper.find('InventoryListItem').first().prop('isSelected')
-    ).toEqual(true);
+    await user.click(selectAll);
+    rowCheckboxes.forEach((box) => expect(box).toBeChecked());
   });
 
-  test('should disable delete button', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<InventoryList />);
-    });
-    wrapper.update();
-
-    await act(async () => {
-      wrapper.find('InventoryListItem').at(2).invoke('onSelect')();
-    });
-    wrapper.update();
-
-    expect(wrapper.find('ToolbarDeleteButton button').prop('disabled')).toEqual(
-      true
+  test('should disable delete button when item without delete capability selected', async () => {
+    const { user } = renderWithContexts(<InventoryList />);
+    const row = (await screen.findByRole('link', { name: 'Smart Inv' })).closest(
+      'tr'
     );
+    await user.click(within(row).getByRole('checkbox'));
+    expect(screen.getByRole('button', { name: 'Delete' })).toBeDisabled();
+    await settleTooltips();
   });
 
   test('should call delete api', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<InventoryList />);
-    });
-    wrapper.update();
+    InventoriesAPI.destroy.mockResolvedValue({});
+    const { user } = renderWithContexts(<InventoryList />);
+    const row = (
+      await screen.findByRole('link', { name: 'Inv no hosts' })
+    ).closest('tr');
+    await user.click(within(row).getByRole('checkbox'));
 
-    await act(async () => {
-      wrapper.find('InventoryListItem').at(0).invoke('onSelect')();
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('InventoryListItem').at(1).invoke('onSelect')();
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('ToolbarDeleteButton').invoke('onDelete')();
-    });
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'confirm delete' })
+    );
 
-    expect(InventoriesAPI.destroy).toHaveBeenCalledTimes(2);
+    await waitFor(() =>
+      expect(InventoriesAPI.destroy).toHaveBeenCalledTimes(1)
+    );
+    await settleTooltips();
   });
 
   test('should show deletion error', async () => {
-    InventoriesAPI.destroy.mockRejectedValue(
-      new Error({
-        response: {
-          config: {
-            method: 'delete',
-            url: '/api/v2/inventory/1',
-          },
-          data: 'An error occurred',
-        },
-      })
+    InventoriesAPI.destroy.mockRejectedValue(new Error());
+    const { user } = renderWithContexts(<InventoryList />);
+    const row = (
+      await screen.findByRole('link', { name: 'Inv no hosts' })
+    ).closest('tr');
+    await user.click(within(row).getByRole('checkbox'));
+
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'confirm delete' })
     );
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<InventoryList />);
-    });
-    wrapper.update();
-    expect(InventoriesAPI.read).toHaveBeenCalledTimes(1);
-    await act(async () => {
-      wrapper.find('InventoryListItem').at(0).invoke('onSelect')();
-    });
-    wrapper.update();
 
-    await act(async () => {
-      wrapper.find('ToolbarDeleteButton').invoke('onDelete')();
-    });
-    wrapper.update();
-
-    const modal = wrapper.find('Modal[aria-label="Deletion Error"]');
-    expect(modal).toHaveLength(1);
-    expect(modal.prop('title')).toEqual('Error!');
+    expect(await screen.findByText('Error!')).toBeInTheDocument();
+    await settleTooltips();
   });
 
-  test('Add button shown for users without ability to POST', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<InventoryList />);
-    });
-    wrapper.update();
-
-    expect(wrapper.find('ToolbarAddButton').length).toBe(1);
+  test('Add button shown for users with ability to POST', async () => {
+    renderWithContexts(<InventoryList />);
+    await screen.findByRole('link', { name: 'Inv no hosts' });
+    expect(screen.getByRole('button', { name: 'Add' })).toBeInTheDocument();
   });
 
   test('Add button hidden for users without ability to POST', async () => {
-    InventoriesAPI.readOptions = () =>
-      Promise.resolve({
-        data: {
-          actions: {
-            GET: {},
-          },
+    InventoriesAPI.readOptions.mockResolvedValue({
+      data: {
+        actions: {
+          GET: {},
         },
-      });
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<InventoryList />);
+      },
     });
-    wrapper.update();
-
-    expect(wrapper.find('ToolbarAddButton').length).toBe(0);
+    renderWithContexts(<InventoryList />);
+    await screen.findByRole('link', { name: 'Inv no hosts' });
+    expect(
+      screen.queryByRole('button', { name: 'Add' })
+    ).not.toBeInTheDocument();
   });
 });

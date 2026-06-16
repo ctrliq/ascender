@@ -1,62 +1,85 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { GroupsAPI } from 'api';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryGroupHostAdd from './InventoryGroupHostAdd';
 import mockHost from '../shared/data.host.json';
 
 jest.mock('../../../api');
 
+jest.mock('components/HostForm', () => ({
+  handleSubmit,
+  handleCancel,
+  submitError,
+}) => (
+  <div>
+    <button
+      type="button"
+      aria-label="mock-submit"
+      onClick={() => handleSubmit(mockHost)}
+    />
+    <button type="button" aria-label="mock-cancel" onClick={handleCancel} />
+    {submitError ? <div data-testid="mock-submit-error" /> : null}
+  </div>
+));
+
+function renderHostAdd(history) {
+  return renderWithContexts(
+    <InventoryGroupHostAdd inventoryGroup={{ id: 123, inventory: 3 }} />,
+    { context: { router: { history } } }
+  );
+}
+
 describe('<InventoryGroupHostAdd />', () => {
-  let wrapper;
-  let history;
-
-  beforeEach(async () => {
-    history = createMemoryHistory();
-
+  beforeEach(() => {
     GroupsAPI.createHost.mockResolvedValue({
       data: {
         ...mockHost,
       },
     });
-
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <InventoryGroupHostAdd inventoryGroup={{ id: 123, inventory: 3 }} />,
-        {
-          context: { router: { history } },
-        }
-      );
-    });
   });
 
-  afterAll(() => {
+  afterEach(() => {
     jest.clearAllMocks();
   });
 
   test('handleSubmit should post to api', async () => {
-    await act(async () => {
-      wrapper.find('HostForm').prop('handleSubmit')(mockHost);
-    });
-    expect(GroupsAPI.createHost).toHaveBeenCalledWith(123, mockHost);
+    const history = createMemoryHistory();
+    const { user } = renderHostAdd(history);
+
+    await user.click(screen.getByRole('button', { name: 'mock-submit' }));
+
+    await waitFor(() =>
+      expect(GroupsAPI.createHost).toHaveBeenCalledWith(123, mockHost)
+    );
   });
 
-  test('should navigate to inventory group host list when cancel is clicked', () => {
-    wrapper.find('button[aria-label="Cancel"]').invoke('onClick')();
-    expect(history.location.pathname).toEqual(
-      '/inventories/inventory/3/groups/123/nested_hosts'
+  test('should navigate to inventory group host list when cancel is clicked', async () => {
+    const history = createMemoryHistory();
+    const { user } = renderHostAdd(history);
+
+    await user.click(screen.getByRole('button', { name: 'mock-cancel' }));
+
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual(
+        '/inventories/inventory/3/groups/123/nested_hosts'
+      )
     );
   });
 
   test('successful form submission should trigger redirect', async () => {
-    await act(async () => {
-      wrapper.find('HostForm').invoke('handleSubmit')(mockHost);
-    });
-    expect(wrapper.find('FormSubmitError').length).toBe(0);
-    expect(history.location.pathname).toEqual(
-      '/inventories/inventory/3/hosts/2/details'
+    const history = createMemoryHistory();
+    const { user } = renderHostAdd(history);
+
+    await user.click(screen.getByRole('button', { name: 'mock-submit' }));
+
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual(
+        '/inventories/inventory/3/hosts/2/details'
+      )
     );
+    expect(screen.queryByTestId('mock-submit-error')).not.toBeInTheDocument();
   });
 
   test('failed form submission should show an error message', async () => {
@@ -66,10 +89,13 @@ describe('<InventoryGroupHostAdd />', () => {
       },
     };
     GroupsAPI.createHost.mockImplementationOnce(() => Promise.reject(error));
-    await act(async () => {
-      wrapper.find('HostForm').invoke('handleSubmit')(mockHost);
-    });
-    wrapper.update();
-    expect(wrapper.find('FormSubmitError').length).toBe(1);
+    const history = createMemoryHistory();
+    const { user } = renderHostAdd(history);
+
+    await user.click(screen.getByRole('button', { name: 'mock-submit' }));
+
+    expect(
+      await screen.findByTestId('mock-submit-error')
+    ).toBeInTheDocument();
   });
 });

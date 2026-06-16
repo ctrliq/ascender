@@ -1,13 +1,9 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom-v5-compat';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { GroupsAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
-
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryGroup from './InventoryGroup';
 
 jest.mock('../../../api');
@@ -30,11 +26,12 @@ const groupData = {
 
 const inventory = { id: 1, name: 'Foo' };
 
-// Mount under the same /inventories/:inventoryType/:id/groups/:groupId/* route
-// that InventoryGroups gives it, so useParams resolves from the URL.
+// InventoryGroup reads :inventoryType/:id/:groupId via useParams and renders a
+// nested v6 route tree, so mount it under its real parent route at a concrete
+// URL.
 function renderAt(path) {
   const history = createMemoryHistory({ initialEntries: [path] });
-  return mountWithContexts(
+  return renderWithContexts(
     <Routes>
       <Route
         path="/inventories/:inventoryType/:id/groups/:groupId/*"
@@ -48,70 +45,73 @@ function renderAt(path) {
 }
 
 describe('<InventoryGroup />', () => {
-  let wrapper;
-
-  beforeEach(async () => {
+  beforeEach(() => {
     GroupsAPI.readDetail.mockResolvedValue(groupData);
-    await act(async () => {
-      wrapper = renderAt('/inventories/inventory/1/groups/1/details');
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   test('renders successfully', async () => {
-    expect(wrapper.length).toBe(1);
+    renderAt('/inventories/inventory/1/groups/1/details');
+    expect(await screen.findByRole('tab', { name: 'Details' })).toBeInTheDocument();
   });
 
   test('expect all tabs to exist, including Back to Groups', async () => {
-    const routedTabs = wrapper.find('RoutedTabs');
-    expect(routedTabs).toHaveLength(1);
-
-    const tabs = routedTabs.prop('tabsArray');
-    expect(tabs[0].link).toEqual(`/inventories/inventory/1/groups`);
-    expect(tabs[1].name).toEqual('Details');
-    expect(tabs[2].name).toEqual('Related Groups');
-    expect(tabs[3].name).toEqual('Hosts');
+    renderAt('/inventories/inventory/1/groups/1/details');
+    await screen.findByRole('tab', { name: 'Details' });
+    const expectedTabs = [
+      'Back to Groups',
+      'Details',
+      'Related Groups',
+      'Hosts',
+    ];
+    expectedTabs.forEach((name) =>
+      expect(screen.getByRole('tab', { name })).toBeInTheDocument()
+    );
   });
 
   test('should show content error when user attempts to navigate to erroneous route', async () => {
-    await act(async () => {
-      wrapper = renderAt('/inventories/inventory/1/groups/1/foobar');
-    });
-    await waitForElement(wrapper, 'ContentError', (el) => el.length === 1);
+    renderAt('/inventories/inventory/1/groups/1/foobar');
+    expect(
+      await screen.findByText('View Inventory Details')
+    ).toBeInTheDocument();
   });
 
   test('should show content error when api throws error on initial render', async () => {
     GroupsAPI.readDetail.mockImplementationOnce(() =>
       Promise.reject(new Error())
     );
-    await act(async () => {
-      wrapper = renderAt('/inventories/inventory/1/groups/1/details');
-    });
-    await waitForElement(wrapper, 'ContentError', (el) => el.length === 1);
+    renderAt('/inventories/inventory/1/groups/1/details');
+    expect(
+      await screen.findByText('Something went wrong...')
+    ).toBeInTheDocument();
   });
 });
 
 describe('constructed inventory', () => {
-  let wrapper;
-
-  beforeEach(async () => {
+  beforeEach(() => {
     GroupsAPI.readDetail.mockResolvedValue(groupData);
-    await act(async () => {
-      wrapper = renderAt(
-        '/inventories/constructed_inventory/1/groups/1/details'
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
   });
 
-  test('Constructed Inventory expect all tabs to exist, including Back to Groups', () => {
-    const routedTabs = wrapper.find('RoutedTabs');
-    expect(routedTabs).toHaveLength(1);
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
-    const tabs = routedTabs.prop('tabsArray');
-    expect(tabs[0].link).toEqual(`/inventories/constructed_inventory/1/groups`);
-    expect(tabs[1].name).toEqual('Details');
-    expect(tabs[2].name).toEqual('Related Groups');
-    expect(tabs[3].name).toEqual('Hosts');
+  test('Constructed Inventory expect all tabs to exist, including Back to Groups', async () => {
+    renderAt('/inventories/constructed_inventory/1/groups/1/details');
+    await screen.findByRole('tab', { name: 'Details' });
+    const expectedTabs = [
+      'Back to Groups',
+      'Details',
+      'Related Groups',
+      'Hosts',
+    ];
+    await waitFor(() =>
+      expectedTabs.forEach((name) =>
+        expect(screen.getByRole('tab', { name })).toBeInTheDocument()
+      )
+    );
   });
 });

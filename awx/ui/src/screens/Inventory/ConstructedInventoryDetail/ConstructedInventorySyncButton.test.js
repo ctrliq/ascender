@@ -1,10 +1,10 @@
 import React from 'react';
 import { I18nProvider } from '@lingui/react';
 import { i18n } from '@lingui/core';
-import english from '../../../locales/en/messages';
 import { InventoriesAPI } from 'api';
-import ConstructedInventorySyncButton from './ConstructedInventorySyncButton';
 import { render, fireEvent, screen, waitFor } from '@testing-library/react';
+import english from '../../../locales/en/messages';
+import ConstructedInventorySyncButton from './ConstructedInventorySyncButton';
 import '@testing-library/jest-dom';
 
 jest.mock('../../../api');

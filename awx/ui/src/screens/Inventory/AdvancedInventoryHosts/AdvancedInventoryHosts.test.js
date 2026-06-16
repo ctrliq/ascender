@@ -1,17 +1,26 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router-dom-v5-compat';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+import { InventoriesAPI } from 'api';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
+import mockHost from '../shared/data.host.json';
 import AdvancedInventoryHosts from './AdvancedInventoryHosts';
+
+jest.mock('../../../api');
+
+// Mock the leaf list so we only assert routing/dispatch here.
+jest.mock('./AdvancedInventoryHostList', () => {
+  const AdvancedInventoryHostList = () => (
+    <div aria-label="mock-advanced-host-list" />
+  );
+  return { __esModule: true, default: AdvancedInventoryHostList };
+});
 
 // AdvancedInventoryHosts uses relative routes; mount it under its v6 parent.
 function renderUnder(initialEntry, props) {
   const history = createMemoryHistory({ initialEntries: [initialEntry] });
-  return mountWithContexts(
+  return renderWithContexts(
     <Routes>
       <Route
         path="/inventories/:inventoryType/:id/hosts/*"
@@ -22,39 +31,29 @@ function renderUnder(initialEntry, props) {
   );
 }
 
-jest.mock('../../../api');
-jest.mock('./AdvancedInventoryHostList', () => {
-  const AdvancedInventoryHostList = () => <div />;
-  return {
-    __esModule: true,
-    default: AdvancedInventoryHostList,
-  };
-});
-
 describe('<AdvancedInventoryHosts />', () => {
-  test('should render smart inventory host list', () => {
-    const wrapper = renderUnder('/inventories/smart_inventory/1/hosts', {
-      inventory: { id: 1 },
-    });
-    expect(wrapper.find('AdvancedInventoryHostList').length).toBe(1);
-    expect(wrapper.find('AdvancedInventoryHostList').prop('inventory')).toEqual(
-      {
-        id: 1,
-      }
-    );
+  afterEach(() => {
     jest.clearAllMocks();
   });
 
-  test('should render smart inventory host details', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = renderUnder('/inventories/smart_inventory/1/hosts/2', {
-        inventory: { id: 1 },
-        setBreadcrumb: () => {},
-      });
+  test('should render smart inventory host list', () => {
+    renderUnder('/inventories/smart_inventory/1/hosts', {
+      inventory: { id: 1 },
     });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('AdvancedInventoryHost').length).toBe(1);
-    jest.clearAllMocks();
+    expect(
+      screen.getByLabelText('mock-advanced-host-list')
+    ).toBeInTheDocument();
+  });
+
+  test('should render smart inventory host details', async () => {
+    InventoriesAPI.readHostDetail.mockResolvedValue({ ...mockHost });
+    renderUnder('/inventories/smart_inventory/1/hosts/2', {
+      inventory: { id: 1 },
+      setBreadcrumb: () => {},
+    });
+    // the host detail dispatcher renders RoutedTabs once the host loads
+    expect(
+      await screen.findByRole('tab', { name: 'Details' })
+    ).toBeInTheDocument();
   });
 });

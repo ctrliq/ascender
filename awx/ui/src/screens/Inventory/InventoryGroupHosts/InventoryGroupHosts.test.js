@@ -1,32 +1,34 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router-dom-v5-compat';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryGroupHosts from './InventoryGroupHosts';
 
 jest.mock('../../../api');
+jest.mock('./InventoryGroupHostList', () => {
+  const InventoryGroupHostList = () => (
+    <div aria-label="mock-group-host-list" />
+  );
+  return { __esModule: true, default: InventoryGroupHostList };
+});
 
 describe('<InventoryGroupHosts />', () => {
-  let wrapper;
-
-  test('initially renders successfully', async () => {
+  test('initially renders successfully', () => {
     const history = createMemoryHistory({
       initialEntries: ['/inventories/inventory/1/groups/1/nested_hosts'],
     });
 
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Routes>
-          <Route
-            path="/inventories/:inventoryType/:id/groups/:groupId/nested_hosts/*"
-            element={<InventoryGroupHosts />}
-          />
-        </Routes>,
-        { context: { router: { history } } }
-      );
-    });
-    expect(wrapper.length).toBe(1);
-    expect(wrapper.find('InventoryGroupHostList').length).toBe(1);
+    renderWithContexts(
+      <Routes>
+        <Route
+          path="/inventories/:inventoryType/:id/groups/:groupId/nested_hosts/*"
+          element={<InventoryGroupHosts />}
+        />
+      </Routes>,
+      { context: { router: { history } } }
+    );
+
+    expect(screen.getByLabelText('mock-group-host-list')).toBeInTheDocument();
   });
 });

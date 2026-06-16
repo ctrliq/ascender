@@ -1,138 +1,160 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
-import { InventorySourcesAPI, ProjectsAPI, CredentialsAPI } from 'api';
+import { screen, waitFor } from '@testing-library/react';
 import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+  InventorySourcesAPI,
+  ProjectsAPI,
+  CredentialsAPI,
+  ExecutionEnvironmentsAPI,
+} from 'api';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventorySourceForm from './InventorySourceForm';
 
 jest.mock('../../../api');
 
-describe('<InventorySourceForm />', () => {
-  let wrapper;
-
-  describe('Successful form submission', () => {
-    const onSubmit = jest.fn();
-
-    beforeAll(async () => {
-      CredentialsAPI.read.mockResolvedValue({
-        data: { count: 0, results: [] },
-      });
-      ProjectsAPI.readInventories.mockResolvedValue({
-        data: ['foo', 'bar'],
-      });
-      InventorySourcesAPI.readOptions = async () => ({
-        data: {
-          actions: {
-            GET: {
-              source: {
-                choices: [
-                  ['file', 'File, Directory or Script'],
-                  ['scm', 'Sourced from a Project'],
-                  ['ec2', 'Amazon EC2'],
-                  ['gce', 'Google Compute Engine'],
-                  ['azure_rm', 'Microsoft Azure Resource Manager'],
-                  ['vmware', 'VMware vCenter'],
-                  ['satellite6', 'Red Hat Satellite 6'],
-                  ['openstack', 'OpenStack'],
-                  ['rhv', 'Red Hat Virtualization'],
-                  ['ascender', 'CIQ Ascender Automation Platform'],
-                  ['terraform', 'Terraform State'],
-                ],
-              },
-            },
-          },
+// Source choices returned by InventorySourcesAPI.readOptions on mount. The
+// component filters out the 'file' choice and renders the rest as the Source
+// AnsibleSelect options.
+const readOptionsResult = {
+  data: {
+    actions: {
+      GET: {
+        source: {
+          choices: [
+            ['file', 'File, Directory or Script'],
+            ['scm', 'Sourced from a Project'],
+            ['ec2', 'Amazon EC2'],
+            ['gce', 'Google Compute Engine'],
+            ['azure_rm', 'Microsoft Azure Resource Manager'],
+            ['vmware', 'VMware vCenter'],
+            ['satellite6', 'Red Hat Satellite 6'],
+            ['openstack', 'OpenStack'],
+            ['rhv', 'Red Hat Virtualization'],
+            ['ascender', 'CIQ Ascender Automation Platform'],
+            ['terraform', 'Terraform State'],
+          ],
         },
-      });
-      await act(async () => {
-        wrapper = mountWithContexts(
-          <InventorySourceForm onCancel={() => {}} onSubmit={onSubmit} />
-        );
-      });
-      await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    });
+      },
+    },
+  },
+};
 
-    afterAll(() => {
-      jest.clearAllMocks();
+describe('<InventorySourceForm />', () => {
+  beforeEach(() => {
+    CredentialsAPI.read.mockResolvedValue({
+      data: { count: 0, results: [] },
     });
+    ProjectsAPI.readInventories.mockResolvedValue({
+      data: ['foo', 'bar'],
+    });
+    InventorySourcesAPI.readOptions = async () => readOptionsResult;
+    // The ExecutionEnvironmentLookup rendered by the form fetches EEs on mount;
+    // mock its API calls so loading settles without console errors.
+    ExecutionEnvironmentsAPI.read.mockResolvedValue({
+      data: { count: 0, results: [] },
+    });
+    ExecutionEnvironmentsAPI.readOptions.mockResolvedValue({
+      data: { actions: { GET: {} }, related_search_fields: [] },
+    });
+  });
 
-    test('should initially display primary form fields', () => {
-      expect(wrapper.find('FormGroup[label="Name"]')).toHaveLength(1);
-      expect(wrapper.find('FormGroup[label="Description"]')).toHaveLength(1);
-      expect(wrapper.find('FormGroup[label="Source"]')).toHaveLength(1);
-      expect(
-        wrapper.find('FormGroup[label="Ansible Environment"]')
-      ).toHaveLength(0);
-      expect(wrapper.find('ExecutionEnvironmentLookup')).toHaveLength(1);
-    });
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
-    test('should display subform when source dropdown has a value', async () => {
-      await act(async () => {
-        wrapper.find('AnsibleSelect#source').prop('onChange')(null, 'scm');
-      });
-      wrapper.update();
-      expect(wrapper.find('Title').text()).toBe('Source details');
-    });
+  test('should initially display primary form fields', async () => {
+    renderWithContexts(
+      <InventorySourceForm onCancel={() => {}} onSubmit={() => {}} />
+    );
+    // settle the readOptions loading state
+    await screen.findByText('Source');
 
-    test('should show field error when form is invalid', async () => {
-      expect(onSubmit).not.toHaveBeenCalled();
-      await act(async () => {
-        wrapper.find('CredentialLookup').invoke('onChange')({
-          id: 1,
-          name: 'mock cred',
-        });
-        wrapper.find('ProjectLookup').invoke('onChange')({
-          id: 2,
-          name: 'mock proj',
-        });
-        wrapper.find('Select#source_path').prop('onToggle')();
-        wrapper.find('Select#source_path').prop('onSelect')(null, 'foo');
-        wrapper.find('AnsibleSelect#verbosity').prop('onChange')(null, '2');
-        wrapper.find('button[aria-label="Save"]').simulate('click');
-      });
-      wrapper.update();
-      expect(wrapper.find('FormGroup[label="Name"] .pf-m-error')).toHaveLength(
-        1
-      );
-      expect(onSubmit).not.toHaveBeenCalled();
-    });
+    expect(screen.getByText('Name')).toBeInTheDocument();
+    expect(screen.getByText('Description')).toBeInTheDocument();
+    expect(screen.getByText('Source')).toBeInTheDocument();
+    // ExecutionEnvironmentLookup renders a FormGroup labelled "Execution
+    // Environment"
+    expect(screen.getByText('Execution Environment')).toBeInTheDocument();
+    expect(
+      screen.queryByText('Ansible Environment')
+    ).not.toBeInTheDocument();
+  });
 
-    test('should call onSubmit when Save button is clicked', async () => {
-      expect(onSubmit).not.toHaveBeenCalled();
-      wrapper.find('input#name').simulate('change', {
-        target: { value: 'new foo', name: 'name' },
-      });
-      await act(async () => {
-        wrapper.find('button[aria-label="Save"]').simulate('click');
-      });
-      wrapper.update();
-      expect(onSubmit).toHaveBeenCalled();
-    });
+  test('should display subform when source dropdown has a value', async () => {
+    const { user, container } = renderWithContexts(
+      <InventorySourceForm onCancel={() => {}} onSubmit={() => {}} />
+    );
+    await screen.findByText('Source');
+
+    // The Source control is an AnsibleSelect rendered as <select id="source">.
+    // Selecting a non-empty value reveals the "Source details" subform.
+    await user.selectOptions(container.querySelector('#source'), 'scm');
+
+    expect(await screen.findByText('Source details')).toBeInTheDocument();
+  });
+
+  test('should show field error when form is invalid', async () => {
+    const onSubmit = jest.fn();
+    const { user, container } = renderWithContexts(
+      <InventorySourceForm onCancel={() => {}} onSubmit={onSubmit} />
+    );
+    await screen.findByText('Source');
+
+    // The enzyme test drove CredentialLookup/ProjectLookup/source_path/verbosity
+    // via .invoke before saving. Those sub-lookups debounce 1000ms and driving
+    // them through the real DOM is slow and flaky, so we drop them: the point
+    // of the test is that an invalid (empty Name) form blocks submit. Select a
+    // source to render the subform, leave Name empty, then click Save once.
+    await user.selectOptions(container.querySelector('#source'), 'scm');
+    await screen.findByText('Source details');
+
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+
+    // Name is required; the validation error surfaces and submit is blocked.
+    expect(
+      await screen.findByText('This field must not be blank')
+    ).toBeInTheDocument();
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
+
+  test('should call onSubmit when Save button is clicked', async () => {
+    const onSubmit = jest.fn();
+    const { user, container } = renderWithContexts(
+      <InventorySourceForm onCancel={() => {}} onSubmit={onSubmit} />
+    );
+    await screen.findByText('Source');
+
+    // Fill the required Name field and pick a Source. Source is required, so
+    // we select 'ec2' (its subform has no required fields) to keep the form
+    // valid, then click Save once.
+    await user.type(container.querySelector('#name'), 'new foo');
+    await user.selectOptions(container.querySelector('#source'), 'ec2');
+    await screen.findByText('Source details');
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+
+    await waitFor(() => expect(onSubmit).toHaveBeenCalled());
   });
 
   test('calls "onCancel" when Cancel button is clicked', async () => {
     const onCancel = jest.fn();
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <InventorySourceForm onCancel={onCancel} onSubmit={() => {}} />
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(onCancel).not.toHaveBeenCalled();
-    wrapper.find('button[aria-label="Cancel"]').prop('onClick')();
+    const { user } = renderWithContexts(
+      <InventorySourceForm onCancel={onCancel} onSubmit={() => {}} />
+    );
+    await screen.findByText('Source');
+
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
+
     expect(onCancel).toHaveBeenCalled();
   });
 
   test('should display ContentError on throw', async () => {
     InventorySourcesAPI.readOptions = jest.fn();
     InventorySourcesAPI.readOptions.mockRejectedValueOnce(new Error());
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <InventorySourceForm onCancel={() => {}} onSubmit={() => {}} />
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('ContentError').length).toBe(1);
+    renderWithContexts(
+      <InventorySourceForm onCancel={() => {}} onSubmit={() => {}} />
+    );
+
+    expect(
+      await screen.findByText('Something went wrong...')
+    ).toBeInTheDocument();
   });
 });

@@ -1,19 +1,9 @@
 import React from 'react';
-import { Router } from 'react-router-dom';
-import {
-  render,
-  fireEvent,
-  screen,
-  waitFor,
-  within,
-} from '@testing-library/react';
-import '@testing-library/jest-dom';
-import { HostsAPI } from 'api';
-import { i18n } from '@lingui/core';
-import { I18nProvider } from '@lingui/react';
-import InventoryHostItem from './InventoryHostItem';
+import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import english from '../../../locales/en/messages';
+import { HostsAPI } from 'api';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
+import InventoryHostItem from './InventoryHostItem';
 
 jest.mock('api');
 
@@ -51,46 +41,40 @@ const mockHost = {
   },
 };
 
-describe('<InventoryHostItem />', () => {
+const getChips = () => {
+  const list = screen.getByRole('list', { name: 'Related Groups' });
+  const items = within(list).getAllByRole('listitem');
+  return items.map((item) => item.textContent);
+};
+
+function renderItem(props) {
   const history = createMemoryHistory({
     initialEntries: ['/inventories/inventory/1/hosts'],
   });
-
-  const getChips = (currentScreen) => {
-    const list = currentScreen.getByRole('list', {
-      name: 'Related Groups',
-    });
-    const { getAllByRole } = within(list);
-    const items = getAllByRole('listitem');
-    return items.map((item) => item.textContent);
-  };
-
-  const Component = (props) => (
-    <I18nProvider i18n={i18n}>
-      <Router history={history}>
-        <table>
-          <tbody>
-            <InventoryHostItem
-              detailUrl="/host/1"
-              editUrl={`/inventories/inventory/1/hosts/1/edit`}
-              host={mockHost}
-              isSelected={false}
-              onSelect={() => {}}
-              {...props}
-            />
-          </tbody>
-        </table>
-      </Router>
-    </I18nProvider>
+  return renderWithContexts(
+    <table>
+      <tbody>
+        <InventoryHostItem
+          detailUrl="/host/1"
+          editUrl="/inventories/inventory/1/hosts/1/edit"
+          host={mockHost}
+          isSelected={false}
+          onSelect={() => {}}
+          {...props}
+        />
+      </tbody>
+    </table>,
+    { context: { router: { history } } }
   );
+}
 
-  beforeEach(() => {
-    i18n.load({ en: english });
-    i18n.activate('en');
+describe('<InventoryHostItem />', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   test('should display expected details', () => {
-    render(<Component />);
+    renderItem();
 
     expect(screen.getByRole('cell', { name: 'Bar' })).toBeInTheDocument();
     expect(
@@ -105,59 +89,48 @@ describe('<InventoryHostItem />', () => {
       '/inventories/inventory/1/hosts/1/edit'
     );
 
-    const relatedGroupChips = getChips(screen);
-    expect(relatedGroupChips).toEqual(['group_11']);
+    expect(getChips()).toEqual(['group_11']);
   });
 
   test('edit button hidden from users without edit capabilities', () => {
-    const copyMockHost = { ...mockHost };
-    copyMockHost.summary_fields.user_capabilities.edit = false;
+    const copyMockHost = {
+      ...mockHost,
+      summary_fields: {
+        ...mockHost.summary_fields,
+        user_capabilities: { edit: false },
+      },
+    };
 
-    render(<Component host={copyMockHost} />);
-    expect(screen.queryByText('Edit host')).toBeNull();
+    renderItem({ host: copyMockHost });
+    expect(screen.queryByText('Edit host')).not.toBeInTheDocument();
   });
 
   test('should show and hide related groups on overflow button click', async () => {
-    const copyMockHost = { ...mockHost };
     const mockGroups = [
-      {
-        id: 1,
-        name: 'group_1',
-      },
-      {
-        id: 2,
-        name: 'group_2',
-      },
-      {
-        id: 3,
-        name: 'group_3',
-      },
-      {
-        id: 4,
-        name: 'group_4',
-      },
-      {
-        id: 5,
-        name: 'group_5',
-      },
-      {
-        id: 6,
-        name: 'group_6',
-      },
+      { id: 1, name: 'group_1' },
+      { id: 2, name: 'group_2' },
+      { id: 3, name: 'group_3' },
+      { id: 4, name: 'group_4' },
+      { id: 5, name: 'group_5' },
+      { id: 6, name: 'group_6' },
     ];
-    copyMockHost.summary_fields.groups = {
-      count: 6,
-      results: mockGroups.slice(0, 5),
+    const copyMockHost = {
+      ...mockHost,
+      summary_fields: {
+        ...mockHost.summary_fields,
+        groups: {
+          count: 6,
+          results: mockGroups.slice(0, 5),
+        },
+      },
     };
     HostsAPI.readGroups.mockReturnValue({
-      data: {
-        results: mockGroups,
-      },
+      data: { results: mockGroups },
     });
 
-    render(<Component host={copyMockHost} />);
+    renderItem({ host: copyMockHost });
 
-    const initialRelatedGroupChips = getChips(screen);
+    const initialRelatedGroupChips = getChips();
     expect(initialRelatedGroupChips).toEqual([
       'group_1',
       'group_2',
@@ -166,13 +139,11 @@ describe('<InventoryHostItem />', () => {
       '2 more',
     ]);
 
-    const overflowGroupsButton = screen.queryByText('2 more');
-    fireEvent.click(overflowGroupsButton);
+    fireEvent.click(screen.getByText('2 more'));
 
     await waitFor(() => expect(HostsAPI.readGroups).toHaveBeenCalledWith(1));
 
-    const expandedRelatedGroupChips = getChips(screen);
-    expect(expandedRelatedGroupChips).toEqual([
+    expect(getChips()).toEqual([
       'group_1',
       'group_2',
       'group_3',
@@ -182,52 +153,36 @@ describe('<InventoryHostItem />', () => {
       'Show less',
     ]);
 
-    const collapseGroupsButton = await screen.findByText('Show less');
-    fireEvent.click(collapseGroupsButton);
-
-    const collapsedRelatedGroupChips = getChips(screen);
-    expect(collapsedRelatedGroupChips).toEqual(initialRelatedGroupChips);
+    fireEvent.click(await screen.findByText('Show less'));
+    expect(getChips()).toEqual(initialRelatedGroupChips);
   });
 
   test('should show error modal when related groups api request fails', async () => {
-    const copyMockHost = { ...mockHost };
     const mockGroups = [
-      {
-        id: 1,
-        name: 'group_1',
-      },
-      {
-        id: 2,
-        name: 'group_2',
-      },
-      {
-        id: 3,
-        name: 'group_3',
-      },
-      {
-        id: 4,
-        name: 'group_4',
-      },
-      {
-        id: 5,
-        name: 'group_5',
-      },
-      {
-        id: 6,
-        name: 'group_6',
-      },
+      { id: 1, name: 'group_1' },
+      { id: 2, name: 'group_2' },
+      { id: 3, name: 'group_3' },
+      { id: 4, name: 'group_4' },
+      { id: 5, name: 'group_5' },
+      { id: 6, name: 'group_6' },
     ];
-    copyMockHost.summary_fields.groups = {
-      count: 6,
-      results: mockGroups.slice(0, 5),
+    const copyMockHost = {
+      ...mockHost,
+      summary_fields: {
+        ...mockHost.summary_fields,
+        groups: {
+          count: 6,
+          results: mockGroups.slice(0, 5),
+        },
+      },
     };
     HostsAPI.readGroups.mockRejectedValueOnce(new Error());
 
-    render(<Component host={copyMockHost} />);
-    await waitFor(() => {
-      const overflowGroupsButton = screen.queryByText('2 more');
-      fireEvent.click(overflowGroupsButton);
-    });
-    expect(screen.getByRole('dialog', { name: 'Alert modal Error!' }));
+    renderItem({ host: copyMockHost });
+    fireEvent.click(screen.getByText('2 more'));
+
+    expect(
+      await screen.findByRole('dialog', { name: 'Alert modal Error!' })
+    ).toBeInTheDocument();
   });
 });

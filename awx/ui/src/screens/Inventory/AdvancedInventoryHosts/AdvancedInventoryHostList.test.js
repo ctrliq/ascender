@@ -1,32 +1,43 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen } from '@testing-library/react';
+import { createMemoryHistory } from 'history';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { InventoriesAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import AdvancedInventoryHostList from './AdvancedInventoryHostList';
 import mockInventory from '../shared/data.inventory.json';
 import mockHosts from '../shared/data.hosts.json';
 
 jest.mock('../../../api');
 
-describe('<AdvancedInventoryHostList />', () => {
-  let wrapper;
-  const clonedInventory = {
-    ...mockInventory,
-    summary_fields: {
-      ...mockInventory.summary_fields,
-      user_capabilities: {
-        ...mockInventory.summary_fields.user_capabilities,
-      },
+const clonedInventory = {
+  ...mockInventory,
+  summary_fields: {
+    ...mockInventory.summary_fields,
+    user_capabilities: {
+      ...mockInventory.summary_fields.user_capabilities,
     },
-  };
+  },
+};
 
-  beforeEach(async () => {
-    InventoriesAPI.readHosts.mockResolvedValue({
-      data: mockHosts,
-    });
+function renderList(inventory = clonedInventory) {
+  const history = createMemoryHistory({
+    initialEntries: ['/inventories/smart_inventory/1/hosts'],
+  });
+  return renderWithContexts(
+    <Routes>
+      <Route
+        path="/inventories/:inventoryType/:id/hosts"
+        element={<AdvancedInventoryHostList inventory={inventory} />}
+      />
+    </Routes>,
+    { context: { router: { history } } }
+  );
+}
+
+describe('<AdvancedInventoryHostList />', () => {
+  beforeEach(() => {
+    InventoriesAPI.readHosts.mockResolvedValue({ data: mockHosts });
     InventoriesAPI.readAdHocOptions.mockResolvedValue({
       data: {
         actions: {
@@ -42,54 +53,42 @@ describe('<AdvancedInventoryHostList />', () => {
         },
       },
     });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <AdvancedInventoryHostList inventory={clonedInventory} />
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
   });
 
-  afterAll(() => {
+  afterEach(() => {
     jest.clearAllMocks();
   });
 
-  test('initially renders successfully', () => {
-    expect(wrapper.find('AdvancedInventoryHostList').length).toBe(1);
-  });
-
-  test('should fetch hosts from api and render them in the list', () => {
+  test('should fetch hosts from api and render them in the list', async () => {
+    renderList();
+    await screen.findAllByRole('link', { name: /dummy/ });
     expect(InventoriesAPI.readHosts).toHaveBeenCalled();
-    expect(wrapper.find('AdvancedInventoryHostListItem').length).toBe(3);
+    // three hosts each render a selectable row checkbox
+    expect(screen.getAllByRole('checkbox', { name: /select row/i })).toHaveLength(
+      3
+    );
   });
 
   test('should select and deselect all items', async () => {
-    expect.assertions(6);
-    act(() => {
-      wrapper.find('DataListToolbar').invoke('onSelectAll')(true);
+    const { user } = renderList();
+    await screen.findAllByRole('link', { name: /dummy/ });
+    const selectAll = screen.getByRole('checkbox', { name: 'Select all' });
+    const rowCheckboxes = screen.getAllByRole('checkbox', {
+      name: /select row/i,
     });
-    wrapper.update();
-    wrapper.find('.pf-c-table__check input').forEach((el) => {
-      expect(el.props().checked).toEqual(true);
-    });
-    act(() => {
-      wrapper.find('DataListToolbar').invoke('onSelectAll')(false);
-    });
-    wrapper.update();
-    wrapper.find('.pf-c-table__check input').forEach((el) => {
-      expect(el.props().checked).toEqual(false);
-    });
+
+    await user.click(selectAll);
+    rowCheckboxes.forEach((box) => expect(box).toBeChecked());
+
+    await user.click(selectAll);
+    rowCheckboxes.forEach((box) => expect(box).not.toBeChecked());
   });
 
   test('should show content error when api throws an error', async () => {
-    InventoriesAPI.readHosts.mockImplementation(() =>
-      Promise.reject(new Error())
-    );
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <AdvancedInventoryHostList inventory={mockInventory} />
-      );
-    });
-    await waitForElement(wrapper, 'ContentError', (el) => el.length === 1);
+    InventoriesAPI.readHosts.mockRejectedValue(new Error());
+    renderList(mockInventory);
+    expect(
+      await screen.findByText('Something went wrong...')
+    ).toBeInTheDocument();
   });
 });

@@ -1,69 +1,51 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { InventorySourcesAPI } from 'api';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventorySourceSyncButton from './InventorySourceSyncButton';
 
 jest.mock('../../../api');
 
 const source = { id: 1, name: 'Foo', source: 'Source Bar' };
-const onSyncLoading = jest.fn();
 
 describe('<InventorySourceSyncButton />', () => {
-  let wrapper;
-  beforeEach(() => {
-    wrapper = mountWithContexts(
-      <InventorySourceSyncButton
-        source={source}
-        onSyncLoading={onSyncLoading}
-        onFetchSources={() => {}}
-      />
-    );
-  });
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  test('should mount properly', () => {
-    expect(wrapper.find('InventorySourceSyncButton').length).toBe(1);
-  });
-
   test('should render start sync button', () => {
-    expect(wrapper.find('SyncIcon').length).toBe(1);
-    expect(
-      wrapper.find('Button[aria-label="Start sync source"]').prop('isDisabled')
-    ).toBe(false);
+    const { container } = renderWithContexts(
+      <InventorySourceSyncButton source={source} />
+    );
+    const button = screen.getByRole('button', { name: 'Start sync source' });
+    expect(button).toBeInTheDocument();
+    expect(button).not.toBeDisabled();
+    expect(container.querySelector('svg')).toBeInTheDocument();
   });
 
   test('should start sync properly', async () => {
     InventorySourcesAPI.createSyncStart.mockResolvedValue({
       data: { status: 'pending' },
     });
-
-    await act(async () =>
-      wrapper.find('Button[aria-label="Start sync source"]').simulate('click')
+    const { user } = renderWithContexts(
+      <InventorySourceSyncButton source={source} />
     );
-    expect(InventorySourcesAPI.createSyncStart).toHaveBeenCalledWith(1);
+
+    await user.click(screen.getByRole('button', { name: 'Start sync source' }));
+
+    await waitFor(() =>
+      expect(InventorySourcesAPI.createSyncStart).toHaveBeenCalledWith(1)
+    );
   });
 
   test('should throw error on sync start properly', async () => {
-    InventorySourcesAPI.createSyncStart.mockRejectedValueOnce(
-      new Error({
-        response: {
-          config: {
-            method: 'post',
-            url: '/api/v2/inventory_sources/update',
-          },
-          data: 'An error occurred',
-          status: 403,
-        },
-      })
+    InventorySourcesAPI.createSyncStart.mockRejectedValueOnce(new Error());
+    const { user } = renderWithContexts(
+      <InventorySourceSyncButton source={source} />
     );
 
-    await act(async () =>
-      wrapper.find('Button[aria-label="Start sync source"]').simulate('click')
-    );
-    wrapper.update();
-    expect(wrapper.find('AlertModal').length).toBe(1);
+    await user.click(screen.getByRole('button', { name: 'Start sync source' }));
+
+    expect(await screen.findByText('Error!')).toBeInTheDocument();
   });
 });

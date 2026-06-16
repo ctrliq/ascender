@@ -1,57 +1,86 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router-dom-v5-compat';
 import { GroupsAPI } from 'api';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryRelatedGroupAdd from './InventoryRelatedGroupAdd';
 
 jest.mock('../../../api');
 
-describe('<InventoryRelatedGroupAdd/>', () => {
-  let wrapper;
-  let history;
+jest.mock('../shared/InventoryGroupForm', () => ({
+  handleSubmit,
+  handleCancel,
+  error,
+}) => (
+  <div>
+    <button
+      type="button"
+      aria-label="mock-submit"
+      onClick={() => handleSubmit({ name: 'foo', description: 'bar' })}
+    />
+    <button type="button" aria-label="mock-cancel" onClick={handleCancel} />
+    {error ? <div data-testid="mock-submit-error" /> : null}
+  </div>
+));
 
-  beforeEach(() => {
-    history = createMemoryHistory({
-      initialEntries: ['/inventories/inventory/1/groups/2/nested_groups/add'],
-    });
-    wrapper = mountWithContexts(
-      <Routes>
-        <Route
-          path="/inventories/inventory/:id/groups/:groupId/nested_groups/add/*"
-          element={<InventoryRelatedGroupAdd />}
-        />
-        <Route path="*" element={null} />
-      </Routes>,
-      { context: { router: { history } } }
-    );
+function renderRelatedAdd(history) {
+  return renderWithContexts(
+    <Routes>
+      <Route
+        path="/inventories/inventory/:id/groups/:groupId/nested_groups/add/*"
+        element={<InventoryRelatedGroupAdd />}
+      />
+      <Route path="*" element={null} />
+    </Routes>,
+    { context: { router: { history } } }
+  );
+}
+
+const url = '/inventories/inventory/1/groups/2/nested_groups/add';
+
+describe('<InventoryRelatedGroupAdd/>', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   test('should render properly', () => {
-    expect(wrapper.find('InventoryRelatedGroupAdd').length).toBe(1);
+    const history = createMemoryHistory({ initialEntries: [url] });
+    renderRelatedAdd(history);
+    expect(
+      screen.getByRole('button', { name: 'mock-submit' })
+    ).toBeInTheDocument();
   });
 
   test('should call api with proper data', async () => {
     GroupsAPI.create.mockResolvedValue({ data: { id: 3 } });
-    await act(() =>
-      wrapper.find('InventoryGroupForm').prop('handleSubmit')({
+    const history = createMemoryHistory({ initialEntries: [url] });
+    const { user } = renderRelatedAdd(history);
+
+    await user.click(screen.getByRole('button', { name: 'mock-submit' }));
+
+    await waitFor(() =>
+      expect(GroupsAPI.create).toHaveBeenCalledWith({
+        inventory: '1',
         name: 'foo',
         description: 'bar',
       })
     );
-    expect(GroupsAPI.create).toHaveBeenCalledWith({
-      inventory: '1',
-      name: 'foo',
-      description: 'bar',
-    });
-    expect(GroupsAPI.associateChildGroup).toHaveBeenCalledWith('2', 3);
+    await waitFor(() =>
+      expect(GroupsAPI.associateChildGroup).toHaveBeenCalledWith('2', 3)
+    );
   });
 
   test('cancel should navigate user to Inventory Groups List', async () => {
-    wrapper.find('button[aria-label="Cancel"]').simulate('click');
-    expect(history.location.pathname).toEqual(
-      '/inventories/inventory/1/groups/2/nested_groups'
+    const history = createMemoryHistory({ initialEntries: [url] });
+    const { user } = renderRelatedAdd(history);
+
+    await user.click(screen.getByRole('button', { name: 'mock-cancel' }));
+
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual(
+        '/inventories/inventory/1/groups/2/nested_groups'
+      )
     );
   });
 
@@ -65,14 +94,14 @@ describe('<InventoryRelatedGroupAdd/>', () => {
         data: { detail: 'An error occurred' },
       },
     });
-    await act(() =>
-      wrapper.find('InventoryGroupForm').prop('handleSubmit')({
-        name: 'foo',
-        description: 'bar',
-      })
-    );
-    wrapper.update();
-    expect(wrapper.find('FormSubmitError').length).toBe(1);
+    const history = createMemoryHistory({ initialEntries: [url] });
+    const { user } = renderRelatedAdd(history);
+
+    await user.click(screen.getByRole('button', { name: 'mock-submit' }));
+
+    expect(
+      await screen.findByTestId('mock-submit-error')
+    ).toBeInTheDocument();
   });
 
   test('should throw error on association of group', async () => {
@@ -86,18 +115,20 @@ describe('<InventoryRelatedGroupAdd/>', () => {
         data: { detail: 'An error occurred' },
       },
     });
-    await act(() =>
-      wrapper.find('InventoryGroupForm').prop('handleSubmit')({
+    const history = createMemoryHistory({ initialEntries: [url] });
+    const { user } = renderRelatedAdd(history);
+
+    await user.click(screen.getByRole('button', { name: 'mock-submit' }));
+
+    await waitFor(() =>
+      expect(GroupsAPI.create).toHaveBeenCalledWith({
+        inventory: '1',
         name: 'foo',
         description: 'bar',
       })
     );
-    expect(GroupsAPI.create).toHaveBeenCalledWith({
-      inventory: '1',
-      name: 'foo',
-      description: 'bar',
-    });
-    wrapper.update();
-    expect(wrapper.find('FormSubmitError').length).toBe(1);
+    expect(
+      await screen.findByTestId('mock-submit-error')
+    ).toBeInTheDocument();
   });
 });
