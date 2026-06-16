@@ -21,6 +21,7 @@ describe('<CredentialTypeListItem/>', () => {
             detailUrl="credential_types/1/details"
             isSelected={false}
             onSelect={() => {}}
+            rowIndex={0}
             {...props}
           />
         </tbody>
@@ -36,7 +37,9 @@ describe('<CredentialTypeListItem/>', () => {
     renderItem();
     expect(screen.getByText('Foo')).toBeInTheDocument();
     expect(screen.getByLabelText('Edit credential type')).toBeInTheDocument();
-    expect(screen.getByRole('checkbox')).not.toBeChecked();
+    expect(
+      screen.getByRole('checkbox', { name: 'Select row 0' })
+    ).not.toBeChecked();
   });
 
   test('edit button shown to users with edit capabilities', () => {

@@ -75,10 +75,23 @@ describe('<CredentialTypeForm/>', () => {
 
   test('should update form values', async () => {
     const { user, container } = renderForm();
+
+    // PF4's FormField renders a Popover labelIcon that breaks getByLabelText's
+    // label association, so the inputs are selected by id; assert they exist
+    // before interacting so a markup change fails clearly.
     const nameField = container.querySelector('#credential-type-name');
+    expect(nameField).toBeInTheDocument();
     await user.clear(nameField);
     await user.type(nameField, 'Foo');
     expect(nameField).toHaveValue('Foo');
+
+    const descriptionField = container.querySelector(
+      '#credential-type-description'
+    );
+    expect(descriptionField).toBeInTheDocument();
+    await user.clear(descriptionField);
+    await user.type(descriptionField, 'New description');
+    expect(descriptionField).toHaveValue('New description');
   });
 
   test('should call onCancel when Cancel button is clicked', async () => {

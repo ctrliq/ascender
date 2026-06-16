@@ -56,9 +56,9 @@ describe('<CredentialTypeList>', () => {
     const { user } = renderWithContexts(<CredentialTypeList />);
     await screen.findByText('Foo');
 
-    const checkboxes = screen.getAllByRole('checkbox');
-    await user.click(checkboxes[1]);
-    expect(checkboxes[1]).toBeChecked();
+    const rowCheckbox = screen.getByRole('checkbox', { name: 'Select row 0' });
+    await user.click(rowCheckbox);
+    expect(rowCheckbox).toBeChecked();
 
     await user.click(screen.getByRole('button', { name: 'Delete' }));
     // PF4 Modal aria-hides the tree in jsdom; query the confirm by label.
@@ -91,7 +91,7 @@ describe('<CredentialTypeList>', () => {
     const { user } = renderWithContexts(<CredentialTypeList />);
     await screen.findByText('Foo');
 
-    await user.click(screen.getAllByRole('checkbox')[1]);
+    await user.click(screen.getByRole('checkbox', { name: 'Select row 0' }));
     await user.click(screen.getByRole('button', { name: 'Delete' }));
     fireEvent.click(await screen.findByLabelText('confirm delete'));
 
