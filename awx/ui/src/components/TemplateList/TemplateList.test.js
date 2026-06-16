@@ -1,14 +1,14 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, within } from '@testing-library/react';
 import {
   JobTemplatesAPI,
   UnifiedJobTemplatesAPI,
   WorkflowJobTemplatesAPI,
 } from 'api';
 import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../testUtils/enzymeHelpers';
+  renderWithContexts,
+  settleTooltips,
+} from '../../../testUtils/rtlContexts';
 
 import TemplateList from './TemplateList';
 
@@ -74,6 +74,10 @@ const mockTemplates = [
   },
 ];
 
+function getRow(name) {
+  return screen.getByRole('link', { name }).closest('tr');
+}
+
 describe('<TemplateList />', () => {
   let debug;
   beforeEach(() => {
@@ -89,7 +93,11 @@ describe('<TemplateList />', () => {
         actions: [],
       },
     });
-    debug = global.console.debug; // eslint-disable-line prefer-destructuring
+    JobTemplatesAPI.readOptions.mockResolvedValue({ data: { actions: {} } });
+    WorkflowJobTemplatesAPI.readOptions.mockResolvedValue({
+      data: { actions: {} },
+    });
+    debug = global.console.debug;
     global.console.debug = () => {};
   });
 
@@ -99,166 +107,90 @@ describe('<TemplateList />', () => {
   });
 
   test('initially renders successfully', async () => {
-    await act(async () => {
-      mountWithContexts(
-        <TemplateList
-          match={{ path: '/templates', url: '/templates' }}
-          location={{ search: '', pathname: '/templates' }}
-        />
-      );
-    });
+    renderWithContexts(
+      <TemplateList
+        match={{ path: '/templates', url: '/templates' }}
+        location={{ search: '', pathname: '/templates' }}
+      />
+    );
+    await screen.findByRole('link', { name: 'Job Template 1' });
   });
 
   test('Templates are retrieved from the api and the components finishes loading', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<TemplateList />);
-    });
+    renderWithContexts(<TemplateList />);
+    await screen.findByRole('link', { name: 'Job Template 1' });
     expect(UnifiedJobTemplatesAPI.read).toHaveBeenCalled();
-    await act(async () => {
-      await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    });
-    expect(wrapper.find('TemplateListItem').length).toEqual(5);
+    // five name links, one per TemplateListItem
+    expect(
+      screen.getAllByRole('link', { name: /Job Template/ })
+    ).toHaveLength(5);
   });
 
   test('handleSelect is called when a template list item is selected', async () => {
-    const wrapper = mountWithContexts(<TemplateList />);
-    await act(async () => {
-      await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    });
-    const checkBox = wrapper.find('TemplateListItem').at(1).find('input');
+    const { user } = renderWithContexts(<TemplateList />);
+    await screen.findByRole('link', { name: 'Job Template 2' });
 
-    checkBox.simulate('change', {
-      target: {
-        id: 2,
-        name: 'Job Template 2',
-        url: '/templates/job_template/2',
-        type: 'job_template',
-        summary_fields: { user_capabilities: { delete: true } },
-      },
-    });
-
-    expect(wrapper.find('TemplateListItem').at(1).prop('isSelected')).toBe(
-      true
-    );
+    const checkbox = within(getRow('Job Template 2')).getByRole('checkbox');
+    expect(checkbox).not.toBeChecked();
+    await user.click(checkbox);
+    expect(checkbox).toBeChecked();
   });
 
   test('handleSelectAll is called when a template list item is selected', async () => {
-    const wrapper = mountWithContexts(<TemplateList />);
-    await act(async () => {
-      await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    });
-    expect(wrapper.find('Checkbox#select-all').prop('isChecked')).toBe(false);
+    const { user } = renderWithContexts(<TemplateList />);
+    await screen.findByRole('link', { name: 'Job Template 1' });
 
-    const toolBarCheckBox = wrapper.find('Checkbox#select-all');
-    act(() => {
-      toolBarCheckBox.prop('onChange')(true);
-    });
-    wrapper.update();
-    expect(wrapper.find('Checkbox#select-all').prop('isChecked')).toBe(true);
+    const selectAll = screen.getByRole('checkbox', { name: 'Select all' });
+    expect(selectAll).not.toBeChecked();
+    await user.click(selectAll);
+    expect(selectAll).toBeChecked();
   });
 
   test('delete button is disabled if user does not have delete capabilities on a selected template', async () => {
-    const wrapper = mountWithContexts(<TemplateList />);
-    await act(async () => {
-      await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    });
-    const deleteableItem = wrapper.find('TemplateListItem').at(0).find('input');
-    const nonDeleteableItem = wrapper
-      .find('TemplateListItem')
-      .at(4)
-      .find('input');
+    const { user } = renderWithContexts(<TemplateList />);
+    await screen.findByRole('link', { name: 'Job Template 1' });
 
-    deleteableItem.simulate('change', {
-      id: 1,
-      name: 'Job Template 1',
-      url: '/templates/job_template/1',
-      type: 'job_template',
-      summary_fields: {
-        user_capabilities: {
-          delete: true,
-        },
-      },
-    });
+    const deleteableCheckbox = within(getRow('Job Template 1')).getByRole(
+      'checkbox'
+    );
+    const nonDeleteableCheckbox = within(
+      getRow('Workflow Job Template 2')
+    ).getByRole('checkbox');
 
-    expect(wrapper.find('Button[aria-label="Delete"]').prop('isDisabled')).toBe(
-      false
-    );
-    deleteableItem.simulate('change', {
-      id: 1,
-      name: 'Job Template 1',
-      url: '/templates/job_template/1',
-      type: 'job_template',
-      summary_fields: {
-        user_capabilities: {
-          delete: true,
-        },
-      },
-    });
-    expect(wrapper.find('Button[aria-label="Delete"]').prop('isDisabled')).toBe(
-      true
-    );
-    nonDeleteableItem.simulate('change', {
-      id: 5,
-      name: 'Workflow Job Template 2',
-      url: '/templates/workflow_job_template/5',
-      type: 'workflow_job_template',
-      summary_fields: {
-        user_capabilities: {
-          delete: false,
-        },
-      },
-    });
-    expect(wrapper.find('Button[aria-label="Delete"]').prop('isDisabled')).toBe(
-      true
-    );
+    // select a deleteable template -> Delete enabled
+    await user.click(deleteableCheckbox);
+    expect(screen.getByRole('button', { name: 'Delete' })).toBeEnabled();
+
+    // deselect it -> Delete disabled (nothing selected)
+    await user.click(deleteableCheckbox);
+    expect(screen.getByRole('button', { name: 'Delete' })).toBeDisabled();
+
+    // select a non-deleteable template -> Delete disabled
+    await user.click(nonDeleteableCheckbox);
+    expect(screen.getByRole('button', { name: 'Delete' })).toBeDisabled();
   });
 
   test('api is called to delete templates for each selected template.', async () => {
-    const wrapper = mountWithContexts(<TemplateList />);
-    await act(async () => {
-      await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    });
-    const jobTemplate = wrapper.find('TemplateListItem').at(1).find('input');
-    const workflowJobTemplate = wrapper
-      .find('TemplateListItem')
-      .at(3)
-      .find('input');
+    JobTemplatesAPI.destroy.mockResolvedValue({});
+    WorkflowJobTemplatesAPI.destroy.mockResolvedValue({});
+    const { user } = renderWithContexts(<TemplateList />);
+    await screen.findByRole('link', { name: 'Job Template 2' });
 
-    jobTemplate.simulate('change', {
-      target: {
-        id: 2,
-        name: 'Job Template 2',
-        url: '/templates/job_template/2',
-        type: 'job_template',
-        summary_fields: { user_capabilities: { delete: true } },
-      },
-    });
+    await user.click(
+      within(getRow('Job Template 2')).getByRole('checkbox')
+    );
+    await user.click(
+      within(getRow('Workflow Job Template 1')).getByRole('checkbox')
+    );
 
-    workflowJobTemplate.simulate('change', {
-      target: {
-        id: 4,
-        name: 'Workflow Job Template 1',
-        url: '/templates/workflow_job_template/4',
-        type: 'workflow_job_template',
-        summary_fields: {
-          user_capabilities: {
-            delete: true,
-          },
-        },
-      },
-    });
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'confirm delete' })
+    );
 
-    await act(async () => {
-      wrapper.find('button[aria-label="Delete"]').prop('onClick')();
-    });
-    wrapper.update();
-    await act(async () => {
-      await wrapper
-        .find('button[aria-label="confirm delete"]')
-        .prop('onClick')();
-    });
-    expect(JobTemplatesAPI.destroy).toHaveBeenCalledWith(2);
+    await waitFor(() =>
+      expect(JobTemplatesAPI.destroy).toHaveBeenCalledWith(2)
+    );
     expect(WorkflowJobTemplatesAPI.destroy).toHaveBeenCalledWith(4);
   });
 
@@ -274,48 +206,40 @@ describe('<TemplateList />', () => {
         },
       })
     );
-    const wrapper = mountWithContexts(<TemplateList />);
-    await act(async () => {
-      await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    });
-    const checkBox = wrapper.find('TemplateListItem').at(1).find('input');
+    const { user } = renderWithContexts(<TemplateList />);
+    await screen.findByRole('link', { name: 'Job Template 2' });
 
-    checkBox.simulate('change', {
-      target: {
-        id: 'a',
-        name: 'Job Template 2',
-        url: '/templates/job_template/2',
-        type: 'job_template',
-        summary_fields: { user_capabilities: { delete: true } },
-      },
-    });
-    await act(async () => {
-      wrapper.find('button[aria-label="Delete"]').prop('onClick')();
-    });
-    wrapper.update();
-    await act(async () => {
-      await wrapper
-        .find('button[aria-label="confirm delete"]')
-        .prop('onClick')();
-    });
-
-    await waitForElement(
-      wrapper,
-      'Modal[aria-label="Deletion Error"]',
-      (el) => el.props().isOpen === true && el.props().title === 'Error!'
+    await user.click(
+      within(getRow('Job Template 2')).getByRole('checkbox')
     );
+
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'confirm delete' })
+    );
+
+    const errorTitle = await screen.findByText('Error!');
+
+    // The deletion-error AlertModal stacks over the still-closing confirm
+    // modal, so the error dialog's subtree is aria-hidden and getByRole can't
+    // reach its Close button; scope the query to the error dialog instead.
+    const errorDialog = errorTitle.closest('.pf-c-modal-box');
+    await user.click(within(errorDialog).getByLabelText('Close'));
+    await waitFor(() =>
+      expect(screen.queryByText('Error!')).not.toBeInTheDocument()
+    );
+    await settleTooltips();
   });
+
   test('should properly copy template', async () => {
-    JobTemplatesAPI.copy.mockResolvedValue({});
-    const wrapper = mountWithContexts(<TemplateList />);
-    await act(async () => {
-      await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    });
-    await act(async () =>
-      wrapper.find('Button[aria-label="Copy"]').prop('onClick')()
-    );
-    expect(JobTemplatesAPI.copy).toHaveBeenCalled();
+    JobTemplatesAPI.copy.mockResolvedValue({ status: 201, data: { id: 6 } });
+    const { user } = renderWithContexts(<TemplateList />);
+    await screen.findByRole('link', { name: 'Job Template 1' });
+
+    // only Job Template 1 has copy capability
+    await user.click(screen.getByRole('button', { name: 'Copy' }));
+
+    await waitFor(() => expect(JobTemplatesAPI.copy).toHaveBeenCalled());
     expect(UnifiedJobTemplatesAPI.read).toHaveBeenCalled();
-    wrapper.update();
   });
 });
