@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useRef } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
-import { Route, Switch } from 'react-router-dom';
+import { Routes, Route, useParams } from 'react-router-dom-v5-compat';
 
 import { Config } from 'contexts/Config';
 import ScreenHeader from 'components/ScreenHeader/ScreenHeader';
@@ -16,6 +16,27 @@ import SmartInventoryAdd from './SmartInventoryAdd';
 import ConstructedInventoryAdd from './ConstructedInventoryAdd';
 import FederatedInventoryAdd from './FederatedInventoryAdd';
 import { getInventoryPath } from './shared/utils';
+
+// A single :inventoryType/:id route (instead of one literal route per kind) so
+// inventoryType is a real route param that the nested group/host screens read
+// via useParams; this picks the right detail screen for the kind.
+function InventoryTypeRouter({ setBreadcrumb }) {
+  const { inventoryType } = useParams();
+  if (inventoryType === 'smart_inventory') {
+    return <SmartInventory setBreadcrumb={setBreadcrumb} />;
+  }
+  if (inventoryType === 'constructed_inventory') {
+    return <ConstructedInventory setBreadcrumb={setBreadcrumb} />;
+  }
+  if (inventoryType === 'federated_inventory') {
+    return <FederatedInventory setBreadcrumb={setBreadcrumb} />;
+  }
+  return (
+    <Config>
+      {({ me }) => <Inventory setBreadcrumb={setBreadcrumb} me={me || {}} />}
+    </Config>
+  );
+}
 
 function Inventories() {
   const { t } = useLingui();
@@ -109,41 +130,34 @@ function Inventories() {
         streamType="inventory"
         breadcrumbConfig={breadcrumbConfig}
       />
-      <Switch>
-        <Route path="/inventories/inventory/add">
-          <InventoryAdd />
-        </Route>
-        <Route path="/inventories/smart_inventory/add">
-          <SmartInventoryAdd />
-        </Route>
-        <Route path="/inventories/constructed_inventory/add">
-          <ConstructedInventoryAdd />
-        </Route>
-        <Route path="/inventories/federated_inventory/add">
-          <FederatedInventoryAdd />
-        </Route>
-        <Route path="/inventories/inventory/:id">
-          <Config>
-            {({ me }) => (
-              <Inventory setBreadcrumb={setBreadcrumbConfig} me={me || {}} />
-            )}
-          </Config>
-        </Route>
-        <Route path="/inventories/smart_inventory/:id">
-          <SmartInventory setBreadcrumb={setBreadcrumbConfig} />
-        </Route>
-        <Route path="/inventories/constructed_inventory/:id">
-          <ConstructedInventory setBreadcrumb={setBreadcrumbConfig} />
-        </Route>
-        <Route path="/inventories/federated_inventory/:id">
-          <FederatedInventory setBreadcrumb={setBreadcrumbConfig} />
-        </Route>
-        <Route path="/inventories">
-          <PersistentFilters pageKey="inventories">
-            <InventoryList />
-          </PersistentFilters>
-        </Route>
-      </Switch>
+      <Routes>
+        <Route path="/inventories/inventory/add" element={<InventoryAdd />} />
+        <Route
+          path="/inventories/smart_inventory/add"
+          element={<SmartInventoryAdd />}
+        />
+        <Route
+          path="/inventories/constructed_inventory/add"
+          element={<ConstructedInventoryAdd />}
+        />
+        <Route
+          path="/inventories/federated_inventory/add"
+          element={<FederatedInventoryAdd />}
+        />
+        {/* /* so each detail screen's own nested <Routes> can match */}
+        <Route
+          path="/inventories/:inventoryType/:id/*"
+          element={<InventoryTypeRouter setBreadcrumb={setBreadcrumbConfig} />}
+        />
+        <Route
+          path="/inventories"
+          element={
+            <PersistentFilters pageKey="inventories">
+              <InventoryList />
+            </PersistentFilters>
+          }
+        />
+      </Routes>
     </>
   );
 }

@@ -1,6 +1,13 @@
 import React, { useCallback, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { Link, Switch, Route, Redirect, useRouteMatch, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import {
+  Routes,
+  Route,
+  Navigate,
+  useParams,
+  useLocation,
+} from 'react-router-dom-v5-compat';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card, PageSection } from '@patternfly/react-core';
 
@@ -22,7 +29,8 @@ import { getInventoryPath } from './shared/utils';
 function ConstructedInventory({ setBreadcrumb }) {
   const { t } = useLingui();
   const location = useLocation();
-  const match = useRouteMatch('/inventories/constructed_inventory/:id');
+  const { id } = useParams();
+  const constructedBaseUrl = `/inventories/constructed_inventory/${id}`;
 
   const {
     result: inventory,
@@ -31,11 +39,9 @@ function ConstructedInventory({ setBreadcrumb }) {
     isLoading,
   } = useRequest(
     useCallback(async () => {
-      const { data } = await ConstructedInventoriesAPI.readDetail(
-        match.params.id
-      );
+      const { data } = await ConstructedInventoriesAPI.readDetail(id);
       return data;
-    }, [match.params.id]),
+    }, [id]),
     { inventory: null, isLoading: true }
   );
 
@@ -60,18 +66,18 @@ function ConstructedInventory({ setBreadcrumb }) {
       link: `/inventories`,
       id: 99,
     },
-    { name: t`Details`, link: `${match.url}/details`, id: 0 },
-    { name: t`Access`, link: `${match.url}/access`, id: 1 },
-    { name: t`Hosts`, link: `${match.url}/hosts`, id: 2 },
-    { name: t`Groups`, link: `${match.url}/groups`, id: 3 },
+    { name: t`Details`, link: `${constructedBaseUrl}/details`, id: 0 },
+    { name: t`Access`, link: `${constructedBaseUrl}/access`, id: 1 },
+    { name: t`Hosts`, link: `${constructedBaseUrl}/hosts`, id: 2 },
+    { name: t`Groups`, link: `${constructedBaseUrl}/groups`, id: 3 },
     {
       name: t`Jobs`,
-      link: `${match.url}/jobs`,
+      link: `${constructedBaseUrl}/jobs`,
       id: 4,
     },
     {
       name: t`Job Templates`,
-      link: `${match.url}/job_templates`,
+      link: `${constructedBaseUrl}/job_templates`,
       id: 5,
     },
   ];
@@ -106,7 +112,7 @@ function ConstructedInventory({ setBreadcrumb }) {
   }
 
   if (inventory && inventory?.kind !== 'constructed') {
-    return <Redirect to={`${getInventoryPath(inventory)}/details`} />;
+    return <Navigate to={`${getInventoryPath(inventory)}/details`} replace />;
   }
 
   let showCardHeader = true;
@@ -122,87 +128,97 @@ function ConstructedInventory({ setBreadcrumb }) {
     <PageSection>
       <Card>
         {showCardHeader && <RoutedTabs tabsArray={tabsArray} />}
-        <Switch>
-          <Redirect
-            from="/inventories/constructed_inventory/:id"
-            to="/inventories/constructed_inventory/:id/details"
-            exact
+        <Routes>
+          <Route
+            index
+            element={<Navigate to={`${constructedBaseUrl}/details`} replace />}
           />
-          {inventory && [
+          {inventory && (
             <Route
-              path="/inventories/constructed_inventory/:id/details"
-              key="details"
-            >
-              <ConstructedInventoryDetail inventory={inventory} />
-            </Route>,
+              path="details"
+              element={<ConstructedInventoryDetail inventory={inventory} />}
+            />
+          )}
+          {inventory && (
             <Route
-              key="edit"
-              path="/inventories/constructed_inventory/:id/edit"
-            >
-              <ConstructedInventoryEdit inventory={inventory} />
-            </Route>,
+              path="edit"
+              element={<ConstructedInventoryEdit inventory={inventory} />}
+            />
+          )}
+          {inventory && (
             <Route
-              path="/inventories/constructed_inventory/:id/access"
-              key="access"
-            >
-              <ResourceAccessList
-                resource={inventory}
-                apiModel={InventoriesAPI}
-              />
-            </Route>,
+              path="access"
+              element={
+                <ResourceAccessList
+                  resource={inventory}
+                  apiModel={InventoriesAPI}
+                />
+              }
+            />
+          )}
+          {/* /* so the nested <AdvancedInventoryHosts> route tree can match */}
+          {inventory && (
             <Route
-              path="/inventories/constructed_inventory/:id/hosts"
-              key="hosts"
-            >
-              <AdvancedInventoryHosts
-                inventory={inventory}
-                setBreadcrumb={setBreadcrumb}
-              />
-            </Route>,
+              path="hosts/*"
+              element={
+                <AdvancedInventoryHosts
+                  inventory={inventory}
+                  setBreadcrumb={setBreadcrumb}
+                />
+              }
+            />
+          )}
+          {/* /* so the nested <InventoryGroups> route tree can match */}
+          {inventory && (
             <Route
-              path="/inventories/constructed_inventory/:id/groups"
-              key="constructed_inventory_groups"
-            >
-              <InventoryGroups
-                inventory={inventory}
-                setBreadcrumb={setBreadcrumb}
-              />
-            </Route>,
+              path="groups/*"
+              element={
+                <InventoryGroups
+                  inventory={inventory}
+                  setBreadcrumb={setBreadcrumb}
+                />
+              }
+            />
+          )}
+          {inventory && (
             <Route
-              key="jobs"
-              path="/inventories/constructed_inventory/:id/jobs"
-            >
-              <JobList
-                defaultParams={{
-                  or__job__inventory: inventory.id,
-                  or__adhoccommand__inventory: inventory.id,
-                  or__inventoryupdate__inventory_source__inventory:
-                    inventory.id,
-                  or__workflowjob__inventory: inventory.id,
-                }}
-              />
-            </Route>,
+              path="jobs"
+              element={
+                <JobList
+                  defaultParams={{
+                    or__job__inventory: inventory.id,
+                    or__adhoccommand__inventory: inventory.id,
+                    or__inventoryupdate__inventory_source__inventory:
+                      inventory.id,
+                    or__workflowjob__inventory: inventory.id,
+                  }}
+                />
+              }
+            />
+          )}
+          {inventory && (
             <Route
-              key="job_templates"
-              path="/inventories/constructed_inventory/:id/job_templates"
-            >
-              <RelatedTemplateList
-                searchParams={{ inventory__id: inventory.id }}
-              />
-            </Route>,
-          ]}
-          <Route path="*" key="not-found">
-            <ContentError isNotFound>
-              {match.params.id && (
-                <Link
-                  to={`/inventories/constructed_inventory/${match.params.id}/details`}
-                >
-                  {t`View Constructed Inventory Details`}
-                </Link>
-              )}
-            </ContentError>
-          </Route>
-        </Switch>
+              path="job_templates"
+              element={
+                <RelatedTemplateList
+                  searchParams={{ inventory__id: inventory.id }}
+                />
+              }
+            />
+          )}
+          <Route
+            path="*"
+            element={
+              <ContentError isNotFound>
+                {id && (
+                  <Link to={`${constructedBaseUrl}/details`}>
+                    {t`View Constructed Inventory Details`}
+                  </Link>
+                )}
+              </ContentError>
+            }
+          />
+        </Routes>
       </Card>
     </PageSection>
   );

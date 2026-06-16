@@ -1,5 +1,6 @@
 import React from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import { Host } from 'types';
 import { CardBody } from 'components/Card';

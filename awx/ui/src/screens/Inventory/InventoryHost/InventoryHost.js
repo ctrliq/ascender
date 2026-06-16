@@ -1,6 +1,13 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { Switch, Route, Redirect, Link, useRouteMatch, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import {
+  Routes,
+  Route,
+  Navigate,
+  useParams,
+  useLocation,
+} from 'react-router-dom-v5-compat';
 import { Card } from '@patternfly/react-core';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import useRequest from 'hooks/useRequest';
@@ -18,8 +25,9 @@ import InventoryHostGroups from '../InventoryHostGroups';
 function InventoryHost({ setBreadcrumb, inventory }) {
   const { t } = useLingui();
   const location = useLocation();
-  const match = useRouteMatch('/inventories/inventory/:id/hosts/:hostId');
+  const { hostId } = useParams();
   const hostListUrl = `/inventories/inventory/${inventory.id}/hosts`;
+  const hostBaseUrl = `${hostListUrl}/${hostId}`;
 
   const {
     result: { host },
@@ -30,12 +38,12 @@ function InventoryHost({ setBreadcrumb, inventory }) {
     useCallback(async () => {
       const response = await InventoriesAPI.readHostDetail(
         inventory.id,
-        match.params.hostId
+        hostId
       );
       return {
         host: response,
       };
-    }, [inventory.id, match.params.hostId]),
+    }, [inventory.id, hostId]),
     {
       host: null,
     }
@@ -64,22 +72,22 @@ function InventoryHost({ setBreadcrumb, inventory }) {
     },
     {
       name: t`Details`,
-      link: `${match.url}/details`,
+      link: `${hostBaseUrl}/details`,
       id: 1,
     },
     {
       name: t`Facts`,
-      link: `${match.url}/facts`,
+      link: `${hostBaseUrl}/facts`,
       id: 2,
     },
     {
       name: t`Groups`,
-      link: `${match.url}/groups`,
+      link: `${hostBaseUrl}/groups`,
       id: 3,
     },
     {
       name: t`Jobs`,
-      link: `${match.url}/jobs`,
+      link: `${hostBaseUrl}/jobs`,
       id: 4,
     },
   ];
@@ -113,50 +121,43 @@ function InventoryHost({ setBreadcrumb, inventory }) {
       {isLoading && <ContentLoading />}
 
       {!isLoading && host && (
-        <Switch>
-          <Redirect
-            from="/inventories/inventory/:id/hosts/:hostId"
-            to="/inventories/inventory/:id/hosts/:hostId/details"
-            exact
+        <Routes>
+          <Route
+            index
+            element={<Navigate to={`${hostBaseUrl}/details`} replace />}
           />
           <Route
-            key="details"
-            path="/inventories/inventory/:id/hosts/:hostId/details"
-          >
-            <InventoryHostDetail host={host} />
-          </Route>
+            path="details"
+            element={<InventoryHostDetail host={host} />}
+          />
           <Route
-            key="edit"
-            path="/inventories/inventory/:id/hosts/:hostId/edit"
-          >
-            <InventoryHostEdit host={host} inventory={inventory} />
-          </Route>
+            path="edit"
+            element={<InventoryHostEdit host={host} inventory={inventory} />}
+          />
           <Route
-            key="facts"
-            path="/inventories/inventory/:id/hosts/:hostId/facts"
-          >
-            <InventoryHostFacts host={host} />
-          </Route>
+            path="facts"
+            element={<InventoryHostFacts host={host} />}
+          />
+          {/* /* so the nested <InventoryHostGroups> route tree can match */}
           <Route
-            key="groups"
-            path="/inventories/inventory/:id/hosts/:hostId/groups"
-          >
-            <InventoryHostGroups />
-          </Route>
+            path="groups/*"
+            element={<InventoryHostGroups />}
+          />
           <Route
-            key="jobs"
-            path="/inventories/inventory/:id/hosts/:hostId/jobs"
-          >
-            <JobList defaultParams={{ job__hosts: host.id }} />
-          </Route>
-          <Route key="not-found" path="*">
-            <ContentError isNotFound>
-              <Link to={`${match.url}/details`}>
-                {t`View Inventory Host Details`}
-              </Link>
-            </ContentError>
-          </Route>
-        </Switch>
+            path="jobs"
+            element={<JobList defaultParams={{ job__hosts: host.id }} />}
+          />
+          <Route
+            path="*"
+            element={
+              <ContentError isNotFound>
+                <Link to={`${hostBaseUrl}/details`}>
+                  {t`View Inventory Host Details`}
+                </Link>
+              </ContentError>
+            }
+          />
+        </Routes>
       )}
     </>
   );

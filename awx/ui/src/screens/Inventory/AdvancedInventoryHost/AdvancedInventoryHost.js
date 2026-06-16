@@ -1,7 +1,13 @@
 import React, { useEffect, useCallback } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
-import { Link, Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import {
+  Routes,
+  Route,
+  Navigate,
+  useParams,
+} from 'react-router-dom-v5-compat';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
@@ -12,9 +18,8 @@ import AdvancedInventoryHostDetail from '../AdvancedInventoryHostDetail';
 
 function AdvancedInventoryHost({ inventory, setBreadcrumb }) {
   const { t } = useLingui();
-  const { params, path, url } = useRouteMatch(
-    '/inventories/:inventoryType/:id/hosts/:hostId'
-  );
+  const { inventoryType, hostId } = useParams();
+  const hostBaseUrl = `/inventories/${inventoryType}/${inventory.id}/hosts/${hostId}`;
 
   const {
     result: host,
@@ -25,10 +30,10 @@ function AdvancedInventoryHost({ inventory, setBreadcrumb }) {
     useCallback(async () => {
       const response = await InventoriesAPI.readHostDetail(
         inventory.id,
-        params.hostId
+        hostId
       );
       return response;
-    }, [inventory.id, params.hostId]),
+    }, [inventory.id, hostId]),
     { isLoading: true }
   );
 
@@ -53,12 +58,12 @@ function AdvancedInventoryHost({ inventory, setBreadcrumb }) {
           {t`Back to Hosts`}
         </>
       ),
-      link: `/inventories/${params.inventoryType}/${inventory.id}/hosts`,
+      link: `/inventories/${inventoryType}/${inventory.id}/hosts`,
       id: 0,
     },
     {
       name: t`Details`,
-      link: `${url}/details`,
+      link: `${hostBaseUrl}/details`,
       id: 1,
     },
   ];
@@ -70,25 +75,28 @@ function AdvancedInventoryHost({ inventory, setBreadcrumb }) {
       {isLoading && <ContentLoading />}
 
       {!isLoading && host && (
-        <Switch>
-          <Redirect
-            from="/inventories/:inventoryType/:id/hosts/:hostId"
-            to={`${path}/details`}
-            exact
+        <Routes>
+          <Route
+            index
+            element={<Navigate to={`${hostBaseUrl}/details`} replace />}
           />
-          <Route key="details" path={`${path}/details`}>
-            <AdvancedInventoryHostDetail host={host} />
-          </Route>
-          <Route key="not-found" path="*">
-            <ContentError isNotFound>
-              <Link to={`${url}/details`}>
-                {params.inventoryType === 'smart_inventory'
-                  ? t`View smart inventory host details`
-                  : t`View constructed inventory host details`}
-              </Link>
-            </ContentError>
-          </Route>
-        </Switch>
+          <Route
+            path="details"
+            element={<AdvancedInventoryHostDetail host={host} />}
+          />
+          <Route
+            path="*"
+            element={
+              <ContentError isNotFound>
+                <Link to={`${hostBaseUrl}/details`}>
+                  {inventoryType === 'smart_inventory'
+                    ? t`View smart inventory host details`
+                    : t`View constructed inventory host details`}
+                </Link>
+              </ContentError>
+            }
+          />
+        </Routes>
       )}
     </>
   );

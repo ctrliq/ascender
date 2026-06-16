@@ -1,6 +1,7 @@
 import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { createMemoryHistory } from 'history';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { HostsAPI } from 'api';
 import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
 import InventoryHostGroups from './InventoryHostGroups';
@@ -32,11 +33,15 @@ describe('<InventoryHostGroups />', () => {
     });
 
     await act(async () => {
-      wrapper = mountWithContexts(<InventoryHostGroups />, {
-        context: {
-          router: { history, route: { location: history.location } },
-        },
-      });
+      wrapper = mountWithContexts(
+        <Routes>
+          <Route
+            path="/inventories/inventory/:id/hosts/:hostId/groups/*"
+            element={<InventoryHostGroups />}
+          />
+        </Routes>,
+        { context: { router: { history } } }
+      );
     });
     expect(wrapper.length).toBe(1);
     expect(wrapper.find('InventoryHostGroupsList').length).toBe(1);

@@ -1,6 +1,7 @@
 import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { createMemoryHistory } from 'history';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { InventoriesAPI, OrganizationsAPI } from 'api';
 import {
   mountWithContexts,
@@ -13,18 +14,33 @@ jest.mock('../../../api/models/Inventories');
 jest.mock('../../../api/models/Organizations');
 jest.mock('../../../api/models/InventorySources');
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useRouteMatch: () => ({
-    url: '/inventories/inventory/2/sources/123',
-    params: { id: 2, sourceId: 123 },
-  }),
-}));
-
 const mockInventory = {
   id: 2,
   name: 'Mock Inventory',
 };
+
+// InventorySource reads :sourceId via useParams and uses relative routes, so
+// mount it under its ".../sources/:sourceId/*" parent route.
+function mountInventorySource(initialEntry, props = {}) {
+  const history = createMemoryHistory({ initialEntries: [initialEntry] });
+  const wrapper = mountWithContexts(
+    <Routes>
+      <Route
+        path="/inventories/inventory/:id/sources/:sourceId/*"
+        element={
+          <InventorySource
+            inventory={mockInventory}
+            me={{ is_system_auditor: false }}
+            setBreadcrumb={() => {}}
+            {...props}
+          />
+        }
+      />
+    </Routes>,
+    { context: { router: { history } } }
+  );
+  return { wrapper, history };
+}
 
 describe('<InventorySource />', () => {
   let wrapper;
@@ -32,13 +48,9 @@ describe('<InventorySource />', () => {
 
   beforeEach(async () => {
     await act(async () => {
-      wrapper = mountWithContexts(
-        <InventorySource
-          inventory={mockInventory}
-          me={{ is_system_auditor: false }}
-          setBreadcrumb={() => {}}
-        />
-      );
+      ({ wrapper } = mountInventorySource(
+        '/inventories/inventory/2/sources/123/details'
+      ));
     });
   });
 
@@ -73,13 +85,9 @@ describe('<InventorySource />', () => {
     });
     InventoriesAPI.readSourceDetail.mockRejectedValueOnce(new Error());
     await act(async () => {
-      wrapper = mountWithContexts(
-        <InventorySource
-          inventory={mockInventory}
-          me={{ is_system_auditor: false }}
-          setBreadcrumb={() => {}}
-        />
-      );
+      ({ wrapper } = mountInventorySource(
+        '/inventories/inventory/2/sources/123/details'
+      ));
     });
     await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
     await waitForElement(wrapper, 'ContentError', (el) => el.length === 1);
@@ -95,18 +103,10 @@ describe('<InventorySource />', () => {
     OrganizationsAPI.read.mockResolvedValue({
       data: { results: [{ id: 1, name: 'isNotifAdmin' }] },
     });
-    history = createMemoryHistory({
-      initialEntries: ['/inventories/inventory/2/sources/1/foobar'],
-    });
     await act(async () => {
-      wrapper = mountWithContexts(
-        <InventorySource
-          inventory={mockInventory}
-          setBreadcrumb={() => {}}
-          me={{ is_system_auditor: false }}
-        />,
-        { context: { router: { history } } }
-      );
+      ({ wrapper, history } = mountInventorySource(
+        '/inventories/inventory/2/sources/1/foobar'
+      ));
     });
     await waitForElement(wrapper, 'ContentError', (el) => el.length === 1);
     expect(wrapper.find('ContentError Title').text()).toEqual('Not Found');
@@ -119,7 +119,7 @@ describe('<InventorySource />', () => {
     OrganizationsAPI.read.mockResolvedValue({
       data: { results: [{ id: 1, name: 'isNotifAdmin' }] },
     });
-    expect(InventoriesAPI.readSourceDetail).toHaveBeenCalledWith(2, 123);
+    expect(InventoriesAPI.readSourceDetail).toHaveBeenCalledWith(2, '123');
     expect(OrganizationsAPI.read).toHaveBeenCalled();
   });
 

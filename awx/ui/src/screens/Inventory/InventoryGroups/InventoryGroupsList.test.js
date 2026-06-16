@@ -1,6 +1,6 @@
 import React from 'react';
 import { act } from 'react-dom/test-utils';
-import { Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { createMemoryHistory } from 'history';
 import { InventoriesAPI, GroupsAPI } from 'api';
 import {
@@ -10,6 +10,20 @@ import {
 import InventoryGroupsList from './InventoryGroupsList';
 
 jest.mock('../../../api');
+
+function renderUnder(url) {
+  const history = createMemoryHistory({ initialEntries: [url] });
+  const wrapper = mountWithContexts(
+    <Routes>
+      <Route
+        path="/inventories/:inventoryType/:id/groups/*"
+        element={<InventoryGroupsList />}
+      />
+    </Routes>,
+    { context: { router: { history } } }
+  );
+  return { wrapper, history };
+}
 const mockGroups = [
   {
     id: 1,
@@ -54,14 +68,6 @@ const mockGroups = [
 
 describe('<InventoryGroupsList />', () => {
   let wrapper;
-  jest.mock('react-router-dom', () => ({
-    ...jest.requireActual('react-router-dom'),
-    useParams: () => ({
-      id: 1,
-      groupId: 2,
-      inventoryType: 'inventory',
-    }),
-  }));
   beforeEach(async () => {
     InventoriesAPI.readGroups.mockResolvedValue({
       data: {
@@ -92,25 +98,8 @@ describe('<InventoryGroupsList />', () => {
         },
       },
     });
-    const history = createMemoryHistory({
-      initialEntries: ['/inventories/inventory/3/groups'],
-    });
     await act(async () => {
-      wrapper = mountWithContexts(
-        <Route path="/inventories/:inventoryType/:id/groups">
-          <InventoryGroupsList />
-        </Route>,
-        {
-          context: {
-            router: {
-              history,
-              route: {
-                location: history.location,
-              },
-            },
-          },
-        }
-      );
+      ({ wrapper } = renderUnder('/inventories/inventory/3/groups'));
     });
     await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
   });
@@ -195,7 +184,7 @@ describe('<InventoryGroupsList />', () => {
       },
     });
     await act(async () => {
-      wrapper = mountWithContexts(<InventoryGroupsList />);
+      ({ wrapper } = renderUnder('/inventories/inventory/3/groups'));
     });
     expect(wrapper.find('AdHocCommands')).toHaveLength(0);
   });
@@ -256,7 +245,7 @@ describe('<InventoryGroupsList/> error handling', () => {
       Promise.reject(new Error())
     );
     await act(async () => {
-      wrapper = mountWithContexts(<InventoryGroupsList />);
+      ({ wrapper } = renderUnder('/inventories/inventory/3/groups'));
     });
     await waitForElement(wrapper, 'ContentError', (el) => el.length > 0);
   });
@@ -266,14 +255,14 @@ describe('<InventoryGroupsList/> error handling', () => {
       Promise.reject(new Error())
     );
     await act(async () => {
-      wrapper = mountWithContexts(<InventoryGroupsList />);
+      ({ wrapper } = renderUnder('/inventories/inventory/3/groups'));
     });
     await waitForElement(wrapper, 'ContentError', (el) => el.length > 0);
   });
 
   test('should show error modal when group is not successfully deleted from api', async () => {
     await act(async () => {
-      wrapper = mountWithContexts(<InventoryGroupsList />);
+      ({ wrapper } = renderUnder('/inventories/inventory/3/groups'));
     });
     waitForElement(wrapper, 'ContentEmpty', (el) => el.length === 0);
 
@@ -320,14 +309,6 @@ describe('<InventoryGroupsList/> error handling', () => {
 
 describe('Constructed Inventory group', () => {
   let wrapper;
-  jest.mock('react-router-dom', () => ({
-    ...jest.requireActual('react-router-dom'),
-    useParams: () => ({
-      id: 1,
-      groupId: 2,
-      inventoryType: 'constructed_inventory',
-    }),
-  }));
 
   beforeEach(async () => {
     InventoriesAPI.readGroups.mockResolvedValue({
@@ -359,25 +340,8 @@ describe('Constructed Inventory group', () => {
         },
       },
     });
-    const history = createMemoryHistory({
-      initialEntries: ['/inventories/constructed_inventory/3/groups'],
-    });
     await act(async () => {
-      wrapper = mountWithContexts(
-        <Route path="/inventories/:inventoryType/:id/groups">
-          <InventoryGroupsList />
-        </Route>,
-        {
-          context: {
-            router: {
-              history,
-              route: {
-                location: history.location,
-              },
-            },
-          },
-        }
-      );
+      ({ wrapper } = renderUnder('/inventories/constructed_inventory/3/groups'));
     });
     await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
   });

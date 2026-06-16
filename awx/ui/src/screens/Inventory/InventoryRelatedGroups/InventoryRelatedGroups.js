@@ -1,24 +1,20 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import InventoryRelatedGroupList from './InventoryRelatedGroupList';
 import InventoryRelatedGroupAdd from '../InventoryRelatedGroupAdd';
 
 function InventoryRelatedGroups() {
   return (
-    <Switch>
+    <Routes>
       <Route
-        key="addRelatedGroups"
-        path="/inventories/:inventoryType/:id/groups/:groupId/nested_groups/add"
-      >
-        <InventoryRelatedGroupAdd />
-      </Route>
+        path="add"
+        element={<InventoryRelatedGroupAdd />}
+      />
       <Route
-        key="relatedGroups"
-        path="/inventories/:inventoryType/:id/groups/:groupId/nested_groups"
-      >
-        <InventoryRelatedGroupList />
-      </Route>
-    </Switch>
+        index
+        element={<InventoryRelatedGroupList />}
+      />
+    </Routes>
   );
 }
 export default InventoryRelatedGroups;

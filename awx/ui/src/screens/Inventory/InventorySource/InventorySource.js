@@ -1,7 +1,14 @@
 import React, { useEffect, useCallback } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
-import { Link, Switch, Route, Redirect, useRouteMatch, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import {
+  Routes,
+  Route,
+  Navigate,
+  useParams,
+  useLocation,
+} from 'react-router-dom-v5-compat';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import useRequest from 'hooks/useRequest';
 
@@ -17,8 +24,9 @@ import InventorySourceEdit from '../InventorySourceEdit';
 function InventorySource({ inventory, setBreadcrumb, me }) {
   const { t } = useLingui();
   const location = useLocation();
-  const match = useRouteMatch('/inventories/inventory/:id/sources/:sourceId');
+  const { sourceId } = useParams();
   const sourceListUrl = `/inventories/inventory/${inventory.id}/sources`;
+  const detailsBaseUrl = `${sourceListUrl}/${sourceId}`;
 
   const {
     result: { source, isNotifAdmin },
@@ -28,7 +36,7 @@ function InventorySource({ inventory, setBreadcrumb, me }) {
   } = useRequest(
     useCallback(async () => {
       const [inventorySource, notifAdminRes] = await Promise.all([
-        InventoriesAPI.readSourceDetail(inventory.id, match.params.sourceId),
+        InventoriesAPI.readSourceDetail(inventory.id, sourceId),
         OrganizationsAPI.read({
           page_size: 1,
           role_level: 'notification_admin_role',
@@ -38,7 +46,7 @@ function InventorySource({ inventory, setBreadcrumb, me }) {
         source: inventorySource,
         isNotifAdmin: notifAdminRes.data.results.length > 0,
       };
-    }, [inventory.id, match.params.sourceId]),
+    }, [inventory.id, sourceId]),
     { source: null, isNotifAdmin: false }
   );
 
@@ -75,12 +83,12 @@ function InventorySource({ inventory, setBreadcrumb, me }) {
     },
     {
       name: t`Details`,
-      link: `${match.url}/details`,
+      link: `${detailsBaseUrl}/details`,
       id: 1,
     },
     {
       name: t`Schedules`,
-      link: `${match.url}/schedules`,
+      link: `${detailsBaseUrl}/schedules`,
       id: 2,
     },
   ];
@@ -91,7 +99,7 @@ function InventorySource({ inventory, setBreadcrumb, me }) {
   if (canSeeNotificationsTab) {
     tabsArray.push({
       name: t`Notifications`,
-      link: `${match.url}/notifications`,
+      link: `${detailsBaseUrl}/notifications`,
       id: 3,
     });
   }
@@ -113,56 +121,54 @@ function InventorySource({ inventory, setBreadcrumb, me }) {
       {isLoading && <ContentLoading />}
 
       {!isLoading && source && (
-        <Switch>
-          <Redirect
-            from="/inventories/inventory/:id/sources/:sourceId"
-            to="/inventories/inventory/:id/sources/:sourceId/details"
-            exact
+        <Routes>
+          <Route index element={<Navigate to="details" replace />} />
+          <Route
+            path="details"
+            element={<InventorySourceDetail inventorySource={source} />}
           />
           <Route
-            key="details"
-            path="/inventories/inventory/:id/sources/:sourceId/details"
-          >
-            <InventorySourceDetail inventorySource={source} />
-          </Route>
+            path="edit"
+            element={
+              <InventorySourceEdit source={source} inventory={inventory} />
+            }
+          />
           <Route
-            key="edit"
-            path="/inventories/inventory/:id/sources/:sourceId/edit"
-          >
-            <InventorySourceEdit source={source} inventory={inventory} />
-          </Route>
+            path="notifications"
+            element={
+              <NotificationList
+                id={Number(sourceId)}
+                canToggleNotifications={canToggleNotifications}
+                apiModel={InventorySourcesAPI}
+              />
+            }
+          />
+          {/* /* so the nested <Schedules> route tree can match */}
           <Route
-            key="notifications"
-            path="/inventories/inventory/:id/sources/:sourceId/notifications"
-          >
-            <NotificationList
-              id={Number(match.params.sourceId)}
-              canToggleNotifications={canToggleNotifications}
-              apiModel={InventorySourcesAPI}
-            />
-          </Route>
+            path="schedules/*"
+            element={
+              <Schedules
+                apiModel={InventorySourcesAPI}
+                setBreadcrumb={(schedule) =>
+                  setBreadcrumb(inventory, source, schedule)
+                }
+                resource={source}
+                loadSchedules={loadSchedules}
+                loadScheduleOptions={loadScheduleOptions}
+              />
+            }
+          />
           <Route
-            key="schedules"
-            path="/inventories/inventory/:id/sources/:sourceId/schedules"
-          >
-            <Schedules
-              apiModel={InventorySourcesAPI}
-              setBreadcrumb={(schedule) =>
-                setBreadcrumb(inventory, source, schedule)
-              }
-              resource={source}
-              loadSchedules={loadSchedules}
-              loadScheduleOptions={loadScheduleOptions}
-            />
-          </Route>
-          <Route key="not-found" path="*">
-            <ContentError isNotFound>
-              <Link to={`${match.url}/details`}>
-                {t`View inventory source details`}
-              </Link>
-            </ContentError>
-          </Route>
-        </Switch>
+            path="*"
+            element={
+              <ContentError isNotFound>
+                <Link to={`${detailsBaseUrl}/details`}>
+                  {t`View inventory source details`}
+                </Link>
+              </ContentError>
+            }
+          />
+        </Routes>
       )}
     </>
   );

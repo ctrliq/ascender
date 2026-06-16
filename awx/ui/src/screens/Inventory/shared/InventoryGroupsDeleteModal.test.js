@@ -1,30 +1,37 @@
 import React from 'react';
 import { act } from 'react-dom/test-utils';
+import { createMemoryHistory } from 'history';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { InventoriesAPI } from 'api';
 import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
 
 import InventoryGroupsDeleteModal from './InventoryGroupsDeleteModal';
 
 jest.mock('../../../api');
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => ({
-    id: 1,
-  }),
-}));
 describe('<InventoryGroupsDeleteModal />', () => {
   let wrapper;
   beforeEach(() => {
+    const history = createMemoryHistory({
+      initialEntries: ['/inventories/inventory/1/groups'],
+    });
     act(() => {
       wrapper = mountWithContexts(
-        <InventoryGroupsDeleteModal
-          onAfterDelete={() => {}}
-          isDisabled={false}
-          groups={[
-            { id: 1, name: 'Foo' },
-            { id: 2, name: 'Bar' },
-          ]}
-        />
+        <Routes>
+          <Route
+            path="/inventories/:inventoryType/:id/groups/*"
+            element={
+              <InventoryGroupsDeleteModal
+                onAfterDelete={() => {}}
+                isDisabled={false}
+                groups={[
+                  { id: 1, name: 'Foo' },
+                  { id: 2, name: 'Bar' },
+                ]}
+              />
+            }
+          />
+        </Routes>,
+        { context: { router: { history } } }
       );
     });
   });
@@ -61,7 +68,7 @@ describe('<InventoryGroupsDeleteModal />', () => {
     await act(() =>
       wrapper.find('Button[aria-label="Confirm Delete"]').prop('onClick')()
     );
-    expect(InventoriesAPI.promoteGroup).toHaveBeenCalledWith(1, 1);
+    expect(InventoriesAPI.promoteGroup).toHaveBeenCalledWith('1', 1);
   });
 
   test('should throw deletion error ', async () => {
@@ -91,7 +98,7 @@ describe('<InventoryGroupsDeleteModal />', () => {
     await act(() =>
       wrapper.find('Button[aria-label="Confirm Delete"]').prop('onClick')()
     );
-    expect(InventoriesAPI.promoteGroup).toHaveBeenCalledWith(1, 1);
+    expect(InventoriesAPI.promoteGroup).toHaveBeenCalledWith('1', 1);
     wrapper.update();
     expect(wrapper.find('ErrorDetail').length).toBe(1);
   });

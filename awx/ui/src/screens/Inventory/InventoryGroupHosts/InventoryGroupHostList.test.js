@@ -1,6 +1,7 @@
 import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { createMemoryHistory } from 'history';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { GroupsAPI, InventoriesAPI } from 'api';
 import {
   mountWithContexts,
@@ -8,20 +9,27 @@ import {
 } from '../../../../testUtils/enzymeHelpers';
 import InventoryGroupHostList from './InventoryGroupHostList';
 import mockHosts from '../shared/data.hosts.json';
-import { Route } from 'react-router-dom';
 
 jest.mock('../../../api/models/Groups');
 jest.mock('../../../api/models/Inventories');
 jest.mock('../../../api/models/CredentialTypes');
 
+function renderUnder(url) {
+  const history = createMemoryHistory({ initialEntries: [url] });
+  const wrapper = mountWithContexts(
+    <Routes>
+      <Route
+        path="/inventories/:inventoryType/:id/groups/:groupId/nested_hosts/*"
+        element={<InventoryGroupHostList />}
+      />
+    </Routes>,
+    { context: { router: { history } } }
+  );
+  return { wrapper, history };
+}
+
 describe('<InventoryGroupHostList />', () => {
-  jest.mock('react-router-dom', () => ({
-    ...jest.requireActual('react-router-dom'),
-    useParams: () => ({
-      id: 1,
-      groupId: 2,
-    }),
-  }));
+  const url = '/inventories/inventory/1/groups/2/nested_hosts';
   let wrapper;
 
   beforeEach(async () => {
@@ -52,7 +60,7 @@ describe('<InventoryGroupHostList />', () => {
       },
     });
     await act(async () => {
-      wrapper = mountWithContexts(<InventoryGroupHostList />);
+      ({ wrapper } = renderUnder(url));
     });
     await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
   });
@@ -122,7 +130,7 @@ describe('<InventoryGroupHostList />', () => {
       },
     });
     await act(async () => {
-      wrapper = mountWithContexts(<InventoryGroupHostList />);
+      ({ wrapper } = renderUnder(url));
     });
     await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
     expect(wrapper.find('AddDropDownButton').length).toBe(0);
@@ -258,15 +266,9 @@ describe('<InventoryGroupHostList />', () => {
         },
       },
     });
-    const history = createMemoryHistory({
-      initialEntries: ['/inventories/inventory/1/groups/2/nested_hosts/add'],
-    });
+    let history;
     await act(async () => {
-      wrapper = mountWithContexts(<InventoryGroupHostList />, {
-        context: {
-          router: { history },
-        },
-      });
+      ({ wrapper, history } = renderUnder(`${url}/add`));
     });
     await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
     await act(async () => {
@@ -287,7 +289,7 @@ describe('<InventoryGroupHostList />', () => {
       Promise.reject(new Error())
     );
     await act(async () => {
-      wrapper = mountWithContexts(<InventoryGroupHostList />);
+      ({ wrapper } = renderUnder(url));
     });
     await waitForElement(wrapper, 'ContentError', (el) => el.length === 1);
   });
@@ -307,21 +309,13 @@ describe('<InventoryGroupHostList />', () => {
       },
     });
     await act(async () => {
-      wrapper = mountWithContexts(<InventoryGroupHostList />);
+      ({ wrapper } = renderUnder(url));
     });
     expect(wrapper.find('AdHocCommands')).toHaveLength(0);
   });
 });
 
 describe('<InventoryGroupHostList> for constructed inventories', () => {
-  jest.mock('react-router-dom', () => ({
-    ...jest.requireActual('react-router-dom'),
-    useParams: () => ({
-      id: 1,
-      groupId: 2,
-      inventoryType: 'constructed_inventory',
-    }),
-  }));
   let wrapper;
 
   beforeEach(async () => {
@@ -351,16 +345,10 @@ describe('<InventoryGroupHostList> for constructed inventories', () => {
         },
       },
     });
-    const history = createMemoryHistory({
-      initialEntries: ['/inventories/constructed_inventory/1/groups/2/hosts'],
-    });
     await act(async () => {
-      wrapper = mountWithContexts(
-        <Route path="/inventories/:inventoryType/:id/groups/:groupId/hosts">
-          <InventoryGroupHostList />
-        </Route>,
-        { context: { router: { history } } }
-      );
+      ({ wrapper } = renderUnder(
+        '/inventories/constructed_inventory/1/groups/2/nested_hosts'
+      ));
     });
     await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
   });

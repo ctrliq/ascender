@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
-import { useParams } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom-v5-compat';
+import { useNavigate, useParams } from 'react-router-dom-v5-compat';
 import { GroupsAPI } from 'api';
 
 import InventoryGroupForm from '../shared/InventoryGroupForm';

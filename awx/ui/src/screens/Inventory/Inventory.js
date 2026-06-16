@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
-import { Switch, Route, Redirect, Link, useLocation, useRouteMatch } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import {
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+  useParams,
+} from 'react-router-dom-v5-compat';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card, PageSection } from '@patternfly/react-core';
 import ContentError from 'components/ContentError';
@@ -24,14 +31,13 @@ function Inventory({ setBreadcrumb }) {
   const [hasContentLoading, setHasContentLoading] = useState(true);
   const [inventory, setInventory] = useState(null);
   const location = useLocation();
-  const match = useRouteMatch({
-    path: '/inventories/inventory/:id',
-  });
+  const { id } = useParams();
+  const inventoryBaseUrl = `/inventories/inventory/${id}`;
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const { data } = await InventoriesAPI.readDetail(match.params.id);
+        const { data } = await InventoriesAPI.readDetail(id);
         setBreadcrumb(data);
         setInventory(data);
       } catch (error) {
@@ -42,7 +48,7 @@ function Inventory({ setBreadcrumb }) {
     }
 
     fetchData();
-  }, [match.params.id, location.pathname, setBreadcrumb]);
+  }, [id, location.pathname, setBreadcrumb]);
 
   const tabsArray = [
     {
@@ -56,19 +62,19 @@ function Inventory({ setBreadcrumb }) {
       id: 99,
       persistentFilterKey: 'inventories',
     },
-    { name: t`Details`, link: `${match.url}/details`, id: 0 },
-    { name: t`Access`, link: `${match.url}/access`, id: 1 },
-    { name: t`Groups`, link: `${match.url}/groups`, id: 2 },
-    { name: t`Hosts`, link: `${match.url}/hosts`, id: 3 },
-    { name: t`Sources`, link: `${match.url}/sources`, id: 4 },
+    { name: t`Details`, link: `${inventoryBaseUrl}/details`, id: 0 },
+    { name: t`Access`, link: `${inventoryBaseUrl}/access`, id: 1 },
+    { name: t`Groups`, link: `${inventoryBaseUrl}/groups`, id: 2 },
+    { name: t`Hosts`, link: `${inventoryBaseUrl}/hosts`, id: 3 },
+    { name: t`Sources`, link: `${inventoryBaseUrl}/sources`, id: 4 },
     {
       name: t`Jobs`,
-      link: `${match.url}/jobs`,
+      link: `${inventoryBaseUrl}/jobs`,
       id: 5,
     },
     {
       name: t`Job Templates`,
-      link: `${match.url}/job_templates`,
+      link: `${inventoryBaseUrl}/job_templates`,
       id: 6,
     },
   ];
@@ -113,89 +119,125 @@ function Inventory({ setBreadcrumb }) {
   }
 
   if (inventory && inventory?.kind !== '') {
-    return <Redirect to={`${getInventoryPath(inventory)}/details`} />;
+    return <Navigate to={`${getInventoryPath(inventory)}/details`} replace />;
   }
 
   return (
     <PageSection>
       <Card>
         {showCardHeader && <RoutedTabs tabsArray={tabsArray} />}
-        <Switch>
-          <Redirect
-            from="/inventories/inventory/:id"
-            to="/inventories/inventory/:id/details"
-            exact
+        <Routes>
+          <Route
+            index
+            element={<Navigate to={`${inventoryBaseUrl}/details`} replace />}
           />
-          {inventory && [
-            <Route path="/inventories/inventory/:id/details" key="details">
-              <InventoryDetail
-                inventory={inventory}
-                hasInventoryLoading={hasContentLoading}
-              />
-            </Route>,
-            <Route path="/inventories/inventory/:id/edit" key="edit">
-              <InventoryEdit inventory={inventory} />
-            </Route>,
-            <Route path="/inventories/inventory/:id/hosts" key="hosts">
-              <InventoryHosts
-                inventory={inventory}
-                setBreadcrumb={setBreadcrumb}
-              />
-            </Route>,
-            <Route path="/inventories/inventory/:id/access" key="access">
-              <ResourceAccessList
-                resource={inventory}
-                apiModel={InventoriesAPI}
-              />
-            </Route>,
-            <Route path="/inventories/inventory/:id/groups" key="groups">
-              <InventoryGroups
-                inventory={inventory}
-                setBreadcrumb={setBreadcrumb}
-              />
-            </Route>,
-            <Route path="/inventories/inventory/:id/sources" key="sources">
-              <InventorySources
-                inventory={inventory}
-                setBreadcrumb={setBreadcrumb}
-              />
-            </Route>,
-            <Route path="/inventories/inventory/:id/jobs" key="jobs">
-              <JobList
-                defaultParams={{
-                  or__job__inventory: inventory.id,
-                  or__adhoccommand__inventory: inventory.id,
-                  or__inventoryupdate__inventory_source__inventory:
-                    inventory.id,
-                  or__workflowjob__inventory: inventory.id,
-                }}
-                additionalRelatedSearchableKeys={[
-                  'inventoryupdate__inventory_source__inventory',
-                ]}
-              />
-            </Route>,
+          {inventory && (
             <Route
-              path="/inventories/inventory/:id/job_templates"
-              key="job_templates"
-            >
-              <RelatedTemplateList
-                searchParams={{ inventory__id: inventory.id }}
-                resourceName={inventory.name}
-              />
-            </Route>,
-            <Route path="*" key="not-found">
+              path="details"
+              element={
+                <InventoryDetail
+                  inventory={inventory}
+                  hasInventoryLoading={hasContentLoading}
+                />
+              }
+            />
+          )}
+          {inventory && (
+            <Route
+              path="edit"
+              element={<InventoryEdit inventory={inventory} />}
+            />
+          )}
+          {/* /* so the nested <InventoryHosts> route tree can match */}
+          {inventory && (
+            <Route
+              path="hosts/*"
+              element={
+                <InventoryHosts
+                  inventory={inventory}
+                  setBreadcrumb={setBreadcrumb}
+                />
+              }
+            />
+          )}
+          {inventory && (
+            <Route
+              path="access"
+              element={
+                <ResourceAccessList
+                  resource={inventory}
+                  apiModel={InventoriesAPI}
+                />
+              }
+            />
+          )}
+          {/* /* so the nested <InventoryGroups> route tree can match */}
+          {inventory && (
+            <Route
+              path="groups/*"
+              element={
+                <InventoryGroups
+                  inventory={inventory}
+                  setBreadcrumb={setBreadcrumb}
+                />
+              }
+            />
+          )}
+          {/* /* so the nested <InventorySources> route tree can match */}
+          {inventory && (
+            <Route
+              path="sources/*"
+              element={
+                <InventorySources
+                  inventory={inventory}
+                  setBreadcrumb={setBreadcrumb}
+                />
+              }
+            />
+          )}
+          {inventory && (
+            <Route
+              path="jobs"
+              element={
+                <JobList
+                  defaultParams={{
+                    or__job__inventory: inventory.id,
+                    or__adhoccommand__inventory: inventory.id,
+                    or__inventoryupdate__inventory_source__inventory:
+                      inventory.id,
+                    or__workflowjob__inventory: inventory.id,
+                  }}
+                  additionalRelatedSearchableKeys={[
+                    'inventoryupdate__inventory_source__inventory',
+                  ]}
+                />
+              }
+            />
+          )}
+          {inventory && (
+            <Route
+              path="job_templates"
+              element={
+                <RelatedTemplateList
+                  searchParams={{ inventory__id: inventory.id }}
+                  resourceName={inventory.name}
+                />
+              }
+            />
+          )}
+          <Route
+            path="*"
+            element={
               <ContentError isNotFound>
-                {match.params.id && (
-                  <Link
-                    to={`/inventories/inventory/${match.params.id}/details`}
-                  >
+                {id && (
+                  <Link to={`${inventoryBaseUrl}/details`}>
                     {t`View Inventory Details`}
                   </Link>
                 )}
               </ContentError>
-            </Route>,
-          ]}
-        </Switch>
+            }
+          />
+        </Routes>
       </Card>
     </PageSection>
   );

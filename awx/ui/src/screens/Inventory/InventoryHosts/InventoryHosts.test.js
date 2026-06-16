@@ -1,5 +1,6 @@
 import React from 'react';
 import { createMemoryHistory } from 'history';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
 import InventoryHosts from './InventoryHosts';
 
@@ -17,15 +18,15 @@ describe('<InventoryHosts />', () => {
       initialEntries: ['/inventories/inventory/1/hosts'],
     });
 
-    const match = {
-      path: '/inventories/inventory/:id/hosts',
-      url: '/inventories/inventory/1/hosts',
-      isExact: true,
-    };
-
-    const wrapper = mountWithContexts(<InventoryHosts />, {
-      context: { router: { history, route: { match } } },
-    });
+    const wrapper = mountWithContexts(
+      <Routes>
+        <Route
+          path="/inventories/inventory/:id/hosts/*"
+          element={<InventoryHosts />}
+        />
+      </Routes>,
+      { context: { router: { history } } }
+    );
 
     expect(wrapper.find('InventoryHostList').length).toBe(1);
   });

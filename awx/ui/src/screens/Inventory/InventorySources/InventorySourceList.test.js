@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { createMemoryHistory } from 'history';
 import { act } from 'react-dom/test-utils';
 import {
@@ -60,7 +60,7 @@ describe('<InventorySourceList />', () => {
   let debug;
 
   beforeEach(async () => {
-    debug = global.console.debug; // eslint-disable-line prefer-destructuring
+    debug = global.console.debug;
     global.console.debug = () => {};
     InventoriesAPI.readSources.mockResolvedValue(sources);
     InventoriesAPI.updateSources.mockResolvedValue({
@@ -89,9 +89,12 @@ describe('<InventorySourceList />', () => {
     });
     await act(async () => {
       wrapper = mountWithContexts(
-        <Route path="/inventories/:inventoryType/:id/sources">
-          <InventorySourceList />
-        </Route>,
+        <Routes>
+          <Route
+            path="/inventories/:inventoryType/:id/sources/*"
+            element={<InventorySourceList />}
+          />
+        </Routes>,
         {
           context: {
             router: {
@@ -232,8 +235,19 @@ describe('<InventorySourceList />', () => {
       })
     );
 
+    const errorHistory = createMemoryHistory({
+      initialEntries: ['/inventories/inventory/1/sources'],
+    });
     await act(async () => {
-      wrapper = mountWithContexts(<InventorySourceList />);
+      wrapper = mountWithContexts(
+        <Routes>
+          <Route
+            path="/inventories/:inventoryType/:id/sources/*"
+            element={<InventorySourceList />}
+          />
+        </Routes>,
+        { context: { router: { history: errorHistory } } }
+      );
     });
     wrapper.update();
 
@@ -254,8 +268,19 @@ describe('<InventorySourceList />', () => {
       })
     );
 
+    const errorHistory = createMemoryHistory({
+      initialEntries: ['/inventories/inventory/1/sources'],
+    });
     await act(async () => {
-      wrapper = mountWithContexts(<InventorySourceList />);
+      wrapper = mountWithContexts(
+        <Routes>
+          <Route
+            path="/inventories/:inventoryType/:id/sources/*"
+            element={<InventorySourceList />}
+          />
+        </Routes>,
+        { context: { router: { history: errorHistory } } }
+      );
     });
     wrapper.update();
 
@@ -321,9 +346,12 @@ describe('<InventorySourceList /> RBAC testing', () => {
     });
     await act(async () => {
       newWrapper = mountWithContexts(
-        <Route path="/inventories/:inventoryType/:id/sources">
-          <InventorySourceList />
-        </Route>,
+        <Routes>
+          <Route
+            path="/inventories/:inventoryType/:id/sources/*"
+            element={<InventorySourceList />}
+          />
+        </Routes>,
         {
           context: {
             router: {
@@ -356,9 +384,12 @@ describe('<InventorySourceList /> RBAC testing', () => {
     });
     await act(async () => {
       newWrapper = mountWithContexts(
-        <Route path="/inventories/:inventoryType/:id/sources">
-          <InventorySourceList />
-        </Route>,
+        <Routes>
+          <Route
+            path="/inventories/:inventoryType/:id/sources/*"
+            element={<InventorySourceList />}
+          />
+        </Routes>,
         {
           context: {
             router: {

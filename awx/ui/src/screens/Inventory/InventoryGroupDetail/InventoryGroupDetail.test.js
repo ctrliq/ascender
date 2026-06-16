@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { createMemoryHistory } from 'history';
 import { act } from 'react-dom/test-utils';
 import { GroupsAPI } from 'api';
@@ -39,23 +39,19 @@ describe('<InventoryGroupDetail />', () => {
   let history;
 
   describe('User has full permissions', () => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useParams: () => ({
-        id: 1,
-        groupId: 3,
-        inventoryType: 'inventory',
-      }),
-    }));
     beforeEach(async () => {
       await act(async () => {
         history = createMemoryHistory({
           initialEntries: ['/inventories/inventory/1/groups/1/details'],
         });
         wrapper = mountWithContexts(
-          <Route path="/inventories/inventory/:id/groups/:groupId">
-            <InventoryGroupDetail inventoryGroup={inventoryGroup} />
-          </Route>,
+          <Routes>
+            <Route
+              path="/inventories/:inventoryType/:id/groups/:groupId/*"
+              element={<InventoryGroupDetail inventoryGroup={inventoryGroup} />}
+            />
+            <Route path="*" element={null} />
+          </Routes>,
           {
             context: {
               router: {
@@ -124,14 +120,6 @@ describe('<InventoryGroupDetail />', () => {
   });
 
   describe('User has read-only permissions', () => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useParams: () => ({
-        id: 1,
-        groupId: 3,
-        inventoryType: 'inventory',
-      }),
-    }));
     test('should hide edit/delete buttons', async () => {
       const readOnlyGroup = {
         ...inventoryGroup,
@@ -149,9 +137,13 @@ describe('<InventoryGroupDetail />', () => {
           initialEntries: ['/inventories/inventory/1/groups/1/details'],
         });
         wrapper = mountWithContexts(
-          <Route path="/inventories/inventory/:id/groups/:groupId">
-            <InventoryGroupDetail inventoryGroup={readOnlyGroup} />
-          </Route>,
+          <Routes>
+            <Route
+              path="/inventories/:inventoryType/:id/groups/:groupId/*"
+              element={<InventoryGroupDetail inventoryGroup={readOnlyGroup} />}
+            />
+            <Route path="*" element={null} />
+          </Routes>,
           {
             context: {
               router: {
@@ -179,12 +171,18 @@ describe('<InventoryGroupDetail />', () => {
     beforeEach(async () => {
       await act(async () => {
         history = createMemoryHistory({
-          initialEntries: ['/inventories/inventory/1/groups/1/details'],
+          initialEntries: [
+            '/inventories/constructed_inventory/1/groups/1/details',
+          ],
         });
         wrapper = mountWithContexts(
-          <Route path="/inventories/inventory/:id/groups/:groupId">
-            <InventoryGroupDetail inventoryGroup={inventoryGroup} />
-          </Route>,
+          <Routes>
+            <Route
+              path="/inventories/:inventoryType/:id/groups/:groupId/*"
+              element={<InventoryGroupDetail inventoryGroup={inventoryGroup} />}
+            />
+            <Route path="*" element={null} />
+          </Routes>,
           {
             context: {
               router: {
