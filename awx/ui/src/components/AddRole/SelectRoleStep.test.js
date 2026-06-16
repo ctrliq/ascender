@@ -1,14 +1,10 @@
 import React from 'react';
-
-import {
-  mountWithContexts,
-  shallowWithContexts,
-} from '../../../testUtils/enzymeHelpers';
+import { screen } from '@testing-library/react';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import SelectRoleStep from './SelectRoleStep';
 
 describe('<SelectRoleStep />', () => {
-  let wrapper;
   const roles = {
     project_admin_role: {
       id: 1,
@@ -36,19 +32,21 @@ describe('<SelectRoleStep />', () => {
   ];
 
   test('initially renders without crashing', () => {
-    wrapper = shallowWithContexts(
+    renderWithContexts(
       <SelectRoleStep
         roles={roles}
         selectedResourceRows={selectedResourceRows}
         selectedRoleRows={selectedRoles}
       />
     );
-    expect(wrapper.length).toBe(1);
+    // one CheckboxCard checkbox per role
+    expect(screen.getByRole('checkbox', { name: 'Project Admin' })).toBeInTheDocument();
+    expect(screen.getByRole('checkbox', { name: 'Execute' })).toBeInTheDocument();
   });
 
-  test('clicking role fires onRolesClick callback', () => {
+  test('clicking role fires onRolesClick callback', async () => {
     const onRolesClick = jest.fn();
-    wrapper = mountWithContexts(
+    const { user } = renderWithContexts(
       <SelectRoleStep
         onRolesClick={onRolesClick}
         roles={roles}
@@ -56,9 +54,10 @@ describe('<SelectRoleStep />', () => {
         selectedRoleRows={selectedRoles}
       />
     );
-    const CheckboxCards = wrapper.find('CheckboxCard');
-    expect(CheckboxCards.length).toBe(2);
-    CheckboxCards.first().prop('onSelect')();
+    const checkboxes = screen.getAllByRole('checkbox');
+    expect(checkboxes).toHaveLength(2);
+    // click the first CheckboxCard (Project Admin)
+    await user.click(screen.getByRole('checkbox', { name: 'Project Admin' }));
     expect(onRolesClick).toHaveBeenCalledWith({
       id: 1,
       name: 'Project Admin',

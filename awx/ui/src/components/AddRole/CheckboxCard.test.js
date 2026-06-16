@@ -1,11 +1,11 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { screen } from '@testing-library/react';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import CheckboxCard from './CheckboxCard';
 
 describe('<CheckboxCard />', () => {
-  let wrapper;
   test('initially renders without crashing', () => {
-    wrapper = shallow(<CheckboxCard name="Foobar" itemId={5} />);
-    expect(wrapper.length).toBe(1);
+    renderWithContexts(<CheckboxCard name="Foobar" itemId={5} />);
+    expect(screen.getByRole('checkbox', { name: 'Foobar' })).toBeInTheDocument();
   });
 });

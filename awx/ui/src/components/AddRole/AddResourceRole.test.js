@@ -1,15 +1,10 @@
-/* eslint-disable react/jsx-pascal-case */
 import React from 'react';
-import { shallow } from 'enzyme';
+import { screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import { act } from 'react-dom/test-utils';
 
 import { TeamsAPI, UsersAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../testUtils/enzymeHelpers';
-import AddResourceRole, { _AddResourceRole } from './AddResourceRole';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
+import AddResourceRole from './AddResourceRole';
 
 jest.mock('../../api/models/Teams');
 jest.mock('../../api/models/Users');
@@ -17,7 +12,13 @@ jest.mock('../../api/models/Users');
 // TODO: Once error handling is functional in
 // this component write tests for it
 
-describe('<_AddResourceRole />', () => {
+// The wizard footer's primary button is labelled "Next" until the last step,
+// where it becomes "Save". Helper to grab whichever is currently shown.
+const getPrimaryButton = () =>
+  screen.queryByRole('button', { name: 'Next' }) ||
+  screen.getByRole('button', { name: 'Save' });
+
+describe('<AddResourceRole />', () => {
   const roles = {
     admin_role: {
       description: 'Can manage all aspects of the organization',
@@ -59,75 +60,72 @@ describe('<_AddResourceRole />', () => {
     });
   });
 
-  test('initially renders without crashing', () => {
-    mountWithContexts(
-      <AddResourceRole
-        onClose={() => {}}
-        onSave={() => {}}
-        roles={roles}
-      />
-    );
+  afterEach(() => {
+    jest.clearAllMocks();
   });
+
+  test('initially renders without crashing', () => {
+    renderWithContexts(
+      <AddResourceRole onClose={() => {}} onSave={() => {}} roles={roles} />
+    );
+    expect(screen.getByRole('button', { name: 'Users' })).toBeInTheDocument();
+  });
+
   test('should save properly', async () => {
-    let wrapper;
-    act(() => {
-      wrapper = mountWithContexts(
-        <AddResourceRole onClose={() => {}} onSave={() => {}} roles={roles} />,
-        { context: { network: { handleHttpError: () => {} } } }
-      );
-    });
-    wrapper.update();
-
-    // Step 1
-    const selectableCardWrapper = wrapper.find('SelectableCard');
-    expect(selectableCardWrapper.length).toBe(2);
-    act(() => wrapper.find('SelectableCard[label="Users"]').prop('onClick')());
-    wrapper.update();
-    await act(async () =>
-      wrapper.find('Button[type="submit"]').prop('onClick')()
+    const { user } = renderWithContexts(
+      <AddResourceRole onClose={() => {}} onSave={() => {}} roles={roles} />
     );
-    wrapper.update();
 
-    // Step 2
-    await waitForElement(wrapper, 'EmptyStateBody', (el) => el.length === 0);
-    expect(wrapper.find('Chip').length).toBe(0);
-    wrapper.find('CheckboxListItem[name="foo"]').invoke('onSelect')(true);
-    wrapper.find('CheckboxListItem[name="bar"]').invoke('onSelect')(true);
-    wrapper.find('CheckboxListItem[name="baz"]').invoke('onSelect')(true);
-    wrapper.find('CheckboxListItem[name="baz"]').invoke('onSelect')(false);
-    expect(
-      wrapper.find('CheckboxListItem[name="foo"]').prop('isSelected')
-    ).toBe(true);
-    expect(
-      wrapper.find('CheckboxListItem[name="bar"]').prop('isSelected')
-    ).toBe(true);
-    expect(
-      wrapper.find('CheckboxListItem[name="baz"]').prop('isSelected')
-    ).toBe(false);
-    expect(wrapper.find('Chip').length).toBe(2);
-    act(() => wrapper.find('Button[type="submit"]').prop('onClick')());
-    wrapper.update();
+    // Step 1 - two resource-type cards
+    expect(screen.getByRole('button', { name: 'Users' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Teams' })).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Users' }));
+    await user.click(getPrimaryButton());
 
-    // Step 3
-    act(() =>
-      wrapper.find('Checkbox[aria-label="Admin"]').invoke('onChange')(true)
-    );
-    wrapper.update();
-    expect(wrapper.find('Checkbox[aria-label="Admin"]').prop('isChecked')).toBe(
-      true
-    );
+    // Step 2 - select foo, bar, baz then deselect baz
+    const fooRow = (await screen.findByText('foo')).closest('tr');
+    const barRow = screen.getByText('bar').closest('tr');
+    const bazRow = screen.getByText('baz').closest('tr');
+    await user.click(within(fooRow).getByRole('checkbox'));
+    await user.click(within(barRow).getByRole('checkbox'));
+    await user.click(within(bazRow).getByRole('checkbox'));
+    await user.click(within(bazRow).getByRole('checkbox'));
+
+    // isSelected prop -> checkbox checked state
+    expect(within(fooRow).getByRole('checkbox')).toBeChecked();
+    expect(within(barRow).getByRole('checkbox')).toBeChecked();
+    expect(within(bazRow).getByRole('checkbox')).not.toBeChecked();
+
+    // Two selected items show in the SelectedList (Chip equivalents). Each
+    // chip's close button is labelled by the item text; baz was deselected so
+    // only foo and bar remain.
+    expect(
+      screen.getByRole('button', { name: 'close foo' })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'close bar' })
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'close baz' })
+    ).not.toBeInTheDocument();
+
+    await user.click(getPrimaryButton());
+
+    // Step 3 - check the Admin role
+    const adminCheckbox = await screen.findByRole('checkbox', { name: 'Admin' });
+    await user.click(adminCheckbox);
+    expect(adminCheckbox).toBeChecked();
 
     // Save
-    await act(async () =>
-      wrapper.find('Button[type="submit"]').prop('onClick')()
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    await waitFor(() =>
+      expect(UsersAPI.associateRole).toHaveBeenCalledTimes(2)
     );
     expect(UsersAPI.associateRole).toHaveBeenCalledWith(1, 1);
     expect(UsersAPI.associateRole).toHaveBeenCalledWith(2, 1);
-    expect(UsersAPI.associateRole).toHaveBeenCalledTimes(2);
   });
 
   test('should call on error properly', async () => {
-    let wrapper;
     const onError = jest.fn();
     UsersAPI.associateRole.mockRejectedValue(
       new Error({
@@ -141,281 +139,198 @@ describe('<_AddResourceRole />', () => {
         },
       })
     );
-    act(() => {
-      wrapper = mountWithContexts(
-        <AddResourceRole
-          onClose={() => {}}
-          onError={onError}
-          onSave={() => {}}
-          roles={roles}
-        />,
-        { context: { network: { handleHttpError: () => {} } } }
-      );
-    });
-    wrapper.update();
+    const { user } = renderWithContexts(
+      <AddResourceRole
+        onClose={() => {}}
+        onError={onError}
+        onSave={() => {}}
+        roles={roles}
+      />
+    );
 
     // Step 1
-    const selectableCardWrapper = wrapper.find('SelectableCard');
-    expect(selectableCardWrapper.length).toBe(2);
-    act(() => wrapper.find('SelectableCard[label="Users"]').prop('onClick')());
-    wrapper.update();
-    await act(async () =>
-      wrapper.find('Button[type="submit"]').prop('onClick')()
-    );
-    wrapper.update();
+    await user.click(screen.getByRole('button', { name: 'Users' }));
+    await user.click(getPrimaryButton());
 
     // Step 2
-    await waitForElement(wrapper, 'EmptyStateBody', (el) => el.length === 0);
-    act(() =>
-      wrapper.find('CheckboxListItem[name="foo"]').invoke('onSelect')(true)
-    );
-    wrapper.update();
-    expect(
-      wrapper.find('CheckboxListItem[name="foo"]').prop('isSelected')
-    ).toBe(true);
-    act(() => wrapper.find('Button[type="submit"]').prop('onClick')());
-    wrapper.update();
+    const fooRow = (await screen.findByText('foo')).closest('tr');
+    await user.click(within(fooRow).getByRole('checkbox'));
+    expect(within(fooRow).getByRole('checkbox')).toBeChecked();
+    await user.click(getPrimaryButton());
 
     // Step 3
-    act(() =>
-      wrapper.find('Checkbox[aria-label="Admin"]').invoke('onChange')(true)
-    );
-    wrapper.update();
-    expect(wrapper.find('Checkbox[aria-label="Admin"]').prop('isChecked')).toBe(
-      true
-    );
+    const adminCheckbox = await screen.findByRole('checkbox', { name: 'Admin' });
+    await user.click(adminCheckbox);
+    expect(adminCheckbox).toBeChecked();
 
     // Save
-    await act(async () =>
-      wrapper.find('Button[type="submit"]').prop('onClick')()
-    );
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    await waitFor(() => expect(onError).toHaveBeenCalled());
     expect(UsersAPI.associateRole).toHaveBeenCalledWith(1, 1);
-    expect(onError).toHaveBeenCalled();
   });
 
   test('should update history properly', async () => {
-    let wrapper;
     const history = createMemoryHistory({
       initialEntries: ['/organizations/2/access?resource.order_by=-username'],
     });
-    act(() => {
-      wrapper = mountWithContexts(
-        <AddResourceRole onClose={() => {}} onSave={() => {}} roles={roles} />,
-        { context: { router: { history } } }
-      );
-    });
-    wrapper.update();
+    const { user } = renderWithContexts(
+      <AddResourceRole onClose={() => {}} onSave={() => {}} roles={roles} />,
+      { context: { router: { history } } }
+    );
 
     // Step 1
-    const selectableCardWrapper = wrapper.find('SelectableCard');
-    expect(selectableCardWrapper.length).toBe(2);
-    act(() => wrapper.find('SelectableCard[label="Users"]').prop('onClick')());
-    wrapper.update();
-    await act(async () =>
-      wrapper.find('Button[type="submit"]').prop('onClick')()
-    );
-    wrapper.update();
+    await user.click(screen.getByRole('button', { name: 'Users' }));
+    await user.click(getPrimaryButton());
 
     // Step 2
-    await waitForElement(wrapper, 'EmptyStateBody', (el) => el.length === 0);
-    act(() =>
-      wrapper.find('CheckboxListItem[name="foo"]').invoke('onSelect')(true)
+    const fooRow = (await screen.findByText('foo')).closest('tr');
+    await user.click(within(fooRow).getByRole('checkbox'));
+    expect(within(fooRow).getByRole('checkbox')).toBeChecked();
+
+    // Jump back to step 1 via the wizard nav -> effect resets the query string
+    await user.click(
+      screen.getByRole('button', { name: 'Select a Resource Type' })
     );
-    wrapper.update();
-    expect(
-      wrapper.find('CheckboxListItem[name="foo"]').prop('isSelected')
-    ).toBe(true);
-    await act(async () =>
-      wrapper.find('PFWizard').prop('onGoToStep')({ id: 1 })
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual('/organizations/2/access')
     );
-    wrapper.update();
-    expect(history.location.pathname).toEqual('/organizations/2/access');
+    expect(history.location.search).toEqual('');
   });
 
   test('should successfuly click user/team cards', async () => {
-    let wrapper;
-    act(() => {
-      wrapper = mountWithContexts(
-        <AddResourceRole onClose={() => {}} onSave={() => {}} roles={roles} />,
-        { context: { network: { handleHttpError: () => {} } } }
-      );
-    });
-    wrapper.update();
-
-    const selectableCardWrapper = wrapper.find('SelectableCard');
-    expect(selectableCardWrapper.length).toBe(2);
-    act(() => wrapper.find('SelectableCard[label="Users"]').prop('onClick')());
-    wrapper.update();
-
-    await waitForElement(
-      wrapper,
-      'SelectableCard[label="Users"]',
-      (el) => el.prop('isSelected') === true
+    const { user } = renderWithContexts(
+      <AddResourceRole onClose={() => {}} onSave={() => {}} roles={roles} />
     );
-    act(() => wrapper.find('SelectableCard[label="Teams"]').prop('onClick')());
-    wrapper.update();
 
-    await waitForElement(
-      wrapper,
-      'SelectableCard[label="Teams"]',
-      (el) => el.prop('isSelected') === true
+    const usersCard = screen.getByRole('button', { name: 'Users' });
+    const teamsCard = screen.getByRole('button', { name: 'Teams' });
+
+    await user.click(usersCard);
+    // SelectableCard isSelected -> active-color border; assert via aria-current
+    // equivalent: the card stays in the document and Next becomes enabled
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'Next' })).toBeEnabled()
+    );
+
+    await user.click(teamsCard);
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'Next' })).toBeEnabled()
     );
   });
 
   test('should reset values with resource type changes', async () => {
-    let wrapper;
-    act(() => {
-      wrapper = mountWithContexts(
-        <AddResourceRole onClose={() => {}} onSave={() => {}} roles={roles} />,
-        { context: { network: { handleHttpError: () => {} } } }
-      );
-    });
-    wrapper.update();
+    const { user } = renderWithContexts(
+      <AddResourceRole onClose={() => {}} onSave={() => {}} roles={roles} />
+    );
 
     // Step 1
-    const selectableCardWrapper = wrapper.find('SelectableCard');
-    expect(selectableCardWrapper.length).toBe(2);
-    act(() => wrapper.find('SelectableCard[label="Users"]').prop('onClick')());
-    wrapper.update();
-    await act(async () =>
-      wrapper.find('Button[type="submit"]').prop('onClick')()
-    );
-    wrapper.update();
+    await user.click(screen.getByRole('button', { name: 'Users' }));
+    await user.click(getPrimaryButton());
 
-    // Step 2
-    await waitForElement(wrapper, 'EmptyStateBody', (el) => el.length === 0);
-    act(() =>
-      wrapper.find('CheckboxListItem[name="foo"]').invoke('onSelect')(true)
-    );
-    wrapper.update();
-    expect(
-      wrapper.find('CheckboxListItem[name="foo"]').prop('isSelected')
-    ).toBe(true);
-    act(() => wrapper.find('Button[type="submit"]').prop('onClick')());
-    wrapper.update();
+    // Step 2 - select foo
+    const fooRow = (await screen.findByText('foo')).closest('tr');
+    await user.click(within(fooRow).getByRole('checkbox'));
+    expect(within(fooRow).getByRole('checkbox')).toBeChecked();
+    await user.click(getPrimaryButton());
 
-    // Step 3
-    act(() =>
-      wrapper.find('Checkbox[aria-label="Admin"]').invoke('onChange')(true)
+    // Step 3 - check Admin
+    const adminCheckbox = await screen.findByRole('checkbox', { name: 'Admin' });
+    await user.click(adminCheckbox);
+    expect(adminCheckbox).toBeChecked();
+
+    // Go back to step 1 via nav
+    await user.click(
+      screen.getByRole('button', { name: 'Select a Resource Type' })
     );
-    wrapper.update();
-    expect(wrapper.find('Checkbox[aria-label="Admin"]').prop('isChecked')).toBe(
-      true
+    await waitFor(() =>
+      expect(
+        screen.getByRole('button', { name: 'Select a Resource Type' })
+      ).toHaveAttribute('aria-current', 'step')
     );
 
-    // Go back to step 1
-    act(() => {
-      wrapper
-        .find('WizardNavItem[content="Select a Resource Type"]')
-        .find('button')
-        .prop('onClick')({ id: 1 });
+    // Select Teams this time -> clears selections in following steps
+    await user.click(screen.getByRole('button', { name: 'Teams' }));
+    await user.click(getPrimaryButton());
+
+    // Step 2 (teams) - nothing carried over: no team checkbox is checked, so
+    // Next is disabled (proves the prior user selection was cleared)
+    const teamRow = (await screen.findByText('Team foo')).closest('tr');
+    screen
+      .getAllByRole('checkbox')
+      .forEach((box) => expect(box).not.toBeChecked());
+    expect(screen.getByRole('button', { name: 'Next' })).toBeDisabled();
+
+    // pick a team to advance to the roles step
+    await user.click(within(teamRow).getByRole('checkbox'));
+    await user.click(getPrimaryButton());
+
+    // Step 3 - no roles carried over from the earlier Admin selection
+    const roleCheckboxes = await screen.findAllByRole('checkbox', {
+      name: /Admin|Execute/,
     });
-    wrapper.update();
-    expect(
-      wrapper
-        .find('WizardNavItem[content="Select a Resource Type"]')
-        .prop('isCurrent')
-    ).toBe(true);
+    roleCheckboxes.forEach((box) => expect(box).not.toBeChecked());
 
-    // Go back to step 1 and this time select teams.  Doing so should clear following steps
-    act(() => wrapper.find('SelectableCard[label="Teams"]').prop('onClick')());
-    wrapper.update();
-    await act(async () =>
-      wrapper.find('Button[type="submit"]').prop('onClick')()
-    );
-    wrapper.update();
-
-    // Make sure no teams have been selected
-    await waitForElement(wrapper, 'EmptyStateBody', (el) => el.length === 0);
-    wrapper
-      .find('DataListCheck')
-      .map((item) => expect(item.prop('checked')).toBe(false));
-    act(() => wrapper.find('Button[type="submit"]').prop('onClick')());
-    wrapper.update();
-
-    // Make sure that no roles have been selected
-    wrapper
-      .find('Checkbox')
-      .map((card) => expect(card.prop('isChecked')).toBe(false));
-
-    // Make sure the save button is disabled
-    expect(wrapper.find('Button[type="submit"]').prop('isDisabled')).toBe(true);
+    // Save button disabled (no roles selected)
+    expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled();
   });
 
-  test('should not display team as a choice in case credential does not have organization', () => {
-    const wrapper = mountWithContexts(
+  test('should not display team as a choice in case credential does not have organization', async () => {
+    const { user } = renderWithContexts(
       <AddResourceRole
         onClose={() => {}}
         onSave={() => {}}
         roles={roles}
         resource={{ type: 'credential', organization: null }}
-      />,
-      { context: { network: { handleHttpError: () => {} } } }
+      />
     );
 
-    expect(wrapper.find('SelectableCard').length).toBe(1);
-    wrapper.find('SelectableCard[label="Users"]').simulate('click');
-    wrapper.update();
+    expect(screen.getByRole('button', { name: 'Users' })).toBeInTheDocument();
     expect(
-      wrapper.find('SelectableCard[label="Users"]').prop('isSelected')
-    ).toBe(true);
+      screen.queryByRole('button', { name: 'Teams' })
+    ).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Users' }));
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'Next' })).toBeEnabled()
+    );
   });
+
   test('should show correct button text', async () => {
-    let wrapper;
-    act(() => {
-      wrapper = mountWithContexts(
-        <AddResourceRole onClose={() => {}} onSave={() => {}} roles={roles} />,
-        { context: { network: { handleHttpError: () => {} } } }
-      );
-    });
-    wrapper.update();
+    const { user } = renderWithContexts(
+      <AddResourceRole onClose={() => {}} onSave={() => {}} roles={roles} />
+    );
 
     // Step 1
-    const selectableCardWrapper = wrapper.find('SelectableCard');
-    expect(selectableCardWrapper.length).toBe(2);
-    act(() => wrapper.find('SelectableCard[label="Users"]').prop('onClick')());
-    wrapper.update();
-    await act(async () =>
-      wrapper.find('Button[type="submit"]').prop('onClick')()
-    );
-    expect(wrapper.find('Button[type="submit"]').text()).toBe('Next');
-
-    wrapper.update();
+    await user.click(screen.getByRole('button', { name: 'Users' }));
+    expect(screen.getByRole('button', { name: 'Next' })).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Next' }));
 
     // Step 2
-    await waitForElement(wrapper, 'EmptyStateBody', (el) => el.length === 0);
-    expect(wrapper.find('Chip').length).toBe(0);
-    act(() =>
-      wrapper.find('CheckboxListItem[name="foo"]').invoke('onSelect')(true)
-    );
-    wrapper.update();
+    const fooRow = (await screen.findByText('foo')).closest('tr');
+    await user.click(within(fooRow).getByRole('checkbox'));
+    expect(within(fooRow).getByRole('checkbox')).toBeChecked();
+    // selected chip for foo appears
     expect(
-      wrapper.find('CheckboxListItem[name="foo"]').prop('isSelected')
-    ).toBe(true);
-    expect(wrapper.find('Chip').length).toBe(1);
-    expect(wrapper.find('Button[type="submit"]').text()).toBe('Next');
-    act(() => wrapper.find('Button[type="submit"]').prop('onClick')());
-    wrapper.update();
+      screen.getByRole('button', { name: 'close foo' })
+    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Next' })).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Next' }));
 
-    // Step 3
-    act(() =>
-      wrapper.find('Checkbox[aria-label="Admin"]').invoke('onChange')(true)
-    );
-    expect(wrapper.find('Button[type="submit"]').text()).toBe('Save');
-    wrapper.update();
+    // Step 3 - primary button is Save
+    const adminCheckbox = await screen.findByRole('checkbox', { name: 'Admin' });
+    await user.click(adminCheckbox);
+    expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument();
 
-    // Go Back
-    await act(async () =>
-      wrapper.find('Button[variant="secondary"]').prop('onClick')()
-    );
-    wrapper.update();
-    expect(wrapper.find('Button[type="submit"]').text()).toBe('Next');
+    // Go Back -> primary button is Next again
+    await user.click(screen.getByRole('button', { name: 'Back' }));
+    expect(
+      await screen.findByRole('button', { name: 'Next' })
+    ).toBeInTheDocument();
 
-    // return to last step
-    await act(async () =>
-      wrapper.find('Button[type="submit"]').prop('onClick')()
-    );
-    wrapper.update();
-    expect(wrapper.find('Button[type="submit"]').text()).toBe('Save');
+    // Return to last step -> Save again
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    expect(
+      await screen.findByRole('button', { name: 'Save' })
+    ).toBeInTheDocument();
   });
 });

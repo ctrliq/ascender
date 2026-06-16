@@ -1,11 +1,6 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
-
-import {
-  mountWithContexts,
-  shallowWithContexts,
-  waitForElement,
-} from '../../../testUtils/enzymeHelpers';
+import { screen, waitFor, within } from '@testing-library/react';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import SelectResourceStep from './SelectResourceStep';
 
 describe('<SelectResourceStep />', () => {
@@ -23,22 +18,29 @@ describe('<SelectResourceStep />', () => {
       key: 'username',
     },
   ];
+
   afterEach(() => {
     jest.restoreAllMocks();
   });
+
   test('initially renders without crashing', async () => {
-    act(() => {
-      shallowWithContexts(
-        <SelectResourceStep
-          searchColumns={searchColumns}
-          sortColumns={sortColumns}
-          displayKey="username"
-          onRowClick={() => {}}
-          fetchItems={() => {}}
-          fetchOptions={() => {}}
-        />
-      );
+    const fetchItems = jest.fn().mockResolvedValue({
+      data: { count: 0, results: [] },
     });
+    const fetchOptions = jest.fn().mockResolvedValue({
+      data: { actions: { GET: {}, POST: {} }, related_search_fields: [] },
+    });
+    renderWithContexts(
+      <SelectResourceStep
+        searchColumns={searchColumns}
+        sortColumns={sortColumns}
+        displayKey="username"
+        onRowClick={() => {}}
+        fetchItems={fetchItems}
+        fetchOptions={fetchOptions}
+      />
+    );
+    await waitFor(() => expect(fetchItems).toHaveBeenCalled());
   });
 
   test('fetches resources on mount and adds items to list', async () => {
@@ -53,32 +55,30 @@ describe('<SelectResourceStep />', () => {
     });
     const options = jest.fn().mockResolvedValue({
       data: {
-        actions: {
-          GET: {},
-          POST: {},
-        },
+        actions: { GET: {}, POST: {} },
         related_search_fields: [],
       },
     });
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SelectResourceStep
-          searchColumns={searchColumns}
-          sortColumns={sortColumns}
-          displayKey="username"
-          onRowClick={() => {}}
-          fetchItems={handleSearch}
-          fetchOptions={options}
-        />
-      );
-    });
-    expect(handleSearch).toHaveBeenCalledWith({
-      order_by: 'username',
-      page: 1,
-      page_size: 5,
-    });
-    waitForElement(wrapper, 'CheckBoxListItem', (el) => el.length === 2);
+    renderWithContexts(
+      <SelectResourceStep
+        searchColumns={searchColumns}
+        sortColumns={sortColumns}
+        displayKey="username"
+        onRowClick={() => {}}
+        fetchItems={handleSearch}
+        fetchOptions={options}
+      />
+    );
+    await waitFor(() =>
+      expect(handleSearch).toHaveBeenCalledWith({
+        order_by: 'username',
+        page: 1,
+        page_size: 5,
+      })
+    );
+    // both rows render
+    expect(await screen.findByText('foo')).toBeInTheDocument();
+    expect(screen.getByText('bar')).toBeInTheDocument();
   });
 
   test('clicking on row fires callback with correct params', async () => {
@@ -92,35 +92,25 @@ describe('<SelectResourceStep />', () => {
     };
     const options = jest.fn().mockResolvedValue({
       data: {
-        actions: {
-          GET: {},
-          POST: {},
-        },
+        actions: { GET: {}, POST: {} },
         related_search_fields: [],
       },
     });
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SelectResourceStep
-          searchColumns={searchColumns}
-          sortColumns={sortColumns}
-          displayKey="username"
-          onRowClick={handleRowClick}
-          fetchItems={() => ({ data })}
-          fetchOptions={options}
-          selectedResourceRows={[]}
-        />
-      );
-    });
-    wrapper.update();
-    const checkboxListItemWrapper = wrapper.find('CheckboxListItem');
-    expect(checkboxListItemWrapper.length).toBe(2);
+    const { user } = renderWithContexts(
+      <SelectResourceStep
+        searchColumns={searchColumns}
+        sortColumns={sortColumns}
+        displayKey="username"
+        onRowClick={handleRowClick}
+        fetchItems={() => ({ data })}
+        fetchOptions={options}
+        selectedResourceRows={[]}
+      />
+    );
 
-    checkboxListItemWrapper
-      .first()
-      .find('input[type="checkbox"]')
-      .simulate('click');
+    const fooRow = (await screen.findByText('foo')).closest('tr');
+    const checkbox = within(fooRow).getByRole('checkbox');
+    await user.click(checkbox);
     expect(handleRowClick).toHaveBeenCalledWith(data.results[0]);
   });
 });
