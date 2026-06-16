@@ -1,10 +1,10 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { HostsAPI } from 'api';
 import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+  renderWithContexts,
+  assertDetail,
+} from '../../../../testUtils/rtlContexts';
 import HostDetail from './HostDetail';
 
 import mockHost from '../data.host.json';
@@ -12,18 +12,13 @@ import mockHost from '../data.host.json';
 jest.mock('../../../api');
 
 describe('<HostDetail />', () => {
-  let wrapper;
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
   describe('User has edit permissions', () => {
-    beforeAll(() => {
-      wrapper = mountWithContexts(<HostDetail host={mockHost} />);
-    });
-
     test('should render Details', async () => {
-      function assertDetail(label, value) {
-        expect(wrapper.find(`Detail[label="${label}"] dt`).text()).toBe(label);
-        expect(wrapper.find(`Detail[label="${label}"] dd`).text()).toBe(value);
-      }
+      renderWithContexts(<HostDetail host={mockHost} />);
 
       assertDetail('Name', 'localhost');
       assertDetail('Description', 'a good description');
@@ -33,60 +28,69 @@ describe('<HostDetail />', () => {
     });
 
     test('should show edit button for users with edit permission', () => {
-      const editButton = wrapper.find('Button[aria-label="edit"]');
-      expect(editButton.text()).toEqual('Edit');
-      expect(editButton.prop('to')).toBe('/hosts/2/edit');
+      renderWithContexts(<HostDetail host={mockHost} />);
+      const editButton = screen.getByRole('link', { name: 'edit' });
+      expect(editButton).toHaveTextContent('Edit');
+      expect(editButton).toHaveAttribute('href', '/hosts/2/edit');
     });
 
     test('expected api call is made for delete', async () => {
-      await act(async () => {
-        wrapper.find('DeleteButton').invoke('onConfirm')();
-      });
-      expect(HostsAPI.destroy).toHaveBeenCalledTimes(1);
+      HostsAPI.destroy.mockResolvedValueOnce({});
+      const { user } = renderWithContexts(<HostDetail host={mockHost} />);
+
+      await user.click(screen.getByRole('button', { name: 'Delete' }));
+      await user.click(
+        await screen.findByRole('button', { name: 'Confirm Delete' })
+      );
+
+      await waitFor(() => expect(HostsAPI.destroy).toHaveBeenCalledTimes(1));
     });
 
     test('Error dialog shown for failed deletion', async () => {
       HostsAPI.destroy.mockImplementationOnce(() =>
         Promise.reject(new Error())
       );
-      await act(async () => {
-        wrapper.find('DeleteButton').invoke('onConfirm')();
-      });
-      await waitForElement(
-        wrapper,
-        'Modal[title="Error!"]',
-        (el) => el.length === 1
+      const { user } = renderWithContexts(<HostDetail host={mockHost} />);
+
+      await user.click(screen.getByRole('button', { name: 'Delete' }));
+      await user.click(
+        await screen.findByRole('button', { name: 'Confirm Delete' })
       );
-      await act(async () => {
-        wrapper.find('Modal[title="Error!"]').invoke('onClose')();
-      });
-      await waitForElement(
-        wrapper,
-        'Modal[title="Error!"]',
-        (el) => el.length === 0
+
+      expect(await screen.findByText('Error!')).toBeInTheDocument();
+
+      await user.click(screen.getByRole('button', { name: 'Close' }));
+      await waitFor(() =>
+        expect(screen.queryByText('Error!')).not.toBeInTheDocument()
       );
     });
   });
 
   describe('User has read-only permissions', () => {
-    beforeAll(() => {
-      const readOnlyHost = { ...mockHost };
-      readOnlyHost.summary_fields.user_capabilities.edit = false;
-      readOnlyHost.summary_fields.recent_jobs = [];
-
-      wrapper = mountWithContexts(<HostDetail host={mockHost} />);
-    });
+    const readOnlyHost = {
+      ...mockHost,
+      summary_fields: {
+        ...mockHost.summary_fields,
+        user_capabilities: {
+          ...mockHost.summary_fields.user_capabilities,
+          edit: false,
+        },
+        recent_jobs: [],
+      },
+    };
 
     test('should hide activity stream when there are no recent jobs', async () => {
-      expect(wrapper.find(`Detail[label="Activity"] Sparkline`)).toHaveLength(
-        0
-      );
-      const activity_detail = wrapper.find(`Detail[label="Activity"]`).at(0);
-      expect(activity_detail.prop('isEmpty')).toEqual(true);
+      renderWithContexts(<HostDetail host={readOnlyHost} />);
+      // an empty Detail (isEmpty) renders null, so the Activity row and its
+      // Sparkline are omitted entirely
+      expect(screen.queryByText('Activity')).not.toBeInTheDocument();
     });
 
     test('should hide edit button for users without edit permission', async () => {
-      expect(wrapper.find('Button[aria-label="edit"]').length).toBe(0);
+      renderWithContexts(<HostDetail host={readOnlyHost} />);
+      expect(
+        screen.queryByRole('link', { name: 'edit' })
+      ).not.toBeInTheDocument();
     });
   });
 });

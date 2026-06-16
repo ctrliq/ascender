@@ -1,10 +1,7 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { HostsAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import HostFacts from './HostFacts';
 import mockHost from '../data.host.json';
 import mockHostFacts from '../data.hostFacts.json';
@@ -19,22 +16,20 @@ jest.mock('react-router-dom', () => ({
 }));
 
 describe('<HostFacts />', () => {
-  let wrapper;
-
-  beforeEach(async () => {
-    HostsAPI.readFacts.mockResolvedValue({ data: mockHostFacts });
-    await act(async () => {
-      wrapper = mountWithContexts(<HostFacts host={mockHost} />);
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-  });
-
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  test('initially renders successfully ', () => {
-    expect(wrapper.find('HostFacts').length).toBe(1);
+  test('initially renders successfully', async () => {
+    HostsAPI.readFacts.mockResolvedValue({ data: mockHostFacts });
+    renderWithContexts(<HostFacts host={mockHost} />);
+    // react-ace renders empty under jsdom, so assert the Facts detail label
+    // rather than the JSON body
+    expect(await screen.findByText('Facts')).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
+    );
+    expect(HostsAPI.readFacts).toHaveBeenCalledWith(mockHost.id);
   });
 
   test('renders ContentError when facts GET fails', async () => {
@@ -50,9 +45,9 @@ describe('<HostFacts />', () => {
         },
       })
     );
-    await act(async () => {
-      wrapper = mountWithContexts(<HostFacts host={mockHost} />);
-    });
-    await waitForElement(wrapper, 'ContentError', (el) => el.length === 1);
+    renderWithContexts(<HostFacts host={mockHost} />);
+    expect(
+      await screen.findByText('Something went wrong...')
+    ).toBeInTheDocument();
   });
 });

@@ -1,6 +1,6 @@
 import React from 'react';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
-
+import { screen, within } from '@testing-library/react';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import HostsListItem from './HostListItem';
 
 const mockHost = {
@@ -9,6 +9,7 @@ const mockHost = {
   url: '/api/v2/hosts/1',
   description: 'Buzz',
   inventory: 1,
+  enabled: true,
   summary_fields: {
     inventory: {
       id: 1,
@@ -21,55 +22,58 @@ const mockHost = {
   },
 };
 
+function renderItem(host) {
+  return renderWithContexts(
+    <table>
+      <tbody>
+        <HostsListItem
+          isSelected={false}
+          detailUrl="/host/1"
+          onSelect={() => {}}
+          host={host}
+        />
+      </tbody>
+    </table>
+  );
+}
+
 describe('<HostsListItem />', () => {
-  let wrapper;
-
-  beforeEach(() => {
-    wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <HostsListItem
-            isSelected={false}
-            detailUrl="/host/1"
-            onSelect={() => {}}
-            host={mockHost}
-          />
-        </tbody>
-      </table>
-    );
-  });
-
   test('should display expected details', () => {
-    expect(wrapper.find('HostListItem').length).toBe(1);
-    expect(wrapper.find('Td[dataLabel="Name"]').find('Link').prop('to')).toBe(
-      '/host/1'
-    );
-    expect(wrapper.find('Td[dataLabel="Description"]').text()).toBe('Buzz');
+    renderItem(mockHost);
+    const nameLink = screen.getByRole('link', { name: 'Host 1' });
+    expect(nameLink).toHaveAttribute('href', '/host/1');
+
+    const row = nameLink.closest('tr');
+    const descriptionCell = within(row)
+      .getAllByRole('cell')
+      .find((cell) => cell.getAttribute('data-label') === 'Description');
+    expect(descriptionCell).toHaveTextContent('Buzz');
   });
 
   test('edit button shown to users with edit capabilities', () => {
-    expect(wrapper.find('PencilAltIcon').exists()).toBeTruthy();
+    renderItem(mockHost);
+    expect(
+      screen.getByRole('link', { name: 'Edit Host' })
+    ).toHaveAttribute('href', '/hosts/1/edit');
   });
 
   test('edit button hidden from users without edit capabilities', () => {
-    const copyMockHost = { ...mockHost };
-    copyMockHost.summary_fields.user_capabilities.edit = false;
-    wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <HostsListItem
-            isSelected={false}
-            detailUrl="/host/1"
-            onSelect={() => {}}
-            host={copyMockHost}
-          />
-        </tbody>
-      </table>
-    );
-    expect(wrapper.find('PencilAltIcon').exists()).toBeFalsy();
+    renderItem({
+      ...mockHost,
+      summary_fields: {
+        ...mockHost.summary_fields,
+        user_capabilities: { edit: false },
+      },
+    });
+    expect(
+      screen.queryByRole('link', { name: 'Edit Host' })
+    ).not.toBeInTheDocument();
   });
 
   test('should display host toggle', () => {
-    expect(wrapper.find('HostToggle').length).toBe(1);
+    renderItem(mockHost);
+    expect(
+      screen.getByRole('checkbox', { name: 'Toggle host' })
+    ).toBeInTheDocument();
   });
 });

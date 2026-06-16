@@ -1,69 +1,102 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { HostsAPI } from 'api';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import mockHost from '../data.host.json';
 import HostEdit from './HostEdit';
 
 jest.mock('../../../api');
 
+const updatedHostData = {
+  name: 'new name',
+  description: 'new description',
+  variables: '---\nfoo: bar',
+};
+
+// Mock the shared HostForm: a Save button invokes handleSubmit with the
+// provided test payload, a Cancel button invokes handleCancel, and the
+// submitError prop renders so the error branch can be asserted.
+jest.mock('components/HostForm', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: ({ handleSubmit, handleCancel, submitError }) =>
+      ReactLib.createElement(
+        'div',
+        null,
+        ReactLib.createElement(
+          'button',
+          {
+            type: 'button',
+            'aria-label': 'Save',
+            onClick: () => handleSubmit(global.__hostFormSubmitData),
+          },
+          'Save'
+        ),
+        ReactLib.createElement(
+          'button',
+          { type: 'button', 'aria-label': 'Cancel', onClick: handleCancel },
+          'Cancel'
+        ),
+        submitError
+          ? ReactLib.createElement('div', null, 'FormSubmitError')
+          : null
+      ),
+  };
+});
+
 describe('<HostEdit />', () => {
-  let wrapper;
   let history;
 
-  const updatedHostData = {
-    name: 'new name',
-    description: 'new description',
-    variables: '---\nfoo: bar',
-  };
-
-  beforeAll(async () => {
+  beforeEach(() => {
+    global.__hostFormSubmitData = updatedHostData;
     history = createMemoryHistory();
-    await act(async () => {
-      wrapper = mountWithContexts(<HostEdit host={mockHost} />, {
-        context: { router: { history } },
-      });
-    });
   });
 
-  afterAll(() => {
+  afterEach(() => {
     jest.clearAllMocks();
   });
 
-  test('handleSubmit should call api update', async () => {
-    await act(async () => {
-      wrapper.find('HostForm').prop('handleSubmit')(updatedHostData);
+  function render() {
+    return renderWithContexts(<HostEdit host={mockHost} />, {
+      context: { router: { history } },
     });
-    expect(HostsAPI.update).toHaveBeenCalledWith(2, updatedHostData);
+  }
+
+  test('handleSubmit should call api update', async () => {
+    const { user } = render();
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    await waitFor(() =>
+      expect(HostsAPI.update).toHaveBeenCalledWith(2, updatedHostData)
+    );
   });
 
   test('should navigate to host detail when cancel is clicked', async () => {
-    await act(async () => {
-      wrapper.find('button[aria-label="Cancel"]').prop('onClick')();
-    });
+    const { user } = render();
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
     expect(history.location.pathname).toEqual('/hosts/2/details');
   });
 
   test('should navigate to host detail after successful submission', async () => {
-    await act(async () => {
-      wrapper.find('HostForm').invoke('handleSubmit')(updatedHostData);
-    });
-    expect(wrapper.find('FormSubmitError').length).toBe(0);
-    expect(history.location.pathname).toEqual('/hosts/2/details');
+    const { user } = render();
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual('/hosts/2/details')
+    );
+    expect(screen.queryByText('FormSubmitError')).not.toBeInTheDocument();
   });
 
   test('failed form submission should show an error message', async () => {
+    global.__hostFormSubmitData = mockHost;
     const error = {
       response: {
         data: { detail: 'An error occurred' },
       },
     };
     HostsAPI.update.mockImplementationOnce(() => Promise.reject(error));
-    await act(async () => {
-      wrapper.find('HostForm').invoke('handleSubmit')(mockHost);
-    });
-    wrapper.update();
-    expect(wrapper.find('FormSubmitError').length).toBe(1);
+    const { user } = render();
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    expect(await screen.findByText('FormSubmitError')).toBeInTheDocument();
   });
 });
