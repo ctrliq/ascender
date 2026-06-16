@@ -343,7 +343,7 @@ If you want to clean all things once your are done, you can do:
 ### SAML and OIDC Integration
 Keycloak can be used as both a SAML and OIDC provider and can be used to test AWX social auth. This section describes how to build a reference Keycloak instance and plumb it with AWX for testing purposes.
 
-First, be sure that you have the awx.awx collection installed by running `make install_collection`.
+First, be sure that you have the ctrliq.ascender collection installed by running `make install_collection`.
 Next, make sure you have your containers running by running `make docker-compose`.
 
 Note: The following instructions assume we are using the built-in postgres database container. If you are not using the internal database you can use this guide as a reference, updating the database fields as required for your connection.
@@ -402,7 +402,7 @@ In addition to container_reference, there are some additional variables which yo
 
 To override any of the variables above you can add more `-e` arguments to the playbook run below. For example, if you simply need to change the `keycloak_pass` add the argument `-e keycloak_pass=my_secret_pass` to the following ansible-playbook command.
 
-In addition, you may need to override the username or password to get into your AWX instance. We log into AWX in order to read and write the SAML and OIDC settings. This can be done in several ways because we are using the awx.awx collection. The easiest way is to set environment variables such as `CONTROLLER_USERNAME`. See the awx.awx documentation for more information on setting environment variables. In the example provided below we are showing an example of specifying a username/password for authentication.
+In addition, you may need to override the username or password to get into your AWX instance. We log into AWX in order to read and write the SAML and OIDC settings. This can be done in several ways because we are using the ctrliq.ascender collection. The easiest way is to set environment variables such as `CONTROLLER_USERNAME`. See the ctrliq.ascender documentation for more information on setting environment variables. In the example provided below we are showing an example of specifying a username/password for authentication.
 
 Now that we have all of our variables covered we can run the playbook like:
 ```bash
@@ -426,7 +426,7 @@ If you Keycloak configuration is not working and you need to rerun the playbook 
 
 OpenLDAP is an LDAP provider that can be used to test AWX with LDAP integration. This section describes how to build a reference OpenLDAP instance and plumb it with your AWX for testing purposes.
 
-First, be sure that you have the awx.awx collection installed by running `make install_collection`.
+First, be sure that you have the ctrliq.ascender collection installed by running `make install_collection`.
 
 Anytime you want to run an OpenLDAP instance alongside AWX we can start docker-compose with the LDAP option to get an LDAP instance with the command:
 ```bash
@@ -461,7 +461,7 @@ The first account is a normal user. The second account will be a super user in A
 
 tacacs+ is an networking protocol that provides external authentication which can be used with AWX. This section describes how to build a reference tacacs+ instance and plumb it with your AWX for testing purposes.
 
-First, be sure that you have the awx.awx collection installed by running `make install_collection`.
+First, be sure that you have the ctrliq.ascender collection installed by running `make install_collection`.
 
 Anytime you want to run a tacacs+ instance alongside AWX we can start docker-compose with the TACACS option to get a containerized instance with the command:
 ```bash

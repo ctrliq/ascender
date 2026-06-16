@@ -8,7 +8,7 @@
   tasks:
     - name: Load existing and new tacacs+ settings
       set_fact:
-        existing_tacacs: "{{ lookup('awx.awx.controller_api', 'settings/tacacsplus', host=awx_host, verify_ssl=false) }}"
+        existing_tacacs: "{{ lookup('ctrliq.ascender.controller_api', 'settings/tacacsplus', host=awx_host, verify_ssl=false) }}"
         new_tacacs: "{{ lookup('template', 'tacacsplus_settings.json.j2') }}"
 
     - name: Display existing tacacs+ configuration
@@ -26,7 +26,7 @@
         content: "{{ existing_tacacs }}"
 
     - name: Configure AWX tacacs+ adapter
-      awx.awx.settings:
+      ctrliq.ascender.settings:
         settings: "{{ new_tacacs }}"
         controller_host: "{{ awx_host }}"
         validate_certs: False

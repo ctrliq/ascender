@@ -1,0 +1,39 @@
+# (********************************************************)
+# (*                                                      *)
+# (*             WARNING                                  *)
+# (*                                                      *)
+# (*  This file is managed by Ansible and not to be       *)
+# (*  edited directly! Instead modify:                    *)
+# (*  tools/roles/template_galaxy/templates/galaxy.yml.j2 *)
+# (*                                                      *)
+# (*  Changes to the base galaxy.yml file are refreshed   *)
+# (*  upon build of the collection                        *)
+# (********************************************************)
+---
+authors:
+  - Ascender Project Contributors
+dependencies: {}
+description: Ansible content that interacts with the Ascender (AWX) Controller API.
+documentation: https://github.com/ctrliq/ascender/blob/devel/ascender_collection/README.md
+homepage: https://ascender-automation.org
+issues: https://github.com/ctrliq/ascender/issues?q=is%3Aissue+label%3Acomponent%3Aascender_collection
+license:
+  - GPL-3.0-or-later
+name: ascender
+namespace: ctrliq
+readme: README.md
+repository: https://github.com/ctrliq/ascender
+tags:
+  - cloud
+  - infrastructure
+  - ascender
+  - ansible
+  - automation
+version: 0.0.1-devel
+build_ignore:
+  - tools
+  - test
+  - setup.cfg
+  - galaxy.yml.j2
+  - template_galaxy.yml
+  - '*.tar.gz'

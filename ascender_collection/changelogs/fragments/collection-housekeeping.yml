@@ -1,0 +1,5 @@
+trivial:
+  - README - rewrite the collection README for Ascender (accurate ``ctrliq.ascender`` content, a working example playbook, the ``controller_*`` authentication parameters, the included-content listing, and the GPL-3.0-or-later license).
+  - build - exclude the ``test`` directory from the built collection artifact and drop the now-dangling ``test/ascender/conftest.py`` entries from the sanity ignore files.
+  - build - default ``COLLECTION_TEMPLATE_VERSION`` to ``true`` so a build stamps the real collection version into ``_COLLECTION_VERSION`` instead of the ``0.0.1-devel`` placeholder.
+  - tests - add unit and integration coverage for the bitbucket_dc webhook service, the schedule rrule list return value, ``workflow_launch`` tags/skip_tags, the application ``client_secret`` output, and cross-organization team role lookups.

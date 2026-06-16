@@ -1,0 +1,27 @@
+=========================================
+Ascender Ansible Collection Release Notes
+=========================================
+
+.. contents:: Topics
+
+v25.4.0
+=======
+
+Release Summary
+---------------
+
+First release of the collection under the ``ctrliq.ascender`` namespace, modernized for current ansible-core and brought up to Ansible Galaxy standards.
+
+Minor Changes
+-------------
+
+- Added RETURN documentation to every module that was missing it, so the full module reference now documents its return values.
+- Updated the inventory and lookup plugins to import from ``ansible.module_utils.common.text.converters`` and the Python 3 standard library instead of the deprecated ``_text`` and ``six`` modules.
+- user - added the ``preferred_language`` option, matching the per-user UI language field exposed by the controller API.
+
+Breaking Changes
+----------------
+
+- Raised the minimum required ansible-core to 2.17. The modules and plugins are now Python 3 only; the legacy ``six`` based Python 2 compatibility shims have been removed.
+- Removed the long-deprecated ``tower_*`` module and plugin redirects (their announced removal date was 2022-01-23). Use the current ``ctrliq.ascender.*`` names instead.
+- Renamed the collection from ``awx.awx`` to ``ctrliq.ascender``. Playbooks must update their fully-qualified module, plugin and doc-fragment names (for example ``awx.awx.job_launch`` becomes ``ctrliq.ascender.job_launch``). The collection source folder is now ``ascender_collection``.

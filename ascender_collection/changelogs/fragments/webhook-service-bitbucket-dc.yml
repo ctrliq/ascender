@@ -1,0 +1,2 @@
+minor_changes:
+  - job_template, workflow_job_template - accept ``bitbucket_dc`` as a ``webhook_service``, which the controller has supported since migration 0188.
