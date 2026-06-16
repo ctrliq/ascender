@@ -1,6 +1,6 @@
 import React from 'react';
-
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { screen } from '@testing-library/react';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import DeleteRoleConfirmationModal from './DeleteRoleConfirmationModal';
 
@@ -15,7 +15,7 @@ const role = {
 
 describe('<DeleteRoleConfirmationModal />', () => {
   test('should render Team confirmation modal', () => {
-    const wrapper = mountWithContexts(
+    renderWithContexts(
       <DeleteRoleConfirmationModal
         role={role}
         username="jane"
@@ -23,16 +23,23 @@ describe('<DeleteRoleConfirmationModal />', () => {
         onConfirm={() => {}}
       />
     );
-    wrapper.update();
-    expect(wrapper.find('ModalBoxBody').text()).toBe(
-      'Are you sure you want to remove Member access from The Team?  Doing so affects all members of the team.If you only want to remove access for this particular user, please remove them from the team.'
+    // The modal title (rendered as the dialog's <Title>) reflects the team variant.
+    expect(
+      screen.getByRole('dialog', { name: /Remove Team Access/ })
+    ).toBeInTheDocument();
+    // Body text spans two paragraphs joined by <br/>; assert the dialog body content.
+    const body = document.querySelector('.pf-c-modal-box__body');
+    expect(body).toHaveTextContent(
+      'Are you sure you want to remove Member access from The Team? Doing so affects all members of the team.'
     );
-    expect(wrapper.find('Title').text()).toBe('Remove Team Access');
+    expect(body).toHaveTextContent(
+      'If you only want to remove access for this particular user, please remove them from the team.'
+    );
   });
 
   test('should render the User confirmation delete modal', () => {
     delete role.team_id;
-    const wrapper = mountWithContexts(
+    renderWithContexts(
       <DeleteRoleConfirmationModal
         role={role}
         username="jane"
@@ -40,9 +47,11 @@ describe('<DeleteRoleConfirmationModal />', () => {
         onConfirm={() => {}}
       />
     );
-    wrapper.update();
-    expect(wrapper.find('Title').text()).toBe('Remove User Access');
-    expect(wrapper.find('ModalBoxBody').text()).toBe(
+    expect(
+      screen.getByRole('dialog', { name: /Remove User Access/ })
+    ).toBeInTheDocument();
+    const body = document.querySelector('.pf-c-modal-box__body');
+    expect(body).toHaveTextContent(
       'Are you sure you want to remove Member access from jane?'
     );
   });
