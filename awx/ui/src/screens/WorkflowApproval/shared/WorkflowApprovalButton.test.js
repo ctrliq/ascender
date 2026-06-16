@@ -1,65 +1,53 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
-
-import {
-  mountWithContexts,
-  shallowWithContexts,
-} from '../../../../testUtils/enzymeHelpers';
+import { screen, waitFor } from '@testing-library/react';
 import { WorkflowApprovalsAPI } from 'api';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import WorkflowApprovalButton from './WorkflowApprovalButton';
 import mockData from '../data.workflowApprovals.json';
 
 jest.mock('api');
 
-describe('<WorkflowApprovalButton/> shallow mount', () => {
-  let wrapper;
+const mockApprovalList = mockData.results;
 
-  let mockApprovalList = mockData.results;
+describe('<WorkflowApprovalButton/>', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
   test('initially render successfully', () => {
-    wrapper = shallowWithContexts(
+    renderWithContexts(
       <WorkflowApprovalButton
         workflowApproval={mockApprovalList[0]}
         onHandleToast={jest.fn()}
       />
     );
-
-    expect(wrapper.find('WorkflowApprovalButton')).toHaveLength(1);
-    wrapper
-      .find('Button')
-      .forEach((button) => expect(button.prop('isDisabled')).toBe(false));
-  });
-});
-
-describe('<WorkflowApprovalButton/>, full mount', () => {
-  let wrapper;
-  let mockApprovalList = mockData.results;
-  const approveButton = 'Button[ouiaId="workflow-approve-button"]';
-  afterEach(() => {
-    wrapper.unmount();
-    jest.clearAllMocks();
+    expect(screen.getByRole('button', { name: 'Approve' })).toBeEnabled();
   });
 
   test('should be disabled', () => {
-    wrapper = mountWithContexts(
+    renderWithContexts(
       <WorkflowApprovalButton
         workflowApproval={mockApprovalList[2]}
         onHandleToast={jest.fn()}
       />
     );
-    expect(wrapper.find(approveButton)).toHaveLength(1);
-    expect(wrapper.find(approveButton).prop('isDisabled')).toBe(true);
+    expect(
+      screen.getByRole('button', {
+        name: 'This workflow has already been acted on',
+      })
+    ).toBeDisabled();
   });
+
   test('should handle approve', async () => {
-    act(() => {
-      wrapper = mountWithContexts(
-        <WorkflowApprovalButton
-          workflowApproval={mockApprovalList[0]}
-          onHandleToast={jest.fn()}
-        />
-      );
-    });
-    await act(() => wrapper.find(approveButton).prop('onClick')());
-    expect(WorkflowApprovalsAPI.approve).toHaveBeenCalledWith(218);
+    const { user } = renderWithContexts(
+      <WorkflowApprovalButton
+        workflowApproval={mockApprovalList[0]}
+        onHandleToast={jest.fn()}
+      />
+    );
+    await user.click(screen.getByRole('button', { name: 'Approve' }));
+    await waitFor(() =>
+      expect(WorkflowApprovalsAPI.approve).toHaveBeenCalledWith(218)
+    );
   });
 });

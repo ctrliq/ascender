@@ -1,14 +1,23 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, within } from '@testing-library/react';
 import { WorkflowApprovalsAPI } from 'api';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import WorkflowApprovalList from './WorkflowApprovalList';
 import mockWorkflowApprovals from '../data.workflowApprovals.json';
 
 jest.mock('../../../api');
 
+// Row id=221 ("220 - approval copy") is failed + deletable: the only row used
+// in the delete tests below.
+const deletableRowName = '220 - approval copy';
+
+async function renderList() {
+  const utils = renderWithContexts(<WorkflowApprovalList />);
+  await screen.findByRole('link', { name: deletableRowName });
+  return utils;
+}
+
 describe('<WorkflowApprovalList />', () => {
-  let wrapper;
   beforeEach(() => {
     WorkflowApprovalsAPI.read.mockResolvedValue({
       data: {
@@ -33,88 +42,61 @@ describe('<WorkflowApprovalList />', () => {
   });
 
   test('should load and render workflow approvals', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(<WorkflowApprovalList />);
-    });
-    wrapper.update();
-
-    expect(wrapper.find('WorkflowApprovalListItem')).toHaveLength(4);
+    await renderList();
+    // header row + 4 data rows
+    expect(screen.getAllByRole('row')).toHaveLength(5);
   });
 
   test('should select workflow approval when checked', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(<WorkflowApprovalList />);
-    });
-    wrapper.update();
+    const { user } = await renderList();
 
-    await act(async () => {
-      wrapper.find('WorkflowApprovalListItem').first().invoke('onSelect')();
-    });
-    wrapper.update();
+    const row = screen.getByRole('link', { name: deletableRowName }).closest('tr');
+    const checkbox = within(row).getByRole('checkbox');
+    expect(checkbox).not.toBeChecked();
 
-    expect(
-      wrapper.find('WorkflowApprovalListItem').first().prop('isSelected')
-    ).toEqual(true);
+    await user.click(checkbox);
+    expect(checkbox).toBeChecked();
   });
 
   test('should select all', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(<WorkflowApprovalList />);
-    });
-    wrapper.update();
+    const { user } = await renderList();
 
-    await act(async () => {
-      wrapper.find('DataListToolbar').invoke('onSelectAll')(true);
-    });
-    wrapper.update();
+    const selectAll = screen.getByRole('checkbox', { name: 'Select all' });
+    const rowCheckboxes = screen
+      .getAllByRole('checkbox')
+      .filter((box) => box !== selectAll);
 
-    const items = wrapper.find('WorkflowApprovalListItem');
-    expect(items).toHaveLength(4);
-    items.forEach((item) => {
-      expect(item.prop('isSelected')).toEqual(true);
-    });
+    expect(rowCheckboxes).toHaveLength(4);
+    rowCheckboxes.forEach((box) => expect(box).not.toBeChecked());
 
-    expect(
-      wrapper.find('WorkflowApprovalListItem').first().prop('isSelected')
-    ).toEqual(true);
+    await user.click(selectAll);
+    rowCheckboxes.forEach((box) => expect(box).toBeChecked());
   });
 
   test('Delete button is active', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(<WorkflowApprovalList />);
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('WorkflowApprovalListItem').at(1).invoke('onSelect')();
-    });
-    wrapper.update();
-    expect(wrapper.find('Button[aria-label="Delete"]').prop('isDisabled')).toBe(
-      false
-    );
+    const { user } = await renderList();
+
+    const row = screen.getByRole('link', { name: deletableRowName }).closest('tr');
+    await user.click(within(row).getByRole('checkbox'));
+
+    expect(screen.getByRole('button', { name: 'Delete' })).toBeEnabled();
   });
 
   test('should call delete api', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(<WorkflowApprovalList />);
-    });
-    wrapper.update();
+    const { user } = await renderList();
 
-    await act(async () => {
-      wrapper.find('WorkflowApprovalListItem').at(1).invoke('onSelect')();
-    });
-    wrapper.update();
-    expect(
-      wrapper.find('Button[aria-label="Delete"]').prop('isDisabled')
-    ).toEqual(false);
-    await act(async () =>
-      wrapper.find('Button[aria-label="Delete"]').prop('onClick')()
+    const row = screen.getByRole('link', { name: deletableRowName }).closest('tr');
+    await user.click(within(row).getByRole('checkbox'));
+
+    expect(screen.getByRole('button', { name: 'Delete' })).toBeEnabled();
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'confirm delete' })
     );
 
-    wrapper.update();
-    await act(async () =>
-      wrapper.find('Button[aria-label="confirm delete"]').prop('onClick')()
+    await waitFor(() =>
+      expect(WorkflowApprovalsAPI.destroy).toHaveBeenCalledTimes(1)
     );
-    expect(WorkflowApprovalsAPI.destroy).toHaveBeenCalledTimes(1);
   });
 
   test('should show deletion error', async () => {
@@ -129,31 +111,18 @@ describe('<WorkflowApprovalList />', () => {
         },
       })
     );
-    await act(async () => {
-      wrapper = mountWithContexts(<WorkflowApprovalList />);
-    });
-    wrapper.update();
+    const { user } = await renderList();
     expect(WorkflowApprovalsAPI.read).toHaveBeenCalledTimes(1);
 
-    await act(async () => {
-      wrapper.find('WorkflowApprovalListItem').at(1).invoke('onSelect')();
-    });
-    wrapper.update();
-    expect(
-      wrapper.find('Button[aria-label="Delete"]').prop('isDisabled')
-    ).toEqual(false);
-    await act(async () =>
-      wrapper.find('Button[aria-label="Delete"]').prop('onClick')()
+    const row = screen.getByRole('link', { name: deletableRowName }).closest('tr');
+    await user.click(within(row).getByRole('checkbox'));
+
+    expect(screen.getByRole('button', { name: 'Delete' })).toBeEnabled();
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'confirm delete' })
     );
 
-    wrapper.update();
-    await act(async () =>
-      wrapper.find('Button[aria-label="confirm delete"]').prop('onClick')()
-    );
-    wrapper.update();
-
-    const modal = wrapper.find('Modal');
-    expect(modal).toHaveLength(1);
-    expect(modal.prop('title')).toEqual('Error!');
+    expect(await screen.findByText('Error!')).toBeInTheDocument();
   });
 });

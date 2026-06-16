@@ -1,23 +1,21 @@
 import React from 'react';
 import { act } from 'react-dom/test-utils';
 import WS from 'jest-websocket-mock';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import useWsWorkflowApprovals from './useWsWorkflowApprovals';
 
-function TestInner() {
-  return <div />;
-}
 function Test({ workflowApprovals, fetchWorkflowApprovals }) {
   const updatedWorkflowApprovals = useWsWorkflowApprovals(
     workflowApprovals,
     fetchWorkflowApprovals
   );
-  return <TestInner workflowApprovals={updatedWorkflowApprovals} />;
+  return (
+    <div data-testid="result">{JSON.stringify(updatedWorkflowApprovals)}</div>
+  );
 }
 
 describe('useWsWorkflowApprovals hook', () => {
   let debug;
-  let wrapper;
   beforeEach(() => {
     debug = global.console.debug; // eslint-disable-line prefer-destructuring
     global.console.debug = () => {};
@@ -34,21 +32,18 @@ describe('useWsWorkflowApprovals hook', () => {
   afterEach(() => {
     global.console.debug = debug;
     WS.clean();
-    if (wrapper) {
-      wrapper.unmount();
-    }
   });
 
   test('should return workflow approvals list', () => {
     const workflowApprovals = [{ id: 1, status: 'successful' }];
-    wrapper = mountWithContexts(
+    const { getByTestId } = renderWithContexts(
       <Test
         workflowApprovals={workflowApprovals}
         fetchWorkflowApprovals={() => {}}
       />
     );
 
-    expect(wrapper.find('TestInner').prop('workflowApprovals')).toEqual(
+    expect(JSON.parse(getByTestId('result').textContent)).toEqual(
       workflowApprovals
     );
   });
@@ -59,7 +54,7 @@ describe('useWsWorkflowApprovals hook', () => {
 
     const workflowApprovals = [{ id: 1, status: 'successful' }];
     await act(async () => {
-      wrapper = mountWithContexts(
+      renderWithContexts(
         <Test
           workflowApprovals={workflowApprovals}
           fetchWorkflowApprovals={() => {}}
@@ -85,7 +80,7 @@ describe('useWsWorkflowApprovals hook', () => {
     const workflowApprovals = [{ id: 1, status: 'successful' }];
     const fetchWorkflowApprovals = jest.fn(() => []);
     await act(async () => {
-      wrapper = await mountWithContexts(
+      renderWithContexts(
         <Test
           workflowApprovals={workflowApprovals}
           fetchWorkflowApprovals={fetchWorkflowApprovals}
@@ -113,7 +108,7 @@ describe('useWsWorkflowApprovals hook', () => {
     const workflowApprovals = [{ id: 1, status: 'pending' }];
     const fetchWorkflowApprovals = jest.fn(() => []);
     await act(async () => {
-      wrapper = await mountWithContexts(
+      renderWithContexts(
         <Test
           workflowApprovals={workflowApprovals}
           fetchWorkflowApprovals={fetchWorkflowApprovals}
@@ -141,7 +136,7 @@ describe('useWsWorkflowApprovals hook', () => {
     const workflowApprovals = [{ id: 1, status: 'successful' }];
     const fetchWorkflowApprovals = jest.fn(() => []);
     await act(async () => {
-      wrapper = await mountWithContexts(
+      renderWithContexts(
         <Test
           workflowApprovals={workflowApprovals}
           fetchWorkflowApprovals={fetchWorkflowApprovals}

@@ -1,11 +1,11 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, within } from '@testing-library/react';
 import { WorkflowApprovalsAPI, WorkflowJobsAPI } from 'api';
 import { formatDateString } from 'util/dates';
 import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+  renderWithContexts,
+  assertDetail,
+} from '../../../../testUtils/rtlContexts';
 import WorkflowApprovalDetail from './WorkflowApprovalDetail';
 import mockWorkflowApprovals from '../data.workflowApprovals.json';
 
@@ -36,13 +36,27 @@ jest.mock('@lingui/react/macro', () => ({
   }),
 }));
 
+// react-ace does not render its value into the DOM under jsdom, so surface the
+// value VariablesDetail receives as plain text to keep the original assertion.
+jest.mock('components/CodeEditor', () => ({
+  ...jest.requireActual('components/CodeEditor'),
+  VariablesDetail: ({ label, value }) => (
+    <div>
+      <div>{label}</div>
+      <div data-testid="variables-detail-value">{value}</div>
+    </div>
+  ),
+}));
+
 jest.mock('../shared/WorkflowApprovalUtils', () => ({
   ...jest.requireActual('../shared/WorkflowApprovalUtils'),
   getDetailPendingLabel: (workflowApproval, t) => {
     if (!workflowApproval.approval_expiration) {
       return 'Never';
     }
-    return jest.requireActual('util/dates').formatDateString(workflowApproval.approval_expiration);
+    return jest
+      .requireActual('util/dates')
+      .formatDateString(workflowApproval.approval_expiration);
   },
   getStatus: (workflowApproval) => {
     if (workflowApproval.status === 'successful') {
@@ -157,6 +171,16 @@ const workflowJob = {
   webhook_guid: '',
 };
 
+async function renderDetail(approval, props = {}) {
+  const utils = renderWithContexts(
+    <WorkflowApprovalDetail workflowApproval={approval} {...props} />
+  );
+  // wait for the workflow job fetch to resolve and the card body to render
+  await screen.findByText('Workflow job details');
+  return utils;
+}
+
+
 describe('<WorkflowApprovalDetail />', () => {
   beforeEach(() => {
     WorkflowJobsAPI.readDetail.mockResolvedValue({ data: workflowJob });
@@ -167,17 +191,8 @@ describe('<WorkflowApprovalDetail />', () => {
   });
 
   test('should render Details', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <WorkflowApprovalDetail workflowApproval={workflowApproval} />
-      );
-    });
-    waitForElement(wrapper, 'WorkflowApprovalDetail', (el) => el.length > 0);
-    function assertDetail(label, value) {
-      expect(wrapper.find(`Detail[label="${label}"] dt`).text()).toBe(label);
-      expect(wrapper.find(`Detail[label="${label}"] dd`).text()).toBe(value);
-    }
+    await renderDetail(workflowApproval);
+
     assertDetail('Name', workflowApproval.name);
     assertDetail('Description', workflowApproval.description);
     assertDetail('Expires', 'Never');
@@ -189,182 +204,119 @@ describe('<WorkflowApprovalDetail />', () => {
       'Workflow Job Template',
       workflowApproval.summary_fields.workflow_job_template.name
     );
-    const dateDetails = wrapper.find('UserDateDetail');
-    expect(dateDetails).toHaveLength(1);
-    expect(dateDetails.at(0).prop('label')).toEqual('Created');
-    expect(dateDetails.at(0).prop('date')).toEqual(
-      '2020-10-09T17:13:12.067947Z'
+
+    const createdLabel = screen.getByText('Created');
+    expect(createdLabel.nextElementSibling).toHaveTextContent(
+      formatDateString('2020-10-09T17:13:12.067947Z')
     );
-    expect(dateDetails.at(0).prop('user')).toEqual(
-      workflowApproval.summary_fields.created_by
-    );
+    expect(createdLabel.nextElementSibling).toHaveTextContent('admin');
+
     assertDetail('Last Modified', formatDateString(workflowApproval.modified));
     assertDetail('Elapsed', '00:00:22');
     assertDetail('Limit', 'localhost');
     assertDetail('Source Control Branch', 'main');
-    const linkInventory = wrapper
-      .find('Detail[label="Inventory"]')
-      .find('Link');
-    expect(linkInventory.prop('to')).toEqual(
+
+    const inventoryLabel = screen.getByText('Inventory');
+    const inventoryLink = within(inventoryLabel.nextElementSibling).getByRole(
+      'link'
+    );
+    expect(inventoryLink).toHaveAttribute(
+      'href',
       '/inventories/inventory/1/details'
     );
+
     assertDetail('Labels', 'Test2');
-    expect(wrapper.find('VariablesDetail').prop('value')).toEqual(
+
+    expect(screen.getByTestId('variables-detail-value')).toHaveTextContent(
       '{"foo": "bar", "baz": "qux", "first_one": 10}'
     );
   });
 
   test('should show expiration date/time', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <WorkflowApprovalDetail
-          workflowApproval={{
-            ...workflowApproval,
-            approval_expiration: '2020-10-10T17:13:12.067947Z',
-          }}
-        />
-      );
+    await renderDetail({
+      ...workflowApproval,
+      approval_expiration: '2020-10-10T17:13:12.067947Z',
     });
-    waitForElement(wrapper, 'WorkflowApprovalDetail', (el) => el.length > 0);
-    expect(wrapper.find(`Detail[label="Expires"] dd`).text()).toBe(
-      `${formatDateString('2020-10-10T17:13:12.067947Z')}`
-    );
+    assertDetail('Expires', formatDateString('2020-10-10T17:13:12.067947Z'));
   });
 
   test('should show finished date/time', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <WorkflowApprovalDetail
-          workflowApproval={{
-            ...workflowApproval,
-            finished: '2020-10-10T17:13:12.067947Z',
-          }}
-        />
-      );
+    await renderDetail({
+      ...workflowApproval,
+      finished: '2020-10-10T17:13:12.067947Z',
     });
-    waitForElement(wrapper, 'WorkflowApprovalDetail', (el) => el.length > 0);
-    expect(wrapper.find(`Detail[label="Finished"] dd`).text()).toBe(
-      `${formatDateString('2020-10-10T17:13:12.067947Z')}`
-    );
+    assertDetail('Finished', formatDateString('2020-10-10T17:13:12.067947Z'));
   });
 
   test('should show canceled date/time', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <WorkflowApprovalDetail
-          workflowApproval={{
-            ...workflowApproval,
-            canceled_on: '2020-10-10T17:13:12.067947Z',
-          }}
-        />
-      );
+    await renderDetail({
+      ...workflowApproval,
+      canceled_on: '2020-10-10T17:13:12.067947Z',
     });
-    waitForElement(wrapper, 'WorkflowApprovalDetail', (el) => el.length > 0);
-
-    expect(wrapper.find(`Detail[label="Canceled"] dd`).text()).toBe(
-      `${formatDateString('2020-10-10T17:13:12.067947Z')}`
-    );
+    assertDetail('Canceled', formatDateString('2020-10-10T17:13:12.067947Z'));
   });
 
   test('should show explanation', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <WorkflowApprovalDetail
-          workflowApproval={{
-            ...workflowApproval,
-            job_explanation: 'Some explanation text',
-          }}
-        />
-      );
+    await renderDetail({
+      ...workflowApproval,
+      job_explanation: 'Some explanation text',
     });
-    waitForElement(wrapper, 'WorkflowApprovalDetail', (el) => el.length > 0);
-    expect(wrapper.find(`Detail[label="Explanation"] dd`).text()).toBe(
-      'Some explanation text'
-    );
+    assertDetail('Explanation', 'Some explanation text');
   });
 
   test('should show status when not pending', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <WorkflowApprovalDetail
-          workflowApproval={{
-            ...workflowApproval,
-            status: 'successful',
-            summary_fields: {
-              ...workflowApproval.summary_fields,
-              approved_or_denied_by: {
-                id: 1,
-                username: 'Foobar',
-              },
-            },
-          }}
-        />
-      );
+    await renderDetail({
+      ...workflowApproval,
+      status: 'successful',
+      summary_fields: {
+        ...workflowApproval.summary_fields,
+        approved_or_denied_by: {
+          id: 1,
+          username: 'Foobar',
+        },
+      },
     });
-    waitForElement(wrapper, 'WorkflowApprovalDetail', (el) => el.length > 0);
-    expect(wrapper.find('StatusLabel').text()).toBe('Approved');
+    const statusLabel = screen.getByText('Status');
+    expect(statusLabel.nextElementSibling).toHaveTextContent('Approved');
   });
 
   test('should show actor when available', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <WorkflowApprovalDetail
-          workflowApproval={{
-            ...workflowApproval,
-            summary_fields: {
-              ...workflowApproval.summary_fields,
-              approved_or_denied_by: {
-                id: 1,
-                username: 'Foobar',
-              },
-            },
-          }}
-        />
-      );
+    await renderDetail({
+      ...workflowApproval,
+      summary_fields: {
+        ...workflowApproval.summary_fields,
+        approved_or_denied_by: {
+          id: 1,
+          username: 'Foobar',
+        },
+      },
     });
-    waitForElement(wrapper, 'WorkflowApprovalDetail', (el) => el.length > 0);
-    expect(wrapper.find(`Detail[label="Actor"] dd`).text()).toBe('Foobar');
+    assertDetail('Actor', 'Foobar');
   });
 
   test('action buttons should be hidden when user cannot approve or deny', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <WorkflowApprovalDetail
-          workflowApproval={{
-            ...workflowApproval,
-            can_approve_or_deny: false,
-          }}
-        />
-      );
+    await renderDetail({
+      ...workflowApproval,
+      can_approve_or_deny: false,
     });
-    waitForElement(wrapper, 'WorkflowApprovalDetail', (el) => el.length > 0);
-    expect(wrapper.find('WorkflowApprovalActionButtons').length).toBe(0);
+    expect(
+      screen.queryByRole('button', { name: 'Approve' })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Deny' })
+    ).not.toBeInTheDocument();
   });
 
   test('only the delete button should render when approval is not pending', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <WorkflowApprovalDetail
-          workflowApproval={{
-            ...workflowApproval,
-            can_approve_or_deny: true,
-            status: 'successful',
-          }}
-        />
-      );
+    await renderDetail({
+      ...workflowApproval,
+      can_approve_or_deny: true,
+      status: 'successful',
     });
-    waitForElement(wrapper, 'WorkflowApprovalDetail', (el) => el.length > 0);
-    expect(wrapper.find('WorkflowApprovalControls').length).toBe(0);
-    expect(wrapper.find('Button[aria-label="Approve"]').length).toBe(0);
-    expect(wrapper.find('DeleteButton').length).toBe(1);
+    expect(
+      screen.queryByRole('button', { name: 'Approve' })
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Delete' })).toBeInTheDocument();
   });
 
   test('should not load Labels', async () => {
@@ -380,50 +332,25 @@ describe('<WorkflowApprovalDetail />', () => {
       },
     });
 
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <WorkflowApprovalDetail workflowApproval={workflowApproval} />
-      );
-    });
-    waitForElement(wrapper, 'WorkflowApprovalDetail', (el) => el.length > 0);
-    const labels_detail = wrapper.find(`Detail[label="Labels"]`).at(0);
-    expect(labels_detail.prop('isEmpty')).toEqual(true);
+    await renderDetail(workflowApproval);
+    // when there are no labels the Detail is empty and not rendered
+    expect(screen.queryByText('Labels')).not.toBeInTheDocument();
   });
 
   test('Error dialog shown for failed approval', async () => {
     WorkflowApprovalsAPI.approve.mockImplementationOnce(() =>
       Promise.reject(new Error())
     );
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <WorkflowApprovalDetail
-          workflowApproval={workflowApproval}
-          fetchWorkflowApproval={jest.fn()}
-        />
-      );
+    const { user } = await renderDetail(workflowApproval, {
+      fetchWorkflowApproval: jest.fn(),
     });
-    waitForElement(wrapper, 'WorkflowApprovalDetail', (el) => el.length > 0);
-    await act(async () => {
-      wrapper
-        .find('Button[ouiaId="workflow-approve-button"]')
-        .at(0)
-        .invoke('onClick')();
-    });
+    await user.click(screen.getByRole('button', { name: 'Approve' }));
     expect(WorkflowApprovalsAPI.approve).toHaveBeenCalledTimes(1);
-    await waitForElement(
-      wrapper,
-      'Modal[title="Error!"]',
-      (el) => el.length === 1
-    );
-    await act(async () => {
-      wrapper.find('Modal[title="Error!"]').invoke('onClose')();
-    });
-    await waitForElement(
-      wrapper,
-      'Modal[title="Error!"]',
-      (el) => el.length === 0
+
+    expect(await screen.findByText('Error!')).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Close' }));
+    await waitFor(() =>
+      expect(screen.queryByText('Error!')).not.toBeInTheDocument()
     );
   });
 
@@ -431,32 +358,16 @@ describe('<WorkflowApprovalDetail />', () => {
     WorkflowApprovalsAPI.deny.mockImplementationOnce(() =>
       Promise.reject(new Error())
     );
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <WorkflowApprovalDetail
-          workflowApproval={workflowApproval}
-          fetchWorkflowApproval={jest.fn()}
-        />
-      );
+    const { user } = await renderDetail(workflowApproval, {
+      fetchWorkflowApproval: jest.fn(),
     });
-    waitForElement(wrapper, 'WorkflowApprovalDetail', (el) => el.length > 0);
-    await act(async () => {
-      wrapper.find('Button[ouiaId="workflow-deny-button"]').invoke('onClick')();
-    });
+    await user.click(screen.getByRole('button', { name: 'Deny' }));
     expect(WorkflowApprovalsAPI.deny).toHaveBeenCalledTimes(1);
-    await waitForElement(
-      wrapper,
-      'Modal[title="Error!"]',
-      (el) => el.length === 1
-    );
-    await act(async () => {
-      wrapper.find('Modal[title="Error!"]').invoke('onClose')();
-    });
-    await waitForElement(
-      wrapper,
-      'Modal[title="Error!"]',
-      (el) => el.length === 0
+
+    expect(await screen.findByText('Error!')).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Close' }));
+    await waitFor(() =>
+      expect(screen.queryByText('Error!')).not.toBeInTheDocument()
     );
   });
 
@@ -464,55 +375,31 @@ describe('<WorkflowApprovalDetail />', () => {
     WorkflowApprovalsAPI.destroy.mockImplementationOnce(() =>
       Promise.reject(new Error())
     );
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <WorkflowApprovalDetail
-          workflowApproval={{
-            ...workflowApproval,
-            status: 'successful',
-            summary_fields: {
-              ...workflowApproval.summary_fields,
-              approved_or_denied_by: {
-                id: 1,
-                username: 'Foobar',
-              },
-            },
-          }}
-        />
-      );
+    const { user } = await renderDetail({
+      ...workflowApproval,
+      status: 'successful',
+      summary_fields: {
+        ...workflowApproval.summary_fields,
+        approved_or_denied_by: {
+          id: 1,
+          username: 'Foobar',
+        },
+      },
     });
-    waitForElement(wrapper, 'WorkflowApprovalDetail', (el) => el.length > 0);
-    await waitForElement(
-      wrapper,
-      'WorkflowApprovalDetail Button[aria-label="Delete"]'
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'Confirm Delete' })
     );
-    await act(async () => {
-      wrapper.find('DeleteButton').invoke('onConfirm')();
-    });
-    await waitForElement(
-      wrapper,
-      'Modal[title="Error!"]',
-      (el) => el.length === 1
-    );
-    await act(async () => {
-      wrapper.find('Modal[title="Error!"]').invoke('onClose')();
-    });
-    await waitForElement(
-      wrapper,
-      'Modal[title="Error!"]',
-      (el) => el.length === 0
+    expect(await screen.findByText('Error!')).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Close' }));
+    await waitFor(() =>
+      expect(screen.queryByText('Error!')).not.toBeInTheDocument()
     );
   });
 
   test('should fetch its workflow job details', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <WorkflowApprovalDetail workflowApproval={workflowApproval} />
-      );
-    });
-    waitForElement(wrapper, 'WorkflowApprovalDetail', (el) => el.length > 0);
+    await renderDetail(workflowApproval);
     expect(WorkflowJobsAPI.readDetail).toHaveBeenCalledTimes(1);
     expect(WorkflowJobsAPI.readDetail).toHaveBeenCalledWith(216);
   });
