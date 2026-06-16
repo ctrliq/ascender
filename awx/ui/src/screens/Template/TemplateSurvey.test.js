@@ -1,7 +1,7 @@
 import React from 'react';
 import { act } from 'react-dom/test-utils';
 
-import { Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { createMemoryHistory } from 'history';
 import { JobTemplatesAPI, WorkflowJobTemplatesAPI } from 'api';
 import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
@@ -20,6 +20,25 @@ const surveyData = {
   ],
 };
 
+// TemplateSurvey is a v6 descendant screen mounted by Template at
+// `.../:id/survey/*`, so mount it under the same real v6 route here (its child
+// routes are relative; the SurveyList is the index route). The template id used
+// by the API comes from the `template` prop, not the route param.
+async function mountSurvey(url, element) {
+  const history = createMemoryHistory({ initialEntries: [url] });
+  let wrapper;
+  await act(async () => {
+    wrapper = mountWithContexts(
+      <Routes>
+        <Route path="/templates/:templateType/:id/survey/*" element={element} />
+      </Routes>,
+      { context: { router: { history } } }
+    );
+  });
+  wrapper.update();
+  return wrapper;
+}
+
 describe('<TemplateSurvey />', () => {
   beforeEach(() => {
     JobTemplatesAPI.readSurvey.mockResolvedValue({
@@ -32,94 +51,28 @@ describe('<TemplateSurvey />', () => {
   });
 
   test('should fetch survey from API', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/templates/job_template/7/survey'],
-    });
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Route path="/templates/:templateType/:id/survey">
-          <TemplateSurvey template={mockJobTemplateData} canEdit />
-        </Route>,
-        {
-          context: {
-            router: {
-              history,
-              route: {
-                location: history.location,
-                match: {
-                  params: { templateType: 'job_template', id: 7 },
-                },
-              },
-            },
-          },
-        }
-      );
-    });
-    wrapper.update();
+    const wrapper = await mountSurvey(
+      '/templates/job_template/7/survey',
+      <TemplateSurvey template={mockJobTemplateData} canEdit />
+    );
     expect(JobTemplatesAPI.readSurvey).toHaveBeenCalledWith(7);
-
     expect(wrapper.find('SurveyList').prop('survey')).toEqual(surveyData);
   });
 
   test('should display error in retrieving survey', async () => {
     JobTemplatesAPI.readSurvey.mockRejectedValue(new Error());
-    let wrapper;
-    const history = createMemoryHistory({
-      initialEntries: ['/templates/job_template/7/survey'],
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Route path="/templates/:templateType/:id/survey">
-          <TemplateSurvey template={{ ...mockJobTemplateData, id: 'a' }} />
-        </Route>,
-        {
-          context: {
-            router: {
-              history,
-              route: {
-                location: history.location,
-                match: {
-                  params: { templateType: 'job_template', id: 7 },
-                },
-              },
-            },
-          },
-        }
-      );
-    });
-
-    wrapper.update();
-
+    const wrapper = await mountSurvey(
+      '/templates/job_template/7/survey',
+      <TemplateSurvey template={{ ...mockJobTemplateData, id: 'a' }} />
+    );
     expect(wrapper.find('ContentError').length).toBe(1);
   });
 
   test('should update API with survey changes', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/templates/job_template/7/survey'],
-    });
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Route path="/templates/:templateType/:id/survey">
-          <TemplateSurvey template={mockJobTemplateData} canEdit />
-        </Route>,
-        {
-          context: {
-            router: {
-              history,
-              route: {
-                location: history.location,
-                match: {
-                  params: { templateType: 'job_template', id: 7 },
-                },
-              },
-            },
-          },
-        }
-      );
-    });
-    wrapper.update();
+    const wrapper = await mountSurvey(
+      '/templates/job_template/7/survey',
+      <TemplateSurvey template={mockJobTemplateData} canEdit />
+    );
 
     await act(async () => {
       await wrapper.find('SurveyList').invoke('updateSurvey')([
@@ -138,31 +91,10 @@ describe('<TemplateSurvey />', () => {
   });
 
   test('should toggle jt survery on', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/templates/job_template/7/survey'],
-    });
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Route path="/templates/:templateType/:id/survey">
-          <TemplateSurvey template={mockJobTemplateData} canEdit />
-        </Route>,
-        {
-          context: {
-            router: {
-              history,
-              route: {
-                location: history.location,
-                match: {
-                  params: { templateType: 'job_template', id: 7 },
-                },
-              },
-            },
-          },
-        }
-      );
-    });
-    wrapper.update();
+    const wrapper = await mountSurvey(
+      '/templates/job_template/7/survey',
+      <TemplateSurvey template={mockJobTemplateData} canEdit />
+    );
     await act(() =>
       wrapper.find('Switch[aria-label="Survey Toggle"]').prop('onChange')()
     );
@@ -174,77 +106,29 @@ describe('<TemplateSurvey />', () => {
   });
 
   test('should toggle wfjt survey on', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/templates/workflow_job_template/15/survey'],
-    });
-
     WorkflowJobTemplatesAPI.readSurvey.mockResolvedValueOnce({
       data: surveyData,
     });
-
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Route path="/templates/:templateType/:id/survey">
-          <TemplateSurvey template={mockWorkflowJobTemplateData} canEdit />
-        </Route>,
-        {
-          context: {
-            router: {
-              history,
-              route: {
-                location: history.location,
-                match: {
-                  params: { templateType: 'workflow_job_template', id: 15 },
-                },
-              },
-            },
-          },
-        }
-      );
-    });
-    wrapper.update();
+    const wrapper = await mountSurvey(
+      '/templates/workflow_job_template/15/survey',
+      <TemplateSurvey template={mockWorkflowJobTemplateData} canEdit />
+    );
     await act(() =>
       wrapper.find('Switch[aria-label="Survey Toggle"]').prop('onChange')()
     );
 
     wrapper.update();
-    expect(WorkflowJobTemplatesAPI.update).toHaveBeenCalledWith(15, {
-      survey_enabled: false,
-    });
+    expect(WorkflowJobTemplatesAPI.update).toHaveBeenCalledWith(15, { survey_enabled: false });
   });
 
   test('should successfully delete jt survey', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/templates/job_template/7/survey'],
-    });
-
     JobTemplatesAPI.readSurvey.mockResolvedValueOnce({
       data: surveyData,
     });
-
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Route path="/templates/:templateType/:id/survey">
-          <TemplateSurvey template={mockJobTemplateData} canEdit />
-        </Route>,
-        {
-          context: {
-            router: {
-              history,
-              route: {
-                location: history.location,
-                match: {
-                  params: { templateType: 'job_template', id: 15 },
-                },
-              },
-            },
-          },
-        }
-      );
-    });
-    wrapper.update();
+    const wrapper = await mountSurvey(
+      '/templates/job_template/7/survey',
+      <TemplateSurvey template={mockJobTemplateData} canEdit />
+    );
     act(() => wrapper.find('Checkbox#select-all').invoke('onChange')(true));
     wrapper.update();
     wrapper.find('Button[ouiaId="survey-delete-button"]').simulate('click');
@@ -258,36 +142,13 @@ describe('<TemplateSurvey />', () => {
   });
 
   test('should successfully delete wfjt survey', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/templates/workflow_job_template/15/survey'],
-    });
-
     WorkflowJobTemplatesAPI.readSurvey.mockResolvedValueOnce({
       data: surveyData,
     });
-
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Route path="/templates/:templateType/:id/survey">
-          <TemplateSurvey template={mockWorkflowJobTemplateData} canEdit />
-        </Route>,
-        {
-          context: {
-            router: {
-              history,
-              route: {
-                location: history.location,
-                match: {
-                  params: { templateType: 'workflow_job_template', id: 15 },
-                },
-              },
-            },
-          },
-        }
-      );
-    });
-    wrapper.update();
+    const wrapper = await mountSurvey(
+      '/templates/workflow_job_template/15/survey',
+      <TemplateSurvey template={mockWorkflowJobTemplateData} canEdit />
+    );
     act(() => wrapper.find('Checkbox#select-all').invoke('onChange')(true));
     wrapper.update();
     wrapper.find('Button[ouiaId="survey-delete-button"]').simulate('click');

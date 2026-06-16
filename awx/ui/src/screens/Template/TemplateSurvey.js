@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom-v5-compat';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import { JobTemplatesAPI, WorkflowJobTemplatesAPI } from 'api';
 import ContentError from 'components/ContentError';
@@ -12,8 +12,6 @@ function TemplateSurvey({ template, canEdit }) {
   const { t } = useLingui();
   const [surveyEnabled, setSurveyEnabled] = useState(template.survey_enabled);
 
-  const { pathname } = useLocation();
-  const surveyUrl = `${pathname.substr(0, pathname.indexOf('survey'))}survey`;
   const templateType = template.type;
   const templateId = template.id;
 
@@ -100,7 +98,7 @@ function TemplateSurvey({ template, canEdit }) {
       <Routes>
         {canEdit && (
           <Route
-            path={`${surveyUrl}/add`}
+            path="add"
             element={
               <SurveyQuestionAdd survey={survey} updateSurvey={updateSurveySpec} />
             }
@@ -108,7 +106,7 @@ function TemplateSurvey({ template, canEdit }) {
         )}
         {canEdit && (
           <Route
-            path={`${surveyUrl}/edit`}
+            path="edit"
             element={
               <SurveyQuestionEdit
                 survey={survey}
@@ -118,7 +116,7 @@ function TemplateSurvey({ template, canEdit }) {
           />
         )}
         <Route
-          path={surveyUrl}
+          index
           element={
             <SurveyList
               isLoading={isLoading || updateLoading}
