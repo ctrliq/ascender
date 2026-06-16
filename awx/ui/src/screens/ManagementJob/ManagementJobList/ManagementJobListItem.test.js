@@ -1,13 +1,11 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen } from '@testing-library/react';
 
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import ManagementJobListItem from './ManagementJobListItem';
 
 describe('<ManagementJobListItem/>', () => {
-  let wrapper;
-
   const managementJob = {
     id: 3,
     name: 'Cleanup Expired Sessions',
@@ -16,44 +14,33 @@ describe('<ManagementJobListItem/>', () => {
     url: '/api/v2/system_job_templates/3/',
   };
 
-  test('should mount successfully', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <table>
-          <tbody>
-            <ManagementJobListItem
-              id={managementJob.id}
-              name={managementJob.name}
-              description={managementJob.description}
-              isSuperUser
-              onLaunchError={() => {}}
-            />
-          </tbody>
-        </table>
-      );
-    });
-    expect(wrapper.find('ManagementJobListItem').length).toBe(1);
+  const renderItem = () =>
+    renderWithContexts(
+      <table>
+        <tbody>
+          <ManagementJobListItem
+            id={managementJob.id}
+            name={managementJob.name}
+            description={managementJob.description}
+            isSuperUser
+            onLaunchError={() => {}}
+          />
+        </tbody>
+      </table>
+    );
+
+  test('should mount successfully', () => {
+    renderItem();
+    expect(screen.getByText(managementJob.name)).toBeInTheDocument();
   });
 
-  test('should render the proper data', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <table>
-          <tbody>
-            <ManagementJobListItem
-              id={managementJob.id}
-              name={managementJob.name}
-              description={managementJob.description}
-              isSuperUser
-              onLaunchError={() => {}}
-            />
-          </tbody>
-        </table>
-      );
-    });
-    expect(wrapper.find('Td').at(1).text()).toBe(managementJob.name);
-    expect(wrapper.find('Td').at(2).text()).toBe(managementJob.description);
+  test('should render the proper data', () => {
+    renderItem();
+    expect(screen.getByText(managementJob.name)).toBeInTheDocument();
+    expect(screen.getByText(managementJob.description)).toBeInTheDocument();
 
-    expect(wrapper.find('RocketIcon').exists()).toBeTruthy();
+    expect(
+      screen.getByRole('button', { name: 'Launch management job' })
+    ).toBeInTheDocument();
   });
 });

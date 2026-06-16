@@ -1,7 +1,8 @@
 import React from 'react';
+import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import ManagementJobs from './ManagementJobs';
 
@@ -15,20 +16,15 @@ jest.mock('./ManagementJobList', () => {
 });
 
 describe('<ManagementJobs />', () => {
-  let pageWrapper;
-
-  beforeEach(() => {
+  test('renders the list at /management_jobs', () => {
     const history = createMemoryHistory({
       initialEntries: ['/management_jobs'],
     });
-    pageWrapper = mountWithContexts(<ManagementJobs />, {
+    renderWithContexts(<ManagementJobs />, {
       context: { router: { history } },
     });
-  });
 
-  test('renders the list at /management_jobs', () => {
-    expect(pageWrapper.length).toBe(1);
-    expect(pageWrapper.find('ScreenHeader').length).toBe(1);
-    expect(pageWrapper.text()).toContain('ManagementJobList');
+    expect(screen.getByText('Management jobs')).toBeInTheDocument();
+    expect(screen.getByText('ManagementJobList')).toBeInTheDocument();
   });
 });
