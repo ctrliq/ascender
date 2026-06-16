@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { Route, Switch } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import ScreenHeader from 'components/ScreenHeader';
 import PersistentFilters from 'components/PersistentFilters';
 import ManagementJob from './ManagementJob';
@@ -34,16 +34,21 @@ function ManagementJobs() {
   return (
     <>
       <ScreenHeader streamType="none" breadcrumbConfig={breadcrumbConfig} />
-      <Switch>
-        <Route path={`${basePath}/:id`}>
-          <ManagementJob setBreadcrumb={buildBreadcrumbConfig} />
-        </Route>
-        <Route path={basePath}>
-          <PersistentFilters pageKey="managementJobs">
-            <ManagementJobList setBreadcrumb={buildBreadcrumbConfig} />
-          </PersistentFilters>
-        </Route>
-      </Switch>
+      <Routes>
+        {/* /* so the nested <ManagementJob> route tree can match */}
+        <Route
+          path={`${basePath}/:id/*`}
+          element={<ManagementJob setBreadcrumb={buildBreadcrumbConfig} />}
+        />
+        <Route
+          path={basePath}
+          element={
+            <PersistentFilters pageKey="managementJobs">
+              <ManagementJobList setBreadcrumb={buildBreadcrumbConfig} />
+            </PersistentFilters>
+          }
+        />
+      </Routes>
     </>
   );
 }
