@@ -1,11 +1,17 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { render, screen } from '@testing-library/react';
 
 import DetailList from './DetailList';
+import Detail from './Detail';
 
 describe('DetailList', () => {
   test('renders the expected content', () => {
-    const wrapper = mount(<DetailList />);
-    expect(wrapper).toHaveLength(1);
+    render(
+      <DetailList>
+        <Detail label="foo" value="bar" />
+      </DetailList>
+    );
+    const term = screen.getByText('foo');
+    expect(term.nextElementSibling).toHaveTextContent('bar');
   });
 });
