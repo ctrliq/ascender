@@ -1,21 +1,30 @@
 import React from 'react';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { screen, waitFor } from '@testing-library/react';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import JobListCancelButton from './JobListCancelButton';
 
-describe('<JobListCancelButton />', () => {
-  let wrapper;
+function getCancelButton() {
+  // The non-kebab control has a stable id; query it directly so the lookup is
+  // not affected by the aria-hidden PF applies to the page while a modal is
+  // open/closing.
+  return document.getElementById('jobs-list-cancel-button');
+}
 
-  test('should be disabled when no rows are selected', () => {
-    wrapper = mountWithContexts(<JobListCancelButton jobsToCancel={[]} />);
-    expect(wrapper.find('JobListCancelButton button').props().disabled).toBe(
-      true
-    );
-    expect(wrapper.find('Tooltip').props().content).toBe(
-      'Select a job to cancel'
-    );
+describe('<JobListCancelButton />', () => {
+  test('should be disabled when no rows are selected', async () => {
+    const { user } = renderWithContexts(<JobListCancelButton jobsToCancel={[]} />);
+    expect(getCancelButton()).toBeDisabled();
+
+    // Tooltip content is rendered on hover; matches the old enzyme
+    // Tooltip[content="Select a job to cancel"] assertion.
+    await user.hover(getCancelButton().closest('div'));
+    expect(
+      await screen.findByText('Select a job to cancel')
+    ).toBeInTheDocument();
   });
+
   test('should be disabled when user does not have permissions to cancel selected job', () => {
-    wrapper = mountWithContexts(
+    renderWithContexts(
       <JobListCancelButton
         jobsToCancel={[
           {
@@ -32,12 +41,11 @@ describe('<JobListCancelButton />', () => {
         ]}
       />
     );
-    expect(wrapper.find('JobListCancelButton button').props().disabled).toBe(
-      true
-    );
+    expect(getCancelButton()).toBeDisabled();
   });
+
   test('should be disabled when selected job is not running', () => {
-    wrapper = mountWithContexts(
+    renderWithContexts(
       <JobListCancelButton
         jobsToCancel={[
           {
@@ -54,12 +62,11 @@ describe('<JobListCancelButton />', () => {
         ]}
       />
     );
-    expect(wrapper.find('JobListCancelButton button').props().disabled).toBe(
-      true
-    );
+    expect(getCancelButton()).toBeDisabled();
   });
+
   test('should be enabled when user does have permission to cancel selected job', () => {
-    wrapper = mountWithContexts(
+    renderWithContexts(
       <JobListCancelButton
         jobsToCancel={[
           {
@@ -76,13 +83,12 @@ describe('<JobListCancelButton />', () => {
         ]}
       />
     );
-    expect(wrapper.find('JobListCancelButton button').props().disabled).toBe(
-      false
-    );
+    expect(getCancelButton()).toBeEnabled();
   });
-  test('modal functions as expected', () => {
+
+  test('modal functions as expected', async () => {
     const onCancel = jest.fn();
-    wrapper = mountWithContexts(
+    const { user } = renderWithContexts(
       <JobListCancelButton
         jobsToCancel={[
           {
@@ -100,20 +106,26 @@ describe('<JobListCancelButton />', () => {
         onCancel={onCancel}
       />
     );
-    expect(wrapper.find('AlertModal').length).toBe(0);
-    wrapper.find('JobListCancelButton button').simulate('click');
-    wrapper.update();
-    expect(wrapper.find('AlertModal').length).toBe(1);
-    wrapper.find('button#cancel-job-return-button').simulate('click');
-    wrapper.update();
+
+    // no modal initially
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+
+    // open modal, then click Return -> onCancel not called, modal closes
+    await user.click(getCancelButton());
+    expect(await screen.findByRole('dialog')).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Return' }));
+    await waitFor(() =>
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    );
     expect(onCancel).toHaveBeenCalledTimes(0);
-    expect(wrapper.find('AlertModal').length).toBe(0);
-    expect(wrapper.find('AlertModal').length).toBe(0);
-    wrapper.find('JobListCancelButton button').simulate('click');
-    wrapper.update();
-    expect(wrapper.find('AlertModal').length).toBe(1);
-    wrapper.find('button#cancel-job-confirm-button').simulate('click');
-    wrapper.update();
+
+    // open modal again, click the confirm (danger) button -> onCancel called
+    await user.click(getCancelButton());
+    expect(await screen.findByRole('dialog')).toBeInTheDocument();
+    // the confirm button shares the "Cancel job" text but lives in the modal
+    const dialog = screen.getByRole('dialog');
+    const confirmButton = dialog.querySelector('#cancel-job-confirm-button');
+    await user.click(confirmButton);
     expect(onCancel).toHaveBeenCalledTimes(1);
   });
 });

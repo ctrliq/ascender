@@ -1,23 +1,25 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { act, screen, waitFor } from '@testing-library/react';
 import WS from 'jest-websocket-mock';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import useWsJobs from './useWsJobs';
 
-function TestInner() {
-  return <div />;
-}
+// RTL 12 has no renderHook, so we drive the hook through a test component that
+// serializes its result into a data-testid node we can read back.
 function Test({ jobs, fetch }) {
   const qsConfig = {};
   const syncedJobs = useWsJobs(jobs, fetch, qsConfig);
-  return <TestInner jobs={syncedJobs} />;
+  return <div data-testid="jobs">{JSON.stringify(syncedJobs)}</div>;
+}
+
+function getJobs() {
+  return JSON.parse(screen.getByTestId('jobs').textContent);
 }
 
 describe('useWsJobs hook', () => {
   let debug;
-  let wrapper;
   let mockServer;
-  
+
   beforeEach(() => {
     /*
       Jest mock timers don’t play well with jest-websocket-mock,
@@ -27,35 +29,28 @@ describe('useWsJobs hook', () => {
       __esModule: true,
       default: jest.fn((val) => val),
     }));
-    debug = global.console.debug; // eslint-disable-line prefer-destructuring
+    debug = global.console.debug;
     global.console.debug = () => {};
-    
-    // Clean up any existing websocket connections
+
     WS.clean();
   });
 
   afterEach(() => {
     global.console.debug = debug;
     jest.clearAllMocks();
-    
-    // Clean up websocket connections
+
     if (mockServer) {
       mockServer.close();
       mockServer = null;
     }
     WS.clean();
-    
-    if (wrapper) {
-      wrapper.unmount();
-      wrapper = null;
-    }
   });
 
   test('should return jobs list', () => {
     const jobs = [{ id: 1 }];
-    wrapper = mountWithContexts(<Test jobs={jobs} />);
+    renderWithContexts(<Test jobs={jobs} />);
 
-    expect(wrapper.find('TestInner').prop('jobs')).toEqual(jobs);
+    expect(getJobs()).toEqual(jobs);
     WS.clean();
   });
 
@@ -65,7 +60,7 @@ describe('useWsJobs hook', () => {
 
     const jobs = [{ id: 1 }];
     await act(async () => {
-      wrapper = await mountWithContexts(<Test jobs={jobs} />);
+      renderWithContexts(<Test jobs={jobs} />);
     });
 
     await mockServer.connected;
@@ -89,7 +84,7 @@ describe('useWsJobs hook', () => {
 
     const jobs = [{ id: 1, status: 'running' }];
     await act(async () => {
-      wrapper = await mountWithContexts(<Test jobs={jobs} />);
+      renderWithContexts(<Test jobs={jobs} />);
     });
 
     await mockServer.connected;
@@ -103,8 +98,8 @@ describe('useWsJobs hook', () => {
         },
       })
     );
-    expect(wrapper.find('TestInner').prop('jobs')[0].status).toEqual('running');
-    
+    expect(getJobs()[0].status).toEqual('running');
+
     await act(async () => {
       mockServer.send(
         JSON.stringify({
@@ -114,12 +109,8 @@ describe('useWsJobs hook', () => {
         })
       );
     });
-    
-    wrapper.update();
 
-    expect(wrapper.find('TestInner').prop('jobs')[0].status).toEqual(
-      'successful'
-    );
+    await waitFor(() => expect(getJobs()[0].status).toEqual('successful'));
     mockServer.close();
     mockServer = null;
   });
@@ -130,11 +121,11 @@ describe('useWsJobs hook', () => {
     const jobs = [{ id: 1 }];
     const fetch = jest.fn(() => []);
     await act(async () => {
-      wrapper = await mountWithContexts(<Test jobs={jobs} fetch={fetch} />);
+      renderWithContexts(<Test jobs={jobs} fetch={fetch} />);
     });
 
     await mockServer.connected;
-    act(() => {
+    await act(async () => {
       mockServer.send(
         JSON.stringify({
           unified_job_id: 2,
@@ -144,7 +135,7 @@ describe('useWsJobs hook', () => {
       );
     });
 
-    expect(fetch).toHaveBeenCalledWith([2]);
+    await waitFor(() => expect(fetch).toHaveBeenCalledWith([2]));
     mockServer.close();
     mockServer = null;
   });

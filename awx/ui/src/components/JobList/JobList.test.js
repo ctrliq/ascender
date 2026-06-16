@@ -1,5 +1,5 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, within } from '@testing-library/react';
 import {
   AdHocCommandsAPI,
   InventoryUpdatesAPI,
@@ -11,9 +11,9 @@ import {
   InventorySourcesAPI,
 } from 'api';
 import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../testUtils/enzymeHelpers';
+  renderWithContexts,
+  settleTooltips,
+} from '../../../testUtils/rtlContexts';
 import JobList from './JobList';
 
 jest.mock('../../api');
@@ -117,12 +117,18 @@ const mockResults = [
   },
 ];
 
-function waitForLoaded(wrapper) {
-  return waitForElement(
-    wrapper,
-    'JobList',
-    (el) => el.find('ContentLoading').length === 0
-  );
+// successful clones (non-running) so the bulk-delete button is enabled and we
+// can drive a real delete through the toolbar + confirm modal.
+const deletableResults = mockResults.map((job) => ({
+  ...job,
+  status: 'successful',
+}));
+
+function getRowCheckboxes() {
+  const selectAll = screen.queryByRole('checkbox', { name: 'Select all' });
+  return screen
+    .getAllByRole('checkbox')
+    .filter((box) => box !== selectAll);
 }
 
 describe('<JobList />', () => {
@@ -155,7 +161,7 @@ describe('<JobList />', () => {
         },
       },
     });
-    debug = global.console.debug; // eslint-disable-line prefer-destructuring
+    debug = global.console.debug;
     global.console.debug = () => {};
   });
 
@@ -165,104 +171,71 @@ describe('<JobList />', () => {
   });
 
   test('initially renders successfully', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<JobList />);
-    });
-    await waitForLoaded(wrapper);
-    expect(wrapper.find('JobListItem')).toHaveLength(6);
+    renderWithContexts(<JobList />);
+    await waitFor(() =>
+      expect(screen.getAllByRole('link', { name: /— job \d/ })).toHaveLength(6)
+    );
   });
 
   test('should select and un-select items', async () => {
-    const [mockItem] = mockResults;
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<JobList />);
-    });
-    await waitForLoaded(wrapper);
+    const { user } = renderWithContexts(<JobList />);
+    await screen.findByRole('link', { name: '1 — job 1' });
 
-    act(() => {
-      wrapper.find('JobListItem').first().invoke('onSelect')(mockItem);
-    });
-    wrapper.update();
-    expect(wrapper.find('JobListItem').first().prop('isSelected')).toEqual(
-      true
-    );
-    expect(
-      wrapper.find('ToolbarDeleteButton').prop('itemsToDelete')
-    ).toHaveLength(1);
+    const firstRow = screen
+      .getByRole('link', { name: '1 — job 1' })
+      .closest('tr');
+    const checkbox = within(firstRow).getByRole('checkbox');
 
-    act(() => {
-      wrapper.find('JobListItem').first().invoke('onSelect')(mockItem);
-    });
-    wrapper.update();
-    expect(wrapper.find('JobListItem').first().prop('isSelected')).toEqual(
-      false
-    );
-    expect(
-      wrapper.find('ToolbarDeleteButton').prop('itemsToDelete')
-    ).toHaveLength(0);
+    expect(checkbox).not.toBeChecked();
+    await user.click(checkbox);
+    expect(checkbox).toBeChecked();
+    await user.click(checkbox);
+    expect(checkbox).not.toBeChecked();
   });
 
   test('should select and deselect all', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<JobList />);
-    });
-    await waitForLoaded(wrapper);
+    const { user } = renderWithContexts(<JobList />);
+    await screen.findByRole('link', { name: '1 — job 1' });
 
-    act(() => {
-      wrapper.find('DataListToolbar').invoke('onSelectAll')(true);
-    });
-    wrapper.update();
-    wrapper.find('JobListItem');
-    expect(
-      wrapper.find('ToolbarDeleteButton').prop('itemsToDelete')
-    ).toHaveLength(6);
+    const selectAll = screen.getByRole('checkbox', { name: 'Select all' });
+    const rowCheckboxes = getRowCheckboxes();
+    expect(rowCheckboxes).toHaveLength(6);
 
-    act(() => {
-      wrapper.find('DataListToolbar').invoke('onSelectAll')(false);
-    });
-    wrapper.update();
-    wrapper.find('JobListItem');
-    expect(
-      wrapper.find('ToolbarDeleteButton').prop('itemsToDelete')
-    ).toHaveLength(0);
+    await user.click(selectAll);
+    rowCheckboxes.forEach((box) => expect(box).toBeChecked());
+
+    await user.click(selectAll);
+    rowCheckboxes.forEach((box) => expect(box).not.toBeChecked());
   });
 
   test('should send all corresponding delete API requests', async () => {
-    AdHocCommandsAPI.destroy = jest.fn();
-    InventoryUpdatesAPI.destroy = jest.fn();
-    JobsAPI.destroy = jest.fn();
-    ProjectUpdatesAPI.destroy = jest.fn();
-    SystemJobsAPI.destroy = jest.fn();
-    WorkflowJobsAPI.destroy = jest.fn();
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<JobList />);
+    UnifiedJobsAPI.read.mockResolvedValue({
+      data: { count: 6, results: deletableResults },
     });
-    await waitForLoaded(wrapper);
+    AdHocCommandsAPI.destroy = jest.fn().mockResolvedValue({});
+    InventoryUpdatesAPI.destroy = jest.fn().mockResolvedValue({});
+    JobsAPI.destroy = jest.fn().mockResolvedValue({});
+    ProjectUpdatesAPI.destroy = jest.fn().mockResolvedValue({});
+    SystemJobsAPI.destroy = jest.fn().mockResolvedValue({});
+    WorkflowJobsAPI.destroy = jest.fn().mockResolvedValue({});
 
-    act(() => {
-      wrapper.find('DataListToolbar').invoke('onSelectAll')(true);
+    const { user } = renderWithContexts(<JobList />);
+    await screen.findByRole('link', { name: '1 — job 1' });
+
+    await user.click(screen.getByRole('checkbox', { name: 'Select all' }));
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'confirm delete' })
+    );
+
+    await waitFor(() => {
+      expect(AdHocCommandsAPI.destroy).toHaveBeenCalledTimes(1);
+      expect(InventoryUpdatesAPI.destroy).toHaveBeenCalledTimes(1);
+      expect(JobsAPI.destroy).toHaveBeenCalledTimes(1);
+      expect(ProjectUpdatesAPI.destroy).toHaveBeenCalledTimes(1);
+      expect(SystemJobsAPI.destroy).toHaveBeenCalledTimes(1);
+      expect(WorkflowJobsAPI.destroy).toHaveBeenCalledTimes(1);
     });
-    wrapper.update();
-    wrapper.find('JobListItem');
-    expect(
-      wrapper.find('ToolbarDeleteButton').prop('itemsToDelete')
-    ).toHaveLength(6);
-
-    await act(async () => {
-      wrapper.find('ToolbarDeleteButton').invoke('onDelete')();
-    });
-    expect(AdHocCommandsAPI.destroy).toHaveBeenCalledTimes(1);
-    expect(InventoryUpdatesAPI.destroy).toHaveBeenCalledTimes(1);
-    expect(JobsAPI.destroy).toHaveBeenCalledTimes(1);
-    expect(ProjectUpdatesAPI.destroy).toHaveBeenCalledTimes(1);
-    expect(SystemJobsAPI.destroy).toHaveBeenCalledTimes(1);
-    expect(WorkflowJobsAPI.destroy).toHaveBeenCalledTimes(1);
-
-    jest.restoreAllMocks();
   });
 
   test('should query jobs list after delete API requests', async () => {
@@ -275,7 +248,7 @@ describe('<JobList />', () => {
             url: '/api/v2/project_updates/1',
             name: 'job 1',
             type: 'project_update',
-            status: 'running',
+            status: 'successful',
             related: {
               cancel: '/api/v2/project_updates/1/cancel',
             },
@@ -289,35 +262,30 @@ describe('<JobList />', () => {
         ],
       },
     });
+    ProjectUpdatesAPI.destroy = jest.fn().mockResolvedValue({});
     const jobListParams = {
       order_by: '-finished',
       not__launch_type: 'sync',
       page: 1,
       page_size: 20,
     };
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<JobList />);
-    });
-    await waitForLoaded(wrapper);
 
-    act(() => {
-      expect(UnifiedJobsAPI.read).toHaveBeenCalledTimes(1);
-      wrapper.find('DataListToolbar').invoke('onSelectAll')(true);
-    });
-    wrapper.update();
-    wrapper.find('JobListItem');
-    expect(
-      wrapper.find('ToolbarDeleteButton').prop('itemsToDelete')
-    ).toHaveLength(1);
+    const { user } = renderWithContexts(<JobList />);
+    await screen.findByRole('link', { name: '1 — job 1' });
+    expect(UnifiedJobsAPI.read).toHaveBeenCalledTimes(1);
+    expect(UnifiedJobsAPI.read).toHaveBeenCalledWith(jobListParams);
 
-    await act(async () => {
-      wrapper.find('ToolbarDeleteButton').invoke('onDelete')();
-      expect(UnifiedJobsAPI.read).toHaveBeenCalledTimes(1);
-      expect(UnifiedJobsAPI.read).toHaveBeenCalledWith(jobListParams);
-    });
+    await user.click(screen.getByRole('checkbox', { name: 'Select all' }));
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'confirm delete' })
+    );
 
-    jest.restoreAllMocks();
+    // a re-fetch of the list is triggered after deletion
+    await waitFor(() =>
+      expect(UnifiedJobsAPI.read).toHaveBeenCalledTimes(2)
+    );
+    expect(UnifiedJobsAPI.read).toHaveBeenLastCalledWith(jobListParams);
   });
 
   test('should display message about job running status', async () => {
@@ -361,30 +329,19 @@ describe('<JobList />', () => {
       },
     });
 
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<JobList />);
-    });
-    await waitForLoaded(wrapper);
+    const { user } = renderWithContexts(<JobList />);
+    await screen.findByRole('link', { name: '1 — job 1' });
 
-    act(() => {
-      wrapper.find('DataListToolbar').invoke('onSelectAll')(true);
-    });
-    wrapper.update();
-    wrapper.find('JobListItem');
-    expect(
-      wrapper.find('ToolbarDeleteButton').prop('itemsToDelete')
-    ).toHaveLength(2);
+    await user.click(screen.getByRole('checkbox', { name: 'Select all' }));
 
-    wrapper.update();
-
-    const deleteButton = wrapper.find('ToolbarDeleteButton').find('Button');
-    expect(deleteButton.prop('isDisabled')).toBe(true);
-
-    jest.restoreAllMocks();
+    // running jobs cannot be deleted -> the toolbar Delete button is disabled
+    expect(screen.getByRole('button', { name: 'Delete' })).toBeDisabled();
   });
 
   test('error is shown when job not successfully deleted from api', async () => {
+    UnifiedJobsAPI.read.mockResolvedValue({
+      data: { count: 6, results: deletableResults },
+    });
     JobsAPI.destroy.mockImplementation(() => {
       throw new Error({
         response: {
@@ -396,56 +353,68 @@ describe('<JobList />', () => {
         },
       });
     });
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<JobList />);
-    });
-    await waitForLoaded(wrapper);
-    await act(async () => {
-      wrapper.find('JobListItem').at(1).invoke('onSelect')();
-    });
-    wrapper.update();
 
-    await act(async () => {
-      wrapper.find('ToolbarDeleteButton').invoke('onDelete')();
-    });
-    wrapper.update();
-    await waitForElement(
-      wrapper,
-      'Modal',
-      (el) => el.props().isOpen === true && el.props().title === 'Error!'
+    const { user } = renderWithContexts(<JobList />);
+    await screen.findByRole('link', { name: '2 — job 2' });
+
+    const row = screen.getByRole('link', { name: '2 — job 2' }).closest('tr');
+    await user.click(within(row).getByRole('checkbox'));
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'confirm delete' })
     );
+
+    expect(await screen.findByText('Error!')).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Close' }));
+    await waitFor(() =>
+      expect(screen.queryByText('Error!')).not.toBeInTheDocument()
+    );
+    await settleTooltips();
   });
 
   test('should send all corresponding cancel API requests', async () => {
-    JobsAPI.cancel = jest.fn();
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<JobList />);
+    // every selected job must be running AND cancellable (start capability) so
+    // the real toolbar Cancel button is enabled; jobs 5/6 lack start by default.
+    UnifiedJobsAPI.read.mockResolvedValue({
+      data: {
+        count: 6,
+        results: mockResults.map((job) => ({
+          ...job,
+          summary_fields: {
+            ...job.summary_fields,
+            user_capabilities: {
+              ...job.summary_fields.user_capabilities,
+              start: true,
+            },
+          },
+        })),
+      },
     });
-    await waitForLoaded(wrapper);
+    AdHocCommandsAPI.cancel = jest.fn().mockResolvedValue({});
+    InventoryUpdatesAPI.cancel = jest.fn().mockResolvedValue({});
+    JobsAPI.cancel = jest.fn().mockResolvedValue({});
+    ProjectUpdatesAPI.cancel = jest.fn().mockResolvedValue({});
+    SystemJobsAPI.cancel = jest.fn().mockResolvedValue({});
+    WorkflowJobsAPI.cancel = jest.fn().mockResolvedValue({});
 
-    act(() => {
-      wrapper.find('DataListToolbar').invoke('onSelectAll')(true);
+    const { user } = renderWithContexts(<JobList />);
+    await screen.findByRole('link', { name: '1 — job 1' });
+
+    await user.click(screen.getByRole('checkbox', { name: 'Select all' }));
+    await user.click(screen.getByRole('button', { name: 'Cancel jobs' }));
+    // confirm modal -> the danger confirm button
+    const dialog = await screen.findByRole('dialog');
+    await user.click(dialog.querySelector('#cancel-job-confirm-button'));
+
+    await waitFor(() => {
+      expect(ProjectUpdatesAPI.cancel).toHaveBeenCalledWith(1);
+      expect(JobsAPI.cancel).toHaveBeenCalledWith(2);
+      expect(InventoryUpdatesAPI.cancel).toHaveBeenCalledWith(3);
+      expect(WorkflowJobsAPI.cancel).toHaveBeenCalledWith(4);
+      expect(SystemJobsAPI.cancel).toHaveBeenCalledWith(5);
+      expect(AdHocCommandsAPI.cancel).toHaveBeenCalledWith(6);
     });
-    wrapper.update();
-    wrapper.find('JobListItem');
-    expect(
-      wrapper.find('JobListCancelButton').prop('jobsToCancel')
-    ).toHaveLength(6);
-
-    await act(async () => {
-      wrapper.find('JobListCancelButton').invoke('onCancel')();
-    });
-
-    expect(ProjectUpdatesAPI.cancel).toHaveBeenCalledWith(1);
-    expect(JobsAPI.cancel).toHaveBeenCalledWith(2);
-    expect(InventoryUpdatesAPI.cancel).toHaveBeenCalledWith(3);
-    expect(WorkflowJobsAPI.cancel).toHaveBeenCalledWith(4);
-    expect(SystemJobsAPI.cancel).toHaveBeenCalledWith(5);
-    expect(AdHocCommandsAPI.cancel).toHaveBeenCalledWith(6);
-
-    jest.restoreAllMocks();
   });
 
   test('error is shown when job not successfully cancelled', async () => {
@@ -460,24 +429,17 @@ describe('<JobList />', () => {
         },
       });
     });
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<JobList />);
-    });
-    await waitForLoaded(wrapper);
-    await act(async () => {
-      wrapper.find('JobListItem').at(1).invoke('onSelect')();
-    });
-    wrapper.update();
 
-    await act(async () => {
-      wrapper.find('JobListCancelButton').invoke('onCancel')();
-    });
-    wrapper.update();
-    await waitForElement(
-      wrapper,
-      'Modal',
-      (el) => el.props().isOpen === true && el.props().title === 'Error!'
-    );
+    const { user } = renderWithContexts(<JobList />);
+    await screen.findByRole('link', { name: '2 — job 2' });
+
+    const row = screen.getByRole('link', { name: '2 — job 2' }).closest('tr');
+    await user.click(within(row).getByRole('checkbox'));
+    await user.click(screen.getByRole('button', { name: 'Cancel job' }));
+    const dialog = await screen.findByRole('dialog');
+    await user.click(dialog.querySelector('#cancel-job-confirm-button'));
+
+    expect(await screen.findByText('Error!')).toBeInTheDocument();
+    await settleTooltips();
   });
 });
