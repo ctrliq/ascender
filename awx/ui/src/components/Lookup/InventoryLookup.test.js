@@ -1,8 +1,8 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { Formik } from 'formik';
 import { InventoriesAPI } from 'api';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import InventoryLookup from './InventoryLookup';
 
 jest.mock('../../api');
@@ -18,10 +18,14 @@ const mockedInventories = {
 };
 
 describe('InventoryLookup', () => {
-  let wrapper;
-
   beforeEach(() => {
     InventoriesAPI.read.mockResolvedValue(mockedInventories);
+    InventoriesAPI.readOptions.mockResolvedValue({
+      data: {
+        actions: { GET: {}, POST: {} },
+        related_search_fields: [],
+      },
+    });
   });
 
   afterEach(() => {
@@ -29,53 +33,28 @@ describe('InventoryLookup', () => {
   });
 
   test('should render successfully and fetch data', async () => {
-    InventoriesAPI.readOptions.mockReturnValue({
-      data: {
-        actions: {
-          GET: {},
-          POST: {},
-        },
-        related_search_fields: [],
-      },
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <InventoryLookup onChange={() => {}} />
-        </Formik>
-      );
-    });
-    wrapper.update();
-    expect(InventoriesAPI.read).toHaveBeenCalledTimes(1);
+    renderWithContexts(
+      <Formik>
+        <InventoryLookup onChange={() => {}} />
+      </Formik>
+    );
+    await waitFor(() => expect(InventoriesAPI.read).toHaveBeenCalledTimes(1));
     expect(InventoriesAPI.read).toHaveBeenCalledWith({
       order_by: 'name',
       page: 1,
       page_size: 5,
       role_level: 'use_role',
     });
-    expect(wrapper.find('InventoryLookup')).toHaveLength(1);
-    expect(wrapper.find('Lookup').prop('isDisabled')).toBe(false);
+    expect(screen.getByRole('button', { name: 'Search' })).toBeEnabled();
   });
 
   test('should fetch only regular inventories when hideSmartInventories is true', async () => {
-    InventoriesAPI.readOptions.mockReturnValue({
-      data: {
-        actions: {
-          GET: {},
-          POST: {},
-        },
-        related_search_fields: [],
-      },
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <InventoryLookup onChange={() => {}} hideAdvancedInventories />
-        </Formik>
-      );
-    });
-    wrapper.update();
-    expect(InventoriesAPI.read).toHaveBeenCalledTimes(1);
+    renderWithContexts(
+      <Formik>
+        <InventoryLookup onChange={() => {}} hideAdvancedInventories />
+      </Formik>
+    );
+    await waitFor(() => expect(InventoriesAPI.read).toHaveBeenCalledTimes(1));
     expect(InventoriesAPI.read).toHaveBeenCalledWith({
       not__kind: ['smart', 'constructed', 'federated'],
       order_by: 'name',
@@ -83,51 +62,32 @@ describe('InventoryLookup', () => {
       page_size: 5,
       role_level: 'use_role',
     });
-    expect(wrapper.find('InventoryLookup')).toHaveLength(1);
-    expect(wrapper.find('Lookup').prop('isDisabled')).toBe(false);
+    expect(screen.getByRole('button', { name: 'Search' })).toBeEnabled();
   });
 
   test('inventory lookup should be enabled', async () => {
-    InventoriesAPI.readOptions.mockReturnValue({
-      data: {
-        actions: {
-          GET: {},
-        },
-        related_search_fields: [],
-      },
+    InventoriesAPI.readOptions.mockResolvedValue({
+      data: { actions: { GET: {} }, related_search_fields: [] },
     });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <InventoryLookup onChange={() => {}} />
-        </Formik>
-      );
-    });
-    wrapper.update();
-    expect(InventoriesAPI.read).toHaveBeenCalledTimes(1);
-    expect(wrapper.find('InventoryLookup')).toHaveLength(1);
-    expect(wrapper.find('Lookup').prop('isDisabled')).toBe(false);
+    renderWithContexts(
+      <Formik>
+        <InventoryLookup onChange={() => {}} />
+      </Formik>
+    );
+    await waitFor(() => expect(InventoriesAPI.read).toHaveBeenCalledTimes(1));
+    expect(screen.getByRole('button', { name: 'Search' })).toBeEnabled();
   });
 
   test('inventory lookup should be disabled', async () => {
-    InventoriesAPI.readOptions.mockReturnValue({
-      data: {
-        actions: {
-          GET: {},
-        },
-        related_search_fields: [],
-      },
+    InventoriesAPI.readOptions.mockResolvedValue({
+      data: { actions: { GET: {} }, related_search_fields: [] },
     });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <InventoryLookup isDisabled onChange={() => {}} />
-        </Formik>
-      );
-    });
-    wrapper.update();
-    expect(InventoriesAPI.read).toHaveBeenCalledTimes(1);
-    expect(wrapper.find('InventoryLookup')).toHaveLength(1);
-    expect(wrapper.find('Lookup').prop('isDisabled')).toBe(true);
+    renderWithContexts(
+      <Formik>
+        <InventoryLookup isDisabled onChange={() => {}} />
+      </Formik>
+    );
+    await waitFor(() => expect(InventoriesAPI.read).toHaveBeenCalledTimes(1));
+    expect(screen.getByRole('button', { name: 'Search' })).toBeDisabled();
   });
 });

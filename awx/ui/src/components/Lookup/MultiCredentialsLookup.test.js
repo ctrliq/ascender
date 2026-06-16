@@ -1,19 +1,14 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, within } from '@testing-library/react';
 import { Formik } from 'formik';
-import { CredentialsAPI, CredentialTypesAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../testUtils/enzymeHelpers';
 import { createMemoryHistory } from 'history';
+import { CredentialsAPI, CredentialTypesAPI } from 'api';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import MultiCredentialsLookup from './MultiCredentialsLookup';
 
 jest.mock('../../api');
 
 describe('<Formik><MultiCredentialsLookup /></Formik>', () => {
-  let wrapper;
-
   const credentials = [
     {
       id: 1,
@@ -40,8 +35,23 @@ describe('<Formik><MultiCredentialsLookup /></Formik>', () => {
     { id: 8, credential_type: 4, kind: 'Machine', name: 'Gatsby' },
   ];
 
+  function renderLookup(props = {}, options = {}) {
+    return renderWithContexts(
+      <Formik>
+        <MultiCredentialsLookup
+          value={credentials}
+          tooltip="This is credentials look up"
+          onChange={() => {}}
+          onError={() => {}}
+          {...props}
+        />
+      </Formik>,
+      options
+    );
+  }
+
   beforeEach(() => {
-    CredentialTypesAPI.loadAllTypes.mockResolvedValueOnce([
+    CredentialTypesAPI.loadAllTypes.mockResolvedValue([
       {
         id: 400,
         kind: 'ssh',
@@ -51,7 +61,7 @@ describe('<Formik><MultiCredentialsLookup /></Formik>', () => {
       { id: 500, kind: 'vault', namespace: 'buzz', name: 'Vault' },
       { id: 600, kind: 'machine', namespace: 'fuzz', name: 'Machine' },
     ]);
-    CredentialsAPI.read.mockResolvedValueOnce({
+    CredentialsAPI.read.mockResolvedValue({
       data: {
         results: [
           {
@@ -89,7 +99,6 @@ describe('<Formik><MultiCredentialsLookup /></Formik>', () => {
             name: 'Cred 5',
             url: 'www.google.com',
           },
-
           {
             id: 6,
             credential_type: 5,
@@ -107,7 +116,7 @@ describe('<Formik><MultiCredentialsLookup /></Formik>', () => {
             inputs: {},
           },
         ],
-        count: 3,
+        count: 7,
       },
     });
     CredentialsAPI.readOptions.mockResolvedValue({
@@ -127,43 +136,24 @@ describe('<Formik><MultiCredentialsLookup /></Formik>', () => {
 
   test('should load credential types', async () => {
     const onChange = jest.fn();
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <MultiCredentialsLookup
-            value={credentials}
-            tooltip="This is credentials look up"
-            onChange={onChange}
-            onError={() => {}}
-          />
-        </Formik>
-      );
-    });
-    wrapper.update();
-    expect(wrapper.find('MultiCredentialsLookup')).toHaveLength(1);
-    expect(CredentialTypesAPI.loadAllTypes).toHaveBeenCalled();
+    renderLookup({ onChange });
+    await waitFor(() =>
+      expect(CredentialTypesAPI.loadAllTypes).toHaveBeenCalled()
+    );
+    expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument();
   });
 
   test('onChange is called when you click to remove a credential from input', async () => {
     const onChange = jest.fn();
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <MultiCredentialsLookup
-            value={credentials}
-            tooltip="This is credentials look up"
-            onChange={onChange}
-            onError={() => {}}
-          />
-        </Formik>
-      );
-    });
-    const chip = wrapper.find('CredentialChip');
-    expect(chip).toHaveLength(5);
-    const button = chip.at(1).find('Chip Button');
-    await act(async () => {
-      button.invoke('onClick')();
-    });
+    const { user } = renderLookup({ onChange });
+    await waitFor(() =>
+      expect(CredentialTypesAPI.loadAllTypes).toHaveBeenCalled()
+    );
+
+    // remove the second chip (SSH: Alex)
+    const chip = screen.getByText('Alex').closest('.pf-c-chip');
+    await user.click(within(chip).getByRole('button'));
+
     expect(onChange).toHaveBeenCalledWith([
       {
         id: 1,
@@ -185,27 +175,16 @@ describe('<Formik><MultiCredentialsLookup /></Formik>', () => {
   });
 
   test('should change credential types', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <MultiCredentialsLookup
-            value={credentials}
-            tooltip="This is credentials look up"
-            onChange={() => {}}
-            onError={() => {}}
-          />
-        </Formik>
-      );
-    });
-    const searchButton = await waitForElement(
-      wrapper,
-      'Button[aria-label="Search"]'
-    );
-    await act(async () => {
-      searchButton.invoke('onClick')();
-    });
-    expect(CredentialsAPI.read).toHaveBeenCalledTimes(2);
-    const select = await waitForElement(wrapper, 'AnsibleSelect');
+    const { user } = renderLookup();
+    await waitFor(() => expect(CredentialsAPI.read).toHaveBeenCalledTimes(1));
+
+    await user.click(screen.getByRole('button', { name: 'Search' }));
+    const dialog = await screen.findByRole('dialog');
+    await waitFor(() => expect(CredentialsAPI.read).toHaveBeenCalledTimes(2));
+
+    // category select renders the initial ssh credentials
+    expect(await within(dialog).findByText('Cred 2')).toBeInTheDocument();
+
     CredentialsAPI.read.mockResolvedValueOnce({
       data: {
         results: [
@@ -214,105 +193,57 @@ describe('<Formik><MultiCredentialsLookup /></Formik>', () => {
         count: 1,
       },
     });
-    await act(async () => {
-      select.invoke('onChange')({}, 500);
-    });
-    wrapper.update();
-    expect(wrapper.find('OptionsList').prop('options')).toEqual([
-      {
-        id: 1,
-        kind: 'cloud',
-        name: 'New Cred',
-        url: 'www.google.com',
-        label: 'New Cred',
-      },
-    ]);
+    await user.selectOptions(within(dialog).getByRole('combobox'), '500');
+
+    expect(await within(dialog).findByText('New Cred')).toBeInTheDocument();
   });
 
   test('should reset query params (credentials.page) when selected credential type is changed', async () => {
     const history = createMemoryHistory({
       initialEntries: ['?credentials.page=2'],
     });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <MultiCredentialsLookup
-            value={credentials}
-            tooltip="This is credentials look up"
-            onChange={() => {}}
-            onError={() => {}}
-          />
-        </Formik>,
-        {
-          context: { router: { history } },
-        }
-      );
-    });
-    const searchButton = await waitForElement(
-      wrapper,
-      'Button[aria-label="Search"]'
+    const { user } = renderLookup(
+      {},
+      { context: { router: { history } } }
     );
-    await act(async () => {
-      searchButton.invoke('onClick')();
-    });
-    expect(CredentialsAPI.read).toHaveBeenCalledWith({
-      credential_type: 400,
-      order_by: 'name',
-      page: 2,
-      page_size: 5,
-    });
+    await waitFor(() => expect(CredentialsAPI.read).toHaveBeenCalledTimes(1));
 
-    const select = await waitForElement(wrapper, 'AnsibleSelect');
-    await act(async () => {
-      select.invoke('onChange')({}, 500);
-    });
-    wrapper.update();
+    await user.click(screen.getByRole('button', { name: 'Search' }));
+    const dialog = await screen.findByRole('dialog');
+    await waitFor(() =>
+      expect(CredentialsAPI.read).toHaveBeenCalledWith({
+        credential_type: 400,
+        order_by: 'name',
+        page: 2,
+        page_size: 5,
+      })
+    );
 
-    expect(CredentialsAPI.read).toHaveBeenCalledWith({
-      credential_type: 500,
-      order_by: 'name',
-      page: 1,
-      page_size: 5,
-    });
+    await user.selectOptions(within(dialog).getByRole('combobox'), '500');
+
+    await waitFor(() =>
+      expect(CredentialsAPI.read).toHaveBeenCalledWith({
+        credential_type: 500,
+        order_by: 'name',
+        page: 1,
+        page_size: 5,
+      })
+    );
   });
 
   test('should only add 1 credential per credential type except vault(see below)', async () => {
     const onChange = jest.fn();
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <MultiCredentialsLookup
-            value={credentials}
-            tooltip="This is credentials look up"
-            onChange={onChange}
-            onError={() => {}}
-          />
-        </Formik>
-      );
-    });
-    const searchButton = await waitForElement(
-      wrapper,
-      'Button[aria-label="Search"]'
-    );
-    await act(async () => {
-      searchButton.invoke('onClick')();
-    });
-    wrapper.update();
-    const optionsList = wrapper.find('OptionsList');
-    expect(optionsList.prop('multiple')).toEqual(false);
-    act(() => {
-      optionsList.invoke('selectItem')({
-        id: 5,
-        credential_type: 4,
-        kind: 'Machine',
-        name: 'Cred 5',
-        url: 'www.google.com',
-      });
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('Button[variant="primary"]').invoke('onClick')();
-    });
+    const { user } = renderLookup({ onChange });
+    await waitFor(() => expect(CredentialsAPI.read).toHaveBeenCalledTimes(1));
+
+    await user.click(screen.getByRole('button', { name: 'Search' }));
+    const dialog = await screen.findByRole('dialog');
+    // ssh category => single-select (radio)
+    const cred5Row = (await within(dialog).findByText('Cred 5')).closest('tr');
+    await user.click(within(cred5Row).getByRole('radio'));
+
+    await user.click(within(dialog).getByRole('button', { name: 'Select' }));
+
     expect(onChange).toHaveBeenCalledWith([
       {
         id: 1,
@@ -342,83 +273,54 @@ describe('<Formik><MultiCredentialsLookup /></Formik>', () => {
         kind: 'Machine',
         name: 'Cred 5',
         url: 'www.google.com',
+        label: 'Cred 5',
       },
     ]);
   });
 
   test('should properly render vault credential labels', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <MultiCredentialsLookup
-            value={credentials}
-            tooltip="This is credentials look up"
-            onChange={() => {}}
-            onError={() => {}}
-          />
-        </Formik>
-      );
-    });
-    const searchButton = await waitForElement(
-      wrapper,
-      'Button[aria-label="Search"]'
-    );
-    await act(async () => {
-      searchButton.invoke('onClick')();
-    });
-    wrapper.update();
-    const typeSelect = wrapper.find('AnsibleSelect');
-    await act(async () => {
-      typeSelect.invoke('onChange')({}, 500);
-    });
-    wrapper.update();
-    const optionsList = wrapper.find('OptionsList');
-    expect(optionsList.prop('multiple')).toEqual(true);
-    expect(wrapper.find('CheckboxListItem[label="Cred 6 | vault ID"]'));
-    expect(wrapper.find('CheckboxListItem[label="Cred 7"]'));
+    const { user } = renderLookup();
+    await waitFor(() => expect(CredentialsAPI.read).toHaveBeenCalledTimes(1));
+
+    await user.click(screen.getByRole('button', { name: 'Search' }));
+    const dialog = await screen.findByRole('dialog');
+    await user.selectOptions(within(dialog).getByRole('combobox'), '500');
+
+    expect(
+      await within(dialog).findByText('Cred 6 | vault ID')
+    ).toBeInTheDocument();
+    expect(within(dialog).getByText('Cred 7')).toBeInTheDocument();
   });
 
   test('should allow multiple vault credentials with no vault id', async () => {
     const onChange = jest.fn();
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <MultiCredentialsLookup
-            value={credentials}
-            tooltip="This is credentials look up"
-            onChange={onChange}
-            onError={() => {}}
-          />
-        </Formik>
-      );
+    CredentialsAPI.read.mockResolvedValue({
+      data: {
+        results: [
+          {
+            id: 11,
+            credential_type: 3,
+            kind: 'vault',
+            name: 'Vault',
+            url: 'www.google.com',
+          },
+        ],
+        count: 1,
+      },
     });
-    const searchButton = await waitForElement(
-      wrapper,
-      'Button[aria-label="Search"]'
-    );
-    await act(async () => {
-      searchButton.invoke('onClick')();
-    });
-    wrapper.update();
-    const typeSelect = wrapper.find('AnsibleSelect');
-    act(() => {
-      typeSelect.invoke('onChange')({}, 500);
-    });
-    wrapper.update();
-    const optionsList = wrapper.find('OptionsList');
-    expect(optionsList.prop('multiple')).toEqual(true);
-    act(() => {
-      optionsList.invoke('selectItem')({
-        id: 11,
-        credential_type: 3,
-        kind: 'vault',
-        name: 'Vault',
-      });
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('Button[variant="primary"]').invoke('onClick')();
-    });
+    const { user } = renderLookup({ onChange });
+    await waitFor(() => expect(CredentialsAPI.read).toHaveBeenCalledTimes(1));
+
+    await user.click(screen.getByRole('button', { name: 'Search' }));
+    const dialog = await screen.findByRole('dialog');
+    await user.selectOptions(within(dialog).getByRole('combobox'), '500');
+
+    const vaultRow = (
+      await within(dialog).findByText('Vault', { selector: 'b' })
+    ).closest('tr');
+    await user.click(within(vaultRow).getByRole('checkbox'));
+    await user.click(within(dialog).getByRole('button', { name: 'Select' }));
+
     expect(onChange).toHaveBeenCalledWith([
       {
         id: 1,
@@ -443,52 +345,47 @@ describe('<Formik><MultiCredentialsLookup /></Formik>', () => {
       },
       { id: 23, credential_type: 3, kind: 'vault', name: 'Gatsby 2' },
       { id: 8, credential_type: 4, kind: 'Machine', name: 'Gatsby' },
-      { id: 11, credential_type: 3, kind: 'vault', name: 'Vault' },
+      {
+        id: 11,
+        credential_type: 3,
+        kind: 'vault',
+        name: 'Vault',
+        url: 'www.google.com',
+        label: 'Vault',
+      },
     ]);
   });
 
   test('should allow multiple vault credentials with different vault ids', async () => {
     const onChange = jest.fn();
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <MultiCredentialsLookup
-            value={credentials}
-            tooltip="This is credentials look up"
-            onChange={onChange}
-            onError={() => {}}
-          />
-        </Formik>
-      );
+    CredentialsAPI.read.mockResolvedValue({
+      data: {
+        results: [
+          {
+            id: 12,
+            credential_type: 3,
+            kind: 'vault',
+            name: 'Other Vault',
+            url: 'www.google.com',
+            inputs: { vault_id: '2' },
+          },
+        ],
+        count: 1,
+      },
     });
-    const searchButton = await waitForElement(
-      wrapper,
-      'Button[aria-label="Search"]'
-    );
-    await act(async () => {
-      searchButton.invoke('onClick')();
-    });
-    wrapper.update();
-    const typeSelect = wrapper.find('AnsibleSelect');
-    act(() => {
-      typeSelect.invoke('onChange')({}, 500);
-    });
-    wrapper.update();
-    const optionsList = wrapper.find('OptionsList');
-    expect(optionsList.prop('multiple')).toEqual(true);
-    act(() => {
-      optionsList.invoke('selectItem')({
-        id: 12,
-        credential_type: 3,
-        kind: 'vault',
-        name: 'Other Vault',
-        vault_id: '2',
-      });
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('Button[variant="primary"]').invoke('onClick')();
-    });
+    const { user } = renderLookup({ onChange });
+    await waitFor(() => expect(CredentialsAPI.read).toHaveBeenCalledTimes(1));
+
+    await user.click(screen.getByRole('button', { name: 'Search' }));
+    const dialog = await screen.findByRole('dialog');
+    await user.selectOptions(within(dialog).getByRole('combobox'), '500');
+
+    const vaultRow = (
+      await within(dialog).findByText('Other Vault | 2')
+    ).closest('tr');
+    await user.click(within(vaultRow).getByRole('checkbox'));
+    await user.click(within(dialog).getByRole('button', { name: 'Select' }));
+
     expect(onChange).toHaveBeenCalledWith([
       {
         id: 1,
@@ -518,53 +415,43 @@ describe('<Formik><MultiCredentialsLookup /></Formik>', () => {
         credential_type: 3,
         kind: 'vault',
         name: 'Other Vault',
-        vault_id: '2',
+        url: 'www.google.com',
+        inputs: { vault_id: '2' },
+        label: 'Other Vault | 2',
       },
     ]);
   });
 
   test('should not select multiple vault credentials with same vault id', async () => {
     const onChange = jest.fn();
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <MultiCredentialsLookup
-            value={credentials}
-            tooltip="This is credentials look up"
-            onChange={onChange}
-            onError={() => {}}
-          />
-        </Formik>
-      );
+    CredentialsAPI.read.mockResolvedValue({
+      data: {
+        results: [
+          {
+            id: 13,
+            credential_type: 3,
+            kind: 'vault',
+            name: 'Vault Cred with Same Vault Id',
+            url: 'www.google.com',
+            inputs: { vault_id: '1' },
+          },
+        ],
+        count: 1,
+      },
     });
-    const searchButton = await waitForElement(
-      wrapper,
-      'Button[aria-label="Search"]'
-    );
-    await act(async () => {
-      searchButton.invoke('onClick')();
-    });
-    wrapper.update();
-    const typeSelect = wrapper.find('AnsibleSelect');
-    act(() => {
-      typeSelect.invoke('onChange')({}, 500);
-    });
-    wrapper.update();
-    const optionsList = wrapper.find('OptionsList');
-    expect(optionsList.prop('multiple')).toEqual(true);
-    act(() => {
-      optionsList.invoke('selectItem')({
-        id: 13,
-        credential_type: 3,
-        kind: 'vault',
-        name: 'Vault Cred with Same Vault Id',
-        inputs: { vault_id: '1' },
-      });
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('Button[variant="primary"]').invoke('onClick')();
-    });
+    const { user } = renderLookup({ onChange });
+    await waitFor(() => expect(CredentialsAPI.read).toHaveBeenCalledTimes(1));
+
+    await user.click(screen.getByRole('button', { name: 'Search' }));
+    const dialog = await screen.findByRole('dialog');
+    await user.selectOptions(within(dialog).getByRole('combobox'), '500');
+
+    const vaultRow = (
+      await within(dialog).findByText('Vault Cred with Same Vault Id | 1')
+    ).closest('tr');
+    await user.click(within(vaultRow).getByRole('checkbox'));
+    await user.click(within(dialog).getByRole('button', { name: 'Select' }));
+
     expect(onChange).toHaveBeenCalledWith([
       {
         id: 1,
@@ -587,7 +474,9 @@ describe('<Formik><MultiCredentialsLookup /></Formik>', () => {
         credential_type: 3,
         kind: 'vault',
         name: 'Vault Cred with Same Vault Id',
+        url: 'www.google.com',
         inputs: { vault_id: '1' },
+        label: 'Vault Cred with Same Vault Id | 1',
       },
     ]);
   });

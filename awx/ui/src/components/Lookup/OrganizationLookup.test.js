@@ -1,39 +1,47 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { Formik } from 'formik';
 import { OrganizationsAPI } from 'api';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import OrganizationLookup, { _OrganizationLookup } from './OrganizationLookup';
 
 jest.mock('../../api');
 
 describe('OrganizationLookup', () => {
-  let wrapper;
+  beforeEach(() => {
+    OrganizationsAPI.read.mockResolvedValue({
+      data: { results: [], count: 0 },
+    });
+    OrganizationsAPI.readOptions.mockResolvedValue({
+      data: { actions: { GET: {} }, related_search_fields: [] },
+    });
+  });
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
   test('should render successfully', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <OrganizationLookup onChange={() => {}} />
-        </Formik>
-      );
-    });
-    expect(wrapper).toHaveLength(1);
+    renderWithContexts(
+      <Formik>
+        <OrganizationLookup onChange={() => {}} />
+      </Formik>
+    );
+    expect(await screen.findByText('Organization')).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Search' })
+    ).toBeInTheDocument();
   });
 
   test('should fetch organizations', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <OrganizationLookup onChange={() => {}} />
-        </Formik>
-      );
-    });
-    expect(OrganizationsAPI.read).toHaveBeenCalledTimes(1);
+    renderWithContexts(
+      <Formik>
+        <OrganizationLookup onChange={() => {}} />
+      </Formik>
+    );
+    await waitFor(() =>
+      expect(OrganizationsAPI.read).toHaveBeenCalledTimes(1)
+    );
     expect(OrganizationsAPI.read).toHaveBeenCalledWith({
       order_by: 'name',
       page: 1,
@@ -42,80 +50,74 @@ describe('OrganizationLookup', () => {
   });
 
   test('should display "Organization" label', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <OrganizationLookup onChange={() => {}} />
-        </Formik>
-      );
-    });
-    const title = wrapper.find('FormGroup .pf-c-form__label-text');
-    expect(title.text()).toEqual('Organization');
+    renderWithContexts(
+      <Formik>
+        <OrganizationLookup onChange={() => {}} />
+      </Formik>
+    );
+    expect(await screen.findByText('Organization')).toBeInTheDocument();
   });
 
-  test('should define default value for function props', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <OrganizationLookup onChange={() => {}} />
-        </Formik>
-      );
-    });
+  test('should define default value for function props', () => {
     expect(_OrganizationLookup.defaultProps.onBlur).toBeInstanceOf(Function);
     expect(_OrganizationLookup.defaultProps.onBlur).not.toThrow();
   });
 
   test('should auto-select organization when only one available and autoPopulate prop is true', async () => {
-    OrganizationsAPI.read.mockReturnValue({
+    const org = { id: 1, name: 'org', url: '/api/v2/organizations/1/' };
+    OrganizationsAPI.read.mockResolvedValue({
       data: {
-        results: [{ id: 1 }],
+        results: [org],
         count: 1,
       },
     });
     const onChange = jest.fn();
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <OrganizationLookup autoPopulate onChange={onChange} />
-        </Formik>
-      );
-    });
-    expect(onChange).toHaveBeenCalledWith({ id: 1 });
+    renderWithContexts(
+      <Formik>
+        <OrganizationLookup autoPopulate onChange={onChange} />
+      </Formik>
+    );
+    await waitFor(() => expect(onChange).toHaveBeenCalledWith(org));
   });
 
   test('should not auto-select organization when autoPopulate prop is false', async () => {
-    OrganizationsAPI.read.mockReturnValue({
+    OrganizationsAPI.read.mockResolvedValue({
       data: {
-        results: [{ id: 1 }],
+        results: [{ id: 1, name: 'org', url: '/api/v2/organizations/1/' }],
         count: 1,
       },
     });
     const onChange = jest.fn();
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <OrganizationLookup onChange={onChange} />
-        </Formik>
-      );
-    });
+    renderWithContexts(
+      <Formik>
+        <OrganizationLookup onChange={onChange} />
+      </Formik>
+    );
+    await waitFor(() =>
+      expect(OrganizationsAPI.read).toHaveBeenCalledTimes(1)
+    );
     expect(onChange).not.toHaveBeenCalled();
   });
 
   test('should not auto-select organization when multiple available', async () => {
-    OrganizationsAPI.read.mockReturnValue({
+    OrganizationsAPI.read.mockResolvedValue({
       data: {
-        results: [{ id: 1 }, { id: 2 }],
+        results: [
+          { id: 1, name: 'org 1', url: '/api/v2/organizations/1/' },
+          { id: 2, name: 'org 2', url: '/api/v2/organizations/2/' },
+        ],
         count: 2,
       },
     });
     const onChange = jest.fn();
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <OrganizationLookup autoPopulate onChange={onChange} />
-        </Formik>
-      );
-    });
+    renderWithContexts(
+      <Formik>
+        <OrganizationLookup autoPopulate onChange={onChange} />
+      </Formik>
+    );
+    await waitFor(() =>
+      expect(OrganizationsAPI.read).toHaveBeenCalledTimes(1)
+    );
     expect(onChange).not.toHaveBeenCalled();
   });
 });

@@ -1,9 +1,9 @@
 import React from 'react';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { screen } from '@testing-library/react';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import HostListItem from './HostListItem';
 
 describe('HostListItem', () => {
-  let wrapper;
   const mockInventory = {
     id: 1,
     type: 'inventory',
@@ -16,16 +16,16 @@ describe('HostListItem', () => {
     },
   };
   test('initially renders successfully', () => {
-    wrapper = mountWithContexts(
+    renderWithContexts(
       <table>
         <tbody>
           <HostListItem item={mockInventory} />
         </tbody>
       </table>
     );
-    expect(wrapper.find('HostListItem').length).toBe(1);
-    expect(wrapper.find('Td').at(0).text()).toBe('Foo');
-    expect(wrapper.find('Td').at(1).text()).toBe('Buzz');
-    expect(wrapper.find('Td').at(2).text()).toBe('Bar');
+    const cells = screen.getAllByRole('cell');
+    expect(cells[0]).toHaveTextContent('Foo');
+    expect(cells[1]).toHaveTextContent('Buzz');
+    expect(cells[2]).toHaveTextContent('Bar');
   });
 });

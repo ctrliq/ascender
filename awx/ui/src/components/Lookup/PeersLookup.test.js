@@ -1,8 +1,8 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { Formik } from 'formik';
 import { InstancesAPI } from 'api';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import PeersLookup from './PeersLookup';
 
 jest.mock('../../api');
@@ -68,11 +68,15 @@ const instances = [
 ];
 
 describe('PeersLookup', () => {
-  let wrapper;
-
   beforeEach(() => {
     InstancesAPI.read.mockResolvedValue({
       data: mockedInstances,
+    });
+    InstancesAPI.readOptions.mockResolvedValue({
+      data: {
+        actions: { GET: {}, POST: {} },
+        related_search_fields: [],
+      },
     });
   });
 
@@ -81,59 +85,32 @@ describe('PeersLookup', () => {
   });
 
   test('should render successfully without instance_details (for new added instance)', async () => {
-    InstancesAPI.readOptions.mockReturnValue({
-      data: {
-        actions: {
-          GET: {},
-          POST: {},
-        },
-        related_search_fields: [],
-      },
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <PeersLookup value={instances} onChange={() => {}} />
-        </Formik>
-      );
-    });
-    wrapper.update();
-    expect(InstancesAPI.read).toHaveBeenCalledTimes(1);
-    expect(wrapper.find('PeersLookup')).toHaveLength(1);
-    // Use fieldId selector instead of label due to Lingui v5 translation issues
-    expect(wrapper.find('FormGroup[fieldId="instances"]').length).toBe(1);
-    expect(wrapper.find('Checkbox[aria-label="Prompt on launch"]').length).toBe(
-      0
+    renderWithContexts(
+      <Formik>
+        <PeersLookup value={instances} onChange={() => {}} />
+      </Formik>
     );
+    await waitFor(() => expect(InstancesAPI.read).toHaveBeenCalledTimes(1));
+    expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument();
+    expect(
+      screen.queryByRole('checkbox', { name: 'Prompt on launch' })
+    ).not.toBeInTheDocument();
   });
+
   test('should render successfully with instance_details for edit instance', async () => {
-    InstancesAPI.readOptions.mockReturnValue({
-      data: {
-        actions: {
-          GET: {},
-          POST: {},
-        },
-        related_search_fields: [],
-      },
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <PeersLookup
-            value={instances}
-            instance_details={instances[0]}
-            onChange={() => {}}
-          />
-        </Formik>
-      );
-    });
-    wrapper.update();
-    expect(InstancesAPI.read).toHaveBeenCalledTimes(1);
-    expect(wrapper.find('PeersLookup')).toHaveLength(1);
-    // Use fieldId selector instead of label due to Lingui v5 translation issues
-    expect(wrapper.find('FormGroup[fieldId="instances"]').length).toBe(1);
-    expect(wrapper.find('Checkbox[aria-label="Prompt on launch"]').length).toBe(
-      0
+    renderWithContexts(
+      <Formik>
+        <PeersLookup
+          value={instances}
+          instance_details={instances[0]}
+          onChange={() => {}}
+        />
+      </Formik>
     );
+    await waitFor(() => expect(InstancesAPI.read).toHaveBeenCalledTimes(1));
+    expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument();
+    expect(
+      screen.queryByRole('checkbox', { name: 'Prompt on launch' })
+    ).not.toBeInTheDocument();
   });
 });

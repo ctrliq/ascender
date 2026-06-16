@@ -1,180 +1,144 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { Formik } from 'formik';
 import { ProjectsAPI } from 'api';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import ProjectLookup from './ProjectLookup';
 
 jest.mock('../../api');
 
 describe('<ProjectLookup />', () => {
+  beforeEach(() => {
+    ProjectsAPI.readOptions.mockResolvedValue({
+      data: {
+        actions: { GET: {} },
+        related_search_fields: [],
+      },
+    });
+  });
+
   afterEach(() => {
     jest.clearAllMocks();
   });
 
   test('should auto-select project when only one available and autoPopulate prop is true', async () => {
-    ProjectsAPI.read.mockReturnValue({
+    const project = { id: 1, name: 'Test', url: '/api/v2/projects/1/' };
+    ProjectsAPI.read.mockResolvedValue({
       data: {
-        results: [{ id: 1, name: 'Test' }],
+        results: [project],
         count: 1,
       },
     });
     const onChange = jest.fn();
-    await act(async () => {
-      mountWithContexts(
-        <Formik>
-          <ProjectLookup autoPopulate onChange={onChange} />
-        </Formik>
-      );
-    });
-    expect(onChange).toHaveBeenCalledWith({ id: 1, name: 'Test' });
+    renderWithContexts(
+      <Formik>
+        <ProjectLookup autoPopulate onChange={onChange} />
+      </Formik>
+    );
+    await waitFor(() => expect(onChange).toHaveBeenCalledWith(project));
   });
 
   test('should not auto-select project when autoPopulate prop is false', async () => {
-    ProjectsAPI.read.mockReturnValue({
+    ProjectsAPI.read.mockResolvedValue({
       data: {
-        results: [{ id: 1, name: 'Test' }],
+        results: [{ id: 1, name: 'Test', url: '/api/v2/projects/1/' }],
         count: 1,
       },
     });
     const onChange = jest.fn();
-    await act(async () => {
-      mountWithContexts(
-        <Formik>
-          <ProjectLookup onChange={onChange} />
-        </Formik>
-      );
-    });
+    renderWithContexts(
+      <Formik>
+        <ProjectLookup onChange={onChange} />
+      </Formik>
+    );
+    await waitFor(() => expect(ProjectsAPI.read).toHaveBeenCalledTimes(1));
     expect(onChange).not.toHaveBeenCalled();
   });
 
   test('should not auto-select project when multiple available', async () => {
-    ProjectsAPI.read.mockReturnValue({
+    ProjectsAPI.read.mockResolvedValue({
       data: {
         results: [
-          { id: 1, name: 'Test' },
-          { id: 2, name: 'Test 2' },
+          { id: 1, name: 'Test', url: '/api/v2/projects/1/' },
+          { id: 2, name: 'Test 2', url: '/api/v2/projects/2/' },
         ],
         count: 2,
       },
     });
     const onChange = jest.fn();
-    await act(async () => {
-      mountWithContexts(
-        <Formik>
-          <ProjectLookup autoPopulate onChange={onChange} />
-        </Formik>
-      );
-    });
+    renderWithContexts(
+      <Formik>
+        <ProjectLookup autoPopulate onChange={onChange} />
+      </Formik>
+    );
+    await waitFor(() => expect(ProjectsAPI.read).toHaveBeenCalledTimes(1));
     expect(onChange).not.toHaveBeenCalled();
   });
 
   test('project lookup should be enabled', async () => {
-    let wrapper;
-    ProjectsAPI.read.mockReturnValue({
+    ProjectsAPI.read.mockResolvedValue({
       data: {
-        results: [{ id: 1, name: 'Test' }],
+        results: [{ id: 1, name: 'Test', url: '/api/v2/projects/1/' }],
         count: 1,
       },
     });
-    ProjectsAPI.readOptions.mockReturnValue({
-      data: {
-        actions: {
-          GET: {},
-        },
-        related_search_fields: [],
-      },
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <ProjectLookup isOverrideDisabled onChange={() => {}} />
-        </Formik>
-      );
-    });
-    wrapper.update();
-    expect(ProjectsAPI.read).toHaveBeenCalledTimes(1);
-    expect(wrapper.find('ProjectLookup')).toHaveLength(1);
-    expect(wrapper.find('Lookup').prop('isDisabled')).toBe(false);
+    renderWithContexts(
+      <Formik>
+        <ProjectLookup isOverrideDisabled onChange={() => {}} />
+      </Formik>
+    );
+    await waitFor(() => expect(ProjectsAPI.read).toHaveBeenCalledTimes(1));
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'Search' })).toBeEnabled()
+    );
   });
 
   test('project lookup should be disabled', async () => {
-    let wrapper;
-
-    ProjectsAPI.readOptions.mockReturnValue({
-      data: {
-        actions: {
-          GET: {},
-        },
-        related_search_fields: [],
-      },
+    ProjectsAPI.read.mockResolvedValue({
+      data: { results: [], count: 0 },
     });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <ProjectLookup onChange={() => {}} />
-        </Formik>
-      );
-    });
-    wrapper.update();
-    expect(ProjectsAPI.read).toHaveBeenCalledTimes(1);
-    expect(wrapper.find('ProjectLookup')).toHaveLength(1);
-    expect(wrapper.find('Lookup').prop('isDisabled')).toBe(true);
-  });
-
-  test('should not show helper text', async () => {
-    let wrapper;
-
-    ProjectsAPI.readOptions.mockReturnValue({
-      data: {
-        actions: {
-          GET: {},
-        },
-        related_search_fields: [],
-      },
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <ProjectLookup
-            isValid
-            helperTextInvalid="select value"
-            onChange={() => {}}
-          />
-        </Formik>
-      );
-    });
-    wrapper.update();
-
-    expect(wrapper.find('div#project-helper').length).toBe(0);
-  });
-
-  test('should not show helper text', async () => {
-    let wrapper;
-
-    ProjectsAPI.readOptions.mockReturnValue({
-      data: {
-        actions: {
-          GET: {},
-        },
-        related_search_fields: [],
-      },
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <ProjectLookup
-            isValid={false}
-            helperTextInvalid="select value"
-            onChange={() => {}}
-          />
-        </Formik>
-      );
-    });
-    wrapper.update();
-
-    expect(wrapper.find('div#project-helper').text('helperTextInvalid')).toBe(
-      'select value'
+    renderWithContexts(
+      <Formik>
+        <ProjectLookup onChange={() => {}} />
+      </Formik>
     );
+    await waitFor(() => expect(ProjectsAPI.read).toHaveBeenCalledTimes(1));
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'Search' })).toBeDisabled()
+    );
+  });
+
+  test('should not show helper text when valid', async () => {
+    ProjectsAPI.read.mockResolvedValue({
+      data: { results: [], count: 0 },
+    });
+    renderWithContexts(
+      <Formik>
+        <ProjectLookup
+          isValid
+          helperTextInvalid="select value"
+          onChange={() => {}}
+        />
+      </Formik>
+    );
+    await waitFor(() => expect(ProjectsAPI.read).toHaveBeenCalledTimes(1));
+    expect(screen.queryByText('select value')).not.toBeInTheDocument();
+  });
+
+  test('should show helper text when invalid', async () => {
+    ProjectsAPI.read.mockResolvedValue({
+      data: { results: [], count: 0 },
+    });
+    renderWithContexts(
+      <Formik>
+        <ProjectLookup
+          isValid={false}
+          helperTextInvalid="select value"
+          onChange={() => {}}
+        />
+      </Formik>
+    );
+    await waitFor(() => expect(ProjectsAPI.read).toHaveBeenCalledTimes(1));
+    expect(await screen.findByText('select value')).toBeInTheDocument();
   });
 });
