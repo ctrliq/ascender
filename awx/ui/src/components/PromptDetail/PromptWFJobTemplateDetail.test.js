@@ -1,5 +1,9 @@
 import React from 'react';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { screen } from '@testing-library/react';
+import {
+  renderWithContexts,
+  assertDetail,
+} from '../../../testUtils/rtlContexts';
 import PromptWFJobTemplateDetail from './PromptWFJobTemplateDetail';
 import mockData from './data.workflow_template.json';
 
@@ -9,62 +13,44 @@ const mockWF = {
 };
 
 describe('PromptWFJobTemplateDetail', () => {
-  let wrapper;
-
-  beforeAll(() => {
-    wrapper = mountWithContexts(
-      <PromptWFJobTemplateDetail resource={mockWF} />
-    );
-  });
-
-  test('should render successfully', () => {
-    expect(wrapper.find('PromptWFJobTemplateDetail')).toHaveLength(1);
-  });
-
   test('should render expected details', () => {
-    function assertDetail(label, value) {
-      expect(wrapper.find(`Detail[label="${label}"] dt`).text()).toBe(label);
-      expect(wrapper.find(`Detail[label="${label}"] dd`).text()).toBe(value);
-    }
+    renderWithContexts(<PromptWFJobTemplateDetail resource={mockWF} />);
 
-    expect(wrapper.find('StatusIcon')).toHaveLength(1);
+    // Activity row renders a Sparkline (one job link for the single recent job)
+    expect(
+      screen.getByRole('link', { name: 'View job 226' })
+    ).toBeInTheDocument();
     assertDetail('Inventory', 'Mock Smart Inv');
     assertDetail('Source Control Branch', '/bar/');
     assertDetail('Limit', 'hosts1,hosts2');
     assertDetail('Webhook Service', 'Github');
     assertDetail('Webhook Key', 'Pim3mRXT0');
-    expect(wrapper.find('Detail[label="Webhook URL"] dd').text()).toEqual(
-      expect.stringContaining('/api/v2/workflow_job_templates/47/github/')
+
+    const webhookUrlTerm = screen.getByText('Webhook URL');
+    expect(webhookUrlTerm.nextElementSibling).toHaveTextContent(
+      '/api/v2/workflow_job_templates/47/github/'
     );
-    expect(
-      wrapper
-        .find('Detail[label="Enabled Options"]')
-        .containsAllMatchingElements([
-          <li>Concurrent Jobs</li>,
-          <li>Webhooks</li>,
-        ])
-    ).toEqual(true);
-    expect(
-      wrapper
-        .find('Detail[label="Webhook Credential"]')
-        .containsAllMatchingElements([
-          <span>
-            <strong>Github Token:</strong>github
-          </span>,
-        ])
-    ).toEqual(true);
-    expect(
-      wrapper
-        .find('Detail[label="Labels"]')
-        .containsAllMatchingElements([<span>L_10o0</span>, <span>L_20o0</span>])
-    ).toEqual(true);
-    expect(wrapper.find('VariablesDetail').prop('value')).toEqual(
-      '---\nmock: data'
+
+    // Enabled Options renders one <li> per enabled flag
+    expect(screen.getByText('Concurrent Jobs')).toBeInTheDocument();
+    expect(screen.getByText('Webhooks')).toBeInTheDocument();
+
+    // Webhook Credential chip
+    const webhookCredTerm = screen.getByText('Webhook Credential');
+    expect(webhookCredTerm.nextElementSibling).toHaveTextContent(
+      'Github Token: github'
     );
+
+    // Labels chips
+    expect(screen.getByText('L_10o0')).toBeInTheDocument();
+    expect(screen.getByText('L_20o0')).toBeInTheDocument();
+
+    // Variables uses react-ace (empty under jsdom); assert the surrounding label
+    expect(screen.getByText('Variables')).toBeInTheDocument();
   });
 
   test('should not load Activity', () => {
-    wrapper = mountWithContexts(
+    renderWithContexts(
       <PromptWFJobTemplateDetail
         resource={{
           ...mockWF,
@@ -74,12 +60,12 @@ describe('PromptWFJobTemplateDetail', () => {
         }}
       />
     );
-    const activity_detail = wrapper.find(`Detail[label="Activity"]`).at(0);
-    expect(activity_detail.prop('isEmpty')).toEqual(true);
+    // isEmpty Activity Detail renders nothing, so the label is absent
+    expect(screen.queryByText('Activity')).not.toBeInTheDocument();
   });
 
   test('should not load Labels', () => {
-    wrapper = mountWithContexts(
+    renderWithContexts(
       <PromptWFJobTemplateDetail
         resource={{
           ...mockWF,
@@ -91,7 +77,7 @@ describe('PromptWFJobTemplateDetail', () => {
         }}
       />
     );
-    const labels_detail = wrapper.find(`Detail[label="Labels"]`).at(0);
-    expect(labels_detail.prop('isEmpty')).toEqual(true);
+    // isEmpty Labels Detail renders nothing, so the label is absent
+    expect(screen.queryByText('Labels')).not.toBeInTheDocument();
   });
 });
