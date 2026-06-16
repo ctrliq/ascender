@@ -3,15 +3,8 @@ import { useLingui } from '@lingui/react/macro';
 
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card, PageSection } from '@patternfly/react-core';
-import {
-  Switch,
-  Route,
-  Redirect,
-  Link,
-  useLocation,
-  useParams,
-  useRouteMatch,
-} from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom-v5-compat';
 import RoutedTabs from 'components/RoutedTabs';
 import { useConfig } from 'contexts/Config';
 import useRequest from 'hooks/useRequest';
@@ -26,9 +19,9 @@ import JobTemplateEdit from './JobTemplateEdit';
 import TemplateSurvey from './TemplateSurvey';
 
 function Template({ setBreadcrumb }) {
-  const match = useRouteMatch();
   const location = useLocation();
   const { id: templateId } = useParams();
+  const baseUrl = `/templates/job_template/${templateId}`;
   const { me = {} } = useConfig();
   const { t } = useLingui();
 
@@ -133,34 +126,34 @@ function Template({ setBreadcrumb }) {
       persistentFilterKey: 'templates',
       id: 99,
     },
-    { name: t`Details`, link: `${match.url}/details` },
-    { name: t`Access`, link: `${match.url}/access` },
+    { name: t`Details`, link: `${baseUrl}/details` },
+    { name: t`Access`, link: `${baseUrl}/access` },
   ];
 
   if (canSeeNotificationsTab) {
     tabsArray.push({
       name: t`Notifications`,
-      link: `${match.url}/notifications`,
+      link: `${baseUrl}/notifications`,
     });
   }
 
   if (template) {
     tabsArray.push({
       name: t`Schedules`,
-      link: `${match.url}/schedules`,
+      link: `${baseUrl}/schedules`,
     });
   }
 
   tabsArray.push(
     {
       name: t`Jobs`,
-      link: `${match.url}/jobs`,
+      link: `${baseUrl}/jobs`,
     },
     {
       name: canAddAndEditSurvey
         ? t`Survey`
         : t`View Survey`,
-      link: `${match.url}/survey`,
+      link: `${baseUrl}/survey`,
     }
   );
 
@@ -196,77 +189,93 @@ function Template({ setBreadcrumb }) {
       <Card>
         {showCardHeader && <RoutedTabs tabsArray={tabsArray} />}
         {template && (
-          <Switch>
-            <Redirect
-              from="/templates/:templateType/:id"
-              to="/templates/:templateType/:id/details"
-              exact
-            />
-            <Route key="details" path="/templates/:templateType/:id/details">
-              <JobTemplateDetail
-                hasTemplateLoading={isLoading}
-                template={template}
-              />
-            </Route>
-            <Route key="edit" path="/templates/:templateType/:id/edit">
-              <JobTemplateEdit
-                template={template}
-                reloadTemplate={loadTemplateAndRoles}
-              />
-            </Route>
-            <Route key="access" path="/templates/:templateType/:id/access">
-              <ResourceAccessList
-                resource={template}
-                apiModel={JobTemplatesAPI}
-              />
-            </Route>
+          <Routes>
             <Route
-              key="schedules"
-              path="/templates/:templateType/:id/schedules"
-            >
-              <Schedules
-                apiModel={JobTemplatesAPI}
-                setBreadcrumb={setBreadcrumb}
-                resource={template}
-                loadSchedules={loadSchedules}
-                loadScheduleOptions={loadScheduleOptions}
-                surveyConfig={surveyConfig}
-                launchConfig={launchConfig}
-                resourceDefaultCredentials={resourceDefaultCredentials}
-              />
-            </Route>
-            {canSeeNotificationsTab && (
-              <Route path="/templates/:templateType/:id/notifications">
-                <NotificationList
-                  id={Number(templateId)}
-                  canToggleNotifications={isNotifAdmin}
+              path="/templates/:templateType/:id/details"
+              element={
+                <JobTemplateDetail
+                  hasTemplateLoading={isLoading}
+                  template={template}
+                />
+              }
+            />
+            <Route
+              path="/templates/:templateType/:id/edit"
+              element={
+                <JobTemplateEdit
+                  template={template}
+                  reloadTemplate={loadTemplateAndRoles}
+                />
+              }
+            />
+            <Route
+              path="/templates/:templateType/:id/access"
+              element={
+                <ResourceAccessList
+                  resource={template}
                   apiModel={JobTemplatesAPI}
                 />
-              </Route>
-            )}
-            <Route path="/templates/:templateType/:id/jobs">
-              <JobList defaultParams={{ job__job_template: template.id }} />
-            </Route>
-            <Route path="/templates/:templateType/:id/survey">
-              <TemplateSurvey
-                template={template}
-                canEdit={canAddAndEditSurvey}
+              }
+            />
+            <Route
+              path="/templates/:templateType/:id/schedules/*"
+              element={
+                <Schedules
+                  apiModel={JobTemplatesAPI}
+                  setBreadcrumb={setBreadcrumb}
+                  resource={template}
+                  loadSchedules={loadSchedules}
+                  loadScheduleOptions={loadScheduleOptions}
+                  surveyConfig={surveyConfig}
+                  launchConfig={launchConfig}
+                  resourceDefaultCredentials={resourceDefaultCredentials}
+                />
+              }
+            />
+            {canSeeNotificationsTab && (
+              <Route
+                path="/templates/:templateType/:id/notifications"
+                element={
+                  <NotificationList
+                    id={Number(templateId)}
+                    canToggleNotifications={isNotifAdmin}
+                    apiModel={JobTemplatesAPI}
+                  />
+                }
               />
-            </Route>
-            {!isLoading && (
-              <Route key="not-found" path="*">
+            )}
+            <Route
+              path="/templates/:templateType/:id/jobs"
+              element={
+                <JobList defaultParams={{ job__job_template: template.id }} />
+              }
+            />
+            <Route
+              path="/templates/:templateType/:id/survey/*"
+              element={
+                <TemplateSurvey
+                  template={template}
+                  canEdit={canAddAndEditSurvey}
+                />
+              }
+            />
+            <Route
+              path="/templates/:templateType/:id"
+              element={<Navigate to={`${baseUrl}/details`} replace />}
+            />
+            <Route
+              path="*"
+              element={
                 <ContentError isNotFound>
-                  {match.params.id && (
-                    <Link
-                      to={`/templates/${match?.params?.templateType}/${templateId}/details`}
-                    >
+                  {templateId && (
+                    <Link to={`${baseUrl}/details`}>
                       {t`View Template Details`}
                     </Link>
                   )}
                 </ContentError>
-              </Route>
-            )}
-          </Switch>
+              }
+            />
+          </Routes>
         )}
       </Card>
     </PageSection>

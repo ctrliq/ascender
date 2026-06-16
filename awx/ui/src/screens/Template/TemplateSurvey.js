@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Switch, Route, useParams } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import { JobTemplatesAPI, WorkflowJobTemplatesAPI } from 'api';
 import ContentError from 'components/ContentError';
@@ -12,7 +12,8 @@ function TemplateSurvey({ template, canEdit }) {
   const { t } = useLingui();
   const [surveyEnabled, setSurveyEnabled] = useState(template.survey_enabled);
 
-  const { templateType, id: templateId } = useParams();
+  const templateType = template.type;
+  const templateId = template.id;
 
   const {
     result: survey,
@@ -94,35 +95,41 @@ function TemplateSurvey({ template, canEdit }) {
   }
   return (
     <>
-      <Switch>
+      <Routes>
         {canEdit && (
-          <Route path="/templates/:templateType/:id/survey/add">
-            <SurveyQuestionAdd
-              survey={survey}
-              updateSurvey={updateSurveySpec}
-            />
-          </Route>
-        )}
-        {canEdit && (
-          <Route path="/templates/:templateType/:id/survey/edit">
-            <SurveyQuestionEdit
-              survey={survey}
-              updateSurvey={updateSurveySpec}
-            />
-          </Route>
-        )}
-        <Route path="/templates/:templateType/:id/survey" exact>
-          <SurveyList
-            isLoading={isLoading || updateLoading}
-            survey={survey}
-            surveyEnabled={surveyEnabled}
-            toggleSurvey={toggleSurvey}
-            updateSurvey={updateSurveySpec}
-            deleteSurvey={deleteSurvey}
-            canEdit={canEdit}
+          <Route
+            path="add"
+            element={
+              <SurveyQuestionAdd survey={survey} updateSurvey={updateSurveySpec} />
+            }
           />
-        </Route>
-      </Switch>
+        )}
+        {canEdit && (
+          <Route
+            path="edit"
+            element={
+              <SurveyQuestionEdit
+                survey={survey}
+                updateSurvey={updateSurveySpec}
+              />
+            }
+          />
+        )}
+        <Route
+          index
+          element={
+            <SurveyList
+              isLoading={isLoading || updateLoading}
+              survey={survey}
+              surveyEnabled={surveyEnabled}
+              toggleSurvey={toggleSurvey}
+              updateSurvey={updateSurveySpec}
+              deleteSurvey={deleteSurvey}
+              canEdit={canEdit}
+            />
+          }
+        />
+      </Routes>
       {error && (
         <AlertModal
           isOpen={error}
