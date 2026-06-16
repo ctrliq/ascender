@@ -1,27 +1,26 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
-import { mount } from 'enzyme';
-import { mountWithContexts } from '../../testUtils/enzymeHelpers';
+import { render, act, waitFor } from '@testing-library/react';
+import { renderWithContexts } from '../../testUtils/rtlContexts';
 import useRequest, { useDeleteItems } from './useRequest';
 
-function TestInner() {
-  return <div />;
-}
+const result = { current: null };
+const latest = () => result.current;
+
 function Test({ makeRequest, initialValue = {} }) {
-  const request = useRequest(makeRequest, initialValue);
-  return <TestInner {...request} />;
+  result.current = useRequest(makeRequest, initialValue);
+  return null;
 }
 function DeleteTest({ makeRequest, args = {} }) {
-  const request = useDeleteItems(makeRequest, args);
-  return <TestInner {...request} />;
+  result.current = useDeleteItems(makeRequest, args);
+  return null;
 }
 
 describe('useRequest hooks', () => {
   describe('useRequest', () => {
-    test('should return initial value as result', async () => {
+    test('should return initial value as result', () => {
       const makeRequest = jest.fn();
       makeRequest.mockResolvedValue({ data: 'foo' });
-      const wrapper = mount(
+      render(
         <Test
           makeRequest={makeRequest}
           initialValue={{
@@ -30,7 +29,7 @@ describe('useRequest hooks', () => {
         />
       );
 
-      expect(wrapper.find('TestInner').prop('result')).toEqual({
+      expect(latest().result).toEqual({
         initial: true,
       });
     });
@@ -38,47 +37,43 @@ describe('useRequest hooks', () => {
     test('should return result', async () => {
       const makeRequest = jest.fn();
       makeRequest.mockResolvedValue({ data: 'foo' });
-      const wrapper = mount(<Test makeRequest={makeRequest} />);
+      render(<Test makeRequest={makeRequest} />);
 
       await act(async () => {
-        wrapper.find('TestInner').invoke('request')();
+        latest().request();
       });
-      wrapper.update();
-      expect(wrapper.find('TestInner').prop('result')).toEqual({ data: 'foo' });
+      expect(latest().result).toEqual({ data: 'foo' });
     });
 
-    test('should is isLoading flag', async () => {
+    test('should set isLoading flag', async () => {
       const makeRequest = jest.fn();
       let resolve;
       const promise = new Promise((r) => {
         resolve = r;
       });
       makeRequest.mockReturnValue(promise);
-      const wrapper = mount(<Test makeRequest={makeRequest} />);
+      render(<Test makeRequest={makeRequest} />);
 
       await act(async () => {
-        wrapper.find('TestInner').invoke('request')();
+        latest().request();
       });
-      wrapper.update();
-      expect(wrapper.find('TestInner').prop('isLoading')).toEqual(true);
+      expect(latest().isLoading).toEqual(true);
       await act(async () => {
         resolve({ data: 'foo' });
       });
-      wrapper.update();
-      expect(wrapper.find('TestInner').prop('isLoading')).toEqual(false);
-      expect(wrapper.find('TestInner').prop('result')).toEqual({ data: 'foo' });
+      expect(latest().isLoading).toEqual(false);
+      expect(latest().result).toEqual({ data: 'foo' });
     });
 
     test('should invoke request function', async () => {
       const makeRequest = jest.fn();
       makeRequest.mockResolvedValue({ data: 'foo' });
-      const wrapper = mount(<Test makeRequest={makeRequest} />);
+      render(<Test makeRequest={makeRequest} />);
 
       expect(makeRequest).not.toHaveBeenCalled();
       await act(async () => {
-        wrapper.find('TestInner').invoke('request')();
+        latest().request();
       });
-      wrapper.update();
       expect(makeRequest).toHaveBeenCalledTimes(1);
     });
 
@@ -87,13 +82,12 @@ describe('useRequest hooks', () => {
       const makeRequest = () => {
         throw error;
       };
-      const wrapper = mount(<Test makeRequest={makeRequest} />);
+      render(<Test makeRequest={makeRequest} />);
 
       await act(async () => {
-        wrapper.find('TestInner').invoke('request')();
+        latest().request();
       });
-      wrapper.update();
-      expect(wrapper.find('TestInner').prop('error')).toEqual(error);
+      expect(latest().error).toEqual(error);
     });
 
     test('should reset error/result on each request', async () => {
@@ -105,26 +99,23 @@ describe('useRequest hooks', () => {
 
         return { data: 'foo' };
       };
-      const wrapper = mount(<Test makeRequest={makeRequest} />);
+      render(<Test makeRequest={makeRequest} />);
 
       await act(async () => {
-        wrapper.find('TestInner').invoke('request')(true);
+        latest().request(true);
       });
-      wrapper.update();
-      expect(wrapper.find('TestInner').prop('result')).toEqual({});
-      expect(wrapper.find('TestInner').prop('error')).toEqual(error);
+      expect(latest().result).toEqual({});
+      expect(latest().error).toEqual(error);
       await act(async () => {
-        wrapper.find('TestInner').invoke('request')();
+        latest().request();
       });
-      wrapper.update();
-      expect(wrapper.find('TestInner').prop('result')).toEqual({ data: 'foo' });
-      expect(wrapper.find('TestInner').prop('error')).toEqual(null);
+      expect(latest().result).toEqual({ data: 'foo' });
+      expect(latest().error).toEqual(null);
       await act(async () => {
-        wrapper.find('TestInner').invoke('request')(true);
+        latest().request(true);
       });
-      wrapper.update();
-      expect(wrapper.find('TestInner').prop('result')).toEqual({});
-      expect(wrapper.find('TestInner').prop('error')).toEqual(error);
+      expect(latest().result).toEqual({});
+      expect(latest().error).toEqual(error);
     });
 
     test('should not update state after unmount', async () => {
@@ -134,13 +125,13 @@ describe('useRequest hooks', () => {
         resolve = r;
       });
       makeRequest.mockReturnValue(promise);
-      const wrapper = mount(<Test makeRequest={makeRequest} />);
+      const { unmount } = render(<Test makeRequest={makeRequest} />);
 
       expect(makeRequest).not.toHaveBeenCalled();
       await act(async () => {
-        wrapper.find('TestInner').invoke('request')();
+        latest().request();
       });
-      wrapper.unmount();
+      unmount();
       await act(async () => {
         resolve({ data: 'foo' });
       });
@@ -151,7 +142,7 @@ describe('useRequest hooks', () => {
     test('should invoke delete function', async () => {
       const makeRequest = jest.fn();
       makeRequest.mockResolvedValue({ data: 'foo' });
-      const wrapper = mountWithContexts(
+      renderWithContexts(
         <DeleteTest
           makeRequest={makeRequest}
           args={{
@@ -163,9 +154,8 @@ describe('useRequest hooks', () => {
 
       expect(makeRequest).not.toHaveBeenCalled();
       await act(async () => {
-        wrapper.find('TestInner').invoke('deleteItems')();
+        await latest().deleteItems();
       });
-      wrapper.update();
       expect(makeRequest).toHaveBeenCalledTimes(1);
     });
 
@@ -174,7 +164,7 @@ describe('useRequest hooks', () => {
       const makeRequest = () => {
         throw error;
       };
-      const wrapper = mountWithContexts(
+      renderWithContexts(
         <DeleteTest
           makeRequest={makeRequest}
           args={{
@@ -185,10 +175,9 @@ describe('useRequest hooks', () => {
       );
 
       await act(async () => {
-        wrapper.find('TestInner').invoke('deleteItems')();
+        await latest().deleteItems();
       });
-      wrapper.update();
-      expect(wrapper.find('TestInner').prop('deletionError')).toEqual(error);
+      await waitFor(() => expect(latest().deletionError).toEqual(error));
     });
 
     test('should dismiss error', async () => {
@@ -196,7 +185,7 @@ describe('useRequest hooks', () => {
       const makeRequest = () => {
         throw error;
       };
-      const wrapper = mountWithContexts(
+      renderWithContexts(
         <DeleteTest
           makeRequest={makeRequest}
           args={{
@@ -207,14 +196,13 @@ describe('useRequest hooks', () => {
       );
 
       await act(async () => {
-        wrapper.find('TestInner').invoke('deleteItems')();
+        await latest().deleteItems();
       });
-      wrapper.update();
+      await waitFor(() => expect(latest().deletionError).toEqual(error));
       await act(async () => {
-        wrapper.find('TestInner').invoke('clearDeletionError')();
+        latest().clearDeletionError();
       });
-      wrapper.update();
-      expect(wrapper.find('TestInner').prop('deletionError')).toEqual(null);
+      expect(latest().deletionError).toEqual(null);
     });
   });
 });

@@ -1,118 +1,96 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
-import { mount } from 'enzyme';
+import { render, act } from '@testing-library/react';
 import useSelected from './useSelected';
 
 const array = [{ id: '1' }, { id: '2' }, { id: '3' }];
 
-const TestHook = ({ callback }) => {
-  callback();
+const result = { current: null };
+const latest = () => result.current;
+
+const TestHook = ({ list }) => {
+  result.current = useSelected(list);
   return null;
 };
 
-const testHook = (callback) => {
-  mount(<TestHook callback={callback} />);
+const testHook = (list) => {
+  render(<TestHook list={list} />);
 };
 
 describe('useSelected hook', () => {
-  let selected;
-  let isAllSelected;
-  let handleSelect;
-  let setSelected;
-  let selectAll;
-  let clearSelected;
-
   test('should return expected initial values', () => {
-    testHook(() => {
-      ({ selected, isAllSelected, handleSelect, setSelected } = useSelected());
-    });
-    expect(selected).toEqual([]);
-    expect(isAllSelected).toEqual(false);
-    expect(handleSelect).toBeInstanceOf(Function);
-    expect(setSelected).toBeInstanceOf(Function);
+    testHook();
+    expect(latest().selected).toEqual([]);
+    expect(latest().isAllSelected).toEqual(false);
+    expect(latest().handleSelect).toBeInstanceOf(Function);
+    expect(latest().setSelected).toBeInstanceOf(Function);
   });
 
   test('handleSelect should update and filter selected items', () => {
-    testHook(() => {
-      ({ selected, isAllSelected, handleSelect, setSelected } = useSelected());
-    });
+    testHook();
 
     act(() => {
-      handleSelect(array[0]);
+      latest().handleSelect(array[0]);
     });
-    expect(selected).toEqual([array[0]]);
+    expect(latest().selected).toEqual([array[0]]);
 
     act(() => {
-      handleSelect(array[0]);
+      latest().handleSelect(array[0]);
     });
-    expect(selected).toEqual([]);
+    expect(latest().selected).toEqual([]);
   });
 
   test('should return expected isAllSelected value', () => {
-    testHook(() => {
-      ({ selected, isAllSelected, handleSelect, setSelected } =
-        useSelected(array));
-    });
+    testHook(array);
 
     act(() => {
-      handleSelect(array[0]);
+      latest().handleSelect(array[0]);
     });
-    expect(selected).toEqual([array[0]]);
-    expect(isAllSelected).toEqual(false);
+    expect(latest().selected).toEqual([array[0]]);
+    expect(latest().isAllSelected).toEqual(false);
 
     act(() => {
-      handleSelect(array[1]);
-      handleSelect(array[2]);
+      latest().handleSelect(array[1]);
     });
-    expect(selected).toEqual(array);
-    expect(isAllSelected).toEqual(true);
+    act(() => {
+      latest().handleSelect(array[2]);
+    });
+    expect(latest().selected).toEqual(array);
+    expect(latest().isAllSelected).toEqual(true);
 
     act(() => {
-      setSelected([]);
+      latest().setSelected([]);
     });
-    expect(selected).toEqual([]);
-    expect(isAllSelected).toEqual(false);
+    expect(latest().selected).toEqual([]);
+    expect(latest().isAllSelected).toEqual(false);
   });
 
   test('should return selectAll', () => {
-    testHook(() => {
-      ({ selected, isAllSelected, handleSelect, setSelected, selectAll } =
-        useSelected(array));
-    });
+    testHook(array);
 
     act(() => {
-      selectAll(true);
+      latest().selectAll(true);
     });
-    expect(isAllSelected).toEqual(true);
-    expect(selected).toEqual(array);
+    expect(latest().isAllSelected).toEqual(true);
+    expect(latest().selected).toEqual(array);
 
     act(() => {
-      selectAll(false);
+      latest().selectAll(false);
     });
-    expect(isAllSelected).toEqual(false);
-    expect(selected).toEqual([]);
+    expect(latest().isAllSelected).toEqual(false);
+    expect(latest().selected).toEqual([]);
   });
 
   test('should return clearSelected', () => {
-    testHook(() => {
-      ({
-        selected,
-        isAllSelected,
-        handleSelect,
-        setSelected,
-        selectAll,
-        clearSelected,
-      } = useSelected(array));
+    testHook(array);
+
+    act(() => {
+      latest().selectAll(true);
     });
 
     act(() => {
-      selectAll(true);
+      latest().clearSelected();
     });
-
-    act(() => {
-      clearSelected();
-    });
-    expect(isAllSelected).toEqual(false);
-    expect(selected).toEqual([]);
+    expect(latest().isAllSelected).toEqual(false);
+    expect(latest().selected).toEqual([]);
   });
 });

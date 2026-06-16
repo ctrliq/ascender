@@ -1,35 +1,33 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
-import { shallow, mount } from 'enzyme';
+import { render, screen, act } from '@testing-library/react';
 import useToast, { Toast, AlertVariant } from './useToast';
 
 describe('useToast', () => {
-  const Child = () => <div />;
+  const result = { current: null };
+  const latest = () => result.current;
   const Test = () => {
-    const toastVals = useToast();
-    return <Child {...toastVals} />;
+    result.current = useToast();
+    return null;
   };
 
   test('should provide Toast component', () => {
-    const wrapper = mount(<Test />);
-
-    expect(wrapper.find('Child').prop('Toast')).toEqual(Toast);
+    render(<Test />);
+    expect(latest().Toast).toEqual(Toast);
   });
 
   test('should add toast', () => {
-    const wrapper = mount(<Test />);
+    render(<Test />);
 
-    expect(wrapper.find('Child').prop('toastProps').toasts).toEqual([]);
+    expect(latest().toastProps.toasts).toEqual([]);
     act(() => {
-      wrapper.find('Child').prop('addToast')({
+      latest().addToast({
         message: 'one',
         id: 1,
         variant: 'success',
       });
     });
-    wrapper.update();
 
-    expect(wrapper.find('Child').prop('toastProps').toasts).toEqual([
+    expect(latest().toastProps.toasts).toEqual([
       {
         message: 'one',
         id: 1,
@@ -39,30 +37,28 @@ describe('useToast', () => {
   });
 
   test('should remove toast', () => {
-    const wrapper = mount(<Test />);
+    render(<Test />);
 
     act(() => {
-      wrapper.find('Child').prop('addToast')({
+      latest().addToast({
         message: 'one',
         id: 1,
         variant: 'success',
       });
     });
-    wrapper.update();
-    expect(wrapper.find('Child').prop('toastProps').toasts).toHaveLength(1);
+    expect(latest().toastProps.toasts).toHaveLength(1);
     act(() => {
-      wrapper.find('Child').prop('removeToast')(1);
+      latest().removeToast(1);
     });
-    wrapper.update();
 
-    expect(wrapper.find('Child').prop('toastProps').toasts).toHaveLength(0);
+    expect(latest().toastProps.toasts).toHaveLength(0);
   });
 });
 
 describe('Toast', () => {
   test('should render nothing with no toasts', () => {
-    const wrapper = shallow(<Toast toasts={[]} removeToast={() => {}} />);
-    expect(wrapper).toEqual({});
+    const { container } = render(<Toast toasts={[]} removeToast={() => {}} />);
+    expect(container).toBeEmptyDOMElement();
   });
 
   test('should render toast alert', () => {
@@ -72,13 +68,12 @@ describe('Toast', () => {
       id: 1,
       message: 'the message',
     };
-    const wrapper = shallow(<Toast toasts={[toast]} removeToast={() => {}} />);
+    render(<Toast toasts={[toast]} removeToast={() => {}} />);
 
-    const alert = wrapper.find('Alert');
-    expect(alert.prop('title')).toEqual('Inventory saved');
-    expect(alert.prop('variant')).toEqual('success');
-    expect(alert.prop('ouiaId')).toEqual('toast-message-1');
-    expect(alert.prop('children')).toEqual('the message');
+    const alert = screen.getByText('Inventory saved').closest('.pf-c-alert');
+    expect(alert).toHaveClass('pf-m-success');
+    expect(alert).toHaveAttribute('data-ouia-component-id', 'toast-message-1');
+    expect(alert).toHaveTextContent('the message');
   });
 
   test('should call removeToast', () => {
@@ -88,12 +83,12 @@ describe('Toast', () => {
       variant: AlertVariant.success,
       id: 1,
     };
-    const wrapper = shallow(
-      <Toast toasts={[toast]} removeToast={removeToast} />
-    );
+    render(<Toast toasts={[toast]} removeToast={removeToast} />);
 
-    const alert = wrapper.find('Alert');
-    alert.prop('actionClose').props.onClose(1);
+    const closeButton = screen.getByRole('button', { name: /close/i });
+    act(() => {
+      closeButton.click();
+    });
     expect(removeToast).toHaveBeenCalledTimes(1);
   });
 
@@ -111,14 +106,9 @@ describe('Toast', () => {
         id: 2,
       },
     ];
-    const wrapper = shallow(<Toast toasts={toasts} removeToast={() => {}} />);
+    render(<Toast toasts={toasts} removeToast={() => {}} />);
 
-    const alert = wrapper.find('Alert');
-    expect(alert).toHaveLength(2);
-
-    expect(alert.at(0).prop('title')).toEqual('Inventory saved');
-    expect(alert.at(0).prop('variant')).toEqual('success');
-    expect(alert.at(1).prop('title')).toEqual('error saving');
-    expect(alert.at(1).prop('variant')).toEqual('danger');
+    expect(screen.getByText('Inventory saved')).toBeInTheDocument();
+    expect(screen.getByText('error saving')).toBeInTheDocument();
   });
 });

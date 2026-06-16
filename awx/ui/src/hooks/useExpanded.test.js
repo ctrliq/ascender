@@ -1,96 +1,82 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
-import { mount } from 'enzyme';
+import { render, act } from '@testing-library/react';
 import useExpanded from './useExpanded';
 
 const array = [{ id: '1' }, { id: '2' }, { id: '3' }];
 
-const TestHook = ({ callback }) => {
-  callback();
+const result = { current: null };
+const latest = () => result.current;
+
+const TestHook = ({ list }) => {
+  result.current = useExpanded(list);
   return null;
 };
 
-const testHook = (callback) => {
-  mount(<TestHook callback={callback} />);
+const testHook = (list) => {
+  render(<TestHook list={list} />);
 };
 
-describe('useSelected hook', () => {
-  let expanded;
-  let isAllExpanded;
-  let handleExpand;
-  let setExpanded;
-  let expandAll;
-
+describe('useExpanded hook', () => {
   test('should return expected initial values', () => {
-    testHook(() => {
-      ({ expanded, isAllExpanded, handleExpand, setExpanded, expandAll } =
-        useExpanded());
-    });
-    expect(expanded).toEqual([]);
-    expect(isAllExpanded).toEqual(false);
-    expect(handleExpand).toBeInstanceOf(Function);
-    expect(setExpanded).toBeInstanceOf(Function);
+    testHook();
+    expect(latest().expanded).toEqual([]);
+    expect(latest().isAllExpanded).toEqual(false);
+    expect(latest().handleExpand).toBeInstanceOf(Function);
+    expect(latest().setExpanded).toBeInstanceOf(Function);
   });
 
-  test('handleSelect should update and filter selected items', () => {
-    testHook(() => {
-      ({ expanded, isAllExpanded, handleExpand, setExpanded, expandAll } =
-        useExpanded());
-    });
+  test('handleExpand should update and filter expanded items', () => {
+    testHook();
 
     act(() => {
-      handleExpand(array[0]);
+      latest().handleExpand(array[0]);
     });
-    expect(expanded).toEqual([array[0]]);
+    expect(latest().expanded).toEqual([array[0]]);
 
     act(() => {
-      handleExpand(array[0]);
+      latest().handleExpand(array[0]);
     });
-    expect(expanded).toEqual([]);
+    expect(latest().expanded).toEqual([]);
   });
 
-  test('should return expected isAllSelected value', () => {
-    testHook(() => {
-      ({ expanded, isAllExpanded, handleExpand, setExpanded, expandAll } =
-        useExpanded(array));
-    });
+  test('should return expected isAllExpanded value', () => {
+    testHook(array);
 
     act(() => {
-      handleExpand(array[0]);
+      latest().handleExpand(array[0]);
     });
-    expect(expanded).toEqual([array[0]]);
-    expect(isAllExpanded).toEqual(false);
+    expect(latest().expanded).toEqual([array[0]]);
+    expect(latest().isAllExpanded).toEqual(false);
 
     act(() => {
-      handleExpand(array[1]);
-      handleExpand(array[2]);
+      latest().handleExpand(array[1]);
     });
-    expect(expanded).toEqual(array);
-    expect(isAllExpanded).toEqual(true);
+    act(() => {
+      latest().handleExpand(array[2]);
+    });
+    expect(latest().expanded).toEqual(array);
+    expect(latest().isAllExpanded).toEqual(true);
 
     act(() => {
-      setExpanded([]);
+      latest().setExpanded([]);
     });
-    expect(expanded).toEqual([]);
-    expect(isAllExpanded).toEqual(false);
+    expect(latest().expanded).toEqual([]);
+    expect(latest().isAllExpanded).toEqual(false);
   });
 
-  test('should return selectAll', () => {
-    testHook(() => {
-      ({ expanded, isAllExpanded, handleExpand, setExpanded, expandAll } =
-        useExpanded(array));
-    });
+  test('should return expandAll', () => {
+    testHook(array);
 
     act(() => {
-      expandAll(true);
+      latest().expandAll(true);
     });
-    expect(isAllExpanded).toEqual(true);
-    expect(expanded).toEqual(array);
+    expect(latest().isAllExpanded).toEqual(true);
+    expect(latest().expanded).toEqual(array);
 
     act(() => {
-      expandAll(false);
+      latest().expandAll(false);
     });
-    expect(isAllExpanded).toEqual(false);
-    expect(expanded).toEqual([]);
+    expect(latest().isAllExpanded).toEqual(false);
+    expect(latest().expanded).toEqual([]);
   });
 });
