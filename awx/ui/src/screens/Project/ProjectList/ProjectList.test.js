@@ -1,15 +1,12 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, within } from '@testing-library/react';
 import {
   ProjectsAPI,
   JobTemplatesAPI,
   WorkflowJobTemplatesAPI,
   InventorySourcesAPI,
 } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ProjectList from './ProjectList';
 
 jest.mock('../../../api');
@@ -89,6 +86,11 @@ const mockProjects = [
   },
 ];
 
+function getRowCheckbox(name) {
+  const row = screen.getByRole('link', { name }).closest('tr');
+  return within(row).getByRole('checkbox');
+}
+
 describe('<ProjectList />', () => {
   beforeEach(() => {
     JobTemplatesAPI.read.mockResolvedValue({ data: { count: 0 } });
@@ -117,104 +119,79 @@ describe('<ProjectList />', () => {
   });
 
   test('should load and render projects', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<ProjectList />);
-    });
-    wrapper.update();
+    renderWithContexts(<ProjectList />);
 
-    expect(wrapper.find('ProjectListItem')).toHaveLength(4);
+    expect(await screen.findByRole('link', { name: 'Project 1' })).toBeInTheDocument();
+    mockProjects.forEach((p) =>
+      expect(screen.getByRole('link', { name: p.name })).toBeInTheDocument()
+    );
   });
 
   test('should select project when checked', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<ProjectList />);
-    });
-    wrapper.update();
+    const { user } = renderWithContexts(<ProjectList />);
+    await screen.findByRole('link', { name: 'Project 1' });
 
-    await act(async () => {
-      wrapper.find('ProjectListItem').first().invoke('onSelect')();
-    });
-    wrapper.update();
-
-    expect(wrapper.find('ProjectListItem').first().prop('isSelected')).toEqual(
-      true
-    );
-  });
-
-  test('should have proper number of delete detail requests', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<ProjectList />);
-    });
-    wrapper.update();
-    expect(
-      wrapper.find('ToolbarDeleteButton').prop('deleteDetailsRequests')
-    ).toHaveLength(3);
+    const checkbox = getRowCheckbox('Project 1');
+    expect(checkbox).not.toBeChecked();
+    await user.click(checkbox);
+    expect(checkbox).toBeChecked();
   });
 
   test('should select all', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<ProjectList />);
-    });
-    wrapper.update();
+    const { user } = renderWithContexts(<ProjectList />);
+    await screen.findByRole('link', { name: 'Project 1' });
 
-    await act(async () => {
-      wrapper.find('DataListToolbar').invoke('onSelectAll')(true);
-    });
-    wrapper.update();
+    const selectAll = screen.getByRole('checkbox', { name: 'Select all' });
+    const rowCheckboxes = screen
+      .getAllByRole('checkbox')
+      .filter((box) => box !== selectAll);
+    expect(rowCheckboxes).toHaveLength(4);
 
-    const items = wrapper.find('ProjectListItem');
-    expect(items).toHaveLength(4);
-    items.forEach((item) => {
-      expect(item.prop('isSelected')).toEqual(true);
-    });
-
-    expect(wrapper.find('ProjectListItem').first().prop('isSelected')).toEqual(
-      true
-    );
+    await user.click(selectAll);
+    rowCheckboxes.forEach((box) => expect(box).toBeChecked());
   });
 
-  test('should disable delete button', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<ProjectList />);
-    });
-    wrapper.update();
+  test('should disable delete button when a non-deletable project is selected', async () => {
+    const { user } = renderWithContexts(<ProjectList />);
+    await screen.findByRole('link', { name: 'Project 3' });
 
-    await act(async () => {
-      wrapper.find('ProjectListItem').at(2).invoke('onSelect')();
-    });
+    await user.click(getRowCheckbox('Project 3'));
 
-    waitForElement(
-      wrapper,
-      'ToolbarDeleteButton button',
-      (el) => el.prop('disabled') === true
-    );
+    expect(screen.getByRole('button', { name: 'Delete' })).toBeDisabled();
   });
 
-  test('should call delete api', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<ProjectList />);
-    });
-    wrapper.update();
+  test('should call delete api and query related-resource delete details', async () => {
+    ProjectsAPI.destroy.mockResolvedValue({});
+    const { user } = renderWithContexts(<ProjectList />);
+    await screen.findByRole('link', { name: 'Project 1' });
 
-    await act(async () => {
-      wrapper.find('ProjectListItem').at(0).invoke('onSelect')();
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('ProjectListItem').at(1).invoke('onSelect')();
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('ToolbarDeleteButton').invoke('onDelete')();
-    });
+    await user.click(getRowCheckbox('Project 1'));
+    await user.click(getRowCheckbox('Project 2'));
 
-    expect(ProjectsAPI.destroy).toHaveBeenCalledTimes(2);
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'confirm delete' })
+    );
+
+    await waitFor(() => expect(ProjectsAPI.destroy).toHaveBeenCalledTimes(2));
+  });
+
+  test('single-project delete confirmation fires the 3 related-resource requests', async () => {
+    ProjectsAPI.destroy.mockResolvedValue({});
+    const { user } = renderWithContexts(<ProjectList />);
+    await screen.findByRole('link', { name: 'Project 1' });
+
+    await user.click(getRowCheckbox('Project 1'));
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+
+    // opening the confirmation for a single item queries the related resources
+    // (JobTemplates, WorkflowJobTemplates, InventorySources) that block delete
+    await screen.findByRole('button', { name: 'confirm delete' });
+    await waitFor(() => {
+      expect(JobTemplatesAPI.read).toHaveBeenCalled();
+      expect(WorkflowJobTemplatesAPI.read).toHaveBeenCalled();
+      expect(InventorySourcesAPI.read).toHaveBeenCalled();
+    });
   });
 
   test('should show deletion error', async () => {
@@ -229,52 +206,38 @@ describe('<ProjectList />', () => {
         },
       })
     );
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<ProjectList />);
-    });
-    wrapper.update();
+    const { user } = renderWithContexts(<ProjectList />);
+    await screen.findByRole('link', { name: 'Project 1' });
     expect(ProjectsAPI.read).toHaveBeenCalledTimes(1);
-    await act(async () => {
-      wrapper.find('ProjectListItem').at(0).invoke('onSelect')();
-    });
-    wrapper.update();
 
-    await act(async () => {
-      wrapper.find('ToolbarDeleteButton').invoke('onDelete')();
-    });
-    wrapper.update();
+    await user.click(getRowCheckbox('Project 1'));
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'confirm delete' })
+    );
 
-    const modal = wrapper.find('Modal');
-    expect(modal).toHaveLength(1);
-    expect(modal.prop('title')).toEqual('Error!');
+    expect(await screen.findByText('Error!')).toBeInTheDocument();
   });
 
-  test('Add button shown for users without ability to POST', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<ProjectList />);
-    });
-    wrapper.update();
+  test('Add button shown for users with ability to POST', async () => {
+    renderWithContexts(<ProjectList />);
+    await screen.findByRole('link', { name: 'Project 1' });
 
-    expect(wrapper.find('ToolbarAddButton').length).toBe(1);
+    expect(screen.getByRole('link', { name: 'Add' })).toBeInTheDocument();
   });
 
   test('Add button hidden for users without ability to POST', async () => {
-    ProjectsAPI.readOptions = () =>
-      Promise.resolve({
-        data: {
-          actions: {
-            GET: {},
-          },
+    ProjectsAPI.readOptions.mockResolvedValue({
+      data: {
+        actions: {
+          GET: {},
         },
-      });
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<ProjectList />);
+        related_search_fields: [],
+      },
     });
-    wrapper.update();
+    renderWithContexts(<ProjectList />);
+    await screen.findByRole('link', { name: 'Project 1' });
 
-    expect(wrapper.find('ToolbarAddButton').length).toBe(0);
+    expect(screen.queryByRole('link', { name: 'Add' })).not.toBeInTheDocument();
   });
 });

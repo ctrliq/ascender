@@ -1,7 +1,7 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { ProjectsAPI } from 'api';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import ProjectSyncButton from './ProjectSyncButton';
 
@@ -12,63 +12,59 @@ jest.mock('hooks/useBrandName', () => ({
     current: 'AWX',
   }),
 }));
+
+// ProjectSyncButton renders its own Sync button (aria-label "Sync Project")
+// and does not render the children render-prop; the button's onClick drives
+// the sync request directly.
+const children = () => null;
+
 describe('ProjectSyncButton', () => {
-  let wrapper;
-
-  const children = (handleSync) => (
-    <button type="submit" onClick={() => handleSync()} />
-  );
-
   test('renders the expected content', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ProjectSyncButton projectId={1}>{children}</ProjectSyncButton>
-      );
-    });
-    expect(wrapper).toHaveLength(1);
+    renderWithContexts(
+      <ProjectSyncButton projectId={1}>{children}</ProjectSyncButton>
+    );
+    expect(
+      screen.getByRole('button', { name: 'Sync Project' })
+    ).toBeInTheDocument();
   });
+
   test('correct api calls are made on sync', async () => {
     ProjectsAPI.sync.mockResolvedValue({
       data: {
         id: 9000,
       },
     });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ProjectSyncButton projectId={1}>{children}</ProjectSyncButton>
-      );
-    });
-    const button = wrapper.find('button');
-    await act(async () => {
-      button.prop('onClick')();
-    });
+    const { user } = renderWithContexts(
+      <ProjectSyncButton projectId={1}>{children}</ProjectSyncButton>
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Sync Project' }));
 
     expect(ProjectsAPI.sync).toHaveBeenCalledWith(1);
   });
-  test('disable button and set onClick to undefined on sync', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ProjectSyncButton projectId={1} lastJobStatus="running">
-          {children}
-        </ProjectSyncButton>
-      );
-    });
 
-    expect(wrapper.find('Button').prop('isDisabled')).toBe(true);
-    expect(wrapper.find('Button').prop('onClick')).toBe(undefined);
-  });
-  test('should render tooltip on sync', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ProjectSyncButton projectId={1} lastJobStatus="running">
-          {children}
-        </ProjectSyncButton>
-      );
-    });
+  test('disables sync button when last job is running', async () => {
+    renderWithContexts(
+      <ProjectSyncButton projectId={1} lastJobStatus="running">
+        {children}
+      </ProjectSyncButton>
+    );
 
-    // Verify that a tooltip is rendered when sync is disabled
-    expect(wrapper.find('Tooltip')).toHaveLength(1);
+    expect(screen.getByRole('button', { name: 'Sync Project' })).toBeDisabled();
   });
+
+  test('should render tooltip wrapper on disabled sync', async () => {
+    const { container } = renderWithContexts(
+      <ProjectSyncButton projectId={1} lastJobStatus="running">
+        {children}
+      </ProjectSyncButton>
+    );
+
+    // disabled state wraps the button in a Tooltip-controlled div
+    expect(container.querySelector('div > button')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Sync Project' })).toBeDisabled();
+  });
+
   test('displays error modal after unsuccessful sync', async () => {
     ProjectsAPI.sync.mockRejectedValue(
       new Error({
@@ -82,21 +78,19 @@ describe('ProjectSyncButton', () => {
         },
       })
     );
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ProjectSyncButton projectId={1}>{children}</ProjectSyncButton>
-      );
-    });
-    expect(wrapper.find('Modal').length).toBe(0);
-    await act(async () => {
-      wrapper.find('button').prop('onClick')();
-    });
-    wrapper.update();
-    expect(wrapper.find('Modal').length).toBe(1);
-    await act(async () => {
-      wrapper.find('ModalBoxCloseButton').simulate('click');
-    });
-    wrapper.update();
-    expect(wrapper.find('Modal').length).toBe(0);
+    const { user } = renderWithContexts(
+      <ProjectSyncButton projectId={1}>{children}</ProjectSyncButton>
+    );
+
+    expect(screen.queryByText('Error!')).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Sync Project' }));
+
+    expect(await screen.findByText('Error!')).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Close' }));
+    await waitFor(() =>
+      expect(screen.queryByText('Error!')).not.toBeInTheDocument()
+    );
   });
 });

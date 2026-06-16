@@ -1,13 +1,10 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router-dom-v5-compat';
 import { OrganizationsAPI, ProjectsAPI, RootAPI } from 'api';
 import mockOrganization from 'util/data.organization.json';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import mockDetails from './data.project.json';
 import Project from './Project';
 
@@ -33,7 +30,7 @@ async function getOrganizations() {
 // nested v6 <Routes> resolve and useParams sees the id.
 function renderProject(initialEntry = '/projects/1/details') {
   const history = createMemoryHistory({ initialEntries: [initialEntry] });
-  return mountWithContexts(
+  return renderWithContexts(
     <Routes>
       <Route
         path="/projects/:id/*"
@@ -45,8 +42,6 @@ function renderProject(initialEntry = '/projects/1/details') {
 }
 
 describe('<Project />', () => {
-  let wrapper;
-
   beforeEach(() => {
     OrganizationsAPI.read = jest.fn();
     ProjectsAPI.readDetail = jest.fn();
@@ -59,21 +54,19 @@ describe('<Project />', () => {
   });
 
   test('initially renders successfully', async () => {
-    await act(async () => {
-      renderProject();
-    });
+    renderProject();
+    expect(
+      await screen.findByRole('tab', { name: 'Details' })
+    ).toBeInTheDocument();
   });
 
   test('notifications tab shown for admins', async () => {
-    await act(async () => {
-      wrapper = renderProject();
-    });
-    const tabs = await waitForElement(
-      wrapper,
-      '.pf-c-tabs__item-text',
-      (el) => el.length === 6
-    );
-    expect(tabs.at(4).text()).toEqual('Notifications');
+    renderProject();
+    await screen.findByRole('tab', { name: 'Details' });
+
+    expect(await screen.findByRole('tab', { name: 'Notifications' }))
+      .toBeInTheDocument();
+    await waitFor(() => expect(screen.getAllByRole('tab')).toHaveLength(6));
   });
 
   test('notifications tab hidden with reduced permissions', async () => {
@@ -83,38 +76,32 @@ describe('<Project />', () => {
       previous: null,
       data: { results: [] },
     });
-    await act(async () => {
-      wrapper = renderProject();
-    });
-    const tabs = await waitForElement(
-      wrapper,
-      '.pf-c-tabs__item-text',
-      (el) => el.length === 5
-    );
-    tabs.forEach((tab) => expect(tab.text()).not.toEqual('Notifications'));
+    renderProject();
+    await screen.findByRole('tab', { name: 'Details' });
+
+    await waitFor(() => expect(screen.getAllByRole('tab')).toHaveLength(5));
+    expect(
+      screen.queryByRole('tab', { name: 'Notifications' })
+    ).not.toBeInTheDocument();
   });
 
-  test('schedules tab shown for scm based projects.', async () => {
+  test('schedules tab shown for scm based projects', async () => {
     OrganizationsAPI.read = async () => ({
       count: 0,
       next: null,
       previous: null,
       data: { results: [] },
     });
+    renderProject();
+    await screen.findByRole('tab', { name: 'Details' });
 
-    await act(async () => {
-      wrapper = renderProject();
-    });
-    const tabs = await waitForElement(
-      wrapper,
-      '.pf-c-tabs__item',
-      (el) => el.length === 5
-    );
-    expect(tabs.at(4).text()).toEqual('Schedules');
+    expect(
+      await screen.findByRole('tab', { name: 'Schedules' })
+    ).toBeInTheDocument();
   });
 
-  test('schedules tab hidden for manual projects.', async () => {
-    const manualDetails = Object.assign(mockDetails, { scm_type: '' });
+  test('schedules tab hidden for manual projects', async () => {
+    const manualDetails = { ...mockDetails, scm_type: '' };
     ProjectsAPI.readDetail = async () => ({ data: manualDetails });
     OrganizationsAPI.read = async () => ({
       count: 0,
@@ -122,29 +109,23 @@ describe('<Project />', () => {
       previous: null,
       data: { results: [] },
     });
+    renderProject();
+    await screen.findByRole('tab', { name: 'Details' });
 
-    await act(async () => {
-      wrapper = renderProject();
-    });
-    const tabs = await waitForElement(
-      wrapper,
-      '.pf-c-tabs__item',
-      (el) => el.length === 4
-    );
-    tabs.forEach((tab) => expect(tab.text()).not.toEqual('Schedules'));
+    await waitFor(() => expect(screen.getAllByRole('tab')).toHaveLength(4));
+    expect(
+      screen.queryByRole('tab', { name: 'Schedules' })
+    ).not.toBeInTheDocument();
   });
 
   test('should show content error when user attempts to navigate to erroneous route', async () => {
-    await act(async () => {
-      wrapper = renderProject('/projects/1/foobar');
-    });
-    await waitForElement(wrapper, 'ContentError', (el) => el.length === 1);
+    renderProject('/projects/1/foobar');
+    expect(await screen.findByText('Not Found')).toBeInTheDocument();
   });
 
   test('redirects the bare /projects/:id to the details tab', async () => {
-    await act(async () => {
-      wrapper = renderProject('/projects/1');
-    });
-    await waitForElement(wrapper, 'ProjectDetail', (el) => el.length === 1);
+    renderProject('/projects/1');
+    // ProjectDetail renders the project name detail
+    expect(await screen.findByText('Name')).toBeInTheDocument();
   });
 });
