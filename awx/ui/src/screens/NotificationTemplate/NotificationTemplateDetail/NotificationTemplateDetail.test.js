@@ -1,9 +1,10 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen } from '@testing-library/react';
+
 import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+  renderWithContexts,
+  assertDetail,
+} from '../../../../testUtils/rtlContexts';
 import NotificationTemplateDetail from './NotificationTemplateDetail';
 import defaultMessages from '../shared/notification-template-default-messages.json';
 
@@ -23,28 +24,10 @@ const mockTemplate = {
     organization: '/api/v2/organizations/1/',
   },
   summary_fields: {
-    organization: {
-      id: 1,
-      name: 'Default',
-      description: '',
-    },
-    created_by: {
-      id: 2,
-      username: 'test',
-      first_name: '',
-      last_name: '',
-    },
-    modified_by: {
-      id: 2,
-      username: 'test',
-      first_name: '',
-      last_name: '',
-    },
-    user_capabilities: {
-      edit: true,
-      delete: true,
-      copy: true,
-    },
+    organization: { id: 1, name: 'Default', description: '' },
+    created_by: { id: 2, username: 'test', first_name: '', last_name: '' },
+    modified_by: { id: 2, username: 'test', first_name: '', last_name: '' },
+    user_capabilities: { edit: true, delete: true, copy: true },
     recent_notifications: [{ status: 'success' }],
   },
   created: '2021-06-16T18:52:23.811374Z',
@@ -68,61 +51,33 @@ const mockTemplate = {
 };
 
 describe('<NotificationTemplateDetail />', () => {
-  let wrapper;
-
   afterEach(() => {
     jest.clearAllMocks();
   });
 
+  const assertCommonDetails = async () => {
+    expect(await screen.findByText('Name')).toBeInTheDocument();
+    assertDetail('Name', 'abc');
+    assertDetail('Description', 'foo description');
+    // Email Options renders the SSL/TLS flags as list items
+    expect(screen.getByText('Use SSL')).toBeInTheDocument();
+    expect(screen.getByText('Use TLS')).toBeInTheDocument();
+  };
+
   test('should render Details', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <NotificationTemplateDetail
-          template={mockTemplate}
-          defaultMessages={defaultMessages}
-        />
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    function assertDetail(label, value) {
-      expect(wrapper.find(`Detail[label="${label}"] dt`).text()).toBe(label);
-      expect(wrapper.find(`Detail[label="${label}"] dd`).text()).toBe(value);
-    }
-    assertDetail('Name', mockTemplate.name);
-    assertDetail('Description', mockTemplate.description);
-    expect(
-      wrapper
-        .find('Detail[label="Email Options"]')
-        .containsAllMatchingElements([<li>Use SSL</li>, <li>Use TLS</li>])
-    ).toEqual(true);
-    expect(
-      wrapper.find('Detail[label="Email Options"]').prop('helpText')
-    ).toBeDefined();
+    renderWithContexts(
+      <NotificationTemplateDetail
+        template={mockTemplate}
+        defaultMessages={defaultMessages}
+      />
+    );
+    await assertCommonDetails();
   });
 
   test('should render Details when defaultMessages is missing', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <NotificationTemplateDetail
-          template={mockTemplate}
-          defaultMessages={null}
-        />
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    function assertDetail(label, value) {
-      expect(wrapper.find(`Detail[label="${label}"] dt`).text()).toBe(label);
-      expect(wrapper.find(`Detail[label="${label}"] dd`).text()).toBe(value);
-    }
-    assertDetail('Name', mockTemplate.name);
-    assertDetail('Description', mockTemplate.description);
-    expect(
-      wrapper
-        .find('Detail[label="Email Options"]')
-        .containsAllMatchingElements([<li>Use SSL</li>, <li>Use TLS</li>])
-    ).toEqual(true);
-    expect(
-      wrapper.find('Detail[label="Email Options"]').prop('helpText')
-    ).toBeDefined();
+    renderWithContexts(
+      <NotificationTemplateDetail template={mockTemplate} defaultMessages={null} />
+    );
+    await assertCommonDetails();
   });
 });

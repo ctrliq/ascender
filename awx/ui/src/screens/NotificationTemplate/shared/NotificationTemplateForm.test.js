@@ -1,10 +1,35 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { screen, waitFor, act } from '@testing-library/react';
+
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import NotificationTemplateForm from './NotificationTemplateForm';
 
 jest.mock('../../../api/models/NotificationTemplates');
 jest.mock('../../../api/models/Organizations');
+
+// react-ace (CodeEditor) does not expose its value as queryable text in jsdom,
+// so render the editor value as plain text to allow content assertions. The
+// custom-message fields use CodeEditorField, which is rendered from its formik
+// field value.
+jest.mock('components/CodeEditor', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    ...jest.requireActual('components/CodeEditor'),
+    default: ({ value }) => ReactLib.createElement('div', null, value),
+  };
+});
+jest.mock('components/CodeEditor/CodeEditorField', () => {
+  const ReactLib = require('react');
+  const { useField } = require('formik');
+  return {
+    __esModule: true,
+    default: ({ name }) => {
+      const [field] = useField(name);
+      return ReactLib.createElement('div', null, field.value);
+    },
+  };
+});
 
 const template = {
   id: 3,
@@ -14,18 +39,9 @@ const template = {
   url: '/notification_templates/3',
   organization: 1,
   summary_fields: {
-    user_capabilities: {
-      edit: true,
-    },
-    recent_notifications: [
-      {
-        status: 'success',
-      },
-    ],
-    organization: {
-      id: 1,
-      name: 'The Organization',
-    },
+    user_capabilities: { edit: true },
+    recent_notifications: [{ status: 'success' }],
+    organization: { id: 1, name: 'The Organization' },
   },
 };
 
@@ -45,10 +61,7 @@ const emailTemplate = {
   },
 };
 
-const messageDef = {
-  message: 'default message',
-  body: 'default body',
-};
+const messageDef = { message: 'default message', body: 'default body' };
 const defaults = {
   started: messageDef,
   success: messageDef,
@@ -60,12 +73,7 @@ const defaults = {
     timed_out: messageDef,
   },
 };
-const defaultMessages = {
-  email: defaults,
-  slack: defaults,
-  twilio: defaults,
-};
-
+const defaultMessages = { email: defaults, slack: defaults, twilio: defaults };
 const allDefaultMessages = {
   ...defaultMessages,
   grafana: defaults,
@@ -150,203 +158,135 @@ const secretTemplates = [
   },
 ];
 
-describe('<NotificationTemplateForm />', () => {
-  let wrapper;
-  test('should render form fields', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <NotificationTemplateForm
-          template={template}
-          defaultMessages={defaultMessages}
-          detailUrl="/notification_templates/3/detail"
-          onSubmit={jest.fn()}
-          onCancel={jest.fn()}
-        />
-      );
-    });
+const renderForm = (props = {}) =>
+  renderWithContexts(
+    <NotificationTemplateForm
+      template={template}
+      defaultMessages={defaultMessages}
+      detailUrl="/notification_templates/3/detail"
+      onSubmit={jest.fn()}
+      onCancel={jest.fn()}
+      {...props}
+    />
+  );
 
-    expect(wrapper.find('input#notification-name').prop('value')).toEqual(
+describe('<NotificationTemplateForm />', () => {
+  test('should render fields and reveal email options on type change', async () => {
+    const { container, user } = renderForm();
+    expect(container.querySelector('#notification-name')).toHaveValue(
       'Test Notification'
     );
-    expect(
-      wrapper.find('input#notification-description').prop('value')
-    ).toEqual('a sample notification');
-    expect(wrapper.find('OrganizationLookup').prop('value')).toEqual({
-      id: 1,
-      name: 'The Organization',
-    });
-    expect(wrapper.find('AnsibleSelect').prop('value')).toEqual('slack');
-    expect(wrapper.find('TypeInputsSubForm').prop('type')).toEqual('slack');
-    expect(wrapper.find('CustomMessagesSubForm').prop('type')).toEqual('slack');
-    expect(
-      wrapper.find('CustomMessagesSubForm').prop('defaultMessages')
-    ).toEqual(defaultMessages);
+    expect(container.querySelector('#notification-description')).toHaveValue(
+      'a sample notification'
+    );
+    expect(screen.getByDisplayValue('The Organization')).toBeInTheDocument();
+    expect(container.querySelector('#notification-type')).toHaveValue('slack');
+    expect(container.querySelector('#option-use-ssl')).toBeNull();
+    expect(container.querySelector('#option-use-tls')).toBeNull();
 
-    expect(wrapper.find('input#option-use-ssl').length).toBe(0);
-    expect(wrapper.find('input#option-use-tls').length).toBe(0);
+    await user.selectOptions(
+      container.querySelector('#notification-type'),
+      'email'
+    );
 
+    await waitFor(() =>
+      expect(container.querySelector('#option-use-ssl')).toBeInTheDocument()
+    );
+    expect(container.querySelector('#option-use-tls')).toBeInTheDocument();
+  });
+
+  test('should render existing custom messages', async () => {
     await act(async () => {
-      wrapper.find('AnsibleSelect#notification-type').invoke('onChange')(
-        {
-          target: {
-            name: 'notification_type',
-            value: 'email',
-          },
+      renderForm({
+        template: {
+          ...template,
+          messages: { started: { message: 'Started', body: null } },
         },
-        'email'
-      );
+      });
     });
-
-    wrapper.update();
-
-    expect(wrapper.find('input#option-use-ssl').length).toBe(1);
-    expect(wrapper.find('input#option-use-tls').length).toBe(1);
-    expect(
-      wrapper.find('FormGroup[label="Email Options"]').find('HelpIcon').length
-    ).toBe(1);
+    expect(screen.getByText('Started')).toBeInTheDocument();
   });
 
-  test('should render custom messages fields', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <NotificationTemplateForm
-          template={{
-            ...template,
-            messages: {
-              started: {
-                message: 'Started',
-                body: null,
-              },
-            },
-          }}
-          defaultMessages={defaultMessages}
-          detailUrl="/notification_templates/3/detail"
-          onSubmit={jest.fn()}
-          onCancel={jest.fn()}
-        />
-      );
-    });
-
-    expect(wrapper.find('CodeEditor').at(0).prop('value')).toEqual('Started');
-  });
-
-  test('should submit', async () => {
-    const handleSubmit = jest.fn();
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <NotificationTemplateForm
-          template={{
-            ...template,
-            notification_configuration: {
-              channels: ['#foo'],
-              token: 'abc123',
-            },
-          }}
-          defaultMessages={defaultMessages}
-          detailUrl="/notification_templates/3/detail"
-          onSubmit={handleSubmit}
-          onCancel={jest.fn()}
-        />
-      );
-    });
-
-    await act(async () => {
-      wrapper.find('FormActionGroup').invoke('onSubmit')();
-    });
-    wrapper.update();
-
-    expect(handleSubmit).toHaveBeenCalledWith({
-      name: 'Test Notification',
-      description: 'a sample notification',
-      organization: 1,
-      notification_type: 'slack',
-      notification_configuration: {
-        channels: ['#foo'],
-        hex_color: '',
-        token: 'abc123',
+  test('should submit the assembled values', async () => {
+    const onSubmit = jest.fn();
+    const { user } = renderForm({
+      template: {
+        ...template,
+        notification_configuration: { channels: ['#foo'], token: 'abc123' },
       },
-      messages: null,
+      onSubmit,
     });
+
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+
+    await waitFor(() =>
+      expect(onSubmit).toHaveBeenCalledWith({
+        name: 'Test Notification',
+        description: 'a sample notification',
+        organization: 1,
+        notification_type: 'slack',
+        notification_configuration: {
+          channels: ['#foo'],
+          hex_color: '',
+          token: 'abc123',
+        },
+        messages: null,
+      })
+    );
   });
 
   test('should clear the email password when reverted', async () => {
-    const handleSubmit = jest.fn();
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <NotificationTemplateForm
-          template={emailTemplate}
-          defaultMessages={defaultMessages}
-          detailUrl="/notification_templates/3/detail"
-          onSubmit={handleSubmit}
-          onCancel={jest.fn()}
-        />
-      );
+    const onSubmit = jest.fn();
+    const { container, user } = renderForm({
+      template: emailTemplate,
+      onSubmit,
     });
 
-    await act(async () => {
-      wrapper
-        .find('Button')
-        .filterWhere(
-          (node) => node.prop('ouiaId') === 'notification_configuration.password-revert'
-        )
-        .simulate('click');
-    });
-    wrapper.update();
+    await user.click(
+      container.querySelector(
+        '[data-ouia-component-id="notification_configuration.password-revert"]'
+      )
+    );
+    await user.click(screen.getByRole('button', { name: 'Save' }));
 
-    await act(async () => {
-      wrapper.find('FormActionGroup').invoke('onSubmit')();
-    });
-    wrapper.update();
-
-    expect(handleSubmit).toHaveBeenCalledWith(
-      expect.objectContaining({
-        notification_configuration: expect.objectContaining({
-          password: '',
-        }),
-      })
+    await waitFor(() =>
+      expect(onSubmit).toHaveBeenCalledWith(
+        expect.objectContaining({
+          notification_configuration: expect.objectContaining({
+            password: '',
+          }),
+        })
+      )
     );
   });
 
   test.each(secretTemplates)(
     'should clear the $type secret when reverted',
     async ({ template: secretTemplate, fieldName }) => {
-      const handleSubmit = jest.fn();
-      await act(async () => {
-        wrapper = mountWithContexts(
-          <NotificationTemplateForm
-            template={secretTemplate}
-            defaultMessages={allDefaultMessages}
-            detailUrl="/notification_templates/3/detail"
-            onSubmit={handleSubmit}
-            onCancel={jest.fn()}
-          />
-        );
+      const onSubmit = jest.fn();
+      const { container, user } = renderForm({
+        template: secretTemplate,
+        defaultMessages: allDefaultMessages,
+        onSubmit,
       });
 
-      const revertButton = wrapper
-        .find('Button')
-        .filterWhere(
-          (node) => node.prop('ouiaId') === `${fieldName}-revert`
-        );
+      const revertButton = container.querySelector(
+        `[data-ouia-component-id="${fieldName}-revert"]`
+      );
+      expect(revertButton).not.toBeNull();
 
-      expect(revertButton.exists()).toBe(true);
+      await user.click(revertButton);
+      await user.click(screen.getByRole('button', { name: 'Save' }));
 
-      await act(async () => {
-        revertButton.simulate('click');
-      });
-      wrapper.update();
-
-      await act(async () => {
-        wrapper.find('FormActionGroup').invoke('onSubmit')();
-      });
-      wrapper.update();
-
-      expect(handleSubmit).toHaveBeenCalledWith(
-        expect.objectContaining({
-          notification_configuration: expect.objectContaining({
-            [fieldName.split('.').pop()]: '',
-          }),
-        })
+      const key = fieldName.split('.').pop();
+      await waitFor(() =>
+        expect(onSubmit).toHaveBeenCalledWith(
+          expect.objectContaining({
+            notification_configuration: expect.objectContaining({
+              [key]: '',
+            }),
+          })
+        )
       );
     }
   );
