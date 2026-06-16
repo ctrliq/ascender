@@ -1,11 +1,8 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 
 import { CredentialsAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import ToolbarDeleteButton from './ToolbarDeleteButton';
 
 jest.mock('../../api');
@@ -28,7 +25,6 @@ const itemC = {
 
 describe('<ToolbarDeleteButton />', () => {
   let deleteDetailsRequests;
-  let wrapper;
   beforeEach(() => {
     deleteDetailsRequests = [
       {
@@ -43,77 +39,72 @@ describe('<ToolbarDeleteButton />', () => {
   });
 
   test('should render button', () => {
-    wrapper = mountWithContexts(
+    renderWithContexts(
       <ToolbarDeleteButton onDelete={() => {}} itemsToDelete={[]} />
     );
-    expect(wrapper.find('button')).toHaveLength(1);
+    expect(screen.getByRole('button', { name: 'Delete' })).toBeInTheDocument();
   });
 
   test('should open confirmation modal', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ToolbarDeleteButton
-          onDelete={() => {}}
-          itemsToDelete={[itemA]}
-          deleteDetailsRequests={deleteDetailsRequests}
-          deleteMessage="Delete this?"
-          warningMessage="Are you sure to want to delete this"
-        />
-      );
-    });
+    const { user } = renderWithContexts(
+      <ToolbarDeleteButton
+        onDelete={() => {}}
+        itemsToDelete={[itemA]}
+        deleteDetailsRequests={deleteDetailsRequests}
+        deleteMessage="Delete this?"
+        warningMessage="Are you sure to want to delete this"
+      />
+    );
 
-    expect(wrapper.find('Modal')).toHaveLength(0);
-    await act(async () => {
-      wrapper.find('button').prop('onClick')();
-    });
-    await waitForElement(wrapper, 'Modal', (el) => el.length > 0);
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+
+    const modal = await screen.findByRole('dialog');
     expect(CredentialsAPI.read).toHaveBeenCalled();
-    expect(wrapper.find('Modal')).toHaveLength(1);
+    expect(modal).toBeInTheDocument();
+    // the delete-details badge is rendered with this aria-label
     expect(
-      wrapper.find('div[aria-label="Workflow Job Template Node: 1"]')
-    ).toHaveLength(1);
+      screen.getByLabelText('Workflow Job Template Node: 1')
+    ).toBeInTheDocument();
     expect(
-      wrapper.find('Button[aria-label="confirm delete"]').prop('isDisabled')
-    ).toBe(false);
-    expect(wrapper.find('div[aria-label="Delete this?"]')).toHaveLength(1);
+      screen.getByRole('button', { name: 'confirm delete' })
+    ).not.toBeDisabled();
+    expect(screen.getByLabelText('Delete this?')).toBeInTheDocument();
   });
 
   test('should open confirmation with enabled delete button modal', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ToolbarDeleteButton
-          onDelete={() => {}}
-          itemsToDelete={[
-            {
-              name: 'foo',
-              id: 1,
-              type: 'credential_type',
-              summary_fields: { user_capabilities: { delete: true } },
-            },
-            {
-              name: 'bar',
-              id: 2,
-              type: 'credential_type',
-              summary_fields: { user_capabilities: { delete: true } },
-            },
-          ]}
-          deleteDetailsRequests={deleteDetailsRequests}
-          deleteMessage="Delete this?"
-          warningMessage="Are you sure to want to delete this"
-        />
-      );
-    });
+    const { user } = renderWithContexts(
+      <ToolbarDeleteButton
+        onDelete={() => {}}
+        itemsToDelete={[
+          {
+            name: 'foo',
+            id: 1,
+            type: 'credential_type',
+            summary_fields: { user_capabilities: { delete: true } },
+          },
+          {
+            name: 'bar',
+            id: 2,
+            type: 'credential_type',
+            summary_fields: { user_capabilities: { delete: true } },
+          },
+        ]}
+        deleteDetailsRequests={deleteDetailsRequests}
+        deleteMessage="Delete this?"
+        warningMessage="Are you sure to want to delete this"
+      />
+    );
 
-    expect(wrapper.find('Modal')).toHaveLength(0);
-    await act(async () => {
-      wrapper.find('button').prop('onClick')();
-    });
-    await waitForElement(wrapper, 'Modal', (el) => el.length > 0);
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+
+    expect(await screen.findByRole('dialog')).toBeInTheDocument();
+    // multiple items skip the per-item delete details request
     expect(CredentialsAPI.read).not.toHaveBeenCalled();
-    expect(wrapper.find('Modal')).toHaveLength(1);
     expect(
-      wrapper.find('Button[aria-label="confirm delete"]').prop('isDisabled')
-    ).toBe(false);
+      screen.getByRole('button', { name: 'confirm delete' })
+    ).not.toBeDisabled();
   });
 
   test('should disable confirm delete button', async () => {
@@ -123,37 +114,33 @@ describe('<ToolbarDeleteButton />', () => {
         request: CredentialsAPI.read.mockResolvedValue({ data: { count: 3 } }),
       },
     ];
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ToolbarDeleteButton
-          onDelete={() => {}}
-          itemsToDelete={[
-            {
-              name: 'foo',
-              id: 1,
-              type: 'credential_type',
-              summary_fields: { user_capabilities: { delete: true } },
-            },
-          ]}
-          deleteDetailsRequests={request}
-          deleteMessage="Delete this?"
-          warningMessage="Are you sure to want to delete this"
-        />
-      );
-    });
+    const { user } = renderWithContexts(
+      <ToolbarDeleteButton
+        onDelete={() => {}}
+        itemsToDelete={[
+          {
+            name: 'foo',
+            id: 1,
+            type: 'credential_type',
+            summary_fields: { user_capabilities: { delete: true } },
+          },
+        ]}
+        deleteDetailsRequests={request}
+        deleteMessage="Delete this?"
+        warningMessage="Are you sure to want to delete this"
+      />
+    );
 
-    expect(wrapper.find('Modal')).toHaveLength(0);
-    await act(async () => {
-      wrapper.find('button').prop('onClick')();
-    });
-    await waitForElement(wrapper, 'Modal', (el) => el.length > 0);
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+
+    expect(await screen.findByRole('dialog')).toBeInTheDocument();
     expect(CredentialsAPI.read).toHaveBeenCalled();
-    expect(wrapper.find('Modal')).toHaveLength(1);
-
+    // single credential_type item with delete details disables confirm
     expect(
-      wrapper.find('Button[aria-label="confirm delete"]').prop('isDisabled')
-    ).toBe(true);
-    expect(wrapper.find('div[aria-label="Delete this?"]')).toHaveLength(1);
+      screen.getByRole('button', { name: 'confirm delete' })
+    ).toBeDisabled();
+    expect(screen.getByLabelText('Delete this?')).toBeInTheDocument();
   });
 
   test('should open delete error modal', async () => {
@@ -175,65 +162,66 @@ describe('<ToolbarDeleteButton />', () => {
       },
     ];
 
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ToolbarDeleteButton
-          onDelete={() => {}}
-          itemsToDelete={[itemA]}
-          deleteDetailsRequests={request}
-          deleteMessage="Delete this?"
-          warningMessage="Are you sure to want to delete this"
-        />
-      );
-    });
+    const { user } = renderWithContexts(
+      <ToolbarDeleteButton
+        onDelete={() => {}}
+        itemsToDelete={[itemA]}
+        deleteDetailsRequests={request}
+        deleteMessage="Delete this?"
+        warningMessage="Are you sure to want to delete this"
+      />
+    );
 
-    expect(wrapper.find('Modal')).toHaveLength(0);
-    await act(async () => wrapper.find('button').simulate('click'));
-    await waitForElement(wrapper, 'Modal', (el) => el.length > 0);
-    expect(CredentialsAPI.read).toHaveBeenCalled();
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
 
-    wrapper.update();
-
-    expect(wrapper.find('AlertModal[title="Error!"]')).toHaveLength(1);
+    await waitFor(() => expect(CredentialsAPI.read).toHaveBeenCalled());
+    expect(await screen.findByText('Error!')).toBeInTheDocument();
   });
 
-  test('should invoke onDelete prop', () => {
+  test('should invoke onDelete prop', async () => {
     const onDelete = jest.fn();
-    wrapper = mountWithContexts(
+    const { user } = renderWithContexts(
       <ToolbarDeleteButton onDelete={onDelete} itemsToDelete={[itemA]} />
     );
-    wrapper.find('button').simulate('click');
-    wrapper.update();
-    wrapper
-      .find('ModalBoxFooter button[aria-label="confirm delete"]')
-      .simulate('click');
-    wrapper.update();
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'confirm delete' })
+    );
     expect(onDelete).toHaveBeenCalled();
-    expect(wrapper.find('Modal')).toHaveLength(0);
+    await waitFor(() =>
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    );
   });
 
   test('should disable button when no delete permissions', () => {
-    wrapper = mountWithContexts(
+    renderWithContexts(
       <ToolbarDeleteButton onDelete={() => {}} itemsToDelete={[itemB]} />
     );
-    expect(wrapper.find('button[disabled]')).toHaveLength(1);
+    expect(screen.getByRole('button', { name: 'Delete' })).toBeDisabled();
   });
 
-  test('should render tooltip', () => {
-    wrapper = mountWithContexts(
+  test('should render tooltip', async () => {
+    const { user } = renderWithContexts(
       <ToolbarDeleteButton onDelete={() => {}} itemsToDelete={[itemA]} />
     );
-    expect(wrapper.find('Tooltip')).toHaveLength(1);
-    expect(wrapper.find('Tooltip').prop('content')).toEqual('Delete');
+    // tooltip content is revealed on hover
+    const button = screen.getByRole('button', { name: 'Delete' });
+    await user.hover(button);
+    expect(await screen.findByRole('tooltip')).toHaveTextContent('Delete');
+    await user.unhover(button);
   });
 
-  test('should render tooltip for username', () => {
-    wrapper = mountWithContexts(
+  test('should render tooltip for username', async () => {
+    const { user } = renderWithContexts(
       <ToolbarDeleteButton onDelete={() => {}} itemsToDelete={[itemC]} />
     );
-    expect(wrapper.find('Tooltip')).toHaveLength(1);
-    expect(wrapper.find('Tooltip').prop('content').props.children).toEqual(
+    // disabled button is wrapped in a div; hover the wrapper to show tooltip
+    const button = screen.getByRole('button', { name: 'Delete' });
+    await user.hover(button);
+    expect(await screen.findByRole('tooltip')).toHaveTextContent(
       'You do not have permission to delete Items: Foo'
     );
+    await user.unhover(button);
   });
 });

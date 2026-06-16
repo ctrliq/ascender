@@ -1,6 +1,7 @@
 import React from 'react';
+import { screen, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import HeaderRow, { HeaderCell } from './HeaderRow';
 
 describe('<HeaderRow />', () => {
@@ -11,7 +12,7 @@ describe('<HeaderRow />', () => {
   };
 
   test('should render cells', async () => {
-    const wrapper = mountWithContexts(
+    renderWithContexts(
       <table>
         <HeaderRow qsConfig={qsConfig}>
           <HeaderCell sortKey="one">One</HeaderCell>
@@ -20,17 +21,19 @@ describe('<HeaderRow />', () => {
       </table>
     );
 
-    const cells = wrapper.find('Th');
+    // HeaderRow is selectable by default, so it renders an empty leading
+    // <th> plus the two HeaderCell columns = 3 column headers
+    const cells = screen.getAllByRole('columnheader');
     expect(cells).toHaveLength(3);
-    expect(cells.at(1).text()).toEqual('One');
-    expect(cells.at(2).text()).toEqual('Two');
+    expect(cells[1]).toHaveTextContent('One');
+    expect(cells[2]).toHaveTextContent('Two');
   });
 
   test('should provide sort controls', async () => {
     const history = createMemoryHistory({
       initialEntries: ['/list'],
     });
-    const wrapper = mountWithContexts(
+    const { user } = renderWithContexts(
       <table>
         <HeaderRow qsConfig={qsConfig}>
           <HeaderCell sortKey="one">One</HeaderCell>
@@ -40,8 +43,10 @@ describe('<HeaderRow />', () => {
       { context: { router: { history } } }
     );
 
-    const cell = wrapper.find('Th').at(1);
-    cell.prop('sort').onSort({}, '', 'desc');
+    // the "One" column is sortable and currently sorted ascending (the default
+    // order_by), so clicking its sort button toggles it to descending
+    const oneHeader = screen.getByRole('columnheader', { name: /One/ });
+    await user.click(within(oneHeader).getByRole('button', { name: 'One' }));
     expect(history.location.search).toEqual('?order_by=-one');
   });
 
@@ -49,7 +54,7 @@ describe('<HeaderRow />', () => {
     const history = createMemoryHistory({
       initialEntries: ['/list'],
     });
-    const wrapper = mountWithContexts(
+    renderWithContexts(
       <table>
         <HeaderRow qsConfig={qsConfig}>
           <HeaderCell sortKey="one">One</HeaderCell>
@@ -59,13 +64,14 @@ describe('<HeaderRow />', () => {
       { context: { router: { history } } }
     );
 
-    const cell = wrapper.find('Th').at(2);
-    expect(cell.prop('sort')).toEqual(null);
+    // the "Two" column has no sortKey, so it renders no sort button (sort=null)
+    const twoHeader = screen.getByRole('columnheader', { name: 'Two' });
+    expect(within(twoHeader).queryByRole('button')).not.toBeInTheDocument();
   });
 
   test('should handle null children gracefully', async () => {
     const nope = false;
-    const wrapper = mountWithContexts(
+    renderWithContexts(
       <table>
         <HeaderRow qsConfig={qsConfig}>
           <HeaderCell sortKey="one">One</HeaderCell>
@@ -75,7 +81,6 @@ describe('<HeaderRow />', () => {
       </table>
     );
 
-    const cells = wrapper.find('Th');
-    expect(cells).toHaveLength(3);
+    expect(screen.getAllByRole('columnheader')).toHaveLength(3);
   });
 });
