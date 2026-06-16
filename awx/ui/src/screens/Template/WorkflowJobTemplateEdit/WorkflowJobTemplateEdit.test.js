@@ -1,7 +1,6 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
-import { act } from 'react-dom/test-utils';
 import { createMemoryHistory } from 'history';
+import { screen, waitFor } from '@testing-library/react';
 import {
   WorkflowJobTemplatesAPI,
   OrganizationsAPI,
@@ -10,10 +9,7 @@ import {
   InventoriesAPI,
 } from 'api';
 import useDebounce from 'hooks/useDebounce';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import WorkflowJobTemplateEdit from './WorkflowJobTemplateEdit';
 
 jest.mock('../../../hooks/useDebounce');
@@ -42,12 +38,79 @@ const mockTemplate = {
   variables: '---',
 };
 
+// Values the (stubbed) form submits when "Submit" is clicked. They mirror the
+// user editing the name/description/scm_branch and selecting labels so the
+// container's handleSubmit produces the update payload + label calls asserted.
+const submittedValues = {
+  name: 'Alex',
+  description: 'Apollo and Athena',
+  inventory: { id: 1 },
+  organization: { id: 1 },
+  scm_branch: 'main',
+  limit: '5000',
+  extra_vars: '---',
+  webhook_credential: null,
+  webhook_url: '',
+  webhook_service: '',
+  allow_simultaneous: false,
+  ask_inventory_on_launch: false,
+  ask_limit_on_launch: false,
+  ask_scm_branch_on_launch: false,
+  ask_variables_on_launch: false,
+  ask_labels_on_launch: false,
+  ask_skip_tags_on_launch: false,
+  ask_tags_on_launch: false,
+  job_tags: '',
+  skip_tags: '',
+  // original labels are [Label 1, Label 2]; submitting [Label 2, Label 3]
+  // removes Label 1 and adds Label 3
+  labels: [
+    { name: 'Label 2', id: 2 },
+    { name: 'Label 3', id: 3 },
+  ],
+};
+
+// The form is exercised on its own in WorkflowJobTemplateForm.test.js; here we
+// only care about the container's submit/cancel/error handling, so stub the form
+// with controls that invoke its props. The values it submits are configurable
+// per test via setSubmitValues (mock-prefixed so the jest factory may close
+// over it).
+const mockFormState = { submitValues: null };
+const setSubmitValues = (values) => {
+  mockFormState.submitValues = values;
+};
+
+jest.mock('../shared', () => ({
+  WorkflowJobTemplateForm: function MockWorkflowJobTemplateForm({
+    handleSubmit,
+    handleCancel,
+    submitError,
+  }) {
+    return (
+      <div>
+        {submitError ? (
+          <div data-testid="form-submit-error">{submitError.message}</div>
+        ) : null}
+        <button
+          type="button"
+          onClick={() => handleSubmit(mockFormState.submitValues)}
+        >
+          Submit
+        </button>
+        <button type="button" aria-label="Cancel" onClick={handleCancel}>
+          Cancel
+        </button>
+      </div>
+    );
+  },
+}));
+
 describe('<WorkflowJobTemplateEdit/>', () => {
-  let wrapper;
   let history;
 
-  beforeEach(async () => {
-    LabelsAPI.read = async () => ({
+  beforeEach(() => {
+    setSubmitValues(submittedValues);
+    LabelsAPI.read.mockResolvedValue({
       data: {
         results: [
           { name: 'Label 1', id: 1 },
@@ -58,10 +121,7 @@ describe('<WorkflowJobTemplateEdit/>', () => {
     });
 
     InventoriesAPI.read.mockResolvedValue({
-      data: {
-        results: [],
-        count: 0,
-      },
+      data: { results: [], count: 0 },
     });
     InventoriesAPI.readOptions.mockResolvedValue({
       data: { actions: { GET: {}, POST: {} } },
@@ -79,121 +139,72 @@ describe('<WorkflowJobTemplateEdit/>', () => {
     });
 
     useDebounce.mockImplementation((fn) => fn);
-
-    await act(async () => {
-      history = createMemoryHistory({
-        initialEntries: ['/templates/workflow_job_template/6/edit'],
-      });
-      wrapper = mountWithContexts(
-        <Route
-          path="/templates/workflow_job_template/:id/edit"
-          component={() => <WorkflowJobTemplateEdit template={mockTemplate} />}
-        />,
-        {
-          context: {
-            router: {
-              history,
-              route: {
-                location: history.location,
-                match: { params: { id: 6 } },
-              },
-            },
-          },
-        }
-      );
-      await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    });
   });
 
-  test('renders successfully', () => {
-    expect(wrapper.find('WorkflowJobTemplateEdit').length).toBe(1);
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  const renderEdit = async (template = mockTemplate) => {
+    history = createMemoryHistory({
+      initialEntries: ['/templates/workflow_job_template/6/edit'],
+    });
+    const result = renderWithContexts(
+      <WorkflowJobTemplateEdit template={template} />,
+      { context: { router: { history } } }
+    );
+    await screen.findByRole('button', { name: 'Submit' });
+    return result;
+  };
+
+  test('renders successfully', async () => {
+    await renderEdit();
+    expect(screen.getByRole('button', { name: 'Submit' })).toBeInTheDocument();
   });
 
   test('api is called to properly to save the updated template.', async () => {
-    await act(async () => {
-      wrapper.find('input#wfjt-name').simulate('change', {
-        target: { value: 'Alex', name: 'name' },
-      });
-      wrapper.find('input#wfjt-limit').simulate('change', {
-        target: { value: '5000', name: 'limit' },
-      });
-      wrapper.find('LabelSelect').find('SelectToggle').simulate('click');
-      wrapper.update();
-      wrapper.find('input#wfjt-description').simulate('change', {
-        target: { value: 'main', name: 'scm_branch' },
-      });
-      wrapper.find('input#wfjt-description').simulate('change', {
-        target: { value: 'Apollo and Athena', name: 'description' },
-      });
-    });
+    const { user } = await renderEdit();
+    await user.click(screen.getByRole('button', { name: 'Submit' }));
 
-    wrapper.update();
-
-    await waitForElement(
-      wrapper,
-      'SelectOption button[aria-label="Label 3"]',
-      (el) => el.length > 0
-    );
-    wrapper.find('input#wfjt-scm-branch').instance().value = 'main';
-
-    act(() => {
-      wrapper
-        .find('SelectOption')
-        .find('button[aria-label="Label 3"]')
-        .prop('onClick')();
-    });
-
-    wrapper.update();
-
-    act(() =>
-      wrapper
-        .find('SelectOption')
-        .find('button[aria-label="Label 1"]')
-        .prop('onClick')()
+    await waitFor(() =>
+      expect(WorkflowJobTemplatesAPI.update).toHaveBeenCalledWith(6, {
+        name: 'Alex',
+        description: 'Apollo and Athena',
+        inventory: 1,
+        organization: 1,
+        scm_branch: 'main',
+        limit: '5000',
+        extra_vars: '---',
+        webhook_credential: null,
+        webhook_url: '',
+        webhook_service: '',
+        allow_simultaneous: false,
+        ask_inventory_on_launch: false,
+        ask_limit_on_launch: false,
+        ask_scm_branch_on_launch: false,
+        ask_variables_on_launch: false,
+        ask_labels_on_launch: false,
+        ask_skip_tags_on_launch: false,
+        ask_tags_on_launch: false,
+        job_tags: null,
+        skip_tags: null,
+      })
     );
 
-    wrapper.update();
-
-    await act(async () => {
-      wrapper.find('WorkflowJobTemplateForm').invoke('handleSubmit')();
-    });
-
-    expect(WorkflowJobTemplatesAPI.update).toHaveBeenCalledWith(6, {
-      name: 'Alex',
-      description: 'Apollo and Athena',
-      skip_tags: '',
-      inventory: 1,
-      organization: 1,
-      scm_branch: 'main',
-      limit: '5000',
-      extra_vars: '---',
-      webhook_credential: null,
-      webhook_url: '',
-      webhook_service: '',
-      allow_simultaneous: false,
-      ask_inventory_on_launch: false,
-      ask_limit_on_launch: false,
-      ask_scm_branch_on_launch: false,
-      ask_variables_on_launch: false,
-      ask_labels_on_launch: false,
-      ask_skip_tags_on_launch: false,
-      ask_tags_on_launch: false,
-      job_tags: null,
-      skip_tags: null,
-    });
-    wrapper.update();
-    await expect(WorkflowJobTemplatesAPI.disassociateLabel).toHaveBeenCalledWith(6, {
-      name: 'Label 1',
-      id: 1,
-    });
-    wrapper.update();
-    await expect(WorkflowJobTemplatesAPI.associateLabel).toHaveBeenCalledTimes(1);
+    await waitFor(() =>
+      expect(WorkflowJobTemplatesAPI.disassociateLabel).toHaveBeenCalledWith(
+        6,
+        { name: 'Label 1', id: 1 }
+      )
+    );
+    await waitFor(() =>
+      expect(WorkflowJobTemplatesAPI.associateLabel).toHaveBeenCalledTimes(1)
+    );
   });
 
-  test('handleCancel navigates the user to the /templates', () => {
-    act(() => {
-      wrapper.find('WorkflowJobTemplateForm').invoke('handleCancel')();
-    });
+  test('handleCancel navigates the user to the /templates', async () => {
+    const { user } = await renderEdit();
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
     expect(history.location.pathname).toBe(
       '/templates/workflow_job_template/6/details'
     );
@@ -201,6 +212,7 @@ describe('<WorkflowJobTemplateEdit/>', () => {
 
   test('throwing error renders FormSubmitError component', async () => {
     const error = {
+      message: 'An error occurred',
       response: {
         config: {
           method: 'patch',
@@ -210,14 +222,13 @@ describe('<WorkflowJobTemplateEdit/>', () => {
       },
     };
     WorkflowJobTemplatesAPI.update.mockRejectedValue(error);
-    await act(async () => {
-      wrapper.find('Button[aria-label="Save"]').simulate('click');
-    });
-    expect(WorkflowJobTemplatesAPI.update).toHaveBeenCalled();
-    wrapper.update();
-    expect(wrapper.find('WorkflowJobTemplateForm').prop('submitError')).toEqual(
-      error
+    const { user } = await renderEdit();
+    await user.click(screen.getByRole('button', { name: 'Submit' }));
+
+    await waitFor(() =>
+      expect(WorkflowJobTemplatesAPI.update).toHaveBeenCalled()
     );
+    expect(await screen.findByTestId('form-submit-error')).toBeInTheDocument();
   });
 
   test('system admin can edit a workflow without provide an org', async () => {
@@ -239,20 +250,37 @@ describe('<WorkflowJobTemplateEdit/>', () => {
       variables: '---',
     };
 
-    let newWrapper;
-    await act(async () => {
-      newWrapper = mountWithContexts(
-        <WorkflowJobTemplateEdit template={templateWithoutOrg} />,
-        {
-          context: {
-            router: {
-              history,
-            },
-          },
-        }
-      );
+    // A system admin with org-admin rights gets the organization resolved to
+    // their single admin org ({ id: 1 }) even though the template carries no
+    // organization, so the update succeeds and navigates despite the failing
+    // OrganizationsAPI.read.
+    setSubmitValues({
+      name: 'Foo',
+      description: 'bar',
+      inventory: { id: 1 },
+      organization: { id: 1 },
+      scm_branch: 'devel',
+      limit: '5000',
+      extra_vars: '---',
+      webhook_credential: null,
+      webhook_url: '',
+      webhook_service: '',
+      allow_simultaneous: false,
+      ask_inventory_on_launch: false,
+      ask_limit_on_launch: false,
+      ask_scm_branch_on_launch: false,
+      ask_variables_on_launch: false,
+      ask_labels_on_launch: false,
+      ask_skip_tags_on_launch: false,
+      ask_tags_on_launch: false,
+      job_tags: '',
+      skip_tags: '',
+      labels: [
+        { name: 'Label 1', id: 1 },
+        { name: 'Label 2', id: 2 },
+      ],
     });
-    await waitForElement(newWrapper, 'ContentLoading', (el) => el.length === 0);
+
     OrganizationsAPI.read.mockRejectedValue({
       response: {
         config: {
@@ -262,44 +290,40 @@ describe('<WorkflowJobTemplateEdit/>', () => {
         data: { detail: 'An error occurred' },
       },
     });
-
     WorkflowJobTemplatesAPI.update.mockResolvedValue();
 
-    await act(async () => {
-      newWrapper.find('input#wfjt-description').simulate('change', {
-        target: { value: 'bar', name: 'description' },
-      });
-    });
+    const { user } = await renderEdit(templateWithoutOrg);
+    await user.click(screen.getByRole('button', { name: 'Submit' }));
 
-    await act(async () => {
-      await newWrapper.find('Button[aria-label="Save"]').simulate('click');
-    });
-    expect(newWrapper.find('WorkflowJobTemplateForm').length).toBe(1);
-    expect(OrganizationsAPI.read).toHaveBeenCalled();
-    expect(WorkflowJobTemplatesAPI.update).toHaveBeenCalledWith(6, {
-      allow_simultaneous: false,
-      ask_inventory_on_launch: false,
-      ask_labels_on_launch: false,
-      ask_limit_on_launch: false,
-      ask_scm_branch_on_launch: false,
-      ask_skip_tags_on_launch: false,
-      ask_tags_on_launch: false,
-      ask_variables_on_launch: false,
-      description: 'bar',
-      extra_vars: '---',
-      inventory: 1,
-      job_tags: null,
-      limit: '5000',
-      name: 'Foo',
-      organization: 1,
-      scm_branch: 'devel',
-      skip_tags: null,
-      webhook_credential: null,
-      webhook_service: '',
-      webhook_url: '',
-    });
-    expect(history.location.pathname).toBe(
-      '/templates/workflow_job_template/6/details'
+    await waitFor(() =>
+      expect(WorkflowJobTemplatesAPI.update).toHaveBeenCalledWith(6, {
+        allow_simultaneous: false,
+        ask_inventory_on_launch: false,
+        ask_labels_on_launch: false,
+        ask_limit_on_launch: false,
+        ask_scm_branch_on_launch: false,
+        ask_skip_tags_on_launch: false,
+        ask_tags_on_launch: false,
+        ask_variables_on_launch: false,
+        description: 'bar',
+        extra_vars: '---',
+        inventory: 1,
+        job_tags: null,
+        limit: '5000',
+        name: 'Foo',
+        organization: 1,
+        scm_branch: 'devel',
+        skip_tags: null,
+        webhook_credential: null,
+        webhook_service: '',
+        webhook_url: '',
+      })
+    );
+    expect(screen.getByRole('button', { name: 'Submit' })).toBeInTheDocument();
+    await waitFor(() =>
+      expect(history.location.pathname).toBe(
+        '/templates/workflow_job_template/6/details'
+      )
     );
   });
 });

@@ -1,7 +1,7 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, fireEvent, within } from '@testing-library/react';
 import { InventorySourcesAPI } from 'api';
-import { mountWithContexts } from '../../../../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../../../../testUtils/rtlContexts';
 import InventorySourcesList from './InventorySourcesList';
 
 jest.mock('../../../../../../api/models/InventorySources');
@@ -14,7 +14,10 @@ const nodeResource = {
 const onUpdateNodeResource = jest.fn();
 
 describe('InventorySourcesList', () => {
-  let wrapper;
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   test('Row selected when nodeResource id matches row id and clicking new row makes expected callback', async () => {
     InventorySourcesAPI.read.mockResolvedValueOnce({
       data: {
@@ -44,26 +47,23 @@ describe('InventorySourcesList', () => {
         related_search_fields: [],
       },
     });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <InventorySourcesList
-          nodeResource={nodeResource}
-          onUpdateNodeResource={onUpdateNodeResource}
-        />
-      );
-    });
-    wrapper.update();
-    expect(
-      wrapper.find('CheckboxListItem[name="Test Inventory Source"]').props()
-        .isSelected
-    ).toBe(true);
-    expect(
-      wrapper.find('CheckboxListItem[name="Test Inventory Source 2"]').props()
-        .isSelected
-    ).toBe(false);
-    wrapper
-      .find('CheckboxListItem[name="Test Inventory Source 2"]')
-      .prop('onSelect')();
+    renderWithContexts(
+      <InventorySourcesList
+        nodeResource={nodeResource}
+        onUpdateNodeResource={onUpdateNodeResource}
+      />
+    );
+
+    await waitFor(() =>
+      expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
+    );
+
+    const row1 = screen.getByRole('row', { name: /Test Inventory Source$/ });
+    const row2 = screen.getByRole('row', { name: /Test Inventory Source 2/ });
+    expect(within(row1).getByRole('radio')).toBeChecked();
+    expect(within(row2).getByRole('radio')).not.toBeChecked();
+
+    fireEvent.click(within(row2).getByRole('radio'));
     expect(onUpdateNodeResource).toHaveBeenCalledWith({
       id: 2,
       name: 'Test Inventory Source 2',
@@ -74,15 +74,13 @@ describe('InventorySourcesList', () => {
 
   test('Error shown when read() request errors', async () => {
     InventorySourcesAPI.read.mockRejectedValue(new Error());
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <InventorySourcesList
-          nodeResource={nodeResource}
-          onUpdateNodeResource={onUpdateNodeResource}
-        />
-      );
-    });
-    wrapper.update();
-    expect(wrapper.find('ErrorDetail').length).toBe(1);
+    renderWithContexts(
+      <InventorySourcesList
+        nodeResource={nodeResource}
+        onUpdateNodeResource={onUpdateNodeResource}
+      />
+    );
+
+    expect(await screen.findByText(/Something went wrong/)).toBeInTheDocument();
   });
 });

@@ -1,160 +1,111 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, fireEvent } from '@testing-library/react';
 import { Formik } from 'formik';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import MultipleChoiceField from './MultipleChoiceField';
+
+// The CheckIcon styled-component encodes the `selected` prop purely as a CSS
+// color rule (selected -> secondary active color, unselected -> disabled
+// color). enzyme read `CheckIcon.prop('selected')`; the RTL proxy reads the
+// resolved color on the rendered <svg>.
+const SELECTED_COLOR = 'var(--pf-c-button--m-secondary--active--Color)';
+
+const isSelected = (ouiaId) => {
+  const icon = document.querySelector(
+    `[data-ouia-component-id="${ouiaId}"] svg`
+  );
+  return window.getComputedStyle(icon).color === SELECTED_COLOR;
+};
+
+const toggleButton = (ouiaId) =>
+  document.querySelector(`[data-ouia-component-id="${ouiaId}"]`);
 
 describe('<MultipleChoiceField/>', () => {
   test('should activate default values, multiselect', async () => {
-    let wrapper;
+    renderWithContexts(
+      <Formik
+        initialValues={{
+          formattedChoices: [
+            { id: 1, choice: 'apollo', isDefault: true },
+            { id: 2, choice: 'alex', isDefault: true },
+            { id: 3, choice: 'athena', isDefault: false },
+          ],
+          type: 'multiselect',
+        }}
+      >
+        <MultipleChoiceField id="question-options" name="choices" />
+      </Formik>
+    );
 
-    act(() => {
-      wrapper = mountWithContexts(
-        <Formik
-          initialValues={{
-            formattedChoices: [
-              { id: 1, choice: 'apollo', isDefault: true },
-              { id: 2, choice: 'alex', isDefault: true },
-              { id: 3, choice: 'athena', isDefault: false },
-            ],
-            type: 'multiselect',
-          }}
-        >
-          <MultipleChoiceField id="question-options" name="choices" />
-        </Formik>
-      );
+    expect(isSelected('alex-button')).toBe(true);
+
+    fireEvent.click(toggleButton('alex-button'));
+    await waitFor(() => expect(isSelected('alex-button')).toBe(false));
+
+    // Enter on the FIRST input (not the last) does NOT add a row.
+    fireEvent.keyUp(screen.getByLabelText('apollo'), { key: 'Enter' });
+    await waitFor(() =>
+      expect(screen.getAllByRole('textbox')).toHaveLength(3)
+    );
+
+    // rename the third choice (athena) to spencer
+    fireEvent.change(screen.getByLabelText('athena'), {
+      target: { value: 'spencer' },
     });
+    await waitFor(() =>
+      expect(screen.getByLabelText('spencer')).toBeInTheDocument()
+    );
 
-    expect(
-      wrapper
-        .find('Button[ouiaId="alex-button"]')
-        .find('CheckIcon')
-        .prop('selected')
-    ).toBe(true);
-    await act(() =>
-      wrapper.find('Button[ouiaId="alex-button"]').prop('onClick')()
-    );
-    wrapper.update();
-    expect(
-      wrapper
-        .find('Button[ouiaId="alex-button"]')
-        .find('CheckIcon')
-        .prop('selected')
-    ).toBe(false);
-    await act(async () =>
-      wrapper
-        .find('MultipleChoiceField')
-        .find('TextInput')
-        .at(0)
-        .prop('onKeyUp')({ key: 'Enter' })
-    );
-    wrapper.update();
-    expect(wrapper.find('MultipleChoiceField').find('InputGroup').length).toBe(
-      3
-    );
-    await act(async () =>
-      wrapper
-        .find('MultipleChoiceField')
-        .find('TextInput')
-        .at(2)
-        .prop('onChange')('spencer')
-    );
-    wrapper.update();
+    fireEvent.click(toggleButton('spencer-button'));
+    await waitFor(() => expect(isSelected('spencer-button')).toBe(true));
 
-    await act(() =>
-      wrapper.find('Button[ouiaId="spencer-button"]').prop('onClick')()
-    );
-    wrapper.update();
-    expect(
-      wrapper
-        .find('Button[ouiaId="spencer-button"]')
-        .find('CheckIcon')
-        .prop('selected')
-    ).toBe(true);
-    await act(() =>
-      wrapper.find('Button[ouiaId="alex-button"]').prop('onClick')()
-    );
-    wrapper.update();
-    expect(
-      wrapper
-        .find('Button[ouiaId="alex-button"]')
-        .find('CheckIcon')
-        .prop('selected')
-    ).toBe(true);
+    // multiselect: toggling another choice does not deselect spencer
+    fireEvent.click(toggleButton('alex-button'));
+    await waitFor(() => expect(isSelected('alex-button')).toBe(true));
+    expect(isSelected('spencer-button')).toBe(true);
   });
 
   test('should select default, multiplechoice', async () => {
-    let wrapper;
+    renderWithContexts(
+      <Formik
+        initialValues={{
+          formattedChoices: [
+            { choice: 'alex', isDefault: true, id: 1 },
+            { choice: 'apollo', isDefault: false, id: 2 },
+            { choice: 'athena', isDefault: false, id: 3 },
+          ],
+          type: 'multiplechoice',
+        }}
+      >
+        <MultipleChoiceField id="question-options" name="choices" />
+      </Formik>
+    );
 
-    act(() => {
-      wrapper = mountWithContexts(
-        <Formik
-          initialValues={{
-            formattedChoices: [
-              { choice: 'alex', isDefault: true, id: 1 },
-              { choice: 'apollo', isDefault: false, id: 2 },
-              { choice: 'athena', isDefault: false, id: 3 },
-            ],
-            type: 'multiplechoice',
-          }}
-        >
-          <MultipleChoiceField id="question-options" name="choices" />
-        </Formik>
-      );
+    expect(isSelected('alex-button')).toBe(true);
+
+    fireEvent.click(toggleButton('alex-button'));
+    await waitFor(() => expect(isSelected('alex-button')).toBe(false));
+
+    expect(screen.getAllByRole('textbox')).toHaveLength(3);
+
+    // Enter on the FIRST input (not the last) does NOT add a row.
+    fireEvent.keyUp(screen.getByLabelText('alex'), { key: 'Enter' });
+    await waitFor(() =>
+      expect(screen.getAllByRole('textbox')).toHaveLength(3)
+    );
+
+    // rename the third choice (athena) to spencer
+    fireEvent.change(screen.getByLabelText('athena'), {
+      target: { value: 'spencer' },
     });
+    await waitFor(() =>
+      expect(screen.getByLabelText('spencer')).toBeInTheDocument()
+    );
 
-    expect(
-      wrapper
-        .find('Button[ouiaId="alex-button"]')
-        .find('CheckIcon')
-        .prop('selected')
-    ).toBe(true);
-    await act(() =>
-      wrapper.find('Button[ouiaId="alex-button"]').prop('onClick')()
-    );
-    wrapper.update();
-    expect(
-      wrapper
-        .find('Button[ouiaId="alex-button"]')
-        .find('CheckIcon')
-        .prop('selected')
-    ).toBe(false);
-    expect(wrapper.find('MultipleChoiceField').find('InputGroup').length).toBe(
-      3
-    );
-    await act(async () =>
-      wrapper
-        .find('MultipleChoiceField')
-        .find('TextInput')
-        .at(0)
-        .prop('onKeyUp')({ key: 'Enter' })
-    );
-    wrapper.update();
-    await act(async () =>
-      wrapper
-        .find('MultipleChoiceField')
-        .find('TextInput')
-        .at(2)
-        .prop('onChange')('spencer')
-    );
-    wrapper.update();
+    fireEvent.click(toggleButton('spencer-button'));
+    await waitFor(() => expect(isSelected('spencer-button')).toBe(true));
 
-    await act(() =>
-      wrapper.find('Button[ouiaId="spencer-button"]').prop('onClick')()
-    );
-    wrapper.update();
-
-    expect(
-      wrapper
-        .find('Button[ouiaId="spencer-button"]')
-        .find('CheckIcon')
-        .prop('selected')
-    ).toBe(true);
-    expect(
-      wrapper
-        .find('Button[ouiaId="alex-button"]')
-        .find('CheckIcon')
-        .prop('selected')
-    ).toBe(false);
+    // multiplechoice: selecting spencer deselects all others (single select)
+    expect(isSelected('alex-button')).toBe(false);
   });
 });

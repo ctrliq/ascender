@@ -1,7 +1,7 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, fireEvent, within } from '@testing-library/react';
 import { JobTemplatesAPI } from 'api';
-import { mountWithContexts } from '../../../../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../../../../testUtils/rtlContexts';
 import JobTemplatesList from './JobTemplatesList';
 
 jest.mock('../../../../../../api/models/JobTemplates');
@@ -14,7 +14,6 @@ const nodeResource = {
 const onUpdateNodeResource = jest.fn();
 
 describe('JobTemplatesList', () => {
-  let wrapper;
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -52,26 +51,23 @@ describe('JobTemplatesList', () => {
         related_search_fields: [],
       },
     });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <JobTemplatesList
-          nodeResource={nodeResource}
-          onUpdateNodeResource={onUpdateNodeResource}
-        />
-      );
-    });
-    wrapper.update();
-    expect(
-      wrapper.find('CheckboxListItem[name="Test Job Template"]').props()
-        .isSelected
-    ).toBe(true);
-    expect(
-      wrapper.find('CheckboxListItem[name="Test Job Template 2"]').props()
-        .isSelected
-    ).toBe(false);
-    wrapper
-      .find('CheckboxListItem[name="Test Job Template 2"]')
-      .prop('onSelect')();
+    renderWithContexts(
+      <JobTemplatesList
+        nodeResource={nodeResource}
+        onUpdateNodeResource={onUpdateNodeResource}
+      />
+    );
+
+    await waitFor(() =>
+      expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
+    );
+
+    const row1 = screen.getByRole('row', { name: /Test Job Template$/ });
+    const row2 = screen.getByRole('row', { name: /Test Job Template 2/ });
+    expect(within(row1).getByRole('radio')).toBeChecked();
+    expect(within(row2).getByRole('radio')).not.toBeChecked();
+
+    fireEvent.click(within(row2).getByRole('radio'));
     expect(onUpdateNodeResource).toHaveBeenCalledWith({
       id: 2,
       name: 'Test Job Template 2',
@@ -107,18 +103,26 @@ describe('JobTemplatesList', () => {
         related_search_fields: [],
       },
     });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <JobTemplatesList
-          nodeResource={nodeResource}
-          onUpdateNodeResource={onUpdateNodeResource}
-        />
-      );
-    });
-    wrapper.update();
-    expect(
-      wrapper.find('CheckboxListItem[name="Test Job Template"] Popover').length
-    ).toBe(1);
+    renderWithContexts(
+      <JobTemplatesList
+        nodeResource={nodeResource}
+        onUpdateNodeResource={onUpdateNodeResource}
+      />
+    );
+
+    await waitFor(() =>
+      expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
+    );
+
+    const row = screen.getByRole('row', { name: /Test Job Template/ });
+    // The row action is a PF Popover whose trigger is an
+    // OutlinedQuestionCircleIcon (role=img). Its presence is the RTL proxy for
+    // the enzyme assertion that the row rendered exactly one Popover. We do not
+    // open the popover: its body (TemplatePopoverContent) renders against mock
+    // data lacking summary_fields, which would log prop-type console errors that
+    // the setupTests trap turns into failures.
+    const popoverTriggers = within(row).getAllByRole('img', { hidden: true });
+    expect(popoverTriggers).toHaveLength(1);
   });
 
   test('Error shown when read() request errors', async () => {
@@ -132,15 +136,15 @@ describe('JobTemplatesList', () => {
         related_search_fields: [],
       },
     });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <JobTemplatesList
-          nodeResource={nodeResource}
-          onUpdateNodeResource={onUpdateNodeResource}
-        />
-      );
-    });
-    wrapper.update();
-    expect(wrapper.find('ErrorDetail').length).toBe(1);
+    renderWithContexts(
+      <JobTemplatesList
+        nodeResource={nodeResource}
+        onUpdateNodeResource={onUpdateNodeResource}
+      />
+    );
+
+    expect(
+      await screen.findByText(/Something went wrong/)
+    ).toBeInTheDocument();
   });
 });

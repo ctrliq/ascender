@@ -1,14 +1,15 @@
 import React from 'react';
+import { screen, fireEvent } from '@testing-library/react';
 import { WorkflowDispatchContext } from 'contexts/Workflow';
-import { mountWithContexts } from '../../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import DeleteAllNodesModal from './DeleteAllNodesModal';
 
-let wrapper;
 const dispatch = jest.fn();
 
 describe('DeleteAllNodesModal', () => {
-  beforeAll(() => {
-    wrapper = mountWithContexts(
+  beforeEach(() => {
+    dispatch.mockClear();
+    renderWithContexts(
       <WorkflowDispatchContext.Provider value={dispatch}>
         <DeleteAllNodesModal />
       </WorkflowDispatchContext.Provider>
@@ -16,21 +17,21 @@ describe('DeleteAllNodesModal', () => {
   });
 
   test('Delete All button dispatches as expected', () => {
-    wrapper.find('button#confirm-delete-all-nodes').simulate('click');
+    fireEvent.click(document.querySelector('button#confirm-delete-all-nodes'));
     expect(dispatch).toHaveBeenCalledWith({
       type: 'DELETE_ALL_NODES',
     });
   });
 
   test('Cancel button dispatches as expected', () => {
-    wrapper.find('button#cancel-delete-all-nodes').simulate('click');
+    fireEvent.click(document.querySelector('button#cancel-delete-all-nodes'));
     expect(dispatch).toHaveBeenCalledWith({
       type: 'TOGGLE_DELETE_ALL_NODES_MODAL',
     });
   });
 
   test('Close button dispatches as expected', () => {
-    wrapper.find('TimesIcon').simulate('click');
+    fireEvent.click(screen.getByRole('button', { name: /close/i }));
     expect(dispatch).toHaveBeenCalledWith({
       type: 'TOGGLE_DELETE_ALL_NODES_MODAL',
     });

@@ -1,10 +1,14 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
-import {
-  mountWithContexts,
-  shallowWithContexts,
-} from '../../../../testUtils/enzymeHelpers';
+import { screen } from '@testing-library/react';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import SurveyListItem from './SurveyListItem';
+
+const renderInTable = (ui) =>
+  renderWithContexts(
+    <table>
+      <tbody>{ui}</tbody>
+    </table>
+  );
 
 describe('<SurveyListItem />', () => {
   const item = {
@@ -16,33 +20,26 @@ describe('<SurveyListItem />', () => {
   };
 
   test('renders successfully', () => {
-    let wrapper;
-    act(() => {
-      wrapper = shallowWithContexts(
-        <SurveyListItem question={item} isFirst={false} isLast={false} />
-      );
-    });
-    expect(wrapper.length).toBe(1);
+    renderInTable(
+      <SurveyListItem question={item} isFirst={false} isLast={false} />
+    );
+    expect(screen.getByRole('row')).toBeInTheDocument();
   });
 
   test('fields are rendering properly', () => {
-    let wrapper;
-    act(() => {
-      wrapper = mountWithContexts(
-        <table>
-          <tbody>
-            <SurveyListItem
-              question={item}
-              isFirst={false}
-              isLast={false}
-              canEdit
-            />
-          </tbody>
-        </table>
-      );
-    });
-    expect(wrapper.find('SelectColumn').length).toBe(1);
-    expect(wrapper.find('Td').length).toBe(5);
+    renderInTable(
+      <SurveyListItem
+        question={item}
+        isFirst={false}
+        isLast={false}
+        canEdit
+      />
+    );
+    // Select column checkbox + 4 data cells (name, type, default, actions)
+    expect(
+      screen.getByRole('checkbox', { name: 'Select all rows' })
+    ).toBeInTheDocument();
+    expect(screen.getAllByRole('cell')).toHaveLength(5);
   });
 
   test('required item has required asterisk', () => {
@@ -54,41 +51,32 @@ describe('<SurveyListItem />', () => {
       required: true,
     };
 
-    let wrapper;
-    act(() => {
-      wrapper = mountWithContexts(
-        <table>
-          <tbody>
-            <SurveyListItem
-              question={newItem}
-              isChecked={false}
-              isFirst
-              isLast
-              canEdit
-            />
-          </tbody>
-        </table>
-      );
-    });
-    expect(wrapper.find('span[aria-label="Required"]').length).toBe(1);
-  });
-  test('items that are not required should not have an asterisk', () => {
-    let wrapper;
-    act(() => {
-      wrapper = shallowWithContexts(
-        <SurveyListItem
-          question={item}
-          isChecked={false}
-          isFirst
-          isLast
-          canEdit
-        />
-      );
-    });
-    expect(wrapper.find('span[aria-label="Required"]').length).toBe(0);
+    renderInTable(
+      <SurveyListItem
+        question={newItem}
+        isChecked={false}
+        isFirst
+        isLast
+        canEdit
+      />
+    );
+    expect(screen.getByLabelText('Required')).toBeInTheDocument();
   });
 
-  test('required item has required asterisk', () => {
+  test('items that are not required should not have an asterisk', () => {
+    renderInTable(
+      <SurveyListItem
+        question={item}
+        isChecked={false}
+        isFirst
+        isLast
+        canEdit
+      />
+    );
+    expect(screen.queryByLabelText('Required')).not.toBeInTheDocument();
+  });
+
+  test('multiselect default renders read-only chips', () => {
     const newItem = {
       question_name: 'Foo',
       default: 'a\nd\nb\ne\nf\ng\nh\ni\nk',
@@ -96,30 +84,32 @@ describe('<SurveyListItem />', () => {
       id: 1,
     };
 
-    let wrapper;
-    act(() => {
-      wrapper = mountWithContexts(
-        <table>
-          <tbody>
-            <SurveyListItem
-              question={newItem}
-              isChecked={false}
-              isFirst
-              isLast
-              canEdit
-            />
-          </tbody>
-        </table>
-      );
+    renderInTable(
+      <SurveyListItem
+        question={newItem}
+        isChecked={false}
+        isFirst
+        isLast
+        canEdit
+      />
+    );
+    // numChips=5 + 1 overflow chip => 6 list items in the chip group.
+    // PF renders each chip as a list item; the overflow chip is the "4 more"
+    // toggle. The five visible chips are read-only (no close button).
+    const chips = screen.getAllByRole('listitem');
+    expect(chips).toHaveLength(6);
+    ['a', 'd', 'b', 'e', 'f'].forEach((label) => {
+      expect(screen.getByText(label)).toBeInTheDocument();
+      // read-only chips have no remove button
+      expect(
+        screen.queryByRole('button', { name: `Remove ${label}` })
+      ).not.toBeInTheDocument();
     });
-    expect(wrapper.find('Chip').length).toBe(6);
-    wrapper
-      .find('Chip')
-      .filter((chip) => chip.prop('isOverFlowChip') !== true)
-      .map((chip) => expect(chip.prop('isReadOnly')).toBe(true));
+    // overflow chip toggle present
+    expect(screen.getByText('4 more')).toBeInTheDocument();
   });
 
-  test('items that are no required should have no an asterisk', () => {
+  test('password default renders ENCRYPTED', () => {
     const newItem = {
       question_name: 'Foo',
       default: '$encrypted$',
@@ -127,58 +117,52 @@ describe('<SurveyListItem />', () => {
       id: 1,
     };
 
-    let wrapper;
-    act(() => {
-      wrapper = mountWithContexts(
-        <table>
-          <tbody>
-            <SurveyListItem
-              question={newItem}
-              isChecked={false}
-              isFirst
-              isLast
-              canEdit
-            />
-          </tbody>
-        </table>
-      );
-    });
-    expect(wrapper.find('span').text()).toBe('ENCRYPTED');
+    renderInTable(
+      <SurveyListItem
+        question={newItem}
+        isChecked={false}
+        isFirst
+        isLast
+        canEdit
+      />
+    );
+    expect(screen.getByText('ENCRYPTED')).toBeInTheDocument();
   });
 
   test('users without edit/delete permissions are unable to reorder the questions', () => {
-    let wrapper;
-    act(() => {
-      wrapper = shallowWithContexts(
-        <SurveyListItem canEdit={false} question={item} isChecked={false} />
-      );
-    });
-    expect(wrapper.find('button[aria-label="move up"]')).toHaveLength(0);
-    expect(wrapper.find('button[aria-label="move down"]')).toHaveLength(0);
-    expect(wrapper.find('PencilAltIcon').exists()).toBeFalsy();
+    renderInTable(
+      <SurveyListItem canEdit={false} question={item} isChecked={false} />
+    );
+    expect(
+      screen.queryByRole('button', { name: 'move up' })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'move down' })
+    ).not.toBeInTheDocument();
+    // No edit (pencil) button is rendered without edit capabilities.
+    expect(
+      document.querySelector('[data-ouia-component-id="edit-survey-buzz"]')
+    ).toBeNull();
   });
 
   test('edit button shown to users with edit capabilities', () => {
-    let wrapper;
-    act(() => {
-      wrapper = mountWithContexts(
-        <table>
-          <tbody>
-            <SurveyListItem
-              question={item}
-              isFirst
-              isLast
-              isChecked={false}
-              canEdit
-            />
-          </tbody>
-        </table>
-      );
-    });
+    renderInTable(
+      <SurveyListItem
+        question={item}
+        isFirst
+        isLast
+        isChecked={false}
+        canEdit
+      />
+    );
 
-    expect(wrapper.find('PencilAltIcon').exists()).toBeTruthy();
-    expect(wrapper.find('Button[ouiaId="edit-survey-buzz"]').prop('to')).toBe(
-      'survey/edit?question_variable=buzz'
+    const editLink = document.querySelector(
+      '[data-ouia-component-id="edit-survey-buzz"]'
+    );
+    expect(editLink).toBeInTheDocument();
+    expect(editLink).toHaveAttribute(
+      'href',
+      '/survey/edit?question_variable=buzz'
     );
   });
 });

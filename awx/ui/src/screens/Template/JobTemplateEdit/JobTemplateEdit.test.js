@@ -1,34 +1,11 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
 import { createMemoryHistory } from 'history';
-import {
-  CredentialsAPI,
-  CredentialTypesAPI,
-  JobTemplatesAPI,
-  LabelsAPI,
-  ProjectsAPI,
-  InventoriesAPI,
-  ExecutionEnvironmentsAPI,
-  InstanceGroupsAPI,
-  RootAPI,
-} from 'api';
-import useDebounce from 'hooks/useDebounce';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+import { screen, waitFor } from '@testing-library/react';
+import { JobTemplatesAPI, ProjectsAPI } from 'api';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import JobTemplateEdit from './JobTemplateEdit';
 
-jest.mock('../../../hooks/useDebounce');
-jest.mock('../../../api/models/Credentials');
-jest.mock('../../../api/models/CredentialTypes');
-jest.mock('../../../api/models/JobTemplates');
-jest.mock('../../../api/models/Labels');
-jest.mock('../../../api/models/Projects');
-jest.mock('../../../api/models/Inventories');
-jest.mock('../../../api/models/ExecutionEnvironments');
-jest.mock('../../../api/models/InstanceGroups');
-jest.mock('../../../api/models/Root');
+jest.mock('../../../api');
 
 const mockJobTemplate = {
   allow_callbacks: false,
@@ -48,11 +25,6 @@ const mockJobTemplate = {
   ask_inventory_on_launch: false,
   ask_job_slice_count_on_launch: false,
   ask_credential_on_launch: false,
-  ask_execution_environment_on_launch: false,
-  ask_forks_on_launch: false,
-  ask_instance_groups_on_launch: false,
-  ask_job_slice_count_on_launch: false,
-  ask_labels_on_launch: false,
   ask_timeout_on_launch: false,
   become_enabled: false,
   description: 'Bar',
@@ -115,258 +87,105 @@ const mockJobTemplate = {
   execution_environment: 1,
 };
 
-const mockRelatedCredentials = {
-  count: 2,
-  next: null,
-  previous: null,
-  results: [
-    {
-      id: 1,
-      type: 'credential',
-      url: '/api/v2/credentials/1/',
-      related: {},
-      summary_fields: {
-        user_capabilities: {
-          edit: true,
-          delete: true,
-          copy: true,
-          use: true,
-        },
-      },
-      created: '2016-08-24T20:20:44.411607Z',
-      modified: '2019-06-18T16:14:00.109434Z',
-      name: 'Test Vault Credential',
-      description: 'Credential with access to vaulted data.',
-      organization: 1,
-      credential_type: 3,
-      inputs: { vault_password: '$encrypted$' },
-    },
-    {
-      id: 2,
-      type: 'credential',
-      url: '/api/v2/credentials/2/',
-      related: {},
-      summary_fields: {
-        user_capabilities: {
-          edit: true,
-          delete: true,
-          copy: true,
-          use: true,
-        },
-      },
-      created: '2016-08-24T20:20:44.411607Z',
-      modified: '2017-07-11T15:58:39.103659Z',
-      name: 'Test Machine Credential',
-      description: 'Credential with access to internal machines.',
-      organization: 1,
-      credential_type: 1,
-      inputs: { ssh_key_data: '$encrypted$' },
-    },
-  ],
+// The form has its own suite (JobTemplateForm.test.js); stub it so we can drive
+// the container's submit/cancel + value-transformation logic directly. The
+// Save button mirrors a post-edit form state: changed name/job_type, inventory,
+// cleared execution environment, and a new set of labels. (Names are mock-
+// prefixed so jest's out-of-scope guard allows them inside the mock factory.)
+const mockUpdatedLabels = [
+  { id: 3, name: 'Foo' },
+  { id: 4, name: 'Bar' },
+  { id: 5, name: 'Maple' },
+  { id: 6, name: 'Tree' },
+];
+// The values object the real form would hand to onSubmit: scalar template
+// fields (no id/type/related/summary_fields/webhook_key) plus the object-valued
+// lookups the container unwraps, plus the edits made in the form.
+const mockBuildSubmitValues = () => {
+  const {
+    id,
+    type,
+    related,
+    summary_fields,
+    webhook_key,
+    ...scalarFields
+  } = mockJobTemplate;
+  return {
+    ...scalarFields,
+    name: 'new name',
+    job_type: 'check',
+    inventory: { id: 1, name: 'Other Inventory' },
+    project: { id: 3, name: 'Boo' },
+    execution_environment: '',
+    webhook_credential: null,
+    labels: mockUpdatedLabels,
+    instanceGroups: [],
+    initialInstanceGroups: [],
+    credentials: mockJobTemplate.summary_fields.credentials,
+  };
 };
-
-const mockRelatedProjectPlaybooks = [
-  'check.yml',
-  'debug-50.yml',
-  'debug.yml',
-  'debug2.yml',
-  'debug_extra_vars.yml',
-  'dynamic_inventory.yml',
-  'environ_test.yml',
-  'fail_unless.yml',
-  'pass_unless.yml',
-  'pause.yml',
-  'ping-20.yml',
-  'ping.yml',
-  'setfact_50.yml',
-  'vault.yml',
-];
-
-const mockInstanceGroups = [
-  {
-    id: 1,
-    type: 'instance_group',
-    url: '/api/v2/instance_groups/1/',
-    related: {
-      jobs: '/api/v2/instance_groups/1/jobs/',
-      instances: '/api/v2/instance_groups/1/instances/',
-    },
-    name: 'tower',
-    capacity: 59,
-    committed_capacity: 0,
-    consumed_capacity: 0,
-    percent_capacity_remaining: 100.0,
-    jobs_running: 0,
-    jobs_total: 3,
-    instances: 1,
-    controller: null,
-    policy_instance_percentage: 100,
-    policy_instance_minimum: 0,
-    policy_instance_list: [],
-  },
-];
-
-const mockExecutionEnvironment = [
-  {
-    id: 1,
-    name: 'Default EE',
-    description: '',
-    image: 'quay.io/ansible/awx-ee',
-  },
-];
+const mockFormProps = { current: undefined };
+jest.mock('../shared/JobTemplateForm', () =>
+  function MockJobTemplateForm(props) {
+    mockFormProps.current = props;
+    const { handleSubmit, handleCancel } = props;
+    return (
+      <div>
+        <button
+          type="button"
+          aria-label="Save"
+          onClick={() => handleSubmit(mockBuildSubmitValues())}
+        >
+          Save
+        </button>
+        <button type="button" aria-label="Cancel" onClick={handleCancel}>
+          Cancel
+        </button>
+      </div>
+    );
+  }
+);
 
 describe('<JobTemplateEdit />', () => {
   beforeEach(() => {
-    RootAPI.readAssetVariables.mockResolvedValue({
-      data: {
-        BRAND_NAME: 'AWX',
-      },
-    });
-    JobTemplatesAPI.readCredentials.mockResolvedValue({
-      data: mockRelatedCredentials,
-    });
-    JobTemplatesAPI.readInstanceGroups.mockReturnValue({
-      data: { results: mockInstanceGroups },
-    });
-
-    InventoriesAPI.read.mockResolvedValue({
-      data: {
-        results: [],
-        count: 0,
-      },
-    });
-    InventoriesAPI.readOptions.mockResolvedValue({
-      data: { actions: { GET: {}, POST: {} } },
-    });
-
-    InstanceGroupsAPI.read.mockResolvedValue({
-      data: {
-        results: [],
-        count: 0,
-      },
-    });
-    InstanceGroupsAPI.readOptions.mockResolvedValue({
-      data: { actions: { GET: {}, POST: {} } },
-    });
-
-    ProjectsAPI.read.mockResolvedValue({
-      data: {
-        results: [],
-        count: 0,
-      },
-    });
-    ProjectsAPI.readOptions.mockResolvedValue({
-      data: { actions: { GET: {}, POST: {} } },
-    });
-    ProjectsAPI.readPlaybooks.mockResolvedValue({
-      data: mockRelatedProjectPlaybooks,
-    });
-
-    LabelsAPI.read.mockResolvedValue({ data: { results: [] } });
-
-    CredentialsAPI.read.mockResolvedValue({
-      data: {
-        results: [],
-        count: 0,
-      },
-    });
-    CredentialsAPI.readOptions.mockResolvedValue({
-      data: { actions: { GET: {}, POST: {} } },
-    });
-
-    CredentialTypesAPI.loadAllTypes.mockResolvedValue([]);
-
-    ExecutionEnvironmentsAPI.read.mockResolvedValue({
-      data: {
-        results: mockExecutionEnvironment,
-        count: 1,
-      },
-    });
-    ExecutionEnvironmentsAPI.readOptions.mockResolvedValue({
-      data: { actions: { GET: {}, POST: {} } },
-    });
-
-    useDebounce.mockImplementation((fn) => fn);
+    ProjectsAPI.readDetail.mockResolvedValue({ data: {} });
   });
 
   afterEach(() => {
     jest.resetAllMocks();
+    mockFormProps.current = undefined;
   });
 
   test('initially renders successfully', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <JobTemplateEdit template={mockJobTemplate} />
-      );
-    });
-    wrapper.update();
-    expect(wrapper.find('FormGroup[label="Host Config Key"]').length).toBe(1);
-    expect(
-      wrapper.find('FormGroup[label="Host Config Key"]').prop('isRequired')
-    ).toBe(true);
+    renderWithContexts(<JobTemplateEdit template={mockJobTemplate} />);
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument()
+    );
+    // container hands the template through to the form
+    expect(mockFormProps.current.template).toEqual(mockJobTemplate);
   });
 
   test('handleSubmit should call api update', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <JobTemplateEdit
-          template={mockJobTemplate}
-          reloadTemplate={jest.fn()}
-        />
-      );
-    });
-    wrapper.update();
+    JobTemplatesAPI.update.mockResolvedValue({ data: {} });
+    JobTemplatesAPI.orderInstanceGroups.mockResolvedValue({});
+    JobTemplatesAPI.disassociateLabel.mockResolvedValue({});
+    JobTemplatesAPI.associateLabel.mockResolvedValue({});
+    JobTemplatesAPI.disassociateCredentials.mockResolvedValue({});
+    JobTemplatesAPI.associateCredentials.mockResolvedValue({});
 
-    const updatedTemplateData = {
-      job_type: 'check',
-      name: 'new name',
-      inventory: {
-        id: 1,
-        name: 'Other Inventory',
-      },
-    };
-    const labels = [
-      { id: 3, name: 'Foo' },
-      { id: 4, name: 'Bar' },
-      { id: 5, name: 'Maple' },
-      { id: 6, name: 'Tree' },
-    ];
-    await waitForElement(wrapper, 'LabelSelect', (el) => el.length > 0);
-    act(() => {
-      wrapper.find('LabelSelect').invoke('onChange')(labels);
-      wrapper.update();
-    });
-    act(() => {
-      wrapper.find('AnsibleSelect#template-job-type').prop('onChange')(
-        null,
-        'check'
-      );
-    });
-    wrapper.update();
-    act(() => {
-      wrapper.find('InventoryLookup').invoke('onChange')({
-        id: 1,
-        name: 'Other Inventory',
-      });
+    const { user } = renderWithContexts(
+      <JobTemplateEdit template={mockJobTemplate} reloadTemplate={jest.fn()} />
+    );
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument()
+    );
 
-      wrapper.find('TextInput#execution-environments').invoke('onChange')('');
-    });
-    wrapper.update();
-
-    wrapper.find('input#template-name').simulate('change', {
-      target: { value: 'new name', name: 'name' },
-    });
-
-    await act(async () => {
-      wrapper.find('button[aria-label="Save"]').simulate('click');
-      wrapper.update();
-    });
+    await user.click(screen.getByRole('button', { name: 'Save' }));
 
     const expected = {
       ...mockJobTemplate,
-      ...updatedTemplateData,
+      job_type: 'check',
+      name: 'new name',
       inventory: 1,
       project: 3,
       execution_environment: null,
@@ -377,29 +196,30 @@ describe('<JobTemplateEdit />', () => {
     delete expected.related;
     delete expected.webhook_key;
     delete expected.webhook_url;
-    expect(JobTemplatesAPI.update).toHaveBeenCalledWith(1, expected);
+    delete expected.webhook_credential;
+
+    await waitFor(() =>
+      expect(JobTemplatesAPI.update).toHaveBeenCalledWith(1, {
+        ...expected,
+        webhook_credential: null,
+      })
+    );
     expect(JobTemplatesAPI.disassociateLabel).toHaveBeenCalledTimes(2);
     expect(JobTemplatesAPI.associateLabel).toHaveBeenCalledTimes(4);
   });
 
   test('should navigate to job template detail when cancel is clicked', async () => {
     const history = createMemoryHistory({});
-    let wrapper;
-    let cancelButton;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <JobTemplateEdit template={mockJobTemplate} />,
-        { context: { router: { history } } }
-      );
-      cancelButton = await waitForElement(
-        wrapper,
-        'button[aria-label="Cancel"]',
-        (e) => e.length === 1
-      );
-    });
-    await act(async () => {
-      cancelButton.prop('onClick')();
-    });
+    const { user } = renderWithContexts(
+      <JobTemplateEdit template={mockJobTemplate} />,
+      { context: { router: { history } } }
+    );
+    await waitFor(() =>
+      expect(
+        screen.getByRole('button', { name: 'Cancel' })
+      ).toBeInTheDocument()
+    );
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
     expect(history.location.pathname).toEqual(
       '/templates/job_template/1/details'
     );

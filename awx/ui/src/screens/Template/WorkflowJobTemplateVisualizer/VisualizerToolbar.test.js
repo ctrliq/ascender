@@ -1,12 +1,12 @@
 import React from 'react';
+import { screen, fireEvent } from '@testing-library/react';
 import {
   WorkflowDispatchContext,
   WorkflowStateContext,
 } from 'contexts/Workflow';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import VisualizerToolbar from './VisualizerToolbar';
 
-let wrapper;
 const close = jest.fn();
 const dispatch = jest.fn();
 const save = jest.fn();
@@ -26,20 +26,21 @@ const workflowContext = {
 };
 
 describe('VisualizerToolbar', () => {
-  beforeAll(() => {
-    const nodes = [
-      {
-        id: 1,
-      },
-      {
-        id: 2,
-      },
-      {
-        id: 3,
-        isDeleted: true,
-      },
-    ];
-    wrapper = mountWithContexts(
+  const nodes = [
+    {
+      id: 1,
+    },
+    {
+      id: 2,
+    },
+    {
+      id: 3,
+      isDeleted: true,
+    },
+  ];
+
+  function renderToolbar() {
+    return renderWithContexts(
       <WorkflowDispatchContext.Provider value={dispatch}>
         <WorkflowStateContext.Provider value={{ ...workflowContext, nodes }}>
           <VisualizerToolbar
@@ -52,41 +53,57 @@ describe('VisualizerToolbar', () => {
         </WorkflowStateContext.Provider>
       </WorkflowDispatchContext.Provider>
     );
-  });
+  }
 
   test('Shows correct number of nodes', () => {
     // The start node (id=1) and deleted nodes (isDeleted=true) should be ignored
-    expect(wrapper.find('Badge').text()).toBe('1');
+    renderToolbar();
+    expect(document.querySelector('#visualizer-total-nodes-badge')).toHaveTextContent(
+      '1'
+    );
   });
 
   test('Should display action buttons', () => {
-    expect(wrapper.find('CompassIcon')).toHaveLength(1);
-    expect(wrapper.find('WrenchIcon')).toHaveLength(1);
-    expect(wrapper.find('BookIcon')).toHaveLength(1);
-    expect(wrapper.find('RocketIcon')).toHaveLength(1);
-    expect(wrapper.find('TrashAltIcon')).toHaveLength(1);
+    renderToolbar();
+    expect(
+      screen.getByRole('button', { name: 'Toggle legend' })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Toggle tools' })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Workflow documentation' })
+    ).toBeInTheDocument();
+    expect(document.querySelector('#visualizer-launch')).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Delete all nodes' })
+    ).toBeInTheDocument();
   });
 
   test('Toggle Legend button dispatches as expected', () => {
-    wrapper.find('CompassIcon').simulate('click');
+    renderToolbar();
+    fireEvent.click(screen.getByRole('button', { name: 'Toggle legend' }));
     expect(dispatch).toHaveBeenCalledWith({ type: 'TOGGLE_LEGEND' });
   });
 
   test('Toggle Tools button dispatches as expected', () => {
-    wrapper.find('WrenchIcon').simulate('click');
+    renderToolbar();
+    fireEvent.click(screen.getByRole('button', { name: 'Toggle tools' }));
     expect(dispatch).toHaveBeenCalledWith({ type: 'TOGGLE_TOOLS' });
   });
 
   test('Delete All button dispatches as expected', () => {
-    wrapper.find('TrashAltIcon').simulate('click');
+    renderToolbar();
+    fireEvent.click(screen.getByRole('button', { name: 'Delete all nodes' }));
     expect(dispatch).toHaveBeenCalledWith({
       type: 'SET_SHOW_DELETE_ALL_NODES_MODAL',
       value: true,
     });
   });
 
-  test('Delete All button dispatches as expected', () => {
-    wrapper.find('TrashAltIcon').simulate('click');
+  test('Delete All button dispatches as expected (duplicate)', () => {
+    renderToolbar();
+    fireEvent.click(screen.getByRole('button', { name: 'Delete all nodes' }));
     expect(dispatch).toHaveBeenCalledWith({
       type: 'SET_SHOW_DELETE_ALL_NODES_MODAL',
       value: true,
@@ -94,24 +111,28 @@ describe('VisualizerToolbar', () => {
   });
 
   test('Save button calls expected function', () => {
-    wrapper.find('button[aria-label="Save"]').simulate('click');
+    renderToolbar();
+    fireEvent.click(screen.getByRole('button', { name: 'Save' }));
     expect(save).toHaveBeenCalled();
   });
 
   test('Close button calls expected function', () => {
-    wrapper.find('TimesIcon').simulate('click');
+    renderToolbar();
+    fireEvent.click(screen.getByRole('button', { name: 'Close' }));
     expect(close).toHaveBeenCalled();
   });
 
   test('Launch button should be hidden when user cannot start workflow', () => {
-    const nodes = [
+    const oneNode = [
       {
         id: 1,
       },
     ];
-    const toolbar = mountWithContexts(
+    renderWithContexts(
       <WorkflowDispatchContext.Provider value={dispatch}>
-        <WorkflowStateContext.Provider value={{ ...workflowContext, nodes }}>
+        <WorkflowStateContext.Provider
+          value={{ ...workflowContext, nodes: oneNode }}
+        >
           <VisualizerToolbar
             onClose={close}
             onSave={save}
@@ -129,19 +150,24 @@ describe('VisualizerToolbar', () => {
         </WorkflowStateContext.Provider>
       </WorkflowDispatchContext.Provider>
     );
-    expect(toolbar.find('LaunchButton button').length).toBe(0);
+    expect(document.querySelector('#visualizer-launch')).toBeNull();
   });
 
   test('Launch button should be disabled when there are unsaved changes', () => {
-    expect(wrapper.find('LaunchButton button').prop('disabled')).toEqual(false);
-    const nodes = [
+    renderToolbar();
+    // totalNodes > 0 and no unsaved changes => enabled
+    expect(document.querySelector('#visualizer-launch')).not.toBeDisabled();
+
+    const oneNode = [
       {
         id: 1,
       },
     ];
-    const disabledToolbar = mountWithContexts(
+    renderWithContexts(
       <WorkflowDispatchContext.Provider value={dispatch}>
-        <WorkflowStateContext.Provider value={{ ...workflowContext, nodes }}>
+        <WorkflowStateContext.Provider
+          value={{ ...workflowContext, nodes: oneNode }}
+        >
           <VisualizerToolbar
             onClose={close}
             onSave={save}
@@ -152,20 +178,22 @@ describe('VisualizerToolbar', () => {
         </WorkflowStateContext.Provider>
       </WorkflowDispatchContext.Provider>
     );
-    expect(
-      disabledToolbar.find('LaunchButton button').prop('disabled')
-    ).toEqual(true);
+    const launchButtons = document.querySelectorAll('#visualizer-launch');
+    // the second render's launch button is the last one in the document
+    expect(launchButtons[launchButtons.length - 1]).toBeDisabled();
   });
 
   test('Buttons should be hidden when user cannot edit workflow', () => {
-    const nodes = [
+    const oneNode = [
       {
         id: 1,
       },
     ];
-    const toolbar = mountWithContexts(
+    renderWithContexts(
       <WorkflowDispatchContext.Provider value={dispatch}>
-        <WorkflowStateContext.Provider value={{ ...workflowContext, nodes }}>
+        <WorkflowStateContext.Provider
+          value={{ ...workflowContext, nodes: oneNode }}
+        >
           <VisualizerToolbar
             onClose={close}
             onSave={save}
@@ -176,7 +204,7 @@ describe('VisualizerToolbar', () => {
         </WorkflowStateContext.Provider>
       </WorkflowDispatchContext.Provider>
     );
-    expect(toolbar.find('#visualizer-delete-all').length).toBe(0);
-    expect(toolbar.find('#visualizer-save').length).toBe(0);
+    expect(document.querySelector('#visualizer-delete-all')).toBeNull();
+    expect(document.querySelector('#visualizer-save')).toBeNull();
   });
 });

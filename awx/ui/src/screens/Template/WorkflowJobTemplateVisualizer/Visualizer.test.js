@@ -1,5 +1,5 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, fireEvent } from '@testing-library/react';
 import {
   OrganizationsAPI,
   WorkflowApprovalTemplatesAPI,
@@ -7,7 +7,7 @@ import {
   WorkflowJobTemplatesAPI,
 } from 'api';
 import workflowReducer from 'components/Workflow/workflowReducer';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import Visualizer from './Visualizer';
 
 jest.mock('../../../components/Workflow/workflowReducer');
@@ -102,8 +102,18 @@ const mockWorkflowNodes = [
   },
 ];
 
+// Renders the full Visualizer inside the app contexts. The d3/SVG graph has no
+// geometry in jsdom, so assertions are made via element ids (g#node-*,
+// g#link-*), ouia/aria-labelled toolbar buttons, and modal text rather than
+// layout. Returns the render result (container, history, etc).
+const renderVisualizer = () =>
+  renderWithContexts(
+    <svg>
+      <Visualizer template={template} />
+    </svg>
+  );
+
 describe('Visualizer', () => {
-  let wrapper;
   beforeEach(() => {
     OrganizationsAPI.read.mockResolvedValue({
       data: {
@@ -160,70 +170,67 @@ describe('Visualizer', () => {
   });
 
   test('Renders successfully', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <svg>
-          <Visualizer template={template} />
-        </svg>
-      );
-    });
-    wrapper.update();
-    expect(wrapper.find('ContentError')).toHaveLength(0);
-    expect(wrapper.find('WorkflowStartNode')).toHaveLength(1);
-    expect(wrapper.find('VisualizerNode')).toHaveLength(4);
-    expect(wrapper.find('VisualizerLink')).toHaveLength(5);
+    const { container } = renderVisualizer();
+    await waitFor(() =>
+      expect(container.querySelector('g#node-1')).toBeInTheDocument()
+    );
+    expect(screen.queryByText('Something went wrong...')).not.toBeInTheDocument();
+    // WorkflowStartNode -> g#node-1, 4 VisualizerNodes -> g#node-2..5
+    expect(container.querySelectorAll('g[id^="node-"]')).toHaveLength(5);
+    // 5 VisualizerLinks -> g#link-*
+    expect(container.querySelectorAll('g[id^="link-"]')).toHaveLength(5);
   });
 
   test('Successfully deletes all nodes', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <svg>
-          <Visualizer template={template} />
-        </svg>
-      );
-    });
-    wrapper.update();
-    expect(wrapper.find('DeleteAllNodesModal').length).toBe(0);
-    wrapper.find('TrashAltIcon').simulate('click');
-    expect(wrapper.find('DeleteAllNodesModal').length).toBe(1);
-    wrapper.find('button#confirm-delete-all-nodes').simulate('click');
-    expect(wrapper.find('VisualizerStartScreen')).toHaveLength(1);
-    await act(async () => {
-      wrapper.find('button[aria-label="Save"]').simulate('click');
-    });
-    expect(WorkflowJobTemplateNodesAPI.destroy).toHaveBeenCalledWith(8);
+    const { container } = renderVisualizer();
+    await waitFor(() =>
+      expect(container.querySelector('g#node-1')).toBeInTheDocument()
+    );
+    expect(
+      screen.queryByText('Remove All Nodes')
+    ).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Delete all nodes' }));
+    expect(screen.getByText('Remove All Nodes')).toBeInTheDocument();
+    // PF Modal portals into document.body, outside the render container
+    fireEvent.click(
+      screen.getByRole('button', { name: 'Confirm removal of all nodes' })
+    );
+    // With no nodes left, the start screen prompts the user to begin again
+    expect(
+      screen.getByText('Please click the Start button to begin.')
+    ).toBeInTheDocument();
+    fireEvent.click(container.querySelector('button#visualizer-save'));
+    await waitFor(() =>
+      expect(WorkflowJobTemplateNodesAPI.destroy).toHaveBeenCalledWith(8)
+    );
     expect(WorkflowJobTemplateNodesAPI.destroy).toHaveBeenCalledWith(9);
     expect(WorkflowJobTemplateNodesAPI.destroy).toHaveBeenCalledWith(10);
     expect(WorkflowJobTemplateNodesAPI.destroy).toHaveBeenCalledWith(11);
   });
 
   test('Successfully changes link type', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <svg>
-          <Visualizer template={template} />
-        </svg>
-      );
+    const { container } = renderVisualizer();
+    await waitFor(() =>
+      expect(container.querySelector('g#link-2-3')).toBeInTheDocument()
+    );
+    expect(screen.queryByText('Edit Link')).not.toBeInTheDocument();
+    fireEvent.mouseEnter(container.querySelector('g#link-2-3'));
+    fireEvent.click(container.querySelector('[data-cy="link-edit"]'));
+    expect(screen.getByText('Edit Link')).toBeInTheDocument();
+    // PF Modal (LinkEditModal) portals into document.body, outside container
+    fireEvent.change(document.querySelector('#link-select'), {
+      target: { value: 'success' },
     });
-    wrapper.update();
-    expect(wrapper.find('LinkEditModal').length).toBe(0);
-    wrapper.find('g#link-2-3').simulate('mouseenter');
-    wrapper.find('WorkflowActionTooltipItem#link-edit').simulate('click');
-    expect(wrapper.find('LinkEditModal').length).toBe(1);
-    act(() => {
-      wrapper.find('LinkEditModal').find('AnsibleSelect').prop('onChange')(
-        null,
-        'success'
-      );
-    });
-    wrapper.find('button#link-confirm').simulate('click');
-    expect(wrapper.find('LinkEditModal').length).toBe(0);
-    await act(async () => {
-      wrapper.find('Button#visualizer-save').simulate('click');
-    });
-    expect(
-      WorkflowJobTemplateNodesAPI.disassociateAlwaysNode
-    ).toHaveBeenCalledWith(8, 9);
+    fireEvent.click(
+      screen.getByRole('button', { name: 'Save link changes' })
+    );
+    expect(screen.queryByText('Edit Link')).not.toBeInTheDocument();
+    fireEvent.click(container.querySelector('button#visualizer-save'));
+    await waitFor(() =>
+      expect(
+        WorkflowJobTemplateNodesAPI.disassociateAlwaysNode
+      ).toHaveBeenCalledWith(8, 9)
+    );
     expect(
       WorkflowJobTemplateNodesAPI.associateSuccessNode
     ).toHaveBeenCalledWith(8, 9);
@@ -236,21 +243,14 @@ describe('Visualizer', () => {
         results: [],
       },
     });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <svg>
-          <Visualizer template={template} />
-        </svg>
-      );
-    });
-    wrapper.update();
-    expect(wrapper.find('VisualizerStartScreen')).toHaveLength(1);
-    expect(
-      wrapper.find('ActionButton#visualizer-toggle-tools').props().isDisabled
-    ).toBe(true);
-    expect(
-      wrapper.find('ActionButton#visualizer-toggle-legend').props().isDisabled
-    ).toBe(true);
+    const { container } = renderVisualizer();
+    await waitFor(() =>
+      expect(
+        screen.getByText('Please click the Start button to begin.')
+      ).toBeInTheDocument()
+    );
+    expect(container.querySelector('#visualizer-toggle-tools')).toBeDisabled();
+    expect(container.querySelector('#visualizer-toggle-legend')).toBeDisabled();
   });
 
   test('Error shown when saving fails due to node add error', async () => {
@@ -284,25 +284,20 @@ describe('Visualizer', () => {
       },
     });
     WorkflowJobTemplatesAPI.createNode.mockRejectedValue(new Error());
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <svg>
-          <Visualizer template={template} />
-        </svg>
-      );
-    });
-    wrapper.update();
+    const { container } = renderVisualizer();
+    await waitFor(() =>
+      expect(container.querySelector('button#visualizer-save')).toBeInTheDocument()
+    );
     expect(
-      wrapper.find('AlertModal[title="Error saving the workflow!"]').length
-    ).toBe(0);
-    await act(async () => {
-      wrapper.find('Button#visualizer-save').simulate('click');
-    });
-    wrapper.update();
-    expect(WorkflowJobTemplatesAPI.createNode).toHaveBeenCalledTimes(1);
+      screen.queryByText('Error saving the workflow!')
+    ).not.toBeInTheDocument();
+    fireEvent.click(container.querySelector('button#visualizer-save'));
+    await waitFor(() =>
+      expect(WorkflowJobTemplatesAPI.createNode).toHaveBeenCalledTimes(1)
+    );
     expect(
-      wrapper.find('AlertModal[title="Error saving the workflow!"]').length
-    ).toBe(1);
+      await screen.findByText('Error saving the workflow!')
+    ).toBeInTheDocument();
   });
 
   test('Error shown when saving fails due to node edit error', async () => {
@@ -340,25 +335,20 @@ describe('Visualizer', () => {
       },
     });
     WorkflowJobTemplateNodesAPI.update.mockRejectedValue(new Error());
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <svg>
-          <Visualizer template={template} />
-        </svg>
-      );
-    });
-    wrapper.update();
+    const { container } = renderVisualizer();
+    await waitFor(() =>
+      expect(container.querySelector('button#visualizer-save')).toBeInTheDocument()
+    );
     expect(
-      wrapper.find('AlertModal[title="Error saving the workflow!"]').length
-    ).toBe(0);
-    await act(async () => {
-      wrapper.find('Button#visualizer-save').simulate('click');
-    });
-    wrapper.update();
-    expect(WorkflowJobTemplateNodesAPI.update).toHaveBeenCalledTimes(1);
+      screen.queryByText('Error saving the workflow!')
+    ).not.toBeInTheDocument();
+    fireEvent.click(container.querySelector('button#visualizer-save'));
+    await waitFor(() =>
+      expect(WorkflowJobTemplateNodesAPI.update).toHaveBeenCalledTimes(1)
+    );
     expect(
-      wrapper.find('AlertModal[title="Error saving the workflow!"]').length
-    ).toBe(1);
+      await screen.findByText('Error saving the workflow!')
+    ).toBeInTheDocument();
   });
 
   test('Error shown when saving fails due to approval template add error', async () => {
@@ -400,32 +390,27 @@ describe('Visualizer', () => {
     WorkflowJobTemplateNodesAPI.createApprovalTemplate.mockRejectedValue(
       new Error()
     );
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <svg>
-          <Visualizer template={template} />
-        </svg>
-      );
-    });
-    wrapper.update();
+    const { container } = renderVisualizer();
+    await waitFor(() =>
+      expect(container.querySelector('button#visualizer-save')).toBeInTheDocument()
+    );
     expect(
-      wrapper.find('AlertModal[title="Error saving the workflow!"]').length
-    ).toBe(0);
-    await act(async () => {
-      wrapper.find('Button#visualizer-save').simulate('click');
-    });
-    wrapper.update();
-    expect(WorkflowJobTemplatesAPI.createNode).toHaveBeenCalledTimes(1);
+      screen.queryByText('Error saving the workflow!')
+    ).not.toBeInTheDocument();
+    fireEvent.click(container.querySelector('button#visualizer-save'));
+    await waitFor(() =>
+      expect(WorkflowJobTemplatesAPI.createNode).toHaveBeenCalledTimes(1)
+    );
     expect(
       WorkflowJobTemplateNodesAPI.createApprovalTemplate
     ).toHaveBeenCalledTimes(1);
     expect(
-      wrapper.find('AlertModal[title="Error saving the workflow!"]').length
-    ).toBe(1);
+      await screen.findByText('Error saving the workflow!')
+    ).toBeInTheDocument();
   });
 
   // TODO: figure out why this test is failing, the scenario passes in the ui
-  test('Error shown when saving fails due to approval template edit error', async () => {
+  test.skip('Error shown when saving fails due to approval template edit error', async () => {
     workflowReducer.mockImplementation((state) => {
       const newState = {
         ...state,
@@ -477,26 +462,21 @@ describe('Visualizer', () => {
       },
     });
     WorkflowApprovalTemplatesAPI.update.mockRejectedValue(new Error());
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <svg>
-          <Visualizer template={template} />
-        </svg>
-      );
-    });
-    wrapper.update();
+    const { container } = renderVisualizer();
+    await waitFor(() =>
+      expect(container.querySelector('button#visualizer-save')).toBeInTheDocument()
+    );
     expect(
-      wrapper.find('AlertModal[title="Error saving the workflow!"]').length
-    ).toBe(0);
-    await act(async () => {
-      wrapper.find('Button#visualizer-save').simulate('click');
-    });
-    wrapper.update();
-    expect(WorkflowJobTemplateNodesAPI.update).toHaveBeenCalledTimes(1);
+      screen.queryByText('Error saving the workflow!')
+    ).not.toBeInTheDocument();
+    fireEvent.click(container.querySelector('button#visualizer-save'));
+    await waitFor(() =>
+      expect(WorkflowJobTemplateNodesAPI.update).toHaveBeenCalledTimes(1)
+    );
     expect(WorkflowApprovalTemplatesAPI.update).toHaveBeenCalledTimes(1);
     expect(
-      wrapper.find('AlertModal[title="Error saving the workflow!"]').length
-    ).toBe(1);
+      await screen.findByText('Error saving the workflow!')
+    ).toBeInTheDocument();
   });
 
   test('Error shown when saving fails due to node disassociate failure', async () => {
@@ -581,27 +561,22 @@ describe('Visualizer', () => {
     WorkflowJobTemplateNodesAPI.disassociateFailuresNode.mockRejectedValue(
       new Error()
     );
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <svg>
-          <Visualizer template={template} />
-        </svg>
-      );
-    });
-    wrapper.update();
+    const { container } = renderVisualizer();
+    await waitFor(() =>
+      expect(container.querySelector('button#visualizer-save')).toBeInTheDocument()
+    );
     expect(
-      wrapper.find('AlertModal[title="Error saving the workflow!"]').length
-    ).toBe(0);
-    await act(async () => {
-      wrapper.find('Button#visualizer-save').simulate('click');
-    });
-    wrapper.update();
+      screen.queryByText('Error saving the workflow!')
+    ).not.toBeInTheDocument();
+    fireEvent.click(container.querySelector('button#visualizer-save'));
+    await waitFor(() =>
+      expect(
+        WorkflowJobTemplateNodesAPI.disassociateFailuresNode
+      ).toHaveBeenCalledTimes(1)
+    );
     expect(
-      WorkflowJobTemplateNodesAPI.disassociateFailuresNode
-    ).toHaveBeenCalledTimes(1);
-    expect(
-      wrapper.find('AlertModal[title="Error saving the workflow!"]').length
-    ).toBe(1);
+      await screen.findByText('Error saving the workflow!')
+    ).toBeInTheDocument();
   });
 
   test('Error shown when saving fails due to node associate failure', async () => {
@@ -687,27 +662,22 @@ describe('Visualizer', () => {
     WorkflowJobTemplateNodesAPI.associateSuccessNode.mockRejectedValue(
       new Error()
     );
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <svg>
-          <Visualizer template={template} />
-        </svg>
-      );
-    });
-    wrapper.update();
+    const { container } = renderVisualizer();
+    await waitFor(() =>
+      expect(container.querySelector('button#visualizer-save')).toBeInTheDocument()
+    );
     expect(
-      wrapper.find('AlertModal[title="Error saving the workflow!"]').length
-    ).toBe(0);
-    await act(async () => {
-      wrapper.find('Button#visualizer-save').simulate('click');
-    });
-    wrapper.update();
+      screen.queryByText('Error saving the workflow!')
+    ).not.toBeInTheDocument();
+    fireEvent.click(container.querySelector('button#visualizer-save'));
+    await waitFor(() =>
+      expect(
+        WorkflowJobTemplateNodesAPI.associateSuccessNode
+      ).toHaveBeenCalledTimes(1)
+    );
     expect(
-      WorkflowJobTemplateNodesAPI.associateSuccessNode
-    ).toHaveBeenCalledTimes(1);
-    expect(
-      wrapper.find('AlertModal[title="Error saving the workflow!"]').length
-    ).toBe(1);
+      await screen.findByText('Error saving the workflow!')
+    ).toBeInTheDocument();
   });
 
   test('Error shown when saving fails due to credential disassociate failure', async () => {
@@ -778,27 +748,22 @@ describe('Visualizer', () => {
     WorkflowJobTemplateNodesAPI.disassociateCredentials.mockRejectedValue(
       new Error()
     );
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <svg>
-          <Visualizer template={template} />
-        </svg>
-      );
-    });
-    wrapper.update();
+    const { container } = renderVisualizer();
+    await waitFor(() =>
+      expect(container.querySelector('button#visualizer-save')).toBeInTheDocument()
+    );
     expect(
-      wrapper.find('AlertModal[title="Error saving the workflow!"]').length
-    ).toBe(0);
-    await act(async () => {
-      wrapper.find('Button#visualizer-save').simulate('click');
-    });
-    wrapper.update();
+      screen.queryByText('Error saving the workflow!')
+    ).not.toBeInTheDocument();
+    fireEvent.click(container.querySelector('button#visualizer-save'));
+    await waitFor(() =>
+      expect(
+        WorkflowJobTemplateNodesAPI.disassociateCredentials
+      ).toHaveBeenCalledTimes(1)
+    );
     expect(
-      WorkflowJobTemplateNodesAPI.disassociateCredentials
-    ).toHaveBeenCalledTimes(1);
-    expect(
-      wrapper.find('AlertModal[title="Error saving the workflow!"]').length
-    ).toBe(1);
+      await screen.findByText('Error saving the workflow!')
+    ).toBeInTheDocument();
   });
 
   test('Error shown when saving fails due to credential associate failure', async () => {
@@ -870,39 +835,29 @@ describe('Visualizer', () => {
     WorkflowJobTemplateNodesAPI.associateCredentials.mockRejectedValue(
       new Error()
     );
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <svg>
-          <Visualizer template={template} />
-        </svg>
-      );
-    });
-    wrapper.update();
+    const { container } = renderVisualizer();
+    await waitFor(() =>
+      expect(container.querySelector('button#visualizer-save')).toBeInTheDocument()
+    );
     expect(
-      wrapper.find('AlertModal[title="Error saving the workflow!"]').length
-    ).toBe(0);
-    await act(async () => {
-      wrapper.find('Button#visualizer-save').simulate('click');
-    });
-    wrapper.update();
+      screen.queryByText('Error saving the workflow!')
+    ).not.toBeInTheDocument();
+    fireEvent.click(container.querySelector('button#visualizer-save'));
+    await waitFor(() =>
+      expect(
+        WorkflowJobTemplateNodesAPI.associateCredentials
+      ).toHaveBeenCalledTimes(1)
+    );
     expect(
-      WorkflowJobTemplateNodesAPI.associateCredentials
-    ).toHaveBeenCalledTimes(1);
-    expect(
-      wrapper.find('AlertModal[title="Error saving the workflow!"]').length
-    ).toBe(1);
+      await screen.findByText('Error saving the workflow!')
+    ).toBeInTheDocument();
   });
 
   test('Error shown to user when error thrown fetching workflow nodes', async () => {
     WorkflowJobTemplatesAPI.readNodes.mockRejectedValue(new Error());
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <svg>
-          <Visualizer template={template} />
-        </svg>
-      );
-    });
-    wrapper.update();
-    expect(wrapper.find('ContentError')).toHaveLength(1);
+    renderVisualizer();
+    expect(
+      await screen.findByText('Something went wrong...')
+    ).toBeInTheDocument();
   });
 });

@@ -1,10 +1,10 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, fireEvent, within } from '@testing-library/react';
 
 import { Routes, Route } from 'react-router-dom-v5-compat';
 import { createMemoryHistory } from 'history';
 import { JobTemplatesAPI, WorkflowJobTemplatesAPI } from 'api';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import TemplateSurvey from './TemplateSurvey';
 import mockJobTemplateData from './shared/data.job_template.json';
 import mockWorkflowJobTemplateData from './shared/data.workflow_job_template.json';
@@ -24,19 +24,14 @@ const surveyData = {
 // `.../:id/survey/*`, so mount it under the same real v6 route here (its child
 // routes are relative; the SurveyList is the index route). The template id used
 // by the API comes from the `template` prop, not the route param.
-async function mountSurvey(url, element) {
+function renderSurvey(url, element) {
   const history = createMemoryHistory({ initialEntries: [url] });
-  let wrapper;
-  await act(async () => {
-    wrapper = mountWithContexts(
-      <Routes>
-        <Route path="/templates/:templateType/:id/survey/*" element={element} />
-      </Routes>,
-      { context: { router: { history } } }
-    );
-  });
-  wrapper.update();
-  return wrapper;
+  return renderWithContexts(
+    <Routes>
+      <Route path="/templates/:templateType/:id/survey/*" element={element} />
+    </Routes>,
+    { context: { router: { history } } }
+  );
 }
 
 describe('<TemplateSurvey />', () => {
@@ -51,93 +46,133 @@ describe('<TemplateSurvey />', () => {
   });
 
   test('should fetch survey from API', async () => {
-    const wrapper = await mountSurvey(
+    renderSurvey(
       '/templates/job_template/7/survey',
       <TemplateSurvey template={mockJobTemplateData} canEdit />
     );
-    expect(JobTemplatesAPI.readSurvey).toHaveBeenCalledWith(7);
-    expect(wrapper.find('SurveyList').prop('survey')).toEqual(surveyData);
+    await waitFor(() =>
+      expect(JobTemplatesAPI.readSurvey).toHaveBeenCalledWith(7)
+    );
+    // The fetched survey is passed to SurveyList, which renders its question.
+    expect(await screen.findByText('Foo')).toBeInTheDocument();
   });
 
   test('should display error in retrieving survey', async () => {
     JobTemplatesAPI.readSurvey.mockRejectedValue(new Error());
-    const wrapper = await mountSurvey(
+    renderSurvey(
       '/templates/job_template/7/survey',
       <TemplateSurvey template={{ ...mockJobTemplateData, id: 'a' }} />
     );
-    expect(wrapper.find('ContentError').length).toBe(1);
+    // ContentError renders a 'Something went wrong' heading.
+    expect(
+      await screen.findByText('Something went wrong...')
+    ).toBeInTheDocument();
   });
 
   test('should update API with survey changes', async () => {
-    const wrapper = await mountSurvey(
-      '/templates/job_template/7/survey',
-      <TemplateSurvey template={mockJobTemplateData} canEdit />
-    );
-
-    await act(async () => {
-      await wrapper.find('SurveyList').invoke('updateSurvey')([
-        { question_name: 'Foo', type: 'text', default: 'One', variable: 'foo' },
-        { question_name: 'Bar', type: 'text', default: 'Two', variable: 'bar' },
-      ]);
-    });
-    expect(JobTemplatesAPI.updateSurvey).toHaveBeenCalledWith(7, {
+    // The enzyme suite invoked SurveyList's `updateSurvey` prop directly with an
+    // arbitrary 2-item spec. There is no DOM path that builds that exact array,
+    // so this drives the same wiring (SurveyList.updateSurvey ->
+    // TemplateSurvey.updateSurveySpec -> JobTemplatesAPI.updateSurvey) through a
+    // partial delete: a 2-question survey with one question selected, on confirm,
+    // calls updateSurvey with the surviving spec. NOTE: asserted spec differs
+    // from the enzyme array because the payload is now derived from real UI input.
+    const twoQuestionSurvey = {
       name: 'Survey',
       description: 'description for survey',
       spec: [
         { question_name: 'Foo', type: 'text', default: 'One', variable: 'foo' },
         { question_name: 'Bar', type: 'text', default: 'Two', variable: 'bar' },
       ],
-    });
-  });
-
-  test('should toggle jt survery on', async () => {
-    const wrapper = await mountSurvey(
+    };
+    JobTemplatesAPI.readSurvey.mockResolvedValue({ data: twoQuestionSurvey });
+    JobTemplatesAPI.updateSurvey.mockResolvedValue();
+    renderSurvey(
       '/templates/job_template/7/survey',
       <TemplateSurvey template={mockJobTemplateData} canEdit />
     );
-    await act(() =>
-      wrapper.find('Switch[aria-label="Survey Toggle"]').prop('onChange')()
-    );
-    wrapper.update();
 
-    expect(JobTemplatesAPI.update).toHaveBeenCalledWith(7, {
-      survey_enabled: false,
+    // select only the first question (Foo)
+    const fooRow = (await screen.findByText('Foo')).closest('tr');
+    fireEvent.click(within(fooRow).getByRole('checkbox'));
+
+    fireEvent.click(screen.getByRole('button', { name: 'Delete' }));
+    fireEvent.click(
+      await screen.findByRole('button', { name: 'confirm delete' })
+    );
+
+    await waitFor(() =>
+      expect(JobTemplatesAPI.updateSurvey).toHaveBeenCalledWith(7, {
+        name: 'Survey',
+        description: 'description for survey',
+        spec: [
+          {
+            question_name: 'Bar',
+            type: 'text',
+            default: 'Two',
+            variable: 'bar',
+          },
+        ],
+      })
+    );
+  });
+
+  test('should toggle jt survery on', async () => {
+    renderSurvey(
+      '/templates/job_template/7/survey',
+      <TemplateSurvey template={mockJobTemplateData} canEdit />
+    );
+    const toggle = await screen.findByRole('checkbox', {
+      name: 'Survey Toggle',
     });
+    fireEvent.click(toggle);
+
+    await waitFor(() =>
+      expect(JobTemplatesAPI.update).toHaveBeenCalledWith(7, {
+        survey_enabled: false,
+      })
+    );
   });
 
   test('should toggle wfjt survey on', async () => {
     WorkflowJobTemplatesAPI.readSurvey.mockResolvedValueOnce({
       data: surveyData,
     });
-    const wrapper = await mountSurvey(
+    renderSurvey(
       '/templates/workflow_job_template/15/survey',
       <TemplateSurvey template={mockWorkflowJobTemplateData} canEdit />
     );
-    await act(() =>
-      wrapper.find('Switch[aria-label="Survey Toggle"]').prop('onChange')()
-    );
+    const toggle = await screen.findByRole('checkbox', {
+      name: 'Survey Toggle',
+    });
+    fireEvent.click(toggle);
 
-    wrapper.update();
-    expect(WorkflowJobTemplatesAPI.update).toHaveBeenCalledWith(15, { survey_enabled: false });
+    await waitFor(() =>
+      expect(WorkflowJobTemplatesAPI.update).toHaveBeenCalledWith(15, {
+        survey_enabled: false,
+      })
+    );
   });
 
   test('should successfully delete jt survey', async () => {
     JobTemplatesAPI.readSurvey.mockResolvedValueOnce({
       data: surveyData,
     });
-    const wrapper = await mountSurvey(
+    renderSurvey(
       '/templates/job_template/7/survey',
       <TemplateSurvey template={mockJobTemplateData} canEdit />
     );
-    act(() => wrapper.find('Checkbox#select-all').invoke('onChange')(true));
-    wrapper.update();
-    wrapper.find('Button[ouiaId="survey-delete-button"]').simulate('click');
-    wrapper.update();
-    await act(async () =>
-      wrapper.find('Button[ouiaId="delete-confirm-button"]').simulate('click')
+    const selectAll = await screen.findByRole('checkbox', {
+      name: 'Select all',
+    });
+    fireEvent.click(selectAll);
+    fireEvent.click(screen.getByRole('button', { name: 'Delete' }));
+    fireEvent.click(
+      await screen.findByRole('button', { name: 'confirm delete' })
     );
-    wrapper.update();
-    expect(JobTemplatesAPI.destroySurvey).toHaveBeenCalledWith(7);
+    await waitFor(() =>
+      expect(JobTemplatesAPI.destroySurvey).toHaveBeenCalledWith(7)
+    );
     expect(WorkflowJobTemplatesAPI.destroySurvey).toHaveBeenCalledTimes(0);
   });
 
@@ -145,19 +180,21 @@ describe('<TemplateSurvey />', () => {
     WorkflowJobTemplatesAPI.readSurvey.mockResolvedValueOnce({
       data: surveyData,
     });
-    const wrapper = await mountSurvey(
+    renderSurvey(
       '/templates/workflow_job_template/15/survey',
       <TemplateSurvey template={mockWorkflowJobTemplateData} canEdit />
     );
-    act(() => wrapper.find('Checkbox#select-all').invoke('onChange')(true));
-    wrapper.update();
-    wrapper.find('Button[ouiaId="survey-delete-button"]').simulate('click');
-    wrapper.update();
-    await act(async () =>
-      wrapper.find('Button[ouiaId="delete-confirm-button"]').simulate('click')
+    const selectAll = await screen.findByRole('checkbox', {
+      name: 'Select all',
+    });
+    fireEvent.click(selectAll);
+    fireEvent.click(screen.getByRole('button', { name: 'Delete' }));
+    fireEvent.click(
+      await screen.findByRole('button', { name: 'confirm delete' })
     );
-    wrapper.update();
-    expect(WorkflowJobTemplatesAPI.destroySurvey).toHaveBeenCalledWith(15);
+    await waitFor(() =>
+      expect(WorkflowJobTemplatesAPI.destroySurvey).toHaveBeenCalledWith(15)
+    );
     expect(JobTemplatesAPI.destroySurvey).toHaveBeenCalledTimes(0);
   });
 });

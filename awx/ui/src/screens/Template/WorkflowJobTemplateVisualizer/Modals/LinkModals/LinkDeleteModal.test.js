@@ -1,12 +1,12 @@
 import React from 'react';
+import { screen, fireEvent } from '@testing-library/react';
 import {
   WorkflowDispatchContext,
   WorkflowStateContext,
 } from 'contexts/Workflow';
-import { mountWithContexts } from '../../../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../../../testUtils/rtlContexts';
 import LinkDeleteModal from './LinkDeleteModal';
 
-let wrapper;
 const dispatch = jest.fn();
 
 const workflowContext = {
@@ -22,8 +22,12 @@ const workflowContext = {
 };
 
 describe('LinkDeleteModal', () => {
-  beforeAll(() => {
-    wrapper = mountWithContexts(
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  beforeEach(() => {
+    renderWithContexts(
       <WorkflowDispatchContext.Provider value={dispatch}>
         <WorkflowStateContext.Provider value={workflowContext}>
           <LinkDeleteModal />
@@ -33,14 +37,14 @@ describe('LinkDeleteModal', () => {
   });
 
   test('Confirm button dispatches as expected', () => {
-    wrapper.find('button#confirm-link-removal').simulate('click');
+    fireEvent.click(document.querySelector('button#confirm-link-removal'));
     expect(dispatch).toHaveBeenCalledWith({
       type: 'DELETE_LINK',
     });
   });
 
   test('Cancel button dispatches as expected', () => {
-    wrapper.find('button#cancel-link-removal').simulate('click');
+    fireEvent.click(document.querySelector('button#cancel-link-removal'));
     expect(dispatch).toHaveBeenCalledWith({
       type: 'SET_LINK_TO_DELETE',
       value: null,
@@ -48,7 +52,9 @@ describe('LinkDeleteModal', () => {
   });
 
   test('Close button dispatches as expected', () => {
-    wrapper.find('TimesIcon').simulate('click');
+    // AlertModal renders into a body portal; the PF Modal close button is
+    // labeled "Close".
+    fireEvent.click(screen.getByRole('button', { name: 'Close' }));
     expect(dispatch).toHaveBeenCalledWith({
       type: 'SET_LINK_TO_DELETE',
       value: null,

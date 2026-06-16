@@ -1,6 +1,6 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { screen, waitFor, fireEvent } from '@testing-library/react';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import SurveyQuestionForm from './SurveyQuestionForm';
 
 const question = {
@@ -15,382 +15,303 @@ const question = {
 
 const noop = () => {};
 
-async function selectType(wrapper, type) {
-  await act(async () => {
-    wrapper.find('AnsibleSelect#question-type').invoke('onChange')(
-      {
-        target: {
-          name: 'type',
-          value: type,
-        },
-      },
-      type
-    );
-  });
-  wrapper.update();
+// Drive the real AnsibleSelect (a PF FormSelect <select>) to change the
+// question type, then wait for the type-dependent fields to (re)render.
+function selectType(type) {
+  const select = document.querySelector('#question-type');
+  fireEvent.change(select, { target: { value: type } });
 }
 
 describe('<SurveyQuestionForm />', () => {
   test('should render form', () => {
-    let wrapper;
+    renderWithContexts(
+      <SurveyQuestionForm
+        question={question}
+        handleSubmit={noop}
+        handleCancel={noop}
+      />
+    );
 
-    act(() => {
-      wrapper = mountWithContexts(
-        <SurveyQuestionForm
-          question={question}
-          handleSubmit={noop}
-          handleCancel={noop}
-        />
-      );
-    });
-
-    expect(wrapper.find('FormField#question-name input').prop('value')).toEqual(
+    expect(document.querySelector('#question-name')).toHaveValue(
       question.question_name
     );
-    expect(
-      wrapper.find('FormField#question-description input').prop('value')
-    ).toEqual(question.question_description);
-    expect(
-      wrapper.find('FormField#question-variable input').prop('value')
-    ).toEqual(question.variable);
-    expect(
-      wrapper.find('CheckboxField#question-required input').prop('checked')
-    ).toEqual(true);
-    expect(wrapper.find('AnsibleSelect#question-type').prop('value')).toEqual(
-      question.type
+    expect(document.querySelector('#question-description')).toHaveValue(
+      question.question_description
     );
+    expect(document.querySelector('#question-variable')).toHaveValue(
+      question.variable
+    );
+    expect(document.querySelector('#question-required')).toBeChecked();
+    expect(document.querySelector('#question-type')).toHaveValue(question.type);
   });
 
   test('should provide fields for text question', () => {
-    let wrapper;
+    renderWithContexts(
+      <SurveyQuestionForm
+        question={question}
+        handleSubmit={noop}
+        handleCancel={noop}
+      />
+    );
 
-    act(() => {
-      wrapper = mountWithContexts(
-        <SurveyQuestionForm
-          question={question}
-          handleSubmit={noop}
-          handleCancel={noop}
-        />
-      );
-    });
-
-    expect(wrapper.find('FormField#question-min').prop('type')).toEqual(
+    expect(document.querySelector('#question-min')).toHaveAttribute(
+      'type',
       'number'
     );
-    expect(wrapper.find('FormField#question-max').prop('type')).toEqual(
+    expect(document.querySelector('#question-max')).toHaveAttribute(
+      'type',
       'number'
     );
-    expect(wrapper.find('FormField#question-default').prop('type')).toEqual(
+    expect(document.querySelector('#question-default')).toHaveAttribute(
+      'type',
       'text'
     );
   });
 
   test('should provide fields for textarea question', async () => {
-    let wrapper;
+    renderWithContexts(
+      <SurveyQuestionForm
+        question={question}
+        handleSubmit={noop}
+        handleCancel={noop}
+      />
+    );
+    selectType('textarea');
 
-    act(() => {
-      wrapper = mountWithContexts(
-        <SurveyQuestionForm
-          question={question}
-          handleSubmit={noop}
-          handleCancel={noop}
-        />
-      );
-    });
-    await selectType(wrapper, 'textarea');
-
-    expect(wrapper.find('FormField#question-min').prop('type')).toEqual(
+    expect(document.querySelector('#question-min')).toHaveAttribute(
+      'type',
       'number'
     );
-    expect(wrapper.find('FormField#question-max').prop('type')).toEqual(
+    expect(document.querySelector('#question-max')).toHaveAttribute(
+      'type',
       'number'
     );
-    expect(wrapper.find('FormField#question-default').prop('type')).toEqual(
-      'textarea'
+    await waitFor(() =>
+      expect(document.querySelector('textarea#question-default')).toBeInTheDocument()
     );
   });
 
   test('should provide fields for password question', async () => {
-    let wrapper;
+    renderWithContexts(
+      <SurveyQuestionForm
+        question={question}
+        handleSubmit={noop}
+        handleCancel={noop}
+      />
+    );
+    selectType('password');
 
-    act(() => {
-      wrapper = mountWithContexts(
-        <SurveyQuestionForm
-          question={question}
-          handleSubmit={noop}
-          handleCancel={noop}
-        />
-      );
-    });
-    await selectType(wrapper, 'password');
-
-    expect(wrapper.find('FormField#question-min').prop('type')).toEqual(
+    expect(document.querySelector('#question-min')).toHaveAttribute(
+      'type',
       'number'
     );
-    expect(wrapper.find('FormField#question-max').prop('type')).toEqual(
+    expect(document.querySelector('#question-max')).toHaveAttribute(
+      'type',
       'number'
     );
-    expect(
-      wrapper.find('PasswordField#question-default input').prop('type')
-    ).toEqual('password');
+    await waitFor(() =>
+      expect(document.querySelector('#question-default')).toHaveAttribute(
+        'type',
+        'password'
+      )
+    );
   });
 
   test('should provide fields for multiple choice question', async () => {
-    let wrapper;
-
-    act(() => {
-      wrapper = mountWithContexts(
-        <SurveyQuestionForm
-          question={question}
-          handleSubmit={noop}
-          handleCancel={noop}
-        />
-      );
-    });
-    await selectType(wrapper, 'multiplechoice');
-
-    expect(wrapper.find('MultipleChoiceField').length).toBe(1);
-    expect(wrapper.find('MultipleChoiceField').find('TextInput').length).toBe(
-      1
+    renderWithContexts(
+      <SurveyQuestionForm
+        question={question}
+        handleSubmit={noop}
+        handleCancel={noop}
+      />
     );
+    selectType('multiplechoice');
+
+    await screen.findByText('Multiple Choice Options');
+    // exactly one empty-choice text input and one default-toggle button
     expect(
-      wrapper
-        .find('MultipleChoiceField')
-        .find('Button[aria-label="Click to toggle default value"]').length
-    ).toBe(1);
+      screen.getAllByRole('textbox', { name: 'new choice' })
+    ).toHaveLength(1);
+    expect(
+      screen.getAllByRole('button', { name: 'Click to toggle default value' })
+    ).toHaveLength(1);
   });
 
   test('should provide fields for multi-select question', async () => {
-    let wrapper;
-
-    act(() => {
-      wrapper = mountWithContexts(
-        <SurveyQuestionForm
-          question={question}
-          handleSubmit={noop}
-          handleCancel={noop}
-        />
-      );
-    });
-    await selectType(wrapper, 'multiselect');
-
-    expect(wrapper.find('MultipleChoiceField').length).toBe(1);
-    expect(wrapper.find('MultipleChoiceField').find('TextInput').length).toBe(
-      1
+    renderWithContexts(
+      <SurveyQuestionForm
+        question={question}
+        handleSubmit={noop}
+        handleCancel={noop}
+      />
     );
+    selectType('multiselect');
+
+    await screen.findByText('Multiple Choice Options');
     expect(
-      wrapper
-        .find('MultipleChoiceField')
-        .find('Button[aria-label="Click to toggle default value"]').length
-    ).toBe(1);
+      screen.getAllByRole('textbox', { name: 'new choice' })
+    ).toHaveLength(1);
+    expect(
+      screen.getAllByRole('button', { name: 'Click to toggle default value' })
+    ).toHaveLength(1);
   });
 
   test('should provide fields for integer question', async () => {
-    let wrapper;
+    renderWithContexts(
+      <SurveyQuestionForm
+        question={question}
+        handleSubmit={noop}
+        handleCancel={noop}
+      />
+    );
+    selectType('integer');
 
-    act(() => {
-      wrapper = mountWithContexts(
-        <SurveyQuestionForm
-          question={question}
-          handleSubmit={noop}
-          handleCancel={noop}
-        />
-      );
-    });
-    await selectType(wrapper, 'integer');
-
-    expect(wrapper.find('FormField#question-min').prop('type')).toEqual(
+    expect(document.querySelector('#question-min')).toHaveAttribute(
+      'type',
       'number'
     );
-    expect(wrapper.find('FormField#question-max').prop('type')).toEqual(
+    expect(document.querySelector('#question-max')).toHaveAttribute(
+      'type',
       'number'
     );
-    expect(
-      wrapper.find('FormField#question-default input').prop('type')
-    ).toEqual('number');
+    await waitFor(() =>
+      expect(document.querySelector('#question-default')).toHaveAttribute(
+        'type',
+        'number'
+      )
+    );
   });
 
   test('should provide fields for float question', async () => {
-    let wrapper;
+    renderWithContexts(
+      <SurveyQuestionForm
+        question={question}
+        handleSubmit={noop}
+        handleCancel={noop}
+      />
+    );
+    selectType('float');
 
-    act(() => {
-      wrapper = mountWithContexts(
-        <SurveyQuestionForm
-          question={question}
-          handleSubmit={noop}
-          handleCancel={noop}
-        />
-      );
-    });
-    await selectType(wrapper, 'float');
-
-    expect(wrapper.find('FormField#question-min').prop('type')).toEqual(
+    expect(document.querySelector('#question-min')).toHaveAttribute(
+      'type',
       'number'
     );
-    expect(wrapper.find('FormField#question-max').prop('type')).toEqual(
+    expect(document.querySelector('#question-max')).toHaveAttribute(
+      'type',
       'number'
     );
-    expect(
-      wrapper.find('FormField#question-default input').prop('type')
-    ).toEqual('number');
+    await waitFor(() =>
+      expect(document.querySelector('#question-default')).toHaveAttribute(
+        'type',
+        'number'
+      )
+    );
   });
-  test('should activate default values, multiselect', async () => {
-    let wrapper;
 
-    act(() => {
-      wrapper = mountWithContexts(
-        <SurveyQuestionForm
-          question={question}
-          handleSubmit={noop}
-          handleCancel={noop}
-        />
-      );
+  // The default-toggle renders a styled CheckIcon whose `selected` prop drives
+  // a styled-components class. enzyme read the `selected` prop directly; in the
+  // real DOM we proxy it by asserting the icon's class changes when toggled.
+  const toggleButton = (choice) =>
+    document.querySelector(`[data-ouia-component-id="${choice}-button"]`);
+  const iconClass = (choice) =>
+    toggleButton(choice).querySelector('svg').getAttribute('class');
+
+  test('should activate default values, multiselect', async () => {
+    renderWithContexts(
+      <SurveyQuestionForm
+        question={question}
+        handleSubmit={noop}
+        handleCancel={noop}
+      />
+    );
+    selectType('multiselect');
+    await screen.findByText('Multiple Choice Options');
+
+    const firstInput = screen.getByRole('textbox', { name: 'new choice' });
+    fireEvent.change(firstInput, { target: { value: 'alex' } });
+
+    // not selected yet
+    const alexUnselected = iconClass('alex');
+    fireEvent.click(toggleButton('alex'));
+    await waitFor(() =>
+      expect(iconClass('alex')).not.toEqual(alexUnselected)
+    );
+    const alexSelected = iconClass('alex');
+
+    // adding a new choice via Enter on the last (alex) input
+    fireEvent.keyUp(screen.getByRole('textbox', { name: 'alex' }), {
+      key: 'Enter',
     });
-    await selectType(wrapper, 'multiselect');
-    await act(async () =>
-      wrapper
-        .find('MultipleChoiceField')
-        .find('MultipleChoiceField')
-        .find('TextInput')
-        .at(0)
-        .prop('onChange')('alex')
+    await waitFor(() =>
+      expect(
+        document.querySelectorAll('#formattedChoices .pf-c-input-group')
+      ).toHaveLength(2)
     );
-    wrapper.update();
-    expect(
-      wrapper
-        .find('Button[ouiaId="alex-button"]')
-        .find('CheckIcon')
-        .prop('selected')
-    ).toBe(false);
-    await act(() =>
-      wrapper.find('Button[ouiaId="alex-button"]').prop('onClick')()
+
+    const secondInput = screen.getByRole('textbox', { name: 'new choice' });
+    fireEvent.change(secondInput, { target: { value: 'spencer' } });
+    await waitFor(() =>
+      expect(
+        document.querySelectorAll('#formattedChoices .pf-c-input-group')
+      ).toHaveLength(2)
     );
-    wrapper.update();
-    expect(
-      wrapper
-        .find('Button[ouiaId="alex-button"]')
-        .find('CheckIcon')
-        .prop('selected')
-    ).toBe(true);
-    await act(async () =>
-      wrapper
-        .find('MultipleChoiceField')
-        .find('TextInput')
-        .at(0)
-        .prop('onKeyUp')({ key: 'Enter' })
+
+    fireEvent.click(toggleButton('spencer'));
+    await waitFor(() =>
+      expect(iconClass('spencer')).toEqual(alexSelected)
     );
-    wrapper.update();
-    expect(wrapper.find('MultipleChoiceField').find('InputGroup').length).toBe(
-      2
-    );
-    await act(async () =>
-      wrapper
-        .find('MultipleChoiceField')
-        .find('TextInput')
-        .at(1)
-        .prop('onChange')('spencer')
-    );
-    wrapper.update();
-    expect(wrapper.find('MultipleChoiceField').find('InputGroup').length).toBe(
-      2
-    );
-    await act(() =>
-      wrapper.find('Button[ouiaId="spencer-button"]').prop('onClick')()
-    );
-    wrapper.update();
-    expect(
-      wrapper
-        .find('Button[ouiaId="spencer-button"]')
-        .find('CheckIcon')
-        .prop('selected')
-    ).toBe(true);
-    await act(() =>
-      wrapper.find('Button[ouiaId="alex-button"]').prop('onClick')()
-    );
-    wrapper.update();
-    expect(
-      wrapper
-        .find('Button[ouiaId="alex-button"]')
-        .find('CheckIcon')
-        .prop('selected')
-    ).toBe(false);
+
+    // multiselect keeps multiple defaults; toggling alex back off
+    fireEvent.click(toggleButton('alex'));
+    await waitFor(() => expect(iconClass('alex')).toEqual(alexUnselected));
+    // spencer stays selected
+    expect(iconClass('spencer')).toEqual(alexSelected);
   });
 
   test('should select default, multiplechoice', async () => {
-    let wrapper;
+    renderWithContexts(
+      <SurveyQuestionForm
+        question={question}
+        handleSubmit={noop}
+        handleCancel={noop}
+      />
+    );
+    selectType('multiplechoice');
+    await screen.findByText('Multiple Choice Options');
 
-    act(() => {
-      wrapper = mountWithContexts(
-        <SurveyQuestionForm
-          question={question}
-          handleSubmit={noop}
-          handleCancel={noop}
-        />
-      );
+    const firstInput = screen.getByRole('textbox', { name: 'new choice' });
+    fireEvent.change(firstInput, { target: { value: 'alex' } });
+
+    const alexUnselected = iconClass('alex');
+    fireEvent.click(toggleButton('alex'));
+    await waitFor(() =>
+      expect(iconClass('alex')).not.toEqual(alexUnselected)
+    );
+    const alexSelected = iconClass('alex');
+    expect(
+      document.querySelectorAll('#formattedChoices .pf-c-input-group')
+    ).toHaveLength(1);
+
+    fireEvent.keyUp(screen.getByRole('textbox', { name: 'alex' }), {
+      key: 'Enter',
     });
-    await selectType(wrapper, 'multiplechoice');
-    await act(async () =>
-      wrapper
-        .find('MultipleChoiceField')
-        .find('TextInput')
-        .at(0)
-        .prop('onChange')('alex')
+    await waitFor(() =>
+      expect(
+        document.querySelectorAll('#formattedChoices .pf-c-input-group')
+      ).toHaveLength(2)
     );
-    wrapper.update();
-    expect(
-      wrapper
-        .find('Button[ouiaId="alex-button"]')
-        .find('CheckIcon')
-        .prop('selected')
-    ).toBe(false);
-    await act(() =>
-      wrapper.find('Button[ouiaId="alex-button"]').prop('onClick')()
-    );
-    wrapper.update();
-    expect(
-      wrapper
-        .find('Button[ouiaId="alex-button"]')
-        .find('CheckIcon')
-        .prop('selected')
-    ).toBe(true);
-    expect(wrapper.find('MultipleChoiceField').find('InputGroup').length).toBe(
-      1
-    );
-    await act(async () =>
-      wrapper
-        .find('MultipleChoiceField')
-        .find('TextInput')
-        .at(0)
-        .prop('onKeyUp')({ key: 'Enter' })
-    );
-    wrapper.update();
-    await act(async () =>
-      wrapper
-        .find('MultipleChoiceField')
-        .find('TextInput')
-        .at(1)
-        .prop('onChange')('spencer')
-    );
-    wrapper.update();
-    expect(wrapper.find('MultipleChoiceField').find('InputGroup').length).toBe(
-      2
-    );
-    await act(() =>
-      wrapper.find('Button[ouiaId="spencer-button"]').prop('onClick')()
-    );
-    wrapper.update();
 
-    expect(
-      wrapper
-        .find('Button[ouiaId="spencer-button"]')
-        .find('CheckIcon')
-        .prop('selected')
-    ).toBe(true);
-    expect(
-      wrapper
-        .find('Button[ouiaId="alex-button"]')
-        .find('CheckIcon')
-        .prop('selected')
-    ).toBe(false);
+    const secondInput = screen.getByRole('textbox', { name: 'new choice' });
+    fireEvent.change(secondInput, { target: { value: 'spencer' } });
+    await waitFor(() =>
+      expect(
+        document.querySelectorAll('#formattedChoices .pf-c-input-group')
+      ).toHaveLength(2)
+    );
+
+    fireEvent.click(toggleButton('spencer'));
+    // multiplechoice is single-select: spencer becomes the default, alex clears
+    await waitFor(() => expect(iconClass('spencer')).toEqual(alexSelected));
+    expect(iconClass('alex')).toEqual(alexUnselected);
   });
 });

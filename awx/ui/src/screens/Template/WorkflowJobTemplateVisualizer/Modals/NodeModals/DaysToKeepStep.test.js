@@ -1,28 +1,21 @@
 import React from 'react';
 import { Formik } from 'formik';
-import { mountWithContexts } from '../../../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../../../testUtils/rtlContexts';
 import DaysToKeepStep from './DaysToKeepStep';
 
-let wrapper;
-
 describe('DaysToKeepStep', () => {
-  beforeAll(() => {
-    wrapper = mountWithContexts(
+  test('Days to keep field rendered correctly', () => {
+    renderWithContexts(
       <Formik initialValues={{ daysToKeep: 30 }}>
         <DaysToKeepStep />
       </Formik>
     );
-  });
-
-  afterAll(() => {
-    wrapper.unmount();
-  });
-
-  test('Days to keep field rendered correctly', () => {
-    expect(wrapper.find('FormField#days-to-keep').length).toBe(1);
-    expect(wrapper.find('FormField#days-to-keep').prop('isRequired')).toBe(
-      true
-    );
-    expect(wrapper.find('input#days-to-keep').prop('value')).toBe(30);
+    const input = document.querySelector('input#days-to-keep');
+    // FormField#days-to-keep is rendered
+    expect(input).toBeInTheDocument();
+    // isRequired is passed through to the underlying input
+    expect(input).toBeRequired();
+    // initial value comes from Formik (rendered into a text input as a string)
+    expect(input).toHaveValue('30');
   });
 });

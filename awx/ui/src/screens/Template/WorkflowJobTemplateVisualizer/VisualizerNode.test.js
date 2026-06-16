@@ -1,13 +1,12 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, fireEvent, waitFor } from '@testing-library/react';
 import {
   WorkflowDispatchContext,
   WorkflowStateContext,
 } from 'contexts/Workflow';
 import { JobTemplatesAPI, WorkflowJobTemplateNodesAPI } from 'api';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import VisualizerNode from './VisualizerNode';
-import { asyncFlush } from '../../../setupTests';
 
 jest.mock('../../../api/models/JobTemplates');
 jest.mock('../../../api/models/WorkflowJobTemplateNodes');
@@ -51,11 +50,25 @@ const dispatch = jest.fn();
 const updateHelpText = jest.fn();
 const updateNodeHelp = jest.fn();
 
+// The NodeG container <g id="node-{id}"> drives hover/leave.
+const nodeG = (id = 2) => document.querySelector(`#node-${id}`);
+// The action tooltip is only rendered when hovering; its items carry the
+// data-cy/id of each action (node-add, node-details, ...). Use the presence of
+// an action item as the DOM proxy for "tooltip is open" and count the actions.
+const tooltipItem = (id) => document.querySelector(`#${id}`);
+const tooltipItemCount = () =>
+  document.querySelectorAll(
+    '#node-add, #node-details, #node-edit, #node-link, #node-delete'
+  ).length;
+const isTooltipOpen = () => tooltipItem('node-add') !== null;
+// The node's content foreignObject (the one wrapping the resource name).
+const nodeContentForeignObject = (id = 2) =>
+  document.querySelector(`#node-${id}-name`).closest('foreignObject');
+
 describe('VisualizerNode', () => {
   describe('Node with unified job template', () => {
-    let wrapper;
-    beforeAll(() => {
-      wrapper = mountWithContexts(
+    beforeEach(() => {
+      renderWithContexts(
         <WorkflowDispatchContext.Provider value={dispatch}>
           <WorkflowStateContext.Provider value={mockedContext}>
             <svg>
@@ -75,49 +88,52 @@ describe('VisualizerNode', () => {
     });
 
     test('Displays unified job template name inside node', () => {
-      expect(wrapper.find('NodeResourceName').text()).toBe('Automation JT');
+      expect(document.querySelector('#node-2-name')).toHaveTextContent(
+        'Automation JT'
+      );
     });
 
     test('Displays action tooltip on hover and updates help text on hover', () => {
-      expect(wrapper.find('WorkflowActionTooltip').length).toBe(0);
-      wrapper.find('g').simulate('mouseenter');
-      expect(wrapper.find('WorkflowActionTooltip').length).toBe(1);
-      expect(wrapper.find('WorkflowActionTooltipItem').length).toBe(5);
-      wrapper.find('g').simulate('mouseleave');
-      expect(wrapper.find('WorkflowActionTooltip').length).toBe(0);
-      wrapper.find('foreignObject').first().simulate('mouseenter');
+      expect(isTooltipOpen()).toBe(false);
+      fireEvent.mouseEnter(nodeG());
+      expect(isTooltipOpen()).toBe(true);
+      expect(tooltipItemCount()).toBe(5);
+      fireEvent.mouseLeave(nodeG());
+      expect(isTooltipOpen()).toBe(false);
+      fireEvent.mouseEnter(nodeContentForeignObject());
       expect(updateNodeHelp).toHaveBeenCalledWith(nodeWithJT);
-      wrapper.find('foreignObject').first().simulate('mouseleave');
+      fireEvent.mouseLeave(nodeContentForeignObject());
       expect(updateNodeHelp).toHaveBeenCalledWith(null);
     });
 
     test('Add tooltip action hover/click updates help text and dispatches properly', () => {
-      wrapper.find('g').simulate('mouseenter');
-      wrapper.find('WorkflowActionTooltipItem#node-add').simulate('mouseenter');
+      fireEvent.mouseEnter(nodeG());
+      fireEvent.mouseEnter(tooltipItem('node-add'));
       expect(updateHelpText).toHaveBeenCalledWith('Add a new node');
-      wrapper.find('WorkflowActionTooltipItem#node-add').simulate('mouseleave');
+      fireEvent.mouseLeave(tooltipItem('node-add'));
       expect(updateHelpText).toHaveBeenCalledWith(null);
-      wrapper.find('WorkflowActionTooltipItem#node-add').simulate('click');
+      // RTL's mouseLeave bubbles to the node <g> (React derives onMouseLeave
+      // from mouseout), closing the tooltip; re-hover to reopen before click.
+      fireEvent.mouseEnter(nodeG());
+      fireEvent.click(tooltipItem('node-add'));
       expect(dispatch).toHaveBeenCalledWith({
         type: 'START_ADD_NODE',
         sourceNodeId: 2,
       });
-      expect(wrapper.find('WorkflowActionTooltip').length).toBe(0);
+      expect(isTooltipOpen()).toBe(false);
     });
 
     test('Edit tooltip action hover/click updates help text and dispatches properly', async () => {
-      wrapper.find('g').simulate('mouseenter');
-      wrapper
-        .find('WorkflowActionTooltipItem#node-edit')
-        .simulate('mouseenter');
+      fireEvent.mouseEnter(nodeG());
+      fireEvent.mouseEnter(tooltipItem('node-edit'));
       expect(updateHelpText).toHaveBeenCalledWith('Edit this node');
-      wrapper
-        .find('WorkflowActionTooltipItem#node-edit')
-        .simulate('mouseleave');
+      fireEvent.mouseLeave(tooltipItem('node-edit'));
       expect(updateHelpText).toHaveBeenCalledWith(null);
-      wrapper.find('WorkflowActionTooltipItem#node-edit').simulate('click');
-      await asyncFlush();
-      expect(dispatch).toHaveBeenCalledTimes(2);
+      // RTL's mouseLeave bubbles to the node <g> (React derives onMouseLeave
+      // from mouseout), closing the tooltip; re-hover to reopen before click.
+      fireEvent.mouseEnter(nodeG());
+      fireEvent.click(tooltipItem('node-edit'));
+      await waitFor(() => expect(dispatch).toHaveBeenCalledTimes(2));
       expect(dispatch.mock.calls).toEqual([
         [
           {
@@ -132,22 +148,18 @@ describe('VisualizerNode', () => {
           },
         ],
       ]);
-      expect(wrapper.find('WorkflowActionTooltip').length).toBe(0);
+      expect(isTooltipOpen()).toBe(false);
     });
 
     test('Details tooltip action hover/click updates help text and dispatches properly', async () => {
-      wrapper.find('g').simulate('mouseenter');
-      wrapper
-        .find('WorkflowActionTooltipItem#node-details')
-        .simulate('mouseenter');
+      fireEvent.mouseEnter(nodeG());
+      fireEvent.mouseEnter(tooltipItem('node-details'));
       expect(updateHelpText).toHaveBeenCalledWith('View node details');
-      wrapper
-        .find('WorkflowActionTooltipItem#node-details')
-        .simulate('mouseleave');
+      fireEvent.mouseLeave(tooltipItem('node-details'));
       expect(updateHelpText).toHaveBeenCalledWith(null);
-      wrapper.find('WorkflowActionTooltipItem#node-details').simulate('click');
-      await asyncFlush();
-      expect(dispatch).toHaveBeenCalledTimes(2);
+      fireEvent.mouseEnter(nodeG());
+      fireEvent.click(tooltipItem('node-details'));
+      await waitFor(() => expect(dispatch).toHaveBeenCalledTimes(2));
       expect(dispatch.mock.calls).toEqual([
         [
           {
@@ -162,49 +174,43 @@ describe('VisualizerNode', () => {
           },
         ],
       ]);
-      expect(wrapper.find('WorkflowActionTooltip').length).toBe(0);
+      expect(isTooltipOpen()).toBe(false);
     });
 
     test('Link tooltip action hover/click updates help text and dispatches properly', () => {
-      wrapper.find('g').simulate('mouseenter');
-      wrapper
-        .find('WorkflowActionTooltipItem#node-link')
-        .simulate('mouseenter');
+      fireEvent.mouseEnter(nodeG());
+      fireEvent.mouseEnter(tooltipItem('node-link'));
       expect(updateHelpText).toHaveBeenCalledWith('Link to an available node');
-      wrapper
-        .find('WorkflowActionTooltipItem#node-link')
-        .simulate('mouseleave');
+      fireEvent.mouseLeave(tooltipItem('node-link'));
       expect(updateHelpText).toHaveBeenCalledWith(null);
-      wrapper.find('WorkflowActionTooltipItem#node-link').simulate('click');
+      fireEvent.mouseEnter(nodeG());
+      fireEvent.click(tooltipItem('node-link'));
       expect(dispatch).toHaveBeenCalledWith({
         type: 'SELECT_SOURCE_FOR_LINKING',
         node: nodeWithJT,
       });
-      expect(wrapper.find('WorkflowActionTooltip').length).toBe(0);
+      expect(isTooltipOpen()).toBe(false);
     });
 
     test('Delete tooltip action hover/click updates help text and dispatches properly', () => {
-      wrapper.find('g').simulate('mouseenter');
-      wrapper
-        .find('WorkflowActionTooltipItem#node-delete')
-        .simulate('mouseenter');
+      fireEvent.mouseEnter(nodeG());
+      fireEvent.mouseEnter(tooltipItem('node-delete'));
       expect(updateHelpText).toHaveBeenCalledWith('Delete this node');
-      wrapper
-        .find('WorkflowActionTooltipItem#node-delete')
-        .simulate('mouseleave');
+      fireEvent.mouseLeave(tooltipItem('node-delete'));
       expect(updateHelpText).toHaveBeenCalledWith(null);
-      wrapper.find('WorkflowActionTooltipItem#node-delete').simulate('click');
+      fireEvent.mouseEnter(nodeG());
+      fireEvent.click(tooltipItem('node-delete'));
       expect(dispatch).toHaveBeenCalledWith({
         type: 'SET_NODE_TO_DELETE',
         value: nodeWithJT,
       });
-      expect(wrapper.find('WorkflowActionTooltip').length).toBe(0);
+      expect(isTooltipOpen()).toBe(false);
     });
   });
+
   describe('Node actions while adding a new link', () => {
-    let wrapper;
-    beforeAll(() => {
-      wrapper = mountWithContexts(
+    beforeEach(() => {
+      renderWithContexts(
         <WorkflowDispatchContext.Provider value={dispatch}>
           <WorkflowStateContext.Provider
             value={{
@@ -215,8 +221,7 @@ describe('VisualizerNode', () => {
           >
             <svg>
               <VisualizerNode
-                mouseEnter={() => {}}
-                mouseLeave={() => {}}
+                onMouseOver={() => {}}
                 node={nodeWithJT}
                 readOnly={false}
                 updateHelpText={updateHelpText}
@@ -227,21 +232,24 @@ describe('VisualizerNode', () => {
         </WorkflowDispatchContext.Provider>
       );
     });
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
 
     test('Displays correct help text when hovering over node while adding link', () => {
-      expect(wrapper.find('WorkflowActionTooltip').length).toBe(0);
-      wrapper.find('g').simulate('mouseenter');
-      expect(wrapper.find('WorkflowActionTooltip').length).toBe(0);
+      expect(isTooltipOpen()).toBe(false);
+      fireEvent.mouseEnter(nodeG());
+      expect(isTooltipOpen()).toBe(false);
       expect(updateHelpText).toHaveBeenCalledWith(
         'Click to create a new link to this node.'
       );
-      wrapper.find('g').simulate('mouseleave');
-      expect(wrapper.find('WorkflowActionTooltip').length).toBe(0);
+      fireEvent.mouseLeave(nodeG());
+      expect(isTooltipOpen()).toBe(false);
       expect(updateHelpText).toHaveBeenCalledWith(null);
     });
 
     test('Dispatches properly when node is clicked', () => {
-      wrapper.find('foreignObject').first().simulate('click');
+      fireEvent.click(nodeContentForeignObject());
       expect(dispatch).toHaveBeenCalledWith({
         type: 'SET_ADD_LINK_TARGET_NODE',
         value: nodeWithJT,
@@ -251,7 +259,7 @@ describe('VisualizerNode', () => {
 
   describe('Node without unified job template', () => {
     test('Displays DELETED text inside node when unified job template is missing', () => {
-      const wrapper = mountWithContexts(
+      renderWithContexts(
         <svg>
           <WorkflowStateContext.Provider value={mockedContext}>
             <VisualizerNode
@@ -265,14 +273,15 @@ describe('VisualizerNode', () => {
           </WorkflowStateContext.Provider>
         </svg>
       );
-      expect(wrapper).toHaveLength(1);
-      expect(wrapper.find('NodeResourceName').text()).toBe('DELETED');
+      expect(document.querySelector('#node-2-name')).toHaveTextContent(
+        'DELETED'
+      );
     });
   });
 
   describe('Node with empty string alias', () => {
     test('Displays unified job template name inside node', () => {
-      const wrapper = mountWithContexts(
+      renderWithContexts(
         <svg>
           <WorkflowStateContext.Provider value={mockedContext}>
             <VisualizerNode
@@ -290,14 +299,15 @@ describe('VisualizerNode', () => {
           </WorkflowStateContext.Provider>
         </svg>
       );
-      expect(wrapper).toHaveLength(1);
-      expect(wrapper.find('NodeResourceName').text()).toBe('foobar');
+      expect(document.querySelector('#node-2-name')).toHaveTextContent(
+        'foobar'
+      );
     });
   });
 
   describe('Node should display convergence label', () => {
     test('Should display ALL convergence label', async () => {
-      const wrapper = mountWithContexts(
+      renderWithContexts(
         <WorkflowDispatchContext.Provider value={dispatch}>
           <WorkflowStateContext.Provider value={mockedContext}>
             <svg>
@@ -350,17 +360,15 @@ describe('VisualizerNode', () => {
           </WorkflowStateContext.Provider>
         </WorkflowDispatchContext.Provider>
       );
-      expect(wrapper.find('p[data-cy="convergence-label"]').length).toBe(1);
-      expect(
-        wrapper.find('p[data-cy="convergence-label"]').prop('children')
-      ).toEqual('ALL');
+      const label = document.querySelector('[data-cy="convergence-label"]');
+      expect(label).not.toBeNull();
+      expect(label).toHaveTextContent('ALL');
     });
   });
 
   describe('Node without full unified job template', () => {
-    let wrapper;
     beforeEach(() => {
-      wrapper = mountWithContexts(
+      renderWithContexts(
         <WorkflowDispatchContext.Provider value={dispatch}>
           <WorkflowStateContext.Provider value={mockedContext}>
             <svg>
@@ -414,16 +422,19 @@ describe('VisualizerNode', () => {
         </WorkflowDispatchContext.Provider>
       );
     });
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
 
     test('Attempts to fetch full unified job template on view', async () => {
-      wrapper.find('g').simulate('mouseenter');
-      await act(async () => {
-        wrapper
-          .find('WorkflowActionTooltipItem#node-details')
-          .simulate('click');
-      });
-      expect(JobTemplatesAPI.readDetail).toHaveBeenCalledWith(7);
-      expect(wrapper.find('p[data-cy="convergence-label"]').length).toBe(0);
+      fireEvent.mouseEnter(nodeG());
+      fireEvent.click(tooltipItem('node-details'));
+      await waitFor(() =>
+        expect(JobTemplatesAPI.readDetail).toHaveBeenCalledWith(7)
+      );
+      expect(
+        document.querySelector('[data-cy="convergence-label"]')
+      ).toBeNull();
     });
 
     test('Displays error fetching full unified job template', async () => {
@@ -439,15 +450,12 @@ describe('VisualizerNode', () => {
           },
         })
       );
-      expect(wrapper.find('AlertModal').length).toBe(0);
-      wrapper.find('g').simulate('mouseenter');
-      await act(async () => {
-        wrapper
-          .find('WorkflowActionTooltipItem#node-details')
-          .simulate('click');
-      });
-      wrapper.update();
-      expect(wrapper.find('AlertModal').length).toBe(1);
+      expect(screen.queryByRole('dialog')).toBeNull();
+      fireEvent.mouseEnter(nodeG());
+      fireEvent.click(tooltipItem('node-details'));
+      await waitFor(() =>
+        expect(screen.getByRole('dialog')).toBeInTheDocument()
+      );
     });
 
     test('Attempts to fetch credentials on view', async () => {
@@ -457,16 +465,15 @@ describe('VisualizerNode', () => {
           name: 'Example',
         },
       });
-      wrapper.find('g').simulate('mouseenter');
-      await act(async () => {
-        wrapper
-          .find('WorkflowActionTooltipItem#node-details')
-          .simulate('click');
-      });
-      expect(WorkflowJobTemplateNodesAPI.readCredentials).toHaveBeenCalledWith(
-        49
+      fireEvent.mouseEnter(nodeG());
+      fireEvent.click(tooltipItem('node-details'));
+      await waitFor(() =>
+        expect(
+          WorkflowJobTemplateNodesAPI.readCredentials
+        ).toHaveBeenCalledWith(49)
       );
     });
+
     test('Displays error fetching credentials', async () => {
       JobTemplatesAPI.readDetail.mockResolvedValueOnce({
         data: {
@@ -486,15 +493,12 @@ describe('VisualizerNode', () => {
           },
         })
       );
-      expect(wrapper.find('AlertModal').length).toBe(0);
-      wrapper.find('g').simulate('mouseenter');
-      await act(async () => {
-        wrapper
-          .find('WorkflowActionTooltipItem#node-details')
-          .simulate('click');
-      });
-      wrapper.update();
-      expect(wrapper.find('AlertModal').length).toBe(1);
+      expect(screen.queryByRole('dialog')).toBeNull();
+      fireEvent.mouseEnter(nodeG());
+      fireEvent.click(tooltipItem('node-details'));
+      await waitFor(() =>
+        expect(screen.getByRole('dialog')).toBeInTheDocument()
+      );
     });
   });
 });

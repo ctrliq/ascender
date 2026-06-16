@@ -1,14 +1,10 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
 import {
   WorkflowDispatchContext,
   WorkflowStateContext,
 } from 'contexts/Workflow';
 import { useUserProfile } from 'contexts/Config';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../../../testUtils/rtlContexts';
 import NodeEditModal from './NodeEditModal';
 
 const dispatch = jest.fn();
@@ -17,6 +13,16 @@ jest.mock('../../../../../api/models/InventorySources');
 jest.mock('../../../../../api/models/JobTemplates');
 jest.mock('../../../../../api/models/Projects');
 jest.mock('../../../../../api/models/WorkflowJobTemplates');
+
+// Capture the onSave prop NodeEditModal hands to NodeModal so the test can
+// invoke it directly, mirroring the enzyme `wrapper.find('NodeModal').prop`
+// access. The real NodeModal wizard is not exercised here.
+let capturedOnSave;
+jest.mock('./NodeModal', () => (props) => {
+  capturedOnSave = props.onSave;
+  return null;
+});
+
 const values = {
   inventory: undefined,
   nodeResource: {
@@ -43,18 +49,17 @@ const workflowContext = {
 
 describe('NodeEditModal', () => {
   beforeEach(() => {
-    useUserProfile.mockImplementation(() => {
-      return {
-        isSuperUser: true,
-        isSystemAuditor: false,
-        isOrgAdmin: false,
-        isNotificationAdmin: false,
-        isExecEnvAdmin: false,
-      };
-    });
+    useUserProfile.mockImplementation(() => ({
+      isSuperUser: true,
+      isSystemAuditor: false,
+      isOrgAdmin: false,
+      isNotificationAdmin: false,
+      isExecEnvAdmin: false,
+    }));
   });
+
   test('Node modal confirmation dispatches as expected', async () => {
-    const wrapper = mountWithContexts(
+    renderWithContexts(
       <WorkflowDispatchContext.Provider value={dispatch}>
         <WorkflowStateContext.Provider value={workflowContext}>
           <NodeEditModal
@@ -65,14 +70,9 @@ describe('NodeEditModal', () => {
         </WorkflowStateContext.Provider>
       </WorkflowDispatchContext.Provider>
     );
-    waitForElement(
-      wrapper,
-      'WizardNavItem[content="ContentLoading"]',
-      (el) => el.length === 0
-    );
-    await act(async () => {
-      wrapper.find('NodeModal').prop('onSave')(values, {});
-    });
+
+    capturedOnSave(values, {});
+
     expect(dispatch).toHaveBeenCalledWith({
       node: {
         all_parents_must_converge: false,

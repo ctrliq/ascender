@@ -1,5 +1,6 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { screen, fireEvent } from '@testing-library/react';
+import { renderWithContexts } from '../../../../../../testUtils/rtlContexts';
 import NodeNextButton from './NodeNextButton';
 
 const activeStep = {
@@ -13,11 +14,10 @@ const buttonText = 'Next';
 const onClick = jest.fn();
 const onNext = jest.fn();
 const triggerNext = 0;
-let wrapper;
 
 describe('NodeNextButton', () => {
-  beforeAll(() => {
-    wrapper = mount(
+  test('Button text matches', () => {
+    renderWithContexts(
       <NodeNextButton
         activeStep={activeStep}
         buttonText={buttonText}
@@ -26,19 +26,44 @@ describe('NodeNextButton', () => {
         triggerNext={triggerNext}
       />
     );
-  });
-
-  test('Button text matches', () => {
-    expect(wrapper.find('button').text()).toBe(buttonText);
+    expect(screen.getByRole('button')).toHaveTextContent(buttonText);
   });
 
   test('Clicking button makes expected callback', () => {
-    wrapper.find('button').simulate('click');
+    onClick.mockClear();
+    renderWithContexts(
+      <NodeNextButton
+        activeStep={activeStep}
+        buttonText={buttonText}
+        onClick={onClick}
+        onNext={onNext}
+        triggerNext={triggerNext}
+      />
+    );
+    fireEvent.click(screen.getByRole('button'));
     expect(onClick).toHaveBeenCalledWith(activeStep);
   });
 
   test('onNext triggered when triggerNext counter incrimented', () => {
-    wrapper.setProps({ triggerNext: 1 });
+    onNext.mockClear();
+    const { rerender } = renderWithContexts(
+      <NodeNextButton
+        activeStep={activeStep}
+        buttonText={buttonText}
+        onClick={onClick}
+        onNext={onNext}
+        triggerNext={triggerNext}
+      />
+    );
+    rerender(
+      <NodeNextButton
+        activeStep={activeStep}
+        buttonText={buttonText}
+        onClick={onClick}
+        onNext={onNext}
+        triggerNext={1}
+      />
+    );
     expect(onNext).toHaveBeenCalled();
   });
 });
