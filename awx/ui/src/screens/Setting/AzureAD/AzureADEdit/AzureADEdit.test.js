@@ -1,19 +1,15 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import AzureADEdit from './AzureADEdit';
 
 jest.mock('../../../../api');
 
 describe('<AzureADEdit />', () => {
-  let wrapper;
   let history;
 
   beforeEach(() => {
@@ -39,52 +35,52 @@ describe('<AzureADEdit />', () => {
     jest.clearAllMocks();
   });
 
-  beforeEach(async () => {
+  async function renderEdit() {
     history = createMemoryHistory({
       initialEntries: ['/settings/azure/default/edit'],
     });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <AzureADEdit />
-        </SettingsProvider>,
-        {
-          context: { router: { history } },
-        }
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-  });
+    const result = renderWithContexts(
+      <SettingsProvider value={mockAllOptions.actions}>
+        <AzureADEdit />
+      </SettingsProvider>,
+      { context: { router: { history } } }
+    );
+    await waitFor(() =>
+      expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
+    );
+    return result;
+  }
 
-  test('initially renders without crashing', () => {
-    expect(wrapper.find('AzureADEdit').length).toBe(1);
+  test('initially renders without crashing', async () => {
+    await renderEdit();
+    expect(
+      screen.getByRole('button', { name: 'Save' })
+    ).toBeInTheDocument();
   });
 
   test('should successfully send default values to api on form revert all', async () => {
+    const { user } = await renderEdit();
     expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(0);
-    expect(wrapper.find('RevertAllAlert')).toHaveLength(0);
-    await act(async () => {
-      wrapper
-        .find('button[aria-label="Revert all to default"]')
-        .invoke('onClick')();
-    });
-    wrapper.update();
-    expect(wrapper.find('RevertAllAlert')).toHaveLength(1);
-    await act(async () => {
-      wrapper
-        .find('RevertAllAlert button[aria-label="Confirm revert all"]')
-        .invoke('onClick')();
-    });
-    wrapper.update();
-    expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(1);
+    expect(screen.queryByText('Revert settings')).not.toBeInTheDocument();
+    await user.click(
+      screen.getByRole('button', { name: 'Revert all to default' })
+    );
+    expect(await screen.findByText('Revert settings')).toBeInTheDocument();
+    await user.click(
+      screen.getByRole('button', { name: 'Confirm revert all' })
+    );
+    await waitFor(() =>
+      expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(1)
+    );
     expect(SettingsAPI.revertCategory).toHaveBeenCalledWith('azuread-oauth2');
   });
 
   test('should successfully send request to api on form submission', async () => {
-    await act(async () => {
-      wrapper.find('Form').invoke('onSubmit')();
-    });
-    expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1);
+    const { user } = await renderEdit();
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    await waitFor(() =>
+      expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1)
+    );
     expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
       SOCIAL_AUTH_AZUREAD_OAUTH2_KEY: 'mock key',
       SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET: '$encrypted$',
@@ -98,17 +94,21 @@ describe('<AzureADEdit />', () => {
   });
 
   test('should navigate to azure detail on successful submission', async () => {
-    await act(async () => {
-      wrapper.find('Form').invoke('onSubmit')();
-    });
-    expect(history.location.pathname).toEqual('/settings/azure/default/details');
+    const { user } = await renderEdit();
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual(
+        '/settings/azure/default/details'
+      )
+    );
   });
 
   test('should navigate to azure detail when cancel is clicked', async () => {
-    await act(async () => {
-      wrapper.find('button[aria-label="Cancel"]').invoke('onClick')();
-    });
-    expect(history.location.pathname).toEqual('/settings/azure/default/details');
+    const { user } = await renderEdit();
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
+    expect(history.location.pathname).toEqual(
+      '/settings/azure/default/details'
+    );
   });
 
   test('should display error message on unsuccessful submission', async () => {
@@ -118,13 +118,10 @@ describe('<AzureADEdit />', () => {
       },
     };
     SettingsAPI.updateAll.mockImplementation(() => Promise.reject(error));
-    expect(wrapper.find('FormSubmitError').length).toBe(0);
+    const { user } = await renderEdit();
     expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(0);
-    await act(async () => {
-      wrapper.find('Form').invoke('onSubmit')();
-    });
-    wrapper.update();
-    expect(wrapper.find('FormSubmitError').length).toBe(1);
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    expect(await screen.findByText('An error occurred')).toBeInTheDocument();
     expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1);
   });
 
@@ -132,14 +129,11 @@ describe('<AzureADEdit />', () => {
     SettingsAPI.readCategory.mockImplementationOnce(() =>
       Promise.reject(new Error())
     );
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <AzureADEdit />
-        </SettingsProvider>
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('ContentError').length).toBe(1);
+    await renderEdit();
+    expect(
+      screen.getByText(
+        'There was an error loading this content. Please reload the page.'
+      )
+    ).toBeInTheDocument();
   });
 });

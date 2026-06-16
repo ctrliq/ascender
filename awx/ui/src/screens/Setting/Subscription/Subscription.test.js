@@ -1,12 +1,9 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { Routes, Route } from 'react-router-dom-v5-compat';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { SettingsAPI, RootAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
-import { Routes, Route } from 'react-router-dom-v5-compat';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import mockAllSettings from '../shared/data.allSettings.json';
 import Subscription from './Subscription';
 
@@ -22,8 +19,6 @@ RootAPI.readAssetVariables.mockResolvedValue({
 });
 
 describe('<Subscription />', () => {
-  let wrapper;
-
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -32,12 +27,13 @@ describe('<Subscription />', () => {
     const history = createMemoryHistory({
       initialEntries: ['/settings/subscription'],
     });
-    await act(async () => {
-      wrapper = mountWithContexts(<Routes><Route path="/settings/subscription/*" element={<Subscription />} /></Routes>, {
+    renderWithContexts(
+      <Routes>
+        <Route path="/settings/subscription/*" element={<Subscription />} />
+      </Routes>,
+      {
         context: {
-          router: {
-            history,
-          },
+          router: { history },
           config: {
             license_info: {
               license_type: 'enterprise',
@@ -46,12 +42,14 @@ describe('<Subscription />', () => {
             },
           },
         },
-      });
-    });
-    await waitForElement(
-      wrapper,
-      'SubscriptionDetail',
-      (el) => el.length === 1
+      }
     );
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual(
+        '/settings/subscription/details'
+      )
+    );
+    // SubscriptionDetail renders the read-only subscription type detail
+    expect(await screen.findByText('Subscription type')).toBeInTheDocument();
   });
 });

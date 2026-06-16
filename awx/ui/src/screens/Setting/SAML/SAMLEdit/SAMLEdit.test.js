@@ -1,19 +1,15 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import SAMLEdit from './SAMLEdit';
 
 jest.mock('../../../../api');
 
 describe('<SAMLEdit />', () => {
-  let wrapper;
   let history;
 
   beforeEach(() => {
@@ -52,122 +48,83 @@ describe('<SAMLEdit />', () => {
     jest.clearAllMocks();
   });
 
-  beforeEach(async () => {
+  async function renderEdit() {
     history = createMemoryHistory({
       initialEntries: ['/settings/saml/edit'],
     });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <SAMLEdit />
-        </SettingsProvider>,
-        {
-          context: { router: { history } },
-        }
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-  });
+    const result = renderWithContexts(
+      <SettingsProvider value={mockAllOptions.actions}>
+        <SAMLEdit />
+      </SettingsProvider>,
+      { context: { router: { history } } }
+    );
+    await waitFor(() =>
+      expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
+    );
+    return result;
+  }
 
-  test('initially renders without crashing', () => {
-    expect(wrapper.find('SAMLEdit').length).toBe(1);
+  test('initially renders without crashing', async () => {
+    await renderEdit();
+    expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument();
   });
 
   test('should display expected form fields', async () => {
-    expect(
-      wrapper.find('FormGroup[label="SAML Service Provider Entity ID"]').length
-    ).toBe(1);
-    expect(
-      wrapper.find(
-        'FormGroup[label="Automatically Create Organizations and Teams on SAML Login"]'
-      ).length
-    ).toBe(1);
-    expect(
-      wrapper.find(
-        'FormGroup[label="SAML Service Provider Public Certificate"]'
-      ).length
-    ).toBe(1);
-    expect(
-      wrapper.find('FormGroup[label="SAML Service Provider Private Key"]')
-        .length
-    ).toBe(1);
-    expect(
-      wrapper.find('FormGroup[label="SAML Service Provider Organization Info"]')
-        .length
-    ).toBe(1);
-    expect(
-      wrapper.find('FormGroup[label="SAML Service Provider Technical Contact"]')
-        .length
-    ).toBe(1);
-    expect(
-      wrapper.find('FormGroup[label="SAML Service Provider Support Contact"]')
-        .length
-    ).toBe(1);
-    expect(
-      wrapper.find('FormGroup[label="SAML Enabled Identity Providers"]').length
-    ).toBe(1);
-    expect(
-      wrapper.find('FormGroup[label="SAML Organization Map"]').length
-    ).toBe(1);
-    expect(wrapper.find('FormGroup[label="SAML Team Map"]').length).toBe(1);
-    expect(
-      wrapper.find('FormGroup[label="SAML Organization Attribute Mapping"]')
-        .length
-    ).toBe(1);
-    expect(
-      wrapper.find('FormGroup[label="SAML Team Attribute Mapping"]').length
-    ).toBe(1);
-    expect(wrapper.find('FormGroup[label="SAML Security Config"]').length).toBe(
-      1
-    );
-    expect(
-      wrapper.find(
-        'FormGroup[label="SAML Service Provider extra configuration data"]'
-      ).length
-    ).toBe(1);
-    expect(
-      wrapper.find(
-        'FormGroup[label="SAML IDP to extra_data attribute mapping"]'
-      ).length
-    ).toBe(1);
+    await renderEdit();
+    [
+      'SAML Service Provider Entity ID',
+      'Automatically Create Organizations and Teams on SAML Login',
+      'SAML Service Provider Public Certificate',
+      'SAML Service Provider Private Key',
+      'SAML Service Provider Organization Info',
+      'SAML Service Provider Technical Contact',
+      'SAML Service Provider Support Contact',
+      'SAML Enabled Identity Providers',
+      'SAML Organization Map',
+      'SAML Team Map',
+      'SAML Organization Attribute Mapping',
+      'SAML Team Attribute Mapping',
+      'SAML Security Config',
+      'SAML Service Provider extra configuration data',
+      'SAML IDP to extra_data attribute mapping',
+    ].forEach((label) => {
+      expect(screen.getByText(label)).toBeInTheDocument();
+    });
   });
 
   test('should successfully send default values to api on form revert all', async () => {
+    const { user } = await renderEdit();
     expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(0);
-    expect(wrapper.find('RevertAllAlert')).toHaveLength(0);
-    await act(async () => {
-      wrapper
-        .find('button[aria-label="Revert all to default"]')
-        .invoke('onClick')();
-    });
-    wrapper.update();
-    expect(wrapper.find('RevertAllAlert')).toHaveLength(1);
-    await act(async () => {
-      wrapper
-        .find('RevertAllAlert button[aria-label="Confirm revert all"]')
-        .invoke('onClick')();
-    });
-    wrapper.update();
-    expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(1);
+    expect(screen.queryByText('Revert settings')).not.toBeInTheDocument();
+    await user.click(
+      screen.getByRole('button', { name: 'Revert all to default' })
+    );
+    expect(await screen.findByText('Revert settings')).toBeInTheDocument();
+    await user.click(
+      screen.getByRole('button', { name: 'Confirm revert all' })
+    );
+    await waitFor(() =>
+      expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(1)
+    );
     expect(SettingsAPI.revertCategory).toHaveBeenCalledWith('saml');
   });
 
   test('should successfully send request to api on form submission', async () => {
-    act(() => {
-      wrapper.find('input#SOCIAL_AUTH_SAML_SP_ENTITY_ID').simulate('change', {
-        target: { value: 'new_id', name: 'SOCIAL_AUTH_SAML_SP_ENTITY_ID' },
-      });
-      wrapper
-        .find(
-          'FormGroup[fieldId="SOCIAL_AUTH_SAML_TECHNICAL_CONTACT"] button[aria-label="Revert"]'
-        )
-        .invoke('onClick')();
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('Form').invoke('onSubmit')();
-    });
-    expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1);
+    const { user, container } = await renderEdit();
+    const entityIdInput = container.querySelector(
+      '#SOCIAL_AUTH_SAML_SP_ENTITY_ID'
+    );
+    await user.clear(entityIdInput);
+    await user.type(entityIdInput, 'new_id');
+    await user.click(
+      container.querySelector(
+        'button[data-ouia-component-id="SOCIAL_AUTH_SAML_TECHNICAL_CONTACT-revert"]'
+      )
+    );
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    await waitFor(() =>
+      expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1)
+    );
     expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
       SAML_AUTO_CREATE_OBJECTS: true,
       SOCIAL_AUTH_SAML_ENABLED_IDPS: {},
@@ -191,16 +148,16 @@ describe('<SAMLEdit />', () => {
   });
 
   test('should navigate to saml detail on successful submission', async () => {
-    await act(async () => {
-      wrapper.find('Form').invoke('onSubmit')();
-    });
-    expect(history.location.pathname).toEqual('/settings/saml/details');
+    const { user } = await renderEdit();
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual('/settings/saml/details')
+    );
   });
 
   test('should navigate to saml detail when cancel is clicked', async () => {
-    await act(async () => {
-      wrapper.find('button[aria-label="Cancel"]').invoke('onClick')();
-    });
+    const { user } = await renderEdit();
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
     expect(history.location.pathname).toEqual('/settings/saml/details');
   });
 
@@ -211,13 +168,10 @@ describe('<SAMLEdit />', () => {
       },
     };
     SettingsAPI.updateAll.mockImplementation(() => Promise.reject(error));
-    expect(wrapper.find('FormSubmitError').length).toBe(0);
+    const { user } = await renderEdit();
     expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(0);
-    await act(async () => {
-      wrapper.find('Form').invoke('onSubmit')();
-    });
-    wrapper.update();
-    expect(wrapper.find('FormSubmitError').length).toBe(1);
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    expect(await screen.findByText('An error occurred')).toBeInTheDocument();
     expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1);
   });
 
@@ -225,14 +179,11 @@ describe('<SAMLEdit />', () => {
     SettingsAPI.readCategory.mockImplementationOnce(() =>
       Promise.reject(new Error())
     );
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <SAMLEdit />
-        </SettingsProvider>
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('ContentError').length).toBe(1);
+    await renderEdit();
+    expect(
+      screen.getByText(
+        'There was an error loading this content. Please reload the page.'
+      )
+    ).toBeInTheDocument();
   });
 });

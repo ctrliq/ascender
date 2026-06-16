@@ -1,37 +1,28 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
 import { Formik } from 'formik';
-import { mountWithContexts } from '../../../../../testUtils/enzymeHelpers';
+import { screen } from '@testing-library/react';
+import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import EulaStep from './EulaStep';
 
 describe('<EulaStep />', () => {
-  let wrapper;
-
-  beforeEach(async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik
-          initialValues={{
-            insights: false,
-            manifest_file: null,
-            manifest_filename: '',
-            pendo: false,
-            subscription: null,
-            password: '',
-            username: '',
-          }}
-        >
-          <EulaStep />
-        </Formik>
-      );
-    });
-  });
-
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
-  test('initially renders without crashing', async () => {
-    expect(wrapper.find('EulaStep').length).toBe(1);
+  test('initially renders the expected content', () => {
+    renderWithContexts(
+      <Formik
+        initialValues={{
+          insights: false,
+          manifest_file: null,
+          manifest_filename: '',
+          pendo: false,
+          subscription: null,
+          password: '',
+          username: '',
+        }}
+      >
+        <EulaStep />
+      </Formik>
+    );
+    expect(
+      screen.getByText('End User License Agreement')
+    ).toBeInTheDocument();
   });
 });

@@ -1,12 +1,9 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, fireEvent } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import LoggingEdit from './LoggingEdit';
 
@@ -40,188 +37,183 @@ const mockSettings = {
 };
 
 describe('<LoggingEdit />', () => {
-  let wrapper;
   let history;
 
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
-  beforeEach(async () => {
+  beforeEach(() => {
     SettingsAPI.revertCategory.mockResolvedValue({});
     SettingsAPI.updateAll.mockResolvedValue({});
     SettingsAPI.readCategory.mockResolvedValue({
       data: mockSettings,
     });
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  async function renderEdit() {
     history = createMemoryHistory({
       initialEntries: ['/settings/logging/edit'],
     });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <LoggingEdit />
-        </SettingsProvider>,
-        {
-          context: { router: { history } },
-        }
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-  });
+    const result = renderWithContexts(
+      <SettingsProvider value={mockAllOptions.actions}>
+        <LoggingEdit />
+      </SettingsProvider>,
+      { context: { router: { history } } }
+    );
+    await waitFor(() =>
+      expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
+    );
+    return result;
+  }
 
-  test('initially renders without crashing', () => {
-    expect(wrapper.find('LoggingEdit').length).toBe(1);
+  // FormGroup label -> the FormGroup wrapper element, used to scope assertions
+  // about the required marker to a single field.
+  function getFormGroup(container, label) {
+    const labelEl = screen.queryByText(label);
+    if (!labelEl) {
+      return null;
+    }
+    return labelEl.closest('.pf-c-form__group');
+  }
+
+  test('initially renders without crashing', async () => {
+    await renderEdit();
+    expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument();
   });
 
   test('Enable External Logging toggle should be disabled when it is off and there is no Logging Aggregator or no Logging Aggregator Type', async () => {
-    const enableLoggingField =
-      "FormGroup[label='Enable External Logging'] Switch";
-    const loggingAggregatorField =
-      "FormGroup[label='Logging Aggregator'] TextInputBase";
-    expect(wrapper.find(enableLoggingField).prop('isChecked')).toBe(true);
-    expect(wrapper.find(enableLoggingField).prop('isDisabled')).toBe(false);
-    await act(async () => {
-      wrapper.find(enableLoggingField).invoke('onChange')(false);
+    const { container } = await renderEdit();
+    const enableSwitch = container.querySelector('#LOG_AGGREGATOR_ENABLED');
+    expect(enableSwitch.checked).toBe(true);
+    expect(enableSwitch.disabled).toBe(false);
+    // Toggle external logging off.
+    fireEvent.click(enableSwitch);
+    // Clear the Logging Aggregator host input.
+    const hostInput = container.querySelector('#LOG_AGGREGATOR_HOST');
+    fireEvent.change(hostInput, {
+      target: { name: 'LOG_AGGREGATOR_HOST', value: '' },
     });
-    await act(async () => {
-      wrapper.find(loggingAggregatorField).invoke('onChange')(null, {
-        target: {
-          name: 'LOG_AGGREGATOR_HOST',
-          value: '',
-        },
-      });
+    await waitFor(() => {
+      const toggled = container.querySelector('#LOG_AGGREGATOR_ENABLED');
+      expect(toggled.checked).toBe(false);
+      expect(toggled.disabled).toBe(true);
     });
-    wrapper.update();
-    expect(
-      wrapper.find(enableLoggingField).find('Switch').prop('isChecked')
-    ).toBe(false);
-    expect(
-      wrapper.find(enableLoggingField).find('Switch').prop('isDisabled')
-    ).toBe(true);
   });
 
-  test('Logging Aggregator and Logging Aggregator Type should be required when External Logging toggle is enabled', () => {
-    const enableLoggingField = wrapper.find(
-      "FormGroup[label='Enable External Logging']"
+  test('Logging Aggregator and Logging Aggregator Type should be required when External Logging toggle is enabled', async () => {
+    const { container } = await renderEdit();
+    const aggregatorGroup = getFormGroup(container, 'Logging Aggregator');
+    const aggregatorTypeGroup = getFormGroup(
+      container,
+      'Logging Aggregator Type'
     );
-    const loggingAggregatorField = wrapper.find(
-      "FormGroup[label='Logging Aggregator']"
-    );
-    const loggingAggregatorTypeField = wrapper.find(
-      "FormGroup[label='Logging Aggregator Type']"
-    );
-    expect(enableLoggingField.find('RevertButton').text()).toEqual('Revert');
     expect(
-      loggingAggregatorField.find('.pf-c-form__label-required')
+      aggregatorGroup.querySelectorAll('.pf-c-form__label-required')
     ).toHaveLength(1);
     expect(
-      loggingAggregatorTypeField.find('.pf-c-form__label-required')
+      aggregatorTypeGroup.querySelectorAll('.pf-c-form__label-required')
     ).toHaveLength(1);
   });
 
   test('Logging Aggregator and Logging Aggregator Type should not be required when External Logging toggle is disabled', async () => {
-    await act(async () => {
-      wrapper
-        .find("FormGroup[label='Enable External Logging'] Switch")
-        .invoke('onChange')(false);
-    });
-    wrapper.update();
-    const enableLoggingField = wrapper.find(
-      "FormGroup[label='Enable External Logging']"
+    const { container } = await renderEdit();
+    fireEvent.click(container.querySelector('#LOG_AGGREGATOR_ENABLED'));
+    await waitFor(() =>
+      expect(
+        container.querySelector('#LOG_AGGREGATOR_ENABLED').checked
+      ).toBe(false)
     );
-    const loggingAggregatorField = wrapper.find(
-      "FormGroup[label='Logging Aggregator']"
+    const aggregatorGroup = getFormGroup(container, 'Logging Aggregator');
+    const aggregatorTypeGroup = getFormGroup(
+      container,
+      'Logging Aggregator Type'
     );
-    const loggingAggregatorTypeField = wrapper.find(
-      "FormGroup[label='Logging Aggregator Type']"
-    );
-    expect(enableLoggingField.find('RevertButton').text()).toEqual('Undo');
     expect(
-      loggingAggregatorField.find('.pf-c-form__label-required')
+      aggregatorGroup.querySelectorAll('.pf-c-form__label-required')
     ).toHaveLength(0);
     expect(
-      loggingAggregatorTypeField.find('.pf-c-form__label-required')
+      aggregatorTypeGroup.querySelectorAll('.pf-c-form__label-required')
     ).toHaveLength(0);
   });
 
-  test('HTTPS certificate toggle should be shown when protocol is https', () => {
-    const httpsField = wrapper.find(
-      "FormGroup[label='Enable/disable HTTPS certificate verification']"
-    );
-    expect(httpsField).toHaveLength(1);
-    expect(httpsField.find('Switch').prop('isChecked')).toBe(true);
+  test('HTTPS certificate toggle should be shown when protocol is https', async () => {
+    const { container } = await renderEdit();
+    expect(
+      screen.getByText('Enable/disable HTTPS certificate verification')
+    ).toBeInTheDocument();
+    expect(
+      container.querySelector('#LOG_AGGREGATOR_VERIFY_CERT').checked
+    ).toBe(true);
   });
 
-  test('TCP connection timeout should be required when protocol is tcp', () => {
-    const tcpTimeoutField = wrapper.find(
-      "FormGroup[label='TCP Connection Timeout']"
+  test('TCP connection timeout should be required when protocol is tcp', async () => {
+    const { container } = await renderEdit();
+    fireEvent.change(
+      container.querySelector('#LOG_AGGREGATOR_PROTOCOL'),
+      {
+        target: { name: 'LOG_AGGREGATOR_PROTOCOL', value: 'tcp' },
+      }
     );
-    expect(tcpTimeoutField).toHaveLength(1);
-    expect(tcpTimeoutField.find('.pf-c-form__label-required')).toHaveLength(1);
-  });
-
-  test('TCP connection timeout and https certificate toggle should be hidden when protocol is udp', async () => {
-    await act(async () => {
-      wrapper
-        .find('AnsibleSelect[name="LOG_AGGREGATOR_PROTOCOL"]')
-        .invoke('onChange')({
-        target: {
-          name: 'LOG_AGGREGATOR_PROTOCOL',
-          value: 'udp',
-        },
-      });
-    });
-    wrapper.update();
+    await waitFor(() =>
+      expect(
+        screen.getByText('TCP Connection Timeout')
+      ).toBeInTheDocument()
+    );
+    const tcpGroup = getFormGroup(container, 'TCP Connection Timeout');
     expect(
-      wrapper.find(
-        "FormGroup[label='Enable/disable HTTPS certificate verification']"
-      )
-    ).toHaveLength(0);
-    expect(
-      wrapper.find("FormGroup[label='TCP Connection Timeout']")
-    ).toHaveLength(0);
-    expect(
-      wrapper.find("FormGroup[label='Logging Aggregator Level Threshold']")
+      tcpGroup.querySelectorAll('.pf-c-form__label-required')
     ).toHaveLength(1);
   });
 
+  test('TCP connection timeout and https certificate toggle should be hidden when protocol is udp', async () => {
+    const { container } = await renderEdit();
+    fireEvent.change(
+      container.querySelector('#LOG_AGGREGATOR_PROTOCOL'),
+      {
+        target: { name: 'LOG_AGGREGATOR_PROTOCOL', value: 'udp' },
+      }
+    );
+    await waitFor(() =>
+      expect(
+        screen.queryByText('TCP Connection Timeout')
+      ).not.toBeInTheDocument()
+    );
+    expect(
+      screen.queryByText('Enable/disable HTTPS certificate verification')
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getByText('Logging Aggregator Level Threshold')
+    ).toBeInTheDocument();
+  });
+
   test('should successfully send default values to api on form revert all', async () => {
+    const { user } = await renderEdit();
     expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(0);
-    expect(wrapper.find('RevertAllAlert')).toHaveLength(0);
-    await act(async () => {
-      wrapper
-        .find('button[aria-label="Revert all to default"]')
-        .invoke('onClick')();
-    });
-    wrapper.update();
-    expect(wrapper.find('RevertAllAlert')).toHaveLength(1);
-    await act(async () => {
-      wrapper
-        .find('RevertAllAlert button[aria-label="Confirm revert all"]')
-        .invoke('onClick')();
-    });
-    wrapper.update();
-    expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(1);
+    expect(screen.queryByText('Revert settings')).not.toBeInTheDocument();
+    await user.click(
+      screen.getByRole('button', { name: 'Revert all to default' })
+    );
+    expect(await screen.findByText('Revert settings')).toBeInTheDocument();
+    await user.click(
+      screen.getByRole('button', { name: 'Confirm revert all' })
+    );
+    await waitFor(() =>
+      expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(1)
+    );
     expect(SettingsAPI.revertCategory).toHaveBeenCalledWith('logging');
   });
 
   test('should successfully send request to api on form submission', async () => {
+    const { user, container } = await renderEdit();
     expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(0);
-    const loggingAggregatorField =
-      "FormGroup[label='Logging Aggregator'] TextInputBase";
-    await act(async () => {
-      wrapper.find(loggingAggregatorField).invoke('onChange')(null, {
-        target: {
-          name: 'LOG_AGGREGATOR_PORT',
-          value: 1010,
-        },
-      });
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('Form').invoke('onSubmit')();
-    });
-    expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1);
+    const portInput = container.querySelector('#LOG_AGGREGATOR_PORT');
+    await user.clear(portInput);
+    await user.type(portInput, '1010');
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    await waitFor(() =>
+      expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1)
+    );
     expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
       ...mockSettings,
       LOG_AGGREGATOR_PORT: 1010,
@@ -229,16 +221,16 @@ describe('<LoggingEdit />', () => {
   });
 
   test('should navigate to logging detail on successful submission', async () => {
-    await act(async () => {
-      wrapper.find('Form').invoke('onSubmit')();
-    });
-    expect(history.location.pathname).toEqual('/settings/logging/details');
+    const { user } = await renderEdit();
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual('/settings/logging/details')
+    );
   });
 
   test('should navigate to logging detail when cancel is clicked', async () => {
-    await act(async () => {
-      wrapper.find('button[aria-label="Cancel"]').invoke('onClick')();
-    });
+    const { user } = await renderEdit();
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
     expect(history.location.pathname).toEqual('/settings/logging/details');
   });
 
@@ -249,13 +241,10 @@ describe('<LoggingEdit />', () => {
       },
     };
     SettingsAPI.updateAll.mockImplementation(() => Promise.reject(error));
-    expect(wrapper.find('FormSubmitError').length).toBe(0);
+    const { user } = await renderEdit();
     expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(0);
-    await act(async () => {
-      wrapper.find('Form').invoke('onSubmit')();
-    });
-    wrapper.update();
-    expect(wrapper.find('FormSubmitError').length).toBe(1);
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    expect(await screen.findByText('An error occurred')).toBeInTheDocument();
     expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1);
   });
 
@@ -263,14 +252,11 @@ describe('<LoggingEdit />', () => {
     SettingsAPI.readCategory.mockImplementationOnce(() =>
       Promise.reject(new Error())
     );
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <LoggingEdit />
-        </SettingsProvider>
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('ContentError').length).toBe(1);
+    await renderEdit();
+    expect(
+      screen.getByText(
+        'There was an error loading this content. Please reload the page.'
+      )
+    ).toBeInTheDocument();
   });
 });

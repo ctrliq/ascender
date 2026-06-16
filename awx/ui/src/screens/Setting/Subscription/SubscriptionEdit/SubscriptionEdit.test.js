@@ -1,11 +1,13 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import {
+  screen,
+  waitFor,
+  within,
+  fireEvent,
+} from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { ConfigAPI, MeAPI, SettingsAPI, RootAPI, UsersAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import SubscriptionEdit from './SubscriptionEdit';
 
 jest.mock('../../../../api');
@@ -49,12 +51,18 @@ const emptyConfig = {
   request: jest.fn(),
 };
 
+async function waitForLoaded() {
+  await waitFor(() =>
+    expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
+  );
+}
+
 describe('<SubscriptionEdit />', () => {
   describe('installing a fresh subscription', () => {
-    let wrapper;
     let history;
+    let container;
 
-    beforeAll(async () => {
+    async function renderFresh() {
       jest.resetAllMocks();
       RootAPI.readAssetVariables = async () => ({
         data: {
@@ -62,155 +70,134 @@ describe('<SubscriptionEdit />', () => {
           PENDO_API_KEY: '',
         },
       });
-      SettingsAPI.readCategory = async () => ({
-        data: {},
-      });
+      SettingsAPI.readCategory = async () => ({ data: {} });
       history = createMemoryHistory({
         initialEntries: ['/settings/subscription_managment'],
       });
-      await act(async () => {
-        wrapper = mountWithContexts(<SubscriptionEdit />, {
-          context: {
-            config: emptyConfig,
-            router: { history },
-          },
-        });
-      });
-      await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    });
-
-    test('initially renders without crashing', () => {
-      expect(wrapper.find('SubscriptionEdit').length).toBe(1);
-    });
-
-    test('should show all wizard steps when it is a trial or a fresh installation', () => {
-      expect(
-        wrapper.find('WizardNavItem[content="Mock Subscription"]').length
-      ).toBe(1);
-      expect(
-        wrapper.find('WizardNavItem[content="User and Automation Analytics"]')
-          .length
-      ).toBe(1);
-      expect(
-        wrapper.find('WizardNavItem[content="End user license agreement"]')
-          .length
-      ).toBe(1);
-      expect(
-        wrapper.find('button[aria-label="Cancel subscription edit"]').length
-      ).toBe(0);
-    });
-
-    test('subscription selection type toggle should default to manifest', () => {
-      expect(wrapper.find('ToggleGroupItem').first().text()).toBe(
-        'Subscription manifest'
-      );
-      expect(wrapper.find('ToggleGroupItem').first().props().isSelected).toBe(
-        true
-      );
-      expect(wrapper.find('ToggleGroupItem').last().text()).toBe(
-        'Username / password'
-      );
-      expect(wrapper.find('ToggleGroupItem').last().props().isSelected).toBe(
-        false
-      );
-    });
-
-    test('file upload field should upload manifest file', async () => {
-      expect(wrapper.find('FileUploadField').prop('filename')).toEqual('');
-      const mockFile = new Blob(['123'], { type: 'application/zip' });
-      mockFile.name = 'mock.zip';
-      mockFile.date = new Date();
-      await act(async () => {
-        wrapper.find('FileUpload').invoke('onChange')(mockFile, 'mock.zip');
-      });
-      await act(async () => {
-        wrapper.update();
-      });
-      await act(async () => {
-        wrapper.update();
-      });
-      expect(wrapper.find('FileUploadField').prop('filename')).toEqual(
-        'mock.zip'
-      );
-    });
-
-    test('clicking next button should show analytics step', async () => {
-      wrapper.update();
-      await act(async () => {
-        wrapper.find('button#subscription-wizard-next').simulate('click');
-      });
-      wrapper.update();
-      expect(wrapper.find('AnalyticsStep').length).toBe(1);
-      expect(wrapper.find('CheckboxField').length).toBe(2);
-      expect(wrapper.find('FormField').length).toBe(1);
-      expect(wrapper.find('PasswordField').length).toBe(1);
-    });
-
-    test('deselecting insights checkbox should hide username and password fields', async () => {
-      expect(wrapper.find('input#username-field')).toHaveLength(1);
-      expect(wrapper.find('input#password-field')).toHaveLength(1);
-      await act(async () => {
-        wrapper.find('Checkbox[name="pendo"] input').simulate('change', {
-          target: { value: false, name: 'pendo' },
-        });
-        wrapper.find('Checkbox[name="insights"] input').simulate('change', {
-          target: { value: false, name: 'insights' },
-        });
-      });
-      wrapper.update();
-      expect(wrapper.find('input#username-field')).toHaveLength(0);
-      expect(wrapper.find('input#password-field')).toHaveLength(0);
-    });
-
-    test('clicking next button should show eula step', async () => {
-      await act(async () => {
-        wrapper.find('button#subscription-wizard-next').simulate('click');
-      });
-      wrapper.update();
-      expect(wrapper.find('EulaStep').length).toBe(1);
-      expect(wrapper.find('button#subscription-wizard-submit').length).toBe(1);
-      expect(
-        wrapper.find('button#subscription-wizard-submit').prop('disabled')
-      ).toBe(false);
-    });
-
-    test('should successfully save on form submission', async () => {
-      const { window } = global;
-      global.window.pendo = { initialize: async () => ({}) };
-      ConfigAPI.read = async () => ({
-        data: mockConfig,
-      });
-      MeAPI.read = async () => ({
-        data: {
-          results: [
-            {
-              is_superuser: true,
-            },
-          ],
+      const utils = renderWithContexts(<SubscriptionEdit />, {
+        context: {
+          config: emptyConfig,
+          router: { history },
         },
       });
-      ConfigAPI.attach = async () => ({});
-      ConfigAPI.create = async () => ({
-        data: mockConfig,
-      });
-      UsersAPI.readAdminOfOrganizations({
-        data: {},
-      });
-      expect(wrapper.find('Alert[title="Save successful"]')).toHaveLength(0);
-      await act(async () =>
-        wrapper.find('button[aria-label="Submit"]').simulate('click')
+      container = utils.container;
+      await waitForLoaded();
+      return utils;
+    }
+
+    test('shows all wizard steps when it is a trial or fresh installation', async () => {
+      await renderFresh();
+      // brand-prefixed subscription step plus analytics and eula steps.
+      // "Mock Subscription" appears in both the wizard nav and the active
+      // step header, so allow multiple matches.
+      expect(screen.getAllByText('Mock Subscription').length).toBeGreaterThan(
+        0
       );
-      wrapper.update();
-      waitForElement(wrapper, 'Alert[title="Save successful"]');
-      global.window = window;
+      expect(
+        screen.getByText('User and Automation Analytics')
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText('End user license agreement')
+      ).toBeInTheDocument();
+      // no cancel button when there is no valid key
+      expect(
+        screen.queryByRole('button', { name: 'Cancel subscription edit' })
+      ).not.toBeInTheDocument();
+    });
+
+    test('subscription selection type toggle defaults to manifest', async () => {
+      await renderFresh();
+      // PF ToggleGroupItem puts the id on the wrapper div and the selected
+      // state (pf-m-selected / aria-pressed) on the inner button
+      const manifestButton = container.querySelector(
+        '#subscription-manifest button'
+      );
+      const credButton = container.querySelector('#username-password button');
+      expect(manifestButton).toHaveTextContent('Subscription manifest');
+      expect(manifestButton).toHaveClass('pf-m-selected');
+      expect(credButton).toHaveTextContent('Username / password');
+      expect(credButton).not.toHaveClass('pf-m-selected');
+    });
+
+    test('file upload field uploads a manifest file', async () => {
+      await renderFresh();
+      const filenameInput = container.querySelector(
+        '#upload-manifest-filename'
+      );
+      expect(filenameInput.value).toEqual('');
+      const fileInput = container.querySelector('input[type="file"]');
+      const file = new File(['123'], 'mock.zip', { type: 'application/zip' });
+      fireEvent.change(fileInput, { target: { files: [file] } });
+      await waitFor(() =>
+        expect(
+          container.querySelector('#upload-manifest-filename').value
+        ).toEqual('mock.zip')
+      );
+    });
+
+    test('clicking next advances to analytics step then eula step and submits', async () => {
+      const { user } = await renderFresh();
+
+      // upload a manifest so submit is enabled
+      const fileInput = container.querySelector('input[type="file"]');
+      const file = new File(['123'], 'mock.zip', { type: 'application/zip' });
+      fireEvent.change(fileInput, { target: { files: [file] } });
+      await waitFor(() =>
+        expect(
+          container.querySelector('#upload-manifest-filename').value
+        ).toEqual('mock.zip')
+      );
+
+      // advance to the analytics step
+      fireEvent.click(container.querySelector('#subscription-wizard-next'));
+      expect(await screen.findByText('User analytics')).toBeInTheDocument();
+      expect(screen.getByText('Automation Analytics')).toBeInTheDocument();
+      // manifest + insights enabled -> credential fields are shown
+      expect(container.querySelector('#username-field')).toBeInTheDocument();
+      expect(container.querySelector('#password-field')).toBeInTheDocument();
+
+      // deselecting both analytics checkboxes hides the credential fields
+      await user.click(container.querySelector('#pendo-field'));
+      await user.click(container.querySelector('#insights-field'));
+      await waitFor(() =>
+        expect(container.querySelector('#username-field')).toBeNull()
+      );
+      expect(container.querySelector('#password-field')).toBeNull();
+
+      // advance to the eula step
+      fireEvent.click(container.querySelector('#subscription-wizard-next'));
+      expect(
+        await screen.findByText('End User License Agreement')
+      ).toBeInTheDocument();
+      const submit = container.querySelector('#subscription-wizard-submit');
+      expect(submit).toBeInTheDocument();
+      expect(submit).not.toBeDisabled();
+
+      // submit successfully
+      global.window.pendo = { initialize: async () => ({}) };
+      ConfigAPI.read = async () => ({ data: mockConfig });
+      MeAPI.read = async () => ({
+        data: { results: [{ is_superuser: true }] },
+      });
+      ConfigAPI.attach = async () => ({});
+      ConfigAPI.create = async () => ({ data: mockConfig });
+      SettingsAPI.updateCategory = async () => ({});
+      UsersAPI.readAdminOfOrganizations = async () => ({ data: {} });
+
+      fireEvent.click(submit);
+      expect(await screen.findByText('Save successful!')).toBeInTheDocument();
     });
   });
 
   describe('editing with a valid subscription', () => {
-    let wrapper;
     let history;
+    let container;
 
-    beforeAll(async () => {
+    async function renderEdit() {
+      jest.resetAllMocks();
+      RootAPI.readAssetVariables = async () => ({
+        data: { BRAND_NAME: 'Mock', PENDO_API_KEY: '' },
+      });
       SettingsAPI.readCategory = async () => ({
         data: {
           SUBSCRIPTIONS_PASSWORD: 'mock_password',
@@ -232,175 +219,152 @@ describe('<SubscriptionEdit />', () => {
       history = createMemoryHistory({
         initialEntries: ['/settings/subscription/edit'],
       });
-      await act(async () => {
-        wrapper = mountWithContexts(<SubscriptionEdit />, {
-          context: {
-            config: {
-              mockConfig,
-              request: jest.fn(),
-            },
-            me: {
-              is_superuser: true,
-            },
-            router: { history },
+      const utils = renderWithContexts(<SubscriptionEdit />, {
+        context: {
+          config: {
+            ...mockConfig,
+            license_info: { valid_key: true },
+            request: jest.fn(),
           },
-        });
+          router: { history },
+        },
       });
-      await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
+      container = utils.container;
+      await waitForLoaded();
+      return utils;
+    }
+
+    test('hides the analytics step when editing a current subscription', async () => {
+      await renderEdit();
+      expect(
+        screen.getAllByText('Subscription Management').length
+      ).toBeGreaterThan(0);
+      expect(
+        screen.queryByText('User and Automation Analytics')
+      ).not.toBeInTheDocument();
+      expect(
+        screen.getByText('End user license agreement')
+      ).toBeInTheDocument();
     });
 
-    test('should hide analytics step when editing a current subscription', async () => {
-      expect(
-        wrapper.find('WizardNavItem[content="Subscription Management"]').length
-      ).toBe(1);
-      expect(
-        wrapper.find('WizardNavItem[content="User and Automation Analytics"]')
-          .length
-      ).toBe(0);
-      expect(
-        wrapper.find('WizardNavItem[content="End user license agreement"]')
-          .length
-      ).toBe(1);
-    });
-
-    test('Username/password toggle button should show username credential fields', async () => {
-      expect(wrapper.find('ToggleGroupItem').last().props().isSelected).toBe(
-        false
+    test('username/password toggle shows credential fields', async () => {
+      const { user } = await renderEdit();
+      const credToggle = container.querySelector('#username-password');
+      expect(credToggle).not.toHaveClass('pf-m-selected');
+      await user.click(
+        screen.getByRole('button', { name: 'Username / password' })
       );
-      wrapper
-        .find('ToggleGroupItem[text="Username / password"] button')
-        .simulate('click');
-      wrapper.update();
-      expect(wrapper.find('ToggleGroupItem').last().props().isSelected).toBe(
-        true
-      );
-      expect(wrapper.find('input#username-field').prop('value')).toEqual('');
-      expect(wrapper.find('input#password-field').prop('value')).toEqual('');
-      await act(async () => {
-        wrapper.find('input#username-field').simulate('change', {
-          target: { value: 'username-cred', name: 'username' },
-        });
-        wrapper.find('input#password-field').simulate('change', {
-          target: { value: 'password-cred', name: 'password' },
-        });
+      const usernameInput = container.querySelector('#username-field');
+      const passwordInput = container.querySelector('#password-field');
+      expect(usernameInput.value).toEqual('');
+      expect(passwordInput.value).toEqual('');
+      fireEvent.change(usernameInput, {
+        target: { value: 'username-cred', name: 'username' },
       });
-      wrapper.update();
-      expect(wrapper.find('input#username-field').prop('value')).toEqual(
-        'username-cred'
+      fireEvent.change(passwordInput, {
+        target: { value: 'password-cred', name: 'password' },
+      });
+      await waitFor(() =>
+        expect(container.querySelector('#username-field').value).toEqual(
+          'username-cred'
+        )
       );
-      expect(wrapper.find('input#password-field').prop('value')).toEqual(
+      expect(container.querySelector('#password-field').value).toEqual(
         'password-cred'
       );
     });
 
-    test('should open subscription selection modal', async () => {
-      expect(wrapper.find('Flex[id="selected-subscription-file"]').length).toBe(
-        0
+    test('opens the subscription selection modal and selects a subscription', async () => {
+      const { user } = await renderEdit();
+      await user.click(
+        screen.getByRole('button', { name: 'Username / password' })
       );
-      await act(async () => {
-        wrapper
-          .find('SubscriptionStep button[aria-label="Get subscriptions"]')
-          .simulate('click');
+      const usernameInput = container.querySelector('#username-field');
+      const passwordInput = container.querySelector('#password-field');
+      fireEvent.change(usernameInput, {
+        target: { value: 'username-cred', name: 'username' },
       });
-      wrapper.update();
-      await waitForElement(wrapper, 'SubscriptionModal');
-      await act(async () => {
-        wrapper
-          .find('SubscriptionModal SelectColumn')
-          .first()
-          .invoke('onSelect')();
+      fireEvent.change(passwordInput, {
+        target: { value: 'password-cred', name: 'password' },
       });
-      wrapper.update();
-      await act(async () =>
-        wrapper.find('Button[aria-label="Confirm selection"]').prop('onClick')()
+      await waitFor(() =>
+        expect(container.querySelector('#username-field').value).toEqual(
+          'username-cred'
+        )
       );
-      wrapper.update();
-      await waitForElement(
-        wrapper,
-        'SubscriptionModal',
-        (el) => el.length === 0
-      );
-    });
 
-    test('should show selected subscription name', () => {
-      expect(wrapper.find('Flex[id="selected-subscription"]').length).toBe(1);
-      expect(wrapper.find('Flex[id="selected-subscription"] i').text()).toBe(
-        'mock subscription 50 instances'
+      // open the subscription modal (button's accessible name is its
+      // aria-label, "Get subscriptions")
+      await user.click(
+        screen.getByRole('button', { name: 'Get subscriptions' })
       );
-    });
-    test('next should skip analytics step and navigate to eula step', async () => {
-      await act(async () => {
-        wrapper.find('button#subscription-wizard-next').simulate('click');
-      });
-      wrapper.update();
-      expect(wrapper.find('SubscriptionStep').length).toBe(0);
-      expect(wrapper.find('AnalyticsStep').length).toBe(0);
-      expect(wrapper.find('EulaStep').length).toBe(1);
       expect(
-        wrapper.find('button#subscription-wizard-submit').prop('disabled')
-      ).toBe(false);
-    });
+        await screen.findByText('mock subscription 50 instances')
+      ).toBeInTheDocument();
 
-    test('should successfully send request to api on form submission', async () => {
-      expect(wrapper.find('EulaStep').length).toBe(1);
-      ConfigAPI.read = async () => ({
-        data: {
-          mockConfig,
-        },
-      });
+      // select the subscription radio and confirm
+      const grid = screen.getByRole('grid');
+      const rows = within(grid).getAllByRole('row');
+      await user.click(within(rows[1]).getByRole('radio'));
+      await user.click(
+        screen.getByRole('button', { name: 'Confirm selection' })
+      );
+
+      // the modal closes and the selected subscription name is shown
+      await waitFor(() =>
+        expect(
+          screen.queryByRole('button', { name: 'Confirm selection' })
+        ).not.toBeInTheDocument()
+      );
+      const selected = container.querySelector('#selected-subscription');
+      expect(selected).toBeInTheDocument();
+      expect(within(selected).getByText('mock subscription 50 instances')).toBeInTheDocument();
+
+      // next skips the analytics step and goes straight to eula
+      fireEvent.click(container.querySelector('#subscription-wizard-next'));
+      expect(
+        await screen.findByText('End User License Agreement')
+      ).toBeInTheDocument();
+      expect(screen.queryByText('User analytics')).not.toBeInTheDocument();
+      const submit = container.querySelector('#subscription-wizard-submit');
+      expect(submit).not.toBeDisabled();
+
+      // submit successfully
+      ConfigAPI.read = async () => ({ data: mockConfig });
       MeAPI.read = async () => ({
-        data: {
-          results: [
-            {
-              is_superuser: true,
-            },
-          ],
-        },
+        data: { results: [{ is_superuser: true }] },
       });
       ConfigAPI.attach = async () => ({});
       ConfigAPI.create = async () => ({});
-      UsersAPI.readAdminOfOrganizations = async () => ({
-        data: {},
-      });
-      waitForElement(
-        wrapper,
-        'Alert[title="Save successful"]',
-        (el) => el.length === 0
-      );
-      await act(async () =>
-        wrapper.find('button#subscription-wizard-submit').prop('onClick')()
-      );
-      wrapper.update();
-      waitForElement(wrapper, 'Alert[title="Save successful"]');
+      UsersAPI.readAdminOfOrganizations = async () => ({ data: {} });
+      fireEvent.click(submit);
+      expect(await screen.findByText('Save successful!')).toBeInTheDocument();
     });
 
-    test('should navigate to subscription details on cancel', async () => {
-      expect(
-        wrapper.find('button[aria-label="Cancel subscription edit"]').length
-      ).toBe(1);
-      await act(async () => {
-        wrapper
-          .find('button[aria-label="Cancel subscription edit"]')
-          .invoke('onClick')();
+    test('navigates to subscription details on cancel', async () => {
+      const { user } = await renderEdit();
+      const cancel = screen.getByRole('button', {
+        name: 'Cancel subscription edit',
       });
+      expect(cancel).toBeInTheDocument();
+      await user.click(cancel);
       expect(history.location.pathname).toEqual(
         '/settings/subscription/details'
       );
     });
   });
 
-  test('should throw a content error', async () => {
-    RootAPI.readAssetVariables = jest.fn();
-    RootAPI.readAssetVariables.mockRejectedValueOnce(new Error());
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<SubscriptionEdit />, {
-        context: {
-          config: emptyConfig,
-        },
-      });
+  test('shows a content error when asset variables fail to load', async () => {
+    jest.resetAllMocks();
+    RootAPI.readAssetVariables = jest.fn().mockRejectedValueOnce(new Error());
+    renderWithContexts(<SubscriptionEdit />, {
+      context: { config: emptyConfig },
     });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    await waitForElement(wrapper, 'ContentError', (el) => el.length === 1);
+    await waitForLoaded();
+    expect(
+      await screen.findByText(
+        'There was an error loading this content. Please reload the page.'
+      )
+    ).toBeInTheDocument();
   });
 });

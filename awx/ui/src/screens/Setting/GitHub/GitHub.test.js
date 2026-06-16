@@ -1,21 +1,29 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { Routes, Route } from 'react-router-dom-v5-compat';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { SettingsAPI } from 'api';
 import { SettingsProvider } from 'contexts/Settings';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
-import { Routes, Route } from 'react-router-dom-v5-compat';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import mockAllOptions from '../shared/data.allSettingOptions.json';
 import GitHub from './GitHub';
 
 jest.mock('../../../api/models/Settings');
 
-describe('<GitHub />', () => {
-  let wrapper;
+async function setup(initialEntry) {
+  const history = createMemoryHistory({ initialEntries: [initialEntry] });
+  const utils = renderWithContexts(
+    <SettingsProvider value={mockAllOptions.actions}>
+      <Routes>
+        <Route path="/settings/github/*" element={<GitHub />} />
+      </Routes>
+    </SettingsProvider>,
+    { context: { router: { history } } }
+  );
+  return { history, ...utils };
+}
 
+describe('<GitHub />', () => {
   beforeEach(() => {
     SettingsAPI.readCategory.mockResolvedValueOnce({
       data: {
@@ -94,85 +102,38 @@ describe('<GitHub />', () => {
   });
 
   test('should render github default details', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/settings/github/'],
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <Routes>
-            <Route path="/settings/github/*" element={<GitHub />} />
-          </Routes>
-        </SettingsProvider>,
-        {
-          context: { router: { history } },
-        }
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('GitHubDetail').length).toBe(1);
-    expect(wrapper.find('Detail[label="GitHub OAuth2 Key"]').length).toBe(1);
+    await setup('/settings/github/');
+    await waitFor(() =>
+      expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
+    );
+    expect(await screen.findByText('GitHub OAuth2 Key')).toBeInTheDocument();
   });
 
   test('should redirect to github organization category details', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/settings/github/organization'],
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <Routes>
-            <Route path="/settings/github/*" element={<GitHub />} />
-          </Routes>
-        </SettingsProvider>,
-        {
-          context: { router: { history } },
-        }
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('GitHubDetail').length).toBe(1);
+    await setup('/settings/github/organization');
+    await waitFor(() =>
+      expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
+    );
     expect(
-      wrapper.find('Detail[label="GitHub Organization OAuth2 Key"]').length
-    ).toBe(1);
+      await screen.findByText('GitHub Organization OAuth2 Key')
+    ).toBeInTheDocument();
   });
 
   test('should render github edit', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/settings/github/default/edit'],
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <Routes>
-            <Route path="/settings/github/*" element={<GitHub />} />
-          </Routes>
-        </SettingsProvider>,
-        {
-          context: { router: { history } },
-        }
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('GitHubEdit').length).toBe(1);
+    await setup('/settings/github/default/edit');
+    await waitFor(() =>
+      expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
+    );
+    // the edit form exposes a Save button; the detail view does not
+    expect(
+      await screen.findByRole('button', { name: 'Save' })
+    ).toBeInTheDocument();
   });
 
   test('should show content error when user navigates to erroneous route', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/settings/github/foo/bar'],
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <Routes>
-            <Route path="/settings/github/*" element={<GitHub />} />
-          </Routes>
-        </SettingsProvider>,
-        {
-          context: { router: { history } },
-        }
-      );
-    });
-    expect(wrapper.find('ContentError').length).toBe(1);
+    await setup('/settings/github/foo/bar');
+    expect(
+      await screen.findByText(/The page you requested could not be found/)
+    ).toBeInTheDocument();
   });
 });

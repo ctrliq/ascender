@@ -1,18 +1,18 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { createMemoryHistory } from 'history';
 import { SettingsAPI } from 'api';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
-import { Routes, Route } from 'react-router-dom-v5-compat';
+import { SettingsProvider } from 'contexts/Settings';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import mockJobSettings from '../shared/data.jobSettings.json';
-import Jobs from './Troubleshooting';
+import mockAllOptions from '../shared/data.allSettingOptions.json';
+import mockTroubleshootingSettings from './TroubleshootingEdit/data.defaultTroubleshootingSettings.json';
 import Troubleshooting from './Troubleshooting';
 
 jest.mock('../../../api');
 
 describe('<Troubleshooting />', () => {
-  let wrapper;
-
   beforeEach(() => {
     SettingsAPI.readCategory.mockResolvedValue({
       data: mockJobSettings,
@@ -23,39 +23,42 @@ describe('<Troubleshooting />', () => {
     jest.clearAllMocks();
   });
 
+  function renderTroubleshooting(initialEntries) {
+    const history = createMemoryHistory({ initialEntries });
+    return renderWithContexts(
+      <SettingsProvider value={mockAllOptions.actions}>
+        <Routes>
+          <Route
+            path="/settings/troubleshooting/*"
+            element={<Troubleshooting />}
+          />
+        </Routes>
+      </SettingsProvider>,
+      { context: { router: { history } } }
+    );
+  }
+
   test('should render troubleshooting details', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/settings/troubleshooting/details'],
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(<Routes><Route path="/settings/troubleshooting/*" element={<Jobs />} /></Routes>, {
-        context: { router: { history } },
-      });
-    });
-    expect(wrapper.find('TroubleshootingDetail').length).toBe(1);
+    renderTroubleshooting(['/settings/troubleshooting/details']);
+    expect(await screen.findByText('Job execution path')).toBeInTheDocument();
   });
 
   test('should render troubleshooting edit', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/settings/troubleshooting/edit'],
+    SettingsAPI.readCategory.mockResolvedValue({
+      data: mockTroubleshootingSettings,
     });
-    await act(async () => {
-      wrapper = mountWithContexts(<Routes><Route path="/settings/troubleshooting/*" element={<Jobs />} /></Routes>, {
-        context: { router: { history } },
-      });
-    });
-    expect(wrapper.find('TroubleshootingEdit').length).toBe(1);
+    renderTroubleshooting(['/settings/troubleshooting/edit']);
+    expect(
+      await screen.findByRole('button', { name: 'Save' })
+    ).toBeInTheDocument();
   });
 
   test('should show content error when user navigates to erroneous route', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/settings/troubleshooting/foo'],
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(<Routes><Route path="/settings/troubleshooting/*" element={<Troubleshooting />} /></Routes>, {
-        context: { router: { history } },
-      });
-    });
-    expect(wrapper.find('ContentError').length).toBe(1);
+    renderTroubleshooting(['/settings/troubleshooting/foo']);
+    await waitFor(() =>
+      expect(
+        screen.getByText(/The page you requested could not be found/)
+      ).toBeInTheDocument()
+    );
   });
 });

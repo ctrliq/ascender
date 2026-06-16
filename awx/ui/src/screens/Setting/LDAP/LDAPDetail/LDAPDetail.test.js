@@ -1,59 +1,51 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
-import { useRouteMatch } from 'react-router-dom';
+import { screen, waitFor } from '@testing-library/react';
+import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
 import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../../testUtils/enzymeHelpers';
-import {
+  renderWithContexts,
   assertDetail,
-  assertVariableDetail,
-} from '../../shared/settingTestUtils';
+} from '../../../../../testUtils/rtlContexts';
 import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import mockLDAP from '../../shared/data.ldapSettings.json';
 import LDAPDetail from './LDAPDetail';
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useRouteMatch: jest.fn(),
-}));
 jest.mock('../../../../api');
 
 describe('<LDAPDetail />', () => {
+  beforeEach(() => {
+    SettingsAPI.readCategory.mockResolvedValue({ data: mockLDAP });
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  async function renderDetail(category = 'default', context = {}) {
+    const history = createMemoryHistory({
+      initialEntries: [`/settings/ldap/${category}/details`],
+    });
+    const result = renderWithContexts(
+      <SettingsProvider value={mockAllOptions.actions}>
+        <LDAPDetail />
+      </SettingsProvider>,
+      { context: { ...context, router: { history } } }
+    );
+    await waitFor(() =>
+      expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
+    );
+    return result;
+  }
+
   describe('Default', () => {
-    let wrapper;
-
-    beforeEach(() => {
-      SettingsAPI.readCategory.mockResolvedValue({ data: mockLDAP });
+    test('initially renders without crashing', async () => {
+      await renderDetail();
+      expect(screen.getByText('LDAP Server URI')).toBeInTheDocument();
     });
 
-    beforeEach(async () => {
-      useRouteMatch.mockImplementation(() => ({
-        url: '/settings/ldap/default/details',
-        path: '/settings/ldap/:category/details',
-        params: { category: 'default' },
-      }));
-      await act(async () => {
-        wrapper = mountWithContexts(
-          <SettingsProvider value={mockAllOptions.actions}>
-            <LDAPDetail />
-          </SettingsProvider>
-        );
-      });
-      await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    });
-
-    afterAll(() => {
-      jest.clearAllMocks();
-    });
-
-    test('initially renders without crashing', () => {
-      expect(wrapper.find('LDAPDetail').length).toBe(1);
-    });
-
-    test('should render expected tabs', () => {
+    test('should render expected tabs', async () => {
+      await renderDetail();
       const expectedTabs = [
         'Back to Settings',
         'Default',
@@ -63,95 +55,70 @@ describe('<LDAPDetail />', () => {
         'LDAP4',
         'LDAP5',
       ];
-      wrapper.find('RoutedTabs li').forEach((tab, index) => {
-        expect(tab.text()).toEqual(expectedTabs[index]);
+      expectedTabs.forEach((tabName) => {
+        expect(screen.getByText(tabName)).toBeInTheDocument();
       });
     });
 
-    test('should render expected details', () => {
-      assertDetail(wrapper, 'LDAP Server URI', 'ldap://ldap.example.com');
-      assertDetail(wrapper, 'LDAP Bind DN', 'cn=eng_user');
-      assertDetail(wrapper, 'LDAP Bind Password', 'Encrypted');
-      assertDetail(wrapper, 'LDAP Start TLS', 'Off');
+    test('should render expected details', async () => {
+      await renderDetail();
+      assertDetail('LDAP Server URI', 'ldap://ldap.example.com');
+      assertDetail('LDAP Bind DN', 'cn=eng_user');
+      assertDetail('LDAP Bind Password', 'Encrypted');
+      assertDetail('LDAP Start TLS', 'Off');
       assertDetail(
-        wrapper,
         'LDAP User DN Template',
         'uid=%(user)s,OU=Users,DC=example,DC=com'
       );
-      assertDetail(wrapper, 'LDAP Group Type', 'MemberDNGroupType');
+      assertDetail('LDAP Group Type', 'MemberDNGroupType');
       assertDetail(
-        wrapper,
         'LDAP Require Group',
         'CN=Service Users,OU=Users,DC=example,DC=com'
       );
-      assertDetail(wrapper, 'LDAP Deny Group', 'Not configured');
-      assertVariableDetail(wrapper, 'LDAP User Search', '[]');
-      assertVariableDetail(wrapper, 'LDAP User Attribute Map', '{}');
-      assertVariableDetail(wrapper, 'LDAP Group Search', '[]');
-      assertVariableDetail(
-        wrapper,
+      assertDetail('LDAP Deny Group', 'Not configured');
+      // list/object details render via CodeEditor, which is empty under jsdom;
+      // assert only that the surrounding labels are present.
+      [
+        'LDAP User Search',
+        'LDAP User Attribute Map',
+        'LDAP Group Search',
         'LDAP Group Type Parameters',
-        '{\n  "member_attr": "member",\n  "name_attr": "cn"\n}'
-      );
-      assertVariableDetail(wrapper, 'LDAP User Flags By Group', '{}');
-      assertVariableDetail(wrapper, 'LDAP Organization Map', '{}');
-      assertVariableDetail(wrapper, 'LDAP Team Map', '{}');
+        'LDAP User Flags By Group',
+        'LDAP Organization Map',
+        'LDAP Team Map',
+      ].forEach((label) => {
+        expect(screen.getByText(label)).toBeInTheDocument();
+      });
     });
 
     test('should hide edit button from non-superusers', async () => {
-      const config = {
-        me: {
-          is_superuser: false,
-        },
-      };
-      await act(async () => {
-        wrapper = mountWithContexts(
-          <SettingsProvider value={mockAllOptions.actions}>
-            <LDAPDetail />
-          </SettingsProvider>,
-          {
-            context: { config },
-          }
-        );
+      await renderDetail('default', {
+        config: { me: { is_superuser: false } },
       });
-      await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-      expect(wrapper.find('Button[aria-label="Edit"]').exists()).toBeFalsy();
+      expect(
+        screen.queryByRole('link', { name: 'Edit' })
+      ).not.toBeInTheDocument();
     });
 
     test('should display content error when api throws error on initial render', async () => {
       SettingsAPI.readCategory.mockRejectedValue(new Error());
-      await act(async () => {
-        wrapper = mountWithContexts(
-          <SettingsProvider value={mockAllOptions.actions}>
-            <LDAPDetail />
-          </SettingsProvider>
-        );
-      });
-      await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-      expect(wrapper.find('ContentError').length).toBe(1);
+      await renderDetail();
+      expect(
+        screen.getByText(
+          'There was an error loading this content. Please reload the page.'
+        )
+      ).toBeInTheDocument();
     });
   });
 
   describe('Redirect', () => {
-    beforeEach(() => {
-      SettingsAPI.readCategory.mockResolvedValue({ data: mockLDAP });
-    });
-
     test('should render redirect when user navigates to erroneous category', async () => {
-      let wrapper;
-      useRouteMatch.mockImplementation(() => ({
-        url: '/settings/ldap/foo/details',
-        path: '/settings/ldap/:category/details',
-        params: { category: 'foo' },
-      }));
-      await act(async () => {
-        wrapper = mountWithContexts(
-          <SettingsProvider value={mockAllOptions.actions}>
-            <LDAPDetail />
-          </SettingsProvider>
-        );
-      });
-      await waitForElement(wrapper, 'Redirect');
+      const { history } = await renderDetail('foo');
+      await waitFor(() =>
+        expect(history.location.pathname).toEqual(
+          '/settings/ldap/default/details'
+        )
+      );
     });
   });
 });

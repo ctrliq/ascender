@@ -1,18 +1,16 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
-import { Routes, Route } from 'react-router-dom-v5-compat';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import mockAllOptions from '../shared/data.allSettingOptions.json';
 import OIDC from './OIDC';
 
 jest.mock('../../../api');
 
 describe('<OIDC />', () => {
-  let wrapper;
-
   beforeEach(() => {
     SettingsAPI.readCategory.mockResolvedValue({
       data: {
@@ -28,49 +26,36 @@ describe('<OIDC />', () => {
     jest.clearAllMocks();
   });
 
+  function renderOIDC(initialEntries) {
+    const history = createMemoryHistory({ initialEntries });
+    return renderWithContexts(
+      <SettingsProvider value={mockAllOptions.actions}>
+        <Routes>
+          <Route path="/settings/oidc/*" element={<OIDC />} />
+        </Routes>
+      </SettingsProvider>,
+      { context: { router: { history } } }
+    );
+  }
+
   test('should render OIDC details', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/settings/oidc/details'],
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <Routes><Route path="/settings/oidc/*" element={<OIDC />} /></Routes>
-        </SettingsProvider>,
-        {
-          context: { router: { history } },
-        }
-      );
-    });
-    expect(wrapper.find('OIDCDetail').length).toBe(1);
+    renderOIDC(['/settings/oidc/details']);
+    expect(await screen.findByText('OIDC Key')).toBeInTheDocument();
   });
 
   test('should render OIDC edit', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/settings/oidc/edit'],
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <Routes><Route path="/settings/oidc/*" element={<OIDC />} /></Routes>
-        </SettingsProvider>,
-        {
-          context: { router: { history } },
-        }
-      );
-    });
-    expect(wrapper.find('OIDCEdit').length).toBe(1);
+    renderOIDC(['/settings/oidc/edit']);
+    expect(
+      await screen.findByRole('button', { name: 'Save' })
+    ).toBeInTheDocument();
   });
 
   test('should show content error when user navigates to erroneous route', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/settings/oidc/foo'],
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(<Routes><Route path="/settings/oidc/*" element={<OIDC />} /></Routes>, {
-        context: { router: { history } },
-      });
-    });
-    expect(wrapper.find('ContentError').length).toBe(1);
+    renderOIDC(['/settings/oidc/foo']);
+    await waitFor(() =>
+      expect(
+        screen.getByText(/The page you requested could not be found/)
+      ).toBeInTheDocument()
+    );
   });
 });

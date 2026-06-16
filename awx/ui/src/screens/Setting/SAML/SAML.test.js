@@ -1,18 +1,16 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { createMemoryHistory } from 'history';
 import { SettingsAPI } from 'api';
 import { SettingsProvider } from 'contexts/Settings';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
-import { Routes, Route } from 'react-router-dom-v5-compat';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import mockAllOptions from '../shared/data.allSettingOptions.json';
 import SAML from './SAML';
 
 jest.mock('../../../api');
 
 describe('<SAML />', () => {
-  let wrapper;
-
   beforeEach(() => {
     SettingsAPI.readCategory.mockResolvedValue({
       data: {
@@ -42,49 +40,38 @@ describe('<SAML />', () => {
     jest.clearAllMocks();
   });
 
+  function renderSAML(initialEntries) {
+    const history = createMemoryHistory({ initialEntries });
+    return renderWithContexts(
+      <SettingsProvider value={mockAllOptions.actions}>
+        <Routes>
+          <Route path="/settings/saml/*" element={<SAML />} />
+        </Routes>
+      </SettingsProvider>,
+      { context: { router: { history } } }
+    );
+  }
+
   test('should render SAML details', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/settings/saml/details'],
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <Routes><Route path="/settings/saml/*" element={<SAML />} /></Routes>
-        </SettingsProvider>,
-        {
-          context: { router: { history } },
-        }
-      );
-    });
-    expect(wrapper.find('SAMLDetail').length).toBe(1);
+    renderSAML(['/settings/saml/details']);
+    expect(
+      await screen.findByText('SAML Service Provider Entity ID')
+    ).toBeInTheDocument();
   });
 
   test('should render SAML edit', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/settings/saml/edit'],
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <Routes><Route path="/settings/saml/*" element={<SAML />} /></Routes>
-        </SettingsProvider>,
-        {
-          context: { router: { history } },
-        }
-      );
-    });
-    expect(wrapper.find('SAMLEdit').length).toBe(1);
+    renderSAML(['/settings/saml/edit']);
+    expect(
+      await screen.findByRole('button', { name: 'Save' })
+    ).toBeInTheDocument();
   });
 
   test('should show content error when user navigates to erroneous route', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/settings/saml/foo'],
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(<Routes><Route path="/settings/saml/*" element={<SAML />} /></Routes>, {
-        context: { router: { history } },
-      });
-    });
-    expect(wrapper.find('ContentError').length).toBe(1);
+    renderSAML(['/settings/saml/foo']);
+    await waitFor(() =>
+      expect(
+        screen.getByText(/The page you requested could not be found/)
+      ).toBeInTheDocument()
+    );
   });
 });

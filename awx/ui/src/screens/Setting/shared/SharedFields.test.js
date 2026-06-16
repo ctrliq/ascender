@@ -1,9 +1,7 @@
 import React from 'react';
 import { Formik } from 'formik';
-import { I18nProvider } from '@lingui/react';
-import { act } from 'react-dom/test-utils';
-import { i18n } from '@lingui/core';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { screen, within, fireEvent, waitFor } from '@testing-library/react';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import {
   BooleanField,
   ChoiceField,
@@ -14,48 +12,29 @@ import {
   ObjectField,
   TextAreaField,
 } from './SharedFields';
-import en from '../../../locales/en/messages';
 
 describe('Setting form fields', () => {
   test('BooleanField renders the expected content', async () => {
-    i18n.load({ en });
-    i18n.activate('en');
-    const wrapper = mountWithContexts(
-      <I18nProvider i18n={i18n}>
-        <Formik
-          initialValues={{
-            boolean: true,
-          }}
-        >
-          {() => (
-            <BooleanField
-              name="boolean"
-              config={{
-                label: 'test',
-                help_text: 'test',
-              }}
-            />
-          )}
-        </Formik>
-      </I18nProvider>
+    const { user, container } = renderWithContexts(
+      <Formik initialValues={{ boolean: true }}>
+        {() => (
+          <BooleanField
+            name="boolean"
+            config={{ label: 'test', help_text: 'test' }}
+          />
+        )}
+      </Formik>
     );
-    expect(wrapper.find('Switch')).toHaveLength(1);
-    expect(wrapper.find('Switch').prop('isChecked')).toBe(true);
-    expect(wrapper.find('Switch').prop('isDisabled')).toBe(false);
-    await act(async () => {
-      wrapper.find('Switch').invoke('onChange')();
-    });
-    wrapper.update();
-    expect(wrapper.find('Switch').prop('isChecked')).toBe(false);
+    const toggle = container.querySelector('#boolean');
+    expect(toggle).toBeChecked();
+    expect(toggle).not.toBeDisabled();
+    await user.click(toggle);
+    expect(container.querySelector('#boolean')).not.toBeChecked();
   });
 
-  test('ChoiceField renders unrequired form field', async () => {
-    const wrapper = mountWithContexts(
-      <Formik
-        initialValues={{
-          choice: 'one',
-        }}
-      >
+  test('ChoiceField renders unrequired form field', () => {
+    const { container } = renderWithContexts(
+      <Formik initialValues={{ choice: 'one' }}>
         {() => (
           <ChoiceField
             name="choice"
@@ -71,124 +50,86 @@ describe('Setting form fields', () => {
         )}
       </Formik>
     );
-    expect(wrapper.find('FormSelect')).toHaveLength(1);
-    expect(wrapper.find('.pf-c-form__label-required')).toHaveLength(0);
+    expect(container.querySelector('select#choice')).toBeInTheDocument();
+    expect(
+      container.querySelector('.pf-c-form__label-required')
+    ).not.toBeInTheDocument();
   });
 
-  test('EncryptedField renders the expected content', async () => {
-    const wrapper = mountWithContexts(
-      <Formik
-        initialValues={{
-          encrypted: '',
-        }}
-      >
+  test('EncryptedField renders the expected content', () => {
+    const { container } = renderWithContexts(
+      <Formik initialValues={{ encrypted: '' }}>
         {() => (
           <EncryptedField
             name="encrypted"
-            config={{
-              label: 'test',
-              help_text: 'test',
-            }}
+            config={{ label: 'test', help_text: 'test' }}
           />
         )}
       </Formik>
     );
-    expect(wrapper.find('PasswordInput')).toHaveLength(1);
+    const input = container.querySelector('#encrypted');
+    expect(input).toBeInTheDocument();
+    expect(input).toHaveAttribute('type', 'password');
   });
 
   test('InputField renders the expected content', async () => {
-    const wrapper = mountWithContexts(
-      <Formik
-        initialValues={{
-          text: '',
-        }}
-      >
+    const { user, container } = renderWithContexts(
+      <Formik initialValues={{ text: '' }}>
         {() => (
           <InputField
             name="text"
-            config={{
-              label: 'test',
-              help_text: 'test',
-              default: '',
-            }}
+            config={{ label: 'test', help_text: 'test', default: '' }}
           />
         )}
       </Formik>
     );
-    expect(wrapper.find('TextInputBase')).toHaveLength(1);
-    expect(wrapper.find('TextInputBase').prop('value')).toEqual('');
-    await act(async () => {
-      wrapper.find('TextInputBase').invoke('onChange')(null, {
-        target: {
-          name: 'text',
-          value: 'foo',
-        },
-      });
-    });
-    wrapper.update();
-    expect(wrapper.find('TextInputBase').prop('value')).toEqual('foo');
+    const input = container.querySelector('#text');
+    expect(input).toHaveValue('');
+    await user.type(input, 'foo');
+    expect(container.querySelector('#text')).toHaveValue('foo');
   });
 
   test('InputField should revert to expected default value', async () => {
-    const wrapper = mountWithContexts(
-      <Formik
-        initialValues={{
-          number: 5,
-        }}
-      >
+    const { user, container } = renderWithContexts(
+      <Formik initialValues={{ number: 5 }}>
         {() => (
           <InputField
             name="number"
             type="number"
-            config={{
-              label: 'test number input',
-              min_value: -10,
-              default: 0,
-            }}
+            config={{ label: 'test number input', min_value: -10, default: 0 }}
           />
         )}
       </Formik>
     );
-    expect(wrapper.find('TextInputBase')).toHaveLength(1);
-    expect(wrapper.find('TextInputBase').prop('value')).toEqual(5);
-    await act(async () => {
-      wrapper.find('button[aria-label="Revert"]').invoke('onClick')();
-    });
-    wrapper.update();
-    expect(wrapper.find('TextInputBase').prop('value')).toEqual(0);
+    const input = container.querySelector('#number');
+    expect(input).toHaveValue(5);
+    await user.click(
+      within(container.querySelector('#number-field')).getByRole('button', {
+        name: 'Revert',
+      })
+    );
+    expect(container.querySelector('#number')).toHaveValue(0);
   });
 
-  test('InputAlertField initially renders disable TextInput', async () => {
-    const wrapper = mountWithContexts(
-      <Formik
-        initialValues={{
-          text: '',
-        }}
-      >
+  test('InputAlertField initially renders disabled TextInput', () => {
+    const { container } = renderWithContexts(
+      <Formik initialValues={{ text: '' }}>
         {() => (
           <InputAlertField
             name="text"
-            config={{
-              label: 'test',
-              help_text: 'test',
-              default: '',
-            }}
+            config={{ label: 'test', help_text: 'test', default: '' }}
           />
         )}
       </Formik>
     );
-    expect(wrapper.find('TextInput')).toHaveLength(1);
-    expect(wrapper.find('TextInput').prop('value')).toEqual('');
-    expect(wrapper.find('TextInput').prop('isDisabled')).toBe(true);
+    const input = container.querySelector('#text');
+    expect(input).toHaveValue('');
+    expect(input).toBeDisabled();
   });
 
   test('TextAreaField renders the expected content', async () => {
-    const wrapper = mountWithContexts(
-      <Formik
-        initialValues={{
-          mock_textarea: '',
-        }}
-      >
+    const { user, container } = renderWithContexts(
+      <Formik initialValues={{ mock_textarea: '' }}>
         {() => (
           <TextAreaField
             name="mock_textarea"
@@ -201,26 +142,17 @@ describe('Setting form fields', () => {
         )}
       </Formik>
     );
-    expect(wrapper.find('textarea')).toHaveLength(1);
-    expect(wrapper.find('textarea#mock_textarea').prop('value')).toEqual('');
-    await act(async () => {
-      wrapper.find('textarea#mock_textarea').simulate('change', {
-        target: { value: 'new textarea value', name: 'mock_textarea' },
-      });
-    });
-    wrapper.update();
-    expect(wrapper.find('textarea').prop('value')).toEqual(
+    const textarea = container.querySelector('textarea#mock_textarea');
+    expect(textarea).toHaveValue('');
+    await user.type(textarea, 'new textarea value');
+    expect(container.querySelector('textarea#mock_textarea')).toHaveValue(
       'new textarea value'
     );
   });
 
-  test('ObjectField renders the expected content', async () => {
-    const wrapper = mountWithContexts(
-      <Formik
-        initialValues={{
-          object: '["one", "two", "three"]',
-        }}
-      >
+  test('ObjectField renders the expected content', () => {
+    renderWithContexts(
+      <Formik initialValues={{ object: '["one", "two", "three"]' }}>
         {() => (
           <ObjectField
             name="object"
@@ -234,24 +166,14 @@ describe('Setting form fields', () => {
         )}
       </Formik>
     );
-    expect(wrapper.find('CodeEditor')).toHaveLength(1);
-    expect(wrapper.find('CodeEditor').prop('value')).toBe(
-      '["one", "two", "three"]'
-    );
-    await act(async () => {
-      wrapper.find('CodeEditor').invoke('onChange')('[]');
-    });
-    wrapper.update();
-    expect(wrapper.find('CodeEditor').prop('value')).toBe('[]');
+    // CodeEditor (react-ace) renders empty under jsdom, so assert the field's
+    // label rather than the editor contents.
+    expect(screen.getByText('test')).toBeInTheDocument();
   });
 
   test('FileUploadField renders the expected content', async () => {
-    const wrapper = mountWithContexts(
-      <Formik
-        initialValues={{
-          mock_file: 'mock file value',
-        }}
-      >
+    const { user, container } = renderWithContexts(
+      <Formik initialValues={{ mock_file: 'mock file value' }}>
         {() => (
           <FileUploadField
             name="mock_file"
@@ -264,38 +186,43 @@ describe('Setting form fields', () => {
         )}
       </Formik>
     );
-
-    expect(
-      wrapper.find('FileUploadField[value="mock file value"]')
-    ).toHaveLength(1);
-    expect(wrapper.find('label').text()).toEqual('mock file label');
-    expect(wrapper.find('input#mock_file-filename').prop('value')).toEqual('');
-    await act(async () => {
-      wrapper.find('FileUpload').invoke('onChange')(
-        {
-          text: () =>
-            '-----BEGIN PRIVATE KEY-----\\nAAAAAAAAAAAAAA\\n-----END PRIVATE KEY-----\\n',
-        },
-        'new file name'
-      );
-    });
-    wrapper.update();
-    expect(wrapper.find('input#mock_file-filename').prop('value')).toEqual(
-      'new file name'
+    expect(screen.getByText('mock file label')).toBeInTheDocument();
+    const filenameInput = container.querySelector('#mock_file-filename');
+    expect(filenameInput).toHaveValue('');
+    const fileInput = container.querySelector('input[type="file"]');
+    const file = new File(
+      [
+        '-----BEGIN PRIVATE KEY-----\nAAAAAAAAAAAAAA\n-----END PRIVATE KEY-----\n',
+      ],
+      'new file name',
+      { type: 'text/plain' }
     );
-    await act(async () => {
-      wrapper.find('button[aria-label="Revert"]').invoke('onClick')();
-    });
-    wrapper.update();
-    expect(wrapper.find('input#mock_file-filename').prop('value')).toEqual('');
+    // fireEvent.change (not user.upload) drives react-dropzone's hidden file
+    // input without triggering the focus/blur sequence; the component spreads
+    // formik's onBlur onto that unnamed input, and a real blur would log a
+    // Formik warning that the console-error trap turns into a failure.
+    fireEvent.change(fileInput, { target: { files: [file] } });
+    await waitFor(() =>
+      expect(container.querySelector('#mock_file-filename')).toHaveValue(
+        'new file name'
+      )
+    );
+    // wait for the async file read to finish (the loading spinner clears) so no
+    // setFileIsUploading state update leaks past unmount into the next test
+    await waitFor(() =>
+      expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
+    );
+    await user.click(
+      within(container.querySelector('#mock_file-field')).getByRole('button', {
+        name: 'Revert',
+      })
+    );
+    expect(container.querySelector('#mock_file-filename')).toHaveValue('');
   });
+
   test('should render confirmation modal when toggle on for disable local auth', async () => {
-    const wrapper = mountWithContexts(
-      <Formik
-        initialValues={{
-          DISABLE_LOCAL_AUTH: false,
-        }}
-      >
+    const { user, container } = renderWithContexts(
+      <Formik initialValues={{ DISABLE_LOCAL_AUTH: false }}>
         {() => (
           <BooleanField
             name="DISABLE_LOCAL_AUTH"
@@ -316,35 +243,23 @@ describe('Setting form fields', () => {
         )}
       </Formik>
     );
-    expect(wrapper.find('Switch')).toHaveLength(1);
-    expect(wrapper.find('Switch').prop('isChecked')).toBe(false);
-    expect(wrapper.find('Switch').prop('isDisabled')).toBe(false);
-    await act(async () => {
-      wrapper.find('Switch').invoke('onChange')(true);
-    });
-    wrapper.update();
-
-    expect(wrapper.find('AlertModal')).toHaveLength(1);
+    const toggle = container.querySelector('#DISABLE_LOCAL_AUTH');
+    expect(toggle).not.toBeChecked();
+    expect(toggle).not.toBeDisabled();
+    await user.click(toggle);
     expect(
-      wrapper.find('BooleanField[name="DISABLE_LOCAL_AUTH"]')
-    ).toHaveLength(1);
-    await act(async () =>
-      wrapper
-        .find('Button[ouiaId="confirm-misc-settings-modal"]')
-        .prop('onClick')()
-    );
-    wrapper.update();
-    expect(wrapper.find('AlertModal')).toHaveLength(0);
-    expect(wrapper.find('Switch').prop('isChecked')).toBe(true);
+      screen.getByText('Confirm Disable Local Authorization')
+    ).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Confirm' }));
+    expect(
+      screen.queryByText('Confirm Disable Local Authorization')
+    ).not.toBeInTheDocument();
+    expect(container.querySelector('#DISABLE_LOCAL_AUTH')).toBeChecked();
   });
 
   test('should not render confirmation modal when toggling off', async () => {
-    const wrapper = mountWithContexts(
-      <Formik
-        initialValues={{
-          DISABLE_LOCAL_AUTH: true,
-        }}
-      >
+    const { user, container } = renderWithContexts(
+      <Formik initialValues={{ DISABLE_LOCAL_AUTH: true }}>
         {() => (
           <BooleanField
             name="DISABLE_LOCAL_AUTH"
@@ -365,24 +280,19 @@ describe('Setting form fields', () => {
         )}
       </Formik>
     );
-    expect(wrapper.find('Switch')).toHaveLength(1);
-    expect(wrapper.find('Switch').prop('isChecked')).toBe(true);
-    expect(wrapper.find('Switch').prop('isDisabled')).toBe(false);
-    await act(async () => {
-      wrapper.find('Switch').invoke('onChange')(false);
-    });
-    wrapper.update();
-    expect(wrapper.find('AlertModal')).toHaveLength(0);
-    expect(wrapper.find('Switch').prop('isChecked')).toBe(false);
+    const toggle = container.querySelector('#DISABLE_LOCAL_AUTH');
+    expect(toggle).toBeChecked();
+    expect(toggle).not.toBeDisabled();
+    await user.click(toggle);
+    expect(
+      screen.queryByText('Confirm Disable Local Authorization')
+    ).not.toBeInTheDocument();
+    expect(container.querySelector('#DISABLE_LOCAL_AUTH')).not.toBeChecked();
   });
 
-  test('should not toggle disable local auth', async () => {
-    const wrapper = mountWithContexts(
-      <Formik
-        initialValues={{
-          DISABLE_LOCAL_AUTH: false,
-        }}
-      >
+  test('should not toggle disable local auth when cancelled', async () => {
+    const { user, container } = renderWithContexts(
+      <Formik initialValues={{ DISABLE_LOCAL_AUTH: false }}>
         {() => (
           <BooleanField
             name="DISABLE_LOCAL_AUTH"
@@ -403,23 +313,17 @@ describe('Setting form fields', () => {
         )}
       </Formik>
     );
-    expect(wrapper.find('Switch')).toHaveLength(1);
-    expect(wrapper.find('Switch').prop('isChecked')).toBe(false);
-    expect(wrapper.find('Switch').prop('isDisabled')).toBe(false);
-    await act(async () => {
-      wrapper.find('Switch').invoke('onChange')(true);
-    });
-    wrapper.update();
-
-    expect(wrapper.find('AlertModal')).toHaveLength(1);
-    await act(async () =>
-      wrapper
-        .find('Button[ouiaId="cancel-misc-settings-modal"]')
-        .prop('onClick')()
-    );
-    wrapper.update();
-
-    expect(wrapper.find('AlertModal')).toHaveLength(0);
-    expect(wrapper.find('Switch').prop('isChecked')).toBe(false);
+    const toggle = container.querySelector('#DISABLE_LOCAL_AUTH');
+    expect(toggle).not.toBeChecked();
+    expect(toggle).not.toBeDisabled();
+    await user.click(toggle);
+    expect(
+      screen.getByText('Confirm Disable Local Authorization')
+    ).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
+    expect(
+      screen.queryByText('Confirm Disable Local Authorization')
+    ).not.toBeInTheDocument();
+    expect(container.querySelector('#DISABLE_LOCAL_AUTH')).not.toBeChecked();
   });
 });

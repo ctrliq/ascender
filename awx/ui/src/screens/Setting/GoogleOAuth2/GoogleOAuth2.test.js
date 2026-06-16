@@ -1,36 +1,41 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
-import { Routes, Route } from 'react-router-dom-v5-compat';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import mockAllOptions from '../shared/data.allSettingOptions.json';
 import GoogleOAuth2 from './GoogleOAuth2';
 
 jest.mock('../../../api');
 
-describe('<GoogleOAuth2 />', () => {
-  let wrapper;
+const mockSettings = {
+  SOCIAL_AUTH_GOOGLE_OAUTH2_CALLBACK_URL:
+    'https://towerhost/sso/complete/google-oauth2/',
+  SOCIAL_AUTH_GOOGLE_OAUTH2_KEY: 'mock key',
+  SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET: '$encrypted$',
+  SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS: ['example.com', 'example_2.com'],
+  SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS: {},
+  SOCIAL_AUTH_GOOGLE_OAUTH2_ORGANIZATION_MAP: { Default: {} },
+  SOCIAL_AUTH_GOOGLE_OAUTH2_TEAM_MAP: {},
+};
 
+function mountAt(path) {
+  const history = createMemoryHistory({ initialEntries: [path] });
+  return renderWithContexts(
+    <SettingsProvider value={JSON.parse(JSON.stringify(mockAllOptions.actions))}>
+      <Routes>
+        <Route path="/settings/google_oauth2/*" element={<GoogleOAuth2 />} />
+      </Routes>
+    </SettingsProvider>,
+    { context: { router: { history } } }
+  );
+}
+
+describe('<GoogleOAuth2 />', () => {
   beforeEach(() => {
-    SettingsAPI.readCategory.mockResolvedValue({
-      data: {
-        SOCIAL_AUTH_GOOGLE_OAUTH2_CALLBACK_URL:
-          'https://towerhost/sso/complete/google-oauth2/',
-        SOCIAL_AUTH_GOOGLE_OAUTH2_KEY: 'mock key',
-        SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET: '$encrypted$',
-        SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS: [
-          'example.com',
-          'example_2.com',
-        ],
-        SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS: {},
-        SOCIAL_AUTH_GOOGLE_OAUTH2_ORGANIZATION_MAP: {
-          Default: {},
-        },
-        SOCIAL_AUTH_GOOGLE_OAUTH2_TEAM_MAP: {},
-      },
-    });
+    SettingsAPI.readCategory.mockResolvedValue({ data: mockSettings });
   });
 
   afterEach(() => {
@@ -38,48 +43,23 @@ describe('<GoogleOAuth2 />', () => {
   });
 
   test('should render Google OAuth 2.0 details', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/settings/google_oauth2/details'],
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <Routes><Route path="/settings/google_oauth2/*" element={<GoogleOAuth2 />} /></Routes>
-        </SettingsProvider>,
-        {
-          context: { router: { history } },
-        }
-      );
-    });
-    expect(wrapper.find('GoogleOAuth2Detail').length).toBe(1);
+    mountAt('/settings/google_oauth2/details');
+    expect(
+      await screen.findByText('Google OAuth2 Callback URL')
+    ).toBeInTheDocument();
   });
 
   test('should render Google OAuth 2.0 edit', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/settings/google_oauth2/edit'],
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <Routes><Route path="/settings/google_oauth2/*" element={<GoogleOAuth2 />} /></Routes>
-        </SettingsProvider>,
-        {
-          context: { router: { history } },
-        }
-      );
-    });
-    expect(wrapper.find('GoogleOAuth2Edit').length).toBe(1);
+    mountAt('/settings/google_oauth2/edit');
+    expect(
+      await screen.findByRole('button', { name: 'Save' })
+    ).toBeInTheDocument();
   });
 
   test('should show content error when user navigates to erroneous route', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/settings/google_oauth2/foo'],
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(<Routes><Route path="/settings/google_oauth2/*" element={<GoogleOAuth2 />} /></Routes>, {
-        context: { router: { history } },
-      });
-    });
-    expect(wrapper.find('ContentError').length).toBe(1);
+    mountAt('/settings/google_oauth2/foo');
+    expect(
+      await screen.findByText('View Google OAuth 2.0 settings')
+    ).toBeInTheDocument();
   });
 });

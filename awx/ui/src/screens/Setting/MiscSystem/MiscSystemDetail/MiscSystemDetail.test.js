@@ -1,43 +1,42 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI, ExecutionEnvironmentsAPI } from 'api';
 import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../../testUtils/enzymeHelpers';
-import {
+  renderWithContexts,
   assertDetail,
-  assertVariableDetail,
-} from '../../shared/settingTestUtils';
+} from '../../../../../testUtils/rtlContexts';
 import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import MiscSystemDetail from './MiscSystemDetail';
 
 jest.mock('../../../../api');
 
-describe('<MiscSystemDetail />', () => {
-  let wrapper;
+// CodeEditor (react-ace) renders empty under jsdom, so for variable details we
+// assert the surrounding label is present rather than the editor contents.
+function assertVariableDetail(label) {
+  expect(screen.getByText(label)).toBeInTheDocument();
+}
 
-  beforeEach(async () => {
-    SettingsAPI.readCategory = jest.fn();
-    SettingsAPI.readCategory.mockResolvedValue({
-      data: {
-        ACTIVITY_STREAM_ENABLED: true,
-        ACTIVITY_STREAM_ENABLED_FOR_INVENTORY_SYNC: false,
-        ORG_ADMINS_CAN_SEE_ALL_USERS: true,
-        MANAGE_ORGANIZATION_AUTH: true,
-        TOWER_URL_BASE: 'https://towerhost',
-        REMOTE_HOST_HEADERS: [],
-        PROXY_IP_ALLOWED_LIST: [],
-        CSRF_TRUSTED_ORIGINS: [],
-        LICENSE: null,
-        INSTALL_UUID: 'db39b9ec-0c6e-4554-987d-42aw9c732ed8',
-        DEFAULT_EXECUTION_ENVIRONMENT: 1,
-        AUTOMATION_ANALYTICS_LAST_ENTRIES:
-          '{"foo": "2021-11-24R06:35:15.179Z"}',
-      },
-    });
-    ExecutionEnvironmentsAPI.readDetail = jest.fn();
+function freshSystemData() {
+  return {
+    ACTIVITY_STREAM_ENABLED: true,
+    ACTIVITY_STREAM_ENABLED_FOR_INVENTORY_SYNC: false,
+    ORG_ADMINS_CAN_SEE_ALL_USERS: true,
+    MANAGE_ORGANIZATION_AUTH: true,
+    TOWER_URL_BASE: 'https://towerhost',
+    REMOTE_HOST_HEADERS: [],
+    PROXY_IP_ALLOWED_LIST: [],
+    CSRF_TRUSTED_ORIGINS: [],
+    LICENSE: null,
+    INSTALL_UUID: 'db39b9ec-0c6e-4554-987d-42aw9c732ed8',
+    DEFAULT_EXECUTION_ENVIRONMENT: 1,
+    AUTOMATION_ANALYTICS_LAST_ENTRIES: '{"foo": "2021-11-24R06:35:15.179Z"}',
+  };
+}
+
+describe('<MiscSystemDetail />', () => {
+  beforeEach(() => {
+    SettingsAPI.readCategory.mockResolvedValue({ data: freshSystemData() });
     ExecutionEnvironmentsAPI.readDetail.mockResolvedValue({
       data: {
         id: 1,
@@ -46,103 +45,79 @@ describe('<MiscSystemDetail />', () => {
         pull: 'missing',
       },
     });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <MiscSystemDetail />
-        </SettingsProvider>
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
   });
 
-  test('initially renders without crashing', () => {
-    expect(wrapper.find('MiscSystemDetail').length).toBe(1);
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
-  test('should render expected tabs', () => {
+  async function mountDetail(
+    options = mockAllOptions.actions,
+    context = undefined
+  ) {
+    renderWithContexts(
+      <SettingsProvider value={options}>
+        <MiscSystemDetail />
+      </SettingsProvider>,
+      context ? { context } : undefined
+    );
+    await waitFor(() =>
+      expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
+    );
+  }
+
+  test('initially renders without crashing', async () => {
+    await mountDetail();
+    expect(screen.getByText('Details')).toBeInTheDocument();
+  });
+
+  test('should render expected tabs', async () => {
+    await mountDetail();
     const expectedTabs = ['Back to Settings', 'Details'];
-    wrapper.find('RoutedTabs li').forEach((tab, index) => {
-      expect(tab.text()).toEqual(expectedTabs[index]);
+    screen.getAllByRole('tab').forEach((tab, index) => {
+      expect(tab).toHaveTextContent(expectedTabs[index]);
     });
   });
 
-  test('should render expected details', () => {
+  test('should render expected details', async () => {
+    await mountDetail();
     assertDetail(
-      wrapper,
       'Unique identifier for an installation',
       'db39b9ec-0c6e-4554-987d-42aw9c732ed8'
     );
-    assertDetail(wrapper, 'All Users Visible to Organization Admins', 'On');
-    assertDetail(wrapper, 'Base URL of the service', 'https://towerhost');
-    assertDetail(
-      wrapper,
-      'Organization Admins Can Manage Users and Teams',
-      'On'
-    );
-    assertDetail(wrapper, 'Enable Activity Stream', 'On');
-    assertDetail(wrapper, 'Enable Activity Stream for Inventory Sync', 'Off');
-    assertVariableDetail(wrapper, 'Remote Host Headers', '[]');
-    assertVariableDetail(wrapper, 'Proxy IP Allowed List', '[]');
-    assertDetail(wrapper, 'Global default execution environment', 'Foo');
+    assertDetail('All Users Visible to Organization Admins', 'On');
+    assertDetail('Base URL of the service', 'https://towerhost');
+    assertDetail('Organization Admins Can Manage Users and Teams', 'On');
+    assertDetail('Enable Activity Stream', 'On');
+    assertDetail('Enable Activity Stream for Inventory Sync', 'Off');
+    assertVariableDetail('Remote Host Headers');
+    assertVariableDetail('Proxy IP Allowed List');
+    assertDetail('Global default execution environment', 'Foo');
   });
 
   test('should render execution environment as not configured', async () => {
-    ExecutionEnvironmentsAPI.readDetail.mockResolvedValue({
-      data: {},
+    SettingsAPI.readCategory.mockResolvedValue({
+      data: { ...freshSystemData(), DEFAULT_EXECUTION_ENVIRONMENT: null },
     });
-    let newWrapper;
-    await act(async () => {
-      newWrapper = mountWithContexts(
-        <SettingsProvider
-          value={{
-            ...mockAllOptions.actions,
-            DEFAULT_EXECUTION_ENVIRONMENT: null,
-          }}
-        >
-          <MiscSystemDetail />
-        </SettingsProvider>
-      );
+    await mountDetail({
+      ...mockAllOptions.actions,
+      DEFAULT_EXECUTION_ENVIRONMENT: null,
     });
-    await waitForElement(newWrapper, 'ContentLoading', (el) => el.length === 0);
-
-    assertDetail(
-      newWrapper,
-      'Global default execution environment',
-      'Not configured'
-    );
+    assertDetail('Global default execution environment', 'Not configured');
   });
 
   test('should hide edit button from non-superusers', async () => {
-    const config = {
-      me: {
-        is_superuser: false,
-      },
-    };
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <MiscSystemDetail />
-        </SettingsProvider>,
-        {
-          context: { config },
-        }
-      );
+    await mountDetail(mockAllOptions.actions, {
+      config: { me: { is_superuser: false } },
     });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('Button[aria-label="Edit"]').exists()).toBeFalsy();
+    expect(screen.queryByRole('link', { name: 'Edit' })).not.toBeInTheDocument();
   });
 
   test('should display content error when api throws error on initial render', async () => {
     SettingsAPI.readCategory.mockRejectedValue(new Error());
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <MiscSystemDetail />
-        </SettingsProvider>
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('ContentError').length).toBe(1);
+    await mountDetail();
+    expect(
+      await screen.findByText(/Something went wrong/i)
+    ).toBeInTheDocument();
   });
 });

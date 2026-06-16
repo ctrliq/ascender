@@ -1,20 +1,16 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
-import {
-  mountWithContexts,
-} from '../../../../testUtils/enzymeHelpers';
-import { Routes, Route } from 'react-router-dom-v5-compat';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import mockAllOptions from '../shared/data.allSettingOptions.json';
 import AzureAD from './AzureAD';
 
 jest.mock('../../../api');
 
 describe('<AzureAD />', () => {
-  let wrapper;
-
   beforeEach(() => {
     SettingsAPI.readCategory.mockResolvedValue({
       data: {
@@ -36,49 +32,38 @@ describe('<AzureAD />', () => {
     jest.clearAllMocks();
   });
 
+  function renderAzure(initialEntries) {
+    const history = createMemoryHistory({ initialEntries });
+    return renderWithContexts(
+      <SettingsProvider value={mockAllOptions.actions}>
+        <Routes>
+          <Route path="/settings/azure/*" element={<AzureAD />} />
+        </Routes>
+      </SettingsProvider>,
+      { context: { router: { history } } }
+    );
+  }
+
   test('should render azure details', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/settings/azure/default/details'],
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <Routes><Route path="/settings/azure/*" element={<AzureAD />} /></Routes>
-        </SettingsProvider>,
-        {
-          context: { router: { history } },
-        }
-      );
-    });
-    expect(wrapper.find('AzureADDetail').length).toBe(1);
+    renderAzure(['/settings/azure/default/details']);
+    expect(
+      await screen.findByText('Azure AD OAuth2 Callback URL')
+    ).toBeInTheDocument();
   });
 
   test('should render azure edit', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/settings/azure/default/edit'],
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(<Routes><Route path="/settings/azure/*" element={<AzureAD />} /></Routes>, {
-        context: { router: { history } },
-      });
-    });
-    expect(wrapper.find('AzureADEdit').length).toBe(1);
+    renderAzure(['/settings/azure/default/edit']);
+    expect(
+      await screen.findByRole('button', { name: 'Save' })
+    ).toBeInTheDocument();
   });
 
   test('should show content error when user navigates to erroneous route', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/settings/azure/foo/bar/baz'],
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <Routes><Route path="/settings/azure/*" element={<AzureAD />} /></Routes>
-        </SettingsProvider>,
-        {
-          context: { router: { history } },
-        }
-      );
-    });
-    expect(wrapper.find('ContentError').length).toBe(1);
+    renderAzure(['/settings/azure/foo/bar/baz']);
+    await waitFor(() =>
+      expect(
+        screen.getByText(/The page you requested could not be found/)
+      ).toBeInTheDocument()
+    );
   });
 });
