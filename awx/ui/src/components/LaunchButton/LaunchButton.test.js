@@ -1,6 +1,6 @@
 import React from 'react';
 import { createMemoryHistory } from 'history';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import {
   InventorySourcesAPI,
   JobsAPI,
@@ -9,19 +9,25 @@ import {
   WorkflowJobsAPI,
   WorkflowJobTemplatesAPI,
 } from 'api';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import LaunchButton from './LaunchButton';
 
 jest.mock('../../api');
 
 describe('LaunchButton', () => {
+  // The render-prop children expose a plain button; give it an accessible name
+  // so it can be driven by role, replacing enzyme's wrapper.find('button').
   const launchButton = ({ handleLaunch }) => (
-    <button type="submit" onClick={() => handleLaunch()} />
+    <button type="submit" aria-label="launch" onClick={() => handleLaunch()} />
   );
 
   const relaunchButton = ({ handleRelaunch }) => (
-    <button type="submit" onClick={() => handleRelaunch()} />
+    <button
+      type="submit"
+      aria-label="relaunch"
+      onClick={() => handleRelaunch()}
+    />
   );
 
   const resource = {
@@ -58,10 +64,10 @@ describe('LaunchButton', () => {
   afterEach(() => jest.clearAllMocks());
 
   test('renders the expected content', () => {
-    const wrapper = mountWithContexts(
+    renderWithContexts(
       <LaunchButton resource={resource}>{launchButton}</LaunchButton>
     );
-    expect(wrapper).toHaveLength(1);
+    expect(screen.getByRole('button', { name: 'launch' })).toBeInTheDocument();
   });
 
   test('should redirect to job after successful launch', async () => {
@@ -74,7 +80,7 @@ describe('LaunchButton', () => {
         id: 9000,
       },
     });
-    const wrapper = mountWithContexts(
+    const { user } = renderWithContexts(
       <LaunchButton resource={resource}>{launchButton}</LaunchButton>,
       {
         context: {
@@ -82,11 +88,14 @@ describe('LaunchButton', () => {
         },
       }
     );
-    const button = wrapper.find('button');
-    await act(() => button.prop('onClick')());
+    await user.click(screen.getByRole('button', { name: 'launch' }));
     expect(JobTemplatesAPI.readLaunch).toHaveBeenCalledWith(1);
-    expect(JobTemplatesAPI.launch).toHaveBeenCalledWith(1, {});
-    expect(history.location.pathname).toEqual('/jobs/9000/output');
+    await waitFor(() =>
+      expect(JobTemplatesAPI.launch).toHaveBeenCalledWith(1, {})
+    );
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual('/jobs/9000/output')
+    );
   });
 
   test('should launch the correct job type', async () => {
@@ -103,7 +112,7 @@ describe('LaunchButton', () => {
         id: 9000,
       },
     });
-    const wrapper = mountWithContexts(
+    const { user } = renderWithContexts(
       <LaunchButton
         resource={{
           id: 1,
@@ -118,11 +127,14 @@ describe('LaunchButton', () => {
         },
       }
     );
-    const button = wrapper.find('button');
-    await act(() => button.prop('onClick')());
+    await user.click(screen.getByRole('button', { name: 'launch' }));
     expect(WorkflowJobTemplatesAPI.readLaunch).toHaveBeenCalledWith(1);
-    expect(WorkflowJobTemplatesAPI.launch).toHaveBeenCalledWith(1, {});
-    expect(history.location.pathname).toEqual('/jobs/9000/output');
+    await waitFor(() =>
+      expect(WorkflowJobTemplatesAPI.launch).toHaveBeenCalledWith(1, {})
+    );
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual('/jobs/9000/output')
+    );
   });
 
   test('should relaunch job correctly', async () => {
@@ -139,7 +151,7 @@ describe('LaunchButton', () => {
         id: 9000,
       },
     });
-    const wrapper = mountWithContexts(
+    const { user } = renderWithContexts(
       <LaunchButton
         resource={{
           id: 1,
@@ -154,11 +166,14 @@ describe('LaunchButton', () => {
         },
       }
     );
-    const button = wrapper.find('button');
-    await act(() => button.prop('onClick')());
+    await user.click(screen.getByRole('button', { name: 'relaunch' }));
     expect(JobsAPI.readRelaunch).toHaveBeenCalledWith(1);
-    expect(JobsAPI.relaunch).toHaveBeenCalledWith(1, {});
-    expect(history.location.pathname).toEqual('/jobs/9000/output');
+    await waitFor(() =>
+      expect(JobsAPI.relaunch).toHaveBeenCalledWith(1, {})
+    );
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual('/jobs/9000/output')
+    );
   });
 
   test('should relaunch workflow job correctly', async () => {
@@ -175,7 +190,7 @@ describe('LaunchButton', () => {
         id: 9000,
       },
     });
-    const wrapper = mountWithContexts(
+    const { user } = renderWithContexts(
       <LaunchButton
         resource={{
           id: 1,
@@ -190,11 +205,14 @@ describe('LaunchButton', () => {
         },
       }
     );
-    const button = wrapper.find('button');
-    await act(() => button.prop('onClick')());
+    await user.click(screen.getByRole('button', { name: 'relaunch' }));
     expect(WorkflowJobsAPI.readRelaunch).toHaveBeenCalledWith(1);
-    expect(WorkflowJobsAPI.relaunch).toHaveBeenCalledWith(1, {});
-    expect(history.location.pathname).toEqual('/jobs/9000/output');
+    await waitFor(() =>
+      expect(WorkflowJobsAPI.relaunch).toHaveBeenCalledWith(1, {})
+    );
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual('/jobs/9000/output')
+    );
   });
 
   test('should relaunch project sync correctly', async () => {
@@ -211,7 +229,7 @@ describe('LaunchButton', () => {
         id: 9000,
       },
     });
-    const wrapper = mountWithContexts(
+    const { user } = renderWithContexts(
       <LaunchButton
         resource={{
           id: 1,
@@ -227,14 +245,17 @@ describe('LaunchButton', () => {
         },
       }
     );
-    const button = wrapper.find('button');
-    await act(() => button.prop('onClick')());
+    await user.click(screen.getByRole('button', { name: 'relaunch' }));
     expect(ProjectsAPI.readLaunchUpdate).toHaveBeenCalledWith(5);
-    expect(ProjectsAPI.launchUpdate).toHaveBeenCalledWith(5);
-    expect(history.location.pathname).toEqual('/jobs/9000/output');
+    await waitFor(() =>
+      expect(ProjectsAPI.launchUpdate).toHaveBeenCalledWith(5)
+    );
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual('/jobs/9000/output')
+    );
   });
 
-  test('should relaunch project sync correctly', async () => {
+  test('should relaunch inventory sync correctly', async () => {
     InventorySourcesAPI.readLaunchUpdate.mockResolvedValue({
       data: {
         can_start_without_user_input: true,
@@ -248,7 +269,7 @@ describe('LaunchButton', () => {
         id: 9000,
       },
     });
-    const wrapper = mountWithContexts(
+    const { user } = renderWithContexts(
       <LaunchButton
         resource={{
           id: 1,
@@ -264,17 +285,17 @@ describe('LaunchButton', () => {
         },
       }
     );
-    const button = wrapper.find('button');
-    await act(() => button.prop('onClick')());
+    await user.click(screen.getByRole('button', { name: 'relaunch' }));
     expect(InventorySourcesAPI.readLaunchUpdate).toHaveBeenCalledWith(5);
-    expect(InventorySourcesAPI.launchUpdate).toHaveBeenCalledWith(5);
-    expect(history.location.pathname).toEqual('/jobs/9000/output');
+    await waitFor(() =>
+      expect(InventorySourcesAPI.launchUpdate).toHaveBeenCalledWith(5)
+    );
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual('/jobs/9000/output')
+    );
   });
 
   test('displays error modal after unsuccessful launch', async () => {
-    const wrapper = mountWithContexts(
-      <LaunchButton resource={resource}>{launchButton}</LaunchButton>
-    );
     JobTemplatesAPI.launch.mockRejectedValue(
       new Error({
         response: {
@@ -287,12 +308,19 @@ describe('LaunchButton', () => {
         },
       })
     );
-    expect(wrapper.find('Modal').length).toBe(0);
-    await act(() => wrapper.find('button').prop('onClick')());
-    wrapper.update();
-    expect(wrapper.find('Modal').length).toBe(1);
-    wrapper.find('ModalBoxCloseButton').simulate('click');
-    wrapper.update();
-    expect(wrapper.find('Modal').length).toBe(0);
+    const { user } = renderWithContexts(
+      <LaunchButton resource={resource}>{launchButton}</LaunchButton>
+    );
+    expect(screen.queryByText('Error!')).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'launch' }));
+
+    // AlertModal renders its title as the dialog heading once the launch fails
+    expect(await screen.findByText('Error!')).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Close' }));
+    await waitFor(() =>
+      expect(screen.queryByText('Error!')).not.toBeInTheDocument()
+    );
   });
 });
