@@ -41,14 +41,14 @@ function Teams() {
     <>
       <ScreenHeader streamType="team" breadcrumbConfig={breadcrumbConfig} />
       <Routes>
-        <Route path="/teams/add" element={<TeamAdd />} />
+        <Route path="add" element={<TeamAdd />} />
         {/* so the nested <Team> route tree can match the rest */}
         <Route
-          path="/teams/:id/*"
+          path=":id/*"
           element={<Team setBreadcrumb={buildBreadcrumbConfig} />}
         />
         <Route
-          path="/teams"
+          index
           element={
             <PersistentFilters pageKey="teams">
               <Config>

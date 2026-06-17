@@ -8,7 +8,7 @@
   tasks:
     - name: Load existing and new LDAP settings
       set_fact:
-        existing_ldap: "{{ lookup('awx.awx.controller_api', 'settings/ldap', host=awx_host, verify_ssl=false) }}"
+        existing_ldap: "{{ lookup('ctrliq.ascender.controller_api', 'settings/ldap', host=awx_host, verify_ssl=false) }}"
         new_ldap: "{{ lookup('template', 'ldap_settings.json.j2') }}"
 
     - name: Display existing LDAP configuration
@@ -26,7 +26,7 @@
         content: "{{ existing_ldap }}"
 
     - name: Configure AWX LDAP adapter
-      awx.awx.settings:
+      ctrliq.ascender.settings:
         settings: "{{ new_ldap }}"
         controller_host: "{{ awx_host }}"
         validate_certs: False

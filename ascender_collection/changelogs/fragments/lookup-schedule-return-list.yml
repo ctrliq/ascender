@@ -1,0 +1,2 @@
+bugfixes:
+  - schedule_rrule, schedule_rruleset - return a list as Ansible lookup plugins are expected to, instead of a bare string. Use ``lookup`` for a single rule string and ``query`` for the list.

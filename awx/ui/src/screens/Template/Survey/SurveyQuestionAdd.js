@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useRouteMatch } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom-v5-compat';
 import { CardBody } from 'components/Card';
 import SurveyQuestionForm from './SurveyQuestionForm';
@@ -7,7 +7,8 @@ import SurveyQuestionForm from './SurveyQuestionForm';
 export default function SurveyQuestionAdd({ survey, updateSurvey }) {
   const [formError, setFormError] = useState(null);
   const navigate = useNavigate();
-  const match = useRouteMatch();
+  const { pathname } = useLocation();
+  const surveyUrl = pathname.replace('/add', '');
 
   const handleSubmit = async (question) => {
     const formData = { ...question };
@@ -41,14 +42,14 @@ export default function SurveyQuestionAdd({ survey, updateSurvey }) {
       delete formData.formattedChoices;
       const newSpec = survey?.spec ? survey.spec.concat(formData) : [formData];
       await updateSurvey(newSpec);
-      navigate(match.url.replace('/add', ''));
+      navigate(surveyUrl);
     } catch (err) {
       setFormError(err);
     }
   };
 
   const handleCancel = () => {
-    navigate(match.url.replace('/add', ''));
+    navigate(surveyUrl);
   };
 
   return (

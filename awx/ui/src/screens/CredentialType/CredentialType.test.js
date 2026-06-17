@@ -58,7 +58,7 @@ describe('<CredentialType />', () => {
   test('fetches the credential type detail', async () => {
     renderAt('/credential_types/42/details');
     expect(await screen.findByText('CredentialTypeDetails')).toBeInTheDocument();
-    // real route params are strings (the old enzyme test mocked a number)
+    // real route params are strings (the previous test mocked a number)
     expect(CredentialTypesAPI.readDetail).toHaveBeenCalledWith('42');
   });
 

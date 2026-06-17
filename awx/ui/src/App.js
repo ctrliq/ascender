@@ -1,14 +1,13 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
+import { HashRouter } from 'react-router-dom';
 import {
-  useRouteMatch,
-  useLocation,
-  HashRouter,
+  CompatRouter,
+  Routes,
   Route,
-  Switch,
-  Redirect,
-  useHistory,
-} from 'react-router-dom';
-import { CompatRouter } from 'react-router-dom-v5-compat';
+  Navigate,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom-v5-compat';
 import { ErrorBoundary } from 'react-error-boundary';
 import locationReplace from 'util/navigation';
 import { I18nProvider } from '@lingui/react';
@@ -55,50 +54,71 @@ const RenderAppContainer = () => {
 
 const AuthorizedRoutes = ({ routeConfig }) => {
   const isAuthorized = useAuthorizedPath();
-  const match = useRouteMatch();
 
   if (!isAuthorized) {
     return (
-      <Switch>
-        <ProtectedRoute
-          key="/subscription_management"
+      <Routes>
+        <Route
           path="/subscription_management"
-        >
-          <PageSection>
-            <Card>
-              <SubscriptionEdit />
-            </Card>
-          </PageSection>
-        </ProtectedRoute>
-        <Route path="*">
-          <Redirect to="/subscription_management" />
-        </Route>
-      </Switch>
+          element={
+            <ProtectedRoute>
+              <PageSection>
+                <Card>
+                  <SubscriptionEdit />
+                </Card>
+              </PageSection>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="*"
+          element={<Navigate to="/subscription_management" replace />}
+        />
+      </Routes>
     );
   }
 
   return (
-    <Switch>
+    <Routes>
       {routeConfig
         .flatMap(({ routes }) => routes)
         .map(({ path, screen: Screen }) => (
-          <ProtectedRoute key={path} path={path}>
-            <Screen match={match} />
-          </ProtectedRoute>
+          // /* so each screen's own nested <Routes> can match the rest
+          <Route
+            key={path}
+            path={`${path}/*`}
+            element={
+              <ProtectedRoute>
+                <Screen />
+              </ProtectedRoute>
+            }
+          />
         ))
         .concat(
-          <ProtectedRoute key="metrics" path="/metrics">
-            <Metrics />
-          </ProtectedRoute>,
-          <ProtectedRoute key="not-found" path="*">
-            <NotFound />
-          </ProtectedRoute>
+          <Route
+            key="metrics"
+            path="/metrics/*"
+            element={
+              <ProtectedRoute>
+                <Metrics />
+              </ProtectedRoute>
+            }
+          />,
+          <Route
+            key="not-found"
+            path="*"
+            element={
+              <ProtectedRoute>
+                <NotFound />
+              </ProtectedRoute>
+            }
+          />
         )}
-    </Switch>
+    </Routes>
   );
 };
 
-export function ProtectedRoute({ children, ...rest }) {
+export function ProtectedRoute({ children }) {
   const {
     authRedirectTo,
     isUserBeingLoggedOut,
@@ -117,11 +137,9 @@ export function ProtectedRoute({ children, ...rest }) {
 
   if (isAuthenticated(document.cookie)) {
     return (
-      <Route {...rest}>
-        <ErrorBoundary FallbackComponent={ErrorFallback}>
-          {children}
-        </ErrorBoundary>
-      </Route>
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
+        {children}
+      </ErrorBoundary>
     );
   }
 
@@ -133,7 +151,7 @@ export function ProtectedRoute({ children, ...rest }) {
     locationReplace(loginRedirectOverride);
     return null;
   }
-  return <Redirect to="/login" />;
+  return <Navigate to="/login" replace />;
 }
 
 function App() {
@@ -152,8 +170,8 @@ function App() {
       import('./darkmode.css');
     }
   }, []);
-  const history = useHistory();
-  const { hash, search, pathname } = useLocation();
+  const navigate = useNavigate();
+  const { search } = useLocation();
   const searchParams = Object.fromEntries(new URLSearchParams(search));
   const pseudolocalization =
     searchParams.pseudolocalization === 'true' || false;
@@ -178,8 +196,8 @@ function App() {
   const redirectURL = window.sessionStorage.getItem(SESSION_REDIRECT_URL);
   if (redirectURL) {
     window.sessionStorage.removeItem(SESSION_REDIRECT_URL);
-    if (redirectURL !== '/' || redirectURL !== '/home')
-      history.replace(redirectURL);
+    if (redirectURL !== '/' && redirectURL !== '/home')
+      navigate(redirectURL, { replace: true });
   }
 
   if (isLoading) {
@@ -193,22 +211,23 @@ function App() {
   return (
     <I18nProvider i18n={i18n}>
       <SessionProvider>
-        <Switch>
-          <Route exact strict path="/*/">
-            <Redirect to={`${pathname.slice(0, -1)}${search}${hash}`} />
-          </Route>
-          <Route path="/login">
-            <Login isAuthenticated={isAuthenticated} />
-          </Route>
-          <Route exact path="/">
-            <Redirect to="/home" />
-          </Route>
-          <ProtectedRoute>
-            <ConfigProvider>
-              <RenderAppContainer />
-            </ConfigProvider>
-          </ProtectedRoute>
-        </Switch>
+        <Routes>
+          <Route
+            path="/login"
+            element={<Login isAuthenticated={isAuthenticated} />}
+          />
+          <Route path="/" element={<Navigate to="/home" replace />} />
+          <Route
+            path="*"
+            element={
+              <ProtectedRoute>
+                <ConfigProvider>
+                  <RenderAppContainer />
+                </ConfigProvider>
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
       </SessionProvider>
     </I18nProvider>
   );

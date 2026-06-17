@@ -1,5 +1,6 @@
 import React from 'react';
 import { createMemoryHistory } from 'history';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { act } from 'react-dom/test-utils';
 import {
   WorkflowJobTemplatesAPI,
@@ -244,12 +245,19 @@ describe('<WorkflowJobTemplate />', () => {
     });
     await act(async () => {
       wrapper = mountWithContexts(
-        <WorkflowJobTemplate
-          setBreadcrumb={() => {}}
-          me={{
-            is_system_auditor: true,
-          }}
-        />,
+        <Routes>
+          <Route
+            path="/templates/*"
+            element={
+              <WorkflowJobTemplate
+                setBreadcrumb={() => {}}
+                me={{
+                  is_system_auditor: true,
+                }}
+              />
+            }
+          />
+        </Routes>,
         {
           context: { router: { history } },
         }

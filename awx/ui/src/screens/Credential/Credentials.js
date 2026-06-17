@@ -43,18 +43,18 @@ function Credentials() {
       />
       <Routes>
         <Route
-          path="/credentials/add"
+          path="add"
           element={
             <Config>{({ me }) => <CredentialAdd me={me || {}} />}</Config>
           }
         />
         {/* so the nested <Credential> route tree can match the rest */}
         <Route
-          path="/credentials/:id/*"
+          path=":id/*"
           element={<Credential setBreadcrumb={buildBreadcrumbConfig} />}
         />
         <Route
-          path="/credentials"
+          index
           element={
             <PersistentFilters pageKey="credentials">
               <CredentialList />

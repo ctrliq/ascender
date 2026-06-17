@@ -1,6 +1,7 @@
 import React from 'react';
 import { createMemoryHistory } from 'history';
 import { screen, waitFor } from '@testing-library/react';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { InventoriesAPI, OrganizationsAPI } from 'api';
 
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
@@ -22,9 +23,14 @@ jest.mock('./InventoryDetail', () => {
 describe('<Inventories />', () => {
   test('initially renders without crashing', () => {
     const history = createMemoryHistory({ initialEntries: ['/inventories'] });
-    const { container } = renderWithContexts(<Inventories />, {
-      context: { router: { history } },
-    });
+    const { container } = renderWithContexts(
+      <Routes>
+        <Route path="/inventories/*" element={<Inventories />} />
+      </Routes>,
+      {
+        context: { router: { history } },
+      }
+    );
     expect(container).toBeInTheDocument();
   });
 
@@ -45,9 +51,14 @@ describe('<Inventories />', () => {
     const history = createMemoryHistory({
       initialEntries: ['/inventories/inventory/1/details'],
     });
-    renderWithContexts(<Inventories />, {
-      context: { router: { history } },
-    });
+    renderWithContexts(
+      <Routes>
+        <Route path="/inventories/*" element={<Inventories />} />
+      </Routes>,
+      {
+        context: { router: { history } },
+      }
+    );
 
     expect(await screen.findByTestId('inventory-detail')).toBeInTheDocument();
     await waitFor(() =>
