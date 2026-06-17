@@ -128,6 +128,8 @@ describe('<ApplicationsList/>', () => {
     );
 
     expect(await screen.findByText('Error!')).toBeInTheDocument();
+    // the error modal includes an ErrorDetail with an expandable "Details" toggle
+    expect(screen.getByText('Details')).toBeInTheDocument();
   });
 
   test('should not render add button', async () => {

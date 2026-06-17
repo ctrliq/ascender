@@ -138,6 +138,9 @@ describe('<ApplicationForm/>', () => {
         client_type: 'confidential',
         name: 'foo',
         redirect_uris: 'http://www.google.com',
+        // ApplicationAdd/Edit read values.organization.id, so the form must
+        // submit organization as an object with an id (auto-populated here)
+        organization: expect.objectContaining({ id: 1 }),
       })
     );
   });

@@ -209,6 +209,8 @@ describe('<ApplicationTokenList/>', () => {
     expect(
       await screen.findByText('Error deleting tokens')
     ).toBeInTheDocument();
+    // the error modal includes an ErrorDetail with an expandable "Details" toggle
+    expect(screen.getByText('Details')).toBeInTheDocument();
   });
 
   test('should not render add button', async () => {
