@@ -1,17 +1,19 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import {
+  renderWithContexts,
+  assertDetail,
+} from '../../../testUtils/rtlContexts';
 
 import DetailList from './DetailList';
 import Detail from './Detail';
 
 describe('DetailList', () => {
   test('renders the expected content', () => {
-    render(
+    renderWithContexts(
       <DetailList>
         <Detail label="foo" value="bar" />
       </DetailList>
     );
-    const term = screen.getByText('foo');
-    expect(term.nextElementSibling).toHaveTextContent('bar');
+    assertDetail('foo', 'bar');
   });
 });
