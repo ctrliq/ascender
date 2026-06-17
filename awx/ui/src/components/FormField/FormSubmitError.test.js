@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen, waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { Formik } from 'formik';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import FormSubmitError from './FormSubmitError';
@@ -33,7 +33,7 @@ describe('<FormSubmitError>', () => {
         )}
       </Formik>
     );
-    await waitFor(() => expect(screen.getByText('invalid')).toBeInTheDocument());
+    expect(await screen.findByText('invalid')).toBeInTheDocument();
   });
 
   test('should display error message if field errors not provided', async () => {
@@ -49,9 +49,7 @@ describe('<FormSubmitError>', () => {
         {() => <FormSubmitError error={error} />}
       </Formik>
     );
-    await waitFor(() =>
-      expect(screen.getByText('There was an error')).toBeInTheDocument()
-    );
+    expect(await screen.findByText('There was an error')).toBeInTheDocument();
     // PF inline danger Alert: no role="alert", identified by .pf-c-alert
     expect(container.querySelector('.pf-c-alert')).toBeInTheDocument();
     expect(global.console.error).toHaveBeenCalledWith(error);

@@ -29,21 +29,26 @@ describe('PasswordInput', () => {
     const { container, user } = renderInput();
     const input = container.querySelector('#test-password');
     const toggle = screen.getByRole('button', { name: 'Toggle Password' });
-    // masked state: input type=password, EyeSlashIcon ("reveal") shown
+    // masked state: input type=password
     expect(input).toHaveAttribute('type', 'password');
-    expect(toggle.querySelector('svg')).toBeInTheDocument();
-    const maskedIconPath = toggle.querySelector('svg path').getAttribute('d');
 
+    // toggling reveals the value (input type flips to text) and back; assert
+    // the user-visible behavior rather than the icon's svg path (which is a
+    // brittle @patternfly/react-icons implementation detail)
     await user.click(toggle);
-
     await waitFor(() =>
       expect(container.querySelector('#test-password')).toHaveAttribute(
         'type',
         'text'
       )
     );
-    // revealed state swaps EyeSlashIcon -> EyeIcon (different svg path)
-    const revealedIconPath = toggle.querySelector('svg path').getAttribute('d');
-    expect(revealedIconPath).not.toEqual(maskedIconPath);
+
+    await user.click(toggle);
+    await waitFor(() =>
+      expect(container.querySelector('#test-password')).toHaveAttribute(
+        'type',
+        'password'
+      )
+    );
   });
 });
