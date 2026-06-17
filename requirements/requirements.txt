@@ -93,7 +93,7 @@ cryptography==46.0.7
     #   social-auth-core
 cython==3.2.5
     # via -r /awx_devel/requirements/requirements.in
-daphne==4.1.2
+daphne==4.2.2
     # via -r /awx_devel/requirements/requirements.in
 defusedxml==0.7.1
     # via
