@@ -1,7 +1,10 @@
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { WorkflowApprovalsAPI } from 'api';
-import { renderWithContexts } from '../../../../testUtils/rtlContexts';
+import {
+  renderWithContexts,
+  settleTooltips,
+} from '../../../../testUtils/rtlContexts';
 import WorkflowApprovalList from './WorkflowApprovalList';
 import mockWorkflowApprovals from '../data.workflowApprovals.json';
 
@@ -97,6 +100,10 @@ describe('<WorkflowApprovalList />', () => {
     await waitFor(() =>
       expect(WorkflowApprovalsAPI.destroy).toHaveBeenCalledTimes(1)
     );
+
+    // confirming delete closes the modal and refocuses the Tooltip-wrapped
+    // toolbar Delete button
+    await settleTooltips();
   });
 
   test('should show deletion error', async () => {
@@ -124,5 +131,12 @@ describe('<WorkflowApprovalList />', () => {
     );
 
     expect(await screen.findByText('Error!')).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Close' }));
+    await waitFor(() =>
+      expect(screen.queryByText('Error!')).not.toBeInTheDocument()
+    );
+    // closing the modal refocuses the Tooltip-wrapped toolbar Delete button
+    await settleTooltips();
   });
 });
