@@ -17,7 +17,10 @@ describe('<Metrics/>', () => {
       `[data-ouia-component-id="${ouiaId}"]`
     );
     await user.click(within(select).getByRole('button'));
-    return select;
+    // The menu may be rendered in a Popper/portal outside the select's DOM
+    // subtree, so resolve the open listbox from `screen` rather than scoping
+    // to the select container.
+    return screen.findByRole('listbox');
   };
 
   beforeEach(async () => {
@@ -61,12 +64,12 @@ describe('<Metrics/>', () => {
 
   test('should render chart after selecting metric and instance', async () => {
     // open the Instance select and pick "instance 1"
-    const instanceSelect = await openSelect('Instance-select');
-    await user.click(within(instanceSelect).getByText('instance 1'));
+    const instanceListbox = await openSelect('Instance-select');
+    await user.click(within(instanceListbox).getByText('instance 1'));
 
     // open the Metric select and pick "metric1"
-    const metricSelect = await openSelect('Metric-select');
-    await user.click(within(metricSelect).getByText('metric1'));
+    const metricListbox = await openSelect('Metric-select');
+    await user.click(within(metricListbox).getByText('metric1'));
 
     await waitFor(() =>
       expect(MetricsAPI.read).toHaveBeenCalledWith({
@@ -79,9 +82,7 @@ describe('<Metrics/>', () => {
   });
 
   test('should not include receptor instances', async () => {
-    const instanceSelect = await openSelect('Instance-select');
-
-    const listbox = await within(instanceSelect).findByRole('listbox');
+    const listbox = await openSelect('Instance-select');
     // execution-node ("receptor") instances are filtered out; the two
     // non-execution instances plus the "All" option remain (3 total).
     expect(within(listbox).queryByText('receptor')).toBeNull();
