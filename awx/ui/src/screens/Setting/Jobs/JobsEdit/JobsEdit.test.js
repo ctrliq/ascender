@@ -34,17 +34,20 @@ describe('<JobsEdit />', () => {
     // mount; suppress it so the setupTests console trap doesn't fail the test.
     const originalError = console.error;
     console.error = jest.fn();
-    const result = renderWithContexts(
-      <SettingsProvider value={options}>
-        <JobsEdit />
-      </SettingsProvider>,
-      { context: { router: { history } } }
-    );
-    await waitFor(() =>
-      expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
-    );
-    console.error = originalError;
-    return result;
+    try {
+      const result = renderWithContexts(
+        <SettingsProvider value={options}>
+          <JobsEdit />
+        </SettingsProvider>,
+        { context: { router: { history } } }
+      );
+      await waitFor(() =>
+        expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
+      );
+      return result;
+    } finally {
+      console.error = originalError;
+    }
   }
 
   test('initially renders without crashing', async () => {

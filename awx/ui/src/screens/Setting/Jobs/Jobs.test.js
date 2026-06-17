@@ -48,11 +48,14 @@ describe('<Jobs />', () => {
     // doesn't fail this render-only assertion.
     const originalError = console.error;
     console.error = jest.fn();
-    mountAt('/settings/jobs/edit');
-    expect(
-      await screen.findByRole('button', { name: 'Save' })
-    ).toBeInTheDocument();
-    console.error = originalError;
+    try {
+      mountAt('/settings/jobs/edit');
+      expect(
+        await screen.findByRole('button', { name: 'Save' })
+      ).toBeInTheDocument();
+    } finally {
+      console.error = originalError;
+    }
   });
 
   test('should show content error when user navigates to erroneous route', async () => {
