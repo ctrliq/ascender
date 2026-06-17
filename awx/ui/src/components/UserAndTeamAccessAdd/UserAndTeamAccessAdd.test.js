@@ -1,5 +1,6 @@
 import React from 'react';
 import { screen, waitFor, act } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { UsersAPI, JobTemplatesAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import UserAndTeamAccessAdd from './UserAndTeamAccessAdd';
@@ -72,23 +73,31 @@ function navItem(name) {
 // timers + flush microtasks so the list renders, without clicking in a
 // retry loop.
 async function settleList() {
+  // advance past the 1000ms debounce with fake timers (instead of sleeping a
+  // real 1.2s) and flush the resulting microtasks so the list renders
   await act(async () => {
     await Promise.resolve();
   });
   await act(async () => {
-    await new Promise((resolve) => {
-      setTimeout(resolve, 1200);
-    });
+    jest.advanceTimersByTime(1200);
+  });
+  await act(async () => {
+    await Promise.resolve();
   });
 }
 
 describe('<UserAndTeamAccessAdd/>', () => {
+  beforeEach(() => {
+    jest.useFakeTimers();
+  });
+
   afterEach(() => {
+    jest.useRealTimers();
     jest.resetAllMocks();
   });
 
   function setup() {
-    return renderWithContexts(
+    const utils = renderWithContexts(
       <UserAndTeamAccessAdd
         apiModel={UsersAPI}
         resourceId={99}
@@ -98,6 +107,11 @@ describe('<UserAndTeamAccessAdd/>', () => {
         onError={onError}
       />
     );
+    // a userEvent bound to the fake timers so its internal delays advance
+    return {
+      ...utils,
+      user: userEvent.setup({ advanceTimers: jest.advanceTimersByTime }),
+    };
   }
 
   test('should mount properly', () => {
