@@ -1,25 +1,53 @@
 import React from 'react';
+import { fireEvent, screen, act } from '@testing-library/react';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import CodeEditor from './CodeEditor';
 
-// CodeEditor wraps react-ace. Under jsdom react-ace renders an .ace_editor
-// container with a hidden <textarea>, but the editor's value lives in an
-// internal model and is NOT mirrored to that textarea (textarea.value stays
-// ""), and changing the textarea does not fire onChange. So the controlled
-// `value` and `onChange` props are unobservable through the DOM here. We assert
-// the props that DO surface: the editor container/textarea presence, the
-// textarea id (CodeEditor copies its `id` prop onto the textarea), and the
-// readOnly state (textarea[readonly]). react-ace also needs
-// document.body.createTextRange under jsdom (carried over from the enzyme test).
+// CodeEditor pulls in ace-builds mode/theme files for their side effects; those
+// expect the global `ace` that the real react-ace sets up on import. Since we
+// mock react-ace below, neutralize those side-effect imports so they don't throw.
+jest.mock('ace-builds/src-noconflict/mode-json', () => ({}));
+jest.mock('ace-builds/src-noconflict/mode-javascript', () => ({}));
+jest.mock('ace-builds/src-noconflict/mode-yaml', () => ({}));
+jest.mock('ace-builds/src-noconflict/mode-django', () => ({}));
+jest.mock('ace-builds/src-noconflict/theme-twilight', () => ({}));
+
+// Mock react-ace so the controlled props CodeEditor passes through
+// (mode/value/setOptions/onChange) are observable. Under jsdom the real
+// react-ace keeps its value in an internal model that never reaches the DOM and
+// editing it fires no onChange, so we render those props onto a textarea and
+// forward edits to onChange instead.
+jest.mock('react-ace', () => {
+  const ReactMock = require('react');
+  // class component so CodeEditor's ref (editor.current.refEditor) resolves
+  class AceMock extends ReactMock.Component {
+    render() {
+      const { mode, value, onChange, setOptions, name } = this.props;
+      return ReactMock.createElement(
+        'div',
+        {
+          ref: (el) => {
+            this.refEditor = el;
+          },
+        },
+        ReactMock.createElement('textarea', {
+          'data-testid': 'ace-editor',
+          'data-mode': mode,
+          name,
+          value,
+          readOnly: !!(setOptions && setOptions.readOnly),
+          onChange: (e) => onChange && onChange(e.target.value),
+        })
+      );
+    }
+  }
+  return { __esModule: true, default: AceMock };
+});
 
 describe('CodeEditor', () => {
-  beforeEach(() => {
-    document.body.createTextRange = jest.fn();
-  });
-
-  it('should render the ace editor in the requested mode', () => {
+  it('should render the ace editor in the requested mode with the given value', () => {
     const onChange = jest.fn();
-    const { container } = renderWithContexts(
+    renderWithContexts(
       <CodeEditor
         id="code"
         value={'---\nfoo: bar'}
@@ -27,23 +55,18 @@ describe('CodeEditor', () => {
         mode="yaml"
       />
     );
-    // editor container + hidden textarea are rendered
-    expect(container.querySelector('.ace_editor')).toBeInTheDocument();
-    const textarea = container.querySelector('textarea');
-    expect(textarea).toBeInTheDocument();
-    // CodeEditor copies its `id` prop onto the editor textarea
-    expect(textarea).toHaveAttribute('id', 'code');
-    // not read only -> textarea is editable
-    expect(textarea).not.toHaveAttribute('readonly');
-    // NOTE: the original enzyme test also asserted the ace `value` and `mode`
-    // props; neither surfaces to the DOM under jsdom (value is held in ace's
-    // internal model, mode produces no observable attribute), so they cannot be
-    // asserted here.
+    const editor = screen.getByTestId('ace-editor');
+    // mode is mapped through aceModes (yaml -> yaml) and passed to the editor
+    expect(editor).toHaveAttribute('data-mode', 'yaml');
+    // the controlled value is passed through
+    expect(editor).toHaveValue('---\nfoo: bar');
+    // not read only -> editor is editable
+    expect(editor).not.toHaveAttribute('readonly');
   });
 
   it('should render in read only mode', () => {
     const onChange = jest.fn();
-    const { container } = renderWithContexts(
+    renderWithContexts(
       <CodeEditor
         id="code"
         value="---"
@@ -52,17 +75,27 @@ describe('CodeEditor', () => {
         readOnly
       />
     );
-    const textarea = container.querySelector('textarea');
-    expect(textarea).toBeInTheDocument();
-    // readOnly prop surfaces as the textarea[readonly] attribute
-    expect(textarea).toHaveAttribute('readonly');
-    // NOTE: the original enzyme test also asserted the ace `value` prop, which
-    // is held in ace's internal model and not observable through the DOM.
+    // readOnly is forwarded via setOptions.readOnly
+    expect(screen.getByTestId('ace-editor')).toHaveAttribute('readonly');
   });
 
-  // NOTE: the original enzyme test "should trigger onChange prop" drove the ace
-  // editor's onChange directly via the React prop. Under jsdom react-ace does
-  // not mirror edits to the hidden textarea, so there is no DOM event that
-  // reaches onChange; this behaviour is not observable through the rendered DOM
-  // and the assertion has no RTL equivalent.
+  it('should trigger the onChange prop (debounced) on edit', () => {
+    jest.useFakeTimers();
+    try {
+      const onChange = jest.fn();
+      renderWithContexts(
+        <CodeEditor id="code" value={'---'} onChange={onChange} mode="yaml" />
+      );
+      fireEvent.change(screen.getByTestId('ace-editor'), {
+        target: { value: '---\nfoo: bar' },
+      });
+      // CodeEditor wraps onChange in debounce(onChange, 250)
+      act(() => {
+        jest.advanceTimersByTime(300);
+      });
+      expect(onChange).toHaveBeenCalledWith('---\nfoo: bar');
+    } finally {
+      jest.useRealTimers();
+    }
+  });
 });

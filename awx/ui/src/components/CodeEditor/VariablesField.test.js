@@ -1,8 +1,32 @@
 import React from 'react';
-import { screen, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { Formik } from 'formik';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import VariablesField from './VariablesField';
+
+// Mock the CodeEditor leaf with a controlled <textarea> that renders the value
+// and forwards edits to onChange. This keeps the existing .ace_editor-based
+// assertions working (the mock renders an .ace_editor wrapper) while making the
+// editor's value drivable, so the onChange -> Formik path is observable (the
+// real react-ace editor does not surface its value/edits to the DOM under
+// jsdom).
+jest.mock('./CodeEditor', () => {
+  const ReactMock = require('react');
+  return {
+    __esModule: true,
+    default: ({ value, onChange, readOnly }) =>
+      ReactMock.createElement(
+        'div',
+        { className: 'ace_editor' },
+        ReactMock.createElement('textarea', {
+          'data-testid': 'code-editor',
+          value: value || '',
+          readOnly: !!readOnly,
+          onChange: (e) => onChange && onChange(e.target.value),
+        })
+      ),
+  };
+});
 
 // VariablesField renders a YAML/JSON MultiButtonToggle plus a CodeEditor
 // (react-ace). Under jsdom react-ace keeps its value in an internal model that
@@ -145,14 +169,16 @@ describe('VariablesField', () => {
         )}
       </Formik>
     );
+    // edit the (mocked) editor, which drives VariablesField's onChange ->
+    // Formik, then submit and assert the updated value is submitted
+    fireEvent.change(screen.getByTestId('code-editor'), {
+      target: { value: '---\nfoo: baz\n' },
+    });
     await user.click(screen.getByText('Submit'));
     await waitFor(() => expect(handleSubmit).toHaveBeenCalled());
     expect(handleSubmit.mock.calls[0][0]).toEqual({
-      variables: '---\nfoo: bar\n',
+      variables: '---\nfoo: baz\n',
     });
-    // NOTE: original first drove the CodeEditor's onChange to change the value
-    // before submitting; ace edits are not observable/drivable under jsdom, so
-    // this asserts submission of the (unchanged) initial field value instead.
   });
 
   it('should initialize to JSON if value is JSON', async () => {

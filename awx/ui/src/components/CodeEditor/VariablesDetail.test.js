@@ -3,8 +3,6 @@ import { screen } from '@testing-library/react';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import VariablesDetail from './VariablesDetail';
 
-jest.mock('../../api');
-
 // VariablesDetail renders a YAML/JSON MultiButtonToggle and a read-only
 // CodeEditor (react-ace). Under jsdom react-ace's value is held in an internal
 // model and never reaches the DOM, so the editor *text* (formatted JSON,
@@ -79,7 +77,7 @@ describe('<VariablesDetail>', () => {
     ).toHaveTextContent('Variables');
   });
 
-  test('should update mode when prop changes', async () => {
+  test('should preserve the selected mode when the value prop changes', async () => {
     const { user, rerender } = renderWithContexts(
       <VariablesDetail value="---foo: bar" label="Variables" name="test" />
     );
