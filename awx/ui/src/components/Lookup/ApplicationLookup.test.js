@@ -23,7 +23,7 @@ const fetchedApplications = {
       },
       {
         id: 4,
-        name: 'application that should not crach',
+        name: 'application that should not crash',
         description: '',
       },
     ],
@@ -32,9 +32,9 @@ const fetchedApplications = {
 describe('ApplicationLookup', () => {
   beforeEach(() => {
     ApplicationsAPI.read.mockResolvedValueOnce(fetchedApplications);
-    ApplicationsAPI.readOptions = {
+    ApplicationsAPI.readOptions.mockResolvedValue({
       data: { actions: { GET: {} }, related_search_fields: [] },
-    };
+    });
   });
 
   afterEach(() => {
