@@ -5,6 +5,7 @@ import * as SessionContext from 'contexts/Session';
 import { shallow } from 'enzyme';
 import { mountWithContexts } from '../testUtils/enzymeHelpers';
 import * as navigation from 'util/navigation';
+import * as auth from 'util/auth';
 import App, { ProtectedRoute } from './App';
 
 jest.mock('./api');
@@ -65,5 +66,26 @@ describe('<App />', () => {
 
     expect(replaceSpy).toHaveBeenCalled();
     replaceSpy.mockRestore();
+  });
+
+  test('renders children when authenticated', async () => {
+    jest.spyOn(SessionContext, 'useSession').mockImplementation(() => ({
+      setAuthRedirectTo: jest.fn(),
+      isSessionExpired: false,
+      isUserBeingLoggedOut: false,
+      loginRedirectOverride: null,
+    }));
+    jest.spyOn(auth, 'isAuthenticated').mockReturnValue(true);
+
+    let wrapper;
+    await act(async () => {
+      wrapper = mountWithContexts(
+        <ProtectedRoute>
+          <div id="protected-child">foo</div>
+        </ProtectedRoute>
+      );
+    });
+    expect(wrapper.find('#protected-child').length).toBeGreaterThan(0);
+    jest.restoreAllMocks();
   });
 });

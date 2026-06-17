@@ -3,15 +3,8 @@ import { useLingui } from '@lingui/react/macro';
 
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card, PageSection } from '@patternfly/react-core';
-import {
-  Switch,
-  Route,
-  Redirect,
-  Link,
-  useLocation,
-  useParams,
-  useRouteMatch,
-} from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom-v5-compat';
 import RoutedTabs from 'components/RoutedTabs';
 import { useConfig } from 'contexts/Config';
 import useRequest from 'hooks/useRequest';
@@ -32,8 +25,8 @@ import { Visualizer } from './WorkflowJobTemplateVisualizer';
 function WorkflowJobTemplate({ setBreadcrumb }) {
   const { t } = useLingui();
   const location = useLocation();
-  const match = useRouteMatch();
   const { id: templateId } = useParams();
+  const baseUrl = `/templates/workflow_job_template/${templateId}`;
   const { me = {} } = useConfig();
 
   const {
@@ -114,38 +107,38 @@ function WorkflowJobTemplate({ setBreadcrumb }) {
       persistentFilterKey: 'templates',
       id: 99,
     },
-    { name: t`Details`, link: `${match.url}/details` },
-    { name: t`Access`, link: `${match.url}/access` },
+    { name: t`Details`, link: `${baseUrl}/details` },
+    { name: t`Access`, link: `${baseUrl}/access` },
   ];
 
   if (canSeeNotificationsTab) {
     tabsArray.push({
       name: t`Notifications`,
-      link: `${match.url}/notifications`,
+      link: `${baseUrl}/notifications`,
     });
   }
 
   if (template) {
     tabsArray.push({
       name: t`Schedules`,
-      link: `${match.url}/schedules`,
+      link: `${baseUrl}/schedules`,
     });
   }
 
   tabsArray.push(
     {
       name: t`Visualizer`,
-      link: `${match.url}/visualizer`,
+      link: `${baseUrl}/visualizer`,
     },
     {
       name: t`Jobs`,
-      link: `${match.url}/jobs`,
+      link: `${baseUrl}/jobs`,
     },
     {
       name: canAddAndEditSurvey
         ? t`Survey`
         : t`View Survey`,
-      link: `${match.url}/survey`,
+      link: `${baseUrl}/survey`,
     }
   );
 
@@ -188,99 +181,115 @@ function WorkflowJobTemplate({ setBreadcrumb }) {
     <PageSection>
       <Card>
         {showCardHeader && <RoutedTabs tabsArray={tabsArray} />}
-        <Switch>
-          <Redirect
-            from="/templates/:templateType/:id"
-            to="/templates/:templateType/:id/details"
-            exact
-          />
+        <Routes>
           {template && (
-            <Route key="details" path="/templates/:templateType/:id/details">
-              <WorkflowJobTemplateDetail template={template} />
-            </Route>
-          )}
-          {template && (
-            <Route key="edit" path="/templates/:templateType/:id/edit">
-              <WorkflowJobTemplateEdit template={template} />
-            </Route>
-          )}
-          {template && (
-            <Route key="access" path="/templates/:templateType/:id/access">
-              <ResourceAccessList
-                resource={template}
-                apiModel={WorkflowJobTemplatesAPI}
-              />
-            </Route>
+            <Route
+              path=":templateType/:id/details"
+              element={<WorkflowJobTemplateDetail template={template} />}
+            />
           )}
           {template && (
             <Route
-              key="schedules"
-              path="/templates/:templateType/:id/schedules"
-            >
-              <Schedules
-                apiModel={WorkflowJobTemplatesAPI}
-                setBreadcrumb={setBreadcrumb}
-                resource={template}
-                loadSchedules={loadSchedules}
-                loadScheduleOptions={loadScheduleOptions}
-                surveyConfig={surveyConfig}
-                launchConfig={launchConfig}
-              />
-            </Route>
+              path=":templateType/:id/edit"
+              element={<WorkflowJobTemplateEdit template={template} />}
+            />
+          )}
+          {template && (
+            <Route
+              path=":templateType/:id/access"
+              element={
+                <ResourceAccessList
+                  resource={template}
+                  apiModel={WorkflowJobTemplatesAPI}
+                />
+              }
+            />
+          )}
+          {template && (
+            <Route
+              path=":templateType/:id/schedules/*"
+              element={
+                <Schedules
+                  apiModel={WorkflowJobTemplatesAPI}
+                  setBreadcrumb={setBreadcrumb}
+                  resource={template}
+                  loadSchedules={loadSchedules}
+                  loadScheduleOptions={loadScheduleOptions}
+                  surveyConfig={surveyConfig}
+                  launchConfig={launchConfig}
+                />
+              }
+            />
           )}
           {canSeeNotificationsTab && (
-            <Route path="/templates/:templateType/:id/notifications">
-              <NotificationList
-                id={Number(templateId)}
-                canToggleNotifications={isNotifAdmin}
-                apiModel={WorkflowJobTemplatesAPI}
-                showApprovalsToggle
-              />
-            </Route>
+            <Route
+              path=":templateType/:id/notifications"
+              element={
+                <NotificationList
+                  id={Number(templateId)}
+                  canToggleNotifications={isNotifAdmin}
+                  apiModel={WorkflowJobTemplatesAPI}
+                  showApprovalsToggle
+                />
+              }
+            />
           )}
           {template && (
             <Route
-              key="wfjt-visualizer"
-              path="/templates/workflow_job_template/:id/visualizer"
-            >
-              <AppendBody>
-                <FullPage>
-                  <Visualizer template={template} />
-                </FullPage>
-              </AppendBody>
-            </Route>
+              path="workflow_job_template/:id/visualizer"
+              element={
+                <AppendBody>
+                  <FullPage>
+                    <Visualizer template={template} />
+                  </FullPage>
+                </AppendBody>
+              }
+            />
           )}
           {template?.id && (
-            <Route path="/templates/:templateType/:id/jobs">
-              <JobList
-                defaultParams={{
-                  workflow_job__workflow_job_template: template.id,
-                }}
-              />
-            </Route>
+            <Route
+              path=":templateType/:id/jobs"
+              element={
+                <JobList
+                  defaultParams={{
+                    workflow_job__workflow_job_template: template.id,
+                  }}
+                />
+              }
+            />
           )}
           {template && (
-            <Route path="/templates/:templateType/:id/survey">
-              <TemplateSurvey
-                template={template}
-                canEdit={canAddAndEditSurvey}
-              />
-            </Route>
+            <Route
+              path=":templateType/:id/survey/*"
+              element={
+                <TemplateSurvey
+                  template={template}
+                  canEdit={canAddAndEditSurvey}
+                />
+              }
+            />
+          )}
+          {template && (
+            <Route
+              path=":templateType/:id"
+              element={<Navigate to={`${baseUrl}/details`} replace />}
+            />
           )}
           {!hasRolesandTemplateLoading && (
-            <Route key="not-found" path="*">
-              <ContentError isNotFound>
-                {match.params.id && (
-                  <Link
-                    to={`/templates/${match.params.templateType}/${match.params.id}/details`}
-                  >
-                    {t`View Template Details`}
-                  </Link>
-                )}
-              </ContentError>
-            </Route>
+            <Route
+              path="*"
+              element={
+                <ContentError isNotFound>
+                  {templateId && (
+                    <Link to={`${baseUrl}/details`}>
+                      {t`View Template Details`}
+                    </Link>
+                  )}
+                </ContentError>
+              }
+            />
           )}
-        </Switch>
+        </Routes>
       </Card>
     </PageSection>
   );

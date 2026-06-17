@@ -20,7 +20,7 @@
 
     - block:
         - name: Launch Demo Job Template
-          awx.awx.job_launch:
+          ctrliq.ascender.job_launch:
             name: Demo Job Template
             wait: yes
             validate_certs: no

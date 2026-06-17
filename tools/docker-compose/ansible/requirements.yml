@@ -1,5 +1,6 @@
 ---
 collections:
-  - awx.awx
+  # ctrliq.ascender is installed from the bundled source via `make install_collection`
+  # (it is not published on Ansible Galaxy), so it is intentionally not listed here.
   - flowerysong.hvault
   - community.docker

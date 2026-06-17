@@ -1,6 +1,7 @@
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { SettingsAPI, RootAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import mockAllOptions from './shared/data.allSettingOptions.json';
@@ -28,19 +29,25 @@ describe('<Settings />', () => {
     const history = createMemoryHistory({
       initialEntries: ['/settings'],
     });
-    renderWithContexts(<Settings />, {
-      context: {
-        router: {
-          history,
-        },
-        config: {
-          me: {
-            is_superuser: false,
-            is_system_auditor: false,
+    renderWithContexts(
+      <Routes>
+        <Route path="/settings/*" element={<Settings />} />
+        <Route path="*" element={null} />
+      </Routes>,
+      {
+        context: {
+          router: {
+            history,
+          },
+          config: {
+            me: {
+              is_superuser: false,
+              is_system_auditor: false,
+            },
           },
         },
-      },
-    });
+      }
+    );
     await waitFor(() =>
       expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
     );
@@ -52,19 +59,24 @@ describe('<Settings />', () => {
     const history = createMemoryHistory({
       initialEntries: ['/settings'],
     });
-    renderWithContexts(<Settings />, {
-      context: {
-        router: {
-          history,
-        },
-        config: {
-          me: {
-            is_superuser: true,
-            is_system_auditor: true,
+    renderWithContexts(
+      <Routes>
+        <Route path="/settings/*" element={<Settings />} />
+      </Routes>,
+      {
+        context: {
+          router: {
+            history,
+          },
+          config: {
+            me: {
+              is_superuser: true,
+              is_system_auditor: true,
+            },
           },
         },
-      },
-    });
+      }
+    );
     await waitFor(() =>
       expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
     );

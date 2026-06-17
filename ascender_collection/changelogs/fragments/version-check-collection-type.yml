@@ -1,0 +1,2 @@
+bugfixes:
+  - controller_api - map the ``ascender`` collection type to the ``AWX`` product name the server reports, so the version check no longer emits "You are using the ascender version of this collection but connecting to AWX" on every task and again compares the collection and controller major versions.

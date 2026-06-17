@@ -153,10 +153,10 @@ use_dev_supervisor.txt
 
 
 # Ansible module tests
-/awx_collection_test_venv/
-/awx_collection/*.tar.gz
+/ascender_collection_test_venv/
+/ascender_collection/*.tar.gz
 /sanity/
-/awx_collection_build/
+/ascender_collection_build/
 
 .idea/*
 *.unison.tmp

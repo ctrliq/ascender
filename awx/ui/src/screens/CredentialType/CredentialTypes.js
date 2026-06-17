@@ -37,14 +37,14 @@ function CredentialTypes() {
         breadcrumbConfig={breadcrumbConfig}
       />
       <Routes>
-        <Route path="/credential_types/add" element={<CredentialTypeAdd />} />
+        <Route path="add" element={<CredentialTypeAdd />} />
         {/* so the nested <CredentialType> route tree can match the rest */}
         <Route
-          path="/credential_types/:id/*"
+          path=":id/*"
           element={<CredentialType setBreadcrumb={buildBreadcrumbConfig} />}
         />
         <Route
-          path="/credential_types"
+          index
           element={
             <PersistentFilters pageKey="credentialTypes">
               <CredentialTypeList />
