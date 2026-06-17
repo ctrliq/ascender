@@ -58,10 +58,14 @@ async function waitForLoaded() {
   await waitFor(() =>
     expect(JobsAPI.readEvents.mock.calls.length).toBeGreaterThan(0)
   );
-  await waitForElementToBeRemoved(
-    () => document.querySelector('[role="progressbar"]'),
-    { timeout: 4000 }
-  ).catch(() => {});
+  // Only wait for the spinner when one is actually present, and let a real
+  // timeout fail the test rather than swallowing it with .catch().
+  if (document.querySelector('[role="progressbar"]')) {
+    await waitForElementToBeRemoved(
+      () => document.querySelector('[role="progressbar"]'),
+      { timeout: 4000 }
+    );
+  }
 }
 
 describe('<JobOutput />', () => {
