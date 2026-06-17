@@ -3,6 +3,7 @@ import { createMemoryHistory } from 'history';
 import { act } from 'react-dom/test-utils';
 import { JobTemplatesAPI, OrganizationsAPI } from 'api';
 
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import {
   mountWithContexts,
   waitForElement,
@@ -17,6 +18,24 @@ const mockMe = {
   is_super_user: true,
   is_system_auditor: false,
 };
+
+// Template is a v6 descendant mounted by Templates at job_template/:id/*, so it
+// reads :id from the route. Mount it under the same real v6 route here; the
+// default /foobar subpath hits Template's not-found branch (only tabs render,
+// no detail subcomponent fetches).
+function renderTemplate(entry = '/templates/job_template/1/foobar') {
+  const history = createMemoryHistory({ initialEntries: [entry] });
+  return mountWithContexts(
+    <Routes>
+      <Route
+        path="/templates/job_template/:id/*"
+        element={<Template setBreadcrumb={() => {}} me={mockMe} />}
+      />
+    </Routes>,
+    { context: { router: { history } } }
+  );
+}
+
 describe('<Template />', () => {
   let wrapper;
   beforeEach(() => {
@@ -68,25 +87,19 @@ describe('<Template />', () => {
   });
   test('initially renders successfully', async () => {
     await act(async () => {
-      wrapper = mountWithContexts(
-        <Template setBreadcrumb={() => {}} me={mockMe} />
-      );
+      wrapper = renderTemplate();
     });
   });
   test('When component mounts API is called and the response is put in state', async () => {
     await act(async () => {
-      wrapper = mountWithContexts(
-        <Template setBreadcrumb={() => {}} me={mockMe} />
-      );
+      wrapper = renderTemplate();
     });
     expect(JobTemplatesAPI.readDetail).toHaveBeenCalled();
     expect(OrganizationsAPI.read).toHaveBeenCalled();
   });
   test('notifications tab shown for admins', async () => {
     await act(async () => {
-      wrapper = mountWithContexts(
-        <Template setBreadcrumb={() => {}} me={mockMe} />
-      );
+      wrapper = renderTemplate();
     });
 
     const tabs = await waitForElement(
@@ -107,9 +120,7 @@ describe('<Template />', () => {
     });
 
     await act(async () => {
-      wrapper = mountWithContexts(
-        <Template setBreadcrumb={() => {}} me={mockMe} />
-      );
+      wrapper = renderTemplate();
     });
     const tabs = await waitForElement(
       wrapper,
@@ -120,56 +131,15 @@ describe('<Template />', () => {
   });
 
   test('should show content error when user attempts to navigate to erroneous route', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/templates/job_template/1/foobar'],
-    });
-
     await act(async () => {
-      wrapper = mountWithContexts(
-        <Template setBreadcrumb={() => {}} me={mockMe} />,
-        {
-          context: {
-            router: {
-              history,
-              route: {
-                location: history.location,
-                match: {
-                  params: { id: 1 },
-                  url: '/templates/job_template/1/foobar',
-                  path: '/templates/job_template/1/foobar',
-                },
-              },
-            },
-          },
-        }
-      );
+      wrapper = renderTemplate('/templates/job_template/1/foobar');
     });
 
     await waitForElement(wrapper, 'ContentError', (el) => el.length === 1);
   });
   test('should call to get webhook key', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/templates/job_template/1/foobar'],
-    });
     await act(async () => {
-      wrapper = mountWithContexts(
-        <Template setBreadcrumb={() => {}} me={mockMe} />,
-        {
-          context: {
-            router: {
-              history,
-              route: {
-                location: history.location,
-                match: {
-                  params: { id: 1 },
-                  url: '/templates/job_template/1/foobar',
-                  path: '/templates/job_template/1/foobar',
-                },
-              },
-            },
-          },
-        }
-      );
+      wrapper = renderTemplate('/templates/job_template/1/foobar');
     });
     expect(JobTemplatesAPI.readWebhookKey).toHaveBeenCalled();
   });
@@ -180,28 +150,8 @@ describe('<Template />', () => {
       },
     });
 
-    const history = createMemoryHistory({
-      initialEntries: ['/templates/job_template/1/foobar'],
-    });
     await act(async () => {
-      wrapper = mountWithContexts(
-        <Template setBreadcrumb={() => {}} me={mockMe} />,
-        {
-          context: {
-            router: {
-              history,
-              route: {
-                location: history.location,
-                match: {
-                  params: { id: 1 },
-                  url: '/templates/job_template/1/foobar',
-                  path: '/templates/job_template/1/foobar',
-                },
-              },
-            },
-          },
-        }
-      );
+      wrapper = renderTemplate('/templates/job_template/1/foobar');
     });
     expect(JobTemplatesAPI.readWebhookKey).not.toHaveBeenCalled();
   });

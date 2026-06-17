@@ -247,7 +247,7 @@ describe('<WorkflowJobTemplate />', () => {
       wrapper = mountWithContexts(
         <Routes>
           <Route
-            path="/templates/*"
+            path="/templates/workflow_job_template/:id/*"
             element={
               <WorkflowJobTemplate
                 setBreadcrumb={() => {}}
