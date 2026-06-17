@@ -280,5 +280,12 @@ describe('<HostGroupsList />', () => {
     );
 
     expect(await screen.findByText('Error!')).toBeInTheDocument();
+    // Close the error modal while still mounted (unmounting through an open
+    // focus trap re-engages a toolbar tooltip), then settle.
+    await user.click(screen.getByRole('button', { name: 'Close' }));
+    await waitFor(() =>
+      expect(screen.queryByText('Error!')).not.toBeInTheDocument()
+    );
+    await settleTooltips();
   });
 });
