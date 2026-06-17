@@ -6,7 +6,7 @@ import ActionItem from './ActionItem';
 describe('<ActionItem />', () => {
   test('should render child wrapped with tooltip', async () => {
     const { user } = renderWithContexts(
-      <ActionItem columns={1} tooltip="a tooltip" visible>
+      <ActionItem column={1} tooltip="a tooltip" visible>
         foo
       </ActionItem>
     );
@@ -23,7 +23,7 @@ describe('<ActionItem />', () => {
 
   test('should render null if not visible', async () => {
     const { container } = renderWithContexts(
-      <ActionItem columns={1} tooltip="foo">
+      <ActionItem column={1} tooltip="foo">
         <div>foo</div>
       </ActionItem>
     );
