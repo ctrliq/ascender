@@ -129,6 +129,9 @@ function renderEdit(props = {}) {
 
 describe('<ScheduleEdit />', () => {
   beforeEach(() => {
+    // resetMocks clears the captured props between tests; reset formProps so a
+    // test waits for the current render rather than seeing the previous one.
+    formProps = undefined;
     SchedulesAPI.readZoneInfo.mockResolvedValue({
       data: [{ name: 'America/New_York' }],
     });

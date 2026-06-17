@@ -12,7 +12,8 @@ import DateTimePicker from './DateTimePicker';
 // to DateTimePicker's behavior; filter out only that one message and forward
 // everything else to the trap so real errors still fail the suite.
 const realConsoleError = console.error;
-beforeAll(() => {
+// resetMocks wipes the spy before each test, so (re)install it per test.
+beforeEach(() => {
   jest.spyOn(console, 'error').mockImplementation((...args) => {
     if (
       typeof args[0] === 'string' &&
@@ -25,7 +26,7 @@ beforeAll(() => {
     realConsoleError(...args);
   });
 });
-afterAll(() => {
+afterEach(() => {
   console.error.mockRestore();
 });
 

@@ -16,7 +16,8 @@ jest.mock('../../../api/models/Inventories');
 // unrelated to ScheduleForm and would trip the setupTests console trap, so
 // filter only that message and forward everything else.
 const realConsoleError = console.error;
-beforeAll(() => {
+// resetMocks wipes the spy before each test, so (re)install it per test.
+beforeEach(() => {
   jest.spyOn(console, 'error').mockImplementation((...args) => {
     if (
       typeof args[0] === 'string' &&
@@ -29,7 +30,7 @@ beforeAll(() => {
     realConsoleError(...args);
   });
 });
-afterAll(() => {
+afterEach(() => {
   console.error.mockRestore();
 });
 
