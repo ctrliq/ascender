@@ -42,10 +42,10 @@ function Users() {
     <>
       <ScreenHeader streamType="user" breadcrumbConfig={breadcrumbConfig} />
       <Routes>
-        <Route path="/users/add" element={<UserAdd />} />
+        <Route path="add" element={<UserAdd />} />
         {/* /* so the nested <User> route tree can match the rest */}
         <Route
-          path="/users/:id/*"
+          path=":id/*"
           element={
             <Config>
               {({ me }) => (
@@ -55,7 +55,7 @@ function Users() {
           }
         />
         <Route
-          path="/users"
+          index
           element={
             <PersistentFilters pageKey="users">
               <UsersList />

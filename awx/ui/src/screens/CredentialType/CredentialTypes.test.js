@@ -1,6 +1,7 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import CredentialTypes from './CredentialTypes';
@@ -32,9 +33,14 @@ jest.mock('./CredentialType', () => {
 
 function renderAt(path) {
   const history = createMemoryHistory({ initialEntries: [path] });
-  return renderWithContexts(<CredentialTypes />, {
-    context: { router: { history } },
-  });
+  return renderWithContexts(
+    <Routes>
+      <Route path="/credential_types/*" element={<CredentialTypes />} />
+    </Routes>,
+    {
+      context: { router: { history } },
+    }
+  );
 }
 
 describe('<CredentialTypes />', () => {

@@ -1,6 +1,7 @@
 import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { createMemoryHistory } from 'history';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { SettingsAPI, RootAPI } from 'api';
 import {
   mountWithContexts,
@@ -34,19 +35,25 @@ describe('<Settings />', () => {
       initialEntries: ['/settings'],
     });
     await act(async () => {
-      wrapper = mountWithContexts(<Settings />, {
-        context: {
-          router: {
-            history,
-          },
-          config: {
-            me: {
-              is_superuser: false,
-              is_system_auditor: false,
+      wrapper = mountWithContexts(
+        <Routes>
+          <Route path="/settings/*" element={<Settings />} />
+          <Route path="*" element={null} />
+        </Routes>,
+        {
+          context: {
+            router: {
+              history,
+            },
+            config: {
+              me: {
+                is_superuser: false,
+                is_system_auditor: false,
+              },
             },
           },
-        },
-      });
+        }
+      );
     });
     await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
     expect(history.location.pathname).toBe('/');
@@ -58,17 +65,22 @@ describe('<Settings />', () => {
       initialEntries: ['/settings'],
     });
     await act(async () => {
-      wrapper = mountWithContexts(<Settings />, {
-        context: {
-          router: {
-            history,
+      wrapper = mountWithContexts(
+        <Routes>
+          <Route path="/settings/*" element={<Settings />} />
+        </Routes>,
+        {
+          context: {
+            router: {
+              history,
+            },
+            config: {
+              is_superuser: true,
+              is_system_auditor: true,
+            },
           },
-          config: {
-            is_superuser: true,
-            is_system_auditor: true,
-          },
-        },
-      });
+        }
+      );
     });
     await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
     expect(wrapper.find('SettingList').length).toBe(1);
@@ -76,8 +88,23 @@ describe('<Settings />', () => {
 
   test('should render content error on throw', async () => {
     SettingsAPI.readAllOptions.mockRejectedValue(new Error());
+    const history = createMemoryHistory({
+      initialEntries: ['/settings'],
+    });
     await act(async () => {
-      wrapper = mountWithContexts(<Settings />);
+      wrapper = mountWithContexts(
+        <Routes>
+          <Route path="/settings/*" element={<Settings />} />
+          <Route path="*" element={null} />
+        </Routes>,
+        {
+          context: {
+            router: {
+              history,
+            },
+          },
+        }
+      );
     });
     await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
     expect(wrapper.find('ContentError').length).toBe(1);

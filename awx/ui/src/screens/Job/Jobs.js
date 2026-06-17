@@ -61,7 +61,7 @@ function Jobs() {
       <ScreenHeader streamType="job" breadcrumbConfig={breadcrumbConfig} />
       <Routes>
         <Route
-          path="/jobs"
+          index
           element={
             <PageSection>
               <PersistentFilters pageKey="jobs">
@@ -70,21 +70,21 @@ function Jobs() {
             </PageSection>
           }
         />
-        <Route path="/jobs/system/:id/*" element={<SystemRedirect />} />
+        <Route path="system/:id/*" element={<SystemRedirect />} />
         <Route
-          path="/jobs/:id/details"
+          path=":id/details"
           element={<TypeRedirect view="details" />}
         />
         <Route
-          path="/jobs/:id/output"
+          path=":id/output"
           element={<TypeRedirect view="output" />}
         />
         {/* /* so the nested <Job> route tree can match details/output */}
         <Route
-          path="/jobs/:typeSegment/:id/*"
+          path=":typeSegment/:id/*"
           element={<Job setBreadcrumb={buildBreadcrumbConfig} />}
         />
-        <Route path="/jobs/:id" element={<TypeRedirect />} />
+        <Route path=":id" element={<TypeRedirect />} />
       </Routes>
     </>
   );

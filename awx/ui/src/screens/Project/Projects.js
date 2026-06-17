@@ -43,14 +43,14 @@ function Projects() {
     <>
       <ScreenHeader streamType="project" breadcrumbConfig={breadcrumbConfig} />
       <Routes>
-        <Route path="/projects/add" element={<ProjectAdd />} />
+        <Route path="add" element={<ProjectAdd />} />
         {/* so the nested <Project> route tree can match */}
         <Route
-          path="/projects/:id/*"
+          path=":id/*"
           element={<Project setBreadcrumb={buildBreadcrumbConfig} />}
         />
         <Route
-          path="/projects"
+          index
           element={
             <PersistentFilters pageKey="projects">
               <ProjectsList />

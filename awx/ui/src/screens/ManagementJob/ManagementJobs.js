@@ -37,11 +37,11 @@ function ManagementJobs() {
       <Routes>
         {/* /* so the nested <ManagementJob> route tree can match */}
         <Route
-          path={`${basePath}/:id/*`}
+          path=":id/*"
           element={<ManagementJob setBreadcrumb={buildBreadcrumbConfig} />}
         />
         <Route
-          path={basePath}
+          index
           element={
             <PersistentFilters pageKey="managementJobs">
               <ManagementJobList setBreadcrumb={buildBreadcrumbConfig} />

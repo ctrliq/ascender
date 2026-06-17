@@ -24,7 +24,7 @@ function AllSchedules() {
       />
       <Routes>
         <Route
-          path="/schedules"
+          index
           element={
             <PageSection>
               <Card>
