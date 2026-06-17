@@ -35,12 +35,7 @@ describe('<HostMetrics />', () => {
   });
 
   test('initially renders successfully', async () => {
-    renderWithContexts(
-      <HostMetrics
-        match={{ path: '/hosts', url: '/hosts' }}
-        location={{ search: '', pathname: '/hosts' }}
-      />
-    );
+    renderWithContexts(<HostMetrics />);
     await waitFor(() =>
       expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
     );
@@ -54,8 +49,6 @@ describe('<HostMetrics />', () => {
 
     expect(HostMetricsAPI.read).toHaveBeenCalled();
     expect(screen.getByText('Host name')).toBeInTheDocument();
-    expect(
-      document.querySelectorAll('[id^="host_metrics-row-"]')
-    ).toHaveLength(1);
+    expect(screen.getAllByRole('cell', { name: 'Host name' })).toHaveLength(1);
   });
 });
