@@ -7,6 +7,17 @@ import {
 import PromptJobTemplateDetail from './PromptJobTemplateDetail';
 import mockData from './data.job_template.json';
 
+// Render the (otherwise Ace-backed) CodeEditor as plain text so VariablesDetail's
+// computed value is assertable under jsdom.
+jest.mock('components/CodeEditor/CodeEditor', () => {
+  const ReactMock = require('react');
+  return {
+    __esModule: true,
+    default: ({ value }) =>
+      ReactMock.createElement('div', { 'data-testid': 'code-editor' }, value),
+  };
+});
+
 const mockJT = {
   ...mockData,
   webhook_key: 'PiM3n2',
@@ -93,16 +104,21 @@ describe('PromptJobTemplateDetail', () => {
     expect(screen.getByText('Fact Storage')).toBeInTheDocument();
     expect(screen.getByText('Webhooks')).toBeInTheDocument();
 
-    // Variables uses react-ace (empty under jsdom); assert the surrounding label
+    // Variables renders the extra_vars through the (mocked) CodeEditor
     expect(screen.getByText('Variables')).toBeInTheDocument();
+    expect(screen.getByTestId('code-editor')).toHaveTextContent('foo: bar');
   });
 
   test('should render "Deleted" details', () => {
-    delete mockJT.summary_fields.inventory;
-    delete mockJT.summary_fields.organization;
-    delete mockJT.summary_fields.project;
+    const deletedJT = {
+      ...mockJT,
+      summary_fields: { ...mockJT.summary_fields },
+    };
+    delete deletedJT.summary_fields.inventory;
+    delete deletedJT.summary_fields.organization;
+    delete deletedJT.summary_fields.project;
 
-    renderWithContexts(<PromptJobTemplateDetail resource={mockJT} />);
+    renderWithContexts(<PromptJobTemplateDetail resource={deletedJT} />);
 
     assertDetail('Inventory', 'Deleted');
     assertDetail('Organization', 'Deleted');
@@ -115,6 +131,7 @@ describe('PromptJobTemplateDetail', () => {
         resource={{
           ...mockJT,
           summary_fields: {
+            ...mockJT.summary_fields,
             recent_jobs: [],
           },
         }}
@@ -129,6 +146,7 @@ describe('PromptJobTemplateDetail', () => {
         resource={{
           ...mockJT,
           summary_fields: {
+            ...mockJT.summary_fields,
             credentials: [],
           },
         }}

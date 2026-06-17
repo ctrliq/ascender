@@ -1,8 +1,22 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
-import { renderWithContexts } from '../../../testUtils/rtlContexts';
+import {
+  renderWithContexts,
+  assertDetail,
+} from '../../../testUtils/rtlContexts';
 import PromptInventorySourceDetail from './PromptInventorySourceDetail';
 import mockInvSource from './data.inventory_source.json';
+
+// Render the (otherwise Ace-backed) CodeEditor as plain text so VariablesDetail's
+// computed value is assertable under jsdom.
+jest.mock('components/CodeEditor/CodeEditor', () => {
+  const ReactMock = require('react');
+  return {
+    __esModule: true,
+    default: ({ value }) =>
+      ReactMock.createElement('div', { 'data-testid': 'code-editor' }, value),
+  };
+});
 
 describe('PromptInventorySourceDetail', () => {
   test('should render expected details', () => {
@@ -15,6 +29,7 @@ describe('PromptInventorySourceDetail', () => {
     expect(screen.getByText('scm')).toBeInTheDocument();
     expect(screen.getByText('Mock Project')).toBeInTheDocument();
     expect(screen.getByText('2 Seconds')).toBeInTheDocument();
+    assertDetail('Inventory File', 'foo');
 
     // Regions chips
     expect(screen.getByText('us-east-1')).toBeInTheDocument();
@@ -34,8 +49,9 @@ describe('PromptInventorySourceDetail', () => {
       'Cloud: mock cred'
     );
 
-    // Variables uses react-ace (empty under jsdom); assert the surrounding label
+    // Source Variables renders the source_vars through the (mocked) CodeEditor
     expect(screen.getByText('Source Variables')).toBeInTheDocument();
+    expect(screen.getByTestId('code-editor')).toHaveTextContent('foo: bar');
 
     // Enabled Options renders one <li> per enabled flag
     expect(
@@ -50,9 +66,13 @@ describe('PromptInventorySourceDetail', () => {
   });
 
   test('should render "Deleted" details', () => {
-    delete mockInvSource.summary_fields.organization;
+    const deletedInvSource = {
+      ...mockInvSource,
+      summary_fields: { ...mockInvSource.summary_fields },
+    };
+    delete deletedInvSource.summary_fields.organization;
     renderWithContexts(
-      <PromptInventorySourceDetail resource={mockInvSource} />
+      <PromptInventorySourceDetail resource={deletedInvSource} />
     );
 
     expect(screen.getByText('Deleted')).toBeInTheDocument();
@@ -64,6 +84,7 @@ describe('PromptInventorySourceDetail', () => {
         resource={{
           ...mockInvSource,
           summary_fields: {
+            ...mockInvSource.summary_fields,
             credentials: [],
           },
         }}

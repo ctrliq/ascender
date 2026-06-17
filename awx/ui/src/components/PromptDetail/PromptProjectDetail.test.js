@@ -55,8 +55,12 @@ describe('PromptProjectDetail', () => {
   });
 
   test('should render "Deleted" details', () => {
-    delete mockProject.summary_fields.organization;
-    renderWithContexts(<PromptProjectDetail resource={mockProject} />, {
+    const deletedProject = {
+      ...mockProject,
+      summary_fields: { ...mockProject.summary_fields },
+    };
+    delete deletedProject.summary_fields.organization;
+    renderWithContexts(<PromptProjectDetail resource={deletedProject} />, {
       context: { config },
     });
     assertDetail('Organization', 'Deleted');

@@ -7,6 +7,17 @@ import {
 import PromptWFJobTemplateDetail from './PromptWFJobTemplateDetail';
 import mockData from './data.workflow_template.json';
 
+// Render the (otherwise Ace-backed) CodeEditor as plain text so VariablesDetail's
+// computed value is assertable under jsdom.
+jest.mock('components/CodeEditor/CodeEditor', () => {
+  const ReactMock = require('react');
+  return {
+    __esModule: true,
+    default: ({ value }) =>
+      ReactMock.createElement('div', { 'data-testid': 'code-editor' }, value),
+  };
+});
+
 const mockWF = {
   ...mockData,
   webhook_key: 'Pim3mRXT0',
@@ -45,8 +56,9 @@ describe('PromptWFJobTemplateDetail', () => {
     expect(screen.getByText('L_10o0')).toBeInTheDocument();
     expect(screen.getByText('L_20o0')).toBeInTheDocument();
 
-    // Variables uses react-ace (empty under jsdom); assert the surrounding label
+    // Variables renders the extra_vars through the (mocked) CodeEditor
     expect(screen.getByText('Variables')).toBeInTheDocument();
+    expect(screen.getByTestId('code-editor')).toHaveTextContent('mock: data');
   });
 
   test('should not load Activity', () => {
@@ -55,6 +67,7 @@ describe('PromptWFJobTemplateDetail', () => {
         resource={{
           ...mockWF,
           summary_fields: {
+            ...mockWF.summary_fields,
             recent_jobs: [],
           },
         }}
@@ -70,6 +83,7 @@ describe('PromptWFJobTemplateDetail', () => {
         resource={{
           ...mockWF,
           summary_fields: {
+            ...mockWF.summary_fields,
             labels: {
               results: [],
             },

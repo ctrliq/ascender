@@ -8,6 +8,17 @@ import mockTemplate from './data.job_template.json';
 
 import PromptDetail from './PromptDetail';
 
+// Render the (otherwise Ace-backed) CodeEditor as plain text so VariablesDetail's
+// computed value is assertable under jsdom.
+jest.mock('components/CodeEditor/CodeEditor', () => {
+  const ReactMock = require('react');
+  return {
+    __esModule: true,
+    default: ({ value }) =>
+      ReactMock.createElement('div', { 'data-testid': 'code-editor' }, value),
+  };
+});
+
 const mockPromptLaunch = {
   ask_credential_on_launch: true,
   ask_diff_mode_on_launch: true,
@@ -65,7 +76,9 @@ describe('PromptDetail', () => {
       );
 
       // No overrides -> no "Prompted Values" section
-      expect(screen.queryByRole('heading', { level: 2 })).toBeNull();
+      expect(
+        screen.queryByRole('heading', { name: 'Prompted Values' })
+      ).not.toBeInTheDocument();
 
       assertDetail('Name', 'Mock JT');
       assertDetail('Description', 'Mock JT Description');
@@ -84,8 +97,9 @@ describe('PromptDetail', () => {
         screen.getByText('Job Slicing').nextElementSibling
       ).toHaveTextContent('1');
 
-      // Variables uses react-ace (empty under jsdom); assert the surrounding label
+      // Variables renders the extra_vars through the (mocked) CodeEditor
       expect(screen.getByText('Variables')).toBeInTheDocument();
+      expect(screen.getByTestId('code-editor')).toHaveTextContent('foo: bar');
 
       // Labels chips
       expect(screen.getByText('L_91o2')).toBeInTheDocument();
@@ -119,7 +133,9 @@ describe('PromptDetail', () => {
     test('should not render promptable overrides section', () => {
       renderWithContexts(<PromptDetail resource={mockTemplate} />);
       // No launchConfig prompt data + no overrides -> no "Prompted Values" section
-      expect(screen.queryByRole('heading', { level: 2 })).toBeNull();
+      expect(
+        screen.queryByRole('heading', { name: 'Prompted Values' })
+      ).not.toBeInTheDocument();
       expect(
         screen.queryByLabelText('Prompt Overrides')
       ).not.toBeInTheDocument();
@@ -168,8 +184,8 @@ describe('PromptDetail', () => {
       );
 
       expect(
-        screen.getByRole('heading', { level: 2 })
-      ).toHaveTextContent('Prompted Values');
+        screen.getByRole('heading', { name: 'Prompted Values' })
+      ).toBeInTheDocument();
       assertDetail('Name', 'Mock JT');
       assertDetail('Description', 'Mock JT Description');
       assertDetail('Type', 'Job Template');
@@ -183,8 +199,11 @@ describe('PromptDetail', () => {
       assertDetail('Forks', '2');
       assertDetail('Job Slicing', '2');
 
-      // Variables uses react-ace (empty under jsdom); assert the surrounding label
+      // Variables renders the overridden extra_vars through the (mocked) CodeEditor
       expect(screen.getByText('Variables')).toBeInTheDocument();
+      const codeEditor = screen.getByTestId('code-editor');
+      expect(codeEditor).toHaveTextContent('one: two');
+      expect(codeEditor).toHaveTextContent('bar: baz');
 
       // Labels chips
       const labelsTerm = screen.getByText('Labels');
