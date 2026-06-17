@@ -104,7 +104,9 @@ describe('<ExecutionEnvironmentDetails/>', () => {
     await waitFor(() =>
       expect(ExecutionEnvironmentsAPI.destroy).toHaveBeenCalledTimes(1)
     );
-    expect(history.location.pathname).toBe('/execution_environments');
+    await waitFor(() =>
+      expect(history.location.pathname).toBe('/execution_environments')
+    );
   });
 
   test('should render action buttons for a managed ee', async () => {

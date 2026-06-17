@@ -69,7 +69,6 @@ const renderForm = async (props = {}) => {
       onCancel={onCancel}
       onSubmit={onSubmit}
       executionEnvironment={executionEnvironment}
-      options={mockOptions}
       me={mockMe}
       {...props}
     />

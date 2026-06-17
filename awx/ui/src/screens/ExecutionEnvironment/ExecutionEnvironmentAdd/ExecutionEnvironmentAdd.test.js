@@ -68,7 +68,11 @@ describe('<ExecutionEnvironmentAdd/>', () => {
         organization: 9,
       })
     );
-    expect(history.location.pathname).toBe('/execution_environments/42/details');
+    await waitFor(() =>
+      expect(history.location.pathname).toBe(
+        '/execution_environments/42/details'
+      )
+    );
   });
 
   test('handleCancel returns the user back to the list', async () => {

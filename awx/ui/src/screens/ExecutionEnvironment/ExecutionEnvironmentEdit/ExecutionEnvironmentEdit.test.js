@@ -70,8 +70,10 @@ describe('<ExecutionEnvironmentEdit/>', () => {
         organization: null,
       })
     );
-    expect(history.location.pathname).toEqual(
-      '/execution_environments/42/details'
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual(
+        '/execution_environments/42/details'
+      )
     );
   });
 
