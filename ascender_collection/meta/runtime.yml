@@ -1,0 +1,48 @@
+---
+requires_ansible: '>=2.16.0'
+action_groups:
+  controller:
+    - ad_hoc_command
+    - ad_hoc_command_cancel
+    - ad_hoc_command_wait
+    - application
+    - bulk_job_launch
+    - bulk_host_create
+    - bulk_host_delete
+    - controller_meta
+    - credential_input_source
+    - credential
+    - credential_type
+    - execution_environment
+    - export
+    - group
+    - host
+    - import
+    - instance
+    - instance_group
+    - inventory
+    - inventory_source
+    - inventory_source_update
+    - job_cancel
+    - job_launch
+    - job_list
+    - job_template
+    - job_wait
+    - label
+    - license
+    - notification_template
+    - organization
+    - project
+    - project_update
+    - role
+    - schedule
+    - settings
+    - subscriptions
+    - team
+    - token
+    - user
+    - workflow_approval
+    - workflow_job_template_node
+    - workflow_job_template
+    - workflow_launch
+    - workflow_node_wait

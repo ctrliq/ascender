@@ -1,5 +1,5 @@
 import React from 'react';
-import { useRouteMatch } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';
 
 import styled from 'styled-components';
@@ -36,7 +36,8 @@ function SurveyToolbar({
 }) {
   const { t } = useLingui();
   isDeleteDisabled = !canEdit || isDeleteDisabled;
-  const match = useRouteMatch();
+  const { pathname } = useLocation();
+  const surveyUrl = `${pathname.substr(0, pathname.indexOf('survey'))}survey`;
   return (
     <Toolbar id="survey-toolbar" ouiaId="survey-toolbar">
       <ToolbarContent>
@@ -56,7 +57,7 @@ function SurveyToolbar({
           <ToolbarItem>
             <ToolbarAddButton
               isDisabled={!canEdit}
-              linkTo={`${match.url}/add`}
+              linkTo={`${surveyUrl}/add`}
             />
           </ToolbarItem>
           {canEdit && onOpenOrderModal && (

@@ -1,0 +1,2 @@
+bugfixes:
+  - role - look up teams without the organization filter (as already done for organizations and users), so a team that lives in a different organization than ``lookup_organization`` can be resolved.

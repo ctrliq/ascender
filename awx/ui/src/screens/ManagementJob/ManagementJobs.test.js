@@ -1,6 +1,7 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
@@ -20,9 +21,14 @@ describe('<ManagementJobs />', () => {
     const history = createMemoryHistory({
       initialEntries: ['/management_jobs'],
     });
-    renderWithContexts(<ManagementJobs />, {
-      context: { router: { history } },
-    });
+    renderWithContexts(
+      <Routes>
+        <Route path="/management_jobs/*" element={<ManagementJobs />} />
+      </Routes>,
+      {
+        context: { router: { history } },
+      }
+    );
 
     expect(screen.getByText('Management jobs')).toBeInTheDocument();
     expect(screen.getByText('ManagementJobList')).toBeInTheDocument();

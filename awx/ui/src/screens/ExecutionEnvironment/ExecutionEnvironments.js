@@ -37,18 +37,18 @@ function ExecutionEnvironments() {
       />
       <Routes>
         <Route
-          path="/execution_environments/add"
+          path="add"
           element={<ExecutionEnvironmentAdd />}
         />
         {/* so the nested <ExecutionEnvironment> route tree can match the rest */}
         <Route
-          path="/execution_environments/:id/*"
+          path=":id/*"
           element={
             <ExecutionEnvironment setBreadcrumb={buildBreadcrumbConfig} />
           }
         />
         <Route
-          path="/execution_environments"
+          index
           element={
             <PersistentFilters pageKey="executionEnvironments">
               <ExecutionEnvironmentList />
