@@ -28,7 +28,20 @@ describe('<Dashboard />', () => {
       },
     });
     graphRequest = DashboardAPI.readJobGraph;
-    graphRequest.mockResolvedValue({});
+    graphRequest.mockResolvedValue({
+      data: {
+        jobs: {
+          successful: [
+            [1609459200, 2],
+            [1609545600, 4],
+          ],
+          failed: [
+            [1609459200, 1],
+            [1609545600, 0],
+          ],
+        },
+      },
+    });
     UnifiedJobTemplatesAPI.read.mockResolvedValue({
       data: { count: 0, results: [] },
     });
