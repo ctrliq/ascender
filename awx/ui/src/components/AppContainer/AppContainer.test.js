@@ -157,7 +157,9 @@ describe('<AppContainer />', () => {
     // check about modal content (raw textContent preserves the double spaces
     // of the speech bubble that toHaveTextContent would collapse)
     const dialog = await screen.findByRole('dialog');
-    expect(dialog.querySelector('pre').textContent).toContain('<  AWX 222  >');
+    expect(dialog.querySelector('pre').textContent).toContain(
+      `<  AWX ${version}  >`
+    );
 
     // close the about modal
     await user.click(within(dialog).getByRole('button', { name: 'Close Dialog' }));

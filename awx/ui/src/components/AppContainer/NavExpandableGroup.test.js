@@ -47,7 +47,7 @@ describe('NavExpandableGroup', () => {
     expect(fiz).not.toHaveAttribute('aria-current', 'page');
   });
 
-  test('when location is /foo/1/bar/fiz isActive returns false', () => {
+  test('when location is /foo/1/bar/fiz the Foo group stays active (prefix match)', () => {
     renderGroup('/foo/1/bar/fiz');
 
     const foo = screen.getByRole('link', { name: 'Foo' });
