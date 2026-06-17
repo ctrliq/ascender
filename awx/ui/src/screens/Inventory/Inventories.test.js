@@ -1,6 +1,7 @@
 import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { createMemoryHistory } from 'history';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { InventoriesAPI, OrganizationsAPI } from 'api';
 
 import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
@@ -22,9 +23,14 @@ jest.mock('./InventoryDetail', () => {
 describe('<Inventories />', () => {
   test('initially renders without crashing', () => {
     const history = createMemoryHistory({ initialEntries: ['/inventories'] });
-    const pageWrapper = mountWithContexts(<Inventories />, {
-      context: { router: { history } },
-    });
+    const pageWrapper = mountWithContexts(
+      <Routes>
+        <Route path="/inventories/*" element={<Inventories />} />
+      </Routes>,
+      {
+        context: { router: { history } },
+      }
+    );
     expect(pageWrapper.length).toBe(1);
   });
 
@@ -47,9 +53,14 @@ describe('<Inventories />', () => {
     });
     let wrapper;
     await act(async () => {
-      wrapper = mountWithContexts(<Inventories />, {
-        context: { router: { history } },
-      });
+      wrapper = mountWithContexts(
+        <Routes>
+          <Route path="/inventories/*" element={<Inventories />} />
+        </Routes>,
+        {
+          context: { router: { history } },
+        }
+      );
     });
     wrapper.update();
     expect(wrapper.find('InventoryDetail').length).toBe(1);

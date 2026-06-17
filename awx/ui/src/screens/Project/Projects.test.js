@@ -1,6 +1,7 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import { _Projects as Projects } from './Projects';
 
@@ -16,9 +17,14 @@ jest.mock('./ProjectList/ProjectList', () => {
 describe('<Projects />', () => {
   test('should display a breadcrumb heading', () => {
     const history = createMemoryHistory({ initialEntries: ['/projects'] });
-    renderWithContexts(<Projects />, {
-      context: { router: { history } },
-    });
+    renderWithContexts(
+      <Routes>
+        <Route path="/projects/*" element={<Projects />} />
+      </Routes>,
+      {
+        context: { router: { history } },
+      }
+    );
 
     // ScreenHeader renders the "Projects" breadcrumb title for this route
     expect(screen.getByText('Projects')).toBeInTheDocument();

@@ -1,0 +1,2 @@
+minor_changes:
+  - workflow_launch - add ``tags`` and ``skip_tags`` parameters that drive the ``job_tags``/``skip_tags`` prompts on a workflow job template launched with ``ask_tags_on_launch``/``ask_skip_tags_on_launch``.

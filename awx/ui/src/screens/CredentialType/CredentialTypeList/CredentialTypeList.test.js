@@ -1,11 +1,8 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, fireEvent } from '@testing-library/react';
 
 import { CredentialTypesAPI, CredentialsAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import CredentialTypeList from './CredentialTypeList';
 
@@ -19,18 +16,14 @@ const credentialTypes = {
         id: 1,
         name: 'Foo',
         kind: 'cloud',
-        summary_fields: {
-          user_capabilities: { edit: true, delete: true },
-        },
+        summary_fields: { user_capabilities: { edit: true, delete: true } },
         url: '',
       },
       {
         id: 2,
         name: 'Bar',
         kind: 'cloud',
-        summary_fields: {
-          user_capabilities: { edit: false, delete: true },
-        },
+        summary_fields: { user_capabilities: { edit: false, delete: true } },
         url: '',
       },
     ],
@@ -40,138 +33,68 @@ const credentialTypes = {
 
 const options = { data: { actions: { POST: true } } };
 
-describe('<CredentialTypeList', () => {
-  let wrapper;
-
+describe('<CredentialTypeList>', () => {
   beforeEach(() => {
     CredentialsAPI.read.mockResolvedValue({ data: { count: 0 } });
     CredentialTypesAPI.read.mockResolvedValue(credentialTypes);
     CredentialTypesAPI.readOptions.mockResolvedValue(options);
   });
 
-  test('should mount successfully', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(<CredentialTypeList />);
-    });
-    await waitForElement(wrapper, 'CredentialTypeList', (el) => el.length > 0);
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
-  test('should have proper number of delete detail requests', () => {
-    expect(
-      wrapper.find('ToolbarDeleteButton').prop('deleteDetailsRequests')
-    ).toHaveLength(1);
-  });
-
-  test('should have data fetched and render 2 rows', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(<CredentialTypeList />);
-    });
-    await waitForElement(wrapper, 'CredentialTypeList', (el) => el.length > 0);
-    expect(wrapper.find('CredentialTypeListItem').length).toBe(2);
+  test('should fetch data and render 2 rows', async () => {
+    renderWithContexts(<CredentialTypeList />);
+    expect(await screen.findByText('Foo')).toBeInTheDocument();
+    expect(screen.getByText('Bar')).toBeInTheDocument();
     expect(CredentialTypesAPI.read).toHaveBeenCalled();
     expect(CredentialTypesAPI.readOptions).toHaveBeenCalled();
   });
 
   test('should delete item successfully', async () => {
-    CredentialTypesAPI.read.mockResolvedValue(credentialTypes);
-    await act(async () => {
-      wrapper = mountWithContexts(<CredentialTypeList />);
-    });
-    await waitForElement(wrapper, 'CredentialTypeList', (el) => el.length > 0);
+    const { user } = renderWithContexts(<CredentialTypeList />);
+    await screen.findByText('Foo');
 
-    wrapper
-      .find('.pf-c-table__check')
-      .first()
-      .find('input')
-      .simulate('change', credentialTypes.data.results[0]);
-    wrapper.update();
+    const rowCheckbox = screen.getByRole('checkbox', { name: 'Select row 0' });
+    await user.click(rowCheckbox);
+    expect(rowCheckbox).toBeChecked();
 
-    expect(
-      wrapper.find('.pf-c-table__check').first().find('input').prop('checked')
-    ).toBe(true);
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    // PF4 Modal aria-hides the tree in jsdom; query the confirm by label.
+    fireEvent.click(await screen.findByLabelText('confirm delete'));
 
-    await act(async () => {
-      wrapper.find('Button[aria-label="Delete"]').prop('onClick')();
-    });
-    wrapper.update();
-
-    await act(async () =>
-      wrapper.find('Button[aria-label="confirm delete"]').prop('onClick')()
-    );
-
-    expect(CredentialTypesAPI.destroy).toHaveBeenCalledWith(
-      credentialTypes.data.results[0].id
+    await waitFor(() =>
+      expect(CredentialTypesAPI.destroy).toHaveBeenCalledWith(1)
     );
   });
 
-  test('should not render add button', async () => {
+  test('should not render add button when POST is not allowed', async () => {
     CredentialTypesAPI.readOptions.mockResolvedValue({
       data: { actions: { POST: false } },
     });
-    await act(async () => {
-      wrapper = mountWithContexts(<CredentialTypeList />);
-    });
-    waitForElement(wrapper, 'CredentialTypeList', (el) => el.length > 0);
-    expect(wrapper.find('ToolbarAddButton').length).toBe(0);
+    renderWithContexts(<CredentialTypeList />);
+    await screen.findByText('Foo');
+    expect(screen.queryByRole('link', { name: 'Add' })).not.toBeInTheDocument();
   });
 
-  test('should thrown content error', async () => {
-    CredentialTypesAPI.destroy = jest.fn();
-    CredentialTypesAPI.read.mockRejectedValue(
-      new Error({
-        response: {
-          config: {
-            method: 'GET',
-            url: '/api/v2/credential_types',
-          },
-          data: 'An error occurred',
-        },
-      })
-    );
-    await act(async () => {
-      wrapper = mountWithContexts(<CredentialTypeList />);
-    });
-    await waitForElement(wrapper, 'CredentialTypeList', (el) => el.length > 0);
-    expect(wrapper.find('ContentError').length).toBe(1);
-  });
-
-  test('should render deletion error modal', async () => {
-    CredentialTypesAPI.destroy = jest.fn();
-    CredentialTypesAPI.destroy.mockRejectedValue(
-      new Error({
-        response: {
-          config: {
-            method: 'DELETE',
-            url: '/api/v2/credential_types',
-          },
-          data: 'An error occurred',
-        },
-      })
-    );
-    await act(async () => {
-      wrapper = mountWithContexts(<CredentialTypeList />);
-    });
-    waitForElement(wrapper, 'CredentialTypeList', (el) => el.length > 0);
-
-    wrapper
-      .find('.pf-c-table__check')
-      .first()
-      .find('input')
-      .simulate('change', 'a');
-    wrapper.update();
+  test('should show a content error when the fetch fails', async () => {
+    CredentialTypesAPI.read.mockRejectedValue(new Error('nope'));
+    renderWithContexts(<CredentialTypeList />);
     expect(
-      wrapper.find('.pf-c-table__check').first().find('input').prop('checked')
-    ).toBe(true);
+      await screen.findByText('Something went wrong...')
+    ).toBeInTheDocument();
+  });
 
-    await act(async () =>
-      wrapper.find('Button[aria-label="Delete"]').prop('onClick')()
-    );
-    wrapper.update();
+  test('should render a deletion error modal', async () => {
+    CredentialTypesAPI.destroy.mockRejectedValue(new Error('nope'));
+    const { user } = renderWithContexts(<CredentialTypeList />);
+    await screen.findByText('Foo');
 
-    await act(async () =>
-      wrapper.find('Button[aria-label="confirm delete"]').prop('onClick')()
-    );
-    wrapper.update();
-    expect(wrapper.find('ErrorDetail').length).toBe(1);
+    await user.click(screen.getByRole('checkbox', { name: 'Select row 0' }));
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    fireEvent.click(await screen.findByLabelText('confirm delete'));
+
+    expect(await screen.findByLabelText('Deletion error')).toBeInTheDocument();
   });
 });

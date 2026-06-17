@@ -88,7 +88,7 @@ This workflow will:
 
 ## Promote the draft releases
 
-### Releasing Ascender, awxkit and awx.awx collection
+### Releasing Ascender, awxkit and the ctrliq.ascender collection
 
 Once staging is complete we can complete the release of awx and the operator.
 
@@ -114,15 +114,15 @@ Once the release is published, another workflow called [Promote Release](github.
 
 ![Promote release](img/promote-release.png)
 
-This workflow will take the generated images and promote them to quay.io in addition it will also release awxkit and the awx.awx collection. The overall process will not take long.
+This workflow will take the generated images and promote them to quay.io in addition it will also release awxkit and the ctrliq.ascender collection. The overall process will not take long.
 
 6. Once the workflow is finished, verify that the new image is present on the [Repository Tags](https://quay.io/repository/ansible/awx?tag=latest&tab=tags) on Quay:
 
 ![Verify released Ascender image](img/verify-released-awx-image.png)
 
-7. Go to the awx.awx collection on [Ansible Galaxy](https://galaxy.ansible.com/awx/awx) and validate the latest version matches and was updated recently:
+7. Go to the ctrliq.ascender collection on [Ansible Galaxy](https://galaxy.ansible.com/ctrliq/ascender) and validate the latest version matches and was updated recently:
 
-![Verify release awx.awx collection](img/galaxy.png)
+![Verify release ctrliq.ascender collection](img/galaxy.png)
 
 8. Go to awxkit's page on [PyPi](https://pypi.org/project/awxkit/#history) and validate the latest release is there:
 

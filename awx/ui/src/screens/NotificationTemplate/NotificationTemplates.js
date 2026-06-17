@@ -34,18 +34,18 @@ function NotificationTemplates() {
       />
       <Routes>
         <Route
-          path="/notification_templates/add"
+          path="add"
           element={<NotificationTemplateAdd />}
         />
         {/* so the nested <NotificationTemplate> route tree can match the rest */}
         <Route
-          path="/notification_templates/:id/*"
+          path=":id/*"
           element={
             <NotificationTemplate setBreadcrumb={updateBreadcrumbConfig} />
           }
         />
         <Route
-          path="/notification_templates"
+          index
           element={
             <PersistentFilters pageKey="notificationTemplates">
               <NotificationTemplateList />

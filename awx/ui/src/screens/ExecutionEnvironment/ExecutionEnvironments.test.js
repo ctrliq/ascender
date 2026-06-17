@@ -1,6 +1,7 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import ExecutionEnvironments from './ExecutionEnvironments';
@@ -36,9 +37,17 @@ jest.mock('./ExecutionEnvironment', () => {
 
 function renderAt(path) {
   const history = createMemoryHistory({ initialEntries: [path] });
-  return renderWithContexts(<ExecutionEnvironments />, {
-    context: { router: { history } },
-  });
+  return renderWithContexts(
+    <Routes>
+      <Route
+        path="/execution_environments/*"
+        element={<ExecutionEnvironments />}
+      />
+    </Routes>,
+    {
+      context: { router: { history } },
+    }
+  );
 }
 
 describe('<ExecutionEnvironments />', () => {

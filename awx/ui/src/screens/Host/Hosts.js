@@ -40,10 +40,10 @@ function Hosts() {
     <>
       <ScreenHeader streamType="host" breadcrumbConfig={breadcrumbConfig} />
       <Routes>
-        <Route path="/hosts/add" element={<HostAdd />} />
+        <Route path="add" element={<HostAdd />} />
         {/* /* so the nested <Host> route tree can match the rest */}
         <Route
-          path="/hosts/:id/*"
+          path=":id/*"
           element={
             <Config>
               {({ me }) => (
@@ -53,7 +53,7 @@ function Hosts() {
           }
         />
         <Route
-          path="/hosts"
+          index
           element={
             <PersistentFilters pageKey="hosts">
               <HostList />
