@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen, waitFor } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import { NotificationTemplatesAPI, JobTemplatesAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import NotificationList from './NotificationList';
@@ -187,8 +187,9 @@ describe('<NotificationList />', () => {
       1,
       'started'
     );
-    // the original suite asserted an ErrorDetail rendered; the toggle failure
-    // surfaces it inside the "Error!" AlertModal dialog.
-    expect(await screen.findByText('Error!')).toBeInTheDocument();
+    // the toggle failure surfaces in the "Error!" AlertModal dialog, which
+    // includes the expandable ErrorDetail ("Details" toggle)
+    const errorDialog = await screen.findByRole('dialog', { name: /Error!/ });
+    expect(within(errorDialog).getByText('Details')).toBeInTheDocument();
   });
 });
