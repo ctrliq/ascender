@@ -206,14 +206,18 @@ describe('<InstanceListItem/>', () => {
 
     const slider = screen.getByRole('slider');
     slider.focus();
-    // Any slider change triggers the (mocked-immediate) update which rejects.
+    // A single ArrowRight from the initial 0.40 advances one step (0.1) to
+    // 0.5, which handleChangeValue rounds to 0.5. This triggers the
+    // (mocked-immediate) update which rejects.
     await user.keyboard('{ArrowRight}');
 
-    await waitFor(() =>
+    await waitFor(() => {
+      const expected =
+        Math.round(Number(slider.getAttribute('aria-valuenow')) * 100) / 100;
       expect(InstancesAPI.update).toHaveBeenCalledWith(1, {
-        capacity_adjustment: 1,
-      })
-    );
+        capacity_adjustment: expected,
+      });
+    });
   });
 
   test('Should render expanded row with the correct data points', () => {
