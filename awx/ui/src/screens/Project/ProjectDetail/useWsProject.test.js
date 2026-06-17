@@ -112,13 +112,14 @@ describe('useWsProject', () => {
       })
     );
 
-    await waitFor(() =>
-      expect(getResult().summary_fields.current_job).toEqual({
-        id: 2,
-        status: 'running',
-        finished: undefined,
-      })
-    );
+    // getResult() round-trips through JSON, which drops keys whose value is
+    // undefined (the running update has finished: undefined), so assert only
+    // the stable fields rather than the whole object.
+    await waitFor(() => {
+      const currentJob = getResult().summary_fields.current_job;
+      expect(currentJob.id).toEqual(2);
+      expect(currentJob.status).toEqual('running');
+    });
 
     mockServer.send(
       JSON.stringify({

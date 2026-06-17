@@ -53,16 +53,20 @@ describe('ProjectSyncButton', () => {
     expect(screen.getByRole('button', { name: 'Sync Project' })).toBeDisabled();
   });
 
-  test('should render tooltip wrapper on disabled sync', async () => {
-    const { container } = renderWithContexts(
+  test('shows an explanatory tooltip on disabled sync', async () => {
+    const { user } = renderWithContexts(
       <ProjectSyncButton projectId={1} lastJobStatus="running">
         {children}
       </ProjectSyncButton>
     );
 
-    // disabled state wraps the button in a Tooltip-controlled div
-    expect(container.querySelector('div > button')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Sync Project' })).toBeDisabled();
+    const button = screen.getByRole('button', { name: 'Sync Project' });
+    expect(button).toBeDisabled();
+
+    // hovering the disabled button reveals the explanatory Tooltip, which is
+    // only rendered on the disabled (running) path
+    await user.hover(button);
+    expect(await screen.findByRole('tooltip')).toBeInTheDocument();
   });
 
   test('displays error modal after unsuccessful sync', async () => {

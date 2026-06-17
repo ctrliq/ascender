@@ -121,6 +121,7 @@ describe('<ProjectForm />', () => {
 
     // AnsibleSelect renders a native <select id="scm_type">
     const scmSelect = document.querySelector('#scm_type');
+    expect(scmSelect).toBeInTheDocument();
     await user.selectOptions(scmSelect, 'git');
 
     expect(await screen.findByText('Source Control URL')).toBeInTheDocument();
