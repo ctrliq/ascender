@@ -214,7 +214,7 @@ describe('<OrganizationForm />', () => {
       default_environment: null,
     };
     const onSubmit = jest.fn();
-    OrganizationsAPI.update.mockResolvedValue(1, mockDataForm);
+    OrganizationsAPI.update.mockResolvedValue(1);
     OrganizationsAPI.associateInstanceGroup.mockResolvedValue('done');
     OrganizationsAPI.disassociateInstanceGroup.mockResolvedValue('done');
     const { user } = renderWithContexts(

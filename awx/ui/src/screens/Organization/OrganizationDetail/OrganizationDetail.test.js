@@ -1,5 +1,7 @@
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
+import { Routes, Route } from 'react-router-dom-v5-compat';
+import { createMemoryHistory } from 'history';
 
 import { OrganizationsAPI, CredentialsAPI } from 'api';
 import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails';
@@ -89,10 +91,23 @@ describe('<OrganizationDetail />', () => {
   });
 
   test('should show edit button for users with edit permission', async () => {
-    renderWithContexts(<OrganizationDetail organization={mockOrganization} />);
+    // the Edit link is built from the route :id param, so render under a
+    // matching route with the organization id in the path
+    const history = createMemoryHistory({
+      initialEntries: ['/organizations/12/details'],
+    });
+    renderWithContexts(
+      <Routes>
+        <Route
+          path="/organizations/:id/details"
+          element={<OrganizationDetail organization={mockOrganization} />}
+        />
+      </Routes>,
+      { context: { router: { history } } }
+    );
     const editButton = await screen.findByRole('link', { name: 'Edit' });
     expect(editButton).toHaveTextContent('Edit');
-    expect(editButton).toHaveAttribute('href', '/organizations/undefined/edit');
+    expect(editButton).toHaveAttribute('href', '/organizations/12/edit');
   });
 
   test('should hide edit button for users without edit permission', async () => {

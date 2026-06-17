@@ -3,10 +3,7 @@ import { screen, waitFor, within } from '@testing-library/react';
 
 import { OrganizationsAPI, CredentialsAPI } from 'api';
 import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails';
-import {
-  renderWithContexts,
-  settleTooltips,
-} from '../../../../testUtils/rtlContexts';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import OrganizationsList from './OrganizationList';
 
@@ -177,7 +174,9 @@ describe('<OrganizationsList />', () => {
     );
 
     expect(await screen.findByText('Error!')).toBeInTheDocument();
-    await settleTooltips();
+    // settleTooltips() was a ~700ms dead wait here: it only settles a tooltip
+    // that appears after a modal closes, but this test leaves the error modal
+    // open, so there is nothing for it to settle. Drop it.
   });
 
   test('Add button shown for users with ability to POST', async () => {
