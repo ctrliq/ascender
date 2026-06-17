@@ -261,12 +261,14 @@ describe('<Login />', () => {
       },
     });
     await waitFor(() => expect(MeAPI.read).toHaveBeenCalled());
-    expect(window.localStorage.getItem).toHaveBeenCalledWith(SESSION_USER_ID);
-    expect(window.localStorage.setItem).toHaveBeenCalledWith(
-      SESSION_USER_ID,
-      '1'
-    );
-    await waitFor(() => expect(history.location.pathname).toEqual('/home'));
+    await waitFor(() => {
+      expect(window.localStorage.getItem).toHaveBeenCalledWith(SESSION_USER_ID);
+      expect(window.localStorage.setItem).toHaveBeenCalledWith(
+        SESSION_USER_ID,
+        '1'
+      );
+      expect(history.location.pathname).toEqual('/home');
+    });
   });
 
   test('render redirect to authRedirectTo when authenticated as a previous user', async () => {
@@ -290,14 +292,14 @@ describe('<Login />', () => {
       },
     });
 
-    await waitFor(() =>
-      expect(window.localStorage.getItem).toHaveBeenCalledWith(SESSION_USER_ID)
-    );
-    expect(window.localStorage.setItem).toHaveBeenCalledWith(
-      SESSION_USER_ID,
-      '42'
-    );
-    await waitFor(() => expect(history.location.pathname).toEqual('/projects'));
+    await waitFor(() => {
+      expect(window.localStorage.getItem).toHaveBeenCalledWith(SESSION_USER_ID);
+      expect(window.localStorage.setItem).toHaveBeenCalledWith(
+        SESSION_USER_ID,
+        '42'
+      );
+      expect(history.location.pathname).toEqual('/projects');
+    });
   });
 
   test('GitHub auth buttons shown', async () => {
