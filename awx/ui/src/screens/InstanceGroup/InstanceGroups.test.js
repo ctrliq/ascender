@@ -1,6 +1,7 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import InstanceGroups from './InstanceGroups';
 
@@ -46,9 +47,14 @@ jest.mock('./ContainerGroup', () => {
 
 function renderAt(path) {
   const history = createMemoryHistory({ initialEntries: [path] });
-  return renderWithContexts(<InstanceGroups />, {
-    context: { router: { history } },
-  });
+  return renderWithContexts(
+    <Routes>
+      <Route path="/instance_groups/*" element={<InstanceGroups />} />
+    </Routes>,
+    {
+      context: { router: { history } },
+    }
+  );
 }
 
 describe('<InstanceGroups />', () => {

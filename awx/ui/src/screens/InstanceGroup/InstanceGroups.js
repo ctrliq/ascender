@@ -61,25 +61,25 @@ function InstanceGroups() {
       />
       <Routes>
         <Route
-          path="/instance_groups/container_group/add"
+          path="container_group/add"
           element={<ContainerGroupAdd />}
         />
         {/* /* so the nested <ContainerGroup> route tree can match the rest */}
         <Route
-          path="/instance_groups/container_group/:id/*"
+          path="container_group/:id/*"
           element={<ContainerGroup setBreadcrumb={buildBreadcrumbConfig} />}
         />
         <Route
-          path="/instance_groups/add"
+          path="add"
           element={<InstanceGroupAdd />}
         />
         {/* /* so the nested <InstanceGroup> route tree can match the rest */}
         <Route
-          path="/instance_groups/:id/*"
+          path=":id/*"
           element={<InstanceGroup setBreadcrumb={buildBreadcrumbConfig} />}
         />
         <Route
-          path="/instance_groups"
+          index
           element={
             <PersistentFilters pageKey="instanceGroups">
               <InstanceGroupList />

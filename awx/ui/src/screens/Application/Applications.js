@@ -52,7 +52,7 @@ function Applications() {
       />
       <Routes>
         <Route
-          path="/applications/add"
+          path="add"
           element={
             <ApplicationAdd
               onSuccessfulAdd={(app) => setApplicationModalSource(app)}
@@ -61,11 +61,11 @@ function Applications() {
         />
         {/* /* so the nested <Application> route tree can match the rest */}
         <Route
-          path="/applications/:id/*"
+          path=":id/*"
           element={<Application setBreadcrumb={buildBreadcrumbConfig} />}
         />
         <Route
-          path="/applications"
+          index
           element={
             <PersistentFilters pageKey="applications">
               <ApplicationsList />

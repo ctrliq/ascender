@@ -184,19 +184,19 @@ function WorkflowJobTemplate({ setBreadcrumb }) {
         <Routes>
           {template && (
             <Route
-              path="/templates/:templateType/:id/details"
+              path=":templateType/:id/details"
               element={<WorkflowJobTemplateDetail template={template} />}
             />
           )}
           {template && (
             <Route
-              path="/templates/:templateType/:id/edit"
+              path=":templateType/:id/edit"
               element={<WorkflowJobTemplateEdit template={template} />}
             />
           )}
           {template && (
             <Route
-              path="/templates/:templateType/:id/access"
+              path=":templateType/:id/access"
               element={
                 <ResourceAccessList
                   resource={template}
@@ -207,7 +207,7 @@ function WorkflowJobTemplate({ setBreadcrumb }) {
           )}
           {template && (
             <Route
-              path="/templates/:templateType/:id/schedules/*"
+              path=":templateType/:id/schedules/*"
               element={
                 <Schedules
                   apiModel={WorkflowJobTemplatesAPI}
@@ -223,7 +223,7 @@ function WorkflowJobTemplate({ setBreadcrumb }) {
           )}
           {canSeeNotificationsTab && (
             <Route
-              path="/templates/:templateType/:id/notifications"
+              path=":templateType/:id/notifications"
               element={
                 <NotificationList
                   id={Number(templateId)}
@@ -236,7 +236,7 @@ function WorkflowJobTemplate({ setBreadcrumb }) {
           )}
           {template && (
             <Route
-              path="/templates/workflow_job_template/:id/visualizer"
+              path="workflow_job_template/:id/visualizer"
               element={
                 <AppendBody>
                   <FullPage>
@@ -248,7 +248,7 @@ function WorkflowJobTemplate({ setBreadcrumb }) {
           )}
           {template?.id && (
             <Route
-              path="/templates/:templateType/:id/jobs"
+              path=":templateType/:id/jobs"
               element={
                 <JobList
                   defaultParams={{
@@ -260,7 +260,7 @@ function WorkflowJobTemplate({ setBreadcrumb }) {
           )}
           {template && (
             <Route
-              path="/templates/:templateType/:id/survey/*"
+              path=":templateType/:id/survey/*"
               element={
                 <TemplateSurvey
                   template={template}
@@ -271,7 +271,7 @@ function WorkflowJobTemplate({ setBreadcrumb }) {
           )}
           {template && (
             <Route
-              path="/templates/:templateType/:id"
+              path=":templateType/:id"
               element={<Navigate to={`${baseUrl}/details`} replace />}
             />
           )}

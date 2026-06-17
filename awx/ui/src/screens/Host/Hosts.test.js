@@ -1,6 +1,7 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import Hosts from './Hosts';
 
@@ -32,9 +33,12 @@ jest.mock('./Host', () => {
 
 function renderAt(path) {
   const history = createMemoryHistory({ initialEntries: [path] });
-  return renderWithContexts(<Hosts />, {
-    context: { router: { history } },
-  });
+  return renderWithContexts(
+    <Routes>
+      <Route path="/hosts/*" element={<Hosts />} />
+    </Routes>,
+    { context: { router: { history } } }
+  );
 }
 
 describe('<Hosts />', () => {

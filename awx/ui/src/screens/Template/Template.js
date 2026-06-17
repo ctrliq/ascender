@@ -191,7 +191,7 @@ function Template({ setBreadcrumb }) {
         {template && (
           <Routes>
             <Route
-              path="/templates/:templateType/:id/details"
+              path=":templateType/:id/details"
               element={
                 <JobTemplateDetail
                   hasTemplateLoading={isLoading}
@@ -200,7 +200,7 @@ function Template({ setBreadcrumb }) {
               }
             />
             <Route
-              path="/templates/:templateType/:id/edit"
+              path=":templateType/:id/edit"
               element={
                 <JobTemplateEdit
                   template={template}
@@ -209,7 +209,7 @@ function Template({ setBreadcrumb }) {
               }
             />
             <Route
-              path="/templates/:templateType/:id/access"
+              path=":templateType/:id/access"
               element={
                 <ResourceAccessList
                   resource={template}
@@ -218,7 +218,7 @@ function Template({ setBreadcrumb }) {
               }
             />
             <Route
-              path="/templates/:templateType/:id/schedules/*"
+              path=":templateType/:id/schedules/*"
               element={
                 <Schedules
                   apiModel={JobTemplatesAPI}
@@ -234,7 +234,7 @@ function Template({ setBreadcrumb }) {
             />
             {canSeeNotificationsTab && (
               <Route
-                path="/templates/:templateType/:id/notifications"
+                path=":templateType/:id/notifications"
                 element={
                   <NotificationList
                     id={Number(templateId)}
@@ -245,13 +245,13 @@ function Template({ setBreadcrumb }) {
               />
             )}
             <Route
-              path="/templates/:templateType/:id/jobs"
+              path=":templateType/:id/jobs"
               element={
                 <JobList defaultParams={{ job__job_template: template.id }} />
               }
             />
             <Route
-              path="/templates/:templateType/:id/survey/*"
+              path=":templateType/:id/survey/*"
               element={
                 <TemplateSurvey
                   template={template}
@@ -260,7 +260,7 @@ function Template({ setBreadcrumb }) {
               }
             />
             <Route
-              path="/templates/:templateType/:id"
+              path=":templateType/:id"
               element={<Navigate to={`${baseUrl}/details`} replace />}
             />
             <Route

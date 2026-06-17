@@ -46,10 +46,10 @@ function Organizations() {
         breadcrumbConfig={breadcrumbConfig}
       />
       <Routes>
-        <Route path="/organizations/add" element={<OrganizationAdd />} />
+        <Route path="add" element={<OrganizationAdd />} />
         {/* so the nested <Organization> route tree can match the rest */}
         <Route
-          path="/organizations/:id/*"
+          path=":id/*"
           element={
             <Config>
               {({ me }) => (
@@ -59,7 +59,7 @@ function Organizations() {
           }
         />
         <Route
-          path="/organizations"
+          index
           element={
             <PersistentFilters pageKey="organizations">
               <OrganizationsList />

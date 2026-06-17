@@ -37,11 +37,11 @@ function WorkflowApprovals() {
       <Routes>
         {/* so the nested <WorkflowApproval> route tree can match the rest */}
         <Route
-          path="/workflow_approvals/:id/*"
+          path=":id/*"
           element={<WorkflowApproval setBreadcrumb={updateBreadcrumbConfig} />}
         />
         <Route
-          path="/workflow_approvals"
+          index
           element={
             <PersistentFilters pageKey="workflowApprovals">
               <WorkflowApprovalList />
