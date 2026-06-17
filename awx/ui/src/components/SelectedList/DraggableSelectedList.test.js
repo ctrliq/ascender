@@ -3,7 +3,7 @@
 // deprecated. Its replacement is a DragDrop component, however that component
 // is not keyboard accessible. Therefore we have elected to turn off these
 // tests.
-// github.com/patternfly/patternfly-react/issues/6317s
+// https://github.com/patternfly/patternfly-react/issues/6317
 
 import React from 'react';
 import { screen } from '@testing-library/react';
@@ -74,7 +74,7 @@ describe.skip('<DraggableSelectedList />', () => {
     });
   });
 
-  test('should disable remove button when dragging item', () => {
+  test('should render remove buttons enabled in the initial (not-dragging) state', () => {
     // The original enzyme test drove drag state by invoking the DataList
     // onDragStart/onDragCancel props directly (wrapper.find('DataList')
     // .prop('onDragStart')()). That deprecated PF drag API has no accessible

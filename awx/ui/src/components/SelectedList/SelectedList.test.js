@@ -29,7 +29,7 @@ describe('<SelectedList />', () => {
     expect(screen.getByText('bar')).toBeInTheDocument();
   });
 
-  test('showOverflow should set showOverflow on ChipGroup', () => {
+  test('caps visible chips at numChips and shows an overflow expander', () => {
     // With an empty list the ChipGroup renders no overflow chip. With 5+ items
     // the numChips={5} cap would surface a "N more" overflow chip; assert the
     // cap by rendering 6 items and checking exactly one item is hidden behind
