@@ -14,7 +14,7 @@ channels
 channels-valkey
 cryptography>=46.0.7  # CVE-2026-39892
 Cython>=3 # this is needed as a build dependency, one day we may have separated build deps; <3 cap removed once pyyaml>=6.0.1 supported Cython 3
-daphne
+daphne>=4.2.2  # CVE-2026-44545 CVE-2026-44546
 distro
 django>=5.2.14,<6.0 # CVE-2026-5766 CVE-2026-35192 CVE-2026-6907; <6.0 also enforced by django-ansible-base (Django<6.0, djangorestframework<3.16)
 django-auth-ldap
