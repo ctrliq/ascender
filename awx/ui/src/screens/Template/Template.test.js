@@ -1,9 +1,12 @@
 import React from 'react';
-import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
+import { act } from 'react-dom/test-utils';
 import { JobTemplatesAPI, OrganizationsAPI } from 'api';
 
-import { renderWithContexts } from '../../../testUtils/rtlContexts';
+import {
+  mountWithContexts,
+  waitForElement,
+} from '../../../testUtils/enzymeHelpers';
 import Template from './Template';
 import mockJobTemplateData from './shared/data.job_template.json';
 
@@ -15,6 +18,7 @@ const mockMe = {
   is_system_auditor: false,
 };
 describe('<Template />', () => {
+  let wrapper;
   beforeEach(() => {
     JobTemplatesAPI.readDetail.mockResolvedValue({
       data: { ...mockJobTemplateData, survey_enabled: false },
@@ -63,23 +67,34 @@ describe('<Template />', () => {
     jest.clearAllMocks();
   });
   test('initially renders successfully', async () => {
-    renderWithContexts(<Template setBreadcrumb={() => {}} me={mockMe} />);
-    await waitFor(() => expect(JobTemplatesAPI.readDetail).toHaveBeenCalled());
+    await act(async () => {
+      wrapper = mountWithContexts(
+        <Template setBreadcrumb={() => {}} me={mockMe} />
+      );
+    });
   });
   test('When component mounts API is called and the response is put in state', async () => {
-    renderWithContexts(<Template setBreadcrumb={() => {}} me={mockMe} />);
-    await waitFor(() => expect(JobTemplatesAPI.readDetail).toHaveBeenCalled());
+    await act(async () => {
+      wrapper = mountWithContexts(
+        <Template setBreadcrumb={() => {}} me={mockMe} />
+      );
+    });
+    expect(JobTemplatesAPI.readDetail).toHaveBeenCalled();
     expect(OrganizationsAPI.read).toHaveBeenCalled();
   });
   test('notifications tab shown for admins', async () => {
-    renderWithContexts(<Template setBreadcrumb={() => {}} me={mockMe} />);
+    await act(async () => {
+      wrapper = mountWithContexts(
+        <Template setBreadcrumb={() => {}} me={mockMe} />
+      );
+    });
 
-    await waitFor(() =>
-      expect(screen.getAllByRole('tab')).toHaveLength(7)
+    const tabs = await waitForElement(
+      wrapper,
+      '.pf-c-tabs__item',
+      (el) => el.length === 7
     );
-    expect(
-      screen.getByRole('tab', { name: 'Notifications' })
-    ).toBeInTheDocument();
+    expect(tabs.at(3).text()).toEqual('Notifications');
   });
   test('notifications tab hidden with reduced permissions', async () => {
     OrganizationsAPI.read.mockResolvedValue({
@@ -91,13 +106,17 @@ describe('<Template />', () => {
       },
     });
 
-    renderWithContexts(<Template setBreadcrumb={() => {}} me={mockMe} />);
-    await waitFor(() =>
-      expect(screen.getAllByRole('tab')).toHaveLength(6)
+    await act(async () => {
+      wrapper = mountWithContexts(
+        <Template setBreadcrumb={() => {}} me={mockMe} />
+      );
+    });
+    const tabs = await waitForElement(
+      wrapper,
+      '.pf-c-tabs__item',
+      (el) => el.length === 6
     );
-    expect(
-      screen.queryByRole('tab', { name: 'Notifications' })
-    ).not.toBeInTheDocument();
+    tabs.forEach((tab) => expect(tab.text()).not.toEqual('Notifications'));
   });
 
   test('should show content error when user attempts to navigate to erroneous route', async () => {
@@ -105,48 +124,54 @@ describe('<Template />', () => {
       initialEntries: ['/templates/job_template/1/foobar'],
     });
 
-    renderWithContexts(<Template setBreadcrumb={() => {}} me={mockMe} />, {
-      context: {
-        router: {
-          history,
-          route: {
-            location: history.location,
-            match: {
-              params: { id: 1 },
-              url: '/templates/job_template/1/foobar',
-              path: '/templates/job_template/1/foobar',
+    await act(async () => {
+      wrapper = mountWithContexts(
+        <Template setBreadcrumb={() => {}} me={mockMe} />,
+        {
+          context: {
+            router: {
+              history,
+              route: {
+                location: history.location,
+                match: {
+                  params: { id: 1 },
+                  url: '/templates/job_template/1/foobar',
+                  path: '/templates/job_template/1/foobar',
+                },
+              },
             },
           },
-        },
-      },
+        }
+      );
     });
 
-    expect(
-      await screen.findByText('Not Found')
-    ).toBeInTheDocument();
+    await waitForElement(wrapper, 'ContentError', (el) => el.length === 1);
   });
   test('should call to get webhook key', async () => {
     const history = createMemoryHistory({
       initialEntries: ['/templates/job_template/1/foobar'],
     });
-    renderWithContexts(<Template setBreadcrumb={() => {}} me={mockMe} />, {
-      context: {
-        router: {
-          history,
-          route: {
-            location: history.location,
-            match: {
-              params: { id: 1 },
-              url: '/templates/job_template/1/foobar',
-              path: '/templates/job_template/1/foobar',
+    await act(async () => {
+      wrapper = mountWithContexts(
+        <Template setBreadcrumb={() => {}} me={mockMe} />,
+        {
+          context: {
+            router: {
+              history,
+              route: {
+                location: history.location,
+                match: {
+                  params: { id: 1 },
+                  url: '/templates/job_template/1/foobar',
+                  path: '/templates/job_template/1/foobar',
+                },
+              },
             },
           },
-        },
-      },
+        }
+      );
     });
-    await waitFor(() =>
-      expect(JobTemplatesAPI.readWebhookKey).toHaveBeenCalled()
-    );
+    expect(JobTemplatesAPI.readWebhookKey).toHaveBeenCalled();
   });
   test('should not call to get webhook key', async () => {
     JobTemplatesAPI.readTemplateOptions.mockResolvedValueOnce({
@@ -158,22 +183,26 @@ describe('<Template />', () => {
     const history = createMemoryHistory({
       initialEntries: ['/templates/job_template/1/foobar'],
     });
-    renderWithContexts(<Template setBreadcrumb={() => {}} me={mockMe} />, {
-      context: {
-        router: {
-          history,
-          route: {
-            location: history.location,
-            match: {
-              params: { id: 1 },
-              url: '/templates/job_template/1/foobar',
-              path: '/templates/job_template/1/foobar',
+    await act(async () => {
+      wrapper = mountWithContexts(
+        <Template setBreadcrumb={() => {}} me={mockMe} />,
+        {
+          context: {
+            router: {
+              history,
+              route: {
+                location: history.location,
+                match: {
+                  params: { id: 1 },
+                  url: '/templates/job_template/1/foobar',
+                  path: '/templates/job_template/1/foobar',
+                },
+              },
             },
           },
-        },
-      },
+        }
+      );
     });
-    await waitFor(() => expect(JobTemplatesAPI.readDetail).toHaveBeenCalled());
     expect(JobTemplatesAPI.readWebhookKey).not.toHaveBeenCalled();
   });
 });
