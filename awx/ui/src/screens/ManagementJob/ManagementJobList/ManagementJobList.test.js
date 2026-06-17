@@ -71,6 +71,12 @@ describe('<ManagementJobList/>', () => {
     rows.forEach((name) => {
       expect(screen.getByText(name)).toBeInTheDocument();
     });
+    // Verify the list renders exactly one row per management job (excluding the
+    // header row) so missing/duplicate rows are caught.
+    const dataRows = screen
+      .getAllByRole('row')
+      .filter((row) => row.id.startsWith('mgmt-jobs-row-'));
+    expect(dataRows).toHaveLength(managementJobs.data.results.length);
     expect(SystemJobTemplatesAPI.read).toHaveBeenCalled();
     expect(SystemJobTemplatesAPI.readOptions).toHaveBeenCalled();
   });
