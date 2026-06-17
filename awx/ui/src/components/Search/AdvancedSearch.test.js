@@ -9,7 +9,7 @@ import AdvancedSearch from './AdvancedSearch';
 async function selectFrom(user, ouiaId, optionName) {
   const wrap = document.querySelector(`[data-ouia-component-id="${ouiaId}"]`);
   await user.click(within(wrap).getByRole('button', { name: 'Options menu' }));
-  fireEvent.click(await screen.findByRole('option', { name: optionName }));
+  await user.click(await screen.findByRole('option', { name: optionName }));
 }
 
 async function clearFrom(user, ouiaId) {
@@ -46,7 +46,8 @@ describe('<AdvancedSearch />', () => {
       within(keyWrap).getByRole('button', { name: 'Options menu' })
     );
     // 'bar' is in both lists but must appear only once -> foo, bar, baz
-    expect(screen.getAllByRole('option')).toHaveLength(3);
+    // scope to this Select so options from other Selects aren't counted
+    expect(within(keyWrap).getAllByRole('option')).toHaveLength(3);
   });
 
   test("Don't call onSearch unless a search value is set", async () => {
@@ -228,7 +229,8 @@ describe('<AdvancedSearch />', () => {
     );
     await user.click(within(wrap).getByRole('button', { name: 'Options menu' }));
     // with negative filtering off, only "and" and "or" remain (no "not")
-    const options = screen.getAllByRole('option');
+    // scope to this Select so options from other Selects aren't counted
+    const options = within(wrap).getAllByRole('option');
     expect(options).toHaveLength(2);
     expect(screen.getByRole('option', { name: /^or/ })).toBeInTheDocument();
     expect(screen.getByRole('option', { name: /^and/ })).toBeInTheDocument();
@@ -258,7 +260,8 @@ describe('<AdvancedSearch />', () => {
     await user.click(within(wrap).getByRole('button', { name: 'Options menu' }));
     // with fuzzy filtering off, the "search" (fuzzy id/name/description) option
     // is removed -> name__icontains, name, id remain
-    const options = screen.getAllByRole('option');
+    // scope to this Select so options from other Selects aren't counted
+    const options = within(wrap).getAllByRole('option');
     expect(options).toHaveLength(3);
     expect(
       screen.getByRole('option', { name: /Fuzzy search on name field/ })

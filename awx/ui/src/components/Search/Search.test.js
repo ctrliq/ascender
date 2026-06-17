@@ -231,10 +231,11 @@ describe('<Search />', () => {
     );
 
     expect(history.location.search).toEqual(query);
-    // empty-value chip has no visible text, so scope to the rendered chip and
-    // click its close button (the only button inside the chip)
-    const chip = document.querySelector('.pf-c-chip');
-    await user.click(within(chip).getByRole('button'));
+    // the query (or__type:) produces exactly one chip with no visible text;
+    // assert there is only one and click its close button (the only button)
+    const chips = document.querySelectorAll('.pf-c-chip');
+    expect(chips).toHaveLength(1);
+    await user.click(within(chips[0]).getByRole('button'));
     expect(onRemove).toHaveBeenCalledWith('or__type', '');
   });
 
