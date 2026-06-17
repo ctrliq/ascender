@@ -99,7 +99,9 @@ describe('WorkflowNodeTypeLetter', () => {
         />
       </svg>
     );
-    expect(container.querySelector('svg')).toBeInTheDocument();
+    // the pause icon is an <svg> rendered inside the component's foreignObject;
+    // the outer wrapper <svg> would match either way, so scope to foreignObject
+    expect(container.querySelector('foreignObject svg')).toBeInTheDocument();
   });
   test('renders pause icon when unified_job_type=workflow_approval', () => {
     const { container } = render(
@@ -111,6 +113,8 @@ describe('WorkflowNodeTypeLetter', () => {
         />
       </svg>
     );
-    expect(container.querySelector('svg')).toBeInTheDocument();
+    // the pause icon is an <svg> rendered inside the component's foreignObject;
+    // the outer wrapper <svg> would match either way, so scope to foreignObject
+    expect(container.querySelector('foreignObject svg')).toBeInTheDocument();
   });
 });
