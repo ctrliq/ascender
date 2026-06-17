@@ -1,13 +1,10 @@
 import React from 'react';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import { act } from 'react-dom/test-utils';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { JobTemplatesAPI, OrganizationsAPI } from 'api';
 
-import { Routes, Route } from 'react-router-dom-v5-compat';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import Template from './Template';
 import mockJobTemplateData from './shared/data.job_template.json';
 
@@ -25,7 +22,7 @@ const mockMe = {
 // no detail subcomponent fetches).
 function renderTemplate(entry = '/templates/job_template/1/foobar') {
   const history = createMemoryHistory({ initialEntries: [entry] });
-  return mountWithContexts(
+  return renderWithContexts(
     <Routes>
       <Route
         path="/templates/job_template/:id/*"
@@ -37,7 +34,6 @@ function renderTemplate(entry = '/templates/job_template/1/foobar') {
 }
 
 describe('<Template />', () => {
-  let wrapper;
   beforeEach(() => {
     JobTemplatesAPI.readDetail.mockResolvedValue({
       data: { ...mockJobTemplateData, survey_enabled: false },
@@ -68,91 +64,66 @@ describe('<Template />', () => {
         count: 1,
         next: null,
         previous: null,
-        results: [
-          {
-            id: 1,
-          },
-        ],
+        results: [{ id: 1 }],
       },
     });
     JobTemplatesAPI.readLaunch.mockResolvedValue({ data: {} });
     JobTemplatesAPI.readWebhookKey.mockResolvedValue({
-      data: {
-        webhook_key: 'key',
-      },
+      data: { webhook_key: 'key' },
     });
   });
   afterEach(() => {
     jest.clearAllMocks();
   });
+
   test('initially renders successfully', async () => {
-    await act(async () => {
-      wrapper = renderTemplate();
-    });
+    renderTemplate();
+    await waitFor(() => expect(JobTemplatesAPI.readDetail).toHaveBeenCalled());
   });
+
   test('When component mounts API is called and the response is put in state', async () => {
-    await act(async () => {
-      wrapper = renderTemplate();
-    });
-    expect(JobTemplatesAPI.readDetail).toHaveBeenCalled();
+    renderTemplate();
+    await waitFor(() => expect(JobTemplatesAPI.readDetail).toHaveBeenCalled());
     expect(OrganizationsAPI.read).toHaveBeenCalled();
   });
-  test('notifications tab shown for admins', async () => {
-    await act(async () => {
-      wrapper = renderTemplate();
-    });
 
-    const tabs = await waitForElement(
-      wrapper,
-      '.pf-c-tabs__item',
-      (el) => el.length === 7
-    );
-    expect(tabs.at(3).text()).toEqual('Notifications');
+  test('notifications tab shown for admins', async () => {
+    renderTemplate();
+    await waitFor(() => expect(screen.getAllByRole('tab')).toHaveLength(7));
+    expect(
+      screen.getByRole('tab', { name: 'Notifications' })
+    ).toBeInTheDocument();
   });
+
   test('notifications tab hidden with reduced permissions', async () => {
     OrganizationsAPI.read.mockResolvedValue({
-      data: {
-        count: 0,
-        next: null,
-        previous: null,
-        results: [],
-      },
+      data: { count: 0, next: null, previous: null, results: [] },
     });
-
-    await act(async () => {
-      wrapper = renderTemplate();
-    });
-    const tabs = await waitForElement(
-      wrapper,
-      '.pf-c-tabs__item',
-      (el) => el.length === 6
-    );
-    tabs.forEach((tab) => expect(tab.text()).not.toEqual('Notifications'));
+    renderTemplate();
+    await waitFor(() => expect(screen.getAllByRole('tab')).toHaveLength(6));
+    expect(
+      screen.queryByRole('tab', { name: 'Notifications' })
+    ).not.toBeInTheDocument();
   });
 
   test('should show content error when user attempts to navigate to erroneous route', async () => {
-    await act(async () => {
-      wrapper = renderTemplate('/templates/job_template/1/foobar');
-    });
+    renderTemplate('/templates/job_template/1/foobar');
+    expect(await screen.findByText('Not Found')).toBeInTheDocument();
+  });
 
-    await waitForElement(wrapper, 'ContentError', (el) => el.length === 1);
-  });
   test('should call to get webhook key', async () => {
-    await act(async () => {
-      wrapper = renderTemplate('/templates/job_template/1/foobar');
-    });
-    expect(JobTemplatesAPI.readWebhookKey).toHaveBeenCalled();
+    renderTemplate('/templates/job_template/1/foobar');
+    await waitFor(() =>
+      expect(JobTemplatesAPI.readWebhookKey).toHaveBeenCalled()
+    );
   });
+
   test('should not call to get webhook key', async () => {
     JobTemplatesAPI.readTemplateOptions.mockResolvedValueOnce({
-      data: {
-        actions: {},
-      },
+      data: { actions: {} },
     });
-
-    await act(async () => {
-      wrapper = renderTemplate('/templates/job_template/1/foobar');
-    });
+    renderTemplate('/templates/job_template/1/foobar');
+    await waitFor(() => expect(JobTemplatesAPI.readDetail).toHaveBeenCalled());
     expect(JobTemplatesAPI.readWebhookKey).not.toHaveBeenCalled();
   });
 });
