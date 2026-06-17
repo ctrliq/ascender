@@ -163,7 +163,9 @@ describe('CredentialsStep', () => {
     );
 
     const select = await findCategorySelect(container);
-    await user.selectOptions(select, 'Vault');
+    // the native <select> option values are credential type ids, so select
+    // by the Vault type id (3) rather than its label
+    await user.selectOptions(select, '3');
 
     await waitFor(() =>
       expect(CredentialsAPI.read).toHaveBeenCalledWith({
@@ -200,7 +202,9 @@ describe('CredentialsStep', () => {
     );
 
     const select = await findCategorySelect(container);
-    await user.selectOptions(select, 'Vault');
+    // the native <select> option values are credential type ids, so select
+    // by the Vault type id (3) rather than its label
+    await user.selectOptions(select, '3');
 
     await waitFor(() =>
       expect(CredentialsAPI.read).toHaveBeenCalledWith({
@@ -341,7 +345,9 @@ describe('CredentialsStep', () => {
     expect(alert).toHaveTextContent('Vault | foo');
 
     const select = await findCategorySelect(container);
-    await user.selectOptions(select, 'Vault');
+    // the native <select> option values are credential type ids, so select
+    // by the Vault type id (3) rather than its label
+    await user.selectOptions(select, '3');
 
     const checkbox = await waitFor(() => {
       const el = container.querySelector('#check-action-item-33 input');

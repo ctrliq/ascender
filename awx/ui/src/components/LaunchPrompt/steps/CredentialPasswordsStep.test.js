@@ -99,8 +99,8 @@ describe('CredentialPasswordsStep', () => {
         >
           <CredentialPasswordsStep
             launchConfig={{
+              ask_credential_on_launch: true,
               defaults: {
-                ask_credential_on_launch: true,
                 credentials: [
                   {
                     id: 1,
