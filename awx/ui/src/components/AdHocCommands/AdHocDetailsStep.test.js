@@ -77,7 +77,7 @@ describe('<AdHocDetailsStep />', () => {
     expect(screen.getByText('Extra variables')).toBeInTheDocument();
   });
 
-  test('shold update form values', async () => {
+  test('should update form values', async () => {
     const { user } = renderStep();
     await waitFor(() =>
       expect(document.querySelector('#module_name')).toBeInTheDocument()
@@ -94,8 +94,8 @@ describe('<AdHocDetailsStep />', () => {
     await user.type(argsInput, 'foo');
     await user.clear(limitInput);
     await user.type(limitInput, 'Inventory 1, inventory 2, new inventory');
-    // verbosity options come from VerbositySelectField; "1" maps to "1 (Verbose)"
-    await user.selectOptions(verbositySelect, '1 (Verbose)');
+    // select verbosity by its stable option value ('1'), not the i18n label
+    await user.selectOptions(verbositySelect, '1');
     await user.clear(forksInput);
     await user.type(forksInput, '10');
 

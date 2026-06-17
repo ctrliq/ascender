@@ -61,7 +61,8 @@ function renderAdHoc(props = {}) {
 async function runWizardToLaunch(user) {
   await user.selectOptions(document.querySelector('#module_name'), 'command');
   await user.type(document.querySelector('#module_args'), 'foo');
-  await user.selectOptions(document.querySelector('#verbosity'), '1 (Verbose)');
+  // select verbosity by its stable option value ('1'), not the i18n label
+  await user.selectOptions(document.querySelector('#verbosity'), '1');
   await user.click(screen.getByRole('button', { name: 'Next' }));
 
   // step 2: execution environment - select EE2

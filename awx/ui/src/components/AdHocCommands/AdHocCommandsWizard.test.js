@@ -40,7 +40,8 @@ async function fillDetails(user) {
   );
   await user.selectOptions(document.querySelector('#module_name'), 'command');
   await user.type(document.querySelector('#module_args'), 'foo');
-  await user.selectOptions(document.querySelector('#verbosity'), '1 (Verbose)');
+  // select verbosity by its stable option value ('1'), not the i18n label
+  await user.selectOptions(document.querySelector('#verbosity'), '1');
 }
 
 // The Wizard footer renders a Next button and a final Launch button.
@@ -220,11 +221,19 @@ describe('<AdHocCommandsWizard/>', () => {
     await waitFor(() => expect(credRadios[0]).toBeChecked());
     await user.click(nextButton());
 
-    // step 4: credential passwords - the ssh password field is rendered
-    const sshPassword = await waitFor(() =>
-      document.querySelector('input[name="credential_passwords.ssh_password"]')
+    // step 4: credential passwords - the ssh password field is rendered.
+    // Assert inside waitFor (a bare querySelector returning null doesn't throw,
+    // so waitFor would resolve immediately even when the field is absent).
+    await waitFor(() =>
+      expect(
+        document.querySelector(
+          'input[name="credential_passwords.ssh_password"]'
+        )
+      ).toBeInTheDocument()
     );
-    expect(sshPassword).toBeInTheDocument();
+    const sshPassword = document.querySelector(
+      'input[name="credential_passwords.ssh_password"]'
+    );
     await user.type(sshPassword, 'password');
     expect(sshPassword).toHaveValue('password');
     await user.click(nextButton());
