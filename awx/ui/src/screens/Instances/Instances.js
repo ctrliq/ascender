@@ -39,20 +39,20 @@ function Instances() {
       <ScreenHeader streamType="instance" breadcrumbConfig={breadcrumbConfig} />
       <Routes>
         <Route
-          path="/instances/add"
+          path="add"
           element={<InstanceAdd setBreadcrumb={buildBreadcrumbConfig} />}
         />
         <Route
-          path="/instances/:id/edit"
+          path=":id/edit"
           element={<InstanceEdit setBreadcrumb={buildBreadcrumbConfig} />}
         />
         {/* so the nested <Instance> route tree can match the rest */}
         <Route
-          path="/instances/:id/*"
+          path=":id/*"
           element={<Instance setBreadcrumb={buildBreadcrumbConfig} />}
         />
         <Route
-          path="/instances"
+          index
           element={
             <PersistentFilters pageKey="instances">
               <InstanceList />

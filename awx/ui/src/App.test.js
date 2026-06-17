@@ -1,8 +1,9 @@
 import React from 'react';
-import { render, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { RootAPI } from 'api';
 import * as SessionContext from 'contexts/Session';
 import * as navigation from 'util/navigation';
+import * as auth from 'util/auth';
 import { renderWithContexts } from '../testUtils/rtlContexts';
 import App, { ProtectedRoute } from './App';
 
@@ -75,5 +76,24 @@ describe('<App />', () => {
 
     await waitFor(() => expect(replaceSpy).toHaveBeenCalled());
     replaceSpy.mockRestore();
+  });
+
+  test('renders children when authenticated', async () => {
+    jest.spyOn(SessionContext, 'useSession').mockImplementation(() => ({
+      setAuthRedirectTo: jest.fn(),
+      isSessionExpired: false,
+      isUserBeingLoggedOut: false,
+      loginRedirectOverride: null,
+    }));
+    jest.spyOn(auth, 'isAuthenticated').mockReturnValue(true);
+
+    renderWithContexts(
+      <ProtectedRoute>
+        <div id="protected-child">foo</div>
+      </ProtectedRoute>
+    );
+
+    expect(await screen.findByText('foo')).toBeInTheDocument();
+    jest.restoreAllMocks();
   });
 });

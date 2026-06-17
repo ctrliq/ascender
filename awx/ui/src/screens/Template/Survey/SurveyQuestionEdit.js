@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLocation, useRouteMatch } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useNavigate, Navigate } from 'react-router-dom-v5-compat';
 import ContentLoading from 'components/ContentLoading';
 import { CardBody } from 'components/Card';
@@ -8,8 +8,8 @@ import SurveyQuestionForm from './SurveyQuestionForm';
 export default function SurveyQuestionEdit({ survey, updateSurvey }) {
   const [formError, setFormError] = useState(null);
   const navigate = useNavigate();
-  const match = useRouteMatch();
-  const { search } = useLocation();
+  const { pathname, search } = useLocation();
+  const surveyUrl = `${pathname.substr(0, pathname.indexOf('survey'))}survey`;
   const queryParams = new URLSearchParams(search);
   const questionVariable = decodeURIComponent(
     queryParams.get('question_variable')
@@ -22,16 +22,11 @@ export default function SurveyQuestionEdit({ survey, updateSurvey }) {
   const question = survey.spec.find((q) => q.variable === questionVariable);
 
   if (!question) {
-    return (
-      <Navigate
-        to={`/templates/${match.params.templateType}/${match.params.id}/survey`}
-      />
-    );
+    return <Navigate to={surveyUrl} />;
   }
 
   const navigateToList = () => {
-    const index = match.url.indexOf('/edit');
-    navigate(match.url.substr(0, index));
+    navigate(surveyUrl);
   };
 
   const handleSubmit = async (formData) => {

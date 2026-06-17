@@ -1,0 +1,2 @@
+bugfixes:
+  - application - apply the ``skip_authorization`` parameter, which was documented and in the argument spec but never read or sent to the API.

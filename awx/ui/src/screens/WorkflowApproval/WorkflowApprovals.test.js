@@ -1,6 +1,7 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import WorkflowApprovals from './WorkflowApprovals';
 
@@ -26,9 +27,14 @@ jest.mock('./WorkflowApproval', () => {
 
 function renderAt(path) {
   const history = createMemoryHistory({ initialEntries: [path] });
-  return renderWithContexts(<WorkflowApprovals />, {
-    context: { router: { history } },
-  });
+  return renderWithContexts(
+    <Routes>
+      <Route path="/workflow_approvals/*" element={<WorkflowApprovals />} />
+    </Routes>,
+    {
+      context: { router: { history } },
+    }
+  );
 }
 
 describe('<WorkflowApprovals />', () => {

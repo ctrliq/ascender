@@ -1,12 +1,10 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
-
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { screen } from '@testing-library/react';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import CredentialTypeListItem from './CredentialTypeListItem';
 
 describe('<CredentialTypeListItem/>', () => {
-  let wrapper;
   const credential_type = {
     id: 1,
     name: 'Foo',
@@ -14,84 +12,51 @@ describe('<CredentialTypeListItem/>', () => {
     kind: 'cloud',
   };
 
-  test('should mount successfully', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <table>
-          <tbody>
-            <CredentialTypeListItem
-              credentialType={credential_type}
-              detailUrl="credential_types/1/details"
-              isSelected={false}
-              onSelect={() => {}}
-            />
-          </tbody>
-        </table>
-      );
-    });
-    expect(wrapper.find('CredentialTypeListItem').length).toBe(1);
-  });
-
-  test('should render the proper data', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <table>
-          <tbody>
-            <CredentialTypeListItem
-              credentialType={credential_type}
-              detailsUrl="credential_types/1/details"
-              isSelected={false}
-              onSelect={() => {}}
-            />
-          </tbody>
-        </table>
-      );
-    });
-    expect(wrapper.find('Td[dataLabel="Name"]').text()).toBe('Foo');
-    expect(wrapper.find('PencilAltIcon').length).toBe(1);
-    expect(wrapper.find('.pf-c-table__check input').prop('checked')).toBe(
-      undefined
+  const renderItem = (props = {}) =>
+    renderWithContexts(
+      <table>
+        <tbody>
+          <CredentialTypeListItem
+            credentialType={credential_type}
+            detailUrl="credential_types/1/details"
+            isSelected={false}
+            onSelect={() => {}}
+            rowIndex={0}
+            {...props}
+          />
+        </tbody>
+      </table>
     );
+
+  test('should mount successfully', () => {
+    renderItem();
+    expect(screen.getByRole('row')).toBeInTheDocument();
   });
 
-  test('edit button shown to users with edit capabilities', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <table>
-          <tbody>
-            <CredentialTypeListItem
-              credentialType={credential_type}
-              detailsUrl="credential_types/1/details"
-              isSelected
-              onSelect={() => {}}
-            />
-          </tbody>
-        </table>
-      );
-    });
-
-    expect(wrapper.find('PencilAltIcon').exists()).toBeTruthy();
+  test('should render the proper data', () => {
+    renderItem();
+    expect(screen.getByText('Foo')).toBeInTheDocument();
+    expect(screen.getByLabelText('Edit credential type')).toBeInTheDocument();
+    expect(
+      screen.getByRole('checkbox', { name: 'Select row 0' })
+    ).not.toBeChecked();
   });
 
-  test('edit button hidden from users without edit capabilities', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <table>
-          <tbody>
-            <CredentialTypeListItem
-              credentialType={{
-                ...credential_type,
-                summary_fields: { user_capabilities: { edit: false } },
-              }}
-              detailsUrl="credential_types/1/details"
-              isSelected
-              onSelect={() => {}}
-            />
-          </tbody>
-        </table>
-      );
-    });
+  test('edit button shown to users with edit capabilities', () => {
+    renderItem({ isSelected: true });
+    expect(screen.getByLabelText('Edit credential type')).toBeInTheDocument();
+  });
 
-    expect(wrapper.find('PencilAltIcon').exists()).toBeFalsy();
+  test('edit button hidden from users without edit capabilities', () => {
+    renderItem({
+      credentialType: {
+        ...credential_type,
+        summary_fields: { user_capabilities: { edit: false } },
+      },
+      isSelected: true,
+    });
+    expect(
+      screen.queryByLabelText('Edit credential type')
+    ).not.toBeInTheDocument();
   });
 });

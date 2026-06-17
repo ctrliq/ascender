@@ -131,26 +131,26 @@ function Inventories() {
         breadcrumbConfig={breadcrumbConfig}
       />
       <Routes>
-        <Route path="/inventories/inventory/add" element={<InventoryAdd />} />
+        <Route path="inventory/add" element={<InventoryAdd />} />
         <Route
-          path="/inventories/smart_inventory/add"
+          path="smart_inventory/add"
           element={<SmartInventoryAdd />}
         />
         <Route
-          path="/inventories/constructed_inventory/add"
+          path="constructed_inventory/add"
           element={<ConstructedInventoryAdd />}
         />
         <Route
-          path="/inventories/federated_inventory/add"
+          path="federated_inventory/add"
           element={<FederatedInventoryAdd />}
         />
         {/* /* so each detail screen's own nested <Routes> can match */}
         <Route
-          path="/inventories/:inventoryType/:id/*"
+          path=":inventoryType/:id/*"
           element={<InventoryTypeRouter setBreadcrumb={setBreadcrumbConfig} />}
         />
         <Route
-          path="/inventories"
+          index
           element={
             <PersistentFilters pageKey="inventories">
               <InventoryList />
