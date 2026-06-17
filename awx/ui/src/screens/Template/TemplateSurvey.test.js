@@ -117,7 +117,7 @@ describe('<TemplateSurvey />', () => {
     );
   });
 
-  test('should toggle jt survery on', async () => {
+  test('should toggle jt survey on', async () => {
     renderSurvey(
       '/templates/job_template/7/survey',
       <TemplateSurvey template={mockJobTemplateData} canEdit />

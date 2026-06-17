@@ -44,7 +44,7 @@ describe('NodeNextButton', () => {
     expect(onClick).toHaveBeenCalledWith(activeStep);
   });
 
-  test('onNext triggered when triggerNext counter incrimented', () => {
+  test('onNext triggered when triggerNext counter incremented', () => {
     onNext.mockClear();
     const { rerender } = renderWithContexts(
       <NodeNextButton

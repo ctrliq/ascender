@@ -101,15 +101,6 @@ describe('VisualizerToolbar', () => {
     });
   });
 
-  test('Delete All button dispatches as expected (duplicate)', () => {
-    renderToolbar();
-    fireEvent.click(screen.getByRole('button', { name: 'Delete all nodes' }));
-    expect(dispatch).toHaveBeenCalledWith({
-      type: 'SET_SHOW_DELETE_ALL_NODES_MODAL',
-      value: true,
-    });
-  });
-
   test('Save button calls expected function', () => {
     renderToolbar();
     fireEvent.click(screen.getByRole('button', { name: 'Save' }));
