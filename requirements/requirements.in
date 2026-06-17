@@ -12,7 +12,7 @@ botocore
 cachetools
 channels
 channels-valkey
-cryptography>=46.0.7  # CVE-2026-39892
+cryptography>=49.0.0  # CVE-2026-39892 GHSA-537c-gmf6-5ccf
 Cython>=3 # this is needed as a build dependency, one day we may have separated build deps; <3 cap removed once pyyaml>=6.0.1 supported Cython 3
 daphne>=4.2.2  # CVE-2026-44545 CVE-2026-44546
 distro
@@ -40,6 +40,7 @@ jinja2>=3.1.6  # CVE-2025-27516
 JSON-log-formatter
 jsonschema
 Markdown>=3.8.1  # CVE-2025-69534 # used for formatting API help
+msal>=1.37.0  # cryptography>=49 compatibility (msal<1.37 caps cryptography<49)
 openshift
 packaging==24.2
 pexpect==4.7.0  # see library notes
@@ -48,7 +49,7 @@ psycopg
 psutil
 pygerduty
 pygithub
-pyopenssl>=26.0.0  # resolve dep conflict from cryptography pin above
+pyopenssl>=26.3.0  # tracks cryptography pin above (pyopenssl 26.3.0 requires cryptography>=49)
 pyparsing==2.4.6  # Upgrading to v3 of pyparsing introduce errors on smart host filtering: Expected 'or' term, found 'or'  (at char 15), (line:1, col:16)
 python-daemon>3.0.0
 python-dsv-sdk>=1.0.4
