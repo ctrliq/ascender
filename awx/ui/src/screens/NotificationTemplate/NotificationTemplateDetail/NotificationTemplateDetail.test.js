@@ -57,8 +57,8 @@ describe('<NotificationTemplateDetail />', () => {
 
   const assertCommonDetails = async () => {
     expect(await screen.findByText('Name')).toBeInTheDocument();
-    assertDetail('Name', 'abc');
-    assertDetail('Description', 'foo description');
+    assertDetail('Name', mockTemplate.name);
+    assertDetail('Description', mockTemplate.description);
     // Email Options renders the SSL/TLS flags as list items
     expect(screen.getByText('Use SSL')).toBeInTheDocument();
     expect(screen.getByText('Use TLS')).toBeInTheDocument();

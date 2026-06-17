@@ -1,11 +1,7 @@
 import React from 'react';
 import { screen, waitFor, fireEvent, act } from '@testing-library/react';
 
-import {
-  NotificationsAPI,
-  NotificationTemplatesAPI,
-  OrganizationsAPI,
-} from 'api';
+import { NotificationsAPI, NotificationTemplatesAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import NotificationTemplateList from './NotificationTemplateList';
@@ -53,8 +49,8 @@ const mockTemplates = {
 
 describe('<NotificationTemplateList />', () => {
   beforeEach(() => {
-    OrganizationsAPI.read.mockResolvedValue(mockTemplates);
-    OrganizationsAPI.readOptions.mockResolvedValue({
+    NotificationTemplatesAPI.read.mockResolvedValue(mockTemplates);
+    NotificationTemplatesAPI.readOptions.mockResolvedValue({
       data: { actions: { GET: {}, POST: {} } },
     });
   });
@@ -68,7 +64,7 @@ describe('<NotificationTemplateList />', () => {
     expect(await screen.findByText('Boston')).toBeInTheDocument();
     expect(screen.getByText('Minneapolis')).toBeInTheDocument();
     expect(screen.getByText('Philidelphia')).toBeInTheDocument();
-    expect(OrganizationsAPI.read).toHaveBeenCalledTimes(1);
+    expect(NotificationTemplatesAPI.read).toHaveBeenCalledTimes(1);
   });
 
   test('should select a row', async () => {
@@ -87,13 +83,15 @@ describe('<NotificationTemplateList />', () => {
     await user.click(screen.getByRole('button', { name: 'Delete' }));
     fireEvent.click(await screen.findByLabelText('confirm delete'));
     await waitFor(() =>
-      expect(OrganizationsAPI.destroy).toHaveBeenCalledTimes(3)
+      expect(NotificationTemplatesAPI.destroy).toHaveBeenCalledTimes(3)
     );
-    await waitFor(() => expect(OrganizationsAPI.read).toHaveBeenCalledTimes(2));
+    await waitFor(() =>
+      expect(NotificationTemplatesAPI.read).toHaveBeenCalledTimes(2)
+    );
   });
 
   test('should show an error dialog for a failed deletion', async () => {
-    OrganizationsAPI.destroy.mockRejectedValue(new Error('nope'));
+    NotificationTemplatesAPI.destroy.mockRejectedValue(new Error('nope'));
     const { user } = renderWithContexts(<NotificationTemplateList />);
     await screen.findByText('Boston');
     await user.click(screen.getAllByRole('checkbox')[1]);
@@ -109,7 +107,7 @@ describe('<NotificationTemplateList />', () => {
   });
 
   test('should hide the add button without POST capability', async () => {
-    OrganizationsAPI.readOptions.mockResolvedValue({
+    NotificationTemplatesAPI.readOptions.mockResolvedValue({
       data: { actions: { GET: {} } },
     });
     renderWithContexts(<NotificationTemplateList />);
@@ -132,10 +130,13 @@ describe('<NotificationTemplateList />', () => {
     });
 
     renderWithContexts(<NotificationTemplateList />);
-    await act(async () => {}); // flush the data-load promises
+    // wait for the list rows/actions to render before interacting
+    await screen.findByText('Boston');
 
     expect(screen.queryByText('foobar')).not.toBeInTheDocument();
-    fireEvent.click(screen.getAllByRole('button', { name: 'Test Notification' })[0]);
+    fireEvent.click(
+      screen.getAllByRole('button', { name: 'Test Notification' })[0]
+    );
 
     // runAllTimersAsync flushes the microtask queue between timers, so the
     // test() -> setTimeout(poll) -> readDetail() -> onAddToast chain resolves.
