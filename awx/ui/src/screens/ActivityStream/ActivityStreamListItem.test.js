@@ -14,7 +14,6 @@ describe('<ActivityStreamListItem />', () => {
             streamItem={{
               timestamp: '12:00:00',
             }}
-            onSelect={() => {}}
           />
         </tbody>
       </table>
