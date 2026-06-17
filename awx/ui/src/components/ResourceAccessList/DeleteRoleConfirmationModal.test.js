@@ -38,10 +38,13 @@ describe('<DeleteRoleConfirmationModal />', () => {
   });
 
   test('should render the User confirmation delete modal', () => {
-    delete role.team_id;
+    // use a per-test copy without team_id so the shared role fixture (and test
+    // order) is not affected
+    const userRole = { ...role };
+    delete userRole.team_id;
     renderWithContexts(
       <DeleteRoleConfirmationModal
-        role={role}
+        role={userRole}
         username="jane"
         onCancel={() => {}}
         onConfirm={() => {}}

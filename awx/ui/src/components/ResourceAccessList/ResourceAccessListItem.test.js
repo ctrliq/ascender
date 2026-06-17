@@ -42,9 +42,15 @@ describe('<ResourceAccessListItem />', () => {
       </table>
     );
 
-    // Username link plus first name / last name cells.
+    // Username link plus first name / last name cells. The first name equals
+    // the username here, so target the First name cell by its column label.
     expect(screen.getByRole('link', { name: 'jane' })).toBeInTheDocument();
-    expect(screen.getByText('brown')).toBeInTheDocument();
+    expect(
+      document.querySelector('[data-label="First name"]')
+    ).toHaveTextContent('jane');
+    expect(
+      document.querySelector('[data-label="Last name"]')
+    ).toHaveTextContent('brown');
 
     // The only role has a team_id, so it's a team role; the "User Roles" Detail
     // is empty (isEmpty -> Detail renders nothing). The team role chip renders.
