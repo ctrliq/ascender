@@ -51,13 +51,9 @@ describe('<InventoryGroupsDeleteModal />', () => {
     await user.click(screen.getByRole('button', { name: 'Delete' }));
     await screen.findByRole('dialog');
 
-    // the AlertModal has both a ModalBox "Close" (X) and a Cancel button
-    // labelled "Close"; click the modal-box close button by its ouia id
-    await user.click(
-      document.querySelector(
-        '[data-ouia-component-id="alert-modal-ModalBoxCloseButton"]'
-      )
-    );
+    // close via the user-visible Cancel button (its aria-label is "Close",
+    // shared with the ModalBox X, so target it by its visible text instead)
+    await user.click(screen.getByText('Cancel'));
     await waitFor(() =>
       expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
     );
