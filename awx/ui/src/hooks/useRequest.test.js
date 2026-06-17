@@ -40,7 +40,7 @@ describe('useRequest hooks', () => {
       render(<Test makeRequest={makeRequest} />);
 
       await act(async () => {
-        latest().request();
+        await latest().request();
       });
       expect(latest().result).toEqual({ data: 'foo' });
     });
@@ -54,12 +54,16 @@ describe('useRequest hooks', () => {
       makeRequest.mockReturnValue(promise);
       render(<Test makeRequest={makeRequest} />);
 
+      let requestPromise;
       await act(async () => {
-        latest().request();
+        // capture (don't await) the pending request so isLoading stays true
+        requestPromise = latest().request();
       });
       expect(latest().isLoading).toEqual(true);
       await act(async () => {
         resolve({ data: 'foo' });
+        // await the request inside act so its state updates flush within act
+        await requestPromise;
       });
       expect(latest().isLoading).toEqual(false);
       expect(latest().result).toEqual({ data: 'foo' });
@@ -72,7 +76,7 @@ describe('useRequest hooks', () => {
 
       expect(makeRequest).not.toHaveBeenCalled();
       await act(async () => {
-        latest().request();
+        await latest().request();
       });
       expect(makeRequest).toHaveBeenCalledTimes(1);
     });
@@ -102,17 +106,17 @@ describe('useRequest hooks', () => {
       render(<Test makeRequest={makeRequest} />);
 
       await act(async () => {
-        latest().request(true);
+        await latest().request(true);
       });
       expect(latest().result).toEqual({});
       expect(latest().error).toEqual(error);
       await act(async () => {
-        latest().request();
+        await latest().request();
       });
       expect(latest().result).toEqual({ data: 'foo' });
       expect(latest().error).toEqual(null);
       await act(async () => {
-        latest().request(true);
+        await latest().request(true);
       });
       expect(latest().result).toEqual({});
       expect(latest().error).toEqual(error);
