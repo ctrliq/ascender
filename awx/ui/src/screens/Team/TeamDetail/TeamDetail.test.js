@@ -10,17 +10,17 @@ import TeamDetail from './TeamDetail';
 
 jest.mock('../../../api');
 
-const makeTeam = (overrides = {}) => ({
+const makeTeam = ({ summary_fields, ...overrides } = {}) => ({
   name: 'Foo',
   description: 'Bar',
   created: '2015-07-07T17:21:26.429745Z',
   modified: '2019-08-11T19:47:37.980466Z',
+  ...overrides,
   summary_fields: {
     organization: { id: 1, name: 'Default' },
     user_capabilities: { edit: true, delete: true },
-    ...(overrides.summary_fields || {}),
+    ...(summary_fields || {}),
   },
-  ...overrides,
 });
 
 describe('<TeamDetail />', () => {
