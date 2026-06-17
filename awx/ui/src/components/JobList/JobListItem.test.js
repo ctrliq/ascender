@@ -254,7 +254,9 @@ describe('<JobListItem with failed job />', () => {
     expect(screen.queryAllByRole('menuitem')).toHaveLength(0);
 
     await user.click(toggle);
-    expect(screen.getAllByRole('menuitem')).toHaveLength(3);
+    // the menu renders via a PF popper appended to document.body, so the items
+    // can appear asynchronously after the click; await them
+    expect(await screen.findAllByRole('menuitem')).toHaveLength(3);
   });
 
   test('dropdown should not be rendered for job type different of playbook run', () => {

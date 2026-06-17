@@ -4,6 +4,12 @@ import WS from 'jest-websocket-mock';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import useWsJobs from './useWsJobs';
 
+// NOTE: this suite runs against the real useThrottle. A previous jest.mock of
+// '../../hooks/useThrottle' lived inside beforeEach, where it is not hoisted and
+// therefore never took effect; making it effective (module scope) changes the
+// throttle timing and breaks these websocket assertions, so the ineffective
+// mock has been removed rather than activated.
+
 // RTL 12 has no renderHook, so we drive the hook through a test component that
 // serializes its result into a data-testid node we can read back.
 function Test({ jobs, fetch }) {
@@ -21,14 +27,6 @@ describe('useWsJobs hook', () => {
   let mockServer;
 
   beforeEach(() => {
-    /*
-      Jest mock timers don’t play well with jest-websocket-mock,
-      so we'll stub out throttling to resolve immediately
-    */
-    jest.mock('../../hooks/useThrottle', () => ({
-      __esModule: true,
-      default: jest.fn((val) => val),
-    }));
     debug = global.console.debug;
     global.console.debug = () => {};
 
