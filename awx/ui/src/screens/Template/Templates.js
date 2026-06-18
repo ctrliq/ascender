@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useRef } from 'react';
 
-import { Route, Switch } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom-v5-compat';
 import { PageSection } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
 
@@ -65,27 +65,31 @@ function Templates() {
         streamType="job_template,workflow_job_template,workflow_job_template_node"
         breadcrumbConfig={breadcrumbConfig}
       />
-      <Switch>
-        <Route path="/templates/job_template/add">
-          <JobTemplateAdd />
-        </Route>
-        <Route path="/templates/workflow_job_template/add">
-          <WorkflowJobTemplateAdd />
-        </Route>
-        <Route path="/templates/job_template/:id">
-          <Template setBreadcrumb={setBreadcrumbConfig} />
-        </Route>
-        <Route path="/templates/workflow_job_template/:id">
-          <WorkflowJobTemplate setBreadcrumb={setBreadcrumbConfig} />
-        </Route>
-        <Route path="/templates">
-          <PageSection>
-            <PersistentFilters pageKey="templates">
-              <TemplateList />
-            </PersistentFilters>
-          </PageSection>
-        </Route>
-      </Switch>
+      <Routes>
+        <Route path="job_template/add" element={<JobTemplateAdd />} />
+        <Route
+          path="workflow_job_template/add"
+          element={<WorkflowJobTemplateAdd />}
+        />
+        <Route
+          path="job_template/:id/*"
+          element={<Template setBreadcrumb={setBreadcrumbConfig} />}
+        />
+        <Route
+          path="workflow_job_template/:id/*"
+          element={<WorkflowJobTemplate setBreadcrumb={setBreadcrumbConfig} />}
+        />
+        <Route
+          index
+          element={
+            <PageSection>
+              <PersistentFilters pageKey="templates">
+                <TemplateList />
+              </PersistentFilters>
+            </PageSection>
+          }
+        />
+      </Routes>
     </>
   );
 }

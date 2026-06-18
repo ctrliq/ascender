@@ -3,8 +3,8 @@ import { useLingui } from '@lingui/react/macro';
 
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card, PageSection } from '@patternfly/react-core';
-import { Link, useLocation, useParams } from 'react-router-dom';
-import { Routes, Route, Navigate } from 'react-router-dom-v5-compat';
+import { Link, useLocation } from 'react-router-dom';
+import { Routes, Route, Navigate, useParams } from 'react-router-dom-v5-compat';
 import RoutedTabs from 'components/RoutedTabs';
 import { useConfig } from 'contexts/Config';
 import useRequest from 'hooks/useRequest';
@@ -191,7 +191,7 @@ function Template({ setBreadcrumb }) {
         {template && (
           <Routes>
             <Route
-              path=":templateType/:id/details"
+              path="details"
               element={
                 <JobTemplateDetail
                   hasTemplateLoading={isLoading}
@@ -200,7 +200,7 @@ function Template({ setBreadcrumb }) {
               }
             />
             <Route
-              path=":templateType/:id/edit"
+              path="edit"
               element={
                 <JobTemplateEdit
                   template={template}
@@ -209,7 +209,7 @@ function Template({ setBreadcrumb }) {
               }
             />
             <Route
-              path=":templateType/:id/access"
+              path="access"
               element={
                 <ResourceAccessList
                   resource={template}
@@ -218,7 +218,7 @@ function Template({ setBreadcrumb }) {
               }
             />
             <Route
-              path=":templateType/:id/schedules/*"
+              path="schedules/*"
               element={
                 <Schedules
                   apiModel={JobTemplatesAPI}
@@ -234,7 +234,7 @@ function Template({ setBreadcrumb }) {
             />
             {canSeeNotificationsTab && (
               <Route
-                path=":templateType/:id/notifications"
+                path="notifications"
                 element={
                   <NotificationList
                     id={Number(templateId)}
@@ -245,13 +245,13 @@ function Template({ setBreadcrumb }) {
               />
             )}
             <Route
-              path=":templateType/:id/jobs"
+              path="jobs"
               element={
                 <JobList defaultParams={{ job__job_template: template.id }} />
               }
             />
             <Route
-              path=":templateType/:id/survey/*"
+              path="survey/*"
               element={
                 <TemplateSurvey
                   template={template}
@@ -259,10 +259,7 @@ function Template({ setBreadcrumb }) {
                 />
               }
             />
-            <Route
-              path=":templateType/:id"
-              element={<Navigate to={`${baseUrl}/details`} replace />}
-            />
+            <Route index element={<Navigate to="details" replace />} />
             <Route
               path="*"
               element={
