@@ -1,10 +1,10 @@
 import React from 'react';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import WorkflowTools from './WorkflowTools';
 
 describe('WorkflowTools', () => {
   test('renders the expected content', () => {
-    const wrapper = mountWithContexts(
+    const { container } = renderWithContexts(
       <WorkflowTools
         onClose={() => {}}
         onFitGraph={() => {}}
@@ -14,12 +14,14 @@ describe('WorkflowTools', () => {
         zoomPercentage={100}
       />
     );
-    expect(wrapper).toHaveLength(1);
+    expect(
+      container.querySelector('[data-ouia-component-id="visualizer-zoom-in-button"]')
+    ).toBeInTheDocument();
   });
-  test('clicking zoom/pan buttons passes callback correct values', () => {
+  test('clicking zoom/pan buttons passes callback correct values', async () => {
     const pan = jest.fn();
     const zoomChange = jest.fn();
-    const wrapper = mountWithContexts(
+    const { container, user } = renderWithContexts(
       <WorkflowTools
         onClose={() => {}}
         onFitGraph={() => {}}
@@ -29,17 +31,19 @@ describe('WorkflowTools', () => {
         zoomPercentage={95.7}
       />
     );
-    wrapper.find('PlusIcon').simulate('click');
+    const byOuia = (id) =>
+      container.querySelector(`[data-ouia-component-id="${id}"]`);
+    await user.click(byOuia('visualizer-zoom-in-button'));
     expect(zoomChange).toHaveBeenCalledWith(1.1);
-    wrapper.find('MinusIcon').simulate('click');
+    await user.click(byOuia('visualizer-zoom-out-button'));
     expect(zoomChange).toHaveBeenCalledWith(0.8);
-    wrapper.find('CaretLeftIcon').simulate('click');
+    await user.click(byOuia('visualizer-pan-left-button'));
     expect(pan).toHaveBeenCalledWith('left');
-    wrapper.find('CaretUpIcon').simulate('click');
+    await user.click(byOuia('visualizer-pan-up-button'));
     expect(pan).toHaveBeenCalledWith('up');
-    wrapper.find('CaretRightIcon').simulate('click');
+    await user.click(byOuia('visualizer-pan-right-button'));
     expect(pan).toHaveBeenCalledWith('right');
-    wrapper.find('CaretDownIcon').simulate('click');
+    await user.click(byOuia('visualizer-pan-down-button'));
     expect(pan).toHaveBeenCalledWith('down');
   });
 });

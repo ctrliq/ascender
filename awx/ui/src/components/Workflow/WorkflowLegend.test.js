@@ -1,10 +1,13 @@
 import React from 'react';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { screen } from '@testing-library/react';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import WorkflowLegend from './WorkflowLegend';
 
 describe('WorkflowLegend', () => {
   test('renders the expected content', () => {
-    const wrapper = mountWithContexts(<WorkflowLegend onClose={() => {}} />);
-    expect(wrapper).toHaveLength(1);
+    renderWithContexts(<WorkflowLegend onClose={() => {}} />);
+    expect(screen.getByText('Legend')).toBeInTheDocument();
+    expect(screen.getByText('Job Template')).toBeInTheDocument();
+    expect(screen.getByText('Always')).toBeInTheDocument();
   });
 });

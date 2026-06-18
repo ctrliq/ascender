@@ -1,44 +1,40 @@
 import React from 'react';
-import { mount } from 'enzyme';
-import { PauseIcon } from '@patternfly/react-icons';
+import { render } from '@testing-library/react';
 import WorkflowNodeTypeLetter from './WorkflowNodeTypeLetter';
 
 describe('WorkflowNodeTypeLetter', () => {
   test('renders JT when type=job_template', () => {
-    const wrapper = mount(
+    const { container } = render(
       <svg>
         <WorkflowNodeTypeLetter
           node={{ fullUnifiedJobTemplate: { type: 'job_template' } }}
         />
       </svg>
     );
-    expect(wrapper).toHaveLength(1);
-    expect(wrapper.text()).toBe('JT');
+    expect(container.querySelector('foreignObject')).toHaveTextContent('JT');
   });
   test('renders JT when unified_job_type=job', () => {
-    const wrapper = mount(
+    const { container } = render(
       <svg>
         <WorkflowNodeTypeLetter
           node={{ fullUnifiedJobTemplate: { unified_job_type: 'job' } }}
         />
       </svg>
     );
-    expect(wrapper).toHaveLength(1);
-    expect(wrapper.text()).toBe('JT');
+    expect(container.querySelector('foreignObject')).toHaveTextContent('JT');
   });
   test('renders P when type=project', () => {
-    const wrapper = mount(
+    const { container } = render(
       <svg>
         <WorkflowNodeTypeLetter
           node={{ fullUnifiedJobTemplate: { type: 'project' } }}
         />
       </svg>
     );
-    expect(wrapper).toHaveLength(1);
-    expect(wrapper.text()).toBe('P');
+    expect(container.querySelector('foreignObject')).toHaveTextContent('P');
   });
   test('renders P when unified_job_type=project_update', () => {
-    const wrapper = mount(
+    const { container } = render(
       <svg>
         <WorkflowNodeTypeLetter
           node={{
@@ -47,22 +43,20 @@ describe('WorkflowNodeTypeLetter', () => {
         />
       </svg>
     );
-    expect(wrapper).toHaveLength(1);
-    expect(wrapper.text()).toBe('P');
+    expect(container.querySelector('foreignObject')).toHaveTextContent('P');
   });
   test('renders I when type=inventory_source', () => {
-    const wrapper = mount(
+    const { container } = render(
       <svg>
         <WorkflowNodeTypeLetter
           node={{ fullUnifiedJobTemplate: { type: 'inventory_source' } }}
         />
       </svg>
     );
-    expect(wrapper).toHaveLength(1);
-    expect(wrapper.text()).toBe('I');
+    expect(container.querySelector('foreignObject')).toHaveTextContent('I');
   });
   test('renders I when unified_job_type=inventory_update', () => {
-    const wrapper = mount(
+    const { container } = render(
       <svg>
         <WorkflowNodeTypeLetter
           node={{
@@ -71,22 +65,20 @@ describe('WorkflowNodeTypeLetter', () => {
         />
       </svg>
     );
-    expect(wrapper).toHaveLength(1);
-    expect(wrapper.text()).toBe('I');
+    expect(container.querySelector('foreignObject')).toHaveTextContent('I');
   });
   test('renders W when type=workflow_job_template', () => {
-    const wrapper = mount(
+    const { container } = render(
       <svg>
         <WorkflowNodeTypeLetter
           node={{ fullUnifiedJobTemplate: { type: 'workflow_job_template' } }}
         />
       </svg>
     );
-    expect(wrapper).toHaveLength(1);
-    expect(wrapper.text()).toBe('W');
+    expect(container.querySelector('foreignObject')).toHaveTextContent('W');
   });
   test('renders W when unified_job_type=workflow_job', () => {
-    const wrapper = mount(
+    const { container } = render(
       <svg>
         <WorkflowNodeTypeLetter
           node={{
@@ -95,11 +87,10 @@ describe('WorkflowNodeTypeLetter', () => {
         />
       </svg>
     );
-    expect(wrapper).toHaveLength(1);
-    expect(wrapper.text()).toBe('W');
+    expect(container.querySelector('foreignObject')).toHaveTextContent('W');
   });
-  test('renders puse icon when type=workflow_approval_template', () => {
-    const wrapper = mount(
+  test('renders pause icon when type=workflow_approval_template', () => {
+    const { container } = render(
       <svg>
         <WorkflowNodeTypeLetter
           node={{
@@ -108,11 +99,12 @@ describe('WorkflowNodeTypeLetter', () => {
         />
       </svg>
     );
-    expect(wrapper).toHaveLength(1);
-    expect(wrapper.containsMatchingElement(<PauseIcon />));
+    // the pause icon is an <svg> rendered inside the component's foreignObject;
+    // the outer wrapper <svg> would match either way, so scope to foreignObject
+    expect(container.querySelector('foreignObject svg')).toBeInTheDocument();
   });
-  test('renders W when unified_job_type=workflow_approval', () => {
-    const wrapper = mount(
+  test('renders pause icon when unified_job_type=workflow_approval', () => {
+    const { container } = render(
       <svg>
         <WorkflowNodeTypeLetter
           node={{
@@ -121,7 +113,8 @@ describe('WorkflowNodeTypeLetter', () => {
         />
       </svg>
     );
-    expect(wrapper).toHaveLength(1);
-    expect(wrapper.containsMatchingElement(<PauseIcon />));
+    // the pause icon is an <svg> rendered inside the component's foreignObject;
+    // the outer wrapper <svg> would match either way, so scope to foreignObject
+    expect(container.querySelector('foreignObject svg')).toBeInTheDocument();
   });
 });

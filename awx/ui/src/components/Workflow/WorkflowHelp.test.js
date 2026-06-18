@@ -1,10 +1,10 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { render, screen } from '@testing-library/react';
 import WorkflowHelp from './WorkflowHelp';
 
 describe('WorkflowHelp', () => {
   test('successfully mounts', () => {
-    const wrapper = mount(<WorkflowHelp />);
-    expect(wrapper).toHaveLength(1);
+    render(<WorkflowHelp>Help content</WorkflowHelp>);
+    expect(screen.getByText('Help content')).toBeInTheDocument();
   });
 });
