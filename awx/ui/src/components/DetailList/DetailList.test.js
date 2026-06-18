@@ -1,11 +1,19 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import {
+  renderWithContexts,
+  assertDetail,
+} from '../../../testUtils/rtlContexts';
 
 import DetailList from './DetailList';
+import Detail from './Detail';
 
 describe('DetailList', () => {
   test('renders the expected content', () => {
-    const wrapper = mount(<DetailList />);
-    expect(wrapper).toHaveLength(1);
+    renderWithContexts(
+      <DetailList>
+        <Detail label="foo" value="bar" />
+      </DetailList>
+    );
+    assertDetail('foo', 'bar');
   });
 });
