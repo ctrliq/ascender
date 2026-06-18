@@ -1,5 +1,6 @@
 import React from 'react';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { screen } from '@testing-library/react';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import SettingList from './SettingList';
 
 jest.mock('../../api');
@@ -11,12 +12,8 @@ jest.mock('hooks/useBrandName', () => ({
 }));
 
 describe('<SettingList />', () => {
-  let wrapper;
-  beforeEach(() => {
-    wrapper = mountWithContexts(<SettingList />);
-  });
-
   test('initially renders without crashing', () => {
-    expect(wrapper.length).toBe(1);
+    renderWithContexts(<SettingList />);
+    expect(screen.getByText('Authentication')).toBeInTheDocument();
   });
 });

@@ -1,19 +1,15 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import RADIUSEdit from './RADIUSEdit';
 
 jest.mock('../../../../api');
 
 describe('<RADIUSEdit />', () => {
-  let wrapper;
   let history;
 
   beforeEach(() => {
@@ -32,67 +28,65 @@ describe('<RADIUSEdit />', () => {
     jest.clearAllMocks();
   });
 
-  beforeEach(async () => {
+  async function renderEdit() {
     history = createMemoryHistory({
       initialEntries: ['/settings/radius/edit'],
     });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <RADIUSEdit />
-        </SettingsProvider>,
-        {
-          context: { router: { history } },
-        }
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-  });
+    const result = renderWithContexts(
+      <SettingsProvider value={mockAllOptions.actions}>
+        <RADIUSEdit />
+      </SettingsProvider>,
+      { context: { router: { history } } }
+    );
+    await waitFor(() =>
+      expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
+    );
+    return result;
+  }
 
-  test('initially renders without crashing', () => {
-    expect(wrapper.find('RADIUSEdit').length).toBe(1);
+  test('initially renders without crashing', async () => {
+    await renderEdit();
+    expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument();
   });
 
   test('should display expected form fields', async () => {
-    expect(wrapper.find('FormGroup[label="RADIUS Server"]').length).toBe(1);
-    expect(wrapper.find('FormGroup[label="RADIUS Port"]').length).toBe(1);
-    expect(wrapper.find('FormGroup[label="RADIUS Secret"]').length).toBe(1);
+    await renderEdit();
+    expect(screen.getByText('RADIUS Server')).toBeInTheDocument();
+    expect(screen.getByText('RADIUS Port')).toBeInTheDocument();
+    expect(screen.getByText('RADIUS Secret')).toBeInTheDocument();
   });
 
   test('should successfully send default values to api on form revert all', async () => {
+    const { user } = await renderEdit();
     expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(0);
-    expect(wrapper.find('RevertAllAlert')).toHaveLength(0);
-    await act(async () => {
-      wrapper
-        .find('button[aria-label="Revert all to default"]')
-        .invoke('onClick')();
-    });
-    wrapper.update();
-    expect(wrapper.find('RevertAllAlert')).toHaveLength(1);
-    await act(async () => {
-      wrapper
-        .find('RevertAllAlert button[aria-label="Confirm revert all"]')
-        .invoke('onClick')();
-    });
-    wrapper.update();
-    expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(1);
+    expect(screen.queryByText('Revert settings')).not.toBeInTheDocument();
+    await user.click(
+      screen.getByRole('button', { name: 'Revert all to default' })
+    );
+    expect(await screen.findByText('Revert settings')).toBeInTheDocument();
+    await user.click(
+      screen.getByRole('button', { name: 'Confirm revert all' })
+    );
+    await waitFor(() =>
+      expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(1)
+    );
     expect(SettingsAPI.revertCategory).toHaveBeenCalledWith('radius');
   });
 
   test('should successfully send request to api on form submission', async () => {
-    act(() => {
-      wrapper.find('input#RADIUS_SERVER').simulate('change', {
-        target: { value: 'radius.new_mock.org', name: 'RADIUS_SERVER' },
-      });
-      wrapper
-        .find('FormGroup[fieldId="RADIUS_SECRET"] button[aria-label="Revert"]')
-        .invoke('onClick')();
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('Form').invoke('onSubmit')();
-    });
-    expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1);
+    const { user, container } = await renderEdit();
+    const serverInput = container.querySelector('#RADIUS_SERVER');
+    await user.clear(serverInput);
+    await user.type(serverInput, 'radius.new_mock.org');
+    await user.click(
+      container.querySelector(
+        'button[data-ouia-component-id="RADIUS_SECRET-revert"]'
+      )
+    );
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    await waitFor(() =>
+      expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1)
+    );
     expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
       RADIUS_SERVER: 'radius.new_mock.org',
       RADIUS_PORT: 1812,
@@ -101,16 +95,16 @@ describe('<RADIUSEdit />', () => {
   });
 
   test('should navigate to radius detail on successful submission', async () => {
-    await act(async () => {
-      wrapper.find('Form').invoke('onSubmit')();
-    });
-    expect(history.location.pathname).toEqual('/settings/radius/details');
+    const { user } = await renderEdit();
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual('/settings/radius/details')
+    );
   });
 
   test('should navigate to radius detail when cancel is clicked', async () => {
-    await act(async () => {
-      wrapper.find('button[aria-label="Cancel"]').invoke('onClick')();
-    });
+    const { user } = await renderEdit();
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
     expect(history.location.pathname).toEqual('/settings/radius/details');
   });
 
@@ -121,13 +115,10 @@ describe('<RADIUSEdit />', () => {
       },
     };
     SettingsAPI.updateAll.mockImplementation(() => Promise.reject(error));
-    expect(wrapper.find('FormSubmitError').length).toBe(0);
+    const { user } = await renderEdit();
     expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(0);
-    await act(async () => {
-      wrapper.find('Form').invoke('onSubmit')();
-    });
-    wrapper.update();
-    expect(wrapper.find('FormSubmitError').length).toBe(1);
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    expect(await screen.findByText('An error occurred')).toBeInTheDocument();
     expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1);
   });
 
@@ -135,14 +126,11 @@ describe('<RADIUSEdit />', () => {
     SettingsAPI.readCategory.mockImplementationOnce(() =>
       Promise.reject(new Error())
     );
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <RADIUSEdit />
-        </SettingsProvider>
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('ContentError').length).toBe(1);
+    await renderEdit();
+    expect(
+      screen.getByText(
+        'There was an error loading this content. Please reload the page.'
+      )
+    ).toBeInTheDocument();
   });
 });

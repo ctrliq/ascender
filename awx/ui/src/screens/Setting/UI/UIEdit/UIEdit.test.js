@@ -1,19 +1,15 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import UIEdit from './UIEdit';
 
 jest.mock('../../../../api');
 
 describe('<UIEdit />', () => {
-  let wrapper;
   let history;
 
   beforeEach(() => {
@@ -34,76 +30,67 @@ describe('<UIEdit />', () => {
     jest.clearAllMocks();
   });
 
-  beforeEach(async () => {
-    // Temporarily suppress console.error to prevent PropTypes warnings from failing tests
-    const originalError = console.error;
-    console.error = jest.fn();
-    
+  async function renderEdit() {
     history = createMemoryHistory({
       initialEntries: ['/settings/ui/edit'],
     });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <UIEdit />
-        </SettingsProvider>,
-        {
-          context: { router: { history } },
-        }
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    
-    // Restore console.error after component mount
-    console.error = originalError;
-  });
+    const result = renderWithContexts(
+      <SettingsProvider value={mockAllOptions.actions}>
+        <UIEdit />
+      </SettingsProvider>,
+      { context: { router: { history } } }
+    );
+    await waitFor(() =>
+      expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
+    );
+    return result;
+  }
 
-  test('initially renders without crashing', () => {
-    expect(wrapper.find('UIEdit').length).toBe(1);
+  test('initially renders without crashing', async () => {
+    await renderEdit();
+    expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument();
   });
 
   test('should display expected form fields', async () => {
-    expect(wrapper.find('FormGroup[label="Custom Login Info"]').length).toBe(1);
-    expect(wrapper.find('FormGroup[label="Custom Login Logo"]').length).toBe(1);
+    await renderEdit();
+    expect(screen.getByText('Custom Login Info')).toBeInTheDocument();
+    expect(screen.getByText('Custom Login Logo')).toBeInTheDocument();
     expect(
-      wrapper.find('FormGroup[label="User Analytics Tracking State"]').length
-    ).toBe(1);
+      screen.getByText('User Analytics Tracking State')
+    ).toBeInTheDocument();
   });
 
   test('should successfully send default values to api on form revert all', async () => {
+    const { user } = await renderEdit();
     expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(0);
-    expect(wrapper.find('RevertAllAlert')).toHaveLength(0);
-    await act(async () => {
-      wrapper
-        .find('button[aria-label="Revert all to default"]')
-        .invoke('onClick')();
-    });
-    wrapper.update();
-    expect(wrapper.find('RevertAllAlert')).toHaveLength(1);
-    await act(async () => {
-      wrapper
-        .find('RevertAllAlert button[aria-label="Confirm revert all"]')
-        .invoke('onClick')();
-    });
-    wrapper.update();
-    expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(1);
+    expect(screen.queryByText('Revert settings')).not.toBeInTheDocument();
+    await user.click(
+      screen.getByRole('button', { name: 'Revert all to default' })
+    );
+    expect(await screen.findByText('Revert settings')).toBeInTheDocument();
+    await user.click(
+      screen.getByRole('button', { name: 'Confirm revert all' })
+    );
+    await waitFor(() =>
+      expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(1)
+    );
     expect(SettingsAPI.revertCategory).toHaveBeenCalledWith('ui');
   });
 
   test('should successfully send request to api on form submission', async () => {
-    act(() => {
-      wrapper.find('textarea#CUSTOM_LOGIN_INFO').simulate('change', {
-        target: { value: 'new login info', name: 'CUSTOM_LOGIN_INFO' },
-      });
-      wrapper
-        .find('FormGroup[fieldId="CUSTOM_LOGO"] button[aria-label="Revert"]')
-        .invoke('onClick')();
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('Form').invoke('onSubmit')();
-    });
-    expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1);
+    const { user, container } = await renderEdit();
+    const loginInfo = container.querySelector('#CUSTOM_LOGIN_INFO');
+    await user.clear(loginInfo);
+    await user.type(loginInfo, 'new login info');
+    await user.click(
+      container.querySelector(
+        'button[data-ouia-component-id="CUSTOM_LOGO-revert"]'
+      )
+    );
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    await waitFor(() =>
+      expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1)
+    );
     expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
       CUSTOM_LOGIN_INFO: 'new login info',
       CUSTOM_LOGO: '',
@@ -114,31 +101,30 @@ describe('<UIEdit />', () => {
   });
 
   test('should navigate to ui detail on successful submission', async () => {
-    await act(async () => {
-      wrapper.find('Form').invoke('onSubmit')();
-    });
-    expect(history.location.pathname).toEqual('/settings/ui/details');
+    const { user } = await renderEdit();
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual('/settings/ui/details')
+    );
     expect(history.location.state?.hardReload).toEqual(undefined);
   });
 
   test('should navigate to ui detail with reload param on successful submission where PENDO_TRACKING_STATE changes', async () => {
-    act(() => {
-      wrapper.find('select#PENDO_TRACKING_STATE').simulate('change', {
-        target: { value: 'off', name: 'CUSTOM_LOGIN_INFO' },
-      });
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('Form').invoke('onSubmit')();
-    });
-    expect(history.location.pathname).toEqual('/settings/ui/details');
+    const { user, container } = await renderEdit();
+    await user.selectOptions(
+      container.querySelector('#PENDO_TRACKING_STATE'),
+      'off'
+    );
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual('/settings/ui/details')
+    );
     expect(history.location.state?.hardReload).toEqual(true);
   });
 
   test('should navigate to ui detail when cancel is clicked', async () => {
-    await act(async () => {
-      wrapper.find('button[aria-label="Cancel"]').invoke('onClick')();
-    });
+    const { user } = await renderEdit();
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
     expect(history.location.pathname).toEqual('/settings/ui/details');
   });
 
@@ -149,13 +135,10 @@ describe('<UIEdit />', () => {
       },
     };
     SettingsAPI.updateAll.mockImplementation(() => Promise.reject(error));
-    expect(wrapper.find('FormSubmitError').length).toBe(0);
+    const { user } = await renderEdit();
     expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(0);
-    await act(async () => {
-      wrapper.find('Form').invoke('onSubmit')();
-    });
-    wrapper.update();
-    expect(wrapper.find('FormSubmitError').length).toBe(1);
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    expect(await screen.findByText('An error occurred')).toBeInTheDocument();
     expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1);
   });
 
@@ -163,14 +146,11 @@ describe('<UIEdit />', () => {
     SettingsAPI.readCategory.mockImplementationOnce(() =>
       Promise.reject(new Error())
     );
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <UIEdit />
-        </SettingsProvider>
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('ContentError').length).toBe(1);
+    await renderEdit();
+    expect(
+      screen.getByText(
+        'There was an error loading this content. Please reload the page.'
+      )
+    ).toBeInTheDocument();
   });
 });

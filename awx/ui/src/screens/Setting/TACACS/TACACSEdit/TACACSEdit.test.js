@@ -1,19 +1,15 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import TACACSEdit from './TACACSEdit';
 
 jest.mock('../../../../api/');
 
 describe('<TACACSEdit />', () => {
-  let wrapper;
   let history;
 
   beforeEach(() => {
@@ -35,78 +31,74 @@ describe('<TACACSEdit />', () => {
     jest.clearAllMocks();
   });
 
-  beforeEach(async () => {
+  async function renderEdit() {
     history = createMemoryHistory({
       initialEntries: ['/settings/tacacs/edit'],
     });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <TACACSEdit />
-        </SettingsProvider>,
-        {
-          context: { router: { history } },
-        }
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-  });
+    const result = renderWithContexts(
+      <SettingsProvider value={mockAllOptions.actions}>
+        <TACACSEdit />
+      </SettingsProvider>,
+      { context: { router: { history } } }
+    );
+    await waitFor(() =>
+      expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
+    );
+    return result;
+  }
 
-  test('initially renders without crashing', () => {
-    expect(wrapper.find('TACACSEdit').length).toBe(1);
+  test('initially renders without crashing', async () => {
+    await renderEdit();
+    expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument();
   });
 
   test('should display expected form fields', async () => {
-    expect(wrapper.find('FormGroup[label="TACACS+ Server"]').length).toBe(1);
-    expect(wrapper.find('FormGroup[label="TACACS+ Port"]').length).toBe(1);
-    expect(wrapper.find('FormGroup[label="TACACS+ Secret"]').length).toBe(1);
+    await renderEdit();
+    expect(screen.getByText('TACACS+ Server')).toBeInTheDocument();
+    expect(screen.getByText('TACACS+ Port')).toBeInTheDocument();
+    expect(screen.getByText('TACACS+ Secret')).toBeInTheDocument();
     expect(
-      wrapper.find('FormGroup[label="TACACS+ Auth Session Timeout"]').length
-    ).toBe(1);
+      screen.getByText('TACACS+ Auth Session Timeout')
+    ).toBeInTheDocument();
     expect(
-      wrapper.find('FormGroup[label="TACACS+ Authentication Protocol"]').length
-    ).toBe(1);
+      screen.getByText('TACACS+ Authentication Protocol')
+    ).toBeInTheDocument();
   });
 
   test('should successfully send default values to api on form revert all', async () => {
+    const { user } = await renderEdit();
     expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(0);
-    expect(wrapper.find('RevertAllAlert')).toHaveLength(0);
-    await act(async () => {
-      wrapper
-        .find('button[aria-label="Revert all to default"]')
-        .invoke('onClick')();
-    });
-    wrapper.update();
-    expect(wrapper.find('RevertAllAlert')).toHaveLength(1);
-    await act(async () => {
-      wrapper
-        .find('RevertAllAlert button[aria-label="Confirm revert all"]')
-        .invoke('onClick')();
-    });
-    wrapper.update();
-    expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(1);
+    expect(screen.queryByText('Revert settings')).not.toBeInTheDocument();
+    await user.click(
+      screen.getByRole('button', { name: 'Revert all to default' })
+    );
+    expect(await screen.findByText('Revert settings')).toBeInTheDocument();
+    await user.click(
+      screen.getByRole('button', { name: 'Confirm revert all' })
+    );
+    await waitFor(() =>
+      expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(1)
+    );
     expect(SettingsAPI.revertCategory).toHaveBeenCalledWith('tacacsplus');
   });
 
   test('should successfully send request to api on form submission', async () => {
-    act(() => {
-      wrapper.find('input#TACACSPLUS_HOST').simulate('change', {
-        target: { value: 'new_host', name: 'TACACSPLUS_HOST' },
-      });
-      wrapper.find('input#TACACSPLUS_PORT').simulate('change', {
-        target: { value: 999, name: 'TACACSPLUS_PORT' },
-      });
-      wrapper
-        .find(
-          'FormGroup[fieldId="TACACSPLUS_SECRET"] button[aria-label="Revert"]'
-        )
-        .invoke('onClick')();
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('Form').invoke('onSubmit')();
-    });
-    expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1);
+    const { user, container } = await renderEdit();
+    const hostInput = container.querySelector('#TACACSPLUS_HOST');
+    await user.clear(hostInput);
+    await user.type(hostInput, 'new_host');
+    const portInput = container.querySelector('#TACACSPLUS_PORT');
+    await user.clear(portInput);
+    await user.type(portInput, '999');
+    await user.click(
+      container.querySelector(
+        'button[data-ouia-component-id="TACACSPLUS_SECRET-revert"]'
+      )
+    );
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    await waitFor(() =>
+      expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1)
+    );
     expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
       TACACSPLUS_HOST: 'new_host',
       TACACSPLUS_PORT: 999,
@@ -118,16 +110,16 @@ describe('<TACACSEdit />', () => {
   });
 
   test('should navigate to tacacs detail on successful submission', async () => {
-    await act(async () => {
-      wrapper.find('Form').invoke('onSubmit')();
-    });
-    expect(history.location.pathname).toEqual('/settings/tacacs/details');
+    const { user } = await renderEdit();
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual('/settings/tacacs/details')
+    );
   });
 
   test('should navigate to tacacs detail when cancel is clicked', async () => {
-    await act(async () => {
-      wrapper.find('button[aria-label="Cancel"]').invoke('onClick')();
-    });
+    const { user } = await renderEdit();
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
     expect(history.location.pathname).toEqual('/settings/tacacs/details');
   });
 
@@ -138,13 +130,10 @@ describe('<TACACSEdit />', () => {
       },
     };
     SettingsAPI.updateAll.mockImplementation(() => Promise.reject(error));
-    expect(wrapper.find('FormSubmitError').length).toBe(0);
+    const { user } = await renderEdit();
     expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(0);
-    await act(async () => {
-      wrapper.find('Form').invoke('onSubmit')();
-    });
-    wrapper.update();
-    expect(wrapper.find('FormSubmitError').length).toBe(1);
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    expect(await screen.findByText('An error occurred')).toBeInTheDocument();
     expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1);
   });
 
@@ -152,14 +141,11 @@ describe('<TACACSEdit />', () => {
     SettingsAPI.readCategory.mockImplementationOnce(() =>
       Promise.reject(new Error())
     );
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <TACACSEdit />
-        </SettingsProvider>
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('ContentError').length).toBe(1);
+    await renderEdit();
+    expect(
+      screen.getByText(
+        'There was an error loading this content. Please reload the page.'
+      )
+    ).toBeInTheDocument();
   });
 });

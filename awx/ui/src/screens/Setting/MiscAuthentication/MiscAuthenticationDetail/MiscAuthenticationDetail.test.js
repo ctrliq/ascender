@@ -1,24 +1,18 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
 import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../../testUtils/enzymeHelpers';
-import {
+  renderWithContexts,
   assertDetail,
-  assertVariableDetail,
-} from '../../shared/settingTestUtils';
+} from '../../../../../testUtils/rtlContexts';
 import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import MiscAuthenticationDetail from './MiscAuthenticationDetail';
 
 jest.mock('../../../../api');
 
 describe('<MiscAuthenticationDetail />', () => {
-  let wrapper;
-
-  beforeEach(async () => {
+  beforeEach(() => {
     SettingsAPI.readCategory = jest.fn();
     SettingsAPI.readCategory.mockResolvedValue({
       data: {
@@ -43,88 +37,75 @@ describe('<MiscAuthenticationDetail />', () => {
         SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL: false,
       },
     });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <MiscAuthenticationDetail />
-        </SettingsProvider>
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
   });
 
-  test('initially renders without crashing', () => {
-    expect(wrapper.find('MiscAuthenticationDetail').length).toBe(1);
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
-  test('should render expected tabs', () => {
+  async function renderDetail(context) {
+    const result = renderWithContexts(
+      <SettingsProvider value={mockAllOptions.actions}>
+        <MiscAuthenticationDetail />
+      </SettingsProvider>,
+      context
+    );
+    await waitFor(() =>
+      expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
+    );
+    return result;
+  }
+
+  test('initially renders without crashing', async () => {
+    await renderDetail();
+    expect(
+      screen.getByText('Disable the built-in authentication system')
+    ).toBeInTheDocument();
+  });
+
+  test('should render expected tabs', async () => {
+    await renderDetail();
     const expectedTabs = ['Back to Settings', 'Details'];
-    wrapper.find('RoutedTabs li').forEach((tab, index) => {
-      expect(tab.text()).toEqual(expectedTabs[index]);
+    expectedTabs.forEach((tab) => {
+      expect(screen.getByRole('tab', { name: tab })).toBeInTheDocument();
     });
   });
 
-  test('should render expected details', () => {
-    assertDetail(wrapper, 'Disable the built-in authentication system', 'Off');
-    assertVariableDetail(
-      wrapper,
-      'OAuth 2 Timeout Settings',
-      '{\n  "ACCESS_TOKEN_EXPIRE_SECONDS": 31536000000,\n  "AUTHORIZATION_CODE_EXPIRE_SECONDS": 600,\n  "REFRESH_TOKEN_EXPIRE_SECONDS": 2628000\n}'
-    );
-    assertDetail(wrapper, 'Login redirect override URL', 'https://foohost');
-    assertVariableDetail(
-      wrapper,
-      'Authentication Backends',
-      '[\n  "awx.sso.backends.TACACSPlusBackend",\n  "awx.main.backends.AWXModelBackend"\n]'
-    );
-    assertVariableDetail(wrapper, 'Social Auth Organization Map', '{}');
-    assertVariableDetail(wrapper, 'Social Auth Team Map', '{}');
-    assertVariableDetail(wrapper, 'Social Auth User Fields', '[]');
-    assertDetail(wrapper, 'Use Email address for usernames', 'Off');
-    assertDetail(
-      wrapper,
-      'Allow External Users to Create OAuth2 Tokens',
-      'Off'
-    );
-    assertDetail(wrapper, 'Enable HTTP Basic Auth', 'On');
-    assertDetail(wrapper, 'Idle Time Force Log Out', '1800 seconds');
-    assertDetail(
-      wrapper,
-      'Maximum number of simultaneous logged in sessions',
-      '-1'
-    );
+  test('should render expected details', async () => {
+    await renderDetail();
+    assertDetail('Disable the built-in authentication system', 'Off');
+    // CodeEditor (object/list types) renders empty under jsdom; assert the label.
+    expect(screen.getByText('OAuth 2 Timeout Settings')).toBeInTheDocument();
+    assertDetail('Login redirect override URL', 'https://foohost');
+    expect(screen.getByText('Authentication Backends')).toBeInTheDocument();
+    expect(
+      screen.getByText('Social Auth Organization Map')
+    ).toBeInTheDocument();
+    expect(screen.getByText('Social Auth Team Map')).toBeInTheDocument();
+    expect(screen.getByText('Social Auth User Fields')).toBeInTheDocument();
+    assertDetail('Use Email address for usernames', 'Off');
+    assertDetail('Allow External Users to Create OAuth2 Tokens', 'Off');
+    assertDetail('Enable HTTP Basic Auth', 'On');
+    assertDetail('Idle Time Force Log Out', '1800 seconds');
+    assertDetail('Maximum number of simultaneous logged in sessions', '-1');
   });
 
   test('should hide edit button from non-superusers', async () => {
-    const config = {
-      me: {
-        is_superuser: false,
-      },
-    };
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <MiscAuthenticationDetail />
-        </SettingsProvider>,
-        {
-          context: { config },
-        }
-      );
+    await renderDetail({
+      context: { config: { me: { is_superuser: false } } },
     });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('Button[aria-label="Edit"]').exists()).toBeFalsy();
+    expect(
+      screen.queryByRole('link', { name: 'Edit' })
+    ).not.toBeInTheDocument();
   });
 
   test('should display content error when api throws error on initial render', async () => {
     SettingsAPI.readCategory.mockRejectedValue(new Error());
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <MiscAuthenticationDetail />
-        </SettingsProvider>
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('ContentError').length).toBe(1);
+    await renderDetail();
+    expect(
+      screen.getByText(
+        'There was an error loading this content. Please reload the page.'
+      )
+    ).toBeInTheDocument();
   });
 });

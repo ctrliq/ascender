@@ -1,16 +1,12 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
 import { useRouteMatch } from 'react-router-dom';
+import { screen, waitFor } from '@testing-library/react';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
 import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../../testUtils/enzymeHelpers';
-import {
+  renderWithContexts,
   assertDetail,
-  assertVariableDetail,
-} from '../../shared/settingTestUtils';
+} from '../../../../../testUtils/rtlContexts';
 import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import GitHubDetail from './GitHubDetail';
 
@@ -90,41 +86,45 @@ const mockEnterpriseTeam = {
   },
 };
 
-describe('<GitHubDetail />', () => {
-  describe('Default', () => {
-    let wrapper;
+function mockAllCategories() {
+  SettingsAPI.readCategory.mockResolvedValueOnce(mockDefault);
+  SettingsAPI.readCategory.mockResolvedValueOnce(mockOrg);
+  SettingsAPI.readCategory.mockResolvedValueOnce(mockTeam);
+  SettingsAPI.readCategory.mockResolvedValueOnce(mockEnterprise);
+  SettingsAPI.readCategory.mockResolvedValueOnce(mockEnterpriseOrg);
+  SettingsAPI.readCategory.mockResolvedValueOnce(mockEnterpriseTeam);
+}
 
-    beforeEach(async () => {
-      SettingsAPI.readCategory.mockResolvedValueOnce(mockDefault);
-      SettingsAPI.readCategory.mockResolvedValueOnce(mockOrg);
-      SettingsAPI.readCategory.mockResolvedValueOnce(mockTeam);
-      SettingsAPI.readCategory.mockResolvedValueOnce(mockEnterprise);
-      SettingsAPI.readCategory.mockResolvedValueOnce(mockEnterpriseOrg);
-      SettingsAPI.readCategory.mockResolvedValueOnce(mockEnterpriseTeam);
+async function setup(context) {
+  const utils = renderWithContexts(
+    <SettingsProvider value={mockAllOptions.actions}>
+      <GitHubDetail />
+    </SettingsProvider>,
+    context ? { context } : undefined
+  );
+  await waitFor(() =>
+    expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
+  );
+  return utils;
+}
+
+describe('<GitHubDetail />', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  describe('Default', () => {
+    beforeEach(() => {
+      mockAllCategories();
       useRouteMatch.mockImplementation(() => ({
         url: '/settings/github/default/details',
         path: '/settings/github/:category/details',
         params: { category: 'default' },
       }));
-      await act(async () => {
-        wrapper = mountWithContexts(
-          <SettingsProvider value={mockAllOptions.actions}>
-            <GitHubDetail />
-          </SettingsProvider>
-        );
-      });
-      await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
     });
 
-    afterAll(() => {
-      jest.clearAllMocks();
-    });
-
-    test('initially renders without crashing', () => {
-      expect(wrapper.find('GitHubDetail').length).toBe(1);
-    });
-
-    test('should render expected tabs', () => {
+    test('should render expected tabs', async () => {
+      await setup();
       const expectedTabs = [
         'Back to Settings',
         'GitHub Default',
@@ -134,365 +134,217 @@ describe('<GitHubDetail />', () => {
         'GitHub Enterprise Organization',
         'GitHub Enterprise Team',
       ];
-      wrapper.find('RoutedTabs li').forEach((tab, index) => {
-        expect(tab.text()).toEqual(expectedTabs[index]);
+      expectedTabs.forEach((tab) => {
+        expect(screen.getByText(tab)).toBeInTheDocument();
       });
     });
 
-    test('should render expected details', () => {
+    test('should render expected details', async () => {
+      await setup();
       assertDetail(
-        wrapper,
         'GitHub OAuth2 Callback URL',
         'https://towerhost/sso/complete/github/'
       );
-      assertDetail(wrapper, 'GitHub OAuth2 Key', 'mock github key');
-      assertDetail(wrapper, 'GitHub OAuth2 Secret', 'Encrypted');
-      assertVariableDetail(wrapper, 'GitHub OAuth2 Organization Map', 'null');
-      assertVariableDetail(wrapper, 'GitHub OAuth2 Team Map', 'null');
+      assertDetail('GitHub OAuth2 Key', 'mock github key');
+      assertDetail('GitHub OAuth2 Secret', 'Encrypted');
+      expect(
+        screen.getByText('GitHub OAuth2 Organization Map')
+      ).toBeInTheDocument();
+      expect(screen.getByText('GitHub OAuth2 Team Map')).toBeInTheDocument();
     });
 
     test('should hide edit button from non-superusers', async () => {
-      const config = {
-        me: {
-          is_superuser: false,
-        },
-      };
-      await act(async () => {
-        wrapper = mountWithContexts(
-          <SettingsProvider value={mockAllOptions.actions}>
-            <GitHubDetail />
-          </SettingsProvider>,
-          {
-            context: { config },
-          }
-        );
-      });
-      await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-      expect(wrapper.find('Button[aria-label="Edit"]').exists()).toBeFalsy();
+      await setup({ config: { me: { is_superuser: false } } });
+      expect(
+        screen.queryByRole('button', { name: 'Edit' })
+      ).not.toBeInTheDocument();
     });
 
     test('should display content error when api throws error on initial render', async () => {
+      SettingsAPI.readCategory.mockReset();
       SettingsAPI.readCategory.mockRejectedValue(new Error());
-      await act(async () => {
-        wrapper = mountWithContexts(
-          <SettingsProvider value={mockAllOptions.actions}>
-            <GitHubDetail />
-          </SettingsProvider>
-        );
-      });
-      await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-      expect(wrapper.find('ContentError').length).toBe(1);
+      await setup();
+      expect(screen.getByText(/Something went wrong/)).toBeInTheDocument();
     });
   });
 
   describe('Organization', () => {
-    let wrapper;
-
-    beforeAll(async () => {
-      SettingsAPI.readCategory.mockResolvedValueOnce(mockDefault);
-      SettingsAPI.readCategory.mockResolvedValueOnce(mockOrg);
-      SettingsAPI.readCategory.mockResolvedValueOnce(mockTeam);
-      SettingsAPI.readCategory.mockResolvedValueOnce(mockEnterprise);
-      SettingsAPI.readCategory.mockResolvedValueOnce(mockEnterpriseOrg);
-      SettingsAPI.readCategory.mockResolvedValueOnce(mockEnterpriseTeam);
+    beforeEach(() => {
+      mockAllCategories();
       useRouteMatch.mockImplementation(() => ({
         url: '/settings/github/organization/details',
         path: '/settings/github/:category/details',
         params: { category: 'organization' },
       }));
-      await act(async () => {
-        wrapper = mountWithContexts(
-          <SettingsProvider value={mockAllOptions.actions}>
-            <GitHubDetail />
-          </SettingsProvider>
-        );
-      });
-      await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
     });
 
-    afterAll(() => {
-      jest.clearAllMocks();
-    });
-
-    test('should render expected details', () => {
+    test('should render expected details', async () => {
+      await setup();
       assertDetail(
-        wrapper,
         'GitHub Organization OAuth2 Callback URL',
         'https://towerhost/sso/complete/github-org/'
       );
-      assertDetail(wrapper, 'GitHub Organization OAuth2 Key', 'Not configured');
-      assertDetail(wrapper, 'GitHub Organization OAuth2 Secret', 'Encrypted');
-      assertDetail(wrapper, 'GitHub Organization Name', 'Not configured');
-      assertVariableDetail(
-        wrapper,
-        'GitHub Organization OAuth2 Organization Map',
-        'null'
-      );
-      assertVariableDetail(
-        wrapper,
-        'GitHub Organization OAuth2 Team Map',
-        'null'
-      );
+      assertDetail('GitHub Organization OAuth2 Key', 'Not configured');
+      assertDetail('GitHub Organization OAuth2 Secret', 'Encrypted');
+      assertDetail('GitHub Organization Name', 'Not configured');
+      expect(
+        screen.getByText('GitHub Organization OAuth2 Organization Map')
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText('GitHub Organization OAuth2 Team Map')
+      ).toBeInTheDocument();
     });
   });
 
   describe('Team', () => {
-    let wrapper;
-
-    beforeAll(async () => {
-      SettingsAPI.readCategory.mockResolvedValueOnce(mockDefault);
-      SettingsAPI.readCategory.mockResolvedValueOnce(mockOrg);
-      SettingsAPI.readCategory.mockResolvedValueOnce(mockTeam);
-      SettingsAPI.readCategory.mockResolvedValueOnce(mockEnterprise);
-      SettingsAPI.readCategory.mockResolvedValueOnce(mockEnterpriseOrg);
-      SettingsAPI.readCategory.mockResolvedValueOnce(mockEnterpriseTeam);
+    beforeEach(() => {
+      mockAllCategories();
       useRouteMatch.mockImplementation(() => ({
         url: '/settings/github/team/details',
         path: '/settings/github/:category/details',
         params: { category: 'team' },
       }));
-      await act(async () => {
-        wrapper = mountWithContexts(
-          <SettingsProvider value={mockAllOptions.actions}>
-            <GitHubDetail />
-          </SettingsProvider>
-        );
-      });
-      await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
     });
 
-    afterAll(() => {
-      jest.clearAllMocks();
-    });
-
-    test('should render expected details', () => {
+    test('should render expected details', async () => {
+      await setup();
       assertDetail(
-        wrapper,
         'GitHub Team OAuth2 Callback URL',
         'https://towerhost/sso/complete/github-team/'
       );
-      assertDetail(wrapper, 'GitHub Team OAuth2 Key', 'OAuth2 key (Client ID)');
-      assertDetail(wrapper, 'GitHub Team OAuth2 Secret', 'Encrypted');
-      assertDetail(wrapper, 'GitHub Team ID', 'team_id');
-      assertVariableDetail(
-        wrapper,
-        'GitHub Team OAuth2 Organization Map',
-        '{}'
-      );
-      assertVariableDetail(wrapper, 'GitHub Team OAuth2 Team Map', '{}');
+      assertDetail('GitHub Team OAuth2 Key', 'OAuth2 key (Client ID)');
+      assertDetail('GitHub Team OAuth2 Secret', 'Encrypted');
+      assertDetail('GitHub Team ID', 'team_id');
+      expect(
+        screen.getByText('GitHub Team OAuth2 Organization Map')
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText('GitHub Team OAuth2 Team Map')
+      ).toBeInTheDocument();
     });
   });
 
   describe('Enterprise', () => {
-    let wrapper;
-
-    beforeAll(async () => {
-      SettingsAPI.readCategory.mockResolvedValueOnce(mockDefault);
-      SettingsAPI.readCategory.mockResolvedValueOnce(mockOrg);
-      SettingsAPI.readCategory.mockResolvedValueOnce(mockTeam);
-      SettingsAPI.readCategory.mockResolvedValueOnce(mockEnterprise);
-      SettingsAPI.readCategory.mockResolvedValueOnce(mockEnterpriseOrg);
-      SettingsAPI.readCategory.mockResolvedValueOnce(mockEnterpriseTeam);
+    beforeEach(() => {
+      mockAllCategories();
       useRouteMatch.mockImplementation(() => ({
         url: '/settings/github/enterprise/details',
         path: '/settings/github/:category/details',
         params: { category: 'enterprise' },
       }));
-      await act(async () => {
-        wrapper = mountWithContexts(
-          <SettingsProvider value={mockAllOptions.actions}>
-            <GitHubDetail />
-          </SettingsProvider>
-        );
-      });
-      await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
     });
 
-    afterAll(() => {
-      jest.clearAllMocks();
-    });
-
-    test('should render expected details', () => {
+    test('should render expected details', async () => {
+      await setup();
       assertDetail(
-        wrapper,
         'GitHub Enterprise OAuth2 Callback URL',
         'https://towerhost/sso/complete/github-enterprise/'
       );
+      assertDetail('GitHub Enterprise URL', 'https://localhost/enterpriseurl');
       assertDetail(
-        wrapper,
-        'GitHub Enterprise URL',
-        'https://localhost/enterpriseurl'
-      );
-      assertDetail(
-        wrapper,
         'GitHub Enterprise API URL',
         'https://localhost/enterpriseapi'
       );
-      assertDetail(wrapper, 'GitHub Enterprise OAuth2 Key', 'foobar');
-      assertDetail(wrapper, 'GitHub Enterprise OAuth2 Secret', 'Encrypted');
-      assertVariableDetail(
-        wrapper,
-        'GitHub Enterprise OAuth2 Organization Map',
-        'null'
-      );
-      assertVariableDetail(
-        wrapper,
-        'GitHub Enterprise OAuth2 Team Map',
-        'null'
-      );
+      assertDetail('GitHub Enterprise OAuth2 Key', 'foobar');
+      assertDetail('GitHub Enterprise OAuth2 Secret', 'Encrypted');
+      expect(
+        screen.getByText('GitHub Enterprise OAuth2 Organization Map')
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText('GitHub Enterprise OAuth2 Team Map')
+      ).toBeInTheDocument();
     });
   });
 
   describe('Enterprise Org', () => {
-    let wrapper;
-
-    beforeAll(async () => {
-      SettingsAPI.readCategory.mockResolvedValueOnce(mockDefault);
-      SettingsAPI.readCategory.mockResolvedValueOnce(mockOrg);
-      SettingsAPI.readCategory.mockResolvedValueOnce(mockTeam);
-      SettingsAPI.readCategory.mockResolvedValueOnce(mockEnterprise);
-      SettingsAPI.readCategory.mockResolvedValueOnce(mockEnterpriseOrg);
-      SettingsAPI.readCategory.mockResolvedValueOnce(mockEnterpriseTeam);
+    beforeEach(() => {
+      mockAllCategories();
       useRouteMatch.mockImplementation(() => ({
         url: '/settings/github/enterprise_organization/details',
         path: '/settings/github/:category/details',
         params: { category: 'enterprise_organization' },
       }));
-      await act(async () => {
-        wrapper = mountWithContexts(
-          <SettingsProvider value={mockAllOptions.actions}>
-            <GitHubDetail />
-          </SettingsProvider>
-        );
-      });
-      await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
     });
 
-    afterAll(() => {
-      jest.clearAllMocks();
-    });
-
-    test('should render expected details', () => {
+    test('should render expected details', async () => {
+      await setup();
       assertDetail(
-        wrapper,
         'GitHub Enterprise Organization OAuth2 Callback URL',
         'https://towerhost/sso/complete/github-enterprise-org/'
       );
       assertDetail(
-        wrapper,
         'GitHub Enterprise Organization URL',
         'https://localhost/orgurl'
       );
       assertDetail(
-        wrapper,
         'GitHub Enterprise Organization API URL',
         'https://localhost/orgapi'
       );
-      assertDetail(
-        wrapper,
-        'GitHub Enterprise Organization OAuth2 Key',
-        'foobar'
-      );
-      assertDetail(
-        wrapper,
-        'GitHub Enterprise Organization OAuth2 Secret',
-        'Encrypted'
-      );
-      assertDetail(wrapper, 'GitHub Enterprise Organization Name', 'foo');
-      assertVariableDetail(
-        wrapper,
-        'GitHub Enterprise Organization OAuth2 Organization Map',
-        'null'
-      );
-      assertVariableDetail(
-        wrapper,
-        'GitHub Enterprise Organization OAuth2 Team Map',
-        'null'
-      );
+      assertDetail('GitHub Enterprise Organization OAuth2 Key', 'foobar');
+      assertDetail('GitHub Enterprise Organization OAuth2 Secret', 'Encrypted');
+      assertDetail('GitHub Enterprise Organization Name', 'foo');
+      expect(
+        screen.getByText(
+          'GitHub Enterprise Organization OAuth2 Organization Map'
+        )
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText('GitHub Enterprise Organization OAuth2 Team Map')
+      ).toBeInTheDocument();
     });
   });
 
   describe('Enterprise Team', () => {
-    let wrapper;
-
-    beforeAll(async () => {
-      SettingsAPI.readCategory.mockResolvedValueOnce(mockDefault);
-      SettingsAPI.readCategory.mockResolvedValueOnce(mockOrg);
-      SettingsAPI.readCategory.mockResolvedValueOnce(mockTeam);
-      SettingsAPI.readCategory.mockResolvedValueOnce(mockEnterprise);
-      SettingsAPI.readCategory.mockResolvedValueOnce(mockEnterpriseOrg);
-      SettingsAPI.readCategory.mockResolvedValueOnce(mockEnterpriseTeam);
+    beforeEach(() => {
+      mockAllCategories();
       useRouteMatch.mockImplementation(() => ({
         url: '/settings/github/enterprise_team/details',
         path: '/settings/github/:category/details',
         params: { category: 'enterprise_team' },
       }));
-      await act(async () => {
-        wrapper = mountWithContexts(
-          <SettingsProvider value={mockAllOptions.actions}>
-            <GitHubDetail />
-          </SettingsProvider>
-        );
-      });
-      await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
     });
 
-    afterAll(() => {
-      jest.clearAllMocks();
-    });
-
-    test('should render expected details', () => {
+    test('should render expected details', async () => {
+      await setup();
       assertDetail(
-        wrapper,
         'GitHub Enterprise Team OAuth2 Callback URL',
         'https://towerhost/sso/complete/github-enterprise-team/'
       );
+      assertDetail('GitHub Enterprise Team URL', 'https://localhost/teamurl');
       assertDetail(
-        wrapper,
-        'GitHub Enterprise Team URL',
-        'https://localhost/teamurl'
-      );
-      assertDetail(
-        wrapper,
         'GitHub Enterprise Team API URL',
         'https://localhost/teamapi'
       );
-      assertDetail(wrapper, 'GitHub Enterprise Team OAuth2 Key', 'foobar');
-      assertDetail(
-        wrapper,
-        'GitHub Enterprise Team OAuth2 Secret',
-        'Encrypted'
-      );
-      assertDetail(wrapper, 'GitHub Enterprise Team ID', 'foo');
-      assertVariableDetail(
-        wrapper,
-        'GitHub Enterprise Team OAuth2 Organization Map',
-        'null'
-      );
-      assertVariableDetail(
-        wrapper,
-        'GitHub Enterprise Team OAuth2 Team Map',
-        'null'
-      );
+      assertDetail('GitHub Enterprise Team OAuth2 Key', 'foobar');
+      assertDetail('GitHub Enterprise Team OAuth2 Secret', 'Encrypted');
+      assertDetail('GitHub Enterprise Team ID', 'foo');
+      expect(
+        screen.getByText('GitHub Enterprise Team OAuth2 Organization Map')
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText('GitHub Enterprise Team OAuth2 Team Map')
+      ).toBeInTheDocument();
     });
   });
 
   describe('Redirect', () => {
-    test('should render redirect when user navigates to erroneous category', async () => {
-      let wrapper;
+    test('should redirect when user navigates to erroneous category', async () => {
+      mockAllCategories();
       useRouteMatch.mockImplementation(() => ({
         url: '/settings/github/foo/details',
         path: '/settings/github/:category/details',
         params: { category: 'foo' },
       }));
-      await act(async () => {
-        wrapper = mountWithContexts(
-          <SettingsProvider value={mockAllOptions.actions}>
-            <GitHubDetail />
-          </SettingsProvider>
-        );
-      });
-      await waitForElement(wrapper, 'Redirect');
+      const { history } = renderWithContexts(
+        <SettingsProvider value={mockAllOptions.actions}>
+          <GitHubDetail />
+        </SettingsProvider>
+      );
+      await waitFor(() =>
+        expect(history.location.pathname).toEqual(
+          '/settings/github/default/details'
+        )
+      );
     });
   });
 });

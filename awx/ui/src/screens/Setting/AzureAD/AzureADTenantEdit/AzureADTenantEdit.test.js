@@ -1,19 +1,15 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import AzureADTenantEdit from './AzureADTenantEdit';
 
 jest.mock('../../../../api');
 
 describe('<AzureADTenantEdit />', () => {
-  let wrapper;
   let history;
   let tenantSettings;
 
@@ -51,7 +47,7 @@ describe('<AzureADTenantEdit />', () => {
         unit: null,
       },
     };
-  
+
     SettingsAPI.revertCategory.mockResolvedValue({});
     SettingsAPI.updateAll.mockResolvedValue({});
     SettingsAPI.readCategory.mockResolvedValue({
@@ -73,74 +69,84 @@ describe('<AzureADTenantEdit />', () => {
     jest.clearAllMocks();
   });
 
-  beforeEach(async () => {
+  async function renderEdit() {
     history = createMemoryHistory({
       initialEntries: ['/settings/azure/tenant/edit'],
     });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={tenantSettings}>
-          <AzureADTenantEdit />
-        </SettingsProvider>,
-        {
-          context: { router: { history } },
-        }
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-  });
+    const result = renderWithContexts(
+      <SettingsProvider value={tenantSettings}>
+        <AzureADTenantEdit />
+      </SettingsProvider>,
+      { context: { router: { history } } }
+    );
+    await waitFor(() =>
+      expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
+    );
+    return result;
+  }
 
-  test('initially renders without crashing', () => {
-    expect(wrapper.find('AzureADTenantEdit').length).toBe(1);
+  test('initially renders without crashing', async () => {
+    await renderEdit();
+    expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument();
   });
 
   test('should successfully send default values to api on form revert all', async () => {
+    const { user } = await renderEdit();
     expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(0);
-    expect(wrapper.find('RevertAllAlert')).toHaveLength(0);
-    await act(async () => {
-      wrapper
-        .find('button[aria-label="Revert all to default"]')
-        .invoke('onClick')();
-    });
-    wrapper.update();
-    expect(wrapper.find('RevertAllAlert')).toHaveLength(1);
-    await act(async () => {
-      wrapper
-        .find('RevertAllAlert button[aria-label="Confirm revert all"]')
-        .invoke('onClick')();
-    });
-    wrapper.update();
-    expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(1);
+    expect(screen.queryByText('Revert settings')).not.toBeInTheDocument();
+    await user.click(
+      screen.getByRole('button', { name: 'Revert all to default' })
+    );
+    expect(await screen.findByText('Revert settings')).toBeInTheDocument();
+    await user.click(
+      screen.getByRole('button', { name: 'Confirm revert all' })
+    );
+    await waitFor(() =>
+      expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(1)
+    );
     expect(SettingsAPI.revertCategory).toHaveBeenCalledWith(
       'azuread-oauth2-tenant'
     );
   });
 
   test('should successfully send request to api on form submission', async () => {
-    await act(async () => {
-      wrapper.find('Form').invoke('onSubmit')();
-    });
-    expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1);
+    const { user } = await renderEdit();
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    await waitFor(() =>
+      expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1)
+    );
     const callArgs = SettingsAPI.updateAll.mock.calls[0][0];
-    expect(callArgs.SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY).toEqual('mock tenant key');
-    expect(callArgs.SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET).toEqual('$encrypted$');
-    expect(callArgs.SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TENANT_ID).toEqual('mock-tenant-id');
+    expect(callArgs.SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY).toEqual(
+      'mock tenant key'
+    );
+    expect(callArgs.SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET).toEqual(
+      '$encrypted$'
+    );
+    expect(callArgs.SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TENANT_ID).toEqual(
+      'mock-tenant-id'
+    );
     // Nested objects should be properly formatted
-    expect(typeof callArgs.SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_ORGANIZATION_MAP).toEqual('object');
-    expect(typeof callArgs.SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TEAM_MAP).toEqual('object');
+    expect(
+      typeof callArgs.SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_ORGANIZATION_MAP
+    ).toEqual('object');
+    expect(
+      typeof callArgs.SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TEAM_MAP
+    ).toEqual('object');
   });
 
   test('should navigate to azure tenant detail on successful submission', async () => {
-    await act(async () => {
-      wrapper.find('Form').invoke('onSubmit')();
-    });
-    expect(history.location.pathname).toEqual('/settings/azure/tenant/details');
+    const { user } = await renderEdit();
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual(
+        '/settings/azure/tenant/details'
+      )
+    );
   });
 
   test('should navigate to azure tenant detail when cancel is clicked', async () => {
-    await act(async () => {
-      wrapper.find('button[aria-label="Cancel"]').invoke('onClick')();
-    });
+    const { user } = await renderEdit();
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
     expect(history.location.pathname).toEqual('/settings/azure/tenant/details');
   });
 
@@ -151,13 +157,10 @@ describe('<AzureADTenantEdit />', () => {
       },
     };
     SettingsAPI.updateAll.mockImplementation(() => Promise.reject(error));
-    expect(wrapper.find('FormSubmitError').length).toBe(0);
+    const { user } = await renderEdit();
     expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(0);
-    await act(async () => {
-      wrapper.find('Form').invoke('onSubmit')();
-    });
-    wrapper.update();
-    expect(wrapper.find('FormSubmitError').length).toBe(1);
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    expect(await screen.findByText('An error occurred')).toBeInTheDocument();
     expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1);
   });
 
@@ -165,14 +168,11 @@ describe('<AzureADTenantEdit />', () => {
     SettingsAPI.readCategory.mockImplementationOnce(() =>
       Promise.reject(new Error())
     );
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={tenantSettings}>
-          <AzureADTenantEdit />
-        </SettingsProvider>
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('ContentError').length).toBe(1);
+    await renderEdit();
+    expect(
+      screen.getByText(
+        'There was an error loading this content. Please reload the page.'
+      )
+    ).toBeInTheDocument();
   });
 });

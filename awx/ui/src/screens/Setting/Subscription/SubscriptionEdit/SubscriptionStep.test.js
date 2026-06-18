@@ -1,119 +1,128 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
 import { Formik } from 'formik';
-import { mountWithContexts } from '../../../../../testUtils/enzymeHelpers';
+import { screen, waitFor, fireEvent } from '@testing-library/react';
+import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import SubscriptionStep from './SubscriptionStep';
 
+const initialValues = {
+  insights: false,
+  manifest_file: null,
+  manifest_filename: '',
+  pendo: false,
+  subscription: null,
+  password: '',
+  username: '',
+};
+
+function renderStep() {
+  return renderWithContexts(
+    <Formik initialValues={initialValues}>
+      <SubscriptionStep />
+    </Formik>
+  );
+}
+
 describe('<SubscriptionStep />', () => {
-  let wrapper;
-
-  beforeAll(async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik
-          initialValues={{
-            insights: false,
-            manifest_file: null,
-            manifest_filename: '',
-            pendo: false,
-            subscription: null,
-            password: '',
-            username: '',
-          }}
-        >
-          <SubscriptionStep />
-        </Formik>
-      );
-    });
-  });
-
-  afterAll(() => {
-    jest.clearAllMocks();
-  });
-
-  test('initially renders without crashing', async () => {
-    expect(wrapper.find('SubscriptionStep').length).toBe(1);
+  test('initially renders without crashing', () => {
+    renderStep();
+    expect(
+      screen.getByText('Red Hat subscription manifest')
+    ).toBeInTheDocument();
   });
 
   test('should update filename when a manifest zip file is uploaded', async () => {
-    expect(wrapper.find('FileUploadField')).toHaveLength(1);
-    expect(wrapper.find('label').text()).toEqual(
-      'Red Hat subscription manifest'
-    );
-    expect(wrapper.find('FileUploadField').prop('value')).toEqual(null);
-    expect(wrapper.find('FileUploadField').prop('filename')).toEqual('');
-    const mockFile = new Blob(['123'], { type: 'application/zip' });
-    mockFile.name = 'new file name';
-    mockFile.date = new Date();
-    await act(async () => {
-      wrapper.find('FileUpload').invoke('onChange')(mockFile, 'new file name');
+    const { container } = renderStep();
+    const fileInput = container.querySelector('input[type="file"]');
+    expect(fileInput).toBeInTheDocument();
+    // the readonly filename input starts empty
+    const filenameInput = container.querySelector('#upload-manifest-filename');
+    expect(filenameInput.value).toEqual('');
+
+    // the dropzone accept rule is '.zip' (extension based), so the file name
+    // must end in .zip for onChange/onDropAccepted to fire
+    const file = new File(['123'], 'new file name.zip', {
+      type: 'application/zip',
     });
-    await act(async () => {
-      wrapper.update();
-    });
-    await act(async () => {
-      wrapper.update();
-    });
-    expect(wrapper.find('FileUploadField').prop('value')).toEqual(
-      expect.stringMatching(/^[\x00-\x7F]+$/) // eslint-disable-line no-control-regex
-    );
-    expect(wrapper.find('FileUploadField').prop('filename')).toEqual(
-      'new file name'
+    fireEvent.change(fileInput, { target: { files: [file] } });
+
+    // FileReader.onload sets the filename asynchronously
+    await waitFor(() =>
+      expect(
+        container.querySelector('#upload-manifest-filename').value
+      ).toEqual('new file name.zip')
     );
   });
 
   test('clear button should clear manifest value and filename', async () => {
-    await act(async () => {
-      wrapper
-        .find('FileUpload .pf-c-input-group button')
-        .last()
-        .simulate('click');
+    const { container } = renderStep();
+    const fileInput = container.querySelector('input[type="file"]');
+    const file = new File(['123'], 'new file name.zip', {
+      type: 'application/zip',
     });
-    wrapper.update();
-    expect(wrapper.find('FileUploadField').prop('value')).toEqual(null);
-    expect(wrapper.find('FileUploadField').prop('filename')).toEqual('');
+    fireEvent.change(fileInput, { target: { files: [file] } });
+    await waitFor(() =>
+      expect(
+        container.querySelector('#upload-manifest-filename').value
+      ).toEqual('new file name.zip')
+    );
+
+    // PF FileUpload renders a clear button in the input group
+    const clearButton = screen.getByRole('button', { name: 'Clear' });
+    fireEvent.click(clearButton);
+    await waitFor(() =>
+      expect(
+        container.querySelector('#upload-manifest-filename').value
+      ).toEqual('')
+    );
   });
 
-  test('FileUpload should throw an error', async () => {
+  test('FileUpload should throw an error on an invalid file format', async () => {
+    const { container } = renderStep();
     expect(
-      wrapper.find('div#subscription-manifest-helper.pf-m-error')
-    ).toHaveLength(0);
-    await act(async () => {
-      wrapper.find('FileUpload').invoke('onChange')('✓', 'new file name');
+      container.querySelector('div#subscription-manifest-helper.pf-m-error')
+    ).toBeNull();
+
+    const fileInput = container.querySelector('input[type="file"]');
+    // a non-zip extension is rejected by the dropzone accept rule which
+    // fires onDropRejected -> manifestHelpers.setError(true)
+    const badFile = new File(['nope'], 'foo.txt', { type: 'text/plain' });
+    fireEvent.change(fileInput, { target: { files: [badFile] } });
+
+    await waitFor(() => {
+      const helper = container.querySelector(
+        'div#subscription-manifest-helper.pf-m-error'
+      );
+      expect(helper).not.toBeNull();
+      expect(helper).toHaveTextContent(
+        'Invalid file format. Please upload a valid Red Hat Subscription Manifest.'
+      );
     });
-    wrapper.update();
-    expect(
-      wrapper.find('div#subscription-manifest-helper.pf-m-error')
-    ).toHaveLength(1);
-    expect(wrapper.find('div#subscription-manifest-helper').text()).toContain(
-      'Invalid file format. Please upload a valid Red Hat Subscription Manifest.'
-    );
   });
 
   test('Username/password toggle button should show username credential fields', async () => {
-    expect(wrapper.find('ToggleGroupItem').last().props().isSelected).toBe(
-      false
-    );
-    wrapper
-      .find('ToggleGroupItem[text="Username / password"] button')
-      .simulate('click');
-    wrapper.update();
-    expect(wrapper.find('ToggleGroupItem').last().props().isSelected).toBe(
-      true
-    );
-    await act(async () => {
-      wrapper.find('input#username-field').simulate('change', {
-        target: { value: 'username-cred', name: 'username' },
-      });
-      wrapper.find('input#password-field').simulate('change', {
-        target: { value: 'password-cred', name: 'password' },
-      });
+    const { container } = renderStep();
+    expect(container.querySelector('#username-field')).toBeNull();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Username / password' }));
+
+    const usernameInput = container.querySelector('#username-field');
+    const passwordInput = container.querySelector('#password-field');
+    expect(usernameInput).toBeInTheDocument();
+    expect(passwordInput).toBeInTheDocument();
+
+    fireEvent.change(usernameInput, {
+      target: { value: 'username-cred', name: 'username' },
     });
-    wrapper.update();
-    expect(wrapper.find('input#username-field').prop('value')).toEqual(
-      'username-cred'
+    fireEvent.change(passwordInput, {
+      target: { value: 'password-cred', name: 'password' },
+    });
+
+    await waitFor(() =>
+      expect(container.querySelector('#username-field').value).toEqual(
+        'username-cred'
+      )
     );
-    expect(wrapper.find('input#password-field').prop('value')).toEqual(
+    expect(container.querySelector('#password-field').value).toEqual(
       'password-cred'
     );
   });

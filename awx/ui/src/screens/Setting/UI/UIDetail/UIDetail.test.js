@@ -1,20 +1,17 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, within } from '@testing-library/react';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
 import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../../testUtils/enzymeHelpers';
-import { assertDetail } from '../../shared/settingTestUtils';
+  renderWithContexts,
+  assertDetail,
+} from '../../../../../testUtils/rtlContexts';
 import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import UIDetail from './UIDetail';
 
 jest.mock('../../../../api');
 
 describe('<UIDetail />', () => {
-  let wrapper;
-
   beforeEach(() => {
     SettingsAPI.readCategory.mockResolvedValue({
       data: {
@@ -25,71 +22,65 @@ describe('<UIDetail />', () => {
     });
   });
 
-  beforeEach(async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <UIDetail />
-        </SettingsProvider>
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-  });
-
-  afterAll(() => {
+  afterEach(() => {
     jest.clearAllMocks();
   });
 
-  test('initially renders without crashing', () => {
-    expect(wrapper.find('UIDetail').length).toBe(1);
-  });
-
-  test('should render expected tabs', () => {
-    const expectedTabs = ['Back to Settings', 'Details'];
-    wrapper.find('RoutedTabs li').forEach((tab, index) => {
-      expect(tab.text()).toEqual(expectedTabs[index]);
-    });
-  });
-
-  test('should render expected details', () => {
-    assertDetail(wrapper, 'User Analytics Tracking State', 'off');
-    assertDetail(wrapper, 'Custom Login Info', 'mock info');
-    expect(wrapper.find('Detail[label="Custom Login Logo"] dt').text()).toBe(
-      'Custom Login Logo'
+  async function renderDetail(context) {
+    const result = renderWithContexts(
+      <SettingsProvider value={mockAllOptions.actions}>
+        <UIDetail />
+      </SettingsProvider>,
+      context
     );
-    expect(wrapper.find('Detail[label="Custom Login Logo"] dd img').length).toBe(1);
+    await waitFor(() =>
+      expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
+    );
+    return result;
+  }
+
+  test('initially renders without crashing', async () => {
+    await renderDetail();
+    expect(
+      screen.getByText('User Analytics Tracking State')
+    ).toBeInTheDocument();
+  });
+
+  test('should render expected tabs', async () => {
+    await renderDetail();
+    expect(
+      screen.getAllByRole('tab', { name: /Back to Settings/ }).length
+    ).toBeGreaterThan(0);
+    expect(
+      screen.getAllByRole('tab', { name: /Details/ }).length
+    ).toBeGreaterThan(0);
+  });
+
+  test('should render expected details', async () => {
+    await renderDetail();
+    assertDetail('User Analytics Tracking State', 'off');
+    assertDetail('Custom Login Info', 'mock info');
+    const logoLabel = screen.getByText('Custom Login Logo');
+    const logoValue = logoLabel.nextElementSibling;
+    expect(within(logoValue).getByRole('img')).toBeInTheDocument();
   });
 
   test('should hide edit button from non-superusers', async () => {
-    const config = {
-      me: {
-        is_superuser: false,
-      },
-    };
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <UIDetail />
-        </SettingsProvider>,
-        {
-          context: { config },
-        }
-      );
+    await renderDetail({
+      context: { config: { me: { is_superuser: false } } },
     });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('Button[aria-label="Edit"]').exists()).toBeFalsy();
+    expect(
+      screen.queryByRole('link', { name: 'Edit' })
+    ).not.toBeInTheDocument();
   });
 
   test('should display content error when api throws error on initial render', async () => {
     SettingsAPI.readCategory.mockRejectedValue(new Error());
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <UIDetail />
-        </SettingsProvider>
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('ContentError').length).toBe(1);
+    await renderDetail();
+    expect(
+      screen.getByText(
+        'There was an error loading this content. Please reload the page.'
+      )
+    ).toBeInTheDocument();
   });
 });

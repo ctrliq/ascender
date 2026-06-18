@@ -1,6 +1,9 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
-import { mountWithContexts } from '../../../../../testUtils/enzymeHelpers';
+import { screen } from '@testing-library/react';
+import {
+  renderWithContexts,
+  assertDetail,
+} from '../../../../../testUtils/rtlContexts';
 import SubscriptionDetail from './SubscriptionDetail';
 
 const config = {
@@ -37,30 +40,17 @@ const config = {
 };
 
 describe('<SubscriptionDetail />', () => {
-  let wrapper;
-
-  beforeEach(async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(<SubscriptionDetail />, {
-        context: { config },
-      });
-    });
-  });
-
   test('initially renders without crashing', () => {
-    expect(wrapper.find('SubscriptionDetail').length).toBe(1);
+    renderWithContexts(<SubscriptionDetail />, { context: { config } });
+    expect(screen.getByText('Status')).toBeInTheDocument();
   });
 
   test('should render expected details', () => {
-    function assertDetail(label, value) {
-      expect(wrapper.find(`Detail[label="${label}"] dt`).text()).toBe(label);
-      expect(wrapper.find(`Detail[label="${label}"] dd`).text()).toBe(value);
-    }
-    expect(wrapper.find(`Detail[label="Status"] dt`).text()).toBe('Status');
-    expect(wrapper.find(`Detail[label="Status"] dd`).text()).toContain(
-      'Compliant'
-    );
-    expect(wrapper.find(`Detail[label="Status"] dd`).text()).toContain(
+    renderWithContexts(<SubscriptionDetail />, { context: { config } });
+
+    const status = screen.getByText('Status');
+    expect(status.nextElementSibling).toHaveTextContent('Compliant');
+    expect(status.nextElementSibling).toHaveTextContent(
       'The number of hosts you have automated against is below your subscription count.'
     );
     assertDetail('Automation controller version', '1.2.3');
@@ -76,24 +66,20 @@ describe('<SubscriptionDetail />', () => {
     assertDetail('Hosts remaining', '1000');
     assertDetail('Hosts automated', '12 since 3/2/2021, 7:43:48 PM');
 
-    expect(wrapper.find('Button[aria-label="edit"]').length).toBe(0);
+    expect(
+      screen.queryByRole('link', { name: 'edit' })
+    ).not.toBeInTheDocument();
   });
 
   test('should render edit button for system admin', () => {
-    wrapper = mountWithContexts(<SubscriptionDetail />, {
-      context: {
-        config: {
-          ...config,
-          me: { is_superuser: true },
-        },
-      },
+    renderWithContexts(<SubscriptionDetail />, {
+      context: { config: { ...config, me: { is_superuser: true } } },
     });
-
-    expect(wrapper.find('Button[aria-label="edit"]').length).toBe(1);
+    expect(screen.getByRole('link', { name: 'edit' })).toBeInTheDocument();
   });
 
   test('should not render Hosts Automated Detail if license_info.automated_instances is undefined', () => {
-    wrapper = mountWithContexts(<SubscriptionDetail />, {
+    renderWithContexts(<SubscriptionDetail />, {
       context: {
         config: {
           ...config,
@@ -101,7 +87,6 @@ describe('<SubscriptionDetail />', () => {
         },
       },
     });
-
-    expect(wrapper.find(`Detail[label="Hosts automated"]`).length).toBe(0);
+    expect(screen.queryByText('Hosts automated')).not.toBeInTheDocument();
   });
 });

@@ -1,19 +1,15 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import OIDCEdit from './OIDCEdit';
 
 jest.mock('../../../../api');
 
 describe('<OIDCEdit />', () => {
-  let wrapper;
   let history;
 
   beforeEach(() => {
@@ -33,78 +29,73 @@ describe('<OIDCEdit />', () => {
     jest.clearAllMocks();
   });
 
-  beforeEach(async () => {
+  async function renderEdit() {
     history = createMemoryHistory({
       initialEntries: ['/settings/oidc/edit'],
     });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <OIDCEdit />
-        </SettingsProvider>,
-        {
-          context: { router: { history } },
-        }
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-  });
+    const result = renderWithContexts(
+      <SettingsProvider value={mockAllOptions.actions}>
+        <OIDCEdit />
+      </SettingsProvider>,
+      { context: { router: { history } } }
+    );
+    await waitFor(() =>
+      expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
+    );
+    return result;
+  }
 
-  test('initially renders without crashing', () => {
-    expect(wrapper.find('OIDCEdit').length).toBe(1);
+  test('initially renders without crashing', async () => {
+    await renderEdit();
+    expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument();
   });
 
   test('should display expected form fields', async () => {
-    expect(wrapper.find('FormGroup[label="OIDC Key"]').length).toBe(1);
-    expect(wrapper.find('FormGroup[label="OIDC Secret"]').length).toBe(1);
-    expect(wrapper.find('FormGroup[label="OIDC Provider URL"]').length).toBe(1);
+    await renderEdit();
+    expect(screen.getByText('OIDC Key')).toBeInTheDocument();
+    expect(screen.getByText('OIDC Secret')).toBeInTheDocument();
+    expect(screen.getByText('OIDC Provider URL')).toBeInTheDocument();
     expect(
-      wrapper.find('FormGroup[label="Verify OIDC Provider Certificate"]').length
-    ).toBe(1);
+      screen.getByText('Verify OIDC Provider Certificate')
+    ).toBeInTheDocument();
   });
 
   test('should successfully send default values to api on form revert all', async () => {
+    const { user } = await renderEdit();
     expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(0);
-    expect(wrapper.find('RevertAllAlert')).toHaveLength(0);
-    await act(async () => {
-      wrapper
-        .find('button[aria-label="Revert all to default"]')
-        .invoke('onClick')();
-    });
-    wrapper.update();
-    expect(wrapper.find('RevertAllAlert')).toHaveLength(1);
-    await act(async () => {
-      wrapper
-        .find('RevertAllAlert button[aria-label="Confirm revert all"]')
-        .invoke('onClick')();
-    });
-    wrapper.update();
-    expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(1);
+    expect(screen.queryByText('Revert settings')).not.toBeInTheDocument();
+    await user.click(
+      screen.getByRole('button', { name: 'Revert all to default' })
+    );
+    expect(await screen.findByText('Revert settings')).toBeInTheDocument();
+    await user.click(
+      screen.getByRole('button', { name: 'Confirm revert all' })
+    );
+    await waitFor(() =>
+      expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(1)
+    );
     expect(SettingsAPI.revertCategory).toHaveBeenCalledWith('oidc');
   });
 
   test('should successfully send request to api on form submission', async () => {
-    act(() => {
-      wrapper
-        .find(
-          'FormGroup[fieldId="SOCIAL_AUTH_OIDC_SECRET"] button[aria-label="Revert"]'
-        )
-        .invoke('onClick')();
-      wrapper.find('input#SOCIAL_AUTH_OIDC_KEY').simulate('change', {
-        target: { value: 'new key', name: 'SOCIAL_AUTH_OIDC_KEY' },
-      });
-      wrapper.find('input#SOCIAL_AUTH_OIDC_OIDC_ENDPOINT').simulate('change', {
-        target: {
-          value: 'https://example.com',
-          name: 'SOCIAL_AUTH_OIDC_OIDC_ENDPOINT',
-        },
-      });
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('Form').invoke('onSubmit')();
-    });
-    expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1);
+    const { user, container } = await renderEdit();
+    await user.click(
+      container.querySelector(
+        'button[data-ouia-component-id="SOCIAL_AUTH_OIDC_SECRET-revert"]'
+      )
+    );
+    const keyInput = container.querySelector('#SOCIAL_AUTH_OIDC_KEY');
+    await user.clear(keyInput);
+    await user.type(keyInput, 'new key');
+    const endpointInput = container.querySelector(
+      '#SOCIAL_AUTH_OIDC_OIDC_ENDPOINT'
+    );
+    await user.clear(endpointInput);
+    await user.type(endpointInput, 'https://example.com');
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    await waitFor(() =>
+      expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1)
+    );
     expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
       SOCIAL_AUTH_OIDC_KEY: 'new key',
       SOCIAL_AUTH_OIDC_SECRET: '',
@@ -114,16 +105,16 @@ describe('<OIDCEdit />', () => {
   });
 
   test('should navigate to OIDC detail on successful submission', async () => {
-    await act(async () => {
-      wrapper.find('Form').invoke('onSubmit')();
-    });
-    expect(history.location.pathname).toEqual('/settings/oidc/details');
+    const { user } = await renderEdit();
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual('/settings/oidc/details')
+    );
   });
 
   test('should navigate to OIDC detail when cancel is clicked', async () => {
-    await act(async () => {
-      wrapper.find('button[aria-label="Cancel"]').invoke('onClick')();
-    });
+    const { user } = await renderEdit();
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
     expect(history.location.pathname).toEqual('/settings/oidc/details');
   });
 
@@ -134,13 +125,10 @@ describe('<OIDCEdit />', () => {
       },
     };
     SettingsAPI.updateAll.mockImplementation(() => Promise.reject(error));
-    expect(wrapper.find('FormSubmitError').length).toBe(0);
+    const { user } = await renderEdit();
     expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(0);
-    await act(async () => {
-      wrapper.find('Form').invoke('onSubmit')();
-    });
-    wrapper.update();
-    expect(wrapper.find('FormSubmitError').length).toBe(1);
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    expect(await screen.findByText('An error occurred')).toBeInTheDocument();
     expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1);
   });
 
@@ -148,14 +136,11 @@ describe('<OIDCEdit />', () => {
     SettingsAPI.readCategory.mockImplementationOnce(() =>
       Promise.reject(new Error())
     );
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <OIDCEdit />
-        </SettingsProvider>
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('ContentError').length).toBe(1);
+    await renderEdit();
+    expect(
+      screen.getByText(
+        'There was an error loading this content. Please reload the page.'
+      )
+    ).toBeInTheDocument();
   });
 });

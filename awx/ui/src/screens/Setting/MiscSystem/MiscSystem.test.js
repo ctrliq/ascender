@@ -1,22 +1,37 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import { SettingsAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
 import { Routes, Route } from 'react-router-dom-v5-compat';
+import { SettingsProvider } from 'contexts/Settings';
+import { SettingsAPI, ExecutionEnvironmentsAPI } from 'api';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
+import mockAllOptions from '../shared/data.allSettingOptions.json';
+import mockAllSettings from '../shared/data.allSettings.json';
 import MiscSystem from './MiscSystem';
 
 jest.mock('../../../api');
 
-describe('<MiscSystem />', () => {
-  let wrapper;
+function mountAt(path, config) {
+  const history = createMemoryHistory({ initialEntries: [path] });
+  const context = { router: { history } };
+  if (config) {
+    context.config = config;
+  }
+  return renderWithContexts(
+    <SettingsProvider value={JSON.parse(JSON.stringify(mockAllOptions.actions))}>
+      <Routes>
+        <Route path="/settings/miscellaneous_system/*" element={<MiscSystem />} />
+      </Routes>
+    </SettingsProvider>,
+    { context }
+  );
+}
 
+describe('<MiscSystem />', () => {
   beforeEach(() => {
-    SettingsAPI.readCategory.mockResolvedValue({
-      data: {},
+    SettingsAPI.readCategory.mockResolvedValue({ data: mockAllSettings });
+    ExecutionEnvironmentsAPI.read.mockResolvedValue({
+      data: { results: [], count: 0 },
     });
   });
 
@@ -25,63 +40,36 @@ describe('<MiscSystem />', () => {
   });
 
   test('should render miscellaneous system details', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/settings/miscellaneous_system/details'],
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(<Routes><Route path="/settings/miscellaneous_system/*" element={<MiscSystem />} /></Routes>, {
-        context: { router: { history } },
-      });
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('MiscSystemDetail').length).toBe(1);
+    mountAt('/settings/miscellaneous_system/details');
+    expect(await screen.findByText('Details')).toBeInTheDocument();
+    await waitFor(() =>
+      expect(SettingsAPI.readCategory).toHaveBeenCalledWith('system')
+    );
   });
 
   test('should render miscellaneous system edit', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/settings/miscellaneous_system/edit'],
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(<Routes><Route path="/settings/miscellaneous_system/*" element={<MiscSystem />} /></Routes>, {
-        context: { router: { history } },
-      });
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('MiscSystemEdit').length).toBe(1);
+    mountAt('/settings/miscellaneous_system/edit');
+    expect(
+      await screen.findByRole('button', { name: 'Save' })
+    ).toBeInTheDocument();
   });
 
   test('should show content error when user navigates to erroneous route', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/settings/miscellaneous_system/foo'],
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(<Routes><Route path="/settings/miscellaneous_system/*" element={<MiscSystem />} /></Routes>, {
-        context: { router: { history } },
-      });
-    });
-    expect(wrapper.find('ContentError').length).toBe(1);
+    mountAt('/settings/miscellaneous_system/foo');
+    expect(
+      await screen.findByText('View Miscellaneous System settings')
+    ).toBeInTheDocument();
   });
 
   test('should redirect to details for users without system admin permissions', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/settings/miscellaneous_system/edit'],
+    mountAt('/settings/miscellaneous_system/edit', {
+      me: { is_superuser: false },
     });
-    await act(async () => {
-      wrapper = mountWithContexts(<Routes><Route path="/settings/miscellaneous_system/*" element={<MiscSystem />} /></Routes>, {
-        context: {
-          router: {
-            history,
-          },
-          config: {
-            me: {
-              is_superuser: false,
-            },
-          },
-        },
-      });
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('MiscSystemDetail').length).toBe(1);
-    expect(wrapper.find('MiscSystemEdit').length).toBe(0);
+    // Non-superusers are redirected from edit to the read-only Details tab, so
+    // the Save button never renders.
+    expect(await screen.findByText('Details')).toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Save' })
+    ).not.toBeInTheDocument();
   });
 });

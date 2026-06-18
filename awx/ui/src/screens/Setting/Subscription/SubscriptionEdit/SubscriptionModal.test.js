@@ -1,157 +1,149 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, within } from '@testing-library/react';
 import { ConfigAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import SubscriptionModal from './SubscriptionModal';
 
 jest.mock('../../../../api');
 
-describe('<SubscriptionModal />', () => {
-  let wrapper;
-  const onConfirm = jest.fn();
-  const onClose = jest.fn();
+const mockSubscriptions = [
+  {
+    subscription_name: 'mock A',
+    instance_count: 100,
+    license_date: 1714000271,
+    pool_id: 7,
+  },
+  {
+    subscription_name: 'mock B',
+    instance_count: 200,
+    license_date: 1714000271,
+    pool_id: 8,
+  },
+  {
+    subscription_name: 'mock C',
+    instance_count: 30,
+    license_date: 1714000271,
+    pool_id: 9,
+  },
+];
 
-  beforeAll(async () => {
-    ConfigAPI.readSubscriptions = async () => ({
-      data: [
-        {
-          subscription_name: 'mock A',
-          instance_count: 100,
-          license_date: 1714000271,
-          pool_id: 7,
-        },
-        {
-          subscription_name: 'mock B',
-          instance_count: 200,
-          license_date: 1714000271,
-          pool_id: 8,
-        },
-        {
-          subscription_name: 'mock C',
-          instance_count: 30,
-          license_date: 1714000271,
-          pool_id: 9,
-        },
-      ],
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(
+async function waitForLoaded() {
+  await waitFor(() =>
+    expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
+  );
+}
+
+describe('<SubscriptionModal />', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  describe('with subscriptions', () => {
+    const onConfirm = jest.fn();
+    const onClose = jest.fn();
+
+    async function setup() {
+      ConfigAPI.readSubscriptions = jest.fn().mockResolvedValue({
+        data: mockSubscriptions.map((s) => ({ ...s })),
+      });
+      const utils = renderWithContexts(
         <SubscriptionModal
-          subscriptionCreds={{
-            username: 'admin',
-            password: '$encrypted',
-          }}
+          subscriptionCreds={{ username: 'admin', password: '$encrypted' }}
           onConfirm={onConfirm}
           onClose={onClose}
         />
       );
-      await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
+      await screen.findByText('mock A');
+      return utils;
+    }
+
+    test('should render header', async () => {
+      await setup();
+      const headers = within(
+        screen.getByRole('grid')
+      ).getAllByRole('columnheader');
+      expect(headers[1]).toHaveTextContent('Name');
+      expect(headers[2]).toHaveTextContent('Managed nodes');
+      expect(headers[3]).toHaveTextContent('Expires');
     });
-  });
 
-  afterAll(() => {
-    jest.clearAllMocks();
-  });
-
-  test('initially renders without crashing', async () => {
-    expect(wrapper.find('SubscriptionModal').length).toBe(1);
-  });
-
-  test('should render header', async () => {
-    wrapper.update();
-    const header = wrapper.find('tr').first().find('th');
-    expect(header.at(0).text()).toEqual('');
-    expect(header.at(1).text()).toEqual('Name');
-    expect(header.at(2).text()).toEqual('Managed nodes');
-    expect(header.at(3).text()).toEqual('Expires');
-  });
-
-  test('should render subscription rows', async () => {
-    const rows = wrapper.find('tbody tr');
-    expect(rows).toHaveLength(3);
-    const firstRow = rows.at(0).find('td');
-    expect(firstRow.at(0).find('input[type="radio"]')).toHaveLength(1);
-    expect(firstRow.at(1).text()).toEqual('mock A');
-    expect(firstRow.at(2).text()).toEqual('100');
-    
-    // Use the actual i18n-formatted date string with narrow no-break space (U+202F)
-    expect(firstRow.at(3).text()).toEqual('4/24/2024, 11:11:11\u202FPM');
-  });
-
-  test('submit button should call onConfirm', async () => {
-    expect(
-      wrapper.find('Button[aria-label="Confirm selection"]').prop('isDisabled')
-    ).toBe(true);
-    await act(async () => {
-      wrapper
-        .find('SubscriptionModal SelectColumn')
-        .first()
-        .invoke('onSelect')();
+    test('should render subscription rows', async () => {
+      await setup();
+      const rows = within(screen.getByRole('grid')).getAllByRole('row');
+      // header row + 3 subscription rows
+      expect(rows).toHaveLength(4);
+      const firstRow = rows[1];
+      expect(within(firstRow).getByRole('radio')).toBeInTheDocument();
+      expect(firstRow).toHaveTextContent('mock A');
+      expect(firstRow).toHaveTextContent('100');
+      // the i18n date formatter separates time and meridiem with a narrow
+      // no-break space (U+202F); match loosely so the space variant is ignored
+      expect(firstRow).toHaveTextContent(/4\/24\/2024, 11:11:11\s?PM/);
     });
-    wrapper.update();
-    expect(
-      wrapper.find('Button[aria-label="Confirm selection"]').prop('isDisabled')
-    ).toBe(false);
-    expect(onConfirm).toHaveBeenCalledTimes(0);
-    expect(onClose).toHaveBeenCalledTimes(0);
-    await act(async () =>
-      wrapper.find('Button[aria-label="Confirm selection"]').prop('onClick')()
-    );
-    expect(onConfirm).toHaveBeenCalledTimes(1);
-    expect(onClose).toHaveBeenCalledTimes(1);
+
+    test('submit button should call onConfirm', async () => {
+      const { user } = await setup();
+      const confirm = screen.getByRole('button', { name: 'Confirm selection' });
+      expect(confirm).toBeDisabled();
+      const rows = within(screen.getByRole('grid')).getAllByRole('row');
+      await user.click(within(rows[1]).getByRole('radio'));
+      expect(
+        screen.getByRole('button', { name: 'Confirm selection' })
+      ).not.toBeDisabled();
+      expect(onConfirm).toHaveBeenCalledTimes(0);
+      expect(onClose).toHaveBeenCalledTimes(0);
+      await user.click(
+        screen.getByRole('button', { name: 'Confirm selection' })
+      );
+      expect(onConfirm).toHaveBeenCalledTimes(1);
+      expect(onClose).toHaveBeenCalledTimes(1);
+    });
+
+    test('should auto-select current selected subscription', async () => {
+      ConfigAPI.readSubscriptions = jest.fn().mockResolvedValue({
+        data: mockSubscriptions.map((s) => ({ ...s })),
+      });
+      renderWithContexts(
+        <SubscriptionModal
+          subscriptionCreds={{ username: 'admin', password: '$encrypted' }}
+          selectedSubscription={{ id: 2 }}
+        />
+      );
+      await screen.findByText('mock A');
+      await waitFor(() =>
+        expect(document.querySelector('tr[id="row-2"] input')).toBeChecked()
+      );
+      expect(document.querySelector('tr[id="row-1"] input')).not.toBeChecked();
+      expect(document.querySelector('tr[id="row-3"] input')).not.toBeChecked();
+    });
   });
 
   test('should show empty content', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SubscriptionModal
-          subscriptionCreds={{
-            username: null,
-            password: null,
-          }}
-        />
-      );
-      await waitForElement(wrapper, 'ContentEmpty', (el) => el.length === 1);
-    });
-  });
-
-  test('should auto-select current selected subscription', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SubscriptionModal
-          subscriptionCreds={{
-            username: 'admin',
-            password: '$encrypted',
-          }}
-          selectedSubscription={{
-            id: 2,
-          }}
-        />
-      );
-      await waitForElement(wrapper, 'table');
-      expect(wrapper.find('tr[id="row-1"] input').prop('checked')).toBe(false);
-      expect(wrapper.find('tr[id="row-2"] input').prop('checked')).toBe(true);
-      expect(wrapper.find('tr[id="row-3"] input').prop('checked')).toBe(false);
-    });
+    renderWithContexts(
+      <SubscriptionModal subscriptionCreds={{ username: null, password: null }} />
+    );
+    expect(
+      await screen.findByText('No subscriptions found')
+    ).toBeInTheDocument();
   });
 
   test('should display error detail message', async () => {
-    ConfigAPI.readSubscriptions = jest.fn();
-    ConfigAPI.readSubscriptions.mockRejectedValueOnce(new Error());
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SubscriptionModal
-          subscriptionCreds={{
-            username: 'admin',
-            password: '$encrypted',
-          }}
-        />
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    await waitForElement(wrapper, 'ErrorDetail', (el) => el.length === 1);
+    ConfigAPI.readSubscriptions = jest.fn().mockRejectedValueOnce(new Error());
+    renderWithContexts(
+      <SubscriptionModal
+        subscriptionCreds={{ username: 'admin', password: '$encrypted' }}
+      />
+    );
+    await waitForLoaded();
+    expect(
+      await screen.findByText('No subscriptions found')
+    ).toBeInTheDocument();
+    // the error branch additionally renders ErrorDetail (a "Details" toggle)
+    expect(
+      screen.getByText(
+        'We were unable to locate licenses associated with this account.'
+      )
+    ).toBeInTheDocument();
+    expect(screen.getByText('Details')).toBeInTheDocument();
   });
 });

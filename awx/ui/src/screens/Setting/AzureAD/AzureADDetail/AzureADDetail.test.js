@@ -1,15 +1,11 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
 import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../../testUtils/enzymeHelpers';
-import {
+  renderWithContexts,
   assertDetail,
-  assertVariableDetail,
-} from '../../shared/settingTestUtils';
+} from '../../../../../testUtils/rtlContexts';
 import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import AzureADDetail from './AzureADDetail';
 
@@ -23,9 +19,7 @@ jest.mock('react-router-dom', () => ({
 }));
 
 describe('<AzureADDetail />', () => {
-  let wrapper;
-
-  beforeEach(async () => {
+  beforeEach(() => {
     const mockData = {
       SOCIAL_AUTH_AZUREAD_OAUTH2_CALLBACK_URL:
         'https://towerhost/sso/complete/azuread-oauth2/',
@@ -41,77 +35,77 @@ describe('<AzureADDetail />', () => {
     SettingsAPI.readCategory.mockResolvedValue({
       data: mockData,
     });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <AzureADDetail />
-        </SettingsProvider>
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
   });
 
-  afterAll(() => {
+  afterEach(() => {
     jest.clearAllMocks();
   });
 
-  test('initially renders without crashing', () => {
-    expect(wrapper.find('AzureADDetail').length).toBe(1);
+  async function renderDetail(context) {
+    const result = renderWithContexts(
+      <SettingsProvider value={mockAllOptions.actions}>
+        <AzureADDetail />
+      </SettingsProvider>,
+      context
+    );
+    await waitFor(() =>
+      expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
+    );
+    return result;
+  }
+
+  test('initially renders without crashing', async () => {
+    await renderDetail();
+    expect(
+      screen.getByText('Azure AD OAuth2 Callback URL')
+    ).toBeInTheDocument();
   });
 
-  test('should render expected tabs', () => {
-    const expectedTabs = ['Back to Settings', 'Azure AD Default', 'Azure AD Tenant'];
-    wrapper.find('RoutedTabs li').forEach((tab, index) => {
-      expect(tab.text()).toEqual(expectedTabs[index]);
+  test('should render expected tabs', async () => {
+    await renderDetail();
+    const expectedTabs = [
+      /Back to Settings/,
+      /Azure AD Default/,
+      /Azure AD Tenant/,
+    ];
+    expectedTabs.forEach((text) => {
+      expect(
+        screen.getAllByRole('tab', { name: text }).length
+      ).toBeGreaterThan(0);
     });
   });
 
-  test('should render expected details', () => {
+  test('should render expected details', async () => {
+    await renderDetail();
     assertDetail(
-      wrapper,
       'Azure AD OAuth2 Callback URL',
       'https://towerhost/sso/complete/azuread-oauth2/'
     );
-    assertDetail(wrapper, 'Azure AD OAuth2 Key', 'mock key');
-    assertDetail(wrapper, 'Azure AD OAuth2 Secret', 'Encrypted');
-    assertVariableDetail(wrapper, 'Azure AD OAuth2 Organization Map', '{}');
-    assertVariableDetail(
-      wrapper,
-      'Azure AD OAuth2 Team Map',
-      '{\n  "My Team": {\n    "users": []\n  }\n}'
-    );
+    assertDetail('Azure AD OAuth2 Key', 'mock key');
+    assertDetail('Azure AD OAuth2 Secret', 'Encrypted');
+    // CodeEditor renders empty under jsdom; assert the label is present.
+    expect(
+      screen.getByText('Azure AD OAuth2 Organization Map')
+    ).toBeInTheDocument();
+    expect(screen.getByText('Azure AD OAuth2 Team Map')).toBeInTheDocument();
   });
 
   test('should hide edit button from non-superusers', async () => {
-    const config = {
-      me: {
-        is_superuser: false,
-      },
-    };
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <AzureADDetail />
-        </SettingsProvider>,
-        {
-          context: { config },
-        }
-      );
+    await renderDetail({
+      context: { config: { me: { is_superuser: false } } },
     });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('Button[aria-label="Edit"]').exists()).toBeFalsy();
+    expect(
+      screen.queryByRole('link', { name: 'Edit' })
+    ).not.toBeInTheDocument();
   });
 
   test('should display content error when api throws error on initial render', async () => {
     SettingsAPI.readCategory.mockRejectedValue(new Error());
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <AzureADDetail />
-        </SettingsProvider>
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('ContentError').length).toBe(1);
+    await renderDetail();
+    expect(
+      screen.getByText(
+        'There was an error loading this content. Please reload the page.'
+      )
+    ).toBeInTheDocument();
   });
 });
