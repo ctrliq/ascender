@@ -1,45 +1,95 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
-import { DashboardAPI, RootAPI } from 'api';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { screen, waitFor } from '@testing-library/react';
+import {
+  DashboardAPI,
+  RootAPI,
+  UnifiedJobTemplatesAPI,
+  JobTemplatesAPI,
+  WorkflowJobTemplatesAPI,
+} from 'api';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import Dashboard from './Dashboard';
 
 jest.mock('../../api');
 
+// DashboardGraph's LineChart draws with d3, which needs
+// SVGPathElement.getTotalLength (absent in jsdom). The chart isn't what these
+// tests cover, so stub it and assert on the dashboard's tabs/counts + requests.
+jest.mock('./shared/LineChart', () => () => <div data-testid="line-chart" />);
+
 describe('<Dashboard />', () => {
-  let pageWrapper;
   let graphRequest;
 
-  beforeEach(async () => {
-    await act(async () => {
-      DashboardAPI.read.mockResolvedValue({});
-      RootAPI.readAssetVariables.mockResolvedValue({
-        data: {
-          BRAND_NAME: 'AWX',
+  beforeEach(() => {
+    DashboardAPI.read.mockResolvedValue({});
+    RootAPI.readAssetVariables.mockResolvedValue({
+      data: {
+        BRAND_NAME: 'AWX',
+      },
+    });
+    graphRequest = DashboardAPI.readJobGraph;
+    graphRequest.mockResolvedValue({
+      data: {
+        jobs: {
+          successful: [
+            [1609459200, 2],
+            [1609545600, 4],
+          ],
+          failed: [
+            [1609459200, 1],
+            [1609545600, 0],
+          ],
         },
-      });
-      graphRequest = DashboardAPI.readJobGraph;
-      graphRequest.mockResolvedValue({});
-      pageWrapper = mountWithContexts(<Dashboard />);
+      },
+    });
+    UnifiedJobTemplatesAPI.read.mockResolvedValue({
+      data: { count: 0, results: [] },
+    });
+    UnifiedJobTemplatesAPI.readOptions.mockResolvedValue({
+      data: { actions: {}, related_search_fields: [] },
+    });
+    JobTemplatesAPI.readOptions.mockResolvedValue({
+      data: { actions: {} },
+    });
+    WorkflowJobTemplatesAPI.readOptions.mockResolvedValue({
+      data: { actions: {} },
     });
   });
 
-  test('initially renders without crashing', () => {
-    expect(pageWrapper.length).toBe(1);
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
-  test('renders dashboard graph by default', () => {
-    expect(pageWrapper.find('LineChart').length).toBe(1);
+  test('initially renders without crashing', async () => {
+    renderWithContexts(<Dashboard />);
+    expect(
+      await screen.findByRole('tab', { name: 'Job status graph tab' })
+    ).toBeInTheDocument();
+  });
+
+  test('renders dashboard graph by default', async () => {
+    renderWithContexts(<Dashboard />);
+    // The Job status tab is active by default, so DashboardGraph mounts and
+    // requests the default (all/month) job graph data.
+    await screen.findByRole('tab', { name: 'Job status graph tab' });
+    expect(await screen.findByTestId('line-chart')).toBeInTheDocument();
+    await waitFor(() =>
+      expect(graphRequest).toHaveBeenCalledWith({
+        job_type: 'all',
+        period: 'month',
+      })
+    );
   });
 
   test('renders template list when the active tab is changed', async () => {
-    expect(pageWrapper.find('DashboardTemplateList').length).toBe(0);
-    await act(async () => {
-      pageWrapper
-        .find('button[aria-label="Recent Templates list tab"]')
-        .simulate('click');
+    const { user } = renderWithContexts(<Dashboard />);
+    const templatesTab = await screen.findByRole('tab', {
+      name: 'Recent Templates list tab',
     });
-    pageWrapper.update();
-    expect(pageWrapper.find('TemplateList').length).toBe(1);
+    await user.click(templatesTab);
+    // TemplateList mounts and fetches; with an empty result it renders its
+    // empty-state, confirming the list (not the graph) is now shown.
+    expect(await screen.findByText('No Templates Found')).toBeInTheDocument();
+    await waitFor(() => expect(UnifiedJobTemplatesAPI.read).toHaveBeenCalled());
   });
 });

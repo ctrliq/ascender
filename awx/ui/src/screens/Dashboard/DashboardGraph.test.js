@@ -1,61 +1,95 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, within } from '@testing-library/react';
 
 import { DashboardAPI } from 'api';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import DashboardGraph from './DashboardGraph';
 
 jest.mock('../../api');
 
+// LineChart renders via d3, which relies on SVGPathElement.getTotalLength —
+// not implemented by jsdom — so the real chart throws while drawing. The chart
+// itself isn't under test here (the filter controls and the data request are),
+// so stub it out and keep the assertions on the surrounding UI + API calls.
+jest.mock('./shared/LineChart', () => () => <div data-testid="line-chart" />);
+
+// The three PF Select toggles all expose the accessible name "Options menu",
+// so they can't be told apart by role+name. They carry distinct classNames
+// (periodSelect / jobTypeSelect / jobStatusSelect) wired up in the source, so
+// scope to each select wrapper and grab its toggle button.
+function getToggle(container, className) {
+  return container.querySelector(`.${className} button.pf-c-select__toggle`);
+}
+
 describe('<DashboardGraph/>', () => {
-  let pageWrapper;
   let graphRequest;
 
-  beforeEach(async () => {
-    await act(async () => {
-      DashboardAPI.read.mockResolvedValue({});
-      graphRequest = DashboardAPI.readJobGraph;
-      graphRequest.mockResolvedValue({});
-      pageWrapper = mountWithContexts(<DashboardGraph />);
+  beforeEach(() => {
+    DashboardAPI.read.mockResolvedValue({});
+    graphRequest = DashboardAPI.readJobGraph;
+    graphRequest.mockResolvedValue({
+      data: {
+        jobs: {
+          successful: [
+            [1609459200, 2],
+            [1609545600, 4],
+          ],
+          failed: [
+            [1609459200, 1],
+            [1609545600, 0],
+          ],
+        },
+      },
     });
   });
 
-  test('renders month-based/all job type chart by default', () => {
-    expect(graphRequest).toHaveBeenCalledWith({
-      job_type: 'all',
-      period: 'month',
-    });
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('renders month-based/all job type chart by default', async () => {
+    renderWithContexts(<DashboardGraph />);
+    await waitFor(() =>
+      expect(graphRequest).toHaveBeenCalledWith({
+        job_type: 'all',
+        period: 'month',
+      })
+    );
   });
 
   test('should render all three line chart filters with correct number of options', async () => {
-    expect(pageWrapper.find('Select[variant="single"]')).toHaveLength(3);
-    await act(async () => {
-      pageWrapper
-        .find('Select[placeholderText="Select job type"]')
-        .prop('onToggle')(true);
-    });
-    pageWrapper.update();
-    expect(pageWrapper.find('SelectOption')).toHaveLength(4);
-    await act(async () => {
-      pageWrapper
-        .find('Select[placeholderText="Select job type"]')
-        .prop('onToggle')(false);
-      pageWrapper
-        .find('Select[placeholderText="Select period"]')
-        .prop('onToggle')(true);
-    });
-    pageWrapper.update();
-    expect(pageWrapper.find('SelectOption')).toHaveLength(4);
-    await act(async () => {
-      pageWrapper
-        .find('Select[placeholderText="Select period"]')
-        .prop('onToggle')(false);
-      pageWrapper
-        .find('Select[placeholderText="Select status"]')
-        .prop('onToggle')(true);
-    });
-    pageWrapper.update();
-    expect(pageWrapper.find('SelectOption')).toHaveLength(3);
+    const { user, container } = renderWithContexts(<DashboardGraph />);
+
+    await waitFor(() => expect(graphRequest).toHaveBeenCalled());
+
+    const periodToggle = getToggle(container, 'periodSelect');
+    const jobTypeToggle = getToggle(container, 'jobTypeSelect');
+    const statusToggle = getToggle(container, 'jobStatusSelect');
+    expect(periodToggle).toBeInTheDocument();
+    expect(jobTypeToggle).toBeInTheDocument();
+    expect(statusToggle).toBeInTheDocument();
+
+    await user.click(jobTypeToggle);
+    let listbox = await screen.findByRole('listbox');
+    expect(within(listbox).getAllByRole('option')).toHaveLength(4);
+
+    await user.click(jobTypeToggle);
+    await waitFor(() =>
+      expect(screen.queryByRole('listbox')).not.toBeInTheDocument()
+    );
+
+    await user.click(periodToggle);
+    listbox = await screen.findByRole('listbox');
+    expect(within(listbox).getAllByRole('option')).toHaveLength(4);
+
+    await user.click(periodToggle);
+    await waitFor(() =>
+      expect(screen.queryByRole('listbox')).not.toBeInTheDocument()
+    );
+
+    await user.click(statusToggle);
+    listbox = await screen.findByRole('listbox');
+    expect(within(listbox).getAllByRole('option')).toHaveLength(3);
   });
 });

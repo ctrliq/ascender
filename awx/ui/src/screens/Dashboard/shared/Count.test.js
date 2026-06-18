@@ -1,24 +1,23 @@
 import React from 'react';
 
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import Count from './Count';
 
 describe('<Count />', () => {
-  let pageWrapper;
-
   test('initially renders without crashing', () => {
-    pageWrapper = mountWithContexts(<Count link="foo" />);
-    expect(pageWrapper.length).toBe(1);
+    const { container } = renderWithContexts(<Count link="foo" />);
+    expect(container).toBeInTheDocument();
+    expect(container.querySelector('h2')).toBeInTheDocument();
   });
 
   test('renders non-failed version of count without prop', () => {
-    pageWrapper = mountWithContexts(<Count link="foo" />);
-    expect(pageWrapper.find('h2').hasClass('failed')).toBe(false);
+    const { container } = renderWithContexts(<Count link="foo" />);
+    expect(container.querySelector('h2')).not.toHaveClass('failed');
   });
 
   test('renders failed version of count with appropriate prop', () => {
-    pageWrapper = mountWithContexts(<Count link="foo" failed />);
-    expect(pageWrapper.find('h2').hasClass('failed')).toBe(true);
+    const { container } = renderWithContexts(<Count link="foo" failed />);
+    expect(container.querySelector('h2')).toHaveClass('failed');
   });
 });
