@@ -1,59 +1,62 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { screen } from '@testing-library/react';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import ReLaunchDropDown from './ReLaunchDropDown';
 
 describe('ReLaunchDropDown', () => {
-  const handleRelaunch = jest.fn();
-
   test('expected content is rendered on initialization', () => {
-    const wrapper = mountWithContexts(
-      <ReLaunchDropDown handleRelaunch={handleRelaunch} />
-    );
+    renderWithContexts(<ReLaunchDropDown handleRelaunch={() => {}} />);
 
-    expect(wrapper.find('Dropdown')).toHaveLength(1);
+    expect(
+      screen.getByRole('button', { name: 'relaunch jobs' })
+    ).toBeInTheDocument();
   });
 
   test('dropdown have expected items and callbacks', async () => {
-    const wrapper = mountWithContexts(
+    const handleRelaunch = jest.fn();
+    const { user } = renderWithContexts(
       <ReLaunchDropDown handleRelaunch={handleRelaunch} />
     );
-    expect(wrapper.find('DropdownItem')).toHaveLength(0);
-    // the menu renders in a popper, whose async positioning must be flushed
-    await act(async () => {
-      wrapper.find('button').simulate('click');
-    });
-    wrapper.update();
-    expect(wrapper.find('DropdownItem')).toHaveLength(3);
 
-    wrapper
-      .find('DropdownItem[aria-label="Relaunch failed hosts"]')
-      .simulate('click');
+    // closed until the toggle is clicked
+    expect(
+      screen.queryByRole('menuitem', { name: 'Relaunch failed hosts' })
+    ).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'relaunch jobs' }));
+
+    // the menu stays open after a selection, so both items are reachable
+    await user.click(
+      screen.getByRole('menuitem', { name: 'Relaunch failed hosts' })
+    );
     expect(handleRelaunch).toHaveBeenCalledWith({ hosts: 'failed' });
 
-    wrapper
-      .find('DropdownItem[aria-label="Relaunch all hosts"]')
-      .simulate('click');
+    await user.click(
+      screen.getByRole('menuitem', { name: 'Relaunch all hosts' })
+    );
     expect(handleRelaunch).toHaveBeenCalledWith({ hosts: 'all' });
   });
 
-  test('dropdown isPrimary have expected items and callbacks', () => {
-    const wrapper = mountWithContexts(
+  test('dropdown isPrimary have expected items and callbacks', async () => {
+    const handleRelaunch = jest.fn();
+    const { user } = renderWithContexts(
       <ReLaunchDropDown isPrimary handleRelaunch={handleRelaunch} />
     );
-    expect(wrapper.find('DropdownItem')).toHaveLength(0);
-    wrapper.find('button').simulate('click');
-    wrapper.update();
-    expect(wrapper.find('DropdownItem')).toHaveLength(3);
 
-    wrapper
-      .find('DropdownItem[aria-label="Relaunch failed hosts"]')
-      .simulate('click');
+    expect(
+      screen.queryByRole('menuitem', { name: 'Relaunch failed hosts' })
+    ).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'relaunch jobs' }));
+
+    await user.click(
+      screen.getByRole('menuitem', { name: 'Relaunch failed hosts' })
+    );
     expect(handleRelaunch).toHaveBeenCalledWith({ hosts: 'failed' });
 
-    wrapper
-      .find('DropdownItem[aria-label="Relaunch all hosts"]')
-      .simulate('click');
+    await user.click(
+      screen.getByRole('menuitem', { name: 'Relaunch all hosts' })
+    );
     expect(handleRelaunch).toHaveBeenCalledWith({ hosts: 'all' });
   });
 });
