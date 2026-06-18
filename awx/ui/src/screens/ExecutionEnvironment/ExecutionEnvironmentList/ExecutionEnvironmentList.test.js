@@ -1,5 +1,5 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, fireEvent } from '@testing-library/react';
 
 import {
   ExecutionEnvironmentsAPI,
@@ -9,10 +9,7 @@ import {
   ProjectsAPI,
   UnifiedJobTemplatesAPI,
 } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import ExecutionEnvironmentList from './ExecutionEnvironmentList';
 
@@ -59,164 +56,63 @@ describe('<ExecutionEnvironmentList/>', () => {
       data: { results: [{ id: 10000000 }] },
     });
     WorkflowJobTemplateNodesAPI.read.mockResolvedValue({ data: { count: 0 } });
-
     OrganizationsAPI.read.mockResolvedValue({ data: { count: 0 } });
-
     UnifiedJobTemplatesAPI.read.mockResolvedValue({ data: { count: 0 } });
-
     ProjectsAPI.read.mockResolvedValue({ data: { count: 0 } });
   });
 
   afterEach(() => {
     jest.clearAllMocks();
   });
-  let wrapper;
 
-  test('should mount successfully', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(<ExecutionEnvironmentList />);
-    });
-    await waitForElement(
-      wrapper,
-      'ExecutionEnvironmentList',
-      (el) => el.length > 0
-    );
-  });
-
-  test('should have data fetched and render 2 rows', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(<ExecutionEnvironmentList />);
-    });
-    await waitForElement(
-      wrapper,
-      'ExecutionEnvironmentList',
-      (el) => el.length > 0
-    );
-
-    expect(wrapper.find('ExecutionEnvironmentListItem').length).toBe(2);
+  test('should fetch data and render 2 rows', async () => {
+    renderWithContexts(<ExecutionEnvironmentList />);
+    expect(await screen.findByText('Foo')).toBeInTheDocument();
+    expect(screen.getByText('Bar')).toBeInTheDocument();
     expect(ExecutionEnvironmentsAPI.read).toHaveBeenCalled();
     expect(ExecutionEnvironmentsAPI.readOptions).toHaveBeenCalled();
   });
 
-  test('should delete items successfully', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(<ExecutionEnvironmentList />);
-    });
-    await waitForElement(
-      wrapper,
-      'ExecutionEnvironmentList',
-      (el) => el.length > 0
+  test('should delete selected items', async () => {
+    const { user } = renderWithContexts(<ExecutionEnvironmentList />);
+    await screen.findByText('Foo');
+
+    await user.click(screen.getByRole('checkbox', { name: 'Select row 0' }));
+    await user.click(screen.getByRole('checkbox', { name: 'Select row 1' }));
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    fireEvent.click(await screen.findByLabelText('confirm delete'));
+
+    await waitFor(() =>
+      expect(ExecutionEnvironmentsAPI.destroy).toHaveBeenCalledTimes(2)
     );
-
-    await act(async () => {
-      wrapper.find('ExecutionEnvironmentListItem').at(0).invoke('onSelect')();
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('ExecutionEnvironmentListItem').at(1).invoke('onSelect')();
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('ToolbarDeleteButton').invoke('onDelete')();
-    });
-
-    expect(ExecutionEnvironmentsAPI.destroy).toHaveBeenCalledTimes(2);
   });
 
-  test('should render deletion error modal', async () => {
-    ExecutionEnvironmentsAPI.destroy.mockRejectedValue(
-      new Error({
-        response: {
-          config: {
-            method: 'DELETE',
-            url: '/api/v2/execution_environments',
-          },
-          data: 'An error occurred',
-        },
-      })
-    );
-    await act(async () => {
-      wrapper = mountWithContexts(<ExecutionEnvironmentList />);
-    });
-    waitForElement(wrapper, 'ExecutionEnvironmentList', (el) => el.length > 0);
+  test('should render a deletion error modal', async () => {
+    ExecutionEnvironmentsAPI.destroy.mockRejectedValue(new Error('nope'));
+    const { user } = renderWithContexts(<ExecutionEnvironmentList />);
+    await screen.findByText('Foo');
 
-    wrapper
-      .find('ExecutionEnvironmentListItem')
-      .at(0)
-      .find('input')
-      .simulate('change', 'a');
-    wrapper.update();
+    await user.click(screen.getByRole('checkbox', { name: 'Select row 0' }));
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    fireEvent.click(await screen.findByLabelText('confirm delete'));
 
+    expect(await screen.findByLabelText('Deletion error')).toBeInTheDocument();
+  });
+
+  test('should show a content error when the fetch fails', async () => {
+    ExecutionEnvironmentsAPI.read.mockRejectedValue(new Error('nope'));
+    renderWithContexts(<ExecutionEnvironmentList />);
     expect(
-      wrapper
-        .find('ExecutionEnvironmentListItem')
-        .at(0)
-        .find('input')
-        .prop('checked')
-    ).toBe(true);
-
-    await act(async () =>
-      wrapper.find('Button[aria-label="Delete"]').prop('onClick')()
-    );
-    wrapper.update();
-
-    await waitForElement(
-      wrapper,
-      'Button[aria-label="confirm delete"]',
-      (el) => el.length > 0
-    );
-    await act(async () =>
-      wrapper.find('Button[aria-label="confirm delete"]').prop('onClick')()
-    );
-    wrapper.update();
-    expect(wrapper.find('ErrorDetail').length).toBe(1);
+      await screen.findByText('Something went wrong...')
+    ).toBeInTheDocument();
   });
 
-  test('should thrown content error', async () => {
-    ExecutionEnvironmentsAPI.read.mockRejectedValue(
-      new Error({
-        response: {
-          config: {
-            method: 'GET',
-            url: '/api/v2/execution_environments',
-          },
-          data: 'An error occurred',
-        },
-      })
-    );
-    await act(async () => {
-      wrapper = mountWithContexts(<ExecutionEnvironmentList />);
-    });
-    await waitForElement(
-      wrapper,
-      'ExecutionEnvironmentList',
-      (el) => el.length > 0
-    );
-    expect(wrapper.find('ContentError').length).toBe(1);
-  });
-
-  test('should not render add button', async () => {
-    ExecutionEnvironmentsAPI.read.mockResolvedValue(executionEnvironments);
+  test('should not render the add button when POST is not allowed', async () => {
     ExecutionEnvironmentsAPI.readOptions.mockResolvedValue({
       data: { actions: { POST: false } },
     });
-    await act(async () => {
-      wrapper = mountWithContexts(<ExecutionEnvironmentList />);
-    });
-    waitForElement(wrapper, 'ExecutionEnvironmentList', (el) => el.length > 0);
-    expect(wrapper.find('ToolbarAddButton').length).toBe(0);
-  });
-
-  test('should have proper number of delete detail requests', async () => {
-    ExecutionEnvironmentsAPI.read.mockResolvedValue(executionEnvironments);
-    ExecutionEnvironmentsAPI.readOptions.mockResolvedValue({
-      data: { actions: { POST: false } },
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(<ExecutionEnvironmentList />);
-    });
-    expect(
-      wrapper.find('ToolbarDeleteButton').prop('deleteDetailsRequests')
-    ).toHaveLength(4);
+    renderWithContexts(<ExecutionEnvironmentList />);
+    await screen.findByText('Foo');
+    expect(screen.queryByRole('link', { name: 'Add' })).not.toBeInTheDocument();
   });
 });

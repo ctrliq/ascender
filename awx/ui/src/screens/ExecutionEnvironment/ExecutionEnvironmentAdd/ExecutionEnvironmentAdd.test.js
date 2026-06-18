@@ -1,153 +1,101 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
 import { createMemoryHistory } from 'history';
+import { screen, waitFor } from '@testing-library/react';
 
-import { ExecutionEnvironmentsAPI, CredentialTypesAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+import { ExecutionEnvironmentsAPI } from 'api';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ExecutionEnvironmentAdd from './ExecutionEnvironmentAdd';
 
 jest.mock('../../../api');
 
-const mockMe = {
-  is_superuser: true,
-  is_system_auditor: false,
-};
-
-const executionEnvironmentData = {
-  name: 'Test EE',
-  credential: 4,
-  description: 'A simple EE',
-  image: 'https://registry.com/image/container',
-  pull: 'one',
-  summary_fields: {
-    credential: {
-      id: 4,
-      name: 'Container Registry',
-      description: '',
-      kind: 'registry',
-      cloud: false,
-      kubernetes: false,
-      credential_type_id: 17,
-    },
-  },
-};
-
-const mockOptions = {
-  data: {
-    actions: {
-      POST: {
-        pull: {
-          choices: [
-            ['one', 'One'],
-            ['two', 'Two'],
-            ['three', 'Three'],
-          ],
-        },
-      },
-    },
-  },
-};
-
-const containerRegistryCredentialResolve = {
-  data: {
-    results: [
-      {
-        id: 4,
-        name: 'Container Registry',
-        kind: 'registry',
-      },
-    ],
-    count: 1,
-  },
-};
+// The form has its own suite; stub it so we can drive the container's
+// submit/cancel/error handling and observe the query-param prefill it passes.
+jest.mock('../shared/ExecutionEnvironmentForm', () =>
+  function MockExecutionEnvironmentForm({
+    onSubmit,
+    onCancel,
+    submitError,
+    executionEnvironment,
+  }) {
+    return (
+      <div>
+        {submitError ? <div data-testid="form-submit-error" /> : null}
+        <div data-testid="prefill-image">{executionEnvironment?.image}</div>
+        <button
+          type="button"
+          onClick={() =>
+            onSubmit({
+              name: 'Test EE',
+              image: 'https://registry.com/image/container',
+              credential: { id: 4 },
+              organization: { id: 9 },
+            })
+          }
+        >
+          Submit
+        </button>
+        <button type="button" aria-label="Cancel" onClick={onCancel}>
+          Cancel
+        </button>
+      </div>
+    );
+  }
+);
 
 describe('<ExecutionEnvironmentAdd/>', () => {
-  let wrapper;
   let history;
 
-  beforeEach(async () => {
-    CredentialTypesAPI.read.mockResolvedValue(
-      containerRegistryCredentialResolve
-    );
-    history = createMemoryHistory({
-      initialEntries: ['/execution_environments'],
+  const renderAdd = (initialEntry = '/execution_environments') => {
+    history = createMemoryHistory({ initialEntries: [initialEntry] });
+    return renderWithContexts(<ExecutionEnvironmentAdd />, {
+      context: { router: { history } },
     });
-    ExecutionEnvironmentsAPI.readOptions.mockResolvedValue(mockOptions);
-    ExecutionEnvironmentsAPI.create.mockResolvedValue({
-      data: {
-        id: 42,
-      },
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(<ExecutionEnvironmentAdd me={mockMe} />, {
-        context: { router: { history } },
-      });
-    });
-
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-  });
+  };
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
   test('handleSubmit should call the api and redirect to details page', async () => {
-    await act(async () => {
-      wrapper.find('ExecutionEnvironmentForm').prop('onSubmit')({
-        executionEnvironmentData,
-      });
-    });
-    wrapper.update();
-    expect(ExecutionEnvironmentsAPI.create).toHaveBeenCalledWith({
-      executionEnvironmentData,
-    });
-    expect(history.location.pathname).toBe(
-      '/execution_environments/42/details'
+    ExecutionEnvironmentsAPI.create.mockResolvedValue({ data: { id: 42 } });
+    const { user } = renderAdd();
+    await user.click(screen.getByRole('button', { name: 'Submit' }));
+    await waitFor(() =>
+      expect(ExecutionEnvironmentsAPI.create).toHaveBeenCalledWith({
+        name: 'Test EE',
+        image: 'https://registry.com/image/container',
+        credential: 4,
+        organization: 9,
+      })
+    );
+    await waitFor(() =>
+      expect(history.location.pathname).toBe(
+        '/execution_environments/42/details'
+      )
     );
   });
 
-  test('handleCancel should return the user back to the execution environments list', async () => {
-    wrapper.find('Button[aria-label="Cancel"]').simulate('click');
+  test('handleCancel returns the user back to the list', async () => {
+    const { user } = renderAdd();
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
     expect(history.location.pathname).toEqual('/execution_environments');
   });
 
-  test('failed form submission should show an error message', async () => {
-    const error = {
-      response: {
-        data: { detail: 'An error occurred' },
-      },
-    };
-    ExecutionEnvironmentsAPI.create.mockImplementationOnce(() =>
-      Promise.reject(error)
-    );
-    await act(async () => {
-      wrapper.find('ExecutionEnvironmentForm').invoke('onSubmit')(
-        executionEnvironmentData
-      );
+  test('failed form submission shows an error message', async () => {
+    ExecutionEnvironmentsAPI.create.mockRejectedValue({
+      response: { data: { detail: 'An error occurred' } },
     });
-    wrapper.update();
-    expect(wrapper.find('FormSubmitError').length).toBe(1);
+    const { user } = renderAdd();
+    await user.click(screen.getByRole('button', { name: 'Submit' }));
+    expect(await screen.findByTestId('form-submit-error')).toBeInTheDocument();
   });
 
-  test('should parse and prefill select form fields from query params', async () => {
-    history = createMemoryHistory({
-      initialEntries: [
-        '/execution_environments/add?image=https://myhub.io/repo:2.0',
-      ],
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(<ExecutionEnvironmentAdd me={mockMe} />, {
-        context: { router: { history } },
-      });
-    });
-
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-
-    expect(
-      wrapper.find('input#execution-environment-image').prop('value')
-    ).toEqual('https://myhub.io/repo:2.0');
+  test('prefills the image from the query params', () => {
+    renderAdd(
+      '/execution_environments/add?image=https://myhub.io/repo:2.0'
+    );
+    expect(screen.getByTestId('prefill-image')).toHaveTextContent(
+      'https://myhub.io/repo:2.0'
+    );
   });
 });

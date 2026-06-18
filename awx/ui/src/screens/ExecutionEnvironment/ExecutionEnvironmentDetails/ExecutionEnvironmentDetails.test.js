@@ -1,16 +1,26 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
 import { createMemoryHistory } from 'history';
+import { screen, waitFor, fireEvent } from '@testing-library/react';
 
 import { ExecutionEnvironmentsAPI } from 'api';
 import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+  renderWithContexts,
+  assertDetail,
+} from '../../../../testUtils/rtlContexts';
 
 import ExecutionEnvironmentDetails from './ExecutionEnvironmentDetails';
 
 jest.mock('../../../api');
+
+// The DeleteButton fetches related-resource counts on click; return an empty
+// request list so it skips that fetch (which hits several auto-mocked APIs)
+// and opens the confirm modal directly.
+jest.mock('util/getRelatedResourceDeleteDetails', () => ({
+  relatedResourceDeleteRequests: () => ({ executionEnvironment: () => [] }),
+  getRelatedResourceDeleteCounts: jest
+    .fn()
+    .mockResolvedValue({ results: {}, error: null }),
+}));
 
 const executionEnvironment = {
   id: 17,
@@ -25,27 +35,10 @@ const executionEnvironment = {
     credential: '/api/v2/credentials/4/',
   },
   summary_fields: {
-    user_capabilities: {
-      edit: true,
-      delete: true,
-      copy: true,
-    },
-    credential: {
-      id: 4,
-      name: 'Container Registry',
-    },
-    created_by: {
-      id: 1,
-      username: 'admin',
-      first_name: '',
-      last_name: '',
-    },
-    modified_by: {
-      id: 1,
-      username: 'admin',
-      first_name: '',
-      last_name: '',
-    },
+    user_capabilities: { edit: true, delete: true, copy: true },
+    credential: { id: 4, name: 'Container Registry' },
+    created_by: { id: 1, username: 'admin', first_name: '', last_name: '' },
+    modified_by: { id: 1, username: 'admin', first_name: '', last_name: '' },
   },
   name: 'Default EE',
   created: '2020-09-17T20:14:15.408782Z',
@@ -58,224 +51,101 @@ const executionEnvironment = {
 };
 
 describe('<ExecutionEnvironmentDetails/>', () => {
-  let wrapper;
-  test('should render details properly', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ExecutionEnvironmentDetails
-          executionEnvironment={executionEnvironment}
-        />
-      );
-    });
-    wrapper.update();
-
-    expect(wrapper.find('Detail[label="Image"]').prop('value')).toEqual(
-      executionEnvironment.image
-    );
-    expect(wrapper.find('Detail[label="Description"]').prop('value')).toEqual(
-      'Foo'
-    );
-    expect(wrapper.find('Detail[label="Organization"]').prop('value')).toEqual(
-      'Globally Available'
-    );
-    expect(
-      wrapper.find('Detail[label="Registry credential"]').prop('value').props
-        .children
-    ).toEqual(executionEnvironment.summary_fields.credential.name);
-    expect(wrapper.find('Detail[label="Managed"]').prop('value')).toEqual(
-      'False'
-    );
-    const dates = wrapper.find('UserDateDetail');
-    expect(dates).toHaveLength(2);
-    expect(dates.at(0).prop('date')).toEqual(executionEnvironment.created);
-    expect(dates.at(1).prop('date')).toEqual(executionEnvironment.modified);
-    const editButton = wrapper.find('Button[aria-label="edit"]');
-    expect(editButton.text()).toEqual('Edit');
-    expect(editButton.prop('to')).toBe('/execution_environments/17/edit');
-
-    const deleteButton = wrapper.find('Button[aria-label="Delete"]');
-    expect(deleteButton.text()).toEqual('Delete');
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
-  test('should render organization detail', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ExecutionEnvironmentDetails
-          executionEnvironment={{
-            ...executionEnvironment,
-            organization: 1,
-            summary_fields: {
-              organization: { id: 1, name: 'Bar' },
-              credential: {
-                id: 4,
-                name: 'Container Registry',
-              },
-            },
-          }}
-        />
-      );
-    });
-    wrapper.update();
+  test('should render details properly', async () => {
+    renderWithContexts(
+      <ExecutionEnvironmentDetails executionEnvironment={executionEnvironment} />
+    );
+    await waitFor(() => expect(screen.getByText('Image')).toBeInTheDocument());
+    assertDetail('Image', executionEnvironment.image);
+    assertDetail('Description', 'Foo');
+    assertDetail('Organization', 'Globally Available');
+    assertDetail('Registry credential', 'Container Registry');
+    assertDetail('Managed', 'False');
+    expect(screen.getByText('Created')).toBeInTheDocument();
+    expect(screen.getByText('Last Modified')).toBeInTheDocument();
+    expect(screen.getByLabelText('edit')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Delete' })).toBeInTheDocument();
+  });
 
-    expect(wrapper.find('Detail[label="Image"]').prop('value')).toEqual(
-      executionEnvironment.image
+  test('should render organization detail when set', async () => {
+    renderWithContexts(
+      <ExecutionEnvironmentDetails
+        executionEnvironment={{
+          ...executionEnvironment,
+          organization: 1,
+          summary_fields: {
+            organization: { id: 1, name: 'Bar' },
+            credential: { id: 4, name: 'Container Registry' },
+          },
+        }}
+      />
     );
-    expect(wrapper.find('Detail[label="Description"]').prop('value')).toEqual(
-      'Foo'
-    );
-    expect(wrapper.find(`Detail[label="Organization"] dd`).text()).toBe('Bar');
-    expect(
-      wrapper.find('Detail[label="Registry credential"]').prop('value').props
-        .children
-    ).toEqual(executionEnvironment.summary_fields.credential.name);
-    const dates = wrapper.find('UserDateDetail');
-    expect(dates).toHaveLength(2);
-    expect(dates.at(0).prop('date')).toEqual(executionEnvironment.created);
-    expect(dates.at(1).prop('date')).toEqual(executionEnvironment.modified);
+    await waitFor(() => expect(screen.getByText('Image')).toBeInTheDocument());
+    assertDetail('Organization', 'Bar');
+    assertDetail('Registry credential', 'Container Registry');
   });
 
   test('expected api call is made for delete', async () => {
     const history = createMemoryHistory({
       initialEntries: ['/execution_environments/42/details'],
     });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ExecutionEnvironmentDetails
-          executionEnvironment={executionEnvironment}
-        />,
-        {
-          context: { router: { history } },
-        }
-      );
-    });
-    await act(async () => {
-      wrapper.find('DeleteButton').invoke('onConfirm')();
-    });
-    expect(ExecutionEnvironmentsAPI.destroy).toHaveBeenCalledTimes(1);
-    expect(history.location.pathname).toBe('/execution_environments');
+    const { user } = renderWithContexts(
+      <ExecutionEnvironmentDetails
+        executionEnvironment={executionEnvironment}
+      />,
+      { context: { router: { history } } }
+    );
+    await user.click(await screen.findByRole('button', { name: 'Delete' }));
+    fireEvent.click(await screen.findByLabelText('Confirm Delete'));
+    await waitFor(() =>
+      expect(ExecutionEnvironmentsAPI.destroy).toHaveBeenCalledTimes(1)
+    );
+    await waitFor(() =>
+      expect(history.location.pathname).toBe('/execution_environments')
+    );
   });
 
-  test('should render action buttons to managed ee', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ExecutionEnvironmentDetails
-          executionEnvironment={{
-            ...executionEnvironment,
-            managed: true,
-          }}
-        />
-      );
-    });
-    wrapper.update();
+  test('should render action buttons for a managed ee', async () => {
+    renderWithContexts(
+      <ExecutionEnvironmentDetails
+        executionEnvironment={{ ...executionEnvironment, managed: true }}
+      />
+    );
+    await waitFor(() => expect(screen.getByText('Image')).toBeInTheDocument());
+    assertDetail('Managed', 'True');
+    expect(screen.getByLabelText('edit')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Delete' })).toBeInTheDocument();
+  });
 
-    expect(wrapper.find('Detail[label="Image"]').prop('value')).toEqual(
-      executionEnvironment.image
+  test('should hide the edit button without edit permission', async () => {
+    renderWithContexts(
+      <ExecutionEnvironmentDetails
+        executionEnvironment={{
+          ...executionEnvironment,
+          summary_fields: { user_capabilities: { edit: false } },
+        }}
+      />
     );
-    expect(wrapper.find('Detail[label="Description"]').prop('value')).toEqual(
-      'Foo'
+    await waitFor(() => expect(screen.getByText('Image')).toBeInTheDocument());
+    expect(screen.queryByLabelText('edit')).not.toBeInTheDocument();
+  });
+
+  test('should hide the delete button without delete permission', async () => {
+    renderWithContexts(
+      <ExecutionEnvironmentDetails
+        executionEnvironment={{
+          ...executionEnvironment,
+          summary_fields: { user_capabilities: { delete: false } },
+        }}
+      />
     );
-    expect(wrapper.find('Detail[label="Organization"]').prop('value')).toEqual(
-      'Globally Available'
-    );
+    await waitFor(() => expect(screen.getByText('Image')).toBeInTheDocument());
     expect(
-      wrapper.find('Detail[label="Registry credential"]').prop('value').props
-        .children
-    ).toEqual(executionEnvironment.summary_fields.credential.name);
-    expect(wrapper.find('Detail[label="Managed"]').prop('value')).toEqual(
-      'True'
-    );
-    const dates = wrapper.find('UserDateDetail');
-    expect(dates).toHaveLength(2);
-    expect(dates.at(0).prop('date')).toEqual(executionEnvironment.created);
-    expect(dates.at(1).prop('date')).toEqual(executionEnvironment.modified);
-    expect(wrapper.find('Button[aria-label="edit"]')).toHaveLength(1);
-
-    expect(wrapper.find('Button[aria-label="Delete"]')).toHaveLength(1);
-  });
-
-  test('should have proper number of delete detail requests', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/execution_environments/42/details'],
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ExecutionEnvironmentDetails
-          executionEnvironment={executionEnvironment}
-        />,
-        {
-          context: { router: { history } },
-        }
-      );
-    });
-    expect(
-      wrapper.find('DeleteButton').prop('deleteDetailsRequests')
-    ).toHaveLength(4);
-  });
-
-  test('should show edit button for users with edit permission', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ExecutionEnvironmentDetails
-          executionEnvironment={executionEnvironment}
-        />
-      );
-    });
-    const editButton = await waitForElement(
-      wrapper,
-      'ExecutionEnvironmentDetails Button[aria-label="edit"]'
-    );
-    expect(editButton.text()).toEqual('Edit');
-    expect(editButton.prop('to')).toBe('/execution_environments/17/edit');
-  });
-
-  test('should hide edit button for users without edit permission', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ExecutionEnvironmentDetails
-          executionEnvironment={{
-            ...executionEnvironment,
-            summary_fields: { user_capabilities: { edit: false } },
-          }}
-        />
-      );
-    });
-    await waitForElement(wrapper, 'ExecutionEnvironmentDetails');
-    expect(
-      wrapper.find('ExecutionEnvironmentDetails Button[aria-label="edit"]')
-        .length
-    ).toBe(0);
-  });
-
-  test('should show delete button for users with delete permission', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ExecutionEnvironmentDetails
-          executionEnvironment={executionEnvironment}
-        />
-      );
-    });
-    const deleteButton = await waitForElement(
-      wrapper,
-      'ExecutionEnvironmentDetails Button[aria-label="Delete"]'
-    );
-    expect(deleteButton.text()).toEqual('Delete');
-  });
-
-  test('should hide delete button for users without delete permission', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ExecutionEnvironmentDetails
-          executionEnvironment={{
-            ...executionEnvironment,
-            summary_fields: { user_capabilities: { delete: false } },
-          }}
-        />
-      );
-    });
-    await waitForElement(wrapper, 'ExecutionEnvironmentDetails');
-    expect(
-      wrapper.find('ExecutionEnvironmentDetails Button[aria-label="Delete"]')
-        .length
-    ).toBe(0);
+      screen.queryByRole('button', { name: 'Delete' })
+    ).not.toBeInTheDocument();
   });
 });

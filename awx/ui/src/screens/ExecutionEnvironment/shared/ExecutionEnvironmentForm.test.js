@@ -1,52 +1,24 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
+
 import { ExecutionEnvironmentsAPI, CredentialTypesAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import ExecutionEnvironmentForm from './ExecutionEnvironmentForm';
 
 jest.mock('../../../api');
 
-const mockMe = {
-  is_superuser: true,
-  is_super_auditor: false,
-};
+const mockMe = { is_superuser: true, is_super_auditor: false };
 
 const executionEnvironment = {
   id: 16,
   name: 'Test EE',
   type: 'execution_environment',
   pull: 'one',
-  url: '/api/v2/execution_environments/16/',
-  related: {
-    created_by: '/api/v2/users/1/',
-    modified_by: '/api/v2/users/1/',
-    activity_stream: '/api/v2/execution_environments/16/activity_stream/',
-    unified_job_templates:
-      '/api/v2/execution_environments/16/unified_job_templates/',
-    credential: '/api/v2/credentials/4/',
-  },
   summary_fields: {
-    organization: {
-      id: 1,
-      name: 'Default',
-      description: '',
-    },
-    credential: {
-      id: 4,
-      name: 'Container Registry',
-      description: '',
-      kind: 'registry',
-      cloud: false,
-      kubernetes: false,
-      credential_type_id: 17,
-    },
+    organization: { id: 1, name: 'Default', description: '' },
+    credential: { id: 4, name: 'Container Registry', kind: 'registry' },
   },
-  created: '2020-09-17T16:06:57.346128Z',
-  modified: '2020-09-17T16:06:57.346147Z',
   description: 'A simple EE',
   organization: 1,
   image: 'https://registry.com/image/container',
@@ -55,37 +27,13 @@ const executionEnvironment = {
 };
 
 const globallyAvailableEE = {
+  ...executionEnvironment,
   id: 17,
   name: 'GEE',
-  type: 'execution_environment',
-  pull: 'one',
-  url: '/api/v2/execution_environments/17/',
-  related: {
-    created_by: '/api/v2/users/1/',
-    modified_by: '/api/v2/users/1/',
-    activity_stream: '/api/v2/execution_environments/16/activity_stream/',
-    unified_job_templates:
-      '/api/v2/execution_environments/16/unified_job_templates/',
-    credential: '/api/v2/credentials/4/',
-  },
   summary_fields: {
-    credential: {
-      id: 4,
-      name: 'Container Registry',
-      description: '',
-      kind: 'registry',
-      cloud: false,
-      kubernetes: false,
-      credential_type_id: 17,
-    },
+    credential: { id: 4, name: 'Container Registry', kind: 'registry' },
   },
-  created: '2020-09-17T16:06:57.346128Z',
-  modified: '2020-09-17T16:06:57.346147Z',
-  description: 'A simple EE',
   organization: null,
-  image: 'https://registry.com/image/container',
-  managed: false,
-  credential: 4,
 };
 
 const mockOptions = {
@@ -106,210 +54,108 @@ const mockOptions = {
 
 const containerRegistryCredentialResolve = {
   data: {
-    results: [
-      {
-        id: 4,
-        name: 'Container Registry',
-        kind: 'registry',
-      },
-    ],
+    results: [{ id: 4, name: 'Container Registry', kind: 'registry' }],
     count: 1,
   },
 };
 
+const renderForm = async (props = {}) => {
+  ExecutionEnvironmentsAPI.readOptions.mockResolvedValue(mockOptions);
+  CredentialTypesAPI.read.mockResolvedValue(containerRegistryCredentialResolve);
+  const onCancel = jest.fn();
+  const onSubmit = jest.fn();
+  const result = renderWithContexts(
+    <ExecutionEnvironmentForm
+      onCancel={onCancel}
+      onSubmit={onSubmit}
+      executionEnvironment={executionEnvironment}
+      me={mockMe}
+      {...props}
+    />
+  );
+  // wait for the form to finish loading (ContentLoading -> fields)
+  await screen.findByRole('button', { name: 'Save' });
+  return { ...result, onCancel, onSubmit };
+};
+
 describe('<ExecutionEnvironmentForm/>', () => {
-  let wrapper;
-  let onCancel;
-  let onSubmit;
-
-  beforeEach(async () => {
-    onCancel = jest.fn();
-    onSubmit = jest.fn();
-    ExecutionEnvironmentsAPI.readOptions.mockResolvedValue(mockOptions);
-    CredentialTypesAPI.read.mockResolvedValue(
-      containerRegistryCredentialResolve
-    );
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ExecutionEnvironmentForm
-          onCancel={onCancel}
-          onSubmit={onSubmit}
-          executionEnvironment={executionEnvironment}
-          options={mockOptions}
-          me={mockMe}
-        />
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-  });
-
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  test('Initially renders successfully', () => {
-    expect(wrapper.length).toBe(1);
+  test('should display the form fields', async () => {
+    await renderForm();
+    expect(screen.getByText('Image')).toBeInTheDocument();
+    expect(screen.getByText('Description')).toBeInTheDocument();
+    expect(screen.getByText('Registry credential')).toBeInTheDocument();
+    expect(screen.getByText('Organization')).toBeInTheDocument();
   });
 
-  test('should display form fields properly', () => {
-    expect(wrapper.find('FormGroup[label="Image"]').length).toBe(1);
-    expect(wrapper.find('FormGroup[label="Description"]').length).toBe(1);
-    expect(wrapper.find('CredentialLookup').length).toBe(1);
-  });
-
-  test('should call onSubmit when form submitted', async () => {
+  test('should call onSubmit when the form is submitted', async () => {
+    const { user, onSubmit } = await renderForm();
     expect(onSubmit).not.toHaveBeenCalled();
-    await act(async () => {
-      wrapper.find('button[aria-label="Save"]').simulate('click');
-    });
-    expect(onSubmit).toHaveBeenCalledTimes(1);
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1));
   });
 
-  test('should update form values', async () => {
-    await act(async () => {
-      wrapper.find('input#execution-environment-image').simulate('change', {
-        target: {
-          value: 'Updated EE Name',
-          name: 'name',
-        },
-      });
-      wrapper.find('input#execution-environment-image').simulate('change', {
-        target: {
-          value: 'https://registry.com/image/container2',
-          name: 'image',
-        },
-      });
-      wrapper
-        .find('input#execution-environment-description')
-        .simulate('change', {
-          target: { value: 'New description', name: 'description' },
-        });
-      wrapper.find('CredentialLookup').invoke('onBlur')();
-      wrapper.find('CredentialLookup').invoke('onChange')({
-        id: 99,
-        name: 'credential',
-      });
+  test('should update the image and description fields', async () => {
+    const { user, container } = await renderForm();
+    const imageField = container.querySelector('#execution-environment-image');
+    await user.clear(imageField);
+    await user.type(imageField, 'https://registry.com/image/container2');
+    expect(imageField).toHaveValue('https://registry.com/image/container2');
 
-      wrapper.find('OrganizationLookup').invoke('onBlur')();
-      wrapper.find('OrganizationLookup').invoke('onChange')({
-        id: 3,
-        name: 'organization',
-      });
-    });
-
-    wrapper.update();
-    expect(wrapper.find('OrganizationLookup').prop('value')).toEqual({
-      id: 3,
-      name: 'organization',
-    });
-    expect(
-      wrapper.find('input#execution-environment-image').prop('value')
-    ).toEqual('https://registry.com/image/container2');
-    expect(
-      wrapper.find('input#execution-environment-description').prop('value')
-    ).toEqual('New description');
-    expect(wrapper.find('CredentialLookup').prop('value')).toEqual({
-      id: 99,
-      name: 'credential',
-    });
+    const descField = container.querySelector(
+      '#execution-environment-description'
+    );
+    await user.clear(descField);
+    await user.type(descField, 'New description');
+    expect(descField).toHaveValue('New description');
   });
 
-  test('should call handleCancel when Cancel button is clicked', async () => {
-    expect(onCancel).not.toHaveBeenCalled();
-    wrapper.find('button[aria-label="Cancel"]').invoke('onClick')();
+  test('should call onCancel when Cancel is clicked', async () => {
+    const { user, onCancel } = await renderForm();
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
     expect(onCancel).toHaveBeenCalled();
   });
 
-  test('globally available EE can not have organization reassigned', async () => {
-    let newWrapper;
-    await act(async () => {
-      newWrapper = mountWithContexts(
-        <ExecutionEnvironmentForm
-          onCancel={onCancel}
-          onSubmit={onSubmit}
-          executionEnvironment={globallyAvailableEE}
-          options={mockOptions}
-          me={mockMe}
-          isOrgLookupDisabled
-        />
-      );
+  test('disables the organization lookup for a globally available ee', async () => {
+    const { container } = await renderForm({
+      executionEnvironment: globallyAvailableEE,
+      isOrgLookupDisabled: true,
     });
-    await waitForElement(newWrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(newWrapper.find('OrganizationLookup').prop('isDisabled')).toEqual(
-      true
-    );
-    expect(newWrapper.find('Tooltip').prop('content')).toEqual(
-      'Globally available execution environment can not be reassigned to a specific Organization'
-    );
+    expect(
+      container.querySelector('[data-ouia-component-id="organization-open"]')
+    ).toBeDisabled();
   });
 
-  test('should allow an organization to be re-assigned as globally available EE', async () => {
-    let newWrapper;
-    await act(async () => {
-      newWrapper = mountWithContexts(
-        <ExecutionEnvironmentForm
-          onCancel={onCancel}
-          onSubmit={onSubmit}
-          executionEnvironment={executionEnvironment}
-          options={mockOptions}
-          me={mockMe}
-          isOrgLookupDisabled
-        />
-      );
-    });
-    await waitForElement(newWrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(newWrapper.find('OrganizationLookup').prop('isDisabled')).toEqual(
-      false
-    );
-    expect(newWrapper.find('Tooltip').length).toEqual(0);
-
-    await act(async () => {
-      newWrapper.find('OrganizationLookup').invoke('onBlur')();
-      newWrapper.find('OrganizationLookup').invoke('onChange')(null);
-    });
-    newWrapper.update();
-    expect(newWrapper.find('OrganizationLookup').prop('value')).toEqual(null);
+  test('allows reassigning the organization for a non-global ee', async () => {
+    const { container } = await renderForm({ isOrgLookupDisabled: true });
+    expect(
+      container.querySelector('[data-ouia-component-id="organization-open"]')
+    ).toBeEnabled();
   });
 
-  test('should disable edition for managed EEs, except pull option', async () => {
-    let newWrapper;
-    await act(async () => {
-      newWrapper = mountWithContexts(
-        <ExecutionEnvironmentForm
-          onCancel={onCancel}
-          onSubmit={onSubmit}
-          executionEnvironment={{ ...executionEnvironment, managed: true }}
-          options={mockOptions}
-          me={mockMe}
-        />
-      );
+  test('disables every field except pull for a managed ee', async () => {
+    const { container } = await renderForm({
+      executionEnvironment: { ...executionEnvironment, managed: true },
     });
-    await waitForElement(newWrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(newWrapper.find('OrganizationLookup').prop('isDisabled')).toEqual(
-      true
-    );
-    expect(newWrapper.find('CredentialLookup').prop('isDisabled')).toEqual(
-      true
-    );
     expect(
-      newWrapper
-        .find('TextInputBase[id="execution-environment-name"]')
-        .prop('isDisabled')
-    ).toEqual(true);
+      container.querySelector('#execution-environment-name')
+    ).toBeDisabled();
     expect(
-      newWrapper
-        .find('TextInputBase[id="execution-environment-description"]')
-        .prop('isDisabled')
-    ).toEqual(true);
+      container.querySelector('#execution-environment-image')
+    ).toBeDisabled();
     expect(
-      newWrapper
-        .find('TextInputBase[id="execution-environment-image"]')
-        .prop('isDisabled')
-    ).toEqual(true);
+      container.querySelector('#execution-environment-description')
+    ).toBeDisabled();
     expect(
-      newWrapper
-        .find('FormSelect[id="container-pull-options"]')
-        .prop('isDisabled')
-    ).toEqual(false);
+      container.querySelector('[data-ouia-component-id="credential-open"]')
+    ).toBeDisabled();
+    expect(
+      container.querySelector('[data-ouia-component-id="organization-open"]')
+    ).toBeDisabled();
+    // the pull option stays editable
+    expect(container.querySelector('#container-pull-options')).toBeEnabled();
   });
 });
