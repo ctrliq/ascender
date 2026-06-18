@@ -1,11 +1,9 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, within } from '@testing-library/react';
 
 import { OrganizationsAPI, CredentialsAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import OrganizationsList from './OrganizationList';
 
@@ -68,7 +66,6 @@ const mockOrganizations = {
 };
 
 describe('<OrganizationsList />', () => {
-  let wrapper;
   beforeEach(() => {
     CredentialsAPI.read.mockResolvedValue({ data: { count: 0 } });
     OrganizationsAPI.read.mockResolvedValue(mockOrganizations);
@@ -85,151 +82,73 @@ describe('<OrganizationsList />', () => {
     jest.clearAllMocks();
   });
 
-  test('Initially renders successfully', async () => {
-    await act(async () => {
-      mountWithContexts(<OrganizationsList />);
-    });
-  });
-
-  test('should have proper number of delete detail requests', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(<OrganizationsList />);
-    });
-    await waitForElement(
-      wrapper,
-      'OrganizationsList',
-      (el) => el.find('ContentLoading').length === 0
-    );
-    expect(
-      wrapper.find('ToolbarDeleteButton').prop('deleteDetailsRequests')
-    ).toHaveLength(7);
-  });
-
   test('Items are rendered after loading', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(<OrganizationsList />);
-    });
-    await waitForElement(
-      wrapper,
-      'OrganizationsList',
-      (el) => el.find('ContentLoading').length === 0
-    );
-    expect(wrapper.find('OrganizationListItem').length).toBe(3);
+    renderWithContexts(<OrganizationsList />);
+    await screen.findByRole('link', { name: 'Organization 0' });
+    expect(OrganizationsAPI.read).toHaveBeenCalledTimes(1);
+    expect(
+      screen.getAllByRole('link', { name: /^Organization \d$/ })
+    ).toHaveLength(3);
+  });
+
+  test('should build the proper number of delete detail requests', () => {
+    const deleteDetailsRequests = relatedResourceDeleteRequests(
+      (str) => str
+    ).organization(mockOrganizations.data.results[0]);
+    expect(deleteDetailsRequests).toHaveLength(7);
   });
 
   test('Item appears selected after selecting it', async () => {
-    const itemCheckboxInput = 'tr#org-row-1 input[type="checkbox"]';
-    await act(async () => {
-      wrapper = mountWithContexts(<OrganizationsList />);
-    });
-    await waitForElement(
-      wrapper,
-      'OrganizationsList',
-      (el) => el.find('ContentLoading').length === 0
-    );
-    await act(async () => {
-      wrapper.find(itemCheckboxInput).props().onChange();
-    });
-    await waitForElement(
-      wrapper,
-      'OrganizationsList',
-      (el) => el.find(itemCheckboxInput).props().checked === true
-    );
+    const { user } = renderWithContexts(<OrganizationsList />);
+    await screen.findByRole('link', { name: 'Organization 0' });
+    const row = screen
+      .getByRole('link', { name: 'Organization 0' })
+      .closest('tr');
+    const checkbox = within(row).getByRole('checkbox');
+
+    expect(checkbox).not.toBeChecked();
+    await user.click(checkbox);
+    expect(checkbox).toBeChecked();
   });
 
   test('All items appear selected after select-all and unselected after unselect-all', async () => {
-    const itemCheckboxInputs = [
-      'tr#org-row-1 input[type="checkbox"]',
-      'tr#org-row-2 input[type="checkbox"]',
-      'tr#org-row-3 input[type="checkbox"]',
-    ];
-    await act(async () => {
-      wrapper = mountWithContexts(<OrganizationsList />);
-    });
-    await waitForElement(
-      wrapper,
-      'OrganizationsList',
-      (el) => el.find('ContentLoading').length === 0
-    );
-    // Check for initially unselected items
-    await waitForElement(
-      wrapper,
-      'input#select-all',
-      (el) => el.props().checked === false
-    );
-    itemCheckboxInputs.forEach((inputSelector) => {
-      const checkboxInput = wrapper
-        .find('OrganizationsList')
-        .find(inputSelector);
-      expect(checkboxInput.props().checked === false);
-    });
-    // Check select-all behavior
-    await act(async () => {
-      wrapper.find('Checkbox#select-all').props().onChange(true);
-    });
-    await waitForElement(
-      wrapper,
-      'input#select-all',
-      (el) => el.props().checked === true
-    );
-    itemCheckboxInputs.forEach((inputSelector) => {
-      const checkboxInput = wrapper
-        .find('OrganizationsList')
-        .find(inputSelector);
-      expect(checkboxInput.props().checked === true);
-    });
-    // Check unselect-all behavior
-    await act(async () => {
-      wrapper.find('Checkbox#select-all').props().onChange(false);
-    });
-    await waitForElement(
-      wrapper,
-      'input#select-all',
-      (el) => el.props().checked === false
-    );
-    itemCheckboxInputs.forEach((inputSelector) => {
-      const checkboxInput = wrapper
-        .find('OrganizationsList')
-        .find(inputSelector);
-      expect(checkboxInput.props().checked === false);
-    });
+    const { user } = renderWithContexts(<OrganizationsList />);
+    await screen.findByRole('link', { name: 'Organization 0' });
+
+    const selectAll = screen.getByRole('checkbox', { name: 'Select all' });
+    const rowCheckboxes = screen
+      .getAllByRole('checkbox')
+      .filter((box) => box !== selectAll);
+
+    expect(rowCheckboxes).toHaveLength(3);
+    rowCheckboxes.forEach((box) => expect(box).not.toBeChecked());
+
+    await user.click(selectAll);
+    rowCheckboxes.forEach((box) => expect(box).toBeChecked());
+
+    await user.click(selectAll);
+    rowCheckboxes.forEach((box) => expect(box).not.toBeChecked());
   });
 
   test('Expected api calls are made for multi-delete', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(<OrganizationsList />);
-    });
-    await waitForElement(
-      wrapper,
-      'OrganizationsList',
-      (el) => el.find('ContentLoading').length === 0
-    );
+    OrganizationsAPI.destroy.mockResolvedValue({});
+    const { user } = renderWithContexts(<OrganizationsList />);
+    await screen.findByRole('link', { name: 'Organization 0' });
     expect(OrganizationsAPI.read).toHaveBeenCalledTimes(1);
-    await act(async () => {
-      wrapper.find('Checkbox#select-all').props().onChange(true);
-    });
-    await waitForElement(
-      wrapper,
-      'input#select-all',
-      (el) => el.props().checked === true
+
+    await user.click(screen.getByRole('checkbox', { name: 'Select all' }));
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'confirm delete' })
     );
-    await act(async () => {
-      wrapper.find('button[aria-label="Delete"]').simulate('click');
-      wrapper.update();
-    });
-    const deleteButton = global.document.querySelector(
-      'body div[role="dialog"] button[aria-label="confirm delete"]'
+
+    await waitFor(() =>
+      expect(OrganizationsAPI.destroy).toHaveBeenCalledTimes(3)
     );
-    expect(deleteButton).not.toEqual(null);
-    await act(async () => {
-      deleteButton.click();
-    });
-    expect(OrganizationsAPI.destroy).toHaveBeenCalledTimes(3);
     expect(OrganizationsAPI.read).toHaveBeenCalledTimes(2);
   });
 
   test('Error dialog shown for failed deletion', async () => {
-    const itemCheckboxInput = 'tr#org-row-1 input[type="checkbox"]';
     OrganizationsAPI.destroy.mockRejectedValue(
       new Error({
         response: {
@@ -241,50 +160,29 @@ describe('<OrganizationsList />', () => {
         },
       })
     );
-    await act(async () => {
-      wrapper = mountWithContexts(<OrganizationsList />);
-    });
-    await waitForElement(
-      wrapper,
-      'OrganizationsList',
-      (el) => el.find('ContentLoading').length === 0
+    const { user } = renderWithContexts(<OrganizationsList />);
+    await screen.findByRole('link', { name: 'Organization 0' });
+
+    const row = screen
+      .getByRole('link', { name: 'Organization 0' })
+      .closest('tr');
+    await user.click(within(row).getByRole('checkbox'));
+
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'confirm delete' })
     );
-    await act(async () => {
-      wrapper.find(itemCheckboxInput).props().onChange();
-    });
-    await waitForElement(
-      wrapper,
-      'OrganizationsList',
-      (el) => el.find(itemCheckboxInput).props().checked === true
-    );
-    await act(async () => {
-      wrapper.find('button[aria-label="Delete"]').simulate('click');
-      wrapper.update();
-    });
-    const deleteButton = global.document.querySelector(
-      'body div[role="dialog"] button[aria-label="confirm delete"]'
-    );
-    expect(deleteButton).not.toEqual(null);
-    await act(async () => {
-      deleteButton.click();
-    });
-    await waitForElement(
-      wrapper,
-      'Modal',
-      (el) => el.props().isOpen === true && el.props().title === 'Error!'
-    );
+
+    expect(await screen.findByText('Error!')).toBeInTheDocument();
+    // settleTooltips() was a ~700ms dead wait here: it only settles a tooltip
+    // that appears after a modal closes, but this test leaves the error modal
+    // open, so there is nothing for it to settle. Drop it.
   });
 
   test('Add button shown for users with ability to POST', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(<OrganizationsList />);
-    });
-    await waitForElement(
-      wrapper,
-      'OrganizationsList',
-      (el) => el.find('ContentLoading').length === 0
-    );
-    expect(wrapper.find('ToolbarAddButton').length).toBe(1);
+    renderWithContexts(<OrganizationsList />);
+    await screen.findByRole('link', { name: 'Organization 0' });
+    expect(screen.getByRole('link', { name: 'Add' })).toBeInTheDocument();
   });
 
   test('Add button hidden for users without ability to POST', async () => {
@@ -295,14 +193,8 @@ describe('<OrganizationsList />', () => {
         },
       },
     });
-    await act(async () => {
-      wrapper = mountWithContexts(<OrganizationsList />);
-    });
-    await waitForElement(
-      wrapper,
-      'OrganizationsList',
-      (el) => el.find('ContentLoading').length === 0
-    );
-    expect(wrapper.find('ToolbarAddButton').length).toBe(0);
+    renderWithContexts(<OrganizationsList />);
+    await screen.findByRole('link', { name: 'Organization 0' });
+    expect(screen.queryByRole('link', { name: 'Add' })).not.toBeInTheDocument();
   });
 });

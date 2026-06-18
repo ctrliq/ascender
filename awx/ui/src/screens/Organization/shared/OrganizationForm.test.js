@@ -1,22 +1,69 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { OrganizationsAPI, ExecutionEnvironmentsAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import OrganizationForm from './OrganizationForm';
 
 jest.mock('../../../api');
 
-describe('<OrganizationForm />', () => {
-  const network = {};
-  const meConfig = {
-    me: {
-      is_superuser: false,
-    },
+// The lookups have their own modal-driven suites; here we stub them so the
+// form's wiring (chips from value, onChange -> onSubmit args) can be driven
+// deterministically, matching what the enzyme suite did via prop('onChange').
+jest.mock('components/Lookup', () => {
+  const actual = jest.requireActual('components/Lookup');
+  return {
+    ...actual,
+    InstanceGroupsLookup: ({ value, onChange }) => (
+      <div data-testid="instance-groups-lookup">
+        {(value || []).map((ig) => (
+          <span key={ig.id} data-testid="instance-group-chip">
+            {ig.name}
+          </span>
+        ))}
+        <button
+          type="button"
+          aria-label="add-instance-groups"
+          onClick={() =>
+            onChange(
+              [
+                { name: 'One', id: 1 },
+                { name: 'Three', id: 3 },
+              ],
+              'instanceGroups'
+            )
+          }
+        >
+          add-instance-groups
+        </button>
+      </div>
+    ),
+    ExecutionEnvironmentLookup: ({ value, onChange }) => (
+      <div data-testid="execution-environment-lookup">
+        {value ? <span>{value.name}</span> : null}
+        <button
+          type="button"
+          aria-label="select-ee"
+          onClick={() => onChange({ id: 1, name: 'Test EE' })}
+        >
+          select-ee
+        </button>
+      </div>
+    ),
   };
+});
+
+jest.mock('components/Lookup/CredentialLookup', () => ({ value }) => (
+  <div data-testid="credential-lookup">
+    {(Array.isArray(value) ? value : [value].filter(Boolean)).map((cred) => (
+      <span key={cred.id} data-testid="galaxy-credential-chip">
+        {cred.name}
+      </span>
+    ))}
+  </div>
+));
+
+describe('<OrganizationForm />', () => {
   const mockData = {
     id: 1,
     name: 'Foo',
@@ -36,7 +83,7 @@ describe('<OrganizationForm />', () => {
   ];
 
   beforeEach(() => {
-    OrganizationsAPI.readInstanceGroups.mockReturnValue({
+    OrganizationsAPI.readInstanceGroups.mockResolvedValue({
       data: {
         results: mockInstanceGroups,
       },
@@ -48,160 +95,104 @@ describe('<OrganizationForm />', () => {
   });
 
   test('should render default galaxy credential when passed', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <OrganizationForm
-          onSubmit={jest.fn()}
-          onCancel={jest.fn()}
-          me={meConfig.me}
-          defaultGalaxyCredential={{
-            id: 2,
-            type: 'credential',
-            name: 'Ansible Galaxy',
-            credential_type: 18,
-            managed: true,
-            kind: 'galaxy_api_token',
-          }}
-        />,
-        {
-          context: { network },
-        }
-      );
-    });
-    await waitForElement(wrapper, 'CredentialLookup', (el) => el.length === 1);
-    expect(wrapper.find('CredentialLookup Chip span')).toHaveLength(1);
+    renderWithContexts(
+      <OrganizationForm
+        onSubmit={jest.fn()}
+        onCancel={jest.fn()}
+        defaultGalaxyCredential={{
+          id: 2,
+          type: 'credential',
+          name: 'Ansible Galaxy',
+          credential_type: 18,
+          managed: true,
+          kind: 'galaxy_api_token',
+        }}
+      />
+    );
+    expect(
+      await screen.findByTestId('credential-lookup')
+    ).toBeInTheDocument();
+    expect(screen.getAllByTestId('galaxy-credential-chip')).toHaveLength(1);
   });
 
   test('should request related instance groups from api', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <OrganizationForm
-          organization={mockData}
-          onSubmit={jest.fn()}
-          onCancel={jest.fn()}
-          me={meConfig.me}
-        />,
-        {
-          context: { network },
-        }
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
+    renderWithContexts(
+      <OrganizationForm
+        organization={mockData}
+        onSubmit={jest.fn()}
+        onCancel={jest.fn()}
+      />
+    );
+    await screen.findByTestId('instance-groups-lookup');
     expect(OrganizationsAPI.readInstanceGroups).toHaveBeenCalledTimes(1);
   });
 
   test('componentDidMount should set instanceGroups to state', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <OrganizationForm
-          organization={mockData}
-          onSubmit={jest.fn()}
-          onCancel={jest.fn()}
-          me={meConfig.me}
-        />,
-        {
-          context: { network },
-        }
-      );
-    });
-
-    await waitForElement(
-      wrapper,
-      'InstanceGroupsLookup',
-      (el) => el.length === 1
+    renderWithContexts(
+      <OrganizationForm
+        organization={mockData}
+        onSubmit={jest.fn()}
+        onCancel={jest.fn()}
+      />
     );
+    await screen.findByTestId('instance-groups-lookup');
     expect(OrganizationsAPI.readInstanceGroups).toHaveBeenCalled();
-    expect(wrapper.find('InstanceGroupsLookup Chip span')).toHaveLength(2);
+    expect(screen.getAllByTestId('instance-group-chip')).toHaveLength(2);
   });
 
   test('Instance group is rendered when added', async () => {
-    OrganizationsAPI.readInstanceGroups.mockReturnValue({
+    OrganizationsAPI.readInstanceGroups.mockResolvedValue({
       data: { results: [] },
     });
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <OrganizationForm
-          organization={mockData}
-          onSubmit={jest.fn()}
-          onCancel={jest.fn()}
-          me={meConfig.me}
-        />
-      );
-    });
-    const lookup = await waitForElement(
-      wrapper,
-      'InstanceGroupsLookup',
-      (el) => el.length === 1
+    const { user } = renderWithContexts(
+      <OrganizationForm
+        organization={mockData}
+        onSubmit={jest.fn()}
+        onCancel={jest.fn()}
+      />
     );
-    expect(lookup.length).toBe(1);
-    expect(lookup.find('Chip span')).toHaveLength(0);
-    await act(async () => {
-      lookup.prop('onChange')(
-        [
-          {
-            id: 1,
-            name: 'foo',
-          },
-        ],
-        'instanceGroups'
-      );
-    });
-    const group = await waitForElement(
-      wrapper,
-      'InstanceGroupsLookup Chip span',
-      (el) => el.length === 1
+    await screen.findByTestId('instance-groups-lookup');
+    expect(screen.queryAllByTestId('instance-group-chip')).toHaveLength(0);
+
+    await user.click(
+      screen.getByRole('button', { name: 'add-instance-groups' })
     );
-    expect(group.text()).toEqual('foo');
+
+    expect(screen.getByText('One')).toBeInTheDocument();
+    expect(screen.getByText('Three')).toBeInTheDocument();
   });
 
   test('changing inputs and saving triggers expected callback', async () => {
-    OrganizationsAPI.readInstanceGroups.mockReturnValue({
-      data: {
-        results: mockInstanceGroups,
-      },
-    });
-    ExecutionEnvironmentsAPI.read.mockReturnValue({
+    ExecutionEnvironmentsAPI.read.mockResolvedValue({
       data: {
         results: mockExecutionEnvironment,
       },
     });
-    let wrapper;
     const onSubmit = jest.fn();
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <OrganizationForm
-          organization={mockData}
-          onSubmit={onSubmit}
-          onCancel={jest.fn()}
-          me={meConfig.me}
-        />
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    await act(async () => {
-      wrapper.find('input#org-name').simulate('change', {
-        target: { value: 'new foo', name: 'name' },
-      });
-      wrapper.find('input#org-description').simulate('change', {
-        target: { value: 'new bar', name: 'description' },
-      });
-      wrapper.find('input#org-max_hosts').simulate('change', {
-        target: { value: 134, name: 'max_hosts' },
-      });
-      wrapper.find('ExecutionEnvironmentLookup').invoke('onChange')({
-        id: 1,
-        name: 'Test EE',
-      });
-    });
-    await act(async () => {
-      wrapper.find('button[aria-label="Save"]').simulate('click');
-    });
-    wrapper.update();
-    expect(onSubmit).toHaveBeenCalledTimes(1);
+    const { user, container } = renderWithContexts(
+      <OrganizationForm
+        organization={mockData}
+        onSubmit={onSubmit}
+        onCancel={jest.fn()}
+      />
+    );
+    await screen.findByTestId('instance-groups-lookup');
+
+    const nameInput = container.querySelector('#org-name');
+    const descriptionInput = container.querySelector('#org-description');
+    const maxHostsInput = container.querySelector('#org-max_hosts');
+
+    await user.clear(nameInput);
+    await user.type(nameInput, 'new foo');
+    await user.clear(descriptionInput);
+    await user.type(descriptionInput, 'new bar');
+    await user.clear(maxHostsInput);
+    await user.type(maxHostsInput, '134');
+    await user.click(screen.getByRole('button', { name: 'select-ee' }));
+
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+
+    await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1));
     expect(onSubmit.mock.calls[0][0]).toEqual({
       name: 'new foo',
       description: 'new bar',
@@ -212,12 +203,7 @@ describe('<OrganizationForm />', () => {
   });
 
   test('onSubmit associates and disassociates instance groups', async () => {
-    OrganizationsAPI.readInstanceGroups.mockReturnValue({
-      data: {
-        results: mockInstanceGroups,
-      },
-    });
-    ExecutionEnvironmentsAPI.read.mockReturnValue({
+    ExecutionEnvironmentsAPI.read.mockResolvedValue({
       data: { results: mockExecutionEnvironment },
     });
     const mockDataForm = {
@@ -228,86 +214,64 @@ describe('<OrganizationForm />', () => {
       default_environment: null,
     };
     const onSubmit = jest.fn();
-    OrganizationsAPI.update.mockResolvedValue(1, mockDataForm);
+    OrganizationsAPI.update.mockResolvedValue(1);
     OrganizationsAPI.associateInstanceGroup.mockResolvedValue('done');
     OrganizationsAPI.disassociateInstanceGroup.mockResolvedValue('done');
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <OrganizationForm
-          organization={mockData}
-          onSubmit={onSubmit}
-          onCancel={jest.fn()}
-          me={meConfig.me}
-        />,
-        {
-          context: { network },
-        }
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    await act(async () => {
-      wrapper.find('InstanceGroupsLookup').prop('onChange')(
+    const { user } = renderWithContexts(
+      <OrganizationForm
+        organization={mockData}
+        onSubmit={onSubmit}
+        onCancel={jest.fn()}
+      />
+    );
+    await screen.findByTestId('instance-groups-lookup');
+
+    await user.click(
+      screen.getByRole('button', { name: 'add-instance-groups' })
+    );
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+
+    await waitFor(() =>
+      expect(onSubmit).toHaveBeenCalledWith(
+        mockDataForm,
         [
           { name: 'One', id: 1 },
           { name: 'Three', id: 3 },
         ],
-        'instanceGroups'
-      );
-    });
-    await act(async () => {
-      wrapper.find('button[aria-label="Save"]').simulate('click');
-    });
-    expect(onSubmit).toHaveBeenCalledWith(
-      mockDataForm,
-      [
-        { name: 'One', id: 1 },
-        { name: 'Three', id: 3 },
-      ],
-      mockInstanceGroups
+        mockInstanceGroups
+      )
     );
   });
 
   test('onSubmit does not get called if max_hosts value is out of range', async () => {
     const onSubmit = jest.fn();
     // mount with negative value
-    let wrapper1;
     const mockDataNegative = JSON.parse(JSON.stringify(mockData));
     mockDataNegative.max_hosts = -5;
-    await act(async () => {
-      wrapper1 = mountWithContexts(
-        <OrganizationForm
-          organization={mockDataNegative}
-          onSubmit={onSubmit}
-          onCancel={jest.fn()}
-          me={meConfig.me}
-        />
-      );
-    });
-    await waitForElement(wrapper1, 'ContentLoading', (el) => el.length === 0);
-    await act(async () => {
-      wrapper1.find('button[aria-label="Save"]').simulate('click');
-    });
+    const { user, unmount } = renderWithContexts(
+      <OrganizationForm
+        organization={mockDataNegative}
+        onSubmit={onSubmit}
+        onCancel={jest.fn()}
+      />
+    );
+    await screen.findByTestId('instance-groups-lookup');
+    await user.click(screen.getByRole('button', { name: 'Save' }));
     expect(onSubmit).not.toHaveBeenCalled();
+    unmount();
 
     // mount with out of range value
-    let wrapper2;
     const mockDataOutOfRange = JSON.parse(JSON.stringify(mockData));
     mockDataOutOfRange.max_hosts = 999999999999999999999;
-    await act(async () => {
-      wrapper2 = mountWithContexts(
-        <OrganizationForm
-          organization={mockDataOutOfRange}
-          onSubmit={onSubmit}
-          onCancel={jest.fn()}
-          me={meConfig.me}
-        />
-      );
-    });
-    await waitForElement(wrapper2, 'ContentLoading', (el) => el.length === 0);
-    await act(async () => {
-      wrapper2.find('button[aria-label="Save"]').simulate('click');
-    });
+    const { user: user2 } = renderWithContexts(
+      <OrganizationForm
+        organization={mockDataOutOfRange}
+        onSubmit={onSubmit}
+        onCancel={jest.fn()}
+      />
+    );
+    await screen.findByTestId('instance-groups-lookup');
+    await user2.click(screen.getByRole('button', { name: 'Save' }));
     expect(onSubmit).not.toHaveBeenCalled();
   });
 
@@ -316,50 +280,44 @@ describe('<OrganizationForm />', () => {
     // mount with String value (default to zero)
     const mockDataString = JSON.parse(JSON.stringify(mockData));
     mockDataString.max_hosts = 'Bee';
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <OrganizationForm
-          organization={mockDataString}
-          onSubmit={onSubmit}
-          onCancel={jest.fn()}
-          me={meConfig.me}
-        />
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    await act(async () => {
-      wrapper.find('button[aria-label="Save"]').simulate('click');
-    });
-    expect(onSubmit).toHaveBeenCalledWith(
-      {
-        name: 'Foo',
-        description: 'Bar',
-        galaxy_credentials: [],
-        max_hosts: 0,
-        default_environment: null,
-      },
-      mockInstanceGroups,
-      mockInstanceGroups
+    const { user } = renderWithContexts(
+      <OrganizationForm
+        organization={mockDataString}
+        onSubmit={onSubmit}
+        onCancel={jest.fn()}
+      />
+    );
+    await screen.findByTestId('instance-groups-lookup');
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+
+    await waitFor(() =>
+      expect(onSubmit).toHaveBeenCalledWith(
+        {
+          name: 'Foo',
+          description: 'Bar',
+          galaxy_credentials: [],
+          max_hosts: 0,
+          default_environment: null,
+        },
+        mockInstanceGroups,
+        mockInstanceGroups
+      )
     );
   });
 
   test('calls "onCancel" when Cancel button is clicked', async () => {
     const onCancel = jest.fn();
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <OrganizationForm
-          organization={mockData}
-          onSubmit={jest.fn()}
-          onCancel={onCancel}
-          me={meConfig.me}
-        />
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
+    const { user } = renderWithContexts(
+      <OrganizationForm
+        organization={mockData}
+        onSubmit={jest.fn()}
+        onCancel={onCancel}
+      />
+    );
+    await screen.findByTestId('instance-groups-lookup');
     expect(onCancel).not.toHaveBeenCalled();
-    wrapper.find('button[aria-label="Cancel"]').prop('onClick')();
+
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
     expect(onCancel).toHaveBeenCalled();
   });
 });

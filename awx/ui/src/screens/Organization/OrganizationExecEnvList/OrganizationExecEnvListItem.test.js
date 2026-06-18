@@ -1,12 +1,11 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen } from '@testing-library/react';
 
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import OrganizationExecEnvListItem from './OrganizationExecEnvListItem';
 
 describe('<OrganizationExecEnvListItem/>', () => {
-  let wrapper;
   const executionEnvironment = {
     id: 1,
     image: 'https://registry.com/r/image/manifest',
@@ -16,35 +15,30 @@ describe('<OrganizationExecEnvListItem/>', () => {
     pull: 'always',
   };
 
-  test('should mount successfully', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <table>
-          <tbody>
-            <OrganizationExecEnvListItem
-              executionEnvironment={executionEnvironment}
-              detailUrl="execution_environments/1/details"
-            />
-          </tbody>
-        </table>
-      );
-    });
-    expect(wrapper.find('OrganizationExecEnvListItem').length).toBe(1);
+  function renderItem() {
+    return renderWithContexts(
+      <table>
+        <tbody>
+          <OrganizationExecEnvListItem
+            executionEnvironment={executionEnvironment}
+            detailUrl="execution_environments/1/details"
+          />
+        </tbody>
+      </table>
+    );
+  }
+
+  test('should mount successfully', () => {
+    renderItem();
+    expect(screen.getByRole('row')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'foo' })).toBeInTheDocument();
   });
 
-  test('should render the proper data', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <table>
-          <tbody>
-            <OrganizationExecEnvListItem
-              executionEnvironment={executionEnvironment}
-              detailUrl="execution_environments/1/details"
-            />
-          </tbody>
-        </table>
-      );
-    });
-    expect(wrapper.find('Td').at(1).text()).toBe(executionEnvironment.image);
+  test('should render the proper data', () => {
+    renderItem();
+    const imageCell = screen
+      .getAllByRole('cell')
+      .find((cell) => cell.getAttribute('data-label') === 'Image');
+    expect(imageCell).toHaveTextContent(executionEnvironment.image);
   });
 });

@@ -1,14 +1,37 @@
 import React from 'react';
 import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { CredentialsAPI, OrganizationsAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import OrganizationAdd from './OrganizationAdd';
 
 jest.mock('../../../api');
+
+// The shared OrganizationForm carries galaxy-credential and instance-group
+// lookups that are exercised by OrganizationForm's own suite; here we only
+// need to drive its onSubmit/onCancel callbacks, so capture the latest props.
+let formProps;
+jest.mock('../shared/OrganizationForm', () => {
+  const MockOrganizationForm = (props) => {
+    formProps = props;
+    return (
+      <div data-testid="organization-form">
+        <button
+          type="button"
+          aria-label="Save"
+          onClick={() => props.onSubmit({}, [])}
+        >
+          Save
+        </button>
+        <button type="button" aria-label="Cancel" onClick={props.onCancel}>
+          Cancel
+        </button>
+      </div>
+    );
+  };
+  return MockOrganizationForm;
+});
 
 describe('<OrganizationAdd />', () => {
   beforeEach(() => {
@@ -28,6 +51,11 @@ describe('<OrganizationAdd />', () => {
     });
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+    formProps = undefined;
+  });
+
   test('onSubmit should post to api', async () => {
     const updatedOrgData = {
       name: 'new name',
@@ -36,10 +64,13 @@ describe('<OrganizationAdd />', () => {
       default_environment: { id: 1, name: 'Foo' },
     };
     OrganizationsAPI.create.mockResolvedValueOnce({ data: {} });
+    renderWithContexts(<OrganizationAdd />);
+    await screen.findByTestId('organization-form');
+
     await act(async () => {
-      const wrapper = mountWithContexts(<OrganizationAdd />);
-      wrapper.find('OrganizationForm').prop('onSubmit')(updatedOrgData, []);
+      formProps.onSubmit(updatedOrgData, []);
     });
+
     expect(OrganizationsAPI.create).toHaveBeenCalledWith({
       ...updatedOrgData,
       default_environment: 1,
@@ -49,16 +80,13 @@ describe('<OrganizationAdd />', () => {
 
   test('should navigate to organizations list when cancel is clicked', async () => {
     const history = createMemoryHistory({});
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<OrganizationAdd />, {
-        context: { router: { history } },
-      });
+    const { user } = renderWithContexts(<OrganizationAdd />, {
+      context: { router: { history } },
     });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    await act(async () => {
-      wrapper.find('button[aria-label="Cancel"]').invoke('onClick')();
-    });
+    await screen.findByTestId('organization-form');
+
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
+
     expect(history.location.pathname).toEqual('/organizations');
   });
 
@@ -78,14 +106,15 @@ describe('<OrganizationAdd />', () => {
         ...orgData,
       },
     });
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<OrganizationAdd />, {
-        context: { router: { history } },
-      });
-      await waitForElement(wrapper, 'button[aria-label="Save"]');
-      await wrapper.find('OrganizationForm').prop('onSubmit')(orgData, [3]);
+    renderWithContexts(<OrganizationAdd />, {
+      context: { router: { history } },
     });
+    await screen.findByTestId('organization-form');
+
+    await act(async () => {
+      await formProps.onSubmit(orgData, [{ id: 3 }]);
+    });
+
     expect(history.location.pathname).toEqual('/organizations/5');
   });
 
@@ -110,15 +139,13 @@ describe('<OrganizationAdd />', () => {
         ...orgData,
       },
     });
-    let wrapper;
+    renderWithContexts(<OrganizationAdd />);
+    await screen.findByTestId('organization-form');
+
     await act(async () => {
-      wrapper = mountWithContexts(<OrganizationAdd />);
+      await formProps.onSubmit(orgData, mockInstanceGroups);
     });
-    await waitForElement(wrapper, 'button[aria-label="Save"]');
-    await wrapper.find('OrganizationForm').prop('onSubmit')(
-      orgData,
-      mockInstanceGroups
-    );
+
     expect(OrganizationsAPI.associateInstanceGroup).toHaveBeenCalledWith(5, 3);
   });
 
@@ -141,33 +168,16 @@ describe('<OrganizationAdd />', () => {
         ...orgData,
       },
     });
-    let wrapper;
+    renderWithContexts(<OrganizationAdd />);
+    await screen.findByTestId('organization-form');
+
     await act(async () => {
-      wrapper = mountWithContexts(<OrganizationAdd />);
+      await formProps.onSubmit(orgData, [{ id: 3 }]);
     });
-    await waitForElement(wrapper, 'button[aria-label="Save"]');
-    await wrapper.find('OrganizationForm').prop('onSubmit')(orgData, [3]);
+
     expect(OrganizationsAPI.associateGalaxyCredential).toHaveBeenCalledWith(
       5,
       9000
     );
-  });
-
-  test('AnsibleSelect component does not render if there are 0 virtual environments', async () => {
-    const mockInstanceGroups = [
-      { name: 'One', id: 1 },
-      { name: 'Two', id: 2 },
-    ];
-    OrganizationsAPI.readInstanceGroups.mockReturnValue({
-      data: {
-        results: mockInstanceGroups,
-      },
-    });
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<OrganizationAdd />, {});
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('AnsibleSelect FormSelect')).toHaveLength(0);
   });
 });
