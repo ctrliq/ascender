@@ -31,6 +31,13 @@ describe('<App />', () => {
     });
   });
 
+  afterEach(() => {
+    // restoreAllMocks (not clearAllMocks) so jest.spyOn spies are actually
+    // restored — with resetMocks:true a leftover spy leaks into later tests
+    // (or partial reruns) as a reset spy that returns undefined.
+    jest.restoreAllMocks();
+  });
+
   test('renders ok', async () => {
     const contextValues = {
       setAuthRedirectTo: jest.fn(),
@@ -48,7 +55,6 @@ describe('<App />', () => {
     // mounted, the RTL counterpart of the original shallow length check.
     const { container } = render(<App />);
     expect(container).toHaveTextContent('Loading...');
-    jest.clearAllMocks();
   });
 
   test('redirect to login override', async () => {
@@ -75,7 +81,6 @@ describe('<App />', () => {
     );
 
     await waitFor(() => expect(replaceSpy).toHaveBeenCalled());
-    replaceSpy.mockRestore();
   });
 
   test('renders children when authenticated', async () => {
@@ -94,6 +99,5 @@ describe('<App />', () => {
     );
 
     expect(await screen.findByText('foo')).toBeInTheDocument();
-    jest.restoreAllMocks();
   });
 });
