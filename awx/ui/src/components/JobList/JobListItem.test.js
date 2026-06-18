@@ -1,8 +1,8 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import JobListItem from './JobListItem';
 
@@ -37,293 +37,262 @@ const mockJob = {
   execution_environment: 1,
 };
 
+function renderItem(ui, options) {
+  return renderWithContexts(
+    <table>
+      <tbody>{ui}</tbody>
+    </table>,
+    options
+  );
+}
+
+// A non-failed job renders the plain "Relaunch" button; a failed playbook run
+// renders the relaunch dropdown whose toggle is labelled "relaunch jobs". Both
+// stand in for the enzyme `find('LaunchButton')` assertion.
+function queryLaunchButton(scope) {
+  return (
+    scope.queryByRole('button', { name: 'Relaunch' }) ||
+    scope.queryByRole('button', { name: 'relaunch jobs' })
+  );
+}
+
+// Detail renders <dt>label</dt><dd>value</dd>; scope to the render so multiple
+// rows from earlier renders in the same test don't collide.
+function assertDetail(scope, label, value) {
+  const term = scope.getByText(label);
+  expect(term.nextElementSibling).toHaveTextContent(value);
+}
+
 describe('<JobListItem />', () => {
-  let wrapper;
+  let container;
 
   beforeEach(() => {
     const history = createMemoryHistory({
       initialEntries: ['/jobs'],
     });
-    wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <JobListItem job={mockJob} isSelected onSelect={() => {}} />
-        </tbody>
-      </table>,
-      { context: { router: { history } } }
-    );
+    ({ container } = renderItem(
+      <JobListItem job={mockJob} isSelected onSelect={() => {}} />,
+      {
+        context: { router: { history } },
+      }
+    ));
   });
 
-  function assertDetail(label, value) {
-    expect(wrapper.find(`Detail[label="${label}"] dt`).text()).toBe(label);
-    expect(wrapper.find(`Detail[label="${label}"] dd`).text()).toBe(value);
-  }
-
   test('initially renders successfully', () => {
-    expect(wrapper.find('JobListItem').length).toBe(1);
+    expect(
+      within(container).getByRole('link', { name: /Demo Job Template/ })
+    ).toBeInTheDocument();
   });
 
   test('should display expected details', () => {
-    assertDetail('Job Slice', '1/3');
-    assertDetail('Schedule', 'mock schedule');
+    // Detail rows live in the (always-rendered) expandable row content.
+    assertDetail(within(container), 'Job Slice', '1/3');
+    assertDetail(within(container), 'Schedule', 'mock schedule');
   });
 
   test('launch button shown to users with launch capabilities', () => {
-    expect(wrapper.find('LaunchButton').length).toBe(1);
-  });
-
-  test('launch button shown to users with launch capabilities', () => {
-    expect(wrapper.find('LaunchButton').length).toBe(1);
+    expect(queryLaunchButton(within(container))).toBeInTheDocument();
   });
 
   test('should render source data in expanded view', () => {
-    wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <JobListItem
-            isExpanded
-            inventorySourceLabels={[
-              ['scm', 'Sourced from Project'],
-              ['file', 'File, Directory or Script'],
-            ]}
-            job={{
-              ...mockJob,
-              type: 'inventory_update',
-              source: 'scm',
-              summary_fields: { user_capabilities: { start: false } },
-            }}
-            detailUrl={`/jobs/playbook/${mockJob.id}`}
-            onSelect={() => {}}
-            isSelected={false}
-          />
-        </tbody>
-      </table>
+    const { container: c } = renderItem(
+      <JobListItem
+        isExpanded
+        inventorySourceLabels={[
+          ['scm', 'Sourced from Project'],
+          ['file', 'File, Directory or Script'],
+        ]}
+        job={{
+          ...mockJob,
+          type: 'inventory_update',
+          source: 'scm',
+          summary_fields: { user_capabilities: { start: false } },
+        }}
+        detailUrl={`/jobs/playbook/${mockJob.id}`}
+        onSelect={() => {}}
+        isSelected={false}
+      />
     );
-    expect(wrapper.find('ExpandableRowContent')).toHaveLength(1);
-    expect(
-      wrapper.find('dd[data-cy="job-inventory-source-type-value"]').text()
-    ).toBe('Sourced from Project');
+    const sourceValue = c.querySelector(
+      'dd[data-cy="job-inventory-source-type-value"]'
+    );
+    expect(sourceValue).toHaveTextContent('Sourced from Project');
   });
+
   test('launch button hidden from users without launch capabilities', () => {
-    wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <JobListItem
-            job={{
-              ...mockJob,
-              summary_fields: { user_capabilities: { start: false } },
-            }}
-            detailUrl={`/jobs/playbook/${mockJob.id}`}
-            onSelect={() => {}}
-            isSelected={false}
-          />
-        </tbody>
-      </table>
+    const { container: c } = renderItem(
+      <JobListItem
+        job={{
+          ...mockJob,
+          summary_fields: { user_capabilities: { start: false } },
+        }}
+        detailUrl={`/jobs/playbook/${mockJob.id}`}
+        onSelect={() => {}}
+        isSelected={false}
+      />
     );
-    expect(wrapper.find('LaunchButton').length).toBe(0);
+    expect(queryLaunchButton(within(c))).not.toBeInTheDocument();
   });
 
   test('should hide type column when showTypeColumn is false', () => {
-    expect(wrapper.find('Td[dataLabel="Type"]').length).toBe(0);
+    expect(
+      container.querySelector('td[data-label="Type"]')
+    ).not.toBeInTheDocument();
   });
 
   test('should show type column when showTypeColumn is true', () => {
-    wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <JobListItem
-            job={mockJob}
-            showTypeColumn
-            isSelected
-            onSelect={() => {}}
-          />
-        </tbody>
-      </table>
+    const { container: c } = renderItem(
+      <JobListItem job={mockJob} showTypeColumn isSelected onSelect={() => {}} />
     );
-    expect(wrapper.find('Td[dataLabel="Type"]').length).toBe(1);
+    expect(c.querySelector('td[data-label="Type"]')).toBeInTheDocument();
   });
 
   test('should not show schedule detail in expanded view', () => {
-    wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <JobListItem
-            job={{
-              ...mockJob,
-              summary_fields: {},
-            }}
-            showTypeColumn
-            isSelected
-            onSelect={() => {}}
-          />
-        </tbody>
-      </table>
+    // summary_fields has no schedule, but launch_type is scheduled, so the
+    // DeletedDetail still renders a "Schedule" label.
+    const { container: c } = renderItem(
+      <JobListItem
+        job={{
+          ...mockJob,
+          summary_fields: {},
+        }}
+        showTypeColumn
+        isSelected
+        onSelect={() => {}}
+      />
     );
-    expect(wrapper.find('Detail[label="Schedule"] dt').length).toBe(1);
+    expect(within(c).getByText('Schedule')).toBeInTheDocument();
   });
 
   test('should not display EE for canceled jobs', () => {
-    wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <JobListItem
-            job={{
-              ...mockJob,
-              status: 'canceled',
-              execution_environment: null,
-            }}
-            showTypeColumn
-            isSelected
-            onSelect={() => {}}
-          />
-        </tbody>
-      </table>
+    const { container: c } = renderItem(
+      <JobListItem
+        job={{
+          ...mockJob,
+          status: 'canceled',
+          execution_environment: null,
+        }}
+        showTypeColumn
+        isSelected
+        onSelect={() => {}}
+      />
     );
-    expect(wrapper.find('Detail[label="Execution Environment"]').length).toBe(
-      0
-    );
+    expect(
+      within(c).queryByText('Execution Environment')
+    ).not.toBeInTheDocument();
   });
 
   test('should display missing resource for completed jobs and missing EE', () => {
-    wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <JobListItem
-            job={mockJob}
-            showTypeColumn
-            isSelected
-            onSelect={() => {}}
-          />
-        </tbody>
-      </table>
+    const { container: c } = renderItem(
+      <JobListItem job={mockJob} showTypeColumn isSelected onSelect={() => {}} />
     );
-    expect(wrapper.find('Detail[label="Execution Environment"]').length).toBe(
-      1
-    );
-    expect(
-      wrapper.find('Detail[label="Execution Environment"] dd').text()
-    ).toBe('Missing resource');
+    assertDetail(within(c), 'Execution Environment', 'Missing resource');
   });
 
   test('should not load Source', () => {
-    wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <JobListItem
-            inventorySourceLabels={[]}
-            job={{
-              ...mockJob,
-              type: 'inventory_update',
-              summary_fields: {
-                user_capabilities: {},
-              },
-            }}
-          />
-        </tbody>
-      </table>
+    // isEmpty Source detail renders nothing -> no "Source" label in the DOM.
+    const { container: c } = renderItem(
+      <JobListItem
+        inventorySourceLabels={[]}
+        job={{
+          ...mockJob,
+          type: 'inventory_update',
+          summary_fields: {
+            user_capabilities: {},
+          },
+        }}
+      />
     );
-    const source_detail = wrapper.find(`Detail[label="Source"]`).at(0);
-    expect(source_detail.prop('isEmpty')).toEqual(true);
+    expect(within(c).queryByText('Source')).not.toBeInTheDocument();
   });
 
   test('should not load Credentials', () => {
-    wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <JobListItem
-            job={{
-              ...mockJob,
-              type: 'inventory_update',
-              summary_fields: {
-                credentials: [],
-              },
-            }}
-          />
-        </tbody>
-      </table>
+    // empty credentials -> isEmpty Detail renders nothing.
+    const { container: c } = renderItem(
+      <JobListItem
+        job={{
+          ...mockJob,
+          type: 'inventory_update',
+          summary_fields: {
+            credentials: [],
+          },
+        }}
+      />
     );
-    const credentials_detail = wrapper
-      .find(`Detail[label="Credentials"]`)
-      .at(0);
-    expect(credentials_detail.prop('isEmpty')).toEqual(true);
+    expect(within(c).queryByText('Credentials')).not.toBeInTheDocument();
   });
 });
 
 describe('<JobListItem with failed job />', () => {
-  let wrapper;
+  let user;
+  let container;
 
   beforeEach(() => {
     const history = createMemoryHistory({
       initialEntries: ['/jobs'],
     });
-    wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <JobListItem
-            job={{ ...mockJob, status: 'failed' }}
-            isSelected
-            onSelect={() => {}}
-          />
-        </tbody>
-      </table>,
+    ({ user, container } = renderItem(
+      <JobListItem
+        job={{ ...mockJob, status: 'failed' }}
+        isSelected
+        onSelect={() => {}}
+      />,
       { context: { router: { history } } }
-    );
+    ));
   });
 
   test('launch button shown to users with launch capabilities', () => {
-    expect(wrapper.find('LaunchButton').length).toBe(1);
+    expect(queryLaunchButton(within(container))).toBeInTheDocument();
   });
 
   test('dropdown should be displayed in case of failed job', async () => {
-    expect(wrapper.find('LaunchButton').length).toBe(1);
-    const dropdown = wrapper.find('Dropdown');
-    expect(dropdown).toHaveLength(1);
-    expect(dropdown.find('DropdownItem')).toHaveLength(0);
-    // the menu renders in a popper, whose async positioning must be flushed
-    await act(async () => {
-      dropdown.find('button').simulate('click');
+    const toggle = within(container).getByRole('button', {
+      name: 'relaunch jobs',
     });
-    wrapper.update();
-    expect(wrapper.find('DropdownItem')).toHaveLength(3);
+    expect(toggle).toBeInTheDocument();
+    // menu closed -> no items
+    expect(screen.queryAllByRole('menuitem')).toHaveLength(0);
+
+    await user.click(toggle);
+    // the menu renders via a PF popper appended to document.body, so the items
+    // can appear asynchronously after the click; await them
+    expect(await screen.findAllByRole('menuitem')).toHaveLength(3);
   });
 
   test('dropdown should not be rendered for job type different of playbook run', () => {
-    wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <JobListItem
-            job={{
-              ...mockJob,
-              status: 'failed',
-              type: 'project_update',
-            }}
-            onSelect={() => {}}
-            isSelected
-          />
-        </tbody>
-      </table>
+    const { container: c } = renderItem(
+      <JobListItem
+        job={{
+          ...mockJob,
+          status: 'failed',
+          type: 'project_update',
+        }}
+        onSelect={() => {}}
+        isSelected
+      />
     );
-    expect(wrapper.find('LaunchButton').length).toBe(1);
-    expect(wrapper.find('Dropdown')).toHaveLength(0);
+    // a project_update renders the plain Relaunch button, not the dropdown
+    expect(
+      within(c).queryByRole('button', { name: 'relaunch jobs' })
+    ).toBeNull();
+    expect(
+      within(c).getByRole('button', { name: 'Relaunch' })
+    ).toBeInTheDocument();
   });
 
   test('launch button hidden from users without launch capabilities', () => {
-    wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <JobListItem
-            job={{
-              ...mockJob,
-              status: 'failed',
-              summary_fields: { user_capabilities: { start: false } },
-            }}
-            detailUrl={`/jobs/playbook/${mockJob.id}`}
-            onSelect={() => {}}
-            isSelected={false}
-          />
-        </tbody>
-      </table>
+    const { container: c } = renderItem(
+      <JobListItem
+        job={{
+          ...mockJob,
+          status: 'failed',
+          summary_fields: { user_capabilities: { start: false } },
+        }}
+        detailUrl={`/jobs/playbook/${mockJob.id}`}
+        onSelect={() => {}}
+        isSelected={false}
+      />
     );
-    expect(wrapper.find('LaunchButton').length).toBe(0);
+    expect(queryLaunchButton(within(c))).not.toBeInTheDocument();
   });
 });
