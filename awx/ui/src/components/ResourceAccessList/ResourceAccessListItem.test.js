@@ -1,10 +1,7 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen } from '@testing-library/react';
 
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import ResourceAccessListItem from './ResourceAccessListItem';
 
@@ -34,60 +31,64 @@ const accessRecord = {
 
 describe('<ResourceAccessListItem />', () => {
   test('initially renders successfully', async () => {
-    let wrapper;
+    renderWithContexts(
+      <table>
+        <tbody>
+          <ResourceAccessListItem
+            accessRecord={accessRecord}
+            onRoleDelete={() => {}}
+          />
+        </tbody>
+      </table>
+    );
 
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <table>
-          <tbody>
-            <ResourceAccessListItem
-              accessRecord={accessRecord}
-              onRoleDelete={() => {}}
-            />
-          </tbody>
-        </table>
-      );
-    });
+    // Username link plus first name / last name cells. The first name equals
+    // the username here, so target the First name cell by its column label.
+    expect(screen.getByRole('link', { name: 'jane' })).toBeInTheDocument();
+    expect(
+      document.querySelector('[data-label="First name"]')
+    ).toHaveTextContent('jane');
+    expect(
+      document.querySelector('[data-label="Last name"]')
+    ).toHaveTextContent('brown');
 
-    waitForElement(wrapper, 'ResourceAccessListItem', (el) => el.length > 0);
-
-    expect(wrapper.find('Td[dataLabel="First name"]').text()).toBe('jane');
-    expect(wrapper.find('Td[dataLabel="Last name"]').text()).toBe('brown');
-
-    const user_roles_detail = wrapper.find(`Detail[label="User Roles"]`).at(0);
-    expect(user_roles_detail.prop('isEmpty')).toEqual(true);
+    // The only role has a team_id, so it's a team role; the "User Roles" Detail
+    // is empty (isEmpty -> Detail renders nothing). The team role chip renders.
+    expect(screen.queryByText('User Roles')).not.toBeInTheDocument();
+    expect(screen.getByText('Team Roles')).toBeInTheDocument();
+    expect(screen.getByText('Member')).toBeInTheDocument();
   });
 
   test('should not load team roles', async () => {
-    let wrapper;
-
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <table>
-          <tbody>
-            <ResourceAccessListItem
-              accessRecord={{
-                ...accessRecord,
-                summary_fields: {
-                  direct_access: [
-                    {
-                      role: {
-                        id: 3,
-                        name: 'Member',
-                        user_capabilities: { unattach: true },
-                      },
+    renderWithContexts(
+      <table>
+        <tbody>
+          <ResourceAccessListItem
+            accessRecord={{
+              ...accessRecord,
+              summary_fields: {
+                direct_access: [
+                  {
+                    role: {
+                      id: 3,
+                      name: 'Member',
+                      user_capabilities: { unattach: true },
                     },
-                  ],
-                  indirect_access: [],
-                },
-              }}
-              onRoleDelete={() => {}}
-            />
-          </tbody>
-        </table>
-      );
-    });
-    const team_roles_detail = wrapper.find(`Detail[label="Team Roles"]`).at(0);
-    expect(team_roles_detail.prop('isEmpty')).toEqual(true);
+                  },
+                ],
+                indirect_access: [],
+              },
+            }}
+            onRoleDelete={() => {}}
+          />
+        </tbody>
+      </table>
+    );
+
+    // The role lacks a team_id, so it's a user role; the "Team Roles" Detail is
+    // empty (isEmpty -> Detail renders nothing) while "User Roles" renders.
+    expect(screen.queryByText('Team Roles')).not.toBeInTheDocument();
+    expect(screen.getByText('User Roles')).toBeInTheDocument();
+    expect(screen.getByText('Member')).toBeInTheDocument();
   });
 });

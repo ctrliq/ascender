@@ -1,5 +1,5 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import {
   CredentialsAPI,
@@ -10,17 +10,13 @@ import {
 } from 'api';
 import { useUserProfile } from 'contexts/Config';
 import * as ConfigContext from 'contexts/Config';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import ResourceAccessList from './ResourceAccessList';
 
 jest.mock('../../api');
 
 describe('<ResourceAccessList />', () => {
-  let wrapper;
   const organization = {
     id: 1,
     name: 'Default',
@@ -299,27 +295,35 @@ describe('<ResourceAccessList />', () => {
     kubernetes: false,
   };
 
-  const history = createMemoryHistory({
-    initialEntries: ['/organizations/1/access'],
-  });
+  const renderOrg = () =>
+    renderWithContexts(
+      <ResourceAccessList resource={organization} apiModel={OrganizationsAPI} />,
+      {
+        context: {
+          router: {
+            history: createMemoryHistory({
+              initialEntries: ['/organizations/1/access'],
+            }),
+          },
+        },
+      }
+    );
 
   const credentialHistory = createMemoryHistory({
     initialEntries: ['/credentials/1/access'],
   });
 
-  beforeEach(async () => {
+  beforeEach(() => {
     jest.spyOn(ConfigContext, 'useConfig').mockImplementation(() => ({
       me: { id: 2 },
     }));
-    useUserProfile.mockImplementation(() => {
-      return {
-        isSuperUser: true,
-        isSystemAuditor: false,
-        isOrgAdmin: false,
-        isNotificationAdmin: false,
-        isExecEnvAdmin: false,
-      };
-    });
+    useUserProfile.mockImplementation(() => ({
+      isSuperUser: true,
+      isSystemAuditor: false,
+      isOrgAdmin: false,
+      isNotificationAdmin: false,
+      isExecEnvAdmin: false,
+    }));
     OrganizationsAPI.readAccessList.mockResolvedValue({ data });
     OrganizationsAPI.readAccessOptions.mockResolvedValue({
       data: {
@@ -351,19 +355,6 @@ describe('<ResourceAccessList />', () => {
         related_search_fields: [],
       },
     });
-
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ResourceAccessList
-          resource={organization}
-          apiModel={OrganizationsAPI}
-        />,
-        { context: { router: { history } } }
-      );
-    });
-
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    wrapper.update();
   });
 
   afterEach(() => {
@@ -371,181 +362,213 @@ describe('<ResourceAccessList />', () => {
   });
 
   test('should fetch and display access records on mount', async () => {
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
+    renderOrg();
+    expect(
+      await screen.findByRole('link', { name: 'joe' })
+    ).toBeInTheDocument();
     expect(OrganizationsAPI.readAccessList).toHaveBeenCalled();
-    expect(wrapper.find('ResourceAccessListItem').length).toBe(2);
+    // Two access records (joe, jane) each rendered as a row.
+    expect(screen.getByRole('link', { name: 'jane' })).toBeInTheDocument();
   });
 
   test('should open and close confirmation dialog when deleting role', async () => {
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('DeleteRoleConfirmationModal')).toHaveLength(0);
-    const button = wrapper.find('Chip Button').at(0);
-    await act(async () => {
-      button.prop('onClick')();
+    const { user } = renderOrg();
+    await screen.findByRole('link', { name: 'joe' });
+    // No confirm modal initially.
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    // Click the first role chip's close button (joe's user role).
+    const chipButtons = screen.getAllByRole('button', {
+      name: /Remove Member chip/,
     });
-    wrapper.update();
-    expect(wrapper.find('DeleteRoleConfirmationModal')).toHaveLength(1);
-    await act(async () => {
-      wrapper.find('DeleteRoleConfirmationModal').prop('onCancel')();
+    await user.click(chipButtons[0]);
+    const dialog = await screen.findByRole('dialog');
+    expect(dialog).toBeInTheDocument();
+    // Cancel the modal.
+    await user.click(within(dialog).getByRole('button', { name: 'Cancel' }));
+    await waitFor(() => {
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     });
-    wrapper.update();
-    expect(wrapper.find('DeleteRoleConfirmationModal')).toHaveLength(0);
     expect(TeamsAPI.disassociateRole).not.toHaveBeenCalled();
     expect(UsersAPI.disassociateRole).not.toHaveBeenCalled();
   });
 
   test('should delete user role', async () => {
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    const button = wrapper.find('Chip Button').at(0);
-    await act(async () => {
-      button.prop('onClick')();
+    const { user } = renderOrg();
+    await screen.findByRole('link', { name: 'joe' });
+    const chipButtons = screen.getAllByRole('button', {
+      name: /Remove Member chip/,
     });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('DeleteRoleConfirmationModal').prop('onConfirm')();
+    // Index 0 is joe's user role (id 1, user id 1).
+    await user.click(chipButtons[0]);
+    const dialog = await screen.findByRole('dialog');
+    await user.click(
+      within(dialog).getByRole('button', { name: 'Confirm delete' })
+    );
+    await waitFor(() => {
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     });
-    wrapper.update();
-    expect(wrapper.find('DeleteRoleConfirmationModal')).toHaveLength(0);
     expect(TeamsAPI.disassociateRole).not.toHaveBeenCalled();
     expect(UsersAPI.disassociateRole).toHaveBeenCalledWith(1, 1);
     expect(OrganizationsAPI.readAccessList).toHaveBeenCalledTimes(2);
   });
 
   test('should delete team role', async () => {
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    const button = wrapper.find('Chip Button').at(1);
-    await act(async () => {
-      button.prop('onClick')();
+    const { user } = renderOrg();
+    await screen.findByRole('link', { name: 'jane' });
+    const chipButtons = screen.getAllByRole('button', {
+      name: /Remove Member chip/,
     });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('DeleteRoleConfirmationModal').prop('onConfirm')();
+    // Index 1 is jane's team role (id 3, team id 5).
+    await user.click(chipButtons[1]);
+    const dialog = await screen.findByRole('dialog');
+    await user.click(
+      within(dialog).getByRole('button', { name: 'Confirm delete' })
+    );
+    await waitFor(() => {
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     });
-    wrapper.update();
-    expect(wrapper.find('DeleteRoleConfirmationModal')).toHaveLength(0);
     expect(TeamsAPI.disassociateRole).toHaveBeenCalledWith(5, 3);
     expect(UsersAPI.disassociateRole).not.toHaveBeenCalled();
     expect(OrganizationsAPI.readAccessList).toHaveBeenCalledTimes(2);
   });
 
   test('should call api to get org details', async () => {
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
+    // The original asserted the computed toolbarSearchColumns prop, including the
+    // "Roles" column whose options merge the org admin role id with the system
+    // administrator role id ('2, 1'). The DOM equivalent: select "Roles" as the
+    // search key, open the value filter, and assert the rendered options, with
+    // the Admin option carrying the merged id 'select-option-2, 1'.
+    const { user } = renderOrg();
+    await screen.findByRole('link', { name: 'joe' });
 
+    // Open the simple key select (scoped by ouiaId; the key Select toggle and
+    // the value Select toggle both expose a generic "Options menu" name) and
+    // pick "Roles" as the search key. The presence of the "Roles" option already
+    // proves the Roles column was appended to toolbarSearchColumns.
+    const keySelect = document.querySelector(
+      '[data-ouia-component-id="simple-key-select"]'
+    );
+    await user.click(within(keySelect).getByRole('button'));
+    const rolesOption = await screen.findByRole('option', { name: 'Roles' });
+    // Search's handleDropdownSelect keys off target.innerText, which jsdom does
+    // not populate from layout; set it explicitly so the real handler resolves
+    // the selected column, then dispatch the click it listens for.
+    Object.defineProperty(rolesOption, 'innerText', {
+      configurable: true,
+      value: 'Roles',
+    });
+    fireEvent.click(rolesOption);
+
+    // Open the "Filter By Roles" value select (scoped by ouiaId).
+    const rolesSelect = await waitFor(() => {
+      const el = document.querySelector(
+        '[data-ouia-component-id="filter-by-or__roles__in"]'
+      );
+      expect(el).toBeInTheDocument();
+      return el;
+    });
+    await user.click(within(rolesSelect).getByRole('button'));
+
+    const listbox = await screen.findByRole('listbox');
+    expect(within(listbox).getByText('Admin')).toBeInTheDocument();
+    expect(within(listbox).getByText('Execute')).toBeInTheDocument();
+    expect(within(listbox).getByText('Project Admin')).toBeInTheDocument();
+    // The Admin option carries the merged role ids '2, 1' as its value (the org
+    // admin role id merged with the system administrator role id) -- this is the
+    // DOM equivalent of the original toolbarSearchColumns options assertion.
     expect(
-      wrapper.find('PaginatedTable').prop('toolbarSearchColumns')
-    ).toStrictEqual([
-      { isDefault: true, key: 'username__icontains', name: 'Username' },
-      { key: 'first_name__icontains', name: 'First Name' },
-      { key: 'last_name__icontains', name: 'Last Name' },
-      {
-        key: 'or__roles__in',
-        name: 'Roles',
-        options: [
-          ['2, 1', 'Admin'],
-          ['3', 'Execute'],
-          ['4', 'Project Admin'],
-        ],
-      },
-    ]);
+      listbox.querySelector('[id="select-option-2, 1"]')
+    ).toBeInTheDocument();
   });
 
   test('should show add button for system admin', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ResourceAccessList resource={credential} apiModel={CredentialsAPI} />,
-        { context: { router: { credentialHistory } } }
-      );
-    });
-
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    wrapper.update();
-    expect(wrapper.find('ToolbarAddButton').length).toEqual(1);
+    renderWithContexts(
+      <ResourceAccessList resource={credential} apiModel={CredentialsAPI} />,
+      { context: { router: { history: credentialHistory } } }
+    );
+    expect(
+      await screen.findByRole('button', { name: /add/i })
+    ).toBeInTheDocument();
   });
 
   test('should not show add button for a user without edit permissions on the credential', async () => {
-    useUserProfile.mockImplementation(() => {
-      return {
-        isSuperUser: false,
-        isSystemAuditor: false,
-        isOrgAdmin: false,
-        isNotificationAdmin: false,
-        isExecEnvAdmin: false,
-      };
-    });
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ResourceAccessList
-          resource={{
-            ...credential,
-            summary_fields: {
-              ...credential.summary_fields,
-              user_capabilities: {
-                edit: false,
-                delete: false,
-                copy: false,
-                use: false,
-              },
+    useUserProfile.mockImplementation(() => ({
+      isSuperUser: false,
+      isSystemAuditor: false,
+      isOrgAdmin: false,
+      isNotificationAdmin: false,
+      isExecEnvAdmin: false,
+    }));
+    renderWithContexts(
+      <ResourceAccessList
+        resource={{
+          ...credential,
+          summary_fields: {
+            ...credential.summary_fields,
+            user_capabilities: {
+              edit: false,
+              delete: false,
+              copy: false,
+              use: false,
             },
-          }}
-          apiModel={CredentialsAPI}
-        />,
-        { context: { router: { credentialHistory } } }
-      );
-    });
-
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    wrapper.update();
-    expect(wrapper.find('ToolbarAddButton').length).toEqual(0);
+          },
+        }}
+        apiModel={CredentialsAPI}
+      />,
+      { context: { router: { history: credentialHistory } } }
+    );
+    // Wait for content to load, then assert no Add button.
+    await waitFor(() =>
+      expect(CredentialsAPI.readAccessOptions).toHaveBeenCalled()
+    );
+    await waitFor(() =>
+      expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
+    );
+    expect(
+      screen.queryByRole('button', { name: /add/i })
+    ).not.toBeInTheDocument();
   });
 
   test('should show add button for non system admin, org admin, credential admin for credentials associated with org', async () => {
-    useUserProfile.mockImplementation(() => {
-      return {
-        isSuperUser: false,
-        isSystemAuditor: false,
-        isOrgAdmin: true,
-        isNotificationAdmin: false,
-        isExecEnvAdmin: false,
-      };
-    });
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ResourceAccessList resource={credential} apiModel={CredentialsAPI} />,
-        { context: { router: { credentialHistory } } }
-      );
-    });
-
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    wrapper.update();
-    expect(wrapper.find('ToolbarAddButton').length).toEqual(1);
+    useUserProfile.mockImplementation(() => ({
+      isSuperUser: false,
+      isSystemAuditor: false,
+      isOrgAdmin: true,
+      isNotificationAdmin: false,
+      isExecEnvAdmin: false,
+    }));
+    renderWithContexts(
+      <ResourceAccessList resource={credential} apiModel={CredentialsAPI} />,
+      { context: { router: { history: credentialHistory } } }
+    );
+    expect(
+      await screen.findByRole('button', { name: /add/i })
+    ).toBeInTheDocument();
   });
 
   test('should not show add button for non system admin, org admin, credential admin for credentials non associated with org', async () => {
-    useUserProfile.mockImplementation(() => {
-      return {
-        isSuperUser: false,
-        isSystemAuditor: false,
-        isOrgAdmin: true,
-        isNotificationAdmin: false,
-        isExecEnvAdmin: false,
-      };
-    });
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ResourceAccessList
-          resource={{ ...credential, organization: null }}
-          apiModel={CredentialsAPI}
-        />,
-        { context: { router: { credentialHistory } } }
-      );
-    });
-
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    wrapper.update();
-    expect(wrapper.find('ToolbarAddButton').length).toEqual(0);
+    useUserProfile.mockImplementation(() => ({
+      isSuperUser: false,
+      isSystemAuditor: false,
+      isOrgAdmin: true,
+      isNotificationAdmin: false,
+      isExecEnvAdmin: false,
+    }));
+    renderWithContexts(
+      <ResourceAccessList
+        resource={{ ...credential, organization: null }}
+        apiModel={CredentialsAPI}
+      />,
+      { context: { router: { history: credentialHistory } } }
+    );
+    await waitFor(() =>
+      expect(CredentialsAPI.readAccessOptions).toHaveBeenCalled()
+    );
+    await waitFor(() =>
+      expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
+    );
+    expect(
+      screen.queryByRole('button', { name: /add/i })
+    ).not.toBeInTheDocument();
   });
 });
