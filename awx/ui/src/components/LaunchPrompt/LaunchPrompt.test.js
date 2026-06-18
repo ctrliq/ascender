@@ -1,5 +1,5 @@
 import React from 'react';
-import { act, isElementOfType } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import {
   ExecutionEnvironmentsAPI,
   InstanceGroupsAPI,
@@ -8,19 +8,8 @@ import {
   CredentialTypesAPI,
   JobTemplatesAPI,
 } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import LaunchPrompt from './LaunchPrompt';
-import InventoryStep from './steps/InventoryStep';
-import CredentialsStep from './steps/CredentialsStep';
-import CredentialPasswordsStep from './steps/CredentialPasswordsStep';
-import OtherPromptsStep from './steps/OtherPromptsStep';
-import PreviewStep from './steps/PreviewStep';
-import ExecutionEnvironmentStep from './steps/ExecutionEnvironmentStep';
-import InstanceGroupsStep from './steps/InstanceGroupsStep';
-import SurveyStep from './steps/SurveyStep';
 
 jest.mock('../../api/models/Inventories');
 jest.mock('../../api/models/ExecutionEnvironments');
@@ -49,6 +38,25 @@ const resource = {
   },
 };
 const noop = () => {};
+
+// The wizard renders every included step's name as <div id="...-step"> in the
+// left-hand nav. It mounts in a PF Modal portal (under document.body, not the
+// render container), so query the document and collect ids in DOM order to
+// assert the step set without reaching into component internals.
+async function getStepIds() {
+  return waitFor(() => {
+    // de-dupe: each step name renders both in the collapsed toggle and the
+    // nav list, so collect unique ids in first-seen (DOM) order.
+    const seen = [];
+    document.querySelectorAll('[id$="-step"]').forEach((el) => {
+      if (!seen.includes(el.id)) {
+        seen.push(el.id);
+      }
+    });
+    expect(seen.length).toBeGreaterThan(0);
+    return seen;
+  });
+}
 
 describe('LaunchPrompt', () => {
   beforeEach(() => {
@@ -187,274 +195,222 @@ describe('LaunchPrompt', () => {
   afterEach(() => jest.clearAllMocks());
 
   test('should render Wizard with all steps', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <LaunchPrompt
-          launchConfig={{
-            ...config,
-            ask_inventory_on_launch: true,
-            ask_credential_on_launch: true,
-            ask_scm_branch_on_launch: true,
-            ask_execution_environment_on_launch: true,
-            ask_instance_groups_on_launch: true,
-            survey_enabled: true,
-            passwords_needed_to_start: ['ssh_password'],
-            defaults: {
-              credentials: [
-                {
-                  id: 1,
-                  name: 'cred that prompts',
-                  passwords_needed: ['ssh_password'],
-                  credential_type: 1,
-                },
-              ],
-            },
-          }}
-          resource={{
-            ...resource,
-            summary_fields: {
-              credentials: [
-                {
-                  id: 5,
-                  name: 'cred that prompts',
-                  credential_type: 1,
-                  inputs: {
-                    password: 'ASK',
-                  },
-                },
-              ],
-            },
-          }}
-          resourceDefaultCredentials={[
-            {
-              id: 5,
-              name: 'cred that prompts',
-              credential_type: 1,
-              inputs: {
-                password: 'ASK',
-              },
-            },
-          ]}
-          onLaunch={noop}
-          onCancel={noop}
-          surveyConfig={{
-            name: '',
-            description: '',
-            spec: [
+    renderWithContexts(
+      <LaunchPrompt
+        launchConfig={{
+          ...config,
+          ask_inventory_on_launch: true,
+          ask_credential_on_launch: true,
+          ask_scm_branch_on_launch: true,
+          ask_execution_environment_on_launch: true,
+          ask_instance_groups_on_launch: true,
+          survey_enabled: true,
+          passwords_needed_to_start: ['ssh_password'],
+          defaults: {
+            credentials: [
               {
-                choices: '',
-                default: '',
-                max: 1024,
-                min: 0,
-                new_question: false,
-                question_description: '',
-                question_name: 'foo',
-                required: true,
-                type: 'text',
-                variable: 'foo',
+                id: 1,
+                name: 'cred that prompts',
+                passwords_needed: ['ssh_password'],
+                credential_type: 1,
               },
             ],
-          }}
-        />
-      );
-    });
-    const wizard = await waitForElement(wrapper, 'Wizard');
-    const steps = wizard.prop('steps');
-
-    expect(steps).toHaveLength(8);
-    
-    // Test step names by checking the id prop instead of translated children
-    expect(steps[0].name.props.id).toEqual('inventory-step');
-    expect(steps[1].name.props.id).toEqual('credentials-step');
-    expect(steps[2].name.props.id).toEqual('credential-passwords-step');
-    expect(steps[3].name.props.id).toEqual('execution-environment-step');
-    expect(steps[4].name.props.id).toEqual('instance-groups-step');
-    expect(steps[5].name.props.id).toEqual('other-prompts-step');
-    expect(steps[6].name.props.id).toEqual('survey-step');
-    expect(steps[7].name.props.id).toEqual('preview-step');
-    expect(wizard.find('WizardHeader').prop('title')).toBe('Launch | Foobar');
-    expect(wizard.find('WizardHeader').prop('description')).toBe(
-      'Foo Description'
+          },
+        }}
+        resource={{
+          ...resource,
+          summary_fields: {
+            credentials: [
+              {
+                id: 5,
+                name: 'cred that prompts',
+                credential_type: 1,
+                inputs: {
+                  password: 'ASK',
+                },
+              },
+            ],
+          },
+        }}
+        resourceDefaultCredentials={[
+          {
+            id: 5,
+            name: 'cred that prompts',
+            credential_type: 1,
+            inputs: {
+              password: 'ASK',
+            },
+          },
+        ]}
+        onLaunch={noop}
+        onCancel={noop}
+        surveyConfig={{
+          name: '',
+          description: '',
+          spec: [
+            {
+              choices: '',
+              default: '',
+              max: 1024,
+              min: 0,
+              new_question: false,
+              question_description: '',
+              question_name: 'foo',
+              required: true,
+              type: 'text',
+              variable: 'foo',
+            },
+          ],
+        }}
+      />
     );
+
+    const ids = await getStepIds();
+    expect(ids).toEqual([
+      'inventory-step',
+      'credentials-step',
+      'credential-passwords-step',
+      'execution-environment-step',
+      'instance-groups-step',
+      'other-prompts-step',
+      'survey-step',
+      'preview-step',
+    ]);
+    expect(screen.getByText('Launch | Foobar')).toBeInTheDocument();
+    expect(screen.getByText('Foo Description')).toBeInTheDocument();
   });
 
   test('should add inventory step', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <LaunchPrompt
-          launchConfig={{
-            ...config,
-            ask_inventory_on_launch: true,
-          }}
-          resource={resource}
-          onLaunch={noop}
-          onCancel={noop}
-        />
-      );
-    });
-    const wizard = await waitForElement(wrapper, 'Wizard');
-    const steps = wizard.prop('steps');
+    renderWithContexts(
+      <LaunchPrompt
+        launchConfig={{
+          ...config,
+          ask_inventory_on_launch: true,
+        }}
+        resource={resource}
+        onLaunch={noop}
+        onCancel={noop}
+      />
+    );
 
-    expect(steps).toHaveLength(2);
-    expect(steps[0].name.props.id).toEqual('inventory-step');
-    expect(isElementOfType(steps[0].component, InventoryStep)).toEqual(true);
-    expect(isElementOfType(steps[1].component, PreviewStep)).toEqual(true);
+    const ids = await getStepIds();
+    expect(ids).toEqual(['inventory-step', 'preview-step']);
   });
 
   test('should add credentials step', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <LaunchPrompt
-          launchConfig={{
-            ...config,
-            ask_credential_on_launch: true,
-          }}
-          resource={resource}
-          onLaunch={noop}
-          onCancel={noop}
-          resourceDefaultCredentials={[
-            {
-              id: 5,
-              name: 'cred that prompts',
-              credential_type: 1,
-              inputs: {
-                password: 'ASK',
-              },
+    renderWithContexts(
+      <LaunchPrompt
+        launchConfig={{
+          ...config,
+          ask_credential_on_launch: true,
+        }}
+        resource={resource}
+        onLaunch={noop}
+        onCancel={noop}
+        resourceDefaultCredentials={[
+          {
+            id: 5,
+            name: 'cred that prompts',
+            credential_type: 1,
+            inputs: {
+              password: 'ASK',
             },
-          ]}
-        />
-      );
-    });
-    const wizard = await waitForElement(wrapper, 'Wizard');
-    const steps = wizard.prop('steps');
+          },
+        ]}
+      />
+    );
 
-    expect(steps).toHaveLength(3);
-    expect(steps[0].name.props.id).toEqual('credentials-step');
-    expect(isElementOfType(steps[0].component, CredentialsStep)).toEqual(true);
-    expect(
-      isElementOfType(steps[1].component, CredentialPasswordsStep)
-    ).toEqual(true);
-    expect(isElementOfType(steps[2].component, PreviewStep)).toEqual(true);
+    const ids = await getStepIds();
+    expect(ids).toEqual([
+      'credentials-step',
+      'credential-passwords-step',
+      'preview-step',
+    ]);
   });
 
   test('should add execution environment step', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <LaunchPrompt
-          launchConfig={{
-            ...config,
-            ask_execution_environment_on_launch: true,
-          }}
-          resource={resource}
-          onLaunch={noop}
-          onCancel={noop}
-        />
-      );
-    });
-    const wizard = await waitForElement(wrapper, 'Wizard');
-    const steps = wizard.prop('steps');
+    renderWithContexts(
+      <LaunchPrompt
+        launchConfig={{
+          ...config,
+          ask_execution_environment_on_launch: true,
+        }}
+        resource={resource}
+        onLaunch={noop}
+        onCancel={noop}
+      />
+    );
 
-    expect(steps).toHaveLength(2);
-    expect(steps[0].name.props.id).toEqual('execution-environment-step');
-    expect(
-      isElementOfType(steps[0].component, ExecutionEnvironmentStep)
-    ).toEqual(true);
-    expect(isElementOfType(steps[1].component, PreviewStep)).toEqual(true);
+    const ids = await getStepIds();
+    expect(ids).toEqual(['execution-environment-step', 'preview-step']);
   });
 
   test('should add instance groups step', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <LaunchPrompt
-          launchConfig={{
-            ...config,
-            ask_instance_groups_on_launch: true,
-          }}
-          resource={resource}
-          onLaunch={noop}
-          onCancel={noop}
-        />
-      );
-    });
-    const wizard = await waitForElement(wrapper, 'Wizard');
-    const steps = wizard.prop('steps');
-
-    expect(steps).toHaveLength(2);
-    expect(steps[0].name.props.id).toEqual('instance-groups-step');
-    expect(isElementOfType(steps[0].component, InstanceGroupsStep)).toEqual(
-      true
+    renderWithContexts(
+      <LaunchPrompt
+        launchConfig={{
+          ...config,
+          ask_instance_groups_on_launch: true,
+        }}
+        resource={resource}
+        onLaunch={noop}
+        onCancel={noop}
+      />
     );
-    expect(isElementOfType(steps[1].component, PreviewStep)).toEqual(true);
+
+    const ids = await getStepIds();
+    expect(ids).toEqual(['instance-groups-step', 'preview-step']);
   });
 
   test('should add other prompts step', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <LaunchPrompt
-          launchConfig={{
-            ...config,
-            ask_verbosity_on_launch: true,
-          }}
-          resource={resource}
-          onLaunch={noop}
-          onCancel={noop}
-        />
-      );
-    });
-    const wizard = await waitForElement(wrapper, 'Wizard');
-    const steps = wizard.prop('steps');
+    renderWithContexts(
+      <LaunchPrompt
+        launchConfig={{
+          ...config,
+          ask_verbosity_on_launch: true,
+        }}
+        resource={resource}
+        onLaunch={noop}
+        onCancel={noop}
+      />
+    );
 
-    expect(steps).toHaveLength(2);
-    expect(steps[0].name.props.id).toEqual('other-prompts-step');
-    expect(isElementOfType(steps[0].component, OtherPromptsStep)).toEqual(true);
-    expect(isElementOfType(steps[1].component, PreviewStep)).toEqual(true);
+    const ids = await getStepIds();
+    expect(ids).toEqual(['other-prompts-step', 'preview-step']);
   });
 
   test('should add survey step', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <LaunchPrompt
-          launchConfig={{
-            ...config,
-            survey_enabled: true,
-          }}
-          resource={resource}
-          onLaunch={noop}
-          onCancel={noop}
-          surveyConfig={{
-            name: '',
-            description: '',
-            spec: [
-              {
-                choices: '',
-                default: '',
-                max: 1024,
-                min: 0,
-                new_question: false,
-                question_description: '',
-                question_name: 'foo',
-                required: true,
-                type: 'text',
-                variable: 'foo',
-              },
-            ],
-          }}
-        />
-      );
-    });
-    const wizard = await waitForElement(wrapper, 'Wizard');
-    const steps = wizard.prop('steps');
+    renderWithContexts(
+      <LaunchPrompt
+        launchConfig={{
+          ...config,
+          survey_enabled: true,
+        }}
+        resource={resource}
+        onLaunch={noop}
+        onCancel={noop}
+        surveyConfig={{
+          name: '',
+          description: '',
+          spec: [
+            {
+              choices: '',
+              default: '',
+              max: 1024,
+              min: 0,
+              new_question: false,
+              question_description: '',
+              question_name: 'foo',
+              required: true,
+              type: 'text',
+              variable: 'foo',
+            },
+          ],
+        }}
+      />
+    );
 
-    expect(steps).toHaveLength(2);
-    expect(steps[0].name.props.id).toEqual('survey-step');
-    expect(isElementOfType(steps[0].component, SurveyStep)).toEqual(true);
-    expect(isElementOfType(steps[1].component, PreviewStep)).toEqual(true);
+    const ids = await getStepIds();
+    expect(ids).toEqual(['survey-step', 'preview-step']);
   });
 });

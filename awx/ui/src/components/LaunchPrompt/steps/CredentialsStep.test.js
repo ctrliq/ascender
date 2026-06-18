@@ -1,9 +1,9 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { Formik } from 'formik';
-import { CredentialsAPI, CredentialTypesAPI } from 'api';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
 import { createMemoryHistory } from 'history';
+import { CredentialsAPI, CredentialTypesAPI } from 'api';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import CredentialsStep from './CredentialsStep';
 
 jest.mock('../../../api/models/CredentialTypes');
@@ -101,6 +101,16 @@ const credentials = [
   },
 ];
 
+// The credential-type AnsibleSelect renders a native <select> with a generic
+// "Select Input" aria-label, so locate it by its stable id.
+async function findCategorySelect(container) {
+  return waitFor(() => {
+    const el = container.querySelector('select#multiCredentialsLookUp-select');
+    expect(el).not.toBeNull();
+    return el;
+  });
+}
+
 describe('CredentialsStep', () => {
   beforeEach(() => {
     CredentialTypesAPI.loadAllTypes.mockResolvedValue(types);
@@ -121,112 +131,113 @@ describe('CredentialsStep', () => {
     });
   });
 
-  test('should load credentials', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <CredentialsStep allowCredentialsWithPasswords />
-        </Formik>
-      );
-    });
-    wrapper.update();
+  afterEach(() => jest.clearAllMocks());
 
-    expect(CredentialsAPI.read).toHaveBeenCalled();
-    expect(wrapper.find('OptionsList').prop('options')).toEqual(credentials);
+  test('should load credentials', async () => {
+    renderWithContexts(
+      <Formik>
+        <CredentialsStep allowCredentialsWithPasswords />
+      </Formik>
+    );
+
+    await waitFor(() => expect(CredentialsAPI.read).toHaveBeenCalled());
+    expect(await screen.findByText('Cred 1')).toBeInTheDocument();
+    expect(screen.getByText('Cred 2')).toBeInTheDocument();
+    expect(screen.getByText('Cred 5')).toBeInTheDocument();
   });
 
   test('should load credentials for selected type', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <CredentialsStep allowCredentialsWithPasswords />
-        </Formik>
-      );
-    });
-    wrapper.update();
+    const { user, container } = renderWithContexts(
+      <Formik>
+        <CredentialsStep allowCredentialsWithPasswords />
+      </Formik>
+    );
 
-    expect(CredentialsAPI.read).toHaveBeenCalledWith({
-      credential_type: 1,
-      order_by: 'name',
-      page: 1,
-      page_size: 5,
-    });
+    await waitFor(() =>
+      expect(CredentialsAPI.read).toHaveBeenCalledWith({
+        credential_type: 1,
+        order_by: 'name',
+        page: 1,
+        page_size: 5,
+      })
+    );
 
-    await act(async () => {
-      wrapper.find('AnsibleSelect').invoke('onChange')({}, 3);
-    });
-    expect(CredentialsAPI.read).toHaveBeenCalledWith({
-      credential_type: 3,
-      order_by: 'name',
-      page: 1,
-      page_size: 5,
-    });
+    const select = await findCategorySelect(container);
+    // the native <select> option values are credential type ids, so select
+    // by the Vault type id (3) rather than its label
+    await user.selectOptions(select, '3');
+
+    await waitFor(() =>
+      expect(CredentialsAPI.read).toHaveBeenCalledWith({
+        credential_type: 3,
+        order_by: 'name',
+        page: 1,
+        page_size: 5,
+      })
+    );
   });
 
   test('should reset query params (credential.page) when selected credential type is changed', async () => {
-    let wrapper;
     const history = createMemoryHistory({
       initialEntries: [
         '?credential.page=2&credential.page_size=5&credential.order_by=name',
       ],
     });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <CredentialsStep allowCredentialsWithPasswords />
-        </Formik>,
-        {
-          context: { router: { history } },
-        }
-      );
-    });
-    wrapper.update();
+    const { user, container } = renderWithContexts(
+      <Formik>
+        <CredentialsStep allowCredentialsWithPasswords />
+      </Formik>,
+      {
+        context: { router: { history } },
+      }
+    );
 
-    expect(CredentialsAPI.read).toHaveBeenCalledWith({
-      credential_type: 1,
-      order_by: 'name',
-      page: 2,
-      page_size: 5,
-    });
+    await waitFor(() =>
+      expect(CredentialsAPI.read).toHaveBeenCalledWith({
+        credential_type: 1,
+        order_by: 'name',
+        page: 2,
+        page_size: 5,
+      })
+    );
 
-    await act(async () => {
-      wrapper.find('AnsibleSelect').invoke('onChange')({}, 3);
-    });
-    expect(CredentialsAPI.read).toHaveBeenCalledWith({
-      credential_type: 3,
-      order_by: 'name',
-      page: 1,
-      page_size: 5,
-    });
+    const select = await findCategorySelect(container);
+    // the native <select> option values are credential type ids, so select
+    // by the Vault type id (3) rather than its label
+    await user.selectOptions(select, '3');
+
+    await waitFor(() =>
+      expect(CredentialsAPI.read).toHaveBeenCalledWith({
+        credential_type: 3,
+        order_by: 'name',
+        page: 1,
+        page_size: 5,
+      })
+    );
   });
 
   test("error should be shown when a credential that prompts for passwords is selected on a step that doesn't allow it", async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik
-          initialValues={{
-            credentials: [],
-          }}
-        >
-          <CredentialsStep allowCredentialsWithPasswords={false} />
-        </Formik>
-      );
-    });
-    wrapper.update();
-    expect(wrapper.find('Alert').length).toBe(0);
-    await act(async () => {
-      wrapper.find('td#check-action-item-2').find('input').simulate('click');
-    });
-    wrapper.update();
-    expect(wrapper.find('Alert').length).toBe(1);
-    expect(wrapper.find('Alert').text().includes('Cred 2')).toBe(true);
+    const { user, container } = renderWithContexts(
+      <Formik
+        initialValues={{
+          credentials: [],
+        }}
+      >
+        <CredentialsStep allowCredentialsWithPasswords={false} />
+      </Formik>
+    );
+
+    await screen.findByText('Cred 2');
+    expect(screen.queryByText(/require passwords on launch/)).toBeNull();
+
+    const checkbox = container.querySelector('#check-action-item-2 input');
+    await user.click(checkbox);
+
+    const alert = await screen.findByText(/require passwords on launch/);
+    expect(alert).toHaveTextContent('Cred 2');
   });
 
   test('error should be toggled when default machine credential is removed and then replaced', async () => {
-    let wrapper;
     const selectedCredentials = [
       {
         id: 5,
@@ -242,38 +253,40 @@ describe('CredentialsStep', () => {
         },
       },
     ];
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik
-          initialValues={{
-            credentials: selectedCredentials,
-          }}
-        >
-          <CredentialsStep
-            allowCredentialsWithPasswords={false}
-            defaultCredentials={selectedCredentials}
-          />
-        </Formik>
-      );
-    });
-    wrapper.update();
-    expect(wrapper.find('Alert').length).toBe(0);
-    expect(wrapper.find('CredentialChip').length).toBe(1);
-    await act(async () => {
-      wrapper.find('button#remove_credential-chip-5').simulate('click');
-    });
-    wrapper.update();
-    expect(wrapper.find('Alert').length).toBe(1);
-    expect(wrapper.find('Alert').text().includes('Machine')).toBe(true);
-    await act(async () => {
-      wrapper.find('td#check-action-item-5').find('input').simulate('click');
-    });
-    wrapper.update();
-    expect(wrapper.find('Alert').length).toBe(0);
+    const { user, container } = renderWithContexts(
+      <Formik
+        initialValues={{
+          credentials: selectedCredentials,
+        }}
+      >
+        <CredentialsStep
+          allowCredentialsWithPasswords={false}
+          defaultCredentials={selectedCredentials}
+        />
+      </Formik>
+    );
+
+    await screen.findByText('Cred 2');
+    expect(screen.queryByText(/must be replaced/)).toBeNull();
+
+    const removeChip = container.querySelector(
+      'button#remove_credential-chip-5'
+    );
+    expect(removeChip).not.toBeNull();
+    await user.click(removeChip);
+
+    const alert = await screen.findByText(/must be replaced/);
+    expect(alert).toHaveTextContent('Machine');
+
+    const checkbox = container.querySelector('#check-action-item-5 input');
+    await user.click(checkbox);
+
+    await waitFor(() =>
+      expect(screen.queryByText(/must be replaced/)).toBeNull()
+    );
   });
 
   test('error should be toggled when default vault credential is removed and then replaced', async () => {
-    let wrapper;
     const selectedCredentials = [
       {
         id: 33,
@@ -306,38 +319,45 @@ describe('CredentialsStep', () => {
         },
       },
     ];
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik
-          initialValues={{
-            credentials: selectedCredentials,
-          }}
-        >
-          <CredentialsStep
-            allowCredentialsWithPasswords={false}
-            defaultCredentials={selectedCredentials}
-          />
-        </Formik>
-      );
+    const { user, container } = renderWithContexts(
+      <Formik
+        initialValues={{
+          credentials: selectedCredentials,
+        }}
+      >
+        <CredentialsStep
+          allowCredentialsWithPasswords={false}
+          defaultCredentials={selectedCredentials}
+        />
+      </Formik>
+    );
+
+    await screen.findByText('Cred 1');
+    expect(screen.queryByText(/must be replaced/)).toBeNull();
+
+    const removeChip = container.querySelector(
+      'button#remove_credential-chip-33'
+    );
+    expect(removeChip).not.toBeNull();
+    await user.click(removeChip);
+
+    const alert = await screen.findByText(/must be replaced/);
+    expect(alert).toHaveTextContent('Vault | foo');
+
+    const select = await findCategorySelect(container);
+    // the native <select> option values are credential type ids, so select
+    // by the Vault type id (3) rather than its label
+    await user.selectOptions(select, '3');
+
+    const checkbox = await waitFor(() => {
+      const el = container.querySelector('#check-action-item-33 input');
+      expect(el).not.toBeNull();
+      return el;
     });
-    wrapper.update();
-    expect(wrapper.find('Alert').length).toBe(0);
-    expect(wrapper.find('CredentialChip').length).toBe(2);
-    await act(async () => {
-      wrapper.find('button#remove_credential-chip-33').simulate('click');
-    });
-    wrapper.update();
-    expect(wrapper.find('CredentialChip').length).toBe(1);
-    expect(wrapper.find('Alert').length).toBe(1);
-    expect(wrapper.find('Alert').text().includes('Vault | foo')).toBe(true);
-    await act(async () => {
-      wrapper.find('AnsibleSelect').invoke('onChange')({}, 3);
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('td#check-action-item-33').find('input').simulate('click');
-    });
-    wrapper.update();
-    expect(wrapper.find('Alert').length).toBe(0);
+    await user.click(checkbox);
+
+    await waitFor(() =>
+      expect(screen.queryByText(/must be replaced/)).toBeNull()
+    );
   });
 });

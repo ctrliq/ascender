@@ -1,8 +1,8 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { Formik } from 'formik';
 import { InstanceGroupsAPI } from 'api';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InstanceGroupsStep from './InstanceGroupsStep';
 
 jest.mock('../../../api/models/InstanceGroups');
@@ -33,20 +33,18 @@ describe('InstanceGroupsStep', () => {
     });
   });
 
-  test('should load instance groups', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik initialValues={{ instance_groups: [] }}>
-          <InstanceGroupsStep />
-        </Formik>
-      );
-    });
-    wrapper.update();
+  afterEach(() => jest.clearAllMocks());
 
-    expect(InstanceGroupsAPI.read).toHaveBeenCalled();
-    expect(wrapper.find('OptionsList').prop('options')).toEqual(
-      instance_groups
+  test('should load instance groups', async () => {
+    renderWithContexts(
+      <Formik initialValues={{ instance_groups: [] }}>
+        <InstanceGroupsStep />
+      </Formik>
     );
+
+    await waitFor(() => expect(InstanceGroupsAPI.read).toHaveBeenCalled());
+    expect(await screen.findByText('ig one')).toBeInTheDocument();
+    expect(screen.getByText('ig two')).toBeInTheDocument();
+    expect(screen.getByText('ig three')).toBeInTheDocument();
   });
 });
