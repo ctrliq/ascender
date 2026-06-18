@@ -1,30 +1,29 @@
 import React from 'react';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { screen } from '@testing-library/react';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import ToolbarAddButton from './ToolbarAddButton';
 
 describe('<ToolbarAddButton />', () => {
-  test('should render button', () => {
+  test('should render button', async () => {
     const onClick = jest.fn();
-    const wrapper = mountWithContexts(<ToolbarAddButton onClick={onClick} />);
-    const button = wrapper.find('button');
-    expect(button).toHaveLength(1);
-    button.simulate('click');
+    const { user } = renderWithContexts(<ToolbarAddButton onClick={onClick} />);
+    const button = screen.getByRole('button', { name: 'Add' });
+    expect(button).toBeInTheDocument();
+    await user.click(button);
     expect(onClick).toHaveBeenCalled();
   });
 
   test('should render link', () => {
-    const wrapper = mountWithContexts(<ToolbarAddButton linkTo="/foo" />);
-    const link = wrapper.find('Link');
-    expect(link).toHaveLength(1);
-    expect(link.prop('to')).toBe('/foo');
+    renderWithContexts(<ToolbarAddButton linkTo="/foo" />);
+    const link = screen.getByRole('link', { name: 'Add' });
+    expect(link).toBeInTheDocument();
+    expect(link).toHaveAttribute('href', '/foo');
   });
 
   test('should render link with toggle icon', () => {
-    const wrapper = mountWithContexts(
-      <ToolbarAddButton showToggleIndicator linkTo="/foo" />
-    );
-    const link = wrapper.find('Link');
-    expect(link).toHaveLength(1);
-    expect(link.prop('to')).toBe('/foo');
+    renderWithContexts(<ToolbarAddButton showToggleIndicator linkTo="/foo" />);
+    const link = screen.getByRole('link', { name: 'Add' });
+    expect(link).toBeInTheDocument();
+    expect(link).toHaveAttribute('href', '/foo');
   });
 });

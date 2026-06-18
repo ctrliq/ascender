@@ -1,29 +1,34 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { screen } from '@testing-library/react';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import ActionItem from './ActionItem';
 
 describe('<ActionItem />', () => {
-  test('should render child with tooltip', async () => {
-    const wrapper = shallow(
-      <ActionItem columns={1} tooltip="a tooltip" visible>
+  test('should render child wrapped with tooltip', async () => {
+    const { user } = renderWithContexts(
+      <ActionItem column={1} tooltip="a tooltip" visible>
         foo
       </ActionItem>
     );
 
-    const tooltip = wrapper.find('Tooltip');
-    expect(tooltip.prop('content')).toEqual('a tooltip');
-    expect(tooltip.prop('children')).toEqual(<div>foo</div>);
+    // when a tooltip is provided, ActionItem wraps the children in a <div>
+    // inside a PF Tooltip; the child content is rendered to the DOM
+    const child = screen.getByText('foo');
+    expect(child).toBeInTheDocument();
+    expect(child.tagName).toEqual('DIV');
+    // the tooltip content ("a tooltip") is revealed on hover
+    await user.hover(child);
+    expect(await screen.findByRole('tooltip')).toHaveTextContent('a tooltip');
   });
 
   test('should render null if not visible', async () => {
-    const wrapper = shallow(
-      <ActionItem columns={1} tooltip="foo">
+    const { container } = renderWithContexts(
+      <ActionItem column={1} tooltip="foo">
         <div>foo</div>
       </ActionItem>
     );
 
-    expect(wrapper.find('Tooltip')).toHaveLength(0);
-    expect(wrapper.find('div')).toHaveLength(0);
-    expect(wrapper.text()).toEqual('');
+    expect(container).toBeEmptyDOMElement();
+    expect(screen.queryByText('foo')).not.toBeInTheDocument();
   });
 });
