@@ -9,10 +9,10 @@ import InstanceEdit from './InstanceEdit';
 
 jest.mock('../../../api');
 jest.mock('../../../hooks/useDebounce');
-// The component reads useParams from react-router-dom-v5-compat (the route
+// The component reads useParams from react-router-dom (the route
 // tree is v6); mock it there, keeping the rest of the module real.
-jest.mock('react-router-dom-v5-compat', () => ({
-  ...jest.requireActual('react-router-dom-v5-compat'),
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
   useParams: () => ({
     id: 42,
   }),

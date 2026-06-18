@@ -1,6 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { useLocation } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom-v5-compat';
+import { useLocation, useNavigate  } from 'react-router-dom';
 import { parseQueryString, updateQueryString } from 'util/qs';
 import useIsMounted from './useIsMounted';
 

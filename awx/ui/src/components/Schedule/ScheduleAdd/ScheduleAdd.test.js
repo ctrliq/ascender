@@ -1,5 +1,5 @@
 import React from 'react';
-import { waitFor } from '@testing-library/react';
+import { act, waitFor } from '@testing-library/react';
 import { RRule } from 'rrule';
 import {
   CredentialsAPI,
@@ -75,11 +75,15 @@ const resource = {
 };
 
 function submit(values) {
-  // mirror ScheduleForm's onSubmit, which forwards the launch/survey config
-  return formProps.handleSubmit(
-    values,
-    formProps.launchConfig,
-    formProps.surveyConfig
+  // mirror ScheduleForm's onSubmit, which forwards the launch/survey config.
+  // handleSubmit navigates on success, which updates the router; wrap in act so
+  // that state update is flushed inside the test.
+  return act(() =>
+    formProps.handleSubmit(
+      values,
+      formProps.launchConfig,
+      formProps.surveyConfig
+    )
   );
 }
 

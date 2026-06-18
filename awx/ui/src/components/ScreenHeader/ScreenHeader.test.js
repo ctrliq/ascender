@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen, within } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { createMemoryHistory } from 'history';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import ScreenHeader from './ScreenHeader';
@@ -13,12 +13,18 @@ describe('<ScreenHeader />', () => {
     '/foo/1/bar/fiz': 'Fiz',
   };
 
-  test('initially renders successfully', () => {
+  const renderAt = (pathname) =>
     renderWithContexts(
-      <MemoryRouter initialEntries={['/foo/1/bar']} initialIndex={0}>
-        <ScreenHeader streamType="all_activity" breadcrumbConfig={config} />
-      </MemoryRouter>
+      <ScreenHeader streamType="all_activity" breadcrumbConfig={config} />,
+      {
+        context: {
+          router: { history: createMemoryHistory({ initialEntries: [pathname] }) },
+        },
+      }
     );
+
+  test('initially renders successfully', () => {
+    renderAt('/foo/1/bar');
 
     const nav = screen.getByRole('navigation', { name: 'Breadcrumb' });
     const crumbs = within(nav).getAllByRole('link');
@@ -41,11 +47,7 @@ describe('<ScreenHeader />', () => {
     ];
 
     routes.forEach(([location, crumbLength]) => {
-      const { unmount } = renderWithContexts(
-        <MemoryRouter initialEntries={[location]}>
-          <ScreenHeader streamType="all_activity" breadcrumbConfig={config} />
-        </MemoryRouter>
-      );
+      const { unmount } = renderAt(location);
 
       const nav = screen.queryByRole('navigation', { name: 'Breadcrumb' });
       const crumbs = nav ? within(nav).queryAllByRole('link') : [];

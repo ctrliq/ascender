@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import { useNavigate, Navigate } from 'react-router-dom-v5-compat';
+import { useLocation, useNavigate, Navigate  } from 'react-router-dom';
 import ContentLoading from 'components/ContentLoading';
 import { CardBody } from 'components/Card';
 import SurveyQuestionForm from './SurveyQuestionForm';

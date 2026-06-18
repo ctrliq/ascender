@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useRouteMatch } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom-v5-compat';
+import { useMatch, useNavigate  } from 'react-router-dom';
 import { Formik } from 'formik';
 import { Form } from '@patternfly/react-core';
 import { CardBody } from 'components/Card';
@@ -35,9 +34,7 @@ function LDAPEdit() {
   const navigate = useNavigate();
   const { isModalOpen, toggleModal, closeModal } = useModal();
   const { PUT: options } = useSettings();
-  const {
-    params: { category },
-  } = useRouteMatch('/settings/ldap/:category/edit');
+  const category = useMatch('/settings/ldap/:category/edit')?.params?.category;
   const ldapCategory =
     category === 'default' ? 'AUTH_LDAP_' : `AUTH_LDAP_${category}_`;
 

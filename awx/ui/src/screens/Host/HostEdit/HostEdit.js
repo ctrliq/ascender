@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router-dom-v5-compat';
+import { useNavigate } from 'react-router-dom';
 import { CardBody } from 'components/Card';
 import HostForm from 'components/HostForm';
 import { HostsAPI } from 'api';

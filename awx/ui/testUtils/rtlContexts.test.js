@@ -1,11 +1,7 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import { useHistory, useLocation } from 'react-router-dom';
-import {
-  useNavigate,
-  useLocation as useLocationV6,
-} from 'react-router-dom-v5-compat';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Plural } from '@lingui/react/macro';
 import { useConfig } from '../src/contexts/Config';
 import { useSession } from '../src/contexts/Session';
@@ -28,16 +24,16 @@ function SessionProbe() {
 
 function RouterProbe() {
   const location = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
   return (
-    <button type="button" onClick={() => history.push('/somewhere-else')}>
+    <button type="button" onClick={() => navigate('/somewhere-else')}>
       {location.pathname}
     </button>
   );
 }
 
 function CompatRouterProbe() {
-  const location = useLocationV6();
+  const location = useLocation();
   const navigate = useNavigate();
   return (
     <button type="button" onClick={() => navigate('/compat-target')}>
@@ -80,7 +76,7 @@ describe('renderWithContexts', () => {
     expect(screen.getByRole('button')).toHaveTextContent('/credentials');
   });
 
-  test('supports the react-router-dom-v5-compat hooks', async () => {
+  test('supports the react-router-dom hooks', async () => {
     const { history, user } = renderWithContexts(<CompatRouterProbe />);
     expect(screen.getByRole('button')).toHaveTextContent('/');
     await user.click(screen.getByRole('button'));

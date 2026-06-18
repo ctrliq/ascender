@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom-v5-compat';
+import { useNavigate } from 'react-router-dom';
 import { Card, PageSection } from '@patternfly/react-core';
 import { FederatedInventoriesAPI, InventoriesAPI } from 'api';
 import { CardBody } from 'components/Card';

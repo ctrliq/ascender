@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
-import { useLocation, Link } from 'react-router-dom';
-import { useParams } from 'react-router-dom-v5-compat';
+import { useLocation, Link, useParams  } from 'react-router-dom';
 
 import { DropdownItem } from '@patternfly/react-core';
 import { GroupsAPI, InventoriesAPI } from 'api';

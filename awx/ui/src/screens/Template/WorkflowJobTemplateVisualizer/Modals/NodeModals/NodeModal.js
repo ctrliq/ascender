@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 import React, { useContext, useState, useEffect, useCallback } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom-v5-compat';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';
 import { Formik, useFormikContext } from 'formik';
 import yaml from 'js-yaml';

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom-v5-compat';
+import { useNavigate, useParams } from 'react-router-dom';
 import { CardBody } from 'components/Card';
 import {
   CredentialsAPI,
@@ -113,7 +113,7 @@ function CredentialEdit({ credential }) {
     if (result) {
       navigate(`/credentials/${result.id}/details`);
     }
-    // navigate is not referentially stable in react-router-dom-v5-compat
+    // navigate is not referentially stable in react-router-dom
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [result]);
   const {

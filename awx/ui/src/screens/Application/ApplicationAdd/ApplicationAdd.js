@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom-v5-compat';
+import { useNavigate } from 'react-router-dom';
 
 import { Card, PageSection } from '@patternfly/react-core';
 import useRequest from 'hooks/useRequest';

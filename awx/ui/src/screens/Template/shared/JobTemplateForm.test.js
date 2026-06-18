@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen, waitFor, fireEvent } from '@testing-library/react';
-import { Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import {
   LabelsAPI,
@@ -294,31 +294,25 @@ describe('<JobTemplateForm />', () => {
   });
 
   test('webhooks and enable concurrent jobs functions properly', async () => {
+    // WebhookSubForm reads the template id from useParams(), so mount the form
+    // under a real v6 route whose concrete URL provides id=1.
     const history = createMemoryHistory({
       initialEntries: ['/templates/job_template/1/edit'],
     });
     renderWithContexts(
-      <Route
-        path="/templates/job_template/:id/edit"
-        component={() => (
-          <JobTemplateForm
-            template={mockData}
-            handleSubmit={jest.fn()}
-            handleCancel={jest.fn()}
-          />
-        )}
-      />,
-      {
-        context: {
-          router: {
-            history,
-            route: {
-              location: history.location,
-              match: { params: { id: 1 } },
-            },
-          },
-        },
-      }
+      <Routes>
+        <Route
+          path="/templates/job_template/:id/edit"
+          element={
+            <JobTemplateForm
+              template={mockData}
+              handleSubmit={jest.fn()}
+              handleCancel={jest.fn()}
+            />
+          }
+        />
+      </Routes>,
+      { context: { router: { history } } }
     );
 
     // the template has webhook_service set, so the webhook section is enabled
@@ -354,33 +348,25 @@ describe('<JobTemplateForm />', () => {
       initialEntries: ['/templates/job_template/1/edit'],
     });
     renderWithContexts(
-      <Route
-        path="/templates/job_template/:id/edit"
-        component={() => (
-          <JobTemplateForm
-            template={{
-              ...mockData,
-              webhook_credential: null,
-              webhook_key: '',
-              webhook_service: 'github',
-              related: { webhook_receiver: '' },
-            }}
-            handleSubmit={jest.fn()}
-            handleCancel={jest.fn()}
-          />
-        )}
-      />,
-      {
-        context: {
-          router: {
-            history,
-            route: {
-              location: history.location,
-              match: { params: { id: 1 } },
-            },
-          },
-        },
-      }
+      <Routes>
+        <Route
+          path="/templates/job_template/:id/edit"
+          element={
+            <JobTemplateForm
+              template={{
+                ...mockData,
+                webhook_credential: null,
+                webhook_key: '',
+                webhook_service: 'github',
+                related: { webhook_receiver: '' },
+              }}
+              handleSubmit={jest.fn()}
+              handleCancel={jest.fn()}
+            />
+          }
+        />
+      </Routes>,
+      { context: { router: { history } } }
     );
 
     const webhookKeyInput = await screen.findByLabelText(

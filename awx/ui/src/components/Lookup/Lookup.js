@@ -10,7 +10,7 @@ import {
   node,
   object,
 } from 'prop-types';
-import { useLocation, useNavigate } from 'react-router-dom-v5-compat';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useField } from 'formik';
 import { SearchIcon } from '@patternfly/react-icons';
 import {

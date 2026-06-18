@@ -1,7 +1,6 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Navigate } from 'react-router-dom-v5-compat';
+import { Link, Navigate  } from 'react-router-dom';
 import { bool, instanceOf } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 

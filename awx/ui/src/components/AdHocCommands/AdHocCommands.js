@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState, useContext } from 'react';
-import { useParams } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom-v5-compat';
+import { useParams, useNavigate  } from 'react-router-dom';
 
 import { useLingui } from '@lingui/react/macro';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 
@@ -12,10 +12,10 @@ import {
 import InstanceList from './InstanceList';
 
 jest.mock('../../../api');
-// InstanceList reads useParams from react-router-dom-v5-compat (the route tree
+// InstanceList reads useParams from react-router-dom (the route tree
 // is v6); mock it there, keeping the rest of the module real.
-jest.mock('react-router-dom-v5-compat', () => ({
-  ...jest.requireActual('react-router-dom-v5-compat'),
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
   useParams: () => ({
     id: 1,
     instanceGroupId: 2,
@@ -116,9 +116,12 @@ function setup() {
     initialEntries: ['/instance_groups/1/instances'],
   });
   return renderWithContexts(
-    <Route path="/instance_groups/:id/instances">
-      <InstanceList instanceGroup={{ name: 'Alex' }} />
-    </Route>,
+    <Routes>
+      <Route
+        path="/instance_groups/:id/instances"
+        element={<InstanceList instanceGroup={{ name: 'Alex' }} />}
+      />
+    </Routes>,
     { context: { router: { history } } }
   );
 }

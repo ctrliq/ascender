@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom-v5-compat';
+import { useNavigate } from 'react-router-dom';
 import { Card } from '@patternfly/react-core';
 import { CardBody } from 'components/Card';
 import useRequest from 'hooks/useRequest';
@@ -26,7 +26,7 @@ function InventorySourceEdit({ source, inventory }) {
     if (result) {
       navigate(detailsUrl);
     }
-    // navigate is not referentially stable in react-router-dom-v5-compat
+    // navigate is not referentially stable in react-router-dom
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [result, detailsUrl]);
 

@@ -1,8 +1,7 @@
 
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useLocation } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom-v5-compat';
+import { useLocation, useNavigate  } from 'react-router-dom';
 import styled from 'styled-components';
 import { Toolbar, ToolbarContent } from '@patternfly/react-core';
 

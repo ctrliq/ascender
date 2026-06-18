@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom-v5-compat';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import InstanceList from './InstanceList';
 import InstanceDetails from '../InstanceDetails';
 

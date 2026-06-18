@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
-import { useParams } from 'react-router-dom-v5-compat';
+import { Link, useParams  } from 'react-router-dom';
 import { bool, func } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 

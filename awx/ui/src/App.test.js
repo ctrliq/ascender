@@ -49,10 +49,25 @@ describe('<App />', () => {
       .spyOn(SessionContext, 'useSession')
       .mockImplementation(() => contextValues);
 
-    // The default export self-mounts HashRouter/CompatRouter, so render it
-    // directly rather than wrapping it again. dynamicActivate is held pending
-    // (see mock above) so App stays on its loading shell — asserting the app
-    // mounted, the RTL counterpart of the original shallow length check.
+    // The default export self-mounts the real HashRouter, which logs React
+    // Router v6 future-flag warnings ("v7_startTransition" / "v7_relativeSplatPath")
+    // on mount. Those are framework deprecation notices, not app warnings — let
+    // them through without tripping the setupTests console-warn trap, while any
+    // other warning still surfaces.
+    const realWarn = global.console.warn;
+    jest.spyOn(global.console, 'warn').mockImplementation((...args) => {
+      if (
+        typeof args[0] === 'string' &&
+        args[0].includes('React Router Future Flag Warning')
+      ) {
+        return;
+      }
+      realWarn(...args);
+    });
+
+    // dynamicActivate is held pending (see mock above) so App stays on its
+    // loading shell — asserting the app mounted, the RTL counterpart of the
+    // original shallow length check.
     const { container } = render(<App />);
     expect(container).toHaveTextContent('Loading...');
   });

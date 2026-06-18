@@ -95,7 +95,7 @@ function renderInstanceGroups(instanceGroups) {
           <Link
             to={`${buildLinkURL(ig)}${ig.id}/details`}
             className={className}
-            innerRef={componentRef}
+            ref={componentRef}
           >
             {content}
           </Link>

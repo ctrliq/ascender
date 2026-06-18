@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useReducer } from 'react';
-import { useNavigate } from 'react-router-dom-v5-compat';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { shape } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';

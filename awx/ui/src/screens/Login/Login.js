@@ -3,7 +3,7 @@
 //
 
 import React, { useCallback, useState, useEffect, useRef } from 'react';
-import { Navigate } from 'react-router-dom-v5-compat';
+import { Navigate } from 'react-router-dom';
 
 import { useLingui } from '@lingui/react/macro';
 import { Formik } from 'formik';

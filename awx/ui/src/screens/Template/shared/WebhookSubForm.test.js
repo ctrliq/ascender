@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen, waitFor, fireEvent } from '@testing-library/react';
-import { Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 
 import { Formik } from 'formik';
@@ -21,24 +21,22 @@ describe('<WebhookSubForm />', () => {
   };
 
   const renderForm = (values, templateType, pathname) => {
-    const params = {
-      id: 51,
-      templateType,
-    };
+    history = createMemoryHistory({ initialEntries: [`/${pathname}`] });
     return renderWithContexts(
-      <Route path="templates/:templateType/:id/edit">
-        <Formik initialValues={values}>
-          <WebhookSubForm templateType={templateType} />
-        </Formik>
-      </Route>,
+      <Routes>
+        <Route
+          path="/templates/:templateType/:id/edit"
+          element={
+            <Formik initialValues={values}>
+              <WebhookSubForm templateType={templateType} />
+            </Formik>
+          }
+        />
+      </Routes>,
       {
         context: {
           router: {
             history,
-            route: {
-              location: { pathname },
-              match: { params },
-            },
           },
         },
       }
@@ -47,7 +45,7 @@ describe('<WebhookSubForm />', () => {
 
   beforeEach(async () => {
     history = createMemoryHistory({
-      initialEntries: ['templates/job_template/51/edit'],
+      initialEntries: ['/templates/job_template/51/edit'],
     });
     CredentialsAPI.read.mockResolvedValue({
       data: { results: [{ id: 12, name: 'Github credential' }] },

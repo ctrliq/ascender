@@ -2,14 +2,12 @@ import React, { useCallback, useEffect } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
 
-import { Link } from 'react-router-dom';
-import {
+import { Link,
   Routes,
   Route,
   Navigate,
   useParams,
-  useLocation,
-} from 'react-router-dom-v5-compat';
+  useLocation } from 'react-router-dom';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card, PageSection } from '@patternfly/react-core';
 import RoutedTabs from 'components/RoutedTabs';

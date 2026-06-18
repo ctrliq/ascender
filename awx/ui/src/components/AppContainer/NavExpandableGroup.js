@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes, { oneOfType, string, arrayOf } from 'prop-types';
-import { matchPath, Link } from 'react-router-dom';
-import { useLocation } from 'react-router-dom-v5-compat';
+import { matchPath, Link, useLocation  } from 'react-router-dom';
 import { NavExpandable, NavItem } from '@patternfly/react-core';
 
 function NavExpandableGroup(props) {
@@ -15,7 +14,7 @@ function NavExpandableGroup(props) {
   const isActive = navItemPaths.some(isActivePath);
 
   function isActivePath(path) {
-    return Boolean(matchPath(location.pathname, { path }));
+    return Boolean(matchPath({ path, end: false }, location.pathname));
   }
 
   if (routes.length === 1 && groupId === 'settings') {

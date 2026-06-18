@@ -1,17 +1,9 @@
 import React from 'react';
-import { Router } from 'react-router-dom';
-import { Router as RouterV6 } from 'react-router-dom-v5-compat';
 import { InventoriesAPI, ConstructedInventoriesAPI } from 'api';
-import {
-  render,
-  screen,
-  waitForElementToBeRemoved,
-} from '@testing-library/react';
+import { screen, waitForElementToBeRemoved } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { createMemoryHistory } from 'history';
-import { I18nProvider } from '@lingui/react';
-import { i18n } from '@lingui/core';
-import english from '../../../locales/en/messages';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ConstructedInventoryDetail from './ConstructedInventoryDetail';
 
 jest.mock('../../../api');
@@ -73,24 +65,17 @@ const mockInventory = {
 };
 
 describe('<ConstructedInventoryDetail />', () => {
-  const history = createMemoryHistory({
-    initialEntries: ['/inventories/constructed_inventory/1/details'],
-  });
-
-  const Component = (props) => (
-    <I18nProvider i18n={i18n}>
-      <Router history={history}>
-        <RouterV6 location={history.location} navigator={history}>
-        <ConstructedInventoryDetail inventory={mockInventory} {...props} />
-        </RouterV6>
-      </Router>
-    </I18nProvider>
-  );
+  const renderComponent = (props) => {
+    const history = createMemoryHistory({
+      initialEntries: ['/inventories/constructed_inventory/1/details'],
+    });
+    return renderWithContexts(
+      <ConstructedInventoryDetail inventory={mockInventory} {...props} />,
+      { context: { router: { history } } }
+    );
+  };
 
   beforeEach(() => {
-    i18n.load({ en: english });
-    i18n.activate('en');
-
     InventoriesAPI.readInstanceGroups.mockResolvedValue({
       data: { results: [] },
     });
@@ -185,7 +170,7 @@ describe('<ConstructedInventoryDetail />', () => {
   });
 
   test('should render details', async () => {
-    render(<Component />);
+    renderComponent();
     await waitForElementToBeRemoved(() => screen.getByRole('progressbar'));
     expect(screen.getByText('Name')).toBeInTheDocument();
     expect(screen.getByText('Constructed Inv')).toBeInTheDocument();
@@ -196,7 +181,7 @@ describe('<ConstructedInventoryDetail />', () => {
   });
 
   test('should render action buttons', async () => {
-    render(<Component />);
+    renderComponent();
     await waitForElementToBeRemoved(() => screen.getByRole('progressbar'));
     expect(screen.getByRole('link', { name: 'Edit' })).toHaveAttribute(
       'href',
@@ -229,7 +214,7 @@ describe('<ConstructedInventoryDetail />', () => {
         ],
       },
     });
-    render(<Component />);
+    renderComponent();
     await waitForElementToBeRemoved(() => screen.getByRole('progressbar'));
     expect(
       screen.getByRole('button', {
@@ -240,7 +225,7 @@ describe('<ConstructedInventoryDetail />', () => {
 
   test('should show error when the api throws while fetching details', async () => {
     InventoriesAPI.readInputInventories.mockRejectedValueOnce(new Error());
-    render(<Component />);
+    renderComponent();
     await waitForElementToBeRemoved(() => screen.getByRole('progressbar'));
     expect(
       screen.getByText(

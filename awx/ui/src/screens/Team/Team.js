@@ -1,14 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
 
-import { Link } from 'react-router-dom';
-import {
+import { Link,
   Routes,
   Route,
   Navigate,
   useLocation,
-  useParams,
-} from 'react-router-dom-v5-compat';
+  useParams } from 'react-router-dom';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card, PageSection } from '@patternfly/react-core';
 import { Config } from 'contexts/Config';

@@ -10,7 +10,7 @@ import {
   Navigate,
   useLocation,
   useNavigationType,
-} from 'react-router-dom-v5-compat';
+} from 'react-router-dom';
 import { DateTime } from 'luxon';
 import { RootAPI, MeAPI } from 'api';
 import { isAuthenticated } from 'util/auth';

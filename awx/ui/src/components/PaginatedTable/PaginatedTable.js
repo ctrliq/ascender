@@ -4,8 +4,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { TableComposable, Tbody } from '@patternfly/react-table';
-import { useLocation } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom-v5-compat';
+import { useLocation, useNavigate  } from 'react-router-dom';
 
 import { useLingui } from '@lingui/react/macro';
 

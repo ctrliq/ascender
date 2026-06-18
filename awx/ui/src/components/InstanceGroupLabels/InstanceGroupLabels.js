@@ -19,7 +19,7 @@ function InstanceGroupLabels({ labels, isLinkable }) {
             render={({ className, content, componentRef }) => (
               <Link
                 className={className}
-                innerRef={componentRef}
+                ref={componentRef}
                 to={`${buildLinkURL(is_container_group)}${id}/details`}
               >
                 {content}

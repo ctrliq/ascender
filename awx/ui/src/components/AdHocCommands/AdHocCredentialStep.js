@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { useLocation } from 'react-router-dom-v5-compat';
+import { useLocation } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';

@@ -6,7 +6,7 @@ import {
   Navigate,
   useLocation,
   useParams,
-} from 'react-router-dom-v5-compat';
+} from 'react-router-dom';
 
 import { useLingui } from '@lingui/react/macro';
 import { Card, PageSection } from '@patternfly/react-core';

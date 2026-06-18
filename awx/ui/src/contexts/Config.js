@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useMemo } from 'react';
-import { useRouteMatch } from 'react-router-dom';
+import { useMatch } from 'react-router-dom';
 
 import { useLingui } from '@lingui/react/macro';
 import {
@@ -163,8 +163,6 @@ export const useUserProfile = () => {
 
 export const useAuthorizedPath = () => {
   const config = useConfig();
-  const subscriptionMgmtRoute = useRouteMatch({
-    path: '/subscription_management',
-  });
+  const subscriptionMgmtRoute = useMatch({ path: '/subscription_management', end: false });
   return !!config.license_info?.valid_key && !subscriptionMgmtRoute;
 };

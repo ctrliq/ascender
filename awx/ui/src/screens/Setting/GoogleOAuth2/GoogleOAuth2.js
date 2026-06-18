@@ -1,6 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Routes, Route, Navigate } from 'react-router-dom-v5-compat';
+import { Link, Routes, Route, Navigate  } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';
 import { PageSection, Card } from '@patternfly/react-core';
 import ContentError from 'components/ContentError';
