@@ -1,35 +1,39 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { render } from '@testing-library/react';
 import omitProps from './omitProps';
 
+// omitProps returns a component that forwards its props (minus the omitted
+// ones) to the wrapped element. With a plain 'div' the forwarded props land as
+// DOM attributes, so the enzyme `.prop('foo')` checks become attribute checks
+// on the rendered node (present attribute === forwarded prop; absent === omitted).
 describe('omitProps', () => {
   test('should render child component', () => {
     const Omit = omitProps('div');
-    const wrapper = mount(<Omit foo="one" bar="two" />);
+    const { container } = render(<Omit foo="one" bar="two" />);
 
-    const div = wrapper.find('div');
-    expect(div).toHaveLength(1);
-    expect(div.prop('foo')).toEqual('one');
-    expect(div.prop('bar')).toEqual('two');
+    const div = container.querySelector('div');
+    expect(div).not.toBeNull();
+    expect(div.getAttribute('foo')).toEqual('one');
+    expect(div.getAttribute('bar')).toEqual('two');
   });
 
   test('should not pass omitted props to child component', () => {
     const Omit = omitProps('div', 'foo', 'bar');
-    const wrapper = mount(<Omit foo="one" bar="two" />);
+    const { container } = render(<Omit foo="one" bar="two" />);
 
-    const div = wrapper.find('div');
-    expect(div).toHaveLength(1);
-    expect(div.prop('foo')).toEqual(undefined);
-    expect(div.prop('bar')).toEqual(undefined);
+    const div = container.querySelector('div');
+    expect(div).not.toBeNull();
+    expect(div.hasAttribute('foo')).toBe(false);
+    expect(div.hasAttribute('bar')).toBe(false);
   });
 
   test('should support mix of omitted and non-omitted props', () => {
     const Omit = omitProps('div', 'foo');
-    const wrapper = mount(<Omit foo="one" bar="two" />);
+    const { container } = render(<Omit foo="one" bar="two" />);
 
-    const div = wrapper.find('div');
-    expect(div).toHaveLength(1);
-    expect(div.prop('foo')).toEqual(undefined);
-    expect(div.prop('bar')).toEqual('two');
+    const div = container.querySelector('div');
+    expect(div).not.toBeNull();
+    expect(div.hasAttribute('foo')).toBe(false);
+    expect(div.getAttribute('bar')).toEqual('two');
   });
 });

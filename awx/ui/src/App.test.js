@@ -1,15 +1,26 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { render, screen, waitFor } from '@testing-library/react';
 import { RootAPI } from 'api';
 import * as SessionContext from 'contexts/Session';
-import { shallow } from 'enzyme';
-import { mountWithContexts } from '../testUtils/enzymeHelpers';
 import * as navigation from 'util/navigation';
 import * as auth from 'util/auth';
+import { renderWithContexts } from '../testUtils/rtlContexts';
 import App, { ProtectedRoute } from './App';
 
 jest.mock('./api');
 jest.mock('util/webWorker', () => jest.fn());
+
+// Keep the real `locales` map (App.js validates the active language against it)
+// but hold i18n activation pending so App stays on its top-level loading shell.
+// This mirrors the original shallow render — it asserts App mounts without
+// driving the deep provider tree, whose ConfigProvider/SessionProvider are
+// globally mocked in setupTests and warn when mounted without a `value` prop.
+jest.mock('./i18nLoader', () => ({
+  ...jest.requireActual('./i18nLoader'),
+  // plain function, not jest.fn — resetMocks would strip a jest.fn's impl and
+  // make App.js's `dynamicActivate(...).then(...)` throw on undefined.
+  dynamicActivate: () => new Promise(() => {}),
+}));
 
 describe('<App />', () => {
   beforeEach(() => {
@@ -18,6 +29,13 @@ describe('<App />', () => {
         BRAND_NAME: 'AWX',
       },
     });
+  });
+
+  afterEach(() => {
+    // restoreAllMocks (not clearAllMocks) so jest.spyOn spies are actually
+    // restored — with resetMocks:true a leftover spy leaks into later tests
+    // (or partial reruns) as a reset spy that returns undefined.
+    jest.restoreAllMocks();
   });
 
   test('renders ok', async () => {
@@ -31,12 +49,12 @@ describe('<App />', () => {
       .spyOn(SessionContext, 'useSession')
       .mockImplementation(() => contextValues);
 
-    let wrapper;
-    await act(async () => {
-      wrapper = shallow(<App />);
-    });
-    expect(wrapper.length).toBe(1);
-    jest.clearAllMocks();
+    // The default export self-mounts HashRouter/CompatRouter, so render it
+    // directly rather than wrapping it again. dynamicActivate is held pending
+    // (see mock above) so App stays on its loading shell — asserting the app
+    // mounted, the RTL counterpart of the original shallow length check.
+    const { container } = render(<App />);
+    expect(container).toHaveTextContent('Loading...');
   });
 
   test('redirect to login override', async () => {
@@ -56,16 +74,13 @@ describe('<App />', () => {
       .spyOn(SessionContext, 'useSession')
       .mockImplementation(() => contextValues);
 
-    await act(async () => {
-      mountWithContexts(
-        <ProtectedRoute>
-          <div>foo</div>
-        </ProtectedRoute>
-      );
-    });
+    renderWithContexts(
+      <ProtectedRoute>
+        <div>foo</div>
+      </ProtectedRoute>
+    );
 
-    expect(replaceSpy).toHaveBeenCalled();
-    replaceSpy.mockRestore();
+    await waitFor(() => expect(replaceSpy).toHaveBeenCalled());
   });
 
   test('renders children when authenticated', async () => {
@@ -77,15 +92,12 @@ describe('<App />', () => {
     }));
     jest.spyOn(auth, 'isAuthenticated').mockReturnValue(true);
 
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ProtectedRoute>
-          <div id="protected-child">foo</div>
-        </ProtectedRoute>
-      );
-    });
-    expect(wrapper.find('#protected-child').length).toBeGreaterThan(0);
-    jest.restoreAllMocks();
+    renderWithContexts(
+      <ProtectedRoute>
+        <div id="protected-child">foo</div>
+      </ProtectedRoute>
+    );
+
+    expect(await screen.findByText('foo')).toBeInTheDocument();
   });
 });
