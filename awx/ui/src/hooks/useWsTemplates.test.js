@@ -1,7 +1,7 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { act, screen, waitFor } from '@testing-library/react';
 import WS from 'jest-websocket-mock';
-import { mountWithContexts } from '../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../testUtils/rtlContexts';
 import useWsTemplates from './useWsTemplates';
 
 /*
@@ -13,19 +13,21 @@ jest.mock('./useThrottle', () => ({
   default: jest.fn((val) => val),
 }));
 
-function TestInner() {
-  return <div />;
-}
 function Test({ templates }) {
   const syncedTemplates = useWsTemplates(templates);
-  return <TestInner templates={syncedTemplates} />;
+  return (
+    <div data-testid="templates">{JSON.stringify(syncedTemplates)}</div>
+  );
+}
+
+function getTemplates() {
+  return JSON.parse(screen.getByTestId('templates').textContent);
 }
 
 describe('useWsTemplates hook', () => {
   let debug;
-  let wrapper;
   beforeEach(() => {
-    debug = global.console.debug; // eslint-disable-line prefer-destructuring
+    ({ debug } = global.console);
     global.console.debug = () => {};
   });
 
@@ -33,14 +35,16 @@ describe('useWsTemplates hook', () => {
     global.console.debug = debug;
     WS.clean();
     // Add small delay to ensure websocket cleanup completes
-    await new Promise(resolve => setTimeout(resolve, 50));
+    await new Promise((resolve) => {
+      setTimeout(resolve, 50);
+    });
   });
 
   test('should return templates list', () => {
     const templates = [{ id: 1 }];
-    wrapper = mountWithContexts(<Test templates={templates} />);
+    renderWithContexts(<Test templates={templates} />);
 
-    expect(wrapper.find('TestInner').prop('templates')).toEqual(templates);
+    expect(getTemplates()).toEqual(templates);
     WS.clean();
   });
 
@@ -50,7 +54,7 @@ describe('useWsTemplates hook', () => {
 
     const templates = [{ id: 1 }];
     await act(async () => {
-      wrapper = await mountWithContexts(<Test templates={templates} />);
+      renderWithContexts(<Test templates={templates} />);
     });
 
     await mockServer.connected;
@@ -68,7 +72,6 @@ describe('useWsTemplates hook', () => {
   test('should update recent job status', async () => {
     global.document.cookie = 'csrftoken=abc123';
     const mockServer = new WS('ws://localhost/websocket/');
-    let testWrapper;
 
     const templates = [
       {
@@ -90,7 +93,7 @@ describe('useWsTemplates hook', () => {
       },
     ];
     await act(async () => {
-      testWrapper = await mountWithContexts(<Test templates={templates} />);
+      renderWithContexts(<Test templates={templates} />);
     });
 
     await mockServer.connected;
@@ -103,10 +106,9 @@ describe('useWsTemplates hook', () => {
         },
       })
     );
-    expect(
-      testWrapper.find('TestInner').prop('templates')[0].summary_fields
-        .recent_jobs[0].status
-    ).toEqual('running');
+    expect(getTemplates()[0].summary_fields.recent_jobs[0].status).toEqual(
+      'running'
+    );
     act(() => {
       mockServer.send(
         JSON.stringify({
@@ -117,18 +119,17 @@ describe('useWsTemplates hook', () => {
         })
       );
     });
-    testWrapper.update();
 
-    expect(
-      testWrapper.find('TestInner').prop('templates')[0].summary_fields
-        .recent_jobs[0].status
-    ).toEqual('successful');
+    await waitFor(() =>
+      expect(getTemplates()[0].summary_fields.recent_jobs[0].status).toEqual(
+        'successful'
+      )
+    );
   });
 
   test('should add new job status', async () => {
     global.document.cookie = 'csrftoken=abc123';
     const mockServer = new WS('ws://localhost/websocket/');
-    let testWrapper;
 
     const templates = [
       {
@@ -150,7 +151,7 @@ describe('useWsTemplates hook', () => {
       },
     ];
     await act(async () => {
-      testWrapper = await mountWithContexts(<Test templates={templates} />);
+      renderWithContexts(<Test templates={templates} />);
     });
 
     await mockServer.connected;
@@ -163,10 +164,9 @@ describe('useWsTemplates hook', () => {
         },
       })
     );
-    expect(
-      testWrapper.find('TestInner').prop('templates')[0].summary_fields
-        .recent_jobs[0].status
-    ).toEqual('running');
+    expect(getTemplates()[0].summary_fields.recent_jobs[0].status).toEqual(
+      'running'
+    );
     act(() => {
       mockServer.send(
         JSON.stringify({
@@ -177,15 +177,11 @@ describe('useWsTemplates hook', () => {
         })
       );
     });
-    testWrapper.update();
 
-    expect(
-      testWrapper.find('TestInner').prop('templates')[0].summary_fields.recent_jobs
-    ).toHaveLength(3);
-    expect(
-      testWrapper.find('TestInner').prop('templates')[0].summary_fields
-        .recent_jobs[0]
-    ).toEqual({
+    await waitFor(() =>
+      expect(getTemplates()[0].summary_fields.recent_jobs).toHaveLength(3)
+    );
+    expect(getTemplates()[0].summary_fields.recent_jobs[0]).toEqual({
       id: 13,
       status: 'running',
       finished: null,

@@ -1,63 +1,53 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
-import { mount } from 'enzyme';
+import { render, act } from '@testing-library/react';
 import useModal from './useModal';
 
-const TestHook = ({ callback }) => {
-  callback();
+const result = { current: null };
+const latest = () => result.current;
+
+const TestHook = ({ initialValue }) => {
+  result.current = useModal(initialValue);
   return null;
 };
 
-const testHook = (callback) => {
-  mount(<TestHook callback={callback} />);
+const testHook = (initialValue) => {
+  render(<TestHook initialValue={initialValue} />);
 };
 
 describe('useModal hook', () => {
-  let closeModal;
-  let isModalOpen;
-  let toggleModal;
-
   test('isModalOpen should return expected default value', () => {
-    testHook(() => {
-      ({ isModalOpen, toggleModal, closeModal } = useModal());
-    });
-    expect(isModalOpen).toEqual(false);
-    expect(toggleModal).toBeInstanceOf(Function);
-    expect(closeModal).toBeInstanceOf(Function);
+    testHook();
+    expect(latest().isModalOpen).toEqual(false);
+    expect(latest().toggleModal).toBeInstanceOf(Function);
+    expect(latest().closeModal).toBeInstanceOf(Function);
   });
 
   test('isModalOpen should return expected initialized value', () => {
-    testHook(() => {
-      ({ isModalOpen, toggleModal, closeModal } = useModal(true));
-    });
-    expect(isModalOpen).toEqual(true);
-    expect(toggleModal).toBeInstanceOf(Function);
-    expect(closeModal).toBeInstanceOf(Function);
+    testHook(true);
+    expect(latest().isModalOpen).toEqual(true);
+    expect(latest().toggleModal).toBeInstanceOf(Function);
+    expect(latest().closeModal).toBeInstanceOf(Function);
   });
 
   test('should return expected isModalOpen value after modal toggle', () => {
-    testHook(() => {
-      ({ isModalOpen, toggleModal, closeModal } = useModal());
-    });
-    expect(isModalOpen).toEqual(false);
+    testHook();
+    expect(latest().isModalOpen).toEqual(false);
     act(() => {
-      toggleModal();
+      latest().toggleModal();
     });
-    expect(isModalOpen).toEqual(true);
+    expect(latest().isModalOpen).toEqual(true);
   });
 
   test('isModalOpen should be false after closeModal is called', () => {
-    testHook(() => {
-      ({ isModalOpen, toggleModal, closeModal } = useModal());
-    });
-    expect(isModalOpen).toEqual(false);
+    testHook();
+    expect(latest().isModalOpen).toEqual(false);
     act(() => {
-      toggleModal();
+      latest().toggleModal();
     });
-    expect(isModalOpen).toEqual(true);
+    expect(latest().isModalOpen).toEqual(true);
     act(() => {
-      closeModal();
+      latest().closeModal();
     });
-    expect(isModalOpen).toEqual(false);
+    expect(latest().isModalOpen).toEqual(false);
   });
 });
