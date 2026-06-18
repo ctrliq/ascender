@@ -1,7 +1,7 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { act, screen } from '@testing-library/react';
 import WS from 'jest-websocket-mock';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import useWsPendingApprovalCount from './useWsPendingApprovalCount';
 
 // Mock useThrottle to return the value immediately without throttling
@@ -10,26 +10,25 @@ jest.mock('../../hooks/useThrottle', () => ({
   default: jest.fn((val) => val),
 }));
 
-function TestInner() {
-  return <div />;
+function TestInner({ count }) {
+  return <div data-testid="count">{count}</div>;
 }
 function Test({ initialCount, fetchApprovalsCount }) {
   const updatedWorkflowApprovals = useWsPendingApprovalCount(
     initialCount,
     fetchApprovalsCount
   );
-  return <TestInner initialCount={updatedWorkflowApprovals} />;
+  return <TestInner count={updatedWorkflowApprovals} />;
 }
 
 describe('useWsPendingApprovalCount hook', () => {
   let debug;
-  let wrapper;
   beforeEach(() => {
     /*
       Jest mock timers don't play well with jest-websocket-mock,
       so we'll stub out throttling to resolve immediately
     */
-    debug = global.console.debug; // eslint-disable-line prefer-destructuring
+    debug = global.console.debug;
     global.console.debug = () => {};
   });
 
@@ -39,11 +38,11 @@ describe('useWsPendingApprovalCount hook', () => {
   });
 
   test('should return workflow approval pending count', () => {
-    wrapper = mountWithContexts(
+    renderWithContexts(
       <Test initialCount={2} fetchApprovalsCount={() => {}} />
     );
 
-    expect(wrapper.find('TestInner').prop('initialCount')).toEqual(2);
+    expect(screen.getByTestId('count')).toHaveTextContent('2');
   });
 
   test('should establish websocket connection', async () => {
@@ -51,7 +50,7 @@ describe('useWsPendingApprovalCount hook', () => {
     const mockServer = new WS('ws://localhost/websocket/');
 
     await act(async () => {
-      wrapper = mountWithContexts(
+      renderWithContexts(
         <Test initialCount={2} fetchApprovalsCount={() => {}} />
       );
     });
@@ -72,15 +71,15 @@ describe('useWsPendingApprovalCount hook', () => {
     global.document.cookie = 'csrftoken=abc123';
     const mockServer = new WS('ws://localhost/websocket/');
     const fetchApprovalsCount = jest.fn(() => []);
-    
+
     await act(async () => {
-      wrapper = await mountWithContexts(
+      renderWithContexts(
         <Test initialCount={2} fetchApprovalsCount={fetchApprovalsCount} />
       );
     });
 
     await mockServer.connected;
-    
+
     // Send the websocket message
     act(() => {
       mockServer.send(
@@ -91,14 +90,12 @@ describe('useWsPendingApprovalCount hook', () => {
         })
       );
     });
-    
-    wrapper.update();
 
     // TODO: This test has timing issues with the throttling mechanism and websocket mocking
     // The hook correctly receives the websocket message but the throttled fetch doesn't trigger
     // in the test environment. This is a known issue with jest-websocket-mock and useThrottle.
     // For now, we just verify the component renders and websocket connects properly.
-    expect(wrapper.find('TestInner')).toHaveLength(1);
+    expect(screen.getByTestId('count')).toBeInTheDocument();
     // expect(fetchApprovalsCount).toHaveBeenCalledTimes(1); // TODO: Fix timing issue
   });
 
@@ -107,7 +104,7 @@ describe('useWsPendingApprovalCount hook', () => {
     const mockServer = new WS('ws://localhost/websocket/');
     const fetchApprovalsCount = jest.fn(() => []);
     await act(async () => {
-      wrapper = await mountWithContexts(
+      renderWithContexts(
         <Test initialCount={2} fetchApprovalsCount={fetchApprovalsCount} />
       );
     });

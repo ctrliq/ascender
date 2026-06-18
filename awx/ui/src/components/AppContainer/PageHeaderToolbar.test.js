@@ -1,66 +1,82 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, within } from '@testing-library/react';
 import { WorkflowApprovalsAPI } from 'api';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import PageHeaderToolbar from './PageHeaderToolbar';
 
 jest.mock('../../api');
 
-let wrapper;
-
 describe('PageHeaderToolbar', () => {
-  const pageHelpDropdownSelector = 'Dropdown QuestionCircleIcon';
-  const pageUserDropdownSelector = 'Dropdown UserIcon';
   const onAboutClick = jest.fn();
   const onLogoutClick = jest.fn();
 
-  test('expected content is rendered on initialization', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <PageHeaderToolbar
-          onAboutClick={onAboutClick}
-          onLogoutClick={onLogoutClick}
-        />
-      );
-    });
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
+  test('expected content is rendered on initialization', async () => {
+    const { container } = renderWithContexts(
+      <PageHeaderToolbar
+        onAboutClick={onAboutClick}
+        onLogoutClick={onLogoutClick}
+      />
+    );
+
+    // help dropdown toggle (aria-label Info) and user dropdown toggle. Wait
+    // for the on-mount approvals request to settle so its setState lands inside
+    // act before asserting.
+    expect(await screen.findByRole('button', { name: 'Info' })).toBeInTheDocument();
     expect(
-      wrapper.find(
-        'Link[to="/workflow_approvals?workflow_approvals.status=pending"]'
+      container.querySelector(
+        'a[href="/workflow_approvals?workflow_approvals.status=pending"]'
       )
-    ).toHaveLength(1);
-    expect(wrapper.find(pageHelpDropdownSelector)).toHaveLength(1);
-    expect(wrapper.find(pageUserDropdownSelector)).toHaveLength(1);
+    ).toBeInTheDocument();
+    expect(
+      container.querySelector(
+        '[data-ouia-component-id="toolbar-user-dropdown-toggle"]'
+      )
+    ).toBeInTheDocument();
+    await waitFor(() =>
+      expect(WorkflowApprovalsAPI.read).toHaveBeenCalled()
+    );
   });
 
   test('dropdowns have expected items and callbacks', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <PageHeaderToolbar
-          onAboutClick={onAboutClick}
-          onLogoutClick={onLogoutClick}
-          loggedInUser={{ id: 1 }}
-        />
-      );
-    });
-    expect(wrapper.find('DropdownItem')).toHaveLength(0);
-    wrapper.find(pageHelpDropdownSelector).simulate('click');
-    expect(wrapper.find('DropdownItem')).toHaveLength(2);
+    const { user } = renderWithContexts(
+      <PageHeaderToolbar
+        onAboutClick={onAboutClick}
+        onLogoutClick={onLogoutClick}
+        loggedInUser={{ id: 1 }}
+      />
+    );
+    // wait for the on-mount approvals request to settle
+    await screen.findByRole('button', { name: 'Info' });
 
-    const about = wrapper.find('DropdownItem[ouiaId="about-dropdown-item"]');
-    about.simulate('click');
+    // help dropdown items are not rendered until the toggle is clicked
+    expect(screen.queryByText('About')).not.toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Info' }));
+    expect(screen.getByText('Help')).toBeInTheDocument();
+    expect(screen.getByText('About')).toBeInTheDocument();
+
+    // clicking About fires the callback
+    await user.click(screen.getByText('About'));
     expect(onAboutClick).toHaveBeenCalled();
 
-    expect(wrapper.find('DropdownItem')).toHaveLength(0);
-    wrapper.find(pageUserDropdownSelector).simulate('click');
-    wrapper.update();
-    expect(
-      wrapper.find('DropdownItem[aria-label="User details"]').prop('href')
-    ).toBe('#/users/1/details');
-    expect(wrapper.find('DropdownItem')).toHaveLength(2);
+    // open the user dropdown (item carries aria-label "User details")
+    const userToggle = document.querySelector(
+      '[data-ouia-component-id="toolbar-user-dropdown-toggle"]'
+    );
+    await user.click(userToggle);
 
-    const logout = wrapper.find('DropdownItem li button');
-    logout.simulate('click');
+    // PF DropdownItem renders the item with role="menuitem" (the anchor's
+    // href is the DOM equivalent of the enzyme DropdownItem href prop check)
+    const userDetails = await screen.findByRole('menuitem', {
+      name: 'User details',
+    });
+    expect(userDetails).toHaveAttribute('href', '#/users/1/details');
+
+    // clicking Logout fires the callback
+    await user.click(screen.getByRole('menuitem', { name: 'Logout' }));
     expect(onLogoutClick).toHaveBeenCalled();
   });
 
@@ -70,17 +86,18 @@ describe('PageHeaderToolbar', () => {
         count: 20,
       },
     });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <PageHeaderToolbar
-          onAboutClick={onAboutClick}
-          onLogoutClick={onLogoutClick}
-        />
-      );
-    });
+    const { container } = renderWithContexts(
+      <PageHeaderToolbar
+        onAboutClick={onAboutClick}
+        onLogoutClick={onLogoutClick}
+      />
+    );
 
-    expect(
-      wrapper.find('NotificationBadge#toolbar-workflow-approval-badge').text()
-    ).toEqual('20');
+    await waitFor(() => {
+      const badge = container.querySelector(
+        '#toolbar-workflow-approval-badge'
+      );
+      expect(within(badge).getByText('20')).toBeInTheDocument();
+    });
   });
 });
