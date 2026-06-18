@@ -1,15 +1,22 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { screen } from '@testing-library/react';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import Wizard from './Wizard';
 
 describe('Wizard', () => {
   test('renders the expected content', () => {
-    const wrapper = mount(
+    renderWithContexts(
       <Wizard
         title="Simple Wizard"
         steps={[{ name: 'Step 1', component: <p>Step 1</p> }]}
       />
     );
-    expect(wrapper).toHaveLength(1);
+    // The wizard renders its first step's content (the <p>) plus nav entries
+    // that also read "Step 1"; the content paragraph is the unique <p>.
+    expect(screen.getByText('Step 1', { selector: 'p' })).toBeInTheDocument();
+    // The step's nav button is present and active.
+    expect(
+      screen.getByRole('button', { name: 'Step 1' })
+    ).toBeInTheDocument();
   });
 });
