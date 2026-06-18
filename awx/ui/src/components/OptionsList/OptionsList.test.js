@@ -1,18 +1,20 @@
 import React from 'react';
+import { screen, within } from '@testing-library/react';
 import { getQSConfig } from 'util/qs';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import OptionsList from './OptionsList';
 
 const qsConfig = getQSConfig('test', { order_by: 'foo' });
 
+const options = [
+  { id: 1, name: 'foo', url: '/item/1' },
+  { id: 2, name: 'bar', url: '/item/2' },
+  { id: 3, name: 'baz', url: '/item/3' },
+];
+
 describe('<OptionsList />', () => {
   it('should display list of options', () => {
-    const options = [
-      { id: 1, name: 'foo', url: '/item/1' },
-      { id: 2, name: 'bar', url: '/item/2' },
-      { id: 3, name: 'baz', url: '/item/3' },
-    ];
-    const wrapper = mountWithContexts(
+    renderWithContexts(
       <OptionsList
         value={[]}
         options={options}
@@ -27,17 +29,21 @@ describe('<OptionsList />', () => {
         name="Item"
       />
     );
-    expect(wrapper.find('PaginatedTable').prop('items')).toEqual(options);
-    expect(wrapper.find('SelectedList')).toHaveLength(0);
+
+    // one selectable (radio) row rendered per option
+    expect(screen.getAllByRole('radio')).toHaveLength(options.length);
+    options.forEach((opt) => {
+      expect(screen.getByText(opt.name)).toBeInTheDocument();
+    });
+
+    // no selection preview when value is empty
+    expect(
+      screen.queryByRole('group', { name: 'Chip group category' })
+    ).toBeNull();
   });
 
   it('should render selected list', () => {
-    const options = [
-      { id: 1, name: 'foo', url: '/item/1' },
-      { id: 2, name: 'bar', url: '/item/2' },
-      { id: 3, name: 'baz', url: '/item/3' },
-    ];
-    const wrapper = mountWithContexts(
+    renderWithContexts(
       <OptionsList
         value={[options[1]]}
         options={options}
@@ -52,8 +58,14 @@ describe('<OptionsList />', () => {
         name="Item"
       />
     );
-    const list = wrapper.find('SelectedList');
-    expect(list).toHaveLength(1);
-    expect(list.prop('selected')).toEqual([options[1]]);
+
+    // SelectedList renders its label and a chip for each selected item
+    expect(screen.getByText('Selected')).toBeInTheDocument();
+    const chipGroup = screen.getByRole('group', {
+      name: 'Chip group category',
+    });
+    const chips = within(chipGroup).getAllByRole('listitem');
+    expect(chips).toHaveLength(1);
+    expect(chips[0]).toHaveTextContent('bar');
   });
 });

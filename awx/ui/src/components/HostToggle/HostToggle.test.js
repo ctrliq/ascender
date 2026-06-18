@@ -1,7 +1,7 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { HostsAPI } from 'api';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import HostToggle from './HostToggle';
 
 jest.mock('../../api');
@@ -25,28 +25,32 @@ const mockHost = {
   },
 };
 
+// The PF Switch renders a hidden checkbox input with the aria-label
+const getToggle = () => screen.getByRole('checkbox', { name: 'Toggle host' });
+
 describe('<HostToggle>', () => {
-  test('should should toggle off', async () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('should toggle off', async () => {
     const onToggle = jest.fn();
-    const wrapper = mountWithContexts(
+    const { user } = renderWithContexts(
       <HostToggle host={mockHost} onToggle={onToggle} />
     );
-    expect(wrapper.find('Switch').prop('isChecked')).toEqual(true);
+    expect(getToggle()).toBeChecked();
 
-    await act(async () => {
-      wrapper.find('Switch').invoke('onChange')();
-    });
+    await user.click(getToggle());
     expect(HostsAPI.update).toHaveBeenCalledWith(1, {
       enabled: false,
     });
-    wrapper.update();
-    expect(wrapper.find('Switch').prop('isChecked')).toEqual(false);
+    await waitFor(() => expect(getToggle()).not.toBeChecked());
     expect(onToggle).toHaveBeenCalledWith(false);
   });
 
-  test('should should toggle on', async () => {
+  test('should toggle on', async () => {
     const onToggle = jest.fn();
-    const wrapper = mountWithContexts(
+    const { user } = renderWithContexts(
       <HostToggle
         host={{
           ...mockHost,
@@ -55,50 +59,41 @@ describe('<HostToggle>', () => {
         onToggle={onToggle}
       />
     );
-    expect(wrapper.find('Switch').prop('isChecked')).toEqual(false);
+    expect(getToggle()).not.toBeChecked();
 
-    await act(async () => {
-      wrapper.find('Switch').invoke('onChange')();
-    });
+    await user.click(getToggle());
     expect(HostsAPI.update).toHaveBeenCalledWith(1, {
       enabled: true,
     });
-    wrapper.update();
-    expect(wrapper.find('Switch').prop('isChecked')).toEqual(true);
+    await waitFor(() => expect(getToggle()).toBeChecked());
     expect(onToggle).toHaveBeenCalledWith(true);
   });
 
   test('should be enabled', async () => {
-    const wrapper = mountWithContexts(<HostToggle host={mockHost} />);
-    expect(wrapper.find('Switch').prop('isDisabled')).toEqual(false);
+    renderWithContexts(<HostToggle host={mockHost} />);
+    expect(getToggle()).toBeEnabled();
   });
 
   test('should be disabled', async () => {
-    const wrapper = mountWithContexts(
-      <HostToggle isDisabled host={mockHost} />
-    );
-    expect(wrapper.find('Switch').prop('isDisabled')).toEqual(true);
+    renderWithContexts(<HostToggle isDisabled host={mockHost} />);
+    expect(getToggle()).toBeDisabled();
   });
 
   test('should show error modal', async () => {
     HostsAPI.update.mockImplementation(() => {
       throw new Error('nope');
     });
-    const wrapper = mountWithContexts(<HostToggle host={mockHost} />);
-    expect(wrapper.find('Switch').prop('isChecked')).toEqual(true);
+    const { user } = renderWithContexts(<HostToggle host={mockHost} />);
+    expect(getToggle()).toBeChecked();
 
-    await act(async () => {
-      wrapper.find('Switch').invoke('onChange')();
-    });
-    wrapper.update();
-    const modal = wrapper.find('AlertModal');
-    expect(modal).toHaveLength(1);
-    expect(modal.prop('isOpen')).toEqual(true);
+    await user.click(getToggle());
+    const dialog = await screen.findByRole('dialog');
+    expect(dialog).toBeInTheDocument();
+    expect(screen.getByText('Error!')).toBeInTheDocument();
 
-    act(() => {
-      modal.invoke('onClose')();
-    });
-    wrapper.update();
-    expect(wrapper.find('AlertModal')).toHaveLength(0);
+    await user.click(screen.getByRole('button', { name: 'Close' }));
+    await waitFor(() =>
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    );
   });
 });

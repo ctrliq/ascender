@@ -1,42 +1,34 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { screen } from '@testing-library/react';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import CopyButton from './CopyButton';
 
 jest.mock('../../api');
 
-let wrapper;
-
 describe('<CopyButton/>', () => {
-  test('should mount properly', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <CopyButton
-          onCopyStart={() => {}}
-          onCopyFinish={() => {}}
-          copyItem={() => {}}
-          errorMessage="Failed to copy template."
-        />
-      );
-    });
-    expect(wrapper.find('CopyButton').length).toBe(1);
+  test('should mount properly', () => {
+    renderWithContexts(
+      <CopyButton
+        onCopyStart={() => {}}
+        onCopyFinish={() => {}}
+        copyItem={() => {}}
+        errorMessage="Failed to copy template."
+      />
+    );
+    expect(screen.getByRole('button', { name: 'Copy' })).toBeInTheDocument();
   });
 
-  test('should call the correct function on button click', async () => {
+  test('should call copyItem on button click', async () => {
     const copyItem = jest.fn();
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <CopyButton
-          onCopyStart={() => {}}
-          onCopyFinish={() => {}}
-          copyItem={copyItem}
-          errorMessage="Failed to copy template."
-        />
-      );
-    });
-    await act(async () => {
-      wrapper.find('button').simulate('click');
-    });
+    const { user } = renderWithContexts(
+      <CopyButton
+        onCopyStart={() => {}}
+        onCopyFinish={() => {}}
+        copyItem={copyItem}
+        errorMessage="Failed to copy template."
+      />
+    );
+    await user.click(screen.getByRole('button', { name: 'Copy' }));
     expect(copyItem).toHaveBeenCalledTimes(1);
   });
 });

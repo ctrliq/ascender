@@ -1,5 +1,6 @@
 import React from 'react';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { screen } from '@testing-library/react';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import AnsibleSelect from './AnsibleSelect';
 
 const mockData = [
@@ -16,9 +17,8 @@ const mockData = [
 ];
 
 describe('<AnsibleSelect />', () => {
-  const onChange = jest.fn();
-  test('initially renders successfully', async () => {
-    mountWithContexts(
+  test('initially renders successfully', () => {
+    renderWithContexts(
       <AnsibleSelect
         id="bar"
         value="foo"
@@ -27,25 +27,33 @@ describe('<AnsibleSelect />', () => {
         data={mockData}
       />
     );
+    expect(screen.getByRole('combobox')).toBeInTheDocument();
   });
 
-  test('calls "onSelectChange" on dropdown select change', () => {
-    const wrapper = mountWithContexts(
+  test('calls "onChange" on dropdown select change', async () => {
+    const onChange = jest.fn();
+    const { user } = renderWithContexts(
       <AnsibleSelect
         id="bar"
-        value="foo"
+        value="/var/lib/awx/venv/baz/"
         name="bar"
         onChange={onChange}
         data={mockData}
       />
     );
     expect(onChange).not.toHaveBeenCalled();
-    wrapper.find('select').simulate('change');
+    await user.selectOptions(
+      screen.getByRole('combobox'),
+      '/var/lib/awx/venv/ansible/'
+    );
     expect(onChange).toHaveBeenCalled();
+    // onSelectChange forwards (event, value); the selected value is the option.
+    const [, value] = onChange.mock.calls[0];
+    expect(value).toEqual('/var/lib/awx/venv/ansible/');
   });
 
   test('Returns correct select options', () => {
-    const wrapper = mountWithContexts(
+    renderWithContexts(
       <AnsibleSelect
         id="bar"
         value="foo"
@@ -55,7 +63,9 @@ describe('<AnsibleSelect />', () => {
       />
     );
 
-    expect(wrapper.find('FormSelect')).toHaveLength(1);
-    expect(wrapper.find('FormSelectOption')).toHaveLength(2);
+    expect(screen.getByRole('combobox')).toBeInTheDocument();
+    const options = screen.getAllByRole('option');
+    expect(options).toHaveLength(2);
+    expect(options.map((o) => o.textContent)).toEqual(['Baz', 'Default']);
   });
 });

@@ -1,9 +1,6 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../testUtils/enzymeHelpers';
+import { screen, waitFor } from '@testing-library/react';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import Sort from './Sort';
 
@@ -15,15 +12,7 @@ jest.mock('react-router-dom', () => ({
 }));
 
 describe('<Sort />', () => {
-  let sort;
-
-  afterEach(() => {
-    if (sort) {
-      sort = null;
-    }
-  });
-
-  test('should trigger onSort callback', () => {
+  test('should trigger onSort callback', async () => {
     const qsConfig = {
       namespace: 'item',
       defaultParams: { page: 1, page_size: 5, order_by: 'name' },
@@ -37,21 +26,19 @@ describe('<Sort />', () => {
       },
     ];
 
-    const sortBtn = 'button[aria-label="Sort"]';
-
     const onSort = jest.fn();
 
-    const wrapper = mountWithContexts(
+    const { user } = renderWithContexts(
       <Sort qsConfig={qsConfig} columns={columns} onSort={onSort} />
-    ).find('Sort');
+    );
 
-    wrapper.find(sortBtn).simulate('click');
+    await user.click(screen.getByRole('button', { name: 'Sort' }));
 
     expect(onSort).toHaveBeenCalledTimes(1);
     expect(onSort).toHaveBeenCalledWith('name', 'descending');
   });
 
-  test('onSort properly passes back descending when ascending was passed as prop', () => {
+  test('onSort properly passes back descending when ascending was passed as prop', async () => {
     const qsConfig = {
       namespace: 'item',
       defaultParams: { page: 1, page_size: 5, order_by: 'foo' },
@@ -59,32 +46,21 @@ describe('<Sort />', () => {
     };
 
     const columns = [
-      {
-        name: 'Foo',
-        key: 'foo',
-      },
-      {
-        name: 'Bar',
-        key: 'bar',
-      },
-      {
-        name: 'Bakery',
-        key: 'bakery',
-      },
+      { name: 'Foo', key: 'foo' },
+      { name: 'Bar', key: 'bar' },
+      { name: 'Bakery', key: 'bakery' },
     ];
 
     const onSort = jest.fn();
 
-    const wrapper = mountWithContexts(
+    const { user } = renderWithContexts(
       <Sort qsConfig={qsConfig} columns={columns} onSort={onSort} />
-    ).find('Sort');
-    const sortDropdownToggle = wrapper.find('Button');
-    expect(sortDropdownToggle.length).toBe(1);
-    sortDropdownToggle.simulate('click');
+    );
+    await user.click(screen.getByRole('button', { name: 'Sort' }));
     expect(onSort).toHaveBeenCalledWith('foo', 'descending');
   });
 
-  test('onSort properly passes back ascending when descending was passed as prop', () => {
+  test('onSort properly passes back ascending when descending was passed as prop', async () => {
     const qsConfig = {
       namespace: 'item',
       defaultParams: { page: 1, page_size: 5, order_by: '-foo' },
@@ -92,28 +68,17 @@ describe('<Sort />', () => {
     };
 
     const columns = [
-      {
-        name: 'Foo',
-        key: 'foo',
-      },
-      {
-        name: 'Bar',
-        key: 'bar',
-      },
-      {
-        name: 'Bakery',
-        key: 'bakery',
-      },
+      { name: 'Foo', key: 'foo' },
+      { name: 'Bar', key: 'bar' },
+      { name: 'Bakery', key: 'bakery' },
     ];
 
     const onSort = jest.fn();
 
-    const wrapper = mountWithContexts(
+    const { user } = renderWithContexts(
       <Sort qsConfig={qsConfig} columns={columns} onSort={onSort} />
-    ).find('Sort');
-    const sortDropdownToggle = wrapper.find('Button');
-    expect(sortDropdownToggle.length).toBe(1);
-    sortDropdownToggle.simulate('click');
+    );
+    await user.click(screen.getByRole('button', { name: 'Sort' }));
     expect(onSort).toHaveBeenCalledWith('foo', 'ascending');
   });
 
@@ -125,37 +90,30 @@ describe('<Sort />', () => {
     };
 
     const columns = [
-      {
-        name: 'Foo',
-        key: 'foo',
-      },
-      {
-        name: 'Bar',
-        key: 'bar',
-      },
-      {
-        name: 'Bakery',
-        key: 'bakery',
-      },
+      { name: 'Foo', key: 'foo' },
+      { name: 'Bar', key: 'bar' },
+      { name: 'Bakery', key: 'bakery' },
     ];
 
     const onSort = jest.fn();
 
-    const wrapper = mountWithContexts(
+    const { user } = renderWithContexts(
       <Sort qsConfig={qsConfig} columns={columns} onSort={onSort} />
     );
-    act(() => wrapper.find('Dropdown').invoke('onToggle')(true));
-    wrapper.update();
-    await waitForElement(
-      wrapper,
-      'Dropdown',
-      (el) => el.prop('isOpen') === true
+    // Open the sort dropdown (toggle shows the active column name "Foo").
+    await user.click(screen.getByRole('button', { name: 'Foo' }));
+    const barItem = await screen.findByText('Bar');
+    // Sort's handleDropdownSelect matches the picked column by the clicked
+    // element's `innerText`. jsdom does not implement innerText, so define it
+    // explicitly here to drive the real production handler.
+    Object.defineProperty(barItem, 'innerText', {
+      value: 'Bar',
+      configurable: true,
+    });
+    await user.click(barItem);
+    await waitFor(() =>
+      expect(onSort).toHaveBeenCalledWith('bar', 'ascending')
     );
-    act(() =>
-      wrapper.find('li').at(0).prop('onClick')({ target: { innerText: 'Bar' } })
-    );
-    wrapper.update();
-    expect(onSort).toHaveBeenCalledWith('bar', 'ascending');
   });
 
   test('should display numeric descending icon', () => {
@@ -166,7 +124,7 @@ describe('<Sort />', () => {
     };
     const numericColumns = [{ name: 'ID', key: 'id' }];
 
-    const wrapper = mountWithContexts(
+    const { container } = renderWithContexts(
       <Sort
         qsConfig={qsConfigNumDown}
         columns={numericColumns}
@@ -174,7 +132,9 @@ describe('<Sort />', () => {
       />
     );
 
-    expect(wrapper.find('SortNumericDownAltIcon')).toHaveLength(1);
+    // SortNumericDownAltIcon
+    const path = container.querySelector('button[aria-label="Sort"] svg path');
+    expect(path.getAttribute('d')).toContain('zm224 64h-16V304');
   });
 
   test('should display numeric ascending icon', () => {
@@ -185,7 +145,7 @@ describe('<Sort />', () => {
     };
     const numericColumns = [{ name: 'ID', key: 'id' }];
 
-    const wrapper = mountWithContexts(
+    const { container } = renderWithContexts(
       <Sort
         qsConfig={qsConfigNumUp}
         columns={numericColumns}
@@ -193,7 +153,9 @@ describe('<Sort />', () => {
       />
     );
 
-    expect(wrapper.find('SortNumericDownIcon')).toHaveLength(1);
+    // SortNumericDownIcon
+    const path = container.querySelector('button[aria-label="Sort"] svg path');
+    expect(path.getAttribute('d')).toContain('M304 96h16v64h-16');
   });
 
   test('should display alphanumeric descending icon', () => {
@@ -204,7 +166,7 @@ describe('<Sort />', () => {
     };
     const alphaColumns = [{ name: 'Name', key: 'name' }];
 
-    const wrapper = mountWithContexts(
+    const { container } = renderWithContexts(
       <Sort
         qsConfig={qsConfigAlphaDown}
         columns={alphaColumns}
@@ -212,7 +174,9 @@ describe('<Sort />', () => {
       />
     );
 
-    expect(wrapper.find('SortAlphaDownAltIcon')).toHaveLength(1);
+    // SortAlphaDownAltIcon
+    const path = container.querySelector('button[aria-label="Sort"] svg path');
+    expect(path.getAttribute('d')).toContain('352zm112-128h128');
   });
 
   test('should display alphanumeric ascending icon', () => {
@@ -223,7 +187,7 @@ describe('<Sort />', () => {
     };
     const alphaColumns = [{ name: 'Name', key: 'name' }];
 
-    const wrapper = mountWithContexts(
+    const { container } = renderWithContexts(
       <Sort
         qsConfig={qsConfigAlphaDown}
         columns={alphaColumns}
@@ -231,6 +195,8 @@ describe('<Sort />', () => {
       />
     );
 
-    expect(wrapper.find('SortAlphaDownIcon')).toHaveLength(1);
+    // SortAlphaDownIcon
+    const path = container.querySelector('button[aria-label="Sort"] svg path');
+    expect(path.getAttribute('d')).toContain('190.22 352 176 352zm240-64H288');
   });
 });

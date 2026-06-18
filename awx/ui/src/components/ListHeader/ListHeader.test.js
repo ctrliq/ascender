@@ -1,7 +1,7 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { act } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import ListHeader from './ListHeader';
 
 describe('ListHeader', () => {
@@ -11,48 +11,58 @@ describe('ListHeader', () => {
     integerFields: ['id', 'page', 'page_size'],
     dateFields: ['modified', 'created'],
   };
-  const renderToolbarFn = jest.fn();
+
+  // Capture the toolbar props ListHeader passes to its renderToolbar callback
+  // so the handlers (onSort/onSearch/onRemove/clearAllFilters) can be exercised
+  // directly, mirroring the enzyme suite's `toolbar.prop('onX')(...)`.
+  function makeCapturingToolbar() {
+    const captured = {};
+    const renderToolbar = (props) => {
+      Object.assign(captured, props);
+      return <div data-testid="toolbar" />;
+    };
+    return { captured, renderToolbar };
+  }
+
+  const baseProps = {
+    qsConfig,
+    searchColumns: [{ name: 'foo', key: 'foo__icontains', isDefault: true }],
+    sortColumns: [{ name: 'foo', key: 'foo' }],
+  };
 
   test('initially renders without crashing', () => {
     const history = createMemoryHistory({
       initialEntries: ['/organizations/1/teams'],
     });
-    const wrapper = mountWithContexts(
+    const { container } = renderWithContexts(
       <ListHeader
         itemCount={50}
-        qsConfig={qsConfig}
-        searchColumns={[
-          { name: 'foo', key: 'foo__icontains', isDefault: true },
-        ]}
-        sortColumns={[{ name: 'foo', key: 'foo' }]}
-        renderToolbar={renderToolbarFn}
+        renderToolbar={jest.fn()}
+        {...baseProps}
       />,
       { context: { router: { history } } }
     );
-    expect(wrapper.length).toBe(1);
+    expect(container).toBeInTheDocument();
   });
 
   test('should navigate when DataListToolbar calls onSort prop', async () => {
     const history = createMemoryHistory({
       initialEntries: ['/organizations/1/teams'],
     });
-    const wrapper = mountWithContexts(
-      <ListHeader
-        itemCount={7}
-        qsConfig={qsConfig}
-        searchColumns={[
-          { name: 'foo', key: 'foo__icontains', isDefault: true },
-        ]}
-        sortColumns={[{ name: 'foo', key: 'foo' }]}
-      />,
+    const { captured, renderToolbar } = makeCapturingToolbar();
+    renderWithContexts(
+      <ListHeader itemCount={7} renderToolbar={renderToolbar} {...baseProps} />,
       { context: { router: { history } } }
     );
 
-    const toolbar = wrapper.find('DataListToolbar');
-    toolbar.prop('onSort')('foo', 'descending');
+    act(() => {
+      captured.onSort('foo', 'descending');
+    });
     expect(history.location.search).toEqual('?item.order_by=-foo');
-    toolbar.prop('onSort')('foo', 'ascending');
-    // since order_by = name is the default, that should be strip out of the search
+    act(() => {
+      captured.onSort('foo', 'ascending');
+    });
+    // since order_by = foo is the default, that should be stripped out of the search
     expect(history.location.search).toEqual('');
   });
 
@@ -61,22 +71,15 @@ describe('ListHeader', () => {
     const history = createMemoryHistory({
       initialEntries: [`/organizations/1/teams${query}`],
     });
-    const wrapper = mountWithContexts(
-      <ListHeader
-        itemCount={7}
-        qsConfig={qsConfig}
-        searchColumns={[
-          { name: 'foo', key: 'foo__icontains', isDefault: true },
-        ]}
-        sortColumns={[{ name: 'foo', key: 'foo' }]}
-      />,
+    const { captured, renderToolbar } = makeCapturingToolbar();
+    renderWithContexts(
+      <ListHeader itemCount={7} renderToolbar={renderToolbar} {...baseProps} />,
       { context: { router: { history } } }
     );
 
     expect(history.location.search).toEqual(query);
-    const toolbar = wrapper.find('DataListToolbar');
     act(() => {
-      toolbar.prop('clearAllFilters')();
+      captured.clearAllFilters();
     });
     expect(history.location.search).toEqual('?item.page_size=5');
   });
@@ -86,21 +89,16 @@ describe('ListHeader', () => {
     const history = createMemoryHistory({
       initialEntries: [`/organizations/1/teams${query}`],
     });
-    const wrapper = mountWithContexts(
-      <ListHeader
-        itemCount={7}
-        qsConfig={qsConfig}
-        searchColumns={[
-          { name: 'foo', key: 'foo__icontains', isDefault: true },
-        ]}
-        sortColumns={[{ name: 'foo', key: 'foo' }]}
-      />,
+    const { captured, renderToolbar } = makeCapturingToolbar();
+    renderWithContexts(
+      <ListHeader itemCount={7} renderToolbar={renderToolbar} {...baseProps} />,
       { context: { router: { history } } }
     );
 
     expect(history.location.search).toEqual(query);
-    const toolbar = wrapper.find('DataListToolbar');
-    toolbar.prop('onSearch')('name__icontains', 'foo');
+    act(() => {
+      captured.onSearch('name__icontains', 'foo');
+    });
     expect(history.location.search).toEqual(
       '?item.name__icontains=foo&item.page_size=10'
     );
@@ -111,21 +109,16 @@ describe('ListHeader', () => {
     const history = createMemoryHistory({
       initialEntries: [`/organizations/1/teams${query}`],
     });
-    const wrapper = mountWithContexts(
-      <ListHeader
-        itemCount={7}
-        qsConfig={qsConfig}
-        searchColumns={[
-          { name: 'foo', key: 'foo__icontains', isDefault: true },
-        ]}
-        sortColumns={[{ name: 'foo', key: 'foo' }]}
-      />,
+    const { captured, renderToolbar } = makeCapturingToolbar();
+    renderWithContexts(
+      <ListHeader itemCount={7} renderToolbar={renderToolbar} {...baseProps} />,
       { context: { router: { history } } }
     );
 
     expect(history.location.search).toEqual(query);
-    const toolbar = wrapper.find('DataListToolbar');
-    toolbar.prop('onRemove')('name__icontains', 'foo');
+    act(() => {
+      captured.onRemove('name__icontains', 'foo');
+    });
     expect(history.location.search).toEqual('?item.page_size=10');
   });
 });

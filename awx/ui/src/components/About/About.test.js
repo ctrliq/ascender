@@ -1,5 +1,6 @@
 import React from 'react';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { screen } from '@testing-library/react';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import About from './About';
 
 jest.mock('../../hooks/useBrandName', () => ({
@@ -8,14 +9,24 @@ jest.mock('../../hooks/useBrandName', () => ({
 }));
 
 describe('<About />', () => {
-  test('should render AboutModal', () => {
+  test('should render AboutModal with product name and version', () => {
     const onClose = jest.fn();
-    const wrapper = mountWithContexts(<About isOpen onClose={onClose} />);
+    renderWithContexts(<About isOpen onClose={onClose} version="1.2.3" />);
 
-    const modal = wrapper.find('AboutModal');
-    expect(modal).toHaveLength(1);
-    expect(modal.prop('onClose')).toEqual(onClose);
-    expect(modal.prop('productName')).toEqual('AWX');
-    expect(modal.prop('isOpen')).toEqual(true);
+    // AboutModal renders into a body portal; the product name surfaces as the
+    // dialog's accessible name.
+    const dialog = screen.getByRole('dialog');
+    expect(dialog).toBeInTheDocument();
+    expect(screen.getByText('AWX')).toBeInTheDocument();
+
+    // The version is rendered inside the speech-bubble <pre>.
+    const pre = dialog.querySelector('pre');
+    expect(pre.textContent).toContain('AWX 1.2.3');
+  });
+
+  test('should not render when isOpen is false', () => {
+    const onClose = jest.fn();
+    renderWithContexts(<About onClose={onClose} version="1.2.3" />);
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 });

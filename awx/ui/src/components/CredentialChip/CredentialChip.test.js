@@ -1,5 +1,6 @@
 import React from 'react';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { screen } from '@testing-library/react';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import CredentialChip from './CredentialChip';
 
 describe('CredentialChip', () => {
@@ -10,10 +11,11 @@ describe('CredentialChip', () => {
       name: 'foo',
     };
 
-    const wrapper = mountWithContexts(
-      <CredentialChip credential={credential} />
+    renderWithContexts(<CredentialChip credential={credential} />);
+    expect(screen.getByText(/SSH:/)).toBeInTheDocument();
+    expect(screen.getByText('foo', { exact: false })).toHaveTextContent(
+      'SSH: foo'
     );
-    expect(wrapper.find('CredentialChip').text()).toEqual('SSH: foo');
   });
 
   test('should render AWS kind', () => {
@@ -23,10 +25,10 @@ describe('CredentialChip', () => {
       name: 'foo',
     };
 
-    const wrapper = mountWithContexts(
-      <CredentialChip credential={credential} />
+    renderWithContexts(<CredentialChip credential={credential} />);
+    expect(screen.getByText('foo', { exact: false })).toHaveTextContent(
+      'AWS: foo'
     );
-    expect(wrapper.find('CredentialChip').text()).toEqual('AWS: foo');
   });
 
   test('should render with "Cloud"', () => {
@@ -37,10 +39,10 @@ describe('CredentialChip', () => {
       name: 'foo',
     };
 
-    const wrapper = mountWithContexts(
-      <CredentialChip credential={credential} />
+    renderWithContexts(<CredentialChip credential={credential} />);
+    expect(screen.getByText('foo', { exact: false })).toHaveTextContent(
+      'Cloud: foo'
     );
-    expect(wrapper.find('CredentialChip').text()).toEqual('Cloud: foo');
   });
 
   test('should render with other kind', () => {
@@ -50,9 +52,26 @@ describe('CredentialChip', () => {
       name: 'foo',
     };
 
-    const wrapper = mountWithContexts(
-      <CredentialChip credential={credential} />
+    renderWithContexts(<CredentialChip credential={credential} />);
+    expect(screen.getByText('foo', { exact: false })).toHaveTextContent(
+      'Other: foo'
     );
-    expect(wrapper.find('CredentialChip').text()).toEqual('Other: foo');
+  });
+
+  test('should render a deletable chip with a close button by default', () => {
+    const credential = { id: 1, kind: 'ssh', name: 'foo' };
+    renderWithContexts(
+      <CredentialChip credential={credential} onClick={() => {}} />
+    );
+    // PF Chip's close button is labelled by the chip text (aria-labelledby).
+    expect(
+      screen.getByRole('button', { name: /SSH: foo/ })
+    ).toBeInTheDocument();
+  });
+
+  test('should render a read-only chip without a close button', () => {
+    const credential = { id: 1, kind: 'ssh', name: 'foo' };
+    renderWithContexts(<CredentialChip credential={credential} isReadOnly />);
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
   });
 });

@@ -1,5 +1,9 @@
 import React from 'react';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { screen, waitFor } from '@testing-library/react';
+import {
+  renderWithContexts,
+  assertDetail,
+} from '../../../testUtils/rtlContexts';
 
 import ExecutionEnvironmentDetail from './ExecutionEnvironmentDetail';
 
@@ -12,34 +16,36 @@ const mockExecutionEnvironment = {
 };
 
 describe('<ExecutionEnvironmentDetail/>', () => {
-  test('should display execution environment detail', async () => {
-    const wrapper = mountWithContexts(
+  test('should display execution environment detail', () => {
+    renderWithContexts(
       <ExecutionEnvironmentDetail
         executionEnvironment={mockExecutionEnvironment}
       />
     );
-    const executionEnvironment = wrapper.find('ExecutionEnvironmentDetail');
-    expect(executionEnvironment).toHaveLength(1);
-    expect(executionEnvironment.find('dt').text()).toEqual(
-      'Execution Environment'
-    );
-    expect(executionEnvironment.find('dd').text()).toEqual(
-      mockExecutionEnvironment.name
+    assertDetail('Execution Environment', mockExecutionEnvironment.name);
+    expect(
+      screen.getByRole('link', { name: mockExecutionEnvironment.name })
+    ).toHaveAttribute(
+      'href',
+      `/execution_environments/${mockExecutionEnvironment.id}/details`
     );
   });
 
   test('should display warning deleted execution environment', async () => {
-    const wrapper = mountWithContexts(
+    const { user } = renderWithContexts(
       <ExecutionEnvironmentDetail verifyMissingVirtualEnv={false} />
     );
-    const executionEnvironment = wrapper.find('ExecutionEnvironmentDetail');
-    expect(executionEnvironment).toHaveLength(1);
-    expect(executionEnvironment.find('dt').text()).toEqual(
-      'Execution Environment'
-    );
-    expect(executionEnvironment.find('dd').text()).toEqual('Missing resource');
-    expect(wrapper.find('Tooltip').prop('content')).toEqual(
-      `Execution environment is missing or deleted.`
-    );
+    assertDetail('Execution Environment', 'Missing resource');
+    // The deleted-EE warning wraps the icon in a PF Tooltip; its content is
+    // only rendered into the DOM on hover (DOM equivalent of the enzyme
+    // `Tooltip.prop('content')` assertion).
+    const term = screen.getByText('Execution Environment');
+    const icon = term.nextElementSibling.querySelector('svg');
+    await user.hover(icon);
+    await waitFor(() => {
+      expect(
+        screen.getByText('Execution environment is missing or deleted.')
+      ).toBeInTheDocument();
+    });
   });
 });

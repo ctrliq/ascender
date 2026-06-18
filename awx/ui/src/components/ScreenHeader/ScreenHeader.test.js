@@ -1,16 +1,11 @@
 import React from 'react';
+import { screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import ScreenHeader from './ScreenHeader';
 
 describe('<ScreenHeader />', () => {
-  let breadcrumbWrapper;
-  let breadcrumb;
-  let breadcrumbItem;
-  let breadcrumbHeading;
-
   const config = {
     '/foo': 'Foo',
     '/foo/1': 'One',
@@ -18,27 +13,21 @@ describe('<ScreenHeader />', () => {
     '/foo/1/bar/fiz': 'Fiz',
   };
 
-  const findChildren = () => {
-    breadcrumb = breadcrumbWrapper.find('ScreenHeader');
-    breadcrumbItem = breadcrumbWrapper.find('BreadcrumbItem');
-    breadcrumbHeading = breadcrumbWrapper.find('Title');
-  };
-
   test('initially renders successfully', () => {
-    breadcrumbWrapper = mountWithContexts(
+    renderWithContexts(
       <MemoryRouter initialEntries={['/foo/1/bar']} initialIndex={0}>
         <ScreenHeader streamType="all_activity" breadcrumbConfig={config} />
       </MemoryRouter>
     );
 
-    findChildren();
+    const nav = screen.getByRole('navigation', { name: 'Breadcrumb' });
+    const crumbs = within(nav).getAllByRole('link');
+    expect(crumbs).toHaveLength(2);
+    expect(crumbs[0]).toHaveTextContent('Foo');
+    expect(crumbs[1]).toHaveTextContent('One');
 
-    expect(breadcrumb).toHaveLength(1);
-    expect(breadcrumbItem).toHaveLength(2);
-    expect(breadcrumbHeading).toHaveLength(1);
-    expect(breadcrumbItem.first().text()).toBe('Foo');
-    expect(breadcrumbItem.last().text()).toBe('One');
-    expect(breadcrumbHeading.text()).toBe('Bar');
+    const heading = screen.getByRole('heading', { level: 2 });
+    expect(heading).toHaveTextContent('Bar');
   });
 
   test('renders breadcrumb items defined in breadcrumbConfig', () => {
@@ -52,15 +41,17 @@ describe('<ScreenHeader />', () => {
     ];
 
     routes.forEach(([location, crumbLength]) => {
-      breadcrumbWrapper = mountWithContexts(
+      const { unmount } = renderWithContexts(
         <MemoryRouter initialEntries={[location]}>
           <ScreenHeader streamType="all_activity" breadcrumbConfig={config} />
         </MemoryRouter>
       );
 
-      expect(breadcrumbWrapper.find('BreadcrumbItem')).toHaveLength(
-        crumbLength
-      );
+      const nav = screen.queryByRole('navigation', { name: 'Breadcrumb' });
+      const crumbs = nav ? within(nav).queryAllByRole('link') : [];
+      expect(crumbs).toHaveLength(crumbLength);
+
+      unmount();
     });
   });
 });

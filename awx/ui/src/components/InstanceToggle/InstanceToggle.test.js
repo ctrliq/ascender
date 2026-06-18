@@ -1,7 +1,7 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { InstancesAPI } from 'api';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import InstanceToggle from './InstanceToggle';
 
 jest.mock('../../api');
@@ -33,6 +33,9 @@ const mockInstance = {
   managed_by_policy: true,
 };
 
+// The PF Switch renders a hidden checkbox input with the aria-label
+const getToggle = () => screen.getByRole('checkbox', { name: 'Toggle instance' });
+
 describe('<InstanceToggle>', () => {
   const onToggle = jest.fn();
   const fetchInstances = jest.fn();
@@ -42,29 +45,26 @@ describe('<InstanceToggle>', () => {
   });
 
   test('should show toggle off', async () => {
-    const wrapper = mountWithContexts(
+    const { user } = renderWithContexts(
       <InstanceToggle
         instance={mockInstance}
         fetchInstances={fetchInstances}
         onToggle={onToggle}
       />
     );
-    expect(wrapper.find('Switch').prop('isChecked')).toEqual(true);
+    expect(getToggle()).toBeChecked();
 
-    await act(async () => {
-      wrapper.find('Switch').invoke('onChange')();
-    });
+    await user.click(getToggle());
     expect(InstancesAPI.update).toHaveBeenCalledWith(1, {
       enabled: false,
     });
-    wrapper.update();
-    expect(wrapper.find('Switch').prop('isChecked')).toEqual(false);
+    await waitFor(() => expect(getToggle()).not.toBeChecked());
     expect(onToggle).toHaveBeenCalledWith(false);
     expect(fetchInstances).toHaveBeenCalledTimes(1);
   });
 
   test('should show toggle on', async () => {
-    const wrapper = mountWithContexts(
+    const { user } = renderWithContexts(
       <InstanceToggle
         instance={{
           ...mockInstance,
@@ -74,16 +74,13 @@ describe('<InstanceToggle>', () => {
         fetchInstances={fetchInstances}
       />
     );
-    expect(wrapper.find('Switch').prop('isChecked')).toEqual(false);
+    expect(getToggle()).not.toBeChecked();
 
-    await act(async () => {
-      wrapper.find('Switch').invoke('onChange')();
-    });
+    await user.click(getToggle());
     expect(InstancesAPI.update).toHaveBeenCalledWith(1, {
       enabled: true,
     });
-    wrapper.update();
-    expect(wrapper.find('Switch').prop('isChecked')).toEqual(true);
+    await waitFor(() => expect(getToggle()).toBeChecked());
     expect(onToggle).toHaveBeenCalledWith(true);
     expect(fetchInstances).toHaveBeenCalledTimes(1);
   });
@@ -92,23 +89,19 @@ describe('<InstanceToggle>', () => {
     InstancesAPI.update.mockImplementation(() => {
       throw new Error('nope');
     });
-    const wrapper = mountWithContexts(
-      <InstanceToggle instance={mockInstance} />
+    const { user } = renderWithContexts(
+      <InstanceToggle instance={mockInstance} fetchInstances={fetchInstances} />
     );
-    expect(wrapper.find('Switch').prop('isChecked')).toEqual(true);
+    expect(getToggle()).toBeChecked();
 
-    await act(async () => {
-      wrapper.find('Switch').invoke('onChange')();
-    });
-    wrapper.update();
-    const modal = wrapper.find('AlertModal');
-    expect(modal).toHaveLength(1);
-    expect(modal.prop('isOpen')).toEqual(true);
+    await user.click(getToggle());
+    const dialog = await screen.findByRole('dialog');
+    expect(dialog).toBeInTheDocument();
+    expect(screen.getByText('Error!')).toBeInTheDocument();
 
-    act(() => {
-      modal.invoke('onClose')();
-    });
-    wrapper.update();
-    expect(wrapper.find('AlertModal')).toHaveLength(0);
+    await user.click(screen.getByRole('button', { name: 'Close' }));
+    await waitFor(() =>
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    );
   });
 });
