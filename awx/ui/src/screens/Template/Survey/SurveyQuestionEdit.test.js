@@ -1,8 +1,8 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import { act } from 'react-dom/test-utils';
 import { createMemoryHistory } from 'history';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { screen, waitFor, fireEvent } from '@testing-library/react';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import SurveyQuestionEdit from './SurveyQuestionEdit';
 
 const survey = {
@@ -28,10 +28,33 @@ const survey = {
   ],
 };
 
+function renderEdit(surveyData, history, updateSurvey) {
+  return renderWithContexts(
+    <Switch>
+      <Route path="/templates/:templateType/:id/survey/edit">
+        <SurveyQuestionEdit survey={surveyData} updateSurvey={updateSurvey} />
+      </Route>
+    </Switch>,
+    {
+      context: { router: { history } },
+    }
+  );
+}
+
+// Edit the form (pre-filled from the foo question) and submit.
+function editAndSubmit(variable) {
+  fireEvent.change(document.querySelector('#question-name'), {
+    target: { value: 'new question' },
+  });
+  fireEvent.change(document.querySelector('#question-variable'), {
+    target: { value: variable },
+  });
+  fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+}
+
 describe('<SurveyQuestionEdit />', () => {
   let updateSurvey;
   let history;
-  let wrapper;
 
   describe('with question_variable present', () => {
     beforeEach(() => {
@@ -41,40 +64,32 @@ describe('<SurveyQuestionEdit />', () => {
         ],
       });
       updateSurvey = jest.fn();
-      wrapper = mountWithContexts(
-        <Switch>
-          <Route path="/templates/:templateType/:id/survey/edit">
-            <SurveyQuestionEdit survey={survey} updateSurvey={updateSurvey} />
-          </Route>
-        </Switch>,
-        {
-          context: { router: { history } },
-        }
-      );
+      renderEdit(survey, history, updateSurvey);
     });
 
     test('should render form', () => {
-      expect(wrapper.find('SurveyQuestionForm')).toHaveLength(1);
+      expect(
+        screen.getByRole('button', { name: 'Save' })
+      ).toBeInTheDocument();
+      // form is pre-filled with the foo question
+      expect(document.querySelector('#question-variable')).toHaveValue('foo');
     });
 
-    test('should call updateSurvey', () => {
-      act(() => {
-        wrapper.find('SurveyQuestionForm').invoke('handleSubmit')({
-          question_name: 'new question',
-          variable: 'question',
-          type: 'text',
-        });
-      });
-      wrapper.update();
+    test('should call updateSurvey', async () => {
+      editAndSubmit('question');
 
-      expect(updateSurvey).toHaveBeenCalledWith([
-        {
+      await waitFor(() => expect(updateSurvey).toHaveBeenCalled());
+      const newSpec = updateSurvey.mock.calls[0][0];
+      // the edited question replaces spec[0], spec[1] is preserved
+      expect(newSpec).toHaveLength(2);
+      expect(newSpec[0]).toEqual(
+        expect.objectContaining({
           question_name: 'new question',
           variable: 'question',
           type: 'text',
-        },
-        survey.spec[1],
-      ]);
+        })
+      );
+      expect(newSpec[1]).toEqual(survey.spec[1]);
     });
 
     test('should set formError', async () => {
@@ -85,18 +100,9 @@ describe('<SurveyQuestionEdit />', () => {
         throw err;
       });
 
-      act(() => {
-        wrapper.find('SurveyQuestionForm').invoke('handleSubmit')({
-          question_name: 'new question',
-          variable: 'question',
-          type: 'text',
-        });
-      });
-      wrapper.update();
+      editAndSubmit('question');
 
-      expect(wrapper.find('SurveyQuestionForm').prop('submitError')).toEqual(
-        err
-      );
+      expect(await screen.findByText('oops')).toBeInTheDocument();
       global.console.error = realConsoleError;
     });
 
@@ -104,50 +110,36 @@ describe('<SurveyQuestionEdit />', () => {
       const realConsoleError = global.console.error;
       global.console.error = jest.fn();
 
-      act(() => {
-        wrapper.find('SurveyQuestionForm').invoke('handleSubmit')({
-          question_name: 'new question',
-          variable: 'bar',
-          type: 'text',
-        });
-      });
-      wrapper.update();
+      editAndSubmit('bar');
 
-      const err = wrapper.find('SurveyQuestionForm').prop('submitError');
-      expect(err.message).toEqual(
-        'Survey already contains a question with variable named “bar”'
-      );
+      expect(
+        await screen.findByText(
+          'Survey already contains a question with variable named “bar”'
+        )
+      ).toBeInTheDocument();
+      expect(updateSurvey).not.toHaveBeenCalled();
       global.console.error = realConsoleError;
     });
   });
 
   describe('without question_variable present', () => {
-    test('should redirect back to the survey list', () => {
+    test('should redirect back to the survey list', async () => {
       history = createMemoryHistory({
         initialEntries: ['/templates/job_templates/1/survey/edit'],
       });
       updateSurvey = jest.fn();
-      act(() => {
-        wrapper = mountWithContexts(
-          <Switch>
-            <Route path="/templates/:templateType/:id/survey/edit">
-              <SurveyQuestionEdit survey={survey} updateSurvey={updateSurvey} />
-            </Route>
-          </Switch>,
-          {
-            context: { router: { history } },
-          }
-        );
-      });
+      renderEdit(survey, history, updateSurvey);
 
-      expect(history.location.pathname).toEqual(
-        '/templates/job_templates/1/survey'
+      await waitFor(() =>
+        expect(history.location.pathname).toEqual(
+          '/templates/job_templates/1/survey'
+        )
       );
     });
   });
 
   test('should handle multiplechoice as array', () => {
-    const survey = {
+    const mcSurvey = {
       spec: [
         {
           question_name: 'What is the foo?',
@@ -168,26 +160,19 @@ describe('<SurveyQuestionEdit />', () => {
       ],
     });
     updateSurvey = jest.fn();
-    wrapper = mountWithContexts(
-      <Switch>
-        <Route path="/templates/:templateType/:id/survey/edit">
-          <SurveyQuestionEdit survey={survey} updateSurvey={updateSurvey} />
-        </Route>
-      </Switch>,
-      {
-        context: { router: { history } },
-      }
-    );
+    renderEdit(mcSurvey, history, updateSurvey);
 
-    const inputs = wrapper.find('MultipleChoiceField TextInput');
+    const inputs = document.querySelectorAll(
+      '#formattedChoices input[type="text"]'
+    );
     expect(inputs).toHaveLength(3);
-    expect(inputs.at(0).prop('value')).toEqual('one');
-    expect(inputs.at(1).prop('value')).toEqual('two');
-    expect(inputs.at(2).prop('value')).toEqual('three');
+    expect(inputs[0]).toHaveValue('one');
+    expect(inputs[1]).toHaveValue('two');
+    expect(inputs[2]).toHaveValue('three');
   });
 
   test('should handle multiplechoice as string', () => {
-    const survey = {
+    const mcSurvey = {
       spec: [
         {
           question_name: 'What is the foo?',
@@ -208,26 +193,19 @@ describe('<SurveyQuestionEdit />', () => {
       ],
     });
     updateSurvey = jest.fn();
-    wrapper = mountWithContexts(
-      <Switch>
-        <Route path="/templates/:templateType/:id/survey/edit">
-          <SurveyQuestionEdit survey={survey} updateSurvey={updateSurvey} />
-        </Route>
-      </Switch>,
-      {
-        context: { router: { history } },
-      }
-    );
+    renderEdit(mcSurvey, history, updateSurvey);
 
-    const inputs = wrapper.find('MultipleChoiceField TextInput');
+    const inputs = document.querySelectorAll(
+      '#formattedChoices input[type="text"]'
+    );
     expect(inputs).toHaveLength(3);
-    expect(inputs.at(0).prop('value')).toEqual('one');
-    expect(inputs.at(1).prop('value')).toEqual('two');
-    expect(inputs.at(2).prop('value')).toEqual('three');
+    expect(inputs[0]).toHaveValue('one');
+    expect(inputs[1]).toHaveValue('two');
+    expect(inputs[2]).toHaveValue('three');
   });
 
   test('should handle multiselect as array', () => {
-    const survey = {
+    const msSurvey = {
       spec: [
         {
           question_name: 'What is the foo?',
@@ -248,26 +226,19 @@ describe('<SurveyQuestionEdit />', () => {
       ],
     });
     updateSurvey = jest.fn();
-    wrapper = mountWithContexts(
-      <Switch>
-        <Route path="/templates/:templateType/:id/survey/edit">
-          <SurveyQuestionEdit survey={survey} updateSurvey={updateSurvey} />
-        </Route>
-      </Switch>,
-      {
-        context: { router: { history } },
-      }
-    );
+    renderEdit(msSurvey, history, updateSurvey);
 
-    const inputs = wrapper.find('MultipleChoiceField TextInput');
+    const inputs = document.querySelectorAll(
+      '#formattedChoices input[type="text"]'
+    );
     expect(inputs).toHaveLength(3);
-    expect(inputs.at(0).prop('value')).toEqual('one');
-    expect(inputs.at(1).prop('value')).toEqual('two');
-    expect(inputs.at(2).prop('value')).toEqual('three');
+    expect(inputs[0]).toHaveValue('one');
+    expect(inputs[1]).toHaveValue('two');
+    expect(inputs[2]).toHaveValue('three');
   });
 
   test('should handle multiselect as string', () => {
-    const survey = {
+    const msSurvey = {
       spec: [
         {
           question_name: 'What is the foo?',
@@ -288,21 +259,14 @@ describe('<SurveyQuestionEdit />', () => {
       ],
     });
     updateSurvey = jest.fn();
-    wrapper = mountWithContexts(
-      <Switch>
-        <Route path="/templates/:templateType/:id/survey/edit">
-          <SurveyQuestionEdit survey={survey} updateSurvey={updateSurvey} />
-        </Route>
-      </Switch>,
-      {
-        context: { router: { history } },
-      }
-    );
+    renderEdit(msSurvey, history, updateSurvey);
 
-    const inputs = wrapper.find('MultipleChoiceField TextInput');
+    const inputs = document.querySelectorAll(
+      '#formattedChoices input[type="text"]'
+    );
     expect(inputs).toHaveLength(3);
-    expect(inputs.at(0).prop('value')).toEqual('one');
-    expect(inputs.at(1).prop('value')).toEqual('two');
-    expect(inputs.at(2).prop('value')).toEqual('three');
+    expect(inputs[0]).toHaveValue('one');
+    expect(inputs[1]).toHaveValue('two');
+    expect(inputs[2]).toHaveValue('three');
   });
 });

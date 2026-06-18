@@ -1,9 +1,10 @@
 import React from 'react';
+import { fireEvent } from '@testing-library/react';
 import {
   WorkflowDispatchContext,
   WorkflowStateContext,
 } from 'contexts/Workflow';
-import { mountWithContexts } from '../../../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../../../testUtils/rtlContexts';
 import LinkAddModal from './LinkAddModal';
 
 const dispatch = jest.fn();
@@ -14,14 +15,14 @@ const workflowContext = {
 
 describe('LinkAddModal', () => {
   test('Confirm button dispatches as expected', () => {
-    const wrapper = mountWithContexts(
+    renderWithContexts(
       <WorkflowDispatchContext.Provider value={dispatch}>
         <WorkflowStateContext.Provider value={workflowContext}>
           <LinkAddModal />
         </WorkflowStateContext.Provider>
       </WorkflowDispatchContext.Provider>
     );
-    wrapper.find('button#link-confirm').simulate('click');
+    fireEvent.click(document.querySelector('button#link-confirm'));
     expect(dispatch).toHaveBeenCalledWith({
       type: 'CREATE_LINK',
       linkType: 'success',

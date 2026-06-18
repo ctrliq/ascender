@@ -1,23 +1,21 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, fireEvent } from '@testing-library/react';
 import {
   WorkflowDispatchContext,
   WorkflowStateContext,
 } from 'contexts/Workflow';
 import { JobTemplatesAPI, WorkflowJobTemplatesAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../../../testUtils/rtlContexts';
 import NodeViewModal from './NodeViewModal';
 
 jest.mock('../../../../../api');
 
-const waitForLoaded = async (wrapper) =>
-  waitForElement(
-    wrapper,
-    'NodeViewModal',
-    (el) => el.find('ContentLoading').length === 0
+// The modal renders into a body portal and finishes loading once the launch /
+// related-data requests resolve; wait for the spinner (role progressbar) to go
+// away before asserting on content.
+const waitForLoaded = async () =>
+  waitFor(() =>
+    expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
   );
 
 describe('NodeViewModal', () => {
@@ -52,7 +50,6 @@ describe('NodeViewModal', () => {
   });
 
   describe('Workflow job template node', () => {
-    let wrapper;
     const workflowContext = {
       nodeToView: {
         fullUnifiedJobTemplate: {
@@ -69,44 +66,56 @@ describe('NodeViewModal', () => {
       },
     };
 
-    beforeEach(async () => {
-      await act(async () => {
-        wrapper = mountWithContexts(
-          <WorkflowDispatchContext.Provider value={dispatch}>
-            <WorkflowStateContext.Provider value={workflowContext}>
-              <NodeViewModal />
-            </WorkflowStateContext.Provider>
-          </WorkflowDispatchContext.Provider>
-        );
-      });
-      waitForLoaded(wrapper);
-    });
-
     afterAll(() => {
       jest.resetAllMocks();
     });
 
-    test('should render prompt detail', () => {
-      expect(wrapper.find('PromptDetail').length).toBe(1);
+    const renderModal = () =>
+      renderWithContexts(
+        <WorkflowDispatchContext.Provider value={dispatch}>
+          <WorkflowStateContext.Provider value={workflowContext}>
+            <NodeViewModal />
+          </WorkflowStateContext.Provider>
+        </WorkflowDispatchContext.Provider>
+      );
+
+    test('should render prompt detail', async () => {
+      renderModal();
+      await waitForLoaded();
+      // PromptDetail renders the node name and a Convergence detail for a
+      // workflow node; assert both as a proxy for the component being present.
+      // ("Mock Node" also appears in the modal title, so target the detail.)
+      expect(
+        document.querySelector('[data-cy="prompt-detail-name-value"]')
+      ).toHaveTextContent('Mock Node');
+      expect(
+        document.querySelector('[data-cy="prompt-detail-convergence-value"]')
+      ).toBeInTheDocument();
     });
 
-    test('should fetch workflow template launch data', () => {
+    test('should fetch workflow template launch data', async () => {
+      renderModal();
+      await waitForLoaded();
       expect(JobTemplatesAPI.readLaunch).not.toHaveBeenCalled();
       expect(JobTemplatesAPI.readInstanceGroups).not.toHaveBeenCalled();
       expect(WorkflowJobTemplatesAPI.readLaunch).toHaveBeenCalledWith(1);
       expect(WorkflowJobTemplatesAPI.readWebhookKey).toHaveBeenCalledWith(1);
     });
 
-    test('Close button dispatches as expected', () => {
-      wrapper.find('TimesIcon').simulate('click');
+    test('Close button dispatches as expected', async () => {
+      renderModal();
+      await waitForLoaded();
+      fireEvent.click(screen.getByRole('button', { name: 'Close' }));
       expect(dispatch).toHaveBeenCalledWith({
         type: 'SET_NODE_TO_VIEW',
         value: null,
       });
     });
 
-    test('Edit button dispatches as expected', () => {
-      wrapper.find('button[aria-label="Edit Node"]').simulate('click');
+    test('Edit button dispatches as expected', async () => {
+      renderModal();
+      await waitForLoaded();
+      fireEvent.click(screen.getByRole('button', { name: 'Edit Node' }));
       expect(dispatch).toHaveBeenCalledWith({
         type: 'SET_NODE_TO_VIEW',
         value: null,
@@ -133,18 +142,14 @@ describe('NodeViewModal', () => {
     };
 
     test('should fetch job template launch data', async () => {
-      let wrapper;
-
-      await act(async () => {
-        wrapper = mountWithContexts(
-          <WorkflowDispatchContext.Provider value={dispatch}>
-            <WorkflowStateContext.Provider value={workflowContext}>
-              <NodeViewModal />
-            </WorkflowStateContext.Provider>
-          </WorkflowDispatchContext.Provider>
-        );
-      });
-      waitForLoaded(wrapper);
+      renderWithContexts(
+        <WorkflowDispatchContext.Provider value={dispatch}>
+          <WorkflowStateContext.Provider value={workflowContext}>
+            <NodeViewModal />
+          </WorkflowStateContext.Provider>
+        </WorkflowDispatchContext.Provider>
+      );
+      await waitForLoaded();
       expect(WorkflowJobTemplatesAPI.readLaunch).not.toHaveBeenCalled();
       expect(JobTemplatesAPI.readWebhookKey).not.toHaveBeenCalledWith();
       expect(JobTemplatesAPI.readLaunch).toHaveBeenCalledWith(1);
@@ -153,51 +158,48 @@ describe('NodeViewModal', () => {
     });
 
     test('should show content error when read call unsuccessful', async () => {
-      let wrapper;
       JobTemplatesAPI.readLaunch.mockRejectedValue(new Error({}));
-      await act(async () => {
-        wrapper = mountWithContexts(
-          <WorkflowDispatchContext.Provider value={dispatch}>
-            <WorkflowStateContext.Provider value={workflowContext}>
-              <NodeViewModal />
-            </WorkflowStateContext.Provider>
-          </WorkflowDispatchContext.Provider>
-        );
-      });
-      waitForLoaded(wrapper);
-      expect(wrapper.find('ContentError').length).toBe(1);
+      renderWithContexts(
+        <WorkflowDispatchContext.Provider value={dispatch}>
+          <WorkflowStateContext.Provider value={workflowContext}>
+            <NodeViewModal />
+          </WorkflowStateContext.Provider>
+        </WorkflowDispatchContext.Provider>
+      );
+      await waitForLoaded();
+      expect(
+        await screen.findByText('Something went wrong...')
+      ).toBeInTheDocument();
       jest.clearAllMocks();
     });
 
     test('edit button should be shown when readOnly prop is false', async () => {
-      let wrapper;
-      await act(async () => {
-        wrapper = mountWithContexts(
-          <WorkflowDispatchContext.Provider value={dispatch}>
-            <WorkflowStateContext.Provider value={workflowContext}>
-              <NodeViewModal />
-            </WorkflowStateContext.Provider>
-          </WorkflowDispatchContext.Provider>
-        );
-      });
-      waitForLoaded(wrapper);
-      expect(wrapper.find('Button#node-view-edit-button').length).toBe(1);
+      renderWithContexts(
+        <WorkflowDispatchContext.Provider value={dispatch}>
+          <WorkflowStateContext.Provider value={workflowContext}>
+            <NodeViewModal />
+          </WorkflowStateContext.Provider>
+        </WorkflowDispatchContext.Provider>
+      );
+      await waitForLoaded();
+      expect(
+        document.querySelector('button#node-view-edit-button')
+      ).toBeInTheDocument();
       jest.clearAllMocks();
     });
 
     test('edit button should be hidden when readOnly prop is true', async () => {
-      let wrapper;
-      await act(async () => {
-        wrapper = mountWithContexts(
-          <WorkflowDispatchContext.Provider value={dispatch}>
-            <WorkflowStateContext.Provider value={workflowContext}>
-              <NodeViewModal readOnly />
-            </WorkflowStateContext.Provider>
-          </WorkflowDispatchContext.Provider>
-        );
-      });
-      waitForLoaded(wrapper);
-      expect(wrapper.find('Button#node-view-edit-button').length).toBe(0);
+      renderWithContexts(
+        <WorkflowDispatchContext.Provider value={dispatch}>
+          <WorkflowStateContext.Provider value={workflowContext}>
+            <NodeViewModal readOnly />
+          </WorkflowStateContext.Provider>
+        </WorkflowDispatchContext.Provider>
+      );
+      await waitForLoaded();
+      expect(
+        document.querySelector('button#node-view-edit-button')
+      ).not.toBeInTheDocument();
       jest.clearAllMocks();
     });
   });
@@ -217,17 +219,14 @@ describe('NodeViewModal', () => {
     };
 
     test('should not fetch launch data', async () => {
-      let wrapper;
-      await act(async () => {
-        wrapper = mountWithContexts(
-          <WorkflowDispatchContext.Provider value={dispatch}>
-            <WorkflowStateContext.Provider value={workflowContext}>
-              <NodeViewModal />
-            </WorkflowStateContext.Provider>
-          </WorkflowDispatchContext.Provider>
-        );
-      });
-      waitForLoaded(wrapper);
+      renderWithContexts(
+        <WorkflowDispatchContext.Provider value={dispatch}>
+          <WorkflowStateContext.Provider value={workflowContext}>
+            <NodeViewModal />
+          </WorkflowStateContext.Provider>
+        </WorkflowDispatchContext.Provider>
+      );
+      await waitForLoaded();
       expect(WorkflowJobTemplatesAPI.readLaunch).not.toHaveBeenCalled();
       expect(JobTemplatesAPI.readLaunch).not.toHaveBeenCalled();
       expect(JobTemplatesAPI.readInstanceGroups).not.toHaveBeenCalled();
@@ -250,17 +249,14 @@ describe('NodeViewModal', () => {
     };
 
     test('should not fetch launch data', async () => {
-      let wrapper;
-      await act(async () => {
-        wrapper = mountWithContexts(
-          <WorkflowDispatchContext.Provider value={dispatch}>
-            <WorkflowStateContext.Provider value={workflowContext}>
-              <NodeViewModal />
-            </WorkflowStateContext.Provider>
-          </WorkflowDispatchContext.Provider>
-        );
-      });
-      waitForLoaded(wrapper);
+      renderWithContexts(
+        <WorkflowDispatchContext.Provider value={dispatch}>
+          <WorkflowStateContext.Provider value={workflowContext}>
+            <NodeViewModal />
+          </WorkflowStateContext.Provider>
+        </WorkflowDispatchContext.Provider>
+      );
+      await waitForLoaded();
       expect(WorkflowJobTemplatesAPI.readLaunch).not.toHaveBeenCalled();
       expect(JobTemplatesAPI.readLaunch).not.toHaveBeenCalled();
       expect(JobTemplatesAPI.readInstanceGroups).not.toHaveBeenCalled();
@@ -283,17 +279,14 @@ describe('NodeViewModal', () => {
     };
 
     test('should not fetch launch data', async () => {
-      let wrapper;
-      await act(async () => {
-        wrapper = mountWithContexts(
-          <WorkflowDispatchContext.Provider value={dispatch}>
-            <WorkflowStateContext.Provider value={workflowContext}>
-              <NodeViewModal />
-            </WorkflowStateContext.Provider>
-          </WorkflowDispatchContext.Provider>
-        );
-      });
-      waitForLoaded(wrapper);
+      renderWithContexts(
+        <WorkflowDispatchContext.Provider value={dispatch}>
+          <WorkflowStateContext.Provider value={workflowContext}>
+            <NodeViewModal />
+          </WorkflowStateContext.Provider>
+        </WorkflowDispatchContext.Provider>
+      );
+      await waitForLoaded();
       expect(WorkflowJobTemplatesAPI.readLaunch).not.toHaveBeenCalled();
       expect(JobTemplatesAPI.readLaunch).not.toHaveBeenCalled();
       expect(JobTemplatesAPI.readInstanceGroups).not.toHaveBeenCalled();
@@ -316,18 +309,17 @@ describe('NodeViewModal', () => {
     };
 
     test('should display "Any" Convergence label', async () => {
-      let wrapper;
-      await act(async () => {
-        wrapper = mountWithContexts(
-          <WorkflowDispatchContext.Provider value={dispatch}>
-            <WorkflowStateContext.Provider value={workflowContext}>
-              <NodeViewModal />
-            </WorkflowStateContext.Provider>
-          </WorkflowDispatchContext.Provider>
-        );
-      });
-      waitForLoaded(wrapper);
-      expect(wrapper.find('Detail[label="Convergence"] dd').text()).toBe('Any');
+      renderWithContexts(
+        <WorkflowDispatchContext.Provider value={dispatch}>
+          <WorkflowStateContext.Provider value={workflowContext}>
+            <NodeViewModal />
+          </WorkflowStateContext.Provider>
+        </WorkflowDispatchContext.Provider>
+      );
+      await waitForLoaded();
+      expect(
+        document.querySelector('[data-cy="prompt-detail-convergence-value"]')
+      ).toHaveTextContent('Any');
       jest.clearAllMocks();
     });
   });

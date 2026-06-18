@@ -1,5 +1,5 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, fireEvent, within } from '@testing-library/react';
 import { Formik } from 'formik';
 import {
   InventorySourcesAPI,
@@ -8,7 +8,7 @@ import {
   WorkflowJobTemplatesAPI,
 } from 'api';
 import { useUserProfile } from 'contexts/Config';
-import { mountWithContexts } from '../../../../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../../../../testUtils/rtlContexts';
 
 import NodeTypeStep from './NodeTypeStep';
 
@@ -17,19 +17,27 @@ jest.mock('../../../../../../api/models/JobTemplates');
 jest.mock('../../../../../../api/models/Projects');
 jest.mock('../../../../../../api/models/WorkflowJobTemplates');
 
+// AnsibleSelect renders <select aria-label="Select Input">.
+function getNodeTypeSelect() {
+  return screen.getByRole('combobox', { name: 'Select Input' });
+}
+
 describe('NodeTypeStep', () => {
   beforeEach(() => {
-    useUserProfile.mockImplementation(() => {
-      return {
-        isSuperUser: true,
-        isSystemAuditor: false,
-        isOrgAdmin: false,
-        isNotificationAdmin: false,
-        isExecEnvAdmin: false,
-      };
-    });
+    useUserProfile.mockImplementation(() => ({
+      isSuperUser: true,
+      isSystemAuditor: false,
+      isOrgAdmin: false,
+      isNotificationAdmin: false,
+      isExecEnvAdmin: false,
+    }));
   });
-  beforeAll(() => {
+  // jest is configured with resetMocks:true (package.json), which clears mock
+  // implementations before every test. The original enzyme suite set these in
+  // beforeAll and only asserted that the right list component mounted (never its
+  // rows), so the reset went unnoticed. Here we assert rows render, so the
+  // resolved values must be (re)applied in beforeEach to survive the reset.
+  beforeEach(() => {
     JobTemplatesAPI.read.mockResolvedValue({
       data: {
         count: 1,
@@ -122,146 +130,121 @@ describe('NodeTypeStep', () => {
   afterAll(() => {
     jest.clearAllMocks();
   });
+
   test('It shows the job template list by default', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik initialValues={{ nodeType: 'job_template' }}>
-          <NodeTypeStep />
-        </Formik>
-      );
-    });
-    wrapper.update();
-    expect(wrapper.find('AnsibleSelect').prop('value')).toBe('job_template');
-    expect(wrapper.find('JobTemplatesList').length).toBe(1);
+    renderWithContexts(
+      <Formik initialValues={{ nodeType: 'job_template' }}>
+        <NodeTypeStep />
+      </Formik>
+    );
+    expect(getNodeTypeSelect()).toHaveValue('job_template');
+    expect(
+      await screen.findByRole('row', { name: /Test Job Template/ })
+    ).toBeInTheDocument();
   });
+
   test('It shows the project list when node type is project', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik initialValues={{ nodeType: 'project' }}>
-          <NodeTypeStep />
-        </Formik>
-      );
-    });
-    wrapper.update();
-    expect(wrapper.find('AnsibleSelect').prop('value')).toBe('project');
-    expect(wrapper.find('ProjectsList').length).toBe(1);
+    renderWithContexts(
+      <Formik initialValues={{ nodeType: 'project' }}>
+        <NodeTypeStep />
+      </Formik>
+    );
+    expect(getNodeTypeSelect()).toHaveValue('project');
+    expect(
+      await screen.findByRole('row', { name: /Test Project/ })
+    ).toBeInTheDocument();
   });
+
   test('It shows the inventory source list when node type is inventory source', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik initialValues={{ nodeType: 'inventory_source' }}>
-          <NodeTypeStep />
-        </Formik>
-      );
-    });
-    wrapper.update();
-    expect(wrapper.find('AnsibleSelect').prop('value')).toBe(
-      'inventory_source'
+    renderWithContexts(
+      <Formik initialValues={{ nodeType: 'inventory_source' }}>
+        <NodeTypeStep />
+      </Formik>
     );
-    expect(wrapper.find('InventorySourcesList').length).toBe(1);
+    expect(getNodeTypeSelect()).toHaveValue('inventory_source');
+    expect(
+      await screen.findByRole('row', { name: /Test Inventory Source/ })
+    ).toBeInTheDocument();
   });
+
   test('It shows the workflow job template list when node type is workflow job template', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik initialValues={{ nodeType: 'workflow_job_template' }}>
-          <NodeTypeStep />
-        </Formik>
-      );
-    });
-    wrapper.update();
-    expect(wrapper.find('AnsibleSelect').prop('value')).toBe(
-      'workflow_job_template'
+    renderWithContexts(
+      <Formik initialValues={{ nodeType: 'workflow_job_template' }}>
+        <NodeTypeStep />
+      </Formik>
     );
-    expect(wrapper.find('WorkflowJobTemplatesList').length).toBe(1);
+    expect(getNodeTypeSelect()).toHaveValue('workflow_job_template');
+    expect(
+      await screen.findByRole('row', { name: /Test Workflow Job Template/ })
+    ).toBeInTheDocument();
   });
+
   test('It shows the approval form fields when node type is approval', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik
-          initialValues={{
-            nodeType: 'workflow_approval_template',
-            approvalName: '',
-            approvalDescription: '',
-            timeoutMinutes: 0,
-            timeoutSeconds: 0,
-            convergence: 'any',
-          }}
-        >
-          <NodeTypeStep />
-        </Formik>
-      );
-    });
-    wrapper.update();
-    expect(wrapper.find('AnsibleSelect').prop('value')).toBe(
-      'workflow_approval_template'
+    renderWithContexts(
+      <Formik
+        initialValues={{
+          nodeType: 'workflow_approval_template',
+          approvalName: '',
+          approvalDescription: '',
+          timeoutMinutes: 0,
+          timeoutSeconds: 0,
+          convergence: 'any',
+        }}
+      >
+        <NodeTypeStep />
+      </Formik>
     );
-    expect(wrapper.find('FormField[label="Name"]').length).toBe(1);
-    expect(wrapper.find('FormField[label="Description"]').length).toBe(1);
-    expect(wrapper.find('input[name="timeoutMinutes"]').length).toBe(1);
-    expect(wrapper.find('input[name="timeoutSeconds"]').length).toBe(1);
 
-    await act(async () => {
-      wrapper.find('input#approval-name').simulate('change', {
-        target: { value: 'Test Approval', name: 'approvalName' },
-      });
-      wrapper.find('input#approval-description').simulate('change', {
-        target: {
-          value: 'Test Approval Description',
-          name: 'approvalDescription',
-        },
-      });
-      wrapper.find('input[name="timeoutMinutes"]').simulate('change', {
-        target: { value: 5, name: 'timeoutMinutes' },
-      });
-      wrapper.find('input[name="timeoutSeconds"]').simulate('change', {
-        target: { value: 30, name: 'timeoutSeconds' },
-      });
+    expect(getNodeTypeSelect()).toHaveValue('workflow_approval_template');
+    const nameInput = document.querySelector('input#approval-name');
+    const descriptionInput = document.querySelector('input#approval-description');
+    const minutesInput = screen.getByLabelText('Timeout minutes');
+    const secondsInput = screen.getByLabelText('Timeout seconds');
+    expect(nameInput).toBeInTheDocument();
+    expect(descriptionInput).toBeInTheDocument();
+    expect(minutesInput).toBeInTheDocument();
+    expect(secondsInput).toBeInTheDocument();
+
+    fireEvent.change(nameInput, {
+      target: { value: 'Test Approval', name: 'approvalName' },
+    });
+    fireEvent.change(descriptionInput, {
+      target: {
+        value: 'Test Approval Description',
+        name: 'approvalDescription',
+      },
+    });
+    fireEvent.change(minutesInput, {
+      target: { value: 5, name: 'timeoutMinutes' },
+    });
+    fireEvent.change(secondsInput, {
+      target: { value: 30, name: 'timeoutSeconds' },
     });
 
-    wrapper.update();
-
-    expect(wrapper.find('input#approval-name').prop('value')).toBe(
-      'Test Approval'
-    );
-    expect(wrapper.find('input#approval-description').prop('value')).toBe(
-      'Test Approval Description'
-    );
-    expect(wrapper.find('input[name="timeoutMinutes"]').prop('value')).toBe(5);
-    expect(wrapper.find('input[name="timeoutSeconds"]').prop('value')).toBe(30);
+    await waitFor(() => expect(nameInput).toHaveValue('Test Approval'));
+    expect(descriptionInput).toHaveValue('Test Approval Description');
+    expect(minutesInput).toHaveValue(5);
+    expect(secondsInput).toHaveValue(30);
   });
 
   test('it does not show management job as a choice for non system admin', async () => {
-    useUserProfile.mockImplementation(() => {
-      return {
-        isSuperUser: false,
-        isSystemAuditor: false,
-        isOrgAdmin: true,
-        isNotificationAdmin: false,
-        isExecEnvAdmin: false,
-      };
-    });
+    useUserProfile.mockImplementation(() => ({
+      isSuperUser: false,
+      isSystemAuditor: false,
+      isOrgAdmin: true,
+      isNotificationAdmin: false,
+      isExecEnvAdmin: false,
+    }));
 
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik initialValues={{ nodeType: 'workflow_job_template' }}>
-          <NodeTypeStep />
-        </Formik>
-      );
-    });
-    wrapper.update();
-    expect(wrapper.find('AnsibleSelect').prop('data').length).toBe(5);
-    expect(
-      wrapper
-        .find('AnsibleSelect')
-        .prop('data')
-        .map((item) => item.key)
-    ).toEqual([
+    renderWithContexts(
+      <Formik initialValues={{ nodeType: 'workflow_job_template' }}>
+        <NodeTypeStep />
+      </Formik>
+    );
+    await screen.findByRole('row', { name: /Test Workflow Job Template/ });
+    const options = within(getNodeTypeSelect()).getAllByRole('option');
+    expect(options).toHaveLength(5);
+    expect(options.map((opt) => opt.value)).toEqual([
       'workflow_approval_template',
       'inventory_source',
       'job_template',
@@ -271,22 +254,15 @@ describe('NodeTypeStep', () => {
   });
 
   test('it does show management job as a choice for system admin', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik initialValues={{ nodeType: 'workflow_job_template' }}>
-          <NodeTypeStep />
-        </Formik>
-      );
-    });
-    wrapper.update();
-    expect(wrapper.find('AnsibleSelect').prop('data').length).toBe(6);
-    expect(
-      wrapper
-        .find('AnsibleSelect')
-        .prop('data')
-        .map((item) => item.key)
-    ).toEqual([
+    renderWithContexts(
+      <Formik initialValues={{ nodeType: 'workflow_job_template' }}>
+        <NodeTypeStep />
+      </Formik>
+    );
+    await screen.findByRole('row', { name: /Test Workflow Job Template/ });
+    const options = within(getNodeTypeSelect()).getAllByRole('option');
+    expect(options).toHaveLength(6);
+    expect(options.map((opt) => opt.value)).toEqual([
       'workflow_approval_template',
       'inventory_source',
       'job_template',

@@ -1,20 +1,23 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, fireEvent } from '@testing-library/react';
 import {
   WorkflowDispatchContext,
   WorkflowStateContext,
 } from 'contexts/Workflow';
-import { mountWithContexts } from '../../../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../../../testUtils/rtlContexts';
 import LinkModal from './LinkModal';
 
 const dispatch = jest.fn();
 const onConfirm = jest.fn();
-let wrapper;
 
 describe('LinkModal', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   describe('Adding new link', () => {
-    beforeAll(() => {
-      wrapper = mountWithContexts(
+    beforeEach(() => {
+      renderWithContexts(
         <WorkflowDispatchContext.Provider value={dispatch}>
           <WorkflowStateContext.Provider
             value={{
@@ -28,35 +31,36 @@ describe('LinkModal', () => {
     });
 
     test('Dropdown defaults to success when adding new link', () => {
-      expect(wrapper.find('AnsibleSelect').prop('value')).toBe('success');
+      // AnsibleSelect renders a native <select id="link-select">.
+      expect(document.querySelector('#link-select').value).toBe('success');
     });
 
     test('Cancel button dispatches as expected', () => {
-      wrapper.find('button#link-cancel').simulate('click');
+      fireEvent.click(document.querySelector('button#link-cancel'));
       expect(dispatch).toHaveBeenCalledWith({
         type: 'CANCEL_LINK_MODAL',
       });
     });
 
     test('Close button dispatches as expected', () => {
-      wrapper.find('TimesIcon').simulate('click');
+      fireEvent.click(screen.getByRole('button', { name: 'Close' }));
       expect(dispatch).toHaveBeenCalledWith({
         type: 'CANCEL_LINK_MODAL',
       });
     });
 
     test('Confirm button passes callback correct link type after changing dropdown', () => {
-      act(() => {
-        wrapper.find('AnsibleSelect').prop('onChange')(null, 'always');
+      fireEvent.change(document.querySelector('#link-select'), {
+        target: { value: 'always' },
       });
-      wrapper.find('button#link-confirm').simulate('click');
+      fireEvent.click(document.querySelector('button#link-confirm'));
       expect(onConfirm).toHaveBeenCalledWith('always');
     });
   });
 
   describe('Editing existing link', () => {
     test('Dropdown defaults to existing link type when editing link', () => {
-      wrapper = mountWithContexts(
+      renderWithContexts(
         <WorkflowDispatchContext.Provider value={dispatch}>
           <WorkflowStateContext.Provider
             value={{
@@ -75,7 +79,7 @@ describe('LinkModal', () => {
           </WorkflowStateContext.Provider>
         </WorkflowDispatchContext.Provider>
       );
-      expect(wrapper.find('AnsibleSelect').prop('value')).toBe('failure');
+      expect(document.querySelector('#link-select').value).toBe('failure');
     });
   });
 });

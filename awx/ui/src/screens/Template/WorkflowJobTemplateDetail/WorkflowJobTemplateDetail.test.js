@@ -1,17 +1,22 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
-import { createMemoryHistory } from 'history';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, within } from '@testing-library/react';
 
 import { WorkflowJobTemplateNodesAPI } from 'api';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import {
+  renderWithContexts,
+  assertDetail,
+} from '../../../../testUtils/rtlContexts';
 import WorkflowJobTemplateDetail from './WorkflowJobTemplateDetail';
 
 jest.mock('../../../api');
 
+// Detail renders <div><dt>label</dt><dd>value</dd></div>; return the dd cell for
+// a given Detail label so tests can assert on its contents.
+function getDetailValue(label) {
+  return screen.getByText(label).nextElementSibling;
+}
+
 describe('<WorkflowJobTemplateDetail/>', () => {
-  let wrapper;
-  let history;
   const template = {
     id: 1,
     name: 'WFJT Template',
@@ -47,177 +52,103 @@ describe('<WorkflowJobTemplateDetail/>', () => {
     limit: 'servers',
   };
 
-  beforeEach(async () => {
+  beforeEach(() => {
     WorkflowJobTemplateNodesAPI.read.mockResolvedValue({ data: { count: 0 } });
-    history = createMemoryHistory({
-      initialEntries: ['/templates/workflow_job_template/1/details'],
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Route
-          path="/templates/workflow_job_template/:id/details"
-          component={() => (
-            <WorkflowJobTemplateDetail
-              template={template}
-              hasContentLoading={false}
-              onSetContentLoading={() => {}}
-            />
-          )}
-        />,
-        {
-          context: {
-            router: {
-              history,
-              route: {
-                location: history.location,
-                match: {
-                  params: { id: 1 },
-                  path: '/templates/workflow_job_template/1/details',
-                  url: '/templates/workflow_job_template/1/details',
-                },
-              },
-            },
-          },
-        }
-      );
-    });
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  const renderDetail = (tmpl = template) =>
+    renderWithContexts(<WorkflowJobTemplateDetail template={tmpl} />);
+
   test('renders successfully', () => {
-    expect(wrapper.find(WorkflowJobTemplateDetail).length).toBe(1);
+    renderDetail();
+    expect(screen.getByText('WFJT Template')).toBeInTheDocument();
   });
 
   test('expect detail fields to render properly', () => {
-    const renderedValues = [
-      {
-        element: 'UserDateDetail[label="Created"]',
-        prop: 'date',
-        value: '2015-07-07T17:21:26.429745Z',
-      },
-      {
-        element: 'UserDateDetail[label="Modified"]',
-        prop: 'date',
-        value: '2019-08-11T19:47:37.980466Z',
-      },
-      {
-        element: 'Detail[label="Webhook URL"]',
-        prop: 'value',
-        value: 'http://localhost/api/v2/workflow_job_templates/45/github/',
-      },
-      {
-        element: 'Detail[label="Source Control Branch"]',
-        prop: 'value',
-        value: 'main',
-      },
-      {
-        element: 'Detail[label="Limit"]',
-        prop: 'value',
-        value: 'servers',
-      },
-      {
-        element: "Detail[label='Webhook Service']",
-        prop: 'value',
-        value: 'Github',
-      },
-      {
-        element: 'Detail[label="Webhook Key"]',
-        prop: 'value',
-        value: 'Foo webhook key',
-      },
-      {
-        element: 'Detail[label="Name"]',
-        value: 'WFJT Template',
-        prop: 'value',
-      },
-      {
-        element: 'Detail[label="Description"]',
-        prop: 'value',
-        value: 'Yo, it is a wfjt template!',
-      },
-      {
-        element: 'Detail[label="Job Type"]',
-        prop: 'value',
-        value: 'Workflow Job Template',
-      },
-    ];
+    renderDetail();
 
-    const organization = wrapper
-      .find('Detail[label="Organization"]')
-      .find('.pf-c-label__content');
-    const inventory = wrapper.find('Detail[label="Inventory"]').find('a');
-    const labels = wrapper
-      .find('Detail[label="Labels"]')
-      .find('Chip[component="div"]');
-    const sparkline = wrapper.find('Sparkline Link');
+    assertDetail('Created', '7/7/2015');
+    assertDetail('Modified', '8/11/2019');
+    assertDetail(
+      'Webhook URL',
+      'http://localhost/api/v2/workflow_job_templates/45/github/'
+    );
+    assertDetail('Source Control Branch', 'main');
+    assertDetail('Limit', 'servers');
+    assertDetail('Webhook Service', 'Github');
+    assertDetail('Webhook Key', 'Foo webhook key');
+    assertDetail('Name', 'WFJT Template');
+    assertDetail('Description', 'Yo, it is a wfjt template!');
+    assertDetail('Job Type', 'Workflow Job Template');
 
-    expect(organization.text()).toBe('Org');
-    expect(inventory.text()).toEqual('Bar');
-    expect(labels.length).toBe(3);
-    expect(sparkline.length).toBe(3);
+    // Organization renders a label inside a link
+    const organization = getDetailValue('Organization');
+    expect(organization).toHaveTextContent('Org');
+    // Inventory renders a link to the inventory's name
+    const inventory = getDetailValue('Inventory');
+    expect(inventory).toHaveTextContent('Bar');
 
-    const assertValue = (value) => {
-      expect(wrapper.find(`${value.element}`).prop(`${value.prop}`)).toEqual(
-        `${value.value}`
-      );
-    };
+    // three labels render as chips
+    const labels = getDetailValue('Labels');
+    expect(within(labels).getByText('Label 1')).toBeInTheDocument();
+    expect(within(labels).getByText('Label 2')).toBeInTheDocument();
+    expect(within(labels).getByText('Label 3')).toBeInTheDocument();
 
-    renderedValues.map((value) => assertValue(value));
+    // three recent jobs render as sparkline links
+    const activity = getDetailValue('Activity');
+    expect(within(activity).getAllByRole('link')).toHaveLength(3);
   });
 
   test('should have proper number of delete detail requests', async () => {
-    expect(
-      wrapper.find('DeleteButton').prop('deleteDetailsRequests')
-    ).toHaveLength(1);
+    const { user } = renderDetail();
+    // template() builds exactly one delete-details request
+    // (WorkflowJobTemplateNodesAPI.read); opening the delete modal fires it once.
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await waitFor(() =>
+      expect(WorkflowJobTemplateNodesAPI.read).toHaveBeenCalledTimes(1)
+    );
   });
 
   test('link out resource have the correct url', () => {
-    const inventory = wrapper.find('Detail[label="Inventory"]').find('Link');
-    const organization = wrapper
-      .find('Detail[label="Organization"]')
-      .find('Link');
-    expect(inventory.prop('to')).toEqual('/inventories/inventory/1/details');
-    expect(organization.prop('to')).toEqual('/organizations/1/details');
+    renderDetail();
+    const inventory = within(getDetailValue('Inventory')).getByRole('link');
+    const organization = within(getDetailValue('Organization')).getByRole(
+      'link'
+    );
+    expect(inventory).toHaveAttribute(
+      'href',
+      '/inventories/inventory/1/details'
+    );
+    expect(organization).toHaveAttribute('href', '/organizations/1/details');
   });
 
-  test('should not load Activity', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <WorkflowJobTemplateDetail
-          template={{
-            ...template,
-            summary_fields: {
-              ...template.summary_fields,
-              recent_jobs: [],
-            },
-          }}
-          hasContentLoading={false}
-          onSetContentLoading={() => {}}
-        />
-      );
+  test('should not load Activity', () => {
+    renderDetail({
+      ...template,
+      summary_fields: {
+        ...template.summary_fields,
+        recent_jobs: [],
+      },
     });
-    const activity_detail = wrapper.find(`Detail[label="Activity"]`).at(0);
-    expect(activity_detail.prop('isEmpty')).toEqual(true);
+    // isEmpty Activity detail renders nothing
+    expect(screen.queryByText('Activity')).not.toBeInTheDocument();
   });
 
-  test('should not load Labels', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <WorkflowJobTemplateDetail
-          template={{
-            ...template,
-            summary_fields: {
-              ...template.summary_fields,
-              labels: {
-                results: [],
-              },
-            },
-          }}
-          hasContentLoading={false}
-          onSetContentLoading={() => {}}
-        />
-      );
+  test('should not load Labels', () => {
+    renderDetail({
+      ...template,
+      summary_fields: {
+        ...template.summary_fields,
+        labels: {
+          results: [],
+        },
+      },
     });
-    const labels_detail = wrapper.find(`Detail[label="Labels"]`).at(0);
-    expect(labels_detail.prop('isEmpty')).toEqual(true);
+    // isEmpty Labels detail renders nothing
+    expect(screen.queryByText('Labels')).not.toBeInTheDocument();
   });
 });

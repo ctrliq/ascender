@@ -1,6 +1,6 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
-import { mountWithContexts } from '../../../../../../../testUtils/enzymeHelpers';
+import { screen, waitFor, fireEvent, within } from '@testing-library/react';
+import { renderWithContexts } from '../../../../../../../testUtils/rtlContexts';
 import { SystemJobTemplatesAPI } from '../../../../../../api';
 import SystemJobTemplatesList from './SystemJobTemplatesList';
 
@@ -37,10 +37,10 @@ const nodeResource = {
 const onUpdateNodeResource = jest.fn();
 
 describe('SystemJobTemplatesList', () => {
-  let wrapper;
   afterEach(() => {
-    wrapper.unmount();
+    jest.clearAllMocks();
   });
+
   test('Row selected when nodeResource id matches row id and clicking new row makes expected callback', async () => {
     SystemJobTemplatesAPI.read.mockResolvedValueOnce({
       data: {
@@ -104,26 +104,23 @@ describe('SystemJobTemplatesList', () => {
         related_search_fields: [],
       },
     });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SystemJobTemplatesList
-          nodeResource={nodeResource}
-          onUpdateNodeResource={onUpdateNodeResource}
-        />
-      );
-    });
-    wrapper.update();
-    expect(
-      wrapper.find('CheckboxListItem[name="Cleanup Job Details"]').props()
-        .isSelected
-    ).toBe(true);
-    expect(
-      wrapper.find('CheckboxListItem[name="Cleanup Activity Stream"]').props()
-        .isSelected
-    ).toBe(false);
-    wrapper
-      .find('CheckboxListItem[name="Cleanup Activity Stream"]')
-      .prop('onSelect')();
+    renderWithContexts(
+      <SystemJobTemplatesList
+        nodeResource={nodeResource}
+        onUpdateNodeResource={onUpdateNodeResource}
+      />
+    );
+
+    await waitFor(() =>
+      expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
+    );
+
+    const row1 = screen.getByRole('row', { name: /Cleanup Job Details/ });
+    const row2 = screen.getByRole('row', { name: /Cleanup Activity Stream/ });
+    expect(within(row1).getByRole('radio')).toBeChecked();
+    expect(within(row2).getByRole('radio')).not.toBeChecked();
+
+    fireEvent.click(within(row2).getByRole('radio'));
     expect(onUpdateNodeResource).toHaveBeenCalledWith({
       id: 2,
       type: 'system_job_template',
@@ -170,17 +167,16 @@ describe('SystemJobTemplatesList', () => {
       job_type: 'cleanup_activitystream',
     });
   });
+
   test('Error shown when read() request errors', async () => {
     SystemJobTemplatesAPI.read.mockRejectedValue(new Error());
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SystemJobTemplatesList
-          nodeResource={nodeResource}
-          onUpdateNodeResource={onUpdateNodeResource}
-        />
-      );
-    });
-    wrapper.update();
-    expect(wrapper.find('ErrorDetail').length).toBe(1);
+    renderWithContexts(
+      <SystemJobTemplatesList
+        nodeResource={nodeResource}
+        onUpdateNodeResource={onUpdateNodeResource}
+      />
+    );
+
+    expect(await screen.findByText(/Something went wrong/)).toBeInTheDocument();
   });
 });

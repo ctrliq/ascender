@@ -1,16 +1,21 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
 import {
   WorkflowDispatchContext,
   WorkflowStateContext,
 } from 'contexts/Workflow';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../../../testUtils/rtlContexts';
 import NodeAddModal from './NodeAddModal';
 
 const dispatch = jest.fn();
+
+// Capture the onSave prop NodeAddModal hands to NodeModal so the test can
+// invoke it directly, mirroring the enzyme `wrapper.find('NodeModal').prop`
+// access. The real NodeModal wizard is not exercised here.
+let capturedOnSave;
+jest.mock('./NodeModal', () => (props) => {
+  capturedOnSave = props.onSave;
+  return null;
+});
 
 const nodeResource = {
   id: 448,
@@ -27,24 +32,15 @@ const workflowContext = {
 
 describe('NodeAddModal', () => {
   test('Node modal confirmation dispatches as expected', async () => {
-    const wrapper = mountWithContexts(
+    renderWithContexts(
       <WorkflowDispatchContext.Provider value={dispatch}>
         <WorkflowStateContext.Provider value={workflowContext}>
           <NodeAddModal onSave={() => {}} askLinkType title="Add Node" />
         </WorkflowStateContext.Provider>
       </WorkflowDispatchContext.Provider>
     );
-    waitForElement(
-      wrapper,
-      'WizardNavItem[content="ContentLoading"]',
-      (el) => el.length === 0
-    );
-    await act(async () => {
-      wrapper.find('NodeModal').prop('onSave')(
-        { linkType: 'success', nodeResource },
-        {}
-      );
-    });
+
+    capturedOnSave({ linkType: 'success', nodeResource }, {});
 
     expect(dispatch).toHaveBeenCalledWith({
       node: {

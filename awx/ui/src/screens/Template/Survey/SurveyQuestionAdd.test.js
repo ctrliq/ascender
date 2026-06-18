@@ -1,6 +1,6 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { screen, waitFor, fireEvent } from '@testing-library/react';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import SurveyQuestionAdd from './SurveyQuestionAdd';
 
 const survey = {
@@ -26,6 +26,17 @@ const survey = {
   ],
 };
 
+// Fill in a new text question and submit the real form.
+function addQuestion(variable = 'question') {
+  fireEvent.change(document.querySelector('#question-name'), {
+    target: { value: 'new question' },
+  });
+  fireEvent.change(document.querySelector('#question-variable'), {
+    target: { value: variable },
+  });
+  fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+}
+
 describe('<SurveyQuestionAdd />', () => {
   let updateSurvey;
 
@@ -34,41 +45,36 @@ describe('<SurveyQuestionAdd />', () => {
   });
 
   test('should render form', () => {
-    let wrapper;
-    act(() => {
-      wrapper = mountWithContexts(
-        <SurveyQuestionAdd survey={survey} updateSurvey={updateSurvey} />
-      );
-    });
+    renderWithContexts(
+      <SurveyQuestionAdd survey={survey} updateSurvey={updateSurvey} />
+    );
 
-    expect(wrapper.find('SurveyQuestionForm')).toHaveLength(1);
+    expect(
+      screen.getByRole('button', { name: 'Save' })
+    ).toBeInTheDocument();
+    expect(document.querySelector('#question-name')).toBeInTheDocument();
   });
 
-  test('should call updateSurvey', () => {
-    let wrapper;
-    act(() => {
-      wrapper = mountWithContexts(
-        <SurveyQuestionAdd survey={survey} updateSurvey={updateSurvey} />
-      );
-    });
+  test('should call updateSurvey', async () => {
+    renderWithContexts(
+      <SurveyQuestionAdd survey={survey} updateSurvey={updateSurvey} />
+    );
 
-    act(() => {
-      wrapper.find('SurveyQuestionForm').invoke('handleSubmit')({
+    addQuestion();
+
+    await waitFor(() => expect(updateSurvey).toHaveBeenCalled());
+    const newSpec = updateSurvey.mock.calls[0][0];
+    // existing questions are preserved, new question is appended
+    expect(newSpec).toHaveLength(3);
+    expect(newSpec[0]).toEqual(survey.spec[0]);
+    expect(newSpec[1]).toEqual(survey.spec[1]);
+    expect(newSpec[2]).toEqual(
+      expect.objectContaining({
         question_name: 'new question',
         variable: 'question',
         type: 'text',
-      });
-    });
-    wrapper.update();
-
-    expect(updateSurvey).toHaveBeenCalledWith([
-      ...survey.spec,
-      {
-        question_name: 'new question',
-        variable: 'question',
-        type: 'text',
-      },
-    ]);
+      })
+    );
   });
 
   test('should set formError', async () => {
@@ -78,49 +84,32 @@ describe('<SurveyQuestionAdd />', () => {
     updateSurvey.mockImplementation(() => {
       throw err;
     });
-    let wrapper;
-    act(() => {
-      wrapper = mountWithContexts(
-        <SurveyQuestionAdd survey={survey} updateSurvey={updateSurvey} />
-      );
-    });
+    renderWithContexts(
+      <SurveyQuestionAdd survey={survey} updateSurvey={updateSurvey} />
+    );
 
-    act(() => {
-      wrapper.find('SurveyQuestionForm').invoke('handleSubmit')({
-        question_name: 'new question',
-        variable: 'question',
-        type: 'text',
-      });
-    });
-    wrapper.update();
+    addQuestion();
 
-    expect(wrapper.find('SurveyQuestionForm').prop('submitError')).toEqual(err);
+    // FormSubmitError surfaces the thrown error message in the form
+    expect(await screen.findByText('oops')).toBeInTheDocument();
     global.console.error = realConsoleError;
   });
 
   test('should generate error for duplicate variable names', async () => {
     const realConsoleError = global.console.error;
     global.console.error = jest.fn();
-    let wrapper;
-    act(() => {
-      wrapper = mountWithContexts(
-        <SurveyQuestionAdd survey={survey} updateSurvey={updateSurvey} />
-      );
-    });
-
-    act(() => {
-      wrapper.find('SurveyQuestionForm').invoke('handleSubmit')({
-        question_name: 'new question',
-        variable: 'foo',
-        type: 'text',
-      });
-    });
-    wrapper.update();
-
-    const err = wrapper.find('SurveyQuestionForm').prop('submitError');
-    expect(err.message).toEqual(
-      'Survey already contains a question with variable named “foo”'
+    renderWithContexts(
+      <SurveyQuestionAdd survey={survey} updateSurvey={updateSurvey} />
     );
+
+    addQuestion('foo');
+
+    expect(
+      await screen.findByText(
+        'Survey already contains a question with variable named “foo”'
+      )
+    ).toBeInTheDocument();
+    expect(updateSurvey).not.toHaveBeenCalled();
     global.console.error = realConsoleError;
   });
 });

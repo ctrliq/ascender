@@ -1,7 +1,7 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, fireEvent, within } from '@testing-library/react';
 import { WorkflowJobTemplatesAPI } from 'api';
-import { mountWithContexts } from '../../../../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../../../../testUtils/rtlContexts';
 import WorkflowJobTemplatesList from './WorkflowJobTemplatesList';
 
 jest.mock('../../../../../../api/models/WorkflowJobTemplates');
@@ -14,7 +14,9 @@ const nodeResource = {
 const onUpdateNodeResource = jest.fn();
 
 describe('WorkflowJobTemplatesList', () => {
-  let wrapper;
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
   test('Row selected when nodeResource id matches row id and clicking new row makes expected callback', async () => {
     WorkflowJobTemplatesAPI.read.mockResolvedValueOnce({
@@ -45,28 +47,27 @@ describe('WorkflowJobTemplatesList', () => {
         related_search_fields: [],
       },
     });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <WorkflowJobTemplatesList
-          nodeResource={nodeResource}
-          onUpdateNodeResource={onUpdateNodeResource}
-        />
-      );
+    renderWithContexts(
+      <WorkflowJobTemplatesList
+        nodeResource={nodeResource}
+        onUpdateNodeResource={onUpdateNodeResource}
+      />
+    );
+
+    await waitFor(() =>
+      expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
+    );
+
+    const row1 = screen.getByRole('row', {
+      name: /Test Workflow Job Template$/,
     });
-    wrapper.update();
-    expect(
-      wrapper
-        .find('CheckboxListItem[name="Test Workflow Job Template"]')
-        .props().isSelected
-    ).toBe(true);
-    expect(
-      wrapper
-        .find('CheckboxListItem[name="Test Workflow Job Template 2"]')
-        .props().isSelected
-    ).toBe(false);
-    wrapper
-      .find('CheckboxListItem[name="Test Workflow Job Template 2"]')
-      .prop('onSelect')();
+    const row2 = screen.getByRole('row', {
+      name: /Test Workflow Job Template 2/,
+    });
+    expect(within(row1).getByRole('radio')).toBeChecked();
+    expect(within(row2).getByRole('radio')).not.toBeChecked();
+
+    fireEvent.click(within(row2).getByRole('radio'));
     expect(onUpdateNodeResource).toHaveBeenCalledWith({
       id: 2,
       name: 'Test Workflow Job Template 2',
@@ -77,15 +78,13 @@ describe('WorkflowJobTemplatesList', () => {
 
   test('Error shown when read() request errors', async () => {
     WorkflowJobTemplatesAPI.read.mockRejectedValue(new Error());
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <WorkflowJobTemplatesList
-          nodeResource={nodeResource}
-          onUpdateNodeResource={onUpdateNodeResource}
-        />
-      );
-    });
-    wrapper.update();
-    expect(wrapper.find('ErrorDetail').length).toBe(1);
+    renderWithContexts(
+      <WorkflowJobTemplatesList
+        nodeResource={nodeResource}
+        onUpdateNodeResource={onUpdateNodeResource}
+      />
+    );
+
+    expect(await screen.findByText(/Something went wrong/)).toBeInTheDocument();
   });
 });
