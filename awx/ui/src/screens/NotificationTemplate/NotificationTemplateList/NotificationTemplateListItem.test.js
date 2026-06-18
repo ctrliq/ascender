@@ -1,7 +1,9 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
+
 import { NotificationTemplatesAPI } from 'api';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
+
 import NotificationTemplateListItem from './NotificationTemplateListItem';
 
 jest.mock('../../../api/models/NotificationTemplates');
@@ -12,147 +14,81 @@ const template = {
   notification_type: 'slack',
   name: 'Test Notification',
   summary_fields: {
-    organization: {
-      id: 1,
-      name: 'Foo',
-    },
-    user_capabilities: {
-      edit: true,
-      copy: true,
-    },
-    recent_notifications: [
-      {
-        status: 'success',
-      },
-    ],
+    organization: { id: 1, name: 'Foo' },
+    user_capabilities: { edit: true, copy: true },
+    recent_notifications: [{ status: 'success' }],
   },
 };
 
-describe('<NotificationTemplateListItem />', () => {
-  test('should render template row', () => {
-    const wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <NotificationTemplateListItem
-            template={template}
-            onAddToast={jest.fn()}
-            detailUrl="/notification_templates/3/detail"
-          />
-        </tbody>
-      </table>
-    );
+const renderItem = (props = {}) =>
+  renderWithContexts(
+    <table>
+      <tbody>
+        <NotificationTemplateListItem
+          template={template}
+          onAddToast={jest.fn()}
+          fetchTemplates={jest.fn().mockResolvedValue()}
+          detailUrl="/notification_templates/3/detail"
+          {...props}
+        />
+      </tbody>
+    </table>
+  );
 
-    const cells = wrapper.find('Td');
-    expect(cells).toHaveLength(6);
-    expect(cells.at(1).text()).toEqual('Test Notification');
-    expect(cells.at(2).text()).toEqual('Success');
-    expect(cells.at(3).text()).toEqual('Slack');
+describe('<NotificationTemplateListItem />', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('should render template row', () => {
+    renderItem();
+    expect(screen.getByText('Test Notification')).toBeInTheDocument();
+    expect(screen.getByText('Success')).toBeInTheDocument();
+    expect(screen.getByText('Slack')).toBeInTheDocument();
   });
 
   test('should send test notification', async () => {
     NotificationTemplatesAPI.test.mockResolvedValue({
       data: { notification: 1 },
     });
-
-    const wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <NotificationTemplateListItem
-            template={template}
-            onAddToast={jest.fn()}
-            detailUrl="/notification_templates/3/detail"
-          />
-        </tbody>
-      </table>
+    const { user } = renderItem();
+    await user.click(screen.getByRole('button', { name: 'Test Notification' }));
+    await waitFor(() =>
+      expect(NotificationTemplatesAPI.test).toHaveBeenCalledTimes(1)
     );
-    await act(async () => {
-      wrapper.find('Button').at(0).invoke('onClick')();
-    });
-    expect(NotificationTemplatesAPI.test).toHaveBeenCalledTimes(1);
-    expect(wrapper.find('Td').at(2).text()).toEqual('Running');
+    expect(screen.getByText('Running')).toBeInTheDocument();
   });
 
-  test('should call api to copy inventory', async () => {
+  test('should call api to copy template', async () => {
     NotificationTemplatesAPI.copy.mockResolvedValue({ name: 'Foo' });
-
-    const wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <NotificationTemplateListItem
-            template={template}
-            onAddToast={jest.fn()}
-            detailUrl="/notification_templates/3/detail"
-          />
-        </tbody>
-      </table>
+    const { user } = renderItem();
+    await user.click(screen.getByRole('button', { name: 'Copy' }));
+    await waitFor(() =>
+      expect(NotificationTemplatesAPI.copy).toHaveBeenCalled()
     );
-
-    await act(async () =>
-      wrapper.find('Button[aria-label="Copy"]').prop('onClick')()
-    );
-    expect(NotificationTemplatesAPI.copy).toHaveBeenCalled();
-    jest.clearAllMocks();
   });
 
-  test('should render proper alert modal on copy error', async () => {
-    NotificationTemplatesAPI.copy.mockRejectedValue(
-      new Error({
-        response: {
-          config: {
-            method: 'post',
-            url: '/api/v2/notification_templates/3/copy',
-          },
-          data: 'An error ocurred',
-          status: 403,
+  test('should render an error modal on copy failure', async () => {
+    NotificationTemplatesAPI.copy.mockRejectedValue(new Error('nope'));
+    const { user } = renderItem();
+    await user.click(screen.getByRole('button', { name: 'Copy' }));
+    expect(
+      await screen.findByText('Failed to copy template.')
+    ).toBeInTheDocument();
+  });
+
+  test('should not render copy button without copy capability', () => {
+    renderItem({
+      template: {
+        ...template,
+        summary_fields: {
+          organization: { id: 3, name: 'Test' },
+          user_capabilities: { copy: false, edit: false },
         },
-      })
-    );
-
-    const wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <NotificationTemplateListItem
-            template={template}
-            onAddToast={jest.fn()}
-            detailUrl="/notification_templates/3/detail"
-          />
-        </tbody>
-      </table>
-    );
-    expect(wrapper.find('Modal').length).toBe(0);
-    await act(async () =>
-      wrapper.find('Button[aria-label="Copy"]').prop('onClick')()
-    );
-    wrapper.update();
-    expect(wrapper.find('Modal').length).toBe(1);
-    expect(wrapper.find('Modal').prop('isOpen')).toBe(true);
-    jest.clearAllMocks();
-  });
-
-  test('should not render copy button', async () => {
-    const wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <NotificationTemplateListItem
-            template={{
-              ...template,
-              summary_fields: {
-                organization: {
-                  id: 3,
-                  name: 'Test',
-                },
-                user_capabilities: {
-                  copy: false,
-                  edit: false,
-                },
-              },
-            }}
-            onAddToast={jest.fn()}
-            detailUrl="/notification_templates/3/detail"
-          />
-        </tbody>
-      </table>
-    );
-    expect(wrapper.find('CopyButton').length).toBe(0);
+      },
+    });
+    expect(
+      screen.queryByRole('button', { name: 'Copy' })
+    ).not.toBeInTheDocument();
   });
 });
