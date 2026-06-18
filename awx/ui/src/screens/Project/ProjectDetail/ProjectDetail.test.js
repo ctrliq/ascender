@@ -1,5 +1,5 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import {
   ProjectsAPI,
@@ -8,100 +8,106 @@ import {
   InventorySourcesAPI,
 } from 'api';
 import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+  renderWithContexts,
+  assertDetail,
+} from '../../../../testUtils/rtlContexts';
 import ProjectDetail from './ProjectDetail';
 
 jest.mock('../../../api');
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useRouteMatch: () => ({
-    url: '/projects/1/details',
-  }),
-}));
 jest.mock('hooks/useBrandName', () => ({
   __esModule: true,
   default: () => ({
     current: 'AWX',
   }),
 }));
-describe('<ProjectDetail />', () => {
-  const mockProject = {
-    id: 1,
-    type: 'project',
-    url: '/api/v2/projects/1',
-    summary_fields: {
-      organization: {
-        id: 10,
-        name: 'Foo',
-      },
-      default_environment: {
-        id: 12,
-        name: 'Bar',
-        image: 'quay.io/ansible/awx-ee',
-      },
-      credential: {
-        id: 1000,
-        name: 'qux',
-        kind: 'scm',
-      },
-      signature_validation_credential: {
-        id: 2000,
-        name: 'svc',
-        kind: 'cryptography',
-      },
-      last_job: {
-        id: 9000,
-        status: 'successful',
-      },
-      created_by: {
-        id: 1,
-        username: 'admin',
-      },
-      modified_by: {
-        id: 1,
-        username: 'admin',
-      },
-      user_capabilities: {
-        edit: true,
-        delete: true,
-        start: true,
-        schedule: true,
-        copy: true,
-      },
-    },
-    created: '2019-10-10T01:15:06.780472Z',
-    modified: '2019-10-10T01:15:06.780490Z',
-    name: 'Project 1',
-    description: 'lorem ipsum',
-    scm_type: 'git',
-    scm_url: 'https://mock.com/bar',
-    scm_branch: 'baz',
-    scm_refspec: 'refs/remotes/*',
-    scm_clean: true,
-    scm_delete_on_update: true,
-    scm_track_submodules: true,
-    credential: 100,
-    signature_validation_credential: 200,
-    status: 'successful',
-    organization: 10,
-    scm_update_on_launch: true,
-    scm_update_cache_timeout: 5,
-    allow_override: true,
-    default_environment: 1,
-  };
 
-  test('initially renders successfully', () => {
-    mountWithContexts(<ProjectDetail project={mockProject} />);
+const mockProject = {
+  id: 1,
+  type: 'project',
+  url: '/api/v2/projects/1',
+  summary_fields: {
+    organization: {
+      id: 10,
+      name: 'Foo',
+    },
+    default_environment: {
+      id: 12,
+      name: 'Bar',
+      image: 'quay.io/ansible/awx-ee',
+    },
+    credential: {
+      id: 1000,
+      name: 'qux',
+      kind: 'scm',
+    },
+    signature_validation_credential: {
+      id: 2000,
+      name: 'svc',
+      kind: 'cryptography',
+    },
+    last_job: {
+      id: 9000,
+      status: 'successful',
+    },
+    created_by: {
+      id: 1,
+      username: 'admin',
+    },
+    modified_by: {
+      id: 1,
+      username: 'admin',
+    },
+    user_capabilities: {
+      edit: true,
+      delete: true,
+      start: true,
+      schedule: true,
+      copy: true,
+    },
+  },
+  created: '2019-10-10T01:15:06.780472Z',
+  modified: '2019-10-10T01:15:06.780490Z',
+  name: 'Project 1',
+  description: 'lorem ipsum',
+  scm_type: 'git',
+  scm_url: 'https://mock.com/bar',
+  scm_branch: 'baz',
+  scm_refspec: 'refs/remotes/*',
+  scm_clean: true,
+  scm_delete_on_update: true,
+  scm_track_submodules: true,
+  credential: 100,
+  signature_validation_credential: 200,
+  status: 'successful',
+  organization: 10,
+  scm_update_on_launch: true,
+  scm_update_cache_timeout: 5,
+  allow_override: true,
+  default_environment: 1,
+};
+
+function renderDetail(project = mockProject, entry = '/projects/1/details') {
+  const history = createMemoryHistory({ initialEntries: [entry] });
+  return renderWithContexts(<ProjectDetail project={project} />, {
+    context: { router: { history } },
+  });
+}
+
+describe('<ProjectDetail />', () => {
+  beforeEach(() => {
+    // DeleteButton queries related resources when opening its confirm modal
+    JobTemplatesAPI.read.mockResolvedValue({ data: { count: 0 } });
+    WorkflowJobTemplatesAPI.read.mockResolvedValue({ data: { count: 0 } });
+    InventorySourcesAPI.read.mockResolvedValue({ data: { count: 0 } });
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   test('should render Details', () => {
-    const wrapper = mountWithContexts(<ProjectDetail project={mockProject} />);
-    function assertDetail(label, value) {
-      expect(wrapper.find(`Detail[label="${label}"] dt`).text()).toBe(label);
-      expect(wrapper.find(`Detail[label="${label}"] dd`).text()).toBe(value);
-    }
+    renderDetail();
+
     assertDetail('Name', mockProject.name);
     assertDetail('Description', mockProject.description);
     assertDetail('Organization', mockProject.summary_fields.organization.name);
@@ -121,38 +127,27 @@ describe('<ProjectDetail />', () => {
       'Cache Timeout',
       `${mockProject.scm_update_cache_timeout} Seconds`
     );
-    const executionEnvironment = wrapper.find('ExecutionEnvironmentDetail');
-    expect(executionEnvironment).toHaveLength(1);
-    expect(executionEnvironment.find('dt').text()).toEqual(
-      'Default Execution Environment'
-    );
-    expect(executionEnvironment.find('dd').text()).toEqual(
+
+    assertDetail(
+      'Default Execution Environment',
       mockProject.summary_fields.default_environment.name
     );
 
-    const dateDetails = wrapper.find('UserDateDetail');
-    expect(dateDetails).toHaveLength(2);
-    expect(dateDetails.at(0).prop('label')).toEqual('Created');
-    expect(dateDetails.at(0).prop('date')).toEqual(
-      '2019-10-10T01:15:06.780472Z'
+    expect(screen.getByText('Created')).toBeInTheDocument();
+    expect(screen.getByText('Last Modified')).toBeInTheDocument();
+
+    const optionsTerm = screen.getByText('Enabled Options');
+    const optionsList = within(optionsTerm.nextElementSibling).getAllByRole(
+      'listitem'
     );
-    expect(dateDetails.at(1).prop('label')).toEqual('Last Modified');
-    expect(dateDetails.at(1).prop('date')).toEqual(
-      '2019-10-10T01:15:06.780490Z'
-    );
-    expect(
-      wrapper.find('Detail[label="Enabled Options"]').find('li')
-    ).toHaveLength(5);
-    const options = [
+    expect(optionsList).toHaveLength(5);
+    [
       'Discard local changes before syncing',
       'Delete the project before syncing',
       'Track submodules latest commit on branch',
       'Update revision on job launch',
       'Allow branch override',
-    ];
-    wrapper.find('li').map((item, index) => {
-      expect(item.text().includes(options[index]));
-    });
+    ].forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
   });
 
   test('should hide options label when all project options return false', () => {
@@ -166,142 +161,102 @@ describe('<ProjectDetail />', () => {
       created: '',
       modified: '',
     };
-    const wrapper = mountWithContexts(
-      <ProjectDetail project={{ ...mockProject, ...mockOptions }} />
-    );
-    expect(wrapper.find('Detail[label="Enabled Options"]').length).toBe(0);
+    renderDetail({ ...mockProject, ...mockOptions });
+    expect(screen.queryByText('Enabled Options')).not.toBeInTheDocument();
   });
 
-  test('should have proper number of delete detail requests', () => {
+  test('delete confirmation fires the 3 related-resource requests', async () => {
     JobTemplatesAPI.read.mockResolvedValue({ data: { count: 0 } });
     WorkflowJobTemplatesAPI.read.mockResolvedValue({ data: { count: 0 } });
     InventorySourcesAPI.read.mockResolvedValue({ data: { count: 0 } });
-    const mockOptions = {
-      scm_type: '',
-      scm_clean: false,
-      scm_delete_on_update: false,
-      scm_update_on_launch: false,
-      allow_override: false,
-      created: '',
-      modified: '',
-    };
-    const wrapper = mountWithContexts(
-      <ProjectDetail project={{ ...mockProject, ...mockOptions }} />
-    );
-    expect(
-      wrapper.find('DeleteButton').prop('deleteDetailsRequests')
-    ).toHaveLength(3);
+    const { user } = renderDetail();
+
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+
+    // opening the delete confirmation queries the related resources that
+    // could block deletion (JobTemplates, WorkflowJobTemplates, InventorySources)
+    await waitFor(() => {
+      expect(JobTemplatesAPI.read).toHaveBeenCalled();
+      expect(WorkflowJobTemplatesAPI.read).toHaveBeenCalled();
+      expect(InventorySourcesAPI.read).toHaveBeenCalled();
+    });
   });
 
   test('should render with missing summary fields', async () => {
-    const wrapper = mountWithContexts(
-      <ProjectDetail project={{ ...mockProject, summary_fields: {} }} />
-    );
-    await waitForElement(
-      wrapper,
-      'Detail[label="Name"]',
-      (el) => el.length === 1
-    );
+    renderDetail({ ...mockProject, summary_fields: {} });
+    expect(await screen.findByText('Name')).toBeInTheDocument();
   });
 
   test('should show edit and sync button for users with edit permission', async () => {
+    renderDetail();
     // the Sync button shows its "Sync" label only on the details view
-    const history = createMemoryHistory({
-      initialEntries: [`/projects/${mockProject.id}/details`],
+    const editButton = await screen.findByRole('link', { name: 'edit' });
+    const syncButton = await screen.findByRole('button', {
+      name: 'Sync Project',
     });
-    const wrapper = mountWithContexts(
-      <ProjectDetail project={mockProject} />,
-      { context: { router: { history } } }
-    );
-    const editButton = await waitForElement(
-      wrapper,
-      'ProjectDetail Button[aria-label="edit"]'
-    );
-
-    const syncButton = await waitForElement(
-      wrapper,
-      'ProjectDetail Button[aria-label="Sync Project"]'
-    );
-    expect(editButton.text()).toEqual('Edit');
-    expect(syncButton.text()).toEqual('Sync');
-    expect(editButton.prop('to')).toBe(`/projects/${mockProject.id}/edit`);
+    expect(editButton).toHaveTextContent('Edit');
+    expect(syncButton).toHaveTextContent('Sync');
+    expect(editButton).toHaveAttribute('href', '/projects/1/edit');
   });
 
   test('should hide edit button for users without edit permission', async () => {
-    const wrapper = mountWithContexts(
-      <ProjectDetail
-        project={{
-          ...mockProject,
-          summary_fields: {
-            user_capabilities: {
-              edit: false,
-            },
-          },
-        }}
-      />
-    );
-    await waitForElement(wrapper, 'ProjectDetail');
-    expect(wrapper.find('ProjectDetail Button[aria-label="edit"]').length).toBe(
-      0
-    );
-    expect(wrapper.find('ProjectDetail Button[aria-label="sync"]').length).toBe(
-      0
-    );
+    renderDetail({
+      ...mockProject,
+      summary_fields: {
+        user_capabilities: {
+          edit: false,
+        },
+      },
+    });
+    await screen.findByText('Name');
+    expect(screen.queryByRole('link', { name: 'edit' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Sync Project' })
+    ).not.toBeInTheDocument();
   });
 
-  test('edit button should navigate to project edit', () => {
-    const history = createMemoryHistory();
-    const wrapper = mountWithContexts(<ProjectDetail project={mockProject} />, {
-      context: { router: { history } },
-    });
-    expect(wrapper.find('Button[aria-label="edit"]').length).toBe(1);
-    wrapper
-      .find('Button[aria-label="edit"] Link')
-      .simulate('click', { button: 0 });
+  test('edit button should navigate to project edit', async () => {
+    const { history, user } = renderDetail();
+    await user.click(screen.getByRole('link', { name: 'edit' }));
     expect(history.location.pathname).toEqual('/projects/1/edit');
   });
 
   test('sync button should call api to sync project', async () => {
     ProjectsAPI.readSync.mockResolvedValue({ data: { can_update: true } });
-    const wrapper = mountWithContexts(<ProjectDetail project={mockProject} />);
-    await act(() =>
-      wrapper
-        .find('ProjectDetail Button[aria-label="Sync Project"]')
-        .prop('onClick')(1)
-    );
-    expect(ProjectsAPI.sync).toHaveBeenCalledTimes(1);
+    ProjectsAPI.sync.mockResolvedValue({ data: {} });
+    const { user } = renderDetail();
+
+    await user.click(screen.getByRole('button', { name: 'Sync Project' }));
+    await waitFor(() => expect(ProjectsAPI.sync).toHaveBeenCalledTimes(1));
   });
 
   test('expected api calls are made for delete', async () => {
-    const wrapper = mountWithContexts(<ProjectDetail project={mockProject} />);
-    await waitForElement(wrapper, 'ProjectDetail Button[aria-label="Delete"]');
-    await act(async () => {
-      wrapper.find('DeleteButton').invoke('onConfirm')();
-    });
-    expect(ProjectsAPI.destroy).toHaveBeenCalledTimes(1);
+    ProjectsAPI.destroy.mockResolvedValueOnce({});
+    const { user } = renderDetail();
+
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'Confirm Delete' })
+    );
+    await waitFor(() => expect(ProjectsAPI.destroy).toHaveBeenCalledTimes(1));
   });
 
   test('Error dialog shown for failed deletion', async () => {
     ProjectsAPI.destroy.mockImplementationOnce(() =>
       Promise.reject(new Error())
     );
-    const wrapper = mountWithContexts(<ProjectDetail project={mockProject} />);
-    await waitForElement(wrapper, 'ProjectDetail Button[aria-label="Delete"]');
-    await act(async () => {
-      wrapper.find('DeleteButton').invoke('onConfirm')();
-    });
-    await waitForElement(
-      wrapper,
-      'Modal[title="Error!"]',
-      (el) => el.length === 1
+    const { user } = renderDetail();
+
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'Confirm Delete' })
     );
-    await act(async () => {
-      wrapper.find('Modal[title="Error!"]').invoke('onClose')();
-    });
-    await waitForElement(
-      wrapper,
-      'Modal[title="Error!"]',
-      (el) => el.length === 0
+
+    expect(await screen.findByText('Error!')).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Close' }));
+    await waitFor(() =>
+      expect(screen.queryByText('Error!')).not.toBeInTheDocument()
     );
   });
 });

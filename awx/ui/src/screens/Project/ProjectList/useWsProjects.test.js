@@ -1,20 +1,20 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import WS from 'jest-websocket-mock';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import useWsProjects from './useWsProjects';
 
-function TestInner() {
-  return <div />;
-}
 function Test({ projects }) {
   const synced = useWsProjects(projects);
-  return <TestInner projects={synced} />;
+  return <div data-testid="result">{JSON.stringify(synced)}</div>;
+}
+
+function getResult() {
+  return JSON.parse(screen.getByTestId('result').textContent);
 }
 
 describe('useWsProjects', () => {
   let debug;
-  let wrapper;
   beforeEach(() => {
     debug = global.console.debug; // eslint-disable-line prefer-destructuring
     global.console.debug = () => {};
@@ -22,16 +22,14 @@ describe('useWsProjects', () => {
 
   afterEach(() => {
     global.console.debug = debug;
+    WS.clean();
   });
 
   test('should return projects list', async () => {
     const projects = [{ id: 1 }];
-    await act(async () => {
-      wrapper = await mountWithContexts(<Test projects={projects} />);
-    });
+    renderWithContexts(<Test projects={projects} />);
 
-    expect(wrapper.find('TestInner').prop('projects')).toEqual(projects);
-    WS.clean();
+    expect(getResult()).toEqual(projects);
   });
 
   test('should establish websocket connection', async () => {
@@ -39,9 +37,7 @@ describe('useWsProjects', () => {
     const mockServer = new WS('ws://localhost/websocket/');
 
     const projects = [{ id: 1 }];
-    await act(async () => {
-      wrapper = await mountWithContexts(<Test projects={projects} />);
-    });
+    renderWithContexts(<Test projects={projects} />);
 
     await mockServer.connected;
     await expect(mockServer).toReceiveMessage(
@@ -53,7 +49,6 @@ describe('useWsProjects', () => {
         },
       })
     );
-    WS.clean();
   });
 
   test('should update project status', async () => {
@@ -72,9 +67,7 @@ describe('useWsProjects', () => {
         },
       },
     ];
-    await act(async () => {
-      wrapper = await mountWithContexts(<Test projects={projects} />);
-    });
+    renderWithContexts(<Test projects={projects} />);
 
     await mockServer.connected;
     await expect(mockServer).toReceiveMessage(
@@ -86,29 +79,22 @@ describe('useWsProjects', () => {
         },
       })
     );
-    expect(
-      wrapper.find('TestInner').prop('projects')[0].summary_fields.current_job
-        .status
-    ).toEqual('running');
-    await act(async () => {
-      mockServer.send(
-        JSON.stringify({
-          project_id: 1,
-          unified_job_id: 12,
-          type: 'project_update',
-          status: 'successful',
-          finished: '2020-07-02T16:28:31.839071Z',
-        })
-      );
-    });
-    wrapper.update();
+    expect(getResult()[0].summary_fields.current_job.status).toEqual('running');
 
-    // In test environment, WebSocket integration may not update state
-    // Test that either the update worked or original state is maintained
-    const currentJob = wrapper.find('TestInner').prop('projects')[0].summary_fields.current_job;
-    expect(
-      currentJob.status === 'successful' || currentJob.status === 'running'
-    ).toBe(true);
-    WS.clean();
+    mockServer.send(
+      JSON.stringify({
+        project_id: 1,
+        unified_job_id: 12,
+        type: 'project_update',
+        status: 'successful',
+        finished: '2020-07-02T16:28:31.839071Z',
+      })
+    );
+
+    await waitFor(() =>
+      expect(getResult()[0].summary_fields.current_job.status).toEqual(
+        'successful'
+      )
+    );
   });
 });

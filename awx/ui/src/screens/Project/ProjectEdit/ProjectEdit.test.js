@@ -1,195 +1,150 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import { ProjectsAPI, CredentialTypesAPI, RootAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+import { ProjectsAPI } from 'api';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ProjectEdit from './ProjectEdit';
 
 jest.mock('../../../api');
 
-describe('<ProjectEdit />', () => {
-  let wrapper;
-  const projectData = {
-    id: 123,
-    name: 'foo',
-    description: 'bar',
-    scm_type: 'git',
-    scm_url: 'https://foo.bar',
-    scm_clean: true,
-    scm_track_submodules: false,
-    credential: 100,
-    signature_validation_credential: 200,
-    local_path: 'bar',
-    organization: 2,
-    scm_update_on_launch: true,
-    scm_update_cache_timeout: 3,
-    allow_override: false,
-    summary_fields: {
-      credential: {
-        id: 100,
-        credential_type_id: 5,
-        kind: 'insights',
-      },
-      signature_validation_credential: {
-        id: 200,
-        credential_type_id: 6,
-        kind: 'cryptography',
-        name: 'foo',
-      },
-      organization: {
-        id: 2,
-        name: 'Default',
-      },
+const projectData = {
+  id: 123,
+  name: 'foo',
+  description: 'bar',
+  scm_type: 'git',
+  scm_url: 'https://foo.bar',
+  scm_clean: true,
+  scm_track_submodules: false,
+  credential: 100,
+  signature_validation_credential: 200,
+  local_path: 'bar',
+  organization: 2,
+  scm_update_on_launch: true,
+  scm_update_cache_timeout: 3,
+  allow_override: false,
+  summary_fields: {
+    credential: {
+      id: 100,
+      credential_type_id: 5,
+      kind: 'insights',
     },
-  };
-
-  const projectOptionsResolve = {
-    data: {
-      actions: {
-        GET: {
-          scm_type: {
-            choices: [
-              ['', 'Manual'],
-              ['git', 'Git'],
-              ['svn', 'Subversion'],
-              ['archive', 'Remote Archive'],
-              ['insights', 'Red Hat Insights'],
-            ],
-          },
-        },
-      },
+    signature_validation_credential: {
+      id: 200,
+      credential_type_id: 6,
+      kind: 'cryptography',
+      name: 'foo',
     },
-  };
-
-  const scmCredentialResolve = {
-    data: {
-      count: 1,
-      results: [
-        {
-          id: 4,
-          name: 'Source Control',
-          kind: 'scm',
-        },
-      ],
+    organization: {
+      id: 2,
+      name: 'Default',
     },
-  };
+  },
+};
 
-  const insightsCredentialResolve = {
-    data: {
-      count: 1,
-      results: [
-        {
-          id: 5,
-          name: 'Insights',
-          kind: 'insights',
-        },
-      ],
-    },
-  };
+// the shape ProjectForm passes to handleSubmit (organization as an object)
+const submitValues = {
+  ...projectData,
+  organization: { id: 2, name: 'Default' },
+  default_environment: { id: 1, name: 'Foo' },
+};
 
-  const cryptographyCredentialResolve = {
-    data: {
-      count: 1,
-      results: [
-        {
-          id: 6,
-          name: 'GPG Public Key',
+// Mock the shared ProjectForm so the container's submit/cancel branches can be
+// driven directly.
+jest.mock('../shared/ProjectForm', () => ({
+  __esModule: true,
+  default: ({ handleSubmit, handleCancel, submitError }) => {
+    const ReactLib = require('react');
+    // mirror submitValues; jest.mock factories cannot close over outer vars
+    const values = {
+      id: 123,
+      name: 'foo',
+      description: 'bar',
+      scm_type: 'git',
+      scm_url: 'https://foo.bar',
+      scm_clean: true,
+      scm_track_submodules: false,
+      credential: 100,
+      signature_validation_credential: 200,
+      local_path: 'bar',
+      scm_update_on_launch: true,
+      scm_update_cache_timeout: 3,
+      allow_override: false,
+      summary_fields: {
+        credential: { id: 100, credential_type_id: 5, kind: 'insights' },
+        signature_validation_credential: {
+          id: 200,
+          credential_type_id: 6,
           kind: 'cryptography',
+          name: 'foo',
         },
-      ],
-    },
-  };
-
-  beforeEach(async () => {
-    RootAPI.readAssetVariables.mockResolvedValue({
-      data: {
-        BRAND_NAME: 'AWX',
+        organization: { id: 2, name: 'Default' },
       },
-    });
-    await ProjectsAPI.readOptions.mockImplementation(
-      () => projectOptionsResolve
+      organization: { id: 2, name: 'Default' },
+      default_environment: { id: 1, name: 'Foo' },
+    };
+    return ReactLib.createElement(
+      'div',
+      null,
+      ReactLib.createElement(
+        'button',
+        {
+          type: 'button',
+          'aria-label': 'mock-submit',
+          onClick: () => handleSubmit({ ...values }),
+        },
+        'submit'
+      ),
+      ReactLib.createElement(
+        'button',
+        { type: 'button', 'aria-label': 'Cancel', onClick: handleCancel },
+        'cancel'
+      ),
+      submitError ? ReactLib.createElement('div', null, 'submit-error') : null
     );
-    await CredentialTypesAPI.read.mockImplementation(
-      () => scmCredentialResolve
-    );
-    await CredentialTypesAPI.read.mockImplementation(
-      () => insightsCredentialResolve
-    );
-    await CredentialTypesAPI.read.mockImplementation(
-      () => cryptographyCredentialResolve
-    );
-  });
+  },
+}));
 
+describe('<ProjectEdit />', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  test('initially renders successfully', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(<ProjectEdit project={projectData} />);
-    });
-    expect(wrapper.length).toBe(1);
-  });
-
-  test('handleSubmit should post to the api', async () => {
-    const history = createMemoryHistory();
+  test('handleSubmit should call api update', async () => {
     ProjectsAPI.update.mockResolvedValueOnce({
       data: { ...projectData },
     });
-    await act(async () => {
-      wrapper = mountWithContexts(<ProjectEdit project={projectData} />, {
-        context: { router: { history } },
-      });
+    const { user } = renderWithContexts(<ProjectEdit project={projectData} />);
+
+    await user.click(screen.getByRole('button', { name: 'mock-submit' }));
+
+    await waitFor(() => expect(ProjectsAPI.update).toHaveBeenCalledTimes(1));
+    expect(ProjectsAPI.update).toHaveBeenCalledWith(123, {
+      ...submitValues,
+      organization: 2,
+      default_environment: 1,
+      signature_validation_credential: 200,
     });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    await act(async () => {
-      wrapper.find('form').simulate('submit');
-    });
-    wrapper.update();
-    expect(ProjectsAPI.update).toHaveBeenCalledTimes(1);
   });
 
-  test('handleSubmit should throw an error', async () => {
-    const config = {
-      project_local_paths: [],
-      project_base_dir: 'foo/bar',
-    };
+  test('handleSubmit should surface submit error', async () => {
     const error = new Error('oops');
-    const realConsoleError = global.console.error;
-    global.console.error = jest.fn();
     ProjectsAPI.update.mockImplementation(() => Promise.reject(error));
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ProjectEdit project={{ ...projectData, scm_type: 'manual' }} />,
-        {
-          context: { config },
-        }
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    await act(async () => {
-      wrapper.find('form').simulate('submit');
-    });
-    wrapper.update();
+    const { user } = renderWithContexts(<ProjectEdit project={projectData} />);
+
+    await user.click(screen.getByRole('button', { name: 'mock-submit' }));
+
+    expect(await screen.findByText('submit-error')).toBeInTheDocument();
     expect(ProjectsAPI.update).toHaveBeenCalledTimes(1);
-    expect(wrapper.find('ProjectForm').prop('submitError')).toEqual(error);
-    global.console.error = realConsoleError;
   });
 
-  test('CardBody cancel button should navigate to project details', async () => {
+  test('Cancel button should navigate to project details', async () => {
     const history = createMemoryHistory();
-    await act(async () => {
-      wrapper = mountWithContexts(<ProjectEdit project={projectData} />, {
-        context: { router: { history } },
-      });
+    const { user } = renderWithContexts(<ProjectEdit project={projectData} />, {
+      context: { router: { history } },
     });
-    await waitForElement(wrapper, 'EmptyStateBody', (el) => el.length === 0);
-    await act(async () => {
-      wrapper.find('ProjectEdit button[aria-label="Cancel"]').simulate('click');
-    });
+
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
+
     expect(history.location.pathname).toEqual('/projects/123/details');
   });
 });
