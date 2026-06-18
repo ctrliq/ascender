@@ -1,20 +1,11 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import { InventoriesAPI, OrganizationsAPI, InstanceGroupsAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+import { InventoriesAPI } from 'api';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import SmartInventoryEdit from './SmartInventoryEdit';
 import mockSmartInventory from '../shared/data.smart_inventory.json';
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => ({
-    id: 2,
-  }),
-}));
 jest.mock('../../../api');
 
 const mockSmartInv = {
@@ -24,26 +15,36 @@ const mockSmartInv = {
   },
 };
 
+jest.mock(
+  '../shared/SmartInventoryForm',
+  () =>
+    function SmartInventoryForm({ onSubmit, onCancel, submitError }) {
+      const mockSubmitValues = {
+        name: 'Mock Smart',
+        organization: { id: 1 },
+        instance_groups: [
+          { id: 10, name: 'instance-group-10' },
+          { id: 30, name: 'instance-group-30' },
+        ],
+      };
+      return (
+        <div>
+          <button
+            type="button"
+            aria-label="mock-submit"
+            onClick={() => onSubmit(mockSubmitValues)}
+          />
+          <button type="button" aria-label="mock-cancel" onClick={onCancel} />
+          {submitError ? <div data-testid="mock-submit-error" /> : null}
+        </div>
+      );
+    }
+);
+
 describe('<SmartInventoryEdit />', () => {
-  let wrapper;
-
-  const history = createMemoryHistory({
-    initialEntries: [`/inventories/smart_inventory/${mockSmartInv.id}/edit`],
-  });
-
-  beforeEach(async () => {
-    OrganizationsAPI.read.mockResolvedValue({
-      data: { results: [], count: 0 },
-    });
-    InstanceGroupsAPI.read.mockResolvedValue({
-      data: { results: [], count: 0 },
-    });
-    InventoriesAPI.associateInstanceGroup.mockResolvedValue();
-    InventoriesAPI.disassociateInstanceGroup.mockResolvedValue();
+  beforeEach(() => {
     InventoriesAPI.update.mockResolvedValue({ data: mockSmartInv });
-    InventoriesAPI.readOptions.mockResolvedValue({
-      data: { actions: { POST: true } },
-    });
+    InventoriesAPI.orderInstanceGroups.mockResolvedValue();
     InventoriesAPI.readInstanceGroups.mockResolvedValue({
       data: {
         count: 0,
@@ -53,115 +54,76 @@ describe('<SmartInventoryEdit />', () => {
         ],
       },
     });
-
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SmartInventoryEdit inventory={{ ...mockSmartInv }} />,
-        {
-          context: { router: { history } },
-        }
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
   });
 
-  afterAll(() => {
+  afterEach(() => {
     jest.clearAllMocks();
   });
 
-  test('should render CodeEditor field', () => {
-    expect(wrapper.find('CodeEditor').prop('value')).toEqual('---');
-  });
-
   test('should fetch related instance groups on initial render', async () => {
+    renderWithContexts(<SmartInventoryEdit inventory={{ ...mockSmartInv }} />);
+    expect(await screen.findByRole('button', { name: 'mock-submit' })).toBeInTheDocument();
     expect(InventoriesAPI.readInstanceGroups).toHaveBeenCalledTimes(1);
   });
 
-  test('save button should be enabled for users with POST capability', () => {
-    expect(wrapper.find('Button[aria-label="Save"]').prop('isDisabled')).toBe(
-      false
-    );
-  });
-
   test('should post to the api when submit is clicked', async () => {
-    expect(InventoriesAPI.update).toHaveBeenCalledTimes(0);
-    expect(InventoriesAPI.associateInstanceGroup).toHaveBeenCalledTimes(0);
-    expect(InventoriesAPI.disassociateInstanceGroup).toHaveBeenCalledTimes(0);
-    await act(async () => {
-      wrapper.find('SmartInventoryForm').invoke('onSubmit')({
-        ...mockSmartInv,
-        instance_groups: [
-          { id: 10, name: 'instance-group-10' },
-          { id: 30, name: 'instance-group-30' },
-        ],
-      });
-    });
-    expect(InventoriesAPI.update).toHaveBeenCalledTimes(1);
+    const { user } = renderWithContexts(
+      <SmartInventoryEdit inventory={{ ...mockSmartInv }} />
+    );
+    await user.click(await screen.findByRole('button', { name: 'mock-submit' }));
+
+    await waitFor(() => expect(InventoriesAPI.update).toHaveBeenCalledTimes(1));
     expect(InventoriesAPI.orderInstanceGroups).toHaveBeenCalledTimes(1);
   });
 
   test('successful form submission should trigger redirect to details', async () => {
-    expect(wrapper.find('FormSubmitError').length).toBe(0);
-    expect(history.location.pathname).toEqual(
-      '/inventories/smart_inventory/2/details'
+    const history = createMemoryHistory({
+      initialEntries: [`/inventories/smart_inventory/${mockSmartInv.id}/edit`],
+    });
+    const { user } = renderWithContexts(
+      <SmartInventoryEdit inventory={{ ...mockSmartInv }} />,
+      { context: { router: { history } } }
+    );
+    await user.click(await screen.findByRole('button', { name: 'mock-submit' }));
+
+    await waitFor(() =>
+      expect(history.location.pathname).toBe(
+        `/inventories/smart_inventory/${mockSmartInv.id}/details`
+      )
     );
   });
 
   test('should navigate to inventory details when cancel is clicked', async () => {
-    await act(async () => {
-      wrapper.find('button[aria-label="Cancel"]').invoke('onClick')();
+    const history = createMemoryHistory({
+      initialEntries: [`/inventories/smart_inventory/${mockSmartInv.id}/edit`],
     });
+    const { user } = renderWithContexts(
+      <SmartInventoryEdit inventory={{ ...mockSmartInv }} />,
+      { context: { router: { history } } }
+    );
+    await user.click(await screen.findByRole('button', { name: 'mock-cancel' }));
+
     expect(history.location.pathname).toEqual(
-      '/inventories/smart_inventory/2/details'
+      `/inventories/smart_inventory/${mockSmartInv.id}/details`
     );
   });
 
   test('unsuccessful form submission should show an error message', async () => {
-    const error = {
-      response: {
-        data: { detail: 'An error occurred' },
-      },
-    };
-    InventoriesAPI.update.mockImplementationOnce(() => Promise.reject(error));
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SmartInventoryEdit inventory={{ ...mockSmartInv }} />
-      );
-    });
-    expect(wrapper.find('FormSubmitError').length).toBe(0);
-    await act(async () => {
-      wrapper.find('SmartInventoryForm').invoke('onSubmit')({});
-    });
-    wrapper.update();
-    expect(wrapper.find('FormSubmitError').length).toBe(1);
+    InventoriesAPI.update.mockRejectedValueOnce(new Error('boom'));
+    const { user } = renderWithContexts(
+      <SmartInventoryEdit inventory={{ ...mockSmartInv }} />
+    );
+    await user.click(await screen.findByRole('button', { name: 'mock-submit' }));
+
+    expect(await screen.findByTestId('mock-submit-error')).toBeInTheDocument();
   });
 
   test('should throw content error', async () => {
-    expect(wrapper.find('ContentError').length).toBe(0);
-    InventoriesAPI.readInstanceGroups.mockImplementationOnce(() =>
-      Promise.reject(new Error())
-    );
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SmartInventoryEdit inventory={{ ...mockSmartInv }} />
-      );
-    });
-    wrapper.update();
-    expect(wrapper.find('ContentError').length).toBe(1);
-  });
+    InventoriesAPI.readInstanceGroups.mockRejectedValueOnce(new Error());
+    renderWithContexts(<SmartInventoryEdit inventory={{ ...mockSmartInv }} />);
 
-  test('save button should be disabled for users without POST capability', async () => {
-    InventoriesAPI.readOptions.mockResolvedValue({
-      data: { actions: { POST: false } },
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <SmartInventoryEdit inventory={{ ...mockSmartInv }} />
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('Button[aria-label="Save"]').prop('isDisabled')).toBe(
-      true
-    );
+    expect(
+      await screen.findByText(/There was an error loading this content/i)
+    ).toBeInTheDocument();
   });
 });

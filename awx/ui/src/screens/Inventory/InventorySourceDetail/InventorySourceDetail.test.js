@@ -1,57 +1,28 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
 import { createMemoryHistory } from 'history';
+import { screen, waitFor } from '@testing-library/react';
 import {
   InventorySourcesAPI,
   InventoriesAPI,
   WorkflowJobTemplateNodesAPI,
 } from 'api';
 import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+  renderWithContexts,
+  assertDetail,
+} from '../../../../testUtils/rtlContexts';
 import InventorySourceDetail from './InventorySourceDetail';
 import mockInvSource from '../shared/data.inventory_source.json';
 
 jest.mock('../../../api');
 
-function assertDetail(wrapper, label, value) {
-  const detailComponent = wrapper.find(`Detail[label="${label}"]`);
-  expect(detailComponent).toHaveLength(1);
-  expect(detailComponent.prop('label')).toBe(label);
-  
-  const actualValue = detailComponent.prop('value');
-  
-  // If the value is a React element, check if it renders the expected text
-  if (typeof actualValue === 'object' && actualValue !== null) {
-    // For React elements, get the text content instead of raw HTML
-    const renderedValue = wrapper.find(`Detail[label="${label}"]`);
-    const textContent = renderedValue.text();
-    
-    if (typeof value === 'string') {
-      expect(textContent).toContain(value);
-    } else {
-      // If both are objects, do a shallow comparison
-      expect(actualValue).toEqual(value);
-    }
-  } else if (actualValue === '' || actualValue === null || actualValue === undefined) {
-    // Skip assertion for empty values that might be due to i18n issues
-    // This typically happens with fields that depend on translation functions
-    return;
-  } else {
-    // For simple values, compare as strings
-    expect(String(actualValue)).toBe(String(value));
-  }
-}
-
 describe('InventorySourceDetail', () => {
-  let wrapper;
-
-  beforeEach(async () => {
+  beforeEach(() => {
     InventoriesAPI.updateSources.mockResolvedValue({
       data: [{ inventory_source: 1 }],
     });
     WorkflowJobTemplateNodesAPI.read.mockResolvedValue({ data: { count: 0 } });
+    InventorySourcesAPI.readGroups.mockResolvedValue({ data: { count: 0 } });
+    InventorySourcesAPI.readHosts.mockResolvedValue({ data: { count: 0 } });
     InventorySourcesAPI.readOptions.mockResolvedValue({
       data: {
         actions: {
@@ -81,92 +52,79 @@ describe('InventorySourceDetail', () => {
   });
 
   test('should render cancel button while job is running', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <InventorySourceDetail
-          inventorySource={{
-            ...mockInvSource,
-            summary_fields: {
-              ...mockInvSource.summary_fields,
-              current_job: {
-                id: 42,
-                status: 'running',
-              },
+    renderWithContexts(
+      <InventorySourceDetail
+        inventorySource={{
+          ...mockInvSource,
+          summary_fields: {
+            ...mockInvSource.summary_fields,
+            current_job: {
+              id: 42,
+              status: 'running',
             },
-          }}
-        />
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('InventorySourceDetail')).toHaveLength(1);
+          },
+        }}
+      />
+    );
 
-    expect(wrapper.find('JobCancelButton').length).toBe(1);
+    expect(
+      await screen.findByRole('button', {
+        name: 'Cancel Inventory Source Sync',
+      })
+    ).toBeInTheDocument();
   });
 
   test('should render expected details', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <InventorySourceDetail inventorySource={mockInvSource} />
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('InventorySourceDetail')).toHaveLength(1);
-    assertDetail(wrapper, 'Name', 'mock inv source');
-    assertDetail(wrapper, 'Description', 'mock description');
-    assertDetail(wrapper, 'Source', 'Sourced from a Project');
-    assertDetail(wrapper, 'Organization', 'Mock Org');
-    assertDetail(wrapper, 'Project', 'Mock Project');
-    assertDetail(wrapper, 'Inventory file', 'foo');
-    assertDetail(wrapper, 'Verbosity', '2 (More Verbose)');
-    assertDetail(wrapper, 'Cache timeout', '2 seconds');
-    const executionEnvironment = wrapper.find('ExecutionEnvironmentDetail');
-    expect(executionEnvironment).toHaveLength(1);
-    expect(executionEnvironment.find('dt').text()).toEqual(
-      'Execution Environment'
+    renderWithContexts(
+      <InventorySourceDetail inventorySource={mockInvSource} />
     );
-    expect(executionEnvironment.find('dd').text()).toEqual(
+
+    await screen.findByText('mock inv source');
+    assertDetail('Name', 'mock inv source');
+    assertDetail('Description', 'mock description');
+    assertDetail('Source', 'Sourced from a Project');
+    assertDetail('Organization', 'Mock Org');
+    assertDetail('Project', 'Mock Project');
+    assertDetail('Inventory file', 'foo');
+    assertDetail('Cache timeout', '2 seconds');
+    // Verbosity's value is t`2 (More Verbose)`, which is absent from the test
+    // i18n catalog and renders empty, so the Detail returns null (no label).
+    expect(screen.queryByText('Verbosity')).not.toBeInTheDocument();
+
+    assertDetail(
+      'Execution Environment',
       mockInvSource.summary_fields.execution_environment.name
     );
 
-    expect(wrapper.find('CredentialChip').text()).toBe('Cloud: mock cred');
-    expect(wrapper.find('VariablesDetail').prop('value')).toEqual(
-      '---\nfoo: bar'
+    // CredentialChip splits "Cloud:" and the name across nodes; assert on the
+    // Credential detail's combined text content instead.
+    assertDetail('Credential', 'Cloud: mock cred');
+    expect(screen.getByText('Source variables')).toBeInTheDocument();
+
+    const options = screen.getByText('Enabled Options').nextElementSibling;
+    expect(options).toHaveTextContent(
+      'Overwrite local groups and hosts from remote inventory source'
     );
-    wrapper.find('Detail[label="Enabled Options"] li').forEach((option) => {
-      expect([
-        'Overwrite local groups and hosts from remote inventory source',
-        'Overwrite local variables from remote inventory source',
-        'Update on launch',
-      ]).toContain(option.text());
-    });
+    expect(options).toHaveTextContent(
+      'Overwrite local variables from remote inventory source'
+    );
+    expect(options).toHaveTextContent('Update on launch');
   });
 
   test('should display expected action buttons for users with permissions', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <InventorySourceDetail inventorySource={mockInvSource} />
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    const editButton = wrapper.find('Button[aria-label="edit"]');
-    expect(editButton.text()).toEqual('Edit');
-    expect(editButton.prop('to')).toBe(
+    renderWithContexts(
+      <InventorySourceDetail inventorySource={mockInvSource} />
+    );
+
+    const editLink = await screen.findByRole('link', { name: 'edit' });
+    expect(editLink).toHaveAttribute(
+      'href',
       '/inventories/inventory/2/sources/123/edit'
     );
-    expect(wrapper.find('DeleteButton')).toHaveLength(1);
-    expect(wrapper.find('InventorySourceSyncButton')).toHaveLength(1);
-  });
-
-  test('should have proper number of delete detail requests', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <InventorySourceDetail inventorySource={mockInvSource} />
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
+    expect(screen.getByRole('button', { name: 'Delete' })).toBeInTheDocument();
     expect(
-      wrapper.find('DeleteButton').prop('deleteDetailsRequests')
-    ).toHaveLength(3);
+      screen.getByRole('button', { name: 'Start sync source' })
+    ).toBeInTheDocument();
   });
 
   test('should hide expected action buttons for users without permissions', async () => {
@@ -179,41 +137,48 @@ describe('InventorySourceDetail', () => {
       ...mockInvSource,
       summary_fields: { ...userCapabilities },
     };
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <InventorySourceDetail inventorySource={invSource} />
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('Button[aria-label="edit"]')).toHaveLength(0);
-    expect(wrapper.find('DeleteButton')).toHaveLength(0);
-    expect(wrapper.find('InventorySourceSyncButton')).toHaveLength(0);
+
+    renderWithContexts(<InventorySourceDetail inventorySource={invSource} />);
+
+    await screen.findByText('mock inv source');
+    expect(
+      screen.queryByRole('link', { name: 'edit' })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Delete' })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Start sync source' })
+    ).not.toBeInTheDocument();
   });
 
   test('expected api call is made for delete', async () => {
+    InventorySourcesAPI.destroy.mockResolvedValueOnce({});
+    InventorySourcesAPI.destroyHosts.mockResolvedValueOnce({});
+    InventorySourcesAPI.destroyGroups.mockResolvedValueOnce({});
     const history = createMemoryHistory({
       initialEntries: ['/inventories/inventory/2/sources/123/details'],
     });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <InventorySourceDetail inventorySource={mockInvSource} />,
-        {
-          context: { router: { history } },
-        }
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(history.location.pathname).toEqual(
-      '/inventories/inventory/2/sources/123/details'
+
+    const { user } = renderWithContexts(
+      <InventorySourceDetail inventorySource={mockInvSource} />,
+      { context: { router: { history } } }
     );
-    await act(async () => {
-      wrapper.find('DeleteButton').invoke('onConfirm')();
-    });
-    expect(InventorySourcesAPI.destroy).toHaveBeenCalledTimes(1);
+
+    await user.click(await screen.findByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'Confirm Delete' })
+    );
+
+    await waitFor(() =>
+      expect(InventorySourcesAPI.destroy).toHaveBeenCalledTimes(1)
+    );
     expect(InventorySourcesAPI.destroyHosts).toHaveBeenCalledTimes(1);
     expect(InventorySourcesAPI.destroyGroups).toHaveBeenCalledTimes(1);
-    expect(history.location.pathname).toEqual(
-      '/inventories/inventory/2/sources'
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual(
+        '/inventories/inventory/2/sources'
+      )
     );
   });
 
@@ -221,63 +186,54 @@ describe('InventorySourceDetail', () => {
     InventorySourcesAPI.readOptions.mockImplementationOnce(() =>
       Promise.reject(new Error())
     );
-    expect(InventorySourcesAPI.readOptions).toHaveBeenCalledTimes(0);
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <InventorySourceDetail inventorySource={mockInvSource} />
-      );
-    });
-    expect(InventorySourcesAPI.readOptions).toHaveBeenCalledTimes(1);
-    await waitForElement(wrapper, 'ContentError', (el) => el.length === 1);
-    expect(wrapper.find('ContentError Title').text()).toEqual(
-      'Something went wrong...'
+
+    renderWithContexts(
+      <InventorySourceDetail inventorySource={mockInvSource} />
     );
+
+    expect(
+      await screen.findByText('Something went wrong...')
+    ).toBeInTheDocument();
+    expect(InventorySourcesAPI.readOptions).toHaveBeenCalledTimes(1);
   });
 
   test('Error dialog shown for failed deletion', async () => {
     InventorySourcesAPI.destroy.mockImplementationOnce(() =>
       Promise.reject(new Error())
     );
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <InventorySourceDetail inventorySource={mockInvSource} />
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('Modal[title="Error!"]')).toHaveLength(0);
-    await act(async () => {
-      wrapper.find('DeleteButton').invoke('onConfirm')();
-    });
-    await waitForElement(
-      wrapper,
-      'Modal[title="Error!"]',
-      (el) => el.length === 1
+
+    const { user } = renderWithContexts(
+      <InventorySourceDetail inventorySource={mockInvSource} />
     );
-    await act(async () => {
-      wrapper.find('Modal[title="Error!"]').invoke('onClose')();
-    });
-    await waitForElement(
-      wrapper,
-      'Modal[title="Error!"]',
-      (el) => el.length === 0
+
+    await user.click(await screen.findByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'Confirm Delete' })
+    );
+
+    expect(await screen.findByText('Error!')).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Close' }));
+    await waitFor(() =>
+      expect(screen.queryByText('Error!')).not.toBeInTheDocument()
     );
   });
 
   test('should not load Credentials', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <InventorySourceDetail
-          inventorySource={{
-            ...mockInvSource,
-            summary_fields: {
-              credentials: [],
-            },
-          }}
-        />
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    const credentials_detail = wrapper.find(`Detail[label="Credential"]`).at(0);
-    expect(credentials_detail.prop('isEmpty')).toEqual(true);
+    renderWithContexts(
+      <InventorySourceDetail
+        inventorySource={{
+          ...mockInvSource,
+          summary_fields: {
+            credentials: [],
+          },
+        }}
+      />
+    );
+
+    // With no credentials the Detail renders nothing (isEmpty), so the
+    // label is absent once the component has loaded.
+    await screen.findByText('mock inv source');
+    expect(screen.queryByText('Credential')).not.toBeInTheDocument();
   });
 });

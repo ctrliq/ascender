@@ -1,21 +1,18 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { InventoriesAPI, UnifiedJobsAPI } from 'api';
 import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+  renderWithContexts,
+  assertDetail,
+} from '../../../../testUtils/rtlContexts';
 import SmartInventoryDetail from './SmartInventoryDetail';
-
 import mockSmartInventory from '../shared/data.smart_inventory.json';
 
 jest.mock('../../../api');
 
 describe('<SmartInventoryDetail />', () => {
-  let wrapper;
-
   describe('User has edit permissions', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       UnifiedJobsAPI.read.mockResolvedValue({
         data: {
           results: [
@@ -33,24 +30,18 @@ describe('<SmartInventoryDetail />', () => {
           results: [{ id: 1, name: 'mock instance group' }],
         },
       });
-      await act(async () => {
-        wrapper = mountWithContexts(
-          <SmartInventoryDetail inventory={mockSmartInventory} />
-        );
-      });
-      await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
     });
 
-    afterAll(() => {
+    afterEach(() => {
       jest.clearAllMocks();
     });
 
     test('should render Details', async () => {
-      function assertDetail(label, value) {
-        expect(wrapper.find(`Detail[label="${label}"] dt`).text()).toBe(label);
-        expect(wrapper.find(`Detail[label="${label}"] dd`).text()).toBe(value);
-      }
+      renderWithContexts(
+        <SmartInventoryDetail inventory={mockSmartInventory} />
+      );
 
+      await screen.findByText('Smart Inv');
       assertDetail('Name', 'Smart Inv');
       assertDetail('Description', 'smart inv description');
       assertDetail('Type', 'Smart inventory');
@@ -58,74 +49,84 @@ describe('<SmartInventoryDetail />', () => {
       assertDetail('Smart host filter', 'name__icontains=local');
       assertDetail('Instance groups', 'mock instance group');
       assertDetail('Total hosts', '2');
-      expect(wrapper.find(`Detail[label="Activity"] Sparkline`)).toHaveLength(
-        1
-      );
-      const vars = wrapper.find('VariablesDetail');
-      expect(vars).toHaveLength(1);
-      expect(vars.prop('value')).toEqual(mockSmartInventory.variables);
-      const dates = wrapper.find('UserDateDetail');
-      expect(dates).toHaveLength(2);
-      expect(dates.at(0).prop('date')).toEqual(mockSmartInventory.created);
-      expect(dates.at(1).prop('date')).toEqual(mockSmartInventory.modified);
+
+      expect(screen.getByText('Activity')).toBeInTheDocument();
+      expect(screen.getByText('Variables')).toBeInTheDocument();
+      expect(screen.getByText('Created')).toBeInTheDocument();
+      expect(screen.getByText('Last modified')).toBeInTheDocument();
     });
 
-    test('should show edit button for users with edit permission', () => {
-      const editButton = wrapper.find('Button[aria-label="edit"]');
-      expect(editButton.text()).toEqual('Edit');
-      expect(editButton.prop('to')).toBe(
+    test('should show edit button for users with edit permission', async () => {
+      renderWithContexts(
+        <SmartInventoryDetail inventory={mockSmartInventory} />
+      );
+
+      const editLink = await screen.findByRole('link', { name: 'edit' });
+      expect(editLink).toHaveAttribute(
+        'href',
         `/inventories/smart_inventory/${mockSmartInventory.id}/edit`
       );
     });
 
-    test('expected api calls are made on initial render', () => {
+    test('expected api calls are made on initial render', async () => {
+      renderWithContexts(
+        <SmartInventoryDetail inventory={mockSmartInventory} />
+      );
+
+      await screen.findByText('Smart Inv');
       expect(InventoriesAPI.readInstanceGroups).toHaveBeenCalledTimes(1);
       expect(UnifiedJobsAPI.read).toHaveBeenCalledTimes(1);
     });
 
     test('expected api call is made for delete', async () => {
-      expect(InventoriesAPI.destroy).toHaveBeenCalledTimes(0);
-      await act(async () => {
-        wrapper.find('DeleteButton').invoke('onConfirm')();
-      });
-      expect(InventoriesAPI.destroy).toHaveBeenCalledTimes(1);
+      InventoriesAPI.destroy.mockResolvedValueOnce({});
+      const { user } = renderWithContexts(
+        <SmartInventoryDetail inventory={mockSmartInventory} />
+      );
+
+      await user.click(await screen.findByRole('button', { name: 'Delete' }));
+      await user.click(
+        await screen.findByRole('button', { name: 'Confirm Delete' })
+      );
+
+      await waitFor(() =>
+        expect(InventoriesAPI.destroy).toHaveBeenCalledTimes(1)
+      );
     });
 
     test('Error dialog shown for failed deletion', async () => {
-      InventoriesAPI.destroy.mockImplementationOnce(() =>
-        Promise.reject(new Error())
+      InventoriesAPI.destroy.mockRejectedValueOnce(new Error());
+      const { user } = renderWithContexts(
+        <SmartInventoryDetail inventory={mockSmartInventory} />
       );
-      await act(async () => {
-        wrapper.find('DeleteButton').invoke('onConfirm')();
-      });
-      await waitForElement(
-        wrapper,
-        'Modal[title="Error!"]',
-        (el) => el.length === 1
+
+      await user.click(await screen.findByRole('button', { name: 'Delete' }));
+      await user.click(
+        await screen.findByRole('button', { name: 'Confirm Delete' })
       );
-      await act(async () => {
-        wrapper.find('Modal[title="Error!"]').invoke('onClose')();
-      });
-      await waitForElement(
-        wrapper,
-        'Modal[title="Error!"]',
-        (el) => el.length === 0
+
+      expect(await screen.findByText('Error!')).toBeInTheDocument();
+      expect(
+        screen.getByText('Failed to delete smart inventory.')
+      ).toBeInTheDocument();
+
+      await user.click(screen.getByRole('button', { name: 'Close' }));
+      await waitFor(() =>
+        expect(screen.queryByText('Error!')).not.toBeInTheDocument()
       );
     });
 
     test('should not load Activity', async () => {
-      await act(async () => {
-        wrapper = mountWithContexts(
-          <SmartInventoryDetail
-            inventory={{
-              ...mockSmartInventory,
-              recent_jobs: [],
-            }}
-          />
-        );
-      });
-      const activity_detail = wrapper.find(`Detail[label="Activity"]`).at(0);
-      expect(activity_detail.prop('isEmpty')).toEqual(true);
+      // Activity is sourced from UnifiedJobsAPI.read; with no recent jobs the
+      // Detail renders nothing (isEmpty), so the label is absent.
+      UnifiedJobsAPI.read.mockResolvedValue({ data: { results: [] } });
+
+      renderWithContexts(
+        <SmartInventoryDetail inventory={mockSmartInventory} />
+      );
+
+      await screen.findByText('Smart Inv');
+      expect(screen.queryByText('Activity')).not.toBeInTheDocument();
     });
 
     test('should not load Instance Groups', async () => {
@@ -135,17 +136,12 @@ describe('<SmartInventoryDetail />', () => {
         },
       });
 
-      let wrapper;
-      await act(async () => {
-        wrapper = mountWithContexts(
-          <SmartInventoryDetail inventory={mockSmartInventory} />
-        );
-      });
-      wrapper.update();
-      const instance_groups_detail = wrapper
-        .find(`Detail[label="Instance groups"]`)
-        .at(0);
-      expect(instance_groups_detail.prop('isEmpty')).toEqual(true);
+      renderWithContexts(
+        <SmartInventoryDetail inventory={mockSmartInventory} />
+      );
+
+      await screen.findByText('Smart Inv');
+      expect(screen.queryByText('Instance groups')).not.toBeInTheDocument();
     });
   });
 
@@ -155,33 +151,47 @@ describe('<SmartInventoryDetail />', () => {
     });
 
     test('should hide edit button for users without edit permission', async () => {
-      const readOnlySmartInv = { ...mockSmartInventory };
-      readOnlySmartInv.summary_fields.user_capabilities.edit = false;
-
-      await act(async () => {
-        wrapper = mountWithContexts(
-          <SmartInventoryDetail inventory={readOnlySmartInv} />
-        );
+      UnifiedJobsAPI.read.mockResolvedValue({ data: { results: [] } });
+      InventoriesAPI.readInstanceGroups.mockResolvedValue({
+        data: { results: [] },
       });
-      await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-      expect(wrapper.find('Button[aria-label="edit"]').length).toBe(0);
+      const readOnlySmartInv = {
+        ...mockSmartInventory,
+        summary_fields: {
+          ...mockSmartInventory.summary_fields,
+          user_capabilities: {
+            ...mockSmartInventory.summary_fields.user_capabilities,
+            edit: false,
+          },
+        },
+      };
+
+      renderWithContexts(
+        <SmartInventoryDetail inventory={readOnlySmartInv} />
+      );
+
+      await screen.findByText('Smart Inv');
+      expect(
+        screen.queryByRole('link', { name: 'edit' })
+      ).not.toBeInTheDocument();
     });
 
     test('should show content error when jobs request fails', async () => {
       UnifiedJobsAPI.read.mockImplementationOnce(() =>
         Promise.reject(new Error())
       );
-      expect(UnifiedJobsAPI.read).toHaveBeenCalledTimes(0);
-      await act(async () => {
-        wrapper = mountWithContexts(
-          <SmartInventoryDetail inventory={mockSmartInventory} />
-        );
+      InventoriesAPI.readInstanceGroups.mockResolvedValue({
+        data: { results: [] },
       });
-      expect(UnifiedJobsAPI.read).toHaveBeenCalledTimes(1);
-      await waitForElement(wrapper, 'ContentError', (el) => el.length === 1);
-      expect(wrapper.find('ContentError Title').text()).toEqual(
-        'Something went wrong...'
+
+      renderWithContexts(
+        <SmartInventoryDetail inventory={mockSmartInventory} />
       );
+
+      expect(
+        await screen.findByText('Something went wrong...')
+      ).toBeInTheDocument();
+      expect(UnifiedJobsAPI.read).toHaveBeenCalledTimes(1);
     });
   });
 });

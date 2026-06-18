@@ -1,29 +1,37 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
 import { createMemoryHistory } from 'history';
+import { Routes, Route } from 'react-router-dom-v5-compat';
+import { screen, within } from '@testing-library/react';
 import { ConstructedInventoriesAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import mockInventory from './shared/data.inventory.json';
 import ConstructedInventory from './ConstructedInventory';
 
 jest.mock('../../api');
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useRouteMatch: () => ({
-    url: '/constructed_inventories/1',
-    params: { id: 1 },
-  }),
-}));
+
+// ConstructedInventory reads the id from useParams, so mount it under its v6
+// parent route at a concrete URL rather than mocking the router.
+function renderAt(initialEntry) {
+  const history = createMemoryHistory({ initialEntries: [initialEntry] });
+  return renderWithContexts(
+    <Routes>
+      <Route
+        path="/inventories/:inventoryType/:id/*"
+        element={<ConstructedInventory setBreadcrumb={() => {}} />}
+      />
+    </Routes>,
+    { context: { router: { history } } }
+  );
+}
 
 describe('<ConstructedInventory />', () => {
-  let wrapper;
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
   test('should render expected tabs', async () => {
     ConstructedInventoriesAPI.readDetail.mockResolvedValue({
-      data: mockInventory,
+      data: { ...mockInventory, kind: 'constructed' },
     });
     const expectedTabs = [
       'Back to Inventories',
@@ -34,13 +42,12 @@ describe('<ConstructedInventory />', () => {
       'Jobs',
       'Job Templates',
     ];
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ConstructedInventory setBreadcrumb={() => {}} />
-      );
-    });
-    wrapper.find('RoutedTabs li').forEach((tab, index) => {
-      expect(tab.text()).toEqual(expectedTabs[index]);
+    renderAt('/inventories/constructed_inventory/1/details');
+    const tablist = await screen.findByRole('tablist');
+    const tabs = within(tablist).getAllByRole('tab');
+    expect(tabs).toHaveLength(expectedTabs.length);
+    expectedTabs.forEach((label) => {
+      expect(within(tablist).getByText(label)).toBeInTheDocument();
     });
   });
 
@@ -48,30 +55,7 @@ describe('<ConstructedInventory />', () => {
     ConstructedInventoriesAPI.readDetail.mockResolvedValue({
       data: { ...mockInventory, kind: 'constructed' },
     });
-    const history = createMemoryHistory({
-      initialEntries: ['/inventories/constructed_inventory/1/foobar'],
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ConstructedInventory setBreadcrumb={() => {}} />,
-        {
-          context: {
-            router: {
-              history,
-              route: {
-                location: history.location,
-                match: {
-                  params: { id: 1 },
-                  url: '/inventories/constructed_inventory/1/foobar',
-                  path: '/inventories/:inventoryType/:id/foobar',
-                },
-              },
-            },
-          },
-        }
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('ContentError').length).toBe(1);
+    renderAt('/inventories/constructed_inventory/1/foobar');
+    expect(await screen.findByText('Not Found')).toBeInTheDocument();
   });
 });

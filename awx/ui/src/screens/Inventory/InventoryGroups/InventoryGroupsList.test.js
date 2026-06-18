@@ -1,19 +1,19 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
 import { Routes, Route } from 'react-router-dom-v5-compat';
 import { createMemoryHistory } from 'history';
+import { screen, within } from '@testing-library/react';
 import { InventoriesAPI, GroupsAPI } from 'api';
 import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+  renderWithContexts,
+  settleTooltips,
+} from '../../../../testUtils/rtlContexts';
 import InventoryGroupsList from './InventoryGroupsList';
 
 jest.mock('../../../api');
 
 function renderUnder(url) {
   const history = createMemoryHistory({ initialEntries: [url] });
-  const wrapper = mountWithContexts(
+  const result = renderWithContexts(
     <Routes>
       <Route
         path="/inventories/:inventoryType/:id/groups/*"
@@ -22,8 +22,9 @@ function renderUnder(url) {
     </Routes>,
     { context: { router: { history } } }
   );
-  return { wrapper, history };
+  return { ...result, history };
 }
+
 const mockGroups = [
   {
     id: 1,
@@ -32,10 +33,7 @@ const mockGroups = [
     inventory: 1,
     url: '/api/v2/groups/1',
     summary_fields: {
-      user_capabilities: {
-        delete: true,
-        edit: true,
-      },
+      user_capabilities: { delete: true, edit: true },
     },
   },
   {
@@ -45,10 +43,7 @@ const mockGroups = [
     inventory: 1,
     url: '/api/v2/groups/2',
     summary_fields: {
-      user_capabilities: {
-        delete: true,
-        edit: true,
-      },
+      user_capabilities: { delete: true, edit: true },
     },
   },
   {
@@ -58,50 +53,46 @@ const mockGroups = [
     inventory: 1,
     url: '/api/v2/groups/3',
     summary_fields: {
-      user_capabilities: {
-        delete: false,
-        edit: false,
-      },
+      user_capabilities: { delete: false, edit: false },
     },
   },
 ];
 
-describe('<InventoryGroupsList />', () => {
-  let wrapper;
-  beforeEach(async () => {
-    InventoriesAPI.readGroups.mockResolvedValue({
-      data: {
-        count: mockGroups.length,
-        results: mockGroups,
+function mockSuccessfulApis() {
+  InventoriesAPI.readGroups.mockResolvedValue({
+    data: {
+      count: mockGroups.length,
+      results: mockGroups,
+    },
+  });
+  InventoriesAPI.readGroupsOptions.mockResolvedValue({
+    data: {
+      actions: {
+        GET: {},
+        POST: {},
       },
-    });
-    InventoriesAPI.readGroupsOptions.mockResolvedValue({
-      data: {
-        actions: {
-          GET: {},
-          POST: {},
-        },
-      },
-    });
-    InventoriesAPI.readAdHocOptions.mockResolvedValue({
-      data: {
-        actions: {
-          GET: {
-            module_name: {
-              choices: [
-                ['command', 'command'],
-                ['shell', 'shell'],
-              ],
-            },
+    },
+  });
+  InventoriesAPI.readAdHocOptions.mockResolvedValue({
+    data: {
+      actions: {
+        GET: {
+          module_name: {
+            choices: [
+              ['command', 'command'],
+              ['shell', 'shell'],
+            ],
           },
-          POST: {},
         },
+        POST: {},
       },
-    });
-    await act(async () => {
-      ({ wrapper } = renderUnder('/inventories/inventory/3/groups'));
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
+    },
+  });
+}
+
+describe('<InventoryGroupsList />', () => {
+  beforeEach(() => {
+    mockSuccessfulApis();
   });
 
   afterEach(() => {
@@ -109,63 +100,47 @@ describe('<InventoryGroupsList />', () => {
   });
 
   test('should fetch groups from api and render them in the list', async () => {
+    renderUnder('/inventories/inventory/3/groups');
+    expect(await screen.findByRole('link', { name: 'foo' })).toBeInTheDocument();
     expect(InventoriesAPI.readGroups).toHaveBeenCalled();
-    expect(wrapper.find('InventoryGroupItem').length).toBe(3);
+    expect(screen.getByRole('link', { name: 'bar' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'baz' })).toBeInTheDocument();
   });
 
   test('should render Run Commands button', async () => {
-    expect(wrapper.find('AdHocCommands')).toHaveLength(1);
+    renderUnder('/inventories/inventory/3/groups');
+    expect(
+      await screen.findByRole('button', { name: 'Run Command' })
+    ).toBeInTheDocument();
   });
 
   test('should check and uncheck the row item', async () => {
-    expect(
-      wrapper.find('.pf-c-table__check').first().find('input').props().checked
-    ).toBe(false);
-
-    await act(async () => {
-      wrapper
-        .find('.pf-c-table__check')
-        .first()
-        .find('input')
-        .invoke('onChange')(true);
-    });
-    wrapper.update();
-    expect(
-      wrapper.find('.pf-c-table__check').first().find('input').props().checked
-    ).toBe(true);
-
-    await act(async () => {
-      wrapper
-        .find('.pf-c-table__check')
-        .first()
-        .find('input')
-        .invoke('onChange')(false);
-    });
-    wrapper.update();
-    expect(
-      wrapper.find('.pf-c-table__check').first().find('input').props().checked
-    ).toBe(false);
+    const { user } = renderUnder('/inventories/inventory/3/groups');
+    const row = (await screen.findByRole('link', { name: 'foo' })).closest('tr');
+    const checkbox = within(row).getByRole('checkbox');
+    expect(checkbox).not.toBeChecked();
+    await user.click(checkbox);
+    expect(checkbox).toBeChecked();
+    await user.click(checkbox);
+    expect(checkbox).not.toBeChecked();
   });
 
   test('should check all row items when select all is checked', async () => {
-    expect.assertions(9);
-    wrapper.find('.pf-c-table__check').forEach((el) => {
-      expect(el.find('input').props().checked).toBe(false);
-    });
-    await act(async () => {
-      wrapper.find('Checkbox#select-all').invoke('onChange')(true);
-    });
-    wrapper.update();
-    wrapper.find('.pf-c-table__check').forEach((el) => {
-      expect(el.find('input').props().checked).toBe(true);
-    });
-    await act(async () => {
-      wrapper.find('Checkbox#select-all').invoke('onChange')(false);
-    });
-    wrapper.update();
-    wrapper.find('.pf-c-table__check').forEach((el) => {
-      expect(el.find('input').props().checked).toBe(false);
-    });
+    const { user } = renderUnder('/inventories/inventory/3/groups');
+    await screen.findByRole('link', { name: 'foo' });
+    const selectAll = screen.getByRole('checkbox', { name: 'Select all' });
+    const rowCheckboxes = screen
+      .getAllByRole('checkbox')
+      .filter((box) => box !== selectAll);
+
+    expect(rowCheckboxes).toHaveLength(3);
+    rowCheckboxes.forEach((box) => expect(box).not.toBeChecked());
+
+    await user.click(selectAll);
+    rowCheckboxes.forEach((box) => expect(box).toBeChecked());
+
+    await user.click(selectAll);
+    rowCheckboxes.forEach((box) => expect(box).not.toBeChecked());
   });
 
   test('should not render ad hoc commands button', async () => {
@@ -183,57 +158,18 @@ describe('<InventoryGroupsList />', () => {
         },
       },
     });
-    await act(async () => {
-      ({ wrapper } = renderUnder('/inventories/inventory/3/groups'));
-    });
-    expect(wrapper.find('AdHocCommands')).toHaveLength(0);
+    renderUnder('/inventories/inventory/3/groups');
+    await screen.findByRole('link', { name: 'foo' });
+    expect(
+      screen.queryByRole('button', { name: 'Run Command' })
+    ).not.toBeInTheDocument();
   });
 });
 
 describe('<InventoryGroupsList/> error handling', () => {
-  let wrapper;
-
   beforeEach(() => {
-    InventoriesAPI.readGroups.mockResolvedValue({
-      data: {
-        count: mockGroups.length,
-        results: mockGroups,
-      },
-    });
-    InventoriesAPI.readGroupsOptions.mockResolvedValue({
-      data: {
-        actions: {
-          GET: {},
-          POST: {},
-        },
-      },
-    });
-    InventoriesAPI.readAdHocOptions.mockResolvedValue({
-      data: {
-        actions: {
-          GET: {
-            module_name: {
-              choices: [
-                ['command', 'command'],
-                ['shell', 'shell'],
-              ],
-            },
-          },
-          POST: {},
-        },
-      },
-    });
-    GroupsAPI.destroy.mockRejectedValue(
-      new Error({
-        response: {
-          config: {
-            method: 'delete',
-            url: '/api/v2/groups/1',
-          },
-          data: 'An error occurred',
-        },
-      })
-    );
+    mockSuccessfulApis();
+    GroupsAPI.destroy.mockRejectedValue(new Error());
   });
 
   afterEach(() => {
@@ -244,114 +180,57 @@ describe('<InventoryGroupsList/> error handling', () => {
     InventoriesAPI.readGroupsOptions.mockImplementationOnce(() =>
       Promise.reject(new Error())
     );
-    await act(async () => {
-      ({ wrapper } = renderUnder('/inventories/inventory/3/groups'));
-    });
-    await waitForElement(wrapper, 'ContentError', (el) => el.length > 0);
+    renderUnder('/inventories/inventory/3/groups');
+    expect(
+      await screen.findByText('Something went wrong...')
+    ).toBeInTheDocument();
   });
 
   test('should show content error if groups are not successfully fetched from api', async () => {
     InventoriesAPI.readGroups.mockImplementation(() =>
       Promise.reject(new Error())
     );
-    await act(async () => {
-      ({ wrapper } = renderUnder('/inventories/inventory/3/groups'));
-    });
-    await waitForElement(wrapper, 'ContentError', (el) => el.length > 0);
+    renderUnder('/inventories/inventory/3/groups');
+    expect(
+      await screen.findByText('Something went wrong...')
+    ).toBeInTheDocument();
   });
 
   test('should show error modal when group is not successfully deleted from api', async () => {
-    await act(async () => {
-      ({ wrapper } = renderUnder('/inventories/inventory/3/groups'));
-    });
-    waitForElement(wrapper, 'ContentEmpty', (el) => el.length === 0);
+    const { user } = renderUnder('/inventories/inventory/3/groups');
+    const row = (await screen.findByRole('link', { name: 'foo' })).closest('tr');
+    await user.click(within(row).getByRole('checkbox'));
 
-    await act(async () => {
-      wrapper
-        .find('.pf-c-table__check')
-        .first()
-        .find('input')
-        .invoke('onChange')();
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('Toolbar Button[aria-label="Delete"]').invoke('onClick')();
-    });
-    wrapper.update();
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    expect(await screen.findByText('Delete Group?')).toBeInTheDocument();
 
-    await waitForElement(
-      wrapper,
-      'AlertModal__Header',
-      (el) => el.text() === 'Delete Group?'
+    await user.click(
+      screen.getByRole('radio', { name: 'Delete All Groups and Hosts' })
     );
-    await act(async () => {
-      wrapper.find('Radio[id="radio-delete"]').invoke('onChange')();
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper
-        .find('ModalBoxFooter Button[aria-label="Confirm Delete"]')
-        .invoke('onClick')();
-    });
-    await waitForElement(
-      wrapper,
-      'AlertModal[aria-label="deletion error"] Modal',
-      (el) => el.props().isOpen === true && el.props().title === 'Error!'
-    );
+    await user.click(screen.getByRole('button', { name: 'Confirm Delete' }));
 
-    await act(async () => {
-      wrapper
-        .find('AlertModal[aria-label="deletion error"]')
-        .invoke('onClose')();
-    });
+    expect(await screen.findByText('Error!')).toBeInTheDocument();
+    await settleTooltips();
   });
 });
 
 describe('Constructed Inventory group', () => {
-  let wrapper;
-
-  beforeEach(async () => {
-    InventoriesAPI.readGroups.mockResolvedValue({
-      data: {
-        count: mockGroups.length,
-        results: mockGroups,
-      },
-    });
-    InventoriesAPI.readGroupsOptions.mockResolvedValue({
-      data: {
-        actions: {
-          GET: {},
-          POST: {},
-        },
-      },
-    });
-    InventoriesAPI.readAdHocOptions.mockResolvedValue({
-      data: {
-        actions: {
-          GET: {
-            module_name: {
-              choices: [
-                ['command', 'command'],
-                ['shell', 'shell'],
-              ],
-            },
-          },
-          POST: {},
-        },
-      },
-    });
-    await act(async () => {
-      ({ wrapper } = renderUnder('/inventories/constructed_inventory/3/groups'));
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
+  beforeEach(() => {
+    mockSuccessfulApis();
   });
 
   afterEach(() => {
     jest.clearAllMocks();
   });
-  test('should not show add button', () => {
-    expect(wrapper.find('ToolbarAddButton').length).toBe(0);
-    expect(wrapper.find('ToolbarDeleteButton').length).toBe(0);
-    expect(wrapper.find('AdHocCommands').length).toBe(1);
+
+  test('should not show add or delete buttons but still show ad hoc commands', async () => {
+    renderUnder('/inventories/constructed_inventory/3/groups');
+    expect(
+      await screen.findByRole('button', { name: 'Run Command' })
+    ).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'Add' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Delete' })
+    ).not.toBeInTheDocument();
   });
 });

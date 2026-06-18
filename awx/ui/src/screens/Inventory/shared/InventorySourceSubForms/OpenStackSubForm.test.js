@@ -1,8 +1,8 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
 import { Formik } from 'formik';
+import { waitFor } from '@testing-library/react';
 import { CredentialsAPI } from 'api';
-import { mountWithContexts } from '../../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import OpenStackSubForm from './OpenStackSubForm';
 
 jest.mock('../../../../api');
@@ -21,39 +21,37 @@ const initialValues = {
 };
 
 describe('<OpenStackSubForm />', () => {
-  let wrapper;
-
-  beforeEach(async () => {
+  beforeEach(() => {
     CredentialsAPI.read.mockResolvedValue({
       data: { count: 0, results: [] },
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik initialValues={initialValues}>
-          <OpenStackSubForm />
-        </Formik>
-      );
     });
   });
 
   afterAll(() => {
-    jest.resetAllMocks();
+    jest.clearAllMocks();
   });
 
-  test('should render subform fields', () => {
-    expect(wrapper.find('FormGroup[label="Credential"]')).toHaveLength(1);
-    expect(wrapper.find('FormGroup[label="Verbosity"]')).toHaveLength(1);
-    expect(wrapper.find('FormGroup[label="Update options"]')).toHaveLength(1);
-    expect(
-      wrapper.find('FormGroup[label="Cache timeout (seconds)"]')
-    ).toHaveLength(1);
-    expect(
-      wrapper.find('VariablesField[label="Source variables"]')
-    ).toHaveLength(1);
+  function renderForm() {
+    return renderWithContexts(
+      <Formik initialValues={initialValues}>
+        <OpenStackSubForm />
+      </Formik>
+    );
+  }
+
+  test('should render subform fields', async () => {
+    const { getByText } = renderForm();
+    await waitFor(() => expect(CredentialsAPI.read).toHaveBeenCalled());
+    expect(getByText('Credential')).toBeInTheDocument();
+    expect(getByText('Verbosity')).toBeInTheDocument();
+    expect(getByText('Update options')).toBeInTheDocument();
+    expect(getByText('Cache timeout (seconds)')).toBeInTheDocument();
+    expect(getByText('Source variables')).toBeInTheDocument();
   });
 
-  test('should make expected api calls', () => {
-    expect(CredentialsAPI.read).toHaveBeenCalledTimes(1);
+  test('should make expected api calls', async () => {
+    renderForm();
+    await waitFor(() => expect(CredentialsAPI.read).toHaveBeenCalledTimes(1));
     expect(CredentialsAPI.read).toHaveBeenCalledWith({
       credential_type__namespace: 'openstack',
       order_by: 'name',

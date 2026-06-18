@@ -1,35 +1,34 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { act, waitFor } from '@testing-library/react';
 import WS from 'jest-websocket-mock';
 import { InventorySourcesAPI } from 'api';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import useWsInventorySourceDetails from './useWsInventorySourcesDetails';
 
 jest.mock('../../../api/models/InventorySources');
 
-function TestInner() {
-  return <div />;
-}
 function Test({ inventorySource }) {
   const synced = useWsInventorySourceDetails(inventorySource);
-  return <TestInner inventorySource={synced} />;
+  // expose the hook result as JSON so the test can assert on it via the DOM
+  return <div data-testid="result">{JSON.stringify(synced)}</div>;
 }
 
-describe('useWsProject', () => {
-  let wrapper;
+function readResult(container) {
+  return JSON.parse(container.querySelector('[data-testid="result"]').textContent);
+}
+
+describe('useWsInventorySourceDetails', () => {
+  afterEach(() => {
+    WS.clean();
+  });
 
   test('should return inventory source detail', async () => {
     const inventorySource = { id: 1 };
-    await act(async () => {
-      wrapper = await mountWithContexts(
-        <Test inventorySource={inventorySource} />
-      );
-    });
-
-    expect(wrapper.find('TestInner').prop('inventorySource')).toEqual(
-      inventorySource
+    const { container } = renderWithContexts(
+      <Test inventorySource={inventorySource} />
     );
-    WS.clean();
+
+    expect(readResult(container)).toEqual(inventorySource);
   });
 
   test('should establish websocket connection', async () => {
@@ -37,11 +36,7 @@ describe('useWsProject', () => {
     const mockServer = new WS('ws://localhost/websocket/');
 
     const inventorySource = { id: 1 };
-    await act(async () => {
-      wrapper = await mountWithContexts(
-        <Test inventorySource={inventorySource} />
-      );
-    });
+    renderWithContexts(<Test inventorySource={inventorySource} />);
 
     await mockServer.connected;
     await expect(mockServer).toReceiveMessage(
@@ -53,7 +48,6 @@ describe('useWsProject', () => {
         },
       })
     );
-    WS.clean();
   });
 
   test('should update inventory source status', async () => {
@@ -70,11 +64,9 @@ describe('useWsProject', () => {
         },
       },
     };
-    await act(async () => {
-      wrapper = await mountWithContexts(
-        <Test inventorySource={inventorySource} />
-      );
-    });
+    const { container } = renderWithContexts(
+      <Test inventorySource={inventorySource} />
+    );
 
     await mockServer.connected;
     await expect(mockServer).toReceiveMessage(
@@ -86,11 +78,11 @@ describe('useWsProject', () => {
         },
       })
     );
-    expect(
-      wrapper.find('TestInner').prop('inventorySource').summary_fields
-        .current_job.status
-    ).toEqual('running');
+    expect(readResult(container).summary_fields.current_job.status).toEqual(
+      'running'
+    );
 
+    // an inventory_source-typed message is ignored by the hook
     await act(async () => {
       mockServer.send(
         JSON.stringify({
@@ -104,12 +96,8 @@ describe('useWsProject', () => {
         })
       );
     });
-    wrapper.update();
 
-    expect(
-      wrapper.find('TestInner').prop('inventorySource').summary_fields
-        .current_job
-    ).toEqual({
+    expect(readResult(container).summary_fields.current_job).toEqual({
       id: 1,
       status: 'running',
       finished: null,
@@ -119,6 +107,7 @@ describe('useWsProject', () => {
     InventorySourcesAPI.readDetail.mockResolvedValue({
       data: {},
     });
+    // an inventory_update message in a terminal status triggers a detail refetch
     await act(async () => {
       mockServer.send(
         JSON.stringify({
@@ -132,9 +121,10 @@ describe('useWsProject', () => {
         })
       );
     });
-    expect(InventorySourcesAPI.readDetail).toHaveBeenCalledTimes(1);
+    await waitFor(() =>
+      expect(InventorySourcesAPI.readDetail).toHaveBeenCalledTimes(1)
+    );
 
     jest.clearAllMocks();
-    WS.clean();
   });
 });

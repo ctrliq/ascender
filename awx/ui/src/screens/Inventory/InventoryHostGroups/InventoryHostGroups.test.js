@@ -1,49 +1,31 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
 import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router-dom-v5-compat';
-import { HostsAPI } from 'api';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { screen } from '@testing-library/react';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryHostGroups from './InventoryHostGroups';
 
-jest.mock('../../../api');
-HostsAPI.readAllGroups.mockResolvedValue({
-  data: {
-    count: 1,
-    results: [
-      {
-        id: 1,
-        url: 'www.google.com',
-        summary_fields: {
-          inventory: { id: 1, name: 'foo' },
-          user_capabilities: { edit: true },
-        },
-        name: 'Bar',
-      },
-    ],
-  },
+// stub the leaf list so the index route renders without hitting the API
+jest.mock('./InventoryHostGroupsList', () => {
+  const InventoryHostGroupsList = () => <div data-testid="host-groups-list" />;
+  return { __esModule: true, default: InventoryHostGroupsList };
 });
-HostsAPI.readGroupsOptions.mockResolvedValue({ data: { actions: {} } });
 
 describe('<InventoryHostGroups />', () => {
-  test('initially renders successfully', async () => {
-    let wrapper;
+  test('initially renders successfully', () => {
     const history = createMemoryHistory({
       initialEntries: ['/inventories/inventory/1/hosts/1/groups'],
     });
 
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Routes>
-          <Route
-            path="/inventories/inventory/:id/hosts/:hostId/groups/*"
-            element={<InventoryHostGroups />}
-          />
-        </Routes>,
-        { context: { router: { history } } }
-      );
-    });
-    expect(wrapper.length).toBe(1);
-    expect(wrapper.find('InventoryHostGroupsList').length).toBe(1);
+    renderWithContexts(
+      <Routes>
+        <Route
+          path="/inventories/inventory/:id/hosts/:hostId/groups/*"
+          element={<InventoryHostGroups />}
+        />
+      </Routes>,
+      { context: { router: { history } } }
+    );
+    expect(screen.getByTestId('host-groups-list')).toBeInTheDocument();
   });
 });

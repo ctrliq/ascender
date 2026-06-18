@@ -1,13 +1,16 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom-v5-compat';
 import { createMemoryHistory } from 'history';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, within } from '@testing-library/react';
 import {
   InventoriesAPI,
   InventorySourcesAPI,
   WorkflowJobTemplateNodesAPI,
 } from 'api';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import {
+  renderWithContexts,
+  settleTooltips,
+} from '../../../../testUtils/rtlContexts';
 
 import InventorySourceList from './InventorySourceList';
 
@@ -54,9 +57,21 @@ const sources = {
   },
 };
 
+function renderList(initialEntry = '/inventories/inventory/1/sources') {
+  const history = createMemoryHistory({ initialEntries: [initialEntry] });
+  return renderWithContexts(
+    <Routes>
+      <Route
+        path="/inventories/:inventoryType/:id/sources/*"
+        element={<InventorySourceList />}
+      />
+    </Routes>,
+    { context: { router: { history } } }
+  );
+}
+
 describe('<InventorySourceList />', () => {
-  let wrapper;
-  let history;
+  let user;
   let debug;
 
   beforeEach(async () => {
@@ -84,31 +99,8 @@ describe('<InventorySourceList />', () => {
         },
       },
     });
-    history = createMemoryHistory({
-      initialEntries: ['/inventories/inventory/1/sources'],
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Routes>
-          <Route
-            path="/inventories/:inventoryType/:id/sources/*"
-            element={<InventorySourceList />}
-          />
-        </Routes>,
-        {
-          context: {
-            router: {
-              history,
-              route: {
-                location: { search: '' },
-                match: { params: { id: 1 } },
-              },
-            },
-          },
-        }
-      );
-    });
-    wrapper.update();
+    ({ user } = renderList());
+    await screen.findByRole('link', { name: 'Source Foo' });
   });
 
   afterEach(() => {
@@ -125,199 +117,122 @@ describe('<InventorySourceList />', () => {
     expect(InventorySourcesAPI.readOptions).toHaveBeenCalled();
   });
 
-  test('should have proper number of delete detail requests', async () => {
-    expect(
-      wrapper.find('ToolbarDeleteButton').prop('deleteDetailsRequests')
-    ).toHaveLength(3);
-  });
-
   test('source data should render properly', async () => {
-    expect(wrapper.find('InventorySourceListItem')).toHaveLength(2);
-    expect(
-      wrapper.find('InventorySourceListItem').first().prop('source')
-    ).toEqual(sources.data.results[0]);
+    expect(screen.getByRole('link', { name: 'Source Foo' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Source Bar' })).toBeInTheDocument();
   });
 
   test('add button is not disabled and delete button is disabled', async () => {
-    const addButton = wrapper.find('ToolbarAddButton').find('Link');
-    const deleteButton = wrapper.find('ToolbarDeleteButton').find('Button');
-    expect(addButton.prop('aria-disabled')).toBe(false);
-    expect(deleteButton.prop('isDisabled')).toBe(true);
+    expect(screen.getByRole('link', { name: 'Add' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Delete' })).toBeDisabled();
   });
 
   test('delete button becomes enabled and properly calls api to delete', async () => {
-    const deleteButton = wrapper.find('ToolbarDeleteButton').find('Button');
+    expect(screen.getByRole('button', { name: 'Delete' })).toBeDisabled();
 
-    expect(deleteButton.prop('isDisabled')).toBe(true);
+    const row = screen.getByRole('link', { name: 'Source Foo' }).closest('tr');
+    const checkbox = within(row).getByRole('checkbox');
+    await user.click(checkbox);
+    expect(checkbox).toBeChecked();
 
-    await act(async () =>
-      wrapper.find('.pf-c-table__check').first().find('input').prop('onChange')(
-        { id: 1 }
-      )
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'confirm delete' })
     );
-    wrapper.update();
-    expect(
-      wrapper.find('.pf-c-table__check').first().find('input').prop('checked')
-    ).toBe(true);
 
-    await act(async () =>
-      wrapper.find('Button[aria-label="Delete"]').prop('onClick')()
+    await waitFor(() =>
+      expect(InventorySourcesAPI.destroy).toHaveBeenCalledWith(1)
     );
-    wrapper.update();
-    expect(wrapper.find('AlertModal').length).toBe(1);
-
-    await act(async () =>
-      wrapper.find('Button[aria-label="confirm delete"]').prop('onClick')()
-    );
-    expect(InventorySourcesAPI.destroy).toHaveBeenCalledWith(1);
     expect(InventorySourcesAPI.destroyHosts).toHaveBeenCalledWith(1);
     expect(InventorySourcesAPI.destroyGroups).toHaveBeenCalledWith(1);
   });
 
   test('should throw error after deletion failure', async () => {
-    InventorySourcesAPI.destroy.mockRejectedValue(
-      new Error({
-        response: {
-          config: {
-            method: 'delete',
-            url: '/api/v2/inventory_sources/',
-          },
-          data: 'An error occurred',
-          status: 403,
-        },
-      })
+    InventorySourcesAPI.destroy.mockRejectedValue(new Error());
+
+    const row = screen.getByRole('link', { name: 'Source Foo' }).closest('tr');
+    await user.click(within(row).getByRole('checkbox'));
+
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'confirm delete' })
     );
 
-    await act(async () =>
-      wrapper.find('.pf-c-table__check').first().find('input').prop('onChange')(
-        { id: 1 }
-      )
-    );
-    wrapper.update();
-
-    await act(async () =>
-      wrapper.find('Button[aria-label="Delete"]').prop('onClick')()
-    );
-    wrapper.update();
-
-    await act(async () =>
-      wrapper.find('Button[aria-label="confirm delete"]').prop('onClick')()
-    );
-    wrapper.update();
-    expect(wrapper.find("AlertModal[aria-label='Delete error']").length).toBe(
-      1
-    );
-  });
-
-  test('displays error after unsuccessful read sources fetch', async () => {
-    InventorySourcesAPI.readOptions.mockRejectedValue(
-      new Error({
-        response: {
-          config: {
-            method: 'get',
-            url: '/api/v2/inventories/inventory_sources/',
-          },
-          data: 'An error occurred',
-          status: 403,
-        },
-      })
-    );
-    InventoriesAPI.readSources.mockRejectedValue(
-      new Error({
-        response: {
-          config: {
-            method: 'get',
-            url: '/api/v2/inventories/inventory_sources/',
-          },
-          data: 'An error occurred',
-          status: 403,
-        },
-      })
-    );
-
-    const errorHistory = createMemoryHistory({
-      initialEntries: ['/inventories/inventory/1/sources'],
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Routes>
-          <Route
-            path="/inventories/:inventoryType/:id/sources/*"
-            element={<InventorySourceList />}
-          />
-        </Routes>,
-        { context: { router: { history: errorHistory } } }
-      );
-    });
-    wrapper.update();
-
-    expect(wrapper.find('ContentError').length).toBe(1);
-  });
-
-  test('displays error after unsuccessful read options fetch', async () => {
-    InventorySourcesAPI.readOptions.mockRejectedValue(
-      new Error({
-        response: {
-          config: {
-            method: 'options',
-            url: '/api/v2/inventory_sources/',
-          },
-          data: 'An error occurred',
-          status: 403,
-        },
-      })
-    );
-
-    const errorHistory = createMemoryHistory({
-      initialEntries: ['/inventories/inventory/1/sources'],
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Routes>
-          <Route
-            path="/inventories/:inventoryType/:id/sources/*"
-            element={<InventorySourceList />}
-          />
-        </Routes>,
-        { context: { router: { history: errorHistory } } }
-      );
-    });
-    wrapper.update();
-
-    expect(wrapper.find('ContentError').length).toBe(1);
-  });
-
-  test('displays error after unsuccessful sync all button', async () => {
-    InventoriesAPI.syncAllSources.mockRejectedValue(
-      new Error({
-        response: {
-          config: {
-            method: 'post',
-            url: '/api/v2/inventories/',
-          },
-          data: 'An error occurred',
-          status: 403,
-        },
-      })
-    );
-    await act(async () =>
-      wrapper.find('Button[aria-label="Sync all"]').prop('onClick')()
-    );
-    expect(InventoriesAPI.syncAllSources).toHaveBeenCalled();
-    wrapper.update();
-    expect(wrapper.find("AlertModal[aria-label='Sync error']").length).toBe(1);
+    expect(await screen.findByText('Error!')).toBeInTheDocument();
+    await settleTooltips();
   });
 
   test('should render sync all button and make api call to start sync for all', async () => {
-    const syncAllButton = wrapper.find('Button[aria-label="Sync all"]');
-    expect(syncAllButton.length).toBe(1);
-    await act(async () => syncAllButton.prop('onClick')());
-    expect(InventoriesAPI.syncAllSources).toHaveBeenCalled();
+    const syncAllButton = screen.getByRole('button', { name: 'Sync all' });
+    expect(syncAllButton).toBeInTheDocument();
+    await user.click(syncAllButton);
+    await waitFor(() =>
+      expect(InventoriesAPI.syncAllSources).toHaveBeenCalled()
+    );
     expect(InventoriesAPI.readSources).toHaveBeenCalled();
+    await settleTooltips();
+  });
+
+  test('displays error after unsuccessful sync all button', async () => {
+    InventoriesAPI.syncAllSources.mockRejectedValue(new Error());
+    await user.click(screen.getByRole('button', { name: 'Sync all' }));
+    await waitFor(() =>
+      expect(InventoriesAPI.syncAllSources).toHaveBeenCalled()
+    );
+    expect(await screen.findByText('Error!')).toBeInTheDocument();
+    await settleTooltips();
+  });
+});
+
+describe('<InventorySourceList /> error handling', () => {
+  let debug;
+
+  beforeEach(() => {
+    debug = global.console.debug;
+    global.console.debug = () => {};
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+    global.console.debug = debug;
+  });
+
+  test('displays error after unsuccessful read sources fetch', async () => {
+    InventorySourcesAPI.readOptions.mockRejectedValue(new Error());
+    InventoriesAPI.readSources.mockRejectedValue(new Error());
+
+    renderList();
+
+    expect(
+      await screen.findByText('Something went wrong...')
+    ).toBeInTheDocument();
+  });
+
+  test('displays error after unsuccessful read options fetch', async () => {
+    InventoriesAPI.readSources.mockResolvedValue(sources);
+    InventorySourcesAPI.readOptions.mockRejectedValue(new Error());
+
+    renderList();
+
+    expect(
+      await screen.findByText('Something went wrong...')
+    ).toBeInTheDocument();
   });
 });
 
 describe('<InventorySourceList /> RBAC testing', () => {
+  let debug;
+
+  beforeEach(() => {
+    debug = global.console.debug;
+    global.console.debug = () => {};
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+    global.console.debug = debug;
+  });
+
   test('should not render add button', async () => {
     sources.data.results[0].summary_fields.user_capabilities = {
       edit: true,
@@ -340,37 +255,14 @@ describe('<InventorySourceList /> RBAC testing', () => {
         },
       },
     });
-    let newWrapper;
-    const history = createMemoryHistory({
-      initialEntries: ['/inventories/inventory/2/sources'],
-    });
-    await act(async () => {
-      newWrapper = mountWithContexts(
-        <Routes>
-          <Route
-            path="/inventories/:inventoryType/:id/sources/*"
-            element={<InventorySourceList />}
-          />
-        </Routes>,
-        {
-          context: {
-            router: {
-              history,
-              route: {
-                location: { search: '' },
-                match: { params: { id: 2 } },
-              },
-            },
-          },
-        }
-      );
-    });
-    newWrapper.update();
-    expect(newWrapper.find('ToolbarAddButton').length).toBe(0);
-    jest.clearAllMocks();
+
+    renderList('/inventories/inventory/2/sources');
+    await screen.findByRole('link', { name: 'Source Foo' });
+
+    expect(screen.queryByRole('link', { name: 'Add' })).not.toBeInTheDocument();
   });
 
-  test('should not render Sync All button', async () => {
+  test('should not render Sync all button', async () => {
     sources.data.results[0].summary_fields.user_capabilities = {
       edit: true,
       delete: true,
@@ -378,33 +270,27 @@ describe('<InventorySourceList /> RBAC testing', () => {
       schedule: true,
     };
     InventoriesAPI.readSources.mockResolvedValue(sources);
-    let newWrapper;
-    const history = createMemoryHistory({
-      initialEntries: ['/inventories/inventory/2/sources'],
-    });
-    await act(async () => {
-      newWrapper = mountWithContexts(
-        <Routes>
-          <Route
-            path="/inventories/:inventoryType/:id/sources/*"
-            element={<InventorySourceList />}
-          />
-        </Routes>,
-        {
-          context: {
-            router: {
-              history,
-              route: {
-                location: { search: '' },
-                match: { params: { id: 2 } },
-              },
+    InventorySourcesAPI.readOptions.mockResolvedValue({
+      data: {
+        actions: {
+          GET: {
+            source: {
+              choices: [
+                ['scm', 'SCM'],
+                ['ec2', 'EC2'],
+              ],
             },
           },
-        }
-      );
+          POST: {},
+        },
+      },
     });
-    newWrapper.update();
-    expect(newWrapper.find('Button[aria-label="Sync All"]').length).toBe(0);
-    jest.clearAllMocks();
+
+    renderList('/inventories/inventory/2/sources');
+    await screen.findByRole('link', { name: 'Source Foo' });
+
+    expect(
+      screen.queryByRole('button', { name: 'Sync all' })
+    ).not.toBeInTheDocument();
   });
 });

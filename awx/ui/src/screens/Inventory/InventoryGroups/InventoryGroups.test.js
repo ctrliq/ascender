@@ -1,16 +1,26 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
 import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router-dom-v5-compat';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { screen } from '@testing-library/react';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryGroups from './InventoryGroups';
 
 jest.mock('../../../api');
 
+// stub the leaf screens so route resolution can be asserted without the API
+jest.mock('./InventoryGroupsList', () => {
+  const InventoryGroupsList = () => <div data-testid="groups-list" />;
+  return { __esModule: true, default: InventoryGroupsList };
+});
+jest.mock('../InventoryGroupAdd/InventoryGroupAdd', () => {
+  const InventoryGroupsAdd = () => <div data-testid="groups-add" />;
+  return { __esModule: true, default: InventoryGroupsAdd };
+});
+
 // InventoryGroups uses relative routes, so mount it under its v6 parent route.
 function renderUnder(initialEntry, inventory) {
   const history = createMemoryHistory({ initialEntries: [initialEntry] });
-  return mountWithContexts(
+  return renderWithContexts(
     <Routes>
       <Route
         path="/inventories/:inventoryType/:id/groups/*"
@@ -24,25 +34,13 @@ function renderUnder(initialEntry, inventory) {
 }
 
 describe('<InventoryGroups />', () => {
-  test('initially renders successfully', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = renderUnder('/inventories/inventory/1/groups', {
-        id: 1,
-        name: 'Foo',
-      });
-    });
-    expect(wrapper.length).toBe(1);
-    expect(wrapper.find('InventoryGroupsList').length).toBe(1);
+  test('initially renders successfully', () => {
+    renderUnder('/inventories/inventory/1/groups', { id: 1, name: 'Foo' });
+    expect(screen.getByTestId('groups-list')).toBeInTheDocument();
   });
-  test('test that InventoryGroupsAdd renders', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = renderUnder('/inventories/inventory/1/groups/add', {
-        id: 1,
-        name: 'Foo',
-      });
-    });
-    expect(wrapper.find('InventoryGroupsAdd').length).toBe(1);
+
+  test('test that InventoryGroupsAdd renders', () => {
+    renderUnder('/inventories/inventory/1/groups/add', { id: 1, name: 'Foo' });
+    expect(screen.getByTestId('groups-add')).toBeInTheDocument();
   });
 });

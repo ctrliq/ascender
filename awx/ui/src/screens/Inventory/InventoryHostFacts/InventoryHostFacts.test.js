@@ -1,58 +1,30 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen } from '@testing-library/react';
 import { HostsAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryHostFacts from './InventoryHostFacts';
 import mockHost from '../shared/data.host.json';
 import mockHostFacts from '../shared/data.hostFacts.json';
 
 jest.mock('../../../api');
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => ({
-    id: 1,
-    hostId: 1,
-  }),
-}));
 
 describe('<InventoryHostFacts />', () => {
-  let wrapper;
-
-  beforeEach(async () => {
-    HostsAPI.readFacts.mockResolvedValue({ data: mockHostFacts });
-    await act(async () => {
-      wrapper = mountWithContexts(<InventoryHostFacts host={mockHost} />);
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-  });
-
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  test('initially renders successfully ', () => {
-    expect(wrapper.find('InventoryHostFacts').length).toBe(1);
+  test('initially renders successfully', async () => {
+    HostsAPI.readFacts.mockResolvedValue({ data: mockHostFacts });
+    renderWithContexts(<InventoryHostFacts host={mockHost} />);
+    // react-ace renders empty under jsdom; assert the Facts label/container
+    expect(await screen.findByText('Facts')).toBeInTheDocument();
   });
 
   test('renders ContentError when facts GET fails', async () => {
-    HostsAPI.readFacts.mockRejectedValueOnce(
-      new Error({
-        response: {
-          config: {
-            method: 'get',
-            url: '/api/v2/hosts/1/ansible_facts',
-          },
-          data: 'An error occurred',
-          status: 500,
-        },
-      })
-    );
-    await act(async () => {
-      wrapper = mountWithContexts(<InventoryHostFacts host={mockHost} />);
-    });
-    await waitForElement(wrapper, 'ContentError', (el) => el.length === 1);
+    HostsAPI.readFacts.mockRejectedValueOnce(new Error());
+    renderWithContexts(<InventoryHostFacts host={mockHost} />);
+    expect(
+      await screen.findByText('Something went wrong...')
+    ).toBeInTheDocument();
   });
 });

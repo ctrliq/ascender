@@ -1,97 +1,73 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
-import { act } from 'react-dom/test-utils';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { Routes, Route } from 'react-router-dom-v5-compat';
+import { createMemoryHistory } from 'history';
+import { screen } from '@testing-library/react';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryGroupItem from './InventoryGroupItem';
 
-describe('<InventoryGroupItem />', () => {
-  let wrapper;
-  const mockGroup = {
-    id: 2,
-    type: 'group',
-    name: 'foo',
-    inventory: 1,
-    summary_fields: {
-      user_capabilities: {
-        edit: true,
-      },
+const mockGroup = {
+  id: 2,
+  type: 'group',
+  name: 'foo',
+  inventory: 1,
+  summary_fields: {
+    user_capabilities: {
+      edit: true,
     },
-  };
+  },
+};
 
-  beforeEach(() => {
-    wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <InventoryGroupItem
-            group={mockGroup}
-            inventoryId={1}
-            isSelected={false}
-            onSelect={() => {}}
-          />
-        </tbody>
-      </table>
-    );
-  });
-
-  test('initially renders successfully', () => {
-    expect(wrapper.find('InventoryGroupItem').length).toBe(1);
-  });
-
-  test('edit button should be shown to users with edit capabilities', () => {
-    expect(wrapper.find('PencilAltIcon').exists()).toBeTruthy();
-  });
-
-  test('edit button should be hidden from users without edit capabilities', () => {
-    const copyMockGroup = { ...mockGroup };
-    copyMockGroup.summary_fields.user_capabilities.edit = false;
-
-    wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <InventoryGroupItem
-            group={copyMockGroup}
-            inventoryId={1}
-            isSelected={false}
-            onSelect={() => {}}
-          />
-        </tbody>
-      </table>
-    );
-    expect(wrapper.find('PencilAltIcon').exists()).toBeFalsy();
-  });
-  test('edit button should be hidden from constructed inventory group', async () => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ id: 42, inventoryType: 'constructed_inventory' }),
-    }));
-    const mockGroup = {
-      id: 2,
-      type: 'group',
-      name: 'foo',
-      inventory: 1,
-      summary_fields: {
-        user_capabilities: {
-          edit: true,
-        },
-      },
-    };
-
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Route path="/inventories/:inventoryType/:id/groups">
+function renderItem(group, url = '/inventories/inventory/1/groups') {
+  const history = createMemoryHistory({ initialEntries: [url] });
+  return renderWithContexts(
+    <Routes>
+      <Route
+        path="/inventories/:inventoryType/:id/groups/*"
+        element={
           <table>
             <tbody>
               <InventoryGroupItem
-                group={mockGroup}
-                inventoryId={1}
+                group={group}
                 isSelected={false}
                 onSelect={() => {}}
+                rowIndex={0}
               />
             </tbody>
           </table>
-        </Route>
-      );
+        }
+      />
+    </Routes>,
+    { context: { router: { history } } }
+  );
+}
+
+describe('<InventoryGroupItem />', () => {
+  test('initially renders successfully', () => {
+    renderItem(mockGroup);
+    expect(screen.getByRole('link', { name: 'foo' })).toBeInTheDocument();
+  });
+
+  test('edit button should be shown to users with edit capabilities', () => {
+    renderItem(mockGroup);
+    expect(
+      screen.getByRole('link', { name: 'Edit Group' })
+    ).toBeInTheDocument();
+  });
+
+  test('edit button should be hidden from users without edit capabilities', () => {
+    renderItem({
+      ...mockGroup,
+      summary_fields: { user_capabilities: { edit: false } },
     });
-    expect(wrapper.find('PencilAltIcon').exists()).toBeFalsy();
+    expect(
+      screen.queryByRole('link', { name: 'Edit Group' })
+    ).not.toBeInTheDocument();
+  });
+
+  test('edit button should be hidden from constructed inventory group', () => {
+    renderItem(mockGroup, '/inventories/constructed_inventory/42/groups');
+    expect(
+      screen.queryByRole('link', { name: 'Edit Group' })
+    ).not.toBeInTheDocument();
   });
 });

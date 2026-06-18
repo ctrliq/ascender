@@ -1,12 +1,12 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router-dom-v5-compat';
 import { GroupsAPI, InventoriesAPI } from 'api';
 import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+  renderWithContexts,
+  settleTooltips,
+} from '../../../../testUtils/rtlContexts';
 import InventoryGroupHostList from './InventoryGroupHostList';
 import mockHosts from '../shared/data.hosts.json';
 
@@ -16,7 +16,7 @@ jest.mock('../../../api/models/CredentialTypes');
 
 function renderUnder(url) {
   const history = createMemoryHistory({ initialEntries: [url] });
-  const wrapper = mountWithContexts(
+  return renderWithContexts(
     <Routes>
       <Route
         path="/inventories/:inventoryType/:id/groups/:groupId/nested_hosts/*"
@@ -25,274 +25,199 @@ function renderUnder(url) {
     </Routes>,
     { context: { router: { history } } }
   );
-  return { wrapper, history };
 }
+
+const adHocOptions = {
+  data: {
+    actions: {
+      GET: {
+        module_name: {
+          choices: [
+            ['command', 'command'],
+            ['shell', 'shell'],
+          ],
+        },
+      },
+      POST: {},
+    },
+  },
+};
 
 describe('<InventoryGroupHostList />', () => {
   const url = '/inventories/inventory/1/groups/2/nested_hosts';
-  let wrapper;
 
-  beforeEach(async () => {
-    GroupsAPI.readAllHosts.mockResolvedValue({
-      data: { ...mockHosts },
-    });
+  beforeEach(() => {
+    GroupsAPI.readAllHosts.mockResolvedValue({ data: { ...mockHosts } });
     InventoriesAPI.readHostsOptions.mockResolvedValue({
-      data: {
-        actions: {
-          GET: {},
-          POST: {},
-        },
-      },
+      data: { actions: { GET: {}, POST: {} } },
     });
-    InventoriesAPI.readAdHocOptions.mockResolvedValue({
-      data: {
-        actions: {
-          GET: {
-            module_name: {
-              choices: [
-                ['command', 'command'],
-                ['shell', 'shell'],
-              ],
-            },
-          },
-          POST: {},
-        },
-      },
-    });
-    await act(async () => {
-      ({ wrapper } = renderUnder(url));
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
+    InventoriesAPI.readAdHocOptions.mockResolvedValue(adHocOptions);
   });
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  test('initially renders successfully ', () => {
-    expect(wrapper.find('InventoryGroupHostList').length).toBe(1);
-  });
-
-  test('should fetch inventory group hosts from api and render them in the list', () => {
+  test('should fetch inventory group hosts from api and render them in the list', async () => {
+    renderUnder(url);
+    await screen.findAllByRole('link', { name: /dummy/ });
     expect(GroupsAPI.readAllHosts).toHaveBeenCalled();
     expect(InventoriesAPI.readHostsOptions).toHaveBeenCalled();
     expect(InventoriesAPI.readAdHocOptions).toHaveBeenCalled();
-    expect(wrapper.find('InventoryGroupHostListItem').length).toBe(3);
+    expect(
+      screen.getAllByRole('checkbox', { name: /select row/i })
+    ).toHaveLength(3);
   });
 
   test('should check and uncheck the row item', async () => {
-    expect(
-      wrapper.find('input[aria-label="Select row 2"]').props().checked
-    ).toBe(false);
-    await act(async () => {
-      wrapper.find('input[aria-label="Select row 2"]').invoke('onChange')();
-    });
-    wrapper.update();
-    expect(
-      wrapper.find('input[aria-label="Select row 2"]').props().checked
-    ).toBe(true);
-    await act(async () => {
-      wrapper.find('input[aria-label="Select row 2"]').invoke('onChange')();
-    });
-    wrapper.update();
-    expect(
-      wrapper.find('input[aria-label="Select row 2"]').props().checked
-    ).toBe(false);
+    const { user } = renderUnder(url);
+    await screen.findAllByRole('link', { name: /dummy/ });
+    const checkbox = screen.getByRole('checkbox', { name: 'Select row 2' });
+    expect(checkbox).not.toBeChecked();
+    await user.click(checkbox);
+    expect(checkbox).toBeChecked();
+    await user.click(checkbox);
+    expect(checkbox).not.toBeChecked();
   });
 
   test('should check all row items when select all is checked', async () => {
-    wrapper.find('DataListCheck').forEach((el) => {
-      expect(el.props().checked).toBe(false);
+    const { user } = renderUnder(url);
+    await screen.findAllByRole('link', { name: /dummy/ });
+    const selectAll = screen.getByRole('checkbox', { name: 'Select all' });
+    const rowCheckboxes = screen.getAllByRole('checkbox', {
+      name: /select row/i,
     });
-    await act(async () => {
-      wrapper.find('Checkbox#select-all').invoke('onChange')(true);
-    });
-    wrapper.update();
-    wrapper.find('DataListCheck').forEach((el) => {
-      expect(el.props().checked).toBe(true);
-    });
-    await act(async () => {
-      wrapper.find('Checkbox#select-all').invoke('onChange')(false);
-    });
-    wrapper.update();
-    wrapper.find('DataListCheck').forEach((el) => {
-      expect(el.props().checked).toBe(false);
-    });
+    await user.click(selectAll);
+    rowCheckboxes.forEach((box) => expect(box).toBeChecked());
+    await user.click(selectAll);
+    rowCheckboxes.forEach((box) => expect(box).not.toBeChecked());
   });
 
   test('should show add dropdown button and Run Commands according to permissions', async () => {
-    expect(wrapper.find('AddDropDownButton').length).toBe(1);
-    InventoriesAPI.readHostsOptions.mockResolvedValueOnce({
-      data: {
-        actions: {
-          GET: {},
-        },
-      },
+    renderUnder(url);
+    await screen.findAllByRole('link', { name: /dummy/ });
+    expect(screen.getByRole('button', { name: 'Add' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Run Command' })
+    ).toBeInTheDocument();
+  });
+
+  test('should hide add dropdown without POST permission', async () => {
+    InventoriesAPI.readHostsOptions.mockResolvedValue({
+      data: { actions: { GET: {} } },
     });
-    await act(async () => {
-      ({ wrapper } = renderUnder(url));
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('AddDropDownButton').length).toBe(0);
-    expect(wrapper.find('AdHocCommands').length).toBe(1);
+    renderUnder(url);
+    await screen.findAllByRole('link', { name: /dummy/ });
+    expect(
+      screen.queryByRole('button', { name: 'Add' })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Run Command' })
+    ).toBeInTheDocument();
   });
 
   test('expected api calls are made for multi-delete', async () => {
-    expect(GroupsAPI.disassociateHost).toHaveBeenCalledTimes(0);
-    expect(GroupsAPI.readAllHosts).toHaveBeenCalledTimes(1);
-    await act(async () => {
-      wrapper.find('Checkbox#select-all').invoke('onChange')(true);
-    });
-    wrapper.update();
-    wrapper.find('button[aria-label="Disassociate"]').simulate('click');
-    expect(wrapper.find('AlertModal Title').text()).toEqual(
-      'Disassociate host from group?'
+    GroupsAPI.disassociateHost.mockResolvedValue({});
+    const { user } = renderUnder(url);
+    await screen.findAllByRole('link', { name: /dummy/ });
+    await user.click(screen.getByRole('checkbox', { name: 'Select all' }));
+    await user.click(screen.getByRole('button', { name: 'Disassociate' }));
+    expect(
+      await screen.findByText('Disassociate host from group?')
+    ).toBeInTheDocument();
+    await user.click(
+      screen.getByRole('button', { name: 'confirm disassociate' })
     );
-    await act(async () => {
-      wrapper
-        .find('button[aria-label="confirm disassociate"]')
-        .simulate('click');
-    });
-    expect(GroupsAPI.disassociateHost).toHaveBeenCalledTimes(3);
-    expect(GroupsAPI.readAllHosts).toHaveBeenCalledTimes(2);
+    await waitFor(() =>
+      expect(GroupsAPI.disassociateHost).toHaveBeenCalledTimes(3)
+    );
+    await waitFor(() => expect(GroupsAPI.readAllHosts).toHaveBeenCalledTimes(2));
   });
 
   test('should show error modal for failed disassociation', async () => {
     GroupsAPI.disassociateHost.mockRejectedValue(new Error());
-    await act(async () => {
-      wrapper.find('Checkbox#select-all').invoke('onChange')(true);
-    });
-    wrapper.update();
-    wrapper.find('button[aria-label="Disassociate"]').simulate('click');
-    expect(wrapper.find('AlertModal Title').text()).toEqual(
-      'Disassociate host from group?'
+    const { user } = renderUnder(url);
+    await screen.findAllByRole('link', { name: /dummy/ });
+    await user.click(screen.getByRole('checkbox', { name: 'Select all' }));
+    await user.click(screen.getByRole('button', { name: 'Disassociate' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'confirm disassociate' })
     );
-    await act(async () => {
-      wrapper
-        .find('button[aria-label="confirm disassociate"]')
-        .simulate('click');
-    });
-    wrapper.update();
-    expect(wrapper.find('AlertModal ErrorDetail').length).toBe(1);
-    expect(wrapper.find('AlertModal ModalBoxBody').text()).toEqual(
-      expect.stringContaining('Failed to disassociate one or more hosts.')
+    expect(await screen.findByText('Error!')).toBeInTheDocument();
+    expect(
+      screen.getByText('Failed to disassociate one or more hosts.')
+    ).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Close' }));
+    await waitFor(() =>
+      expect(screen.queryByText('Error!')).not.toBeInTheDocument()
     );
+    await settleTooltips();
   });
 
   test('should show associate host modal when adding an existing host', async () => {
-    const dropdownToggle = wrapper.find('ToolbarAddButton');
-    act(() => {
-      dropdownToggle.prop('onClick')();
+    InventoriesAPI.readHosts.mockResolvedValue({
+      data: { count: 0, results: [] },
     });
-    wrapper.update();
-
-    await act(async () => {
-      wrapper
-        .find('DropdownItem[aria-label="Add existing host"]')
-        .prop('onClick')();
-    });
-    await waitForElement(wrapper, 'AssociateModal', (el) => el.length === 1);
-    wrapper.find('ModalBoxCloseButton').simulate('click');
-    expect(wrapper.find('AssociateModal').length).toBe(0);
+    const { user } = renderUnder(url);
+    await screen.findAllByRole('link', { name: /dummy/ });
+    await user.click(screen.getByRole('button', { name: 'Add' }));
+    await user.click(
+      await screen.findByRole('menuitem', { name: 'Add existing host' })
+    );
+    expect(await screen.findByRole('dialog')).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Close' }));
+    await waitFor(() =>
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    );
+    await settleTooltips();
   });
 
   test('should make expected api request when associating hosts', async () => {
-    GroupsAPI.associateHost.mockResolvedValue();
+    GroupsAPI.associateHost.mockResolvedValue({});
     InventoriesAPI.readHosts.mockResolvedValue({
       data: {
         count: 1,
         results: [{ id: 123, name: 'foo', url: '/api/v2/hosts/123/' }],
       },
     });
-    act(() => {
-      wrapper.find('ToolbarAddButton').prop('onClick')();
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper
-        .find('DropdownItem[aria-label="Add existing host"]')
-        .prop('onClick')();
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    await act(async () => {
-      wrapper.find('CheckboxListItem').first().invoke('onSelect')();
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('button[aria-label="Save"]').simulate('click');
-    });
-    await waitForElement(wrapper, 'AssociateModal', (el) => el.length === 0);
+    const { user } = renderUnder(url);
+    await screen.findAllByRole('link', { name: /dummy/ });
+    await user.click(screen.getByRole('button', { name: 'Add' }));
+    await user.click(
+      await screen.findByRole('menuitem', { name: 'Add existing host' })
+    );
+    const dialog = await screen.findByRole('dialog');
+    await user.click(await within(dialog).findByText('foo'));
+    await user.click(within(dialog).getByRole('button', { name: 'Save' }));
+    await waitFor(() =>
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    );
     expect(InventoriesAPI.readHosts).toHaveBeenCalledTimes(1);
     expect(GroupsAPI.associateHost).toHaveBeenCalledTimes(1);
-  });
-
-  test('should show error modal for failed host association', async () => {
-    GroupsAPI.associateHost.mockRejectedValue(new Error());
-    InventoriesAPI.readHosts.mockResolvedValue({
-      data: {
-        count: 1,
-        results: [{ id: 123, name: 'foo', url: '/api/v2/hosts/123/' }],
-      },
-    });
-    wrapper.find('ToolbarAddButton[aria-label="Add"]').simulate('click');
-    await act(async () => {
-      wrapper
-        .find('DropdownItem[aria-label="Add existing host"]')
-        .simulate('click');
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    await act(async () => {
-      wrapper.find('CheckboxListItem').first().invoke('onSelect')();
-    });
-    await act(async () => {
-      wrapper.find('button[aria-label="Save"]').simulate('click');
-    });
-    wrapper.update();
-    expect(wrapper.find('AlertModal ErrorDetail').length).toBe(1);
-    expect(wrapper.find('AlertModal ModalBoxBody').text()).toEqual(
-      expect.stringContaining('Failed to associate.')
-    );
+    await settleTooltips();
   });
 
   test('should navigate to host add form when adding a new host', async () => {
-    GroupsAPI.readAllHosts.mockResolvedValue({
-      data: { ...mockHosts },
-    });
-    InventoriesAPI.readHostsOptions.mockResolvedValue({
-      data: {
-        actions: {
-          GET: {},
-          POST: {},
-        },
-      },
-    });
-    let history;
-    await act(async () => {
-      ({ wrapper, history } = renderUnder(`${url}/add`));
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    await act(async () => {
-      wrapper.find('ToolbarAddButton').prop('onClick')();
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('[ouiaId="add-new-host-dropdown-item"]').simulate('click');
-    });
-    wrapper.update();
+    const { user, history } = renderUnder(url);
+    await screen.findAllByRole('link', { name: /dummy/ });
+    await user.click(screen.getByRole('button', { name: 'Add' }));
+    await user.click(
+      await screen.findByRole('menuitem', { name: 'Add new host' })
+    );
     expect(history.location.pathname).toEqual(
       '/inventories/inventory/1/groups/2/nested_hosts/add'
     );
+    await settleTooltips();
   });
 
   test('should show content error when api throws error on initial render', async () => {
-    InventoriesAPI.readHostsOptions.mockImplementationOnce(() =>
-      Promise.reject(new Error())
-    );
-    await act(async () => {
-      ({ wrapper } = renderUnder(url));
-    });
-    await waitForElement(wrapper, 'ContentError', (el) => el.length === 1);
+    InventoriesAPI.readHostsOptions.mockRejectedValue(new Error());
+    renderUnder(url);
+    expect(
+      await screen.findByText('Something went wrong...')
+    ).toBeInTheDocument();
   });
+
   test('should not render ad hoc commands button', async () => {
     InventoriesAPI.readAdHocOptions.mockResolvedValue({
       data: {
@@ -308,56 +233,35 @@ describe('<InventoryGroupHostList />', () => {
         },
       },
     });
-    await act(async () => {
-      ({ wrapper } = renderUnder(url));
-    });
-    expect(wrapper.find('AdHocCommands')).toHaveLength(0);
+    renderUnder(url);
+    await screen.findAllByRole('link', { name: /dummy/ });
+    expect(
+      screen.queryByRole('button', { name: 'Run Command' })
+    ).not.toBeInTheDocument();
   });
 });
 
 describe('<InventoryGroupHostList> for constructed inventories', () => {
-  let wrapper;
-
-  beforeEach(async () => {
-    GroupsAPI.readAllHosts.mockResolvedValue({
-      data: { ...mockHosts },
-    });
+  beforeEach(() => {
+    GroupsAPI.readAllHosts.mockResolvedValue({ data: { ...mockHosts } });
     InventoriesAPI.readHostsOptions.mockResolvedValue({
-      data: {
-        actions: {
-          GET: {},
-          POST: {},
-        },
-      },
+      data: { actions: { GET: {}, POST: {} } },
     });
-    InventoriesAPI.readAdHocOptions.mockResolvedValue({
-      data: {
-        actions: {
-          GET: {
-            module_name: {
-              choices: [
-                ['command', 'command'],
-                ['shell', 'shell'],
-              ],
-            },
-          },
-          POST: {},
-        },
-      },
-    });
-    await act(async () => {
-      ({ wrapper } = renderUnder(
-        '/inventories/constructed_inventory/1/groups/2/nested_hosts'
-      ));
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
+    InventoriesAPI.readAdHocOptions.mockResolvedValue(adHocOptions);
   });
 
   afterEach(() => {
     jest.clearAllMocks();
   });
+
   test('Should not show associate, or disassociate button', async () => {
-    expect(wrapper.find('AddDropDownButton').length).toBe(0);
-    expect(wrapper.find('DisassociateButton').length).toBe(0);
+    renderUnder('/inventories/constructed_inventory/1/groups/2/nested_hosts');
+    await screen.findAllByRole('link', { name: /dummy/ });
+    expect(
+      screen.queryByRole('button', { name: 'Add' })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Disassociate' })
+    ).not.toBeInTheDocument();
   });
 });

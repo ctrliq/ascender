@@ -1,48 +1,66 @@
 import React from 'react';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { Routes, Route } from 'react-router-dom-v5-compat';
+import { createMemoryHistory } from 'history';
+import { screen } from '@testing-library/react';
+import {
+  renderWithContexts,
+  assertDetail,
+} from '../../../../testUtils/rtlContexts';
 import AdvancedInventoryHostDetail from './AdvancedInventoryHostDetail';
 import mockHost from '../shared/data.host.json';
 
 jest.mock('../../../api');
 
-describe('<AdvancedInventoryHostDetail />', () => {
-  let wrapper;
-
-  beforeAll(() => {
-    wrapper = mountWithContexts(
-      <AdvancedInventoryHostDetail host={mockHost} />
-    );
+function renderAt(host) {
+  const history = createMemoryHistory({
+    initialEntries: ['/inventories/inventory/3/hosts/2/details'],
   });
-
-  test('should render Details', () => {
-    function assertDetail(label, value) {
-      expect(wrapper.find(`Detail[label="${label}"] dt`).text()).toBe(label);
-      expect(wrapper.find(`Detail[label="${label}"] dd`).text()).toBe(value);
+  return renderWithContexts(
+    <Routes>
+      <Route
+        path="/inventories/:inventoryType/:id/hosts/:hostId/details"
+        element={<AdvancedInventoryHostDetail host={host} />}
+      />
+      <Route path="*" element={null} />
+    </Routes>,
+    {
+      context: { router: { history } },
     }
+  );
+}
 
+describe('<AdvancedInventoryHostDetail />', () => {
+  test('should render Details', async () => {
+    renderAt(mockHost);
+
+    await screen.findByText('localhost');
     assertDetail('Name', 'localhost');
     assertDetail('Description', 'localhost description');
     assertDetail('Inventory', 'Mikes Inventory');
     assertDetail('Enabled', 'On');
     assertDetail('Created', '10/28/2019, 9:26:54 PM');
     assertDetail('Last modified', '10/29/2019, 8:18:41 PM');
-    expect(wrapper.find('Detail[label="Activity"] Sparkline')).toHaveLength(1);
-    expect(wrapper.find('VariablesDetail')).toHaveLength(1);
+
+    // Sparkline (Activity) renders its tooltip/status for the recent job.
+    const activity = screen.getByText('Activity');
+    expect(activity.nextElementSibling).not.toBeEmptyDOMElement();
+
+    // react-ace VariablesDetail renders empty under jsdom, assert the label.
+    expect(screen.getByText('Variables')).toBeInTheDocument();
   });
 
-  test('should not load Activity', () => {
-    wrapper = mountWithContexts(
-      <AdvancedInventoryHostDetail
-        host={{
-          ...mockHost,
-          summary_fields: {
-            recent_jobs: [],
-            inventory: { kind: 'constructed', id: 2 },
-          },
-        }}
-      />
-    );
-    const activity_detail = wrapper.find(`Detail[label="Activity"]`).at(0);
-    expect(activity_detail.prop('isEmpty')).toEqual(true);
+  test('should not load Activity', async () => {
+    renderAt({
+      ...mockHost,
+      summary_fields: {
+        recent_jobs: [],
+        inventory: { kind: 'constructed', id: 2 },
+      },
+    });
+
+    // With no recent jobs the Activity Detail renders nothing (isEmpty), so
+    // the label is absent.
+    await screen.findByText('localhost');
+    expect(screen.queryByText('Activity')).not.toBeInTheDocument();
   });
 });

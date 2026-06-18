@@ -1,9 +1,9 @@
 import React from 'react';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { screen } from '@testing-library/react';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryHostGroupItem from './InventoryHostGroupItem';
 
 describe('<InventoryHostGroupItem />', () => {
-  let wrapper;
   const mockGroup = {
     id: 2,
     type: 'group',
@@ -16,45 +16,43 @@ describe('<InventoryHostGroupItem />', () => {
     },
   };
 
-  beforeEach(() => {
-    wrapper = mountWithContexts(
+  function renderItem(group) {
+    return renderWithContexts(
       <table>
         <tbody>
           <InventoryHostGroupItem
-            group={mockGroup}
+            group={group}
             inventoryId={1}
             isSelected={false}
             onSelect={() => {}}
+            rowIndex={0}
           />
         </tbody>
       </table>
     );
-  });
+  }
 
   test('initially renders successfully', () => {
-    expect(wrapper.find('InventoryHostGroupItem').length).toBe(1);
+    renderItem(mockGroup);
+    expect(screen.getByRole('link', { name: 'foo' })).toBeInTheDocument();
   });
 
   test('edit button should be shown to users with edit capabilities', () => {
-    expect(wrapper.find('PencilAltIcon').exists()).toBeTruthy();
+    renderItem(mockGroup);
+    const editLink = screen
+      .getAllByRole('link')
+      .find((link) => link.getAttribute('href')?.endsWith('/edit'));
+    expect(editLink).toBeDefined();
   });
 
   test('edit button should be hidden from users without edit capabilities', () => {
-    const copyMockGroup = { ...mockGroup };
-    copyMockGroup.summary_fields.user_capabilities.edit = false;
-
-    wrapper = mountWithContexts(
-      <table>
-        <tbody>
-          <InventoryHostGroupItem
-            group={copyMockGroup}
-            inventoryId={1}
-            isSelected={false}
-            onSelect={() => {}}
-          />
-        </tbody>
-      </table>
-    );
-    expect(wrapper.find('PencilAltIcon').exists()).toBeFalsy();
+    renderItem({
+      ...mockGroup,
+      summary_fields: { user_capabilities: { edit: false } },
+    });
+    const editLink = screen
+      .queryAllByRole('link')
+      .find((link) => link.getAttribute('href')?.endsWith('/edit'));
+    expect(editLink).toBeUndefined();
   });
 });

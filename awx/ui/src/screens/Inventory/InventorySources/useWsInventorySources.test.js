@@ -1,7 +1,7 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { act, screen, waitFor } from '@testing-library/react';
 import WS from 'jest-websocket-mock';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import useWsInventorySources from './useWsInventorySources';
 
 /*
@@ -13,36 +13,40 @@ jest.mock('../../../hooks/useThrottle', () => ({
   default: jest.fn((val) => val),
 }));
 
-function TestInner() {
-  return <div />;
-}
+// Render the hook's synced result as JSON so tests can read it from the DOM
+// (RTL 12 has no renderHook, and the hook returns plain data).
 function Test({ sources }) {
   const syncedSources = useWsInventorySources(sources);
-  return <TestInner sources={syncedSources} />;
+  return <div data-testid="ws-result">{JSON.stringify(syncedSources)}</div>;
 }
+
+const getResult = () => JSON.parse(screen.getByTestId('ws-result').textContent);
+
+const subscribeMessage = JSON.stringify({
+  xrftoken: 'abc123',
+  groups: {
+    jobs: ['status_changed'],
+    control: ['limit_reached_1'],
+  },
+});
 
 describe('useWsInventorySources hook', () => {
   let debug;
-  let wrapper;
   beforeEach(() => {
-    debug = global.console.debug; // eslint-disable-line prefer-destructuring
+    debug = global.console.debug;
     global.console.debug = () => {};
   });
 
   afterEach(() => {
     global.console.debug = debug;
-    if (wrapper) {
-      wrapper.unmount();
-      wrapper = null;
-    }
     WS.clean();
   });
 
   test('should return sources list', () => {
     const sources = [{ id: 1 }];
-    wrapper = mountWithContexts(<Test sources={sources} />);
+    renderWithContexts(<Test sources={sources} />);
 
-    expect(wrapper.find('TestInner').prop('sources')).toEqual(sources);
+    expect(getResult()).toEqual(sources);
   });
 
   test('should establish websocket connection', async () => {
@@ -51,19 +55,11 @@ describe('useWsInventorySources hook', () => {
 
     const sources = [{ id: 1 }];
     await act(async () => {
-      wrapper = await mountWithContexts(<Test sources={sources} />);
+      renderWithContexts(<Test sources={sources} />);
     });
 
     await mockServer.connected;
-    await expect(mockServer).toReceiveMessage(
-      JSON.stringify({
-        xrftoken: 'abc123',
-        groups: {
-          jobs: ['status_changed'],
-          control: ['limit_reached_1'],
-        },
-      })
-    );
+    await expect(mockServer).toReceiveMessage(subscribeMessage);
   });
 
   test('should update current job status', async () => {
@@ -83,19 +79,11 @@ describe('useWsInventorySources hook', () => {
       },
     ];
     await act(async () => {
-      wrapper = await mountWithContexts(<Test sources={sources} />);
+      renderWithContexts(<Test sources={sources} />);
     });
 
     await mockServer.connected;
-    await expect(mockServer).toReceiveMessage(
-      JSON.stringify({
-        xrftoken: 'abc123',
-        groups: {
-          jobs: ['status_changed'],
-          control: ['limit_reached_1'],
-        },
-      })
-    );
+    await expect(mockServer).toReceiveMessage(subscribeMessage);
     act(() => {
       mockServer.send(
         JSON.stringify({
@@ -107,21 +95,20 @@ describe('useWsInventorySources hook', () => {
         })
       );
     });
-    wrapper.update();
 
-    const source = wrapper.find('TestInner').prop('sources')[0];
-    expect(source).toEqual({
-      id: 3,
-      status: 'successful',
-      last_updated: 'the_time',
-      summary_fields: {
-        current_job: {
-          id: 5,
-          status: 'successful',
-          finished: 'the_time',
+    await waitFor(() =>
+      expect(getResult()[0]).toEqual({
+        id: 3,
+        status: 'successful',
+        last_updated: 'the_time',
+        summary_fields: {
+          current_job: {
+            id: 5,
+            status: 'successful',
+            finished: 'the_time',
+          },
         },
-      },
-    });
-    WS.clean();
+      })
+    );
   });
 });

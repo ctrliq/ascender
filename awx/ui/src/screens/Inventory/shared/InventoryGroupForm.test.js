@@ -1,5 +1,6 @@
 import React from 'react';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { screen } from '@testing-library/react';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryGroupForm from './InventoryGroupForm';
 
 const group = {
@@ -8,27 +9,23 @@ const group = {
   description: 'Bar',
   variables: 'ying: false',
 };
+
 describe('<InventoryGroupForm />', () => {
-  let wrapper;
-  beforeEach(() => {
-    wrapper = mountWithContexts(
+  test('should render values for the fields that have them', () => {
+    renderWithContexts(
       <InventoryGroupForm
         handleSubmit={jest.fn()}
         handleCancel={jest.fn()}
         group={group}
       />
     );
+    expect(screen.getByLabelText(/^Name/)).toHaveValue('Foo');
+    expect(screen.getByLabelText('Description')).toHaveValue('Bar');
+    expect(screen.getByText('Variables')).toBeInTheDocument();
   });
-  test('initially renders successfully', () => {
-    expect(wrapper.length).toBe(1);
-  });
-  test('should render values for the fields that have them', () => {
-    expect(wrapper.find("FormGroup[label='Name']").length).toBe(1);
-    expect(wrapper.find("FormGroup[label='Description']").length).toBe(1);
-    expect(wrapper.find("VariablesField[label='Variables']").length).toBe(1);
-  });
+
   test('should throw error properly', () => {
-    const newWrapper = mountWithContexts(
+    renderWithContexts(
       <InventoryGroupForm
         handleSubmit={jest.fn()}
         handleCancel={jest.fn()}
@@ -44,6 +41,6 @@ describe('<InventoryGroupForm />', () => {
         }}
       />
     );
-    expect(newWrapper.find('FormSubmitError').length).toBe(1);
+    expect(screen.getByText('An error occurred')).toBeInTheDocument();
   });
 });

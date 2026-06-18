@@ -1,73 +1,101 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { LabelsAPI, InventoriesAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
-
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryAdd from './InventoryAdd';
 
 jest.mock('../../../api');
 
-describe('<InventoryAdd />', () => {
-  let wrapper;
-  let history;
+const submitValues = {
+  name: 'new Foo',
+  organization: { id: 2 },
+  instanceGroups: [
+    { name: 'Bizz', id: 1 },
+    { name: 'Buzz', id: 2 },
+  ],
+  labels: [{ name: 'label' }],
+};
 
-  beforeEach(async () => {
-    history = createMemoryHistory({ initialEntries: ['/inventories'] });
+jest.mock(
+  '../shared/InventoryForm',
+  () =>
+    ({ onSubmit, onCancel, submitError }) => (
+      <div>
+        <button
+          type="button"
+          aria-label="mock-submit"
+          onClick={() => onSubmit(submitValues)}
+        />
+        <button type="button" aria-label="mock-cancel" onClick={onCancel} />
+        {submitError ? <div data-testid="mock-submit-error" /> : null}
+      </div>
+    )
+);
+
+describe('<InventoryAdd />', () => {
+  beforeEach(() => {
     LabelsAPI.read.mockResolvedValue({ data: { results: [] } });
     InventoriesAPI.create.mockResolvedValue({ data: { id: 13 } });
-    await act(async () => {
-      wrapper = mountWithContexts(<InventoryAdd />, {
-        context: { router: { history } },
-      });
-    });
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   test('Initially renders successfully', () => {
-    expect(wrapper.length).toBe(1);
+    renderWithContexts(<InventoryAdd />);
+    expect(screen.getByRole('button', { name: 'mock-submit' })).toBeInTheDocument();
   });
-  test('handleSubmit should call the api and redirect to details page', async () => {
-    const instanceGroups = [
-      { name: 'Bizz', id: 1 },
-      { name: 'Buzz', id: 2 },
-    ];
-    await waitForElement(wrapper, 'isLoading', (el) => el.length === 0);
 
-    await act(async () => {
-      wrapper.find('InventoryForm').prop('onSubmit')({
+  test('handleSubmit should call the api and redirect to details page', async () => {
+    const history = createMemoryHistory({ initialEntries: ['/inventories'] });
+    const { user } = renderWithContexts(<InventoryAdd />, {
+      context: { router: { history } },
+    });
+
+    await user.click(screen.getByRole('button', { name: 'mock-submit' }));
+
+    await waitFor(() =>
+      expect(InventoriesAPI.create).toHaveBeenCalledWith({
         name: 'new Foo',
-        organization: { id: 2 },
-        instanceGroups,
+        organization: 2,
         labels: [{ name: 'label' }],
-      });
-    });
-    expect(InventoriesAPI.create).toHaveBeenCalledWith({
-      name: 'new Foo',
-      organization: 2,
-      labels: [{ name: 'label' }],
-    });
+      })
+    );
     expect(InventoriesAPI.associateLabel).toHaveBeenCalledWith(
       13,
       { name: 'label' },
       2
     );
-    instanceGroups.map((IG) =>
+    submitValues.instanceGroups.forEach((IG) =>
       expect(InventoriesAPI.associateInstanceGroup).toHaveBeenCalledWith(
         13,
         IG.id
       )
     );
-    expect(history.location.pathname).toBe('/inventories/inventory/13/details');
+    await waitFor(() =>
+      expect(history.location.pathname).toBe('/inventories/inventory/13/details')
+    );
   });
 
   test('handleCancel should return the user back to the inventories list', async () => {
-    await waitForElement(wrapper, 'isLoading', (el) => el.length === 0);
-    await act(async () => {
-      wrapper.find('Button[aria-label="Cancel"]').simulate('click');
+    const history = createMemoryHistory({ initialEntries: ['/inventories'] });
+    const { user } = renderWithContexts(<InventoryAdd />, {
+      context: { router: { history } },
     });
+
+    await user.click(screen.getByRole('button', { name: 'mock-cancel' }));
+
     expect(history.location.pathname).toEqual('/inventories');
+  });
+
+  test('shows submit error when the api call fails', async () => {
+    InventoriesAPI.create.mockRejectedValueOnce(new Error('boom'));
+    const { user } = renderWithContexts(<InventoryAdd />);
+
+    await user.click(screen.getByRole('button', { name: 'mock-submit' }));
+
+    expect(await screen.findByTestId('mock-submit-error')).toBeInTheDocument();
   });
 });
