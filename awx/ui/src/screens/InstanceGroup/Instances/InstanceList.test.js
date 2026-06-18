@@ -1,19 +1,21 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
 import { Route } from 'react-router-dom';
+import { screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 
 import { InstancesAPI, InstanceGroupsAPI } from 'api';
 import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+  renderWithContexts,
+  settleTooltips,
+} from '../../../../testUtils/rtlContexts';
 
 import InstanceList from './InstanceList';
 
 jest.mock('../../../api');
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+// InstanceList reads useParams from react-router-dom-v5-compat (the route tree
+// is v6); mock it there, keeping the rest of the module real.
+jest.mock('react-router-dom-v5-compat', () => ({
+  ...jest.requireActual('react-router-dom-v5-compat'),
   useParams: () => ({
     id: 1,
     instanceGroupId: 2,
@@ -109,10 +111,20 @@ const instances = [
 
 const options = { data: { actions: { POST: true } } };
 
-describe('<InstanceList/>', () => {
-  let wrapper;
+function setup() {
+  const history = createMemoryHistory({
+    initialEntries: ['/instance_groups/1/instances'],
+  });
+  return renderWithContexts(
+    <Route path="/instance_groups/:id/instances">
+      <InstanceList instanceGroup={{ name: 'Alex' }} />
+    </Route>,
+    { context: { router: { history } } }
+  );
+}
 
-  beforeEach(async () => {
+describe('<InstanceList/>', () => {
+  beforeEach(() => {
     InstanceGroupsAPI.readInstances.mockResolvedValue({
       data: {
         count: instances.length,
@@ -120,112 +132,108 @@ describe('<InstanceList/>', () => {
       },
     });
     InstanceGroupsAPI.readInstanceOptions.mockResolvedValue(options);
-    const history = createMemoryHistory({
-      initialEntries: ['/instance_groups/1/instances'],
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Route path="/instance_groups/:id/instances">
-          <InstanceList instanceGroup={{ name: 'Alex' }} />
-        </Route>,
-        {
-          context: {
-            router: { history, route: { location: history.location } },
-          },
-        }
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
   });
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  test('should have data fetched', () => {
-    expect(wrapper.find('InstanceList').length).toBe(1);
-  });
+  test('should fetch instances from the api and render them in the list', async () => {
+    setup();
+    await screen.findByRole('link', { name: 'awx' });
 
-  test('should fetch instances from the api and render them in the list', () => {
     expect(InstanceGroupsAPI.readInstances).toHaveBeenCalled();
     expect(InstanceGroupsAPI.readInstanceOptions).toHaveBeenCalled();
-    expect(wrapper.find('InstanceListItem').length).toBe(3);
+    expect(screen.getByRole('link', { name: 'awx' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'foo' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'bar' })).toBeInTheDocument();
   });
 
-  test('should show associate group modal when adding an existing group', () => {
-    wrapper.find('ToolbarAddButton').simulate('click');
-    expect(wrapper.find('AssociateModal').length).toBe(1);
-    wrapper.find('ModalBoxCloseButton').simulate('click');
-    expect(wrapper.find('AssociateModal').length).toBe(0);
-  });
-  test('should run health check', async () => {
+  test('should show associate modal when adding an existing instance', async () => {
+    InstancesAPI.read.mockResolvedValue({ data: { count: 0, results: [] } });
+    InstancesAPI.readOptions.mockResolvedValue({
+      data: { actions: { GET: {} }, related_search_fields: [] },
+    });
+    const { user } = setup();
+    await screen.findByRole('link', { name: 'awx' });
+
+    await user.click(screen.getByRole('button', { name: /Associate/ }));
     expect(
-      wrapper.find('Button[ouiaId="health-check"]').prop('isDisabled')
-    ).toBe(true);
-    await act(async () =>
-      wrapper.find('DataListToolbar').prop('onSelectAll')(instances)
+      await screen.findByRole('dialog', { name: /Select Instances/ })
+    ).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Close' }));
+    await waitFor(() =>
+      expect(
+        screen.queryByRole('dialog', { name: /Select Instances/ })
+      ).not.toBeInTheDocument()
     );
-    wrapper.update();
-    expect(
-      wrapper.find('Button[ouiaId="health-check"]').prop('isDisabled')
-    ).toBe(false);
-    await act(async () =>
-      wrapper.find('Button[ouiaId="health-check"]').prop('onClick')()
-    );
-    expect(InstancesAPI.healthCheck).toHaveBeenCalledTimes(1);
+    // Closing the modal refocuses the Tooltip-wrapped Associate button.
+    await settleTooltips();
   });
+
+  test('should run health check on selected execution instances', async () => {
+    InstancesAPI.healthCheck.mockResolvedValue({ data: {} });
+    const { user } = setup();
+    await screen.findByRole('link', { name: 'awx' });
+
+    const healthCheck = screen.getByRole('button', { name: 'Run health check' });
+    expect(healthCheck).toBeDisabled();
+
+    await user.click(screen.getByRole('checkbox', { name: 'Select all' }));
+    await waitFor(() => expect(healthCheck).toBeEnabled());
+
+    await user.click(healthCheck);
+    // Only the execution node (id 3) is health-checked.
+    await waitFor(() =>
+      expect(InstancesAPI.healthCheck).toHaveBeenCalledTimes(1)
+    );
+    expect(InstancesAPI.healthCheck).toHaveBeenCalledWith(3);
+    // A success alert appears; await it so async state settles before unmount.
+    expect(
+      await screen.findByText(/Health check request\(s\) submitted/)
+    ).toBeInTheDocument();
+    // handleHealthCheck clears the selection after the request resolves; wait
+    // for the resulting re-render so no state update lands after unmount.
+    await waitFor(() => expect(healthCheck).toBeDisabled());
+  });
+
   test('should render health check error', async () => {
-    InstancesAPI.healthCheck.mockRejectedValue(
-      new Error({
-        response: {
-          config: {
-            method: 'create',
-            url: '/api/v2/instances',
-          },
-          data: 'An error occurred',
-          status: 403,
-        },
-      })
+    InstancesAPI.healthCheck.mockRejectedValue(new Error());
+    const { user } = setup();
+    await screen.findByRole('link', { name: 'awx' });
+
+    await user.click(screen.getByRole('checkbox', { name: 'Select all' }));
+    const healthCheck = screen.getByRole('button', { name: 'Run health check' });
+    await waitFor(() => expect(healthCheck).toBeEnabled());
+
+    await user.click(healthCheck);
+    expect(await screen.findByText('Error!')).toBeInTheDocument();
+    // Dismiss the modal so the error/selection state unwinds before unmount.
+    await user.click(screen.getByRole('button', { name: 'Close' }));
+    await waitFor(() =>
+      expect(screen.queryByText('Error!')).not.toBeInTheDocument()
     );
-    expect(
-      wrapper.find('Button[ouiaId="health-check"]').prop('isDisabled')
-    ).toBe(true);
-    await act(async () =>
-      wrapper.find('DataListToolbar').prop('onSelectAll')(instances)
-    );
-    wrapper.update();
-    expect(
-      wrapper.find('Button[ouiaId="health-check"]').prop('isDisabled')
-    ).toBe(false);
-    await act(async () =>
-      wrapper.find('Button[ouiaId="health-check"]').prop('onClick')()
-    );
-    wrapper.update();
-    expect(wrapper.find('AlertModal')).toHaveLength(1);
   });
 
-  test('should disable disassociate button', async () => {
-    expect(
-      wrapper.find('Button[ouiaId="disassociate-button"]').prop('isDisabled')
-    ).toBe(true);
-    await act(async () =>
-      wrapper.find('DataListToolbar').prop('onSelectAll')(instances)
-    );
+  test('disassociate button is disabled until a non-control instance is selected', async () => {
+    const { user } = setup();
+    await screen.findByRole('link', { name: 'awx' });
 
-    wrapper.update();
-    expect(
-      wrapper.find('Button[ouiaId="disassociate-button"]').prop('isDisabled')
-    ).toBe(true);
-    await act(async () =>
-      wrapper
-        .find('Tr#instance-row-1')
-        .find('SelectColumn[aria-label="Select row 0"]')
-        .prop('onSelect')(false)
-    );
+    const disassociate = screen.getByRole('button', { name: 'Disassociate' });
+    expect(disassociate).toBeDisabled();
 
-    wrapper.update();
-    expect(
-      wrapper.find('Button[ouiaId="disassociate-button"]').prop('isDisabled')
-    ).toBe(false);
+    // Selecting all includes the control node (awx), keeping it disabled.
+    await user.click(screen.getByRole('checkbox', { name: 'Select all' }));
+    expect(disassociate).toBeDisabled();
+
+    // Deselecting the control node leaves only non-control nodes -> enabled.
+    const controlRow = screen.getByRole('link', { name: 'awx' }).closest('tr');
+    const controlCheckbox = within(controlRow)
+      .getAllByRole('checkbox')
+      .find((box) => box.getAttribute('aria-label') !== 'Toggle instance');
+    await user.click(controlCheckbox);
+
+    await waitFor(() => expect(disassociate).toBeEnabled());
   });
 });

@@ -1,14 +1,16 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 
 import { InstanceGroupsAPI } from 'api';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InstanceGroupAdd from './InstanceGroupAdd';
 
 jest.mock('../../../api');
 
-const instanceGroupData = {
+// Prefixed `mock` so the jest.mock factory below may reference it (jest allows
+// out-of-scope refs only when the name begins with "mock").
+const mockInstanceGroupData = {
   id: 42,
   type: 'instance_group',
   url: '/api/v2/instance_groups/42/',
@@ -41,11 +43,24 @@ const instanceGroupData = {
   },
 };
 
+// Mock the shared form so the test drives InstanceGroupAdd's own submit/cancel
+// handlers directly. The form itself is covered by InstanceGroupForm.test.js.
+jest.mock('../shared/InstanceGroupForm', () => ({ onSubmit, onCancel, submitError }) => (
+  <div>
+    {submitError && <div>FormSubmitError</div>}
+    <button type="button" onClick={() => onSubmit(mockInstanceGroupData)}>
+      mock submit
+    </button>
+    <button type="button" aria-label="Cancel" onClick={onCancel}>
+      Cancel
+    </button>
+  </div>
+));
+
 describe('<InstanceGroupAdd/>', () => {
-  let wrapper;
   let history;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     history = createMemoryHistory({
       initialEntries: ['/instance_groups'],
     });
@@ -54,11 +69,6 @@ describe('<InstanceGroupAdd/>', () => {
         id: 42,
       },
     });
-    await act(async () => {
-      wrapper = mountWithContexts(<InstanceGroupAdd />, {
-        context: { router: { history } },
-      });
-    });
   });
 
   afterEach(() => {
@@ -66,16 +76,23 @@ describe('<InstanceGroupAdd/>', () => {
   });
 
   test('handleSubmit should call the api and redirect to details page', async () => {
-    await act(async () => {
-      wrapper.find('InstanceGroupForm').prop('onSubmit')(instanceGroupData);
+    const { user } = renderWithContexts(<InstanceGroupAdd />, {
+      context: { router: { history } },
     });
-    wrapper.update();
-    expect(InstanceGroupsAPI.create).toHaveBeenCalledWith(instanceGroupData);
+    await user.click(screen.getByRole('button', { name: 'mock submit' }));
+    await waitFor(() =>
+      expect(InstanceGroupsAPI.create).toHaveBeenCalledWith(
+        mockInstanceGroupData
+      )
+    );
     expect(history.location.pathname).toBe('/instance_groups/42/details');
   });
 
   test('handleCancel should return the user back to the instance group list', async () => {
-    wrapper.find('Button[aria-label="Cancel"]').simulate('click');
+    const { user } = renderWithContexts(<InstanceGroupAdd />, {
+      context: { router: { history } },
+    });
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
     expect(history.location.pathname).toEqual('/instance_groups');
   });
 
@@ -85,13 +102,11 @@ describe('<InstanceGroupAdd/>', () => {
         data: { detail: 'An error occurred' },
       },
     };
-    InstanceGroupsAPI.create.mockImplementationOnce(() =>
-      Promise.reject(error)
-    );
-    await act(async () => {
-      wrapper.find('InstanceGroupForm').invoke('onSubmit')(instanceGroupData);
+    InstanceGroupsAPI.create.mockImplementationOnce(() => Promise.reject(error));
+    const { user } = renderWithContexts(<InstanceGroupAdd />, {
+      context: { router: { history } },
     });
-    wrapper.update();
-    expect(wrapper.find('FormSubmitError').length).toBe(1);
+    await user.click(screen.getByRole('button', { name: 'mock submit' }));
+    expect(await screen.findByText('FormSubmitError')).toBeInTheDocument();
   });
 });

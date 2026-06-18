@@ -1,6 +1,6 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { screen, waitFor } from '@testing-library/react';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import InstanceGroupForm from './InstanceGroupForm';
 
@@ -40,81 +40,70 @@ const instanceGroup = {
 };
 
 describe('<InstanceGroupForm/>', () => {
-  let wrapper;
   let onCancel;
   let onSubmit;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     onCancel = jest.fn();
     onSubmit = jest.fn();
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <InstanceGroupForm
-          onCancel={onCancel}
-          onSubmit={onSubmit}
-          instanceGroup={instanceGroup}
-        />
-      );
-    });
   });
 
   afterEach(() => {
     jest.clearAllMocks();
-    wrapper.unmount();
   });
 
-  test('Initially renders successfully', () => {
-    expect(wrapper.length).toBe(1);
-  });
+  function setup() {
+    return renderWithContexts(
+      <InstanceGroupForm
+        onCancel={onCancel}
+        onSubmit={onSubmit}
+        instanceGroup={instanceGroup}
+      />
+    );
+  }
 
   test('should display form fields properly', () => {
-    expect(wrapper.find('FormGroup[label="Name"]').length).toBe(1);
+    const { container } = setup();
+    // FormField labelIcon Popovers break getByLabelText, so query inputs by id.
+    expect(container.querySelector('#instance-group-name')).toBeInTheDocument();
     expect(
-      wrapper.find('FormGroup[label="Policy instance minimum"]').length
-    ).toBe(1);
+      container.querySelector('#instance-group-policy-instance-minimum')
+    ).toBeInTheDocument();
     expect(
-      wrapper.find('FormGroup[label="Policy instance percentage"]').length
-    ).toBe(1);
+      container.querySelector('#instance-group-policy-instance-percentage')
+    ).toBeInTheDocument();
   });
 
   test('should call onSubmit when form submitted', async () => {
+    const { user } = setup();
     expect(onSubmit).not.toHaveBeenCalled();
-    await act(async () => {
-      wrapper.find('button[aria-label="Save"]').simulate('click');
-    });
-    expect(onSubmit).toHaveBeenCalledTimes(1);
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1));
   });
 
   test('should update form values', async () => {
-    act(() => {
-      wrapper.find('input#instance-group-name').simulate('change', {
-        target: { value: 'Foo', name: 'name' },
-      });
-      wrapper
-        .find('input#instance-group-policy-instance-minimum')
-        .simulate('change', {
-          target: { value: 10, name: 'policy_instance_minimum' },
-        });
-    });
-    await act(async () => {
-      wrapper.update();
-    });
-    expect(wrapper.find('input#instance-group-name').prop('value')).toEqual(
-      'Foo'
+    const { user, container } = setup();
+    const nameInput = container.querySelector('#instance-group-name');
+    const minInput = container.querySelector(
+      '#instance-group-policy-instance-minimum'
     );
+
+    await user.clear(nameInput);
+    await user.type(nameInput, 'Foo');
+    await user.clear(minInput);
+    await user.type(minInput, '10');
+
+    expect(nameInput).toHaveValue('Foo');
+    expect(minInput).toHaveValue(10);
     expect(
-      wrapper.find('input#instance-group-policy-instance-minimum').prop('value')
-    ).toEqual(10);
-    expect(
-      wrapper
-        .find('input#instance-group-policy-instance-percentage')
-        .prop('value')
-    ).toEqual(46);
+      container.querySelector('#instance-group-policy-instance-percentage')
+    ).toHaveValue(46);
   });
 
   test('should call handleCancel when Cancel button is clicked', async () => {
+    const { user } = setup();
     expect(onCancel).not.toHaveBeenCalled();
-    wrapper.find('button[aria-label="Cancel"]').invoke('onClick')();
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
     expect(onCancel).toHaveBeenCalled();
   });
 });
