@@ -1,5 +1,6 @@
 import React from 'react';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { screen, waitFor } from '@testing-library/react';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import WorkflowApprovalListDenyButton from './WorkflowApprovalListDenyButton';
 
 const workflowApproval = {
@@ -11,43 +12,44 @@ const workflowApproval = {
 
 describe('<WorkflowApprovalListDenyButton />', () => {
   test('should render button', () => {
-    const wrapper = mountWithContexts(
+    renderWithContexts(
       <WorkflowApprovalListDenyButton onDeny={() => {}} selectedItems={[]} />
     );
-    expect(wrapper.find('button')).toHaveLength(1);
+    expect(screen.getByRole('button', { name: 'Deny' })).toBeInTheDocument();
   });
 
-  test('should invoke onDeny prop', () => {
+  test('should invoke onDeny prop', async () => {
     const onDeny = jest.fn();
-    const wrapper = mountWithContexts(
+    const { user } = renderWithContexts(
       <WorkflowApprovalListDenyButton
         onDeny={onDeny}
         selectedItems={[workflowApproval]}
       />
     );
-    wrapper.find('button').simulate('click');
-    wrapper.update();
+    await user.click(screen.getByRole('button', { name: 'Deny' }));
     expect(onDeny).toHaveBeenCalled();
   });
 
   test('should disable button when no approve/deny permissions', () => {
-    const wrapper = mountWithContexts(
+    renderWithContexts(
       <WorkflowApprovalListDenyButton
         onDeny={() => {}}
         selectedItems={[{ ...workflowApproval, can_approve_or_deny: false }]}
       />
     );
-    expect(wrapper.find('button[disabled]')).toHaveLength(1);
+    expect(screen.getByRole('button', { name: 'Deny' })).toBeDisabled();
   });
 
-  test('should render tooltip', () => {
-    const wrapper = mountWithContexts(
+  test('should render tooltip', async () => {
+    const { user } = renderWithContexts(
       <WorkflowApprovalListDenyButton
         onDeny={() => {}}
         selectedItems={[workflowApproval]}
       />
     );
-    expect(wrapper.find('Tooltip')).toHaveLength(1);
-    expect(wrapper.find('Tooltip').prop('content')).toEqual('Deny');
+    await user.hover(screen.getByRole('button', { name: 'Deny' }));
+    await waitFor(() =>
+      expect(screen.getByRole('tooltip')).toHaveTextContent('Deny')
+    );
   });
 });

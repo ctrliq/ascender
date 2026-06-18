@@ -1,64 +1,54 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
-
-import {
-  mountWithContexts,
-  shallowWithContexts,
-} from '../../../../testUtils/enzymeHelpers';
+import { screen, waitFor } from '@testing-library/react';
 import { WorkflowApprovalsAPI } from 'api';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import WorkflowDenyButton from './WorkflowDenyButton';
 import mockData from '../data.workflowApprovals.json';
 
 jest.mock('api');
 
-describe('<WorkflowDenyButton/> shallow mount', () => {
-  let wrapper;
+const mockApprovalList = mockData.results;
 
-  let mockApprovalList = mockData.results;
-
-  test('initially render successfully', () => {
-    wrapper = shallowWithContexts(
-      <WorkflowDenyButton workflowApproval={mockApprovalList[0]} />
-    );
-
-    expect(wrapper.find('WorkflowDenyButton')).toHaveLength(1);
-    wrapper
-      .find('Button')
-      .forEach((button) => expect(button.prop('isDisabled')).toBe(false));
-  });
-});
-
-describe('<WorkflowDenyButton/>, full mount', () => {
-  let wrapper;
-  let mockApprovalList = mockData.results;
-  const denyButton = 'Button[ouiaId="workflow-deny-button"]';
+describe('<WorkflowDenyButton/>', () => {
   afterEach(() => {
-    wrapper.unmount();
     jest.clearAllMocks();
   });
 
+  test('initially render successfully', () => {
+    renderWithContexts(
+      <WorkflowDenyButton
+        workflowApproval={mockApprovalList[0]}
+        onHandleToast={jest.fn()}
+      />
+    );
+    expect(screen.getByRole('button', { name: 'Deny' })).toBeEnabled();
+  });
+
   test('should be disabled', () => {
-    wrapper = mountWithContexts(
+    renderWithContexts(
       <WorkflowDenyButton
         workflowApproval={mockApprovalList[2]}
         onHandleToast={jest.fn()}
       />
     );
-    expect(wrapper.find(denyButton)).toHaveLength(1);
-    expect(wrapper.find(denyButton).prop('isDisabled')).toBe(true);
+    expect(
+      screen.getByRole('button', {
+        name: 'This workflow has already been acted on',
+      })
+    ).toBeDisabled();
   });
 
   test('should handle deny', async () => {
-    act(() => {
-      wrapper = mountWithContexts(
-        <WorkflowDenyButton
-          workflowApproval={mockApprovalList[0]}
-          onHandleToast={jest.fn()}
-        />
-      );
-    });
-    await act(() => wrapper.find(denyButton).prop('onClick')());
-    expect(WorkflowApprovalsAPI.deny).toHaveBeenCalledWith(218);
+    const { user } = renderWithContexts(
+      <WorkflowDenyButton
+        workflowApproval={mockApprovalList[0]}
+        onHandleToast={jest.fn()}
+      />
+    );
+    await user.click(screen.getByRole('button', { name: 'Deny' }));
+    await waitFor(() =>
+      expect(WorkflowApprovalsAPI.deny).toHaveBeenCalledWith(218)
+    );
   });
 
   test('Should handle deny error', async () => {
@@ -74,16 +64,13 @@ describe('<WorkflowDenyButton/>, full mount', () => {
         },
       })
     );
-    act(() => {
-      wrapper = mountWithContexts(
-        <WorkflowDenyButton
-          workflowApproval={mockApprovalList[0]}
-          onHandleToast={jest.fn()}
-        />
-      );
-    });
-    await act(() => wrapper.find(denyButton).prop('onClick')());
-    wrapper.update();
-    expect(wrapper.find('ErrorDetail')).toHaveLength(1);
+    const { user } = renderWithContexts(
+      <WorkflowDenyButton
+        workflowApproval={mockApprovalList[0]}
+        onHandleToast={jest.fn()}
+      />
+    );
+    await user.click(screen.getByRole('button', { name: 'Deny' }));
+    expect(await screen.findByText('Error!')).toBeInTheDocument();
   });
 });
