@@ -1,82 +1,42 @@
 import React from 'react';
-import { MemoryRouter } from 'react-router-dom';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { screen } from '@testing-library/react';
+
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import TeamListItem from './TeamListItem';
 
+const renderItem = (capabilities = { edit: true }) =>
+  renderWithContexts(
+    <table>
+      <tbody>
+        <TeamListItem
+          team={{
+            id: 1,
+            name: 'Team 1',
+            summary_fields: { user_capabilities: capabilities },
+          }}
+          detailUrl="/team/1"
+          isSelected
+          onSelect={() => {}}
+          rowIndex={0}
+        />
+      </tbody>
+    </table>
+  );
+
 describe('<TeamListItem />', () => {
   test('initially renders successfully', () => {
-    mountWithContexts(
-      <MemoryRouter initialEntries={['/teams']} initialIndex={0}>
-        <table>
-          <tbody>
-            <TeamListItem
-              team={{
-                id: 1,
-                name: 'Team 1',
-                summary_fields: {
-                  user_capabilities: {
-                    edit: true,
-                  },
-                },
-              }}
-              detailUrl="/team/1"
-              isSelected
-              onSelect={() => {}}
-            />
-          </tbody>
-        </table>
-      </MemoryRouter>
-    );
+    renderItem();
+    expect(screen.getByText('Team 1')).toBeInTheDocument();
   });
+
   test('edit button shown to users with edit capabilities', () => {
-    const wrapper = mountWithContexts(
-      <MemoryRouter initialEntries={['/teams']} initialIndex={0}>
-        <table>
-          <tbody>
-            <TeamListItem
-              team={{
-                id: 1,
-                name: 'Team',
-                summary_fields: {
-                  user_capabilities: {
-                    edit: true,
-                  },
-                },
-              }}
-              detailUrl="/team/1"
-              isSelected
-              onSelect={() => {}}
-            />
-          </tbody>
-        </table>
-      </MemoryRouter>
-    );
-    expect(wrapper.find('PencilAltIcon').exists()).toBeTruthy();
+    renderItem({ edit: true });
+    expect(screen.getByLabelText('Edit Team')).toBeInTheDocument();
   });
+
   test('edit button hidden from users without edit capabilities', () => {
-    const wrapper = mountWithContexts(
-      <MemoryRouter initialEntries={['/teams']} initialIndex={0}>
-        <table>
-          <tbody>
-            <TeamListItem
-              team={{
-                id: 1,
-                name: 'Team',
-                summary_fields: {
-                  user_capabilities: {
-                    edit: false,
-                  },
-                },
-              }}
-              detailUrl="/team/1"
-              isSelected
-              onSelect={() => {}}
-            />
-          </tbody>
-        </table>
-      </MemoryRouter>
-    );
-    expect(wrapper.find('PencilAltIcon').exists()).toBeFalsy();
+    renderItem({ edit: false });
+    expect(screen.queryByLabelText('Edit Team')).not.toBeInTheDocument();
   });
 });

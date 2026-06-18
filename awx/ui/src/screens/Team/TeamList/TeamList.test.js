@@ -1,7 +1,7 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, within } from '@testing-library/react';
 import { TeamsAPI } from 'api';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import TeamList from './TeamList';
 
@@ -15,209 +15,130 @@ const mockAPITeamList = {
         name: 'Team 0',
         id: 1,
         url: '/teams/1',
-        summary_fields: {
-          user_capabilities: {
-            delete: true,
-            edit: true,
-          },
-        },
+        summary_fields: { user_capabilities: { delete: true, edit: true } },
       },
       {
         name: 'Team 1',
         id: 2,
         url: '/teams/2',
-        summary_fields: {
-          user_capabilities: {
-            delete: true,
-            edit: true,
-          },
-        },
+        summary_fields: { user_capabilities: { delete: true, edit: true } },
       },
       {
         name: 'Team 2',
         id: 3,
         url: '/teams/3',
-        summary_fields: {
-          user_capabilities: {
-            delete: true,
-            edit: true,
-          },
-        },
+        summary_fields: { user_capabilities: { delete: true, edit: true } },
       },
     ],
   },
-  isModalOpen: false,
-  warningTitle: 'title',
-  warningMsg: 'message',
 };
 
-describe('<TeamList />', () => {
-  beforeEach(() => {
-    TeamsAPI.read = jest.fn(() =>
-      Promise.resolve({
-        data: mockAPITeamList.data,
-      })
-    );
-    TeamsAPI.readOptions = jest.fn(() =>
-      Promise.resolve({
-        data: {
-          actions: {
-            GET: {},
-            POST: {},
-          },
-        },
-      })
-    );
+afterEach(() => {
+  jest.clearAllMocks();
+});
+
+describe('<TeamList /> with full permissions', () => {
+  let user;
+
+  beforeEach(async () => {
+    TeamsAPI.read.mockResolvedValue({ data: mockAPITeamList.data });
+    TeamsAPI.readOptions.mockResolvedValue({
+      data: { actions: { GET: {}, POST: {} } },
+    });
+
+    ({ user } = renderWithContexts(<TeamList />));
+    await screen.findByRole('link', { name: 'Team 0' });
   });
 
-  test('should load and render teams', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<TeamList />);
-    });
-    wrapper.update();
-
-    expect(wrapper.find('TeamListItem')).toHaveLength(3);
+  test('should load and render teams', () => {
+    expect(TeamsAPI.read).toHaveBeenCalled();
+    expect(screen.getByRole('link', { name: 'Team 0' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Team 1' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Team 2' })).toBeInTheDocument();
   });
 
   test('should select team when checked', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<TeamList />);
-    });
-    wrapper.update();
-
-    await act(async () => {
-      wrapper.find('TeamListItem').first().invoke('onSelect')();
-    });
-    wrapper.update();
-
-    expect(wrapper.find('TeamListItem').first().prop('isSelected')).toEqual(
-      true
-    );
+    const row = screen.getByRole('link', { name: 'Team 0' }).closest('tr');
+    const checkbox = within(row).getByRole('checkbox');
+    expect(checkbox).not.toBeChecked();
+    await user.click(checkbox);
+    expect(checkbox).toBeChecked();
   });
 
   test('should select all', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<TeamList />);
-    });
-    wrapper.update();
+    const selectAll = screen.getByRole('checkbox', { name: 'Select all' });
+    const rowCheckboxes = screen
+      .getAllByRole('checkbox')
+      .filter((box) => box !== selectAll);
 
-    await act(async () => {
-      wrapper.find('DataListToolbar').invoke('onSelectAll')(true);
-    });
-    wrapper.update();
-
-    const items = wrapper.find('TeamListItem');
-    expect(items).toHaveLength(3);
-    items.forEach((item) => {
-      expect(item.prop('isSelected')).toEqual(true);
-    });
-
-    expect(wrapper.find('TeamListItem').first().prop('isSelected')).toEqual(
-      true
-    );
+    expect(rowCheckboxes).toHaveLength(3);
+    await user.click(selectAll);
+    rowCheckboxes.forEach((box) => expect(box).toBeChecked());
   });
 
   test('should call delete api', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<TeamList />);
-    });
-    wrapper.update();
-
-    await act(async () => {
-      wrapper.find('TeamListItem').at(0).invoke('onSelect')();
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('TeamListItem').at(1).invoke('onSelect')();
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('ToolbarDeleteButton').invoke('onDelete')();
-    });
-
-    expect(TeamsAPI.destroy).toHaveBeenCalledTimes(2);
+    TeamsAPI.destroy.mockResolvedValue({});
+    await user.click(
+      within(
+        screen.getByRole('link', { name: 'Team 0' }).closest('tr')
+      ).getByRole('checkbox')
+    );
+    await user.click(
+      within(
+        screen.getByRole('link', { name: 'Team 1' }).closest('tr')
+      ).getByRole('checkbox')
+    );
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'confirm delete' })
+    );
+    await waitFor(() => expect(TeamsAPI.destroy).toHaveBeenCalledTimes(2));
   });
 
   test('should re-fetch teams after team(s) have been deleted', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<TeamList />);
-    });
-    wrapper.update();
+    TeamsAPI.destroy.mockResolvedValue({});
     expect(TeamsAPI.read).toHaveBeenCalledTimes(1);
-    await act(async () => {
-      wrapper.find('TeamListItem').at(0).invoke('onSelect')();
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('ToolbarDeleteButton').invoke('onDelete')();
-    });
-
-    expect(TeamsAPI.read).toHaveBeenCalledTimes(2);
+    await user.click(
+      within(
+        screen.getByRole('link', { name: 'Team 0' }).closest('tr')
+      ).getByRole('checkbox')
+    );
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'confirm delete' })
+    );
+    await waitFor(() => expect(TeamsAPI.read).toHaveBeenCalledTimes(2));
   });
 
   test('should show deletion error', async () => {
-    TeamsAPI.destroy.mockRejectedValue(
-      new Error({
-        response: {
-          config: {
-            method: 'delete',
-            url: '/api/v2/teams/1',
-          },
-          data: 'An error occurred',
-        },
-      })
+    TeamsAPI.destroy.mockRejectedValue(new Error());
+    await user.click(
+      within(
+        screen.getByRole('link', { name: 'Team 0' }).closest('tr')
+      ).getByRole('checkbox')
     );
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<TeamList />);
-    });
-    wrapper.update();
-    expect(TeamsAPI.read).toHaveBeenCalledTimes(1);
-    await act(async () => {
-      wrapper.find('TeamListItem').at(0).invoke('onSelect')();
-    });
-    wrapper.update();
-
-    await act(async () => {
-      wrapper.find('ToolbarDeleteButton').invoke('onDelete')();
-    });
-    wrapper.update();
-
-    const modal = wrapper.find('Modal');
-    expect(modal).toHaveLength(1);
-    expect(modal.prop('title')).toEqual('Error!');
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'confirm delete' })
+    );
+    expect(await screen.findByText('Error!')).toBeInTheDocument();
   });
 
-  test('Add button shown for users without ability to POST', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<TeamList />);
-    });
-    wrapper.update();
-
-    expect(wrapper.find('ToolbarAddButton').length).toBe(1);
+  test('Add button shown for users with ability to POST', () => {
+    expect(screen.getByRole('link', { name: 'Add' })).toBeInTheDocument();
   });
+});
 
+describe('<TeamList /> without full permissions', () => {
   test('Add button hidden for users without ability to POST', async () => {
-    TeamsAPI.readOptions = () =>
-      Promise.resolve({
-        data: {
-          actions: {
-            GET: {},
-          },
-        },
-      });
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<TeamList />);
+    TeamsAPI.read.mockResolvedValue({ data: mockAPITeamList.data });
+    TeamsAPI.readOptions.mockResolvedValue({
+      data: { actions: { GET: {} } },
     });
-    wrapper.update();
 
-    expect(wrapper.find('ToolbarAddButton').length).toBe(0);
+    renderWithContexts(<TeamList />);
+    await screen.findByRole('link', { name: 'Team 0' });
+
+    expect(screen.queryByRole('link', { name: 'Add' })).not.toBeInTheDocument();
   });
 });

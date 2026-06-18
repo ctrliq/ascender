@@ -72,7 +72,7 @@ describe('<Team />', () => {
   test('fetches the team detail', async () => {
     renderAt('/teams/1/details');
     expect(await screen.findByText('TeamDetail')).toBeInTheDocument();
-    // real route params are strings (the old enzyme test mocked a number)
+    // real route params come through as strings
     expect(TeamsAPI.readDetail).toHaveBeenCalledWith('1');
   });
 
