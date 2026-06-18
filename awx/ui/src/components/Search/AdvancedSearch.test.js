@@ -73,8 +73,8 @@ describe('<AdvancedSearch />', () => {
   });
 
   test('Disable searchValue input until a key is set', async () => {
-    // The key Select has no isCreatable affordance, so the enzyme suite drove
-    // onCreateOption directly; here we select a real key option to enable input.
+    // The key Select has no isCreatable affordance, so we select a real key
+    // option to enable input.
     const { user } = renderWithContexts(
       <AdvancedSearch
         onSearch={jest.fn()}
@@ -88,8 +88,8 @@ describe('<AdvancedSearch />', () => {
   });
 
   test('Strip and__ set type from key', async () => {
-    // searchableKeys provides 'foo' as a selectable option (the enzyme suite
-    // created it via onCreateOption, which has no DOM affordance here).
+    // searchableKeys provides 'foo' as a selectable option (creating it via
+    // onCreateOption has no DOM affordance here).
     const advancedSearchMock = jest.fn();
     const { user } = renderWithContexts(
       <AdvancedSearch
@@ -181,8 +181,8 @@ describe('<AdvancedSearch />', () => {
   });
 
   test('typeahead onClear should remove key components', async () => {
-    // The enzyme suite cleared all three typeaheads then asserted onSearch('', 'baz').
-    // With a real DOM the value input is disabled once the key is cleared (the UI
+    // Clearing all three typeaheads would assert onSearch('', 'baz'), but with
+    // a real DOM the value input is disabled once the key is cleared (the UI
     // forbids searching with no key), so we assert the DOM-observable outcome of
     // onClear instead: the prefix and key are removed and search is disabled again.
     const advancedSearchMock = jest.fn();

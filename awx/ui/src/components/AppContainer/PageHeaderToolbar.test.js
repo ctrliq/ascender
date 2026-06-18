@@ -69,7 +69,7 @@ describe('PageHeaderToolbar', () => {
     await user.click(userToggle);
 
     // PF DropdownItem renders the item with role="menuitem" (the anchor's
-    // href is the DOM equivalent of the enzyme DropdownItem href prop check)
+    // href is the DOM equivalent of the DropdownItem href prop check)
     const userDetails = await screen.findByRole('menuitem', {
       name: 'User details',
     });

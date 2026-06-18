@@ -71,7 +71,7 @@ describe('<Host />', () => {
   test('fetches the host detail', async () => {
     renderAt('/hosts/1/details');
     expect(await screen.findByText('HostDetail')).toBeInTheDocument();
-    // real route params are strings (the old enzyme test mocked a number)
+    // real route params are strings (route params are always strings under react-router)
     expect(HostsAPI.readDetail).toHaveBeenCalledWith('1');
   });
 

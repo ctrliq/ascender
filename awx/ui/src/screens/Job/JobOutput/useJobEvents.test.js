@@ -14,11 +14,11 @@ function Child() {
   return <div />;
 }
 function HookTest({
-  // Unlike enzyme's shallow render, RTL mounts and runs effects (the hook's
+  // RTL mounts and runs effects (the hook's
   // fetch queue). The default callbacks return never-settling promises so the
   // sync getter tests see the synchronously-built reducer state without an
-  // un-acted async setState firing after act() returns (matching the original
-  // shallow behaviour where effects never completed). Tests that exercise the
+  // un-acted async setState firing after act() returns (effects never
+  // complete). Tests that exercise the
   // fetch paths pass their own resolving mocks and await act().
   fetchEventByUuid = () => new Promise(() => {}),
   fetchChildrenSummary = () => new Promise(() => {}),

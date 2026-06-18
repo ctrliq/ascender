@@ -92,7 +92,7 @@ describe('<Application />', () => {
     renderAt('/applications/1/details');
     expect(await screen.findByText('ApplicationDetails')).toBeInTheDocument();
     expect(ApplicationsAPI.readOptions).toHaveBeenCalled();
-    // real route params are strings (the old enzyme test mocked a number)
+    // real route params are strings (route params are always strings under react-router)
     expect(ApplicationsAPI.readDetail).toHaveBeenCalledWith('1');
   });
 

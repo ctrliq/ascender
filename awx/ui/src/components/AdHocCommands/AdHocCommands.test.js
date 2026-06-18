@@ -56,8 +56,7 @@ function renderAdHoc(props = {}) {
 }
 
 // Walk the open wizard from the details step through to launch, selecting the
-// EE row at index 2 (EE2) and the credential row at index 4 (Cred 4) to mirror
-// the original enzyme flow's check-action-item-2 / -4 selections.
+// EE row at index 2 (EE2) and the credential row at index 4 (Cred 4).
 async function runWizardToLaunch(user) {
   await user.selectOptions(document.querySelector('#module_name'), 'command');
   await user.type(document.querySelector('#module_args'), 'foo');

@@ -33,9 +33,9 @@ describe('NodeTypeStep', () => {
     }));
   });
   // jest is configured with resetMocks:true (package.json), which clears mock
-  // implementations before every test. The original enzyme suite set these in
-  // beforeAll and only asserted that the right list component mounted (never its
-  // rows), so the reset went unnoticed. Here we assert rows render, so the
+  // implementations before every test. When these were set in
+  // beforeAll and the test only asserted that the right list component mounted
+  // (never its rows), the reset went unnoticed. Here we assert rows render, so the
   // resolved values must be (re)applied in beforeEach to survive the reset.
   beforeEach(() => {
     JobTemplatesAPI.read.mockResolvedValue({

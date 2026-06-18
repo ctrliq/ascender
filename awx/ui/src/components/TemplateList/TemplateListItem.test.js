@@ -373,8 +373,8 @@ describe('<TemplateListItem />', () => {
     assertDetail('Project', "Mike's Project");
     assertDetail('Execution Environment', 'Mock EE 1.2.3');
 
-    // Organization Link in the expanded section (was checked on the row in the
-    // enzyme suite, which actually renders the Detail in the expanded body).
+    // Organization Link in the expanded section (the Detail renders in the
+    // expanded body).
     expect(
       screen.getByRole('link', { name: "Mike's Org" })
     ).toHaveAttribute('href', '/organizations/1/details');
@@ -391,8 +391,7 @@ describe('<TemplateListItem />', () => {
     expect(within(labels).getByText('L_91o2')).toBeInTheDocument();
 
     // Activity cell renders a Sparkline (svg) for the single recent job.
-    // Equivalent to the enzyme Td[dataLabel="Activity"] Sparkline length 1
-    // assertion.
+    // Asserts one Sparkline renders in the Activity cell.
     const activityCell = container.querySelector('[data-label="Activity"]');
     expect(activityCell).toBeInTheDocument();
     expect(activityCell.querySelector('svg')).toBeInTheDocument();
@@ -412,8 +411,7 @@ describe('<TemplateListItem />', () => {
       />
     );
     // Detail with isEmpty (empty credentials array) renders null, so the
-    // Credentials label is absent from the DOM. Equivalent to the enzyme
-    // assertion that Detail[label="Credentials"].prop('isEmpty') === true.
+    // Credentials label is absent from the DOM.
     expect(screen.queryByText('Credentials')).not.toBeInTheDocument();
   });
 

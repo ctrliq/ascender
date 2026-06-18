@@ -6,8 +6,8 @@ import CheckboxListItem from './CheckboxListItem';
 
 // CheckboxListItem renders a PF <Td select={...}> whose checkbox only renders
 // inside a full PF Table context; mounted standalone here the row content and
-// the Tr onClick selection behaviour are what we assert (matching the original
-// enzyme coverage, which never reached the checkbox input either).
+// the Tr onClick selection behaviour are what we assert (the checkbox input is
+// not reachable without that context).
 
 describe('CheckboxListItem', () => {
   test('renders the expected content', () => {

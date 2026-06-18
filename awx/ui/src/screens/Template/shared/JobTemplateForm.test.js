@@ -17,10 +17,10 @@ import JobTemplateForm from './JobTemplateForm';
 jest.mock('../../../api');
 
 // The Inventory / Project / Credential lookups talk to the API and render
-// large search modals; the enzyme suite drove their onChange handlers
-// directly. To keep that intent in RTL we stand them in with lightweight
-// mocks that surface the current value in the DOM and expose buttons to
-// trigger onChange with the same payloads the original test used.
+// large search modals; rather than drive their onChange handlers through
+// those modals, we stand them in with lightweight mocks that surface the
+// current value in the DOM and expose buttons to trigger onChange with the
+// same payloads the test uses.
 jest.mock('components/Lookup', () => {
   const actual = jest.requireActual('components/Lookup');
   return {
@@ -146,8 +146,8 @@ describe('<JobTemplateForm />', () => {
 
   beforeEach(() => {
     // The deeply-nested PF Lookup/OptionsList components log prop-type
-    // warnings under the partial API mocks; the enzyme suite suppressed
-    // console.error the same way so these don't fail the run.
+    // warnings under the partial API mocks; suppress console.error so these
+    // don't fail the run.
     consoleError = global.console.error;
     global.console.error = jest.fn();
     RootAPI.readAssetVariables.mockResolvedValue({
@@ -322,8 +322,7 @@ describe('<JobTemplateForm />', () => {
     );
 
     // the template has webhook_service set, so the webhook section is enabled
-    // on mount and the checkbox renders already checked (the enzyme suite
-    // force-set onChange(true), which was a no-op given the initial value).
+    // on mount and the checkbox renders already checked.
     const webhookCheckbox = await screen.findByRole('checkbox', {
       name: 'Enable Webhook',
     });

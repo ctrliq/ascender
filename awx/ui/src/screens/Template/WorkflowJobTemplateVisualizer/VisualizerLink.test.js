@@ -97,8 +97,8 @@ describe('VisualizerLink', () => {
     );
     fireEvent.mouseLeave(tooltipItem('link-add-node'));
     expect(updateHelpText).toHaveBeenCalledWith(null);
-    // mouseLeave bubbles to the link <g> and dismisses the tooltip in RTL
-    // (enzyme's simulate did not bubble), so re-hover before clicking.
+    // mouseLeave bubbles to the link <g> and dismisses the tooltip in RTL,
+    // so re-hover before clicking.
     fireEvent.mouseEnter(getLinkG());
     fireEvent.click(tooltipItem('link-add-node'));
     expect(dispatch).toHaveBeenCalledWith({

@@ -9,7 +9,7 @@ jest.mock('../../../api');
 
 // The lookups have their own modal-driven suites; here we stub them so the
 // form's wiring (chips from value, onChange -> onSubmit args) can be driven
-// deterministically, matching what the enzyme suite did via prop('onChange').
+// deterministically.
 jest.mock('components/Lookup', () => {
   const actual = jest.requireActual('components/Lookup');
   return {

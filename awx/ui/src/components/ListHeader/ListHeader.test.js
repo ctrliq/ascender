@@ -14,7 +14,7 @@ describe('ListHeader', () => {
 
   // Capture the toolbar props ListHeader passes to its renderToolbar callback
   // so the handlers (onSort/onSearch/onRemove/clearAllFilters) can be exercised
-  // directly, mirroring the enzyme suite's `toolbar.prop('onX')(...)`.
+  // directly.
   function makeCapturingToolbar() {
     const captured = {};
     const renderToolbar = (props) => {

@@ -4,8 +4,8 @@ import omitProps from './omitProps';
 
 // omitProps returns a component that forwards its props (minus the omitted
 // ones) to the wrapped element. With a plain 'div' the forwarded props land as
-// DOM attributes, so the enzyme `.prop('foo')` checks become attribute checks
-// on the rendered node (present attribute === forwarded prop; absent === omitted).
+// DOM attributes, so we verify forwarding via attribute checks on the rendered
+// node (present attribute === forwarded prop; absent === omitted).
 describe('omitProps', () => {
   test('should render child component', () => {
     const Omit = omitProps('div');

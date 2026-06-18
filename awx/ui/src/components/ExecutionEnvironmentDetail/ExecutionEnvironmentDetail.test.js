@@ -37,8 +37,7 @@ describe('<ExecutionEnvironmentDetail/>', () => {
     );
     assertDetail('Execution Environment', 'Missing resource');
     // The deleted-EE warning wraps the icon in a PF Tooltip; its content is
-    // only rendered into the DOM on hover (DOM equivalent of the enzyme
-    // `Tooltip.prop('content')` assertion).
+    // only rendered into the DOM on hover, so we assert it after hovering.
     const term = screen.getByText('Execution Environment');
     const icon = term.nextElementSibling.querySelector('svg');
     await user.hover(icon);

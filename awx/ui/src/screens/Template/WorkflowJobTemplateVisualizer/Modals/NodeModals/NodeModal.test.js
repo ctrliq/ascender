@@ -19,7 +19,7 @@ const dispatch = jest.fn();
 const onSave = jest.fn();
 
 // The PF Wizard renders into a body portal; these helpers query the live DOM
-// (screen/document) rather than an enzyme wrapper.
+// (screen/document) directly.
 const nextButton = () => document.querySelector('button#next-node-modal');
 const clickNext = () => fireEvent.click(nextButton());
 const selectNodeType = (value) =>

@@ -227,8 +227,7 @@ describe('<ScheduleDetail />', () => {
     // The Verbosity detail's value comes from VERBOSITY(t)[verbosity], whose
     // Lingui macro resolves to an empty string under the test i18n setup, so
     // the Detail renders null (no DOM node) even though ask_verbosity_on_launch
-    // is true. The original enzyme suite matched the React element regardless
-    // of what it rendered; RTL can only see the (absent) DOM, so we assert the
+    // is true. RTL can only see the (absent) DOM, so we assert the
     // empty-value behavior here. See VerbositySelectField VERBOSITY().
     expect(document.querySelector('#schedule-verbosity')).not.toBeInTheDocument();
     expect(screen.getByText('Show Changes')).toBeInTheDocument();

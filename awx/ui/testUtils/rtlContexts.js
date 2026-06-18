@@ -1,10 +1,9 @@
 /*
- * React Testing Library counterpart of testUtils/enzymeHelpers.
+ * React Testing Library test harness for mounting components with app context.
  *
  * renderWithContexts(ui, { context }) renders a component inside the app's
- * top-level providers (i18n, session, config, router) with the same context
- * defaults and the same override mechanism as mountWithContexts, so enzyme
- * suites can be converted incrementally:
+ * top-level providers (i18n, session, config, router) with sensible context
+ * defaults and a per-test override mechanism:
  *
  *   const { history, user } = renderWithContexts(<MyComponent />, {
  *     context: { router: { history: createMemoryHistory(...) } },
@@ -63,8 +62,7 @@ function applyDefaultContexts(context) {
 // The v5 Router subscribes to history and drives re-renders; this nested v6
 // Router is fully controlled (location comes from v5's context, the navigator
 // is the shared history object) so components migrated to the
-// react-router-dom-v5-compat APIs work without a second subscription. Mirrors
-// the CompatV6Layer in enzymeHelpers.
+// react-router-dom-v5-compat APIs work without a second subscription.
 function CompatV6Layer({ history, children }) {
   const location = useLocation();
   return (

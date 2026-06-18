@@ -8,7 +8,7 @@ import Credentials from './Credentials';
 jest.mock('../../api/models/Credentials');
 
 // Capture the ScreenHeader props so we can assert the breadcrumb/title
-// mapping that the previous enzyme suite covered.
+// mapping.
 let mockScreenHeaderProps;
 jest.mock('components/ScreenHeader', () => ({
   __esModule: true,

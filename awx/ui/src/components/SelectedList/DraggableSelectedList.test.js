@@ -89,12 +89,11 @@ describe('<DraggableSelectedList />', () => {
   });
 
   test('should render remove buttons enabled in the initial (not-dragging) state', () => {
-    // The original enzyme test drove drag state by invoking the DataList
-    // onDragStart/onDragCancel props directly (wrapper.find('DataList')
-    // .prop('onDragStart')()). That deprecated PF drag API has no accessible
-    // DOM trigger to fire via RTL, which is the very reason this suite is
-    // skipped. We assert the initial (not-dragging) enabled state of the
-    // remove buttons, the DOM-observable part of the original assertion.
+    // Drag state was previously driven by invoking the DataList
+    // onDragStart/onDragCancel props directly. That deprecated PF drag API
+    // has no accessible DOM trigger to fire via RTL, which is the very reason
+    // this suite is skipped. We assert the initial (not-dragging) enabled
+    // state of the remove buttons, the DOM-observable part of the assertion.
     const mockSelected = [
       {
         id: 1,

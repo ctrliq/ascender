@@ -51,7 +51,7 @@ describe('<WorkflowApproval />', () => {
     expect(
       await screen.findByText('WorkflowApprovalDetail')
     ).toBeInTheDocument();
-    // real route params are strings (the old enzyme test mocked a number)
+    // real route params are strings (route params are always strings under react-router)
     expect(WorkflowApprovalsAPI.readDetail).toHaveBeenCalledWith('1');
   });
 

@@ -5,7 +5,7 @@ import StatusLabel from './StatusLabel';
 
 // PF Label color is rendered as a `pf-m-<color>` class on the label span, and
 // the status icon (no distinguishing accessible name) is identified by its
-// unique SVG path data — both preserve the original enzyme prop assertions.
+// unique SVG path data — both assert the color and icon for each status.
 const ICON_PATH_PREFIX = {
   CheckCircleIcon: 'M504 256c0 136.967-111.033 248',
   ExclamationCircleIcon: 'M504 256c0 136.997-111.043 248',
