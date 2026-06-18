@@ -1,196 +1,147 @@
 import React from 'react';
 import { Toolbar, ToolbarContent } from '@patternfly/react-core';
 import { createMemoryHistory } from 'history';
-import { act } from 'react-dom/test-utils';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import {
+  screen,
+  within,
+  fireEvent,
+  waitFor,
+} from '@testing-library/react';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import Search from './Search';
 
+const QS_CONFIG = {
+  namespace: 'organization',
+  dateFields: ['modified', 'created'],
+  defaultParams: { page: 1, page_size: 5, order_by: 'name' },
+  integerFields: ['page', 'page_size'],
+};
+
+function renderSearch(props, options) {
+  return renderWithContexts(
+    <Toolbar
+      id={`${(props.qsConfig || QS_CONFIG).namespace}-list-toolbar`}
+      clearAllFilters={() => {}}
+      collapseListedFiltersBreakpoint="lg"
+    >
+      <ToolbarContent>
+        <Search
+          qsConfig={QS_CONFIG}
+          onShowAdvancedSearch={jest.fn()}
+          {...props}
+        />
+      </ToolbarContent>
+    </Toolbar>,
+    options
+  );
+}
+
+// The simple key Select's onSelect handler reads `target.innerText` to map the
+// clicked option back to a search column. jsdom never populates `innerText`, so
+// we set it on the real option element before dispatching a real click.
+// The handler does not close the key dropdown on select, so we open it only when
+// it is currently closed and press Escape afterwards to leave it settled.
+async function selectKey(user, name) {
+  const keyWrap = document.querySelector(
+    '[data-ouia-component-id="simple-key-select"]'
+  );
+  const toggle = within(keyWrap).getByRole('button', { name: 'Options menu' });
+  if (toggle.getAttribute('aria-expanded') !== 'true') {
+    await user.click(toggle);
+  }
+  const option = await screen.findByRole('option', { name });
+  option.innerText = name;
+  fireEvent.click(option);
+  fireEvent.keyDown(document.activeElement || document.body, { key: 'Escape' });
+}
+
 describe('<Search />', () => {
-  let search;
-
-  const QS_CONFIG = {
-    namespace: 'organization',
-    dateFields: ['modified', 'created'],
-    defaultParams: { page: 1, page_size: 5, order_by: 'name' },
-    integerFields: ['page', 'page_size'],
-  };
-
-  afterEach(() => {
-    if (search) {
-      search = null;
-    }
-  });
-
-  test('it triggers the expected callbacks', () => {
+  test('it triggers the expected callbacks', async () => {
     const columns = [{ name: 'Name', key: 'name__icontains', isDefault: true }];
-
-    const searchBtn = 'button[aria-label="Search submit button"]';
-    const searchTextInput = 'input[aria-label="Search text input"]';
-
     const onSearch = jest.fn();
+    const { user } = renderSearch({ columns, onSearch });
 
-    search = mountWithContexts(
-      <Toolbar
-        id={`${QS_CONFIG.namespace}-list-toolbar`}
-        clearAllFilters={() => {}}
-        collapseListedFiltersBreakpoint="lg"
-      >
-        <ToolbarContent>
-          <Search
-            qsConfig={QS_CONFIG}
-            columns={columns}
-            onSearch={onSearch}
-            onShowAdvancedSearch={jest.fn}
-          />
-        </ToolbarContent>
-      </Toolbar>
+    await user.type(
+      screen.getByRole('searchbox', { name: 'Search text input' }),
+      'test-321'
     );
-
-    search.find(searchTextInput).instance().value = 'test-321';
-    search.find(searchTextInput).simulate('change');
-    search.find(searchBtn).simulate('click');
+    await user.click(
+      screen.getByRole('button', { name: 'Search submit button' })
+    );
 
     expect(onSearch).toHaveBeenCalledTimes(1);
     expect(onSearch).toHaveBeenCalledWith('name__icontains', 'test-321');
   });
 
-  test('changing key select updates which key is called for onSearch', () => {
-    const searchButton = 'button[aria-label="Search submit button"]';
-    const searchTextInput = 'input[aria-label="Search text input"]';
+  test('changing key select updates which key is called for onSearch', async () => {
     const columns = [
       { name: 'Name', key: 'name__icontains', isDefault: true },
       { name: 'Description', key: 'description__icontains' },
     ];
     const onSearch = jest.fn();
-    const wrapper = mountWithContexts(
-      <Toolbar
-        id={`${QS_CONFIG.namespace}-list-toolbar`}
-        clearAllFilters={() => {}}
-        collapseListedFiltersBreakpoint="lg"
-      >
-        <ToolbarContent>
-          <Search
-            qsConfig={QS_CONFIG}
-            columns={columns}
-            onSearch={onSearch}
-            onShowAdvancedSearch={jest.fn}
-          />
-        </ToolbarContent>
-      </Toolbar>
-    );
+    const { user } = renderSearch({ columns, onSearch });
 
-    act(() => {
-      wrapper.find('Select[aria-label="Simple key select"]').invoke('onSelect')(
-        { target: { innerText: 'Description' } }
-      );
-    });
-    wrapper.update();
-    wrapper.find(searchTextInput).instance().value = 'test-321';
-    wrapper.find(searchTextInput).simulate('change');
-    wrapper.find(searchButton).simulate('click');
+    await selectKey(user, 'Description');
+    await user.type(
+      screen.getByRole('searchbox', { name: 'Search text input' }),
+      'test-321'
+    );
+    await user.click(
+      screen.getByRole('button', { name: 'Search submit button' })
+    );
 
     expect(onSearch).toHaveBeenCalledTimes(1);
     expect(onSearch).toHaveBeenCalledWith('description__icontains', 'test-321');
   });
 
-  test('changing key select to and from advanced causes onShowAdvancedSearch callback to be invoked', () => {
+  test('changing key select to and from advanced causes onShowAdvancedSearch callback to be invoked', async () => {
     const columns = [
       { name: 'Name', key: 'name__icontains', isDefault: true },
       { name: 'Description', key: 'description__icontains' },
       { name: 'Advanced', key: 'advanced' },
     ];
-    const onSearch = jest.fn();
     const onShowAdvancedSearch = jest.fn();
-    const wrapper = mountWithContexts(
-      <Toolbar
-        id={`${QS_CONFIG.namespace}-list-toolbar`}
-        clearAllFilters={() => {}}
-        collapseListedFiltersBreakpoint="lg"
-      >
-        <ToolbarContent>
-          <Search
-            qsConfig={QS_CONFIG}
-            columns={columns}
-            onSearch={onSearch}
-            onShowAdvancedSearch={onShowAdvancedSearch}
-          />
-        </ToolbarContent>
-      </Toolbar>
-    );
-
-    act(() => {
-      wrapper.find('Select[aria-label="Simple key select"]').invoke('onSelect')(
-        { target: { innerText: 'Advanced' } }
-      );
+    const { user } = renderSearch({
+      columns,
+      onSearch: jest.fn(),
+      onShowAdvancedSearch,
     });
-    wrapper.update();
+
+    await selectKey(user, 'Advanced');
     expect(onShowAdvancedSearch).toHaveBeenCalledTimes(1);
     expect(onShowAdvancedSearch).toHaveBeenCalledWith(true);
-    jest.clearAllMocks();
-    act(() => {
-      wrapper.find('Select[aria-label="Simple key select"]').invoke('onSelect')(
-        { target: { innerText: 'Description' } }
-      );
-    });
-    wrapper.update();
+
+    onShowAdvancedSearch.mockClear();
+    await selectKey(user, 'Description');
     expect(onShowAdvancedSearch).toHaveBeenCalledTimes(1);
     expect(onShowAdvancedSearch).toHaveBeenCalledWith(false);
   });
 
-  test('attempt to search with empty string', () => {
-    const searchButton = 'button[aria-label="Search submit button"]';
-    const searchTextInput = 'input[aria-label="Search text input"]';
+  test('attempt to search with empty string', async () => {
     const columns = [{ name: 'Name', key: 'name__icontains', isDefault: true }];
     const onSearch = jest.fn();
-    const wrapper = mountWithContexts(
-      <Toolbar
-        id={`${QS_CONFIG.namespace}-list-toolbar`}
-        clearAllFilters={() => {}}
-        collapseListedFiltersBreakpoint="lg"
-      >
-        <ToolbarContent>
-          <Search
-            qsConfig={QS_CONFIG}
-            columns={columns}
-            onSearch={onSearch}
-            onShowAdvancedSearch={jest.fn}
-          />
-        </ToolbarContent>
-      </Toolbar>
-    );
+    const { user } = renderSearch({ columns, onSearch });
 
-    wrapper.find(searchTextInput).instance().value = '';
-    wrapper.find(searchTextInput).simulate('change');
-    wrapper.find(searchButton).simulate('click');
+    // submit button is disabled while the value is empty; clicking it is a no-op
+    await user.click(
+      screen.getByRole('button', { name: 'Search submit button' })
+    );
 
     expect(onSearch).toHaveBeenCalledTimes(0);
   });
 
-  test('search with a valid string', () => {
-    const searchButton = 'button[aria-label="Search submit button"]';
-    const searchTextInput = 'input[aria-label="Search text input"]';
+  test('search with a valid string', async () => {
     const columns = [{ name: 'Name', key: 'name__icontains', isDefault: true }];
     const onSearch = jest.fn();
-    const wrapper = mountWithContexts(
-      <Toolbar
-        id={`${QS_CONFIG.namespace}-list-toolbar`}
-        clearAllFilters={() => {}}
-        collapseListedFiltersBreakpoint="lg"
-      >
-        <ToolbarContent>
-          <Search
-            qsConfig={QS_CONFIG}
-            columns={columns}
-            onSearch={onSearch}
-            onShowAdvancedSearch={jest.fn}
-          />
-        </ToolbarContent>
-      </Toolbar>
-    );
+    const { user } = renderSearch({ columns, onSearch });
 
-    wrapper.find(searchTextInput).instance().value = 'test-321';
-    wrapper.find(searchTextInput).simulate('change');
-    wrapper.find(searchButton).simulate('click');
+    await user.type(
+      screen.getByRole('searchbox', { name: 'Search text input' }),
+      'test-321'
+    );
+    await user.click(
+      screen.getByRole('button', { name: 'Search submit button' })
+    );
 
     expect(onSearch).toHaveBeenCalledTimes(1);
     expect(onSearch).toHaveBeenCalledWith('name__icontains', 'test-321');
@@ -207,32 +158,20 @@ describe('<Search />', () => {
     const history = createMemoryHistory({
       initialEntries: [`/organizations/${query}`],
     });
-    const wrapper = mountWithContexts(
-      <Toolbar
-        id={`${QS_CONFIG.namespace}-list-toolbar`}
-        clearAllFilters={() => {}}
-        collapseListedFiltersBreakpoint="lg"
-      >
-        <ToolbarContent>
-          <Search
-            qsConfig={QS_CONFIG}
-            columns={columns}
-            onShowAdvancedSearch={jest.fn}
-          />
-        </ToolbarContent>
-      </Toolbar>,
-      { context: { router: { history } } }
-    );
-    const typeFilterWrapper = wrapper.find(
-      'ToolbarFilter[categoryName="Type (or__scm_type)"]'
-    );
-    expect(typeFilterWrapper.prop('chips')[0].key).toEqual('or__scm_type:foo');
-    const nameFilterWrapper = wrapper.find(
-      'ToolbarFilter[categoryName="Name (name__icontains)"]'
-    );
-    expect(nameFilterWrapper.prop('chips')[0].key).toEqual(
-      'name__icontains:bar'
-    );
+    renderSearch({ columns }, { context: { router: { history } } });
+
+    // The enzyme suite read ToolbarFilter `chips[0].key` (e.g. 'or__scm_type:foo');
+    // the DOM equivalent is the chip-group category label + the visible chip text.
+    // Option-based columns render the option label ('Foo Bar!'), not the raw value.
+    const typeGroup = screen
+      .getByText('Type (or__scm_type)')
+      .closest('.pf-c-chip-group');
+    expect(within(typeGroup).getByText('Foo Bar!')).toBeInTheDocument();
+
+    const nameGroup = screen
+      .getByText('Name (name__icontains)')
+      .closest('.pf-c-chip-group');
+    expect(within(nameGroup).getByText('bar')).toBeInTheDocument();
   });
 
   test('should test handle remove of option-based key', async () => {
@@ -254,31 +193,16 @@ describe('<Search />', () => {
       initialEntries: [`/organizations/1/teams${query}`],
     });
     const onRemove = jest.fn();
-    const wrapper = mountWithContexts(
-      <Toolbar
-        id={`${qsConfigNew.namespace}-list-toolbar`}
-        clearAllFilters={() => {}}
-        collapseListedFiltersBreakpoint="lg"
-      >
-        <ToolbarContent>
-          <Search
-            qsConfig={qsConfigNew}
-            columns={columns}
-            onRemove={onRemove}
-            onShowAdvancedSearch={jest.fn}
-          />
-        </ToolbarContent>
-      </Toolbar>,
+    const { user } = renderSearch(
+      { qsConfig: qsConfigNew, columns, onRemove },
       { context: { router: { history } } }
     );
+
     expect(history.location.search).toEqual(query);
-    // click remove button on chip
-    await act(async () => {
-      wrapper
-        .find('.pf-c-chip button[aria-label="close"]')
-        .at(0)
-        .simulate('click');
-    });
+    // PF Chip's close button is aria-labelledby the chip text, so its accessible
+    // name is the chip text ('foo'), not 'close'; click it within its chip.
+    const chip = screen.getByText('foo').closest('.pf-c-chip');
+    await user.click(within(chip).getByRole('button'));
     expect(onRemove).toHaveBeenCalledWith('or__type', 'foo');
   });
 
@@ -301,31 +225,17 @@ describe('<Search />', () => {
       initialEntries: [`/organizations/1/teams${query}`],
     });
     const onRemove = jest.fn();
-    const wrapper = mountWithContexts(
-      <Toolbar
-        id={`${qsConfigNew.namespace}-list-toolbar`}
-        clearAllFilters={() => {}}
-        collapseListedFiltersBreakpoint="lg"
-      >
-        <ToolbarContent>
-          <Search
-            qsConfig={qsConfigNew}
-            columns={columns}
-            onRemove={onRemove}
-            onShowAdvancedSearch={jest.fn}
-          />
-        </ToolbarContent>
-      </Toolbar>,
+    const { user } = renderSearch(
+      { qsConfig: qsConfigNew, columns, onRemove },
       { context: { router: { history } } }
     );
+
     expect(history.location.search).toEqual(query);
-    // click remove button on chip
-    await act(async () => {
-      wrapper
-        .find('.pf-c-chip button[aria-label="close"]')
-        .at(0)
-        .simulate('click');
-    });
+    // the query (or__type:) produces exactly one chip with no visible text;
+    // assert there is only one and click its close button (the only button)
+    const chips = document.querySelectorAll('.pf-c-chip');
+    expect(chips).toHaveLength(1);
+    await user.click(within(chips[0]).getByRole('button'));
     expect(onRemove).toHaveBeenCalledWith('or__type', '');
   });
 
@@ -340,30 +250,17 @@ describe('<Search />', () => {
     const history = createMemoryHistory({
       initialEntries: [`/organizations/${query}`],
     });
-    const wrapper = mountWithContexts(
-      <Toolbar
-        id={`${QS_CONFIG.namespace}-list-toolbar`}
-        clearAllFilters={() => {}}
-        collapseListedFiltersBreakpoint="lg"
-      >
-        <ToolbarContent>
-          <Search
-            qsConfig={QS_CONFIG}
-            columns={columns}
-            onShowAdvancedSearch={jest.fn}
-          />
-        </ToolbarContent>
-      </Toolbar>,
-      { context: { router: { history } } }
-    );
-    const nameExactFilterWrapper = wrapper.find(
-      'ToolbarFilter[categoryName="name__exact"]'
-    );
-    expect(nameExactFilterWrapper.prop('chips')[0].key).toEqual(
-      'name__exact:baz'
-    );
-    const fooFilterWrapper = wrapper.find('ToolbarFilter[categoryName="foo"]');
-    expect(fooFilterWrapper.prop('chips')[0].key).toEqual('foo:bar');
+    renderSearch({ columns }, { context: { router: { history } } });
+
+    // Keys without a search column still get their own ToolbarFilter chip group;
+    // assert the category label + chip text the enzyme suite read off the props.
+    const nameExactGroup = screen
+      .getByText('name__exact')
+      .closest('.pf-c-chip-group');
+    expect(within(nameExactGroup).getByText('baz')).toBeInTheDocument();
+
+    const fooGroup = screen.getByText('foo').closest('.pf-c-chip-group');
+    expect(within(fooGroup).getByText('bar')).toBeInTheDocument();
   });
 
   describe('date fields', () => {
@@ -371,155 +268,129 @@ describe('<Search />', () => {
       { name: 'Name', key: 'name__icontains', isDefault: true },
       { name: 'Created', key: 'created' },
     ];
-    const dateInput = 'input[aria-label="Date search input"]';
-    const dateSubmitBtn = 'button[aria-label="Search submit button"]';
 
-    function mountSearch(onSearch) {
-      return mountWithContexts(
-        <Toolbar
-          id={`${QS_CONFIG.namespace}-list-toolbar`}
-          clearAllFilters={() => {}}
-          collapseListedFiltersBreakpoint="lg"
-        >
-          <ToolbarContent>
-            <Search
-              qsConfig={QS_CONFIG}
-              columns={dateColumns}
-              onSearch={onSearch}
-              onShowAdvancedSearch={jest.fn}
-            />
-          </ToolbarContent>
-        </Toolbar>
-      );
+    function renderDateSearch(onSearch) {
+      return renderSearch({ columns: dateColumns, onSearch });
     }
 
-    test('renders date input and operator select for a date column', () => {
-      search = mountSearch(jest.fn());
-      act(() => {
-        search.find('Select[aria-label="Simple key select"]').prop('onSelect')(
-          { target: { innerText: 'Created' } }
-        );
-      });
-      search.update();
-      expect(search.find(dateInput)).toHaveLength(1);
-      expect(search.find(dateInput).prop('type')).toBe('date');
+    test('renders date input and operator select for a date column', async () => {
+      const { user } = renderDateSearch(jest.fn());
+      await selectKey(user, 'Created');
+
+      const dateInput = screen.getByLabelText('Date search input');
+      expect(dateInput).toBeInTheDocument();
+      expect(dateInput).toHaveAttribute('type', 'date');
       expect(
-        search.find('Select[aria-label="Date operator select"]')
-      ).toHaveLength(1);
+        document.querySelector(
+          '[data-ouia-component-id="date-operator-select-created"]'
+        )
+      ).toBeInTheDocument();
     });
 
-    test('searching submits the column key with the default operator', () => {
+    test('searching submits the column key with the default operator', async () => {
       const onSearch = jest.fn();
-      search = mountSearch(onSearch);
-      act(() => {
-        search.find('Select[aria-label="Simple key select"]').prop('onSelect')(
-          { target: { innerText: 'Created' } }
-        );
+      const { user } = renderDateSearch(onSearch);
+      await selectKey(user, 'Created');
+
+      fireEvent.change(screen.getByLabelText('Date search input'), {
+        target: { value: '2026-06-01' },
       });
-      search.update();
-      search.find(dateInput).instance().value = '2026-06-01';
-      search.find(dateInput).simulate('change');
-      search.find(dateSubmitBtn).simulate('click');
+      await user.click(
+        screen.getByRole('button', { name: 'Search submit button' })
+      );
+
       expect(onSearch).toHaveBeenCalledTimes(1);
       expect(onSearch).toHaveBeenCalledWith('created__gte', '2026-06-01');
     });
 
-    test('switching the operator changes the submitted parameter', () => {
+    test('switching the operator changes the submitted parameter', async () => {
       const onSearch = jest.fn();
-      search = mountSearch(onSearch);
-      act(() => {
-        search.find('Select[aria-label="Simple key select"]').prop('onSelect')(
-          { target: { innerText: 'Created' } }
-        );
+      const { user } = renderDateSearch(onSearch);
+      await selectKey(user, 'Created');
+
+      const operatorWrap = document.querySelector(
+        '[data-ouia-component-id="date-operator-select-created"]'
+      );
+      await user.click(
+        within(operatorWrap).getByRole('button', { name: 'Options menu' })
+      );
+      // operator select keys off the `selection` arg, not innerText, so a real
+      // click on the option drives it directly
+      fireEvent.click(await screen.findByRole('option', { name: 'Before' }));
+
+      fireEvent.change(screen.getByLabelText('Date search input'), {
+        target: { value: '2026-06-30' },
       });
-      search.update();
-      act(() => {
-        search
-          .find('Select[aria-label="Date operator select"]')
-          .prop('onSelect')(null, 'Before');
-      });
-      search.update();
-      search.find(dateInput).instance().value = '2026-06-30';
-      search.find(dateInput).simulate('change');
-      search.find(dateSubmitBtn).simulate('click');
+      await user.click(
+        screen.getByRole('button', { name: 'Search submit button' })
+      );
+
       expect(onSearch).toHaveBeenCalledTimes(1);
       expect(onSearch).toHaveBeenCalledWith('created__lt', '2026-06-30');
     });
 
-    test('a value typed for a text column does not leak into a date search', () => {
+    test('a value typed for a text column does not leak into a date search', async () => {
       const onSearch = jest.fn();
-      search = mountSearch(onSearch);
-      const textInput = 'input[aria-label="Search text input"]';
-      search.find(textInput).instance().value = 'foo';
-      search.find(textInput).simulate('change');
-      act(() => {
-        search.find('Select[aria-label="Simple key select"]').prop('onSelect')(
-          { target: { innerText: 'Created' } }
-        );
-      });
-      search.update();
-      expect(search.find(dateInput).prop('value')).toBe('');
+      const { user } = renderDateSearch(onSearch);
+
+      await user.type(
+        screen.getByRole('searchbox', { name: 'Search text input' }),
+        'foo'
+      );
+      await selectKey(user, 'Created');
+
+      expect(screen.getByLabelText('Date search input')).toHaveValue('');
       expect(
-        search.find('button[aria-label="Search submit button"]').prop(
-          'disabled'
-        )
-      ).toBe(true);
+        screen.getByRole('button', { name: 'Search submit button' })
+      ).toBeDisabled();
     });
 
-    test('Enter in the date input submits the search', () => {
+    test('Enter in the date input submits the search', async () => {
       const onSearch = jest.fn();
-      search = mountSearch(onSearch);
-      act(() => {
-        search.find('Select[aria-label="Simple key select"]').prop('onSelect')(
-          { target: { innerText: 'Created' } }
-        );
-      });
-      search.update();
-      search.find(dateInput).instance().value = '2026-06-15';
-      search.find(dateInput).simulate('change');
-      search.find(dateInput).simulate('keydown', { key: 'Enter' });
+      const { user } = renderDateSearch(onSearch);
+      await selectKey(user, 'Created');
+
+      const dateInput = screen.getByLabelText('Date search input');
+      fireEvent.change(dateInput, { target: { value: '2026-06-15' } });
+      fireEvent.keyDown(dateInput, { key: 'Enter' });
+
       expect(onSearch).toHaveBeenCalledWith('created__gte', '2026-06-15');
     });
 
-    test('operator dropdown does not stay open across column switches', () => {
-      search = mountSearch(jest.fn());
-      act(() => {
-        search.find('Select[aria-label="Simple key select"]').prop('onSelect')(
-          { target: { innerText: 'Created' } }
-        );
-      });
-      search.update();
-      act(() => {
-        search
-          .find('Select[aria-label="Date operator select"]')
-          .prop('onToggle')(true);
-      });
-      search.update();
+    test('operator dropdown does not stay open across column switches', async () => {
+      const { user } = renderDateSearch(jest.fn());
+      await selectKey(user, 'Created');
+
+      const operatorWrap = document.querySelector(
+        '[data-ouia-component-id="date-operator-select-created"]'
+      );
+      await user.click(
+        within(operatorWrap).getByRole('button', { name: 'Options menu' })
+      );
+      // open means the operator options are visible
       expect(
-        search.find('Select[aria-label="Date operator select"]').prop('isOpen')
-      ).toBe(true);
-      act(() => {
-        search.find('Select[aria-label="Simple key select"]').prop('onSelect')(
-          { target: { innerText: 'Name' } }
-        );
-      });
-      act(() => {
-        search.find('Select[aria-label="Simple key select"]').prop('onSelect')(
-          { target: { innerText: 'Created' } }
-        );
-      });
-      search.update();
-      expect(
-        search.find('Select[aria-label="Date operator select"]').prop('isOpen')
-      ).toBe(false);
+        screen.getByRole('option', { name: 'Before' })
+      ).toBeInTheDocument();
+
+      await selectKey(user, 'Name');
+      await selectKey(user, 'Created');
+
+      // switching columns resets the operator dropdown to closed
+      await waitFor(() =>
+        expect(
+          screen.queryByRole('option', { name: 'Before' })
+        ).not.toBeInTheDocument()
+      );
     });
 
     test('non-date columns keep the plain text input', () => {
-      search = mountSearch(jest.fn());
-      expect(search.find(dateInput)).toHaveLength(0);
+      renderDateSearch(jest.fn());
       expect(
-        search.find('input[aria-label="Search text input"]')
-      ).toHaveLength(1);
+        screen.queryByLabelText('Date search input')
+      ).not.toBeInTheDocument();
+      expect(
+        screen.getByRole('searchbox', { name: 'Search text input' })
+      ).toBeInTheDocument();
     });
   });
 });
