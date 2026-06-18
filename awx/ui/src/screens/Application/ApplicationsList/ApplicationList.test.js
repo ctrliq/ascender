@@ -1,96 +1,82 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, within } from '@testing-library/react';
 
 import { ApplicationsAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ApplicationsList from './ApplicationsList';
 
 jest.mock('../../../api/models/Applications');
 
-const applications = {
-  data: {
-    results: [
-      {
-        id: 1,
-        name: 'Foo',
-        summary_fields: {
-          organization: { name: 'Org 1', id: 10 },
-          user_capabilities: { edit: true, delete: true },
+// fresh data per test because one test mutates user_capabilities.edit
+function buildApplications() {
+  return {
+    data: {
+      results: [
+        {
+          id: 1,
+          name: 'Foo',
+          summary_fields: {
+            organization: { name: 'Org 1', id: 10 },
+            user_capabilities: { edit: true, delete: true },
+          },
+          url: '',
+          organization: 10,
         },
-        url: '',
-        organization: 10,
-      },
-      {
-        id: 2,
-        name: 'Bar',
-        summary_fields: {
-          organization: { name: 'Org 2', id: 20 },
-          user_capabilities: { edit: true, delete: true },
+        {
+          id: 2,
+          name: 'Bar',
+          summary_fields: {
+            organization: { name: 'Org 2', id: 20 },
+            user_capabilities: { edit: true, delete: true },
+          },
+          url: '',
+          organization: 20,
         },
-        url: '',
-        organization: 20,
-      },
-    ],
-    count: 2,
-  },
-};
-const options = { data: { actions: { POST: true } } };
-describe('<ApplicationsList/>', () => {
-  let wrapper;
-  test('should mount properly', async () => {
-    ApplicationsAPI.read.mockResolvedValue(applications);
-    ApplicationsAPI.readOptions.mockResolvedValue(options);
-    await act(async () => {
-      wrapper = mountWithContexts(<ApplicationsList />);
-    });
-    await waitForElement(wrapper, 'ApplicationsList', (el) => el.length > 0);
-  });
+      ],
+      count: 2,
+    },
+  };
+}
 
+const options = { data: { actions: { POST: true } } };
+
+afterEach(() => {
+  jest.clearAllMocks();
+});
+
+describe('<ApplicationsList/>', () => {
   test('should have data fetched and render 2 rows', async () => {
-    ApplicationsAPI.read.mockResolvedValue(applications);
+    ApplicationsAPI.read.mockResolvedValue(buildApplications());
     ApplicationsAPI.readOptions.mockResolvedValue(options);
-    await act(async () => {
-      wrapper = mountWithContexts(<ApplicationsList />);
-    });
-    await waitForElement(wrapper, 'ApplicationsList', (el) => el.length > 0);
-    expect(wrapper.find('ApplicationListItem').length).toBe(2);
+
+    renderWithContexts(<ApplicationsList />);
+
+    expect(await screen.findByRole('link', { name: 'Foo' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Bar' })).toBeInTheDocument();
     expect(ApplicationsAPI.read).toHaveBeenCalled();
     expect(ApplicationsAPI.readOptions).toHaveBeenCalled();
   });
 
   test('should delete item successfully', async () => {
-    ApplicationsAPI.read.mockResolvedValue(applications);
+    ApplicationsAPI.read.mockResolvedValue(buildApplications());
     ApplicationsAPI.readOptions.mockResolvedValue(options);
-    await act(async () => {
-      wrapper = mountWithContexts(<ApplicationsList />);
-    });
-    waitForElement(wrapper, 'ApplicationsList', (el) => el.length > 0);
+    ApplicationsAPI.destroy.mockResolvedValue({});
 
-    wrapper
-      .find('.pf-c-table__check')
-      .first()
-      .find('input')
-      .simulate('change', applications.data.results[0]);
+    const { user } = renderWithContexts(<ApplicationsList />);
+    await screen.findByRole('link', { name: 'Foo' });
 
-    wrapper.update();
+    const row = screen.getByRole('link', { name: 'Foo' }).closest('tr');
+    const checkbox = within(row).getByRole('checkbox');
+    await user.click(checkbox);
+    expect(checkbox).toBeChecked();
 
-    expect(
-      wrapper.find('.pf-c-table__check').first().find('input').prop('checked')
-    ).toBe(true);
-    await act(async () =>
-      wrapper.find('Button[aria-label="Delete"]').prop('onClick')()
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'confirm delete' })
     );
 
-    wrapper.update();
-
-    await act(async () =>
-      wrapper.find('Button[aria-label="confirm delete"]').prop('onClick')()
-    );
-    expect(ApplicationsAPI.destroy).toHaveBeenCalledWith(
-      applications.data.results[0].id
+    await waitFor(() =>
+      expect(ApplicationsAPI.destroy).toHaveBeenCalledWith(1)
     );
   });
 
@@ -107,15 +93,17 @@ describe('<ApplicationsList/>', () => {
       })
     );
     ApplicationsAPI.readOptions.mockResolvedValue(options);
-    await act(async () => {
-      wrapper = mountWithContexts(<ApplicationsList />);
-    });
 
-    await waitForElement(wrapper, 'ApplicationsList', (el) => el.length > 0);
-    expect(wrapper.find('ContentError').length).toBe(1);
+    renderWithContexts(<ApplicationsList />);
+
+    expect(
+      await screen.findByText('Something went wrong...')
+    ).toBeInTheDocument();
   });
 
   test('should render deletion error modal', async () => {
+    ApplicationsAPI.read.mockResolvedValue(buildApplications());
+    ApplicationsAPI.readOptions.mockResolvedValue(options);
     ApplicationsAPI.destroy.mockRejectedValue(
       new Error({
         response: {
@@ -127,65 +115,53 @@ describe('<ApplicationsList/>', () => {
         },
       })
     );
-    ApplicationsAPI.read.mockResolvedValue(applications);
-    ApplicationsAPI.readOptions.mockResolvedValue(options);
-    await act(async () => {
-      wrapper = mountWithContexts(<ApplicationsList />);
-    });
-    waitForElement(wrapper, 'ApplicationsList', (el) => el.length > 0);
 
-    wrapper
-      .find('.pf-c-table__check')
-      .first()
-      .find('input')
-      .simulate('change', 'a');
+    const { user } = renderWithContexts(<ApplicationsList />);
+    await screen.findByRole('link', { name: 'Foo' });
 
-    wrapper.update();
+    const row = screen.getByRole('link', { name: 'Foo' }).closest('tr');
+    await user.click(within(row).getByRole('checkbox'));
 
-    expect(
-      wrapper.find('.pf-c-table__check').first().find('input').prop('checked')
-    ).toBe(true);
-    await act(async () =>
-      wrapper.find('Button[aria-label="Delete"]').prop('onClick')()
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'confirm delete' })
     );
 
-    wrapper.update();
-
-    await act(async () =>
-      wrapper.find('Button[aria-label="confirm delete"]').prop('onClick')()
-    );
-    wrapper.update();
-
-    expect(wrapper.find('ErrorDetail').length).toBe(1);
+    expect(await screen.findByText('Error!')).toBeInTheDocument();
+    // the error modal includes an ErrorDetail with an expandable "Details" toggle
+    expect(screen.getByText('Details')).toBeInTheDocument();
   });
 
   test('should not render add button', async () => {
-    ApplicationsAPI.read.mockResolvedValue(applications);
+    ApplicationsAPI.read.mockResolvedValue(buildApplications());
     ApplicationsAPI.readOptions.mockResolvedValue({
       data: { actions: { POST: false } },
     });
-    await act(async () => {
-      wrapper = mountWithContexts(<ApplicationsList />);
-    });
-    waitForElement(wrapper, 'ApplicationsList', (el) => el.length > 0);
-    expect(wrapper.find('ToolbarAddButton').length).toBe(0);
+
+    renderWithContexts(<ApplicationsList />);
+    await screen.findByRole('link', { name: 'Foo' });
+
+    expect(screen.queryByRole('link', { name: 'Add' })).not.toBeInTheDocument();
   });
 
   test('should not render edit button for first list item', async () => {
+    const applications = buildApplications();
     applications.data.results[0].summary_fields.user_capabilities.edit = false;
     ApplicationsAPI.read.mockResolvedValue(applications);
     ApplicationsAPI.readOptions.mockResolvedValue({
       data: { actions: { POST: false } },
     });
-    await act(async () => {
-      wrapper = mountWithContexts(<ApplicationsList />);
-    });
-    waitForElement(wrapper, 'ApplicationsList', (el) => el.length > 0);
+
+    renderWithContexts(<ApplicationsList />);
+    await screen.findByRole('link', { name: 'Foo' });
+
+    const fooRow = screen.getByRole('link', { name: 'Foo' }).closest('tr');
+    const barRow = screen.getByRole('link', { name: 'Bar' }).closest('tr');
     expect(
-      wrapper.find('ApplicationListItem').at(0).find('PencilAltIcon').length
-    ).toBe(0);
+      within(fooRow).queryByRole('link', { name: 'Edit application' })
+    ).not.toBeInTheDocument();
     expect(
-      wrapper.find('ApplicationListItem').at(1).find('PencilAltIcon').length
-    ).toBe(1);
+      within(barRow).getByRole('link', { name: 'Edit application' })
+    ).toBeInTheDocument();
   });
 });

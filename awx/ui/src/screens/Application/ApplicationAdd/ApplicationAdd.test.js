@@ -1,23 +1,48 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { ApplicationsAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import ApplicationAdd from './ApplicationAdd';
 
 jest.mock('../../../api/models/Applications');
 jest.mock('../../../api/models/Organizations');
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  history: () => ({
-    location: '/applications/add',
-  }),
-}));
+// The real form is exercised in ApplicationForm.test.js; here we mock it so the
+// container's readOptions/create/navigation/submit-error logic is what's tested.
+// onSubmit receives the form values (organization as an object, per the form);
+// onCancel is wired to the container's handleCancel.
+jest.mock('../shared/ApplicationForm', () => function MockApplicationForm({
+    onSubmit,
+    onCancel,
+    submitError,
+  }) {
+    return (
+      <div>
+        {submitError ? <div>FormSubmitError</div> : null}
+        <button
+          type="button"
+          onClick={() =>
+            onSubmit({
+              authorization_grant_type: 'authorization-code',
+              client_type: 'confidential',
+              description: 'bar',
+              name: 'foo',
+              organization: { id: 1 },
+              redirect_uris: 'http://www.google.com',
+            })
+          }
+        >
+          Submit
+        </button>
+        <button type="button" onClick={onCancel}>
+          Cancel
+        </button>
+      </div>
+    );
+  });
+
 const options = {
   data: {
     actions: {
@@ -39,101 +64,53 @@ const options = {
   },
 };
 
-const onSuccessfulAdd = jest.fn();
+afterEach(() => {
+  jest.clearAllMocks();
+});
 
 describe('<ApplicationAdd/>', () => {
-  let wrapper;
-  test('should render properly', async () => {
-    ApplicationsAPI.readOptions.mockResolvedValue(options);
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ApplicationAdd onSuccessfulAdd={onSuccessfulAdd} />
-      );
-    });
+  const onSuccessfulAdd = jest.fn();
 
-    expect(wrapper.find('ApplicationAdd').length).toBe(1);
-    expect(wrapper.find('ApplicationForm').length).toBe(1);
+  test('should render properly and read options', async () => {
+    ApplicationsAPI.readOptions.mockResolvedValue(options);
+
+    renderWithContexts(<ApplicationAdd onSuccessfulAdd={onSuccessfulAdd} />);
+
+    expect(
+      await screen.findByRole('button', { name: 'Submit' })
+    ).toBeInTheDocument();
     expect(ApplicationsAPI.readOptions).toHaveBeenCalled();
   });
 
-  test('expect values to be updated and submitted properly', async () => {
+  test('should create and redirect on successful submit', async () => {
     const history = createMemoryHistory({
       initialEntries: ['/applications/add'],
     });
     ApplicationsAPI.readOptions.mockResolvedValue(options);
-
     ApplicationsAPI.create.mockResolvedValue({ data: { id: 8 } });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ApplicationAdd onSuccessfulAdd={onSuccessfulAdd} />,
-        {
-          context: { router: { history } },
-        }
-      );
-    });
 
-    await act(async () => {
-      wrapper.find('input#name').simulate('change', {
-        target: { value: 'new foo', name: 'name' },
-      });
-      wrapper.find('input#description').simulate('change', {
-        target: { value: 'new bar', name: 'description' },
-      });
-      wrapper
-        .find('AnsibleSelect[name="authorization_grant_type"]')
-        .prop('onChange')({}, 'authorization code');
-
-      wrapper.find('input#redirect_uris').simulate('change', {
-        target: { value: 'https://www.google.com', name: 'redirect_uris' },
-      });
-      wrapper.find('AnsibleSelect[name="client_type"]').prop('onChange')(
-        {},
-        'confidential'
-      );
-      wrapper.find('OrganizationLookup').invoke('onChange')({
-        id: 1,
-        name: 'organization',
-      });
-    });
-
-    wrapper.update();
-    expect(wrapper.find('input#name').prop('value')).toBe('new foo');
-    expect(wrapper.find('input#description').prop('value')).toBe('new bar');
-    expect(wrapper.find('input#organization').prop('value')).toBe(
-      'organization'
+    const { user } = renderWithContexts(
+      <ApplicationAdd onSuccessfulAdd={onSuccessfulAdd} />,
+      { context: { router: { history } } }
     );
-    expect(
-      wrapper
-        .find('AnsibleSelect[name="authorization_grant_type"]')
-        .prop('value')
-    ).toBe('authorization code');
-    expect(
-      wrapper.find('AnsibleSelect[name="client_type"]').prop('value')
-    ).toBe('confidential');
-    expect(wrapper.find('input#redirect_uris').prop('value')).toBe(
-      'https://www.google.com'
-    );
-    await act(async () => {
-      wrapper.find('Formik').prop('onSubmit')({
+    await screen.findByRole('button', { name: 'Submit' });
+
+    await user.click(screen.getByRole('button', { name: 'Submit' }));
+
+    await waitFor(() =>
+      expect(ApplicationsAPI.create).toHaveBeenCalledWith({
         authorization_grant_type: 'authorization-code',
         client_type: 'confidential',
         description: 'bar',
         name: 'foo',
-        organization: { id: 1 },
+        organization: 1,
         redirect_uris: 'http://www.google.com',
-      });
-    });
-
-    expect(ApplicationsAPI.create).toHaveBeenCalledWith({
-      authorization_grant_type: 'authorization-code',
-      client_type: 'confidential',
-      description: 'bar',
-      name: 'foo',
-      organization: 1,
-      redirect_uris: 'http://www.google.com',
-    });
-    expect(history.location.pathname).toBe('/applications/8/details');
+      })
+    );
     expect(onSuccessfulAdd).toHaveBeenCalledWith({ id: 8 });
+    await waitFor(() =>
+      expect(history.location.pathname).toBe('/applications/8/details')
+    );
   });
 
   test('should cancel form properly', async () => {
@@ -142,66 +119,43 @@ describe('<ApplicationAdd/>', () => {
     });
     ApplicationsAPI.readOptions.mockResolvedValue(options);
 
-    ApplicationsAPI.create.mockResolvedValue({ data: { id: 8 } });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ApplicationAdd onSuccessfulAdd={onSuccessfulAdd} />,
-        {
-          context: { router: { history } },
-        }
-      );
-    });
-    await act(async () => {
-      wrapper.find('Button[aria-label="Cancel"]').prop('onClick')();
-    });
+    const { user } = renderWithContexts(
+      <ApplicationAdd onSuccessfulAdd={onSuccessfulAdd} />,
+      { context: { router: { history } } }
+    );
+    await screen.findByRole('button', { name: 'Cancel' });
+
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
+
     expect(history.location.pathname).toBe('/applications');
   });
 
-  test('should throw error on submit', async () => {
-    const error = {
+  test('should show form submit error on failed create', async () => {
+    ApplicationsAPI.readOptions.mockResolvedValue(options);
+    ApplicationsAPI.create.mockRejectedValue({
       response: {
-        config: {
-          method: 'patch',
-          url: '/api/v2/applications/',
-        },
+        config: { method: 'patch', url: '/api/v2/applications/' },
         data: { detail: 'An error occurred' },
       },
-    };
-    ApplicationsAPI.create.mockRejectedValue(error);
-    ApplicationsAPI.readOptions.mockResolvedValue(options);
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ApplicationAdd onSuccessfulAdd={onSuccessfulAdd} />
-      );
-    });
-    await act(async () => {
-      wrapper.find('Formik').prop('onSubmit')({
-        id: 1,
-        organization: { id: 1 },
-      });
     });
 
-    waitForElement(wrapper, 'FormSubmitError', (el) => el.length > 0);
-  });
-  test('should render content error on failed read options request', async () => {
-    ApplicationsAPI.readOptions.mockRejectedValue(
-      new Error({
-        response: {
-          config: {
-            method: 'options',
-          },
-          data: 'An error occurred',
-          status: 403,
-        },
-      })
+    const { user } = renderWithContexts(
+      <ApplicationAdd onSuccessfulAdd={onSuccessfulAdd} />
     );
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ApplicationAdd onSuccessfulAdd={onSuccessfulAdd} />
-      );
-    });
+    await screen.findByRole('button', { name: 'Submit' });
 
-    wrapper.update();
-    expect(wrapper.find('ContentError').length).toBe(1);
+    await user.click(screen.getByRole('button', { name: 'Submit' }));
+
+    expect(await screen.findByText('FormSubmitError')).toBeInTheDocument();
+  });
+
+  test('should render content error on failed read options request', async () => {
+    ApplicationsAPI.readOptions.mockRejectedValue(new Error());
+
+    renderWithContexts(<ApplicationAdd onSuccessfulAdd={onSuccessfulAdd} />);
+
+    expect(
+      await screen.findByText('Something went wrong...')
+    ).toBeInTheDocument();
   });
 });

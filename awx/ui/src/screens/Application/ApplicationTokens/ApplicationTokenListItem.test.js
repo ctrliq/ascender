@@ -1,12 +1,11 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, within } from '@testing-library/react';
 
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import ApplicationTokenListItem from './ApplicationTokenListItem';
 
 describe('<ApplicationTokenListItem/>', () => {
-  let wrapper;
   const token = {
     id: 2,
     type: 'o_auth2_access_token',
@@ -39,62 +38,48 @@ describe('<ApplicationTokenListItem/>', () => {
     scope: 'read',
   };
 
-  test('should mount successfully', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <table>
-          <tbody>
-            <ApplicationTokenListItem
-              token={token}
-              detailUrl="/users/2/details"
-              isSelected={false}
-              onSelect={() => {}}
-              rowIndex={1}
-            />
-          </tbody>
-        </table>
-      );
-    });
-    expect(wrapper.find('ApplicationTokenListItem').length).toBe(1);
+  function renderItem(props = {}) {
+    return renderWithContexts(
+      <table>
+        <tbody>
+          <ApplicationTokenListItem
+            token={token}
+            detailUrl="/users/2/details"
+            isSelected={false}
+            onSelect={() => {}}
+            rowIndex={1}
+            {...props}
+          />
+        </tbody>
+      </table>
+    );
+  }
+
+  test('should mount successfully', () => {
+    renderItem();
+    expect(screen.getByRole('row')).toBeInTheDocument();
   });
 
-  test('should render the proper data', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <table>
-          <tbody>
-            <ApplicationTokenListItem
-              token={token}
-              detailUrl="/users/2/details"
-              isSelected={false}
-              onSelect={() => {}}
-              rowIndex={1}
-            />
-          </tbody>
-        </table>
-      );
-    });
-    expect(wrapper.find('Td').at(1).text()).toBe('admin');
-    expect(wrapper.find('Td').at(2).text()).toBe('Read');
-    expect(wrapper.find('Td').at(3).text()).toBe('10/25/3019, 7:56:38 PM');
+  test('should render the proper data', () => {
+    renderItem();
+    const row = screen.getByRole('row');
+    const cells = within(row).getAllByRole('cell');
+    const nameCell = cells.find(
+      (cell) => cell.getAttribute('data-label') === 'Name'
+    );
+    const scopeCell = cells.find(
+      (cell) => cell.getAttribute('data-label') === 'Scope'
+    );
+    const expiresCell = cells.find(
+      (cell) => cell.getAttribute('data-label') === 'Expires'
+    );
+    expect(nameCell).toHaveTextContent('admin');
+    expect(scopeCell).toHaveTextContent('Read');
+    expect(expiresCell).toHaveTextContent('10/25/3019, 7:56:38 PM');
   });
 
-  test('should be checked', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <table>
-          <tbody>
-            <ApplicationTokenListItem
-              token={token}
-              detailUrl="/users/2/details"
-              isSelected
-              onSelect={() => {}}
-              rowIndex={1}
-            />
-          </tbody>
-        </table>
-      );
-    });
-    expect(wrapper.find('Td').at(0).prop('select').isSelected).toBe(true);
+  test('should be checked', () => {
+    renderItem({ isSelected: true });
+    expect(within(screen.getByRole('row')).getByRole('checkbox')).toBeChecked();
   });
 });

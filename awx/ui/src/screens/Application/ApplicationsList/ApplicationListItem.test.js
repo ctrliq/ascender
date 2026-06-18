@@ -1,12 +1,10 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
-
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { screen, within } from '@testing-library/react';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import ApplicationListItem from './ApplicationListItem';
 
 describe('<ApplicationListItem/>', () => {
-  let wrapper;
   const application = {
     id: 1,
     name: 'Foo',
@@ -15,40 +13,40 @@ describe('<ApplicationListItem/>', () => {
       user_capabilities: { edit: true },
     },
   };
-  test('should mount successfully', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <table>
-          <tbody>
-            <ApplicationListItem
-              application={application}
-              detailUrl="/organizations/2/details"
-              isSelected={false}
-              onSelect={() => {}}
-            />
-          </tbody>
-        </table>
-      );
-    });
-    expect(wrapper.find('ApplicationListItem').length).toBe(1);
+
+  function renderItem(app = application) {
+    return renderWithContexts(
+      <table>
+        <tbody>
+          <ApplicationListItem
+            application={app}
+            detailUrl="/organizations/2/details"
+            isSelected={false}
+            onSelect={() => {}}
+          />
+        </tbody>
+      </table>
+    );
+  }
+
+  test('should mount successfully', () => {
+    renderItem();
+    expect(screen.getByRole('row')).toBeInTheDocument();
   });
-  test('should render the proper data', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <table>
-          <tbody>
-            <ApplicationListItem
-              application={application}
-              detailUrl="/organizations/2/details"
-              isSelected={false}
-              onSelect={() => {}}
-            />
-          </tbody>
-        </table>
-      );
-    });
-    expect(wrapper.find('Td').at(1).text()).toBe('Foo');
-    expect(wrapper.find('Td').at(2).text()).toBe('Organization');
-    expect(wrapper.find('PencilAltIcon').length).toBe(1);
+
+  test('should render the proper data', () => {
+    renderItem();
+    const row = screen.getByRole('row');
+    const nameCell = within(row)
+      .getAllByRole('cell')
+      .find((cell) => cell.getAttribute('data-label') === 'Name');
+    const orgCell = within(row)
+      .getAllByRole('cell')
+      .find((cell) => cell.getAttribute('data-label') === 'Organization');
+    expect(nameCell).toHaveTextContent('Foo');
+    expect(orgCell).toHaveTextContent('Organization');
+    expect(
+      screen.getByRole('link', { name: 'Edit application' })
+    ).toBeInTheDocument();
   });
 });
