@@ -1,8 +1,8 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { Formik } from 'formik';
 import { ApplicationsAPI } from 'api';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import ApplicationLookup from './ApplicationLookup';
 
 jest.mock('../../api');
@@ -13,25 +13,28 @@ const application = {
 };
 
 const fetchedApplications = {
-  count: 2,
-  results: [
-    {
-      id: 1,
-      name: 'app',
-      description: '',
-    },
-    {
-      id: 4,
-      name: 'application that should not crach',
-      description: '',
-    },
-  ],
+  data: {
+    count: 2,
+    results: [
+      {
+        id: 1,
+        name: 'app',
+        description: '',
+      },
+      {
+        id: 4,
+        name: 'application that should not crash',
+        description: '',
+      },
+    ],
+  },
 };
 describe('ApplicationLookup', () => {
-  let wrapper;
-
   beforeEach(() => {
     ApplicationsAPI.read.mockResolvedValueOnce(fetchedApplications);
+    ApplicationsAPI.readOptions.mockResolvedValue({
+      data: { actions: { GET: {} }, related_search_fields: [] },
+    });
   });
 
   afterEach(() => {
@@ -39,48 +42,46 @@ describe('ApplicationLookup', () => {
   });
 
   test('should render successfully', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <ApplicationLookup
-            label="Application"
-            value={application}
-            onChange={() => {}}
-          />
-        </Formik>
-      );
-    });
-    expect(wrapper.find('ApplicationLookup')).toHaveLength(1);
+    renderWithContexts(
+      <Formik>
+        <ApplicationLookup
+          label="Application"
+          value={application}
+          onChange={() => {}}
+        />
+      </Formik>
+    );
+    expect(await screen.findByText('Application')).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Search' })
+    ).toBeInTheDocument();
   });
 
   test('should fetch applications', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <ApplicationLookup
-            label="Application"
-            value={application}
-            onChange={() => {}}
-          />
-        </Formik>
-      );
-    });
-    expect(ApplicationsAPI.read).toHaveBeenCalledTimes(1);
+    renderWithContexts(
+      <Formik>
+        <ApplicationLookup
+          label="Application"
+          value={application}
+          onChange={() => {}}
+        />
+      </Formik>
+    );
+    await waitFor(() =>
+      expect(ApplicationsAPI.read).toHaveBeenCalledTimes(1)
+    );
   });
 
   test('should display label', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <ApplicationLookup
-            label="Application"
-            value={application}
-            onChange={() => {}}
-          />
-        </Formik>
-      );
-    });
-    const title = wrapper.find('FormGroup .pf-c-form__label-text');
-    expect(title.text()).toEqual('Application');
+    renderWithContexts(
+      <Formik>
+        <ApplicationLookup
+          label="Application"
+          value={application}
+          onChange={() => {}}
+        />
+      </Formik>
+    );
+    expect(await screen.findByText('Application')).toBeInTheDocument();
   });
 });

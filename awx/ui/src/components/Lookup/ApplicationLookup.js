@@ -36,7 +36,7 @@ function ApplicationLookup({ onChange, value, label, fieldName, validate }) {
         actionsResponse,
       ] = await Promise.all([
         ApplicationsAPI.read(params),
-        ApplicationsAPI.readOptions,
+        ApplicationsAPI.readOptions(),
       ]);
       return {
         applications: results,

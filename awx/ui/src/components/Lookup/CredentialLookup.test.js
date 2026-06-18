@@ -1,15 +1,13 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { Formik } from 'formik';
 import { CredentialsAPI } from 'api';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import CredentialLookup, { _CredentialLookup } from './CredentialLookup';
 
 jest.mock('../../api');
 
 describe('CredentialLookup', () => {
-  let wrapper;
-
   beforeEach(() => {
     CredentialsAPI.read.mockResolvedValueOnce({
       data: {
@@ -41,33 +39,24 @@ describe('CredentialLookup', () => {
   });
 
   test('should render successfully', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <CredentialLookup
-            credentialTypeId={1}
-            label="Foo"
-            onChange={() => {}}
-          />
-        </Formik>
-      );
-    });
-    expect(wrapper.find('CredentialLookup')).toHaveLength(1);
+    renderWithContexts(
+      <Formik>
+        <CredentialLookup credentialTypeId={1} label="Foo" onChange={() => {}} />
+      </Formik>
+    );
+    expect(await screen.findByText('Foo')).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Search' })
+    ).toBeInTheDocument();
   });
 
   test('should fetch credentials', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <CredentialLookup
-            credentialTypeId={1}
-            label="Foo"
-            onChange={() => {}}
-          />
-        </Formik>
-      );
-    });
-    expect(CredentialsAPI.read).toHaveBeenCalledTimes(1);
+    renderWithContexts(
+      <Formik>
+        <CredentialLookup credentialTypeId={1} label="Foo" onChange={() => {}} />
+      </Formik>
+    );
+    await waitFor(() => expect(CredentialsAPI.read).toHaveBeenCalledTimes(1));
     expect(CredentialsAPI.read).toHaveBeenCalledWith({
       credential_type: 1,
       order_by: 'name',
@@ -77,104 +66,85 @@ describe('CredentialLookup', () => {
   });
 
   test('should display label', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <CredentialLookup
-            credentialTypeId={1}
-            label="Foo"
-            onChange={() => {}}
-          />
-        </Formik>
-      );
-    });
-    const title = wrapper.find('FormGroup .pf-c-form__label-text');
-    expect(title.text()).toEqual('Foo');
+    renderWithContexts(
+      <Formik>
+        <CredentialLookup credentialTypeId={1} label="Foo" onChange={() => {}} />
+      </Formik>
+    );
+    expect(await screen.findByText('Foo')).toBeInTheDocument();
   });
 
-  test('should define default value for function props', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <CredentialLookup
-            credentialTypeId={1}
-            label="Foo"
-            onChange={() => {}}
-          />
-        </Formik>
-      );
-    });
+  test('should define default value for function props', () => {
     expect(_CredentialLookup.defaultProps.onBlur).toBeInstanceOf(Function);
     expect(_CredentialLookup.defaultProps.onBlur).not.toThrow();
   });
 
   test('should not auto-select credential when autoPopulate prop is false', async () => {
-    CredentialsAPI.read.mockReturnValue({
+    CredentialsAPI.read.mockResolvedValue({
       data: {
-        results: [{ id: 1 }],
+        results: [{ id: 1, name: 'Cred 1', url: 'www.google.com' }],
         count: 1,
       },
     });
     const onChange = jest.fn();
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <CredentialLookup
-            credentialTypeId={1}
-            label="Foo"
-            onChange={onChange}
-          />
-        </Formik>
-      );
-    });
+    renderWithContexts(
+      <Formik>
+        <CredentialLookup credentialTypeId={1} label="Foo" onChange={onChange} />
+      </Formik>
+    );
+    await waitFor(() => expect(CredentialsAPI.read).toHaveBeenCalledTimes(1));
     expect(onChange).not.toHaveBeenCalled();
   });
 
   test('should not auto-select credential when multiple available', async () => {
-    CredentialsAPI.read.mockReturnValue({
+    CredentialsAPI.read.mockResolvedValue({
       data: {
-        results: [{ id: 1 }, { id: 2 }],
+        results: [
+          { id: 1, name: 'Cred 1', url: 'www.google.com' },
+          { id: 2, name: 'Cred 2', url: 'www.google.com' },
+        ],
         count: 2,
       },
     });
     const onChange = jest.fn();
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <CredentialLookup
-            credentialTypeId={1}
-            label="Foo"
-            autoPopulate
-            onChange={onChange}
-          />
-        </Formik>
-      );
-    });
+    renderWithContexts(
+      <Formik>
+        <CredentialLookup
+          credentialTypeId={1}
+          label="Foo"
+          autoPopulate
+          onChange={onChange}
+        />
+      </Formik>
+    );
+    await waitFor(() => expect(CredentialsAPI.read).toHaveBeenCalledTimes(1));
     expect(onChange).not.toHaveBeenCalled();
   });
 });
 
 describe('CredentialLookup auto select', () => {
   test('should auto-select credential when only one available and autoPopulate prop is true', async () => {
+    const cred = { id: 1, name: 'Cred 1', url: 'www.google.com' };
     CredentialsAPI.read.mockResolvedValue({
       data: {
-        results: [{ id: 1 }],
+        results: [cred],
         count: 1,
       },
     });
-    const onChange = jest.fn();
-    await act(async () => {
-      mountWithContexts(
-        <Formik>
-          <CredentialLookup
-            autoPopulate
-            credentialTypeId={1}
-            label="Foo"
-            onChange={onChange}
-          />
-        </Formik>
-      );
+    CredentialsAPI.readOptions.mockResolvedValue({
+      data: { actions: { GET: {} }, related_search_fields: [] },
     });
-    expect(onChange).toHaveBeenCalledWith({ id: 1 });
+    const onChange = jest.fn();
+    renderWithContexts(
+      <Formik>
+        <CredentialLookup
+          autoPopulate
+          credentialTypeId={1}
+          label="Foo"
+          onChange={onChange}
+        />
+      </Formik>
+    );
+    await waitFor(() => expect(onChange).toHaveBeenCalledWith(cred));
   });
 });

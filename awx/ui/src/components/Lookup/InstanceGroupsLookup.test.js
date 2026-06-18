@@ -1,8 +1,8 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { Formik } from 'formik';
 import { InstanceGroupsAPI } from 'api';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import InstanceGroupsLookup from './InstanceGroupsLookup';
 
 jest.mock('../../api');
@@ -53,11 +53,15 @@ const instanceGroups = [
 ];
 
 describe('InstanceGroupsLookup', () => {
-  let wrapper;
-
   beforeEach(() => {
     InstanceGroupsAPI.read.mockResolvedValue({
       data: mockedInstanceGroups,
+    });
+    InstanceGroupsAPI.readOptions.mockResolvedValue({
+      data: {
+        actions: { GET: {}, POST: {} },
+        related_search_fields: [],
+      },
     });
   });
 
@@ -66,46 +70,34 @@ describe('InstanceGroupsLookup', () => {
   });
 
   test('should render successfully', async () => {
-    InstanceGroupsAPI.readOptions.mockReturnValue({
-      data: {
-        actions: {
-          GET: {},
-          POST: {},
-        },
-        related_search_fields: [],
-      },
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <InstanceGroupsLookup value={instanceGroups} onChange={() => {}} />
-        </Formik>
-      );
-    });
-    wrapper.update();
-    expect(InstanceGroupsAPI.read).toHaveBeenCalledTimes(1);
-    expect(wrapper.find('InstanceGroupsLookup')).toHaveLength(1);
-    expect(wrapper.find('FormGroup[label="Instance Groups"]').length).toBe(1);
-    expect(wrapper.find('Checkbox[aria-label="Prompt on launch"]').length).toBe(
-      0
+    renderWithContexts(
+      <Formik>
+        <InstanceGroupsLookup value={instanceGroups} onChange={() => {}} />
+      </Formik>
     );
+    await waitFor(() =>
+      expect(InstanceGroupsAPI.read).toHaveBeenCalledTimes(1)
+    );
+    expect(await screen.findByText('Instance Groups')).toBeInTheDocument();
+    expect(
+      screen.queryByRole('checkbox', { name: 'Prompt on launch' })
+    ).not.toBeInTheDocument();
   });
+
   test('should render prompt on launch checkbox when necessary', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <InstanceGroupsLookup
-            value={instanceGroups}
-            onChange={() => {}}
-            isPromptableField
-            promptId="ig-prompt"
-            promptName="ask_instance_groups_on_launch"
-          />
-        </Formik>
-      );
-    });
-    expect(wrapper.find('Checkbox[aria-label="Prompt on launch"]').length).toBe(
-      1
+    renderWithContexts(
+      <Formik>
+        <InstanceGroupsLookup
+          value={instanceGroups}
+          onChange={() => {}}
+          isPromptableField
+          promptId="ig-prompt"
+          promptName="ask_instance_groups_on_launch"
+        />
+      </Formik>
     );
+    expect(
+      await screen.findByRole('checkbox', { name: 'Prompt on launch' })
+    ).toBeInTheDocument();
   });
 });
