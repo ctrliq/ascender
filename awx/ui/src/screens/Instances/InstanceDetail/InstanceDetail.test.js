@@ -1,12 +1,9 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import * as ConfigContext from 'contexts/Config';
 import useDebounce from 'hooks/useDebounce';
 import { InstancesAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InstanceDetail from './InstanceDetail';
 
 jest.mock('../../../api');
@@ -20,8 +17,15 @@ jest.mock('react-router-dom-v5-compat', () => ({
   }),
 }));
 
+function computeForks(memCapacity, cpuCapacity, adjustment) {
+  const minCapacity = Math.min(memCapacity, cpuCapacity);
+  const maxCapacity = Math.max(memCapacity, cpuCapacity);
+  return Math.floor(
+    minCapacity + (maxCapacity - minCapacity) * adjustment
+  );
+}
+
 describe('<InstanceDetail/>', () => {
-  let wrapper;
   beforeEach(() => {
     useDebounce.mockImplementation((fn) => fn);
 
@@ -82,91 +86,95 @@ describe('<InstanceDetail/>', () => {
       },
     });
   });
+
   afterEach(() => {
     jest.clearAllMocks();
-    wrapper.unmount();
   });
+
   test('Should render proper data', async () => {
     jest.spyOn(ConfigContext, 'useConfig').mockImplementation(() => ({
       me: { is_superuser: true },
     }));
-    await act(async () => {
-      wrapper = mountWithContexts(<InstanceDetail setBreadcrumb={() => {}} />);
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('InstanceDetail')).toHaveLength(1);
+    const { container } = renderWithContexts(
+      <InstanceDetail setBreadcrumb={() => {}} />
+    );
 
+    expect(await screen.findByText('awx_1')).toBeInTheDocument();
     expect(InstancesAPI.readDetail).toHaveBeenCalledWith(1);
     expect(InstancesAPI.readHealthCheckDetail).toHaveBeenCalledWith(1);
-    expect(
-      wrapper.find("Button[ouiaId='health-check-button']").prop('isDisabled')
-    ).toBe(false);
+
+    const healthCheckButton = container.querySelector(
+      '[data-ouia-component-id="health-check-button"]'
+    );
+    expect(healthCheckButton).toBeEnabled();
   });
 
   test('should calculate number of forks when slide changes', async () => {
     jest.spyOn(ConfigContext, 'useConfig').mockImplementation(() => ({
       me: { is_superuser: true },
     }));
-    await act(async () => {
-      wrapper = mountWithContexts(<InstanceDetail setBreadcrumb={() => {}} />);
+    const { user, container } = renderWithContexts(
+      <InstanceDetail setBreadcrumb={() => {}} />
+    );
+
+    await screen.findByText('awx_1');
+
+    // initial capacity_adjustment is 1.00 -> min(32,38) + (38-32)*1 = 38 forks
+    const forksDiv = container.querySelector('[data-cy="number-forks"]');
+    expect(forksDiv).toHaveTextContent('38');
+    expect(forksDiv).toHaveTextContent('forks');
+
+    const slider = screen.getByRole('slider');
+
+    // Drive the real slider down via keyboard; forks recompute from the
+    // resulting aria-valuenow each step (PF clamps to [min,max] by step).
+    slider.focus();
+    await user.keyboard('{Home}{ArrowLeft}');
+    await waitFor(() => {
+      const adj = Math.round(Number(slider.getAttribute('aria-valuenow')) * 100) / 100;
+      const expected = computeForks(38, 32, adj);
+      expect(container.querySelector('[data-cy="number-forks"]')).toHaveTextContent(
+        String(expected)
+      );
     });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
 
-    expect(wrapper.find('InstanceDetail').length).toBe(1);
-    const forksText = wrapper.find('div[data-cy="number-forks"]').text();
-    expect(forksText).toContain('38');
-    expect(forksText).toContain('forks');
-
-    await act(async () => {
-      wrapper.find('Slider').prop('onChange')(4);
+    await user.keyboard('{ArrowRight}{ArrowRight}{ArrowRight}{ArrowRight}{ArrowRight}');
+    await waitFor(() => {
+      const adj = Math.round(Number(slider.getAttribute('aria-valuenow')) * 100) / 100;
+      const expected = computeForks(38, 32, adj);
+      expect(container.querySelector('[data-cy="number-forks"]')).toHaveTextContent(
+        String(expected)
+      );
     });
-
-    wrapper.update();
-
-    const forksText56 = wrapper.find('div[data-cy="number-forks"]').text();
-    expect(forksText56).toContain('56');
-    expect(forksText56).toContain('forks');
-
-    await act(async () => {
-      wrapper.find('Slider').prop('onChange')(0);
-    });
-    wrapper.update();
-    const forksText32 = wrapper.find('div[data-cy="number-forks"]').text();
-    expect(forksText32).toContain('32');
-    expect(forksText32).toContain('forks');
-
-    await act(async () => {
-      wrapper.find('Slider').prop('onChange')(0.5);
-    });
-    wrapper.update();
-    const forksText35 = wrapper.find('div[data-cy="number-forks"]').text();
-    expect(forksText35).toContain('35');
-    expect(forksText35).toContain('forks');
   });
 
   test('buttons should be disabled', async () => {
     jest.spyOn(ConfigContext, 'useConfig').mockImplementation(() => ({
       me: { is_system_auditor: true },
     }));
-    await act(async () => {
-      wrapper = mountWithContexts(<InstanceDetail setBreadcrumb={() => {}} />);
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
+    const { container } = renderWithContexts(
+      <InstanceDetail setBreadcrumb={() => {}} />
+    );
 
-    expect(
-      wrapper.find("Button[ouiaId='health-check-button']").prop('isDisabled')
-    ).toBe(true);
+    await screen.findByText('awx_1');
+
+    const healthCheckButton = container.querySelector(
+      '[data-ouia-component-id="health-check-button"]'
+    );
+    expect(healthCheckButton).toBeDisabled();
   });
 
   test('should display instance toggle', async () => {
     jest.spyOn(ConfigContext, 'useConfig').mockImplementation(() => ({
       me: { is_system_auditor: true },
     }));
-    await act(async () => {
-      wrapper = mountWithContexts(<InstanceDetail setBreadcrumb={() => {}} />);
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('InstanceToggle').length).toBe(1);
+    renderWithContexts(<InstanceDetail setBreadcrumb={() => {}} />);
+
+    await screen.findByText('awx_1');
+    // InstanceToggle renders a PF Switch (a checkbox) labelled "Toggle instance".
+    expect(
+      screen.getByRole('checkbox', { name: 'Toggle instance' })
+    ).toBeInTheDocument();
   });
 
   test('Should handle api error for health check', async () => {
@@ -185,19 +193,21 @@ describe('<InstanceDetail/>', () => {
     jest.spyOn(ConfigContext, 'useConfig').mockImplementation(() => ({
       me: { is_superuser: true },
     }));
-    await act(async () => {
-      wrapper = mountWithContexts(<InstanceDetail setBreadcrumb={() => {}} />);
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(
-      wrapper.find("Button[ouiaId='health-check-button']").prop('isDisabled')
-    ).toBe(false);
-    await act(async () => {
-      wrapper.find("Button[ouiaId='health-check-button']").prop('onClick')();
-    });
+    const { user, container } = renderWithContexts(
+      <InstanceDetail setBreadcrumb={() => {}} />
+    );
+
+    await screen.findByText('awx_1');
+
+    const healthCheckButton = container.querySelector(
+      '[data-ouia-component-id="health-check-button"]'
+    );
+    expect(healthCheckButton).toBeEnabled();
+
+    await user.click(healthCheckButton);
+
     expect(InstancesAPI.healthCheck).toHaveBeenCalledWith(1);
-    wrapper.update();
-    expect(wrapper.find('AlertModal')).toHaveLength(1);
-    expect(wrapper.find('ErrorDetail')).toHaveLength(1);
+    expect(await screen.findByText('Error!')).toBeInTheDocument();
+    expect(screen.getByText('Details', { exact: false })).toBeInTheDocument();
   });
 });

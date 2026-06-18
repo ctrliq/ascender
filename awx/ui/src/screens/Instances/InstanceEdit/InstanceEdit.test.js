@@ -1,12 +1,9 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import useDebounce from 'hooks/useDebounce';
 import { InstancesAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import InstanceEdit from './InstanceEdit';
 
@@ -20,6 +17,32 @@ jest.mock('react-router-dom-v5-compat', () => ({
     id: 42,
   }),
 }));
+
+const updatedInstance = {
+  node_type: 'hop',
+  peers: ['test-peer'],
+};
+
+// Stub the shared form: it surfaces the container's handleSubmit/handleCancel
+// through real buttons and renders the submit error so we can assert on it.
+jest.mock('../Shared/InstanceForm', () => {
+  const MockForm = ({ handleSubmit, handleCancel, submitError }) => (
+    <div>
+      <button
+        type="button"
+        aria-label="Save"
+        onClick={() => handleSubmit({ node_type: 'hop', peers: ['test-peer'] })}
+      >
+        Save
+      </button>
+      <button type="button" aria-label="Cancel" onClick={handleCancel}>
+        Cancel
+      </button>
+      {submitError ? <div data-testid="form-submit-error">error</div> : null}
+    </div>
+  );
+  return MockForm;
+});
 
 const instanceData = {
   id: 42,
@@ -39,100 +62,85 @@ const instanceData = {
     links: [],
   },
   uuid: '00000000-0000-0000-0000-000000000000',
-  created: '2023-04-26T22:06:46.766198Z',
-  modified: '2023-04-26T22:06:46.766217Z',
-  last_seen: '2023-04-26T23:12:02.857732Z',
-  health_check_started: null,
-  health_check_pending: false,
-  last_health_check: '2023-04-26T23:01:13.941693Z',
-  errors: 'Instance received normal shutdown signal',
-  capacity_adjustment: '1.00',
-  version: '0.1.dev33237+g1fdef52',
-  capacity: 0,
-  consumed_capacity: 0,
-  percent_capacity_remaining: 0,
-  jobs_running: 0,
-  jobs_total: 0,
-  cpu: '8.0',
-  memory: 8011055104,
-  cpu_capacity: 0,
-  mem_capacity: 0,
-  enabled: true,
-  managed_by_policy: true,
   node_type: 'hybrid',
   node_state: 'installed',
-  ip_address: null,
-  listener_port: 27199,
-  peers: [],
-  peers_from_control_nodes: false,
+  enabled: true,
 };
 
 const instanceDataWithPeers = {
   results: [instanceData],
 };
 
-const updatedInstance = {
-  node_type: 'hop',
-  peers: ['test-peer'],
-};
-
 describe('<InstanceEdit/>', () => {
-  let wrapper;
   let history;
 
-  beforeAll(async () => {
+  beforeEach(() => {
     useDebounce.mockImplementation((fn) => fn);
     history = createMemoryHistory();
     InstancesAPI.readDetail.mockResolvedValue({ data: instanceData });
     InstancesAPI.readPeers.mockResolvedValue({ data: instanceDataWithPeers });
-
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <InstanceEdit
-          instance={instanceData}
-          peers={instanceDataWithPeers}
-          isEdit
-          setBreadcrumb={() => {}}
-        />,
-        {
-          context: { router: { history } },
-        }
-      );
-    });
-    expect(InstancesAPI.readDetail).toHaveBeenCalledWith(42);
   });
 
-  afterAll(() => {
+  afterEach(() => {
     jest.clearAllMocks();
   });
 
-  test('initially renders successfully', async () => {
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    expect(wrapper.find('InstanceEdit')).toHaveLength(1);
+  test('initially renders successfully and fetches detail', async () => {
+    renderWithContexts(<InstanceEdit setBreadcrumb={() => {}} />, {
+      context: { router: { history } },
+    });
+
+    expect(await screen.findByRole('button', { name: 'Save' })).toBeInTheDocument();
+    expect(InstancesAPI.readDetail).toHaveBeenCalledWith(42);
   });
 
   test('handleSubmit should call the api and redirect to details page', async () => {
-    await act(async () => {
-      wrapper.find('InstanceForm').invoke('handleSubmit')(updatedInstance);
-    });
-    expect(InstancesAPI.update).toHaveBeenCalledWith(42, updatedInstance);
-    expect(history.location.pathname).toEqual('/instances/42/details');
+    InstancesAPI.update.mockResolvedValue({});
+    const { user } = renderWithContexts(
+      <InstanceEdit setBreadcrumb={() => {}} />,
+      {
+        context: { router: { history } },
+      }
+    );
+
+    await user.click(await screen.findByRole('button', { name: 'Save' }));
+
+    await waitFor(() =>
+      expect(InstancesAPI.update).toHaveBeenCalledWith(42, updatedInstance)
+    );
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual('/instances/42/details')
+    );
   });
 
   test('should navigate to instance details when cancel is clicked', async () => {
-    await act(async () => {
-      wrapper.find('button[aria-label="Cancel"]').simulate('click');
-    });
+    const { user } = renderWithContexts(
+      <InstanceEdit setBreadcrumb={() => {}} />,
+      {
+        context: { router: { history } },
+      }
+    );
+
+    await user.click(await screen.findByRole('button', { name: 'Cancel' }));
+
     expect(history.location.pathname).toEqual('/instances/42/details');
   });
 
-  test('should navigate to instance details after successful submission', async () => {
-    await act(async () => {
-      wrapper.find('InstanceForm').invoke('handleSubmit')(updatedInstance);
-    });
-    wrapper.update();
-    expect(wrapper.find('submitError').length).toBe(0);
-    expect(history.location.pathname).toEqual('/instances/42/details');
+  test('successful submission should not show an error message', async () => {
+    InstancesAPI.update.mockResolvedValue({});
+    const { user } = renderWithContexts(
+      <InstanceEdit setBreadcrumb={() => {}} />,
+      {
+        context: { router: { history } },
+      }
+    );
+
+    await user.click(await screen.findByRole('button', { name: 'Save' }));
+
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual('/instances/42/details')
+    );
+    expect(screen.queryByTestId('form-submit-error')).not.toBeInTheDocument();
   });
 
   test('failed form submission should show an error message', async () => {
@@ -142,10 +150,15 @@ describe('<InstanceEdit/>', () => {
       },
     };
     InstancesAPI.update.mockImplementationOnce(() => Promise.reject(error));
-    await act(async () => {
-      wrapper.find('InstanceForm').invoke('handleSubmit')(updatedInstance);
-    });
-    wrapper.update();
-    expect(wrapper.find('FormSubmitError').length).toBe(1);
+    const { user } = renderWithContexts(
+      <InstanceEdit setBreadcrumb={() => {}} />,
+      {
+        context: { router: { history } },
+      }
+    );
+
+    await user.click(await screen.findByRole('button', { name: 'Save' }));
+
+    expect(await screen.findByTestId('form-submit-error')).toBeInTheDocument();
   });
 });

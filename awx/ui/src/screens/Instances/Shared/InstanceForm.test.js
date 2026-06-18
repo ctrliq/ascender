@@ -1,97 +1,96 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+import { screen, waitFor } from '@testing-library/react';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import InstanceForm from './InstanceForm';
 
 jest.mock('../../../api');
 
 describe('<InstanceForm />', () => {
-  let wrapper;
-  let handleCancel;
-  let handleSubmit;
+  test('should display form fields properly', () => {
+    renderWithContexts(
+      <InstanceForm
+        handleCancel={() => {}}
+        handleSubmit={() => {}}
+        submitError={null}
+      />
+    );
 
-  beforeAll(async () => {
-    handleCancel = jest.fn();
-    handleSubmit = jest.fn();
-
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <InstanceForm
-          handleCancel={handleCancel}
-          handleSubmit={handleSubmit}
-          submitError={null}
-        />
-      );
-    });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-  });
-
-  afterAll(() => {
-    jest.clearAllMocks();
-  });
-
-  test('Initially renders successfully', () => {
-    expect(wrapper.length).toBe(1);
-  });
-
-  test('should display form fields properly', async () => {
-    await waitForElement(wrapper, 'InstanceForm', (el) => el.length > 0);
-    expect(wrapper.find('FormGroup[label="Host Name"]').length).toBe(1);
-    expect(wrapper.find('FormGroup[label="Description"]').length).toBe(1);
-    expect(wrapper.find('FormGroup[label="Instance State"]').length).toBe(1);
-    expect(wrapper.find('FormGroup[label="Listener Port"]').length).toBe(1);
-    expect(wrapper.find('FormGroup[label="Instance Type"]').length).toBe(1);
+    expect(screen.getByText('Host Name')).toBeInTheDocument();
+    expect(screen.getByText('Description')).toBeInTheDocument();
+    expect(screen.getByText('Instance State')).toBeInTheDocument();
+    expect(screen.getByText('Listener Port')).toBeInTheDocument();
+    expect(screen.getByText('Instance Type')).toBeInTheDocument();
   });
 
   test('should update form values', async () => {
-    await act(async () => {
-      wrapper.find('input#hostname').simulate('change', {
-        target: { value: 'new Foo', name: 'hostname' },
-      });
-    });
+    const { user, container } = renderWithContexts(
+      <InstanceForm
+        handleCancel={() => {}}
+        handleSubmit={() => {}}
+        submitError={null}
+      />
+    );
 
-    wrapper.update();
-    expect(wrapper.find('input#hostname').prop('value')).toEqual('new Foo');
+    const hostnameInput = container.querySelector('input#hostname');
+    await user.clear(hostnameInput);
+    await user.type(hostnameInput, 'new Foo');
+    expect(hostnameInput).toHaveValue('new Foo');
   });
 
   test('should call handleCancel when Cancel button is clicked', async () => {
+    const handleCancel = jest.fn();
+    const { user } = renderWithContexts(
+      <InstanceForm
+        handleCancel={handleCancel}
+        handleSubmit={() => {}}
+        submitError={null}
+      />
+    );
+
     expect(handleCancel).not.toHaveBeenCalled();
-    wrapper.find('button[aria-label="Cancel"]').invoke('onClick')();
-    wrapper.update();
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
     expect(handleCancel).toHaveBeenCalled();
   });
 
   test('should call handleSubmit when Save button is clicked', async () => {
-    expect(handleSubmit).not.toHaveBeenCalled();
-    await act(async () => {
-      wrapper.find('input#hostname').simulate('change', {
-        target: { value: 'new Foo', name: 'hostname' },
-      });
-      wrapper.find('input#instance-description').simulate('change', {
-        target: { value: 'This is a repeat song', name: 'description' },
-      });
-    });
-    wrapper.update();
-    expect(
-      wrapper.find('FormField[label="Instance State"]').prop('isDisabled')
-    ).toBe(true);
-    await act(async () => {
-      wrapper.find('button[aria-label="Save"]').invoke('onClick')();
-    });
+    const handleSubmit = jest.fn();
+    const { user, container } = renderWithContexts(
+      <InstanceForm
+        handleCancel={() => {}}
+        handleSubmit={handleSubmit}
+        submitError={null}
+      />
+    );
 
-    expect(handleSubmit).toHaveBeenCalledWith({
-      description: 'This is a repeat song',
-      enabled: true,
-      managed_by_policy: true,
-      hostname: 'new Foo',
-      node_state: 'installed',
-      node_type: 'execution',
-      peers_from_control_nodes: false,
-      peers: [],
-    });
+    expect(handleSubmit).not.toHaveBeenCalled();
+
+    const hostnameInput = container.querySelector('input#hostname');
+    await user.clear(hostnameInput);
+    await user.type(hostnameInput, 'new Foo');
+
+    const descriptionInput = container.querySelector(
+      'input#instance-description'
+    );
+    await user.clear(descriptionInput);
+    await user.type(descriptionInput, 'This is a repeat song');
+
+    // Instance State field is always disabled
+    expect(container.querySelector('input#instance-state')).toBeDisabled();
+
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+
+    await waitFor(() =>
+      expect(handleSubmit).toHaveBeenCalledWith({
+        description: 'This is a repeat song',
+        enabled: true,
+        managed_by_policy: true,
+        hostname: 'new Foo',
+        node_state: 'installed',
+        node_type: 'execution',
+        peers_from_control_nodes: false,
+        peers: [],
+      })
+    );
   });
 });
