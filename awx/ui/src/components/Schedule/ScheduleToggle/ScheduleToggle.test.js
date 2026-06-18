@@ -1,7 +1,7 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { SchedulesAPI } from 'api';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ScheduleToggle from './ScheduleToggle';
 
 jest.mock('../../../api');
@@ -29,27 +29,28 @@ const mockSchedule = {
 };
 
 describe('<ScheduleToggle>', () => {
-  test('should should toggle off', async () => {
+  test('should toggle off', async () => {
+    SchedulesAPI.update.mockResolvedValue({});
     const onToggle = jest.fn();
-    const wrapper = mountWithContexts(
+    const { user } = renderWithContexts(
       <ScheduleToggle schedule={mockSchedule} onToggle={onToggle} />
     );
-    expect(wrapper.find('Switch').prop('isChecked')).toEqual(true);
+    const toggle = screen.getByRole('checkbox', { name: 'Toggle schedule' });
+    expect(toggle).toBeChecked();
 
-    await act(async () => {
-      wrapper.find('Switch').invoke('onChange')();
-    });
+    await user.click(toggle);
+
     expect(SchedulesAPI.update).toHaveBeenCalledWith(1, {
       enabled: false,
     });
-    wrapper.update();
-    expect(wrapper.find('Switch').prop('isChecked')).toEqual(false);
+    await waitFor(() => expect(toggle).not.toBeChecked());
     expect(onToggle).toHaveBeenCalledWith(false);
   });
 
-  test('should should toggle on', async () => {
+  test('should toggle on', async () => {
+    SchedulesAPI.update.mockResolvedValue({});
     const onToggle = jest.fn();
-    const wrapper = mountWithContexts(
+    const { user } = renderWithContexts(
       <ScheduleToggle
         schedule={{
           ...mockSchedule,
@@ -58,16 +59,15 @@ describe('<ScheduleToggle>', () => {
         onToggle={onToggle}
       />
     );
-    expect(wrapper.find('Switch').prop('isChecked')).toEqual(false);
+    const toggle = screen.getByRole('checkbox', { name: 'Toggle schedule' });
+    expect(toggle).not.toBeChecked();
 
-    await act(async () => {
-      wrapper.find('Switch').invoke('onChange')();
-    });
+    await user.click(toggle);
+
     expect(SchedulesAPI.update).toHaveBeenCalledWith(1, {
       enabled: true,
     });
-    wrapper.update();
-    expect(wrapper.find('Switch').prop('isChecked')).toEqual(true);
+    await waitFor(() => expect(toggle).toBeChecked());
     expect(onToggle).toHaveBeenCalledWith(true);
   });
 
@@ -75,23 +75,19 @@ describe('<ScheduleToggle>', () => {
     SchedulesAPI.update.mockImplementation(() => {
       throw new Error('nope');
     });
-    const wrapper = mountWithContexts(
+    const { user } = renderWithContexts(
       <ScheduleToggle schedule={mockSchedule} />
     );
-    expect(wrapper.find('Switch').prop('isChecked')).toEqual(true);
+    const toggle = screen.getByRole('checkbox', { name: 'Toggle schedule' });
+    expect(toggle).toBeChecked();
 
-    await act(async () => {
-      wrapper.find('Switch').invoke('onChange')();
-    });
-    wrapper.update();
-    const modal = wrapper.find('AlertModal');
-    expect(modal).toHaveLength(1);
-    expect(modal.prop('isOpen')).toEqual(true);
+    await user.click(toggle);
 
-    act(() => {
-      modal.invoke('onClose')();
-    });
-    wrapper.update();
-    expect(wrapper.find('AlertModal')).toHaveLength(0);
+    expect(await screen.findByText('Error!')).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Close' }));
+    await waitFor(() =>
+      expect(screen.queryByText('Error!')).not.toBeInTheDocument()
+    );
   });
 });

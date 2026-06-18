@@ -1,13 +1,12 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router-dom-v5-compat';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import Schedules from './Schedules';
 
 describe('<Schedules />', () => {
   test('initially renders successfully', async () => {
-    let wrapper;
     const history = createMemoryHistory({
       initialEntries: ['/templates/job_template/1/schedules'],
     });
@@ -15,25 +14,29 @@ describe('<Schedules />', () => {
 
     // Schedules uses relative routes, so mount it under its ".../schedules/*"
     // parent route.
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Routes>
-          <Route
-            path="/templates/job_template/:id/schedules/*"
-            element={
-              <Schedules
-                setBreadcrumb={() => {}}
-                jobTemplate={jobTemplate}
-                loadSchedules={() => {}}
-                loadScheduleOptions={() => {}}
-                apiModel={{ createSchedule: () => {} }}
-              />
-            }
-          />
-        </Routes>,
-        { context: { router: { history } } }
-      );
-    });
-    expect(wrapper.length).toBe(1);
+    const { container } = renderWithContexts(
+      <Routes>
+        <Route
+          path="/templates/job_template/:id/schedules/*"
+          element={
+            <Schedules
+              setBreadcrumb={() => {}}
+              jobTemplate={jobTemplate}
+              loadSchedules={() => {}}
+              loadScheduleOptions={() => {}}
+              apiModel={{ createSchedule: () => {} }}
+            />
+          }
+        />
+      </Routes>,
+      { context: { router: { history } } }
+    );
+
+    // the index route resolves to ScheduleList, whose toolbar (with the
+    // "Select all" control) renders once the component mounts
+    expect(
+      await screen.findByRole('checkbox', { name: 'Select all' })
+    ).toBeInTheDocument();
+    expect(container).not.toBeEmptyDOMElement();
   });
 });

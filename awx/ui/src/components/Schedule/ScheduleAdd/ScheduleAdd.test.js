@@ -1,5 +1,5 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { waitFor } from '@testing-library/react';
 import { RRule } from 'rrule';
 import {
   CredentialsAPI,
@@ -8,7 +8,7 @@ import {
   JobTemplatesAPI,
   InventoriesAPI,
 } from 'api';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ScheduleAdd from './ScheduleAdd';
 
 jest.mock('../../../api/models/Credentials');
@@ -16,6 +16,19 @@ jest.mock('../../../api/models/CredentialTypes');
 jest.mock('../../../api/models/Schedules');
 jest.mock('../../../api/models/JobTemplates');
 jest.mock('../../../api/models/Inventories');
+
+// The multi-section/prompt-wizard form is exercised by ScheduleForm's own
+// suite. Here we mock it so we can drive ScheduleAdd's handleSubmit directly
+// (the original suite invoked the Formik onSubmit, which simply forwards the
+// form values + launchConfig/surveyConfig to that handleSubmit).
+let formProps;
+jest.mock('../shared/ScheduleForm', () => {
+  const MockScheduleForm = (props) => {
+    formProps = props;
+    return <div data-testid="schedule-form" />;
+  };
+  return MockScheduleForm;
+});
 
 const launchConfig = {
   can_start_without_user_input: false,
@@ -47,83 +60,79 @@ const launchConfig = {
     skip_tags: '',
     job_type: 'run',
     verbosity: 0,
-    inventory: {
-      name: null,
-      id: null,
-    },
+    inventory: { name: null, id: null },
     scm_branch: '',
   },
 };
 
-let wrapper;
+const resource = {
+  id: 700,
+  type: 'job_template',
+  inventory: 2,
+  summary_fields: { credentials: [] },
+  name: 'Foo Job Template',
+  description: '',
+};
+
+function submit(values) {
+  // mirror ScheduleForm's onSubmit, which forwards the launch/survey config
+  return formProps.handleSubmit(
+    values,
+    formProps.launchConfig,
+    formProps.surveyConfig
+  );
+}
+
+function renderAdd(props = {}) {
+  return renderWithContexts(
+    <ScheduleAdd
+      apiModel={JobTemplatesAPI}
+      resource={resource}
+      launchConfig={launchConfig}
+      surveyConfig={{}}
+      {...props}
+    />
+  );
+}
 
 describe('<ScheduleAdd />', () => {
-  beforeEach(async () => {
+  beforeEach(() => {
+    // resetMocks clears the captured props between tests; reset formProps so a
+    // test waits for the current render rather than seeing the previous one.
+    formProps = undefined;
     SchedulesAPI.readZoneInfo.mockResolvedValue({
-      data: [
-        {
-          name: 'America/New_York',
-        },
-      ],
+      data: [{ name: 'America/New_York' }],
     });
     JobTemplatesAPI.createSchedule.mockResolvedValue({ data: { id: 3 } });
-
     CredentialTypesAPI.loadAllTypes.mockResolvedValue([
       { id: 1, name: 'ssh', kind: 'ssh' },
     ]);
-
     CredentialsAPI.read.mockResolvedValue({
       data: {
         count: 1,
         results: [
-          {
-            id: 10,
-            name: 'cred 1',
-            kind: 'ssh',
-            url: '',
-            credential_type: 1,
-          },
+          { id: 10, name: 'cred 1', kind: 'ssh', url: '', credential_type: 1 },
         ],
       },
     });
-
     CredentialsAPI.readOptions.mockResolvedValue({
       data: {
         related_search_fields: [],
         actions: { GET: { filterabled: true } },
       },
     });
-
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <ScheduleAdd
-          apiModel={JobTemplatesAPI}
-          resource={{
-            id: 700,
-            type: 'job_template',
-            inventory: 2,
-            summary_fields: { credentials: [] },
-            name: 'Foo Job Template',
-            description: '',
-          }}
-          launchConfig={launchConfig}
-          surveyConfig={{}}
-        />
-      );
-    });
-    wrapper.update();
   });
 
   test('Successfully creates a schedule with repeat frequency: None (run once)', async () => {
-    await act(async () => {
-      wrapper.find('Formik').invoke('onSubmit')({
-        description: 'test description',
-        frequency: [],
-        name: 'Run once schedule',
-        startDate: '2020-03-25',
-        startTime: '10:00 AM',
-        timezone: 'America/New_York',
-      });
+    renderAdd();
+    await waitFor(() => expect(formProps).toBeDefined());
+    await submit({
+      description: 'test description',
+      frequency: [],
+      name: 'Run once schedule',
+      startDate: '2020-03-25',
+      startTime: '10:00 AM',
+      timezone: 'America/New_York',
     });
     expect(JobTemplatesAPI.createSchedule).toHaveBeenCalledWith(700, {
       description: 'test description',
@@ -135,22 +144,18 @@ describe('<ScheduleAdd />', () => {
   });
 
   test('Successfully creates a schedule with 10 minute repeat frequency and 10 occurrences', async () => {
-    await act(async () => {
-      wrapper.find('Formik').invoke('onSubmit')({
-        description: 'test description',
-        frequency: ['minute'],
-        frequencyOptions: {
-          minute: {
-            end: 'after',
-            interval: 10,
-            occurrences: 10,
-          },
-        },
-        name: 'Run every 10 minutes 10 times',
-        startDate: '2020-03-25',
-        startTime: '10:30 AM',
-        timezone: 'America/New_York',
-      });
+    renderAdd();
+    await waitFor(() => expect(formProps).toBeDefined());
+    await submit({
+      description: 'test description',
+      frequency: ['minute'],
+      frequencyOptions: {
+        minute: { end: 'after', interval: 10, occurrences: 10 },
+      },
+      name: 'Run every 10 minutes 10 times',
+      startDate: '2020-03-25',
+      startTime: '10:30 AM',
+      timezone: 'America/New_York',
     });
     expect(JobTemplatesAPI.createSchedule).toHaveBeenCalledWith(700, {
       description: 'test description',
@@ -162,23 +167,23 @@ describe('<ScheduleAdd />', () => {
   });
 
   test('Successfully creates a schedule with hourly repeat frequency ending on a specific date/time', async () => {
-    await act(async () => {
-      wrapper.find('Formik').invoke('onSubmit')({
-        description: 'test description',
-        frequency: ['hour'],
-        frequencyOptions: {
-          hour: {
-            end: 'onDate',
-            interval: 1,
-            endDate: '2020-03-26',
-            endTime: '10:45 AM',
-          },
+    renderAdd();
+    await waitFor(() => expect(formProps).toBeDefined());
+    await submit({
+      description: 'test description',
+      frequency: ['hour'],
+      frequencyOptions: {
+        hour: {
+          end: 'onDate',
+          interval: 1,
+          endDate: '2020-03-26',
+          endTime: '10:45 AM',
         },
-        name: 'Run every hour until date',
-        startDate: '2020-03-25',
-        startTime: '10:45 AM',
-        timezone: 'America/New_York',
-      });
+      },
+      name: 'Run every hour until date',
+      startDate: '2020-03-25',
+      startTime: '10:45 AM',
+      timezone: 'America/New_York',
     });
     expect(JobTemplatesAPI.createSchedule).toHaveBeenCalledWith(700, {
       description: 'test description',
@@ -190,21 +195,16 @@ describe('<ScheduleAdd />', () => {
   });
 
   test('Successfully creates a schedule with daily repeat frequency', async () => {
-    await act(async () => {
-      wrapper.find('Formik').invoke('onSubmit')({
-        description: 'test description',
-        frequency: ['day'],
-        frequencyOptions: {
-          day: {
-            end: 'never',
-            interval: 1,
-          },
-        },
-        name: 'Run daily',
-        startDate: '2020-03-25',
-        startTime: '10:45 AM',
-        timezone: 'America/New_York',
-      });
+    renderAdd();
+    await waitFor(() => expect(formProps).toBeDefined());
+    await submit({
+      description: 'test description',
+      frequency: ['day'],
+      frequencyOptions: { day: { end: 'never', interval: 1 } },
+      name: 'Run daily',
+      startDate: '2020-03-25',
+      startTime: '10:45 AM',
+      timezone: 'America/New_York',
     });
     expect(JobTemplatesAPI.createSchedule).toHaveBeenCalledWith(700, {
       description: 'test description',
@@ -216,23 +216,23 @@ describe('<ScheduleAdd />', () => {
   });
 
   test('Successfully creates a schedule with weekly repeat frequency on mon/wed/fri', async () => {
-    await act(async () => {
-      wrapper.find('Formik').invoke('onSubmit')({
-        description: 'test description',
-        frequency: ['week'],
-        frequencyOptions: {
-          week: {
-            end: 'never',
-            interval: 1,
-            occurrences: 1,
-            daysOfWeek: [RRule.MO, RRule.WE, RRule.FR],
-          },
+    renderAdd();
+    await waitFor(() => expect(formProps).toBeDefined());
+    await submit({
+      description: 'test description',
+      frequency: ['week'],
+      frequencyOptions: {
+        week: {
+          end: 'never',
+          interval: 1,
+          occurrences: 1,
+          daysOfWeek: [RRule.MO, RRule.WE, RRule.FR],
         },
-        name: 'Run weekly on mon/wed/fri',
-        startDate: '2020-03-25',
-        startTime: '10:45 AM',
-        timezone: 'America/New_York',
-      });
+      },
+      name: 'Run weekly on mon/wed/fri',
+      startDate: '2020-03-25',
+      startTime: '10:45 AM',
+      timezone: 'America/New_York',
     });
     expect(JobTemplatesAPI.createSchedule).toHaveBeenCalledWith(700, {
       description: 'test description',
@@ -243,24 +243,24 @@ describe('<ScheduleAdd />', () => {
   });
 
   test('Successfully creates a schedule with monthly repeat frequency on the first day of the month', async () => {
-    await act(async () => {
-      wrapper.find('Formik').invoke('onSubmit')({
-        description: 'test description',
-        frequency: ['month'],
-        frequencyOptions: {
-          month: {
-            end: 'never',
-            occurrences: 1,
-            interval: 1,
-            runOn: 'day',
-            runOnDayNumber: 1,
-          },
+    renderAdd();
+    await waitFor(() => expect(formProps).toBeDefined());
+    await submit({
+      description: 'test description',
+      frequency: ['month'],
+      frequencyOptions: {
+        month: {
+          end: 'never',
+          occurrences: 1,
+          interval: 1,
+          runOn: 'day',
+          runOnDayNumber: 1,
         },
-        name: 'Run on the first day of the month',
-        startTime: '10:45 AM',
-        startDate: '2020-04-01',
-        timezone: 'America/New_York',
-      });
+      },
+      name: 'Run on the first day of the month',
+      startTime: '10:45 AM',
+      startDate: '2020-04-01',
+      timezone: 'America/New_York',
     });
     expect(JobTemplatesAPI.createSchedule).toHaveBeenCalledWith(700, {
       description: 'test description',
@@ -272,27 +272,27 @@ describe('<ScheduleAdd />', () => {
   });
 
   test('Successfully creates a schedule with monthly repeat frequency on the last tuesday of the month', async () => {
-    await act(async () => {
-      wrapper.find('Formik').invoke('onSubmit')({
-        description: 'test description',
-        frequency: ['month'],
-        frequencyOptions: {
-          month: {
-            end: 'never',
-            endDate: '2020-03-26',
-            endTime: '11:00 AM',
-            interval: 1,
-            occurrences: 1,
-            runOn: 'the',
-            runOnTheDay: 'tuesday',
-            runOnTheOccurrence: -1,
-          },
+    renderAdd();
+    await waitFor(() => expect(formProps).toBeDefined());
+    await submit({
+      description: 'test description',
+      frequency: ['month'],
+      frequencyOptions: {
+        month: {
+          end: 'never',
+          endDate: '2020-03-26',
+          endTime: '11:00 AM',
+          interval: 1,
+          occurrences: 1,
+          runOn: 'the',
+          runOnTheDay: 'tuesday',
+          runOnTheOccurrence: -1,
         },
-        name: 'Run monthly on the last Tuesday',
-        startDate: '2020-03-31',
-        startTime: '11:00 AM',
-        timezone: 'America/New_York',
-      });
+      },
+      name: 'Run monthly on the last Tuesday',
+      startDate: '2020-03-31',
+      startTime: '11:00 AM',
+      timezone: 'America/New_York',
     });
     expect(JobTemplatesAPI.createSchedule).toHaveBeenCalledWith(700, {
       description: 'test description',
@@ -304,25 +304,25 @@ describe('<ScheduleAdd />', () => {
   });
 
   test('Successfully creates a schedule with yearly repeat frequency on the first day of March', async () => {
-    await act(async () => {
-      wrapper.find('Formik').invoke('onSubmit')({
-        description: 'test description',
-        frequency: ['year'],
-        frequencyOptions: {
-          year: {
-            end: 'never',
-            interval: 1,
-            occurrences: 1,
-            runOn: 'day',
-            runOnDayMonth: 3,
-            runOnDayNumber: 1,
-          },
+    renderAdd();
+    await waitFor(() => expect(formProps).toBeDefined());
+    await submit({
+      description: 'test description',
+      frequency: ['year'],
+      frequencyOptions: {
+        year: {
+          end: 'never',
+          interval: 1,
+          occurrences: 1,
+          runOn: 'day',
+          runOnDayMonth: 3,
+          runOnDayNumber: 1,
         },
-        name: 'Yearly on the first day of March',
-        startDate: '2020-03-01',
-        startTime: '12:00 AM',
-        timezone: 'America/New_York',
-      });
+      },
+      name: 'Yearly on the first day of March',
+      startDate: '2020-03-01',
+      startTime: '12:00 AM',
+      timezone: 'America/New_York',
     });
     expect(JobTemplatesAPI.createSchedule).toHaveBeenCalledWith(700, {
       description: 'test description',
@@ -334,26 +334,26 @@ describe('<ScheduleAdd />', () => {
   });
 
   test('Successfully creates a schedule with yearly repeat frequency on the second Friday in April', async () => {
-    await act(async () => {
-      wrapper.find('Formik').invoke('onSubmit')({
-        description: 'test description',
-        frequency: ['year'],
-        frequencyOptions: {
-          year: {
-            end: 'never',
-            interval: 1,
-            occurrences: 1,
-            runOn: 'the',
-            runOnTheOccurrence: 2,
-            runOnTheDay: 'friday',
-            runOnTheMonth: 4,
-          },
+    renderAdd();
+    await waitFor(() => expect(formProps).toBeDefined());
+    await submit({
+      description: 'test description',
+      frequency: ['year'],
+      frequencyOptions: {
+        year: {
+          end: 'never',
+          interval: 1,
+          occurrences: 1,
+          runOn: 'the',
+          runOnTheOccurrence: 2,
+          runOnTheDay: 'friday',
+          runOnTheMonth: 4,
         },
-        name: 'Yearly on the second Friday in April',
-        startDate: '2020-04-10',
-        startTime: '11:15 AM',
-        timezone: 'America/New_York',
-      });
+      },
+      name: 'Yearly on the second Friday in April',
+      startDate: '2020-04-10',
+      startTime: '11:15 AM',
+      timezone: 'America/New_York',
     });
     expect(JobTemplatesAPI.createSchedule).toHaveBeenCalledWith(700, {
       description: 'test description',
@@ -365,26 +365,26 @@ describe('<ScheduleAdd />', () => {
   });
 
   test('Successfully creates a schedule with yearly repeat frequency on the first weekday in October', async () => {
-    await act(async () => {
-      wrapper.find('Formik').invoke('onSubmit')({
-        description: 'test description',
-        frequency: ['year'],
-        frequencyOptions: {
-          year: {
-            end: 'never',
-            interval: 1,
-            occurrences: 1,
-            runOn: 'the',
-            runOnTheOccurrence: 1,
-            runOnTheDay: 'weekday',
-            runOnTheMonth: 10,
-          },
+    renderAdd();
+    await waitFor(() => expect(formProps).toBeDefined());
+    await submit({
+      description: 'test description',
+      frequency: ['year'],
+      frequencyOptions: {
+        year: {
+          end: 'never',
+          interval: 1,
+          occurrences: 1,
+          runOn: 'the',
+          runOnTheOccurrence: 1,
+          runOnTheDay: 'weekday',
+          runOnTheMonth: 10,
         },
-        name: 'Yearly on the first weekday in October',
-        startDate: '2020-04-10',
-        startTime: '11:15 AM',
-        timezone: 'America/New_York',
-      });
+      },
+      name: 'Yearly on the first weekday in October',
+      startDate: '2020-04-10',
+      startTime: '11:15 AM',
+      timezone: 'America/New_York',
     });
     expect(JobTemplatesAPI.createSchedule).toHaveBeenCalledWith(700, {
       description: 'test description',
@@ -400,80 +400,34 @@ describe('<ScheduleAdd />', () => {
       data: {
         count: 2,
         results: [
-          {
-            name: 'Foo',
-            id: 1,
-            url: '',
-          },
-          {
-            name: 'Bar',
-            id: 2,
-            url: '',
-          },
+          { name: 'Foo', id: 1, url: '' },
+          { name: 'Bar', id: 2, url: '' },
         ],
       },
     });
     InventoriesAPI.readOptions.mockResolvedValue({
       data: {
         related_search_fields: [],
-        actions: {
-          GET: {
-            filterable: true,
-          },
-        },
+        actions: { GET: { filterable: true } },
       },
     });
+    SchedulesAPI.associateCredential.mockResolvedValue({});
 
-    await act(async () =>
-      wrapper.find('Button[aria-label="Prompt"]').prop('onClick')()
-    );
-    wrapper.update();
-    // Inventory step
-    expect(wrapper.find('WizardNavItem').at(0).prop('isCurrent')).toBe(true);
-    await act(async () => {
-      wrapper.find('td#check-action-item-1').find('input').simulate('click');
+    renderAdd();
+    await waitFor(() => expect(formProps).toBeDefined());
+
+    // The prompt wizard lives inside ScheduleForm; here we submit the values it
+    // would have produced (inventory chosen + credential 10 added).
+    await submit({
+      name: 'Schedule',
+      frequency: [],
+      skip_tags: '',
+      inventory: { name: 'inventory', id: 45 },
+      credentials: [{ name: 'cred 1', id: 10 }],
+      startDate: '2021-01-28',
+      startTime: '2:15 PM',
+      timezone: 'America/New_York',
     });
-    wrapper.update();
-    expect(
-      wrapper.find('td#check-action-item-1').find('input').prop('checked')
-    ).toBe(true);
-    await act(async () =>
-      wrapper.find('WizardFooterInternal').prop('onNext')()
-    );
-    wrapper.update();
-    // Credential step
-    expect(wrapper.find('WizardNavItem').at(1).prop('isCurrent')).toBe(true);
-    await act(async () => {
-      wrapper.find('td#check-action-item-10').find('input').simulate('click');
-    });
-    wrapper.update();
-    expect(
-      wrapper.find('td#check-action-item-10').find('input').prop('checked')
-    ).toBe(true);
-    await act(async () =>
-      wrapper.find('WizardFooterInternal').prop('onNext')()
-    );
-    wrapper.update();
-    // Preview step
-    expect(wrapper.find('WizardNavItem').at(2).prop('isCurrent')).toBe(true);
-    await act(async () =>
-      wrapper.find('WizardFooterInternal').prop('onNext')()
-    );
-    wrapper.update();
-    expect(wrapper.find('Wizard').length).toBe(0);
-    await act(async () => {
-      wrapper.find('Formik').invoke('onSubmit')({
-        name: 'Schedule',
-        frequency: [],
-        skip_tags: '',
-        inventory: { name: 'inventory', id: 45 },
-        credentials: [{ name: 'cred 1', id: 10 }],
-        startDate: '2021-01-28',
-        startTime: '2:15 PM',
-        timezone: 'America/New_York',
-      });
-    });
-    wrapper.update();
 
     expect(JobTemplatesAPI.createSchedule).toHaveBeenCalledWith(700, {
       extra_data: {},
@@ -483,65 +437,50 @@ describe('<ScheduleAdd />', () => {
         'DTSTART;TZID=America/New_York:20210128T141500 RRULE:INTERVAL=1;COUNT=1;FREQ=MINUTELY',
       skip_tags: '',
     });
-    expect(SchedulesAPI.associateCredential).toHaveBeenCalledWith(3, 10);
+    await waitFor(() =>
+      expect(SchedulesAPI.associateCredential).toHaveBeenCalledWith(3, 10)
+    );
   });
 
   test('should submit survey with default values properly, without opening prompt wizard', async () => {
-    let scheduleSurveyWrapper;
-    await act(async () => {
-      scheduleSurveyWrapper = mountWithContexts(
-        <ScheduleAdd
-          apiModel={JobTemplatesAPI}
-          resource={{
-            id: 700,
-            type: 'job_template',
-            inventory: 2,
-            summary_fields: { credentials: [] },
-            name: 'Foo Job Template',
-            description: '',
-          }}
-          launchConfig={launchConfig}
-          surveyConfig={{
-            spec: [
-              {
-                question_name: 'text',
-                question_description: '',
-                required: true,
-                type: 'text',
-                variable: 'text',
-                min: 0,
-                max: 1024,
-                default: 'text variable',
-                choices: '',
-                new_question: true,
-              },
-              {
-                question_name: 'mc',
-                question_description: '',
-                required: true,
-                type: 'multiplechoice',
-                variable: 'mc',
-                min: 0,
-                max: 1024,
-                default: 'first',
-                choices: 'first\nsecond',
-                new_question: true,
-              },
-            ],
-          }}
-        />
-      );
+    renderAdd({
+      surveyConfig: {
+        spec: [
+          {
+            question_name: 'text',
+            question_description: '',
+            required: true,
+            type: 'text',
+            variable: 'text',
+            min: 0,
+            max: 1024,
+            default: 'text variable',
+            choices: '',
+            new_question: true,
+          },
+          {
+            question_name: 'mc',
+            question_description: '',
+            required: true,
+            type: 'multiplechoice',
+            variable: 'mc',
+            min: 0,
+            max: 1024,
+            default: 'first',
+            choices: 'first\nsecond',
+            new_question: true,
+          },
+        ],
+      },
     });
-    scheduleSurveyWrapper.update();
-    await act(async () => {
-      scheduleSurveyWrapper.find('Formik').invoke('onSubmit')({
-        description: 'test description',
-        frequency: [],
-        name: 'Run once schedule',
-        startDate: '2020-03-25',
-        startTime: '10:00 AM',
-        timezone: 'America/New_York',
-      });
+    await waitFor(() => expect(formProps).toBeDefined());
+    await submit({
+      description: 'test description',
+      frequency: [],
+      name: 'Run once schedule',
+      startDate: '2020-03-25',
+      startTime: '10:00 AM',
+      timezone: 'America/New_York',
     });
     expect(JobTemplatesAPI.createSchedule).toHaveBeenCalledWith(700, {
       description: 'test description',
