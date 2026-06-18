@@ -1,10 +1,7 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, within } from '@testing-library/react';
 import { CredentialsAPI, ExecutionEnvironmentsAPI, RootAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import AdHocCommandsWizard from './AdHocCommandsWizard';
 
 jest.mock('../../api/models/CredentialTypes');
@@ -22,26 +19,42 @@ const adHocItems = [
   { name: 'Inventory 2' },
   { name: 'inventory 3' },
 ];
+
+function renderWizard(onLaunch) {
+  return renderWithContexts(
+    <AdHocCommandsWizard
+      adHocItems={adHocItems}
+      onLaunch={onLaunch}
+      moduleOptions={moduleOptions}
+      onCloseWizard={() => {}}
+      credentialTypeId={1}
+      organizationId={1}
+    />
+  );
+}
+
+// Fill the details step (module/args/verbosity) so Next is enabled.
+async function fillDetails(user) {
+  await waitFor(() =>
+    expect(document.querySelector('#module_name')).toBeInTheDocument()
+  );
+  await user.selectOptions(document.querySelector('#module_name'), 'command');
+  await user.type(document.querySelector('#module_args'), 'foo');
+  // select verbosity by its stable option value ('1'), not the i18n label
+  await user.selectOptions(document.querySelector('#verbosity'), '1');
+}
+
+// The Wizard footer renders a Next button and a final Launch button.
+const nextButton = () => screen.getByRole('button', { name: 'Next' });
+const launchButton = () => screen.getByRole('button', { name: 'Launch' });
+
 describe('<AdHocCommandsWizard/>', () => {
-  let wrapper;
   const onLaunch = jest.fn();
-  beforeEach(async () => {
+  beforeEach(() => {
     RootAPI.readAssetVariables.mockResolvedValue({
       data: {
         BRAND_NAME: 'AWX',
       },
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <AdHocCommandsWizard
-          adHocItems={adHocItems}
-          onLaunch={onLaunch}
-          moduleOptions={moduleOptions}
-          onCloseWizard={() => {}}
-          credentialTypeId={1}
-          organizationId={1}
-        />
-      );
     });
   });
   afterEach(() => {
@@ -49,30 +62,44 @@ describe('<AdHocCommandsWizard/>', () => {
   });
 
   test('should mount properly', async () => {
-    expect(wrapper.find('AdHocCommandsWizard').length).toBe(1);
+    renderWizard(onLaunch);
+    // the wizard renders its title in a body portal
+    expect(await screen.findByText('Run command')).toBeInTheDocument();
   });
 
   test('launch button should be disabled', async () => {
-    waitForElement(wrapper, 'WizardNavItem', (el) => el.length > 0);
+    ExecutionEnvironmentsAPI.read.mockResolvedValue({
+      data: { results: [], count: 0 },
+    });
+    ExecutionEnvironmentsAPI.readOptions.mockResolvedValue({
+      data: { actions: { GET: {} } },
+    });
+    CredentialsAPI.read.mockResolvedValue({
+      data: { results: [], count: 0 },
+    });
+    CredentialsAPI.readOptions.mockResolvedValue({
+      data: { actions: { GET: {} } },
+    });
+    const { user } = renderWizard(onLaunch);
+    await waitFor(() =>
+      expect(document.querySelector('#module_name')).toBeInTheDocument()
+    );
+    // step through without filling required fields -> preview reports errors.
+    // each list step is empty here, so the "No ... Found" empty state is a
+    // unique marker that the wizard advanced to that step.
+    await user.click(nextButton());
+    await screen.findByText('No Execution Environments Found');
+    await user.click(nextButton());
+    await screen.findByText('No Machine Credential Found');
+    await user.click(nextButton());
 
-    expect(wrapper.find('Button[type="submit"]').prop('isDisabled')).toBe(
-      false
+    // preview step shows the missing-field error and disables Launch
+    await waitFor(() =>
+      expect(
+        screen.getByText('Some of the previous step(s) have errors')
+      ).toBeInTheDocument()
     );
-    act(() => wrapper.find('Button[type="submit"]').prop('onClick')());
-    expect(wrapper.find('Button[type="submit"]').prop('isDisabled')).toBe(
-      false
-    );
-    wrapper.update();
-    act(() => wrapper.find('Button[type="submit"]').prop('onClick')());
-    expect(wrapper.find('Button[type="submit"]').prop('isDisabled')).toBe(
-      false
-    );
-    wrapper.update();
-    act(() => wrapper.find('Button[type="submit"]').prop('onClick')());
-    wrapper.update();
-
-    expect(wrapper.find('AdHocPreviewStep').prop('hasErrors')).toBe(true);
-    expect(wrapper.find('Button[type="submit"]').prop('isDisabled')).toBe(true);
+    expect(launchButton()).toBeDisabled();
   });
 
   test('launch button should become active', async () => {
@@ -100,94 +127,47 @@ describe('<AdHocCommandsWizard/>', () => {
     CredentialsAPI.readOptions.mockResolvedValue({
       data: { actions: { GET: {} } },
     });
-    await waitForElement(wrapper, 'WizardNavItem', (el) => el.length > 0);
+    const { user } = renderWizard(onLaunch);
+    await fillDetails(user);
+    expect(nextButton()).toBeEnabled();
+    await user.click(nextButton());
 
-    await act(async () => {
-      wrapper.find('AnsibleSelect[name="module_name"]').prop('onChange')(
-        {},
-        'command'
-      );
-      wrapper.find('input#module_args').simulate('change', {
-        target: { value: 'foo', name: 'module_args' },
-      });
-      wrapper.find('AnsibleSelect[name="verbosity"]').prop('onChange')({}, 1);
-    });
-    wrapper.update();
-    expect(wrapper.find('Button[type="submit"]').prop('isDisabled')).toBe(
-      false
+    // step 2: execution environment list
+    await waitFor(() => expect(screen.getByText('EE 1')).toBeInTheDocument());
+    const eeRadios = screen.getAllByRole('radio');
+    expect(eeRadios).toHaveLength(2);
+    await user.click(eeRadios[0]);
+    await waitFor(() => expect(eeRadios[0]).toBeChecked());
+    await user.click(nextButton());
+
+    // step 3: machine credential list
+    await waitFor(() => expect(screen.getByText('Cred 1')).toBeInTheDocument());
+    const credRadios = screen.getAllByRole('radio');
+    expect(credRadios).toHaveLength(2);
+    await user.click(credRadios[0]);
+    await waitFor(() => expect(credRadios[0]).toBeChecked());
+    await user.click(nextButton());
+
+    // preview step -> launch
+    await waitFor(() => expect(launchButton()).toBeEnabled());
+    await user.click(launchButton());
+
+    await waitFor(() =>
+      expect(onLaunch).toHaveBeenCalledWith({
+        become_enabled: '',
+        credentials: [{ id: 1, name: 'Cred 1', url: '' }],
+        credential_passwords: {},
+        diff_mode: false,
+        execution_environment: [{ id: 1, name: 'EE 1', url: '' }],
+        extra_vars: '---',
+        forks: 0,
+        job_type: 'run',
+        limit: 'Inventory 1, Inventory 2, inventory 3',
+        module_args: 'foo',
+        module_name: 'command',
+        verbosity: '1',
+      })
     );
-    await act(async () =>
-      wrapper.find('Button[type="submit"]').prop('onClick')()
-    );
-
-    wrapper.update();
-
-    // step 2
-
-    await waitForElement(wrapper, 'OptionsList', (el) => el.length > 0);
-    expect(wrapper.find('CheckboxListItem').length).toBe(2);
-    expect(wrapper.find('Button[type="submit"]').prop('isDisabled')).toBe(
-      false
-    );
-
-    await act(async () => {
-      wrapper.find('td#check-action-item-1').find('input').simulate('click');
-    });
-
-    wrapper.update();
-
-    expect(
-      wrapper.find('CheckboxListItem[label="EE 1"]').prop('isSelected')
-    ).toBe(true);
-    expect(wrapper.find('Button[type="submit"]').prop('isDisabled')).toBe(
-      false
-    );
-
-    await act(async () =>
-      wrapper.find('Button[type="submit"]').prop('onClick')()
-    );
-
-    wrapper.update();
-    // step 3
-
-    await waitForElement(wrapper, 'OptionsList', (el) => el.length > 0);
-    expect(wrapper.find('CheckboxListItem').length).toBe(2);
-
-    await act(async () => {
-      wrapper.find('td#check-action-item-1').find('input').simulate('click');
-    });
-
-    wrapper.update();
-
-    expect(
-      wrapper.find('CheckboxListItem[label="Cred 1"]').prop('isSelected')
-    ).toBe(true);
-
-    await act(async () =>
-      wrapper.find('Button[type="submit"]').prop('onClick')()
-    );
-    wrapper.update();
-    await act(async () =>
-      wrapper.find('Button[type="submit"]').prop('onClick')()
-    );
-    expect(wrapper.find('Button[type="submit"]').prop('isDisabled')).toBe(
-      false
-    );
-
-    expect(onLaunch).toHaveBeenCalledWith({
-      become_enabled: '',
-      credentials: [{ id: 1, name: 'Cred 1', url: '' }],
-      credential_passwords: {},
-      diff_mode: false,
-      execution_environment: [{ id: 1, name: 'EE 1', url: '' }],
-      extra_vars: '---',
-      forks: 0,
-      job_type: 'run',
-      limit: 'Inventory 1, Inventory 2, inventory 3',
-      module_args: 'foo',
-      module_name: 'command',
-      verbosity: 1,
-    });
   });
 
   test('should render credential passwords step', async () => {
@@ -220,141 +200,103 @@ describe('<AdHocCommandsWizard/>', () => {
     CredentialsAPI.readOptions.mockResolvedValue({
       data: { actions: { GET: {} } },
     });
-    await waitForElement(wrapper, 'WizardNavItem', (el) => el.length > 0);
+    const { user } = renderWizard(onLaunch);
+    await fillDetails(user);
+    expect(nextButton()).toBeEnabled();
+    await user.click(nextButton());
 
-    await act(async () => {
-      wrapper.find('AnsibleSelect[name="module_name"]').prop('onChange')(
-        {},
-        'command'
-      );
-      wrapper.find('input#module_args').simulate('change', {
-        target: { value: 'foo', name: 'module_args' },
-      });
-      wrapper.find('AnsibleSelect[name="verbosity"]').prop('onChange')({}, 1);
-    });
-    wrapper.update();
-    expect(wrapper.find('Button[type="submit"]').prop('isDisabled')).toBe(
-      false
+    // step 2: execution environment
+    await waitFor(() => expect(screen.getByText('EE 1')).toBeInTheDocument());
+    const eeRadios = screen.getAllByRole('radio');
+    expect(eeRadios).toHaveLength(2);
+    await user.click(eeRadios[0]);
+    await waitFor(() => expect(eeRadios[0]).toBeChecked());
+    await user.click(nextButton());
+
+    // step 3: credential (selecting a password-prompting cred adds step 4)
+    await waitFor(() => expect(screen.getByText('Cred 1')).toBeInTheDocument());
+    const credRadios = screen.getAllByRole('radio');
+    expect(credRadios).toHaveLength(2);
+    await user.click(credRadios[0]);
+    await waitFor(() => expect(credRadios[0]).toBeChecked());
+    await user.click(nextButton());
+
+    // step 4: credential passwords - the ssh password field is rendered.
+    // Assert inside waitFor (a bare querySelector returning null doesn't throw,
+    // so waitFor would resolve immediately even when the field is absent).
+    await waitFor(() =>
+      expect(
+        document.querySelector(
+          'input[name="credential_passwords.ssh_password"]'
+        )
+      ).toBeInTheDocument()
     );
-    await act(async () =>
-      wrapper.find('Button[type="submit"]').prop('onClick')()
+    const sshPassword = document.querySelector(
+      'input[name="credential_passwords.ssh_password"]'
     );
+    await user.type(sshPassword, 'password');
+    expect(sshPassword).toHaveValue('password');
+    await user.click(nextButton());
 
-    wrapper.update();
+    // preview step -> launch
+    await waitFor(() => expect(launchButton()).toBeEnabled());
+    await user.click(launchButton());
 
-    // step 2
-
-    await waitForElement(wrapper, 'OptionsList', (el) => el.length > 0);
-    expect(wrapper.find('CheckboxListItem').length).toBe(2);
-    expect(wrapper.find('Button[type="submit"]').prop('isDisabled')).toBe(
-      false
-    );
-
-    await act(async () => {
-      wrapper.find('td#check-action-item-1').find('input').simulate('click');
-    });
-
-    wrapper.update();
-
-    expect(
-      wrapper.find('CheckboxListItem[label="EE 1"]').prop('isSelected')
-    ).toBe(true);
-    expect(wrapper.find('Button[type="submit"]').prop('isDisabled')).toBe(
-      false
-    );
-
-    await act(async () =>
-      wrapper.find('Button[type="submit"]').prop('onClick')()
-    );
-
-    wrapper.update();
-    // step 3
-
-    await waitForElement(wrapper, 'OptionsList', (el) => el.length > 0);
-    expect(wrapper.find('CheckboxListItem').length).toBe(2);
-
-    await act(async () => {
-      wrapper.find('td#check-action-item-1').find('input').simulate('click');
-    });
-
-    wrapper.update();
-
-    expect(
-      wrapper.find('CheckboxListItem[label="Cred 1"]').prop('isSelected')
-    ).toBe(true);
-
-    await act(async () =>
-      wrapper.find('Button[type="submit"]').prop('onClick')()
-    );
-    wrapper.update();
-
-    // step 4
-
-    expect(wrapper.find('PasswordInput')).toHaveLength(1);
-    await act(async () =>
-      wrapper
-        .find('TextInputBase[name="credential_passwords.ssh_password"]')
-        .prop('onChange')('', {
-        target: {
-          value: 'password',
-          name: 'credential_passwords.ssh_password',
-        },
+    await waitFor(() =>
+      expect(onLaunch).toHaveBeenCalledWith({
+        become_enabled: '',
+        credentials: [
+          { id: 1, name: 'Cred 1', url: '', inputs: { password: 'ASK' } },
+        ],
+        credential_passwords: { ssh_password: 'password' },
+        diff_mode: false,
+        execution_environment: [{ id: 1, name: 'EE 1', url: '' }],
+        extra_vars: '---',
+        forks: 0,
+        job_type: 'run',
+        limit: 'Inventory 1, Inventory 2, inventory 3',
+        module_args: 'foo',
+        module_name: 'command',
+        verbosity: '1',
       })
     );
-    wrapper.update();
-    expect(
-      wrapper
-        .find('TextInput[name="credential_passwords.ssh_password"]')
-        .prop('value')
-    ).toBe('password');
-    await act(async () =>
-      wrapper.find('Button[type="submit"]').prop('onClick')()
-    );
-    await act(async () =>
-      wrapper.find('Button[type="submit"]').prop('onClick')()
-    );
-    wrapper.update();
-
-    // step 5
-
-    expect(wrapper.find('Button[type="submit"]').prop('isDisabled')).toBe(
-      false
-    );
-
-    expect(onLaunch).toHaveBeenCalledWith({
-      become_enabled: '',
-      credentials: [
-        { id: 1, name: 'Cred 1', url: '', inputs: { password: 'ASK' } },
-      ],
-      credential_passwords: { ssh_password: 'password' },
-      diff_mode: false,
-      execution_environment: [{ id: 1, name: 'EE 1', url: '' }],
-      extra_vars: '---',
-      forks: 0,
-      job_type: 'run',
-      limit: 'Inventory 1, Inventory 2, inventory 3',
-      module_args: 'foo',
-      module_name: 'command',
-      verbosity: 1,
-    });
   });
 
   test('should show error in navigation bar', async () => {
-    await waitForElement(wrapper, 'WizardNavItem', (el) => el.length > 0);
-
-    await act(async () => {
-      wrapper.find('AnsibleSelect[name="module_name"]').prop('onChange')(
-        {},
-        'command'
-      );
-      wrapper.find('input#module_args').simulate('change', {
-        target: { value: '', name: 'module_args' },
-      });
+    ExecutionEnvironmentsAPI.read.mockResolvedValue({
+      data: { results: [], count: 0 },
     });
-    waitForElement(wrapper, 'ExclamationCircleIcon', (el) => el.length > 0);
+    ExecutionEnvironmentsAPI.readOptions.mockResolvedValue({
+      data: { actions: { GET: {} } },
+    });
+    const { user } = renderWizard(onLaunch);
+    await waitFor(() =>
+      expect(document.querySelector('#module_name')).toBeInTheDocument()
+    );
+    // choose command (requires args) but leave args empty, then advance.
+    // advancing marks the details step visited so its nav item flags the error.
+    await user.selectOptions(document.querySelector('#module_name'), 'command');
+    await user.click(nextButton());
+    await screen.findByText('No Execution Environments Found');
+
+    // the details nav item surfaces the error icon (StepName ExclamationCircle)
+    await waitFor(() =>
+      expect(
+        document.querySelector('#details-step svg')
+      ).toBeInTheDocument()
+    );
   });
 
   test('expect credential step to throw error', async () => {
+    ExecutionEnvironmentsAPI.read.mockResolvedValue({
+      data: {
+        results: [{ id: 1, name: 'EE 1', url: '' }],
+        count: 1,
+      },
+    });
+    ExecutionEnvironmentsAPI.readOptions.mockResolvedValue({
+      data: { actions: { GET: {} } },
+    });
     CredentialsAPI.read.mockRejectedValue(
       new Error({
         response: {
@@ -370,34 +312,19 @@ describe('<AdHocCommandsWizard/>', () => {
     CredentialsAPI.readOptions.mockResolvedValue({
       data: { actions: { GET: {} } },
     });
-    await waitForElement(wrapper, 'WizardNavItem', (el) => el.length > 0);
+    const { user } = renderWizard(onLaunch);
+    await fillDetails(user);
+    expect(nextButton()).toBeEnabled();
+    await user.click(nextButton());
 
-    await act(async () => {
-      wrapper.find('AnsibleSelect[name="module_name"]').prop('onChange')(
-        {},
-        'command'
-      );
-      wrapper.find('input#module_args').simulate('change', {
-        target: { value: 'foo', name: 'module_args' },
-      });
-      wrapper.find('AnsibleSelect[name="verbosity"]').prop('onChange')({}, 1);
-    });
-    wrapper.update();
-    expect(wrapper.find('Button[type="submit"]').prop('isDisabled')).toBe(
-      false
+    await waitFor(() => expect(screen.getByText('EE 1')).toBeInTheDocument());
+    await user.click(nextButton());
+
+    // the credential step's failed fetch renders ContentError
+    await waitFor(() =>
+      expect(
+        within(document.body).getByText(/Something went wrong/i)
+      ).toBeInTheDocument()
     );
-
-    await act(async () =>
-      wrapper.find('Button[type="submit"]').prop('onClick')()
-    );
-
-    wrapper.update();
-
-    await act(async () =>
-      wrapper.find('Button[type="submit"]').prop('onClick')()
-    );
-
-    wrapper.update();
-    expect(wrapper.find('ContentError').length).toBe(1);
   });
 });

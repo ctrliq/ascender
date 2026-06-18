@@ -1,17 +1,13 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { Formik } from 'formik';
 import { ExecutionEnvironmentsAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import AdHocExecutionEnvironmentStep from './AdHocExecutionEnvironmentStep';
 
 jest.mock('../../api/models/ExecutionEnvironments');
 
 describe('<AdHocExecutionEnvironmentStep />', () => {
-  let wrapper;
   beforeEach(async () => {
     ExecutionEnvironmentsAPI.read.mockResolvedValue({
       data: {
@@ -25,13 +21,6 @@ describe('<AdHocExecutionEnvironmentStep />', () => {
     ExecutionEnvironmentsAPI.readOptions.mockResolvedValue({
       data: { actions: { GET: {} } },
     });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <AdHocExecutionEnvironmentStep organizationId={1} />
-        </Formik>
-      );
-    });
   });
 
   afterEach(() => {
@@ -39,12 +28,25 @@ describe('<AdHocExecutionEnvironmentStep />', () => {
   });
 
   test('should mount properly', async () => {
-    await waitForElement(wrapper, 'OptionsList', (el) => el.length > 0);
+    renderWithContexts(
+      <Formik>
+        <AdHocExecutionEnvironmentStep organizationId={1} />
+      </Formik>
+    );
+    // OptionsList renders the fetched rows once loading resolves
+    await waitFor(() => expect(screen.getByText('EE1 1')).toBeInTheDocument());
   });
 
   test('should call api', async () => {
-    await waitForElement(wrapper, 'OptionsList', (el) => el.length > 0);
+    renderWithContexts(
+      <Formik>
+        <AdHocExecutionEnvironmentStep organizationId={1} />
+      </Formik>
+    );
+    await waitFor(() => expect(screen.getByText('EE1 1')).toBeInTheDocument());
     expect(ExecutionEnvironmentsAPI.read).toHaveBeenCalled();
-    expect(wrapper.find('CheckboxListItem').length).toBe(2);
+    // two CheckboxListItem rows (one per result) render a radio select cell
+    expect(screen.getByText('EE2')).toBeInTheDocument();
+    expect(screen.getAllByRole('radio')).toHaveLength(2);
   });
 });

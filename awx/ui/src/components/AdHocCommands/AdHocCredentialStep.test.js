@@ -1,18 +1,14 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { Formik } from 'formik';
 import { CredentialsAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import AdHocCredentialStep from './AdHocCredentialStep';
 
 jest.mock('../../api/models/Credentials');
 
 describe('<AdHocCredentialStep />', () => {
   const onEnableLaunch = jest.fn();
-  let wrapper;
   beforeEach(async () => {
     CredentialsAPI.read.mockResolvedValue({
       data: {
@@ -26,28 +22,31 @@ describe('<AdHocCredentialStep />', () => {
     CredentialsAPI.readOptions.mockResolvedValue({
       data: { actions: { GET: {} } },
     });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <Formik>
-          <AdHocCredentialStep
-            credentialTypeId={1}
-            onEnableLaunch={onEnableLaunch}
-          />
-        </Formik>
-      );
-    });
   });
   afterEach(() => {
     jest.clearAllMocks();
   });
 
   test('should mount properly', async () => {
-    await waitForElement(wrapper, 'OptionsList', (el) => el.length > 0);
+    renderWithContexts(
+      <Formik>
+        <AdHocCredentialStep credentialTypeId={1} onEnableLaunch={onEnableLaunch} />
+      </Formik>
+    );
+    // OptionsList renders the fetched credential rows once loading resolves
+    await waitFor(() => expect(screen.getByText('Cred 1')).toBeInTheDocument());
   });
 
   test('should call api', async () => {
-    await waitForElement(wrapper, 'OptionsList', (el) => el.length > 0);
+    renderWithContexts(
+      <Formik>
+        <AdHocCredentialStep credentialTypeId={1} onEnableLaunch={onEnableLaunch} />
+      </Formik>
+    );
+    await waitFor(() => expect(screen.getByText('Cred 1')).toBeInTheDocument());
     expect(CredentialsAPI.read).toHaveBeenCalled();
-    expect(wrapper.find('CheckboxListItem').length).toBe(2);
+    // two CheckboxListItem rows (one per result) render a radio select cell
+    expect(screen.getByText('Cred2')).toBeInTheDocument();
+    expect(screen.getAllByRole('radio')).toHaveLength(2);
   });
 });

@@ -1,5 +1,5 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, fireEvent } from '@testing-library/react';
 import {
   CredentialTypesAPI,
   InventoriesAPI,
@@ -8,9 +8,9 @@ import {
   RootAPI,
 } from 'api';
 import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../testUtils/enzymeHelpers';
+  renderWithContexts,
+  settleTooltips,
+} from '../../../testUtils/rtlContexts';
 import AdHocCommands from './AdHocCommands';
 
 jest.mock('../../api/models/CredentialTypes');
@@ -40,6 +40,60 @@ const adHocItems = [
   { name: 'Inventory 2 Org 0' },
 ];
 
+function renderAdHoc(props = {}) {
+  return renderWithContexts(
+    <AdHocCommands
+      adHocItems={adHocItems}
+      hasListItems
+      onLaunchLoading={() => jest.fn()}
+      moduleOptions={[
+        ['command', 'command'],
+        ['foo', 'foo'],
+      ]}
+      {...props}
+    />
+  );
+}
+
+// Walk the open wizard from the details step through to launch, selecting the
+// EE row at index 2 (EE2) and the credential row at index 4 (Cred 4) to mirror
+// the original enzyme flow's check-action-item-2 / -4 selections.
+async function runWizardToLaunch(user) {
+  await user.selectOptions(document.querySelector('#module_name'), 'command');
+  await user.type(document.querySelector('#module_args'), 'foo');
+  // select verbosity by its stable option value ('1'), not the i18n label
+  await user.selectOptions(document.querySelector('#verbosity'), '1');
+  await user.click(screen.getByRole('button', { name: 'Next' }));
+
+  // step 2: execution environment - select EE2
+  await screen.findByText('EE2');
+  await user.click(screen.getByRole('row', { name: /EE2/ }).querySelector('input'));
+  await waitFor(() =>
+    expect(
+      screen.getByRole('row', { name: /EE2/ }).querySelector('input')
+    ).toBeChecked()
+  );
+  await user.click(screen.getByRole('button', { name: 'Next' }));
+
+  // step 3: machine credential - select Cred 4
+  await screen.findByText('Cred 4');
+  await user.click(
+    screen.getByRole('row', { name: /Cred 4/ }).querySelector('input')
+  );
+  await waitFor(() =>
+    expect(
+      screen.getByRole('row', { name: /Cred 4/ }).querySelector('input')
+    ).toBeChecked()
+  );
+  await user.click(screen.getByRole('button', { name: 'Next' }));
+
+  // preview step -> launch
+  await waitFor(() =>
+    expect(screen.getByRole('button', { name: 'Launch' })).toBeEnabled()
+  );
+  await user.click(screen.getByRole('button', { name: 'Launch' }));
+}
+
 describe('<AdHocCommands />', () => {
   beforeEach(() => {
     RootAPI.readAssetVariables.mockResolvedValue({
@@ -59,28 +113,21 @@ describe('<AdHocCommands />', () => {
         count: 2,
       },
     });
+    ExecutionEnvironmentsAPI.readOptions.mockResolvedValue({
+      data: { actions: { GET: {}, POST: {} } },
+    });
   });
-  let wrapper;
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
   test('mounts successfully', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <AdHocCommands
-          adHocItems={adHocItems}
-          hasListItems
-          onLaunchLoading={() => jest.fn()}
-          moduleOptions={[
-            ['command', 'command'],
-            ['shell', 'shell'],
-          ]}
-        />
-      );
-    });
-    expect(wrapper.find('AdHocCommands').length).toBe(1);
+    renderAdHoc();
+    expect(
+      await screen.findByRole('button', { name: 'Run Command' })
+    ).toBeInTheDocument();
+    await settleTooltips();
   });
 
   test('should open the wizard', async () => {
@@ -88,40 +135,16 @@ describe('<AdHocCommands />', () => {
     CredentialTypesAPI.read.mockResolvedValue({
       data: { results: [{ id: 1 }] },
     });
-    ExecutionEnvironmentsAPI.read.mockResolvedValue({
-      data: {
-        results: [
-          { id: 1, name: 'EE1 1', url: 'wwww.google.com' },
-          { id: 2, name: 'EE2', url: 'wwww.google.com' },
-        ],
-        count: 2,
-      },
+    const { user } = renderAdHoc();
+    const runButton = await screen.findByRole('button', {
+      name: 'Run Command',
     });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <AdHocCommands
-          moduleOptions={[
-            ['command', 'command'],
-            ['foo', 'foo'],
-          ]}
-          adHocItems={adHocItems}
-          hasListItems
-          onLaunchLoading={() => jest.fn()}
-        />
-      );
-    });
-    await waitForElement(
-      wrapper,
-      'button[aria-label="Run Command"]',
-      (el) => el.length === 1
-    );
-    await act(async () =>
-      wrapper.find('button[aria-label="Run Command"]').prop('onClick')()
-    );
+    await user.click(runButton);
 
-    wrapper.update();
-
-    expect(wrapper.find('AdHocCommandsWizard').length).toBe(1);
+    // the wizard renders its title once open
+    expect(await screen.findByText('Run command')).toBeInTheDocument();
+    // settle the Run Command button's tooltip timers before unmount
+    await settleTooltips();
   });
 
   test('should submit properly', async () => {
@@ -129,7 +152,6 @@ describe('<AdHocCommands />', () => {
     InventoriesAPI.readDetail.mockResolvedValue({
       data: { organization: 1 },
     });
-
     CredentialsAPI.read.mockResolvedValue({
       data: {
         results: credentials,
@@ -139,117 +161,37 @@ describe('<AdHocCommands />', () => {
     CredentialsAPI.readOptions.mockResolvedValue({
       data: { actions: { GET: {} } },
     });
-
-    ExecutionEnvironmentsAPI.read.mockResolvedValue({
-      data: {
-        results: [
-          { id: 1, name: 'EE1 1', url: 'wwww.google.com' },
-          { id: 2, name: 'EE2', url: 'wwww.google.com' },
-        ],
-        count: 2,
-      },
+    const { user } = renderAdHoc();
+    const runButton = await screen.findByRole('button', {
+      name: 'Run Command',
     });
-    ExecutionEnvironmentsAPI.readOptions.mockResolvedValue({
-      data: { actions: { GET: {}, POST: {} } },
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <AdHocCommands
-          adHocItems={adHocItems}
-          hasListItems
-          moduleOptions={[
-            ['command', 'command'],
-            ['foo', 'foo'],
-          ]}
-          onLaunchLoading={() => jest.fn()}
-        />
-      );
-    });
-    await waitForElement(
-      wrapper,
-      'button[aria-label="Run Command"]',
-      (el) => el.length === 1
-    );
-    await act(async () =>
-      wrapper.find('button[aria-label="Run Command"]').prop('onClick')()
-    );
-    wrapper.update();
-
-    await act(async () => {
-      wrapper.find('AnsibleSelect[name="module_name"]').prop('onChange')(
-        {},
-        'command'
-      );
-      wrapper.find('input#module_args').simulate('change', {
-        target: { value: 'foo', name: 'module_args' },
-      });
-      wrapper.find('AnsibleSelect[name="verbosity"]').prop('onChange')({}, 1);
-    });
-
-    wrapper.update();
-
-    expect(wrapper.find('Button[type="submit"]').prop('isDisabled')).toBe(
-      false
-    );
-    await act(async () =>
-      wrapper.find('Button[type="submit"]').prop('onClick')()
-    );
-    await waitForElement(wrapper, 'ContentEmpty', (el) => el.length === 0);
-
-    // second step of wizard
-
-    await act(async () => {
-      wrapper.find('td#check-action-item-2').find('input').simulate('click');
-    });
-
-    wrapper.update();
-
-    expect(
-      wrapper.find('CheckboxListItem[label="EE2"]').prop('isSelected')
-    ).toBe(true);
-
-    await act(async () =>
-      wrapper.find('Button[type="submit"]').prop('onClick')()
-    );
-    // third step of wizard
-    await waitForElement(wrapper, 'ContentEmpty', (el) => el.length === 0);
-
-    await act(async () => {
-      wrapper.find('td#check-action-item-4').find('input').simulate('click');
-    });
-
-    wrapper.update();
-
-    expect(
-      wrapper.find('CheckboxListItem[label="Cred 4"]').prop('isSelected')
-    ).toBe(true);
-
-    await act(async () =>
-      wrapper.find('Button[type="submit"]').prop('onClick')()
-    );
-    wrapper.update();
-
-    // fourth step
-    await act(async () =>
-      wrapper.find('Button[type="submit"]').prop('onClick')()
+    await user.click(runButton);
+    await waitFor(() =>
+      expect(document.querySelector('#module_name')).toBeInTheDocument()
     );
 
-    expect(InventoriesAPI.launchAdHocCommands).toHaveBeenCalledWith(1, {
-      module_args: 'foo',
-      diff_mode: false,
-      credential: 4,
-      become_password: undefined,
-      job_type: 'run',
-      become_enabled: '',
-      extra_vars: '---',
-      forks: 0,
-      limit: 'Inventory 1 Org 0, Inventory 2 Org 0',
-      module_name: 'command',
-      ssh_key_unlock: undefined,
-      ssh_password: undefined,
-      verbosity: 1,
-      execution_environment: 2,
-    });
+    await runWizardToLaunch(user);
+
+    await waitFor(() =>
+      expect(InventoriesAPI.launchAdHocCommands).toHaveBeenCalledWith(1, {
+        module_args: 'foo',
+        diff_mode: false,
+        credential: 4,
+        become_password: undefined,
+        job_type: 'run',
+        become_enabled: '',
+        extra_vars: '---',
+        forks: 0,
+        limit: 'Inventory 1 Org 0, Inventory 2 Org 0',
+        module_name: 'command',
+        ssh_key_unlock: undefined,
+        ssh_password: undefined,
+        verbosity: '1',
+        execution_environment: 2,
+      })
+    );
+    // launch navigates away, unmounting the tooltip-wrapped Run Command button
+    await settleTooltips();
   });
 
   test('should throw error on submission properly', async () => {
@@ -268,15 +210,6 @@ describe('<AdHocCommands />', () => {
     InventoriesAPI.readDetail.mockResolvedValue({
       data: { organization: 1 },
     });
-    CredentialTypesAPI.read.mockResolvedValue({
-      data: {
-        results: [
-          {
-            id: 1,
-          },
-        ],
-      },
-    });
     CredentialsAPI.read.mockResolvedValue({
       data: {
         results: credentials,
@@ -286,138 +219,37 @@ describe('<AdHocCommands />', () => {
     CredentialsAPI.readOptions.mockResolvedValue({
       data: { actions: { GET: {} } },
     });
-
-    ExecutionEnvironmentsAPI.read.mockResolvedValue({
-      data: {
-        results: [
-          {
-            id: 1,
-            name: 'EE1 1',
-            url: 'wwww.google.com',
-          },
-          {
-            id: 2,
-            name: 'EE2',
-            url: 'wwww.google.com',
-          },
-        ],
-        count: 2,
-      },
+    const { user } = renderAdHoc();
+    const runButton = await screen.findByRole('button', {
+      name: 'Run Command',
     });
-    ExecutionEnvironmentsAPI.readOptions.mockResolvedValue({
-      data: { actions: { GET: {}, POST: {} } },
-    });
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <AdHocCommands
-          adHocItems={adHocItems}
-          moduleOptions={[
-            ['command', 'command'],
-            ['foo', 'foo'],
-          ]}
-          hasListItems
-          onLaunchLoading={() => jest.fn()}
-        />
-      );
-    });
-    await waitForElement(
-      wrapper,
-      'button[aria-label="Run Command"]',
-      (el) => el.length === 1
-    );
-    await act(async () =>
-      wrapper.find('button[aria-label="Run Command"]').prop('onClick')()
-    );
-    wrapper.update();
-
-    await act(async () => {
-      wrapper.find('AnsibleSelect[name="module_name"]').prop('onChange')(
-        {},
-        'command'
-      );
-      wrapper.find('input#module_args').simulate('change', {
-        target: {
-          value: 'foo',
-          name: 'module_args',
-        },
-      });
-      wrapper.find('AnsibleSelect[name="verbosity"]').prop('onChange')({}, 1);
-    });
-
-    wrapper.update();
-
-    expect(wrapper.find('Button[type="submit"]').prop('isDisabled')).toBe(
-      false
+    await user.click(runButton);
+    await waitFor(() =>
+      expect(document.querySelector('#module_name')).toBeInTheDocument()
     );
 
-    await act(async () =>
-      wrapper.find('Button[type="submit"]').prop('onClick')()
+    await runWizardToLaunch(user);
+
+    // the failed launch surfaces an AlertModal with ErrorDetail
+    await waitFor(() =>
+      expect(screen.getByText('Failed to launch job.')).toBeInTheDocument()
     );
-
-    await waitForElement(wrapper, 'ContentEmpty', (el) => el.length === 0);
-
-    // second step of wizard
-
-    await act(async () => {
-      wrapper.find('td#check-action-item-2').find('input').simulate('click');
-    });
-
-    wrapper.update();
-
     expect(
-      wrapper.find('CheckboxListItem[label="EE2"]').prop('isSelected')
-    ).toBe(true);
-
-    await act(async () =>
-      wrapper.find('Button[type="submit"]').prop('onClick')()
-    );
-    // third step of wizard
-    await waitForElement(wrapper, 'ContentEmpty', (el) => el.length === 0);
-
-    await act(async () => {
-      wrapper.find('td#check-action-item-4').find('input').simulate('click');
-    });
-
-    wrapper.update();
-
-    expect(
-      wrapper.find('CheckboxListItem[label="Cred 4"]').prop('isSelected')
-    ).toBe(true);
-
-    await act(async () =>
-      wrapper.find('Button[type="submit"]').prop('onClick')()
-    );
-    wrapper.update();
-
-    // fourth step of wizard
-
-    await act(async () =>
-      wrapper.find('Button[type="submit"]').prop('onClick')()
-    );
-    await waitForElement(wrapper, 'ErrorDetail', (el) => el.length > 0);
+      screen.getByRole('button', { name: 'Details' })
+    ).toBeInTheDocument();
+    await settleTooltips();
   });
 
   test('should disable run command button due to lack of list items', async () => {
     InventoriesAPI.readHosts.mockResolvedValue({
       data: { results: [], count: 0 },
     });
-
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <AdHocCommands
-          moduleOptions={[
-            ['command', 'command'],
-            ['foo', 'foo'],
-          ]}
-          adHocItems={adHocItems}
-          hasListItems={false}
-          onLaunchLoading={() => jest.fn()}
-        />
-      );
+    renderAdHoc({ hasListItems: false });
+    const runButton = await screen.findByRole('button', {
+      name: 'Run Command',
     });
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
-    const runCommandsButton = wrapper.find('button[aria-label="Run Command"]');
-    expect(runCommandsButton.prop('disabled')).toBe(true);
+    expect(runButton).toBeDisabled();
+    await settleTooltips();
   });
 
   test('should open alert modal when error on fetching data', async () => {
@@ -433,21 +265,19 @@ describe('<AdHocCommands />', () => {
         },
       })
     );
-    await act(async () => {
-      wrapper = mountWithContexts(
-        <AdHocCommands
-          moduleOptions={[
-            ['command', 'command'],
-            ['foo', 'foo'],
-          ]}
-          adHocItems={adHocItems}
-          hasListItems
-          onLaunchLoading={() => jest.fn()}
-        />
-      );
+    renderAdHoc();
+    const runButton = await screen.findByRole('button', {
+      name: 'Run Command',
     });
-    await act(async () => wrapper.find('button').prop('onClick')());
-    wrapper.update();
-    expect(wrapper.find('ErrorDetail').length).toBe(1);
+    // fireEvent (not userEvent) avoids focusing the button, so its tooltip
+    // hover/focus timer is not scheduled before the fetch error swaps the
+    // button out for the AlertModal (which would log an unmount warning).
+    fireEvent.click(runButton);
+
+    // a fetch error while the wizard is open renders the ContentError alert
+    await waitFor(() =>
+      expect(screen.getByText('Something went wrong...')).toBeInTheDocument()
+    );
+    await settleTooltips();
   });
 });
