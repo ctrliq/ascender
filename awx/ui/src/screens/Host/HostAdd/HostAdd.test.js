@@ -1,8 +1,8 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { HostsAPI } from 'api';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import HostAdd from './HostAdd';
 
 jest.mock('../../../api');
@@ -17,11 +17,43 @@ const hostData = {
   variables: '---\nfoo: bar',
 };
 
+// Mock the shared HostForm: a Save button invokes handleSubmit with the
+// provided test payload, a Cancel button invokes handleCancel, and the
+// submitError prop renders so the error branch can be asserted.
+jest.mock('components/HostForm', () => {
+  const ReactLib = require('react');
+  return {
+    __esModule: true,
+    default: ({ handleSubmit, handleCancel, submitError }) =>
+      ReactLib.createElement(
+        'div',
+        null,
+        ReactLib.createElement(
+          'button',
+          {
+            type: 'button',
+            'aria-label': 'Save',
+            onClick: () => handleSubmit(global.__hostFormSubmitData),
+          },
+          'Save'
+        ),
+        ReactLib.createElement(
+          'button',
+          { type: 'button', 'aria-label': 'Cancel', onClick: handleCancel },
+          'Cancel'
+        ),
+        submitError
+          ? ReactLib.createElement('div', null, 'FormSubmitError')
+          : null
+      ),
+  };
+});
+
 describe('<HostAdd />', () => {
-  let wrapper;
   let history;
 
-  beforeEach(async () => {
+  beforeEach(() => {
+    global.__hostFormSubmitData = hostData;
     history = createMemoryHistory({
       initialEntries: ['/templates/job_templates/1/survey/edit/foo'],
       state: { some: 'state' },
@@ -32,37 +64,39 @@ describe('<HostAdd />', () => {
         id: 5,
       },
     });
-    await act(async () => {
-      wrapper = mountWithContexts(<HostAdd />, {
-        context: { router: { history } },
-      });
-    });
   });
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  test('handleSubmit should post to api', async () => {
-    await act(async () => {
-      wrapper.find('HostForm').prop('handleSubmit')(hostData);
+  function render() {
+    return renderWithContexts(<HostAdd />, {
+      context: { router: { history } },
     });
-    expect(HostsAPI.create).toHaveBeenCalledWith({ ...hostData, inventory: 1 });
+  }
+
+  test('handleSubmit should post to api', async () => {
+    const { user } = render();
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    await waitFor(() =>
+      expect(HostsAPI.create).toHaveBeenCalledWith({ ...hostData, inventory: 1 })
+    );
   });
 
   test('should navigate to hosts list when cancel is clicked', async () => {
-    await act(async () => {
-      wrapper.find('button[aria-label="Cancel"]').prop('onClick')();
-    });
+    const { user } = render();
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
     expect(history.location.pathname).toEqual('/hosts');
   });
 
   test('successful form submission should trigger redirect', async () => {
-    await act(async () => {
-      wrapper.find('HostForm').invoke('handleSubmit')(hostData);
-    });
-    expect(wrapper.find('FormSubmitError').length).toBe(0);
-    expect(history.location.pathname).toEqual('/hosts/5/details');
+    const { user } = render();
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual('/hosts/5/details')
+    );
+    expect(screen.queryByText('FormSubmitError')).not.toBeInTheDocument();
   });
 
   test('failed form submission should show an error message', async () => {
@@ -72,10 +106,8 @@ describe('<HostAdd />', () => {
       },
     };
     HostsAPI.create.mockImplementationOnce(() => Promise.reject(error));
-    await act(async () => {
-      wrapper.find('HostForm').invoke('handleSubmit')(hostData);
-    });
-    wrapper.update();
-    expect(wrapper.find('FormSubmitError').length).toBe(1);
+    const { user } = render();
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    expect(await screen.findByText('FormSubmitError')).toBeInTheDocument();
   });
 });

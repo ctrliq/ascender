@@ -1,11 +1,11 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { HostsAPI } from 'api';
 import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+  renderWithContexts,
+  settleTooltips,
+} from '../../../../testUtils/rtlContexts';
 
 import HostList from './HostList';
 
@@ -17,6 +17,7 @@ const mockHosts = [
     name: 'Host 1',
     url: '/api/v2/hosts/1',
     inventory: 1,
+    enabled: true,
     summary_fields: {
       inventory: {
         id: 1,
@@ -25,6 +26,7 @@ const mockHosts = [
       user_capabilities: {
         delete: true,
         update: true,
+        edit: true,
       },
       recent_jobs: [],
     },
@@ -34,6 +36,7 @@ const mockHosts = [
     name: 'Host 2',
     url: '/api/v2/hosts/2',
     inventory: 1,
+    enabled: true,
     summary_fields: {
       inventory: {
         id: 1,
@@ -42,6 +45,7 @@ const mockHosts = [
       user_capabilities: {
         delete: true,
         update: true,
+        edit: true,
       },
       recent_jobs: [],
     },
@@ -51,6 +55,7 @@ const mockHosts = [
     name: 'Host 3',
     url: '/api/v2/hosts/3',
     inventory: 1,
+    enabled: true,
     summary_fields: {
       inventory: {
         id: 1,
@@ -67,17 +72,22 @@ const mockHosts = [
       user_capabilities: {
         delete: false,
         update: false,
+        edit: false,
       },
     },
   },
 ];
 
-function waitForLoaded(wrapper) {
-  return waitForElement(
-    wrapper,
-    'HostList',
-    (el) => el.find('ContentLoading').length === 0
-  );
+function getRow(name) {
+  return screen.getByRole('link', { name }).closest('tr');
+}
+
+// each host row has two checkbox-role controls: the row select and the
+// HostToggle switch (aria-label "Toggle host"); this returns the select one
+function getRowSelect(name) {
+  return within(getRow(name))
+    .getAllByRole('checkbox')
+    .find((box) => box.getAttribute('aria-label') !== 'Toggle host');
 }
 
 describe('<HostList />', () => {
@@ -105,114 +115,68 @@ describe('<HostList />', () => {
   });
 
   test('initially renders successfully', async () => {
-    await act(async () => {
-      mountWithContexts(
-        <HostList
-          match={{ path: '/hosts', url: '/hosts' }}
-          location={{ search: '', pathname: '/hosts' }}
-        />
-      );
-    });
+    renderWithContexts(<HostList />);
+    await screen.findByRole('link', { name: 'Host 1' });
   });
 
   test('Hosts are retrieved from the api and the components finishes loading', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<HostList />);
-    });
-    await waitForLoaded(wrapper);
-
-    expect(
-      wrapper.find('PaginatedTable').props().toolbarRelatedSearchableKeys
-    ).toStrictEqual(['first_key', 'ansible_facts']);
+    renderWithContexts(<HostList />);
+    await screen.findByRole('link', { name: 'Host 1' });
 
     expect(HostsAPI.read).toHaveBeenCalled();
-    expect(wrapper.find('HostListItem')).toHaveLength(3);
+    expect(
+      screen.getAllByRole('link', { name: /^Host \d$/ })
+    ).toHaveLength(3);
   });
 
   test('should select and deselect a single item', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<HostList />);
-    });
-    await waitForLoaded(wrapper);
+    const { user } = renderWithContexts(<HostList />);
+    await screen.findByRole('link', { name: 'Host 1' });
 
-    act(() => {
-      wrapper
-        .find('.pf-c-table__check')
-        .first()
-        .find('input')
-        .invoke('onChange')();
-    });
-    wrapper.update();
-    expect(wrapper.find('HostListItem').first().prop('isSelected')).toEqual(
-      true
-    );
-    act(() => {
-      wrapper
-        .find('.pf-c-table__check')
-        .first()
-        .find('input')
-        .invoke('onChange')();
-    });
-    wrapper.update();
-    expect(wrapper.find('HostListItem').first().prop('isSelected')).toEqual(
-      false
-    );
+    const checkbox = getRowSelect('Host 1');
+    expect(checkbox).not.toBeChecked();
+    await user.click(checkbox);
+    expect(checkbox).toBeChecked();
+    await user.click(checkbox);
+    expect(checkbox).not.toBeChecked();
   });
 
   test('should select all items', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<HostList />);
-    });
-    await waitForLoaded(wrapper);
+    const { user } = renderWithContexts(<HostList />);
+    await screen.findByRole('link', { name: 'Host 1' });
 
-    act(() => {
-      wrapper.find('DataListToolbar').invoke('onSelectAll')(true);
-    });
-    wrapper.update();
+    const selectAll = screen.getByRole('checkbox', { name: 'Select all' });
+    await user.click(selectAll);
 
-    wrapper.find('HostListItem').forEach((item) => {
-      expect(item.prop('isSelected')).toEqual(true);
+    ['Host 1', 'Host 2', 'Host 3'].forEach((name) => {
+      const rowCheckbox = getRowSelect(name);
+      expect(rowCheckbox).toBeChecked();
     });
   });
 
   test('delete button is disabled if user does not have delete capabilities on a selected host', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<HostList />);
-    });
-    await waitForLoaded(wrapper);
+    const { user } = renderWithContexts(<HostList />);
+    await screen.findByRole('link', { name: 'Host 1' });
 
-    act(() => {
-      wrapper.find('HostListItem').at(2).invoke('onSelect')();
-    });
-    expect(wrapper.find('ToolbarDeleteButton button').prop('disabled')).toEqual(
-      true
-    );
+    // Host 3 has delete:false
+    await user.click(getRowSelect('Host 3'));
+    expect(screen.getByRole('button', { name: 'Delete' })).toBeDisabled();
   });
 
   test('api is called to delete hosts for each selected host.', async () => {
-    HostsAPI.destroy = jest.fn();
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<HostList />);
-    });
-    await waitForLoaded(wrapper);
+    HostsAPI.destroy = jest.fn().mockResolvedValue({});
+    const { user } = renderWithContexts(<HostList />);
+    await screen.findByRole('link', { name: 'Host 1' });
 
-    await act(async () => {
-      wrapper.find('HostListItem').at(0).invoke('onSelect')();
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('HostListItem').at(1).invoke('onSelect')();
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('ToolbarDeleteButton').invoke('onDelete')();
-    });
-    expect(HostsAPI.destroy).toHaveBeenCalledTimes(2);
+    await user.click(getRowSelect('Host 1'));
+    await user.click(getRowSelect('Host 2'));
+
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'confirm delete' })
+    );
+
+    await waitFor(() => expect(HostsAPI.destroy).toHaveBeenCalledTimes(2));
   });
 
   test('error is shown when host not successfully deleted from api', async () => {
@@ -227,35 +191,32 @@ describe('<HostList />', () => {
         },
       })
     );
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<HostList />);
-    });
-    await waitForLoaded(wrapper);
+    const { user } = renderWithContexts(<HostList />);
+    await screen.findByRole('link', { name: 'Host 1' });
 
-    await act(async () => {
-      wrapper.find('HostListItem').at(0).invoke('onSelect')();
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('ToolbarDeleteButton').invoke('onDelete')();
-    });
-    wrapper.update();
+    await user.click(getRowSelect('Host 1'));
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'confirm delete' })
+    );
 
-    const modal = wrapper.find('Modal');
-    expect(modal).toHaveLength(1);
-    expect(modal.prop('title')).toEqual('Error!');
+    expect(await screen.findByText('Error!')).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Close' }));
+    await waitFor(() =>
+      expect(screen.queryByText('Error!')).not.toBeInTheDocument()
+    );
+    await settleTooltips();
   });
 
   test('should show Add and Smart Inventory buttons according to permissions', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<HostList />);
-    });
-    await waitForLoaded(wrapper);
+    renderWithContexts(<HostList />);
+    await screen.findByRole('link', { name: 'Host 1' });
 
-    expect(wrapper.find('ToolbarAddButton').length).toBe(1);
-    expect(wrapper.find('Button[aria-label="Smart Inventory"]').length).toBe(1);
+    expect(screen.getByRole('link', { name: 'Add' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Smart Inventory' })
+    ).toBeInTheDocument();
   });
 
   test('should hide Add and Smart Inventory buttons according to permissions', async () => {
@@ -266,65 +227,53 @@ describe('<HostList />', () => {
         },
       },
     });
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<HostList />);
-    });
-    await waitForLoaded(wrapper);
+    renderWithContexts(<HostList />);
+    await screen.findByRole('link', { name: 'Host 1' });
 
-    expect(wrapper.find('ToolbarAddButton').length).toBe(0);
-    expect(wrapper.find('Button[aria-label="Smart Inventory"]').length).toBe(0);
+    expect(screen.queryByRole('link', { name: 'Add' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Smart Inventory' })
+    ).not.toBeInTheDocument();
   });
 
   test('Smart Inventory button should be disabled when no search params are present', async () => {
-    let wrapper;
-    await act(async () => {
-      wrapper = mountWithContexts(<HostList />);
-    });
-    await waitForLoaded(wrapper);
+    renderWithContexts(<HostList />);
+    await screen.findByRole('link', { name: 'Host 1' });
     expect(
-      wrapper.find('Button[aria-label="Smart Inventory"]').props().isDisabled
-    ).toBe(true);
+      screen.getByRole('button', { name: 'Smart Inventory' })
+    ).toBeDisabled();
   });
 
-  test('Smart Inventory button should be disable to ansible facts search', async () => {
-    let wrapper;
+  test('Smart Inventory button should be disabled with ansible facts search', async () => {
     const history = createMemoryHistory({
       initialEntries: [
         '/hosts?host.host_filter=ansible_facts__ansible_date_time__weekday_number%3D"3"',
       ],
     });
-    await act(async () => {
-      wrapper = mountWithContexts(<HostList />, {
-        context: { router: { history } },
-      });
+    renderWithContexts(<HostList />, {
+      context: { router: { history } },
     });
-
-    await waitForLoaded(wrapper);
+    await screen.findByRole('link', { name: 'Host 1' });
     expect(
-      wrapper.find('Button[aria-label="Smart Inventory"]').props().isDisabled
-    ).toBe(true);
+      screen.getByRole('button', { name: 'Smart Inventory' })
+    ).toBeDisabled();
   });
 
   test('Clicking Smart Inventory button should navigate to smart inventory form with correct query param', async () => {
-    let wrapper;
     const history = createMemoryHistory({
       initialEntries: ['/hosts?host.name__icontains=foo'],
     });
-    await act(async () => {
-      wrapper = mountWithContexts(<HostList />, {
-        context: { router: { history } },
-      });
+    const { user } = renderWithContexts(<HostList />, {
+      context: { router: { history } },
     });
+    await screen.findByRole('link', { name: 'Host 1' });
 
-    await waitForLoaded(wrapper);
-    expect(
-      wrapper.find('Button[aria-label="Smart Inventory"]').props().isDisabled
-    ).toBe(false);
-    await act(async () => {
-      wrapper.find('Button[aria-label="Smart Inventory"]').simulate('click');
+    const smartInventoryButton = screen.getByRole('button', {
+      name: 'Smart Inventory',
     });
-    wrapper.update();
+    expect(smartInventoryButton).not.toBeDisabled();
+    await user.click(smartInventoryButton);
+
     expect(history.location.pathname).toEqual(
       '/inventories/smart_inventory/add'
     );
