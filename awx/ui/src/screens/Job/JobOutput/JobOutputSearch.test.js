@@ -1,7 +1,7 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import JobOutputSearch from './JobOutputSearch';
 
 jest.mock('react-router-dom', () => ({
@@ -11,92 +11,103 @@ jest.mock('react-router-dom', () => ({
   }),
 }));
 
+const qsConfig = {
+  defaultParams: { page: 1 },
+  integerFields: ['page', 'page_size'],
+};
+
+// The column dropdown is the Search "Simple key select" (ouiaId). The single
+// Select keeps the currently-selected column in its toggle text and lists only
+// the remaining columns as options, so the full set is the selected toggle
+// value followed by the option labels.
+async function getColumnNames(user) {
+  const select = document.querySelector(
+    '[data-ouia-component-id="simple-key-select"]'
+  );
+  const toggle = select.querySelector('button');
+  const selected = select.querySelector('.pf-c-select__toggle-text')
+    .textContent;
+  await user.click(toggle);
+  const listbox = await screen.findByRole('listbox');
+  const options = within(listbox)
+    .getAllByRole('option')
+    .map((o) => o.textContent);
+  await user.click(toggle);
+  return [selected, ...options];
+}
+
 describe('JobOutputSearch', () => {
   test('should update url query params', async () => {
-    const searchBtn = 'button[aria-label="Search submit button"]';
-    const searchTextInput = 'input[aria-label="Search text input"]';
     const history = createMemoryHistory({
       initialEntries: ['/jobs/playbook/1/output'],
     });
 
-    const wrapper = mountWithContexts(
+    const { user } = renderWithContexts(
       <JobOutputSearch
         job={{
           status: 'successful',
           type: 'project',
         }}
-        qsConfig={{
-          defaultParams: { page: 1 },
-          integerFields: ['page', 'page_size'],
-        }}
+        qsConfig={qsConfig}
       />,
       {
         context: { router: { history } },
       }
     );
 
-    await act(async () => {
-      wrapper.find(searchTextInput).instance().value = '99';
-      wrapper.find(searchTextInput).simulate('change');
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find(searchBtn).simulate('click');
-    });
-    expect(wrapper.find('Search').prop('columns')).toHaveLength(3);
-    expect(wrapper.find('Search').prop('columns')[0].name).toBe('Stdout');
-    expect(wrapper.find('Search').prop('columns')[1].name).toBe('Event');
-    expect(wrapper.find('Search').prop('columns')[2].name).toBe('Advanced');
-    expect(history.location.search).toEqual('?stdout__icontains=99');
+    const input = screen.getByLabelText('Search text input');
+    await user.type(input, '99');
+    await user.click(
+      screen.getByRole('button', { name: 'Search submit button' })
+    );
+
+    const names = await getColumnNames(user);
+    expect(names).toEqual(['Stdout', 'Event', 'Advanced']);
+
+    await waitFor(() =>
+      expect(history.location.search).toEqual('?stdout__icontains=99')
+    );
   });
-  test('Should not have Event key in search drop down for system job', () => {
+
+  test('Should not have Event key in search drop down for system job', async () => {
     const history = createMemoryHistory({
       initialEntries: ['/jobs/playbook/1/output'],
     });
 
-    const wrapper = mountWithContexts(
+    const { user } = renderWithContexts(
       <JobOutputSearch
         job={{
           status: 'successful',
           type: 'system_job',
         }}
-        qsConfig={{
-          defaultParams: { page: 1 },
-          integerFields: ['page', 'page_size'],
-        }}
+        qsConfig={qsConfig}
       />,
       {
         context: { router: { history } },
       }
     );
-    expect(wrapper.find('Search').prop('columns')).toHaveLength(2);
-    expect(wrapper.find('Search').prop('columns')[0].name).toBe('Stdout');
-    expect(wrapper.find('Search').prop('columns')[1].name).toBe('Advanced');
+
+    expect(await getColumnNames(user)).toEqual(['Stdout', 'Advanced']);
   });
 
-  test('Should not have Event key in search drop down for inventory update job', () => {
+  test('Should not have Event key in search drop down for inventory update job', async () => {
     const history = createMemoryHistory({
       initialEntries: ['/jobs/playbook/1/output'],
     });
 
-    const wrapper = mountWithContexts(
+    const { user } = renderWithContexts(
       <JobOutputSearch
         job={{
           status: 'successful',
           type: 'inventory_update',
         }}
-        qsConfig={{
-          defaultParams: { page: 1 },
-          integerFields: ['page', 'page_size'],
-        }}
+        qsConfig={qsConfig}
       />,
       {
         context: { router: { history } },
       }
     );
 
-    expect(wrapper.find('Search').prop('columns')).toHaveLength(2);
-    expect(wrapper.find('Search').prop('columns')[0].name).toBe('Stdout');
-    expect(wrapper.find('Search').prop('columns')[1].name).toBe('Advanced');
+    expect(await getColumnNames(user)).toEqual(['Stdout', 'Advanced']);
   });
 });

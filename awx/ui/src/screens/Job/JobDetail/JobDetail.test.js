@@ -1,50 +1,40 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import { JobsAPI, ProjectUpdatesAPI } from 'api';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { JobsAPI } from 'api';
+import {
+  renderWithContexts,
+  assertDetail,
+} from '../../../../testUtils/rtlContexts';
 import JobDetail from './JobDetail';
 import mockJobData from '../shared/data.job.json';
 
 jest.mock('../../../api');
 
-describe('<JobDetail />', () => {
-  let wrapper;
-  function assertDetail(label, value) {
-    const detailComponent = wrapper.find(`Detail[label="${label}"]`);
-    expect(detailComponent).toHaveLength(1);
-    expect(detailComponent.prop('label')).toBe(label);
-    
-    const actualValue = detailComponent.prop('value');
-    
-    // If the value is a React element, check if it renders the expected text
-    if (typeof actualValue === 'object' && actualValue !== null) {
-      // For React elements, get the text content instead of raw HTML
-      const renderedValue = wrapper.find(`Detail[label="${label}"]`);
-      const textContent = renderedValue.text();
-      
-      if (typeof value === 'string') {
-        expect(textContent).toContain(value);
-      } else {
-        // If both are objects, do a shallow comparison
-        expect(actualValue).toEqual(value);
-      }
-    } else if (actualValue === '' || actualValue === null || actualValue === undefined) {
-      // Skip assertion for empty values that might be due to i18n issues
-      // This typically happens with fields that depend on translation functions
-      return;
-    } else {
-      // For simple values, compare as strings
-      expect(String(actualValue)).toBe(String(value));
-    }
-  }
+// The OutputToolbar-style action buttons here are tooltip-free, but the
+// CredentialChip/labels and AlertModal still pull in PF Tooltips; rendering
+// Tooltip as a passthrough avoids stray entry-timer state updates after the
+// tree unmounts (jsdom measures tooltips at 0 size). No test asserts tooltip
+// content.
+jest.mock('@patternfly/react-core', () => {
+  const actual = jest.requireActual('@patternfly/react-core');
+  return {
+    ...actual,
+    Tooltip: ({ children }) => children,
+  };
+});
 
+// Detail renders <dt>label</dt> as a sibling of its <dd>value</dd>; this scopes
+// to the value cell of a given label.
+const detailValue = (label) => screen.getByText(label).nextElementSibling;
+
+describe('<JobDetail />', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
 
   test('should display details', () => {
-    wrapper = mountWithContexts(
+    renderWithContexts(
       <JobDetail
         job={{
           ...mockJobData,
@@ -68,25 +58,25 @@ describe('<JobDetail />', () => {
       />
     );
 
-    // StatusIcon adds visibly hidden accessibility text " successful "
     assertDetail('Job ID', '2');
-    expect(wrapper.find(`Detail[label="Status"] dd`).text()).toContain(
-      'Successful'
-    );
-    expect(wrapper.find(`Detail[label="Status"] dd`).text()).toContain(
+    expect(detailValue('Status')).toHaveTextContent('Successful');
+    expect(detailValue('Status')).toHaveTextContent(
       'Job explanation placeholder'
     );
     assertDetail('Started', '8/8/2019, 7:24:18 PM');
     assertDetail('Finished', '8/8/2019, 7:24:50 PM');
     assertDetail('Job Template', mockJobData.summary_fields.job_template.name);
-    assertDetail('Source Workflow Job', `1234 - Test Source Workflow`);
+    assertDetail('Source Workflow Job', '1234 - Test Source Workflow');
     assertDetail('Job Type', 'Playbook Run');
     assertDetail('Launched By', mockJobData.summary_fields.created_by.username);
     assertDetail('Inventory', mockJobData.summary_fields.inventory.name);
     assertDetail('Project', mockJobData.summary_fields.project.name);
     assertDetail('Revision', mockJobData.scm_revision);
     assertDetail('Playbook', mockJobData.playbook);
-    assertDetail('Verbosity', '0 (Normal)');
+    // Verbosity is omitted: VERBOSITY(t)['0 (Normal)'] resolves to an empty
+    // string under the test i18n catalog, so the Detail renders nothing (the
+    // original enzyme test's custom assertDetail explicitly skipped empty
+    // values, making this a no-op there too).
     assertDetail('Execution Node', mockJobData.execution_node);
     assertDetail(
       'Instance Group',
@@ -95,44 +85,28 @@ describe('<JobDetail />', () => {
     assertDetail('Credentials', 'SSH: Demo Credential');
     assertDetail('Machine Credential', 'SSH: Machine cred');
     assertDetail('Source Control Branch', 'main');
-
     assertDetail(
       'Execution Environment',
       mockJobData.summary_fields.execution_environment.name
     );
-
     assertDetail('Job Slice', '0/1');
     assertDetail('Forks', '42');
 
-    const credentialChip = wrapper.find(
-      `Detail[label="Credentials"] CredentialChip`
+    // The Credentials chip renders the credential name.
+    expect(detailValue('Credentials')).toHaveTextContent('Demo Credential');
+
+    // Job Tags / Skip Tags render their values as chips.
+    expect(detailValue('Job Tags')).toHaveTextContent('a');
+    expect(detailValue('Job Tags')).toHaveTextContent('b');
+    expect(detailValue('Skip Tags')).toHaveTextContent('c');
+    expect(detailValue('Skip Tags')).toHaveTextContent('d');
+
+    // Both job status and project-update status render a StatusLabel reading
+    // "Successful".
+    expect(detailValue('Status')).toHaveTextContent('Successful');
+    expect(detailValue('Project Update Status')).toHaveTextContent(
+      'Successful'
     );
-    expect(credentialChip.prop('credential')).toEqual(
-      mockJobData.summary_fields.credentials[0]
-    );
-
-    expect(
-      wrapper
-        .find('Detail[label="Job Tags"]')
-        .containsAnyMatchingElements([<span>a</span>, <span>b</span>])
-    ).toEqual(true);
-
-    expect(
-      wrapper
-        .find('Detail[label="Skip Tags"]')
-        .containsAnyMatchingElements([<span>c</span>, <span>d</span>])
-    ).toEqual(true);
-
-    const statusDetail = wrapper.find('Detail[label="Status"]');
-    const statusLabel = statusDetail.find('StatusLabel');
-    expect(statusLabel.prop('status')).toEqual('successful');
-
-    const projectStatusDetail = wrapper.find(
-      'Detail[label="Project Update Status"]'
-    );
-    expect(projectStatusDetail.find('StatusLabel')).toHaveLength(1);
-    const projectStatusLabel = statusDetail.find('StatusLabel');
-    expect(projectStatusLabel.prop('status')).toEqual('successful');
   });
 
   test('should display Deleted for Inventory and Project for job type run', () => {
@@ -147,13 +121,14 @@ describe('<JobDetail />', () => {
       inventory: null,
     };
 
-    wrapper = mountWithContexts(<JobDetail job={job} />);
-    expect(wrapper.find(`DeletedDetail[label="Project"]`).length).toBe(1);
-    expect(wrapper.find(`DeletedDetail[label="Inventory"]`).length).toBe(1);
+    renderWithContexts(<JobDetail job={job} />);
+    // DeletedDetail renders the label with a "Deleted" value.
+    expect(detailValue('Project')).toHaveTextContent('Deleted');
+    expect(detailValue('Inventory')).toHaveTextContent('Deleted');
   });
 
   test('should not display finished date', () => {
-    wrapper = mountWithContexts(
+    renderWithContexts(
       <JobDetail
         job={{
           ...mockJobData,
@@ -161,11 +136,11 @@ describe('<JobDetail />', () => {
         }}
       />
     );
-    expect(wrapper.find(`Detail[label="Finished"]`).length).toBe(0);
+    expect(screen.queryByText('Finished')).not.toBeInTheDocument();
   });
 
   test('should display module name and module arguments', () => {
-    wrapper = mountWithContexts(
+    renderWithContexts(
       <JobDetail
         job={{
           ...mockJobData,
@@ -194,11 +169,11 @@ describe('<JobDetail />', () => {
     assertDetail('Module Name', 'command');
     assertDetail('Module Arguments', 'echo hello_world');
     assertDetail('Job Type', 'Run Command');
-    expect(wrapper.find(`Detail[label="Project"]`).length).toBe(0);
+    expect(screen.queryByText('Project')).not.toBeInTheDocument();
   });
 
   test('should display source data', () => {
-    wrapper = mountWithContexts(
+    renderWithContexts(
       <JobDetail
         job={{
           ...mockJobData,
@@ -231,11 +206,11 @@ describe('<JobDetail />', () => {
       />
     );
     assertDetail('Source', 'Sourced from Project');
-    expect(wrapper.find(`Detail[label="Project"]`).length).toBe(0);
+    expect(screen.queryByText('Project')).not.toBeInTheDocument();
   });
 
-  test('should show schedule that launched workflow job', async () => {
-    wrapper = mountWithContexts(
+  test('should show schedule that launched workflow job', () => {
+    renderWithContexts(
       <JobDetail
         job={{
           ...mockJobData,
@@ -255,18 +230,18 @@ describe('<JobDetail />', () => {
         }}
       />
     );
-    const launchedByDetail = wrapper.find('Detail[label="Launched By"] dd');
-    expect(launchedByDetail).toHaveLength(1);
-    expect(launchedByDetail.text()).toBe('mock wf schedule');
+    const launchedBy = detailValue('Launched By');
+    expect(launchedBy).toHaveTextContent('mock wf schedule');
     expect(
-      launchedByDetail.find(
-        'a[href="/templates/workflow_job_template/888/schedules/999/details"]'
-      )
-    ).toHaveLength(1);
+      within(launchedBy).getByRole('link', { name: 'mock wf schedule' })
+    ).toHaveAttribute(
+      'href',
+      '/templates/workflow_job_template/888/schedules/999/details'
+    );
   });
 
   test('should hide "Launched By" detail for JT launched from a workflow launched by a schedule', () => {
-    wrapper = mountWithContexts(
+    renderWithContexts(
       <JobDetail
         job={{
           ...mockJobData,
@@ -286,48 +261,33 @@ describe('<JobDetail />', () => {
         }}
       />
     );
-    expect(wrapper.find('Detail[label="Launched By"] dt')).toHaveLength(0);
-    expect(wrapper.find('Detail[label="Launched By"] dd')).toHaveLength(0);
+    expect(screen.queryByText('Launched By')).not.toBeInTheDocument();
   });
 
   test('should properly delete job', async () => {
-    wrapper = mountWithContexts(<JobDetail job={mockJobData} />);
-    wrapper.find('button[aria-label="Delete"]').simulate('click');
-    wrapper.update();
-    const modal = wrapper.find('Modal[aria-label="Alert modal"]');
-    expect(modal.length).toBe(1);
-    modal.find('button[aria-label="Confirm Delete"]').simulate('click');
-    expect(JobsAPI.destroy).toHaveBeenCalledTimes(1);
+    JobsAPI.destroy.mockResolvedValue({});
+    const { user } = renderWithContexts(<JobDetail job={mockJobData} />);
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'Confirm Delete' })
+    );
+    await waitFor(() => expect(JobsAPI.destroy).toHaveBeenCalledTimes(1));
   });
 
   test('should display error modal when a job does not delete properly', async () => {
-    ProjectUpdatesAPI.destroy.mockRejectedValue(
-      new Error({
-        response: {
-          config: {
-            method: 'delete',
-            url: '/api/v2/project_updates/1',
-          },
-          data: 'An error occurred',
-          status: 404,
-        },
-      })
+    JobsAPI.destroy.mockRejectedValue(new Error('delete failed'));
+    const { user } = renderWithContexts(<JobDetail job={mockJobData} />);
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'Confirm Delete' })
     );
-    wrapper = mountWithContexts(<JobDetail job={mockJobData} />);
-    wrapper.find('button[aria-label="Delete"]').simulate('click');
-    const modal = wrapper.find('Modal[aria-label="Alert modal"]');
-    expect(modal.length).toBe(1);
-    await act(async () => {
-      modal.find('button[aria-label="Confirm Delete"]').simulate('click');
-    });
-    wrapper.update();
-
-    const errorModal = wrapper.find('ErrorDetail');
-    expect(errorModal.length).toBe(1);
+    expect(
+      await screen.findByRole('dialog', { name: /Job Delete Error/ })
+    ).toBeInTheDocument();
   });
 
   test('should display Playbook Check detail', () => {
-    wrapper = mountWithContexts(
+    renderWithContexts(
       <JobDetail
         job={{
           ...mockJobData,
@@ -343,7 +303,7 @@ describe('<JobDetail />', () => {
       initialEntries: ['/settings/miscellaneous_system/edit'],
     });
 
-    wrapper = mountWithContexts(
+    renderWithContexts(
       <JobDetail
         job={{
           ...mockJobData,
@@ -353,29 +313,23 @@ describe('<JobDetail />', () => {
       />,
       {
         context: {
-          router: {
-            history,
-          },
-          config: {
-            me: {
-              is_superuser: false,
-            },
-          },
+          router: { history },
+          config: { me: { is_superuser: false } },
         },
       }
     );
     expect(
-      wrapper.find('Button[aria-label="Cancel Demo Job Template"]')
-    ).toHaveLength(0);
-    expect(wrapper.find(`Detail[label="Project"]`).length).toBe(0);
+      screen.queryByRole('button', { name: 'Cancel Demo Job Template' })
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText('Project')).not.toBeInTheDocument();
   });
 
-  test('should not show cancel job button, job completed', async () => {
+  test('should not show cancel job button, job completed', () => {
     const history = createMemoryHistory({
       initialEntries: ['/settings/miscellaneous_system/edit'],
     });
 
-    wrapper = mountWithContexts(
+    renderWithContexts(
       <JobDetail
         job={{
           ...mockJobData,
@@ -385,28 +339,22 @@ describe('<JobDetail />', () => {
       />,
       {
         context: {
-          router: {
-            history,
-          },
-          config: {
-            me: {
-              is_superuser: true,
-            },
-          },
+          router: { history },
+          config: { me: { is_superuser: true } },
         },
       }
     );
     expect(
-      wrapper.find('Button[aria-label="Cancel Demo Job Template"]')
-    ).toHaveLength(0);
+      screen.queryByRole('button', { name: 'Cancel Demo Job Template' })
+    ).not.toBeInTheDocument();
   });
 
-  test('should show cancel button, pending, super user', async () => {
+  test('should show cancel button, pending, super user', () => {
     const history = createMemoryHistory({
       initialEntries: ['/settings/miscellaneous_system/edit'],
     });
 
-    wrapper = mountWithContexts(
+    renderWithContexts(
       <JobDetail
         job={{
           ...mockJobData,
@@ -416,28 +364,22 @@ describe('<JobDetail />', () => {
       />,
       {
         context: {
-          router: {
-            history,
-          },
-          config: {
-            me: {
-              is_superuser: true,
-            },
-          },
+          router: { history },
+          config: { me: { is_superuser: true } },
         },
       }
     );
     expect(
-      wrapper.find('Button[aria-label="Cancel Demo Job Template"]')
-    ).toHaveLength(1);
+      screen.getByRole('button', { name: 'Cancel Demo Job Template' })
+    ).toBeInTheDocument();
   });
 
-  test('should show cancel button, pending, super project update, not super user', async () => {
+  test('should show cancel button, pending, super project update, not super user', () => {
     const history = createMemoryHistory({
       initialEntries: ['/settings/miscellaneous_system/edit'],
     });
 
-    wrapper = mountWithContexts(
+    renderWithContexts(
       <JobDetail
         job={{
           ...mockJobData,
@@ -447,20 +389,14 @@ describe('<JobDetail />', () => {
       />,
       {
         context: {
-          router: {
-            history,
-          },
-          config: {
-            me: {
-              is_superuser: false,
-            },
-          },
+          router: { history },
+          config: { me: { is_superuser: false } },
         },
       }
     );
     expect(
-      wrapper.find('Button[aria-label="Cancel Demo Job Template"]')
-    ).toHaveLength(1);
+      screen.getByRole('button', { name: 'Cancel Demo Job Template' })
+    ).toBeInTheDocument();
   });
 
   test('should render workflow job details', () => {
@@ -563,8 +499,8 @@ describe('<JobDetail />', () => {
       webhook_credential: null,
       webhook_guid: '',
     };
-    wrapper = mountWithContexts(<JobDetail job={workFlowJob} />);
-    assertDetail('Status', 'Successful');
+    renderWithContexts(<JobDetail job={workFlowJob} />);
+    expect(detailValue('Status')).toHaveTextContent('Successful');
     assertDetail('Started', '7/6/2021, 7:40:17 PM');
     assertDetail('Finished', '7/6/2021, 7:40:42 PM');
     assertDetail('Job Template', 'Sliced Job Template');
@@ -574,7 +510,7 @@ describe('<JobDetail />', () => {
   });
 
   test('should not load Source', () => {
-    wrapper = mountWithContexts(
+    renderWithContexts(
       <JobDetail
         job={{
           ...mockJobData,
@@ -587,12 +523,17 @@ describe('<JobDetail />', () => {
         inventorySourceLabels={[]}
       />
     );
-    const source_detail = wrapper.find(`Detail[label="Source"]`).at(0);
-    expect(source_detail.prop('isEmpty')).toEqual(true);
+    // The inventory-source "Source" detail is isEmpty (no labels supplied) and
+    // therefore renders nothing — its value cell (data-cy job-inventory-source-
+    // type) is absent. (A separate project-fallback "Source" label may still
+    // render, so we assert on the inventory-source detail specifically.)
+    expect(
+      document.querySelector('[data-cy="job-inventory-source-type"]')
+    ).not.toBeInTheDocument();
   });
 
   test('should not load Credentials', () => {
-    wrapper = mountWithContexts(
+    renderWithContexts(
       <JobDetail
         job={{
           ...mockJobData,
@@ -603,14 +544,12 @@ describe('<JobDetail />', () => {
         }}
       />
     );
-    const credentials_detail = wrapper
-      .find(`Detail[label="Credentials"]`)
-      .at(0);
-    expect(credentials_detail.prop('isEmpty')).toEqual(true);
+    // An empty Credentials detail (isEmpty) is not rendered.
+    expect(screen.queryByText('Credentials')).not.toBeInTheDocument();
   });
 
   test('should not load Job Tags', () => {
-    wrapper = mountWithContexts(
+    renderWithContexts(
       <JobDetail
         job={{
           ...mockJobData,
@@ -618,11 +557,11 @@ describe('<JobDetail />', () => {
         }}
       />
     );
-    expect(wrapper.find('Detail[label="Job Tags"]').length).toBe(0);
+    expect(screen.queryByText('Job Tags')).not.toBeInTheDocument();
   });
 
   test('should not load Skip Tags', () => {
-    wrapper = mountWithContexts(
+    renderWithContexts(
       <JobDetail
         job={{
           ...mockJobData,
@@ -630,6 +569,6 @@ describe('<JobDetail />', () => {
         }}
       />
     );
-    expect(wrapper.find('Detail[label="Skip Tags"]').length).toBe(0);
+    expect(screen.queryByText('Skip Tags')).not.toBeInTheDocument();
   });
 });

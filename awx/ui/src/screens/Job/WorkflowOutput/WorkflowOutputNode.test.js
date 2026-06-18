@@ -1,6 +1,6 @@
 import React from 'react';
 import { WorkflowStateContext } from 'contexts/Workflow';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import WorkflowOutputNode from './WorkflowOutputNode';
 
 const nodeWithJT = {
@@ -71,65 +71,47 @@ const nodePositions = {
   },
 };
 
+function renderNode(node) {
+  return renderWithContexts(
+    <svg>
+      <WorkflowStateContext.Provider value={{ nodePositions }}>
+        <WorkflowOutputNode
+          mouseEnter={() => {}}
+          mouseLeave={() => {}}
+          node={node}
+        />
+      </WorkflowStateContext.Provider>
+    </svg>
+  );
+}
+
 describe('WorkflowOutputNode', () => {
   test('mounts successfully', () => {
-    const wrapper = mountWithContexts(
-      <svg>
-        <WorkflowStateContext.Provider value={{ nodePositions }}>
-          <WorkflowOutputNode
-            mouseEnter={() => {}}
-            mouseLeave={() => {}}
-            node={nodeWithJT}
-          />
-        </WorkflowStateContext.Provider>
-      </svg>
-    );
-    expect(wrapper).toHaveLength(1);
+    const { container } = renderNode(nodeWithJT);
+    expect(container.querySelector('#node-2')).toBeInTheDocument();
   });
+
   test('node contents displayed correctly when Job and Job Template exist', () => {
-    const wrapper = mountWithContexts(
-      <svg>
-        <WorkflowStateContext.Provider value={{ nodePositions }}>
-          <WorkflowOutputNode
-            mouseEnter={() => {}}
-            mouseLeave={() => {}}
-            node={nodeWithJT}
-          />
-        </WorkflowStateContext.Provider>
-      </svg>
+    const { container } = renderNode(nodeWithJT);
+    expect(container.querySelector('#node-2')).toHaveTextContent(
+      'Automation JT'
     );
-    expect(wrapper.text('p')).toContain('Automation JT');
-    expect(wrapper.find('WorkflowOutputNode Elapsed').text()).toBe('00:00:07');
+    expect(container.querySelector('#node-2')).toHaveTextContent('00:00:07');
   });
+
   test('node contents displayed correctly when Job Template deleted', () => {
-    const wrapper = mountWithContexts(
-      <svg>
-        <WorkflowStateContext.Provider value={{ nodePositions }}>
-          <WorkflowOutputNode
-            mouseEnter={() => {}}
-            mouseLeave={() => {}}
-            node={nodeWithoutJT}
-          />
-        </WorkflowStateContext.Provider>
-      </svg>
+    const { container } = renderNode(nodeWithoutJT);
+    expect(container.querySelector('#node-2')).toHaveTextContent(
+      'Automation JT 2'
     );
-    expect(wrapper.contains(<p>Automation JT 2</p>)).toBe(true);
-    expect(wrapper.find('WorkflowOutputNode Elapsed').text()).toBe('00:00:07');
+    expect(container.querySelector('#node-2')).toHaveTextContent('00:00:07');
   });
+
   test('node contents displayed correctly when Job deleted', () => {
-    const wrapper = mountWithContexts(
-      <svg>
-        <WorkflowStateContext.Provider value={{ nodePositions }}>
-          <WorkflowOutputNode
-            mouseEnter={() => {}}
-            mouseLeave={() => {}}
-            node={{ id: 2 }}
-          />
-        </WorkflowStateContext.Provider>
-      </svg>
-    );
-    expect(wrapper.text()).toBe('DELETED');
+    const { container } = renderNode({ id: 2 });
+    expect(container.querySelector('#node-2')).toHaveTextContent('DELETED');
   });
+
   test('carried-forward node (relaunch from failed) shows as successful', () => {
     const carriedNode = {
       id: 2,
@@ -139,27 +121,25 @@ describe('WorkflowOutputNode', () => {
         summary_fields: {
           unified_job_template: { name: 'Carried JT', type: 'job_template' },
         },
-        unifiedJobTemplate: { id: 77, name: 'Carried JT', unified_job_type: 'job' },
+        unifiedJobTemplate: {
+          id: 77,
+          name: 'Carried JT',
+          unified_job_type: 'job',
+        },
       },
     };
-    const wrapper = mountWithContexts(
-      <svg>
-        <WorkflowStateContext.Provider value={{ nodePositions }}>
-          <WorkflowOutputNode
-            mouseEnter={() => {}}
-            mouseLeave={() => {}}
-            node={carriedNode}
-          />
-        </WorkflowStateContext.Provider>
-      </svg>
-    );
-    // no spawned job, but it renders the successful status icon (green), not the default label
-    expect(wrapper.find('StatusIcon[status="successful"]')).toHaveLength(1);
-    expect(wrapper.find('NodeDefaultLabel')).toHaveLength(0);
+    const { container } = renderNode(carriedNode);
+    const node = container.querySelector('#node-2');
+    // no spawned job, but it renders the successful status icon (green)
+    expect(
+      node.querySelector('[data-job-status="successful"]')
+    ).toBeInTheDocument();
     // and it shows the elapsed time carried over from the prior run
-    expect(wrapper.find('WorkflowOutputNode Elapsed').text()).toBe('00:00:07');
+    expect(node).toHaveTextContent('00:00:07');
     // the job-template type letter still renders on the carried node
-    expect(wrapper.find('#node-2-type-letter').first().text()).toBe('JT');
+    expect(container.querySelector('#node-2-type-letter')).toHaveTextContent(
+      'JT'
+    );
   });
 
   test('pending node (not yet run) shows its type letter from the start', () => {
@@ -171,19 +151,10 @@ describe('WorkflowOutputNode', () => {
         },
       },
     };
-    const wrapper = mountWithContexts(
-      <svg>
-        <WorkflowStateContext.Provider value={{ nodePositions }}>
-          <WorkflowOutputNode
-            mouseEnter={() => {}}
-            mouseLeave={() => {}}
-            node={pendingNode}
-          />
-        </WorkflowStateContext.Provider>
-      </svg>
+    const { container } = renderNode(pendingNode);
+    expect(container.querySelector('#node-4-type-letter')).toHaveTextContent(
+      'JT'
     );
-    // no job and not carried, but the type letter is shown immediately
-    expect(wrapper.find('#node-4-type-letter').first().text()).toBe('JT');
   });
 
   test('carried-forward nested workflow node shows the W type letter', () => {
@@ -200,18 +171,10 @@ describe('WorkflowOutputNode', () => {
         },
       },
     };
-    const wrapper = mountWithContexts(
-      <svg>
-        <WorkflowStateContext.Provider value={{ nodePositions }}>
-          <WorkflowOutputNode
-            mouseEnter={() => {}}
-            mouseLeave={() => {}}
-            node={carriedWorkflowNode}
-          />
-        </WorkflowStateContext.Provider>
-      </svg>
+    const { container } = renderNode(carriedWorkflowNode);
+    expect(container.querySelector('#node-3-type-letter')).toHaveTextContent(
+      'W'
     );
-    expect(wrapper.find('#node-3-type-letter').first().text()).toBe('W');
   });
 
   test('running node has a blue frame matching the running icon', () => {
@@ -224,18 +187,8 @@ describe('WorkflowOutputNode', () => {
         },
       },
     };
-    const wrapper = mountWithContexts(
-      <svg>
-        <WorkflowStateContext.Provider value={{ nodePositions }}>
-          <WorkflowOutputNode
-            mouseEnter={() => {}}
-            mouseLeave={() => {}}
-            node={runningNode}
-          />
-        </WorkflowStateContext.Provider>
-      </svg>
-    );
-    expect(wrapper.find('rect').first().prop('stroke')).toBe(
+    const { container } = renderNode(runningNode);
+    expect(container.querySelector('rect').getAttribute('stroke')).toBe(
       'var(--pf-global--primary-color--100)'
     );
   });
@@ -257,19 +210,8 @@ describe('WorkflowOutputNode', () => {
         },
       },
     };
-    const wrapper = mountWithContexts(
-      <svg>
-        <WorkflowStateContext.Provider value={{ nodePositions }}>
-          <WorkflowOutputNode
-            mouseEnter={() => {}}
-            mouseLeave={() => {}}
-            node={runningNode}
-          />
-        </WorkflowStateContext.Provider>
-      </svg>
-    );
-    wrapper.update();
-    expect(wrapper.find('WorkflowOutputNode Elapsed').text()).toBe('00:00:10');
+    const { container } = renderNode(runningNode);
+    expect(container.querySelector('#node-2')).toHaveTextContent('00:00:10');
     jest.useRealTimers();
   });
 
@@ -283,18 +225,8 @@ describe('WorkflowOutputNode', () => {
         },
       },
     };
-    const wrapper = mountWithContexts(
-      <svg>
-        <WorkflowStateContext.Provider value={{ nodePositions }}>
-          <WorkflowOutputNode
-            mouseEnter={() => {}}
-            mouseLeave={() => {}}
-            node={canceledNode}
-          />
-        </WorkflowStateContext.Provider>
-      </svg>
-    );
-    expect(wrapper.find('rect').first().prop('stroke')).toBe(
+    const { container } = renderNode(canceledNode);
+    expect(container.querySelector('rect').getAttribute('stroke')).toBe(
       'var(--pf-global--palette--orange-300)'
     );
   });

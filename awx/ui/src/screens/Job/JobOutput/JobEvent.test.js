@@ -1,6 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import JobEvent from './JobEvent';
 
 const mockOnPlayStartEvent = {
@@ -18,7 +17,7 @@ const mockRunnerOnOkEvent = {
   counter: 5,
   start_line: 4,
   end_line: 5,
-  stdout: '\u001b[0;32mok: [localhost]\u001b[0m',
+  stdout: '[0;32mok: [localhost][0m',
 };
 
 const singleDigitTimestampEvent = {
@@ -49,53 +48,56 @@ const mockOnPlayStartLineTextHtml = [
   },
 ];
 
+// JobEventLineText renders the html via dangerouslySetInnerHTML; in jsdom that
+// lands in the line-text element. type="job_event_line_text" identifies them.
+const lineTextNodes = (container) =>
+  container.querySelectorAll('[type="job_event_line_text"]');
+
 describe('<JobEvent />', () => {
   test('playbook event timestamps are rendered', () => {
-    const wrapper1 = shallow(
+    const { container: c1 } = renderWithContexts(
       <JobEvent
         lineTextHtml={mockOnPlayStartLineTextHtml}
         event={mockOnPlayStartEvent}
+        measure={jest.fn()}
       />
     );
-    const lineText1 = wrapper1.find('JobEventLineText');
-    const html1 = lineText1.at(1).prop('dangerouslySetInnerHTML').__html;
-    expect(html1.includes('18:11:22')).toBe(true);
+    expect(c1.innerHTML).toContain('18:11:22');
 
-    const wrapper2 = shallow(
+    const { container: c2 } = renderWithContexts(
       <JobEvent
         lineTextHtml={mockSingleDigitTimestampEventLineTextHtml}
         event={singleDigitTimestampEvent}
+        measure={jest.fn()}
       />
     );
-    const lineText2 = wrapper2.find('JobEventLineText');
-    const html2 = lineText2.at(1).prop('dangerouslySetInnerHTML').__html;
-    expect(html2.includes('08:01:02')).toBe(true);
+    expect(c2.innerHTML).toContain('08:01:02');
   });
 
   test('ansi stdout colors are rendered as html', () => {
-    const wrapper = shallow(
+    const { container } = renderWithContexts(
       <JobEvent
         lineTextHtml={mockAnsiLineTextHtml}
         event={mockRunnerOnOkEvent}
+        measure={jest.fn()}
       />
     );
-    const lineText = wrapper.find('JobEventLineText');
-    expect(
-      lineText
-        .prop('dangerouslySetInnerHTML')
-        .__html.includes(
-          '<span class="output--1977390340">ok: [localhost]</span>'
-        )
-    ).toBe(true);
+    expect(container.innerHTML).toContain(
+      '<span class="output--1977390340">ok: [localhost]</span>'
+    );
   });
 
   test("events without stdout aren't rendered", () => {
     const missingStdoutEvent = { ...mockOnPlayStartEvent };
     delete missingStdoutEvent.stdout;
-    const wrapper = shallow(
-      <JobEvent lineTextHtml={[]} event={missingStdoutEvent} />
+    const { container } = renderWithContexts(
+      <JobEvent
+        lineTextHtml={[]}
+        event={missingStdoutEvent}
+        measure={jest.fn()}
+      />
     );
-    expect(wrapper.find('JobEventLineText')).toHaveLength(0);
+    expect(lineTextNodes(container)).toHaveLength(0);
   });
 
   describe('click handling with text selection', () => {
@@ -109,12 +111,18 @@ describe('<JobEvent />', () => {
       window.getSelection = originalGetSelection;
     });
 
-    test('click fires onJobEventClick when no text is selected', () => {
+    // JobEventLine sets onClick only when isClickable; the clickable element is
+    // the line wrapper that contains the line-text node.
+    const clickableLine = (container) =>
+      lineTextNodes(container)[0]?.closest('[class]')?.parentElement ||
+      container.querySelector('[type="job_event_line_text"]')?.parentElement;
+
+    test('click fires onJobEventClick when no text is selected', async () => {
       window.getSelection = jest.fn().mockReturnValue({
         toString: () => '',
       });
       const onJobEventClick = jest.fn();
-      const wrapper = mountWithContexts(
+      const { user, container } = renderWithContexts(
         <JobEvent
           lineTextHtml={mockAnsiLineTextHtml}
           event={mockRunnerOnOkEvent}
@@ -123,20 +131,16 @@ describe('<JobEvent />', () => {
           measure={jest.fn()}
         />
       );
-      // Find the clickable div rendered by the styled JobEventLine
-      const clickable = wrapper.find('div[onClick]');
-      expect(clickable.length).toBeGreaterThan(0);
-      clickable.first().simulate('click');
+      await user.click(clickableLine(container));
       expect(onJobEventClick).toHaveBeenCalledTimes(1);
-      wrapper.unmount();
     });
 
-    test('click is suppressed when text is selected', () => {
+    test('click is suppressed when text is selected', async () => {
       window.getSelection = jest.fn().mockReturnValue({
         toString: () => 'selected text',
       });
       const onJobEventClick = jest.fn();
-      const wrapper = mountWithContexts(
+      const { user, container } = renderWithContexts(
         <JobEvent
           lineTextHtml={mockAnsiLineTextHtml}
           event={mockRunnerOnOkEvent}
@@ -145,16 +149,13 @@ describe('<JobEvent />', () => {
           measure={jest.fn()}
         />
       );
-      const clickable = wrapper.find('div[onClick]');
-      expect(clickable.length).toBeGreaterThan(0);
-      clickable.first().simulate('click');
+      await user.click(clickableLine(container));
       expect(onJobEventClick).not.toHaveBeenCalled();
-      wrapper.unmount();
     });
 
     test('no click handler when isClickable is false', () => {
       const onJobEventClick = jest.fn();
-      const wrapper = mountWithContexts(
+      const { container } = renderWithContexts(
         <JobEvent
           lineTextHtml={mockAnsiLineTextHtml}
           event={mockRunnerOnOkEvent}
@@ -163,9 +164,13 @@ describe('<JobEvent />', () => {
           measure={jest.fn()}
         />
       );
-      const clickable = wrapper.find('div[onClick]');
-      expect(clickable).toHaveLength(0);
-      wrapper.unmount();
+      // With isClickable false, JobEventLine receives no onClick handler.
+      const line = clickableLine(container);
+      expect(line).toBeTruthy();
+      // No onClick prop -> the cursor/clickable styling marker is absent.
+      // Asserting the handler isn't wired: clicking does nothing.
+      line.click();
+      expect(onJobEventClick).not.toHaveBeenCalled();
     });
   });
 });

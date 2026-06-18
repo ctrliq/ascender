@@ -1,6 +1,6 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
-import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
+import { waitForElementToBeRemoved } from '@testing-library/react';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import Job from './Job';
 
@@ -17,8 +17,12 @@ jest.mock('react-router-dom-v5-compat', () => ({
 
 describe('<Job />', () => {
   test('initially renders successfully', async () => {
-    await act(async () => {
-      await mountWithContexts(<Job setBreadcrumb={() => {}} />);
-    });
+    const { container } = renderWithContexts(<Job setBreadcrumb={() => {}} />);
+    // The auto-mocked api makes the initial fetch settle (into an error
+    // state); wait for the ContentLoading spinner to be removed so the
+    // async state update lands inside the test.
+    await waitForElementToBeRemoved(() =>
+      container.querySelector('[role="progressbar"]')
+    );
   });
 });

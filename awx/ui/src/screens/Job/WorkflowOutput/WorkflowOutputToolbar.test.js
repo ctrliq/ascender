@@ -1,13 +1,12 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { act } from '@testing-library/react';
 import {
   WorkflowDispatchContext,
   WorkflowStateContext,
 } from 'contexts/Workflow';
-import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import WorkflowOutputToolbar from './WorkflowOutputToolbar';
 
-let wrapper;
 const dispatch = jest.fn();
 const job = {
   id: 1,
@@ -30,128 +29,94 @@ const workflowContext = {
   showTools: false,
 };
 
-function shouldFind(element) {
-  expect(wrapper.find(element)).toHaveLength(1);
+function renderToolbar(jobOverride, contextOverride, onDelete) {
+  return renderWithContexts(
+    <WorkflowDispatchContext.Provider value={dispatch}>
+      <WorkflowStateContext.Provider
+        value={{ ...workflowContext, ...contextOverride }}
+      >
+        <WorkflowOutputToolbar
+          job={jobOverride || job}
+          onDelete={onDelete || (() => {})}
+        />
+      </WorkflowStateContext.Provider>
+    </WorkflowDispatchContext.Provider>
+  );
 }
-describe('WorkflowOutputToolbar', () => {
-  beforeAll(() => {
-    const nodes = [
-      {
-        id: 1,
-      },
-      {
-        id: 2,
-      },
-      {
-        id: 3,
-        isDeleted: true,
-      },
-    ];
-    wrapper = mountWithContexts(
-      <WorkflowDispatchContext.Provider value={dispatch}>
-        <WorkflowStateContext.Provider value={{ ...workflowContext, nodes }}>
-          <WorkflowOutputToolbar job={job} />
-        </WorkflowStateContext.Provider>
-      </WorkflowDispatchContext.Provider>
-    );
-  });
 
+const byOuia = (id) => document.querySelector(`[data-ouia-component-id="${id}"]`);
+
+const nodes = [{ id: 1 }, { id: 2 }, { id: 3, isDeleted: true }];
+
+afterEach(() => {
+  jest.clearAllMocks();
+});
+
+describe('WorkflowOutputToolbar', () => {
   test('should render correct toolbar item', () => {
-    shouldFind(`Button[ouiaId="edit-workflow"]`);
-    shouldFind('Button#workflow-output-toggle-legend');
-    shouldFind('Badge#workflow-elapsed-badge');
-    shouldFind('Button#workflow-output-toggle-tools');
-    shouldFind('JobCancelButton');
+    renderToolbar(job, { nodes });
+    expect(byOuia('edit-workflow')).toBeInTheDocument();
+    expect(
+      document.querySelector('#workflow-output-toggle-legend')
+    ).toBeInTheDocument();
+    expect(
+      document.querySelector('#workflow-elapsed-badge')
+    ).toBeInTheDocument();
+    expect(
+      document.querySelector('#workflow-output-toggle-tools')
+    ).toBeInTheDocument();
+    expect(byOuia('cancel-job-button')).toBeInTheDocument();
     // a runnable (non-failed) workflow shows a plain relaunch button
-    shouldFind('Button[ouiaId="workflow-output-relaunch-button"]');
+    expect(byOuia('workflow-output-relaunch-button')).toBeInTheDocument();
   });
 
   test('failed workflow shows the relaunch-from-failed dropdown', () => {
-    const failedJob = { ...job, status: 'failed' };
-    const failedWrapper = mountWithContexts(
-      <WorkflowDispatchContext.Provider value={dispatch}>
-        <WorkflowStateContext.Provider
-          value={{ ...workflowContext, nodes: [{ id: 1 }] }}
-        >
-          <WorkflowOutputToolbar job={failedJob} />
-        </WorkflowStateContext.Provider>
-      </WorkflowDispatchContext.Provider>
-    );
-    expect(failedWrapper.find('WorkflowReLaunchDropDown')).toHaveLength(1);
-    expect(
-      failedWrapper.find('Button[ouiaId="workflow-output-relaunch-button"]')
-    ).toHaveLength(0);
+    renderToolbar({ ...job, status: 'failed' }, { nodes: [{ id: 1 }] });
+    expect(byOuia('relaunch-workflow-toggle')).toBeInTheDocument();
+    expect(byOuia('workflow-output-relaunch-button')).not.toBeInTheDocument();
   });
 
   ['error', 'canceled'].forEach((status) => {
     test(`${status} workflow also shows the relaunch-from-failed dropdown`, () => {
-      const wrapper2 = mountWithContexts(
-        <WorkflowDispatchContext.Provider value={dispatch}>
-          <WorkflowStateContext.Provider
-            value={{ ...workflowContext, nodes: [{ id: 1 }] }}
-          >
-            <WorkflowOutputToolbar job={{ ...job, status }} />
-          </WorkflowStateContext.Provider>
-        </WorkflowDispatchContext.Provider>
-      );
-      const dropdown = wrapper2.find('WorkflowReLaunchDropDown');
-      expect(dropdown).toHaveLength(1);
-      expect(dropdown.prop('status')).toBe(status);
-      expect(
-        wrapper2.find('Button[ouiaId="workflow-output-relaunch-button"]')
-      ).toHaveLength(0);
+      renderToolbar({ ...job, status }, { nodes: [{ id: 1 }] });
+      expect(byOuia('relaunch-workflow-toggle')).toBeInTheDocument();
+      expect(byOuia('workflow-output-relaunch-button')).not.toBeInTheDocument();
     });
   });
 
   test('shows a delete button when the workflow is finished and deletable', () => {
-    const finishedJob = { ...job, status: 'successful' };
-    const finishedWrapper = mountWithContexts(
-      <WorkflowDispatchContext.Provider value={dispatch}>
-        <WorkflowStateContext.Provider
-          value={{ ...workflowContext, nodes: [{ id: 1 }] }}
-        >
-          <WorkflowOutputToolbar job={finishedJob} onDelete={() => {}} />
-        </WorkflowStateContext.Provider>
-      </WorkflowDispatchContext.Provider>
+    renderToolbar(
+      { ...job, status: 'successful' },
+      { nodes: [{ id: 1 }] },
+      () => {}
     );
-    expect(
-      finishedWrapper.find('DeleteButton[ouiaId="workflow-output-delete-button"]')
-    ).toHaveLength(1);
+    expect(byOuia('workflow-output-delete-button')).toBeInTheDocument();
   });
 
   test('Shows correct number of nodes', () => {
-    // The start node (id=1) and deleted nodes (isDeleted=true) should be ignored
-    expect(
-      wrapper
-        .find('Badge')
-        .filterWhere((b) => b.prop('id') !== 'workflow-elapsed-badge')
-        .text()
-    ).toBe('1');
+    renderToolbar(job, { nodes });
+    // The start node (id=1) and deleted nodes (isDeleted=true) are ignored,
+    // leaving 1; the elapsed badge has a distinct id.
+    const badges = Array.from(
+      document.querySelectorAll('.pf-c-badge')
+    ).filter((b) => b.id !== 'workflow-elapsed-badge');
+    expect(badges).toHaveLength(1);
+    expect(badges[0]).toHaveTextContent('1');
   });
 
-  test('Toggle Legend button dispatches as expected', () => {
-    wrapper.find('CompassIcon').simulate('click');
+  test('Toggle Legend button dispatches as expected', async () => {
+    const { user } = renderToolbar(job, { nodes });
+    await user.click(document.querySelector('#workflow-output-toggle-legend'));
     expect(dispatch).toHaveBeenCalledWith({ type: 'TOGGLE_LEGEND' });
   });
 
-  test('Toggle Tools button dispatches as expected', () => {
-    wrapper.find('WrenchIcon').simulate('click');
+  test('Toggle Tools button dispatches as expected', async () => {
+    const { user } = renderToolbar(job, { nodes });
+    await user.click(document.querySelector('#workflow-output-toggle-tools'));
     expect(dispatch).toHaveBeenCalledWith({ type: 'TOGGLE_TOOLS' });
   });
 
   test('does not render the visualizer button when no workflow template exists', () => {
-    const nodes = [
-      {
-        id: 1,
-      },
-      {
-        id: 2,
-      },
-      {
-        id: 3,
-        isDeleted: true,
-      },
-    ];
     const slicedJob = {
       ...job,
       summary_fields: {
@@ -159,17 +124,8 @@ describe('WorkflowOutputToolbar', () => {
         workflow_job_template: null,
       },
     };
-    const slicedWrapper = mountWithContexts(
-      <WorkflowDispatchContext.Provider value={dispatch}>
-        <WorkflowStateContext.Provider value={{ ...workflowContext, nodes }}>
-          <WorkflowOutputToolbar job={slicedJob} />
-        </WorkflowStateContext.Provider>
-      </WorkflowDispatchContext.Provider>
-    );
-
-    expect(slicedWrapper.find('Button[ouiaId="edit-workflow"]')).toHaveLength(
-      0
-    );
+    renderToolbar(slicedJob, { nodes });
+    expect(byOuia('edit-workflow')).not.toBeInTheDocument();
   });
 
   describe('elapsed timer', () => {
@@ -182,62 +138,46 @@ describe('WorkflowOutputToolbar', () => {
       jest.useRealTimers();
     });
 
-    function mountToolbar(jobOverrides) {
-      return mountWithContexts(
-        <WorkflowDispatchContext.Provider value={dispatch}>
-          <WorkflowStateContext.Provider value={workflowContext}>
-            <WorkflowOutputToolbar job={{ ...job, ...jobOverrides }} />
-          </WorkflowStateContext.Provider>
-        </WorkflowDispatchContext.Provider>
-      );
-    }
+    const elapsedText = () =>
+      document.querySelector('#workflow-elapsed-badge').textContent;
 
     test('should show live elapsed time while running', () => {
-      const runningWrapper = mountToolbar({
+      renderToolbar({
+        ...job,
         started: '2021-09-01T12:30:40.000Z',
         finished: null,
       });
-      expect(
-        runningWrapper.find('Badge#workflow-elapsed-badge').text()
-      ).toBe('00:00:05');
+      expect(elapsedText()).toBe('00:00:05');
       act(() => {
         jest.advanceTimersByTime(2000);
       });
-      runningWrapper.update();
-      expect(
-        runningWrapper.find('Badge#workflow-elapsed-badge').text()
-      ).toBe('00:00:07');
+      expect(elapsedText()).toBe('00:00:07');
     });
 
     test('should keep the live value while finished is set but elapsed has not arrived yet', () => {
-      const wsWindowWrapper = mountToolbar({
+      renderToolbar({
+        ...job,
         status: 'successful',
         started: '2021-09-01T12:30:40.000Z',
         finished: '2021-09-01T12:30:45.000Z',
         elapsed: undefined,
       });
-      expect(
-        wsWindowWrapper.find('Badge#workflow-elapsed-badge').text()
-      ).toBe('00:00:05');
+      expect(elapsedText()).toBe('00:00:05');
     });
 
     test('should show final elapsed time once finished', () => {
-      const finishedWrapper = mountToolbar({
+      renderToolbar({
+        ...job,
         status: 'successful',
         started: '2021-09-01T11:00:00.000Z',
         finished: '2021-09-01T12:01:01.000Z',
         elapsed: 3661,
       });
-      expect(
-        finishedWrapper.find('Badge#workflow-elapsed-badge').text()
-      ).toBe('01:01:01');
+      expect(elapsedText()).toBe('01:01:01');
       act(() => {
         jest.advanceTimersByTime(2000);
       });
-      finishedWrapper.update();
-      expect(
-        finishedWrapper.find('Badge#workflow-elapsed-badge').text()
-      ).toBe('01:01:01');
+      expect(elapsedText()).toBe('01:01:01');
     });
   });
 });
