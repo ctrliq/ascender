@@ -1,51 +1,37 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { act, screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import {
   CredentialsAPI,
   CredentialInputSourcesAPI,
   CredentialTypesAPI,
 } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
-
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import CredentialAdd from './CredentialAdd';
 
 jest.mock('../../../api');
 
-const mockCredentialResults = {
+// Drive the container directly through the shared CredentialForm's props.
+let formProps;
+jest.mock('../shared/CredentialForm', () => (props) => {
+  formProps = props;
+  return (
+    <button type="button" onClick={() => props.onCancel()}>
+      mock-credential-form
+    </button>
+  );
+});
+
+const mockCredentialTypeResults = {
   data: {
     results: [
       {
         id: 1,
-        type: 'credential_type',
-        url: '/api/v2/credential_types/1/',
-        related: {
-          credentials: '/api/v2/credential_types/1/credentials/',
-          activity_stream: '/api/v2/credential_types/1/activity_stream/',
-        },
-        summary_fields: {
-          user_capabilities: {
-            edit: false,
-            delete: false,
-          },
-        },
-        created: '2020-02-12T19:42:43.539626Z',
-        modified: '2020-02-12T19:43:03.159739Z',
         name: 'Machine',
-        description: '',
         kind: 'ssh',
-        namespace: 'ssh',
-        managed: true,
         inputs: {
           fields: [
-            {
-              id: 'username',
-              label: 'Username',
-              type: 'string',
-            },
+            { id: 'username', label: 'Username', type: 'string' },
             {
               id: 'password',
               label: 'Password',
@@ -57,7 +43,6 @@ const mockCredentialResults = {
               id: 'ssh_key_data',
               label: 'SSH Private Key',
               type: 'string',
-              format: 'ssh_private_key',
               secret: true,
               multiline: true,
             },
@@ -79,8 +64,6 @@ const mockCredentialResults = {
               id: 'become_method',
               label: 'Privilege Escalation Method',
               type: 'string',
-              help_text:
-                'Specify a method for "become" operations. This is equivalent to specifying the --become-method Ansible parameter.',
             },
             {
               id: 'become_username',
@@ -103,52 +86,60 @@ const mockCredentialResults = {
 };
 
 describe('<CredentialAdd />', () => {
-  let wrapper;
-  let history;
+  afterEach(() => {
+    jest.clearAllMocks();
+    formProps = undefined;
+  });
 
   describe('Initial GET request succeeds', () => {
+    let history;
+    let user;
+
     beforeEach(async () => {
-      CredentialsAPI.read.mockResolvedValue(mockCredentialResults);
+      CredentialTypesAPI.read.mockResolvedValue(mockCredentialTypeResults);
+      // NOTE: jest auto-mocks all `*API.create` to the SAME shared fn (they
+      // share a prototype via the Base class), so we only set the resolved
+      // value once; both CredentialsAPI.create and
+      // CredentialInputSourcesAPI.create return { data: { id: 13 } }.
       CredentialsAPI.create.mockResolvedValue({ data: { id: 13 } });
       history = createMemoryHistory({ initialEntries: ['/credentials'] });
-      await act(async () => {
-        wrapper = mountWithContexts(<CredentialAdd />, {
-          context: { router: { history } },
-        });
-      });
+      ({ user } = renderWithContexts(<CredentialAdd />, {
+        context: { router: { history } },
+      }));
+      await screen.findByText('mock-credential-form');
     });
 
     test('handleSubmit should call the api and redirect to details page', async () => {
-      await waitForElement(wrapper, 'isLoading', (el) => el.length === 0);
       await act(async () => {
-        wrapper.find('CredentialForm').prop('onSubmit')({
-          user: 1,
-          name: 'foo',
-          description: 'bar',
-          credential_type: '1',
-          inputs: {
-            username: {
-              credential: {
-                id: 1,
-                name: 'Some cred',
-              },
-              inputs: {
-                foo: 'bar',
-              },
+        await formProps.onSubmit({
+        user: 1,
+        name: 'foo',
+        description: 'bar',
+        credential_type: '1',
+        inputs: {
+          username: {
+            credential: {
+              id: 1,
+              name: 'Some cred',
             },
-            password: 'foo',
-            ssh_key_data: 'bar',
-            ssh_public_key_data: 'baz',
-            ssh_key_unlock: 'foobar',
-            become_method: '',
-            become_username: '',
-            become_password: '',
+            inputs: {
+              foo: 'bar',
+            },
           },
+          password: 'foo',
+          ssh_key_data: 'bar',
+          ssh_public_key_data: 'baz',
+          ssh_key_unlock: 'foobar',
+          become_method: '',
+          become_username: '',
+          become_password: '',
+        },
           passwordPrompts: {
             become_password: true,
           },
         });
       });
+
       expect(CredentialsAPI.create).toHaveBeenCalledWith({
         user: 1,
         name: 'foo',
@@ -172,15 +163,13 @@ describe('<CredentialAdd />', () => {
         source_credential: 1,
         target_credential: 13,
       });
-      expect(history.location.pathname).toBe('/credentials/13/details');
+      await waitFor(() =>
+        expect(history.location.pathname).toBe('/credentials/13/details')
+      );
     });
 
     test('handleCancel should return the user back to the credentials list', async () => {
-      await waitForElement(wrapper, 'isLoading', (el) => el.length === 0);
-      await act(async () => {
-        wrapper.find('Button[aria-label="Cancel"]').simulate('click');
-      });
-      wrapper.update();
+      await user.click(screen.getByText('mock-credential-form'));
       expect(history.location.pathname).toEqual('/credentials');
     });
   });
@@ -188,14 +177,14 @@ describe('<CredentialAdd />', () => {
   describe('Initial GET request fails', () => {
     test('shows error when initial GET request fails', async () => {
       CredentialTypesAPI.read.mockRejectedValue(new Error());
-      history = createMemoryHistory({ initialEntries: ['/credentials'] });
-      await act(async () => {
-        wrapper = mountWithContexts(<CredentialAdd />, {
-          context: { router: { history } },
-        });
+      const history = createMemoryHistory({ initialEntries: ['/credentials'] });
+      renderWithContexts(<CredentialAdd />, {
+        context: { router: { history } },
       });
-      wrapper.update();
-      expect(wrapper.find('ContentError').length).toBe(1);
+
+      expect(
+        await screen.findByText(/There was an error loading this content/)
+      ).toBeInTheDocument();
     });
   });
 });

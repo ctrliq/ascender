@@ -1,34 +1,46 @@
 import React from 'react';
-import { mountWithContexts } from '../../../../../testUtils/enzymeHelpers';
+import { screen } from '@testing-library/react';
+import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import selectedCredential from '../data.cyberArkCredential.json';
 import CredentialPluginSelected from './CredentialPluginSelected';
 
-describe('<CredentialPluginSelected />', () => {
-  let wrapper;
+function setup() {
   const onClearPlugin = jest.fn();
   const onEditPlugin = jest.fn();
-  beforeAll(() => {
-    wrapper = mountWithContexts(
-      <CredentialPluginSelected
-        credential={selectedCredential}
-        onClearPlugin={onClearPlugin}
-        onEditPlugin={onEditPlugin}
-      />
-    );
-  });
+  const { user, container } = renderWithContexts(
+    <CredentialPluginSelected
+      credential={selectedCredential}
+      onClearPlugin={onClearPlugin}
+      onEditPlugin={onEditPlugin}
+    />
+  );
+  return { user, container, onClearPlugin, onEditPlugin };
+}
 
+describe('<CredentialPluginSelected />', () => {
   test('renders the expected content', () => {
-    expect(wrapper.find('CredentialChip').length).toBe(1);
-    expect(wrapper.find('KeyIcon').length).toBe(1);
+    setup();
+    expect(screen.getByText(`${selectedCredential.name}`)).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', {
+        name: 'Edit Credential Plugin Configuration',
+      })
+    ).toBeInTheDocument();
   });
 
-  test('clearing plugin calls expected function', () => {
-    wrapper.find('CredentialChip button').simulate('click');
+  test('clearing plugin calls expected function', async () => {
+    const { user, container, onClearPlugin } = setup();
+    await user.click(container.querySelector('button[aria-label="close"]'));
     expect(onClearPlugin).toHaveBeenCalledTimes(1);
   });
 
-  test('editing plugin calls expected function', () => {
-    wrapper.find('KeyIcon').simulate('click');
+  test('editing plugin calls expected function', async () => {
+    const { user, onEditPlugin } = setup();
+    await user.click(
+      screen.getByRole('button', {
+        name: 'Edit Credential Plugin Configuration',
+      })
+    );
     expect(onEditPlugin).toHaveBeenCalledTimes(1);
   });
 });

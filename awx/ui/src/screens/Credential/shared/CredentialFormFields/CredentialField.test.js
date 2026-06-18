@@ -1,7 +1,7 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen } from '@testing-library/react';
 import { Formik } from 'formik';
-import { mountWithContexts } from '../../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import credentialTypes from '../data.credentialTypes.json';
 import CredentialField from './CredentialField';
 
@@ -19,106 +19,86 @@ jest.mock('react-router-dom', () => ({
     pathname: '/credentials/3/edit',
   }),
 }));
+
+function renderField(initialInputs, type = credentialType, options = fieldOptions) {
+  return renderWithContexts(
+    <Formik
+      initialValues={{
+        passwordPrompts: {},
+        inputs: initialInputs,
+      }}
+    >
+      {() => <CredentialField fieldOptions={options} credentialType={type} />}
+    </Formik>
+  );
+}
+
+const externalButtonName =
+  'Populate field from an external secret management system';
+
 describe('<CredentialField />', () => {
-  let wrapper;
   test('renders correctly without initial value', () => {
-    wrapper = mountWithContexts(
-      <Formik
-        initialValues={{
-          passwordPrompts: {},
-          inputs: {
-            password: '',
-          },
-        }}
-      >
-        {() => (
-          <CredentialField
-            fieldOptions={fieldOptions}
-            credentialType={credentialType}
-          />
-        )}
-      </Formik>
-    );
-    expect(wrapper.find('CredentialField').length).toBe(1);
-    expect(wrapper.find('PasswordInput').length).toBe(1);
-    expect(wrapper.find('TextInput').props().isDisabled).toBe(false);
-    expect(wrapper.find('KeyIcon').length).toBe(1);
-    expect(wrapper.find('PficonHistoryIcon').length).toBe(0);
+    const { container } = renderField({ password: '' });
+    const input = container.querySelector('#credential-password');
+    expect(input).toBeInTheDocument();
+    expect(input).not.toBeDisabled();
+    // KeyIcon (external plugin) button
+    expect(
+      screen.getByRole('button', { name: externalButtonName })
+    ).toBeInTheDocument();
+    // no Replace/Revert (PficonHistoryIcon) button when there is no initialValue
+    expect(
+      screen.queryByRole('button', { name: 'Replace field with new value' })
+    ).not.toBeInTheDocument();
   });
 
   test('renders correctly with initial value', () => {
-    wrapper = mountWithContexts(
-      <Formik
-        initialValues={{
-          passwordPrompts: {},
-          inputs: {
-            password: '$encrypted$',
-          },
-        }}
-      >
-        {() => (
-          <CredentialField
-            fieldOptions={fieldOptions}
-            credentialType={credentialType}
-          />
-        )}
-      </Formik>
-    );
-    expect(wrapper.find('CredentialField').length).toBe(1);
-    expect(wrapper.find('PasswordInput').length).toBe(1);
-    expect(wrapper.find('TextInput').props().isDisabled).toBe(true);
-    expect(wrapper.find('TextInput').props().value).toBe('');
-    expect(wrapper.find('TextInput').props().placeholder).toBe('ENCRYPTED');
-    expect(wrapper.find('KeyIcon').length).toBe(1);
-    expect(wrapper.find('PficonHistoryIcon').length).toBe(1);
+    const { container } = renderField({ password: '$encrypted$' });
+    const input = container.querySelector('#credential-password');
+    expect(input).toBeInTheDocument();
+    expect(input).toBeDisabled();
+    expect(input).toHaveValue('');
+    expect(input).toHaveAttribute('placeholder', 'ENCRYPTED');
+    expect(
+      screen.getByRole('button', { name: externalButtonName })
+    ).toBeInTheDocument();
+    // PficonHistoryIcon replace button present
+    expect(
+      container.querySelector('#credential-password-replace-button')
+    ).toBeInTheDocument();
   });
 
   test('replace/revert button behaves as expected', async () => {
-    wrapper = mountWithContexts(
-      <Formik
-        initialValues={{
-          passwordPrompts: {},
-          inputs: {
-            password: '$encrypted$',
-          },
-        }}
-      >
-        {() => (
-          <CredentialField
-            fieldOptions={fieldOptions}
-            credentialType={credentialType}
-          />
-        )}
-      </Formik>
+    const { container, user } = renderField({ password: '$encrypted$' });
+    const replaceButton = container.querySelector(
+      '#credential-password-replace-button'
     );
+    expect(container.querySelector('#credential-password')).toBeDisabled();
+
+    // initial state: Replace — input is disabled and shows the ENCRYPTED
+    // placeholder. Clicking puts it in Revert state: input enabled, no
+    // placeholder. (The tooltip text flips Replace<->Revert; the aria-label is
+    // keyed off meta.touched rather than the toggle, so we assert the
+    // user-observable input state instead.)
+    await user.click(replaceButton);
+    expect(container.querySelector('#credential-password')).not.toBeDisabled();
+    expect(container.querySelector('#credential-password')).toHaveValue('');
     expect(
-      wrapper.find('Tooltip#credential-password-replace-tooltip').props()
-        .content
-    ).toBe('Replace');
-    expect(wrapper.find('TextInput').props().isDisabled).toBe(true);
-    wrapper.find('PficonHistoryIcon').simulate('click');
-    await act(async () => {
-      wrapper.update();
-    });
-    expect(
-      wrapper.find('Tooltip#credential-password-replace-tooltip').props()
-        .content
-    ).toBe('Revert');
-    expect(wrapper.find('TextInput').props().isDisabled).toBe(false);
-    expect(wrapper.find('TextInput').props().value).toBe('');
-    expect(wrapper.find('TextInput').props().placeholder).toBe(undefined);
-    wrapper.find('PficonHistoryIcon').simulate('click');
-    await act(async () => {
-      wrapper.update();
-    });
-    expect(
-      wrapper.find('Tooltip#credential-password-replace-tooltip').props()
-        .content
-    ).toBe('Replace');
-    expect(wrapper.find('TextInput').props().isDisabled).toBe(true);
-    expect(wrapper.find('TextInput').props().value).toBe('');
-    expect(wrapper.find('TextInput').props().placeholder).toBe('ENCRYPTED');
+      container.querySelector('#credential-password')
+    ).not.toHaveAttribute('placeholder');
+
+    // revert back to the encrypted/disabled state
+    await user.click(
+      container.querySelector('#credential-password-replace-button')
+    );
+    expect(container.querySelector('#credential-password')).toBeDisabled();
+    expect(container.querySelector('#credential-password')).toHaveValue('');
+    expect(container.querySelector('#credential-password')).toHaveAttribute(
+      'placeholder',
+      'ENCRYPTED'
+    );
   });
+
   test('Should check to see if the ability to edit vault ID is disabled after creation.', () => {
     const vaultCredential = credentialTypes.find((type) => type.id === 3);
     const vaultFieldOptions = {
@@ -127,25 +107,14 @@ describe('<CredentialField />', () => {
       type: 'string',
       secret: true,
     };
-    wrapper = mountWithContexts(
-      <Formik
-        initialValues={{
-          passwordPrompts: {},
-          inputs: {
-            password: 'password',
-            vault_id: 'vault_id',
-          },
-        }}
-      >
-        {() => (
-          <CredentialField
-            fieldOptions={vaultFieldOptions}
-            credentialType={vaultCredential}
-          />
-        )}
-      </Formik>
+    const { container } = renderField(
+      { password: 'password', vault_id: 'vault_id' },
+      vaultCredential,
+      vaultFieldOptions
     );
-    expect(wrapper.find('CredentialInput').props().isDisabled).toBe(true);
-    expect(wrapper.find('KeyIcon').length).toBe(1);
+    expect(container.querySelector('#credential-vault_id')).toBeDisabled();
+    expect(
+      screen.getByRole('button', { name: externalButtonName })
+    ).toBeInTheDocument();
   });
 });

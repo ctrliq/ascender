@@ -1,20 +1,18 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor, within } from '@testing-library/react';
 import { CredentialsAPI } from 'api';
 import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+  renderWithContexts,
+  settleTooltips,
+} from '../../../../testUtils/rtlContexts';
 import { CredentialList } from '.';
 import { mockCredentials } from '../shared';
 
 jest.mock('../../../api');
 
 describe('<CredentialList />', () => {
-  let wrapper;
-
   beforeEach(async () => {
-    CredentialsAPI.read.mockResolvedValueOnce({ data: mockCredentials });
+    CredentialsAPI.read.mockResolvedValue({ data: mockCredentials });
     CredentialsAPI.readOptions.mockResolvedValue({
       data: {
         actions: {
@@ -23,133 +21,102 @@ describe('<CredentialList />', () => {
         },
       },
     });
-
-    await act(async () => {
-      wrapper = mountWithContexts(<CredentialList />);
-    });
-
-    await waitForElement(wrapper, 'ContentLoading', (el) => el.length === 0);
   });
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  test('initially renders successfully', () => {
-    expect(wrapper.find('CredentialList').length).toBe(1);
-  });
+  test('should fetch credentials from api and render them in the list', async () => {
+    renderWithContexts(<CredentialList />);
+    await screen.findByRole('link', { name: 'Foo' });
 
-  test('should have proper number of delete detail requests', () => {
+    expect(CredentialsAPI.read).toHaveBeenCalled();
     expect(
-      wrapper.find('ToolbarDeleteButton').prop('deleteDetailsRequests')
+      screen.getAllByRole('link', { name: /Foo|Bar|Baz|FooBar|Qux/ })
     ).toHaveLength(5);
   });
 
-  test('should fetch credentials from api and render the in the list', () => {
-    expect(CredentialsAPI.read).toHaveBeenCalled();
-    expect(wrapper.find('CredentialListItem').length).toBe(5);
-  });
-
   test('should show content error if credentials are not successfully fetched from api', async () => {
-    CredentialsAPI.readOptions.mockImplementationOnce(() =>
-      Promise.reject(new Error())
-    );
-    await act(async () => {
-      wrapper = mountWithContexts(<CredentialList />);
-    });
-    await waitForElement(wrapper, 'ContentError', (el) => el.length === 1);
+    CredentialsAPI.readOptions.mockRejectedValueOnce(new Error());
+    renderWithContexts(<CredentialList />);
+
+    expect(
+      await screen.findByText(/There was an error loading this content/)
+    ).toBeInTheDocument();
   });
 
   test('should check and uncheck the row item', async () => {
-    expect(
-      wrapper.find('.pf-c-table__check').first().find('input').props().checked
-    ).toBe(false);
-    await act(async () => {
-      wrapper
-        .find('.pf-c-table__check')
-        .first()
-        .find('input')
-        .invoke('onChange')(true);
-    });
-    wrapper.update();
-    expect(
-      wrapper.find('.pf-c-table__check').first().find('input').props().checked
-    ).toBe(true);
-    await act(async () => {
-      wrapper
-        .find('.pf-c-table__check')
-        .first()
-        .find('input')
-        .invoke('onChange')(false);
-    });
-    wrapper.update();
-    expect(
-      wrapper.find('.pf-c-table__check').first().find('input').props().checked
-    ).toBe(false);
+    const { user } = renderWithContexts(<CredentialList />);
+    await screen.findByRole('link', { name: 'Foo' });
+
+    const row = screen.getByRole('link', { name: 'Foo' }).closest('tr');
+    const checkbox = within(row).getByRole('checkbox');
+
+    expect(checkbox).not.toBeChecked();
+    await user.click(checkbox);
+    expect(checkbox).toBeChecked();
+    await user.click(checkbox);
+    expect(checkbox).not.toBeChecked();
   });
 
   test('should check all row items when select all is checked', async () => {
-    wrapper.find('DataListCheck').forEach((el) => {
-      expect(el.props().checked).toBe(false);
-    });
-    await act(async () => {
-      wrapper.find('Checkbox#select-all').invoke('onChange')(true);
-    });
-    wrapper.update();
-    wrapper.find('DataListCheck').forEach((el) => {
-      expect(el.props().checked).toBe(true);
-    });
-    await act(async () => {
-      wrapper.find('Checkbox#select-all').invoke('onChange')(false);
-    });
-    wrapper.update();
-    wrapper.find('DataListCheck').forEach((el) => {
-      expect(el.props().checked).toBe(false);
-    });
+    const { user } = renderWithContexts(<CredentialList />);
+    await screen.findByRole('link', { name: 'Foo' });
+
+    const selectAll = screen.getByRole('checkbox', { name: 'Select all' });
+    const rowCheckboxes = screen
+      .getAllByRole('checkbox')
+      .filter((box) => box !== selectAll);
+
+    expect(rowCheckboxes).toHaveLength(5);
+    rowCheckboxes.forEach((box) => expect(box).not.toBeChecked());
+
+    await user.click(selectAll);
+    rowCheckboxes.forEach((box) => expect(box).toBeChecked());
+
+    await user.click(selectAll);
+    rowCheckboxes.forEach((box) => expect(box).not.toBeChecked());
   });
 
   test('should call api delete credentials for each selected credential', async () => {
-    CredentialsAPI.read.mockResolvedValueOnce({ data: mockCredentials });
-    CredentialsAPI.destroy = jest.fn();
+    CredentialsAPI.destroy = jest.fn().mockResolvedValue({});
+    const { user } = renderWithContexts(<CredentialList />);
+    await screen.findByRole('link', { name: 'Baz' });
 
-    await act(async () => {
-      wrapper
-        .find('.pf-c-table__check')
-        .at(2)
-        .find('input')
-        .invoke('onChange')();
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('ToolbarDeleteButton').invoke('onDelete')();
-    });
-    wrapper.update();
-    expect(CredentialsAPI.destroy).toHaveBeenCalledTimes(1);
+    const row = screen.getByRole('link', { name: 'Baz' }).closest('tr');
+    await user.click(within(row).getByRole('checkbox'));
+
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'confirm delete' })
+    );
+
+    await waitFor(() => expect(CredentialsAPI.destroy).toHaveBeenCalledTimes(1));
   });
 
   test('should show error modal when credential is not successfully deleted from api', async () => {
-    CredentialsAPI.destroy.mockImplementationOnce(() =>
-      Promise.reject(new Error())
+    CredentialsAPI.destroy = jest.fn().mockRejectedValueOnce(new Error());
+    const { user } = renderWithContexts(<CredentialList />);
+    await screen.findByRole('link', { name: 'Foo' });
+
+    const row = screen.getByRole('link', { name: 'Foo' }).closest('tr');
+    await user.click(within(row).getByRole('checkbox'));
+
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'confirm delete' })
     );
-    await act(async () => {
-      wrapper
-        .find('.pf-c-table__check')
-        .at(1)
-        .find('input')
-        .invoke('onChange')();
-    });
-    wrapper.update();
-    await act(async () => {
-      wrapper.find('ToolbarDeleteButton').invoke('onDelete')();
-    });
-    await waitForElement(
-      wrapper,
-      'Modal[aria-label="Deletion Error"]',
-      (el) => el.props().isOpen === true && el.props().title === 'Error!'
+
+    expect(await screen.findByText('Error!')).toBeInTheDocument();
+
+    // The deletion-error AlertModal has no footer actions, so PF renders only
+    // the modal-box X (aria-label "Close"); the app root carries aria-hidden,
+    // so getByRole can't reach it — close via the real DOM node instead.
+    await user.click(document.querySelector('button[aria-label="Close"]'));
+    await waitFor(() =>
+      expect(screen.queryByText('Error!')).not.toBeInTheDocument()
     );
-    await act(async () => {
-      wrapper.find('ModalBoxCloseButton').invoke('onClose')();
-    });
-    await waitForElement(wrapper, 'Modal', (el) => el.props().isOpen === false);
+    await settleTooltips();
   });
 });

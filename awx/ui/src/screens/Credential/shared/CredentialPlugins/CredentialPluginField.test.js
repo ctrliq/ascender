@@ -1,8 +1,8 @@
 import React from 'react';
+import { screen } from '@testing-library/react';
 import { Formik } from 'formik';
 import { TextInput } from '@patternfly/react-core';
-import { act } from 'react-dom/test-utils';
-import { mountWithContexts } from '../../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import CredentialPluginField from './CredentialPluginField';
 
 const fieldOptions = {
@@ -13,11 +13,13 @@ const fieldOptions = {
 
 jest.mock('../../../../api');
 
+const pluginButtonName =
+  'Populate field from an external secret management system';
+
 describe('<CredentialPluginField />', () => {
-  let wrapper;
   describe('No plugin configured', () => {
-    beforeAll(() => {
-      wrapper = mountWithContexts(
+    function renderField() {
+      return renderWithContexts(
         <Formik
           initialValues={{
             inputs: {
@@ -36,27 +38,41 @@ describe('<CredentialPluginField />', () => {
           )}
         </Formik>
       );
-    });
+    }
 
     test('renders the expected content', () => {
-      expect(wrapper.find('input').length).toBe(1);
-      expect(wrapper.find('KeyIcon').length).toBe(1);
-      expect(wrapper.find('CredentialPluginSelected').length).toBe(0);
+      const { container } = renderField();
+      expect(container.querySelectorAll('input')).toHaveLength(1);
+      expect(
+        screen.getByRole('button', { name: pluginButtonName })
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByText('External Secret Management System')
+      ).not.toBeInTheDocument();
     });
 
     test('clicking plugin button shows plugin prompt', async () => {
-      expect(wrapper.find('CredentialPluginPrompt').length).toBe(0);
-      await act(async () => {
-        wrapper.find('KeyIcon').simulate('click');
-      });
-      wrapper.update();
-      expect(wrapper.find('CredentialPluginPrompt').length).toBe(1);
+      const { user } = renderField();
+      expect(
+        screen.queryByRole('dialog', {
+          name: 'External Secret Management System',
+        })
+      ).not.toBeInTheDocument();
+
+      await user.click(
+        screen.getByRole('button', { name: pluginButtonName })
+      );
+      expect(
+        await screen.findByRole('dialog', {
+          name: 'External Secret Management System',
+        })
+      ).toBeInTheDocument();
     });
   });
 
   describe('Plugin already configured', () => {
-    beforeAll(() => {
-      wrapper = mountWithContexts(
+    function renderField() {
+      return renderWithContexts(
         <Formik
           initialValues={{
             inputs: {
@@ -83,13 +99,21 @@ describe('<CredentialPluginField />', () => {
           )}
         </Formik>
       );
-    });
+    }
 
     test('renders the expected content', () => {
-      expect(wrapper.find('CredentialPluginPrompt').length).toBe(0);
-      expect(wrapper.find('input').length).toBe(0);
-      expect(wrapper.find('KeyIcon').length).toBe(1);
-      expect(wrapper.find('CredentialPluginSelected').length).toBe(1);
+      const { container } = renderField();
+      expect(
+        screen.queryByText('External Secret Management System')
+      ).not.toBeInTheDocument();
+      expect(container.querySelectorAll('input')).toHaveLength(0);
+      // CredentialPluginSelected renders the edit-plugin (KeyIcon) button
+      expect(
+        screen.getByRole('button', {
+          name: 'Edit Credential Plugin Configuration',
+        })
+      ).toBeInTheDocument();
+      expect(screen.getByText('CyberArk Cred')).toBeInTheDocument();
     });
   });
 });
