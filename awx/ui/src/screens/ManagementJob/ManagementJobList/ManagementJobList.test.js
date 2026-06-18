@@ -1,11 +1,8 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { screen, waitFor } from '@testing-library/react';
 
 import { SystemJobTemplatesAPI } from 'api';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../testUtils/enzymeHelpers';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import ManagementJobList from './ManagementJobList';
 
@@ -58,22 +55,28 @@ describe('<ManagementJobList/>', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
-  let wrapper;
 
   test('should mount successfully', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(<ManagementJobList />);
-    });
-    await waitForElement(wrapper, 'ManagementJobList', (el) => el.length > 0);
+    renderWithContexts(<ManagementJobList />);
+    expect(
+      await screen.findByText('Cleanup Activity Stream')
+    ).toBeInTheDocument();
   });
 
   test('should have data fetched and render 4 rows', async () => {
-    await act(async () => {
-      wrapper = mountWithContexts(<ManagementJobList />);
-    });
-    await waitForElement(wrapper, 'ManagementJobList', (el) => el.length > 0);
+    renderWithContexts(<ManagementJobList />);
+    await screen.findByText('Cleanup Activity Stream');
 
-    expect(wrapper.find('ManagementJobListItem').length).toBe(4);
+    const rows = managementJobs.data.results.map((job) => job.name);
+    rows.forEach((name) => {
+      expect(screen.getByText(name)).toBeInTheDocument();
+    });
+    // Verify the list renders exactly one row per management job (excluding the
+    // header row) so missing/duplicate rows are caught.
+    const dataRows = screen
+      .getAllByRole('row')
+      .filter((row) => row.id.startsWith('mgmt-jobs-row-'));
+    expect(dataRows).toHaveLength(managementJobs.data.results.length);
     expect(SystemJobTemplatesAPI.read).toHaveBeenCalled();
     expect(SystemJobTemplatesAPI.readOptions).toHaveBeenCalled();
   });
@@ -90,11 +93,10 @@ describe('<ManagementJobList/>', () => {
         },
       })
     );
-    await act(async () => {
-      wrapper = mountWithContexts(<ManagementJobList />);
-    });
-    await waitForElement(wrapper, 'ManagementJobList', (el) => el.length > 0);
-    expect(wrapper.find('ContentError').length).toBe(1);
+    renderWithContexts(<ManagementJobList />);
+    expect(
+      await screen.findByText('Something went wrong...')
+    ).toBeInTheDocument();
   });
 
   test('should not render add button', async () => {
@@ -102,10 +104,12 @@ describe('<ManagementJobList/>', () => {
     SystemJobTemplatesAPI.readOptions.mockResolvedValue({
       data: { actions: { POST: false } },
     });
-    await act(async () => {
-      wrapper = mountWithContexts(<ManagementJobList />);
-    });
-    waitForElement(wrapper, 'ManagementJobList', (el) => el.length > 0);
-    expect(wrapper.find('ToolbarAddButton').length).toBe(0);
+    renderWithContexts(<ManagementJobList />);
+    await screen.findByText('Cleanup Activity Stream');
+    await waitFor(() =>
+      expect(
+        screen.queryByRole('button', { name: /Add/i })
+      ).not.toBeInTheDocument()
+    );
   });
 });
