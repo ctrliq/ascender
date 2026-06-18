@@ -52,7 +52,6 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^12.1.5",
     "@testing-library/user-event": "14.6.1",
-    "@wojtekmaj/enzyme-adapter-react-17": "0.8.0",
     "babel-jest": "^30.3.0",
     "babel-loader": "^10.1.1",
     "babel-plugin-macros": "3.1.0",
@@ -68,8 +67,6 @@
     "css-minimizer-webpack-plugin": "^8.0.0",
     "dotenv": "^17.4.2",
     "dotenv-expand": "^13.0.0",
-    "enzyme": "^3.11.0",
-    "enzyme-to-json": "^3.6.2",
     "eslint": "^9.39.4",
     "eslint-config-airbnb-extended": "^3.1.0",
     "eslint-config-prettier": "10.1.8",
@@ -205,9 +202,6 @@
     "coveragePathIgnorePatterns": [
       "<rootDir>/src/locales",
       "index.js"
-    ],
-    "snapshotSerializers": [
-      "enzyme-to-json/serializer"
     ]
   },
   "babel": {

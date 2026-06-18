@@ -79,8 +79,8 @@ describe('<SmartInventoryForm />', () => {
   });
 
   // The host filter field is disabled until the form's `organization` value is
-  // truthy. The enzyme test drove OrganizationLookup.onChange directly; instead
-  // we seed `organization` from initialValues (inventory.summary_fields). The
+  // truthy. Instead of driving OrganizationLookup.onChange directly, we
+  // seed `organization` from initialValues (inventory.summary_fields). The
   // HostFilterLookup's search/open button has id="host-filter" and receives the
   // `isDisabled` prop, which renders as the button's `disabled` attribute, so we
   // query that button to read the enabled/disabled signal.
@@ -129,9 +129,8 @@ describe('<SmartInventoryForm />', () => {
     expect(onSubmit).not.toHaveBeenCalled();
   });
 
-  // The enzyme suite drove HostFilterLookup.onChange directly to set a
-  // host_filter string and then asserted on the rendered ChipGroup chips.
-  // HostFilterLookup.onChange is not drivable through the real DOM without
+  // HostFilterLookup.onChange could set a host_filter string whose ChipGroup
+  // chips we then assert on, but it is not drivable through the real DOM without
   // opening its search modal, but the `?host_filter=` query-param path
   // exercises the same chip-rendering code: initialValues seeds host_filter
   // from the param, and HostFilterLookup builds chips from `value`. This single

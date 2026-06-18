@@ -47,8 +47,8 @@ function renderItem(ui, options) {
 }
 
 // A non-failed job renders the plain "Relaunch" button; a failed playbook run
-// renders the relaunch dropdown whose toggle is labelled "relaunch jobs". Both
-// stand in for the enzyme `find('LaunchButton')` assertion.
+// renders the relaunch dropdown whose toggle is labelled "relaunch jobs". This
+// returns whichever launch control is present.
 function queryLaunchButton(scope) {
   return (
     scope.queryByRole('button', { name: 'Relaunch' }) ||

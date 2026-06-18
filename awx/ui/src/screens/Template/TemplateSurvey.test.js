@@ -70,13 +70,13 @@ describe('<TemplateSurvey />', () => {
   });
 
   test('should update API with survey changes', async () => {
-    // The enzyme suite invoked SurveyList's `updateSurvey` prop directly with an
-    // arbitrary 2-item spec. There is no DOM path that builds that exact array,
+    // Invoking SurveyList's `updateSurvey` prop directly with an arbitrary
+    // 2-item spec has no DOM path that builds that exact array,
     // so this drives the same wiring (SurveyList.updateSurvey ->
     // TemplateSurvey.updateSurveySpec -> JobTemplatesAPI.updateSurvey) through a
     // partial delete: a 2-question survey with one question selected, on confirm,
-    // calls updateSurvey with the surviving spec. NOTE: asserted spec differs
-    // from the enzyme array because the payload is now derived from real UI input.
+    // calls updateSurvey with the surviving spec. NOTE: the asserted spec is
+    // derived from real UI input.
     const twoQuestionSurvey = {
       name: 'Survey',
       description: 'description for survey',

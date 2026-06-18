@@ -112,8 +112,8 @@ describe('<ConstructedInventoryForm />', () => {
     expect(onSubmit).not.toHaveBeenCalled();
   });
 
-  // ADAPTATION: the original enzyme test "should show field error when form is
-  // saved without constructed plugin parameter" drove the VariablesField's
+  // ADAPTATION: the original "should show field error when form is
+  // saved without constructed plugin parameter" test drove the VariablesField's
   // CodeEditor onChange/onBlur directly to trigger the `plugin` required
   // validator ('The plugin parameter is required.'). Under jsdom react-ace /
   // CodeEditor renders empty, so the editor cannot be typed into or blurred

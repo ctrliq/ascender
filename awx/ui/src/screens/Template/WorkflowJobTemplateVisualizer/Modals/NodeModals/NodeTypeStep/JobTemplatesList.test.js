@@ -116,8 +116,8 @@ describe('JobTemplatesList', () => {
 
     const row = screen.getByRole('row', { name: /Test Job Template/ });
     // The row action is a PF Popover whose trigger is an
-    // OutlinedQuestionCircleIcon (role=img). Its presence is the RTL proxy for
-    // the enzyme assertion that the row rendered exactly one Popover. We do not
+    // OutlinedQuestionCircleIcon (role=img). Its presence is how we assert
+    // that the row rendered exactly one Popover. We do not
     // open the popover: its body (TemplatePopoverContent) renders against mock
     // data lacking summary_fields, which would log prop-type console errors that
     // the setupTests trap turns into failures.

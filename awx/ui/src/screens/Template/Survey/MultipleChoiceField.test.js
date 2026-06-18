@@ -6,8 +6,8 @@ import MultipleChoiceField from './MultipleChoiceField';
 
 // The CheckIcon styled-component encodes the `selected` prop purely as a CSS
 // color rule (selected -> secondary active color, unselected -> disabled
-// color). enzyme read `CheckIcon.prop('selected')`; the RTL proxy reads the
-// resolved color on the rendered <svg>.
+// color). To proxy the `selected` prop we read the resolved color on the
+// rendered <svg>.
 const SELECTED_COLOR = 'var(--pf-c-button--m-secondary--active--Color)';
 
 const isSelected = (ouiaId) => {

@@ -99,8 +99,8 @@ describe('<InventorySourceForm />', () => {
     );
     await screen.findByText('Source');
 
-    // The enzyme test drove CredentialLookup/ProjectLookup/source_path/verbosity
-    // via .invoke before saving. Those sub-lookups debounce 1000ms and driving
+    // We don't drive CredentialLookup/ProjectLookup/source_path/verbosity
+    // before saving. Those sub-lookups debounce 1000ms and driving
     // them through the real DOM is slow and flaky, so we drop them: the point
     // of the test is that an invalid (empty Name) form blocks submit. Select a
     // source to render the subform, leave Name empty, then click Save once.

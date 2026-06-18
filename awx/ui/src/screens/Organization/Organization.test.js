@@ -89,7 +89,7 @@ describe('<Organization />', () => {
   test('fetches the organization detail', async () => {
     renderAt('/organizations/1/details');
     expect(await screen.findByText('OrganizationDetail')).toBeInTheDocument();
-    // real route params are strings (the old enzyme test mocked a number)
+    // real route params are strings (route params are always strings under react-router)
     expect(OrganizationsAPI.readDetail).toHaveBeenCalledWith('1');
   });
 

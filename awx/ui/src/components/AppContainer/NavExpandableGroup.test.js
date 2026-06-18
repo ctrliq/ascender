@@ -28,7 +28,7 @@ function renderGroup(initialEntry) {
 }
 
 // PF NavItem renders the active link with aria-current="page" (the DOM
-// equivalent of the enzyme NavItem isActive prop), and each Link renders an
+// equivalent of the NavItem isActive prop), and each Link renders an
 // <a> whose href is the route path (the DOM equivalent of Link `to`).
 describe('NavExpandableGroup', () => {
   test('initialization and render', () => {

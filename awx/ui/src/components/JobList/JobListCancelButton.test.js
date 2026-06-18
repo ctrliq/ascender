@@ -15,8 +15,8 @@ describe('<JobListCancelButton />', () => {
     const { user } = renderWithContexts(<JobListCancelButton jobsToCancel={[]} />);
     expect(getCancelButton()).toBeDisabled();
 
-    // Tooltip content is rendered on hover; matches the old enzyme
-    // Tooltip[content="Select a job to cancel"] assertion.
+    // Tooltip content is rendered on hover; asserts the
+    // "Select a job to cancel" tooltip text.
     await user.hover(getCancelButton().closest('div'));
     expect(
       await screen.findByText('Select a job to cancel')

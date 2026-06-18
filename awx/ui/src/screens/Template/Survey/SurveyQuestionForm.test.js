@@ -209,8 +209,8 @@ describe('<SurveyQuestionForm />', () => {
   });
 
   // The default-toggle renders a styled CheckIcon whose `selected` prop drives
-  // a styled-components class. enzyme read the `selected` prop directly; in the
-  // real DOM we proxy it by asserting the icon's class changes when toggled.
+  // a styled-components class. In the real DOM we proxy that prop by asserting
+  // the icon's class changes when toggled.
   const toggleButton = (choice) =>
     document.querySelector(`[data-ouia-component-id="${choice}-button"]`);
   const iconClass = (choice) =>

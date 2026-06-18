@@ -237,7 +237,7 @@ It is good practice to bind our class methods within our class constructor metho
 
 1. Avoid defining the method every time `render()` is called.
 2. [Performance advantages](https://stackoverflow.com/a/44844916).
-3. Ease of [testing](https://github.com/airbnb/enzyme/issues/365).
+3. Ease of testing.
 
 ### Typechecking with PropTypes
 
@@ -303,26 +303,25 @@ this.state = {
 
 ### Testing components that use contexts
 
-We have several React contexts that wrap much of the app, including those from react-router, lingui, and some of our own. When testing a component that depends on one or more of these, you can use the `mountWithContexts()` helper function found in `testUtils/enzymeHelpers.js`. This can be used just like Enzyme's `mount()` function, except it will wrap the component tree with the necessary context providers and basic stub data.
+We have several React contexts that wrap much of the app, including those from react-router, lingui, and some of our own. When testing a component that depends on one or more of these, use the `renderWithContexts()` helper function found in `testUtils/rtlContexts.js`. It wraps the component tree with the necessary context providers and basic stub data, then returns [React Testing Library](https://testing-library.com/docs/react-testing-library/intro)'s `render` result plus a `history` object and a configured `user` (from `@testing-library/user-event`).
 
-If you want to stub the value of a context, or assert actions taken on it, you can customize a contexts value by passing a second parameter to `mountWithContexts`. For example, this provides a custom value for the `Config` context:
+If you want to stub the value of a context, or assert actions taken on it, you can customize a context's value by passing a `context` object as the second parameter. For example, this provides a custom value for the `Config` context:
 
 ```javascript
 const config = {
-  isDev: true,
+  version: '1.2.3',
 };
-mountWithContexts(<OrganizationForm />, {
+const { user } = renderWithContexts(<OrganizationForm />, {
   context: { config },
 });
 ```
 
-The object containing context values looks for five known contexts, identified by the keys `linguiPublisher`, `router`, `config`, `network`, and `dialog` — the latter three each referring to the contexts defined in `src/contexts`. You can pass `false` for any of these values, and the corresponding context will be omitted from your test. For example, this will mount your component without the dialog context:
+The `context` object recognizes three keys — `config`, `session`, and `router` — each merged over the helper's default stub data. Pass `router: { history }` to drive the component with a specific `createMemoryHistory()` instance:
 
 ```javascript
-mountWithContexts(<Organization />< {
-  context: {
-    dialog: false,
-  }
+const history = createMemoryHistory({ initialEntries: ['/organizations/1'] });
+renderWithContexts(<Organization />, {
+  context: { router: { history } },
 });
 ```
 

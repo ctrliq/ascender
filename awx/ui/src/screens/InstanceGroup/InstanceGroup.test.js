@@ -72,7 +72,7 @@ describe('<InstanceGroup />', () => {
   test('fetches the instance group detail', async () => {
     renderAt('/instance_groups/42/details');
     expect(await screen.findByText('InstanceGroupDetails')).toBeInTheDocument();
-    // real route params are strings (the old enzyme test mocked a number)
+    // real route params are strings (route params are always strings under react-router)
     expect(InstanceGroupsAPI.readDetail).toHaveBeenCalledWith('42');
   });
 

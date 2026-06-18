@@ -81,7 +81,7 @@ describe('<ActivityStreamDetailButton />', () => {
 
     // the changes payload is rendered into a read-only code editor. The Ace
     // editor keeps its text in an internal model that does not surface as DOM
-    // text under jsdom (the enzyme suite read it off the CodeEditor `value`
+    // text under jsdom (the value is held on the CodeEditor `value`
     // prop, which RTL cannot reach), so assert the editor is present and that
     // VariablesDetail detected the JSON changes object and engaged JSON mode --
     // the active mode button is the PF "primary" variant.

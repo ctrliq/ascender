@@ -3,9 +3,9 @@ import { render } from '@testing-library/react';
 import StatusIcon from './StatusIcon';
 
 // The PF icon SVGs have role="img" but no distinguishing accessible name,
-// so to preserve the original per-icon assertions we match on the SVG path
+// so to preserve the per-icon assertions we match on the SVG path
 // data, which is unique per icon component. Each prefix below identifies the
-// icon the original enzyme test looked up by component name.
+// icon by its component.
 const ICON_PATH_PREFIX = {
   CheckCircleIcon: 'M504 256c0 136.967-111.033 248',
   RunningIcon: 'M370.72 133.28C339.458 104.008',

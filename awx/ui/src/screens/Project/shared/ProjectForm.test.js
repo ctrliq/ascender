@@ -136,8 +136,8 @@ describe('<ProjectForm />', () => {
   });
 
   test('renders the scm subform for a git project with prefilled lookups', async () => {
-    // The synthetic onChange-invoke wiring covered by the original enzyme test
-    // is internal Formik/Lookup plumbing; assert instead that an existing git
+    // The synthetic onChange-invoke wiring is internal Formik/Lookup
+    // plumbing; assert instead that an existing git
     // project mounts with its scm subform (URL + credential) and the
     // organization lookup prefilled from summary_fields.
     renderWithContexts(

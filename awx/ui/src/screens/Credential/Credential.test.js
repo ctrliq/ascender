@@ -68,7 +68,7 @@ describe('<Credential />', () => {
   test('fetches the credential detail', async () => {
     renderAt('/credentials/2/details');
     expect(await screen.findByText('CredentialDetail')).toBeInTheDocument();
-    // real route params are strings (the old enzyme test mocked a number)
+    // real route params are strings (route params are always strings under react-router)
     expect(CredentialsAPI.readDetail).toHaveBeenCalledWith('2');
   });
 

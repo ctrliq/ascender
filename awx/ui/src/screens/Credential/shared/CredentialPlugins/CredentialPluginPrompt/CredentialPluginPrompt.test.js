@@ -178,8 +178,7 @@ describe('<CredentialPluginPrompt />', () => {
       await user.click(screen.getByRole('button', { name: 'OK' }));
 
       // MetadataStep fields are named inputs.<id>, so the metadata values are
-      // submitted nested under `inputs` (the old enzyme test set a flat key via
-      // a synthetic event's `name`, which the real input/formik wiring does not).
+      // submitted nested under `inputs`.
       expect(onSubmit).toHaveBeenCalledWith(
         expect.objectContaining({
           credential: selectedCredential,

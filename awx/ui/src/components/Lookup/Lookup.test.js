@@ -10,7 +10,7 @@ const QS_CONFIG = getQSConfig('test', {});
 describe('<Lookup />', () => {
   let onChange;
   // Captures the most recent render-props the Lookup passes to its options
-  // list, so tests can assert on state/canDelete without an enzyme wrapper.
+  // list, so tests can assert on state/canDelete directly.
   let lastRenderProps;
 
   const renderOptionsList = (renderProps) => {

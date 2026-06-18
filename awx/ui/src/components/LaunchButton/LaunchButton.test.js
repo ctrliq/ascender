@@ -17,7 +17,7 @@ jest.mock('../../api');
 
 describe('LaunchButton', () => {
   // The render-prop children expose a plain button; give it an accessible name
-  // so it can be driven by role, replacing enzyme's wrapper.find('button').
+  // so it can be driven by role.
   const launchButton = ({ handleLaunch }) => (
     <button type="submit" aria-label="launch" onClick={() => handleLaunch()} />
   );

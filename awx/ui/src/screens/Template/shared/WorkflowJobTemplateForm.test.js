@@ -83,8 +83,8 @@ describe('<WorkflowJobTemplateForm/>', () => {
 
   beforeEach(async () => {
     // The VariablesField CodeEditor and deeply-nested PF Lookup components log
-    // warnings under the partial API mocks; silence console.error as the
-    // enzyme suite effectively did so they don't fail the run.
+    // warnings under the partial API mocks; silence console.error so they
+    // don't fail the run.
     consoleError = global.console.error;
     global.console.error = jest.fn();
     WorkflowJobTemplatesAPI.updateWebhookKey.mockResolvedValue({

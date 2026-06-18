@@ -123,10 +123,9 @@ describe('<InventoryForm />', () => {
     expect(nameInput).toHaveValue('new Foo');
     // the org field renders (its label was awaited in renderForm)
     expect(screen.getByText('Organization')).toBeInTheDocument();
-    // The original enzyme test also drove OrganizationLookup.onChange via
-    // `.invoke`; driving the full org-lookup modal through the real DOM is
-    // heavy and debounces 1000ms, so that sub-assertion is intentionally
-    // dropped here per the migration guidance.
+    // Driving the full org-lookup modal through the real DOM is
+    // heavy and debounces 1000ms, so the OrganizationLookup.onChange
+    // sub-assertion is intentionally dropped here per the migration guidance.
   });
 
   test('should call onCancel when Cancel button is clicked', async () => {

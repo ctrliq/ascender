@@ -15,8 +15,7 @@ jest.mock('../../../../../api/models/Projects');
 jest.mock('../../../../../api/models/WorkflowJobTemplates');
 
 // Capture the onSave prop NodeEditModal hands to NodeModal so the test can
-// invoke it directly, mirroring the enzyme `wrapper.find('NodeModal').prop`
-// access. The real NodeModal wizard is not exercised here.
+// invoke it directly. The real NodeModal wizard is not exercised here.
 let capturedOnSave;
 jest.mock('./NodeModal', () => (props) => {
   capturedOnSave = props.onSave;

@@ -160,8 +160,8 @@ describe('<Search />', () => {
     });
     renderSearch({ columns }, { context: { router: { history } } });
 
-    // The enzyme suite read ToolbarFilter `chips[0].key` (e.g. 'or__scm_type:foo');
-    // the DOM equivalent is the chip-group category label + the visible chip text.
+    // Assert the chip-group category label + the visible chip text (the
+    // DOM equivalent of the ToolbarFilter chip key, e.g. 'or__scm_type:foo').
     // Option-based columns render the option label ('Foo Bar!'), not the raw value.
     const typeGroup = screen
       .getByText('Type (or__scm_type)')
@@ -253,7 +253,7 @@ describe('<Search />', () => {
     renderSearch({ columns }, { context: { router: { history } } });
 
     // Keys without a search column still get their own ToolbarFilter chip group;
-    // assert the category label + chip text the enzyme suite read off the props.
+    // assert the category label + chip text rendered for that group.
     const nameExactGroup = screen
       .getByText('name__exact')
       .closest('.pf-c-chip-group');
