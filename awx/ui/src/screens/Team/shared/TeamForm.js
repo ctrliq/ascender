@@ -53,9 +53,13 @@ function TeamFormFields({ team }) {
   );
 }
 
-function TeamForm(props) {
-  const { team, handleCancel, handleSubmit, submitError, ...rest } = props;
-
+function TeamForm({
+  team = {},
+  handleCancel,
+  handleSubmit,
+  submitError = null,
+  ...rest
+}) {
   return (
     <Formik
       initialValues={{
@@ -86,11 +90,6 @@ TeamForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   team: PropTypes.shape({}),
   submitError: PropTypes.shape(),
-};
-
-TeamForm.defaultProps = {
-  team: {},
-  submitError: null,
 };
 
 export default TeamForm;

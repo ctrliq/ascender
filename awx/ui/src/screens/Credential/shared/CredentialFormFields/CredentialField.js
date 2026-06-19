@@ -29,7 +29,7 @@ const FileUpload = styled(PFFileUpload)`
 function CredentialInput({
   fieldOptions,
   isFieldGroupValid,
-  credentialKind,
+  credentialKind = '',
   isVaultIdDisabled,
   ...rest
 }) {
@@ -167,10 +167,6 @@ CredentialInput.propTypes = {
   credentialKind: string,
 };
 
-CredentialInput.defaultProps = {
-  credentialKind: '',
-};
-
 function CredentialField({ credentialType, fieldOptions }) {
   const { values: formikValues } = useFormikContext();
   const location = useLocation();
@@ -255,7 +251,5 @@ CredentialField.propTypes = {
     label: string.isRequired,
   }).isRequired,
 };
-
-CredentialField.defaultProps = {};
 
 export default CredentialField;

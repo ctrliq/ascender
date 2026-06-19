@@ -17,8 +17,13 @@ const Checkbox = styled(PFCheckbox)`
   }
 `;
 
-function CheckboxCard(props) {
-  const { name, description, isSelected, onSelect, itemId } = props;
+function CheckboxCard({
+  name,
+  description = '',
+  isSelected = false,
+  onSelect = null,
+  itemId,
+}) {
   return (
     <CheckboxWrapper>
       <Checkbox
@@ -45,12 +50,6 @@ CheckboxCard.propTypes = {
   isSelected: PropTypes.bool,
   onSelect: PropTypes.func,
   itemId: PropTypes.number.isRequired,
-};
-
-CheckboxCard.defaultProps = {
-  description: '',
-  isSelected: false,
-  onSelect: null,
 };
 
 export default CheckboxCard;

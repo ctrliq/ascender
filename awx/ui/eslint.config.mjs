@@ -214,6 +214,10 @@ export default defineConfig([
       'react/jsx-props-no-spreading': ['off'],
       'react/prefer-stateless-function': 'off',
       'react/prop-types': 'off',
+      // default values are expressed via ES default parameters (the React
+      // 18.3/19 migration away from the deprecated defaultProps), so accept a
+      // destructured default argument in place of a defaultProps entry
+      'react/require-default-props': ['error', { functions: 'defaultArguments' }],
       'react/sort-comp': ['error', {}],
       'jsx-a11y/label-has-for': 'off',
       'jsx-a11y/label-has-associated-control': 'off',

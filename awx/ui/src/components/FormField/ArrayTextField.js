@@ -4,20 +4,18 @@ import { useField } from 'formik';
 import { FormGroup, TextArea } from '@patternfly/react-core';
 import Popover from '../Popover';
 
-function ArrayTextField(props) {
-  const {
-    id,
-    helperText,
-    name,
-    label,
-    tooltip,
-    tooltipMaxWidth,
-    validate,
-    isRequired,
-    type,
-    ...rest
-  } = props;
-
+function ArrayTextField({
+  id,
+  helperText = '',
+  name,
+  label,
+  tooltip = null,
+  tooltipMaxWidth = '',
+  validate = () => {},
+  isRequired = false,
+  type,
+  ...rest
+}) {
   const [field, meta, helpers] = useField({ name, validate });
   const isValid = !(meta.touched && meta.error);
   const value = field.value || [];
@@ -61,14 +59,6 @@ ArrayTextField.propTypes = {
   isRequired: PropTypes.bool,
   tooltip: PropTypes.node,
   tooltipMaxWidth: PropTypes.string,
-};
-
-ArrayTextField.defaultProps = {
-  helperText: '',
-  validate: () => {},
-  isRequired: false,
-  tooltip: null,
-  tooltipMaxWidth: '',
 };
 
 export default ArrayTextField;

@@ -21,14 +21,14 @@ const QS_CONFIG = getQSConfig('instance-groups', {
 });
 
 function InstanceGroupsLookup({
-  id,
+  id = 'org-instance-groups',
   value,
   onChange,
-  tooltip,
-  className,
-  required,
-  fieldName,
-  validate,
+  tooltip = '',
+  className = '',
+  required = false,
+  fieldName = 'instance_groups',
+  validate = () => undefined,
   isPromptableField,
   promptId,
   promptName,
@@ -167,15 +167,6 @@ InstanceGroupsLookup.propTypes = {
   required: bool,
   validate: func,
   fieldName: string,
-};
-
-InstanceGroupsLookup.defaultProps = {
-  id: 'org-instance-groups',
-  tooltip: '',
-  className: '',
-  required: false,
-  validate: () => undefined,
-  fieldName: 'instance_groups',
 };
 
 export default InstanceGroupsLookup;

@@ -74,11 +74,6 @@ describe('CredentialLookup', () => {
     expect(await screen.findByText('Foo')).toBeInTheDocument();
   });
 
-  test('should define default value for function props', () => {
-    expect(_CredentialLookup.defaultProps.onBlur).toBeInstanceOf(Function);
-    expect(_CredentialLookup.defaultProps.onBlur).not.toThrow();
-  });
-
   test('should not auto-select credential when autoPopulate prop is false', async () => {
     CredentialsAPI.read.mockResolvedValue({
       data: {

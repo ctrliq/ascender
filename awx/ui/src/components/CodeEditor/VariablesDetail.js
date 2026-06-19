@@ -18,11 +18,11 @@ import CodeEditor from './CodeEditor';
 import { JSON_MODE, YAML_MODE } from './constants';
 
 function VariablesDetail({
-  dataCy,
-  helpText,
+  dataCy = '',
+  helpText = '',
   value,
   label,
-  rows,
+  rows = null,
   fullHeight,
   name,
 }) {
@@ -158,12 +158,6 @@ VariablesDetail.propTypes = {
   helpText: oneOfType([node, string]),
   name: string.isRequired,
 };
-VariablesDetail.defaultProps = {
-  rows: null,
-  dataCy: '',
-  helpText: '',
-};
-
 function ModeToggle({
   id,
   label,

@@ -32,7 +32,7 @@ const NoOptionDropdown = styled.div`
   border-bottom-color: var(--pf-global--BorderColor--200);
 `;
 
-function Sort({ columns, qsConfig, onSort }) {
+function Sort({ columns, qsConfig, onSort = null }) {
   const { t } = useLingui();
   const location = useLocation();
   const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false);
@@ -153,10 +153,6 @@ Sort.propTypes = {
   qsConfig: QSConfig.isRequired,
   columns: SortColumns.isRequired,
   onSort: PropTypes.func,
-};
-
-Sort.defaultProps = {
-  onSort: null,
 };
 
 export default Sort;

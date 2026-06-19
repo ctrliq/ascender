@@ -13,7 +13,14 @@ import { DetailName, DetailValue } from './Detail';
 import CodeEditor from '../CodeEditor';
 import Popover from '../Popover';
 
-function CodeDetail({ value, label, mode, rows, helpText, dataCy }) {
+function CodeDetail({
+  value,
+  label,
+  mode,
+  rows = null,
+  helpText = '',
+  dataCy = '',
+}) {
   const labelCy = dataCy ? `${dataCy}-label` : null;
   const valueCy = dataCy ? `${dataCy}-value` : null;
   const editorId = dataCy ? `${dataCy}-editor` : 'code-editor';
@@ -65,10 +72,4 @@ CodeDetail.propTypes = {
   rows: oneOfType([number, string]),
   mode: oneOf(['json', 'javascript', 'yaml', 'jinja2']).isRequired,
 };
-CodeDetail.defaultProps = {
-  rows: null,
-  helpText: '',
-  dataCy: '',
-};
-
 export default CodeDetail;

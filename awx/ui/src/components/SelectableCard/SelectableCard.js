@@ -32,12 +32,12 @@ const Description = styled.p`
 `;
 
 function SelectableCard({
-  label,
-  description,
+  label = '',
+  description = '',
   onClick,
-  isSelected,
+  isSelected = false,
   dataCy,
-  ariaLabel,
+  ariaLabel = '',
 }) {
   return (
     <SelectableItem
@@ -64,13 +64,6 @@ SelectableCard.propTypes = {
   onClick: PropTypes.func.isRequired,
   isSelected: PropTypes.bool,
   ariaLabel: PropTypes.string,
-};
-
-SelectableCard.defaultProps = {
-  label: '',
-  description: '',
-  isSelected: false,
-  ariaLabel: '',
 };
 
 export default SelectableCard;

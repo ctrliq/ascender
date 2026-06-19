@@ -120,8 +120,8 @@ function InventoryForm({
   inventory = {},
   onSubmit,
   onCancel,
-  submitError,
-  instanceGroups,
+  submitError = null,
+  instanceGroups = [],
   ...rest
 }) {
   const initialValues = {
@@ -165,12 +165,6 @@ InventoryForm.propType = {
   instanceGroups: shape(),
   inventory: shape(),
   submitError: shape(),
-};
-
-InventoryForm.defaultProps = {
-  inventory: {},
-  instanceGroups: [],
-  submitError: null,
 };
 
 export default InventoryForm;

@@ -42,12 +42,12 @@ const AdvancedGroup = styled.div`
 
 function AdvancedSearch({
   onSearch,
-  searchableKeys,
-  relatedSearchableKeys,
-  maxSelectHeight,
-  enableNegativeFiltering,
-  enableRelatedFuzzyFiltering,
-  handleIsAnsibleFactsSelected,
+  searchableKeys = [],
+  relatedSearchableKeys = [],
+  maxSelectHeight = '300px',
+  enableNegativeFiltering = true,
+  enableRelatedFuzzyFiltering = true,
+  handleIsAnsibleFactsSelected = () => {},
   isFilterCleared,
 }) {
   const { t } = useLingui();
@@ -354,15 +354,6 @@ AdvancedSearch.propTypes = {
   enableNegativeFiltering: bool,
   enableRelatedFuzzyFiltering: bool,
   handleIsAnsibleFactsSelected: func,
-};
-
-AdvancedSearch.defaultProps = {
-  searchableKeys: [],
-  relatedSearchableKeys: [],
-  maxSelectHeight: '300px',
-  enableNegativeFiltering: true,
-  enableRelatedFuzzyFiltering: true,
-  handleIsAnsibleFactsSelected: () => {},
 };
 
 export default AdvancedSearch;

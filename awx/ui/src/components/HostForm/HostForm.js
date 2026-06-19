@@ -73,10 +73,18 @@ const InventoryLookupField = ({ isDisabled }) => {
 const HostForm = ({
   handleCancel,
   handleSubmit,
-  host,
-  isInventoryVisible,
-  submitError,
-  disableInventoryLookup,
+  host = {
+    name: '',
+    description: '',
+    inventory: undefined,
+    variables: '---\n',
+    summary_fields: {
+      inventory: null,
+    },
+  },
+  isInventoryVisible = true,
+  submitError = null,
+  disableInventoryLookup = false,
 }) => {
   const { t } = useLingui();
   return (
@@ -135,21 +143,6 @@ HostForm.propTypes = {
   isInventoryVisible: bool,
   submitError: shape({}),
   disableInventoryLookup: bool,
-};
-
-HostForm.defaultProps = {
-  host: {
-    name: '',
-    description: '',
-    inventory: undefined,
-    variables: '---\n',
-    summary_fields: {
-      inventory: null,
-    },
-  },
-  isInventoryVisible: true,
-  submitError: null,
-  disableInventoryLookup: false,
 };
 
 export { HostForm as _HostForm };

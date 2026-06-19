@@ -26,21 +26,20 @@ const EmptyStateControlsWrapper = styled.div`
     margin-left: 20px;
   }
 `;
-function ListHeader(props) {
+function ListHeader({
+  emptyStateControls,
+  itemCount,
+  pagination,
+  qsConfig,
+  relatedSearchableKeys = [],
+  renderToolbar = (toolbarProps) => <DataListToolbar {...toolbarProps} />,
+  searchColumns,
+  searchableKeys = [],
+  sortColumns = null,
+}) {
   const { search, pathname } = useLocation();
   const [isFilterCleared, setIsFilterCleared] = useState(false);
   const navigate = useNavigate();
-  const {
-    emptyStateControls,
-    itemCount,
-    pagination,
-    qsConfig,
-    relatedSearchableKeys,
-    renderToolbar,
-    searchColumns,
-    searchableKeys,
-    sortColumns,
-  } = props;
 
   const handleSearch = (key, value) => {
     const params = parseQueryString(qsConfig, search);
@@ -139,13 +138,6 @@ ListHeader.propTypes = {
   relatedSearchableKeys: PropTypes.arrayOf(PropTypes.string),
   sortColumns: SortColumns,
   renderToolbar: PropTypes.func,
-};
-
-ListHeader.defaultProps = {
-  renderToolbar: (props) => <DataListToolbar {...props} />,
-  searchableKeys: [],
-  sortColumns: null,
-  relatedSearchableKeys: [],
 };
 
 export default ListHeader;

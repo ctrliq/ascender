@@ -71,6 +71,4 @@ TypeInputsSubForm.propTypes = {
   credentialType: CredentialType.isRequired,
 };
 
-TypeInputsSubForm.defaultProps = {};
-
 export default TypeInputsSubForm;

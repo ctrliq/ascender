@@ -18,11 +18,12 @@ function CodeEditorField({
   id,
   name,
   label,
-  tooltip,
-  helperText,
-  validate,
-  isRequired,
+  tooltip = null,
+  helperText = '',
+  validate = () => {},
+  isRequired = false,
   mode,
+  rows = 5,
   ...rest
 }) {
   const [field, meta, helpers] = useField({ name, validate });
@@ -47,6 +48,7 @@ function CodeEditorField({
           helpers.setValue(value);
         }}
         mode={mode}
+        rows={rows}
       />
     </FormGroup>
   );
@@ -61,14 +63,6 @@ CodeEditorField.propTypes = {
   tooltip: node,
   mode: oneOf(['javascript', 'yaml', 'jinja2']).isRequired,
   rows: number,
-};
-
-CodeEditorField.defaultProps = {
-  helperText: '',
-  validate: () => {},
-  isRequired: false,
-  tooltip: null,
-  rows: 5,
 };
 
 export default CodeEditorField;

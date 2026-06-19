@@ -5,7 +5,7 @@ import { useLingui } from '@lingui/react/macro';
 import { ActionGroup, Button } from '@patternfly/react-core';
 import { FormFullWidthLayout } from '../FormLayout';
 
-const FormActionGroup = ({ onCancel, onSubmit, submitDisabled }) => {
+const FormActionGroup = ({ onCancel, onSubmit, submitDisabled = false }) => {
   const { t } = useLingui();
   return (
     <FormFullWidthLayout>
@@ -39,10 +39,6 @@ FormActionGroup.propTypes = {
   onCancel: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   submitDisabled: PropTypes.bool,
-};
-
-FormActionGroup.defaultProps = {
-  submitDisabled: false,
 };
 
 export default FormActionGroup;

@@ -17,7 +17,7 @@ function cannotCancelBecauseNotRunning(job) {
   return !isJobRunning(job.status);
 }
 
-function JobListCancelButton({ jobsToCancel, onCancel }) {
+function JobListCancelButton({ jobsToCancel = [], onCancel = () => {} }) {
   const { t } = useLingui();
   const { isKebabified, onKebabModalChange } = useContext(KebabifiedContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -186,11 +186,6 @@ function JobListCancelButton({ jobsToCancel, onCancel }) {
 JobListCancelButton.propTypes = {
   jobsToCancel: arrayOf(Job),
   onCancel: func,
-};
-
-JobListCancelButton.defaultProps = {
-  jobsToCancel: [],
-  onCancel: () => {},
 };
 
 export default JobListCancelButton;

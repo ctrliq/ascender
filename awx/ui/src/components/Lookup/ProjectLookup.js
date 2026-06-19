@@ -22,17 +22,17 @@ const QS_CONFIG = getQSConfig('project', {
 });
 
 function ProjectLookup({
-  helperTextInvalid,
-  autoPopulate,
-  isValid,
+  helperTextInvalid = '',
+  autoPopulate = false,
+  isValid = true,
   onChange,
-  required,
-  tooltip,
-  value,
-  onBlur,
-  isOverrideDisabled,
-  validate,
-  fieldName,
+  required = false,
+  tooltip = '',
+  value = null,
+  onBlur = () => {},
+  isOverrideDisabled = false,
+  validate = () => undefined,
+  fieldName = 'project',
 }) {
   const location = useLocation();
   const { t } = useLingui();
@@ -190,19 +190,6 @@ ProjectLookup.propTypes = {
   isOverrideDisabled: bool,
   validate: func,
   fieldName: string,
-};
-
-ProjectLookup.defaultProps = {
-  autoPopulate: false,
-  helperTextInvalid: '',
-  isValid: true,
-  onBlur: () => {},
-  required: false,
-  tooltip: '',
-  value: null,
-  isOverrideDisabled: false,
-  validate: () => undefined,
-  fieldName: 'project',
 };
 
 export { ProjectLookup as _ProjectLookup };

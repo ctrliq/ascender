@@ -5,20 +5,18 @@ import { useField } from 'formik';
 import { FormGroup, TextInput, TextArea } from '@patternfly/react-core';
 import Popover from '../Popover';
 
-function FormField(props) {
-  const {
-    id,
-    helperText,
-    name,
-    label,
-    tooltip,
-    tooltipMaxWidth,
-    validate,
-    isRequired,
-    type,
-    ...rest
-  } = props;
-
+function FormField({
+  id,
+  helperText = '',
+  name,
+  label,
+  tooltip = null,
+  tooltipMaxWidth = '',
+  validate = () => {},
+  isRequired = false,
+  type = 'text',
+  ...rest
+}) {
   const [field, meta] = useField({ name, validate });
   const isValid = !(meta.touched && meta.error);
 
@@ -85,15 +83,6 @@ FormField.propTypes = {
   isRequired: PropTypes.bool,
   tooltip: PropTypes.node,
   tooltipMaxWidth: PropTypes.string,
-};
-
-FormField.defaultProps = {
-  helperText: '',
-  type: 'text',
-  validate: () => {},
-  isRequired: false,
-  tooltip: null,
-  tooltipMaxWidth: '',
 };
 
 export default FormField;

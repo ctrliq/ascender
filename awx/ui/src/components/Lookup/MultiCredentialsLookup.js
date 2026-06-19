@@ -26,11 +26,11 @@ async function loadCredentials(params, selectedCredentialTypeId) {
 }
 
 function MultiCredentialsLookup({
-  value,
+  value = [],
   onChange,
   onError,
-  fieldName,
-  validate,
+  fieldName = 'credentials',
+  validate = () => undefined,
 }) {
   const location = useLocation();
   const navigate = useNavigate();
@@ -258,12 +258,6 @@ MultiCredentialsLookup.propTypes = {
   onError: PropTypes.func.isRequired,
   validate: PropTypes.func,
   fieldName: PropTypes.string,
-};
-
-MultiCredentialsLookup.defaultProps = {
-  value: [],
-  validate: () => undefined,
-  fieldName: 'credentials',
 };
 
 export { MultiCredentialsLookup as _MultiCredentialsLookup };

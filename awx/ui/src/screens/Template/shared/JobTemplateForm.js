@@ -50,15 +50,34 @@ import getHelpText from './JobTemplate.helptext';
 
 const { origin } = document.location;
 
+// Stable default so it doesn't change identity each render (it feeds a
+// useCallback dependency below); previously this lived in defaultProps.
+const defaultTemplate = {
+  name: '',
+  description: '',
+  job_type: 'run',
+  inventory: undefined,
+  project: undefined,
+  playbook: '',
+  scm_branch: '',
+  summary_fields: {
+    inventory: null,
+    labels: { results: [] },
+    project: null,
+    credentials: [],
+  },
+  isNew: true,
+};
+
 function JobTemplateForm({
-  template,
+  template = defaultTemplate,
   handleCancel,
   handleSubmit,
   setFieldValue,
   setFieldTouched,
-  submitError,
+  submitError = null,
   validateField,
-  isOverrideDisabledLookup, // TODO: this is a confusing variable name
+  isOverrideDisabledLookup = false, // TODO: this is a confusing variable name
 }) {
   const { t } = useLingui();
   const helpText = getHelpText(t);
@@ -668,27 +687,6 @@ JobTemplateForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   submitError: PropTypes.shape({}),
   isOverrideDisabledLookup: PropTypes.bool,
-};
-
-JobTemplateForm.defaultProps = {
-  template: {
-    name: '',
-    description: '',
-    job_type: 'run',
-    inventory: undefined,
-    project: undefined,
-    playbook: '',
-    scm_branch: '',
-    summary_fields: {
-      inventory: null,
-      labels: { results: [] },
-      project: null,
-      credentials: [],
-    },
-    isNew: true,
-  },
-  submitError: null,
-  isOverrideDisabledLookup: false,
 };
 
 const FormikApp = withFormik({

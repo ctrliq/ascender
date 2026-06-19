@@ -71,7 +71,7 @@ function TemplatePopoverContent({ template }) {
   );
 }
 
-function JobTemplatesList({ nodeResource, onUpdateNodeResource }) {
+function JobTemplatesList({ nodeResource = null, onUpdateNodeResource }) {
   const location = useLocation();
   const { t } = useLingui();
 
@@ -177,10 +177,6 @@ function JobTemplatesList({ nodeResource, onUpdateNodeResource }) {
 JobTemplatesList.propTypes = {
   nodeResource: shape(),
   onUpdateNodeResource: func.isRequired,
-};
-
-JobTemplatesList.defaultProps = {
-  nodeResource: null,
 };
 
 export default JobTemplatesList;

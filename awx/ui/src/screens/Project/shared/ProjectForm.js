@@ -340,7 +340,7 @@ function ProjectFormFields({
   );
 }
 
-function ProjectForm({ project, submitError, ...props }) {
+function ProjectForm({ project = {}, submitError = null, ...props }) {
   const { handleCancel, handleSubmit } = props;
   const { summary_fields = {} } = project;
   const { project_base_dir, project_local_paths } = useConfig();
@@ -481,11 +481,6 @@ ProjectForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   project: PropTypes.shape({}),
   submitError: PropTypes.shape({}),
-};
-
-ProjectForm.defaultProps = {
-  project: {},
-  submitError: null,
 };
 
 export default ProjectForm;

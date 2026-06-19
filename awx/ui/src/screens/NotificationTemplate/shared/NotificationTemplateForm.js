@@ -102,11 +102,15 @@ function NotificationTemplateFormFields({ defaultMessages, template }) {
 }
 
 function NotificationTemplateForm({
-  template,
+  template = {
+    name: '',
+    description: '',
+    notification_type: '',
+  },
   defaultMessages,
   onSubmit,
   onCancel,
-  submitError,
+  submitError = null,
 }) {
   const handleSubmit = (values) => {
     onSubmit(
@@ -201,15 +205,6 @@ NotificationTemplateForm.propTypes = {
   onSubmit: func.isRequired,
   onCancel: func.isRequired,
   submitError: shape(),
-};
-
-NotificationTemplateForm.defaultProps = {
-  template: {
-    name: '',
-    description: '',
-    notification_type: '',
-  },
-  submitError: null,
 };
 
 export default NotificationTemplateForm;

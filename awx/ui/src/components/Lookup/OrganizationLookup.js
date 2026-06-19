@@ -20,18 +20,18 @@ const QS_CONFIG = getQSConfig('organizations', {
 });
 
 function OrganizationLookup({
-  id,
-  helperTextInvalid,
-  isValid,
-  onBlur,
+  id = 'organization',
+  helperTextInvalid = '',
+  isValid = true,
+  onBlur = () => {},
   onChange,
-  required,
-  value,
-  autoPopulate,
-  isDisabled,
+  required = false,
+  value = null,
+  autoPopulate = false,
+  isDisabled = false,
   helperText,
-  validate,
-  fieldName,
+  validate = () => undefined,
+  fieldName = 'organization',
 }) {
   const location = useLocation();
   const { t } = useLingui();
@@ -171,19 +171,6 @@ OrganizationLookup.propTypes = {
   isDisabled: bool,
   validate: func,
   fieldName: string,
-};
-
-OrganizationLookup.defaultProps = {
-  id: 'organization',
-  helperTextInvalid: '',
-  isValid: true,
-  onBlur: () => {},
-  required: false,
-  value: null,
-  autoPopulate: false,
-  isDisabled: false,
-  validate: () => undefined,
-  fieldName: 'organization',
 };
 
 export { OrganizationLookup as _OrganizationLookup };

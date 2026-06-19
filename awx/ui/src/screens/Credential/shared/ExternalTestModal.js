@@ -14,7 +14,7 @@ import useRequest from 'hooks/useRequest';
 import { CredentialPluginTestAlert } from './CredentialPlugins';
 
 function ExternalTestModal({
-  credential,
+  credential = null,
   credentialType,
   credentialFormValues,
   onClose,
@@ -173,10 +173,6 @@ ExternalTestModal.propType = {
   credentialType: shape({}).isRequired,
   credentialFormValues: shape({}).isRequired,
   onClose: func.isRequired,
-};
-
-ExternalTestModal.defaultProps = {
-  credential: null,
 };
 
 export default ExternalTestModal;

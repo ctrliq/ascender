@@ -16,7 +16,11 @@ const ListItem = styled.li`
   color: var(--pf-global--danger-color--100);
 `;
 
-const InventoryGroupsDeleteModal = ({ onAfterDelete, isDisabled, groups }) => {
+const InventoryGroupsDeleteModal = ({
+  onAfterDelete,
+  isDisabled,
+  groups = [],
+}) => {
   const { t } = useLingui();
   const [radioOption, setRadioOption] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -164,10 +168,6 @@ InventoryGroupsDeleteModal.propTypes = {
   onAfterDelete: func.isRequired,
   groups: arrayOf(Group),
   isDisabled: bool.isRequired,
-};
-
-InventoryGroupsDeleteModal.defaultProps = {
-  groups: [],
 };
 
 export default InventoryGroupsDeleteModal;

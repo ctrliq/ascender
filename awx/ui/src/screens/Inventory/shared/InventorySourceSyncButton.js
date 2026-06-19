@@ -9,7 +9,7 @@ import AlertModal from 'components/AlertModal/AlertModal';
 import ErrorDetail from 'components/ErrorDetail/ErrorDetail';
 import { InventorySourcesAPI } from 'api';
 
-function InventorySourceSyncButton({ source, icon }) {
+function InventorySourceSyncButton({ source = {}, icon = true }) {
   const { t } = useLingui();
   const {
     isLoading: startSyncLoading,
@@ -57,11 +57,6 @@ function InventorySourceSyncButton({ source, icon }) {
     </>
   );
 }
-
-InventorySourceSyncButton.defaultProps = {
-  source: {},
-  icon: true,
-};
 
 InventorySourceSyncButton.propTypes = {
   source: PropTypes.shape({}),

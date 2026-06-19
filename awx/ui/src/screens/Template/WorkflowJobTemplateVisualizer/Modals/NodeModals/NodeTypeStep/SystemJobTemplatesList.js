@@ -19,7 +19,7 @@ const QS_CONFIG = getQSConfig('system-job-templates', {
   order_by: 'name',
 });
 
-function SystemJobTemplatesList({ nodeResource, onUpdateNodeResource }) {
+function SystemJobTemplatesList({ nodeResource = null, onUpdateNodeResource }) {
   const location = useLocation();
   const { t } = useLingui();
 
@@ -106,10 +106,6 @@ function SystemJobTemplatesList({ nodeResource, onUpdateNodeResource }) {
 SystemJobTemplatesList.propTypes = {
   nodeResource: shape(),
   onUpdateNodeResource: func.isRequired,
-};
-
-SystemJobTemplatesList.defaultProps = {
-  nodeResource: null,
 };
 
 export default SystemJobTemplatesList;

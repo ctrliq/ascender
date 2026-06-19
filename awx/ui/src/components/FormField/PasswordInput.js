@@ -11,17 +11,16 @@ import {
 } from '@patternfly/react-core';
 import { EyeIcon, EyeSlashIcon } from '@patternfly/react-icons';
 
-function PasswordInput(props) {
+function PasswordInput({
+  autocomplete = 'new-password',
+  id,
+  name,
+  validate = () => {},
+  isFieldGroupValid,
+  isRequired = false,
+  isDisabled = false,
+}) {
   const { t } = useLingui();
-  const {
-    autocomplete,
-    id,
-    name,
-    validate,
-    isFieldGroupValid,
-    isRequired,
-    isDisabled,
-  } = props;
   const [inputType, setInputType] = useState('password');
   const [field, meta] = useField({ name, validate });
 
@@ -74,13 +73,6 @@ PasswordInput.propTypes = {
   validate: PropTypes.func,
   isRequired: PropTypes.bool,
   isDisabled: PropTypes.bool,
-};
-
-PasswordInput.defaultProps = {
-  autocomplete: 'new-password',
-  validate: () => {},
-  isRequired: false,
-  isDisabled: false,
 };
 
 export default PasswordInput;

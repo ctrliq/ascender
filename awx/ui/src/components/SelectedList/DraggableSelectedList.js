@@ -22,7 +22,11 @@ const RemoveActionSection = styled(DataListAction)`
   }
 `;
 
-function DraggableSelectedList({ selected, onRemove, onRowDrag }) {
+function DraggableSelectedList({
+  selected = [],
+  onRemove = () => null,
+  onRowDrag = () => null,
+}) {
   const { t } = useLingui();
   const [liveText, setLiveText] = useState('');
   const [id, setId] = useState('');
@@ -133,11 +137,6 @@ DraggableSelectedList.propTypes = {
   onRemove: PropTypes.func,
   onRowDrag: PropTypes.func,
   selected: PropTypes.arrayOf(ListItem),
-};
-DraggableSelectedList.defaultProps = {
-  onRemove: () => null,
-  onRowDrag: () => null,
-  selected: [],
 };
 
 export default DraggableSelectedList;

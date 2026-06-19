@@ -10,7 +10,7 @@ import {
 } from '@patternfly/react-core';
 import Popover from 'components/Popover';
 
-function BecomeMethodField({ fieldOptions, isRequired }) {
+function BecomeMethodField({ fieldOptions, isRequired = false }) {
   const { t } = useLingui();
   const [isOpen, setIsOpen] = useState(false);
   const [options, setOptions] = useState(
@@ -79,9 +79,6 @@ BecomeMethodField.propTypes = {
     label: string.isRequired,
   }).isRequired,
   isRequired: bool,
-};
-BecomeMethodField.defaultProps = {
-  isRequired: false,
 };
 
 export default BecomeMethodField;

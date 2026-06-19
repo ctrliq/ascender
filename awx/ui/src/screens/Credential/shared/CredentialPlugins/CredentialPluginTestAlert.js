@@ -10,8 +10,8 @@ import {
 
 function CredentialPluginTestAlert({
   credentialName,
-  successResponse,
-  errorResponse,
+  successResponse = null,
+  errorResponse = null,
 }) {
   const { t } = useLingui();
   const [testMessage, setTestMessage] = useState('');
@@ -77,11 +77,6 @@ CredentialPluginTestAlert.propTypes = {
   credentialName: string.isRequired,
   successResponse: shape({}),
   errorResponse: shape({}),
-};
-
-CredentialPluginTestAlert.defaultProps = {
-  successResponse: null,
-  errorResponse: null,
 };
 
 export default CredentialPluginTestAlert;

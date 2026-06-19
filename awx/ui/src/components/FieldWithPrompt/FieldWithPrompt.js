@@ -19,11 +19,11 @@ const StyledCheckboxField = styled(CheckboxField)`
 function FieldWithPrompt({
   children,
   fieldId,
-  isRequired,
+  isRequired = false,
   label,
   promptId,
   promptName,
-  tooltip,
+  tooltip = null,
   isDisabled,
 }) {
   const { t } = useLingui();
@@ -61,11 +61,6 @@ FieldWithPrompt.propTypes = {
   promptId: string.isRequired,
   promptName: string.isRequired,
   tooltip: node,
-};
-
-FieldWithPrompt.defaultProps = {
-  isRequired: false,
-  tooltip: null,
 };
 
 export default FieldWithPrompt;

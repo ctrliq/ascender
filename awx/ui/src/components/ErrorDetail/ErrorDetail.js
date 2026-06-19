@@ -33,7 +33,7 @@ const Expandable = styled(PFExpandable)`
   }
 `;
 
-function ErrorDetail({ error }) {
+function ErrorDetail({ error = null }) {
   const { t } = useLingui();
   const { response } = error;
   const [isExpanded, setIsExpanded] = useState(false);
@@ -101,8 +101,4 @@ function ErrorDetail({ error }) {
 ErrorDetail.propTypes = {
   error: PropTypes.instanceOf(Error),
 };
-ErrorDetail.defaultProps = {
-  error: null,
-};
-
 export default ErrorDetail;

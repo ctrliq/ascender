@@ -211,10 +211,10 @@ function CredentialFormFields({ initialTypeId, credentialTypes }) {
 function CredentialForm({
   credential = {},
   credentialTypes,
-  inputSources,
+  inputSources = {},
   onSubmit,
   onCancel,
-  submitError,
+  submitError = null,
   isOrgLookupDisabled,
   ...rest
 }) {
@@ -362,12 +362,6 @@ CredentialForm.propTypes = {
   credential: shape({}),
   inputSources: shape({}),
   submitError: shape({}),
-};
-
-CredentialForm.defaultProps = {
-  credential: {},
-  inputSources: {},
-  submitError: null,
 };
 
 export default CredentialForm;

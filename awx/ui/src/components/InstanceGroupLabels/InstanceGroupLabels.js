@@ -4,7 +4,7 @@ import { arrayOf, bool, number, shape, string } from 'prop-types';
 import { Label, LabelGroup } from '@patternfly/react-core';
 import { Link } from 'react-router-dom';
 
-function InstanceGroupLabels({ labels, isLinkable }) {
+function InstanceGroupLabels({ labels, isLinkable = false }) {
   const buildLinkURL = (isContainerGroup) =>
     isContainerGroup
       ? '/instance_groups/container_group/'
@@ -43,7 +43,5 @@ InstanceGroupLabels.propTypes = {
     .isRequired,
   isLinkable: bool,
 };
-
-InstanceGroupLabels.defaultProps = { isLinkable: false };
 
 export default InstanceGroupLabels;

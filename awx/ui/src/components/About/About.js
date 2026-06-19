@@ -8,7 +8,7 @@ import { useLingui } from '@lingui/react/macro';
 import { AboutModal } from '@patternfly/react-core';
 import useBrandName from 'hooks/useBrandName';
 
-function About({ version, isOpen, onClose }) {
+function About({ version = null, isOpen = false, onClose }) {
   const { t } = useLingui();
   const brandName = useBrandName();
 
@@ -74,11 +74,6 @@ About.propTypes = {
   isOpen: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   version: PropTypes.string,
-};
-
-About.defaultProps = {
-  isOpen: false,
-  version: null,
 };
 
 export default About;

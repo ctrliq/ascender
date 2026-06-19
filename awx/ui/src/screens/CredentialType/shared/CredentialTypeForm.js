@@ -55,7 +55,7 @@ function CredentialTypeForm({
   credentialType = {},
   onSubmit,
   onCancel,
-  submitError,
+  submitError = null,
   ...rest
 }) {
   const initialValues = {
@@ -94,11 +94,6 @@ CredentialTypeForm.propTypes = {
   onCancel: func.isRequired,
   onSubmit: func.isRequired,
   submitError: shape({}),
-};
-
-CredentialTypeForm.defaultProps = {
-  credentialType: {},
-  submitError: null,
 };
 
 export default CredentialTypeForm;

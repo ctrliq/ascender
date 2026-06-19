@@ -36,13 +36,13 @@ const DetailValue = styled(
 
 const Detail = ({
   label,
-  value,
-  fullWidth,
+  value = null,
+  fullWidth = false,
   className,
   dataCy,
-  alwaysVisible,
+  alwaysVisible = false,
   isEmpty,
-  helpText,
+  helpText = null,
   isEncrypted,
   isNotConfigured,
 }) => {
@@ -89,13 +89,6 @@ Detail.propTypes = {
   alwaysVisible: bool,
   helpText: oneOfType([string, node]),
 };
-Detail.defaultProps = {
-  value: null,
-  fullWidth: false,
-  alwaysVisible: false,
-  helpText: null,
-};
-
 export default Detail;
 export { DetailName };
 export { DetailValue };

@@ -29,17 +29,19 @@ const StyledCheckboxField = styled(CheckboxField)`
   margin-left: auto;
 `;
 
+const defaultValidators = {};
+
 function VariablesField({
   id,
   name,
   label,
-  readOnly,
-  promptId,
+  readOnly = false,
+  promptId = null,
   tooltip,
-  initialMode,
-  onModeChange,
-  isRequired,
-  validators,
+  initialMode = YAML_MODE,
+  onModeChange = () => {},
+  isRequired = false,
+  validators = defaultValidators,
 }) {
   const { t } = useLingui();
   // track focus manually, because the Code Editor library doesn't wire
@@ -192,15 +194,6 @@ VariablesField.propTypes = {
   isRequired: bool,
   validators: shape({}),
 };
-VariablesField.defaultProps = {
-  readOnly: false,
-  promptId: null,
-  initialMode: YAML_MODE,
-  onModeChange: () => {},
-  isRequired: false,
-  validators: {},
-};
-
 function VariablesFieldInternals({
   id,
   name,

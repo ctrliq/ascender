@@ -348,8 +348,4 @@ InventorySourceForm.propTypes = {
   submitError: shape({}),
 };
 
-InventorySourceForm.defaultProps = {
-  submitError: null,
-};
-
 export default InventorySourceForm;

@@ -167,7 +167,7 @@ function UserFormFields({ user }) {
   );
 }
 
-function UserForm({ user, handleCancel, handleSubmit, submitError }) {
+function UserForm({ user = {}, handleCancel, handleSubmit, submitError }) {
   const { t } = useLingui();
   const handleValidateAndSubmit = (values, { setErrors }) => {
     if (values.password !== values.confirm_password) {
@@ -232,10 +232,6 @@ UserForm.propTypes = {
   handleCancel: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   user: PropTypes.shape({}),
-};
-
-UserForm.defaultProps = {
-  user: {},
 };
 
 export default UserForm;

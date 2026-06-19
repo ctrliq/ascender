@@ -20,20 +20,20 @@ const QS_CONFIG = getQSConfig('inventory', {
 });
 
 function InventoryLookup({
-  autoPopulate,
-  excludeIds,
-  fieldId,
-  fieldName,
-  hideAdvancedInventories,
-  isDisabled,
+  autoPopulate = false,
+  excludeIds = [],
+  fieldId = 'inventory',
+  fieldName = 'inventory',
+  hideAdvancedInventories = false,
+  isDisabled = false,
   isPromptableField,
   onBlur,
   onChange,
   promptId,
   promptName,
-  required,
-  validate,
-  value,
+  required = false,
+  validate = () => {},
+  value = null,
   multiple,
 }) {
   const location = useLocation();
@@ -263,18 +263,6 @@ InventoryLookup.propTypes = {
   required: bool,
   validate: func,
   value: oneOfType([Inventory, arrayOf(Inventory)]),
-};
-
-InventoryLookup.defaultProps = {
-  autoPopulate: false,
-  excludeIds: [],
-  fieldId: 'inventory',
-  fieldName: 'inventory',
-  hideAdvancedInventories: false,
-  isDisabled: false,
-  required: false,
-  validate: () => {},
-  value: null,
 };
 
 export default InventoryLookup;

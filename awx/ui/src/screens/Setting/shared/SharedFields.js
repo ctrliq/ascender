@@ -372,7 +372,12 @@ InputAlertField.propTypes = {
   config: shape({}).isRequired,
 };
 
-const InputField = ({ name, config, type = 'text', isRequired = false }) => {
+const InputField = ({
+  name,
+  config = null,
+  type = 'text',
+  isRequired = false,
+}) => {
   const { t } = useLingui();
   const min_value = config?.min_value ?? Number.MIN_SAFE_INTEGER;
   const max_value = config?.max_value ?? Number.MAX_SAFE_INTEGER;
@@ -413,9 +418,6 @@ const InputField = ({ name, config, type = 'text', isRequired = false }) => {
 InputField.propTypes = {
   name: string.isRequired,
   config: shape({}),
-};
-InputField.defaultProps = {
-  config: null,
 };
 
 const TextAreaField = ({ name, config, isRequired = false }) => {

@@ -13,7 +13,7 @@ import { JOB_TYPE_URL_SEGMENTS } from '../../constants';
 
 const NOT_FOUND = 'not found';
 
-function JobTypeRedirect({ id, view }) {
+function JobTypeRedirect({ id, view = 'output' }) {
   const { t } = useLingui();
   const {
     isLoading,
@@ -64,7 +64,4 @@ function JobTypeRedirect({ id, view }) {
   );
 }
 
-JobTypeRedirect.defaultProps = {
-  view: 'output',
-};
 export default JobTypeRedirect;

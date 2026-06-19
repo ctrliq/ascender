@@ -7,7 +7,12 @@ import { useLingui } from '@lingui/react/macro';
 import { Role } from 'types';
 import AlertModal from '../AlertModal';
 
-function DeleteRoleConfirmationModal({ role, username, onCancel, onConfirm }) {
+function DeleteRoleConfirmationModal({
+  role,
+  username = '',
+  onCancel,
+  onConfirm,
+}) {
   const { t } = useLingui();
   const sourceOfRole = () =>
     typeof role.team_id !== 'undefined' ? t`Team` : t`User`;
@@ -59,10 +64,6 @@ DeleteRoleConfirmationModal.propTypes = {
   username: string,
   onCancel: func.isRequired,
   onConfirm: func.isRequired,
-};
-
-DeleteRoleConfirmationModal.defaultProps = {
-  username: '',
 };
 
 export default DeleteRoleConfirmationModal;

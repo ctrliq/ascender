@@ -28,12 +28,14 @@ const NUM_DAYS_PER_FREQUENCY = {
   year: 365,
 };
 
+const defaultSchedule = {};
+
 function ScheduleForm({
   hasDaysToKeepField,
   handleCancel,
   handleSubmit: submitSchedule,
-  schedule,
-  submitError,
+  schedule = defaultSchedule,
+  submitError = null,
   resource,
   launchConfig,
   surveyConfig,
@@ -575,11 +577,6 @@ ScheduleForm.propTypes = {
   handleSubmit: func.isRequired,
   schedule: shape({}),
   submitError: shape(),
-};
-
-ScheduleForm.defaultProps = {
-  schedule: {},
-  submitError: null,
 };
 
 export default ScheduleForm;

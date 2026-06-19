@@ -20,7 +20,6 @@ import { VariablesDetail } from 'components/CodeEditor';
 import { formatDateString, secondsToHHMMSS } from 'util/dates';
 import { WorkflowApprovalsAPI, WorkflowJobsAPI } from 'api';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
-import { WorkflowApproval } from 'types';
 import StatusLabel from 'components/StatusLabel';
 import JobCancelButton from 'components/JobCancelButton';
 import useToast, { AlertVariant } from 'hooks/useToast';
@@ -337,9 +336,5 @@ function WorkflowApprovalDetail({ workflowApproval, fetchWorkflowApproval }) {
     </CardBody>
   );
 }
-
-WorkflowApprovalDetail.defaultProps = {
-  workflowApproval: WorkflowApproval.isRequired,
-};
 
 export default WorkflowApprovalDetail;

@@ -20,7 +20,7 @@ const QS_CONFIG = getQSConfig('projects', {
   order_by: 'name',
 });
 
-function ProjectsList({ nodeResource, onUpdateNodeResource }) {
+function ProjectsList({ nodeResource = null, onUpdateNodeResource }) {
   const location = useLocation();
   const { t } = useLingui();
 
@@ -123,10 +123,6 @@ function ProjectsList({ nodeResource, onUpdateNodeResource }) {
 ProjectsList.propTypes = {
   nodeResource: shape(),
   onUpdateNodeResource: func.isRequired,
-};
-
-ProjectsList.defaultProps = {
-  nodeResource: null,
 };
 
 export default ProjectsList;

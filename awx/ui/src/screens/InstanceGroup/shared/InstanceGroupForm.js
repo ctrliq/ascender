@@ -66,7 +66,7 @@ function InstanceGroupForm({
   instanceGroup = {},
   onSubmit,
   onCancel,
-  submitError,
+  submitError = null,
   ...rest
 }) {
   const initialValues = {
@@ -102,11 +102,6 @@ InstanceGroupForm.propTypes = {
   onCancel: func.isRequired,
   onSubmit: func.isRequired,
   submitError: shape({}),
-};
-
-InstanceGroupForm.defaultProps = {
-  instanceGroup: {},
-  submitError: null,
 };
 
 export default InstanceGroupForm;
