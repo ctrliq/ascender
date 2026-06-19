@@ -12,14 +12,14 @@ function NotificationListItem({
   canToggleNotifications,
   notification,
   detailUrl,
-  approvalsTurnedOn,
-  startedTurnedOn,
-  successTurnedOn,
-  errorTurnedOn,
+  approvalsTurnedOn = false,
+  startedTurnedOn = false,
+  successTurnedOn = false,
+  errorTurnedOn = false,
   toggleNotification,
 
   typeLabels,
-  showApprovalsToggle,
+  showApprovalsToggle = false,
 }) {
   const { t } = useLingui();
   return (
@@ -119,14 +119,6 @@ NotificationListItem.propTypes = {
   toggleNotification: func.isRequired,
   typeLabels: shape().isRequired,
   showApprovalsToggle: bool,
-};
-
-NotificationListItem.defaultProps = {
-  approvalsTurnedOn: false,
-  errorTurnedOn: false,
-  startedTurnedOn: false,
-  successTurnedOn: false,
-  showApprovalsToggle: false,
 };
 
 export default NotificationListItem;

@@ -5,8 +5,15 @@ import { FormGroup, InputGroup } from '@patternfly/react-core';
 import Popover from '../Popover';
 import PasswordInput from './PasswordInput';
 
-function PasswordField(props) {
-  const { id, name, label, validate, isRequired, helperText } = props;
+function PasswordField({
+  id,
+  name,
+  label,
+  validate = () => {},
+  isRequired = false,
+  helperText,
+  ...rest
+}) {
   const [, meta] = useField({ name, validate });
   const isValid = !(meta.touched && meta.error);
 
@@ -20,7 +27,15 @@ function PasswordField(props) {
       labelIcon={helperText && <Popover content={helperText} />}
     >
       <InputGroup>
-        <PasswordInput {...props} />
+        <PasswordInput
+          id={id}
+          name={name}
+          label={label}
+          validate={validate}
+          isRequired={isRequired}
+          helperText={helperText}
+          {...rest}
+        />
       </InputGroup>
     </FormGroup>
   );
@@ -33,12 +48,6 @@ PasswordField.propTypes = {
   validate: PropTypes.func,
   isRequired: PropTypes.bool,
   isDisabled: PropTypes.bool,
-};
-
-PasswordField.defaultProps = {
-  validate: () => {},
-  isRequired: false,
-  isDisabled: false,
 };
 
 export default PasswordField;

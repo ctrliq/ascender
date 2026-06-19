@@ -30,7 +30,7 @@ const StartDiv = styled.div`
   padding: 0px 10px;
 `;
 
-function WorkflowStartNode({ onUpdateHelpText, showActionTooltip }) {
+function WorkflowStartNode({ onUpdateHelpText = () => {}, showActionTooltip }) {
   const { t } = useLingui();
   const ref = useRef(null);
   const startNodeRef = useRef(null);
@@ -88,10 +88,6 @@ function WorkflowStartNode({ onUpdateHelpText, showActionTooltip }) {
 WorkflowStartNode.propTypes = {
   showActionTooltip: bool.isRequired,
   onUpdateHelpText: func,
-};
-
-WorkflowStartNode.defaultProps = {
-  onUpdateHelpText: () => {},
 };
 
 export default WorkflowStartNode;

@@ -129,7 +129,7 @@ function CredentialPluginWizard({ handleSubmit, onClose }) {
   );
 }
 
-function CredentialPluginPrompt({ onClose, onSubmit, initialValues }) {
+function CredentialPluginPrompt({ onClose, onSubmit, initialValues = {} }) {
   return (
     <Formik
       initialValues={{
@@ -149,10 +149,6 @@ CredentialPluginPrompt.propTypes = {
   onClose: func.isRequired,
   onSubmit: func.isRequired,
   initialValues: shape({}),
-};
-
-CredentialPluginPrompt.defaultProps = {
-  initialValues: {},
 };
 
 export default CredentialPluginPrompt;

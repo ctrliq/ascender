@@ -21,21 +21,21 @@ const QS_CONFIG = getQSConfig('execution_environments', {
 });
 
 function ExecutionEnvironmentLookup({
-  id,
+  id = 'execution-environments',
   globallyAvailable,
   helperTextInvalid,
   isDisabled,
   isValid,
   onBlur,
   onChange,
-  organizationId,
-  popoverContent,
-  projectId,
+  organizationId = null,
+  popoverContent = '',
+  projectId = null,
   tooltip,
-  validate,
-  value,
-  fieldName,
-  overrideLabel,
+  validate = () => undefined,
+  value = null,
+  fieldName = 'execution_environment',
+  overrideLabel = false,
   isPromptableField,
   promptId,
   promptName,
@@ -252,17 +252,6 @@ ExecutionEnvironmentLookup.propTypes = {
   validate: func,
   fieldName: string,
   overrideLabel: bool,
-};
-
-ExecutionEnvironmentLookup.defaultProps = {
-  id: 'execution-environments',
-  popoverContent: '',
-  value: null,
-  projectId: null,
-  organizationId: null,
-  validate: () => undefined,
-  fieldName: 'execution_environment',
-  overrideLabel: false,
 };
 
 export default ExecutionEnvironmentLookup;

@@ -99,7 +99,7 @@ function omitOverrides(resource, overrides, defaultConfig) {
 
 function PromptDetail({
   resource,
-  launchConfig = {},
+  launchConfig = { defaults: {} },
   overrides = {},
   workflowNode = false,
 }) {
@@ -385,10 +385,6 @@ function PromptDetail({
     </>
   );
 }
-
-PromptDetail.defaultProps = {
-  launchConfig: { defaults: {} },
-};
 
 PromptDetail.propTypes = {
   resource: shape({}).isRequired,

@@ -41,10 +41,6 @@ const editFieldPropTypes = {
   isEdit: PropTypes.bool,
 };
 
-const editFieldDefaultProps = {
-  isEdit: false,
-};
-
 const TypeFields = {
   email: EmailFields,
   grafana: GrafanaFields,
@@ -56,7 +52,7 @@ const TypeFields = {
   twilio: TwilioFields,
   webhook: WebhookFields,
 };
-function TypeInputsSubForm({ type, isEdit }) {
+function TypeInputsSubForm({ type, isEdit = false }) {
   const { t } = useLingui();
   const Fields = TypeFields[type];
   return (
@@ -75,17 +71,13 @@ TypeInputsSubForm.propTypes = {
   isEdit: PropTypes.bool,
 };
 
-TypeInputsSubForm.defaultProps = {
-  isEdit: false,
-};
-
 export default TypeInputsSubForm;
 
 function SecretPasswordField({
   id,
   label,
   name,
-  isEdit,
+  isEdit = false,
   isRequiredOnCreate = false,
 }) {
   const validate = isRequiredOnCreate && !isEdit ? required(null) : undefined;
@@ -126,12 +118,7 @@ SecretPasswordField.propTypes = {
   isRequiredOnCreate: PropTypes.bool,
 };
 
-SecretPasswordField.defaultProps = {
-  isEdit: false,
-  isRequiredOnCreate: false,
-};
-
-function EmailFields({ isEdit }) {
+function EmailFields({ isEdit = false }) {
   const { t } = useLingui();
   const helpText = useMemo(() => ({
     emailRecipients: t`Use one email address per line to create a recipient list for this type of notification.`,
@@ -235,7 +222,7 @@ function EmailFields({ isEdit }) {
   );
 }
 
-function GrafanaFields({ isEdit }) {
+function GrafanaFields({ isEdit = false }) {
   const { t } = useLingui();
   const helpText = {
     grafanaUrl: t`The base URL of the Grafana server - the
@@ -292,12 +279,8 @@ function GrafanaFields({ isEdit }) {
 
 EmailFields.propTypes = editFieldPropTypes;
 
-EmailFields.defaultProps = editFieldDefaultProps;
-
 GrafanaFields.propTypes = editFieldPropTypes;
-
-GrafanaFields.defaultProps = editFieldDefaultProps;
-function IRCFields({ isEdit }) {
+function IRCFields({ isEdit = false }) {
   const { t } = useLingui();
   const helpText = {
     ircTargets: t`Use one IRC channel or username per line. The pound
@@ -357,8 +340,6 @@ function IRCFields({ isEdit }) {
 
 IRCFields.propTypes = editFieldPropTypes;
 
-IRCFields.defaultProps = editFieldDefaultProps;
-
 function MattermostFields() {
   const { t } = useLingui();
   return (
@@ -399,7 +380,7 @@ function MattermostFields() {
   );
 }
 
-function PagerdutyFields({ isEdit }) {
+function PagerdutyFields({ isEdit = false }) {
   const { t } = useLingui();
   return (
     <>
@@ -440,8 +421,6 @@ function PagerdutyFields({ isEdit }) {
 
 PagerdutyFields.propTypes = editFieldPropTypes;
 
-PagerdutyFields.defaultProps = editFieldDefaultProps;
-
 function RocketChatFields() {
   const { t } = useLingui();
   return (
@@ -476,7 +455,7 @@ function RocketChatFields() {
   );
 }
 
-function SlackFields({ isEdit }) {
+function SlackFields({ isEdit = false }) {
   const { t } = useLingui();
   const helpText = useMemo(() => ({
     slackChannels: (
@@ -523,9 +502,7 @@ function SlackFields({ isEdit }) {
 
 SlackFields.propTypes = editFieldPropTypes;
 
-SlackFields.defaultProps = editFieldDefaultProps;
-
-function TwilioFields({ isEdit }) {
+function TwilioFields({ isEdit = false }) {
   const { t } = useLingui();
   const helpText = {
     twilioSourcePhoneNumber: t`The number associated with the "Messaging
@@ -574,9 +551,7 @@ function TwilioFields({ isEdit }) {
 
 TwilioFields.propTypes = editFieldPropTypes;
 
-TwilioFields.defaultProps = editFieldDefaultProps;
-
-function WebhookFields({ isEdit }) {
+function WebhookFields({ isEdit = false }) {
   const { t } = useLingui();
   const helpText = {
     webhookHeaders: t`Specify HTTP Headers in JSON format. Refer to
@@ -652,5 +627,3 @@ function WebhookFields({ isEdit }) {
 }
 
 WebhookFields.propTypes = editFieldPropTypes;
-
-WebhookFields.defaultProps = editFieldDefaultProps;

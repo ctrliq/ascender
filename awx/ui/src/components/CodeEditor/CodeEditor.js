@@ -86,15 +86,15 @@ AceEditor.displayName = 'AceEditor';
 function CodeEditor({
   id,
   value,
-  onChange,
+  onChange = () => {},
   onFocus,
   onBlur,
   mode,
-  readOnly,
-  hasErrors,
-  rows,
-  fullHeight,
-  className,
+  readOnly = false,
+  hasErrors = false,
+  rows = 6,
+  fullHeight = false,
+  className = '',
 }) {
   const { t } = useLingui();
   if (rows && typeof rows !== 'number' && rows !== 'auto') {
@@ -213,13 +213,4 @@ CodeEditor.propTypes = {
   rows: oneOfType([number, string]),
   className: string,
 };
-CodeEditor.defaultProps = {
-  readOnly: false,
-  onChange: () => {},
-  rows: 6,
-  fullHeight: false,
-  hasErrors: false,
-  className: '',
-};
-
 export default CodeEditor;

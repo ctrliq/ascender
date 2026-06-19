@@ -22,7 +22,10 @@ const OccurrencesLabel = styled.div`
   }
 `;
 
-function ScheduleOccurrences({ preview = { local: [], utc: [] }, tz }) {
+function ScheduleOccurrences({
+  preview = { local: [], utc: [] },
+  tz = Intl.DateTimeFormat().resolvedOptions().timeZone,
+}) {
   const { t } = useLingui();
   const [mode, setMode] = useState('local');
 
@@ -77,11 +80,6 @@ function ScheduleOccurrences({ preview = { local: [], utc: [] }, tz }) {
 ScheduleOccurrences.propTypes = {
   preview: shape(),
   tz: string,
-};
-
-ScheduleOccurrences.defaultProps = {
-  preview: { local: [], utc: [] },
-  tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
 };
 
 export default ScheduleOccurrences;

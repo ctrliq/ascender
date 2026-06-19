@@ -27,7 +27,7 @@ const QS_CONFIG = getQSConfig('schedule', {
 function ScheduleList({
   loadSchedules,
   loadScheduleOptions,
-  hideAddButton,
+  hideAddButton = false,
   resource,
   launchConfig,
   surveyConfig,
@@ -258,9 +258,6 @@ ScheduleList.propTypes = {
   hideAddButton: bool,
   loadSchedules: func.isRequired,
   loadScheduleOptions: func.isRequired,
-};
-ScheduleList.defaultProps = {
-  hideAddButton: false,
 };
 
 export default ScheduleList;

@@ -34,12 +34,17 @@ import getHelpText from './WorkflowJobTemplate.helptext';
 const urlOrigin = window.location.origin;
 
 function WorkflowJobTemplateForm({
-  template,
+  template = {
+    name: '',
+    description: '',
+    inventory: undefined,
+    project: undefined,
+  },
   handleSubmit,
   handleCancel,
-  submitError,
-  isOrgAdmin,
-  isInventoryDisabled,
+  submitError = null,
+  isOrgAdmin = false,
+  isInventoryDisabled = false,
 }) {
   const { t } = useLingui();
   const helpText = getHelpText(t);
@@ -290,18 +295,6 @@ WorkflowJobTemplateForm.propTypes = {
   submitError: shape({}),
   isOrgAdmin: PropTypes.bool,
   isInventoryDisabled: PropTypes.bool,
-};
-
-WorkflowJobTemplateForm.defaultProps = {
-  submitError: null,
-  template: {
-    name: '',
-    description: '',
-    inventory: undefined,
-    project: undefined,
-  },
-  isOrgAdmin: false,
-  isInventoryDisabled: false,
 };
 
 const FormikApp = withFormik({

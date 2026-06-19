@@ -3,17 +3,19 @@ import { string, oneOfType, arrayOf, func } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 import { Select, SelectOption, SelectVariant } from '@patternfly/react-core';
 
-function Option({ show, ...props }) {
+function Option({ show = true, ...props }) {
   if (!show) {
     return null;
   }
   return <SelectOption {...props} />;
 }
-Option.defaultProps = {
-  show: true,
-};
 
-function LookupTypeInput({ value, type, setValue, maxSelectHeight }) {
+function LookupTypeInput({
+  value = '',
+  type = 'string',
+  setValue,
+  maxSelectHeight = '300px',
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const { t } = useLingui();
   return (
@@ -147,11 +149,6 @@ LookupTypeInput.propTypes = {
   value: oneOfType([string, arrayOf(string)]),
   setValue: func.isRequired,
   maxSelectHeight: string,
-};
-LookupTypeInput.defaultProps = {
-  type: 'string',
-  value: '',
-  maxSelectHeight: '300px',
 };
 
 export default LookupTypeInput;

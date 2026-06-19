@@ -100,11 +100,11 @@ const SmartInventoryFormFields = ({ inventory }) => {
 };
 
 function SmartInventoryForm({
-  inventory,
-  instanceGroups,
+  inventory = {},
+  instanceGroups = [],
   onSubmit,
   onCancel,
-  submitError,
+  submitError = null,
 }) {
   const { search } = useLocation();
   const queryParams = new URLSearchParams(search);
@@ -187,12 +187,6 @@ SmartInventoryForm.propTypes = {
   onCancel: func.isRequired,
   onSubmit: func.isRequired,
   submitError: shape({}),
-};
-
-SmartInventoryForm.defaultProps = {
-  instanceGroups: [],
-  inventory: {},
-  submitError: null,
 };
 
 export default SmartInventoryForm;

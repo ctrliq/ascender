@@ -20,7 +20,7 @@ const QS_CONFIG = getQSConfig('inventory-sources', {
   order_by: 'name',
 });
 
-function InventorySourcesList({ nodeResource, onUpdateNodeResource }) {
+function InventorySourcesList({ nodeResource = null, onUpdateNodeResource }) {
   const { t } = useLingui();
   const location = useLocation();
 
@@ -116,10 +116,6 @@ function InventorySourcesList({ nodeResource, onUpdateNodeResource }) {
 InventorySourcesList.propTypes = {
   nodeResource: shape(),
   onUpdateNodeResource: func.isRequired,
-};
-
-InventorySourcesList.defaultProps = {
-  nodeResource: null,
 };
 
 export default InventorySourcesList;

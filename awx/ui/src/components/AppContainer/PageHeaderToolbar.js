@@ -39,7 +39,7 @@ const UserName = styled.span`
 `;
 
 function PageHeaderToolbar({
-  isAboutDisabled,
+  isAboutDisabled = false,
   onAboutClick,
   onLogoutClick,
   loggedInUser,
@@ -237,10 +237,6 @@ PageHeaderToolbar.propTypes = {
   isAboutDisabled: PropTypes.bool,
   onAboutClick: PropTypes.func.isRequired,
   onLogoutClick: PropTypes.func.isRequired,
-};
-
-PageHeaderToolbar.defaultProps = {
-  isAboutDisabled: false,
 };
 
 export default PageHeaderToolbar;

@@ -33,26 +33,29 @@ const ChipHolder = styled.div`
   background-color: ${(props) =>
     props.$isDisabled ? 'var(--pf-global--disabled-color--300)' : null};
 `;
-function Lookup(props) {
-  const {
-    id,
-    header,
-    onChange,
-    onBlur,
-    isLoading,
-    value,
-    multiple,
-    required,
-    qsConfig,
-    renderItemChip,
-    renderOptionsList,
-    isDisabled,
-    onDebounce,
-    fieldName,
-    validate,
-    modalDescription,
-    onUpdate,
-  } = props;
+function Lookup({
+  id = 'lookup-search',
+  header = null,
+  onChange,
+  onBlur = () => {},
+  isLoading,
+  value = null,
+  multiple = false,
+  required = false,
+  qsConfig,
+  renderItemChip = ({ item, removeItem, canDelete }) => (
+    <Chip key={item.id} onClick={() => removeItem(item)} isReadOnly={!canDelete}>
+      {item.name}
+    </Chip>
+  ),
+  renderOptionsList,
+  isDisabled = false,
+  onDebounce = () => undefined,
+  fieldName,
+  validate = () => undefined,
+  modalDescription = '',
+  onUpdate = () => {},
+}) {
   const { t } = useLingui();
   const location = useLocation();
   const navigate = useNavigate();
@@ -253,29 +256,6 @@ Lookup.propTypes = {
   validate: func,
   onDebounce: func,
   isDisabled: bool,
-};
-
-Lookup.defaultProps = {
-  id: 'lookup-search',
-  header: null,
-  value: null,
-  multiple: false,
-  required: false,
-  modalDescription: '',
-  onBlur: () => {},
-  renderItemChip: ({ item, removeItem, canDelete }) => (
-    <Chip
-      key={item.id}
-      onClick={() => removeItem(item)}
-      isReadOnly={!canDelete}
-    >
-      {item.name}
-    </Chip>
-  ),
-  validate: () => undefined,
-  onDebounce: () => undefined,
-  onUpdate: () => {},
-  isDisabled: false,
 };
 
 export { Lookup as _Lookup };

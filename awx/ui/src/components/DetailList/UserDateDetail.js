@@ -11,7 +11,7 @@ const Detail = styled(_Detail)`
   word-break: break-word;
 `;
 
-function UserDateDetail({ label, date, user }) {
+function UserDateDetail({ label, date, user = null }) {
   const dateStr = formatDateString(date);
   const username = user ? user.username : '';
   return (
@@ -35,8 +35,4 @@ UserDateDetail.propTypes = {
   date: string.isRequired,
   user: SummaryFieldUser,
 };
-UserDateDetail.defaultProps = {
-  user: null,
-};
-
 export default UserDateDetail;

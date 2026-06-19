@@ -95,8 +95,13 @@ function CredentialPluginInput(props) {
   );
 }
 
-function CredentialPluginField(props) {
-  const { fieldOptions, isRequired, validated } = props;
+function CredentialPluginField({
+  isDisabled = false,
+  isRequired = false,
+  ...restProps
+}) {
+  const props = { isDisabled, isRequired, ...restProps };
+  const { fieldOptions, validated } = props;
 
   const [, meta, helpers] = useField(`inputs.${fieldOptions.id}`);
   const [passwordPromptField] = useField(`passwordPrompts.${fieldOptions.id}`);
@@ -168,11 +173,6 @@ CredentialPluginField.propTypes = {
   }).isRequired,
   isDisabled: PropTypes.bool,
   isRequired: PropTypes.bool,
-};
-
-CredentialPluginField.defaultProps = {
-  isDisabled: false,
-  isRequired: false,
 };
 
 export default CredentialPluginField;

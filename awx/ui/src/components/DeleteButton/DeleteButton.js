@@ -24,7 +24,7 @@ function DeleteButton({
   variant,
   children,
   isDisabled,
-  ouiaId,
+  ouiaId = null,
   deleteMessage,
   deleteDetailsRequests,
   disabledTooltip,
@@ -153,10 +153,6 @@ function DeleteButton({
 
 DeleteButton.propTypes = {
   ouiaId: PropTypes.string,
-};
-
-DeleteButton.defaultProps = {
-  ouiaId: null,
 };
 
 export default DeleteButton;

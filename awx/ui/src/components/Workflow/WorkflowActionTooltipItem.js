@@ -25,9 +25,9 @@ const TooltipItem = styled.div`
 function WorkflowActionTooltipItem({
   children,
   id,
-  onClick,
-  onMouseEnter,
-  onMouseLeave,
+  onClick = () => {},
+  onMouseEnter = () => {},
+  onMouseLeave = () => {},
 }) {
   return (
     <TooltipItem
@@ -47,12 +47,6 @@ WorkflowActionTooltipItem.propTypes = {
   onClick: func,
   onMouseEnter: func,
   onMouseLeave: func,
-};
-
-WorkflowActionTooltipItem.defaultProps = {
-  onClick: () => {},
-  onMouseEnter: () => {},
-  onMouseLeave: () => {},
 };
 
 export default WorkflowActionTooltipItem;

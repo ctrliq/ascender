@@ -26,12 +26,12 @@ const ExclamationTrianglePopover = styled(PFExclamationTriangleIcon)`
 ExclamationTrianglePopover.displayName = 'ExclamationTrianglePopover';
 
 function ExecutionEnvironmentDetail({
-  executionEnvironment,
-  isDefaultEnvironment,
-  virtualEnvironment,
-  verifyMissingVirtualEnv,
-  helpText,
-  dataCy,
+  executionEnvironment = null,
+  isDefaultEnvironment = false,
+  virtualEnvironment = '',
+  verifyMissingVirtualEnv = true,
+  helpText = '',
+  dataCy = 'execution-environment-detail',
 }) {
   const { t } = useLingui();
   const config = useConfig();
@@ -135,15 +135,6 @@ ExecutionEnvironmentDetail.propTypes = {
   verifyMissingVirtualEnv: bool,
   helpText: string,
   dataCy: string,
-};
-
-ExecutionEnvironmentDetail.defaultProps = {
-  isDefaultEnvironment: false,
-  executionEnvironment: null,
-  virtualEnvironment: '',
-  verifyMissingVirtualEnv: true,
-  helpText: '',
-  dataCy: 'execution-environment-detail',
 };
 
 export default ExecutionEnvironmentDetail;

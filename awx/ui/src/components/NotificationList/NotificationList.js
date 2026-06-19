@@ -26,7 +26,7 @@ function NotificationList({
   canToggleNotifications,
   id,
 
-  showApprovalsToggle,
+  showApprovalsToggle = false,
 }) {
   const { t } = useLingui();
   const location = useLocation();
@@ -263,10 +263,6 @@ NotificationList.propTypes = {
   id: number.isRequired,
   canToggleNotifications: bool.isRequired,
   showApprovalsToggle: bool,
-};
-
-NotificationList.defaultProps = {
-  showApprovalsToggle: false,
 };
 
 export default NotificationList;

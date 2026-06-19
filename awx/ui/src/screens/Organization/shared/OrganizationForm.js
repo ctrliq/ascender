@@ -125,11 +125,17 @@ function OrganizationFormFields({
 }
 
 function OrganizationForm({
-  organization,
+  organization = {
+    id: '',
+    name: '',
+    description: '',
+    max_hosts: '0',
+    default_environment: '',
+  },
   onCancel,
   onSubmit,
-  submitError,
-  defaultGalaxyCredential,
+  submitError = null,
+  defaultGalaxyCredential = null,
   ...rest
 }) {
   const [contentError, setContentError] = useState(null);
@@ -223,18 +229,6 @@ OrganizationForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
   submitError: PropTypes.shape(),
-};
-
-OrganizationForm.defaultProps = {
-  defaultGalaxyCredential: null,
-  organization: {
-    id: '',
-    name: '',
-    description: '',
-    max_hosts: '0',
-    default_environment: '',
-  },
-  submitError: null,
 };
 
 export { OrganizationForm as _OrganizationForm };

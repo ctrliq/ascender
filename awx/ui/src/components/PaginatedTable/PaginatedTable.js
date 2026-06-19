@@ -19,24 +19,27 @@ import Pagination from '../Pagination';
 import DataListToolbar from '../DataListToolbar';
 import LoadingSpinner from '../LoadingSpinner';
 
+// Stable default so the clearSelected effect dep does not change every render.
+const noop = () => {};
+
 function PaginatedTable({
-  contentError,
-  hasContentLoading,
+  contentError = null,
+  hasContentLoading = false,
   emptyStateControls,
   items,
   itemCount,
   qsConfig,
   headerRow,
   renderRow,
-  toolbarSearchColumns,
-  toolbarSearchableKeys,
-  toolbarRelatedSearchableKeys,
-  pluralizedItemName,
-  showPageSizeOptions,
-  renderToolbar,
+  toolbarSearchColumns = [],
+  toolbarSearchableKeys = [],
+  toolbarRelatedSearchableKeys = [],
+  pluralizedItemName = null,
+  showPageSizeOptions = true,
+  renderToolbar = (props) => <DataListToolbar {...props} />,
   emptyContentMessage,
-  clearSelected,
-  ouiaId,
+  clearSelected = noop,
+  ouiaId = null,
 }) {
   const { t } = useLingui();
   const location = useLocation();
@@ -205,19 +208,6 @@ PaginatedTable.propTypes = {
   contentError: PropTypes.shape(),
   clearSelected: PropTypes.func,
   ouiaId: PropTypes.string,
-};
-
-PaginatedTable.defaultProps = {
-  hasContentLoading: false,
-  contentError: null,
-  toolbarSearchColumns: [],
-  toolbarSearchableKeys: [],
-  toolbarRelatedSearchableKeys: [],
-  pluralizedItemName: null,
-  showPageSizeOptions: true,
-  renderToolbar: (props) => <DataListToolbar {...props} />,
-  ouiaId: null,
-  clearSelected: () => {},
 };
 
 export { PaginatedTable as _PaginatedTable };

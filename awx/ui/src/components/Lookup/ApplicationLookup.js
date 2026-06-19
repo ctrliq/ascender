@@ -18,7 +18,13 @@ const QS_CONFIG = getQSConfig('applications', {
   order_by: 'name',
 });
 
-function ApplicationLookup({ onChange, value, label, fieldName, validate }) {
+function ApplicationLookup({
+  onChange,
+  value = null,
+  label,
+  fieldName = 'application',
+  validate = () => undefined,
+}) {
   const { t } = useLingui();
   const location = useLocation();
   const {
@@ -144,12 +150,6 @@ ApplicationLookup.propTypes = {
   value: Application,
   validate: func,
   fieldName: string,
-};
-
-ApplicationLookup.defaultProps = {
-  value: null,
-  validate: () => undefined,
-  fieldName: 'application',
 };
 
 export default ApplicationLookup;

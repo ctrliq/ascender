@@ -79,7 +79,7 @@ const CheckboxListItem = ({
 };
 
 CheckboxListItem.propTypes = {
-  isSelected: PropTypes.bool.isRequired,
+  isSelected: PropTypes.bool,
   itemId: PropTypes.number.isRequired,
   label: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,

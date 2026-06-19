@@ -40,7 +40,13 @@ async function loadLabelOptions(setLabels, onError, isMounted) {
   }
 }
 
-function LabelSelect({ value, placeholder, onChange, onError, createText }) {
+function LabelSelect({
+  value,
+  placeholder = '',
+  onChange,
+  onError,
+  createText,
+}) {
   const [isLoading, setIsLoading] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
   const isMounted = useIsMounted();
@@ -147,8 +153,4 @@ LabelSelect.propTypes = {
   onChange: func.isRequired,
   onError: func.isRequired,
 };
-LabelSelect.defaultProps = {
-  placeholder: '',
-};
-
 export default LabelSelect;

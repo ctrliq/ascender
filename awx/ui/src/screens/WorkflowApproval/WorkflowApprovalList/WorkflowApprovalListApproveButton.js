@@ -10,7 +10,7 @@ function cannotApprove(item) {
   return !item.can_approve_or_deny;
 }
 
-function WorkflowApprovalListApproveButton({ onApprove, selectedItems }) {
+function WorkflowApprovalListApproveButton({ onApprove, selectedItems = [] }) {
   const { t } = useLingui();
   const { isKebabified } = useContext(KebabifiedContext);
 
@@ -68,10 +68,6 @@ function WorkflowApprovalListApproveButton({ onApprove, selectedItems }) {
 WorkflowApprovalListApproveButton.propTypes = {
   onApprove: PropTypes.func.isRequired,
   selectedItems: PropTypes.arrayOf(WorkflowApproval),
-};
-
-WorkflowApprovalListApproveButton.defaultProps = {
-  selectedItems: [],
 };
 
 export default WorkflowApprovalListApproveButton;

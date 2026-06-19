@@ -31,7 +31,7 @@ const ToolbarItem = styled(PFToolbarItem)`
 
 // TODO: Recommend renaming this component to avoid confusion
 // with ExpandingContainer
-function ExpandCollapse({ isCompact, onCompact, onExpand }) {
+function ExpandCollapse({ isCompact = true, onCompact, onExpand }) {
   const { t } = useLingui();
   return (
     <>
@@ -65,10 +65,6 @@ ExpandCollapse.propTypes = {
   onCompact: PropTypes.func.isRequired,
   onExpand: PropTypes.func.isRequired,
   isCompact: PropTypes.bool,
-};
-
-ExpandCollapse.defaultProps = {
-  isCompact: true,
 };
 
 export default ExpandCollapse;

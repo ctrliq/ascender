@@ -8,8 +8,8 @@ function CheckboxField({
   id,
   name,
   label,
-  tooltip,
-  validate,
+  tooltip = '',
+  validate = () => {},
   isDisabled,
   ...rest
 }) {
@@ -43,9 +43,4 @@ CheckboxField.propTypes = {
   validate: func,
   tooltip: node,
 };
-CheckboxField.defaultProps = {
-  validate: () => {},
-  tooltip: '',
-};
-
 export default CheckboxField;

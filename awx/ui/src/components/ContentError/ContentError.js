@@ -15,7 +15,7 @@ import { ExclamationTriangleIcon } from '@patternfly/react-icons';
 import { useSession } from 'contexts/Session';
 import ErrorDetail from '../ErrorDetail';
 
-function ContentError({ error, children, isNotFound }) {
+function ContentError({ error = null, children, isNotFound = false }) {
   const { t } = useLingui();
   const { logout } = useSession();
 
@@ -58,10 +58,5 @@ ContentError.propTypes = {
   error: instanceOf(Error),
   isNotFound: bool,
 };
-ContentError.defaultProps = {
-  error: null,
-  isNotFound: false,
-};
-
 export { ContentError as _ContentError };
 export default ContentError;

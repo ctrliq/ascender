@@ -88,13 +88,13 @@ const ItemToDelete = shape({
 
 function ToolbarDeleteButton({
   itemsToDelete,
-  pluralizedItemName,
+  pluralizedItemName = 'Items',
   errorMessage,
   onDelete,
   deleteDetailsRequests,
-  warningMessage,
+  warningMessage = null,
   deleteMessage,
-  cannotDelete,
+  cannotDelete = (item) => !item.summary_fields.user_capabilities.delete,
 }) {
   const { t } = useLingui();
   const { isKebabified, onKebabModalChange } = useContext(KebabifiedContext);
@@ -310,12 +310,6 @@ ToolbarDeleteButton.propTypes = {
   pluralizedItemName: string,
   warningMessage: node,
   cannotDelete: func,
-};
-
-ToolbarDeleteButton.defaultProps = {
-  pluralizedItemName: 'Items',
-  warningMessage: null,
-  cannotDelete: (item) => !item.summary_fields.user_capabilities.delete,
 };
 
 export default ToolbarDeleteButton;

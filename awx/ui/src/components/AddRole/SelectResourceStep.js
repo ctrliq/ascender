@@ -25,12 +25,12 @@ const QS_Config = (sortColumns) =>
     }`,
   });
 function SelectResourceStep({
-  searchColumns,
-  sortColumns,
-  displayKey,
-  onRowClick,
-  selectedLabel,
-  selectedResourceRows,
+  searchColumns = null,
+  sortColumns = null,
+  displayKey = 'name',
+  onRowClick = () => {},
+  selectedLabel = null,
+  selectedResourceRows = [],
   fetchItems,
   fetchOptions,
 }) {
@@ -148,15 +148,6 @@ SelectResourceStep.propTypes = {
   fetchItems: PropTypes.func.isRequired,
   selectedLabel: PropTypes.string,
   selectedResourceRows: PropTypes.arrayOf(PropTypes.object),
-};
-
-SelectResourceStep.defaultProps = {
-  searchColumns: null,
-  sortColumns: null,
-  displayKey: 'name',
-  onRowClick: () => {},
-  selectedLabel: null,
-  selectedResourceRows: [],
 };
 
 export { SelectResourceStep as _SelectResourceStep };

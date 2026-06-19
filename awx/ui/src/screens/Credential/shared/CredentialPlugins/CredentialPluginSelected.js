@@ -24,8 +24,8 @@ const PluginHelpText = styled.p`
 
 function CredentialPluginSelected({
   credential,
-  onEditPlugin,
-  onClearPlugin,
+  onEditPlugin = () => {},
+  onClearPlugin = () => {},
   fieldId,
 }) {
   const { t } = useLingui();
@@ -61,11 +61,6 @@ CredentialPluginSelected.propTypes = {
   credential: Credential.isRequired,
   onEditPlugin: func,
   onClearPlugin: func,
-};
-
-CredentialPluginSelected.defaultProps = {
-  onEditPlugin: () => {},
-  onClearPlugin: () => {},
 };
 
 export default CredentialPluginSelected;

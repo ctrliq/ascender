@@ -93,7 +93,11 @@ const ActionButton = styled(Button)`
     color: #fff;
   }
 `;
-function WorkflowOutputToolbar({ job, onDelete, isDeleteDisabled }) {
+function WorkflowOutputToolbar({
+  job,
+  onDelete = () => {},
+  isDeleteDisabled = false,
+}) {
   const { t } = useLingui();
   const dispatch = useContext(WorkflowDispatchContext);
   const navigate = useNavigate();
@@ -263,11 +267,6 @@ WorkflowOutputToolbar.propTypes = {
   job: shape().isRequired,
   onDelete: func,
   isDeleteDisabled: bool,
-};
-
-WorkflowOutputToolbar.defaultProps = {
-  onDelete: () => {},
-  isDeleteDisabled: false,
 };
 
 export default WorkflowOutputToolbar;

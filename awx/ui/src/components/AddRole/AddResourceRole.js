@@ -18,7 +18,13 @@ const readTeams = async (queryParams) => TeamsAPI.read(queryParams);
 
 const readTeamsOptions = async () => TeamsAPI.readOptions();
 
-function AddResourceRole({ onSave, onClose, roles, resource, onError }) {
+function AddResourceRole({
+  onSave,
+  onClose,
+  roles = {},
+  resource = {},
+  onError,
+}) {
   const { t } = useLingui();
 
   const userSearchColumns = useMemo(() => [
@@ -283,11 +289,6 @@ AddResourceRole.propTypes = {
   onSave: PropTypes.func.isRequired,
   roles: PropTypes.shape(),
   resource: PropTypes.shape(),
-};
-
-AddResourceRole.defaultProps = {
-  roles: {},
-  resource: {},
 };
 
 export { AddResourceRole as _AddResourceRole };

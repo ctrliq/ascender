@@ -16,10 +16,14 @@ const SplitLabelItem = styled(SplitItem)`
   word-break: initial;
 `;
 
-function SelectedList(props) {
-  const { label, selected, onRemove, displayKey, isReadOnly, renderItemChip } =
-    props;
-
+function SelectedList({
+  label = 'Selected',
+  selected,
+  onRemove = () => null,
+  displayKey = 'name',
+  isReadOnly = false,
+  renderItemChip = null,
+}) {
   const renderChip =
     renderItemChip ||
     (({ item, removeItem }) => (
@@ -57,14 +61,6 @@ SelectedList.propTypes = {
   selected: PropTypes.arrayOf(PropTypes.object).isRequired,
   isReadOnly: PropTypes.bool,
   renderItemChip: PropTypes.func,
-};
-
-SelectedList.defaultProps = {
-  displayKey: 'name',
-  label: 'Selected',
-  onRemove: () => null,
-  isReadOnly: false,
-  renderItemChip: null,
 };
 
 export default SelectedList;

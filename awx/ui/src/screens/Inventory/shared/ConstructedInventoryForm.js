@@ -160,7 +160,7 @@ function ConstructedInventoryForm({
   inputInventories,
   onCancel,
   onSubmit,
-  submitError,
+  submitError = null,
   options,
 }) {
   const initialValues = {
@@ -198,10 +198,6 @@ ConstructedInventoryForm.propTypes = {
   onCancel: func.isRequired,
   onSubmit: func.isRequired,
   submitError: shape({}),
-};
-
-ConstructedInventoryForm.defaultProps = {
-  submitError: null,
 };
 
 export default ConstructedInventoryForm;

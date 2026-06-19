@@ -26,22 +26,22 @@ function OptionsList({
   columns,
   contentError,
   deselectItem,
-  displayKey,
+  displayKey = 'name',
   header,
   isLoading,
-  isSelectedDraggable,
-  multiple,
+  isSelectedDraggable = false,
+  multiple = false,
   name,
   optionCount,
   options,
   qsConfig,
   readOnly,
   relatedSearchableKeys,
-  renderItemChip,
-  searchColumns,
+  renderItemChip = null,
+  searchColumns = [],
   searchableKeys,
   selectItem,
-  sortColumns,
+  sortColumns = [],
   sortSelectedItems,
   value,
 }) {
@@ -144,14 +144,6 @@ OptionsList.propTypes = {
   selectItem: func.isRequired,
   sortColumns: SortColumns,
   value: oneOfType([arrayOf(Item), arrayOf(InstanceItem)]).isRequired,
-};
-OptionsList.defaultProps = {
-  isSelectedDraggable: false,
-  multiple: false,
-  renderItemChip: null,
-  searchColumns: [],
-  sortColumns: [],
-  displayKey: 'name',
 };
 
 export default OptionsList;

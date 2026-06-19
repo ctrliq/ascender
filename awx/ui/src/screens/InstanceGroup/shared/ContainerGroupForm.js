@@ -108,11 +108,11 @@ function ContainerGroupFormFields({ instanceGroup }) {
 }
 
 function ContainerGroupForm({
-  initialPodSpec,
-  instanceGroup,
+  initialPodSpec = {},
+  instanceGroup = {},
   onSubmit,
   onCancel,
-  submitError,
+  submitError = null,
   ...rest
 }) {
   const isCheckboxChecked = Boolean(instanceGroup?.pod_spec_override) || false;
@@ -157,12 +157,6 @@ ContainerGroupForm.propTypes = {
   onSubmit: func.isRequired,
   submitError: shape({}),
   initialPodSpec: shape({}),
-};
-
-ContainerGroupForm.defaultProps = {
-  instanceGroup: {},
-  submitError: null,
-  initialPodSpec: {},
 };
 
 export default ContainerGroupForm;

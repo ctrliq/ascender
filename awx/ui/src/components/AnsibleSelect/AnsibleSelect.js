@@ -14,12 +14,12 @@ import { FormSelect, FormSelectOption } from '@patternfly/react-core';
 
 function AnsibleSelect({
   id,
-  data,
-  isValid,
-  onBlur,
+  data = [],
+  isValid = true,
+  onBlur = () => {},
   value,
-  className,
-  isDisabled,
+  className = '',
+  isDisabled = false,
   onChange,
   name,
 }) {
@@ -61,14 +61,6 @@ const Option = shape({
   label: string.isRequired,
   isDisabled: bool,
 });
-
-AnsibleSelect.defaultProps = {
-  data: [],
-  isValid: true,
-  onBlur: () => {},
-  className: '',
-  isDisabled: false,
-};
 
 AnsibleSelect.propTypes = {
   data: arrayOf(Option),

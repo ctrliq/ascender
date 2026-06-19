@@ -24,10 +24,10 @@ const ItemToDelete = shape({
 
 function HostMetricsDeleteButton({
   itemsToDelete,
-  pluralizedItemName,
+  pluralizedItemName = 'Items',
   onDelete,
   deleteDetailsRequests,
-  warningMessage,
+  warningMessage = null,
   deleteMessage,
 }) {
   const { t } = useLingui();
@@ -196,11 +196,6 @@ HostMetricsDeleteButton.propTypes = {
   itemsToDelete: arrayOf(ItemToDelete).isRequired,
   pluralizedItemName: string,
   warningMessage: node,
-};
-
-HostMetricsDeleteButton.defaultProps = {
-  pluralizedItemName: 'Items',
-  warningMessage: null,
 };
 
 export default HostMetricsDeleteButton;

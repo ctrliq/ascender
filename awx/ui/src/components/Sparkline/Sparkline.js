@@ -21,7 +21,7 @@ const Wrapper = styled.div`
 `;
 /* eslint-enable react/jsx-pascal-case */
 
-const Sparkline = ({ jobs }) => {
+const Sparkline = ({ jobs = [] }) => {
   const { t } = useLingui();
   const generateTooltip = (job) => (
     <>
@@ -55,9 +55,6 @@ const Sparkline = ({ jobs }) => {
 
 Sparkline.propTypes = {
   jobs: arrayOf(Job),
-};
-Sparkline.defaultProps = {
-  jobs: [],
 };
 
 export default Sparkline;

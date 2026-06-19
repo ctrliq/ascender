@@ -58,11 +58,6 @@ describe('OrganizationLookup', () => {
     expect(await screen.findByText('Organization')).toBeInTheDocument();
   });
 
-  test('should define default value for function props', () => {
-    expect(_OrganizationLookup.defaultProps.onBlur).toBeInstanceOf(Function);
-    expect(_OrganizationLookup.defaultProps.onBlur).not.toThrow();
-  });
-
   test('should auto-select organization when only one available and autoPopulate prop is true', async () => {
     const org = { id: 1, name: 'org', url: '/api/v2/organizations/1/' };
     OrganizationsAPI.read.mockResolvedValue({

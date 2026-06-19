@@ -20,23 +20,25 @@ const QS_CONFIG = getQSConfig('instances', {
   order_by: 'hostname',
 });
 
+const defaultInstanceDetails = {};
+
 function PeersLookup({
-  id,
+  id = 'instances',
   value,
   onChange,
-  tooltip,
-  className,
-  required,
-  fieldName,
-  multiple,
-  validate,
-  columns,
+  tooltip = '',
+  className = '',
+  required = false,
+  fieldName = 'instances',
+  multiple = true,
+  validate = () => undefined,
+  columns = undefined,
   isPromptableField,
   promptId,
   promptName,
-  formLabel,
-  typePeers,
-  instance_details,
+  formLabel = undefined,
+  typePeers = false,
+  instance_details = defaultInstanceDetails,
 }) {
   const location = useLocation();
   const { t } = useLingui();
@@ -185,20 +187,6 @@ PeersLookup.propTypes = {
   formLabel: string,
   instance_details: (Instance, shape({})),
   typePeers: bool,
-};
-
-PeersLookup.defaultProps = {
-  id: 'instances',
-  tooltip: '',
-  className: '',
-  required: false,
-  validate: () => undefined,
-  fieldName: 'instances',
-  columns: undefined,
-  formLabel: undefined,
-  instance_details: {},
-  multiple: true,
-  typePeers: false,
 };
 
 export default PeersLookup;

@@ -7,12 +7,12 @@ import CheckboxCard from './CheckboxCard';
 import { SelectedList } from '../SelectedList';
 
 function RolesStep({
-  onRolesClick,
+  onRolesClick = () => {},
   roles,
-  selectedListKey,
-  selectedListLabel,
-  selectedResourceRows,
-  selectedRoleRows,
+  selectedListKey = 'name',
+  selectedListLabel = null,
+  selectedResourceRows = [],
+  selectedRoleRows = [],
 }) {
   const { t } = useLingui();
 
@@ -63,14 +63,6 @@ RolesStep.propTypes = {
   selectedListLabel: PropTypes.string,
   selectedResourceRows: PropTypes.arrayOf(PropTypes.object),
   selectedRoleRows: PropTypes.arrayOf(PropTypes.object),
-};
-
-RolesStep.defaultProps = {
-  onRolesClick: () => {},
-  selectedListKey: 'name',
-  selectedListLabel: null,
-  selectedResourceRows: [],
-  selectedRoleRows: [],
 };
 
 export default RolesStep;

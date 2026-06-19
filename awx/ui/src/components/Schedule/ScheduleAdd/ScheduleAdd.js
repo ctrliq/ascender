@@ -168,6 +168,4 @@ ScheduleAdd.propTypes = {
   apiModel: shape({ createSchedule: func.isRequired }).isRequired,
 };
 
-ScheduleAdd.defaultProps = {};
-
 export default ScheduleAdd;

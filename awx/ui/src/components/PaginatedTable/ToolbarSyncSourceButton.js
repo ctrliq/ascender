@@ -5,7 +5,7 @@ import { useLingui } from '@lingui/react/macro';
 
 import { useKebabifiedMenu } from 'contexts/Kebabified';
 
-function ToolbarSyncSourceButton({ onClick }) {
+function ToolbarSyncSourceButton({ onClick = null }) {
   const { t } = useLingui();
   const { isKebabified } = useKebabifiedMenu();
 
@@ -42,9 +42,6 @@ function ToolbarSyncSourceButton({ onClick }) {
 
 ToolbarSyncSourceButton.propTypes = {
   onClick: func,
-};
-ToolbarSyncSourceButton.defaultProps = {
-  onClick: null,
 };
 
 export default ToolbarSyncSourceButton;

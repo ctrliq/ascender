@@ -7,8 +7,8 @@ import { useLingui } from '@lingui/react/macro';
 import { useKebabifiedMenu } from 'contexts/Kebabified';
 
 function ToolbarAddButton({
-  linkTo,
-  onClick,
+  linkTo = null,
+  onClick = null,
   isDisabled,
   defaultLabel,
   showToggleIndicator,
@@ -63,10 +63,6 @@ function ToolbarAddButton({
 ToolbarAddButton.propTypes = {
   linkTo: string,
   onClick: func,
-};
-ToolbarAddButton.defaultProps = {
-  linkTo: null,
-  onClick: null,
 };
 
 export default ToolbarAddButton;

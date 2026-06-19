@@ -65,7 +65,9 @@ const getStdOutValue = (hostEvent) => {
   return stdOut;
 };
 
-function HostEventModal({ onClose, hostEvent = {}, isOpen = false }) {
+const defaultHostEvent = {};
+
+function HostEventModal({ onClose, hostEvent = defaultHostEvent, isOpen = false }) {
   const { t } = useLingui();
   const [hostStatus, setHostStatus] = useState(null);
   const [activeTabKey, setActiveTabKey] = useState(0);
@@ -220,9 +222,4 @@ HostEventModal.propTypes = {
   onClose: PropTypes.func.isRequired,
   hostEvent: PropTypes.shape({}),
   isOpen: PropTypes.bool,
-};
-
-HostEventModal.defaultProps = {
-  hostEvent: null,
-  isOpen: false,
 };

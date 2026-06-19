@@ -201,6 +201,4 @@ ScheduleEdit.propTypes = {
   schedule: shape({}).isRequired,
 };
 
-ScheduleEdit.defaultProps = {};
-
 export default ScheduleEdit;

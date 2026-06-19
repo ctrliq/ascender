@@ -13,7 +13,14 @@ const PopoverButton = styled.button`
   --pf-c-form__group-label-help--hover--Color: var(--pf-global--Color--100);
 `;
 
-function Popover({ ariaLabel, content, header, id, maxWidth, ...rest }) {
+function Popover({
+  ariaLabel = null,
+  content = null,
+  header = null,
+  id = '',
+  maxWidth = '',
+  ...rest
+}) {
   const { t } = useLingui();
   if (!content) {
     return null;
@@ -47,13 +54,6 @@ Popover.propTypes = {
   header: node,
   id: string,
   maxWidth: string,
-};
-Popover.defaultProps = {
-  ariaLabel: null,
-  content: null,
-  header: null,
-  id: '',
-  maxWidth: '',
 };
 
 export default Popover;

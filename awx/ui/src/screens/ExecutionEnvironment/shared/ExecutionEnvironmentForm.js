@@ -159,9 +159,9 @@ function ExecutionEnvironmentForm({
   executionEnvironment = {},
   onSubmit,
   onCancel,
-  submitError,
+  submitError = null,
   me,
-  isOrgLookupDisabled,
+  isOrgLookupDisabled = false,
   ...rest
 }) {
   const {
@@ -232,12 +232,6 @@ ExecutionEnvironmentForm.propTypes = {
   onSubmit: func.isRequired,
   submitError: shape({}),
   isOrgLookupDisabled: bool,
-};
-
-ExecutionEnvironmentForm.defaultProps = {
-  executionEnvironment: {},
-  submitError: null,
-  isOrgLookupDisabled: false,
 };
 
 export default ExecutionEnvironmentForm;

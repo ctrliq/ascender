@@ -19,7 +19,7 @@ const QS_CONFIG = getQSConfig('workflow-job-templates', {
   order_by: 'name',
 });
 
-function WorkflowJobTemplatesList({ nodeResource, onUpdateNodeResource }) {
+function WorkflowJobTemplatesList({ nodeResource = null, onUpdateNodeResource }) {
   const location = useLocation();
   const { t } = useLingui();
 
@@ -122,10 +122,6 @@ function WorkflowJobTemplatesList({ nodeResource, onUpdateNodeResource }) {
 WorkflowJobTemplatesList.propTypes = {
   nodeResource: shape(),
   onUpdateNodeResource: func.isRequired,
-};
-
-WorkflowJobTemplatesList.defaultProps = {
-  nodeResource: null,
 };
 
 export default WorkflowJobTemplatesList;

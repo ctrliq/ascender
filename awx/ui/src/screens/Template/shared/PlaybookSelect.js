@@ -6,13 +6,15 @@ import { SelectVariant, Select, SelectOption } from '@patternfly/react-core';
 import { ProjectsAPI } from 'api';
 import useRequest from 'hooks/useRequest';
 
+const noop = () => {};
+
 function PlaybookSelect({
-  projectId,
+  projectId = null,
   isValid,
   selected,
   onBlur,
   onError,
-  onChange,
+  onChange = noop,
 }) {
   const { t } = useLingui();
   const [isDisabled, setIsDisabled] = useState(false);
@@ -83,10 +85,5 @@ PlaybookSelect.propTypes = {
   projectId: oneOfType([number, string]),
   onChange: func,
 };
-PlaybookSelect.defaultProps = {
-  projectId: null,
-  onChange: () => {},
-};
-
 export { PlaybookSelect as _PlaybookSelect };
 export default PlaybookSelect;

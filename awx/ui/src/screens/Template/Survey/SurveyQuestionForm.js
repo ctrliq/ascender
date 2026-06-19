@@ -100,10 +100,10 @@ function AnswerTypeField() {
 }
 
 function SurveyQuestionForm({
-  question,
+  question = null,
   handleSubmit,
   handleCancel,
-  submitError,
+  submitError = null,
 }) {
   const config = useConfig();
   const { t } = useLingui();
@@ -301,8 +301,4 @@ SurveyQuestionForm.propTypes = {
   submitError: shape({}),
 };
 
-SurveyQuestionForm.defaultProps = {
-  question: null,
-  submitError: null,
-};
 export default SurveyQuestionForm;

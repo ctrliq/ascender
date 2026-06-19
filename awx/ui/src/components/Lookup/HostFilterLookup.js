@@ -92,14 +92,14 @@ const QS_CONFIG = getQSConfig(
 
 function HostFilterLookup({
   helperTextInvalid,
-  isValid,
+  isValid = true,
   isDisabled,
-  onBlur,
-  onChange,
-  organizationId,
-  value,
-  enableNegativeFiltering,
-  enableRelatedFuzzyFiltering,
+  onBlur = () => {},
+  onChange = () => {},
+  organizationId = null,
+  value = '',
+  enableNegativeFiltering = true,
+  enableRelatedFuzzyFiltering = true,
 }) {
   const { t } = useLingui();
   const navigate = useNavigate();
@@ -465,14 +465,4 @@ HostFilterLookup.propTypes = {
   enableNegativeFiltering: bool,
   enableRelatedFuzzyFiltering: bool,
 };
-HostFilterLookup.defaultProps = {
-  isValid: true,
-  onBlur: () => {},
-  onChange: () => {},
-  organizationId: null,
-  value: '',
-  enableNegativeFiltering: true,
-  enableRelatedFuzzyFiltering: true,
-};
-
 export default HostFilterLookup;

@@ -10,11 +10,11 @@ import ErrorDetail from '../ErrorDetail';
 function CopyButton({
   id,
   copyItem,
-  isDisabled,
+  isDisabled = false,
   onCopyStart,
   onCopyFinish,
   errorMessage,
-  ouiaId,
+  ouiaId = null,
 }) {
   const { t } = useLingui();
   const {
@@ -67,11 +67,6 @@ CopyButton.propTypes = {
   errorMessage: PropTypes.string.isRequired,
   isDisabled: PropTypes.bool,
   ouiaId: PropTypes.string,
-};
-
-CopyButton.defaultProps = {
-  isDisabled: false,
-  ouiaId: null,
 };
 
 export default CopyButton;

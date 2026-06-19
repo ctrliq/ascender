@@ -49,17 +49,17 @@ const NoOptionDropdown = styled.div`
 
 function Search({
   columns,
-  onSearch,
+  onSearch = null,
   onReplaceSearch,
-  onRemove,
+  onRemove = null,
   qsConfig,
-  searchableKeys,
+  searchableKeys = [],
   relatedSearchableKeys,
   onShowAdvancedSearch,
-  isDisabled,
-  maxSelectHeight,
-  enableNegativeFiltering,
-  enableRelatedFuzzyFiltering,
+  isDisabled = false,
+  maxSelectHeight = '300px',
+  enableNegativeFiltering = true,
+  enableRelatedFuzzyFiltering = true,
   handleIsAnsibleFactsSelected,
   isFilterCleared,
 }) {
@@ -398,16 +398,6 @@ Search.propTypes = {
   enableNegativeFiltering: PropTypes.bool,
   enableRelatedFuzzyFiltering: PropTypes.bool,
   searchableKeys: SearchableKeys,
-};
-
-Search.defaultProps = {
-  onSearch: null,
-  onRemove: null,
-  isDisabled: false,
-  maxSelectHeight: '300px',
-  enableNegativeFiltering: true,
-  enableRelatedFuzzyFiltering: true,
-  searchableKeys: [],
 };
 
 export default Search;

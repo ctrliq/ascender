@@ -14,7 +14,7 @@ const Th = styled(PFTh)`
 export default function HeaderRow({
   qsConfig,
   isExpandable,
-  isSelectable,
+  isSelectable = true,
   children,
 }) {
   const location = useLocation();
@@ -58,10 +58,6 @@ export default function HeaderRow({
     </Thead>
   );
 }
-
-HeaderRow.defaultProps = {
-  isSelectable: true,
-};
 
 export function HeaderCell({
   sortKey,

@@ -30,24 +30,24 @@ const QS_CONFIG = getQSConfig('credentials', {
 });
 
 function CredentialLookup({
-  autoPopulate,
-  credentialTypeId,
-  credentialTypeKind,
+  autoPopulate = false,
+  credentialTypeId = '',
+  credentialTypeKind = '',
   credentialTypeNamespace,
-  fieldName,
-  helperTextInvalid,
-  isDisabled,
+  fieldName = 'credential',
+  helperTextInvalid = '',
+  isDisabled = false,
   isSelectedDraggable,
-  isValid,
+  isValid = true,
   label,
   modalDescription,
-  multiple,
-  onBlur,
+  multiple = false,
+  onBlur = () => {},
   onChange,
-  required,
+  required = false,
   tooltip,
-  validate,
-  value,
+  validate = () => undefined,
+  value = null,
 }) {
   const { t } = useLingui();
   const location = useLocation();
@@ -233,16 +233,17 @@ function CredentialLookup({
 
 function idOrKind(props, propName, componentName) {
   let error;
+  // credentialTypeKind formerly defaulted to '' via defaultProps, which React
+  // applied to the element's props BEFORE running PropTypes — so this validator
+  // always saw a present empty string and never fired (callers may pass
+  // credentialTypeNamespace instead of id/kind). Default params don't reach
+  // PropTypes, so treat an omitted/undefined value as that former '' default to
+  // preserve behavior.
+  const kindValue =
+    props.credentialTypeKind === undefined ? '' : props.credentialTypeKind;
   if (
     !Object.prototype.hasOwnProperty.call(props, 'credentialTypeId') &&
-    !Object.prototype.hasOwnProperty.call(props, 'credentialTypeKind')
-  )
-    error = new Error(
-      `Either "credentialTypeId" or "credentialTypeKind" is required`
-    );
-  if (
-    !Object.prototype.hasOwnProperty.call(props, 'credentialTypeId') &&
-    typeof props[propName] !== 'string'
+    typeof kindValue !== 'string'
   ) {
     error = new Error(
       `Invalid prop '${propName}' '${props[propName]}' supplied to '${componentName}'.`
@@ -266,21 +267,6 @@ CredentialLookup.propTypes = {
   autoPopulate: bool,
   validate: func,
   fieldName: string,
-};
-
-CredentialLookup.defaultProps = {
-  credentialTypeId: '',
-  credentialTypeKind: '',
-  helperTextInvalid: '',
-  isValid: true,
-  multiple: false,
-  onBlur: () => {},
-  required: false,
-  value: null,
-  isDisabled: false,
-  autoPopulate: false,
-  validate: () => undefined,
-  fieldName: 'credential',
 };
 
 export { CredentialLookup as _CredentialLookup };

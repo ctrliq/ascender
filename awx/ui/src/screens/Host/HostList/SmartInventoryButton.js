@@ -8,9 +8,9 @@ import { useKebabifiedMenu } from 'contexts/Kebabified';
 
 function SmartInventoryButton({
   onClick,
-  isDisabled,
-  hasInvalidKeys,
-  hasAnsibleFactsKeys,
+  isDisabled = false,
+  hasInvalidKeys = false,
+  hasAnsibleFactsKeys = false,
 }) {
   const { t } = useLingui();
   const { isKebabified } = useKebabifiedMenu();
@@ -72,12 +72,6 @@ SmartInventoryButton.propTypes = {
   isDisabled: bool,
   onClick: func.isRequired,
   hasAnsibleFactsKeys: bool,
-};
-
-SmartInventoryButton.defaultProps = {
-  hasInvalidKeys: false,
-  isDisabled: false,
-  hasAnsibleFactsKeys: false,
 };
 
 export default SmartInventoryButton;

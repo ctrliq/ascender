@@ -57,7 +57,7 @@ NodeResourceName.displayName = 'NodeResourceName';
 
 function VisualizerNode({
   node,
-  onMouseOver,
+  onMouseOver = () => {},
   readOnly,
   updateHelpText,
   updateNodeHelp,
@@ -393,10 +393,6 @@ VisualizerNode.propTypes = {
   readOnly: bool.isRequired,
   updateHelpText: func.isRequired,
   updateNodeHelp: func.isRequired,
-};
-
-VisualizerNode.defaultProps = {
-  onMouseOver: () => {},
 };
 
 export default VisualizerNode;

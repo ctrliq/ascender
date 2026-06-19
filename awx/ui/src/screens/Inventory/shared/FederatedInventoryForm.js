@@ -109,7 +109,7 @@ function FederatedInventoryForm({
   inputInventories,
   onCancel,
   onSubmit,
-  submitError,
+  submitError = null,
 }) {
   const initialValues = {
     kind: 'federated',
@@ -141,10 +141,6 @@ FederatedInventoryForm.propTypes = {
   onCancel: func.isRequired,
   onSubmit: func.isRequired,
   submitError: shape({}),
-};
-
-FederatedInventoryForm.defaultProps = {
-  submitError: null,
 };
 
 export default FederatedInventoryForm;

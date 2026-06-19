@@ -70,7 +70,12 @@ const OUTPUT_NO_COUNT_JOB_TYPES = [
   'inventory_update',
 ];
 
-const OutputToolbar = ({ job, onDelete, isDeleteDisabled, jobStatus }) => {
+const OutputToolbar = ({
+  job,
+  onDelete,
+  isDeleteDisabled = false,
+  jobStatus,
+}) => {
   const { t } = useLingui();
   const [activeJobElapsedTime, setActiveJobElapsedTime] = useState('00:00:00');
   const hideCounts = OUTPUT_NO_COUNT_JOB_TYPES.includes(job.type);
@@ -252,10 +257,6 @@ OutputToolbar.propTypes = {
   isDeleteDisabled: bool,
   job: shape({}).isRequired,
   onDelete: func.isRequired,
-};
-
-OutputToolbar.defaultProps = {
-  isDeleteDisabled: false,
 };
 
 export default OutputToolbar;
