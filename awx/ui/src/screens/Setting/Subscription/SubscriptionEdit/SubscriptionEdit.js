@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { Link, useRouteMatch } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom-v5-compat';
+import { useNavigate } from 'routerCompat';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { Formik, useFormikContext } from 'formik';
 import {

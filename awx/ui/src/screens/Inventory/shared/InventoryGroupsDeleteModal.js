@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { useParams } from 'react-router-dom-v5-compat';
+import { useParams } from 'routerCompat';
 import { func, bool, arrayOf } from 'prop-types';
 import { Plural, useLingui } from '@lingui/react/macro';
 import { Button, Radio, DropdownItem } from '@patternfly/react-core';

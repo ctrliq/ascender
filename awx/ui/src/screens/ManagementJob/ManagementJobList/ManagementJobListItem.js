@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
 import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom-v5-compat';
+import { useNavigate } from 'routerCompat';
 import { Button, Tooltip } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
 import { RocketIcon } from '@patternfly/react-icons';

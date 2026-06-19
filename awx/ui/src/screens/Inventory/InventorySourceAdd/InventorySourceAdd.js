@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom-v5-compat';
+import { useNavigate } from 'routerCompat';
 import { Card } from '@patternfly/react-core';
 import { InventorySourcesAPI } from 'api';
 import useRequest from 'hooks/useRequest';

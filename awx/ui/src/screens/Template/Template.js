@@ -4,7 +4,7 @@ import { useLingui } from '@lingui/react/macro';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card, PageSection } from '@patternfly/react-core';
 import { Link, useLocation } from 'react-router-dom';
-import { Routes, Route, Navigate, useParams } from 'react-router-dom-v5-compat';
+import { Routes, Route, Navigate, useParams } from 'routerCompat';
 import RoutedTabs from 'components/RoutedTabs';
 import { useConfig } from 'contexts/Config';
 import useRequest from 'hooks/useRequest';

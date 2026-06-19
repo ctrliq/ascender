@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router-dom-v5-compat';
+import { useNavigate } from 'routerCompat';
 import { CardBody } from 'components/Card';
 import { NotificationTemplatesAPI } from 'api';
 import NotificationTemplateForm from '../shared/NotificationTemplateForm';
