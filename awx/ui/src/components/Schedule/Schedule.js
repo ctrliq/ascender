@@ -8,7 +8,7 @@ import {
   Navigate,
   useLocation,
   useParams,
-} from 'react-router-dom-v5-compat';
+} from 'routerCompat';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { SchedulesAPI } from 'api';
 import useRequest from 'hooks/useRequest';

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom-v5-compat';
+import { useNavigate } from 'routerCompat';
 import { useLingui } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
 import { Host } from 'types';

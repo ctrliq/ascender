@@ -6,7 +6,7 @@ import {
   TabTitleText,
 } from '@patternfly/react-core';
 import { useLocation } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom-v5-compat';
+import { useNavigate } from 'routerCompat';
 import styled from 'styled-components';
 import { getPersistentFilters } from 'components/PersistentFilters';
 

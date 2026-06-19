@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom-v5-compat';
+import { useNavigate } from 'routerCompat';
 import { Card, PageSection } from '@patternfly/react-core';
 import { Inventory } from 'types';
 import { FederatedInventoriesAPI, InventoriesAPI } from 'api';

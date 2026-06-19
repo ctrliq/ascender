@@ -1,6 +1,6 @@
 import React from 'react';
 import { Router } from 'react-router-dom';
-import { Router as RouterV6 } from 'react-router-dom-v5-compat';
+import { Router as RouterV6 } from 'routerCompat';
 import { InventoriesAPI, ConstructedInventoriesAPI } from 'api';
 import {
   render,

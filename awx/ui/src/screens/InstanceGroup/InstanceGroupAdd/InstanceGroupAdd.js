@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Card, PageSection } from '@patternfly/react-core';
-import { useNavigate } from 'react-router-dom-v5-compat';
+import { useNavigate } from 'routerCompat';
 
 import { CardBody } from 'components/Card';
 import { InstanceGroupsAPI } from 'api';

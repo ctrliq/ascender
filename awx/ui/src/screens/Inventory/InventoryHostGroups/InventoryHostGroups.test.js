@@ -1,6 +1,6 @@
 import React from 'react';
 import { createMemoryHistory } from 'history';
-import { Routes, Route } from 'react-router-dom-v5-compat';
+import { Routes, Route } from 'routerCompat';
 import { screen } from '@testing-library/react';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryHostGroups from './InventoryHostGroups';

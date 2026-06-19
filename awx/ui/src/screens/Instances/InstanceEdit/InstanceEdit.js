@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router-dom';
-import { useNavigate, useParams } from 'react-router-dom-v5-compat';
+import { useNavigate, useParams } from 'routerCompat';
 import { Card, PageSection } from '@patternfly/react-core';
 import useRequest from 'hooks/useRequest';
 import ContentError from 'components/ContentError';

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { arrayOf, string, func, bool, shape } from 'prop-types';
-import { useLocation } from 'react-router-dom-v5-compat';
+import { useLocation } from 'routerCompat';
 import { useLingui } from '@lingui/react/macro';
 import { FormGroup, Chip } from '@patternfly/react-core';
 import { InstancesAPI } from 'api';

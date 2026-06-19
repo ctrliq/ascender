@@ -6,7 +6,7 @@ import { Button } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
 
 import { Link } from 'react-router-dom';
-import { useParams } from 'react-router-dom-v5-compat';
+import { useParams } from 'routerCompat';
 import { PencilAltIcon } from '@patternfly/react-icons';
 import { ActionsTd, ActionItem } from 'components/PaginatedTable';
 import { Group } from 'types';

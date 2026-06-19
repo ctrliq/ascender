@@ -6,7 +6,7 @@ import {
   Navigate,
   useParams,
   useLocation,
-} from 'react-router-dom-v5-compat';
+} from 'routerCompat';
 import { useLingui } from '@lingui/react/macro';
 
 import { CaretLeftIcon } from '@patternfly/react-icons';

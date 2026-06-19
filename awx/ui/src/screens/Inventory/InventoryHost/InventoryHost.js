@@ -7,7 +7,7 @@ import {
   Navigate,
   useParams,
   useLocation,
-} from 'react-router-dom-v5-compat';
+} from 'routerCompat';
 import { Card } from '@patternfly/react-core';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import useRequest from 'hooks/useRequest';

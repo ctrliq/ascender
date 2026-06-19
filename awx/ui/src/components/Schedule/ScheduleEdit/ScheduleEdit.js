@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom-v5-compat';
+import { useNavigate } from 'routerCompat';
 import { shape } from 'prop-types';
 import { Card } from '@patternfly/react-core';
 import yaml from 'js-yaml';

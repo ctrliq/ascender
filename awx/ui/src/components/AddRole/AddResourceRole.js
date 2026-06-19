@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { useLocation, useNavigate } from 'react-router-dom-v5-compat';
+import { useLocation, useNavigate } from 'routerCompat';
 import { useLingui } from '@lingui/react/macro';
 import { TeamsAPI, UsersAPI } from 'api';
 import useSelected from 'hooks/useSelected';

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { func, bool, string, number, oneOfType, arrayOf } from 'prop-types';
-import { useLocation } from 'react-router-dom-v5-compat';
+import { useLocation } from 'routerCompat';
 import { useLingui } from '@lingui/react/macro';
 import { InventoriesAPI } from 'api';
 import { Inventory } from 'types';

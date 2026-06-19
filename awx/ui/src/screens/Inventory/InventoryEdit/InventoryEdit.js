@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom-v5-compat';
+import { useLocation, useNavigate } from 'routerCompat';
 import { object } from 'prop-types';
 
 import { CardBody } from 'components/Card';
