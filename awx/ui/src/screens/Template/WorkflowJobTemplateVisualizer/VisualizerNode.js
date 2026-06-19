@@ -1,7 +1,6 @@
 import React, { useContext, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
-import { bool, func, shape } from 'prop-types';
 import {
   InfoIcon,
   LinkIcon,
@@ -386,13 +385,5 @@ function VisualizerNode({
     </>
   );
 }
-
-VisualizerNode.propTypes = {
-  node: shape().isRequired,
-  onMouseOver: func,
-  readOnly: bool.isRequired,
-  updateHelpText: func.isRequired,
-  updateNodeHelp: func.isRequired,
-};
 
 export default VisualizerNode;

@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useField, useFormikContext } from 'formik';
-import { shape, string } from 'prop-types';
 import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
 import {
@@ -17,7 +16,6 @@ import {
 import { PficonHistoryIcon } from '@patternfly/react-icons';
 import { PasswordInput } from 'components/FormField';
 import AnsibleSelect from 'components/AnsibleSelect';
-import { CredentialType } from 'types';
 import { required } from 'util/validators';
 import { CredentialPluginField } from '../CredentialPlugins';
 import BecomeMethodField from './BecomeMethodField';
@@ -159,14 +157,6 @@ function CredentialInput({
   );
 }
 
-CredentialInput.propTypes = {
-  fieldOptions: shape({
-    id: string.isRequired,
-    label: string.isRequired,
-  }).isRequired,
-  credentialKind: string,
-};
-
 function CredentialField({ credentialType, fieldOptions }) {
   const { values: formikValues } = useFormikContext();
   const location = useLocation();
@@ -243,13 +233,5 @@ function CredentialField({ credentialType, fieldOptions }) {
     </CredentialPluginField>
   );
 }
-
-CredentialField.propTypes = {
-  credentialType: CredentialType.isRequired,
-  fieldOptions: shape({
-    id: string.isRequired,
-    label: string.isRequired,
-  }).isRequired,
-};
 
 export default CredentialField;

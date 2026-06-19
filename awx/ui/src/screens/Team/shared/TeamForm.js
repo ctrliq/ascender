@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import PropTypes from 'prop-types';
 
 import { Formik, useField, useFormikContext } from 'formik';
 import { Form } from '@patternfly/react-core';
@@ -84,12 +83,5 @@ function TeamForm({
     </Formik>
   );
 }
-
-TeamForm.propTypes = {
-  handleCancel: PropTypes.func.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
-  team: PropTypes.shape({}),
-  submitError: PropTypes.shape(),
-};
 
 export default TeamForm;

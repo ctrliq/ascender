@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useReducer } from 'react';
 import { useNavigate } from 'react-router-dom-v5-compat';
 import styled from 'styled-components';
-import { shape } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 
 import {
@@ -714,9 +713,5 @@ function Visualizer({ template }) {
     </WorkflowStateContext.Provider>
   );
 }
-
-Visualizer.propTypes = {
-  template: shape().isRequired,
-};
 
 export default Visualizer;

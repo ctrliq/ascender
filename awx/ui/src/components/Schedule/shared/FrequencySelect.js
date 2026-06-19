@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { arrayOf, string } from 'prop-types';
 import { Select, SelectOption, SelectVariant } from '@patternfly/react-core';
 
 export default function FrequencySelect({
@@ -47,9 +46,5 @@ export default function FrequencySelect({
     </Select>
   );
 }
-
-FrequencySelect.propTypes = {
-  value: arrayOf(string).isRequired,
-};
 
 export { SelectOption, SelectVariant };

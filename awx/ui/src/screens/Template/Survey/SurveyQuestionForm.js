@@ -1,5 +1,4 @@
 import React from 'react';
-import { func, string, bool, number, shape } from 'prop-types';
 import { Formik, useField } from 'formik';
 import { useLingui } from '@lingui/react/macro';
 import { Form, FormGroup } from '@patternfly/react-core';
@@ -286,19 +285,5 @@ function SurveyQuestionForm({
     </Formik>
   );
 }
-
-SurveyQuestionForm.propTypes = {
-  question: shape({
-    question_name: string.isRequired,
-    question_description: string.isRequired,
-    required: bool,
-    type: string.isRequired,
-    min: number,
-    max: number,
-  }),
-  handleSubmit: func.isRequired,
-  handleCancel: func.isRequired,
-  submitError: shape({}),
-};
 
 export default SurveyQuestionForm;

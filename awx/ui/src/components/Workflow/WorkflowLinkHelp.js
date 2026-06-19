@@ -2,7 +2,6 @@ import React from 'react';
 
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
-import { shape } from 'prop-types';
 
 const GridDL = styled.dl`
   column-gap: 15px;
@@ -43,9 +42,5 @@ function WorkflowLinkHelp({ link }) {
     </GridDL>
   );
 }
-
-WorkflowLinkHelp.propTypes = {
-  link: shape().isRequired,
-};
 
 export default WorkflowLinkHelp;

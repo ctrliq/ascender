@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
-import { bool, func, shape } from 'prop-types';
 import {
   Badge as PFBadge,
   Button,
@@ -187,13 +186,5 @@ function VisualizerToolbar({
     </div>
   );
 }
-
-VisualizerToolbar.propTypes = {
-  onClose: func.isRequired,
-  onSave: func.isRequired,
-  template: shape().isRequired,
-  hasUnsavedChanges: bool.isRequired,
-  readOnly: bool.isRequired,
-};
 
 export default VisualizerToolbar;

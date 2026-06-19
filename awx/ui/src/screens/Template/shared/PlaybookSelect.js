@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { func, number, string, oneOfType } from 'prop-types';
 
 import { useLingui } from '@lingui/react/macro';
 import { SelectVariant, Select, SelectOption } from '@patternfly/react-core';
@@ -81,9 +80,5 @@ function PlaybookSelect({
     </Select>
   );
 }
-PlaybookSelect.propTypes = {
-  projectId: oneOfType([number, string]),
-  onChange: func,
-};
 export { PlaybookSelect as _PlaybookSelect };
 export default PlaybookSelect;

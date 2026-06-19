@@ -21,7 +21,6 @@ import CodeEditor from 'components/CodeEditor';
 import CredentialChip from 'components/CredentialChip';
 import ErrorDetail from 'components/ErrorDetail';
 import { CredentialsAPI, CredentialTypesAPI } from 'api';
-import { Credential } from 'types';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails';
 
@@ -323,9 +322,5 @@ function CredentialDetail({ credential }) {
     </CardBody>
   );
 }
-
-CredentialDetail.propTypes = {
-  credential: Credential.isRequired,
-};
 
 export default CredentialDetail;

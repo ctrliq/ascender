@@ -1,12 +1,10 @@
 import React from 'react';
-import { bool, string } from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Trans, useLingui } from '@lingui/react/macro';
 
 import { Popover, Tooltip } from '@patternfly/react-core';
 import styled from 'styled-components';
 import { ExclamationTriangleIcon as PFExclamationTriangleIcon } from '@patternfly/react-icons';
-import { ExecutionEnvironment } from 'types';
 import getDocsBaseUrl from 'util/getDocsBaseUrl';
 import { useConfig } from 'contexts/Config';
 import { Detail } from '../DetailList';
@@ -127,14 +125,5 @@ function ExecutionEnvironmentDetail({
 
   return null;
 }
-
-ExecutionEnvironmentDetail.propTypes = {
-  executionEnvironment: ExecutionEnvironment,
-  isDefaultEnvironment: bool,
-  virtualEnvironment: string,
-  verifyMissingVirtualEnv: bool,
-  helpText: string,
-  dataCy: string,
-};
 
 export default ExecutionEnvironmentDetail;

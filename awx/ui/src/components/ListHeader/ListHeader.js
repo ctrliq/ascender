@@ -1,6 +1,5 @@
 
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom-v5-compat';
 import styled from 'styled-components';
@@ -12,7 +11,6 @@ import {
   removeParams,
   updateQueryString,
 } from 'util/qs';
-import { QSConfig, SearchColumns, SortColumns, SearchableKeys } from 'types';
 import DataListToolbar from '../DataListToolbar';
 
 const EmptyStateControlsWrapper = styled.div`
@@ -129,15 +127,5 @@ function ListHeader({
     </>
   );
 }
-
-ListHeader.propTypes = {
-  itemCount: PropTypes.number.isRequired,
-  qsConfig: QSConfig.isRequired,
-  searchColumns: SearchColumns.isRequired,
-  searchableKeys: SearchableKeys,
-  relatedSearchableKeys: PropTypes.arrayOf(PropTypes.string),
-  sortColumns: SortColumns,
-  renderToolbar: PropTypes.func,
-};
 
 export default ListHeader;

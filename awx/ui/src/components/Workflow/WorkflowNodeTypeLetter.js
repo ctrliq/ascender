@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { shape } from 'prop-types';
 import { PauseIcon } from '@patternfly/react-icons';
 
 const NodeTypeLetter = styled.div`
@@ -78,9 +77,5 @@ function WorkflowNodeTypeLetter({ node }) {
     </foreignObject>
   );
 }
-
-WorkflowNodeTypeLetter.propTypes = {
-  node: shape().isRequired,
-};
 
 export default WorkflowNodeTypeLetter;

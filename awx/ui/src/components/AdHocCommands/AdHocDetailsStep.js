@@ -1,7 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
-import PropTypes from 'prop-types';
 import { useField } from 'formik';
 import { Form, FormGroup, Switch, Checkbox } from '@patternfly/react-core';
 import styled from 'styled-components';
@@ -278,9 +277,5 @@ function AdHocDetailsStep({ moduleOptions }) {
     </Form>
   );
 }
-
-AdHocDetailsStep.propTypes = {
-  moduleOptions: PropTypes.arrayOf(PropTypes.array).isRequired,
-};
 
 export default AdHocDetailsStep;

@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { useLingui } from '@lingui/react/macro';
-import { node } from 'prop-types';
 import styled from 'styled-components';
 import _Detail from './Detail';
 
@@ -22,9 +21,5 @@ function DeletedDetail({ label, dataCy, helpText }) {
     />
   );
 }
-
-DeletedDetail.propTypes = {
-  label: node.isRequired,
-};
 
 export default DeletedDetail;

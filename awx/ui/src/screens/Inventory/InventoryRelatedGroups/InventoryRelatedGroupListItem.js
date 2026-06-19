@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom-v5-compat';
-import { string, bool, func, number } from 'prop-types';
 
 import { useLingui } from '@lingui/react/macro';
 
@@ -9,7 +8,6 @@ import { Td, Tr } from '@patternfly/react-table';
 import { Button } from '@patternfly/react-core';
 import { PencilAltIcon } from '@patternfly/react-icons';
 
-import { Group } from 'types';
 import { ActionItem, ActionsTd } from 'components/PaginatedTable';
 
 function InventoryRelatedGroupListItem({
@@ -63,14 +61,5 @@ function InventoryRelatedGroupListItem({
     </Tr>
   );
 }
-
-InventoryRelatedGroupListItem.propTypes = {
-  detailUrl: string.isRequired,
-  editUrl: string.isRequired,
-  group: Group.isRequired,
-  rowIndex: number.isRequired,
-  isSelected: bool.isRequired,
-  onSelect: func.isRequired,
-};
 
 export default InventoryRelatedGroupListItem;

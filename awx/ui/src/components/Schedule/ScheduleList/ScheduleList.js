@@ -1,6 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
-import { bool, func } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 import { SchedulesAPI } from 'api';
 import useRequest, { useDeleteItems } from 'hooks/useRequest';
@@ -253,11 +252,5 @@ function ScheduleList({
     </>
   );
 }
-
-ScheduleList.propTypes = {
-  hideAddButton: bool,
-  loadSchedules: func.isRequired,
-  loadScheduleOptions: func.isRequired,
-};
 
 export default ScheduleList;

@@ -1,10 +1,8 @@
 import React, { useCallback, useEffect } from 'react';
-import { node, func, bool, string } from 'prop-types';
 import { useLocation } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import { FormGroup } from '@patternfly/react-core';
 import { OrganizationsAPI } from 'api';
-import { Organization } from 'types';
 import { getQSConfig, parseQueryString } from 'util/qs';
 import { getSearchableKeys } from 'components/PaginatedTable';
 import useRequest from 'hooks/useRequest';
@@ -158,20 +156,6 @@ function OrganizationLookup({
     </FormGroup>
   );
 }
-
-OrganizationLookup.propTypes = {
-  id: string,
-  helperTextInvalid: node,
-  isValid: bool,
-  onBlur: func,
-  onChange: func.isRequired,
-  required: bool,
-  value: Organization,
-  autoPopulate: bool,
-  isDisabled: bool,
-  validate: func,
-  fieldName: string,
-};
 
 export { OrganizationLookup as _OrganizationLookup };
 export default OrganizationLookup;

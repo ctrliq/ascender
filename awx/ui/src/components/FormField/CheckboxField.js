@@ -1,5 +1,4 @@
 import React from 'react';
-import { string, func, node } from 'prop-types';
 import { useField } from 'formik';
 import { Checkbox } from '@patternfly/react-core';
 import Popover from '../Popover';
@@ -36,11 +35,4 @@ function CheckboxField({
     />
   );
 }
-CheckboxField.propTypes = {
-  id: string.isRequired,
-  name: string.isRequired,
-  label: string.isRequired,
-  validate: func,
-  tooltip: node,
-};
 export default CheckboxField;

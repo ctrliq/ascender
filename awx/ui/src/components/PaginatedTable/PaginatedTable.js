@@ -2,7 +2,6 @@
 // Modifications Copyright (c) 2023 Ctrl IQ, Inc.
 //
 import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { TableComposable, Tbody } from '@patternfly/react-table';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom-v5-compat';
@@ -10,7 +9,6 @@ import { useNavigate } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 
 import { parseQueryString, updateQueryString } from 'util/qs';
-import { QSConfig, SearchColumns, SearchableKeys } from 'types';
 import ListHeader from '../ListHeader';
 import ContentEmpty from '../ContentEmpty';
 import ContentError from '../ContentError';
@@ -186,29 +184,6 @@ function PaginatedTable({
     </>
   );
 }
-
-const Item = PropTypes.shape({
-  id: PropTypes.number.isRequired,
-  url: PropTypes.string.isRequired,
-  name: PropTypes.string,
-});
-
-PaginatedTable.propTypes = {
-  items: PropTypes.arrayOf(Item).isRequired,
-  itemCount: PropTypes.number.isRequired,
-  pluralizedItemName: PropTypes.string,
-  qsConfig: QSConfig.isRequired,
-  renderRow: PropTypes.func.isRequired,
-  toolbarSearchColumns: SearchColumns,
-  toolbarSearchableKeys: SearchableKeys,
-  toolbarRelatedSearchableKeys: PropTypes.arrayOf(PropTypes.string),
-  showPageSizeOptions: PropTypes.bool,
-  renderToolbar: PropTypes.func,
-  hasContentLoading: PropTypes.bool,
-  contentError: PropTypes.shape(),
-  clearSelected: PropTypes.func,
-  ouiaId: PropTypes.string,
-};
 
 export { PaginatedTable as _PaginatedTable };
 export default PaginatedTable;

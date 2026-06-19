@@ -1,12 +1,10 @@
 import React from 'react';
-import { string, bool, func } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router-dom';
 import { Button } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
 import { PencilAltIcon } from '@patternfly/react-icons';
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
-import { CredentialType } from 'types';
 
 function CredentialTypeListItem({
   credentialType,
@@ -55,12 +53,5 @@ function CredentialTypeListItem({
     </Tr>
   );
 }
-
-CredentialTypeListItem.prototype = {
-  credentialType: CredentialType.isRequired,
-  detailUrl: string.isRequired,
-  isSelected: bool.isRequired,
-  onSelect: func.isRequired,
-};
 
 export default CredentialTypeListItem;

@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { Host } from 'types';
 import { CardBody } from 'components/Card';
 import { DetailList } from 'components/DetailList';
 import { VariablesDetail } from 'components/CodeEditor';
@@ -46,9 +45,5 @@ function InventoryHostFacts({ host }) {
     </CardBody>
   );
 }
-
-InventoryHostFacts.propTypes = {
-  host: Host.isRequired,
-};
 
 export default InventoryHostFacts;

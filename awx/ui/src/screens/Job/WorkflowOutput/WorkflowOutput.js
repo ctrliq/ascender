@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 
 import styled from 'styled-components';
-import { shape } from 'prop-types';
 import { CardBody as PFCardBody } from '@patternfly/react-core';
 import {
   WorkflowDispatchContext,
@@ -150,9 +149,5 @@ function WorkflowOutput({ job }) {
     </WorkflowStateContext.Provider>
   );
 }
-
-WorkflowOutput.propTypes = {
-  job: shape().isRequired,
-};
 
 export default WorkflowOutput;

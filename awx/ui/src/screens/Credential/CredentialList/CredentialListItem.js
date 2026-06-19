@@ -1,5 +1,4 @@
 import React, { useState, useCallback } from 'react';
-import { string, bool, func } from 'prop-types';
 
 import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router-dom';
@@ -9,7 +8,6 @@ import { PencilAltIcon } from '@patternfly/react-icons';
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
 import { timeOfDay } from 'util/dates';
 
-import { Credential } from 'types';
 import { CredentialsAPI } from 'api';
 import CopyButton from 'components/CopyButton';
 
@@ -93,12 +91,5 @@ function CredentialListItem({
     </Tr>
   );
 }
-
-CredentialListItem.propTypes = {
-  detailUrl: string.isRequired,
-  credential: Credential.isRequired,
-  isSelected: bool.isRequired,
-  onSelect: func.isRequired,
-};
 
 export default CredentialListItem;

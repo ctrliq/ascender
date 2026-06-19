@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { oneOfType, node, bool, string } from 'prop-types';
 import { TextListItem, TextListItemVariants } from '@patternfly/react-core';
 import styled from 'styled-components';
 import Popover from '../Popover';
@@ -81,13 +80,6 @@ const Detail = ({
       </DetailValue>
     </div>
   );
-};
-Detail.propTypes = {
-  label: node.isRequired,
-  value: node,
-  fullWidth: bool,
-  alwaysVisible: bool,
-  helpText: oneOfType([string, node]),
 };
 export default Detail;
 export { DetailName };

@@ -2,7 +2,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Navigate } from 'react-router-dom-v5-compat';
-import { bool, instanceOf } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 
 import {
@@ -54,9 +53,5 @@ function ContentError({ error = null, children, isNotFound = false }) {
     </>
   );
 }
-ContentError.propTypes = {
-  error: instanceOf(Error),
-  isNotFound: bool,
-};
 export { ContentError as _ContentError };
 export default ContentError;

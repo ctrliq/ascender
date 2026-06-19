@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom-v5-compat';
 import { CardBody } from 'components/Card';
 
@@ -45,9 +44,5 @@ function TeamEdit({ team }) {
     </CardBody>
   );
 }
-
-TeamEdit.propTypes = {
-  team: PropTypes.shape().isRequired,
-};
 
 export default TeamEdit;

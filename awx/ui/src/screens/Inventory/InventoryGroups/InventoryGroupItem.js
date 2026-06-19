@@ -1,5 +1,4 @@
 import React from 'react';
-import { bool, func } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 
 import { Button } from '@patternfly/react-core';
@@ -9,7 +8,6 @@ import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom-v5-compat';
 import { PencilAltIcon } from '@patternfly/react-icons';
 import { ActionsTd, ActionItem } from 'components/PaginatedTable';
-import { Group } from 'types';
 
 function InventoryGroupItem({ group, isSelected, onSelect, rowIndex }) {
   const { t } = useLingui();
@@ -54,11 +52,5 @@ function InventoryGroupItem({ group, isSelected, onSelect, rowIndex }) {
     </Tr>
   );
 }
-
-InventoryGroupItem.propTypes = {
-  group: Group.isRequired,
-  isSelected: bool.isRequired,
-  onSelect: func.isRequired,
-};
 
 export default InventoryGroupItem;

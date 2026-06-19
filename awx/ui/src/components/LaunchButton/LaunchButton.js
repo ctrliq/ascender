@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom-v5-compat';
-import { number, shape } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 import {
   AdHocCommandsAPI,
@@ -256,11 +255,5 @@ function LaunchButton({ resource, children }) {
     </>
   );
 }
-
-LaunchButton.propTypes = {
-  resource: shape({
-    id: number.isRequired,
-  }).isRequired,
-};
 
 export default LaunchButton;

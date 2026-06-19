@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { string, bool, func, oneOf, shape } from 'prop-types';
 
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
@@ -183,17 +182,6 @@ function VariablesField({
     </div>
   );
 }
-VariablesField.propTypes = {
-  id: string.isRequired,
-  name: string.isRequired,
-  label: string.isRequired,
-  readOnly: bool,
-  promptId: string,
-  initialMode: oneOf([YAML_MODE, JSON_MODE]),
-  onModeChange: func,
-  isRequired: bool,
-  validators: shape({}),
-};
 function VariablesFieldInternals({
   id,
   name,

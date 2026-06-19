@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom-v5-compat';
 
 import { useLingui } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
-import { Host } from 'types';
 import { CardBody, CardActionsRow } from 'components/Card';
 import AlertModal from 'components/AlertModal';
 import ErrorDetail from 'components/ErrorDetail';
@@ -135,9 +134,5 @@ function HostDetail({ host }) {
     </CardBody>
   );
 }
-
-HostDetail.propTypes = {
-  host: Host.isRequired,
-};
 
 export default HostDetail;

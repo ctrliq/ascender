@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import { useLingui } from '@lingui/react/macro';
 import {
@@ -60,11 +59,5 @@ function ExpandCollapse({ isCompact = true, onCompact, onExpand }) {
     </>
   );
 }
-
-ExpandCollapse.propTypes = {
-  onCompact: PropTypes.func.isRequired,
-  onExpand: PropTypes.func.isRequired,
-  isCompact: PropTypes.bool,
-};
 
 export default ExpandCollapse;

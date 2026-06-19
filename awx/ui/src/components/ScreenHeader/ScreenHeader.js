@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import useTitle from 'hooks/useTitle';
 
 import { useLingui } from '@lingui/react/macro';
@@ -138,14 +137,6 @@ const Crumb = ({ breadcrumbConfig, showDivider }) => {
       </Route>
     </>
   );
-};
-
-ScreenHeader.propTypes = {
-  breadcrumbConfig: PropTypes.objectOf(PropTypes.string).isRequired,
-};
-
-Crumb.propTypes = {
-  breadcrumbConfig: PropTypes.objectOf(PropTypes.string).isRequired,
 };
 
 export default ScreenHeader;

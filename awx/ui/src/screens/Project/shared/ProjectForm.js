@@ -3,7 +3,6 @@
 //
 /* eslint no-nested-ternary: 0 */
 import React, { useCallback, useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 import { Formik, useField, useFormikContext } from 'formik';
 import { Form, FormGroup, Title } from '@patternfly/react-core';
@@ -475,12 +474,5 @@ function ProjectForm({ project = {}, submitError = null, ...props }) {
     </Formik>
   );
 }
-
-ProjectForm.propTypes = {
-  handleCancel: PropTypes.func.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
-  project: PropTypes.shape({}),
-  submitError: PropTypes.shape({}),
-};
 
 export default ProjectForm;

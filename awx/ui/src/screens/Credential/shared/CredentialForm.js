@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { shape } from 'prop-types';
 import { Formik, useField, useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
 
@@ -356,12 +355,5 @@ function CredentialForm({
     </Formik>
   );
 }
-
-CredentialForm.propTypes = {
-  credentialTypes: shape({}).isRequired,
-  credential: shape({}),
-  inputSources: shape({}),
-  submitError: shape({}),
-};
 
 export default CredentialForm;

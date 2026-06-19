@@ -1,10 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Plural, useLingui } from '@lingui/react/macro';
-import { arrayOf, func } from 'prop-types';
 import { Button, DropdownItem, Tooltip } from '@patternfly/react-core';
 import { KebabifiedContext } from 'contexts/Kebabified';
 import { isJobRunning } from 'util/jobs';
-import { Job } from 'types';
 import AlertModal from '../AlertModal';
 
 function cannotCancelBecausePermissions(job) {
@@ -182,10 +180,5 @@ function JobListCancelButton({ jobsToCancel = [], onCancel = () => {} }) {
     </>
   );
 }
-
-JobListCancelButton.propTypes = {
-  jobsToCancel: arrayOf(Job),
-  onCancel: func,
-};
 
 export default JobListCancelButton;

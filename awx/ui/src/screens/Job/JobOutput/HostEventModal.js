@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Tab, Tabs, TabTitleText } from '@patternfly/react-core';
-import PropTypes from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 
 import { encode } from 'html-entities';
@@ -217,9 +216,3 @@ function HostEventModal({ onClose, hostEvent = defaultHostEvent, isOpen = false 
 }
 
 export default HostEventModal;
-
-HostEventModal.propTypes = {
-  onClose: PropTypes.func.isRequired,
-  hostEvent: PropTypes.shape({}),
-  isOpen: PropTypes.bool,
-};

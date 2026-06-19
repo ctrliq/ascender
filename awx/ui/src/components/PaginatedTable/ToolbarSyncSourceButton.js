@@ -1,5 +1,4 @@
 import React from 'react';
-import { func } from 'prop-types';
 import { Button, DropdownItem, Tooltip } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
 
@@ -39,9 +38,5 @@ function ToolbarSyncSourceButton({ onClick = null }) {
     </Tooltip>
   );
 }
-
-ToolbarSyncSourceButton.propTypes = {
-  onClick: func,
-};
 
 export default ToolbarSyncSourceButton;

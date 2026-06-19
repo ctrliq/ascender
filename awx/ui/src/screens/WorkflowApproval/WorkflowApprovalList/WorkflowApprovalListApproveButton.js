@@ -1,10 +1,8 @@
 import React, { useContext } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
-import PropTypes from 'prop-types';
 import { Button, DropdownItem, Tooltip } from '@patternfly/react-core';
 import { KebabifiedContext } from 'contexts/Kebabified';
-import { WorkflowApproval } from 'types';
 
 function cannotApprove(item) {
   return !item.can_approve_or_deny;
@@ -64,10 +62,5 @@ function WorkflowApprovalListApproveButton({ onApprove, selectedItems = [] }) {
     </>
   );
 }
-
-WorkflowApprovalListApproveButton.propTypes = {
-  onApprove: PropTypes.func.isRequired,
-  selectedItems: PropTypes.arrayOf(WorkflowApproval),
-};
 
 export default WorkflowApprovalListApproveButton;

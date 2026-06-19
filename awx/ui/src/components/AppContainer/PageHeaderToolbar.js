@@ -2,7 +2,6 @@
 // Modifications Copyright (c) 2023 Ctrl IQ, Inc.
 //
 import React, { useCallback, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 
 import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router-dom';
@@ -232,11 +231,5 @@ function PageHeaderToolbar({
     </PageHeaderTools>
   );
 }
-
-PageHeaderToolbar.propTypes = {
-  isAboutDisabled: PropTypes.bool,
-  onAboutClick: PropTypes.func.isRequired,
-  onLogoutClick: PropTypes.func.isRequired,
-};
 
 export default PageHeaderToolbar;

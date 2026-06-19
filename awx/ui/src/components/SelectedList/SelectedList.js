@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Chip, Split as PFSplit, SplitItem } from '@patternfly/react-core';
 
 import styled from 'styled-components';
@@ -53,14 +52,5 @@ function SelectedList({
     </Split>
   );
 }
-
-SelectedList.propTypes = {
-  displayKey: PropTypes.string,
-  label: PropTypes.string,
-  onRemove: PropTypes.func,
-  selected: PropTypes.arrayOf(PropTypes.object).isRequired,
-  isReadOnly: PropTypes.bool,
-  renderItemChip: PropTypes.func,
-};
 
 export default SelectedList;

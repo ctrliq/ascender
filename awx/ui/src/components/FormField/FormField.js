@@ -1,6 +1,5 @@
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useField } from 'formik';
 import { FormGroup, TextInput, TextArea } from '@patternfly/react-core';
 import Popover from '../Popover';
@@ -72,17 +71,5 @@ function FormField({
     </>
   );
 }
-
-FormField.propTypes = {
-  helperText: PropTypes.string,
-  id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  label: PropTypes.oneOfType([PropTypes.object, PropTypes.string]).isRequired,
-  type: PropTypes.string,
-  validate: PropTypes.func,
-  isRequired: PropTypes.bool,
-  tooltip: PropTypes.node,
-  tooltipMaxWidth: PropTypes.string,
-};
 
 export default FormField;

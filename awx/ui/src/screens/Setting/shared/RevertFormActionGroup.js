@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 import { ActionGroup, Button } from '@patternfly/react-core';
 import { FormFullWidthLayout } from 'components/FormLayout';
@@ -40,12 +39,6 @@ const RevertFormActionGroup = ({ children, onCancel, onRevert, onSubmit }) => {
       </ActionGroup>
     </FormFullWidthLayout>
   );
-};
-
-RevertFormActionGroup.propTypes = {
-  onCancel: PropTypes.func.isRequired,
-  onRevert: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired,
 };
 
 export default RevertFormActionGroup;

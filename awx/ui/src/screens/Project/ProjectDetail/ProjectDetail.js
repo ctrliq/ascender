@@ -12,7 +12,6 @@ import {
   TextListItemVariants,
   Tooltip,
 } from '@patternfly/react-core';
-import { Project } from 'types';
 import { Config, useConfig } from 'contexts/Config';
 import AlertModal from 'components/AlertModal';
 import { CardBody, CardActionsRow } from 'components/Card';
@@ -365,9 +364,5 @@ function ProjectDetail({ project }) {
     </CardBody>
   );
 }
-
-ProjectDetail.propTypes = {
-  project: Project.isRequired,
-};
 
 export default ProjectDetail;

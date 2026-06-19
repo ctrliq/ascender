@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
 import { FormGroup, InputGroup, Title } from '@patternfly/react-core';
@@ -25,7 +24,6 @@ import {
   minMaxValue,
   twilioPhoneNumber,
 } from 'util/validators';
-import { NotificationType } from 'types';
 import Popover from '../../../components/Popover/Popover';
 import RevertButton from '../../Setting/shared/RevertButton';
 
@@ -36,10 +34,6 @@ const PasswordFormGroup = styled(FormGroup)`
     width: 100%;
   }
 `;
-
-const editFieldPropTypes = {
-  isEdit: PropTypes.bool,
-};
 
 const TypeFields = {
   email: EmailFields,
@@ -66,10 +60,6 @@ function TypeInputsSubForm({ type, isEdit = false }) {
     </SubFormLayout>
   );
 }
-TypeInputsSubForm.propTypes = {
-  type: NotificationType.isRequired,
-  isEdit: PropTypes.bool,
-};
 
 export default TypeInputsSubForm;
 
@@ -109,14 +99,6 @@ function SecretPasswordField({
     </PasswordFormGroup>
   );
 }
-
-SecretPasswordField.propTypes = {
-  id: PropTypes.string.isRequired,
-  label: PropTypes.node.isRequired,
-  name: PropTypes.string.isRequired,
-  isEdit: PropTypes.bool,
-  isRequiredOnCreate: PropTypes.bool,
-};
 
 function EmailFields({ isEdit = false }) {
   const { t } = useLingui();
@@ -277,9 +259,6 @@ function GrafanaFields({ isEdit = false }) {
   );
 }
 
-EmailFields.propTypes = editFieldPropTypes;
-
-GrafanaFields.propTypes = editFieldPropTypes;
 function IRCFields({ isEdit = false }) {
   const { t } = useLingui();
   const helpText = {
@@ -337,8 +316,6 @@ function IRCFields({ isEdit = false }) {
     </>
   );
 }
-
-IRCFields.propTypes = editFieldPropTypes;
 
 function MattermostFields() {
   const { t } = useLingui();
@@ -419,8 +396,6 @@ function PagerdutyFields({ isEdit = false }) {
   );
 }
 
-PagerdutyFields.propTypes = editFieldPropTypes;
-
 function RocketChatFields() {
   const { t } = useLingui();
   return (
@@ -500,8 +475,6 @@ function SlackFields({ isEdit = false }) {
   );
 }
 
-SlackFields.propTypes = editFieldPropTypes;
-
 function TwilioFields({ isEdit = false }) {
   const { t } = useLingui();
   const helpText = {
@@ -548,8 +521,6 @@ function TwilioFields({ isEdit = false }) {
     </>
   );
 }
-
-TwilioFields.propTypes = editFieldPropTypes;
 
 function WebhookFields({ isEdit = false }) {
   const { t } = useLingui();
@@ -625,5 +596,3 @@ function WebhookFields({ isEdit = false }) {
     </>
   );
 }
-
-WebhookFields.propTypes = editFieldPropTypes;

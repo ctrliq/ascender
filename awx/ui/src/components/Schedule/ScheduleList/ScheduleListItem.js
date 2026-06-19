@@ -1,5 +1,4 @@
 import React from 'react';
-import { bool, func } from 'prop-types';
 
 import { useLingui } from '@lingui/react/macro';
 
@@ -11,7 +10,6 @@ import {
   ExclamationTriangleIcon as PFExclamationTriangleIcon,
 } from '@patternfly/react-icons';
 import styled from 'styled-components';
-import { Schedule } from 'types';
 import { formatDateString } from 'util/dates';
 import { DetailList, Detail } from '../../DetailList';
 import { ActionsTd, ActionItem, TdBreakWord } from '../../PaginatedTable';
@@ -147,11 +145,5 @@ function ScheduleListItem({
     </Tr>
   );
 }
-
-ScheduleListItem.propTypes = {
-  isSelected: bool.isRequired,
-  onSelect: func.isRequired,
-  schedule: Schedule.isRequired,
-};
 
 export default ScheduleListItem;

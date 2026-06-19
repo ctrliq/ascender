@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { func, shape } from 'prop-types';
 import { WorkflowStateContext } from 'contexts/Workflow';
 import {
   generateLine,
@@ -66,11 +65,5 @@ function WorkflowOutputLink({ link, mouseEnter, mouseLeave }) {
     </g>
   );
 }
-
-WorkflowOutputLink.propTypes = {
-  link: shape().isRequired,
-  mouseEnter: func.isRequired,
-  mouseLeave: func.isRequired,
-};
 
 export default WorkflowOutputLink;

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom-v5-compat';
-import { string, bool, func, number } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 import { Button, Tooltip } from '@patternfly/react-core';
 import { PencilAltIcon } from '@patternfly/react-icons';
@@ -10,7 +9,6 @@ import { Td, Tr } from '@patternfly/react-table';
 import { ActionItem, ActionsTd } from 'components/PaginatedTable';
 import HostToggle from 'components/HostToggle';
 import Sparkline from 'components/Sparkline';
-import { Host } from 'types';
 
 function InventoryGroupHostListItem({
   detailUrl,
@@ -82,14 +80,5 @@ function InventoryGroupHostListItem({
     </Tr>
   );
 }
-
-InventoryGroupHostListItem.propTypes = {
-  detailUrl: string.isRequired,
-  editUrl: string.isRequired,
-  rowIndex: number.isRequired,
-  host: Host.isRequired,
-  isSelected: bool.isRequired,
-  onSelect: func.isRequired,
-};
 
 export default InventoryGroupHostListItem;

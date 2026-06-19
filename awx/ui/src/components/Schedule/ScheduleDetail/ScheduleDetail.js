@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom-v5-compat';
 import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
 import { Chip, Divider, Title, Button } from '@patternfly/react-core';
-import { Schedule } from 'types';
 import { formatDateString } from 'util/dates';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import { JobTemplatesAPI, SchedulesAPI, WorkflowJobTemplatesAPI } from 'api';
@@ -668,9 +667,5 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
     </CardBody>
   );
 }
-
-ScheduleDetail.propTypes = {
-  schedule: Schedule.isRequired,
-};
 
 export default ScheduleDetail;

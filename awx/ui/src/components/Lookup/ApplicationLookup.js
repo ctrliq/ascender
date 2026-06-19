@@ -1,10 +1,8 @@
 import React, { useCallback, useEffect } from 'react';
-import { func, node, string } from 'prop-types';
 import { useLocation } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';
 import { FormGroup } from '@patternfly/react-core';
 import { ApplicationsAPI } from 'api';
-import { Application } from 'types';
 import { getSearchableKeys } from 'components/PaginatedTable';
 import { getQSConfig, parseQueryString } from 'util/qs';
 import useRequest from 'hooks/useRequest';
@@ -144,12 +142,5 @@ function ApplicationLookup({
     </FormGroup>
   );
 }
-ApplicationLookup.propTypes = {
-  label: node.isRequired,
-  onChange: func.isRequired,
-  value: Application,
-  validate: func,
-  fieldName: string,
-};
 
 export default ApplicationLookup;
