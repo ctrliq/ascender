@@ -102,7 +102,7 @@ function AddResourceRole({
     if (currentStepId === 1 && maxEnabledStep > 1) {
       navigate(location.pathname);
     }
-    // navigate is not referentially stable in react-router-dom-v5-compat;
+    // navigate is not referentially stable in react-router-dom;
     // including it refires this effect after unrelated navigations
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentStepId, location.pathname, maxEnabledStep]);

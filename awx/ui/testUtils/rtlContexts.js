@@ -13,8 +13,7 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Router, useLocation } from 'react-router-dom';
-import { Router as RouterV6 } from 'react-router-dom-v5-compat';
+import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import { I18nProvider } from '@lingui/react';
 import { i18n } from '@lingui/core';
@@ -59,16 +58,25 @@ function applyDefaultContexts(context) {
   return newContext;
 }
 
-// The v5 Router subscribes to history and drives re-renders; this nested v6
-// Router is fully controlled (location comes from v5's context, the navigator
-// is the shared history object) so components migrated to the
-// react-router-dom-v5-compat APIs work without a second subscription.
-function CompatV6Layer({ history, children }) {
-  const location = useLocation();
+// react-router v6's low-level <Router> is controlled: it takes the current
+// location/navigationType plus the history object as its navigator. Subscribe
+// to the (history v5) history so location changes re-render — the v6 equivalent
+// of react-router-dom's unstable_HistoryRouter, inlined to avoid the unstable
+// API and any history-version coupling.
+function HistoryRouter({ history, children }) {
+  const [state, setState] = React.useState({
+    action: history.action,
+    location: history.location,
+  });
+  React.useLayoutEffect(() => history.listen(setState), [history]);
   return (
-    <RouterV6 location={location} navigator={history}>
+    <Router
+      location={state.location}
+      navigationType={state.action}
+      navigator={history}
+    >
       {children}
-    </RouterV6>
+    </Router>
   );
 }
 
@@ -82,9 +90,7 @@ export function renderWithContexts(ui, options = {}) {
       <I18nProvider i18n={i18n}>
         <SessionProvider value={session}>
           <ConfigProvider value={config}>
-            <Router history={history}>
-              <CompatV6Layer history={history}>{children}</CompatV6Layer>
-            </Router>
+            <HistoryRouter history={history}>{children}</HistoryRouter>
           </ConfigProvider>
         </SessionProvider>
       </I18nProvider>

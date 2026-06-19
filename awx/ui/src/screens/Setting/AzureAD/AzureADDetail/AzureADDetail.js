@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { Link, Redirect, useRouteMatch } from 'react-router-dom';
+import { Link, Navigate, useMatch } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
 import { CaretLeftIcon } from '@patternfly/react-icons';
@@ -20,10 +20,7 @@ function AzureADDetail() {
   const { GET: options } = useSettings();
 
   const baseURL = '/settings/azure';
-  const {
-    path,
-    params: { category },
-  } = useRouteMatch(`${baseURL}/:category/details`);
+  const category = useMatch(`${baseURL}/:category/details`)?.params?.category;
 
   const {
     isLoading,
@@ -76,7 +73,7 @@ function AzureADDetail() {
   ];
 
   if (!Object.keys(azureDetails).includes(category)) {
-    return <Redirect from={path} to={`${baseURL}/default/details`} exact />;
+    return <Navigate to={`${baseURL}/default/details`} replace />;
   }
 
   return (

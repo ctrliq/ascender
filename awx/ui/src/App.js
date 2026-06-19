@@ -1,13 +1,12 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { HashRouter } from 'react-router-dom';
 import {
-  CompatRouter,
+  HashRouter,
   Routes,
   Route,
   Navigate,
   useLocation,
   useNavigate,
-} from 'react-router-dom-v5-compat';
+} from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 import locationReplace from 'util/navigation';
 import { I18nProvider } from '@lingui/react';
@@ -235,8 +234,6 @@ function App() {
 
 export default () => (
   <HashRouter>
-    <CompatRouter>
-      <App />
-    </CompatRouter>
+    <App />
   </HashRouter>
 );

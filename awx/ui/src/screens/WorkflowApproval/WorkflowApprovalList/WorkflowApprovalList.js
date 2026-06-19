@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useLocation, useRouteMatch } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Plural, useLingui } from '@lingui/react/macro';
 import { Card, PageSection } from '@patternfly/react-core';
 import { WorkflowApprovalsAPI } from 'api';
@@ -31,7 +31,6 @@ const QS_CONFIG = getQSConfig('workflow_approvals', {
 
 function WorkflowApprovalsList() {
   const location = useLocation();
-  const match = useRouteMatch();
   const { t } = useLingui();
   const {
     result: { results, count, relatedSearchableKeys },
@@ -232,7 +231,7 @@ function WorkflowApprovalsList() {
               <WorkflowApprovalListItem
                 key={workflowApproval.id}
                 workflowApproval={workflowApproval}
-                detailUrl={`${match.url}/${workflowApproval.id}`}
+                detailUrl={`${location.pathname}/${workflowApproval.id}`}
                 isSelected={selected.some(
                   (row) => row.id === workflowApproval.id
                 )}

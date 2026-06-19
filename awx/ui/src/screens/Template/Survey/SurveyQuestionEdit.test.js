@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import { screen, waitFor, fireEvent } from '@testing-library/react';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
@@ -30,11 +30,19 @@ const survey = {
 
 function renderEdit(surveyData, history, updateSurvey) {
   return renderWithContexts(
-    <Switch>
-      <Route path="/templates/:templateType/:id/survey/edit">
-        <SurveyQuestionEdit survey={surveyData} updateSurvey={updateSurvey} />
-      </Route>
-    </Switch>,
+    <Routes>
+      <Route
+        path="/templates/:templateType/:id/survey/edit"
+        element={
+          <SurveyQuestionEdit survey={surveyData} updateSurvey={updateSurvey} />
+        }
+      />
+      {/* destination route for the redirect/navigate-to-list assertions */}
+      <Route
+        path="/templates/:templateType/:id/survey"
+        element={<div data-testid="survey-list" />}
+      />
+    </Routes>,
     {
       context: { router: { history } },
     }

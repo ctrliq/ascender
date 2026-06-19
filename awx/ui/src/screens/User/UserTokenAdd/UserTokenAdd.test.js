@@ -6,8 +6,8 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import UserTokenAdd from './UserTokenAdd';
 
 jest.mock('../../../api');
-jest.mock('react-router-dom-v5-compat', () => ({
-  ...jest.requireActual('react-router-dom-v5-compat'),
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
   useParams: () => ({ id: 1 }),
 }));
 

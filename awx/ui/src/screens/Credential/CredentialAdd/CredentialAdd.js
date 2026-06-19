@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useNavigate } from 'routerCompat';
+import { useNavigate } from 'react-router-dom';
 import { PageSection, Card } from '@patternfly/react-core';
 import { CardBody } from 'components/Card';
 import ContentError from 'components/ContentError';
@@ -89,7 +89,7 @@ function CredentialAdd({ me }) {
     if (credentialId) {
       navigate(`/credentials/${credentialId}/details`);
     }
-    // navigate is not referentially stable in react-router-dom-v5-compat
+    // navigate is not referentially stable in react-router-dom
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [credentialId]);
 

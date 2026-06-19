@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'routerCompat';
+import { Link, useNavigate  } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';
 
 import {
@@ -147,7 +146,7 @@ function FederatedInventoryDetail({ inventory }) {
                   render={({ className, content, componentRef }) => (
                     <Link
                       className={className}
-                      innerRef={componentRef}
+                      ref={componentRef}
                       to={`/inventories/inventory/${inputInventory.id}/details`}
                     >
                       {content}

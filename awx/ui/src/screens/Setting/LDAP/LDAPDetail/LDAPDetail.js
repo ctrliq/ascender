@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { Link, Redirect, useRouteMatch } from 'react-router-dom';
+import { Link, Navigate, useMatch } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
 import { CaretLeftIcon } from '@patternfly/react-icons';
@@ -28,10 +28,7 @@ function LDAPDetail() {
   const { t } = useLingui();
   const { me } = useConfig();
   const { GET: options } = useSettings();
-  const {
-    path,
-    params: { category },
-  } = useRouteMatch('/settings/ldap/:category/details');
+  const category = useMatch('/settings/ldap/:category/details')?.params?.category;
 
   const {
     isLoading,
@@ -131,7 +128,7 @@ function LDAPDetail() {
   ];
 
   if (!Object.keys(LDAPDetails).includes(category)) {
-    return <Redirect from={path} to={`${baseURL}/default/details`} exact />;
+    return <Navigate to={`${baseURL}/default/details`} replace />;
   }
 
   return (

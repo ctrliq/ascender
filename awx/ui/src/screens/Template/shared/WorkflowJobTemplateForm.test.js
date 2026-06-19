@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen, waitFor, fireEvent, within } from '@testing-library/react';
-import { Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import {
   WorkflowJobTemplatesAPI,
@@ -55,30 +55,25 @@ describe('<WorkflowJobTemplateForm/>', () => {
     webhook_service: 'github',
   };
 
+  // WebhookSubForm reads the template id from useParams(), so mount the form
+  // under a real v6 route whose concrete URL (set on history below) provides
+  // id=6.
   const renderForm = (props = {}) =>
     renderWithContexts(
-      <Route
-        path="/templates/workflow_job_template/:id/edit"
-        component={() => (
-          <WorkflowJobTemplateForm
-            template={mockTemplate}
-            handleCancel={handleCancel}
-            handleSubmit={handleSubmit}
-            {...props}
-          />
-        )}
-      />,
-      {
-        context: {
-          router: {
-            history,
-            route: {
-              location: history.location,
-              match: { params: { id: 6 } },
-            },
-          },
-        },
-      }
+      <Routes>
+        <Route
+          path="/templates/workflow_job_template/:id/edit"
+          element={
+            <WorkflowJobTemplateForm
+              template={mockTemplate}
+              handleCancel={handleCancel}
+              handleSubmit={handleSubmit}
+              {...props}
+            />
+          }
+        />
+      </Routes>,
+      { context: { router: { history } } }
     );
 
   beforeEach(async () => {
