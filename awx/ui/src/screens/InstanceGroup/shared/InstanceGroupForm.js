@@ -1,5 +1,4 @@
 import React from 'react';
-import { func, shape } from 'prop-types';
 import { Formik } from 'formik';
 import { useLingui } from '@lingui/react/macro';
 import { Form } from '@patternfly/react-core';
@@ -96,12 +95,5 @@ function InstanceGroupForm({
     </Formik>
   );
 }
-
-InstanceGroupForm.propTypes = {
-  instanceGroup: shape({}),
-  onCancel: func.isRequired,
-  onSubmit: func.isRequired,
-  submitError: shape({}),
-};
 
 export default InstanceGroupForm;

@@ -1,10 +1,8 @@
 import React from 'react';
-import { node, string } from 'prop-types';
 import { Trans } from '@lingui/react/macro';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { formatDateString } from 'util/dates';
-import { SummaryFieldUser } from 'types';
 import _Detail from './Detail';
 
 const Detail = styled(_Detail)`
@@ -30,9 +28,4 @@ function UserDateDetail({ label, date, user = null }) {
     />
   );
 }
-UserDateDetail.propTypes = {
-  label: node.isRequired,
-  date: string.isRequired,
-  user: SummaryFieldUser,
-};
 export default UserDateDetail;

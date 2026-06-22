@@ -1,10 +1,8 @@
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import useToast, { AlertVariant } from 'hooks/useToast';
-import { string, bool, func } from 'prop-types';
 import { Tr, Td } from '@patternfly/react-table';
 import { Link } from 'react-router-dom';
-import { WorkflowApproval } from 'types';
 import { formatDateString } from 'util/dates';
 import StatusLabel from 'components/StatusLabel';
 import JobCancelButton from 'components/JobCancelButton';
@@ -136,12 +134,5 @@ function WorkflowApprovalListItem({
     </Tr>
   );
 }
-
-WorkflowApprovalListItem.propTypes = {
-  workflowApproval: WorkflowApproval.isRequired,
-  detailUrl: string.isRequired,
-  isSelected: bool.isRequired,
-  onSelect: func.isRequired,
-};
 
 export default WorkflowApprovalListItem;

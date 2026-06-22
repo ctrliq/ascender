@@ -28,7 +28,6 @@ import ExecutionEnvironmentDetail from 'components/ExecutionEnvironmentDetail';
 import { VERBOSITY } from 'components/VerbositySelectField';
 import { getJobModel, isJobRunning } from 'util/jobs';
 import { formatDateString } from 'util/dates';
-import { Job } from 'types';
 import getJobHelpText from '../Job.helptext';
 
 const StatusDetailValue = styled.div`
@@ -682,10 +681,6 @@ function JobDetail({ job, inventorySourceLabels }) {
     </CardBody>
   );
 }
-JobDetail.propTypes = {
-  job: Job.isRequired,
-};
-
 export default JobDetail;
 
 function validateReactNode(value) {

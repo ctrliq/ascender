@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useField } from 'formik';
 import { FormGroup, TextArea } from '@patternfly/react-core';
 import Popover from '../Popover';
@@ -49,16 +48,5 @@ function ArrayTextField({
     </FormGroup>
   );
 }
-
-ArrayTextField.propTypes = {
-  helperText: PropTypes.string,
-  id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  label: PropTypes.oneOfType([PropTypes.object, PropTypes.string]).isRequired,
-  validate: PropTypes.func,
-  isRequired: PropTypes.bool,
-  tooltip: PropTypes.node,
-  tooltipMaxWidth: PropTypes.string,
-};
 
 export default ArrayTextField;

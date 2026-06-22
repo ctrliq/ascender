@@ -1,6 +1,5 @@
 
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 
 import { useLocation } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';
@@ -22,7 +21,6 @@ import {
 
 import styled from 'styled-components';
 import { parseQueryString } from 'util/qs';
-import { SortColumns, QSConfig } from 'types';
 
 const NoOptionDropdown = styled.div`
   align-self: stretch;
@@ -148,11 +146,5 @@ function Sort({ columns, qsConfig, onSort = null }) {
     </>
   );
 }
-
-Sort.propTypes = {
-  qsConfig: QSConfig.isRequired,
-  columns: SortColumns.isRequired,
-  onSort: PropTypes.func,
-};
 
 export default Sort;

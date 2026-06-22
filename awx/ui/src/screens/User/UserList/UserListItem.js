@@ -1,5 +1,4 @@
 import React from 'react';
-import { string, bool, func } from 'prop-types';
 
 import { useLingui } from '@lingui/react/macro';
 import { Button, Label } from '@patternfly/react-core';
@@ -7,8 +6,6 @@ import { Tr, Td } from '@patternfly/react-table';
 import { Link } from 'react-router-dom';
 import { PencilAltIcon } from '@patternfly/react-icons';
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
-
-import { User } from 'types';
 
 function UserListItem({ user, isSelected, onSelect, detailUrl, rowIndex }) {
   const { t } = useLingui();
@@ -78,12 +75,5 @@ function UserListItem({ user, isSelected, onSelect, detailUrl, rowIndex }) {
     </Tr>
   );
 }
-
-UserListItem.prototype = {
-  user: User.isRequired,
-  detailUrl: string.isRequired,
-  isSelected: bool.isRequired,
-  onSelect: func.isRequired,
-};
 
 export default UserListItem;

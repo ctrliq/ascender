@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { node, number } from 'prop-types';
 
 const TooltipContents = styled.div`
   display: flex;
@@ -59,11 +58,5 @@ function WorkflowActionTooltip({ actions, pointX, pointY }) {
     </foreignObject>
   );
 }
-
-WorkflowActionTooltip.propTypes = {
-  actions: node.isRequired,
-  pointX: number.isRequired,
-  pointY: number.isRequired,
-};
 
 export default WorkflowActionTooltip;

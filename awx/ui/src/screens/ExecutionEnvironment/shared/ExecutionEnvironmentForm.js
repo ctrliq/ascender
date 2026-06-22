@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useRef } from 'react';
-import { func, shape, bool } from 'prop-types';
 import { Formik, useField, useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
 import { Form, FormGroup, Tooltip } from '@patternfly/react-core';
@@ -225,13 +224,5 @@ function ExecutionEnvironmentForm({
     </Formik>
   );
 }
-
-ExecutionEnvironmentForm.propTypes = {
-  executionEnvironment: shape({}),
-  onCancel: func.isRequired,
-  onSubmit: func.isRequired,
-  submitError: shape({}),
-  isOrgLookupDisabled: bool,
-};
 
 export default ExecutionEnvironmentForm;

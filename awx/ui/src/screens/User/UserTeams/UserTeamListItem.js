@@ -1,9 +1,7 @@
 import React from 'react';
-import { bool, func } from 'prop-types';
 import { Link } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';
 import { Tr, Td } from '@patternfly/react-table';
-import { Team } from 'types';
 
 function UserTeamListItem({ team, isSelected, onSelect, rowIndex }) {
   const { t } = useLingui();
@@ -34,11 +32,5 @@ function UserTeamListItem({ team, isSelected, onSelect, rowIndex }) {
     </Tr>
   );
 }
-
-UserTeamListItem.prototype = {
-  team: Team.isRequired,
-  isSelected: bool.isRequired,
-  onSelect: func.isRequired,
-};
 
 export default UserTeamListItem;

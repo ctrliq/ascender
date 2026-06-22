@@ -2,7 +2,6 @@ import React from 'react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import { ExclamationTriangleIcon } from '@patternfly/react-icons';
-import { shape } from 'prop-types';
 import { secondsToHHMMSS } from 'util/dates';
 import { stringIsUUID } from 'util/strings';
 
@@ -203,9 +202,5 @@ function WorkflowNodeHelp({ node }) {
     </>
   );
 }
-
-WorkflowNodeHelp.propTypes = {
-  node: shape().isRequired,
-};
 
 export default WorkflowNodeHelp;

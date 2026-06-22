@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { useNavigate } from 'routerCompat';
-import { shape, func, bool } from 'prop-types';
 import { Badge as PFBadge, Button, Tooltip } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
 
@@ -262,11 +261,5 @@ function WorkflowOutputToolbar({
     </Toolbar>
   );
 }
-
-WorkflowOutputToolbar.propTypes = {
-  job: shape().isRequired,
-  onDelete: func,
-  isDeleteDisabled: bool,
-};
 
 export default WorkflowOutputToolbar;

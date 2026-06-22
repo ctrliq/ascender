@@ -2,7 +2,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate, Navigate } from 'routerCompat';
 
-import { JobTemplate } from 'types';
 import { JobTemplatesAPI, ProjectsAPI } from 'api';
 import { getAddedAndRemoved } from 'util/lists';
 import useRequest from 'hooks/useRequest';
@@ -137,7 +136,4 @@ function JobTemplateEdit({ template, reloadTemplate }) {
   );
 }
 
-JobTemplateEdit.propTypes = {
-  template: JobTemplate.isRequired,
-};
 export default JobTemplateEdit;

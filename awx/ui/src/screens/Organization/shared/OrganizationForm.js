@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import { Formik, useField, useFormikContext } from 'formik';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { Form } from '@patternfly/react-core';
@@ -222,14 +221,6 @@ function OrganizationForm({
     </Formik>
   );
 }
-
-OrganizationForm.propTypes = {
-  defaultGalaxyCredential: PropTypes.shape(),
-  organization: PropTypes.shape(),
-  onSubmit: PropTypes.func.isRequired,
-  onCancel: PropTypes.func.isRequired,
-  submitError: PropTypes.shape(),
-};
 
 export { OrganizationForm as _OrganizationForm };
 export default OrganizationForm;

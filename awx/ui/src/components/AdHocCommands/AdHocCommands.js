@@ -4,7 +4,6 @@ import { useNavigate } from 'routerCompat';
 
 import { useLingui } from '@lingui/react/macro';
 
-import PropTypes from 'prop-types';
 import { Button, DropdownItem, Tooltip } from '@patternfly/react-core';
 
 import useRequest, { useDismissableError } from 'hooks/useRequest';
@@ -164,12 +163,5 @@ function AdHocCommands({
     </>
   );
 }
-
-AdHocCommands.propTypes = {
-  adHocItems: PropTypes.arrayOf(PropTypes.object).isRequired,
-  hasListItems: PropTypes.bool.isRequired,
-  onLaunchLoading: PropTypes.func.isRequired,
-  moduleOptions: PropTypes.arrayOf(PropTypes.array).isRequired,
-};
 
 export default AdHocCommands;

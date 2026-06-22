@@ -1,5 +1,4 @@
 import React from 'react';
-import { bool, func } from 'prop-types';
 import { Button, DropdownItem, Tooltip } from '@patternfly/react-core';
 
 import { useLingui } from '@lingui/react/macro';
@@ -67,11 +66,5 @@ function SmartInventoryButton({
     </Tooltip>
   );
 }
-SmartInventoryButton.propTypes = {
-  hasInvalidKeys: bool,
-  isDisabled: bool,
-  onClick: func.isRequired,
-  hasAnsibleFactsKeys: bool,
-};
 
 export default SmartInventoryButton;

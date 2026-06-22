@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { useNavigate } from 'routerCompat';
 import { CardBody } from 'components/Card';
 import HostForm from 'components/HostForm';
@@ -39,9 +38,5 @@ function HostEdit({ host }) {
     </CardBody>
   );
 }
-
-HostEdit.propTypes = {
-  host: PropTypes.shape().isRequired,
-};
 
 export default HostEdit;

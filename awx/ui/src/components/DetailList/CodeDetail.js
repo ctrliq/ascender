@@ -1,13 +1,4 @@
 import React from 'react';
-import {
-  arrayOf,
-  oneOf,
-  oneOfType,
-  node,
-  number,
-  shape,
-  string,
-} from 'prop-types';
 import { TextListItemVariants } from '@patternfly/react-core';
 import { DetailName, DetailValue } from './Detail';
 import CodeEditor from '../CodeEditor';
@@ -64,12 +55,4 @@ function CodeDetail({
     </>
   );
 }
-CodeDetail.propTypes = {
-  value: oneOfType([shape({}), arrayOf(string), string]).isRequired,
-  label: node.isRequired,
-  dataCy: string,
-  helpText: string,
-  rows: oneOfType([number, string]),
-  mode: oneOf(['json', 'javascript', 'yaml', 'jinja2']).isRequired,
-};
 export default CodeDetail;

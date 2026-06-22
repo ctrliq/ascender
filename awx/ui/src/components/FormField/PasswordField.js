@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useField } from 'formik';
 import { FormGroup, InputGroup } from '@patternfly/react-core';
 import Popover from '../Popover';
@@ -40,14 +39,5 @@ function PasswordField({
     </FormGroup>
   );
 }
-
-PasswordField.propTypes = {
-  id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-  validate: PropTypes.func,
-  isRequired: PropTypes.bool,
-  isDisabled: PropTypes.bool,
-};
 
 export default PasswordField;

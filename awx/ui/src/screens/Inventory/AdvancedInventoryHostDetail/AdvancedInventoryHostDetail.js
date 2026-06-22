@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useParams } from 'routerCompat';
 import { useLingui } from '@lingui/react/macro';
-import { Host } from 'types';
 import { CardBody } from 'components/Card';
 import { Detail, DetailList, UserDateDetail } from 'components/DetailList';
 import Sparkline from 'components/Sparkline';
@@ -70,9 +69,5 @@ function AdvancedInventoryHostDetail({ host }) {
     </CardBody>
   );
 }
-
-AdvancedInventoryHostDetail.propTypes = {
-  host: Host.isRequired,
-};
 
 export default AdvancedInventoryHostDetail;

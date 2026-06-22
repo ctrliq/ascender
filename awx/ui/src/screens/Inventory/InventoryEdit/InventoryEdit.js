@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'routerCompat';
-import { object } from 'prop-types';
 
 import { CardBody } from 'components/Card';
 import { InventoriesAPI } from 'api';
@@ -108,10 +107,6 @@ function InventoryEdit({ inventory }) {
     </CardBody>
   );
 }
-
-InventoryEdit.propType = {
-  inventory: object.isRequired,
-};
 
 export { InventoryEdit as _InventoryEdit };
 export default InventoryEdit;

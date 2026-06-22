@@ -1,11 +1,9 @@
 import React, { useCallback, useEffect } from 'react';
-import { string, func, bool, oneOfType, number } from 'prop-types';
 import { useLocation } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';
 import { FormGroup, Tooltip } from '@patternfly/react-core';
 import { ExecutionEnvironmentsAPI, ProjectsAPI } from 'api';
 import { getSearchableKeys } from 'components/PaginatedTable';
-import { ExecutionEnvironment } from 'types';
 import { getQSConfig, parseQueryString, mergeParams } from 'util/qs';
 import useRequest from 'hooks/useRequest';
 import Popover from '../Popover';
@@ -241,17 +239,5 @@ function ExecutionEnvironmentLookup({
     </FormGroup>
   );
 }
-
-ExecutionEnvironmentLookup.propTypes = {
-  id: string,
-  value: ExecutionEnvironment,
-  popoverContent: string,
-  onChange: func.isRequired,
-  projectId: oneOfType([number, string]),
-  organizationId: oneOfType([number, string]),
-  validate: func,
-  fieldName: string,
-  overrideLabel: bool,
-};
 
 export default ExecutionEnvironmentLookup;

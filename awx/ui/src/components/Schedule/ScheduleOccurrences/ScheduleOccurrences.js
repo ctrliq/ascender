@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { shape, string } from 'prop-types';
 import styled from 'styled-components';
 
 import { useLingui } from '@lingui/react/macro';
@@ -22,9 +21,15 @@ const OccurrencesLabel = styled.div`
   }
 `;
 
+// Resolve the browser's time zone once at module load rather than on every
+// render. As a `defaultProps` value this was evaluated a single time; an ES
+// default parameter re-runs `Intl.DateTimeFormat()` on each render when `tz`
+// is omitted, so hoist it to a module constant to preserve the old timing.
+const DEFAULT_TIME_ZONE = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
 function ScheduleOccurrences({
   preview = { local: [], utc: [] },
-  tz = Intl.DateTimeFormat().resolvedOptions().timeZone,
+  tz = DEFAULT_TIME_ZONE,
 }) {
   const { t } = useLingui();
   const [mode, setMode] = useState('local');
@@ -76,10 +81,5 @@ function ScheduleOccurrences({
     </>
   );
 }
-
-ScheduleOccurrences.propTypes = {
-  preview: shape(),
-  tz: string,
-};
 
 export default ScheduleOccurrences;

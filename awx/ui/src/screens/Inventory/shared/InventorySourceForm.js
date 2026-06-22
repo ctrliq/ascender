@@ -1,7 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Formik, useField, useFormikContext } from 'formik';
-import { func, shape } from 'prop-types';
 import { Form, FormGroup, Title } from '@patternfly/react-core';
 import { InventorySourcesAPI } from 'api';
 import useRequest from 'hooks/useRequest';
@@ -340,12 +339,6 @@ const InventorySourceForm = ({
       )}
     </Formik>
   );
-};
-
-InventorySourceForm.propTypes = {
-  onCancel: func.isRequired,
-  onSubmit: func.isRequired,
-  submitError: shape({}),
 };
 
 export default InventorySourceForm;

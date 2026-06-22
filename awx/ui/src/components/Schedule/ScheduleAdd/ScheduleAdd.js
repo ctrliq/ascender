@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { func, shape } from 'prop-types';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'routerCompat';
 import { Card } from '@patternfly/react-core';
@@ -163,9 +162,5 @@ function ScheduleAdd({
     </Card>
   );
 }
-
-ScheduleAdd.propTypes = {
-  apiModel: shape({ createSchedule: func.isRequired }).isRequired,
-};
 
 export default ScheduleAdd;

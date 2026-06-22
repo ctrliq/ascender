@@ -1,5 +1,4 @@
 import React from 'react';
-import { bool, func, number, oneOfType, string } from 'prop-types';
 import { Button } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
 import { useLingui } from '@lingui/react/macro';
@@ -7,7 +6,6 @@ import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router-dom';
 import { PencilAltIcon } from '@patternfly/react-icons';
 import { ActionsTd, ActionItem } from 'components/PaginatedTable';
-import { Group } from 'types';
 
 function InventoryHostGroupItem({
   group,
@@ -57,12 +55,5 @@ function InventoryHostGroupItem({
     </Tr>
   );
 }
-
-InventoryHostGroupItem.propTypes = {
-  group: Group.isRequired,
-  inventoryId: oneOfType([number, string]).isRequired,
-  isSelected: bool.isRequired,
-  onSelect: func.isRequired,
-};
 
 export default InventoryHostGroupItem;

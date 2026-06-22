@@ -1,5 +1,4 @@
 import React from 'react';
-import { string, bool, func } from 'prop-types';
 
 import { useLingui } from '@lingui/react/macro';
 
@@ -8,7 +7,6 @@ import { Tr, Td } from '@patternfly/react-table';
 import { Link } from 'react-router-dom';
 import { PencilAltIcon } from '@patternfly/react-icons';
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
-import { Host } from 'types';
 import HostToggle from 'components/HostToggle';
 import Sparkline from 'components/Sparkline';
 
@@ -78,12 +76,5 @@ function HostListItem({ host, isSelected, onSelect, detailUrl, rowIndex }) {
     </Tr>
   );
 }
-
-HostListItem.propTypes = {
-  host: Host.isRequired,
-  detailUrl: string.isRequired,
-  isSelected: bool.isRequired,
-  onSelect: func.isRequired,
-};
 
 export default HostListItem;

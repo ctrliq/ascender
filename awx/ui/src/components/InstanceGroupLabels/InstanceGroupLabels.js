@@ -1,5 +1,4 @@
 import React from 'react';
-import { arrayOf, bool, number, shape, string } from 'prop-types';
 
 import { Label, LabelGroup } from '@patternfly/react-core';
 import { Link } from 'react-router-dom';
@@ -37,11 +36,5 @@ function InstanceGroupLabels({ labels, isLinkable = false }) {
     </LabelGroup>
   );
 }
-
-InstanceGroupLabels.propTypes = {
-  labels: arrayOf(shape({ id: number.isRequired, name: string.isRequired }))
-    .isRequired,
-  isLinkable: bool,
-};
 
 export default InstanceGroupLabels;

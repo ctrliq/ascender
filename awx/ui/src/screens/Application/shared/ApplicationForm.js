@@ -4,7 +4,6 @@ import { useLocation } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';
 import { Formik, useField, useFormikContext } from 'formik';
 import { Form, FormGroup } from '@patternfly/react-core';
-import PropTypes from 'prop-types';
 
 import { required } from 'util/validators';
 import FormField, { FormSubmitError } from 'components/FormField';
@@ -183,12 +182,5 @@ function ApplicationForm({
     </Formik>
   );
 }
-
-ApplicationForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-  onCancel: PropTypes.func.isRequired,
-  authorizationOptions: PropTypes.arrayOf(PropTypes.object).isRequired,
-  clientTypeOptions: PropTypes.arrayOf(PropTypes.object).isRequired,
-};
 
 export default ApplicationForm;

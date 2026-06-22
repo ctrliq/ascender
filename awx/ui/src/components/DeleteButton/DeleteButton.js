@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 
 import { useLingui } from '@lingui/react/macro';
 
@@ -150,9 +149,5 @@ function DeleteButton({
     </>
   );
 }
-
-DeleteButton.propTypes = {
-  ouiaId: PropTypes.string,
-};
 
 export default DeleteButton;

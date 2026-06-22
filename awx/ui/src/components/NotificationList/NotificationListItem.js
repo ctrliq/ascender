@@ -1,5 +1,4 @@
 import React from 'react';
-import { shape, number, string, bool, func } from 'prop-types';
 
 import { useLingui } from '@lingui/react/macro';
 
@@ -103,22 +102,5 @@ function NotificationListItem({
     </Tr>
   );
 }
-
-NotificationListItem.propTypes = {
-  notification: shape({
-    id: number.isRequired,
-    name: string.isRequired,
-    notification_type: string.isRequired,
-  }).isRequired,
-  canToggleNotifications: bool.isRequired,
-  detailUrl: string.isRequired,
-  approvalsTurnedOn: bool,
-  errorTurnedOn: bool,
-  startedTurnedOn: bool,
-  successTurnedOn: bool,
-  toggleNotification: func.isRequired,
-  typeLabels: shape().isRequired,
-  showApprovalsToggle: bool,
-};
 
 export default NotificationListItem;

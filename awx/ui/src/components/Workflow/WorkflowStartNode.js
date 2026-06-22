@@ -1,7 +1,6 @@
 import React, { useContext, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
-import { bool, func } from 'prop-types';
 import { PlusIcon } from '@patternfly/react-icons';
 import {
   WorkflowDispatchContext,
@@ -84,10 +83,5 @@ function WorkflowStartNode({ onUpdateHelpText = () => {}, showActionTooltip }) {
     </StartG>
   );
 }
-
-WorkflowStartNode.propTypes = {
-  showActionTooltip: bool.isRequired,
-  onUpdateHelpText: func,
-};
 
 export default WorkflowStartNode;

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { useNavigate } from 'routerCompat';
 import { CardBody } from 'components/Card';
 import HostForm from 'components/HostForm';
@@ -36,9 +35,5 @@ function InventoryHostEdit({ host, inventory }) {
     </CardBody>
   );
 }
-
-InventoryHostEdit.propTypes = {
-  host: PropTypes.shape().isRequired,
-};
 
 export default InventoryHostEdit;

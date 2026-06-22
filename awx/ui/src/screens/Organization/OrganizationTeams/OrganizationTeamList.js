@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';
 import { OrganizationsAPI } from 'api';
@@ -97,10 +96,6 @@ function OrganizationTeamList({ id }) {
     />
   );
 }
-
-OrganizationTeamList.propTypes = {
-  id: PropTypes.number.isRequired,
-};
 
 export { OrganizationTeamList as _OrganizationTeamList };
 export default OrganizationTeamList;

@@ -1,6 +1,5 @@
 
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'routerCompat';
 import { useLingui } from '@lingui/react/macro';
@@ -165,14 +164,5 @@ function CredentialPluginField({
     </>
   );
 }
-
-CredentialPluginField.propTypes = {
-  fieldOptions: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired,
-  }).isRequired,
-  isDisabled: PropTypes.bool,
-  isRequired: PropTypes.bool,
-};
 
 export default CredentialPluginField;
