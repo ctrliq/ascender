@@ -12,7 +12,6 @@ import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
 import useRequest from 'hooks/useRequest';
 import { useConfig } from 'contexts/Config';
-import { Credential } from 'types';
 import CredentialForm from '../shared/CredentialForm';
 
 function CredentialEdit({ credential }) {
@@ -202,10 +201,6 @@ function CredentialEdit({ credential }) {
     </CardBody>
   );
 }
-
-CredentialEdit.propTypes = {
-  credential: Credential.isRequired,
-};
 
 export { CredentialEdit as _CredentialEdit };
 export default CredentialEdit;

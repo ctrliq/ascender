@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import PropTypes, { shape } from 'prop-types';
 import { useField, useFormikContext, withFormik } from 'formik';
 import {
   Form,
@@ -25,7 +24,6 @@ import FormActionGroup from 'components/FormActionGroup';
 import ContentError from 'components/ContentError';
 import CheckboxField from 'components/FormField/CheckboxField';
 import Popover from 'components/Popover';
-import { WorkFlowJobTemplate } from 'types';
 import LabelSelect from 'components/LabelSelect';
 import { TagMultiSelect } from 'components/MultiSelect';
 import WebhookSubForm from './WebhookSubForm';
@@ -287,15 +285,6 @@ function WorkflowJobTemplateForm({
     </Form>
   );
 }
-
-WorkflowJobTemplateForm.propTypes = {
-  template: WorkFlowJobTemplate,
-  handleSubmit: PropTypes.func.isRequired,
-  handleCancel: PropTypes.func.isRequired,
-  submitError: shape({}),
-  isOrgAdmin: PropTypes.bool,
-  isInventoryDisabled: PropTypes.bool,
-};
 
 const FormikApp = withFormik({
   mapPropsToValues({ template = {} }) {

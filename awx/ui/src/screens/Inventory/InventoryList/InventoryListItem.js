@@ -1,5 +1,4 @@
 import React, { useState, useCallback } from 'react';
-import { bool, func } from 'prop-types';
 
 import { Button, Label } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
@@ -8,7 +7,6 @@ import { Plural, useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router-dom';
 import { timeOfDay } from 'util/dates';
 import { InventoriesAPI } from 'api';
-import { Inventory } from 'types';
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
 import CopyButton from 'components/CopyButton';
 import StatusLabel from 'components/StatusLabel';
@@ -23,11 +21,6 @@ function InventoryListItem({
   fetchInventories,
 }) {
   const { t } = useLingui();
-  InventoryListItem.propTypes = {
-    inventory: Inventory.isRequired,
-    isSelected: bool.isRequired,
-    onSelect: func.isRequired,
-  };
   const [isCopying, setIsCopying] = useState(false);
 
   const copyInventory = useCallback(async () => {

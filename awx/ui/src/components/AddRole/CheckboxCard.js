@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Checkbox as PFCheckbox } from '@patternfly/react-core';
 import styled from 'styled-components';
 
@@ -43,13 +42,5 @@ function CheckboxCard({
     </CheckboxWrapper>
   );
 }
-
-CheckboxCard.propTypes = {
-  name: PropTypes.string.isRequired,
-  description: PropTypes.string,
-  isSelected: PropTypes.bool,
-  onSelect: PropTypes.func,
-  itemId: PropTypes.number.isRequired,
-};
 
 export default CheckboxCard;

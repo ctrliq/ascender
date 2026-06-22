@@ -1,20 +1,13 @@
 import React from 'react';
-import { func } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 import { Chip } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
 import { Link } from 'react-router-dom';
 
-import { AccessRecord } from 'types';
 import ChipGroup from '../ChipGroup';
 import { DetailList, Detail } from '../DetailList';
 
 function ResourceAccessListItem({ accessRecord, onRoleDelete }) {
-  ResourceAccessListItem.propTypes = {
-    accessRecord: AccessRecord.isRequired,
-    onRoleDelete: func.isRequired,
-  };
-
   const getRoleLists = () => {
     const teamRoles = [];
     const userRoles = [];

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
-import { string, shape } from 'prop-types';
 import {
   Alert,
   AlertActionCloseButton,
@@ -72,11 +71,5 @@ function CredentialPluginTestAlert({
     </AlertGroup>
   );
 }
-
-CredentialPluginTestAlert.propTypes = {
-  credentialName: string.isRequired,
-  successResponse: shape({}),
-  errorResponse: shape({}),
-};
 
 export default CredentialPluginTestAlert;

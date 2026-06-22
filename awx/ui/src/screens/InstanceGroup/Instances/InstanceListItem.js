@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom-v5-compat';
-import { bool, func } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 
 import styled from 'styled-components';
@@ -19,7 +18,6 @@ import { formatDateString } from 'util/dates';
 import { ActionsTd, ActionItem } from 'components/PaginatedTable';
 import InstanceToggle from 'components/InstanceToggle';
 import StatusLabel from 'components/StatusLabel';
-import { Instance } from 'types';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import useDebounce from 'hooks/useDebounce';
 import computeForks from 'util/computeForks';
@@ -265,11 +263,5 @@ function InstanceListItem({
     </>
   );
 }
-
-InstanceListItem.prototype = {
-  instance: Instance.isRequired,
-  isSelected: bool.isRequired,
-  onSelect: func.isRequired,
-};
 
 export default InstanceListItem;

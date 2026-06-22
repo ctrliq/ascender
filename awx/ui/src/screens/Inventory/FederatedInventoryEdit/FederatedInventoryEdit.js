@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom-v5-compat';
 import { Card, PageSection } from '@patternfly/react-core';
-import { Inventory } from 'types';
 import { FederatedInventoriesAPI, InventoriesAPI } from 'api';
 import { CardBody } from 'components/Card';
 import ContentLoading from 'components/ContentLoading';
@@ -117,9 +116,5 @@ function FederatedInventoryEdit({ inventory }) {
     </PageSection>
   );
 }
-
-FederatedInventoryEdit.propTypes = {
-  inventory: Inventory.isRequired,
-};
 
 export default FederatedInventoryEdit;

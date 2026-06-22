@@ -1,5 +1,4 @@
 import React from 'react';
-import { shape } from 'prop-types';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
@@ -385,10 +384,5 @@ function PromptDetail({
     </>
   );
 }
-
-PromptDetail.propTypes = {
-  resource: shape({}).isRequired,
-  launchConfig: shape({}),
-};
 
 export default PromptDetail;

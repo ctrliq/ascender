@@ -1,15 +1,4 @@
 import React, { useReducer, useEffect, useState } from 'react';
-import {
-  string,
-  bool,
-  arrayOf,
-  func,
-  number,
-  oneOfType,
-  shape,
-  node,
-  object,
-} from 'prop-types';
 import { useLocation, useNavigate } from 'react-router-dom-v5-compat';
 import { useField } from 'formik';
 import { SearchIcon } from '@patternfly/react-icons';
@@ -24,7 +13,6 @@ import {
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import useDebounce from 'hooks/useDebounce';
-import { QSConfig } from 'types';
 import ChipGroup from '../ChipGroup';
 import reducer, { initReducer } from './shared/reducer';
 
@@ -224,39 +212,6 @@ function Lookup({
     </>
   );
 }
-
-const Item = shape({
-  id: number.isRequired,
-});
-const InstanceItem = shape({
-  id: number.isRequired,
-  hostname: string.isRequired,
-});
-
-Lookup.propTypes = {
-  id: string,
-  header: string,
-  modalDescription: oneOfType([string, node]),
-  onChange: func.isRequired,
-  onUpdate: func,
-  value: oneOfType([
-    Item,
-    arrayOf(Item),
-    object,
-    InstanceItem,
-    arrayOf(InstanceItem),
-  ]),
-  multiple: bool,
-  required: bool,
-  onBlur: func,
-  qsConfig: QSConfig.isRequired,
-  renderItemChip: func,
-  renderOptionsList: func.isRequired,
-  fieldName: string.isRequired,
-  validate: func,
-  onDebounce: func,
-  isDisabled: bool,
-};
 
 export { Lookup as _Lookup };
 export default Lookup;

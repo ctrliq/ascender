@@ -1,6 +1,5 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { number, shape, bool } from 'prop-types';
 
 import { useLingui } from '@lingui/react/macro';
 import { getQSConfig, parseQueryString } from 'util/qs';
@@ -257,12 +256,5 @@ function NotificationList({
     </>
   );
 }
-
-NotificationList.propTypes = {
-  apiModel: shape({}).isRequired,
-  id: number.isRequired,
-  canToggleNotifications: bool.isRequired,
-  showApprovalsToggle: bool,
-};
 
 export default NotificationList;

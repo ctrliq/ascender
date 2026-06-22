@@ -2,7 +2,6 @@ import React from 'react';
 
 import { useLingui } from '@lingui/react/macro';
 import { Chip } from '@patternfly/react-core';
-import { Credential } from 'types';
 import { toTitleCase } from 'util/strings';
 
 function CredentialChip({ credential, ...props }) {
@@ -32,9 +31,6 @@ function CredentialChip({ credential, ...props }) {
     </Chip>
   );
 }
-CredentialChip.propTypes = {
-  credential: Credential.isRequired,
-};
 
 export { CredentialChip as _CredentialChip };
 export default CredentialChip;

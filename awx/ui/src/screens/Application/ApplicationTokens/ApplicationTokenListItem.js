@@ -1,10 +1,8 @@
 import React from 'react';
-import { string, bool, func, number } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router-dom';
 import { Tr, Td } from '@patternfly/react-table';
 
-import { Token } from 'types';
 import { formatDateString } from 'util/dates';
 import { toTitleCase } from 'util/strings';
 
@@ -38,13 +36,5 @@ function ApplicationTokenListItem({
     </Tr>
   );
 }
-
-ApplicationTokenListItem.propTypes = {
-  token: Token.isRequired,
-  detailUrl: string.isRequired,
-  isSelected: bool.isRequired,
-  onSelect: func.isRequired,
-  rowIndex: number.isRequired,
-};
 
 export default ApplicationTokenListItem;

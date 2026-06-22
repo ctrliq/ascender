@@ -1,7 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';
-import { func, shape } from 'prop-types';
 import { WorkflowJobTemplatesAPI } from 'api';
 import { getQSConfig, parseQueryString } from 'util/qs';
 import useRequest from 'hooks/useRequest';
@@ -118,10 +117,5 @@ function WorkflowJobTemplatesList({ nodeResource = null, onUpdateNodeResource })
     />
   );
 }
-
-WorkflowJobTemplatesList.propTypes = {
-  nodeResource: shape(),
-  onUpdateNodeResource: func.isRequired,
-};
 
 export default WorkflowJobTemplatesList;

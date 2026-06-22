@@ -1,5 +1,4 @@
 import React from 'react';
-import { node, string } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 import { Popover as PFPopover } from '@patternfly/react-core';
 import { HelpIcon } from '@patternfly/react-icons';
@@ -47,13 +46,5 @@ function Popover({
     </PFPopover>
   );
 }
-
-Popover.propTypes = {
-  ariaLabel: string,
-  content: node,
-  header: node,
-  id: string,
-  maxWidth: string,
-};
 
 export default Popover;

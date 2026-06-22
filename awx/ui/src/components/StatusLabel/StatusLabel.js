@@ -1,6 +1,5 @@
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { oneOf } from 'prop-types';
 import { Label, Tooltip } from '@patternfly/react-core';
 import icons from '../StatusIcon/icons';
 
@@ -83,32 +82,3 @@ export default function StatusLabel({ status, tooltipContent = '', children }) {
     </>
   );
 }
-
-StatusLabel.propTypes = {
-  status: oneOf([
-    'approved',
-    'denied',
-    'success',
-    'successful',
-    'ok',
-    'healthy',
-    'failed',
-    'error',
-    'unreachable',
-    'running',
-    'pending',
-    'skipped',
-    'timedOut',
-    'waiting',
-    'disabled',
-    'canceled',
-    'changed',
-    'ready',
-    'installed',
-    'provisioning',
-    'deprovisioning',
-    'unavailable',
-    'provision-fail',
-    'deprovision-fail',
-  ]).isRequired,
-};

@@ -2,7 +2,6 @@ import React, { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 import { useField } from 'formik';
 import { Form, FormGroup, Alert } from '@patternfly/react-core';
 import { CredentialsAPI } from 'api';
@@ -151,7 +150,4 @@ function AdHocCredentialStep({ credentialTypeId }) {
   );
 }
 
-AdHocCredentialStep.propTypes = {
-  credentialTypeId: PropTypes.number.isRequired,
-};
 export default AdHocCredentialStep;

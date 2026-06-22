@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { func, arrayOf, number, shape, string, oneOfType } from 'prop-types';
 import {
   Chip,
   ChipGroup,
@@ -142,15 +141,4 @@ function LabelSelect({
     </Select>
   );
 }
-LabelSelect.propTypes = {
-  value: arrayOf(
-    shape({
-      id: oneOfType([number, string]).isRequired,
-      name: string.isRequired,
-    })
-  ).isRequired,
-  placeholder: string,
-  onChange: func.isRequired,
-  onError: func.isRequired,
-};
 export default LabelSelect;

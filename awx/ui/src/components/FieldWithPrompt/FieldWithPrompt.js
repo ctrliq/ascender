@@ -1,5 +1,4 @@
 import React from 'react';
-import { bool, node, string } from 'prop-types';
 
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
@@ -53,14 +52,5 @@ function FieldWithPrompt({
     </div>
   );
 }
-
-FieldWithPrompt.propTypes = {
-  fieldId: string.isRequired,
-  isRequired: bool,
-  label: string.isRequired,
-  promptId: string.isRequired,
-  promptName: string.isRequired,
-  tooltip: node,
-};
 
 export default FieldWithPrompt;

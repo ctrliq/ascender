@@ -1,12 +1,10 @@
 import React from 'react';
-import { arrayOf } from 'prop-types';
 
 import { Link as _Link } from 'react-router-dom';
 import { Tooltip } from '@patternfly/react-core';
 import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
 import { formatDateString } from 'util/dates';
-import { Job } from 'types';
 import StatusIcon from '../StatusIcon';
 import { JOB_TYPE_URL_SEGMENTS } from '../../constants';
 
@@ -51,10 +49,6 @@ const Sparkline = ({ jobs = [] }) => {
   ));
 
   return <Wrapper>{statusIcons}</Wrapper>;
-};
-
-Sparkline.propTypes = {
-  jobs: arrayOf(Job),
 };
 
 export default Sparkline;

@@ -5,8 +5,6 @@ import {
   AlertActionCloseButton,
   AlertVariant,
 } from '@patternfly/react-core';
-import { arrayOf, func } from 'prop-types';
-import { Toast as ToastType } from 'types';
 
 export default function useToast() {
   const [toasts, setToasts] = useState([]);
@@ -55,10 +53,5 @@ export function Toast({ toasts, removeToast }) {
     </AlertGroup>
   );
 }
-
-Toast.propTypes = {
-  toasts: arrayOf(ToastType).isRequired,
-  removeToast: func.isRequired,
-};
 
 export { AlertVariant };

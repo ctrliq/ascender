@@ -3,7 +3,6 @@ import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 
 import { ChipGroup as PFChipGroup } from '@patternfly/react-core';
-import { number } from 'prop-types';
 
 function ChipGroup({ numChips, totalChips, ...props }) {
   const { t } = useLingui();
@@ -16,10 +15,5 @@ function ChipGroup({ numChips, totalChips, ...props }) {
     />
   );
 }
-
-ChipGroup.propTypes = {
-  numChips: number.isRequired,
-  totalChips: number.isRequired,
-};
 
 export default ChipGroup;

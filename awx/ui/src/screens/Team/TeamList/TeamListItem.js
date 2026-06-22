@@ -1,5 +1,4 @@
 import React from 'react';
-import { string, bool, func } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 
 import { Button } from '@patternfly/react-core';
@@ -7,16 +6,9 @@ import { Tr, Td } from '@patternfly/react-table';
 import { Link } from 'react-router-dom';
 import { PencilAltIcon } from '@patternfly/react-icons';
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
-import { Team } from 'types';
 
 function TeamListItem({ team, isSelected, onSelect, detailUrl, rowIndex }) {
   const { t } = useLingui();
-  TeamListItem.propTypes = {
-    team: Team.isRequired,
-    detailUrl: string.isRequired,
-    isSelected: bool.isRequired,
-    onSelect: func.isRequired,
-  };
 
   const labelId = `check-action-${team.id}`;
 

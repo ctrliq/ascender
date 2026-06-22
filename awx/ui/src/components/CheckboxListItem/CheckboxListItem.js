@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 import { Td, Tr } from '@patternfly/react-table';
 import { ActionsTd } from 'components/PaginatedTable';
@@ -76,15 +75,6 @@ const CheckboxListItem = ({
       )}
     </Tr>
   );
-};
-
-CheckboxListItem.propTypes = {
-  isSelected: PropTypes.bool,
-  itemId: PropTypes.number.isRequired,
-  label: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  onDeselect: PropTypes.func.isRequired,
-  onSelect: PropTypes.func.isRequired,
 };
 
 export default CheckboxListItem;

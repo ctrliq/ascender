@@ -1,5 +1,4 @@
 import React, { useState, useCallback } from 'react';
-import { string, bool, func } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router-dom';
 import { Button } from '@patternfly/react-core';
@@ -8,7 +7,6 @@ import { PencilAltIcon } from '@patternfly/react-icons';
 
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
 import CopyButton from 'components/CopyButton';
-import { ExecutionEnvironment } from 'types';
 import { ExecutionEnvironmentsAPI } from 'api';
 import { timeOfDay } from 'util/dates';
 
@@ -131,13 +129,5 @@ function ExecutionEnvironmentListItem({
     </Tr>
   );
 }
-
-ExecutionEnvironmentListItem.prototype = {
-  executionEnvironment: ExecutionEnvironment.isRequired,
-  detailUrl: string.isRequired,
-  isSelected: bool.isRequired,
-  onSelect: func.isRequired,
-  onCopy: func.isRequired,
-};
 
 export default ExecutionEnvironmentListItem;

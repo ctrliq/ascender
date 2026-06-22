@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom-v5-compat';
-import { shape } from 'prop-types';
 import { Card } from '@patternfly/react-core';
 import yaml from 'js-yaml';
 import { OrganizationsAPI, SchedulesAPI } from 'api';
@@ -196,9 +195,5 @@ function ScheduleEdit({
     </Card>
   );
 }
-
-ScheduleEdit.propTypes = {
-  schedule: shape({}).isRequired,
-};
 
 export default ScheduleEdit;

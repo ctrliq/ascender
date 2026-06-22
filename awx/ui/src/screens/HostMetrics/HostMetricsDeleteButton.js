@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { func, node, string, arrayOf, shape } from 'prop-types';
 import styled from 'styled-components';
 import { Alert, Badge, Button, Tooltip } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
@@ -17,10 +16,6 @@ const Label = styled.span`
     margin-right: 10px;
   }
 `;
-
-const ItemToDelete = shape({
-  hostname: string.isRequired,
-});
 
 function HostMetricsDeleteButton({
   itemsToDelete,
@@ -190,12 +185,5 @@ function HostMetricsDeleteButton({
     </>
   );
 }
-
-HostMetricsDeleteButton.propTypes = {
-  onDelete: func.isRequired,
-  itemsToDelete: arrayOf(ItemToDelete).isRequired,
-  pluralizedItemName: string,
-  warningMessage: node,
-};
 
 export default HostMetricsDeleteButton;

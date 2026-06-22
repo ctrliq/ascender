@@ -1,5 +1,4 @@
 import React from 'react';
-import { func, string } from 'prop-types';
 import styled from 'styled-components';
 import { Button } from '@patternfly/react-core';
 import ButtonGroup from './ButtonGroup';
@@ -37,38 +36,5 @@ function MultiButtonToggle({ buttons, value, onChange, name }) {
     </ButtonGroup>
   );
 }
-
-const buttonsPropType = {
-  isRequired: ({ buttons }) => {
-    if (!buttons) {
-      return new Error(
-        `The prop buttons is marked as required in MultiButtonToggle, but its value is '${buttons}'`
-      );
-    }
-    // We expect this data structure to look like:
-    // [[value(unrestricted type), label(string)], [value(unrestricted type), label(string)], ...]
-    if (
-      !Array.isArray(buttons) ||
-      buttons.length < 2 ||
-      buttons.reduce(
-        (prevVal, button) => prevVal || typeof button[1] !== 'string',
-        false
-      )
-    ) {
-      return new Error(
-        `Invalid prop buttons supplied to MultiButtonToggle. Validation failed.`
-      );
-    }
-
-    return null;
-  },
-};
-
-MultiButtonToggle.propTypes = {
-  buttons: buttonsPropType.isRequired,
-  value: string.isRequired,
-  onChange: func.isRequired,
-  name: string.isRequired,
-};
 
 export default MultiButtonToggle;

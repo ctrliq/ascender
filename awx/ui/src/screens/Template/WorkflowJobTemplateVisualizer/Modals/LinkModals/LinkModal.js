@@ -3,7 +3,6 @@ import { Button, FormGroup, Modal } from '@patternfly/react-core';
 
 import { useLingui } from '@lingui/react/macro';
 
-import { func } from 'prop-types';
 import {
   WorkflowDispatchContext,
   WorkflowStateContext,
@@ -78,9 +77,5 @@ function LinkModal({ header, onConfirm }) {
     </Modal>
   );
 }
-
-LinkModal.propTypes = {
-  onConfirm: func.isRequired,
-};
 
 export default LinkModal;

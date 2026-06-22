@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom-v5-compat';
-import PropTypes from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 import { ToolbarItem, Alert } from '@patternfly/react-core';
 import { CredentialsAPI, CredentialTypesAPI } from 'api';
@@ -243,22 +242,6 @@ function MultiCredentialsLookup({
     />
   );
 }
-
-MultiCredentialsLookup.propTypes = {
-  value: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number,
-      name: PropTypes.string,
-      description: PropTypes.string,
-      kind: PropTypes.string,
-      clound: PropTypes.bool,
-    })
-  ),
-  onChange: PropTypes.func.isRequired,
-  onError: PropTypes.func.isRequired,
-  validate: PropTypes.func,
-  fieldName: PropTypes.string,
-};
 
 export { MultiCredentialsLookup as _MultiCredentialsLookup };
 export default MultiCredentialsLookup;

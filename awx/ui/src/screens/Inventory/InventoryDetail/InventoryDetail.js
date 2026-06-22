@@ -22,7 +22,6 @@ import ContentLoading from 'components/ContentLoading';
 import ChipGroup from 'components/ChipGroup';
 import { InventoriesAPI } from 'api';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
-import { Inventory } from 'types';
 import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails';
 import InstanceGroupLabels from 'components/InstanceGroupLabels';
 import getHelpText from '../shared/Inventory.helptext';
@@ -210,8 +209,4 @@ function InventoryDetail({ inventory }) {
     </CardBody>
   );
 }
-InventoryDetail.propTypes = {
-  inventory: Inventory.isRequired,
-};
-
 export default InventoryDetail;

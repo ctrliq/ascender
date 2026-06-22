@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { shape, string } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
 import {
@@ -164,11 +163,6 @@ const BooleanField = ({
     </SettingGroup>
   ) : null;
 };
-BooleanField.propTypes = {
-  name: string.isRequired,
-  config: shape({}).isRequired,
-};
-
 const ChoiceField = ({ name, config, isRequired = false }) => {
   const { t } = useLingui();
   const validate = isRequired ? required(null) : null;
@@ -200,11 +194,6 @@ const ChoiceField = ({ name, config, isRequired = false }) => {
     </SettingGroup>
   ) : null;
 };
-ChoiceField.propTypes = {
-  name: string.isRequired,
-  config: shape({}).isRequired,
-};
-
 const EncryptedField = ({ name, config, isRequired = false }) => {
   const { t } = useLingui();
   const validate = isRequired ? required(null) : null;
@@ -234,11 +223,6 @@ const EncryptedField = ({ name, config, isRequired = false }) => {
     </SettingGroup>
   ) : null;
 };
-EncryptedField.propTypes = {
-  name: string.isRequired,
-  config: shape({}).isRequired,
-};
-
 const ExecutionEnvField = ({ name, config, isRequired = false }) => {
   const { t } = useLingui();
   const [field, meta, helpers] = useField({ name });
@@ -265,11 +249,6 @@ const ExecutionEnvField = ({ name, config, isRequired = false }) => {
     </SettingGroup>
   ) : null;
 };
-ExecutionEnvField.propTypes = {
-  name: string.isRequired,
-  config: shape({}).isRequired,
-};
-
 const InputAlertField = ({ name, config }) => {
   const { t } = useLingui();
   const [field, meta] = useField({ name });
@@ -367,11 +346,6 @@ const InputAlertField = ({ name, config }) => {
   ) : null;
 };
 
-InputAlertField.propTypes = {
-  name: string.isRequired,
-  config: shape({}).isRequired,
-};
-
 const InputField = ({
   name,
   config = null,
@@ -415,11 +389,6 @@ const InputField = ({
     </SettingGroup>
   ) : null;
 };
-InputField.propTypes = {
-  name: string.isRequired,
-  config: shape({}),
-};
-
 const TextAreaField = ({ name, config, isRequired = false }) => {
   const { t } = useLingui();
   const validate = isRequired ? required(null) : null;
@@ -452,11 +421,6 @@ const TextAreaField = ({ name, config, isRequired = false }) => {
     </SettingGroup>
   ) : null;
 };
-TextAreaField.propTypes = {
-  name: string.isRequired,
-  config: shape({}).isRequired,
-};
-
 const ObjectField = ({ name, config, revertValue, isRequired = false }) => {
   const { t } = useLingui();
   const validate = isRequired ? required(null) : null;
@@ -498,11 +462,6 @@ const ObjectField = ({ name, config, revertValue, isRequired = false }) => {
     </FormFullWidthLayout>
   ) : null;
 };
-ObjectField.propTypes = {
-  name: string.isRequired,
-  config: shape({}).isRequired,
-};
-
 const FileUploadIconWrapper = styled.div`
   margin: var(--pf-global--spacer--md);
 `;
@@ -567,11 +526,6 @@ const FileUploadField = ({
     </FormFullWidthLayout>
   ) : null;
 };
-FileUploadField.propTypes = {
-  name: string.isRequired,
-  config: shape({}).isRequired,
-};
-
 export {
   BooleanField,
   ChoiceField,

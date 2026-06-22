@@ -1,6 +1,5 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom-v5-compat';
-import { Inventory } from 'types';
 import AdvancedInventoryHostList from './AdvancedInventoryHostList';
 import AdvancedInventoryHost from '../AdvancedInventoryHost';
 
@@ -24,9 +23,5 @@ function AdvancedInventoryHosts({ inventory, setBreadcrumb }) {
     </Routes>
   );
 }
-
-AdvancedInventoryHosts.propTypes = {
-  inventory: Inventory.isRequired,
-};
 
 export default AdvancedInventoryHosts;

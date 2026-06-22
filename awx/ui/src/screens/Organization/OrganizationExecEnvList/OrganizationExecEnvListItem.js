@@ -1,10 +1,7 @@
 import React from 'react';
-import { string } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router-dom';
 import { Tr, Td } from '@patternfly/react-table';
-
-import { ExecutionEnvironment } from 'types';
 
 function OrganizationExecEnvListItem({ executionEnvironment, detailUrl }) {
   const { t } = useLingui();
@@ -22,10 +19,5 @@ function OrganizationExecEnvListItem({ executionEnvironment, detailUrl }) {
     </Tr>
   );
 }
-
-OrganizationExecEnvListItem.prototype = {
-  executionEnvironment: ExecutionEnvironment.isRequired,
-  detailUrl: string.isRequired,
-};
 
 export default OrganizationExecEnvListItem;

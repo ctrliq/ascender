@@ -1,5 +1,4 @@
 import React from 'react';
-import { shape, string, number, arrayOf, node, oneOfType } from 'prop-types';
 import {
   Tab as PFTab,
   Tabs as PFTabs,
@@ -69,14 +68,5 @@ function RoutedTabs({ tabsArray }) {
     </Tabs>
   );
 }
-
-RoutedTabs.propTypes = {
-  tabsArray: arrayOf(
-    shape({
-      id: number.isRequired,
-      name: oneOfType([string.isRequired, node.isRequired]),
-    })
-  ).isRequired,
-};
 
 export default RoutedTabs;

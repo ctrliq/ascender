@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import { func, shape } from 'prop-types';
 import { Formik, useField, useFormikContext } from 'formik';
 
 import { useLingui } from '@lingui/react/macro';
@@ -150,13 +149,5 @@ function ContainerGroupForm({
     </Formik>
   );
 }
-
-ContainerGroupForm.propTypes = {
-  instanceGroup: shape({}),
-  onCancel: func.isRequired,
-  onSubmit: func.isRequired,
-  submitError: shape({}),
-  initialPodSpec: shape({}),
-};
 
 export default ContainerGroupForm;

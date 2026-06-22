@@ -1,5 +1,4 @@
 import React, { useEffect, useCallback } from 'react';
-import { string, number, shape, arrayOf } from 'prop-types';
 import * as d3 from 'd3';
 import { useLingui } from '@lingui/react/macro';
 import { PageContextConsumer } from '@patternfly/react-core';
@@ -285,12 +284,6 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
 
   return <div id={id} style={{ marginTop: '3rem' }} />;
 }
-
-LineChart.propTypes = {
-  id: string.isRequired,
-  data: arrayOf(shape({})).isRequired,
-  height: number.isRequired,
-};
 
 const withPageContext = (Component) =>
   function contextComponent(props) {

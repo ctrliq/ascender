@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import { useLingui } from '@lingui/react/macro';
 import { ActionGroup, Button } from '@patternfly/react-core';
@@ -33,12 +32,6 @@ const FormActionGroup = ({ onCancel, onSubmit, submitDisabled = false }) => {
       </ActionGroup>
     </FormFullWidthLayout>
   );
-};
-
-FormActionGroup.propTypes = {
-  onCancel: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired,
-  submitDisabled: PropTypes.bool,
 };
 
 export default FormActionGroup;

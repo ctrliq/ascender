@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import { func, shape } from 'prop-types';
 import { Formik, useField } from 'formik';
 import { useLingui } from '@lingui/react/macro';
 import {
@@ -144,11 +143,5 @@ function CredentialPluginPrompt({ onClose, onSubmit, initialValues = {} }) {
     </Formik>
   );
 }
-
-CredentialPluginPrompt.propTypes = {
-  onClose: func.isRequired,
-  onSubmit: func.isRequired,
-  initialValues: shape({}),
-};
 
 export default CredentialPluginPrompt;

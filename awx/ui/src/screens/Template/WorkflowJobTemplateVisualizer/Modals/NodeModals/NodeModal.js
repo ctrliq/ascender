@@ -4,7 +4,6 @@ import { useLocation, useNavigate } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import { Formik, useFormikContext } from 'formik';
 import yaml from 'js-yaml';
-import { bool, node, func } from 'prop-types';
 import {
   Button,
   WizardContextConsumer,
@@ -407,12 +406,6 @@ const NodeModal = ({ onSave, askLinkType, title }) => {
       )}
     </Formik>
   );
-};
-
-NodeModal.propTypes = {
-  askLinkType: bool.isRequired,
-  onSave: func.isRequired,
-  title: node.isRequired,
 };
 
 export default NodeModal;

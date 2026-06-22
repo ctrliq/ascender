@@ -1,5 +1,4 @@
 import React from 'react';
-import { string } from 'prop-types';
 import icons from './icons';
 
 const green = '--pf-global--success-color--100';
@@ -46,9 +45,5 @@ function StatusIcon({ status, ...props }) {
     </div>
   );
 }
-
-StatusIcon.propTypes = {
-  status: string.isRequired,
-};
 
 export default StatusIcon;

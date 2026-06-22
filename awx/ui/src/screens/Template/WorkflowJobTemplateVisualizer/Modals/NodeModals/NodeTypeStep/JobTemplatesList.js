@@ -4,7 +4,6 @@ import { useLocation } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';
 import { Popover } from '@patternfly/react-core';
 import { OutlinedQuestionCircleIcon } from '@patternfly/react-icons';
-import { func, shape } from 'prop-types';
 import { JobTemplatesAPI } from 'api';
 import { getQSConfig, parseQueryString } from 'util/qs';
 import useRequest from 'hooks/useRequest';
@@ -173,10 +172,5 @@ function JobTemplatesList({ nodeResource = null, onUpdateNodeResource }) {
     />
   );
 }
-
-JobTemplatesList.propTypes = {
-  nodeResource: shape(),
-  onUpdateNodeResource: func.isRequired,
-};
 
 export default JobTemplatesList;

@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom-v5-compat';
 import { useLingui } from '@lingui/react/macro';
 import { Button, Label } from '@patternfly/react-core';
 
-import { Inventory } from 'types';
 import { InventoriesAPI, UnifiedJobsAPI } from 'api';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 
@@ -183,9 +182,5 @@ function SmartInventoryDetail({ inventory }) {
     </>
   );
 }
-
-SmartInventoryDetail.propTypes = {
-  inventory: Inventory.isRequired,
-};
 
 export default SmartInventoryDetail;

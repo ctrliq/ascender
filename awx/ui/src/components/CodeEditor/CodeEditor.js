@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useCallback } from 'react';
-import { oneOf, bool, number, string, func, oneOfType } from 'prop-types';
 
 import ReactAce from 'react-ace';
 import 'ace-builds/src-noconflict/mode-json';
@@ -203,14 +202,4 @@ function CodeEditor({
     </>
   );
 }
-CodeEditor.propTypes = {
-  value: string.isRequired,
-  onChange: func,
-  mode: oneOf(['javascript', 'yaml', 'jinja2', 'json']).isRequired,
-  readOnly: bool,
-  hasErrors: bool,
-  fullHeight: bool,
-  rows: oneOfType([number, string]),
-  className: string,
-};
 export default CodeEditor;

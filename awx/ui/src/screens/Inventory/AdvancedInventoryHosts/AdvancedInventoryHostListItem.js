@@ -1,10 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { string, bool, func } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 import { Tr, Td } from '@patternfly/react-table';
 import Sparkline from 'components/Sparkline';
-import { Host } from 'types';
 
 function AdvancedInventoryHostListItem({
   detailUrl,
@@ -48,12 +46,5 @@ function AdvancedInventoryHostListItem({
     </Tr>
   );
 }
-
-AdvancedInventoryHostListItem.propTypes = {
-  detailUrl: string.isRequired,
-  host: Host.isRequired,
-  isSelected: bool.isRequired,
-  onSelect: func.isRequired,
-};
 
 export default AdvancedInventoryHostListItem;

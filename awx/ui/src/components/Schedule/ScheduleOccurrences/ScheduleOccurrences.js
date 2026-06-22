@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { shape, string } from 'prop-types';
 import styled from 'styled-components';
 
 import { useLingui } from '@lingui/react/macro';
@@ -82,10 +81,5 @@ function ScheduleOccurrences({
     </>
   );
 }
-
-ScheduleOccurrences.propTypes = {
-  preview: shape(),
-  tz: string,
-};
 
 export default ScheduleOccurrences;
