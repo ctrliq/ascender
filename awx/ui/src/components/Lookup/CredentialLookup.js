@@ -1,13 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
 import { useLocation } from 'routerCompat';
-import {
-  arrayOf,
-  bool,
-  func,
-  node,
-  number,
-  string,
-  oneOfType,
 
 import { useLingui } from '@lingui/react/macro';
 import { FormGroup } from '@patternfly/react-core';

@@ -1,14 +1,4 @@
 import React, { useReducer, useEffect, useState } from 'react';
-import {
-  string,
-  bool,
-  arrayOf,
-  func,
-  number,
-  oneOfType,
-  shape,
-  node,
-  object,
 import { useLocation, useNavigate } from 'routerCompat';
 import { useField } from 'formik';
 import { SearchIcon } from '@patternfly/react-icons';
