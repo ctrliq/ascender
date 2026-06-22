@@ -1,6 +1,6 @@
 import React from 'react';
 import { matchPath, Link } from 'react-router-dom';
-import { useLocation } from 'react-router-dom-v5-compat';
+import { useLocation } from 'routerCompat';
 import { NavExpandable, NavItem } from '@patternfly/react-core';
 
 function NavExpandableGroup(props) {

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Navigate } from 'react-router-dom-v5-compat';
+import { Navigate } from 'routerCompat';
 import { useLingui } from '@lingui/react/macro';
 
 import {

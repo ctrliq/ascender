@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom-v5-compat';
+import { useNavigate } from 'routerCompat';
 import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
 import { Chip, Divider, Title, Button } from '@patternfly/react-core';

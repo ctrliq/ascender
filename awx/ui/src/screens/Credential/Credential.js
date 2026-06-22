@@ -10,7 +10,7 @@ import {
   Navigate,
   useParams,
   useLocation,
-} from 'react-router-dom-v5-compat';
+} from 'routerCompat';
 import useRequest from 'hooks/useRequest';
 import { ResourceAccessList } from 'components/ResourceAccessList';
 import ContentError from 'components/ContentError';

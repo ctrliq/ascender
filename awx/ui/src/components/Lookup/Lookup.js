@@ -1,5 +1,5 @@
 import React, { useReducer, useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom-v5-compat';
+import { useLocation, useNavigate } from 'routerCompat';
 import { useField } from 'formik';
 import { SearchIcon } from '@patternfly/react-icons';
 import {

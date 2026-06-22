@@ -9,7 +9,7 @@ import {
   Navigate,
   useParams,
   useLocation,
-} from 'react-router-dom-v5-compat';
+} from 'routerCompat';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card, PageSection } from '@patternfly/react-core';
 import RoutedTabs from 'components/RoutedTabs';

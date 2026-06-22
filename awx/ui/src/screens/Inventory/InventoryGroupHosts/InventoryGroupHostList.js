@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import { useParams } from 'react-router-dom-v5-compat';
+import { useParams } from 'routerCompat';
 
 import { useLingui } from '@lingui/react/macro';
 import { DropdownItem } from '@patternfly/react-core';

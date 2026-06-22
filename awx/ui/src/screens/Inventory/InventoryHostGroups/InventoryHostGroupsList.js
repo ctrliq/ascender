@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useParams } from 'react-router-dom-v5-compat';
+import { useParams } from 'routerCompat';
 import { useLingui } from '@lingui/react/macro';
 
 import { getQSConfig, parseQueryString, mergeParams } from 'util/qs';

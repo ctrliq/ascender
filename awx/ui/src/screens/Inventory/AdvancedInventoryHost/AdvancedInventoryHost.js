@@ -7,7 +7,7 @@ import {
   Route,
   Navigate,
   useParams,
-} from 'react-router-dom-v5-compat';
+} from 'routerCompat';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
