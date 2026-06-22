@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
-import { func, shape } from 'prop-types';
 import { Formik } from 'formik';
 import { Button, Form, FormGroup, Modal } from '@patternfly/react-core';
 import { CredentialsAPI, CredentialTypesAPI } from 'api';
@@ -167,12 +166,5 @@ function ExternalTestModal({
     </>
   );
 }
-
-ExternalTestModal.propType = {
-  credential: shape({}),
-  credentialType: shape({}).isRequired,
-  credentialFormValues: shape({}).isRequired,
-  onClose: func.isRequired,
-};
 
 export default ExternalTestModal;

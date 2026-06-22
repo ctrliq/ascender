@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from 'react';
 import { Formik, useField, useFormikContext } from 'formik';
-import { func, shape } from 'prop-types';
 import { Form, FormGroup } from '@patternfly/react-core';
 import { VariablesField } from 'components/CodeEditor';
 import Popover from 'components/Popover';
@@ -158,13 +157,5 @@ function InventoryForm({
     </Formik>
   );
 }
-
-InventoryForm.propType = {
-  handleSubmit: func.isRequired,
-  handleCancel: func.isRequired,
-  instanceGroups: shape(),
-  inventory: shape(),
-  submitError: shape(),
-};
 
 export default InventoryForm;

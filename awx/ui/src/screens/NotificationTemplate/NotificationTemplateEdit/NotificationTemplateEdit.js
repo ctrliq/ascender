@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom-v5-compat';
 import { CardBody } from 'components/Card';
 import { NotificationTemplatesAPI } from 'api';
@@ -35,10 +34,6 @@ function NotificationTemplateEdit({ template, defaultMessages }) {
     </CardBody>
   );
 }
-
-NotificationTemplateEdit.propTypes = {
-  template: PropTypes.shape().isRequired,
-};
 
 export { NotificationTemplateEdit as _NotificationTemplateEdit };
 export default NotificationTemplateEdit;

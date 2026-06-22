@@ -1,5 +1,4 @@
 import React, { useState, useCallback } from 'react';
-import { string, bool, func } from 'prop-types';
 import { Button, ClipboardCopy, Tooltip } from '@patternfly/react-core';
 import { Tr, Td, ExpandableRowContent } from '@patternfly/react-table';
 import { useLingui } from '@lingui/react/macro';
@@ -18,7 +17,6 @@ import StatusLabel from 'components/StatusLabel';
 import { toTitleCase } from 'util/strings';
 import { isJobRunning } from 'util/jobs';
 import CopyButton from 'components/CopyButton';
-import { Project } from 'types';
 import JobCancelButton from 'components/JobCancelButton';
 import ProjectSyncButton from '../shared/ProjectSyncButton';
 
@@ -40,12 +38,6 @@ function ProjectListItem({
 }) {
   const { t } = useLingui();
   const [isDisabled, setIsDisabled] = useState(false);
-  ProjectListItem.propTypes = {
-    project: Project.isRequired,
-    detailUrl: string.isRequired,
-    isSelected: bool.isRequired,
-    onSelect: func.isRequired,
-  };
 
   const copyProject = useCallback(async () => {
     const response = await ProjectsAPI.copy(project.id, {

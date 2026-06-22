@@ -1,5 +1,4 @@
 import React from 'react';
-import { bool, func, number, oneOfType, string } from 'prop-types';
 
 import { useLingui } from '@lingui/react/macro';
 
@@ -8,7 +7,6 @@ import { Tr, Td } from '@patternfly/react-table';
 import { Link } from 'react-router-dom';
 import { PencilAltIcon } from '@patternfly/react-icons';
 import { ActionsTd, ActionItem } from 'components/PaginatedTable';
-import { Group } from 'types';
 
 function HostGroupItem({ group, inventoryId, isSelected, onSelect, rowIndex }) {
   const { t } = useLingui();
@@ -50,12 +48,5 @@ function HostGroupItem({ group, inventoryId, isSelected, onSelect, rowIndex }) {
     </Tr>
   );
 }
-
-HostGroupItem.propTypes = {
-  group: Group.isRequired,
-  inventoryId: oneOfType([number, string]).isRequired,
-  isSelected: bool.isRequired,
-  onSelect: func.isRequired,
-};
 
 export default HostGroupItem;

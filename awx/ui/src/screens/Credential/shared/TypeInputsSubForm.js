@@ -8,7 +8,6 @@ import {
   SubFormLayout,
 } from 'components/FormLayout';
 import { CheckboxField } from 'components/FormField';
-import { CredentialType } from 'types';
 import { CredentialField, GceFileUploadField } from './CredentialFormFields';
 
 function TypeInputsSubForm({ credentialType }) {
@@ -66,9 +65,5 @@ function TypeInputsSubForm({ credentialType }) {
     </SubFormLayout>
   );
 }
-
-TypeInputsSubForm.propTypes = {
-  credentialType: CredentialType.isRequired,
-};
 
 export default TypeInputsSubForm;

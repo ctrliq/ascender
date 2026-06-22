@@ -1,10 +1,8 @@
 import React, { useCallback, useEffect } from 'react';
-import { node, string, func, bool, object, oneOfType } from 'prop-types';
 import { useLocation } from 'routerCompat';
 import { useLingui } from '@lingui/react/macro';
 import { FormGroup } from '@patternfly/react-core';
 import { ProjectsAPI } from 'api';
-import { Project } from 'types';
 import useAutoPopulateLookup from 'hooks/useAutoPopulateLookup';
 import useRequest from 'hooks/useRequest';
 import { getSearchableKeys } from 'components/PaginatedTable';
@@ -177,20 +175,6 @@ function ProjectLookup({
     </FormGroup>
   );
 }
-
-ProjectLookup.propTypes = {
-  autoPopulate: bool,
-  helperTextInvalid: node,
-  isValid: bool,
-  onBlur: func,
-  onChange: func.isRequired,
-  required: bool,
-  tooltip: string,
-  value: oneOfType([Project, object]),
-  isOverrideDisabled: bool,
-  validate: func,
-  fieldName: string,
-};
 
 export { ProjectLookup as _ProjectLookup };
 export default ProjectLookup;

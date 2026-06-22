@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import { bool, func, shape } from 'prop-types';
 import { Formik, useField, useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
 import { Form, FormGroup, Tooltip } from '@patternfly/react-core';
@@ -134,15 +133,6 @@ const HostForm = ({
       )}
     </Formik>
   );
-};
-
-HostForm.propTypes = {
-  handleCancel: func.isRequired,
-  handleSubmit: func.isRequired,
-  host: shape({}),
-  isInventoryVisible: bool,
-  submitError: shape({}),
-  disableInventoryLookup: bool,
 };
 
 export { HostForm as _HostForm };

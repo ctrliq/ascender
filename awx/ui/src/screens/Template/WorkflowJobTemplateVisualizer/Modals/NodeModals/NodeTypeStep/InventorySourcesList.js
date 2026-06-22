@@ -1,7 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { func, shape } from 'prop-types';
 import { InventorySourcesAPI } from 'api';
 import { getQSConfig, parseQueryString } from 'util/qs';
 import useRequest from 'hooks/useRequest';
@@ -112,10 +111,5 @@ function InventorySourcesList({ nodeResource = null, onUpdateNodeResource }) {
     />
   );
 }
-
-InventorySourcesList.propTypes = {
-  nodeResource: shape(),
-  onUpdateNodeResource: func.isRequired,
-};
 
 export default InventorySourcesList;

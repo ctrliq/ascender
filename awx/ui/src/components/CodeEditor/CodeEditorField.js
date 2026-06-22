@@ -1,14 +1,4 @@
 import React from 'react';
-import {
-  string,
-  oneOfType,
-  object,
-  func,
-  bool,
-  node,
-  oneOf,
-  number,
-} from 'prop-types';
 import { useField } from 'formik';
 import { FormGroup } from '@patternfly/react-core';
 import CodeEditor from './CodeEditor';
@@ -53,16 +43,5 @@ function CodeEditorField({
     </FormGroup>
   );
 }
-CodeEditorField.propTypes = {
-  helperText: string,
-  id: string.isRequired,
-  name: string.isRequired,
-  label: oneOfType([object, string]).isRequired,
-  validate: func,
-  isRequired: bool,
-  tooltip: node,
-  mode: oneOf(['javascript', 'yaml', 'jinja2']).isRequired,
-  rows: number,
-};
 
 export default CodeEditorField;

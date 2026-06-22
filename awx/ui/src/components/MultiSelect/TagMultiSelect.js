@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { func, string } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 import { Select, SelectOption, SelectVariant } from '@patternfly/react-core';
 import { arrayToString, stringToArray } from 'util/strings';
@@ -66,10 +65,5 @@ function TagMultiSelect({ onChange, value }) {
     </Select>
   );
 }
-
-TagMultiSelect.propTypes = {
-  onChange: func.isRequired,
-  value: string.isRequired,
-};
 
 export default TagMultiSelect;

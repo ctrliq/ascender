@@ -1,13 +1,4 @@
 import React from 'react';
-import {
-  arrayOf,
-  oneOfType,
-  func,
-  number,
-  string,
-  shape,
-  bool,
-} from 'prop-types';
 
 import { useLingui } from '@lingui/react/macro';
 import { FormSelect, FormSelectOption } from '@patternfly/react-core';
@@ -54,24 +45,6 @@ function AnsibleSelect({
     </FormSelect>
   );
 }
-
-const Option = shape({
-  key: oneOfType([string, number]).isRequired,
-  value: oneOfType([string, number]).isRequired,
-  label: string.isRequired,
-  isDisabled: bool,
-});
-
-AnsibleSelect.propTypes = {
-  data: arrayOf(Option),
-  id: string.isRequired,
-  isValid: bool,
-  onBlur: func,
-  onChange: func.isRequired,
-  value: oneOfType([string, number]).isRequired,
-  className: string,
-  isDisabled: bool,
-};
 
 export { AnsibleSelect as _AnsibleSelect };
 export default AnsibleSelect;

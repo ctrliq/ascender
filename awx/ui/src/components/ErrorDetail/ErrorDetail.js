@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import { useLingui } from '@lingui/react/macro';
@@ -98,7 +97,4 @@ function ErrorDetail({ error = null }) {
   );
 }
 
-ErrorDetail.propTypes = {
-  error: PropTypes.instanceOf(Error),
-};
 export default ErrorDetail;

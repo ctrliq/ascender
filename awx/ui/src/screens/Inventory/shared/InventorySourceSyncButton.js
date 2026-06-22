@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
-import PropTypes from 'prop-types';
 import { Button, Tooltip } from '@patternfly/react-core';
 import { SyncIcon } from '@patternfly/react-icons';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
@@ -57,10 +56,5 @@ function InventorySourceSyncButton({ source = {}, icon = true }) {
     </>
   );
 }
-
-InventorySourceSyncButton.propTypes = {
-  source: PropTypes.shape({}),
-  icon: PropTypes.bool,
-};
 
 export default InventorySourceSyncButton;

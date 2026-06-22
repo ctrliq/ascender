@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import { useLingui } from '@lingui/react/macro';
 
@@ -55,14 +54,5 @@ function RolesStep({
     </>
   );
 }
-
-RolesStep.propTypes = {
-  onRolesClick: PropTypes.func,
-  roles: PropTypes.objectOf(PropTypes.object).isRequired,
-  selectedListKey: PropTypes.string,
-  selectedListLabel: PropTypes.string,
-  selectedResourceRows: PropTypes.arrayOf(PropTypes.object),
-  selectedRoleRows: PropTypes.arrayOf(PropTypes.object),
-};
 
 export default RolesStep;

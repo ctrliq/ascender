@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { node, number, oneOfType, shape, string, arrayOf } from 'prop-types';
 
 import { useLingui } from '@lingui/react/macro';
 import {
@@ -150,14 +149,6 @@ function VariablesDetail({
     </>
   );
 }
-VariablesDetail.propTypes = {
-  value: oneOfType([shape({}), arrayOf(string), string]).isRequired,
-  label: node.isRequired,
-  rows: oneOfType([number, string]),
-  dataCy: string,
-  helpText: oneOfType([node, string]),
-  name: string.isRequired,
-};
 function ModeToggle({
   id,
   label,

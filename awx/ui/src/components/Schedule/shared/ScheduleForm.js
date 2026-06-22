@@ -1,5 +1,4 @@
 import React, { useEffect, useCallback, useState, useRef } from 'react';
-import { shape, func } from 'prop-types';
 import { DateTime } from 'luxon';
 import { useLingui } from '@lingui/react/macro';
 import { Formik } from 'formik';
@@ -571,13 +570,6 @@ function ScheduleForm({
     </Config>
   );
 }
-
-ScheduleForm.propTypes = {
-  handleCancel: func.isRequired,
-  handleSubmit: func.isRequired,
-  schedule: shape({}),
-  submitError: shape(),
-};
 
 export default ScheduleForm;
 

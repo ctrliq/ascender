@@ -16,7 +16,6 @@ import {
   integer,
   combine,
 } from 'util/validators';
-import { Survey } from 'types';
 import FormField from '../../FormField';
 import Popover from '../../Popover';
 
@@ -45,9 +44,6 @@ function SurveyStep({ surveyConfig }) {
     </div>
   );
 }
-SurveyStep.propTypes = {
-  surveyConfig: Survey.isRequired,
-};
 
 function TextField({ question }) {
   const validators = [

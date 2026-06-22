@@ -1,5 +1,4 @@
 import React from 'react';
-import { func, shape } from 'prop-types';
 import { Formik } from 'formik';
 
 import { useLingui } from '@lingui/react/macro';
@@ -88,12 +87,5 @@ function CredentialTypeForm({
     </Formik>
   );
 }
-
-CredentialTypeForm.propTypes = {
-  credentialType: shape({}),
-  onCancel: func.isRequired,
-  onSubmit: func.isRequired,
-  submitError: shape({}),
-};
 
 export default CredentialTypeForm;

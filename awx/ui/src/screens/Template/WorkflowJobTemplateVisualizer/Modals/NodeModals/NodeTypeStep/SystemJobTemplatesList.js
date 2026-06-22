@@ -1,7 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';
-import { func, shape } from 'prop-types';
 import { SystemJobTemplatesAPI } from 'api';
 import { getQSConfig, parseQueryString } from 'util/qs';
 import useRequest from 'hooks/useRequest';
@@ -102,10 +101,5 @@ function SystemJobTemplatesList({ nodeResource = null, onUpdateNodeResource }) {
     />
   );
 }
-
-SystemJobTemplatesList.propTypes = {
-  nodeResource: shape(),
-  onUpdateNodeResource: func.isRequired,
-};
 
 export default SystemJobTemplatesList;

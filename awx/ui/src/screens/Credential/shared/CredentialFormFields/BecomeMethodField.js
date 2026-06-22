@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useField } from 'formik';
-import { bool, shape, string } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 import {
   FormGroup,
@@ -73,12 +72,5 @@ function BecomeMethodField({ fieldOptions, isRequired = false }) {
     </FormGroup>
   );
 }
-BecomeMethodField.propTypes = {
-  fieldOptions: shape({
-    id: string.isRequired,
-    label: string.isRequired,
-  }).isRequired,
-  isRequired: bool,
-};
 
 export default BecomeMethodField;

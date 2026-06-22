@@ -3,7 +3,6 @@ import { useLocation } from 'react-router-dom-v5-compat';
 import { Button, Tooltip } from '@patternfly/react-core';
 import { SyncIcon } from '@patternfly/react-icons';
 
-import { number } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 
@@ -71,9 +70,5 @@ function ProjectSyncButton({ projectId, lastJobStatus = null }) {
     </>
   );
 }
-
-ProjectSyncButton.propTypes = {
-  projectId: number.isRequired,
-};
 
 export default ProjectSyncButton;

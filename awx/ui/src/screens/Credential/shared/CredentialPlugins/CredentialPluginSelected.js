@@ -1,11 +1,9 @@
 import React from 'react';
-import { func } from 'prop-types';
 import { Trans, useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import { Button, ButtonVariant, Tooltip } from '@patternfly/react-core';
 import { KeyIcon } from '@patternfly/react-icons';
 import CredentialChip from 'components/CredentialChip';
-import { Credential } from 'types';
 
 const SelectedCredential = styled.div`
   display: flex;
@@ -56,11 +54,5 @@ function CredentialPluginSelected({
     </>
   );
 }
-
-CredentialPluginSelected.propTypes = {
-  credential: Credential.isRequired,
-  onEditPlugin: func,
-  onClearPlugin: func,
-};
 
 export default CredentialPluginSelected;

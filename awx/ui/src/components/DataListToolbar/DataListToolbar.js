@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
 import {
@@ -20,7 +19,6 @@ import {
   AngleRightIcon,
   SearchIcon,
 } from '@patternfly/react-icons';
-import { SearchColumns, SortColumns, QSConfig, SearchableKeys } from 'types';
 import { KebabifiedProvider } from 'contexts/Kebabified';
 import ExpandCollapse from '../ExpandCollapse';
 import Search from '../Search';
@@ -207,27 +205,5 @@ function DataListToolbar({
     </Toolbar>
   );
 }
-
-DataListToolbar.propTypes = {
-  itemCount: PropTypes.number,
-  clearAllFilters: PropTypes.func,
-  qsConfig: QSConfig.isRequired,
-  searchColumns: SearchColumns.isRequired,
-  searchableKeys: SearchableKeys,
-  relatedSearchableKeys: PropTypes.arrayOf(PropTypes.string),
-  sortColumns: SortColumns,
-  isAllSelected: PropTypes.bool,
-  isCompact: PropTypes.bool,
-  onCompact: PropTypes.func,
-  onExpand: PropTypes.func,
-  onSearch: PropTypes.func,
-  onReplaceSearch: PropTypes.func,
-  onSelectAll: PropTypes.func,
-  onSort: PropTypes.func,
-  additionalControls: PropTypes.arrayOf(PropTypes.node),
-  enableNegativeFiltering: PropTypes.bool,
-  enableRelatedFuzzyFiltering: PropTypes.bool,
-  advancedSearchDisabled: PropTypes.bool,
-};
 
 export default DataListToolbar;

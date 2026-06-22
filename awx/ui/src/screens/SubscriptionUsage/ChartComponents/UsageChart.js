@@ -1,5 +1,4 @@
 import React, { useEffect, useCallback } from 'react';
-import { string, number, shape, arrayOf } from 'prop-types';
 import * as d3 from 'd3';
 import { PageContextConsumer } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
@@ -323,12 +322,6 @@ function UsageChart({ id, data, height, pageContext }) {
 
   return <div id={id} />;
 }
-
-UsageChart.propTypes = {
-  id: string.isRequired,
-  data: arrayOf(shape({})).isRequired,
-  height: number.isRequired,
-};
 
 const withPageContext = (Component) =>
   function contextComponent(props) {

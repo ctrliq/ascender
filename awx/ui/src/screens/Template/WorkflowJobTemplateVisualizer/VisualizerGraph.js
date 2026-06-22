@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
-import { bool } from 'prop-types';
 import * as d3 from 'd3';
 import {
   WorkflowDispatchContext,
@@ -317,7 +316,4 @@ function VisualizerGraph({ readOnly }) {
     </>
   );
 }
-VisualizerGraph.propTypes = {
-  readOnly: bool.isRequired,
-};
 export default VisualizerGraph;

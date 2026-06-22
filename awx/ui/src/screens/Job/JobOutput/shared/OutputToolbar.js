@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 import { calculateElapsed, secondsToHHMMSS } from 'util/dates';
-import { bool, shape, func } from 'prop-types';
 import {
   DownloadIcon,
   RocketIcon,
@@ -251,12 +250,6 @@ const OutputToolbar = ({
         )}
     </Wrapper>
   );
-};
-
-OutputToolbar.propTypes = {
-  isDeleteDisabled: bool,
-  job: shape({}).isRequired,
-  onDelete: func.isRequired,
 };
 
 export default OutputToolbar;

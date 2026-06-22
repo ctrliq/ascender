@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import PropTypes from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 import { Formik, useField, useFormikContext } from 'formik';
 import { Form, FormGroup } from '@patternfly/react-core';
@@ -227,11 +226,5 @@ function UserForm({ user = {}, handleCancel, handleSubmit, submitError }) {
     </Formik>
   );
 }
-
-UserForm.propTypes = {
-  handleCancel: PropTypes.func.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
-  user: PropTypes.shape({}),
-};
 
 export default UserForm;

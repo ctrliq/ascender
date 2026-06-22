@@ -3,7 +3,6 @@
 //
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 import { AboutModal } from '@patternfly/react-core';
 import useBrandName from 'hooks/useBrandName';
@@ -69,11 +68,5 @@ function About({ version = null, isOpen = false, onClose }) {
     </AboutModal>
   );
 }
-
-About.propTypes = {
-  isOpen: PropTypes.bool,
-  onClose: PropTypes.func.isRequired,
-  version: PropTypes.string,
-};
 
 export default About;

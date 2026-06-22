@@ -1,16 +1,6 @@
 import React from 'react';
-import {
-  arrayOf,
-  shape,
-  bool,
-  func,
-  number,
-  string,
-  oneOfType,
-} from 'prop-types';
 import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
-import { QSConfig, SearchColumns, SortColumns } from 'types';
 import { SelectedList, DraggableSelectedList } from '../SelectedList';
 import CheckboxListItem from '../CheckboxListItem';
 import DataListToolbar from '../DataListToolbar';
@@ -120,30 +110,5 @@ function OptionsList({
     </ModalList>
   );
 }
-
-const Item = shape({
-  id: oneOfType([number, string]).isRequired,
-  name: string.isRequired,
-  url: string,
-});
-const InstanceItem = shape({
-  id: oneOfType([number, string]).isRequired,
-  hostname: string.isRequired,
-  url: string,
-});
-OptionsList.propTypes = {
-  deselectItem: func.isRequired,
-  displayKey: string,
-  isSelectedDraggable: bool,
-  multiple: bool,
-  optionCount: number.isRequired,
-  options: oneOfType([arrayOf(Item), arrayOf(InstanceItem)]).isRequired,
-  qsConfig: QSConfig.isRequired,
-  renderItemChip: func,
-  searchColumns: SearchColumns,
-  selectItem: func.isRequired,
-  sortColumns: SortColumns,
-  value: oneOfType([arrayOf(Item), arrayOf(InstanceItem)]).isRequired,
-};
 
 export default OptionsList;

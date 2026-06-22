@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import { useLingui } from '@lingui/react/macro';
-import { bool, func, shape } from 'prop-types';
 import { PencilAltIcon, PlusIcon, TrashAltIcon } from '@patternfly/react-icons';
 import {
   WorkflowDispatchContext,
@@ -150,12 +149,5 @@ function VisualizerLink({ link, updateLinkHelp, readOnly, updateHelpText }) {
     </LinkG>
   );
 }
-
-VisualizerLink.propTypes = {
-  link: shape().isRequired,
-  readOnly: bool.isRequired,
-  updateHelpText: func.isRequired,
-  updateLinkHelp: func.isRequired,
-};
 
 export default VisualizerLink;
