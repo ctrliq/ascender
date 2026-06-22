@@ -1,9 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';
 import useRequest from 'hooks/useRequest';
-import { SearchColumns, SortColumns } from 'types';
 import { getQSConfig, parseQueryString } from 'util/qs';
 import DataListToolbar from '../DataListToolbar';
 import CheckboxListItem from '../CheckboxListItem';
@@ -139,16 +137,6 @@ function SelectResourceStep({
     </>
   );
 }
-
-SelectResourceStep.propTypes = {
-  searchColumns: SearchColumns,
-  sortColumns: SortColumns,
-  displayKey: PropTypes.string,
-  onRowClick: PropTypes.func,
-  fetchItems: PropTypes.func.isRequired,
-  selectedLabel: PropTypes.string,
-  selectedResourceRows: PropTypes.arrayOf(PropTypes.object),
-};
 
 export { SelectResourceStep as _SelectResourceStep };
 export default SelectResourceStep;

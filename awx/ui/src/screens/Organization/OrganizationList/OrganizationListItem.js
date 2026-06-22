@@ -1,5 +1,4 @@
 import React from 'react';
-import { string, bool, func } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
@@ -8,8 +7,6 @@ import {
   PencilAltIcon,
 } from '@patternfly/react-icons';
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
-
-import { Organization } from 'types';
 
 function OrganizationListItem({
   organization,
@@ -64,12 +61,5 @@ function OrganizationListItem({
     </Tr>
   );
 }
-
-OrganizationListItem.propTypes = {
-  organization: Organization.isRequired,
-  detailUrl: string.isRequired,
-  isSelected: bool.isRequired,
-  onSelect: func.isRequired,
-};
 
 export default OrganizationListItem;

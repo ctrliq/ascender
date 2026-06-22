@@ -1,7 +1,6 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import PropTypes from 'prop-types';
 import { Dropdown, DropdownPosition } from '@patternfly/react-core';
 import { useKebabifiedMenu } from 'contexts/Kebabified';
 import { ToolbarAddButton } from '../PaginatedTable';
@@ -49,10 +48,6 @@ function AddDropDownButton({ dropdownItems, ouiaId }) {
     </div>
   );
 }
-
-AddDropDownButton.propTypes = {
-  dropdownItems: PropTypes.arrayOf(PropTypes.element.isRequired).isRequired,
-};
 
 export { AddDropDownButton as _AddDropDownButton };
 export default AddDropDownButton;

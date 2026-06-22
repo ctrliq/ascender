@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import { Button } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
 import { useLingui } from '@lingui/react/macro';
@@ -36,11 +35,5 @@ function OrganizationTeamListItem({ team, detailUrl }) {
     </Tr>
   );
 }
-
-OrganizationTeamListItem.propTypes = {
-  team: PropTypes.shape({ id: PropTypes.number, name: PropTypes.string })
-    .isRequired,
-  detailUrl: PropTypes.string.isRequired,
-};
 
 export default OrganizationTeamListItem;

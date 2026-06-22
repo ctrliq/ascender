@@ -5,12 +5,9 @@ import { useNavigate } from 'routerCompat';
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import {
-  AutoSizer,
-  CellMeasurer,
-  CellMeasurerCache,
-  InfiniteLoader,
-  List,
-} from 'react-virtualized';
+  useVirtualizer,
+  defaultRangeExtractor,
+} from '@tanstack/react-virtual';
 import { Button, Alert } from '@patternfly/react-core';
 
 import AlertModal from 'components/AlertModal';
@@ -69,6 +66,10 @@ const OutputWrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
+  /* min-height: 0 lets this flex child shrink below its content height so the
+     fixed-height CardBody bounds it; without it the column grows to fit all
+     rows and the nested scroll container never constrains. */
+  min-height: 0;
   font-family: monospace;
   font-size: 15px;
   outline: 1px solid var(--pf-global--BorderColor--100);
@@ -78,17 +79,27 @@ const OutputWrapper = styled.div`
     )}
 `;
 
+// The scroll container that hosts the virtualized rows. Replaces
+// react-virtualized's AutoSizer + Grid. It must have a real height; the parent
+// OutputWrapper is `flex: 1 1 auto` inside the flex-column CardBody, so this
+// fills the remaining space and owns the scrollbar.
+const ScrollContainer = styled.div`
+  flex: 1 1 auto;
+  /* min-height: 0 is required for the overflow:auto scroll to engage inside the
+     flex column — otherwise clientHeight grows to the full content height, the
+     virtualizer treats every row as visible and renders the whole list (which
+     then thrashes measureElement and pegs the CPU on long jobs). */
+  min-height: 0;
+  overflow: auto;
+  position: relative;
+`;
+
 const OutputFooter = styled.div`
   background-color: var(--pf-global--BackgroundColor--200);
   border-right: 1px solid var(--pf-global--BorderColor--100);
   width: 75px;
   flex: 1;
 `;
-
-const cache = new CellMeasurerCache({
-  fixedWidth: true,
-  defaultHeight: 25,
-});
 
 export const MAX_SELECTION_OVERSCAN = 500;
 
@@ -137,11 +148,42 @@ export function computeOverscanIndices(
   };
 }
 
+// react-virtual's measureElement uses a ResizeObserver to dynamically size rows.
+// On varied-height output a measure can shift layout within the same frame, so
+// the browser emits the benign notice "ResizeObserver loop completed with
+// undelivered notifications". It has no functional impact, but CRA's dev error
+// overlay treats that window 'error' as fatal and blocks the whole UI.
+//
+// We must NOT fix this by deferring the observer callback (e.g. to
+// requestAnimationFrame): react-virtual needs to apply the measured height in
+// the same commit, and on a live job the component re-renders continuously as
+// events stream in. A deferred measurement means each streaming render paints
+// rows at their stale 25px estimate before the next frame corrects them, so the
+// rows visibly overlap / garble / drop. Instead, leave the ResizeObserver
+// callback synchronous and just swallow the benign loop notice at the window
+// 'error' level before CRA's overlay sees it. Installed at module load (capture
+// phase) so it runs before the overlay's own handler.
+if (typeof window !== 'undefined' && !window.__ascResizeObserverErrorSilenced) {
+  const isResizeObserverLoopError = (message) =>
+    typeof message === 'string' &&
+    message.includes('ResizeObserver loop');
+  window.addEventListener(
+    'error',
+    (event) => {
+      if (isResizeObserverLoopError(event.message)) {
+        event.stopImmediatePropagation();
+        event.preventDefault();
+      }
+    },
+    true
+  );
+  window.__ascResizeObserverErrorSilenced = true;
+}
+
 function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
   const { t } = useLingui();
   const location = useLocation();
-  const listRef = useRef(null);
-  const previousWidth = useRef(0);
+  const parentRef = useRef(null);
   const jobSocketCounter = useRef(0);
   const isMounted = useIsMounted();
   const scrollTop = useRef(0);
@@ -151,6 +193,7 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
   const eventsProcessedDelay = useRef(250);
   const outputRef = useRef(null);
   const totalRowsRef = useRef(0);
+  const scrollToEndTimeout = useRef(null);
 
   const fetchEventByUuid = async (uuid) => {
     let promise = eventByUuidRequests.current[uuid];
@@ -211,6 +254,111 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
   const [showEventsRefresh, setShowEventsRefresh] = useState(false);
   const [selectedRowRange, setSelectedRowRange] = useState(null);
 
+  const totalNonCollapsedRows = Math.max(
+    remoteRowCount - getNumCollapsedEvents(),
+    0
+  );
+  totalRowsRef.current = totalNonCollapsedRows + wsEvents.length;
+  const rowCount = totalNonCollapsedRows + wsEvents.length;
+
+  // Selection-aware range extractor: always render the default visible range
+  // plus, when there is an active text selection, the rows that span it (so the
+  // browser selection is not collapsed by unmounting). Wired through the
+  // preserved computeOverscanIndices pure function.
+  const rangeExtractor = useCallback(
+    (range) => {
+      const { overscanStartIndex, overscanStopIndex } = computeOverscanIndices(
+        {
+          cellCount: range.count,
+          overscanCellsCount: range.overscan,
+          startIndex: range.startIndex,
+          stopIndex: range.endIndex,
+        },
+        selectedRowRange
+      );
+      const set = new Set(defaultRangeExtractor(range));
+      for (let i = overscanStartIndex; i <= overscanStopIndex; i++) {
+        set.add(i);
+      }
+      return Array.from(set).sort((a, b) => a - b);
+    },
+    [selectedRowRange]
+  );
+
+  // useVirtualizer() returns functions the React Compiler can't memoize; this
+  // component predates React Compiler, matching the rules already off in
+  // eslint.config.mjs (set-state-in-effect, immutability, refs, purity).
+  // eslint-disable-next-line react-hooks/incompatible-library
+  const rowVirtualizer = useVirtualizer({
+    count: rowCount,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => 25,
+    overscan: 20,
+    rangeExtractor,
+    // A stable starting viewport so the virtualizer doesn't thrash when no live
+    // ResizeObserver updates the rect (jsdom/tests). The real browser's
+    // ResizeObserver updates this to the true size on mount.
+    initialRect: { width: 1000, height: 600 },
+  });
+
+  // Passed to JobEvent / JobEventSkeleton as `measure` so they can request a
+  // remeasure on content/image load — replacing react-virtualized's CellMeasurer
+  // measure callback. This is intentionally a no-op: react-virtual's
+  // measureElement attaches a ResizeObserver to every rendered row, so a row that
+  // changes height (image load, expand/collapse) is re-measured automatically.
+  //
+  // It must NOT call rowVirtualizer.measure(): that resets the ENTIRE size cache
+  // back to the 25px estimate, and a ResizeObserver only re-fires for rows whose
+  // box actually changes — so already-settled rows stay stuck at the estimate.
+  // On a live job, streaming JobEvents fire this constantly, which collapsed
+  // every measured height and left the absolutely-positioned rows overlapping
+  // (garbled / overlapping / missing rows).
+  const remeasure = useCallback(() => {}, []);
+
+  const scrollToRow = (rowIndex) => {
+    setLastScrollPosition(rowIndex);
+    // Read the row count from the ref so this works correctly even when invoked
+    // from a memoized callback (scrollToEnd) that captured an earlier render.
+    const currentRowCount = totalRowsRef.current;
+    if (currentRowCount === 0) {
+      return;
+    }
+    if (rowIndex < 0) {
+      rowVirtualizer.scrollToIndex(currentRowCount - 1, { align: 'end' });
+    } else {
+      rowVirtualizer.scrollToIndex(Math.min(rowIndex, currentRowCount - 1), {
+        align: 'auto',
+      });
+    }
+  };
+
+  const scrollToEnd = useCallback(() => {
+    // Cancel any pending follow-up scroll before scheduling a new one, so rapid
+    // scrollToEnd calls (live output) don't pile up timers. The handle is kept
+    // in a ref because the previous `let timeout` was never assigned, making the
+    // clearTimeout a no-op.
+    if (scrollToEndTimeout.current) {
+      clearTimeout(scrollToEndTimeout.current);
+      scrollToEndTimeout.current = null;
+    }
+    scrollToRow(-1);
+    if (isFollowModeEnabled) {
+      // A second scroll after layout settles, so late dynamic-height row
+      // measurements don't leave the view a little short of the end.
+      scrollToEndTimeout.current = setTimeout(() => scrollToRow(-1), 100);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFollowModeEnabled]);
+
+  useEffect(
+    () => () => {
+      if (scrollToEndTimeout.current) {
+        clearTimeout(scrollToEndTimeout.current);
+      }
+    },
+    []
+  );
+
   useEffect(() => {
     if (!isTreeReady || !onReadyEvents.length) {
       return;
@@ -223,12 +371,6 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
       }, 0);
     }
   }, [isTreeReady, onReadyEvents]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const totalNonCollapsedRows = Math.max(
-    remoteRowCount - getNumCollapsedEvents(),
-    0
-  );
-  totalRowsRef.current = totalNonCollapsedRows + wsEvents.length;
 
   useInterval(
     () => {
@@ -358,11 +500,13 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
     }
   }, [wsEvents.length, isFollowModeEnabled]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  useEffect(() => {
-    if (listRef.current?.recomputeRowHeights) {
-      listRef.current.recomputeRowHeights();
-    }
-  }, [currentlyLoading, cssMap, remoteRowCount, wsEvents.length]);
+  // NOTE: do NOT add an effect here that calls rowVirtualizer.measure() on
+  // content changes (currentlyLoading/cssMap/remoteRowCount/wsEvents). measure()
+  // clears the ENTIRE itemSizeCache back to the 25px estimateSize, and the
+  // per-row ResizeObserver installed by measureElement only re-fires for rows
+  // whose box actually changes — so already-settled rows stay stuck at the
+  // estimate and the absolutely-positioned multi-line rows overlap. New/changed
+  // rows are measured automatically when they mount or reflow.
 
   useEffect(() => {
     if (!jobStatus || isJobRunning(jobStatus)) {
@@ -408,7 +552,7 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
     useDismissableError(deleteError);
 
   // When the user has text selected inside the output area, expand the
-  // react-virtualized render range to cover those rows so they are not
+  // virtualized render range to cover those rows so they are not
   // unmounted (which would collapse the browser selection).
   useEffect(() => {
     let rafId = null;
@@ -436,9 +580,7 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
           setSelectedRowRange(null);
           return;
         }
-        const gridEl = outputRef.current.querySelector(
-          '.ReactVirtualized__Grid'
-        );
+        const gridEl = parentRef.current;
         if (!gridEl) {
           setSelectedRowRange(null);
           return;
@@ -449,24 +591,17 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
         const topAbs = selRect.top - containerRect.top + currentScrollTop;
         const bottomAbs = selRect.bottom - containerRect.top + currentScrollTop;
 
-        // Walk the cache's cumulative row heights to find which row indices
-        // correspond to the selection's top and bottom pixel offsets.
-        let startIdx = 0;
-        let endIdx = totalRowsRef.current - 1;
-        let cumHeight = 0;
-        let foundStart = false;
-        for (let i = 0; i < totalRowsRef.current; i++) {
-          const h = cache.rowHeight({ index: i });
-          if (!foundStart && cumHeight + h > topAbs) {
-            startIdx = Math.max(0, i - 1);
-            foundStart = true;
-          }
-          if (cumHeight + h > bottomAbs) {
-            endIdx = Math.min(totalRowsRef.current - 1, i + 1);
-            break;
-          }
-          cumHeight += h;
-        }
+        // Map the selection's top/bottom pixel offsets to row indices using the
+        // virtualizer's measurements (replaces the manual cumulative walk of
+        // CellMeasurerCache.rowHeight). Pad by 1 like the original.
+        const count = totalRowsRef.current;
+        const topItem = rowVirtualizer.getVirtualItemForOffset(topAbs);
+        const bottomItem = rowVirtualizer.getVirtualItemForOffset(bottomAbs);
+        const startIdx = Math.max(0, (topItem ? topItem.index : 0) - 1);
+        const endIdx = Math.min(
+          count - 1,
+          (bottomItem ? bottomItem.index : count - 1) + 1
+        );
         setSelectedRowRange((prev) => {
           if (prev && prev.start === startIdx && prev.end === endIdx) {
             return prev;
@@ -482,12 +617,8 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
       document.removeEventListener('selectionchange', handleSelectionChange);
       if (rafId) cancelAnimationFrame(rafId);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const overscanIndicesGetter = useCallback(
-    (params) => computeOverscanIndices(params, selectedRowRange),
-    [selectedRowRange]
-  );
 
   const monitorJobSocketCounter = () => {
     if (
@@ -560,9 +691,6 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
         setCurrentlyLoading((prevCurrentlyLoading) =>
           prevCurrentlyLoading.filter((n) => !loadRange.includes(n))
         );
-        loadRange.forEach((n) => {
-          cache.clear(n);
-        });
       }
     }
   };
@@ -593,7 +721,7 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
     setIsHostModalOpen(false);
   };
 
-  const rowRenderer = ({ index, parent, key, style }) => {
+  const renderRow = (index) => {
     let event;
     let node;
     try {
@@ -621,43 +749,34 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
       actualLineTextHtml = lineTextHtml;
     }
 
-    return (
-      <CellMeasurer
-        key={key}
-        cache={cache}
-        parent={parent}
-        rowIndex={index}
-        columnIndex={0}
-      >
-        {({ measure }) =>
-          event ? (
-            <JobEvent
-              isClickable={isHostEvent(event)}
-              onJobEventClick={() => handleHostEventClick(event)}
-              className="row"
-              style={style}
-              lineTextHtml={actualLineTextHtml}
-              index={index}
-              event={event}
-              measure={measure}
-              isCollapsed={node.isCollapsed}
-              hasChildren={node.children.length}
-              onToggleCollapsed={() => {
-                toggleNodeIsCollapsed(event.uuid, !node.isCollapsed);
-              }}
-              jobStatus={jobStatus}
-            />
-          ) : (
-            <JobEventSkeleton
-              className="row"
-              style={style}
-              counter={index}
-              contentLength={80}
-              measure={measure}
-            />
-          )
-        }
-      </CellMeasurer>
+    // The wrapping virtual-row div (measureElement) owns the absolute
+    // positioning, so JobEvent/JobEventSkeleton get an empty style — their
+    // internal layout is unchanged.
+    return event ? (
+      <JobEvent
+        isClickable={isHostEvent(event)}
+        onJobEventClick={() => handleHostEventClick(event)}
+        className="row"
+        style={{}}
+        lineTextHtml={actualLineTextHtml}
+        index={index}
+        event={event}
+        measure={remeasure}
+        isCollapsed={node.isCollapsed}
+        hasChildren={node.children.length}
+        onToggleCollapsed={() => {
+          toggleNodeIsCollapsed(event.uuid, !node.isCollapsed);
+        }}
+        jobStatus={jobStatus}
+      />
+    ) : (
+      <JobEventSkeleton
+        className="row"
+        style={{}}
+        counter={index}
+        contentLength={80}
+        measure={remeasure}
+      />
     );
   };
 
@@ -737,32 +856,77 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
     setCurrentlyLoading((prevCurrentlyLoading) =>
       prevCurrentlyLoading.filter((n) => !loadRange.includes(n))
     );
-    loadRange.forEach((n) => {
-      cache.clear(n);
-    });
     if (isFollowModeEnabled) {
       scrollToEnd();
     }
   };
 
-  const scrollToRow = (rowIndex) => {
-    setLastScrollPosition(rowIndex);
-    if (listRef.current) {
-      listRef.current.scrollToRow(rowIndex);
+  // Infinite-load driver (no @tanstack/react-virtual equivalent of
+  // react-virtualized's InfiniteLoader): whenever the rendered range changes,
+  // find the first unloaded row within it and load a batch of >= 50 rows
+  // around it. currentlyLoading guards against duplicate concurrent loads.
+  const virtualItems = rowVirtualizer.getVirtualItems();
+  // Rendered range as primitives — depending on the getVirtualItems() array ref
+  // would re-run this effect every render and churn loads endlessly.
+  const renderedStart = virtualItems.length ? virtualItems[0].index : 0;
+  const renderedStop = virtualItems.length
+    ? virtualItems[virtualItems.length - 1].index
+    : 0;
+  // Dedupe: don't re-request the same unloaded boundary while it is in flight.
+  const lastLoadStartRef = useRef(-1);
+  useEffect(() => {
+    if (hasContentLoading || rowCount === 0 || !virtualItems.length) {
+      return;
     }
-  };
+    // No viewport (e.g. jsdom, or a not-yet-laid-out container) => nothing is
+    // really visible, so don't drive infinite-load (which would otherwise loop).
+    if (!parentRef.current || parentRef.current.clientHeight === 0) {
+      return;
+    }
+    let firstUnloaded = -1;
+    for (let i = renderedStart; i <= renderedStop; i++) {
+      if (!isRowLoaded({ index: i })) {
+        firstUnloaded = i;
+        break;
+      }
+    }
+    if (firstUnloaded === -1) {
+      lastLoadStartRef.current = -1;
+      return;
+    }
+    if (firstUnloaded === lastLoadStartRef.current) {
+      // already requested this boundary; wait for it to resolve
+      return;
+    }
+    lastLoadStartRef.current = firstUnloaded;
+    const minimumBatchSize = 50;
+    const startIndex = firstUnloaded;
+    const stopIndex = Math.min(
+      rowCount - 1,
+      Math.max(renderedStop, startIndex + minimumBatchSize - 1)
+    );
+    loadMoreRows({ startIndex, stopIndex });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    renderedStart,
+    renderedStop,
+    hasContentLoading,
+    rowCount,
+    remoteRowCount,
+    currentlyLoading,
+  ]);
 
   const handleScrollPrevious = () => {
-    const startIndex = listRef.current.Grid._renderedRowStartIndex;
-    const stopIndex = listRef.current.Grid._renderedRowStopIndex;
+    const startIndex = rowVirtualizer.range?.startIndex ?? 0;
+    const stopIndex = rowVirtualizer.range?.endIndex ?? 0;
     const scrollRange = stopIndex - startIndex;
     scrollToRow(Math.max(0, startIndex - scrollRange));
     setIsFollowModeEnabled(false);
   };
 
   const handleScrollNext = () => {
-    const startIndex = listRef.current.Grid._renderedRowStartIndex;
-    const stopIndex = listRef.current.Grid._renderedRowStopIndex;
+    const startIndex = rowVirtualizer.range?.startIndex ?? 0;
+    const stopIndex = rowVirtualizer.range?.endIndex ?? 0;
     const scrollRange = stopIndex - startIndex;
     scrollToRow(stopIndex + scrollRange);
   };
@@ -772,44 +936,34 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
     setIsFollowModeEnabled(false);
   };
 
-  const scrollToEnd = useCallback(() => {
-    scrollToRow(-1);
-    let timeout;
-    if (isFollowModeEnabled) {
-      setTimeout(() => scrollToRow(-1), 100);
-    }
-    return () => clearTimeout(timeout);
-  }, [isFollowModeEnabled]);
-
   const handleScrollLast = () => {
     scrollToEnd();
     setIsFollowModeEnabled(true);
   };
 
-  const handleResize = ({ width }) => {
-    if (width !== previousWidth) {
-      cache.clearAll();
-      if (listRef.current?.recomputeRowHeights) {
-        listRef.current.recomputeRowHeights();
-      }
-    }
-    previousWidth.current = width;
-  };
-
   const handleScroll = (e) => {
+    const target = e.currentTarget;
     if (
       isFollowModeEnabled &&
-      scrollTop.current > e.scrollTop &&
-      scrollHeight.current === e.scrollHeight
+      scrollTop.current > target.scrollTop &&
+      scrollHeight.current === target.scrollHeight
     ) {
       setIsFollowModeEnabled(false);
     }
-    scrollTop.current = e.scrollTop;
-    scrollHeight.current = e.scrollHeight;
-    if (e.scrollTop + e.clientHeight >= e.scrollHeight) {
+    scrollTop.current = target.scrollTop;
+    scrollHeight.current = target.scrollHeight;
+    if (target.scrollTop + target.clientHeight >= target.scrollHeight) {
       setIsFollowModeEnabled(true);
     }
   };
+
+  // Width changes are handled automatically by measureElement: every rendered
+  // row carries a per-element ResizeObserver, so when the container width
+  // changes the visible rows reflow and are re-measured individually. We must
+  // NOT call rowVirtualizer.measure() here — it clears the whole size cache back
+  // to the 25px estimate and, since the per-row observers only re-fire for rows
+  // whose box actually changes, unchanged rows stay stuck at the estimate and
+  // the multi-line rows overlap.
 
   const handleExpandCollapseAll = () => {
     toggleCollapseAll(!isAllCollapsed);
@@ -818,6 +972,9 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
   if (contentError) {
     return <ContentError error={contentError} />;
   }
+
+  const showEmptyOutput =
+    !hasContentLoading && remoteRowCount + wsEvents.length === 0;
 
   return (
     <>
@@ -885,62 +1042,50 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
           isAllCollapsed={isAllCollapsed}
         />
         <OutputWrapper ref={outputRef} $cssMap={cssMap}>
-          <InfiniteLoader
-            isRowLoaded={isRowLoaded}
-            loadMoreRows={loadMoreRows}
-            rowCount={totalNonCollapsedRows + wsEvents.length}
-            minimumBatchSize={50}
-          >
-            {({ onRowsRendered, registerChild }) => {
-              if (
-                !hasContentLoading &&
-                remoteRowCount + wsEvents.length === 0
-              ) {
-                return (
-                  <EmptyOutput
-                    job={job}
-                    hasQueryParams={location.search.length > 1}
-                    isJobRunning={isJobRunning(jobStatus)}
-                    onUnmount={() => {
-                      if (listRef.current?.recomputeRowHeights) {
-                        listRef.current.recomputeRowHeights();
-                      }
-                    }}
-                  />
-                );
-              }
-              return (
-                <AutoSizer nonce={window.NONCE_ID} onResize={handleResize}>
-                  {({ width, height }) => (
-                    <>
-                      {hasContentLoading ? (
-                        <div style={{ width }}>
-                          <ContentLoading />
-                        </div>
-                      ) : (
-                        <List
-                          ref={(ref) => {
-                            registerChild(ref);
-                            listRef.current = ref;
-                          }}
-                          deferredMeasurementCache={cache}
-                          height={height || 1}
-                          onRowsRendered={onRowsRendered}
-                          rowCount={totalNonCollapsedRows + wsEvents.length}
-                          rowHeight={cache.rowHeight}
-                          rowRenderer={rowRenderer}
-                          width={width || 1}
-                          overscanRowCount={20}
-                          overscanIndicesGetter={overscanIndicesGetter}
-                          onScroll={handleScroll}
-                        />
-                      )}
-                    </>
-                  )}
-                </AutoSizer>
-              );
-            }}
-          </InfiniteLoader>
+          {showEmptyOutput ? (
+            <EmptyOutput
+              job={job}
+              hasQueryParams={location.search.length > 1}
+              isJobRunning={isJobRunning(jobStatus)}
+              // EmptyOutput calls onUnmount on every render (its effect has no
+              // dep array), so this must not trigger a re-render. The original
+              // called listRef.current?.recomputeRowHeights() which was a no-op
+              // here (no <List> mounted in the empty branch); react-virtual
+              // re-measures automatically when real content mounts.
+              onUnmount={() => {}}
+            />
+          ) : (
+            <ScrollContainer ref={parentRef} onScroll={handleScroll}>
+              {hasContentLoading ? (
+                <ContentLoading />
+              ) : (
+                <div
+                  style={{
+                    height: `${rowVirtualizer.getTotalSize()}px`,
+                    width: '100%',
+                    position: 'relative',
+                  }}
+                >
+                  {rowVirtualizer.getVirtualItems().map((virtualItem) => (
+                    <div
+                      key={virtualItem.key}
+                      data-index={virtualItem.index}
+                      ref={rowVirtualizer.measureElement}
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        transform: `translateY(${virtualItem.start}px)`,
+                      }}
+                    >
+                      {renderRow(virtualItem.index)}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </ScrollContainer>
+          )}
           <OutputFooter />
         </OutputWrapper>
       </CardBody>

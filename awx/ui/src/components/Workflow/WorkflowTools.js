@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
-import { func, number } from 'prop-types';
 import { Button, Tooltip } from '@patternfly/react-core';
 import {
   CaretDownIcon,
@@ -187,13 +186,5 @@ function WorkflowTools({
     </Wrapper>
   );
 }
-
-WorkflowTools.propTypes = {
-  onFitGraph: func.isRequired,
-  onPan: func.isRequired,
-  onPanToMiddle: func.isRequired,
-  onZoomChange: func.isRequired,
-  zoomPercentage: number.isRequired,
-};
 
 export default WorkflowTools;

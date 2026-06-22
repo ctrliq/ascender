@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes, { oneOfType, string, arrayOf } from 'prop-types';
 import { matchPath, Link, useLocation  } from 'react-router-dom';
 import { NavExpandable, NavItem } from '@patternfly/react-core';
 
@@ -42,11 +41,5 @@ function NavExpandableGroup(props) {
     </NavExpandable>
   );
 }
-
-NavExpandableGroup.propTypes = {
-  groupId: string.isRequired,
-  groupTitle: oneOfType([PropTypes.element, string]).isRequired,
-  routes: arrayOf(PropTypes.object).isRequired,
-};
 
 export default NavExpandableGroup;

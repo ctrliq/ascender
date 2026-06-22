@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import PropTypes from 'prop-types';
 import { Button, Tooltip } from '@patternfly/react-core';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import AlertModal from 'components/AlertModal/AlertModal';
@@ -52,9 +51,5 @@ function ConstructedInventorySyncButton({ inventoryId }) {
     </>
   );
 }
-
-ConstructedInventorySyncButton.propTypes = {
-  inventoryId: PropTypes.number.isRequired,
-};
 
 export default ConstructedInventorySyncButton;

@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import useTitle from 'hooks/useTitle';
 
 import { useLingui } from '@lingui/react/macro';
@@ -105,10 +104,6 @@ const ScreenHeader = ({ breadcrumbConfig, streamType }) => {
       </div>
     </PageSection>
   );
-};
-
-ScreenHeader.propTypes = {
-  breadcrumbConfig: PropTypes.objectOf(PropTypes.string).isRequired,
 };
 
 export default ScreenHeader;

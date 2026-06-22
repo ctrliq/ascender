@@ -1,5 +1,4 @@
 import React from 'react';
-import { string, bool, func } from 'prop-types';
 import { Button } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
 import { useLingui } from '@lingui/react/macro';
@@ -7,7 +6,6 @@ import { Link } from 'react-router-dom';
 import { PencilAltIcon } from '@patternfly/react-icons';
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
 import { formatDateString } from 'util/dates';
-import { Application } from 'types';
 
 function ApplicationListItem({
   application,
@@ -65,12 +63,5 @@ function ApplicationListItem({
     </Tr>
   );
 }
-
-ApplicationListItem.propTypes = {
-  application: Application.isRequired,
-  detailUrl: string.isRequired,
-  isSelected: bool.isRequired,
-  onSelect: func.isRequired,
-};
 
 export default ApplicationListItem;

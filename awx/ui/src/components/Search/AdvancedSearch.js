@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { string, func, bool, arrayOf } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 import {
   Button,
@@ -18,7 +17,6 @@ import styled from 'styled-components';
 import { useLocation } from 'react-router-dom';
 import { useConfig } from 'contexts/Config';
 import getDocsBaseUrl from 'util/getDocsBaseUrl';
-import { SearchableKeys } from 'types';
 import RelatedLookupTypeInput from './RelatedLookupTypeInput';
 import LookupTypeInput from './LookupTypeInput';
 
@@ -345,15 +343,5 @@ function AdvancedSearch({
     </AdvancedGroup>
   );
 }
-
-AdvancedSearch.propTypes = {
-  onSearch: func.isRequired,
-  searchableKeys: SearchableKeys,
-  relatedSearchableKeys: arrayOf(string),
-  maxSelectHeight: string,
-  enableNegativeFiltering: bool,
-  enableRelatedFuzzyFiltering: bool,
-  handleIsAnsibleFactsSelected: func,
-};
 
 export default AdvancedSearch;

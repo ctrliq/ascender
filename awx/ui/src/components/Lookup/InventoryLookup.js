@@ -1,9 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
-import { func, bool, string, number, oneOfType, arrayOf } from 'prop-types';
 import { useLocation } from 'routerCompat';
 import { useLingui } from '@lingui/react/macro';
 import { InventoriesAPI } from 'api';
-import { Inventory } from 'types';
 import useRequest from 'hooks/useRequest';
 import useAutoPopulateLookup from 'hooks/useAutoPopulateLookup';
 import { getQSConfig, parseQueryString, mergeParams } from 'util/qs';
@@ -251,18 +249,5 @@ function InventoryLookup({
     </>
   );
 }
-
-InventoryLookup.propTypes = {
-  autoPopulate: bool,
-  excludeIds: arrayOf(number),
-  fieldId: string,
-  fieldName: string,
-  hideAdvancedInventories: bool,
-  isDisabled: bool,
-  onChange: func.isRequired,
-  required: bool,
-  validate: func,
-  value: oneOfType([Inventory, arrayOf(Inventory)]),
-};
 
 export default InventoryLookup;

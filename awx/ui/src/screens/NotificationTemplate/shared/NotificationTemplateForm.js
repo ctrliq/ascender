@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import { shape, func } from 'prop-types';
 import { Formik, useField, useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
 import { Form, FormGroup } from '@patternfly/react-core';
@@ -198,14 +197,6 @@ function NotificationTemplateForm({
     </Formik>
   );
 }
-
-NotificationTemplateForm.propTypes = {
-  template: shape(),
-  defaultMessages: shape().isRequired,
-  onSubmit: func.isRequired,
-  onCancel: func.isRequired,
-  submitError: shape(),
-};
 
 export default NotificationTemplateForm;
 

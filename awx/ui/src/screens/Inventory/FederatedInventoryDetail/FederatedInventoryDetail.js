@@ -9,7 +9,6 @@ import {
   Chip,
 } from '@patternfly/react-core';
 import { InventoriesAPI, FederatedInventoriesAPI } from 'api';
-import { Inventory } from 'types';
 import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import AlertModal from 'components/AlertModal';
@@ -207,9 +206,5 @@ function FederatedInventoryDetail({ inventory }) {
     </CardBody>
   );
 }
-
-FederatedInventoryDetail.propTypes = {
-  inventory: Inventory.isRequired,
-};
 
 export default FederatedInventoryDetail;

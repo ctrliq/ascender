@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
@@ -65,14 +64,5 @@ function PasswordInput({
     </>
   );
 }
-
-PasswordInput.propTypes = {
-  autocomplete: PropTypes.string,
-  id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  validate: PropTypes.func,
-  isRequired: PropTypes.bool,
-  isDisabled: PropTypes.bool,
-};
 
 export default PasswordInput;

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import {
   Button,
   DataList,
@@ -128,15 +127,5 @@ function DraggableSelectedList({
     </>
   );
 }
-
-const ListItem = PropTypes.shape({
-  id: PropTypes.number.isRequired,
-  name: PropTypes.string.isRequired,
-});
-DraggableSelectedList.propTypes = {
-  onRemove: PropTypes.func,
-  onRowDrag: PropTypes.func,
-  selected: PropTypes.arrayOf(ListItem),
-};
 
 export default DraggableSelectedList;

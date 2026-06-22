@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { useNavigate } from 'routerCompat';
 import { CardBody } from 'components/Card';
 import { OrganizationsAPI } from 'api';
@@ -70,10 +69,6 @@ function OrganizationEdit({ organization }) {
     </CardBody>
   );
 }
-
-OrganizationEdit.propTypes = {
-  organization: PropTypes.shape().isRequired,
-};
 
 export { OrganizationEdit as _OrganizationEdit };
 export default OrganizationEdit;

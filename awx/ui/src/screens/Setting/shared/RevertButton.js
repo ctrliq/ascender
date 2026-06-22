@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import { useField } from 'formik';
 import { Button, Tooltip } from '@patternfly/react-core';
@@ -66,9 +65,5 @@ function RevertButton({
     </Tooltip>
   );
 }
-
-RevertButton.propTypes = {
-  id: PropTypes.string.isRequired,
-};
 
 export default RevertButton;

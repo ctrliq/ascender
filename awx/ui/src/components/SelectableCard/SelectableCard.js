@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const SelectableItem = styled.div`
@@ -57,13 +56,5 @@ function SelectableCard({
     </SelectableItem>
   );
 }
-
-SelectableCard.propTypes = {
-  label: PropTypes.string,
-  description: PropTypes.string,
-  onClick: PropTypes.func.isRequired,
-  isSelected: PropTypes.bool,
-  ariaLabel: PropTypes.string,
-};
 
 export default SelectableCard;

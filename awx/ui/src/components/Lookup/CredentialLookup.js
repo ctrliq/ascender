@@ -8,12 +8,10 @@ import {
   number,
   string,
   oneOfType,
-} from 'prop-types';
 
 import { useLingui } from '@lingui/react/macro';
 import { FormGroup } from '@patternfly/react-core';
 import { CredentialsAPI } from 'api';
-import { Credential } from 'types';
 import { getSearchableKeys } from 'components/PaginatedTable';
 import { getQSConfig, parseQueryString, mergeParams } from 'util/qs';
 import useAutoPopulateLookup from 'hooks/useAutoPopulateLookup';
@@ -230,44 +228,6 @@ function CredentialLookup({
     </FormGroup>
   );
 }
-
-function idOrKind(props, propName, componentName) {
-  let error;
-  // credentialTypeKind formerly defaulted to '' via defaultProps, which React
-  // applied to the element's props BEFORE running PropTypes — so this validator
-  // always saw a present empty string and never fired (callers may pass
-  // credentialTypeNamespace instead of id/kind). Default params don't reach
-  // PropTypes, so treat an omitted/undefined value as that former '' default to
-  // preserve behavior.
-  const kindValue =
-    props.credentialTypeKind === undefined ? '' : props.credentialTypeKind;
-  if (
-    !Object.prototype.hasOwnProperty.call(props, 'credentialTypeId') &&
-    typeof kindValue !== 'string'
-  ) {
-    error = new Error(
-      `Invalid prop '${propName}' '${props[propName]}' supplied to '${componentName}'.`
-    );
-  }
-  return error;
-}
-
-CredentialLookup.propTypes = {
-  credentialTypeId: oneOfType([number, string]),
-  credentialTypeKind: idOrKind,
-  helperTextInvalid: node,
-  isValid: bool,
-  label: string.isRequired,
-  multiple: bool,
-  onBlur: func,
-  onChange: func.isRequired,
-  required: bool,
-  value: oneOfType([Credential, arrayOf(Credential)]),
-  isDisabled: bool,
-  autoPopulate: bool,
-  validate: func,
-  fieldName: string,
-};
 
 export { CredentialLookup as _CredentialLookup };
 export default CredentialLookup;

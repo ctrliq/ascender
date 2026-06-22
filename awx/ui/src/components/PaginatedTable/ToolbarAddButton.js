@@ -1,5 +1,4 @@
 import React from 'react';
-import { string, func } from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Button, DropdownItem, Tooltip } from '@patternfly/react-core';
 import CaretDownIcon from '@patternfly/react-icons/dist/js/icons/caret-down-icon';
@@ -60,9 +59,4 @@ function ToolbarAddButton({
     </Tooltip>
   );
 }
-ToolbarAddButton.propTypes = {
-  linkTo: string,
-  onClick: func,
-};
-
 export default ToolbarAddButton;

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'routerCompat';
-import { number, func, bool, string } from 'prop-types';
 
 import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
@@ -456,13 +455,4 @@ function HostFilterLookup({
   );
 }
 
-HostFilterLookup.propTypes = {
-  isValid: bool,
-  onBlur: func,
-  onChange: func,
-  organizationId: number,
-  value: string,
-  enableNegativeFiltering: bool,
-  enableRelatedFuzzyFiltering: bool,
-};
 export default HostFilterLookup;

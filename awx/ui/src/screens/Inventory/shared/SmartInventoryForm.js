@@ -1,9 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { Formik, useField, useFormikContext } from 'formik';
 import { useLocation } from 'react-router-dom';
-import { func, shape, arrayOf } from 'prop-types';
 import { Form } from '@patternfly/react-core';
-import { InstanceGroup } from 'types';
 import { VariablesField } from 'components/CodeEditor';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
@@ -180,13 +178,5 @@ function SmartInventoryForm({
     </Formik>
   );
 }
-
-SmartInventoryForm.propTypes = {
-  instanceGroups: arrayOf(InstanceGroup),
-  inventory: shape({}),
-  onCancel: func.isRequired,
-  onSubmit: func.isRequired,
-  submitError: shape({}),
-};
 
 export default SmartInventoryForm;

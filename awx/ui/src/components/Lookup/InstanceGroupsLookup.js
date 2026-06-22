@@ -1,10 +1,8 @@
 import React, { useCallback, useEffect } from 'react';
-import { arrayOf, string, func, bool } from 'prop-types';
 import { useLocation } from 'routerCompat';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { FormGroup } from '@patternfly/react-core';
 import { InstanceGroupsAPI } from 'api';
-import { InstanceGroup } from 'types';
 import { getSearchableKeys } from 'components/PaginatedTable';
 import { getQSConfig, parseQueryString } from 'util/qs';
 import useRequest from 'hooks/useRequest';
@@ -157,16 +155,5 @@ function InstanceGroupsLookup({
     </FormGroup>
   );
 }
-
-InstanceGroupsLookup.propTypes = {
-  id: string,
-  value: arrayOf(InstanceGroup).isRequired,
-  tooltip: string,
-  onChange: func.isRequired,
-  className: string,
-  required: bool,
-  validate: func,
-  fieldName: string,
-};
 
 export default InstanceGroupsLookup;

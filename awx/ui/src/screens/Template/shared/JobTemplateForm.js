@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import PropTypes from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 
 import { withFormik, useField } from 'formik';
@@ -31,7 +30,6 @@ import {
 } from 'components/FormLayout';
 import { VariablesField } from 'components/CodeEditor';
 import { required, combine, maxLength } from 'util/validators';
-import { JobTemplate } from 'types';
 import {
   InventoryLookup,
   InstanceGroupsLookup,
@@ -681,13 +679,6 @@ function JobTemplateForm({
     </Form>
   );
 }
-JobTemplateForm.propTypes = {
-  template: JobTemplate,
-  handleCancel: PropTypes.func.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
-  submitError: PropTypes.shape({}),
-  isOverrideDisabledLookup: PropTypes.bool,
-};
 
 const FormikApp = withFormik({
   mapPropsToValues({ resourceValues = null, template = {} }) {

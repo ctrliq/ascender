@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 
 import { useLingui } from '@lingui/react/macro';
 import { useLocation } from 'react-router-dom';
@@ -18,7 +17,6 @@ import {
 import { SearchIcon } from '@patternfly/react-icons';
 import styled from 'styled-components';
 import { parseQueryString } from 'util/qs';
-import { QSConfig, SearchColumns, SearchableKeys } from 'types';
 import AdvancedSearch from './AdvancedSearch';
 import getChipsByKey from './getChipsByKey';
 
@@ -386,18 +384,5 @@ function Search({
     </ToolbarGroup>
   );
 }
-
-Search.propTypes = {
-  qsConfig: QSConfig.isRequired,
-  columns: SearchColumns.isRequired,
-  onSearch: PropTypes.func,
-  onRemove: PropTypes.func,
-  onShowAdvancedSearch: PropTypes.func.isRequired,
-  isDisabled: PropTypes.bool,
-  maxSelectHeight: PropTypes.string,
-  enableNegativeFiltering: PropTypes.bool,
-  enableRelatedFuzzyFiltering: PropTypes.bool,
-  searchableKeys: SearchableKeys,
-};
 
 export default Search;

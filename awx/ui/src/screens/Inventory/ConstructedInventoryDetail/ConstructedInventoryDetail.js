@@ -14,7 +14,6 @@ import {
   Tooltip,
 } from '@patternfly/react-core';
 import { InventoriesAPI, ConstructedInventoriesAPI } from 'api';
-import { Inventory } from 'types';
 import { formatDateString } from 'util/dates';
 import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
@@ -365,9 +364,5 @@ function ConstructedInventoryDetail({ inventory }) {
     </CardBody>
   );
 }
-
-ConstructedInventoryDetail.propTypes = {
-  inventory: Inventory.isRequired,
-};
 
 export default ConstructedInventoryDetail;

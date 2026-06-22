@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import PropTypes from 'prop-types';
 import { useLocation, useNavigate } from 'routerCompat';
 import { useLingui } from '@lingui/react/macro';
 import { TeamsAPI, UsersAPI } from 'api';
@@ -283,13 +282,6 @@ function AddResourceRole({
     />
   );
 }
-
-AddResourceRole.propTypes = {
-  onClose: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
-  roles: PropTypes.shape(),
-  resource: PropTypes.shape(),
-};
 
 export { AddResourceRole as _AddResourceRole };
 export default AddResourceRole;

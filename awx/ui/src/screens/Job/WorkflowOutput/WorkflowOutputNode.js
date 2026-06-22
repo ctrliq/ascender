@@ -3,7 +3,6 @@ import { useNavigate } from 'routerCompat';
 
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
-import { func, shape } from 'prop-types';
 import { WorkflowStateContext } from 'contexts/Workflow';
 import StatusIcon from 'components/StatusIcon';
 import { WorkflowNodeTypeLetter } from 'components/Workflow';
@@ -232,11 +231,5 @@ function WorkflowOutputNode({ mouseEnter, mouseLeave, node }) {
     </NodeG>
   );
 }
-
-WorkflowOutputNode.propTypes = {
-  mouseEnter: func.isRequired,
-  mouseLeave: func.isRequired,
-  node: shape().isRequired,
-};
 
 export default WorkflowOutputNode;

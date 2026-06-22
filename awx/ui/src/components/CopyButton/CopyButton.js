@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import PropTypes from 'prop-types';
 import { Button } from '@patternfly/react-core';
 import { CopyIcon } from '@patternfly/react-icons';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
@@ -59,14 +58,5 @@ function CopyButton({
     </>
   );
 }
-
-CopyButton.propTypes = {
-  copyItem: PropTypes.func.isRequired,
-  onCopyStart: PropTypes.func.isRequired,
-  onCopyFinish: PropTypes.func.isRequired,
-  errorMessage: PropTypes.string.isRequired,
-  isDisabled: PropTypes.bool,
-  ouiaId: PropTypes.string,
-};
 
 export default CopyButton;

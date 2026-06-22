@@ -1,14 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import {
-  func,
-  bool,
-  node,
-  number,
-  string,
-  arrayOf,
-  shape,
-  checkPropTypes,
-} from 'prop-types';
 import styled from 'styled-components';
 import {
   Alert,
@@ -33,58 +23,6 @@ const Label = styled.span`
     margin-right: 10px;
   }
 `;
-
-const requiredField = (props) => {
-  const { name, username, image } = props;
-  if (!name && !username && !image) {
-    return new Error(
-      `One of 'name', 'username' or 'image' is required by ItemToDelete component.`
-    );
-  }
-  if (name) {
-    checkPropTypes(
-      {
-        name: string,
-      },
-      { name: props.name },
-      'prop',
-      'ItemToDelete'
-    );
-  }
-  if (username) {
-    checkPropTypes(
-      {
-        username: string,
-      },
-      { username: props.username },
-      'prop',
-      'ItemToDelete'
-    );
-  }
-  if (image) {
-    checkPropTypes(
-      {
-        image: string,
-      },
-      { image: props.image },
-      'prop',
-      'ItemToDelete'
-    );
-  }
-  return null;
-};
-
-const ItemToDelete = shape({
-  id: number.isRequired,
-  name: requiredField,
-  username: requiredField,
-  image: requiredField,
-  summary_fields: shape({
-    user_capabilities: shape({
-      delete: bool.isRequired,
-    }).isRequired,
-  }).isRequired,
-});
 
 function ToolbarDeleteButton({
   itemsToDelete,
@@ -303,13 +241,5 @@ function ToolbarDeleteButton({
     </>
   );
 }
-
-ToolbarDeleteButton.propTypes = {
-  onDelete: func.isRequired,
-  itemsToDelete: arrayOf(ItemToDelete).isRequired,
-  pluralizedItemName: string,
-  warningMessage: node,
-  cannotDelete: func,
-};
 
 export default ToolbarDeleteButton;

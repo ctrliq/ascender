@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { Button, Modal } from '@patternfly/react-core';
 
 import { Trans, useLingui } from '@lingui/react/macro';
-import { func } from 'prop-types';
 import { WorkflowDispatchContext } from 'contexts/Workflow';
 
 function UnsavedChangesModal({ onSaveAndExit, onExit }) {
@@ -47,10 +46,5 @@ function UnsavedChangesModal({ onSaveAndExit, onExit }) {
     </Modal>
   );
 }
-
-UnsavedChangesModal.propTypes = {
-  onExit: func.isRequired,
-  onSaveAndExit: func.isRequired,
-};
 
 export default UnsavedChangesModal;

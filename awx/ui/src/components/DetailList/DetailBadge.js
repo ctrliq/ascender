@@ -1,5 +1,4 @@
 import React from 'react';
-import { node } from 'prop-types';
 import styled from 'styled-components';
 import { Badge } from '@patternfly/react-core';
 
@@ -19,9 +18,5 @@ function DetailBadge({ label, helpText, content, dataCy = null }) {
     />
   );
 }
-DetailBadge.propTypes = {
-  label: node.isRequired,
-  content: node.isRequired,
-};
 
 export default DetailBadge;

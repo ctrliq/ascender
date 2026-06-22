@@ -2,7 +2,6 @@ import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 
 import { withFormik, useFormikContext } from 'formik';
-import PropTypes from 'prop-types';
 import Wizard from '../Wizard';
 import useAdHocLaunchSteps from './useAdHocLaunchSteps';
 
@@ -75,10 +74,4 @@ const FormikApp = withFormik({
   },
 })(AdHocCommandsWizard);
 
-FormikApp.propTypes = {
-  onLaunch: PropTypes.func.isRequired,
-  moduleOptions: PropTypes.arrayOf(PropTypes.array).isRequired,
-  onCloseWizard: PropTypes.func.isRequired,
-  credentialTypeId: PropTypes.number.isRequired,
-};
 export default FormikApp;

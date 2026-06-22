@@ -1,10 +1,8 @@
 
 import React from 'react';
-import { func, string } from 'prop-types';
 import { Button } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
 
-import { Role } from 'types';
 import AlertModal from '../AlertModal';
 
 function DeleteRoleConfirmationModal({
@@ -58,12 +56,5 @@ function DeleteRoleConfirmationModal({
     </AlertModal>
   );
 }
-
-DeleteRoleConfirmationModal.propTypes = {
-  role: Role.isRequired,
-  username: string,
-  onCancel: func.isRequired,
-  onConfirm: func.isRequired,
-};
 
 export default DeleteRoleConfirmationModal;

@@ -1,9 +1,7 @@
 import React from 'react';
 import { Tr, Td } from '@patternfly/react-table';
 import { formatDateString } from 'util/dates';
-import { HostMetrics } from 'types';
 import { useLingui } from '@lingui/react/macro';
-import { bool, func } from 'prop-types';
 
 function HostMetricsListItem({ item, isSelected, onSelect, rowIndex }) {
   const { t } = useLingui();
@@ -28,11 +26,5 @@ function HostMetricsListItem({ item, isSelected, onSelect, rowIndex }) {
     </Tr>
   );
 }
-
-HostMetricsListItem.propTypes = {
-  item: HostMetrics.isRequired,
-  isSelected: bool.isRequired,
-  onSelect: func.isRequired,
-};
 
 export default HostMetricsListItem;

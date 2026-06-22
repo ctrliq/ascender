@@ -1,5 +1,4 @@
 import React from 'react';
-import { string, bool, func } from 'prop-types';
 
 import { useLingui } from '@lingui/react/macro';
 
@@ -14,7 +13,6 @@ import { Tr, Td } from '@patternfly/react-table';
 import { PencilAltIcon } from '@patternfly/react-icons';
 import styled from 'styled-components';
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
-import { InstanceGroup } from 'types';
 
 const Unavailable = styled.span`
   color: var(--pf-global--danger-color--200);
@@ -98,11 +96,4 @@ function InstanceGroupListItem({
     </Tr>
   );
 }
-InstanceGroupListItem.prototype = {
-  instanceGroup: InstanceGroup.isRequired,
-  detailUrl: string.isRequired,
-  isSelected: bool.isRequired,
-  onSelect: func.isRequired,
-};
-
 export default InstanceGroupListItem;

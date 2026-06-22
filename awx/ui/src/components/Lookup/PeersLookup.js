@@ -1,10 +1,8 @@
 import React, { useCallback, useEffect } from 'react';
-import { arrayOf, string, func, bool, shape } from 'prop-types';
 import { useLocation } from 'routerCompat';
 import { useLingui } from '@lingui/react/macro';
 import { FormGroup, Chip } from '@patternfly/react-core';
 import { InstancesAPI } from 'api';
-import { Instance } from 'types';
 import { getSearchableKeys } from 'components/PaginatedTable';
 import { getQSConfig, parseQueryString, mergeParams } from 'util/qs';
 import useRequest from 'hooks/useRequest';
@@ -172,21 +170,5 @@ function PeersLookup({
     </FormGroup>
   );
 }
-
-PeersLookup.propTypes = {
-  id: string,
-  value: arrayOf(Instance).isRequired,
-  tooltip: string,
-  onChange: func.isRequired,
-  className: string,
-  required: bool,
-  validate: func,
-  multiple: bool,
-  fieldName: string,
-  columns: arrayOf(Object),
-  formLabel: string,
-  instance_details: (Instance, shape({})),
-  typePeers: bool,
-};
 
 export default PeersLookup;

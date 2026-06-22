@@ -11,7 +11,6 @@ import useRequest from 'hooks/useRequest';
 import useSelected from 'hooks/useSelected';
 import { getQSConfig, parseQueryString } from 'util/qs';
 import { InventoriesAPI } from 'api';
-import { Inventory } from 'types';
 import AdHocCommands from 'components/AdHocCommands/AdHocCommands';
 import AdvancedInventoryHostListItem from './AdvancedInventoryHostListItem';
 
@@ -132,9 +131,5 @@ function AdvancedInventoryHostList({ inventory }) {
     />
   );
 }
-
-AdvancedInventoryHostList.propTypes = {
-  inventory: Inventory.isRequired,
-};
 
 export default AdvancedInventoryHostList;

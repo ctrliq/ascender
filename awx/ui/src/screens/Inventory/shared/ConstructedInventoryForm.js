@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 import { Formik, useField, useFormikContext } from 'formik';
-import { func, shape } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 import { minMaxValue, required } from 'util/validators';
 import { Form, FormGroup } from '@patternfly/react-core';
@@ -193,11 +192,5 @@ function ConstructedInventoryForm({
     </Formik>
   );
 }
-
-ConstructedInventoryForm.propTypes = {
-  onCancel: func.isRequired,
-  onSubmit: func.isRequired,
-  submitError: shape({}),
-};
 
 export default ConstructedInventoryForm;

@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import { string, bool, func } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 import { Tr, Td } from '@patternfly/react-table';
 import { Link } from 'react-router-dom';
@@ -12,7 +11,6 @@ import ErrorDetail from 'components/ErrorDetail';
 import HostToggle from 'components/HostToggle';
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
-import { Host } from 'types';
 import Sparkline from 'components/Sparkline';
 
 function InventoryHostItem({
@@ -138,12 +136,5 @@ function InventoryHostItem({
     </>
   );
 }
-
-InventoryHostItem.propTypes = {
-  detailUrl: string.isRequired,
-  host: Host.isRequired,
-  isSelected: bool.isRequired,
-  onSelect: func.isRequired,
-};
 
 export default InventoryHostItem;

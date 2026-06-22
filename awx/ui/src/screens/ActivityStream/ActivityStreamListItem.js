@@ -1,5 +1,4 @@
 import React from 'react';
-import { shape } from 'prop-types';
 import { useLingui } from '@lingui/react/macro';
 import { Tr, Td } from '@patternfly/react-table';
 import { Link } from 'react-router-dom';
@@ -12,9 +11,6 @@ import ActivityStreamDescription from './ActivityStreamDescription';
 
 function ActivityStreamListItem({ streamItem }) {
   const { t } = useLingui();
-  ActivityStreamListItem.propTypes = {
-    streamItem: shape({}).isRequired,
-  };
 
   const buildUser = (item) => {
     let link;
