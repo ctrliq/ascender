@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom-v5-compat';
+import { useNavigate } from 'routerCompat';
 import { PageSection, Card } from '@patternfly/react-core';
 
 import { TeamsAPI } from 'api';

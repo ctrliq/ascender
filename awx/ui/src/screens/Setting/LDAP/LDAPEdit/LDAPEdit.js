@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useRouteMatch } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom-v5-compat';
+import { useNavigate } from 'routerCompat';
 import { Formik } from 'formik';
 import { Form } from '@patternfly/react-core';
 import { CardBody } from 'components/Card';

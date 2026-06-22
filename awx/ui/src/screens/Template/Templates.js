@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useRef } from 'react';
 
-import { Routes, Route } from 'react-router-dom-v5-compat';
+import { Routes, Route } from 'routerCompat';
 import { PageSection } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
 

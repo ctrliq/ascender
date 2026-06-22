@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { useNavigate } from 'react-router-dom-v5-compat';
+import { useNavigate } from 'routerCompat';
 import { Badge as PFBadge, Button, Tooltip } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
 

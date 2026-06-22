@@ -5,7 +5,7 @@ import {
   Route,
   Navigate,
   useParams,
-} from 'react-router-dom-v5-compat';
+} from 'routerCompat';
 import { useLingui } from '@lingui/react/macro';
 import { PageSection, Card } from '@patternfly/react-core';
 import ContentError from 'components/ContentError';

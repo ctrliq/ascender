@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Navigate } from 'react-router-dom-v5-compat';
+import { Navigate } from 'routerCompat';
 import { PageSection, Card } from '@patternfly/react-core';
 
 import { useLingui } from '@lingui/react/macro';
