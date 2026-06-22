@@ -1,12 +1,10 @@
 import React, { useCallback, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import {
+import { Link,
   Routes,
   Route,
   Navigate,
   useParams,
-  useLocation,
-} from 'routerCompat';
+  useLocation } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';
 
 import { CaretLeftIcon } from '@patternfly/react-icons';

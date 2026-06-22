@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useNavigate } from 'routerCompat';
+import { useNavigate } from 'react-router-dom';
 import useRequest from 'hooks/useRequest';
 import { InventoriesAPI } from 'api';
 import { CardBody } from 'components/Card';
@@ -57,7 +57,7 @@ function SmartInventoryEdit({ inventory }) {
         search: '',
       });
     }
-    // navigate is not referentially stable in react-router-dom-v5-compat
+    // navigate is not referentially stable in react-router-dom
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [submitResult, detailsUrl]);
 

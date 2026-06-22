@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { useLocation, useRouteMatch } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Plural, useLingui } from '@lingui/react/macro';
 import { Card, PageSection } from '@patternfly/react-core';
 import { ProjectsAPI } from 'api';
@@ -35,7 +35,6 @@ const QS_CONFIG = getQSConfig('project', {
 function ProjectList() {
   const { t } = useLingui();
   const location = useLocation();
-  const match = useRouteMatch();
   const { addToast, Toast, toastProps } = useToast();
 
   const {
@@ -239,7 +238,7 @@ function ProjectList() {
                     ? [
                         <ToolbarAddButton
                           key="add"
-                          linkTo={`${match.url}/add`}
+                          linkTo={`${location.pathname}/add`}
                         />,
                       ]
                     : []),
@@ -267,7 +266,7 @@ function ProjectList() {
                 fetchProjects={fetchProjects}
                 key={project.id}
                 project={project}
-                detailUrl={`${match.url}/${project.id}`}
+                detailUrl={`${location.pathname}/${project.id}`}
                 isSelected={selected.some((row) => row.id === project.id)}
                 onSelect={() => handleSelect(project)}
                 onCopy={handleCopy}
@@ -277,7 +276,7 @@ function ProjectList() {
             )}
             emptyStateControls={
               canAdd ? (
-                <ToolbarAddButton key="add" linkTo={`${match.url}/add`} />
+                <ToolbarAddButton key="add" linkTo={`${location.pathname}/add`} />
               ) : null
             }
           />

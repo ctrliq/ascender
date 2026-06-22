@@ -1,8 +1,7 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import { Router } from 'react-router-dom';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 // Mock the WorkflowOutputNavigation component to avoid i18n issues
 jest.mock('./WorkflowOutputNavigation', () => {
@@ -66,16 +65,14 @@ const jobs = [
 
 describe('<WorkflowOuputNavigation/>', () => {
   test('Should open modal and deprovision node', async () => {
-    const user = userEvent.setup();
     const ref = React.createRef();
     const history = createMemoryHistory({
-      initialEntries: ['jobs/playbook/2/output'],
+      initialEntries: ['/jobs/playbook/2/output'],
     });
-    
-    render(
-      <Router history={history}>
-        <WorkflowOutputNavigation relatedJobs={jobs} parentRef={ref} />
-      </Router>
+
+    const { user } = renderWithContexts(
+      <WorkflowOutputNavigation relatedJobs={jobs} parentRef={ref} />,
+      { context: { router: { history } } }
     );
 
     const button = screen.getByRole('button');

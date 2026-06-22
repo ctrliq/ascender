@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo } from 'react';
-import { useParams, useRouteMatch } from 'react-router-dom';
+import { useParams, useMatch } from 'react-router-dom';
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import {
@@ -39,10 +39,7 @@ function UserAndTeamAccessAdd({
   // The caller passes the resource id explicitly (works whether the parent
   // screen uses react-router v5 or v6); fall back to the v5 route param.
   const associationId = resourceId ?? routeId;
-  const teamsRouteMatch = useRouteMatch({
-    path: '/teams/:id/roles',
-    exact: true,
-  });
+  const teamsRouteMatch = useMatch('/teams/:id/roles');
 
   const {
     selected: resourcesSelected,

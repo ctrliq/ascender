@@ -1,16 +1,12 @@
 import React from 'react';
-import { Route, Router } from 'react-router-dom';
-import { Router as RouterV6 } from 'routerCompat';
+import { Routes, Route } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import * as ConfigContext from 'contexts/Config';
-import { within, render, waitFor, screen } from '@testing-library/react';
+import { within, waitFor, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
 import { InstanceGroupsAPI, InstancesAPI, SettingsAPI } from 'api';
-
-import { I18nProvider } from '@lingui/react';
-import { i18n } from '@lingui/core';
-import english from '../../../../src/locales/en/messages';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InstanceList from './InstanceList';
 
 jest.mock('../../../api/models/InstanceGroups');
@@ -117,13 +113,6 @@ describe('<InstanceList />, React testing library tests', () => {
   const user = userEvent.setup();
   const options = { data: { actions: { POST: true } } };
 
-  const history = createMemoryHistory({
-    initialEntries: ['/instances'],
-  });
-
-  i18n.load({ en: english });
-  i18n.activate('en');
-
   const customRender = (ui, isK8s = true) => {
     jest.spyOn(ConfigContext, 'useConfig').mockImplementation(() => ({
       me: { is_superuser: true },
@@ -141,14 +130,14 @@ describe('<InstanceList />, React testing library tests', () => {
       data: { results: [{ id: 1 }], count: 1 },
     });
 
-    return render(
-      <I18nProvider i18n={i18n}>
-        <Router history={history}>
-          <RouterV6 location={history.location} navigator={history}>
-            <Route path="/instances">{ui} </Route>
-          </RouterV6>
-        </Router>
-      </I18nProvider>
+    const history = createMemoryHistory({
+      initialEntries: ['/instances'],
+    });
+    return renderWithContexts(
+      <Routes>
+        <Route path="/instances" element={ui} />
+      </Routes>,
+      { context: { router: { history } } }
     );
   };
 

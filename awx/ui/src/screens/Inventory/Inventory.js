@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
-import { Link } from 'react-router-dom';
-import {
+import { Link,
   Routes,
   Route,
   Navigate,
   useLocation,
-  useParams,
-} from 'routerCompat';
+  useParams } from 'react-router-dom';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card, PageSection } from '@patternfly/react-core';
 import ContentError from 'components/ContentError';

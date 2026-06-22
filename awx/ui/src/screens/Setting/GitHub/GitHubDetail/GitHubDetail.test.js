@@ -1,6 +1,7 @@
 import React from 'react';
-import { useRouteMatch } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { screen, waitFor } from '@testing-library/react';
+import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
 import {
@@ -10,10 +11,6 @@ import {
 import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import GitHubDetail from './GitHubDetail';
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useRouteMatch: jest.fn(),
-}));
 jest.mock('../../../../api');
 
 const mockDefault = {
@@ -95,12 +92,26 @@ function mockAllCategories() {
   SettingsAPI.readCategory.mockResolvedValueOnce(mockEnterpriseTeam);
 }
 
-async function setup(context) {
+async function setup(category, context) {
+  const history = createMemoryHistory({
+    initialEntries: [`/settings/github/${category}/details`],
+  });
+  const mergedContext = {
+    ...context,
+    router: { history, ...context?.router },
+  };
   const utils = renderWithContexts(
-    <SettingsProvider value={mockAllOptions.actions}>
-      <GitHubDetail />
-    </SettingsProvider>,
-    context ? { context } : undefined
+    <Routes>
+      <Route
+        path="/settings/github/:category/details"
+        element={
+          <SettingsProvider value={mockAllOptions.actions}>
+            <GitHubDetail />
+          </SettingsProvider>
+        }
+      />
+    </Routes>,
+    { context: mergedContext }
   );
   await waitFor(() =>
     expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
@@ -116,15 +127,10 @@ describe('<GitHubDetail />', () => {
   describe('Default', () => {
     beforeEach(() => {
       mockAllCategories();
-      useRouteMatch.mockImplementation(() => ({
-        url: '/settings/github/default/details',
-        path: '/settings/github/:category/details',
-        params: { category: 'default' },
-      }));
     });
 
     test('should render expected tabs', async () => {
-      await setup();
+      await setup('default');
       const expectedTabs = [
         'Back to Settings',
         'GitHub Default',
@@ -140,7 +146,7 @@ describe('<GitHubDetail />', () => {
     });
 
     test('should render expected details', async () => {
-      await setup();
+      await setup('default');
       assertDetail(
         'GitHub OAuth2 Callback URL',
         'https://towerhost/sso/complete/github/'
@@ -154,7 +160,7 @@ describe('<GitHubDetail />', () => {
     });
 
     test('should hide edit button from non-superusers', async () => {
-      await setup({ config: { me: { is_superuser: false } } });
+      await setup('default', { config: { me: { is_superuser: false } } });
       expect(
         screen.queryByRole('button', { name: 'Edit' })
       ).not.toBeInTheDocument();
@@ -163,7 +169,7 @@ describe('<GitHubDetail />', () => {
     test('should display content error when api throws error on initial render', async () => {
       SettingsAPI.readCategory.mockReset();
       SettingsAPI.readCategory.mockRejectedValue(new Error());
-      await setup();
+      await setup('default');
       expect(screen.getByText(/Something went wrong/)).toBeInTheDocument();
     });
   });
@@ -171,15 +177,10 @@ describe('<GitHubDetail />', () => {
   describe('Organization', () => {
     beforeEach(() => {
       mockAllCategories();
-      useRouteMatch.mockImplementation(() => ({
-        url: '/settings/github/organization/details',
-        path: '/settings/github/:category/details',
-        params: { category: 'organization' },
-      }));
     });
 
     test('should render expected details', async () => {
-      await setup();
+      await setup('organization');
       assertDetail(
         'GitHub Organization OAuth2 Callback URL',
         'https://towerhost/sso/complete/github-org/'
@@ -199,15 +200,10 @@ describe('<GitHubDetail />', () => {
   describe('Team', () => {
     beforeEach(() => {
       mockAllCategories();
-      useRouteMatch.mockImplementation(() => ({
-        url: '/settings/github/team/details',
-        path: '/settings/github/:category/details',
-        params: { category: 'team' },
-      }));
     });
 
     test('should render expected details', async () => {
-      await setup();
+      await setup('team');
       assertDetail(
         'GitHub Team OAuth2 Callback URL',
         'https://towerhost/sso/complete/github-team/'
@@ -227,15 +223,10 @@ describe('<GitHubDetail />', () => {
   describe('Enterprise', () => {
     beforeEach(() => {
       mockAllCategories();
-      useRouteMatch.mockImplementation(() => ({
-        url: '/settings/github/enterprise/details',
-        path: '/settings/github/:category/details',
-        params: { category: 'enterprise' },
-      }));
     });
 
     test('should render expected details', async () => {
-      await setup();
+      await setup('enterprise');
       assertDetail(
         'GitHub Enterprise OAuth2 Callback URL',
         'https://towerhost/sso/complete/github-enterprise/'
@@ -259,15 +250,10 @@ describe('<GitHubDetail />', () => {
   describe('Enterprise Org', () => {
     beforeEach(() => {
       mockAllCategories();
-      useRouteMatch.mockImplementation(() => ({
-        url: '/settings/github/enterprise_organization/details',
-        path: '/settings/github/:category/details',
-        params: { category: 'enterprise_organization' },
-      }));
     });
 
     test('should render expected details', async () => {
-      await setup();
+      await setup('enterprise_organization');
       assertDetail(
         'GitHub Enterprise Organization OAuth2 Callback URL',
         'https://towerhost/sso/complete/github-enterprise-org/'
@@ -297,15 +283,10 @@ describe('<GitHubDetail />', () => {
   describe('Enterprise Team', () => {
     beforeEach(() => {
       mockAllCategories();
-      useRouteMatch.mockImplementation(() => ({
-        url: '/settings/github/enterprise_team/details',
-        path: '/settings/github/:category/details',
-        params: { category: 'enterprise_team' },
-      }));
     });
 
     test('should render expected details', async () => {
-      await setup();
+      await setup('enterprise_team');
       assertDetail(
         'GitHub Enterprise Team OAuth2 Callback URL',
         'https://towerhost/sso/complete/github-enterprise-team/'
@@ -330,15 +311,21 @@ describe('<GitHubDetail />', () => {
   describe('Redirect', () => {
     test('should redirect when user navigates to erroneous category', async () => {
       mockAllCategories();
-      useRouteMatch.mockImplementation(() => ({
-        url: '/settings/github/foo/details',
-        path: '/settings/github/:category/details',
-        params: { category: 'foo' },
-      }));
-      const { history } = renderWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <GitHubDetail />
-        </SettingsProvider>
+      const history = createMemoryHistory({
+        initialEntries: ['/settings/github/foo/details'],
+      });
+      renderWithContexts(
+        <Routes>
+          <Route
+            path="/settings/github/:category/details"
+            element={
+              <SettingsProvider value={mockAllOptions.actions}>
+                <GitHubDetail />
+              </SettingsProvider>
+            }
+          />
+        </Routes>,
+        { context: { router: { history } } }
       );
       await waitFor(() =>
         expect(history.location.pathname).toEqual(

@@ -12,26 +12,43 @@ import {
   Tooltip,
 } from '@patternfly/react-core';
 import { HistoryIcon } from '@patternfly/react-icons';
-import { Link, Route, useRouteMatch, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const ScreenHeader = ({ breadcrumbConfig, streamType }) => {
   const { light } = PageSectionVariants;
-  const oneCrumbMatch = useRouteMatch({
-    path: Object.keys(breadcrumbConfig)[0],
-    strict: true,
-  });
-
+  const { t } = useLingui();
   const location = useLocation();
+
+  // Document <title>: look up the parent path's label (drop the leaf segment for
+  // any path deeper than one level), preserving the original behaviour.
   const parts = location.pathname.split('/');
   if (parts.length > 2) {
     parts.pop();
   }
-
   const pathTitle = breadcrumbConfig[parts.join('/')];
   useTitle(pathTitle);
 
-  const isOnlyOneCrumb = oneCrumbMatch && oneCrumbMatch.isExact;
-  const { t } = useLingui();
+  // Build the cumulative resolved paths along the current location, e.g.
+  // /foo/1/bar -> ['/foo', '/foo/1', '/foo/1/bar']. breadcrumbConfig is keyed by
+  // these literal resolved paths, so a string lookup replaces the v5 recursive
+  // <Route>/useRouteMatch walk.
+  const segments = location.pathname.split('/').filter(Boolean);
+  const cumulativePaths = segments.map(
+    (_, index) => `/${segments.slice(0, index + 1).join('/')}`
+  );
+  const currentPath =
+    cumulativePaths[cumulativePaths.length - 1] || location.pathname;
+
+  // When the location is exactly the screen's root crumb, show only the title.
+  const isOnlyOneCrumb = currentPath === Object.keys(breadcrumbConfig)[0];
+
+  // Breadcrumb links: every ancestor path that has a configured label, except
+  // the current page (rendered as the title below).
+  const crumbs = cumulativePaths.filter(
+    (path) => path !== currentPath && breadcrumbConfig[path]
+  );
+  const title = breadcrumbConfig[currentPath];
+
   return (
     <PageSection variant={light}>
       <div
@@ -44,9 +61,15 @@ const ScreenHeader = ({ breadcrumbConfig, streamType }) => {
         <div>
           {!isOnlyOneCrumb && (
             <Breadcrumb ouiaId="breadcrumb-list">
-              <Route path="/:path">
-                <Crumb breadcrumbConfig={breadcrumbConfig} />
-              </Route>
+              {crumbs.map((path, index) => (
+                <BreadcrumbItem
+                  key={path}
+                  showDivider={index > 0}
+                  data-cy={breadcrumbConfig[path]}
+                >
+                  <Link to={path}>{breadcrumbConfig[path]}</Link>
+                </BreadcrumbItem>
+              ))}
             </Breadcrumb>
           )}
           <div
@@ -54,9 +77,11 @@ const ScreenHeader = ({ breadcrumbConfig, streamType }) => {
               minHeight: '31px',
             }}
           >
-            <Route path="/:path">
-              <ActualTitle breadcrumbConfig={breadcrumbConfig} />
-            </Route>
+            {title && (
+              <Title size="2xl" headingLevel="h2" data-cy="screen-title">
+                {title}
+              </Title>
+            )}
           </div>
         </div>
         {streamType !== 'none' && (
@@ -78,64 +103,6 @@ const ScreenHeader = ({ breadcrumbConfig, streamType }) => {
         )}
       </div>
     </PageSection>
-  );
-};
-
-const ActualTitle = ({ breadcrumbConfig }) => {
-  const match = useRouteMatch();
-  const title = breadcrumbConfig[match.url];
-  let titleElement;
-
-  if (match.isExact) {
-    titleElement = (
-      <Title size="2xl" headingLevel="h2" data-cy="screen-title">
-        {title}
-      </Title>
-    );
-  }
-
-  if (!title) {
-    titleElement = null;
-  }
-
-  return (
-    <>
-      {titleElement}
-      <Route path={`${match.url}/:path`}>
-        <ActualTitle breadcrumbConfig={breadcrumbConfig} />
-      </Route>
-    </>
-  );
-};
-
-const Crumb = ({ breadcrumbConfig, showDivider }) => {
-  const match = useRouteMatch();
-  const crumb = breadcrumbConfig[match.url];
-
-  let crumbElement = (
-    <BreadcrumbItem key={match.url} showDivider={showDivider} data-cy={crumb}>
-      <Link to={match.url}>{crumb}</Link>
-    </BreadcrumbItem>
-  );
-
-  if (match.isExact) {
-    crumbElement = null;
-  }
-
-  if (!crumb) {
-    crumbElement = null;
-  }
-  return (
-    <>
-      {crumbElement}
-      <Route path={`${match.url}/:path`}>
-        <Crumb
-          breadcrumbConfig={breadcrumbConfig}
-          showDivider
-          data-cy={crumb}
-        />
-      </Route>
-    </>
   );
 };
 

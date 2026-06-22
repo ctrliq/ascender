@@ -1,25 +1,9 @@
 import React from 'react';
-import { MemoryRouter } from 'react-router-dom';
-import { CompatRouter } from 'react-router-dom-v5-compat';
 import { MeshAPI } from 'api';
-import { render, waitFor, screen } from '@testing-library/react';
+import { waitFor, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { I18nProvider } from '@lingui/react';
-import { i18n } from '@lingui/core';
-import english from 'locales/en/messages';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import TopologyView from './TopologyView';
-
-i18n.load({ en: english.messages });
-i18n.activate('en');
-
-// Custom render function with I18n context
-const renderWithI18n = (component) => {
-  return render(
-    <I18nProvider i18n={i18n}>
-      {component}
-    </I18nProvider>
-  );
-};
 
 jest.mock('../../api');
 jest.mock('util/webWorker', () => {
@@ -95,13 +79,7 @@ describe('<TopologyView />', () => {
         links: [],
       },
     });
-    renderWithI18n(
-      <MemoryRouter>
-      <CompatRouter>
-        <TopologyView />
-      </CompatRouter>
-      </MemoryRouter>
-    );
+    renderWithContexts(<TopologyView />);
     await waitFor(() => screen.getByRole('heading', { level: 2 }));
     expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(
       'Topology View'
@@ -115,13 +93,7 @@ describe('<TopologyView />', () => {
         links: [],
       },
     });
-    renderWithI18n(
-      <MemoryRouter>
-      <CompatRouter>
-        <TopologyView />
-      </CompatRouter>
-      </MemoryRouter>
-    );
+    renderWithContexts(<TopologyView />);
     await waitFor(() => screen.getByRole('heading', { level: 2 }));
     expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(
       'Topology View'
@@ -141,13 +113,7 @@ describe('<TopologyView />', () => {
         },
       })
     );
-    renderWithI18n(
-      <MemoryRouter>
-      <CompatRouter>
-        <TopologyView />
-      </CompatRouter>
-      </MemoryRouter>
-    );
+    renderWithContexts(<TopologyView />);
     await waitFor(() => screen.getByRole('heading', { level: 2 }));
     expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(
       'Topology View'

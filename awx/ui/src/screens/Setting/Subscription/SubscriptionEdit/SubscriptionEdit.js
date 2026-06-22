@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { Link, useRouteMatch } from 'react-router-dom';
-import { useNavigate } from 'routerCompat';
+import { Link, useMatch, useNavigate  } from 'react-router-dom';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { Formik, useFormikContext } from 'formik';
 import {
@@ -94,9 +93,7 @@ function SubscriptionEdit() {
   const navigate = useNavigate();
   const { request: updateConfig, license_info } = useConfig();
   const hasValidKey = Boolean(license_info?.valid_key);
-  const subscriptionMgmtRoute = useRouteMatch({
-    path: '/subscription_management',
-  });
+  const subscriptionMgmtRoute = useMatch({ path: '/subscription_management', end: false });
 
   const {
     isLoading: isContentLoading,
@@ -175,7 +172,7 @@ function SubscriptionEdit() {
         );
       }, 3000);
     }
-    // navigate is not referentially stable in react-router-dom-v5-compat
+    // navigate is not referentially stable in react-router-dom
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [submitSuccessful, subscriptionMgmtRoute]);
 

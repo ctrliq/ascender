@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useNavigate } from 'routerCompat';
+import { useNavigate } from 'react-router-dom';
 import { Card, PageSection } from '@patternfly/react-core';
 import { CardBody } from 'components/Card';
 import useRequest from 'hooks/useRequest';
@@ -58,7 +58,7 @@ function SmartInventoryAdd() {
         search: '',
       });
     }
-    // navigate is not referentially stable in react-router-dom-v5-compat;
+    // navigate is not referentially stable in react-router-dom;
     // including it refires this redirect effect after unrelated navigations
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inventoryId]);

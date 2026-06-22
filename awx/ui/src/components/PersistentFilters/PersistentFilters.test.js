@@ -1,7 +1,7 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
-import { Router, Route } from 'react-router-dom';
+import { act, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import PersistentFilters from './PersistentFilters';
 
 const KEY = 'awx-persistent-filter';
@@ -12,10 +12,9 @@ describe('PersistentFilters', () => {
     const history = createMemoryHistory({
       initialEntries: ['/templates'],
     });
-    render(
-      <Router history={history}>
-        <PersistentFilters pageKey="templates">test</PersistentFilters>
-      </Router>
+    renderWithContexts(
+      <PersistentFilters pageKey="templates">test</PersistentFilters>,
+      { context: { router: { history } } }
     );
 
     expect(JSON.parse(sessionStorage.getItem(KEY))).toEqual({
@@ -37,10 +36,9 @@ describe('PersistentFilters', () => {
     const history = createMemoryHistory({
       initialEntries: ['/templates'],
     });
-    render(
-      <Router history={history}>
-        <PersistentFilters pageKey="templates">test</PersistentFilters>
-      </Router>
+    renderWithContexts(
+      <PersistentFilters pageKey="templates">test</PersistentFilters>,
+      { context: { router: { history } } }
     );
 
     expect(history.location.search).toEqual('');
@@ -50,18 +48,19 @@ describe('PersistentFilters', () => {
     const history = createMemoryHistory({
       initialEntries: ['/templates'],
     });
-    render(
-      <Router history={history}>
-        <PersistentFilters pageKey="templates">test</PersistentFilters>
-      </Router>
+    renderWithContexts(
+      <PersistentFilters pageKey="templates">test</PersistentFilters>,
+      { context: { router: { history } } }
     );
 
-    history.push('/templates?page=3');
-    await waitFor(() => true);
-
-    expect(JSON.parse(sessionStorage.getItem(KEY))).toEqual({
-      pageKey: 'templates',
-      qs: '?page=3',
+    act(() => {
+      history.push('/templates?page=3');
     });
+    await waitFor(() =>
+      expect(JSON.parse(sessionStorage.getItem(KEY))).toEqual({
+        pageKey: 'templates',
+        qs: '?page=3',
+      })
+    );
   });
 });
