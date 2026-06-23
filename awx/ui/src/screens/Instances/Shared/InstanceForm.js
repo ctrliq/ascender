@@ -1,7 +1,10 @@
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Formik, useField } from 'formik';
-import { Form, FormGroup, CardBody } from '@patternfly/react-core';
+import { Form, FormGroup, CardBody, FormHelperText,
+HelperText,
+HelperTextItem,
+} from '@patternfly/react-core';
 import { FormColumnLayout } from 'components/FormLayout';
 import FormField, {
   FormSubmitError,
@@ -60,12 +63,6 @@ function InstanceFormFields({ isEdit }) {
         fieldId="instance-type"
         label={t`Instance Type`}
         tooltip={t`Sets the role that this instance will play within mesh topology. Default is "execution."`}
-        validated={
-          !instanceTypeMeta.touched || !instanceTypeMeta.error
-            ? 'default'
-            : 'error'
-        }
-        helperTextInvalid={instanceTypeMeta.error}
         isRequired
       >
         <AnsibleSelect
@@ -81,6 +78,15 @@ function InstanceFormFields({ isEdit }) {
           }}
           isDisabled={isEdit}
         />
+        {instanceTypeMeta.touched && instanceTypeMeta.error && (
+          <FormHelperText>
+            <HelperText>
+              <HelperTextItem variant="error">
+                {instanceTypeMeta.error}
+              </HelperTextItem>
+            </HelperText>
+          </FormHelperText>
+        )}
       </FormGroup>
       <FormGroup
         fieldId="instance-option-checkboxes"

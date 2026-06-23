@@ -1,6 +1,13 @@
 import React from 'react';
 import { useField } from 'formik';
-import { FormGroup, InputGroup } from '@patternfly/react-core';
+import {
+  FormGroup,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
+  InputGroup,
+  InputGroupItem,
+} from '@patternfly/react-core';
 import Popover from '../Popover';
 import PasswordInput from './PasswordInput';
 
@@ -19,14 +26,12 @@ function PasswordField({
   return (
     <FormGroup
       fieldId={id}
-      helperTextInvalid={meta.error}
       isRequired={isRequired}
-      validated={isValid ? 'default' : 'error'}
       label={label}
       labelIcon={helperText && <Popover content={helperText} />}
     >
       <InputGroup>
-        <PasswordInput
+        <InputGroupItem><PasswordInput
           id={id}
           name={name}
           label={label}
@@ -34,8 +39,15 @@ function PasswordField({
           isRequired={isRequired}
           helperText={helperText}
           {...rest}
-        />
+        /></InputGroupItem>
       </InputGroup>
+      {!isValid && (
+        <FormHelperText>
+          <HelperText>
+            <HelperTextItem variant="error">{meta.error}</HelperTextItem>
+          </HelperText>
+        </FormHelperText>
+      )}
     </FormGroup>
   );
 }

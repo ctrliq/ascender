@@ -1,12 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
-  Alert,
-  Badge,
-  Button,
-  DropdownItem,
-  Tooltip,
+	Alert,
+	Badge,
+	Button,
+	Tooltip
 } from '@patternfly/react-core';
+import {
+	DropdownItem
+} from '@patternfly/react-core/deprecated';
 import { useLingui } from '@lingui/react/macro';
 import { KebabifiedContext } from 'contexts/Kebabified';
 import { getRelatedResourceDeleteCounts } from 'util/getRelatedResourceDeleteDetails';

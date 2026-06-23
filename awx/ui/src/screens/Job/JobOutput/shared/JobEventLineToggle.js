@@ -4,8 +4,8 @@ import { useLingui } from '@lingui/react/macro';
 import { AngleDownIcon, AngleRightIcon } from '@patternfly/react-icons';
 
 const Wrapper = styled.div`
-  background-color: var(--pf-global--BackgroundColor--200);
-  color: var(--pf-global--Color--200);
+  background-color: var(--pf-v5-global--BackgroundColor--200);
+  color: var(--pf-v5-global--Color--200);
   display: flex;
   flex: 0 0 30px;
   font-size: 18px;
@@ -35,9 +35,9 @@ export default function JobEventLineToggle({
     <Wrapper>
       <Button onClick={onToggle} type="button">
         {isCollapsed ? (
-          <AngleRightIcon size="sm" title={t`Expand section`} />
+          <AngleRightIcon title={t`Expand section`} />
         ) : (
-          <AngleDownIcon size="sm" title={t`Collapse section`} />
+          <AngleDownIcon title={t`Collapse section`} />
         )}
       </Button>
     </Wrapper>

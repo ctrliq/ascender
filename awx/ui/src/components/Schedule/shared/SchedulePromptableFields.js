@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
-import { ExpandableSection, Wizard } from '@patternfly/react-core';
+import {
+	ExpandableSection
+} from '@patternfly/react-core';
+import {
+	Wizard
+} from '@patternfly/react-core/deprecated';
 import { useLingui } from '@lingui/react/macro';
 import { useFormikContext } from 'formik';
 import { useDismissableError } from 'hooks/useRequest';
@@ -104,8 +109,8 @@ function SchedulePromptableFields({
                 ? t`Hide description`
                 : t`Show description`
             }
-            onToggle={() => {
-              setShowDescription(!showDescription);
+            onToggle={(_event, isExpanded) => {
+              setShowDescription(isExpanded);
             }}
             isExpanded={showDescription}
           >

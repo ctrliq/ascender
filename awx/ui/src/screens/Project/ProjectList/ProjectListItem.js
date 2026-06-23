@@ -21,7 +21,7 @@ import JobCancelButton from 'components/JobCancelButton';
 import ProjectSyncButton from '../shared/ProjectSyncButton';
 
 const Label = styled.span`
-  color: var(--pf-global--disabled-color--100);
+  color: var(--pf-v5-global--disabled-color--100);
 `;
 
 function ProjectListItem({
@@ -155,7 +155,7 @@ function ProjectListItem({
             rowIndex,
             isSelected,
             onSelect,
-            disable: isJobRunning(job?.status),
+            isDisabled: isJobRunning(job?.status),
           }}
           dataLabel={t`Selected`}
         />

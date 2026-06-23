@@ -28,7 +28,7 @@ import ErrorDetail from 'components/ErrorDetail';
 import { Detail, DetailList } from 'components/DetailList';
 
 const Unavailable = styled.span`
-  color: var(--pf-global--danger-color--200);
+  color: var(--pf-v5-global--danger-color--200);
 `;
 
 const SliderHolder = styled.div`
@@ -169,7 +169,7 @@ function InstanceListItem({
                 min={0}
                 step={0.1}
                 value={instance.capacity_adjustment}
-                onChange={handleChangeValue}
+                onChange={(_event, value) => handleChangeValue(value)}
                 isDisabled={!config?.me?.is_superuser || !instance.enabled}
                 data-cy="slider"
               />
@@ -181,13 +181,13 @@ function InstanceListItem({
         </Td>
         <Td
           dataLabel={t`Instance group used capacity`}
-          css="--pf-c-table--cell--MinWidth: 175px;"
+          css="--pf-v5-c-table--cell--MinWidth: 175px;"
         >
           {usedCapacity(instance)}
         </Td>
         <ActionsTd
           dataLabel={t`Actions`}
-          css="--pf-c-table--cell--Width: 125px"
+          css="--pf-v5-c-table--cell--Width: 125px"
         >
           <ActionItem visible>
             <InstanceToggle

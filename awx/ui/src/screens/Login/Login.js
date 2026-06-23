@@ -200,23 +200,23 @@ function AWXLogin({ alt, isAuthenticated }) {
               autoComplete="off"
               data-cy="login-form"
               className={authError ? 'pf-m-error' : ''}
+              showHelperText={!!authError}
               helperText={authError ? helperText : null}
               isLoginButtonDisabled={isAuthenticating}
               isValidPassword={!authError}
               isValidUsername={!authError}
               loginButtonLabel={t`Log In`}
-              onChangePassword={(val) => {
+              onChangePassword={(_event, val) => {
                 formik.setFieldValue('password', val);
                 dismissAuthError();
               }}
-              onChangeUsername={(val) => {
+              onChangeUsername={(_event, val) => {
                 formik.setFieldValue('username', val);
                 dismissAuthError();
               }}
               onLoginButtonClick={formik.handleSubmit}
               passwordLabel={t`Password`}
               passwordValue={formik.values.password}
-              showHelperText={authError}
               usernameLabel={t`Username`}
               usernameValue={formik.values.username}
             />

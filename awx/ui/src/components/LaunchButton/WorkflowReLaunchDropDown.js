@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
 import {
-  Dropdown,
-  DropdownToggle,
-  DropdownItem,
-  DropdownPosition,
-  DropdownSeparator,
-  DropdownDirection,
-} from '@patternfly/react-core';
+	Dropdown,
+	DropdownToggle,
+	DropdownItem,
+	DropdownPosition,
+	DropdownSeparator,
+	DropdownDirection
+} from '@patternfly/react-core/deprecated';
 import { RocketIcon } from '@patternfly/react-icons';
 
 function WorkflowReLaunchDropDown({
@@ -22,8 +22,8 @@ function WorkflowReLaunchDropDown({
   const { t } = useLingui();
   const [isOpen, setIsOpen] = useState(false);
 
-  const onToggle = () => {
-    setIsOpen((prev) => !prev);
+  const onToggle = (_event, val) => {
+    setIsOpen(val);
   };
 
   // The "from failed" option re-runs every node that did not succeed and carries
@@ -85,7 +85,7 @@ function WorkflowReLaunchDropDown({
             onToggle={onToggle}
             aria-label={t`relaunch workflow`}
             id={id}
-            isPrimary
+            toggleVariant="primary"
             ouiaId="relaunch-workflow-toggle"
           >
             {t`Relaunch`}

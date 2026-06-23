@@ -148,7 +148,7 @@ async function waitForForm(container) {
 // Choose a run-frequency from the (multi-select checkbox) FrequencySelect. The
 // run-frequency select is the first PF select toggle in the form.
 async function selectRunFrequency(user, container, optionLabel) {
-  const toggle = container.querySelectorAll('.pf-c-select__toggle')[0];
+  const toggle = container.querySelectorAll('.pf-v5-c-select__toggle')[0];
   await user.click(toggle);
   await user.click(await screen.findByText(optionLabel));
   // close the menu so it doesn't linger

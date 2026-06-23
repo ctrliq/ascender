@@ -2,16 +2,18 @@ import React, { useState, useRef } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { GripVerticalIcon } from '@patternfly/react-icons';
 import {
-  Modal,
-  TextInput,
-  TextArea,
-  Select,
-  SelectOption,
-  SelectVariant,
-  Button,
+	Modal,
+	TextInput,
+	TextArea,
+	Button
 } from '@patternfly/react-core';
 import {
-  TableComposable,
+	Select,
+	SelectOption,
+	SelectVariant
+} from '@patternfly/react-core/deprecated';
+import {
+  Table,
   Thead,
   Tbody,
   Tr,
@@ -215,7 +217,7 @@ function SurveyReorderModal({
         </Button>,
       ]}
     >
-      <TableComposable>
+      <Table>
         <Thead>
           <Tr ouiaId="survey-order-table-header">
             <Th dataLabel={t`Order`}>{t`Order`}</Th>
@@ -250,7 +252,7 @@ function SurveyReorderModal({
             </Tr>
           ))}
         </Tbody>
-      </TableComposable>
+      </Table>
     </Modal>
   );
 }

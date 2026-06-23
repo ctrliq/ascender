@@ -1,7 +1,10 @@
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
-import { Form, FormGroup, Switch } from '@patternfly/react-core';
+import { Form, FormGroup, Switch, FormHelperText,
+HelperText,
+HelperTextItem,
+} from '@patternfly/react-core';
 import styled from 'styled-components';
 import LabelSelect from '../../LabelSelect';
 import FormField from '../../FormField';
@@ -16,10 +19,10 @@ import workflowHelpText from '../../../screens/Template/shared/WorkflowJobTempla
 const FieldHeader = styled.div`
   display: flex;
   justify-content: space-between;
-  padding-bottom: var(--pf-c-form__label--PaddingBottom);
+  padding-bottom: var(--pf-v5-c-form__label--PaddingBottom);
 
   label {
-    --pf-c-form__label--PaddingBottom: 0px;
+    --pf-v5-c-form__label--PaddingBottom: 0px;
   }
 `;
 
@@ -125,7 +128,7 @@ function OtherPromptsStep({ launchConfig, variablesMode, onVarModeChange }) {
 
 function JobTypeField({ helpTextSource }) {
   const { t } = useLingui();
-  const [field, meta, helpers] = useField('job_type');
+  const [field, , helpers] = useField('job_type');
   const options = [
     {
       value: '',
@@ -141,14 +144,12 @@ function JobTypeField({ helpTextSource }) {
       isDisabled: false,
     },
   ];
-  const isValid = !(meta.touched && meta.error);
   return (
     <FormGroup
       fieldId="prompt-job-type"
       label={t`Job Type`}
       labelIcon={<Popover content={helpTextSource.jobType} />}
       isRequired
-      validated={isValid ? 'default' : 'error'}
     >
       <AnsibleSelect
         id="prompt-job-type"
@@ -161,14 +162,10 @@ function JobTypeField({ helpTextSource }) {
 }
 
 function VerbosityField({ helpTextSource }) {
-  const [, meta] = useField('verbosity');
-  const isValid = !(meta.touched && meta.error);
-
   return (
     <VerbositySelectField
       fieldId="prompt-verbosity"
       tooltip={helpTextSource.verbosity}
-      isValid={isValid ? 'default' : 'error'}
     />
   );
 }
@@ -180,8 +177,8 @@ function ShowChangesToggle() {
     <FormGroup fieldId="prompt-show-changes">
       <FieldHeader>
         {' '}
-        <label className="pf-c-form__label" htmlFor="prompt-show-changes">
-          <span className="pf-c-form__label-text">
+        <label className="pf-v5-c-form__label" htmlFor="prompt-show-changes">
+          <span className="pf-v5-c-form__label-text">
             {t`Show Changes`}
             <Popover
               content={t`If enabled, show the changes made
@@ -226,8 +223,6 @@ function LabelsField({ helpTextSource }) {
       fieldId="prompt-labels"
       label={t`Labels`}
       labelIcon={<Popover content={helpTextSource.labels} />}
-      validated={!meta.touched || !meta.error ? 'default' : 'error'}
-      helperTextInvalid={meta.error}
     >
       <LabelSelect
         value={field.value}
@@ -235,6 +230,15 @@ function LabelsField({ helpTextSource }) {
         createText={t`Create`}
         onError={(err) => helpers.setError(err)}
       />
+      {meta.error && (
+        <FormHelperText>
+          <HelperText>
+            <HelperTextItem variant="error">
+              {meta.error}
+            </HelperTextItem>
+          </HelperText>
+        </FormHelperText>
+      )}
     </FormGroup>
   );
 }

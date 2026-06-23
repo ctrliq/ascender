@@ -3,7 +3,10 @@ import { useLocation } from 'react-router';
 
 import { useLingui } from '@lingui/react/macro';
 import { Formik, useField, useFormikContext } from 'formik';
-import { Form, FormGroup } from '@patternfly/react-core';
+import { Form, FormGroup, FormHelperText,
+HelperText,
+HelperTextItem,
+} from '@patternfly/react-core';
 
 import { required } from 'util/validators';
 import FormField, { FormSubmitError } from 'components/FormField';
@@ -75,18 +78,12 @@ function ApplicationFormFields({
       />
       <FormGroup
         fieldId="authType"
-        helperTextInvalid={authorizationTypeMeta.error}
-        validated={
-          !authorizationTypeMeta.touched || !authorizationTypeMeta.error
-            ? 'default'
-            : 'error'
-        }
         isRequired
         label={t`Authorization grant type`}
         labelIcon={
-          <Popover
-            content={applicationHelpTextStrings.authorizationGrantType}
-          />
+        <Popover
+        content={applicationHelpTextStrings.authorizationGrantType}
+        />
         }
       >
         <AnsibleSelect
@@ -101,6 +98,15 @@ function ApplicationFormFields({
             authorizationTypeHelpers.setValue(value);
           }}
         />
+        {authorizationTypeMeta.touched && authorizationTypeMeta.error && (
+          <FormHelperText>
+            <HelperText>
+              <HelperTextItem variant="error">
+                {authorizationTypeMeta.error}
+              </HelperTextItem>
+            </HelperText>
+          </FormHelperText>
+        )}
       </FormGroup>
       <FormField
         id="redirect_uris"
@@ -119,10 +125,6 @@ function ApplicationFormFields({
       />
       <FormGroup
         fieldId="clientType"
-        helperTextInvalid={clientTypeMeta.error}
-        validated={
-          !clientTypeMeta.touched || !clientTypeMeta.error ? 'default' : 'error'
-        }
         isRequired
         label={t`Client type`}
         labelIcon={<Popover content={applicationHelpTextStrings.clientType} />}
@@ -136,6 +138,15 @@ function ApplicationFormFields({
             clientTypeHelpers.setValue(value);
           }}
         />
+        {clientTypeMeta.touched && clientTypeMeta.error && (
+          <FormHelperText>
+            <HelperText>
+              <HelperTextItem variant="error">
+                {clientTypeMeta.error}
+              </HelperTextItem>
+            </HelperText>
+          </FormHelperText>
+        )}
       </FormGroup>
     </>
   );

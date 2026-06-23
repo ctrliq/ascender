@@ -34,8 +34,7 @@ export const SourceVarsField = ({ popoverContent }) => {
 export const VerbosityField = () => {
   const { t } = useLingui();
   const helpText = getHelpText(t);
-  const [field, meta, helpers] = useField('verbosity');
-  const isValid = !(meta.touched && meta.error);
+  const [field, , helpers] = useField('verbosity');
   const options = [
     { value: '0', key: '0', label: t`0 (Warning)` },
     { value: '1', key: '1', label: t`1 (Info)` },
@@ -45,7 +44,6 @@ export const VerbosityField = () => {
   return (
     <FormGroup
       fieldId="verbosity"
-      validated={isValid ? 'default' : 'error'}
       label={t`Verbosity`}
       labelIcon={<Popover content={helpText.subFormVerbosityFields} />}
     >

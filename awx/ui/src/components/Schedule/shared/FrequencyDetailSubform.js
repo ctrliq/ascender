@@ -10,6 +10,9 @@ import {
   FormGroup,
   Radio,
   TextInput,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
 } from '@patternfly/react-core';
 import { required, requiredPositiveInteger } from 'util/validators';
 import AnsibleSelect from '../../AnsibleSelect';
@@ -218,11 +221,7 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
       <FormGroup
         name={`${prefix}.interval`}
         fieldId={`schedule-run-every-${id}`}
-        helperTextInvalid={intervalMeta.error}
         isRequired
-        validated={
-          !intervalMeta.touched || !intervalMeta.error ? 'default' : 'error'
-        }
         label={isException ? t`Skip every` : t`Run every`}
       >
         <div css="display: flex">
@@ -233,26 +232,29 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
             min="1"
             step="1"
             {...interval}
-            onChange={(value, event) => {
+            onChange={(event) => {
               interval.onChange(event);
             }}
           />
           <RunEveryLabel>{getRunEveryLabel()}</RunEveryLabel>
         </div>
+        {intervalMeta.error && (
+          <FormHelperText>
+            <HelperText>
+              <HelperTextItem variant="error">
+                {intervalMeta.error}
+              </HelperTextItem>
+            </HelperText>
+          </FormHelperText>
+        )}
       </FormGroup>
       {frequency === 'week' && (
-        <FormGroup
-          name={`${prefix}.daysOfWeek`}
-          fieldId={`schedule-days-of-week-${id}`}
-          helperTextInvalid={daysOfWeekMeta.error}
-          isRequired
-          validated={
-            !daysOfWeekMeta.touched || !daysOfWeekMeta.error
-              ? 'default'
-              : 'error'
-          }
-          label={t`On days`}
-        >
+      <FormGroup
+        name={`${prefix}.daysOfWeek`}
+        fieldId={`schedule-days-of-week-${id}`}
+        isRequired
+        label={t`On days`}
+      >
           <div css="display: flex">
             <Checkbox
               label={t`Sun`}
@@ -346,20 +348,25 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
               name={`${prefix}.daysOfWeek`}
             />
           </div>
+          {daysOfWeekMeta.error && (
+            <FormHelperText>
+              <HelperText>
+                <HelperTextItem variant="error">
+                  {daysOfWeekMeta.error}
+                </HelperTextItem>
+              </HelperText>
+            </FormHelperText>
+          )}
         </FormGroup>
       )}
       {(frequency === 'month' || frequency === 'year') &&
         !Number.isNaN(new Date(startDate.value)) && (
-          <FormGroup
-            name={`${prefix}.runOn`}
-            fieldId={`schedule-run-on-${id}`}
-            helperTextInvalid={runOnMeta.error}
-            isRequired
-            validated={
-              !runOnMeta.touched || !runOnMeta.error ? 'default' : 'error'
-            }
-            label={t`Run on`}
-          >
+        <FormGroup
+          name={`${prefix}.runOn`}
+          fieldId={`schedule-run-on-${id}`}
+          isRequired
+          label={t`Run on`}
+        >
             <RunOnRadio
               id={`schedule-run-on-day-${id}`}
               name={`${prefix}.runOn`}
@@ -390,7 +397,7 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
                     step="1"
                     isDisabled={runOn.value !== 'day'}
                     {...runOnDayNumber}
-                    onChange={(value, event) => {
+                    onChange={(event) => {
                       runOnDayNumber.onChange(event);
                     }}
                   />
@@ -398,7 +405,7 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
               }
               value="day"
               isChecked={runOn.value === 'day'}
-              onChange={(value, event) => {
+              onChange={(event) => {
                 event.target.value = 'day';
                 runOn.onChange(event);
               }}
@@ -508,28 +515,35 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
               }
               value="the"
               isChecked={runOn.value === 'the'}
-              onChange={(value, event) => {
+              onChange={(event) => {
                 event.target.value = 'the';
                 runOn.onChange(event);
               }}
             />
+            {runOnMeta.error && (
+              <FormHelperText>
+                <HelperText>
+                  <HelperTextItem variant="error">
+                    {runOnMeta.error}
+                  </HelperTextItem>
+                </HelperText>
+              </FormHelperText>
+            )}
           </FormGroup>
         )}
-      <FormGroup
-        name={`${prefix}.end`}
-        fieldId={`schedule-end-${id}`}
-        helperTextInvalid={endMeta.error}
-        isRequired
-        validated={!endMeta.touched || !endMeta.error ? 'default' : 'error'}
-        label={t`End`}
-      >
+          <FormGroup
+            name={`${prefix}.end`}
+            fieldId={`schedule-end-${id}`}
+            isRequired
+            label={t`End`}
+          >
         <Radio
           id={`end-never-${id}`}
           name={`${prefix}.end`}
           label={t`Never`}
           value="never"
           isChecked={end.value === 'never'}
-          onChange={(value, event) => {
+          onChange={(event) => {
             event.target.value = 'never';
             end.onChange(event);
           }}
@@ -541,7 +555,7 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
           label={t`After number of occurrences`}
           value="after"
           isChecked={end.value === 'after'}
-          onChange={(value, event) => {
+          onChange={(event) => {
             event.target.value = 'after';
             end.onChange(event);
           }}
@@ -553,12 +567,21 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
           label={t`On date`}
           value="onDate"
           isChecked={end.value === 'onDate'}
-          onChange={(value, event) => {
+          onChange={(event) => {
             event.target.value = 'onDate';
             end.onChange(event);
           }}
           ouiaId={`end-on-radio-button-${id}`}
         />
+        {endMeta.error && (
+          <FormHelperText>
+            <HelperText>
+              <HelperTextItem variant="error">
+                {endMeta.error}
+              </HelperTextItem>
+            </HelperText>
+          </FormHelperText>
+        )}
       </FormGroup>
       {end?.value === 'after' && (
         <FormField

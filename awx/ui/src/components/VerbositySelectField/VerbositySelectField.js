@@ -11,7 +11,6 @@ function VerbositySelectField({
   promptId,
   promptName,
   tooltip,
-  isValid,
 }) {
   const { t } = useLingui();
 
@@ -43,7 +42,6 @@ function VerbositySelectField({
   ) : (
     <FormGroup
       fieldId={fieldId}
-      validated={isValid ? 'default' : 'error'}
       label={t`Verbosity`}
       labelIcon={<Popover content={tooltip} />}
     >

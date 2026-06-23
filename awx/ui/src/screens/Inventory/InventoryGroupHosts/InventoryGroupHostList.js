@@ -3,7 +3,9 @@ import { useLocation, Link } from 'react-router';
 import { useParams } from 'routerCompat';
 
 import { useLingui } from '@lingui/react/macro';
-import { DropdownItem } from '@patternfly/react-core';
+import {
+	DropdownItem
+} from '@patternfly/react-core/deprecated';
 import { getQSConfig, mergeParams, parseQueryString } from 'util/qs';
 import { GroupsAPI, InventoriesAPI } from 'api';
 

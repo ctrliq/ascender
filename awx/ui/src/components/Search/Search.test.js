@@ -165,12 +165,12 @@ describe('<Search />', () => {
     // Option-based columns render the option label ('Foo Bar!'), not the raw value.
     const typeGroup = screen
       .getByText('Type (or__scm_type)')
-      .closest('.pf-c-chip-group');
+      .closest('.pf-v5-c-chip-group');
     expect(within(typeGroup).getByText('Foo Bar!')).toBeInTheDocument();
 
     const nameGroup = screen
       .getByText('Name (name__icontains)')
-      .closest('.pf-c-chip-group');
+      .closest('.pf-v5-c-chip-group');
     expect(within(nameGroup).getByText('bar')).toBeInTheDocument();
   });
 
@@ -201,7 +201,7 @@ describe('<Search />', () => {
     expect(history.location.search).toEqual(query);
     // PF Chip's close button is aria-labelledby the chip text, so its accessible
     // name is the chip text ('foo'), not 'close'; click it within its chip.
-    const chip = screen.getByText('foo').closest('.pf-c-chip');
+    const chip = screen.getByText('foo').closest('.pf-v5-c-chip');
     await user.click(within(chip).getByRole('button'));
     expect(onRemove).toHaveBeenCalledWith('or__type', 'foo');
   });
@@ -233,7 +233,7 @@ describe('<Search />', () => {
     expect(history.location.search).toEqual(query);
     // the query (or__type:) produces exactly one chip with no visible text;
     // assert there is only one and click its close button (the only button)
-    const chips = document.querySelectorAll('.pf-c-chip');
+    const chips = document.querySelectorAll('.pf-v5-c-chip');
     expect(chips).toHaveLength(1);
     await user.click(within(chips[0]).getByRole('button'));
     expect(onRemove).toHaveBeenCalledWith('or__type', '');
@@ -256,10 +256,10 @@ describe('<Search />', () => {
     // assert the category label + chip text rendered for that group.
     const nameExactGroup = screen
       .getByText('name__exact')
-      .closest('.pf-c-chip-group');
+      .closest('.pf-v5-c-chip-group');
     expect(within(nameExactGroup).getByText('baz')).toBeInTheDocument();
 
-    const fooGroup = screen.getByText('foo').closest('.pf-c-chip-group');
+    const fooGroup = screen.getByText('foo').closest('.pf-v5-c-chip-group');
     expect(within(fooGroup).getByText('bar')).toBeInTheDocument();
   });
 

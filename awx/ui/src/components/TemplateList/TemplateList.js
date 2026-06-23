@@ -5,7 +5,12 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLocation, Link } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
-import { Card, DropdownItem } from '@patternfly/react-core';
+import {
+	Card
+} from '@patternfly/react-core';
+import {
+	DropdownItem
+} from '@patternfly/react-core/deprecated';
 import {
   JobTemplatesAPI,
   UnifiedJobTemplatesAPI,

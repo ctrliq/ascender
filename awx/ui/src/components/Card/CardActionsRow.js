@@ -1,18 +1,15 @@
 import React from 'react';
-import { CardActions } from '@patternfly/react-core';
 import styled from 'styled-components';
 
 const CardActionsWrapper = styled.div`
-  margin-top: var(--pf-global--spacer--xl);
-  --pf-c-card__actions--PaddingLeft: 0;
+  margin-top: var(--pf-v5-global--spacer--xl);
+  display: flex;
+  align-items: center;
+  gap: var(--pf-v5-global--spacer--sm);
 `;
 
 function CardActionsRow({ children }) {
-  return (
-    <CardActionsWrapper>
-      <CardActions>{children}</CardActions>
-    </CardActionsWrapper>
-  );
+  return <CardActionsWrapper>{children}</CardActionsWrapper>;
 }
 
 export default CardActionsRow;

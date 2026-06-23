@@ -3,15 +3,16 @@ import styled from 'styled-components';
 
 import { useLingui } from '@lingui/react/macro';
 import {
-  Card,
-  CardHeader,
-  CardActions,
-  CardBody,
-  PageSection,
-  Select,
-  SelectVariant,
-  SelectOption,
+	Card,
+	CardHeader,
+	CardBody,
+	PageSection
 } from '@patternfly/react-core';
+import {
+	Select,
+	SelectVariant,
+	SelectOption
+} from '@patternfly/react-core/deprecated';
 
 import useRequest from 'hooks/useRequest';
 import { DashboardAPI } from 'api';
@@ -20,14 +21,17 @@ import LineChart from './shared/LineChart';
 
 const StatusSelect = styled(Select)`
   && {
-    --pf-c-select__toggle--MinWidth: 165px;
+    --pf-v5-c-select__toggle--MinWidth: 165px;
   }
 `;
 const GraphCardHeader = styled(CardHeader)`
-  margin-top: var(--pf-global--spacer--lg);
+  margin-top: var(--pf-v5-global--spacer--lg);
 `;
 
-const GraphCardActions = styled(CardActions)`
+const GraphCardActions = styled.div`
+  display: flex;
+  align-items: center;
+  gap: var(--pf-v5-global--spacer--sm);
   margin-left: initial;
   padding-left: 0;
 `;
@@ -97,7 +101,7 @@ function DashboardGraph() {
             aria-label={t`Select period`}
             typeAheadAriaLabel={t`Select period`}
             className="periodSelect"
-            onToggle={setIsPeriodDropdownOpen}
+            onToggle={(_event, val) => setIsPeriodDropdownOpen(val)}
             onSelect={(event, selection) => {
               setIsPeriodDropdownOpen(false);
               setPeriodSelection(selection);
@@ -125,7 +129,7 @@ function DashboardGraph() {
             placeholderText={t`Select job type`}
             aria-label={t`Select job type`}
             className="jobTypeSelect"
-            onToggle={setIsJobTypeDropdownOpen}
+            onToggle={(_event, val) => setIsJobTypeDropdownOpen(val)}
             onSelect={(event, selection) => {
               setIsJobTypeDropdownOpen(false);
               setJobTypeSelection(selection);
@@ -152,7 +156,7 @@ function DashboardGraph() {
             placeholderText={t`Select status`}
             aria-label={t`Select status`}
             className="jobStatusSelect"
-            onToggle={setIsJobStatusDropdownOpen}
+            onToggle={(_event, val) => setIsJobStatusDropdownOpen(val)}
             onSelect={(event, selection) => {
               setIsJobStatusDropdownOpen(false);
               setJobStatusSelection(selection);

@@ -5,11 +5,11 @@ import { HelpIcon } from '@patternfly/react-icons';
 import styled from 'styled-components';
 
 const PopoverButton = styled.button`
-  padding: var(--pf-global--spacer--xs);
-  margin: -(var(--pf-global--spacer--xs));
-  font-size: var(--pf-global--FontSize--sm);
-  --pf-c-form__group-label-help--Color: var(--pf-global--Color--200);
-  --pf-c-form__group-label-help--hover--Color: var(--pf-global--Color--100);
+  padding: var(--pf-v5-global--spacer--xs);
+  margin: -(var(--pf-v5-global--spacer--xs));
+  font-size: var(--pf-v5-global--FontSize--sm);
+  --pf-v5-c-form__group-label-help--Color: var(--pf-v5-global--Color--200);
+  --pf-v5-c-form__group-label-help--hover--Color: var(--pf-v5-global--Color--100);
 `;
 
 function Popover({
@@ -37,11 +37,11 @@ function Popover({
       <PopoverButton
         aria-label={ariaLabel ?? t`More information`}
         aria-haspopup="true"
-        className="pf-c-form__group-label-help"
+        className="pf-v5-c-form__group-label-help"
         onClick={(e) => e.preventDefault()}
         type="button"
       >
-        <HelpIcon noVerticalAlign />
+        <HelpIcon />
       </PopoverButton>
     </PFPopover>
   );

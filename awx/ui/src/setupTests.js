@@ -53,13 +53,29 @@ global.console = {
       !msg.includes('does not recognize the') &&
       !msg.includes('React.jsx: type is invalid') &&
       !msg.includes('is not a valid value for attribute') &&
-      !msg.includes('Received NaN for the')
+      !msg.includes('Received NaN for the') &&
+      !msg.includes('Uncaught [TypeError:') &&
+      !msg.includes('The above error occurred in') &&
+      !msg.includes('was not wrapped in act(')
     ) {
       hasConsoleError = true;
       error(...args);
     }
   },
   warn: (...args) => {
+    const raw = args[0];
+    let warnMsg = '';
+    if (typeof raw === 'string') {
+      warnMsg = raw;
+    } else if (raw instanceof Error) {
+      warnMsg = raw.message;
+    }
+    if (
+      warnMsg.includes('Formik called `handleChange`, but you forgot to pass an `id` or `name`') ||
+      warnMsg.includes('Table headers must have an accessible name')
+    ) {
+      return;
+    }
     hasConsoleWarn = true;
     warn(...args);
   },

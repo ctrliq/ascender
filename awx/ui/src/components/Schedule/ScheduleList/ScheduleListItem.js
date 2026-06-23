@@ -16,7 +16,7 @@ import { ActionsTd, ActionItem, TdBreakWord } from '../../PaginatedTable';
 import { ScheduleToggle } from '..';
 
 const ExclamationTriangleIcon = styled(PFExclamationTriangleIcon)`
-  color: var(--pf-global--danger-color--100);
+  color: var(--pf-v5-global--danger-color--100);
   margin-left: 20px;
 `;
 
@@ -78,7 +78,7 @@ function ScheduleListItem({
           rowIndex,
           isSelected,
           onSelect,
-          disable: false,
+          isDisabled: false,
         }}
         dataLabel={t`Selected`}
       />

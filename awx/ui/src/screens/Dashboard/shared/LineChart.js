@@ -34,11 +34,11 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
 
     const textColor =
       getComputedStyle(document.documentElement)
-        .getPropertyValue('--pf-global--Color--100')
+        .getPropertyValue('--pf-v5-global--Color--100')
         .trim() || '#151515';
     const gridColor =
       getComputedStyle(document.documentElement)
-        .getPropertyValue('--pf-global--BorderColor--100')
+        .getPropertyValue('--pf-v5-global--BorderColor--100')
         .trim() || '#373a41';
 
     function transition(path) {

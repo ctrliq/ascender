@@ -39,8 +39,8 @@ const CardHeader = styled(_CardHeader)`
   }
 `;
 const CardDescription = styled.div`
-  color: var(--pf-global--Color--200);
-  font-size: var(--pf-global--FontSize--xs);
+  color: var(--pf-v5-global--Color--200);
+  font-size: var(--pf-v5-global--FontSize--xs);
 `;
 
 function SettingList() {

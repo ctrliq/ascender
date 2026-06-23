@@ -10,13 +10,13 @@ import MultiButtonToggle from '../../MultiButtonToggle';
 
 const OccurrencesLabel = styled.div`
   display: inline-block;
-  font-size: var(--pf-c-form__label--FontSize);
-  font-weight: var(--pf-c-form__label--FontWeight);
-  line-height: var(--pf-c-form__label--LineHeight);
-  color: var(--pf-c-form__label--Color);
+  font-size: var(--pf-v5-c-form__label--FontSize);
+  font-weight: var(--pf-v5-c-form__label--FontWeight);
+  line-height: var(--pf-v5-c-form__label--LineHeight);
+  color: var(--pf-v5-c-form__label--Color);
 
   span:first-of-type {
-    font-weight: var(--pf-global--FontWeight--bold);
+    font-weight: var(--pf-v5-global--FontWeight--bold);
     margin-right: 10px;
   }
 `;

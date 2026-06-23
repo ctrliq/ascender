@@ -166,7 +166,7 @@ describe('<CredentialForm />', () => {
       // wrapper that also holds the browse button #credential-gce-file-browse-button
       const fileInput = container
         .querySelector('#credential-gce-file-browse-button')
-        .closest('.pf-c-file-upload')
+        .closest('.pf-v5-c-file-upload')
         .querySelector('input[type="file"]');
       const file = makeJsonFile(
         '{"client_email":"testemail@ansible.com","project_id":"test123","private_key":"-----BEGIN PRIVATE KEY-----\\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\\n-----END PRIVATE KEY-----\\n"}'
@@ -192,7 +192,7 @@ describe('<CredentialForm />', () => {
       const gceClearButton = within(
         container
           .querySelector('#credential-gce-file-browse-button')
-          .closest('.pf-c-file-upload')
+          .closest('.pf-v5-c-file-upload')
       ).getByRole('button', { name: 'Clear' });
       await user.click(gceClearButton);
       await waitFor(() =>
@@ -231,7 +231,7 @@ describe('<CredentialForm />', () => {
       // wrapper that also holds the browse button #credential-gce-file-browse-button
       const fileInput = container
         .querySelector('#credential-gce-file-browse-button')
-        .closest('.pf-c-file-upload')
+        .closest('.pf-v5-c-file-upload')
         .querySelector('input[type="file"]');
       const file = makeJsonFile('{not good json}');
       fireEvent.change(fileInput, { target: { files: [file] } });

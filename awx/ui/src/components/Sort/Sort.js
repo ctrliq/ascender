@@ -4,14 +4,16 @@ import React, { useState } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import {
-  Button,
-  ButtonVariant,
-  Dropdown,
-  DropdownPosition,
-  DropdownToggle,
-  DropdownItem,
-  InputGroup,
+	Button,
+	ButtonVariant,
+	InputGroup, InputGroupItem
 } from '@patternfly/react-core';
+import {
+	Dropdown,
+	DropdownPosition,
+	DropdownToggle,
+	DropdownItem
+} from '@patternfly/react-core/deprecated';
 import {
   SortAlphaDownIcon,
   SortAlphaDownAltIcon,
@@ -24,10 +26,10 @@ import { parseQueryString } from 'util/qs';
 
 const NoOptionDropdown = styled.div`
   align-self: stretch;
-  border: 1px solid var(--pf-global--BorderColor--300);
+  border: 1px solid var(--pf-v5-global--BorderColor--300);
   padding: 5px 15px;
   white-space: nowrap;
-  border-bottom-color: var(--pf-global--BorderColor--200);
+  border-bottom-color: var(--pf-v5-global--BorderColor--200);
 `;
 
 function Sort({ columns, qsConfig, onSort = null }) {
@@ -115,7 +117,7 @@ function Sort({ columns, qsConfig, onSort = null }) {
         <InputGroup>
           {(sortDropdownItems.length > 0 && (
             <Dropdown
-              onToggle={handleDropdownToggle}
+              onToggle={(_event, isOpen) => handleDropdownToggle(isOpen)}
               onSelect={handleDropdownSelect}
               direction={up}
               isOpen={isSortDropdownOpen}
@@ -123,7 +125,7 @@ function Sort({ columns, qsConfig, onSort = null }) {
               toggle={
                 <DropdownToggle
                   id="awx-sort"
-                  onToggle={handleDropdownToggle}
+                  onToggle={(_event, isOpen) => handleDropdownToggle(isOpen)}
                   ouiaId="sort-dropdown-toggle"
                 >
                   {sortedColumnName}
@@ -133,14 +135,14 @@ function Sort({ columns, qsConfig, onSort = null }) {
             />
           )) || <NoOptionDropdown>{sortedColumnName}</NoOptionDropdown>}
 
-          <Button
+          <InputGroupItem><Button
             variant={ButtonVariant.control}
             aria-label={t`Sort`}
             onClick={handleSort}
             ouiaId="sort-button"
           >
             <SortIcon />
-          </Button>
+          </Button></InputGroupItem>
         </InputGroup>
       )}
     </>

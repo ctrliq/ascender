@@ -11,9 +11,12 @@ import {
   ButtonVariant,
   Chip,
   FormGroup,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
   InputGroup,
   Modal,
-  Tooltip,
+  Tooltip, InputGroupItem,
 } from '@patternfly/react-core';
 import { HostsAPI } from 'api';
 import { getQSConfig, mergeParams, parseQueryString } from 'util/qs';
@@ -47,15 +50,15 @@ const Alert = styled(PFAlert)`
 
 const ChipHolder = styled.div`
   && {
-    --pf-c-form-control--Height: auto;
+    --pf-v5-c-form-control--Height: auto;
   }
-  .pf-c-chip-group {
+  .pf-v5-c-chip-group {
     margin-right: 8px;
   }
 `;
 
 const ModalList = styled.div`
-  .pf-c-toolbar__content {
+  .pf-v5-c-toolbar__content {
     padding: 0 !important;
   }
 `;
@@ -293,7 +296,7 @@ function HostFilterLookup({
 
   const renderLookup = () => (
     <InputGroup onBlur={onBlur}>
-      <Button
+      <InputGroupItem><Button
         ouiaId="host-filter-search-button"
         aria-label={t`Search`}
         id="host-filter"
@@ -302,8 +305,8 @@ function HostFilterLookup({
         variant={ButtonVariant.control}
       >
         <SearchIcon />
-      </Button>
-      <ChipHolder className="pf-c-form-control">
+      </Button></InputGroupItem>
+      <InputGroupItem><ChipHolder className="pf-v5-c-form-control">
         {searchColumns.map(({ name, key }) => (
           <ChipGroup
             categoryName={name}
@@ -341,17 +344,15 @@ function HostFilterLookup({
                 ))}
               </ChipGroup>
             ))}
-      </ChipHolder>
+      </ChipHolder></InputGroupItem>
     </InputGroup>
   );
 
   return (
     <FormGroup
       fieldId="host-filter"
-      helperTextInvalid={helperTextInvalid}
       isRequired
       label={t`Smart host filter`}
-      validated={isValid ? 'default' : 'error'}
       labelIcon={
         <Popover
           content={t`Populate the hosts for this inventory by using a search
@@ -451,6 +452,15 @@ function HostFilterLookup({
         </ModalList>
       </Modal>
       <LookupErrorMessage error={error} />
+      {!isValid && (
+        <FormHelperText>
+          <HelperText>
+            <HelperTextItem variant="error">
+              {helperTextInvalid}
+            </HelperTextItem>
+          </HelperText>
+        </FormHelperText>
+      )}
     </FormGroup>
   );
 }

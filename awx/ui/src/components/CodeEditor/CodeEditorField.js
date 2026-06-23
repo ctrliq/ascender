@@ -1,6 +1,11 @@
 import React from 'react';
 import { useField } from 'formik';
-import { FormGroup } from '@patternfly/react-core';
+import {
+  FormGroup,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
+} from '@patternfly/react-core';
 import CodeEditor from './CodeEditor';
 import Popover from '../Popover';
 
@@ -23,10 +28,7 @@ function CodeEditorField({
     <FormGroup
       id={`${id}-field`}
       fieldId={id}
-      helperText={helperText}
-      helperTextInvalid={meta.error}
       isRequired={isRequired}
-      validated={isValid ? 'default' : 'error'}
       label={label}
       labelIcon={<Popover content={tooltip} />}
     >
@@ -40,6 +42,15 @@ function CodeEditorField({
         mode={mode}
         rows={rows}
       />
+      {(helperText || !isValid) && (
+        <FormHelperText>
+          <HelperText>
+            <HelperTextItem variant={isValid ? 'default' : 'error'}>
+              {isValid ? helperText : meta.error}
+            </HelperTextItem>
+          </HelperText>
+        </FormHelperText>
+      )}
     </FormGroup>
   );
 }

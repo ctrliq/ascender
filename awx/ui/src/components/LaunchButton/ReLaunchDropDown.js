@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
 import {
-  Dropdown,
-  DropdownToggle,
-  DropdownItem,
-  DropdownPosition,
-  DropdownSeparator,
-  DropdownDirection,
-} from '@patternfly/react-core';
+	Dropdown,
+	DropdownToggle,
+	DropdownItem,
+	DropdownPosition,
+	DropdownSeparator,
+	DropdownDirection
+} from '@patternfly/react-core/deprecated';
 import { RocketIcon } from '@patternfly/react-icons';
 
 function ReLaunchDropDown({
@@ -21,8 +21,8 @@ function ReLaunchDropDown({
   const { t } = useLingui();
   const [isOpen, setIsOpen] = useState(false);
 
-  const onToggle = () => {
-    setIsOpen((prev) => !prev);
+  const onToggle = (_event, val) => {
+    setIsOpen(val);
   };
 
   const dropdownItems = [
@@ -77,7 +77,7 @@ function ReLaunchDropDown({
             onToggle={onToggle}
             aria-label={t`relaunch jobs`}
             id={id}
-            isPrimary
+            toggleVariant="primary"
             ouiaId="relaunch-job-toggle"
           >
             {t`Relaunch`}

@@ -7,17 +7,19 @@ import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
 import styled from 'styled-components';
 import {
-  Dropdown,
-  DropdownItem,
-  DropdownToggle,
-  DropdownPosition,
-  NotificationBadge,
-  NotificationBadgeVariant,
-  PageHeaderTools,
-  PageHeaderToolsGroup,
-  PageHeaderToolsItem,
-  Tooltip,
+	NotificationBadge,
+	NotificationBadgeVariant,
+	Tooltip
 } from '@patternfly/react-core';
+import {
+	PageHeaderTools,
+	PageHeaderToolsGroup,
+	PageHeaderToolsItem,
+	Dropdown,
+	DropdownItem,
+	DropdownToggle,
+	DropdownPosition
+} from '@patternfly/react-core/deprecated';
 import { MoonIcon, QuestionCircleIcon, SunIcon, UserIcon } from '@patternfly/react-icons';
 import { WorkflowApprovalsAPI } from 'api';
 import useRequest from 'hooks/useRequest';
@@ -28,13 +30,13 @@ import useWsPendingApprovalCount from './useWsPendingApprovalCount';
 const PendingWorkflowApprovals = styled.div`
   display: flex;
   align-items: center;
-  padding: var(--pf-global--spacer--md);
-  margin-right: var(--pf-global--spacer--md);
+  padding: var(--pf-v5-global--spacer--md);
+  margin-right: var(--pf-v5-global--spacer--md);
 `;
 
 const UserName = styled.span`
-  margin-left: var(--pf-global--spacer--md);
-  font-size: var(--pf-global--FontSize--sm);
+  margin-left: var(--pf-v5-global--spacer--md);
+  font-size: var(--pf-v5-global--FontSize--sm);
 `;
 
 function PageHeaderToolbar({
@@ -114,9 +116,9 @@ function PageHeaderToolbar({
                 background: 'none',
                 border: 'none',
                 cursor: 'pointer',
-                padding: 'var(--pf-global--spacer--md)',
-                color: 'var(--pf-global--Color--100)',
-                fontSize: 'var(--pf-global--FontSize--md)',
+                padding: 'var(--pf-v5-global--spacer--md)',
+                color: 'var(--pf-v5-global--Color--100)',
+                fontSize: 'var(--pf-v5-global--FontSize--md)',
                 display: 'flex',
                 alignItems: 'center',
               }}
@@ -154,7 +156,7 @@ function PageHeaderToolbar({
             ouiaId="toolbar-info-dropdown"
             toggle={
               <DropdownToggle
-                onToggle={setIsHelpOpen}
+                onToggle={(_event, val) => setIsHelpOpen(val)}
                 aria-label={t`Info`}
                 ouiaId="toolbar-info-dropdown-toggle"
               >
@@ -195,7 +197,7 @@ function PageHeaderToolbar({
             onSelect={handleUserSelect}
             toggle={
               <DropdownToggle
-                onToggle={setIsUserOpen}
+                onToggle={(_event, val) => setIsUserOpen(val)}
                 ouiaId="toolbar-user-dropdown-toggle"
               >
                 <UserIcon />

@@ -5,9 +5,8 @@ import {
   Button,
   EmptyState,
   EmptyStateBody,
-  EmptyStateIcon,
-  Title,
-} from '@patternfly/react-core';
+  EmptyStateIcon, EmptyStateHeader,
+  } from '@patternfly/react-core';
 import { CubesIcon } from '@patternfly/react-icons';
 import { TeamsAPI, RolesAPI, UsersAPI } from 'api';
 import useRequest, { useDeleteItems } from 'hooks/useRequest';
@@ -124,10 +123,7 @@ function TeamRolesList({ me, team }) {
   if (isSysAdmin) {
     return (
       <EmptyState variant="full">
-        <EmptyStateIcon icon={CubesIcon} />
-        <Title headingLevel="h5" size="lg">
-          {t`System Administrator`}
-        </Title>
+        <EmptyStateHeader titleText={<>{t`System Administrator`}</>} icon={<EmptyStateIcon icon={CubesIcon} />} headingLevel="h5" />
         <EmptyStateBody>
           {t`System administrators have unrestricted access to all resources.`}
         </EmptyStateBody>

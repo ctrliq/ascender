@@ -1,7 +1,13 @@
 import React, { useContext } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
-import { Button, DropdownItem, Tooltip } from '@patternfly/react-core';
+import {
+	Button,
+	Tooltip
+} from '@patternfly/react-core';
+import {
+	DropdownItem
+} from '@patternfly/react-core/deprecated';
 import { KebabifiedContext } from 'contexts/Kebabified';
 
 function cannotApprove(item) {

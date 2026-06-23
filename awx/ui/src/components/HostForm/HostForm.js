@@ -1,7 +1,14 @@
 import React, { useCallback } from 'react';
 import { Formik, useField, useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
-import { Form, FormGroup, Tooltip } from '@patternfly/react-core';
+import {
+  Form,
+  FormGroup,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
+  Tooltip,
+} from '@patternfly/react-core';
 import { required } from 'util/validators';
 import FormField, { FormSubmitError } from '../FormField';
 import FormActionGroup from '../FormActionGroup/FormActionGroup';
@@ -53,10 +60,6 @@ const InventoryLookupField = ({ isDisabled }) => {
       }
       isRequired
       fieldId="inventory-lookup"
-      validated={
-        !inventoryMeta.touched || !inventoryMeta.error ? 'default' : 'error'
-      }
-      helperTextInvalid={inventoryMeta.error}
     >
       {isDisabled ? (
         <Tooltip content={t`Unable to change inventory on a host`}>
@@ -64,6 +67,15 @@ const InventoryLookupField = ({ isDisabled }) => {
         </Tooltip>
       ) : (
         renderInventoryLookup
+      )}
+      {inventoryMeta.touched && inventoryMeta.error && (
+        <FormHelperText>
+          <HelperText>
+            <HelperTextItem variant="error">
+              {inventoryMeta.error}
+            </HelperTextItem>
+          </HelperText>
+        </FormHelperText>
       )}
     </FormGroup>
   );

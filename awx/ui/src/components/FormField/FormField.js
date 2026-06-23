@@ -1,7 +1,14 @@
 
 import React from 'react';
 import { useField } from 'formik';
-import { FormGroup, TextInput, TextArea } from '@patternfly/react-core';
+import {
+  FormGroup,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
+  TextInput,
+  TextArea,
+} from '@patternfly/react-core';
 import Popover from '../Popover';
 
 function FormField({
@@ -13,11 +20,22 @@ function FormField({
   tooltipMaxWidth = '',
   validate = () => {},
   isRequired = false,
+  isReadOnly = false,
   type = 'text',
   ...rest
 }) {
   const [field, meta] = useField({ name, validate });
   const isValid = !(meta.touched && meta.error);
+
+  const helperTextContent = (
+    <FormHelperText>
+      <HelperText>
+        <HelperTextItem variant={isValid ? 'default' : 'error'}>
+          {isValid ? helperText : meta.error}
+        </HelperTextItem>
+      </HelperText>
+    </FormHelperText>
+  );
 
   return (
     <>
@@ -25,10 +43,7 @@ function FormField({
         <FormGroup
           fieldId={id}
           data-cy={`${id}-form-group`}
-          helperText={helperText}
-          helperTextInvalid={meta.error}
           isRequired={isRequired}
-          validated={isValid ? 'default' : 'error'}
           label={label}
           labelIcon={<Popover content={tooltip} maxWidth={tooltipMaxWidth} />}
         >
@@ -39,19 +54,17 @@ function FormField({
             resizeOrientation="vertical"
             {...rest}
             {...field}
-            onChange={(value, event) => {
+            onChange={(event) => {
               field.onChange(event);
             }}
           />
+          {(helperText || !isValid) && helperTextContent}
         </FormGroup>
       )) || (
         <FormGroup
           fieldId={id}
           data-cy={`${id}-form-group`}
-          helperText={helperText}
-          helperTextInvalid={meta.error}
           isRequired={isRequired}
-          validated={isValid ? 'default' : 'error'}
           label={label}
           labelIcon={<Popover content={tooltip} maxWidth={tooltipMaxWidth} />}
         >
@@ -59,13 +72,15 @@ function FormField({
             id={id}
             isRequired={isRequired}
             validated={isValid ? 'default' : 'error'}
+            {...(isReadOnly ? { readOnlyVariant: 'default' } : {})}
             {...rest}
             {...field}
             type={type}
-            onChange={(value, event) => {
+            onChange={(event) => {
               field.onChange(event);
             }}
           />
+          {(helperText || !isValid) && helperTextContent}
         </FormGroup>
       )}
     </>

@@ -31,17 +31,17 @@ import {
 } from '../shared/WorkflowApprovalUtils';
 
 const Divider = styled(PFDivider)`
-  margin-top: var(--pf-global--spacer--lg);
-  margin-bottom: var(--pf-global--spacer--lg);
+  margin-top: var(--pf-v5-global--spacer--lg);
+  margin-bottom: var(--pf-v5-global--spacer--lg);
 `;
 
 const Title = styled(PFTitle)`
-  margin-top: var(--pf-global--spacer--xl);
-  --pf-c-title--m-md--FontWeight: 700;
+  margin-top: var(--pf-v5-global--spacer--xl);
+  --pf-v5-c-title--m-md--FontWeight: 700;
 `;
 
 const WFDetailList = styled(DetailList)`
-  padding: 0px var(--pf-global--spacer--lg);
+  padding: 0px var(--pf-v5-global--spacer--lg);
 `;
 
 function WorkflowApprovalDetail({ workflowApproval, fetchWorkflowApproval }) {

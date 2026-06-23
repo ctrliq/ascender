@@ -52,7 +52,7 @@ describe('Setting form fields', () => {
     );
     expect(container.querySelector('select#choice')).toBeInTheDocument();
     expect(
-      container.querySelector('.pf-c-form__label-required')
+      container.querySelector('.pf-v5-c-form__label-required')
     ).not.toBeInTheDocument();
   });
 

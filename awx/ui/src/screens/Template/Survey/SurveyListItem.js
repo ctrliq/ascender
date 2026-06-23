@@ -10,8 +10,8 @@ import ChipGroup from 'components/ChipGroup';
 import { ActionItem, ActionsTd } from 'components/PaginatedTable';
 
 const Required = styled.span`
-  color: var(--pf-global--danger-color--100);
-  margin-left: var(--pf-global--spacer--xs);
+  color: var(--pf-v5-global--danger-color--100);
+  margin-left: var(--pf-v5-global--spacer--xs);
 `;
 
 const SurveyActionsTd = styled(ActionsTd)`
@@ -49,7 +49,7 @@ function SurveyListItem({ canEdit, question, isChecked, onSelect, rowIndex }) {
           {question.required && (
             <Required
               aria-label={t`Required`}
-              className="pf-c-form__label-required"
+              className="pf-v5-c-form__label-required"
               aria-hidden="true"
             >
               *

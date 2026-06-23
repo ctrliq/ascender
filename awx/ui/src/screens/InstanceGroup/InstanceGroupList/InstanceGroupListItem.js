@@ -15,7 +15,7 @@ import styled from 'styled-components';
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
 
 const Unavailable = styled.span`
-  color: var(--pf-global--danger-color--200);
+  color: var(--pf-v5-global--danger-color--200);
 `;
 
 function InstanceGroupListItem({

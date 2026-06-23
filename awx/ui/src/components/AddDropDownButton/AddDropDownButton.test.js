@@ -1,6 +1,8 @@
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
-import { DropdownItem } from '@patternfly/react-core';
+import {
+	DropdownItem
+} from '@patternfly/react-core/deprecated';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import AddDropDownButton from './AddDropDownButton';
 

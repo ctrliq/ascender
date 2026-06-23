@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
 
 import {
-  Button,
-  Nav,
-  NavList,
-  Page,
-  PageHeader as PFPageHeader,
-  PageHeaderTools,
-  PageHeaderToolsGroup,
-  PageHeaderToolsItem,
-  PageSidebar,
+	Button,
+	Nav,
+	NavList,
+	Page,
+	PageSidebar, PageSidebarBody
 } from '@patternfly/react-core';
+import {
+	PageHeader as PFPageHeader,
+	PageHeaderTools,
+	PageHeaderToolsGroup,
+	PageHeaderToolsItem
+} from '@patternfly/react-core/deprecated';
 import { Plural, Trans, useLingui } from '@lingui/react/macro';
 
 import styled from 'styled-components';
@@ -25,7 +27,7 @@ import PageHeaderToolbar from './PageHeaderToolbar';
 import AlertModal from '../AlertModal';
 
 const PageHeader = styled(PFPageHeader)`
-  & .pf-c-page__header-brand-link {
+  & .pf-v5-c-page__header-brand-link {
     color: inherit;
     &:hover {
       color: inherit;
@@ -91,9 +93,9 @@ function AppContainer({ navRouteConfig = [], children }) {
   );
 
   const sidebar = (
-    <PageSidebar
-      theme="dark"
-      nav={
+    <PageSidebar theme="dark" >
+<PageSidebarBody>
+
         <Nav
 
           aria-label={t`Navigation`}
@@ -111,8 +113,9 @@ function AppContainer({ navRouteConfig = [], children }) {
             ))}
           </NavList>
         </Nav>
-      }
-    />
+
+</PageSidebarBody>
+</PageSidebar>
   );
 
   return (

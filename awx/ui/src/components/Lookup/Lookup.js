@@ -8,7 +8,7 @@ import {
   Chip,
   InputGroup,
   Modal,
-  TextInput,
+  TextInput, InputGroupItem,
 } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
@@ -17,9 +17,9 @@ import ChipGroup from '../ChipGroup';
 import reducer, { initReducer } from './shared/reducer';
 
 const ChipHolder = styled.div`
-  --pf-c-form-control--Height: auto;
+  --pf-v5-c-form-control--Height: auto;
   background-color: ${(props) =>
-    props.$isDisabled ? 'var(--pf-global--disabled-color--300)' : null};
+    props.$isDisabled ? 'var(--pf-v5-global--disabled-color--300)' : null};
 `;
 function Lookup({
   id = 'lookup-search',
@@ -132,7 +132,7 @@ function Lookup({
   return (
     <>
       <InputGroup onBlur={onBlur}>
-        <Button
+        <InputGroupItem><Button
           aria-label={t`Search`}
           id={`${id}-open`}
           ouiaId={`${id}-open`}
@@ -141,9 +141,9 @@ function Lookup({
           isDisabled={isLoading || isDisabled}
         >
           <SearchIcon />
-        </Button>
+        </Button></InputGroupItem>
         {multiple ? (
-          <ChipHolder $isDisabled={isDisabled} className="pf-c-form-control">
+          <ChipHolder $isDisabled={isDisabled} className="pf-v5-c-form-control">
             <ChipGroup
               numChips={5}
               totalChips={items.length}
@@ -163,7 +163,7 @@ function Lookup({
             id={id}
             ouiaId={`${id}-input`}
             value={typedText}
-            onChange={(inputValue) => {
+            onChange={(_event, inputValue) => {
               setTypedText(inputValue);
               if (value?.name !== inputValue) {
                 debounceRequest(inputValue);

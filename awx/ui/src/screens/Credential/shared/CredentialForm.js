@@ -4,15 +4,20 @@ import { Formik, useField, useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
 
 import {
-  ActionGroup,
-  Button,
-  Form,
-  FormGroup,
-  Select as PFSelect,
-  SelectOption as PFSelectOption,
-  SelectVariant,
-  Tooltip,
+	ActionGroup,
+	Button,
+	Form,
+	FormGroup,
+	Tooltip,
+	FormHelperText,
+	HelperText,
+	HelperTextItem,
 } from '@patternfly/react-core';
+import {
+	Select as PFSelect,
+	SelectOption as PFSelectOption,
+	SelectVariant
+} from '@patternfly/react-core/deprecated';
 import styled from 'styled-components';
 import FormField, { FormSubmitError } from 'components/FormField';
 import { FormColumnLayout, FormFullWidthLayout } from 'components/FormLayout';
@@ -126,7 +131,7 @@ function CredentialFormFields({ initialTypeId, credentialTypes }) {
       typeAheadAriaLabel={t`Select Credential Type`}
       isOpen={isSelectOpen}
       variant={SelectVariant.typeahead}
-      onToggle={setIsSelectOpen}
+      onToggle={(_event, val) => setIsSelectOpen(val)}
       onSelect={(event, value) => {
         setCredentialTypeId(value);
         credTypeHelpers.setValue(value);
@@ -179,11 +184,7 @@ function CredentialFormFields({ initialTypeId, credentialTypes }) {
       />
       <FormGroup
         fieldId="credential-Type"
-        helperTextInvalid={credTypeMeta.error}
         isRequired
-        validated={
-          !credTypeMeta.touched || !credTypeMeta.error ? 'default' : 'error'
-        }
         label={t`Credential Type`}
       >
         {isCredentialTypeDisabled ? (
@@ -194,6 +195,15 @@ function CredentialFormFields({ initialTypeId, credentialTypes }) {
           </Tooltip>
         ) : (
           credentialTypeSelect
+        )}
+        {credTypeMeta.touched && credTypeMeta.error && (
+          <FormHelperText>
+            <HelperText>
+              <HelperTextItem variant="error">
+                {credTypeMeta.error}
+              </HelperTextItem>
+            </HelperText>
+          </FormHelperText>
         )}
       </FormGroup>
       {credentialTypeId !== undefined &&

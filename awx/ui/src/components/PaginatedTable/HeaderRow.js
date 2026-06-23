@@ -6,8 +6,8 @@ import styled from 'styled-components';
 import { parseQueryString, updateQueryString } from 'util/qs';
 
 const Th = styled(PFTh)`
-  --pf-c-table--cell--Overflow: initial;
-  --pf-c-table--cell--MaxWidth: none;
+  --pf-v5-c-table--cell--Overflow: initial;
+  --pf-v5-c-table--cell--MaxWidth: none;
   ${(props) => (props.$alignRight ? 'text-align: right;' : '')}
 `;
 

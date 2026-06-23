@@ -52,7 +52,7 @@ const HeaderTitle = styled.div`
   align-items: center;
   h1 {
     margin-right: 10px;
-    font-weight: var(--pf-global--FontWeight--bold);
+    font-weight: var(--pf-v5-global--FontWeight--bold);
   }
 `;
 
@@ -62,7 +62,7 @@ const OutputHeader = styled.div`
 `;
 
 const OutputWrapper = styled.div`
-  background-color: var(--pf-global--BackgroundColor--200);
+  background-color: var(--pf-v5-global--BackgroundColor--200);
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
@@ -72,7 +72,7 @@ const OutputWrapper = styled.div`
   min-height: 0;
   font-family: monospace;
   font-size: 15px;
-  outline: 1px solid var(--pf-global--BorderColor--100);
+  outline: 1px solid var(--pf-v5-global--BorderColor--100);
   ${({ $cssMap }) =>
     Object.keys($cssMap).map(
       (className) => `.${className}{${$cssMap[className]}}`
@@ -95,8 +95,8 @@ const ScrollContainer = styled.div`
 `;
 
 const OutputFooter = styled.div`
-  background-color: var(--pf-global--BackgroundColor--200);
-  border-right: 1px solid var(--pf-global--BorderColor--100);
+  background-color: var(--pf-v5-global--BackgroundColor--200);
+  border-right: 1px solid var(--pf-v5-global--BorderColor--100);
   width: 75px;
   flex: 1;
 `;
@@ -1011,7 +1011,7 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
         />
         {showEventsRefresh ? (
           <Alert
-            variant="default"
+            variant="custom"
             title={
               <>
                 {t`Events processing complete.`}{' '}

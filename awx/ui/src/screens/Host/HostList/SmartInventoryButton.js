@@ -1,5 +1,11 @@
 import React from 'react';
-import { Button, DropdownItem, Tooltip } from '@patternfly/react-core';
+import {
+	Button,
+	Tooltip
+} from '@patternfly/react-core';
+import {
+	DropdownItem
+} from '@patternfly/react-core/deprecated';
 
 import { useLingui } from '@lingui/react/macro';
 

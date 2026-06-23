@@ -1,7 +1,10 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Formik, useField, useFormikContext } from 'formik';
-import { Form, FormGroup, Title } from '@patternfly/react-core';
+import { Form, FormGroup, Title, FormHelperText,
+HelperText,
+HelperTextItem,
+} from '@patternfly/react-core';
 import { InventorySourcesAPI } from 'api';
 import useRequest from 'hooks/useRequest';
 import { required } from 'util/validators';
@@ -143,11 +146,7 @@ const InventorySourceFormFields = ({
       />
       <FormGroup
         fieldId="source"
-        helperTextInvalid={sourceMeta.error}
         isRequired
-        validated={
-          !sourceMeta.touched || !sourceMeta.error ? 'default' : 'error'
-        }
         label={t`Source`}
       >
         <AnsibleSelect
@@ -166,6 +165,15 @@ const InventorySourceFormFields = ({
             resetSubFormFields(value);
           }}
         />
+        {sourceMeta.touched && sourceMeta.error && (
+          <FormHelperText>
+            <HelperText>
+              <HelperTextItem variant="error">
+                {sourceMeta.error}
+              </HelperTextItem>
+            </HelperText>
+          </FormHelperText>
+        )}
       </FormGroup>
       {!['', 'custom'].includes(sourceField.value) && (
         <SubFormLayout>

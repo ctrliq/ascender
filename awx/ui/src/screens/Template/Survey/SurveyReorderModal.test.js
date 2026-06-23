@@ -113,7 +113,7 @@ describe('<SurveyReorderModal />', () => {
       '[data-ouia-component-id="survey-preview-multiSelect-a"]'
     );
     expect(multiSelect).toBeInTheDocument();
-    const chips = multiSelect.querySelectorAll('.pf-c-chip');
+    const chips = multiSelect.querySelectorAll('.pf-v5-c-chip');
     expect(chips.length).toBe(4);
     const multiSelectToggle = multiSelect.querySelector(
       'button[aria-label="Options menu"]'

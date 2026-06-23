@@ -1,17 +1,19 @@
 import React, { useEffect, useCallback, useState, useRef } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import {
-  PageSection,
-  Card,
-  CardHeader,
-  CardBody,
-  Toolbar,
-  ToolbarGroup,
-  ToolbarContent,
-  ToolbarItem,
-  Select,
-  SelectOption,
+	PageSection,
+	Card,
+	CardHeader,
+	CardBody,
+	Toolbar,
+	ToolbarGroup,
+	ToolbarContent,
+	ToolbarItem
 } from '@patternfly/react-core';
+import {
+	Select,
+	SelectOption
+} from '@patternfly/react-core/deprecated';
 
 import { MetricsAPI, InstancesAPI } from 'api';
 import useRequest from 'hooks/useRequest';
@@ -190,7 +192,7 @@ function Metrics() {
                   <ToolbarItem>
                     <Select
                       ouiaId="Instance-select"
-                      onToggle={setInstanceIsOpen}
+                      onToggle={(_event, val) => setInstanceIsOpen(val)}
                       isOpen={instanceIsOpen}
                       onSelect={(e, value) => {
                         count = [0];
@@ -218,7 +220,7 @@ function Metrics() {
                         setRenderedData([]);
                         setMetricIsOpen(false);
                       }}
-                      onToggle={setMetricIsOpen}
+                      onToggle={(_event, val) => setMetricIsOpen(val)}
                       selections={metric}
                     >
                       {metrics.map((met) => (

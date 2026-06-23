@@ -5,11 +5,13 @@ import { useLingui } from '@lingui/react/macro';
 import { Formik, useFormikContext } from 'formik';
 import yaml from 'js-yaml';
 import {
-  Button,
-  WizardContextConsumer,
-  WizardFooter,
-  Form,
+	Button,
+	Form
 } from '@patternfly/react-core';
+import {
+	WizardContextConsumer,
+	WizardFooter
+} from '@patternfly/react-core/deprecated';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
 

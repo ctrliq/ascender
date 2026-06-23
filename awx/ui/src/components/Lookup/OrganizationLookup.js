@@ -1,7 +1,12 @@
 import React, { useCallback, useEffect } from 'react';
 import { useLocation } from 'routerCompat';
 import { useLingui } from '@lingui/react/macro';
-import { FormGroup } from '@patternfly/react-core';
+import {
+  FormGroup,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
+} from '@patternfly/react-core';
 import { OrganizationsAPI } from 'api';
 import { getQSConfig, parseQueryString } from 'util/qs';
 import { getSearchableKeys } from 'components/PaginatedTable';
@@ -94,11 +99,8 @@ function OrganizationLookup({
   return (
     <FormGroup
       fieldId={id}
-      helperTextInvalid={helperTextInvalid}
       isRequired={required}
-      validated={isValid ? 'default' : 'error'}
       label={t`Organization`}
-      helperText={helperText}
     >
       <Lookup
         isDisabled={isDisabled}
@@ -153,6 +155,15 @@ function OrganizationLookup({
         )}
       />
       <LookupErrorMessage error={contentError} />
+      {(helperText || !isValid) && (
+        <FormHelperText>
+          <HelperText>
+            <HelperTextItem variant={isValid ? 'default' : 'error'}>
+              {isValid ? helperText : helperTextInvalid}
+            </HelperTextItem>
+          </HelperText>
+        </FormHelperText>
+      )}
     </FormGroup>
   );
 }

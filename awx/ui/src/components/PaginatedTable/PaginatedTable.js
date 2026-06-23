@@ -2,7 +2,7 @@
 // Modifications Copyright (c) 2023 Ctrl IQ, Inc.
 //
 import React, { useEffect } from 'react';
-import { TableComposable, Tbody } from '@patternfly/react-table';
+import { Table, Tbody } from '@patternfly/react-table';
 import { useLocation } from 'react-router';
 import { useNavigate } from 'routerCompat';
 
@@ -112,14 +112,14 @@ function PaginatedTable({
     Content = (
       <div css="overflow: auto">
         {hasContentLoading && <LoadingSpinner />}
-        <TableComposable
+        <Table
           aria-label={dataListLabel}
           ouiaId={ouiaId || `paginated-table-${pluralizedItemName}`}
           variant="compact"
         >
           {headerRow}
           <Tbody>{items.map(renderRow)}</Tbody>
-        </TableComposable>
+        </Table>
       </div>
     );
   }

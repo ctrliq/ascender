@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const Group = styled.div`
   display: inline-flex;
 
-  & > .pf-c-button:not(:last-child) {
+  & > .pf-v5-c-button:not(:last-child) {
     &,
     &::after {
       border-top-right-radius: 0;
@@ -12,7 +12,7 @@ const Group = styled.div`
     }
   }
 
-  & > .pf-c-button:not(:first-child) {
+  & > .pf-v5-c-button:not(:first-child) {
     &,
     &::after {
       border-top-left-radius: 0;

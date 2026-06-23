@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { Select, SelectOption, SelectVariant } from '@patternfly/react-core';
+import {
+	Select,
+	SelectOption,
+	SelectVariant
+} from '@patternfly/react-core/deprecated';
 
 function Option({ show = true, ...props }) {
   if (!show) {
@@ -24,7 +28,7 @@ function LookupTypeInput({
       className="lookupSelect"
       variant={SelectVariant.typeahead}
       typeAheadAriaLabel={t`Lookup typeahead`}
-      onToggle={setIsOpen}
+      onToggle={(_event, val) => setIsOpen(val)}
       onSelect={(event, selection) => setValue(selection)}
       onClear={() => setValue(null)}
       selections={value}

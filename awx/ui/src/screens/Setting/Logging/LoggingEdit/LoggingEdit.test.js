@@ -74,7 +74,7 @@ describe('<LoggingEdit />', () => {
     if (!labelEl) {
       return null;
     }
-    return labelEl.closest('.pf-c-form__group');
+    return labelEl.closest('.pf-v5-c-form__group');
   }
 
   test('initially renders without crashing', async () => {
@@ -109,10 +109,10 @@ describe('<LoggingEdit />', () => {
       'Logging Aggregator Type'
     );
     expect(
-      aggregatorGroup.querySelectorAll('.pf-c-form__label-required')
+      aggregatorGroup.querySelectorAll('.pf-v5-c-form__label-required')
     ).toHaveLength(1);
     expect(
-      aggregatorTypeGroup.querySelectorAll('.pf-c-form__label-required')
+      aggregatorTypeGroup.querySelectorAll('.pf-v5-c-form__label-required')
     ).toHaveLength(1);
   });
 
@@ -130,10 +130,10 @@ describe('<LoggingEdit />', () => {
       'Logging Aggregator Type'
     );
     expect(
-      aggregatorGroup.querySelectorAll('.pf-c-form__label-required')
+      aggregatorGroup.querySelectorAll('.pf-v5-c-form__label-required')
     ).toHaveLength(0);
     expect(
-      aggregatorTypeGroup.querySelectorAll('.pf-c-form__label-required')
+      aggregatorTypeGroup.querySelectorAll('.pf-v5-c-form__label-required')
     ).toHaveLength(0);
   });
 
@@ -162,7 +162,7 @@ describe('<LoggingEdit />', () => {
     );
     const tcpGroup = getFormGroup(container, 'TCP Connection Timeout');
     expect(
-      tcpGroup.querySelectorAll('.pf-c-form__label-required')
+      tcpGroup.querySelectorAll('.pf-v5-c-form__label-required')
     ).toHaveLength(1);
   });
 

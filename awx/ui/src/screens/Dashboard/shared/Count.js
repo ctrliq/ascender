@@ -4,24 +4,24 @@ import { Link } from 'react-router';
 import { Card } from '@patternfly/react-core';
 
 const CountCard = styled(Card)`
-  padding: var(--pf-global--spacer--md);
+  padding: var(--pf-v5-global--spacer--md);
   display: flex;
   align-items: center;
-  padding-top: var(--pf-global--spacer--sm);
+  padding-top: var(--pf-v5-global--spacer--sm);
   cursor: pointer;
   text-align: center;
-  color: var(--pf-global--Color--100);
+  color: var(--pf-v5-global--Color--100);
   text-decoration: none;
 
   & h2 {
-    font-size: var(--pf-global--FontSize--4xl);
-    color: var(--pf-global--primary-color--100);
+    font-size: var(--pf-v5-global--FontSize--4xl);
+    color: var(--pf-v5-global--primary-color--100);
     text-decoration: none;
     margin-bottom: 0.5rem;
   }
 
   & h2.failed {
-    color: var(--pf-global--danger-color--100);
+    color: var(--pf-v5-global--danger-color--100);
   }
 `;
 
@@ -35,7 +35,7 @@ const CountLink = styled(Link)`
 function Count({ failed, link, data, label }) {
   return (
     <CountLink to={link}>
-      <CountCard isHoverable>
+      <CountCard isClickable>
         <h2 className={failed && 'failed'}>{data || 0}</h2>
         {label}
       </CountCard>

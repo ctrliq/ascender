@@ -16,7 +16,7 @@ function EulaStep() {
           id="eula-container"
           style={{ minHeight: '200px' }}
           resizeOrientation="vertical"
-          isReadOnly
+           readOnlyVariant="default"
         >
           {eula}
         </TextArea>

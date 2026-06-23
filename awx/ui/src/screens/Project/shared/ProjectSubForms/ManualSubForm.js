@@ -1,7 +1,10 @@
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
-import { FormGroup, Alert } from '@patternfly/react-core';
+import { FormGroup, Alert, FormHelperText,
+HelperText,
+HelperTextItem,
+} from '@patternfly/react-core';
 import { required } from 'util/validators';
 import AnsibleSelect from 'components/AnsibleSelect';
 import FormField from 'components/FormField';
@@ -66,9 +69,7 @@ const ManualSubForm = ({
       />
       <FormGroup
         fieldId="project-local-path"
-        helperTextInvalid={pathMeta.error}
         isRequired
-        validated={!pathMeta.touched || !pathMeta.error ? 'default' : 'error'}
         label={t`Playbook Directory`}
         labelIcon={<Popover content={projectHelpStrings.projectLocalPath} />}
       >
@@ -80,6 +81,15 @@ const ManualSubForm = ({
             pathHelpers.setValue(value);
           }}
         />
+        {pathMeta.touched && pathMeta.error && (
+          <FormHelperText>
+            <HelperText>
+              <HelperTextItem variant="error">
+                {pathMeta.error}
+              </HelperTextItem>
+            </HelperText>
+          </FormHelperText>
+        )}
       </FormGroup>
     </>
   );

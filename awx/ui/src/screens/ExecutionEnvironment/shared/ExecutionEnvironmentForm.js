@@ -1,7 +1,10 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { Formik, useField, useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
-import { Form, FormGroup, Tooltip } from '@patternfly/react-core';
+import { Form, FormGroup, Tooltip, FormHelperText,
+HelperText,
+HelperTextItem,
+} from '@patternfly/react-core';
 import { ExecutionEnvironmentsAPI } from 'api';
 import CredentialLookup from 'components/Lookup/CredentialLookup';
 import FormActionGroup from 'components/FormActionGroup';
@@ -105,12 +108,6 @@ function ExecutionEnvironmentFormFields({
       />
       <FormGroup
         fieldId="execution-environment-container-options"
-        helperTextInvalid={containerOptionsMeta.error}
-        validated={
-          !containerOptionsMeta.touched || !containerOptionsMeta.error
-            ? 'default'
-            : 'error'
-        }
         label={t`Pull`}
       >
         <AnsibleSelect
@@ -121,6 +118,15 @@ function ExecutionEnvironmentFormFields({
             containerOptionsHelpers.setValue(value);
           }}
         />
+        {containerOptionsMeta.touched && containerOptionsMeta.error && (
+          <FormHelperText>
+            <HelperText>
+              <HelperTextItem variant="error">
+                {containerOptionsMeta.error}
+              </HelperTextItem>
+            </HelperText>
+          </FormHelperText>
+        )}
       </FormGroup>
       <FormField
         id="execution-environment-description"

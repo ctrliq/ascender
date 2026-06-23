@@ -78,7 +78,7 @@ describe('<PlaybookSelect />', () => {
 
     await waitFor(() => {
       const selectToggleButton = container.querySelector(
-        'button.pf-c-select__toggle-button'
+        'button.pf-v5-c-select__toggle-button'
       );
       fireEvent.click(selectToggleButton);
       // Select options are displayed
@@ -103,7 +103,7 @@ describe('<PlaybookSelect />', () => {
     );
 
     await waitFor(() => {
-      const input = container.querySelector('input.pf-c-form-control');
+      const input = container.querySelector('input[type="text"]');
       expect(input).toBeVisible();
       fireEvent.change(input, { target: { value: 'foo.yml' } });
     });

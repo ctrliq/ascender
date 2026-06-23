@@ -3,17 +3,19 @@ import React, { useState, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useLocation } from 'react-router';
 import {
-  Button,
-  ButtonVariant,
-  InputGroup,
-  Select,
-  SelectOption,
-  SelectVariant,
-  TextInput,
-  ToolbarGroup,
-  ToolbarItem,
-  ToolbarFilter,
+	Button,
+	ButtonVariant,
+	InputGroup,
+	TextInput,
+	ToolbarGroup,
+	ToolbarItem,
+	ToolbarFilter, InputGroupItem
 } from '@patternfly/react-core';
+import {
+	Select,
+	SelectOption,
+	SelectVariant
+} from '@patternfly/react-core/deprecated';
 import { SearchIcon } from '@patternfly/react-icons';
 import styled from 'styled-components';
 import { parseQueryString } from 'util/qs';
@@ -28,21 +30,21 @@ SubmitButtonWrapper.displayName = 'SubmitButtonWrapper';
 const DateInputGroup = styled(InputGroup)`
   /* keep the operator select at its natural width so the date input
      next to it stays visible */
-  & > .pf-c-select {
+  & > .pf-v5-c-select {
     width: auto;
     flex: 0 0 auto;
   }
-  & > .pf-c-form-control {
+  & > .pf-v5-c-form-control {
     flex: 1 1 auto;
   }
 `;
 
 const NoOptionDropdown = styled.div`
   align-self: stretch;
-  border: 1px solid var(--pf-global--BorderColor--300);
+  border: 1px solid var(--pf-v5-global--BorderColor--300);
   padding: 5px 15px;
   white-space: nowrap;
-  border-bottom-color: var(--pf-global--BorderColor--200);
+  border-bottom-color: var(--pf-v5-global--BorderColor--200);
 `;
 
 function Search({
@@ -187,7 +189,7 @@ function Search({
             className="simpleKeySelect"
             aria-label={t`Simple key select`}
             typeAheadAriaLabel={t`Simple key select`}
-            onToggle={setIsSearchDropdownOpen}
+            onToggle={(_event, val) => setIsSearchDropdownOpen(val)}
             onSelect={handleDropdownSelect}
             selections={searchColumnName}
             isOpen={isSearchDropdownOpen}
@@ -229,7 +231,7 @@ function Search({
                 variant={SelectVariant.checkbox}
                 aria-label={name}
                 typeAheadAriaLabel={name}
-                onToggle={setIsFilterDropdownOpen}
+                onToggle={(_event, val) => setIsFilterDropdownOpen(val)}
                 onSelect={(event, selection) =>
                   handleFilterDropdownSelect(key, event, selection)
                 }
@@ -258,7 +260,7 @@ function Search({
             (isBoolean && (
               <Select
                 aria-label={name}
-                onToggle={setIsFilterDropdownOpen}
+                onToggle={(_event, val) => setIsFilterDropdownOpen(val)}
                 onSelect={(event, selection) => onReplaceSearch(key, selection)}
                 selections={chipsByKey[key].chips[0]?.label}
                 isOpen={isFilterDropdownOpen}
@@ -283,7 +285,7 @@ function Search({
                   className="dateOperatorSelect"
                   aria-label={t`Date operator select`}
                   typeAheadAriaLabel={t`Date operator select`}
-                  onToggle={setIsDateOperatorOpen}
+                  onToggle={(_event, val) => setIsDateOperatorOpen(val)}
                   onSelect={(event, selection) => {
                     const [op] = dateOperators.find(
                       ([, label]) => label === selection
@@ -310,7 +312,7 @@ function Search({
                   type="date"
                   aria-label={t`Date search input`}
                   value={searchValue}
-                  onChange={setSearchValue}
+                  onChange={(_event, val) => setSearchValue(val)}
                   onKeyDown={handleDateKeyDown}
                   isDisabled={isDisabled}
                 />
@@ -328,7 +330,7 @@ function Search({
               </DateInputGroup>
             )) || (
               <InputGroup>
-                <TextInput
+                <InputGroupItem isFill ><TextInput
                   data-cy="search-text-input"
                   type={
                     (qsConfig.integerFields.find(
@@ -339,11 +341,11 @@ function Search({
                   }
                   aria-label={t`Search text input`}
                   value={searchValue}
-                  onChange={setSearchValue}
+                  onChange={(_event, val) => setSearchValue(val)}
                   onKeyDown={handleTextKeyDown}
                   isDisabled={isDisabled}
-                />
-                <SubmitButtonWrapper $disabled={!searchValue}>
+                /></InputGroupItem>
+                <InputGroupItem><SubmitButtonWrapper $disabled={!searchValue}>
                   <Button
                     ouiaId="search-submit-button"
                     variant={ButtonVariant.control}
@@ -353,7 +355,7 @@ function Search({
                   >
                     <SearchIcon />
                   </Button>
-                </SubmitButtonWrapper>
+                </SubmitButtonWrapper></InputGroupItem>
               </InputGroup>
             )}
         </ToolbarFilter>

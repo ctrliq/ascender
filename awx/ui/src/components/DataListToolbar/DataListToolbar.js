@@ -2,18 +2,20 @@ import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
 import {
-  Button,
-  Checkbox,
-  Toolbar,
-  ToolbarContent as PFToolbarContent,
-  ToolbarGroup,
-  ToolbarItem,
-  ToolbarToggleGroup,
-  Tooltip,
-  Dropdown,
-  DropdownPosition,
-  KebabToggle,
+	Button,
+	Checkbox,
+	Toolbar,
+	ToolbarContent as PFToolbarContent,
+	ToolbarGroup,
+	ToolbarItem,
+	ToolbarToggleGroup,
+	Tooltip
 } from '@patternfly/react-core';
+import {
+	Dropdown,
+	DropdownPosition,
+	KebabToggle
+} from '@patternfly/react-core/deprecated';
 import {
   AngleDownIcon,
   AngleRightIcon,
@@ -25,7 +27,7 @@ import Search from '../Search';
 import Sort from '../Sort';
 
 const ToolbarContent = styled(PFToolbarContent)`
-  & > .pf-c-toolbar__content-section {
+  & > .pf-v5-c-toolbar__content-section {
     flex-wrap: nowrap;
   }
 `;
@@ -125,7 +127,7 @@ function DataListToolbar({
               <Tooltip content={t`Select all`} position="top">
                 <Checkbox
                   isChecked={isAllSelected}
-                  onChange={onSelectAll}
+                  onChange={(_event, checked) => onSelectAll(checked)}
                   aria-label={t`Select all`}
                   id="select-all"
                   ouiaId="select-all"
@@ -175,7 +177,7 @@ function DataListToolbar({
                 toggle={
                   <KebabToggle
                     data-cy="actions-kebab-toogle"
-                    onToggle={(isOpen) => {
+                    onToggle={(_event, isOpen) => {
                       if (!isKebabModalOpen) {
                         setIsKebabOpen(isOpen);
                       }

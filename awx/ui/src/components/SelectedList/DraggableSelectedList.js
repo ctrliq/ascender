@@ -24,37 +24,12 @@ const RemoveActionSection = styled(DataListAction)`
 function DraggableSelectedList({
   selected = [],
   onRemove = () => null,
-  onRowDrag = () => null,
 }) {
   const { t } = useLingui();
-  const [liveText, setLiveText] = useState('');
-  const [id, setId] = useState('');
-  const [isDragging, setIsDragging] = useState(false);
+  const [liveText] = useState('');
+  const [isDragging] = useState(false);
 
-  const onDragStart = (newId) => {
-    setId(newId);
-    setLiveText(t`Dragging started for item id: ${newId}.`);
-    setIsDragging(true);
-  };
-
-  const onDragMove = (oldIndex, newIndex) => {
-    setLiveText(
-      t`Dragging item ${id}. Item with index ${oldIndex} in now ${newIndex}.`
-    );
-  };
-
-  const onDragCancel = () => {
-    setLiveText(t`Dragging cancelled. List is unchanged.`);
-    setIsDragging(false);
-  };
-
-  const onDragFinish = (newItemOrder) => {
-    const selectedItems = newItemOrder.map((item) =>
-      selected.find((i) => i.name === item)
-    );
-    onRowDrag(selectedItems);
-    setIsDragging(false);
-  };
+  // TODO: PF5 removed DataList drag props; drag-and-drop needs @patternfly/react-drag-drop
 
   const removeItem = (item) => {
     onRemove(selected.find((i) => i.name === item));
@@ -71,11 +46,7 @@ function DraggableSelectedList({
       <DataList
         aria-label={t`Draggable list to reorder and remove selected items.`}
         data-cy="draggable-list"
-        itemOrder={orderedList}
-        onDragCancel={onDragCancel}
-        onDragFinish={onDragFinish}
-        onDragMove={onDragMove}
-        onDragStart={onDragStart}
+
       >
         {orderedList.map((label, index) => {
           const rowPosition = index + 1;

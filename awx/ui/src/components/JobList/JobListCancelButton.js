@@ -1,6 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Plural, useLingui } from '@lingui/react/macro';
-import { Button, DropdownItem, Tooltip } from '@patternfly/react-core';
+import {
+	Button,
+	Tooltip
+} from '@patternfly/react-core';
+import {
+	DropdownItem
+} from '@patternfly/react-core/deprecated';
 import { KebabifiedContext } from 'contexts/Kebabified';
 import { isJobRunning } from 'util/jobs';
 import AlertModal from '../AlertModal';

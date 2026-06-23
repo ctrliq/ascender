@@ -64,8 +64,8 @@ function CustomMessagesSubForm({ defaultMessages, type }) {
       {useCustomField.value && (
         <SubFormLayout>
           <Text
-            className="pf-c-content"
-            css="margin-bottom: var(--pf-c-content--MarginBottom)"
+            className="pf-v5-c-content"
+            css="margin-bottom: var(--pf-v5-c-content--MarginBottom)"
           >
             <small>
               {t`Use custom messages to change the content of

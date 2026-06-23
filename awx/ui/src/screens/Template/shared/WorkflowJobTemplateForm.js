@@ -4,6 +4,9 @@ import { useField, useFormikContext, withFormik } from 'formik';
 import {
   Form,
   FormGroup,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
   Checkbox,
   TextInput,
   Title,
@@ -51,7 +54,6 @@ function WorkflowJobTemplateForm({
     Boolean(template.webhook_service)
   );
   const [hasContentError, setContentError] = useState(null);
-  const [askInventoryOnLaunchField] = useField('ask_inventory_on_launch');
   const [inventoryField, inventoryMeta, inventoryHelpers] =
     useField('inventory');
   const [labelsField, , labelsHelpers] = useField('labels');
@@ -138,13 +140,6 @@ function WorkflowJobTemplateForm({
         />
         <FormGroup
           fieldId="inventory-lookup"
-          validated={
-            !(inventoryMeta.touched || askInventoryOnLaunchField.value) ||
-            !inventoryMeta.error
-              ? 'default'
-              : 'error'
-          }
-          helperTextInvalid={inventoryMeta.error}
         >
           <InventoryLookup
             promptId="wfjt-ask-inventory-on-launch"
@@ -159,6 +154,15 @@ function WorkflowJobTemplateForm({
             error={inventoryMeta.error}
             isDisabled={isInventoryDisabled}
           />
+          {inventoryMeta.error && (
+            <FormHelperText>
+              <HelperText>
+                <HelperTextItem variant="error">
+                  {inventoryMeta.error}
+                </HelperTextItem>
+              </HelperText>
+            </FormHelperText>
+          )}
         </FormGroup>
         <FieldWithPrompt
           fieldId="wfjt-limit"
@@ -173,7 +177,7 @@ function WorkflowJobTemplateForm({
             validated={
               !limitMeta.touched || !limitMeta.error ? 'default' : 'error'
             }
-            onChange={(value) => {
+            onChange={(_event, value) => {
               limitHelpers.setValue(value);
             }}
           />
@@ -188,7 +192,7 @@ function WorkflowJobTemplateForm({
           <TextInput
             id="wfjt-scm-branch"
             value={scmField.value}
-            onChange={(value) => {
+            onChange={(_event, value) => {
               scmHelpers.setValue(value);
             }}
             aria-label={t`source control branch`}
@@ -258,7 +262,7 @@ function WorkflowJobTemplateForm({
             id="wfjt-enabled-webhooks"
             ouiaId="wfjt-enabled-webhooks"
             isChecked={enableWebhooks}
-            onChange={(checked) => {
+            onChange={(_event, checked) => {
               setEnableWebhooks(checked);
             }}
           />

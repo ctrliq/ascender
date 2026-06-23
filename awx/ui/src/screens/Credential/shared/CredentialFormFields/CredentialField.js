@@ -11,7 +11,10 @@ import {
   FormGroup,
   InputGroup,
   TextInput,
-  Tooltip,
+  Tooltip, InputGroupItem,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
 } from '@patternfly/react-core';
 import { PficonHistoryIcon } from '@patternfly/react-icons';
 import { PasswordInput } from 'components/FormField';
@@ -76,51 +79,50 @@ function CredentialInput({
   );
 
   if (fieldOptions.multiline) {
-    const handleFileChange = (value, filename) => {
-      helpers.setValue(value);
-      setFileName(filename);
+    const fileUploadProps = {
+      id: `credential-${fieldOptions.id}`,
+      type: 'text',
+      value: subFormField.value,
+      filename: fileName,
+      filenamePlaceholder: t`Drag a file here or browse to upload`,
+      browseButtonText: t`Browse…`,
+      clearButtonText: t`Clear`,
+      onFileInputChange: (_event, file) => {
+        setFileName(file.name);
+      },
+      onDataChange: (_event, data) => {
+        helpers.setValue(data);
+      },
+      onTextChange: (_event, text) => {
+        helpers.setValue(text);
+      },
+      onClearClick: () => {
+        setFileName('');
+        helpers.setValue('');
+      },
+      onReadStarted: () => setFileIsUploading(true),
+      onReadFinished: () => setFileIsUploading(false),
+      isLoading: fileIsUploading,
+      allowEditingUploadedText: true,
+      validated: isValid ? 'default' : 'error',
     };
 
     if (fieldOptions.secret) {
       return (
         <InputGroup>
           {RevertReplaceButton}
-          <FileUpload
-            {...subFormField}
+          <InputGroupItem><FileUpload
+            {...fileUploadProps}
             {...rest}
-            id={`credential-${fieldOptions.id}`}
-            type="text"
-            filename={fileName}
-            filenamePlaceholder={t`Drag a file here or browse to upload`}
-            browseButtonText={t`Browse…`}
-            clearButtonText={t`Clear`}
-            onChange={handleFileChange}
-            onReadStarted={() => setFileIsUploading(true)}
-            onReadFinished={() => setFileIsUploading(false)}
-            isLoading={fileIsUploading}
-            allowEditingUploadedText
-            validated={isValid ? 'default' : 'error'}
-          />
+          /></InputGroupItem>
         </InputGroup>
       );
     }
 
     return (
       <FileUpload
-        {...subFormField}
+        {...fileUploadProps}
         {...rest}
-        id={`credential-${fieldOptions.id}`}
-        type="text"
-        filename={fileName}
-        filenamePlaceholder={t`Drag a file here or browse to upload`}
-        browseButtonText={t`Browse…`}
-        clearButtonText={t`Clear`}
-        onChange={handleFileChange}
-        onReadStarted={() => setFileIsUploading(true)}
-        onReadFinished={() => setFileIsUploading(false)}
-        isLoading={fileIsUploading}
-        allowEditingUploadedText
-        validated={isValid ? 'default' : 'error'}
         isDisabled={false}
       />
     );
@@ -148,7 +150,7 @@ function CredentialInput({
     <TextInput
       {...subFormField}
       id={`credential-${fieldOptions.id}`}
-      onChange={(value, event) => {
+      onChange={(event) => {
         subFormField.onChange(event);
       }}
       isDisabled={isVaultIdDisabled}
@@ -189,19 +191,26 @@ function CredentialField({ credentialType, fieldOptions }) {
     return (
       <FormGroup
         fieldId={`credential-${fieldOptions.id}`}
-        helperTextInvalid={meta.error}
         label={fieldOptions.label}
         isRequired={isRequired}
-        validated={isValid ? 'default' : 'error'}
       >
         <AnsibleSelect
           {...subFormField}
           id={`credential-${fieldOptions.id}`}
           data={selectOptions}
-          onChange={(event, value) => {
-            helpers.setValue(value);
+          onChange={(_event, val) => {
+            helpers.setValue(val);
           }}
         />
+        {!isValid && (
+          <FormHelperText>
+            <HelperText>
+              <HelperTextItem variant="error">
+                {meta.error}
+              </HelperTextItem>
+            </HelperText>
+          </FormHelperText>
+        )}
       </FormGroup>
     );
   }

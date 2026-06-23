@@ -1,7 +1,10 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { Dropdown, DropdownPosition } from '@patternfly/react-core';
+import {
+	Dropdown,
+	DropdownPosition
+} from '@patternfly/react-core/deprecated';
 import { useKebabifiedMenu } from 'contexts/Kebabified';
 import { ToolbarAddButton } from '../PaginatedTable';
 

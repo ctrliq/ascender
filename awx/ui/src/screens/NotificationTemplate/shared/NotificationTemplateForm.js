@@ -1,7 +1,10 @@
 import React, { useCallback } from 'react';
 import { Formik, useField, useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
-import { Form, FormGroup } from '@patternfly/react-core';
+import { Form, FormGroup, FormHelperText,
+HelperText,
+HelperTextItem,
+} from '@patternfly/react-core';
 
 import AnsibleSelect from 'components/AnsibleSelect';
 import FormField, { FormSubmitError } from 'components/FormField';
@@ -61,9 +64,7 @@ function NotificationTemplateFormFields({ defaultMessages, template }) {
       />
       <FormGroup
         fieldId="notification-type"
-        helperTextInvalid={typeMeta.error}
         isRequired
-        validated={!typeMeta.touched || !typeMeta.error ? 'default' : 'error'}
         label={t`Type`}
       >
         <AnsibleSelect
@@ -88,6 +89,15 @@ function NotificationTemplateFormFields({ defaultMessages, template }) {
             { value: 'webhook', key: 'webhook', label: 'Webhook' },
           ]}
         />
+        {typeMeta.touched && typeMeta.error && (
+          <FormHelperText>
+            <HelperText>
+              <HelperTextItem variant="error">
+                {typeMeta.error}
+              </HelperTextItem>
+            </HelperText>
+          </FormHelperText>
+        )}
       </FormGroup>
       {typeField.value && (
         <TypeInputsSubForm type={typeField.value} isEdit={Boolean(template?.id)} />

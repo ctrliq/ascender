@@ -3,14 +3,16 @@ import { Link, useMatch, useNavigate  } from 'react-router';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { Formik, useFormikContext } from 'formik';
 import {
-  Alert,
-  AlertGroup,
-  Button,
-  Form,
-  Wizard,
-  WizardContextConsumer,
-  WizardFooter,
+	Alert,
+	AlertGroup,
+	Button,
+	Form
 } from '@patternfly/react-core';
+import {
+	Wizard,
+	WizardContextConsumer,
+	WizardFooter
+} from '@patternfly/react-core/deprecated';
 import { ConfigAPI, SettingsAPI, RootAPI } from 'api';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import ContentLoading from 'components/ContentLoading';

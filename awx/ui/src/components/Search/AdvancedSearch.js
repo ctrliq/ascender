@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import {
-  Button,
-  ButtonVariant,
-  Divider,
-  InputGroup,
-  Select,
-  SelectGroup,
-  SelectOption,
-  SelectVariant,
-  TextInput,
-  Tooltip,
+	Button,
+	ButtonVariant,
+	Divider,
+	InputGroup,
+	TextInput,
+	Tooltip, InputGroupItem
 } from '@patternfly/react-core';
+import {
+	Select,
+	SelectGroup,
+	SelectOption,
+	SelectVariant
+} from '@patternfly/react-core/deprecated';
 import { SearchIcon, QuestionCircleIcon } from '@patternfly/react-icons';
 import styled from 'styled-components';
 import { useLocation } from 'react-router';
@@ -30,10 +32,10 @@ const AdvancedGroup = styled.div`
 
   @media (max-width: 991px) {
     display: grid;
-    grid-gap: var(--pf-global--spacer--sm);
+    grid-gap: var(--pf-v5-global--spacer--sm);
   }
 
-  & .pf-c-select {
+  & .pf-v5-c-select {
     min-width: 150px;
   }
 `;
@@ -144,7 +146,7 @@ function AdvancedSearch({
       className="setTypeSelect"
       variant={SelectVariant.typeahead}
       typeAheadAriaLabel={t`Set type typeahead`}
-      onToggle={setIsPrefixDropdownOpen}
+      onToggle={(_event, val) => setIsPrefixDropdownOpen(val)}
       onSelect={(event, selection) => setPrefixSelection(selection)}
       onClear={() => setPrefixSelection(null)}
       selections={prefixSelection}
@@ -216,7 +218,7 @@ function AdvancedSearch({
             value={
               (!keySelection && t`First, select a key`) || searchValue
             }
-            onChange={setSearchValue}
+            onChange={(_event, val) => setSearchValue(val)}
             onKeyDown={handleAdvancedTextKeyDown}
           />
         </Tooltip>
@@ -232,7 +234,7 @@ function AdvancedSearch({
         value={
           (!keySelection && t`First, select a key`) || searchValue
         }
-        onChange={setSearchValue}
+        onChange={(_event, val) => setSearchValue(val)}
         onKeyDown={handleAdvancedTextKeyDown}
         placeholder={placeholderText}
       />
@@ -261,7 +263,7 @@ function AdvancedSearch({
         className="keySelect"
         variant={SelectVariant.typeahead}
         typeAheadAriaLabel={t`Key typeahead`}
-        onToggle={setIsKeyDropdownOpen}
+        onToggle={(_event, val) => setIsKeyDropdownOpen(val)}
         onSelect={(event, selection) => setKeySelection(selection)}
         onClear={() => setKeySelection(null)}
         selections={keySelection}
@@ -313,7 +315,7 @@ function AdvancedSearch({
 
       <InputGroup>
         {renderTextInput()}
-        <SubmitButtonWrapper $disabled={!searchValue}>
+        <InputGroupItem><SubmitButtonWrapper $disabled={!searchValue}>
           <Button
             ouiaId="advanced-search-text-input"
             variant={ButtonVariant.control}
@@ -323,7 +325,7 @@ function AdvancedSearch({
           >
             <SearchIcon />
           </Button>
-        </SubmitButtonWrapper>
+        </SubmitButtonWrapper></InputGroupItem>
       </InputGroup>
       <Tooltip
         content={t`Advanced search documentation`}

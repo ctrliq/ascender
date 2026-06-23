@@ -6,9 +6,12 @@ import { useLingui } from '@lingui/react/macro';
 import {
   Alert,
   FormGroup,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
   TextInput,
   InputGroup,
-  Button,
+  Button, InputGroupItem,
 } from '@patternfly/react-core';
 import { useField, useFormikContext } from 'formik';
 import ContentError from 'components/ContentError';
@@ -131,7 +134,6 @@ function WebhookSubForm({ templateType }) {
       <FormGroup
         name="webhook_service"
         fieldId="webhook_service"
-        helperTextInvalid={webhookServiceMeta.error}
         label={t`Webhook Service`}
         labelIcon={<Popover content={helpText.webhookService} />}
       >
@@ -159,6 +161,15 @@ function WebhookSubForm({ templateType }) {
             }
           }}
         />
+        {webhookServiceMeta.error && (
+          <FormHelperText>
+            <HelperText>
+              <HelperTextItem variant="error">
+                {webhookServiceMeta.error}
+              </HelperTextItem>
+            </HelperText>
+          </FormHelperText>
+        )}
       </FormGroup>
       <>
         <FormGroup
@@ -172,7 +183,7 @@ function WebhookSubForm({ templateType }) {
             id="t-webhookURL"
             aria-label={t`Webhook URL`}
             value={webhookUrlField.value}
-            isReadOnly
+             readOnlyVariant="default"
           />
         </FormGroup>
         <FormGroup
@@ -181,13 +192,13 @@ function WebhookSubForm({ templateType }) {
           fieldId="template-webhook_key"
         >
           <InputGroup>
-            <TextInput
+            <InputGroupItem isFill ><TextInput
               id="template-webhook_key"
-              isReadOnly
+
               aria-label={t`workflow job template webhook key`}
-              value={webhookKeyField.value}
-            />
-            <Button
+              value={webhookKeyField.value} readOnlyVariant="default"
+            /></InputGroupItem>
+            <InputGroupItem><Button
               ouiaId="update-webhook-key-button"
               isDisabled={isUpdateKeyDisabled}
               variant="tertiary"
@@ -195,7 +206,7 @@ function WebhookSubForm({ templateType }) {
               onClick={changeWebhookKey}
             >
               <SyncAltIcon />
-            </Button>
+            </Button></InputGroupItem>
           </InputGroup>
         </FormGroup>
       </>

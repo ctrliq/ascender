@@ -1,6 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router';
-import { Button, DropdownItem, Tooltip } from '@patternfly/react-core';
+import {
+	Button,
+	Tooltip
+} from '@patternfly/react-core';
+import {
+	DropdownItem
+} from '@patternfly/react-core/deprecated';
 import CaretDownIcon from '@patternfly/react-icons/dist/js/icons/caret-down-icon';
 import { useLingui } from '@lingui/react/macro';
 import { useKebabifiedMenu } from 'contexts/Kebabified';

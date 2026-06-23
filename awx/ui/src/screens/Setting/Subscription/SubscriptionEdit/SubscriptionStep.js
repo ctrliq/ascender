@@ -10,6 +10,9 @@ import {
   Flex,
   FlexItem,
   FormGroup,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
   ToggleGroup,
   ToggleGroupItem,
   Tooltip,
@@ -42,11 +45,10 @@ function SubscriptionStep() {
   );
   const { isModalOpen, toggleModal, closeModal } = useModal();
   const [manifest, manifestMeta, manifestHelpers] = useField('manifest_file');
-  const [manifestFilename, , manifestFilenameHelpers] =
-    useField('manifest_filename');
+  const [manifestFilename, , manifestFilenameHelpers] = useField('manifest_filename');
   const [subscription, , subscriptionHelpers] = useField('subscription');
-  const [username, usernameMeta, usernameHelpers] = useField('username');
-  const [password, passwordMeta, passwordHelpers] = useField('password');
+  const [username] = useField('username');
+  const [password] = useField('password');
 
   return (
     <Flex
@@ -117,10 +119,7 @@ function SubscriptionStep() {
           </p>
           <FileUploadField
             fieldId="subscription-manifest"
-            validated={manifestMeta.error ? 'error' : 'default'}
-            helperTextInvalid={t`Invalid file format. Please upload a valid Red Hat Subscription Manifest.`}
             label={t`Red Hat subscription manifest`}
-            helperText={t`Upload a .zip file`}
             labelIcon={
               <Popover
                 content={
@@ -163,33 +162,37 @@ function SubscriptionStep() {
               value={manifest.value}
               filename={manifestFilename.value}
               browseButtonText={t`Browse`}
+              clearButtonText={t`Clear`}
               isDisabled={!config?.me?.is_superuser}
+              onFileInputChange={(_event, file) => {
+                manifestFilenameHelpers.setValue(file.name);
+                manifestHelpers.setError(false);
+                const reader = new FileReader();
+                reader.onload = () => {
+                  manifestHelpers.setValue(reader.result);
+                };
+                reader.readAsDataURL(file);
+              }}
+              onClearClick={() => {
+                manifestFilenameHelpers.setValue('');
+                manifestHelpers.setValue('');
+              }}
               dropzoneProps={{
-                accept: '.zip',
+                accept: { 'application/zip': ['.zip'] },
                 onDropRejected: () => manifestHelpers.setError(true),
               }}
-              onChange={(value, filename) => {
-                if (!value) {
-                  manifestHelpers.setValue(null);
-                  manifestFilenameHelpers.setValue('');
-                  usernameHelpers.setValue(usernameMeta.initialValue);
-                  passwordHelpers.setValue(passwordMeta.initialValue);
-                  return;
-                }
-
-                try {
-                  const raw = new FileReader();
-                  raw.readAsBinaryString(value);
-                  raw.onload = () => {
-                    const rawValue = btoa(raw.result);
-                    manifestHelpers.setValue(rawValue);
-                    manifestFilenameHelpers.setValue(filename);
-                  };
-                } catch (err) {
-                  manifestHelpers.setError(err);
-                }
-              }}
             />
+            <FormHelperText>
+              <HelperText>
+                <HelperTextItem
+                  variant={manifestMeta.error ? 'error' : 'default'}
+                >
+                  {manifestMeta.error
+                    ? t`Invalid file format. Please upload a valid Red Hat Subscription Manifest.`
+                    : t`Upload a .zip file`}
+                </HelperTextItem>
+              </HelperText>
+            </FormHelperText>
           </FileUploadField>
         </>
       ) : (

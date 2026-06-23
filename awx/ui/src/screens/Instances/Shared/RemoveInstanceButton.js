@@ -6,12 +6,14 @@ import {
   relatedResourceDeleteRequests,
 } from 'util/getRelatedResourceDeleteDetails';
 import {
-  Button,
-  DropdownItem,
-  Tooltip,
-  Alert,
-  Badge,
+	Button,
+	Tooltip,
+	Alert,
+	Badge
 } from '@patternfly/react-core';
+import {
+	DropdownItem
+} from '@patternfly/react-core/deprecated';
 import AlertModal from 'components/AlertModal';
 import styled from 'styled-components';
 import ErrorDetail from 'components/ErrorDetail';

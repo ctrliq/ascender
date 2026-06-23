@@ -2,11 +2,16 @@ import React, { useState } from 'react';
 import { useField } from 'formik';
 import { useLingui } from '@lingui/react/macro';
 import {
-  FormGroup,
-  Select,
-  SelectOption,
-  SelectVariant,
+	FormGroup,
+	FormHelperText,
+	HelperText,
+	HelperTextItem,
 } from '@patternfly/react-core';
+import {
+	Select,
+	SelectOption,
+	SelectVariant
+} from '@patternfly/react-core/deprecated';
 import Popover from 'components/Popover';
 
 function BecomeMethodField({ fieldOptions, isRequired = false }) {
@@ -34,20 +39,18 @@ function BecomeMethodField({ fieldOptions, isRequired = false }) {
   return (
     <FormGroup
       fieldId={`credential-${fieldOptions.id}`}
-      helperTextInvalid={meta.error}
       label={fieldOptions.label}
       labelIcon={
         fieldOptions.help_text && <Popover content={fieldOptions.help_text} />
       }
       isRequired={isRequired}
-      validated={!(meta.touched && meta.error) ? 'default' : 'error'}
     >
       <Select
         ouiaId={`CredentialForm-${fieldOptions.id}`}
         typeAheadAriaLabel={fieldOptions.label}
         maxHeight={200}
         variant={SelectVariant.typeahead}
-        onToggle={setIsOpen}
+        onToggle={(_event, val) => setIsOpen(val)}
         onClear={() => {
           helpers.setValue('');
         }}
@@ -69,6 +72,15 @@ function BecomeMethodField({ fieldOptions, isRequired = false }) {
           <SelectOption key={option.value} value={option.value} />
         ))}
       </Select>
+      {meta.touched && meta.error && (
+        <FormHelperText>
+          <HelperText>
+            <HelperTextItem variant="error">
+              {meta.error}
+            </HelperTextItem>
+          </HelperText>
+        </FormHelperText>
+      )}
     </FormGroup>
   );
 }

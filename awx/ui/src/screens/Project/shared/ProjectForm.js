@@ -5,7 +5,10 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Formik, useField, useFormikContext } from 'formik';
-import { Form, FormGroup, Title } from '@patternfly/react-core';
+import { Form, FormGroup, Title, FormHelperText,
+HelperText,
+HelperTextItem,
+} from '@patternfly/react-core';
 import { useConfig } from 'contexts/Config';
 import AnsibleSelect from 'components/AnsibleSelect';
 import ContentError from 'components/ContentError';
@@ -253,11 +256,7 @@ function ProjectFormFields({
       />
       <FormGroup
         fieldId="project-scm-type"
-        helperTextInvalid={scmTypeMeta.error}
         isRequired
-        validated={
-          !scmTypeMeta.touched || !scmTypeMeta.error ? 'default' : 'error'
-        }
         label={t`Source Control Type`}
       >
         <AnsibleSelect
@@ -286,6 +285,15 @@ function ProjectFormFields({
             resetScmTypeFields(value, formik);
           }}
         />
+        {scmTypeMeta.touched && scmTypeMeta.error && (
+          <FormHelperText>
+            <HelperText>
+              <HelperTextItem variant="error">
+                {scmTypeMeta.error}
+              </HelperTextItem>
+            </HelperText>
+          </FormHelperText>
+        )}
       </FormGroup>
       <CredentialLookup
         credentialTypeId={signatureValidationCredentials.cryptography.typeId}

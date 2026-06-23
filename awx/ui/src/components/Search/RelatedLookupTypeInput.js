@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { Select, SelectOption, SelectVariant } from '@patternfly/react-core';
+import {
+	Select,
+	SelectOption,
+	SelectVariant
+} from '@patternfly/react-core/deprecated';
 
 function RelatedLookupTypeInput({
   value,
@@ -17,7 +21,7 @@ function RelatedLookupTypeInput({
       className="lookupSelect"
       variant={SelectVariant.typeahead}
       typeAheadAriaLabel={t`Related search type typeahead`}
-      onToggle={setIsOpen}
+      onToggle={(_event, val) => setIsOpen(val)}
       onSelect={(event, selection) => setValue(selection)}
       selections={value}
       isOpen={isOpen}

@@ -25,7 +25,7 @@ function AnsibleSelect({
       id={id}
       ouiaId={id}
       value={value}
-      onChange={onSelectChange}
+      onChange={(event, val) => onSelectChange(val, event)}
       onBlur={onBlur}
       aria-label={t`Select Input`}
       validated={isValid ? 'default' : 'error'}

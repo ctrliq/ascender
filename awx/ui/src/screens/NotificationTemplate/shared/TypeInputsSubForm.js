@@ -1,7 +1,10 @@
 import React, { useMemo } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
-import { FormGroup, InputGroup, Title } from '@patternfly/react-core';
+import { FormGroup, InputGroup, Title, InputGroupItem, FormHelperText,
+HelperText,
+HelperTextItem,
+} from '@patternfly/react-core';
 import styled from 'styled-components';
 import {
   FormCheckboxLayout,
@@ -28,7 +31,7 @@ import Popover from '../../../components/Popover/Popover';
 import RevertButton from '../../Setting/shared/RevertButton';
 
 const PasswordFormGroup = styled(FormGroup)`
-  .pf-c-form__group-label {
+  .pf-v5-c-form__group-label {
     display: inline-flex;
     align-items: center;
     width: 100%;
@@ -72,15 +75,12 @@ function SecretPasswordField({
 }) {
   const validate = isRequiredOnCreate && !isEdit ? required(null) : undefined;
   const [, meta] = useField({ name, validate });
-  const isValid = !(meta.touched && meta.error);
   const isRequired = isRequiredOnCreate && !isEdit;
 
   return (
     <PasswordFormGroup
       fieldId={id}
-      helperTextInvalid={meta.error}
       label={label}
-      validated={isValid ? 'default' : 'error'}
       isRequired={isRequired}
       labelIcon={
         isEdit ? (
@@ -89,13 +89,22 @@ function SecretPasswordField({
       }
     >
       <InputGroup>
-        <PasswordInput
+        <InputGroupItem><PasswordInput
           id={id}
           name={name}
           validate={validate}
           isRequired={isRequired}
-        />
+        /></InputGroupItem>
       </InputGroup>
+      {meta.touched && meta.error && (
+        <FormHelperText>
+          <HelperText>
+            <HelperTextItem variant="error">
+              {meta.error}
+            </HelperTextItem>
+          </HelperText>
+        </FormHelperText>
+      )}
     </PasswordFormGroup>
   );
 }
@@ -571,11 +580,7 @@ function WebhookFields({ isEdit = false }) {
       </FormFullWidthLayout>
       <FormGroup
         fieldId="webhook-http-method"
-        helperTextInvalid={methodMeta.error}
         isRequired
-        validated={
-          !methodMeta.touched || !methodMeta.error ? 'default' : 'error'
-        }
         label={t`HTTP Method`}
       >
         <AnsibleSelect
@@ -592,6 +597,15 @@ function WebhookFields({ isEdit = false }) {
             { value: 'PUT', key: 'put', label: t`PUT` },
           ]}
         />
+        {methodMeta.error && (
+          <FormHelperText>
+            <HelperText>
+              <HelperTextItem variant="error">
+                {methodMeta.error}
+              </HelperTextItem>
+            </HelperText>
+          </FormHelperText>
+        )}
       </FormGroup>
     </>
   );

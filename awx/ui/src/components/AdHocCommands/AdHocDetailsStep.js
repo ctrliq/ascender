@@ -2,7 +2,10 @@
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
-import { Form, FormGroup, Switch, Checkbox } from '@patternfly/react-core';
+import { Form, FormGroup, Switch, Checkbox, FormHelperText,
+HelperText,
+HelperTextItem,
+} from '@patternfly/react-core';
 import styled from 'styled-components';
 import { required } from 'util/validators';
 import useBrandName from 'hooks/useBrandName';
@@ -58,16 +61,10 @@ function AdHocDetailsStep({ moduleOptions }) {
             aria-label={t`select module`}
             label={t`Module`}
             isRequired
-            helperTextInvalid={moduleNameMeta.error}
-            validated={
-              !moduleNameMeta.touched || !moduleNameMeta.error
-                ? 'default'
-                : 'error'
-            }
             labelIcon={
-              <Popover
-                content={t`These are the modules that ${brandName} supports running commands against.`}
-              />
+            <Popover
+            content={t`These are the modules that ${brandName} supports running commands against.`}
+            />
             }
           >
             <AnsibleSelect
@@ -95,6 +92,15 @@ function AdHocDetailsStep({ moduleOptions }) {
                 moduleNameHelpers.setValue(value);
               }}
             />
+            {!isValid && (
+              <FormHelperText>
+                <HelperText>
+                  <HelperTextItem variant="error">
+                    {moduleNameMeta.error}
+                  </HelperTextItem>
+                </HelperText>
+              </FormHelperText>
+            )}
           </FormGroup>
           <FormField
             id="module_args"
@@ -223,7 +229,7 @@ function AdHocDetailsStep({ moduleOptions }) {
                   id="become_enabled"
                   ouiaId="become_enabled"
                   isChecked={becomeEnabledField.value}
-                  onChange={(checked) => {
+                  onChange={(_event, checked) => {
                     becomeEnabledHelpers.setValue(checked);
                   }}
                 />
