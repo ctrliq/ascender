@@ -15,10 +15,6 @@ jest.mock('react-router', () => ({
   useLocation: () => ({
     search: '',
   }),
-}));
-// the component reads useParams from react-router-dom (v6 route tree)
-jest.mock('react-router', () => ({
-  ...jest.requireActual('react-router'),
   useParams: () => ({
     id: 1,
   }),

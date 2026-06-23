@@ -12,8 +12,7 @@ import AzureADDetail from './AzureADDetail';
 jest.mock('../../../../api');
 jest.mock('react-router', () => ({
   ...jest.requireActual('react-router'),
-  useRouteMatch: () => ({
-    path: '/settings/azure/default/details',
+  useMatch: () => ({
     params: { category: 'default' },
   }),
 }));
