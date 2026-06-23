@@ -7,7 +7,7 @@ import { Link,
   Route,
   Navigate,
   useParams,
-  useLocation } from 'react-router-dom';
+  useLocation } from 'react-router';
 import useRequest from 'hooks/useRequest';
 import RoutedTabs from 'components/RoutedTabs';
 import ContentError from 'components/ContentError';

@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo } from 'react';
-import { useParams, useMatch } from 'react-router-dom';
+import { useParams, useMatch } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import {

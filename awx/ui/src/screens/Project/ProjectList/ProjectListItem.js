@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { Button, ClipboardCopy, Tooltip } from '@patternfly/react-core';
 import { Tr, Td, ExpandableRowContent } from '@patternfly/react-table';
 import { useLingui } from '@lingui/react/macro';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import {
   PencilAltIcon,
   UndoIcon,

@@ -4,7 +4,7 @@ import { Link,
   Route,
   Navigate,
   useParams,
-  useLocation } from 'react-router-dom';
+  useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 
 import { CaretLeftIcon } from '@patternfly/react-icons';

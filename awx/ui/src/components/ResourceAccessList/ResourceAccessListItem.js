@@ -2,7 +2,7 @@ import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Chip } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 import ChipGroup from '../ChipGroup';
 import { DetailList, Detail } from '../DetailList';

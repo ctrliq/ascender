@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import { useNavigate } from 'routerCompat';
 import { Thead, Tr, Th as PFTh } from '@patternfly/react-table';
 import styled from 'styled-components';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router';
 import { screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 
@@ -14,8 +14,8 @@ import InstanceList from './InstanceList';
 jest.mock('../../../api');
 // InstanceList reads useParams from react-router-dom (the route tree
 // is v6); mock it there, keeping the rest of the module real.
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+jest.mock('react-router', () => ({
+  ...jest.requireActual('react-router'),
   useParams: () => ({
     id: 1,
     instanceGroupId: 2,

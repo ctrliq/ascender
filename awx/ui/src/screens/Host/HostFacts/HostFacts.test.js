@@ -7,8 +7,8 @@ import mockHost from '../data.host.json';
 import mockHostFacts from '../data.hostFacts.json';
 
 jest.mock('../../../api/models/Hosts');
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+jest.mock('react-router', () => ({
+  ...jest.requireActual('react-router'),
   useParams: () => ({
     id: 1,
     hostId: 1,

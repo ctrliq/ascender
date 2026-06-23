@@ -14,8 +14,8 @@ import CredentialEdit from './CredentialEdit';
 jest.mock('../../../api');
 // The component reads useParams from react-router-dom (the route
 // tree is v6); mock it there, keeping the rest of the module real.
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+jest.mock('react-router', () => ({
+  ...jest.requireActual('react-router'),
   useParams: () => ({
     id: 3,
   }),

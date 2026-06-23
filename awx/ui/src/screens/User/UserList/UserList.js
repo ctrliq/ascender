@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 
 import { Card, PageSection } from '@patternfly/react-core';
 import { UsersAPI } from 'api';

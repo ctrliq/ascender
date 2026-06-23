@@ -1,6 +1,6 @@
 import React from 'react';
 import { Trans, useLingui } from '@lingui/react/macro';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import styled from 'styled-components';
 import { Chip, Divider, Title } from '@patternfly/react-core';
 import { toTitleCase } from 'util/strings';

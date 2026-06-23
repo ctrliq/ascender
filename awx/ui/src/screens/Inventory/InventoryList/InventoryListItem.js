@@ -4,7 +4,7 @@ import { Button, Label } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
 import { PencilAltIcon } from '@patternfly/react-icons';
 import { Plural, useLingui } from '@lingui/react/macro';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { timeOfDay } from 'util/dates';
 import { InventoriesAPI } from 'api';
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';

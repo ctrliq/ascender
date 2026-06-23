@@ -8,7 +8,7 @@ import { Link,
   Route,
   Navigate,
   useParams,
-  useLocation } from 'react-router-dom';
+  useLocation } from 'react-router';
 import useRequest from 'hooks/useRequest';
 import { ResourceAccessList } from 'components/ResourceAccessList';
 import ContentError from 'components/ContentError';

@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { Formik, useField, useFormikContext } from 'formik';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import { Form } from '@patternfly/react-core';
 import { VariablesField } from 'components/CodeEditor';
 import ContentError from 'components/ContentError';

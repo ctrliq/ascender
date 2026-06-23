@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import { useNavigate, Navigate } from 'routerCompat';
 import ContentLoading from 'components/ContentLoading';
 import { CardBody } from 'components/Card';

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 const ansibleDocUrls = {
   ec2: 'https://docs.ansible.com/ansible/latest/collections/amazon/aws/aws_ec2_inventory.html',

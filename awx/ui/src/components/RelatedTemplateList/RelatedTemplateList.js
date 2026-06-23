@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
 import { Card } from '@patternfly/react-core';
 import { JobTemplatesAPI } from 'api';

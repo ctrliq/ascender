@@ -14,7 +14,7 @@ import {
 } from '@patternfly/react-core';
 import { SearchIcon, QuestionCircleIcon } from '@patternfly/react-icons';
 import styled from 'styled-components';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import { useConfig } from 'contexts/Config';
 import getDocsBaseUrl from 'util/getDocsBaseUrl';
 import RelatedLookupTypeInput from './RelatedLookupTypeInput';

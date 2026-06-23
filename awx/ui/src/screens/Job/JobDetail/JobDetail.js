@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { useNavigate } from 'routerCompat';
 
 import { Button, Chip } from '@patternfly/react-core';

@@ -10,7 +10,7 @@ import PaginatedTable, {
 import DataListToolbar from 'components/DataListToolbar';
 import { getQSConfig, parseQueryString } from 'util/qs';
 import { Card, PageSection } from '@patternfly/react-core';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import useSelected from 'hooks/useSelected';
 import HostMetricsListItem from './HostMetricsListItem';
 import HostMetricsDeleteButton from './HostMetricsDeleteButton';

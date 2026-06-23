@@ -5,7 +5,7 @@ import { Link,
   Route,
   Navigate,
   useParams,
-  useLocation } from 'react-router-dom';
+  useLocation } from 'react-router';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card, PageSection } from '@patternfly/react-core';
 

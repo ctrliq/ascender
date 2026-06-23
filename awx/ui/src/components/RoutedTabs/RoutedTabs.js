@@ -4,7 +4,7 @@ import {
   Tabs as PFTabs,
   TabTitleText,
 } from '@patternfly/react-core';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import { useNavigate } from 'routerCompat';
 import styled from 'styled-components';
 import { getPersistentFilters } from 'components/PersistentFilters';

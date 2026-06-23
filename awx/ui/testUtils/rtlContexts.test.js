@@ -1,7 +1,7 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router';
 import { Plural } from '@lingui/react/macro';
 import { useConfig } from '../src/contexts/Config';
 import { useSession } from '../src/contexts/Session';

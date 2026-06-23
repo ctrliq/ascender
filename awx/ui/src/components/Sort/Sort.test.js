@@ -4,8 +4,8 @@ import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import Sort from './Sort';
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+jest.mock('react-router', () => ({
+  ...jest.requireActual('react-router'),
   useLocation: () => ({
     pathname: '/organizations',
   }),

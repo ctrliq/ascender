@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import { PageSection, Card } from '@patternfly/react-core';
 
 import useExpanded from 'hooks/useExpanded';

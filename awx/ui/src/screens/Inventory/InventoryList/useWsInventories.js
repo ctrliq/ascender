@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import { useNavigate } from 'routerCompat';
 import { parseQueryString, updateQueryString } from 'util/qs';
 import useWebsocket from 'hooks/useWebsocket';

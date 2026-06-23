@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import useWebsocket from 'hooks/useWebsocket';
 import useThrottle from 'hooks/useThrottle';
 import { parseQueryString } from 'util/qs';

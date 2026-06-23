@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Label, LabelGroup } from '@patternfly/react-core';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 function InstanceGroupLabels({ labels, isLinkable = false }) {
   const buildLinkURL = (isContainerGroup) =>

@@ -6,7 +6,7 @@ import {
   Navigate,
   useLocation,
   useNavigate,
-} from 'react-router-dom';
+} from 'react-router';
 import { ErrorBoundary } from 'react-error-boundary';
 import locationReplace from 'util/navigation';
 import { I18nProvider } from '@lingui/react';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tr, Td } from '@patternfly/react-table';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 
 function LabelListItem({ label, searchOrg }) {

@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useLingui } from '@lingui/react/macro';
 
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { Switch } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
 import { ActionsTd, ActionItem } from '../PaginatedTable';

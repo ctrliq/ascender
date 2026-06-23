@@ -4,8 +4,8 @@ import { createMemoryHistory } from 'history';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import JobOutputSearch from './JobOutputSearch';
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+jest.mock('react-router', () => ({
+  ...jest.requireActual('react-router'),
   history: () => ({
     location: '/jobs/playbook/1/output',
   }),
