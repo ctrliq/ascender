@@ -41,12 +41,12 @@ global.console = {
   // adapted from https://github.com/facebook/jest/issues/6121#issuecomment-708330601
   error: (...args) => {
     const raw = args[0];
-    const msg =
-      typeof raw === 'string'
-        ? raw
-        : raw instanceof Error
-          ? raw.message
-          : '';
+    let msg = '';
+    if (typeof raw === 'string') {
+      msg = raw;
+    } else if (raw instanceof Error) {
+      msg = raw.message;
+    }
     if (
       !networkRequestUrl &&
       !msg.includes('findDOMNode is deprecated') &&
