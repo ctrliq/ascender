@@ -111,12 +111,19 @@ function AWXLogin({ alt, isAuthenticated }) {
       if (isAuthenticated(document.cookie)) {
         const { data } = await MeAPI.read();
         const newUserId = data.results[0].id;
-        const previousUserId = JSON.parse(
-          window.localStorage.getItem(SESSION_USER_ID)
-        );
-        isNewUser.current =
-          previousUserId === null ||
-          newUserId.toString() !== previousUserId.toString();
+        const cacheKey = `isNewUser-${newUserId}`;
+        const cached = window.sessionStorage.getItem(cacheKey);
+        if (cached !== null) {
+          isNewUser.current = cached === 'true';
+        } else {
+          const previousUserId = JSON.parse(
+            window.localStorage.getItem(SESSION_USER_ID)
+          );
+          isNewUser.current =
+            previousUserId === null ||
+            newUserId.toString() !== previousUserId.toString();
+          window.sessionStorage.setItem(cacheKey, String(isNewUser.current));
+        }
         window.localStorage.setItem(SESSION_USER_ID, JSON.stringify(newUserId));
         setUserId(newUserId);
       }

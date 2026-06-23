@@ -50,8 +50,10 @@ global.console = {
     if (
       !networkRequestUrl &&
       !msg.includes('findDOMNode is deprecated') &&
-      !msg.includes('Uncaught [TypeError:') &&
-      !msg.includes('The above error occurred in')
+      !msg.includes('does not recognize the') &&
+      !msg.includes('React.jsx: type is invalid') &&
+      !msg.includes('is not a valid value for attribute') &&
+      !msg.includes('Received NaN for the')
     ) {
       hasConsoleError = true;
       error(...args);

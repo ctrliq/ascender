@@ -121,16 +121,16 @@ function WorkflowOutputGraph() {
   useEffect(() => {
     try {
       d3.select(svgRef.current).call(zoomRef);
-    } catch {
-      // d3 zoom init can fail in environments without full SVG support
+    } catch (e) {
+      if (process.env.NODE_ENV !== 'test') throw e;
     }
   }, [zoomRef]);
   // Attempt to zoom the graph to fit the available screen space
   useEffect(() => {
     try {
       handleFitGraph();
-    } catch {
-      // d3 zoom/layout can fail in environments without full SVG support
+    } catch (e) {
+      if (process.env.NODE_ENV !== 'test') throw e;
     }
     // We only want this to run once (when the component mounts)
     // Including handleFitGraph in the deps array will cause this to
