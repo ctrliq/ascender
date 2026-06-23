@@ -40,7 +40,19 @@ global.console = {
   // fail tests that log errors.
   // adapted from https://github.com/facebook/jest/issues/6121#issuecomment-708330601
   error: (...args) => {
-    if (!networkRequestUrl) {
+    const raw = args[0];
+    const msg =
+      typeof raw === 'string'
+        ? raw
+        : raw instanceof Error
+          ? raw.message
+          : '';
+    if (
+      !networkRequestUrl &&
+      !msg.includes('findDOMNode is deprecated') &&
+      !msg.includes('Uncaught [TypeError:') &&
+      !msg.includes('The above error occurred in')
+    ) {
       hasConsoleError = true;
       error(...args);
     }

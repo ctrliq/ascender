@@ -386,6 +386,7 @@ const NodeModal = ({ onSave, askLinkType, title }) => {
         approvalName: '',
         approvalDescription: '',
         daysToKeep: 30,
+        identifier: nodeToEdit?.identifier || '',
         timeoutMinutes: 0,
         timeoutSeconds: 0,
         convergence: 'any',

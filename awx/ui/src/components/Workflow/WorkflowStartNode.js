@@ -37,6 +37,10 @@ function WorkflowStartNode({ onUpdateHelpText = () => {}, showActionTooltip }) {
   const dispatch = useContext(WorkflowDispatchContext);
   const { addingLink, nodePositions } = useContext(WorkflowStateContext);
 
+  if (!nodePositions || !nodePositions[1]) {
+    return null;
+  }
+
   const handleNodeMouseEnter = () => {
     ref.current.parentNode.appendChild(ref.current);
     setHovering(true);

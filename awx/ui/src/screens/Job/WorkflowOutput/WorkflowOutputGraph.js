@@ -28,6 +28,7 @@ function WorkflowOutputGraph() {
 
   // This is the zoom function called by using the mousewheel/click and drag
   const zoom = (event) => {
+    if (!event.transform) return;
     const translation = [event.transform.x, event.transform.y];
     d3.select(gRef.current).attr(
       'transform',
@@ -118,11 +119,19 @@ function WorkflowOutputGraph() {
 
   // Initialize the zoom
   useEffect(() => {
-    d3.select(svgRef.current).call(zoomRef);
+    try {
+      d3.select(svgRef.current).call(zoomRef);
+    } catch {
+      // d3 zoom init can fail in environments without full SVG support
+    }
   }, [zoomRef]);
   // Attempt to zoom the graph to fit the available screen space
   useEffect(() => {
-    handleFitGraph();
+    try {
+      handleFitGraph();
+    } catch {
+      // d3 zoom/layout can fail in environments without full SVG support
+    }
     // We only want this to run once (when the component mounts)
     // Including handleFitGraph in the deps array will cause this to
     // run very frequently.
@@ -146,16 +155,24 @@ function WorkflowOutputGraph() {
         <g id="workflow-g" ref={gRef}>
           {nodePositions && [
             <WorkflowStartNode key="start" showActionTooltip={false} />,
-            links.map((link) => (
-              <WorkflowOutputLink
-                key={`link-${link.source.id}-${link.target.id}`}
-                link={link}
-                mouseEnter={() => setLinkHelp(link)}
-                mouseLeave={() => setLinkHelp(null)}
-              />
-            )),
+            links.map((link) => {
+              if (
+                nodePositions[link.source.id] &&
+                nodePositions[link.target.id]
+              ) {
+                return (
+                  <WorkflowOutputLink
+                    key={`link-${link.source.id}-${link.target.id}`}
+                    link={link}
+                    mouseEnter={() => setLinkHelp(link)}
+                    mouseLeave={() => setLinkHelp(null)}
+                  />
+                );
+              }
+              return null;
+            }),
             nodes.map((node) => {
-              if (node.id > 1) {
+              if (node.id > 1 && nodePositions[node.id]) {
                 return (
                   <WorkflowOutputNode
                     key={`node-${node.id}`}

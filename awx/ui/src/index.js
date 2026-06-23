@@ -2,7 +2,7 @@
 // Modifications Copyright (c) 2023 Ctrl IQ, Inc.
 //
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import './setupCSP';
 import '@patternfly/react-core/dist/styles/base.css';
 import './border.css';
@@ -10,11 +10,12 @@ import './ascender.css';
 
 import App from './App';
 
-ReactDOM.render(
+const container = document.getElementById('app') || document.createElement('div');
+const root = createRoot(container);
+root.render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>,
-  document.getElementById('app') || document.createElement('div')
+  </React.StrictMode>
 );
 
 if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
