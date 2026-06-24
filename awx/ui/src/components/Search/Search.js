@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import {
   Button,
   ButtonVariant,

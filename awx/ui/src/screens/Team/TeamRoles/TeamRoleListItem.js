@@ -4,7 +4,7 @@ import { Chip } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
 import { useLingui } from '@lingui/react/macro';
 
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 function TeamRoleListItem({ role, detailUrl, onDisassociate }) {
   const { t } = useLingui();

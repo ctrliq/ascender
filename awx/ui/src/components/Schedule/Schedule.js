@@ -6,7 +6,7 @@ import { Link,
   Route,
   Navigate,
   useLocation,
-  useParams } from 'react-router-dom';
+  useParams } from 'react-router';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { SchedulesAPI } from 'api';
 import useRequest from 'hooks/useRequest';

@@ -10,10 +10,9 @@ import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import AzureADDetail from './AzureADDetail';
 
 jest.mock('../../../../api');
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useRouteMatch: () => ({
-    path: '/settings/azure/default/details',
+jest.mock('react-router', () => ({
+  ...jest.requireActual('react-router'),
+  useMatch: () => ({
     params: { category: 'default' },
   }),
 }));

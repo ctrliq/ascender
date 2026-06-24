@@ -12,7 +12,7 @@ import {
   Tooltip,
 } from '@patternfly/react-core';
 import { HistoryIcon } from '@patternfly/react-icons';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router';
 
 const ScreenHeader = ({ breadcrumbConfig, streamType }) => {
   const { light } = PageSectionVariants;

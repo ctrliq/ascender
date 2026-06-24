@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import { useField, useFormikContext } from 'formik';
 import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';

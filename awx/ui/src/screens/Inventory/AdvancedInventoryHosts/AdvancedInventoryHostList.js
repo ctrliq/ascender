@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 
 import DataListToolbar from 'components/DataListToolbar';

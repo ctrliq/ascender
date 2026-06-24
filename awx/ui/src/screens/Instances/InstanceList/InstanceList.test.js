@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router';
 import { createMemoryHistory } from 'history';
 import * as ConfigContext from 'contexts/Config';
 import { within, waitFor, screen } from '@testing-library/react';
@@ -12,8 +12,8 @@ import InstanceList from './InstanceList';
 jest.mock('../../../api/models/InstanceGroups');
 jest.mock('../../../api/models/Instances');
 jest.mock('../../../api/models/Settings');
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+jest.mock('react-router', () => ({
+  ...jest.requireActual('react-router'),
   useParams: () => ({
     id: 1,
   }),

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Link as _Link } from 'react-router-dom';
+import { Link as _Link } from 'react-router';
 import { Tooltip } from '@patternfly/react-core';
 import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';

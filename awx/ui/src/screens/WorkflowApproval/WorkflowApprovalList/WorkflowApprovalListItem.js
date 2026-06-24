@@ -2,7 +2,7 @@ import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import useToast, { AlertVariant } from 'hooks/useToast';
 import { Tr, Td } from '@patternfly/react-table';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { formatDateString } from 'util/dates';
 import StatusLabel from 'components/StatusLabel';
 import JobCancelButton from 'components/JobCancelButton';

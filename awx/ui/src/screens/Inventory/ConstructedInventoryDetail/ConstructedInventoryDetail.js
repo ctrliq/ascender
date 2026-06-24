@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { Link, useNavigate  } from 'react-router-dom';
+import { Link, useNavigate  } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 
 import {

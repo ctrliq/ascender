@@ -6,7 +6,7 @@ import {
   TextListVariants,
   TextListItemVariants,
 } from '@patternfly/react-core';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { Config } from 'contexts/Config';
 import { toTitleCase } from 'util/strings';
 import { Detail, DeletedDetail } from '../DetailList';

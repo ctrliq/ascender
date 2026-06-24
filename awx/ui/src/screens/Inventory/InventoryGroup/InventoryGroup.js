@@ -5,7 +5,7 @@ import { Link,
   Route,
   Navigate,
   useLocation,
-  useParams } from 'react-router-dom';
+  useParams } from 'react-router';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import RoutedTabs from 'components/RoutedTabs';
 import ContentError from 'components/ContentError';

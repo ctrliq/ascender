@@ -10,15 +10,11 @@ import UserTokenList from './UserTokenList';
 jest.mock('../../../api/models/Users');
 jest.mock('../../../api/models/Tokens');
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+jest.mock('react-router', () => ({
+  ...jest.requireActual('react-router'),
   useLocation: () => ({
     search: '',
   }),
-}));
-// the component reads useParams from react-router-dom (v6 route tree)
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
   useParams: () => ({
     id: 1,
   }),

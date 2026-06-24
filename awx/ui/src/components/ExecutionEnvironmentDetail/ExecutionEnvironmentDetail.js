@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { Trans, useLingui } from '@lingui/react/macro';
 
 import { Popover, Tooltip } from '@patternfly/react-core';

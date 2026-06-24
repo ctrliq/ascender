@@ -13,7 +13,7 @@ import ErrorDetail from 'components/ErrorDetail';
 import AlertModal from 'components/AlertModal';
 import useToast, { AlertVariant } from 'hooks/useToast';
 import { getQSConfig, parseQueryString } from 'util/qs';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import { useParams } from 'routerCompat';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import DataListToolbar from 'components/DataListToolbar';

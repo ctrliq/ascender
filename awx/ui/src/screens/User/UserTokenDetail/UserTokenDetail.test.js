@@ -9,8 +9,8 @@ import UserTokenDetail from './UserTokenDetail';
 
 jest.mock('../../../api/models/Tokens');
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+jest.mock('react-router', () => ({
+  ...jest.requireActual('react-router'),
   useParams: () => ({
     id: 1,
     tokenId: 2,

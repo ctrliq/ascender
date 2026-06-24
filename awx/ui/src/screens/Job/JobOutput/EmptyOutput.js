@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router';
 import {
   SearchIcon,
   ExclamationCircleIcon as PFExclamationCircleIcon,

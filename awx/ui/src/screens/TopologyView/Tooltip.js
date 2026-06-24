@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import { useConfig } from 'contexts/Config';

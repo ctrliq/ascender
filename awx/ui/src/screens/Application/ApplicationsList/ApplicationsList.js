@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import { Card, PageSection } from '@patternfly/react-core';
 import { getQSConfig, parseQueryString } from 'util/qs';
 import useRequest, { useDeleteItems } from 'hooks/useRequest';

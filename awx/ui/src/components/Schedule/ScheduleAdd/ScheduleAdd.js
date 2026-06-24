@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import { useNavigate } from 'routerCompat';
 import { Card } from '@patternfly/react-core';
 import yaml from 'js-yaml';

@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import { useNavigate } from 'routerCompat';
 import styled from 'styled-components';
 import { Toolbar, ToolbarContent } from '@patternfly/react-core';

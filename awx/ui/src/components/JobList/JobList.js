@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import { useLingui, Plural } from '@lingui/react/macro';
 
 import { Card } from '@patternfly/react-core';

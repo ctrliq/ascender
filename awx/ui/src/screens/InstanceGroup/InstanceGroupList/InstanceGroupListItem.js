@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useLingui } from '@lingui/react/macro';
 
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import {
   Button,
   Progress,

@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { useNavigate, useParams } from 'routerCompat';
 
 import { Button } from '@patternfly/react-core';

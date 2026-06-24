@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { SyncAltIcon } from '@patternfly/react-icons';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 
 import {

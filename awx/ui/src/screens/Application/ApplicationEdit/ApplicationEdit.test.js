@@ -12,8 +12,8 @@ jest.mock('../../../api/models/Organizations');
 // The component reads useParams from react-router-dom (the route
 // tree is v6); mock it there, keeping useNavigate real so the cancel/submit
 // navigation assertions still exercise history.
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+jest.mock('react-router', () => ({
+  ...jest.requireActual('react-router'),
   useParams: () => ({ id: 1 }),
 }));
 

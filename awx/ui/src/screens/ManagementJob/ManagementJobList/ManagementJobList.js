@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import { Card, PageSection } from '@patternfly/react-core';
 
 import { SystemJobTemplatesAPI } from 'api';

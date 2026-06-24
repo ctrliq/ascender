@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { Trans, useLingui } from '@lingui/react/macro';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import { useParams } from 'routerCompat';
 
 import useExpanded from 'hooks/useExpanded';
