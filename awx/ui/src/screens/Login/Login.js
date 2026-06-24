@@ -45,7 +45,6 @@ function AWXLogin({ alt, isAuthenticated }) {
   const { authRedirectTo, isSessionExpired, isRedirectLinkReceived } =
     useSession();
   const isNewUser = useRef(true);
-  const hasVerifiedUser = useRef(false);
 
   const {
     isLoading: isCustomLoginInfoLoading,
@@ -111,7 +110,22 @@ function AWXLogin({ alt, isAuthenticated }) {
     useCallback(async () => {
       if (isAuthenticated(document.cookie)) {
         const { data } = await MeAPI.read();
-        setUserId(data.results[0].id);
+        const newUserId = data.results[0].id;
+        const cacheKey = `isNewUser-${newUserId}`;
+        const cached = window.sessionStorage.getItem(cacheKey);
+        if (cached !== null) {
+          isNewUser.current = cached === 'true';
+        } else {
+          const previousUserId = JSON.parse(
+            window.localStorage.getItem(SESSION_USER_ID)
+          );
+          isNewUser.current =
+            previousUserId === null ||
+            newUserId.toString() !== previousUserId.toString();
+          window.sessionStorage.setItem(cacheKey, String(isNewUser.current));
+        }
+        window.localStorage.setItem(SESSION_USER_ID, JSON.stringify(newUserId));
+        setUserId(newUserId);
       }
     }, [isAuthenticated])
   );
@@ -125,27 +139,6 @@ function AWXLogin({ alt, isAuthenticated }) {
   useEffect(() => {
     fetchUserId();
   }, [fetchUserId]);
-
-  const setLocalStorageAndRedirect = useCallback(() => {
-    if (userId && !hasVerifiedUser.current) {
-      const verifyIsNewUser = () => {
-        const previousUserId = JSON.parse(
-          window.localStorage.getItem(SESSION_USER_ID)
-        );
-        if (previousUserId === null) {
-          return true;
-        }
-        return userId.toString() !== previousUserId.toString();
-      };
-      isNewUser.current = verifyIsNewUser();
-      hasVerifiedUser.current = true;
-      window.localStorage.setItem(SESSION_USER_ID, JSON.stringify(userId));
-    }
-  }, [userId]);
-
-  useEffect(() => {
-    setLocalStorageAndRedirect();
-  }, [userId, setLocalStorageAndRedirect]);
 
   let helperText;
   if (authError?.response?.status === 401) {
@@ -177,7 +170,7 @@ function AWXLogin({ alt, isAuthenticated }) {
   if (isUserIdLoading) {
     return <LoadingSpinner />;
   }
-  if (userId && hasVerifiedUser.current) {
+  if (userId) {
     const redirect =
       isNewUser.current && !isRedirectLinkReceived ? '/home' : authRedirectTo;
 

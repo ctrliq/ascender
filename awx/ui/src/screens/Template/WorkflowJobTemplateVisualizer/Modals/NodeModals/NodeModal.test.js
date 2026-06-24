@@ -319,6 +319,7 @@ describe('NodeModal', () => {
       expect(onSave).toHaveBeenCalledWith(
         {
           convergence: 'any',
+          identifier: '',
           linkType: 'always',
           nodeType: 'job_template',
           inventory: { name: 'Foo Inv', id: 1 },
@@ -359,6 +360,7 @@ describe('NodeModal', () => {
       expect(onSave).toHaveBeenCalledWith(
         {
           convergence: 'any',
+          identifier: '',
           linkType: 'failure',
           nodeResource: {
             id: 1,
@@ -396,6 +398,7 @@ describe('NodeModal', () => {
       expect(onSave).toHaveBeenCalledWith(
         {
           convergence: 'any',
+          identifier: '',
           linkType: 'failure',
           nodeResource: {
             id: 1,
@@ -436,6 +439,7 @@ describe('NodeModal', () => {
       expect(onSave).toHaveBeenCalledWith(
         {
           convergence: 'any',
+          identifier: '',
           linkType: 'success',
           nodeResource: {
             id: 1,
@@ -512,6 +516,7 @@ describe('NodeModal', () => {
           convergence: 'any',
           approvalDescription: 'Test Approval Description',
           approvalName: 'Test Approval',
+          identifier: '',
           linkType: 'always',
           nodeResource: null,
           nodeType: 'workflow_approval_template',

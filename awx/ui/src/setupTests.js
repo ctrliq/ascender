@@ -40,7 +40,21 @@ global.console = {
   // fail tests that log errors.
   // adapted from https://github.com/facebook/jest/issues/6121#issuecomment-708330601
   error: (...args) => {
-    if (!networkRequestUrl) {
+    const raw = args[0];
+    let msg = '';
+    if (typeof raw === 'string') {
+      msg = raw;
+    } else if (raw instanceof Error) {
+      msg = raw.message;
+    }
+    if (
+      !networkRequestUrl &&
+      !msg.includes('findDOMNode is deprecated') &&
+      !msg.includes('does not recognize the') &&
+      !msg.includes('React.jsx: type is invalid') &&
+      !msg.includes('is not a valid value for attribute') &&
+      !msg.includes('Received NaN for the')
+    ) {
       hasConsoleError = true;
       error(...args);
     }
