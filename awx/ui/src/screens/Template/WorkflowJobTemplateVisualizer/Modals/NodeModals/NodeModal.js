@@ -6,12 +6,10 @@ import { Formik, useFormikContext } from 'formik';
 import yaml from 'js-yaml';
 import {
 	Button,
-	Form
+	Form,
+	WizardFooterWrapper,
+	useWizardContext,
 } from '@patternfly/react-core';
-import {
-	WizardContextConsumer,
-	WizardFooter
-} from '@patternfly/react-core/deprecated';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
 
@@ -28,6 +26,59 @@ import Wizard from 'components/Wizard';
 import AlertModal from 'components/AlertModal';
 import useWorkflowNodeSteps from './useWorkflowNodeSteps';
 import NodeNextButton from './NodeNextButton';
+
+function NodeModalCustomFooter({
+  promptSteps,
+  isLaunchLoading,
+  triggerNext,
+  setTriggerNext,
+  handleCancel,
+  nextButtonText,
+}) {
+  const { t } = useLingui();
+  const { activeStep, goToNextStep, goToPrevStep } = useWizardContext();
+
+  // Look up the original step data to get enableNext (not part of PF5 step type)
+  const originalStep = promptSteps.find((s) => s.id === activeStep?.id);
+  const stepWithEnableNext = {
+    ...activeStep,
+    enableNext: originalStep?.enableNext !== false,
+  };
+
+  return (
+    <WizardFooterWrapper>
+      <NodeNextButton
+        isDisabled={isLaunchLoading}
+        triggerNext={triggerNext}
+        activeStep={stepWithEnableNext}
+        aria-label={nextButtonText(activeStep)}
+        onNext={goToNextStep}
+        onClick={() => setTriggerNext(triggerNext + 1)}
+        buttonText={nextButtonText(activeStep)}
+      />
+      {activeStep && activeStep.id !== promptSteps[0]?.id && (
+        <Button
+          ouiaId="node-modal-back-button"
+          id="back-node-modal"
+          variant="secondary"
+          aria-label={t`Back`}
+          onClick={goToPrevStep}
+        >
+          {t`Back`}
+        </Button>
+      )}
+      <Button
+        ouiaId="node-modal-cancel-button"
+        id="cancel-node-modal"
+        variant="link"
+        aria-label={t`Cancel`}
+        onClick={handleCancel}
+      >
+        {t`Cancel`}
+      </Button>
+    </WizardFooterWrapper>
+  );
+}
 
 function NodeModalForm({
   askLinkType,
@@ -123,55 +174,18 @@ function NodeModalForm({
     contentError || credentialError
   );
 
-  function nextButtonText(activeStep) {
-    let verifyPromptSteps = false;
-    if (promptSteps.length) {
-      verifyPromptSteps =
-        activeStep.id === promptSteps[promptSteps.length - 1]?.id;
-    }
-    return verifyPromptSteps || activeStep.name === 'Preview'
-      ? t`Save`
-      : t`Next`;
-  }
-
-  const CustomFooter = (
-    <WizardFooter>
-      <WizardContextConsumer>
-        {({ activeStep, onNext, onBack }) => (
-          <>
-            <NodeNextButton
-              isDisabled={isLaunchLoading}
-              triggerNext={triggerNext}
-              activeStep={activeStep}
-              aria-label={nextButtonText(activeStep)}
-              onNext={onNext}
-              onClick={() => setTriggerNext(triggerNext + 1)}
-              buttonText={nextButtonText(activeStep)}
-            />
-            {activeStep && activeStep.id !== promptSteps[0]?.id && (
-              <Button
-                ouiaId="node-modal-back-button"
-                id="back-node-modal"
-                variant="secondary"
-                aria-label={t`Back`}
-                onClick={onBack}
-              >
-                {t`Back`}
-              </Button>
-            )}
-            <Button
-              ouiaId="node-modal-cancel-button"
-              id="cancel-node-modal"
-              variant="link"
-              aria-label={t`Cancel`}
-              onClick={handleCancel}
-            >
-              {t`Cancel`}
-            </Button>
-          </>
-        )}
-      </WizardContextConsumer>
-    </WizardFooter>
+  const getNextButtonText = useCallback(
+    (activeStep) => {
+      let verifyPromptSteps = false;
+      if (promptSteps.length) {
+        verifyPromptSteps =
+          activeStep.id === promptSteps[promptSteps.length - 1]?.id;
+      }
+      return verifyPromptSteps || activeStep.name === 'Preview'
+        ? t`Save`
+        : t`Next`;
+    },
+    [promptSteps, t]
   );
 
   if (error) {
@@ -205,7 +219,16 @@ function NodeModalForm({
   }
   return (
     <Wizard
-      footer={CustomFooter}
+      footer={
+        <NodeModalCustomFooter
+          promptSteps={promptSteps}
+          isLaunchLoading={isLaunchLoading}
+          triggerNext={triggerNext}
+          setTriggerNext={setTriggerNext}
+          handleCancel={handleCancel}
+          nextButtonText={getNextButtonText}
+        />
+      }
       isOpen={!error}
       onClose={handleCancel}
       onSave={() => {

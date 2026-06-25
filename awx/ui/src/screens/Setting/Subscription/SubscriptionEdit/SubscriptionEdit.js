@@ -6,13 +6,11 @@ import {
 	Alert,
 	AlertGroup,
 	Button,
-	Form
+	Form,
+	WizardFooterWrapper,
+	useWizardContext,
 } from '@patternfly/react-core';
-import {
-	Wizard,
-	WizardContextConsumer,
-	WizardFooter
-} from '@patternfly/react-core/deprecated';
+import Wizard from 'components/Wizard';
 import { ConfigAPI, SettingsAPI, RootAPI } from 'api';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import ContentLoading from 'components/ContentLoading';
@@ -28,65 +26,60 @@ const CustomFooter = ({ isSubmitLoading }) => {
   const { values, errors } = useFormikContext();
   const { me, license_info } = useConfig();
   const navigate = useNavigate();
+  const { activeStep, goToNextStep, goToPrevStep } = useWizardContext();
 
   return (
-    <WizardFooter>
-      <WizardContextConsumer>
-        {({ activeStep, onNext, onBack }) => (
-          <>
-            {activeStep.id === 'eula-step' ? (
-              <Button
-                id="subscription-wizard-submit"
-                aria-label={t`Submit`}
-                variant="primary"
-                onClick={onNext}
-                isDisabled={
-                  (!values.manifest_file && !values.subscription) ||
-                  !me?.is_superuser ||
-                  Object.keys(errors).length !== 0
-                }
-                type="button"
-                ouiaId="subscription-wizard-submit"
-                isLoading={isSubmitLoading}
-              >
-                <Trans>Submit</Trans>
-              </Button>
-            ) : (
-              <Button
-                id="subscription-wizard-next"
-                ouiaId="subscription-wizard-next"
-                variant="primary"
-                onClick={onNext}
-                type="button"
-              >
-                <Trans>Next</Trans>
-              </Button>
-            )}
-            <Button
-              id="subscription-wizard-back"
-              variant="secondary"
-              ouiaId="subscription-wizard-back"
-              onClick={onBack}
-              isDisabled={activeStep.id === 'subscription-step'}
-              type="button"
-            >
-              <Trans>Back</Trans>
-            </Button>
-            {license_info?.valid_key && (
-              <Button
-                id="subscription-wizard-cancel"
-                ouiaId="subscription-wizard-cancel"
-                variant="link"
-                aria-label={t`Cancel subscription edit`}
-                onClick={() => navigate('/settings/subscription/details')}
-              >
-                <Trans>Cancel</Trans>
-              </Button>
-            )}
-          </>
-        )}
-      </WizardContextConsumer>
-    </WizardFooter>
+    <WizardFooterWrapper>
+      {activeStep.id === 'eula-step' ? (
+        <Button
+          id="subscription-wizard-submit"
+          aria-label={t`Submit`}
+          variant="primary"
+          onClick={goToNextStep}
+          isDisabled={
+            (!values.manifest_file && !values.subscription) ||
+            !me?.is_superuser ||
+            Object.keys(errors).length !== 0
+          }
+          type="button"
+          ouiaId="subscription-wizard-submit"
+          isLoading={isSubmitLoading}
+        >
+          <Trans>Submit</Trans>
+        </Button>
+      ) : (
+        <Button
+          id="subscription-wizard-next"
+          ouiaId="subscription-wizard-next"
+          variant="primary"
+          onClick={goToNextStep}
+          type="button"
+        >
+          <Trans>Next</Trans>
+        </Button>
+      )}
+      <Button
+        id="subscription-wizard-back"
+        variant="secondary"
+        ouiaId="subscription-wizard-back"
+        onClick={goToPrevStep}
+        isDisabled={activeStep.id === 'subscription-step'}
+        type="button"
+      >
+        <Trans>Back</Trans>
+      </Button>
+      {license_info?.valid_key && (
+        <Button
+          id="subscription-wizard-cancel"
+          ouiaId="subscription-wizard-cancel"
+          variant="link"
+          aria-label={t`Cancel subscription edit`}
+          onClick={() => navigate('/settings/subscription/details')}
+        >
+          <Trans>Cancel</Trans>
+        </Button>
+      )}
+    </WizardFooterWrapper>
   );
 };
 

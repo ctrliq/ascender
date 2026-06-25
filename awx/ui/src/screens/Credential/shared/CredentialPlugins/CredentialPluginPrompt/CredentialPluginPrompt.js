@@ -2,19 +2,77 @@ import React, { useCallback } from 'react';
 import { Formik, useField } from 'formik';
 import { useLingui } from '@lingui/react/macro';
 import {
-	Button,
-	Tooltip
+  Button,
+  Tooltip,
+  WizardFooterWrapper,
+  useWizardContext,
 } from '@patternfly/react-core';
-import {
-	Wizard,
-	WizardContextConsumer,
-	WizardFooter
-} from '@patternfly/react-core/deprecated';
+import Wizard from 'components/Wizard';
 import { CredentialsAPI } from 'api';
 import useRequest from 'hooks/useRequest';
 import CredentialsStep from './CredentialsStep';
 import MetadataStep from './MetadataStep';
 import { CredentialPluginTestAlert } from '..';
+
+function CredentialPluginFooter({
+  selectedCredential,
+  testPluginMetadata,
+  onClose,
+  steps,
+}) {
+  const { t } = useLingui();
+  const { activeStep, goToNextStep, goToPrevStep } = useWizardContext();
+  const originalStep = steps.find((s) => s.id === activeStep?.id);
+  const isMetadataStep = originalStep?.key === 'metadata';
+
+  return (
+    <WizardFooterWrapper>
+      <Button
+        ouiaId="credential-plugin-prompt-next"
+        id="credential-plugin-prompt-next"
+        variant="primary"
+        onClick={goToNextStep}
+        isDisabled={!selectedCredential.value}
+      >
+        {isMetadataStep ? t`OK` : t`Next`}
+      </Button>
+      {activeStep && isMetadataStep && (
+        <>
+          <Tooltip
+            content={t`Click this button to verify connection to the secret management system using the selected credential and specified inputs.`}
+            position="right"
+          >
+            <Button
+              ouiaId="credential-plugin-prompt-test"
+              id="credential-plugin-prompt-test"
+              variant="secondary"
+              onClick={() => testPluginMetadata()}
+            >
+              {t`Test`}
+            </Button>
+          </Tooltip>
+
+          <Button
+            ouiaId="credential-plugin-prompt-back"
+            id="credential-plugin-prompt-back"
+            variant="secondary"
+            onClick={goToPrevStep}
+          >
+            {t`Back`}
+          </Button>
+        </>
+      )}
+      <Button
+        ouiaId="credential-plugin-prompt-cancel"
+        id="credential-plugin-prompt-cancel"
+        variant="link"
+        onClick={onClose}
+      >
+        {t`Cancel`}
+      </Button>
+    </WizardFooterWrapper>
+  );
+}
 
 function CredentialPluginWizard({ handleSubmit, onClose }) {
   const { t } = useLingui();
@@ -53,62 +111,6 @@ function CredentialPluginWizard({ handleSubmit, onClose }) {
     },
   ];
 
-  const CustomFooter = (
-    <WizardFooter>
-      <WizardContextConsumer>
-        {({ activeStep, onNext, onBack }) => (
-          <>
-            <Button
-              ouiaId="credential-plugin-prompt-next"
-              id="credential-plugin-prompt-next"
-              variant="primary"
-              onClick={onNext}
-              isDisabled={!selectedCredential.value}
-            >
-              {activeStep.key === 'metadata'
-                ? t`OK`
-                : t`Next`}
-            </Button>
-            {activeStep && activeStep.key === 'metadata' && (
-              <>
-                <Tooltip
-                  content={t`Click this button to verify connection to the secret management system using the selected credential and specified inputs.`}
-                  position="right"
-                >
-                  <Button
-                    ouiaId="credential-plugin-prompt-test"
-                    id="credential-plugin-prompt-test"
-                    variant="secondary"
-                    onClick={() => testPluginMetadata()}
-                  >
-                    {t`Test`}
-                  </Button>
-                </Tooltip>
-
-                <Button
-                  ouiaId="credential-plugin-prompt-back"
-                  id="credential-plugin-prompt-back"
-                  variant="secondary"
-                  onClick={onBack}
-                >
-                  {t`Back`}
-                </Button>
-              </>
-            )}
-            <Button
-              ouiaId="credential-plugin-prompt-cancel"
-              id="credential-plugin-prompt-cancel"
-              variant="link"
-              onClick={onClose}
-            >
-              {t`Cancel`}
-            </Button>
-          </>
-        )}
-      </WizardContextConsumer>
-    </WizardFooter>
-  );
-
   return (
     <>
       <Wizard
@@ -117,7 +119,14 @@ function CredentialPluginWizard({ handleSubmit, onClose }) {
         title={t`External Secret Management System`}
         steps={steps}
         onSave={handleSubmit}
-        footer={CustomFooter}
+        footer={
+          <CredentialPluginFooter
+            selectedCredential={selectedCredential}
+            testPluginMetadata={testPluginMetadata}
+            onClose={onClose}
+            steps={steps}
+          />
+        }
       />
       {selectedCredential.value && (
         <CredentialPluginTestAlert
