@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import {
 	ExpandableSection
 } from '@patternfly/react-core';
-import {
-	Wizard
-} from '@patternfly/react-core/deprecated';
+import Wizard from 'components/Wizard';
 import { useLingui } from '@lingui/react/macro';
 import { useFormikContext } from 'formik';
 import { useDismissableError } from 'hooks/useRequest';
