@@ -23,6 +23,9 @@ function CustomMessagesSubForm({ defaultMessages, type }) {
         return;
       }
       const defs = defaultMessages[type];
+      if (!defs) {
+        return;
+      }
 
       const resetFields = (name, defaults) => {
         setFieldValue(`${name}.message`, defaults.message || '');
