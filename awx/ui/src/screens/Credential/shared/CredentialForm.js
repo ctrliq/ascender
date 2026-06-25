@@ -12,12 +12,15 @@ import {
 	FormHelperText,
 	HelperText,
 	HelperTextItem,
+	MenuToggle,
+	Select,
+	SelectList,
+	SelectOption,
+	TextInputGroup,
+	TextInputGroupMain,
+	TextInputGroupUtilities,
 } from '@patternfly/react-core';
-import {
-	Select as PFSelect,
-	SelectOption as PFSelectOption,
-	SelectVariant
-} from '@patternfly/react-core/deprecated';
+import { TimesIcon } from '@patternfly/react-icons';
 import styled from 'styled-components';
 import FormField, { FormSubmitError } from 'components/FormField';
 import { FormColumnLayout, FormFullWidthLayout } from 'components/FormLayout';
@@ -26,14 +29,13 @@ import OrganizationLookup from 'components/Lookup/OrganizationLookup';
 import TypeInputsSubForm from './TypeInputsSubForm';
 import ExternalTestModal from './ExternalTestModal';
 
-const Select = styled(PFSelect)`
+const StyledSelect = styled(Select)`
   ul {
     max-width: 495px;
   }
-  ${(props) => (props.isDisabled ? `cursor: not-allowed` : null)}
 `;
 
-const SelectOption = styled(PFSelectOption)`
+const StyledSelectOption = styled(SelectOption)`
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -44,6 +46,7 @@ function CredentialFormFields({ initialTypeId, credentialTypes }) {
   const { pathname } = useLocation();
   const { setFieldValue, initialValues, setFieldTouched } = useFormikContext();
   const [isSelectOpen, setIsSelectOpen] = useState(false);
+  const [filterValue, setFilterValue] = useState('');
   const [credTypeField, credTypeMeta, credTypeHelpers] = useField({
     name: 'credential_type',
     validate: required(t`Select a value for this field`),
@@ -123,37 +126,97 @@ function CredentialFormFields({ initialTypeId, credentialTypes }) {
   );
 
   const isCredentialTypeDisabled = pathname.includes('edit');
+
+  const selectedLabel =
+    credentialTypeOptions.find((opt) => opt.value === credTypeField.value)
+      ?.label || '';
+
+  const filteredOptions = credentialTypeOptions.filter((opt) =>
+    opt.label.toLowerCase().includes(filterValue.toLowerCase())
+  );
+
   const credentialTypeSelect = (
-    <Select
-      isDisabled={isCredentialTypeDisabled}
-      ouiaId="CredentialForm-credential_type"
-      aria-label={t`Credential Type`}
-      typeAheadAriaLabel={t`Select Credential Type`}
+    <StyledSelect
       isOpen={isSelectOpen}
-      variant={SelectVariant.typeahead}
-      onToggle={(_event, val) => setIsSelectOpen(val)}
-      onSelect={(event, value) => {
+      onOpenChange={(open) => {
+        setIsSelectOpen(open);
+        if (!open) setFilterValue('');
+      }}
+      onSelect={(_event, value) => {
         setCredentialTypeId(value);
         credTypeHelpers.setValue(value);
         setIsSelectOpen(false);
+        setFilterValue('');
       }}
-      selections={credTypeField.value}
-      placeholder={t`Select a credential Type`}
-      isCreatable={false}
-      maxHeight="300px"
-      width="100%"
-      noResultsFoundText={t`No results found`}
-    >
-      {credentialTypeOptions.map((credType) => (
-        <SelectOption
-          key={credType.value}
-          value={credType.value}
-          data-cy={`${credType.id}-credential-type-select-option`}
+      aria-label={t`Credential Type`}
+      ouiaId="CredentialForm-credential_type"
+      style={{ width: '100%' }}
+      toggle={(toggleRef) => (
+        <MenuToggle
+          ref={toggleRef}
+          variant="typeahead"
+          onClick={() => {
+            if (!isCredentialTypeDisabled) setIsSelectOpen(!isSelectOpen);
+          }}
+          isExpanded={isSelectOpen}
+          isDisabled={isCredentialTypeDisabled}
+          style={isCredentialTypeDisabled ? { cursor: 'not-allowed' } : undefined}
         >
-          {credType.label}
-        </SelectOption>
-      ))}
-    </Select>
+          <TextInputGroup isPlain isDisabled={isCredentialTypeDisabled}>
+            <TextInputGroupMain
+              value={filterValue !== '' ? filterValue : selectedLabel}
+              onClick={() => {
+                if (!isCredentialTypeDisabled) setIsSelectOpen(true);
+              }}
+              onChange={(_event, val) => {
+                setFilterValue(val);
+                setIsSelectOpen(true);
+              }}
+              onFocus={() => {
+                if (selectedLabel && filterValue === '') {
+                  setFilterValue(selectedLabel);
+                }
+              }}
+              autoComplete="off"
+              placeholder={t`Select a credential Type`}
+              aria-label={t`Select Credential Type`}
+            />
+            {(filterValue || selectedLabel) && !isCredentialTypeDisabled && (
+              <TextInputGroupUtilities>
+                <Button
+                  variant="plain"
+                  onClick={() => {
+                    setCredentialTypeId(undefined);
+                    credTypeHelpers.setValue('');
+                    setFilterValue('');
+                  }}
+                  aria-label={t`Clear`}
+                >
+                  <TimesIcon />
+                </Button>
+              </TextInputGroupUtilities>
+            )}
+          </TextInputGroup>
+        </MenuToggle>
+      )}
+    >
+      <SelectList style={{ maxHeight: '300px' }}>
+        {filteredOptions.map((credType) => (
+          <StyledSelectOption
+            key={credType.value}
+            value={credType.value}
+            data-cy={`${credType.key}-credential-type-select-option`}
+          >
+            {credType.label}
+          </StyledSelectOption>
+        ))}
+        {filteredOptions.length === 0 && (
+          <SelectOption isDisabled>
+            {t`No results found`}
+          </SelectOption>
+        )}
+      </SelectList>
+    </StyledSelect>
   );
 
   return (

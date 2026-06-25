@@ -6,24 +6,18 @@ import {
 	Card,
 	CardHeader,
 	CardBody,
-	PageSection
-} from '@patternfly/react-core';
-import {
+	MenuToggle,
+	PageSection,
 	Select,
-	SelectVariant,
-	SelectOption
-} from '@patternfly/react-core/deprecated';
+	SelectList,
+	SelectOption,
+} from '@patternfly/react-core';
 
 import useRequest from 'hooks/useRequest';
 import { DashboardAPI } from 'api';
 import ContentLoading from 'components/ContentLoading';
 import LineChart from './shared/LineChart';
 
-const StatusSelect = styled(Select)`
-  && {
-    --pf-v5-c-select__toggle--MinWidth: 165px;
-  }
-`;
 const GraphCardHeader = styled(CardHeader)`
   margin-top: var(--pf-v5-global--spacer--lg);
 `;
@@ -44,6 +38,26 @@ function DashboardGraph() {
   const [periodSelection, setPeriodSelection] = useState('month');
   const [jobTypeSelection, setJobTypeSelection] = useState('all');
   const [jobStatusSelection, setJobStatusSelection] = useState('all');
+
+  const periodLabelMap = {
+    month: t`Past month`,
+    two_weeks: t`Past two weeks`,
+    week: t`Past week`,
+    day: t`Past 24 hours`,
+  };
+
+  const jobTypeLabelMap = {
+    all: t`All job types`,
+    inv_sync: t`Inventory sync`,
+    scm_update: t`SCM update`,
+    playbook_run: t`Playbook run`,
+  };
+
+  const jobStatusLabelMap = {
+    all: t`All jobs`,
+    successful: t`Successful jobs`,
+    failed: t`Failed jobs`,
+  };
 
   const {
     isLoading,
@@ -96,84 +110,107 @@ function DashboardGraph() {
       <GraphCardHeader>
         <GraphCardActions>
           <Select
-            variant={SelectVariant.single}
-            placeholderText={t`Select period`}
-            aria-label={t`Select period`}
-            typeAheadAriaLabel={t`Select period`}
-            className="periodSelect"
-            onToggle={(_event, val) => setIsPeriodDropdownOpen(val)}
-            onSelect={(event, selection) => {
+            isOpen={isPeriodDropdownOpen}
+            onOpenChange={setIsPeriodDropdownOpen}
+            onSelect={(_event, selection) => {
               setIsPeriodDropdownOpen(false);
               setPeriodSelection(selection);
             }}
-            selections={periodSelection}
-            isOpen={isPeriodDropdownOpen}
-            noResultsFoundText={t`No results found`}
+            aria-label={t`Select period`}
+            className="periodSelect"
             ouiaId="dashboard-period-select"
+            toggle={(toggleRef) => (
+              <MenuToggle
+                ref={toggleRef}
+                onClick={() => setIsPeriodDropdownOpen(!isPeriodDropdownOpen)}
+                isExpanded={isPeriodDropdownOpen}
+              >
+                {periodLabelMap[periodSelection] || t`Select period`}
+              </MenuToggle>
+            )}
           >
-            <SelectOption key="month" value="month">
-              {t`Past month`}
-            </SelectOption>
-            <SelectOption key="two_weeks" value="two_weeks">
-              {t`Past two weeks`}
-            </SelectOption>
-            <SelectOption key="week" value="week">
-              {t`Past week`}
-            </SelectOption>
-            <SelectOption key="day" value="day">
-              {t`Past 24 hours`}
-            </SelectOption>
+            <SelectList>
+              <SelectOption value="month">
+                {t`Past month`}
+              </SelectOption>
+              <SelectOption value="two_weeks">
+                {t`Past two weeks`}
+              </SelectOption>
+              <SelectOption value="week">
+                {t`Past week`}
+              </SelectOption>
+              <SelectOption value="day">
+                {t`Past 24 hours`}
+              </SelectOption>
+            </SelectList>
           </Select>
           <Select
-            variant={SelectVariant.single}
-            placeholderText={t`Select job type`}
-            aria-label={t`Select job type`}
-            className="jobTypeSelect"
-            onToggle={(_event, val) => setIsJobTypeDropdownOpen(val)}
-            onSelect={(event, selection) => {
+            isOpen={isJobTypeDropdownOpen}
+            onOpenChange={setIsJobTypeDropdownOpen}
+            onSelect={(_event, selection) => {
               setIsJobTypeDropdownOpen(false);
               setJobTypeSelection(selection);
             }}
-            selections={jobTypeSelection}
-            isOpen={isJobTypeDropdownOpen}
+            aria-label={t`Select job type`}
+            className="jobTypeSelect"
             ouiaId="dashboard-job-type-select"
+            toggle={(toggleRef) => (
+              <MenuToggle
+                ref={toggleRef}
+                onClick={() => setIsJobTypeDropdownOpen(!isJobTypeDropdownOpen)}
+                isExpanded={isJobTypeDropdownOpen}
+              >
+                {jobTypeLabelMap[jobTypeSelection] || t`Select job type`}
+              </MenuToggle>
+            )}
           >
-            <SelectOption key="all" value="all">
-              {t`All job types`}
-            </SelectOption>
-            <SelectOption key="inv_sync" value="inv_sync">
-              {t`Inventory sync`}
-            </SelectOption>
-            <SelectOption key="scm_update" value="scm_update">
-              {t`SCM update`}
-            </SelectOption>
-            <SelectOption key="playbook_run" value="playbook_run">
-              {t`Playbook run`}
-            </SelectOption>
+            <SelectList>
+              <SelectOption value="all">
+                {t`All job types`}
+              </SelectOption>
+              <SelectOption value="inv_sync">
+                {t`Inventory sync`}
+              </SelectOption>
+              <SelectOption value="scm_update">
+                {t`SCM update`}
+              </SelectOption>
+              <SelectOption value="playbook_run">
+                {t`Playbook run`}
+              </SelectOption>
+            </SelectList>
           </Select>
-          <StatusSelect
-            variant={SelectVariant.single}
-            placeholderText={t`Select status`}
-            aria-label={t`Select status`}
-            className="jobStatusSelect"
-            onToggle={(_event, val) => setIsJobStatusDropdownOpen(val)}
-            onSelect={(event, selection) => {
+          <Select
+            isOpen={isJobStatusDropdownOpen}
+            onOpenChange={setIsJobStatusDropdownOpen}
+            onSelect={(_event, selection) => {
               setIsJobStatusDropdownOpen(false);
               setJobStatusSelection(selection);
             }}
-            selections={jobStatusSelection}
-            isOpen={isJobStatusDropdownOpen}
+            aria-label={t`Select status`}
+            className="jobStatusSelect"
+            toggle={(toggleRef) => (
+              <MenuToggle
+                ref={toggleRef}
+                onClick={() => setIsJobStatusDropdownOpen(!isJobStatusDropdownOpen)}
+                isExpanded={isJobStatusDropdownOpen}
+                style={{ minWidth: '165px' }}
+              >
+                {jobStatusLabelMap[jobStatusSelection] || t`Select status`}
+              </MenuToggle>
+            )}
           >
-            <SelectOption key="all" value="all">
-              {t`All jobs`}
-            </SelectOption>
-            <SelectOption key="successful" value="successful">
-              {t`Successful jobs`}
-            </SelectOption>
-            <SelectOption key="failed" value="failed">
-              {t`Failed jobs`}
-            </SelectOption>
-          </StatusSelect>
+            <SelectList>
+              <SelectOption value="all">
+                {t`All jobs`}
+              </SelectOption>
+              <SelectOption value="successful">
+                {t`Successful jobs`}
+              </SelectOption>
+              <SelectOption value="failed">
+                {t`Failed jobs`}
+              </SelectOption>
+            </SelectList>
+          </Select>
         </GraphCardActions>
       </GraphCardHeader>
       <CardBody>

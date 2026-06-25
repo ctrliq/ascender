@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import {
-	Chip,
-	ChipGroup
+  Button,
+  Label,
+  LabelGroup,
+  MenuToggle,
+  Select,
+  SelectList,
+  SelectOption,
+  TextInputGroup,
+  TextInputGroupMain,
+  TextInputGroupUtilities,
 } from '@patternfly/react-core';
-import {
-	Select,
-	SelectOption,
-	SelectVariant
-} from '@patternfly/react-core/deprecated';
+import { TimesIcon } from '@patternfly/react-icons';
 import { useLingui } from '@lingui/react/macro';
 import { LabelsAPI } from 'api';
 import useIsMounted from 'hooks/useIsMounted';
@@ -50,16 +54,13 @@ function LabelSelect({
 }) {
   const [isLoading, setIsLoading] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [filterValue, setFilterValue] = useState('');
   const isMounted = useIsMounted();
   const { t } = useLingui();
   const { selections, onSelect, options, setOptions } = useSyncedSelectValue(
     value,
     onChange
   );
-
-  const toggleExpanded = (toggleValue) => {
-    setIsExpanded(toggleValue);
-  };
 
   useEffect(() => {
     (async () => {
@@ -72,74 +73,138 @@ function LabelSelect({
     /* eslint-disable-next-line react-hooks/exhaustive-deps */
   }, []);
 
-  const renderOptions = (opts) =>
-    opts.map((option) => (
-      <SelectOption
-        key={option.id}
-        aria-label={option.name}
-        value={option}
-        isDisabled={option.isReadOnly}
-      >
-        {option.name}
-      </SelectOption>
-    ));
+  const filteredOptions = filterValue
+    ? options.filter((o) =>
+        o.name.toLowerCase().includes(filterValue.toLowerCase())
+      )
+    : options;
 
-  const onFilter = (event) => {
-    if (event) {
-      const str = event.target.value.toLowerCase();
-      const matches = options.filter((o) => o.name.toLowerCase().includes(str));
-      return renderOptions(matches);
+  const hasExactMatch = options.some(
+    (o) => o.name.toLowerCase() === filterValue.toLowerCase()
+  );
+
+  const handleSelect = (_event, selectedValue) => {
+    const selectedOption =
+      options.find((o) => String(o.id) === String(selectedValue)) ||
+      selections.find((o) => String(o.id) === String(selectedValue));
+
+    if (selectedOption) {
+      onSelect(_event, selectedOption);
+    } else if (typeof selectedValue === 'string') {
+      const newItem = { id: selectedValue, name: selectedValue };
+      onSelect(_event, newItem);
     }
-    return null;
+    setFilterValue('');
   };
 
-  const chipGroupComponent = () => (
-    <ChipGroup>
-      {(selections || []).map((currentChip) => (
-        <Chip
-          isReadOnly={currentChip.isReadOnly}
-          key={currentChip.name}
-          onClick={(e) => {
-            onSelect(e, currentChip);
-          }}
-        >
-          {currentChip.name}
-        </Chip>
-      ))}
-    </ChipGroup>
-  );
+  const handleCreate = () => {
+    const trimmed = filterValue.trim();
+    if (trimmed && !options.find((o) => o.name === trimmed)) {
+      setOptions(options.concat({ name: trimmed, id: trimmed }));
+    }
+    const newItem = { id: trimmed, name: trimmed };
+    onSelect(null, newItem);
+    setFilterValue('');
+  };
 
   return (
     <Select
-      variant={SelectVariant.typeaheadMulti}
-      onToggle={(_event, toggleValue) => toggleExpanded(toggleValue)}
-      onSelect={(e, item) => {
-        if (typeof item === 'string') {
-          item = { id: item, name: item };
-        }
-        onSelect(e, item);
-      }}
-      onClear={() => onChange(selections.filter((label) => label.isReadOnly))}
-      onFilter={onFilter}
-      isCreatable
-      onCreateOption={(label) => {
-        label = label.trim();
-        if (!options.includes(label)) {
-          setOptions(options.concat({ name: label, id: label }));
-        }
-        return label;
-      }}
-      isDisabled={isLoading}
-      selections={selections}
       isOpen={isExpanded}
-      typeAheadAriaLabel={t`Select Labels`}
-      placeholderText={placeholder}
-      createText={createText}
-      noResultsFoundText={t`No results found`}
-      ouiaId="template-label-select"
-      chipGroupComponent={chipGroupComponent()}
+      onOpenChange={(open) => {
+        setIsExpanded(open);
+        if (!open) setFilterValue('');
+      }}
+      onSelect={handleSelect}
+      toggle={(toggleRef) => (
+        <MenuToggle
+          ref={toggleRef}
+          variant="typeahead"
+          onClick={() => setIsExpanded(!isExpanded)}
+          isExpanded={isExpanded}
+          isDisabled={isLoading}
+          ouiaId="template-label-select"
+        >
+          <TextInputGroup isPlain>
+            <TextInputGroupMain
+              value={filterValue}
+              onClick={() => setIsExpanded(true)}
+              onChange={(_event, val) => {
+                setFilterValue(val);
+                setIsExpanded(true);
+              }}
+              autoComplete="off"
+              placeholder={
+                selections.length === 0 ? placeholder : ''
+              }
+              aria-label={t`Select Labels`}
+            >
+              {selections.length > 0 && (
+                <LabelGroup>
+                  {selections.map((currentChip) => (
+                    <Label
+                      key={currentChip.name}
+                      {...(currentChip.isReadOnly
+                        ? { isDisabled: true }
+                        : {
+                            onClose: () => {
+                              onSelect(null, currentChip);
+                            },
+                          })}
+                    >
+                      {currentChip.name}
+                    </Label>
+                  ))}
+                </LabelGroup>
+              )}
+            </TextInputGroupMain>
+            {(filterValue || selections.length > 0) && (
+              <TextInputGroupUtilities>
+                <Button
+                  variant="plain"
+                  onClick={() => {
+                    onChange(
+                      selections.filter((label) => label.isReadOnly)
+                    );
+                    setFilterValue('');
+                  }}
+                  aria-label={t`Clear`}
+                >
+                  <TimesIcon />
+                </Button>
+              </TextInputGroupUtilities>
+            )}
+          </TextInputGroup>
+        </MenuToggle>
+      )}
     >
-      {renderOptions(options)}
+      <SelectList>
+        {filteredOptions.map((option) => (
+          <SelectOption
+            key={option.id}
+            value={String(option.id)}
+            aria-label={option.name}
+            isDisabled={option.isReadOnly}
+            hasCheckbox
+            isSelected={selections.some(
+              (s) => String(s.id) === String(option.id)
+            )}
+          >
+            {option.name}
+          </SelectOption>
+        ))}
+        {filterValue && !hasExactMatch && (
+          <SelectOption
+            key={`create-${filterValue}`}
+            value={filterValue}
+            onClick={handleCreate}
+          >
+            {createText || t`Create`} &quot;{filterValue}&quot;
+          </SelectOption>
+        )}
+        {filteredOptions.length === 0 && !filterValue && (
+          <SelectOption isDisabled>{t`No results found`}</SelectOption>
+        )}
+      </SelectList>
     </Select>
   );
 }

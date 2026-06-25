@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
-import { useParams, Link } from 'react-router';
+import { useParams } from 'react-router';
+import { useNavigate } from 'routerCompat';
 import { useLingui } from '@lingui/react/macro';
 import {
-	Chip
-} from '@patternfly/react-core';
-import {
+	Chip,
+	MenuToggle,
 	Select,
-	SelectOption,
 	SelectGroup,
-	SelectVariant
-} from '@patternfly/react-core/deprecated';
+	SelectList,
+	SelectOption,
+	TextInputGroup,
+	TextInputGroupMain,
+} from '@patternfly/react-core';
 import ChipGroup from 'components/ChipGroup';
 import { stringIsUUID } from 'util/strings';
 
@@ -25,6 +27,7 @@ const JOB_URL_SEGMENT_MAP = {
 function WorkflowOutputNavigation({ relatedJobs, parentRef }) {
   const { t } = useLingui();
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const relevantResults = relatedJobs.filter(
     ({ job: jobId, summary_fields }) =>
@@ -36,6 +39,7 @@ function WorkflowOutputNavigation({ relatedJobs, parentRef }) {
   const [isOpen, setIsOpen] = useState(false);
   const [filterBy, setFilterBy] = useState();
   const [sortedJobs, setSortedJobs] = useState(relevantResults);
+  const [inlineFilter, setInlineFilter] = useState('');
 
   const handleFilter = (v) => {
     if (filterBy === v) {
@@ -58,54 +62,89 @@ function WorkflowOutputNavigation({ relatedJobs, parentRef }) {
   ).length;
   const numFailedJobs = relevantResults.length - numSuccessJobs;
 
+  const filteredJobs = inlineFilter
+    ? sortedJobs.filter((node) => {
+        const label = stringIsUUID(node.identifier)
+          ? node.summary_fields.job.name
+          : node.identifier;
+        return label.toLowerCase().includes(inlineFilter.toLowerCase());
+      })
+    : sortedJobs;
+
   return (
     <Select
       key={`${id}`}
-      variant={SelectVariant.typeaheadMulti}
-      menuAppendTo={parentRef?.current}
-      onToggle={(_event, val) => {
-        setIsOpen(val);
-      }}
-      selections={filterBy}
-      onSelect={(e, v) => {
-        if (v !== 'Failed' && v !== 'Successful') return;
-        handleFilter(v);
-      }}
       isOpen={isOpen}
-      isGrouped
-      hasInlineFilter
-      placeholderText={t`Workflow Job 1/${relevantResults.length}`}
-      chipGroupComponent={
-        <ChipGroup numChips={1} totalChips={1}>
-          <Chip key={filterBy} onClick={() => handleFilter(filterBy)}>
-            {[filterBy]}
-          </Chip>
-        </ChipGroup>
+      onOpenChange={(open) => {
+        setIsOpen(open);
+        if (!open) setInlineFilter('');
+      }}
+      onSelect={(_e, v) => {
+        if (v === 'Failed' || v === 'Successful') {
+          handleFilter(v);
+          return;
+        }
+        const node = sortedJobs.find(
+          (n) => n.summary_fields.job.name === v
+        );
+        if (node) {
+          const url = `/jobs/${JOB_URL_SEGMENT_MAP[node.summary_fields.job.type]}/${node.summary_fields.job?.id}/output`;
+          navigate(url);
+          setIsOpen(false);
+        }
+      }}
+      popperProps={
+        parentRef?.current
+          ? { appendTo: parentRef.current }
+          : undefined
       }
+      toggle={(toggleRef) => (
+        <MenuToggle
+          ref={toggleRef}
+          onClick={() => setIsOpen(!isOpen)}
+          isExpanded={isOpen}
+        >
+          {filterBy ? (
+            <ChipGroup numChips={1} totalChips={1}>
+              <Chip key={filterBy} onClick={() => handleFilter(filterBy)}>
+                {filterBy}
+              </Chip>
+            </ChipGroup>
+          ) : (
+            t`Workflow Job 1/${relevantResults.length}`
+          )}
+        </MenuToggle>
+      )}
     >
-      {[
+      <TextInputGroup>
+        <TextInputGroupMain
+          value={inlineFilter}
+          onChange={(_event, val) => setInlineFilter(val)}
+          placeholder={t`Filter...`}
+          autoComplete="off"
+        />
+      </TextInputGroup>
+      <SelectList>
         <SelectGroup label={t`Workflow Statuses`} key="status">
           <SelectOption
             description={t`Filter by failed jobs`}
             key="failed"
-            value={t`Failed`}
-            itemCount={numFailedJobs}
-          />
+            value="Failed"
+          >
+            {t`Failed`} ({numFailedJobs})
+          </SelectOption>
           <SelectOption
             description={t`Filter by successful jobs`}
             key="successful"
-            value={t`Successful`}
-            itemCount={numSuccessJobs}
-          />
-        </SelectGroup>,
+            value="Successful"
+          >
+            {t`Successful`} ({numSuccessJobs})
+          </SelectOption>
+        </SelectGroup>
         <SelectGroup label={t`Workflow Nodes`} key="nodes">
-          {sortedJobs?.map((node) => (
+          {filteredJobs?.map((node) => (
             <SelectOption
               key={node.id}
-              to={`/jobs/${JOB_URL_SEGMENT_MAP[node.summary_fields.job.type]}/${
-                node.summary_fields.job?.id
-              }/output`}
-              component={Link}
               value={node.summary_fields.job.name}
             >
               {stringIsUUID(node.identifier)
@@ -113,8 +152,8 @@ function WorkflowOutputNavigation({ relatedJobs, parentRef }) {
                 : node.identifier}
             </SelectOption>
           ))}
-        </SelectGroup>,
-      ]}
+        </SelectGroup>
+      </SelectList>
     </Select>
   );
 }

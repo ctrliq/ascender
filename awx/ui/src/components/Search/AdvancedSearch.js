@@ -6,15 +6,18 @@ import {
 	Divider,
 	InputGroup,
 	TextInput,
-	Tooltip, InputGroupItem
-} from '@patternfly/react-core';
-import {
+	Tooltip,
+	InputGroupItem,
 	Select,
-	SelectGroup,
 	SelectOption,
-	SelectVariant
-} from '@patternfly/react-core/deprecated';
-import { SearchIcon, QuestionCircleIcon } from '@patternfly/react-icons';
+	SelectList,
+	SelectGroup,
+	MenuToggle,
+	TextInputGroup,
+	TextInputGroupMain,
+	TextInputGroupUtilities
+} from '@patternfly/react-core';
+import { SearchIcon, QuestionCircleIcon, TimesIcon } from '@patternfly/react-icons';
 import styled from 'styled-components';
 import { useLocation } from 'react-router';
 import { useConfig } from 'contexts/Config';
@@ -40,6 +43,29 @@ const AdvancedGroup = styled.div`
   }
 `;
 
+const prefixOptions = (t, enableNegativeFiltering) => {
+  const opts = [
+    {
+      id: 'and-option-select',
+      value: 'and',
+      description: t`Returns results that satisfy this one as well as other filters.  This is the default set type if nothing is selected.`,
+    },
+    {
+      id: 'or-option-select',
+      value: 'or',
+      description: t`Returns results that satisfy this one or any other filters.`,
+    },
+  ];
+  if (enableNegativeFiltering) {
+    opts.push({
+      id: 'not-option-select',
+      value: 'not',
+      description: t`Returns results that have values other than this one as well as other filters.`,
+    });
+  }
+  return opts;
+};
+
 function AdvancedSearch({
   onSearch,
   searchableKeys = [],
@@ -61,6 +87,8 @@ function AdvancedSearch({
   const [keySelection, setKeySelection] = useState(null);
   const [searchValue, setSearchValue] = useState('');
   const [isTextInputDisabled, setIsTextInputDisabled] = useState(false);
+  const [prefixFilterValue, setPrefixFilterValue] = useState('');
+  const [keyFilterValue, setKeyFilterValue] = useState('');
   const { pathname, search } = useLocation();
 
   useEffect(() => {
@@ -139,43 +167,84 @@ function AdvancedSearch({
     }
   };
 
+  const allPrefixOptions = prefixOptions(t, enableNegativeFiltering);
+  const filteredPrefixOptions = prefixFilterValue
+    ? allPrefixOptions.filter((opt) =>
+        opt.value.toLowerCase().includes(prefixFilterValue.toLowerCase())
+      )
+    : allPrefixOptions;
+
   const renderSetType = () => (
     <Select
-      ouiaId="set-type-typeahead"
       aria-label={t`Set type select`}
       className="setTypeSelect"
-      variant={SelectVariant.typeahead}
-      typeAheadAriaLabel={t`Set type typeahead`}
-      onToggle={(_event, val) => setIsPrefixDropdownOpen(val)}
-      onSelect={(event, selection) => setPrefixSelection(selection)}
-      onClear={() => setPrefixSelection(null)}
-      selections={prefixSelection}
       isOpen={isPrefixDropdownOpen}
-      placeholderText={t`Set type`}
-      maxHeight={maxSelectHeight}
-      noResultsFoundText={t`No results found`}
-      isDisabled={lookupSelection === 'search'}
-    >
-      <SelectOption
-        id="and-option-select"
-        key="and"
-        value="and"
-        description={t`Returns results that satisfy this one as well as other filters.  This is the default set type if nothing is selected.`}
-      />
-      <SelectOption
-        id="or-option-select"
-        key="or"
-        value="or"
-        description={t`Returns results that satisfy this one or any other filters.`}
-      />
-      {enableNegativeFiltering && (
-        <SelectOption
-          id="not-option-select"
-          key="not"
-          value="not"
-          description={t`Returns results that have values other than this one as well as other filters.`}
-        />
+      onOpenChange={(open) => {
+        setIsPrefixDropdownOpen(open);
+        if (!open) setPrefixFilterValue('');
+      }}
+      onSelect={(_event, selection) => {
+        setPrefixSelection(selection);
+        setPrefixFilterValue('');
+        setIsPrefixDropdownOpen(false);
+      }}
+      toggle={(toggleRef) => (
+        <MenuToggle
+          ref={toggleRef}
+          variant="typeahead"
+          onClick={() => setIsPrefixDropdownOpen(!isPrefixDropdownOpen)}
+          isExpanded={isPrefixDropdownOpen}
+          isDisabled={lookupSelection === 'search'}
+          ouiaId="set-type-typeahead"
+        >
+          <TextInputGroup isPlain>
+            <TextInputGroupMain
+              value={prefixFilterValue || prefixSelection || ''}
+              onClick={() => setIsPrefixDropdownOpen(true)}
+              onChange={(_event, val) => {
+                setPrefixFilterValue(val);
+                setIsPrefixDropdownOpen(true);
+              }}
+              autoComplete="off"
+              placeholder={t`Set type`}
+              aria-label={t`Set type typeahead`}
+            />
+            {(prefixFilterValue || prefixSelection) && (
+              <TextInputGroupUtilities>
+                <Button
+                  variant="plain"
+                  onClick={() => {
+                    setPrefixSelection(null);
+                    setPrefixFilterValue('');
+                  }}
+                  aria-label={t`Clear`}
+                >
+                  <TimesIcon />
+                </Button>
+              </TextInputGroupUtilities>
+            )}
+          </TextInputGroup>
+        </MenuToggle>
       )}
+    >
+      <SelectList style={{ maxHeight: maxSelectHeight, overflow: 'auto' }}>
+        {filteredPrefixOptions.length > 0 ? (
+          filteredPrefixOptions.map((opt) => (
+            <SelectOption
+              id={opt.id}
+              key={opt.value}
+              value={opt.value}
+              description={opt.description}
+            >
+              {opt.value}
+            </SelectOption>
+          ))
+        ) : (
+          <SelectOption isDisabled key="no-results" value="no-results">
+            {t`No results found`}
+          </SelectOption>
+        )}
+      </SelectList>
     </Select>
   );
 
@@ -254,62 +323,116 @@ function AdvancedSearch({
     );
   };
 
+  const allKeyOptions = [
+    ...searchableKeys.map((k) => ({ key: k.key, group: 'direct' })),
+    ...relatedKeys.map((rKey) => ({ key: rKey, group: 'related' })),
+  ];
+  const filteredKeyOptions = keyFilterValue
+    ? allKeyOptions.filter((opt) =>
+        opt.key.toLowerCase().includes(keyFilterValue.toLowerCase())
+      )
+    : allKeyOptions;
+  const filteredDirectKeys = filteredKeyOptions.filter(
+    (opt) => opt.group === 'direct'
+  );
+  const filteredRelatedKeys = filteredKeyOptions.filter(
+    (opt) => opt.group === 'related'
+  );
+
   return (
     <AdvancedGroup>
       {renderLookupSelection()}
       <Select
-        ouiaId="set-key-typeahead"
         aria-label={t`Key select`}
         className="keySelect"
-        variant={SelectVariant.typeahead}
-        typeAheadAriaLabel={t`Key typeahead`}
-        onToggle={(_event, val) => setIsKeyDropdownOpen(val)}
-        onSelect={(event, selection) => setKeySelection(selection)}
-        onClear={() => setKeySelection(null)}
-        selections={keySelection}
         isOpen={isKeyDropdownOpen}
-        placeholderText={t`Key`}
-        isGrouped
-        onCreateOption={setKeySelection}
-        maxHeight={maxSelectHeight}
-        noResultsFoundText={t`No results found`}
+        onOpenChange={(open) => {
+          setIsKeyDropdownOpen(open);
+          if (!open) setKeyFilterValue('');
+        }}
+        onSelect={(_event, selection) => {
+          setKeySelection(selection);
+          setKeyFilterValue('');
+          setIsKeyDropdownOpen(false);
+        }}
+        toggle={(toggleRef) => (
+          <MenuToggle
+            ref={toggleRef}
+            variant="typeahead"
+            onClick={() => setIsKeyDropdownOpen(!isKeyDropdownOpen)}
+            isExpanded={isKeyDropdownOpen}
+            ouiaId="set-key-typeahead"
+          >
+            <TextInputGroup isPlain>
+              <TextInputGroupMain
+                value={keyFilterValue || keySelection || ''}
+                onClick={() => setIsKeyDropdownOpen(true)}
+                onChange={(_event, val) => {
+                  setKeyFilterValue(val);
+                  setIsKeyDropdownOpen(true);
+                }}
+                autoComplete="off"
+                placeholder={t`Key`}
+                aria-label={t`Key typeahead`}
+              />
+              {(keyFilterValue || keySelection) && (
+                <TextInputGroupUtilities>
+                  <Button
+                    variant="plain"
+                    onClick={() => {
+                      setKeySelection(null);
+                      setKeyFilterValue('');
+                    }}
+                    aria-label={t`Clear`}
+                  >
+                    <TimesIcon />
+                  </Button>
+                </TextInputGroupUtilities>
+              )}
+            </TextInputGroup>
+          </MenuToggle>
+        )}
       >
-        {[
-          ...(searchableKeys.length
-            ? [
+        <SelectList style={{ maxHeight: maxSelectHeight, overflow: 'auto' }}>
+          {filteredKeyOptions.length > 0 ? (
+            <>
+              {filteredDirectKeys.length > 0 && (
                 <SelectGroup key="direct keys" label={t`Direct Keys`}>
-                  {searchableKeys.map((k) => (
+                  {filteredDirectKeys.map((opt) => (
                     <SelectOption
-                      value={k.key}
-                      key={k.key}
-                      id={`select-option-${k.key}`}
+                      value={opt.key}
+                      key={opt.key}
+                      id={`select-option-${opt.key}`}
                     >
-                      {k.key}
+                      {opt.key}
                     </SelectOption>
                   ))}
-                </SelectGroup>,
-                <Divider key="divider" />,
-              ]
-            : []),
-          ...(relatedKeys.length
-            ? [
-                <SelectGroup
-                  key="related keys"
-                  label={t`Related Keys`}
-                >
-                  {relatedKeys.map((rKey) => (
+                </SelectGroup>
+              )}
+              {filteredDirectKeys.length > 0 &&
+                filteredRelatedKeys.length > 0 && (
+                  <Divider key="divider" />
+                )}
+              {filteredRelatedKeys.length > 0 && (
+                <SelectGroup key="related keys" label={t`Related Keys`}>
+                  {filteredRelatedKeys.map((opt) => (
                     <SelectOption
-                      value={rKey}
-                      key={rKey}
-                      id={`select-option-${rKey}`}
+                      value={opt.key}
+                      key={opt.key}
+                      id={`select-option-${opt.key}`}
                     >
-                      {rKey}
+                      {opt.key}
                     </SelectOption>
                   ))}
-                </SelectGroup>,
-              ]
-            : []),
-        ]}
+                </SelectGroup>
+              )}
+            </>
+          ) : (
+            <SelectOption isDisabled key="no-results" value="no-results">
+              {t`No results found`}
+            </SelectOption>
+          )}
+        </SelectList>
       </Select>
       {renderLookupType()}
 

@@ -145,13 +145,11 @@ async function waitForForm(container) {
   );
 }
 
-// Choose a run-frequency from the (multi-select checkbox) FrequencySelect. The
-// run-frequency select is the first PF select toggle in the form.
 async function selectRunFrequency(user, container, optionLabel) {
-  const toggle = container.querySelectorAll('.pf-v5-c-select__toggle')[0];
+  const toggle = freqSelect(container, 'schedule-frequency');
   await user.click(toggle);
-  await user.click(await screen.findByText(optionLabel));
-  // close the menu so it doesn't linger
+  const listbox = await screen.findByRole('listbox');
+  await user.click(within(listbox).getByText(optionLabel));
   await user.click(toggle);
 }
 

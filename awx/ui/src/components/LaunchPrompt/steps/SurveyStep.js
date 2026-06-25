@@ -2,17 +2,23 @@ import React, { useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
 import {
+	Button,
 	Form,
 	FormGroup,
 	FormHelperText,
 	HelperText,
 	HelperTextItem,
-} from '@patternfly/react-core';
-import {
+	Label,
+	LabelGroup,
+	MenuToggle,
 	Select,
+	SelectList,
 	SelectOption,
-	SelectVariant
-} from '@patternfly/react-core/deprecated';
+	TextInputGroup,
+	TextInputGroupMain,
+	TextInputGroupUtilities,
+} from '@patternfly/react-core';
+import { TimesIcon } from '@patternfly/react-icons';
 import {
   required,
   minMaxValue,
@@ -99,6 +105,7 @@ function MultipleChoiceField({ question }) {
     validate: question.required ? required(null) : null,
   });
   const [isOpen, setIsOpen] = useState(false);
+  const [filterValue, setFilterValue] = useState('');
   const id = `survey-question-${question.variable}`;
   const isValid = !(meta.touched && meta.error);
 
@@ -110,6 +117,12 @@ function MultipleChoiceField({ question }) {
     options = [...question.choices];
   }
 
+  const filteredOptions = filterValue
+    ? options.filter((opt) =>
+        opt.toLowerCase().includes(filterValue.toLowerCase())
+      )
+    : options;
+
   return (
     <FormGroup
       fieldId={id}
@@ -118,26 +131,71 @@ function MultipleChoiceField({ question }) {
       labelIcon={<Popover content={question.question_description} />}
     >
       <Select
-        onToggle={(_event, val) => setIsOpen(val)}
-        onSelect={(event, option) => {
-          helpers.setValue(option);
-          setIsOpen(false);
-        }}
-        selections={field.value}
-        variant={SelectVariant.typeahead}
         id={id}
-        ouiaId={`single-survey-question-${question.variable}`}
         isOpen={isOpen}
-        placeholderText={t`Select an option`}
-        onClear={() => {
-          helpers.setTouched(true);
-          helpers.setValue('');
+        onOpenChange={(open) => {
+          setIsOpen(open);
+          if (!open) setFilterValue('');
         }}
-        noResultsFoundText={t`No results found`}
+        onSelect={(_event, value) => {
+          helpers.setValue(value);
+          setIsOpen(false);
+          setFilterValue('');
+        }}
+        toggle={(toggleRef) => (
+          <MenuToggle
+            ref={toggleRef}
+            variant="typeahead"
+            onClick={() => setIsOpen(!isOpen)}
+            isExpanded={isOpen}
+            ouiaId={`single-survey-question-${question.variable}`}
+          >
+            <TextInputGroup isPlain>
+              <TextInputGroupMain
+                value={filterValue || field.value || ''}
+                onClick={() => setIsOpen(true)}
+                onChange={(_event, val) => {
+                  setFilterValue(val);
+                  setIsOpen(true);
+                }}
+                onFocus={() => {
+                  if (field.value && !filterValue) {
+                    setFilterValue(field.value);
+                  }
+                }}
+                autoComplete="off"
+                placeholder={t`Select an option`}
+              />
+              {(filterValue || field.value) && (
+                <TextInputGroupUtilities>
+                  <Button
+                    variant="plain"
+                    onClick={() => {
+                      helpers.setTouched(true);
+                      helpers.setValue('');
+                      setFilterValue('');
+                    }}
+                    aria-label={t`Clear`}
+                  >
+                    <TimesIcon />
+                  </Button>
+                </TextInputGroupUtilities>
+              )}
+            </TextInputGroup>
+          </MenuToggle>
+        )}
       >
-        {options.map((opt) => (
-          <SelectOption key={opt} value={opt} />
-        ))}
+        <SelectList>
+          {filteredOptions.length > 0 ? (
+            filteredOptions.map((opt) => (
+              <SelectOption key={opt} value={opt}>
+                {opt}
+              </SelectOption>
+            ))
+          ) : (
+            <SelectOption isDisabled>{t`No results found`}</SelectOption>
+          )}
+        </SelectList>
       </Select>
       {!isValid && (
         <FormHelperText>
@@ -155,6 +213,7 @@ function MultipleChoiceField({ question }) {
 function MultiSelectField({ question }) {
   const { t } = useLingui();
   const [isOpen, setIsOpen] = useState(false);
+  const [filterValue, setFilterValue] = useState('');
   const [field, meta, helpers] = useField({
     name: `survey_${question.variable}`,
     validate: question.required ? required(null) : null,
@@ -171,6 +230,12 @@ function MultiSelectField({ question }) {
     options = [...question.choices];
   }
 
+  const filteredOptions = filterValue
+    ? options.filter((opt) =>
+        opt.toLowerCase().includes(filterValue.toLowerCase())
+      )
+    : options;
+
   return (
     <FormGroup
       fieldId={id}
@@ -179,30 +244,95 @@ function MultiSelectField({ question }) {
       labelIcon={<Popover content={question.question_description} />}
     >
       <Select
-        ouiaId={`multi-survey-question-${question.variable}`}
-        variant={SelectVariant.typeaheadMulti}
         id={id}
-        placeholderText={!field.value.length && t`Select option(s)`}
-        onToggle={(_event, val) => setIsOpen(val)}
-        onSelect={(event, option) => {
-          if (field?.value?.includes(option)) {
-            helpers.setValue(field.value.filter((o) => o !== option));
+        isOpen={isOpen}
+        onOpenChange={(open) => {
+          setIsOpen(open);
+          if (!open) setFilterValue('');
+        }}
+        onSelect={(_event, value) => {
+          if (field?.value?.includes(value)) {
+            helpers.setValue(field.value.filter((o) => o !== value));
           } else {
-            helpers.setValue(field.value.concat(option));
+            helpers.setValue(field.value.concat(value));
           }
           helpers.setTouched(true);
+          setFilterValue('');
         }}
-        isOpen={isOpen}
-        selections={field.value}
-        onClear={() => {
-          helpers.setTouched(true);
-          helpers.setValue([]);
-        }}
-        noResultsFoundText={t`No results found`}
+        toggle={(toggleRef) => (
+          <MenuToggle
+            ref={toggleRef}
+            variant="typeahead"
+            onClick={() => setIsOpen(!isOpen)}
+            isExpanded={isOpen}
+            ouiaId={`multi-survey-question-${question.variable}`}
+          >
+            <TextInputGroup isPlain>
+              <TextInputGroupMain
+                value={filterValue}
+                onClick={() => setIsOpen(true)}
+                onChange={(_event, val) => {
+                  setFilterValue(val);
+                  setIsOpen(true);
+                }}
+                autoComplete="off"
+                placeholder={
+                  !field.value?.length ? t`Select option(s)` : ''
+                }
+              >
+                {field.value?.length > 0 && (
+                  <LabelGroup>
+                    {field.value.map((val) => (
+                      <Label
+                        key={val}
+                        onClose={() => {
+                          helpers.setValue(
+                            field.value.filter((o) => o !== val)
+                          );
+                          helpers.setTouched(true);
+                        }}
+                      >
+                        {val}
+                      </Label>
+                    ))}
+                  </LabelGroup>
+                )}
+              </TextInputGroupMain>
+              {(filterValue || field.value?.length > 0) && (
+                <TextInputGroupUtilities>
+                  <Button
+                    variant="plain"
+                    onClick={() => {
+                      helpers.setTouched(true);
+                      helpers.setValue([]);
+                      setFilterValue('');
+                    }}
+                    aria-label={t`Clear`}
+                  >
+                    <TimesIcon />
+                  </Button>
+                </TextInputGroupUtilities>
+              )}
+            </TextInputGroup>
+          </MenuToggle>
+        )}
       >
-        {options.map((opt) => (
-          <SelectOption key={opt} value={opt} />
-        ))}
+        <SelectList>
+          {filteredOptions.length > 0 ? (
+            filteredOptions.map((opt) => (
+              <SelectOption
+                key={opt}
+                value={opt}
+                hasCheckbox
+                isSelected={field.value?.includes(opt)}
+              >
+                {opt}
+              </SelectOption>
+            ))
+          ) : (
+            <SelectOption isDisabled>{t`No results found`}</SelectOption>
+          )}
+        </SelectList>
       </Select>
       {!isValid && (
         <FormHelperText>

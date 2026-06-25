@@ -16,17 +16,9 @@ const qsConfig = {
   integerFields: ['page', 'page_size'],
 };
 
-// The column dropdown is the Search "Simple key select" (ouiaId). The single
-// Select keeps the currently-selected column in its toggle text and lists only
-// the remaining columns as options, so the full set is the selected toggle
-// value followed by the option labels.
 async function getColumnNames(user) {
-  const select = document.querySelector(
-    '[data-ouia-component-id="simple-key-select"]'
-  );
-  const toggle = select.querySelector('button');
-  const selected = select.querySelector('.pf-v5-c-select__toggle-text')
-    .textContent;
+  const toggle = screen.getByRole('button', { name: 'Simple key select' });
+  const selected = toggle.textContent;
   await user.click(toggle);
   const listbox = await screen.findByRole('listbox');
   const options = within(listbox)

@@ -3,14 +3,14 @@ import { screen, within } from '@testing-library/react';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import TagMultiSelect from './TagMultiSelect';
 
-function getChipGroup() {
-  return screen.getByRole('group', { name: 'Chip group category' });
+function getLabelGroup() {
+  return screen.getByRole('list', { name: 'Label group category' });
 }
 
 describe('<TagMultiSelect />', () => {
   it('should render Select with a chip per value', () => {
     renderWithContexts(<TagMultiSelect value="foo,bar" onChange={jest.fn()} />);
-    const chips = within(getChipGroup()).getAllByRole('listitem');
+    const chips = within(getLabelGroup()).getAllByRole('listitem');
     expect(chips).toHaveLength(2);
     expect(chips[0]).toHaveTextContent('foo');
     expect(chips[1]).toHaveTextContent('bar');
@@ -20,14 +20,12 @@ describe('<TagMultiSelect />', () => {
     const { user } = renderWithContexts(
       <TagMultiSelect value="" onChange={jest.fn()} />
     );
-    expect(screen.queryByRole('group', { name: 'Chip group category' })).toBeNull();
+    expect(screen.queryByRole('list', { name: 'Label group category' })).toBeNull();
 
-    await user.click(screen.getByRole('button', { name: 'Options menu' }));
+    const input = screen.getByRole('textbox', { name: 'Select tags' });
+    await user.click(input);
     expect(
-      screen.getByRole('button', { name: 'Options menu' })
-    ).toHaveAttribute('aria-expanded', 'true');
-    expect(
-      screen.queryByRole('group', { name: 'Chip group category' })
+      screen.queryByRole('list', { name: 'Label group category' })
     ).toBeNull();
   });
 
@@ -37,9 +35,8 @@ describe('<TagMultiSelect />', () => {
       <TagMultiSelect value="foo,bar" onChange={onChange} />
     );
 
-    await user.click(screen.getByRole('button', { name: 'Options menu' }));
-    // selecting an unselected typed option adds it to the value string
     const input = screen.getByRole('textbox');
+    await user.click(input);
     await user.type(input, 'baz');
     await user.click(screen.getByRole('option', { name: /Create.*baz/ }));
 

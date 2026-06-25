@@ -6,13 +6,12 @@ import {
 	Alert,
 	Form,
 	FormGroup,
-	TextInput
-} from '@patternfly/react-core';
-import {
+	TextInput,
 	Select,
-	SelectVariant,
-	SelectOption
-} from '@patternfly/react-core/deprecated';
+	SelectOption,
+	SelectList,
+	MenuToggle,
+} from '@patternfly/react-core';
 import { required } from 'util/validators';
 
 import { FormColumnLayout, FormFullWidthLayout } from 'components/FormLayout';
@@ -247,26 +246,33 @@ function NodeTypeStep({ isIdentifierRequired }) {
               }
             >
               <Select
-                variant={SelectVariant.single}
                 isOpen={isConvergenceOpen}
-                selections={convergenceField.value}
-                onToggle={(_event, val) => setIsConvergenceOpen(val)}
-                onSelect={(event, selection) => {
+                onOpenChange={setIsConvergenceOpen}
+                onSelect={(_event, selection) => {
                   convergenceFieldHelpers.setValue(selection);
                   setIsConvergenceOpen(false);
                 }}
                 aria-label={t`Convergence select`}
-                typeAheadAriaLabel={t`Convergence select`}
                 className="convergenceSelect"
                 ouiaId="convergenceSelect"
-                noResultsFoundText={t`No results found`}
+                toggle={(toggleRef) => (
+                  <MenuToggle
+                    ref={toggleRef}
+                    onClick={() => setIsConvergenceOpen(!isConvergenceOpen)}
+                    isExpanded={isConvergenceOpen}
+                  >
+                    {convergenceField.value === 'any' ? t`Any` : t`All`}
+                  </MenuToggle>
+                )}
               >
-                <SelectOption key="any" value="any" id="select-option-any">
-                  {t`Any`}
-                </SelectOption>
-                <SelectOption key="all" value="all" id="select-option-all">
-                  {t`All`}
-                </SelectOption>
+                <SelectList>
+                  <SelectOption value="any" id="select-option-any">
+                    {t`Any`}
+                  </SelectOption>
+                  <SelectOption value="all" id="select-option-all">
+                    {t`All`}
+                  </SelectOption>
+                </SelectList>
               </Select>
             </FormGroup>
             <FormField

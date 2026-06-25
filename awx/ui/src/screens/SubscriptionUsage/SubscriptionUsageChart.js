@@ -7,14 +7,13 @@ import {
 	CardTitle,
 	Flex,
 	FlexItem,
+	MenuToggle,
 	PageSection,
+	Select,
+	SelectList,
+	SelectOption,
 	Text
 } from '@patternfly/react-core';
-import {
-	Select,
-	SelectVariant,
-	SelectOption
-} from '@patternfly/react-core/deprecated';
 import { useLingui } from '@lingui/react/macro';
 
 import useRequest from 'hooks/useRequest';
@@ -112,6 +111,12 @@ function SubscriptionUsageChart() {
     );
   }
 
+  const periodLabelMap = {
+    year: t`Past year`,
+    two_years: t`Past two years`,
+    three_years: t`Past three years`,
+  };
+
   return (
     <Card>
       <Flex style={{ justifyContent: 'space-between' }}>
@@ -133,30 +138,36 @@ function SubscriptionUsageChart() {
       <GraphCardHeader>
         <GraphCardActions>
           <Select
-            variant={SelectVariant.single}
-            placeholderText={t`Select period`}
-            aria-label={t`Select period`}
-            typeAheadAriaLabel={t`Select period`}
-            className="periodSelect"
-            onToggle={(_event, val) => setIsPeriodDropdownOpen(val)}
-            onSelect={(event, selection) => {
+            isOpen={isPeriodDropdownOpen}
+            onOpenChange={setIsPeriodDropdownOpen}
+            onSelect={(_event, selection) => {
               setIsPeriodDropdownOpen(false);
               setPeriodSelection(selection);
             }}
-            selections={periodSelection}
-            isOpen={isPeriodDropdownOpen}
-            noResultsFoundText={t`No results found`}
+            aria-label={t`Select period`}
+            className="periodSelect"
             ouiaId="subscription-usage-period-select"
+            toggle={(toggleRef) => (
+              <MenuToggle
+                ref={toggleRef}
+                onClick={() => setIsPeriodDropdownOpen(!isPeriodDropdownOpen)}
+                isExpanded={isPeriodDropdownOpen}
+              >
+                {periodLabelMap[periodSelection] || t`Select period`}
+              </MenuToggle>
+            )}
           >
-            <SelectOption key="year" value="year">
-              {t`Past year`}
-            </SelectOption>
-            <SelectOption key="two_years" value="two_years">
-              {t`Past two years`}
-            </SelectOption>
-            <SelectOption key="three_years" value="three_years">
-              {t`Past three years`}
-            </SelectOption>
+            <SelectList>
+              <SelectOption value="year">
+                {t`Past year`}
+              </SelectOption>
+              <SelectOption value="two_years">
+                {t`Past two years`}
+              </SelectOption>
+              <SelectOption value="three_years">
+                {t`Past three years`}
+              </SelectOption>
+            </SelectList>
           </Select>
         </GraphCardActions>
       </GraphCardHeader>

@@ -1,10 +1,18 @@
 import React, { useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import {
-	Select,
-	SelectOption,
-	SelectVariant
-} from '@patternfly/react-core/deprecated';
+  Button,
+  Label,
+  LabelGroup,
+  MenuToggle,
+  Select,
+  SelectList,
+  SelectOption,
+  TextInputGroup,
+  TextInputGroupMain,
+  TextInputGroupUtilities,
+} from '@patternfly/react-core';
+import { TimesIcon } from '@patternfly/react-icons';
 import { arrayToString, stringToArray } from 'util/strings';
 
 function TagMultiSelect({ onChange, value }) {
@@ -12,8 +20,9 @@ function TagMultiSelect({ onChange, value }) {
   const selections = stringToArray(value);
   const [options, setOptions] = useState(selections);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [filterValue, setFilterValue] = useState('');
 
-  const onSelect = (event, item) => {
+  const onSelect = (_event, item) => {
     let newValue;
     if (selections.includes(item)) {
       newValue = selections.filter((i) => i !== item);
@@ -21,51 +30,108 @@ function TagMultiSelect({ onChange, value }) {
       newValue = selections.concat(item);
     }
     onChange(arrayToString(newValue));
+    setFilterValue('');
   };
 
-  const toggleExpanded = (toggleValue) => {
-    setIsExpanded(toggleValue);
-  };
+  const filteredOptions = filterValue
+    ? options.filter((o) => o.toLowerCase().includes(filterValue.toLowerCase()))
+    : options;
 
-  const renderOptions = (opts) =>
-    opts.map((option) => (
-      <SelectOption key={option} value={option}>
-        {option}
-      </SelectOption>
-    ));
-
-  const onFilter = (event) => {
-    if (event) {
-      const str = event.target.value.toLowerCase();
-      const matches = options.filter((o) => o.toLowerCase().includes(str));
-      return renderOptions(matches);
-    }
-    return null;
-  };
+  const hasExactMatch = options.some(
+    (o) => o.toLowerCase() === filterValue.toLowerCase()
+  );
 
   return (
     <Select
-      variant={SelectVariant.typeaheadMulti}
-      onToggle={(_event, toggleValue) => toggleExpanded(toggleValue)}
-      onSelect={onSelect}
-      onClear={() => onChange('')}
-      onFilter={onFilter}
-      isCreatable
-      onCreateOption={(name) => {
-        name = name.trim();
-        if (!options.includes(name)) {
-          setOptions(options.concat(name));
-        }
-        return name;
-      }}
-      selections={selections}
       isOpen={isExpanded}
-      typeAheadAriaLabel={t`Select tags`}
-      noResultsFoundText={t`No results found`}
-      ouiaId="tag-multiselect"
-      createText={t`Create`}
+      onOpenChange={(open) => {
+        setIsExpanded(open);
+        if (!open) setFilterValue('');
+      }}
+      onSelect={onSelect}
+      toggle={(toggleRef) => (
+        <MenuToggle
+          ref={toggleRef}
+          variant="typeahead"
+          onClick={() => setIsExpanded(!isExpanded)}
+          isExpanded={isExpanded}
+          ouiaId="tag-multiselect"
+        >
+          <TextInputGroup isPlain>
+            <TextInputGroupMain
+              value={filterValue}
+              onClick={() => setIsExpanded(true)}
+              onChange={(_event, val) => {
+                setFilterValue(val);
+                setIsExpanded(true);
+              }}
+              autoComplete="off"
+              placeholder={selections.length === 0 ? t`Select tags` : ''}
+              aria-label={t`Select tags`}
+            >
+              {selections.length > 0 && (
+                <LabelGroup>
+                  {selections.map((s) => (
+                    <Label
+                      key={s}
+                      onClose={() => {
+                        const newVal = selections.filter((sel) => sel !== s);
+                        onChange(arrayToString(newVal));
+                      }}
+                    >
+                      {s}
+                    </Label>
+                  ))}
+                </LabelGroup>
+              )}
+            </TextInputGroupMain>
+            {(filterValue || selections.length > 0) && (
+              <TextInputGroupUtilities>
+                <Button
+                  variant="plain"
+                  onClick={() => {
+                    onChange('');
+                    setFilterValue('');
+                  }}
+                  aria-label={t`Clear`}
+                >
+                  <TimesIcon />
+                </Button>
+              </TextInputGroupUtilities>
+            )}
+          </TextInputGroup>
+        </MenuToggle>
+      )}
     >
-      {renderOptions(options)}
+      <SelectList>
+        {filteredOptions.map((option) => (
+          <SelectOption
+            key={option}
+            value={option}
+            hasCheckbox
+            isSelected={selections.includes(option)}
+          >
+            {option}
+          </SelectOption>
+        ))}
+        {filterValue && !hasExactMatch && (
+          <SelectOption
+            key={`create-${filterValue}`}
+            value={filterValue}
+            onClick={() => {
+              const trimmed = filterValue.trim();
+              if (trimmed && !options.includes(trimmed)) {
+                setOptions(options.concat(trimmed));
+              }
+            }}
+          >
+            {t`Create`} &quot;{filterValue}&quot;
+          </SelectOption>
+        )}
+        {filteredOptions.length === 0 && !filterValue && (
+          <SelectOption isDisabled>{t`No results found`}</SelectOption>
+        )}
+      </SelectList>
     </Select>
   );
 }

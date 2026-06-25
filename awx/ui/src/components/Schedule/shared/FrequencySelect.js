@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import {
 	Select,
 	SelectOption,
-	SelectVariant
-} from '@patternfly/react-core/deprecated';
+	SelectList,
+	MenuToggle
+} from '@patternfly/react-core';
 
 export default function FrequencySelect({
   id,
@@ -15,7 +16,7 @@ export default function FrequencySelect({
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const onSelect = (event, selectedValue) => {
+  const onSelectHandler = (event, selectedValue) => {
     if (selectedValue === 'none') {
       onChange([]);
       setIsOpen(false);
@@ -29,7 +30,7 @@ export default function FrequencySelect({
     }
   };
 
-  const onToggle = (val) => {
+  const handleOpenChange = (val) => {
     if (!val) {
       onBlur();
     }
@@ -38,17 +39,34 @@ export default function FrequencySelect({
 
   return (
     <Select
-      variant={SelectVariant.checkbox}
-      onSelect={onSelect}
-      selections={value}
-      placeholderText={placeholderText}
-      onToggle={(_event, val) => onToggle(val)}
       isOpen={isOpen}
-      ouiaId={`frequency-select-${id}`}
+      onOpenChange={handleOpenChange}
+      onSelect={onSelectHandler}
+      toggle={(toggleRef) => (
+        <MenuToggle
+          ref={toggleRef}
+          onClick={() => handleOpenChange(!isOpen)}
+          isExpanded={isOpen}
+          ouiaId={`frequency-select-${id}`}
+        >
+          {placeholderText}
+        </MenuToggle>
+      )}
     >
-      {children}
+      <SelectList>
+        {React.Children.map(children, (child) => {
+          if (!child) return null;
+          if (child.props.value === 'none') {
+            return React.cloneElement(child);
+          }
+          return React.cloneElement(child, {
+            hasCheckbox: true,
+            isSelected: value.includes(child.props.value),
+          });
+        })}
+      </SelectList>
     </Select>
   );
 }
 
-export { SelectOption, SelectVariant };
+export { SelectOption };

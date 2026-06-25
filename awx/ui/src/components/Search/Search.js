@@ -9,13 +9,13 @@ import {
 	TextInput,
 	ToolbarGroup,
 	ToolbarItem,
-	ToolbarFilter, InputGroupItem
-} from '@patternfly/react-core';
-import {
+	ToolbarFilter,
+	InputGroupItem,
 	Select,
 	SelectOption,
-	SelectVariant
-} from '@patternfly/react-core/deprecated';
+	SelectList,
+	MenuToggle
+} from '@patternfly/react-core';
 import { SearchIcon } from '@patternfly/react-icons';
 import styled from 'styled-components';
 import { parseQueryString } from 'util/qs';
@@ -30,7 +30,7 @@ SubmitButtonWrapper.displayName = 'SubmitButtonWrapper';
 const DateInputGroup = styled(InputGroup)`
   /* keep the operator select at its natural width so the date input
      next to it stays visible */
-  & > .pf-v5-c-select {
+  & > .pf-v5-c-menu-toggle {
     width: auto;
     flex: 0 0 auto;
   }
@@ -104,19 +104,16 @@ function Search({
     setChipsByKey({ ...chipsByKey, ...searchChips });
   }, [location.search]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleDropdownSelect = ({ target }) => {
+  const handleDropdownSelect = (_event, selectedName) => {
     const { key: actualSearchKey } = columns.find(
-      ({ name }) => name === target.innerText
+      ({ name }) => name === selectedName
     );
     onShowAdvancedSearch(actualSearchKey === 'advanced');
     setIsFilterDropdownOpen(false);
     setIsDateOperatorOpen(false);
     setSearchKey(actualSearchKey);
-    // a value typed for the previous key must not leak into the next one -
-    // a controlled date input renders a stale text value as an empty field
-    // while leaving the submit button enabled, allowing a non-date value
-    // through to the API
     setSearchValue('');
+    setIsSearchDropdownOpen(false);
   };
 
   const handleSearch = (e) => {
@@ -155,11 +152,15 @@ function Search({
     }
   };
 
-  const handleFilterDropdownSelect = (key, event, actualValue) => {
-    if (event.target.checked) {
-      onSearch(key, actualValue);
-    } else {
+  const handleFilterDropdownSelect = (key, _event, actualValue) => {
+    const currentSelections = chipsByKey[key]?.chips.map((chip) => {
+      const [, ...val] = chip.key.split(':');
+      return val.join(':');
+    }) || [];
+    if (currentSelections.includes(actualValue)) {
       onRemove(key, actualValue);
+    } else {
+      onSearch(key, actualValue);
     }
   };
 
@@ -167,37 +168,42 @@ function Search({
     ({ key }) => key === searchKey
   );
 
-  const searchOptions = columns
-    .filter(({ key }) => key !== searchKey)
-    .map(({ key, name }) => (
-      <SelectOption
-        data-cy={`select-option-${key}`}
-        id={`select-option-${key}`}
-        key={key}
-        value={name}
-      >
-        {name}
-      </SelectOption>
-    ));
-
   return (
     <ToolbarGroup variant="filter-group">
       <ToolbarItem>
-        {searchOptions.length > 0 ? (
+        {columns.filter(({ key }) => key !== searchKey).length > 0 ? (
           <Select
-            variant={SelectVariant.single}
             className="simpleKeySelect"
-            aria-label={t`Simple key select`}
-            typeAheadAriaLabel={t`Simple key select`}
-            onToggle={(_event, val) => setIsSearchDropdownOpen(val)}
-            onSelect={handleDropdownSelect}
-            selections={searchColumnName}
             isOpen={isSearchDropdownOpen}
-            ouiaId="simple-key-select"
-            isDisabled={isDisabled}
-            noResultsFoundText={t`No results found`}
+            onOpenChange={setIsSearchDropdownOpen}
+            onSelect={handleDropdownSelect}
+            toggle={(toggleRef) => (
+              <MenuToggle
+                ref={toggleRef}
+                onClick={() => setIsSearchDropdownOpen(!isSearchDropdownOpen)}
+                isExpanded={isSearchDropdownOpen}
+                isDisabled={isDisabled}
+                aria-label={t`Simple key select`}
+                ouiaId="simple-key-select"
+              >
+                {searchColumnName}
+              </MenuToggle>
+            )}
           >
-            {searchOptions}
+            <SelectList>
+              {columns
+                .filter(({ key }) => key !== searchKey)
+                .map(({ key, name }) => (
+                  <SelectOption
+                    data-cy={`select-option-${key}`}
+                    id={`select-option-${key}`}
+                    key={key}
+                    value={name}
+                  >
+                    {name}
+                  </SelectOption>
+                ))}
+            </SelectList>
           </Select>
         ) : (
           <NoOptionDropdown>{searchColumnName}</NoOptionDropdown>
@@ -228,84 +234,111 @@ function Search({
           )) ||
             (options && (
               <Select
-                variant={SelectVariant.checkbox}
                 aria-label={name}
-                typeAheadAriaLabel={name}
-                onToggle={(_event, val) => setIsFilterDropdownOpen(val)}
+                isOpen={isFilterDropdownOpen}
+                onOpenChange={setIsFilterDropdownOpen}
                 onSelect={(event, selection) =>
                   handleFilterDropdownSelect(key, event, selection)
                 }
-                selections={chipsByKey[key]?.chips.map((chip) => {
-                  const [, ...value] = chip.key.split(':');
-                  return value.join(':');
-                })}
-                isOpen={isFilterDropdownOpen}
-                placeholderText={t`Filter By ${name}`}
-                ouiaId={`filter-by-${key}`}
-                isDisabled={isDisabled}
-                maxHeight={maxSelectHeight}
-                noResultsFoundText={t`No results found`}
-              >
-                {options.map(([optionKey, optionLabel]) => (
-                  <SelectOption
-                    key={optionKey}
-                    value={optionKey}
-                    inputId={`select-option-${optionKey}`}
+                toggle={(toggleRef) => (
+                  <MenuToggle
+                    ref={toggleRef}
+                    onClick={() => setIsFilterDropdownOpen(!isFilterDropdownOpen)}
+                    isExpanded={isFilterDropdownOpen}
+                    isDisabled={isDisabled}
+                    ouiaId={`filter-by-${key}`}
                   >
-                    {optionLabel}
-                  </SelectOption>
-                ))}
+                    {t`Filter By ${name}`}
+                  </MenuToggle>
+                )}
+              >
+                <SelectList>
+                  {options.map(([optionKey, optionLabel]) => {
+                    const currentSelections = chipsByKey[key]?.chips.map((chip) => {
+                      const [, ...val] = chip.key.split(':');
+                      return val.join(':');
+                    }) || [];
+                    return (
+                      <SelectOption
+                        key={optionKey}
+                        value={optionKey}
+                        id={`select-option-${optionKey}`}
+                        hasCheckbox
+                        isSelected={currentSelections.includes(optionKey)}
+                      >
+                        {optionLabel}
+                      </SelectOption>
+                    );
+                  })}
+                </SelectList>
               </Select>
             )) ||
             (isBoolean && (
               <Select
                 aria-label={name}
-                onToggle={(_event, val) => setIsFilterDropdownOpen(val)}
-                onSelect={(event, selection) => onReplaceSearch(key, selection)}
-                selections={chipsByKey[key].chips[0]?.label}
                 isOpen={isFilterDropdownOpen}
-                placeholderText={t`Filter By ${name}`}
-                ouiaId={`filter-by-${key}`}
-                isDisabled={isDisabled}
-                maxHeight={maxSelectHeight}
-                noResultsFoundText={t`No results found`}
+                onOpenChange={setIsFilterDropdownOpen}
+                onSelect={(_event, selection) => {
+                  onReplaceSearch(key, selection);
+                  setIsFilterDropdownOpen(false);
+                }}
+                toggle={(toggleRef) => (
+                  <MenuToggle
+                    ref={toggleRef}
+                    onClick={() => setIsFilterDropdownOpen(!isFilterDropdownOpen)}
+                    isExpanded={isFilterDropdownOpen}
+                    isDisabled={isDisabled}
+                    ouiaId={`filter-by-${key}`}
+                    style={{ maxHeight: maxSelectHeight }}
+                  >
+                    {chipsByKey[key].chips[0]?.label || t`Filter By ${name}`}
+                  </MenuToggle>
+                )}
               >
-                <SelectOption key="true" value="true">
-                  {booleanLabels.true || t`Yes`}
-                </SelectOption>
-                <SelectOption key="false" value="false">
-                  {booleanLabels.false || t`No`}
-                </SelectOption>
+                <SelectList>
+                  <SelectOption key="true" value="true">
+                    {booleanLabels.true || t`Yes`}
+                  </SelectOption>
+                  <SelectOption key="false" value="false">
+                    {booleanLabels.false || t`No`}
+                  </SelectOption>
+                </SelectList>
               </Select>
             )) ||
             ((qsConfig.dateFields || []).includes(key) && (
               <DateInputGroup>
                 <Select
-                  variant={SelectVariant.single}
                   className="dateOperatorSelect"
                   aria-label={t`Date operator select`}
-                  typeAheadAriaLabel={t`Date operator select`}
-                  onToggle={(_event, val) => setIsDateOperatorOpen(val)}
-                  onSelect={(event, selection) => {
+                  isOpen={isDateOperatorOpen}
+                  onOpenChange={setIsDateOperatorOpen}
+                  onSelect={(_event, selection) => {
                     const [op] = dateOperators.find(
                       ([, label]) => label === selection
                     );
                     setDateOperator(op);
                     setIsDateOperatorOpen(false);
                   }}
-                  selections={
-                    dateOperators.find(([op]) => op === dateOperator)[1]
-                  }
-                  isOpen={isDateOperatorOpen}
-                  ouiaId={`date-operator-select-${key}`}
-                  isDisabled={isDisabled}
-                  noResultsFoundText={t`No results found`}
+                  toggle={(toggleRef) => (
+                    <MenuToggle
+                      ref={toggleRef}
+                      onClick={() => setIsDateOperatorOpen(!isDateOperatorOpen)}
+                      isExpanded={isDateOperatorOpen}
+                      isDisabled={isDisabled}
+                      aria-label={t`Date operator select`}
+                      ouiaId={`date-operator-select-${key}`}
+                    >
+                      {dateOperators.find(([op]) => op === dateOperator)[1]}
+                    </MenuToggle>
+                  )}
                 >
-                  {dateOperators.map(([op, label]) => (
-                    <SelectOption key={op} value={label}>
-                      {label}
-                    </SelectOption>
-                  ))}
+                  <SelectList>
+                    {dateOperators.map(([op, label]) => (
+                      <SelectOption key={op} value={label}>
+                        {label}
+                      </SelectOption>
+                    ))}
+                  </SelectList>
                 </Select>
                 <TextInput
                   data-cy="date-search-input"

@@ -75,12 +75,9 @@ function gceFieldExpects() {
 }
 
 async function selectCredentialType(user, label) {
-  // The Credential Type field is a PF typeahead Select; open it via the toggle
-  // button inside its container, then pick the option by label.
-  const select = document.querySelector(
-    '[data-ouia-component-id="CredentialForm-credential_type"]'
-  );
-  await user.click(select.querySelector('button'));
+  const input = screen.getByRole('textbox', { name: 'Select Credential Type' });
+  await user.clear(input);
+  await user.click(input);
   await user.click(await screen.findByText(label));
 }
 
