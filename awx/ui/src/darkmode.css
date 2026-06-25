@@ -187,6 +187,7 @@ html.pf-v5-theme-dark .pf-v5-c-login {
 html.pf-v5-theme-dark .pf-v5-c-masthead {
   box-shadow: none;
   border-bottom: 1px solid var(--pf-v5-global--BorderColor--200);
+  background-color: #13161b;
 }
 
 html.pf-v5-theme-dark .pf-v5-c-breadcrumb__item-divider {
@@ -231,7 +232,11 @@ html.pf-v5-theme-dark .pf-v5-c-nav__subnav {
 }
 
 html.pf-v5-theme-dark .pf-v5-c-page__main-section.pf-m-light {
-  --pf-v5-c-page__main-section--BackgroundColor: inherit;
+  background-color: #13161b;
+}
+
+html.pf-v5-theme-dark .pf-v5-c-page__main-section {
+  background-color: #13161b;
 }
 
 html.pf-v5-theme-dark .pf-v5-c-toolbar__group {
@@ -246,6 +251,12 @@ html.pf-v5-theme-dark .pf-v5-c-toolbar__content-section {
 html.pf-v5-theme-dark .pf-v5-c-toolbar__item {
   margin-right: 0;
 }
+
+html.pf-v5-theme-dark .ace-tm .ace_gutter-active-line {
+  background-color: #13161b;
+}
+
+
 
 html.pf-v5-theme-dark .pf-v5-c-tab-content {
   padding-top: var(--pf-v5-global--spacer--2xl);
@@ -631,4 +642,8 @@ html.pf-v5-theme-dark .pf-v5-c-switch {
 
 html.pf-v5-theme-dark .pf-v5-c-switch__input:checked ~ .pf-v5-c-switch__toggle::before {
   --pf-v5-c-switch__toggle--before--BackgroundColor: var(--pf-v5-global--BorderColor--100);
+}
+
+html.pf-v5-theme-dark [class*="FormLayout__SubFormLayout"] {
+  background-color: #13161b;
 }
