@@ -6,14 +6,13 @@ import { useLingui } from '@lingui/react/macro';
 import {
 	Button,
 	ButtonVariant,
-	InputGroup, InputGroupItem
-} from '@patternfly/react-core';
-import {
 	Dropdown,
-	DropdownPosition,
-	DropdownToggle,
-	DropdownItem
-} from '@patternfly/react-core/deprecated';
+	DropdownItem,
+	DropdownList,
+	InputGroup,
+	InputGroupItem,
+	MenuToggle,
+} from '@patternfly/react-core';
 import {
   SortAlphaDownIcon,
   SortAlphaDownAltIcon,
@@ -79,7 +78,7 @@ function Sort({ columns, qsConfig, onSort = null }) {
     onSort(sortKey, sortOrder === 'ascending' ? 'descending' : 'ascending');
   };
 
-  const { up } = DropdownPosition;
+  const up = 'up';
 
   const defaultSortedColumn = columns.find(({ key }) => key === sortKey);
 
@@ -96,7 +95,6 @@ function Sort({ columns, qsConfig, onSort = null }) {
     .map(({ key, name }) => (
       <DropdownItem
         key={key}
-        component="button"
         ouiaId={`${name}-dropdown-item`}
       >
         {name}
@@ -117,22 +115,25 @@ function Sort({ columns, qsConfig, onSort = null }) {
         <InputGroup>
           {(sortDropdownItems.length > 0 && (
             <Dropdown
-              onToggle={(_event, isOpen) => handleDropdownToggle(isOpen)}
               onSelect={handleDropdownSelect}
-              direction={up}
+              onOpenChange={setIsSortDropdownOpen}
+              popperProps={{ direction: up }}
               isOpen={isSortDropdownOpen}
               ouiaId="sort-dropdown"
-              toggle={
-                <DropdownToggle
+              toggle={(toggleRef) => (
+                <MenuToggle
+                  ref={toggleRef}
                   id="awx-sort"
-                  onToggle={(_event, isOpen) => handleDropdownToggle(isOpen)}
+                  onClick={() => handleDropdownToggle(!isSortDropdownOpen)}
+                  isExpanded={isSortDropdownOpen}
                   ouiaId="sort-dropdown-toggle"
                 >
                   {sortedColumnName}
-                </DropdownToggle>
-              }
-              dropdownItems={sortDropdownItems}
-            />
+                </MenuToggle>
+              )}
+            >
+              <DropdownList>{sortDropdownItems}</DropdownList>
+            </Dropdown>
           )) || <NoOptionDropdown>{sortedColumnName}</NoOptionDropdown>}
 
           <InputGroupItem><Button

@@ -4,6 +4,7 @@ import { i18n } from '@lingui/core';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import english from '../../../locales/en/messages';
 import '@testing-library/jest-dom';
+import { settleTooltips } from '../../../../testUtils/rtlContexts';
 import ConstructedInventoryHint from './ConstructedInventoryHint';
 
 jest.mock('../../../api');
@@ -102,6 +103,7 @@ describe('<ConstructedInventoryHint />', () => {
       name: /copy/i,
     });
     fireEvent.click(copyButtons[0]);
+    await settleTooltips();
     expect(navigator.clipboard.writeText).toHaveBeenCalled();
   });
 });

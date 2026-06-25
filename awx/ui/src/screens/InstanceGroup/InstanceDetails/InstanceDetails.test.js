@@ -226,11 +226,8 @@ describe('<InstanceDetails/>', () => {
     );
     expect(await screen.findByText('Error!')).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Close' }));
-    await waitFor(() =>
-      expect(screen.queryByText('Error!')).not.toBeInTheDocument()
-    );
-    // Closing the modal refocuses the Tooltip-wrapped health-check button.
     await settleTooltips();
+    expect(screen.queryByText('Error!')).not.toBeInTheDocument();
   });
 
   test.each([

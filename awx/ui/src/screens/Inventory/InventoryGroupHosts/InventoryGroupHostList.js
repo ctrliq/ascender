@@ -1,11 +1,9 @@
 import React, { useEffect, useCallback, useState } from 'react';
-import { useLocation, Link } from 'react-router';
-import { useParams } from 'routerCompat';
+import { useLocation } from 'react-router';
+import { useNavigate, useParams } from 'routerCompat';
 
 import { useLingui } from '@lingui/react/macro';
-import {
-	DropdownItem
-} from '@patternfly/react-core/deprecated';
+import { DropdownItem } from '@patternfly/react-core';
 import { getQSConfig, mergeParams, parseQueryString } from 'util/qs';
 import { GroupsAPI, InventoriesAPI } from 'api';
 
@@ -39,6 +37,7 @@ function InventoryGroupHostList() {
   const [isAdHocLaunchLoading, setIsAdHocLaunchLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { id: inventoryId, groupId, inventoryType } = useParams();
+  const navigate = useNavigate();
   const location = useLocation();
 
   const {
@@ -172,8 +171,7 @@ function InventoryGroupHostList() {
           {addExistingHost}
         </DropdownItem>,
         <DropdownItem
-          component={Link}
-          to={`${addFormUrl}`}
+          onClick={() => navigate(addFormUrl)}
           key={addNewHost}
           aria-label={addNewHost}
           ouiaId="add-new-host-dropdown-item"

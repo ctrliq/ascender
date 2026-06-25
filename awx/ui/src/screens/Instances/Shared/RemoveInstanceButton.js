@@ -9,11 +9,10 @@ import {
 	Button,
 	Tooltip,
 	Alert,
-	Badge
+	Badge,
+	DropdownItem,
 } from '@patternfly/react-core';
-import {
-	DropdownItem
-} from '@patternfly/react-core/deprecated';
+
 import AlertModal from 'components/AlertModal';
 import styled from 'styled-components';
 import ErrorDetail from 'components/ErrorDetail';

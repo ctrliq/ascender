@@ -1,24 +1,23 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { Link } from 'react-router';
 import {
 	Button,
+	DropdownItem,
+	MenuToggle,
 	Tooltip
 } from '@patternfly/react-core';
-import {
-	DropdownItem
-} from '@patternfly/react-core/deprecated';
 import CaretDownIcon from '@patternfly/react-icons/dist/js/icons/caret-down-icon';
 import { useLingui } from '@lingui/react/macro';
 import { useKebabifiedMenu } from 'contexts/Kebabified';
 
-function ToolbarAddButton({
+const ToolbarAddButton = forwardRef(({
   linkTo = null,
   onClick = null,
   isDisabled,
   defaultLabel,
   showToggleIndicator,
   ouiaId,
-}) {
+}, ref) => {
   const { t } = useLingui();
   const { isKebabified } = useKebabifiedMenu();
 
@@ -41,6 +40,21 @@ function ToolbarAddButton({
       </DropdownItem>
     );
   }
+  if (showToggleIndicator) {
+    return (
+      <Tooltip content={defaultLabel || t`Add`} position="top">
+        <MenuToggle
+          ref={ref}
+          ouiaId={ouiaId}
+          onClick={onClick}
+          isDisabled={isDisabled}
+        >
+          {defaultLabel || t`Add`}
+          <CaretDownIcon />
+        </MenuToggle>
+      </Tooltip>
+    );
+  }
   if (linkTo) {
     return (
       <Tooltip content={defaultLabel || t`Add`} position="top">
@@ -51,7 +65,6 @@ function ToolbarAddButton({
           isDisabled={isDisabled}
         >
           {defaultLabel || t`Add`}
-          {showToggleIndicator && <CaretDownIcon />}
         </Button>
       </Tooltip>
     );
@@ -60,9 +73,8 @@ function ToolbarAddButton({
     <Tooltip content={defaultLabel || t`Add`} position="top">
       <Button ouiaId={ouiaId} onClick={onClick} isDisabled={isDisabled}>
         {defaultLabel || t`Add`}
-        {showToggleIndicator && <CaretDownIcon />}
       </Button>
     </Tooltip>
   );
-}
+});
 export default ToolbarAddButton;

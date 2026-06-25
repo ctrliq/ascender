@@ -1,12 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
-import { useLocation, Link } from 'react-router';
-import { useParams } from 'routerCompat';
+import { useLocation } from 'react-router';
+import { useNavigate, useParams } from 'routerCompat';
 
-import {
-	DropdownItem
-} from '@patternfly/react-core/deprecated';
+import { DropdownItem } from '@patternfly/react-core';
 import { GroupsAPI, InventoriesAPI } from 'api';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import { getQSConfig, parseQueryString, mergeParams } from 'util/qs';
@@ -38,6 +36,7 @@ function InventoryRelatedGroupList() {
   const [associateError, setAssociateError] = useState(null);
   const [disassociateError, setDisassociateError] = useState(null);
   const { id: inventoryId, groupId, inventoryType } = useParams();
+  const navigate = useNavigate();
   const location = useLocation();
 
   const {
@@ -159,8 +158,7 @@ function InventoryRelatedGroupList() {
         </DropdownItem>,
         <DropdownItem
           ouiaId="add-new-group-button"
-          component={Link}
-          to={`${addFormUrl}`}
+          onClick={() => navigate(addFormUrl)}
           key={addNewGroup}
           aria-label={addNewGroup}
         >

@@ -3,11 +3,10 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import {
 	Button,
-	Tooltip
+	Tooltip,
+	DropdownItem,
 } from '@patternfly/react-core';
-import {
-	DropdownItem
-} from '@patternfly/react-core/deprecated';
+
 import styled from 'styled-components';
 import { KebabifiedContext } from 'contexts/Kebabified';
 

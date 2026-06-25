@@ -4,6 +4,9 @@ import { useLingui } from '@lingui/react/macro';
 import {
 	Button,
 	Checkbox,
+	Dropdown,
+	DropdownList,
+	MenuToggle,
 	Toolbar,
 	ToolbarContent as PFToolbarContent,
 	ToolbarGroup,
@@ -12,13 +15,9 @@ import {
 	Tooltip
 } from '@patternfly/react-core';
 import {
-	Dropdown,
-	DropdownPosition,
-	KebabToggle
-} from '@patternfly/react-core/deprecated';
-import {
   AngleDownIcon,
   AngleRightIcon,
+  EllipsisVIcon,
   SearchIcon,
 } from '@patternfly/react-icons';
 import { KebabifiedProvider } from 'contexts/Kebabified';
@@ -68,7 +67,7 @@ function DataListToolbar({
   const viewportWidth =
     window.innerWidth || document.documentElement.clientWidth;
   const dropdownPosition =
-    viewportWidth >= 992 ? DropdownPosition.right : DropdownPosition.left;
+    viewportWidth >= 992 ? 'right' : 'left';
 
   const onShowAdvancedSearch = (shown) => {
     setIsAdvancedSearchShown(shown);
@@ -174,22 +173,33 @@ function DataListToolbar({
           <ToolbarItem>
             <KebabifiedProvider value={kebabProviderValue}>
               <Dropdown
-                toggle={
-                  <KebabToggle
+                toggle={(toggleRef) => (
+                  <MenuToggle
+                    ref={toggleRef}
                     data-cy="actions-kebab-toogle"
-                    onToggle={(_event, isOpen) => {
+                    aria-label={t`Actions`}
+                    variant="plain"
+                    onClick={() => {
                       if (!isKebabModalOpen) {
-                        setIsKebabOpen(isOpen);
+                        setIsKebabOpen(!isKebabOpen);
                       }
                     }}
-                  />
-                }
+                    isExpanded={isKebabOpen}
+                  >
+                    <EllipsisVIcon />
+                  </MenuToggle>
+                )}
                 isOpen={isKebabOpen}
-                position={dropdownPosition}
-                isPlain
-                dropdownItems={additionalControls}
+                onOpenChange={(isOpen) => {
+                  if (!isKebabModalOpen) {
+                    setIsKebabOpen(isOpen);
+                  }
+                }}
+                popperProps={{ position: dropdownPosition }}
                 ouiaId="actions-dropdown"
-              />
+              >
+                <DropdownList>{additionalControls}</DropdownList>
+              </Dropdown>
             </KebabifiedProvider>
           </ToolbarItem>
         )}

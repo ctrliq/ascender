@@ -2,13 +2,12 @@ import React, { useState } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
 import {
+	Divider,
 	Dropdown,
-	DropdownToggle,
 	DropdownItem,
-	DropdownPosition,
-	DropdownSeparator,
-	DropdownDirection
-} from '@patternfly/react-core/deprecated';
+	DropdownList,
+	MenuToggle
+} from '@patternfly/react-core';
 import { RocketIcon } from '@patternfly/react-icons';
 
 function WorkflowReLaunchDropDown({
@@ -22,10 +21,6 @@ function WorkflowReLaunchDropDown({
   const { t } = useLingui();
   const [isOpen, setIsOpen] = useState(false);
 
-  const onToggle = (_event, val) => {
-    setIsOpen(val);
-  };
-
   // The "from failed" option re-runs every node that did not succeed and carries
   // the successful ones forward; word it to match how the workflow ended.
   const isCanceled = status === 'canceled';
@@ -34,90 +29,90 @@ function WorkflowReLaunchDropDown({
     ? t`Relaunch from canceled node`
     : t`Relaunch from failed node`;
 
-  const dropdownItems = [
-    <DropdownItem
-      ouiaId={`${ouiaId}-relaunch-from`}
-      aria-label={t`Relaunch from:`}
-      key="relaunch_from"
-      component="div"
-      isPlainText
-    >
-      {t`Relaunch from:`}
-    </DropdownItem>,
-    <DropdownSeparator key="separator" />,
-    <DropdownItem
-      ouiaId={`${ouiaId}-first`}
-      key="relaunch_first"
-      aria-label={t`Relaunch from first node`}
-      component="button"
-      onClick={() => {
-        handleRelaunch({});
-      }}
-      isDisabled={isLaunching}
-    >
-      {t`First node`}
-    </DropdownItem>,
-    <DropdownItem
-      ouiaId={`${ouiaId}-failed`}
-      key="relaunch_failed"
-      aria-label={failedNodeAriaLabel}
-      component="button"
-      onClick={() => {
-        handleRelaunch({ nodes: 'failed' });
-      }}
-      isDisabled={isLaunching}
-    >
-      {failedNodeLabel}
-    </DropdownItem>,
-  ];
+  const dropdownItems = (
+    <DropdownList>
+      <DropdownItem
+        ouiaId={`${ouiaId}-relaunch-from`}
+        aria-label={t`Relaunch from:`}
+        key="relaunch_from"
+        isAriaDisabled
+      >
+        {t`Relaunch from:`}
+      </DropdownItem>
+      <Divider key="separator" />
+      <DropdownItem
+        ouiaId={`${ouiaId}-first`}
+        key="relaunch_first"
+        aria-label={t`Relaunch from first node`}
+        onClick={() => {
+          handleRelaunch({});
+        }}
+        isDisabled={isLaunching}
+      >
+        {t`First node`}
+      </DropdownItem>
+      <DropdownItem
+        ouiaId={`${ouiaId}-failed`}
+        key="relaunch_failed"
+        aria-label={failedNodeAriaLabel}
+        onClick={() => {
+          handleRelaunch({ nodes: 'failed' });
+        }}
+        isDisabled={isLaunching}
+      >
+        {failedNodeLabel}
+      </DropdownItem>
+    </DropdownList>
+  );
 
   if (isPrimary) {
     return (
       <Dropdown
         ouiaId={ouiaId}
-        position={DropdownPosition.left}
-        direction={DropdownDirection.up}
+        popperProps={{ position: 'left', direction: 'up' }}
         isOpen={isOpen}
-        dropdownItems={dropdownItems}
-        toggle={(
-          <DropdownToggle
-            toggleIndicator={null}
-            onToggle={onToggle}
+        onOpenChange={setIsOpen}
+        toggle={(toggleRef) => (
+          <MenuToggle
+            ref={toggleRef}
+            onClick={() => setIsOpen(!isOpen)}
+            isExpanded={isOpen}
             aria-label={t`relaunch workflow`}
             id={id}
-            toggleVariant="primary"
+            variant="primary"
             ouiaId="relaunch-workflow-toggle"
           >
             {t`Relaunch`}
-          </DropdownToggle>
+          </MenuToggle>
         )}
-      />
+      >
+        {dropdownItems}
+      </Dropdown>
     );
   }
 
   return (
     <Dropdown
       ouiaId={ouiaId}
-      isPlain
-      position={DropdownPosition.right}
-      // Render the menu in a popper on document.body so it flips above the
-      // toggle when there is no room below (e.g. the last rows of the jobs
-      // list) instead of extending the page, and is not clipped by the table.
-      menuAppendTo={() => document.body}
+      popperProps={{ position: 'right', appendTo: () => document.body }}
       isOpen={isOpen}
-      dropdownItems={dropdownItems}
-      toggle={(
-        <DropdownToggle
-          toggleIndicator={null}
-          onToggle={onToggle}
+      onOpenChange={setIsOpen}
+      toggle={(toggleRef) => (
+        <MenuToggle
+          ref={toggleRef}
+          variant="plain"
+          onClick={() => setIsOpen(!isOpen)}
+          isExpanded={isOpen}
           aria-label={t`relaunch workflow`}
           id={id}
           ouiaId="relaunch-workflow-toggle"
         >
           <RocketIcon />
-        </DropdownToggle>
+        </MenuToggle>
       )}
-    />
+    >
+      {dropdownItems}
+    </Dropdown>
   );
 }
 

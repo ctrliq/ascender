@@ -3,11 +3,10 @@ import { useParams } from 'routerCompat';
 import { Plural, useLingui } from '@lingui/react/macro';
 import {
 	Button,
-	Radio
+	Radio,
+	DropdownItem,
 } from '@patternfly/react-core';
-import {
-	DropdownItem
-} from '@patternfly/react-core/deprecated';
+
 import styled from 'styled-components';
 import { KebabifiedContext } from 'contexts/Kebabified';
 import { GroupsAPI, InventoriesAPI } from 'api';

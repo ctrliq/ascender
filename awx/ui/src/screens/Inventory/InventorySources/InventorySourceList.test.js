@@ -166,11 +166,9 @@ describe('<InventorySourceList />', () => {
     const syncAllButton = screen.getByRole('button', { name: 'Sync all' });
     expect(syncAllButton).toBeInTheDocument();
     await user.click(syncAllButton);
-    await waitFor(() =>
-      expect(InventoriesAPI.syncAllSources).toHaveBeenCalled()
-    );
-    expect(InventoriesAPI.readSources).toHaveBeenCalled();
     await settleTooltips();
+    expect(InventoriesAPI.syncAllSources).toHaveBeenCalled();
+    expect(InventoriesAPI.readSources).toHaveBeenCalled();
   });
 
   test('displays error after unsuccessful sync all button', async () => {

@@ -2,17 +2,18 @@ import React, { useState, useEffect } from 'react';
 
 import {
 	Button,
+	Masthead,
+	MastheadBrand,
+	MastheadContent,
+	MastheadMain,
+	MastheadToggle,
 	Nav,
 	NavList,
 	Page,
-	PageSidebar, PageSidebarBody
+	PageSidebar, PageSidebarBody,
+	PageToggleButton
 } from '@patternfly/react-core';
-import {
-	PageHeader as PFPageHeader,
-	PageHeaderTools,
-	PageHeaderToolsGroup,
-	PageHeaderToolsItem
-} from '@patternfly/react-core/deprecated';
+import { BarsIcon } from '@patternfly/react-icons';
 import { Plural, Trans, useLingui } from '@lingui/react/macro';
 
 import styled from 'styled-components';
@@ -26,12 +27,10 @@ import NavExpandableGroup from './NavExpandableGroup';
 import PageHeaderToolbar from './PageHeaderToolbar';
 import AlertModal from '../AlertModal';
 
-const PageHeader = styled(PFPageHeader)`
-  & .pf-v5-c-page__header-brand-link {
+const StyledMastheadBrand = styled(MastheadBrand)`
+  color: inherit;
+  &:hover {
     color: inherit;
-    &:hover {
-      color: inherit;
-    }
   }
 `;
 
@@ -60,36 +59,41 @@ function AppContainer({ navRouteConfig = [], children }) {
     : t`brand logo`;
 
   const header = (
-    <PageHeader
-      showNavToggle
-      logo={<BrandLogo alt={alt} />}
-      logoProps={{ href: '/' }}
-      headerTools={
+    <Masthead>
+      <MastheadToggle>
+        <PageToggleButton variant="plain" aria-label={t`Global navigation`}>
+          <BarsIcon />
+        </PageToggleButton>
+      </MastheadToggle>
+      <MastheadMain>
+        <StyledMastheadBrand component="a" href="/">
+          <BrandLogo alt={alt} />
+        </StyledMastheadBrand>
+      </MastheadMain>
+      <MastheadContent>
         <PageHeaderToolbar
           loggedInUser={config?.me}
           isAboutDisabled={!config?.version}
           onAboutClick={handleAboutModalOpen}
           onLogoutClick={logout}
         />
-      }
-    />
+      </MastheadContent>
+    </Masthead>
   );
 
   const simpleHeader = config.isLoading ? null : (
-    <PageHeader
-      logo={<BrandLogo alt={alt} />}
-      headerTools={
-        <PageHeaderTools>
-          <PageHeaderToolsGroup>
-            <PageHeaderToolsItem>
-              <Button onClick={logout} variant="tertiary" ouiaId="logout">
-                <Trans>Logout</Trans>
-              </Button>
-            </PageHeaderToolsItem>
-          </PageHeaderToolsGroup>
-        </PageHeaderTools>
-      }
-    />
+    <Masthead>
+      <MastheadMain>
+        <MastheadBrand component="a" href="/">
+          <BrandLogo alt={alt} />
+        </MastheadBrand>
+      </MastheadMain>
+      <MastheadContent>
+        <Button onClick={logout} variant="tertiary" ouiaId="logout">
+          <Trans>Logout</Trans>
+        </Button>
+      </MastheadContent>
+    </Masthead>
   );
 
   const sidebar = (

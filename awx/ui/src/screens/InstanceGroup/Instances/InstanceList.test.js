@@ -166,13 +166,10 @@ describe('<InstanceList/>', () => {
     ).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'Close' }));
-    await waitFor(() =>
-      expect(
-        screen.queryByRole('dialog', { name: /Select Instances/ })
-      ).not.toBeInTheDocument()
-    );
-    // Closing the modal refocuses the Tooltip-wrapped Associate button.
     await settleTooltips();
+    expect(
+      screen.queryByRole('dialog', { name: /Select Instances/ })
+    ).not.toBeInTheDocument();
   });
 
   test('should run health check on selected execution instances', async () => {

@@ -41,7 +41,7 @@ function StatusIcon({ status, ...props }) {
           <Icon label={status} />
         </div>
       ) : null}
-      <span className="pf-screen-reader"> {status} </span>
+      <span className="pf-v5-screen-reader"> {status} </span>
     </div>
   );
 }

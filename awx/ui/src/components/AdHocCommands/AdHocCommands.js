@@ -6,11 +6,9 @@ import { useLingui } from '@lingui/react/macro';
 
 import {
 	Button,
-	Tooltip
+	Tooltip,
+	DropdownItem,
 } from '@patternfly/react-core';
-import {
-	DropdownItem
-} from '@patternfly/react-core/deprecated';
 
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import { InventoriesAPI, CredentialTypesAPI } from 'api';

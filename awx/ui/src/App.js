@@ -165,7 +165,7 @@ function App() {
           window.matchMedia('(prefers-color-scheme: dark)').matches;
 
     if (prefersDarkMode) {
-      document.documentElement.classList.add('pf-theme-dark');
+      document.documentElement.classList.add('pf-v5-theme-dark');
       import('./darkmode.css');
     }
   }, []);

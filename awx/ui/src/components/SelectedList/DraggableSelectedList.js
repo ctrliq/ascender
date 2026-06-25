@@ -92,7 +92,7 @@ function DraggableSelectedList({
           );
         })}
       </DataList>
-      <div className="pf-screen-reader" aria-live="assertive">
+      <div className="pf-v5-screen-reader" aria-live="assertive">
         {liveText}
       </div>
     </>

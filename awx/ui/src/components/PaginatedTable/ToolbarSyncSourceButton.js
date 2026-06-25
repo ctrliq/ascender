@@ -1,11 +1,10 @@
 import React from 'react';
 import {
 	Button,
-	Tooltip
+	Tooltip,
+	DropdownItem,
 } from '@patternfly/react-core';
-import {
-	DropdownItem
-} from '@patternfly/react-core/deprecated';
+
 import { useLingui } from '@lingui/react/macro';
 
 import { useKebabifiedMenu } from 'contexts/Kebabified';
