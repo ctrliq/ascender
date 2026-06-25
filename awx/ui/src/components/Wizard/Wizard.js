@@ -39,7 +39,6 @@ function WizardWrapper({
   nextButtonText,
   height,
   style,
-  css: cssProp,
   className,
   ...rest
 }) {
@@ -145,6 +144,7 @@ function WizardWrapper({
         variant={ModalVariant.large}
         showClose={false}
         hasNoBodyWrapper
+        onClose={onClose}
         aria-label={title || 'Wizard'}
       >
         {wizardContent}
