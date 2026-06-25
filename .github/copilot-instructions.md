@@ -30,20 +30,20 @@ Runtime versions (inside container):
 ## Linting
 
 ### Black (code formatting)
-Config in `pyproject.toml`: `line-length = 160`, `skip-string-normalization = true`, `extend-exclude = "ascender_collection"`. Always auto-format new Python code before committing:
+Config in `pyproject.toml`: `line-length = 160`, `skip-string-normalization = true`. Always auto-format new Python code before committing:
 
 ```bash
 # Check (CI-style):
-docker exec tools_awx_1 bash -c "cd /awx_devel && black --check awx awxkit ascender_collection"
+docker exec tools_awx_1 bash -c "cd /awx_devel && black --check awx awxkit"
 # Auto-fix:
-docker exec tools_awx_1 bash -c "cd /awx_devel && black awx awxkit ascender_collection"
+docker exec tools_awx_1 bash -c "cd /awx_devel && black awx awxkit"
 ```
 
 ### Flake8
-Config in `tox.ini` (section `[flake8]`). Checks only: `F401,F402,F821,F823,F841,F811,E265,E266,F541,W605,E722,F822,F523,W291,F405`. Excludes `awx/ui/node_modules`, `env`, `ascender_collection_build`.
+Config in `tox.ini` (section `[flake8]`). Checks only: `F401,F402,F821,F823,F841,F811,E265,E266,F541,W605,E722,F822,F523,W291,F405`. Excludes `awx/ui/node_modules`, `env`.
 
 ```bash
-docker exec tools_awx_1 bash -c "cd /awx_devel && flake8 awx awxkit ascender_collection"
+docker exec tools_awx_1 bash -c "cd /awx_devel && flake8 awx awxkit"
 ```
 
 ### Yamllint
@@ -125,7 +125,6 @@ Migration files live in `awx/main/migrations/` (218 existing files).
 | `awx/ui/` | UI / React frontend (npm) |
 | `awx/ui_next/` | New UI (not currently used, built separately via `make ui-next`) |
 | `awxkit/` | Python client library for the AWX API (own tox suite) |
-| `ascender_collection/` | Ansible Galaxy collection (`ctrliq.ascender`) |
 | `requirements/` | Pinned deps: `requirements.txt`, `requirements_dev.txt`, `requirements_git.txt` |
 | `tools/` | Docker Compose, Ansible build playbooks, dev scripts |
 | `docs/` | Project documentation |

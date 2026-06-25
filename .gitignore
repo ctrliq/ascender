@@ -152,11 +152,7 @@ venv/*
 use_dev_supervisor.txt
 
 
-# Ansible module tests
-/ascender_collection_test_venv/
-/ascender_collection/*.tar.gz
 /sanity/
-/ascender_collection_build/
 
 .idea/*
 *.unison.tmp
