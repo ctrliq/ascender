@@ -1,72 +1,68 @@
 import React, { useState } from 'react';
+import { useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
-import { useField } from 'formik';
-import { FileUpload, FormGroup } from '@patternfly/react-core';
+
+import {
+  FileUpload,
+  FormGroup,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
+} from '@patternfly/react-core';
 
 function GceFileUploadField() {
   const { t } = useLingui();
+  const { setFieldValue } = useFormikContext();
   const [fileError, setFileError] = useState(null);
   const [filename, setFilename] = useState('');
-  const [file, setFile] = useState('');
-  const [, , inputsUsernameHelpers] = useField({
-    name: 'inputs.username',
-  });
-  const [, , inputsProjectHelpers] = useField({
-    name: 'inputs.project',
-  });
-  const [, , inputsSSHKeyDataHelpers] = useField({
-    name: 'inputs.ssh_key_data',
-  });
+  const [fileValue, setFileValue] = useState('');
+
+  const populateFields = (jsonStr) => {
+    try {
+      const json = JSON.parse(jsonStr);
+      setFieldValue('inputs.username', json.client_email || '');
+      setFieldValue('inputs.project', json.project_id || '');
+      setFieldValue('inputs.ssh_key_data', json.private_key || '');
+      setFileError(null);
+    } catch {
+      setFileError(t`There was an error parsing the file. Please check the file formatting and try again.`);
+    }
+  };
+
+  const clearFields = () => {
+    setFieldValue('inputs.username', '');
+    setFieldValue('inputs.project', '');
+    setFieldValue('inputs.ssh_key_data', '');
+  };
+
   return (
     <FormGroup
       fieldId="credential-gce-file"
-      validated={!fileError ? 'default' : 'error'}
       label={t`Service account JSON file`}
-      helperText={t`Select a JSON formatted service account key to autopopulate the following fields.`}
-      helperTextInvalid={fileError}
     >
       <FileUpload
         id="credential-gce-file"
-        value={file}
+        type="text"
+        value={fileValue}
         filename={filename}
         filenamePlaceholder={t`Choose a .json file`}
-        onChange={async (value) => {
-          if (value) {
-            try {
-              setFile(value);
-              setFilename(value.name);
-              const fileText = await value.text();
-              const fileJSON = JSON.parse(fileText);
-              if (
-                !fileJSON.client_email &&
-                !fileJSON.project_id &&
-                !fileJSON.private_key
-              ) {
-                setFileError(
-                  t`Expected at least one of client_email, project_id or private_key to be present in the file.`
-                );
-              } else {
-                inputsUsernameHelpers.setValue(fileJSON.client_email || '');
-                inputsProjectHelpers.setValue(fileJSON.project_id || '');
-                inputsSSHKeyDataHelpers.setValue(fileJSON.private_key || '');
-                setFileError(null);
-              }
-            } catch {
-              setFileError(
-                t`There was an error parsing the file. Please check the file formatting and try again.`
-              );
-            }
-          } else {
-            setFile('');
-            setFilename('');
-            inputsUsernameHelpers.setValue('');
-            inputsProjectHelpers.setValue('');
-            inputsSSHKeyDataHelpers.setValue('');
-            setFileError(null);
-          }
+        browseButtonText={t`Browse…`}
+        clearButtonText={t`Clear`}
+        onFileInputChange={(_event, file) => {
+          setFilename(file.name);
+          setFileError(null);
+        }}
+        onDataChange={(_event, data) => {
+          setFileValue(data);
+          populateFields(data);
+        }}
+        onClearClick={() => {
+          setFilename('');
+          setFileValue('');
+          clearFields();
         }}
         dropzoneProps={{
-          accept: '.json',
+          accept: { 'application/json': ['.json'] },
           onDropRejected: () => {
             setFileError(
               t`File upload rejected. Please select a single .json file.`
@@ -74,6 +70,14 @@ function GceFileUploadField() {
           },
         }}
       />
+      <FormHelperText>
+        <HelperText>
+          <HelperTextItem variant={fileError ? 'error' : 'default'}>
+            {fileError ||
+              t`Select a JSON formatted service account key to autopopulate the following fields.`}
+          </HelperTextItem>
+        </HelperText>
+      </FormHelperText>
     </FormGroup>
   );
 }

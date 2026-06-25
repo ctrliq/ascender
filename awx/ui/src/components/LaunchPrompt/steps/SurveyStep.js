@@ -2,12 +2,17 @@ import React, { useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
 import {
-  Form,
-  FormGroup,
-  Select,
-  SelectOption,
-  SelectVariant,
+	Form,
+	FormGroup,
+	FormHelperText,
+	HelperText,
+	HelperTextItem,
 } from '@patternfly/react-core';
+import {
+	Select,
+	SelectOption,
+	SelectVariant
+} from '@patternfly/react-core/deprecated';
 import {
   required,
   minMaxValue,
@@ -108,14 +113,12 @@ function MultipleChoiceField({ question }) {
   return (
     <FormGroup
       fieldId={id}
-      helperTextInvalid={meta.error}
       isRequired={question.required}
-      validated={isValid ? 'default' : 'error'}
       label={question.question_name}
       labelIcon={<Popover content={question.question_description} />}
     >
       <Select
-        onToggle={setIsOpen}
+        onToggle={(_event, val) => setIsOpen(val)}
         onSelect={(event, option) => {
           helpers.setValue(option);
           setIsOpen(false);
@@ -136,6 +139,15 @@ function MultipleChoiceField({ question }) {
           <SelectOption key={opt} value={opt} />
         ))}
       </Select>
+      {!isValid && (
+        <FormHelperText>
+          <HelperText>
+            <HelperTextItem variant="error">
+              {meta.error}
+            </HelperTextItem>
+          </HelperText>
+        </FormHelperText>
+      )}
     </FormGroup>
   );
 }
@@ -162,12 +174,7 @@ function MultiSelectField({ question }) {
   return (
     <FormGroup
       fieldId={id}
-      helperTextInvalid={
-        meta.error ||
-        t`At least one value must be selected for this field.`
-      }
       isRequired={question.required}
-      validated={isValid ? 'default' : 'error'}
       label={question.question_name}
       labelIcon={<Popover content={question.question_description} />}
     >
@@ -176,7 +183,7 @@ function MultiSelectField({ question }) {
         variant={SelectVariant.typeaheadMulti}
         id={id}
         placeholderText={!field.value.length && t`Select option(s)`}
-        onToggle={setIsOpen}
+        onToggle={(_event, val) => setIsOpen(val)}
         onSelect={(event, option) => {
           if (field?.value?.includes(option)) {
             helpers.setValue(field.value.filter((o) => o !== option));
@@ -197,6 +204,16 @@ function MultiSelectField({ question }) {
           <SelectOption key={opt} value={opt} />
         ))}
       </Select>
+      {!isValid && (
+        <FormHelperText>
+          <HelperText>
+            <HelperTextItem variant="error">
+              {meta.error ||
+                t`At least one value must be selected for this field.`}
+            </HelperTextItem>
+          </HelperText>
+        </FormHelperText>
+      )}
     </FormGroup>
   );
 }

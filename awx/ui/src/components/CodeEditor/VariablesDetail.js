@@ -99,8 +99,8 @@ function VariablesDetail({
         />
         {error && (
           <div
-            css="color: var(--pf-global--danger-color--100);
-            font-size: var(--pf-global--FontSize--sm)"
+            css="color: var(--pf-v5-global--danger-color--100);
+            font-size: var(--pf-v5-global--FontSize--sm)"
           >
             {t`Error:`} {error.message}
           </div>
@@ -124,7 +124,7 @@ function VariablesDetail({
           </Button>,
         ]}
       >
-        <div className="pf-c-form">
+        <div className="pf-v5-c-form">
           <ModeToggle
             id={`${dataCy}-preview-expanded`}
             label={label}
@@ -165,10 +165,10 @@ function ModeToggle({
       <SplitItem isFilled>
         <Split hasGutter css="align-items: baseline">
           <SplitItem>
-            <label className="pf-c-form__label" htmlFor={id}>
+            <label className="pf-v5-c-form__label" htmlFor={id}>
               <span
-                className="pf-c-form__label-text"
-                css="font-weight: var(--pf-global--FontWeight--bold)"
+                className="pf-v5-c-form__label-text"
+                css="font-weight: var(--pf-v5-global--FontWeight--bold)"
               >
                 {label}
               </span>

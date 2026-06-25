@@ -29,13 +29,13 @@ import { VERBOSITY } from '../../VerbositySelectField';
 import getHelpText from '../../../screens/Template/shared/JobTemplate.helptext';
 
 const PromptDivider = styled(Divider)`
-  margin-top: var(--pf-global--spacer--lg);
-  margin-bottom: var(--pf-global--spacer--lg);
+  margin-top: var(--pf-v5-global--spacer--lg);
+  margin-bottom: var(--pf-v5-global--spacer--lg);
 `;
 
 const PromptTitle = styled(Title)`
   margin-top: 40px;
-  --pf-c-title--m-md--FontWeight: 700;
+  --pf-v5-c-title--m-md--FontWeight: 700;
   grid-column: 1 / -1;
 `;
 
@@ -44,25 +44,25 @@ const PromptDetailList = styled(DetailList)`
 `;
 
 const FrequencyDetailsContainer = styled.div`
-  background-color: var(--pf-global--BackgroundColor--200);
-  margin-top: var(--pf-global--spacer--lg);
-  margin-bottom: var(--pf-global--spacer--lg);
-  margin-right: calc(var(--pf-c-card--child--PaddingRight) * -1);
-  margin-left: calc(var(--pf-c-card--child--PaddingLeft) * -1);
-  padding: var(--pf-c-card--child--PaddingRight);
+  background-color: var(--pf-v5-global--BackgroundColor--200);
+  margin-top: var(--pf-v5-global--spacer--lg);
+  margin-bottom: var(--pf-v5-global--spacer--lg);
+  margin-right: calc(var(--pf-v5-c-card--child--PaddingRight) * -1);
+  margin-left: calc(var(--pf-v5-c-card--child--PaddingLeft) * -1);
+  padding: var(--pf-v5-c-card--child--PaddingRight);
 
   & > p {
-    margin-bottom: var(--pf-global--spacer--md);
+    margin-bottom: var(--pf-v5-global--spacer--md);
   }
 
   & > *:not(:first-child):not(:last-child) {
-    margin-bottom: var(--pf-global--spacer--md);
-    padding-bottom: var(--pf-global--spacer--md);
-    border-bottom: 1px solid var(--pf-global--BorderColor--100);
+    margin-bottom: var(--pf-v5-global--spacer--md);
+    padding-bottom: var(--pf-v5-global--spacer--md);
+    border-bottom: 1px solid var(--pf-v5-global--BorderColor--100);
   }
 
   & + & {
-    margin-top: calc(var(--pf-global--spacer--lg) * -1);
+    margin-top: calc(var(--pf-v5-global--spacer--lg) * -1);
   }
 `;
 

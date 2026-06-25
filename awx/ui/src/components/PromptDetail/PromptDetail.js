@@ -16,18 +16,18 @@ import PromptWFJobTemplateDetail from './PromptWFJobTemplateDetail';
 import { VERBOSITY } from '../VerbositySelectField';
 
 const PromptTitle = styled(Title)`
-  margin-top: var(--pf-global--spacer--xl);
-  --pf-c-title--m-md--FontWeight: 700;
+  margin-top: var(--pf-v5-global--spacer--xl);
+  --pf-v5-c-title--m-md--FontWeight: 700;
   grid-column: 1 / -1;
 `;
 
 const PromptDivider = styled(Divider)`
-  margin-top: var(--pf-global--spacer--lg);
-  margin-bottom: var(--pf-global--spacer--lg);
+  margin-top: var(--pf-v5-global--spacer--lg);
+  margin-bottom: var(--pf-v5-global--spacer--lg);
 `;
 
 const PromptDetailList = styled(DetailList)`
-  padding: 0px var(--pf-global--spacer--lg);
+  padding: 0px var(--pf-v5-global--spacer--lg);
 `;
 
 function formatTimeout(timeout) {

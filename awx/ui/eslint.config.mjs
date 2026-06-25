@@ -239,6 +239,8 @@ export default defineConfig([
         { ignore: ['css', 'ouia-component-id'] },
       ],
       'react/forbid-prop-types': 'off',
+      // PF5 Dropdown requires toggle={(toggleRef) => <MenuToggle ref={toggleRef}/>}
+      'react/no-unstable-nested-components': ['error', { allowAsProps: true }],
     },
   },
 ]);

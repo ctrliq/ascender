@@ -12,8 +12,8 @@ const TooltipItem = styled.div`
   width: 25px;
 
   &:hover {
-    color: var(--pf-global--Color--100);
-    background-color: var(--pf-global--BackgroundColor--200);
+    color: var(--pf-v5-global--Color--100);
+    background-color: var(--pf-v5-global--BackgroundColor--200);
   }
 
   &:not(:last-of-type) {

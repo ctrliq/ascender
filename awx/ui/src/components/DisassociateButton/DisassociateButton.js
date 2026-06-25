@@ -1,14 +1,19 @@
 import React, { useState, useEffect, useContext } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
-import { Button, Tooltip, DropdownItem } from '@patternfly/react-core';
+import {
+	Button,
+	Tooltip,
+	DropdownItem,
+} from '@patternfly/react-core';
+
 import styled from 'styled-components';
 import { KebabifiedContext } from 'contexts/Kebabified';
 
 import AlertModal from '../AlertModal';
 
 const ModalNote = styled.div`
-  margin-bottom: var(--pf-global--spacer--xl);
+  margin-bottom: var(--pf-v5-global--spacer--xl);
 `;
 
 function DisassociateButton({

@@ -3,9 +3,14 @@
 */
 
 import React, { useEffect, useCallback } from 'react';
-import { useLocation, Link } from 'react-router';
+import { useLocation } from 'react-router';
+import { useNavigate } from 'routerCompat';
 import { Plural, useLingui } from '@lingui/react/macro';
-import { Card, DropdownItem } from '@patternfly/react-core';
+import {
+	Card,
+	DropdownItem,
+} from '@patternfly/react-core';
+
 import {
   JobTemplatesAPI,
   UnifiedJobTemplatesAPI,
@@ -47,6 +52,7 @@ function TemplateList({ defaultParams }) {
   );
 
   const location = useLocation();
+  const navigate = useNavigate();
   const { addToast, Toast, toastProps } = useToast();
 
   const {
@@ -161,8 +167,7 @@ function TemplateList({ defaultParams }) {
       <DropdownItem
         ouiaId="add-job-template-item"
         key={addTemplate}
-        component={Link}
-        to="/templates/job_template/add/"
+        onClick={() => navigate('/templates/job_template/add/')}
         aria-label={addTemplate}
       >
         {addTemplate}
@@ -173,8 +178,7 @@ function TemplateList({ defaultParams }) {
     addDropDownButton.push(
       <DropdownItem
         ouiaId="add-workflow-job-template-item"
-        component={Link}
-        to="/templates/workflow_job_template/add/"
+        onClick={() => navigate('/templates/workflow_job_template/add/')}
         key={addWFTemplate}
         aria-label={addWFTemplate}
       >

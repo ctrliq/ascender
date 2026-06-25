@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import { useField } from 'formik';
-import { FormGroup, Title } from '@patternfly/react-core';
+import {
+  FormGroup,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
+  Title,
+} from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import FormField from 'components/FormField';
@@ -89,11 +95,8 @@ export default function ScheduleFormFields({
       <FormGroup
         name="timezone"
         fieldId="schedule-timezone"
-        helperTextInvalid={timezoneMeta.error || timezoneMessage}
         isRequired
-        validated={timezoneValidatedStatus}
         label={t`Local time zone`}
-        helperText={timezoneMessage}
         labelIcon={<Popover content={helpText.localTimeZone(config)} />}
       >
         <AnsibleSelect
@@ -102,14 +105,21 @@ export default function ScheduleFormFields({
           {...timezone}
           onChange={warnLinkedTZ}
         />
+        {(timezoneMessage || (timezoneMeta.touched && timezoneMeta.error)) && (
+          <FormHelperText>
+            <HelperText>
+              <HelperTextItem variant={timezoneValidatedStatus}>
+                {timezoneMeta.touched && timezoneMeta.error
+                  ? timezoneMeta.error
+                  : timezoneMessage}
+              </HelperTextItem>
+            </HelperText>
+          </FormHelperText>
+        )}
       </FormGroup>
       <FormGroup
         name="frequency"
         fieldId="schedule-frequency"
-        helperTextInvalid={frequencyMeta.error}
-        validated={
-          !frequencyMeta.touched || !frequencyMeta.error ? 'default' : 'error'
-        }
         label={t`Repeat frequency`}
       >
         <FrequencySelect
@@ -133,6 +143,15 @@ export default function ScheduleFormFields({
           <SelectOption value="month">{t`Month`}</SelectOption>
           <SelectOption value="year">{t`Year`}</SelectOption>
         </FrequencySelect>
+        {frequencyMeta.touched && frequencyMeta.error && (
+          <FormHelperText>
+            <HelperText>
+              <HelperTextItem variant="error">
+                {frequencyMeta.error}
+              </HelperTextItem>
+            </HelperText>
+          </FormHelperText>
+        )}
       </FormGroup>
       {hasDaysToKeepField ? (
         <FormField
@@ -160,7 +179,7 @@ export default function ScheduleFormFields({
           <Title
             size="md"
             headingLevel="h4"
-            css="margin-top: var(--pf-c-card--child--PaddingRight)"
+            css="margin-top: var(--pf-v5-c-card--child--PaddingRight)"
           >
             {t`Exceptions`}
           </Title>
@@ -168,12 +187,6 @@ export default function ScheduleFormFields({
             <FormGroup
               name="exceptions"
               fieldId="exception-frequency"
-              helperTextInvalid={exceptionFrequencyMeta.error}
-              validated={
-                !exceptionFrequencyMeta.touched || !exceptionFrequencyMeta.error
-                  ? 'default'
-                  : 'error'
-              }
               label={t`Add exceptions`}
             >
               <FrequencySelect
@@ -199,6 +212,16 @@ export default function ScheduleFormFields({
                 <SelectOption value="month">{t`Month`}</SelectOption>
                 <SelectOption value="year">{t`Year`}</SelectOption>
               </FrequencySelect>
+              {exceptionFrequencyMeta.touched &&
+                exceptionFrequencyMeta.error && (
+                  <FormHelperText>
+                    <HelperText>
+                      <HelperTextItem variant="error">
+                        {exceptionFrequencyMeta.error}
+                      </HelperTextItem>
+                    </HelperText>
+                  </FormHelperText>
+                )}
             </FormGroup>
           </FormColumnLayout>
           {exceptionFrequency.value.map((val) => (

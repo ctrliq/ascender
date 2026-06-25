@@ -8,8 +8,8 @@ import CredentialChip from 'components/CredentialChip';
 const SelectedCredential = styled.div`
   display: flex;
   justify-content: space-between;
-  background-color: var(--pf-global--BackgroundColor--100);
-  border-bottom-color: var(--pf-global--BorderColor--200);
+  background-color: var(--pf-v5-global--BackgroundColor--100);
+  border-bottom-color: var(--pf-v5-global--BorderColor--200);
 `;
 
 const SpacedCredentialChip = styled(CredentialChip)`

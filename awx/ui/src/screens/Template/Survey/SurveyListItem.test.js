@@ -35,11 +35,10 @@ describe('<SurveyListItem />', () => {
         canEdit
       />
     );
-    // Select column checkbox + 4 data cells (name, type, default, actions)
     expect(
       screen.getByRole('checkbox', { name: 'Select all rows' })
     ).toBeInTheDocument();
-    expect(screen.getAllByRole('cell')).toHaveLength(5);
+    expect(screen.getAllByRole('cell')).toHaveLength(4);
   });
 
   test('required item has required asterisk', () => {

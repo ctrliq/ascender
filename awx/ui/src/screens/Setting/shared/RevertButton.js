@@ -8,7 +8,7 @@ import { useLingui } from '@lingui/react/macro';
 const ButtonWrapper = styled.div`
   margin-left: auto;
   &&& {
-    --pf-c-button--FontSize: var(--pf-c-button--m-small--FontSize);
+    --pf-v5-c-button--FontSize: var(--pf-v5-c-button--m-small--FontSize);
   }
 `;
 
@@ -53,7 +53,7 @@ function RevertButton({
           aria-label={isRevertable ? t`Revert` : t`Undo`}
           ouiaId={`${id}-revert`}
           isInline
-          isSmall
+          size="sm"
           onClick={handleConfirm}
           type="button"
           variant="link"

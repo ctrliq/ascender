@@ -135,8 +135,8 @@ describe('<UserTeamList />', () => {
     await user.click(screen.getByRole('button', { name: 'Associate' }));
     expect(await screen.findByRole('dialog')).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Close' }));
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     await settleTooltips();
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
   test('should show error modal for failed disassociation', async () => {

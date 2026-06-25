@@ -3,6 +3,9 @@ import { useField } from 'formik';
 import { useLingui } from '@lingui/react/macro';
 import {
   FormGroup,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
   TextInput,
   Button,
   InputGroup as PFInputGroup,
@@ -16,13 +19,13 @@ const InputGroup = styled(PFInputGroup)`
 `;
 
 const HelperTextWrapper = styled.div`
-  font-size: var(--pf-c-form__label--FontSize);
+  font-size: var(--pf-v5-c-form__label--FontSize);
 `;
 
 const CheckIcon = styled(PFCheckIcon)`
-  color: var(--pf-c-button--m-plain--disabled--Color);
+  color: var(--pf-v5-c-button--m-plain--disabled--Color);
   ${(props) =>
-    props.selected && `color: var(--pf-c-button--m-secondary--active--Color)`};
+    props.selected && `color: var(--pf-v5-c-button--m-secondary--active--Color)`};
 `;
 
 const validate = (t) => (value) => {
@@ -52,22 +55,11 @@ function MultipleChoiceField({ label, tooltip }) {
       isRequired
       name="formattedChoices"
       id="formattedChoices"
-      helperText={
-        <HelperTextWrapper>
-          {t`Type answer then click checkbox on right to select answer as
-default.`}
-          <br />
-          {t`Press 'Enter' to add more answer choices. One answer
-choice per line.`}
-        </HelperTextWrapper>
-      }
-      helperTextInvalid={formattedChoicesMeta.error}
       onBlur={(e) => {
         if (!e.currentTarget.contains(e.relatedTarget)) {
           formattedChoicesHelpers.setTouched();
         }
       }}
-      validated={isValid ? 'default' : 'error'}
       labelIcon={<Popover content={tooltip} />}
     >
       {formattedChoicesField.value.map(({ choice, isDefault, id }, i) => (
@@ -103,7 +95,7 @@ choice per line.`}
               }
             }}
             value={choice}
-            onChange={(value) => {
+            onChange={(_event, value) => {
               const newValues = formattedChoicesField.value.map(
                 (choiceField, index) =>
                   i === index
@@ -152,6 +144,23 @@ choice per line.`}
           </Button>
         </InputGroup>
       ))}
+      <FormHelperText>
+        <HelperText>
+          <HelperTextItem variant={isValid ? 'default' : 'error'}>
+            {isValid ? (
+              <HelperTextWrapper>
+                {t`Type answer then click checkbox on right to select answer as
+default.`}
+                <br />
+                {t`Press 'Enter' to add more answer choices. One answer
+choice per line.`}
+              </HelperTextWrapper>
+            ) : (
+              formattedChoicesMeta.error
+            )}
+          </HelperTextItem>
+        </HelperText>
+      </FormHelperText>
     </FormGroup>
   );
 }

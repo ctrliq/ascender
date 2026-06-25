@@ -1,7 +1,12 @@
 import React, { useCallback, useEffect } from 'react';
 import { useLocation } from 'routerCompat';
 import { useLingui } from '@lingui/react/macro';
-import { FormGroup } from '@patternfly/react-core';
+import {
+  FormGroup,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
+} from '@patternfly/react-core';
 import { ProjectsAPI } from 'api';
 import useAutoPopulateLookup from 'hooks/useAutoPopulateLookup';
 import useRequest from 'hooks/useRequest';
@@ -97,9 +102,7 @@ function ProjectLookup({
   return (
     <FormGroup
       fieldId="project"
-      helperTextInvalid={helperTextInvalid}
       isRequired={required}
-      validated={isValid ? 'default' : 'error'}
       label={t`Project`}
       labelIcon={tooltip && <Popover content={tooltip} />}
     >
@@ -172,6 +175,15 @@ function ProjectLookup({
         )}
       />
       <LookupErrorMessage error={error} />
+      {!isValid && (
+        <FormHelperText>
+          <HelperText>
+            <HelperTextItem variant="error">
+              {helperTextInvalid}
+            </HelperTextItem>
+          </HelperText>
+        </FormHelperText>
+      )}
     </FormGroup>
   );
 }

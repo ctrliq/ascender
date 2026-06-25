@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
-import { Select, SelectOption, SelectVariant } from '@patternfly/react-core';
+import {
+	Select,
+	SelectOption,
+	SelectVariant
+} from '@patternfly/react-core/deprecated';
 
 export default function FrequencySelect({
   id,
@@ -38,7 +42,7 @@ export default function FrequencySelect({
       onSelect={onSelect}
       selections={value}
       placeholderText={placeholderText}
-      onToggle={onToggle}
+      onToggle={(_event, val) => onToggle(val)}
       isOpen={isOpen}
       ouiaId={`frequency-select-${id}`}
     >

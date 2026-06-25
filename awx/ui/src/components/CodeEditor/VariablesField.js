@@ -20,11 +20,11 @@ import { JSON_MODE, YAML_MODE } from './constants';
 const FieldHeader = styled.div`
   display: flex;
   justify-content: space-between;
-  padding-bottom: var(--pf-c-form__group-label--PaddingBottom);
+  padding-bottom: var(--pf-v5-c-form__group-label--PaddingBottom);
 `;
 
 const StyledCheckboxField = styled(CheckboxField)`
-  --pf-c-check__label--FontSize: var(--pf-c-form__label--FontSize);
+  --pf-v5-c-check__label--FontSize: var(--pf-v5-c-form__label--FontSize);
   margin-left: auto;
 `;
 
@@ -154,7 +154,7 @@ function VariablesField({
           </Button>,
         ]}
       >
-        <div className="pf-c-form">
+        <div className="pf-v5-c-form">
           <VariablesFieldInternals
             id={`${id}-expanded`}
             name={name}
@@ -171,7 +171,7 @@ function VariablesField({
         </div>
       </Modal>
       {meta.error ? (
-        <div className="pf-c-form__helper-text pf-m-error" aria-live="polite">
+        <div className="pf-v5-c-form__helper-text pf-m-error" aria-live="polite">
           {(Array.isArray(meta.error) ? meta.error : [meta.error]).map(
             (errorMessage) => (
               <p key={errorMessage}>{errorMessage}</p>
@@ -212,14 +212,14 @@ function VariablesFieldInternals({
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div className="pf-c-form__group">
+    <div className="pf-v5-c-form__group">
       <FieldHeader data-cy={`${id}-label`}>
         <Split hasGutter>
           <SplitItem>
-            <label htmlFor={id} className="pf-c-form__label">
-              <span className="pf-c-form__label-text">{label}</span>
+            <label htmlFor={id} className="pf-v5-c-form__label">
+              <span className="pf-v5-c-form__label-text">{label}</span>
               {isRequired && (
-                <span className="pf-c-form__label-required" aria-hidden="true">
+                <span className="pf-v5-c-form__label-required" aria-hidden="true">
                   {' '}
                   *{' '}
                 </span>

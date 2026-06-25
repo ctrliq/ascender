@@ -35,11 +35,11 @@ function UsageChart({ id, data, height, pageContext }) {
 
     const gridColor =
       getComputedStyle(document.documentElement)
-        .getPropertyValue('--pf-global--BorderColor--100')
+        .getPropertyValue('--pf-v5-global--BorderColor--100')
         .trim() || '#d7d7d7';
     const textColor =
       getComputedStyle(document.documentElement)
-        .getPropertyValue('--pf-global--Color--100')
+        .getPropertyValue('--pf-v5-global--Color--100')
         .trim() || '#151515';
 
     function transition(path) {

@@ -7,6 +7,9 @@ import {
   yyyyMMddFormat,
   TimePicker,
   FormGroup,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
 } from '@patternfly/react-core';
 import styled from 'styled-components';
 import { required, validateTime, combine } from 'util/validators';
@@ -36,14 +39,7 @@ function DateTimePicker({ dateFieldName, timeFieldName, label }) {
     <FormGroup
       fieldId={`schedule-${label}`}
       data-cy={`schedule-${label}`}
-      helperTextInvalid={dateMeta.error || timeMeta.error}
       isRequired
-      validated={
-        (!dateMeta.touched || !dateMeta.error) &&
-        (!timeMeta.touched || !timeMeta.error)
-          ? 'default'
-          : 'error'
-      }
       label={label}
     >
       <DateTimeGroup>
@@ -70,6 +66,24 @@ function DateTimePicker({ dateFieldName, timeFieldName, label }) {
           onChange={(_, time) => timeHelpers.setValue(time)}
         />
       </DateTimeGroup>
+      {dateMeta.touched && dateMeta.error && (
+        <FormHelperText>
+          <HelperText>
+            <HelperTextItem variant="error">
+              {dateMeta.error}
+            </HelperTextItem>
+          </HelperText>
+        </FormHelperText>
+      )}
+      {timeMeta.touched && timeMeta.error && (
+        <FormHelperText>
+          <HelperText>
+            <HelperTextItem variant="error">
+              {timeMeta.error}
+            </HelperTextItem>
+          </HelperText>
+        </FormHelperText>
+      )}
     </FormGroup>
   );
 }

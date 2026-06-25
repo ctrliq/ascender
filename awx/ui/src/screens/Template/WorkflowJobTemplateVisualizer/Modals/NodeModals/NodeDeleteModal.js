@@ -55,7 +55,7 @@ function NodeDeleteModal() {
         <>
           <p>{t`Are you sure you want to remove the node below:`}</p>
           <br />
-          <strong css="color: var(--pf-global--danger-color--100)">
+          <strong css="color: var(--pf-v5-global--danger-color--100)">
             {nodeToDelete.unifiedJobTemplate.name}
           </strong>
         </>

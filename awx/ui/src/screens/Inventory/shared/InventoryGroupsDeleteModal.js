@@ -1,7 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useParams } from 'routerCompat';
 import { Plural, useLingui } from '@lingui/react/macro';
-import { Button, Radio, DropdownItem } from '@patternfly/react-core';
+import {
+	Button,
+	Radio,
+	DropdownItem,
+} from '@patternfly/react-core';
+
 import styled from 'styled-components';
 import { KebabifiedContext } from 'contexts/Kebabified';
 import { GroupsAPI, InventoriesAPI } from 'api';
@@ -11,7 +16,7 @@ import AlertModal from 'components/AlertModal';
 const ListItem = styled.li`
   display: flex;
   font-weight: 600;
-  color: var(--pf-global--danger-color--100);
+  color: var(--pf-v5-global--danger-color--100);
 `;
 
 const InventoryGroupsDeleteModal = ({

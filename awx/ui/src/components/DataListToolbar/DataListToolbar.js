@@ -2,21 +2,22 @@ import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
 import {
-  Button,
-  Checkbox,
-  Toolbar,
-  ToolbarContent as PFToolbarContent,
-  ToolbarGroup,
-  ToolbarItem,
-  ToolbarToggleGroup,
-  Tooltip,
-  Dropdown,
-  DropdownPosition,
-  KebabToggle,
+	Button,
+	Checkbox,
+	Dropdown,
+	DropdownList,
+	MenuToggle,
+	Toolbar,
+	ToolbarContent as PFToolbarContent,
+	ToolbarGroup,
+	ToolbarItem,
+	ToolbarToggleGroup,
+	Tooltip
 } from '@patternfly/react-core';
 import {
   AngleDownIcon,
   AngleRightIcon,
+  EllipsisVIcon,
   SearchIcon,
 } from '@patternfly/react-icons';
 import { KebabifiedProvider } from 'contexts/Kebabified';
@@ -25,7 +26,7 @@ import Search from '../Search';
 import Sort from '../Sort';
 
 const ToolbarContent = styled(PFToolbarContent)`
-  & > .pf-c-toolbar__content-section {
+  & > .pf-v5-c-toolbar__content-section {
     flex-wrap: nowrap;
   }
 `;
@@ -66,7 +67,7 @@ function DataListToolbar({
   const viewportWidth =
     window.innerWidth || document.documentElement.clientWidth;
   const dropdownPosition =
-    viewportWidth >= 992 ? DropdownPosition.right : DropdownPosition.left;
+    viewportWidth >= 992 ? 'right' : 'left';
 
   const onShowAdvancedSearch = (shown) => {
     setIsAdvancedSearchShown(shown);
@@ -125,7 +126,7 @@ function DataListToolbar({
               <Tooltip content={t`Select all`} position="top">
                 <Checkbox
                   isChecked={isAllSelected}
-                  onChange={onSelectAll}
+                  onChange={(_event, checked) => onSelectAll(checked)}
                   aria-label={t`Select all`}
                   id="select-all"
                   ouiaId="select-all"
@@ -172,22 +173,33 @@ function DataListToolbar({
           <ToolbarItem>
             <KebabifiedProvider value={kebabProviderValue}>
               <Dropdown
-                toggle={
-                  <KebabToggle
+                toggle={(toggleRef) => (
+                  <MenuToggle
+                    ref={toggleRef}
                     data-cy="actions-kebab-toogle"
-                    onToggle={(isOpen) => {
+                    aria-label={t`Actions`}
+                    variant="plain"
+                    onClick={() => {
                       if (!isKebabModalOpen) {
-                        setIsKebabOpen(isOpen);
+                        setIsKebabOpen(!isKebabOpen);
                       }
                     }}
-                  />
-                }
+                    isExpanded={isKebabOpen}
+                  >
+                    <EllipsisVIcon />
+                  </MenuToggle>
+                )}
                 isOpen={isKebabOpen}
-                position={dropdownPosition}
-                isPlain
-                dropdownItems={additionalControls}
+                onOpenChange={(isOpen) => {
+                  if (!isKebabModalOpen) {
+                    setIsKebabOpen(isOpen);
+                  }
+                }}
+                popperProps={{ position: dropdownPosition }}
                 ouiaId="actions-dropdown"
-              />
+              >
+                <DropdownList>{additionalControls}</DropdownList>
+              </Dropdown>
             </KebabifiedProvider>
           </ToolbarItem>
         )}

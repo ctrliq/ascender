@@ -1,7 +1,13 @@
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Formik, useField, useFormikContext } from 'formik';
-import { Form, FormGroup } from '@patternfly/react-core';
+import {
+  Form,
+  FormGroup,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
+} from '@patternfly/react-core';
 import AnsibleSelect from 'components/AnsibleSelect';
 import FormActionGroup from 'components/FormActionGroup/FormActionGroup';
 import FormField, { FormSubmitError } from 'components/FormField';
@@ -34,12 +40,6 @@ function UserTokenFormFields() {
       <FormGroup
         fieldId="application-lookup"
         name="application"
-        validated={
-          !applicationMeta.touched || !applicationMeta.error
-            ? 'default'
-            : 'error'
-        }
-        helperTextInvalid={applicationMeta.error}
       >
         <ApplicationLookup
           value={applicationField.value}
@@ -52,6 +52,15 @@ function UserTokenFormFields() {
           }
           touched={applicationMeta.touched}
         />
+        {applicationMeta.error && (
+          <FormHelperText>
+            <HelperText>
+              <HelperTextItem variant="error">
+                {applicationMeta.error}
+              </HelperTextItem>
+            </HelperText>
+          </FormHelperText>
+        )}
       </FormGroup>
       <FormField
         id="token-description"
@@ -63,9 +72,7 @@ function UserTokenFormFields() {
       <FormGroup
         name="scope"
         fieldId="token-scope"
-        helperTextInvalid={scopeMeta.error}
         isRequired
-        validated={!scopeMeta.touched || !scopeMeta.error ? 'default' : 'error'}
         label={t`Scope`}
         labelIcon={<Popover content={helptext.scope} />}
       >
@@ -81,6 +88,15 @@ function UserTokenFormFields() {
             scopeHelpers.setValue(value);
           }}
         />
+        {scopeMeta.error && (
+          <FormHelperText>
+            <HelperText>
+              <HelperTextItem variant="error">
+                {scopeMeta.error}
+              </HelperTextItem>
+            </HelperText>
+          </FormHelperText>
+        )}
       </FormGroup>
     </>
   );

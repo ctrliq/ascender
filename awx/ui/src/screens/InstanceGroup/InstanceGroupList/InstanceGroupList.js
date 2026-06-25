@@ -1,9 +1,14 @@
 import React, { useEffect, useCallback } from 'react';
-import { useLocation, Link } from 'react-router';
+import { useLocation } from 'react-router';
+import { useNavigate } from 'routerCompat';
 
 import { Plural, useLingui } from '@lingui/react/macro';
 
-import { Card, PageSection, DropdownItem } from '@patternfly/react-core';
+import {
+	Card,
+	PageSection,
+	DropdownItem,
+} from '@patternfly/react-core';
 
 import { InstanceGroupsAPI } from 'api';
 import { getQSConfig, parseQueryString } from 'util/qs';
@@ -30,6 +35,7 @@ const QS_CONFIG = getQSConfig('instance-group', {
 function InstanceGroupList() {
   const { t } = useLingui();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const {
     error: contentError,
@@ -115,8 +121,7 @@ function InstanceGroupList() {
       dropdownItems={[
         <DropdownItem
           ouiaId="add-container-group-item"
-          to="/instance_groups/container_group/add"
-          component={Link}
+          onClick={() => navigate('/instance_groups/container_group/add')}
           key={addContainerGroup}
           aria-label={addContainerGroup}
         >
@@ -124,8 +129,7 @@ function InstanceGroupList() {
         </DropdownItem>,
         <DropdownItem
           ouiaId="add-instance-group-item"
-          to="/instance_groups/add"
-          component={Link}
+          onClick={() => navigate('/instance_groups/add')}
           key={addInstanceGroup}
           aria-label={addInstanceGroup}
         >

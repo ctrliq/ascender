@@ -1,6 +1,6 @@
 
 .ReactVirtualized__List,
-.pf-c-page__main,
+.pf-v5-c-page__main,
 #page-sidebar {
   scrollbar-width: thin;
 }
@@ -9,7 +9,7 @@
   line-height: 9px !important;
 }
 
-#page-sidebar .pf-c-nav__link {
+#page-sidebar .pf-v5-c-nav__link {
   padding-bottom: 8px !important;
   padding-top: 8px !important;
 }
@@ -76,11 +76,11 @@ body {
   font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif;
 }
 
-.pf-c-title {
+.pf-v5-c-title {
   font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif !important;
   font-weight: 500 !important;
 }
 
 input[type="checkbox"] {
-  accent-color: var(--pf-global--primary-color--100);
+  accent-color: var(--pf-v5-global--primary-color--100);
 }

@@ -38,7 +38,7 @@ import useRequest, {
 } from 'hooks/useRequest';
 
 const Unavailable = styled.span`
-  color: var(--pf-global--danger-color--200);
+  color: var(--pf-v5-global--danger-color--200);
 `;
 
 const SliderHolder = styled.div`
@@ -270,7 +270,7 @@ function InstanceDetails({ setBreadcrumb, instanceGroup }) {
                     min={0}
                     step={0.1}
                     value={instance.capacity_adjustment}
-                    onChange={handleChangeValue}
+                    onChange={(_event, value) => handleChangeValue(value)}
                     isDisabled={!config?.me?.is_superuser || !instance.enabled}
                     data-cy="slider"
                   />

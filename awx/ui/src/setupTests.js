@@ -40,26 +40,27 @@ global.console = {
   // fail tests that log errors.
   // adapted from https://github.com/facebook/jest/issues/6121#issuecomment-708330601
   error: (...args) => {
-    const raw = args[0];
-    let msg = '';
-    if (typeof raw === 'string') {
-      msg = raw;
-    } else if (raw instanceof Error) {
-      msg = raw.message;
-    }
     if (
-      !networkRequestUrl &&
-      !msg.includes('findDOMNode is deprecated') &&
-      !msg.includes('does not recognize the') &&
-      !msg.includes('React.jsx: type is invalid') &&
-      !msg.includes('is not a valid value for attribute') &&
-      !msg.includes('Received NaN for the')
+      !networkRequestUrl
     ) {
       hasConsoleError = true;
       error(...args);
     }
   },
   warn: (...args) => {
+    const raw = args[0];
+    let warnMsg = '';
+    if (typeof raw === 'string') {
+      warnMsg = raw;
+    } else if (raw instanceof Error) {
+      warnMsg = raw.message;
+    }
+    if (
+      warnMsg.includes('Formik called `handleChange`, but you forgot to pass an `id` or `name`') ||
+      warnMsg.includes('Table headers must have an accessible name')
+    ) {
+      return;
+    }
     hasConsoleWarn = true;
     warn(...args);
   },

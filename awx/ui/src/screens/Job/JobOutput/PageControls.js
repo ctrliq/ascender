@@ -14,7 +14,7 @@ import styled from 'styled-components';
 const ControllsWrapper = styled.div`
   display: flex;
   height: 35px;
-  border: 1px solid var(--pf-global--BorderColor--100);
+  border: 1px solid var(--pf-v5-global--BorderColor--100);
   width: 100%;
   justify-content: space-between;
 `;

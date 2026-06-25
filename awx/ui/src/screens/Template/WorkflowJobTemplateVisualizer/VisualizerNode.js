@@ -33,7 +33,7 @@ const NodeContents = styled.div`
   font-size: 13px;
   padding: 0px 10px;
   background-color: ${(props) =>
-    props.$isInvalidLinkTarget ? 'var(--pf-global--BackgroundColor--200)' : 'var(--pf-global--BackgroundColor--100)'};
+    props.$isInvalidLinkTarget ? 'var(--pf-v5-global--BackgroundColor--200)' : 'var(--pf-v5-global--BackgroundColor--100)'};
   height: 100%;
   display: flex;
   justify-content: center;
@@ -304,12 +304,12 @@ function VisualizerNode({
               style={{
                 fill:
                   hovering && addingLink && !node.isInvalidLinkTarget
-                    ? 'var(--pf-global--primary-color--100)'
-                    : 'var(--pf-global--BorderColor--100)',
+                    ? 'var(--pf-v5-global--primary-color--100)'
+                    : 'var(--pf-v5-global--BorderColor--100)',
                 stroke:
                   hovering && addingLink && !node.isInvalidLinkTarget
-                    ? 'var(--pf-global--primary-color--100)'
-                    : 'var(--pf-global--BorderColor--100)',
+                    ? 'var(--pf-v5-global--primary-color--100)'
+                    : 'var(--pf-v5-global--BorderColor--100)',
               }}
               height={wfConstants.nodeH / 4}
               rx={2}
@@ -333,11 +333,11 @@ function VisualizerNode({
         )}
         <rect
           style={{
-            fill: 'var(--pf-global--BackgroundColor--100)',
+            fill: 'var(--pf-v5-global--BackgroundColor--100)',
             stroke:
               hovering && addingLink && !node.isInvalidLinkTarget
-                ? 'var(--pf-global--primary-color--100)'
-                : 'var(--pf-global--BorderColor--100)',
+                ? 'var(--pf-v5-global--primary-color--100)'
+                : 'var(--pf-v5-global--BorderColor--100)',
           }}
           height={wfConstants.nodeH}
           rx="2"

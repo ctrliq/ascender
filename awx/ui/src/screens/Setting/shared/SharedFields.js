@@ -5,12 +5,15 @@ import {
   Button,
   FileUpload,
   FormGroup as PFFormGroup,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
   InputGroup,
   Switch,
   TextArea,
   TextInput,
   Tooltip,
-  ButtonVariant,
+  ButtonVariant, InputGroupItem,
 } from '@patternfly/react-core';
 import FileUploadIcon from '@patternfly/react-icons/dist/js/icons/file-upload-icon';
 import { ExclamationCircleIcon as PFExclamationCircleIcon } from '@patternfly/react-icons';
@@ -27,12 +30,12 @@ import RevertButton from './RevertButton';
 
 const ExclamationCircleIcon = styled(PFExclamationCircleIcon)`
   && {
-    color: var(--pf-global--danger-color--100);
+    color: var(--pf-v5-global--danger-color--100);
   }
 `;
 
 const FormGroup = styled(PFFormGroup)`
-  .pf-c-form__group-label {
+  .pf-v5-c-form__group-label {
     display: inline-flex;
     align-items: center;
     width: 100%;
@@ -42,8 +45,8 @@ const FormGroup = styled(PFFormGroup)`
 const Selected = styled.div`
   display: flex;
   justify-content: space-between;
-  background-color: var(--pf-global--BackgroundColor--100);
-  border-bottom-color: var(--pf-global--BorderColor--200);
+  background-color: var(--pf-v5-global--BackgroundColor--100);
+  border-bottom-color: var(--pf-v5-global--BorderColor--200);
 `;
 
 const SettingGroup = ({
@@ -59,15 +62,13 @@ const SettingGroup = ({
   validated,
   t,
 }) => (
-  <FormGroup
+      <FormGroup
     fieldId={fieldId}
-    helperTextInvalid={helperTextInvalid}
     id={`${fieldId}-field`}
     isRequired={isRequired}
     label={label}
-    validated={validated}
     labelIcon={
-      <>
+ <>
         <Popover
           content={popoverContent}
           ariaLabel={`${t`More information for`} ${label}`}
@@ -82,6 +83,15 @@ const SettingGroup = ({
     }
   >
     {children}
+    {validated === 'error' && helperTextInvalid && (
+      <FormHelperText>
+        <HelperText>
+          <HelperTextItem variant="error">
+            {helperTextInvalid}
+          </HelperTextItem>
+        </HelperText>
+      </FormHelperText>
+    )}
   </FormGroup>
 );
 const BooleanField = ({
@@ -152,7 +162,7 @@ const BooleanField = ({
         isDisabled={disabled}
         label={t`On`}
         labelOff={t`Off`}
-        onChange={(isOn) => {
+        onChange={(_event, isOn) => {
           if (needsConfirmationModal && isOn) {
             setIsModalOpen(true);
           }
@@ -212,13 +222,13 @@ const EncryptedField = ({ name, config, isRequired = false }) => {
       t={t}
     >
       <InputGroup>
-        <PasswordInput
+        <InputGroupItem><PasswordInput
           id={name}
           name={name}
           label={config.label}
           validate={validate}
           isRequired={isRequired}
-        />
+        /></InputGroupItem>
       </InputGroup>
     </SettingGroup>
   ) : null;
@@ -299,7 +309,7 @@ const InputAlertField = ({ name, config }) => {
             validated={isValid ? 'default' : 'error'}
             value={field.value}
             onBlur={field.onBlur}
-            onChange={(value, event) => {
+            onChange={(event) => {
               field.onChange(event);
             }}
             isDisabled={isDisable}
@@ -382,7 +392,7 @@ const InputField = ({
         validated={isValid ? 'default' : 'error'}
         value={field.value}
         onBlur={field.onBlur}
-        onChange={(value, event) => {
+        onChange={(event) => {
           field.onChange(event);
         }}
       />
@@ -413,7 +423,7 @@ const TextAreaField = ({ name, config, isRequired = false }) => {
         validated={isValid ? 'default' : 'error'}
         value={field.value}
         onBlur={field.onBlur}
-        onChange={(value, event) => {
+        onChange={(event) => {
           field.onChange(event);
         }}
         resizeOrientation="vertical"
@@ -463,7 +473,7 @@ const ObjectField = ({ name, config, revertValue, isRequired = false }) => {
   ) : null;
 };
 const FileUploadIconWrapper = styled.div`
-  margin: var(--pf-global--spacer--md);
+  margin: var(--pf-v5-global--spacer--md);
 `;
 const FileUploadField = ({
   name,
@@ -475,7 +485,7 @@ const FileUploadField = ({
   const validate = isRequired ? required(null) : null;
   const [filename, setFilename] = useState('');
   const [fileIsUploading, setFileIsUploading] = useState(false);
-  const [field, meta, helpers] = useField({ name, validate });
+  const [field, meta] = useField({ name, validate });
   const isValid = !(meta.touched && meta.error);
 
   return config ? (
@@ -492,13 +502,22 @@ const FileUploadField = ({
         t={t}
       >
         <FileUpload
-          {...field}
           id={name}
           type={type}
+          value={field.value}
           filename={filename}
-          onChange={(value, title) => {
-            helpers.setValue(value);
-            setFilename(title);
+          onFileInputChange={(_event, file) => {
+            setFilename(file.name);
+          }}
+          onDataChange={(_event, data) => {
+            field.onChange({ target: { name, value: data } });
+          }}
+          onTextChange={(_event, text) => {
+            field.onChange({ target: { name, value: text } });
+          }}
+          onClearClick={() => {
+            setFilename('');
+            field.onChange({ target: { name, value: '' } });
           }}
           onReadStarted={() => setFileIsUploading(true)}
           onReadFinished={() => setFileIsUploading(false)}
@@ -506,6 +525,8 @@ const FileUploadField = ({
           allowEditingUploadedText
           validated={isValid ? 'default' : 'error'}
           hideDefaultPreview={type === 'dataURL'}
+          browseButtonText={t`Browse…`}
+          clearButtonText={t`Clear`}
         >
           {type === 'dataURL' && (
             <FileUploadIconWrapper>
@@ -517,7 +538,7 @@ const FileUploadField = ({
                   width="200px"
                 />
               ) : (
-                <FileUploadIcon size="lg" />
+                <FileUploadIcon />
               )}
             </FileUploadIconWrapper>
           )}

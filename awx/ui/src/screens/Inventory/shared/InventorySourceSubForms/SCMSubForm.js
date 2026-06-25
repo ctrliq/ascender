@@ -2,11 +2,16 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useField, useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
 import {
-  FormGroup,
-  SelectVariant,
-  Select,
-  SelectOption,
+	FormGroup,
+	FormHelperText,
+	HelperText,
+	HelperTextItem,
 } from '@patternfly/react-core';
+import {
+	SelectVariant,
+	Select,
+	SelectOption
+} from '@patternfly/react-core/deprecated';
 import { ProjectsAPI } from 'api';
 import useRequest from 'hooks/useRequest';
 import { required } from 'util/validators';
@@ -106,13 +111,6 @@ const SCMSubForm = ({ autoPopulateProject }) => {
       />
       <FormGroup
         fieldId="source_path"
-        helperTextInvalid={sourcePathError?.message || sourcePathMeta.error}
-        validated={
-          (!sourcePathMeta.error || !sourcePathMeta.touched) &&
-          !sourcePathError?.message
-            ? 'default'
-            : 'error'
-        }
         isRequired
         label={t`Inventory file`}
         labelIcon={<Popover content={helpText.sourcePath} />}
@@ -120,7 +118,7 @@ const SCMSubForm = ({ autoPopulateProject }) => {
         <Select
           ouiaId="InventorySourceForm-source_path"
           variant={SelectVariant.typeahead}
-          onToggle={setIsOpen}
+          onToggle={(_event, val) => setIsOpen(val)}
           isOpen={isOpen}
           selections={sourcePathField.value}
           id="source_path"
@@ -148,6 +146,15 @@ const SCMSubForm = ({ autoPopulateProject }) => {
             <SelectOption key={path} id={path} value={path} />
           ))}
         </Select>
+        {((sourcePathMeta.touched && sourcePathMeta.error) || sourcePathError?.message) && (
+          <FormHelperText>
+            <HelperText>
+              <HelperTextItem variant="error">
+                {sourcePathError?.message || sourcePathMeta.error}
+              </HelperTextItem>
+            </HelperText>
+          </FormHelperText>
+        )}
       </FormGroup>
       <VerbosityField />
       <HostFilterField />

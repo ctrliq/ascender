@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { Button } from '@patternfly/react-core';
-import { TableComposable, Thead, Tr, Th, Tbody } from '@patternfly/react-table';
+import { Table, Thead, Tr, Th, Tbody } from '@patternfly/react-table';
 import AlertModal from 'components/AlertModal';
 import ContentEmpty from 'components/ContentEmpty';
 import ContentLoading from 'components/ContentLoading';
@@ -100,7 +100,7 @@ function SurveyList({
   } else {
     content = (
       <>
-        <TableComposable ouiaId="survey-list">
+        <Table ouiaId="survey-list">
           <Thead>
             <Tr ouiaId="survey-table-header">
               <Th />
@@ -126,7 +126,7 @@ function SurveyList({
               />
             ))}
           </Tbody>
-        </TableComposable>
+        </Table>
         {isDeleteModalOpen && deleteModal}
         {isOrderModalOpen && (
           <SurveyReorderModal

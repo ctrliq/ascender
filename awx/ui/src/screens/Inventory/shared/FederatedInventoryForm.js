@@ -2,7 +2,10 @@ import React, { useCallback } from 'react';
 import { Formik, useField, useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
 import { required } from 'util/validators';
-import { Form, FormGroup } from '@patternfly/react-core';
+import { Form, FormGroup, FormHelperText,
+HelperText,
+HelperTextItem,
+} from '@patternfly/react-core';
 import FormActionGroup from 'components/FormActionGroup/FormActionGroup';
 import FormField, { FormSubmitError } from 'components/FormField';
 import { FormColumnLayout } from 'components/FormLayout';
@@ -73,17 +76,11 @@ function FederatedInventoryFormFields({ inventory = {} }) {
         isRequired
         fieldId="input-inventories-lookup"
         id="input-inventories-lookup"
-        helperTextInvalid={inputInventoriesMeta.error}
         label={t`Input Inventories`}
         labelIcon={
           <Popover
             content={t`Select the source inventories for this federated inventory. When a job is launched, hosts will be routed to each source inventory's instance group automatically.`}
           />
-        }
-        validated={
-          !inputInventoriesMeta.touched || !inputInventoriesMeta.error
-            ? 'default'
-            : 'error'
         }
       >
         <InventoryLookup
@@ -98,6 +95,15 @@ function FederatedInventoryFormFields({ inventory = {} }) {
           multiple
           required
         />
+        {inputInventoriesMeta.touched && inputInventoriesMeta.error && (
+          <FormHelperText>
+            <HelperText>
+              <HelperTextItem variant="error">
+                {inputInventoriesMeta.error}
+              </HelperTextItem>
+            </HelperText>
+          </FormHelperText>
+        )}
       </FormGroup>
     </>
   );

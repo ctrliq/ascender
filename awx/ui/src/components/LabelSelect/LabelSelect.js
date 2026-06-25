@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Chip,
-  ChipGroup,
-  Select,
-  SelectOption,
-  SelectVariant,
+	Chip,
+	ChipGroup
 } from '@patternfly/react-core';
+import {
+	Select,
+	SelectOption,
+	SelectVariant
+} from '@patternfly/react-core/deprecated';
 import { useLingui } from '@lingui/react/macro';
 import { LabelsAPI } from 'api';
 import useIsMounted from 'hooks/useIsMounted';
@@ -110,7 +112,7 @@ function LabelSelect({
   return (
     <Select
       variant={SelectVariant.typeaheadMulti}
-      onToggle={toggleExpanded}
+      onToggle={(_event, toggleValue) => toggleExpanded(toggleValue)}
       onSelect={(e, item) => {
         if (typeof item === 'string') {
           item = { id: item, name: item };

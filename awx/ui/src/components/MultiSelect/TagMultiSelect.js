@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { Select, SelectOption, SelectVariant } from '@patternfly/react-core';
+import {
+	Select,
+	SelectOption,
+	SelectVariant
+} from '@patternfly/react-core/deprecated';
 import { arrayToString, stringToArray } from 'util/strings';
 
 function TagMultiSelect({ onChange, value }) {
@@ -42,7 +46,7 @@ function TagMultiSelect({ onChange, value }) {
   return (
     <Select
       variant={SelectVariant.typeaheadMulti}
-      onToggle={toggleExpanded}
+      onToggle={(_event, toggleValue) => toggleExpanded(toggleValue)}
       onSelect={onSelect}
       onClear={() => onChange('')}
       onFilter={onFilter}

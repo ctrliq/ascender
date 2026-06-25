@@ -25,7 +25,7 @@ async function getColumnNames(user) {
     '[data-ouia-component-id="simple-key-select"]'
   );
   const toggle = select.querySelector('button');
-  const selected = select.querySelector('.pf-c-select__toggle-text')
+  const selected = select.querySelector('.pf-v5-c-select__toggle-text')
     .textContent;
   await user.click(toggle);
   const listbox = await screen.findByRole('listbox');

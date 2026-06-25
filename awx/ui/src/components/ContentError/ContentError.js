@@ -5,10 +5,9 @@ import { Navigate } from 'routerCompat';
 import { useLingui } from '@lingui/react/macro';
 
 import {
-  Title,
   EmptyState,
   EmptyStateIcon,
-  EmptyStateBody,
+  EmptyStateBody, EmptyStateHeader, EmptyStateFooter,
 } from '@patternfly/react-core';
 import { ExclamationTriangleIcon } from '@patternfly/react-icons';
 import { useSession } from 'contexts/Session';
@@ -33,12 +32,9 @@ function ContentError({ error = null, children, isNotFound = false }) {
         <Navigate to="/login" />
       ) : (
         <EmptyState variant="full">
-          <EmptyStateIcon icon={ExclamationTriangleIcon} />
-          <Title size="lg" headingLevel="h3">
-            {is404
+          <EmptyStateHeader titleText={<>{is404
               ? t`Not Found`
-              : t`Something went wrong...`}
-          </Title>
+              : t`Something went wrong...`}</>} icon={<EmptyStateIcon icon={ExclamationTriangleIcon} />} headingLevel="h3" />
           <EmptyStateBody>
             {is404
               ? t`The page you requested could not be found.`
@@ -46,9 +42,9 @@ function ContentError({ error = null, children, isNotFound = false }) {
             {children || (
               <Link to="/home">{t`Back to Dashboard.`}</Link>
             )}
-          </EmptyStateBody>
+          </EmptyStateBody><EmptyStateFooter>
           {error && <ErrorDetail error={error} />}
-        </EmptyState>
+        </EmptyStateFooter></EmptyState>
       )}
     </>
   );

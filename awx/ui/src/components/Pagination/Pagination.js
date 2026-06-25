@@ -1,8 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import {
-  Pagination as PFPagination,
-  DropdownDirection,
+	Pagination as PFPagination
 } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
 
@@ -11,7 +10,7 @@ const AWXPagination = styled(PFPagination)`
     props.perPageOptions &&
     !props.perPageOptions.length &&
     css`
-      .pf-c-options-menu__toggle-button {
+      .pf-v5-c-menu-toggle {
         display: none;
       }
     `}
@@ -28,16 +27,16 @@ export default (props) => {
         pages: t`pages`,
         itemsPerPage: t`Items per page`,
         perPageSuffix: t`per page`,
-        toFirstPage: t`Go to first page`,
-        toPreviousPage: t`Go to previous page`,
-        toLastPage: t`Go to last page`,
-        toNextPage: t`Go to next page`,
-        optionsToggle: t`Select`,
-        currPage: t`Current page`,
-        paginationTitle: t`Pagination`,
+        toFirstPageAriaLabel: t`Go to first page`,
+        toPreviousPageAriaLabel: t`Go to previous page`,
+        toLastPageAriaLabel: t`Go to last page`,
+        toNextPageAriaLabel: t`Go to next page`,
+        optionsToggleAriaLabel: t`Select`,
+        currPageAriaLabel: t`Current page`,
+        paginationAriaLabel: t`Pagination`,
         ofWord: t`of`,
       }}
-      dropDirection={DropdownDirection.up}
+      dropDirection="up"
       {...props}
     />
   );

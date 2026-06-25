@@ -19,7 +19,7 @@ jest.mock('./shared/LineChart', () => () => <div data-testid="line-chart" />);
 // (periodSelect / jobTypeSelect / jobStatusSelect) wired up in the source, so
 // scope to each select wrapper and grab its toggle button.
 function getToggle(container, className) {
-  return container.querySelector(`.${className} button.pf-c-select__toggle`);
+  return container.querySelector(`.${className} button.pf-v5-c-select__toggle`);
 }
 
 describe('<DashboardGraph/>', () => {

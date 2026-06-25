@@ -4,15 +4,17 @@ import { useNavigate } from 'routerCompat';
 import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
 import {
-  Card,
-  PageSection,
-  PageSectionVariants,
-  SelectGroup,
-  Select as PFSelect,
-  SelectVariant,
-  SelectOption,
-  Title,
+	Card,
+	PageSection,
+	PageSectionVariants,
+	Title
 } from '@patternfly/react-core';
+import {
+	SelectGroup,
+	Select as PFSelect,
+	SelectVariant,
+	SelectOption
+} from '@patternfly/react-core/deprecated';
 
 import DatalistToolbar from 'components/DataListToolbar';
 import PaginatedTable, {
@@ -132,7 +134,7 @@ function ActivityStream() {
           aria-labelledby="grouped-type-select-id"
           typeAheadAriaLabel={t`Select an activity type`}
           className="activityTypeSelect"
-          onToggle={setIsTypeDropdownOpen}
+          onToggle={(_event, val) => setIsTypeDropdownOpen(val)}
           onSelect={(event, selection) => {
             if (selection) {
               urlParams.set('type', selection);

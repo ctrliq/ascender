@@ -29,9 +29,9 @@ describe('<UserTeamListItem />', () => {
     );
 
     const cells = screen.getAllByRole('cell');
-    expect(cells).toHaveLength(4);
-    expect(cells[1].textContent).toEqual('Team 1');
-    expect(cells[2].textContent).toEqual('The Org');
-    expect(cells[3].textContent).toEqual('something something team');
+    expect(cells).toHaveLength(3);
+    expect(cells[0].textContent).toEqual('Team 1');
+    expect(cells[1].textContent).toEqual('The Org');
+    expect(cells[2].textContent).toEqual('something something team');
   });
 });

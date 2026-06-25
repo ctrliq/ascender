@@ -2,12 +2,14 @@ import React, { useCallback } from 'react';
 import { Formik, useField } from 'formik';
 import { useLingui } from '@lingui/react/macro';
 import {
-  Button,
-  Tooltip,
-  Wizard,
-  WizardContextConsumer,
-  WizardFooter,
+	Button,
+	Tooltip
 } from '@patternfly/react-core';
+import {
+	Wizard,
+	WizardContextConsumer,
+	WizardFooter
+} from '@patternfly/react-core/deprecated';
 import { CredentialsAPI } from 'api';
 import useRequest from 'hooks/useRequest';
 import CredentialsStep from './CredentialsStep';

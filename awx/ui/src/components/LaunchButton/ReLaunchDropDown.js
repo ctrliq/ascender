@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
 import {
-  Dropdown,
-  DropdownToggle,
-  DropdownItem,
-  DropdownPosition,
-  DropdownSeparator,
-  DropdownDirection,
+	Divider,
+	Dropdown,
+	DropdownItem,
+	DropdownList,
+	MenuToggle
 } from '@patternfly/react-core';
 import { RocketIcon } from '@patternfly/react-icons';
 
@@ -21,95 +20,90 @@ function ReLaunchDropDown({
   const { t } = useLingui();
   const [isOpen, setIsOpen] = useState(false);
 
-  const onToggle = () => {
-    setIsOpen((prev) => !prev);
-  };
-
-  const dropdownItems = [
-    <DropdownItem
-      ouiaId={`${ouiaId}-on`}
-      aria-label={t`Relaunch on`}
-      key="relaunch_on"
-      component="div"
-      isPlainText
-    >
-      {t`Relaunch on`}
-    </DropdownItem>,
-    <DropdownSeparator key="separator" />,
-    <DropdownItem
-      ouiaId={`${ouiaId}-all`}
-      key="relaunch_all"
-      aria-label={t`Relaunch all hosts`}
-      component="button"
-      onClick={() => {
-        handleRelaunch({ hosts: 'all' });
-      }}
-      isDisabled={isLaunching}
-    >
-      {t`All`}
-    </DropdownItem>,
-
-    <DropdownItem
-      ouiaId={`${ouiaId}-failed`}
-      key="relaunch_failed"
-      aria-label={t`Relaunch failed hosts`}
-      component="button"
-      onClick={() => {
-        handleRelaunch({ hosts: 'failed' });
-      }}
-      isDisabled={isLaunching}
-    >
-      {t`Failed hosts`}
-    </DropdownItem>,
-  ];
+  const dropdownItems = (
+    <DropdownList>
+      <DropdownItem
+        ouiaId={`${ouiaId}-on`}
+        aria-label={t`Relaunch on`}
+        key="relaunch_on"
+        isAriaDisabled
+      >
+        {t`Relaunch on`}
+      </DropdownItem>
+      <Divider key="separator" />
+      <DropdownItem
+        ouiaId={`${ouiaId}-all`}
+        key="relaunch_all"
+        aria-label={t`Relaunch all hosts`}
+        onClick={() => {
+          handleRelaunch({ hosts: 'all' });
+        }}
+        isDisabled={isLaunching}
+      >
+        {t`All`}
+      </DropdownItem>
+      <DropdownItem
+        ouiaId={`${ouiaId}-failed`}
+        key="relaunch_failed"
+        aria-label={t`Relaunch failed hosts`}
+        onClick={() => {
+          handleRelaunch({ hosts: 'failed' });
+        }}
+        isDisabled={isLaunching}
+      >
+        {t`Failed hosts`}
+      </DropdownItem>
+    </DropdownList>
+  );
 
   if (isPrimary) {
     return (
       <Dropdown
         ouiaId={ouiaId}
-        position={DropdownPosition.left}
-        direction={DropdownDirection.up}
+        popperProps={{ position: 'left', direction: 'up' }}
         isOpen={isOpen}
-        dropdownItems={dropdownItems}
-        toggle={
-          <DropdownToggle
-            toggleIndicator={null}
-            onToggle={onToggle}
+        onOpenChange={setIsOpen}
+        toggle={(toggleRef) => (
+          <MenuToggle
+            ref={toggleRef}
+            onClick={() => setIsOpen(!isOpen)}
+            isExpanded={isOpen}
             aria-label={t`relaunch jobs`}
             id={id}
-            isPrimary
+            variant="primary"
             ouiaId="relaunch-job-toggle"
           >
             {t`Relaunch`}
-          </DropdownToggle>
-        }
-      />
+          </MenuToggle>
+        )}
+      >
+        {dropdownItems}
+      </Dropdown>
     );
   }
 
   return (
     <Dropdown
       ouiaId={ouiaId}
-      isPlain
-      position={DropdownPosition.right}
-      // Render the menu in a popper on document.body so it flips above the
-      // toggle when there is no room below (e.g. the last rows of the jobs
-      // list) instead of extending the page, and is not clipped by the table.
-      menuAppendTo={() => document.body}
+      popperProps={{ position: 'right', appendTo: () => document.body }}
       isOpen={isOpen}
-      dropdownItems={dropdownItems}
-      toggle={
-        <DropdownToggle
-          toggleIndicator={null}
-          onToggle={onToggle}
+      onOpenChange={setIsOpen}
+      toggle={(toggleRef) => (
+        <MenuToggle
+          ref={toggleRef}
+          variant="plain"
+          onClick={() => setIsOpen(!isOpen)}
+          isExpanded={isOpen}
           aria-label={t`relaunch jobs`}
           id={id}
           ouiaId="relaunch-job-toggle"
         >
           <RocketIcon />
-        </DropdownToggle>
-      }
-    />
+        </MenuToggle>
+      )}
+    >
+      {dropdownItems}
+    </Dropdown>
   );
 }
 

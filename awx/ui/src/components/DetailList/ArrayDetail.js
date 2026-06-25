@@ -5,9 +5,9 @@ import { DetailName, DetailValue } from './Detail';
 import Popover from '../Popover';
 
 const Value = styled(DetailValue)`
-  margin-top: var(--pf-global--spacer--xs);
-  padding: var(--pf-global--spacer--xs);
-  border: 1px solid var(--pf-global--BorderColor--100);
+  margin-top: var(--pf-v5-global--spacer--xs);
+  padding: var(--pf-v5-global--spacer--xs);
+  border: 1px solid var(--pf-v5-global--BorderColor--100);
   max-height: 5.5em;
   overflow: auto;
 `;

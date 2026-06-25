@@ -16,9 +16,9 @@ const Button = styled(PFButton)`
   ${(props) =>
     props.isActive
       ? `
-      background-color: var(--pf-global--primary-color--100);
-      --pf-c-button--m-plain--active--Color: white;
-      --pf-c-button--m-plain--focus--Color: white;`
+      background-color: var(--pf-v5-global--primary-color--100);
+      --pf-v5-c-button--m-plain--active--Color: white;
+      --pf-v5-c-button--m-plain--focus--Color: white;`
       : null};
 `;
 

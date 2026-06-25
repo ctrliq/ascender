@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { useParams, Link } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import {
-  Select,
-  SelectOption,
-  SelectGroup,
-  SelectVariant,
-  Chip,
+	Chip
 } from '@patternfly/react-core';
+import {
+	Select,
+	SelectOption,
+	SelectGroup,
+	SelectVariant
+} from '@patternfly/react-core/deprecated';
 import ChipGroup from 'components/ChipGroup';
 import { stringIsUUID } from 'util/strings';
 
@@ -61,8 +63,8 @@ function WorkflowOutputNavigation({ relatedJobs, parentRef }) {
       key={`${id}`}
       variant={SelectVariant.typeaheadMulti}
       menuAppendTo={parentRef?.current}
-      onToggle={() => {
-        setIsOpen(!isOpen);
+      onToggle={(_event, val) => {
+        setIsOpen(val);
       }}
       selections={filterBy}
       onSelect={(e, v) => {

@@ -3,14 +3,16 @@ import { Trans, useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import { useField } from 'formik';
 import {
-  Alert,
-  Form,
-  FormGroup,
-  TextInput,
-  Select,
-  SelectVariant,
-  SelectOption,
+	Alert,
+	Form,
+	FormGroup,
+	TextInput
 } from '@patternfly/react-core';
+import {
+	Select,
+	SelectVariant,
+	SelectOption
+} from '@patternfly/react-core/deprecated';
 import { required } from 'util/validators';
 
 import { FormColumnLayout, FormFullWidthLayout } from 'components/FormLayout';
@@ -193,7 +195,7 @@ function NodeTypeStep({ isIdentifierRequired }) {
                       aria-label={t`Timeout minutes`}
                       id="approval-timeout-minutes"
                       min="0"
-                      onChange={(value, event) => {
+                      onChange={(event) => {
                         timeoutMinutesField.onChange(event);
                       }}
                       step="1"
@@ -207,7 +209,7 @@ function NodeTypeStep({ isIdentifierRequired }) {
                       aria-label={t`Timeout seconds`}
                       id="approval-timeout-seconds"
                       min="0"
-                      onChange={(value, event) => {
+                      onChange={(event) => {
                         timeoutSecondsField.onChange(event);
                       }}
                       step="1"
@@ -248,7 +250,7 @@ function NodeTypeStep({ isIdentifierRequired }) {
                 variant={SelectVariant.single}
                 isOpen={isConvergenceOpen}
                 selections={convergenceField.value}
-                onToggle={setIsConvergenceOpen}
+                onToggle={(_event, val) => setIsConvergenceOpen(val)}
                 onSelect={(event, selection) => {
                   convergenceFieldHelpers.setValue(selection);
                   setIsConvergenceOpen(false);

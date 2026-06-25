@@ -11,7 +11,7 @@ import {
 import getErrorMessage from './getErrorMessage';
 
 const Card = styled(PFCard)`
-  background-color: var(--pf-global--BackgroundColor--200);
+  background-color: var(--pf-v5-global--BackgroundColor--200);
   overflow-wrap: break-word;
 `;
 
@@ -24,7 +24,7 @@ const Expandable = styled(PFExpandable)`
   text-align: left;
   max-width: 75vw;
 
-  & .pf-c-expandable__toggle {
+  & .pf-v5-c-expandable__toggle {
     padding-left: 10px;
     margin-left: 5px;
     margin-top: 10px;
@@ -76,7 +76,7 @@ function ErrorDetail({ error = null }) {
           {error.name}: {error.message}
         </strong>
       </CardBody>
-      <CardBody css="white-space: pre; font-family: var(--pf-global--FontFamily--monospace)">
+      <CardBody css="white-space: pre; font-family: var(--pf-v5-global--FontFamily--monospace)">
         {error.stack}
       </CardBody>
     </>

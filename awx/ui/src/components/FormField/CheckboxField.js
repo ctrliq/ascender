@@ -29,7 +29,7 @@ function CheckboxField({
       {...rest}
       isChecked={field.value}
       {...field}
-      onChange={(value, event) => {
+      onChange={(event) => {
         field.onChange(event);
       }}
     />

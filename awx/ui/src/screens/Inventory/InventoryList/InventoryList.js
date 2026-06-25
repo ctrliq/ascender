@@ -1,7 +1,13 @@
 import React, { useCallback, useEffect } from 'react';
-import { useLocation, Link } from 'react-router';
+import { useLocation } from 'react-router';
+import { useNavigate } from 'routerCompat';
 import { Plural, useLingui } from '@lingui/react/macro';
-import { Card, PageSection, DropdownItem } from '@patternfly/react-core';
+import {
+	Card,
+	PageSection,
+	DropdownItem,
+} from '@patternfly/react-core';
+
 import { InventoriesAPI } from 'api';
 import useRequest, { useDeleteItems } from 'hooks/useRequest';
 import useSelected from 'hooks/useSelected';
@@ -29,6 +35,7 @@ const QS_CONFIG = getQSConfig('inventory', {
 
 function InventoryList() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { addToast, Toast, toastProps } = useToast();
   const { t } = useLingui();
 
@@ -144,8 +151,7 @@ function InventoryList() {
       dropdownItems={[
         <DropdownItem
           ouiaId="add-inventory-item"
-          to="/inventories/inventory/add/"
-          component={Link}
+          onClick={() => navigate('/inventories/inventory/add/')}
           key={addInventory}
           aria-label={addInventory}
         >
@@ -153,8 +159,7 @@ function InventoryList() {
         </DropdownItem>,
         <DropdownItem
           ouiaId="add-smart-inventory-item"
-          to="/inventories/smart_inventory/add/"
-          component={Link}
+          onClick={() => navigate('/inventories/smart_inventory/add/')}
           key={addSmartInventory}
           aria-label={addSmartInventory}
         >
@@ -162,8 +167,7 @@ function InventoryList() {
         </DropdownItem>,
         <DropdownItem
           ouiaId="add-constructed-inventory-item"
-          to="/inventories/constructed_inventory/add/"
-          component={Link}
+          onClick={() => navigate('/inventories/constructed_inventory/add/')}
           key={addConstructedInventory}
           aria-label={addConstructedInventory}
         >
@@ -171,8 +175,7 @@ function InventoryList() {
         </DropdownItem>,
         <DropdownItem
           ouiaId="add-federated-inventory-item"
-          to="/inventories/federated_inventory/add/"
-          component={Link}
+          onClick={() => navigate('/inventories/federated_inventory/add/')}
           key={addFederatedInventory}
           aria-label={addFederatedInventory}
         >

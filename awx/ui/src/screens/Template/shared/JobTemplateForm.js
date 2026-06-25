@@ -5,6 +5,9 @@ import { withFormik, useField } from 'formik';
 import {
   Form,
   FormGroup,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
   Switch,
   Checkbox,
   TextInput,
@@ -289,13 +292,6 @@ function JobTemplateForm({
         </FieldWithPrompt>
         <FormGroup
           fieldId="template-inventory"
-          validated={
-            !(inventoryMeta.touched || askInventoryOnLaunchField.value) ||
-            !inventoryMeta.error
-              ? 'default'
-              : 'error'
-          }
-          helperTextInvalid={inventoryMeta.error}
           isRequired={!askInventoryOnLaunchField.value}
         >
           <InventoryLookup
@@ -313,6 +309,15 @@ function JobTemplateForm({
             isOverrideDisabled={isOverrideDisabledLookup}
             validate={handleInventoryValidation}
           />
+          {inventoryMeta.error && (
+            <FormHelperText>
+              <HelperText>
+                <HelperTextItem variant="error">
+                  {inventoryMeta.error}
+                </HelperTextItem>
+              </HelperText>
+            </FormHelperText>
+          )}
         </FormGroup>
 
         <ProjectLookup
@@ -358,7 +363,7 @@ function JobTemplateForm({
           >
             <TextInput
               id="template-scm-branch"
-              onChange={(value) => {
+              onChange={(_event, value) => {
                 scmHelpers.setValue(value);
               }}
               value={scmField.value}
@@ -366,16 +371,12 @@ function JobTemplateForm({
             />
           </FieldWithPrompt>
         )}
-        <FormGroup
-          fieldId="template-playbook"
-          helperTextInvalid={playbookMeta.error}
-          validated={
-            !playbookMeta.touched || !playbookMeta.error ? 'default' : 'error'
-          }
-          isRequired
-          label={t`Playbook`}
-          labelIcon={<Popover content={helpText.playbook} />}
-        >
+          <FormGroup
+            fieldId="template-playbook"
+            isRequired
+            label={t`Playbook`}
+            labelIcon={<Popover content={helpText.playbook} />}
+          >
           <PlaybookSelect
             onChange={handlePlaybookUpdate}
             projectId={projectField.value?.id}
@@ -384,6 +385,15 @@ function JobTemplateForm({
             onBlur={() => playbookHelpers.setTouched()}
             onError={setContentError}
           />
+          {playbookMeta.error && (
+            <FormHelperText>
+              <HelperText>
+                <HelperTextItem variant="error">
+                  {playbookMeta.error}
+                </HelperTextItem>
+              </HelperText>
+            </FormHelperText>
+          )}
         </FormGroup>
         <FormFullWidthLayout>
           <FieldWithPrompt
@@ -436,7 +446,7 @@ function JobTemplateForm({
                 validated={
                   !forksMeta.touched || !forksMeta.error ? 'default' : 'error'
                 }
-                onChange={(value) => {
+                onChange={(_event, value) => {
                   forksHelpers.setValue(value);
                 }}
                 type="number"
@@ -456,7 +466,7 @@ function JobTemplateForm({
                 validated={
                   !limitMeta.touched || !limitMeta.error ? 'default' : 'error'
                 }
-                onChange={(value) => {
+                onChange={(_event, value) => {
                   limitHelpers.setValue(value);
                 }}
               />
@@ -482,7 +492,7 @@ function JobTemplateForm({
                     ? 'default'
                     : 'error'
                 }
-                onChange={(value) => {
+                onChange={(_event, value) => {
                   jobSliceCountHelpers.setValue(value);
                 }}
                 type="number"
@@ -504,7 +514,7 @@ function JobTemplateForm({
                     ? 'default'
                     : 'error'
                 }
-                onChange={(value) => {
+                onChange={(_event, value) => {
                   timeoutHelpers.setValue(value);
                 }}
                 type="number"
@@ -522,7 +532,7 @@ function JobTemplateForm({
                 id="template-show-changes"
                 label={diffModeField.value ? t`On` : t`Off`}
                 isChecked={diffModeField.value}
-                onChange={(checked) => diffModeHelpers.setValue(checked)}
+                onChange={(_event, checked) => diffModeHelpers.setValue(checked)}
               />
             </FieldWithPrompt>
             <FormFullWidthLayout>
@@ -584,7 +594,7 @@ function JobTemplateForm({
                     id="option-callbacks"
                     ouiaId="option-callbacks"
                     isChecked={allowCallbacks}
-                    onChange={(checked) => {
+                    onChange={(_event, checked) => {
                       setAllowCallbacks(checked);
                     }}
                   />
@@ -600,7 +610,7 @@ function JobTemplateForm({
                     id="wfjt-enabled-webhooks"
                     ouiaId="wfjt-enabled-webhooks"
                     isChecked={enableWebhooks}
-                    onChange={(checked) => {
+                    onChange={(_event, checked) => {
                       setEnableWebhooks(checked);
                     }}
                   />

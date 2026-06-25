@@ -24,11 +24,11 @@ function CodeDetail({
         css="grid-column: 1 / -1"
         data-cy={labelCy}
       >
-        <div className="pf-c-form__label">
+        <div className="pf-v5-c-form__label">
           <label
             htmlFor={editorId}
-            className="pf-c-form__label-text"
-            css="font-weight: var(--pf-global--FontWeight--bold)"
+            className="pf-v5-c-form__label-text"
+            css="font-weight: var(--pf-v5-global--FontWeight--bold)"
           >
             {label}
           </label>

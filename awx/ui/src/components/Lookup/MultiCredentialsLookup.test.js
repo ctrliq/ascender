@@ -151,7 +151,7 @@ describe('<Formik><MultiCredentialsLookup /></Formik>', () => {
     );
 
     // remove the second chip (SSH: Alex)
-    const chip = screen.getByText('Alex').closest('.pf-c-chip');
+    const chip = screen.getByText('Alex').closest('.pf-v5-c-chip');
     await user.click(within(chip).getByRole('button'));
 
     expect(onChange).toHaveBeenCalledWith([

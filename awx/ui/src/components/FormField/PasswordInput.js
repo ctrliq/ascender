@@ -57,7 +57,7 @@ function PasswordInput({
         isRequired={isRequired}
         validated={isValid || isFieldGroupValid ? 'default' : 'error'}
         type={inputType}
-        onChange={(_, event) => {
+        onChange={(event) => {
           field.onChange(event);
         }}
       />

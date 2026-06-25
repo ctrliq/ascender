@@ -31,31 +31,31 @@ function AlertModal({
     danger: (
       <ExclamationCircleIcon
         size="lg"
-        css="color: var(--pf-global--danger-color--100)"
+        css="color: var(--pf-v5-global--danger-color--100)"
       />
     ),
     error: (
       <TimesCircleIcon
         size="lg"
-        css="color: var(--pf-global--danger-color--100)"
+        css="color: var(--pf-v5-global--danger-color--100)"
       />
     ),
     info: (
       <InfoCircleIcon
         size="lg"
-        css="color: var(--pf-global--info-color--100)"
+        css="color: var(--pf-v5-global--info-color--100)"
       />
     ),
     success: (
       <CheckCircleIcon
         size="lg"
-        css="color: var(--pf-global--success-color--100)"
+        css="color: var(--pf-v5-global--success-color--100)"
       />
     ),
     warning: (
       <ExclamationTriangleIcon
         size="lg"
-        css="color: var(--pf-global--warning-color--100)"
+        css="color: var(--pf-v5-global--warning-color--100)"
       />
     ),
   };

@@ -211,11 +211,8 @@ describe('<InventoryHostGroupsList />', () => {
     // the pending fetch doesn't resolve after unmount
     await within(modal).findByText('associable');
     await user.click(screen.getByRole('button', { name: 'Cancel' }));
-    await waitFor(() =>
-      expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
-    );
-    // closing the modal refocuses the Tooltip-wrapped Add button
     await settleTooltips();
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
   test('should make expected api request when associating groups', async () => {
@@ -239,12 +236,9 @@ describe('<InventoryHostGroupsList />', () => {
     await user.click(within(groupRow).getByRole('checkbox'));
     await user.click(within(modal).getByRole('button', { name: 'Save' }));
 
-    await waitFor(() =>
-      expect(HostsAPI.associateGroup).toHaveBeenCalledTimes(1)
-    );
-    expect(InventoriesAPI.readGroups).toHaveBeenCalled();
-    // closing the modal refocuses the Tooltip-wrapped Add button
     await settleTooltips();
+    expect(HostsAPI.associateGroup).toHaveBeenCalledTimes(1);
+    expect(InventoriesAPI.readGroups).toHaveBeenCalled();
   });
 
   test('expected api calls are made for multi-disassociation', async () => {

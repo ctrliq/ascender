@@ -9,7 +9,10 @@ import {
   ButtonVariant,
   FormGroup,
   InputGroup,
-  Tooltip,
+  Tooltip, InputGroupItem,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
 } from '@patternfly/react-core';
 import { KeyIcon } from '@patternfly/react-icons';
 import styles from '@patternfly/react-styles/css/components/Form/form';
@@ -57,11 +60,11 @@ function CredentialPluginInput(props) {
             isRequired,
             validated: validated ? 'default' : 'error',
             isDisabled: disableFieldAndButtons,
-            onChange: (_, event) => {
+            onChange: (event) => {
               inputField.onChange(event);
             },
           })}
-          <Tooltip
+          <InputGroupItem><Tooltip
             content={t`Populate field from an external secret management system`}
           >
             <Button
@@ -74,7 +77,7 @@ function CredentialPluginInput(props) {
             >
               <KeyIcon />
             </Button>
-          </Tooltip>
+          </Tooltip></InputGroupItem>
         </InputGroup>
       )}
       {showPluginWizard && (
@@ -100,7 +103,7 @@ function CredentialPluginField({
   ...restProps
 }) {
   const props = { isDisabled, isRequired, ...restProps };
-  const { fieldOptions, validated } = props;
+  const { fieldOptions } = props;
 
   const [, meta, helpers] = useField(`inputs.${fieldOptions.id}`);
   const [passwordPromptField] = useField(`passwordPrompts.${fieldOptions.id}`);
@@ -147,18 +150,25 @@ function CredentialPluginField({
       ) : (
         <FormGroup
           fieldId={`credential-${fieldOptions.id}`}
-          helperTextInvalid={meta.error}
           isRequired={isRequired}
-          validated={validated ? 'default' : 'error'}
           label={fieldOptions.label}
           labelIcon={
-            fieldOptions.help_text && (
-              <Popover content={fieldOptions.help_text} />
+          fieldOptions.help_text && (
+          <Popover content={fieldOptions.help_text} />
             )
           }
         >
           <CredentialPluginInput {...props} />
           {invalidHelperTextToDisplay}
+          {meta.touched && meta.error && (
+            <FormHelperText>
+              <HelperText>
+                <HelperTextItem variant="error">
+                  {meta.error}
+                </HelperTextItem>
+              </HelperText>
+            </FormHelperText>
+          )}
         </FormGroup>
       )}
     </>

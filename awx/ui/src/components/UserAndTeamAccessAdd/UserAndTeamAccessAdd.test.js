@@ -64,7 +64,7 @@ function navItem(name) {
     .getAllByRole('button')
     .find(
       (b) =>
-        b.classList.contains('pf-c-wizard__nav-link') &&
+        b.classList.contains('pf-v5-c-wizard__nav-link') &&
         b.textContent.trim() === name
     );
 }

@@ -20,10 +20,12 @@ describe('<ToolbarAddButton />', () => {
     expect(link).toHaveAttribute('href', '/foo');
   });
 
-  test('should render link with toggle icon', () => {
-    renderWithContexts(<ToolbarAddButton showToggleIndicator linkTo="/foo" />);
-    const link = screen.getByRole('link', { name: 'Add' });
-    expect(link).toBeInTheDocument();
-    expect(link).toHaveAttribute('href', '/foo');
+  test('should render toggle button with toggle icon', () => {
+    const onClick = jest.fn();
+    renderWithContexts(
+      <ToolbarAddButton showToggleIndicator onClick={onClick} />
+    );
+    const button = screen.getByRole('button', { name: 'Add' });
+    expect(button).toBeInTheDocument();
   });
 });

@@ -27,7 +27,7 @@ const Wrapper = styled.div`
   left: 0;
   padding: 0 10px;
   min-width: 150px;
-  background-color: var(--pf-global--BackgroundColor--100);
+  background-color: var(--pf-v5-global--BackgroundColor--100);
   overflow: auto;
   height: 100%;
 `;
@@ -38,9 +38,9 @@ const Button = styled(PFButton)`
     border-radius: 10px;
     padding: 0;
     font-size: 11px;
-    background-color: var(--pf-global--BackgroundColor--100);
-    border: 1px solid var(--pf-global--BorderColor--100);
-    color: var(--pf-global--Color--100);
+    background-color: var(--pf-v5-global--BackgroundColor--100);
+    border: 1px solid var(--pf-v5-global--BorderColor--100);
+    color: var(--pf-v5-global--Color--100);
   }
 `;
 const DescriptionListDescription = styled(PFDescriptionListDescription)`
@@ -63,7 +63,7 @@ function Legend() {
       <TextContent>
         <Text
           component={TextVariants.small}
-          style={{ fontWeight: 'bold', color: 'var(--pf-global--Color--100)', marginTop: 0 }}
+          style={{ fontWeight: 'bold', color: 'var(--pf-v5-global--Color--100)', marginTop: 0 }}
         >
           {t`Legend`}
         </Text>
@@ -73,7 +73,7 @@ function Legend() {
       <DescriptionList isHorizontal isFluid>
         <DescriptionListGroup>
           <DescriptionListTerm>
-            <Button isSmall>C</Button>
+            <Button size="sm">C</Button>
           </DescriptionListTerm>
           <DescriptionListDescription>
             {t`Control node`}
@@ -81,7 +81,7 @@ function Legend() {
         </DescriptionListGroup>
         <DescriptionListGroup>
           <DescriptionListTerm>
-            <Button variant="primary" isSmall>
+            <Button variant="primary" size="sm">
               Ex
             </Button>
           </DescriptionListTerm>
@@ -91,7 +91,7 @@ function Legend() {
         </DescriptionListGroup>
         <DescriptionListGroup>
           <DescriptionListTerm>
-            <Button variant="primary" isSmall>
+            <Button variant="primary" size="sm">
               Hy
             </Button>
           </DescriptionListTerm>
@@ -101,7 +101,7 @@ function Legend() {
         </DescriptionListGroup>
         <DescriptionListGroup>
           <DescriptionListTerm>
-            <Button variant="primary" isSmall>
+            <Button variant="primary" size="sm">
               h
             </Button>
           </DescriptionListTerm>
@@ -124,7 +124,7 @@ function Legend() {
                   style={{ fill: 'white', marginLeft: '2px', marginTop: '3px' }}
                 />
               }
-              isSmall
+              size="sm"
               style={{ backgroundColor: '#3E8635' }}
             />
           </DescriptionListTerm>
@@ -140,7 +140,7 @@ function Legend() {
                   style={{ fill: 'white', marginLeft: '3px', marginTop: '3px' }}
                 />
               }
-              isSmall
+              size="sm"
               style={{ backgroundColor: '#0066CC' }}
             />
           </DescriptionListTerm>
@@ -156,7 +156,7 @@ function Legend() {
                   style={{ fill: 'white', marginLeft: '3px', marginTop: '3px' }}
                 />
               }
-              isSmall
+              size="sm"
               style={{ backgroundColor: '#6A6E73' }}
             />
           </DescriptionListTerm>
@@ -172,7 +172,7 @@ function Legend() {
                   style={{ fill: 'white', marginLeft: '3px', marginTop: '3px' }}
                 />
               }
-              isSmall
+              size="sm"
               style={{ backgroundColor: '#6A6E73' }}
             />
           </DescriptionListTerm>
@@ -188,7 +188,7 @@ function Legend() {
                   style={{ fill: 'white', marginLeft: '3px', marginTop: '3px' }}
                 />
               }
-              isSmall
+              size="sm"
               style={{ backgroundColor: '#C9190B' }}
             />
           </DescriptionListTerm>
@@ -205,14 +205,14 @@ function Legend() {
                 cy="10"
                 fill="transparent"
                 strokeWidth="1px"
-                style={{ stroke: 'var(--pf-global--BorderColor--100)' }}
+                style={{ stroke: 'var(--pf-v5-global--BorderColor--100)' }}
               />
               <text
                 x="10"
                 y="10"
                 textAnchor="middle"
                 dominantBaseline="central"
-                style={{ fill: 'var(--pf-global--Color--100)' }}
+                style={{ fill: 'var(--pf-v5-global--Color--100)' }}
                 fontSize="11px"
                 fontFamily="inherit"
                 fontWeight="400"
@@ -235,14 +235,14 @@ function Legend() {
                 fill="transparent"
                 strokeDasharray="5"
                 strokeWidth="1px"
-                style={{ stroke: 'var(--pf-global--BorderColor--100)' }}
+                style={{ stroke: 'var(--pf-v5-global--BorderColor--100)' }}
               />
               <text
                 x="10"
                 y="10"
                 textAnchor="middle"
                 dominantBaseline="central"
-                style={{ fill: 'var(--pf-global--Color--100)' }}
+                style={{ fill: 'var(--pf-v5-global--Color--100)' }}
                 fontSize="11px"
                 fontFamily="inherit"
                 fontWeight="400"

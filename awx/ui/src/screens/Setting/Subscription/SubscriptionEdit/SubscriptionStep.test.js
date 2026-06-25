@@ -77,25 +77,25 @@ describe('<SubscriptionStep />', () => {
   });
 
   test('FileUpload should throw an error on an invalid file format', async () => {
-    const { container } = renderStep();
+    renderStep();
     expect(
-      container.querySelector('div#subscription-manifest-helper.pf-m-error')
+      screen.queryByText(
+        'Invalid file format. Please upload a valid Red Hat Subscription Manifest.'
+      )
     ).toBeNull();
 
-    const fileInput = container.querySelector('input[type="file"]');
-    // a non-zip extension is rejected by the dropzone accept rule which
-    // fires onDropRejected -> manifestHelpers.setError(true)
+    const fileInput = document.querySelector('input[type="file"]');
     const badFile = new File(['nope'], 'foo.txt', { type: 'text/plain' });
-    fireEvent.change(fileInput, { target: { files: [badFile] } });
+    fireEvent.drop(fileInput, {
+      dataTransfer: { files: [badFile], types: ['Files'] },
+    });
 
     await waitFor(() => {
-      const helper = container.querySelector(
-        'div#subscription-manifest-helper.pf-m-error'
-      );
-      expect(helper).not.toBeNull();
-      expect(helper).toHaveTextContent(
-        'Invalid file format. Please upload a valid Red Hat Subscription Manifest.'
-      );
+      expect(
+        screen.getByText(
+          'Invalid file format. Please upload a valid Red Hat Subscription Manifest.'
+        )
+      ).toBeInTheDocument();
     });
   });
 

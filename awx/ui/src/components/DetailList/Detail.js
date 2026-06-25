@@ -7,7 +7,7 @@ import Popover from '../Popover';
 const DetailName = styled(({ fullWidth, ...props }) => (
   <TextListItem {...props} />
 ))`
-  font-weight: var(--pf-global--FontWeight--bold);
+  font-weight: var(--pf-v5-global--FontWeight--bold);
   ${(props) =>
     props.fullWidth &&
     `
@@ -29,7 +29,7 @@ const DetailValue = styled(
   ${(props) =>
     (props.isEncrypted || props.isNotConfigured) &&
     `
-    color: var(--pf-global--disabled-color--100);
+    color: var(--pf-v5-global--disabled-color--100);
   `}
 `;
 

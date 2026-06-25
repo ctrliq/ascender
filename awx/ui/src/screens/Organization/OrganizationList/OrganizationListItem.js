@@ -25,7 +25,7 @@ function OrganizationListItem({
           rowIndex,
           isSelected,
           onSelect,
-          disable: false,
+          isDisabled: false,
         }}
         dataLabel={t`Selected`}
       />

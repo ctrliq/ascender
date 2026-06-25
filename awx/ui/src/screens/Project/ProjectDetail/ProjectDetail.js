@@ -35,7 +35,7 @@ import getProjectHelpText from '../shared/Project.helptext';
 import useWsProject from './useWsProject';
 
 const Label = styled.span`
-  color: var(--pf-global--disabled-color--100);
+  color: var(--pf-v5-global--disabled-color--100);
 `;
 
 function ProjectDetail({ project }) {

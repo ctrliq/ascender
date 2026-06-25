@@ -11,7 +11,7 @@
  *   await user.click(screen.getByRole('button', { name: 'Save' }));
  */
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Router } from 'react-router';
 import { createMemoryHistory } from 'history';
@@ -116,20 +116,15 @@ export function renderWithContexts(ui, options = {}) {
  * shortly after closing a modal.
  */
 export async function settleTooltips() {
-  // the focus restore is setTimeout(0) and the tooltip entry delay is 300ms,
-  // so 700ms comfortably covers "tooltip will appear"; when none is coming
-  // this caps the dead wait well below findByRole's 1s default
-  const tooltip = await screen
-    .findByRole('tooltip', {}, { timeout: 700 })
-    .catch(() => null);
-  if (!tooltip) {
-    return;
-  }
-  document.activeElement.blur();
-  await waitFor(
-    () => expect(screen.queryByRole('tooltip')).not.toBeInTheDocument(),
-    { timeout: 2000 }
-  );
+  await act(async () => {
+    // PF5 Tooltip fires a state update ~300ms after focus returns to a
+    // tooltip-wrapped element.  Modal close restores focus via setTimeout(0),
+    // so the full chain is: 0ms (focus restore) + 300ms (tooltip entry delay).
+    // Waiting 500ms inside act() lets both fire inside the act boundary.
+    await new Promise((r) => { setTimeout(r, 500); });
+    document.activeElement?.blur();
+    await new Promise((r) => { setTimeout(r, 100); });
+  });
 }
 
 /*

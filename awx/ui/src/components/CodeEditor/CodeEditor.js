@@ -31,16 +31,16 @@ const FocusWrapper = styled.div`
 `;
 
 const AceEditor = styled(ReactAce)`
-  font-family: var(--pf-global--FontFamily--monospace);
+  font-family: var(--pf-v5-global--FontFamily--monospace);
   max-height: 90vh;
 
   & .ace_marker-layer .ace_active-line {
-    background: var(--pf-global--BorderColor--300) !important;
+    background: var(--pf-v5-global--BorderColor--300) !important;
   }
 
   & .ace_gutter {
-    background: var(--pf-global--BackgroundColor--200);
-    color: var(--pf-global--Color--200);
+    background: var(--pf-v5-global--BackgroundColor--200);
+    color: var(--pf-v5-global--Color--200);
   }
 
   & .ace_scroller {
@@ -57,19 +57,19 @@ const AceEditor = styled(ReactAce)`
   }
 
   & .ace_marker-layer .ace_selection {
-    background: var(--pf-global--BorderColor--100);
+    background: var(--pf-v5-global--BorderColor--100);
   }
 
   ${(props) =>
     props.hasErrors &&
     `
     && {
-      --pf-c-form-control--PaddingRight: var(--pf-c-form-control--invalid--PaddingRight);
-      --pf-c-form-control--BorderBottomColor: var(--pf-c-form-control--invalid--BorderBottomColor);
+      --pf-v5-c-form-control--PaddingRight: var(--pf-v5-c-form-control--invalid--PaddingRight);
+      --pf-v5-c-form-control--BorderBottomColor: var(--pf-v5-c-form-control--invalid--BorderBottomColor);
       padding-right: 24px;
-      padding-bottom: var(--pf-c-form-control--invalid--PaddingBottom);
-      background: var(--pf-c-form-control--invalid--Background);
-      border-bottom-width: var(--pf-c-form-control--invalid--BorderBottomWidth);
+      padding-bottom: var(--pf-v5-c-form-control--invalid--PaddingBottom);
+      background: var(--pf-v5-c-form-control--invalid--Background);
+      border-bottom-width: var(--pf-v5-c-form-control--invalid--BorderBottomWidth);
     }`}
 
   ${(props) =>
@@ -153,7 +153,7 @@ function CodeEditor({
       <FocusWrapper ref={wrapper} tabIndex={readOnly ? -1 : 0}>
         <AceEditor
           mode={aceModes[mode] || 'text'}
-          className={`pf-c-form-control ${className}`}
+          className={`pf-v5-c-form-control ${className}`}
           theme="twilight"
           onChange={debounce(onChange, 250)}
           value={value}
@@ -193,7 +193,7 @@ function CodeEditor({
       </FocusWrapper>
       {!readOnly && (
         <div
-          className="pf-c-form__helper-text keyboard-help-text"
+          className="pf-v5-c-form__helper-text keyboard-help-text"
           aria-live="polite"
         >
           {t`Press Enter to edit. Press ESC to stop editing.`}

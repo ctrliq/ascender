@@ -1,7 +1,13 @@
 import React, { useCallback, useEffect } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
-import { FormGroup, Tooltip } from '@patternfly/react-core';
+import {
+  FormGroup,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
+  Tooltip,
+} from '@patternfly/react-core';
 import { ExecutionEnvironmentsAPI, ProjectsAPI } from 'api';
 import { getSearchableKeys } from 'components/PaginatedTable';
 import { getQSConfig, parseQueryString, mergeParams } from 'util/qs';
@@ -226,8 +232,6 @@ function ExecutionEnvironmentLookup({
       fieldId={id}
       label={renderLabel()}
       labelIcon={popoverContent && <Popover content={popoverContent} />}
-      helperTextInvalid={helperTextInvalid}
-      validated={isValid ? 'default' : 'error'}
     >
       {tooltip && isDisabled ? (
         <Tooltip content={tooltip}>{renderLookup()}</Tooltip>
@@ -236,6 +240,15 @@ function ExecutionEnvironmentLookup({
       )}
 
       <LookupErrorMessage error={error || fetchProjectError} />
+      {!isValid && (
+        <FormHelperText>
+          <HelperText>
+            <HelperTextItem variant="error">
+              {helperTextInvalid}
+            </HelperTextItem>
+          </HelperText>
+        </FormHelperText>
+      )}
     </FormGroup>
   );
 }

@@ -56,7 +56,7 @@ function InventorySourceListItem({
           rowIndex,
           isSelected,
           onSelect,
-          disable: isJobRunning(source.status),
+          isDisabled: isJobRunning(source.status),
         }}
       />
       <TdBreakWord dataLabel={t`Name`}>

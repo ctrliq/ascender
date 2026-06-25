@@ -1,7 +1,13 @@
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Formik, useField, useFormikContext } from 'formik';
-import { Form, FormGroup } from '@patternfly/react-core';
+import {
+  Form,
+  FormGroup,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
+} from '@patternfly/react-core';
 import { useConfig } from 'contexts/Config';
 import AnsibleSelect from 'components/AnsibleSelect';
 import FormActionGroup from 'components/FormActionGroup/FormActionGroup';
@@ -127,11 +133,7 @@ function UserFormFields({ user }) {
       {me.is_superuser && (
         <FormGroup
           fieldId="user-type"
-          helperTextInvalid={userTypeMeta.error}
           isRequired
-          validated={
-            !userTypeMeta.touched || !userTypeMeta.error ? 'default' : 'error'
-          }
           label={t`User Type`}
         >
           <AnsibleSelect
@@ -140,6 +142,15 @@ function UserFormFields({ user }) {
             data={userTypeOptions}
             {...userTypeField}
           />
+          {userTypeMeta.error && (
+            <FormHelperText>
+              <HelperText>
+                <HelperTextItem variant="error">
+                  {userTypeMeta.error}
+                </HelperTextItem>
+              </HelperText>
+            </FormHelperText>
+          )}
         </FormGroup>
       )}
       <FormGroup fieldId="user-preferred-language" label={t`Preferred Language`}>

@@ -15,7 +15,7 @@ describe('<HostStatusBar />', () => {
     );
     // BarWrapper holds one BarSegment div per host status (5 total).
     const wrapper = container.firstChild;
-    expect(wrapper.querySelectorAll(':scope > div')).toHaveLength(5);
+    expect(wrapper.querySelectorAll(':scope > div > div')).toHaveLength(5);
   });
 
   test('tooltips should display host status and count', async () => {
@@ -23,7 +23,7 @@ describe('<HostStatusBar />', () => {
       <HostStatusBar counts={mockCounts} />
     );
     const wrapper = container.firstChild;
-    const segments = wrapper.querySelectorAll(':scope > div');
+    const segments = wrapper.querySelectorAll(':scope > div > div');
     const expectedContent = [
       { label: 'OK', count: 5 },
       { label: 'Skipped', count: 1 },
@@ -53,7 +53,7 @@ describe('<HostStatusBar />', () => {
   test('empty host counts should display tooltip and one bar segment', async () => {
     const { user, container } = renderWithContexts(<HostStatusBar />);
     const wrapper = container.firstChild;
-    const segments = wrapper.querySelectorAll(':scope > div');
+    const segments = wrapper.querySelectorAll(':scope > div > div');
     expect(segments).toHaveLength(1);
 
     await user.hover(segments[0]);

@@ -19,10 +19,10 @@ ActionsGrid.displayName = 'ActionsGrid';
 
 const ActionsCell = styled(Td)`
   text-align: right;
-  --pf-c-table--cell--Width: ${(props) => props.$width}px;
+  --pf-v5-c-table--cell--Width: ${(props) => props.$width}px;
 
   [role='presentation'] {
-    color: var(--pf-global--Color--300);
+    color: var(--pf-v5-global--Color--300);
     opacity: 0.5;
   }
 

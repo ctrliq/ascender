@@ -2,7 +2,10 @@ import React, { useCallback } from 'react';
 import { Formik, useField, useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
 import { minMaxValue, required } from 'util/validators';
-import { Form, FormGroup } from '@patternfly/react-core';
+import { Form, FormGroup, FormHelperText,
+HelperText,
+HelperTextItem,
+} from '@patternfly/react-core';
 import { VariablesField } from 'components/CodeEditor';
 import FormActionGroup from 'components/FormActionGroup/FormActionGroup';
 import FormField, { FormSubmitError } from 'components/FormField';
@@ -90,17 +93,11 @@ function ConstructedInventoryFormFields({ inventory = {}, options }) {
         isRequired
         fieldId="input-inventories-lookup"
         id="input-inventories-lookup"
-        helperTextInvalid={inputInventoriesMeta.error}
         label={t`Input Inventories`}
         labelIcon={
           <Popover
             content={t`Select Input Inventories for the constructed inventory plugin.`}
           />
-        }
-        validated={
-          !inputInventoriesMeta.touched || !inputInventoriesMeta.error
-            ? 'default'
-            : 'error'
         }
       >
         <InventoryLookup
@@ -114,6 +111,15 @@ function ConstructedInventoryFormFields({ inventory = {}, options }) {
           multiple
           required
         />
+        {inputInventoriesMeta.touched && inputInventoriesMeta.error && (
+          <FormHelperText>
+            <HelperText>
+              <HelperTextItem variant="error">
+                {inputInventoriesMeta.error}
+              </HelperTextItem>
+            </HelperText>
+          </FormHelperText>
+        )}
       </FormGroup>
       <FormField
         id="cache-timeout"

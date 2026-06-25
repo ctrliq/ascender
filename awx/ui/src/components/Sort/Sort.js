@@ -4,13 +4,14 @@ import React, { useState } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import {
-  Button,
-  ButtonVariant,
-  Dropdown,
-  DropdownPosition,
-  DropdownToggle,
-  DropdownItem,
-  InputGroup,
+	Button,
+	ButtonVariant,
+	Dropdown,
+	DropdownItem,
+	DropdownList,
+	InputGroup,
+	InputGroupItem,
+	MenuToggle,
 } from '@patternfly/react-core';
 import {
   SortAlphaDownIcon,
@@ -24,10 +25,10 @@ import { parseQueryString } from 'util/qs';
 
 const NoOptionDropdown = styled.div`
   align-self: stretch;
-  border: 1px solid var(--pf-global--BorderColor--300);
+  border: 1px solid var(--pf-v5-global--BorderColor--300);
   padding: 5px 15px;
   white-space: nowrap;
-  border-bottom-color: var(--pf-global--BorderColor--200);
+  border-bottom-color: var(--pf-v5-global--BorderColor--200);
 `;
 
 function Sort({ columns, qsConfig, onSort = null }) {
@@ -77,7 +78,7 @@ function Sort({ columns, qsConfig, onSort = null }) {
     onSort(sortKey, sortOrder === 'ascending' ? 'descending' : 'ascending');
   };
 
-  const { up } = DropdownPosition;
+  const up = 'up';
 
   const defaultSortedColumn = columns.find(({ key }) => key === sortKey);
 
@@ -94,7 +95,6 @@ function Sort({ columns, qsConfig, onSort = null }) {
     .map(({ key, name }) => (
       <DropdownItem
         key={key}
-        component="button"
         ouiaId={`${name}-dropdown-item`}
       >
         {name}
@@ -115,32 +115,35 @@ function Sort({ columns, qsConfig, onSort = null }) {
         <InputGroup>
           {(sortDropdownItems.length > 0 && (
             <Dropdown
-              onToggle={handleDropdownToggle}
               onSelect={handleDropdownSelect}
-              direction={up}
+              onOpenChange={setIsSortDropdownOpen}
+              popperProps={{ direction: up }}
               isOpen={isSortDropdownOpen}
               ouiaId="sort-dropdown"
-              toggle={
-                <DropdownToggle
+              toggle={(toggleRef) => (
+                <MenuToggle
+                  ref={toggleRef}
                   id="awx-sort"
-                  onToggle={handleDropdownToggle}
+                  onClick={() => handleDropdownToggle(!isSortDropdownOpen)}
+                  isExpanded={isSortDropdownOpen}
                   ouiaId="sort-dropdown-toggle"
                 >
                   {sortedColumnName}
-                </DropdownToggle>
-              }
-              dropdownItems={sortDropdownItems}
-            />
+                </MenuToggle>
+              )}
+            >
+              <DropdownList>{sortDropdownItems}</DropdownList>
+            </Dropdown>
           )) || <NoOptionDropdown>{sortedColumnName}</NoOptionDropdown>}
 
-          <Button
+          <InputGroupItem><Button
             variant={ButtonVariant.control}
             aria-label={t`Sort`}
             onClick={handleSort}
             ouiaId="sort-button"
           >
             <SortIcon />
-          </Button>
+          </Button></InputGroupItem>
         </InputGroup>
       )}
     </>

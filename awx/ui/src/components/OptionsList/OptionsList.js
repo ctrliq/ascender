@@ -7,7 +7,7 @@ import DataListToolbar from '../DataListToolbar';
 import PaginatedTable, { HeaderCell, HeaderRow } from '../PaginatedTable';
 
 const ModalList = styled.div`
-  .pf-c-toolbar__content {
+  .pf-v5-c-toolbar__content {
     padding: 0 !important;
   }
 `;

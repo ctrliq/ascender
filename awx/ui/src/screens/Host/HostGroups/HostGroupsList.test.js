@@ -194,11 +194,8 @@ describe('<HostGroupsList />', () => {
     expect(await screen.findByText('Select Groups')).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'Close' }));
-    await waitFor(() =>
-      expect(screen.queryByText('Select Groups')).not.toBeInTheDocument()
-    );
-    // closing the modal refocuses the Tooltip-wrapped Add button
     await settleTooltips();
+    expect(screen.queryByText('Select Groups')).not.toBeInTheDocument();
   });
 
   test('should make expected api request when associating groups', async () => {
@@ -227,13 +224,10 @@ describe('<HostGroupsList />', () => {
     await user.click(within(associateRow).getByRole('checkbox'));
     await user.click(screen.getByRole('button', { name: 'Save' }));
 
-    await waitFor(() =>
-      expect(screen.queryByText('Select Groups')).not.toBeInTheDocument()
-    );
+    await settleTooltips();
+    expect(screen.queryByText('Select Groups')).not.toBeInTheDocument();
     expect(InventoriesAPI.readGroups).toHaveBeenCalledTimes(1);
     expect(HostsAPI.associateGroup).toHaveBeenCalledTimes(1);
-    // closing the modal refocuses the Tooltip-wrapped Add button
-    await settleTooltips();
   });
 
   test('expected api calls are made for multi-disassociation', async () => {

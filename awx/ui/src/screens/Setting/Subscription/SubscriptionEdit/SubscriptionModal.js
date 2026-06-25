@@ -6,11 +6,10 @@ import {
   EmptyState,
   EmptyStateIcon,
   EmptyStateBody,
-  Modal,
-  Title,
-} from '@patternfly/react-core';
+  Modal, EmptyStateHeader, EmptyStateFooter,
+  } from '@patternfly/react-core';
 import {
-  TableComposable,
+  Table,
   Tbody,
   Td,
   Th,
@@ -111,10 +110,7 @@ function SubscriptionModal({
       {isLoading && <ContentLoading />}
       {!isLoading && error && (
         <EmptyState variant="full">
-          <EmptyStateIcon icon={ExclamationTriangleIcon} />
-          <Title size="lg" headingLevel="h3">
-            <Trans>No subscriptions found</Trans>
-          </Title>
+          <EmptyStateHeader titleText={<Trans>No subscriptions found</Trans>} icon={<EmptyStateIcon icon={ExclamationTriangleIcon} />} headingLevel="h3" />
           <EmptyStateBody>
             <Trans>
               We were unable to locate licenses associated with this account.
@@ -128,9 +124,9 @@ function SubscriptionModal({
             >
               <Trans>Return to subscription management.</Trans>
             </Button>
-          </EmptyStateBody>
+          </EmptyStateBody><EmptyStateFooter>
           <ErrorDetail error={error} />
-        </EmptyState>
+        </EmptyStateFooter></EmptyState>
       )}
       {!isLoading && !error && subscriptions?.length === 0 && (
         <ContentEmpty
@@ -139,7 +135,7 @@ function SubscriptionModal({
         />
       )}
       {!isLoading && !error && subscriptions?.length > 0 && (
-        <TableComposable
+        <Table
           variant="compact"
           aria-label={t`Subscriptions table`}
         >
@@ -183,7 +179,7 @@ function SubscriptionModal({
               </Tr>
             ))}
           </Tbody>
-        </TableComposable>
+        </Table>
       )}
     </Modal>
   );

@@ -10,7 +10,7 @@ function WorkflowOutputLink({ link, mouseEnter, mouseLeave }) {
   const ref = useRef(null);
   const [hovering, setHovering] = useState(false);
   const [pathD, setPathD] = useState();
-  const [pathStroke, setPathStroke] = useState('var(--pf-global--BorderColor--100)');
+  const [pathStroke, setPathStroke] = useState('var(--pf-v5-global--BorderColor--100)');
   const { nodePositions } = useContext(WorkflowStateContext);
 
   const handleLinkMouseEnter = () => {
@@ -27,13 +27,13 @@ function WorkflowOutputLink({ link, mouseEnter, mouseLeave }) {
 
   useEffect(() => {
     if (link.linkType === 'failure') {
-      setPathStroke('var(--pf-global--danger-color--100)');
+      setPathStroke('var(--pf-v5-global--danger-color--100)');
     }
     if (link.linkType === 'success') {
-      setPathStroke('var(--pf-global--success-color--100)');
+      setPathStroke('var(--pf-v5-global--success-color--100)');
     }
     if (link.linkType === 'always') {
-      setPathStroke('var(--pf-global--primary-color--100)');
+      setPathStroke('var(--pf-v5-global--primary-color--100)');
     }
   }, [link.linkType]);
 
@@ -50,7 +50,7 @@ function WorkflowOutputLink({ link, mouseEnter, mouseLeave }) {
       onMouseLeave={handleLinkMouseLeave}
     >
       <polygon
-        style={{ fill: 'var(--pf-global--BackgroundColor--200)' }}
+        style={{ fill: 'var(--pf-v5-global--BackgroundColor--200)' }}
         id={`link-${link.source.id}-${link.target.id}-overlay`}
         opacity={hovering ? '1' : '0'}
         points={getLinkOverlayPoints(link, nodePositions)}

@@ -58,7 +58,7 @@ function ExecutionEnvironmentListItem({
           rowIndex,
           isSelected,
           onSelect,
-          disable: false,
+          isDisabled: false,
         }}
         dataLabel={t`Selected`}
       />

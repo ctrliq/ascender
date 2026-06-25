@@ -1,7 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
-import { SelectVariant, Select, SelectOption } from '@patternfly/react-core';
+import {
+	SelectVariant,
+	Select,
+	SelectOption
+} from '@patternfly/react-core/deprecated';
 import { ProjectsAPI } from 'api';
 import useRequest from 'hooks/useRequest';
 
@@ -58,7 +62,7 @@ function PlaybookSelect({
       isOpen={isOpen}
       variant={SelectVariant.typeahead}
       selections={selected}
-      onToggle={setIsOpen}
+      onToggle={(_event, val) => setIsOpen(val)}
       placeholderText={t`Select a playbook`}
       typeAheadAriaLabel={t`Select a playbook`}
       isCreatable

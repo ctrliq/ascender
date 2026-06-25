@@ -80,7 +80,7 @@ describe('<AppContainer />', () => {
 
     // sidebar groups (NavExpandableGroup, 2 expandable groups) and route links
     expect(
-      container.querySelectorAll('.pf-c-nav__item.pf-m-expandable')
+      container.querySelectorAll('.pf-v5-c-nav__item.pf-m-expandable')
     ).toHaveLength(2);
     expect(screen.getByText('Group One')).toBeInTheDocument();
     expect(screen.getByText('Group Two')).toBeInTheDocument();

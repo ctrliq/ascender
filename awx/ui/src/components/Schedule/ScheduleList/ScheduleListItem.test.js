@@ -117,8 +117,7 @@ describe('ScheduleListItem', () => {
 
     test('Clicking checkbox selects item', async () => {
       const { user } = renderItem();
-      const selectCell = cellByLabel('Selected');
-      await user.click(within(selectCell).getByRole('checkbox'));
+      await user.click(screen.getByRole('checkbox', { name: /select/i }));
       expect(onSelect).toHaveBeenCalledTimes(1);
     });
   });

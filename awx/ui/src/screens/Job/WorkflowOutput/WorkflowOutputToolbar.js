@@ -23,7 +23,7 @@ import {
 
 const Toolbar = styled.div`
   align-items: center;
-  border-bottom: 1px solid var(--pf-global--BorderColor--100);
+  border-bottom: 1px solid var(--pf-v5-global--BorderColor--100);
   display: flex;
   height: 56px;
 `;
@@ -34,7 +34,7 @@ const ToolbarJob = styled.div`
 
   h1 {
     margin-right: 10px;
-    font-weight: var(--pf-global--FontWeight--bold);
+    font-weight: var(--pf-v5-global--FontWeight--bold);
   }
 `;
 
@@ -53,7 +53,7 @@ const ToolbarActions = styled.div`
      (relaunch while launching, delete while disabled) don't look interactive
      (badges aren't buttons; modals portal out) */
   button:not(:disabled):not([aria-disabled='true']):hover {
-    background-color: var(--pf-global--primary-color--100);
+    background-color: var(--pf-v5-global--primary-color--100);
     color: #fff;
   }
   /* whiten the icon; the dropdown toggle colors its icon separately */
@@ -88,7 +88,7 @@ const ActionButton = styled(Button)`
   border: none;
 
   &.pf-m-active {
-    background-color: var(--pf-global--primary-color--100);
+    background-color: var(--pf-v5-global--primary-color--100);
     color: #fff;
   }
 `;

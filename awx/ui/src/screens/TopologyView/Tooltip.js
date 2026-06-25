@@ -36,7 +36,7 @@ const Wrapper = styled.div`
   right: 0;
   padding: 0 10px;
   width: 25%;
-  background-color: var(--pf-global--BackgroundColor--100);
+  background-color: var(--pf-v5-global--BackgroundColor--100);
   overflow: auto;
   height: 100%;
 `;
@@ -47,9 +47,9 @@ const Button = styled(PFButton)`
     border-radius: 15px;
     padding: 0;
     font-size: 16px;
-    background-color: var(--pf-global--BackgroundColor--100);
-    border: 1px solid var(--pf-global--BorderColor--100);
-    color: var(--pf-global--Color--100);
+    background-color: var(--pf-v5-global--BackgroundColor--100);
+    border: 1px solid var(--pf-v5-global--BorderColor--100);
+    color: var(--pf-v5-global--Color--100);
   }
 `;
 const DescriptionList = styled(PFDescriptionList)`
@@ -64,7 +64,7 @@ const Text = styled(PFText)`
 `;
 
 const Unavailable = styled.span`
-  color: var(--pf-global--danger-color--200);
+  color: var(--pf-v5-global--danger-color--200);
 `;
 
 const SliderHolder = styled.div`
@@ -90,7 +90,7 @@ function renderInstanceGroups(instanceGroups) {
     <React.Fragment key={ig.id}>
       <Label
         color="blue"
-        isTruncated
+
         render={({ className, content, componentRef }) => (
           <Link
             to={`${buildLinkURL(ig)}${ig.id}/details`}
@@ -182,7 +182,7 @@ function Tooltip({
         <TextContent>
           <Text
             component={TextVariants.small}
-            style={{ fontWeight: 'bold', color: 'var(--pf-global--Color--100)', marginTop: 0 }}
+            style={{ fontWeight: 'bold', color: 'var(--pf-v5-global--Color--100)', marginTop: 0 }}
           >
             {t`Details`}
           </Text>
@@ -208,7 +208,7 @@ function Tooltip({
           <TextContent>
             <Text
               component={TextVariants.small}
-              style={{ fontWeight: 'bold', color: 'var(--pf-global--Color--100)' }}
+              style={{ fontWeight: 'bold', color: 'var(--pf-v5-global--Color--100)' }}
             >
               {t`Details`}
             </Text>
@@ -256,7 +256,7 @@ function Tooltip({
                       dataCy="install-bundle-download-button"
                       aria-label={t`Download Bundle`}
                       component="a"
-                      isSmall
+                      size="sm"
                       href={`${instanceDetail.related?.install_bundle}`}
                       target="_blank"
                       variant="secondary"
@@ -312,7 +312,7 @@ function Tooltip({
                             min={0}
                             step={0.1}
                             value={instanceDetail.capacity_adjustment}
-                            onChange={handleChangeValue}
+                            onChange={(_event, value) => handleChangeValue(value)}
                             isDisabled={
                               !me?.is_superuser || !instanceDetail.enabled
                             }

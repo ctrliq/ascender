@@ -45,6 +45,7 @@ function About({ version = null, isOpen = false, onClose }) {
       isOpen={isOpen}
       onClose={onClose}
       productName={brandName}
+      aria-label={t`About`}
       trademark=""
       brandImageSrc="static/media/Ascender_logo.svg"
       brandImageAlt={t`Brand Image`}
