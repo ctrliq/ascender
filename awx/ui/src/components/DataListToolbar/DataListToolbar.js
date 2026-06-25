@@ -28,6 +28,22 @@ import Sort from '../Sort';
 const ToolbarContent = styled(PFToolbarContent)`
   & > .pf-v5-c-toolbar__content-section {
     flex-wrap: nowrap;
+    align-items: stretch;
+  }
+  & .pf-v5-c-toolbar__group,
+  & .pf-v5-c-toolbar__toggle-group {
+    align-items: stretch;
+  }
+  & .pf-v5-c-toolbar__item,
+  & .pf-v5-c-toolbar__filter {
+    align-items: stretch;
+    align-self: stretch;
+  }
+  & .pf-v5-c-select {
+    height: 100%;
+  }
+  & .pf-v5-c-menu-toggle:not(.pf-m-plain) {
+    height: 100%;
   }
 `;
 
@@ -122,7 +138,7 @@ function DataListToolbar({
         )}
         {onSelectAll && (
           <ToolbarGroup>
-            <ToolbarItem>
+            <ToolbarItem style={{ alignSelf: 'center' }}>
               <Tooltip content={t`Select all`} position="top">
                 <Checkbox
                   isChecked={isAllSelected}
@@ -211,7 +227,7 @@ function DataListToolbar({
           </ToolbarGroup>
         )}
         {!isAdvancedSearchShown && pagination && itemCount > 0 && (
-          <ToolbarItem variant="pagination">{pagination}</ToolbarItem>
+          <ToolbarItem variant="pagination" style={{ alignSelf: 'center' }}>{pagination}</ToolbarItem>
         )}
       </ToolbarContent>
     </Toolbar>

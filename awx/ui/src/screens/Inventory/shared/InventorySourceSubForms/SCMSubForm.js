@@ -2,16 +2,20 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useField, useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
 import {
+	Button,
 	FormGroup,
 	FormHelperText,
 	HelperText,
 	HelperTextItem,
-} from '@patternfly/react-core';
-import {
-	SelectVariant,
+	MenuToggle,
 	Select,
-	SelectOption
-} from '@patternfly/react-core/deprecated';
+	SelectList,
+	SelectOption,
+	TextInputGroup,
+	TextInputGroupMain,
+	TextInputGroupUtilities,
+} from '@patternfly/react-core';
+import { TimesIcon } from '@patternfly/react-icons';
 import { ProjectsAPI } from 'api';
 import useRequest from 'hooks/useRequest';
 import { required } from 'util/validators';
@@ -33,6 +37,7 @@ const SCMSubForm = ({ autoPopulateProject }) => {
   const { t } = useLingui();
   const helpText = getHelpText(t);
   const [isOpen, setIsOpen] = useState(false);
+  const [filterValue, setFilterValue] = useState('');
   const [sourcePath, setSourcePath] = useState([]);
   const { setFieldValue, setFieldTouched } = useFormikContext();
   const [credentialField] = useField('credential');
@@ -81,6 +86,21 @@ const SCMSubForm = ({ autoPopulateProject }) => {
     },
     [setFieldValue, setFieldTouched]
   );
+
+  const isValid =
+    (!sourcePathMeta.error || !sourcePathMeta.touched) &&
+    !sourcePathError?.message;
+
+  const filteredPaths = sourcePath.filter((path) =>
+    path.toLowerCase().includes(filterValue.toLowerCase())
+  );
+
+  const showCreateOption =
+    filterValue.trim() &&
+    !sourcePath.some(
+      (path) => path.toLowerCase() === filterValue.trim().toLowerCase()
+    );
+
   return (
     <>
       {projectField.value?.allow_override && (
@@ -116,35 +136,86 @@ const SCMSubForm = ({ autoPopulateProject }) => {
         labelIcon={<Popover content={helpText.sourcePath} />}
       >
         <Select
-          ouiaId="InventorySourceForm-source_path"
-          variant={SelectVariant.typeahead}
-          onToggle={(_event, val) => setIsOpen(val)}
-          isOpen={isOpen}
-          selections={sourcePathField.value}
           id="source_path"
-          isValid={
-            (!sourcePathMeta.error || !sourcePathMeta.touched) &&
-            !sourcePathError?.message
-          }
-          onSelect={(event, value) => {
+          isOpen={isOpen}
+          onOpenChange={(open) => {
+            setIsOpen(open);
+            if (!open) setFilterValue('');
+          }}
+          onSelect={(_event, value) => {
             setIsOpen(false);
-            value = value.trim();
-            sourcePathHelpers.setValue(value);
+            const trimmed = typeof value === 'string' ? value.trim() : value;
+            sourcePathHelpers.setValue(trimmed);
+            setFilterValue('');
           }}
           aria-label={t`Select source path`}
-          typeAheadAriaLabel={t`Select source path`}
-          placeholder={t`Select source path`}
-          createText={t`Set source path to`}
-          isCreatable
-          onCreateOption={(value) => {
-            value.trim();
-            setSourcePath([...sourcePath, value]);
-          }}
-          noResultsFoundText={t`No results found`}
+          ouiaId="InventorySourceForm-source_path"
+          toggle={(toggleRef) => (
+            <MenuToggle
+              ref={toggleRef}
+              variant="typeahead"
+              onClick={() => setIsOpen(!isOpen)}
+              isExpanded={isOpen}
+              status={isValid ? undefined : 'danger'}
+            >
+              <TextInputGroup isPlain>
+                <TextInputGroupMain
+                  value={filterValue !== '' ? filterValue : (sourcePathField.value || '')}
+                  onClick={() => setIsOpen(true)}
+                  onChange={(_event, val) => {
+                    setFilterValue(val);
+                    setIsOpen(true);
+                  }}
+                  onFocus={() => {
+                    if (sourcePathField.value && filterValue === '') {
+                      setFilterValue(sourcePathField.value);
+                    }
+                  }}
+                  autoComplete="off"
+                  placeholder={t`Select source path`}
+                  aria-label={t`Select source path`}
+                />
+                {(filterValue || sourcePathField.value) && (
+                  <TextInputGroupUtilities>
+                    <Button
+                      variant="plain"
+                      onClick={() => {
+                        sourcePathHelpers.setValue('');
+                        setFilterValue('');
+                      }}
+                      aria-label={t`Clear`}
+                    >
+                      <TimesIcon />
+                    </Button>
+                  </TextInputGroupUtilities>
+                )}
+              </TextInputGroup>
+            </MenuToggle>
+          )}
         >
-          {sourcePath.map((path) => (
-            <SelectOption key={path} id={path} value={path} />
-          ))}
+          <SelectList>
+            {filteredPaths.map((path) => (
+              <SelectOption key={path} id={path} value={path}>
+                {path}
+              </SelectOption>
+            ))}
+            {showCreateOption && (
+              <SelectOption
+                value={filterValue.trim()}
+                onClick={() => {
+                  const trimmed = filterValue.trim();
+                  setSourcePath((prev) => [...prev, trimmed]);
+                }}
+              >
+                {t`Set source path to`} &quot;{filterValue.trim()}&quot;
+              </SelectOption>
+            )}
+            {filteredPaths.length === 0 && !showCreateOption && (
+              <SelectOption isDisabled>
+                {t`No results found`}
+              </SelectOption>
+            )}
+          </SelectList>
         </Select>
         {((sourcePathMeta.touched && sourcePathMeta.error) || sourcePathError?.message) && (
           <FormHelperText>

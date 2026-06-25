@@ -2,16 +2,17 @@ import React, { useState, useRef } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { GripVerticalIcon } from '@patternfly/react-icons';
 import {
+	Label,
+	LabelGroup,
+	MenuToggle,
 	Modal,
+	Select,
+	SelectList,
+	SelectOption,
 	TextInput,
 	TextArea,
 	Button
 } from '@patternfly/react-core';
-import {
-	Select,
-	SelectOption,
-	SelectVariant
-} from '@patternfly/react-core/deprecated';
 import {
   Table,
   Thead,
@@ -144,34 +145,64 @@ function SurveyReorderModal({
         component = (
           <Select
             id={`survey-preview-multipleChoice-${q.variable}`}
-            ouiaId={`survey-preview-multipleChoice-${q.variable}`}
-            isDisabled
-            aria-label={t`Multiple Choice`}
-            typeAheadAriaLabel={t`Multiple Choice`}
-            placeholderText={q.default}
-            onToggle={() => {}}
-          />
+            isOpen={false}
+            onOpenChange={() => {}}
+            toggle={(toggleRef) => (
+              <MenuToggle
+                ref={toggleRef}
+                isDisabled
+                aria-label={t`Multiple Choice`}
+                ouiaId={`survey-preview-multipleChoice-${q.variable}`}
+              >
+                {q.default || t`Select an option`}
+              </MenuToggle>
+            )}
+          >
+            <SelectList>
+              {choices.length > 0 &&
+                choices.map((option) => (
+                  <SelectOption key={option} value={option}>
+                    {option}
+                  </SelectOption>
+                ))}
+            </SelectList>
+          </Select>
         );
         break;
       case 'multiselect':
         component = (
           <Select
-            isDisabled
-            isReadOnly
-            variant={SelectVariant.typeaheadMulti}
-            isOpen={false}
-            selections={q.default.length > 0 ? q.default.split('\n') : []}
-            onToggle={() => {}}
-            aria-label={t`Multi-Select`}
-            typeAheadAriaLabel={t`Multi-Select`}
             id={`survey-preview-multiSelect-${q.variable}`}
-            ouiaId={`survey-preview-multiSelect-${q.variable}`}
-            noResultsFoundText={t`No results found`}
+            isOpen={false}
+            onOpenChange={() => {}}
+            toggle={(toggleRef) => (
+              <MenuToggle
+                ref={toggleRef}
+                isDisabled
+                variant="typeahead"
+                aria-label={t`Multi-Select`}
+                ouiaId={`survey-preview-multiSelect-${q.variable}`}
+              >
+                {q.default.length > 0 ? (
+                  <LabelGroup>
+                    {q.default.split('\n').map((val) => (
+                      <Label key={val}>{val}</Label>
+                    ))}
+                  </LabelGroup>
+                ) : (
+                  t`Select option(s)`
+                )}
+              </MenuToggle>
+            )}
           >
-            {choices.length > 0 &&
-              choices.map((option) => (
-                <SelectOption key={option} value={option} />
-              ))}
+            <SelectList>
+              {choices.length > 0 &&
+                choices.map((option) => (
+                  <SelectOption key={option} value={option}>
+                    {option}
+                  </SelectOption>
+                ))}
+            </SelectList>
           </Select>
         );
         break;

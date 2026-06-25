@@ -67,7 +67,7 @@ describe('<PlaybookSelect />', () => {
   test('should trigger the onChange callback for the option selected from the list', async () => {
     const mockCallback = jest.fn();
 
-    const { container } = renderWithI18n(
+    renderWithI18n(
       <PlaybookSelect
         projectId={1}
         isValid={true}
@@ -77,23 +77,23 @@ describe('<PlaybookSelect />', () => {
     );
 
     await waitFor(() => {
-      const selectToggleButton = container.querySelector(
-        'button.pf-v5-c-select__toggle-button'
-      );
-      fireEvent.click(selectToggleButton);
-      // Select options are displayed
-      expect(screen.getAllByRole('option').length).toBe(2);
-
-      fireEvent.click(screen.getByText('debug.yml'));
-
-      expect(mockCallback).toHaveBeenCalledWith('debug.yml');
+      expect(ProjectsAPI.readPlaybooks).toHaveBeenCalledWith(1);
     });
+
+    const input = screen.getByRole('textbox', { name: 'Select a playbook' });
+    fireEvent.click(input);
+    await waitFor(() => {
+      expect(screen.getAllByRole('option').length).toBe(2);
+    });
+
+    fireEvent.click(screen.getByText('debug.yml'));
+    expect(mockCallback).toHaveBeenCalledWith('debug.yml');
   });
 
   test('should allow entering playbook file name manually', async () => {
     const mockCallback = jest.fn();
 
-    const { container } = renderWithI18n(
+    renderWithI18n(
       <PlaybookSelect
         projectId={1}
         isValid={true}
@@ -103,23 +103,20 @@ describe('<PlaybookSelect />', () => {
     );
 
     await waitFor(() => {
-      const input = container.querySelector('input[type="text"]');
-      expect(input).toBeVisible();
-      fireEvent.change(input, { target: { value: 'foo.yml' } });
+      expect(ProjectsAPI.readPlaybooks).toHaveBeenCalledWith(1);
     });
+
+    const input = screen.getByRole('textbox', { name: 'Select a playbook' });
+    fireEvent.change(input, { target: { value: 'foo.yml' } });
 
     await waitFor(() => {
-      // A new select option is displayed ("foo.yml")
-      expect(
-        screen.getByText('"foo.yml"', { selector: '[role="option"]' })
-      ).toBeVisible();
-      expect(screen.getAllByRole('option').length).toBe(1);
-
-      fireEvent.click(
-        screen.getByText('"foo.yml"', { selector: '[role="option"]' })
-      );
-
-      expect(mockCallback).toHaveBeenCalledWith('foo.yml');
+      // The creatable option shows 'foo.yml' as plain text
+      const options = screen.getAllByRole('option');
+      expect(options.length).toBe(1);
+      expect(options[0]).toHaveTextContent('foo.yml');
     });
+
+    fireEvent.click(screen.getByRole('option', { name: 'foo.yml' }));
+    expect(mockCallback).toHaveBeenCalledWith('foo.yml');
   });
 });

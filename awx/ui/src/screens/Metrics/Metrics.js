@@ -5,15 +5,15 @@ import {
 	Card,
 	CardHeader,
 	CardBody,
+	MenuToggle,
+	Select,
+	SelectList,
+	SelectOption,
 	Toolbar,
 	ToolbarGroup,
 	ToolbarContent,
 	ToolbarItem
 } from '@patternfly/react-core';
-import {
-	Select,
-	SelectOption
-} from '@patternfly/react-core/deprecated';
 
 import { MetricsAPI, InstancesAPI } from 'api';
 import useRequest from 'hooks/useRequest';
@@ -24,7 +24,6 @@ import LineChart from './LineChart';
 
 let count = [0];
 
-// hook thats calls api every 3 seconds to get data
 function useInterval(callback, delay, instance, metric) {
   const savedCallback = useRef();
   useEffect(() => {
@@ -191,41 +190,63 @@ function Metrics() {
                   <ToolbarItem>{t`Instance`}</ToolbarItem>
                   <ToolbarItem>
                     <Select
-                      ouiaId="Instance-select"
-                      onToggle={(_event, val) => setInstanceIsOpen(val)}
                       isOpen={instanceIsOpen}
-                      onSelect={(e, value) => {
+                      onOpenChange={setInstanceIsOpen}
+                      onSelect={(_event, value) => {
                         count = [0];
                         setInstance(value);
                         setInstanceIsOpen(false);
                         setRenderedData([]);
                       }}
-                      selections={instance}
-                      placeholderText={t`Select an instance`}
+                      ouiaId="Instance-select"
+                      toggle={(toggleRef) => (
+                        <MenuToggle
+                          ref={toggleRef}
+                          onClick={() => setInstanceIsOpen(!instanceIsOpen)}
+                          isExpanded={instanceIsOpen}
+                        >
+                          {instance || t`Select an instance`}
+                        </MenuToggle>
+                      )}
                     >
-                      {instances.map((inst) => (
-                        <SelectOption value={inst} key={inst} />
-                      ))}
+                      <SelectList>
+                        {instances.map((inst) => (
+                          <SelectOption value={inst} key={inst}>
+                            {inst}
+                          </SelectOption>
+                        ))}
+                      </SelectList>
                     </Select>
                   </ToolbarItem>
                   <ToolbarItem>{t`Metric`}</ToolbarItem>
                   <ToolbarItem>
                     <Select
-                      ouiaId="Metric-select"
-                      placeholderText={t`Select a metric`}
                       isOpen={metricIsOpen}
-                      onSelect={(e, value) => {
+                      onOpenChange={setMetricIsOpen}
+                      onSelect={(_event, value) => {
                         count = [0];
                         setMetric(value);
                         setRenderedData([]);
                         setMetricIsOpen(false);
                       }}
-                      onToggle={(_event, val) => setMetricIsOpen(val)}
-                      selections={metric}
+                      ouiaId="Metric-select"
+                      toggle={(toggleRef) => (
+                        <MenuToggle
+                          ref={toggleRef}
+                          onClick={() => setMetricIsOpen(!metricIsOpen)}
+                          isExpanded={metricIsOpen}
+                        >
+                          {metric || t`Select a metric`}
+                        </MenuToggle>
+                      )}
                     >
-                      {metrics.map((met) => (
-                        <SelectOption value={met} key={met} />
-                      ))}
+                      <SelectList>
+                        {metrics.map((met) => (
+                          <SelectOption value={met} key={met}>
+                            {met}
+                          </SelectOption>
+                        ))}
+                      </SelectList>
                     </Select>
                   </ToolbarItem>
                 </ToolbarGroup>

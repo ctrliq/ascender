@@ -441,33 +441,17 @@ describe('<ResourceAccessList />', () => {
     const { user } = renderOrg();
     await screen.findByRole('link', { name: 'joe' });
 
-    // Open the simple key select (scoped by ouiaId; the key Select toggle and
-    // the value Select toggle both expose a generic "Options menu" name) and
-    // pick "Roles" as the search key. The presence of the "Roles" option already
-    // proves the Roles column was appended to toolbarSearchColumns.
-    const keySelect = document.querySelector(
-      '[data-ouia-component-id="simple-key-select"]'
-    );
-    await user.click(within(keySelect).getByRole('button'));
-    const rolesOption = await screen.findByRole('option', { name: 'Roles' });
-    // Search's handleDropdownSelect keys off target.innerText, which jsdom does
-    // not populate from layout; set it explicitly so the real handler resolves
-    // the selected column, then dispatch the click it listens for.
-    Object.defineProperty(rolesOption, 'innerText', {
-      configurable: true,
-      value: 'Roles',
-    });
-    fireEvent.click(rolesOption);
+    await user.click(screen.getByRole('button', { name: 'Simple key select' }));
+    await user.click(await screen.findByRole('option', { name: 'Roles' }));
 
-    // Open the "Filter By Roles" value select (scoped by ouiaId).
-    const rolesSelect = await waitFor(() => {
+    const rolesToggle = await waitFor(() => {
       const el = document.querySelector(
         '[data-ouia-component-id="filter-by-or__roles__in"]'
       );
       expect(el).toBeInTheDocument();
       return el;
     });
-    await user.click(within(rolesSelect).getByRole('button'));
+    await user.click(rolesToggle);
 
     const listbox = await screen.findByRole('listbox');
     expect(within(listbox).getByText('Admin')).toBeInTheDocument();

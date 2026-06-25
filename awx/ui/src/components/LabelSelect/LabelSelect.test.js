@@ -11,12 +11,11 @@ const options = [
   { id: 2, name: 'two' },
 ];
 
-// Open the typeahead by clicking its toggle (the Select renders a toggle
-// button labelled "Options menu"), then return the listbox's option nodes.
 async function openAndGetOptions(user) {
-  await user.click(screen.getByRole('button', { name: 'Options menu' }));
+  const input = screen.getByRole('textbox', { name: 'Select Labels' });
+  await user.click(input);
   const listbox = await screen.findByRole('listbox');
-  return within(listbox).getAllByRole('option');
+  return within(listbox).getAllByRole('menuitem');
 }
 
 describe('<LabelSelect />', () => {
@@ -32,9 +31,8 @@ describe('<LabelSelect />', () => {
       <LabelSelect value={[]} onError={() => {}} onChange={() => {}} />
     );
 
-    // the toggle is disabled until the labels load
     await waitFor(() =>
-      expect(screen.getByRole('button', { name: 'Options menu' })).toBeEnabled()
+      expect(screen.getByRole('textbox', { name: 'Select Labels' })).toBeEnabled()
     );
     expect(LabelsAPI.read).toHaveBeenCalledTimes(1);
 
@@ -65,7 +63,7 @@ describe('<LabelSelect />', () => {
 
     await waitFor(() => expect(LabelsAPI.read).toHaveBeenCalledTimes(2));
     await waitFor(() =>
-      expect(screen.getByRole('button', { name: 'Options menu' })).toBeEnabled()
+      expect(screen.getByRole('textbox', { name: 'Select Labels' })).toBeEnabled()
     );
 
     const selectOptions = await openAndGetOptions(user);
@@ -84,14 +82,12 @@ describe('<LabelSelect />', () => {
     );
 
     await waitFor(() =>
-      expect(screen.getByRole('button', { name: 'Options menu' })).toBeEnabled()
+      expect(screen.getByRole('textbox', { name: 'Select Labels' })).toBeEnabled()
     );
 
-    // typing a non-matching value surfaces an isCreatable "create" option;
-    // selecting it calls onChange with the new {id, name} label
-    const input = screen.getByRole('textbox');
+    const input = screen.getByRole('textbox', { name: 'Select Labels' });
     await user.type(input, 'foo');
-    const createOption = await screen.findByText(/foo/);
+    const createOption = await screen.findByRole('option', { name: /Create.*foo/ });
     await user.click(createOption);
 
     expect(onChange).toHaveBeenCalledWith([{ id: 'foo', name: 'foo' }]);
@@ -119,13 +115,11 @@ describe('<LabelSelect />', () => {
     );
 
     await waitFor(() =>
-      expect(screen.getByRole('button', { name: 'Options menu' })).toBeEnabled()
+      expect(screen.getByRole('textbox', { name: 'Select Labels' })).toBeEnabled()
     );
 
     const selectOptions = await openAndGetOptions(user);
     expect(selectOptions).toHaveLength(2);
-    // PF renders a disabled SelectOption with the pf-m-disabled modifier class
-    // (and a disabled checkbox); the enabled option lacks it
     expect(selectOptions[0]).toHaveClass('pf-m-disabled');
     expect(selectOptions[1]).not.toHaveClass('pf-m-disabled');
   });

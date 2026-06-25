@@ -14,12 +14,8 @@ jest.mock('../../api');
 // so stub it out and keep the assertions on the surrounding UI + API calls.
 jest.mock('./shared/LineChart', () => () => <div data-testid="line-chart" />);
 
-// The three PF Select toggles all expose the accessible name "Options menu",
-// so they can't be told apart by role+name. They carry distinct classNames
-// (periodSelect / jobTypeSelect / jobStatusSelect) wired up in the source, so
-// scope to each select wrapper and grab its toggle button.
-function getToggle(container, className) {
-  return container.querySelector(`.${className} button.pf-v5-c-select__toggle`);
+function getToggle(label) {
+  return screen.getByRole('button', { name: label });
 }
 
 describe('<DashboardGraph/>', () => {
@@ -59,13 +55,13 @@ describe('<DashboardGraph/>', () => {
   });
 
   test('should render all three line chart filters with correct number of options', async () => {
-    const { user, container } = renderWithContexts(<DashboardGraph />);
+    const { user } = renderWithContexts(<DashboardGraph />);
 
     await waitFor(() => expect(graphRequest).toHaveBeenCalled());
 
-    const periodToggle = getToggle(container, 'periodSelect');
-    const jobTypeToggle = getToggle(container, 'jobTypeSelect');
-    const statusToggle = getToggle(container, 'jobStatusSelect');
+    const periodToggle = getToggle('Past month');
+    const jobTypeToggle = getToggle('All job types');
+    const statusToggle = getToggle('All jobs');
     expect(periodToggle).toBeInTheDocument();
     expect(jobTypeToggle).toBeInTheDocument();
     expect(statusToggle).toBeInTheDocument();

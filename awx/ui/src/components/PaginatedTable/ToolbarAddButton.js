@@ -6,7 +6,6 @@ import {
 	MenuToggle,
 	Tooltip
 } from '@patternfly/react-core';
-import CaretDownIcon from '@patternfly/react-icons/dist/js/icons/caret-down-icon';
 import { useLingui } from '@lingui/react/macro';
 import { useKebabifiedMenu } from 'contexts/Kebabified';
 
@@ -14,6 +13,7 @@ const ToolbarAddButton = forwardRef(({
   linkTo = null,
   onClick = null,
   isDisabled,
+  isExpanded,
   defaultLabel,
   showToggleIndicator,
   ouiaId,
@@ -48,9 +48,9 @@ const ToolbarAddButton = forwardRef(({
           ouiaId={ouiaId}
           onClick={onClick}
           isDisabled={isDisabled}
+          isExpanded={isExpanded}
         >
           {defaultLabel || t`Add`}
-          <CaretDownIcon />
         </MenuToggle>
       </Tooltip>
     );

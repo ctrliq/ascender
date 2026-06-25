@@ -1,17 +1,16 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import {
-	Select,
-	SelectOption,
-	SelectVariant
-} from '@patternfly/react-core/deprecated';
-
-function Option({ show = true, ...props }) {
-  if (!show) {
-    return null;
-  }
-  return <SelectOption {...props} />;
-}
+  Button,
+  MenuToggle,
+  Select,
+  SelectList,
+  SelectOption,
+  TextInputGroup,
+  TextInputGroupMain,
+  TextInputGroupUtilities,
+} from '@patternfly/react-core';
+import { TimesIcon } from '@patternfly/react-icons';
 
 function LookupTypeInput({
   value = '',
@@ -20,130 +19,192 @@ function LookupTypeInput({
   maxSelectHeight = '300px',
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [filterValue, setFilterValue] = useState('');
   const { t } = useLingui();
+
+  const allOptions = useMemo(
+    () => [
+      {
+        id: 'exact-option-select',
+        value: 'exact',
+        description: t`Exact match (default lookup if not specified).`,
+        show: true,
+      },
+      {
+        id: 'iexact-option-select',
+        value: 'iexact',
+        description: t`Case-insensitive version of exact.`,
+        show: type === 'string',
+      },
+      {
+        id: 'contains-option-select',
+        value: 'contains',
+        description: t`Field contains value.`,
+        show: type === 'string',
+      },
+      {
+        id: 'icontains-option-select',
+        value: 'icontains',
+        description: t`Case-insensitive version of contains`,
+        show: type === 'string',
+      },
+      {
+        id: 'startswith-option-select',
+        value: 'startswith',
+        description: t`Field starts with value.`,
+        show: type !== 'datetime',
+      },
+      {
+        id: 'istartswith-option-select',
+        value: 'istartswith',
+        description: t`Case-insensitive version of startswith.`,
+        show: type !== 'datetime',
+      },
+      {
+        id: 'endswith-option-select',
+        value: 'endswith',
+        description: t`Field ends with value.`,
+        show: type !== 'datetime',
+      },
+      {
+        id: 'iendswith-option-select',
+        value: 'iendswith',
+        description: t`Case-insensitive version of endswith.`,
+        show: type !== 'datetime',
+      },
+      {
+        id: 'regex-option-select',
+        value: 'regex',
+        description: t`Field matches the given regular expression.`,
+        show: true,
+      },
+      {
+        id: 'iregex-option-select',
+        value: 'iregex',
+        description: t`Case-insensitive version of regex.`,
+        show: true,
+      },
+      {
+        id: 'gt-option-select',
+        value: 'gt',
+        description: t`Greater than comparison.`,
+        show: type !== 'json',
+      },
+      {
+        id: 'gte-option-select',
+        value: 'gte',
+        description: t`Greater than or equal to comparison.`,
+        show: type !== 'json',
+      },
+      {
+        id: 'lt-option-select',
+        value: 'lt',
+        description: t`Less than comparison.`,
+        show: type !== 'json',
+      },
+      {
+        id: 'lte-option-select',
+        value: 'lte',
+        description: t`Less than or equal to comparison.`,
+        show: type !== 'json',
+      },
+      {
+        id: 'isnull-option-select',
+        value: 'isnull',
+        description: t`Check whether the given field or related object is null; expects a boolean value.`,
+        show: true,
+      },
+      {
+        id: 'in-option-select',
+        value: 'in',
+        description: t`Check whether the given field's value is present in the list provided; expects a comma-separated list of items.`,
+        show: true,
+      },
+    ],
+    [t, type]
+  );
+
+  const visibleOptions = allOptions.filter((opt) => opt.show);
+
+  const filteredOptions = filterValue
+    ? visibleOptions.filter((opt) =>
+        opt.value.toLowerCase().includes(filterValue.toLowerCase())
+      )
+    : visibleOptions;
+
   return (
     <Select
-      ouiaId="set-lookup-typeahead"
-      aria-label={t`Lookup select`}
-      className="lookupSelect"
-      variant={SelectVariant.typeahead}
-      typeAheadAriaLabel={t`Lookup typeahead`}
-      onToggle={(_event, val) => setIsOpen(val)}
-      onSelect={(event, selection) => setValue(selection)}
-      onClear={() => setValue(null)}
-      selections={value}
+      id="set-lookup-typeahead"
       isOpen={isOpen}
-      placeholderText={t`Lookup type`}
-      maxHeight={maxSelectHeight}
-      noResultsFoundText={t`No results found`}
+      onOpenChange={(open) => {
+        setIsOpen(open);
+        if (!open) setFilterValue('');
+      }}
+      onSelect={(_event, selection) => {
+        setValue(selection);
+        setFilterValue('');
+        setIsOpen(false);
+      }}
+      toggle={(toggleRef) => (
+        <MenuToggle
+          ref={toggleRef}
+          variant="typeahead"
+          onClick={() => setIsOpen(!isOpen)}
+          isExpanded={isOpen}
+          className="lookupSelect"
+          ouiaId="set-lookup-typeahead"
+        >
+          <TextInputGroup isPlain>
+            <TextInputGroupMain
+              value={filterValue || value || ''}
+              onClick={() => setIsOpen(true)}
+              onChange={(_event, val) => {
+                setFilterValue(val);
+                setIsOpen(true);
+              }}
+              onFocus={() => {
+                if (value && !filterValue) {
+                  setFilterValue('');
+                }
+              }}
+              autoComplete="off"
+              placeholder={t`Lookup type`}
+              aria-label={t`Lookup typeahead`}
+            />
+            {(filterValue || value) && (
+              <TextInputGroupUtilities>
+                <Button
+                  variant="plain"
+                  onClick={() => {
+                    setValue(null);
+                    setFilterValue('');
+                  }}
+                  aria-label={t`Clear`}
+                >
+                  <TimesIcon />
+                </Button>
+              </TextInputGroupUtilities>
+            )}
+          </TextInputGroup>
+        </MenuToggle>
+      )}
     >
-      <Option
-        id="exact-option-select"
-        key="exact"
-        value="exact"
-        description={t`Exact match (default lookup if not specified).`}
-      />
-      <Option
-        id="iexact-option-select"
-        key="iexact"
-        value="iexact"
-        description={t`Case-insensitive version of exact.`}
-        show={type === 'string'}
-      />
-      <Option
-        id="contains-option-select"
-        key="contains"
-        value="contains"
-        description={t`Field contains value.`}
-        show={type === 'string'}
-      />
-      <Option
-        id="icontains-option-select"
-        key="icontains"
-        value="icontains"
-        description={t`Case-insensitive version of contains`}
-        show={type === 'string'}
-      />
-      <Option
-        id="startswith-option-select"
-        key="startswith"
-        value="startswith"
-        description={t`Field starts with value.`}
-        show={type !== 'datetime'}
-      />
-      <Option
-        id="istartswith-option-select"
-        key="istartswith"
-        value="istartswith"
-        description={t`Case-insensitive version of startswith.`}
-        show={type !== 'datetime'}
-      />
-      <Option
-        id="endswith-option-select"
-        key="endswith"
-        value="endswith"
-        description={t`Field ends with value.`}
-        show={type !== 'datetime'}
-      />
-      <Option
-        id="iendswith-option-select"
-        key="iendswith"
-        value="iendswith"
-        description={t`Case-insensitive version of endswith.`}
-        show={type !== 'datetime'}
-      />
-      <Option
-        id="regex-option-select"
-        key="regex"
-        value="regex"
-        description={t`Field matches the given regular expression.`}
-      />
-      <Option
-        id="iregex-option-select"
-        key="iregex"
-        value="iregex"
-        description={t`Case-insensitive version of regex.`}
-      />
-      <Option
-        id="gt-option-select"
-        key="gt"
-        value="gt"
-        description={t`Greater than comparison.`}
-        show={type !== 'json'}
-      />
-      <Option
-        id="gte-option-select"
-        key="gte"
-        value="gte"
-        description={t`Greater than or equal to comparison.`}
-        show={type !== 'json'}
-      />
-      <Option
-        id="lt-option-select"
-        key="lt"
-        value="lt"
-        description={t`Less than comparison.`}
-        show={type !== 'json'}
-      />
-      <Option
-        id="lte-option-select"
-        key="lte"
-        value="lte"
-        description={t`Less than or equal to comparison.`}
-        show={type !== 'json'}
-      />
-      <Option
-        id="isnull-option-select"
-        key="isnull"
-        value="isnull"
-        description={t`Check whether the given field or related object is null; expects a boolean value.`}
-      />
-      <Option
-        id="in-option-select"
-        key="in"
-        value="in"
-        description={t`Check whether the given field's value is present in the list provided; expects a comma-separated list of items.`}
-      />
+      <SelectList style={{ maxHeight: maxSelectHeight, overflowY: 'auto' }}>
+        {filteredOptions.length === 0 ? (
+          <SelectOption isDisabled>{t`No results found`}</SelectOption>
+        ) : (
+          filteredOptions.map((opt) => (
+            <SelectOption
+              id={opt.id}
+              key={opt.value}
+              value={opt.value}
+              description={opt.description}
+            >
+              {opt.value}
+            </SelectOption>
+          ))
+        )}
+      </SelectList>
     </Select>
   );
 }

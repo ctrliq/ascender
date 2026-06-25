@@ -36,23 +36,13 @@ function renderSearch(props, options) {
   );
 }
 
-// The simple key Select's onSelect handler reads `target.innerText` to map the
-// clicked option back to a search column. jsdom never populates `innerText`, so
-// we set it on the real option element before dispatching a real click.
-// The handler does not close the key dropdown on select, so we open it only when
-// it is currently closed and press Escape afterwards to leave it settled.
 async function selectKey(user, name) {
-  const keyWrap = document.querySelector(
-    '[data-ouia-component-id="simple-key-select"]'
-  );
-  const toggle = within(keyWrap).getByRole('button', { name: 'Options menu' });
+  const toggle = screen.getByRole('button', { name: 'Simple key select' });
   if (toggle.getAttribute('aria-expanded') !== 'true') {
     await user.click(toggle);
   }
   const option = await screen.findByRole('option', { name });
-  option.innerText = name;
-  fireEvent.click(option);
-  fireEvent.keyDown(document.activeElement || document.body, { key: 'Escape' });
+  await user.click(option);
 }
 
 describe('<Search />', () => {
@@ -160,9 +150,6 @@ describe('<Search />', () => {
     });
     renderSearch({ columns }, { context: { router: { history } } });
 
-    // Assert the chip-group category label + the visible chip text (the
-    // DOM equivalent of the ToolbarFilter chip key, e.g. 'or__scm_type:foo').
-    // Option-based columns render the option label ('Foo Bar!'), not the raw value.
     const typeGroup = screen
       .getByText('Type (or__scm_type)')
       .closest('.pf-v5-c-chip-group');
@@ -199,8 +186,6 @@ describe('<Search />', () => {
     );
 
     expect(history.location.search).toEqual(query);
-    // PF Chip's close button is aria-labelledby the chip text, so its accessible
-    // name is the chip text ('foo'), not 'close'; click it within its chip.
     const chip = screen.getByText('foo').closest('.pf-v5-c-chip');
     await user.click(within(chip).getByRole('button'));
     expect(onRemove).toHaveBeenCalledWith('or__type', 'foo');
@@ -231,8 +216,6 @@ describe('<Search />', () => {
     );
 
     expect(history.location.search).toEqual(query);
-    // the query (or__type:) produces exactly one chip with no visible text;
-    // assert there is only one and click its close button (the only button)
     const chips = document.querySelectorAll('.pf-v5-c-chip');
     expect(chips).toHaveLength(1);
     await user.click(within(chips[0]).getByRole('button'));
@@ -252,8 +235,6 @@ describe('<Search />', () => {
     });
     renderSearch({ columns }, { context: { router: { history } } });
 
-    // Keys without a search column still get their own ToolbarFilter chip group;
-    // assert the category label + chip text rendered for that group.
     const nameExactGroup = screen
       .getByText('name__exact')
       .closest('.pf-v5-c-chip-group');
@@ -281,9 +262,7 @@ describe('<Search />', () => {
       expect(dateInput).toBeInTheDocument();
       expect(dateInput).toHaveAttribute('type', 'date');
       expect(
-        document.querySelector(
-          '[data-ouia-component-id="date-operator-select-created"]'
-        )
+        screen.getByRole('button', { name: 'Date operator select' })
       ).toBeInTheDocument();
     });
 
@@ -308,15 +287,11 @@ describe('<Search />', () => {
       const { user } = renderDateSearch(onSearch);
       await selectKey(user, 'Created');
 
-      const operatorWrap = document.querySelector(
-        '[data-ouia-component-id="date-operator-select-created"]'
-      );
-      await user.click(
-        within(operatorWrap).getByRole('button', { name: 'Options menu' })
-      );
-      // operator select keys off the `selection` arg, not innerText, so a real
-      // click on the option drives it directly
-      fireEvent.click(await screen.findByRole('option', { name: 'Before' }));
+      const operatorToggle = screen.getByRole('button', {
+        name: 'Date operator select',
+      });
+      await user.click(operatorToggle);
+      await user.click(await screen.findByRole('option', { name: 'Before' }));
 
       fireEvent.change(screen.getByLabelText('Date search input'), {
         target: { value: '2026-06-30' },
@@ -361,13 +336,10 @@ describe('<Search />', () => {
       const { user } = renderDateSearch(jest.fn());
       await selectKey(user, 'Created');
 
-      const operatorWrap = document.querySelector(
-        '[data-ouia-component-id="date-operator-select-created"]'
-      );
-      await user.click(
-        within(operatorWrap).getByRole('button', { name: 'Options menu' })
-      );
-      // open means the operator options are visible
+      const operatorToggle = screen.getByRole('button', {
+        name: 'Date operator select',
+      });
+      await user.click(operatorToggle);
       expect(
         screen.getByRole('option', { name: 'Before' })
       ).toBeInTheDocument();
@@ -375,7 +347,6 @@ describe('<Search />', () => {
       await selectKey(user, 'Name');
       await selectKey(user, 'Created');
 
-      // switching columns resets the operator dropdown to closed
       await waitFor(() =>
         expect(
           screen.queryByRole('option', { name: 'Before' })

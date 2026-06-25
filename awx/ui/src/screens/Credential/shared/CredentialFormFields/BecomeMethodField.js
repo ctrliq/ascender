@@ -2,21 +2,26 @@ import React, { useState } from 'react';
 import { useField } from 'formik';
 import { useLingui } from '@lingui/react/macro';
 import {
+	Button,
 	FormGroup,
 	FormHelperText,
 	HelperText,
 	HelperTextItem,
-} from '@patternfly/react-core';
-import {
+	MenuToggle,
 	Select,
+	SelectList,
 	SelectOption,
-	SelectVariant
-} from '@patternfly/react-core/deprecated';
+	TextInputGroup,
+	TextInputGroupMain,
+	TextInputGroupUtilities,
+} from '@patternfly/react-core';
+import { TimesIcon } from '@patternfly/react-icons';
 import Popover from 'components/Popover';
 
 function BecomeMethodField({ fieldOptions, isRequired = false }) {
   const { t } = useLingui();
   const [isOpen, setIsOpen] = useState(false);
+  const [filterValue, setFilterValue] = useState('');
   const [options, setOptions] = useState(
     [
       'sudo',
@@ -36,6 +41,17 @@ function BecomeMethodField({ fieldOptions, isRequired = false }) {
   const [becomeMethodField, meta, helpers] = useField({
     name: `inputs.${fieldOptions.id}`,
   });
+
+  const filteredOptions = options.filter((option) =>
+    option.value.toLowerCase().includes(filterValue.toLowerCase())
+  );
+
+  const showCreateOption =
+    filterValue.trim() &&
+    !options.some(
+      (option) => option.value.toLowerCase() === filterValue.trim().toLowerCase()
+    );
+
   return (
     <FormGroup
       fieldId={`credential-${fieldOptions.id}`}
@@ -46,31 +62,82 @@ function BecomeMethodField({ fieldOptions, isRequired = false }) {
       isRequired={isRequired}
     >
       <Select
-        ouiaId={`CredentialForm-${fieldOptions.id}`}
-        typeAheadAriaLabel={fieldOptions.label}
-        maxHeight={200}
-        variant={SelectVariant.typeahead}
-        onToggle={(_event, val) => setIsOpen(val)}
-        onClear={() => {
-          helpers.setValue('');
-        }}
-        onSelect={(event, option) => {
-          helpers.setValue(option);
-          setIsOpen(false);
-        }}
-        isOpen={isOpen}
         id="privilege-escalation-methods"
-        selections={becomeMethodField.value}
-        isCreatable
-        onCreateOption={(option) => {
-          setOptions([...options, { value: option }]);
+        isOpen={isOpen}
+        isScrollable
+        onOpenChange={(open) => {
+          setIsOpen(open);
+          if (!open) setFilterValue('');
         }}
-        noResultsFoundText={t`No results found`}
-        createText={t`Create`}
+        onSelect={(_event, value) => {
+          helpers.setValue(value);
+          setIsOpen(false);
+          setFilterValue('');
+        }}
+        ouiaId={`CredentialForm-${fieldOptions.id}`}
+        toggle={(toggleRef) => (
+          <MenuToggle
+            ref={toggleRef}
+            variant="typeahead"
+            onClick={() => setIsOpen(!isOpen)}
+            isExpanded={isOpen}
+          >
+            <TextInputGroup isPlain>
+              <TextInputGroupMain
+                value={filterValue !== '' ? filterValue : (becomeMethodField.value || '')}
+                onClick={() => setIsOpen(true)}
+                onChange={(_event, val) => {
+                  setFilterValue(val);
+                  setIsOpen(true);
+                }}
+                onFocus={() => {
+                  if (becomeMethodField.value && filterValue === '') {
+                    setFilterValue(becomeMethodField.value);
+                  }
+                }}
+                autoComplete="off"
+                aria-label={fieldOptions.label}
+              />
+              {(filterValue || becomeMethodField.value) && (
+                <TextInputGroupUtilities>
+                  <Button
+                    variant="plain"
+                    onClick={() => {
+                      helpers.setValue('');
+                      setFilterValue('');
+                    }}
+                    aria-label={t`Clear`}
+                  >
+                    <TimesIcon />
+                  </Button>
+                </TextInputGroupUtilities>
+              )}
+            </TextInputGroup>
+          </MenuToggle>
+        )}
       >
-        {options.map((option) => (
-          <SelectOption key={option.value} value={option.value} />
-        ))}
+        <SelectList style={{ maxHeight: '200px' }}>
+          {filteredOptions.map((option) => (
+            <SelectOption key={option.value} value={option.value}>
+              {option.value}
+            </SelectOption>
+          ))}
+          {showCreateOption && (
+            <SelectOption
+              value={filterValue.trim()}
+              onClick={() => {
+                setOptions([...options, { value: filterValue.trim() }]);
+              }}
+            >
+              {t`Create`} &quot;{filterValue.trim()}&quot;
+            </SelectOption>
+          )}
+          {filteredOptions.length === 0 && !showCreateOption && (
+            <SelectOption isDisabled>
+              {t`No results found`}
+            </SelectOption>
+          )}
+        </SelectList>
       </Select>
       {meta.touched && meta.error && (
         <FormHelperText>

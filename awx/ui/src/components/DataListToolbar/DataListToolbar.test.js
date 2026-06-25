@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen, within, fireEvent } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import DataListToolbar from './DataListToolbar';
 import AddDropDownButton from '../AddDropDownButton/AddDropDownButton';
@@ -134,7 +134,7 @@ describe('<DataListToolbar />', () => {
     );
 
     // open the simple-key select and assert the injected "Advanced" option
-    await user.click(screen.getByRole('button', { name: 'Options menu' }));
+    await user.click(screen.getByRole('button', { name: 'Simple key select' }));
     expect(
       screen.getByRole('option', { name: 'Advanced' })
     ).toBeInTheDocument();
@@ -169,14 +169,8 @@ describe('<DataListToolbar />', () => {
       />
     );
 
-    // enter advanced search mode via the simple-key select -> "Advanced".
-    // Search.handleDropdownSelect matches the option by event.target.innerText,
-    // which jsdom does not populate from layout, so set it explicitly before
-    // dispatching the click (DOM equivalent of the option selection).
-    await user.click(screen.getByRole('button', { name: 'Options menu' }));
-    const advancedOption = screen.getByRole('option', { name: 'Advanced' });
-    advancedOption.innerText = 'Advanced';
-    fireEvent.click(advancedOption);
+    await user.click(screen.getByRole('button', { name: 'Simple key select' }));
+    await user.click(screen.getByRole('option', { name: 'Advanced' }));
 
     // a kebab toggle appears in advanced search mode
     const kebab = await screen.findByRole('button', { name: 'Actions' });

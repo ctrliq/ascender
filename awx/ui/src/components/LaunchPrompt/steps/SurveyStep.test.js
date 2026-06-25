@@ -25,9 +25,9 @@ function makeConfig(choices) {
 }
 
 async function openAndAssertOptions(user) {
-  // The typeahead toggle is the button inside the PF Select.
-  const toggle = screen.getByRole('button', { name: 'Options menu' });
-  await user.click(toggle);
+  // The typeahead toggle is the textbox inside the MenuToggle.
+  const input = screen.getByRole('textbox');
+  await user.click(input);
 
   const listbox = screen.getByRole('listbox');
   ['1', '2', '3', '4', '5', '6'].forEach((value) => {

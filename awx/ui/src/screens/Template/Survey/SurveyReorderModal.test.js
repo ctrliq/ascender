@@ -82,16 +82,13 @@ describe('<SurveyReorderModal />', () => {
 
     // Question 2: multiple choice Select, disabled, placeholder is the default.
     expect(screen.getByText('Select Question')).toBeInTheDocument();
-    const question2Select = document.querySelector(
+    const question2Toggle = document.querySelector(
       '[data-ouia-component-id="survey-preview-multipleChoice-sdf"]'
     );
-    expect(question2Select).toBeInTheDocument();
+    expect(question2Toggle).toBeInTheDocument();
     expect(
-      within(question2Select).getByText('Select Question Value')
+      within(question2Toggle).getByText('Select Question Value')
     ).toBeInTheDocument();
-    const question2Toggle = question2Select.querySelector(
-      'button[aria-label="Options menu"]'
-    );
     expect(question2Toggle).toBeDisabled();
 
     // Question 3: textarea, disabled, with the default value.
@@ -107,18 +104,16 @@ describe('<SurveyReorderModal />', () => {
     expect(question4Value).toBeInTheDocument();
     expect(question4Value).toHaveTextContent('ENCRYPTED');
 
-    // Question 5: multiselect renders the selections as chips (4 values).
+    // Question 5: multiselect renders the selections as Labels (4 values).
     expect(screen.getByText('Multiple select Question')).toBeInTheDocument();
-    const multiSelect = document.querySelector(
+    const multiSelectToggle = document.querySelector(
       '[data-ouia-component-id="survey-preview-multiSelect-a"]'
     );
-    expect(multiSelect).toBeInTheDocument();
-    const chips = multiSelect.querySelectorAll('.pf-v5-c-chip');
-    expect(chips.length).toBe(4);
-    const multiSelectToggle = multiSelect.querySelector(
-      'button[aria-label="Options menu"]'
-    );
-    expect(multiSelectToggle).toBeDisabled();
+    expect(multiSelectToggle).toBeInTheDocument();
+    const toggleWrapper = multiSelectToggle.closest('.pf-v5-c-menu-toggle');
+    const labels = toggleWrapper.querySelectorAll('.pf-v5-c-label');
+    expect(labels.length).toBe(4);
+    expect(toggleWrapper).toHaveClass('pf-m-disabled');
   });
 
   test('Save and Cancel buttons wire up their callbacks', () => {

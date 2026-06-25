@@ -2,10 +2,16 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
 import {
-	SelectVariant,
+	Button,
+	MenuToggle,
 	Select,
-	SelectOption
-} from '@patternfly/react-core/deprecated';
+	SelectList,
+	SelectOption,
+	TextInputGroup,
+	TextInputGroupMain,
+	TextInputGroupUtilities,
+} from '@patternfly/react-core';
+import { TimesIcon } from '@patternfly/react-icons';
 import { ProjectsAPI } from 'api';
 import useRequest from 'hooks/useRequest';
 
@@ -22,6 +28,7 @@ function PlaybookSelect({
   const { t } = useLingui();
   const [isDisabled, setIsDisabled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [filterValue, setFilterValue] = useState('');
   const {
     result: options,
     request: fetchOptions,
@@ -56,31 +63,92 @@ function PlaybookSelect({
     }
   }, [error, onError]);
 
+  const filteredOptions = filterValue
+    ? options.filter((opt) =>
+        opt.toLowerCase().includes(filterValue.toLowerCase())
+      )
+    : options;
+
+  const showCreatableOption =
+    filterValue &&
+    !options.some(
+      (opt) => opt.toLowerCase() === filterValue.toLowerCase()
+    );
+
   return (
     <Select
-      ouiaId="JobTemplateForm-playbook"
       isOpen={isOpen}
-      variant={SelectVariant.typeahead}
-      selections={selected}
-      onToggle={(_event, val) => setIsOpen(val)}
-      placeholderText={t`Select a playbook`}
-      typeAheadAriaLabel={t`Select a playbook`}
-      isCreatable
-      createText=""
-      onSelect={(event, value) => {
+      onOpenChange={(open) => {
+        setIsOpen(open);
+        if (!open) setFilterValue('');
+      }}
+      onSelect={(_event, value) => {
         setIsOpen(false);
+        setFilterValue('');
         onChange(value);
       }}
-      id="template-playbook"
-      validated={isValid ? 'default' : 'error'}
-      onBlur={onBlur}
-      isDisabled={isLoading || isDisabled}
-      maxHeight="1000%"
-      noResultsFoundText={t`No results found`}
+      toggle={(toggleRef) => (
+        <MenuToggle
+          ref={toggleRef}
+          variant="typeahead"
+          onClick={() => setIsOpen(!isOpen)}
+          isExpanded={isOpen}
+          isDisabled={isLoading || isDisabled}
+          status={isValid ? 'default' : 'danger'}
+          id="template-playbook"
+          ouiaId="JobTemplateForm-playbook"
+        >
+          <TextInputGroup isPlain>
+            <TextInputGroupMain
+              value={filterValue || selected || ''}
+              onClick={() => setIsOpen(true)}
+              onChange={(_event, val) => {
+                setFilterValue(val);
+                setIsOpen(true);
+              }}
+              onFocus={() => {
+                if (selected && !filterValue) {
+                  setFilterValue(selected);
+                }
+              }}
+              onBlur={onBlur}
+              autoComplete="off"
+              placeholder={t`Select a playbook`}
+              aria-label={t`Select a playbook`}
+            />
+            {(filterValue || selected) && (
+              <TextInputGroupUtilities>
+                <Button
+                  variant="plain"
+                  onClick={() => {
+                    onChange('');
+                    setFilterValue('');
+                  }}
+                  aria-label={t`Clear`}
+                >
+                  <TimesIcon />
+                </Button>
+              </TextInputGroupUtilities>
+            )}
+          </TextInputGroup>
+        </MenuToggle>
+      )}
     >
-      {options.map((opt) => (
-        <SelectOption key={opt} value={opt} />
-      ))}
+      <SelectList>
+        {filteredOptions.map((opt) => (
+          <SelectOption key={opt} value={opt}>
+            {opt}
+          </SelectOption>
+        ))}
+        {showCreatableOption && (
+          <SelectOption value={filterValue}>
+            {filterValue}
+          </SelectOption>
+        )}
+        {filteredOptions.length === 0 && !showCreatableOption && (
+          <SelectOption isDisabled>{t`No results found`}</SelectOption>
+        )}
+      </SelectList>
     </Select>
   );
 }

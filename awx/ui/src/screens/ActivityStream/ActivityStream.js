@@ -5,16 +5,15 @@ import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
 import {
 	Card,
+	MenuToggle,
 	PageSection,
 	PageSectionVariants,
-	Title
-} from '@patternfly/react-core';
-import {
+	Select,
 	SelectGroup,
-	Select as PFSelect,
-	SelectVariant,
-	SelectOption
-} from '@patternfly/react-core/deprecated';
+	SelectList,
+	SelectOption,
+	Title,
+} from '@patternfly/react-core';
 
 import DatalistToolbar from 'components/DataListToolbar';
 import PaginatedTable, {
@@ -29,11 +28,10 @@ import { ActivityStreamAPI } from 'api';
 
 import ActivityStreamListItem from './ActivityStreamListItem';
 
-const Select = styled(PFSelect)`
+const StyledMenuToggle = styled(MenuToggle)`
   && {
-    width: auto;
+    width: 250px;
     white-space: nowrap;
-    max-height: 480px;
   }
 `;
 
@@ -115,6 +113,28 @@ function ActivityStream() {
     navigate(qs ? `${location.pathname}?${qs}` : location.pathname);
   };
 
+  const typeLabelMap = {
+    all: t`Dashboard (all activity)`,
+    job: t`Jobs`,
+    schedule: t`Schedules`,
+    workflow_approval: t`Workflow Approvals`,
+    'job_template,workflow_job_template,workflow_job_template_node': t`Templates`,
+    credential: t`Credentials`,
+    project: t`Projects`,
+    inventory: t`Inventories`,
+    host: t`Hosts`,
+    organization: t`Organizations`,
+    user: t`Users`,
+    team: t`Teams`,
+    credential_type: t`Credential Types`,
+    notification_template: t`Notification Templates`,
+    instance: t`Instances`,
+    instance_group: t`Instance Groups`,
+    'o_auth2_application,o_auth2_access_token': t`Applications & Tokens`,
+    execution_environment: t`Execution Environments`,
+    setting: t`Settings`,
+  };
+
   return (
     <>
       <PageSection
@@ -129,105 +149,114 @@ function ActivityStream() {
           {t`Activity Stream type selector`}
         </span>
         <Select
-          position="right"
-          variant={SelectVariant.single}
-          aria-labelledby="grouped-type-select-id"
-          typeAheadAriaLabel={t`Select an activity type`}
-          className="activityTypeSelect"
-          onToggle={(_event, val) => setIsTypeDropdownOpen(val)}
-          onSelect={(event, selection) => {
+          isOpen={isTypeDropdownOpen}
+          onOpenChange={setIsTypeDropdownOpen}
+          onSelect={(_event, selection) => {
             if (selection) {
               urlParams.set('type', selection);
             }
             setIsTypeDropdownOpen(false);
             pushHistoryState(urlParams);
           }}
-          selections={activityStreamType}
-          isOpen={isTypeDropdownOpen}
-          isGrouped
-          maxHeight="400px"
-          width="250px"
-          noResultsFoundText={t`No results found`}
+          aria-labelledby="grouped-type-select-id"
+          className="activityTypeSelect"
           ouiaId="activity-type-select"
+          popperProps={{ position: 'end' }}
+          isScrollable
+          toggle={(toggleRef) => (
+            <StyledMenuToggle
+              ref={toggleRef}
+              onClick={() => setIsTypeDropdownOpen(!isTypeDropdownOpen)}
+              isExpanded={isTypeDropdownOpen}
+            >
+              {typeLabelMap[activityStreamType] || activityStreamType}
+            </StyledMenuToggle>
+          )}
         >
           <SelectGroup label={t`Views`} key="views">
-            <SelectOption key="all_activity" value="all">
-              {t`Dashboard (all activity)`}
-            </SelectOption>
-            <SelectOption key="jobs" value="job">
-              {t`Jobs`}
-            </SelectOption>
-            <SelectOption key="schedules" value="schedule">
-              {t`Schedules`}
-            </SelectOption>
-            <SelectOption key="workflow_approvals" value="workflow_approval">
-              {t`Workflow Approvals`}
-            </SelectOption>
+            <SelectList>
+              <SelectOption value="all">
+                {t`Dashboard (all activity)`}
+              </SelectOption>
+              <SelectOption value="job">
+                {t`Jobs`}
+              </SelectOption>
+              <SelectOption value="schedule">
+                {t`Schedules`}
+              </SelectOption>
+              <SelectOption value="workflow_approval">
+                {t`Workflow Approvals`}
+              </SelectOption>
+            </SelectList>
           </SelectGroup>
           <SelectGroup label={t`Resources`} key="resources">
-            <SelectOption
-              key="templates"
-              value="job_template,workflow_job_template,workflow_job_template_node"
-            >
-              {t`Templates`}
-            </SelectOption>
-            <SelectOption key="credentials" value="credential">
-              {t`Credentials`}
-            </SelectOption>
-            <SelectOption key="projects" value="project">
-              {t`Projects`}
-            </SelectOption>
-            <SelectOption key="inventories" value="inventory">
-              {t`Inventories`}
-            </SelectOption>
-            <SelectOption key="hosts" value="host">
-              {t`Hosts`}
-            </SelectOption>
+            <SelectList>
+              <SelectOption
+                value="job_template,workflow_job_template,workflow_job_template_node"
+              >
+                {t`Templates`}
+              </SelectOption>
+              <SelectOption value="credential">
+                {t`Credentials`}
+              </SelectOption>
+              <SelectOption value="project">
+                {t`Projects`}
+              </SelectOption>
+              <SelectOption value="inventory">
+                {t`Inventories`}
+              </SelectOption>
+              <SelectOption value="host">
+                {t`Hosts`}
+              </SelectOption>
+            </SelectList>
           </SelectGroup>
           <SelectGroup label={t`Access`} key="access">
-            <SelectOption key="organizations" value="organization">
-              {t`Organizations`}
-            </SelectOption>
-            <SelectOption key="users" value="user">
-              {t`Users`}
-            </SelectOption>
-            <SelectOption key="teams" value="team">
-              {t`Teams`}
-            </SelectOption>
+            <SelectList>
+              <SelectOption value="organization">
+                {t`Organizations`}
+              </SelectOption>
+              <SelectOption value="user">
+                {t`Users`}
+              </SelectOption>
+              <SelectOption value="team">
+                {t`Teams`}
+              </SelectOption>
+            </SelectList>
           </SelectGroup>
           <SelectGroup label={t`Administration`} key="administration">
-            <SelectOption key="credential_types" value="credential_type">
-              {t`Credential Types`}
-            </SelectOption>
-            <SelectOption
-              key="notification_templates"
-              value="notification_template"
-            >
-              {t`Notification Templates`}
-            </SelectOption>
-            <SelectOption key="instance" value="instance">
-              {t`Instances`}
-            </SelectOption>
-            <SelectOption key="instance_groups" value="instance_group">
-              {t`Instance Groups`}
-            </SelectOption>
-            <SelectOption
-              key="applications"
-              value="o_auth2_application,o_auth2_access_token"
-            >
-              {t`Applications & Tokens`}
-            </SelectOption>
-            <SelectOption
-              key="execution_environments"
-              value="execution_environment"
-            >
-              {t`Execution Environments`}
-            </SelectOption>
+            <SelectList>
+              <SelectOption value="credential_type">
+                {t`Credential Types`}
+              </SelectOption>
+              <SelectOption
+                value="notification_template"
+              >
+                {t`Notification Templates`}
+              </SelectOption>
+              <SelectOption value="instance">
+                {t`Instances`}
+              </SelectOption>
+              <SelectOption value="instance_group">
+                {t`Instance Groups`}
+              </SelectOption>
+              <SelectOption
+                value="o_auth2_application,o_auth2_access_token"
+              >
+                {t`Applications & Tokens`}
+              </SelectOption>
+              <SelectOption
+                value="execution_environment"
+              >
+                {t`Execution Environments`}
+              </SelectOption>
+            </SelectList>
           </SelectGroup>
           <SelectGroup label={t`Settings`} key="settings">
-            <SelectOption key="settings" value="setting">
-              {t`Settings`}
-            </SelectOption>
+            <SelectList>
+              <SelectOption value="setting">
+                {t`Settings`}
+              </SelectOption>
+            </SelectList>
           </SelectGroup>
         </Select>
       </PageSection>

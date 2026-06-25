@@ -31,7 +31,7 @@ describe('<BecomeMethodField>', () => {
       </Formik>
     );
     await user.click(
-      screen.getByRole('button', { name: 'Options menu' })
+      screen.getByRole('textbox', { name: 'Privilege Escalation Method' })
     );
     expect(screen.getAllByRole('option')).toHaveLength(12);
   });
