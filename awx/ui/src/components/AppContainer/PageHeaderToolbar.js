@@ -32,7 +32,7 @@ const ToolbarItems = styled.div`
 `;
 
 const UserName = styled.span`
-  margin-left: var(--pf-v5-global--spacer--md);
+  margin-left: 1rem;
   font-size: var(--pf-v5-global--FontSize--sm);
 `;
 
