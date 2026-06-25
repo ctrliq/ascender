@@ -1,6 +1,5 @@
 
 import React, { useState } from 'react';
-import { useLingui } from '@lingui/react/macro';
 import {
 	Dropdown,
 	DropdownList
@@ -9,7 +8,6 @@ import { useKebabifiedMenu } from 'contexts/Kebabified';
 import { ToolbarAddButton } from '../PaginatedTable';
 
 function AddDropDownButton({ dropdownItems, ouiaId }) {
-  const { t } = useLingui();
   const { isKebabified } = useKebabifiedMenu();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -26,8 +24,8 @@ function AddDropDownButton({ dropdownItems, ouiaId }) {
         <ToolbarAddButton
           ref={toggleRef}
           ouiaId={ouiaId}
-          aria-label={t`Add`}
           showToggleIndicator
+          isExpanded={isOpen}
           onClick={() => setIsOpen(!isOpen)}
         />
       )}

@@ -150,7 +150,6 @@ function CredentialFormFields({ initialTypeId, credentialTypes }) {
       }}
       aria-label={t`Credential Type`}
       ouiaId="CredentialForm-credential_type"
-      style={{ width: '100%' }}
       toggle={(toggleRef) => (
         <MenuToggle
           ref={toggleRef}

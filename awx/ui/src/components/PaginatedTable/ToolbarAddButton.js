@@ -13,6 +13,7 @@ const ToolbarAddButton = forwardRef(({
   linkTo = null,
   onClick = null,
   isDisabled,
+  isExpanded,
   defaultLabel,
   showToggleIndicator,
   ouiaId,
@@ -47,6 +48,7 @@ const ToolbarAddButton = forwardRef(({
           ouiaId={ouiaId}
           onClick={onClick}
           isDisabled={isDisabled}
+          isExpanded={isExpanded}
         >
           {defaultLabel || t`Add`}
         </MenuToggle>
