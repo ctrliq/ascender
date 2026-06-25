@@ -1,0 +1,32 @@
+/* global styles */
+
+@import '~@patternfly/patternfly5/dist/pf5.css';
+
+/* Update background colors */
+
+.pf-c-button.pf-m-primary {
+  background-color: #007bff;
+}
+
+.pf-c-button.pf-m-secondary {
+  background-color: #6c757d;
+}
+
+.pf-c-button.pf-m-danger {
+  background-color: #dc3545;
+}
+
+.pf-c-button.pf-m-success {
+  background-color: #28a745;
+}
+
+.pf-c-button.pf-m-warning {
+  background-color: #ffc107;
+}
+
+.pf-c-button.pf-m-info {
+  background-color: #17a2b8;
+}
+
+/* Update other styles as needed */
+
