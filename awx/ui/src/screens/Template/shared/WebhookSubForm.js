@@ -183,7 +183,7 @@ function WebhookSubForm({ templateType }) {
             id="t-webhookURL"
             aria-label={t`Webhook URL`}
             value={webhookUrlField.value}
-             readOnlyVariant="default"
+            readOnlyVariant="default"
           />
         </FormGroup>
         <FormGroup
@@ -192,12 +192,14 @@ function WebhookSubForm({ templateType }) {
           fieldId="template-webhook_key"
         >
           <InputGroup>
-            <InputGroupItem isFill ><TextInput
-              id="template-webhook_key"
-
-              aria-label={t`workflow job template webhook key`}
-              value={webhookKeyField.value} readOnlyVariant="default"
-            /></InputGroupItem>
+            <InputGroupItem isFill>
+              <TextInput
+                id="template-webhook_key"
+                aria-label={t`workflow job template webhook key`}
+                value={webhookKeyField.value}
+                readOnlyVariant="default"
+              />
+            </InputGroupItem>
             <InputGroupItem><Button
               ouiaId="update-webhook-key-button"
               isDisabled={isUpdateKeyDisabled}

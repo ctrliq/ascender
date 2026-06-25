@@ -70,7 +70,16 @@ function DateTimePicker({ dateFieldName, timeFieldName, label }) {
         <FormHelperText>
           <HelperText>
             <HelperTextItem variant="error">
-              {dateMeta.error || timeMeta.error}
+              {dateMeta.error}
+            </HelperTextItem>
+          </HelperText>
+        </FormHelperText>
+      )}
+      {timeMeta.touched && timeMeta.error && (
+        <FormHelperText>
+          <HelperText>
+            <HelperTextItem variant="error">
+              {timeMeta.error}
             </HelperTextItem>
           </HelperText>
         </FormHelperText>
