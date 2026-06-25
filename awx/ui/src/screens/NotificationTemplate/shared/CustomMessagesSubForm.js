@@ -15,13 +15,18 @@ function CustomMessagesSubForm({ defaultMessages, type }) {
 
   const { setFieldValue } = useFormikContext();
   const config = useConfig();
-  const mountedRef = useRef(null);
+  const prevTypeRef = useRef(type);
   useEffect(
     () => {
-      if (!mountedRef.current) {
-        mountedRef.current = true;
+      // Only reset messages when the notification type actually changes.
+      // Initializing the ref with the current type skips the initial mount,
+      // and the equality check keeps this resilient to React StrictMode's
+      // double-invocation of effects (which would otherwise overwrite
+      // pre-populated values when editing an existing template).
+      if (prevTypeRef.current === type) {
         return;
       }
+      prevTypeRef.current = type;
       const defs = defaultMessages[type];
       if (!defs) {
         return;
