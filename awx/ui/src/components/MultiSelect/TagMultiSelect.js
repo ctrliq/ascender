@@ -116,16 +116,16 @@ function TagMultiSelect({ onChange, value }) {
         ))}
         {filterValue && !hasExactMatch && (
           <SelectOption
-            key={`create-${filterValue}`}
-            value={filterValue}
+            key={`create-${filterValue.trim()}`}
+            value={filterValue.trim()}
             onClick={() => {
               const trimmed = filterValue.trim();
               if (trimmed && !options.includes(trimmed)) {
-                setOptions(options.concat(trimmed));
+                setOptions((prev) => prev.concat(trimmed));
               }
             }}
           >
-            {t`Create`} &quot;{filterValue}&quot;
+            {t`Create`} &quot;{filterValue.trim()}&quot;
           </SelectOption>
         )}
         {filteredOptions.length === 0 && !filterValue && (

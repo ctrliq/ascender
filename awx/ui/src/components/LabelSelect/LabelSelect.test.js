@@ -87,7 +87,7 @@ describe('<LabelSelect />', () => {
 
     const input = screen.getByRole('textbox', { name: 'Select Labels' });
     await user.type(input, 'foo');
-    const createOption = await screen.findByText(/foo/);
+    const createOption = await screen.findByRole('option', { name: /Create.*foo/ });
     await user.click(createOption);
 
     expect(onChange).toHaveBeenCalledWith([{ id: 'foo', name: 'foo' }]);

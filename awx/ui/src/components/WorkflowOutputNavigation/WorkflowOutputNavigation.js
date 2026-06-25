@@ -41,6 +41,11 @@ function WorkflowOutputNavigation({ relatedJobs, parentRef }) {
   const [sortedJobs, setSortedJobs] = useState(relevantResults);
   const [inlineFilter, setInlineFilter] = useState('');
 
+  const statusLabels = {
+    Failed: t`Failed`,
+    Successful: t`Successful`,
+  };
+
   const handleFilter = (v) => {
     if (filterBy === v) {
       setSortedJobs(relevantResults);
@@ -107,7 +112,7 @@ function WorkflowOutputNavigation({ relatedJobs, parentRef }) {
           {filterBy ? (
             <ChipGroup numChips={1} totalChips={1}>
               <Chip key={filterBy} onClick={() => handleFilter(filterBy)}>
-                {filterBy}
+                {statusLabels[filterBy] || filterBy}
               </Chip>
             </ChipGroup>
           ) : (

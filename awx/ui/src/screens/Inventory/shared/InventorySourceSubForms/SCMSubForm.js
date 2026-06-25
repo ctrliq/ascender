@@ -204,7 +204,7 @@ const SCMSubForm = ({ autoPopulateProject }) => {
                 value={filterValue.trim()}
                 onClick={() => {
                   const trimmed = filterValue.trim();
-                  setSourcePath([...sourcePath, trimmed]);
+                  setSourcePath((prev) => [...prev, trimmed]);
                 }}
               >
                 {t`Set source path to`} &quot;{filterValue.trim()}&quot;

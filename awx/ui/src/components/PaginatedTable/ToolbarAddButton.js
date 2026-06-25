@@ -6,7 +6,6 @@ import {
 	MenuToggle,
 	Tooltip
 } from '@patternfly/react-core';
-import CaretDownIcon from '@patternfly/react-icons/dist/js/icons/caret-down-icon';
 import { useLingui } from '@lingui/react/macro';
 import { useKebabifiedMenu } from 'contexts/Kebabified';
 
@@ -50,7 +49,6 @@ const ToolbarAddButton = forwardRef(({
           isDisabled={isDisabled}
         >
           {defaultLabel || t`Add`}
-          <CaretDownIcon />
         </MenuToggle>
       </Tooltip>
     );

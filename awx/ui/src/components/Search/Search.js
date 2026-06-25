@@ -30,7 +30,7 @@ SubmitButtonWrapper.displayName = 'SubmitButtonWrapper';
 const DateInputGroup = styled(InputGroup)`
   /* keep the operator select at its natural width so the date input
      next to it stays visible */
-  & > .pf-v5-c-menu-toggle {
+  & > .pf-v5-c-select {
     width: auto;
     flex: 0 0 auto;
   }

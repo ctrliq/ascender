@@ -28,6 +28,7 @@ import Sort from '../Sort';
 const ToolbarContent = styled(PFToolbarContent)`
   & > .pf-v5-c-toolbar__content-section {
     flex-wrap: nowrap;
+    align-items: center;
   }
 `;
 

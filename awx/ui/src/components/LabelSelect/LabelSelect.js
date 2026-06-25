@@ -91,19 +91,13 @@ function LabelSelect({
     if (selectedOption) {
       onSelect(_event, selectedOption);
     } else if (typeof selectedValue === 'string') {
-      const newItem = { id: selectedValue, name: selectedValue };
+      const trimmed = selectedValue.trim();
+      if (trimmed && !options.find((o) => o.name === trimmed)) {
+        setOptions(options.concat({ name: trimmed, id: trimmed }));
+      }
+      const newItem = { id: trimmed, name: trimmed };
       onSelect(_event, newItem);
     }
-    setFilterValue('');
-  };
-
-  const handleCreate = () => {
-    const trimmed = filterValue.trim();
-    if (trimmed && !options.find((o) => o.name === trimmed)) {
-      setOptions(options.concat({ name: trimmed, id: trimmed }));
-    }
-    const newItem = { id: trimmed, name: trimmed };
-    onSelect(null, newItem);
     setFilterValue('');
   };
 
@@ -194,9 +188,8 @@ function LabelSelect({
         ))}
         {filterValue && !hasExactMatch && (
           <SelectOption
-            key={`create-${filterValue}`}
-            value={filterValue}
-            onClick={handleCreate}
+            key={`create-${filterValue.trim()}`}
+            value={filterValue.trim()}
           >
             {createText || t`Create`} &quot;{filterValue}&quot;
           </SelectOption>

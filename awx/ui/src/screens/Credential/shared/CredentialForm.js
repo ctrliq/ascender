@@ -155,6 +155,7 @@ function CredentialFormFields({ initialTypeId, credentialTypes }) {
         <MenuToggle
           ref={toggleRef}
           variant="typeahead"
+          isFullWidth
           onClick={() => {
             if (!isCredentialTypeDisabled) setIsSelectOpen(!isSelectOpen);
           }}
@@ -200,7 +201,7 @@ function CredentialFormFields({ initialTypeId, credentialTypes }) {
         </MenuToggle>
       )}
     >
-      <SelectList style={{ maxHeight: '300px' }}>
+      <SelectList style={{ maxHeight: '300px', overflowY: 'auto' }}>
         {filteredOptions.map((credType) => (
           <StyledSelectOption
             key={credType.value}
