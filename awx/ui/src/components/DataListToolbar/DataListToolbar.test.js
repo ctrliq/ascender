@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen, within, fireEvent } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import DataListToolbar from './DataListToolbar';
 import AddDropDownButton from '../AddDropDownButton/AddDropDownButton';
