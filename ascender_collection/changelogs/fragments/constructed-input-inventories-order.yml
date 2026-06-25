@@ -1,2 +1,0 @@
-bugfixes:
-  - inventory - preserve the order of ``input_inventories`` on a constructed inventory by treating them as an ordered association.

@@ -17,7 +17,6 @@ the change does.
 <!--- Name of the module/plugin/module/task -->
  - API
  - UI
- - Collection
  - CLI
  - Docs
  - Other

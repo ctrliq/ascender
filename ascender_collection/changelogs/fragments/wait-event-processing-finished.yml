@@ -1,2 +1,0 @@
-bugfixes:
-  - module_utils - wait on ``event_processing_finished`` when the API exposes it (falling back to ``finished``) so job events are fully flushed before a wait returns.

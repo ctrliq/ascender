@@ -12,20 +12,6 @@ GIT_BRANCH ?= $(shell git rev-parse --abbrev-ref HEAD)
 MANAGEMENT_COMMAND ?= awx-manage
 VERSION ?= $(shell $(PYTHON) tools/scripts/scm_version.py 2> /dev/null)
 
-# ansible-test requires semver compatable version, so we allow overrides to hack it
-COLLECTION_VERSION ?= $(shell $(PYTHON) tools/scripts/scm_version.py | cut -d . -f 1-3)
-# args for the ansible-test sanity command
-COLLECTION_SANITY_ARGS ?= --docker
-# collection unit testing directories
-COLLECTION_TEST_DIRS ?= ascender_collection/test/ascender
-# collection integration test directories (defaults to all)
-COLLECTION_TEST_TARGET ?=
-# args for collection install
-COLLECTION_PACKAGE ?= ascender
-COLLECTION_NAMESPACE ?= ctrliq
-COLLECTION_INSTALL = ~/.ansible/collections/ansible_collections/$(COLLECTION_NAMESPACE)/$(COLLECTION_PACKAGE)
-COLLECTION_TEMPLATE_VERSION ?= true
-
 # NOTE: This defaults the container image version to the branch that's active
 COMPOSE_TAG ?= $(GIT_BRANCH)
 MAIN_NODE_TYPE ?= hybrid
@@ -284,7 +270,7 @@ reports:
 
 black: reports
 	@command -v black >/dev/null 2>&1 || { echo "could not find black on your PATH, you may need to \`pip install black\`, or set AWX_IGNORE_BLACK=1" && exit 1; }
-	@(set -o pipefail && $@ $(BLACK_ARGS) awx awxkit ascender_collection | tee reports/$@.report)
+	@(set -o pipefail && $@ $(BLACK_ARGS) awx awxkit | tee reports/$@.report)
 
 ../../.git/hooks/pre-commit:
 	@echo "if [ -x pre-commit.sh ]; then" > .git/hooks/pre-commit
@@ -352,53 +338,6 @@ test_migrations:
 ## Runs AWX_DOCKER_CMD inside a new docker container.
 docker-runner:
 	docker run -u $(shell id -u) --rm -v $(shell pwd):/ascender_devel/:Z --workdir=/ascender_devel $(DEVEL_IMAGE_NAME) $(AWX_DOCKER_CMD)
-
-test_collection:
-	rm -f $(shell ls -d $(VENV_BASE)/awx/lib/python* | head -n 1)/no-global-site-packages.txt
-	if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/awx/bin/activate; \
-	fi && \
-	if ! [ -x "$(shell command -v ansible-playbook)" ]; then pip install ansible-core; fi
-	ansible --version
-	py.test $(COLLECTION_TEST_DIRS) -v
-	# The python path needs to be modified so that the tests can find Ansible within the container
-	# First we will use anything expility set as PYTHONPATH
-	# Second we will load any libraries out of the virtualenv (if it's unspecified that should be ok because python should not load out of an empty directory)
-	# Finally we will add the system path so that the tests can find the ansible libraries
-
-test_collection_all: test_collection
-
-# WARNING: symlinking a collection is fundamentally unstable
-# this is for rapid development iteration with playbooks, do not use with other test targets
-symlink_collection:
-	rm -rf $(COLLECTION_INSTALL)
-	mkdir -p ~/.ansible/collections/ansible_collections/$(COLLECTION_NAMESPACE)  # in case it does not exist
-	ln -s $(shell pwd)/ascender_collection $(COLLECTION_INSTALL)
-
-ascender_collection_build: $(shell find ascender_collection -type f)
-	ansible-playbook -i localhost, ascender_collection/tools/template_galaxy.yml \
-	  -e collection_package=$(COLLECTION_PACKAGE) \
-	  -e collection_namespace=$(COLLECTION_NAMESPACE) \
-	  -e collection_version=$(COLLECTION_VERSION) \
-	  -e '{"awx_template_version": $(COLLECTION_TEMPLATE_VERSION)}'
-	ansible-galaxy collection build ascender_collection_build --force --output-path=ascender_collection_build
-
-build_collection: ascender_collection_build
-
-install_collection: build_collection
-	rm -rf $(COLLECTION_INSTALL)
-	ansible-galaxy collection install ascender_collection_build/$(COLLECTION_NAMESPACE)-$(COLLECTION_PACKAGE)-$(COLLECTION_VERSION).tar.gz
-
-test_collection_sanity:
-	rm -rf ascender_collection_build/
-	rm -rf $(COLLECTION_INSTALL)
-	if ! [ -x "$(shell command -v ansible-test)" ]; then pip install ansible-core; fi
-	ansible --version
-	COLLECTION_VERSION=1.0.0 $(MAKE) install_collection
-	cd $(COLLECTION_INSTALL) && ansible-test sanity $(COLLECTION_SANITY_ARGS)
-
-test_collection_integration: install_collection
-	cd $(COLLECTION_INSTALL) && ansible-test integration -vvv $(COLLECTION_TEST_TARGET)
 
 test_unit:
 	@if [ "$(VENV_BASE)" ]; then \
