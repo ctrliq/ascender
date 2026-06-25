@@ -67,7 +67,6 @@ twilio
 twisted[tls]>=26.4.0   # CVE-2026-42304
 urllib3>=2.7.0 # CVE-2026-44431 CVE-2026-44432
 uWSGI>=2.0.22 # CVE-2023-27522
-uwsgitop
 valkey[libvalkey]
 wheel>=0.46.2  # CVE-2026-24049
 pip==26.1.2  # see CVE-2026-8643
