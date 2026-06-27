@@ -43,14 +43,12 @@ describe('<NotificationListItem canToggleNotifications />', () => {
 
   test('initially renders successfully and displays correct label', () => {
     setup();
-    // PF Switch renders as role="checkbox"; the three default toggles
-    // (start/success/failure) are present, approvals hidden by default.
-    expect(screen.getAllByRole('checkbox')).toHaveLength(3);
+    expect(screen.getAllByRole('switch')).toHaveLength(3);
   });
 
   test('shows approvals toggle when configured', () => {
     setup({ showApprovalsToggle: true });
-    expect(screen.getAllByRole('checkbox')).toHaveLength(4);
+    expect(screen.getAllByRole('switch')).toHaveLength(4);
   });
 
   test('displays correct type', () => {
