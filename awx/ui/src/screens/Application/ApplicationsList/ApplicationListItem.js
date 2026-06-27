@@ -49,15 +49,13 @@ function ApplicationListItem({
           visible={application.summary_fields.user_capabilities.edit}
           tooltip={t`Edit application`}
         >
-          <Button
+          <Button icon={<PencilAltIcon />}
             ouiaId={`${application.id}-edit-button`}
             aria-label={t`Edit application`}
             variant="plain"
             component={Link}
             to={`/applications/${application.id}/edit`}
-          >
-            <PencilAltIcon />
-          </Button>
+           />
         </ActionItem>
       </ActionsTd>
     </Tr>

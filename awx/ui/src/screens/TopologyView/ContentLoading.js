@@ -6,21 +6,20 @@ import {
   EmptyState as PFEmptyState,
   Progress,
   ProgressMeasureLocation,
-  Text,
-  TextContent,
-  TextVariants,
+  Content,
+  ContentVariants,
 } from '@patternfly/react-core';
 
 import { TopologyIcon as PFTopologyIcon } from '@patternfly/react-icons';
 
 const EmptyState = styled(PFEmptyState)`
-  --pf-v5-c-empty-state--m-lg--MaxWidth: none;
+  --pf-v6-c-empty-state--m-lg--MaxWidth: none;
   min-height: 250px;
 `;
 
 const TopologyIcon = styled(PFTopologyIcon)`
   font-size: 3em;
-  fill: var(--pf-v5-global--Color--200);
+  fill: var(--pf-v6-global--Color--200);
 `;
 
 const ContentLoading = ({ className, progress }) => {
@@ -34,14 +33,14 @@ const ContentLoading = ({ className, progress }) => {
         aria-label={t`content-loading-in-progress`}
         style={{ margin: '20px' }}
       />
-      <TextContent style={{ margin: '20px' }}>
-        <Text
-          component={TextVariants.small}
-          style={{ fontWeight: 'bold', color: 'var(--pf-v5-global--Color--100)' }}
+      <Content style={{ margin: '20px' }}>
+        <Content
+          component={ContentVariants.small}
+          style={{ fontWeight: 'bold', color: "var(--pf-t--global--text--color--100)" }}
         >
           {t`Please wait until the topology view is populated...`}
-        </Text>
-      </TextContent>
+        </Content>
+      </Content>
     </EmptyState>
   );
 };

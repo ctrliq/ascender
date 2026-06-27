@@ -87,7 +87,7 @@ function User({ setBreadcrumb, me }) {
 
   if (!isLoading && contentError) {
     return (
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <ContentError error={contentError}>
             {contentError.response && contentError.response.status === 404 && (
@@ -103,7 +103,7 @@ function User({ setBreadcrumb, me }) {
   }
 
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         {showCardHeader && <RoutedTabs tabsArray={tabsArray} />}
         <Routes>

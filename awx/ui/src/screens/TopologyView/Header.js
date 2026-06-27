@@ -4,7 +4,6 @@ import { useLingui } from '@lingui/react/macro';
 import {
   Button,
   PageSection,
-  PageSectionVariants,
   Switch,
   Title,
   Tooltip,
@@ -30,9 +29,8 @@ const Header = ({
   showZoomControls,
 }) => {
   const { t } = useLingui();
-  const { light } = PageSectionVariants;
   return (
-    <PageSection variant={light}>
+    <PageSection hasBodyWrapper={false}>
       <div
         style={{
           display: 'flex',

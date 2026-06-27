@@ -118,7 +118,7 @@ function ExecutionEnvironmentList() {
     relatedResourceDeleteRequests(t).executionEnvironment(selected[0]);
   return (
     <>
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <PaginatedTable
             ouiaId="execution-environment-table"

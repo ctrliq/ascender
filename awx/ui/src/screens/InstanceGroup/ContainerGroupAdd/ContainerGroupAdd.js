@@ -70,7 +70,7 @@ function ContainerGroupAdd() {
 
   if (fetchError) {
     return (
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <CardBody>
             <ContentError error={fetchError} />
@@ -82,7 +82,7 @@ function ContainerGroupAdd() {
 
   if (isLoading) {
     return (
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <CardBody>
             <ContentLoading />
@@ -93,7 +93,7 @@ function ContainerGroupAdd() {
   }
 
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         <CardBody>
           <ContainerGroupForm

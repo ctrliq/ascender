@@ -78,7 +78,7 @@ function MetadataStep() {
                       fieldId={`credential-${field.id}`}
                       label={field.label}
                       isRequired={field.required}
-                      labelIcon={
+                      labelHelp={
                         field.help_text && <Popover content={field.help_text} />
                       }
                     >

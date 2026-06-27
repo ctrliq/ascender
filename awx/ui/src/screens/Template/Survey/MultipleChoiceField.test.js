@@ -8,7 +8,7 @@ import MultipleChoiceField from './MultipleChoiceField';
 // color rule (selected -> secondary active color, unselected -> disabled
 // color). To proxy the `selected` prop we read the resolved color on the
 // rendered <svg>.
-const SELECTED_COLOR = 'var(--pf-v5-c-button--m-secondary--active--Color)';
+const SELECTED_COLOR = 'var(--pf-v6-c-button--m-secondary--active--Color)';
 
 const isSelected = (ouiaId) => {
   const icon = document.querySelector(

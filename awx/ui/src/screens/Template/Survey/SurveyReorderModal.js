@@ -5,7 +5,6 @@ import {
 	Label,
 	LabelGroup,
 	MenuToggle,
-	Modal,
 	Select,
 	SelectList,
 	SelectOption,
@@ -13,6 +12,9 @@ import {
 	TextArea,
 	Button
 } from '@patternfly/react-core';
+import {
+	Modal
+} from '@patternfly/react-core/deprecated';
 import {
   Table,
   Thead,
@@ -270,9 +272,7 @@ function SurveyReorderModal({
               ouiaId={`survey-order-row-${q.variable}`}
             >
               <Td dataLabel={t`Order`}>
-                <Button variant="plain">
-                  <GripVerticalIcon />
-                </Button>
+                <Button icon={<GripVerticalIcon />} variant="plain" />
               </Td>
               <Td dataLabel={t`Name`} aria-label={q.question_name}>
                 {q.question_name}

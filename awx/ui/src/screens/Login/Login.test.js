@@ -122,7 +122,7 @@ describe('<Login />', () => {
     );
     await waitForLoginForm(container);
     expect(container.querySelector('footer').outerHTML).toContain(
-      '<footer class="pf-v5-c-login__footer" data-cy="login-footer"><div id="custom-button">TEST</div></footer>'
+      '<footer class="pf-v6-c-login__footer" data-cy="login-footer"><div id="custom-button">TEST</div></footer>'
     );
   });
 
@@ -184,7 +184,7 @@ describe('<Login />', () => {
     expect(getUsernameInput(container).value).toEqual('');
     expect(getPasswordInput(container).value).toEqual('');
     expect(
-      container.querySelector('.pf-v5-c-form__helper-text')
+      container.querySelector('.pf-v6-c-form__helper-text')
     ).toBeNull();
 
     await user.type(getUsernameInput(container), 'un');
@@ -197,7 +197,7 @@ describe('<Login />', () => {
 
     await waitFor(() =>
       expect(
-        container.querySelector('.pf-v5-c-form__helper-text')
+        container.querySelector('.pf-v6-c-form__helper-text')
       ).toBeInTheDocument()
     );
     expect(getUsernameInput(container)).toHaveAttribute('aria-invalid', 'true');
@@ -212,7 +212,7 @@ describe('<Login />', () => {
     expect(getPasswordInput(container).value).toEqual('bar');
     await waitFor(() =>
       expect(
-        container.querySelector('.pf-v5-c-form__helper-text')
+        container.querySelector('.pf-v6-c-form__helper-text')
       ).toBeNull()
     );
     expect(getUsernameInput(container)).toHaveAttribute(

@@ -48,7 +48,7 @@ function ProjectAdd() {
   };
 
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         <CardBody>
           <ProjectForm

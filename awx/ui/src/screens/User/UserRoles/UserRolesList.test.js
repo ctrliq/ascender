@@ -233,7 +233,7 @@ describe('<UserRolesList />', () => {
 
     await screen.findByText('Credential Bar');
 
-    await events.click(screen.getByRole('button', { name: /close Execute/ }));
+    await events.click(screen.getByRole('button', { name: /Close Execute/ }));
     expect(
       await screen.findByRole('dialog', { name: /Disassociate role!/ })
     ).toBeInTheDocument();
@@ -266,7 +266,7 @@ describe('<UserRolesList />', () => {
 
     await screen.findByText('Credential Bar');
 
-    await events.click(screen.getByRole('button', { name: /close Execute/ }));
+    await events.click(screen.getByRole('button', { name: /Close Execute/ }));
     expect(
       await screen.findByRole('dialog', { name: /Disassociate role!/ })
     ).toBeInTheDocument();

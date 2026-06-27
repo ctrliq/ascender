@@ -74,7 +74,7 @@ function ManagementJobList() {
 
   return (
     <>
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <PaginatedTable
             qsConfig={QS_CONFIG}

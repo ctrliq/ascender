@@ -66,7 +66,7 @@ function OrganizationAdd() {
 
   if (defaultGalaxyCredentialError) {
     return (
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <CardBody>
             <ContentError error={defaultGalaxyCredentialError} />
@@ -78,7 +78,7 @@ function OrganizationAdd() {
 
   if (isLoading) {
     return (
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <CardBody>
             <ContentLoading />
@@ -89,7 +89,7 @@ function OrganizationAdd() {
   }
 
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         <CardBody>
           <OrganizationForm

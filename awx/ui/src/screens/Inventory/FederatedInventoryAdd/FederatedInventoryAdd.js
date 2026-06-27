@@ -36,7 +36,7 @@ function FederatedInventoryAdd() {
   };
 
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         <CardBody>
           <FederatedInventoryForm

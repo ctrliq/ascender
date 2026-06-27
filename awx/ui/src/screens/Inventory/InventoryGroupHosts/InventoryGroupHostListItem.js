@@ -64,15 +64,13 @@ function InventoryGroupHostListItem({
             visible={host.summary_fields.user_capabilities?.edit}
           >
             <Tooltip content={t`Edit Host`} position="top">
-              <Button
+              <Button icon={<PencilAltIcon />}
                 ouiaId={`${host.id}-edit-button`}
                 aria-label={t`Edit Host`}
                 variant="plain"
                 component={Link}
                 to={`${editUrl}`}
-              >
-                <PencilAltIcon />
-              </Button>
+               />
             </Tooltip>
           </ActionItem>
         )}

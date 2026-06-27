@@ -15,7 +15,7 @@ import styled from 'styled-components';
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
 
 const Unavailable = styled.span`
-  color: var(--pf-v5-global--danger-color--200);
+  color: var(--pf-v6-global--danger-color--200);
 `;
 
 function InstanceGroupListItem({
@@ -78,7 +78,7 @@ function InstanceGroupListItem({
           visible={instanceGroup.summary_fields.user_capabilities.edit}
           tooltip={t`Edit instance group`}
         >
-          <Button
+          <Button icon={<PencilAltIcon />}
             ouiaId={`${instanceGroup.id}-edit-button`}
             aria-label={t`Edit instance group`}
             variant="plain"
@@ -88,9 +88,7 @@ function InstanceGroupListItem({
                 ? `/instance_groups/container_group/${instanceGroup.id}/edit`
                 : `/instance_groups/${instanceGroup.id}/edit`
             }
-          >
-            <PencilAltIcon />
-          </Button>
+           />
         </ActionItem>
       </ActionsTd>
     </Tr>

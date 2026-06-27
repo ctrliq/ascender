@@ -149,7 +149,7 @@ function InstanceList() {
       {showHealthCheckAlert ? (
         <HealthCheckAlert onSetHealthCheckAlert={setShowHealthCheckAlert} />
       ) : null}
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <PaginatedTable
             contentError={contentError || removeError}

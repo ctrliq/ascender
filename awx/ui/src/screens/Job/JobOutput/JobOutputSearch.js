@@ -148,7 +148,7 @@ function JobOutputSearch({
     >
       <SearchToolbarContent>
         <ToolbarToggleGroup toggleIcon={<SearchIcon />} breakpoint="lg">
-          <ToolbarItem variant="search-filter">
+          <ToolbarItem >
             {isDisabled ? (
               <Tooltip
                 content={t`Search is disabled while the job is running`}

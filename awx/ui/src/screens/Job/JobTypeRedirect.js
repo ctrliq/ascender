@@ -36,7 +36,7 @@ function JobTypeRedirect({ id, view = 'output' }) {
 
   if (error) {
     return (
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           {error === NOT_FOUND ? (
             <ContentError isNotFound>
@@ -51,7 +51,7 @@ function JobTypeRedirect({ id, view = 'output' }) {
   }
   if (isLoading || !job?.id) {
     return (
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <ContentLoading />
         </Card>

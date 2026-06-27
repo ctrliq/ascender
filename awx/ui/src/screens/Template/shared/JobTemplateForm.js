@@ -375,7 +375,7 @@ function JobTemplateForm({
             fieldId="template-playbook"
             isRequired
             label={t`Playbook`}
-            labelIcon={<Popover content={helpText.playbook} />}
+            labelHelp={<Popover content={helpText.playbook} />}
           >
           <PlaybookSelect
             onChange={handlePlaybookUpdate}

@@ -16,7 +16,7 @@ import AlertModal from 'components/AlertModal';
 const ListItem = styled.li`
   display: flex;
   font-weight: 600;
-  color: var(--pf-v5-global--danger-color--100);
+  color: var(--pf-v6-global--danger-color--100);
 `;
 
 const InventoryGroupsDeleteModal = ({

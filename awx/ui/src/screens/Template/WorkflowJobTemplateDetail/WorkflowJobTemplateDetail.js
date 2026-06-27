@@ -3,14 +3,12 @@ import { Link } from 'react-router';
 import { useNavigate } from 'routerCompat';
 import { useLingui } from '@lingui/react/macro';
 import {
-  Chip,
-  Button,
-  TextList,
-  TextListItem,
-  TextListVariants,
-  TextListItemVariants,
-  Label,
+	Button,
+	Content,
+	ContentVariants,
+	Label
 } from '@patternfly/react-core';
+
 import { WorkflowJobTemplatesAPI } from 'api';
 
 import AlertModal from 'components/AlertModal';
@@ -53,18 +51,18 @@ function WorkflowJobTemplateDetail({ template }) {
     template.allow_simultaneous || template.webhook_service;
 
   const renderOptions = (
-    <TextList component={TextListVariants.ul}>
+    <Content component={ContentVariants.ul}>
       {template.allow_simultaneous && (
-        <TextListItem component={TextListItemVariants.li}>
+        <Content component={ContentVariants.li}>
           {t`Concurrent Jobs`}
-        </TextListItem>
+        </Content>
       )}
       {template.webhook_service && (
-        <TextListItem component={TextListItemVariants.li}>
+        <Content component={ContentVariants.li}>
           {t`Webhooks`}
-        </TextListItem>
+        </Content>
       )}
-    </TextList>
+    </Content>
   );
 
   const {
@@ -217,9 +215,9 @@ function WorkflowJobTemplateDetail({ template }) {
               ouiaId="workflow-job-template-detail-label-chips"
             >
               {summary_fields.labels.results.map((l) => (
-                <Chip key={l.id} ouiaId={`${l.name}-label-chip`} isReadOnly>
+                <Label variant="outline" key={l.id} data-ouia-component-id={`${l.name}-label-chip`} >
                   {l.name}
-                </Chip>
+                </Label>
               ))}
             </ChipGroup>
           }

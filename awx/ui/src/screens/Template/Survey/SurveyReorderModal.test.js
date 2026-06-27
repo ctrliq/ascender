@@ -110,8 +110,8 @@ describe('<SurveyReorderModal />', () => {
       '[data-ouia-component-id="survey-preview-multiSelect-a"]'
     );
     expect(multiSelectToggle).toBeInTheDocument();
-    const toggleWrapper = multiSelectToggle.closest('.pf-v5-c-menu-toggle');
-    const labels = toggleWrapper.querySelectorAll('.pf-v5-c-label');
+    const toggleWrapper = multiSelectToggle.closest('.pf-v6-c-menu-toggle');
+    const labels = toggleWrapper.querySelectorAll('.pf-v6-c-label');
     expect(labels.length).toBe(4);
     expect(toggleWrapper).toHaveClass('pf-m-disabled');
   });

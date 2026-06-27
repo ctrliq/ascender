@@ -22,7 +22,7 @@ function AzureAD() {
   const baseURL = '/settings/azure';
 
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         <Routes>
           <Route

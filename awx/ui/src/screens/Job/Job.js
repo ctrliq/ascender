@@ -5,8 +5,9 @@ import { Link,
   Navigate,
   useParams } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
+import styled from 'styled-components';
 import { CaretLeftIcon } from '@patternfly/react-icons';
-import { Card, PageSection } from '@patternfly/react-core';
+import { Card as PFCard, PageSection } from '@patternfly/react-core';
 import { InventorySourcesAPI } from 'api';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
@@ -19,6 +20,12 @@ import JobDetail from './JobDetail';
 import JobOutput from './JobOutput';
 import { WorkflowOutput } from './WorkflowOutput';
 import useWsJob from './useWsJob';
+
+const WorkflowCard = styled(PFCard)`
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 160px);
+`;
 
 // maps the displayed url segments to actual api types
 export const JOB_URL_SEGMENT_MAP = {
@@ -140,20 +147,20 @@ function Job({ setBreadcrumb }) {
     });
   }
 
-  if (isLoading) {
+  if (isLoading && !jobDetail) {
     return (
-      <PageSection>
-        <Card>
+      <PageSection hasBodyWrapper={false}>
+        <PFCard>
           <ContentLoading />
-        </Card>
+        </PFCard>
       </PageSection>
     );
   }
 
   if (error) {
     return (
-      <PageSection>
-        <Card>
+      <PageSection hasBodyWrapper={false}>
+        <PFCard>
           <ContentError error={error}>
             {error.response?.status === 404 && (
               <span>
@@ -162,22 +169,24 @@ function Job({ setBreadcrumb }) {
               </span>
             )}
           </ContentError>
-        </Card>
+        </PFCard>
       </PageSection>
     );
   }
 
+  const CardComponent = typeSegment === 'workflow' ? WorkflowCard : PFCard;
+
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <div ref={ref}>
-        <Card>
+        <CardComponent>
           <RoutedTabs
             isWorkflow={typeSegment === 'workflow'}
             tabsArray={tabsArray}
           />
           <Routes>
             <Route index element={<Navigate to="output" replace />} />
-            {job && (
+            {job && String(job.id) === id && (
               <Route
                 path="details"
                 element={
@@ -188,17 +197,19 @@ function Job({ setBreadcrumb }) {
                 }
               />
             )}
-            {job && (
+            {job && String(job.id) === id && (
               <Route
                 path="output"
                 element={
                   job.type === 'workflow_job' ? (
-                    <WorkflowOutput job={job} />
+                    <WorkflowOutput key={id} job={job} />
                   ) : (
                     <JobOutput
+                      key={id}
                       job={job}
                       eventRelatedSearchableKeys={eventRelatedSearchableKeys}
                       eventSearchableKeys={eventSearchableKeys}
+                      onJobRefresh={fetchJob}
                     />
                   )
                 }
@@ -215,7 +226,7 @@ function Job({ setBreadcrumb }) {
               }
             />
           </Routes>
-        </Card>
+        </CardComponent>
       </div>
     </PageSection>
   );

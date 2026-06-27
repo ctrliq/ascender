@@ -168,7 +168,7 @@ function Metrics() {
   }, [fetchInstances]);
   if (fetchInitialError || updateError) {
     return (
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <CardBody>
             <ContentError error={fetchInitialError || updateError} />;
@@ -181,7 +181,7 @@ function Metrics() {
     <>
       <ScreenHeader breadcrumbConfig={{ '/metrics': t`Metrics` }} />
 
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <CardHeader>
             <Toolbar ouiaId="metrics-toolbar">
@@ -198,7 +198,7 @@ function Metrics() {
                         setInstanceIsOpen(false);
                         setRenderedData([]);
                       }}
-                      ouiaId="Instance-select"
+                      data-ouia-component-id="Instance-select"
                       toggle={(toggleRef) => (
                         <MenuToggle
                           ref={toggleRef}
@@ -229,7 +229,7 @@ function Metrics() {
                         setRenderedData([]);
                         setMetricIsOpen(false);
                       }}
-                      ouiaId="Metric-select"
+                      data-ouia-component-id="Metric-select"
                       toggle={(toggleRef) => (
                         <MenuToggle
                           ref={toggleRef}

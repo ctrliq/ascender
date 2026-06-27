@@ -152,7 +152,7 @@ describe('<InstanceListItem/>', () => {
   test('should display instance toggle', () => {
     renderItem();
     expect(
-      screen.getByRole('checkbox', { name: 'Toggle instance' })
+      screen.getByRole('switch', { name: 'Toggle instance' })
     ).toBeInTheDocument();
   });
 

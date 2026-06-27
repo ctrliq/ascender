@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { Button, Modal } from '@patternfly/react-core';
+import {
+	Button
+} from '@patternfly/react-core';
+import {
+	Modal
+} from '@patternfly/react-core/deprecated';
 import { SearchPlusIcon } from '@patternfly/react-icons';
 
 import { formatDateString } from 'util/dates';
@@ -20,15 +25,13 @@ function ActivityStreamDetailButton({ streamItem, user, description }) {
 
   return (
     <>
-      <Button
+      <Button icon={<SearchPlusIcon />}
         ouiaId={`${streamItem.id}-view-details-button`}
         aria-label={t`View event details`}
         variant="plain"
         component="button"
         onClick={() => setIsOpen(true)}
-      >
-        <SearchPlusIcon />
-      </Button>
+       />
       <Modal
         variant="large"
         isOpen={isOpen}

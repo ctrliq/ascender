@@ -62,15 +62,13 @@ function HostListItem({ host, isSelected, onSelect, detailUrl, rowIndex }) {
           visible={host.summary_fields.user_capabilities.edit}
           tooltip={t`Edit Host`}
         >
-          <Button
+          <Button icon={<PencilAltIcon />}
             ouiaId={`${host.id}-edit-button}`}
             aria-label={t`Edit Host`}
             variant="plain"
             component={Link}
             to={`/hosts/${host.id}/edit`}
-          >
-            <PencilAltIcon />
-          </Button>
+           />
         </ActionItem>
       </ActionsTd>
     </Tr>

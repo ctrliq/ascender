@@ -133,7 +133,7 @@ const SCMSubForm = ({ autoPopulateProject }) => {
         fieldId="source_path"
         isRequired
         label={t`Inventory file`}
-        labelIcon={<Popover content={helpText.sourcePath} />}
+        labelHelp={<Popover content={helpText.sourcePath} />}
       >
         <Select
           id="source_path"
@@ -149,7 +149,7 @@ const SCMSubForm = ({ autoPopulateProject }) => {
             setFilterValue('');
           }}
           aria-label={t`Select source path`}
-          ouiaId="InventorySourceForm-source_path"
+          data-ouia-component-id="InventorySourceForm-source_path"
           toggle={(toggleRef) => (
             <MenuToggle
               ref={toggleRef}
@@ -177,16 +177,14 @@ const SCMSubForm = ({ autoPopulateProject }) => {
                 />
                 {(filterValue || sourcePathField.value) && (
                   <TextInputGroupUtilities>
-                    <Button
+                    <Button icon={<TimesIcon />}
                       variant="plain"
                       onClick={() => {
                         sourcePathHelpers.setValue('');
                         setFilterValue('');
                       }}
                       aria-label={t`Clear`}
-                    >
-                      <TimesIcon />
-                    </Button>
+                     />
                   </TextInputGroupUtilities>
                 )}
               </TextInputGroup>

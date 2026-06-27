@@ -3,7 +3,10 @@ import { useLingui } from '@lingui/react/macro';
 import { Tr, Td } from '@patternfly/react-table';
 import { Link } from 'react-router';
 import { PencilAltIcon } from '@patternfly/react-icons';
-import { Button, Chip } from '@patternfly/react-core';
+import {
+	Label, Button
+} from '@patternfly/react-core';
+
 import { HostsAPI } from 'api';
 import AlertModal from 'components/AlertModal';
 import ChipGroup from 'components/ChipGroup';
@@ -94,9 +97,9 @@ function InventoryHostItem({
             onOverflowChipClick={() => handleOverflowChipClick(host.id)}
           >
             {relatedGroups.map((group) => (
-              <Chip key={group.name} isReadOnly>
+              <Label variant="outline" key={group.name} >
                 {group.name}
-              </Chip>
+              </Label>
             ))}
           </ChipGroup>
         </TdBreakWord>
@@ -110,15 +113,13 @@ function InventoryHostItem({
             visible={host.summary_fields.user_capabilities?.edit}
             tooltip={t`Edit host`}
           >
-            <Button
+            <Button icon={<PencilAltIcon />}
               aria-label={t`Edit host`}
               ouiaId={`${host.id}-edit-button`}
               variant="plain"
               component={Link}
               to={`${editUrl}`}
-            >
-              <PencilAltIcon />
-            </Button>
+             />
           </ActionItem>
         </ActionsTd>
       </Tr>

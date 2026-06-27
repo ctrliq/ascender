@@ -10,7 +10,7 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
 
   // Methods
   const draw = useCallback(() => {
-    const margin = { top: 15, right: 15, bottom: 35, left: 70 };
+    const margin = { top: 15, right: 15, bottom: 62, left: 70 };
 
     const getWidth = () => {
       let width;
@@ -33,12 +33,12 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
     const width = getWidth();
 
     const textColor =
-      getComputedStyle(document.documentElement)
-        .getPropertyValue('--pf-v5-global--Color--100')
+      getComputedStyle(document.body)
+        .getPropertyValue("--pf-t--global--text--color--100")
         .trim() || '#151515';
     const gridColor =
-      getComputedStyle(document.documentElement)
-        .getPropertyValue('--pf-v5-global--BorderColor--100')
+      getComputedStyle(document.body)
+        .getPropertyValue("--pf-t--global--border--color--default")
         .trim() || '#373a41';
 
     function transition(path) {
@@ -125,7 +125,7 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
       )
       .selectAll('line')
       .attr('stroke', gridColor);
-    svg.selectAll('.y-axis .tick text').attr('x', -5).style('fill', textColor);
+    svg.selectAll('.y-axis .tick text').attr('x', -5).style('fill', textColor).style('font-size', '0.875rem');
 
     // text label for the y axis
     svg
@@ -136,6 +136,7 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
       .attr('dy', '1em')
       .style('text-anchor', 'middle')
       .style('fill', textColor)
+      .style('font-size', '0.9375rem')
       .text(t`Job Runs`);
 
     // Add the X Axis
@@ -166,17 +167,18 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
       .selectAll('line')
       .attr('stroke', gridColor);
 
-    svg.selectAll('.x-axis .tick text').attr('y', 10).style('fill', textColor);
+    svg.selectAll('.x-axis .tick text').attr('y', 10).style('fill', textColor).style('font-size', '0.875rem');
 
     // text label for the x axis
     svg
       .append('text')
       .attr(
         'transform',
-        `translate(${width / 2} , ${height + margin.top + 20})`
+        `translate(${width / 2} , ${height + margin.bottom - 5})`
       )
       .style('text-anchor', 'middle')
       .style('fill', textColor)
+      .style('font-size', '0.9375rem')
       .text(t`Date`);
     const vertical = svg
       .append('path')

@@ -24,7 +24,7 @@ function InstanceGroupAdd() {
   };
 
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         <CardBody>
           <InstanceGroupForm

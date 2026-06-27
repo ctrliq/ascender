@@ -118,16 +118,14 @@ function PlaybookSelect({
             />
             {(filterValue || selected) && (
               <TextInputGroupUtilities>
-                <Button
+                <Button icon={<TimesIcon />}
                   variant="plain"
                   onClick={() => {
                     onChange('');
                     setFilterValue('');
                   }}
                   aria-label={t`Clear`}
-                >
-                  <TimesIcon />
-                </Button>
+                 />
               </TextInputGroupUtilities>
             )}
           </TextInputGroup>

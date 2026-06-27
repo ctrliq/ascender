@@ -66,7 +66,7 @@ function Team({ setBreadcrumb }) {
 
   if (!hasContentLoading && contentError) {
     return (
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <ContentError error={contentError}>
             {contentError.response.status === 404 && (
@@ -82,7 +82,7 @@ function Team({ setBreadcrumb }) {
   }
 
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         {showCardHeader && <RoutedTabs tabsArray={tabsArray} />}
         <Routes>

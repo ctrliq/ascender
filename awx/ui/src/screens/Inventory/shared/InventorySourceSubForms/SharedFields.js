@@ -45,7 +45,7 @@ export const VerbosityField = () => {
     <FormGroup
       fieldId="verbosity"
       label={t`Verbosity`}
-      labelIcon={<Popover content={helpText.subFormVerbosityFields} />}
+      labelHelp={<Popover content={helpText.subFormVerbosityFields} />}
     >
       <AnsibleSelect
         id="verbosity"

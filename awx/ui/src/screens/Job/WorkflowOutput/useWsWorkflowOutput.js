@@ -14,9 +14,6 @@ const fetchWorkflowNodes = async (jobId, pageNo = 1, nodes = []) => {
   return nodes.concat(data.results);
 };
 
-// Job statuses ordered earliest-to-latest, so a lagging full re-fetch never
-// downgrades a node that has already advanced in the live view (which would
-// drop its blue running animation).
 const STATUS_RANK = {
   pending: 1,
   waiting: 1,
@@ -44,7 +41,6 @@ export default function useWsWorkflowOutput(workflowJobId, initialNodes) {
 
   const refreshNodeObjects = useCallback(async () => {
     const updatedNodeObjects = await fetchWorkflowNodes(workflowJobId);
-    // the fetch is async; the component may have unmounted while it was in flight
     if (!isMounted.current) {
       return;
     }
@@ -55,16 +51,12 @@ export default function useWsWorkflowOutput(workflowJobId, initialNodes) {
     setNodes((prevNodes) =>
       (prevNodes || []).map((node) => {
         if (node.id === 1) {
-          // This is our artificial start node
           return { ...node };
         }
         const refreshed = updatedNodeObjectsMap[node.originalNodeObject?.id];
         if (!refreshed) {
           return node;
         }
-        // The fetch can lag a node that just started running; keep the
-        // already-advanced in-memory status so the snapshot does not undo a
-        // running node back to pending and drop its animation.
         const currentStatus =
           node.originalNodeObject?.summary_fields?.job?.status;
         const refreshedStatus = refreshed?.summary_fields?.job?.status;
@@ -79,20 +71,31 @@ export default function useWsWorkflowOutput(workflowJobId, initialNodes) {
     );
   }, [workflowJobId]);
 
-  useEffect(() => {
-    setNodes(initialNodes);
-  }, [initialNodes]);
+  const hasInitializedRef = useRef(false);
 
-  // When a workflow (re)loads, its first node can start running before the node
-  // list is ready, so that running message is dropped and the node never
-  // animates — most visible on a full relaunch, where the first node starts
-  // immediately. Re-fetch shortly after load to recover any status change that
-  // happened during that window. The status-rank merge means this can only
-  // advance node states, never undo a node that is already running/finished.
+  // Sync chart nodes from the reducer ONCE — the first time initialNodes has
+  // real data (more than the artificial START node).  After that the hook owns
+  // the node state exclusively; subsequent initialNodes changes (from the
+  // reducer echo) are ignored so they cannot overwrite WebSocket / recovery
+  // updates.
+  //
+  // Recovery refetches fire at 500 ms and 2500 ms to catch status changes that
+  // happened while the graph was still loading.  The timers are intentionally
+  // NOT cleaned up on effect re-run so they survive React strict-mode's
+  // unmount/remount cycle; refreshNodeObjects is safe to call after unmount
+  // (it checks isMounted).
   useEffect(() => {
-    const timer = setTimeout(refreshNodeObjects, 2000);
-    return () => clearTimeout(timer);
-  }, [workflowJobId, refreshNodeObjects]);
+    if (hasInitializedRef.current) return;
+    if (!initialNodes || initialNodes.length <= 1) return;
+    hasInitializedRef.current = true;
+    setNodes(initialNodes);
+    setTimeout(refreshNodeObjects, 500);
+    setTimeout(refreshNodeObjects, 2500);
+  }, [initialNodes, refreshNodeObjects]);
+
+  useEffect(() => {
+    hasInitializedRef.current = false;
+  }, [workflowJobId]);
 
   useEffect(
     () => {
@@ -112,14 +115,8 @@ export default function useWsWorkflowOutput(workflowJobId, initialNodes) {
             lastMessage.status
           )
         ) {
-          // When a node finishes, re-fetch the nodes so its elapsed time shows
-          // right away rather than only once the whole workflow finishes — the
-          // status_changed message carries no elapsed value to patch in.
           refreshNodeObjects();
         } else {
-          // Functional update so rapid back-to-back messages (e.g. a node going
-          // waiting -> running) can't clobber one another through a stale closure
-          // and lose the running state.
           setNodes((prevNodes) => {
             if (!prevNodes) {
               return prevNodes;

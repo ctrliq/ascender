@@ -12,7 +12,7 @@ import DOMPurify from 'dompurify';
 import {
   Alert,
   Brand,
-  LoginMainFooterLinksItem,
+  LoginMainFooterLinksItem, Button,
   LoginForm,
   Login as PFLogin,
   LoginHeader,
@@ -231,163 +231,163 @@ function AWXLogin({ alt, isAuthenticated }) {
                 const loginUrl = socialAuthOptions[authKey].login_url;
                 if (authKey === 'azuread-oauth2') {
                   return (
-                    <LoginMainFooterLinksItem
+                    <LoginMainFooterLinksItem data-codemods="true"
                       data-cy="social-auth-azure"
-                      href={loginUrl}
+
                       key={authKey}
                       onClick={setSessionRedirect}
-                    >
+                    ><Button variant="link" component="a" href={loginUrl}>
                       <Tooltip content={t`Sign in with Azure AD`}>
                         <AzureIcon size="lg" />
                       </Tooltip>
-                    </LoginMainFooterLinksItem>
+                    </Button></LoginMainFooterLinksItem>
                   );
                 }
                 if (authKey === 'azuread-tenant-oauth2') {
                   return (
-                    <LoginMainFooterLinksItem
+                    <LoginMainFooterLinksItem data-codemods="true"
                       data-cy="social-auth-azure-tenant"
-                      href={loginUrl}
+
                       key={authKey}
                       onClick={setSessionRedirect}
-                    >
+                    ><Button variant="link" component="a" href={loginUrl}>
                       <Tooltip
                         content={t`Sign in with Azure AD Tenant`}
                       >
                         <AzureIcon size="lg" />
                       </Tooltip>
-                    </LoginMainFooterLinksItem>
+                    </Button></LoginMainFooterLinksItem>
                   );
                 }
                 if (authKey === 'github') {
                   return (
-                    <LoginMainFooterLinksItem
+                    <LoginMainFooterLinksItem data-codemods="true"
                       data-cy="social-auth-github"
-                      href={loginUrl}
+
                       key={authKey}
                       onClick={setSessionRedirect}
-                    >
+                    ><Button variant="link" component="a" href={loginUrl}>
                       <Tooltip content={t`Sign in with GitHub`}>
                         <GithubIcon size="lg" />
                       </Tooltip>
-                    </LoginMainFooterLinksItem>
+                    </Button></LoginMainFooterLinksItem>
                   );
                 }
                 if (authKey === 'github-org') {
                   return (
-                    <LoginMainFooterLinksItem
+                    <LoginMainFooterLinksItem data-codemods="true"
                       data-cy="social-auth-github-org"
-                      href={loginUrl}
+
                       key={authKey}
                       onClick={setSessionRedirect}
-                    >
+                    ><Button variant="link" component="a" href={loginUrl}>
                       <Tooltip
                         content={t`Sign in with GitHub Organizations`}
                       >
                         <GithubIcon size="lg" />
                       </Tooltip>
-                    </LoginMainFooterLinksItem>
+                    </Button></LoginMainFooterLinksItem>
                   );
                 }
                 if (authKey === 'github-team') {
                   return (
-                    <LoginMainFooterLinksItem
+                    <LoginMainFooterLinksItem data-codemods="true"
                       data-cy="social-auth-github-team"
-                      href={loginUrl}
+
                       key={authKey}
                       onClick={setSessionRedirect}
-                    >
+                    ><Button variant="link" component="a" href={loginUrl}>
                       <Tooltip content={t`Sign in with GitHub Teams`}>
                         <GithubIcon size="lg" />
                       </Tooltip>
-                    </LoginMainFooterLinksItem>
+                    </Button></LoginMainFooterLinksItem>
                   );
                 }
                 if (authKey === 'github-enterprise') {
                   return (
-                    <LoginMainFooterLinksItem
+                    <LoginMainFooterLinksItem data-codemods="true"
                       data-cy="social-auth-github-enterprise"
-                      href={loginUrl}
+
                       key={authKey}
                       onClick={setSessionRedirect}
-                    >
+                    ><Button variant="link" component="a" href={loginUrl}>
                       <Tooltip
                         content={t`Sign in with GitHub Enterprise`}
                       >
                         <GithubIcon size="lg" />
                       </Tooltip>
-                    </LoginMainFooterLinksItem>
+                    </Button></LoginMainFooterLinksItem>
                   );
                 }
                 if (authKey === 'github-enterprise-org') {
                   return (
-                    <LoginMainFooterLinksItem
+                    <LoginMainFooterLinksItem data-codemods="true"
                       data-cy="social-auth-github-enterprise-org"
-                      href={loginUrl}
+
                       key={authKey}
                       onClick={setSessionRedirect}
-                    >
+                    ><Button variant="link" component="a" href={loginUrl}>
                       <Tooltip
                         content={t`Sign in with GitHub Enterprise Organizations`}
                       >
                         <GithubIcon size="lg" />
                       </Tooltip>
-                    </LoginMainFooterLinksItem>
+                    </Button></LoginMainFooterLinksItem>
                   );
                 }
                 if (authKey === 'github-enterprise-team') {
                   return (
-                    <LoginMainFooterLinksItem
+                    <LoginMainFooterLinksItem data-codemods="true"
                       data-cy="social-auth-github-enterprise-team"
-                      href={loginUrl}
+
                       key={authKey}
                       onClick={setSessionRedirect}
-                    >
+                    ><Button variant="link" component="a" href={loginUrl}>
                       <Tooltip
                         content={t`Sign in with GitHub Enterprise Teams`}
                       >
                         <GithubIcon size="lg" />
                       </Tooltip>
-                    </LoginMainFooterLinksItem>
+                    </Button></LoginMainFooterLinksItem>
                   );
                 }
                 if (authKey === 'google-oauth2') {
                   return (
-                    <LoginMainFooterLinksItem
+                    <LoginMainFooterLinksItem data-codemods="true"
                       data-cy="social-auth-google"
-                      href={loginUrl}
+
                       key={authKey}
                       onClick={setSessionRedirect}
-                    >
+                    ><Button variant="link" component="a" href={loginUrl}>
                       <Tooltip content={t`Sign in with Google`}>
                         <GoogleIcon size="lg" />
                       </Tooltip>
-                    </LoginMainFooterLinksItem>
+                    </Button></LoginMainFooterLinksItem>
                   );
                 }
                 if (authKey === 'oidc') {
                   return (
-                    <LoginMainFooterLinksItem
+                    <LoginMainFooterLinksItem data-codemods="true"
                       data-cy="social-auth-oidc"
-                      href={loginUrl}
+
                       key={authKey}
                       onClick={setSessionRedirect}
-                    >
+                    ><Button variant="link" component="a" href={loginUrl}>
                       <Tooltip content={t`Sign in with OIDC`}>
                         <UserCircleIcon size="lg" />
                       </Tooltip>
-                    </LoginMainFooterLinksItem>
+                    </Button></LoginMainFooterLinksItem>
                   );
                 }
                 if (authKey.startsWith('saml')) {
                   const samlIDP = authKey.split(':')[1] || null;
                   return (
-                    <LoginMainFooterLinksItem
+                    <LoginMainFooterLinksItem data-codemods="true"
                       data-cy="social-auth-saml"
-                      href={loginUrl}
+
                       key={authKey}
                       onClick={setSessionRedirect}
-                    >
+                    ><Button variant="link" component="a" href={loginUrl}>
                       <Tooltip
                         content={
                           samlIDP
@@ -397,7 +397,7 @@ function AWXLogin({ alt, isAuthenticated }) {
                       >
                         <UserCircleIcon size="lg" />
                       </Tooltip>
-                    </LoginMainFooterLinksItem>
+                    </Button></LoginMainFooterLinksItem>
                   );
                 }
 

@@ -6,7 +6,6 @@ import {
   Button,
   EmptyState,
   EmptyStateBody,
-  EmptyStateIcon, EmptyStateHeader,
   } from '@patternfly/react-core';
 import { CubesIcon } from '@patternfly/react-icons';
 import { getQSConfig, parseQueryString } from 'util/qs';
@@ -122,8 +121,7 @@ function UserRolesList({ user }) {
   const isSysAdmin = roles.some((role) => role.name === 'System Administrator');
   if (isSysAdmin) {
     return (
-      <EmptyState variant="full">
-        <EmptyStateHeader titleText={<>{t`System Administrator`}</>} icon={<EmptyStateIcon icon={CubesIcon} />} headingLevel="h5" />
+      <EmptyState  headingLevel="h5" icon={CubesIcon}  titleText={<>{t`System Administrator`}</>} variant="full">
         <EmptyStateBody>
           {t`System administrators have unrestricted access to all resources.`}
         </EmptyStateBody>

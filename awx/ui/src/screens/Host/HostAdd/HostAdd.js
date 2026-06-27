@@ -27,7 +27,7 @@ function HostAdd() {
   };
 
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         <CardBody>
           <HostForm

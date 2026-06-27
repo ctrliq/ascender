@@ -36,12 +36,12 @@ const ActionButton = styled(Button)`
   margin: 0px 6px;
   border: none;
   &:hover {
-    background-color: var(--pf-v5-global--primary-color--100);
+    background-color: var(--pf-v6-global--primary-color--100);
     color: #fff;
   }
 
   &.pf-m-active {
-    background-color: var(--pf-v5-global--primary-color--100);
+    background-color: var(--pf-v6-global--primary-color--100);
     color: #fff;
   }
 `;
@@ -63,11 +63,12 @@ function VisualizerToolbar({
 
   return (
     <div id="visualizer-toolbar">
-      <div css="align-items: center; border-bottom: 1px solid var(--pf-v5-global--BorderColor--100); display: flex; height: 56px; padding: 0px 20px;">
+      <div css="display: flex; align-items: center; border-bottom: 1px solid var(--pf-t--global--border--color--default); padding: 8px 16px;">
         <Title
           headingLevel="h2"
           size="xl"
           id="visualizer-toolbar-template-name"
+          css="white-space: nowrap; margin: 0;"
         >
           {template.name}
         </Title>
@@ -80,7 +81,7 @@ function VisualizerToolbar({
             <ActionButton
               aria-label={t`Toggle legend`}
               id="visualizer-toggle-legend"
-              isActive={totalNodes > 0 && showLegend}
+              className={totalNodes > 0 && showLegend ? 'pf-m-active' : undefined}
               isDisabled={totalNodes === 0}
               onClick={() => dispatch({ type: 'TOGGLE_LEGEND' })}
               variant="plain"
@@ -92,7 +93,7 @@ function VisualizerToolbar({
             <ActionButton
               aria-label={t`Toggle tools`}
               id="visualizer-toggle-tools"
-              isActive={totalNodes > 0 && showTools}
+              className={totalNodes > 0 && showTools ? 'pf-m-active' : undefined}
               isDisabled={totalNodes === 0}
               onClick={() => dispatch({ type: 'TOGGLE_TOOLS' })}
               variant="plain"
@@ -172,15 +173,13 @@ function VisualizerToolbar({
               </Button>
             </>
           )}
-          <Button
+          <Button icon={<TimesIcon />}
             ouiaId="visualizer-close-button"
             id="visualizer-close"
             aria-label={t`Close`}
             onClick={onClose}
             variant="plain"
-          >
-            <TimesIcon />
-          </Button>
+           />
         </div>
       </div>
     </div>

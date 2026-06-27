@@ -89,7 +89,7 @@ function InstanceEdit({ setBreadcrumb }) {
   }
 
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         <InstanceForm
           instance={instance}

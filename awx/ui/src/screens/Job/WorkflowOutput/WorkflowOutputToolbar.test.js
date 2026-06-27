@@ -98,7 +98,7 @@ describe('WorkflowOutputToolbar', () => {
     // The start node (id=1) and deleted nodes (isDeleted=true) are ignored,
     // leaving 1; the elapsed badge has a distinct id.
     const badges = Array.from(
-      document.querySelectorAll('.pf-v5-c-badge')
+      document.querySelectorAll('.pf-v6-c-badge')
     ).filter((b) => b.id !== 'workflow-elapsed-badge');
     expect(badges).toHaveLength(1);
     expect(badges[0]).toHaveTextContent('1');

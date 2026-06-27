@@ -78,7 +78,7 @@ describe('<InventoryHostItem />', () => {
 
     expect(screen.getByRole('cell', { name: 'Bar' })).toBeInTheDocument();
     expect(
-      screen.getByRole('checkbox', { name: 'Toggle host' })
+      screen.getByRole('switch', { name: 'Toggle host' })
     ).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Host 1' })).toHaveAttribute(
       'href',

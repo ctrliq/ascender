@@ -2,14 +2,12 @@ import React, { useCallback, useEffect } from 'react';
 import { Link } from 'react-router';
 import { useNavigate, useParams } from 'routerCompat';
 import {
-  Button,
-  Chip,
-  TextList,
-  TextListItem,
-  TextListItemVariants,
-  TextListVariants,
-  Label,
+	Button,
+	Content,
+	ContentVariants,
+	Label
 } from '@patternfly/react-core';
+
 import { useLingui } from '@lingui/react/macro';
 import AlertModal from 'components/AlertModal';
 import { CardBody, CardActionsRow } from 'components/Card';
@@ -116,38 +114,38 @@ function JobTemplateDetail({ template }) {
     prevent_instance_group_fallback;
 
   const renderOptions = (
-    <TextList component={TextListVariants.ul}>
+    <Content component={ContentVariants.ul}>
       {become_enabled && (
-        <TextListItem component={TextListItemVariants.li}>
+        <Content component={ContentVariants.li}>
           {t`Privilege Escalation`}
-        </TextListItem>
+        </Content>
       )}
       {host_config_key && (
-        <TextListItem component={TextListItemVariants.li}>
+        <Content component={ContentVariants.li}>
           {t`Provisioning Callbacks`}
-        </TextListItem>
+        </Content>
       )}
       {allow_simultaneous && (
-        <TextListItem component={TextListItemVariants.li}>
+        <Content component={ContentVariants.li}>
           {t`Concurrent Jobs`}
-        </TextListItem>
+        </Content>
       )}
       {use_fact_cache && (
-        <TextListItem component={TextListItemVariants.li}>
+        <Content component={ContentVariants.li}>
           {t`Fact Storage`}
-        </TextListItem>
+        </Content>
       )}
       {webhook_service && (
-        <TextListItem component={TextListItemVariants.li}>
+        <Content component={ContentVariants.li}>
           {t`Webhooks`}
-        </TextListItem>
+        </Content>
       )}
       {prevent_instance_group_fallback && (
-        <TextListItem component={TextListItemVariants.li}>
+        <Content component={ContentVariants.li}>
           {t`Prevent Instance Group Fallback`}
-        </TextListItem>
+        </Content>
       )}
-    </TextList>
+    </Content>
   );
 
   const inventoryValue = (kind, id) => {
@@ -413,9 +411,9 @@ function JobTemplateDetail({ template }) {
                 ouiaId="label-chips"
               >
                 {summary_fields.labels.results.map((l) => (
-                  <Chip key={l.id} ouiaId={`label-${l.id}-chip`} isReadOnly>
+                  <Label variant="outline" key={l.id} data-ouia-component-id={`label-${l.id}-chip`} >
                     {l.name}
-                  </Chip>
+                  </Label>
                 ))}
               </ChipGroup>
             }
@@ -443,13 +441,13 @@ function JobTemplateDetail({ template }) {
                 ouiaId="job-tag-chips"
               >
                 {job_tags.split(',').map((jobTag) => (
-                  <Chip
+                  <Label variant="outline"
                     key={jobTag}
-                    ouiaId={`job-tag-${jobTag}-chip`}
-                    isReadOnly
+                    data-ouia-component-id={`job-tag-${jobTag}-chip`}
+
                   >
                     {jobTag}
-                  </Chip>
+                  </Label>
                 ))}
               </ChipGroup>
             }
@@ -469,13 +467,13 @@ function JobTemplateDetail({ template }) {
                 ouiaId="skip-tag-chips"
               >
                 {skip_tags.split(',').map((skipTag) => (
-                  <Chip
+                  <Label variant="outline"
                     key={skipTag}
-                    ouiaId={`skip-tag-${skipTag}-chip`}
-                    isReadOnly
+                    data-ouia-component-id={`skip-tag-${skipTag}-chip`}
+
                   >
                     {skipTag}
-                  </Chip>
+                  </Label>
                 ))}
               </ChipGroup>
             }

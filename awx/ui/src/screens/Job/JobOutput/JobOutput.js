@@ -51,18 +51,23 @@ const HeaderTitle = styled.div`
   display: inline-flex;
   align-items: center;
   h1 {
-    margin-right: 10px;
-    font-weight: var(--pf-v5-global--FontWeight--bold);
+    font-weight: var(--pf-v6-global--FontWeight--bold);
   }
 `;
 
 const OutputHeader = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+
+  h1 {
+    margin: 0;
+  }
 `;
 
 const OutputWrapper = styled.div`
-  background-color: var(--pf-v5-global--BackgroundColor--200);
+  background-color: var(--ascender-output-bg, #fff);
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
@@ -72,7 +77,7 @@ const OutputWrapper = styled.div`
   min-height: 0;
   font-family: monospace;
   font-size: 15px;
-  outline: 1px solid var(--pf-v5-global--BorderColor--100);
+  outline: none;
   ${({ $cssMap }) =>
     Object.keys($cssMap).map(
       (className) => `.${className}{${$cssMap[className]}}`
@@ -85,19 +90,16 @@ const OutputWrapper = styled.div`
 // fills the remaining space and owns the scrollbar.
 const ScrollContainer = styled.div`
   flex: 1 1 auto;
-  /* min-height: 0 is required for the overflow:auto scroll to engage inside the
-     flex column — otherwise clientHeight grows to the full content height, the
-     virtualizer treats every row as visible and renders the whole list (which
-     then thrashes measureElement and pegs the CPU on long jobs). */
   min-height: 0;
   overflow: auto;
   position: relative;
+  background-color: var(--ascender-output-bg, #fff);
 `;
 
 const OutputFooter = styled.div`
-  background-color: var(--pf-v5-global--BackgroundColor--200);
-  border-right: 1px solid var(--pf-v5-global--BorderColor--100);
-  width: 75px;
+  background-color: var(--ascender-gutter-bg, #e8e8e8);
+  border-right: none;
+  width: 85px;
   flex: 1;
 `;
 
@@ -180,7 +182,7 @@ if (typeof window !== 'undefined' && !window.__ascResizeObserverErrorSilenced) {
   window.__ascResizeObserverErrorSilenced = true;
 }
 
-function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
+function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys, onJobRefresh }) {
   const { t } = useLingui();
   const location = useLocation();
   const parentRef = useRef(null);
@@ -401,7 +403,13 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
       data: { event_processing_finished },
     } = await getJobModel(job.type).readDetail(job.id);
     if (event_processing_finished) {
-      setShowEventsRefresh(true);
+      setWsEvents([]);
+      setRemoteRowCount(0);
+      clearLoadedEvents();
+      loadJobEvents();
+      if (onJobRefresh) {
+        onJobRefresh();
+      }
       return;
     }
     const fiveMinutes = 1000 * 60 * 5;
@@ -489,7 +497,6 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
       clearTimeout(batchTimeout);
       closeWebSocket();
       setIsMonitoringWebsocket(false);
-      isMounted.current = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isJobRunning(jobStatus), pollForEventsProcessed]);
@@ -1041,7 +1048,7 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
           isTemplateJob={job.type === 'job'}
           isAllCollapsed={isAllCollapsed}
         />
-        <OutputWrapper ref={outputRef} $cssMap={cssMap}>
+        <OutputWrapper ref={outputRef} $cssMap={cssMap} className="ascender-output-wrapper">
           {showEmptyOutput ? (
             <EmptyOutput
               job={job}
@@ -1055,7 +1062,7 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
               onUnmount={() => {}}
             />
           ) : (
-            <ScrollContainer ref={parentRef} onScroll={handleScroll}>
+            <ScrollContainer ref={parentRef} onScroll={handleScroll} className="ascender-output-scroll">
               {hasContentLoading ? (
                 <ContentLoading />
               ) : (
@@ -1066,6 +1073,17 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
                     position: 'relative',
                   }}
                 >
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      bottom: 0,
+                      width: 85,
+                      backgroundColor: 'var(--ascender-gutter-bg, #e8e8e8)',
+                      zIndex: 0,
+                    }}
+                  />
                   {rowVirtualizer.getVirtualItems().map((virtualItem) => (
                     <div
                       key={virtualItem.key}
@@ -1076,7 +1094,7 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys }) {
                         top: 0,
                         left: 0,
                         width: '100%',
-                        transform: `translateY(${virtualItem.start}px)`,
+                        transform: `translateY(${Math.round(virtualItem.start)}px)`,
                       }}
                     >
                       {renderRow(virtualItem.index)}

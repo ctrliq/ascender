@@ -3,6 +3,7 @@ import * as d3 from 'd3';
 import { WorkflowStateContext } from 'contexts/Workflow';
 import {
   getScaleAndOffsetToFit,
+  constants as wfConstants,
   getTranslatePointsForZoom,
 } from 'components/Workflow/WorkflowUtils';
 import {
@@ -22,11 +23,13 @@ function WorkflowOutputGraph() {
   const [zoomPercentage, setZoomPercentage] = useState(100);
   const svgRef = useRef(null);
   const gRef = useRef(null);
+  const hasFitRef = useRef(false);
+  const hasFocusedRunningRef = useRef(false);
+  const [isPositioned, setIsPositioned] = useState(false);
 
   const { links, nodePositions, nodes, showLegend, showTools } =
     useContext(WorkflowStateContext);
 
-  // This is the zoom function called by using the mousewheel/click and drag
   const zoom = (event) => {
     if (!event.transform) return;
     const translation = [event.transform.x, event.transform.y];
@@ -55,7 +58,6 @@ function WorkflowOutputGraph() {
         xPos += 50;
         break;
       default:
-        // Throw an error?
         break;
     }
     d3.select(svgRef.current).call(
@@ -117,7 +119,6 @@ function WorkflowOutputGraph() {
 
   const zoomRef = d3.zoom().scaleExtent([0.1, 2]).on('zoom', zoom);
 
-  // Initialize the zoom
   useEffect(() => {
     try {
       d3.select(svgRef.current).call(zoomRef);
@@ -125,20 +126,90 @@ function WorkflowOutputGraph() {
       if (process.env.NODE_ENV !== 'test') throw e;
     }
   }, [zoomRef]);
-  // Attempt to zoom the graph to fit the available screen space
+
+  const focusOnNode = (node) => {
+    const nodeX = nodePositions[node.id].x;
+    const nodeY = nodePositions[node.id].y - nodePositions[1].y;
+    const svgRect = svgRef.current.getBoundingClientRect();
+    const scale = 1;
+    const tx = svgRect.width / 2 - (nodeX + wfConstants.nodeW / 2) * scale;
+    const ty = svgRect.height / 2 - (nodeY + wfConstants.nodeH / 2) * scale;
+    return d3.zoomIdentity.translate(tx, ty).scale(scale);
+  };
+
+  const findRunningNode = () =>
+    nodes?.find(
+      (n) =>
+        n.id > 1 &&
+        nodePositions?.[n.id] &&
+        n?.originalNodeObject?.summary_fields?.job?.status === 'running'
+    );
+
+  const findFocusNode = () => {
+    const running = findRunningNode();
+    if (running) return { node: running, isRunning: true };
+
+    const hasCarriedForward = nodes?.some(
+      (n) => n.id > 1 && n?.originalNodeObject?.prior_run_succeeded
+    );
+    if (hasCarriedForward) {
+      const rerunNode = nodes?.find(
+        (n) =>
+          n.id > 1 &&
+          nodePositions?.[n.id] &&
+          !n?.originalNodeObject?.prior_run_succeeded
+      );
+      if (rerunNode) return { node: rerunNode, isRunning: false };
+    }
+
+    return null;
+  };
+
+  // Initial positioning: center on running node if one exists, on the first
+  // re-run node for a relaunch-from-failed, or fit all otherwise. The <g>
+  // starts invisible and fades in after this runs so the user never sees the
+  // graph at the wrong zoom level.
   useEffect(() => {
+    if (hasFitRef.current || !nodePositions || !nodes || nodes.length < 2)
+      return;
     try {
-      handleFitGraph();
+      const focus = findFocusNode();
+      if (focus) {
+        d3.select(svgRef.current).call(
+          zoomRef.transform,
+          focusOnNode(focus.node)
+        );
+        setZoomPercentage(100);
+        if (focus.isRunning) hasFocusedRunningRef.current = true;
+      } else {
+        handleFitGraph();
+      }
+      hasFitRef.current = true;
+      setIsPositioned(true);
     } catch (e) {
       if (process.env.NODE_ENV !== 'test') throw e;
     }
-    // We only want this to run once (when the component mounts)
-    // Including handleFitGraph in the deps array will cause this to
-    // run very frequently.
-    // Discussion: https://github.com/facebook/create-react-app/issues/6880
-    // and https://github.com/facebook/react/issues/15865 amongst others
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [nodePositions, nodes]);
+
+  // If a node starts running after the initial positioning (e.g. via WebSocket),
+  // smoothly transition to it.
+  useEffect(() => {
+    if (!hasFitRef.current || hasFocusedRunningRef.current) return;
+    if (!nodePositions || !nodes) return;
+
+    const runningNode = findRunningNode();
+    if (!runningNode) return;
+    hasFocusedRunningRef.current = true;
+
+    d3.select(svgRef.current)
+      .transition()
+      .duration(400)
+      .call(zoomRef.transform, focusOnNode(runningNode));
+    setZoomPercentage(100);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [nodes]);
+
   return (
     <>
       {(nodeHelp || linkHelp) && (
@@ -150,11 +221,18 @@ function WorkflowOutputGraph() {
       <svg
         id="workflow-svg"
         ref={svgRef}
-        css="display: flex; height: 100%; background-color: var(--pf-v5-global--BackgroundColor--200)"
+        css="flex: 1; width: 100%; background-color: var(--ascender-workflow-graph-bg); border: 1px solid var(--pf-v6-global--BorderColor--100); border-top: none;"
       >
-        <g id="workflow-g" ref={gRef}>
+        <rect width="100%" height="100%" opacity="0" />
+        <g
+          id="workflow-g"
+          ref={gRef}
+          style={{
+            opacity: isPositioned ? 1 : 0,
+            transition: 'opacity 0.3s ease-in',
+          }}
+        >
           {nodePositions && [
-            <WorkflowStartNode key="start" showActionTooltip={false} />,
             links.map((link) => {
               if (
                 nodePositions[link.source.id] &&
@@ -171,6 +249,7 @@ function WorkflowOutputGraph() {
               }
               return null;
             }),
+            <WorkflowStartNode key="start" showActionTooltip={false} />,
             nodes.map((node) => {
               if (node.id > 1 && nodePositions[node.id]) {
                 return (

@@ -81,7 +81,7 @@ function InventoryFormFields({ inventory }) {
       <FormFullWidthLayout>
         <FormGroup
           label={t`Labels`}
-          labelIcon={<Popover content={helpText.labels} />}
+          labelHelp={<Popover content={helpText.labels} />}
           fieldId="inventory-labels"
         >
           <LabelSelect

@@ -33,7 +33,7 @@ const NodeContents = styled.div`
   font-size: 13px;
   padding: 0px 10px;
   background-color: ${(props) =>
-    props.$isInvalidLinkTarget ? 'var(--pf-v5-global--BackgroundColor--200)' : 'var(--pf-v5-global--BackgroundColor--100)'};
+    props.$isInvalidLinkTarget ? "var(--ascender-workflow-graph-bg)" : "var(--ascender-workflow-node-bg)"};
   height: 100%;
   display: flex;
   justify-content: center;
@@ -304,12 +304,12 @@ function VisualizerNode({
               style={{
                 fill:
                   hovering && addingLink && !node.isInvalidLinkTarget
-                    ? 'var(--pf-v5-global--primary-color--100)'
-                    : 'var(--pf-v5-global--BorderColor--100)',
+                    ? "var(--pf-t--global--color--brand--default)"
+                    : "var(--pf-t--global--border--color--default)",
                 stroke:
                   hovering && addingLink && !node.isInvalidLinkTarget
-                    ? 'var(--pf-v5-global--primary-color--100)'
-                    : 'var(--pf-v5-global--BorderColor--100)',
+                    ? "var(--pf-t--global--color--brand--default)"
+                    : "var(--pf-t--global--border--color--default)",
               }}
               height={wfConstants.nodeH / 4}
               rx={2}
@@ -333,11 +333,11 @@ function VisualizerNode({
         )}
         <rect
           style={{
-            fill: 'var(--pf-v5-global--BackgroundColor--100)',
+            fill: "var(--ascender-workflow-node-bg)",
             stroke:
               hovering && addingLink && !node.isInvalidLinkTarget
-                ? 'var(--pf-v5-global--primary-color--100)'
-                : 'var(--pf-v5-global--BorderColor--100)',
+                ? "var(--pf-t--global--color--brand--default)"
+                : "var(--pf-t--global--border--color--default)",
           }}
           height={wfConstants.nodeH}
           rx="2"

@@ -26,7 +26,7 @@ function GitHub() {
   const baseURL = '/settings/github';
 
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         <Routes>
           <Route

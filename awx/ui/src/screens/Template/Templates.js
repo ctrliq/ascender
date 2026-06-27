@@ -82,7 +82,7 @@ function Templates() {
         <Route
           index
           element={
-            <PageSection>
+            <PageSection hasBodyWrapper={false}>
               <PersistentFilters pageKey="templates">
                 <TemplateList />
               </PersistentFilters>

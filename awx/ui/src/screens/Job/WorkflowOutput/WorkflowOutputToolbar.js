@@ -23,7 +23,7 @@ import {
 
 const Toolbar = styled.div`
   align-items: center;
-  border-bottom: 1px solid var(--pf-v5-global--BorderColor--100);
+  border-bottom: 1px solid var(--pf-v6-global--BorderColor--100);
   display: flex;
   height: 56px;
 `;
@@ -33,8 +33,7 @@ const ToolbarJob = styled.div`
   align-items: center;
 
   h1 {
-    margin-right: 10px;
-    font-weight: var(--pf-v5-global--FontWeight--bold);
+    font-weight: var(--pf-v6-global--FontWeight--bold);
   }
 `;
 
@@ -48,12 +47,13 @@ const ToolbarActions = styled.div`
   button {
     margin: 0px 6px;
     padding: 6px 10px;
+    font-size: 1.1rem;
   }
   /* hover background only on enabled action buttons, so disabled controls
      (relaunch while launching, delete while disabled) don't look interactive
      (badges aren't buttons; modals portal out) */
   button:not(:disabled):not([aria-disabled='true']):hover {
-    background-color: var(--pf-v5-global--primary-color--100);
+    background-color: var(--pf-v6-global--primary-color--100);
     color: #fff;
   }
   /* whiten the icon; the dropdown toggle colors its icon separately */
@@ -88,7 +88,7 @@ const ActionButton = styled(Button)`
   border: none;
 
   &.pf-m-active {
-    background-color: var(--pf-v5-global--primary-color--100);
+    background-color: var(--pf-v6-global--primary-color--100);
     color: #fff;
   }
 `;
@@ -155,7 +155,7 @@ function WorkflowOutputToolbar({
         <Tooltip content={t`Toggle Legend`} position="top">
           <ActionButton
             id="workflow-output-toggle-legend"
-            isActive={showLegend}
+            className={showLegend ? 'pf-m-active' : undefined}
             onClick={() => dispatch({ type: 'TOGGLE_LEGEND' })}
             variant="plain"
           >
@@ -165,7 +165,7 @@ function WorkflowOutputToolbar({
         <Tooltip content={t`Toggle Tools`} position="top">
           <ActionButton
             id="workflow-output-toggle-tools"
-            isActive={showTools}
+            className={showTools ? 'pf-m-active' : undefined}
             onClick={() => dispatch({ type: 'TOGGLE_TOOLS' })}
             variant="plain"
           >

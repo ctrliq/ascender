@@ -79,7 +79,7 @@ function Instance({ setBreadcrumb }) {
     return <ContentError />;
   }
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         <RoutedTabs tabsArray={tabsArray} />
         <Routes>

@@ -4,10 +4,10 @@ import { Link, useParams } from 'react-router';
 import { useNavigate } from 'routerCompat';
 import styled from 'styled-components';
 import {
-  Divider as PFDivider,
-  Title as PFTitle,
-  Chip,
+	Label, Divider as PFDivider,
+	Title as PFTitle
 } from '@patternfly/react-core';
+
 import AlertModal from 'components/AlertModal';
 import ChipGroup from 'components/ChipGroup';
 import ContentError from 'components/ContentError';
@@ -31,17 +31,17 @@ import {
 } from '../shared/WorkflowApprovalUtils';
 
 const Divider = styled(PFDivider)`
-  margin-top: var(--pf-v5-global--spacer--lg);
-  margin-bottom: var(--pf-v5-global--spacer--lg);
+  margin-top: var(--pf-v6-global--spacer--lg);
+  margin-bottom: var(--pf-v6-global--spacer--lg);
 `;
 
 const Title = styled(PFTitle)`
-  margin-top: var(--pf-v5-global--spacer--xl);
-  --pf-v5-c-title--m-md--FontWeight: 700;
+  margin-top: var(--pf-v6-global--spacer--xl);
+  --pf-v6-c-title--m-md--FontWeight: 700;
 `;
 
 const WFDetailList = styled(DetailList)`
-  padding: 0px var(--pf-v5-global--spacer--lg);
+  padding: 0px var(--pf-v6-global--spacer--lg);
 `;
 
 function WorkflowApprovalDetail({ workflowApproval, fetchWorkflowApproval }) {
@@ -259,9 +259,9 @@ function WorkflowApprovalDetail({ workflowApproval, fetchWorkflowApproval }) {
               ouiaId="wa-detail-label-chips"
             >
               {workflowJob.summary_fields.labels.results.map((label) => (
-                <Chip key={label.id} isReadOnly>
+                <Label variant="outline" key={label.id} >
                   {label.name}
-                </Chip>
+                </Label>
               ))}
             </ChipGroup>
           }

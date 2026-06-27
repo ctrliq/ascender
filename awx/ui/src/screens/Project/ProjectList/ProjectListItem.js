@@ -21,7 +21,7 @@ import JobCancelButton from 'components/JobCancelButton';
 import ProjectSyncButton from '../shared/ProjectSyncButton';
 
 const Label = styled.span`
-  color: var(--pf-v5-global--disabled-color--100);
+  color: var(--pf-v6-global--disabled-color--100);
 `;
 
 function ProjectListItem({
@@ -118,13 +118,11 @@ function ProjectListItem({
           {t`Refresh for revision`}
         </Label>
         <Tooltip content={t`Refresh project revision`}>
-          <Button
+          <Button icon={<UndoIcon />}
             ouiaId={`project-refresh-revision-${project.id}`}
             variant="plain"
             onClick={() => onRefreshRow(project.id)}
-          >
-            <UndoIcon />
-          </Button>
+           />
         </Tooltip>
       </>
     );
@@ -221,16 +219,14 @@ function ProjectListItem({
             visible={project.summary_fields.user_capabilities.edit}
             tooltip={t`Edit Project`}
           >
-            <Button
+            <Button icon={<PencilAltIcon />}
               ouiaId={`${project.id}-edit-button`}
               isDisabled={isDisabled}
               aria-label={t`Edit Project`}
               variant="plain"
               component={Link}
               to={`/projects/${project.id}/edit`}
-            >
-              <PencilAltIcon />
-            </Button>
+             />
           </ActionItem>
           <ActionItem
             tooltip={t`Copy Project`}

@@ -41,7 +41,7 @@ function AnswerTypeField() {
   return (
     <FormGroup
       label={t`Answer type`}
-      labelIcon={
+      labelHelp={
         <Popover
           content={t`Choose an answer type or format you want as the prompt for the user.
           Refer to the Ansible Controller Documentation for more additional

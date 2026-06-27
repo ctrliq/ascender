@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 import { calculateElapsed, secondsToHHMMSS } from 'util/dates';
 import {
+  CopyIcon,
   DownloadIcon,
   RocketIcon,
   TrashAltIcon,
@@ -52,10 +53,11 @@ const Wrapper = styled.div`
   button {
     margin: 0px 6px;
     padding: 6px 10px;
+    font-size: 1.1rem;
   }
   /* only on enabled buttons, so disabled controls don't look interactive */
   button:not(:disabled):not([aria-disabled='true']):hover {
-    background-color: var(--pf-v5-global--primary-color--100);
+    background-color: var(--pf-v6-global--primary-color--100);
     color: #fff;
   }
   /* whiten the icon; the dropdown toggle colors its icon separately */
@@ -77,6 +79,7 @@ const OutputToolbar = ({
 }) => {
   const { t } = useLingui();
   const [activeJobElapsedTime, setActiveJobElapsedTime] = useState('00:00:00');
+  const [copyTooltip, setCopyTooltip] = useState(null);
   const hideCounts = OUTPUT_NO_COUNT_JOB_TYPES.includes(job.type);
 
   const playCount = job?.playbook_counts?.play_count;
@@ -203,31 +206,47 @@ const OutputToolbar = ({
           ) : (
             <LaunchButton resource={job}>
               {({ handleRelaunch, isLaunching }) => (
-                <Button
+                <Button icon={<RocketIcon />}
                   ouiaId="job-output-relaunch-button"
                   variant="plain"
                   onClick={() => handleRelaunch()}
                   aria-label={t`Relaunch`}
                   isDisabled={isLaunching}
-                >
-                  <RocketIcon />
-                </Button>
+                 />
               )}
             </LaunchButton>
           )}
         </Tooltip>
       )}
 
+      {job.related?.stdout &&
+        ['successful', 'failed', 'error', 'canceled'].includes(jobStatus) && (
+          <Tooltip content={copyTooltip || t`Copy Output`}>
+            <Button
+              icon={<CopyIcon />}
+              ouiaId="job-output-copy-button"
+              variant="plain"
+              aria-label={t`Copy Output`}
+              onClick={async () => {
+                const res = await fetch(
+                  `${job.related.stdout}?format=txt`
+                );
+                const text = await res.text();
+                await navigator.clipboard.writeText(text);
+                setCopyTooltip(t`Copied`);
+                setTimeout(() => setCopyTooltip(null), 2000);
+              }}
+            />
+          </Tooltip>
+        )}
       {job.related?.stdout && (
         <Tooltip content={t`Download Output`}>
           <a href={`${job.related.stdout}?format=txt_download`}>
-            <Button
+            <Button icon={<DownloadIcon />}
               ouiaId="job-output-download-button"
               variant="plain"
               aria-label={t`Download Output`}
-            >
-              <DownloadIcon />
-            </Button>
+             />
           </a>
         </Tooltip>
       )}

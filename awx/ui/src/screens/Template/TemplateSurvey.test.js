@@ -122,7 +122,7 @@ describe('<TemplateSurvey />', () => {
       '/templates/job_template/7/survey',
       <TemplateSurvey template={mockJobTemplateData} canEdit />
     );
-    const toggle = await screen.findByRole('checkbox', {
+    const toggle = await screen.findByRole('switch', {
       name: 'Survey Toggle',
     });
     fireEvent.click(toggle);
@@ -142,7 +142,7 @@ describe('<TemplateSurvey />', () => {
       '/templates/workflow_job_template/15/survey',
       <TemplateSurvey template={mockWorkflowJobTemplateData} canEdit />
     );
-    const toggle = await screen.findByRole('checkbox', {
+    const toggle = await screen.findByRole('switch', {
       name: 'Survey Toggle',
     });
     fireEvent.click(toggle);

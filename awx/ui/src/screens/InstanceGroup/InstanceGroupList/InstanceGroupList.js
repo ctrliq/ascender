@@ -148,7 +148,7 @@ function InstanceGroupList() {
   );
   return (
     <>
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <PaginatedTable
             contentError={contentError}

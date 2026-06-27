@@ -82,7 +82,7 @@ function ConstructedInventory({ setBreadcrumb }) {
 
   if (isLoading) {
     return (
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <ContentLoading />
         </Card>
@@ -92,7 +92,7 @@ function ConstructedInventory({ setBreadcrumb }) {
 
   if (contentError) {
     return (
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <ContentError error={contentError}>
             {contentError?.response?.status === 404 && (
@@ -123,7 +123,7 @@ function ConstructedInventory({ setBreadcrumb }) {
   }
 
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         {showCardHeader && <RoutedTabs tabsArray={tabsArray} />}
         <Routes>

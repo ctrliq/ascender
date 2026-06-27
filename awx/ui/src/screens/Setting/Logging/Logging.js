@@ -13,7 +13,7 @@ function Logging() {
   const { me } = useConfig();
   const { t } = useLingui();
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         <Routes>
           <Route

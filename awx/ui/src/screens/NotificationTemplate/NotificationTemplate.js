@@ -52,7 +52,7 @@ function NotificationTemplate({ setBreadcrumb }) {
 
   if (!isLoading && error) {
     return (
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <ContentError error={error}>
             {error.response?.status === 404 && (
@@ -89,7 +89,7 @@ function NotificationTemplate({ setBreadcrumb }) {
     },
   ];
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         {showCardHeader && <RoutedTabs tabsArray={tabs} />}
         <Routes>

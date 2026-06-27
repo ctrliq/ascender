@@ -63,7 +63,7 @@ function UserToken({ setBreadcrumb, user }) {
 
   if (!isLoading && error) {
     return (
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <ContentError error={error}>
             {error.response.status === 404 && (

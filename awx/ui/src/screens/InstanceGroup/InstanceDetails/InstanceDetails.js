@@ -38,7 +38,7 @@ import useRequest, {
 } from 'hooks/useRequest';
 
 const Unavailable = styled.span`
-  color: var(--pf-v5-global--danger-color--200);
+  color: var(--pf-v6-global--danger-color--200);
 `;
 
 const SliderHolder = styled.div`

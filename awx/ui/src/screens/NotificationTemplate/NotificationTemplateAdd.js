@@ -44,7 +44,7 @@ function NotificationTemplateAdd() {
 
   if (error) {
     return (
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <ContentError error={error}>
             {error.response.status === 404 && (
@@ -62,7 +62,7 @@ function NotificationTemplateAdd() {
   }
 
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         <CardBody>
           {defaultMessages && (

@@ -150,7 +150,7 @@ function Organization({ setBreadcrumb, me }) {
 
   if (!organizationLoading && organizationError) {
     return (
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <ContentError error={organizationError}>
             {organizationError.response.status === 404 && (
@@ -169,7 +169,7 @@ function Organization({ setBreadcrumb, me }) {
 
   if (!rolesLoading && rolesError) {
     return (
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <ContentError error={rolesError} />
         </Card>
@@ -178,7 +178,7 @@ function Organization({ setBreadcrumb, me }) {
   }
 
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         {showCardHeader && <RoutedTabs tabsArray={tabsArray} />}
         <Routes>

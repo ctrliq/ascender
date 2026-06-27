@@ -10,11 +10,11 @@ const TIME_EVENTS = [EVENT_START_TASK, EVENT_START_PLAY, EVENT_STATS_PLAY];
 const ansi = new Ansi({
   stream: true,
   colors: {
-    0: '#000',
+    0: 'var(--ansi-color-0, #000)',
     1: '#A30000',
     2: '#068917',
     3: '#be8f17',
-    4: '#00A',
+    4: 'var(--ansi-color-4, #00A)',
     5: '#A0A',
     6: '#0c6899',
     7: '#AAA',
@@ -22,7 +22,7 @@ const ansi = new Ansi({
     9: '#F55',
     10: '#5F5',
     11: '#FF5',
-    12: '#55F',
+    12: 'var(--ansi-color-12, #55F)',
     13: '#F5F',
     14: '#5FF',
     15: '#FFF',

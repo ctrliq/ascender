@@ -26,7 +26,9 @@ const PotentialLink = styled.polyline`
   pointer-events: none;
 `;
 const WorkflowSVG = styled.svg`
-  background-color: var(--pf-v5-global--BackgroundColor--200);
+  background-color: var(--ascender-workflow-graph-bg);
+  border: 1px solid var(--pf-v6-global--BorderColor--100);
+  border-top: none;
   display: flex;
   height: 100%;
 `;
@@ -91,7 +93,7 @@ function VisualizerGraph({ readOnly }) {
       )
       .raise();
   };
-  // This is the zoom function called by using the mousewheel/click and drag
+
   const zoom = (event) => {
     if (!event.transform) return;
     const translation = [event.transform.x, event.transform.y];
@@ -120,7 +122,6 @@ function VisualizerGraph({ readOnly }) {
         xPos += 50;
         break;
       default:
-        // Throw an error?
         break;
     }
     d3.select(svgRef.current).call(
@@ -181,21 +182,7 @@ function VisualizerGraph({ readOnly }) {
   };
 
   const zoomRef = d3.zoom().scaleExtent([0.1, 2]).on('zoom', zoom);
-  // This useEffect prevents the Visualizer toolbar from going off the screen
-  // as the user zooms in too much.  It effectively makes the toolbarr a sticky header
-  // The user can still zoom in/out but there are limited to the degree they can do so
-  // by the zoomExtent above.
 
-  useEffect(() => {
-    const cancelWheel = (event) => event.preventDefault();
-    document.body.addEventListener('wheel', cancelWheel, { passive: false });
-
-    return () => {
-      document.body.removeEventListener('wheel', cancelWheel);
-    };
-  }, []);
-
-  // Initialize the zoom
   useEffect(() => {
     try {
       d3.select(svgRef.current).call(zoomRef);
@@ -203,20 +190,16 @@ function VisualizerGraph({ readOnly }) {
       if (process.env.NODE_ENV !== 'test') throw e;
     }
   }, [zoomRef]);
-  // Attempt to zoom the graph to fit the available screen space
+
   useEffect(() => {
     try {
       handleFitGraph();
     } catch (e) {
       if (process.env.NODE_ENV !== 'test') throw e;
     }
-    // We only want this to run once (when the component mounts)
-    // Including handleFitGraph in the deps array will cause this to
-    // run very frequently.
-    // Discussion: https://github.com/facebook/create-react-app/issues/6880
-    // and https://github.com/facebook/react/issues/15865 amongst others
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   return (
     <>
       {(helpText || nodeHelp || linkHelp) && (
@@ -238,7 +221,7 @@ function VisualizerGraph({ readOnly }) {
             refX="10"
             viewBox="0 -5 10 10"
           >
-            <path d="M0,-5L10,0L0,5" style={{ fill: 'var(--pf-v5-global--BorderColor--100)' }} />
+            <path d="M0,-5L10,0L0,5" style={{ fill: "var(--pf-t--global--border--color--default)" }} />
           </marker>
         </defs>
         <rect
@@ -303,7 +286,7 @@ function VisualizerGraph({ readOnly }) {
             <PotentialLink
               id="workflow-potentialLink"
               markerEnd="url(#workflow-triangle)"
-              style={{ stroke: 'var(--pf-v5-global--BorderColor--100)' }}
+              style={{ stroke: "var(--pf-t--global--border--color--default)" }}
               strokeDasharray="5,5"
               strokeWidth="2"
             />

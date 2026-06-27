@@ -101,7 +101,7 @@ function ApplicationsList() {
 
   return (
     <>
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <PaginatedTable
             contentError={error}

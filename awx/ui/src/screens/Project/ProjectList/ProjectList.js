@@ -170,7 +170,7 @@ function ProjectList() {
 
   return (
     <>
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <PaginatedTable
             contentError={contentError}

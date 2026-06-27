@@ -41,7 +41,7 @@ function WorkflowApproval({ setBreadcrumb }) {
 
   if (!isLoading && error) {
     return (
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <ContentError error={error}>
             {error.response.status === 404 && (
@@ -77,7 +77,7 @@ function WorkflowApproval({ setBreadcrumb }) {
     },
   ];
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         <RoutedTabs tabsArray={tabs} />
         <Routes>

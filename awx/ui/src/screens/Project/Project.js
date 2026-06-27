@@ -126,7 +126,7 @@ function Project({ setBreadcrumb }) {
 
   if (contentError) {
     return (
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <ContentError error={contentError}>
             {contentError.response.status === 404 && (
@@ -147,7 +147,7 @@ function Project({ setBreadcrumb }) {
   );
 
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         {showCardHeader && <RoutedTabs tabsArray={tabsArray} />}
         {hasContentLoading && <ContentLoading />}

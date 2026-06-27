@@ -82,7 +82,7 @@ function FederatedInventoryEdit({ inventory }) {
 
   if (isLoading) {
     return (
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <ContentLoading />
         </Card>
@@ -92,7 +92,7 @@ function FederatedInventoryEdit({ inventory }) {
 
   if (contentError) {
     return (
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <ContentError error={contentError} />
         </Card>
@@ -101,7 +101,7 @@ function FederatedInventoryEdit({ inventory }) {
   }
 
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         <CardBody>
           <FederatedInventoryForm

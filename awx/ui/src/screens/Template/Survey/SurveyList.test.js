@@ -35,7 +35,7 @@ describe('<SurveyList />', () => {
       />
     );
 
-    const toggle = screen.getByRole('checkbox', { name: 'Survey Toggle' });
+    const toggle = screen.getByRole('switch', { name: 'Survey Toggle' });
     expect(toggle).toBeChecked();
 
     fireEvent.click(toggle);
@@ -115,7 +115,7 @@ describe('<SurveyList />', () => {
       screen.getByRole('checkbox', { name: 'Select all' })
     ).toBeDisabled();
     expect(
-      screen.getByRole('checkbox', { name: 'Survey Toggle' })
+      screen.getByRole('switch', { name: 'Survey Toggle' })
     ).toBeDisabled();
     // Add and Delete toolbar buttons are disabled without edit permission.
     // The Add control is a PF Button rendered as a link (aria-disabled).

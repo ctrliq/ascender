@@ -158,16 +158,16 @@ describe('<WorkflowJobTemplate />', () => {
       await screen.findByRole('link', { name: 'Notification one' })
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('checkbox', { name: 'Toggle notification approvals' })
+      screen.getByRole('switch', { name: 'Toggle notification approvals' })
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('checkbox', { name: 'Toggle notification start' })
+      screen.getByRole('switch', { name: 'Toggle notification start' })
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('checkbox', { name: 'Toggle notification success' })
+      screen.getByRole('switch', { name: 'Toggle notification success' })
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('checkbox', { name: 'Toggle notification failure' })
+      screen.getByRole('switch', { name: 'Toggle notification failure' })
     ).toBeInTheDocument();
   });
 });

@@ -11,7 +11,7 @@ function RADIUS() {
   const { t } = useLingui();
   const baseURL = '/settings/radius';
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         <Routes>
           <Route

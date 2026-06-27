@@ -103,7 +103,7 @@ function Credential({ setBreadcrumb }) {
 
   if (!hasContentLoading && contentError) {
     return (
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <ContentError error={contentError}>
             {contentError.response && contentError.response.status === 404 && (
@@ -124,7 +124,7 @@ function Credential({ setBreadcrumb }) {
   }
 
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         {showCardHeader && <RoutedTabs tabsArray={tabsArray} />}
         {!hasContentLoading && credential && (

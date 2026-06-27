@@ -135,7 +135,7 @@ function HostList() {
     actions && Object.prototype.hasOwnProperty.call(actions, 'POST');
 
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         <PaginatedTable
           contentError={contentError}

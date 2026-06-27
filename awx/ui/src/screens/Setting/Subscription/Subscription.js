@@ -12,7 +12,7 @@ function Subscription() {
   const baseURL = '/settings/subscription';
 
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         <Routes>
           <Route

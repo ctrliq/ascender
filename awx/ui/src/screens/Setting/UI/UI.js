@@ -11,7 +11,7 @@ function UI() {
   const { t } = useLingui();
   const baseURL = '/settings/ui';
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         <Routes>
           <Route

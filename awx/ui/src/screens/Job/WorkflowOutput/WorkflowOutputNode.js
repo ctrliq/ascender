@@ -37,7 +37,7 @@ const Elapsed = styled.div`
   span {
     font-size: 12px;
     font-weight: bold;
-    background-color: var(--pf-v5-global--BackgroundColor--200);
+    background-color: var(--pf-v6-global--BackgroundColor--200);
     padding: 3px 12px;
     border-radius: 14px;
   }
@@ -94,25 +94,23 @@ function WorkflowOutputNode({ mouseEnter, mouseLeave, node }) {
     return () => clearInterval(timer);
   }, [isRunning, jobStarted]);
 
-  let borderColor = 'var(--pf-v5-global--BorderColor--100)';
+  let borderColor = "var(--pf-t--global--border--color--default)";
 
   if (job) {
     if (job.status === 'failed' || job.status === 'error') {
-      borderColor = 'var(--pf-v5-global--danger-color--100)';
+      borderColor = "var(--pf-t--global--color--status--danger--default)";
     }
     if (job.status === 'canceled') {
-      // match the orange of the canceled status icon
-      borderColor = 'var(--pf-v5-global--palette--orange-300)';
+      borderColor = "var(--ascender-status-canceled-color)";
     }
     if (job.status === 'successful' || job.status === 'ok') {
-      borderColor = 'var(--pf-v5-global--success-color--100)';
+      borderColor = "var(--pf-t--global--color--status--success--default)";
     }
     if (job.status === 'running') {
-      // match the blue of the running status icon
-      borderColor = 'var(--pf-v5-global--primary-color--100)';
+      borderColor = "var(--ascender-status-running-color)";
     }
   } else if (priorRunSucceeded) {
-    borderColor = 'var(--pf-v5-global--success-color--100)';
+    borderColor = "var(--pf-t--global--color--status--success--default)";
   }
 
   const handleNodeClick = () => {
@@ -176,7 +174,7 @@ function WorkflowOutputNode({ mouseEnter, mouseLeave, node }) {
         </>
       )}
       <rect
-        fill="var(--pf-v5-global--BackgroundColor--100)"
+        fill="var(--ascender-workflow-node-bg)"
         height={wfConstants.nodeH}
         rx="2"
         ry="2"

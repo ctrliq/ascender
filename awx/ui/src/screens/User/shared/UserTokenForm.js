@@ -74,7 +74,7 @@ function UserTokenFormFields() {
         fieldId="token-scope"
         isRequired
         label={t`Scope`}
-        labelIcon={<Popover content={helptext.scope} />}
+        labelHelp={<Popover content={helptext.scope} />}
       >
         <AnsibleSelect
           {...scopeField}

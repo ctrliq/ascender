@@ -12,7 +12,7 @@ function Labels() {
         streamType="label"
         breadcrumbConfig={{ '/labels': t`Labels` }}
       />
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <LabelLists />
       </PageSection>
     </>

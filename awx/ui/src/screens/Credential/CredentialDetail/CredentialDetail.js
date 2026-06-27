@@ -5,11 +5,9 @@ import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import {
   Button,
-  TextList,
-  TextListItem,
-  TextListVariants,
-  TextListItemVariants,
-} from '@patternfly/react-core';
+  Content,
+  ContentVariants,
+  } from '@patternfly/react-core';
 import AlertModal from 'components/AlertModal';
 import { CardBody, CardActionsRow } from 'components/Card';
 import ContentError from 'components/ContentError';
@@ -268,13 +266,13 @@ function CredentialDetail({ credential }) {
         <Detail
           label={t`Enabled Options`}
           value={
-            <TextList component={TextListVariants.ul}>
+            <Content component={ContentVariants.ul}>
               {enabledBooleanFields.map(({ id, label }) => (
-                <TextListItem key={id} component={TextListItemVariants.li}>
+                <Content key={id} component={ContentVariants.li}>
                   {label}
-                </TextListItem>
+                </Content>
               ))}
-            </TextList>
+            </Content>
           }
           isEmpty={enabledBooleanFields.length === 0}
         />

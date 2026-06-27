@@ -63,7 +63,7 @@ function Jobs() {
         <Route
           index
           element={
-            <PageSection>
+            <PageSection hasBodyWrapper={false}>
               <PersistentFilters pageKey="jobs">
                 <JobList showTypeColumn />
               </PersistentFilters>

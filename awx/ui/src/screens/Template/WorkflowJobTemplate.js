@@ -162,7 +162,7 @@ function WorkflowJobTemplate({ setBreadcrumb }) {
   }
   if (!hasRolesandTemplateLoading && contentError) {
     return (
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <ContentError error={contentError}>
             {contentError.response.status === 404 && (
@@ -178,7 +178,7 @@ function WorkflowJobTemplate({ setBreadcrumb }) {
   }
 
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         {showCardHeader && <RoutedTabs tabsArray={tabsArray} />}
         <Routes>

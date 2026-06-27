@@ -225,7 +225,7 @@ function NodeTypeStep({ isIdentifierRequired }) {
               fieldId="convergence"
               label={t`Convergence`}
               isRequired
-              labelIcon={
+              labelHelp={
                 <Popover
                   content={
                     <>
@@ -254,7 +254,7 @@ function NodeTypeStep({ isIdentifierRequired }) {
                 }}
                 aria-label={t`Convergence select`}
                 className="convergenceSelect"
-                ouiaId="convergenceSelect"
+                data-ouia-component-id="convergenceSelect"
                 toggle={(toggleRef) => (
                   <MenuToggle
                     ref={toggleRef}

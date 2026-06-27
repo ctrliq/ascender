@@ -4,7 +4,7 @@ import ContentError from 'components/ContentError';
 
 function NotFound() {
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         <ContentError isNotFound />
       </Card>

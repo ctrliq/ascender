@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { Chip } from '@patternfly/react-core';
+import { Label } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
 import { Link } from 'react-router';
 
@@ -26,14 +26,16 @@ function UserRolesListItem({ role, detailUrl, onSelect }) {
       </Td>
       <Td dataLabel={t`Role`}>
         {role.name ? (
-          <Chip
+          <Label
+            variant="outline"
             key={role.name}
             aria-label={role.name}
-            onClick={() => onSelect(role)}
-            isReadOnly={!role.summary_fields.user_capabilities.unattach}
+            {...(role.summary_fields.user_capabilities?.unattach
+              ? { onClose: () => onSelect(role) }
+              : {})}
           >
             {role.name}
-          </Chip>
+          </Label>
         ) : null}
       </Td>
     </Tr>

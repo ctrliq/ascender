@@ -86,7 +86,7 @@ function Application({ setBreadcrumb }) {
 
   if (!isLoading && error) {
     return (
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <ContentError error={error}>
             {error.response?.status === 404 && (
@@ -104,7 +104,7 @@ function Application({ setBreadcrumb }) {
   }
 
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         {cardHeader}
         <Routes>

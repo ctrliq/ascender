@@ -53,7 +53,7 @@ function InventoryAdd() {
   };
 
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         <CardBody>
           <InventoryForm

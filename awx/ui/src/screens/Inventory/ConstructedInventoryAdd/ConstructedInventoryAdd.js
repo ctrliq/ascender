@@ -70,7 +70,7 @@ function ConstructedInventoryAdd() {
   };
 
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         <CardBody>
           <ConstructedInventoryForm

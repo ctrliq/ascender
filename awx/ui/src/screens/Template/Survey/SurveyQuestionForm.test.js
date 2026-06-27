@@ -244,7 +244,7 @@ describe('<SurveyQuestionForm />', () => {
     });
     await waitFor(() =>
       expect(
-        document.querySelectorAll('#formattedChoices .pf-v5-c-input-group')
+        document.querySelectorAll('#formattedChoices .pf-v6-c-input-group')
       ).toHaveLength(2)
     );
 
@@ -252,7 +252,7 @@ describe('<SurveyQuestionForm />', () => {
     fireEvent.change(secondInput, { target: { value: 'spencer' } });
     await waitFor(() =>
       expect(
-        document.querySelectorAll('#formattedChoices .pf-v5-c-input-group')
+        document.querySelectorAll('#formattedChoices .pf-v6-c-input-group')
       ).toHaveLength(2)
     );
 
@@ -289,7 +289,7 @@ describe('<SurveyQuestionForm />', () => {
     );
     const alexSelected = iconClass('alex');
     expect(
-      document.querySelectorAll('#formattedChoices .pf-v5-c-input-group')
+      document.querySelectorAll('#formattedChoices .pf-v6-c-input-group')
     ).toHaveLength(1);
 
     fireEvent.keyUp(screen.getByRole('textbox', { name: 'alex' }), {
@@ -297,7 +297,7 @@ describe('<SurveyQuestionForm />', () => {
     });
     await waitFor(() =>
       expect(
-        document.querySelectorAll('#formattedChoices .pf-v5-c-input-group')
+        document.querySelectorAll('#formattedChoices .pf-v6-c-input-group')
       ).toHaveLength(2)
     );
 
@@ -305,7 +305,7 @@ describe('<SurveyQuestionForm />', () => {
     fireEvent.change(secondInput, { target: { value: 'spencer' } });
     await waitFor(() =>
       expect(
-        document.querySelectorAll('#formattedChoices .pf-v5-c-input-group')
+        document.querySelectorAll('#formattedChoices .pf-v6-c-input-group')
       ).toHaveLength(2)
     );
 

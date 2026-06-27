@@ -64,7 +64,7 @@ function SmartInventoryAdd() {
   }, [inventoryId]);
 
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         <CardBody>
           <SmartInventoryForm

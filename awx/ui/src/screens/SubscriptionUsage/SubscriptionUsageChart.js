@@ -12,7 +12,8 @@ import {
 	Select,
 	SelectList,
 	SelectOption,
-	Text
+
+  Content,
 } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
 
@@ -23,23 +24,23 @@ import ContentLoading from 'components/ContentLoading';
 import UsageChart from './ChartComponents/UsageChart';
 
 const GraphCardHeader = styled(CardHeader)`
-  margin-bottom: var(--pf-v5-global--spacer--lg);
+  margin-bottom: var(--pf-v6-global--spacer--lg);
 `;
 
 const ChartCardTitle = styled(CardTitle)`
   padding-right: 24px;
   font-size: 20px;
-  font-weight: var(--pf-v5-c-title--m-xl--FontWeight);
+  font-weight: var(--pf-v6-c-title--m-xl--FontWeight);
 `;
 
-const CardText = styled(Text)`
+const CardText = styled(Content)`
   padding-right: 24px;
 `;
 
 const GraphCardActions = styled.div`
   display: flex;
   align-items: center;
-  gap: var(--pf-v5-global--spacer--sm);
+  gap: var(--pf-v6-global--spacer--sm);
   margin-left: initial;
   padding-left: 0;
 `;
@@ -103,7 +104,7 @@ function SubscriptionUsageChart() {
 
   if (isLoading) {
     return (
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <ContentLoading />
         </Card>
@@ -146,7 +147,7 @@ function SubscriptionUsageChart() {
             }}
             aria-label={t`Select period`}
             className="periodSelect"
-            ouiaId="subscription-usage-period-select"
+            data-ouia-component-id="subscription-usage-period-select"
             toggle={(toggleRef) => (
               <MenuToggle
                 ref={toggleRef}

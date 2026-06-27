@@ -3,11 +3,13 @@ import styled from 'styled-components';
 import { Routes, Route } from 'routerCompat';
 import { useLingui } from '@lingui/react/macro';
 import {
-  Alert,
-  ClipboardCopy,
-  ClipboardCopyVariant,
-  Modal,
+	Alert,
+	ClipboardCopy,
+	ClipboardCopyVariant
 } from '@patternfly/react-core';
+import {
+	Modal
+} from '@patternfly/react-core/deprecated';
 import ScreenHeader from 'components/ScreenHeader';
 import { Detail, DetailList } from 'components/DetailList';
 import PersistentFilters from 'components/PersistentFilters';

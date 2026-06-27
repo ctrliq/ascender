@@ -106,15 +106,13 @@ function InventorySourceListItem({
           visible={source.summary_fields.user_capabilities.edit}
           tooltip={t`Edit`}
         >
-          <Button
+          <Button icon={<PencilAltIcon />}
             ouiaId={`${source.id}-edit-button`}
             aria-label={t`Edit Source`}
             variant="plain"
             component={Link}
             to={`${detailUrl}/edit`}
-          >
-            <PencilAltIcon />
-          </Button>
+           />
         </ActionItem>
       </ActionsTd>
     </Tr>

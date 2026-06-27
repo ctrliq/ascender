@@ -11,7 +11,7 @@ function TACACS() {
   const { t } = useLingui();
   const baseURL = '/settings/tacacs';
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         <Routes>
           <Route

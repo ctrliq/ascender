@@ -102,15 +102,13 @@ function ExecutionEnvironmentListItem({
           visible={executionEnvironment.summary_fields.user_capabilities.edit}
           tooltip={t`Edit Execution Environment`}
         >
-          <Button
+          <Button icon={<PencilAltIcon />}
             ouiaId={`${executionEnvironment.id}-edit-button`}
             aria-label={t`Edit Execution Environment`}
             variant="plain"
             component={Link}
             to={`/execution_environments/${executionEnvironment.id}/edit`}
-          >
-            <PencilAltIcon />
-          </Button>
+           />
         </ActionItem>
         <ActionItem
           visible={executionEnvironment.summary_fields.user_capabilities.copy}

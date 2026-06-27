@@ -135,7 +135,7 @@ function WebhookSubForm({ templateType }) {
         name="webhook_service"
         fieldId="webhook_service"
         label={t`Webhook Service`}
-        labelIcon={<Popover content={helpText.webhookService} />}
+        labelHelp={<Popover content={helpText.webhookService} />}
       >
         <AnsibleSelect
           {...webhookServiceField}
@@ -176,7 +176,7 @@ function WebhookSubForm({ templateType }) {
           type="text"
           fieldId="jt-webhookURL"
           label={t`Webhook URL`}
-          labelIcon={<Popover content={helpText.webhookURL} />}
+          labelHelp={<Popover content={helpText.webhookURL} />}
           name="webhook_url"
         >
           <TextInput
@@ -188,7 +188,7 @@ function WebhookSubForm({ templateType }) {
         </FormGroup>
         <FormGroup
           label={t`Webhook Key`}
-          labelIcon={<Popover content={helpText.webhookKey} />}
+          labelHelp={<Popover content={helpText.webhookKey} />}
           fieldId="template-webhook_key"
         >
           <InputGroup>
@@ -200,15 +200,13 @@ function WebhookSubForm({ templateType }) {
                 readOnlyVariant="default"
               />
             </InputGroupItem>
-            <InputGroupItem><Button
+            <InputGroupItem><Button icon={<SyncAltIcon />}
               ouiaId="update-webhook-key-button"
               isDisabled={isUpdateKeyDisabled}
               variant="tertiary"
               aria-label={t`Update webhook key`}
               onClick={changeWebhookKey}
-            >
-              <SyncAltIcon />
-            </Button></InputGroupItem>
+             /></InputGroupItem>
           </InputGroup>
         </FormGroup>
       </>

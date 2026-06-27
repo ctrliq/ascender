@@ -9,9 +9,8 @@ import {
   DescriptionListGroup as PFDescriptionListGroup,
   DescriptionListDescription as PFDescriptionListDescription,
   Divider,
-  TextContent,
-  Text as PFText,
-  TextVariants,
+  Content,
+  ContentVariants,
 } from '@patternfly/react-core';
 
 import {
@@ -27,7 +26,7 @@ const Wrapper = styled.div`
   left: 0;
   padding: 0 10px;
   min-width: 150px;
-  background-color: var(--pf-v5-global--BackgroundColor--100);
+  background-color: var(--pf-v6-global--BackgroundColor--100);
   overflow: auto;
   height: 100%;
 `;
@@ -38,9 +37,9 @@ const Button = styled(PFButton)`
     border-radius: 10px;
     padding: 0;
     font-size: 11px;
-    background-color: var(--pf-v5-global--BackgroundColor--100);
-    border: 1px solid var(--pf-v5-global--BorderColor--100);
-    color: var(--pf-v5-global--Color--100);
+    background-color: var(--pf-v6-global--BackgroundColor--100);
+    border: 1px solid var(--pf-v6-global--BorderColor--100);
+    color: var(--pf-v6-global--Color--100);
   }
 `;
 const DescriptionListDescription = styled(PFDescriptionListDescription)`
@@ -52,7 +51,7 @@ const DescriptionList = styled(PFDescriptionList)`
 const DescriptionListGroup = styled(PFDescriptionListGroup)`
   align-items: center;
 `;
-const Text = styled(PFText)`
+const Text = styled(Content)`
   margin: 10px 0 5px;
 `;
 
@@ -60,16 +59,16 @@ function Legend() {
   const { t } = useLingui();
   return (
     <Wrapper className="legend" data-cy="legend">
-      <TextContent>
+      <Content>
         <Text
-          component={TextVariants.small}
-          style={{ fontWeight: 'bold', color: 'var(--pf-v5-global--Color--100)', marginTop: 0 }}
+          component={ContentVariants.small}
+          style={{ fontWeight: 'bold', color: "var(--pf-t--global--text--color--100)", marginTop: 0 }}
         >
           {t`Legend`}
         </Text>
         <Divider component="div" />
-        <Text component={TextVariants.small}>{t`Node types`}</Text>
-      </TextContent>
+        <Text component={ContentVariants.small}>{t`Node types`}</Text>
+      </Content>
       <DescriptionList isHorizontal isFluid>
         <DescriptionListGroup>
           <DescriptionListTerm>
@@ -110,11 +109,11 @@ function Legend() {
           </DescriptionListDescription>
         </DescriptionListGroup>
       </DescriptionList>
-      <TextContent>
-        <Text component={TextVariants.small}>
+      <Content>
+        <Text component={ContentVariants.small}>
           {t`Node state types`}
         </Text>
-      </TextContent>
+      </Content>
       <DescriptionList isHorizontal isFluid>
         <DescriptionListGroup>
           <DescriptionListTerm>
@@ -205,14 +204,14 @@ function Legend() {
                 cy="10"
                 fill="transparent"
                 strokeWidth="1px"
-                style={{ stroke: 'var(--pf-v5-global--BorderColor--100)' }}
+                style={{ stroke: "var(--pf-t--global--border--color--default)" }}
               />
               <text
                 x="10"
                 y="10"
                 textAnchor="middle"
                 dominantBaseline="central"
-                style={{ fill: 'var(--pf-v5-global--Color--100)' }}
+                style={{ fill: "var(--pf-t--global--text--color--100)" }}
                 fontSize="11px"
                 fontFamily="inherit"
                 fontWeight="400"
@@ -235,14 +234,14 @@ function Legend() {
                 fill="transparent"
                 strokeDasharray="5"
                 strokeWidth="1px"
-                style={{ stroke: 'var(--pf-v5-global--BorderColor--100)' }}
+                style={{ stroke: "var(--pf-t--global--border--color--default)" }}
               />
               <text
                 x="10"
                 y="10"
                 textAnchor="middle"
                 dominantBaseline="central"
-                style={{ fill: 'var(--pf-v5-global--Color--100)' }}
+                style={{ fill: "var(--pf-t--global--text--color--100)" }}
                 fontSize="11px"
                 fontFamily="inherit"
                 fontWeight="400"
@@ -256,11 +255,11 @@ function Legend() {
           </DescriptionListDescription>
         </DescriptionListGroup>
       </DescriptionList>
-      <TextContent>
-        <Text component={TextVariants.small}>
+      <Content>
+        <Text component={ContentVariants.small}>
           {t`Link state types`}
         </Text>
-      </TextContent>
+      </Content>
       <DescriptionList isHorizontal isFluid>
         <DescriptionListGroup>
           <DescriptionListTerm>

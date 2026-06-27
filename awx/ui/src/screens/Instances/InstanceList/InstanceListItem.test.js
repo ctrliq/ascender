@@ -173,7 +173,7 @@ describe('<InstanceListItem/>', () => {
   test('should display instance toggle', () => {
     renderItem();
     expect(
-      screen.getByRole('checkbox', { name: 'Toggle instance' })
+      screen.getByRole('switch', { name: 'Toggle instance' })
     ).toBeInTheDocument();
   });
 
@@ -246,7 +246,7 @@ describe('<InstanceListItem/>', () => {
     );
 
     expect(
-      screen.queryByRole('checkbox', { name: 'Toggle instance' })
+      screen.queryByRole('switch', { name: 'Toggle instance' })
     ).not.toBeInTheDocument();
     expect(
       container.querySelector('[data-label="Instance group used capacity"]')
