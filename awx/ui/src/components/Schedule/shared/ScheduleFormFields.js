@@ -179,7 +179,7 @@ export default function ScheduleFormFields({
           <Title
             size="md"
             headingLevel="h4"
-            css="margin-top: var(--pf-v6-c-card--child--PaddingRight)"
+            style={{ marginTop: 'var(--pf-v6-c-card--child--PaddingRight)' }}
           >
             {t`Exceptions`}
           </Title>

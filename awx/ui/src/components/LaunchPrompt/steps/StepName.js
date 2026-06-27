@@ -27,7 +27,7 @@ function StepName({ hasErrors, children, id }) {
         content={t`This step contains errors`}
         trigger="click mouseenter focus"
       >
-        <ExclamationCircleIcon css="var(--pf-t--global--color--status--danger--default)" />
+        <ExclamationCircleIcon style={{ color: 'var(--pf-t--global--color--status--danger--default)' }} />
       </Tooltip>
     </AlertText>
   );

@@ -136,7 +136,7 @@ function TemplateListItem({
                 content={t`Resources are missing from this template.`}
                 position="right"
               >
-                <ExclamationTriangleIcon css="var(--pf-t--global--color--status--danger--default)" />
+                <ExclamationTriangleIcon style={{ color: 'var(--pf-t--global--color--status--danger--default)' }} />
               </Tooltip>
             </span>
           )}

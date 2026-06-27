@@ -76,7 +76,7 @@ function ErrorDetail({ error = null }) {
           {error.name}: {error.message}
         </strong>
       </CardBody>
-      <CardBody css="var(--pf-t--global--font--family--mono)">
+      <CardBody style={{ fontFamily: 'var(--pf-t--global--font--family--mono)' }}>
         {error.stack}
       </CardBody>
     </>

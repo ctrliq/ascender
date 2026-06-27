@@ -171,12 +171,12 @@ function ModeToggle({
   return (
     <Split hasGutter>
       <SplitItem isFilled>
-        <Split hasGutter css="align-items: baseline">
+        <Split hasGutter style={{ alignItems: 'baseline' }}>
           <SplitItem>
             <label className="pf-v6-c-form__label" htmlFor={id}>
               <span
                 className="pf-v6-c-form__label-text"
-                css="var(--pf-t--global--font--weight--heading--bold)"
+                style={{ fontWeight: 'var(--pf-t--global--font--weight--heading--bold)' }}
               >
                 {label}
               </span>

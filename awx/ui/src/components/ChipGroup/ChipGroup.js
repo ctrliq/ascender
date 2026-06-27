@@ -14,7 +14,8 @@ function ChipGroup({ numChips, totalChips, ouiaId, onOverflowChipClick, ...props
   };
 
   return (
-    // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events
+    /* eslint-disable jsx-a11y/no-static-element-interactions */
+    /* eslint-disable jsx-a11y/click-events-have-key-events */
     <div onClick={onOverflowChipClick ? handleClick : undefined}>
       <LabelGroup
         {...props}

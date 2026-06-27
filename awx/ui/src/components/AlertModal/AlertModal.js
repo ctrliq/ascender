@@ -39,31 +39,31 @@ function AlertModal({
     danger: (
       <ExclamationCircleIcon
         size="xl"
-        css="var(--pf-t--global--color--status--danger--default)"
+        style={{ color: 'var(--pf-t--global--color--status--danger--default)' }}
       />
     ),
     error: (
       <TimesCircleIcon
         size="xl"
-        css="var(--pf-t--global--color--status--danger--default)"
+        style={{ color: 'var(--pf-t--global--color--status--danger--default)' }}
       />
     ),
     info: (
       <InfoCircleIcon
         size="xl"
-        css="var(--pf-t--global--color--status--info--default)"
+        style={{ color: 'var(--pf-t--global--color--status--info--default)' }}
       />
     ),
     success: (
       <CheckCircleIcon
         size="xl"
-        css="var(--pf-t--global--color--status--success--default)"
+        style={{ color: 'var(--pf-t--global--color--status--success--default)' }}
       />
     ),
     warning: (
       <ExclamationTriangleIcon
         size="xl"
-        css="var(--pf-t--global--color--status--warning--default)"
+        style={{ color: 'var(--pf-t--global--color--status--warning--default)' }}
       />
     ),
   };

@@ -48,6 +48,7 @@ function Popover({
         className="pf-v6-c-form__group-label-help"
         onClick={(e) => e.preventDefault()}
         type="button"
+        {...(ouiaId ? { 'data-ouia-component-id': ouiaId } : {})}
       >
         <HelpIcon />
       </PopoverButton>
