@@ -61,7 +61,7 @@ describe('<NotificationListItem canToggleNotifications />', () => {
   test('handles approvals click when toggle is on', async () => {
     const { user } = setup({ showApprovalsToggle: true, approvalsTurnedOn: true });
     await user.click(
-      screen.getByRole('checkbox', { name: 'Toggle notification approvals' })
+      screen.getByRole('switch', { name: 'Toggle notification approvals' })
     );
     expect(toggleNotification).toHaveBeenCalledWith(9000, true, 'approvals');
   });
@@ -72,7 +72,7 @@ describe('<NotificationListItem canToggleNotifications />', () => {
       approvalsTurnedOn: false,
     });
     await user.click(
-      screen.getByRole('checkbox', { name: 'Toggle notification approvals' })
+      screen.getByRole('switch', { name: 'Toggle notification approvals' })
     );
     expect(toggleNotification).toHaveBeenCalledWith(9000, false, 'approvals');
   });
@@ -80,7 +80,7 @@ describe('<NotificationListItem canToggleNotifications />', () => {
   test('handles started click when toggle is on', async () => {
     const { user } = setup({ startedTurnedOn: true });
     await user.click(
-      screen.getByRole('checkbox', { name: 'Toggle notification start' })
+      screen.getByRole('switch', { name: 'Toggle notification start' })
     );
     expect(toggleNotification).toHaveBeenCalledWith(9000, true, 'started');
   });
@@ -88,7 +88,7 @@ describe('<NotificationListItem canToggleNotifications />', () => {
   test('handles started click when toggle is off', async () => {
     const { user } = setup({ startedTurnedOn: false });
     await user.click(
-      screen.getByRole('checkbox', { name: 'Toggle notification start' })
+      screen.getByRole('switch', { name: 'Toggle notification start' })
     );
     expect(toggleNotification).toHaveBeenCalledWith(9000, false, 'started');
   });
@@ -96,7 +96,7 @@ describe('<NotificationListItem canToggleNotifications />', () => {
   test('handles success click when toggle is on', async () => {
     const { user } = setup({ successTurnedOn: true });
     await user.click(
-      screen.getByRole('checkbox', { name: 'Toggle notification success' })
+      screen.getByRole('switch', { name: 'Toggle notification success' })
     );
     expect(toggleNotification).toHaveBeenCalledWith(9000, true, 'success');
   });
@@ -104,7 +104,7 @@ describe('<NotificationListItem canToggleNotifications />', () => {
   test('handles success click when toggle is off', async () => {
     const { user } = setup({ successTurnedOn: false });
     await user.click(
-      screen.getByRole('checkbox', { name: 'Toggle notification success' })
+      screen.getByRole('switch', { name: 'Toggle notification success' })
     );
     expect(toggleNotification).toHaveBeenCalledWith(9000, false, 'success');
   });
@@ -112,7 +112,7 @@ describe('<NotificationListItem canToggleNotifications />', () => {
   test('handles error click when toggle is on', async () => {
     const { user } = setup({ errorTurnedOn: true });
     await user.click(
-      screen.getByRole('checkbox', { name: 'Toggle notification failure' })
+      screen.getByRole('switch', { name: 'Toggle notification failure' })
     );
     expect(toggleNotification).toHaveBeenCalledWith(9000, true, 'error');
   });
@@ -120,7 +120,7 @@ describe('<NotificationListItem canToggleNotifications />', () => {
   test('handles error click when toggle is off', async () => {
     const { user } = setup({ errorTurnedOn: false });
     await user.click(
-      screen.getByRole('checkbox', { name: 'Toggle notification failure' })
+      screen.getByRole('switch', { name: 'Toggle notification failure' })
     );
     expect(toggleNotification).toHaveBeenCalledWith(9000, false, 'error');
   });

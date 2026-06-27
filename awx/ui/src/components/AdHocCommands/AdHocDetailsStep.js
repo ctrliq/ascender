@@ -61,7 +61,7 @@ function AdHocDetailsStep({ moduleOptions }) {
             aria-label={t`select module`}
             label={t`Module`}
             isRequired
-            labelIcon={
+            labelHelp={
             <Popover
             content={t`These are the modules that ${brandName} supports running commands against.`}
             />
@@ -182,7 +182,7 @@ function AdHocDetailsStep({ moduleOptions }) {
             <FormGroup
               label={t`Show changes`}
               aria-label={t`Show changes`}
-              labelIcon={
+              labelHelp={
                 <Popover
                   content={t`If enabled, show the changes made by Ansible tasks, where supported. This is equivalent to Ansible’s --diff mode.`}
                 />
@@ -192,7 +192,7 @@ function AdHocDetailsStep({ moduleOptions }) {
                 css="display: inline-flex;"
                 id="diff_mode"
                 label={t`On`}
-                labelOff={t`Off`}
+
                 isChecked={diffModeField.value}
                 onChange={() => {
                   diffModeHelpers.setValue(!diffModeField.value);
@@ -242,7 +242,7 @@ function AdHocDetailsStep({ moduleOptions }) {
             name="extra_vars"
             value={JSON.stringify(variablesField.value)}
             rows={4}
-            labelIcon
+            labelHelp
             tooltip={
               <TooltipWrapper>
                 <p>

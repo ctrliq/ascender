@@ -64,7 +64,7 @@ function navItem(name) {
     .getAllByRole('button')
     .find(
       (b) =>
-        b.classList.contains('pf-v5-c-wizard__nav-link') &&
+        b.classList.contains('pf-v6-c-wizard__nav-link') &&
         b.textContent.trim() === name
     );
 }
@@ -182,7 +182,7 @@ describe('<UserAndTeamAccessAdd/>', () => {
     ).toBeInTheDocument();
 
     // Step 2: select the fetched resource row, advance.
-    await user.click(document.querySelector('input[name="checkrow0"]'));
+    await user.click(screen.getByText('Job Template Foo Bar'));
     await user.click(footerButton('Next'));
 
     // Step 3: the roles step renders a checkbox card per object role.
@@ -233,7 +233,7 @@ describe('<UserAndTeamAccessAdd/>', () => {
       await screen.findByText('Job Template Foo Bar')
     ).toBeInTheDocument();
 
-    await user.click(document.querySelector('input[name="checkrow0"]'));
+    await user.click(screen.getByText('Job Template Foo Bar'));
     await user.click(footerButton('Next'));
 
     const adminCard = await screen.findByRole('checkbox', { name: 'Admin' });

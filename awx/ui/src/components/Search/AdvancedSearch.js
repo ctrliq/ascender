@@ -35,10 +35,10 @@ const AdvancedGroup = styled.div`
 
   @media (max-width: 991px) {
     display: grid;
-    grid-gap: var(--pf-v5-global--spacer--sm);
+    grid-gap: var(--pf-v6-global--spacer--sm);
   }
 
-  & .pf-v5-c-select {
+  & .pf-v6-c-select {
     min-width: 150px;
   }
 `;
@@ -211,16 +211,14 @@ function AdvancedSearch({
             />
             {(prefixFilterValue || prefixSelection) && (
               <TextInputGroupUtilities>
-                <Button
+                <Button icon={<TimesIcon />}
                   variant="plain"
                   onClick={() => {
                     setPrefixSelection(null);
                     setPrefixFilterValue('');
                   }}
                   aria-label={t`Clear`}
-                >
-                  <TimesIcon />
-                </Button>
+                 />
               </TextInputGroupUtilities>
             )}
           </TextInputGroup>
@@ -377,16 +375,14 @@ function AdvancedSearch({
               />
               {(keyFilterValue || keySelection) && (
                 <TextInputGroupUtilities>
-                  <Button
+                  <Button icon={<TimesIcon />}
                     variant="plain"
                     onClick={() => {
                       setKeySelection(null);
                       setKeyFilterValue('');
                     }}
                     aria-label={t`Clear`}
-                  >
-                    <TimesIcon />
-                  </Button>
+                   />
                 </TextInputGroupUtilities>
               )}
             </TextInputGroup>
@@ -439,31 +435,27 @@ function AdvancedSearch({
       <InputGroup>
         {renderTextInput()}
         <InputGroupItem><SubmitButtonWrapper $disabled={!searchValue}>
-          <Button
+          <Button icon={<SearchIcon />}
             ouiaId="advanced-search-text-input"
             variant={ButtonVariant.control}
             isDisabled={!searchValue}
             aria-label={t`Search submit button`}
             onClick={handleAdvancedSearch}
-          >
-            <SearchIcon />
-          </Button>
+           />
         </SubmitButtonWrapper></InputGroupItem>
       </InputGroup>
       <Tooltip
         content={t`Advanced search documentation`}
         position="bottom"
       >
-        <Button
+        <Button icon={<QuestionCircleIcon />}
           ouiaId="search-docs-button"
           component="a"
           variant="plain"
           target="_blank"
           href={`${getDocsBaseUrl(config)}/userguide/search_sort.html`}
           rel="noopener noreferrer"
-        >
-          <QuestionCircleIcon />
-        </Button>
+         />
       </Tooltip>
     </AdvancedGroup>
   );

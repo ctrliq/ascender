@@ -348,7 +348,7 @@ describe('<ScheduleDetail />', () => {
 
     await waitFor(() =>
       expect(
-        screen.getByRole('checkbox', { name: 'Toggle schedule' })
+        screen.getByRole('switch', { name: 'Toggle schedule' })
       ).toBeDisabled()
     );
   });

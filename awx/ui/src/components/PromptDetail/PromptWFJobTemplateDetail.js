@@ -2,12 +2,11 @@ import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
 import {
-  Chip,
-  TextList,
-  TextListItem,
-  TextListVariants,
-  TextListItemVariants,
+	Label, Content,
+	ContentVariants,
+
 } from '@patternfly/react-core';
+
 import { toTitleCase } from 'util/strings';
 import CredentialChip from '../CredentialChip';
 import ChipGroup from '../ChipGroup';
@@ -31,18 +30,18 @@ function PromptWFJobTemplateDetail({ resource }) {
   let optionsList = '';
   if (allow_simultaneous || webhook_service) {
     optionsList = (
-      <TextList component={TextListVariants.ul}>
+      <Content component={ContentVariants.ul}>
         {allow_simultaneous && (
-          <TextListItem component={TextListItemVariants.li}>
+          <Content component={ContentVariants.li}>
             {t`Concurrent Jobs`}
-          </TextListItem>
+          </Content>
         )}
         {webhook_service && (
-          <TextListItem component={TextListItemVariants.li}>
+          <Content component={ContentVariants.li}>
             {t`Webhooks`}
-          </TextListItem>
+          </Content>
         )}
-      </TextList>
+      </Content>
     );
   }
 
@@ -127,9 +126,9 @@ function PromptWFJobTemplateDetail({ resource }) {
               ouiaId="prompt-wf-jt-label-chips"
             >
               {summary_fields.labels.results.map((label) => (
-                <Chip key={label.id} isReadOnly>
+                <Label variant="outline" key={label.id} >
                   {label.name}
-                </Chip>
+                </Label>
               ))}
             </ChipGroup>
           }

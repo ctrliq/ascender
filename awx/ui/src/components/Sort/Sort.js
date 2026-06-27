@@ -25,10 +25,10 @@ import { parseQueryString } from 'util/qs';
 
 const NoOptionDropdown = styled.div`
   align-self: stretch;
-  border: 1px solid var(--pf-v5-global--BorderColor--300);
+  border: 1px solid var(--pf-v6-global--BorderColor--300);
   padding: 5px 15px;
   white-space: nowrap;
-  border-bottom-color: var(--pf-v5-global--BorderColor--200);
+  border-bottom-color: var(--pf-v6-global--BorderColor--200);
 `;
 
 function Sort({ columns, qsConfig, onSort = null }) {

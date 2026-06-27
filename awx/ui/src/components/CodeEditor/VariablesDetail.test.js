@@ -73,7 +73,7 @@ describe('<VariablesDetail>', () => {
     );
     expect(container.querySelectorAll('.ace_editor')).toHaveLength(1);
     expect(
-      container.querySelector('.pf-v5-c-form__label')
+      container.querySelector('.pf-v6-c-form__label')
     ).toHaveTextContent('Variables');
   });
 

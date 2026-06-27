@@ -30,21 +30,21 @@ SubmitButtonWrapper.displayName = 'SubmitButtonWrapper';
 const DateInputGroup = styled(InputGroup)`
   /* keep the operator select at its natural width so the date input
      next to it stays visible */
-  & > .pf-v5-c-select {
+  & > .pf-v6-c-select {
     width: auto;
     flex: 0 0 auto;
   }
-  & > .pf-v5-c-form-control {
+  & > .pf-v6-c-form-control {
     flex: 1 1 auto;
   }
 `;
 
 const NoOptionDropdown = styled.div`
   align-self: stretch;
-  border: 1px solid var(--pf-v5-global--BorderColor--300);
+  border: 1px solid var(--pf-v6-global--BorderColor--300);
   padding: 5px 15px;
   white-space: nowrap;
-  border-bottom-color: var(--pf-v5-global--BorderColor--200);
+  border-bottom-color: var(--pf-v6-global--BorderColor--200);
 `;
 
 function Search({
@@ -211,8 +211,8 @@ function Search({
       </ToolbarItem>
       {columns.map(({ key, name, options, isBoolean, booleanLabels = {} }) => (
         <ToolbarFilter
-          chips={chipsByKey[key] ? chipsByKey[key].chips : []}
-          deleteChip={(unusedKey, chip) => {
+          labels={chipsByKey[key] ? chipsByKey[key].chips : []}
+          deleteLabel={(unusedKey, chip) => {
             const [columnKey, ...value] = chip.key.split(':');
             onRemove(columnKey, value.join(':'));
           }}
@@ -350,15 +350,13 @@ function Search({
                   isDisabled={isDisabled}
                 />
                 <SubmitButtonWrapper $disabled={!searchValue}>
-                  <Button
+                  <Button icon={<SearchIcon />}
                     ouiaId="date-search-submit-button"
                     variant={ButtonVariant.control}
                     isDisabled={!searchValue || isDisabled}
                     aria-label={t`Search submit button`}
                     onClick={handleDateSearch}
-                  >
-                    <SearchIcon />
-                  </Button>
+                   />
                 </SubmitButtonWrapper>
               </DateInputGroup>
             )) || (
@@ -379,15 +377,13 @@ function Search({
                   isDisabled={isDisabled}
                 /></InputGroupItem>
                 <InputGroupItem><SubmitButtonWrapper $disabled={!searchValue}>
-                  <Button
+                  <Button icon={<SearchIcon />}
                     ouiaId="search-submit-button"
                     variant={ButtonVariant.control}
                     isDisabled={!searchValue || isDisabled}
                     aria-label={t`Search submit button`}
                     onClick={handleSearch}
-                  >
-                    <SearchIcon />
-                  </Button>
+                   />
                 </SubmitButtonWrapper></InputGroupItem>
               </InputGroup>
             )}
@@ -399,8 +395,8 @@ function Search({
         .filter((val) => columns.map((val2) => val2.key).indexOf(val) === -1)
         .map((leftoverKey) => (
           <ToolbarFilter
-            chips={chipsByKey[leftoverKey] ? chipsByKey[leftoverKey].chips : []}
-            deleteChip={(unusedKey, chip) => {
+            labels={chipsByKey[leftoverKey] ? chipsByKey[leftoverKey].chips : []}
+            deleteLabel={(unusedKey, chip) => {
               const [columnKey, ...value] = chip.key.split(':');
               if (columnKey === 'ansible_facts') {
                 onRemove('host_filter', `${columnKey}__${value}`);

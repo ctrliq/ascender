@@ -4,8 +4,8 @@ import styled from 'styled-components';
 
 const CheckboxWrapper = styled.div`
   display: flex;
-  border: 1px solid var(--pf-v5-global--BorderColor--200);
-  border-radius: var(--pf-v5-global--BorderRadius--sm);
+  border: 1px solid var(--pf-v6-global--BorderColor--200);
+  border-radius: var(--pf-v6-global--BorderRadius--sm);
   padding: 10px;
 `;
 

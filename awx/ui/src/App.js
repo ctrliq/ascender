@@ -32,7 +32,7 @@ import { SESSION_REDIRECT_URL } from './constants';
 
 function ErrorFallback({ error }) {
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         <ContentError error={error} />
       </Card>
@@ -61,7 +61,7 @@ const AuthorizedRoutes = ({ routeConfig }) => {
           path="/subscription_management"
           element={
             <ProtectedRoute>
-              <PageSection>
+              <PageSection hasBodyWrapper={false}>
                 <Card>
                   <SubscriptionEdit />
                 </Card>
@@ -165,8 +165,10 @@ function App() {
           window.matchMedia('(prefers-color-scheme: dark)').matches;
 
     if (prefersDarkMode) {
-      document.documentElement.classList.add('pf-v5-theme-dark');
+      document.documentElement.classList.add('pf-v6-theme-dark');
       import('./darkmode.css');
+    } else {
+      import('./lightmode.css');
     }
   }, []);
   const navigate = useNavigate();

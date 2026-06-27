@@ -16,14 +16,14 @@ import {
 import { WorkflowDispatchContext } from 'contexts/Workflow';
 
 const Wrapper = styled.div`
-  background-color: var(--pf-v5-global--BackgroundColor--100);
-  border: 1px solid var(--pf-v5-global--BorderColor--100);
+  background-color: var(--ascender-workflow-node-bg);
+  border: 1px solid var(--pf-v6-global--BorderColor--100);
   height: 215px;
   position: relative;
 `;
 
 const Header = styled.div`
-  border-bottom: 1px solid var(--pf-v5-global--BorderColor--100);
+  border-bottom: 1px solid var(--pf-v6-global--BorderColor--100);
   padding: 10px;
 `;
 
@@ -86,24 +86,20 @@ function WorkflowTools({
           content={t`Fit the graph to the available screen size`}
           position="bottom"
         >
-          <Button
+          <Button icon={<DesktopIcon />}
             ouiaId="visualizer-zoom-to-fit-button"
             variant="tertiary"
             css="margin-right: 30px;"
             onClick={() => onFitGraph()}
-          >
-            <DesktopIcon />
-          </Button>
+           />
         </Tooltip>
         <Tooltip content={t`Zoom Out`} position="bottom">
-          <Button
+          <Button icon={<MinusIcon />}
             ouiaId="visualizer-zoom-out-button"
             variant="tertiary"
             css="margin-right: 10px;"
             onClick={() => zoomOut()}
-          >
-            <MinusIcon />
-          </Button>
+           />
         </Tooltip>
         <input
           id="zoom-slider"
@@ -117,69 +113,57 @@ function WorkflowTools({
           value={zoomPercentage}
         />
         <Tooltip content={t`Zoom In`} position="bottom">
-          <Button
+          <Button icon={<PlusIcon />}
             ouiaId="visualizer-zoom-in-button"
             variant="tertiary"
             css="margin: 0px 25px 0px 10px;"
             onClick={() => zoomIn()}
-          >
-            <PlusIcon />
-          </Button>
+           />
         </Tooltip>
         <Pan>
           <Tooltip content={t`Pan Left`} position="left">
-            <Button
+            <Button icon={<CaretLeftIcon />}
               ouiaId="visualizer-pan-left-button"
               variant="tertiary"
               css="margin-right: 10px;"
               onClick={() => onPan('left')}
-            >
-              <CaretLeftIcon />
-            </Button>
+             />
           </Tooltip>
           <PanCenter>
             <Tooltip content={t`Pan Up`} position="top">
-              <Button
+              <Button icon={<CaretUpIcon />}
                 ouiaId="visualizer-pan-up-button"
                 variant="tertiary"
                 css="margin-bottom: 10px;"
                 onClick={() => onPan('up')}
-              >
-                <CaretUpIcon />
-              </Button>
+               />
             </Tooltip>
             <Tooltip
               content={t`Set zoom to 100% and center graph`}
               position="top"
             >
-              <Button
+              <Button icon={<HomeIcon />}
                 ouiaId="visualizer-pan-middle-button"
                 variant="tertiary"
                 onClick={() => onPanToMiddle()}
-              >
-                <HomeIcon />
-              </Button>
+               />
             </Tooltip>
             <Tooltip content={t`Pan Down`} position="bottom">
-              <Button
+              <Button icon={<CaretDownIcon />}
                 ouiaId="visualizer-pan-down-button"
                 variant="tertiary"
                 css="margin-top: 10px;"
                 onClick={() => onPan('down')}
-              >
-                <CaretDownIcon />
-              </Button>
+               />
             </Tooltip>
           </PanCenter>
           <Tooltip content={t`Pan Right`} position="right">
-            <Button
+            <Button icon={<CaretRightIcon />}
               ouiaId="visualizer-pan-right-button"
               variant="tertiary"
               css="margin-left: 10px;"
               onClick={() => onPan('right')}
-            >
-              <CaretRightIcon />
-            </Button>
+             />
           </Tooltip>
         </Pan>
       </Tools>

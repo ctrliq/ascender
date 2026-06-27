@@ -147,7 +147,7 @@ describe('OtherPromptsStep', () => {
       </Formik>
     );
 
-    const toggle = screen.getByRole('checkbox', { name: 'On' });
+    const toggle = screen.getByRole('switch', { name: 'On' });
     expect(toggle).toBeInTheDocument();
     expect(toggle).toBeChecked();
   });

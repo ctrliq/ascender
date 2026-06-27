@@ -2,7 +2,11 @@ import React from 'react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
 import styled from 'styled-components';
-import { Chip, Divider, Title } from '@patternfly/react-core';
+import {
+	Label, Divider,
+	Title
+} from '@patternfly/react-core';
+
 import { toTitleCase } from 'util/strings';
 import InstanceGroupLabels from 'components/InstanceGroupLabels';
 import CredentialChip from '../CredentialChip';
@@ -16,18 +20,18 @@ import PromptWFJobTemplateDetail from './PromptWFJobTemplateDetail';
 import { VERBOSITY } from '../VerbositySelectField';
 
 const PromptTitle = styled(Title)`
-  margin-top: var(--pf-v5-global--spacer--xl);
-  --pf-v5-c-title--m-md--FontWeight: 700;
+  margin-top: var(--pf-v6-global--spacer--xl);
+  --pf-v6-c-title--m-md--FontWeight: 700;
   grid-column: 1 / -1;
 `;
 
 const PromptDivider = styled(Divider)`
-  margin-top: var(--pf-v5-global--spacer--lg);
-  margin-bottom: var(--pf-v5-global--spacer--lg);
+  margin-top: var(--pf-v6-global--spacer--lg);
+  margin-bottom: var(--pf-v6-global--spacer--lg);
 `;
 
 const PromptDetailList = styled(DetailList)`
-  padding: 0px var(--pf-v5-global--spacer--lg);
+  padding: 0px var(--pf-v6-global--spacer--lg);
 `;
 
 function formatTimeout(timeout) {
@@ -274,13 +278,13 @@ function PromptDetail({
                         overrides.job_tags !== '' &&
                         overrides.job_tags.length > 0 &&
                         overrides.job_tags.split(',').map((jobTag) => (
-                          <Chip
+                          <Label variant="outline"
                             key={jobTag}
-                            isReadOnly
-                            ouiaId={`job-tag-${jobTag}-chip`}
+
+                            data-ouia-component-id={`job-tag-${jobTag}-chip`}
                           >
                             {jobTag}
-                          </Chip>
+                          </Label>
                         ))}
                     </ChipGroup>
                   }
@@ -307,13 +311,13 @@ function PromptDetail({
                         overrides.skip_tags !== '' &&
                         overrides.skip_tags.length > 0 &&
                         overrides.skip_tags.split(',').map((skipTag) => (
-                          <Chip
+                          <Label variant="outline"
                             key={skipTag}
-                            isReadOnly
-                            ouiaId={`skip-tag-${skipTag}-chip`}
+
+                            data-ouia-component-id={`skip-tag-${skipTag}-chip`}
                           >
                             {skipTag}
-                          </Chip>
+                          </Label>
                         ))}
                     </ChipGroup>
                   }
@@ -330,13 +334,13 @@ function PromptDetail({
                       ouiaId="prompt-label-chips"
                     >
                       {overrides.labels.map((label) => (
-                        <Chip
+                        <Label variant="outline"
                           key={label.id}
-                          ouiaId={`label-${label.id}-chip`}
-                          isReadOnly
+                          data-ouia-component-id={`label-${label.id}-chip`}
+
                         >
                           {label.name}
-                        </Chip>
+                        </Label>
                       ))}
                     </ChipGroup>
                   }

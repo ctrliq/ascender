@@ -6,7 +6,7 @@ import ButtonGroup from './ButtonGroup';
 const SmallButton = styled(Button)`
   && {
     padding: 3px 8px;
-    font-size: var(--pf-v5-global--FontSize--xs);
+    font-size: var(--pf-v6-global--FontSize--xs);
   }
 `;
 SmallButton.displayName = 'SmallButton';

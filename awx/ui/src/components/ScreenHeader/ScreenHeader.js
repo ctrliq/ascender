@@ -5,7 +5,6 @@ import { useLingui } from '@lingui/react/macro';
 import {
   Button,
   PageSection,
-  PageSectionVariants,
   Breadcrumb,
   BreadcrumbItem,
   Title,
@@ -15,7 +14,6 @@ import { HistoryIcon } from '@patternfly/react-icons';
 import { Link, useLocation } from 'react-router';
 
 const ScreenHeader = ({ breadcrumbConfig, streamType }) => {
-  const { light } = PageSectionVariants;
   const { t } = useLingui();
   const location = useLocation();
 
@@ -50,7 +48,7 @@ const ScreenHeader = ({ breadcrumbConfig, streamType }) => {
   const title = breadcrumbConfig[currentPath];
 
   return (
-    <PageSection variant={light}>
+    <PageSection hasBodyWrapper={false}>
       <div
         style={{
           display: 'flex',
@@ -87,7 +85,7 @@ const ScreenHeader = ({ breadcrumbConfig, streamType }) => {
         {streamType !== 'none' && (
           <div>
             <Tooltip content={t`View activity stream`} position="top">
-              <Button
+              <Button icon={<HistoryIcon />}
                 ouiaId="activity-stream-button"
                 aria-label={t`View activity stream`}
                 variant="plain"
@@ -95,9 +93,7 @@ const ScreenHeader = ({ breadcrumbConfig, streamType }) => {
                 to={`/activity_stream${
                   streamType ? `?type=${streamType}` : ''
                 }`}
-              >
-                <HistoryIcon />
-              </Button>
+               />
             </Tooltip>
           </div>
         )}

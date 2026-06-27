@@ -26,23 +26,23 @@ import Search from '../Search';
 import Sort from '../Sort';
 
 const ToolbarContent = styled(PFToolbarContent)`
-  & > .pf-v5-c-toolbar__content-section {
+  & > .pf-v6-c-toolbar__content-section {
     flex-wrap: nowrap;
     align-items: stretch;
   }
-  & .pf-v5-c-toolbar__group,
-  & .pf-v5-c-toolbar__toggle-group {
+  & .pf-v6-c-toolbar__group,
+  & .pf-v6-c-toolbar__toggle-group {
     align-items: stretch;
   }
-  & .pf-v5-c-toolbar__item,
-  & .pf-v5-c-toolbar__filter {
+  & .pf-v6-c-toolbar__item,
+  & .pf-v6-c-toolbar__filter {
     align-items: stretch;
     align-self: stretch;
   }
-  & .pf-v5-c-select {
+  & .pf-v6-c-select {
     height: 100%;
   }
-  & .pf-v5-c-menu-toggle:not(.pf-m-plain) {
+  & .pf-v6-c-menu-toggle:not(.pf-m-plain) {
     height: 100%;
   }
 `;
@@ -119,20 +119,18 @@ function DataListToolbar({
         {onExpandAll && (
           <ToolbarGroup>
             <ToolbarItem>
-              <Button
+              <Button icon={isAllExpanded ? (
+                  <AngleDownIcon aria-label={t`Is expanded`} />
+                ) : (
+                  <AngleRightIcon aria-label={t`Is not expanded`} />
+                )}
                 onClick={() => {
                   onExpandAll(!isAllExpanded);
                 }}
                 aria-label={t`Expand all rows`}
                 ouiaId="expand-all-rows"
                 variant="plain"
-              >
-                {isAllExpanded ? (
-                  <AngleDownIcon aria-label={t`Is expanded`} />
-                ) : (
-                  <AngleRightIcon aria-label={t`Is not expanded`} />
-                )}
-              </Button>
+               />
             </ToolbarItem>
           </ToolbarGroup>
         )}

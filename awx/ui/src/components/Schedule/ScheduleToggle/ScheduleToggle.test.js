@@ -35,7 +35,7 @@ describe('<ScheduleToggle>', () => {
     const { user } = renderWithContexts(
       <ScheduleToggle schedule={mockSchedule} onToggle={onToggle} />
     );
-    const toggle = screen.getByRole('checkbox', { name: 'Toggle schedule' });
+    const toggle = screen.getByRole('switch', { name: 'Toggle schedule' });
     expect(toggle).toBeChecked();
 
     await user.click(toggle);
@@ -59,7 +59,7 @@ describe('<ScheduleToggle>', () => {
         onToggle={onToggle}
       />
     );
-    const toggle = screen.getByRole('checkbox', { name: 'Toggle schedule' });
+    const toggle = screen.getByRole('switch', { name: 'Toggle schedule' });
     expect(toggle).not.toBeChecked();
 
     await user.click(toggle);
@@ -78,7 +78,7 @@ describe('<ScheduleToggle>', () => {
     const { user } = renderWithContexts(
       <ScheduleToggle schedule={mockSchedule} />
     );
-    const toggle = screen.getByRole('checkbox', { name: 'Toggle schedule' });
+    const toggle = screen.getByRole('switch', { name: 'Toggle schedule' });
     expect(toggle).toBeChecked();
 
     await user.click(toggle);

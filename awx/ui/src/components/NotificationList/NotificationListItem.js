@@ -43,7 +43,7 @@ function NotificationListItem({
             id={`notification-${notification.id}-approvals-toggle`}
             ouiaId={`notification-${notification.id}-approvals-toggle`}
             label={t`Approval`}
-            labelOff={t`Approval`}
+
             isChecked={approvalsTurnedOn}
             isDisabled={!canToggleNotifications}
             onChange={() =>
@@ -61,7 +61,7 @@ function NotificationListItem({
             id={`notification-${notification.id}-started-toggle`}
             ouiaId={`notification-${notification.id}-started-toggle`}
             label={t`Start`}
-            labelOff={t`Start`}
+
             isChecked={startedTurnedOn}
             isDisabled={!canToggleNotifications}
             onChange={() =>
@@ -75,7 +75,7 @@ function NotificationListItem({
             id={`notification-${notification.id}-success-toggle`}
             ouiaId={`notification-${notification.id}-success-toggle`}
             label={t`Success`}
-            labelOff={t`Success`}
+
             isChecked={successTurnedOn}
             isDisabled={!canToggleNotifications}
             onChange={() =>
@@ -89,7 +89,7 @@ function NotificationListItem({
             id={`notification-${notification.id}-error-toggle`}
             ouiaId={`notification-${notification.id}-error-toggle`}
             label={t`Failure`}
-            labelOff={t`Failure`}
+
             isChecked={errorTurnedOn}
             isDisabled={!canToggleNotifications}
             onChange={() =>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { within } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import PaginatedTable from './PaginatedTable';
@@ -117,7 +117,7 @@ describe('<PaginatedTable />', () => {
       bottomPagination(container).getByRole('button', { name: 'Select' })
     );
     await user.click(
-      bottomPagination(container).getByRole('menuitem', { name: '20 per page' })
+      screen.getByRole('menuitem', { name: '20 per page' })
     );
     // PF recomputes the page for the new page size; with 7 items at 20/page it
     // lands back on page 1 (the default, so it is stripped from the query) and

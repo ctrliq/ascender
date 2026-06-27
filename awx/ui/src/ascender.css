@@ -1,6 +1,80 @@
+:root {
+  --ascender-gutter-bg: #e8e8e8;
+  --ascender-output-bg: #fff;
+  --ascender-workflow-node-bg: #fff;
+  --ascender-workflow-graph-bg: var(--pf-v6-global--BackgroundColor--200);
+  --pf-v6-global--primary-color--100: #12a66f;
+  --pf-v6-global--primary-color--200: #17c484;
+  --pf-v6-global--danger-color--100: #f04438;
+  --pf-v6-global--danger-color--200: #f97066;
+  --pf-v6-global--success-color--100: #17b26a;
+  --pf-v6-global--success-color--200: #47cd89;
+  --pf-v6-global--warning-color--100: #f79009;
+  --pf-v6-global--warning-color--200: #fdb022;
+  --pf-v6-global--info-color--100: #2e90fa;
+  --pf-v6-global--info-color--200: #53b1fd;
+
+  /* Font sizes */
+  --pf-v6-global--FontSize--xs: 0.75rem;
+  --pf-v6-global--FontSize--sm: 0.875rem;
+  --pf-v6-global--FontSize--md: 1rem;
+  --pf-v6-global--FontSize--lg: 1.125rem;
+  --pf-v6-global--FontSize--xl: 1.25rem;
+  --pf-v6-global--FontSize--2xl: 1.5rem;
+  --pf-v6-global--FontSize--3xl: 1.875rem;
+  --pf-v6-global--FontSize--4xl: 2.25rem;
+
+  /* Spacing */
+  --pf-v6-global--spacer--xs: 0.375rem;
+  --pf-v6-global--spacer--sm: 0.5rem;
+  --pf-v6-global--spacer--md: 0.75rem;
+  --pf-v6-global--spacer--lg: 1rem;
+  --pf-v6-global--spacer--xl: 1.25rem;
+  --pf-v6-global--spacer--2xl: 1.5rem;
+  --pf-v6-global--spacer--3xl: 2rem;
+  --pf-v6-global--spacer--4xl: 2.5rem;
+
+  /* Border radius */
+  --pf-v6-global--BorderRadius--sm: 0.375rem;
+  --pf-v6-global--BorderRadius--md: 0.5rem;
+  --pf-v6-global--BorderRadius--lg: 0.625rem;
+  --pf-v6-global--BorderRadius--xl: 0.75rem;
+  --pf-t--global--border--radius--pill: var(--pf-v6-global--BorderRadius--sm);
+  --pf-t--global--border--radius--action--default: var(--pf-v6-global--BorderRadius--sm);
+
+  /* Font weights */
+  --pf-v6-global--FontWeight--normal: 400;
+  --pf-v6-global--FontWeight--semi-bold: 600;
+  --pf-v6-global--FontWeight--bold: 700;
+
+  /* Line heights */
+  --pf-v6-global--LineHeight--sm: 1.25rem;
+  --pf-v6-global--LineHeight--md: 1.5rem;
+
+  /* Gutter spacing */
+  --pf-v6-global--gutter: 1rem;
+  --pf-v6-global--gutter--md: 1.5rem;
+
+  /* Active/brand colors */
+  --pf-v6-global--active-color--100: #12a66f;
+  --pf-v6-global--active-color--200: #17c484;
+
+  /* Running status — light blue so it doesn't merge with success green */
+  --ascender-status-running-color: #1a7de8;
+  --ascender-status-canceled-color: #c2600c;
+}
+
+#job_output-toolbar {
+  --pf-v6-c-toolbar--PaddingTop: 0.75rem;
+  --pf-v6-c-toolbar--PaddingBottom: 0.75rem;
+}
+
+.ascender-output-scroll {
+  background-image: linear-gradient(to right, #e8e8e8 45px, transparent 45px);
+}
 
 .ReactVirtualized__List,
-.pf-v5-c-page__main,
+.pf-v6-c-page__main,
 #page-sidebar {
   scrollbar-width: thin;
 }
@@ -9,7 +83,7 @@
   line-height: 9px !important;
 }
 
-#page-sidebar .pf-v5-c-nav__link {
+#page-sidebar .pf-v6-c-nav__link {
   padding-bottom: 8px !important;
   padding-top: 8px !important;
 }
@@ -76,11 +150,321 @@ body {
   font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif;
 }
 
-.pf-v5-c-title {
+.pf-v6-c-title {
   font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif !important;
   font-weight: 500 !important;
 }
 
 input[type="checkbox"] {
-  accent-color: var(--pf-v5-global--primary-color--100);
+  accent-color: var(--pf-v6-global--primary-color--100);
+}
+
+/* Slightly smaller toolbar/action icons */
+.pf-v6-c-page__main .pf-v6-c-button__text .pf-v6-svg,
+.pf-v6-c-page__main .pf-v6-c-menu-toggle__text .pf-v6-svg {
+  font-size: 0.95em;
+}
+
+/* PF6 sizing overrides (both light and dark modes) */
+.pf-v6-c-button.pf-m-plain,
+.pf-v6-c-button.pf-m-plain:hover {
+  --pf-v6-c-button--PaddingTop: 0.375rem;
+  --pf-v6-c-button--PaddingRight: 1rem;
+  --pf-v6-c-button--PaddingBottom: 0.375rem;
+  --pf-v6-c-button--PaddingLeft: 1rem;
+}
+
+.pf-v6-c-menu__item {
+  --pf-v6-c-menu__item--FontSize: var(--pf-v6-global--FontSize--md);
+}
+
+.pf-v6-c-menu-toggle.pf-m-plain {
+  --pf-v6-c-menu-toggle--PaddingTop: 0.375rem;
+  --pf-v6-c-menu-toggle--PaddingRight: 1rem;
+  --pf-v6-c-menu-toggle--PaddingBottom: 0.375rem;
+  --pf-v6-c-menu-toggle--PaddingLeft: 1rem;
+  --pf-v6-c-menu-toggle--m-plain--PaddingTop: 0.375rem;
+  --pf-v6-c-menu-toggle--m-plain--PaddingRight: 1rem;
+  --pf-v6-c-menu-toggle--m-plain--PaddingBottom: 0.375rem;
+  --pf-v6-c-menu-toggle--m-plain--PaddingLeft: 1rem;
+  --pf-v6-c-menu-toggle--LineHeight: 1.5;
+}
+
+.pf-v6-c-masthead {
+  box-shadow: none;
+  border-bottom: 1px solid #22262f;
+}
+
+.pf-v6-c-masthead .pf-v6-svg {
+  font-size: 1.125rem;
+}
+
+.pf-v6-c-masthead .pf-v6-c-button.pf-m-plain:hover,
+.pf-v6-c-masthead .pf-v6-c-menu-toggle.pf-m-plain:hover {
+  background-color: #12a66f;
+  color: #fff;
+}
+
+.pf-v6-c-masthead .pf-v6-c-menu__item {
+  font-size: 0.875rem;
+}
+
+
+/* Secondary button — outline style (green border + text, transparent bg) */
+.pf-v6-c-button.pf-m-secondary:not(:disabled) {
+  background-color: transparent;
+  border-color: #12a66f;
+  --pf-v6-c-button--Color: #12a66f;
+  --pf-v6-c-button--hover--Color: #fff;
+  --pf-v6-c-button--BorderColor: #12a66f;
+  --pf-v6-c-button--hover--BorderColor: #0e8c5d;
+  --pf-v6-c-button--m-clicked--BorderColor: #0e8c5d;
+  color: #12a66f;
+}
+
+.pf-v6-c-button.pf-m-secondary:not(:disabled):hover {
+  background-color: #0e8c5d;
+  border-color: #0e8c5d;
+  color: #fff;
+}
+
+/* Pagination enabled button green fill */
+.pf-v6-c-pagination__nav-control .pf-v6-c-button:not(:disabled) {
+  --pf-v6-c-button--m-plain--Color: #fff;
+  background-color: #12a66f;
+  border-radius: 0.5rem;
+}
+
+.pf-v6-c-pagination__nav-control .pf-v6-c-button:not(:disabled):hover {
+  background-color: #0e8c5d;
+}
+
+.pf-v6-c-pagination__nav-control .pf-v6-c-button:not(:disabled) .pf-v6-svg {
+  color: #fff;
+}
+
+/* Toolbar top padding and background */
+.pf-v6-c-toolbar.pf-v6-c-toolbar {
+  --pf-v6-c-toolbar--PaddingBlockStart: var(--pf-t--global--spacer--lg);
+  --pf-v6-c-toolbar--PaddingBlockEnd: var(--pf-t--global--spacer--lg);
+  --pf-v6-c-toolbar--PaddingInlineStart: var(--pf-t--global--spacer--lg);
+  --pf-v6-c-toolbar--PaddingInlineEnd: var(--pf-t--global--spacer--lg);
+}
+
+/* Uniform toolbar control heights */
+.pf-v6-c-toolbar.pf-v6-c-toolbar .pf-v6-c-menu-toggle:not(.pf-m-plain),
+.pf-v6-c-toolbar.pf-v6-c-toolbar .pf-v6-c-button:not(.pf-m-plain),
+.pf-v6-c-toolbar.pf-v6-c-toolbar .pf-v6-c-form-control {
+  height: 2.25rem;
+  max-height: 2.25rem;
+  min-height: 2.25rem;
+  box-sizing: border-box;
+}
+
+
+/* Remove content area card chrome */
+.pf-v6-c-page__main-container {
+  border: none !important;
+  border-radius: 0 !important;
+  background-color: transparent !important;
+}
+
+/* Title section card appearance */
+.pf-v6-c-page__main-section:first-child {
+  border-radius: 16px;
+  margin-bottom: 0.75rem;
+}
+
+/* Nav layout */
+.pf-v6-c-nav {
+  --pf-v6-c-nav__link--PaddingTop: var(--pf-v6-global--spacer--sm);
+  --pf-v6-c-nav__link--PaddingBottom: var(--pf-v6-global--spacer--sm);
+  --pf-v6-c-nav__link--PaddingRight: var(--pf-v6-global--spacer--md);
+  --pf-v6-c-nav__link--PaddingLeft: var(--pf-v6-global--spacer--md);
+  --pf-v6-c-nav__link--FontSize: var(--pf-v6-global--spacer--lg);
+  margin-inline: var(--pf-v6-global--spacer--sm);
+}
+
+.pf-v6-c-nav__link {
+  border-radius: var(--pf-v6-global--BorderRadius--sm);
+}
+
+.pf-v6-c-nav__subnav {
+  --pf-v6-c-nav__link--PaddingTop: 0.25rem;
+  --pf-v6-c-nav__link--PaddingBottom: 0.25rem;
+  --pf-v6-c-nav__link--PaddingRight: inherit;
+  --pf-v6-c-nav__link--PaddingLeft: inherit;
+  --pf-v6-c-nav__link--FontSize: var(--pf-v6-global--FontSize--sm);
+  --pf-v6-c-nav__link--hover--after--BorderColor: inherit;
+  --pf-v6-c-nav__link--focus--after--BorderColor: inherit;
+  --pf-v6-c-nav__link--active--after--BorderColor: inherit;
+  --pf-v6-c-nav__link--m-current--after--BorderColor: inherit;
+  --pf-v6-c-nav__link--hover--after--BorderLeftWidth: inherit;
+  --pf-v6-c-nav__link--focus--after--BorderLeftWidth: inherit;
+  --pf-v6-c-nav__link--active--after--BorderLeftWidth: inherit;
+  --pf-v6-c-nav__link--m-current--after--BorderLeftWidth: inherit;
+  --pf-v6-c-nav--c-divider--PaddingRight: inherit;
+  --pf-v6-c-nav--c-divider--PaddingLeft: inherit;
+}
+
+/* Nav active item green accent */
+.pf-v6-c-nav .pf-v6-c-nav__item::before {
+  background-color: #12a66f;
+}
+
+/* Brand and link colors — green instead of PF6 default blue */
+:root {
+  --pf-t--global--color--brand--default: #12a66f;
+  --pf-t--global--color--brand--hover: #0e8c5d;
+  --pf-t--global--color--brand--accent--default: #12a66f;
+  --pf-t--global--text--color--link--default: #12a66f;
+  --pf-t--global--text--color--link--hover: #0e8c5d;
+  --pf-t--global--color--brand--clicked: #0e8c5d;
+  --pf-t--global--border--color--hover: #12a66f;
+  --pf-t--global--text-decoration--color--default: #12a66f;
+  --pf-t--global--text-decoration--color--hover: #0e8c5d;
+}
+
+/* Link underline — uniform dotted green via background-image (text links in table rows only) */
+.pf-v6-c-table tbody a:not(.pf-v6-c-button):not(.pf-v6-c-label):not([class*="StatusLabel"]):not(:has(.pf-v6-c-label)) {
+  text-decoration: none !important;
+  background-image: linear-gradient(to right, var(--pf-t--global--text--color--link--default) 2px, transparent 2px);
+  background-repeat: repeat-x;
+  background-size: 6px 1px;
+  background-position: bottom;
+  padding-bottom: 1px;
+}
+.pf-v6-c-table tbody a:not(.pf-v6-c-button):not(.pf-v6-c-label):not([class*="StatusLabel"]):not(:has(.pf-v6-c-label)):hover {
+  background-image: linear-gradient(to right, var(--pf-t--global--text--color--link--hover) 2px, transparent 2px);
+}
+
+/* No underline on status badges or action icons in tables */
+.pf-v6-c-table tbody .pf-v6-c-label,
+.pf-v6-c-table tbody .pf-v6-c-button {
+  background-image: none !important;
+}
+
+/* Tooltip font size */
+.pf-v6-c-tooltip .pf-v6-c-tooltip__content {
+  font-size: 0.9375rem !important;
+}
+
+/* Activity stream icon size */
+[data-ouia-component-id="activity-stream-button"] .pf-v6-svg {
+  font-size: 1.25rem;
+}
+
+/* Toolbar select-all checkbox spacing */
+#select-all {
+  margin-right: var(--pf-t--global--spacer--md);
+}
+
+.pf-v6-c-toolbar__group {
+  gap: var(--pf-v6-global--spacer--sm);
+  margin-right: 0;
+}
+
+.pf-v6-c-toolbar__content-section {
+  gap: var(--pf-v6-global--spacer--sm);
+}
+
+.pf-v6-c-toolbar__item {
+  margin-right: 0;
+}
+
+/* Bottom pagination padding to match toolbar */
+.pf-v6-c-pagination.pf-m-bottom.pf-v6-c-pagination {
+  padding: var(--pf-t--global--spacer--lg);
+}
+
+/* Table header font size, background, and uniform vertical alignment */
+.pf-v6-c-table thead th {
+  font-size: var(--pf-v6-global--FontSize--sm);
+  background-color: var(--pf-t--global--background--color--secondary--default);
+  vertical-align: middle;
+  padding-top: 0.75rem !important;
+  padding-bottom: 0.75rem !important;
+}
+
+.pf-v6-c-table thead .pf-v6-c-table__button {
+  margin-block: 0 !important;
+  padding-block: 0.375rem !important;
+}
+
+/* Consistent table row height and vertical alignment */
+.pf-v6-c-table tbody td {
+  height: 3.25rem;
+  vertical-align: middle;
+}
+
+/* Gap between breadcrumb path and page title */
+.pf-v6-c-breadcrumb {
+  margin-bottom: 1rem;
+}
+
+/* Gap between job/workflow name and status badge */
+.ascender-status-label.pf-v6-c-label {
+  margin-left: 20px;
+  --pf-v6-c-label--MaxWidth: none;
+  --pf-v6-c-label--PaddingInlineStart: var(--pf-t--global--spacer--md);
+  --pf-v6-c-label--PaddingInlineEnd: var(--pf-t--global--spacer--md);
+}
+
+/* Status label solid fills — background uses the border/outline color token,
+   text and icon colors auto-adapt via PF6 theme (dark in light mode, white in dark) */
+.ascender-status-label.pf-v6-c-label.pf-m-green {
+  --pf-v6-c-label--BackgroundColor: var(--pf-t--global--border--color--nonstatus--green--default);
+}
+.ascender-status-label.pf-v6-c-label.pf-m-red {
+  --pf-v6-c-label--BackgroundColor: var(--pf-t--global--border--color--nonstatus--red--default);
+}
+.ascender-status-label.pf-v6-c-label.pf-m-blue {
+  --pf-v6-c-label--BackgroundColor: var(--pf-t--global--border--color--nonstatus--blue--default);
+}
+.ascender-status-label.pf-v6-c-label.pf-m-orange {
+  --pf-v6-c-label--BackgroundColor: var(--pf-t--global--border--color--nonstatus--orange--default);
+}
+.ascender-status-label.pf-v6-c-label.pf-m-grey,
+.ascender-status-label.pf-v6-c-label.pf-m-gray {
+  --pf-v6-c-label--BackgroundColor: var(--pf-t--global--border--color--nonstatus--gray--default);
+}
+
+/* Enable d3 wheel zoom on workflow SVGs */
+#workflow-svg {
+  touch-action: none;
+}
+
+/* No focus/hover border change on read-only form controls */
+.pf-v6-c-form-control:has(textarea[readonly]):focus,
+.pf-v6-c-form-control:has(textarea[readonly]):focus-within,
+.pf-v6-c-form-control:has(textarea[readonly]):hover,
+.pf-v6-c-form-control:has(input[readonly]):focus,
+.pf-v6-c-form-control:has(input[readonly]):focus-within,
+.pf-v6-c-form-control:has(input[readonly]):hover {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Visible border on editable code editors (Ace) */
+.ace_editor.pf-v6-c-form-control {
+  border: 1px solid var(--pf-v6-global--BorderColor--100);
+  border-radius: var(--pf-v6-global--BorderRadius--sm);
+}
+
+/* Wizard active step — green background */
+.pf-v6-c-wizard .pf-v6-c-wizard__nav-link.pf-m-current {
+  --pf-v6-c-wizard__nav-link--m-current--BackgroundColor: #12a66f;
+  --pf-v6-c-wizard__nav-link--m-current--Color: #fff;
+}
+
+/* Tighter gap above form action buttons (Save / Cancel) */
+.pf-v6-c-form__group.pf-m-action {
+  --pf-v6-c-form__group--m-action--MarginBlockStart: 0;
+}
+
+/* Workflow dropdown: dividers between groups */
+.pf-v6-c-menu__group + .pf-v6-c-menu__group {
+  border-top: 1px solid var(--pf-v6-global--BorderColor--100);
+  margin-top: var(--pf-v6-global--spacer--sm);
+  padding-top: var(--pf-v6-global--spacer--sm);
 }

@@ -152,12 +152,12 @@ describe('<Search />', () => {
 
     const typeGroup = screen
       .getByText('Type (or__scm_type)')
-      .closest('.pf-v5-c-chip-group');
+      .closest('.pf-v6-c-label-group');
     expect(within(typeGroup).getByText('Foo Bar!')).toBeInTheDocument();
 
     const nameGroup = screen
       .getByText('Name (name__icontains)')
-      .closest('.pf-v5-c-chip-group');
+      .closest('.pf-v6-c-label-group');
     expect(within(nameGroup).getByText('bar')).toBeInTheDocument();
   });
 
@@ -186,7 +186,7 @@ describe('<Search />', () => {
     );
 
     expect(history.location.search).toEqual(query);
-    const chip = screen.getByText('foo').closest('.pf-v5-c-chip');
+    const chip = screen.getByText('foo').closest('.pf-v6-c-label');
     await user.click(within(chip).getByRole('button'));
     expect(onRemove).toHaveBeenCalledWith('or__type', 'foo');
   });
@@ -216,7 +216,7 @@ describe('<Search />', () => {
     );
 
     expect(history.location.search).toEqual(query);
-    const chips = document.querySelectorAll('.pf-v5-c-chip');
+    const chips = document.querySelectorAll('.pf-v6-c-label');
     expect(chips).toHaveLength(1);
     await user.click(within(chips[0]).getByRole('button'));
     expect(onRemove).toHaveBeenCalledWith('or__type', '');
@@ -237,10 +237,10 @@ describe('<Search />', () => {
 
     const nameExactGroup = screen
       .getByText('name__exact')
-      .closest('.pf-v5-c-chip-group');
+      .closest('.pf-v6-c-label-group');
     expect(within(nameExactGroup).getByText('baz')).toBeInTheDocument();
 
-    const fooGroup = screen.getByText('foo').closest('.pf-v5-c-chip-group');
+    const fooGroup = screen.getByText('foo').closest('.pf-v6-c-label-group');
     expect(within(fooGroup).getByText('bar')).toBeInTheDocument();
   });
 

@@ -14,11 +14,11 @@ const Button = styled(PFButton)`
   height: 30px;
   width: 30px;
   ${(props) =>
-    props.isActive
+    props.$isActive
       ? `
-      background-color: var(--pf-v5-global--primary-color--100);
-      --pf-v5-c-button--m-plain--active--Color: white;
-      --pf-v5-c-button--m-plain--focus--Color: white;`
+      background-color: var(--pf-v6-global--primary-color--100);
+      --pf-v6-c-button--m-plain--active--Color: white;
+      --pf-v6-c-button--m-plain--focus--Color: white;`
       : null};
 `;
 
@@ -40,7 +40,7 @@ function ExpandCollapse({ isCompact = true, onCompact, onExpand }) {
           variant="plain"
           aria-label={t`Collapse`}
           onClick={onCompact}
-          isActive={isCompact}
+          $isActive={isCompact}
         >
           <BarsIcon />
         </Button>
@@ -51,7 +51,7 @@ function ExpandCollapse({ isCompact = true, onCompact, onExpand }) {
           variant="plain"
           aria-label={t`Expand`}
           onClick={onExpand}
-          isActive={!isCompact}
+          $isActive={!isCompact}
         >
           <EqualsIcon />
         </Button>

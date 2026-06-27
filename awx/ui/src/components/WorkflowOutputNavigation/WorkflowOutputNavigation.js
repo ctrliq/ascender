@@ -3,15 +3,15 @@ import { useParams } from 'react-router';
 import { useNavigate } from 'routerCompat';
 import { useLingui } from '@lingui/react/macro';
 import {
-	Chip,
-	MenuToggle,
+	Label, MenuToggle,
 	Select,
 	SelectGroup,
 	SelectList,
 	SelectOption,
 	TextInputGroup,
-	TextInputGroupMain,
+	TextInputGroupMain
 } from '@patternfly/react-core';
+
 import ChipGroup from 'components/ChipGroup';
 import { stringIsUUID } from 'util/strings';
 
@@ -111,9 +111,9 @@ function WorkflowOutputNavigation({ relatedJobs, parentRef }) {
         >
           {filterBy ? (
             <ChipGroup numChips={1} totalChips={1}>
-              <Chip key={filterBy} onClick={() => handleFilter(filterBy)}>
+              <Label variant="outline" key={filterBy} onClose={() => handleFilter(filterBy)}>
                 {statusLabels[filterBy] || filterBy}
-              </Chip>
+              </Label>
             </ChipGroup>
           ) : (
             t`Workflow Job 1/${relevantResults.length}`

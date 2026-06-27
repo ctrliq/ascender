@@ -56,7 +56,7 @@ function ScheduleToggle({ schedule, onToggle, className, isDisabled }) {
           css="display: inline-flex;"
           id={`schedule-${schedule.id}-toggle`}
           label={t`On`}
-          labelOff={t`Off`}
+
           isChecked={isEnabled}
           isDisabled={
             isLoading ||

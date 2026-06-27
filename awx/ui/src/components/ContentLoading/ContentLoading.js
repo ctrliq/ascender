@@ -5,14 +5,14 @@ import { useLingui } from '@lingui/react/macro';
 import { EmptyState as PFEmptyState, Skeleton } from '@patternfly/react-core';
 
 const EmptyState = styled(PFEmptyState)`
-  --pf-v5-c-empty-state--m-lg--MaxWidth: none;
+  --pf-v6-c-empty-state--m-lg--MaxWidth: none;
   min-height: 250px;
 `;
 
 const SkeletonStack = styled.div`
   display: flex;
   flex-direction: column;
-  gap: var(--pf-v5-global--spacer--md);
+  gap: var(--pf-v6-global--spacer--md);
   text-align: left;
   width: 100%;
 `;

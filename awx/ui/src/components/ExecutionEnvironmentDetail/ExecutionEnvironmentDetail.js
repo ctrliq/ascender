@@ -10,13 +10,13 @@ import { useConfig } from 'contexts/Config';
 import { Detail } from '../DetailList';
 
 const ExclamationTriangleIcon = styled(PFExclamationTriangleIcon)`
-  color: var(--pf-v5-global--warning-color--100);
+  color: var(--pf-v6-global--warning-color--100);
   margin-left: 18px;
   cursor: pointer;
 `;
 
 const ExclamationTrianglePopover = styled(PFExclamationTriangleIcon)`
-  color: var(--pf-v5-global--warning-color--100);
+  color: var(--pf-v6-global--warning-color--100);
   margin-left: 18px;
   cursor: pointer;
 `;

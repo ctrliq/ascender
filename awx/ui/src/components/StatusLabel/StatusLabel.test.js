@@ -16,7 +16,7 @@ const ICON_PATH_PREFIX = {
 };
 
 function getLabel(container) {
-  return container.querySelector('.pf-v5-c-label');
+  return container.querySelector('.pf-v6-c-label');
 }
 
 function expectLabel(container, { icon, color, text }) {

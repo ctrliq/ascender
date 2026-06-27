@@ -70,7 +70,7 @@ describe('Toast', () => {
     };
     render(<Toast toasts={[toast]} removeToast={() => {}} />);
 
-    const alert = screen.getByText('Inventory saved').closest('.pf-v5-c-alert');
+    const alert = screen.getByText('Inventory saved').closest('.pf-v6-c-alert');
     expect(alert).toHaveClass('pf-m-success');
     expect(alert).toHaveAttribute('data-ouia-component-id', 'toast-message-1');
     expect(alert).toHaveTextContent('the message');

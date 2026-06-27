@@ -2,12 +2,11 @@ import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
 import {
-  Chip,
-  TextList,
-  TextListItem,
-  TextListVariants,
-  TextListItemVariants,
+	Label, Content,
+	ContentVariants,
+
 } from '@patternfly/react-core';
+
 import { toTitleCase } from 'util/strings';
 import CredentialChip from '../CredentialChip';
 import ChipGroup from '../ChipGroup';
@@ -52,33 +51,33 @@ function PromptJobTemplateDetail({ resource }) {
     webhook_service
   ) {
     optionsList = (
-      <TextList component={TextListVariants.ul}>
+      <Content component={ContentVariants.ul}>
         {become_enabled && (
-          <TextListItem component={TextListItemVariants.li}>
+          <Content component={ContentVariants.li}>
             {t`Privilege Escalation`}
-          </TextListItem>
+          </Content>
         )}
         {host_config_key && (
-          <TextListItem component={TextListItemVariants.li}>
+          <Content component={ContentVariants.li}>
             {t`Provisioning Callbacks`}
-          </TextListItem>
+          </Content>
         )}
         {allow_simultaneous && (
-          <TextListItem component={TextListItemVariants.li}>
+          <Content component={ContentVariants.li}>
             {t`Concurrent Jobs`}
-          </TextListItem>
+          </Content>
         )}
         {use_fact_cache && (
-          <TextListItem component={TextListItemVariants.li}>
+          <Content component={ContentVariants.li}>
             {t`Fact Storage`}
-          </TextListItem>
+          </Content>
         )}
         {webhook_service && (
-          <TextListItem component={TextListItemVariants.li}>
+          <Content component={ContentVariants.li}>
             {t`Webhooks`}
-          </TextListItem>
+          </Content>
         )}
-      </TextList>
+      </Content>
     );
   }
 
@@ -226,9 +225,9 @@ function PromptJobTemplateDetail({ resource }) {
               ouiaId="prompt-jt-label-chips"
             >
               {summary_fields.labels.results.map((label) => (
-                <Chip key={label.id} isReadOnly>
+                <Label variant="outline" key={label.id} >
                   {label.name}
-                </Chip>
+                </Label>
               ))}
             </ChipGroup>
           }
@@ -245,9 +244,9 @@ function PromptJobTemplateDetail({ resource }) {
             ouiaId="prompt-jt-instance-group-chips"
           >
             {instance_groups?.map((ig) => (
-              <Chip key={ig.id} isReadOnly>
+              <Label variant="outline" key={ig.id} >
                 {ig.name}
-              </Chip>
+              </Label>
             ))}
           </ChipGroup>
         }
@@ -264,9 +263,9 @@ function PromptJobTemplateDetail({ resource }) {
               ouiaId="prompt-jt-job-tag-chips"
             >
               {job_tags.split(',').map((jobTag) => (
-                <Chip key={jobTag} isReadOnly>
+                <Label variant="outline" key={jobTag} >
                   {jobTag}
-                </Chip>
+                </Label>
               ))}
             </ChipGroup>
           }
@@ -284,9 +283,9 @@ function PromptJobTemplateDetail({ resource }) {
               ouiaId="prompt-jt-skip-tag-chips"
             >
               {skip_tags.split(',').map((skipTag) => (
-                <Chip key={skipTag} isReadOnly>
+                <Label variant="outline" key={skipTag} >
                   {skipTag}
-                </Chip>
+                </Label>
               ))}
             </ChipGroup>
           }

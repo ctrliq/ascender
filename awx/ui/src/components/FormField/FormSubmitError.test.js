@@ -12,7 +12,7 @@ describe('<FormSubmitError>', () => {
       </Formik>
     );
     expect(container).toBeEmptyDOMElement();
-    expect(container.querySelector('.pf-v5-c-alert')).not.toBeInTheDocument();
+    expect(container.querySelector('.pf-v6-c-alert')).not.toBeInTheDocument();
   });
 
   test('should pass field errors to Formik', async () => {
@@ -50,8 +50,8 @@ describe('<FormSubmitError>', () => {
       </Formik>
     );
     expect(await screen.findByText('There was an error')).toBeInTheDocument();
-    // PF inline danger Alert: no role="alert", identified by .pf-v5-c-alert
-    expect(container.querySelector('.pf-v5-c-alert')).toBeInTheDocument();
+    // PF inline danger Alert: no role="alert", identified by .pf-v6-c-alert
+    expect(container.querySelector('.pf-v6-c-alert')).toBeInTheDocument();
     expect(global.console.error).toHaveBeenCalledWith(error);
     global.console = realConsole;
   });

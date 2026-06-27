@@ -32,7 +32,7 @@ describe('FieldWithPrompt', () => {
     expect(screen.getByLabelText('Prompt on launch')).toBeInTheDocument();
     // no required asterisk
     expect(
-      container.querySelector('.pf-v5-c-form__label-required')
+      container.querySelector('.pf-v6-c-form__label-required')
     ).not.toBeInTheDocument();
     // no tooltip Popover trigger
     expect(
@@ -68,7 +68,7 @@ describe('FieldWithPrompt', () => {
     expect(screen.getByLabelText('Prompt on launch')).toBeInTheDocument();
     // required asterisk present
     expect(
-      container.querySelector('.pf-v5-c-form__label-required')
+      container.querySelector('.pf-v6-c-form__label-required')
     ).toBeInTheDocument();
     // the tooltip Popover renders its trigger button
     expect(

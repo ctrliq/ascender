@@ -111,7 +111,7 @@ describe('ScheduleListItem', () => {
     test('Toggle button enabled', () => {
       renderItem();
       expect(
-        screen.getByRole('checkbox', { name: 'Toggle schedule' })
+        screen.getByRole('switch', { name: 'Toggle schedule' })
       ).toBeEnabled();
     });
 
@@ -169,7 +169,7 @@ describe('ScheduleListItem', () => {
     test('Toggle button disabled', () => {
       renderItem({ schedule: readOnlySchedule });
       expect(
-        screen.getByRole('checkbox', { name: 'Toggle schedule' })
+        screen.getByRole('switch', { name: 'Toggle schedule' })
       ).toBeDisabled();
     });
   });
@@ -191,7 +191,7 @@ describe('ScheduleListItem', () => {
       const nameCell = cellByLabel('Name');
       expect(nameCell.querySelector('svg')).toBeInTheDocument();
       expect(
-        screen.getByRole('checkbox', { name: 'Toggle schedule' })
+        screen.getByRole('switch', { name: 'Toggle schedule' })
       ).toBeDisabled();
     });
   });

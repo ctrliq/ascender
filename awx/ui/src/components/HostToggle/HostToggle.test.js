@@ -26,7 +26,7 @@ const mockHost = {
 };
 
 // The PF Switch renders a hidden checkbox input with the aria-label
-const getToggle = () => screen.getByRole('checkbox', { name: 'Toggle host' });
+const getToggle = () => screen.getByRole('switch', { name: 'Toggle host' });
 
 describe('<HostToggle>', () => {
   afterEach(() => {

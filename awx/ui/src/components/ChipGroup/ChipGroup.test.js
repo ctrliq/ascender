@@ -1,5 +1,5 @@
 import React from 'react';
-import { Chip } from '@patternfly/react-core';
+import { Label } from '@patternfly/react-core';
 import { screen } from '@testing-library/react';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import ChipGroup from './ChipGroup';
@@ -9,7 +9,7 @@ describe('ChipGroup', () => {
     renderWithContexts(
       <ChipGroup numChips={5} totalChips={10}>
         {Array.from({ length: 10 }, (v, i) => (
-          <Chip key={i}>{`chip ${i}`}</Chip>
+          <Label variant="outline" key={i}>{`chip ${i}`}</Label>
         ))}
       </ChipGroup>
     );

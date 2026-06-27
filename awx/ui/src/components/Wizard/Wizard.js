@@ -1,11 +1,13 @@
 import React, { useCallback } from 'react';
 import {
-  Modal,
-  ModalVariant,
-  Wizard as PFWizard,
-  WizardStep,
-  WizardHeader,
+	Wizard as PFWizard,
+	WizardStep,
+	WizardHeader
 } from '@patternfly/react-core';
+import {
+	Modal,
+	ModalVariant
+} from '@patternfly/react-core/deprecated';
 import styled from 'styled-components';
 
 /**
@@ -89,6 +91,7 @@ function WizardWrapper({
             title={title}
             description={description}
             onClose={onClose}
+            closeButtonAriaLabel="Close"
           />
         ) : undefined
       }
@@ -158,7 +161,7 @@ function WizardWrapper({
 WizardWrapper.displayName = 'PFWizard';
 
 export default styled(WizardWrapper)`
-  .pf-v5-c-toolbar__content {
+  .pf-v6-c-toolbar__content {
     padding: 0 !important;
   }
 `;

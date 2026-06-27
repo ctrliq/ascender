@@ -2,14 +2,15 @@ import React from 'react';
 
 import { useLingui } from '@lingui/react/macro';
 
-import { ChipGroup as PFChipGroup } from '@patternfly/react-core';
+import { LabelGroup } from '@patternfly/react-core';
 
-function ChipGroup({ numChips, totalChips, ...props }) {
+function ChipGroup({ numChips, totalChips, ouiaId, ...props }) {
   const { t } = useLingui();
   return (
-    <PFChipGroup
+    <LabelGroup
       {...props}
-      numChips={numChips}
+      {...(ouiaId ? { 'data-ouia-component-id': ouiaId } : {})}
+      numLabels={numChips}
       expandedText={t`Show less`}
       collapsedText={t`${totalChips - numChips} more`}
     />

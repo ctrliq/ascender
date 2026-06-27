@@ -28,10 +28,10 @@ function PasswordField({
       fieldId={id}
       isRequired={isRequired}
       label={label}
-      labelIcon={helperText && <Popover content={helperText} />}
+      labelHelp={helperText && <Popover content={helperText} />}
     >
       <InputGroup>
-        <InputGroupItem><PasswordInput
+        <InputGroupItem isFill><PasswordInput
           id={id}
           name={name}
           label={label}

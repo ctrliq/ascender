@@ -96,11 +96,9 @@ describe('<AddResourceRole />', () => {
     expect(within(barRow).getByRole('checkbox')).toBeChecked();
     expect(within(bazRow).getByRole('checkbox')).not.toBeChecked();
 
-    // Two selected items show in the SelectedList as PF Chips. The chip close
-    // buttons are labelled "close" (not by the item text), so assert the count;
-    // the checkbox assertions above already prove baz was deselected.
+    // Two selected items show in the SelectedList as PF Labels with close buttons.
     expect(
-      document.querySelectorAll('.pf-v5-c-chip button[aria-label="close"]')
+      document.querySelectorAll('.pf-v6-c-label .pf-v6-c-label__actions button')
     ).toHaveLength(2);
 
     await user.click(getPrimaryButton());
@@ -305,7 +303,7 @@ describe('<AddResourceRole />', () => {
     expect(within(fooRow).getByRole('checkbox')).toBeChecked();
     // a single selected chip (with its "close" button) appears for foo
     expect(
-      document.querySelectorAll('.pf-v5-c-chip button[aria-label="close"]')
+      document.querySelectorAll('.pf-v6-c-label .pf-v6-c-label__actions button')
     ).toHaveLength(1);
     expect(screen.getByRole('button', { name: 'Next' })).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Next' }));

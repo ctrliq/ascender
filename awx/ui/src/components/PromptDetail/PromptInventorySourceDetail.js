@@ -2,12 +2,11 @@ import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
 import {
-  Chip,
-  TextList,
-  TextListItem,
-  TextListVariants,
-  TextListItemVariants,
+	Label, Content,
+	ContentVariants,
+
 } from '@patternfly/react-core';
+
 import { Detail, DeletedDetail } from '../DetailList';
 import { VariablesDetail } from '../CodeEditor';
 import CredentialChip from '../CredentialChip';
@@ -34,23 +33,23 @@ function PromptInventorySourceDetail({ resource }) {
   let optionsList = '';
   if (overwrite || overwrite_vars || update_on_launch) {
     optionsList = (
-      <TextList component={TextListVariants.ul}>
+      <Content component={ContentVariants.ul}>
         {overwrite && (
-          <TextListItem component={TextListItemVariants.li}>
+          <Content component={ContentVariants.li}>
             {t`Overwrite local groups and hosts from remote inventory source`}
-          </TextListItem>
+          </Content>
         )}
         {overwrite_vars && (
-          <TextListItem component={TextListItemVariants.li}>
+          <Content component={ContentVariants.li}>
             {t`Overwrite local variables from remote inventory source`}
-          </TextListItem>
+          </Content>
         )}
         {update_on_launch && (
-          <TextListItem component={TextListItemVariants.li}>
+          <Content component={ContentVariants.li}>
             {t`Update on launch`}
-          </TextListItem>
+          </Content>
         )}
-      </TextList>
+      </Content>
     );
   }
 
@@ -122,9 +121,9 @@ function PromptInventorySourceDetail({ resource }) {
               ouiaId="prompt-region-chips"
             >
               {source_regions.split(',').map((region) => (
-                <Chip key={region} isReadOnly>
+                <Label variant="outline" key={region} >
                   {region}
-                </Chip>
+                </Label>
               ))}
             </ChipGroup>
           }
@@ -141,9 +140,9 @@ function PromptInventorySourceDetail({ resource }) {
               ouiaId="prompt-instance-filter-chips"
             >
               {instance_filters.split(',').map((filter) => (
-                <Chip key={filter} isReadOnly>
+                <Label variant="outline" key={filter} >
                   {filter}
-                </Chip>
+                </Label>
               ))}
             </ChipGroup>
           }
@@ -160,9 +159,9 @@ function PromptInventorySourceDetail({ resource }) {
               ouiaId="prompt-only-group-by-chips"
             >
               {group_by.split(',').map((group) => (
-                <Chip key={group} isReadOnly>
+                <Label variant="outline" key={group} >
                   {group}
-                </Chip>
+                </Label>
               ))}
             </ChipGroup>
           }

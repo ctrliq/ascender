@@ -3,7 +3,12 @@ import { Link, useLocation } from 'react-router';
 import { useNavigate } from 'routerCompat';
 import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
-import { Chip, Divider, Title, Button } from '@patternfly/react-core';
+import {
+	Label, Divider,
+	Title,
+	Button
+} from '@patternfly/react-core';
+
 import { formatDateString } from 'util/dates';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import { JobTemplatesAPI, SchedulesAPI, WorkflowJobTemplatesAPI } from 'api';
@@ -29,13 +34,13 @@ import { VERBOSITY } from '../../VerbositySelectField';
 import getHelpText from '../../../screens/Template/shared/JobTemplate.helptext';
 
 const PromptDivider = styled(Divider)`
-  margin-top: var(--pf-v5-global--spacer--lg);
-  margin-bottom: var(--pf-v5-global--spacer--lg);
+  margin-top: var(--pf-v6-global--spacer--lg);
+  margin-bottom: var(--pf-v6-global--spacer--lg);
 `;
 
 const PromptTitle = styled(Title)`
   margin-top: 40px;
-  --pf-v5-c-title--m-md--FontWeight: 700;
+  --pf-v6-c-title--m-md--FontWeight: 700;
   grid-column: 1 / -1;
 `;
 
@@ -44,25 +49,25 @@ const PromptDetailList = styled(DetailList)`
 `;
 
 const FrequencyDetailsContainer = styled.div`
-  background-color: var(--pf-v5-global--BackgroundColor--200);
-  margin-top: var(--pf-v5-global--spacer--lg);
-  margin-bottom: var(--pf-v5-global--spacer--lg);
-  margin-right: calc(var(--pf-v5-c-card--child--PaddingRight) * -1);
-  margin-left: calc(var(--pf-v5-c-card--child--PaddingLeft) * -1);
-  padding: var(--pf-v5-c-card--child--PaddingRight);
+  background-color: var(--pf-v6-global--BackgroundColor--200);
+  margin-top: var(--pf-v6-global--spacer--lg);
+  margin-bottom: var(--pf-v6-global--spacer--lg);
+  margin-right: calc(var(--pf-v6-c-card--child--PaddingRight) * -1);
+  margin-left: calc(var(--pf-v6-c-card--child--PaddingLeft) * -1);
+  padding: var(--pf-v6-c-card--child--PaddingRight);
 
   & > p {
-    margin-bottom: var(--pf-v5-global--spacer--md);
+    margin-bottom: var(--pf-v6-global--spacer--md);
   }
 
   & > *:not(:first-child):not(:last-child) {
-    margin-bottom: var(--pf-v5-global--spacer--md);
-    padding-bottom: var(--pf-v5-global--spacer--md);
-    border-bottom: 1px solid var(--pf-v5-global--BorderColor--100);
+    margin-bottom: var(--pf-v6-global--spacer--md);
+    padding-bottom: var(--pf-v6-global--spacer--md);
+    border-bottom: 1px solid var(--pf-v6-global--BorderColor--100);
   }
 
   & + & {
-    margin-top: calc(var(--pf-v5-global--spacer--lg) * -1);
+    margin-top: calc(var(--pf-v6-global--spacer--lg) * -1);
   }
 `;
 
@@ -561,9 +566,9 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
                     ouiaId="schedule-label-chips"
                   >
                     {labels.map((l) => (
-                      <Chip key={l.id} ouiaId={`label-${l.id}-chip`} isReadOnly>
+                      <Label variant="outline" key={l.id} data-ouia-component-id={`label-${l.id}-chip`} >
                         {l.name}
-                      </Chip>
+                      </Label>
                     ))}
                   </ChipGroup>
                 }
@@ -581,13 +586,13 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
                     ouiaId="schedule-job-tag-chips"
                   >
                     {job_tags.split(',').map((jobTag) => (
-                      <Chip
+                      <Label variant="outline"
                         key={jobTag}
-                        isReadOnly
-                        ouiaId={`job-tag-${jobTag}-chip`}
+
+                        data-ouia-component-id={`job-tag-${jobTag}-chip`}
                       >
                         {jobTag}
-                      </Chip>
+                      </Label>
                     ))}
                   </ChipGroup>
                 }
@@ -605,13 +610,13 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
                     ouiaId="schedule-skip-tag-chips"
                   >
                     {skip_tags.split(',').map((skipTag) => (
-                      <Chip
+                      <Label variant="outline"
                         key={skipTag}
-                        isReadOnly
-                        ouiaId={`skip-tag-${skipTag}-chip`}
+
+                        data-ouia-component-id={`skip-tag-${skipTag}-chip`}
                       >
                         {skipTag}
-                      </Chip>
+                      </Label>
                     ))}
                   </ChipGroup>
                 }

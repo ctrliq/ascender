@@ -62,7 +62,7 @@ function HostToggle({
           css="display: inline-flex;"
           id={`host-${host.id}-toggle`}
           label={t`On`}
-          labelOff={t`Off`}
+
           isChecked={isEnabled}
           isDisabled={
             isLoading ||

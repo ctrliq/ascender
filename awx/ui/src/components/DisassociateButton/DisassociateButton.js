@@ -13,7 +13,7 @@ import { KebabifiedContext } from 'contexts/Kebabified';
 import AlertModal from '../AlertModal';
 
 const ModalNote = styled.div`
-  margin-bottom: var(--pf-v5-global--spacer--xl);
+  margin-bottom: var(--pf-v6-global--spacer--xl);
 `;
 
 function DisassociateButton({

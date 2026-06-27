@@ -43,7 +43,7 @@ function VerbositySelectField({
     <FormGroup
       fieldId={fieldId}
       label={t`Verbosity`}
-      labelIcon={<Popover content={tooltip} />}
+      labelHelp={<Popover content={tooltip} />}
     >
       <AnsibleSelect
         id={fieldId}

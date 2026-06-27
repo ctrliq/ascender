@@ -6,8 +6,7 @@ import { useLingui } from '@lingui/react/macro';
 
 import {
   EmptyState,
-  EmptyStateIcon,
-  EmptyStateBody, EmptyStateHeader, EmptyStateFooter,
+  EmptyStateBody, EmptyStateFooter,
 } from '@patternfly/react-core';
 import { ExclamationTriangleIcon } from '@patternfly/react-icons';
 import { useSession } from 'contexts/Session';
@@ -31,10 +30,9 @@ function ContentError({ error = null, children, isNotFound = false }) {
       {is401 ? (
         <Navigate to="/login" />
       ) : (
-        <EmptyState variant="full">
-          <EmptyStateHeader titleText={<>{is404
+        <EmptyState  headingLevel="h3" icon={ExclamationTriangleIcon}  titleText={<>{is404
               ? t`Not Found`
-              : t`Something went wrong...`}</>} icon={<EmptyStateIcon icon={ExclamationTriangleIcon} />} headingLevel="h3" />
+              : t`Something went wrong...`}</>} variant="full">
           <EmptyStateBody>
             {is404
               ? t`The page you requested could not be found.`

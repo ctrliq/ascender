@@ -3,41 +3,105 @@
 */
 
 .ascender-login {
-  --pf-v5-global--FontFamily--sans-serif: Inter,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;
-  --pf-v5-global--FontFamily--heading--sans-serif: Satoshi,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;
-  --pf-v5-global--FontFamily--text: Inter,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;
-  --pf-v5-global--Color--100: #f7f7f7;
-  --pf-v5-global--Color--200: #cecfd2;
-  --pf-v5-global--Color--300: #94979c;
-  --pf-v5-global--disabled-color--100: #85888e;
-  --pf-v5-global--link--Color: #12a66f;
-  --pf-v5-global--link--Color--hover: #cecfd2;
-  --pf-v5-global--BackgroundColor--100: #13161b;
-  --pf-v5-global--BackgroundColor--200: #1a1e25;
-  --pf-v5-global--BorderColor--100: #373a41;
-  --pf-v5-global--BorderColor--200: #22262f;
-  --pf-v5-global--primary-color--100: #12a66f;
-  --pf-v5-global--primary-color--200: #17c484;
-  --pf-v5-global--active-color--100: #12a66f;
-  --pf-v5-global--active-color--200: #17c484;
-  --pf-v5-c-login__main--BackgroundColor: var(--pf-v5-global--BackgroundColor--200);
-  --pf-v5-c-login__container--MaxWidth: 24rem;
-  --pf-v5-c-login__main-body--PaddingRight: 2rem;
-  --pf-v5-c-login__main-body--PaddingLeft: 2rem;
+  --pf-v6-global--FontFamily--sans-serif: Inter,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;
+  --pf-v6-global--FontFamily--heading--sans-serif: Satoshi,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;
+  --pf-v6-global--FontFamily--text: Inter,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;
+  --pf-v6-global--Color--100: #f7f7f7;
+  --pf-v6-global--Color--200: #cecfd2;
+  --pf-v6-global--Color--300: #94979c;
+  --pf-v6-global--disabled-color--100: #85888e;
+  --pf-v6-global--link--Color: #12a66f;
+  --pf-v6-global--link--Color--hover: #cecfd2;
+  --pf-v6-global--BackgroundColor--100: #13161b;
+  --pf-v6-global--BackgroundColor--200: #1a1e25;
+  --pf-v6-global--BorderColor--100: #373a41;
+  --pf-v6-global--BorderColor--200: #22262f;
+  --pf-v6-global--primary-color--100: #12a66f;
+  --pf-v6-global--primary-color--200: #17c484;
+  --pf-v6-global--active-color--100: #12a66f;
+  --pf-v6-global--active-color--200: #17c484;
+  --pf-v6-c-login__main--BackgroundColor: var(--pf-v6-global--BackgroundColor--200);
+  --pf-v6-c-login__container--MaxWidth: 24rem;
+  --pf-v6-c-login__main-body--PaddingRight: 2rem;
+  --pf-v6-c-login__main-body--PaddingLeft: 2rem;
 
-  color: var(--pf-v5-global--Color--100);
-  background-color: var(--pf-v5-global--BackgroundColor--100);
+  color: var(--pf-v6-global--Color--100);
+  background-color: var(--pf-v6-global--BackgroundColor--100);
 }
 
-.ascender-login .pf-v5-c-login__main {
-  background-color: var(--pf-v5-global--BackgroundColor--200);
-  color: var(--pf-v5-global--Color--100);
+.ascender-login .pf-v6-c-login__main {
+  background-color: var(--pf-v6-global--BackgroundColor--200);
+  color: var(--pf-v6-global--Color--100);
   border-radius: 0.5rem;
-  border: 1px solid var(--pf-v5-global--BorderColor--100);
+  border: 1px solid var(--pf-v6-global--BorderColor--100);
 }
 
-.ascender-login .pf-v5-c-brand {
+.ascender-login .pf-v6-c-login__header {
+  margin-top: 0;
+  margin-bottom: 2.5rem;
+}
+
+.ascender-login .pf-v6-c-login__main-body {
+  padding-block-start: 3rem;
+  padding-block-end: 3rem;
+}
+
+.ascender-login .pf-v6-c-login__main > :first-child:not(.pf-v6-c-login__main-header) {
+  padding-block-start: 3rem;
+}
+
+.ascender-login .pf-v6-c-brand {
   display: block;
   margin: 0 auto;
   max-width: 12rem;
+}
+
+.ascender-login .pf-v6-c-button.pf-m-primary {
+  background-color: #12a66f;
+  border-color: #12a66f;
+  color: #fff;
+}
+
+.ascender-login .pf-v6-c-button.pf-m-primary:hover {
+  background-color: #0e8c5d;
+  border-color: #0e8c5d;
+}
+
+.ascender-login .pf-v6-c-form-control {
+  background-color: var(--pf-v6-global--BackgroundColor--100);
+  border: 1px solid var(--pf-v6-global--BorderColor--100);
+  border-radius: var(--pf-v6-global--BorderRadius--sm, 0.25rem);
+}
+
+.ascender-login .pf-v6-c-form-control::before {
+  border-color: var(--pf-v6-global--BorderColor--100);
+}
+
+.ascender-login .pf-v6-c-form-control::after {
+  border-color: transparent;
+}
+
+.ascender-login .pf-v6-c-form-control:focus-within::after {
+  border-color: var(--pf-v6-global--primary-color--100);
+}
+
+.ascender-login .pf-v6-c-form-control input {
+  color: var(--pf-v6-global--Color--100);
+  outline: none;
+}
+
+.ascender-login .pf-v6-c-login__main-footer:has(.pf-v6-c-login__footer:empty) {
+  display: none;
+}
+
+.ascender-login .pf-v6-c-alert.pf-m-warning {
+  background-color: var(--pf-v6-global--BackgroundColor--200);
+  border: 1px solid var(--pf-v6-global--BorderColor--100);
+  color: var(--pf-v6-global--Color--100);
+  --pf-v6-c-alert--m-warning--icon--Color: #f0ab00;
+  margin-bottom: 1.5rem;
+}
+
+.ascender-login .pf-v6-c-alert.pf-m-warning .pf-v6-c-alert__title {
+  color: var(--pf-v6-global--Color--100);
 }

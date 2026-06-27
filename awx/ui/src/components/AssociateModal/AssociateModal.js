@@ -3,7 +3,12 @@ import { useLocation, useNavigate } from 'routerCompat';
 
 import { useLingui } from '@lingui/react/macro';
 
-import { Button, Modal } from '@patternfly/react-core';
+import {
+	Button
+} from '@patternfly/react-core';
+import {
+	Modal
+} from '@patternfly/react-core/deprecated';
 import { getSearchableKeys } from 'components/PaginatedTable';
 import useRequest from 'hooks/useRequest';
 import { getQSConfig, parseQueryString } from 'util/qs';

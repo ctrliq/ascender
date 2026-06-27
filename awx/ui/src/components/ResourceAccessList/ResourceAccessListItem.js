@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { Chip } from '@patternfly/react-core';
+import { Label } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
 import { Link } from 'react-router';
 
@@ -27,17 +27,17 @@ function ResourceAccessListItem({ accessRecord, onRoleDelete }) {
   };
 
   const renderChip = (role) => (
-    <Chip
+    <Label variant="outline"
       key={role.id}
-      onClick={() => {
+      onClose={() => {
         onRoleDelete(role, accessRecord);
       }}
-      isReadOnly={!role.user_capabilities.unattach}
-      ouiaId={`${role.name}-${role.id}`}
+
+      data-ouia-component-id={`${role.name}-${role.id}`}
       closeBtnAriaLabel={t`Remove ${role.name} chip`}
     >
       {role.name}
-    </Chip>
+    </Label>
   );
 
   const [teamRoles, userRoles] = getRoleLists();

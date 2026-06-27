@@ -100,7 +100,7 @@ describe('<AdHocDetailsStep />', () => {
     await user.type(forksInput, '10');
 
     // diff_mode Switch renders a checkbox input with aria-label "toggle changes"
-    const diffSwitch = screen.getByRole('checkbox', { name: 'toggle changes' });
+    const diffSwitch = screen.getByRole('switch', { name: 'toggle changes' });
     await user.click(diffSwitch);
 
     const becomeCheckbox = screen.getByRole('checkbox', {
