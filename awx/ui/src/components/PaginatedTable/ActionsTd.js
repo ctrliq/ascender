@@ -26,7 +26,7 @@ const ActionsCell = styled(Td)`
 `;
 ActionsCell.displayName = 'ActionsCell';
 
-export default function ActionsTd({ children, ...props }) {
+export default function ActionsTd({ children, gridColumns: _gridColumns, ...props }) {
   const numActions = children.length || 1;
   const width = numActions * 40;
   return (
