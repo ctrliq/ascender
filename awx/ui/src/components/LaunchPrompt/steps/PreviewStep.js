@@ -5,7 +5,7 @@ import { Tooltip } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
 import { useFormikContext } from 'formik';
 
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 import mergeExtraVars, { maskPasswords } from 'util/prompt/mergeExtraVars';
 import getSurveyValues from 'util/prompt/getSurveyValues';
 import PromptDetail from '../../PromptDetail';

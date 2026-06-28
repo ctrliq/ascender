@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { Card } from '@patternfly/react-core';
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 import { parseVariableField } from 'util/yaml';
 import { OrganizationsAPI, SchedulesAPI } from 'api';
 import mergeExtraVars from 'util/prompt/mergeExtraVars';
