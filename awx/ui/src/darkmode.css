@@ -52,7 +52,30 @@ html.pf-v6-theme-dark body {
   --pf-v6-global--BoxShadow--md: hsla(0,0%,100%,0);
   --pf-v6-global--BoxShadow--lg: hsla(0,0%,100%,0);
   --pf-v6-global--BoxShadow--xl: hsla(0,0%,100%,0);
-  
+
+
+  --pf-t--global--color--status--success--default: #17b26a;
+  --pf-t--global--color--status--danger--default: #f04438;
+}
+
+html.pf-v6-theme-dark .ascender-status-label.pf-v6-c-label.pf-m-green {
+  --pf-v6-c-label--BackgroundColor: #17b26a;
+}
+html.pf-v6-theme-dark .ascender-status-label.pf-v6-c-label.pf-m-red {
+  --pf-v6-c-label--BackgroundColor: #f04438;
+}
+html.pf-v6-theme-dark .ascender-status-label.pf-v6-c-label.pf-m-blue {
+  --pf-v6-c-label--BackgroundColor: #17b26a;
+}
+
+html.pf-v6-theme-dark .pf-v6-c-label.pf-m-green {
+  --pf-v6-c-label--BackgroundColor: #17b26a;
+}
+html.pf-v6-theme-dark .pf-v6-c-label.pf-m-red {
+  --pf-v6-c-label--BackgroundColor: #f04438;
+}
+html.pf-v6-theme-dark .pf-v6-c-label.pf-m-blue {
+  --pf-v6-c-label--BackgroundColor: #17b26a;
 }
 
 html.pf-v6-theme-dark .pf-v6-c-title {
@@ -61,19 +84,18 @@ html.pf-v6-theme-dark .pf-v6-c-title {
   font-weight: 500 !important;
 }
 
-html.pf-v6-theme-dark .pf-v6-c-data-list__item {
-  --pf-v6-c-data-list__item--BackgroundColor: #1a1e25;
-  background-color: #1a1e25;
-}
-
 html.pf-v6-theme-dark .pf-v6-c-table {
   --pf-v6-c-table__sort__button__text--Color: var(--pf-v6-global--Color--100);
   color: var(--pf-v6-global--Color--100);
-  background-color: #1a1e25;
+  background-color: #13161b;
+}
+
+html.pf-v6-theme-dark .pf-v6-c-table__expandable-row .pf-v6-c-table__expandable-row-content {
+  background-color: #13161b;
 }
 
 html.pf-v6-theme-dark .pf-v6-c-form-control {
-  --pf-v6-c-form-control--BackgroundColor: #13161b;
+  --pf-v6-c-form-control--BackgroundColor: #1b1d21;
   --pf-v6-c-form-control--disabled--BackgroundColor: var(--pf-v6-global--BorderColor--200);
   --pf-v6-c-form-control--BorderColor: var(--pf-v6-global--BorderColor--100);
   --pf-v6-c-form-control--Color: var(--pf-v6-global--Color--100);
@@ -123,6 +145,14 @@ html.pf-v6-theme-dark .ace_editor .ace_constant {
 
 html.pf-v6-theme-dark .ace_editor .ace_keyword {
   color: #cda869 !important;
+}
+
+html.pf-v6-theme-dark .ace_editor .ace_tag {
+  color: #cda869 !important;
+}
+
+html.pf-v6-theme-dark .ace_editor .ace_markup {
+  color: #8f9d6a !important;
 }
 
 html.pf-v6-theme-dark .pf-v6-c-button {
@@ -181,9 +211,9 @@ html.pf-v6-theme-dark b {
 }
 
 html.pf-v6-theme-dark .pf-v6-c-page {
-  --pf-v6-c-page--BackgroundColor: inherit;
-  --pf-v6-c-page__main-section--BackgroundColor: inherit;
-  --pf-v6-c-page__header--BackgroundColor: #000;
+  --pf-v6-c-page--BackgroundColor: #13161b;
+  --pf-v6-c-page__main-section--BackgroundColor: #13161b;
+  --pf-v6-c-page__header--BackgroundColor: #13161b;
   --pf-v6-c-page__sidebar--BackgroundColor: #13161b;
 }
 
@@ -191,7 +221,7 @@ html.pf-v6-theme-dark .pf-v6-c-login {
   --pf-v6-c-login__main--BackgroundColor: var(--pf-v6-global--BackgroundColor--200);
 }
 html.pf-v6-theme-dark .pf-v6-c-masthead {
-  background-color: #000;
+  background-color: #13161b;
 }
 
 html.pf-v6-theme-dark .pf-v6-c-breadcrumb__item-divider {
@@ -236,23 +266,31 @@ html.pf-v6-theme-dark .ascender-output-scroll {
 }
 
 html.pf-v6-theme-dark .pf-v6-c-page__main-section.pf-m-light {
-  background-color: #000;
+  background-color: #13161b;
 }
 
 html.pf-v6-theme-dark .pf-v6-c-page__main-section {
-  background-color: #000;
+  background-color: #13161b;
 }
 
 html.pf-v6-theme-dark .pf-v6-c-page__main-section:first-child {
-  background-color: #1a1e25;
+  background-color: #13161b;
 }
 
 html.pf-v6-theme-dark .pf-v6-c-toolbar {
-  --pf-v6-c-toolbar--BackgroundColor: #1a1e25;
+  --pf-v6-c-toolbar--BackgroundColor: #13161b;
 }
 
 html.pf-v6-theme-dark .pf-v6-c-pagination.pf-m-bottom {
-  background-color: #1a1e25;
+  background-color: #13161b;
+}
+
+html.pf-v6-theme-dark .pf-v6-c-menu-toggle {
+  background-color: #1b1d21;
+}
+
+html.pf-v6-theme-dark .pf-v6-c-menu-toggle.pf-m-primary {
+  background-color: #17b26a;
 }
 
 html.pf-v6-theme-dark .ace-tm .ace_gutter-active-line {
@@ -266,9 +304,11 @@ html.pf-v6-theme-dark .pf-v6-c-tabs__item-text {
 
 html.pf-v6-theme-dark .pf-v6-c-table thead {
   --pf-v6-c-table--cell--FontWeight: 500;
+  border-bottom: 1px #373a41 solid;
+
 }
 html.pf-v6-theme-dark .pf-v6-c-table thead th {
-  background-color: #22262f !important;
+  background-color: #13161b !important;
 }
 html.pf-v6-theme-dark .pf-v6-c-table tr > * {
   color: inherit;
@@ -296,7 +336,8 @@ html.pf-v6-theme-dark .pf-v6-c-title {
 }
 
 html.pf-v6-theme-dark .pf-v6-c-card {
-  --pf-v6-c-card--BackgroundColor: #1a1e25;
+  --pf-v6-c-card--BackgroundColor: #13161b;
+  --pf-v6-c-card--BorderStyle: none;
 }
 
 html.pf-v6-theme-dark .pf-v6-c-card__title {
@@ -306,7 +347,7 @@ html.pf-v6-theme-dark .pf-v6-c-card__title {
 
 html.pf-v6-theme-dark .pf-v6-c-data-list {
   --pf-v6-global--link--Color: inherit; 
-  --pf-v6-c-data-list__item--BackgroundColor: var(--pf-v6-global--BackgroundColor--100);
+  --pf-v6-c-data-list__item--BackgroundColor: #13161b;
   --pf-v6-c-data-list--BorderTopColor: var(--pf-v6-global--BorderColor--200);
   --pf-v6-c-data-list__item--BorderBottomColor: var(--pf-v6-global--BorderColor--200);
   --pf-v6-c-data-list__item--m-hover--BackgroundColor: var(--pf-v6-global--BorderColor--100);
@@ -657,7 +698,7 @@ html.pf-v6-theme-dark .pf-v6-c-switch__input:checked ~ .pf-v6-c-switch__toggle::
 }
 
 html.pf-v6-theme-dark [class*="FormLayout__SubFormLayout"] {
-  background-color: #000;
+  background-color: #13161b;
 }
 
 html.pf-v6-theme-dark #chart .nodes circle {
@@ -677,3 +718,22 @@ html.pf-v6-theme-dark #chart .nodes > g > text {
   fill: var(--pf-v6-global--Color--100);
 }
 
+html.pf-v6-theme-dark .legend {
+  background-color: #13161b;
+}
+
+html.pf-v6-theme-dark .tooltip {
+  background-color: #13161b;
+}
+
+html.pf-v6-theme-dark polygon {
+  --pf-t--global--background--color--200: rgba(0,0,0,0);
+}
+
+html.pf-v6-theme-dark .pf-v6-c-wizard__main-body {
+  background-color: #13161b;
+}
+
+html.pf-v6-theme-dark .pf-v6-c-wizard__header {
+  background-color: #13161b;
+}

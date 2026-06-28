@@ -389,7 +389,7 @@ function MeshGraph({
         svg
           .select(`circle.id-${n.id}`)
           .attr('stroke-width', '5px')
-          .attr('stroke', '#0066CC');
+          .attr('stroke', '#17b26a');
         setIsNodeSelected(true);
         setSelectedNode(n);
       }

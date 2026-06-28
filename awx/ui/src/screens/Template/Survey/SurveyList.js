@@ -103,7 +103,7 @@ function SurveyList({
         <Table ouiaId="survey-list">
           <Thead>
             <Tr ouiaId="survey-table-header">
-              <Th />
+              <Th screenReaderText={t`Row select`} />
               <Th dataLabel={t`Name`}>{t`Name`}</Th>
               <Th dataLabel={t`Type`}>{t`Type`}</Th>
               <Th dataLabel={t`Default`}>{t`Default`}</Th>

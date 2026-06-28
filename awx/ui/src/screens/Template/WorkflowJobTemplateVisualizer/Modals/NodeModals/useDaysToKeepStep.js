@@ -12,7 +12,7 @@ export default function useDaysToKeepStep() {
   const [, daysToKeepMeta] = useField('daysToKeep');
 
   return {
-    step: getStep(t, nodeResourceMeta, daysToKeepMeta),
+    step: getStep(t`Days to keep`, nodeResourceMeta, daysToKeepMeta),
     initialValues: { daysToKeep: 30 },
     isReady: true,
     contentError: null,
@@ -23,7 +23,7 @@ export default function useDaysToKeepStep() {
     validate: () => {},
   };
 }
-function getStep(t, nodeResourceMeta, daysToKeepMeta) {
+function getStep(label, nodeResourceMeta, daysToKeepMeta) {
   if (
     ['cleanup_activitystream', 'cleanup_jobs'].includes(
       nodeResourceMeta?.value?.job_type
@@ -33,7 +33,7 @@ function getStep(t, nodeResourceMeta, daysToKeepMeta) {
       id: STEP_ID,
       name: (
         <StepName hasErrors={!!daysToKeepMeta.error} id="days-to-keep-step">
-          {t`Days to keep`}
+          {label}
         </StepName>
       ),
       component: <DaysToKeepStep />,

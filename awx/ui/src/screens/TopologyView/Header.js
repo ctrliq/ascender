@@ -56,9 +56,7 @@ const Header = ({
               icon={<RedoAltIcon />}
               onClick={refresh}
               isDisabled={!showZoomControls}
-            >
-              <RedoAltIcon />
-            </Button>
+            />
           </Tooltip>
           <Tooltip content={t`Zoom in`} position="top">
             <Button
@@ -68,9 +66,7 @@ const Header = ({
               icon={<SearchPlusIcon />}
               onClick={zoomIn}
               isDisabled={!showZoomControls}
-            >
-              <SearchPlusIcon />
-            </Button>
+            />
           </Tooltip>
           <Tooltip content={t`Zoom out`} position="top">
             <Button
@@ -80,9 +76,7 @@ const Header = ({
               icon={<SearchMinusIcon />}
               onClick={zoomOut}
               isDisabled={!showZoomControls}
-            >
-              <SearchMinusIcon />
-            </Button>
+            />
           </Tooltip>
           <Tooltip content={t`Fit to screen`} position="top">
             <Button
@@ -92,9 +86,7 @@ const Header = ({
               icon={<ExpandArrowsAltIcon />}
               onClick={zoomFit}
               isDisabled={!showZoomControls}
-            >
-              <ExpandArrowsAltIcon />
-            </Button>
+            />
           </Tooltip>
           <Tooltip content={t`Reset zoom`} position="top">
             <Button
@@ -104,9 +96,7 @@ const Header = ({
               icon={<ExpandIcon />}
               onClick={resetZoom}
               isDisabled={!showZoomControls}
-            >
-              <ExpandIcon />
-            </Button>
+            />
           </Tooltip>
           <Tooltip content={t`Toggle legend`} position="top">
             <Switch
