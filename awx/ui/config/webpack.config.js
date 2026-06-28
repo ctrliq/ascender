@@ -333,6 +333,16 @@ module.exports = function (webpackEnv) {
           resolve: { fullySpecified: false },
         },
         {
+          // PatternFly v6 ships per-component CSS via .mjs modules that
+          // `import './component.css'`. The package marks only *.css as
+          // sideEffects, so webpack tree-shakes the .mjs → .css imports
+          // away. Force all @patternfly/react-styles .mjs files to be
+          // treated as side-effectful so the CSS actually loads.
+          test: /\.mjs$/,
+          include: /node_modules\/@patternfly\/react-styles/,
+          sideEffects: true,
+        },
+        {
           // "oneOf" will traverse all following loaders until one will
           // match the requirements. When no loader matches it will fall
           // back to the "file" loader at the end of the loader list.
