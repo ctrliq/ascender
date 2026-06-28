@@ -151,6 +151,10 @@ html.pf-v6-theme-dark .ace_editor .ace_tag {
   color: #cda869 !important;
 }
 
+html.pf-v6-theme-dark .ace_editor .ace_markup {
+  color: #8f9d6a !important;
+}
+
 html.pf-v6-theme-dark .pf-v6-c-button {
   --pf-v6-c-button--m-primary--BackgroundColor: #12a66f;
   --pf-v6-c-button--m-primary--Color: #fff;
