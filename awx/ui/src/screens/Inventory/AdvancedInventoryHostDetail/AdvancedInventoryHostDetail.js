@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
-import { useParams } from 'routerCompat';
+import { useParams } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { CardBody } from 'components/Card';
 import { Detail, DetailList, UserDateDetail } from 'components/DetailList';

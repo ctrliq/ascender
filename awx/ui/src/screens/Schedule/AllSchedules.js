@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Routes, Route, Navigate } from 'routerCompat';
+import { Routes, Route, Navigate } from 'react-router';
 import { PageSection, Card } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
 

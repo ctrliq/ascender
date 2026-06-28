@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
 import { useLocation } from 'react-router';
-import { useNavigate, useParams } from 'routerCompat';
+import { useNavigate, useParams } from 'react-router';
 
 import { DropdownItem } from '@patternfly/react-core';
 import { GroupsAPI, InventoriesAPI } from 'api';

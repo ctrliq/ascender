@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { useNavigate, useParams } from 'routerCompat';
+import { useNavigate, useParams } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 
 import AlertModal from 'components/AlertModal';

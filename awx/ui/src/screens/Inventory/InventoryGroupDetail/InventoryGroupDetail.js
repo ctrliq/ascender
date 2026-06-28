@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { useNavigate, useParams } from 'routerCompat';
+import { useNavigate, useParams } from 'react-router';
 import { Button } from '@patternfly/react-core';
 
 import { VariablesDetail } from 'components/CodeEditor';

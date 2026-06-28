@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'routerCompat';
+import { useNavigate } from 'react-router';
 
 import { CardBody } from 'components/Card';
 import { getAddedAndRemoved } from 'util/lists';

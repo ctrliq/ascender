@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useLocation } from 'react-router';
-import { useParams } from 'routerCompat';
+import { useParams } from 'react-router';
 
 import useExpanded from 'hooks/useExpanded';
 import DataListToolbar from 'components/DataListToolbar';

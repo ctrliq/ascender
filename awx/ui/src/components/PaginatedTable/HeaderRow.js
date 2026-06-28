@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router';
-import { useNavigate } from 'routerCompat';
+import { useNavigate } from 'react-router';
 import { Thead, Tr, Th as PFTh } from '@patternfly/react-table';
 import styled from 'styled-components';
 import { parseQueryString, updateQueryString } from 'util/qs';

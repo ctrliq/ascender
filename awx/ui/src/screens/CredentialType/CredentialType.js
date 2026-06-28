@@ -6,7 +6,7 @@ import {
   Navigate,
   useLocation,
   useParams,
-} from 'routerCompat';
+} from 'react-router';
 
 import { useLingui } from '@lingui/react/macro';
 import { Card, PageSection } from '@patternfly/react-core';

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useLocation } from 'react-router';
-import { useParams } from 'routerCompat';
+import { useParams } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
 
 import useRequest, {

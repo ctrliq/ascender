@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
-import { Routes, Route } from 'routerCompat';
+import { Routes, Route } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import {
 	Alert,

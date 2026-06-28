@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useLocation } from 'routerCompat';
+import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
 import { ExecutionEnvironmentsAPI } from 'api';

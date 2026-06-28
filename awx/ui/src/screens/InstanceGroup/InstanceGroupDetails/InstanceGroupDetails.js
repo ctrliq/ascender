@@ -3,7 +3,7 @@ import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
 import { Link } from 'react-router';
-import { useNavigate } from 'routerCompat';
+import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 import { Button } from '@patternfly/react-core';
 

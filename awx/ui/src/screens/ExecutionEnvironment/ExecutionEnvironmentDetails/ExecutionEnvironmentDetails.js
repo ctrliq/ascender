@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
-import { useNavigate } from 'routerCompat';
+import { useNavigate } from 'react-router';
 import { Button, Label } from '@patternfly/react-core';
 
 import AlertModal from 'components/AlertModal';

@@ -75,7 +75,6 @@
     "file-loader": "^6.2.0",
     "fs-extra": "^11.3.5",
     "globals": "^17.4.0",
-    "history": "^5.3.0",
     "html-webpack-plugin": "^5.6.7",
     "http-proxy-middleware": "4.1.1",
     "inject-manifest-plugin": "^0.6.5",
@@ -173,6 +172,7 @@
       "<rootDir>/src"
     ],
     "moduleNameMapper": {
+      "^history$": "<rootDir>/testUtils/historyShim.js",
       "^react-native$": "react-native-web",
       "^.+\\.module\\.(css|sass|scss)$": "<rootDir>/config/jest/cssModulesTransform.js"
     },

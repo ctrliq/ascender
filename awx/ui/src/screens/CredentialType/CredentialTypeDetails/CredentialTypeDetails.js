@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 
 import { Link } from 'react-router';
-import { useNavigate } from 'routerCompat';
+import { useNavigate } from 'react-router';
 import { Button } from '@patternfly/react-core';
 
 import { VariablesDetail } from 'components/CodeEditor';
