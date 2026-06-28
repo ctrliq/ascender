@@ -61,9 +61,13 @@ function TopologyView() {
           </Card>
         </PageSection>
       ) : (
-        <PageSection hasBodyWrapper={false}>
-          <Card style={{ height: '100%' }}>
-            <CardBody>
+        <PageSection
+          hasBodyWrapper={false}
+          isFilled
+          style={{ display: 'flex', flexDirection: 'column' }}
+        >
+          <Card style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+            <CardBody style={{ flex: 1 }}>
               {!isLoading && (
                 <MeshGraph
                   data={meshData}

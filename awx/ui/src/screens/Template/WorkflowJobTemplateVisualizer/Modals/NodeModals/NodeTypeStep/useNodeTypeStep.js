@@ -34,7 +34,7 @@ export default function useNodeTypeStep(nodeToEdit) {
 
   return {
     step: getStep(
-      t,
+      t`Node type`,
       nodeTypeField,
       approvalNameField,
       nodeResourceField,
@@ -52,7 +52,7 @@ export default function useNodeTypeStep(nodeToEdit) {
   };
 }
 function getStep(
-  t,
+  label,
   nodeTypeField,
   approvalNameField,
   nodeResourceField,
@@ -75,7 +75,7 @@ function getStep(
     id: STEP_ID,
     name: (
       <StepName hasErrors={formError} id="node-type-step">
-        {t`Node type`}
+        {label}
       </StepName>
     ),
     component: (

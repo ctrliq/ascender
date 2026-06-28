@@ -11,7 +11,7 @@ export default function useRunTypeStep(askLinkType) {
   const [, meta] = useField('linkType');
 
   return {
-    step: getStep(t, askLinkType, meta),
+    step: getStep(t`Run type`, askLinkType, meta),
     initialValues: askLinkType ? { linkType: 'success' } : {},
     isReady: true,
     contentError: null,
@@ -22,7 +22,7 @@ export default function useRunTypeStep(askLinkType) {
     validate: () => {},
   };
 }
-function getStep(t, askLinkType, meta) {
+function getStep(label, askLinkType, meta) {
   if (!askLinkType) {
     return null;
   }
@@ -30,7 +30,7 @@ function getStep(t, askLinkType, meta) {
     id: STEP_ID,
     name: (
       <StepName hasErrors={false} id="run-type-step">
-        {t`Run type`}
+        {label}
       </StepName>
     ),
     component: <RunStep />,

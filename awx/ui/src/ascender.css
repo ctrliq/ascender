@@ -81,11 +81,12 @@
 
 #page-sidebar {
   line-height: 9px !important;
+  border-right: 1px solid #22262f;
 }
 
 #page-sidebar .pf-v6-c-nav__link {
-  padding-bottom: 8px !important;
-  padding-top: 8px !important;
+  padding-bottom: 2px !important;
+  padding-top: 2px !important;
 }
 
 /* https://github.com/rsms/inter/tree/v4.1 */
@@ -267,6 +268,12 @@ input[type="checkbox"] {
   border: none !important;
   border-radius: 0 !important;
   background-color: transparent !important;
+  /* PF v6 defaults this grid item to align-self: start, which shrinks it to
+     content height and breaks full-height pages (e.g. Topology View). Stretch
+     it to fill its grid row so height: 100% / isFilled cascades correctly. */
+  --pf-v6-c-page__main-container--AlignSelf: stretch;
+  align-self: stretch !important;
+  min-height: 0;
 }
 
 /* Title section card appearance */
@@ -308,8 +315,12 @@ input[type="checkbox"] {
 }
 
 /* Nav active item green accent */
-.pf-v6-c-nav .pf-v6-c-nav__item::before {
+/* .pf-v6-c-nav .pf-v6-c-nav__item::before {
   background-color: #12a66f;
+} */
+
+.pf-v6-c-nav__item:has(> .pf-v6-c-nav__link.pf-m-current) {
+  --pf-v6-c-nav__item--accent--ScaleY: 0 !important;
 }
 
 /* Brand and link colors — green instead of PF6 default blue */
@@ -325,17 +336,13 @@ input[type="checkbox"] {
   --pf-t--global--text-decoration--color--hover: #0e8c5d;
 }
 
+a {
+    text-decoration: none !important;
+}
+
 /* Link underline — uniform dotted green via background-image (text links in table rows only) */
 .pf-v6-c-table tbody a:not(.pf-v6-c-button):not(.pf-v6-c-label):not([class*="StatusLabel"]):not(:has(.pf-v6-c-label)) {
   text-decoration: none !important;
-  background-image: linear-gradient(to right, var(--pf-t--global--text--color--link--default) 2px, transparent 2px);
-  background-repeat: repeat-x;
-  background-size: 6px 1px;
-  background-position: bottom;
-  padding-bottom: 1px;
-}
-.pf-v6-c-table tbody a:not(.pf-v6-c-button):not(.pf-v6-c-label):not([class*="StatusLabel"]):not(:has(.pf-v6-c-label)):hover {
-  background-image: linear-gradient(to right, var(--pf-t--global--text--color--link--hover) 2px, transparent 2px);
 }
 
 /* No underline on status badges or action icons in tables */
@@ -468,3 +475,8 @@ input[type="checkbox"] {
   margin-top: var(--pf-v6-global--spacer--sm);
   padding-top: var(--pf-v6-global--spacer--sm);
 }
+
+.pf-v6-c-page__main-container {
+	margin-inline-end: 0px !important;
+}
+

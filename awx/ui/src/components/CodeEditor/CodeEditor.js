@@ -31,7 +31,7 @@ const FocusWrapper = styled.div`
 `;
 
 const AceEditor = styled(ReactAce)`
-  font-family: var(--pf-v6-global--FontFamily--monospace);
+  font-family: var(--pf-t--global--font--family--mono, monospace);
   max-height: 90vh;
 
   & .ace_marker-layer .ace_active-line {
