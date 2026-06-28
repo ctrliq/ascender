@@ -105,13 +105,11 @@ describe(parseRuleObj, () => {
     });
   });
 
-  // UNTIL without Z or TZID is ambiguous; parser treats it as UTC but
-  // expected values assume DTSTART's timezone. Needs a design decision.
-  test.skip('should parse hourly rule with end date in local time', () => {
+  test('should parse hourly rule with end date in local time', () => {
     const schedule = {
       rrule:
         'DTSTART;TZID=US/Eastern:20220608T123000 RRULE:INTERVAL=1;FREQ=HOURLY;UNTIL=20230608T130000',
-      dtstart: '2022-06-08T16:30:00',
+      dtstart: '2022-06-08T16:30:00Z',
       timezone: 'US/Eastern',
     };
 
