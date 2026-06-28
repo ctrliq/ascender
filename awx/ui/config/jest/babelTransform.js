@@ -2,19 +2,6 @@
 
 const babelJest = require('babel-jest').default;
 
-const hasJsxRuntime = (() => {
-  if (process.env.DISABLE_NEW_JSX_TRANSFORM === 'true') {
-    return false;
-  }
-
-  try {
-    require.resolve('react/jsx-runtime');
-    return true;
-  } catch (e) {
-    return false;
-  }
-})();
-
 const importMetaTransform = () => ({
   visitor: {
     MetaProperty(path) {
@@ -26,15 +13,21 @@ const importMetaTransform = () => ({
 module.exports = babelJest.createTransformer({
   presets: [
     [
-      require.resolve('babel-preset-react-app'),
+      require.resolve('@babel/preset-env'),
       {
-        runtime: hasJsxRuntime ? 'automatic' : 'classic',
+        targets: { node: 'current' },
+      },
+    ],
+    [
+      require.resolve('@babel/preset-react'),
+      {
+        runtime: 'automatic',
       },
     ],
   ],
   plugins: [
-    require.resolve('babel-plugin-styled-components'),
-    require.resolve('@babel/plugin-syntax-import-meta'),
+    require.resolve('@lingui/babel-plugin-lingui-macro'),
+    require.resolve('../babel/jsx-compat-plugin'),
     importMetaTransform,
   ],
   babelrc: false,

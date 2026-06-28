@@ -35,14 +35,13 @@ const reactRefreshRuntimeEntry = require.resolve('react-refresh/runtime');
 const reactRefreshWebpackPluginRuntimeEntry = require.resolve(
   '@pmmmwh/react-refresh-webpack-plugin'
 );
-const babelRuntimeEntry = require.resolve('babel-preset-react-app');
+const babelRuntimeEntry = require.resolve('@babel/runtime/package.json');
 const babelRuntimeEntryHelpers = require.resolve(
-  '@babel/runtime/helpers/esm/assertThisInitialized',
-  { paths: [babelRuntimeEntry] }
+  '@babel/runtime/helpers/assertThisInitialized'
 );
-const babelRuntimeRegenerator = require.resolve('@babel/runtime/regenerator', {
-  paths: [babelRuntimeEntry],
-});
+const babelRuntimeRegenerator = require.resolve(
+  '@babel/runtime/helpers/regenerator'
+);
 
 // Some apps do not need the benefits of saving a web request, so not inlining the chunk
 // makes for a smoother build process.
@@ -366,22 +365,18 @@ module.exports = function (webpackEnv) {
               include: paths.appSrc,
               loader: require.resolve('babel-loader'),
               options: {
-                customize: require.resolve(
-                  'babel-preset-react-app/webpack-overrides'
-                ),
                 presets: [
+                  require.resolve('@babel/preset-env'),
                   [
-                    require.resolve('babel-preset-react-app'),
+                    require.resolve('@babel/preset-react'),
                     {
                       runtime: hasJsxRuntime ? 'automatic' : 'classic',
                     },
                   ],
                 ],
-                
                 plugins: [
-                  // styled-components v6 removed the babel macro; the plugin
-                  // provides the css-prop transform the codebase relies on.
-                  require.resolve('babel-plugin-styled-components'),
+                  require.resolve('@lingui/babel-plugin-lingui-macro'),
+                  require.resolve('./babel/jsx-compat-plugin'),
                   isEnvDevelopment &&
                     shouldUseReactRefresh &&
                     require.resolve('react-refresh/babel'),
@@ -405,10 +400,18 @@ module.exports = function (webpackEnv) {
                 babelrc: false,
                 configFile: false,
                 compact: false,
+                sourceType: 'unambiguous',
                 presets: [
+                  require.resolve('@babel/preset-env'),
+                ],
+                plugins: [
                   [
-                    require.resolve('babel-preset-react-app/dependencies'),
-                    { helpers: true },
+                    require.resolve('@babel/plugin-transform-runtime'),
+                    {
+                      absoluteRuntime: path.dirname(
+                        require.resolve('@babel/runtime/package.json')
+                      ),
+                    },
                   ],
                 ],
                 cacheDirectory: true,
