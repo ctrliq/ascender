@@ -3,7 +3,7 @@ import React, { useContext, useState, useEffect, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { Formik, useFormikContext } from 'formik';
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 import {
 	Button,
 	Form,
