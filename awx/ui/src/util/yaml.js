@@ -1,6 +1,9 @@
 import yaml from 'js-yaml';
 
 export function yamlToJson(yamlString) {
+  if (!yamlString || !yamlString.trim()) {
+    return '{}';
+  }
   const value = yaml.load(yamlString);
   if (!value) {
     return '{}';
