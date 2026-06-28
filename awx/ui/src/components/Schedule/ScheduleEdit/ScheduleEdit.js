@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router';
-import { useNavigate } from 'routerCompat';
+import { useLocation, useNavigate } from 'react-router';
 import { Card } from '@patternfly/react-core';
 import yaml from 'js-yaml';
 import { OrganizationsAPI, SchedulesAPI } from 'api';

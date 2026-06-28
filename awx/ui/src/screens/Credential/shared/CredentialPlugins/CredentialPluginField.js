@@ -1,7 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router';
-import { useNavigate } from 'routerCompat';
+import { useLocation, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
 import {

@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { Routes, Route } from 'routerCompat';
+import { Routes, Route } from 'react-router';
 
 import { useLingui } from '@lingui/react/macro';
 import ScreenHeader from 'components/ScreenHeader/ScreenHeader';

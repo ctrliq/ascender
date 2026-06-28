@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router';
-import { useNavigate } from 'routerCompat';
+import { useParams, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import {
 	Label, MenuToggle,

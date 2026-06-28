@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useLocation, useNavigate } from 'routerCompat';
+import { useLocation, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { TeamsAPI, UsersAPI } from 'api';
 import useSelected from 'hooks/useSelected';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { createMemoryHistory } from 'history';
 import { screen, waitFor } from '@testing-library/react';
-import { Routes, Route } from 'routerCompat';
+import { Routes, Route } from 'react-router';
 import { InventoriesAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 

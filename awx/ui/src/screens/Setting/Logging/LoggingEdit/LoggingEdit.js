@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useNavigate } from 'routerCompat';
+import { useNavigate } from 'react-router';
 
 import { useLingui } from '@lingui/react/macro';
 import { Formik } from 'formik';

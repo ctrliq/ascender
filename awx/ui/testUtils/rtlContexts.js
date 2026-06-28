@@ -14,7 +14,7 @@ import React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Router } from 'react-router';
-import { createMemoryHistory } from 'history';
+import { createMemoryHistory } from './historyShim';
 import { I18nProvider } from '@lingui/react';
 import { i18n } from '@lingui/core';
 import english from '../src/locales/en/messages';

@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { Link } from 'react-router';
-import { useNavigate, useParams } from 'routerCompat';
+import { Link, useNavigate, useParams } from 'react-router';
 import {
 	Button,
 	Content,

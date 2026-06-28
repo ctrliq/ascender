@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Routes, Route } from 'routerCompat';
+import { Routes, Route } from 'react-router';
 import ContentError from 'components/ContentError';
 import HostGroupsList from './HostGroupsList';
 

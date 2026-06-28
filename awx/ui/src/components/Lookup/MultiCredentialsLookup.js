@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { useLocation, useNavigate } from 'routerCompat';
+import { useLocation, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { ToolbarItem, Alert } from '@patternfly/react-core';
 import { CredentialsAPI, CredentialTypesAPI } from 'api';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { screen, waitFor, fireEvent, within } from '@testing-library/react';
 
-import { Routes, Route } from 'routerCompat';
+import { Routes, Route } from 'react-router';
 import { createMemoryHistory } from 'history';
 import { JobTemplatesAPI, WorkflowJobTemplatesAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';

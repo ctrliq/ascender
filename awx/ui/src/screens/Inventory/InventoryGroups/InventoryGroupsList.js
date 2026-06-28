@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useLocation } from 'react-router';
-import { useParams } from 'routerCompat';
+import { useLocation, useParams } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { Tooltip } from '@patternfly/react-core';
 import { getQSConfig, parseQueryString } from 'util/qs';

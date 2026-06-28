@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'routerCompat';
+import { useNavigate } from 'react-router';
 import { PageSection, Card } from '@patternfly/react-core';
 import useRequest from 'hooks/useRequest';
 import { CredentialsAPI, OrganizationsAPI } from 'api';

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { useNavigate } from 'routerCompat';
+import { useNavigate } from 'react-router';
 import { Formik } from 'formik';
 import { Form } from '@patternfly/react-core';
 import { CardBody } from 'components/Card';

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'routerCompat';
+import { useNavigate } from 'react-router';
 
 import { CardBody } from 'components/Card';
 import { InstanceGroupsAPI } from 'api';

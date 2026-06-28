@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useLocation } from 'routerCompat';
+import { useLocation } from 'react-router';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { FormGroup } from '@patternfly/react-core';
 import { InstanceGroupsAPI } from 'api';

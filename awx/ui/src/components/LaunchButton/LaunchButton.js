@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'routerCompat';
+import { useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import {
   AdHocCommandsAPI,

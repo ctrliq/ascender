@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'routerCompat';
+import { Routes, Route } from 'react-router';
 import { createMemoryHistory } from 'history';
 import { screen, within } from '@testing-library/react';
 import { InventoriesAPI, GroupsAPI } from 'api';

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Routes, Route } from 'routerCompat';
+import { Routes, Route } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { JobTemplatesAPI, WorkflowJobTemplatesAPI } from 'api';
 import ContentError from 'components/ContentError';

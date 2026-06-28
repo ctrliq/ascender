@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'routerCompat';
+import { Routes, Route } from 'react-router';
 import AdvancedInventoryHostList from './AdvancedInventoryHostList';
 import AdvancedInventoryHost from '../AdvancedInventoryHost';
 

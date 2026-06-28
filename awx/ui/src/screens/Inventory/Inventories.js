@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useRef } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
-import { Routes, Route, useParams } from 'routerCompat';
+import { Routes, Route, useParams } from 'react-router';
 
 import { Config } from 'contexts/Config';
 import ScreenHeader from 'components/ScreenHeader/ScreenHeader';

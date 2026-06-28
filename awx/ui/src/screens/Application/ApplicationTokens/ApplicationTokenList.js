@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { useParams, useLocation } from 'routerCompat';
+import { useParams, useLocation } from 'react-router';
 import PaginatedTable, { getSearchableKeys } from 'components/PaginatedTable';
 import { getQSConfig, parseQueryString } from 'util/qs';
 import { TokensAPI, ApplicationsAPI } from 'api';

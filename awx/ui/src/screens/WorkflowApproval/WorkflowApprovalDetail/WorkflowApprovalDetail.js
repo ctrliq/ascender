@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { Link, useParams } from 'react-router';
-import { useNavigate } from 'routerCompat';
+import { Link, useParams, useNavigate } from 'react-router';
 import styled from 'styled-components';
 import {
 	Label, Divider as PFDivider,

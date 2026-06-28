@@ -1,6 +1,6 @@
 /* eslint react/no-unused-state: 0 */
 import React, { useState, useCallback, useEffect } from 'react';
-import { useNavigate, Navigate } from 'routerCompat';
+import { useNavigate, Navigate } from 'react-router';
 
 import { JobTemplatesAPI, ProjectsAPI } from 'api';
 import { getAddedAndRemoved } from 'util/lists';
