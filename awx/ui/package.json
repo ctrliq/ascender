@@ -12,7 +12,7 @@
     "@patternfly/react-core": "^6.5.1",
     "@patternfly/react-icons": "^6.5.1",
     "@patternfly/react-table": "^6.5.1",
-    "@tanstack/react-virtual": "^3.14.3",
+    "@tanstack/react-virtual": "^3.14.4",
     "ace-builds": "^1.44.0",
     "ansi-to-html": "0.7.2",
     "d3": "7.9.0",
