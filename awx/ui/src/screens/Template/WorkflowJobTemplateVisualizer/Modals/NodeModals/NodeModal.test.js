@@ -131,7 +131,7 @@ jest.mock('@patternfly/react-core', () => {
       R.createElement('option', strip(props), children || label),
     Switch: (props) => R.createElement('input', { ...strip(props), type: 'checkbox' }),
     Checkbox: (props) => R.createElement('input', { ...strip(props), type: 'checkbox' }),
-    Form: el('form'),
+    Form: el('div'),
     Title: el('h2'),
     Tooltip: ({ children }) => children || null,
     WizardFooterWrapper: el('div'),

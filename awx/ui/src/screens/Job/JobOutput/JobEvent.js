@@ -12,22 +12,19 @@ const HIDDEN_PASSWORD_PROMPTS = [
   "BECOME password[defaults to SSH password]: "
 ];
 
-const JobEvent = React.forwardRef(
-  (
-    {
-      style,
-      lineTextHtml,
-      isClickable,
-      onJobEventClick,
-      event,
-      measure,
-      isCollapsed,
-      onToggleCollapsed,
-      hasChildren,
-      jobStatus,
-    },
-    ref
-  ) => {
+function JobEvent({
+  style,
+  lineTextHtml,
+  isClickable,
+  onJobEventClick,
+  event,
+  measure,
+  isCollapsed,
+  onToggleCollapsed,
+  hasChildren,
+  jobStatus,
+  ref,
+}) {
     const numOutputLines = lineTextHtml?.length || 0;
     useEffect(() => {
       const timeout = setTimeout(measure, 0);
@@ -88,7 +85,6 @@ const JobEvent = React.forwardRef(
         })}
       </div>
     );
-  }
-);
+}
 
 export default JobEvent;

@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
 import { Link } from 'react-router';
 import {
 	Button,
@@ -9,7 +9,7 @@ import {
 import { useLingui } from '@lingui/react/macro';
 import { useKebabifiedMenu } from 'contexts/Kebabified';
 
-const ToolbarAddButton = forwardRef(({
+function ToolbarAddButton({
   linkTo = null,
   onClick = null,
   isDisabled,
@@ -17,7 +17,8 @@ const ToolbarAddButton = forwardRef(({
   defaultLabel,
   showToggleIndicator,
   ouiaId,
-}, ref) => {
+  ref,
+}) {
   const { t } = useLingui();
   const { isKebabified } = useKebabifiedMenu();
 
@@ -77,5 +78,5 @@ const ToolbarAddButton = forwardRef(({
       </Button>
     </Tooltip>
   );
-});
+}
 export default ToolbarAddButton;

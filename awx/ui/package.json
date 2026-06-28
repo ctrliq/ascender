@@ -22,9 +22,9 @@
     "html-entities": "2.6.0",
     "js-yaml": "4.2.0",
     "luxon": "^3.7.2",
-    "react": "18.3.1",
+    "react": "19.2.7",
     "react-ace": "^14.0.1",
-    "react-dom": "18.3.1",
+    "react-dom": "19.2.7",
     "react-error-boundary": "^6.1.2",
     "react-router": "^7.18.0",
     "rrule": "2.8.1",
@@ -92,7 +92,6 @@
     "postcss-preset-env": "^7.8.3",
     "prettier": "3.8.3",
     "prompts": "^2.4.2",
-    "react-app-polyfill": "^3.0.0",
     "react-dev-utils": "^12.0.1",
     "react-refresh": "^0.18.0",
     "resolve": "^1.22.12",
@@ -151,8 +150,7 @@
       "testUtils/**/*.{js,jsx}"
     ],
     "setupFiles": [
-      "<rootDir>/config/jest/textEncoderPolyfill.js",
-      "react-app-polyfill/jsdom"
+      "<rootDir>/config/jest/textEncoderPolyfill.js"
     ],
     "setupFilesAfterEnv": [
       "<rootDir>/src/setupTests.js"
