@@ -85,7 +85,7 @@
     "jest-watch-typeahead": "^3.0.1",
     "jest-websocket-mock": "^2.5.0",
     "mini-css-extract-plugin": "^2.10.2",
-    "postcss": "^8.5.14",
+    "postcss": "^8.5.15",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-loader": "^8.2.1",
     "postcss-normalize": "^13.0.1",
