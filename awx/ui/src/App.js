@@ -205,6 +205,7 @@ function App() {
     return (
       // Don't render I18nProvider until i18n is activated
 
+      // eslint-disable-next-line i18next/no-literal-string
       <div>Loading...</div>
     );
   }
