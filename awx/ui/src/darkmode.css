@@ -60,18 +60,12 @@ html.pf-v6-theme-dark body {
 html.pf-v6-theme-dark .ascender-status-label.pf-v6-c-label.pf-m-green {
   --pf-v6-c-label--BackgroundColor: #17b26a;
 }
-html.pf-v6-theme-dark .ascender-status-label.pf-v6-c-label.pf-m-red {
-  --pf-v6-c-label--BackgroundColor: #f04438;
-}
 html.pf-v6-theme-dark .ascender-status-label.pf-v6-c-label.pf-m-blue {
   --pf-v6-c-label--BackgroundColor: #17b26a;
 }
 
 html.pf-v6-theme-dark .pf-v6-c-label.pf-m-green {
   --pf-v6-c-label--BackgroundColor: #17b26a;
-}
-html.pf-v6-theme-dark .pf-v6-c-label.pf-m-red {
-  --pf-v6-c-label--BackgroundColor: #f04438;
 }
 html.pf-v6-theme-dark .pf-v6-c-label.pf-m-blue {
   --pf-v6-c-label--BackgroundColor: #17b26a;
