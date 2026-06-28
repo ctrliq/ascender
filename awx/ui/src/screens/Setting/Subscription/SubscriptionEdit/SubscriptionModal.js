@@ -142,7 +142,7 @@ function SubscriptionModal({
         >
           <Thead>
             <Tr ouiaId="subscription-table-header">
-              <Th />
+              <Th screenReaderText={t`Row select`} />
               <Th>{t`Name`}</Th>
               <Th modifier="fitContent">{t`Managed nodes`}</Th>
               <Th modifier="fitContent">{t`Expires`}</Th>

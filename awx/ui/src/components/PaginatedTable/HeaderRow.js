@@ -2,6 +2,7 @@ import React from 'react';
 import { useLocation } from 'react-router';
 import { useNavigate } from 'routerCompat';
 import { Thead, Tr, Th as PFTh } from '@patternfly/react-table';
+import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import { parseQueryString, updateQueryString } from 'util/qs';
 
@@ -17,6 +18,7 @@ export default function HeaderRow({
   isSelectable = true,
   children,
 }) {
+  const { t } = useLingui();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -41,8 +43,8 @@ export default function HeaderRow({
   return (
     <Thead>
       <Tr ouiaId="paginated-table-header-row">
-        {isExpandable && <Th />}
-        {isSelectable && <Th />}
+        {isExpandable && <Th screenReaderText={t`Expand`} />}
+        {isSelectable && <Th screenReaderText={t`Row select`} />}
         {React.Children.map(
           children,
           (child) =>
