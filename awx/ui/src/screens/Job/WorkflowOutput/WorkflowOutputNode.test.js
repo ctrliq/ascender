@@ -189,7 +189,7 @@ describe('WorkflowOutputNode', () => {
     };
     const { container } = renderNode(runningNode);
     expect(container.querySelector('rect').getAttribute('stroke')).toBe(
-      'var(--pf-v5-global--primary-color--100)'
+      "var(--ascender-status-running-color)"
     );
   });
 
@@ -227,7 +227,7 @@ describe('WorkflowOutputNode', () => {
     };
     const { container } = renderNode(canceledNode);
     expect(container.querySelector('rect').getAttribute('stroke')).toBe(
-      'var(--pf-v5-global--palette--orange-300)'
+      "var(--ascender-status-canceled-color)"
     );
   });
 });

@@ -77,7 +77,7 @@ function FederatedInventoryFormFields({ inventory = {} }) {
         fieldId="input-inventories-lookup"
         id="input-inventories-lookup"
         label={t`Input Inventories`}
-        labelIcon={
+        labelHelp={
           <Popover
             content={t`Select the source inventories for this federated inventory. When a job is launched, hosts will be routed to each source inventory's instance group automatically.`}
           />

@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Tab, Tabs, TabTitleText } from '@patternfly/react-core';
+import {
+	Tab,
+	Tabs,
+	TabTitleText
+} from '@patternfly/react-core';
+import {
+	Modal
+} from '@patternfly/react-core/deprecated';
 import { useLingui } from '@lingui/react/macro';
 
 import { encode } from 'html-entities';

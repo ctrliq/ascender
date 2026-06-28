@@ -14,7 +14,7 @@ import styled from 'styled-components';
 const ControllsWrapper = styled.div`
   display: flex;
   height: 35px;
-  border: 1px solid var(--pf-v5-global--BorderColor--100);
+  border: 1px solid var(--pf-v6-global--BorderColor--100);
   width: 100%;
   justify-content: space-between;
 `;
@@ -46,7 +46,7 @@ const PageControls = ({
     <ControllsWrapper>
       <ExpandCollapseWrapper>
         {!isFlatMode && isTemplateJob && (
-          <Button
+          <Button icon={isAllCollapsed ? <AngleRightIcon /> : <AngleDownIcon />}
             aria-label={
               isAllCollapsed
                 ? t`Expand job events`
@@ -55,44 +55,34 @@ const PageControls = ({
             variant="plain"
             type="button"
             onClick={toggleExpandCollapseAll}
-          >
-            {isAllCollapsed ? <AngleRightIcon /> : <AngleDownIcon />}
-          </Button>
+           />
         )}
       </ExpandCollapseWrapper>
       <ScrollWrapper>
-        <Button
+        <Button icon={<AngleUpIcon />}
           ouiaId="job-output-scroll-previous-button"
           aria-label={t`Scroll previous`}
           onClick={onScrollPrevious}
           variant="plain"
-        >
-          <AngleUpIcon />
-        </Button>
-        <Button
+         />
+        <Button icon={<AngleDownIcon />}
           ouiaId="job-output-scroll-next-button"
           aria-label={t`Scroll next`}
           onClick={onScrollNext}
           variant="plain"
-        >
-          <AngleDownIcon />
-        </Button>
-        <Button
+         />
+        <Button icon={<AngleDoubleUpIcon />}
           ouiaId="job-output-scroll-first-button"
           aria-label={t`Scroll first`}
           onClick={onScrollFirst}
           variant="plain"
-        >
-          <AngleDoubleUpIcon />
-        </Button>
-        <Button
+         />
+        <Button icon={<AngleDoubleDownIcon />}
           ouiaId="job-output-scroll-last-button"
           aria-label={t`Scroll last`}
           onClick={onScrollLast}
           variant="plain"
-        >
-          <AngleDoubleDownIcon />
-        </Button>
+         />
       </ScrollWrapper>
     </ControllsWrapper>
   );

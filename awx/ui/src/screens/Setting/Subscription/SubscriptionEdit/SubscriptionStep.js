@@ -120,7 +120,7 @@ function SubscriptionStep() {
           <FileUploadField
             fieldId="subscription-manifest"
             label={t`Red Hat subscription manifest`}
-            labelIcon={
+            labelHelp={
               <Popover
                 content={
                   <Trans>
@@ -256,14 +256,12 @@ function SubscriptionStep() {
                   trigger="mouseenter focus click"
                   content={t`Clear subscription`}
                 >
-                  <Button
+                  <Button icon={<TimesIcon />}
                     onClick={() => subscriptionHelpers.setValue(null)}
                     variant="plain"
                     aria-label={t`Clear subscription selection`}
                     ouiaId="clear-subscription-selection"
-                  >
-                    <TimesIcon />
-                  </Button>
+                   />
                 </Tooltip>
               </FlexItem>
             </Flex>

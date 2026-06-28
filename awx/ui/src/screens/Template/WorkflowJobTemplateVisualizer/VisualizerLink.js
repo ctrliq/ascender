@@ -26,7 +26,7 @@ function VisualizerLink({ link, updateLinkHelp, readOnly, updateHelpText }) {
   const ref = useRef(null);
   const [hovering, setHovering] = useState(false);
   const [pathD, setPathD] = useState();
-  const [pathStroke, setPathStroke] = useState('var(--pf-v5-global--BorderColor--100)');
+  const [pathStroke, setPathStroke] = useState("var(--pf-t--global--border--color--default)");
   const [tooltipX, setTooltipX] = useState();
   const [tooltipY, setTooltipY] = useState();
   const dispatch = useContext(WorkflowDispatchContext);
@@ -100,13 +100,13 @@ function VisualizerLink({ link, updateLinkHelp, readOnly, updateHelpText }) {
 
   useEffect(() => {
     if (link.linkType === 'failure') {
-      setPathStroke('var(--pf-v5-global--danger-color--100)');
+      setPathStroke("var(--pf-t--global--color--status--danger--default)");
     }
     if (link.linkType === 'success') {
-      setPathStroke('var(--pf-v5-global--success-color--100)');
+      setPathStroke("var(--pf-t--global--color--status--success--default)");
     }
     if (link.linkType === 'always') {
-      setPathStroke('var(--pf-v5-global--primary-color--100)');
+      setPathStroke("var(--pf-t--global--color--brand--default)");
     }
   }, [link.linkType]);
 
@@ -126,7 +126,7 @@ function VisualizerLink({ link, updateLinkHelp, readOnly, updateHelpText }) {
       ref={ref}
     >
       <polygon
-        style={{ fill: 'var(--pf-v5-global--BackgroundColor--200)' }}
+        style={{ fill: "var(--pf-t--global--background--color--200)" }}
         id={`link-${link.source.id}-${link.target.id}-background`}
         opacity={hovering ? '1' : '0'}
         points={getLinkOverlayPoints(link, nodePositions)}

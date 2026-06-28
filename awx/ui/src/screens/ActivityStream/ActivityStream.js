@@ -7,7 +7,6 @@ import {
 	Card,
 	MenuToggle,
 	PageSection,
-	PageSectionVariants,
 	Select,
 	SelectGroup,
 	SelectList,
@@ -37,8 +36,6 @@ const StyledMenuToggle = styled(MenuToggle)`
 
 function ActivityStream() {
   const { t } = useLingui();
-  const { light } = PageSectionVariants;
-
   const [isTypeDropdownOpen, setIsTypeDropdownOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -137,8 +134,7 @@ function ActivityStream() {
 
   return (
     <>
-      <PageSection
-        variant={light}
+      <PageSection hasBodyWrapper={false}
         className="pf-m-condensed"
         style={{ display: 'flex', justifyContent: 'space-between' }}
       >
@@ -160,7 +156,7 @@ function ActivityStream() {
           }}
           aria-labelledby="grouped-type-select-id"
           className="activityTypeSelect"
-          ouiaId="activity-type-select"
+          data-ouia-component-id="activity-type-select"
           popperProps={{ position: 'end' }}
           isScrollable
           toggle={(toggleRef) => (
@@ -260,7 +256,7 @@ function ActivityStream() {
           </SelectGroup>
         </Select>
       </PageSection>
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <PaginatedTable
             contentError={contentError}

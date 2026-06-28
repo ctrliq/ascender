@@ -3,16 +3,14 @@ import { Link, useNavigate  } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 
 import {
-  Button,
-  Chip,
-  Label,
-  LabelGroup,
-  TextList,
-  TextListItem,
-  TextListItemVariants,
-  TextListVariants,
-  Tooltip,
+	Button,
+	Label,
+	LabelGroup,
+	Content,
+	ContentVariants,
+	Tooltip
 } from '@patternfly/react-core';
+
 import { InventoriesAPI, ConstructedInventoriesAPI } from 'api';
 import { formatDateString } from 'util/dates';
 import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails';
@@ -236,17 +234,17 @@ function ConstructedInventoryDetail({ inventory }) {
             label={t`Enabled Options`}
             dataCy="constructed-inventory-instance-group-fallback"
             value={
-              <TextList component={TextListVariants.ul}>
+              <Content component={ContentVariants.ul}>
                 {inventory.prevent_instance_group_fallback && (
-                  <TextListItem component={TextListItemVariants.li}>
+                  <Content component={ContentVariants.li}>
                     {t`Prevent Instance Group Fallback`}
                     <Popover
                       header={t`Prevent Instance Group Fallback`}
                       content={helpText.preventInstanceGroupFallback}
                     />
-                  </TextListItem>
+                  </Content>
                 )}
-              </TextList>
+              </Content>
             }
           />
         )}
@@ -261,9 +259,9 @@ function ConstructedInventoryDetail({ inventory }) {
               totalChips={inventory.summary_fields.labels?.results?.length}
             >
               {inventory.summary_fields.labels?.results?.map((l) => (
-                <Chip key={l.id} isReadOnly>
+                <Label variant="outline" key={l.id} >
                   {l.name}
-                </Chip>
+                </Label>
               ))}
             </ChipGroup>
           }

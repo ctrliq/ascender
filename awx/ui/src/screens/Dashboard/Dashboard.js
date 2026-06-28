@@ -30,7 +30,7 @@ import DashboardGraph from './DashboardGraph';
 const Counts = styled.div`
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  grid-gap: var(--pf-v5-global--spacer--lg);
+  grid-gap: var(--pf-v6-global--spacer--lg);
 
   @media (max-width: 900px) {
     grid-template-columns: repeat(3, 1fr);
@@ -43,7 +43,7 @@ const MainPageSection = styled(PageSection)`
   padding-bottom: 0;
 
   & .spacer {
-    margin-bottom: var(--pf-v5-global--spacer--lg);
+    margin-bottom: var(--pf-v6-global--spacer--lg);
   }
 `;
 
@@ -72,7 +72,7 @@ function Dashboard() {
   }, [fetchDashboardGraph]);
   if (isLoading) {
     return (
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <ContentLoading />
         </Card>
@@ -82,7 +82,7 @@ function Dashboard() {
   return (
     <>
       {config?.ui_next && (
-        <Banner variant="blue">
+        <Banner color="blue">
           <Trans>
             <p>
               <InfoCircleIcon /> A tech preview of the new {brandName} user
@@ -95,7 +95,7 @@ function Dashboard() {
         streamType="all"
         breadcrumbConfig={{ '/home': t`Dashboard` }}
       />
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Counts>
           <Count
             link="/hosts"

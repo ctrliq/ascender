@@ -11,7 +11,7 @@ function GoogleOAuth2() {
   const { t } = useLingui();
   const baseURL = '/settings/google_oauth2';
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         <Routes>
           <Route

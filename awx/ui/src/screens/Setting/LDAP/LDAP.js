@@ -21,7 +21,7 @@ function LDAP() {
   const baseURL = '/settings/ldap';
 
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         <Routes>
           <Route

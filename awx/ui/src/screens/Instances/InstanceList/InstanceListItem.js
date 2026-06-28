@@ -26,7 +26,7 @@ import ErrorDetail from 'components/ErrorDetail';
 import { Detail, DetailList } from 'components/DetailList';
 
 const Unavailable = styled.span`
-  color: var(--pf-v5-global--danger-color--200);
+  color: var(--pf-v6-global--danger-color--200);
 `;
 
 const SliderHolder = styled.div`
@@ -194,14 +194,14 @@ function InstanceListItem({
 
             <Td
               dataLabel={t`Instance group used capacity`}
-              css="--pf-v5-c-table--cell--MinWidth: 175px;"
+              css="--pf-v6-c-table--cell--MinWidth: 175px;"
             >
               {usedCapacity(instance)}
             </Td>
 
             <ActionsTd
               dataLabel={t`Actions`}
-              css="--pf-v5-c-table--cell--Width: 125px"
+              css="--pf-v6-c-table--cell--Width: 125px"
             >
               <ActionItem visible>
                 <InstanceToggle

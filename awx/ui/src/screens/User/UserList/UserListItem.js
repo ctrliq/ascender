@@ -61,15 +61,13 @@ function UserListItem({ user, isSelected, onSelect, detailUrl, rowIndex }) {
           visible={user.summary_fields.user_capabilities.edit}
           tooltip={t`Edit User`}
         >
-          <Button
+          <Button icon={<PencilAltIcon />}
             ouiaId={`${user.id}-edit-button`}
             aria-label={t`Edit User`}
             variant="plain"
             component={Link}
             to={`/users/${user.id}/edit`}
-          >
-            <PencilAltIcon />
-          </Button>
+           />
         </ActionItem>
       </ActionsTd>
     </Tr>

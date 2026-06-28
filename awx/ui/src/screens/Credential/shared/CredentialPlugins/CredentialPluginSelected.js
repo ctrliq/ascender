@@ -8,8 +8,8 @@ import CredentialChip from 'components/CredentialChip';
 const SelectedCredential = styled.div`
   display: flex;
   justify-content: space-between;
-  background-color: var(--pf-v5-global--BackgroundColor--100);
-  border-bottom-color: var(--pf-v5-global--BorderColor--200);
+  background-color: var(--pf-v6-global--BackgroundColor--100);
+  border-bottom-color: var(--pf-v6-global--BorderColor--200);
 `;
 
 const SpacedCredentialChip = styled(CredentialChip)`
@@ -35,14 +35,12 @@ function CredentialPluginSelected({
           content={t`Edit Credential Plugin Configuration`}
           position="top"
         >
-          <Button
+          <Button icon={<KeyIcon />}
             ouiaId={`credential-field-${fieldId}-edit-plugin-button`}
             aria-label={t`Edit Credential Plugin Configuration`}
             onClick={onEditPlugin}
             variant={ButtonVariant.control}
-          >
-            <KeyIcon />
-          </Button>
+           />
         </Tooltip>
       </SelectedCredential>
       <PluginHelpText>

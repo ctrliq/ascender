@@ -14,7 +14,7 @@ function MiscSystem() {
   const { me } = useConfig();
 
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         <Routes>
           <Route

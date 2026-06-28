@@ -30,12 +30,12 @@ import RevertButton from './RevertButton';
 
 const ExclamationCircleIcon = styled(PFExclamationCircleIcon)`
   && {
-    color: var(--pf-v5-global--danger-color--100);
+    color: var(--pf-v6-global--danger-color--100);
   }
 `;
 
 const FormGroup = styled(PFFormGroup)`
-  .pf-v5-c-form__group-label {
+  .pf-v6-c-form__group-label {
     display: inline-flex;
     align-items: center;
     width: 100%;
@@ -45,8 +45,8 @@ const FormGroup = styled(PFFormGroup)`
 const Selected = styled.div`
   display: flex;
   justify-content: space-between;
-  background-color: var(--pf-v5-global--BackgroundColor--100);
-  border-bottom-color: var(--pf-v5-global--BorderColor--200);
+  background-color: var(--pf-v6-global--BackgroundColor--100);
+  border-bottom-color: var(--pf-v6-global--BorderColor--200);
 `;
 
 const SettingGroup = ({
@@ -67,7 +67,7 @@ const SettingGroup = ({
     id={`${fieldId}-field`}
     isRequired={isRequired}
     label={label}
-    labelIcon={
+    labelHelp={
  <>
         <Popover
           content={popoverContent}
@@ -161,7 +161,7 @@ const BooleanField = ({
         isChecked={field.value}
         isDisabled={disabled}
         label={t`On`}
-        labelOff={t`Off`}
+
         onChange={(_event, isOn) => {
           if (needsConfirmationModal && isOn) {
             setIsModalOpen(true);
@@ -473,7 +473,7 @@ const ObjectField = ({ name, config, revertValue, isRequired = false }) => {
   ) : null;
 };
 const FileUploadIconWrapper = styled.div`
-  margin: var(--pf-v5-global--spacer--md);
+  margin: var(--pf-v6-global--spacer--md);
 `;
 const FileUploadField = ({
   name,

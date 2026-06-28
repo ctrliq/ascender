@@ -2,12 +2,14 @@ import React, { useCallback, useEffect } from 'react';
 
 import { Trans, useLingui } from '@lingui/react/macro';
 import {
-  Button,
-  EmptyState,
-  EmptyStateIcon,
-  EmptyStateBody,
-  Modal, EmptyStateHeader, EmptyStateFooter,
-  } from '@patternfly/react-core';
+	Button,
+	EmptyState,
+	EmptyStateBody,
+	EmptyStateFooter
+} from '@patternfly/react-core';
+import {
+	Modal
+} from '@patternfly/react-core/deprecated';
 import {
   Table,
   Tbody,
@@ -109,8 +111,7 @@ function SubscriptionModal({
     >
       {isLoading && <ContentLoading />}
       {!isLoading && error && (
-        <EmptyState variant="full">
-          <EmptyStateHeader titleText={<Trans>No subscriptions found</Trans>} icon={<EmptyStateIcon icon={ExclamationTriangleIcon} />} headingLevel="h3" />
+        <EmptyState  headingLevel="h3" icon={ExclamationTriangleIcon}  titleText={<Trans>No subscriptions found</Trans>} variant="full">
           <EmptyStateBody>
             <Trans>
               We were unable to locate licenses associated with this account.

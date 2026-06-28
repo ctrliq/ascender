@@ -97,7 +97,7 @@ function WorkflowJobTemplateAdd() {
   }
 
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         <CardBody>
           <WorkflowJobTemplateForm

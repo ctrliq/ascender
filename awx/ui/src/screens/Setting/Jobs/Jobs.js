@@ -11,7 +11,7 @@ function Jobs() {
   const { t } = useLingui();
   const baseURL = '/settings/jobs';
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         <Routes>
           <Route

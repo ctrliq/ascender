@@ -11,7 +11,7 @@ function Troubleshooting() {
   const { t } = useLingui();
   const baseURL = '/settings/troubleshooting';
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         <Routes>
           <Route

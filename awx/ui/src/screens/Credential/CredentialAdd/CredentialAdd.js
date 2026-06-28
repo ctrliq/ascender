@@ -123,7 +123,7 @@ function CredentialAdd({ me }) {
 
   if (error) {
     return (
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <CardBody>
             <ContentError error={error} />
@@ -134,7 +134,7 @@ function CredentialAdd({ me }) {
   }
   if (isLoading) {
     return (
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <CardBody>
             <ContentLoading />
@@ -144,7 +144,7 @@ function CredentialAdd({ me }) {
     );
   }
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         <CardBody>
           <CredentialForm

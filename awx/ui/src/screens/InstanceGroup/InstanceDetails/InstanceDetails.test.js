@@ -192,7 +192,7 @@ describe('<InstanceDetails/>', () => {
     await screen.findByRole('button', { name: 'Run health check' });
 
     expect(
-      screen.getByRole('checkbox', { name: 'Toggle instance' })
+      screen.getByRole('switch', { name: 'Toggle instance' })
     ).toBeInTheDocument();
   });
 
@@ -241,7 +241,7 @@ describe('<InstanceDetails/>', () => {
     );
     renderDetails();
     // The toggle always renders once details load; use it as a ready signal.
-    await screen.findByRole('checkbox', { name: 'Toggle instance' });
+    await screen.findByRole('switch', { name: 'Toggle instance' });
 
     expect(
       screen.queryByRole('button', { name: 'Run health check' })

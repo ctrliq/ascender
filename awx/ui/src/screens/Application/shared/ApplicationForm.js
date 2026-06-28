@@ -80,7 +80,7 @@ function ApplicationFormFields({
         fieldId="authType"
         isRequired
         label={t`Authorization grant type`}
-        labelIcon={
+        labelHelp={
         <Popover
         content={applicationHelpTextStrings.authorizationGrantType}
         />
@@ -127,7 +127,7 @@ function ApplicationFormFields({
         fieldId="clientType"
         isRequired
         label={t`Client type`}
-        labelIcon={<Popover content={applicationHelpTextStrings.clientType} />}
+        labelHelp={<Popover content={applicationHelpTextStrings.clientType} />}
       >
         <AnsibleSelect
           {...clientTypeField}

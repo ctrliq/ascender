@@ -160,10 +160,10 @@ describe('<CredentialForm />', () => {
       ).toHaveValue('');
 
       // the gce FileUpload's hidden dropzone input shares the FileUpload
-      // wrapper that also holds the browse button #credential-gce-file-browse-button
+      // wrapper that also holds the browse button #credential-gce-file-filename
       const fileInput = container
-        .querySelector('#credential-gce-file-browse-button')
-        .closest('.pf-v5-c-file-upload')
+        .querySelector('#credential-gce-file-filename')
+        .closest('.pf-v6-c-file-upload')
         .querySelector('input[type="file"]');
       const file = makeJsonFile(
         '{"client_email":"testemail@ansible.com","project_id":"test123","private_key":"-----BEGIN PRIVATE KEY-----\\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\\n-----END PRIVATE KEY-----\\n"}'
@@ -188,8 +188,8 @@ describe('<CredentialForm />', () => {
       // FileUpload — other multiline fields also render a Clear button)
       const gceClearButton = within(
         container
-          .querySelector('#credential-gce-file-browse-button')
-          .closest('.pf-v5-c-file-upload')
+          .querySelector('#credential-gce-file-filename')
+          .closest('.pf-v6-c-file-upload')
       ).getByRole('button', { name: 'Clear' });
       await user.click(gceClearButton);
       await waitFor(() =>
@@ -225,10 +225,10 @@ describe('<CredentialForm />', () => {
       ).toBeInTheDocument();
 
       // the gce FileUpload's hidden dropzone input shares the FileUpload
-      // wrapper that also holds the browse button #credential-gce-file-browse-button
+      // wrapper that also holds the browse button #credential-gce-file-filename
       const fileInput = container
-        .querySelector('#credential-gce-file-browse-button')
-        .closest('.pf-v5-c-file-upload')
+        .querySelector('#credential-gce-file-filename')
+        .closest('.pf-v6-c-file-upload')
         .querySelector('input[type="file"]');
       const file = makeJsonFile('{not good json}');
       fireEvent.change(fileInput, { target: { files: [file] } });

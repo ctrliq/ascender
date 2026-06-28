@@ -30,14 +30,12 @@ function LaunchManagementPrompt({
   return (
     <>
       <Tooltip content={t`Launch management job`} position="left">
-        <Button
+        <Button icon={<RocketIcon />}
           aria-label={t`Launch management job`}
           variant="plain"
           onClick={onClick}
           isDisabled={isLoading}
-        >
-          <RocketIcon />
-        </Button>
+         />
       </Tooltip>
       <AlertModal
         isOpen={isOpen}

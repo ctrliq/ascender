@@ -104,7 +104,7 @@ function SurveyToolbar({
               aria-label={t`Survey Toggle`}
               id="survey-toggle"
               label={t`Survey Enabled`}
-              labelOff={t`Survey Disabled`}
+
               isChecked={surveyEnabled}
               isDisabled={!canEdit}
               onChange={() => onToggleSurvey(!surveyEnabled)}

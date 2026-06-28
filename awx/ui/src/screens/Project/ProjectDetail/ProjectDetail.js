@@ -6,10 +6,8 @@ import styled from 'styled-components';
 import {
   Button,
   ClipboardCopy,
-  TextList,
-  TextListItem,
-  TextListVariants,
-  TextListItemVariants,
+  Content,
+  ContentVariants,
   Tooltip,
 } from '@patternfly/react-core';
 import { Config, useConfig } from 'contexts/Config';
@@ -35,7 +33,7 @@ import getProjectHelpText from '../shared/Project.helptext';
 import useWsProject from './useWsProject';
 
 const Label = styled.span`
-  color: var(--pf-v5-global--disabled-color--100);
+  color: var(--pf-v6-global--disabled-color--100);
 `;
 
 function ProjectDetail({ project }) {
@@ -88,41 +86,41 @@ function ProjectDetail({ project }) {
     allow_override
   ) {
     optionsList = (
-      <TextList component={TextListVariants.ul}>
+      <Content component={ContentVariants.ul}>
         {scm_clean && (
-          <TextListItem component={TextListItemVariants.li}>
+          <Content component={ContentVariants.li}>
             {t`Discard local changes before syncing`}
             <Popover content={projectHelpText.options.clean} />
-          </TextListItem>
+          </Content>
         )}
         {scm_delete_on_update && (
-          <TextListItem component={TextListItemVariants.li}>
+          <Content component={ContentVariants.li}>
             {t`Delete the project before syncing`}{' '}
             <Popover
               content={projectHelpText.options.delete}
               id="scm-delete-on-update"
             />
-          </TextListItem>
+          </Content>
         )}
         {scm_track_submodules && (
-          <TextListItem component={TextListItemVariants.li}>
+          <Content component={ContentVariants.li}>
             {t`Track submodules latest commit on branch`}{' '}
             <Popover content={projectHelpText.options.trackSubModules} />
-          </TextListItem>
+          </Content>
         )}
         {scm_update_on_launch && (
-          <TextListItem component={TextListItemVariants.li}>
+          <Content component={ContentVariants.li}>
             {t`Update revision on job launch`}{' '}
             <Popover content={projectHelpText.options.updateOnLaunch} />
-          </TextListItem>
+          </Content>
         )}
         {allow_override && (
-          <TextListItem component={TextListItemVariants.li}>
+          <Content component={ContentVariants.li}>
             {t`Allow branch override`}{' '}
             <Popover content={projectHelpText.options.allowBranchOverride} />
-          </TextListItem>
+          </Content>
         )}
-      </TextList>
+      </Content>
     );
   }
   const generateLastJobTooltip = (job) => (

@@ -19,13 +19,13 @@ import ContentLoading from 'components/ContentLoading';
 import LineChart from './shared/LineChart';
 
 const GraphCardHeader = styled(CardHeader)`
-  margin-top: var(--pf-v5-global--spacer--lg);
+  margin-top: var(--pf-v6-global--spacer--lg);
 `;
 
 const GraphCardActions = styled.div`
   display: flex;
   align-items: center;
-  gap: var(--pf-v5-global--spacer--sm);
+  gap: var(--pf-v6-global--spacer--sm);
   margin-left: initial;
   padding-left: 0;
 `;
@@ -97,7 +97,7 @@ function DashboardGraph() {
   }, [fetchDashboardGraph, periodSelection, jobTypeSelection]);
   if (isLoading) {
     return (
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <ContentLoading />
         </Card>
@@ -118,7 +118,7 @@ function DashboardGraph() {
             }}
             aria-label={t`Select period`}
             className="periodSelect"
-            ouiaId="dashboard-period-select"
+            data-ouia-component-id="dashboard-period-select"
             toggle={(toggleRef) => (
               <MenuToggle
                 ref={toggleRef}
@@ -153,7 +153,7 @@ function DashboardGraph() {
             }}
             aria-label={t`Select job type`}
             className="jobTypeSelect"
-            ouiaId="dashboard-job-type-select"
+            data-ouia-component-id="dashboard-job-type-select"
             toggle={(toggleRef) => (
               <MenuToggle
                 ref={toggleRef}

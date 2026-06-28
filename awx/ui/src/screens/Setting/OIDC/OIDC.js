@@ -11,7 +11,7 @@ function OIDC() {
   const { t } = useLingui();
   const baseURL = '/settings/oidc';
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         <Routes>
           <Route

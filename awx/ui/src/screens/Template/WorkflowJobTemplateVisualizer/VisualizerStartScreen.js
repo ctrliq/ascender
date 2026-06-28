@@ -9,21 +9,21 @@ const Button = styled(PFButton)`
   && {
     background-color: #5cb85c;
     padding: 5px 8px;
-    --pf-v5-global--FontSize--md: 14px;
+    --pf-v6-global--FontSize--md: 14px;
     margin-top: 20px;
   }
 `;
 
 const StartPanel = styled.div`
-  background-color: var(--pf-v5-global--BackgroundColor--100);
-  border: 1px solid var(--pf-v5-global--BorderColor--100);
+  background-color: var(--pf-v6-global--BackgroundColor--100);
+  border: 1px solid var(--pf-v6-global--BorderColor--100);
   padding: 60px 80px;
   text-align: center;
 `;
 
 const StartPanelWrapper = styled.div`
   align-items: center;
-  background-color: var(--pf-v5-global--BackgroundColor--200);
+  background-color: var(--pf-v6-global--BackgroundColor--200);
   display: flex;
   height: 100%;
   justify-content: center;

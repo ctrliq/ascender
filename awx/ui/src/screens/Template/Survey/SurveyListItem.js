@@ -1,6 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router';
-import { Chip, Tooltip, Button } from '@patternfly/react-core';
+import {
+	Label, Tooltip,
+	Button
+} from '@patternfly/react-core';
+
 import { useLingui } from '@lingui/react/macro';
 
 import { Tr, Td } from '@patternfly/react-table';
@@ -10,8 +14,8 @@ import ChipGroup from 'components/ChipGroup';
 import { ActionItem, ActionsTd } from 'components/PaginatedTable';
 
 const Required = styled.span`
-  color: var(--pf-v5-global--danger-color--100);
-  margin-left: var(--pf-v5-global--spacer--xs);
+  color: var(--pf-v6-global--danger-color--100);
+  margin-left: var(--pf-v6-global--spacer--xs);
 `;
 
 const SurveyActionsTd = styled(ActionsTd)`
@@ -49,7 +53,7 @@ function SurveyListItem({ canEdit, question, isChecked, onSelect, rowIndex }) {
           {question.required && (
             <Required
               aria-label={t`Required`}
-              className="pf-v5-c-form__label-required"
+              className="pf-v6-c-form__label-required"
               aria-hidden="true"
             >
               *
@@ -72,13 +76,13 @@ function SurveyListItem({ canEdit, question, isChecked, onSelect, rowIndex }) {
               ouiaId="multiselect-default-chips"
             >
               {question.default.split('\n').map((chip) => (
-                <Chip
+                <Label variant="outline"
                   key={chip}
-                  isReadOnly
-                  ouiaId={`multiselect-default-${chip}-chip`}
+
+                  data-ouia-component-id={`multiselect-default-${chip}-chip`}
                 >
                   {chip}
-                </Chip>
+                </Label>
               ))}
             </ChipGroup>
           )}
@@ -90,16 +94,14 @@ function SurveyListItem({ canEdit, question, isChecked, onSelect, rowIndex }) {
       <SurveyActionsTd dataLabel={t`Actions`}>
         <ActionItem visible={canEdit}>
           <Tooltip content={t`Edit Survey`} position="top">
-            <Button
+            <Button icon={<PencilAltIcon />}
               ouiaId={`edit-survey-${question.variable}`}
               variant="plain"
               component={Link}
               to={`survey/edit?question_variable=${encodeURIComponent(
                 question.variable
               )}`}
-            >
-              <PencilAltIcon />
-            </Button>
+             />
           </Tooltip>
         </ActionItem>
       </SurveyActionsTd>

@@ -183,7 +183,7 @@ function CredentialFormFields({ initialTypeId, credentialTypes }) {
             />
             {(filterValue || selectedLabel) && !isCredentialTypeDisabled && (
               <TextInputGroupUtilities>
-                <Button
+                <Button icon={<TimesIcon />}
                   variant="plain"
                   onClick={() => {
                     setCredentialTypeId(undefined);
@@ -191,9 +191,7 @@ function CredentialFormFields({ initialTypeId, credentialTypes }) {
                     setFilterValue('');
                   }}
                   aria-label={t`Clear`}
-                >
-                  <TimesIcon />
-                </Button>
+                 />
               </TextInputGroupUtilities>
             )}
           </TextInputGroup>

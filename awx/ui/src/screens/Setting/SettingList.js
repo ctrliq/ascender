@@ -18,6 +18,7 @@ import ContentLoading from 'components/ContentLoading/ContentLoading';
 import useBrandName from 'hooks/useBrandName';
 
 const SplitLayout = styled(PageSection)`
+  display: block;
   column-count: 1;
   column-gap: 24px;
   @media (min-width: 576px) {
@@ -29,6 +30,7 @@ const Card = styled(_Card)`
     display: inline-block;
     margin-bottom: 24px;
     width: 100%;
+    border: 1px solid var(--pf-t--global--border--color--default);
   }
 `;
 const CardHeader = styled(_CardHeader)`
@@ -39,8 +41,8 @@ const CardHeader = styled(_CardHeader)`
   }
 `;
 const CardDescription = styled.div`
-  color: var(--pf-v5-global--Color--200);
-  font-size: var(--pf-v5-global--FontSize--xs);
+  color: var(--pf-v6-global--Color--200);
+  font-size: var(--pf-v6-global--FontSize--xs);
 `;
 
 function SettingList() {
@@ -155,7 +157,7 @@ function SettingList() {
 
   if (Object.keys(config).length === 0) {
     return (
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <ContentLoading />
         </Card>

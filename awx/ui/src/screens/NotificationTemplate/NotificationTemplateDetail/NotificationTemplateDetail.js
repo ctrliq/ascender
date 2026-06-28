@@ -3,11 +3,9 @@ import { Link } from 'react-router';
 import { useNavigate } from 'routerCompat';
 import {
   Button,
-  TextList,
-  TextListItem,
-  TextListItemVariants,
-  TextListVariants,
-} from '@patternfly/react-core';
+  Content,
+  ContentVariants,
+  } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
 import AlertModal from 'components/AlertModal';
 import { CardBody, CardActionsRow } from 'components/Card';
@@ -91,18 +89,18 @@ function NotificationTemplateDetail({ template, defaultMessages }) {
   const renderOptionsField = configuration.use_ssl || configuration.use_tls;
 
   const renderOptions = (
-    <TextList component={TextListVariants.ul}>
+    <Content component={ContentVariants.ul}>
       {configuration.use_ssl && (
-        <TextListItem component={TextListItemVariants.li}>
+        <Content component={ContentVariants.li}>
           {t`Use SSL`}
-        </TextListItem>
+        </Content>
       )}
       {configuration.use_tls && (
-        <TextListItem component={TextListItemVariants.li}>
+        <Content component={ContentVariants.li}>
           {t`Use TLS`}
-        </TextListItem>
+        </Content>
       )}
-    </TextList>
+    </Content>
   );
 
   const {

@@ -31,7 +31,7 @@ import Popover from '../../../components/Popover/Popover';
 import RevertButton from '../../Setting/shared/RevertButton';
 
 const PasswordFormGroup = styled(FormGroup)`
-  .pf-v5-c-form__group-label {
+  .pf-v6-c-form__group-label {
     display: inline-flex;
     align-items: center;
     width: 100%;
@@ -82,7 +82,7 @@ function SecretPasswordField({
       fieldId={id}
       label={label}
       isRequired={isRequired}
-      labelIcon={
+      labelHelp={
         isEdit ? (
           <RevertButton id={name} defaultValue="" />
         ) : null
@@ -194,7 +194,7 @@ function EmailFields({ isEdit = false }) {
       <FormGroup
         fieldId="email-options"
         label={t`Email Options`}
-        labelIcon={<Popover content={helpText.emailOptions} />}
+        labelHelp={<Popover content={helpText.emailOptions} />}
       >
         <FormCheckboxLayout>
           <CheckboxField

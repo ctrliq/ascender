@@ -102,7 +102,7 @@ function TeamList() {
 
   return (
     <>
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <PaginatedTable
             contentError={contentError}

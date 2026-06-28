@@ -58,7 +58,7 @@ function ContainerGroupEdit({ instanceGroup }) {
 
   if (fetchError) {
     return (
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <CardBody>
             <ContentError error={fetchError} />

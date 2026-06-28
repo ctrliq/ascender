@@ -5,10 +5,10 @@ import { useLingui } from '@lingui/react/macro';
 import { Badge, Tooltip } from '@patternfly/react-core';
 
 const BarWrapper = styled.div`
-  background-color: var(--pf-v5-global--BackgroundColor--200);
+  background-color: var(--pf-v6-global--BackgroundColor--200);
   display: flex;
   height: 5px;
-  margin-top: 16px;
+  margin-top: 0;
   width: 100%;
 `;
 
@@ -22,7 +22,7 @@ const TooltipContent = styled.div`
   align-items: center;
   display: flex;
 
-  span.pf-v5-c-badge {
+  span.pf-v6-c-badge {
     margin-left: 10px;
   }
 `;

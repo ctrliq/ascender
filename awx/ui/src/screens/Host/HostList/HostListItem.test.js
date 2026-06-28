@@ -73,7 +73,7 @@ describe('<HostsListItem />', () => {
   test('should display host toggle', () => {
     renderItem(mockHost);
     expect(
-      screen.getByRole('checkbox', { name: 'Toggle host' })
+      screen.getByRole('switch', { name: 'Toggle host' })
     ).toBeInTheDocument();
   });
 });

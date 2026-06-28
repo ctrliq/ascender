@@ -4,10 +4,8 @@ import { useNavigate } from 'routerCompat';
 import { useLingui } from '@lingui/react/macro';
 import {
   Button,
-  TextList,
-  TextListItem,
-  TextListVariants,
-  TextListItemVariants,
+  Content,
+  ContentVariants,
   Tooltip,
 } from '@patternfly/react-core';
 import AlertModal from 'components/AlertModal';
@@ -124,30 +122,30 @@ function InventorySourceDetail({ inventorySource }) {
   let optionsList = '';
   if (overwrite || overwrite_vars || update_on_launch) {
     optionsList = (
-      <TextList component={TextListVariants.ul}>
+      <Content component={ContentVariants.ul}>
         {overwrite && (
-          <TextListItem component={TextListItemVariants.li}>
+          <Content component={ContentVariants.li}>
             {t`Overwrite local groups and hosts from remote inventory source`}
             <Popover content={helpText.subFormOptions.overwrite} />
-          </TextListItem>
+          </Content>
         )}
         {overwrite_vars && (
-          <TextListItem component={TextListItemVariants.li}>
+          <Content component={ContentVariants.li}>
             {t`Overwrite local variables from remote inventory source`}
             <Popover content={helpText.subFormOptions.overwriteVariables} />
-          </TextListItem>
+          </Content>
         )}
         {update_on_launch && (
-          <TextListItem component={TextListItemVariants.li}>
+          <Content component={ContentVariants.li}>
             {t`Update on launch`}
             <Popover
               content={helpText.subFormOptions.updateOnLaunch({
                 value: source_project,
               })}
             />
-          </TextListItem>
+          </Content>
         )}
-      </TextList>
+      </Content>
     );
   }
 

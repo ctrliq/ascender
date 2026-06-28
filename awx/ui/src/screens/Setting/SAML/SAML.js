@@ -11,7 +11,7 @@ function SAML() {
   const { t } = useLingui();
   const baseURL = '/settings/saml';
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         <Routes>
           <Route

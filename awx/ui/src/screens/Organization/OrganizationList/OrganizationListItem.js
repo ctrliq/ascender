@@ -47,15 +47,13 @@ function OrganizationListItem({
           visible={organization.summary_fields.user_capabilities.edit}
           tooltip={t`Edit Organization`}
         >
-          <Button
+          <Button icon={<PencilAltIcon />}
             ouiaId={`${organization.id}-edit-button`}
             aria-label={t`Edit Organization`}
             variant="plain"
             component={Link}
             to={`/organizations/${organization.id}/edit`}
-          >
-            <PencilAltIcon />
-          </Button>
+           />
         </ActionItem>
       </ActionsTd>
     </Tr>

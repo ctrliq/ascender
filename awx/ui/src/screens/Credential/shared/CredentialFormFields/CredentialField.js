@@ -55,7 +55,7 @@ function CredentialInput({
                 : t`Replace`
             }
           >
-            <Button
+            <Button icon={<PficonHistoryIcon />}
               id={`credential-${fieldOptions.id}-replace-button`}
               variant={ButtonVariant.control}
               aria-label={
@@ -70,9 +70,7 @@ function CredentialInput({
                   helpers.setValue('', false);
                 }
               }}
-            >
-              <PficonHistoryIcon />
-            </Button>
+             />
           </Tooltip>
         )}
     </>

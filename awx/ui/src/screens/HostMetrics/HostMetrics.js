@@ -56,7 +56,7 @@ function HostMetrics() {
   return (
     <>
       <ScreenHeader streamType="none" breadcrumbConfig={breadcrumbConfig} />
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <PaginatedTable
             contentError={error}

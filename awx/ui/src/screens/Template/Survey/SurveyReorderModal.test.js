@@ -110,8 +110,8 @@ describe('<SurveyReorderModal />', () => {
       '[data-ouia-component-id="survey-preview-multiSelect-a"]'
     );
     expect(multiSelectToggle).toBeInTheDocument();
-    const toggleWrapper = multiSelectToggle.closest('.pf-v5-c-menu-toggle');
-    const labels = toggleWrapper.querySelectorAll('.pf-v5-c-label');
+    const toggleWrapper = multiSelectToggle.closest('.pf-v6-c-menu-toggle');
+    const labels = toggleWrapper.querySelectorAll('.pf-v6-c-label');
     expect(labels.length).toBe(4);
     expect(toggleWrapper).toHaveClass('pf-m-disabled');
   });
@@ -139,8 +139,32 @@ describe('<SurveyReorderModal />', () => {
     expect(onCloseOrderModal).toHaveBeenCalled();
   });
 
-  // Drag-and-drop reordering relies on the browser's native HTML5 drag events
-  // and getBoundingClientRect geometry, which jsdom does not implement. The
-  // reorder behavior is asserted via the Save callback payload above instead.
-  test.skip('reorders questions via drag and drop', () => {});
+  test('reorders questions via drag and drop', () => {
+    const onSave = jest.fn();
+    renderWithContexts(
+      <SurveyReorderModal
+        questions={questions}
+        isOrderModalOpen
+        onSave={onSave}
+      />
+    );
+
+    const rows = document.querySelectorAll('[data-ouia-component-id^="survey-order-row-"]');
+    const firstRow = rows[0];
+    const thirdRow = rows[2];
+
+    fireEvent.dragStart(firstRow, {
+      dataTransfer: { effectAllowed: '' },
+    });
+    fireEvent.dragOver(thirdRow);
+
+    fireEvent.click(
+      document.querySelector('[data-ouia-component-id="survey-order-save"]')
+    );
+
+    const reordered = onSave.mock.calls[0][0];
+    expect(reordered[0].question_name).toBe('Select Question');
+    expect(reordered[1].question_name).toBe('Text Area Question');
+    expect(reordered[2].question_name).toBe('Text Question');
+  });
 });

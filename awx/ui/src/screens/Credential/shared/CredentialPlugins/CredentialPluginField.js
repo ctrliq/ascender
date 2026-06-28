@@ -67,16 +67,14 @@ function CredentialPluginInput(props) {
           <InputGroupItem><Tooltip
             content={t`Populate field from an external secret management system`}
           >
-            <Button
+            <Button icon={<KeyIcon />}
               ouiaId={`credential-field-${fieldOptions.id}-external-button`}
               id={`credential-${fieldOptions.id}-external-button`}
               variant={ButtonVariant.control}
               aria-label={t`Populate field from an external secret management system`}
               onClick={() => setShowPluginWizard(true)}
               isDisabled={isDisabled || disableFieldAndButtons}
-            >
-              <KeyIcon />
-            </Button>
+             />
           </Tooltip></InputGroupItem>
         </InputGroup>
       )}
@@ -152,7 +150,7 @@ function CredentialPluginField({
           fieldId={`credential-${fieldOptions.id}`}
           isRequired={isRequired}
           label={fieldOptions.label}
-          labelIcon={
+          labelHelp={
           fieldOptions.help_text && (
           <Popover content={fieldOptions.help_text} />
             )

@@ -4,13 +4,12 @@ import { useNavigate } from 'routerCompat';
 
 import { useLingui } from '@lingui/react/macro';
 import {
-  Button,
-  Chip,
-  TextList,
-  TextListItem,
-  TextListItemVariants,
-  TextListVariants,
+	Label, Button,
+	Content,
+	ContentVariants,
+
 } from '@patternfly/react-core';
+
 import AlertModal from 'components/AlertModal';
 import { CardBody, CardActionsRow } from 'components/Card';
 import { DetailList, Detail, UserDateDetail } from 'components/DetailList';
@@ -67,13 +66,13 @@ function InventoryDetail({ inventory }) {
   const renderOptionsField = prevent_instance_group_fallback;
 
   const renderOptions = (
-    <TextList component={TextListVariants.ul}>
+    <Content component={ContentVariants.ul}>
       {prevent_instance_group_fallback && (
-        <TextListItem component={TextListItemVariants.li}>
+        <Content component={ContentVariants.li}>
           {t`Prevent Instance Group Fallback`}
-        </TextListItem>
+        </Content>
       )}
-    </TextList>
+    </Content>
   );
 
   if (isLoading) {
@@ -144,9 +143,9 @@ function InventoryDetail({ inventory }) {
                 totalChips={inventory.summary_fields.labels?.results?.length}
               >
                 {inventory.summary_fields.labels?.results?.map((l) => (
-                  <Chip key={l.id} isReadOnly>
+                  <Label variant="outline" key={l.id} >
                     {l.name}
-                  </Chip>
+                  </Label>
                 ))}
               </ChipGroup>
             }

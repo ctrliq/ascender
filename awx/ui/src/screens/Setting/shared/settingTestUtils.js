@@ -5,7 +5,7 @@ export function assertDetail(wrapper, label, value) {
 
 export function assertVariableDetail(wrapper, label, value) {
   expect(
-    wrapper.find(`CodeDetail[label="${label}"] .pf-v5-c-form__label`).text()
+    wrapper.find(`CodeDetail[label="${label}"] .pf-v6-c-form__label`).text()
   ).toBe(label);
   expect(
     wrapper.find(`CodeDetail[label="${label}"] CodeEditor`).prop('value')

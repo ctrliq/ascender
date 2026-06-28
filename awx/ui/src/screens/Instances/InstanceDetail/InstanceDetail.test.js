@@ -173,7 +173,7 @@ describe('<InstanceDetail/>', () => {
     await screen.findByText('awx_1');
     // InstanceToggle renders a PF Switch (a checkbox) labelled "Toggle instance".
     expect(
-      screen.getByRole('checkbox', { name: 'Toggle instance' })
+      screen.getByRole('switch', { name: 'Toggle instance' })
     ).toBeInTheDocument();
   });
 

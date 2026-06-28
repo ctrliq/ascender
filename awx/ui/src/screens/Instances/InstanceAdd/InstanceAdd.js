@@ -28,7 +28,7 @@ function InstanceAdd() {
   };
 
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         <InstanceForm
           submitError={formError}

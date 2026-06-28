@@ -94,7 +94,7 @@ function ConstructedInventoryFormFields({ inventory = {}, options }) {
         fieldId="input-inventories-lookup"
         id="input-inventories-lookup"
         label={t`Input Inventories`}
-        labelIcon={
+        labelHelp={
           <Popover
             content={t`Select Input Inventories for the constructed inventory plugin.`}
           />

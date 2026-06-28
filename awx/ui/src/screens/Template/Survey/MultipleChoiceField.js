@@ -19,13 +19,13 @@ const InputGroup = styled(PFInputGroup)`
 `;
 
 const HelperTextWrapper = styled.div`
-  font-size: var(--pf-v5-c-form__label--FontSize);
+  font-size: var(--pf-v6-c-form__label--FontSize);
 `;
 
 const CheckIcon = styled(PFCheckIcon)`
-  color: var(--pf-v5-c-button--m-plain--disabled--Color);
+  color: var(--pf-v6-c-button--m-plain--disabled--Color);
   ${(props) =>
-    props.selected && `color: var(--pf-v5-c-button--m-secondary--active--Color)`};
+    props.selected && `color: var(--pf-v6-c-button--m-secondary--active--Color)`};
 `;
 
 const validate = (t) => (value) => {
@@ -60,7 +60,7 @@ function MultipleChoiceField({ label, tooltip }) {
           formattedChoicesHelpers.setTouched();
         }
       }}
-      labelIcon={<Popover content={tooltip} />}
+      labelHelp={<Popover content={tooltip} />}
     >
       {formattedChoicesField.value.map(({ choice, isDefault, id }, i) => (
         <InputGroup key={id}>

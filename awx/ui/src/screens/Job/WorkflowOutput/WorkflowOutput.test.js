@@ -132,7 +132,7 @@ describe('WorkflowOutput', () => {
       expect(container.querySelector('#workflow-g')).toBeInTheDocument()
     );
 
-    expect(container.querySelector('.pf-v5-c-empty-state')).not.toBeInTheDocument();
+    expect(container.querySelector('.pf-v6-c-empty-state')).not.toBeInTheDocument();
     // WorkflowStartNode renders a <g id="node-1">.
     expect(container.querySelector('#node-1')).toBeInTheDocument();
     // Each WorkflowOutputNode renders <g id="node-N"> for N > 1 (4 nodes).
@@ -157,7 +157,7 @@ describe('WorkflowOutput', () => {
 
     // ContentError renders a PF empty state with the error heading.
     await waitFor(() =>
-      expect(container.querySelector('.pf-v5-c-empty-state')).toBeInTheDocument()
+      expect(container.querySelector('.pf-v6-c-empty-state')).toBeInTheDocument()
     );
   });
 });

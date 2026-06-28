@@ -47,7 +47,7 @@ function ExecutionEnvironmentAdd() {
     });
 
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         <CardBody>
           <Config>

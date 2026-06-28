@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useField, useFormikContext } from 'formik';
-import { Switch, Text } from '@patternfly/react-core';
+import { Switch, Content } from '@patternfly/react-core';
 import { FormFullWidthLayout, SubFormLayout } from 'components/FormLayout';
 import CodeEditorField from 'components/CodeEditor/CodeEditorField';
 import { useConfig } from 'contexts/Config';
@@ -63,17 +63,19 @@ function CustomMessagesSubForm({ defaultMessages, type }) {
 
   return (
     <>
-      <Switch
-        id="toggle-custom-messages"
-        label={t`Customize messages…`}
-        isChecked={!!useCustomField.value}
-        onChange={() => useCustomHelpers.setValue(!useCustomField.value)}
-      />
+      <div style={{ gridColumn: '1 / -1' }}>
+        <Switch
+          id="toggle-custom-messages"
+          label={t`Customize messages…`}
+          isChecked={!!useCustomField.value}
+          onChange={() => useCustomHelpers.setValue(!useCustomField.value)}
+        />
+      </div>
       {useCustomField.value && (
         <SubFormLayout>
-          <Text
-            className="pf-v5-c-content"
-            css="margin-bottom: var(--pf-v5-c-content--MarginBottom)"
+          <Content component="p"
+            className="pf-v6-c-content"
+            css="margin-bottom: var(--pf-v6-c-content--MarginBottom)"
           >
             <small>
               {t`Use custom messages to change the content of
@@ -103,7 +105,7 @@ function CustomMessagesSubForm({ defaultMessages, type }) {
                 {t`Ansible Controller Documentation.`}
               </a>
             </small>
-          </Text>
+          </Content>
           <FormFullWidthLayout>
             {showMessages && (
               <CodeEditorField

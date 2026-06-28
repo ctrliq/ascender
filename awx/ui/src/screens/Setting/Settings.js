@@ -132,7 +132,7 @@ function Settings() {
 
   if (error) {
     return (
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <ContentError error={error} />
         </Card>
@@ -142,7 +142,7 @@ function Settings() {
 
   if (isLoading || !result || !me) {
     return (
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <ContentLoading />
         </Card>
@@ -190,7 +190,7 @@ function Settings() {
         <Route
           path="*"
           element={
-            <PageSection>
+            <PageSection hasBodyWrapper={false}>
               <Card>
                 <ContentError isNotFound>
                   <Link to="/settings">{t`View all settings`}</Link>

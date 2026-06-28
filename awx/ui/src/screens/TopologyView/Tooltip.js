@@ -18,9 +18,8 @@ import {
   ProgressMeasureLocation,
   ProgressSize,
   Slider,
-  TextContent,
-  Text as PFText,
-  TextVariants,
+  Content,
+  ContentVariants,
   Label,
 } from '@patternfly/react-core';
 import { DownloadIcon } from '@patternfly/react-icons';
@@ -36,7 +35,7 @@ const Wrapper = styled.div`
   right: 0;
   padding: 0 10px;
   width: 25%;
-  background-color: var(--pf-v5-global--BackgroundColor--100);
+  background-color: var(--pf-v6-global--BackgroundColor--100);
   overflow: auto;
   height: 100%;
 `;
@@ -47,9 +46,9 @@ const Button = styled(PFButton)`
     border-radius: 15px;
     padding: 0;
     font-size: 16px;
-    background-color: var(--pf-v5-global--BackgroundColor--100);
-    border: 1px solid var(--pf-v5-global--BorderColor--100);
-    color: var(--pf-v5-global--Color--100);
+    background-color: var(--pf-v6-global--BackgroundColor--100);
+    border: 1px solid var(--pf-v6-global--BorderColor--100);
+    color: var(--pf-v6-global--Color--100);
   }
 `;
 const DescriptionList = styled(PFDescriptionList)`
@@ -59,12 +58,12 @@ const DescriptionListGroup = styled(PFDescriptionListGroup)`
   align-items: center;
   margin-top: 10px;
 `;
-const Text = styled(PFText)`
+const Text = styled(Content)`
   margin: 10px 0 5px;
 `;
 
 const Unavailable = styled.span`
-  color: var(--pf-v5-global--danger-color--200);
+  color: var(--pf-v6-global--danger-color--200);
 `;
 
 const SliderHolder = styled.div`
@@ -179,18 +178,18 @@ function Tooltip({
   return (
     <Wrapper className="tooltip" data-cy="tooltip">
       {isNodeSelected === false ? (
-        <TextContent>
+        <Content>
           <Text
-            component={TextVariants.small}
-            style={{ fontWeight: 'bold', color: 'var(--pf-v5-global--Color--100)', marginTop: 0 }}
+            component={ContentVariants.small}
+            style={{ fontWeight: 'bold', color: "var(--pf-t--global--text--color--100)", marginTop: 0 }}
           >
             {t`Details`}
           </Text>
           <Divider component="div" />
-          <Text component={TextVariants.small}>
+          <Text component={ContentVariants.small}>
             {t`Click on a node icon to display the details.`}
           </Text>
-        </TextContent>
+        </Content>
       ) : (
         <>
           {updateError && (
@@ -205,15 +204,15 @@ function Tooltip({
               <ErrorDetail error={updateError} />
             </AlertModal>
           )}
-          <TextContent>
+          <Content>
             <Text
-              component={TextVariants.small}
-              style={{ fontWeight: 'bold', color: 'var(--pf-v5-global--Color--100)' }}
+              component={ContentVariants.small}
+              style={{ fontWeight: 'bold', color: "var(--pf-t--global--text--color--100)" }}
             >
               {t`Details`}
             </Text>
             <Divider component="div" />
-          </TextContent>
+          </Content>
           {isLoading && <ContentLoading />}
           {!isLoading && (
             <DescriptionList>
@@ -252,7 +251,7 @@ function Tooltip({
                     {t`Download bundle`}
                   </DescriptionListTerm>
                   <DescriptionListDescription>
-                    <PFButton
+                    <PFButton icon={<DownloadIcon />}
                       dataCy="install-bundle-download-button"
                       aria-label={t`Download Bundle`}
                       component="a"
@@ -261,9 +260,7 @@ function Tooltip({
                       target="_blank"
                       variant="secondary"
                       rel="noopener noreferrer"
-                    >
-                      <DownloadIcon />
-                    </PFButton>
+                     />
                   </DescriptionListDescription>
                 </DescriptionListGroup>
               )}

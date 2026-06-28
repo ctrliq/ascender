@@ -73,7 +73,7 @@ function ApplicationAdd({ onSuccessfulAdd }) {
     return <ContentError error={error} />;
   }
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         <CardBody>
           <ApplicationForm

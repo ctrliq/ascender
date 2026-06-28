@@ -37,15 +37,13 @@ function InventoryGroupItem({ group, isSelected, onSelect, rowIndex }) {
             visible={group.summary_fields.user_capabilities.edit}
             tooltip={t`Edit group`}
           >
-            <Button
+            <Button icon={<PencilAltIcon />}
               ouiaId={`${group.id}-edit-button`}
               aria-label={t`Edit Group`}
               variant="plain"
               component={Link}
               to={editUrl}
-            >
-              <PencilAltIcon />
-            </Button>
+             />
           </ActionItem>
         </ActionsTd>
       )}

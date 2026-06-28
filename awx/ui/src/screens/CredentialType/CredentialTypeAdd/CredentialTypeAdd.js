@@ -30,7 +30,7 @@ function CredentialTypeAdd() {
   };
 
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         <CardBody>
           <CredentialTypeForm

@@ -96,7 +96,7 @@ describe('<ApplicationForm/>', () => {
     // selecting authorization-code makes Redirect URIs required
     const redirectGroup = container
       .querySelector('#redirect_uris')
-      .closest('.pf-v5-c-form__group');
+      .closest('.pf-v6-c-form__group');
     expect(within(redirectGroup).getByText('*')).toBeInTheDocument();
   });
 
@@ -164,7 +164,7 @@ describe('<ApplicationForm/>', () => {
 
     const redirectGroup = container
       .querySelector('#redirect_uris')
-      .closest('.pf-v5-c-form__group');
+      .closest('.pf-v6-c-form__group');
     expect(within(redirectGroup).getByText('*')).toBeInTheDocument();
   });
 });

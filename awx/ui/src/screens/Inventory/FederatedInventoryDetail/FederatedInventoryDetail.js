@@ -3,11 +3,11 @@ import { Link, useNavigate  } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 
 import {
-  Button,
-  Label,
-  LabelGroup,
-  Chip,
+	Button,
+	Label,
+	LabelGroup
 } from '@patternfly/react-core';
+
 import { InventoriesAPI, FederatedInventoriesAPI } from 'api';
 import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
@@ -124,9 +124,9 @@ function FederatedInventoryDetail({ inventory }) {
               totalChips={inventory.summary_fields.labels?.results?.length}
             >
               {inventory.summary_fields.labels?.results?.map((l) => (
-                <Chip key={l.id} isReadOnly>
+                <Label variant="outline" key={l.id} >
                   {l.name}
-                </Chip>
+                </Label>
               ))}
             </ChipGroup>
           }

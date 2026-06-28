@@ -8,7 +8,7 @@ import { useLingui } from '@lingui/react/macro';
 const ButtonWrapper = styled.div`
   margin-left: auto;
   &&& {
-    --pf-v5-c-button--FontSize: var(--pf-v5-c-button--m-small--FontSize);
+    --pf-v6-c-button--FontSize: var(--pf-v6-c-button--m-small--FontSize);
   }
 `;
 

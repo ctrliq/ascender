@@ -71,7 +71,7 @@ const ManualSubForm = ({
         fieldId="project-local-path"
         isRequired
         label={t`Playbook Directory`}
-        labelIcon={<Popover content={projectHelpStrings.projectLocalPath} />}
+        labelHelp={<Popover content={projectHelpStrings.projectLocalPath} />}
       >
         <AnsibleSelect
           {...pathField}

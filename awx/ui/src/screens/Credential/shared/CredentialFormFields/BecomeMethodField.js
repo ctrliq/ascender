@@ -56,7 +56,7 @@ function BecomeMethodField({ fieldOptions, isRequired = false }) {
     <FormGroup
       fieldId={`credential-${fieldOptions.id}`}
       label={fieldOptions.label}
-      labelIcon={
+      labelHelp={
         fieldOptions.help_text && <Popover content={fieldOptions.help_text} />
       }
       isRequired={isRequired}
@@ -74,7 +74,7 @@ function BecomeMethodField({ fieldOptions, isRequired = false }) {
           setIsOpen(false);
           setFilterValue('');
         }}
-        ouiaId={`CredentialForm-${fieldOptions.id}`}
+        data-ouia-component-id={`CredentialForm-${fieldOptions.id}`}
         toggle={(toggleRef) => (
           <MenuToggle
             ref={toggleRef}
@@ -100,16 +100,14 @@ function BecomeMethodField({ fieldOptions, isRequired = false }) {
               />
               {(filterValue || becomeMethodField.value) && (
                 <TextInputGroupUtilities>
-                  <Button
+                  <Button icon={<TimesIcon />}
                     variant="plain"
                     onClick={() => {
                       helpers.setValue('');
                       setFilterValue('');
                     }}
                     aria-label={t`Clear`}
-                  >
-                    <TimesIcon />
-                  </Button>
+                   />
                 </TextInputGroupUtilities>
               )}
             </TextInputGroup>

@@ -37,7 +37,7 @@ import InstanceGroupLabels from 'components/InstanceGroupLabels';
 import RemoveInstanceButton from '../Shared/RemoveInstanceButton';
 
 const Unavailable = styled.span`
-  color: var(--pf-v5-global--danger-color--200);
+  color: var(--pf-v6-global--danger-color--200);
 `;
 
 const SliderHolder = styled.div`
@@ -218,7 +218,7 @@ function InstanceDetail({ setBreadcrumb, isK8s }) {
               label={t`Install Bundle`}
               value={
                 <Tooltip content={t`Click to download bundle`}>
-                  <Button
+                  <Button icon={<DownloadIcon />}
                     component="a"
                     size="sm"
                     href={`${instance.related?.install_bundle}`}
@@ -226,9 +226,7 @@ function InstanceDetail({ setBreadcrumb, isK8s }) {
                     variant="secondary"
                     dataCy="install-bundle-download-button"
                     rel="noopener noreferrer"
-                  >
-                    <DownloadIcon />
-                  </Button>
+                   />
                 </Tooltip>
               }
             />

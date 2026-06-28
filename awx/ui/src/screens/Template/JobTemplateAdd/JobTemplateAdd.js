@@ -121,7 +121,7 @@ function JobTemplateAdd() {
   };
 
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         <CardBody>
           <JobTemplateForm

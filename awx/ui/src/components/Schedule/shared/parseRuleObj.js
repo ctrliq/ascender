@@ -153,8 +153,15 @@ function parseRule(ruleString, schedule) {
 
   if (until) {
     options.end = 'onDate';
-    const end = DateTime.fromISO(until.toISOString());
-    const [endDate, endTime] = dateToInputDateTime(end, schedule.timezone);
+    // RFC 5545: UNTIL without Z is in DTSTART's timezone. The rrule
+    // library always parses it as UTC, so strip the Z for non-Z values
+    // so dateToInputDateTime interprets the digits in the schedule tz.
+    const untilIsUTC = /UNTIL=\d{8}T\d{6}Z/i.test(schedule.rrule);
+    const isoStr = until.toISOString();
+    const [endDate, endTime] = dateToInputDateTime(
+      untilIsUTC ? isoStr : isoStr.replace('Z', ''),
+      schedule.timezone
+    );
     options.endDate = endDate;
     options.endTime = endTime;
   } else if (count) {

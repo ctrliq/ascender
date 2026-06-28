@@ -105,13 +105,11 @@ describe(parseRuleObj, () => {
     });
   });
 
-  // TODO: do we need to support this? It's technically invalid RRULE, but the
-  // API has historically supported it as a special case (but cast to UTC?)
-  test.skip('should parse hourly rule with end date in local time', () => {
+  test('should parse hourly rule with end date in local time', () => {
     const schedule = {
       rrule:
         'DTSTART;TZID=US/Eastern:20220608T123000 RRULE:INTERVAL=1;FREQ=HOURLY;UNTIL=20230608T130000',
-      dtstart: '2022-06-08T16:30:00',
+      dtstart: '2022-06-08T16:30:00Z',
       timezone: 'US/Eastern',
     };
 

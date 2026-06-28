@@ -26,7 +26,7 @@ function AllSchedules() {
         <Route
           index
           element={
-            <PageSection>
+            <PageSection hasBodyWrapper={false}>
               <Card>
                 <ScheduleList
                   loadSchedules={loadSchedules}

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useReducer } from 'react';
+import React, { useCallback, useEffect, useMemo, useReducer } from 'react';
 import { useNavigate } from 'routerCompat';
 import { useLingui } from '@lingui/react/macro';
 
@@ -11,7 +11,6 @@ import {
 import { layoutGraph } from 'components/Workflow/WorkflowUtils';
 import AlertModal from 'components/AlertModal';
 import ContentError from 'components/ContentError';
-import ContentLoading from 'components/ContentLoading';
 import ErrorDetail from 'components/ErrorDetail';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import workflowReducer, {
@@ -25,7 +24,9 @@ import useWsWorkflowOutput from './useWsWorkflowOutput';
 const CardBody = styled(PFCardBody)`
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 240px);
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
 `;
 
 const Wrapper = styled.div`
@@ -51,7 +52,7 @@ function WorkflowOutput({ job }) {
   const { t } = useLingui();
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(workflowReducer, {}, initReducer);
-  const { contentError, isLoading, links, nodePositions, nodes } = state;
+  const { contentError, links, nodePositions, nodes } = state;
 
   const {
     request: deleteJob,
@@ -87,7 +88,7 @@ function WorkflowOutput({ job }) {
 
   // Update positions of nodes/links
   useEffect(() => {
-    if (nodes) {
+    if (nodes && nodes.length > 0) {
       const newNodePositions = {};
       const g = layoutGraph(nodes, links);
 
@@ -99,19 +100,14 @@ function WorkflowOutput({ job }) {
     }
   }, [job.id, links, nodes]);
 
-  const updatedNodes = useWsWorkflowOutput(job.id, nodes);
-
-  useEffect(() => {
-    dispatch({ type: 'SET_NODES', value: updatedNodes });
-  }, [updatedNodes]);
-
-  if (isLoading) {
-    return (
-      <CardBody>
-        <ContentLoading />
-      </CardBody>
-    );
-  }
+  // The hook owns live node data (WebSocket + recovery refetch).  Feed its
+  // return value directly into the context so the graph always renders the
+  // latest status without waiting for a reducer dispatch round-trip.
+  const liveNodes = useWsWorkflowOutput(job.id, nodes);
+  const liveState = useMemo(
+    () => (liveNodes !== nodes ? { ...state, nodes: liveNodes } : state),
+    [state, liveNodes, nodes]
+  );
 
   if (contentError) {
     return (
@@ -122,7 +118,7 @@ function WorkflowOutput({ job }) {
   }
 
   return (
-    <WorkflowStateContext.Provider value={state}>
+    <WorkflowStateContext.Provider value={liveState}>
       <WorkflowDispatchContext.Provider value={dispatch}>
         <CardBody>
           <Wrapper>

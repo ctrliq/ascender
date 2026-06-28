@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import { Link } from 'react-router';
 import { useNavigate } from 'routerCompat';
 
-import { Button, Chip } from '@patternfly/react-core';
+import {
+	Label, Button
+} from '@patternfly/react-core';
+
 import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
 
@@ -511,9 +514,9 @@ function JobDetail({ job, inventorySourceLabels }) {
                 ouiaId="job-label-chips"
               >
                 {labels.results.map((l) => (
-                  <Chip key={l.id} isReadOnly ouiaId={`job-label-${l.id}-chip`}>
+                  <Label variant="outline" key={l.id} data-ouia-component-id={`job-label-${l.id}-chip`}>
                     {l.name}
-                  </Chip>
+                  </Label>
                 ))}
               </ChipGroup>
             }
@@ -532,13 +535,13 @@ function JobDetail({ job, inventorySourceLabels }) {
                 ouiaId="job-tag-chips"
               >
                 {job.job_tags.split(',').map((jobTag) => (
-                  <Chip
+                  <Label variant="outline"
                     key={jobTag}
-                    isReadOnly
-                    ouiaId={`job-tag-${jobTag}-chip`}
+
+                    data-ouia-component-id={`job-tag-${jobTag}-chip`}
                   >
                     {jobTag}
-                  </Chip>
+                  </Label>
                 ))}
               </ChipGroup>
             }
@@ -558,13 +561,13 @@ function JobDetail({ job, inventorySourceLabels }) {
                 ouiaId="job-skip-tag-chips"
               >
                 {job.skip_tags.split(',').map((skipTag) => (
-                  <Chip
+                  <Label variant="outline"
                     key={skipTag}
-                    isReadOnly
-                    ouiaId={`job-skip-tag-${skipTag}-chip`}
+
+                    data-ouia-component-id={`job-skip-tag-${skipTag}-chip`}
                   >
                     {skipTag}
-                  </Chip>
+                  </Label>
                 ))}
               </ChipGroup>
             }

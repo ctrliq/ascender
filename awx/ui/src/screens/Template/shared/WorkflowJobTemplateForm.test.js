@@ -159,10 +159,10 @@ describe('<WorkflowJobTemplateForm/>', () => {
     // PF required marker.
     const orgLabels = screen.getAllByText('Organization');
     const orgFormGroup = orgLabels[orgLabels.length - 1].closest(
-      '.pf-v5-c-form__group'
+      '.pf-v6-c-form__group'
     );
     expect(
-      orgFormGroup.querySelector('.pf-v5-c-form__label-required')
+      orgFormGroup.querySelector('.pf-v6-c-form__label-required')
     ).toBeInTheDocument();
   });
 
@@ -182,9 +182,9 @@ describe('<WorkflowJobTemplateForm/>', () => {
     // Organization is not required when not an org admin
     const orgFormGroup = screen
       .getByText('Organization')
-      .closest('.pf-v5-c-form__group');
+      .closest('.pf-v6-c-form__group');
     expect(
-      orgFormGroup.querySelector('.pf-v5-c-form__label-required')
+      orgFormGroup.querySelector('.pf-v6-c-form__label-required')
     ).not.toBeInTheDocument();
   });
 
@@ -257,7 +257,7 @@ describe('<WorkflowJobTemplateForm/>', () => {
     // inventory FormGroup.
     const inventoryFormGroup = screen
       .getByText('Inventory')
-      .closest('.pf-v5-c-form__group');
+      .closest('.pf-v6-c-form__group');
     expect(
       within(inventoryFormGroup).queryByText('*')
     ).not.toBeInTheDocument();

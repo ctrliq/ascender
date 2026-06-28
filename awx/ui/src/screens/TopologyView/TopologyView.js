@@ -53,7 +53,7 @@ function TopologyView() {
         showZoomControls={showZoomControls}
       />
       {fetchInitialError ? (
-        <PageSection>
+        <PageSection hasBodyWrapper={false}>
           <Card>
             <CardBody>
               <ContentError error={fetchInitialError} />
@@ -61,7 +61,7 @@ function TopologyView() {
           </Card>
         </PageSection>
       ) : (
-        <PageSection>
+        <PageSection hasBodyWrapper={false}>
           <Card style={{ height: '100%' }}>
             <CardBody>
               {!isLoading && (

@@ -74,7 +74,7 @@ function ExecutionEnvironment({ setBreadcrumb }) {
 
   if (!isLoading && contentError) {
     return (
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <Card>
           <ContentError error={contentError}>
             {contentError.response?.status === 404 && (
@@ -97,7 +97,7 @@ function ExecutionEnvironment({ setBreadcrumb }) {
   }
 
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <Card>
         {cardHeader}
         {isLoading && <ContentLoading />}

@@ -80,7 +80,7 @@ const hostEventWithArray = {
 
 // The CodeEditor wraps react-ace; in jsdom it renders an .ace_editor element.
 const codeEditorCount = () =>
-  document.querySelectorAll('.ace_editor, .pf-v5-c-form-control').length;
+  document.querySelectorAll('.ace_editor, .pf-v6-c-form-control').length;
 
 // PF Tabs render each tab title as a button[role="tab"] with the given label.
 async function clickTab(user, label) {

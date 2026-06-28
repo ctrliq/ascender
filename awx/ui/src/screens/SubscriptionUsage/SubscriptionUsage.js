@@ -15,7 +15,7 @@ const MainPageSection = styled(PageSection)`
   padding-bottom: 0;
 
   & .spacer {
-    margin-bottom: var(--pf-v5-global--spacer--lg);
+    margin-bottom: var(--pf-v6-global--spacer--lg);
   }
 `;
 
@@ -26,7 +26,7 @@ function SubscriptionUsage() {
   return (
     <>
       {config?.ui_next && (
-        <Banner variant="blue">
+        <Banner color="blue">
           <Trans>
             <p>
               <InfoCircleIcon /> A tech preview of the new {brandName} user
