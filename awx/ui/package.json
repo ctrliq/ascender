@@ -43,7 +43,6 @@
     "@lingui/loader": "^6.4.0",
     "@nteract/mockument": "^1.0.4",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.6.2",
-    "@rspack/core": "^1.7.11",
     "@svgr/webpack": "^8.1.0",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
