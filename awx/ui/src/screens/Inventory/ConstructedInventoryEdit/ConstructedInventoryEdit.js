@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { useNavigate } from 'routerCompat';
+import { useNavigate } from 'react-router';
 import { ConstructedInventoriesAPI, InventoriesAPI } from 'api';
 import useRequest from 'hooks/useRequest';
 import { CardBody } from 'components/Card';

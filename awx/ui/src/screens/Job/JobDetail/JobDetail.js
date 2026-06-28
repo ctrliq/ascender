@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router';
-import { useNavigate } from 'routerCompat';
+import { Link, useNavigate } from 'react-router';
 
 import {
 	Label, Button

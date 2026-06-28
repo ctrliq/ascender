@@ -3,8 +3,7 @@
 //
 import React, { useEffect } from 'react';
 import { Table, Tbody } from '@patternfly/react-table';
-import { useLocation } from 'react-router';
-import { useNavigate } from 'routerCompat';
+import { useLocation, useNavigate } from 'react-router';
 
 import { useLingui } from '@lingui/react/macro';
 

@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { useNavigate, useParams } from 'routerCompat';
+import { useNavigate, useParams } from 'react-router';
 
 import { CardBody } from 'components/Card';
 import { TokensAPI, UsersAPI } from 'api';

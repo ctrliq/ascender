@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { useParams } from 'routerCompat';
+import { useParams } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
 import {
 	Button,

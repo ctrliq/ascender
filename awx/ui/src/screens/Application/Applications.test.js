@@ -1,7 +1,7 @@
 import React from 'react';
 import { screen, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import { Routes, Route } from 'routerCompat';
+import { Routes, Route } from 'react-router';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import Applications from './Applications';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, Navigate } from 'routerCompat';
+import { Routes, Route, Navigate } from 'react-router';
 import InstanceList from './InstanceList';
 import InstanceDetails from '../InstanceDetails';
 

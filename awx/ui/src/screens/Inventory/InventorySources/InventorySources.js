@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'routerCompat';
+import { Routes, Route } from 'react-router';
 import { Config } from 'contexts/Config';
 import InventorySource from '../InventorySource';
 import InventorySourceAdd from '../InventorySourceAdd';

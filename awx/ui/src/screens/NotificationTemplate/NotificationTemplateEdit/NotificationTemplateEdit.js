@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'routerCompat';
+import { useNavigate } from 'react-router';
 import { CardBody } from 'components/Card';
 import { NotificationTemplatesAPI } from 'api';
 import NotificationTemplateForm from '../shared/NotificationTemplateForm';

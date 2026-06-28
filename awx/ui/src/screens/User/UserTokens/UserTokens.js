@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
-import { Routes, Route } from 'routerCompat';
+import { Routes, Route } from 'react-router';
 import {
 	Alert,
 	ClipboardCopy,

@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
-import { Link } from 'react-router';
-import { useNavigate } from 'routerCompat';
+import { Link, useNavigate } from 'react-router';
 import { Button, Tooltip } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
 import { RocketIcon } from '@patternfly/react-icons';

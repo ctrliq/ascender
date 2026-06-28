@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { Routes, Route } from 'routerCompat';
+import { Routes, Route } from 'react-router';
 import PersistentFilters from 'components/PersistentFilters';
 import ScreenHeader from 'components/ScreenHeader/ScreenHeader';
 import ExecutionEnvironment from './ExecutionEnvironment';

@@ -3,7 +3,7 @@ import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
-import { Routes, Route } from 'routerCompat';
+import { Routes, Route } from 'react-router';
 import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import mockLDAP from '../../shared/data.ldapSettings.json';

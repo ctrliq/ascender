@@ -1,8 +1,7 @@
 import React, { useCallback, useState } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
-import { Routes, Route } from 'routerCompat';
-import { useLocation } from 'react-router';
+import { Routes, Route, useLocation } from 'react-router';
 import ScreenHeader from 'components/ScreenHeader';
 import PersistentFilters from 'components/PersistentFilters';
 import InstanceGroupAdd from './InstanceGroupAdd';

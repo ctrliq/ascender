@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'routerCompat';
+import { useLocation, useNavigate } from 'react-router';
 import { PageSection, Card } from '@patternfly/react-core';
 import { CardBody } from 'components/Card';
 

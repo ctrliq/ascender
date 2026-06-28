@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { useLocation } from 'routerCompat';
+import { useLocation } from 'react-router';
 import { Button, Tooltip } from '@patternfly/react-core';
 import { SyncIcon } from '@patternfly/react-icons';
 

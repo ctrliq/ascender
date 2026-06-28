@@ -1,6 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { Link, useLocation } from 'react-router';
-import { useNavigate } from 'routerCompat';
+import { Link, useLocation, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
 import { CaretLeftIcon } from '@patternfly/react-icons';

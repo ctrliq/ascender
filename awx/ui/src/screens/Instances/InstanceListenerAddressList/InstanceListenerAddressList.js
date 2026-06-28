@@ -9,7 +9,7 @@ import PaginatedTable, {
 } from 'components/PaginatedTable';
 import useToast from 'hooks/useToast';
 import { getQSConfig } from 'util/qs';
-import { useParams } from 'routerCompat';
+import { useParams } from 'react-router';
 import useRequest from 'hooks/useRequest';
 import DataListToolbar from 'components/DataListToolbar';
 import { InstancesAPI, ReceptorAPI } from 'api';
