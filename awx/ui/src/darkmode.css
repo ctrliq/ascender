@@ -293,6 +293,10 @@ html.pf-v6-theme-dark .pf-v6-c-menu-toggle {
   background-color: #1b1d21;
 }
 
+html.pf-v6-theme-dark .pf-v6-c-masthead .pf-v6-c-menu-toggle {
+  background-color: transparent;
+}
+
 html.pf-v6-theme-dark .pf-v6-c-menu-toggle.pf-m-primary {
   background-color: #17b26a;
 }
