@@ -105,8 +105,8 @@ describe(parseRuleObj, () => {
     });
   });
 
-  // TODO: do we need to support this? It's technically invalid RRULE, but the
-  // API has historically supported it as a special case (but cast to UTC?)
+  // UNTIL without Z or TZID is ambiguous; parser treats it as UTC but
+  // expected values assume DTSTART's timezone. Needs a design decision.
   test.skip('should parse hourly rule with end date in local time', () => {
     const schedule = {
       rrule:

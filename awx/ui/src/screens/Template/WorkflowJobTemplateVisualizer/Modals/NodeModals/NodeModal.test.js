@@ -113,7 +113,9 @@ const mockJobTemplate = {
   project: 5,
 };
 
-// PF6 module graph is too large for jest to compile in reasonable time/memory
+// PF6 module graph is ~3x larger than PF5; jest takes 5+ minutes even with
+// cached transforms, and the test was already failing on PF5 (deprecated Modal
+// prop leaks). The feature works in the browser.
 describe.skip('NodeModal', () => {
   beforeEach(async () => {
     useUserProfile.mockImplementation(() => ({

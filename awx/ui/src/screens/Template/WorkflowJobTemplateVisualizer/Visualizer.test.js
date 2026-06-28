@@ -409,8 +409,7 @@ describe('Visualizer', () => {
     ).toBeInTheDocument();
   });
 
-  // TODO: figure out why this test is failing, the scenario passes in the ui
-  test.skip('Error shown when saving fails due to approval template edit error', async () => {
+  test('Error shown when saving fails due to approval template edit error', async () => {
     workflowReducer.mockImplementation((state) => {
       const newState = {
         ...state,
