@@ -97,7 +97,7 @@ export default function ScheduleFormFields({
         fieldId="schedule-timezone"
         isRequired
         label={t`Local time zone`}
-        labelIcon={<Popover content={helpText.localTimeZone(config)} />}
+        labelHelp={<Popover content={helpText.localTimeZone(config)} />}
       >
         <AnsibleSelect
           id="schedule-timezone"
@@ -179,7 +179,7 @@ export default function ScheduleFormFields({
           <Title
             size="md"
             headingLevel="h4"
-            css="margin-top: var(--pf-v5-c-card--child--PaddingRight)"
+            style={{ marginTop: 'var(--pf-v6-c-card--child--PaddingRight)' }}
           >
             {t`Exceptions`}
           </Title>

@@ -13,7 +13,7 @@ export default function UnsupportedScheduleForm({ schedule, handleCancel }) {
         title={t`This schedule uses complex rules that are not supported in the\n  UI.  Please use the API to manage this schedule.`}
       />
       <b>{t`Schedule Rules`}:</b>
-      <pre css="white-space: pre; font-family: var(--pf-v5-global--FontFamily--monospace)">
+      <pre style={{ fontFamily: 'var(--pf-t--global--font--family--mono)' }}>
         {schedule.rrule.split(' ').join('\n')}
       </pre>
       <ActionGroup>

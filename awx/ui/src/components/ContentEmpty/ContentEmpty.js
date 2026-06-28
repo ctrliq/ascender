@@ -2,9 +2,7 @@ import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import {
   EmptyState,
-  EmptyStateIcon,
-  EmptyStateBody, EmptyStateHeader,
-} from '@patternfly/react-core';
+  EmptyStateBody, } from '@patternfly/react-core';
 import { CubesIcon } from '@patternfly/react-icons';
 
 const ContentEmpty = ({
@@ -15,8 +13,7 @@ const ContentEmpty = ({
 }) => {
   const { t } = useLingui();
   return (
-    <EmptyState variant="full" className={className}>
-      <EmptyStateHeader titleText={<>{title || t`No items found.`}</>} icon={<EmptyStateIcon icon={icon} />} headingLevel="h3" />
+    <EmptyState  headingLevel="h3" icon={icon}  titleText={<>{title || t`No items found.`}</>} variant="full" className={className}>
       <EmptyStateBody>{message}</EmptyStateBody>
     </EmptyState>
   );

@@ -6,8 +6,8 @@ import { Tooltip } from '@patternfly/react-core';
 import { ExclamationCircleIcon as PFExclamationCircleIcon } from '@patternfly/react-icons';
 
 const AlertText = styled.div`
-  color: var(--pf-v5-global--danger-color--200);
-  font-weight: var(--pf-v5-global--FontWeight--bold);
+  color: var(--pf-v6-global--danger-color--200);
+  font-weight: var(--pf-v6-global--FontWeight--bold);
 `;
 
 const ExclamationCircleIcon = styled(PFExclamationCircleIcon)`
@@ -27,7 +27,7 @@ function StepName({ hasErrors, children, id }) {
         content={t`This step contains errors`}
         trigger="click mouseenter focus"
       >
-        <ExclamationCircleIcon css="color: var(--pf-v5-global--danger-color--100)" />
+        <ExclamationCircleIcon style={{ color: 'var(--pf-t--global--color--status--danger--default)' }} />
       </Tooltip>
     </AlertText>
   );

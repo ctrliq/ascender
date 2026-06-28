@@ -16,7 +16,7 @@ import { ActionsTd, ActionItem, TdBreakWord } from '../../PaginatedTable';
 import { ScheduleToggle } from '..';
 
 const ExclamationTriangleIcon = styled(PFExclamationTriangleIcon)`
-  color: var(--pf-v5-global--danger-color--100);
+  color: var(--pf-v6-global--danger-color--100);
   margin-left: 20px;
 `;
 
@@ -130,16 +130,14 @@ function ScheduleListItem({
           visible={schedule.summary_fields.user_capabilities.edit}
           tooltip={t`Edit Schedule`}
         >
-          <Button
+          <Button icon={<PencilAltIcon />}
             ouiaId={`${schedule.id}-edit-button`}
             aria-label={t`Edit Schedule`}
             css="grid-column: 2"
             variant="plain"
             component={Link}
             to={`${scheduleBaseUrl}/edit`}
-          >
-            <PencilAltIcon />
-          </Button>
+           />
         </ActionItem>
       </ActionsTd>
     </Tr>

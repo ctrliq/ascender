@@ -1,5 +1,10 @@
 import React from 'react';
-import { Modal, Title } from '@patternfly/react-core';
+import {
+	Title
+} from '@patternfly/react-core';
+import {
+	Modal
+} from '@patternfly/react-core/deprecated';
 import {
   CheckCircleIcon,
   ExclamationCircleIcon,
@@ -13,8 +18,11 @@ import styled from 'styled-components';
 
 const Header = styled.div`
   display: flex;
+  align-items: center;
   svg {
     margin-right: 16px;
+    font-size: 1.5rem;
+    min-width: 1.5rem;
   }
 `;
 
@@ -30,32 +38,32 @@ function AlertModal({
   const variantIcons = {
     danger: (
       <ExclamationCircleIcon
-        size="lg"
-        css="color: var(--pf-v5-global--danger-color--100)"
+        size="xl"
+        style={{ color: 'var(--pf-t--global--color--status--danger--default)' }}
       />
     ),
     error: (
       <TimesCircleIcon
-        size="lg"
-        css="color: var(--pf-v5-global--danger-color--100)"
+        size="xl"
+        style={{ color: 'var(--pf-t--global--color--status--danger--default)' }}
       />
     ),
     info: (
       <InfoCircleIcon
-        size="lg"
-        css="color: var(--pf-v5-global--info-color--100)"
+        size="xl"
+        style={{ color: 'var(--pf-t--global--color--status--info--default)' }}
       />
     ),
     success: (
       <CheckCircleIcon
-        size="lg"
-        css="color: var(--pf-v5-global--success-color--100)"
+        size="xl"
+        style={{ color: 'var(--pf-t--global--color--status--success--default)' }}
       />
     ),
     warning: (
       <ExclamationTriangleIcon
-        size="lg"
-        css="color: var(--pf-v5-global--warning-color--100)"
+        size="xl"
+        style={{ color: 'var(--pf-t--global--color--status--warning--default)' }}
       />
     ),
   };

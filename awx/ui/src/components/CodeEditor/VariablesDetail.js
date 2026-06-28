@@ -2,19 +2,40 @@ import React, { useState } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
 import {
-  Split,
-  SplitItem,
-  TextListItemVariants,
-  Button,
-  Modal,
+	Split,
+	SplitItem,
+	Button
 } from '@patternfly/react-core';
+import {
+	Modal
+} from '@patternfly/react-core/deprecated';
 import { ExpandArrowsAltIcon } from '@patternfly/react-icons';
+import styled from 'styled-components';
 import { yamlToJson, jsonToYaml, isJsonObject, isJsonString } from 'util/yaml';
-import { DetailName, DetailValue } from '../DetailList';
 import MultiButtonToggle from '../MultiButtonToggle';
 import Popover from '../Popover';
 import CodeEditor from './CodeEditor';
 import { JSON_MODE, YAML_MODE } from './constants';
+
+const VariablesWrapper = styled.div`
+  grid-column: 1 / -1;
+  padding: 1.25rem 0 0.875rem;
+`;
+
+const VariablesLabel = styled.div`
+  font-size: var(--pf-v6-global--FontSize--xs);
+  font-weight: var(--pf-v6-global--FontWeight--bold);
+  color: var(--pf-v6-global--Color--200);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.5rem;
+`;
+
+const EditorWrapper = styled.div`
+  border: 1px solid var(--pf-v6-global--BorderColor--100);
+  border-radius: var(--pf-v6-global--BorderRadius--sm);
+  overflow: hidden;
+`;
 
 function VariablesDetail({
   dataCy = '',
@@ -63,49 +84,36 @@ function VariablesDetail({
 
   return (
     <>
-      <DetailName
-        data-cy={labelCy}
-        id={dataCy}
-        component={TextListItemVariants.dt}
-        fullWidth
-        css="grid-column: 1 / -1"
-      >
-        <ModeToggle
-          id={`${dataCy}-preview`}
-          label={label}
-          helpText={helpText}
-          dataCy={dataCy}
-          mode={mode}
-          setMode={setMode}
-          currentValue={currentValue}
-          onExpand={() => setIsExpanded(true)}
-          name={name}
-        />
-      </DetailName>
-      <DetailValue
-        data-cy={valueCy}
-        component={TextListItemVariants.dd}
-        fullWidth
-        css="grid-column: 1 / -1; margin-top: -20px"
-      >
-        <CodeEditor
-          id={`${dataCy}-preview`}
-          mode={mode}
-          value={currentValue}
-          readOnly
-          rows={rows}
-          fullHeight={fullHeight}
-          css="margin-top: 10px"
-        />
+      <VariablesWrapper>
+        <VariablesLabel data-cy={labelCy} id={dataCy}>
+          <ModeToggle
+            id={`${dataCy}-preview`}
+            label={label}
+            helpText={helpText}
+            dataCy={dataCy}
+            mode={mode}
+            setMode={setMode}
+            currentValue={currentValue}
+            onExpand={() => setIsExpanded(true)}
+            name={name}
+          />
+        </VariablesLabel>
+        <EditorWrapper data-cy={valueCy}>
+          <CodeEditor
+            id={`${dataCy}-preview`}
+            mode={mode}
+            value={currentValue}
+            readOnly
+            rows={rows}
+            fullHeight={fullHeight}
+          />
+        </EditorWrapper>
         {error && (
-          <div
-            css="color: var(--pf-v5-global--danger-color--100);
-            font-size: var(--pf-v5-global--FontSize--sm)"
-          >
+          <div style={{ color: 'var(--pf-t--global--color--status--danger--default)', marginTop: '0.5rem' }}>
             {t`Error:`} {error.message}
           </div>
         )}
-      </DetailValue>
+      </VariablesWrapper>
       <Modal
         variant="xlarge"
         title={label}
@@ -124,7 +132,7 @@ function VariablesDetail({
           </Button>,
         ]}
       >
-        <div className="pf-v5-c-form">
+        <div className="pf-v6-c-form">
           <ModeToggle
             id={`${dataCy}-preview-expanded`}
             label={label}
@@ -163,12 +171,12 @@ function ModeToggle({
   return (
     <Split hasGutter>
       <SplitItem isFilled>
-        <Split hasGutter css="align-items: baseline">
+        <Split hasGutter style={{ alignItems: 'baseline' }}>
           <SplitItem>
-            <label className="pf-v5-c-form__label" htmlFor={id}>
+            <label className="pf-v6-c-form__label" htmlFor={id}>
               <span
-                className="pf-v5-c-form__label-text"
-                css="font-weight: var(--pf-v5-global--FontWeight--bold)"
+                className="pf-v6-c-form__label-text"
+                style={{ fontWeight: 'var(--pf-t--global--font--weight--heading--bold)' }}
               >
                 {label}
               </span>
@@ -194,14 +202,12 @@ function ModeToggle({
       </SplitItem>
       {onExpand && (
         <SplitItem>
-          <Button
+          <Button icon={<ExpandArrowsAltIcon />}
             variant="plain"
             aria-label={t`Expand input`}
             onClick={onExpand}
             ouiaId={`${dataCy}-expand`}
-          >
-            <ExpandArrowsAltIcon />
-          </Button>
+           />
         </SplitItem>
       )}
     </Split>

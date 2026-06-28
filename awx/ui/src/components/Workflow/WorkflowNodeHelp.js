@@ -23,7 +23,7 @@ const ResourceDeleted = styled.p`
 `;
 
 const StyledExclamationTriangleIcon = styled(ExclamationTriangleIcon)`
-  color: var(--pf-v5-global--warning-color--100);
+  color: var(--pf-v6-global--warning-color--100);
   height: 20px;
   margin-right: 10px;
   width: 20px;

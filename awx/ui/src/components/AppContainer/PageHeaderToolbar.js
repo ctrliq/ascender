@@ -28,12 +28,24 @@ const ToolbarItems = styled.div`
   align-items: center;
   justify-content: flex-end;
   flex: 1;
-  gap: var(--pf-v5-global--spacer--xs);
+  gap: 1.25rem;
+`;
+
+const ToolbarNotificationBadge = styled(NotificationBadge)`
+  &.pf-v6-c-button.pf-m-stateful {
+    --pf-v6-c-button--m-read--BackgroundColor: transparent;
+    --pf-v6-c-button--m-read--BorderColor: transparent;
+    --pf-v6-c-button--m-read--hover--BackgroundColor: #12a66f;
+    --pf-v6-c-button--m-read--hover--BorderColor: transparent;
+    --pf-v6-c-button--m-read--m-clicked--BackgroundColor: #0e8c5d;
+    --pf-v6-c-button--m-read--m-clicked--BorderColor: transparent;
+    padding: var(--pf-v6-global--spacer--xs);
+  }
 `;
 
 const UserName = styled.span`
   margin-left: 1rem;
-  font-size: var(--pf-v5-global--FontSize--sm);
+  font-size: var(--pf-v6-global--FontSize--md);
 `;
 
 function PageHeaderToolbar({
@@ -60,10 +72,11 @@ function PageHeaderToolbar({
     const next = !isDarkMode;
     setIsDarkMode(next);
     if (next) {
-      document.documentElement.classList.add('pf-v5-theme-dark');
+      document.documentElement.classList.add('pf-v6-theme-dark');
       import('../../darkmode.css');
     } else {
-      document.documentElement.classList.remove('pf-v5-theme-dark');
+      document.documentElement.classList.remove('pf-v6-theme-dark');
+      import('../../lightmode.css');
     }
     localStorage.setItem('darkMode', next);
     window.dispatchEvent(new Event('resize'));
@@ -96,20 +109,18 @@ function PageHeaderToolbar({
   return (
     <ToolbarItems>
       <Tooltip position="bottom" content={isDarkMode ? t`Switch to light mode` : t`Switch to dark mode`}>
-        <Button
+        <Button icon={isDarkMode ? <SunIcon /> : <MoonIcon />}
           variant="plain"
           onClick={toggleDarkMode}
           aria-label={isDarkMode ? t`Switch to light mode` : t`Switch to dark mode`}
-        >
-          {isDarkMode ? <SunIcon /> : <MoonIcon />}
-        </Button>
+         />
       </Tooltip>
       <Tooltip
         position="bottom"
         content={t`Pending Workflow Approvals`}
       >
         <Link to="/workflow_approvals?workflow_approvals.status=pending">
-          <NotificationBadge
+          <ToolbarNotificationBadge
             id="toolbar-workflow-approval-badge"
             count={pendingApprovalsCount}
             variant={
@@ -129,7 +140,7 @@ function PageHeaderToolbar({
         toggle={(toggleRef) => (
           <MenuToggle
             ref={toggleRef}
-            variant="plain"
+            variant="plainText"
             onClick={() => setIsHelpOpen(!isHelpOpen)}
             isExpanded={isHelpOpen}
             aria-label={t`Info`}
@@ -168,7 +179,7 @@ function PageHeaderToolbar({
         toggle={(toggleRef) => (
           <MenuToggle
             ref={toggleRef}
-            variant="plain"
+            variant="plainText"
             onClick={() => setIsUserOpen(!isUserOpen)}
             isExpanded={isUserOpen}
             ouiaId="toolbar-user-dropdown-toggle"

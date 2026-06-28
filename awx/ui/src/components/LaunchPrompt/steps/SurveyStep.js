@@ -128,7 +128,7 @@ function MultipleChoiceField({ question }) {
       fieldId={id}
       isRequired={question.required}
       label={question.question_name}
-      labelIcon={<Popover content={question.question_description} />}
+      labelHelp={<Popover content={question.question_description} />}
     >
       <Select
         id={id}
@@ -168,7 +168,7 @@ function MultipleChoiceField({ question }) {
               />
               {(filterValue || field.value) && (
                 <TextInputGroupUtilities>
-                  <Button
+                  <Button icon={<TimesIcon />}
                     variant="plain"
                     onClick={() => {
                       helpers.setTouched(true);
@@ -176,9 +176,7 @@ function MultipleChoiceField({ question }) {
                       setFilterValue('');
                     }}
                     aria-label={t`Clear`}
-                  >
-                    <TimesIcon />
-                  </Button>
+                   />
                 </TextInputGroupUtilities>
               )}
             </TextInputGroup>
@@ -241,7 +239,7 @@ function MultiSelectField({ question }) {
       fieldId={id}
       isRequired={question.required}
       label={question.question_name}
-      labelIcon={<Popover content={question.question_description} />}
+      labelHelp={<Popover content={question.question_description} />}
     >
       <Select
         id={id}
@@ -300,7 +298,7 @@ function MultiSelectField({ question }) {
               </TextInputGroupMain>
               {(filterValue || field.value?.length > 0) && (
                 <TextInputGroupUtilities>
-                  <Button
+                  <Button icon={<TimesIcon />}
                     variant="plain"
                     onClick={() => {
                       helpers.setTouched(true);
@@ -308,9 +306,7 @@ function MultiSelectField({ question }) {
                       setFilterValue('');
                     }}
                     aria-label={t`Clear`}
-                  >
-                    <TimesIcon />
-                  </Button>
+                   />
                 </TextInputGroupUtilities>
               )}
             </TextInputGroup>

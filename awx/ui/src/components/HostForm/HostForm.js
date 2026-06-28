@@ -53,7 +53,7 @@ const InventoryLookupField = ({ isDisabled }) => {
   return (
     <FormGroup
       label={t`Inventory`}
-      labelIcon={
+      labelHelp={
         <Popover
           content={t`Select the inventory that this host will belong to.`}
         />

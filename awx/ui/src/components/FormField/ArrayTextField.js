@@ -30,7 +30,7 @@ function ArrayTextField({
       fieldId={id}
       isRequired={isRequired}
       label={label}
-      labelIcon={<Popover content={tooltip} maxWidth={tooltipMaxWidth} />}
+      labelHelp={<Popover content={tooltip} maxWidth={tooltipMaxWidth} />}
     >
       <TextArea
         id={id}

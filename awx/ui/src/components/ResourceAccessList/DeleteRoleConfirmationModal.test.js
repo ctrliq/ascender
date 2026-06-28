@@ -28,7 +28,7 @@ describe('<DeleteRoleConfirmationModal />', () => {
       screen.getByRole('dialog', { name: /Remove Team Access/ })
     ).toBeInTheDocument();
     // Body text spans two paragraphs joined by <br/>; assert the dialog body content.
-    const body = document.querySelector('.pf-v5-c-modal-box__body');
+    const body = document.querySelector('.pf-v6-c-modal-box__body');
     expect(body).toHaveTextContent(
       'Are you sure you want to remove Member access from The Team? Doing so affects all members of the team.'
     );
@@ -53,7 +53,7 @@ describe('<DeleteRoleConfirmationModal />', () => {
     expect(
       screen.getByRole('dialog', { name: /Remove User Access/ })
     ).toBeInTheDocument();
-    const body = document.querySelector('.pf-v5-c-modal-box__body');
+    const body = document.querySelector('.pf-v6-c-modal-box__body');
     expect(body).toHaveTextContent(
       'Are you sure you want to remove Member access from jane?'
     );

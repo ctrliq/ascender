@@ -79,7 +79,7 @@ describe('<Lookup />', () => {
 
   test('should remove item when X button clicked', async () => {
     const { user } = renderLookup();
-    const chip = screen.getByText('foo').closest('.pf-v5-c-chip');
+    const chip = screen.getByText('foo').closest('.pf-v6-c-label');
     await user.click(within(chip).getByRole('button'));
     expect(onChange).toHaveBeenCalledTimes(1);
     expect(onChange).toHaveBeenCalledWith([]);

@@ -7,11 +7,11 @@ import Popover from '../Popover';
 
 const FieldHeader = styled.div`
   display: flex;
-  padding-bottom: var(--pf-v5-c-form__group-label--PaddingBottom);
+  padding-bottom: var(--pf-v6-c-form__group-label--PaddingBottom);
 `;
 
 const StyledCheckboxField = styled(CheckboxField)`
-  --pf-v5-c-check__label--FontSize: var(--pf-v5-c-form__label--FontSize);
+  --pf-v6-c-check__label--FontSize: var(--pf-v6-c-form__label--FontSize);
   margin-left: auto;
 `;
 
@@ -27,13 +27,13 @@ function FieldWithPrompt({
 }) {
   const { t } = useLingui();
   return (
-    <div className="pf-v5-c-form__group" data-cy={`${fieldId}-form-group`}>
+    <div className="pf-v6-c-form__group" data-cy={`${fieldId}-form-group`}>
       <FieldHeader>
         <div>
-          <label className="pf-v5-c-form__label" htmlFor={fieldId}>
-            <span className="pf-v5-c-form__label-text">{label}</span>
+          <label className="pf-v6-c-form__label" htmlFor={fieldId}>
+            <span className="pf-v6-c-form__label-text">{label}</span>
             {isRequired && (
-              <span className="pf-v5-c-form__label-required" aria-hidden="true">
+              <span className="pf-v6-c-form__label-required" aria-hidden="true">
                 *
               </span>
             )}

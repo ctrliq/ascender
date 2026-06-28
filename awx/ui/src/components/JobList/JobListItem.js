@@ -2,7 +2,10 @@ import React from 'react';
 import { Link } from 'react-router';
 
 import { useLingui } from '@lingui/react/macro';
-import { Button, Chip } from '@patternfly/react-core';
+import {
+	Label, Button
+} from '@patternfly/react-core';
+
 import { Tr, Td, ExpandableRowContent } from '@patternfly/react-table';
 import { RocketIcon } from '@patternfly/react-icons';
 import styled from 'styled-components';
@@ -174,15 +177,13 @@ function JobListItem({
             ) && (
               <LaunchButton resource={job}>
                 {({ handleRelaunch, isLaunching }) => (
-                  <Button
+                  <Button icon={<RocketIcon />}
                     ouiaId={`${job.id}-relaunch-button`}
                     variant="plain"
                     onClick={() => handleRelaunch()}
                     aria-label={t`Relaunch`}
                     isDisabled={isLaunching}
-                  >
-                    <RocketIcon />
-                  </Button>
+                   />
                 )}
               </LaunchButton>
             )}
@@ -324,13 +325,13 @@ function JobListItem({
                       ouiaId={`job-${job.id}-label-chips`}
                     >
                       {labels.results.map((l) => (
-                        <Chip
+                        <Label variant="outline"
                           key={l.id}
-                          isReadOnly
-                          ouiaId={`label-${l.id}-chip`}
+
+                          data-ouia-component-id={`label-${l.id}-chip`}
                         >
                           {l.name}
-                        </Chip>
+                        </Label>
                       ))}
                     </ChipGroup>
                   }

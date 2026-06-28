@@ -30,7 +30,7 @@ function CodeEditorField({
       fieldId={id}
       isRequired={isRequired}
       label={label}
-      labelIcon={<Popover content={tooltip} />}
+      labelHelp={<Popover content={tooltip} />}
     >
       <CodeEditor
         id={id}

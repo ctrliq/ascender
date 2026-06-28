@@ -223,7 +223,7 @@ function ToolbarDeleteButton({
             </Button>,
           ]}
         >
-          <div>{t`This action will delete the following:`}</div>
+          <div style={{ marginBottom: '0.75rem' }}>{t`This action will delete the following:`}</div>
           {itemsToDelete.map((item) => (
             <span key={item.id} id={`item-to-be-deleted-${item.id}`}>
               <strong>{item.name || item.username || item.image}</strong>

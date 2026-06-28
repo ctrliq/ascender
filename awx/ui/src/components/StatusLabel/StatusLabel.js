@@ -65,7 +65,7 @@ export default function StatusLabel({ status, tooltipContent = '', children }) {
   const Icon = icons[status];
 
   const renderLabel = () => (
-    <Label variant="outline" color={color} icon={Icon ? <Icon /> : null}>
+    <Label variant="filled" color={color} icon={Icon ? <Icon /> : null} className="ascender-status-label">
       {children || label}
     </Label>
   );

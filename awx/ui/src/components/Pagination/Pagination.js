@@ -10,7 +10,7 @@ const AWXPagination = styled(PFPagination)`
     props.perPageOptions &&
     !props.perPageOptions.length &&
     css`
-      .pf-v5-c-menu-toggle {
+      .pf-v6-c-menu-toggle {
         display: none;
       }
     `}

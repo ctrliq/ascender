@@ -8,7 +8,7 @@ function LookupErrorMessage({ error }) {
   }
 
   return (
-    <div className="pf-v5-c-form__helper-text pf-m-error" aria-live="polite">
+    <div className="pf-v6-c-form__helper-text pf-m-error" aria-live="polite">
       {error.message || t`An error occurred`}
     </div>
   );

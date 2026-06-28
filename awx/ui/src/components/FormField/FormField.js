@@ -45,7 +45,7 @@ function FormField({
           data-cy={`${id}-form-group`}
           isRequired={isRequired}
           label={label}
-          labelIcon={<Popover content={tooltip} maxWidth={tooltipMaxWidth} />}
+          labelHelp={<Popover content={tooltip} maxWidth={tooltipMaxWidth} />}
         >
           <TextArea
             id={id}
@@ -66,7 +66,7 @@ function FormField({
           data-cy={`${id}-form-group`}
           isRequired={isRequired}
           label={label}
-          labelIcon={<Popover content={tooltip} maxWidth={tooltipMaxWidth} />}
+          labelHelp={<Popover content={tooltip} maxWidth={tooltipMaxWidth} />}
         >
           <TextInput
             id={id}

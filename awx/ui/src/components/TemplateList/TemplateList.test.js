@@ -223,7 +223,7 @@ describe('<TemplateList />', () => {
     // The deletion-error AlertModal stacks over the still-closing confirm
     // modal, so the error dialog's subtree is aria-hidden and getByRole can't
     // reach its Close button; scope the query to the error dialog instead.
-    const errorDialog = errorTitle.closest('.pf-v5-c-modal-box');
+    const errorDialog = errorTitle.closest('.pf-v6-c-modal-box');
     await user.click(within(errorDialog).getByLabelText('Close'));
     await waitFor(() =>
       expect(screen.queryByText('Error!')).not.toBeInTheDocument()

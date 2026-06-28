@@ -1,38 +1,46 @@
 import React from 'react';
-import { TextList, TextListVariants } from '@patternfly/react-core';
 import styled from 'styled-components';
 
 const DetailList = ({ children, stacked, ...props }) => (
-  <TextList component={TextListVariants.dl} {...props}>
+  <dl {...props}>
     {children}
-  </TextList>
+  </dl>
 );
 
 export default styled(DetailList)`
   display: grid;
-  align-items: start;
-  font-size: var(--pf-v5-global--FontSize--sm);
-  gap: ${(props) =>
-    props.compact ? `1rem` : `2rem`};
+  align-items: stretch;
+  font-size: var(--pf-v6-global--FontSize--sm);
+  column-gap: 2rem;
+  row-gap: 0;
+  margin: 0;
   ${(props) =>
     props.stacked
       ? `
     grid-template-columns: auto 1fr;
   `
       : `
-    --column-count: 1;
-    grid-template-columns: repeat(var(--column-count), 1fr);
+    grid-template-columns: 1fr;
 
-    @media (min-width: 920px) {
-      --column-count: 2;
+    @media (min-width: 640px) {
+      grid-template-columns: repeat(2, 1fr);
     }
 
-    @media (min-width: 1210px) {
-      --column-count: 3;
+    @media (min-width: 1024px) {
+      grid-template-columns: repeat(3, 1fr);
     }
   `}
 
+  & > div {
+    padding: 0.875rem 0;
+  }
+
+  & dd .pf-v6-c-label {
+    margin-left: -6px;
+  }
+
+
   & + & {
-    margin-top: var(--pf-v5-global--spacer--2xl);
+    margin-top: var(--pf-v6-global--spacer--2xl);
   }
 `;

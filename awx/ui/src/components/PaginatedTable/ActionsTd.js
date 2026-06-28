@@ -1,28 +1,22 @@
 import React from 'react';
 import { Td } from '@patternfly/react-table';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 const ActionsGrid = styled.div`
-  display: grid;
-  grid-gap: 16px;
+  display: flex;
+  gap: 16px;
   align-items: center;
-  padding-right: 20px
-    ${(props) => {
-      const columns =
-        props.$gridColumns || '40px '.repeat(props.$numActions || 1);
-      return css`
-        grid-template-columns: ${columns};
-      `;
-    }};
+  justify-content: flex-end;
+  padding-right: 20px;
 `;
 ActionsGrid.displayName = 'ActionsGrid';
 
 const ActionsCell = styled(Td)`
   text-align: right;
-  --pf-v5-c-table--cell--Width: ${(props) => props.$width}px;
+  --pf-v6-c-table--cell--Width: ${(props) => props.$width}px;
 
   [role='presentation'] {
-    color: var(--pf-v5-global--Color--300);
+    color: var(--pf-v6-global--Color--300);
     opacity: 0.5;
   }
 
@@ -32,19 +26,13 @@ const ActionsCell = styled(Td)`
 `;
 ActionsCell.displayName = 'ActionsCell';
 
-export default function ActionsTd({ children, gridColumns, ...props }) {
+export default function ActionsTd({ children, gridColumns: _gridColumns, ...props }) {
   const numActions = children.length || 1;
   const width = numActions * 40;
   return (
     <ActionsCell $width={width} {...props}>
-      <ActionsGrid $numActions={numActions} $gridColumns={gridColumns}>
-        {React.Children.map(children, (child, i) =>
-          child
-            ? React.cloneElement(child, {
-                column: i + 1,
-              })
-            : null
-        )}
+      <ActionsGrid>
+        {children}
       </ActionsGrid>
     </ActionsCell>
   );

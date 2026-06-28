@@ -11,6 +11,7 @@ import {
   WorkflowJobTemplatesAPI,
 } from 'api';
 import useToast, { AlertVariant } from 'hooks/useToast';
+import { JOB_TYPE_URL_SEGMENTS } from '../../constants';
 import AlertModal from '../AlertModal';
 import ErrorDetail from '../ErrorDetail';
 import LaunchPrompt from '../LaunchPrompt';
@@ -157,7 +158,10 @@ function LaunchButton({ resource, children }) {
       }
 
       const { data: job } = await jobPromise;
-      if (isMounted.current) navigate(`/jobs/${job.id}/output`);
+      if (isMounted.current) {
+        const seg = JOB_TYPE_URL_SEGMENTS[job.type];
+        navigate(seg ? `/jobs/${seg}/${job.id}/output` : `/jobs/${job.id}/output`);
+      }
     } catch (launchError) {
       if (isMounted.current) setError(launchError);
     } finally {
@@ -211,7 +215,10 @@ function LaunchButton({ resource, children }) {
           relaunch = JobsAPI.relaunch(resource.id, params || {});
         }
         const { data: job } = await relaunch;
-        if (isMounted.current) navigate(`/jobs/${job.id}/output`);
+        if (isMounted.current) {
+          const seg = JOB_TYPE_URL_SEGMENTS[job.type];
+          navigate(seg ? `/jobs/${seg}/${job.id}/output` : `/jobs/${job.id}/output`);
+        }
       } else if (isMounted.current) {
         setShowLaunchPrompt(true);
       }

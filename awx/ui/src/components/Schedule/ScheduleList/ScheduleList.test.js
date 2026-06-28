@@ -193,7 +193,7 @@ describe('ScheduleList', () => {
       expect(document.querySelector('#schedule-5-toggle')).toBeDisabled();
       // a warning icon is rendered for each row that is missing survey values
       const warningIcons = document.querySelectorAll(
-        'td[data-label="Name"] svg'
+        'td[data-label="Name"] .pf-v6-svg'
       );
       expect(warningIcons.length).toBe(5);
     });
@@ -212,7 +212,7 @@ describe('ScheduleList', () => {
       // schedule 3 is missing an inventory -> its toggle is disabled
       expect(document.querySelector('#schedule-3-toggle')).toBeDisabled();
       const warningIcons = document.querySelectorAll(
-        'td[data-label="Name"] svg'
+        'td[data-label="Name"] .pf-v6-svg'
       );
       expect(warningIcons.length).toBe(4);
     });

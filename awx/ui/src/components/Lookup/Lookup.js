@@ -3,13 +3,16 @@ import { useLocation, useNavigate } from 'routerCompat';
 import { useField } from 'formik';
 import { SearchIcon } from '@patternfly/react-icons';
 import {
-  Button,
-  ButtonVariant,
-  Chip,
-  InputGroup,
-  Modal,
-  TextInput, InputGroupItem,
+	Label, Button,
+	ButtonVariant,
+	InputGroup,
+	TextInput,
+	InputGroupItem
 } from '@patternfly/react-core';
+import {
+
+	Modal
+} from '@patternfly/react-core/deprecated';
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import useDebounce from 'hooks/useDebounce';
@@ -17,9 +20,12 @@ import ChipGroup from '../ChipGroup';
 import reducer, { initReducer } from './shared/reducer';
 
 const ChipHolder = styled.div`
-  --pf-v5-c-form-control--Height: auto;
+  --pf-v6-c-form-control--Height: auto;
+  min-height: 37px;
+  display: flex;
+  align-items: center;
   background-color: ${(props) =>
-    props.$isDisabled ? 'var(--pf-v5-global--disabled-color--300)' : null};
+    props.$isDisabled ? "var(--pf-t--global--text--color--disabled)" : null};
 `;
 function Lookup({
   id = 'lookup-search',
@@ -31,10 +37,10 @@ function Lookup({
   multiple = false,
   required = false,
   qsConfig,
-  renderItemChip = ({ item, removeItem, canDelete }) => (
-    <Chip key={item.id} onClick={() => removeItem(item)} isReadOnly={!canDelete}>
+  renderItemChip = ({ item, removeItem }) => (
+    <Label variant="outline" key={item.id} onClose={() => removeItem(item)} >
       {item.name}
-    </Chip>
+    </Label>
   ),
   renderOptionsList,
   isDisabled = false,
@@ -132,18 +138,16 @@ function Lookup({
   return (
     <>
       <InputGroup onBlur={onBlur}>
-        <InputGroupItem><Button
+        <InputGroupItem><Button icon={<SearchIcon />}
           aria-label={t`Search`}
           id={`${id}-open`}
           ouiaId={`${id}-open`}
           onClick={onClick}
           variant={ButtonVariant.control}
           isDisabled={isLoading || isDisabled}
-        >
-          <SearchIcon />
-        </Button></InputGroupItem>
+         /></InputGroupItem>
         {multiple ? (
-          <ChipHolder $isDisabled={isDisabled} className="pf-v5-c-form-control">
+          <InputGroupItem isFill><ChipHolder $isDisabled={isDisabled} className="pf-v6-c-form-control">
             <ChipGroup
               numChips={5}
               totalChips={items.length}
@@ -157,9 +161,9 @@ function Lookup({
                 })
               )}
             </ChipGroup>
-          </ChipHolder>
+          </ChipHolder></InputGroupItem>
         ) : (
-          <TextInput
+          <InputGroupItem isFill><TextInput
             id={id}
             ouiaId={`${id}-input`}
             value={typedText}
@@ -170,7 +174,7 @@ function Lookup({
               }
             }}
             isDisabled={isLoading || isDisabled}
-          />
+          /></InputGroupItem>
         )}
       </InputGroup>
 

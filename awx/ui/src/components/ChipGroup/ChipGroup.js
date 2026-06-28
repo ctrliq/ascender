@@ -2,17 +2,29 @@ import React from 'react';
 
 import { useLingui } from '@lingui/react/macro';
 
-import { ChipGroup as PFChipGroup } from '@patternfly/react-core';
+import { LabelGroup } from '@patternfly/react-core';
 
-function ChipGroup({ numChips, totalChips, ...props }) {
+function ChipGroup({ numChips, totalChips, ouiaId, onOverflowChipClick, ...props }) {
   const { t } = useLingui();
+
+  const handleClick = (e) => {
+    if (onOverflowChipClick && e.target.closest('.pf-m-overflow')) {
+      onOverflowChipClick();
+    }
+  };
+
   return (
-    <PFChipGroup
-      {...props}
-      numChips={numChips}
-      expandedText={t`Show less`}
-      collapsedText={t`${totalChips - numChips} more`}
-    />
+    /* eslint-disable jsx-a11y/no-static-element-interactions */
+    /* eslint-disable jsx-a11y/click-events-have-key-events */
+    <div onClick={onOverflowChipClick ? handleClick : undefined}>
+      <LabelGroup
+        {...props}
+        {...(ouiaId ? { 'data-ouia-component-id': ouiaId } : {})}
+        numLabels={numChips}
+        expandedText={t`Show less`}
+        collapsedText={t`${totalChips - numChips} more`}
+      />
+    </div>
   );
 }
 

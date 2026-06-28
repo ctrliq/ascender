@@ -1,7 +1,10 @@
 import React, { useCallback, useEffect } from 'react';
 import { useLocation } from 'routerCompat';
 import { useLingui } from '@lingui/react/macro';
-import { FormGroup, Chip } from '@patternfly/react-core';
+import {
+	Label, FormGroup
+} from '@patternfly/react-core';
+
 import { InstancesAPI } from 'api';
 import { getSearchableKeys } from 'components/PaginatedTable';
 import { getQSConfig, parseQueryString, mergeParams } from 'util/qs';
@@ -103,14 +106,14 @@ function PeersLookup({
         required={required}
         isLoading={isLoading}
         label={formLabel}
-        renderItemChip={({ item, removeItem, canDelete }) => (
-          <Chip
+        renderItemChip={({ item, removeItem }) => (
+          <Label variant="outline"
             key={item.id}
-            onClick={() => removeItem(item)}
-            isReadOnly={!canDelete}
+            onClose={() => removeItem(item)}
+
           >
             {item.hostname}
-          </Chip>
+          </Label>
         )}
         renderOptionsList={({ state, dispatch, canDelete }) => (
           <OptionsList
@@ -163,7 +166,7 @@ function PeersLookup({
     <FormGroup
       className={className}
       label={formLabel}
-      labelIcon={tooltip && <Popover content={tooltip} />}
+      labelHelp={tooltip && <Popover content={tooltip} />}
       fieldId={id}
     >
       {renderLookup()}

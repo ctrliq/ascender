@@ -56,14 +56,12 @@ function DraggableSelectedList({
                 aria-label={t`Actions`}
                 id={rowPosition}
               >
-                <Button
+                <Button icon={<TimesIcon />}
                   onClick={() => removeItem(label)}
                   variant="plain"
                   aria-label={t`Remove`}
                   ouiaId={`draggable-list-remove-${label}`}
-                >
-                  <TimesIcon />
-                </Button>
+                 />
               </RemoveActionSection>
             </DataListItemRow>
           </DataListItem>

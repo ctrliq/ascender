@@ -101,7 +101,7 @@ function AdHocCredentialStep({ credentialTypeId }) {
           label={t`Machine Credential`}
           aria-label={t`Machine Credential`}
           isRequired
-          labelIcon={
+          labelHelp={
           <Popover
           content={t`Select the credential you want to use when accessing the remote hosts to run the command. Choose the credential containing the username and SSH key or password that Ansible will need to log into the remote hosts.`}
           />

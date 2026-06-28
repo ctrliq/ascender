@@ -1,10 +1,10 @@
 import React from 'react';
 
 import { useLingui } from '@lingui/react/macro';
-import { Chip } from '@patternfly/react-core';
+import { Label } from '@patternfly/react-core';
 import { toTitleCase } from 'util/strings';
 
-function CredentialChip({ credential, ...props }) {
+function CredentialChip({ credential, isReadOnly, ouiaId, onClick, ...props }) {
   const { t } = useLingui();
   let type;
   if (credential.cloud) {
@@ -24,11 +24,20 @@ function CredentialChip({ credential, ...props }) {
     return `${credential.name}`;
   };
 
+  const chipText = `${type}: ${buildCredentialName()}`;
+
   return (
-    <Chip {...props}>
+    <Label
+      variant="outline"
+      {...(ouiaId ? { 'data-ouia-component-id': ouiaId } : {})}
+      {...(!isReadOnly && onClick
+        ? { onClose: onClick, closeBtnAriaLabel: chipText }
+        : {})}
+      {...props}
+    >
       <strong>{type}: </strong>
       {buildCredentialName()}
-    </Chip>
+    </Label>
   );
 }
 

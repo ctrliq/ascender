@@ -1,7 +1,7 @@
-import { defineConfig } from '@lingui/cli';
-import { formatter } from '@lingui/format-po';
+const { defineConfig } = require('@lingui/cli');
+const { formatter } = require('@lingui/format-po');
 
-export default defineConfig({
+module.exports = defineConfig({
   catalogs: [
     {
       path: '<rootDir>/locales/{locale}/messages',

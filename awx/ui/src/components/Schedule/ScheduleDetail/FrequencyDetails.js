@@ -6,8 +6,8 @@ import { formatDateString } from 'util/dates';
 import { DetailList, Detail } from '../../DetailList';
 
 const Label = styled.div`
-  margin-bottom: var(--pf-v5-global--spacer--sm);
-  font-weight: var(--pf-v5-global--FontWeight--bold);
+  margin-bottom: var(--pf-v6-global--spacer--sm);
+  font-weight: var(--pf-v6-global--FontWeight--bold);
 `;
 
 export default function FrequencyDetails({

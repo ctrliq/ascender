@@ -16,9 +16,9 @@ const ExclamationCircleIcon = styled(PFExclamationCircleIcon)`
 
 const ErrorMessageWrapper = styled.div`
   align-items: center;
-  color: var(--pf-v5-global--danger-color--200);
+  color: var(--pf-v6-global--danger-color--200);
   display: flex;
-  font-weight: var(--pf-v5-global--FontWeight--bold);
+  font-weight: var(--pf-v6-global--FontWeight--bold);
   margin-bottom: 10px;
 `;
 function AdHocPreviewStep({ hasErrors, values }) {

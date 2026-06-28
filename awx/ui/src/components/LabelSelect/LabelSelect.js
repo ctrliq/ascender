@@ -153,7 +153,7 @@ function LabelSelect({
             </TextInputGroupMain>
             {(filterValue || selections.length > 0) && (
               <TextInputGroupUtilities>
-                <Button
+                <Button icon={<TimesIcon />}
                   variant="plain"
                   onClick={() => {
                     onChange(
@@ -162,9 +162,7 @@ function LabelSelect({
                     setFilterValue('');
                   }}
                   aria-label={t`Clear`}
-                >
-                  <TimesIcon />
-                </Button>
+                 />
               </TextInputGroupUtilities>
             )}
           </TextInputGroup>

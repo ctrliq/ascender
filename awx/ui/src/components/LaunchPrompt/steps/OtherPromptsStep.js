@@ -19,10 +19,10 @@ import workflowHelpText from '../../../screens/Template/shared/WorkflowJobTempla
 const FieldHeader = styled.div`
   display: flex;
   justify-content: space-between;
-  padding-bottom: var(--pf-v5-c-form__label--PaddingBottom);
+  padding-bottom: var(--pf-v6-c-form__label--PaddingBottom);
 
   label {
-    --pf-v5-c-form__label--PaddingBottom: 0px;
+    --pf-v6-c-form__label--PaddingBottom: 0px;
   }
 `;
 
@@ -148,7 +148,7 @@ function JobTypeField({ helpTextSource }) {
     <FormGroup
       fieldId="prompt-job-type"
       label={t`Job Type`}
-      labelIcon={<Popover content={helpTextSource.jobType} />}
+      labelHelp={<Popover content={helpTextSource.jobType} />}
       isRequired
     >
       <AnsibleSelect
@@ -177,8 +177,8 @@ function ShowChangesToggle() {
     <FormGroup fieldId="prompt-show-changes">
       <FieldHeader>
         {' '}
-        <label className="pf-v5-c-form__label" htmlFor="prompt-show-changes">
-          <span className="pf-v5-c-form__label-text">
+        <label className="pf-v6-c-form__label" htmlFor="prompt-show-changes">
+          <span className="pf-v6-c-form__label-text">
             {t`Show Changes`}
             <Popover
               content={t`If enabled, show the changes made
@@ -192,7 +192,7 @@ function ShowChangesToggle() {
         aria-label={field.value ? t`On` : t`Off`}
         id="prompt-show-changes"
         label={t`On`}
-        labelOff={t`Off`}
+
         isChecked={field.value}
         onChange={helpers.setValue}
         ouiaId="prompt-show-changes"
@@ -207,7 +207,7 @@ function TagField({ id, name, label, tooltip }) {
     <FormGroup
       fieldId={id}
       label={label}
-      labelIcon={<Popover content={tooltip} />}
+      labelHelp={<Popover content={tooltip} />}
     >
       <TagMultiSelect value={field.value} onChange={helpers.setValue} />
     </FormGroup>
@@ -222,7 +222,7 @@ function LabelsField({ helpTextSource }) {
     <FormGroup
       fieldId="prompt-labels"
       label={t`Labels`}
-      labelIcon={<Popover content={helpTextSource.labels} />}
+      labelHelp={<Popover content={helpTextSource.labels} />}
     >
       <LabelSelect
         value={field.value}

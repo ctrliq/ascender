@@ -90,7 +90,7 @@ function AdHocExecutionEnvironmentStep({ organizationId }) {
         fieldId="execution_enviroment"
         label={t`Execution Environment`}
         aria-label={t`Execution Environment`}
-        labelIcon={
+        labelHelp={
           <Popover
             content={t`Select the Execution Environment you want this command to run inside.`}
           />

@@ -30,7 +30,7 @@ describe('<JobCancelButton/>', () => {
       screen.getByRole('button', { name: 'Title' })
     ).toBeInTheDocument();
     expect(screen.getByText('Cancel Job')).toBeInTheDocument();
-    expect(document.querySelector('.pf-v5-c-button svg')).toBeNull();
+    expect(document.querySelector('.pf-v6-c-button svg')).toBeNull();
   });
 
   test('should render icon button', () => {

@@ -49,6 +49,7 @@ const ToolbarAddButton = forwardRef(({
           onClick={onClick}
           isDisabled={isDisabled}
           isExpanded={isExpanded}
+          variant="primary"
         >
           {defaultLabel || t`Add`}
         </MenuToggle>

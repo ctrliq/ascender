@@ -12,7 +12,7 @@ async function selectFrom(user, inputLabel, optionName) {
 
 async function clearFrom(user, inputLabel) {
   const input = screen.getByRole('textbox', { name: inputLabel });
-  const container = input.closest('.pf-v5-c-menu-toggle');
+  const container = input.closest('.pf-v6-c-menu-toggle');
   await user.click(within(container).getByRole('button', { name: 'Clear' }));
 }
 

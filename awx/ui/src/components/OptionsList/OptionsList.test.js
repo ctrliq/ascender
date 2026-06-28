@@ -38,7 +38,7 @@ describe('<OptionsList />', () => {
 
     // no selection preview when value is empty
     expect(
-      screen.queryByRole('group', { name: 'Chip group category' })
+      screen.queryByRole('list', { name: 'Label group category' })
     ).toBeNull();
   });
 
@@ -61,8 +61,8 @@ describe('<OptionsList />', () => {
 
     // SelectedList renders its label and a chip for each selected item
     expect(screen.getByText('Selected')).toBeInTheDocument();
-    const chipGroup = screen.getByRole('group', {
-      name: 'Chip group category',
+    const chipGroup = screen.getByRole('list', {
+      name: 'Label group category',
     });
     const chips = within(chipGroup).getAllByRole('listitem');
     expect(chips).toHaveLength(1);

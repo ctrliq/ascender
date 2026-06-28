@@ -1,35 +1,40 @@
 import React from 'react';
 
-import { TextListItem, TextListItemVariants } from '@patternfly/react-core';
 import styled from 'styled-components';
 import Popover from '../Popover';
 
-const DetailName = styled(({ fullWidth, ...props }) => (
-  <TextListItem {...props} />
+const DetailName = styled(({ fullWidth, component, ...props }) => (
+  <dt {...props} />
 ))`
-  font-weight: var(--pf-v5-global--FontWeight--bold);
+  font-size: var(--pf-v6-global--FontSize--xs);
+  font-weight: var(--pf-v6-global--FontWeight--bold);
+  color: var(--pf-v6-global--Color--200);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.25rem;
   ${(props) =>
     props.fullWidth &&
     `
-    grid-column: 1;
+    grid-column: 1 / -1;
   `}
 `;
 
 const DetailValue = styled(
-  ({ fullWidth, isEncrypted, isNotConfigured, ...props }) => (
-    <TextListItem {...props} />
+  ({ fullWidth, isEncrypted, isNotConfigured, component, ...props }) => (
+    <dd {...props} />
   )
 )`
   overflow-wrap: break-word;
+  margin: 0;
   ${(props) =>
     props.fullWidth &&
     `
-    grid-column: 2 / -1;
+    grid-column: 1 / -1;
   `}
   ${(props) =>
     (props.isEncrypted || props.isNotConfigured) &&
     `
-    color: var(--pf-v5-global--disabled-color--100);
+    color: var(--pf-v6-global--disabled-color--100);
   `}
 `;
 
@@ -60,7 +65,6 @@ const Detail = ({
     <div>
       <DetailName
         className={className}
-        component={TextListItemVariants.dt}
         fullWidth={fullWidth}
         data-cy={labelCy}
         id={dataCy}
@@ -70,7 +74,6 @@ const Detail = ({
       </DetailName>
       <DetailValue
         className={className}
-        component={TextListItemVariants.dd}
         fullWidth={fullWidth}
         data-cy={valueCy}
         isEncrypted={isEncrypted}

@@ -34,7 +34,7 @@ const mockInstance = {
 };
 
 // The PF Switch renders a hidden checkbox input with the aria-label
-const getToggle = () => screen.getByRole('checkbox', { name: 'Toggle instance' });
+const getToggle = () => screen.getByRole('switch', { name: 'Toggle instance' });
 
 describe('<InstanceToggle>', () => {
   const onToggle = jest.fn();

@@ -3,13 +3,13 @@ import styled from 'styled-components';
 
 const SelectableItem = styled.div`
   min-width: 200px;
-  border: 1px solid var(--pf-v5-global--BorderColor--200);
-  border-radius: var(--pf-v5-global--BorderRadius--sm);
+  border: 1px solid var(--pf-v6-global--BorderColor--200);
+  border-radius: var(--pf-v6-global--BorderRadius--sm);
   border: 1px solid;
   border-color: ${(props) =>
     props.$isSelected
-      ? 'var(--pf-v5-global--active-color--100)'
-      : 'var(--pf-v5-global--BorderColor--200)'};
+      ? "var(--pf-t--global--color--brand--default)"
+      : "var(--pf-t--global--border--color--200)"};
   margin-right: 20px;
   display: flex;
   cursor: pointer;
@@ -19,7 +19,7 @@ const Indicator = styled.div`
   display: flex;
   flex: 0 0 5px;
   background-color: ${(props) =>
-    props.$isSelected ? 'var(--pf-v5-global--active-color--100)' : null};
+    props.$isSelected ? "var(--pf-t--global--color--brand--default)" : null};
 `;
 
 const Contents = styled.div`

@@ -3,20 +3,20 @@ import styled from 'styled-components';
 
 import { useLingui } from '@lingui/react/macro';
 
-import { Split, SplitItem, TextListItemVariants } from '@patternfly/react-core';
+import { Split, SplitItem, ContentVariants } from '@patternfly/react-core';
 import { formatDateString } from 'util/dates';
 import { DetailName, DetailValue } from '../../DetailList';
 import MultiButtonToggle from '../../MultiButtonToggle';
 
 const OccurrencesLabel = styled.div`
   display: inline-block;
-  font-size: var(--pf-v5-c-form__label--FontSize);
-  font-weight: var(--pf-v5-c-form__label--FontWeight);
-  line-height: var(--pf-v5-c-form__label--LineHeight);
-  color: var(--pf-v5-c-form__label--Color);
+  font-size: var(--pf-v6-c-form__label--FontSize);
+  font-weight: var(--pf-v6-c-form__label--FontWeight);
+  line-height: var(--pf-v6-c-form__label--LineHeight);
+  color: var(--pf-v6-c-form__label--Color);
 
   span:first-of-type {
-    font-weight: var(--pf-v5-global--FontWeight--bold);
+    font-weight: var(--pf-v6-global--FontWeight--bold);
     margin-right: 10px;
   }
 `;
@@ -41,7 +41,7 @@ function ScheduleOccurrences({
   return (
     <>
       <DetailName
-        component={TextListItemVariants.dt}
+        component={ContentVariants.dt}
         fullWidth
         css="grid-column: 1 / -1"
       >
@@ -66,7 +66,7 @@ function ScheduleOccurrences({
         </Split>
       </DetailName>
       <DetailValue
-        component={TextListItemVariants.dd}
+        component={ContentVariants.dd}
         fullWidth
         css="grid-column: 1 / -1; margin-top: -10px"
       >

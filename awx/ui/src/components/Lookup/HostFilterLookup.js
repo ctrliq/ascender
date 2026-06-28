@@ -6,18 +6,21 @@ import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
 import { SearchIcon } from '@patternfly/react-icons';
 import {
-  Alert as PFAlert,
-  Button,
-  ButtonVariant,
-  Chip,
-  FormGroup,
-  FormHelperText,
-  HelperText,
-  HelperTextItem,
-  InputGroup,
-  Modal,
-  Tooltip, InputGroupItem,
+	Label, Alert as PFAlert,
+	Button,
+	ButtonVariant,
+	FormGroup,
+	FormHelperText,
+	HelperText,
+	HelperTextItem,
+	InputGroup,
+	Tooltip,
+	InputGroupItem
 } from '@patternfly/react-core';
+import {
+
+	Modal
+} from '@patternfly/react-core/deprecated';
 import { HostsAPI } from 'api';
 import { getQSConfig, mergeParams, parseQueryString } from 'util/qs';
 import getDocsBaseUrl from 'util/getDocsBaseUrl';
@@ -50,15 +53,15 @@ const Alert = styled(PFAlert)`
 
 const ChipHolder = styled.div`
   && {
-    --pf-v5-c-form-control--Height: auto;
+    --pf-v6-c-form-control--Height: auto;
   }
-  .pf-v5-c-chip-group {
+  .pf-v6-c-label-group {
     margin-right: 8px;
   }
 `;
 
 const ModalList = styled.div`
-  .pf-v5-c-toolbar__content {
+  .pf-v6-c-toolbar__content {
     padding: 0 !important;
   }
 `;
@@ -296,17 +299,15 @@ function HostFilterLookup({
 
   const renderLookup = () => (
     <InputGroup onBlur={onBlur}>
-      <InputGroupItem><Button
+      <InputGroupItem><Button icon={<SearchIcon />}
         ouiaId="host-filter-search-button"
         aria-label={t`Search`}
         id="host-filter"
         isDisabled={isDisabled}
         onClick={handleOpenModal}
         variant={ButtonVariant.control}
-      >
-        <SearchIcon />
-      </Button></InputGroupItem>
-      <InputGroupItem><ChipHolder className="pf-v5-c-form-control">
+       /></InputGroupItem>
+      <InputGroupItem><ChipHolder className="pf-v6-c-form-control">
         {searchColumns.map(({ name, key }) => (
           <ChipGroup
             categoryName={name}
@@ -316,9 +317,9 @@ function HostFilterLookup({
             ouiaId="host-filter-search-chips"
           >
             {chips[key]?.chips?.map((chip) => (
-              <Chip key={chip.key} isReadOnly>
+              <Label variant="outline" key={chip.key} >
                 {chip.node}
-              </Chip>
+              </Label>
             ))}
           </ChipGroup>
         ))}
@@ -338,9 +339,9 @@ function HostFilterLookup({
                 ouiaId="host-filter-advanced-search-chips"
               >
                 {chips[leftoverKey]?.chips?.map((chip) => (
-                  <Chip key={chip.key} isReadOnly>
+                  <Label variant="outline" key={chip.key} >
                     {chip.node}
-                  </Chip>
+                  </Label>
                 ))}
               </ChipGroup>
             ))}
@@ -353,7 +354,7 @@ function HostFilterLookup({
       fieldId="host-filter"
       isRequired
       label={t`Smart host filter`}
-      labelIcon={
+      labelHelp={
         <Popover
           content={t`Populate the hosts for this inventory by using a search
               filter. Example: ansible_facts__ansible_distribution:"RedHat".

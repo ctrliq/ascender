@@ -148,7 +148,7 @@ function InstanceGroupsLookup({
     <FormGroup
       className={className}
       label={t`Instance Groups`}
-      labelIcon={tooltip && <Popover content={tooltip} />}
+      labelHelp={tooltip && <Popover content={tooltip} />}
       fieldId={id}
     >
       {renderLookup()}

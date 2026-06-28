@@ -269,10 +269,7 @@ describe('CredentialsStep', () => {
     await screen.findByText('Cred 2');
     expect(screen.queryByText(/must be replaced/)).toBeNull();
 
-    const removeChip = container.querySelector(
-      'button#remove_credential-chip-5'
-    );
-    expect(removeChip).not.toBeNull();
+    const removeChip = screen.getByRole('button', { name: 'SSH: Cred 5' });
     await user.click(removeChip);
 
     const alert = await screen.findByText(/must be replaced/);
@@ -335,10 +332,9 @@ describe('CredentialsStep', () => {
     await screen.findByText('Cred 1');
     expect(screen.queryByText(/must be replaced/)).toBeNull();
 
-    const removeChip = container.querySelector(
-      'button#remove_credential-chip-33'
-    );
-    expect(removeChip).not.toBeNull();
+    const removeChip = screen.getByRole('button', {
+      name: 'Vault: Cred 33 | foo',
+    });
     await user.click(removeChip);
 
     const alert = await screen.findByText(/must be replaced/);

@@ -31,16 +31,16 @@ const FocusWrapper = styled.div`
 `;
 
 const AceEditor = styled(ReactAce)`
-  font-family: var(--pf-v5-global--FontFamily--monospace);
+  font-family: var(--pf-v6-global--FontFamily--monospace);
   max-height: 90vh;
 
   & .ace_marker-layer .ace_active-line {
-    background: var(--pf-v5-global--BorderColor--300) !important;
+    background: var(--pf-v6-global--BorderColor--300) !important;
   }
 
   & .ace_gutter {
-    background: var(--pf-v5-global--BackgroundColor--200);
-    color: var(--pf-v5-global--Color--200);
+    background: var(--pf-v6-global--BackgroundColor--200);
+    color: var(--pf-v6-global--Color--200);
   }
 
   & .ace_scroller {
@@ -57,19 +57,23 @@ const AceEditor = styled(ReactAce)`
   }
 
   & .ace_marker-layer .ace_selection {
-    background: var(--pf-v5-global--BorderColor--100);
+    background: var(--pf-v6-global--BorderColor--100);
+  }
+
+  & .ace_marker-layer .ace_bracket {
+    display: none;
   }
 
   ${(props) =>
     props.hasErrors &&
     `
     && {
-      --pf-v5-c-form-control--PaddingRight: var(--pf-v5-c-form-control--invalid--PaddingRight);
-      --pf-v5-c-form-control--BorderBottomColor: var(--pf-v5-c-form-control--invalid--BorderBottomColor);
+      --pf-v6-c-form-control--PaddingRight: var(--pf-v6-c-form-control--invalid--PaddingRight);
+      --pf-v6-c-form-control--BorderBottomColor: var(--pf-v6-c-form-control--invalid--BorderBottomColor);
       padding-right: 24px;
-      padding-bottom: var(--pf-v5-c-form-control--invalid--PaddingBottom);
-      background: var(--pf-v5-c-form-control--invalid--Background);
-      border-bottom-width: var(--pf-v5-c-form-control--invalid--BorderBottomWidth);
+      padding-bottom: var(--pf-v6-c-form-control--invalid--PaddingBottom);
+      background: var(--pf-v6-c-form-control--invalid--Background);
+      border-bottom-width: var(--pf-v6-c-form-control--invalid--BorderBottomWidth);
     }`}
 
   ${(props) =>
@@ -77,6 +81,22 @@ const AceEditor = styled(ReactAce)`
     `
     && .ace_cursor {
       opacity: 0;
+    }
+    &&.pf-v6-c-form-control {
+      border: none;
+      outline: none;
+      padding: 0;
+    }
+    &&.pf-v6-c-form-control:focus,
+    &&.pf-v6-c-form-control:focus-within,
+    &&.pf-v6-c-form-control:hover {
+      border: none;
+      outline: none;
+      box-shadow: none;
+    }
+    &&.pf-v6-c-form-control::before,
+    &&.pf-v6-c-form-control::after {
+      border: none;
     }
     `}
 `;
@@ -153,7 +173,7 @@ function CodeEditor({
       <FocusWrapper ref={wrapper} tabIndex={readOnly ? -1 : 0}>
         <AceEditor
           mode={aceModes[mode] || 'text'}
-          className={`pf-v5-c-form-control ${className}`}
+          className={`pf-v6-c-form-control ${className}`}
           theme="twilight"
           onChange={debounce(onChange, 250)}
           value={value}
@@ -171,6 +191,7 @@ function CodeEditor({
             highlightGutterLine: !readOnly,
             useWorker: false,
             showPrintMargin: false,
+            showFoldWidgets: false,
           }}
           commands={[
             {
@@ -193,7 +214,7 @@ function CodeEditor({
       </FocusWrapper>
       {!readOnly && (
         <div
-          className="pf-v5-c-form__helper-text keyboard-help-text"
+          className="pf-v6-c-form__helper-text keyboard-help-text"
           aria-live="polite"
         >
           {t`Press Enter to edit. Press ESC to stop editing.`}

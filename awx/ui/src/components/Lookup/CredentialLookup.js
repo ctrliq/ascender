@@ -156,7 +156,7 @@ function CredentialLookup({
       fieldId="credential"
       isRequired={required}
       label={label}
-      labelIcon={tooltip && <Popover content={tooltip} />}
+      labelHelp={tooltip && <Popover content={tooltip} />}
     >
       <Lookup
         id="credential"

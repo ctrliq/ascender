@@ -167,7 +167,7 @@ function JobListCancelButton({ jobsToCancel = [], onCancel = () => {} }) {
             </Button>,
           ]}
         >
-          <div>
+          <div style={{ marginBottom: '0.75rem' }}>
             <Plural
               value={numJobsToCancel}
               one={t`This action will cancel the following job:`}

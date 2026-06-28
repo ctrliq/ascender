@@ -231,7 +231,7 @@ function ExecutionEnvironmentLookup({
     <FormGroup
       fieldId={id}
       label={renderLabel()}
-      labelIcon={popoverContent && <Popover content={popoverContent} />}
+      labelHelp={popoverContent && <Popover content={popoverContent} />}
     >
       {tooltip && isDisabled ? (
         <Tooltip content={tooltip}>{renderLookup()}</Tooltip>

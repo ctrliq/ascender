@@ -1,11 +1,9 @@
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import {
-  TextList,
-  TextListItem,
-  TextListVariants,
-  TextListItemVariants,
-} from '@patternfly/react-core';
+  Content,
+  ContentVariants,
+  } from '@patternfly/react-core';
 import { Link } from 'react-router';
 import { Config } from 'contexts/Config';
 import { toTitleCase } from 'util/strings';
@@ -39,33 +37,33 @@ function PromptProjectDetail({ resource }) {
     allow_override
   ) {
     optionsList = (
-      <TextList component={TextListVariants.ul}>
+      <Content component={ContentVariants.ul}>
         {scm_clean && (
-          <TextListItem component={TextListItemVariants.li}>
+          <Content component={ContentVariants.li}>
             {t`Discard local changes before syncing`}
-          </TextListItem>
+          </Content>
         )}
         {scm_delete_on_update && (
-          <TextListItem component={TextListItemVariants.li}>
+          <Content component={ContentVariants.li}>
             {t`Delete the project before syncing`}
-          </TextListItem>
+          </Content>
         )}
         {scm_track_submodules && (
-          <TextListItem component={TextListItemVariants.li}>
+          <Content component={ContentVariants.li}>
             {t`Track submodules latest commit on branch`}
-          </TextListItem>
+          </Content>
         )}
         {scm_update_on_launch && (
-          <TextListItem component={TextListItemVariants.li}>
+          <Content component={ContentVariants.li}>
             {t`Update revision on job launch`}
-          </TextListItem>
+          </Content>
         )}
         {allow_override && (
-          <TextListItem component={TextListItemVariants.li}>
+          <Content component={ContentVariants.li}>
             {t`Allow branch override`}
-          </TextListItem>
+          </Content>
         )}
-      </TextList>
+      </Content>
     );
   }
 

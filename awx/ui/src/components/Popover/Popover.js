@@ -5,11 +5,18 @@ import { HelpIcon } from '@patternfly/react-icons';
 import styled from 'styled-components';
 
 const PopoverButton = styled.button`
-  padding: var(--pf-v5-global--spacer--xs);
-  margin: -(var(--pf-v5-global--spacer--xs));
-  font-size: var(--pf-v5-global--FontSize--sm);
-  --pf-v5-c-form__group-label-help--Color: var(--pf-v5-global--Color--200);
-  --pf-v5-c-form__group-label-help--hover--Color: var(--pf-v5-global--Color--100);
+  padding: var(--pf-v6-global--spacer--xs);
+  margin: calc(-1 * var(--pf-v6-global--spacer--xs));
+  font-size: var(--pf-v6-global--FontSize--sm);
+  line-height: 1;
+  vertical-align: middle;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--pf-v6-global--Color--200);
+  &:hover {
+    color: var(--pf-v6-global--Color--100);
+  }
 `;
 
 function Popover({
@@ -18,6 +25,7 @@ function Popover({
   header = null,
   id = '',
   maxWidth = '',
+  ouiaId,
   ...rest
 }) {
   const { t } = useLingui();
@@ -37,9 +45,10 @@ function Popover({
       <PopoverButton
         aria-label={ariaLabel ?? t`More information`}
         aria-haspopup="true"
-        className="pf-v5-c-form__group-label-help"
+        className="pf-v6-c-form__group-label-help"
         onClick={(e) => e.preventDefault()}
         type="button"
+        {...(ouiaId ? { 'data-ouia-component-id': ouiaId } : {})}
       >
         <HelpIcon />
       </PopoverButton>
