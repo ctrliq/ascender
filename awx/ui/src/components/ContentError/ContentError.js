@@ -1,7 +1,6 @@
 
 import React from 'react';
-import { Link } from 'react-router';
-import { Navigate } from 'react-router';
+import { Link, Navigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 
 import {
