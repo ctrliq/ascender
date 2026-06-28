@@ -15,6 +15,14 @@ const hasJsxRuntime = (() => {
   }
 })();
 
+const importMetaTransform = () => ({
+  visitor: {
+    MetaProperty(path) {
+      path.replaceWithSourceString('({})');
+    },
+  },
+});
+
 module.exports = babelJest.createTransformer({
   presets: [
     [
@@ -25,9 +33,9 @@ module.exports = babelJest.createTransformer({
     ],
   ],
   plugins: [
-    // styled-components v6 removed the babel macro; the plugin provides
-    // the css-prop transform the codebase relies on.
     require.resolve('babel-plugin-styled-components'),
+    require.resolve('@babel/plugin-syntax-import-meta'),
+    importMetaTransform,
   ],
   babelrc: false,
   configFile: false,
