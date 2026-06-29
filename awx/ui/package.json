@@ -110,6 +110,51 @@
     },
     "babel-plugin-styled-components": {
       "@babel/core": "$@babel/core"
+    },
+    "@babel/plugin-syntax-async-generators": {
+      "@babel/core": "$@babel/core"
+    },
+    "@babel/plugin-syntax-bigint": {
+      "@babel/core": "$@babel/core"
+    },
+    "@babel/plugin-syntax-class-properties": {
+      "@babel/core": "$@babel/core"
+    },
+    "@babel/plugin-syntax-class-static-block": {
+      "@babel/core": "$@babel/core"
+    },
+    "@babel/plugin-syntax-import-attributes": {
+      "@babel/core": "$@babel/core"
+    },
+    "@babel/plugin-syntax-import-meta": {
+      "@babel/core": "$@babel/core"
+    },
+    "@babel/plugin-syntax-json-strings": {
+      "@babel/core": "$@babel/core"
+    },
+    "@babel/plugin-syntax-logical-assignment-operators": {
+      "@babel/core": "$@babel/core"
+    },
+    "@babel/plugin-syntax-nullish-coalescing-operator": {
+      "@babel/core": "$@babel/core"
+    },
+    "@babel/plugin-syntax-numeric-separator": {
+      "@babel/core": "$@babel/core"
+    },
+    "@babel/plugin-syntax-object-rest-spread": {
+      "@babel/core": "$@babel/core"
+    },
+    "@babel/plugin-syntax-optional-catch-binding": {
+      "@babel/core": "$@babel/core"
+    },
+    "@babel/plugin-syntax-optional-chaining": {
+      "@babel/core": "$@babel/core"
+    },
+    "@babel/plugin-syntax-private-property-in-object": {
+      "@babel/core": "$@babel/core"
+    },
+    "@babel/plugin-syntax-top-level-await": {
+      "@babel/core": "$@babel/core"
     }
   },
   "scripts": {
