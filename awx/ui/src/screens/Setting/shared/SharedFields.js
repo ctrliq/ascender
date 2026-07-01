@@ -40,6 +40,11 @@ const FormGroup = styled(PFFormGroup)`
     align-items: center;
     width: 100%;
   }
+  .pf-v6-c-form__group-label-help {
+    display: inline-flex;
+    align-items: center;
+    flex: 1 1 auto;
+  }
 `;
 
 const Selected = styled.div`

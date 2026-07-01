@@ -30,7 +30,6 @@ const Card = styled(_Card)`
     display: inline-block;
     margin-bottom: 24px;
     width: 100%;
-    border: 1px solid var(--pf-t--global--border--color--default);
   }
 `;
 const CardHeader = styled(_CardHeader)`

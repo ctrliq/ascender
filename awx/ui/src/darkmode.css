@@ -16,7 +16,7 @@ html.pf-v6-theme-dark body {
   /* === Colors === */
   /* Text colors */
   color: #e0e0e0;
-  background-color: #000;
+  background-color: #13161b;
   --pf-v6-global--Color--100: #e0e0e0;
   --pf-v6-global--Color--200: #cecfd2;
   --pf-v6-global--Color--300: #94979c;
@@ -25,12 +25,12 @@ html.pf-v6-theme-dark body {
   --pf-v6-global--link--Color--hover: #cecfd2;
 
   /* Background colors */
-  --pf-v6-global--BackgroundColor--100: #000;
+  --pf-v6-global--BackgroundColor--100: #13161b;
   --pf-v6-global--BackgroundColor--200: #1a1e25;
   --ascender-workflow-node-bg: #1a1e25;
   --ascender-workflow-graph-bg: #0d0f12;
   --pf-v6-global--BackgroundColor--dark-100: #1a1e25;
-  --pf-v6-global--BackgroundColor--dark-200: #000;
+  --pf-v6-global--BackgroundColor--dark-200: #13161b;
   
   
   
@@ -682,13 +682,13 @@ html.pf-v6-theme-dark .pf-v6-c-alert {
 }
 
 html.pf-v6-theme-dark .pf-v6-c-modal-box {
-  --pf-v6-c-modal-box--BackgroundColor: #1a1e25;
-  background-color: #1a1e25;
+  --pf-v6-c-modal-box--BackgroundColor: #13161b;
+  background-color: #13161b;
 }
 
 html.pf-v6-theme-dark .pf-v6-c-wizard {
-  --pf-v6-c-wizard--BackgroundColor: #1a1e25;
-  background-color: #1a1e25;
+  --pf-v6-c-wizard--BackgroundColor: #13161b;
+  background-color: #13161b;
 }
 
 html.pf-v6-theme-dark .pf-v6-c-wizard__nav {
@@ -696,11 +696,11 @@ html.pf-v6-theme-dark .pf-v6-c-wizard__nav {
 }
 
 html.pf-v6-theme-dark .pf-v6-c-wizard__main {
-  background-color: #1a1e25;
+  background-color: #13161b;
 }
 
 html.pf-v6-theme-dark .pf-v6-c-wizard__footer {
-  background-color: #1a1e25;
+  background-color: #13161b;
 }
 
 html.pf-v6-theme-dark .pf-v6-c-modal-box__header {
@@ -833,4 +833,21 @@ html.pf-v6-theme-dark .pf-v6-c-wizard__main-body {
 
 html.pf-v6-theme-dark .pf-v6-c-wizard__header {
   background-color: #13161b;
+}
+
+html.pf-v6-theme-dark .pf-v6-c-alert.pf-m-warning {
+  --pf-v6-c-alert--BackgroundColor: #1a1e25;
+  --pf-v6-c-alert--m-warning--BorderColor: #444548;
+}
+
+html.pf-v6-theme-dark .pf-v6-c-about-modal-box {
+  --pf-v6-c-about-modal-box--BackgroundColor: #13161b;
+}
+
+html.pf-v6-theme-dark .pf-v6-c-helper-text__item-icon {
+  --pf-v6-c-helper-text__item-icon--Color: #f04438;
+}
+
+html.pf-v6-theme-dark .pf-v6-c-wizard__nav-link {
+  --pf-v6-c-wizard__nav-link--Color: #13161b;
 }
