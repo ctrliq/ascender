@@ -15,9 +15,9 @@ html.pf-v6-theme-dark body {
 
   /* === Colors === */
   /* Text colors */
-  color: #cecfd2;
-  background-color: #000;
-  --pf-v6-global--Color--100: #f7f7f7;
+  color: #e0e0e0;
+  background-color: #13161b;
+  --pf-v6-global--Color--100: #e0e0e0;
   --pf-v6-global--Color--200: #cecfd2;
   --pf-v6-global--Color--300: #94979c;
   --pf-v6-global--disabled-color--100: #85888e;
@@ -25,12 +25,12 @@ html.pf-v6-theme-dark body {
   --pf-v6-global--link--Color--hover: #cecfd2;
 
   /* Background colors */
-  --pf-v6-global--BackgroundColor--100: #000;
+  --pf-v6-global--BackgroundColor--100: #13161b;
   --pf-v6-global--BackgroundColor--200: #1a1e25;
   --ascender-workflow-node-bg: #1a1e25;
   --ascender-workflow-graph-bg: #0d0f12;
   --pf-v6-global--BackgroundColor--dark-100: #1a1e25;
-  --pf-v6-global--BackgroundColor--dark-200: #000;
+  --pf-v6-global--BackgroundColor--dark-200: #13161b;
   
   
   
@@ -38,7 +38,7 @@ html.pf-v6-theme-dark body {
   --pf-t--global--border--color--default: #373a41;
 
   /* === Borders === */
-  --pf-v6-global--BorderColor--100: #373a41;
+  --pf-v6-global--BorderColor--100: #444548;
   --pf-v6-global--BorderColor--200: #22262f;
   --pf-v6-global--BorderColor--300: #22262f;
   --pf-v6-global--BorderColor--disabled: #373a41;
@@ -56,26 +56,83 @@ html.pf-v6-theme-dark body {
 
   --pf-t--global--color--status--success--default: #17b26a;
   --pf-t--global--color--status--danger--default: #f04438;
+
+  --pf-v6-c-button--disabled--BackgroundColor: #22262f;
+  --pf-v6-c-button--disabled--Color: #12a66f;
+  --pf-v6-c-menu-toggle--BorderColor: #444548;
+  --pf-t--global--border--color--control--default: #444548;
+}
+
+html.pf-v6-theme-dark .pf-v6-c-label.pf-m-filled {
+  --pf-v6-c-label--BackgroundColor: #1b1d21;
+  border: 1px solid #444548;
+}
+
+html.pf-v6-theme-dark .pf-v6-c-button.pf-m-link.pf-m-inline {
+  --pf-v6-c-button--TextDecorationStyle: unset;
+  --pf-v6-c-button--TextDecorationLine: none;
+  --pf-v6-c-button--m-link--m-inline--hover--TextDecorationLine: none;
+  padding: 0px 4px 0px 4px;
+  min-height: auto;
+  height: auto;
+}
+
+html.pf-v6-theme-dark .pf-v6-c-button.pf-m-link.pf-m-inline:hover {
+  --pf-v6-c-button--TextDecorationStyle: unset;
+  --pf-v6-c-button--TextDecorationLine: none;
+}
+
+html.pf-v6-theme-dark .ascender-status-label.pf-v6-c-label {
+  --pf-v6-c-label--BackgroundColor: #22262f;
+  --pf-v6-c-label--Color: #12a66f;
+  --pf-v6-c-label__icon--Color: #12a66f;
+  font-weight: 600;
+}
+
+html.pf-v6-theme-dark .pf-v6-c-button.pf-m-link {
+  --pf-v6-c-label--BackgroundColor: #22262f;
+  --pf-v6-c-label--Color: #12a66f;
+  --pf-v6-c-label__icon--Color: #12a66f;
+  color: #12a66f;
+  border: 1px solid #12a66f;
+  margin-left: 0px;
 }
 
 html.pf-v6-theme-dark .ascender-status-label.pf-v6-c-label.pf-m-green {
-  --pf-v6-c-label--BackgroundColor: #17b26a;
+  --pf-v6-c-label--BackgroundColor: #12a66f;
+  --pf-v6-c-label--Color: #22262f;
+  --pf-v6-c-label__icon--Color: #22262f;
+  font-weight: 600;
 }
+
 html.pf-v6-theme-dark .ascender-status-label.pf-v6-c-label.pf-m-red {
   --pf-v6-c-label--BackgroundColor: #f04438;
+  --pf-v6-c-label--Color: #22262f;
+  --pf-v6-c-label__icon--Color: #22262f;
+  font-weight: 600;
 }
+
+/* We don't want any blue, so just change it to our branded green */
 html.pf-v6-theme-dark .ascender-status-label.pf-v6-c-label.pf-m-blue {
-  --pf-v6-c-label--BackgroundColor: #17b26a;
+  --pf-v6-c-label--BackgroundColor: #12a66f;
+  --pf-v6-c-label--Color: #22262f;
+  --pf-v6-c-label__icon--Color: #22262f;
+  font-weight: 600;
 }
 
 html.pf-v6-theme-dark .pf-v6-c-label.pf-m-green {
-  --pf-v6-c-label--BackgroundColor: #17b26a;
+  --pf-v6-c-label--BackgroundColor: #12a66f;
+  --pf-v6-c-label--Color: #22262f;
+  --pf-v6-c-label__icon--Color: #22262f;
 }
 html.pf-v6-theme-dark .pf-v6-c-label.pf-m-red {
   --pf-v6-c-label--BackgroundColor: #f04438;
 }
 html.pf-v6-theme-dark .pf-v6-c-label.pf-m-blue {
-  --pf-v6-c-label--BackgroundColor: #17b26a;
+  --pf-v6-c-label--BackgroundColor: #12a66f;
+  --pf-v6-c-label--Color: #22262f;
+  --pf-v6-c-label__icon--Color: #22262f;
+  font-weight: 600;
 }
 
 html.pf-v6-theme-dark .pf-v6-c-title {
@@ -121,6 +178,10 @@ html.pf-v6-theme-dark .pf-v6-c-form-control {
   outline-offset: 2px;
 }
 
+html.pf-v6-theme-dark .pf-v6-c-radio {
+  --pf-v6-c-radio--AccentColor: #12a66f;
+}
+
 html.pf-v6-theme-dark .ace_editor {
   background-color: #13161b !important;
   color: #f8f8f8 !important;
@@ -157,24 +218,30 @@ html.pf-v6-theme-dark .ace_editor .ace_markup {
 
 html.pf-v6-theme-dark .pf-v6-c-button {
   --pf-v6-c-button--m-primary--BackgroundColor: #12a66f;
-  --pf-v6-c-button--m-primary--Color: #fff;
+  --pf-v6-c-button--m-primary--Color: #13161b;
   --pf-v6-c-button--m-primary--hover--BackgroundColor: #0e8c5d;
-  --pf-v6-c-button--m-primary--focus--Color: #fff;
+  --pf-v6-c-button--m-primary--focus--Color: #13161b;
   --pf-v6-c-button--m-link--Color: #12a66f;
-  --pf-v6-c-button--disabled--BackgroundColor: var(--pf-t--color--gray--60);
-  --pf-v6-c-button--disabled--Color: var(--pf-t--color--gray--30);
+  --pf-v6-c-button--disabled--BackgroundColor: #22262f;
+  --pf-v6-c-button--disabled--Color: #12a66f;
+  font-weight: 600;
+}
+
+html.pf-v6-theme-dark .pf-v6-c-button.pf-m-primary:not(:disabled) {
+  background-color: #12a66f;
+  --pf-v6-c-button--Color: #22262f !important;
+  color: #22262f !important;
 }
 
 html.pf-v6-theme-dark .pf-v6-c-button.pf-m-secondary:not(:disabled) {
   background-color: transparent;
   border-color: #12a66f;
   color: #12a66f;
+  --pf-v6-global--Color--200: #12a66f;
 }
 
 html.pf-v6-theme-dark .pf-v6-c-button.pf-m-secondary:not(:disabled):hover {
-  background-color: #0e8c5d;
   border-color: #0e8c5d;
-  color: #fff;
 }
 
 html.pf-v6-theme-dark .pf-v6-c-button.pf-m-danger {
@@ -190,20 +257,28 @@ html.pf-v6-theme-dark .pf-v6-c-button.pf-m-control {
 }
 
 html.pf-v6-theme-dark .pf-v6-c-button.pf-m-control:disabled {
-  background-color: var(--pf-t--color--gray--60);
-  color: var(--pf-t--color--gray--30);
+  background-color: #12a66f;
+  color: #22262f;
 }
 
 html.pf-v6-theme-dark .pf-v6-c-button.pf-m-control:disabled .pf-v6-svg {
-  color: var(--pf-t--color--gray--30);
+  color: #22262f;
 }
 
 html.pf-v6-theme-dark .pf-v6-c-button.pf-m-control:hover:not(:disabled) {
   background-color: #0e8c5d;
 }
 
-html.pf-v6-theme-dark .pf-v6-c-button.pf-m-link {
-  color: #12a66f;
+html.pf-v6-theme-dark .pf-v6-c-button.pf-m-control:not(:disabled) .pf-v6-c-button__icon {
+  color: #13161b;
+}
+
+html.pf-v6-theme-dark .pf-v6-c-button.pf-m-control:not(:disabled) .pf-v6-svg {
+  color: #13161b;
+}
+
+html.pf-v6-theme-dark .pf-v6-c-menu-toggle__status-icon {
+  --pf-v6-c-menu-toggle__status-icon--Color: #f04438;
 }
 
 html.pf-v6-theme-dark b {
@@ -289,8 +364,26 @@ html.pf-v6-theme-dark .pf-v6-c-menu-toggle {
   background-color: #1b1d21;
 }
 
+html.pf-v6-theme-dark .pf-v6-c-menu-toggle::before {
+  border: var(--pf-v6-c-menu-toggle--BorderWidth) solid #444548;
+}
+
+html.pf-v6-theme-dark .pf-v6-c-menu-toggle:hover {
+  --pf-v6-c-menu-toggle--BorderColor: #444548;
+}
+
+html.pf-v6-theme-dark .pf-v6-c-pagination__page-menu > .pf-v6-c-menu-toggle {
+  background-color: #13161b;
+}
+
+html.pf-v6-theme-dark :focus-visible {
+  outline: 1px solid #373a41;
+}
+
 html.pf-v6-theme-dark .pf-v6-c-menu-toggle.pf-m-primary {
-  background-color: #17b26a;
+  background-color: #12a66f;
+  text-transform: uppercase;
+  font-weight: 600;
 }
 
 html.pf-v6-theme-dark .ace-tm .ace_gutter-active-line {
@@ -457,7 +550,6 @@ html.pf-v6-theme-dark .pf-v6-c-options-menu {
   --pf-v6-c-options-menu__menu-item-icon--Color: var(--pf-v6-global--Color--300);
   --pf-v6-c-options-menu__menu-item--hover--BackgroundColor: var(--pf-v6-global--BorderColor--100);
   --pf-v6-c-options-menu__menu--BackgroundColor: var(--pf-v6-global--BackgroundColor--100);
-  --pf-v6-c-options-menu__toggle--Color: var(--pf-v6-global--Color--200);
 }
 
 html.pf-v6-theme-dark .pf-v6-c-options-menu__menu {
@@ -470,6 +562,10 @@ html.pf-v6-theme-dark .pf-v6-c-form {
   --pf-v6-c-form__label-text--FontWeight: var(--pf-v6-global--FontWeight--normal);
   --pf-v6-c-form__group--m-action--MarginTop: var(--pf-v6-global--spacer--sm);
 }
+html.pf-v6-theme-dark .pf-v6-c-form__group.pf-m-action {
+  overflow: visible;
+}
+
 
 html.pf-v6-theme-dark .pf-v6-c-tooltip {
   --pf-v6-c-tooltip--MaxWidth: inherit;
@@ -512,6 +608,10 @@ html.pf-v6-theme-dark .pf-v6-c-popover.pf-m-top {
   --pf-v6-c-popover__arrow--m-top--TranslateY: 0.25rem;
 }
 
+html.pf-v6-theme-dark .pf-v6-c-form-control.pf-m-expanded {
+  --pf-v6-c-form-control--after--BorderColor: inherit;
+}
+
 html.pf-v6-theme-dark .pf-v6-c-form-control:not(.ace_editor) {
   transition: all 0.15s ease-in-out;
 }
@@ -531,6 +631,10 @@ html.pf-v6-theme-dark .pf-v6-c-button.pf-m-plain:hover {
   --pf-v6-c-button--m-plain--disabled--Color: var(--pf-t--color--gray--30);
 }
 
+html.pf-v6-theme-dark .pf-m-small {
+  font-size: 10px;
+}
+
 html.pf-v6-theme-dark .pf-v6-c-notification-badge {
   --pf-v6-c-notification-badge--PaddingRight: 1rem;
   --pf-v6-c-notification-badge--PaddingLeft: 1rem;
@@ -548,7 +652,7 @@ html.pf-v6-theme-dark .pf-v6-c-form-control:focus {
 }
 
 html.pf-v6-theme-dark .pf-v6-c-form-control:hover {
-  --pf-v6-c-form-control--BorderBottomColor: var(--pf-v6-global--BorderColor--100);
+  --pf-v6-c-form-control--after--BorderColor: #444548;
 }
 
 html.pf-v6-theme-dark .pf-v6-c-input-group {
@@ -585,13 +689,13 @@ html.pf-v6-theme-dark .pf-v6-c-alert {
 }
 
 html.pf-v6-theme-dark .pf-v6-c-modal-box {
-  --pf-v6-c-modal-box--BackgroundColor: #1a1e25;
-  background-color: #1a1e25;
+  --pf-v6-c-modal-box--BackgroundColor: #13161b;
+  background-color: #13161b;
 }
 
 html.pf-v6-theme-dark .pf-v6-c-wizard {
-  --pf-v6-c-wizard--BackgroundColor: #1a1e25;
-  background-color: #1a1e25;
+  --pf-v6-c-wizard--BackgroundColor: #13161b;
+  background-color: #13161b;
 }
 
 html.pf-v6-theme-dark .pf-v6-c-wizard__nav {
@@ -599,11 +703,11 @@ html.pf-v6-theme-dark .pf-v6-c-wizard__nav {
 }
 
 html.pf-v6-theme-dark .pf-v6-c-wizard__main {
-  background-color: #1a1e25;
+  background-color: #13161b;
 }
 
 html.pf-v6-theme-dark .pf-v6-c-wizard__footer {
-  background-color: #1a1e25;
+  background-color: #13161b;
 }
 
 html.pf-v6-theme-dark .pf-v6-c-modal-box__header {
@@ -641,7 +745,7 @@ html.pf-v6-theme-dark .pf-v6-c-pagination__nav-control .pf-v6-c-button:disabled 
   --pf-v6-c-button--disabled--BackgroundColor: transparent;
   --pf-v6-c-button--m-plain--disabled--Color: var(--pf-t--color--gray--30);
   --pf-v6-c-button--disabled--Color: var(--pf-t--color--gray--30);
-  border-color: transparent;
+  border-color: #444548;
   color: var(--pf-t--color--gray--30) !important;
 }
 
@@ -659,8 +763,12 @@ html.pf-v6-theme-dark .pf-v6-c-slider {
   /* --pf-v6-c-slider__rail-track--before--fill--BackgroundColor--gradient-stop: transparent; */
 }
 
+html.pf-v6-theme-dark .pf-v6-c-nav__link:hover {
+  background-color: #26292d;
+}
+
 html.pf-v6-theme-dark .pf-v6-c-nav__link:focus {
-  background-color: var(--pf-v6-global--BorderColor--100);
+  background-color: #444548;
 }
 
 html.pf-v6-theme-dark .pf-v6-c-nav__link:active {
@@ -736,4 +844,21 @@ html.pf-v6-theme-dark .pf-v6-c-wizard__main-body {
 
 html.pf-v6-theme-dark .pf-v6-c-wizard__header {
   background-color: #13161b;
+}
+
+html.pf-v6-theme-dark .pf-v6-c-alert.pf-m-warning {
+  --pf-v6-c-alert--BackgroundColor: #1a1e25;
+  --pf-v6-c-alert--m-warning--BorderColor: #444548;
+}
+
+html.pf-v6-theme-dark .pf-v6-c-about-modal-box {
+  --pf-v6-c-about-modal-box--BackgroundColor: #13161b;
+}
+
+html.pf-v6-theme-dark .pf-v6-c-helper-text__item-icon {
+  --pf-v6-c-helper-text__item-icon--Color: #f04438;
+}
+
+html.pf-v6-theme-dark .pf-v6-c-wizard__nav-link {
+  --pf-v6-c-wizard__nav-link--Color: #13161b;
 }

@@ -7,7 +7,7 @@
   --pf-v6-global--primary-color--200: #17c484;
   --pf-v6-global--danger-color--100: #f04438;
   --pf-v6-global--danger-color--200: #f97066;
-  --pf-v6-global--success-color--100: #17b26a;
+  --pf-v6-global--success-color--100: #12a66f;
   --pf-v6-global--success-color--200: #47cd89;
   --pf-v6-global--warning-color--100: #f79009;
   --pf-v6-global--warning-color--200: #fdb022;
@@ -210,25 +210,6 @@ input[type="checkbox"] {
   font-size: 0.875rem;
 }
 
-
-/* Secondary button — outline style (green border + text, transparent bg) */
-.pf-v6-c-button.pf-m-secondary:not(:disabled) {
-  background-color: transparent;
-  border-color: #12a66f;
-  --pf-v6-c-button--Color: #12a66f;
-  --pf-v6-c-button--hover--Color: #fff;
-  --pf-v6-c-button--BorderColor: #12a66f;
-  --pf-v6-c-button--hover--BorderColor: #0e8c5d;
-  --pf-v6-c-button--m-clicked--BorderColor: #0e8c5d;
-  color: #12a66f;
-}
-
-.pf-v6-c-button.pf-m-secondary:not(:disabled):hover {
-  background-color: #0e8c5d;
-  border-color: #0e8c5d;
-  color: #fff;
-}
-
 /* Pagination enabled button green fill */
 .pf-v6-c-pagination__nav-control .pf-v6-c-button:not(:disabled) {
   --pf-v6-c-button--m-plain--Color: #fff;
@@ -409,6 +390,27 @@ a {
   margin-bottom: 1rem;
 }
 
+.pf-v6-c-label-group__list {
+  --pf-v6-c-label-group__list--ColumnGap: .5rem;
+}
+
+/* Labels inside a label group (e.g. Galaxy credential chips on the
+   Organization details page) get their last characters clipped with an
+   ellipsis because PF6 applies max-width:100% with border-box sizing to the
+   nested label / content / text. Let these labels size to their own content
+   so the full value is displayed; the label group still wraps items. */
+.pf-v6-c-label-group__list-item,
+.pf-v6-c-label-group__list-item .pf-v6-c-label,
+.pf-v6-c-label-group__list-item .pf-v6-c-label__content {
+  max-width: none;
+}
+
+.pf-v6-c-label-group__list-item .pf-v6-c-label__text {
+  max-width: none;
+  overflow: visible;
+  text-overflow: clip;
+}
+
 /* Gap between job/workflow name and status badge */
 .ascender-status-label.pf-v6-c-label {
   margin-left: 20px;
@@ -480,3 +482,6 @@ a {
 	margin-inline-end: 0px !important;
 }
 
+.pf-v6-c-button__text {
+  text-transform: uppercase;
+}

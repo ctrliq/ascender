@@ -95,20 +95,20 @@ html:not(.pf-v6-theme-dark) .pf-v6-c-toolbar {
   --pf-v6-c-toolbar--BackgroundColor: #fff;
 }
 
-.pf-v6-c-button.pf-m-control:not(:disabled) {
+html:not(.pf-v6-theme-dark) .pf-v6-c-button.pf-m-control:not(:disabled) {
   background-color: #12a66f;
   color: #fff;
 }
 
-.pf-v6-c-button.pf-m-control:not(:disabled):hover {
+html:not(.pf-v6-theme-dark) .pf-v6-c-button.pf-m-control:not(:disabled):hover {
   background-color: #0e8c5d;
 }
 
-.pf-v6-c-button.pf-m-control:not(:disabled) .pf-v6-svg {
+html:not(.pf-v6-theme-dark) .pf-v6-c-button.pf-m-control:not(:disabled) .pf-v6-svg {
   color: #fff;
 }
 
-.pf-v6-c-table thead th {
+html:not(.pf-v6-theme-dark) .pf-v6-c-table thead th {
   background-color: var(--pf-t--color--gray--20) !important;
 }
 
@@ -138,4 +138,22 @@ html:not(.pf-v6-theme-dark) .pf-v6-c-pagination.pf-m-bottom {
 
 html:not(.pf-v6-theme-dark) .ascender-output-scroll {
   background-image: linear-gradient(to right, #e8e8e8 85px, transparent 85px);
+}
+
+/* Secondary button — outline style (green border + text, transparent bg) */
+html:not(.pf-v6-theme-dark) .pf-v6-c-button.pf-m-secondary:not(:disabled) {
+  background-color: transparent;
+  border-color: #12a66f;
+  --pf-v6-c-button--Color: #12a66f;
+  --pf-v6-c-button--hover--Color: #fff;
+  --pf-v6-c-button--BorderColor: #12a66f;
+  --pf-v6-c-button--hover--BorderColor: #0e8c5d;
+  --pf-v6-c-button--m-clicked--BorderColor: #0e8c5d;
+  color: #12a66f;
+}
+
+html:not(.pf-v6-theme-dark) .pf-v6-c-button.pf-m-secondary:not(:disabled):hover {
+  background-color: #0e8c5d;
+  border-color: #0e8c5d;
+  color: #fff;
 }
