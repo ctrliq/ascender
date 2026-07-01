@@ -63,6 +63,11 @@ html.pf-v6-theme-dark body {
   --pf-t--global--border--color--control--default: #444548;
 }
 
+html.pf-v6-theme-dark .pf-v6-c-label.pf-m-filled {
+  --pf-v6-c-label--BackgroundColor: #1b1d21;
+  border: 1px solid #444548;
+}
+
 html.pf-v6-theme-dark .pf-v6-c-button.pf-m-link.pf-m-inline {
   --pf-v6-c-button--TextDecorationStyle: unset;
   --pf-v6-c-button--TextDecorationLine: none;
@@ -88,6 +93,7 @@ html.pf-v6-theme-dark .pf-v6-c-button.pf-m-link {
   --pf-v6-c-label--BackgroundColor: #22262f;
   --pf-v6-c-label--Color: #12a66f;
   --pf-v6-c-label__icon--Color: #12a66f;
+  color: #12a66f;
   border: 1px solid #12a66f;
   margin-left: 0px;
 }
@@ -252,11 +258,11 @@ html.pf-v6-theme-dark .pf-v6-c-button.pf-m-control {
 
 html.pf-v6-theme-dark .pf-v6-c-button.pf-m-control:disabled {
   background-color: #12a66f;
-  color: #13161b;
+  color: #22262f;
 }
 
 html.pf-v6-theme-dark .pf-v6-c-button.pf-m-control:disabled .pf-v6-svg {
-  color: #13161b;
+  color: #22262f;
 }
 
 html.pf-v6-theme-dark .pf-v6-c-button.pf-m-control:hover:not(:disabled) {
@@ -269,10 +275,6 @@ html.pf-v6-theme-dark .pf-v6-c-button.pf-m-control:not(:disabled) .pf-v6-c-butto
 
 html.pf-v6-theme-dark .pf-v6-c-button.pf-m-control:not(:disabled) .pf-v6-svg {
   color: #13161b;
-}
-
-html.pf-v6-theme-dark .pf-v6-c-button.pf-m-link {
-  color: #12a66f;
 }
 
 html.pf-v6-theme-dark .pf-v6-c-menu-toggle__status-icon {
@@ -372,7 +374,7 @@ html.pf-v6-theme-dark .pf-v6-c-menu-toggle:hover {
 }
 
 html.pf-v6-theme-dark :focus-visible {
-  outline: 0px;
+  outline: 1px solid #373a41;
 }
 
 html.pf-v6-theme-dark .pf-v6-c-menu-toggle.pf-m-primary {
