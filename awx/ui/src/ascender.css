@@ -62,8 +62,6 @@
   /* Running status — light blue so it doesn't merge with success green */
   --ascender-status-running-color: #1a7de8;
   --ascender-status-canceled-color: #c2600c;
-
-  --pf-v6-c-label__text--MaxWidth: 100%;
 }
 
 #job_output-toolbar {
@@ -390,6 +388,23 @@ a {
 /* Gap between breadcrumb path and page title */
 .pf-v6-c-breadcrumb {
   margin-bottom: 1rem;
+}
+
+/* Labels inside a label group (e.g. Galaxy credential chips on the
+   Organization details page) get their last characters clipped with an
+   ellipsis because PF6 applies max-width:100% with border-box sizing to the
+   nested label / content / text. Let these labels size to their own content
+   so the full value is displayed; the label group still wraps items. */
+.pf-v6-c-label-group__list-item,
+.pf-v6-c-label-group__list-item .pf-v6-c-label,
+.pf-v6-c-label-group__list-item .pf-v6-c-label__content {
+  max-width: none;
+}
+
+.pf-v6-c-label-group__list-item .pf-v6-c-label__text {
+  max-width: none;
+  overflow: visible;
+  text-overflow: clip;
 }
 
 /* Gap between job/workflow name and status badge */
