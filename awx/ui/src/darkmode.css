@@ -161,6 +161,10 @@ html.pf-v6-theme-dark .pf-v6-c-form-control {
   outline-offset: 2px;
 }
 
+html.pf-v6-theme-dark .pf-v6-c-radio {
+  --pf-v6-c-radio--AccentColor: #12a66f;
+}
+
 html.pf-v6-theme-dark .ace_editor {
   background-color: #13161b !important;
   color: #f8f8f8 !important;
