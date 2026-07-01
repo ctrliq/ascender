@@ -32,7 +32,7 @@ const HostStatusBar = ({ counts = {} }) => {
   const noData = Object.keys(counts).length === 0;
   const hostStatus = {
     ok: {
-      color: '#4CB140',
+      color: '#12a66f',
       label: t`OK`,
     },
     skipped: {
@@ -44,7 +44,7 @@ const HostStatusBar = ({ counts = {} }) => {
       label: t`Changed`,
     },
     failures: {
-      color: '#C9190B',
+      color: '#f04438',
       label: t`Failed`,
     },
     dark: {
