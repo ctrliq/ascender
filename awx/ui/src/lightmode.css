@@ -95,20 +95,20 @@ html:not(.pf-v6-theme-dark) .pf-v6-c-toolbar {
   --pf-v6-c-toolbar--BackgroundColor: #fff;
 }
 
-.pf-v6-c-button.pf-m-control:not(:disabled) {
+html:not(.pf-v6-theme-dark) .pf-v6-c-button.pf-m-control:not(:disabled) {
   background-color: #12a66f;
   color: #fff;
 }
 
-.pf-v6-c-button.pf-m-control:not(:disabled):hover {
+html:not(.pf-v6-theme-dark) .pf-v6-c-button.pf-m-control:not(:disabled):hover {
   background-color: #0e8c5d;
 }
 
-.pf-v6-c-button.pf-m-control:not(:disabled) .pf-v6-svg {
+html:not(.pf-v6-theme-dark) .pf-v6-c-button.pf-m-control:not(:disabled) .pf-v6-svg {
   color: #fff;
 }
 
-.pf-v6-c-table thead th {
+html:not(.pf-v6-theme-dark) .pf-v6-c-table thead th {
   background-color: var(--pf-t--color--gray--20) !important;
 }
 

@@ -66,7 +66,15 @@ html.pf-v6-theme-dark body {
 html.pf-v6-theme-dark .pf-v6-c-button.pf-m-link.pf-m-inline {
   --pf-v6-c-button--TextDecorationStyle: unset;
   --pf-v6-c-button--TextDecorationLine: none;
+  --pf-v6-c-button--m-link--m-inline--hover--TextDecorationLine: none;
   padding: 0px 4px 0px 4px;
+  min-height: auto;
+  height: auto;
+}
+
+html.pf-v6-theme-dark .pf-v6-c-button.pf-m-link.pf-m-inline:hover {
+  --pf-v6-c-button--TextDecorationStyle: unset;
+  --pf-v6-c-button--TextDecorationLine: none;
 }
 
 html.pf-v6-theme-dark .ascender-status-label.pf-v6-c-label {
