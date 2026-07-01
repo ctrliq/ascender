@@ -11,149 +11,258 @@ html:not(.pf-v6-theme-dark) {
   --pf-v6-global--BorderColor--100: #d2d2d2;
   --pf-v6-global--BorderColor--200: #e0e0e0;
   --pf-v6-global--BackgroundColor--200: #f5f5f5;
-}
 
-html:not(.pf-v6-theme-dark) .pf-v6-c-page {
-  --pf-v6-c-page--BackgroundColor: #f0f0f0;
-}
+  & .pf-v6-c-page {
+    --pf-v6-c-page--BackgroundColor: #f0f0f0;
+  }
 
-html:not(.pf-v6-theme-dark) .pf-v6-c-page__main {
-  background-color: #f0f0f0;
-}
+  & .pf-v6-c-page__main {
+    background-color: #f0f0f0;
+  }
 
-html:not(.pf-v6-theme-dark) .pf-v6-c-page__main-section {
-  background-color: #f0f0f0;
-}
+  & .pf-v6-c-page__main-section {
+    background-color: #f0f0f0;
+  }
 
-html:not(.pf-v6-theme-dark) .pf-v6-c-page__main-section:first-child {
-  background-color: #fff;
-}
+  & .pf-v6-c-page__main-section:first-child {
+    background-color: #fff;
+  }
 
-html:not(.pf-v6-theme-dark) .pf-v6-c-card.pf-v6-c-card:not(.pf-m-clickable) {
-  background-color: #fff !important;
-  border-radius: 16px !important;
-  box-shadow: none !important;
-}
+  & .pf-v6-c-card.pf-v6-c-card:not(.pf-m-clickable) {
+    background-color: #fff !important;
+    border-radius: 16px !important;
+    box-shadow: none !important;
+  }
 
-/* Dark masthead (top bar) */
-html:not(.pf-v6-theme-dark) .pf-v6-c-masthead {
-  background-color: #151515;
-  color: #fff;
-}
+  /* Dark masthead (top bar) */
+  & .pf-v6-c-masthead {
+    background-color: #151515;
+    color: #fff;
+  }
 
-html:not(.pf-v6-theme-dark) .pf-v6-c-masthead .pf-v6-svg {
-  color: #fff;
-}
+  & .pf-v6-c-masthead .pf-v6-svg {
+    color: #fff;
+  }
 
-html:not(.pf-v6-theme-dark) .pf-v6-c-masthead .pf-v6-c-button.pf-m-plain {
-  color: #fff;
-}
+  & .pf-v6-c-masthead .pf-v6-c-button.pf-m-plain {
+    color: #fff;
+  }
 
-html:not(.pf-v6-theme-dark) .pf-v6-c-masthead .pf-v6-c-menu-toggle {
-  color: #fff;
-}
+  & .pf-v6-c-masthead .pf-v6-c-menu-toggle {
+    color: #fff;
+  }
 
-/* Dark sidebar — match dark mode */
-html:not(.pf-v6-theme-dark) .pf-v6-c-page__sidebar {
-  --pf-v6-c-page__sidebar--BackgroundColor: #13161b;
-  background-color: #13161b;
-}
+  /* Dark sidebar — match dark mode */
+  & .pf-v6-c-page__sidebar {
+    --pf-v6-c-page__sidebar--BackgroundColor: #13161b;
+    background-color: #13161b;
+  }
 
-html:not(.pf-v6-theme-dark) .pf-v6-c-page__sidebar.pf-m-expanded {
-  box-shadow: none;
-  border-right: 1px solid #22262f;
-}
+  & .pf-v6-c-page__sidebar.pf-m-expanded {
+    box-shadow: none;
+    border-right: 1px solid #22262f;
+  }
 
-html:not(.pf-v6-theme-dark) .pf-v6-c-nav {
-  --pf-v6-c-nav--BackgroundColor: transparent;
-  --pf-v6-c-nav__link--Color: #cecfd2;
-  --pf-v6-c-nav__link--hover--Color: #f7f7f7;
-  --pf-v6-c-nav__link--hover--BackgroundColor: #373a41;
-  --pf-v6-c-nav__link--m-current--Color: #f7f7f7;
-  --pf-v6-c-nav__link--m-current--BackgroundColor: #373a41;
-  --pf-v6-c-nav__link--m-current--after--BorderColor: transparent;
-}
+  & .pf-v6-c-nav {
+    --pf-v6-c-nav--BackgroundColor: transparent;
+    --pf-v6-c-nav__link--Color: #cecfd2;
+    --pf-v6-c-nav__link--hover--Color: #f7f7f7;
+    --pf-v6-c-nav__link--hover--BackgroundColor: #373a41;
+    --pf-v6-c-nav__link--m-current--Color: #f7f7f7;
+    --pf-v6-c-nav__link--m-current--BackgroundColor: #373a41;
+    --pf-v6-c-nav__link--m-current--after--BorderColor: transparent;
+  }
 
-html:not(.pf-v6-theme-dark) .pf-v6-c-nav__section-title {
-  color: #f7f7f7;
-}
+  & .pf-v6-c-nav__section-title {
+    color: #f7f7f7;
+  }
 
-html:not(.pf-v6-theme-dark) .pf-v6-c-nav__toggle-icon {
-  color: #94979c;
-  opacity: .6;
-}
+  & .pf-v6-c-nav__toggle-icon {
+    color: #94979c;
+    opacity: .6;
+  }
 
-html:not(.pf-v6-theme-dark) .pf-v6-c-nav__link:focus {
-  background-color: #373a41;
-}
+  & .pf-v6-c-nav__link:focus {
+    background-color: #373a41;
+  }
 
-html:not(.pf-v6-theme-dark) .pf-v6-c-nav__link:active {
-  background-color: transparent;
-}
+  & .pf-v6-c-nav__link:active {
+    background-color: transparent;
+  }
 
-html:not(.pf-v6-theme-dark) .pf-v6-c-toolbar {
-  --pf-v6-c-toolbar--BackgroundColor: #fff;
-}
+  & .pf-v6-c-toolbar {
+    --pf-v6-c-toolbar--BackgroundColor: #fff;
+  }
 
-html:not(.pf-v6-theme-dark) .pf-v6-c-button.pf-m-control:not(:disabled) {
-  background-color: #12a66f;
-  color: #fff;
-}
+  & .pf-v6-c-button.pf-m-control:disabled {
+    background-color: #12a66f;
+    color: var(--pf-t--color--gray--20);
+  }
 
-html:not(.pf-v6-theme-dark) .pf-v6-c-button.pf-m-control:not(:disabled):hover {
-  background-color: #0e8c5d;
-}
+  & .pf-v6-c-button.pf-m-control:disabled .pf-v6-svg {
+    color: var(--pf-t--color--gray--20);
+  }
 
-html:not(.pf-v6-theme-dark) .pf-v6-c-button.pf-m-control:not(:disabled) .pf-v6-svg {
-  color: #fff;
-}
+  & .pf-v6-c-button.pf-m-control:disabled .pf-v6-c-button__icon {
+    color: var(--pf-t--color--gray--20);
+  }
 
-html:not(.pf-v6-theme-dark) .pf-v6-c-table thead th {
-  background-color: var(--pf-t--color--gray--20) !important;
-}
+  & .pf-v6-c-button.pf-m-control:not(:disabled) {
+    background-color: #12a66f;
+    color: #fff;
+  }
 
-html:not(.pf-v6-theme-dark) .pf-v6-c-pagination.pf-m-bottom {
-  background-color: #fff;
-}
+  & .pf-v6-c-button.pf-m-control:not(:disabled):hover {
+    background-color: #0e8c5d;
+  }
 
-.pf-v6-c-pagination__nav-control .pf-v6-c-button:disabled {
-  --pf-v6-c-button--disabled--BackgroundColor: transparent;
-  --pf-v6-c-button--disabled--Color: var(--pf-t--global--text--color--on-disabled);
-  --pf-v6-c-button--m-plain--disabled--Color: var(--pf-t--global--text--color--on-disabled);
-}
+  & .pf-v6-c-button.pf-m-control:not(:disabled) .pf-v6-svg {
+    color: #fff;
+  }
 
-.pf-v6-c-pagination__nav-control .pf-v6-c-button:disabled .pf-v6-svg {
-  color: var(--pf-t--color--gray--40);
-}
+  & .pf-v6-c-button.pf-m-control:not(:disabled) .pf-v6-c-button__icon {
+    color: #fff;
+  }
 
-#job_output-toolbar {
-  border-top: 1px solid var(--pf-t--color--gray--20);
-  border-bottom: 1px solid var(--pf-t--color--gray--20);
-}
+  & .pf-v6-c-table thead th {
+    background-color: #fff;
+    border-bottom: 1px solid var(--pf-v6-c-table__tr--BorderBlockEndColor);
+  }
 
-.ascender-output-wrapper {
-  border-top: 1px solid var(--pf-t--color--gray--20);
-  border-bottom: 1px solid var(--pf-t--color--gray--20);
-}
+  & .pf-v6-c-pagination.pf-m-bottom {
+    background-color: #fff;
+  }
 
-html:not(.pf-v6-theme-dark) .ascender-output-scroll {
-  background-image: linear-gradient(to right, #e8e8e8 85px, transparent 85px);
-}
+  & .pf-v6-c-pagination__nav-control .pf-v6-c-button:disabled {
+    --pf-v6-c-button--disabled--BackgroundColor: transparent;
+    --pf-v6-c-button--disabled--Color: var(--pf-t--global--text--color--on-disabled);
+    --pf-v6-c-button--m-plain--disabled--Color: var(--pf-t--global--text--color--on-disabled);
+  }
 
-/* Secondary button — outline style (green border + text, transparent bg) */
-html:not(.pf-v6-theme-dark) .pf-v6-c-button.pf-m-secondary:not(:disabled) {
-  background-color: transparent;
-  border-color: #12a66f;
-  --pf-v6-c-button--Color: #12a66f;
-  --pf-v6-c-button--hover--Color: #fff;
-  --pf-v6-c-button--BorderColor: #12a66f;
-  --pf-v6-c-button--hover--BorderColor: #0e8c5d;
-  --pf-v6-c-button--m-clicked--BorderColor: #0e8c5d;
-  color: #12a66f;
-}
+  & .pf-v6-c-pagination__nav-control .pf-v6-c-button:disabled .pf-v6-svg {
+    color: var(--pf-t--color--gray--40);
+  }
 
-html:not(.pf-v6-theme-dark) .pf-v6-c-button.pf-m-secondary:not(:disabled):hover {
-  background-color: #0e8c5d;
-  border-color: #0e8c5d;
-  color: #fff;
+  & #job_output-toolbar {
+    border-top: 1px solid var(--pf-t--color--gray--20);
+    border-bottom: 1px solid var(--pf-t--color--gray--20);
+  }
+
+  & .ascender-output-wrapper {
+    border-top: 1px solid var(--pf-t--color--gray--20);
+    border-bottom: 1px solid var(--pf-t--color--gray--20);
+  }
+
+  & .ascender-output-scroll {
+    background-image: linear-gradient(to right, #e8e8e8 85px, transparent 85px);
+  }
+
+  & .pf-v6-c-button {
+    --pf-v6-c-button--m-primary--BackgroundColor: #12a66f;
+    --pf-v6-c-button--m-primary--Color: #fff;
+    --pf-v6-c-button--m-primary--hover--BackgroundColor: #0e8c5d;
+    --pf-v6-c-button--m-primary--focus--Color: var(--pf-t--global--text--color--on-disabled);
+    --pf-v6-c-button--m-link--Color: #12a66f;
+    --pf-v6-c-button--disabled--BackgroundColor: #e8e8e8;
+    --pf-v6-c-button--disabled--Color: #12a66f;
+    --pf-v6-c-button--disabled--BorderColor: #12a66f;
+    --pf-v6-c-button--disabled--BorderWidth: 1px;
+    font-weight: 600;
+  }
+
+  /* Secondary button — outline style (green border + text, transparent bg) */
+  & .pf-v6-c-button.pf-m-secondary:not(:disabled) {
+    background-color: transparent;
+    border-color: #12a66f;
+    --pf-v6-global--Color--200: #12a66f;
+    --pf-v6-c-button--Color: #12a66f;
+    --pf-v6-c-button--hover--Color: #fff;
+    --pf-v6-c-button--BorderColor: #12a66f;
+    --pf-v6-c-button--hover--BorderColor: #0e8c5d;
+    --pf-v6-c-button--m-clicked--BorderColor: #0e8c5d;
+    color: #12a66f;
+  }
+
+  & .pf-v6-c-button.pf-m-secondary:not(:disabled):hover {
+    border-color: #0e8c5d;
+  }
+
+  & .pf-v6-c-button.pf-m-secondary:disabled {
+    border: 1px solid #12a66f;
+  }
+
+  & .pf-v6-c-button.pf-m-link {
+    --pf-v6-c-label--BackgroundColor: #c7c7c7;
+    --pf-v6-c-label--Color: #12a66f;
+    --pf-v6-c-label__icon--Color: #12a66f;
+    color: #12a66f;
+    border: 1px solid #12a66f;
+    margin-left: 0px;
+  }
+
+  & .ascender-status-label.pf-v6-c-label.pf-m-green {
+    --pf-v6-c-label--BackgroundColor: #12a66f;
+    --pf-v6-c-label--Color: #fff;
+    --pf-v6-c-label__icon--Color: #fff;
+    font-weight: 600;
+  }
+
+  & .ascender-status-label.pf-v6-c-label.pf-m-red {
+    --pf-v6-c-label--BackgroundColor: #f04438;
+    --pf-v6-c-label--Color: #fff;
+    --pf-v6-c-label__icon--Color: #fff;
+    font-weight: 600;
+  }
+
+  & .ascender-status-label.pf-v6-c-label.pf-m-orange {
+    --pf-v6-c-label--BackgroundColor: #f79009;
+    --pf-v6-c-label--Color: #fff;
+    --pf-v6-c-label__icon--Color: #fff;
+    font-weight: 600;
+  }
+
+  /* We don't want any blue, so just change it to our branded green */
+  & .ascender-status-label.pf-v6-c-label.pf-m-blue {
+    --pf-v6-c-label--BackgroundColor: #12a66f;
+    --pf-v6-c-label--Color: #fff;
+    --pf-v6-c-label__icon--Color: #fff;
+    font-weight: 600;
+  }
+
+  & .pf-v6-c-label.pf-m-green {
+    --pf-v6-c-label--BackgroundColor: #12a66f;
+    --pf-v6-c-label--Color: #fff;
+    --pf-v6-c-label__icon--Color: #fff;
+  }
+
+  & .pf-v6-c-label.pf-m-red {
+    --pf-v6-c-label--BackgroundColor: #f04438;
+    --pf-v6-c-label--Color: #fff;
+    --pf-v6-c-label__icon--Color: #fff;
+  }
+
+  & .pf-v6-c-label.pf-m-blue {
+    --pf-v6-c-label--BackgroundColor: #12a66f;
+    --pf-v6-c-label--Color: #fff;
+    --pf-v6-c-label__icon--Color: #fff;
+    font-weight: 600;
+  }
+
+  & .pf-v6-c-button.pf-m-link.pf-m-inline {
+    --pf-v6-c-button--TextDecorationStyle: unset;
+    --pf-v6-c-button--TextDecorationLine: none;
+    --pf-v6-c-button--m-link--m-inline--hover--TextDecorationLine: none;
+    padding: 0px 4px 0px 4px;
+    min-height: auto !important;
+    height: auto !important;
+  }
+
+  & .pf-v6-c-button.pf-m-link.pf-m-inline:hover {
+    --pf-v6-c-button--TextDecorationStyle: unset;
+    --pf-v6-c-button--TextDecorationLine: none;
+  }
+
+  [class*="WorkflowActionTooltip__TooltipActions"] {
+    background-color: #fff;
+  }
 }
