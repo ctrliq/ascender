@@ -362,7 +362,6 @@ html.pf-v6-theme-dark .pf-v6-c-pagination.pf-m-bottom {
 
 html.pf-v6-theme-dark .pf-v6-c-menu-toggle {
   background-color: #1b1d21;
-
 }
 
 html.pf-v6-theme-dark .pf-v6-c-menu-toggle::before {
@@ -371,6 +370,10 @@ html.pf-v6-theme-dark .pf-v6-c-menu-toggle::before {
 
 html.pf-v6-theme-dark .pf-v6-c-menu-toggle:hover {
   --pf-v6-c-menu-toggle--BorderColor: #444548;
+}
+
+html.pf-v6-theme-dark .pf-v6-c-pagination__page-menu > .pf-v6-c-menu-toggle {
+  background-color: #13161b;
 }
 
 html.pf-v6-theme-dark :focus-visible {
