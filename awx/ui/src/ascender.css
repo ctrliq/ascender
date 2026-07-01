@@ -390,6 +390,10 @@ a {
   margin-bottom: 1rem;
 }
 
+.pf-v6-c-label-group__list {
+  --pf-v6-c-label-group__list--ColumnGap: .5rem;
+}
+
 /* Labels inside a label group (e.g. Galaxy credential chips on the
    Organization details page) get their last characters clipped with an
    ellipsis because PF6 applies max-width:100% with border-box sizing to the

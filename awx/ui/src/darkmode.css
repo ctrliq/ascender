@@ -81,6 +81,7 @@ html.pf-v6-theme-dark .ascender-status-label.pf-v6-c-label {
   --pf-v6-c-label--BackgroundColor: #22262f;
   --pf-v6-c-label--Color: #12a66f;
   --pf-v6-c-label__icon--Color: #12a66f;
+  font-weight: 600;
 }
 
 html.pf-v6-theme-dark .pf-v6-c-button.pf-m-link {
@@ -110,6 +111,7 @@ html.pf-v6-theme-dark .ascender-status-label.pf-v6-c-label.pf-m-blue {
   --pf-v6-c-label--BackgroundColor: #12a66f;
   --pf-v6-c-label--Color: #22262f;
   --pf-v6-c-label__icon--Color: #22262f;
+  font-weight: 600;
 }
 
 html.pf-v6-theme-dark .pf-v6-c-label.pf-m-green {
@@ -121,9 +123,10 @@ html.pf-v6-theme-dark .pf-v6-c-label.pf-m-red {
   --pf-v6-c-label--BackgroundColor: #f04438;
 }
 html.pf-v6-theme-dark .pf-v6-c-label.pf-m-blue {
-  --pf-v6-c-label--BackgroundColor: #17b26a;
+  --pf-v6-c-label--BackgroundColor: #12a66f;
   --pf-v6-c-label--Color: #22262f;
   --pf-v6-c-label__icon--Color: #22262f;
+  font-weight: 600;
 }
 
 html.pf-v6-theme-dark .pf-v6-c-title {
@@ -219,6 +222,7 @@ html.pf-v6-theme-dark .pf-v6-c-button {
 }
 
 html.pf-v6-theme-dark .pf-v6-c-button.pf-m-primary:not(:disabled) {
+  background-color: #12a66f;
   --pf-v6-c-button--Color: #22262f !important;
   color: #22262f !important;
 }
