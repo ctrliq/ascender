@@ -61,6 +61,8 @@ html.pf-v6-theme-dark body {
   --pf-v6-c-button--disabled--Color: #12a66f;
   --pf-v6-c-menu-toggle--BorderColor: #444548;
   --pf-t--global--border--color--control--default: #444548;
+
+  --pf-v6-c-nav__link--hover--BackgroundColor: red;
 }
 
 html.pf-v6-theme-dark .pf-v6-c-label.pf-m-filled {
@@ -628,6 +630,10 @@ html.pf-v6-theme-dark .pf-v6-c-button.pf-m-plain:hover {
   --pf-v6-c-button--m-plain--disabled--Color: var(--pf-t--color--gray--30);
 }
 
+html.pf-v6-theme-dark .pf-m-small {
+  font-size: 10px;
+}
+
 html.pf-v6-theme-dark .pf-v6-c-notification-badge {
   --pf-v6-c-notification-badge--PaddingRight: 1rem;
   --pf-v6-c-notification-badge--PaddingLeft: 1rem;
@@ -756,8 +762,12 @@ html.pf-v6-theme-dark .pf-v6-c-slider {
   /* --pf-v6-c-slider__rail-track--before--fill--BackgroundColor--gradient-stop: transparent; */
 }
 
+html.pf-v6-theme-dark .pf-v6-c-nav__link:hover {
+  background-color: #26292d;
+}
+
 html.pf-v6-theme-dark .pf-v6-c-nav__link:focus {
-  background-color: var(--pf-v6-global--BorderColor--100);
+  background-color: #444548;
 }
 
 html.pf-v6-theme-dark .pf-v6-c-nav__link:active {
