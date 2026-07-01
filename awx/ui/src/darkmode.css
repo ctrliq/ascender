@@ -61,8 +61,6 @@ html.pf-v6-theme-dark body {
   --pf-v6-c-button--disabled--Color: #12a66f;
   --pf-v6-c-menu-toggle--BorderColor: #444548;
   --pf-t--global--border--color--control--default: #444548;
-
-  --pf-v6-c-nav__link--hover--BackgroundColor: red;
 }
 
 html.pf-v6-theme-dark .pf-v6-c-label.pf-m-filled {
