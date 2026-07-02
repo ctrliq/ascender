@@ -416,6 +416,10 @@ const NodeModal = ({ onSave, askLinkType, title }) => {
         timeoutSeconds: 0,
         convergence: 'any',
         linkType: 'success',
+        linkConditionTrigger: 'success',
+        linkConditionArtifactKey: '',
+        linkConditionOperator: 'eq',
+        linkConditionExpectedValue: '',
         nodeResource: nodeToEdit?.fullUnifiedJobTemplate || null,
         nodeType: nodeToEdit?.fullUnifiedJobTemplate?.type || 'job_template',
       }}

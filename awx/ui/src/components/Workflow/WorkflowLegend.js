@@ -70,6 +70,10 @@ const AlwaysLink = styled(Link)`
   background-color: #337ab7;
 `;
 
+const ConditionLink = styled(Link)`
+  background-color: #f0ab00;
+`;
+
 const Close = styled(TimesIcon)`
   cursor: pointer;
   position: absolute;
@@ -128,6 +132,10 @@ function WorkflowLegend() {
         <li>
           <AlwaysLink />
           <span>{t`Always`}</span>
+        </li>
+        <li>
+          <ConditionLink />
+          <span>{t`On Condition`}</span>
         </li>
       </Legend>
     </Wrapper>
