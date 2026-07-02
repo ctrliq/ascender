@@ -89,7 +89,7 @@ function SecretPasswordField({
       }
     >
       <InputGroup>
-        <InputGroupItem><PasswordInput
+        <InputGroupItem isFill><PasswordInput
           id={id}
           name={name}
           validate={validate}

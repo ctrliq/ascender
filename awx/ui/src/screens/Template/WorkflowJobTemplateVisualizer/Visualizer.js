@@ -431,7 +431,7 @@ function Visualizer({ template }) {
                 inventory: node.promptValues?.inventory?.id || null,
                 unified_job_template: node.fullUnifiedJobTemplate.id,
                 all_parents_must_converge: node.all_parents_must_converge,
-                ...(node.identifier && { identifier: node.identifier }),
+                identifier: node.identifier || undefined,
               }).then(({ data }) => {
                 node.originalNodeObject = data;
                 originalLinkMap[node.id] = {

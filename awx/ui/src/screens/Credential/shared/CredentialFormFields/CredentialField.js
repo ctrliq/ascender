@@ -109,7 +109,7 @@ function CredentialInput({
       return (
         <InputGroup>
           {RevertReplaceButton}
-          <InputGroupItem><FileUpload
+          <InputGroupItem isFill><FileUpload
             {...fileUploadProps}
             {...rest}
           /></InputGroupItem>

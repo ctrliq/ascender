@@ -14,7 +14,11 @@ function NodeNextButton({
       return;
     }
     onNext();
-  }, [onNext, triggerNext]);
+    // `onNext` (the wizard's goToNextStep) gets a new identity on every render,
+    // so it must not be a dependency here — otherwise the effect re-fires on the
+    // next render and advances an extra step, triggering an unintended save.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [triggerNext]);
 
   return (
     <Button
