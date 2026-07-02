@@ -916,6 +916,21 @@ register(
 )
 
 register(
+    'EXECUTION_ENVIRONMENT_BUILDER_CONTAINER_OPTIONS',
+    field_class=fields.StringListField,
+    label=_('EE Builder Container Options'),
+    default=[],
+    help_text=_(
+        "List of container runtime options to use when running EE builder builds. "
+        "When empty (the default), the builder runs with --privileged. "
+        "Set this to override with a tighter capability set, e.g. "
+        "['--cap-add=SYS_ADMIN', '--cap-add=MKNOD', '--device=/dev/fuse', '--security-opt=seccomp=unconfined']."
+    ),
+    category=('Jobs'),
+    category_slug='jobs',
+)
+
+register(
     'RECEPTOR_RELEASE_WORK',
     field_class=fields.BooleanField,
     label=_('Release Receptor Work'),
