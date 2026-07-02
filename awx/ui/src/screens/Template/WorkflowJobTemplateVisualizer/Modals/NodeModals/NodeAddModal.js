@@ -21,6 +21,10 @@ function NodeAddModal() {
       timeoutMinutes,
       timeoutSeconds,
       linkType,
+      linkConditionTrigger,
+      linkConditionArtifactKey,
+      linkConditionOperator,
+      linkConditionExpectedValue,
       convergence,
       identifier,
     } = values;
@@ -41,9 +45,22 @@ function NodeAddModal() {
       identifier,
     };
 
+    if (linkType === 'condition') {
+      node.linkCondition = {
+        trigger: linkConditionTrigger || 'success',
+        artifact_key: linkConditionArtifactKey,
+        operator: linkConditionOperator || 'eq',
+        expected_value: linkConditionExpectedValue || '',
+      };
+    }
+
     delete values.convergence;
 
     delete values.linkType;
+    delete values.linkConditionTrigger;
+    delete values.linkConditionArtifactKey;
+    delete values.linkConditionOperator;
+    delete values.linkConditionExpectedValue;
 
     if (values.nodeType === 'workflow_approval_template') {
       node.nodeResource = {
@@ -66,6 +83,12 @@ function NodeAddModal() {
         };
       }
     }
+
+    // these live on the node itself, not in the prompt values (which alias
+    // `values`); leaking identifier into the node POST body 400s when blank
+    delete values.identifier;
+    delete values.nodeType;
+    delete values.nodeResource;
 
     dispatch({
       type: 'CREATE_NODE',

@@ -15,7 +15,9 @@ function LinkAddModal() {
           {t`Add Link`}
         </Title>
       }
-      onConfirm={(linkType) => dispatch({ type: 'CREATE_LINK', linkType })}
+      onConfirm={(linkType, linkCondition) =>
+        dispatch({ type: 'CREATE_LINK', linkType, linkCondition })
+      }
     />
   );
 }

@@ -26,6 +26,7 @@ describe('LinkAddModal', () => {
     expect(dispatch).toHaveBeenCalledWith({
       type: 'CREATE_LINK',
       linkType: 'success',
+      linkCondition: null,
     });
   });
 });

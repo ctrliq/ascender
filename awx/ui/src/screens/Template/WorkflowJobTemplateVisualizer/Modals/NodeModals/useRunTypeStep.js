@@ -9,10 +9,19 @@ const STEP_ID = 'runType';
 export default function useRunTypeStep(askLinkType) {
   const { t } = useLingui();
   const [, meta] = useField('linkType');
+  const [artifactKeyField] = useField('linkConditionArtifactKey');
 
   return {
-    step: getStep(t`Run type`, askLinkType, meta),
-    initialValues: askLinkType ? { linkType: 'success' } : {},
+    step: getStep(t`Run type`, askLinkType, meta, artifactKeyField),
+    initialValues: askLinkType
+      ? {
+          linkType: 'success',
+          linkConditionTrigger: 'success',
+          linkConditionArtifactKey: '',
+          linkConditionOperator: 'eq',
+          linkConditionExpectedValue: '',
+        }
+      : {},
     isReady: true,
     contentError: null,
     hasError: !!meta.error,
@@ -22,7 +31,7 @@ export default function useRunTypeStep(askLinkType) {
     validate: () => {},
   };
 }
-function getStep(label, askLinkType, meta) {
+function getStep(label, askLinkType, meta, artifactKeyField) {
   if (!askLinkType) {
     return null;
   }
@@ -34,6 +43,8 @@ function getStep(label, askLinkType, meta) {
       </StepName>
     ),
     component: <RunStep />,
-    enableNext: meta.value !== '',
+    enableNext:
+      meta.value !== '' &&
+      (meta.value !== 'condition' || artifactKeyField.value !== ''),
   };
 }

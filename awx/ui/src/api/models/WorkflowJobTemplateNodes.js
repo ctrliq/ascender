@@ -33,6 +33,16 @@ class WorkflowJobTemplateNodes extends LabelsMixin(InstanceGroupsMixin(Base)) {
     });
   }
 
+  associateConditionNode(id, idToAssociate, condition) {
+    return this.http.post(`${this.baseUrl}${id}/condition_nodes/`, {
+      id: idToAssociate,
+      trigger: condition?.trigger || 'success',
+      artifact_key: condition?.artifact_key || '',
+      operator: condition?.operator || 'eq',
+      expected_value: condition?.expected_value || '',
+    });
+  }
+
   disassociateSuccessNode(id, idToDissociate) {
     return this.http.post(`${this.baseUrl}${id}/success_nodes/`, {
       id: idToDissociate,
@@ -49,6 +59,13 @@ class WorkflowJobTemplateNodes extends LabelsMixin(InstanceGroupsMixin(Base)) {
 
   disassociateAlwaysNode(id, idToDissociate) {
     return this.http.post(`${this.baseUrl}${id}/always_nodes/`, {
+      id: idToDissociate,
+      disassociate: true,
+    });
+  }
+
+  disassociateConditionNode(id, idToDissociate) {
+    return this.http.post(`${this.baseUrl}${id}/condition_nodes/`, {
       id: idToDissociate,
       disassociate: true,
     });

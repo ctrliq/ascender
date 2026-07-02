@@ -211,6 +211,15 @@ function Visualizer({ template }) {
             )
           );
           break;
+        case 'condition':
+          associateNodeRequests.push(
+            WorkflowJobTemplateNodesAPI.associateConditionNode(
+              originalLinkMap[link.source.id].id,
+              originalLinkMap[link.target.id].id,
+              link.linkCondition
+            )
+          );
+          break;
         default:
       }
     });
@@ -263,6 +272,21 @@ function Visualizer({ template }) {
             WorkflowJobTemplateNodesAPI.disassociateAlwaysNode(
               node.id,
               alwaysNodeId
+            )
+          );
+        }
+      });
+      (node.condition_nodes || []).forEach((conditionNodeId) => {
+        if (
+          !deletedNodeIds.includes(conditionNodeId) &&
+          (!linkMap[node.id] ||
+            !linkMap[node.id][conditionNodeId] ||
+            linkMap[node.id][conditionNodeId] !== 'condition')
+        ) {
+          disassociateNodeRequests.push(
+            WorkflowJobTemplateNodesAPI.disassociateConditionNode(
+              node.id,
+              conditionNodeId
             )
           );
         }
@@ -369,6 +393,26 @@ function Visualizer({ template }) {
                   newLinks.push(link);
                 }
                 break;
+              case 'condition': {
+                const sourceNode = originalLinkMap[link.source.id];
+                const existingEdge = (sourceNode.condition_edges || []).find(
+                  (edge) => edge.id === originalLinkMap[link.target.id].id
+                );
+                // re-posting an existing condition link updates its condition,
+                // so also treat links whose condition changed as new
+                if (
+                  !existingEdge ||
+                  existingEdge.trigger !== link.linkCondition?.trigger ||
+                  existingEdge.artifact_key !==
+                    link.linkCondition?.artifact_key ||
+                  existingEdge.operator !== link.linkCondition?.operator ||
+                  existingEdge.expected_value !==
+                    link.linkCondition?.expected_value
+                ) {
+                  newLinks.push(link);
+                }
+                break;
+              }
               default:
             }
           }
@@ -383,13 +427,21 @@ function Visualizer({ template }) {
           return;
         }
         if (node.originalNodeObject && !node.isDeleted) {
-          const { id, success_nodes, failure_nodes, always_nodes } =
-            node.originalNodeObject;
+          const {
+            id,
+            success_nodes,
+            failure_nodes,
+            always_nodes,
+            condition_nodes,
+            condition_edges,
+          } = node.originalNodeObject;
           originalLinkMap[node.id] = {
             id,
             success_nodes,
             failure_nodes,
             always_nodes,
+            condition_nodes: condition_nodes || [],
+            condition_edges: condition_edges || [],
           };
         }
         if (node.isDeleted && node.originalNodeObject) {
@@ -412,6 +464,8 @@ function Visualizer({ template }) {
                   success_nodes: [],
                   failure_nodes: [],
                   always_nodes: [],
+                  condition_nodes: [],
+                  condition_edges: [],
                 };
                 approvalTemplateRequests.push(
                   WorkflowJobTemplateNodesAPI.createApprovalTemplate(data.id, {
@@ -439,6 +493,8 @@ function Visualizer({ template }) {
                   success_nodes: [],
                   failure_nodes: [],
                   always_nodes: [],
+                  condition_nodes: [],
+                  condition_edges: [],
                 };
 
                 if (node.promptValues?.addedCredentials?.length > 0) {

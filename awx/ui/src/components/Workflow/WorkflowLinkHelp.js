@@ -29,8 +29,23 @@ function WorkflowLinkHelp({ link }) {
     case 'failure':
       linkType = t`On Failure`;
       break;
+    case 'condition':
+      linkType = t`On Condition`;
+      break;
     default:
       linkType = '';
+  }
+
+  let triggerLabel;
+  switch (link.linkCondition?.trigger) {
+    case 'failure':
+      triggerLabel = t`On Failure`;
+      break;
+    case 'always':
+      triggerLabel = t`Always`;
+      break;
+    default:
+      triggerLabel = t`On Success`;
   }
 
   return (
@@ -39,6 +54,22 @@ function WorkflowLinkHelp({ link }) {
         <b>{t`Run`}</b>
       </dt>
       <dd id="workflow-link-help-type">{linkType}</dd>
+      {link.linkType === 'condition' && link.linkCondition && (
+        <>
+          <dt>
+            <b>{t`Evaluate on`}</b>
+          </dt>
+          <dd id="workflow-link-help-trigger">{triggerLabel}</dd>
+          <dt>
+            <b>{t`Condition`}</b>
+          </dt>
+          <dd id="workflow-link-help-condition">
+            {`${link.linkCondition.artifact_key} ${
+              link.linkCondition.operator === 'ne' ? '!=' : '=='
+            } ${link.linkCondition.expected_value}`}
+          </dd>
+        </>
+      )}
     </GridDL>
   );
 }

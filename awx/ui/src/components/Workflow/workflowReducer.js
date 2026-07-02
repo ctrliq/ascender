@@ -28,7 +28,7 @@ export function initReducer() {
 export default function visualizerReducer(state, action) {
   switch (action.type) {
     case 'CREATE_LINK':
-      return createLink(state, action.linkType);
+      return createLink(state, action.linkType, action.linkCondition);
     case 'CREATE_NODE':
       return createNode(state, action.node);
     case 'CANCEL_LINK':
@@ -130,7 +130,7 @@ export default function visualizerReducer(state, action) {
     case 'TOGGLE_UNSAVED_CHANGES_MODAL':
       return toggleUnsavedChangesModal(state);
     case 'UPDATE_LINK':
-      return updateLink(state, action.linkType);
+      return updateLink(state, action.linkType, action.linkCondition);
     case 'UPDATE_NODE':
       return updateNode(state, action.node);
     case 'REFRESH_NODE':
@@ -140,7 +140,7 @@ export default function visualizerReducer(state, action) {
   }
 }
 
-function createLink(state, linkType) {
+function createLink(state, linkType, linkCondition) {
   const { addLinkSourceNode, addLinkTargetNode, links, nodes } = state;
   const newLinks = [...links];
   const newNodes = [...nodes];
@@ -157,6 +157,7 @@ function createLink(state, linkType) {
       id: addLinkTargetNode.id,
     },
     linkType,
+    ...(linkType === 'condition' && { linkCondition }),
   });
 
   newLinks.forEach((link, index) => {
@@ -205,6 +206,7 @@ function createNode(state, node) {
       id: nextNodeId,
     },
     linkType: node.linkType,
+    ...(node.linkType === 'condition' && { linkCondition: node.linkCondition }),
   });
 
   if (addNodeTarget) {
@@ -336,6 +338,9 @@ function addLinksFromParentsToChildren(
             id: child.id,
           },
           linkType: child.linkType,
+          ...(child.linkType === 'condition' && {
+            linkCondition: child.linkCondition,
+          }),
         });
       }
     });
@@ -363,6 +368,7 @@ function removeLinksFromDeletedNode(
         children.push({
           id: link.target.id,
           linkType: link.linkType,
+          linkCondition: link.linkCondition,
         });
       } else if (link.target.id === nodeId) {
         parents.push(link.source.id);
@@ -489,6 +495,25 @@ function generateLinks(
         source: arrayOfNodesForChart[sourceIndex],
         target: arrayOfNodesForChart[targetIndex],
         linkType: 'always',
+      });
+      nonRootNodeIds.push(nodeId);
+    });
+    (node.condition_nodes || []).forEach((nodeId) => {
+      const targetIndex =
+        chartNodeIdToIndexMapping[nodeIdToChartNodeIdMapping[nodeId]];
+      const conditionEdge = (node.condition_edges || []).find(
+        (edge) => edge.id === nodeId
+      );
+      arrayOfLinksForChart.push({
+        source: arrayOfNodesForChart[sourceIndex],
+        target: arrayOfNodesForChart[targetIndex],
+        linkType: 'condition',
+        linkCondition: conditionEdge && {
+          trigger: conditionEdge.trigger,
+          artifact_key: conditionEdge.artifact_key,
+          operator: conditionEdge.operator,
+          expected_value: conditionEdge.expected_value,
+        },
       });
       nonRootNodeIds.push(nodeId);
     });
@@ -641,7 +666,7 @@ function toggleUnsavedChangesModal(state) {
   };
 }
 
-function updateLink(state, linkType) {
+function updateLink(state, linkType, linkCondition) {
   const { linkToEdit, links } = state;
   const newLinks = [...links];
 
@@ -651,6 +676,11 @@ function updateLink(state, linkType) {
       link.target.id === linkToEdit.target.id
     ) {
       link.linkType = linkType;
+      if (linkType === 'condition') {
+        link.linkCondition = linkCondition;
+      } else {
+        delete link.linkCondition;
+      }
     }
   });
 
