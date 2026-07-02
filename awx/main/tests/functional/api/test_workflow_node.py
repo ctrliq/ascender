@@ -11,6 +11,7 @@ from awx.main.models.workflow import (
     WorkflowJob,
     WorkflowJobTemplate,
     WorkflowJobTemplateNode,
+    WorkflowJobTemplateNodeConditionLink,
 )
 from awx.main.models.credential import Credential
 from awx.main.scheduler import TaskManager, WorkflowManager, DependencyManager
@@ -377,3 +378,129 @@ class TestNodeCredentials:
         # okay, now I will add the new one
         post(url=creds_url, data={'id': cred2.pk}, user=admin_user, expect=204)
         assert list(node.credentials.values_list('id', flat=True)) == [cred2.pk]
+
+
+@pytest.mark.django_db
+class TestConditionNodeLinks:
+    @pytest.fixture
+    def other_node(self, workflow_job_template, job_template):
+        return WorkflowJobTemplateNode.objects.create(workflow_job_template=workflow_job_template, unified_job_template=job_template)
+
+    def _url(self, node):
+        return reverse('api:workflow_job_template_node_condition_nodes_list', kwargs={'pk': node.pk})
+
+    def test_associate_condition_node(self, post, node, other_node, admin_user):
+        post(
+            self._url(node),
+            {'id': other_node.pk, 'artifact_key': 'environment', 'operator': 'eq', 'expected_value': 'production'},
+            user=admin_user,
+            expect=204,
+        )
+        link = WorkflowJobTemplateNodeConditionLink.objects.get(from_node=node, to_node=other_node)
+        assert link.artifact_key == 'environment'
+        assert link.operator == 'eq'
+        assert link.expected_value == 'production'
+        assert link.trigger == 'success'
+
+    def test_associate_condition_node_with_trigger(self, post, node, other_node, admin_user):
+        post(
+            self._url(node),
+            {'id': other_node.pk, 'trigger': 'failure', 'artifact_key': 'error_kind', 'expected_value': 'disk'},
+            user=admin_user,
+            expect=204,
+        )
+        link = WorkflowJobTemplateNodeConditionLink.objects.get(from_node=node, to_node=other_node)
+        assert link.trigger == 'failure'
+
+    def test_invalid_trigger_is_rejected(self, post, node, other_node, admin_user):
+        r = post(
+            self._url(node),
+            {'id': other_node.pk, 'trigger': 'sometimes', 'artifact_key': 'environment', 'expected_value': 'production'},
+            user=admin_user,
+            expect=400,
+        )
+        assert 'trigger' in r.data
+
+    def test_reassociate_updates_condition(self, post, node, other_node, admin_user):
+        post(self._url(node), {'id': other_node.pk, 'artifact_key': 'environment', 'expected_value': 'production'}, user=admin_user, expect=204)
+        post(
+            self._url(node),
+            {'id': other_node.pk, 'artifact_key': 'environment', 'operator': 'ne', 'expected_value': 'staging'},
+            user=admin_user,
+            expect=204,
+        )
+        link = WorkflowJobTemplateNodeConditionLink.objects.get(from_node=node, to_node=other_node)
+        assert link.operator == 'ne'
+        assert link.expected_value == 'staging'
+
+    def test_operator_defaults_to_eq(self, post, node, other_node, admin_user):
+        post(self._url(node), {'id': other_node.pk, 'artifact_key': 'environment', 'expected_value': 'production'}, user=admin_user, expect=204)
+        link = WorkflowJobTemplateNodeConditionLink.objects.get(from_node=node, to_node=other_node)
+        assert link.operator == 'eq'
+
+    def test_non_string_expected_value_is_json_encoded(self, post, node, other_node, admin_user):
+        post(self._url(node), {'id': other_node.pk, 'artifact_key': 'enabled', 'expected_value': True}, user=admin_user, expect=204)
+        link = WorkflowJobTemplateNodeConditionLink.objects.get(from_node=node, to_node=other_node)
+        assert link.expected_value == 'true'
+
+    def test_artifact_key_is_required(self, post, node, other_node, admin_user):
+        r = post(self._url(node), {'id': other_node.pk, 'expected_value': 'production'}, user=admin_user, expect=400)
+        assert 'artifact_key' in r.data
+        assert not WorkflowJobTemplateNodeConditionLink.objects.filter(from_node=node).exists()
+
+    def test_invalid_operator_is_rejected(self, post, node, other_node, admin_user):
+        r = post(
+            self._url(node),
+            {'id': other_node.pk, 'artifact_key': 'environment', 'operator': 'gt', 'expected_value': '1'},
+            user=admin_user,
+            expect=400,
+        )
+        assert 'operator' in r.data
+
+    def test_no_duplicate_link_with_other_relationship(self, post, node, other_node, admin_user):
+        node.success_nodes.add(other_node)
+        post(
+            self._url(node),
+            {'id': other_node.pk, 'artifact_key': 'environment', 'expected_value': 'production'},
+            user=admin_user,
+            expect=400,
+        )
+
+    def test_success_association_rejected_when_condition_link_exists(self, post, node, other_node, admin_user):
+        WorkflowJobTemplateNodeConditionLink.objects.create(from_node=node, to_node=other_node, artifact_key='environment', expected_value='production')
+        url = reverse('api:workflow_job_template_node_success_nodes_list', kwargs={'pk': node.pk})
+        post(url, {'id': other_node.pk}, user=admin_user, expect=400)
+
+    def test_self_reference_rejected(self, post, node, admin_user):
+        post(self._url(node), {'id': node.pk, 'artifact_key': 'environment', 'expected_value': 'production'}, user=admin_user, expect=400)
+
+    def test_cycle_rejected(self, post, node, other_node, admin_user):
+        post(self._url(node), {'id': other_node.pk, 'artifact_key': 'environment', 'expected_value': 'production'}, user=admin_user, expect=204)
+        post(self._url(other_node), {'id': node.pk, 'artifact_key': 'environment', 'expected_value': 'production'}, user=admin_user, expect=400)
+
+    def test_disassociate_removes_link(self, post, node, other_node, admin_user):
+        post(self._url(node), {'id': other_node.pk, 'artifact_key': 'environment', 'expected_value': 'production'}, user=admin_user, expect=204)
+        post(self._url(node), {'id': other_node.pk, 'disassociate': True}, user=admin_user, expect=204)
+        assert not WorkflowJobTemplateNodeConditionLink.objects.filter(from_node=node).exists()
+        assert not node.condition_nodes.exists()
+
+    def test_condition_edges_exposed_in_serializer(self, get, post, node, other_node, admin_user):
+        post(self._url(node), {'id': other_node.pk, 'artifact_key': 'environment', 'expected_value': 'production'}, user=admin_user, expect=204)
+        url = reverse('api:workflow_job_template_node_detail', kwargs={'pk': node.pk})
+        r = get(url, user=admin_user, expect=200)
+        assert r.data['condition_nodes'] == [other_node.pk]
+        assert r.data['condition_edges'] == [
+            {'id': other_node.pk, 'trigger': 'success', 'artifact_key': 'environment', 'operator': 'eq', 'expected_value': 'production'}
+        ]
+        assert 'condition_nodes' in r.data['related']
+
+    def test_create_and_attach_in_one_post(self, post, node, job_template, admin_user):
+        r = post(
+            self._url(node),
+            {'unified_job_template': job_template.pk, 'artifact_key': 'environment', 'expected_value': 'production'},
+            user=admin_user,
+            expect=201,
+        )
+        link = WorkflowJobTemplateNodeConditionLink.objects.get(from_node=node, to_node_id=r.data['id'])
+        assert link.artifact_key == 'environment'
+        assert link.expected_value == 'production'

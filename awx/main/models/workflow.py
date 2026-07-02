@@ -51,12 +51,95 @@ __all__ = [
     'WorkflowJobOptions',
     'WorkflowJobNode',
     'WorkflowJobTemplateNode',
+    'WorkflowJobTemplateNodeConditionLink',
+    'WorkflowJobNodeConditionLink',
     'WorkflowApprovalTemplate',
     'WorkflowApproval',
+    'evaluate_artifact_condition',
 ]
 
 
 logger = logging.getLogger('awx.main.models.workflow')
+
+
+def evaluate_artifact_condition(artifacts, artifact_key, operator, expected_value):
+    """
+    Evaluate a conditional-edge expression against a dict of artifacts
+    (set_stats data produced by the parent job and its ancestors).
+
+    expected_value is stored as text; it is first interpreted as JSON so that
+    typed artifact values (booleans, numbers, lists) can be matched, falling
+    back to comparing against the string representation of the artifact value.
+    A missing artifact_key never matches, regardless of operator.
+    """
+    if artifact_key not in artifacts:
+        return False
+    value = artifacts[artifact_key]
+    matches = False
+    try:
+        expected = json.loads(expected_value)
+        # guard against Python's bool/int cross-type equality (True == 1)
+        matches = value == expected and isinstance(value, bool) == isinstance(expected, bool)
+    except (TypeError, ValueError):
+        pass
+    if not matches:
+        matches = str(value) == expected_value
+    if operator == 'ne':
+        return not matches
+    return matches
+
+
+class WorkflowNodeConditionLinkBase(models.Model):
+    """
+    Through model for the condition_nodes relationship: an edge that is only
+    traversed when the parent job finishes with the outcome selected in
+    `trigger` (success by default) AND the stored condition evaluates to true
+    against the parent's artifacts.
+    """
+
+    class Meta:
+        abstract = True
+        app_label = 'main'
+
+    OPERATOR_CHOICES = [
+        ('eq', _('Equals')),
+        ('ne', _('Not equals')),
+    ]
+
+    TRIGGER_CHOICES = [
+        ('success', _('On success')),
+        ('failure', _('On failure')),
+        ('always', _('Always')),
+    ]
+
+    trigger = models.CharField(
+        max_length=16,
+        choices=TRIGGER_CHOICES,
+        blank=True,
+        default='success',
+        help_text=_('Parent job outcome required before the condition is evaluated.'),
+    )
+    artifact_key = models.CharField(
+        max_length=512,
+        blank=True,
+        default='',
+        help_text=_('Artifact key (produced via set_stats) on the parent job to evaluate.'),
+    )
+    operator = models.CharField(
+        max_length=16,
+        choices=OPERATOR_CHOICES,
+        blank=True,
+        default='eq',
+        help_text=_('Comparison operator applied to the artifact value.'),
+    )
+    expected_value = models.TextField(
+        blank=True,
+        default='',
+        help_text=_('Value the artifact is compared against. Interpreted as JSON when possible, otherwise as a plain string.'),
+    )
+
+    def evaluate(self, artifacts):
+        return evaluate_artifact_condition(artifacts, self.artifact_key, self.operator or 'eq', self.expected_value)
 
 
 class WorkflowNodeBase(CreatedModifiedModel, LaunchTimeConfig):
@@ -99,7 +182,8 @@ class WorkflowNodeBase(CreatedModifiedModel, LaunchTimeConfig):
         success_parents = getattr(self, '%ss_success' % self.__class__.__name__.lower()).all()
         failure_parents = getattr(self, '%ss_failure' % self.__class__.__name__.lower()).all()
         always_parents = getattr(self, '%ss_always' % self.__class__.__name__.lower()).all()
-        return (success_parents | failure_parents | always_parents).order_by('id')
+        condition_parents = getattr(self, '%ss_condition' % self.__class__.__name__.lower()).all()
+        return (success_parents | failure_parents | always_parents | condition_parents).order_by('id')
 
     @classmethod
     def _get_workflow_job_field_names(cls):
@@ -160,6 +244,7 @@ class WorkflowJobTemplateNode(WorkflowNodeBase):
         'success_nodes',
         'failure_nodes',
         'always_nodes',
+        'condition_nodes',
         'credentials',
         'inventory',
         'extra_data',
@@ -177,6 +262,14 @@ class WorkflowJobTemplateNode(WorkflowNodeBase):
         'WorkflowJobTemplate',
         related_name='workflow_job_template_nodes',
         on_delete=models.CASCADE,
+    )
+    condition_nodes = models.ManyToManyField(
+        'self',
+        blank=True,
+        symmetrical=False,
+        through='WorkflowJobTemplateNodeConditionLink',
+        through_fields=('from_node', 'to_node'),
+        related_name='%(class)ss_condition',
     )
     identifier = models.CharField(
         max_length=512,
@@ -240,6 +333,23 @@ class WorkflowJobTemplateNode(WorkflowNodeBase):
         return approval_template
 
 
+class WorkflowJobTemplateNodeConditionLink(WorkflowNodeConditionLinkBase):
+    from_node = models.ForeignKey(
+        'WorkflowJobTemplateNode',
+        related_name='condition_links_from',
+        on_delete=models.CASCADE,
+    )
+    to_node = models.ForeignKey(
+        'WorkflowJobTemplateNode',
+        related_name='condition_links_to',
+        on_delete=models.CASCADE,
+    )
+
+    class Meta:
+        app_label = 'main'
+        unique_together = (('from_node', 'to_node'),)
+
+
 class WorkflowJobNode(WorkflowNodeBase):
     job = models.OneToOneField(
         'UnifiedJob',
@@ -289,6 +399,14 @@ class WorkflowJobNode(WorkflowNodeBase):
         max_length=512,
         blank=True,  # blank denotes pre-migration job nodes
         help_text=_('An identifier coresponding to the workflow job template node that this node was created from.'),
+    )
+    condition_nodes = models.ManyToManyField(
+        'self',
+        blank=True,
+        symmetrical=False,
+        through='WorkflowJobNodeConditionLink',
+        through_fields=('from_node', 'to_node'),
+        related_name='%(class)ss_condition',
     )
     instance_groups = OrderedManyToManyField(
         'InstanceGroup', related_name='workflow_job_node_instance_groups', blank=True, editable=False, through='WorkflowJobNodeBaseInstanceGroupMembership'
@@ -408,6 +526,23 @@ class WorkflowJobNode(WorkflowNodeBase):
         return data
 
 
+class WorkflowJobNodeConditionLink(WorkflowNodeConditionLinkBase):
+    from_node = models.ForeignKey(
+        'WorkflowJobNode',
+        related_name='condition_links_from',
+        on_delete=models.CASCADE,
+    )
+    to_node = models.ForeignKey(
+        'WorkflowJobNode',
+        related_name='condition_links_to',
+        on_delete=models.CASCADE,
+    )
+
+    class Meta:
+        app_label = 'main'
+        unique_together = (('from_node', 'to_node'),)
+
+
 class WorkflowJobOptions(LaunchTimeConfigBase):
     class Meta:
         abstract = True
@@ -459,6 +594,16 @@ class WorkflowJobOptions(LaunchTimeConfigBase):
                     new_child_node = node_links[old_child_node.pk]
                     new_manager = getattr(new_node, relationship)
                     new_manager.add(new_child_node)
+            # condition edges carry per-edge data, so copy the through rows
+            for old_link in old_node.condition_links_from.all():
+                new_node.condition_nodes.through.objects.create(
+                    from_node=new_node,
+                    to_node=node_links[old_link.to_node_id],
+                    trigger=old_link.trigger,
+                    artifact_key=old_link.artifact_key,
+                    operator=old_link.operator,
+                    expected_value=old_link.expected_value,
+                )
 
     @staticmethod
     def _carried_forward_node_state(node):
@@ -480,7 +625,7 @@ class WorkflowJobOptions(LaunchTimeConfigBase):
         return None
 
     def copy_nodes_from_original(self, original=None, user=None, mark_succeeded_as_prior=False):
-        old_node_list = original.workflow_nodes.prefetch_related('always_nodes', 'success_nodes', 'failure_nodes').all()
+        old_node_list = original.workflow_nodes.prefetch_related('always_nodes', 'success_nodes', 'failure_nodes', 'condition_links_from').all()
         node_links = self._create_workflow_nodes(old_node_list, user=user)
         self._inherit_node_relationships(old_node_list, node_links)
         if mark_succeeded_as_prior:

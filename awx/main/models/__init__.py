@@ -79,9 +79,11 @@ from awx.main.models.label import Label  # noqa
 from awx.main.models.workflow import (  # noqa
     WorkflowJob,
     WorkflowJobNode,
+    WorkflowJobNodeConditionLink,
     WorkflowJobOptions,
     WorkflowJobTemplate,
     WorkflowJobTemplateNode,
+    WorkflowJobTemplateNodeConditionLink,
     WorkflowApproval,
     WorkflowApprovalTemplate,
 )

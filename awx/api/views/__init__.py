@@ -6,6 +6,7 @@ import dateutil
 import functools
 import html
 import itertools
+import json
 import logging
 import re
 import requests
@@ -2996,7 +2997,7 @@ class WorkflowJobTemplateNodeChildrenBaseList(EnforceParentRelationshipMixin, Su
         Look for parent->child connection in all relationships except the relationship that is
         attempting to be added; because it's ok to re-add the relationship
         '''
-        relationships = ['success_nodes', 'failure_nodes', 'always_nodes']
+        relationships = ['success_nodes', 'failure_nodes', 'always_nodes', 'condition_nodes']
         relationships.remove(self.relationship)
         qs = functools.reduce(lambda x, y: (x | y), (Q(**{'{}__in'.format(r): [sub.id]}) for r in relationships))
 
@@ -3052,6 +3053,47 @@ class WorkflowJobTemplateNodeAlwaysNodesList(WorkflowJobTemplateNodeChildrenBase
     relationship = 'always_nodes'
 
 
+class WorkflowJobTemplateNodeConditionNodesList(WorkflowJobTemplateNodeChildrenBaseList):
+    relationship = 'condition_nodes'
+
+    def _condition_data(self, data):
+        expected_value = data.get('expected_value', '')
+        if not isinstance(expected_value, str):
+            expected_value = json.dumps(expected_value)
+        return {
+            'trigger': data.get('trigger') or 'success',
+            'artifact_key': data.get('artifact_key', ''),
+            'operator': data.get('operator') or 'eq',
+            'expected_value': expected_value,
+        }
+
+    def is_valid_relation(self, parent, sub, created=False):
+        condition = self._condition_data(self.request.data)
+        if not condition['artifact_key'] or not isinstance(condition['artifact_key'], str):
+            return {'artifact_key': [_('A non-empty artifact_key is required for a conditional link.')]}
+        valid_operators = [choice[0] for choice in models.WorkflowJobTemplateNodeConditionLink.OPERATOR_CHOICES]
+        if condition['operator'] not in valid_operators:
+            return {'operator': [_('Invalid operator. Valid choices are: {}.').format(', '.join(valid_operators))]}
+        valid_triggers = [choice[0] for choice in models.WorkflowJobTemplateNodeConditionLink.TRIGGER_CHOICES]
+        if condition['trigger'] not in valid_triggers:
+            return {'trigger': [_('Invalid trigger. Valid choices are: {}.').format(', '.join(valid_triggers))]}
+        return super(WorkflowJobTemplateNodeConditionNodesList, self).is_valid_relation(parent, sub, created=created)
+
+    def attach(self, request, *args, **kwargs):
+        response = super(WorkflowJobTemplateNodeConditionNodesList, self).attach(request, *args, **kwargs)
+        if response.status_code in (status.HTTP_201_CREATED, status.HTTP_204_NO_CONTENT):
+            # the plain m2m add() created the link with default (empty) condition
+            # values; fill in the requested condition. Re-posting an existing link
+            # updates its condition.
+            sub_id = request.data.get('id', None)
+            if sub_id is None and response.data:
+                sub_id = response.data.get('id', None)
+            if sub_id is not None:
+                parent = self.get_parent_object()
+                models.WorkflowJobTemplateNodeConditionLink.objects.filter(from_node=parent, to_node_id=sub_id).update(**self._condition_data(request.data))
+        return response
+
+
 class WorkflowJobNodeChildrenBaseList(SubListAPIView):
     model = models.WorkflowJobNode
     serializer_class = serializers.WorkflowJobNodeListSerializer
@@ -3071,6 +3113,10 @@ class WorkflowJobNodeFailureNodesList(WorkflowJobNodeChildrenBaseList):
 
 class WorkflowJobNodeAlwaysNodesList(WorkflowJobNodeChildrenBaseList):
     relationship = 'always_nodes'
+
+
+class WorkflowJobNodeConditionNodesList(WorkflowJobNodeChildrenBaseList):
+    relationship = 'condition_nodes'
 
 
 class WorkflowJobTemplateList(ListCreateAPIView):

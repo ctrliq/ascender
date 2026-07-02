@@ -906,9 +906,34 @@ def _reconstruct_relationships(copy_mapping):
                 related_obj = copy_mapping.get(related_obj, related_obj)
                 setattr(new_obj, field_name, related_obj)
             elif field.many_to_many:
-                for related_obj in getattr(old_obj, field_name).all():
-                    logger.debug('Deep copy: Adding {} to {}({}).{} relationship'.format(related_obj, new_obj, model, field_name))
-                    getattr(new_obj, field_name).add(copy_mapping.get(related_obj, related_obj))
+                # forward m2m fields keep through info on remote_field; reverse relations keep it on the field itself
+                rel = field if hasattr(field, 'through') else field.remote_field
+                through = rel.through
+                through_fields = getattr(rel, 'through_fields', None)
+                if through._meta.auto_created or not through_fields:
+                    for related_obj in getattr(old_obj, field_name).all():
+                        logger.debug('Deep copy: Adding {} to {}({}).{} relationship'.format(related_obj, new_obj, model, field_name))
+                        getattr(new_obj, field_name).add(copy_mapping.get(related_obj, related_obj))
+                else:
+                    # m2m with a custom through model: clone the through rows so
+                    # per-edge data (e.g. workflow condition links) is preserved.
+                    # through_fields is declared on the forward field as
+                    # (source, target); on a reverse relation old_obj sits on
+                    # the target side, so swap the lookup direction.
+                    from_field, to_field = through_fields[0], through_fields[1]
+                    if rel is field:
+                        from_field, to_field = to_field, from_field
+                    for link in through.objects.filter(**{from_field: old_obj}):
+                        old_target = getattr(link, to_field)
+                        new_target = copy_mapping.get(old_target, old_target)
+                        if through.objects.filter(**{from_field: new_obj, to_field: new_target}).exists():
+                            # idempotent like the plain m2m add() path
+                            continue
+                        link.pk = None
+                        setattr(link, from_field, new_obj)
+                        setattr(link, to_field, new_target)
+                        logger.debug('Deep copy: Cloning {}({}).{} link to {}'.format(new_obj, model, field_name, new_target))
+                        link.save()
         new_obj.save()
 
 
