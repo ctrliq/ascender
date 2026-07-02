@@ -11,59 +11,46 @@ const activeStep = {
   id: 1,
 };
 const buttonText = 'Next';
-const onClick = jest.fn();
 const onNext = jest.fn();
-const triggerNext = 0;
 
 describe('NodeNextButton', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   test('Button text matches', () => {
     renderWithContexts(
       <NodeNextButton
         activeStep={activeStep}
         buttonText={buttonText}
-        onClick={onClick}
         onNext={onNext}
-        triggerNext={triggerNext}
       />
     );
     expect(screen.getByRole('button')).toHaveTextContent(buttonText);
   });
 
-  test('Clicking button makes expected callback', () => {
-    onClick.mockClear();
+  test('Clicking button advances exactly once', () => {
     renderWithContexts(
       <NodeNextButton
         activeStep={activeStep}
         buttonText={buttonText}
-        onClick={onClick}
         onNext={onNext}
-        triggerNext={triggerNext}
       />
     );
     fireEvent.click(screen.getByRole('button'));
-    expect(onClick).toHaveBeenCalledWith(activeStep);
+    expect(onNext).toHaveBeenCalledTimes(1);
   });
 
-  test('onNext triggered when triggerNext counter incremented', () => {
-    onNext.mockClear();
-    const { rerender } = renderWithContexts(
+  test('Button is disabled when the step does not allow next', () => {
+    renderWithContexts(
       <NodeNextButton
-        activeStep={activeStep}
+        activeStep={{ ...activeStep, enableNext: false }}
         buttonText={buttonText}
-        onClick={onClick}
         onNext={onNext}
-        triggerNext={triggerNext}
       />
     );
-    rerender(
-      <NodeNextButton
-        activeStep={activeStep}
-        buttonText={buttonText}
-        onClick={onClick}
-        onNext={onNext}
-        triggerNext={1}
-      />
-    );
-    expect(onNext).toHaveBeenCalled();
+    expect(screen.getByRole('button')).toBeDisabled();
+    fireEvent.click(screen.getByRole('button'));
+    expect(onNext).not.toHaveBeenCalled();
   });
 });

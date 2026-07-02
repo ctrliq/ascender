@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-no-useless-fragment */
-import React, { useContext, useState, useEffect, useCallback } from 'react';
+import React, { useContext, useEffect, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { Formik, useFormikContext } from 'formik';
@@ -30,8 +30,6 @@ import NodeNextButton from './NodeNextButton';
 function NodeModalCustomFooter({
   promptSteps,
   isLaunchLoading,
-  triggerNext,
-  setTriggerNext,
   handleCancel,
   nextButtonText,
 }) {
@@ -49,11 +47,9 @@ function NodeModalCustomFooter({
     <WizardFooterWrapper>
       <NodeNextButton
         isDisabled={isLaunchLoading}
-        triggerNext={triggerNext}
         activeStep={stepWithEnableNext}
         aria-label={nextButtonText(activeStep)}
         onNext={goToNextStep}
-        onClick={() => setTriggerNext(triggerNext + 1)}
         buttonText={nextButtonText(activeStep)}
       />
       {activeStep && activeStep.id !== promptSteps[0]?.id && (
@@ -97,8 +93,6 @@ function NodeModalForm({
   const dispatch = useContext(WorkflowDispatchContext);
   const { values, setFieldTouched } = useFormikContext();
   const { t } = useLingui();
-
-  const [triggerNext, setTriggerNext] = useState(0);
 
   const clearQueryParams = () => {
     const parts = location.search.replace(/^\?/, '').split('&');
@@ -223,8 +217,6 @@ function NodeModalForm({
         <NodeModalCustomFooter
           promptSteps={promptSteps}
           isLaunchLoading={isLaunchLoading}
-          triggerNext={triggerNext}
-          setTriggerNext={setTriggerNext}
           handleCancel={handleCancel}
           nextButtonText={getNextButtonText}
         />

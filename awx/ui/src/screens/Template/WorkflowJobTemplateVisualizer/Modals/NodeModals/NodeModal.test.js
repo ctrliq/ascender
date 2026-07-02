@@ -58,30 +58,32 @@ jest.mock('@patternfly/react-core', () => {
     const cur = steps[clamped];
     const curProps = cur?.props || {};
 
+    const idxRef = R.useRef(0);
+
     const goToNextStep = R.useCallback(() => {
-      setIdx((prev) => {
-        const s = stepsRef.current;
-        if (prev + 1 >= s.length) { cbRef.current.onSave?.(); return prev; }
-        const ni = prev + 1;
-        cbRef.current.onStepChange?.(
-          {}, { id: s[ni]?.props?.id, name: s[ni]?.props?.name },
-          { id: s[prev]?.props?.id, name: s[prev]?.props?.name }, 'next'
-        );
-        return ni;
-      });
+      const s = stepsRef.current;
+      const prev = idxRef.current;
+      if (prev + 1 >= s.length) { cbRef.current.onSave?.(); return; }
+      const ni = prev + 1;
+      cbRef.current.onStepChange?.(
+        {}, { id: s[ni]?.props?.id, name: s[ni]?.props?.name },
+        { id: s[prev]?.props?.id, name: s[prev]?.props?.name }, 'next'
+      );
+      idxRef.current = ni;
+      setIdx(ni);
     }, []);
 
     const goToPrevStep = R.useCallback(() => {
-      setIdx((prev) => {
-        if (prev <= 0) return prev;
-        const s = stepsRef.current;
-        const ni = prev - 1;
-        cbRef.current.onStepChange?.(
-          {}, { id: s[ni]?.props?.id, name: s[ni]?.props?.name },
-          { id: s[prev]?.props?.id, name: s[prev]?.props?.name }, 'back'
-        );
-        return ni;
-      });
+      const prev = idxRef.current;
+      if (prev <= 0) return;
+      const s = stepsRef.current;
+      const ni = prev - 1;
+      cbRef.current.onStepChange?.(
+        {}, { id: s[ni]?.props?.id, name: s[ni]?.props?.name },
+        { id: s[prev]?.props?.id, name: s[prev]?.props?.name }, 'back'
+      );
+      idxRef.current = ni;
+      setIdx(ni);
     }, []);
 
     const ctx = R.useMemo(() => ({
@@ -102,6 +104,7 @@ jest.mock('@patternfly/react-core', () => {
                 {}, { id: s.props?.id, name: s.props?.name },
                 { id: p.id, name: p.name }, 'nav'
               );
+              idxRef.current = i;
               setIdx(i);
             },
           }, s.props?.name)
