@@ -79,6 +79,7 @@ function BecomeMethodField({ fieldOptions, isRequired = false }) {
           <MenuToggle
             ref={toggleRef}
             variant="typeahead"
+            isFullWidth
             onClick={() => setIsOpen(!isOpen)}
             isExpanded={isOpen}
           >

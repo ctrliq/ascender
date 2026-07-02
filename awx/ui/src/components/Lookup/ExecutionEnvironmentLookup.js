@@ -29,7 +29,7 @@ function ExecutionEnvironmentLookup({
   globallyAvailable,
   helperTextInvalid,
   isDisabled,
-  isValid,
+  isValid = true,
   onBlur,
   onChange,
   organizationId = null,

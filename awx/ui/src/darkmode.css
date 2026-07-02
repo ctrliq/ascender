@@ -870,6 +870,6 @@ html.pf-v6-theme-dark {
   }
 
   & .pf-v6-c-wizard__nav-link {
-    --pf-v6-c-wizard__nav-link--Color: #13161b;
+    --pf-v6-c-wizard__nav-link--Color: var(--pf-t--global--text--color--subtle);
   }
 }

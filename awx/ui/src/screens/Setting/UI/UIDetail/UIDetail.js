@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router';
+import { Link, useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
 import { CaretLeftIcon } from '@patternfly/react-icons';
@@ -19,13 +19,18 @@ function UIDetail() {
   const { t } = useLingui();
   const { me } = useConfig();
   const { GET: options } = useSettings();
-  const navigate = useNavigate();
   const { state: locationState } = useLocation();
   const hardReload = locationState?.hardReload;
 
-  if (hardReload) {
-    navigate(0);
-  }
+  useEffect(() => {
+    if (hardReload) {
+      // Clear the hardReload flag from history state before reloading so that
+      // the post-reload render doesn't see it again and trigger the reload
+      // over and over (infinite loop).
+      window.history.replaceState(null, '');
+      window.location.reload();
+    }
+  }, [hardReload]);
 
   const {
     isLoading,

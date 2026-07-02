@@ -28,7 +28,7 @@ const RunOnRadio = styled(Radio)`
     width: 100%;
   }
 
-  :not(:last-of-type) {
+  &:not(:last-of-type) {
     margin-bottom: 10px;
   }
 
@@ -43,7 +43,7 @@ const RunEveryLabel = styled.p`
 `;
 
 const Checkbox = styled(_Checkbox)`
-  :not(:last-of-type) {
+  &:not(:last-of-type) {
     margin-right: 10px;
   }
 `;

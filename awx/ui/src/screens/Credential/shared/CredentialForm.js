@@ -33,12 +33,19 @@ const StyledSelect = styled(Select)`
   ul {
     max-width: 495px;
   }
-`;
 
-const StyledSelectOption = styled(SelectOption)`
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
+  /*
+   * Truncate long credential type names, but scope the styles to the menu
+   * item's text span only. PatternFly applies the SelectOption className to
+   * both the flex <li> and the inner button, and setting overflow: hidden on
+   * the flex <li> (align-items: baseline) collapses its height, clipping the
+   * option so the text isn't visible.
+   */
+  .pf-v6-c-menu__item-text {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
 `;
 
 function CredentialFormFields({ initialTypeId, credentialTypes }) {
@@ -200,13 +207,13 @@ function CredentialFormFields({ initialTypeId, credentialTypes }) {
     >
       <SelectList style={{ maxHeight: '300px', overflowY: 'auto' }}>
         {filteredOptions.map((credType) => (
-          <StyledSelectOption
+          <SelectOption
             key={credType.value}
             value={credType.value}
             data-cy={`${credType.key}-credential-type-select-option`}
           >
             {credType.label}
-          </StyledSelectOption>
+          </SelectOption>
         ))}
         {filteredOptions.length === 0 && (
           <SelectOption isDisabled>

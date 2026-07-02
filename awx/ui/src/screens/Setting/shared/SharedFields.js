@@ -227,7 +227,7 @@ const EncryptedField = ({ name, config, isRequired = false }) => {
       t={t}
     >
       <InputGroup>
-        <InputGroupItem><PasswordInput
+        <InputGroupItem isFill><PasswordInput
           id={name}
           name={name}
           label={config.label}
