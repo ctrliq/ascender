@@ -10,6 +10,8 @@ import ConstructedInventories from './models/ConstructedInventories';
 import FederatedInventories from './models/FederatedInventories';
 import Dashboard from './models/Dashboard';
 import ExecutionEnvironments from './models/ExecutionEnvironments';
+import ExecutionEnvironmentBuilders from './models/ExecutionEnvironmentBuilders';
+import ExecutionEnvironmentBuilderBuilds from './models/ExecutionEnvironmentBuilderBuilds';
 import Groups from './models/Groups';
 import Hosts from './models/Hosts';
 import InstanceGroups from './models/InstanceGroups';
@@ -62,6 +64,8 @@ const ConstructedInventoriesAPI = new ConstructedInventories();
 const FederatedInventoriesAPI = new FederatedInventories();
 const DashboardAPI = new Dashboard();
 const ExecutionEnvironmentsAPI = new ExecutionEnvironments();
+const ExecutionEnvironmentBuildersAPI = new ExecutionEnvironmentBuilders();
+const ExecutionEnvironmentBuilderBuildsAPI = new ExecutionEnvironmentBuilderBuilds();
 const GroupsAPI = new Groups();
 const HostsAPI = new Hosts();
 const InstanceGroupsAPI = new InstanceGroups();
@@ -115,6 +119,8 @@ export {
   FederatedInventoriesAPI,
   DashboardAPI,
   ExecutionEnvironmentsAPI,
+  ExecutionEnvironmentBuildersAPI,
+  ExecutionEnvironmentBuilderBuildsAPI,
   GroupsAPI,
   HostsAPI,
   InstanceGroupsAPI,

@@ -49,11 +49,13 @@ from awx.main.models import (
     ProjectUpdate,
     InventoryUpdate,
     SystemJob,
+    ExecutionEnvironmentBuilderBuild,
     JobEvent,
     ProjectUpdateEvent,
     InventoryUpdateEvent,
     AdHocCommandEvent,
     SystemJobEvent,
+    ExecutionEnvironmentBuilderBuildEvent,
     build_safe_env,
 )
 from awx.main.tasks.callback import (
@@ -62,6 +64,7 @@ from awx.main.tasks.callback import (
     RunnerCallbackForInventoryUpdate,
     RunnerCallbackForProjectUpdate,
     RunnerCallbackForSystemJob,
+    RunnerCallbackForExecutionEnvironmentBuilderBuild,
 )
 from awx.main.tasks.signals import with_signal_handling, signal_callback
 from awx.main.tasks.receptor import AWXReceptorJob
@@ -652,16 +655,19 @@ class BaseTask(object):
 
         # Field host_status_counts is used as a metric to check if event processing is finished
         # we send notifications if it is, if not, callback receiver will send them
-        if (self.instance.host_status_counts is not None) or (not self.runner_callback.wrapup_event_dispatched):
+        if self.instance and ((self.instance.host_status_counts is not None) or (not self.runner_callback.wrapup_event_dispatched)):
             self.instance.send_notification_templates('succeeded' if status == 'successful' else 'failed')
 
         try:
-            self.final_run_hook(self.instance, status, private_data_dir)
+            if self.instance:
+                self.final_run_hook(self.instance, status, private_data_dir)
         except Exception:
-            logger.exception('{} Final run hook errored.'.format(self.instance.log_format))
+            if self.instance:
+                logger.exception('{} Final run hook errored.'.format(self.instance.log_format))
 
-        self.instance.websocket_emit_status(status)
-        if status != 'successful':
+        if self.instance:
+            self.instance.websocket_emit_status(status)
+        if self.instance and status != 'successful':
             if status == 'canceled':
                 raise AwxTaskError.TaskCancel(self.instance, rc)
             else:
@@ -1927,3 +1933,172 @@ class RunSystemJob(BaseTask):
 
     def build_inventory(self, instance, private_data_dir):
         return None
+
+
+@task(queue=get_task_queuename)
+class RunExecutionEnvironmentBuilderBuild(SourceControlMixin, BaseTask):
+    model = ExecutionEnvironmentBuilderBuild
+    event_model = ExecutionEnvironmentBuilderBuildEvent
+    callback_class = RunnerCallbackForExecutionEnvironmentBuilderBuild
+
+    def build_private_data(self, builder_build, private_data_dir):
+        """
+        Return credential data needed for this builder build.
+        """
+        private_data = {'credentials': {}}
+        if builder_build.execution_environment_builder.credential:
+            credential = builder_build.execution_environment_builder.credential
+            if credential.has_input('ssh_key_data'):
+                private_data['credentials'][credential] = credential.get_input('ssh_key_data', default='')
+        return private_data
+
+    def build_passwords(self, builder_build, runtime_passwords):
+        """
+        Build a dictionary of passwords for SSH private key unlock and registry auth.
+        """
+        passwords = super(RunExecutionEnvironmentBuilderBuild, self).build_passwords(builder_build, runtime_passwords)
+        if builder_build.execution_environment_builder.credential:
+            passwords['registry_key_unlock'] = builder_build.execution_environment_builder.credential.get_input('ssh_key_unlock', default='')
+            passwords['registry_username'] = builder_build.execution_environment_builder.credential.get_input('username', default='')
+            passwords['registry_password'] = builder_build.execution_environment_builder.credential.get_input('password', default='')
+        return passwords
+
+    def build_env(self, builder_build, private_data_dir, private_data_files=None):
+        """
+        Build environment dictionary for ansible-playbook.
+        """
+        env = super(RunExecutionEnvironmentBuilderBuild, self).build_env(builder_build, private_data_dir, private_data_files=private_data_files)
+        env['ANSIBLE_RETRY_FILES_ENABLED'] = str(False)
+        env['ANSIBLE_ASK_PASS'] = str(False)
+        env['ANSIBLE_BECOME_ASK_PASS'] = str(False)
+        env['DISPLAY'] = ''
+        env['TMP'] = settings.AWX_ISOLATION_BASE_PATH
+        env['EXECUTION_ENVIRONMENT_BUILDER_BUILD_ID'] = str(builder_build.pk)
+        return env
+
+    def build_inventory(self, instance, private_data_dir):
+        return 'localhost,'
+
+    def build_args(self, builder_build, private_data_dir, passwords):
+        """
+        Build command line argument list for running ansible-playbook.
+        """
+        args = []
+        if getattr(settings, 'EXECUTION_ENVIRONMENT_BUILDER_BUILD_VVV', False):
+            args.append('-vvv')
+        return args
+
+    def build_extra_vars_file(self, builder_build, private_data_dir):
+        extra_vars = {}
+        builder = builder_build.execution_environment_builder
+
+        extra_vars.update(
+            {
+                'execution_environment_builder_id': builder.pk,
+                'execution_environment_builder_build_id': builder_build.pk,
+                'execution_environment_name': builder.name,
+                'execution_environment_image': builder.image,
+                'execution_environment_tag': builder.tag,
+                'execution_environment_file': builder.execution_environment_file,
+            }
+        )
+
+        if builder.credential:
+            extra_vars['registry_credential'] = {
+                'url': builder.credential.get_input('host', default=''),
+                'username': builder.credential.get_input('username', default=''),
+                'password': builder.credential.get_input('password', default=''),
+                'verify_ssl': builder.credential.get_input('verify_ssl', default=True),
+            }
+
+        self._write_extra_vars_file(private_data_dir, extra_vars)
+
+    def build_playbook_path_relative_to_cwd(self, builder_build, private_data_dir):
+        return os.path.join('build_ee.yml')
+
+    def pre_run_hook(self, instance, private_data_dir):
+        super(RunExecutionEnvironmentBuilderBuild, self).pre_run_hook(instance, private_data_dir)
+        builder = instance.execution_environment_builder
+        if builder is None or builder.project is None:
+            error = _('Execution environment build could not start because it does not have a valid project.')
+            self.update_model(instance.pk, status='failed', job_explanation=error)
+            raise RuntimeError(error)
+        if not builder.execution_environment_file:
+            error = _('Execution environment build could not start because no execution environment file was selected.')
+            self.update_model(instance.pk, status='failed', job_explanation=error)
+            raise RuntimeError(error)
+
+    def build_execution_environment_params(self, instance, private_data_dir):
+        """
+        Return params structure to be executed by the container runtime.
+        For builder builds, we extend the base params to add security options.
+        """
+        params = super(RunExecutionEnvironmentBuilderBuild, self).build_execution_environment_params(instance, private_data_dir)
+        # Add security options for container builds.
+        # EXECUTION_ENVIRONMENT_BUILDER_CONTAINER_OPTIONS overrides the default
+        # --privileged flag, allowing admins to supply a tighter capability set
+        # if their container runtime / kernel supports it.
+        if params and 'container_options' in params:
+            custom_options = getattr(settings, 'EXECUTION_ENVIRONMENT_BUILDER_CONTAINER_OPTIONS', None)
+            if custom_options:
+                params['container_options'].extend(custom_options)
+            else:
+                params['container_options'].extend(['--privileged'])
+        return params
+
+    def build_project_dir(self, instance, private_data_dir):
+        # Sync (if needed) and copy the builder's project into the runner
+        # project dir, just like a job template launch does.
+        builder = instance.execution_environment_builder
+        project = builder.project if builder else None
+        if project is None:
+            raise RuntimeError('Execution environment builder has no project configured.')
+        self._sync_and_copy_project(project, private_data_dir)
+        # The build_ee.yml playbook is not part of the user's project, so drop
+        # it alongside the copied project content so ansible-runner can run it.
+        awx_playbooks = self.get_path_to('../../', 'playbooks')
+        shutil.copy(
+            os.path.join(awx_playbooks, 'build_ee.yml'),
+            os.path.join(private_data_dir, 'project', 'build_ee.yml'),
+        )
+
+    def _sync_and_copy_project(self, project, private_data_dir):
+        # A self-contained variant of SourceControlMixin.sync_and_copy that does
+        # not write project_update/scm_revision onto the build instance (an
+        # ExecutionEnvironmentBuilderBuild has neither field).
+        lock_acquired = self.acquire_lock(project, self.instance.id)
+        if not lock_acquired:
+            self.instance.refresh_from_db()
+            if self.instance.cancel_flag:
+                return
+            raise RuntimeError(f'Could not acquire lock for project {project.id}, job was interrupted')
+        try:
+            failed_reason = project.get_reason_if_failed()
+            if failed_reason:
+                self.update_model(self.instance.pk, status='failed', job_explanation=failed_reason)
+                raise RuntimeError(failed_reason)
+            sync_needs = self.get_sync_needs(project)
+            if sync_needs:
+                local_project_sync = self.spawn_project_sync(project, sync_needs)
+                try:
+                    # RunProjectUpdate copies project content into private_data_dir on success
+                    sync_task = RunProjectUpdate(job_private_data_dir=private_data_dir)
+                    sync_task.run(local_project_sync.id)
+                except Exception:
+                    local_project_sync.refresh_from_db()
+                    if local_project_sync.status != 'canceled':
+                        self.update_model(
+                            self.instance.pk,
+                            status='failed',
+                            job_explanation=(
+                                'Previous Task Failed: {"job_type": "project_update", '
+                                f'"job_name": "{local_project_sync.name}", "job_id": "{local_project_sync.id}"}}'
+                            ),
+                        )
+                        raise
+                    self.instance.refresh_from_db()
+            else:
+                # Local tree is up to date, just copy it into the job folder
+                RunProjectUpdate.make_local_copy(project, private_data_dir)
+        finally:
+            self.release_lock(project)
