@@ -60,6 +60,7 @@ class TestWorkflowJobInheritNodesMixin:
                 nodes[i].success_nodes = mocker.MagicMock(all=mocker.MagicMock(return_value=[mocker.MagicMock(id=i + 1, pk=i + 1)]))
                 nodes[i].always_nodes = mocker.MagicMock(all=mocker.MagicMock(return_value=[]))
                 nodes[i].failure_nodes = mocker.MagicMock(all=mocker.MagicMock(return_value=[]))
+                nodes[i].condition_links_from = mocker.MagicMock(all=mocker.MagicMock(return_value=[]))
                 new_wj_node = mocker.MagicMock(success_nodes=mocker.MagicMock())
                 nodes[i].create_workflow_job_node = mocker.MagicMock(return_value=new_wj_node)
 

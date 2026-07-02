@@ -3,7 +3,7 @@ from unittest import mock
 
 from awx.api.versioning import reverse
 from awx.main.utils import decrypt_field
-from awx.main.models.workflow import WorkflowJobTemplate, WorkflowJobTemplateNode, WorkflowApprovalTemplate
+from awx.main.models.workflow import WorkflowJobTemplate, WorkflowJobTemplateNode, WorkflowJobTemplateNodeConditionLink, WorkflowApprovalTemplate
 from awx.main.models.jobs import JobTemplate
 from awx.main.tasks.system import deep_copy_model_obj
 from awx.main.models import Label, ExecutionEnvironment, InstanceGroup
@@ -165,6 +165,9 @@ def test_workflow_job_template_copy(workflow_job_template, post, get, admin, org
     nodes[1].success_nodes.add(nodes[2])
     nodes[0].failure_nodes.add(nodes[3])
     nodes[3].failure_nodes.add(nodes[4])
+    WorkflowJobTemplateNodeConditionLink.objects.create(
+        from_node=nodes[2], to_node=nodes[4], trigger='always', artifact_key='environment', operator='eq', expected_value='production'
+    )
     with mock.patch('awx.api.generics.trigger_delayed_deep_copy') as deep_copy_mock:
         wfjt_copy_id = post(
             reverse('api:workflow_job_template_copy', kwargs={'pk': workflow_job_template.pk}), {'name': 'new wfjt name'}, admin, expect=201
@@ -192,6 +195,13 @@ def test_workflow_job_template_copy(workflow_job_template, post, get, admin, org
     assert copied_node_list[2] in copied_node_list[1].success_nodes.all()
     assert copied_node_list[3] in copied_node_list[0].failure_nodes.all()
     assert copied_node_list[4] in copied_node_list[3].failure_nodes.all()
+    assert copied_node_list[4] in copied_node_list[2].condition_nodes.all()
+    copied_link = copied_node_list[2].condition_links_from.get()
+    assert copied_link.trigger == 'always'
+    assert copied_link.artifact_key == 'environment'
+    assert copied_link.operator == 'eq'
+    assert copied_link.expected_value == 'production'
+    assert copied_link.to_node_id == copied_node_list[4].id
 
 
 @pytest.mark.django_db

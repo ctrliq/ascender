@@ -6,11 +6,21 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.encoding import smart_str
 
 from awx.main.scheduler.dag_workflow import WorkflowDAG
+from awx.main.models.workflow import evaluate_artifact_condition
 
 
 class Job:
     def __init__(self, status='successful'):
         self.status = status
+
+
+class JobWithArtifacts(Job):
+    def __init__(self, status='successful', artifacts=None):
+        super(JobWithArtifacts, self).__init__(status=status)
+        self.artifacts = artifacts or {}
+
+    def get_effective_artifacts(self, **kwargs):
+        return dict(self.artifacts)
 
 
 class WorkflowNode(object):
@@ -560,6 +570,228 @@ class TestBFSNodesToRun:
         g.mark_dnr_nodes()
 
         assert set([nodes[1], nodes[2]]) == set(g.bfs_nodes_to_run())
+
+
+class TestEvaluateArtifactCondition:
+    def test_eq_string(self):
+        assert evaluate_artifact_condition({'environment': 'production'}, 'environment', 'eq', 'production') is True
+        assert evaluate_artifact_condition({'environment': 'staging'}, 'environment', 'eq', 'production') is False
+
+    def test_eq_json_typed_values(self):
+        assert evaluate_artifact_condition({'count': 3}, 'count', 'eq', '3') is True
+        assert evaluate_artifact_condition({'enabled': True}, 'enabled', 'eq', 'true') is True
+        assert evaluate_artifact_condition({'enabled': False}, 'enabled', 'eq', 'true') is False
+
+    def test_ne(self):
+        assert evaluate_artifact_condition({'environment': 'staging'}, 'environment', 'ne', 'production') is True
+        assert evaluate_artifact_condition({'environment': 'production'}, 'environment', 'ne', 'production') is False
+
+    def test_missing_key_never_matches(self):
+        assert evaluate_artifact_condition({}, 'environment', 'eq', 'production') is False
+        assert evaluate_artifact_condition({}, 'environment', 'ne', 'production') is False
+
+    def test_bool_and_int_do_not_cross_match(self):
+        assert evaluate_artifact_condition({'flag': True}, 'flag', 'eq', '1') is False
+        assert evaluate_artifact_condition({'count': 1}, 'count', 'eq', 'true') is False
+        assert evaluate_artifact_condition({'flag': False}, 'flag', 'eq', '0') is False
+        assert evaluate_artifact_condition({'count': 0}, 'count', 'ne', 'false') is True
+
+
+class TestConditionNodes:
+    @pytest.fixture
+    def condition_dag(self, wf_node_generator):
+        g = WorkflowDAG()
+        nodes = [wf_node_generator() for i in range(4)]
+        for n in nodes:
+            g.add_node(n)
+        r'''
+                    0
+                   /|\
+        C(env==   / | \
+         prod)   /  |  \ F
+                /   |   \
+               1    2    3
+                    |
+                    C(env==staging)
+        '''
+        g.add_edge(nodes[0], nodes[1], "condition_nodes")
+        g.edge_conditions[(nodes[0].id, nodes[1].id)] = ('success', 'environment', 'eq', 'production')
+        g.add_edge(nodes[0], nodes[2], "condition_nodes")
+        g.edge_conditions[(nodes[0].id, nodes[2].id)] = ('success', 'environment', 'eq', 'staging')
+        g.add_edge(nodes[0], nodes[3], "failure_nodes")
+        return (g, nodes)
+
+    def test_matching_condition_path_runs(self, condition_dag):
+        g, nodes = condition_dag
+        nodes[0].job = JobWithArtifacts(status='successful', artifacts={'environment': 'production'})
+
+        nodes_to_run = g.bfs_nodes_to_run()
+        assert [nodes[1]] == nodes_to_run
+
+        dnr_nodes = g.mark_dnr_nodes()
+        assert set([nodes[2], nodes[3]]) == set(dnr_nodes)
+
+    def test_no_matching_condition_no_children_run(self, condition_dag):
+        g, nodes = condition_dag
+        nodes[0].job = JobWithArtifacts(status='successful', artifacts={'environment': 'development'})
+
+        assert [] == g.bfs_nodes_to_run()
+        dnr_nodes = g.mark_dnr_nodes()
+        assert set([nodes[1], nodes[2], nodes[3]]) == set(dnr_nodes)
+        assert g.is_workflow_done() is True
+        assert g.has_workflow_failed() == (False, None)
+
+    def test_missing_artifact_no_children_run(self, condition_dag):
+        g, nodes = condition_dag
+        nodes[0].job = JobWithArtifacts(status='successful', artifacts={})
+
+        assert [] == g.bfs_nodes_to_run()
+        dnr_nodes = g.mark_dnr_nodes()
+        assert set([nodes[1], nodes[2], nodes[3]]) == set(dnr_nodes)
+
+    def test_failed_parent_does_not_traverse_condition_paths(self, condition_dag):
+        g, nodes = condition_dag
+        nodes[0].job = JobWithArtifacts(status='failed', artifacts={'environment': 'production'})
+
+        assert [nodes[3]] == g.bfs_nodes_to_run()
+        dnr_nodes = g.mark_dnr_nodes()
+        assert set([nodes[1], nodes[2]]) == set(dnr_nodes)
+
+    def test_ancestor_artifacts_are_considered(self, condition_dag):
+        g, nodes = condition_dag
+        nodes[0].job = JobWithArtifacts(status='successful', artifacts={})
+        nodes[0].ancestor_artifacts = {'environment': 'staging'}
+
+        assert [nodes[2]] == g.bfs_nodes_to_run()
+
+    def test_own_job_artifacts_win_over_ancestor(self, condition_dag):
+        g, nodes = condition_dag
+        nodes[0].job = JobWithArtifacts(status='successful', artifacts={'environment': 'production'})
+        nodes[0].ancestor_artifacts = {'environment': 'staging'}
+
+        assert [nodes[1]] == g.bfs_nodes_to_run()
+
+    def test_prior_run_succeeded_parent_uses_ancestor_artifacts(self, condition_dag):
+        g, nodes = condition_dag
+        nodes[0].prior_run_succeeded = True
+        nodes[0].ancestor_artifacts = {'environment': 'production'}
+
+        assert [nodes[1]] == g.bfs_nodes_to_run()
+        dnr_nodes = g.mark_dnr_nodes()
+        assert set([nodes[2], nodes[3]]) == set(dnr_nodes)
+
+    @pytest.fixture
+    def condition_convergence_dag(self, wf_node_generator):
+        g = WorkflowDAG()
+        nodes = [wf_node_generator() for i in range(3)]
+        for n in nodes:
+            g.add_node(n)
+        r'''
+               0         1
+                \       /
+        C(go==  \      / S
+         yes)    \    /
+                  \  /
+                   2  (ALL convergence)
+        '''
+        g.add_edge(nodes[0], nodes[2], "condition_nodes")
+        g.edge_conditions[(nodes[0].id, nodes[2].id)] = ('success', 'go', 'eq', 'yes')
+        g.add_edge(nodes[1], nodes[2], "success_nodes")
+        nodes[2].all_parents_must_converge = True
+        return (g, nodes)
+
+    def test_all_convergence_with_passing_condition(self, condition_convergence_dag):
+        g, nodes = condition_convergence_dag
+        nodes[0].job = JobWithArtifacts(status='successful', artifacts={'go': 'yes'})
+        nodes[1].job = Job(status='successful')
+
+        dnr_nodes = g.mark_dnr_nodes()
+        assert 0 == len(dnr_nodes)
+        assert [nodes[2]] == g.bfs_nodes_to_run()
+
+    def test_all_convergence_with_failing_condition(self, condition_convergence_dag):
+        g, nodes = condition_convergence_dag
+        nodes[0].job = JobWithArtifacts(status='successful', artifacts={'go': 'no'})
+        nodes[1].job = Job(status='successful')
+
+        dnr_nodes = g.mark_dnr_nodes()
+        assert [nodes[2]] == dnr_nodes
+        assert [] == g.bfs_nodes_to_run()
+
+    @pytest.fixture
+    def condition_trigger_dag(self, wf_node_generator):
+        g = WorkflowDAG()
+        nodes = [wf_node_generator() for i in range(4)]
+        for n in nodes:
+            g.add_node(n)
+        r'''
+                       0
+                      /|\
+            C(fail,  / | \  C(always,
+             err==  /  |  \  env==prod)
+             disk) /   |   \
+                  1    2    3
+                       |
+                       C(success, env==prod)
+        '''
+        g.add_edge(nodes[0], nodes[1], "condition_nodes")
+        g.edge_conditions[(nodes[0].id, nodes[1].id)] = ('failure', 'error_kind', 'eq', 'disk')
+        g.add_edge(nodes[0], nodes[2], "condition_nodes")
+        g.edge_conditions[(nodes[0].id, nodes[2].id)] = ('success', 'environment', 'eq', 'production')
+        g.add_edge(nodes[0], nodes[3], "condition_nodes")
+        g.edge_conditions[(nodes[0].id, nodes[3].id)] = ('always', 'environment', 'eq', 'production')
+        return (g, nodes)
+
+    def test_failure_trigger_runs_only_on_failed_parent(self, condition_trigger_dag):
+        g, nodes = condition_trigger_dag
+        nodes[0].job = JobWithArtifacts(status='failed', artifacts={'error_kind': 'disk', 'environment': 'production'})
+
+        nodes_to_run = g.bfs_nodes_to_run()
+        # failure-trigger passes; always-trigger passes; success-trigger must not
+        assert set([nodes[1], nodes[3]]) == set(nodes_to_run)
+        dnr_nodes = g.mark_dnr_nodes()
+        assert [nodes[2]] == dnr_nodes
+
+    def test_success_outcome_skips_failure_trigger(self, condition_trigger_dag):
+        g, nodes = condition_trigger_dag
+        nodes[0].job = JobWithArtifacts(status='successful', artifacts={'error_kind': 'disk', 'environment': 'production'})
+
+        nodes_to_run = g.bfs_nodes_to_run()
+        assert set([nodes[2], nodes[3]]) == set(nodes_to_run)
+        dnr_nodes = g.mark_dnr_nodes()
+        assert [nodes[1]] == dnr_nodes
+
+    def test_passing_failure_condition_counts_as_error_handling_path(self, condition_trigger_dag):
+        g, nodes = condition_trigger_dag
+        nodes[0].job = JobWithArtifacts(status='failed', artifacts={'error_kind': 'disk'})
+
+        # the failure-trigger condition passes, so its child will actually run
+        # and the workflow is not marked failed
+        g.mark_dnr_nodes()
+        assert g.has_workflow_failed() == (False, None)
+
+    def test_non_passing_failure_condition_is_not_an_error_handling_path(self, condition_trigger_dag):
+        g, nodes = condition_trigger_dag
+        nodes[0].job = JobWithArtifacts(status='failed', artifacts={})
+
+        # no condition passes, so nothing will handle the failure: the workflow
+        # must be marked failed, same as a failed node with no failure/always edge
+        g.mark_dnr_nodes()
+        failed, message = g.has_workflow_failed()
+        assert failed is True
+
+    def test_deleted_ujt_parent_traverses_passing_failure_condition(self, condition_trigger_dag):
+        g, nodes = condition_trigger_dag
+        # parent never ran (deleted unified job template) and is treated as a
+        # failure; condition edges are evaluated against its ancestor artifacts
+        nodes[0].unified_job_template = None
+        nodes[0].ancestor_artifacts = {'error_kind': 'disk'}
+
+        nodes_to_run = g.bfs_nodes_to_run()
+        assert nodes[1] in nodes_to_run
+        dnr_nodes = g.mark_dnr_nodes()
+        assert nodes[1] not in dnr_nodes
+        assert g.has_workflow_failed() == (False, None)
 
 
 @pytest.mark.skip(reason="Run manually to re-generate doc images")

@@ -6,6 +6,7 @@ from awx.main.models import (
     WorkflowJobTemplateNode,
     WorkflowJobNode,
 )
+from awx.main.models.workflow import evaluate_artifact_condition
 
 # AWX
 from awx.main.scheduler.dag_simple import SimpleDAG
@@ -14,6 +15,9 @@ from awx.main.scheduler.dag_simple import SimpleDAG
 class WorkflowDAG(SimpleDAG):
     def __init__(self, workflow_job=None):
         super(WorkflowDAG, self).__init__()
+        # (from_node_id, to_node_id) -> (trigger, artifact_key, operator, expected_value)
+        self.edge_conditions = dict()
+        self._artifacts_cache = dict()
         if workflow_job:
             self._init_graph(workflow_job)
 
@@ -25,6 +29,9 @@ class WorkflowDAG(SimpleDAG):
             success_nodes = WorkflowJobTemplateNode.success_nodes.through.objects.filter(**filters).values_list(*vals)
             failure_nodes = WorkflowJobTemplateNode.failure_nodes.through.objects.filter(**filters).values_list(*vals)
             always_nodes = WorkflowJobTemplateNode.always_nodes.through.objects.filter(**filters).values_list(*vals)
+            condition_links = WorkflowJobTemplateNode.condition_nodes.through.objects.filter(
+                from_node__workflow_job_template_id=workflow_job_or_jt.id
+            ).values_list('from_node_id', 'to_node_id', 'trigger', 'artifact_key', 'operator', 'expected_value')
         elif hasattr(workflow_job_or_jt, 'workflow_job_nodes'):
             vals = ['from_workflowjobnode_id', 'to_workflowjobnode_id']
             filters = {'from_workflowjobnode__workflow_job_id': workflow_job_or_jt.id}
@@ -32,6 +39,9 @@ class WorkflowDAG(SimpleDAG):
             success_nodes = WorkflowJobNode.success_nodes.through.objects.filter(**filters).values_list(*vals)
             failure_nodes = WorkflowJobNode.failure_nodes.through.objects.filter(**filters).values_list(*vals)
             always_nodes = WorkflowJobNode.always_nodes.through.objects.filter(**filters).values_list(*vals)
+            condition_links = WorkflowJobNode.condition_nodes.through.objects.filter(from_node__workflow_job_id=workflow_job_or_jt.id).values_list(
+                'from_node_id', 'to_node_id', 'trigger', 'artifact_key', 'operator', 'expected_value'
+            )
         else:
             raise RuntimeError("Unexpected object {} {}".format(type(workflow_job_or_jt), workflow_job_or_jt))
 
@@ -47,6 +57,37 @@ class WorkflowDAG(SimpleDAG):
             self.add_edge(wfn_by_id[edge[0]], wfn_by_id[edge[1]], 'failure_nodes')
         for edge in always_nodes:
             self.add_edge(wfn_by_id[edge[0]], wfn_by_id[edge[1]], 'always_nodes')
+        for from_id, to_id, trigger, artifact_key, operator, expected_value in condition_links:
+            self.add_edge(wfn_by_id[from_id], wfn_by_id[to_id], 'condition_nodes')
+            self.edge_conditions[(from_id, to_id)] = (trigger or 'success', artifact_key, operator or 'eq', expected_value)
+
+    def _get_node_artifacts(self, obj):
+        """Artifacts visible on a finished parent node: its accumulated
+        ancestor_artifacts plus whatever its own job produced via set_stats.
+        Mirrors what WorkflowJobNode.get_job_kwargs passes downstream."""
+        if obj.id in self._artifacts_cache:
+            return self._artifacts_cache[obj.id]
+        artifacts = dict(getattr(obj, 'ancestor_artifacts', None) or {})
+        job = getattr(obj, 'job', None)
+        if job:
+            artifacts.update(job.get_effective_artifacts(parents_set=set([getattr(obj, 'workflow_job_id', None)])))
+        self._artifacts_cache[obj.id] = artifacts
+        return artifacts
+
+    def _edge_condition_passes(self, parent_obj, child_obj, outcome):
+        """outcome is the parent's terminal state ('success' or 'failure'); the
+        edge only fires when its trigger matches that outcome (or is 'always')
+        AND the artifact condition holds."""
+        condition = self.edge_conditions.get((parent_obj.id, child_obj.id))
+        if condition is None:
+            return False
+        trigger, artifact_key, operator, expected_value = condition
+        if trigger not in (outcome, 'always'):
+            return False
+        return evaluate_artifact_condition(self._get_node_artifacts(parent_obj), artifact_key, operator, expected_value)
+
+    def _passing_condition_children(self, obj, outcome):
+        return [child for child in self.get_children(obj, 'condition_nodes') if self._edge_condition_passes(obj, child['node_object'], outcome)]
 
     def _are_relevant_parents_finished(self, node):
         obj = node['node_object']
@@ -86,10 +127,16 @@ class WorkflowDAG(SimpleDAG):
                 status = "success_nodes"
             if status is not None:
                 # check that the nodes status matches either a pathway of the same status or is an always path.
-                if p not in [node['node_object'] for node in self.get_parents(obj, status)] and p not in [
-                    node['node_object'] for node in self.get_parents(obj, "always_nodes")
-                ]:
-                    return False
+                if p in [node['node_object'] for node in self.get_parents(obj, status)]:
+                    continue
+                if p in [node['node_object'] for node in self.get_parents(obj, "always_nodes")]:
+                    continue
+                # a parent connected by a condition edge meets the criteria only if the
+                # edge trigger covers the parent's outcome and the condition holds
+                outcome = "success" if status == "success_nodes" else "failure"
+                if self._edge_condition_passes(p, obj, outcome):
+                    continue
+                return False
         return True
 
     def bfs_nodes_to_run(self):
@@ -106,14 +153,22 @@ class WorkflowDAG(SimpleDAG):
             # carried forward from a relaunch-from-failed: do not run, but traverse
             # its success/always paths as though the job had succeeded
             elif obj.prior_run_succeeded:
-                nodes.extend(self.get_children(obj, 'success_nodes') + self.get_children(obj, 'always_nodes'))
+                nodes.extend(
+                    self.get_children(obj, 'success_nodes') + self.get_children(obj, 'always_nodes') + self._passing_condition_children(obj, 'success')
+                )
             elif obj.job:
                 if obj.job.status in ['failed', 'error', 'canceled']:
-                    nodes.extend(self.get_children(obj, 'failure_nodes') + self.get_children(obj, 'always_nodes'))
+                    nodes.extend(
+                        self.get_children(obj, 'failure_nodes') + self.get_children(obj, 'always_nodes') + self._passing_condition_children(obj, 'failure')
+                    )
                 elif obj.job.status == 'successful':
-                    nodes.extend(self.get_children(obj, 'success_nodes') + self.get_children(obj, 'always_nodes'))
+                    nodes.extend(
+                        self.get_children(obj, 'success_nodes') + self.get_children(obj, 'always_nodes') + self._passing_condition_children(obj, 'success')
+                    )
             elif obj.unified_job_template is None:
-                nodes.extend(self.get_children(obj, 'failure_nodes') + self.get_children(obj, 'always_nodes'))
+                nodes.extend(
+                    self.get_children(obj, 'failure_nodes') + self.get_children(obj, 'always_nodes') + self._passing_condition_children(obj, 'failure')
+                )
             else:
                 # This catches root nodes or ANY convergence nodes
                 if not obj.all_parents_must_converge and self._are_relevant_parents_finished(n):
@@ -162,7 +217,15 @@ class WorkflowDAG(SimpleDAG):
 
         for node in failed_nodes:
             obj = node['node_object']
-            if (len(self.get_children(obj, 'failure_nodes')) + len(self.get_children(obj, 'always_nodes'))) == 0:
+            # condition edges only count as an error handling path if they will
+            # actually fire for this failed parent (trigger covers the failure AND
+            # the artifact condition holds); the parent is terminal here so its
+            # artifacts are final
+            if (
+                len(self.get_children(obj, 'failure_nodes'))
+                + len(self.get_children(obj, 'always_nodes'))
+                + len(self._passing_condition_children(obj, 'failure'))
+            ) == 0:
                 if obj.unified_job_template is None:
                     res = True
                     failed_unified_job_template_node_ids.append(str(obj.id))
@@ -219,19 +282,27 @@ class WorkflowDAG(SimpleDAG):
                 pass
             # carried forward from a relaunch-from-failed counts as a successful parent
             elif p.prior_run_succeeded:
-                if node in (self.get_children(p, 'success_nodes') + self.get_children(p, 'always_nodes')):
+                if node in (self.get_children(p, 'success_nodes') + self.get_children(p, 'always_nodes')) or self._edge_condition_passes(
+                    p, node['node_object'], 'success'
+                ):
                     return False
             elif p.job:
                 if p.job.status == 'successful':
-                    if node in (self.get_children(p, 'success_nodes') + self.get_children(p, 'always_nodes')):
+                    if node in (self.get_children(p, 'success_nodes') + self.get_children(p, 'always_nodes')) or self._edge_condition_passes(
+                        p, node['node_object'], 'success'
+                    ):
                         return False
                 elif p.job.status in ['failed', 'error', 'canceled']:
-                    if node in (self.get_children(p, 'failure_nodes') + self.get_children(p, 'always_nodes')):
+                    if node in (self.get_children(p, 'failure_nodes') + self.get_children(p, 'always_nodes')) or self._edge_condition_passes(
+                        p, node['node_object'], 'failure'
+                    ):
                         return False
                 else:
                     return False
             elif not p.do_not_run and p.unified_job_template is None:
-                if node in (self.get_children(p, 'failure_nodes') + self.get_children(p, 'always_nodes')):
+                if node in (self.get_children(p, 'failure_nodes') + self.get_children(p, 'always_nodes')) or self._edge_condition_passes(
+                    p, node['node_object'], 'failure'
+                ):
                     return False
             else:
                 return False
