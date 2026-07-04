@@ -73,6 +73,17 @@ class WorkflowJobTemplateNode(HasCreate, base.Base):
     def add_success_node(self, unified_job_template, **kwargs):
         return self._add_node(self.related.success_nodes, unified_job_template, **kwargs)
 
+    def add_condition_node(self, unified_job_template, artifact_key, trigger='success', operator='eq', expected_value='', **kwargs):
+        return self._add_node(
+            self.related.condition_nodes,
+            unified_job_template,
+            trigger=trigger,
+            artifact_key=artifact_key,
+            operator=operator,
+            expected_value=expected_value,
+            **kwargs,
+        )
+
     def add_credential(self, credential):
         with suppress(exc.NoContent):
             self.related.credentials.post(dict(id=credential.id, associate=True))
@@ -120,6 +131,7 @@ page.register_page(
         resources.workflow_job_template_nodes,
         resources.workflow_job_template_workflow_nodes,
         resources.workflow_job_template_node_always_nodes,
+        resources.workflow_job_template_node_condition_nodes,
         resources.workflow_job_template_node_failure_nodes,
         resources.workflow_job_template_node_success_nodes,
     ],

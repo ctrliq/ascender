@@ -181,8 +181,32 @@ class ApiV2(base.Base):
                 continue
 
             if 'results' in rel_page:
-                results = (x.get_natural_key(self._cache) if by_natural_key else self._export(x, rel_post_fields) for x in rel_page.results)
-                related[export_key] = [x for x in results if x is not None]
+                if key == 'condition_nodes' and by_natural_key:
+                    # conditional workflow edges carry per-edge data (trigger,
+                    # artifact_key, operator, expected_value), taken from the
+                    # node's condition_edges field. Keep the natural key of the
+                    # target under 'id' and the condition fields next to it, so
+                    # the import can re-post the full association.
+                    edges = {edge['id']: edge for edge in _page.json.get('condition_edges', [])}
+                    items = []
+                    for x in rel_page.results:
+                        target_natural_key = x.get_natural_key(self._cache)
+                        if target_natural_key is None:
+                            continue
+                        edge = edges.get(x['id'], {})
+                        items.append(
+                            {
+                                'id': target_natural_key,
+                                'trigger': edge.get('trigger', 'success'),
+                                'artifact_key': edge.get('artifact_key', ''),
+                                'operator': edge.get('operator', 'eq'),
+                                'expected_value': edge.get('expected_value', ''),
+                            }
+                        )
+                    related[export_key] = items
+                else:
+                    results = (x.get_natural_key(self._cache) if by_natural_key else self._export(x, rel_post_fields) for x in rel_page.results)
+                    related[export_key] = [x for x in results if x is not None]
             elif rel.__item_class__.__name__ == 'WorkflowApprovalTemplate':
                 related[export_key] = self._export(rel_page, rel_post_fields)
             else:
@@ -386,15 +410,26 @@ class ApiV2(base.Base):
                 related = endpoint.get(all_pages=True)
                 existing = {rel['id'] for rel in related.results}
                 for item in related_set:
-                    rel_page = self._cache.get_by_natural_key(item)
+                    # Associations that carry their own fields (e.g. conditional
+                    # workflow edges) keep the target natural key under 'id' and
+                    # the association fields next to it.
+                    extra_fields = {}
+                    lookup = item
+                    if isinstance(item.get('id'), dict):
+                        lookup = item['id']
+                        extra_fields = {k: v for k, v in item.items() if k != 'id'}
+                    rel_page = self._cache.get_by_natural_key(lookup)
                     if rel_page is None:
                         log.error("Could not find matching object in Tower for imported relation, item: %r", item)
                         self._has_error = True
                         continue
-                    if rel_page['id'] in existing:
+                    if rel_page['id'] in existing and not extra_fields:
+                        # when the association has extra fields, re-posting an
+                        # existing relation updates them, so do not skip it
                         continue
                     try:
                         post_data = {'id': rel_page['id']}
+                        post_data.update(extra_fields)
                         endpoint.post(post_data)
                         log.error("endpoint: %s, id: %s", endpoint.endpoint, rel_page['id'])
                         self._has_error = True

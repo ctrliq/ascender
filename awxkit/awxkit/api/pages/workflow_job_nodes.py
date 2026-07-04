@@ -33,6 +33,7 @@ page.register_page(
         resources.workflow_job_nodes,
         resources.workflow_job_workflow_nodes,
         resources.workflow_job_node_always_nodes,
+        resources.workflow_job_node_condition_nodes,
         resources.workflow_job_node_failure_nodes,
         resources.workflow_job_node_success_nodes,
     ],
