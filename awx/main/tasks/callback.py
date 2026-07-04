@@ -18,6 +18,62 @@ from awx.main.queue import CallbackQueueDispatcher
 logger = logging.getLogger('awx.main.tasks.callback')
 
 
+def _setting_as_bool(value, default):
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, int) and value in (0, 1):
+        return bool(value)
+    if isinstance(value, str):
+        normalized = value.strip().lower()
+        if normalized in ('true', 'yes', 'on', '1'):
+            return True
+        if normalized in ('false', 'no', 'off', '0'):
+            return False
+    return default
+
+
+def _setting_as_int(value, default):
+    if isinstance(value, bool):
+        return default
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return default
+
+
+def build_stats_artifacts(stats_event_data, max_hosts):
+    """Build the ascender_stats_* artifact entries from a playbook_on_stats event.
+
+    The host name lists are omitted (and ascender_stats_hosts_truncated set) when the
+    play involved more than max_hosts hosts, so artifacts stay reasonably small
+    as they propagate to descendant workflow nodes.
+    """
+    counts = {}
+    for stat in ('changed', 'failures', 'dark', 'ok', 'processed', 'skipped', 'ignored', 'rescued'):
+        value = stats_event_data.get(stat)
+        counts[stat] = value if isinstance(value, dict) else {}
+    all_hosts = set()
+    for host_counts in counts.values():
+        all_hosts.update(host_counts.keys())
+    changed_hosts = {host for host in all_hosts if counts['changed'].get(host)}
+    failed_hosts = {host for host in all_hosts if counts['failures'].get(host) or counts['dark'].get(host)}
+    stats_artifacts = {
+        'ascender_stats_changed': bool(changed_hosts),
+        'ascender_stats_failed': bool(failed_hosts),
+        'ascender_stats_hosts_truncated': len(all_hosts) > max_hosts,
+    }
+    if not stats_artifacts['ascender_stats_hosts_truncated']:
+        stats_artifacts.update(
+            {
+                'ascender_stats_changed_hosts': sorted(changed_hosts),
+                'ascender_stats_non_changed_hosts': sorted(all_hosts - changed_hosts),
+                'ascender_stats_failed_hosts': sorted(failed_hosts),
+                'ascender_stats_non_failed_hosts': sorted(all_hosts - failed_hosts),
+            }
+        )
+    return stats_artifacts
+
+
 class RunnerCallback:
     def __init__(self, model=None):
         self.parent_workflow_job_id = None
@@ -170,10 +226,36 @@ class RunnerCallback:
         '''
         Handle artifacts
         '''
-        if event_data.get('event_data', {}).get('artifact_data', {}):
-            self.delay_update(artifacts=event_data['event_data']['artifact_data'])
+        artifact_data = event_data.get('event_data', {}).get('artifact_data', {})
+        if event_data.get('event', '') == 'playbook_on_stats' and self.event_data_key == 'job_id':
+            stats_artifacts = self.get_stats_artifacts(event_data.get('event_data', {}))
+            if stats_artifacts:
+                # set_stats data provided by the playbook wins over the automatic keys
+                stats_artifacts.update(artifact_data)
+                artifact_data = stats_artifacts
+        if artifact_data:
+            self.delay_update(artifacts=artifact_data)
 
         return False
+
+    def get_stats_artifacts(self, stats_event_data):
+        """Return the automatic ascender_stats_* artifacts for the final stats event,
+        or an empty dict when the feature is disabled. This only runs once per
+        job, so reading the job extra_vars here does not affect the hot path
+        warned about in event_handler."""
+        try:
+            job_extra_vars = self.instance.extra_vars_dict
+        except Exception:
+            logger.exception(f'Failed to parse extra_vars of {self.instance.log_format}, using defaults for automatic stats artifacts')
+            job_extra_vars = {}
+        if not _setting_as_bool(job_extra_vars.get('ASCENDER_AUTO_STATS_ENABLED'), settings.ASCENDER_AUTO_STATS_ENABLED):
+            return {}
+        max_hosts = _setting_as_int(job_extra_vars.get('ASCENDER_AUTO_STATS_MAX_HOSTS'), settings.ASCENDER_AUTO_STATS_MAX_HOSTS)
+        if max_hosts < 0:
+            # the setting itself is validated with min_value=0, but the extra_vars
+            # override is not; a negative value would flag every play as truncated
+            max_hosts = settings.ASCENDER_AUTO_STATS_MAX_HOSTS
+        return build_stats_artifacts(stats_event_data, max_hosts)
 
     def finished_callback(self, runner_obj):
         """
