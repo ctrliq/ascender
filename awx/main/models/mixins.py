@@ -546,7 +546,12 @@ class RelatedJobsMixin(object):
         return [dict(id=t[0], type=mapping[t[1]]) for t in jobs.values_list('id', 'polymorphic_ctype_id')]
 
 
-class WebhookTemplateMixin(models.Model):
+class WebhookKeyTemplateMixin(models.Model):
+    """
+    Webhook service selection and shared secret handling, for any resource
+    that accepts webhook requests.
+    """
+
     class Meta:
         abstract = True
 
@@ -558,14 +563,6 @@ class WebhookTemplateMixin(models.Model):
 
     webhook_service = models.CharField(max_length=16, choices=SERVICES, blank=True, help_text=_('Service that webhook requests will be accepted from'))
     webhook_key = prevent_search(models.CharField(max_length=64, blank=True, help_text=_('Shared secret that the webhook service will use to sign requests')))
-    webhook_credential = models.ForeignKey(
-        'Credential',
-        blank=True,
-        null=True,
-        on_delete=models.SET_NULL,
-        related_name='%(class)ss',
-        help_text=_('Personal Access Token for posting back the status to the service API'),
-    )
 
     def rotate_webhook_key(self):
         self.webhook_key = get_random_string(length=50)
@@ -583,6 +580,20 @@ class WebhookTemplateMixin(models.Model):
                 update_fields.add('webhook_key')
 
         super().save(*args, **kwargs)
+
+
+class WebhookTemplateMixin(WebhookKeyTemplateMixin):
+    class Meta:
+        abstract = True
+
+    webhook_credential = models.ForeignKey(
+        'Credential',
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name='%(class)ss',
+        help_text=_('Personal Access Token for posting back the status to the service API'),
+    )
 
 
 class WebhookMixin(models.Model):

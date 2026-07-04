@@ -54,6 +54,18 @@ function Project({ setBreadcrumb }) {
 
         data.summary_fields.credentials = results;
       }
+
+      if (
+        data.webhook_service &&
+        data.related?.webhook_key &&
+        data.summary_fields?.user_capabilities?.edit
+      ) {
+        const {
+          data: { webhook_key },
+        } = await ProjectsAPI.readWebhookKey(id);
+
+        data.webhook_key = webhook_key;
+      }
       return {
         project: data,
         isNotifAdmin: notifAdminRes.data.results.length > 0,

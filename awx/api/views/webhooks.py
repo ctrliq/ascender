@@ -1,3 +1,4 @@
+from fnmatch import fnmatchcase
 from hashlib import sha1, sha256
 import hmac
 import logging
@@ -15,7 +16,7 @@ from rest_framework.response import Response
 from awx.api import serializers
 from awx.api.generics import APIView, GenericAPIView
 from awx.api.permissions import WebhookKeyPermission
-from awx.main.models import Job, JobTemplate, WorkflowJob, WorkflowJobTemplate
+from awx.main.models import Job, JobTemplate, Project, ProjectUpdate, WorkflowJob, WorkflowJobTemplate
 from awx.main.constants import JOB_VARIABLE_PREFIXES
 
 logger = logging.getLogger('awx.api.views.webhooks')
@@ -26,7 +27,7 @@ class WebhookKeyView(GenericAPIView):
     permission_classes = (WebhookKeyPermission,)
 
     def get_queryset(self):
-        qs_models = {'job_templates': JobTemplate, 'workflow_job_templates': WorkflowJobTemplate}
+        qs_models = {'job_templates': JobTemplate, 'workflow_job_templates': WorkflowJobTemplate, 'projects': Project}
         self.model = qs_models.get(self.kwargs['model_kwarg'])
 
         return super().get_queryset()
@@ -52,9 +53,11 @@ class WebhookReceiverBase(APIView):
     authentication_classes = ()
 
     ref_keys = {}
+    ref_name_keys = {}
+    project_sync_events = []
 
     def get_queryset(self):
-        qs_models = {'job_templates': JobTemplate, 'workflow_job_templates': WorkflowJobTemplate}
+        qs_models = {'job_templates': JobTemplate, 'workflow_job_templates': WorkflowJobTemplate, 'projects': Project}
         model = qs_models.get(self.kwargs['model_kwarg'])
         if model is None:
             raise PermissionDenied
@@ -81,8 +84,7 @@ class WebhookReceiverBase(APIView):
     def get_event_status_api(self):
         raise NotImplementedError
 
-    def get_event_ref(self):
-        key = self.ref_keys.get(self.get_event_type(), '')
+    def _get_payload_value(self, key):
         value = self.request.data
         for element in key.split('.'):
             try:
@@ -92,9 +94,18 @@ class WebhookReceiverBase(APIView):
                     value = (value or {}).get(element)
             except Exception:
                 value = None
+        return value
+
+    def get_event_ref(self):
+        value = self._get_payload_value(self.ref_keys.get(self.get_event_type(), ''))
         if value == '0000000000000000000000000000000000000000':  # a deleted ref
             value = None
         return value
+
+    def get_event_ref_name(self):
+        # The symbolic name of the pushed ref (e.g. refs/heads/main), as opposed
+        # to the commit hash returned by get_event_ref().
+        return self._get_payload_value(self.ref_name_keys.get(self.get_event_type(), ''))
 
     def get_signature(self):
         raise NotImplementedError
@@ -139,6 +150,9 @@ class WebhookReceiverBase(APIView):
             # This was an ignored request type (e.g. ping), don't act on it
             return Response({'message': _("Webhook ignored")}, status=status.HTTP_200_OK)
 
+        if isinstance(obj, Project):
+            return self.handle_project_sync(obj)
+
         event_type = self.get_event_type()
         event_guid = self.get_event_guid()
         event_ref = self.get_event_ref()
@@ -172,6 +186,34 @@ class WebhookReceiverBase(APIView):
 
         return Response({'message': "Job queued."}, status=status.HTTP_202_ACCEPTED)
 
+    def handle_project_sync(self, obj):
+        # For projects the webhook does not carry any variables into a playbook,
+        # it just triggers the same update the Sync button does, so the project
+        # is fetched with its configured branch/refspec.
+        if self.get_event_type() not in self.project_sync_events:
+            logger.debug("Webhook event type '{}' does not trigger a project sync, ignoring.".format(self.get_event_type()))
+            return Response({'message': _("Webhook ignored")}, status=status.HTTP_200_OK)
+
+        ref_name = self.get_event_ref_name()
+        if obj.webhook_ref_filter and not fnmatchcase(ref_name or '', obj.webhook_ref_filter):
+            logger.debug("Webhook ref '{}' did not match the ref filter of project {}, ignoring.".format(ref_name, obj.id))
+            return Response({'message': _("Webhook ref did not match the configured filter, ignoring.")}, status=status.HTTP_200_OK)
+
+        event_guid = self.get_event_guid()
+        kwargs = {'project_id': obj.id, 'webhook_service': obj.webhook_service, 'webhook_guid': event_guid}
+        if ProjectUpdate.objects.filter(**kwargs).exists():
+            # Short circuit if this webhook has already been received and acted upon.
+            logger.debug("Webhook previously received, returning without action.")
+            return Response({'message': _("Webhook previously received, aborting.")}, status=status.HTTP_202_ACCEPTED)
+
+        if not obj.can_update:
+            return Response({'message': _("Project cannot be updated.")}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+        project_update = obj.create_project_update(_eager_fields={'launch_type': 'webhook', 'webhook_service': obj.webhook_service, 'webhook_guid': event_guid})
+        project_update.signal_start()
+
+        return Response({'message': "Project update queued."}, status=status.HTTP_202_ACCEPTED)
+
 
 class GithubWebhookReceiver(WebhookReceiverBase):
     service = 'github'
@@ -186,6 +228,9 @@ class GithubWebhookReceiver(WebhookReceiverBase):
         'create': 'ref',
         'page_build': 'build.commit',
     }
+
+    ref_name_keys = {'push': 'ref'}
+    project_sync_events = ['push']
 
     def get_event_type(self):
         return self.request.headers.get('x-github-event')
@@ -214,6 +259,9 @@ class GitlabWebhookReceiver(WebhookReceiverBase):
     service = 'gitlab'
 
     ref_keys = {'Push Hook': 'checkout_sha', 'Tag Push Hook': 'checkout_sha', 'Merge Request Hook': 'object_attributes.last_commit.id'}
+
+    ref_name_keys = {'Push Hook': 'ref', 'Tag Push Hook': 'ref'}
+    project_sync_events = ['Push Hook', 'Tag Push Hook']
 
     def get_event_type(self):
         return self.request.headers.get('x-gitlab-event')
@@ -258,6 +306,9 @@ class BitbucketDcWebhookReceiver(WebhookReceiverBase):
         'pr:from_ref_updated': 'pullRequest.toRef.latestCommit',
         'pr:modified': 'pullRequest.toRef.latestCommit',
     }
+
+    ref_name_keys = {'repo:refs_changed': 'changes.0.ref.id', 'mirror:repo_synchronized': 'changes.0.ref.id'}
+    project_sync_events = ['repo:refs_changed', 'mirror:repo_synchronized']
 
     def get_event_type(self):
         return self.request.headers.get('x-event-key')

@@ -4,7 +4,7 @@ import { Routes, Route } from 'react-router';
 import { createMemoryHistory } from 'history';
 
 import { Formik } from 'formik';
-import { CredentialsAPI, CredentialTypesAPI } from 'api';
+import { CredentialsAPI, CredentialTypesAPI, ProjectsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import WebhookSubForm from './WebhookSubForm';
@@ -161,5 +161,72 @@ describe('<WebhookSubForm />', () => {
       )
     ).toBeInTheDocument();
     expect(screen.queryByText('Webhook Credential')).not.toBeInTheDocument();
+  });
+
+  describe('project webhooks', () => {
+    const projectInitialValues = {
+      webhook_url: '/api/v2/projects/7/github/',
+      webhook_service: 'github',
+      webhook_key: 'webhook key',
+      webhook_ref_filter: '',
+    };
+
+    const renderProjectForm = (values) => {
+      history = createMemoryHistory({ initialEntries: ['/projects/7/edit'] });
+      return renderWithContexts(
+        <Routes>
+          <Route
+            path="/projects/:id/edit"
+            element={
+              <Formik initialValues={values}>
+                <WebhookSubForm templateType="project" />
+              </Formik>
+            }
+          />
+        </Routes>,
+        {
+          context: {
+            router: {
+              history,
+            },
+          },
+        }
+      );
+    };
+
+    test('should render ref filter and skip the credential lookup', async () => {
+      renderProjectForm(projectInitialValues);
+
+      expect(await screen.findByLabelText('Select Input')).toHaveValue(
+        'github'
+      );
+      expect(screen.getByLabelText('Webhook URL')).toHaveValue(
+        '/api/v2/projects/7/github/'
+      );
+      expect(screen.getByText('Webhook Ref Filter')).toBeInTheDocument();
+      // projects have no webhook credential, so neither the lookup nor the
+      // missing credential type warning should render
+      expect(CredentialTypesAPI.read).not.toHaveBeenCalled();
+      expect(screen.queryByText('Webhook Credential')).not.toBeInTheDocument();
+      expect(
+        screen.queryByText(
+          'Unable to look up the credential type for this webhook service, so the webhook credential field is unavailable.'
+        )
+      ).not.toBeInTheDocument();
+    });
+
+    test('should rotate the webhook key through the projects API', async () => {
+      ProjectsAPI.updateWebhookKey.mockResolvedValue({
+        data: { webhook_key: 'brandnewkey123' },
+      });
+      renderProjectForm(projectInitialValues);
+
+      fireEvent.click(
+        await screen.findByRole('button', { name: 'Update webhook key' })
+      );
+      await waitFor(() =>
+        expect(ProjectsAPI.updateWebhookKey).toHaveBeenCalledWith('7')
+      );
+    });
   });
 });

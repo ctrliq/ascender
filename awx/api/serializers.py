@@ -1513,6 +1513,8 @@ class ProjectSerializer(UnifiedJobTemplateSerializer, ProjectOptionsSerializer):
             'allow_override',
             'default_environment',
             'signature_validation_credential',
+            'webhook_service',
+            'webhook_ref_filter',
         ) + (
             'last_update_failed',
             'last_updated',
@@ -1537,6 +1539,12 @@ class ProjectSerializer(UnifiedJobTemplateSerializer, ProjectOptionsSerializer):
                 access_list=self.reverse('api:project_access_list', kwargs={'pk': obj.pk}),
                 object_roles=self.reverse('api:project_object_roles_list', kwargs={'pk': obj.pk}),
                 copy=self.reverse('api:project_copy', kwargs={'pk': obj.pk}),
+                webhook_key=self.reverse('api:webhook_key', kwargs={'model_kwarg': 'projects', 'pk': obj.pk}),
+                webhook_receiver=(
+                    self.reverse('api:webhook_receiver_{}'.format(obj.webhook_service), kwargs={'model_kwarg': 'projects', 'pk': obj.pk})
+                    if obj.webhook_service
+                    else ''
+                ),
             )
         )
         if obj.organization:
@@ -1581,6 +1589,8 @@ class ProjectSerializer(UnifiedJobTemplateSerializer, ProjectOptionsSerializer):
             for fd in ('scm_update_on_launch', 'scm_delete_on_update', 'scm_track_submodules', 'scm_clean'):
                 if get_field_from_model_or_attrs(fd):
                     raise serializers.ValidationError({fd: _('Update options must be set to false for manual projects.')})
+        if get_field_from_model_or_attrs('webhook_service') and not get_field_from_model_or_attrs('scm_type'):
+            raise serializers.ValidationError({'webhook_service': _('Webhooks are not supported for manual projects.')})
         return super(ProjectSerializer, self).validate(attrs)
 
 
@@ -1625,7 +1635,7 @@ class ProjectUpdateViewSerializer(ProjectSerializer):
 class ProjectUpdateSerializer(UnifiedJobSerializer, ProjectOptionsSerializer):
     class Meta:
         model = ProjectUpdate
-        fields = ('*', 'project', 'job_type', 'job_tags', '-controller_node')
+        fields = ('*', 'project', 'job_type', 'job_tags', '-controller_node', 'webhook_service', 'webhook_guid')
 
     def get_related(self, obj):
         res = super(ProjectUpdateSerializer, self).get_related(obj)

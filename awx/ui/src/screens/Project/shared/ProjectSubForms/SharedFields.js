@@ -1,11 +1,17 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { useFormikContext } from 'formik';
-import { FormGroup, Title } from '@patternfly/react-core';
+import { useField, useFormikContext } from 'formik';
+import { Checkbox, FormGroup, Title } from '@patternfly/react-core';
 import CredentialLookup from 'components/Lookup/CredentialLookup';
 import FormField, { CheckboxField } from 'components/FormField';
+import Popover from 'components/Popover';
 import { required } from 'util/validators';
-import { FormCheckboxLayout, FormFullWidthLayout } from 'components/FormLayout';
+import {
+  FormCheckboxLayout,
+  FormColumnLayout,
+  FormFullWidthLayout,
+} from 'components/FormLayout';
+import WebhookSubForm from '../../../Template/shared/WebhookSubForm';
 import getProjectHelpStrings from '../Project.helptext';
 
 export const UrlFormField = ({ tooltip }) => {
@@ -69,6 +75,31 @@ export const ScmTypeOptions = ({ scmUpdateOnLaunch, hideAllowOverride }) => {
   const { values } = useFormikContext();
   const projectHelpStrings = getProjectHelpStrings(t);
 
+  const [enableWebhooks, setEnableWebhooks] = useState(
+    Boolean(values.webhook_service)
+  );
+  const [, webhookServiceMeta, webhookServiceHelpers] =
+    useField('webhook_service');
+  const [, webhookUrlMeta, webhookUrlHelpers] = useField('webhook_url');
+  const [, webhookKeyMeta, webhookKeyHelpers] = useField('webhook_key');
+  const [, webhookRefFilterMeta, webhookRefFilterHelpers] =
+    useField('webhook_ref_filter');
+
+  useEffect(() => {
+    if (enableWebhooks) {
+      webhookServiceHelpers.setValue(webhookServiceMeta.initialValue);
+      webhookUrlHelpers.setValue(webhookUrlMeta.initialValue);
+      webhookKeyHelpers.setValue(webhookKeyMeta.initialValue);
+      webhookRefFilterHelpers.setValue(webhookRefFilterMeta.initialValue);
+    } else {
+      webhookServiceHelpers.setValue('');
+      webhookUrlHelpers.setValue('');
+      webhookKeyHelpers.setValue('');
+      webhookRefFilterHelpers.setValue('');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [enableWebhooks]);
+
   return (
     <FormFullWidthLayout>
       <FormGroup
@@ -110,6 +141,22 @@ export const ScmTypeOptions = ({ scmUpdateOnLaunch, hideAllowOverride }) => {
               tooltip={projectHelpStrings.options.allowBranchOverride}
             />
           )}
+          <Checkbox
+            aria-label={t`Enable Webhook`}
+            label={
+              <span>
+                {t`Enable Webhook`}
+                &nbsp;
+                <Popover content={projectHelpStrings.options.enableWebhook} />
+              </span>
+            }
+            id="option-enable-webhook"
+            ouiaId="option-enable-webhook"
+            isChecked={enableWebhooks}
+            onChange={(_event, checked) => {
+              setEnableWebhooks(checked);
+            }}
+          />
         </FormCheckboxLayout>
       </FormGroup>
 
@@ -126,6 +173,17 @@ export const ScmTypeOptions = ({ scmUpdateOnLaunch, hideAllowOverride }) => {
             label={t`Cache Timeout`}
             tooltip={projectHelpStrings.options.cacheTimeout}
           />
+        </>
+      )}
+
+      {enableWebhooks && (
+        <>
+          <Title size="md" headingLevel="h4">
+            {t`Webhook details`}
+          </Title>
+          <FormColumnLayout>
+            <WebhookSubForm templateType="project" />
+          </FormColumnLayout>
         </>
       )}
     </FormFullWidthLayout>

@@ -1,7 +1,7 @@
 # Copyright (c) 2017 Ansible, Inc.
 # All Rights Reserved.
 
-from django.urls import path
+from django.urls import include, path
 
 from awx.api.views import (
     ProjectList,
@@ -47,6 +47,7 @@ urls = [
     path('<int:pk>/object_roles/', ProjectObjectRolesList.as_view(), name='project_object_roles_list'),
     path('<int:pk>/access_list/', ProjectAccessList.as_view(), name='project_access_list'),
     path('<int:pk>/copy/', ProjectCopy.as_view(), name='project_copy'),
+    path('<int:pk>/', include('awx.api.urls.webhooks'), {'model_kwarg': 'projects'}),
 ]
 
 __all__ = ['urls']
