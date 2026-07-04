@@ -156,6 +156,8 @@ In addition to `set_stats` data, Ascender automatically derives a set of `ascend
 
 These keys behave exactly like `set_stats` artifacts: they propagate to descendant workflow nodes as extra variables and can be used by conditional workflow connectors (e.g. only run a node when `ascender_stats_changed` equals `true`). Keys registered by the playbook through `set_stats` always win over the automatic ones on name collision. The feature is controlled by the `ASCENDER_AUTO_STATS_ENABLED` setting (default enabled) and both settings can be overridden per job or per workflow with extra variables of the same name (workflow extra variables apply to every job the workflow spawns).
 
+When artifacts of several sibling jobs are aggregated (the slices of a sliced job template, the nodes inside a nested workflow, or several parent nodes converging into one child), the `ascender_stats_*` keys are merged rather than overwritten: the booleans are OR-ed and the host name lists are unioned, so a host that changed or failed in any of the aggregated jobs keeps that state. If any of the aggregated jobs had its host lists truncated, the merged lists are omitted as well. All other artifact keys keep the usual last-writer-wins behavior.
+
 
 ### Workflow Run Example
 
