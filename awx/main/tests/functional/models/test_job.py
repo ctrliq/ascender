@@ -89,6 +89,57 @@ class TestSlicingModels:
         unified_job = job_template.create_unified_job(job_slice_count=2)
         assert isinstance(unified_job, Job)
 
+    def test_effective_slice_count_with_pinned_hosts(self, job_template, inventory):
+        job_template.inventory = inventory
+        job_template.job_slice_count = 5
+        job_template.job_slice_pinned_hosts = ' localhost, missing-host ,'
+        assert job_template.job_slice_pinned_hosts_list == ['localhost', 'missing-host']
+        inventory.hosts.create(name='localhost')
+        for i in range(3):
+            inventory.hosts.create(name='foo{}'.format(i))
+        # localhost is repeated in every slice, so only 3 hosts are worth distributing
+        assert job_template.get_effective_slice_ct({}) == 3
+
+    def test_effective_slice_count_all_hosts_pinned(self, job_template, inventory):
+        job_template.inventory = inventory
+        job_template.job_slice_count = 3
+        job_template.job_slice_pinned_hosts = 'foo0,foo1'
+        for i in range(2):
+            inventory.hosts.create(name='foo{}'.format(i))
+        # slicing is pointless when every host would end up in every slice
+        assert job_template.get_effective_slice_ct({}) == 1
+
+    def test_pinned_hosts_inherited_by_slice_jobs(self, slice_job_factory):
+        # factory creates hosts foo0..foo2 with slice count 3; foo0 pinned leaves
+        # two hosts to distribute, so only two slices get spawned
+        workflow_job = slice_job_factory(3, jt_kwargs={'job_slice_pinned_hosts': 'foo0'}, spawn=True)
+        assert workflow_job.workflow_nodes.count() == 2
+        seen_hosts = []
+        for node in workflow_job.workflow_nodes.all():
+            job = node.job
+            assert job.job_slice_pinned_hosts == 'foo0'
+            # same call the task inventory build makes for the slice
+            data = job.inventory.get_script_data(
+                slice_number=job.job_slice_number, slice_count=job.job_slice_count, slice_pinned_hosts=job.job_slice_pinned_hosts_list
+            )
+            hosts = data['all']['hosts']
+            assert 'foo0' in hosts
+            assert len(hosts) == 2
+            seen_hosts.extend(hosts)
+        # the two remaining hosts got distributed, one per slice
+        assert sorted(seen_hosts) == ['foo0', 'foo0', 'foo1', 'foo2']
+
+    def test_pinned_hosts_fact_cache_alignment(self, slice_job_factory):
+        # the fact cache host set of each slice must match the inventory the
+        # slice actually runs against
+        workflow_job = slice_job_factory(3, jt_kwargs={'job_slice_pinned_hosts': 'foo0', 'use_fact_cache': True}, spawn=True)
+        for node in workflow_job.workflow_nodes.all():
+            job = node.job
+            data = job.inventory.get_script_data(
+                slice_number=job.job_slice_number, slice_count=job.job_slice_count, slice_pinned_hosts=job.job_slice_pinned_hosts_list
+            )
+            assert sorted(host.name for host in job.get_hosts_for_fact_cache()) == data['all']['hosts']
+
 
 # ---------------------------------------------------------------------------
 # Federated inventory launch tests
@@ -308,4 +359,3 @@ class TestFederatedInventoryHasMatchingHosts:
         assert _federated_inventory_has_matching_hosts(inv, 'web:db') is True
         assert _federated_inventory_has_matching_hosts(inv, 'web&db') is True
         assert _federated_inventory_has_matching_hosts(inv, '!web') is True
-

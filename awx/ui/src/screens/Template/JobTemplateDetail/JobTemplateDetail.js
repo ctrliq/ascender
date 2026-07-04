@@ -47,6 +47,7 @@ function JobTemplateDetail({ template }) {
     forks,
     host_config_key,
     job_slice_count,
+    job_slice_pinned_hosts,
     job_tags,
     job_type,
     name,
@@ -288,6 +289,12 @@ function JobTemplateDetail({ template }) {
           value={job_slice_count}
           dataCy="jt-detail-job-slice-count"
           helpText={helpText.jobSlicing}
+        />
+        <Detail
+          label={t`Job Slice Pinned Hosts`}
+          value={job_slice_pinned_hosts}
+          dataCy="jt-detail-job-slice-pinned-hosts"
+          helpText={helpText.jobSlicePinnedHosts}
         />
         {host_config_key && (
           <>

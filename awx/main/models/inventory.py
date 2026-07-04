@@ -281,10 +281,14 @@ class Inventory(CommonModelNameNotUnique, ResourceMixin, RelatedJobsMixin):
             raise ParseError(_('Slice number must be 1 or higher.'))
         return (number, step)
 
-    def get_sliced_hosts(self, host_queryset, slice_number, slice_count):
+    def get_sliced_hosts(self, host_queryset, slice_number, slice_count, pinned_hosts=None):
         """
         Returns a slice of Hosts given a slice number and total slice count, or
         the original queryset if slicing is not requested.
+
+        Hosts named in pinned_hosts are taken out of the round robin
+        distribution and included in every slice instead, so that plays which
+        target them (a coordinating host like localhost) run in all slices.
 
         NOTE: If slicing is performed, this will return a List[Host] with the
         resulting slice. If slicing is not performed it will return the
@@ -297,10 +301,15 @@ class Inventory(CommonModelNameNotUnique, ResourceMixin, RelatedJobsMixin):
 
         if slice_count > 1 and slice_number > 0:
             offset = slice_number - 1
+            if pinned_hosts:
+                pinned = list(host_queryset.filter(name__in=pinned_hosts))
+                if pinned:
+                    sliced = list(host_queryset.exclude(name__in=pinned_hosts)[offset::slice_count])
+                    return sorted(sliced + pinned, key=lambda host: host.name)
             host_queryset = host_queryset[offset::slice_count]
         return host_queryset
 
-    def get_script_data(self, hostvars=False, towervars=False, show_all=False, slice_number=1, slice_count=1):
+    def get_script_data(self, hostvars=False, towervars=False, show_all=False, slice_number=1, slice_count=1, slice_pinned_hosts=None):
         hosts_kw = dict()
         if not show_all:
             hosts_kw['enabled'] = True
@@ -308,7 +317,7 @@ class Inventory(CommonModelNameNotUnique, ResourceMixin, RelatedJobsMixin):
         if towervars:
             fetch_fields.append('enabled')
         host_queryset = self.hosts.filter(**hosts_kw).order_by('name').only(*fetch_fields)
-        hosts = self.get_sliced_hosts(host_queryset, slice_number, slice_count)
+        hosts = self.get_sliced_hosts(host_queryset, slice_number, slice_count, pinned_hosts=slice_pinned_hosts)
 
         data = dict()
         all_group = data.setdefault('all', dict())

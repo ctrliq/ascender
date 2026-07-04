@@ -15,6 +15,7 @@ function getHelpText(t) {
     limit: t`Provide a host pattern to further constrain the list of hosts that will be managed or affected by the playbook. Multiple patterns are allowed. Refer to Ansible documentation for more information and examples on patterns.`,
     verbosity: t`Control the level of output ansible will produce as the playbook executes.`,
     jobSlicing: t`Divide the work done by this job template into the specified number of job slices, each running the same tasks against a portion of the inventory.`,
+    jobSlicePinnedHosts: t`Optional comma separated list of host names to include in every job slice, in addition to the hosts of the slice itself. Useful when a play targets a coordinating host, such as localhost, that all slices depend on. Names are matched exactly against inventory hosts; groups and patterns are not supported. Pinned hosts run their plays once per slice.`,
     timeout: t`The amount of time (in seconds) to run before the job is canceled. Defaults to 0 for no job timeout.`,
     showChanges: t`If enabled, show the changes made by Ansible tasks, where supported. This is equivalent to Ansible's --diff mode.`,
     instanceGroups: t`Select the Instance Groups for this Job Template to run on.`,

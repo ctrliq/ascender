@@ -3200,6 +3200,7 @@ class JobOptionsSerializer(LabelsListMixin, BaseSerializer):
             'scm_branch',
             'forks',
             'limit',
+            'job_slice_pinned_hosts',
             'verbosity',
             'extra_vars',
             'job_tags',

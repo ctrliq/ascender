@@ -66,6 +66,22 @@ def test_workflow_job_relaunch_federated_inventory(organization, job_template, p
 
 
 @pytest.mark.django_db
+def test_workflow_job_relaunch_with_pinned_hosts(slice_jt_factory, post, admin_user):
+    """A sliced job with pinned hosts spawns fewer nodes than
+    min(hosts, slice_count); the relaunch check must apply the same
+    arithmetic instead of flagging a slice count change."""
+    slice_jt = slice_jt_factory(3, jt_kwargs={'job_slice_pinned_hosts': 'foo0'})
+    wfj = slice_jt.create_unified_job()
+    wfj.status = 'successful'
+    wfj.save()
+    assert wfj.is_sliced_job
+    assert wfj.workflow_nodes.count() == 2
+
+    url = reverse("api:workflow_job_relaunch", kwargs={'pk': wfj.pk})
+    post(url, user=admin_user, expect=201)
+
+
+@pytest.mark.django_db
 @pytest.mark.parametrize(
     "is_admin, status",
     [
