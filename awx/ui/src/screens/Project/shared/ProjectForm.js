@@ -454,8 +454,7 @@ function ProjectForm({ project = {}, submitError = null, ...props }) {
         webhook_url: project?.related?.webhook_receiver
           ? `${document.location.origin}${project.related.webhook_receiver}`
           : '',
-        webhook_key:
-          project.webhook_key || 'A NEW WEBHOOK KEY WILL BE GENERATED ON SAVE.',
+        webhook_key: project.webhook_key || '',
         webhook_ref_filter: project.webhook_ref_filter || '',
       }}
       onSubmit={handleSubmit}

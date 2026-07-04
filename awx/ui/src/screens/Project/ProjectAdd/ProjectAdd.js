@@ -33,6 +33,9 @@ function ProjectAdd() {
       values.signature_validation_credential =
         values.signature_validation_credential.id;
     }
+    if (webhook_key) {
+      values.webhook_key = webhook_key;
+    }
     setFormSubmitError(null);
     try {
       const {

@@ -144,7 +144,9 @@ job will not run.`,
                 trigger a project sync.`,
   webhookKey: t`Secret shared with the webhook service. The service uses
                 it to sign its requests, so only your repository can
-                trigger a project sync.`,
+                trigger a project sync. Type your own secret to manage it
+                as configuration, or leave the field blank to have one
+                generated on save.`,
 });
 
 export default getProjectHelpText;

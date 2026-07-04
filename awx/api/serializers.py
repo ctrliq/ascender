@@ -1499,6 +1499,13 @@ class ProjectSerializer(UnifiedJobTemplateSerializer, ProjectOptionsSerializer):
     status = serializers.ChoiceField(choices=Project.PROJECT_STATUS_CHOICES, read_only=True)
     last_update_failed = serializers.BooleanField(read_only=True)
     last_updated = serializers.DateTimeField(read_only=True)
+    webhook_key = serializers.CharField(
+        write_only=True,
+        required=False,
+        allow_blank=True,
+        max_length=64,
+        help_text=_('Shared secret that the webhook service will use to sign requests. Leave blank to generate a new one when the webhook service is set.'),
+    )
     show_capabilities = ['start', 'schedule', 'edit', 'delete', 'copy']
     capabilities_prefetch = ['admin', 'update', {'copy': 'organization.project_admin'}]
 
@@ -1514,6 +1521,7 @@ class ProjectSerializer(UnifiedJobTemplateSerializer, ProjectOptionsSerializer):
             'default_environment',
             'signature_validation_credential',
             'webhook_service',
+            'webhook_key',
             'webhook_ref_filter',
         ) + (
             'last_update_failed',
@@ -1591,6 +1599,8 @@ class ProjectSerializer(UnifiedJobTemplateSerializer, ProjectOptionsSerializer):
                     raise serializers.ValidationError({fd: _('Update options must be set to false for manual projects.')})
         if get_field_from_model_or_attrs('webhook_service') and not get_field_from_model_or_attrs('scm_type'):
             raise serializers.ValidationError({'webhook_service': _('Webhooks are not supported for manual projects.')})
+        if attrs.get('webhook_key') and not get_field_from_model_or_attrs('webhook_service'):
+            raise serializers.ValidationError({'webhook_key': _("Cannot set a webhook key without a webhook service.")})
         return super(ProjectSerializer, self).validate(attrs)
 
 
@@ -3295,6 +3305,9 @@ class JobTemplateMixin(object):
         webhook_service = attrs.get('webhook_service', getattr(self.instance, 'webhook_service', None))
         webhook_credential = attrs.get('webhook_credential', getattr(self.instance, 'webhook_credential', None))
 
+        if attrs.get('webhook_key') and not webhook_service:
+            raise serializers.ValidationError({'webhook_key': _("Cannot set a webhook key without a webhook service.")})
+
         if webhook_credential:
             if webhook_credential.credential_type.kind != 'token':
                 raise serializers.ValidationError({'webhook_credential': _("Must be a Personal Access Token.")})
@@ -3314,6 +3327,13 @@ class JobTemplateSerializer(JobTemplateMixin, UnifiedJobTemplateSerializer, JobO
     capabilities_prefetch = ['admin', 'execute', {'copy': ['project.use', 'inventory.use']}]
 
     status = serializers.ChoiceField(choices=JobTemplate.JOB_TEMPLATE_STATUS_CHOICES, read_only=True, required=False)
+    webhook_key = serializers.CharField(
+        write_only=True,
+        required=False,
+        allow_blank=True,
+        max_length=64,
+        help_text=_('Shared secret that the webhook service will use to sign requests. Leave blank to generate a new one when the webhook service is set.'),
+    )
 
     class Meta:
         model = JobTemplate
@@ -3343,6 +3363,7 @@ class JobTemplateSerializer(JobTemplateMixin, UnifiedJobTemplateSerializer, JobO
             'job_slice_count',
             'webhook_service',
             'webhook_credential',
+            'webhook_key',
             'prevent_instance_group_fallback',
         )
         read_only_fields = ('*',)
@@ -3797,6 +3818,13 @@ class WorkflowJobTemplateSerializer(JobTemplateMixin, LabelsListMixin, UnifiedJo
 
     skip_tags = serializers.CharField(allow_blank=True, allow_null=True, required=False, default=None)
     job_tags = serializers.CharField(allow_blank=True, allow_null=True, required=False, default=None)
+    webhook_key = serializers.CharField(
+        write_only=True,
+        required=False,
+        allow_blank=True,
+        max_length=64,
+        help_text=_('Shared secret that the webhook service will use to sign requests. Leave blank to generate a new one when the webhook service is set.'),
+    )
 
     class Meta:
         model = WorkflowJobTemplate
@@ -3815,6 +3843,7 @@ class WorkflowJobTemplateSerializer(JobTemplateMixin, LabelsListMixin, UnifiedJo
             'ask_limit_on_launch',
             'webhook_service',
             'webhook_credential',
+            'webhook_key',
             '-execution_environment',
             'ask_labels_on_launch',
             'ask_skip_tags_on_launch',

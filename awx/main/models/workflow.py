@@ -733,6 +733,7 @@ class WorkflowJobTemplate(UnifiedJobTemplate, WorkflowJobOptions, SurveyJobTempl
         'job_tags',
         'execution_environment',
     ]
+    FIELDS_TO_DISCARD_AT_COPY = ['webhook_key']
 
     class Meta:
         app_label = 'main'

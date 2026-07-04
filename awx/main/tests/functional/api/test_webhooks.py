@@ -351,6 +351,98 @@ def test_set_webhook_service_manual_project(manual_project, patch, admin):
 
 
 @pytest.mark.django_db
+@pytest.mark.parametrize(
+    "model_kwarg, url_name",
+    [
+        ('projects', 'api:project_detail'),
+        ('job_templates', 'api:job_template_detail'),
+        ('workflow_job_templates', 'api:workflow_job_template_detail'),
+    ],
+)
+def test_set_custom_webhook_key(organization_factory, job_template_factory, workflow_job_template_factory, project, patch, get, admin, model_kwarg, url_name):
+    objs = organization_factory("org")
+    if model_kwarg == 'projects':
+        obj = project
+    elif model_kwarg == 'job_templates':
+        obj = job_template_factory("jt", organization=objs.organization, inventory='test_inv', project='test_proj').job_template
+    else:
+        obj = workflow_job_template_factory("wfjt", organization=objs.organization).workflow_job_template
+
+    url = reverse(url_name, kwargs={'pk': obj.pk})
+    response = patch(url, {'webhook_service': 'github', 'webhook_key': 'secret-managed-as-config'}, user=admin, expect=200)
+    obj.refresh_from_db()
+
+    assert obj.webhook_service == 'github'
+    assert obj.webhook_key == 'secret-managed-as-config'
+    # the key is write only, it can only be read back through the webhook_key endpoint
+    assert 'webhook_key' not in response.data
+
+    key_url = reverse('api:webhook_key', kwargs={'model_kwarg': model_kwarg, 'pk': obj.pk})
+    response = get(key_url, user=admin, expect=200)
+    assert response.data == {'webhook_key': 'secret-managed-as-config'}
+
+
+@pytest.mark.django_db
+def test_change_webhook_key_keeps_service(github_project, patch, admin):
+    old_key = github_project.webhook_key
+
+    url = reverse('api:project_detail', kwargs={'pk': github_project.pk})
+    patch(url, {'webhook_key': 'new-secret'}, user=admin, expect=200)
+    github_project.refresh_from_db()
+
+    assert github_project.webhook_service == 'github'
+    assert github_project.webhook_key == 'new-secret'
+    assert github_project.webhook_key != old_key
+
+
+@pytest.mark.django_db
+def test_blank_webhook_key_generates_new_one(github_project, patch, admin):
+    old_key = github_project.webhook_key
+
+    url = reverse('api:project_detail', kwargs={'pk': github_project.pk})
+    patch(url, {'webhook_key': ''}, user=admin, expect=200)
+    github_project.refresh_from_db()
+
+    assert github_project.webhook_key != ''
+    assert github_project.webhook_key != old_key
+
+
+@pytest.mark.django_db
+def test_webhook_service_change_rotates_key_unless_key_given(github_project, patch, admin):
+    old_key = github_project.webhook_key
+
+    url = reverse('api:project_detail', kwargs={'pk': github_project.pk})
+    patch(url, {'webhook_service': 'gitlab'}, user=admin, expect=200)
+    github_project.refresh_from_db()
+    assert github_project.webhook_key not in ('', old_key)
+
+    patch(url, {'webhook_service': 'github', 'webhook_key': 'pinned-secret'}, user=admin, expect=200)
+    github_project.refresh_from_db()
+    assert (github_project.webhook_service, github_project.webhook_key) == ('github', 'pinned-secret')
+
+
+@pytest.mark.django_db
+def test_webhook_key_requires_service(project, patch, admin):
+    url = reverse('api:project_detail', kwargs={'pk': project.pk})
+    response = patch(url, {'webhook_key': 'orphan-secret'}, user=admin, expect=400)
+
+    assert response.data == {'webhook_key': ["Cannot set a webhook key without a webhook service."]}
+
+
+@pytest.mark.django_db
+def test_copied_project_gets_its_own_webhook_key(github_project, post, admin):
+    url = reverse('api:project_copy', kwargs={'pk': github_project.pk})
+    response = post(url, {'name': 'copied-project'}, user=admin, expect=201)
+
+    from awx.main.models.projects import Project
+
+    copied = Project.objects.get(pk=response.data['id'])
+    assert copied.webhook_service == 'github'
+    assert copied.webhook_key != ''
+    assert copied.webhook_key != github_project.webhook_key
+
+
+@pytest.mark.django_db
 def test_github_push_triggers_project_update(github_project, post):
     with mock.patch.object(ProjectUpdate, 'signal_start') as signal_start:
         response = github_webhook_post(post, github_project, {'ref': 'refs/heads/main', 'after': 'abc123'})

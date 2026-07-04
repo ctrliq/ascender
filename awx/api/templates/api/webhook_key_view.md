@@ -10,3 +10,6 @@ by webhook events.  The response will include the following fields:
 
 Make an empty POST request to this resource to generate a new
 replacement `webhook_key`.
+
+A specific key can also be set by writing to the `webhook_key` field
+of the job template, workflow job template or project resource itself.

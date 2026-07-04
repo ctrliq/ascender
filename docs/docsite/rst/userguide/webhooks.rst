@@ -201,6 +201,8 @@ Projects can also be updated by a webhook, so a push to the repository immediate
 
 To enable it, edit the project, check **Enable Webhook** in the options of the source control type, and pick the webhook service (GitHub, GitLab or Bitbucket Data Center). Saving the project generates the **Webhook URL** and **Webhook Key**; configure them in the repository the same way as for a job template (see the sections above), selecting only push events. There is no webhook credential for projects, since a project sync has no status to post back.
 
+Instead of letting a new key be generated, you can also type your own secret in the **Webhook Key** field (or pass ``webhook_key`` through the API). This is convenient when the key is managed as configuration, for example stored in a vault and applied both to the repository and to the project by an automation. This works the same way for job templates and workflow job templates.
+
 Only push and tag push events trigger a sync; any other event is acknowledged and ignored. The sync behaves exactly like the **Sync** button and fetches the branch or refspec configured in the project. If you only care about some refs, set a **Webhook Ref Filter** pattern, for example ``refs/heads/main`` or ``refs/heads/release-*``; pushes to refs that do not match the pattern are ignored. When the filter is empty, any push triggers a sync.
 
 Project updates started by a webhook show ``webhook`` as their launch type, along with the service and the event id that triggered them.

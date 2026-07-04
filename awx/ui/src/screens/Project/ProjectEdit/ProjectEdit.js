@@ -34,6 +34,9 @@ function ProjectEdit({ project }) {
         values.signature_validation_credential.id;
     }
 
+    if (webhook_key) {
+      values.webhook_key = webhook_key;
+    }
     try {
       const {
         data: { id },

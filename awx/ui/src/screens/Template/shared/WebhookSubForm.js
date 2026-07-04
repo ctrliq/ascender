@@ -101,9 +101,7 @@ function WebhookSubForm({ templateType }) {
   );
 
   const isUpdateKeyDisabled =
-    pathname.endsWith('/add') ||
-    webhookKeyMeta.initialValue ===
-      'A NEW WEBHOOK KEY WILL BE GENERATED ON SAVE.';
+    pathname.endsWith('/add') || !webhookKeyMeta.initialValue;
   const webhookServiceOptions = [
     {
       value: '',
@@ -162,9 +160,7 @@ function WebhookSubForm({ templateType }) {
                 webhookCredentialMeta.initialValue
               );
             } else {
-              webhookKeyHelpers.setValue(
-                (t`a new webhook key will be generated on save.`).toUpperCase()
-              );
+              webhookKeyHelpers.setValue('');
               webhookCredentialHelpers.setValue(null);
             }
           }}
@@ -205,7 +201,8 @@ function WebhookSubForm({ templateType }) {
                 id="template-webhook_key"
                 aria-label={t`workflow job template webhook key`}
                 value={webhookKeyField.value}
-                readOnlyVariant="default"
+                placeholder={t`Leave blank to generate a new webhook key on save`}
+                onChange={(_event, val) => webhookKeyHelpers.setValue(val)}
               />
             </InputGroupItem>
             <InputGroupItem><Button icon={<SyncAltIcon />}

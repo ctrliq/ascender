@@ -570,14 +570,26 @@ class WebhookKeyTemplateMixin(models.Model):
     def save(self, *args, **kwargs):
         update_fields = kwargs.get('update_fields')
 
-        if not self.pk or self._values_have_edits({'webhook_service': self.webhook_service}):
-            if self.webhook_service:
-                self.rotate_webhook_key()
-            else:
-                self.webhook_key = ''
+        if self.pk:
+            service_edited = self._values_have_edits({'webhook_service': self.webhook_service})
+            key_edited = self._values_have_edits({'webhook_key': self.webhook_key})
+        else:
+            service_edited = True
+            key_edited = bool(self.webhook_key)
 
-            if update_fields and 'webhook_service' in update_fields:
+        if service_edited:
+            if not self.webhook_service:
+                self.webhook_key = ''
+            elif not (key_edited and self.webhook_key):
+                # No key was supplied by the caller, generate one. A caller
+                # provided key (e.g. one managed as configuration) is kept as is.
+                self.rotate_webhook_key()
+
+            if update_fields and 'webhook_service' in update_fields and 'webhook_key' not in update_fields:
                 update_fields.add('webhook_key')
+        elif key_edited and self.webhook_service and not self.webhook_key:
+            # Blanking the key of an active webhook means please generate a new one.
+            self.rotate_webhook_key()
 
         super().save(*args, **kwargs)
 

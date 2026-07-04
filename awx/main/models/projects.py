@@ -255,7 +255,7 @@ class Project(UnifiedJobTemplate, ProjectOptions, ResourceMixin, RelatedJobsMixi
 
     SOFT_UNIQUE_TOGETHER = [('polymorphic_ctype', 'name', 'organization')]
     FIELDS_TO_PRESERVE_AT_COPY = ['labels', 'instance_groups', 'credentials']
-    FIELDS_TO_DISCARD_AT_COPY = ['local_path']
+    FIELDS_TO_DISCARD_AT_COPY = ['local_path', 'webhook_key']
     FIELDS_TRIGGER_UPDATE = frozenset(['scm_url', 'scm_branch', 'scm_type', 'scm_refspec'])
 
     class Meta:

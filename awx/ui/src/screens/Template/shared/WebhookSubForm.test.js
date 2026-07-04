@@ -93,16 +93,18 @@ describe('<WebhookSubForm />', () => {
         '/api/v2/job_templates/51/gitlab/'
       )
     );
+    // switching to another service clears the key: a new one is generated on
+    // save unless the user types their own
     expect(
       screen.getByLabelText('workflow job template webhook key')
-    ).toHaveValue('A NEW WEBHOOK KEY WILL BE GENERATED ON SAVE.');
+    ).toHaveValue('');
   });
 
-  test('should have disabled button to update webhook key', async () => {
+  test('should have disabled button to update webhook key when there is no saved key', async () => {
     renderForm(
       {
         ...initialValues,
-        webhook_key: 'A NEW WEBHOOK KEY WILL BE GENERATED ON SAVE.',
+        webhook_key: '',
       },
       'job_template',
       'templates/job_template/51/edit'
@@ -111,6 +113,17 @@ describe('<WebhookSubForm />', () => {
     expect(
       await screen.findByRole('button', { name: 'Update webhook key' })
     ).toBeDisabled();
+  });
+
+  test('should accept a user supplied webhook key', async () => {
+    renderForm(initialValues, 'job_template', 'templates/job_template/51/edit');
+
+    const keyInput = await screen.findByLabelText(
+      'workflow job template webhook key'
+    );
+    fireEvent.change(keyInput, { target: { value: 'my-own-secret' } });
+
+    await waitFor(() => expect(keyInput).toHaveValue('my-own-secret'));
   });
 
   test('test whether the workflow template type is part of the webhook url', async () => {

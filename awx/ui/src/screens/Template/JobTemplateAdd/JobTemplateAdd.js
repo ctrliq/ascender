@@ -58,6 +58,9 @@ function JobTemplateAdd() {
     setFormSubmitError(null);
     remainingValues.project = project.id;
     remainingValues.webhook_credential = webhook_credential?.id;
+    if (webhook_key) {
+      remainingValues.webhook_key = webhook_key;
+    }
     remainingValues.inventory = inventory?.id || null;
     try {
       const {

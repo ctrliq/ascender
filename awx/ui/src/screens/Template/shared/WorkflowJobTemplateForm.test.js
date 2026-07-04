@@ -225,7 +225,7 @@ describe('<WorkflowJobTemplateForm/>', () => {
     const webhookKeyInput = await screen.findByLabelText(
       'workflow job template webhook key'
     );
-    expect(webhookKeyInput).toHaveAttribute('readonly');
+    expect(webhookKeyInput).not.toHaveAttribute('readonly');
     expect(webhookKeyInput).toHaveValue('sdfghjklmnbvcdsew435678iokjhgfd');
 
     fireEvent.click(screen.getByRole('button', { name: 'Update webhook key' }));
