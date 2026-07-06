@@ -341,6 +341,39 @@ register(
 )
 
 register(
+    'ASCENDER_AUTO_STATS_ENABLED',
+    field_class=fields.BooleanField,
+    default=True,
+    label=_('Enable Automatic Job Stats Artifacts'),
+    help_text=_(
+        'Automatically add ascender_stats_* keys (changed/failed flags and host name lists '
+        'derived from the playbook stats) to the artifacts of every finished playbook job '
+        '(jobs launched from job templates; project updates, inventory syncs and ad hoc '
+        'commands are not affected), so they can be used by downstream workflow nodes and '
+        'conditional connectors without requiring set_stats in the playbook. Can be '
+        'overridden per job or workflow with an ASCENDER_AUTO_STATS_ENABLED extra variable.'
+    ),
+    category=_('Jobs'),
+    category_slug='jobs',
+)
+
+register(
+    'ASCENDER_AUTO_STATS_MAX_HOSTS',
+    field_class=fields.IntegerField,
+    default=100,
+    min_value=0,
+    label=_('Maximum Hosts in Automatic Job Stats Artifacts'),
+    help_text=_(
+        'When a play involves more hosts than this, the ascender_stats_* host name lists are '
+        'omitted from the automatic job stats artifacts (the boolean flags are always kept) '
+        'and ascender_stats_hosts_truncated is set instead. Can be overridden per job or workflow '
+        'with an ASCENDER_AUTO_STATS_MAX_HOSTS extra variable.'
+    ),
+    category=_('Jobs'),
+    category_slug='jobs',
+)
+
+register(
     'AWX_COLLECTIONS_ENABLED',
     field_class=fields.BooleanField,
     default=True,

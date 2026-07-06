@@ -142,6 +142,46 @@ class WorkflowNodeConditionLinkBase(models.Model):
         return evaluate_artifact_condition(artifacts, self.artifact_key, self.operator or 'eq', self.expected_value)
 
 
+# Automatic playbook stats artifacts, produced for every finished job
+# (see awx.main.tasks.callback.build_stats_artifacts). Since every job emits
+# the same key names, aggregating artifacts of several sibling jobs (slices of
+# a sliced job template, nodes of a nested workflow, converging parents) with
+# plain dict.update() would keep only the last job's values, hiding e.g. a
+# failed host reported by an earlier sibling. These keys are merged instead.
+STATS_BOOLEAN_ARTIFACTS = ('ascender_stats_changed', 'ascender_stats_failed', 'ascender_stats_hosts_truncated')
+STATS_HOST_LIST_ARTIFACTS = (
+    ('ascender_stats_changed_hosts', 'ascender_stats_non_changed_hosts'),
+    ('ascender_stats_failed_hosts', 'ascender_stats_non_failed_hosts'),
+)
+
+
+def merge_stats_artifacts(dest, src):
+    """Update dest with src like dict.update(), except the automatic
+    ascender_stats_* keys present on both sides are combined: booleans are OR-ed
+    and the host name lists are merged, so a host reported as changed or
+    failed by any of the aggregated jobs keeps that state. When any side was
+    truncated the merged host lists are dropped entirely, mirroring how
+    build_stats_artifacts never emits partial lists.
+    """
+    combined = {}
+    for key in STATS_BOOLEAN_ARTIFACTS:
+        if key in dest and key in src:
+            combined[key] = bool(dest[key]) or bool(src[key])
+    for positive_key, negative_key in STATS_HOST_LIST_ARTIFACTS:
+        if positive_key in dest and positive_key in src:
+            matched = set(dest.get(positive_key) or []) | set(src.get(positive_key) or [])
+            seen = matched | set(dest.get(negative_key) or []) | set(src.get(negative_key) or [])
+            combined[positive_key] = sorted(matched)
+            combined[negative_key] = sorted(seen - matched)
+    dest.update(src)
+    dest.update(combined)
+    if dest.get('ascender_stats_hosts_truncated'):
+        for positive_key, negative_key in STATS_HOST_LIST_ARTIFACTS:
+            dest.pop(positive_key, None)
+            dest.pop(negative_key, None)
+    return dest
+
+
 class WorkflowNodeBase(CreatedModifiedModel, LaunchTimeConfig):
     class Meta:
         abstract = True
@@ -479,9 +519,13 @@ class WorkflowJobNode(WorkflowNodeBase):
         is_root_node = True
         for parent_node in self.get_parent_nodes():
             is_root_node = False
-            aa_dict.update(parent_node.ancestor_artifacts)
+            # within one parent, its own job output supersedes what it inherited;
+            # across parents the stats keys are merged so one parent cannot mask
+            # the changed/failed hosts reported by another
+            parent_artifacts = dict(parent_node.ancestor_artifacts)
             if parent_node.job:
-                aa_dict.update(parent_node.job.get_effective_artifacts(parents_set=set([self.workflow_job_id])))
+                parent_artifacts.update(parent_node.job.get_effective_artifacts(parents_set=set([self.workflow_job_id])))
+            merge_stats_artifacts(aa_dict, parent_artifacts)
         if aa_dict and not is_root_node:
             self.ancestor_artifacts = aa_dict
             self.save(update_fields=['ancestor_artifacts'])
@@ -970,7 +1014,7 @@ class WorkflowJob(UnifiedJob, WorkflowJobOptions, SurveyJobMixin, JobNotificatio
         for job in job_queryset:
             if job.id in parents_set:
                 continue
-            artifacts.update(job.get_effective_artifacts(parents_set=new_parents_set))
+            merge_stats_artifacts(artifacts, job.get_effective_artifacts(parents_set=new_parents_set))
         return artifacts
 
     def prompts_dict(self, *args, **kwargs):

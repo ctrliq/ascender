@@ -146,6 +146,18 @@ Workflow jobs cannot be copied directly; instead, a workflow job is implicitly c
 
 Support for artifacts starts in Ansible and is carried through in Ascender. The `set_stats` module is invoked by users, in a playbook, to register facts. Facts are passed in via the `data:` argument. Note that the default `set_stats` parameters are the correct ones to work with Ascender (*i.e.*, `per_host: no`). Now that facts are registered, we will describe how facts are used. In Ansible, registered facts are "returned" to the callback plugin(s) via the `playbook_on_stats` event. Ansible users can configure whether or not they want the facts displayed through the global `show_custom_stats` configuration. Note that the `show_custom_stats` does not affect the artifact feature of Ascender. This only controls the displaying of `set_stats` fact data in Ansible output (also the output in Ansible playbooks that get run in Ascender). Ascender uses a custom callback plugin that gathers the fact data set via `set_stats` in the `playbook_on_stats` handler and "ships" it back to Ascender, saves it in the database, and makes it available on the job endpoint via the variable `artifacts`. The semantics and usage of `artifacts` throughout a workflow is described elsewhere in this document.
 
+#### Automatic Job Stats Artifacts
+
+In addition to `set_stats` data, Ascender automatically derives a set of `ascender_stats_*` artifact keys from the final playbook stats of every playbook job (that is, jobs launched from a job template; project updates, inventory syncs and ad hoc commands do not produce them), without requiring anything in the playbook:
+
+* `ascender_stats_changed` / `ascender_stats_failed`: booleans, true when any host reported a change or a failure (including unreachable hosts).
+* `ascender_stats_changed_hosts` / `ascender_stats_non_changed_hosts` / `ascender_stats_failed_hosts` / `ascender_stats_non_failed_hosts`: sorted lists of host names.
+* `ascender_stats_hosts_truncated`: true when the play involved more hosts than `ASCENDER_AUTO_STATS_MAX_HOSTS` (default 100), in which case the four host name lists are omitted to keep artifacts small; the boolean flags are always present.
+
+These keys behave exactly like `set_stats` artifacts: they propagate to descendant workflow nodes as extra variables and can be used by conditional workflow connectors (e.g. only run a node when `ascender_stats_changed` equals `true`). Keys registered by the playbook through `set_stats` always win over the automatic ones on name collision. The feature is controlled by the `ASCENDER_AUTO_STATS_ENABLED` setting (default enabled) and both settings can be overridden per job or per workflow with extra variables of the same name (workflow extra variables apply to every job the workflow spawns).
+
+When artifacts of several sibling jobs are aggregated (the slices of a sliced job template, the nodes inside a nested workflow, or several parent nodes converging into one child), the `ascender_stats_*` keys are merged rather than overwritten: the booleans are OR-ed and the host name lists are unioned, so a host that changed or failed in any of the aggregated jobs keeps that state. If any of the aggregated jobs had its host lists truncated, the merged lists are omitted as well. All other artifact keys keep the usual last-writer-wins behavior.
+
 
 ### Workflow Run Example
 

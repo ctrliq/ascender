@@ -2,7 +2,7 @@ import pytest
 
 from awx.main.models.jobs import JobTemplate
 from awx.main.models import Inventory, CredentialType, Credential, Project
-from awx.main.models.workflow import WorkflowJobTemplate, WorkflowJobTemplateNode, WorkflowJob, WorkflowJobNode
+from awx.main.models.workflow import WorkflowJobTemplate, WorkflowJobTemplateNode, WorkflowJob, WorkflowJobNode, merge_stats_artifacts
 from unittest import mock
 
 
@@ -245,3 +245,62 @@ def test_get_ask_mapping_integrity():
         'skip_tags',
         'extra_vars',
     ]
+
+
+class TestMergeStatsArtifacts:
+    """merge_stats_artifacts combines the automatic ascender_stats_* keys across
+    sibling jobs (slices, nested workflow nodes, converging parents) instead of
+    letting the last finished job overwrite the others."""
+
+    def test_plain_keys_keep_update_semantics(self):
+        dest = {'custom': 1, 'other': 'a'}
+        merge_stats_artifacts(dest, {'custom': 2})
+        assert dest == {'custom': 2, 'other': 'a'}
+
+    def test_booleans_are_ored_across_jobs(self):
+        # slice 1 failed a host, slice 2 was clean and finished last
+        dest = {'ascender_stats_changed': True, 'ascender_stats_failed': True, 'ascender_stats_hosts_truncated': False}
+        merge_stats_artifacts(dest, {'ascender_stats_changed': False, 'ascender_stats_failed': False, 'ascender_stats_hosts_truncated': False})
+        assert dest['ascender_stats_changed'] is True
+        assert dest['ascender_stats_failed'] is True
+        assert dest['ascender_stats_hosts_truncated'] is False
+
+    def test_host_lists_are_unioned(self):
+        dest = {
+            'ascender_stats_changed_hosts': ['h1'],
+            'ascender_stats_non_changed_hosts': ['h2'],
+            'ascender_stats_failed_hosts': [],
+            'ascender_stats_non_failed_hosts': ['h1', 'h2'],
+        }
+        src = {
+            'ascender_stats_changed_hosts': ['h2', 'h3'],
+            'ascender_stats_non_changed_hosts': ['h1'],
+            'ascender_stats_failed_hosts': ['h3'],
+            'ascender_stats_non_failed_hosts': ['h1', 'h2'],
+        }
+        merge_stats_artifacts(dest, src)
+        # a host that changed (or failed) in any job stays in the positive list
+        assert dest['ascender_stats_changed_hosts'] == ['h1', 'h2', 'h3']
+        assert dest['ascender_stats_non_changed_hosts'] == []
+        assert dest['ascender_stats_failed_hosts'] == ['h3']
+        assert dest['ascender_stats_non_failed_hosts'] == ['h1', 'h2']
+
+    def test_truncation_drops_lists(self):
+        dest = {
+            'ascender_stats_hosts_truncated': False,
+            'ascender_stats_changed_hosts': ['h1'],
+            'ascender_stats_non_changed_hosts': [],
+        }
+        merge_stats_artifacts(dest, {'ascender_stats_hosts_truncated': True})
+        assert dest['ascender_stats_hosts_truncated'] is True
+        assert 'ascender_stats_changed_hosts' not in dest
+        assert 'ascender_stats_non_changed_hosts' not in dest
+
+    def test_one_sided_keys_are_preserved(self):
+        # a sibling without stats (feature disabled, non-playbook job) must not
+        # erase what another sibling reported
+        dest = {'ascender_stats_failed': True, 'ascender_stats_failed_hosts': ['h1'], 'ascender_stats_non_failed_hosts': []}
+        merge_stats_artifacts(dest, {'some_set_stats_key': 'x'})
+        assert dest['ascender_stats_failed'] is True
+        assert dest['ascender_stats_failed_hosts'] == ['h1']
+        assert dest['some_set_stats_key'] == 'x'

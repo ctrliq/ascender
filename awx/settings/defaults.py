@@ -688,6 +688,18 @@ AWX_COLLECTIONS_ENABLED = True
 # Follow symlinks when scanning for playbooks
 AWX_SHOW_PLAYBOOK_LINKS = False
 
+# Automatically add ascender_stats_* keys (changed/failed flags and host lists
+# derived from the playbook stats) to job artifacts when a job finishes.
+# Can be overridden per job/workflow with an ASCENDER_AUTO_STATS_ENABLED extra var.
+# Note: This setting may be overridden by database settings.
+ASCENDER_AUTO_STATS_ENABLED = True
+
+# Skip the ascender_stats_* host name lists (keeping the boolean flags) when the
+# play involved more hosts than this, to keep artifacts reasonably small.
+# Can be overridden per job/workflow with an ASCENDER_AUTO_STATS_MAX_HOSTS extra var.
+# Note: This setting may be overridden by database settings.
+ASCENDER_AUTO_STATS_MAX_HOSTS = 100
+
 # Applies to any galaxy server
 GALAXY_IGNORE_CERTS = False
 
