@@ -334,3 +334,80 @@ class TestHostManager:
     # 2 organizations with host of same name only has 1 entry in smart inventory
     # smart inventory in 1 organization does not include host from another
     # smart inventory correctly returns hosts in filter in same organization
+
+
+@pytest.mark.django_db
+class TestResolveHostVariable:
+    def test_host_variable_wins_over_group(self, inventory):
+        group = inventory.groups.create(name='dc1', variables={'route_var': 'group-value'})
+        host = inventory.hosts.create(name='host1', variables={'route_var': 'host-value'})
+        group.hosts.add(host)
+        assert inventory.resolve_host_variable('route_var') == {'host1': 'host-value'}
+
+    def test_group_variable_reaches_hosts(self, inventory):
+        group = inventory.groups.create(name='dc1', variables={'route_var': 'dc1-nodes'})
+        group.hosts.add(inventory.hosts.create(name='host1'))
+        group.hosts.add(inventory.hosts.create(name='host2'))
+        inventory.hosts.create(name='ungrouped-host')
+        assert inventory.resolve_host_variable('route_var') == {'host1': 'dc1-nodes', 'host2': 'dc1-nodes'}
+
+    def test_variable_inherited_from_parent_group(self, inventory):
+        parent = inventory.groups.create(name='region', variables={'route_var': 'region-nodes'})
+        child = inventory.groups.create(name='rack')
+        parent.children.add(child)
+        child.hosts.add(inventory.hosts.create(name='host1'))
+        assert inventory.resolve_host_variable('route_var') == {'host1': 'region-nodes'}
+
+    def test_deeper_group_overrides_parent(self, inventory):
+        parent = inventory.groups.create(name='region', variables={'route_var': 'region-nodes'})
+        child = inventory.groups.create(name='aisle', variables={'route_var': 'aisle-nodes'})
+        parent.children.add(child)
+        child.hosts.add(inventory.hosts.create(name='host1'))
+        assert inventory.resolve_host_variable('route_var') == {'host1': 'aisle-nodes'}
+
+    def test_ansible_group_priority_wins_over_name_order(self, inventory):
+        g1 = inventory.groups.create(name='alpha', variables={'route_var': 'alpha-nodes', 'ansible_group_priority': 10})
+        g2 = inventory.groups.create(name='beta', variables={'route_var': 'beta-nodes'})
+        host = inventory.hosts.create(name='host1')
+        g1.hosts.add(host)
+        g2.hosts.add(host)
+        assert inventory.resolve_host_variable('route_var') == {'host1': 'alpha-nodes'}
+
+    def test_disabled_hosts_are_ignored(self, inventory):
+        group = inventory.groups.create(name='dc1', variables={'route_var': 'dc1-nodes'})
+        group.hosts.add(inventory.hosts.create(name='on-host'))
+        group.hosts.add(inventory.hosts.create(name='off-host', enabled=False))
+        assert inventory.resolve_host_variable('route_var') == {'on-host': 'dc1-nodes'}
+
+    def test_same_depth_groups_merge_in_name_order(self, inventory):
+        g1 = inventory.groups.create(name='alpha', variables={'route_var': 'alpha-nodes'})
+        g2 = inventory.groups.create(name='beta', variables={'route_var': 'beta-nodes'})
+        host = inventory.hosts.create(name='host1')
+        g1.hosts.add(host)
+        g2.hosts.add(host)
+        assert inventory.resolve_host_variable('route_var') == {'host1': 'beta-nodes'}
+
+    def test_non_string_and_empty_values_are_ignored(self, inventory):
+        inventory.hosts.create(name='dict-host', variables={'route_var': {'nested': 'value'}})
+        inventory.hosts.create(name='int-host', variables={'route_var': 5})
+        inventory.hosts.create(name='empty-host', variables={'route_var': ''})
+        inventory.hosts.create(name='plain-host')
+        assert inventory.resolve_host_variable('route_var') == {}
+
+    def test_invalid_host_value_does_not_fall_back_to_group(self, inventory):
+        group = inventory.groups.create(name='dc1', variables={'route_var': 'dc1-nodes'})
+        host = inventory.hosts.create(name='host1', variables={'route_var': ['not', 'a', 'string']})
+        group.hosts.add(host)
+        assert inventory.resolve_host_variable('route_var') == {}
+
+    def test_script_data_filters_to_routing_bucket(self, inventory):
+        group = inventory.groups.create(name='dc1', variables={'route_var': 'dc1-nodes'})
+        group.hosts.add(inventory.hosts.create(name='routed-host'))
+        inventory.hosts.create(name='fallback-host')
+        routed = inventory.get_script_data(hostvars=True, ig_routing_var='route_var', ig_routing_value='dc1-nodes')
+        assert set(routed['_meta']['hostvars'].keys()) == {'routed-host'}
+        assert routed['dc1']['hosts'] == ['routed-host']
+        fallback = inventory.get_script_data(hostvars=True, ig_routing_var='route_var', ig_routing_value='')
+        assert set(fallback['_meta']['hostvars'].keys()) == {'fallback-host'}
+        # the group stays (it still carries vars) but its routed host is gone
+        assert 'hosts' not in fallback.get('dc1', {})

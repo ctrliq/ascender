@@ -309,7 +309,111 @@ class Inventory(CommonModelNameNotUnique, ResourceMixin, RelatedJobsMixin):
             host_queryset = host_queryset[offset::slice_count]
         return host_queryset
 
-    def get_script_data(self, hostvars=False, towervars=False, show_all=False, slice_number=1, slice_count=1, slice_pinned_hosts=None):
+    def resolve_host_variable(self, var_name):
+        """
+        Resolve the value of an inventory variable for every enabled host,
+        following a simplified version of the Ansible precedence rules: host
+        variables win over group variables, and groups are merged sorted by
+        depth, then ansible_group_priority, then name, later ones winning.
+
+        Returns a dict mapping host name to value, containing only the hosts
+        where the variable resolves to a non empty string; hosts where it is
+        unset, empty or not a string are left out. Disabled hosts are ignored,
+        matching the hosts a job actually runs against.
+        """
+        group_sort_keys = {}
+        group_raw_values = {}
+        for group in self.groups.only('id', 'name', 'variables'):
+            group_vars = group.variables_dict
+            try:
+                priority = int(group_vars.get('ansible_group_priority', 1))
+            except (TypeError, ValueError):
+                priority = 1
+            group_sort_keys[group.id] = (priority, group.name)
+            if var_name in group_vars:
+                group_raw_values[group.id] = group_vars[var_name]
+
+        parent_map = self.get_group_parents_map() if group_sort_keys else {}
+
+        depths = {}
+
+        def group_depth(group_id, visiting):
+            if group_id in depths:
+                return depths[group_id]
+            depth = 1
+            for parent_id in parent_map.get(group_id, ()):
+                if parent_id in visiting:
+                    continue  # the API prevents group cycles, guard just in case
+                depth = max(depth, group_depth(parent_id, visiting | {parent_id}) + 1)
+            depths[group_id] = depth
+            return depth
+
+        ancestor_map = {}
+
+        def group_ancestors(group_id, visiting):
+            if group_id in ancestor_map:
+                return ancestor_map[group_id]
+            found = set()
+            for parent_id in parent_map.get(group_id, ()):
+                if parent_id in visiting:
+                    continue
+                found.add(parent_id)
+                found |= group_ancestors(parent_id, visiting | {parent_id})
+            ancestor_map[group_id] = found
+            return found
+
+        host_group_map = {}
+        if group_sort_keys:
+            for group_id, host_ids in self.get_group_hosts_map().items():
+                for host_id in host_ids:
+                    host_group_map.setdefault(host_id, set()).add(group_id)
+
+        result = {}
+        for host in self.hosts.filter(enabled=True).only('id', 'name', 'variables'):
+            host_vars = host.variables_dict
+            if var_name in host_vars:
+                value = host_vars[var_name]
+            else:
+                value = None
+                candidate_ids = set()
+                for group_id in host_group_map.get(host.id, ()):
+                    candidate_ids.add(group_id)
+                    candidate_ids |= group_ancestors(group_id, {group_id})
+                best_key = None
+                for group_id in candidate_ids:
+                    if group_id not in group_raw_values:
+                        continue
+                    priority, group_name = group_sort_keys[group_id]
+                    key = (group_depth(group_id, {group_id}), priority, group_name)
+                    if best_key is None or key > best_key:
+                        best_key = key
+                        value = group_raw_values[group_id]
+            if isinstance(value, str) and value:
+                result[host.name] = value
+        return result
+
+    def filter_hosts_to_routing_bucket(self, hosts, var_name, value):
+        """
+        Restrict hosts to the instance group routing bucket for the given value:
+        the hosts whose routing variable resolves to it, or the hosts that do
+        not resolve the variable at all when the value is an empty string.
+        """
+        routed_values = self.resolve_host_variable(var_name)
+        if value:
+            return [host for host in hosts if routed_values.get(host.name) == value]
+        return [host for host in hosts if host.name not in routed_values]
+
+    def get_script_data(
+        self,
+        hostvars=False,
+        towervars=False,
+        show_all=False,
+        slice_number=1,
+        slice_count=1,
+        slice_pinned_hosts=None,
+        ig_routing_var=None,
+        ig_routing_value=None,
+    ):
         hosts_kw = dict()
         if not show_all:
             hosts_kw['enabled'] = True
@@ -318,6 +422,9 @@ class Inventory(CommonModelNameNotUnique, ResourceMixin, RelatedJobsMixin):
             fetch_fields.append('enabled')
         host_queryset = self.hosts.filter(**hosts_kw).order_by('name').only(*fetch_fields)
         hosts = self.get_sliced_hosts(host_queryset, slice_number, slice_count, pinned_hosts=slice_pinned_hosts)
+        if ig_routing_var:
+            # Restrict the inventory to the routing bucket of this job
+            hosts = self.filter_hosts_to_routing_bucket(hosts, ig_routing_var, ig_routing_value)
 
         data = dict()
         all_group = data.setdefault('all', dict())

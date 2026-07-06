@@ -625,6 +625,22 @@ class WorkflowJobNode(WorkflowNodeBase):
             data['_eager_fields']['allow_simultaneous'] = True
             data['_eager_fields']['inventory_id'] = self.ancestor_artifacts['source_inventory_id']
             data['_prevent_federation'] = True
+        # Extra processing for instance group routing: each node runs the bucket of
+        # hosts that resolved to its routing value, on the routed instance group.
+        if 'ig_routing_value' in self.ancestor_artifacts and is_root_node:
+            data['_eager_fields']['allow_simultaneous'] = True
+            data['_eager_fields']['instance_group_routing_value'] = self.ancestor_artifacts['ig_routing_value']
+            data['_prevent_slicing'] = True
+            data['_prevent_ig_routing'] = True
+            routed_ig_id = self.ancestor_artifacts.get('ig_routing_instance_group_id')
+            if routed_ig_id:
+                from awx.main.models.ha import InstanceGroup
+
+                routed_ig = InstanceGroup.objects.filter(pk=routed_ig_id).first()
+                if routed_ig is not None:
+                    data['instance_groups'] = [routed_ig]
+                else:
+                    logger.warning('Instance group %s routed at launch no longer exists, job falls back to default instance groups.', routed_ig_id)
         return data
 
 

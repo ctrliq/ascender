@@ -1,6 +1,8 @@
 import pytest
 
-from awx.main.models import JobTemplate, Job, JobHostSummary, WorkflowJob, Inventory, Project, Organization
+from django.core.exceptions import ValidationError
+
+from awx.main.models import JobTemplate, Job, JobHostSummary, WorkflowJob, Inventory, Project, Organization, InstanceGroup
 from awx.main.models.jobs import _federated_inventory_has_matching_hosts
 
 
@@ -359,3 +361,158 @@ class TestFederatedInventoryHasMatchingHosts:
         assert _federated_inventory_has_matching_hosts(inv, 'web:db') is True
         assert _federated_inventory_has_matching_hosts(inv, 'web&db') is True
         assert _federated_inventory_has_matching_hosts(inv, '!web') is True
+
+
+@pytest.mark.django_db
+class TestInstanceGroupRouting:
+    @pytest.fixture
+    def routed_inventory(self, inventory):
+        dc1 = inventory.groups.create(name='datacenter1', variables={'dc_instance_group': 'dc1-nodes'})
+        dc2 = inventory.groups.create(name='datacenter2', variables={'dc_instance_group': 'dc2-nodes'})
+        for i in range(2):
+            dc1.hosts.add(inventory.hosts.create(name='dc1-host{}'.format(i)))
+            dc2.hosts.add(inventory.hosts.create(name='dc2-host{}'.format(i)))
+        inventory.hosts.create(name='lonely-host')
+        return inventory
+
+    @pytest.fixture
+    def routed_igs(self):
+        return {name: InstanceGroup.objects.create(name=name) for name in ('dc1-nodes', 'dc2-nodes')}
+
+    @pytest.fixture
+    def routed_jt(self, routed_inventory):
+        return JobTemplate.objects.create(name='routed-jt', inventory=routed_inventory, instance_group_routing_var='dc_instance_group')
+
+    @staticmethod
+    def spawn_nodes(workflow_job):
+        jobs = []
+        for node in workflow_job.workflow_nodes.all():
+            # does what the task manager does for spawning workflow jobs
+            kv = node.get_job_kwargs()
+            job = node.unified_job_template.create_unified_job(**kv)
+            node.job = job
+            node.save()
+            jobs.append(job)
+        return jobs
+
+    def test_routing_creates_workflow_with_buckets(self, routed_jt, routed_igs):
+        workflow_job = routed_jt.create_unified_job()
+        assert isinstance(workflow_job, WorkflowJob)
+        assert workflow_job.is_sliced_job
+        artifacts = sorted((node.ancestor_artifacts for node in workflow_job.workflow_nodes.all()), key=lambda a: a['ig_routing_value'])
+        assert artifacts == [
+            {'ig_routing_value': ''},
+            {'ig_routing_value': 'dc1-nodes', 'ig_routing_instance_group_id': routed_igs['dc1-nodes'].id},
+            {'ig_routing_value': 'dc2-nodes', 'ig_routing_instance_group_id': routed_igs['dc2-nodes'].id},
+        ]
+
+    def test_routed_jobs_get_bucket_and_instance_group(self, routed_jt, routed_igs):
+        workflow_job = routed_jt.create_unified_job()
+        jobs = {job.instance_group_routing_value: job for job in self.spawn_nodes(workflow_job)}
+        assert set(jobs) == {'', 'dc1-nodes', 'dc2-nodes'}
+        for value, job in jobs.items():
+            assert job.instance_group_routing_var == 'dc_instance_group'
+            assert job.allow_simultaneous
+            script_data = job.inventory.get_script_data(hostvars=True, ig_routing_var=job.instance_group_routing_var, ig_routing_value=value)
+            hostnames = set(script_data['_meta']['hostvars'].keys())
+            if value:
+                prefix = value.split('-')[0]
+                assert hostnames == {'{}-host0'.format(prefix), '{}-host1'.format(prefix)}
+                assert job.preferred_instance_groups_cache == [routed_igs[value].id]
+            else:
+                assert hostnames == {'lonely-host'}
+                # the fallback bucket keeps the normal instance group selection
+                assert job.preferred_instance_groups_cache == job._get_preferred_instance_group_cache()
+
+    def test_single_bucket_launches_plain_job(self, inventory, routed_igs):
+        group = inventory.groups.create(name='datacenter1', variables={'dc_instance_group': 'dc1-nodes'})
+        group.hosts.add(inventory.hosts.create(name='only-host'))
+        jt = JobTemplate.objects.create(name='routed-jt', inventory=inventory, instance_group_routing_var='dc_instance_group')
+        job = jt.create_unified_job()
+        assert isinstance(job, Job)
+        assert job.instance_group_routing_value == 'dc1-nodes'
+        assert job.preferred_instance_groups_cache == [routed_igs['dc1-nodes'].id]
+
+    def test_no_resolving_hosts_is_a_noop(self, inventory):
+        inventory.hosts.create(name='plain-host')
+        jt = JobTemplate.objects.create(name='routed-jt', inventory=inventory, instance_group_routing_var='dc_instance_group')
+        job = jt.create_unified_job()
+        assert isinstance(job, Job)
+        assert job.instance_group_routing_value is None
+
+    def test_unknown_instance_group_raises(self, routed_jt, routed_igs):
+        routed_igs['dc2-nodes'].delete()
+        with pytest.raises(ValidationError) as excinfo:
+            routed_jt.create_unified_job()
+        assert 'dc2-nodes' in str(excinfo.value)
+
+    def test_prompted_instance_groups_skip_routing(self, routed_jt, routed_igs):
+        other_ig = InstanceGroup.objects.create(name='hand-picked')
+        routed_jt.ask_instance_groups_on_launch = True
+        routed_jt.save()
+        job = routed_jt.create_unified_job(instance_groups=[other_ig])
+        assert isinstance(job, Job)
+        assert job.instance_group_routing_value is None
+        assert job.preferred_instance_groups_cache == [other_ig.id]
+
+    def test_routed_job_task_impact(self, routed_jt, routed_igs):
+        routed_jt.inventory.update_computed_fields()
+        workflow_job = routed_jt.create_unified_job()
+        impacts = {job.instance_group_routing_value: job.task_impact for job in self.spawn_nodes(workflow_job)}
+        # two hosts per datacenter bucket, one host in the fallback bucket, plus one
+        assert impacts == {'dc1-nodes': 3, 'dc2-nodes': 3, '': 2}
+
+    def test_routed_job_fact_cache_alignment(self, routed_jt, routed_igs):
+        routed_jt.use_fact_cache = True
+        routed_jt.save()
+        workflow_job = routed_jt.create_unified_job()
+        for job in self.spawn_nodes(workflow_job):
+            script_data = job.inventory.get_script_data(
+                hostvars=True, ig_routing_var=job.instance_group_routing_var, ig_routing_value=job.instance_group_routing_value
+            )
+            script_hosts = set(script_data['_meta']['hostvars'].keys())
+            fact_hosts = set(host.name for host in job.get_hosts_for_fact_cache())
+            assert fact_hosts == script_hosts
+
+    def test_relaunch_of_routed_child_keeps_bucket(self, routed_jt, routed_igs):
+        workflow_job = routed_jt.create_unified_job()
+        original = {job.instance_group_routing_value: job for job in self.spawn_nodes(workflow_job)}['dc1-nodes']
+        # clearing the routing var on the template must not widen the relaunch
+        # to the whole inventory while it stays pinned to the bucket's group
+        routed_jt.instance_group_routing_var = ''
+        routed_jt.save()
+        relaunched = original.copy_unified_job()
+        assert isinstance(relaunched, Job)
+        assert relaunched.instance_group_routing_var == 'dc_instance_group'
+        assert relaunched.instance_group_routing_value == 'dc1-nodes'
+        assert relaunched.is_ig_routed
+        assert relaunched.preferred_instance_groups_cache == [routed_igs['dc1-nodes'].id]
+
+    def test_prevent_ig_routing_launches_plain_job(self, routed_jt, routed_igs):
+        job = routed_jt.create_unified_job(_prevent_ig_routing=True)
+        assert isinstance(job, Job)
+        assert job.instance_group_routing_value is None
+
+    def test_disabled_hosts_do_not_create_buckets(self, routed_jt, routed_igs):
+        # a disabled host is the only one routing to a value whose instance
+        # group is gone: it must not break the launch nor create a bucket
+        stale = routed_jt.inventory.hosts.create(name='stale-host', enabled=False, variables={'dc_instance_group': 'gone-nodes'})
+        workflow_job = routed_jt.create_unified_job()
+        values = sorted(node.ancestor_artifacts['ig_routing_value'] for node in workflow_job.workflow_nodes.all())
+        assert values == ['', 'dc1-nodes', 'dc2-nodes']
+        stale.delete()
+
+    def test_precomputed_buckets_are_used(self, routed_jt, routed_igs):
+        buckets = routed_jt.get_ig_routing_buckets(routed_jt.inventory)
+        # drop the fallback bucket to prove the passed buckets win over recomputation
+        buckets = [(value, ig) for value, ig in buckets if value]
+        workflow_job = routed_jt.create_unified_job(_ig_routing_buckets=buckets)
+        assert workflow_job.workflow_nodes.count() == 2
+
+    def test_slicing_takes_precedence_over_routing(self, routed_jt, routed_igs):
+        routed_jt.job_slice_count = 2
+        routed_jt.save()
+        workflow_job = routed_jt.create_unified_job()
+        assert workflow_job.workflow_nodes.count() == 2
+        artifacts = [node.ancestor_artifacts for node in workflow_job.workflow_nodes.all()]
+        assert all('job_slice' in artifact for artifact in artifacts)

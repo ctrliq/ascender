@@ -46,6 +46,7 @@ function JobTemplateDetail({ template }) {
     extra_vars,
     forks,
     host_config_key,
+    instance_group_routing_var,
     job_slice_count,
     job_slice_pinned_hosts,
     job_tags,
@@ -295,6 +296,12 @@ function JobTemplateDetail({ template }) {
           value={job_slice_pinned_hosts}
           dataCy="jt-detail-job-slice-pinned-hosts"
           helpText={helpText.jobSlicePinnedHosts}
+        />
+        <Detail
+          label={t`Instance Group Routing Variable`}
+          value={instance_group_routing_var}
+          dataCy="jt-detail-instance-group-routing-var"
+          helpText={helpText.instanceGroupRoutingVar}
         />
         {host_config_key && (
           <>

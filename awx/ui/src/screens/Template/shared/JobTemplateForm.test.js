@@ -323,6 +323,26 @@ describe('<JobTemplateForm />', () => {
     expect(pinnedInput.value).toBe('localhost');
   });
 
+  test('instance group routing variable field accepts a value', async () => {
+    renderWithContexts(
+      <JobTemplateForm
+        template={mockData}
+        handleSubmit={jest.fn()}
+        handleCancel={jest.fn()}
+      />
+    );
+    await screen.findByRole('button', { name: 'Save' });
+
+    const routingInput = document.getElementById(
+      'template-instance-group-routing-var'
+    );
+    expect(routingInput).not.toBeNull();
+    fireEvent.change(routingInput, {
+      target: { value: 'dc_instance_group', name: 'instance_group_routing_var' },
+    });
+    expect(routingInput.value).toBe('dc_instance_group');
+  });
+
   test('webhooks and enable concurrent jobs functions properly', async () => {
     // WebhookSubForm reads the template id from useParams(), so mount the form
     // under a real v6 route whose concrete URL provides id=1.

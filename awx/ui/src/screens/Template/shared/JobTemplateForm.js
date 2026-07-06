@@ -508,6 +508,13 @@ function JobTemplateForm({
                 tooltip={helpText.jobSlicePinnedHosts}
               />
             )}
+            <FormField
+              id="template-instance-group-routing-var"
+              name="instance_group_routing_var"
+              type="text"
+              label={t`Instance Group Routing Variable`}
+              tooltip={helpText.instanceGroupRoutingVar}
+            />
             <FieldWithPrompt
               fieldId="template-timeout"
               label={t`Timeout`}
@@ -742,6 +749,7 @@ const FormikApp = withFormik({
       inventory: summary_fields?.inventory || null,
       job_slice_count: template.job_slice_count || 1,
       job_slice_pinned_hosts: template.job_slice_pinned_hosts || '',
+      instance_group_routing_var: template.instance_group_routing_var || '',
       job_tags: template.job_tags || '',
       job_type: template.job_type || 'run',
       labels: summary_fields.labels.results || [],
