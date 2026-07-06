@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('main', '0200_add_list_ordering'),
+        ('main', '0201_workflowjobnodeconditionlink_and_more'),
     ]
 
     operations = [
