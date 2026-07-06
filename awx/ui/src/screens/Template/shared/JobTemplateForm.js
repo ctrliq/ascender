@@ -504,7 +504,7 @@ function JobTemplateForm({
                 id="template-job-slice-pinned-hosts"
                 name="job_slice_pinned_hosts"
                 type="text"
-                label={t`Job slice pinned hosts`}
+                label={t`Job Slice Pinned Hosts`}
                 tooltip={helpText.jobSlicePinnedHosts}
               />
             )}
