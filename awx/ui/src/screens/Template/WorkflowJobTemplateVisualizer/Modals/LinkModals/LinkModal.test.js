@@ -54,7 +54,35 @@ describe('LinkModal', () => {
         target: { value: 'always' },
       });
       fireEvent.click(document.querySelector('button#link-confirm'));
-      expect(onConfirm).toHaveBeenCalledWith('always');
+      expect(onConfirm).toHaveBeenCalledWith('always', null);
+    });
+
+    test('Condition fields shown and passed to callback when selecting condition', () => {
+      fireEvent.change(document.querySelector('#link-select'), {
+        target: { value: 'condition' },
+      });
+      const artifactKeyInput = document.querySelector(
+        '#link-condition-artifact-key'
+      );
+      expect(artifactKeyInput).not.toBeNull();
+      // save is disabled until an artifact key is provided
+      expect(document.querySelector('button#link-confirm').disabled).toBe(true);
+      fireEvent.change(artifactKeyInput, {
+        target: { value: 'environment' },
+      });
+      fireEvent.change(
+        document.querySelector('#link-condition-expected-value'),
+        {
+          target: { value: 'production' },
+        }
+      );
+      fireEvent.click(document.querySelector('button#link-confirm'));
+      expect(onConfirm).toHaveBeenCalledWith('condition', {
+        trigger: 'success',
+        artifact_key: 'environment',
+        operator: 'eq',
+        expected_value: 'production',
+      });
     });
   });
 

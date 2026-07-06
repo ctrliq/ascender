@@ -108,6 +108,9 @@ function VisualizerLink({ link, updateLinkHelp, readOnly, updateHelpText }) {
     if (link.linkType === 'always') {
       setPathStroke("var(--pf-t--global--color--brand--default)");
     }
+    if (link.linkType === 'condition') {
+      setPathStroke("var(--pf-t--global--color--status--warning--default)");
+    }
   }, [link.linkType]);
 
   useEffect(() => {

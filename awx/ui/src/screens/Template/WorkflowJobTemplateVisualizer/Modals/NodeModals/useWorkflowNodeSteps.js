@@ -323,6 +323,18 @@ export default function useWorkflowNodeSteps(
   );
 
   const pfSteps = steps.map((s) => s.step).filter((s) => s != null);
+
+  // The footer Next button honors enableNext, but the wizard nav would still
+  // let the user jump ahead; disable nav items beyond the first blocked step.
+  let navBlocked = false;
+  pfSteps.forEach((step) => {
+    if (navBlocked) {
+      step.canJumpTo = false;
+    }
+    if (step.enableNext === false) {
+      navBlocked = true;
+    }
+  });
   const isReady = !steps.some((s) => !s.isReady);
 
   useEffect(() => {
@@ -371,6 +383,10 @@ export default function useWorkflowNodeSteps(
           nodeResource: formikValues.nodeResource,
           nodeType: formikValues.nodeType,
           linkType: formikValues.linkType,
+          linkConditionTrigger: formikValues.linkConditionTrigger,
+          linkConditionArtifactKey: formikValues.linkConditionArtifactKey,
+          linkConditionOperator: formikValues.linkConditionOperator,
+          linkConditionExpectedValue: formikValues.linkConditionExpectedValue,
           verbosity: initialValues?.verbosity?.toString(),
         },
       });

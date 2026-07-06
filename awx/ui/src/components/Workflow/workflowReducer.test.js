@@ -150,6 +150,96 @@ describe('Workflow reducer', () => {
         unsavedChanges: true,
       });
     });
+
+    it('should store the condition on new condition links', () => {
+      const state = {
+        ...defaultState,
+        addLinkSourceNode: { id: 2 },
+        addLinkTargetNode: { id: 3 },
+        addingLink: true,
+        isLoading: false,
+        links: [],
+        nodes: [
+          {
+            id: 2,
+            isInvalidLinkTarget: false,
+          },
+          {
+            id: 3,
+            isInvalidLinkTarget: false,
+          },
+        ],
+      };
+      const result = workflowReducer(state, {
+        type: 'CREATE_LINK',
+        linkType: 'condition',
+        linkCondition: {
+          artifact_key: 'environment',
+          operator: 'eq',
+          expected_value: 'production',
+        },
+      });
+      expect(result.links).toEqual([
+        {
+          source: {
+            id: 2,
+          },
+          target: {
+            id: 3,
+          },
+          linkType: 'condition',
+          linkCondition: {
+            artifact_key: 'environment',
+            operator: 'eq',
+            expected_value: 'production',
+          },
+        },
+      ]);
+    });
+  });
+  describe('UPDATE_LINK condition', () => {
+    it('should set and clear linkCondition when switching link types', () => {
+      const baseLink = {
+        source: { id: 2 },
+        target: { id: 3 },
+        linkType: 'success',
+      };
+      const state = {
+        ...defaultState,
+        isLoading: false,
+        linkToEdit: baseLink,
+        links: [{ ...baseLink }],
+        nodes: [],
+      };
+      const conditioned = workflowReducer(state, {
+        type: 'UPDATE_LINK',
+        linkType: 'condition',
+        linkCondition: {
+          artifact_key: 'go',
+          operator: 'ne',
+          expected_value: 'stop',
+        },
+      });
+      expect(conditioned.links[0].linkType).toBe('condition');
+      expect(conditioned.links[0].linkCondition).toEqual({
+        artifact_key: 'go',
+        operator: 'ne',
+        expected_value: 'stop',
+      });
+
+      const backToSuccess = workflowReducer(
+        {
+          ...conditioned,
+          linkToEdit: conditioned.links[0],
+        },
+        {
+          type: 'UPDATE_LINK',
+          linkType: 'success',
+        }
+      );
+      expect(backToSuccess.links[0].linkType).toBe('success');
+      expect(backToSuccess.links[0].linkCondition).toBeUndefined();
+    });
   });
   describe('CREATE_NODE', () => {
     it('should add new node and link from the end of the source node when no target node present', () => {
@@ -793,6 +883,60 @@ describe('Workflow reducer', () => {
     });
   });
   describe('GENERATE_NODES_AND_LINKS', () => {
+    it('should generate condition links with their condition data', () => {
+      const result = workflowReducer(defaultState, {
+        type: 'GENERATE_NODES_AND_LINKS',
+        nodes: [
+          {
+            id: 10,
+            success_nodes: [],
+            failure_nodes: [],
+            always_nodes: [],
+            condition_nodes: [11],
+            condition_edges: [
+              {
+                id: 11,
+                trigger: 'success',
+                artifact_key: 'environment',
+                operator: 'eq',
+                expected_value: 'production',
+              },
+            ],
+            summary_fields: {
+              unified_job_template: {
+                id: 10,
+                name: 'JT 10',
+              },
+            },
+          },
+          {
+            id: 11,
+            success_nodes: [],
+            failure_nodes: [],
+            always_nodes: [],
+            condition_nodes: [],
+            condition_edges: [],
+            summary_fields: {
+              unified_job_template: {
+                id: 11,
+                name: 'JT 11',
+              },
+            },
+          },
+        ],
+      });
+      const conditionLink = result.links.find(
+        (link) => link.linkType === 'condition'
+      );
+      expect(conditionLink).toBeDefined();
+      expect(conditionLink.linkCondition).toEqual({
+        trigger: 'success',
+        artifact_key: 'environment',
+        operator: 'eq',
+        expected_value: 'production',
+      });
+    });
+
     it('should generate the correct node and link arrays', () => {
       const result = workflowReducer(defaultState, {
         type: 'GENERATE_NODES_AND_LINKS',

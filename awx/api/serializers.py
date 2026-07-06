@@ -4159,10 +4159,27 @@ class LaunchConfigurationBaseSerializer(BaseSerializer):
         return attrs
 
 
+def _workflow_node_condition_edges(obj):
+    return [
+        {
+            'id': link.to_node_id,
+            'trigger': link.trigger,
+            'artifact_key': link.artifact_key,
+            'operator': link.operator,
+            'expected_value': link.expected_value,
+        }
+        for link in obj.condition_links_from.all()
+    ]
+
+
 class WorkflowJobTemplateNodeSerializer(LaunchConfigurationBaseSerializer):
     success_nodes = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     failure_nodes = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     always_nodes = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    condition_nodes = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    condition_edges = serializers.SerializerMethodField(
+        help_text=_('List of condition data for each conditional edge originating from this node; id is the target node.')
+    )
     exclude_errors = ('required',)  # required variables may be provided by WFJT or on launch
 
     class Meta:
@@ -4179,9 +4196,14 @@ class WorkflowJobTemplateNodeSerializer(LaunchConfigurationBaseSerializer):
             'success_nodes',
             'failure_nodes',
             'always_nodes',
+            'condition_nodes',
+            'condition_edges',
             'all_parents_must_converge',
             'identifier',
         )
+
+    def get_condition_edges(self, obj):
+        return _workflow_node_condition_edges(obj)
 
     def get_related(self, obj):
         res = super(WorkflowJobTemplateNodeSerializer, self).get_related(obj)
@@ -4189,6 +4211,7 @@ class WorkflowJobTemplateNodeSerializer(LaunchConfigurationBaseSerializer):
         res['success_nodes'] = self.reverse('api:workflow_job_template_node_success_nodes_list', kwargs={'pk': obj.pk})
         res['failure_nodes'] = self.reverse('api:workflow_job_template_node_failure_nodes_list', kwargs={'pk': obj.pk})
         res['always_nodes'] = self.reverse('api:workflow_job_template_node_always_nodes_list', kwargs={'pk': obj.pk})
+        res['condition_nodes'] = self.reverse('api:workflow_job_template_node_condition_nodes_list', kwargs={'pk': obj.pk})
         if obj.unified_job_template:
             res['unified_job_template'] = obj.unified_job_template.get_absolute_url(self.context.get('request'))
         try:
@@ -4216,6 +4239,10 @@ class WorkflowJobNodeSerializer(LaunchConfigurationBaseSerializer):
     success_nodes = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     failure_nodes = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     always_nodes = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    condition_nodes = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    condition_edges = serializers.SerializerMethodField(
+        help_text=_('List of condition data for each conditional edge originating from this node; id is the target node.')
+    )
 
     class Meta:
         model = WorkflowJobNode
@@ -4232,6 +4259,8 @@ class WorkflowJobNodeSerializer(LaunchConfigurationBaseSerializer):
             'success_nodes',
             'failure_nodes',
             'always_nodes',
+            'condition_nodes',
+            'condition_edges',
             'all_parents_must_converge',
             'do_not_run',
             'prior_run_succeeded',
@@ -4239,11 +4268,15 @@ class WorkflowJobNodeSerializer(LaunchConfigurationBaseSerializer):
             'identifier',
         )
 
+    def get_condition_edges(self, obj):
+        return _workflow_node_condition_edges(obj)
+
     def get_related(self, obj):
         res = super(WorkflowJobNodeSerializer, self).get_related(obj)
         res['success_nodes'] = self.reverse('api:workflow_job_node_success_nodes_list', kwargs={'pk': obj.pk})
         res['failure_nodes'] = self.reverse('api:workflow_job_node_failure_nodes_list', kwargs={'pk': obj.pk})
         res['always_nodes'] = self.reverse('api:workflow_job_node_always_nodes_list', kwargs={'pk': obj.pk})
+        res['condition_nodes'] = self.reverse('api:workflow_job_node_condition_nodes_list', kwargs={'pk': obj.pk})
         if obj.unified_job_template:
             res['unified_job_template'] = obj.unified_job_template.get_absolute_url(self.context.get('request'))
         if obj.job:

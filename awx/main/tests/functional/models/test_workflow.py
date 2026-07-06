@@ -9,6 +9,7 @@ from awx.main.models.workflow import (
     WorkflowJobNode,
     WorkflowJobTemplateNode,
     WorkflowJobTemplate,
+    WorkflowJobTemplateNodeConditionLink,
 )
 from awx.main.models.jobs import JobTemplate, Job
 from awx.main.models.projects import ProjectUpdate
@@ -56,13 +57,13 @@ class TestWorkflowDAGFunctional(TransactionTestCase):
 
     def test_build_WFJT_dag(self):
         """
-        Test that building the graph uses 4 queries
+        Test that building the graph uses 5 queries
          1 to get the nodes
-         3 to get the related success, failure, and always connections
+         4 to get the related success, failure, always, and condition connections
         """
         dag = WorkflowDAG()
         wfj = self.workflow_job()
-        with self.assertNumQueries(4):
+        with self.assertNumQueries(5):
             dag._init_graph(wfj)
 
     def test_workflow_done(self):
@@ -501,6 +502,26 @@ class TestWorkflowJob:
         assert nodes[1].success_nodes.filter(id=nodes[2].id).exists()
         assert nodes[0].failure_nodes.filter(id=nodes[3].id).exists()
         assert nodes[3].failure_nodes.filter(id=nodes[4].id).exists()
+
+    def test_inherit_job_template_workflow_condition_links(self, workflow_job):
+        wfjt = workflow_job.workflow_job_template
+        template_nodes = list(wfjt.workflow_job_template_nodes.all().order_by('created'))
+        WorkflowJobTemplateNodeConditionLink.objects.create(
+            from_node=template_nodes[1], to_node=template_nodes[4], trigger='failure', artifact_key='environment', operator='eq', expected_value='production'
+        )
+
+        workflow_job.copy_nodes_from_original(original=wfjt)
+
+        nodes = WorkflowJob.objects.get(id=workflow_job.id).workflow_job_nodes.all().order_by('created')
+        assert nodes[1].condition_nodes.filter(id=nodes[4].id).exists()
+        link = nodes[1].condition_links_from.get()
+        assert link.to_node_id == nodes[4].id
+        assert link.trigger == 'failure'
+        assert link.artifact_key == 'environment'
+        assert link.operator == 'eq'
+        assert link.expected_value == 'production'
+        # condition parents are included in artifact propagation
+        assert nodes[1] in list(nodes[4].get_parent_nodes())
 
     def test_inherit_ancestor_artifacts_from_job(self, job_template, mocker):
         """
