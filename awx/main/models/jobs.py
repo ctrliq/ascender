@@ -781,7 +781,7 @@ class Job(UnifiedJob, JobOptions, SurveyJobMixin, JobNotificationMixin, TaskMana
             if self.inventory is not None:
                 count_hosts = self.inventory.total_hosts
                 if self.job_slice_count > 1:
-                    pinned_ct = len(self.job_slice_pinned_hosts_list)
+                    pinned_ct = self.inventory.hosts.filter(name__in=self.job_slice_pinned_hosts_list).count()
                     count_hosts = max(count_hosts - pinned_ct, 0)
                     # Integer division intentional
                     count_hosts = (count_hosts + self.job_slice_count - self.job_slice_number) // self.job_slice_count

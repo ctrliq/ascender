@@ -312,9 +312,11 @@ describe('<JobTemplateForm />', () => {
       target: { value: '3', name: 'job_slice_count' },
     });
 
-    const pinnedInput = await waitFor(() =>
-      document.getElementById('template-job-slice-pinned-hosts')
-    );
+    const pinnedInput = await waitFor(() => {
+      const el = document.getElementById('template-job-slice-pinned-hosts');
+      if (!el) throw new Error('pinned hosts field not rendered yet');
+      return el;
+    });
     fireEvent.change(pinnedInput, {
       target: { value: 'localhost', name: 'job_slice_pinned_hosts' },
     });
