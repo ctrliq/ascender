@@ -133,7 +133,20 @@ job will not run.`,
                     update. If it is older than Cache Timeout, it is not
                     considered current, and a new project update will be
                     performed.`,
+    enableWebhook: t`Sync the project when a push happens in the
+                    source control repository, so the local copy is
+                    always up to date without polling or updating on
+                    every job launch.`,
   },
+  webhookService: t`Service that webhook requests will be accepted from.`,
+  webhookURL: t`The webhook endpoint of this project. Add it to the
+                webhook configuration of the repository to have pushes
+                trigger a project sync.`,
+  webhookKey: t`Secret shared with the webhook service. The service uses
+                it to sign its requests, so only your repository can
+                trigger a project sync. Type your own secret to manage it
+                as configuration, or leave the field blank to have one
+                generated on save.`,
 });
 
 export default getProjectHelpText;

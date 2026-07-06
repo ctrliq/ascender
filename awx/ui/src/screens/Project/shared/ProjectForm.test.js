@@ -157,6 +157,52 @@ describe('<ProjectForm />', () => {
     ).toBeInTheDocument();
   });
 
+  test('git project with a webhook service mounts with the webhook subform open', async () => {
+    renderWithContexts(
+      <ProjectForm
+        handleSubmit={jest.fn()}
+        handleCancel={jest.fn()}
+        project={{
+          ...mockData,
+          webhook_service: 'github',
+          webhook_key: 'secretkey',
+          webhook_ref_filter: 'refs/heads/main',
+          related: { webhook_receiver: '/api/v2/projects/7/github/' },
+        }}
+      />
+    );
+    await screen.findByText('Source Control Type');
+
+    expect(
+      screen.getByRole('checkbox', { name: 'Enable Webhook' })
+    ).toBeChecked();
+    expect(await screen.findByText('Webhook details')).toBeInTheDocument();
+    expect(screen.getByText('Webhook Ref Filter')).toBeInTheDocument();
+    // projects have no webhook credential
+    expect(screen.queryByText('Webhook Credential')).not.toBeInTheDocument();
+  });
+
+  test('checking Enable Webhook reveals the webhook subform', async () => {
+    const { user } = renderWithContexts(
+      <ProjectForm
+        handleSubmit={jest.fn()}
+        handleCancel={jest.fn()}
+        project={{ ...mockData }}
+      />
+    );
+    await screen.findByText('Source Control URL');
+
+    const webhookCheckbox = screen.getByRole('checkbox', {
+      name: 'Enable Webhook',
+    });
+    expect(webhookCheckbox).not.toBeChecked();
+    expect(screen.queryByText('Webhook details')).not.toBeInTheDocument();
+
+    await user.click(webhookCheckbox);
+
+    expect(await screen.findByText('Webhook details')).toBeInTheDocument();
+  });
+
   test('manual subform should display expected fields', async () => {
     const config = {
       project_local_paths: ['foobar', 'qux'],

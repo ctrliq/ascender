@@ -235,7 +235,7 @@ class JobTemplate(UnifiedJobTemplate, JobOptions, SurveyJobTemplateMixin, Resour
     """
 
     FIELDS_TO_PRESERVE_AT_COPY = ['labels', 'instance_groups', 'credentials', 'survey_spec', 'prevent_instance_group_fallback']
-    FIELDS_TO_DISCARD_AT_COPY = ['vault_credential', 'credential']
+    FIELDS_TO_DISCARD_AT_COPY = ['vault_credential', 'credential', 'webhook_key']
     SOFT_UNIQUE_TOGETHER = [('polymorphic_ctype', 'name', 'organization')]
 
     class Meta:

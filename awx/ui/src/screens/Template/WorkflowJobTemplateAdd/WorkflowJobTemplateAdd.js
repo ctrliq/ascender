@@ -30,6 +30,9 @@ function WorkflowJobTemplateAdd() {
     templatePayload.inventory = inventory?.id;
     templatePayload.organization = organization?.id;
     templatePayload.webhook_credential = webhook_credential?.id;
+    if (webhook_key) {
+      templatePayload.webhook_key = webhook_key;
+    }
     templatePayload.limit = limit === '' ? null : limit;
     templatePayload.job_tags = job_tags === '' ? null : job_tags;
     templatePayload.skip_tags = skip_tags === '' ? null : skip_tags;

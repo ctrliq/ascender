@@ -39,8 +39,16 @@ class Projects extends SchedulesMixin(
     return this.http.get(`${this.baseUrl}${id}/update/`);
   }
 
+  readWebhookKey(id) {
+    return this.http.get(`${this.baseUrl}${id}/webhook_key/`);
+  }
+
   sync(id) {
     return this.http.post(`${this.baseUrl}${id}/update/`);
+  }
+
+  updateWebhookKey(id) {
+    return this.http.post(`${this.baseUrl}${id}/webhook_key/`);
   }
 }
 

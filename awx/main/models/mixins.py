@@ -546,7 +546,12 @@ class RelatedJobsMixin(object):
         return [dict(id=t[0], type=mapping[t[1]]) for t in jobs.values_list('id', 'polymorphic_ctype_id')]
 
 
-class WebhookTemplateMixin(models.Model):
+class WebhookKeyTemplateMixin(models.Model):
+    """
+    Webhook service selection and shared secret handling, for any resource
+    that accepts webhook requests.
+    """
+
     class Meta:
         abstract = True
 
@@ -558,6 +563,41 @@ class WebhookTemplateMixin(models.Model):
 
     webhook_service = models.CharField(max_length=16, choices=SERVICES, blank=True, help_text=_('Service that webhook requests will be accepted from'))
     webhook_key = prevent_search(models.CharField(max_length=64, blank=True, help_text=_('Shared secret that the webhook service will use to sign requests')))
+
+    def rotate_webhook_key(self):
+        self.webhook_key = get_random_string(length=50)
+
+    def save(self, *args, **kwargs):
+        update_fields = kwargs.get('update_fields')
+
+        if self.pk:
+            service_edited = self._values_have_edits({'webhook_service': self.webhook_service})
+            key_edited = self._values_have_edits({'webhook_key': self.webhook_key})
+        else:
+            service_edited = True
+            key_edited = bool(self.webhook_key)
+
+        if service_edited:
+            if not self.webhook_service:
+                self.webhook_key = ''
+            elif not (key_edited and self.webhook_key):
+                # No key was supplied by the caller, generate one. A caller
+                # provided key (e.g. one managed as configuration) is kept as is.
+                self.rotate_webhook_key()
+
+            if update_fields and 'webhook_service' in update_fields and 'webhook_key' not in update_fields:
+                update_fields.add('webhook_key')
+        elif key_edited and self.webhook_service and not self.webhook_key:
+            # Blanking the key of an active webhook means please generate a new one.
+            self.rotate_webhook_key()
+
+        super().save(*args, **kwargs)
+
+
+class WebhookTemplateMixin(WebhookKeyTemplateMixin):
+    class Meta:
+        abstract = True
+
     webhook_credential = models.ForeignKey(
         'Credential',
         blank=True,
@@ -566,23 +606,6 @@ class WebhookTemplateMixin(models.Model):
         related_name='%(class)ss',
         help_text=_('Personal Access Token for posting back the status to the service API'),
     )
-
-    def rotate_webhook_key(self):
-        self.webhook_key = get_random_string(length=50)
-
-    def save(self, *args, **kwargs):
-        update_fields = kwargs.get('update_fields')
-
-        if not self.pk or self._values_have_edits({'webhook_service': self.webhook_service}):
-            if self.webhook_service:
-                self.rotate_webhook_key()
-            else:
-                self.webhook_key = ''
-
-            if update_fields and 'webhook_service' in update_fields:
-                update_fields.add('webhook_key')
-
-        super().save(*args, **kwargs)
 
 
 class WebhookMixin(models.Model):

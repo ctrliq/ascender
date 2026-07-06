@@ -450,6 +450,12 @@ function ProjectForm({ project = {}, submitError = null, ...props }) {
           project.signature_validation_credential || '',
         default_environment:
           project.summary_fields?.default_environment || null,
+        webhook_service: project.webhook_service || '',
+        webhook_url: project?.related?.webhook_receiver
+          ? `${document.location.origin}${project.related.webhook_receiver}`
+          : '',
+        webhook_key: project.webhook_key || '',
+        webhook_ref_filter: project.webhook_ref_filter || '',
       }}
       onSubmit={handleSubmit}
     >

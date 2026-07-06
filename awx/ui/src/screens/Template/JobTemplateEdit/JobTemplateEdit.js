@@ -54,6 +54,9 @@ function JobTemplateEdit({ template, reloadTemplate }) {
     setIsLoading(true);
     remainingValues.project = project.id;
     remainingValues.webhook_credential = webhook_credential?.id || null;
+    if (webhook_key) {
+      remainingValues.webhook_key = webhook_key;
+    }
     remainingValues.inventory = inventory?.id || null;
     remainingValues.execution_environment = execution_environment?.id || null;
     try {

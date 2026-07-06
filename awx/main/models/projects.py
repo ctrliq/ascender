@@ -31,7 +31,7 @@ from awx.main.models.unified_jobs import (
     UnifiedJobTemplate,
 )
 from awx.main.models.jobs import Job
-from awx.main.models.mixins import ResourceMixin, TaskManagerProjectUpdateMixin, RelatedJobsMixin
+from awx.main.models.mixins import ResourceMixin, TaskManagerProjectUpdateMixin, RelatedJobsMixin, WebhookKeyTemplateMixin
 from awx.main.utils import update_scm_url, polymorphic
 from awx.main.utils.ansible import skip_directory, could_be_inventory, could_be_playbook
 from awx.main.utils.execution_environments import get_control_plane_execution_environment
@@ -248,14 +248,14 @@ class ProjectOptions(models.Model):
         return proj_path + '.lock'
 
 
-class Project(UnifiedJobTemplate, ProjectOptions, ResourceMixin, RelatedJobsMixin):
+class Project(UnifiedJobTemplate, ProjectOptions, ResourceMixin, RelatedJobsMixin, WebhookKeyTemplateMixin):
     """
     A project represents a playbook git repo that can access a set of inventories
     """
 
     SOFT_UNIQUE_TOGETHER = [('polymorphic_ctype', 'name', 'organization')]
     FIELDS_TO_PRESERVE_AT_COPY = ['labels', 'instance_groups', 'credentials']
-    FIELDS_TO_DISCARD_AT_COPY = ['local_path']
+    FIELDS_TO_DISCARD_AT_COPY = ['local_path', 'webhook_key']
     FIELDS_TRIGGER_UPDATE = frozenset(['scm_url', 'scm_branch', 'scm_type', 'scm_refspec'])
 
     class Meta:
@@ -283,6 +283,15 @@ class Project(UnifiedJobTemplate, ProjectOptions, ResourceMixin, RelatedJobsMixi
     allow_override = models.BooleanField(
         default=False,
         help_text=_('Allow changing the SCM branch or revision in a job template that uses this project.'),
+    )
+    webhook_ref_filter = models.CharField(
+        max_length=1024,
+        blank=True,
+        default='',
+        help_text=_(
+            'Only sync the project when the webhook ref matches this fnmatch pattern (e.g. refs/heads/main or refs/heads/release-*). '
+            'When empty, any push or tag event triggers a sync.'
+        ),
     )
 
     # credential (keys) used to validate content signature
@@ -546,6 +555,17 @@ class ProjectUpdate(UnifiedJob, ProjectOptions, JobNotificationMixin, TaskManage
         editable=False,
         verbose_name=_('SCM Revision'),
         help_text=_('The SCM Revision discovered by this update for the given project and branch.'),
+    )
+    webhook_service = models.CharField(
+        max_length=16,
+        choices=WebhookKeyTemplateMixin.SERVICES,
+        blank=True,
+        help_text=_('Service that the webhook request that triggered this update came from'),
+    )
+    webhook_guid = models.CharField(
+        blank=True,
+        max_length=128,
+        help_text=_('Unique identifier of the event that triggered this webhook'),
     )
 
     def _set_default_dependencies_processed(self):

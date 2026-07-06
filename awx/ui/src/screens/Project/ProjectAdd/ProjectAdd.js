@@ -9,7 +9,12 @@ function ProjectAdd() {
   const [formSubmitError, setFormSubmitError] = useState(null);
   const navigate = useNavigate();
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async ({
+    webhook_key,
+    webhook_url,
+    webhook_credential,
+    ...values
+  }) => {
     if (values.scm_type === 'manual') {
       values.scm_type = '';
     }
@@ -27,6 +32,9 @@ function ProjectAdd() {
     } else if (typeof values.signature_validation_credential.id === 'number') {
       values.signature_validation_credential =
         values.signature_validation_credential.id;
+    }
+    if (webhook_key) {
+      values.webhook_key = webhook_key;
     }
     setFormSubmitError(null);
     try {

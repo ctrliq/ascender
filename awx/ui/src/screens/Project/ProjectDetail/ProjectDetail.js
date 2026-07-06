@@ -57,6 +57,8 @@ function ProjectDetail({ project }) {
     scm_update_cache_timeout,
     scm_url,
     summary_fields,
+    webhook_service,
+    webhook_ref_filter,
   } = useWsProject(project);
   const docsURL = `${getDocsBaseUrl(
     useConfig()
@@ -270,6 +272,33 @@ function ProjectDetail({ project }) {
         <Detail
           label={t`Cache Timeout`}
           value={`${scm_update_cache_timeout} ${t`Seconds`}`}
+        />
+        {webhook_service && (
+          <Detail
+            label={t`Webhook Service`}
+            value={
+              {
+                github: t`GitHub`,
+                gitlab: t`GitLab`,
+                bitbucket_dc: t`Bitbucket Data Center`,
+              }[webhook_service]
+            }
+            dataCy="project-detail-webhook-service"
+            helpText={projectHelpText.webhookService}
+          />
+        )}
+        {project.related?.webhook_receiver && (
+          <Detail
+            label={t`Webhook URL`}
+            value={`${document.location.origin}${project.related.webhook_receiver}`}
+            dataCy="project-detail-webhook-url"
+            helpText={projectHelpText.webhookURL}
+          />
+        )}
+        <Detail
+          label={t`Webhook Ref Filter`}
+          value={webhook_ref_filter}
+          dataCy="project-detail-webhook-ref-filter"
         />
         <ExecutionEnvironmentDetail
           helpText={projectHelpText.executionEnvironment}

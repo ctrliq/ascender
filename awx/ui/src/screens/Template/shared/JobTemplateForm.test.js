@@ -325,7 +325,7 @@ describe('<JobTemplateForm />', () => {
     const webhookKeyInput = await screen.findByLabelText(
       'workflow job template webhook key'
     );
-    expect(webhookKeyInput).toHaveAttribute('readonly');
+    expect(webhookKeyInput).not.toHaveAttribute('readonly');
     expect(webhookKeyInput).toHaveValue('webhook key');
 
     fireEvent.click(screen.getByRole('button', { name: 'Update webhook key' }));
@@ -372,9 +372,9 @@ describe('<JobTemplateForm />', () => {
     const webhookKeyInput = await screen.findByLabelText(
       'workflow job template webhook key'
     );
-    expect(webhookKeyInput).toHaveValue(
-      'A NEW WEBHOOK KEY WILL BE GENERATED ON SAVE.'
-    );
+    // no key yet: the field is empty (a new key is generated on save unless
+    // the user types their own) and there is nothing to rotate.
+    expect(webhookKeyInput).toHaveValue('');
     expect(
       screen.getByRole('button', { name: 'Update webhook key' })
     ).toBeDisabled();

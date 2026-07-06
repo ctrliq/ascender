@@ -17,24 +17,30 @@ import { useField, useFormikContext } from 'formik';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
 import useRequest from 'hooks/useRequest';
+import FormField from 'components/FormField';
 import { FormColumnLayout } from 'components/FormLayout';
 import { CredentialLookup } from 'components/Lookup';
 import AnsibleSelect from 'components/AnsibleSelect';
 import Popover from 'components/Popover';
 import {
   JobTemplatesAPI,
+  ProjectsAPI,
   WorkflowJobTemplatesAPI,
   CredentialTypesAPI,
 } from 'api';
+import getProjectHelpText from '../../Project/shared/Project.helptext';
 import getHelpText from './WorkflowJobTemplate.helptext';
 
 function WebhookSubForm({ templateType }) {
   const { t } = useLingui();
-  const helpText = getHelpText(t);
   const { setFieldValue } = useFormikContext();
   const { id } = useParams();
   const { pathname } = useLocation();
   const { origin } = document.location;
+  // Projects use the webhook to trigger an SCM update, so there is no
+  // credential to post job statuses back with and no payload variables.
+  const isProject = templateType === 'project';
+  const helpText = isProject ? getProjectHelpText(t) : getHelpText(t);
 
   const [webhookServiceField, webhookServiceMeta, webhookServiceHelpers] =
     useField('webhook_service');
@@ -55,13 +61,13 @@ function WebhookSubForm({ templateType }) {
   } = useRequest(
     useCallback(async () => {
       let results;
-      if (webhookServiceField.value) {
+      if (webhookServiceField.value && !isProject) {
         results = await CredentialTypesAPI.read({
           namespace: `${webhookServiceField.value}_token`,
         });
       }
       return results?.data?.results[0]?.id;
-    }, [webhookServiceField.value])
+    }, [webhookServiceField.value, isProject])
   );
 
   useEffect(() => {
@@ -70,13 +76,15 @@ function WebhookSubForm({ templateType }) {
 
   const { request: fetchWebhookKey, error: webhookKeyError } = useRequest(
     useCallback(async () => {
-      const updateWebhookKey =
-        templateType === 'job_template'
-          ? JobTemplatesAPI.updateWebhookKey(id)
-          : WorkflowJobTemplatesAPI.updateWebhookKey(id);
+      const webhookKeyAPIs = {
+        job_template: JobTemplatesAPI,
+        project: ProjectsAPI,
+      };
+      const webhookKeyAPI =
+        webhookKeyAPIs[templateType] || WorkflowJobTemplatesAPI;
       const {
         data: { webhook_key: key },
-      } = await updateWebhookKey;
+      } = await webhookKeyAPI.updateWebhookKey(id);
       webhookKeyHelpers.setValue(key);
     }, [webhookKeyHelpers, id, templateType])
   );
@@ -93,9 +101,7 @@ function WebhookSubForm({ templateType }) {
   );
 
   const isUpdateKeyDisabled =
-    pathname.endsWith('/add') ||
-    webhookKeyMeta.initialValue ===
-      'A NEW WEBHOOK KEY WILL BE GENERATED ON SAVE.';
+    pathname.endsWith('/add') || !webhookKeyMeta.initialValue;
   const webhookServiceOptions = [
     {
       value: '',
@@ -154,9 +160,7 @@ function WebhookSubForm({ templateType }) {
                 webhookCredentialMeta.initialValue
               );
             } else {
-              webhookKeyHelpers.setValue(
-                (t`a new webhook key will be generated on save.`).toUpperCase()
-              );
+              webhookKeyHelpers.setValue('');
               webhookCredentialHelpers.setValue(null);
             }
           }}
@@ -197,7 +201,8 @@ function WebhookSubForm({ templateType }) {
                 id="template-webhook_key"
                 aria-label={t`workflow job template webhook key`}
                 value={webhookKeyField.value}
-                readOnlyVariant="default"
+                placeholder={t`Leave blank to generate a new webhook key on save`}
+                onChange={(_event, val) => webhookKeyHelpers.setValue(val)}
               />
             </InputGroupItem>
             <InputGroupItem><Button icon={<SyncAltIcon />}
@@ -211,7 +216,17 @@ function WebhookSubForm({ templateType }) {
         </FormGroup>
       </>
 
-      {credTypeId && (
+      {isProject && (
+        <FormField
+          id="project-webhook-ref-filter"
+          name="webhook_ref_filter"
+          type="text"
+          label={t`Webhook Ref Filter`}
+          tooltip={t`Only sync the project when the pushed ref matches this pattern, for example refs/heads/main or refs/heads/release-*. Leave blank to sync on any push or tag event.`}
+        />
+      )}
+
+      {!isProject && credTypeId && (
         <CredentialLookup
           label={t`Webhook Credential`}
           tooltip={helpText.webhookCredential}
@@ -223,7 +238,7 @@ function WebhookSubForm({ templateType }) {
           fieldName="webhook_credential"
         />
       )}
-      {!credTypeId && !isLoading && webhookServiceField.value && (
+      {!isProject && !credTypeId && !isLoading && webhookServiceField.value && (
         <Alert
           variant="warning"
           isInline
