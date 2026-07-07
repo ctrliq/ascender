@@ -189,6 +189,7 @@ function createNode(state, node) {
     isInvalidLinkTarget: false,
     promptValues: node.promptValues,
     all_parents_must_converge: node.all_parents_must_converge,
+    max_retries: node.max_retries,
     identifier: node.identifier,
   });
 
@@ -699,12 +700,14 @@ function updateNode(state, editedNode) {
     launchConfig,
     promptValues,
     all_parents_must_converge,
+    max_retries,
     identifier,
   } = editedNode;
   const newNodes = [...nodes];
 
   const matchingNode = newNodes.find((node) => node.id === nodeToEdit.id);
   matchingNode.all_parents_must_converge = all_parents_must_converge;
+  matchingNode.max_retries = max_retries;
   matchingNode.fullUnifiedJobTemplate = nodeResource;
   matchingNode.isEdited = true;
   matchingNode.launchConfig = launchConfig;

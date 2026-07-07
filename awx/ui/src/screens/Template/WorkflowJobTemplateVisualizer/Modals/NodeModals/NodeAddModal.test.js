@@ -44,6 +44,7 @@ describe('NodeAddModal', () => {
     expect(dispatch).toHaveBeenCalledWith({
       node: {
         all_parents_must_converge: false,
+        max_retries: 0,
         linkType: 'success',
         nodeResource: {
           id: 448,

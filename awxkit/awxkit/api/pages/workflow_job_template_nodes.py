@@ -31,6 +31,7 @@ class WorkflowJobTemplateNode(HasCreate, base.Base):
             'extra_data',
             'identifier',
             'all_parents_must_converge',
+            'max_retries',
             # prompt fields for JTs
             'job_slice_count',
             'forks',

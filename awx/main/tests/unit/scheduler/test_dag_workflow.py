@@ -24,13 +24,25 @@ class JobWithArtifacts(Job):
 
 
 class WorkflowNode(object):
-    def __init__(self, id=None, job=None, do_not_run=False, unified_job_template=None, prior_run_succeeded=False):
+    def __init__(self, id=None, job=None, do_not_run=False, unified_job_template=None, prior_run_succeeded=False, max_retries=0, retry_attempts=0):
         self.id = id if id is not None else uuid.uuid4()
         self.job = job
         self.do_not_run = do_not_run
         self.prior_run_succeeded = prior_run_succeeded
         self.unified_job_template = unified_job_template
         self.all_parents_must_converge = False
+        self.max_retries = max_retries
+        self.retry_attempts = retry_attempts
+
+    # the three methods below mirror WorkflowJobNode
+    def retry_pending(self):
+        return bool(self.job and self.job.status in ('failed', 'error') and self.unified_job_template is not None and self.retry_attempts < self.max_retries)
+
+    def job_finished(self):
+        return bool(self.job and self.job.status in ('successful', 'failed', 'error', 'canceled') and not self.retry_pending())
+
+    def finally_failed(self):
+        return bool(self.job and self.job.status in ('failed', 'error', 'canceled') and not self.retry_pending())
 
 
 @pytest.fixture
@@ -792,6 +804,116 @@ class TestConditionNodes:
         dnr_nodes = g.mark_dnr_nodes()
         assert nodes[1] not in dnr_nodes
         assert g.has_workflow_failed() == (False, None)
+
+
+class TestNodeRetry:
+    @pytest.fixture
+    def workflow_dag_retry(self, wf_node_generator):
+        g = WorkflowDAG()
+        nodes = [wf_node_generator() for i in range(3)]
+        for n in nodes:
+            g.add_node(n)
+        r'''
+               0
+               |\ F
+               | \
+              S|  1
+               |
+               2
+        '''
+        g.add_edge(nodes[0], nodes[1], "failure_nodes")
+        g.add_edge(nodes[0], nodes[2], "success_nodes")
+        return (g, nodes)
+
+    def test_failed_node_with_retries_left_is_respawned(self, workflow_dag_retry):
+        g, nodes = workflow_dag_retry
+        nodes[0].max_retries = 2
+        nodes[0].job = Job(status='failed')
+
+        assert g.mark_dnr_nodes() == [], "children must stay undecided while a retry is pending"
+        assert g.bfs_nodes_to_run() == [nodes[0]], "the failed node itself should be respawned"
+        assert g.is_workflow_done() is False
+        has_failed, reason = g.has_workflow_failed()
+        assert has_failed is False
+        assert reason is None
+
+    def test_exhausted_retries_follow_failure_path(self, workflow_dag_retry):
+        g, nodes = workflow_dag_retry
+        nodes[0].max_retries = 2
+        nodes[0].retry_attempts = 2
+        nodes[0].job = Job(status='failed')
+
+        dnr_nodes = g.mark_dnr_nodes()
+        assert dnr_nodes == [nodes[2]], "success child should be marked DNR once retries are exhausted"
+        assert g.bfs_nodes_to_run() == [nodes[1]], "failure child should run once retries are exhausted"
+
+    def test_retry_after_success_never_pending(self, workflow_dag_retry):
+        g, nodes = workflow_dag_retry
+        nodes[0].max_retries = 2
+        nodes[0].job = Job(status='successful')
+
+        dnr_nodes = g.mark_dnr_nodes()
+        assert dnr_nodes == [nodes[1]]
+        assert g.bfs_nodes_to_run() == [nodes[2]]
+
+    def test_canceled_job_is_not_retried(self, workflow_dag_retry):
+        g, nodes = workflow_dag_retry
+        nodes[0].max_retries = 2
+        nodes[0].job = Job(status='canceled')
+
+        dnr_nodes = g.mark_dnr_nodes()
+        assert dnr_nodes == [nodes[2]]
+        assert g.bfs_nodes_to_run() == [nodes[1]], "canceled node should follow its failure path, not retry"
+
+    def test_error_job_is_retried(self, workflow_dag_retry):
+        g, nodes = workflow_dag_retry
+        nodes[0].max_retries = 1
+        nodes[0].job = Job(status='error')
+
+        assert g.bfs_nodes_to_run() == [nodes[0]]
+        assert g.is_workflow_done() is False
+
+    def test_retry_pending_leaf_does_not_fail_workflow(self, wf_node_generator):
+        g = WorkflowDAG()
+        node = wf_node_generator(max_retries=1)
+        g.add_node(node)
+        node.job = Job(status='failed')
+
+        assert g.is_workflow_done() is False
+        has_failed, reason = g.has_workflow_failed()
+        assert has_failed is False
+
+        node.retry_attempts = 1
+        assert g.is_workflow_done() is True
+        has_failed, reason = g.has_workflow_failed()
+        assert has_failed is True
+
+    def test_retry_pending_parent_blocks_convergence(self, wf_node_generator):
+        g = WorkflowDAG()
+        nodes = [wf_node_generator() for i in range(3)]
+        for n in nodes:
+            g.add_node(n)
+        r'''
+               0    1
+              S \  / S
+                 \/
+                 2
+        '''
+        g.add_edge(nodes[0], nodes[2], "success_nodes")
+        g.add_edge(nodes[1], nodes[2], "success_nodes")
+        nodes[2].all_parents_must_converge = True
+        nodes[0].job = Job(status='successful')
+        nodes[1].max_retries = 1
+        nodes[1].job = Job(status='failed')
+
+        assert g.mark_dnr_nodes() == [], "convergence child undecided while parent retry is pending"
+        assert g.bfs_nodes_to_run() == [nodes[1]], "only the retried parent should spawn"
+
+        # retry succeeded: convergence node runs
+        nodes[1].retry_attempts = 1
+        nodes[1].job = Job(status='successful')
+        assert g.mark_dnr_nodes() == []
+        assert g.bfs_nodes_to_run() == [nodes[2]]
 
 
 @pytest.mark.skip(reason="Run manually to re-generate doc images")

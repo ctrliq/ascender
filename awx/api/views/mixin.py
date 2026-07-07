@@ -41,6 +41,10 @@ class UnifiedJobDeletionMixin(object):
                 raise PermissionDenied(detail=_('Cannot delete job resource when associated workflow job is running.'))
         except self.model.unified_job_node.RelatedObjectDoesNotExist:
             pass
+        # a superseded attempt of a retried workflow node no longer has a
+        # unified_job_node, but its workflow may still be running
+        if obj.retried_workflow_nodes.filter(workflow_job__status__in=ACTIVE_STATES).exists():
+            raise PermissionDenied(detail=_('Cannot delete job resource when associated workflow job is running.'))
         # Still allow deletion of new status, because these can be manually created
         if obj.status in ACTIVE_STATES and obj.status != 'new':
             raise PermissionDenied(detail=_("Cannot delete running job resource."))

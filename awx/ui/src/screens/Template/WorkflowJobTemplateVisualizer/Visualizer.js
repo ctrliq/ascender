@@ -485,6 +485,7 @@ function Visualizer({ template }) {
                 inventory: node.promptValues?.inventory?.id || null,
                 unified_job_template: node.fullUnifiedJobTemplate.id,
                 all_parents_must_converge: node.all_parents_must_converge,
+                max_retries: node.max_retries || 0,
                 identifier: node.identifier || undefined,
               }).then(({ data }) => {
                 node.originalNodeObject = data;
@@ -593,6 +594,7 @@ function Visualizer({ template }) {
                 inventory: node.promptValues?.inventory?.id || null,
                 unified_job_template: node.fullUnifiedJobTemplate.id,
                 all_parents_must_converge: node.all_parents_must_converge,
+                max_retries: node.max_retries || 0,
                 ...(replaceIdentifier(node) && {
                   identifier: node.identifier,
                 }),

@@ -418,6 +418,59 @@ class TestWorkflowDAGFunctional(TransactionTestCase):
         dag.mark_dnr_nodes()
         assert canceled_node in dag.bfs_nodes_to_run()
 
+    def test_failed_node_with_retries_is_respawned_not_failed(self):
+        wfj = self.workflow_job(states=['failed', None, None, None, None])
+        nodes = list(wfj.workflow_nodes.order_by('id'))
+        nodes[0].max_retries = 1
+        nodes[0].save()
+
+        dag = WorkflowDAG(workflow_job=wfj)
+        assert dag.mark_dnr_nodes() == [], "nothing is decided while a retry is pending"
+        assert dag.is_workflow_done() is False
+        spawn_nodes = dag.bfs_nodes_to_run()
+        assert [n.id for n in spawn_nodes] == [nodes[0].id], "the failed node itself must be respawned"
+
+        # simulate the task manager retrying the node and the retry failing too
+        node0 = spawn_nodes[0]
+        node0.job = node0.unified_job_template.create_job()
+        node0.retry_attempts += 1
+        node0.save()
+        node0.job.status = 'failed'
+        node0.job.save()
+
+        # retries exhausted: the failure path finally runs
+        dag = WorkflowDAG(workflow_job=wfj)
+        dnr_ids = {n.id for n in dag.mark_dnr_nodes()}
+        assert dnr_ids == {nodes[1].id, nodes[2].id}
+        assert [n.id for n in dag.bfs_nodes_to_run()] == [nodes[3].id]
+
+    def test_deleted_template_finishes_workflow_despite_pending_retry(self):
+        # deleting the JT while a retry is pending must not hang the workflow:
+        # the retry can never spawn, so the failure becomes final
+        wfj = self.workflow_job(states=['failed', None, None, None, None])
+        wfj.workflow_nodes.update(max_retries=5)
+        for jt in JobTemplate.objects.all():
+            jt.delete()
+
+        dag = WorkflowDAG(workflow_job=wfj)
+        dag.mark_dnr_nodes()
+        assert dag.bfs_nodes_to_run() == [], "no retry can spawn without a template"
+        assert dag.is_workflow_done() is True
+        has_failed, reason = dag.has_workflow_failed()
+        assert has_failed is True
+
+    def test_node_without_retries_fails_right_away(self):
+        # the retry budget is per node: other nodes having one does not delay
+        # the failure paths of a node with max_retries 0
+        wfj = self.workflow_job(states=['failed', None, None, None, None])
+        nodes = list(wfj.workflow_nodes.order_by('id'))
+        wfj.workflow_nodes.exclude(id=nodes[0].id).update(max_retries=3)
+
+        dag = WorkflowDAG(workflow_job=wfj)
+        dnr_ids = {n.id for n in dag.mark_dnr_nodes()}
+        assert dnr_ids == {nodes[1].id, nodes[2].id}, "no retry: the failure is final right away"
+        assert [n.id for n in dag.bfs_nodes_to_run()] == [nodes[3].id]
+
 
 @pytest.mark.django_db
 class TestWorkflowDNR:

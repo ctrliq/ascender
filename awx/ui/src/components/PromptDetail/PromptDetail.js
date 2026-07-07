@@ -140,6 +140,15 @@ function PromptDetail({
             }
           />
         )}
+        {workflowNode &&
+          details.unified_job_type !== 'workflow_approval' &&
+          details.type !== 'workflow_approval_template' && (
+            <Detail
+              label={t`Max Retries`}
+              dataCy="prompt-detail-max-retries"
+              value={workflowNode?.max_retries || 0}
+            />
+          )}
         <Detail
           label={t`Timeout`}
           dataCy="prompt-detail-timeout"

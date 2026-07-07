@@ -24,6 +24,7 @@ function NodeEditModal() {
       timeoutMinutes,
       timeoutSeconds,
       convergence,
+      maxRetries,
       identifier,
       ...rest
     } = values;
@@ -31,6 +32,7 @@ function NodeEditModal() {
     if (values.nodeType === 'workflow_approval_template') {
       node = {
         all_parents_must_converge: convergence === 'all',
+        max_retries: 0,
         nodeResource: {
           description: approvalDescription,
           name: approvalName,
@@ -43,6 +45,7 @@ function NodeEditModal() {
       node = {
         nodeResource,
         all_parents_must_converge: convergence === 'all',
+        max_retries: Number(maxRetries) || 0,
         identifier,
       };
       if (nodeType === 'job_template' || nodeType === 'workflow_job_template') {

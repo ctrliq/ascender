@@ -4238,6 +4238,7 @@ class WorkflowJobTemplateNodeSerializer(LaunchConfigurationBaseSerializer):
             'condition_nodes',
             'condition_edges',
             'all_parents_must_converge',
+            'max_retries',
             'identifier',
         )
 
@@ -4282,6 +4283,7 @@ class WorkflowJobNodeSerializer(LaunchConfigurationBaseSerializer):
     condition_edges = serializers.SerializerMethodField(
         help_text=_('List of condition data for each conditional edge originating from this node; id is the target node.')
     )
+    retried_jobs = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta:
         model = WorkflowJobNode
@@ -4304,6 +4306,9 @@ class WorkflowJobNodeSerializer(LaunchConfigurationBaseSerializer):
             'do_not_run',
             'prior_run_succeeded',
             'prior_run_elapsed',
+            'max_retries',
+            'retry_attempts',
+            'retried_jobs',
             'identifier',
         )
 

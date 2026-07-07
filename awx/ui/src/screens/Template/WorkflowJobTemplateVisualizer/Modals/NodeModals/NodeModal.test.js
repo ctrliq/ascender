@@ -540,6 +540,7 @@ describe('NodeModal', () => {
       expect(onSave).toHaveBeenCalledWith(
         {
           convergence: 'any',
+          maxRetries: 0,
           identifier: '',
           linkType: 'always',
           linkConditionTrigger: 'success',
@@ -585,6 +586,7 @@ describe('NodeModal', () => {
       expect(onSave).toHaveBeenCalledWith(
         {
           convergence: 'any',
+          maxRetries: 0,
           identifier: '',
           linkType: 'failure',
           linkConditionTrigger: 'success',
@@ -627,6 +629,7 @@ describe('NodeModal', () => {
       expect(onSave).toHaveBeenCalledWith(
         {
           convergence: 'any',
+          maxRetries: 0,
           identifier: '',
           linkType: 'failure',
           linkConditionTrigger: 'success',
@@ -672,6 +675,7 @@ describe('NodeModal', () => {
       expect(onSave).toHaveBeenCalledWith(
         {
           convergence: 'any',
+          maxRetries: 0,
           identifier: '',
           linkType: 'success',
           linkConditionTrigger: 'success',
@@ -751,6 +755,7 @@ describe('NodeModal', () => {
       expect(onSave).toHaveBeenCalledWith(
         {
           convergence: 'any',
+          maxRetries: 0,
           approvalDescription: 'Test Approval Description',
           approvalName: 'Test Approval',
           identifier: '',
@@ -860,6 +865,7 @@ describe('Edit existing node', () => {
       expect(onSave).toHaveBeenCalledWith(
         {
           convergence: 'any',
+          maxRetries: 0,
           identifier: 'Foo',
           approvalDescription: 'Test Approval Description',
           approvalName: 'Test Approval',
@@ -936,6 +942,7 @@ describe('Edit existing node', () => {
       expect(onSave).toHaveBeenCalledWith(
         {
           convergence: 'any',
+          maxRetries: 0,
           identifier: 'Foo',
           linkType: 'success',
           linkConditionTrigger: 'success',

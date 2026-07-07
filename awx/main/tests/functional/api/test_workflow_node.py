@@ -53,6 +53,44 @@ def test_node_accepts_prompted_fields(inventory, project, workflow_job_template,
 
 
 @pytest.mark.django_db
+def test_node_max_retries_settable(inventory, project, workflow_job_template, post, admin_user):
+    job_template = JobTemplate.objects.create(inventory=inventory, project=project, playbook='helloworld.yml')
+    url = reverse('api:workflow_job_template_workflow_nodes_list', kwargs={'pk': workflow_job_template.pk})
+    r = post(url, {'unified_job_template': job_template.pk, 'max_retries': 2}, user=admin_user, expect=201)
+    node = WorkflowJobTemplateNode.objects.get(pk=r.data['id'])
+    assert node.max_retries == 2
+
+
+@pytest.mark.django_db
+def test_node_max_retries_rejects_out_of_range_values(inventory, project, workflow_job_template, post, admin_user):
+    # retries have no delay between attempts, so the budget is capped to keep a
+    # misconfigured node from flooding the jobs table before failure paths run
+    job_template = JobTemplate.objects.create(inventory=inventory, project=project, playbook='helloworld.yml')
+    url = reverse('api:workflow_job_template_workflow_nodes_list', kwargs={'pk': workflow_job_template.pk})
+    r = post(url, {'unified_job_template': job_template.pk, 'max_retries': 101}, user=admin_user, expect=400)
+    assert 'max_retries' in r.data
+    r = post(url, {'unified_job_template': job_template.pk, 'max_retries': -1}, user=admin_user, expect=400)
+    assert 'max_retries' in r.data
+
+
+@pytest.mark.django_db
+def test_superseded_retry_attempt_protected_while_workflow_runs(delete, admin_user, inventory, project, workflow_job_template):
+    # a job superseded by an automatic retry loses its unified_job_node link,
+    # but must stay undeletable while its workflow is still running
+    job_template = JobTemplate.objects.create(name='retried-jt', inventory=inventory, project=project, playbook='helloworld.yml')
+    wfj = WorkflowJob.objects.create(workflow_job_template=workflow_job_template, status='running')
+    node = wfj.workflow_nodes.create(unified_job_template=job_template)
+    old_job = job_template.create_job()
+    old_job.status = 'failed'
+    old_job.launch_type = 'workflow'
+    old_job.save()
+    node.retried_jobs.add(old_job)
+
+    url = reverse('api:job_detail', kwargs={'pk': old_job.pk})
+    delete(url, user=admin_user, expect=403)
+
+
+@pytest.mark.django_db
 @pytest.mark.parametrize(
     "field_name, field_value",
     [

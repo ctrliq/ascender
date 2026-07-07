@@ -79,10 +79,21 @@ const getNodeToEditDefaultValues = (
       ? 'all'
       : 'any';
   };
+  const getMaxRetries = () => {
+    if (
+      nodeToEdit &&
+      Object.prototype.hasOwnProperty.call(nodeToEdit, 'max_retries')
+    ) {
+      return nodeToEdit.max_retries;
+    }
+    return nodeToEdit?.originalNodeObject?.max_retries || 0;
+  };
+
   const initialValues = {
     nodeResource: nodeToEdit?.fullUnifiedJobTemplate || null,
     nodeType: nodeToEdit?.fullUnifiedJobTemplate?.type || 'job_template',
     convergence: getConvergence(),
+    maxRetries: getMaxRetries(),
     identifier,
   };
 
@@ -361,6 +372,7 @@ export default function useWorkflowNodeSteps(
         );
         initialValues.identifier = formikValues.identifier;
         initialValues.convergence = formikValues.convergence;
+        initialValues.maxRetries = formikValues.maxRetries;
       }
 
       const errors = formikErrors.nodeResource
