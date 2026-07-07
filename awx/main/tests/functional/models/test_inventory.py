@@ -91,6 +91,31 @@ class TestInventoryScript:
             data.pop('all')
             assert data == expected_data
 
+    def test_slice_subset_with_pinned_hosts(self, inventory):
+        for i in range(7):
+            inventory.hosts.create(name='host{}'.format(i))
+        # host0 is pinned, the remaining 6 hosts are distributed round robin
+        for i in range(3):
+            data = inventory.get_script_data(slice_number=i + 1, slice_count=3, slice_pinned_hosts=['host0'])
+            assert data == {'all': {'hosts': ['host0', 'host{}'.format(i + 1), 'host{}'.format(i + 4)]}}
+
+    def test_slice_pinned_host_keeps_group_membership(self, inventory):
+        group = inventory.groups.create(name='central_hosts')
+        group.hosts.add(inventory.hosts.create(name='central'))
+        for i in range(2):
+            inventory.hosts.create(name='host{}'.format(i))
+        for i in range(2):
+            data = inventory.get_script_data(slice_number=i + 1, slice_count=2, slice_pinned_hosts=['central'])
+            assert data['central_hosts'] == {'hosts': ['central']}
+            assert data['all']['hosts'] == ['host{}'.format(i)]
+
+    def test_slice_pinned_hosts_unknown_names_ignored(self, inventory):
+        for i in range(2):
+            inventory.hosts.create(name='host{}'.format(i))
+        for i in range(2):
+            data = inventory.get_script_data(slice_number=i + 1, slice_count=2, slice_pinned_hosts=['does-not-exist'])
+            assert data == {'all': {'hosts': ['host{}'.format(i)]}}
+
 
 @pytest.mark.django_db
 class TestActiveCount:

@@ -293,6 +293,36 @@ describe('<JobTemplateForm />', () => {
     );
   });
 
+  test('job slice pinned hosts field only shows when slicing is enabled', async () => {
+    renderWithContexts(
+      <JobTemplateForm
+        template={mockData}
+        handleSubmit={jest.fn()}
+        handleCancel={jest.fn()}
+      />
+    );
+    await screen.findByRole('button', { name: 'Save' });
+
+    expect(
+      document.getElementById('template-job-slice-pinned-hosts')
+    ).toBeNull();
+
+    const sliceInput = document.getElementById('template-job-slicing');
+    fireEvent.change(sliceInput, {
+      target: { value: '3', name: 'job_slice_count' },
+    });
+
+    const pinnedInput = await waitFor(() => {
+      const el = document.getElementById('template-job-slice-pinned-hosts');
+      if (!el) throw new Error('pinned hosts field not rendered yet');
+      return el;
+    });
+    fireEvent.change(pinnedInput, {
+      target: { value: 'localhost', name: 'job_slice_pinned_hosts' },
+    });
+    expect(pinnedInput.value).toBe('localhost');
+  });
+
   test('webhooks and enable concurrent jobs functions properly', async () => {
     // WebhookSubForm reads the template id from useParams(), so mount the form
     // under a real v6 route whose concrete URL provides id=1.

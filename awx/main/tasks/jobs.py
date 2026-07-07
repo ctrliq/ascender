@@ -327,6 +327,7 @@ class BaseTask(object):
         if hasattr(instance, 'job_slice_number'):
             script_params['slice_number'] = instance.job_slice_number
             script_params['slice_count'] = instance.job_slice_count
+            script_params['slice_pinned_hosts'] = instance.job_slice_pinned_hosts_list
 
         return self.write_inventory_file(instance.inventory, private_data_dir, 'hosts', script_params)
 

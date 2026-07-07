@@ -499,6 +499,15 @@ function JobTemplateForm({
                 min="1"
               />
             </FieldWithPrompt>
+            {Number(jobSliceCountField.value) > 1 && (
+              <FormField
+                id="template-job-slice-pinned-hosts"
+                name="job_slice_pinned_hosts"
+                type="text"
+                label={t`Job Slice Pinned Hosts`}
+                tooltip={helpText.jobSlicePinnedHosts}
+              />
+            )}
             <FieldWithPrompt
               fieldId="template-timeout"
               label={t`Timeout`}
@@ -732,6 +741,7 @@ const FormikApp = withFormik({
       instanceGroups: [],
       inventory: summary_fields?.inventory || null,
       job_slice_count: template.job_slice_count || 1,
+      job_slice_pinned_hosts: template.job_slice_pinned_hosts || '',
       job_tags: template.job_tags || '',
       job_type: template.job_type || 'run',
       labels: summary_fields.labels.results || [],

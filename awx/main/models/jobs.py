@@ -110,6 +110,17 @@ class JobOptions(BaseModel):
         blank=True,
         default='',
     )
+    job_slice_pinned_hosts = models.TextField(
+        blank=True,
+        default='',
+        help_text=_(
+            'Comma separated list of host names to include in every slice of a sliced job, '
+            'in addition to the hosts of the slice itself. Useful when a play targets a '
+            'coordinating host, such as localhost, that all slices depend on. '
+            'Names are matched exactly against inventory hosts; groups and patterns are '
+            'not supported. Has no effect unless the job is sliced.'
+        ),
+    )
     verbosity = models.PositiveIntegerField(
         choices=VERBOSITY_CHOICES,
         blank=True,
@@ -161,6 +172,10 @@ class JobOptions(BaseModel):
     )
 
     extra_vars_dict = VarsDictProperty('extra_vars', True)
+
+    @property
+    def job_slice_pinned_hosts_list(self):
+        return [name.strip() for name in self.job_slice_pinned_hosts.split(',') if name.strip()]
 
     @property
     def machine_credential(self):
@@ -374,7 +389,14 @@ class JobTemplate(UnifiedJobTemplate, JobOptions, SurveyJobTemplateMixin, Resour
         if self.ask_job_slice_count_on_launch and 'job_slice_count' in kwargs:
             actual_slice_count = kwargs['job_slice_count']
         if actual_inventory:
-            return min(actual_slice_count, actual_inventory.hosts.count())
+            host_count = actual_inventory.hosts.count()
+            pinned_names = self.job_slice_pinned_hosts_list
+            if pinned_names and host_count and actual_slice_count > 1:
+                # Pinned hosts are repeated in every slice, so they do not add
+                # to the number of slices worth spawning.
+                pinned_ct = actual_inventory.hosts.filter(name__in=pinned_names).count()
+                host_count = max(host_count - pinned_ct, 1)
+            return min(actual_slice_count, host_count)
         else:
             return actual_slice_count
 
@@ -759,8 +781,12 @@ class Job(UnifiedJob, JobOptions, SurveyJobMixin, JobNotificationMixin, TaskMana
             if self.inventory is not None:
                 count_hosts = self.inventory.total_hosts
                 if self.job_slice_count > 1:
+                    pinned_ct = self.inventory.hosts.filter(name__in=self.job_slice_pinned_hosts_list).count()
+                    count_hosts = max(count_hosts - pinned_ct, 0)
                     # Integer division intentional
                     count_hosts = (count_hosts + self.job_slice_count - self.job_slice_number) // self.job_slice_count
+                    # pinned hosts run in every slice on top of its share
+                    count_hosts += pinned_ct
             else:
                 count_hosts = 5 if self.forks == 0 else self.forks
         return min(count_hosts, 5 if self.forks == 0 else self.forks) + 1
@@ -922,7 +948,7 @@ class Job(UnifiedJob, JobOptions, SurveyJobMixin, JobNotificationMixin, TaskMana
             host_qs = self.inventory.hosts
 
         host_qs = host_qs.only(*HOST_FACTS_FIELDS)
-        host_qs = self.inventory.get_sliced_hosts(host_qs, self.job_slice_number, self.job_slice_count)
+        host_qs = self.inventory.get_sliced_hosts(host_qs, self.job_slice_number, self.job_slice_count, pinned_hosts=self.job_slice_pinned_hosts_list)
         return host_qs
 
 
