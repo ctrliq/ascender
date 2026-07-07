@@ -225,11 +225,29 @@ class WorkflowManager(TaskBase):
                 for spawn_node in spawn_nodes:
                     if spawn_node.unified_job_template is None:
                         continue
+                    # a node that already has a (failed) job is being automatically retried
+                    superseded_job_id = spawn_node.job_id
+                    is_retry = superseded_job_id is not None
                     kv = spawn_node.get_job_kwargs()
                     job = spawn_node.unified_job_template.create_unified_job(**kv)
                     spawn_node.job = job
+                    if is_retry:
+                        spawn_node.retry_attempts += 1
                     spawn_node.save()
-                    logger.debug('Spawned %s in %s for node %s', job.log_format, workflow_job.log_format, spawn_node.pk)
+                    if is_retry:
+                        # keep the superseded attempt linked to the node so it stays
+                        # protected from deletion and traceable to this workflow
+                        spawn_node.retried_jobs.add(superseded_job_id)
+                        logger.info(
+                            'Spawned %s in %s for node %s, retry %s of %s after failed attempt',
+                            job.log_format,
+                            workflow_job.log_format,
+                            spawn_node.pk,
+                            spawn_node.retry_attempts,
+                            spawn_node.max_retries,
+                        )
+                    else:
+                        logger.debug('Spawned %s in %s for node %s', job.log_format, workflow_job.log_format, spawn_node.pk)
                     can_start = True
                     if isinstance(spawn_node.unified_job_template, WorkflowJobTemplate):
                         workflow_ancestors = job.get_ancestor_workflows()
@@ -267,6 +285,12 @@ class WorkflowManager(TaskBase):
                                 "Job spawned from workflow could not start because it was not in the right state or required manual credentials"
                             )
                     if not can_start:
+                        # the job never started for a structural reason (missing
+                        # resources, recursion, credentials); retrying cannot help,
+                        # so exhaust the node's automatic retry budget
+                        if spawn_node.retry_attempts < spawn_node.max_retries:
+                            spawn_node.retry_attempts = spawn_node.max_retries
+                            spawn_node.save(update_fields=['retry_attempts'])
                         job.status = 'failed'
                         job.save(update_fields=['status', 'job_explanation'])
                         job.websocket_emit_status('failed')

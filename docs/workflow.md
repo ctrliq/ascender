@@ -133,6 +133,17 @@ Workflow jobs support simultaneous job runs just like that of ordinary jobs. It 
 A workflow job is marked as failed if a job spawned by a workflow job fails, without a failure handler. A failure handler is a `failure` or `always` link in the workflow job template. A job that is canceled is, effectively, considered a failure for the purposes of determining if a job nodes is failed.
 
 
+### Automatic Node Retries
+
+Workflow nodes can retry their job automatically when it fails, which is useful when jobs run against flaky infrastructure. The retry count is the `max_retries` field of the workflow job template node, settable through the API or the node form in the workflow visualizer. It defaults to `0` (no retries, the previous behavior) and is capped at 100 since there is no delay between attempts.
+
+Each node keeps its own independent retry budget. `max_retries: 2` means the node may run up to 3 times in total: the original attempt plus 2 retries. When a workflow job is launched the value is copied from each template node to its workflow job node, so changing the template mid run does not affect running workflows. Since the budget belongs to the node, a nested workflow node retries the inner workflow as a whole when it fails; nodes inside the nested workflow retry only if its own template says so, and slices of a sliced job template are not retried individually.
+
+While a node has retries left, a failed or errored job does not send the workflow down the node's failure paths. Instead the scheduler treats the node as if its job were still running: children stay undecided, convergence nodes keep waiting, and the workflow does not complete. On the next scheduler cycle a new job is spawned for the node with the same launch configuration, the node's read only `retry_attempts` counter is incremented, and the node's `job` field points at the newest attempt. Superseded attempts are recorded in the node's read only `retried_jobs` list, keep their link to the workflow, and cannot be deleted while it is still running. Only when the retries are exhausted does the node count as failed and its failure and always paths run, evaluated against the last attempt.
+
+Some failures are never retried: canceled jobs (cancellation is an explicit user action), workflow approval nodes (approvals are human decisions), jobs whose template was deleted mid run, and jobs that could not start at all for structural reasons such as a missing project or inventory, where retrying cannot change the outcome and the budget is exhausted immediately. Automatic retries happen within a single workflow run and complement relaunching a workflow from its failed nodes, which is a manual action taken afterwards; relaunched workflows start their nodes with fresh retry counters. There is no delay between attempts; a backoff interval between retries may be considered in the future.
+
+
 ### Workflow Copy and Relaunch
 
 Other than the normal way of creating workflow job templates, it is also possible to copy existing workflow job templates. The resulting new workflow job template will be mostly identical to the original, except for the `name` field which will be appended in a way to indicate that it's a copy.

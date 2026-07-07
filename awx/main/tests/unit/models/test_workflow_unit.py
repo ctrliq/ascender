@@ -1,8 +1,8 @@
 import pytest
 
-from awx.main.models.jobs import JobTemplate
+from awx.main.models.jobs import JobTemplate, Job
 from awx.main.models import Inventory, CredentialType, Credential, Project
-from awx.main.models.workflow import WorkflowJobTemplate, WorkflowJobTemplateNode, WorkflowJob, WorkflowJobNode, merge_stats_artifacts
+from awx.main.models.workflow import WorkflowJobTemplate, WorkflowJobTemplateNode, WorkflowJob, WorkflowJobNode, WorkflowApproval, merge_stats_artifacts
 from unittest import mock
 
 
@@ -152,6 +152,63 @@ def test_node_getter_and_setters():
     assert node.job_type == 'check'
 
 
+class TestNodeMaxRetries:
+    def node(self, max_retries=0):
+        wfj = WorkflowJob(name='workflow', status='running')
+        # a template id must be present for a retry to be spawnable
+        return WorkflowJobNode(workflow_job=wfj, max_retries=max_retries, unified_job_template_id=1)
+
+    def test_default_is_no_retries(self):
+        assert self.node().max_retries == 0
+
+    def test_retry_pending_for_failed_job_with_retries_left(self):
+        node = self.node(max_retries=1)
+        node.job = Job(status='failed')
+        assert node.retry_pending() is True
+
+    def test_retry_pending_false_when_exhausted(self):
+        node = self.node(max_retries=1)
+        node.job = Job(status='failed')
+        node.retry_attempts = 1
+        assert node.retry_pending() is False
+
+    def test_retry_pending_false_without_job_or_on_success(self):
+        node = self.node(max_retries=1)
+        assert node.retry_pending() is False
+        node.job = Job(status='successful')
+        assert node.retry_pending() is False
+
+    def test_canceled_job_is_never_retried(self):
+        node = self.node(max_retries=1)
+        node.job = Job(status='canceled')
+        assert node.retry_pending() is False
+
+    def test_approvals_are_never_retried(self):
+        node = self.node(max_retries=1)
+        node.job = WorkflowApproval(status='failed')
+        assert node.retry_pending() is False
+
+    def test_deleted_template_disqualifies_retry(self):
+        # a retry can never spawn without a template; treating it as pending
+        # would leave the workflow running forever
+        node = self.node(max_retries=1)
+        node.unified_job_template_id = None
+        node.job = Job(status='failed')
+        assert node.retry_pending() is False
+
+    def test_job_finished_and_finally_failed_track_retries(self):
+        node = self.node(max_retries=1)
+        node.job = Job(status='failed')
+        assert node.job_finished() is False
+        assert node.finally_failed() is False
+        node.retry_attempts = 1
+        assert node.job_finished() is True
+        assert node.finally_failed() is True
+        node.job = Job(status='successful')
+        assert node.job_finished() is True
+        assert node.finally_failed() is False
+
+
 @pytest.mark.django_db
 class TestWorkflowJobCreate:
     def test_create_no_prompts(self, wfjt_node_no_prompts, workflow_job_unit, mocker):
@@ -160,6 +217,7 @@ class TestWorkflowJobCreate:
             wfjt_node_no_prompts.create_workflow_job_node(workflow_job=workflow_job_unit)
             mock_create.assert_called_once_with(
                 all_parents_must_converge=False,
+                max_retries=0,
                 extra_data={},
                 survey_passwords={},
                 char_prompts=wfjt_node_no_prompts.char_prompts,
@@ -176,6 +234,7 @@ class TestWorkflowJobCreate:
             wfjt_node_with_prompts.create_workflow_job_node(workflow_job=workflow_job_unit)
             mock_create.assert_called_once_with(
                 all_parents_must_converge=False,
+                max_retries=0,
                 extra_data={},
                 survey_passwords={},
                 char_prompts=wfjt_node_with_prompts.char_prompts,

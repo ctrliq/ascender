@@ -239,6 +239,10 @@ function NodeViewModal({ readOnly }) {
       };
     }
 
+    if (nodeToView?.max_retries !== undefined) {
+      nodeUpdatedConvergence.max_retries = nodeToView.max_retries;
+    }
+
     Content = (
       <PromptDetail
         launchConfig={launchConfig}

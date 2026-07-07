@@ -415,6 +415,7 @@ const NodeModal = ({ onSave, askLinkType, title }) => {
         timeoutMinutes: 0,
         timeoutSeconds: 0,
         convergence: 'any',
+        maxRetries: nodeToEdit?.max_retries || 0,
         linkType: 'success',
         linkConditionTrigger: 'success',
         linkConditionArtifactKey: '',

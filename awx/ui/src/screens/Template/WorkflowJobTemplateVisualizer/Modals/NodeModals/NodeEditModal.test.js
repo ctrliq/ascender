@@ -75,6 +75,7 @@ describe('NodeEditModal', () => {
     expect(dispatch).toHaveBeenCalledWith({
       node: {
         all_parents_must_converge: false,
+        max_retries: 0,
         nodeResource: { id: 448, name: 'Test JT', type: 'job_template' },
       },
       type: 'UPDATE_NODE',

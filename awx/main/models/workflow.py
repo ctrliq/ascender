@@ -13,6 +13,7 @@ from django.db import connection, models
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.validators import MaxValueValidator
 from django.utils.timezone import now, timedelta
 
 # from django import settings as tower_settings
@@ -60,6 +61,12 @@ __all__ = [
 
 
 logger = logging.getLogger('awx.main.models.workflow')
+
+# Sanity ceiling for the retry budget; retries have no delay between attempts,
+# so an unbounded user value could flood the jobs table before failure paths run
+MAX_RETRIES_CEILING = 100
+# Statuses a spawned unified job cannot leave without outside action
+TERMINAL_JOB_STATUSES = ('successful', 'failed', 'error', 'canceled')
 
 
 def evaluate_artifact_condition(artifacts, artifact_key, operator, expected_value):
@@ -208,6 +215,14 @@ class WorkflowNodeBase(CreatedModifiedModel, LaunchTimeConfig):
     all_parents_must_converge = models.BooleanField(
         default=False, help_text=_("If enabled then the node will only run if all of the parent nodes have met the criteria to reach this node")
     )
+    max_retries = models.PositiveIntegerField(
+        default=0,
+        validators=[MaxValueValidator(MAX_RETRIES_CEILING)],
+        help_text=_(
+            "Maximum number of times this node's job is automatically retried after "
+            "failing before its failure paths are followed. Canceled jobs are never retried."
+        ),
+    )
     unified_job_template = models.ForeignKey(
         'UnifiedJobTemplate',
         related_name='%(class)ss',
@@ -239,6 +254,7 @@ class WorkflowNodeBase(CreatedModifiedModel, LaunchTimeConfig):
             'credentials',
             'char_prompts',
             'all_parents_must_converge',
+            'max_retries',
             'labels',
             'instance_groups',
             'execution_environment',
@@ -291,6 +307,7 @@ class WorkflowJobTemplateNode(WorkflowNodeBase):
         'survey_passwords',
         'char_prompts',
         'all_parents_must_converge',
+        'max_retries',
         'identifier',
         'labels',
         'execution_environment',
@@ -435,6 +452,18 @@ class WorkflowJobNode(WorkflowNodeBase):
         editable=False,
         help_text=_("Elapsed time (seconds) of this node's job in the run it was carried forward from."),
     )
+    retry_attempts = models.PositiveIntegerField(
+        default=0,
+        editable=False,
+        help_text=_("Number of times this node's job has been automatically retried after failing."),
+    )
+    retried_jobs = models.ManyToManyField(
+        'UnifiedJob',
+        related_name='retried_workflow_nodes',
+        blank=True,
+        editable=False,
+        help_text=_('Jobs from earlier attempts of this node that were superseded by an automatic retry.'),
+    )
     identifier = models.CharField(
         max_length=512,
         blank=True,  # blank denotes pre-migration job nodes
@@ -462,6 +491,35 @@ class WorkflowJobNode(WorkflowNodeBase):
     @property
     def event_processing_finished(self):
         return True
+
+    def retry_pending(self):
+        """True when this node's job failed but automatic retries remain, in which
+        case the scheduler treats the node as if its job were still running and
+        respawns it instead of following its failure paths. Canceled jobs are
+        explicit user actions and are never retried."""
+        if not self.job or self.job.status not in ('failed', 'error'):
+            return False
+        # a retry cannot spawn once the template is gone (deleted mid run);
+        # without this the workflow would wait on the retry forever
+        if self.unified_job_template_id is None:
+            return False
+        if self.retry_attempts >= self.max_retries:
+            return False
+        # approvals are human decisions, never retried automatically; resolve
+        # the class through the polymorphic ctype because a base UnifiedJob
+        # instance (e.g. loaded via select_related('job')) defeats isinstance
+        job_cls = self.job.get_real_instance_class() if self.job.polymorphic_ctype_id else type(self.job)
+        if issubclass(job_cls, WorkflowApproval):
+            return False
+        return True
+
+    def job_finished(self):
+        """The node's job reached a terminal status with no automatic retry pending."""
+        return bool(self.job and self.job.status in TERMINAL_JOB_STATUSES and not self.retry_pending())
+
+    def finally_failed(self):
+        """The node's job failed for good: a failure status and no retry pending."""
+        return bool(self.job and self.job.status in ('failed', 'error', 'canceled') and not self.retry_pending())
 
     def get_absolute_url(self, request=None):
         return reverse('api:workflow_job_node_detail', kwargs={'pk': self.pk}, request=request)

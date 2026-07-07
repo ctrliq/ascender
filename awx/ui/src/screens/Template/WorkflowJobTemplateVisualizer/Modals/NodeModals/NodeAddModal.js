@@ -26,6 +26,7 @@ function NodeAddModal() {
       linkConditionOperator,
       linkConditionExpectedValue,
       convergence,
+      maxRetries,
       identifier,
     } = values;
 
@@ -42,6 +43,7 @@ function NodeAddModal() {
     const node = {
       linkType,
       all_parents_must_converge: convergence === 'all',
+      max_retries: Number(maxRetries) || 0,
       identifier,
     };
 
@@ -55,6 +57,7 @@ function NodeAddModal() {
     }
 
     delete values.convergence;
+    delete values.maxRetries;
 
     delete values.linkType;
     delete values.linkConditionTrigger;

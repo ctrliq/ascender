@@ -285,6 +285,18 @@ function NodeTypeStep({ isIdentifierRequired }) {
               validate={isIdentifierRequired ? required(null) : null}
               validated={isValid ? 'default' : 'error'}
             />
+            {nodeTypeField.value !== 'workflow_approval_template' && (
+              <FormField
+                id="node-max-retries"
+                name="maxRetries"
+                type="number"
+                min="0"
+                max="100"
+                aria-label={t`Max Retries`}
+                label={t`Max Retries`}
+                tooltip={t`Maximum number of times this node's job is automatically retried after failing before its failure paths are followed. Canceled jobs are never retried.`}
+              />
+            )}
           </FormFullWidthLayout>
         </FormColumnLayout>
       </Form>

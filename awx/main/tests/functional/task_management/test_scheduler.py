@@ -76,6 +76,94 @@ class TestJobLifeCycle:
         # no further action is necessary, so rescheduling should not happen
         self.run_tm(WorkflowManager(), [mock.call('successful')])
 
+    def test_workflow_node_automatic_retry(self, inventory, project, controlplane_instance_group):
+        jt = JobTemplate.objects.create(inventory=inventory, project=project, playbook='helloworld.yml', name='flaky-jt')
+        wfjt = WorkflowJobTemplate.objects.create(name='retry-wf')
+        wfjt.workflow_nodes.create(unified_job_template=jt, max_retries=1)
+        wj = wfjt.create_unified_job()
+        wj.signal_start()
+
+        self.run_tm(TaskManager(), [mock.call('running')])
+        self.run_tm(WorkflowManager(), [mock.call('pending')])
+
+        node = wj.workflow_nodes.first()
+        first_job = node.job
+        assert node.max_retries == 1, "max_retries must be copied from the template node"
+        assert node.retry_attempts == 0
+        first_job.status = 'failed'
+        first_job.save()
+
+        # the workflow does not fail; the node is respawned with a new job
+        self.run_tm(WorkflowManager(), [mock.call('pending')])
+        wj.refresh_from_db()
+        assert wj.status == 'running'
+        node.refresh_from_db()
+        assert node.retry_attempts == 1
+        assert node.job_id != first_job.id
+        assert jt.jobs.count() == 2
+
+        # the superseded attempt stays linked to its workflow through the node
+        assert list(node.retried_jobs.all()) == [first_job]
+        assert first_job.get_workflow_job() == wj
+        assert first_job.workflow_node_id == node.pk
+
+        # the retry succeeds and the workflow finishes successfully
+        node.job.status = 'successful'
+        node.job.save()
+        self.run_tm(WorkflowManager(), [mock.call('successful')])
+        wj.refresh_from_db()
+        assert wj.status == 'successful'
+
+    def test_workflow_node_retries_exhausted(self, inventory, project, controlplane_instance_group):
+        jt = JobTemplate.objects.create(inventory=inventory, project=project, playbook='helloworld.yml', name='flaky-jt')
+        wfjt = WorkflowJobTemplate.objects.create(name='retry-wf')
+        wfjt.workflow_nodes.create(unified_job_template=jt, max_retries=1)
+        wj = wfjt.create_unified_job()
+        wj.signal_start()
+
+        self.run_tm(TaskManager(), [mock.call('running')])
+        self.run_tm(WorkflowManager(), [mock.call('pending')])
+
+        node = wj.workflow_nodes.first()
+        node.job.status = 'failed'
+        node.job.save()
+
+        # first failure: retried
+        self.run_tm(WorkflowManager(), [mock.call('pending')])
+        node.refresh_from_db()
+        assert node.retry_attempts == 1
+
+        # second failure: retries exhausted, workflow fails
+        node.job.status = 'failed'
+        node.job.save()
+        self.run_tm(WorkflowManager(), [mock.call('failed')])
+        wj.refresh_from_db()
+        assert wj.status == 'failed'
+        node.refresh_from_db()
+        assert node.retry_attempts == 1
+        assert jt.jobs.count() == 2
+
+    def test_workflow_node_never_started_job_is_not_retried(self, inventory, project, controlplane_instance_group):
+        # a job that cannot start for a structural reason (here: no project or
+        # inventory) must exhaust the retry budget instead of hot-looping
+        jt = JobTemplate.objects.create(name='resourceless-jt')
+        wfjt = WorkflowJobTemplate.objects.create(name='retry-wf')
+        wfjt.workflow_nodes.create(unified_job_template=jt, max_retries=5)
+        wj = wfjt.create_unified_job()
+        wj.signal_start()
+
+        self.run_tm(TaskManager(), [mock.call('running')])
+        # first pass: the job is spawned and fails to start
+        self.run_tm(WorkflowManager(), [mock.call('failed')])
+        # second pass: no retry is spawned, the workflow fails
+        self.run_tm(WorkflowManager(), [mock.call('failed')])
+
+        wj.refresh_from_db()
+        assert wj.status == 'failed'
+        node = wj.workflow_nodes.first()
+        assert node.retry_attempts == node.max_retries
+        assert jt.jobs.count() == 1
+
     def test_task_manager_workflow_workflow_rescheduling(self, controlplane_instance_group):
         wfjts = [WorkflowJobTemplate.objects.create(name='foo')]
         for i in range(5):

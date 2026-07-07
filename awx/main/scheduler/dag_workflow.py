@@ -103,8 +103,9 @@ class WorkflowDAG(SimpleDAG):
             # do_not_run is False, node might still run a job and thus blocks children
             elif not p.job:
                 return False
-            # Node decidedly got a job; check if job is done
-            elif p.job and p.job.status not in ['successful', 'failed', 'error', 'canceled']:
+            # Node decidedly got a job; check if job is done. A failed job with
+            # automatic retries left is not done, a new attempt will be spawned.
+            elif p.job and not p.job_finished():
                 return False
         return True
 
@@ -116,8 +117,9 @@ class WorkflowDAG(SimpleDAG):
         parent_nodes = [p['node_object'] for p in self.get_parents(obj)]
         for p in parent_nodes:
             status = None
-            # node has a status
-            if p.job and p.job.status in ["successful", "failed"]:
+            # node has a status; a failed job with automatic retries left has
+            # no final status yet
+            if p.job_finished() and p.job.status in ["successful", "failed"]:
                 if p.job and p.job.status == "successful":
                     status = "success_nodes"
                 elif p.job and p.job.status == "failed":
@@ -157,7 +159,11 @@ class WorkflowDAG(SimpleDAG):
                     self.get_children(obj, 'success_nodes') + self.get_children(obj, 'always_nodes') + self._passing_condition_children(obj, 'success')
                 )
             elif obj.job:
-                if obj.job.status in ['failed', 'error', 'canceled']:
+                # a failed job with automatic retries left is respawned instead
+                # of following its failure paths
+                if obj.retry_pending():
+                    nodes_found.append(n)
+                elif obj.job.status in ['failed', 'error', 'canceled']:
                     nodes.extend(
                         self.get_children(obj, 'failure_nodes') + self.get_children(obj, 'always_nodes') + self._passing_condition_children(obj, 'failure')
                     )
@@ -198,7 +204,7 @@ class WorkflowDAG(SimpleDAG):
             obj = node['node_object']
             if obj.do_not_run is False and not obj.prior_run_succeeded and not obj.job and obj.unified_job_template:
                 return False
-            elif obj.job and obj.job.status not in ['successful', 'failed', 'canceled', 'error']:
+            elif obj.job and not obj.job_finished():
                 return False
         return True
 
@@ -212,7 +218,7 @@ class WorkflowDAG(SimpleDAG):
             obj = node['node_object']
             if obj.do_not_run is False and not obj.prior_run_succeeded and obj.unified_job_template is None:
                 failed_nodes.append(node)
-            elif obj.job and obj.job.status in ['failed', 'canceled', 'error']:
+            elif obj.finally_failed():
                 failed_nodes.append(node)
 
         for node in failed_nodes:
@@ -262,7 +268,7 @@ class WorkflowDAG(SimpleDAG):
 
     def _are_all_nodes_dnr_decided(self, workflow_nodes):
         for n in workflow_nodes:
-            if n.do_not_run is False and not n.prior_run_succeeded and not n.job and n.unified_job_template:
+            if n.do_not_run is False and not n.prior_run_succeeded and (not n.job or n.retry_pending()) and n.unified_job_template:
                 return False
         return True
 
@@ -287,7 +293,10 @@ class WorkflowDAG(SimpleDAG):
                 ):
                     return False
             elif p.job:
-                if p.job.status == 'successful':
+                # a failed job with automatic retries left is not decided yet
+                if p.retry_pending():
+                    return False
+                elif p.job.status == 'successful':
                     if node in (self.get_children(p, 'success_nodes') + self.get_children(p, 'always_nodes')) or self._edge_condition_passes(
                         p, node['node_object'], 'success'
                     ):

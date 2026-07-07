@@ -1238,7 +1238,11 @@ class UnifiedJob(
             try:
                 return self.unified_job_node.workflow_job
             except UnifiedJob.unified_job_node.RelatedObjectDoesNotExist:
-                pass
+                # superseded attempt of a retried node; the node points at the
+                # newest attempt but this job still belongs to its workflow
+                node = self.retried_workflow_nodes.first()
+                if node is not None:
+                    return node.workflow_job
         return None
 
     @property
@@ -1247,7 +1251,9 @@ class UnifiedJob(
             try:
                 return self.unified_job_node.pk
             except UnifiedJob.unified_job_node.RelatedObjectDoesNotExist:
-                pass
+                node = self.retried_workflow_nodes.first()
+                if node is not None:
+                    return node.pk
         return None
 
     def get_effective_artifacts(self, **kwargs):
