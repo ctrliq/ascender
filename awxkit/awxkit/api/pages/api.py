@@ -124,6 +124,12 @@ class ApiV2(base.Base):
             if rel_endpoint.__item_class__.__name__ == 'WorkflowApprovalTemplate':
                 continue
 
+            # Skip related objects (e.g. write_only fields like webhook_key)
+            # that have no NATURAL_KEY defined.
+            if not getattr(rel_endpoint, 'NATURAL_KEY', None):
+                log.warning("Unable to construct a natural key for %r of object %s, skipping.", key, _page.endpoint)
+                continue
+
             rel_natural_key = rel_endpoint.get_natural_key(self._cache)
             if rel_natural_key is None:
                 log.error("Unable to construct a natural key for foreign key %r of object %s.", key, _page.endpoint)
