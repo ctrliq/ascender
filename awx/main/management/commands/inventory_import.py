@@ -23,6 +23,7 @@ from rest_framework.exceptions import PermissionDenied
 
 # AWX inventory imports
 from awx.main.models.inventory import Inventory, InventorySource, InventoryUpdate, Host
+from awx.main.models.jobs import JobHostSummary
 from awx.main.utils.mem_inventory import MemInventory, dict_to_mem_data
 from awx.main.utils.safe_yaml import sanitize_jinja
 
@@ -764,6 +765,26 @@ class Command(BaseCommand):
         if settings.SQL_DEBUG:
             logger.warning('Group-host updates took %d queries for %d group-host relationships', len(connection.queries) - queries_before, group_host_count)
 
+    def _relink_orphaned_job_host_summaries(self):
+        host_map = dict(self.inventory.hosts.values_list('name', 'pk'))
+        if not host_map:
+            return
+
+        host_names = list(host_map.keys())
+        is_constructed = self.inventory.kind == 'constructed'
+        fk_field = 'constructed_host_id' if is_constructed else 'host_id'
+        null_filter = {'constructed_host__isnull': True} if is_constructed else {'host__isnull': True}
+
+        for offset in range(0, len(host_names), self._batch_size):
+            batch_names = host_names[offset : offset + self._batch_size]
+            orphaned = JobHostSummary.objects.filter(job__inventory=self.inventory, host_name__in=batch_names, **null_filter)
+            for host_name in batch_names:
+                host_pk = host_map.get(host_name)
+                if host_pk:
+                    updated = orphaned.filter(host_name=host_name).update(**{fk_field: host_pk})
+                    if updated:
+                        logger.info('Re-linked %d orphaned job host summaries for host "%s"', updated, host_name)
+
     def load_into_database(self):
         """
         Load inventory from in-memory groups to the database, overwriting or
@@ -784,6 +805,7 @@ class Command(BaseCommand):
         self._create_update_hosts(pk_mem_host_map)
         self._create_update_group_children()
         self._create_update_group_hosts()
+        self._relink_orphaned_job_host_summaries()
 
     def remote_tower_license_compare(self, local_license_type):
         # this requires https://github.com/ansible/ansible/pull/52747

@@ -877,6 +877,12 @@ class Group(CommonModelNameNotUnique, RelatedJobsMixin):
         return JobHostSummary.objects.filter(host__in=self.all_hosts)
 
     @property
+    def constructed_host_summaries(self):
+        from awx.main.models.jobs import JobHostSummary
+
+        return JobHostSummary.objects.filter(constructed_host__in=self.all_hosts)
+
+    @property
     def job_events(self):
         from awx.main.models.jobs import JobEvent
 

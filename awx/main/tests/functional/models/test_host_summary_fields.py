@@ -2,8 +2,9 @@ import pytest
 
 from django.utils.timezone import now
 
-from awx.main.models import Job, JobEvent, JobTemplate, Inventory, Host, JobHostSummary, Project
+from awx.main.models import Job, JobEvent, JobTemplate, Inventory, Host, Group, JobHostSummary, Project
 from awx.api.serializers import HostSerializer
+from awx.api.versioning import reverse
 
 
 @pytest.mark.django_db
@@ -109,3 +110,91 @@ class TestHostSummaryFields:
 
         assert 'last_job' not in d
         assert 'last_job_host_summary' not in d
+
+
+@pytest.mark.django_db
+class TestConstructedHostJobSummariesAPI:
+    """The job_host_summaries endpoint for hosts in a constructed inventory
+    should use the constructed_host FK, not the regular host FK."""
+
+    def test_constructed_host_summaries_returned(self, get, admin, organization):
+        source_inv = Inventory.objects.create(name='source', organization=organization)
+        constructed_inv = Inventory.objects.create(name='constructed', kind='constructed', organization=organization)
+
+        source_host = Host.objects.create(name='server1', inventory=source_inv)
+        constructed_host = Host.objects.create(name='server1', inventory=constructed_inv, instance_id=str(source_host.pk))
+
+        project = Project.objects.create(name='test-proj')
+        jt = JobTemplate.objects.create(name='test-jt', inventory=constructed_inv, project=project)
+        job = Job.objects.create(inventory=constructed_inv, job_template=jt, status='successful')
+
+        JobHostSummary.objects.create(
+            job=job, host=source_host, constructed_host=constructed_host,
+            host_name='server1', ok=1
+        )
+
+        url = reverse('api:host_job_host_summaries_list', kwargs={'pk': constructed_host.pk})
+        resp = get(url, user=admin, expect=200)
+        assert resp.data['count'] == 1
+        assert resp.data['results'][0]['host_name'] == 'server1'
+
+    def test_regular_host_summaries_still_work(self, get, admin, organization):
+        inv = Inventory.objects.create(name='regular', organization=organization)
+        host = Host.objects.create(name='server1', inventory=inv)
+
+        project = Project.objects.create(name='test-proj')
+        jt = JobTemplate.objects.create(name='test-jt', inventory=inv, project=project)
+        job = Job.objects.create(inventory=inv, job_template=jt, status='successful')
+
+        JobHostSummary.objects.create(job=job, host=host, host_name='server1', ok=1)
+
+        url = reverse('api:host_job_host_summaries_list', kwargs={'pk': host.pk})
+        resp = get(url, user=admin, expect=200)
+        assert resp.data['count'] == 1
+
+    def test_constructed_host_no_false_positives(self, get, admin, organization):
+        source_inv = Inventory.objects.create(name='source', organization=organization)
+        constructed_inv = Inventory.objects.create(name='constructed', kind='constructed', organization=organization)
+
+        source_host = Host.objects.create(name='server1', inventory=source_inv)
+        constructed_host = Host.objects.create(name='server1', inventory=constructed_inv, instance_id=str(source_host.pk))
+
+        project = Project.objects.create(name='test-proj')
+        jt = JobTemplate.objects.create(name='test-jt', inventory=source_inv, project=project)
+        job = Job.objects.create(inventory=source_inv, job_template=jt, status='successful')
+
+        # Summary linked to source host only, not the constructed one
+        JobHostSummary.objects.create(job=job, host=source_host, host_name='server1', ok=1)
+
+        url = reverse('api:host_job_host_summaries_list', kwargs={'pk': constructed_host.pk})
+        resp = get(url, user=admin, expect=200)
+        assert resp.data['count'] == 0
+
+
+@pytest.mark.django_db
+class TestConstructedGroupJobSummariesAPI:
+    """The job_host_summaries endpoint for groups in a constructed inventory
+    should use the constructed_host FK."""
+
+    def test_constructed_group_summaries_returned(self, get, admin, organization):
+        source_inv = Inventory.objects.create(name='source', organization=organization)
+        constructed_inv = Inventory.objects.create(name='constructed', kind='constructed', organization=organization)
+
+        source_host = Host.objects.create(name='server1', inventory=source_inv)
+        constructed_host = Host.objects.create(name='server1', inventory=constructed_inv, instance_id=str(source_host.pk))
+
+        group = Group.objects.create(name='webservers', inventory=constructed_inv)
+        group.hosts.add(constructed_host)
+
+        project = Project.objects.create(name='test-proj')
+        jt = JobTemplate.objects.create(name='test-jt', inventory=constructed_inv, project=project)
+        job = Job.objects.create(inventory=constructed_inv, job_template=jt, status='successful')
+
+        JobHostSummary.objects.create(
+            job=job, host=source_host, constructed_host=constructed_host,
+            host_name='server1', ok=1
+        )
+
+        url = reverse('api:group_job_host_summaries_list', kwargs={'pk': group.pk})
+        resp = get(url, user=admin, expect=200)
+        assert resp.data['count'] == 1

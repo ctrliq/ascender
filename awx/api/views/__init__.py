@@ -3711,9 +3711,19 @@ class BaseJobHostSummariesList(SubListAPIView):
 class HostJobHostSummariesList(BaseJobHostSummariesList):
     parent_model = models.Host
 
+    def get_sublist_queryset(self, parent):
+        if parent.inventory and parent.inventory.kind == 'constructed':
+            return parent.constructed_host_summaries
+        return super().get_sublist_queryset(parent)
+
 
 class GroupJobHostSummariesList(BaseJobHostSummariesList):
     parent_model = models.Group
+
+    def get_sublist_queryset(self, parent):
+        if parent.inventory and parent.inventory.kind == 'constructed':
+            return parent.constructed_host_summaries
+        return super().get_sublist_queryset(parent)
 
 
 class JobJobHostSummariesList(BaseJobHostSummariesList):

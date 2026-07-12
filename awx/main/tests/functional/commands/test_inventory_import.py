@@ -398,3 +398,138 @@ def test_tower_version_compare():
     with pytest.raises(PermissionDenied):
         cmd.remote_tower_license_compare('very_supported')
     cmd.remote_tower_license_compare('open')
+
+
+@pytest.mark.django_db
+@mock.patch.object(inventory_import.Command, 'set_logging_level', mock_logging)
+class TestRelinkOrphanedJobHostSummaries:
+    """After an overwrite sync deletes and recreates a host, orphaned
+    JobHostSummary records (host_id=NULL) should be re-linked to the
+    new host object by matching on host_name."""
+
+    def test_relink_after_host_recreated(self, inventory):
+        from awx.main.models import JobHostSummary, Job, Project, JobTemplate
+
+        inv_src = InventorySource.objects.create(inventory=inventory, source='ec2')
+        project = Project.objects.create(name='test-proj')
+        jt = JobTemplate.objects.create(name='test-jt', inventory=inventory, project=project)
+
+        data = {
+            '_meta': {'hostvars': {'server1': {}, 'server2': {}}},
+            'ungrouped': {'hosts': ['server1', 'server2']},
+        }
+        options = dict(overwrite=True)
+
+        inventory_import.Command().perform_update(options.copy(), data.copy(), inv_src.create_unified_job())
+        host1 = inventory.hosts.get(name='server1')
+
+        job = Job.objects.create(inventory=inventory, job_template=jt, status='successful')
+        JobHostSummary.objects.create(job=job, host=host1, host_name='server1', ok=1)
+
+        # Simulate host disappearing and reappearing (delete + reimport)
+        host1.delete()
+        inventory_import.Command().perform_update(options.copy(), data.copy(), inv_src.create_unified_job())
+
+        new_host = inventory.hosts.get(name='server1')
+        assert new_host.pk != host1.pk
+
+        summary = JobHostSummary.objects.get(job=job, host_name='server1')
+        assert summary.host_id == new_host.pk
+
+    def test_no_relink_when_host_still_linked(self, inventory):
+        from awx.main.models import JobHostSummary, Job, Project, JobTemplate
+
+        inv_src = InventorySource.objects.create(inventory=inventory, source='ec2')
+        project = Project.objects.create(name='test-proj')
+        jt = JobTemplate.objects.create(name='test-jt', inventory=inventory, project=project)
+
+        data = {
+            '_meta': {'hostvars': {'server1': {}}},
+            'ungrouped': {'hosts': ['server1']},
+        }
+        options = dict(overwrite=True)
+
+        inventory_import.Command().perform_update(options.copy(), data.copy(), inv_src.create_unified_job())
+        host1 = inventory.hosts.get(name='server1')
+
+        job = Job.objects.create(inventory=inventory, job_template=jt, status='successful')
+        JobHostSummary.objects.create(job=job, host=host1, host_name='server1', ok=1)
+
+        # Sync again without host disappearing - PK should be preserved
+        inventory_import.Command().perform_update(options.copy(), data.copy(), inv_src.create_unified_job())
+        same_host = inventory.hosts.get(name='server1')
+        assert same_host.pk == host1.pk
+
+        summary = JobHostSummary.objects.get(job=job, host_name='server1')
+        assert summary.host_id == host1.pk
+
+    def test_relink_constructed_inventory(self, organization):
+        from awx.main.models import JobHostSummary, Job, Project, JobTemplate
+
+        source_inv = Inventory.objects.create(name='source-inv', organization=organization)
+        constructed_inv = Inventory.objects.create(name='constructed-inv', kind='constructed', organization=organization)
+        project = Project.objects.create(name='test-proj')
+        jt = JobTemplate.objects.create(name='test-jt', inventory=constructed_inv, project=project)
+
+        source_host = Host.objects.create(name='server1', inventory=source_inv)
+        constructed_host = Host.objects.create(
+            name='server1', inventory=constructed_inv, instance_id=str(source_host.pk)
+        )
+
+        job = Job.objects.create(inventory=constructed_inv, job_template=jt, status='successful')
+        JobHostSummary.objects.create(
+            job=job, host=source_host, constructed_host=constructed_host,
+            host_name='server1', ok=1
+        )
+
+        old_constructed_pk = constructed_host.pk
+        constructed_host.delete()
+
+        # Recreate constructed host (simulates constructed inventory re-sync)
+        new_constructed_host = Host.objects.create(
+            name='server1', inventory=constructed_inv, instance_id=str(source_host.pk)
+        )
+
+        inv_src = InventorySource.objects.create(inventory=constructed_inv, source='constructed')
+        data = {
+            '_meta': {'hostvars': {'server1': {}}},
+            'ungrouped': {'hosts': ['server1']},
+        }
+        inventory_import.Command().perform_update(dict(overwrite=True), data, inv_src.create_unified_job())
+
+        summary = JobHostSummary.objects.get(job=job, host_name='server1')
+        assert summary.constructed_host_id is not None
+        assert summary.constructed_host_id != old_constructed_pk
+
+    def test_relink_does_not_cross_inventories(self, organization):
+        from awx.main.models import JobHostSummary, Job, Project, JobTemplate
+
+        inv_a = Inventory.objects.create(name='inv-a', organization=organization)
+        inv_b = Inventory.objects.create(name='inv-b', organization=organization)
+        inv_src_a = InventorySource.objects.create(inventory=inv_a, source='ec2')
+        inv_src_b = InventorySource.objects.create(inventory=inv_b, source='ec2')
+        project = Project.objects.create(name='test-proj')
+
+        data = {
+            '_meta': {'hostvars': {'server1': {}}},
+            'ungrouped': {'hosts': ['server1']},
+        }
+        options = dict(overwrite=True)
+
+        # Create host in both inventories
+        inventory_import.Command().perform_update(options.copy(), data.copy(), inv_src_a.create_unified_job())
+        inventory_import.Command().perform_update(options.copy(), data.copy(), inv_src_b.create_unified_job())
+
+        host_b = inv_b.hosts.get(name='server1')
+        jt_b = JobTemplate.objects.create(name='test-jt-b', inventory=inv_b, project=project)
+        job_b = Job.objects.create(inventory=inv_b, job_template=jt_b, status='successful')
+        JobHostSummary.objects.create(job=job_b, host=host_b, host_name='server1', ok=1)
+
+        # Delete host from inv_b, orphaning the summary
+        host_b.delete()
+
+        # Sync inv_a: should NOT re-link inv_b's orphaned summary
+        inventory_import.Command().perform_update(options.copy(), data.copy(), inv_src_a.create_unified_job())
+
+        summary = JobHostSummary.objects.get(job=job_b, host_name='server1')
+        assert summary.host_id is None, "Summary from inv_b should not be re-linked to inv_a's host"
