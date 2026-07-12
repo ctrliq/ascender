@@ -157,6 +157,17 @@ function WorkflowApprovalDetail({ workflowApproval, fetchWorkflowApproval }) {
             dataCy="wa-detail-actor"
           />
         )}
+        {workflowApproval.context_message && (
+          <Detail
+            label={t`Context`}
+            value={
+              <pre style={{ whiteSpace: 'pre-wrap', margin: 0 }}>
+                {workflowApproval.context_message}
+              </pre>
+            }
+            dataCy="wa-detail-context"
+          />
+        )}
         <Detail
           label={t`Explanation`}
           value={workflowApproval.job_explanation}

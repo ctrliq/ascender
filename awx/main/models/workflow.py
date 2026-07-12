@@ -1115,6 +1115,7 @@ class WorkflowApprovalTemplate(UnifiedJobTemplate, RelatedJobsMixin):
     FIELDS_TO_PRESERVE_AT_COPY = [
         'description',
         'timeout',
+        'context_template',
     ]
 
     class Meta:
@@ -1124,6 +1125,14 @@ class WorkflowApprovalTemplate(UnifiedJobTemplate, RelatedJobsMixin):
         blank=True,
         default=0,
         help_text=_("The amount of time (in seconds) before the approval node expires and fails."),
+    )
+    context_template = models.TextField(
+        blank=True,
+        default='',
+        help_text=_(
+            "A Jinja2 template rendered with upstream set_stats artifacts when the approval is created. "
+            "The result is stored on the approval as context_message and shown to the approver."
+        ),
     )
 
     @classmethod
@@ -1181,6 +1190,13 @@ class WorkflowApproval(UnifiedJob, JobNotificationMixin):
         editable=False,
         on_delete=models.SET_NULL,
     )
+    context_message = models.TextField(
+        blank=True,
+        default='',
+        help_text=_(
+            "The rendered context from the approval template's context_template, populated with upstream set_stats artifacts when the approval is created."
+        ),
+    )
 
     def _set_default_dependencies_processed(self):
         self.dependencies_processed = True
@@ -1201,6 +1217,23 @@ class WorkflowApproval(UnifiedJob, JobNotificationMixin):
 
     def _get_parent_field_name(self):
         return 'workflow_approval_template'
+
+    def render_context_message(self, ancestor_artifacts):
+        from jinja2.sandbox import ImmutableSandboxedEnvironment
+        from jinja2.exceptions import TemplateSyntaxError, UndefinedError, SecurityError
+
+        template_str = getattr(self.workflow_approval_template, 'context_template', '')
+        if not template_str or not ancestor_artifacts:
+            return
+        env = ImmutableSandboxedEnvironment()
+        try:
+            rendered = env.from_string(template_str).render(**ancestor_artifacts)
+        except (TemplateSyntaxError, UndefinedError, SecurityError):
+            logger.warning('Failed to render context_template for approval %s', self.pk)
+            return
+        if rendered and rendered.strip():
+            self.context_message = rendered
+            self.save(update_fields=['context_message'])
 
     def save(self, *args, **kwargs):
         update_fields = list(kwargs.get('update_fields', []))
@@ -1319,12 +1352,15 @@ class WorkflowApproval(UnifiedJob, JobNotificationMixin):
 
     def context(self, approval_status):
         workflow_url = urljoin(settings.TOWER_URL_BASE, '/#/jobs/workflow/{}'.format(self.workflow_job.id))
-        return {
+        ctx = {
             'approval_status': approval_status,
             'approval_node_name': self.workflow_approval_template.name,
             'workflow_url': workflow_url,
             'job_metadata': json.dumps(self.notification_data(), indent=4),
         }
+        if self.context_message:
+            ctx['context_message'] = self.context_message
+        return ctx
 
     @property
     def workflow_job_template(self):

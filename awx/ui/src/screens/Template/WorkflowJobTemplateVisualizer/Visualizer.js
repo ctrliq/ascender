@@ -472,6 +472,8 @@ function Visualizer({ template }) {
                     name: node.fullUnifiedJobTemplate.name,
                     description: node.fullUnifiedJobTemplate.description,
                     timeout: node.fullUnifiedJobTemplate.timeout,
+                    context_template:
+                      node.fullUnifiedJobTemplate.context_template || '',
                   })
                 );
               })
@@ -558,6 +560,8 @@ function Visualizer({ template }) {
                         name: node.fullUnifiedJobTemplate.name,
                         description: node.fullUnifiedJobTemplate.description,
                         timeout: node.fullUnifiedJobTemplate.timeout,
+                        context_template:
+                          node.fullUnifiedJobTemplate.context_template || '',
                       }
                     )
                   );
@@ -579,6 +583,8 @@ function Visualizer({ template }) {
                         name: node.fullUnifiedJobTemplate.name,
                         description: node.fullUnifiedJobTemplate.description,
                         timeout: node.fullUnifiedJobTemplate.timeout,
+                        context_template:
+                          node.fullUnifiedJobTemplate.context_template || '',
                       }
                     )
                   );

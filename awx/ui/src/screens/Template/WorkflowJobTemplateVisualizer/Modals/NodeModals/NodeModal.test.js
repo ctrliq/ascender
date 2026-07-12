@@ -758,6 +758,7 @@ describe('NodeModal', () => {
           maxRetries: 0,
           approvalDescription: 'Test Approval Description',
           approvalName: 'Test Approval',
+          contextTemplate: '',
           identifier: '',
           linkType: 'always',
           linkConditionTrigger: 'success',
@@ -768,6 +769,7 @@ describe('NodeModal', () => {
           nodeType: 'workflow_approval_template',
           timeoutMinutes: 5,
           timeoutSeconds: 30,
+          verbosity: undefined,
         },
         {}
       );
@@ -869,6 +871,7 @@ describe('Edit existing node', () => {
           identifier: 'Foo',
           approvalDescription: 'Test Approval Description',
           approvalName: 'Test Approval',
+          contextTemplate: '',
           linkType: 'success',
           linkConditionTrigger: 'success',
           linkConditionArtifactKey: '',
@@ -878,6 +881,7 @@ describe('Edit existing node', () => {
           nodeType: 'workflow_approval_template',
           timeoutMinutes: 5,
           timeoutSeconds: 30,
+          verbosity: undefined,
         },
         {}
       );
