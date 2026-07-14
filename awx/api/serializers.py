@@ -4033,7 +4033,13 @@ class WorkflowApprovalActivityStreamSerializer(WorkflowApprovalSerializer):
 
 class WorkflowApprovalListSerializer(WorkflowApprovalSerializer, UnifiedJobListSerializer):
     class Meta:
-        fields = ('*', '-controller_node', '-execution_node', 'can_approve_or_deny', 'approval_expiration', 'timed_out', 'context_message')
+        fields = ('*', '-controller_node', '-execution_node', 'can_approve_or_deny', 'approval_expiration', 'timed_out', '-context_message')
+
+    def get_field_names(self, declared_fields, info):
+        field_names = super(WorkflowApprovalListSerializer, self).get_field_names(declared_fields, info)
+        # keep the potentially large rendered context out of list payloads,
+        # the detail view is the one that shows it
+        return tuple(x for x in field_names if x != 'context_message')
 
 
 class WorkflowApprovalTemplateSerializer(UnifiedJobTemplateSerializer):
