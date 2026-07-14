@@ -4,6 +4,7 @@
 # Python
 import json
 import logging
+import multiprocessing
 from uuid import uuid4
 from copy import copy
 from urllib.parse import urljoin
@@ -1158,6 +1159,33 @@ class WorkflowApprovalTemplate(UnifiedJobTemplate, RelatedJobsMixin):
         return UnifiedJob.objects.filter(unified_job_template=self)
 
 
+# context_template is user-supplied Jinja2. The sandbox stops attribute escapes but
+# not resource exhaustion (e.g. {{ "x" * 10**9 }}, {{ 10 ** 10 ** 10 }} or a huge
+# loop), so rendering happens in a disposable forked process with CPU and memory
+# limits, and the parent abandons it after a hard timeout.
+CONTEXT_TEMPLATE_TIMEOUT = 10  # seconds
+CONTEXT_TEMPLATE_MEMORY_LIMIT = 256 * 1024 * 1024  # address space the render may allocate beyond what is already in use
+CONTEXT_MESSAGE_MAX_LENGTH = 65536
+
+
+def _render_context_template(conn, template_str, variables):
+    """Runs in a forked child process; must never touch the database and only
+    reports back through conn. The parent kills it if it outlives the timeout."""
+    try:
+        import resource
+
+        current = int(open('/proc/self/statm').read().split()[0]) * resource.getpagesize()
+        resource.setrlimit(resource.RLIMIT_AS, (current + CONTEXT_TEMPLATE_MEMORY_LIMIT, current + CONTEXT_TEMPLATE_MEMORY_LIMIT))
+        resource.setrlimit(resource.RLIMIT_CPU, (CONTEXT_TEMPLATE_TIMEOUT, CONTEXT_TEMPLATE_TIMEOUT))
+    except Exception:
+        pass  # limits are best effort, the parent still enforces the timeout
+    try:
+        rendered = sandbox.ImmutableSandboxedEnvironment().from_string(template_str).render(variables)
+        conn.send(('ok', rendered[:CONTEXT_MESSAGE_MAX_LENGTH]))
+    except Exception as e:
+        conn.send(('error', '{}: {}'.format(type(e).__name__, e)[:1024]))
+
+
 class WorkflowApproval(UnifiedJob, JobNotificationMixin):
     class Meta:
         app_label = 'main'
@@ -1219,18 +1247,35 @@ class WorkflowApproval(UnifiedJob, JobNotificationMixin):
         return 'workflow_approval_template'
 
     def render_context_message(self, ancestor_artifacts):
-        from jinja2.sandbox import ImmutableSandboxedEnvironment
-        from jinja2.exceptions import TemplateSyntaxError, UndefinedError, SecurityError
-
         template_str = getattr(self.workflow_approval_template, 'context_template', '')
-        if not template_str or not ancestor_artifacts:
+        if not template_str:
             return
-        env = ImmutableSandboxedEnvironment()
+        rendered = None
+        ctx = multiprocessing.get_context('fork')
+        parent_conn, child_conn = ctx.Pipe(duplex=False)
+        worker = ctx.Process(target=_render_context_template, args=(child_conn, template_str, dict(ancestor_artifacts or {})))
         try:
-            rendered = env.from_string(template_str).render(**ancestor_artifacts)
-        except (TemplateSyntaxError, UndefinedError, SecurityError):
-            logger.warning('Failed to render context_template for approval %s', self.pk)
-            return
+            worker.start()
+            child_conn.close()
+            if parent_conn.poll(CONTEXT_TEMPLATE_TIMEOUT):
+                status, payload = parent_conn.recv()
+                if status == 'ok':
+                    rendered = payload
+                else:
+                    logger.warning('Failed to render context_template for approval %s: %s', self.pk, payload)
+            else:
+                logger.warning('Rendering context_template for approval %s did not finish within %s seconds', self.pk, CONTEXT_TEMPLATE_TIMEOUT)
+        except EOFError:
+            logger.warning('Rendering context_template for approval %s exited without producing output', self.pk)
+        except Exception:
+            logger.exception('Unexpected error rendering context_template for approval %s', self.pk)
+        finally:
+            parent_conn.close()
+            if worker.pid is not None:
+                worker.join(1)
+                if worker.is_alive():
+                    worker.kill()
+                    worker.join()
         if rendered and rendered.strip():
             self.context_message = rendered
             self.save(update_fields=['context_message'])
