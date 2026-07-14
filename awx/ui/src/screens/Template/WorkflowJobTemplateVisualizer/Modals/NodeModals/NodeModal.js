@@ -133,6 +133,7 @@ function NodeModalForm({
       delete values.approvalDescription;
       delete values.timeoutMinutes;
       delete values.timeoutSeconds;
+      delete values.contextTemplate;
     }
 
     if (
@@ -410,6 +411,7 @@ const NodeModal = ({ onSave, askLinkType, title }) => {
       initialValues={{
         approvalName: '',
         approvalDescription: '',
+        contextTemplate: '',
         daysToKeep: 30,
         identifier: nodeToEdit?.identifier || '',
         timeoutMinutes: 0,

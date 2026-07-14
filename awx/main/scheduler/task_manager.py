@@ -234,6 +234,8 @@ class WorkflowManager(TaskBase):
                     if is_retry:
                         spawn_node.retry_attempts += 1
                     spawn_node.save()
+                    if isinstance(job, WorkflowApproval):
+                        job.render_context_message(spawn_node.ancestor_artifacts)
                     if is_retry:
                         # keep the superseded attempt linked to the node so it stays
                         # protected from deletion and traceable to this workflow

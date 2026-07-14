@@ -3996,7 +3996,7 @@ class WorkflowApprovalSerializer(UnifiedJobSerializer):
 
     class Meta:
         model = WorkflowApproval
-        fields = ('*', '-controller_node', '-execution_node', 'can_approve_or_deny', 'approval_expiration', 'timed_out')
+        fields = ('*', '-controller_node', '-execution_node', 'can_approve_or_deny', 'approval_expiration', 'timed_out', 'context_message')
 
     def get_approval_expiration(self, obj):
         if obj.status != 'pending' or obj.timeout == 0:
@@ -4033,13 +4033,19 @@ class WorkflowApprovalActivityStreamSerializer(WorkflowApprovalSerializer):
 
 class WorkflowApprovalListSerializer(WorkflowApprovalSerializer, UnifiedJobListSerializer):
     class Meta:
-        fields = ('*', '-controller_node', '-execution_node', 'can_approve_or_deny', 'approval_expiration', 'timed_out')
+        fields = ('*', '-controller_node', '-execution_node', 'can_approve_or_deny', 'approval_expiration', 'timed_out', '-context_message')
+
+    def get_field_names(self, declared_fields, info):
+        field_names = super(WorkflowApprovalListSerializer, self).get_field_names(declared_fields, info)
+        # keep the potentially large rendered context out of list payloads,
+        # the detail view is the one that shows it
+        return tuple(x for x in field_names if x != 'context_message')
 
 
 class WorkflowApprovalTemplateSerializer(UnifiedJobTemplateSerializer):
     class Meta:
         model = WorkflowApprovalTemplate
-        fields = ('*', 'timeout', 'name')
+        fields = ('*', 'timeout', 'name', 'context_template')
 
     def get_related(self, obj):
         res = super(WorkflowApprovalTemplateSerializer, self).get_related(obj)
@@ -4365,7 +4371,7 @@ class WorkflowJobTemplateNodeDetailSerializer(WorkflowJobTemplateNodeSerializer)
 class WorkflowJobTemplateNodeCreateApprovalSerializer(BaseSerializer):
     class Meta:
         model = WorkflowApprovalTemplate
-        fields = ('timeout', 'name', 'description')
+        fields = ('timeout', 'name', 'description', 'context_template')
 
     def to_representation(self, obj):
         return {}

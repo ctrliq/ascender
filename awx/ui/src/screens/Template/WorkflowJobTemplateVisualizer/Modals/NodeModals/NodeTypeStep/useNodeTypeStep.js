@@ -97,6 +97,7 @@ function getInitialValues() {
     approvalDescription: '',
     timeoutMinutes: 0,
     timeoutSeconds: 0,
+    contextTemplate: '',
     nodeType: 'job_template',
     convergence: 'any',
     identifier: '',

@@ -4,6 +4,7 @@
 # Python
 import json
 import logging
+import multiprocessing
 from uuid import uuid4
 from copy import copy
 from urllib.parse import urljoin
@@ -1115,6 +1116,7 @@ class WorkflowApprovalTemplate(UnifiedJobTemplate, RelatedJobsMixin):
     FIELDS_TO_PRESERVE_AT_COPY = [
         'description',
         'timeout',
+        'context_template',
     ]
 
     class Meta:
@@ -1124,6 +1126,14 @@ class WorkflowApprovalTemplate(UnifiedJobTemplate, RelatedJobsMixin):
         blank=True,
         default=0,
         help_text=_("The amount of time (in seconds) before the approval node expires and fails."),
+    )
+    context_template = models.TextField(
+        blank=True,
+        default='',
+        help_text=_(
+            "A Jinja2 template rendered with upstream set_stats artifacts when the approval is created. "
+            "The result is stored on the approval as context_message and shown to the approver."
+        ),
     )
 
     @classmethod
@@ -1147,6 +1157,33 @@ class WorkflowApprovalTemplate(UnifiedJobTemplate, RelatedJobsMixin):
 
     def _get_related_jobs(self):
         return UnifiedJob.objects.filter(unified_job_template=self)
+
+
+# context_template is user-supplied Jinja2. The sandbox stops attribute escapes but
+# not resource exhaustion (e.g. {{ "x" * 10**9 }}, {{ 10 ** 10 ** 10 }} or a huge
+# loop), so rendering happens in a disposable forked process with CPU and memory
+# limits, and the parent abandons it after a hard timeout.
+CONTEXT_TEMPLATE_TIMEOUT = 10  # seconds
+CONTEXT_TEMPLATE_MEMORY_LIMIT = 256 * 1024 * 1024  # address space the render may allocate beyond what is already in use
+CONTEXT_MESSAGE_MAX_LENGTH = 65536
+
+
+def _render_context_template(conn, template_str, variables):
+    """Runs in a forked child process; must never touch the database and only
+    reports back through conn. The parent kills it if it outlives the timeout."""
+    try:
+        import resource
+
+        current = int(open('/proc/self/statm').read().split()[0]) * resource.getpagesize()
+        resource.setrlimit(resource.RLIMIT_AS, (current + CONTEXT_TEMPLATE_MEMORY_LIMIT, current + CONTEXT_TEMPLATE_MEMORY_LIMIT))
+        resource.setrlimit(resource.RLIMIT_CPU, (CONTEXT_TEMPLATE_TIMEOUT, CONTEXT_TEMPLATE_TIMEOUT))
+    except Exception:
+        pass  # limits are best effort, the parent still enforces the timeout
+    try:
+        rendered = sandbox.ImmutableSandboxedEnvironment().from_string(template_str).render(variables)
+        conn.send(('ok', rendered[:CONTEXT_MESSAGE_MAX_LENGTH]))
+    except Exception as e:
+        conn.send(('error', '{}: {}'.format(type(e).__name__, e)[:1024]))
 
 
 class WorkflowApproval(UnifiedJob, JobNotificationMixin):
@@ -1181,6 +1218,13 @@ class WorkflowApproval(UnifiedJob, JobNotificationMixin):
         editable=False,
         on_delete=models.SET_NULL,
     )
+    context_message = models.TextField(
+        blank=True,
+        default='',
+        help_text=_(
+            "The rendered context from the approval template's context_template, populated with upstream set_stats artifacts when the approval is created."
+        ),
+    )
 
     def _set_default_dependencies_processed(self):
         self.dependencies_processed = True
@@ -1201,6 +1245,40 @@ class WorkflowApproval(UnifiedJob, JobNotificationMixin):
 
     def _get_parent_field_name(self):
         return 'workflow_approval_template'
+
+    def render_context_message(self, ancestor_artifacts):
+        template_str = getattr(self.workflow_approval_template, 'context_template', '')
+        if not template_str:
+            return
+        rendered = None
+        ctx = multiprocessing.get_context('fork')
+        parent_conn, child_conn = ctx.Pipe(duplex=False)
+        worker = ctx.Process(target=_render_context_template, args=(child_conn, template_str, dict(ancestor_artifacts or {})))
+        try:
+            worker.start()
+            child_conn.close()
+            if parent_conn.poll(CONTEXT_TEMPLATE_TIMEOUT):
+                status, payload = parent_conn.recv()
+                if status == 'ok':
+                    rendered = payload
+                else:
+                    logger.warning('Failed to render context_template for approval %s: %s', self.pk, payload)
+            else:
+                logger.warning('Rendering context_template for approval %s did not finish within %s seconds', self.pk, CONTEXT_TEMPLATE_TIMEOUT)
+        except EOFError:
+            logger.warning('Rendering context_template for approval %s exited without producing output', self.pk)
+        except Exception:
+            logger.exception('Unexpected error rendering context_template for approval %s', self.pk)
+        finally:
+            parent_conn.close()
+            if worker.pid is not None:
+                worker.join(1)
+                if worker.is_alive():
+                    worker.kill()
+                    worker.join()
+        if rendered and rendered.strip():
+            self.context_message = rendered
+            self.save(update_fields=['context_message'])
 
     def save(self, *args, **kwargs):
         update_fields = list(kwargs.get('update_fields', []))
@@ -1319,12 +1397,15 @@ class WorkflowApproval(UnifiedJob, JobNotificationMixin):
 
     def context(self, approval_status):
         workflow_url = urljoin(settings.TOWER_URL_BASE, '/#/jobs/workflow/{}'.format(self.workflow_job.id))
-        return {
+        ctx = {
             'approval_status': approval_status,
             'approval_node_name': self.workflow_approval_template.name,
             'workflow_url': workflow_url,
             'job_metadata': json.dumps(self.notification_data(), indent=4),
         }
+        if self.context_message:
+            ctx['context_message'] = self.context_message
+        return ctx
 
     @property
     def workflow_job_template(self):

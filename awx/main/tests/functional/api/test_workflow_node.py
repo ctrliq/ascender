@@ -243,6 +243,17 @@ class TestApprovalNodes:
         assert WorkflowApprovalTemplate.objects.count() == 0
         get(url, admin_user, expect=404)
 
+    def test_approval_context_message_detail_only(self, get, admin_user):
+        # context_message can be large, so the list endpoint leaves it out
+        # and only the detail endpoint exposes it
+        template = WorkflowApprovalTemplate.objects.create(name='approve deploy', timeout=0)
+        approval = WorkflowApproval.objects.create(workflow_approval_template=template, context_message='terraform plan output')
+        detail = get(reverse('api:workflow_approval_detail', kwargs={'pk': approval.pk}), user=admin_user, expect=200)
+        assert detail.data['context_message'] == 'terraform plan output'
+        listed = get(reverse('api:workflow_approval_list'), user=admin_user, expect=200)
+        assert listed.data['count'] == 1
+        assert 'context_message' not in listed.data['results'][0]
+
     def test_changed_approval_deletion(self, post, approval_node, admin_user, workflow_job_template, job_template):
         # This test verifies that when an approval node changes into something else
         # (in this case, a job template), then the previously-set WorkflowApprovalTemplate

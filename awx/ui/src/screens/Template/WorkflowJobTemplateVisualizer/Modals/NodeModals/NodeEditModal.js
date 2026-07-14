@@ -37,6 +37,7 @@ function NodeEditModal() {
           description: approvalDescription,
           name: approvalName,
           timeout: Number(timeoutMinutes) * 60 + Number(timeoutSeconds),
+          context_template: values.contextTemplate || '',
           type: 'workflow_approval_template',
         },
         identifier,

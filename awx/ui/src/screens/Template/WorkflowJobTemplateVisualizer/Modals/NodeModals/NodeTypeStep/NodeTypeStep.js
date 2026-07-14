@@ -6,6 +6,7 @@ import {
 	Alert,
 	Form,
 	FormGroup,
+	TextArea,
 	TextInput,
 	Select,
 	SelectOption,
@@ -56,6 +57,8 @@ function NodeTypeStep({ isIdentifierRequired }) {
   const [timeoutSecondsField, , timeoutSecondsHelpers] =
     useField('timeoutSeconds');
   const [convergenceField, , convergenceFieldHelpers] = useField('convergence');
+  const [contextTemplateField, , contextTemplateHelpers] =
+    useField('contextTemplate');
 
   const [isConvergenceOpen, setIsConvergenceOpen] = useState(false);
   const config = useConfig();
@@ -130,6 +133,7 @@ function NodeTypeStep({ isIdentifierRequired }) {
               approvalDescriptionHelpers.setValue('');
               timeoutMinutesHelpers.setValue(0);
               timeoutSecondsHelpers.setValue(0);
+              contextTemplateHelpers.setValue('');
               convergenceFieldHelpers.setValue('any');
             }}
           />
@@ -218,6 +222,26 @@ function NodeTypeStep({ isIdentifierRequired }) {
                       <Trans>sec</Trans>
                     </TimeoutLabel>
                   </div>
+                </FormGroup>
+                <FormGroup
+                  label={t`Context Template`}
+                  fieldId="approval-context-template"
+                  labelHelp={
+                    <Popover
+                      content={t`A Jinja2 template rendered with upstream set_stats artifacts when the approval is created. Use this to show the approver relevant context from previous job steps. Available variables come from set_stats data of parent nodes.`}
+                    />
+                  }
+                >
+                  <TextArea
+                    {...contextTemplateField}
+                    aria-label={t`Context Template`}
+                    id="approval-context-template"
+                    onChange={(event) => {
+                      contextTemplateField.onChange(event);
+                    }}
+                    resizeOrientation="vertical"
+                    rows={4}
+                  />
                 </FormGroup>
               </>
             )}

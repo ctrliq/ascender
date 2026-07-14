@@ -4,7 +4,10 @@ from unittest import mock
 import json
 
 # AWX
+from awx.main.models import workflow as workflow_models
 from awx.main.models.workflow import (
+    WorkflowApproval,
+    WorkflowApprovalTemplate,
     WorkflowJob,
     WorkflowJobNode,
     WorkflowJobTemplateNode,
@@ -945,3 +948,47 @@ class TestCombinedArtifacts:
         WorkflowJobNode.objects.create(workflow_job=wfj, job=job)
         # mostly, we just care that this assertion finishes in finite time
         assert wfj.get_effective_artifacts() == {'foo': 'bar'}
+
+
+@pytest.mark.django_db
+class TestApprovalContextMessage:
+    @pytest.fixture
+    def approval(self):
+        template = WorkflowApprovalTemplate.objects.create(name='approve deploy', timeout=0)
+        return WorkflowApproval.objects.create(workflow_approval_template=template)
+
+    def _render(self, approval, template_str, artifacts):
+        approval.workflow_approval_template.context_template = template_str
+        approval.render_context_message(artifacts)
+        approval.refresh_from_db()
+        return approval.context_message
+
+    def test_renders_ancestor_artifacts(self, approval):
+        assert self._render(approval, 'plan: {{ plan_output }}', {'plan_output': '2 to add'}) == 'plan: 2 to add'
+
+    def test_static_template_without_artifacts(self, approval):
+        assert self._render(approval, 'review the plan attached to the ticket', None) == 'review the plan attached to the ticket'
+
+    def test_non_identifier_artifact_keys(self, approval):
+        # set_stats keys are arbitrary strings, they must not break rendering
+        assert self._render(approval, '{{ ok }}', {'not-an-identifier!': 1, 'ok': 'yes'}) == 'yes'
+
+    def test_template_error_does_not_raise(self, approval):
+        assert self._render(approval, '{% if %}', {'x': 1}) == ''
+
+    def test_render_timeout(self, approval, monkeypatch):
+        # the sandbox caps a single range() at MAX_RANGE, so burn CPU with nested loops
+        monkeypatch.setattr(workflow_models, 'CONTEXT_TEMPLATE_TIMEOUT', 1)
+        assert self._render(approval, '{% for i in range(100000) %}{% for j in range(100000) %}{% endfor %}{% endfor %}', {}) == ''
+
+    def test_render_cpu_limit(self, approval, monkeypatch):
+        # huge exponent gets the render process killed by its rlimits before it can reply
+        monkeypatch.setattr(workflow_models, 'CONTEXT_TEMPLATE_TIMEOUT', 1)
+        assert self._render(approval, '{{ 10 ** (10 ** 10) }}', {}) == ''
+
+    def test_render_memory_limit(self, approval):
+        assert self._render(approval, '{{ "x" * 999999999 }}', {}) == ''
+
+    def test_output_truncated(self, approval):
+        rendered = self._render(approval, '{{ "x" * 100000 }}', {})
+        assert len(rendered) == workflow_models.CONTEXT_MESSAGE_MAX_LENGTH

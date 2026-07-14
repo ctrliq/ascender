@@ -9,7 +9,9 @@ class CustomNotificationBase(object):
 
     DEFAULT_APPROVAL_RUNNING_MSG = 'The approval node "{{ approval_node_name }}" needs review. This node can be viewed at: {{ workflow_url }}'
     DEFAULT_APPROVAL_RUNNING_BODY = (
-        'The approval node "{{ approval_node_name }}" needs review. This approval node can be viewed at: {{ workflow_url }}\n\n{{ job_metadata }}'
+        'The approval node "{{ approval_node_name }}" needs review. This approval node can be viewed at: {{ workflow_url }}'
+        '{% if context_message %}\n\nContext:\n{{ context_message }}{% endif %}'
+        '\n\n{{ job_metadata }}'
     )
 
     DEFAULT_APPROVAL_APPROVED_MSG = 'The approval node "{{ approval_node_name }}" was approved. {{ workflow_url }}'
