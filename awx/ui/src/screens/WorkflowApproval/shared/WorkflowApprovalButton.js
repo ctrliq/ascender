@@ -17,7 +17,9 @@ function WorkflowApprovalButton({
   const { id } = workflowApproval;
   const hasBeenActedOn =
     Object.keys(workflowApproval.summary_fields.approved_or_denied_by || {})
-      .length > 0 || workflowApproval.status === 'canceled';
+      .length > 0 ||
+    workflowApproval.status === 'canceled' ||
+    workflowApproval.user_has_voted === true;
   const { error: approveApprovalError, request: approveWorkflowApprovals } =
     useRequest(
       useCallback(async () => WorkflowApprovalsAPI.approve(id), [id]),

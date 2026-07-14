@@ -38,6 +38,8 @@ function NodeEditModal() {
           name: approvalName,
           timeout: Number(timeoutMinutes) * 60 + Number(timeoutSeconds),
           context_template: values.contextTemplate || '',
+          required_approvals: Number(values.requiredApprovals) || 1,
+          on_timeout: values.onTimeout || 'deny',
           type: 'workflow_approval_template',
         },
         identifier,

@@ -13,6 +13,10 @@ class WorkflowApprovals extends Base {
   deny(id) {
     return this.http.post(`${this.baseUrl}${id}/deny/`);
   }
+
+  readVotes(id) {
+    return this.http.get(`${this.baseUrl}${id}/votes/`);
+  }
 }
 
 export default WorkflowApprovals;

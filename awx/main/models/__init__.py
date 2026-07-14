@@ -86,6 +86,7 @@ from awx.main.models.workflow import (  # noqa
     WorkflowJobTemplateNodeConditionLink,
     WorkflowApproval,
     WorkflowApprovalTemplate,
+    WorkflowApprovalVote,
 )
 from awx.api.versioning import reverse
 from awx.main.models.oauth import OAuth2AccessToken, OAuth2Application  # noqa

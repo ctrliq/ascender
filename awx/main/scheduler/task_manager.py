@@ -713,10 +713,16 @@ class TaskManager(TaskBase):
             # Do not process any more workflow approval nodes. Stop here.
             # Maybe we should schedule another TaskManager run
             return
-        timeout_message = _("The approval node {name} ({pk}) has expired after {timeout} seconds.").format(name=task.name, pk=task.pk, timeout=task.timeout)
+        if task.on_timeout == 'approve':
+            timeout_message = _("The approval node {name} ({pk}) was automatically approved after {timeout} seconds.").format(
+                name=task.name, pk=task.pk, timeout=task.timeout
+            )
+            task.status = 'successful'
+        else:
+            timeout_message = _("The approval node {name} ({pk}) has expired after {timeout} seconds.").format(name=task.name, pk=task.pk, timeout=task.timeout)
+            task.status = 'failed'
         logger.warning(timeout_message)
         task.timed_out = True
-        task.status = 'failed'
         task.send_approval_notification('timed_out')
         task.websocket_emit_status(task.status)
         task.job_explanation = timeout_message

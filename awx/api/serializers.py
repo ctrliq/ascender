@@ -94,6 +94,7 @@ from awx.main.models import (
     UnifiedJobTemplate,
     WorkflowApproval,
     WorkflowApprovalTemplate,
+    WorkflowApprovalVote,
     WorkflowJob,
     WorkflowJobNode,
     WorkflowJobTemplate,
@@ -173,6 +174,7 @@ SUMMARIZABLE_FK_FIELDS = {
     'job_template': DEFAULT_SUMMARY_FIELDS,
     'workflow_job_template': DEFAULT_SUMMARY_FIELDS,
     'workflow_job': DEFAULT_SUMMARY_FIELDS,
+    'workflow_approval': DEFAULT_SUMMARY_FIELDS + ('status',),
     'workflow_approval_template': DEFAULT_SUMMARY_FIELDS + ('timeout',),
     'workflow_approval': DEFAULT_SUMMARY_FIELDS + ('timeout',),
     'schedule': DEFAULT_SUMMARY_FIELDS + ('next_run',),
@@ -4016,10 +4018,24 @@ class WorkflowApprovalSerializer(UnifiedJobSerializer):
     can_approve_or_deny = serializers.SerializerMethodField()
     approval_expiration = serializers.SerializerMethodField()
     timed_out = serializers.ReadOnlyField()
+    approvals_received = serializers.SerializerMethodField()
+    user_has_voted = serializers.SerializerMethodField()
 
     class Meta:
         model = WorkflowApproval
-        fields = ('*', '-controller_node', '-execution_node', 'can_approve_or_deny', 'approval_expiration', 'timed_out', 'context_message')
+        fields = (
+            '*',
+            '-controller_node',
+            '-execution_node',
+            'can_approve_or_deny',
+            'approval_expiration',
+            'timed_out',
+            'context_message',
+            'required_approvals',
+            'approvals_received',
+            'on_timeout',
+            'user_has_voted',
+        )
 
     def get_approval_expiration(self, obj):
         if obj.status != 'pending' or obj.timeout == 0:
@@ -4031,6 +4047,15 @@ class WorkflowApprovalSerializer(UnifiedJobSerializer):
         allowed = request.user.can_access(WorkflowApproval, 'approve_or_deny', obj)
         return allowed is True and obj.status == 'pending'
 
+    def get_approvals_received(self, obj):
+        return obj.approvals_received()
+
+    def get_user_has_voted(self, obj):
+        request = self.context.get('request', None)
+        if request is None:
+            return False
+        return obj.has_vote_from(request.user)
+
     def get_related(self, obj):
         res = super(WorkflowApprovalSerializer, self).get_related(obj)
 
@@ -4038,6 +4063,7 @@ class WorkflowApprovalSerializer(UnifiedJobSerializer):
             res['workflow_approval_template'] = self.reverse('api:workflow_approval_template_detail', kwargs={'pk': obj.workflow_approval_template.pk})
         res['approve'] = self.reverse('api:workflow_approval_approve', kwargs={'pk': obj.pk})
         res['deny'] = self.reverse('api:workflow_approval_deny', kwargs={'pk': obj.pk})
+        res['votes'] = self.reverse('api:workflow_approval_votes_list', kwargs={'pk': obj.pk})
         if obj.approved_or_denied_by:
             res['approved_or_denied_by'] = self.reverse('api:user_detail', kwargs={'pk': obj.approved_or_denied_by.pk})
         return res
@@ -4068,7 +4094,7 @@ class WorkflowApprovalListSerializer(WorkflowApprovalSerializer, UnifiedJobListS
 class WorkflowApprovalTemplateSerializer(UnifiedJobTemplateSerializer):
     class Meta:
         model = WorkflowApprovalTemplate
-        fields = ('*', 'timeout', 'name', 'context_template')
+        fields = ('*', 'timeout', 'name', 'context_template', 'required_approvals', 'on_timeout')
 
     def get_related(self, obj):
         res = super(WorkflowApprovalTemplateSerializer, self).get_related(obj)
@@ -4076,6 +4102,33 @@ class WorkflowApprovalTemplateSerializer(UnifiedJobTemplateSerializer):
             del res['last_job']
 
         res.update(jobs=self.reverse('api:workflow_approval_template_jobs_list', kwargs={'pk': obj.pk}))
+        return res
+
+
+class WorkflowApprovalVoteSerializer(BaseSerializer):
+    class Meta:
+        model = WorkflowApprovalVote
+        fields = (
+            '*',
+            '-name',
+            '-description',
+            '-modified',
+            'workflow_approval',
+            'user',
+            'vote',
+            'comment',
+            'workflow_approval_name',
+            'workflow_job_id',
+            'workflow_job_name',
+            'user_name',
+        )
+
+    def get_related(self, obj):
+        res = super(WorkflowApprovalVoteSerializer, self).get_related(obj)
+        if obj.workflow_approval_id:
+            res['workflow_approval'] = self.reverse('api:workflow_approval_detail', kwargs={'pk': obj.workflow_approval_id})
+        if obj.user_id:
+            res['user'] = self.reverse('api:user_detail', kwargs={'pk': obj.user_id})
         return res
 
 
@@ -4394,7 +4447,7 @@ class WorkflowJobTemplateNodeDetailSerializer(WorkflowJobTemplateNodeSerializer)
 class WorkflowJobTemplateNodeCreateApprovalSerializer(BaseSerializer):
     class Meta:
         model = WorkflowApprovalTemplate
-        fields = ('timeout', 'name', 'description', 'context_template')
+        fields = ('timeout', 'name', 'description', 'context_template', 'required_approvals', 'on_timeout')
 
     def to_representation(self, obj):
         return {}

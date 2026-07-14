@@ -12,7 +12,9 @@ function WorkflowDenyButton({ isDetailView, workflowApproval, onHandleToast }) {
   const { t } = useLingui();
   const hasBeenActedOn =
     Object.keys(workflowApproval.summary_fields.approved_or_denied_by || {})
-      .length > 0 || workflowApproval.status === 'canceled';
+      .length > 0 ||
+    workflowApproval.status === 'canceled' ||
+    workflowApproval.user_has_voted === true;
 
   const { id } = workflowApproval;
   const { error: denyApprovalError, request: denyWorkflowApprovals } =
@@ -33,9 +35,7 @@ function WorkflowDenyButton({ isDetailView, workflowApproval, onHandleToast }) {
     <>
       <Button
         aria-label={
-          hasBeenActedOn
-            ? t`This workflow has already been acted on`
-            : t`Deny`
+          hasBeenActedOn ? t`This workflow has already been acted on` : t`Deny`
         }
         ouiaId="workflow-deny-button"
         isDisabled={hasBeenActedOn}

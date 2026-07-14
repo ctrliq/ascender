@@ -3,8 +3,9 @@ import { useLingui } from '@lingui/react/macro';
 import { Link, useParams, useNavigate } from 'react-router';
 import styled from 'styled-components';
 import {
-	Label, Divider as PFDivider,
-	Title as PFTitle
+  Label,
+  Divider as PFDivider,
+  Title as PFTitle,
 } from '@patternfly/react-core';
 
 import AlertModal from 'components/AlertModal';
@@ -89,6 +90,18 @@ function WorkflowApprovalDetail({ workflowApproval, fetchWorkflowApproval }) {
     fetchWorkflowJob();
   }, [fetchWorkflowJob]);
 
+  const { request: fetchVotes, result: votes } = useRequest(
+    useCallback(async () => {
+      const { data } = await WorkflowApprovalsAPI.readVotes(workflowApprovalId);
+      return data.results;
+    }, [workflowApprovalId]),
+    []
+  );
+
+  useEffect(() => {
+    fetchVotes();
+  }, [fetchVotes]);
+
   const handleToast = useCallback(
     (id, title) => {
       addToast({
@@ -98,8 +111,9 @@ function WorkflowApprovalDetail({ workflowApproval, fetchWorkflowApproval }) {
         hasTimeout: true,
       });
       fetchWorkflowApproval();
+      fetchVotes();
     },
-    [addToast, fetchWorkflowApproval]
+    [addToast, fetchWorkflowApproval, fetchVotes]
   );
 
   const isLoading = isDeleteLoading || isLoadingWorkflowJob;
@@ -155,6 +169,37 @@ function WorkflowApprovalDetail({ workflowApproval, fetchWorkflowApproval }) {
               </Link>
             }
             dataCy="wa-detail-actor"
+          />
+        )}
+        {workflowApproval.required_approvals > 1 && (
+          <Detail
+            label={t`Approvals`}
+            value={`${workflowApproval.approvals_received}/${workflowApproval.required_approvals}`}
+            dataCy="wa-detail-approvals"
+          />
+        )}
+        {workflowApproval.timeout > 0 && (
+          <Detail
+            label={t`On Timeout`}
+            value={
+              workflowApproval.on_timeout === 'approve' ? t`Approve` : t`Deny`
+            }
+            dataCy="wa-detail-on-timeout"
+          />
+        )}
+        {votes.length > 0 && (
+          <Detail
+            fullWidth
+            label={t`Votes`}
+            value={votes.map((vote) => (
+              <div key={vote.id}>
+                {vote.summary_fields?.user?.username || vote.user_name}{' '}
+                {vote.vote === 'approve' ? t`approved` : t`denied`}{' '}
+                {formatDateString(vote.created)}
+                {vote.comment ? `: ${vote.comment}` : ''}
+              </div>
+            ))}
+            dataCy="wa-detail-votes"
           />
         )}
         {workflowApproval.context_message && (
@@ -269,7 +314,7 @@ function WorkflowApprovalDetail({ workflowApproval, fetchWorkflowApproval }) {
               ouiaId="wa-detail-label-chips"
             >
               {workflowJob.summary_fields.labels.results.map((label) => (
-                <Label variant="outline" key={label.id} >
+                <Label variant="outline" key={label.id}>
                   {label.name}
                 </Label>
               ))}

@@ -4689,6 +4689,14 @@ class WorkflowApprovalDetail(UnifiedJobDeletionMixin, RetrieveDestroyAPIView):
     serializer_class = serializers.WorkflowApprovalSerializer
 
 
+def _approval_vote_comment(request):
+    if isinstance(request.data, dict):
+        comment = request.data.get('comment', '')
+        if isinstance(comment, str):
+            return comment
+    return ''
+
+
 class WorkflowApprovalApprove(RetrieveAPIView):
     model = models.WorkflowApproval
     serializer_class = serializers.WorkflowApprovalViewSerializer
@@ -4700,7 +4708,9 @@ class WorkflowApprovalApprove(RetrieveAPIView):
             raise PermissionDenied(detail=_("User does not have permission to approve or deny this workflow."))
         if obj.status != 'pending':
             return Response({"error": _("This workflow step has already been approved or denied.")}, status=status.HTTP_400_BAD_REQUEST)
-        obj.approve(request)
+        if obj.has_vote_from(request.user):
+            return Response({"error": _("You have already voted on this workflow step.")}, status=status.HTTP_400_BAD_REQUEST)
+        obj.approve(request, comment=_approval_vote_comment(request))
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -4715,5 +4725,25 @@ class WorkflowApprovalDeny(RetrieveAPIView):
             raise PermissionDenied(detail=_("User does not have permission to approve or deny this workflow."))
         if obj.status != 'pending':
             return Response({"error": _("This workflow step has already been approved or denied.")}, status=status.HTTP_400_BAD_REQUEST)
-        obj.deny(request)
+        if obj.has_vote_from(request.user):
+            return Response({"error": _("You have already voted on this workflow step.")}, status=status.HTTP_400_BAD_REQUEST)
+        obj.deny(request, comment=_approval_vote_comment(request))
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class WorkflowApprovalVotesList(SubListAPIView):
+    model = models.WorkflowApprovalVote
+    serializer_class = serializers.WorkflowApprovalVoteSerializer
+    parent_model = models.WorkflowApproval
+    relationship = 'votes'
+    parent_key = 'workflow_approval'
+
+
+class WorkflowApprovalVoteList(ListAPIView):
+    model = models.WorkflowApprovalVote
+    serializer_class = serializers.WorkflowApprovalVoteSerializer
+
+
+class WorkflowApprovalVoteDetail(RetrieveAPIView):
+    model = models.WorkflowApprovalVote
+    serializer_class = serializers.WorkflowApprovalVoteSerializer

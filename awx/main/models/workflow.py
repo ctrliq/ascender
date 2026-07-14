@@ -57,6 +57,7 @@ __all__ = [
     'WorkflowJobNodeConditionLink',
     'WorkflowApprovalTemplate',
     'WorkflowApproval',
+    'WorkflowApprovalVote',
     'evaluate_artifact_condition',
 ]
 
@@ -1117,6 +1118,13 @@ class WorkflowApprovalTemplate(UnifiedJobTemplate, RelatedJobsMixin):
         'description',
         'timeout',
         'context_template',
+        'required_approvals',
+        'on_timeout',
+    ]
+
+    ON_TIMEOUT_CHOICES = [
+        ('deny', _('Deny')),
+        ('approve', _('Approve')),
     ]
 
     class Meta:
@@ -1126,6 +1134,18 @@ class WorkflowApprovalTemplate(UnifiedJobTemplate, RelatedJobsMixin):
         blank=True,
         default=0,
         help_text=_("The amount of time (in seconds) before the approval node expires and fails."),
+    )
+    required_approvals = models.PositiveIntegerField(
+        blank=True,
+        default=1,
+        help_text=_("The number of distinct users that must approve before the node is considered approved. A single denial always denies the node."),
+    )
+    on_timeout = models.CharField(
+        max_length=7,
+        choices=ON_TIMEOUT_CHOICES,
+        blank=True,
+        default='deny',
+        help_text=_("Whether the approval node is automatically approved or denied when the timeout expires."),
     )
     context_template = models.TextField(
         blank=True,
@@ -1142,7 +1162,7 @@ class WorkflowApprovalTemplate(UnifiedJobTemplate, RelatedJobsMixin):
 
     @classmethod
     def _get_unified_job_field_names(cls):
-        return ['name', 'description', 'timeout']
+        return ['name', 'description', 'timeout', 'required_approvals', 'on_timeout']
 
     def get_absolute_url(self, request=None):
         return reverse('api:workflow_approval_template_detail', kwargs={'pk': self.pk}, request=request)
@@ -1210,6 +1230,18 @@ class WorkflowApproval(UnifiedJob, JobNotificationMixin):
         help_text=_("The time this approval will expire. This is the created time plus timeout, used for filtering."),
     )
     timed_out = models.BooleanField(default=False, help_text=_("Shows when an approval node (with a timeout assigned to it) has timed out."))
+    required_approvals = models.PositiveIntegerField(
+        blank=True,
+        default=1,
+        help_text=_("The number of distinct users that must approve before the node is considered approved. A single denial always denies the node."),
+    )
+    on_timeout = models.CharField(
+        max_length=7,
+        choices=WorkflowApprovalTemplate.ON_TIMEOUT_CHOICES,
+        blank=True,
+        default='deny',
+        help_text=_("Whether the approval node is automatically approved or denied when the timeout expires."),
+    )
     approved_or_denied_by = models.ForeignKey(
         'auth.User',
         related_name='%s(class)s_approved+',
@@ -1299,12 +1331,52 @@ class WorkflowApproval(UnifiedJob, JobNotificationMixin):
                     update_fields.append('expires')
         super(WorkflowApproval, self).save(*args, **kwargs)
 
-    def approve(self, request=None):
-        self.status = 'successful'
-        user = get_current_user()
+    def _record_vote(self, user, vote, comment):
+        try:
+            workflow_job = self.workflow_job
+        except ObjectDoesNotExist:
+            workflow_job = None
+        new_vote = WorkflowApprovalVote.objects.create(
+            workflow_approval=self,
+            user=user,
+            vote=vote,
+            comment=comment or '',
+            workflow_approval_name=self.name,
+            workflow_job_id=workflow_job.id if workflow_job else None,
+            workflow_job_name=workflow_job.name if workflow_job else '',
+            user_name=user.username if user else '',
+        )
+        # a stale prefetch cache would hide the vote we just recorded
+        if hasattr(self, '_prefetched_objects_cache'):
+            self._prefetched_objects_cache.pop('votes', None)
+        return new_vote
+
+    def approvals_received(self):
+        # iterate so a prefetched votes cache is used when present
+        return len(set(vote.user_id for vote in self.votes.all() if vote.vote == 'approve'))
+
+    def has_vote_from(self, user):
+        if not (user and getattr(user, 'id', None)):
+            return False
+        return any(vote.user_id == user.id for vote in self.votes.all())
+
+    def _voting_user(self, request):
+        user = getattr(request, 'user', None) if request is not None else None
+        if not (user and getattr(user, 'id', None)):
+            user = get_current_user()
         # Ensure user is either None or a valid User instance
         if not (user and getattr(user, 'id', None)):
             user = None
+        return user
+
+    def approve(self, request=None, comment=''):
+        user = self._voting_user(request)
+        self._record_vote(user, 'approve', comment)
+        if self.approvals_received() < self.required_approvals:
+            # quorum not reached yet, stay pending but let listeners refresh
+            self.websocket_emit_status(self.status)
+            return reverse('api:workflow_approval_approve', kwargs={'pk': self.pk}, request=request)
+        self.status = 'successful'
         self.approved_or_denied_by = user
         self.save()
         self.send_approval_notification('approved')
@@ -1312,12 +1384,10 @@ class WorkflowApproval(UnifiedJob, JobNotificationMixin):
         ScheduleWorkflowManager().schedule()
         return reverse('api:workflow_approval_approve', kwargs={'pk': self.pk}, request=request)
 
-    def deny(self, request=None):
+    def deny(self, request=None, comment=''):
         self.status = 'failed'
-        user = get_current_user()
-        # Ensure user is either None or a valid User instance
-        if not (user and getattr(user, 'id', None)):
-            user = None
+        user = self._voting_user(request)
+        self._record_vote(user, 'deny', comment)
         self.approved_or_denied_by = user
         self.save()
         self.send_approval_notification('denied')
@@ -1426,3 +1496,78 @@ class WorkflowApproval(UnifiedJob, JobNotificationMixin):
             )
         )
         return result
+
+
+class WorkflowApprovalVote(CreatedModifiedModel):
+    """A single user's response to a workflow approval. Votes are immutable and
+    kept as an audit trail: the approval and user links are severed on deletion
+    while the denormalized name fields preserve what was decided."""
+
+    VOTE_CHOICES = [
+        ('approve', _('Approve')),
+        ('deny', _('Deny')),
+    ]
+
+    class Meta:
+        app_label = 'main'
+        ordering = ('-created',)
+        constraints = [models.UniqueConstraint(fields=['workflow_approval', 'user'], name='unique_workflow_approval_vote_per_user')]
+
+    workflow_approval = models.ForeignKey(
+        'WorkflowApproval',
+        related_name='votes',
+        null=True,
+        default=None,
+        editable=False,
+        on_delete=models.SET_NULL,
+    )
+    user = models.ForeignKey(
+        'auth.User',
+        related_name='workflow_approval_votes',
+        null=True,
+        default=None,
+        editable=False,
+        on_delete=models.SET_NULL,
+    )
+    vote = models.CharField(
+        max_length=7,
+        choices=VOTE_CHOICES,
+        editable=False,
+        help_text=_("Whether this user approved or denied the workflow approval."),
+    )
+    comment = models.TextField(
+        blank=True,
+        default='',
+        editable=False,
+        help_text=_("Optional comment the user submitted along with their vote."),
+    )
+    workflow_approval_name = models.CharField(
+        max_length=512,
+        blank=True,
+        default='',
+        editable=False,
+        help_text=_("Name of the approval node at the time of the vote, kept after the approval is deleted."),
+    )
+    workflow_job_id = models.IntegerField(
+        null=True,
+        default=None,
+        editable=False,
+        help_text=_("ID of the workflow job the approval belonged to, kept after the approval is deleted."),
+    )
+    workflow_job_name = models.CharField(
+        max_length=512,
+        blank=True,
+        default='',
+        editable=False,
+        help_text=_("Name of the workflow job the approval belonged to, kept after the approval is deleted."),
+    )
+    user_name = models.CharField(
+        max_length=512,
+        blank=True,
+        default='',
+        editable=False,
+        help_text=_("Username of the voter at the time of the vote, kept after the user is deleted."),
+    )
+
+    def get_absolute_url(self, request=None):
+        return reverse('api:workflow_approval_vote_detail', kwargs={'pk': self.pk}, request=request)
