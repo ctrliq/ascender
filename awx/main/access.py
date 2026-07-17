@@ -2380,8 +2380,8 @@ class JobEventAccess(BaseAccess):
 
     def filtered_queryset(self):
         return self.model.objects.filter(
-            Q(host__inventory__in=Inventory.accessible_pk_qs(self.user, 'read_role'))
-            | Q(job__job_template__in=JobTemplate.accessible_pk_qs(self.user, 'read_role'))
+            Q(host_id__in=Host.objects.filter(inventory__in=Inventory.accessible_pk_qs(self.user, 'read_role')).values('pk'))
+            | Q(job_id__in=Job.objects.filter(job_template__in=JobTemplate.accessible_pk_qs(self.user, 'read_role')).values('pk'))
         )
 
     def can_add(self, data):
@@ -2511,7 +2511,11 @@ class UnifiedJobTemplateAccess(BaseAccess):
     def filtered_queryset(self):
         return self.model.objects.filter(
             Q(pk__in=self.model.accessible_pk_qs(self.user, 'read_role'))
-            | Q(inventorysource__inventory__id__in=Inventory._accessible_pk_qs(Inventory, self.user, 'read_role'))
+            | Q(
+                pk__in=InventorySource.objects.filter(
+                    inventory__id__in=Inventory._accessible_pk_qs(Inventory, self.user, 'read_role'),
+                ).values('unifiedjobtemplate_ptr_id')
+            )
         )
 
     def can_start(self, obj, validate_license=True):
@@ -2561,8 +2565,8 @@ class UnifiedJobAccess(BaseAccess):
         org_auditor_qs = Organization.objects.filter(Q(admin_role__members=self.user) | Q(auditor_role__members=self.user))
         qs = self.model.objects.filter(
             Q(unified_job_template_id__in=UnifiedJobTemplate.accessible_pk_qs(self.user, 'read_role'))
-            | Q(inventoryupdate__inventory_source__inventory__id__in=inv_pk_qs)
-            | Q(adhoccommand__inventory__id__in=inv_pk_qs)
+            | Q(pk__in=InventoryUpdate.objects.filter(inventory_source__inventory__id__in=inv_pk_qs).values('pk'))
+            | Q(pk__in=AdHocCommand.objects.filter(inventory__id__in=inv_pk_qs).values('pk'))
             | Q(organization__in=org_auditor_qs)
         )
         return qs
@@ -2685,8 +2689,12 @@ class LabelAccess(BaseAccess):
     def filtered_queryset(self):
         return self.model.objects.filter(
             Q(organization__in=Organization.accessible_pk_qs(self.user, 'read_role'))
-            | Q(unifiedjobtemplate_labels__in=UnifiedJobTemplate.accessible_pk_qs(self.user, 'read_role'))
-        ).distinct()
+            | Q(
+                pk__in=UnifiedJobTemplate.labels.through.objects.filter(
+                    unifiedjobtemplate_id__in=UnifiedJobTemplate.accessible_pk_qs(self.user, 'read_role'),
+                ).values('label_id')
+            )
+        )
 
     @check_superuser
     def can_add(self, data):
