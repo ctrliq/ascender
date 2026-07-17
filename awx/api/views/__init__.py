@@ -4690,8 +4690,10 @@ class WorkflowApprovalDetail(UnifiedJobDeletionMixin, RetrieveDestroyAPIView):
 
 
 def _approval_vote_comment(request):
-    if isinstance(request.data, dict):
-        comment = request.data.get('comment', '')
+    # request.data may be a dict, QueryDict or other mapping depending on the parser
+    data = request.data
+    if hasattr(data, 'get'):
+        comment = data.get('comment', '')
         if isinstance(comment, str):
             return comment
     return ''

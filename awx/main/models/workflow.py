@@ -1353,7 +1353,13 @@ class WorkflowApproval(UnifiedJob, JobNotificationMixin):
 
     def approvals_received(self):
         # iterate so a prefetched votes cache is used when present
-        return len(set(vote.user_id for vote in self.votes.all() if vote.vote == 'approve'))
+        approvers = set()
+        for vote in self.votes.all():
+            if vote.vote == 'approve':
+                # user is SET_NULL on deletion; fall back to the denormalized
+                # username so the vote keeps counting toward the quorum
+                approvers.add(vote.user_id if vote.user_id is not None else vote.user_name)
+        return len(approvers)
 
     def has_vote_from(self, user):
         if not (user and getattr(user, 'id', None)):

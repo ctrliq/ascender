@@ -1,6 +1,11 @@
+from unittest import mock
+
 import pytest
 
+from django.http import QueryDict
+
 from awx.api.versioning import reverse
+from awx.api.views import _approval_vote_comment
 from awx.main.models import WorkflowJob, WorkflowJobTemplate, WorkflowApproval, WorkflowApprovalVote
 from awx.main.scheduler import TaskManager, DependencyManager, WorkflowManager
 
@@ -96,6 +101,28 @@ class TestApprovalQuorum:
         assert vote.user_name == alice.username
         assert vote.workflow_approval_name == approval.name
         assert vote.workflow_job_id == approval.workflow_job.id
+
+    def test_vote_comment_read_from_querydict(self):
+        # form-encoded bodies reach the view as a QueryDict, not a plain dict
+        fake_request = mock.Mock(data=QueryDict('comment=sent+as+a+form'))
+        assert _approval_vote_comment(fake_request) == 'sent as a form'
+        fake_request = mock.Mock(data=QueryDict(''))
+        assert _approval_vote_comment(fake_request) == ''
+
+    def test_quorum_survives_approver_deletion(self, spawn_approval, approver, post, alice, bob):
+        wfjt, approval = spawn_approval(required_approvals=2)
+        approver(wfjt, alice)
+        approver(wfjt, bob)
+
+        post(reverse('api:workflow_approval_approve', kwargs={'pk': approval.pk}), user=alice, expect=204)
+        alice.delete()
+        approval.refresh_from_db()
+        assert approval.approvals_received() == 1
+
+        post(reverse('api:workflow_approval_approve', kwargs={'pk': approval.pk}), user=bob, expect=204)
+        approval.refresh_from_db()
+        assert approval.status == 'successful'
+        assert approval.approvals_received() == 2
 
     def test_default_behavior_unchanged(self, spawn_approval, approver, post, alice):
         wfjt, approval = spawn_approval()
