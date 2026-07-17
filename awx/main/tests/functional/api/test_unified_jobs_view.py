@@ -145,3 +145,122 @@ def test_delete_ad_hoc_command_in_active_state(ad_hoc_command_factory, delete, a
     adhoc = ad_hoc_command_factory(initial_state=status)
     url = reverse('api:ad_hoc_command_detail', kwargs={'pk': adhoc.pk})
     delete(url, None, admin, expect=403)
+
+
+@pytest.fixture
+def job_with_heavy_fields(job_factory):
+    job = job_factory()
+    job.extra_vars = '{"some_var": "some_value"}'
+    job.artifacts = {"some_artifact": "some_value"}
+    job.save()
+    return job
+
+
+def _job_result(response, job_id):
+    for row in response.data['results']:
+        if row['id'] == job_id:
+            return row
+    raise AssertionError('job {} not found in {}'.format(job_id, [r['id'] for r in response.data['results']]))
+
+
+@pytest.mark.django_db
+def test_unified_jobs_list_excludes_heavy_fields_by_default(get, admin, job_with_heavy_fields):
+    response = get(reverse('api:unified_job_list') + '?id={}'.format(job_with_heavy_fields.id), admin, expect=200)
+    row = _job_result(response, job_with_heavy_fields.id)
+    assert 'artifacts' not in row
+    assert 'extra_vars' not in row
+
+
+@pytest.mark.django_db
+def test_unified_jobs_list_include_artifacts(get, admin, job_with_heavy_fields):
+    response = get(
+        reverse('api:unified_job_list') + '?id={}&include=artifacts'.format(job_with_heavy_fields.id),
+        admin,
+        expect=200,
+    )
+    row = _job_result(response, job_with_heavy_fields.id)
+    assert 'artifacts' in row
+    assert 'extra_vars' not in row
+
+
+@pytest.mark.django_db
+def test_unified_jobs_list_include_extra_vars(get, admin, job_with_heavy_fields):
+    response = get(
+        reverse('api:unified_job_list') + '?id={}&include=extra_vars'.format(job_with_heavy_fields.id),
+        admin,
+        expect=200,
+    )
+    row = _job_result(response, job_with_heavy_fields.id)
+    assert 'extra_vars' in row
+    assert 'artifacts' not in row
+
+
+@pytest.mark.django_db
+def test_unified_jobs_list_include_both(get, admin, job_with_heavy_fields):
+    response = get(
+        reverse('api:unified_job_list') + '?id={}&include=artifacts,extra_vars'.format(job_with_heavy_fields.id),
+        admin,
+        expect=200,
+    )
+    row = _job_result(response, job_with_heavy_fields.id)
+    assert 'artifacts' in row
+    assert 'extra_vars' in row
+
+
+@pytest.mark.django_db
+def test_unified_jobs_list_include_tolerates_whitespace(get, admin, job_with_heavy_fields):
+    response = get(
+        reverse('api:unified_job_list') + '?id={}&include=%20artifacts%20,%20extra_vars%20'.format(job_with_heavy_fields.id),
+        admin,
+        expect=200,
+    )
+    row = _job_result(response, job_with_heavy_fields.id)
+    assert 'artifacts' in row
+    assert 'extra_vars' in row
+
+
+@pytest.mark.django_db
+def test_unified_jobs_list_include_ignores_unknown(get, admin, job_with_heavy_fields):
+    response = get(
+        reverse('api:unified_job_list') + '?id={}&include=does_not_exist'.format(job_with_heavy_fields.id),
+        admin,
+        expect=200,
+    )
+    row = _job_result(response, job_with_heavy_fields.id)
+    assert 'artifacts' not in row
+    assert 'extra_vars' not in row
+
+
+@pytest.mark.django_db
+def test_unified_jobs_list_include_does_not_honor_always_stripped(get, admin, job_with_heavy_fields):
+    # Always-stripped fields like event_processing_finished, job_args, result_traceback
+    # must remain stripped regardless of the ?include= param — they cannot be re-included.
+    response = get(
+        reverse('api:unified_job_list') + '?id={}&include=job_args,result_traceback,event_processing_finished'.format(job_with_heavy_fields.id),
+        admin,
+        expect=200,
+    )
+    row = _job_result(response, job_with_heavy_fields.id)
+    assert 'event_processing_finished' not in row
+    assert 'job_args' not in row
+    assert 'result_traceback' not in row
+
+
+@pytest.mark.django_db
+def test_jobs_list_excludes_heavy_fields_by_default(get, admin, job_with_heavy_fields):
+    response = get(reverse('api:job_list') + '?id={}'.format(job_with_heavy_fields.id), admin, expect=200)
+    row = _job_result(response, job_with_heavy_fields.id)
+    assert 'artifacts' not in row
+    assert 'extra_vars' not in row
+
+
+@pytest.mark.django_db
+def test_jobs_list_include_extra_vars(get, admin, job_with_heavy_fields):
+    response = get(
+        reverse('api:job_list') + '?id={}&include=extra_vars'.format(job_with_heavy_fields.id),
+        admin,
+        expect=200,
+    )
+    row = _job_result(response, job_with_heavy_fields.id)
+    assert 'extra_vars' in row
+    assert 'artifacts' not in row

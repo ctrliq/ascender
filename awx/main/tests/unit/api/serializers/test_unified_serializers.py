@@ -39,7 +39,9 @@ def test_unified_job_detail_exclusive_fields():
     For each type, assert that the only fields allowed to be exclusive to
     detail view are the allowed types
     """
-    allowed_detail_fields = frozenset(('result_traceback', 'job_args', 'job_cwd', 'job_env', 'event_processing_finished', 'artifacts'))
+    allowed_detail_fields = frozenset(
+        ('result_traceback', 'job_args', 'job_cwd', 'job_env', 'event_processing_finished', 'artifacts', 'extra_vars', 'context_message')
+    )
     for cls in UnifiedJob.__subclasses__():
         list_serializer = getattr(serializers, '{}ListSerializer'.format(cls.__name__))
         detail_serializer = getattr(serializers, '{}Serializer'.format(cls.__name__))

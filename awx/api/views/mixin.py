@@ -216,3 +216,9 @@ class NoTruncateMixin(object):
         if self.request.query_params.get('no_truncate'):
             context.update(no_truncate=True)
         return context
+
+
+class UnifiedJobIncludeMixin(object):
+    # Reserve the name 'include' so we can use it as a query param. Otherwise, the rest-filters backend
+    # would treat it as a model field lookup.
+    rest_filters_reserved_names = ('include',)
