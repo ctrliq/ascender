@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('main', '0200_add_list_ordering'),
+        ('main', '0205_approval_context_template'),
     ]
 
     operations = [
