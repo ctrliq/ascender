@@ -3504,6 +3504,19 @@ class JobList(UnifiedJobIncludeMixin, ListAPIView):
     model = models.Job
     serializer_class = serializers.JobListSerializer
 
+    def get_queryset(self):
+        qs = super().get_queryset()
+        # extra_vars/artifacts are large columns that JobListSerializer omits
+        # from list responses unless requested via ?include=. Defer the ones
+        # that won't be serialized so the DB doesn't read their (potentially
+        # TOAST-ed) values. Only safe here because Job is queried directly
+        # (unlike the polymorphic UnifiedJobList).
+        requested = self.serializer_class.parse_requested_includes(self.request.query_params.get('include', ''))
+        to_defer = self.serializer_class.OPTIONAL_INCLUDE_FIELDS - requested
+        if to_defer:
+            qs = qs.defer(*sorted(to_defer))
+        return qs
+
 
 class JobDetail(UnifiedJobDeletionMixin, RetrieveDestroyAPIView):
     model = models.Job

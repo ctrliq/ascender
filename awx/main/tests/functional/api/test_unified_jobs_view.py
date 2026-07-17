@@ -264,3 +264,46 @@ def test_jobs_list_include_extra_vars(get, admin, job_with_heavy_fields):
     row = _job_result(response, job_with_heavy_fields.id)
     assert 'extra_vars' in row
     assert 'artifacts' not in row
+
+
+def _deferred_field_names(qs):
+    # queryset.query.deferred_loading is (names, defer_flag). When defer_flag is
+    # True the names are deferred; when False (an .only() was applied) the
+    # deferred set is every concrete field not in names.
+    names, defer = qs.query.deferred_loading
+    if defer:
+        return set(names)
+    all_fields = {f.name for f in qs.model._meta.concrete_fields}
+    return all_fields - set(names)
+
+
+def _job_list_queryset(user, querystring=''):
+    from rest_framework.request import Request
+    from rest_framework.test import APIRequestFactory
+
+    from awx.api.views import JobList
+
+    view = JobList()
+    view.request = Request(APIRequestFactory().get('/api/v2/jobs/' + querystring))
+    view.request.user = user
+    return view.get_queryset()
+
+
+@pytest.mark.django_db
+def test_jobs_list_queryset_defers_heavy_columns_by_default(admin):
+    deferred = _deferred_field_names(_job_list_queryset(admin))
+    assert {'extra_vars', 'artifacts'} <= deferred
+
+
+@pytest.mark.django_db
+def test_jobs_list_queryset_defers_only_unrequested_heavy_columns(admin):
+    deferred = _deferred_field_names(_job_list_queryset(admin, '?include=extra_vars'))
+    assert 'artifacts' in deferred
+    assert 'extra_vars' not in deferred
+
+
+@pytest.mark.django_db
+def test_jobs_list_queryset_defers_nothing_when_all_included(admin):
+    deferred = _deferred_field_names(_job_list_queryset(admin, '?include=extra_vars,artifacts'))
+    assert 'extra_vars' not in deferred
+    assert 'artifacts' not in deferred

@@ -907,13 +907,19 @@ class UnifiedJobListSerializer(UnifiedJobSerializer):
     class Meta:
         fields = ('*', '-job_args', '-job_cwd', '-job_env', '-result_traceback', '-event_processing_finished')
 
+    @classmethod
+    def parse_requested_includes(cls, raw):
+        # Single source of truth for parsing the ?include= query param, shared
+        # with UnifiedJobIncludeMixin so the view-level defer and the
+        # serializer-level field stripping never drift apart.
+        requested = {name.strip() for name in (raw or '').split(',') if name.strip()}
+        return frozenset(requested) & cls.OPTIONAL_INCLUDE_FIELDS
+
     def _requested_includes(self):
         request = self.context.get('request')
         if request is None:
             return frozenset()
-        raw = request.query_params.get('include', '')
-        requested = {name.strip() for name in raw.split(',') if name.strip()}
-        return frozenset(requested) & self.OPTIONAL_INCLUDE_FIELDS
+        return self.parse_requested_includes(request.query_params.get('include', ''))
 
     def get_field_names(self, declared_fields, info):
         field_names = super(UnifiedJobListSerializer, self).get_field_names(declared_fields, info)
