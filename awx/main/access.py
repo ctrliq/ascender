@@ -2513,7 +2513,7 @@ class UnifiedJobTemplateAccess(BaseAccess):
             Q(pk__in=self.model.accessible_pk_qs(self.user, 'read_role'))
             | Q(
                 pk__in=InventorySource.objects.filter(
-                    inventory__id__in=Inventory._accessible_pk_qs(Inventory, self.user, 'read_role'),
+                    inventory_id__in=Inventory._accessible_pk_qs(Inventory, self.user, 'read_role'),
                 ).values('unifiedjobtemplate_ptr_id')
             )
         )
@@ -2565,8 +2565,8 @@ class UnifiedJobAccess(BaseAccess):
         org_auditor_qs = Organization.objects.filter(Q(admin_role__members=self.user) | Q(auditor_role__members=self.user))
         qs = self.model.objects.filter(
             Q(unified_job_template_id__in=UnifiedJobTemplate.accessible_pk_qs(self.user, 'read_role'))
-            | Q(pk__in=InventoryUpdate.objects.filter(inventory_source__inventory__id__in=inv_pk_qs).values('pk'))
-            | Q(pk__in=AdHocCommand.objects.filter(inventory__id__in=inv_pk_qs).values('pk'))
+            | Q(pk__in=InventoryUpdate.objects.filter(inventory_source__inventory_id__in=inv_pk_qs).values('pk'))
+            | Q(pk__in=AdHocCommand.objects.filter(inventory_id__in=inv_pk_qs).values('pk'))
             | Q(organization__in=org_auditor_qs)
         )
         return qs
