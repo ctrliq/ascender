@@ -896,14 +896,37 @@ class UnifiedJobSerializer(BaseSerializer):
 
 
 class UnifiedJobListSerializer(UnifiedJobSerializer):
+    # Heavy fields that can hold large amounts of data. They are stripped from
+    # list responses by default to keep payloads small, and can be requested
+    # back explicitly (and only these) via the ?include=<field>[,<field>] query
+    # param handled by UnifiedJobIncludeMixin.
+    OPTIONAL_INCLUDE_FIELDS = frozenset({'artifacts', 'extra_vars'})
+
+    _ALWAYS_STRIPPED_FIELDS = frozenset({'job_args', 'job_cwd', 'job_env', 'result_traceback', 'event_processing_finished'})
+
     class Meta:
-        fields = ('*', '-job_args', '-job_cwd', '-job_env', '-result_traceback', '-event_processing_finished', '-artifacts')
+        fields = ('*', '-job_args', '-job_cwd', '-job_env', '-result_traceback', '-event_processing_finished')
+
+    @classmethod
+    def parse_requested_includes(cls, raw):
+        # Single source of truth for parsing the ?include= query param, shared
+        # with UnifiedJobIncludeMixin so the view-level defer and the
+        # serializer-level field stripping never drift apart.
+        requested = {name.strip() for name in (raw or '').split(',') if name.strip()}
+        return frozenset(requested) & cls.OPTIONAL_INCLUDE_FIELDS
+
+    def _requested_includes(self):
+        request = self.context.get('request')
+        if request is None:
+            return frozenset()
+        return self.parse_requested_includes(request.query_params.get('include', ''))
 
     def get_field_names(self, declared_fields, info):
         field_names = super(UnifiedJobListSerializer, self).get_field_names(declared_fields, info)
         # Meta multiple inheritance and -field_name options don't seem to be
         # taking effect above, so remove the undesired fields here.
-        return tuple(x for x in field_names if x not in ('job_args', 'job_cwd', 'job_env', 'result_traceback', 'event_processing_finished', 'artifacts'))
+        strip = self._ALWAYS_STRIPPED_FIELDS | (self.OPTIONAL_INCLUDE_FIELDS - self._requested_includes())
+        return tuple(x for x in field_names if x not in strip)
 
     def get_types(self):
         if type(self) is UnifiedJobListSerializer:
