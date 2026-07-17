@@ -55,6 +55,7 @@ def test_pre_post_run_hook_facts(mock_create_partition, mock_facts_settings, fin
     org = Organization(pk=1)
     proj = Project(pk=1, organization=org)
     job = mock.MagicMock(spec=Job, use_fact_cache=True, project=proj, organization=org, job_slice_number=1, job_slice_count=1)
+    job.job_slice_pinned_hosts_list = []
     job.inventory = mock_inventory
     job.execution_environment = execution_environment
     job.get_hosts_for_fact_cache = Job.get_hosts_for_fact_cache.__get__(job)  # to run original method
@@ -102,6 +103,7 @@ def test_pre_post_run_hook_facts_deleted_sliced(mock_create_partition, mock_fact
     org = Organization(pk=1)
     proj = Project(pk=1, organization=org)
     job = mock.MagicMock(spec=Job, use_fact_cache=True, project=proj, organization=org, job_slice_number=1, job_slice_count=3)
+    job.job_slice_pinned_hosts_list = []
     job.inventory = mock_inventory
     job.execution_environment = execution_environment
     job.get_hosts_for_fact_cache = Job.get_hosts_for_fact_cache.__get__(job)  # to run original method
