@@ -23,6 +23,9 @@ from django.utils.timezone import now
 from django.utils.encoding import smart_str
 from django.contrib.contenttypes.models import ContentType
 
+# psycopg
+from psycopg import sql
+
 # REST Framework
 from rest_framework.exceptions import ParseError
 
@@ -1141,17 +1144,23 @@ class UnifiedJob(
                         raise StdoutMaxBytesExceeded(total, max_supported)
 
                 tbl = self._meta.db_table + 'event'
-                created_by_cond = ''
+                where_parts = [
+                    sql.SQL('{} = {}').format(sql.Identifier(self.event_parent_key), sql.Literal(self.id)),
+                    sql.SQL("stdout != ''"),
+                ]
                 if self.has_unpartitioned_events:
-                    tbl = f'_unpartitioned_{tbl}'
+                    tbl = '_unpartitioned_' + tbl
                 else:
-                    created_by_cond = f"job_created='{self.created.isoformat()}' AND "
+                    where_parts.insert(0, sql.SQL('job_created = {}').format(sql.Literal(self.created)))
 
-                sql = f"copy (select stdout from {tbl} where {created_by_cond}{self.event_parent_key}={self.id} and stdout != '' order by start_line) to stdout"  # nosql
+                copy_sql = sql.SQL('COPY (SELECT stdout FROM {} WHERE {} ORDER BY start_line) TO STDOUT').format(
+                    sql.Identifier(tbl),
+                    sql.SQL(' AND ').join(where_parts),
+                )
                 # psycopg3's copy writes bytes, but callers of this
                 # function assume a str-based fd will be returned; decode
                 # .write() calls on the fly to maintain this interface
-                with cursor.copy(sql) as copy:
+                with cursor.copy(copy_sql) as copy:
                     while data := copy.read():
                         fd.write(smart_str(bytes(data)))
 
