@@ -31,6 +31,7 @@ import {
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import { AuthAPI, RootAPI, MeAPI } from 'api';
 import { useSession } from 'contexts/Session';
+import { applyTheme, getSavedThemeId, clearSessionTheme } from 'themeRegistry';
 import LoadingSpinner from 'components/LoadingSpinner';
 import { SESSION_REDIRECT_URL, SESSION_USER_ID } from '../../constants';
 import '../../login.css';
@@ -45,6 +46,14 @@ function AWXLogin({ alt, isAuthenticated }) {
   const { authRedirectTo, isSessionExpired, isRedirectLinkReceived } =
     useSession();
   const isNewUser = useRef(true);
+
+  useEffect(() => {
+    clearSessionTheme();
+    applyTheme('default', false);
+    return () => {
+      applyTheme(getSavedThemeId());
+    };
+  }, []);
 
   const {
     isLoading: isCustomLoginInfoLoading,
