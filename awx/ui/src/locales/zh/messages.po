@@ -3248,21 +3248,6 @@ msgstr "数据保留的周期"
 msgid "This workflow does not have any nodes configured."
 msgstr "此工作流没有配置任何节点。"
 
-#: screens/Host/HostGroups/HostGroupsList.js:214
-msgid ""
-"\n"
-"                  Note that you may still see the group in the list after\n"
-"                  disassociating if the host is also a member of that group’s\n"
-"                  children.  This list shows all groups the host is associated\n"
-"                  with directly and indirectly.\n"
-"                "
-msgstr ""
-"\n"
-"                  请注意，如果主机也是该组子级的成员，则在\n"
-"                  取消关联后，您仍可能在列表中看到该组。此列表显示主机直接和\n"
-"                  间接关联的所有组。\n"
-"                "
-
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.js:42
 msgid "Click this button to verify connection to the secret management system using the selected credential and specified inputs."
 msgstr "点击这个按钮使用所选凭证和指定的输入验证到 secret 管理系统的连接。"
@@ -3272,7 +3257,7 @@ msgstr "点击这个按钮使用所选凭证和指定的输入验证到 secret �
 msgid "Project Sync"
 msgstr "项目同步"
 
-#: screens/Host/HostGroups/HostGroupsList.js:239
+#: screens/Host/HostGroups/HostGroupsList.js:234
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.js:250
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:265
 msgid "Select Groups"
@@ -4393,7 +4378,7 @@ msgstr "查看机构详情"
 #: screens/Credential/CredentialList/CredentialList.js:215
 #: screens/Host/HostDetail/HostDetail.js:55
 #: screens/Host/HostDetail/HostDetail.js:126
-#: screens/Host/HostGroups/HostGroupsList.js:246
+#: screens/Host/HostGroups/HostGroupsList.js:241
 #: screens/Host/HostList/HostList.js:233
 #: screens/HostMetrics/HostMetricsDeleteButton.js:104
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:367
@@ -6343,6 +6328,7 @@ msgstr "扩展作业事件"
 msgid "LDAP3"
 msgstr "LDAP3"
 
+#: screens/Host/HostGroups/HostGroupsList.js:214
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.js:231
 msgid "Note that you may still see the group in the list after disassociating if the host is also a member of that group’s children.  This list shows all groups the host is associated with directly and indirectly."
 msgstr "请注意，如果房东/体验达人也是该组的子级成员，则在取消关联后，您仍可能在列表中看到该组。此列表显示房东直接或间接关联的所有群组。"
@@ -7440,7 +7426,7 @@ msgstr "使用 GitHub Organizations 登录"
 msgid "Redirecting to subscription detail"
 msgstr "重定向到订阅详情"
 
-#: screens/Host/HostGroups/HostGroupsList.js:251
+#: screens/Host/HostGroups/HostGroupsList.js:246
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.js:262
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:277
 msgid "Failed to disassociate one or more groups."
@@ -11117,7 +11103,7 @@ msgstr "工作流节点查看模式"
 msgid "Leave this field blank to make the execution environment globally available."
 msgstr "将此字段留空以使执行环境全局可用。"
 
-#: screens/Host/HostGroups/HostGroupsList.js:250
+#: screens/Host/HostGroups/HostGroupsList.js:245
 #: screens/InstanceGroup/Instances/InstanceList.js:389
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.js:297
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.js:261
@@ -11127,7 +11113,7 @@ msgid "Failed to associate."
 msgstr "关联失败。"
 
 #: screens/Host/Host.js:68
-#: screens/Host/HostGroups/HostGroupsList.js:233
+#: screens/Host/HostGroups/HostGroupsList.js:228
 #: screens/Host/Hosts.js:32
 #: screens/Inventory/ConstructedInventory.js:70
 #: screens/Inventory/FederatedInventory.js:70

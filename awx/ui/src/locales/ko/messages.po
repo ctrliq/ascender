@@ -3248,21 +3248,6 @@ msgstr "데이터 보존 기간"
 msgid "This workflow does not have any nodes configured."
 msgstr "이 워크플로에는 노드가 구성되어 있지 않습니다."
 
-#: screens/Host/HostGroups/HostGroupsList.js:214
-msgid ""
-"\n"
-"                  Note that you may still see the group in the list after\n"
-"                  disassociating if the host is also a member of that group’s\n"
-"                  children.  This list shows all groups the host is associated\n"
-"                  with directly and indirectly.\n"
-"                "
-msgstr ""
-"\n"
-"                  연결을 해제한 후에도 호스트가 해당 그룹의 자식의\n"
-"                  구성원인 경우 목록에 그룹이 계속 표시될 수 있습니다.  이 목록은 호스트가 직접 및 간접적으로 연결된\n"
-"                  모든 그룹을 표시합니다.\n"
-"                "
-
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.js:42
 msgid "Click this button to verify connection to the secret management system using the selected credential and specified inputs."
 msgstr "이 버튼을 클릭하여 선택한 인증 정보 및 지정된 입력을 사용하여 시크릿 관리 시스템에 대한 연결을 확인합니다."
@@ -3272,7 +3257,7 @@ msgstr "이 버튼을 클릭하여 선택한 인증 정보 및 지정된 입력�
 msgid "Project Sync"
 msgstr "프로젝트 동기화"
 
-#: screens/Host/HostGroups/HostGroupsList.js:239
+#: screens/Host/HostGroups/HostGroupsList.js:234
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.js:250
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:265
 msgid "Select Groups"
@@ -4393,7 +4378,7 @@ msgstr "조직 세부 정보 보기"
 #: screens/Credential/CredentialList/CredentialList.js:215
 #: screens/Host/HostDetail/HostDetail.js:55
 #: screens/Host/HostDetail/HostDetail.js:126
-#: screens/Host/HostGroups/HostGroupsList.js:246
+#: screens/Host/HostGroups/HostGroupsList.js:241
 #: screens/Host/HostList/HostList.js:233
 #: screens/HostMetrics/HostMetricsDeleteButton.js:104
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:367
@@ -6343,6 +6328,7 @@ msgstr "작업 이벤트 확장"
 msgid "LDAP3"
 msgstr "LDAP3"
 
+#: screens/Host/HostGroups/HostGroupsList.js:214
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.js:231
 msgid "Note that you may still see the group in the list after disassociating if the host is also a member of that group’s children.  This list shows all groups the host is associated with directly and indirectly."
 msgstr "호스트도 해당 그룹의 자녀 중 하나인 경우, 연결 해제 후에도 목록에 그룹이 표시될 수 있습니다. 이 목록에는 호스트가 직간접적으로 연관된 모든 그룹이 표시됩니다."
@@ -7440,7 +7426,7 @@ msgstr "GitHub 조직으로 로그인"
 msgid "Redirecting to subscription detail"
 msgstr "서브스크립션 세부 정보로 리디렉션"
 
-#: screens/Host/HostGroups/HostGroupsList.js:251
+#: screens/Host/HostGroups/HostGroupsList.js:246
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.js:262
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:277
 msgid "Failed to disassociate one or more groups."
@@ -11117,7 +11103,7 @@ msgstr "워크플로우 노드 보기 모달"
 msgid "Leave this field blank to make the execution environment globally available."
 msgstr "이 필드를 비워 두고 실행 환경을 전역적으로 사용할 수 있도록 합니다."
 
-#: screens/Host/HostGroups/HostGroupsList.js:250
+#: screens/Host/HostGroups/HostGroupsList.js:245
 #: screens/InstanceGroup/Instances/InstanceList.js:389
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.js:297
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.js:261
@@ -11127,7 +11113,7 @@ msgid "Failed to associate."
 msgstr "연결에 실패했습니다."
 
 #: screens/Host/Host.js:68
-#: screens/Host/HostGroups/HostGroupsList.js:233
+#: screens/Host/HostGroups/HostGroupsList.js:228
 #: screens/Host/Hosts.js:32
 #: screens/Inventory/ConstructedInventory.js:70
 #: screens/Inventory/FederatedInventory.js:70

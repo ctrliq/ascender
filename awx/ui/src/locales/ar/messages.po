@@ -3251,22 +3251,6 @@ msgstr "فترة الاحتفاظ بالبيانات"
 msgid "This workflow does not have any nodes configured."
 msgstr "لا يحتوي سير العمل هذا على أي عقد مُكوّنة."
 
-#: screens/Host/HostGroups/HostGroupsList.js:214
-msgid ""
-"\n"
-"                  Note that you may still see the group in the list after\n"
-"                  disassociating if the host is also a member of that group’s\n"
-"                  children.  This list shows all groups the host is associated\n"
-"                  with directly and indirectly.\n"
-"                "
-msgstr ""
-"\n"
-"                  لاحظ أنك قد لا تزال ترى المجموعة في القائمة بعد\n"
-"                  إلغاء الربط إذا كان المضيف عضوًا أيضًا في العناصر\n"
-"                  الفرعية لتلك المجموعة. تعرض هذه القائمة جميع المجموعات التي يرتبط بها المضيف\n"
-"                  بشكل مباشر وغير مباشر.\n"
-"                "
-
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.js:42
 msgid "Click this button to verify connection to the secret management system using the selected credential and specified inputs."
 msgstr "انقر على هذا الزر للتحقق من الاتصال بنظام إدارة الأسرار باستخدام بيانات الاعتماد المحددة والمدخلات المُحددة."
@@ -3276,7 +3260,7 @@ msgstr "انقر على هذا الزر للتحقق من الاتصال بنظ�
 msgid "Project Sync"
 msgstr "مزامنة المشروع"
 
-#: screens/Host/HostGroups/HostGroupsList.js:239
+#: screens/Host/HostGroups/HostGroupsList.js:234
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.js:250
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:265
 msgid "Select Groups"
@@ -4397,7 +4381,7 @@ msgstr "عرض تفاصيل المؤسسة"
 #: screens/Credential/CredentialList/CredentialList.js:215
 #: screens/Host/HostDetail/HostDetail.js:55
 #: screens/Host/HostDetail/HostDetail.js:126
-#: screens/Host/HostGroups/HostGroupsList.js:246
+#: screens/Host/HostGroups/HostGroupsList.js:241
 #: screens/Host/HostList/HostList.js:233
 #: screens/HostMetrics/HostMetricsDeleteButton.js:104
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:367
@@ -6347,6 +6331,7 @@ msgstr "توسيع أحداث المهمة"
 msgid "LDAP3"
 msgstr "LDAP3"
 
+#: screens/Host/HostGroups/HostGroupsList.js:214
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.js:231
 msgid "Note that you may still see the group in the list after disassociating if the host is also a member of that group’s children.  This list shows all groups the host is associated with directly and indirectly."
 msgstr "لاحظ أنك قد لا تزال ترى المجموعة في القائمة بعد إلغاء الربط إذا كان المضيف عضوًا أيضًا في العناصر الفرعية لتلك المجموعة. تعرض هذه القائمة جميع المجموعات التي يرتبط بها المضيف بشكل مباشر وغير مباشر."
@@ -7444,7 +7429,7 @@ msgstr "تسجيل الدخول باستخدام GitHub Organizations"
 msgid "Redirecting to subscription detail"
 msgstr "جارٍ إعادة التوجيه إلى تفاصيل الاشتراك"
 
-#: screens/Host/HostGroups/HostGroupsList.js:251
+#: screens/Host/HostGroups/HostGroupsList.js:246
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.js:262
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:277
 msgid "Failed to disassociate one or more groups."
@@ -11122,7 +11107,7 @@ msgstr "نافذة عرض عقدة سير العمل"
 msgid "Leave this field blank to make the execution environment globally available."
 msgstr "اترك هذا الحقل فارغًا لجعل بيئة التنفيذ متاحة عالميًا."
 
-#: screens/Host/HostGroups/HostGroupsList.js:250
+#: screens/Host/HostGroups/HostGroupsList.js:245
 #: screens/InstanceGroup/Instances/InstanceList.js:389
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.js:297
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.js:261
@@ -11132,7 +11117,7 @@ msgid "Failed to associate."
 msgstr "فشل الربط."
 
 #: screens/Host/Host.js:68
-#: screens/Host/HostGroups/HostGroupsList.js:233
+#: screens/Host/HostGroups/HostGroupsList.js:228
 #: screens/Host/Hosts.js:32
 #: screens/Inventory/ConstructedInventory.js:70
 #: screens/Inventory/FederatedInventory.js:70

@@ -3248,22 +3248,6 @@ msgstr "Bewaartermijn van gegevens"
 msgid "This workflow does not have any nodes configured."
 msgstr "Er zijn voor deze workflow geen knooppunten geconfigureerd."
 
-#: screens/Host/HostGroups/HostGroupsList.js:214
-msgid ""
-"\n"
-"                  Note that you may still see the group in the list after\n"
-"                  disassociating if the host is also a member of that group’s\n"
-"                  children.  This list shows all groups the host is associated\n"
-"                  with directly and indirectly.\n"
-"                "
-msgstr ""
-"\n"
-"                  Houd er rekening mee dat u de groep na het opheffen van de koppeling\n"
-"                  mogelijk nog steeds in de lijst ziet als de host ook lid is van de\n"
-"                  onderliggende items van die groep.  Deze lijst toont alle groepen waaraan de host\n"
-"                  direct en indirect is gekoppeld.\n"
-"                "
-
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.js:42
 msgid "Click this button to verify connection to the secret management system using the selected credential and specified inputs."
 msgstr "Klik op deze knop om de verbinding met het geheimbeheersysteem te verifiëren met behulp van de geselecteerde referenties en de opgegeven inputs."
@@ -3273,7 +3257,7 @@ msgstr "Klik op deze knop om de verbinding met het geheimbeheersysteem te verifi
 msgid "Project Sync"
 msgstr "Projectsynchronisatie"
 
-#: screens/Host/HostGroups/HostGroupsList.js:239
+#: screens/Host/HostGroups/HostGroupsList.js:234
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.js:250
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:265
 msgid "Select Groups"
@@ -4394,7 +4378,7 @@ msgstr "Organisatiedetails weergeven"
 #: screens/Credential/CredentialList/CredentialList.js:215
 #: screens/Host/HostDetail/HostDetail.js:55
 #: screens/Host/HostDetail/HostDetail.js:126
-#: screens/Host/HostGroups/HostGroupsList.js:246
+#: screens/Host/HostGroups/HostGroupsList.js:241
 #: screens/Host/HostList/HostList.js:233
 #: screens/HostMetrics/HostMetricsDeleteButton.js:104
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:367
@@ -6344,6 +6328,7 @@ msgstr "Taakgebeurtenissen uitklappen"
 msgid "LDAP3"
 msgstr "LDAP3"
 
+#: screens/Host/HostGroups/HostGroupsList.js:214
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.js:231
 msgid "Note that you may still see the group in the list after disassociating if the host is also a member of that group’s children.  This list shows all groups the host is associated with directly and indirectly."
 msgstr "Houd er rekening mee dat je de groep na het loskoppelen nog steeds in de lijst kunt zien als de host ook lid is van de kinderen van die groep.  Deze lijst toont alle groepen waaraan de verhuurder direct en indirect is gekoppeld."
@@ -7441,7 +7426,7 @@ msgstr "Aanmelden met GitHub-organisaties"
 msgid "Redirecting to subscription detail"
 msgstr "Doorverwijzen naar abonnementsdetails"
 
-#: screens/Host/HostGroups/HostGroupsList.js:251
+#: screens/Host/HostGroups/HostGroupsList.js:246
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.js:262
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:277
 msgid "Failed to disassociate one or more groups."
@@ -11118,7 +11103,7 @@ msgstr "Modis Weergave workflowknooppunt"
 msgid "Leave this field blank to make the execution environment globally available."
 msgstr "Laat dit veld leeg om de uitvoeringsomgeving globaal beschikbaar te maken."
 
-#: screens/Host/HostGroups/HostGroupsList.js:250
+#: screens/Host/HostGroups/HostGroupsList.js:245
 #: screens/InstanceGroup/Instances/InstanceList.js:389
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.js:297
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.js:261
@@ -11128,7 +11113,7 @@ msgid "Failed to associate."
 msgstr "Kan niet koppelen."
 
 #: screens/Host/Host.js:68
-#: screens/Host/HostGroups/HostGroupsList.js:233
+#: screens/Host/HostGroups/HostGroupsList.js:228
 #: screens/Host/Hosts.js:32
 #: screens/Inventory/ConstructedInventory.js:70
 #: screens/Inventory/FederatedInventory.js:70

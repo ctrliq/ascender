@@ -3251,22 +3251,6 @@ msgstr "डेटा प्रतिधारण अवधि"
 msgid "This workflow does not have any nodes configured."
 msgstr "इस वर्कफ़्लो में कोई नोड कॉन्फ़िगर नहीं किया गया है।"
 
-#: screens/Host/HostGroups/HostGroupsList.js:214
-msgid ""
-"\n"
-"                  Note that you may still see the group in the list after\n"
-"                  disassociating if the host is also a member of that group’s\n"
-"                  children.  This list shows all groups the host is associated\n"
-"                  with directly and indirectly.\n"
-"                "
-msgstr ""
-"\n"
-"                  ध्यान दें कि अलग करने के बाद भी आप सूची में समूह देख\n"
-"                  सकते हैं यदि होस्ट उस समूह के चाइल्ड का भी सदस्य\n"
-"                  है। यह सूची उन सभी समूहों को दिखाती है जिनसे होस्ट\n"
-"                  प्रत्यक्ष और अप्रत्यक्ष रूप से संबद्ध है।\n"
-"                "
-
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.js:42
 msgid "Click this button to verify connection to the secret management system using the selected credential and specified inputs."
 msgstr "चयनित क्रेडेंशियल और निर्दिष्ट इनपुट का उपयोग करके सीक्रेट प्रबंधन सिस्टम से कनेक्शन सत्यापित करने के लिए इस बटन पर क्लिक करें।"
@@ -3276,7 +3260,7 @@ msgstr "चयनित क्रेडेंशियल और निर्द
 msgid "Project Sync"
 msgstr "प्रोजेक्ट सिंक"
 
-#: screens/Host/HostGroups/HostGroupsList.js:239
+#: screens/Host/HostGroups/HostGroupsList.js:234
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.js:250
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:265
 msgid "Select Groups"
@@ -4397,7 +4381,7 @@ msgstr "संगठन विवरण देखें"
 #: screens/Credential/CredentialList/CredentialList.js:215
 #: screens/Host/HostDetail/HostDetail.js:55
 #: screens/Host/HostDetail/HostDetail.js:126
-#: screens/Host/HostGroups/HostGroupsList.js:246
+#: screens/Host/HostGroups/HostGroupsList.js:241
 #: screens/Host/HostList/HostList.js:233
 #: screens/HostMetrics/HostMetricsDeleteButton.js:104
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:367
@@ -6347,6 +6331,7 @@ msgstr "जॉब इवेंट विस्तृत करें"
 msgid "LDAP3"
 msgstr "LDAP3"
 
+#: screens/Host/HostGroups/HostGroupsList.js:214
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.js:231
 msgid "Note that you may still see the group in the list after disassociating if the host is also a member of that group’s children.  This list shows all groups the host is associated with directly and indirectly."
 msgstr "ध्यान दें कि अलग करने के बाद भी आप सूची में समूह देख सकते हैं यदि होस्ट उस समूह के चाइल्ड का भी सदस्य है। यह सूची उन सभी समूहों को दिखाती है जिनसे होस्ट प्रत्यक्ष और अप्रत्यक्ष रूप से संबद्ध है।"
@@ -7444,7 +7429,7 @@ msgstr "GitHub Organizations से साइन इन करें"
 msgid "Redirecting to subscription detail"
 msgstr "सदस्यता विवरण पर रीडायरेक्ट किया जा रहा है"
 
-#: screens/Host/HostGroups/HostGroupsList.js:251
+#: screens/Host/HostGroups/HostGroupsList.js:246
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.js:262
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:277
 msgid "Failed to disassociate one or more groups."
@@ -11122,7 +11107,7 @@ msgstr "वर्कफ़्लो नोड दृश्य मोडल"
 msgid "Leave this field blank to make the execution environment globally available."
 msgstr "निष्पादन वातावरण को वैश्विक रूप से उपलब्ध बनाने के लिए इस फ़ील्ड को रिक्त छोड़ें।"
 
-#: screens/Host/HostGroups/HostGroupsList.js:250
+#: screens/Host/HostGroups/HostGroupsList.js:245
 #: screens/InstanceGroup/Instances/InstanceList.js:389
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.js:297
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.js:261
@@ -11132,7 +11117,7 @@ msgid "Failed to associate."
 msgstr "संबद्ध करने में विफल।"
 
 #: screens/Host/Host.js:68
-#: screens/Host/HostGroups/HostGroupsList.js:233
+#: screens/Host/HostGroups/HostGroupsList.js:228
 #: screens/Host/Hosts.js:32
 #: screens/Inventory/ConstructedInventory.js:70
 #: screens/Inventory/FederatedInventory.js:70

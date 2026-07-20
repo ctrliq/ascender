@@ -211,12 +211,7 @@ function HostGroupsList({ host }) {
                 onDisassociate={handleDisassociate}
                 itemsToDisassociate={selected}
                 modalTitle={t`Disassociate group from host?`}
-                modalNote={t`
-                  Note that you may still see the group in the list after
-                  disassociating if the host is also a member of that group’s
-                  children.  This list shows all groups the host is associated
-                  with directly and indirectly.
-                `}
+                modalNote={t`Note that you may still see the group in the list after disassociating if the host is also a member of that group’s children.  This list shows all groups the host is associated with directly and indirectly.`}
               />,
             ]}
           />
