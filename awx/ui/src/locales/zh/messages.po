@@ -1041,6 +1041,10 @@ msgstr "运行状况检查是异步任务。请参阅"
 msgid "Cancel subscription edit"
 msgstr "取消订阅编辑"
 
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:19
+msgid "Prompt for credentials on launch."
+msgstr "启动时提示输入凭证。"
+
 #: screens/Inventory/InventoryGroups/InventoryGroupItem.js:37
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupItem.js:43
 msgid "Edit group"
@@ -1249,6 +1253,10 @@ msgstr "您确定要取消此作业吗？"
 #: screens/Setting/shared/RevertButton.js:42
 msgid "Revert to factory default."
 msgstr "恢复到工厂默认值。"
+
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:26
+msgid "Prompt for job slice count on launch."
+msgstr "启动时提示输入作业切片数。"
 
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:134
 msgid "Filter by failed jobs"
@@ -1948,6 +1956,10 @@ msgstr "密钥"
 msgid "Username"
 msgstr "用户名"
 
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:8
+msgid "The organization that owns this workflow job template."
+msgstr "拥有此工作流作业模板的组织。"
+
 #: components/RelatedTemplateList/RelatedTemplateList.js:225
 msgid "Deleting these templates could impact some workflow nodes that rely on them. Are you sure you want to delete anyway?"
 msgstr "删除这些模板可能会影响依赖它们的一些工作流节点。您确定要删除吗？"
@@ -2084,6 +2096,10 @@ msgstr "删除智能清单"
 msgid "Show"
 msgstr "显示"
 
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:31
+msgid "Webhook key for this workflow job template."
+msgstr "此工作流作业模板的 Webhook 密钥。"
+
 #: components/ResourceAccessList/ResourceAccessList.js:257
 msgid "Failed to assign roles properly"
 msgstr "正确分配角色失败"
@@ -2113,6 +2129,10 @@ msgstr "{0, plural, one {This credential type is currently being used by some cr
 #: screens/User/shared/UserForm.js:119
 msgid "Password"
 msgstr "密码"
+
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:13
+msgid "Allow simultaneous runs of this workflow job template."
+msgstr "允许此工作流作业模板同时运行。"
 
 #: screens/Inventory/FederatedInventory.js:201
 msgid "View Federated Inventory Details"
@@ -2858,6 +2878,10 @@ msgstr "事实"
 #: components/PaginatedTable/PaginatedTable.js:46
 msgid "Items"
 msgstr "项"
+
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:7
+msgid "Select the inventory containing the hosts you want this workflow to manage."
+msgstr "选择包含您希望此工作流管理的主机的清单。"
 
 #: screens/Instances/InstanceDetail/InstanceDetail.js:427
 #: screens/Instances/InstanceList/InstanceList.js:273
@@ -4221,6 +4245,10 @@ msgstr "源控制分支/标签/提交"
 msgid "This will cancel all subsequent nodes in this workflow"
 msgstr "这将取消此工作流中的所有后续节点"
 
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:28
+msgid "Prompt for diff mode on launch."
+msgstr "启动时提示输入差异模式。"
+
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:341
 msgid "Client Identifier"
 msgstr "客户端标识符"
@@ -4725,6 +4753,10 @@ msgstr "系统警告"
 #: screens/Organization/Organizations.js:35
 msgid "Execution Environments"
 msgstr "执行环境"
+
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:20
+msgid "Prompt for job type on launch."
+msgstr "启动时提示输入作业类型。"
 
 #: components/JobList/JobListItem.js:217
 #: components/JobList/JobListItem.js:223
@@ -5452,6 +5484,10 @@ msgstr "没有可用的 JSON"
 msgid "Destination channels or users"
 msgstr "目标频道或用户"
 
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:29
+msgid "Webhook service for this workflow job template."
+msgstr "此工作流作业模板的 Webhook 服务。"
+
 #: screens/Job/JobOutput/shared/OutputToolbar.js:126
 msgid "Play Count"
 msgstr "play 数量"
@@ -5683,6 +5719,10 @@ msgstr "取消删除"
 #: screens/Inventory/shared/ConstructedInventoryHint.js:258
 msgid "Nested groups inventory definition:"
 msgstr "嵌套组清单定义："
+
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:15
+msgid "Prompt for limit on launch."
+msgstr "启动时提示输入限制。"
 
 #: components/JobList/JobListCancelButton.js:96
 msgid "Cancel selected job"
@@ -6098,6 +6138,10 @@ msgstr "添加用户权限"
 #: components/Schedule/shared/ScheduleFormFields.js:184
 msgid "Exceptions"
 msgstr "例外"
+
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:11
+msgid "Select a branch for the workflow."
+msgstr "为工作流选择一个分支。"
 
 #: screens/Template/Survey/SurveyQuestionForm.js:262
 msgid "Refer to the"
@@ -6679,6 +6723,10 @@ msgstr "GitHub Default"
 msgid "Maximum"
 msgstr "最大值"
 
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:5
+msgid "Name of the workflow job template."
+msgstr "工作流作业模板的名称。"
+
 #: screens/Inventory/InventoryList/InventoryList.js:243
 msgid "Sync Status"
 msgstr "同步状态"
@@ -6720,6 +6768,10 @@ msgstr "选择 Playbook 目录"
 msgid "Workflow Job Template"
 msgstr "工作流作业模板"
 
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:18
+msgid "Prompt for labels on launch."
+msgstr "启动时提示输入标签。"
+
 #: screens/SubscriptionUsage/SubscriptionUsageChart.js:118
 #: screens/SubscriptionUsage/SubscriptionUsageChart.js:169
 msgid "Past three years"
@@ -6737,6 +6789,10 @@ msgstr "{0, plural, one {This approval cannot be deleted due to insufficient per
 #: components/VerbositySelectField/VerbositySelectField.js:20
 msgid "2 (More Verbose)"
 msgstr "2（更多详细内容）"
+
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:32
+msgid "Webhook credential for this workflow job template."
+msgstr "此工作流作业模板的 Webhook 凭证。"
 
 #: components/Lookup/HostFilterLookup.js:358
 msgid "Populate the hosts for this inventory by using a search\n"
@@ -6895,6 +6951,10 @@ msgstr "主机已跳过"
 msgid "View Project Details"
 msgstr "查看项目详情"
 
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:22
+msgid "Prompt for tags on launch."
+msgstr "启动时提示输入标记。"
+
 #: components/Workflow/WorkflowTools.js:160
 msgid "Pan Right"
 msgstr "向右平移"
@@ -6942,6 +7002,10 @@ msgstr "资源类型"
 #: screens/Organization/shared/OrganizationForm.js:92
 msgid "The execution environment that will be used for jobs inside of this organization. This will be used a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level."
 msgstr "用于本机构内作业的执行环境。当项目、作业模板或工作流没有显式分配执行环境时，则会使用它。"
+
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:12
+msgid "Enable a survey for this workflow job template."
+msgstr "为此工作流作业模板启用调查。"
 
 #. Aria label for paginated table list
 #: components/PaginatedTable/PaginatedTable.js:83
@@ -7405,6 +7469,10 @@ msgstr "构建2组，限制在交叉点"
 msgid "# sources with sync failures."
 msgstr "#个同步失败的源。"
 
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:30
+msgid "Webhook URL for this workflow job template."
+msgstr "此工作流作业模板的 Webhook URL。"
+
 #: components/Schedule/shared/ScheduleFormFields.js:93
 msgid "Start date/time"
 msgstr "开始日期/时间"
@@ -7778,6 +7846,10 @@ msgstr "命令"
 msgid "Copy Execution Environment"
 msgstr "复制执行环境"
 
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:16
+msgid "Prompt for SCM branch on launch."
+msgstr "启动时提示输入 SCM 分支。"
+
 #: components/Workflow/WorkflowTools.js:142
 msgid "Set zoom to 100% and center graph"
 msgstr "将缩放设置为 100% 和中心图"
@@ -8025,6 +8097,10 @@ msgstr "故障排除"
 msgid "This is the only time the client secret will be shown."
 msgstr "这是唯一显示客户端 secret 的时间。"
 
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:6
+msgid "Optional description for the workflow job template."
+msgstr "工作流作业模板的可选描述。"
+
 #: screens/ActivityStream/ActivityStreamDescription.js:511
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:197
 msgid "approved"
@@ -8186,6 +8262,10 @@ msgstr "自动"
 msgid "Delete All Groups and Hosts"
 msgstr "删除所有组和主机"
 
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:24
+msgid "Prompt for execution environment on launch."
+msgstr "启动时提示输入执行环境。"
+
 #: screens/Host/HostDetail/HostDetail.js:58
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:56
 msgid "Failed to delete {name}."
@@ -8209,6 +8289,10 @@ msgstr "预览"
 #: screens/Application/shared/ApplicationForm.js:129
 msgid "Client type"
 msgstr "客户端类型"
+
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:25
+msgid "Prompt for instance groups on launch."
+msgstr "启动时提示输入实例组。"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:637
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:213
@@ -8310,6 +8394,10 @@ msgstr "您确定要从删除这个链接吗？"
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:281
 msgid "A Jinja2 template rendered with upstream set_stats artifacts when the approval is created. Use this to show the approver relevant context from previous job steps. Available variables come from set_stats data of parent nodes."
 msgstr "创建批准时使用上游 set_stats 工件呈现的 Jinja2 模板。使用它向批准者显示先前作业步骤的相关上下文。可用变量来自父节点的 set_stats 数据。"
+
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:14
+msgid "Prompt for variables on launch."
+msgstr "启动时提示输入变量。"
 
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:206
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:209
@@ -8464,6 +8552,10 @@ msgstr "执行环境"
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:265
 msgid "Delete Workflow Job Template"
 msgstr "删除工作流作业模板"
+
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:9
+msgid "Pass extra command line variables to the workflow."
+msgstr "向工作流传递额外的命令行变量。"
 
 #: screens/InstanceGroup/InstanceGroups.js:36
 msgid "Instance details"
@@ -9858,6 +9950,10 @@ msgstr "返回"
 msgid "Failed to delete role."
 msgstr "删除角色失败。"
 
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:23
+msgid "Prompt for skip tags on launch."
+msgstr "启动时提示输入跳过标记。"
+
 #: components/Lookup/shared/LookupErrorMessage.js:12
 msgid "An error occurred"
 msgstr "发生错误"
@@ -9870,6 +9966,10 @@ msgstr "GitHub Organization"
 #: screens/Metrics/Metrics.js:182
 msgid "Metrics"
 msgstr "指标"
+
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:27
+msgid "Prompt for timeout on launch."
+msgstr "启动时提示输入超时。"
 
 #: screens/User/UserTeams/UserTeamList.js:249
 msgid "Select Teams"
@@ -9901,6 +10001,10 @@ msgstr "{interval} 天"
 #: screens/Project/ProjectList/ProjectListItem.js:232
 msgid "Copy Project"
 msgstr "复制项目"
+
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:21
+msgid "Prompt for verbosity on launch."
+msgstr "启动时提示输入详细程度。"
 
 #: components/LaunchButton/WorkflowReLaunchDropDown.js:30
 msgid "Relaunch from failed node"
@@ -10207,6 +10311,10 @@ msgstr "开始时间"
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:199
 msgid "Total inventory sources"
 msgstr "总库存来源"
+
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:10
+msgid "Provide a host pattern to further constrain the list of hosts that will be managed or affected by the workflow."
+msgstr "提供主机模式以进一步限制将由工作流管理或影响的主机列表。"
 
 #: components/LaunchButton/WorkflowReLaunchDropDown.js:27
 msgid "Canceled node"
@@ -10794,6 +10902,10 @@ msgstr "Automation Controller 版本"
 #: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.js:81
 msgid "Access Token Expiration"
 msgstr "访问令牌过期"
+
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:17
+msgid "Prompt for inventory on launch."
+msgstr "启动时提示输入清单。"
 
 #: screens/Template/shared/WebhookSubForm.js:154
 msgid "a new webhook url will be generated on save."

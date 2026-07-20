@@ -1041,6 +1041,10 @@ msgstr "Les bilans de santé sont des tâches asynchrones. Veuillez consulter la
 msgid "Cancel subscription edit"
 msgstr "Annuler l'édition de l'abonnement"
 
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:19
+msgid "Prompt for credentials on launch."
+msgstr "Demander les identifiants au lancement."
+
 #: screens/Inventory/InventoryGroups/InventoryGroupItem.js:37
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupItem.js:43
 msgid "Edit group"
@@ -1249,6 +1253,10 @@ msgstr "Êtes-vous certain de vouloir annuler ce job ?"
 #: screens/Setting/shared/RevertButton.js:42
 msgid "Revert to factory default."
 msgstr "Revenir à la valeur usine par défaut."
+
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:26
+msgid "Prompt for job slice count on launch."
+msgstr "Demander le nombre de tranches de tâche au lancement."
 
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:134
 msgid "Filter by failed jobs"
@@ -1948,6 +1956,10 @@ msgstr "Clé"
 msgid "Username"
 msgstr "Nom d'utilisateur"
 
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:8
+msgid "The organization that owns this workflow job template."
+msgstr "L'organisation propriétaire de ce modèle de tâche de flux de travail."
+
 #: components/RelatedTemplateList/RelatedTemplateList.js:225
 msgid "Deleting these templates could impact some workflow nodes that rely on them. Are you sure you want to delete anyway?"
 msgstr "La suppression de ces modèles pourrait avoir un impact sur certains nœuds de flux de travail qui en dépendent. Voulez-vous vraiment supprimer quand même ?"
@@ -2084,6 +2096,10 @@ msgstr "Supprimer l'inventaire smart"
 msgid "Show"
 msgstr "Afficher"
 
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:31
+msgid "Webhook key for this workflow job template."
+msgstr "Clé du webhook pour ce modèle de tâche de flux de travail."
+
 #: components/ResourceAccessList/ResourceAccessList.js:257
 msgid "Failed to assign roles properly"
 msgstr "Impossible d'assigner les rôles correctement"
@@ -2113,6 +2129,10 @@ msgstr "{0, plural, one {This credential type is currently being used by some cr
 #: screens/User/shared/UserForm.js:119
 msgid "Password"
 msgstr "Mot de passe"
+
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:13
+msgid "Allow simultaneous runs of this workflow job template."
+msgstr "Autorisez les exécutions simultanées de ce modèle de tâche de flux de travail."
 
 #: screens/Inventory/FederatedInventory.js:201
 msgid "View Federated Inventory Details"
@@ -2858,6 +2878,10 @@ msgstr "Facts"
 #: components/PaginatedTable/PaginatedTable.js:46
 msgid "Items"
 msgstr "Éléments"
+
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:7
+msgid "Select the inventory containing the hosts you want this workflow to manage."
+msgstr "Sélectionnez l'inventaire contenant les hôtes que vous souhaitez gérer avec ce flux de travail."
 
 #: screens/Instances/InstanceDetail/InstanceDetail.js:427
 #: screens/Instances/InstanceList/InstanceList.js:273
@@ -4221,6 +4245,10 @@ msgstr "Branche/ Balise / Commit du Contrôle de la source"
 msgid "This will cancel all subsequent nodes in this workflow"
 msgstr "Cela annulera tous les nœuds suivants dans ce flux de travail."
 
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:28
+msgid "Prompt for diff mode on launch."
+msgstr "Demander le mode différentiel au lancement."
+
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:341
 msgid "Client Identifier"
 msgstr "Identifiant client"
@@ -4725,6 +4753,10 @@ msgstr "Avertissement système"
 #: screens/Organization/Organizations.js:35
 msgid "Execution Environments"
 msgstr "Environnements d'exécution"
+
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:20
+msgid "Prompt for job type on launch."
+msgstr "Demander le type de tâche au lancement."
 
 #: components/JobList/JobListItem.js:217
 #: components/JobList/JobListItem.js:223
@@ -5452,6 +5484,10 @@ msgstr "Pas de JSON disponible"
 msgid "Destination channels or users"
 msgstr "Canaux ou utilisateurs de destination"
 
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:29
+msgid "Webhook service for this workflow job template."
+msgstr "Service de webhook pour ce modèle de tâche de flux de travail."
+
 #: screens/Job/JobOutput/shared/OutputToolbar.js:126
 msgid "Play Count"
 msgstr "Play - Nombre"
@@ -5683,6 +5719,10 @@ msgstr "annuler supprimer"
 #: screens/Inventory/shared/ConstructedInventoryHint.js:258
 msgid "Nested groups inventory definition:"
 msgstr "Définition de l'inventaire des groupes imbriqués :"
+
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:15
+msgid "Prompt for limit on launch."
+msgstr "Demander la limite au lancement."
 
 #: components/JobList/JobListCancelButton.js:96
 msgid "Cancel selected job"
@@ -6098,6 +6138,10 @@ msgstr "Ajouter les permissions de l’utilisateur"
 #: components/Schedule/shared/ScheduleFormFields.js:184
 msgid "Exceptions"
 msgstr "Exceptions"
+
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:11
+msgid "Select a branch for the workflow."
+msgstr "Sélectionnez une branche pour le flux de travail."
 
 #: screens/Template/Survey/SurveyQuestionForm.js:262
 msgid "Refer to the"
@@ -6679,6 +6723,10 @@ msgstr "GitHub (Par défaut)"
 msgid "Maximum"
 msgstr "Maximum"
 
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:5
+msgid "Name of the workflow job template."
+msgstr "Nom du modèle de tâche de flux de travail."
+
 #: screens/Inventory/InventoryList/InventoryList.js:243
 msgid "Sync Status"
 msgstr "Statut de la synchronisation"
@@ -6720,6 +6768,10 @@ msgstr "Choisissez un répertoire Playbook"
 msgid "Workflow Job Template"
 msgstr "Modèle de Job de flux de travail"
 
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:18
+msgid "Prompt for labels on launch."
+msgstr "Demander les libellés au lancement."
+
 #: screens/SubscriptionUsage/SubscriptionUsageChart.js:118
 #: screens/SubscriptionUsage/SubscriptionUsageChart.js:169
 msgid "Past three years"
@@ -6737,6 +6789,10 @@ msgstr "{0, plural, one {This approval cannot be deleted due to insufficient per
 #: components/VerbositySelectField/VerbositySelectField.js:20
 msgid "2 (More Verbose)"
 msgstr "2 (Verbeux +)"
+
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:32
+msgid "Webhook credential for this workflow job template."
+msgstr "Identifiant du webhook pour ce modèle de tâche de flux de travail."
 
 #: components/Lookup/HostFilterLookup.js:358
 msgid "Populate the hosts for this inventory by using a search\n"
@@ -6895,6 +6951,10 @@ msgstr "Hôte ignoré"
 msgid "View Project Details"
 msgstr "Voir les détails du projet"
 
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:22
+msgid "Prompt for tags on launch."
+msgstr "Demander les balises au lancement."
+
 #: components/Workflow/WorkflowTools.js:160
 msgid "Pan Right"
 msgstr "Pan droite"
@@ -6942,6 +7002,10 @@ msgstr "Type de ressources"
 #: screens/Organization/shared/OrganizationForm.js:92
 msgid "The execution environment that will be used for jobs inside of this organization. This will be used a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level."
 msgstr "L'environnement d'exécution qui sera utilisé pour les tâches au sein de cette organisation. Il sera utilisé comme solution de rechange lorsqu'un environnement d'exécution n'a pas été explicitement attribué au niveau du projet, du modèle de job ou du flux de travail."
+
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:12
+msgid "Enable a survey for this workflow job template."
+msgstr "Activez un questionnaire pour ce modèle de tâche de flux de travail."
 
 #. Aria label for paginated table list
 #: components/PaginatedTable/PaginatedTable.js:83
@@ -7405,6 +7469,10 @@ msgstr "Construire 2 groupes, limite à l'intersection"
 msgid "# sources with sync failures."
 msgstr "# sources avec échecs de synchronisation."
 
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:30
+msgid "Webhook URL for this workflow job template."
+msgstr "URL du webhook pour ce modèle de tâche de flux de travail."
+
 #: components/Schedule/shared/ScheduleFormFields.js:93
 msgid "Start date/time"
 msgstr "Date/Heure de début"
@@ -7778,6 +7846,10 @@ msgstr "commande"
 msgid "Copy Execution Environment"
 msgstr "Copier Environnement d'exécution"
 
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:16
+msgid "Prompt for SCM branch on launch."
+msgstr "Demander la branche SCM au lancement."
+
 #: components/Workflow/WorkflowTools.js:142
 msgid "Set zoom to 100% and center graph"
 msgstr "Régler le zoom à 100% et centrer le graphique"
@@ -8025,6 +8097,10 @@ msgstr "Dépannage"
 msgid "This is the only time the client secret will be shown."
 msgstr "C'est la seule fois où le secret du client sera révélé."
 
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:6
+msgid "Optional description for the workflow job template."
+msgstr "Description facultative du modèle de tâche de flux de travail."
+
 #: screens/ActivityStream/ActivityStreamDescription.js:511
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:197
 msgid "approved"
@@ -8186,6 +8262,10 @@ msgstr "Auto"
 msgid "Delete All Groups and Hosts"
 msgstr "Supprimer les groupes et les hôtes"
 
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:24
+msgid "Prompt for execution environment on launch."
+msgstr "Demander l'environnement d'exécution au lancement."
+
 #: screens/Host/HostDetail/HostDetail.js:58
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:56
 msgid "Failed to delete {name}."
@@ -8209,6 +8289,10 @@ msgstr "Prévisualisation"
 #: screens/Application/shared/ApplicationForm.js:129
 msgid "Client type"
 msgstr "Type de client"
+
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:25
+msgid "Prompt for instance groups on launch."
+msgstr "Demander les groupes d'instances au lancement."
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:637
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:213
@@ -8310,6 +8394,10 @@ msgstr "Êtes-vous sûr de vouloir supprimer ce lien ?"
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:281
 msgid "A Jinja2 template rendered with upstream set_stats artifacts when the approval is created. Use this to show the approver relevant context from previous job steps. Available variables come from set_stats data of parent nodes."
 msgstr "Un modèle Jinja2 rendu avec les artefacts set_stats en amont lors de la création de l'approbation. Utilisez ceci pour montrer à l'approbateur le contexte pertinent des étapes de job précédentes. Les variables disponibles proviennent des données set_stats des nœuds parents."
+
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:14
+msgid "Prompt for variables on launch."
+msgstr "Demander les variables au lancement."
 
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:206
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:209
@@ -8464,6 +8552,10 @@ msgstr "Environnement d'exécution"
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:265
 msgid "Delete Workflow Job Template"
 msgstr "Supprimer le modèle de flux de travail "
+
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:9
+msgid "Pass extra command line variables to the workflow."
+msgstr "Transmettez des variables de ligne de commande supplémentaires au flux de travail."
 
 #: screens/InstanceGroup/InstanceGroups.js:36
 msgid "Instance details"
@@ -9858,6 +9950,10 @@ msgstr "Renvoi"
 msgid "Failed to delete role."
 msgstr "N'a pas réussi à supprimer le rôle."
 
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:23
+msgid "Prompt for skip tags on launch."
+msgstr "Demander les balises à ignorer au lancement."
+
 #: components/Lookup/shared/LookupErrorMessage.js:12
 msgid "An error occurred"
 msgstr "Une erreur est survenue"
@@ -9870,6 +9966,10 @@ msgstr "Organisation GitHub"
 #: screens/Metrics/Metrics.js:182
 msgid "Metrics"
 msgstr "Métriques"
+
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:27
+msgid "Prompt for timeout on launch."
+msgstr "Demander le délai d'expiration au lancement."
 
 #: screens/User/UserTeams/UserTeamList.js:249
 msgid "Select Teams"
@@ -9901,6 +10001,10 @@ msgstr "{interval} jour"
 #: screens/Project/ProjectList/ProjectListItem.js:232
 msgid "Copy Project"
 msgstr "Copier le projet"
+
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:21
+msgid "Prompt for verbosity on launch."
+msgstr "Demander la verbosité au lancement."
 
 #: components/LaunchButton/WorkflowReLaunchDropDown.js:30
 msgid "Relaunch from failed node"
@@ -10207,6 +10311,10 @@ msgstr "Heure de début"
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:199
 msgid "Total inventory sources"
 msgstr "Sources totales d'inventaire"
+
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:10
+msgid "Provide a host pattern to further constrain the list of hosts that will be managed or affected by the workflow."
+msgstr "Fournissez un modèle d'hôte pour restreindre davantage la liste des hôtes qui seront gérés ou affectés par le flux de travail."
 
 #: components/LaunchButton/WorkflowReLaunchDropDown.js:27
 msgid "Canceled node"
@@ -10794,6 +10902,10 @@ msgstr "Version de contrôleur d’Automation"
 #: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.js:81
 msgid "Access Token Expiration"
 msgstr "Expiration du jeton d'accès"
+
+#: screens/Template/shared/WorkflowJobTemplate.helptext.js:17
+msgid "Prompt for inventory on launch."
+msgstr "Demander l'inventaire au lancement."
 
 #: screens/Template/shared/WebhookSubForm.js:154
 msgid "a new webhook url will be generated on save."

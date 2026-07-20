@@ -40,7 +40,7 @@ function WebhookSubForm({ templateType }) {
   // Projects use the webhook to trigger an SCM update, so there is no
   // credential to post job statuses back with and no payload variables.
   const isProject = templateType === 'project';
-  const helpText = isProject ? getProjectHelpText(t) : getHelpText(t);
+  const helpText = isProject ? getProjectHelpText(t) : getHelpText();
 
   const [webhookServiceField, webhookServiceMeta, webhookServiceHelpers] =
     useField('webhook_service');

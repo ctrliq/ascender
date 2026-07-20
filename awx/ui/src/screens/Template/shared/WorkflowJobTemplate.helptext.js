@@ -1,5 +1,6 @@
+import { t } from '@lingui/core/macro';
 
-function getHelpText(t) {
+function getHelpText() {
   return {
     name: t`Name of the workflow job template.`,
     description: t`Optional description for the workflow job template.`,
