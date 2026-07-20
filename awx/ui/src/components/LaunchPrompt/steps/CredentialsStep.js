@@ -64,7 +64,7 @@ function CredentialsStep({
         });
 
         if (missingCredentialTypes.length > 0) {
-          return `Job Template default credentials must be replaced with one of the same type.  Please select a credential for the following types in order to proceed: ${missingCredentialTypes.join(', ')}`;
+          return t`Job Template default credentials must be replaced with one of the same type.  Please select a credential for the following types in order to proceed: ${missingCredentialTypes.join(', ')}`;
         }
       }
 
@@ -82,7 +82,7 @@ function CredentialsStep({
           }
         });
         if (credentialsThatPrompt.length > 0) {
-          return `Credentials that require passwords on launch are not permitted.  Please remove or replace the following credentials with a credential of the same type in order to proceed: ${credentialsThatPrompt.join(', ')}`;
+          return t`Credentials that require passwords on launch are not permitted.  Please remove or replace the following credentials with a credential of the same type in order to proceed: ${credentialsThatPrompt.join(', ')}`;
         }
       }
 
@@ -90,7 +90,7 @@ function CredentialsStep({
     };
 
     return createTranslatedValidator(allowCredentialsWithPasswords, val, defaultCredentials ?? []);
-  }, [allowCredentialsWithPasswords, defaultCredentials]);
+  }, [allowCredentialsWithPasswords, defaultCredentials, t]);
 
   const [field, meta, helpers] = useField({
     name: 'credentials',

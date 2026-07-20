@@ -85,6 +85,11 @@ msgstr "Nombre de tâches"
 msgid "Template"
 msgstr "Modèle"
 
+#. placeholder {0}: missingCredentialTypes.join(', ')
+#: components/LaunchPrompt/steps/CredentialsStep.js:67
+msgid "Job Template default credentials must be replaced with one of the same type.  Please select a credential for the following types in order to proceed: {0}"
+msgstr "Les informations d’identification par défaut du modèle de tâche doivent être remplacées par une du même type. Veuillez sélectionner une information d’identification pour les types suivants afin de continuer : {0}"
+
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:416
 #: components/Schedule/shared/ScheduleFormFields.js:159
 msgid "Days of Data to Keep"
@@ -129,6 +134,11 @@ msgstr "Supprimer l’Groupe?"
 #: components/HealthCheckButton/HealthCheckButton.js:24
 msgid "{selectedItemsCount, plural, one {Click to run a health check on the selected instance.} other {Click to run a health check on the selected instances.}}"
 msgstr "{selectedItemsCount, plural, one {Click to run a health check on the selected instance.} other {Click to run a health check on the selected instances.}}"
+
+#. placeholder {0}: formatDateString( workflowApproval.finished )
+#: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:21
+msgid "Denied - {0}.  See the Activity Stream for more information."
+msgstr "Refusé - {0}. Consultez le Flux d’activité pour plus d’informations."
 
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:66
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:87
@@ -246,7 +256,7 @@ msgstr "Impossible de charger la dernière mise à jour du job"
 msgid "Subscription Usage"
 msgstr "Utilisation de l'abonnement"
 
-#: components/TemplateList/TemplateListItem.js:90
+#: components/TemplateList/TemplateListItem.js:89
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:159
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:88
 msgid "(Prompt on launch)"
@@ -308,7 +318,7 @@ msgstr "Sélectionnez les rôles à appliquer"
 #: components/RelatedTemplateList/RelatedTemplateList.js:200
 #: components/TemplateList/TemplateList.js:222
 #: components/TemplateList/TemplateList.js:255
-#: components/TemplateList/TemplateListItem.js:150
+#: components/TemplateList/TemplateListItem.js:149
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:129
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:198
 #: components/Workflow/WorkflowNodeHelp.js:158
@@ -957,7 +967,7 @@ msgstr "Canaux de destination"
 msgid "CIQ Ascender Automation Platform"
 msgstr "CIQ Ascender Automation Platform"
 
-#: components/TemplateList/TemplateListItem.js:203
+#: components/TemplateList/TemplateListItem.js:206
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.js:162
 msgid "Failed to copy template."
 msgstr "Impossible de copier le modèle."
@@ -1596,7 +1606,7 @@ msgstr "Créer un nouvel inventaire fédéré"
 #: components/Schedule/shared/ScheduleFormFields.js:78
 #: components/TemplateList/TemplateList.js:213
 #: components/TemplateList/TemplateList.js:250
-#: components/TemplateList/TemplateListItem.js:129
+#: components/TemplateList/TemplateListItem.js:128
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:62
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:81
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:93
@@ -1847,7 +1857,7 @@ msgstr "Approuvé"
 #: components/Schedule/ScheduleList/ScheduleListItem.js:127
 #: components/SelectedList/DraggableSelectedList.js:56
 #: components/TemplateList/TemplateList.js:256
-#: components/TemplateList/TemplateListItem.js:151
+#: components/TemplateList/TemplateListItem.js:154
 #: screens/ActivityStream/ActivityStream.js:301
 #: screens/ActivityStream/ActivityStreamListItem.js:45
 #: screens/Application/ApplicationsList/ApplicationListItem.js:47
@@ -2045,6 +2055,7 @@ msgstr "Le résultat du nœud parent est requis avant l'évaluation de la condit
 
 #: components/JobList/JobListItem.js:227
 #: components/TemplateList/TemplateList.js:225
+#: components/TemplateList/TemplateListItem.js:152
 #: components/Workflow/WorkflowLegend.js:96
 #: components/Workflow/WorkflowNodeHelp.js:57
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateList.js:97
@@ -2656,6 +2667,12 @@ msgstr "Modifier le groupe"
 #: components/LaunchPrompt/steps/PreviewStep.js:62
 msgid "See errors on the left"
 msgstr "Voir les erreurs sur la gauche"
+
+#. placeholder {0}: workflowApproval.summary_fields.approved_or_denied_by.username
+#. placeholder {1}: formatDateString(workflowApproval.finished)
+#: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:7
+msgid "Approved by {0} - {1}"
+msgstr "Approuvé par {0} - {1}"
 
 #: screens/Job/JobOutput/JobOutputSearch.js:123
 msgid "Host Started"
@@ -3744,7 +3761,7 @@ msgstr "Environnement d'exécution par défaut"
 #: components/PromptDetail/PromptInventorySourceDetail.js:85
 #: components/PromptDetail/PromptJobTemplateDetail.js:134
 #: components/PromptDetail/PromptJobTemplateDetail.js:142
-#: components/TemplateList/TemplateListItem.js:255
+#: components/TemplateList/TemplateListItem.js:258
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:223
 #: screens/Job/JobDetail/JobDetail.js:188
 #: screens/Job/JobDetail/JobDetail.js:222
@@ -4119,7 +4136,7 @@ msgstr "Cette action dissociera les éléments suivants :"
 msgid "Select Instances"
 msgstr "Sélectionner les instances"
 
-#: components/TemplateList/TemplateListItem.js:136
+#: components/TemplateList/TemplateListItem.js:135
 msgid "Resources are missing from this template."
 msgstr "Ressources manquantes dans ce modèle."
 
@@ -4291,8 +4308,8 @@ msgstr "Crypté"
 msgid "{numJobsToCancel, plural, one {Cancel job} other {Cancel jobs}}"
 msgstr "{numJobsToCancel, plural, one {Annuler le travail} other {Annuler les emplois}}"
 
-#: components/TemplateList/TemplateListItem.js:185
-#: components/TemplateList/TemplateListItem.js:191
+#: components/TemplateList/TemplateListItem.js:188
+#: components/TemplateList/TemplateListItem.js:194
 msgid "Edit Template"
 msgstr "Modifier le modèle"
 
@@ -4956,7 +4973,7 @@ msgstr "Effondrement"
 #: components/PromptDetail/PromptJobTemplateDetail.js:220
 #: components/PromptDetail/PromptWFJobTemplateDetail.js:121
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:560
-#: components/TemplateList/TemplateListItem.js:301
+#: components/TemplateList/TemplateListItem.js:304
 #: routeConfig.js:78
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:255
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:120
@@ -5001,7 +5018,7 @@ msgstr "Mois"
 #: components/PromptDetail/PromptDetail.js:211
 #: components/PromptDetail/PromptJobTemplateDetail.js:202
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:537
-#: components/TemplateList/TemplateListItem.js:277
+#: components/TemplateList/TemplateListItem.js:280
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:121
 #: routeConfig.js:88
 #: screens/ActivityStream/ActivityStream.js:118
@@ -6156,8 +6173,8 @@ msgstr "Deuxième"
 msgid "Health checks can only be run on execution nodes."
 msgstr "Les bilans de santé ne peuvent être exécutées que sur les nœuds d'exécution."
 
-#: components/TemplateList/TemplateListItem.js:154
-#: components/TemplateList/TemplateListItem.js:160
+#: components/TemplateList/TemplateListItem.js:157
+#: components/TemplateList/TemplateListItem.js:163
 #: screens/Template/WorkflowJobTemplate.js:129
 msgid "Visualizer"
 msgstr "Visualiseur"
@@ -6760,6 +6777,7 @@ msgid "Choose a Playbook Directory"
 msgstr "Choisissez un répertoire Playbook"
 
 #: components/JobList/JobListItem.js:237
+#: components/TemplateList/TemplateListItem.js:151
 #: components/Workflow/WorkflowNodeHelp.js:61
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateListItem.js:21
 #: screens/Job/JobDetail/JobDetail.js:286
@@ -7070,7 +7088,7 @@ msgid "Integer"
 msgstr "Entier relatif"
 
 #: components/TemplateList/TemplateList.js:253
-#: components/TemplateList/TemplateListItem.js:149
+#: components/TemplateList/TemplateListItem.js:148
 msgid "Last Ran"
 msgstr "Dernière exécution"
 
@@ -7134,7 +7152,7 @@ msgstr "Sync"
 #: components/Schedule/ScheduleList/ScheduleList.js:200
 #: components/Schedule/shared/ScheduleFormFields.js:86
 #: components/TemplateList/TemplateList.js:218
-#: components/TemplateList/TemplateListItem.js:221
+#: components/TemplateList/TemplateListItem.js:224
 #: screens/Application/ApplicationDetails/ApplicationDetails.js:65
 #: screens/Application/ApplicationsList/ApplicationsList.js:121
 #: screens/Application/shared/ApplicationForm.js:65
@@ -7328,6 +7346,10 @@ msgstr "Connectez-vous à GitHub Enterprise"
 #: screens/User/shared/UserForm.js:195
 msgid "Select a value for this field"
 msgstr "Sélectionnez une valeur pour ce champ"
+
+#: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:47
+msgid "Never expires"
+msgstr "N’expire jamais"
 
 #. placeholder {0}: job.id
 #: components/Sparkline/Sparkline.js:43
@@ -8055,6 +8077,11 @@ msgstr "Aucune erreurs de synchronisation des inventaires"
 msgid "Note: The order in which these are selected sets the execution precedence. Select more than one to enable drag."
 msgstr "Remarque : L'ordre dans lequel ces éléments sont sélectionnés définit la priorité d'exécution. Sélectionner plus d’une option pour permettre le déplacement."
 
+#. placeholder {0}: credentialsThatPrompt.join(', ')
+#: components/LaunchPrompt/steps/CredentialsStep.js:85
+msgid "Credentials that require passwords on launch are not permitted.  Please remove or replace the following credentials with a credential of the same type in order to proceed: {0}"
+msgstr "Les informations d’identification qui nécessitent des mots de passe au lancement ne sont pas autorisées. Veuillez supprimer ou remplacer les informations d’identification suivantes par une du même type afin de continuer : {0}"
+
 #: screens/Login/Login.js:385
 msgid "Sign in with OIDC"
 msgstr "Connectez-vous avec OIDC"
@@ -8121,6 +8148,7 @@ msgstr "Type d’exécution"
 
 #: components/Schedule/shared/FrequencyDetailSubform.js:543
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:82
+#: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:57
 msgid "Never"
 msgstr "Jamais"
 
@@ -8347,7 +8375,7 @@ msgstr "Chaque fois qu'une tâche est exécutée à l'aide de cet inventaire, ac
 
 #: components/JobList/JobList.js:241
 #: components/StatusLabel/StatusLabel.js:46
-#: components/TemplateList/TemplateListItem.js:105
+#: components/TemplateList/TemplateListItem.js:104
 #: components/Workflow/WorkflowNodeHelp.js:97
 msgid "Running"
 msgstr "En cours d'exécution"
@@ -8398,6 +8426,12 @@ msgstr "Un modèle Jinja2 rendu avec les artefacts set_stats en amont lors de la
 #: screens/Template/shared/WorkflowJobTemplate.helptext.js:14
 msgid "Prompt for variables on launch."
 msgstr "Demander les variables au lancement."
+
+#. placeholder {0}: workflowApproval.summary_fields.approved_or_denied_by.username
+#. placeholder {1}: formatDateString(workflowApproval.finished)
+#: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:17
+msgid "Denied by {0} - {1}"
+msgstr "Refusé par {0} - {1}"
 
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:206
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:209
@@ -8700,7 +8734,7 @@ msgstr "Mettre à jour les options"
 
 #: components/PromptDetail/PromptDetail.js:178
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:428
-#: components/TemplateList/TemplateListItem.js:270
+#: components/TemplateList/TemplateListItem.js:273
 #: screens/Application/ApplicationDetails/ApplicationDetails.js:110
 #: screens/Application/ApplicationsList/ApplicationListItem.js:44
 #: screens/Application/ApplicationsList/ApplicationsList.js:157
@@ -9368,7 +9402,7 @@ msgstr "Basculer les outils"
 #: components/PromptDetail/PromptProjectDetail.js:75
 #: components/PromptDetail/PromptProjectDetail.js:86
 #: components/PromptDetail/PromptWFJobTemplateDetail.js:67
-#: components/TemplateList/TemplateListItem.js:227
+#: components/TemplateList/TemplateListItem.js:230
 #: screens/Application/ApplicationDetails/ApplicationDetails.js:70
 #: screens/Application/ApplicationsList/ApplicationListItem.js:37
 #: screens/Application/ApplicationsList/ApplicationsList.js:155
@@ -9659,7 +9693,7 @@ msgstr "Me le demander au lancement"
 msgid "Troubleshooting settings"
 msgstr "Réglages de dépannage"
 
-#: components/TemplateList/TemplateListItem.js:168
+#: components/TemplateList/TemplateListItem.js:171
 msgid "Launch Template"
 msgstr "Lancer le modèle."
 
@@ -10349,6 +10383,11 @@ msgstr "Modifier le nœud"
 msgid "Clear"
 msgstr "Effacer"
 
+#. placeholder {0}: formatDateString( workflowApproval.approval_expiration )
+#: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:50
+msgid "Expires on {0}"
+msgstr "Expire le {0}"
+
 #: components/Workflow/WorkflowTools.js:81
 msgid "Tools"
 msgstr "Outils"
@@ -10446,7 +10485,7 @@ msgstr "Groupe d'instance"
 #: components/PromptDetail/PromptJobTemplateDetail.js:97
 #: components/PromptDetail/PromptWFJobTemplateDetail.js:61
 #: components/TemplateList/TemplateList.js:251
-#: components/TemplateList/TemplateListItem.js:144
+#: components/TemplateList/TemplateListItem.js:143
 #: screens/Host/HostDetail/HostDetail.js:70
 #: screens/Host/HostList/HostList.js:171
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.js:33
@@ -10699,6 +10738,11 @@ msgstr "Modifier les détails"
 msgid "Failed to delete role"
 msgstr "N'a pas réussi à supprimer le rôle"
 
+#. placeholder {0}: formatDateString( workflowApproval.finished )
+#: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:11
+msgid "Approved - {0}.  See the Activity Stream for more information."
+msgstr "Approuvé - {0}. Consultez le Flux d’activité pour plus d’informations."
+
 #: screens/WorkflowApproval/shared/WorkflowDenyButton.js:28
 msgid "Successfully Denied"
 msgstr "Refusé avec succès"
@@ -10826,7 +10870,7 @@ msgstr "Choisissez le type de ressource qui recevra de nouveaux rôles.  Par exe
 #: components/Lookup/InstanceGroupsLookup.js:86
 #: components/OptionsList/OptionsList.js:65
 #: components/Schedule/ScheduleList/ScheduleListItem.js:83
-#: components/TemplateList/TemplateListItem.js:127
+#: components/TemplateList/TemplateListItem.js:126
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:359
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:377
 #: screens/Application/ApplicationsList/ApplicationListItem.js:30
@@ -10869,7 +10913,7 @@ msgid "One Slack channel per line. The pound symbol (#)\n"
 msgstr "Un canal Slack par ligne. Le symbole dièse (#)\n"
 "        est requis pour les canaux. Pour répondre ou démarrer un fil de discussion sur un message spécifique, ajoutez l'Id du message parent au canal, où l'Id du message parent comporte 16 chiffres. Un point (.) doit être inséré manuellement après le 10e chiffre.  par ex. :#canal-destination, 1231257890.006423. Voir Slack"
 
-#: components/TemplateList/TemplateListItem.js:176
+#: components/TemplateList/TemplateListItem.js:179
 msgid "Launch template"
 msgstr "Lancer le modèle"
 
@@ -11420,8 +11464,8 @@ msgstr "Début de la notification de basculement"
 #: components/PromptDetail/PromptJobTemplateDetail.js:129
 #: components/PromptDetail/PromptWFJobTemplateDetail.js:79
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:449
-#: components/TemplateList/TemplateListItem.js:240
-#: components/TemplateList/TemplateListItem.js:250
+#: components/TemplateList/TemplateListItem.js:243
+#: components/TemplateList/TemplateListItem.js:253
 #: screens/Host/HostDetail/HostDetail.js:76
 #: screens/Host/HostList/HostList.js:175
 #: screens/Host/HostList/HostListItem.js:50
@@ -11452,7 +11496,7 @@ msgstr "Mettre à jour au lancement"
 msgid "Add hosts to group based on Jinja2 conditionals."
 msgstr "Ajoutez des hôtes au groupe en fonction des conditions Jinja2."
 
-#: components/TemplateList/TemplateListItem.js:198
+#: components/TemplateList/TemplateListItem.js:201
 msgid "Copy Template"
 msgstr "Copier le modèle"
 

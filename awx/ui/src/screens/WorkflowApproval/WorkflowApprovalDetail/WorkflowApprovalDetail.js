@@ -145,7 +145,7 @@ function WorkflowApprovalDetail({ workflowApproval, fetchWorkflowApproval }) {
             label={t`Expires`}
             value={
               <StatusLabel status={workflowApproval.status}>
-                {getDetailPendingLabel(workflowApproval, t)}
+                {getDetailPendingLabel(workflowApproval)}
               </StatusLabel>
             }
             dataCy="wa-detail-expires"

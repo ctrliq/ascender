@@ -87,6 +87,11 @@ msgstr "कार्य संख्या"
 msgid "Template"
 msgstr "टेम्पलेट"
 
+#. placeholder {0}: missingCredentialTypes.join(', ')
+#: components/LaunchPrompt/steps/CredentialsStep.js:67
+msgid "Job Template default credentials must be replaced with one of the same type.  Please select a credential for the following types in order to proceed: {0}"
+msgstr "जॉब टेम्पलेट के ड़िफ़ॉल्ट क्रेडेंशियल को समान प्रकार के किसी एक से बदला जाना चाहिए। आगे बढ़ने के लिए कृपया निम्नलिखित प्रकारों के लिए एक क्रेडेंशियल चुनें: {0}"
+
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:416
 #: components/Schedule/shared/ScheduleFormFields.js:159
 msgid "Days of Data to Keep"
@@ -131,6 +136,11 @@ msgstr "समूह हटाएं?"
 #: components/HealthCheckButton/HealthCheckButton.js:24
 msgid "{selectedItemsCount, plural, one {Click to run a health check on the selected instance.} other {Click to run a health check on the selected instances.}}"
 msgstr "{selectedItemsCount, plural, one {चयनित इंस्टेंस पर हेल्थ चेक चलाने के लिए क्लिक करें।} other {चयनित इंस्टेंसों पर हेल्थ चेक चलाने के लिए क्लिक करें।}}"
+
+#. placeholder {0}: formatDateString( workflowApproval.finished )
+#: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:21
+msgid "Denied - {0}.  See the Activity Stream for more information."
+msgstr "अस्वीकृत - {0}. अधिक जानकारी के लिए गतिविधि स्ट्रीम देखें।"
 
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:66
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:87
@@ -248,7 +258,7 @@ msgstr "अंतिम जॉब अपडेट लोड करने मे�
 msgid "Subscription Usage"
 msgstr "सदस्यता उपयोग"
 
-#: components/TemplateList/TemplateListItem.js:90
+#: components/TemplateList/TemplateListItem.js:89
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:159
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:88
 msgid "(Prompt on launch)"
@@ -310,7 +320,7 @@ msgstr "लागू करने के लिए भूमिकाएं च�
 #: components/RelatedTemplateList/RelatedTemplateList.js:200
 #: components/TemplateList/TemplateList.js:222
 #: components/TemplateList/TemplateList.js:255
-#: components/TemplateList/TemplateListItem.js:150
+#: components/TemplateList/TemplateListItem.js:149
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:129
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:198
 #: components/Workflow/WorkflowNodeHelp.js:158
@@ -959,7 +969,7 @@ msgstr "गंतव्य चैनल"
 msgid "CIQ Ascender Automation Platform"
 msgstr "CIQ Ascender Automation Platform"
 
-#: components/TemplateList/TemplateListItem.js:203
+#: components/TemplateList/TemplateListItem.js:206
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.js:162
 msgid "Failed to copy template."
 msgstr "टेम्पलेट कॉपी करने में विफल।"
@@ -1598,7 +1608,7 @@ msgstr "नई फ़ेडरेटेड इन्वेंटरी बना
 #: components/Schedule/shared/ScheduleFormFields.js:78
 #: components/TemplateList/TemplateList.js:213
 #: components/TemplateList/TemplateList.js:250
-#: components/TemplateList/TemplateListItem.js:129
+#: components/TemplateList/TemplateListItem.js:128
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:62
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:81
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:93
@@ -1849,7 +1859,7 @@ msgstr "अनुमोदित"
 #: components/Schedule/ScheduleList/ScheduleListItem.js:127
 #: components/SelectedList/DraggableSelectedList.js:56
 #: components/TemplateList/TemplateList.js:256
-#: components/TemplateList/TemplateListItem.js:151
+#: components/TemplateList/TemplateListItem.js:154
 #: screens/ActivityStream/ActivityStream.js:301
 #: screens/ActivityStream/ActivityStreamListItem.js:45
 #: screens/Application/ApplicationsList/ApplicationListItem.js:47
@@ -2047,6 +2057,7 @@ msgstr "स्थिति का मूल्यांकन करने स�
 
 #: components/JobList/JobListItem.js:227
 #: components/TemplateList/TemplateList.js:225
+#: components/TemplateList/TemplateListItem.js:152
 #: components/Workflow/WorkflowLegend.js:96
 #: components/Workflow/WorkflowNodeHelp.js:57
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateList.js:97
@@ -2658,6 +2669,12 @@ msgstr "समूह संपादित करें"
 #: components/LaunchPrompt/steps/PreviewStep.js:62
 msgid "See errors on the left"
 msgstr "बाईं ओर त्रुटियां देखें"
+
+#. placeholder {0}: workflowApproval.summary_fields.approved_or_denied_by.username
+#. placeholder {1}: formatDateString(workflowApproval.finished)
+#: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:7
+msgid "Approved by {0} - {1}"
+msgstr "{0} द्वारा अनुमोदित - {1}"
 
 #: screens/Job/JobOutput/JobOutputSearch.js:123
 msgid "Host Started"
@@ -3747,7 +3764,7 @@ msgstr "डिफ़ॉल्ट निष्पादन वातावरण"
 #: components/PromptDetail/PromptInventorySourceDetail.js:85
 #: components/PromptDetail/PromptJobTemplateDetail.js:134
 #: components/PromptDetail/PromptJobTemplateDetail.js:142
-#: components/TemplateList/TemplateListItem.js:255
+#: components/TemplateList/TemplateListItem.js:258
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:223
 #: screens/Job/JobDetail/JobDetail.js:188
 #: screens/Job/JobDetail/JobDetail.js:222
@@ -4122,7 +4139,7 @@ msgstr "यह क्रिया निम्न को अलग कर दे
 msgid "Select Instances"
 msgstr "इंस्टेंस चुनें"
 
-#: components/TemplateList/TemplateListItem.js:136
+#: components/TemplateList/TemplateListItem.js:135
 msgid "Resources are missing from this template."
 msgstr "इस टेम्पलेट से संसाधन अनुपस्थित हैं।"
 
@@ -4294,8 +4311,8 @@ msgstr "एन्क्रिप्टेड"
 msgid "{numJobsToCancel, plural, one {Cancel job} other {Cancel jobs}}"
 msgstr "{numJobsToCancel, plural, one {जॉब रद्द करें} other {जॉब्स रद्द करें}}"
 
-#: components/TemplateList/TemplateListItem.js:185
-#: components/TemplateList/TemplateListItem.js:191
+#: components/TemplateList/TemplateListItem.js:188
+#: components/TemplateList/TemplateListItem.js:194
 msgid "Edit Template"
 msgstr "टेम्पलेट संपादित करें"
 
@@ -4959,7 +4976,7 @@ msgstr "संक्षिप्त करें"
 #: components/PromptDetail/PromptJobTemplateDetail.js:220
 #: components/PromptDetail/PromptWFJobTemplateDetail.js:121
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:560
-#: components/TemplateList/TemplateListItem.js:301
+#: components/TemplateList/TemplateListItem.js:304
 #: routeConfig.js:78
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:255
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:120
@@ -5004,7 +5021,7 @@ msgstr "माह"
 #: components/PromptDetail/PromptDetail.js:211
 #: components/PromptDetail/PromptJobTemplateDetail.js:202
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:537
-#: components/TemplateList/TemplateListItem.js:277
+#: components/TemplateList/TemplateListItem.js:280
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:121
 #: routeConfig.js:88
 #: screens/ActivityStream/ActivityStream.js:118
@@ -6159,8 +6176,8 @@ msgstr "दूसरा"
 msgid "Health checks can only be run on execution nodes."
 msgstr "हेल्थ चेक केवल निष्पादन नोड्स पर चलाए जा सकते हैं।"
 
-#: components/TemplateList/TemplateListItem.js:154
-#: components/TemplateList/TemplateListItem.js:160
+#: components/TemplateList/TemplateListItem.js:157
+#: components/TemplateList/TemplateListItem.js:163
 #: screens/Template/WorkflowJobTemplate.js:129
 msgid "Visualizer"
 msgstr "विज़ुअलाइज़र"
@@ -6763,6 +6780,7 @@ msgid "Choose a Playbook Directory"
 msgstr "एक प्लेबुक निर्देशिका चुनें"
 
 #: components/JobList/JobListItem.js:237
+#: components/TemplateList/TemplateListItem.js:151
 #: components/Workflow/WorkflowNodeHelp.js:61
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateListItem.js:21
 #: screens/Job/JobDetail/JobDetail.js:286
@@ -7073,7 +7091,7 @@ msgid "Integer"
 msgstr "Integer"
 
 #: components/TemplateList/TemplateList.js:253
-#: components/TemplateList/TemplateListItem.js:149
+#: components/TemplateList/TemplateListItem.js:148
 msgid "Last Ran"
 msgstr "अंतिम बार चला"
 
@@ -7137,7 +7155,7 @@ msgstr "सिंक करें"
 #: components/Schedule/ScheduleList/ScheduleList.js:200
 #: components/Schedule/shared/ScheduleFormFields.js:86
 #: components/TemplateList/TemplateList.js:218
-#: components/TemplateList/TemplateListItem.js:221
+#: components/TemplateList/TemplateListItem.js:224
 #: screens/Application/ApplicationDetails/ApplicationDetails.js:65
 #: screens/Application/ApplicationsList/ApplicationsList.js:121
 #: screens/Application/shared/ApplicationForm.js:65
@@ -7331,6 +7349,10 @@ msgstr "GitHub Enterprise से साइन इन करें"
 #: screens/User/shared/UserForm.js:195
 msgid "Select a value for this field"
 msgstr "इस फ़ील्ड के लिए एक मान चुनें"
+
+#: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:47
+msgid "Never expires"
+msgstr "कभी समाप्त नहीं होता"
 
 #. placeholder {0}: job.id
 #: components/Sparkline/Sparkline.js:43
@@ -8059,6 +8081,11 @@ msgstr "कोई इन्वेंटरी सिंक विफलता �
 msgid "Note: The order in which these are selected sets the execution precedence. Select more than one to enable drag."
 msgstr "नोट: इन्हें जिस क्रम में चुना जाता है वह निष्पादन प्राथमिकता निर्धारित करता है। खींचने को सक्षम करने के लिए एक से अधिक चुनें।"
 
+#. placeholder {0}: credentialsThatPrompt.join(', ')
+#: components/LaunchPrompt/steps/CredentialsStep.js:85
+msgid "Credentials that require passwords on launch are not permitted.  Please remove or replace the following credentials with a credential of the same type in order to proceed: {0}"
+msgstr "लॉन्च के समय पासवर्ड की आवश्यकता वाले क्रेडेंशियल की अनुमति नहीं है। आगे बढ़ने के लिए कृपया निम्नलिखित क्रेडेंशियल को हटाएँ या समान प्रकार के क्रेडेंशियल से बदलें: {0}"
+
 #: screens/Login/Login.js:385
 msgid "Sign in with OIDC"
 msgstr "OIDC से साइन इन करें"
@@ -8125,6 +8152,7 @@ msgstr "रन प्रकार"
 
 #: components/Schedule/shared/FrequencyDetailSubform.js:543
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:82
+#: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:57
 msgid "Never"
 msgstr "कभी नहीं"
 
@@ -8351,7 +8379,7 @@ msgstr "हर बार जब इस इन्वेंटरी का उप
 
 #: components/JobList/JobList.js:241
 #: components/StatusLabel/StatusLabel.js:46
-#: components/TemplateList/TemplateListItem.js:105
+#: components/TemplateList/TemplateListItem.js:104
 #: components/Workflow/WorkflowNodeHelp.js:97
 msgid "Running"
 msgstr "चल रहा है"
@@ -8402,6 +8430,12 @@ msgstr "अनुमोदन बनाए जाने पर अपस्ट�
 #: screens/Template/shared/WorkflowJobTemplate.helptext.js:14
 msgid "Prompt for variables on launch."
 msgstr "लॉन्च पर वेरिएबल्स के लिए संकेत दें।"
+
+#. placeholder {0}: workflowApproval.summary_fields.approved_or_denied_by.username
+#. placeholder {1}: formatDateString(workflowApproval.finished)
+#: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:17
+msgid "Denied by {0} - {1}"
+msgstr "{0} द्वारा अस्वीकृत - {1}"
 
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:206
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:209
@@ -8704,7 +8738,7 @@ msgstr "अपडेट विकल्प"
 
 #: components/PromptDetail/PromptDetail.js:178
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:428
-#: components/TemplateList/TemplateListItem.js:270
+#: components/TemplateList/TemplateListItem.js:273
 #: screens/Application/ApplicationDetails/ApplicationDetails.js:110
 #: screens/Application/ApplicationsList/ApplicationListItem.js:44
 #: screens/Application/ApplicationsList/ApplicationsList.js:157
@@ -9372,7 +9406,7 @@ msgstr "टूल टॉगल करें"
 #: components/PromptDetail/PromptProjectDetail.js:75
 #: components/PromptDetail/PromptProjectDetail.js:86
 #: components/PromptDetail/PromptWFJobTemplateDetail.js:67
-#: components/TemplateList/TemplateListItem.js:227
+#: components/TemplateList/TemplateListItem.js:230
 #: screens/Application/ApplicationDetails/ApplicationDetails.js:70
 #: screens/Application/ApplicationsList/ApplicationListItem.js:37
 #: screens/Application/ApplicationsList/ApplicationsList.js:155
@@ -9663,7 +9697,7 @@ msgstr "लॉन्च पर संकेत"
 msgid "Troubleshooting settings"
 msgstr "समस्या निवारण सेटिंग्स"
 
-#: components/TemplateList/TemplateListItem.js:168
+#: components/TemplateList/TemplateListItem.js:171
 msgid "Launch Template"
 msgstr "टेम्पलेट लॉन्च करें"
 
@@ -10353,6 +10387,11 @@ msgstr "नोड संपादित करें"
 msgid "Clear"
 msgstr "साफ़ करें"
 
+#. placeholder {0}: formatDateString( workflowApproval.approval_expiration )
+#: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:50
+msgid "Expires on {0}"
+msgstr "{0} को समाप्त होता है"
+
 #: components/Workflow/WorkflowTools.js:81
 msgid "Tools"
 msgstr "टूल"
@@ -10450,7 +10489,7 @@ msgstr "इंस्टेंस समूह"
 #: components/PromptDetail/PromptJobTemplateDetail.js:97
 #: components/PromptDetail/PromptWFJobTemplateDetail.js:61
 #: components/TemplateList/TemplateList.js:251
-#: components/TemplateList/TemplateListItem.js:144
+#: components/TemplateList/TemplateListItem.js:143
 #: screens/Host/HostDetail/HostDetail.js:70
 #: screens/Host/HostList/HostList.js:171
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.js:33
@@ -10703,6 +10742,11 @@ msgstr "विवरण संपादित करें"
 msgid "Failed to delete role"
 msgstr "भूमिका हटाने में विफल"
 
+#. placeholder {0}: formatDateString( workflowApproval.finished )
+#: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:11
+msgid "Approved - {0}.  See the Activity Stream for more information."
+msgstr "अनुमोदित - {0}. अधिक जानकारी के लिए गतिविधि स्ट्रीम देखें।"
+
 #: screens/WorkflowApproval/shared/WorkflowDenyButton.js:28
 msgid "Successfully Denied"
 msgstr "सफलतापूर्वक अस्वीकृत"
@@ -10830,7 +10874,7 @@ msgstr "उस संसाधन का प्रकार चुनें ज�
 #: components/Lookup/InstanceGroupsLookup.js:86
 #: components/OptionsList/OptionsList.js:65
 #: components/Schedule/ScheduleList/ScheduleListItem.js:83
-#: components/TemplateList/TemplateListItem.js:127
+#: components/TemplateList/TemplateListItem.js:126
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:359
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:377
 #: screens/Application/ApplicationsList/ApplicationListItem.js:30
@@ -10873,7 +10917,7 @@ msgid "One Slack channel per line. The pound symbol (#)\n"
 msgstr "प्रति पंक्ति एक Slack चैनल। चैनलों के लिए पाउंड प्रतीक (#)\n"
 "        आवश्यक है। किसी विशिष्ट संदेश का उत्तर देने या उसके लिए थ्रेड प्रारंभ करने के लिए पैरेंट संदेश Id को चैनल में जोड़ें जहां पैरेंट संदेश Id 16 अंकों का हो। 10वें अंक के बाद एक डॉट (.) मैन्युअल रूप से डाला जाना चाहिए। उदा:#destination-channel, 1231257890.006423। Slack देखें"
 
-#: components/TemplateList/TemplateListItem.js:176
+#: components/TemplateList/TemplateListItem.js:179
 msgid "Launch template"
 msgstr "टेम्पलेट लॉन्च करें"
 
@@ -11424,8 +11468,8 @@ msgstr "सूचना प्रारंभ टॉगल करें"
 #: components/PromptDetail/PromptJobTemplateDetail.js:129
 #: components/PromptDetail/PromptWFJobTemplateDetail.js:79
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:449
-#: components/TemplateList/TemplateListItem.js:240
-#: components/TemplateList/TemplateListItem.js:250
+#: components/TemplateList/TemplateListItem.js:243
+#: components/TemplateList/TemplateListItem.js:253
 #: screens/Host/HostDetail/HostDetail.js:76
 #: screens/Host/HostList/HostList.js:175
 #: screens/Host/HostList/HostListItem.js:50
@@ -11456,7 +11500,7 @@ msgstr "लॉन्च पर अपडेट करें"
 msgid "Add hosts to group based on Jinja2 conditionals."
 msgstr "Jinja2 शर्तों के आधार पर समूह में होस्ट्स जोड़ें।"
 
-#: components/TemplateList/TemplateListItem.js:198
+#: components/TemplateList/TemplateListItem.js:201
 msgid "Copy Template"
 msgstr "टेम्पलेट कॉपी करें"
 

@@ -30,7 +30,7 @@ function WorkflowApprovalListItem({
     workflowApproval.status === 'canceled';
   const labelId = `check-action-${workflowApproval.id}`;
   const workflowJob = workflowApproval?.summary_fields?.source_workflow_job;
-  const status = getStatus(workflowApproval, t);
+  const status = getStatus(workflowApproval);
   // Toast handler for approve/deny actions (PatternFly style)
   const handleToast = (id, message) => {
     addToast({
@@ -76,11 +76,11 @@ function WorkflowApprovalListItem({
       <Td dataLabel={t`Status`}>
         {workflowApproval.status === 'pending' ? (
           <StatusLabel status={workflowApproval.status}>
-            {getPendingLabel(workflowApproval, t)}
+            {getPendingLabel(workflowApproval)}
           </StatusLabel>
         ) : (
           <StatusLabel
-            tooltipContent={getTooltip(workflowApproval, t)}
+            tooltipContent={getTooltip(workflowApproval)}
             status={status}
           />
         )}

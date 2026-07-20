@@ -85,6 +85,11 @@ msgstr "任务计数"
 msgid "Template"
 msgstr "模板"
 
+#. placeholder {0}: missingCredentialTypes.join(', ')
+#: components/LaunchPrompt/steps/CredentialsStep.js:67
+msgid "Job Template default credentials must be replaced with one of the same type.  Please select a credential for the following types in order to proceed: {0}"
+msgstr "作业模板的默认凭证必须替换为相同类型的凭证。请为以下类型选择一个凭证以继续: {0}"
+
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:416
 #: components/Schedule/shared/ScheduleFormFields.js:159
 msgid "Days of Data to Keep"
@@ -129,6 +134,11 @@ msgstr "删除群组"
 #: components/HealthCheckButton/HealthCheckButton.js:24
 msgid "{selectedItemsCount, plural, one {Click to run a health check on the selected instance.} other {Click to run a health check on the selected instances.}}"
 msgstr "{selectedItemsCount, plural, one {Click to run a health check on the selected instance.} other {Click to run a health check on the selected instances.}}"
+
+#. placeholder {0}: formatDateString( workflowApproval.finished )
+#: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:21
+msgid "Denied - {0}.  See the Activity Stream for more information."
+msgstr "已拒绝 - {0}。请参阅活动流以获取更多信息。"
 
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:66
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:87
@@ -246,7 +256,7 @@ msgstr "无法加载最后的作业更新"
 msgid "Subscription Usage"
 msgstr "订阅使用情况"
 
-#: components/TemplateList/TemplateListItem.js:90
+#: components/TemplateList/TemplateListItem.js:89
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:159
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:88
 msgid "(Prompt on launch)"
@@ -308,7 +318,7 @@ msgstr "选择要应用的角色"
 #: components/RelatedTemplateList/RelatedTemplateList.js:200
 #: components/TemplateList/TemplateList.js:222
 #: components/TemplateList/TemplateList.js:255
-#: components/TemplateList/TemplateListItem.js:150
+#: components/TemplateList/TemplateListItem.js:149
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:129
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:198
 #: components/Workflow/WorkflowNodeHelp.js:158
@@ -957,7 +967,7 @@ msgstr "目标频道"
 msgid "CIQ Ascender Automation Platform"
 msgstr "CIQ Ascender Automation Platform"
 
-#: components/TemplateList/TemplateListItem.js:203
+#: components/TemplateList/TemplateListItem.js:206
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.js:162
 msgid "Failed to copy template."
 msgstr "复制模板失败。"
@@ -1596,7 +1606,7 @@ msgstr "创建新联邦库存"
 #: components/Schedule/shared/ScheduleFormFields.js:78
 #: components/TemplateList/TemplateList.js:213
 #: components/TemplateList/TemplateList.js:250
-#: components/TemplateList/TemplateListItem.js:129
+#: components/TemplateList/TemplateListItem.js:128
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:62
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:81
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:93
@@ -1847,7 +1857,7 @@ msgstr "已批准"
 #: components/Schedule/ScheduleList/ScheduleListItem.js:127
 #: components/SelectedList/DraggableSelectedList.js:56
 #: components/TemplateList/TemplateList.js:256
-#: components/TemplateList/TemplateListItem.js:151
+#: components/TemplateList/TemplateListItem.js:154
 #: screens/ActivityStream/ActivityStream.js:301
 #: screens/ActivityStream/ActivityStreamListItem.js:45
 #: screens/Application/ApplicationsList/ApplicationListItem.js:47
@@ -2045,6 +2055,7 @@ msgstr "在评估条件之前需要父节点的结果。"
 
 #: components/JobList/JobListItem.js:227
 #: components/TemplateList/TemplateList.js:225
+#: components/TemplateList/TemplateListItem.js:152
 #: components/Workflow/WorkflowLegend.js:96
 #: components/Workflow/WorkflowNodeHelp.js:57
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateList.js:97
@@ -2656,6 +2667,12 @@ msgstr "编辑组"
 #: components/LaunchPrompt/steps/PreviewStep.js:62
 msgid "See errors on the left"
 msgstr "在左侧查看错误"
+
+#. placeholder {0}: workflowApproval.summary_fields.approved_or_denied_by.username
+#. placeholder {1}: formatDateString(workflowApproval.finished)
+#: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:7
+msgid "Approved by {0} - {1}"
+msgstr "由 {0} 批准 - {1}"
 
 #: screens/Job/JobOutput/JobOutputSearch.js:123
 msgid "Host Started"
@@ -3744,7 +3761,7 @@ msgstr "默认执行环境"
 #: components/PromptDetail/PromptInventorySourceDetail.js:85
 #: components/PromptDetail/PromptJobTemplateDetail.js:134
 #: components/PromptDetail/PromptJobTemplateDetail.js:142
-#: components/TemplateList/TemplateListItem.js:255
+#: components/TemplateList/TemplateListItem.js:258
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:223
 #: screens/Job/JobDetail/JobDetail.js:188
 #: screens/Job/JobDetail/JobDetail.js:222
@@ -4119,7 +4136,7 @@ msgstr "此操作将解除以下关联："
 msgid "Select Instances"
 msgstr "选择实例"
 
-#: components/TemplateList/TemplateListItem.js:136
+#: components/TemplateList/TemplateListItem.js:135
 msgid "Resources are missing from this template."
 msgstr "此模板中缺少资源。"
 
@@ -4291,8 +4308,8 @@ msgstr "已加密"
 msgid "{numJobsToCancel, plural, one {Cancel job} other {Cancel jobs}}"
 msgstr "{numJobsToCancel, plural, one {取消作业} other {取消作业}}"
 
-#: components/TemplateList/TemplateListItem.js:185
-#: components/TemplateList/TemplateListItem.js:191
+#: components/TemplateList/TemplateListItem.js:188
+#: components/TemplateList/TemplateListItem.js:194
 msgid "Edit Template"
 msgstr "编辑模板"
 
@@ -4956,7 +4973,7 @@ msgstr "折叠"
 #: components/PromptDetail/PromptJobTemplateDetail.js:220
 #: components/PromptDetail/PromptWFJobTemplateDetail.js:121
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:560
-#: components/TemplateList/TemplateListItem.js:301
+#: components/TemplateList/TemplateListItem.js:304
 #: routeConfig.js:78
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:255
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:120
@@ -5001,7 +5018,7 @@ msgstr "月"
 #: components/PromptDetail/PromptDetail.js:211
 #: components/PromptDetail/PromptJobTemplateDetail.js:202
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:537
-#: components/TemplateList/TemplateListItem.js:277
+#: components/TemplateList/TemplateListItem.js:280
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:121
 #: routeConfig.js:88
 #: screens/ActivityStream/ActivityStream.js:118
@@ -6156,8 +6173,8 @@ msgstr "秒"
 msgid "Health checks can only be run on execution nodes."
 msgstr "运行状况检查只能在执行节点上运行。"
 
-#: components/TemplateList/TemplateListItem.js:154
-#: components/TemplateList/TemplateListItem.js:160
+#: components/TemplateList/TemplateListItem.js:157
+#: components/TemplateList/TemplateListItem.js:163
 #: screens/Template/WorkflowJobTemplate.js:129
 msgid "Visualizer"
 msgstr "可视化工具"
@@ -6760,6 +6777,7 @@ msgid "Choose a Playbook Directory"
 msgstr "选择 Playbook 目录"
 
 #: components/JobList/JobListItem.js:237
+#: components/TemplateList/TemplateListItem.js:151
 #: components/Workflow/WorkflowNodeHelp.js:61
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateListItem.js:21
 #: screens/Job/JobDetail/JobDetail.js:286
@@ -7070,7 +7088,7 @@ msgid "Integer"
 msgstr "整数"
 
 #: components/TemplateList/TemplateList.js:253
-#: components/TemplateList/TemplateListItem.js:149
+#: components/TemplateList/TemplateListItem.js:148
 msgid "Last Ran"
 msgstr "最后运行"
 
@@ -7134,7 +7152,7 @@ msgstr "同步"
 #: components/Schedule/ScheduleList/ScheduleList.js:200
 #: components/Schedule/shared/ScheduleFormFields.js:86
 #: components/TemplateList/TemplateList.js:218
-#: components/TemplateList/TemplateListItem.js:221
+#: components/TemplateList/TemplateListItem.js:224
 #: screens/Application/ApplicationDetails/ApplicationDetails.js:65
 #: screens/Application/ApplicationsList/ApplicationsList.js:121
 #: screens/Application/shared/ApplicationForm.js:65
@@ -7328,6 +7346,10 @@ msgstr "使用 GitHub Enterprise 登录"
 #: screens/User/shared/UserForm.js:195
 msgid "Select a value for this field"
 msgstr "为这个字段选择一个值"
+
+#: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:47
+msgid "Never expires"
+msgstr "永不过期"
 
 #. placeholder {0}: job.id
 #: components/Sparkline/Sparkline.js:43
@@ -8055,6 +8077,11 @@ msgstr "没有清单同步失败。"
 msgid "Note: The order in which these are selected sets the execution precedence. Select more than one to enable drag."
 msgstr "注：选择它们的顺序设定执行优先级。选择多个来启用拖放。"
 
+#. placeholder {0}: credentialsThatPrompt.join(', ')
+#: components/LaunchPrompt/steps/CredentialsStep.js:85
+msgid "Credentials that require passwords on launch are not permitted.  Please remove or replace the following credentials with a credential of the same type in order to proceed: {0}"
+msgstr "不允许在启动时需要密码的凭证。请删除以下凭证或将其替换为相同类型的凭证以继续: {0}"
+
 #: screens/Login/Login.js:385
 msgid "Sign in with OIDC"
 msgstr "使用 OIDC 登陆"
@@ -8121,6 +8148,7 @@ msgstr "运行类型"
 
 #: components/Schedule/shared/FrequencyDetailSubform.js:543
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:82
+#: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:57
 msgid "Never"
 msgstr "永不"
 
@@ -8347,7 +8375,7 @@ msgstr "每次使用此清单运行作业时，请在执行作业任务之前刷
 
 #: components/JobList/JobList.js:241
 #: components/StatusLabel/StatusLabel.js:46
-#: components/TemplateList/TemplateListItem.js:105
+#: components/TemplateList/TemplateListItem.js:104
 #: components/Workflow/WorkflowNodeHelp.js:97
 msgid "Running"
 msgstr "运行中"
@@ -8398,6 +8426,12 @@ msgstr "创建批准时使用上游 set_stats 工件呈现的 Jinja2 模板。�
 #: screens/Template/shared/WorkflowJobTemplate.helptext.js:14
 msgid "Prompt for variables on launch."
 msgstr "启动时提示输入变量。"
+
+#. placeholder {0}: workflowApproval.summary_fields.approved_or_denied_by.username
+#. placeholder {1}: formatDateString(workflowApproval.finished)
+#: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:17
+msgid "Denied by {0} - {1}"
+msgstr "由 {0} 拒绝 - {1}"
 
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:206
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:209
@@ -8700,7 +8734,7 @@ msgstr "更新选项"
 
 #: components/PromptDetail/PromptDetail.js:178
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:428
-#: components/TemplateList/TemplateListItem.js:270
+#: components/TemplateList/TemplateListItem.js:273
 #: screens/Application/ApplicationDetails/ApplicationDetails.js:110
 #: screens/Application/ApplicationsList/ApplicationListItem.js:44
 #: screens/Application/ApplicationsList/ApplicationsList.js:157
@@ -9368,7 +9402,7 @@ msgstr "切换工具"
 #: components/PromptDetail/PromptProjectDetail.js:75
 #: components/PromptDetail/PromptProjectDetail.js:86
 #: components/PromptDetail/PromptWFJobTemplateDetail.js:67
-#: components/TemplateList/TemplateListItem.js:227
+#: components/TemplateList/TemplateListItem.js:230
 #: screens/Application/ApplicationDetails/ApplicationDetails.js:70
 #: screens/Application/ApplicationsList/ApplicationListItem.js:37
 #: screens/Application/ApplicationsList/ApplicationsList.js:155
@@ -9659,7 +9693,7 @@ msgstr "启动时提示"
 msgid "Troubleshooting settings"
 msgstr "故障修复设置"
 
-#: components/TemplateList/TemplateListItem.js:168
+#: components/TemplateList/TemplateListItem.js:171
 msgid "Launch Template"
 msgstr "启动模板"
 
@@ -10349,6 +10383,11 @@ msgstr "编辑节点"
 msgid "Clear"
 msgstr "清除"
 
+#. placeholder {0}: formatDateString( workflowApproval.approval_expiration )
+#: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:50
+msgid "Expires on {0}"
+msgstr "到期时间 {0}"
+
 #: components/Workflow/WorkflowTools.js:81
 msgid "Tools"
 msgstr "工具"
@@ -10446,7 +10485,7 @@ msgstr "实例组"
 #: components/PromptDetail/PromptJobTemplateDetail.js:97
 #: components/PromptDetail/PromptWFJobTemplateDetail.js:61
 #: components/TemplateList/TemplateList.js:251
-#: components/TemplateList/TemplateListItem.js:144
+#: components/TemplateList/TemplateListItem.js:143
 #: screens/Host/HostDetail/HostDetail.js:70
 #: screens/Host/HostList/HostList.js:171
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.js:33
@@ -10699,6 +10738,11 @@ msgstr "类型详情"
 msgid "Failed to delete role"
 msgstr "删除角色失败"
 
+#. placeholder {0}: formatDateString( workflowApproval.finished )
+#: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:11
+msgid "Approved - {0}.  See the Activity Stream for more information."
+msgstr "已批准 - {0}。请参阅活动流以获取更多信息。"
+
 #: screens/WorkflowApproval/shared/WorkflowDenyButton.js:28
 msgid "Successfully Denied"
 msgstr "成功拒绝"
@@ -10826,7 +10870,7 @@ msgstr "选择将获得新角色的资源类型。例如，如果您想为一组
 #: components/Lookup/InstanceGroupsLookup.js:86
 #: components/OptionsList/OptionsList.js:65
 #: components/Schedule/ScheduleList/ScheduleListItem.js:83
-#: components/TemplateList/TemplateListItem.js:127
+#: components/TemplateList/TemplateListItem.js:126
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:359
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:377
 #: screens/Application/ApplicationsList/ApplicationListItem.js:30
@@ -10869,7 +10913,7 @@ msgid "One Slack channel per line. The pound symbol (#)\n"
 msgstr "每行一个 Slack 频道。频道需要井号 (#)。\n"
 "        要回复特定消息或对其启动线程，请将父消息 Id 添加到频道，其中父消息 Id 为 16 位数字。必须在第 10 位数字后手动插入点 (.)。例如：#destination-channel, 1231257890.006423。请参阅 Slack"
 
-#: components/TemplateList/TemplateListItem.js:176
+#: components/TemplateList/TemplateListItem.js:179
 msgid "Launch template"
 msgstr "启动模板"
 
@@ -11420,8 +11464,8 @@ msgstr "切换通知开始"
 #: components/PromptDetail/PromptJobTemplateDetail.js:129
 #: components/PromptDetail/PromptWFJobTemplateDetail.js:79
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:449
-#: components/TemplateList/TemplateListItem.js:240
-#: components/TemplateList/TemplateListItem.js:250
+#: components/TemplateList/TemplateListItem.js:243
+#: components/TemplateList/TemplateListItem.js:253
 #: screens/Host/HostDetail/HostDetail.js:76
 #: screens/Host/HostList/HostList.js:175
 #: screens/Host/HostList/HostListItem.js:50
@@ -11452,7 +11496,7 @@ msgstr "启动时更新"
 msgid "Add hosts to group based on Jinja2 conditionals."
 msgstr "根据Jinja2条件将房东添加到群组中。"
 
-#: components/TemplateList/TemplateListItem.js:198
+#: components/TemplateList/TemplateListItem.js:201
 msgid "Copy Template"
 msgstr "复制模板"
 

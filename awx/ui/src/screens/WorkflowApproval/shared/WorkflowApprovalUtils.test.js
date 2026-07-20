@@ -18,15 +18,6 @@ async function activate() {
 }
 activate();
 
-// Mock t function that handles template literals properly
-const mockT = (strings, ...values) => {
-  let result = strings[0];
-  for (let i = 0; i < values.length; i++) {
-    result += values[i] + strings[i + 1];
-  }
-  return result;
-};
-
 describe('<WorkflowApproval />', () => {
   test('shows no expiration when approval status is pending and no approval_expiration', () => {
     expect(getPendingLabel(workflowApproval)).toEqual('Never expires');
@@ -82,7 +73,7 @@ describe('<WorkflowApproval />', () => {
     };
     workflowApproval.status = 'successful';
     workflowApproval.finished = '2020-10-10T17:13:12.067947Z';
-    expect(getTooltip(workflowApproval, mockT)).toEqual(
+    expect(getTooltip(workflowApproval)).toEqual(
       'Approved by Foobar - 10/10/2020, 5:13:12 PM'
     );
   });
@@ -93,7 +84,7 @@ describe('<WorkflowApproval />', () => {
     };
     workflowApproval.status = 'successful';
     workflowApproval.finished = '2020-10-10T17:13:12.067947Z';
-    expect(getTooltip(workflowApproval, mockT)).toEqual(
+    expect(getTooltip(workflowApproval)).toEqual(
       'Approved - 10/10/2020, 5:13:12 PM.  See the Activity Stream for more information.'
     );
   });
@@ -106,7 +97,7 @@ describe('<WorkflowApproval />', () => {
     workflowApproval.status = 'failed';
     workflowApproval.finished = '2020-10-10T17:13:12.067947Z';
     workflowApproval.failed = true;
-    expect(getTooltip(workflowApproval, mockT)).toEqual(
+    expect(getTooltip(workflowApproval)).toEqual(
       'Denied by Foobar - 10/10/2020, 5:13:12 PM'
     );
   });
@@ -118,7 +109,7 @@ describe('<WorkflowApproval />', () => {
     workflowApproval.status = 'failed';
     workflowApproval.finished = '2020-10-10T17:13:12.067947Z';
     workflowApproval.failed = true;
-    expect(getTooltip(workflowApproval, mockT)).toEqual(
+    expect(getTooltip(workflowApproval)).toEqual(
       'Denied - 10/10/2020, 5:13:12 PM.  See the Activity Stream for more information.'
     );
   });
