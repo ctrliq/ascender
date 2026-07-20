@@ -4354,6 +4354,9 @@ class WorkflowJobTemplateNodeSerializer(LaunchConfigurationBaseSerializer):
         summary_fields = super(WorkflowJobTemplateNodeSerializer, self).get_summary_fields(obj)
         if isinstance(obj.unified_job_template, WorkflowApprovalTemplate):
             summary_fields['unified_job_template']['timeout'] = obj.unified_job_template.timeout
+            summary_fields['unified_job_template']['required_approvals'] = obj.unified_job_template.required_approvals
+            summary_fields['unified_job_template']['on_timeout'] = obj.unified_job_template.on_timeout
+            summary_fields['unified_job_template']['context_template'] = obj.unified_job_template.context_template
         return summary_fields
 
 
