@@ -11,7 +11,6 @@ module.exports = defineConfig({
   ],
   compileNamespace: 'cjs',
   fallbackLocales: { default: 'en' },
-  format: "po",
   locales: ['en', 'es', 'fr', 'hi', 'ko', 'nl', 'zh', 'ja', 'ar'],
   orderBy: 'messageId',
   rootDir: './src',
