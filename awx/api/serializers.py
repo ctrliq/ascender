@@ -979,7 +979,7 @@ class UnifiedJobStdoutSerializer(UnifiedJobSerializer):
             return super(UnifiedJobStdoutSerializer, self).get_types()
 
 
-SUPPORTED_UI_LOCALES = frozenset(['', 'en', 'es', 'fr', 'ja', 'ko', 'nl', 'zh', 'zu'])
+SUPPORTED_UI_LOCALES = frozenset(['', 'ar', 'en', 'es', 'fr', 'hi', 'ja', 'ko', 'nl', 'zh'])
 
 
 class UserSerializer(BaseSerializer):

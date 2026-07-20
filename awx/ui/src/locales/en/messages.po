@@ -42,12 +42,6 @@ msgstr "Choose an HTTP method"
 msgid "Select an instance"
 msgstr "Select an instance"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:61
-#~ msgid "Welcome to Red Hat Ansible Automation Platform!\n"
-#~ "Please complete the steps below to activate your subscription."
-#~ msgstr "Welcome to Red Hat Ansible Automation Platform!\n"
-#~ "Please complete the steps below to activate your subscription."
-
 #: screens/WorkflowApproval/WorkflowApproval.js:49
 msgid "Workflow Approval not found."
 msgstr "Workflow Approval not found."
@@ -83,10 +77,6 @@ msgstr "Constructed inventory examples"
 msgid "Artifact key"
 msgstr "Artifact key"
 
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:99
-#~ msgid "day"
-#~ msgstr "day"
-
 #: screens/Job/JobOutput/shared/OutputToolbar.js:132
 msgid "Task Count"
 msgstr "Task Count"
@@ -94,10 +84,6 @@ msgstr "Task Count"
 #: screens/Setting/Jobs/JobsEdit/JobsEdit.js:134
 msgid "Template"
 msgstr "Template"
-
-#: components/LaunchPrompt/steps/credentialsValidator.js:40
-#~ msgid "Job Template default credentials must be replaced with one of the same type.  Please select a credential for the following types in order to proceed: {0}"
-#~ msgstr "Job Template default credentials must be replaced with one of the same type.  Please select a credential for the following types in order to proceed: {0}"
 
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:416
 #: components/Schedule/shared/ScheduleFormFields.js:159
@@ -120,14 +106,6 @@ msgstr "Select the Execution Environment you want this command to run inside."
 msgid "Add a new node between these two nodes"
 msgstr "Add a new node between these two nodes"
 
-#: screens/Project/shared/Project.helptext.js:93
-#~ msgid "The first fetches all references. The second\n"
-#~ "fetches the Github pull request number 62, in this example\n"
-#~ "the branch needs to be \"pull/62/head\"."
-#~ msgstr "The first fetches all references. The second\n"
-#~ "fetches the Github pull request number 62, in this example\n"
-#~ "the branch needs to be \"pull/62/head\"."
-
 #: screens/Job/JobOutput/JobOutputSearch.js:120
 msgid "Host Polling"
 msgstr "Host Polling"
@@ -144,16 +122,6 @@ msgstr "Managed by Policy"
 msgid "Advanced search documentation"
 msgstr "Advanced search documentation"
 
-#: screens/Organization/OrganizationDetail/OrganizationDetail.js:106
-#~ msgid "The execution environment that will be used for jobs\n"
-#~ "inside of this organization. This will be used a fallback when\n"
-#~ "an execution environment has not been explicitly assigned at the\n"
-#~ "project, job template or workflow level."
-#~ msgstr "The execution environment that will be used for jobs\n"
-#~ "inside of this organization. This will be used a fallback when\n"
-#~ "an execution environment has not been explicitly assigned at the\n"
-#~ "project, job template or workflow level."
-
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:95
 msgid "Delete Group?"
 msgstr "Delete Group?"
@@ -161,10 +129,6 @@ msgstr "Delete Group?"
 #: components/HealthCheckButton/HealthCheckButton.js:24
 msgid "{selectedItemsCount, plural, one {Click to run a health check on the selected instance.} other {Click to run a health check on the selected instances.}}"
 msgstr "{selectedItemsCount, plural, one {Click to run a health check on the selected instance.} other {Click to run a health check on the selected instances.}}"
-
-#: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:16
-#~ msgid "Denied - {0}.  See the Activity Stream for more information."
-#~ msgstr "Denied - {0}.  See the Activity Stream for more information."
 
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:66
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:87
@@ -292,11 +256,6 @@ msgstr "(Prompt on launch)"
 msgid "This credential type is currently being used by some credentials and cannot be deleted"
 msgstr "This credential type is currently being used by some credentials and cannot be deleted"
 
-#: screens/Job/Job.helptext.js:17
-#: screens/Template/shared/JobTemplate.helptext.js:39
-#~ msgid "Divide the work done by this job template into the specified number of job slices, each running the same tasks against a portion of the inventory."
-#~ msgstr "Divide the work done by this job template into the specified number of job slices, each running the same tasks against a portion of the inventory."
-
 #: components/Search/LookupTypeInput.js:172
 msgid "Lookup typeahead"
 msgstr "Lookup typeahead"
@@ -418,10 +377,6 @@ msgstr "The project must be synced before a revision is available."
 msgid "Policy Type"
 msgstr "Policy Type"
 
-#: components/LaunchPrompt/steps/useSurveyStep.js:103
-#~ msgid "This field must not exceed {0} characters"
-#~ msgstr "This field must not exceed {0} characters"
-
 #: components/StatusLabel/StatusLabel.js:49
 msgid "Timed out"
 msgstr "Timed out"
@@ -498,10 +453,6 @@ msgstr "Always"
 #: screens/Credential/shared/CredentialFormFields/GceFileUploadField.js:28
 msgid "There was an error parsing the file. Please check the file formatting and try again."
 msgstr "There was an error parsing the file. Please check the file formatting and try again."
-
-#: util/validators.js:44
-#~ msgid "This field must not exceed {max} characters"
-#~ msgstr ""
 
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:128
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:134
@@ -605,10 +556,6 @@ msgstr "{0, plural, one {You cannot cancel the following job because it is not r
 msgid "Options"
 msgstr "Options"
 
-#: screens/Project/shared/Project.helptext.js:98
-#~ msgid "For more information, refer to the"
-#~ msgstr "For more information, refer to the"
-
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:371
 msgid "Maximum number of times this node's job is automatically retried after failing before its failure paths are followed. Canceled jobs are never retried."
 msgstr "Maximum number of times this node's job is automatically retried after failing before its failure paths are followed. Canceled jobs are never retried."
@@ -647,12 +594,6 @@ msgstr "GPG Public Key"
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/ProjectsList.js:104
 msgid "Source Control URL"
 msgstr "Source Control URL"
-
-#: screens/Project/shared/Project.helptext.js:124
-#~ msgid "Each time a job runs using this project, update the\n"
-#~ "revision of the project prior to starting the job."
-#~ msgstr "Each time a job runs using this project, update the\n"
-#~ "revision of the project prior to starting the job."
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:297
 #: screens/Inventory/shared/ConstructedInventoryForm.js:152
@@ -875,10 +816,6 @@ msgstr "Add workflow template"
 msgid "Back to Tokens"
 msgstr "Back to Tokens"
 
-#: screens/Template/shared/JobTemplate.helptext.js:105
-#~ msgid "Webhooks: Enable webhook for this template."
-#~ msgstr "Webhooks: Enable webhook for this template."
-
 #: screens/Setting/Settings.js:90
 msgid "LDAP 5"
 msgstr "LDAP 5"
@@ -977,20 +914,6 @@ msgstr "CPU {0}"
 msgid "Elapsed Time"
 msgstr "Elapsed Time"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:197
-#~ msgid "Provide your Red Hat or Red Hat Satellite credentials\n"
-#~ "below and you can choose from a list of your available subscriptions.\n"
-#~ "The credentials you use will be stored for future use in\n"
-#~ "retrieving renewal or expanded subscriptions."
-#~ msgstr "Provide your Red Hat or Red Hat Satellite credentials\n"
-#~ "below and you can choose from a list of your available subscriptions.\n"
-#~ "The credentials you use will be stored for future use in\n"
-#~ "retrieving renewal or expanded subscriptions."
-
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:36
-#~ msgid "{interval, plural, one {# year} other {# years}}"
-#~ msgstr "{interval, plural, one {# year} other {# years}}"
-
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:82
 msgid "Inventory Source Sync"
 msgstr "Inventory Source Sync"
@@ -1039,10 +962,6 @@ msgstr "CIQ Ascender Automation Platform"
 msgid "Failed to copy template."
 msgstr "Failed to copy template."
 
-#: screens/Template/shared/JobTemplate.helptext.js:77
-#~ msgid "If enabled, the job template will prevent adding any inventory or organization instance groups to the list of preferred instances groups to run on.\\n      Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied."
-#~ msgstr "If enabled, the job template will prevent adding any inventory or organization instance groups to the list of preferred instances groups to run on.\\n      Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied."
-
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:188
 #: components/Schedule/shared/FrequencyDetailSubform.js:189
 #: components/Schedule/shared/ScheduleFormFields.js:144
@@ -1076,12 +995,6 @@ msgstr "and click on Update Revision on Launch."
 msgid "End User License Agreement"
 msgstr "End User License Agreement"
 
-#: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:73
-#~ msgid "Minimum percentage of all instances that will be automatically\n"
-#~ "assigned to this group when new instances come online."
-#~ msgstr "Minimum percentage of all instances that will be automatically\n"
-#~ "assigned to this group when new instances come online."
-
 #: screens/ActivityStream/ActivityStreamDetailButton.js:49
 msgid "Setting category"
 msgstr "Setting category"
@@ -1099,10 +1012,6 @@ msgstr "Deletion error"
 #: screens/Team/Team.js:75
 msgid "View all Teams."
 msgstr "View all Teams."
-
-#: util/validators.js:186
-#~ msgid "This field must be a regular expression"
-#~ msgstr "This field must be a regular expression"
 
 #: screens/Job/JobDetail/JobDetail.js:616
 msgid "Artifacts"
@@ -1131,10 +1040,6 @@ msgstr "Health checks are asynchronous tasks. See the"
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.js:76
 msgid "Cancel subscription edit"
 msgstr "Cancel subscription edit"
-
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:19
-#~ msgid "Prompt for credentials on launch."
-#~ msgstr "Prompt for credentials on launch."
 
 #: screens/Inventory/InventoryGroups/InventoryGroupItem.js:37
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupItem.js:43
@@ -1197,10 +1102,6 @@ msgstr "Save & Exit"
 msgid "Select the inventory that this host will belong to."
 msgstr "Select the inventory that this host will belong to."
 
-#: screens/Template/shared/JobTemplate.helptext.js:56
-#~ msgid "Select a webhook service."
-#~ msgstr "Select a webhook service."
-
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.js:84
 msgid "Out of compliance"
 msgstr "Out of compliance"
@@ -1220,10 +1121,6 @@ msgstr "February"
 #: screens/Setting/Settings.js:195
 msgid "View all settings"
 msgstr "View all settings"
-
-#: screens/Template/shared/JobTemplate.helptext.js:60
-#~ msgid "Webhook services can use this as a shared secret."
-#~ msgstr "Webhook services can use this as a shared secret."
 
 #: screens/ManagementJob/ManagementJob.js:133
 msgid "View all management jobs"
@@ -1246,11 +1143,6 @@ msgstr "Some search modifiers like not__ and __search are not supported in Smart
 msgid "timed out"
 msgstr "timed out"
 
-#: screens/Job/Job.helptext.js:15
-#: screens/Template/shared/JobTemplate.helptext.js:33
-#~ msgid "Provide a host pattern to further constrain the list of hosts that will be managed or affected by the playbook. Multiple patterns are allowed. Refer to Ansible documentation for more information and examples on patterns."
-#~ msgstr "Provide a host pattern to further constrain the list of hosts that will be managed or affected by the playbook. Multiple patterns are allowed. Refer to Ansible documentation for more information and examples on patterns."
-
 #: screens/Setting/Logging/Logging.js:37
 msgid "View Logging settings"
 msgstr "View Logging settings"
@@ -1262,10 +1154,6 @@ msgstr "Client secret"
 #: screens/Template/Templates.js:19
 msgid "Create New Job Template"
 msgstr "Create New Job Template"
-
-#: screens/Job/Job.helptext.js:9
-#~ msgid "The project from which this inventory update is sourced."
-#~ msgstr "The project from which this inventory update is sourced."
 
 #: components/AddRole/AddResourceRole.js:214
 msgid "Select Items from List"
@@ -1303,10 +1191,6 @@ msgstr "Are you sure you want to remove all the nodes in this workflow?"
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/RunStep.js:73
 msgid "Execute when an artifact of the parent node matches the condition."
 msgstr "Execute when an artifact of the parent node matches the condition."
-
-#: screens/InstanceGroup/shared/ContainerGroupForm.js:69
-#~ msgid "Maximum number of jobs to run concurrently on this group.\\n          Zero means no limit will be enforced."
-#~ msgstr "Maximum number of jobs to run concurrently on this group.\\n          Zero means no limit will be enforced."
 
 #: components/Lookup/HostFilterLookup.js:144
 msgid "Last job"
@@ -1366,10 +1250,6 @@ msgstr "Are you sure you want to cancel this job?"
 msgid "Revert to factory default."
 msgstr "Revert to factory default."
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:26
-#~ msgid "Prompt for job slice count on launch."
-#~ msgstr "Prompt for job slice count on launch."
-
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:134
 msgid "Filter by failed jobs"
 msgstr "Filter by failed jobs"
@@ -1386,16 +1266,6 @@ msgstr ""
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:269
 msgid "This workflow job template is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "This workflow job template is currently being used by other resources. Are you sure you want to delete it?"
-
-#: screens/Host/HostGroups/HostGroupsList.js:215
-#~ msgid "Note that you may still see the group in the list after\n"
-#~ "disassociating if the host is also a member of that group’s\n"
-#~ "children.  This list shows all groups the host is associated\n"
-#~ "with directly and indirectly."
-#~ msgstr "Note that you may still see the group in the list after\n"
-#~ "disassociating if the host is also a member of that group’s\n"
-#~ "children.  This list shows all groups the host is associated\n"
-#~ "with directly and indirectly."
 
 #: routeConfig.js:103
 #: screens/ActivityStream/ActivityStream.js:121
@@ -1452,10 +1322,6 @@ msgstr "No Hosts Matched"
 msgid "Only Group By"
 msgstr "Only Group By"
 
-#: screens/Setting/shared/SharedFields.js:74
-#~ msgid "More information for"
-#~ msgstr "More information for"
-
 #: screens/Login/Login.js:156
 msgid "There was a problem logging in. Please try again."
 msgstr "There was a problem logging in. Please try again."
@@ -1492,12 +1358,6 @@ msgstr "Container Group"
 #: screens/Dashboard/DashboardGraph.js:140
 msgid "Past week"
 msgstr "Past week"
-
-#: components/AdHocCommands/AdHocDetailsStep.js:249
-#~ msgid "Provide key/value pairs using either\n"
-#~ "YAML or JSON."
-#~ msgstr "Provide key/value pairs using either\n"
-#~ "YAML or JSON."
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.js:56
 msgid "Save link changes"
@@ -1543,10 +1403,6 @@ msgstr "Soft delete"
 #: screens/Job/JobOutput/JobOutputSearch.js:99
 msgid "Stdout"
 msgstr "Stdout"
-
-#: components/LaunchPrompt/LaunchPrompt.js:132
-#~ msgid "Launch | {0})"
-#~ msgstr "Launch | {0})"
 
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:80
 msgid "Only if Missing"
@@ -1629,25 +1485,9 @@ msgstr "Toggle legend"
 msgid "Tokens"
 msgstr "Tokens"
 
-#: screens/Inventory/shared/ConstructedInventoryHint.js:319
-#~ msgid "It is hard to give a specification for\n"
-#~ "the inventory for Ansible facts, because to populate\n"
-#~ "the system facts you need to run a playbook against\n"
-#~ "the inventory that has `gather_facts: true`. The\n"
-#~ "actual facts will differ system-to-system."
-#~ msgstr "It is hard to give a specification for\n"
-#~ "the inventory for Ansible facts, because to populate\n"
-#~ "the system facts you need to run a playbook against\n"
-#~ "the inventory that has `gather_facts: true`. The\n"
-#~ "actual facts will differ system-to-system."
-
 #: screens/Inventory/shared/FederatedInventoryForm.js:82
 msgid "Select the source inventories for this federated inventory. When a job is launched, hosts will be routed to each source inventory's instance group automatically."
 msgstr "Select the source inventories for this federated inventory. When a job is launched, hosts will be routed to each source inventory's instance group automatically."
-
-#: components/Schedule/shared/UnsupportedRRuleAlert.js:25
-#~ msgid "This schedule uses complex rules that are not supported in the\\n        UI.  Please use the API to manage this schedule."
-#~ msgstr "This schedule uses complex rules that are not supported in the\\n        UI.  Please use the API to manage this schedule."
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:336
 msgid "API Service/Integration Key"
@@ -2108,10 +1948,6 @@ msgstr "Key"
 msgid "Username"
 msgstr ""
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:8
-#~ msgid "The organization that owns this workflow job template."
-#~ msgstr "The organization that owns this workflow job template."
-
 #: components/RelatedTemplateList/RelatedTemplateList.js:225
 msgid "Deleting these templates could impact some workflow nodes that rely on them. Are you sure you want to delete anyway?"
 msgstr "Deleting these templates could impact some workflow nodes that rely on them. Are you sure you want to delete anyway?"
@@ -2132,10 +1968,6 @@ msgstr "Success message body"
 msgid "Playbook run"
 msgstr "Playbook run"
 
-#: screens/Template/shared/JobTemplate.helptext.js:14
-#~ msgid "Select the project containing the playbook you want this job to execute."
-#~ msgstr "Select the project containing the playbook you want this job to execute."
-
 #: components/Pagination/Pagination.js:30
 msgid "Go to first page"
 msgstr ""
@@ -2154,10 +1986,6 @@ msgstr ""
 msgid "relaunch workflow"
 msgstr "relaunch workflow"
 
-#: screens/Project/shared/Project.helptext.js:59
-#~ msgid "This project is currently on sync and cannot be clicked until sync process completed"
-#~ msgstr "This project is currently on sync and cannot be clicked until sync process completed"
-
 #: routeConfig.js:131
 #: screens/ActivityStream/ActivityStream.js:221
 msgid "Administration"
@@ -2175,10 +2003,6 @@ msgstr "Label"
 #: screens/Setting/shared/RevertAllAlert.js:25
 msgid "Revert all"
 msgstr "Revert all"
-
-#: screens/Application/shared/Application.helptext.js:7
-#~ msgid "Allowed URIs list, space separated"
-#~ msgstr "Allowed URIs list, space separated"
 
 #: screens/Setting/MiscSystem/MiscSystem.js:38
 msgid "View Miscellaneous System settings"
@@ -2226,10 +2050,6 @@ msgstr "Clear subscription"
 msgid "Install Bundle"
 msgstr "Install Bundle"
 
-#: screens/Project/shared/Project.helptext.js:23
-#~ msgid "Example URLs for GIT Source Control include:"
-#~ msgstr "Example URLs for GIT Source Control include:"
-
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.js:75
 #: screens/CredentialType/shared/CredentialTypeForm.js:38
 msgid "Input configuration"
@@ -2264,10 +2084,6 @@ msgstr "Delete smart inventory"
 msgid "Show"
 msgstr "Show"
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:31
-#~ msgid "Webhook key for this workflow job template."
-#~ msgstr "Webhook key for this workflow job template."
-
 #: components/ResourceAccessList/ResourceAccessList.js:257
 msgid "Failed to assign roles properly"
 msgstr "Failed to assign roles properly"
@@ -2298,10 +2114,6 @@ msgstr "{0, plural, one {This credential type is currently being used by some cr
 msgid "Password"
 msgstr ""
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:13
-#~ msgid "Allow simultaneous runs of this workflow job template."
-#~ msgstr "Allow simultaneous runs of this workflow job template."
-
 #: screens/Inventory/FederatedInventory.js:201
 msgid "View Federated Inventory Details"
 msgstr "View Federated Inventory Details"
@@ -2331,10 +2143,6 @@ msgstr "When was the host first automated"
 msgid "Create New User"
 msgstr "Create New User"
 
-#: screens/Template/shared/WebhookSubForm.js:158
-#~ msgid "a new webhook key will be generated on save."
-#~ msgstr "a new webhook key will be generated on save."
-
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:31
 msgid "{interval} week"
 msgstr "{interval} week"
@@ -2342,10 +2150,6 @@ msgstr "{interval} week"
 #: components/LabelSelect/LabelSelect.js:133
 msgid "Select Labels"
 msgstr "Select Labels"
-
-#: screens/Credential/shared/CredentialFormFields/GceFileUploadField.js:46
-#~ msgid "Expected at least one of client_email, project_id or private_key to be present in the file."
-#~ msgstr "Expected at least one of client_email, project_id or private_key to be present in the file."
 
 #: screens/Template/Template.js:171
 #: screens/Template/WorkflowJobTemplate.js:170
@@ -2359,10 +2163,6 @@ msgstr "Subscription type"
 #: screens/Instances/Shared/RemoveInstanceButton.js:80
 msgid "Select a row to remove"
 msgstr "Select a row to remove"
-
-#: components/Search/AdvancedSearch.js:172
-#~ msgid "Returns results that have values other than this one as well as other filters."
-#~ msgstr "Returns results that have values other than this one as well as other filters."
 
 #: components/LaunchButton/ReLaunchDropDown.js:27
 #: components/LaunchButton/ReLaunchDropDown.js:31
@@ -2566,27 +2366,9 @@ msgstr "Fourth"
 msgid "Health check request(s) submitted. Please wait and reload the page."
 msgstr "Health check request(s) submitted. Please wait and reload the page."
 
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:101
-#~ msgid "weekend day"
-#~ msgstr "weekend day"
-
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:103
 msgid "Execution environment copied successfully"
 msgstr "Execution environment copied successfully"
-
-#: screens/Project/shared/Project.helptext.js:128
-#~ msgid "Time in seconds to consider a project\n"
-#~ "to be current. During job runs and callbacks the task\n"
-#~ "system will evaluate the timestamp of the latest project\n"
-#~ "update. If it is older than Cache Timeout, it is not\n"
-#~ "considered current, and a new project update will be\n"
-#~ "performed."
-#~ msgstr "Time in seconds to consider a project\n"
-#~ "to be current. During job runs and callbacks the task\n"
-#~ "system will evaluate the timestamp of the latest project\n"
-#~ "update. If it is older than Cache Timeout, it is not\n"
-#~ "considered current, and a new project update will be\n"
-#~ "performed."
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:332
 msgid "Cancel Constructed Inventory Source Sync"
@@ -2650,18 +2432,9 @@ msgstr "Enable external logging"
 msgid "STATUS:"
 msgstr "STATUS:"
 
-#: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:23
-#~ msgid "timedOut"
-#~ msgstr "timedOut"
-
 #: screens/Inventory/shared/ConstructedInventoryHint.js:88
 msgid "boolean"
 msgstr "boolean"
-
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:122
-#~ msgid "Allow branch override"
-#~ msgstr "Allow branch override"
 
 #: components/AppContainer/PageHeaderToolbar.js:223
 msgid "User Details"
@@ -2736,10 +2509,6 @@ msgstr "Microsoft Azure Resource Manager"
 msgid "Job Delete Error"
 msgstr "Job Delete Error"
 
-#: components/PaginatedTable/PaginatedTable.js:84
-#~ msgid "No {pluralizedItemName} Found "
-#~ msgstr "No {pluralizedItemName} Found "
-
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:67
 #: components/Schedule/shared/FrequencyDetailSubform.js:256
 msgid "On days"
@@ -2790,10 +2559,6 @@ msgstr "Red Hat Virtualization"
 #: screens/Job/JobOutput/shared/OutputToolbar.js:229
 msgid "Copy Output"
 msgstr "Copy Output"
-
-#: components/SelectedList/DraggableSelectedList.js:39
-#~ msgid "Dragging item {id}. Item with index {oldIndex} in now {newIndex}."
-#~ msgstr "Dragging item {id}. Item with index {oldIndex} in now {newIndex}."
 
 #: components/LabelSelect/LabelSelect.js:196
 #: components/LaunchPrompt/steps/SurveyStep.js:194
@@ -2871,20 +2636,6 @@ msgstr "Edit Group"
 #: components/LaunchPrompt/steps/PreviewStep.js:62
 msgid "See errors on the left"
 msgstr "See errors on the left"
-
-#: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:8
-#~ msgid "Approved by {0} - {1}"
-#~ msgstr "Approved by {0} - {1}"
-
-#: screens/Project/shared/Project.helptext.js:114
-#~ msgid "Delete the local repository in its entirety prior to\n"
-#~ "performing an update. Depending on the size of the\n"
-#~ "repository this may significantly increase the amount\n"
-#~ "of time required to complete an update."
-#~ msgstr "Delete the local repository in its entirety prior to\n"
-#~ "performing an update. Depending on the size of the\n"
-#~ "repository this may significantly increase the amount\n"
-#~ "of time required to complete an update."
 
 #: screens/Job/JobOutput/JobOutputSearch.js:123
 msgid "Host Started"
@@ -3025,13 +2776,6 @@ msgstr "Enabled Value"
 msgid "Use one Annotation Tag per line, without commas."
 msgstr "Use one Annotation Tag per line, without commas."
 
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:60
-#: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:81
-#~ msgid "Maximum number of jobs to run concurrently on this group.\n"
-#~ "Zero means no limit will be enforced."
-#~ msgstr "Maximum number of jobs to run concurrently on this group.\n"
-#~ "Zero means no limit will be enforced."
-
 #: components/StatusLabel/StatusLabel.js:45
 #: screens/Job/JobOutput/shared/HostStatusBar.js:51
 #: screens/Job/JobOutput/shared/OutputToolbar.js:145
@@ -3057,10 +2801,6 @@ msgstr "Input Inventories"
 #: components/Schedule/shared/FrequencyDetailSubform.js:504
 msgid "of"
 msgstr "of"
-
-#: util/validators.js:53
-#~ msgid "This field must be at least {min} characters"
-#~ msgstr "This field must be at least {min} characters"
 
 #: screens/ActivityStream/ActivityStreamDetailButton.js:56
 msgid "Action"
@@ -3104,10 +2844,6 @@ msgstr "workflow job template webhook key"
 msgid "Occurrences"
 msgstr "Occurrences"
 
-#: util/validators.js:139
-#~ msgid "{0, plural, one {Please enter a valid phone number.} other {Please enter valid phone numbers.}}"
-#~ msgstr "{0, plural, one {Please enter a valid phone number.} other {Please enter valid phone numbers.}}"
-
 #: screens/Host/Host.js:63
 #: screens/Host/HostFacts/HostFacts.js:45
 #: screens/Host/Hosts.js:31
@@ -3122,10 +2858,6 @@ msgstr "Facts"
 #: components/PaginatedTable/PaginatedTable.js:46
 msgid "Items"
 msgstr "Items"
-
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:7
-#~ msgid "Select the inventory containing the hosts you want this workflow to manage."
-#~ msgstr "Select the inventory containing the hosts you want this workflow to manage."
 
 #: screens/Instances/InstanceDetail/InstanceDetail.js:427
 #: screens/Instances/InstanceList/InstanceList.js:273
@@ -3248,11 +2980,6 @@ msgstr "Client identifier"
 msgid "Host Failed"
 msgstr "Host Failed"
 
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:269
-#~ msgid "Cache Timeout"
-#~ msgstr "Cache Timeout"
-
 #: components/AddRole/AddResourceRole.js:201
 #: components/AddRole/AddResourceRole.js:202
 #: routeConfig.js:124
@@ -3274,16 +3001,6 @@ msgstr "Host Failed"
 msgid "Teams"
 msgstr ""
 
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:322
-#~ msgid "Cancel Project Sync"
-#~ msgstr "Cancel Project Sync"
-
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:324
-#~ msgid "Cancel Sync"
-#~ msgstr "Cancel Sync"
-
 #: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:46
 #: screens/WorkflowApproval/shared/WorkflowDenyButton.js:38
 msgid "This workflow has already been acted on"
@@ -3304,10 +3021,6 @@ msgstr "The suggested format for variable names is lowercase and\n"
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:534
 msgid "This job template is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "This job template is currently being used by other resources. Are you sure you want to delete it?"
-
-#: components/Schedule/shared/ScheduleFormFields.js:45
-#~ msgid "Warning: {selectedValue} is a link to {link} and will be saved as that."
-#~ msgstr "Warning: {selectedValue} is a link to {link} and will be saved as that."
 
 #: screens/Credential/Credential.js:113
 msgid "View all Credentials."
@@ -3532,19 +3245,9 @@ msgstr "Changed"
 msgid "Data retention period"
 msgstr "Data retention period"
 
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:241
-#~ msgid "Content Signature Validation Credential"
-#~ msgstr "Content Signature Validation Credential"
-
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerStartScreen.js:41
 msgid "This workflow does not have any nodes configured."
 msgstr "This workflow does not have any nodes configured."
-
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:203
-#~ msgid "Copy full revision to clipboard."
-#~ msgstr "Copy full revision to clipboard."
 
 #: screens/Host/HostGroups/HostGroupsList.js:214
 msgid ""
@@ -3580,11 +3283,6 @@ msgstr "Select Groups"
 #: screens/User/shared/UserTokenForm.js:84
 msgid "Read"
 msgstr "Read"
-
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:293
-#~ msgid "Created"
-#~ msgstr "Created"
 
 #: screens/Setting/Subscription/Subscription.js:30
 msgid "View Settings"
@@ -3720,20 +3418,6 @@ msgstr "A subscription manifest is an export of a Red Hat Subscription. To gener
 msgid "{interval} minutes"
 msgstr "{interval} minutes"
 
-#: screens/Project/shared/Project.helptext.js:35
-#~ msgid "Note: When using SSH protocol for GitHub or\n"
-#~ "Bitbucket, enter an SSH key only, do not enter a username\n"
-#~ "(other than git). Additionally, GitHub and Bitbucket do\n"
-#~ "not support password authentication when using SSH. GIT\n"
-#~ "read only protocol (git://) does not use username or\n"
-#~ "password information."
-#~ msgstr "Note: When using SSH protocol for GitHub or\n"
-#~ "Bitbucket, enter an SSH key only, do not enter a username\n"
-#~ "(other than git). Additionally, GitHub and Bitbucket do\n"
-#~ "not support password authentication when using SSH. GIT\n"
-#~ "read only protocol (git://) does not use username or\n"
-#~ "password information."
-
 #: screens/Setting/SettingList.js:113
 msgid "Miscellaneous Authentication settings"
 msgstr "Miscellaneous Authentication settings"
@@ -3741,11 +3425,6 @@ msgstr "Miscellaneous Authentication settings"
 #: components/Schedule/ScheduleOccurrences/ScheduleOccurrences.js:58
 msgid "Local"
 msgstr "Local"
-
-#: screens/Job/Job.helptext.js:7
-#: screens/Template/shared/JobTemplate.helptext.js:11
-#~ msgid "Select the inventory containing the hosts you want this job to manage."
-#~ msgstr "Select the inventory containing the hosts you want this job to manage."
 
 #: components/AlertModal/AlertModal.js:83
 msgid "Alert modal"
@@ -3868,29 +3547,9 @@ msgstr "This action will disassociate all roles for this user from the selected 
 msgid "Cancel"
 msgstr ""
 
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:341
-#~ msgid "Delete"
-#~ msgstr "Delete"
-
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:335
-#~ msgid "Delete Project"
-#~ msgstr "Delete Project"
-
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:101
-#~ msgid "Delete the project before syncing"
-#~ msgstr "Delete the project before syncing"
-
 #: screens/Inventory/Inventory.js:97
 msgid "Inventory not found."
 msgstr "Inventory not found."
-
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:178
-#~ msgid "Description"
-#~ msgstr "Description"
 
 #: components/HealthCheckButton/HealthCheckButton.js:47
 #: components/HealthCheckButton/HealthCheckButton.js:65
@@ -3934,15 +3593,6 @@ msgstr "View all applications."
 #: screens/Template/Survey/SurveyQuestionForm.js:199
 msgid "Minimum length"
 msgstr "Minimum length"
-
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:95
-#~ msgid "Discard local changes before syncing"
-#~ msgstr "Discard local changes before syncing"
-
-#: util/validators.js:62
-#~ msgid "This field must be a number and have a value less than {max}"
-#~ msgstr "This field must be a number and have a value less than {max}"
 
 #: components/Lookup/HostFilterLookup.js:355
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:119
@@ -4004,20 +3654,12 @@ msgstr "This table gives a few useful parameters of the constructed\n"
 msgid "Convergence select"
 msgstr "Convergence select"
 
-#: components/LaunchPrompt/steps/useSurveyStep.js:109
-#~ msgid "This field must be a number and have a value between {0} and {1}"
-#~ msgstr "This field must be a number and have a value between {0} and {1}"
-
 #: components/CodeEditor/VariablesDetail.js:125
 #: components/CodeEditor/VariablesDetail.js:131
 #: components/CodeEditor/VariablesField.js:154
 #: components/CodeEditor/VariablesField.js:160
 msgid "Done"
 msgstr "Done"
-
-#: screens/Template/shared/JobTemplate.helptext.js:45
-#~ msgid "If enabled, show the changes made by Ansible tasks, where supported. This is equivalent to Ansible's --diff mode."
-#~ msgstr "If enabled, show the changes made by Ansible tasks, where supported. This is equivalent to Ansible's --diff mode."
 
 #: components/Lookup/HostFilterLookup.js:417
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:250
@@ -4045,12 +3687,6 @@ msgstr "First automated"
 #: screens/Inventory/shared/ConstructedInventoryHint.js:111
 msgid "dictionary"
 msgstr "dictionary"
-
-#: screens/Inventory/shared/ConstructedInventoryHint.js:92
-#~ msgid "If yes make invalid entries a fatal error, otherwise skip and\n"
-#~ "continue."
-#~ msgstr "If yes make invalid entries a fatal error, otherwise skip and\n"
-#~ "continue."
 
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressList.js:125
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressListItem.js:27
@@ -4080,10 +3716,6 @@ msgstr "TACACS+ settings"
 #: components/Workflow/WorkflowTools.js:115
 msgid "Zoom In"
 msgstr "Zoom In"
-
-#: screens/Job/Job.helptext.js:23
-#~ msgid "Project checkout results"
-#~ msgstr "Project checkout results"
 
 #: components/Schedule/shared/FrequencyDetailSubform.js:149
 msgid "October"
@@ -4126,19 +3758,9 @@ msgstr "Choose a Notification Type"
 msgid "Pull"
 msgstr "Pull"
 
-#: screens/Setting/shared/RevertAllAlert.js:39
-#~ msgid "This will revert all configuration values on this page to\n"
-#~ "their factory defaults. Are you sure you want to proceed?"
-#~ msgstr "This will revert all configuration values on this page to\n"
-#~ "their factory defaults. Are you sure you want to proceed?"
-
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.js:88
 msgid "Environment variables or extra variables that specify the values a credential type can inject."
 msgstr "Environment variables or extra variables that specify the values a credential type can inject."
-
-#: util/getRelatedResourceDeleteDetails.js:141
-#~ msgid "Workflow Job Templates"
-#~ msgstr "Workflow Job Templates"
 
 #. placeholder {0}: import React, { useCallback, useEffect, useState } from 'react'; import { useNavigate, useParams } from 'react-router'; import { Trans, useLingui } from '@lingui/react/macro'; import { Button, Progress, ProgressMeasureLocation, ProgressSize, CodeBlock, CodeBlockCode, Tooltip, Slider, } from '@patternfly/react-core'; import { CaretLeftIcon, OutlinedClockIcon } from '@patternfly/react-icons'; import styled from 'styled-components'; import { useConfig } from 'contexts/Config'; import { InstancesAPI, InstanceGroupsAPI } from 'api'; import useDebounce from 'hooks/useDebounce'; import AlertModal from 'components/AlertModal'; import ErrorDetail from 'components/ErrorDetail'; import DisassociateButton from 'components/DisassociateButton'; import InstanceToggle from 'components/InstanceToggle'; import { CardBody, CardActionsRow } from 'components/Card'; import getDocsBaseUrl from 'util/getDocsBaseUrl'; import { formatDateString } from 'util/dates'; import RoutedTabs from 'components/RoutedTabs'; import ContentError from 'components/ContentError'; import ContentLoading from 'components/ContentLoading'; import { Detail, DetailList } from 'components/DetailList'; import HealthCheckAlert from 'components/HealthCheckAlert'; import StatusLabel from 'components/StatusLabel'; import useRequest, { useDeleteItems, useDismissableError, } from 'hooks/useRequest'; const Unavailable = styled.span` color: var(--pf-v6-global--danger-color--200); `; const SliderHolder = styled.div` display: flex; align-items: center; justify-content: space-between; `; const SliderForks = styled.div` flex-grow: 1; margin-right: 8px; margin-left: 8px; text-align: center; `; function computeForks(memCapacity, cpuCapacity, selectedCapacityAdjustment) { const minCapacity = Math.min(memCapacity, cpuCapacity); const maxCapacity = Math.max(memCapacity, cpuCapacity); return Math.floor( minCapacity + (maxCapacity - minCapacity) * selectedCapacityAdjustment ); } function InstanceDetails({ setBreadcrumb, instanceGroup }) { const { t, i18n } = useLingui(); const config = useConfig(); const { id, instanceId } = useParams(); const navigate = useNavigate(); const [healthCheck, setHealthCheck] = useState({}); const [showHealthCheckAlert, setShowHealthCheckAlert] = useState(false); const [forks, setForks] = useState(); const policyRulesDocsLink = `${getDocsBaseUrl( config )}/html/administration/containers_instance_groups.html#ag-instance-group-policies`; const { isLoading, error: contentError, request: fetchDetails, result: { instance }, } = useRequest( useCallback(async () => { const { data: { results }, } = await InstanceGroupsAPI.readInstances(instanceGroup.id); const isAssociated = results.some( ({ id: instId }) => instId === parseInt(instanceId, 10) ); if (isAssociated) { const { data: details } = await InstancesAPI.readDetail(instanceId); if (details.node_type === 'execution') { const { data: healthCheckData } = await InstancesAPI.readHealthCheckDetail(instanceId); setHealthCheck(healthCheckData); } setBreadcrumb(instanceGroup, details); setForks( computeForks( details.mem_capacity, details.cpu_capacity, details.capacity_adjustment ) ); return { instance: details }; } throw new Error( `This instance is not associated with this instance group` ); }, [instanceId, setBreadcrumb, instanceGroup]), { instance: {}, isLoading: true } ); useEffect(() => { fetchDetails(); }, [fetchDetails]); const { error: healthCheckError, request: fetchHealthCheck } = useRequest( useCallback(async () => { const { status } = await InstancesAPI.healthCheck(instanceId); if (status === 200) { setShowHealthCheckAlert(true); } }, [instanceId]) ); const { deleteItems: disassociateInstance, deletionError: disassociateError, } = useDeleteItems( useCallback(async () => { await InstanceGroupsAPI.disassociateInstance( instanceGroup.id, instance.id ); navigate(`/instance_groups/${instanceGroup.id}/instances`); }, [instanceGroup.id, instance.id, navigate]) ); const { error: updateInstanceError, request: updateInstance } = useRequest( useCallback( async (values) => { await InstancesAPI.update(instance.id, values); }, [instance] ) ); const debounceUpdateInstance = useDebounce(updateInstance, 200); const handleChangeValue = (value) => { const roundedValue = Math.round(value * 100) / 100; setForks( computeForks(instance.mem_capacity, instance.cpu_capacity, roundedValue) ); debounceUpdateInstance({ capacity_adjustment: roundedValue }); }; const formatHealthCheckTimeStamp = (last) => ( <> {formatDateString(last)} {instance.health_check_pending ? ( <> {' '} <OutlinedClockIcon /> </> ) : null} </> ); const { error, dismissError } = useDismissableError( disassociateError || updateInstanceError || healthCheckError ); const tabsArray = [ { name: ( <> <CaretLeftIcon /> {t`Back to Instances`} </> ), link: `/instance_groups/${id}/instances`, id: 99, }, { name: t`Details`, link: `/instance_groups/${id}/instances/${instanceId}/details`, id: 0, }, ]; if (contentError) { return <ContentError error={contentError} />; } if (isLoading) { return <ContentLoading />; } const isExecutionNode = instance.node_type === 'execution'; return ( <> <RoutedTabs tabsArray={tabsArray} /> {showHealthCheckAlert ? ( <HealthCheckAlert onSetHealthCheckAlert={setShowHealthCheckAlert} /> ) : null} <CardBody> <DetailList gutter="sm"> <Detail label={t`Host Name`} value={instance.hostname} dataCy="instance-detail-name" /> <Detail label={t`Status`} value={ instance.node_state ? ( <StatusLabel status={instance.node_state} /> ) : null } /> <Detail label={t`Policy Type`} value={ instance.managed_by_policy ? t`Auto` : t`Manual` } /> <Detail label={t`Running Jobs`} value={instance.jobs_running} /> <Detail label={t`Total Jobs`} value={instance.jobs_total} /> <Detail label={t`Last Health Check`} helpText={ <> {t`Health checks are asynchronous tasks. See the`}{' '} <a href={`${getDocsBaseUrl( config )}/html/administration/instances.html#health-check`} target="_blank" rel="noopener noreferrer" > {t`documentation`} </a>{' '} {t`for more info.`} </> } value={formatHealthCheckTimeStamp(instance.last_health_check)} /> <Detail label={t`Node Type`} value={instance.node_type} /> <Detail label={t`Capacity Adjustment`} value={ <SliderHolder data-cy="slider-holder"> <div data-cy="cpu-capacity"> {t`CPU ${instance.cpu_capacity}`} </div> <SliderForks data-cy="slider-forks"> <div data-cy="number-forks"> {i18n._('{count, plural, one {# fork} other {# forks}}', { count: forks })} </div> <Slider areCustomStepsContinuous max={1} min={0} step={0.1} value={instance.capacity_adjustment} onChange={(_event, value) => handleChangeValue(value)} isDisabled={!config?.me?.is_superuser || !instance.enabled} data-cy="slider" /> </SliderForks> <div data-cy="mem-capacity"> {t`RAM ${instance.mem_capacity}`} </div> </SliderHolder> } /> <Detail label={t`Used Capacity`} value={ instance.enabled ? ( <Progress title={t`Used capacity`} value={Math.round(100 - instance.percent_capacity_remaining)} measureLocation={ProgressMeasureLocation.top} size={ProgressSize.sm} aria-label={t`Used capacity`} /> ) : ( <Unavailable>{t`Unavailable`}</Unavailable> ) } /> {healthCheck?.errors && ( <Detail fullWidth label={t`Errors`} value={ <CodeBlock> <CodeBlockCode>{healthCheck?.errors}</CodeBlockCode> </CodeBlock> } /> )} </DetailList> <CardActionsRow> {isExecutionNode && ( <Tooltip content={t`Run a health check on the instance`}> <Button isDisabled={ !config?.me?.is_superuser || instance.health_check_pending } variant="primary" ouiaId="health-check-button" onClick={fetchHealthCheck} isLoading={instance.health_check_pending} spinnerAriaLabel={t`Running health check`} > {instance.health_check_pending ? t`Running health check` : t`Run health check`} </Button> </Tooltip> )} {config?.me?.is_superuser && instance.node_type !== 'control' && ( <DisassociateButton verifyCannotDisassociate={instanceGroup.name === 'controlplane'} key="disassociate" onDisassociate={disassociateInstance} itemsToDisassociate={[instance]} isProtectedInstanceGroup={instanceGroup.name === 'controlplane'} modalTitle={t`Disassociate instance from instance group?`} modalNote={ instance.managed_by_policy ? ( <Trans> <b> {t`Note: This instance may be re-associated with this instance group if it is managed by `} <a href={policyRulesDocsLink} target="_blank" rel="noopener noreferrer" > {t`policy rules.`} </a> </b> </Trans> ) : null } /> )} <InstanceToggle css="display: inline-flex;" fetchInstances={fetchDetails} instance={instance} /> </CardActionsRow> {error && ( <AlertModal isOpen={error} onClose={dismissError} title={t`Error!`} variant="error" > {updateInstanceError ? t`Failed to update capacity adjustment.` : t`Failed to disassociate one or more instances.`} <ErrorDetail error={error} /> </AlertModal> )} </CardBody> </> ); } export default InstanceDetails; 
 #. placeholder {1}: import React, { useCallback, useEffect, useState } from 'react'; import { useNavigate, useParams } from 'react-router'; import { Trans, useLingui } from '@lingui/react/macro'; import { Button, Progress, ProgressMeasureLocation, ProgressSize, CodeBlock, CodeBlockCode, Tooltip, Slider, } from '@patternfly/react-core'; import { CaretLeftIcon, OutlinedClockIcon } from '@patternfly/react-icons'; import styled from 'styled-components'; import { useConfig } from 'contexts/Config'; import { InstancesAPI, InstanceGroupsAPI } from 'api'; import useDebounce from 'hooks/useDebounce'; import AlertModal from 'components/AlertModal'; import ErrorDetail from 'components/ErrorDetail'; import DisassociateButton from 'components/DisassociateButton'; import InstanceToggle from 'components/InstanceToggle'; import { CardBody, CardActionsRow } from 'components/Card'; import getDocsBaseUrl from 'util/getDocsBaseUrl'; import { formatDateString } from 'util/dates'; import RoutedTabs from 'components/RoutedTabs'; import ContentError from 'components/ContentError'; import ContentLoading from 'components/ContentLoading'; import { Detail, DetailList } from 'components/DetailList'; import HealthCheckAlert from 'components/HealthCheckAlert'; import StatusLabel from 'components/StatusLabel'; import useRequest, { useDeleteItems, useDismissableError, } from 'hooks/useRequest'; const Unavailable = styled.span` color: var(--pf-v6-global--danger-color--200); `; const SliderHolder = styled.div` display: flex; align-items: center; justify-content: space-between; `; const SliderForks = styled.div` flex-grow: 1; margin-right: 8px; margin-left: 8px; text-align: center; `; function computeForks(memCapacity, cpuCapacity, selectedCapacityAdjustment) { const minCapacity = Math.min(memCapacity, cpuCapacity); const maxCapacity = Math.max(memCapacity, cpuCapacity); return Math.floor( minCapacity + (maxCapacity - minCapacity) * selectedCapacityAdjustment ); } function InstanceDetails({ setBreadcrumb, instanceGroup }) { const { t, i18n } = useLingui(); const config = useConfig(); const { id, instanceId } = useParams(); const navigate = useNavigate(); const [healthCheck, setHealthCheck] = useState({}); const [showHealthCheckAlert, setShowHealthCheckAlert] = useState(false); const [forks, setForks] = useState(); const policyRulesDocsLink = `${getDocsBaseUrl( config )}/html/administration/containers_instance_groups.html#ag-instance-group-policies`; const { isLoading, error: contentError, request: fetchDetails, result: { instance }, } = useRequest( useCallback(async () => { const { data: { results }, } = await InstanceGroupsAPI.readInstances(instanceGroup.id); const isAssociated = results.some( ({ id: instId }) => instId === parseInt(instanceId, 10) ); if (isAssociated) { const { data: details } = await InstancesAPI.readDetail(instanceId); if (details.node_type === 'execution') { const { data: healthCheckData } = await InstancesAPI.readHealthCheckDetail(instanceId); setHealthCheck(healthCheckData); } setBreadcrumb(instanceGroup, details); setForks( computeForks( details.mem_capacity, details.cpu_capacity, details.capacity_adjustment ) ); return { instance: details }; } throw new Error( `This instance is not associated with this instance group` ); }, [instanceId, setBreadcrumb, instanceGroup]), { instance: {}, isLoading: true } ); useEffect(() => { fetchDetails(); }, [fetchDetails]); const { error: healthCheckError, request: fetchHealthCheck } = useRequest( useCallback(async () => { const { status } = await InstancesAPI.healthCheck(instanceId); if (status === 200) { setShowHealthCheckAlert(true); } }, [instanceId]) ); const { deleteItems: disassociateInstance, deletionError: disassociateError, } = useDeleteItems( useCallback(async () => { await InstanceGroupsAPI.disassociateInstance( instanceGroup.id, instance.id ); navigate(`/instance_groups/${instanceGroup.id}/instances`); }, [instanceGroup.id, instance.id, navigate]) ); const { error: updateInstanceError, request: updateInstance } = useRequest( useCallback( async (values) => { await InstancesAPI.update(instance.id, values); }, [instance] ) ); const debounceUpdateInstance = useDebounce(updateInstance, 200); const handleChangeValue = (value) => { const roundedValue = Math.round(value * 100) / 100; setForks( computeForks(instance.mem_capacity, instance.cpu_capacity, roundedValue) ); debounceUpdateInstance({ capacity_adjustment: roundedValue }); }; const formatHealthCheckTimeStamp = (last) => ( <> {formatDateString(last)} {instance.health_check_pending ? ( <> {' '} <OutlinedClockIcon /> </> ) : null} </> ); const { error, dismissError } = useDismissableError( disassociateError || updateInstanceError || healthCheckError ); const tabsArray = [ { name: ( <> <CaretLeftIcon /> {t`Back to Instances`} </> ), link: `/instance_groups/${id}/instances`, id: 99, }, { name: t`Details`, link: `/instance_groups/${id}/instances/${instanceId}/details`, id: 0, }, ]; if (contentError) { return <ContentError error={contentError} />; } if (isLoading) { return <ContentLoading />; } const isExecutionNode = instance.node_type === 'execution'; return ( <> <RoutedTabs tabsArray={tabsArray} /> {showHealthCheckAlert ? ( <HealthCheckAlert onSetHealthCheckAlert={setShowHealthCheckAlert} /> ) : null} <CardBody> <DetailList gutter="sm"> <Detail label={t`Host Name`} value={instance.hostname} dataCy="instance-detail-name" /> <Detail label={t`Status`} value={ instance.node_state ? ( <StatusLabel status={instance.node_state} /> ) : null } /> <Detail label={t`Policy Type`} value={ instance.managed_by_policy ? t`Auto` : t`Manual` } /> <Detail label={t`Running Jobs`} value={instance.jobs_running} /> <Detail label={t`Total Jobs`} value={instance.jobs_total} /> <Detail label={t`Last Health Check`} helpText={ <> {t`Health checks are asynchronous tasks. See the`}{' '} <a href={`${getDocsBaseUrl( config )}/html/administration/instances.html#health-check`} target="_blank" rel="noopener noreferrer" > {t`documentation`} </a>{' '} {t`for more info.`} </> } value={formatHealthCheckTimeStamp(instance.last_health_check)} /> <Detail label={t`Node Type`} value={instance.node_type} /> <Detail label={t`Capacity Adjustment`} value={ <SliderHolder data-cy="slider-holder"> <div data-cy="cpu-capacity"> {t`CPU ${instance.cpu_capacity}`} </div> <SliderForks data-cy="slider-forks"> <div data-cy="number-forks"> {i18n._('{count, plural, one {# fork} other {# forks}}', { count: forks })} </div> <Slider areCustomStepsContinuous max={1} min={0} step={0.1} value={instance.capacity_adjustment} onChange={(_event, value) => handleChangeValue(value)} isDisabled={!config?.me?.is_superuser || !instance.enabled} data-cy="slider" /> </SliderForks> <div data-cy="mem-capacity"> {t`RAM ${instance.mem_capacity}`} </div> </SliderHolder> } /> <Detail label={t`Used Capacity`} value={ instance.enabled ? ( <Progress title={t`Used capacity`} value={Math.round(100 - instance.percent_capacity_remaining)} measureLocation={ProgressMeasureLocation.top} size={ProgressSize.sm} aria-label={t`Used capacity`} /> ) : ( <Unavailable>{t`Unavailable`}</Unavailable> ) } /> {healthCheck?.errors && ( <Detail fullWidth label={t`Errors`} value={ <CodeBlock> <CodeBlockCode>{healthCheck?.errors}</CodeBlockCode> </CodeBlock> } /> )} </DetailList> <CardActionsRow> {isExecutionNode && ( <Tooltip content={t`Run a health check on the instance`}> <Button isDisabled={ !config?.me?.is_superuser || instance.health_check_pending } variant="primary" ouiaId="health-check-button" onClick={fetchHealthCheck} isLoading={instance.health_check_pending} spinnerAriaLabel={t`Running health check`} > {instance.health_check_pending ? t`Running health check` : t`Run health check`} </Button> </Tooltip> )} {config?.me?.is_superuser && instance.node_type !== 'control' && ( <DisassociateButton verifyCannotDisassociate={instanceGroup.name === 'controlplane'} key="disassociate" onDisassociate={disassociateInstance} itemsToDisassociate={[instance]} isProtectedInstanceGroup={instanceGroup.name === 'controlplane'} modalTitle={t`Disassociate instance from instance group?`} modalNote={ instance.managed_by_policy ? ( <Trans> <b> {t`Note: This instance may be re-associated with this instance group if it is managed by `} <a href={policyRulesDocsLink} target="_blank" rel="noopener noreferrer" > {t`policy rules.`} </a> </b> </Trans> ) : null } /> )} <InstanceToggle css="display: inline-flex;" fetchInstances={fetchDetails} instance={instance} /> </CardActionsRow> {error && ( <AlertModal isOpen={error} onClose={dismissError} title={t`Error!`} variant="error" > {updateInstanceError ? t`Failed to update capacity adjustment.` : t`Failed to disassociate one or more instances.`} <ErrorDetail error={error} /> </AlertModal> )} </CardBody> </> ); } export default InstanceDetails; 
@@ -4197,16 +3819,6 @@ msgstr "{0, plural, one {This organization is currently being used by other reso
 #: screens/Team/TeamList/TeamList.js:195
 msgid "Failed to delete one or more teams."
 msgstr "Failed to delete one or more teams."
-
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:310
-#~ msgid "edit"
-#~ msgstr "edit"
-
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:314
-#~ msgid "Edit"
-#~ msgstr "Edit"
 
 #: screens/NotificationTemplate/NotificationTemplates.js:15
 #: screens/NotificationTemplate/NotificationTemplates.js:22
@@ -4293,11 +3905,6 @@ msgstr "Before"
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.js:220
 msgid "View node details"
 msgstr "View node details"
-
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:303
-#~ msgid "Enabled Options"
-#~ msgstr "Enabled Options"
 
 #: screens/InstanceGroup/shared/ContainerGroupForm.js:100
 msgid "Custom pod spec"
@@ -4423,11 +4030,6 @@ msgstr "View JSON examples at"
 msgid "Destination SMS Number(s)"
 msgstr "Destination SMS Number(s)"
 
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:349
-#~ msgid "Error!"
-#~ msgstr "Error!"
-
 #: screens/Job/JobDetail/JobDetail.js:452
 msgid "No timeout specified"
 msgstr "No timeout specified"
@@ -4476,10 +4078,6 @@ msgstr "Soft delete {pluralizedItemName}?"
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.js:212
 msgid "DELETED"
 msgstr "DELETED"
-
-#: components/AdHocCommands/AdHocDetailsStep.js:113
-#~ msgid "These arguments are used with the specified module. You can find information about {0} by clicking"
-#~ msgstr "These arguments are used with the specified module. You can find information about {0} by clicking"
 
 #: screens/Instances/Shared/RemoveInstanceButton.js:75
 msgid "You do not have permission to remove instances: {itemsUnableToremove}"
@@ -4547,44 +4145,15 @@ msgstr "Confirm cancellation"
 msgid "Sort"
 msgstr ""
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.js:106
-#~ msgid "Red Hat Ansible Automation Platform"
-#~ msgstr "Red Hat Ansible Automation Platform"
-
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:67
-#: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:88
-#~ msgid "Maximum number of forks to allow across all jobs running concurrently on this group.\n"
-#~ "Zero means no limit will be enforced."
-#~ msgstr "Maximum number of forks to allow across all jobs running concurrently on this group.\n"
-#~ "Zero means no limit will be enforced."
-
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.js:182
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/RunStep.js:145
 msgid "Equals"
 msgstr "Equals"
 
-#: screens/Inventory/shared/ConstructedInventoryHint.js:95
-#~ msgid "If users need feedback about the correctness\n"
-#~ "of their constructed groups, it is highly recommended\n"
-#~ "to use strict: true in the plugin configuration."
-#~ msgstr "If users need feedback about the correctness\n"
-#~ "of their constructed groups, it is highly recommended\n"
-#~ "to use strict: true in the plugin configuration."
-
 #. js-lingui-explicit-id
 #: screens/Dashboard/shared/ChartTooltip.js:66
 msgid "Failed"
 msgstr "Failed"
-
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:323
-#~ msgid "Failed to cancel Project Sync"
-#~ msgstr "Failed to cancel Project Sync"
-
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:352
-#~ msgid "Failed to delete project."
-#~ msgstr "Failed to delete project."
 
 #: screens/Job/JobOutput/JobOutputSearch.js:138
 msgid "Variables Prompted"
@@ -4647,10 +4216,6 @@ msgstr "Filter on nested group name"
 msgid "Error saving the workflow!"
 msgstr "Error saving the workflow!"
 
-#: screens/TopologyView/Tooltip.js:303
-#~ msgid "{count, plural, one {# fork} other {# forks}}"
-#~ msgstr "{count, plural, one {# fork} other {# forks}}"
-
 #: screens/HostMetrics/HostMetrics.js:135
 #: screens/HostMetrics/HostMetricsListItem.js:24
 msgid "Automation"
@@ -4659,16 +4224,6 @@ msgstr "Automation"
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:350
 msgid "Select items from list"
 msgstr ""
-
-#: screens/Project/shared/Project.helptext.js:8
-#~ msgid "Base path used for locating playbooks. Directories\n"
-#~ "found inside this path will be listed in the playbook directory drop-down.\n"
-#~ "Together the base path and selected playbook directory provide the full\n"
-#~ "path used to locate playbooks."
-#~ msgstr "Base path used for locating playbooks. Directories\n"
-#~ "found inside this path will be listed in the playbook directory drop-down.\n"
-#~ "Together the base path and selected playbook directory provide the full\n"
-#~ "path used to locate playbooks."
 
 #: screens/Dashboard/Dashboard.js:147
 msgid "Job status"
@@ -4683,15 +4238,6 @@ msgstr "Source Control Branch/Tag/Commit"
 msgid "This will cancel all subsequent nodes in this workflow"
 msgstr "This will cancel all subsequent nodes in this workflow"
 
-#: screens/Job/Job.helptext.js:12
-#: screens/Template/shared/JobTemplate.helptext.js:24
-#~ msgid "Select credentials for accessing the nodes this job will be ran against. You can only select one credential of each type. For machine credentials (SSH), checking \"Prompt on launch\" without selecting credentials will require you to select a machine credential at run time. If you select credentials and check \"Prompt on launch\", the selected credential(s) become the defaults that can be updated at run time."
-#~ msgstr "Select credentials for accessing the nodes this job will be ran against. You can only select one credential of each type. For machine credentials (SSH), checking \"Prompt on launch\" without selecting credentials will require you to select a machine credential at run time. If you select credentials and check \"Prompt on launch\", the selected credential(s) become the defaults that can be updated at run time."
-
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:28
-#~ msgid "Prompt for diff mode on launch."
-#~ msgstr "Prompt for diff mode on launch."
-
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:341
 msgid "Client Identifier"
 msgstr "Client Identifier"
@@ -4703,11 +4249,6 @@ msgstr "This will cancel all subsequent nodes in this workflow."
 #: components/RelatedTemplateList/RelatedTemplateList.js:257
 msgid "Failed to delete one or more job templates."
 msgstr "Failed to delete one or more job templates."
-
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:140
-#~ msgid "FINISHED:"
-#~ msgstr "FINISHED:"
 
 #: screens/Credential/shared/CredentialFormFields/GceFileUploadField.js:48
 msgid "Choose a .json file"
@@ -4774,10 +4315,6 @@ msgstr "<0>Note: Manually associated instances may be automatically disassociate
 msgid "Refresh project revision"
 msgstr "Refresh project revision"
 
-#: screens/Template/shared/JobTemplate.helptext.js:62
-#~ msgid "Optionally select the credential to use to send status updates back to the webhook service."
-#~ msgstr "Optionally select the credential to use to send status updates back to the webhook service."
-
 #: screens/Setting/Settings.js:112
 msgid "RADIUS"
 msgstr "RADIUS"
@@ -4795,10 +4332,6 @@ msgstr "Instance State"
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:163
 msgid "Actor"
 msgstr "Actor"
-
-#: screens/Project/shared/Project.helptext.js:45
-#~ msgid "Example URLs for Subversion Source Control include:"
-#~ msgstr "Example URLs for Subversion Source Control include:"
 
 #: screens/Instances/InstancePeers/InstancePeerList.js:280
 msgid "Remove peers?"
@@ -4960,10 +4493,6 @@ msgstr "Confirm removal of all nodes"
 msgid "Clean"
 msgstr "Clean"
 
-#: screens/Template/shared/JobTemplate.helptext.js:58
-#~ msgid "Webhook services can launch jobs with this workflow job template by making a POST request to this URL."
-#~ msgstr "Webhook services can launch jobs with this workflow job template by making a POST request to this URL."
-
 #: components/AdHocCommands/useAdHocCredentialPasswordStep.js:45
 #: components/LaunchPrompt/steps/useCredentialPasswordsStep.js:51
 msgid "This field may not be blank"
@@ -4997,14 +4526,6 @@ msgstr "Failed to associate role"
 #: screens/Project/ProjectList/ProjectList.js:294
 msgid "Failed to delete one or more projects."
 msgstr "Failed to delete one or more projects."
-
-#: screens/Template/Survey/SurveyQuestionForm.js:183
-#~ msgid "The suggested format for variable names is lowercase and\n"
-#~ "underscore-separated (for example, foo_bar, user_id, host_name,\n"
-#~ "etc.). Variable names with spaces are not allowed."
-#~ msgstr "The suggested format for variable names is lowercase and\n"
-#~ "underscore-separated (for example, foo_bar, user_id, host_name,\n"
-#~ "etc.). Variable names with spaces are not allowed."
 
 #: screens/Template/Survey/SurveyQuestionForm.js:46
 msgid "Choose an answer type or format you want as the prompt for the user.\n"
@@ -5222,10 +4743,6 @@ msgstr "System Warning"
 msgid "Execution Environments"
 msgstr "Execution Environments"
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:20
-#~ msgid "Prompt for job type on launch."
-#~ msgstr "Prompt for job type on launch."
-
 #: components/JobList/JobListItem.js:217
 #: components/JobList/JobListItem.js:223
 msgid "Schedule"
@@ -5260,10 +4777,6 @@ msgstr "Jobs settings"
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginSelected.js:40
 msgid "Edit Credential Plugin Configuration"
 msgstr "Edit Credential Plugin Configuration"
-
-#: screens/Application/ApplicationTokens/ApplicationTokenList.js:117
-#~ msgid "Delete selected tokens"
-#~ msgstr "Delete selected tokens"
 
 #: screens/Template/Survey/SurveyToolbar.js:84
 msgid "Select a question to delete"
@@ -5325,10 +4838,6 @@ msgstr "Sync all sources"
 msgid "API service/integration key"
 msgstr "API service/integration key"
 
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:28
-#~ msgid "{interval, plural, one {# hour} other {# hours}}"
-#~ msgstr "{interval, plural, one {# hour} other {# hours}}"
-
 #: screens/User/UserList/UserListItem.js:62
 #: screens/User/UserList/UserListItem.js:66
 msgid "Edit User"
@@ -5377,10 +4886,6 @@ msgstr "Sign in with GitHub Teams"
 #: screens/Inventory/InventoryList/InventoryList.js:127
 msgid "Inventory copied successfully"
 msgstr "Inventory copied successfully"
-
-#: screens/Template/shared/JobTemplate.helptext.js:80
-#~ msgid "If enabled, this will store gathered facts so they can be viewed at the host level. Facts are persisted and injected into the fact cache at runtime."
-#~ msgstr "If enabled, this will store gathered facts so they can be viewed at the host level. Facts are persisted and injected into the fact cache at runtime."
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:260
 msgid "The number of distinct users that must approve before the workflow continues. A single denial always denies the node."
@@ -5612,10 +5117,6 @@ msgstr "September"
 msgid "Select Peer Addresses"
 msgstr "Select Peer Addresses"
 
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:30
-#~ msgid "{interval, plural, one {# day} other {# days}}"
-#~ msgstr "{interval, plural, one {# day} other {# days}}"
-
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionModal.js:116
 msgid "We were unable to locate licenses associated with this account."
 msgstr "We were unable to locate licenses associated with this account."
@@ -5698,10 +5199,6 @@ msgstr "Set a value for this field"
 msgid "Failed to deny one or more workflow approval."
 msgstr "Failed to deny one or more workflow approval."
 
-#: components/Search/AdvancedSearch.js:159
-#~ msgid "Returns results that satisfy this one as well as other filters.  This is the default set type if nothing is selected."
-#~ msgstr "Returns results that satisfy this one as well as other filters.  This is the default set type if nothing is selected."
-
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/WorkflowJobTemplatesList.js:99
 msgid "Organization (Name)"
 msgstr "Organization (Name)"
@@ -5709,10 +5206,6 @@ msgstr "Organization (Name)"
 #: components/HealthCheckAlert/HealthCheckAlert.js:29
 msgid "Reload"
 msgstr "Reload"
-
-#: screens/Login/Login.js:253
-#~ msgid "Failed to fetch custom login configuration settings.  System defaults will be shown instead."
-#~ msgstr "Failed to fetch custom login configuration settings.  System defaults will be shown instead."
 
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.js:157
 msgid "Add new host"
@@ -5757,11 +5250,6 @@ msgstr "Select an option"
 msgid "Application information"
 msgstr "Application information"
 
-#: screens/Job/Job.helptext.js:16
-#: screens/Template/shared/JobTemplate.helptext.js:36
-#~ msgid "Control the level of output ansible will produce as the playbook executes."
-#~ msgstr "Control the level of output ansible will produce as the playbook executes."
-
 #: screens/Job/JobOutput/EmptyOutput.js:37
 msgid "This job failed and has no output."
 msgstr "This job failed and has no output."
@@ -5799,12 +5287,6 @@ msgstr "Create"
 msgid "Are you sure you want to submit the request to cancel this job?"
 msgstr "Are you sure you want to submit the request to cancel this job?"
 
-#: screens/Inventory/shared/ConstructedInventoryHint.js:56
-#~ msgid "This table gives a few useful parameters of the constructed\n"
-#~ "inventory plugin. For the full list of parameters"
-#~ msgstr "This table gives a few useful parameters of the constructed\n"
-#~ "inventory plugin. For the full list of parameters"
-
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressList.js:126
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressListItem.js:31
 #: screens/Instances/InstancePeers/InstancePeerList.js:248
@@ -5819,14 +5301,6 @@ msgstr "Port"
 msgid "Are you sure you want to disable local authentication?  Doing so could impact users' ability to log in and the system administrator's ability to reverse this change."
 msgstr "Are you sure you want to disable local authentication?  Doing so could impact users' ability to log in and the system administrator's ability to reverse this change."
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:65
-#~ msgid "This data is used to enhance\n"
-#~ "future releases of the Tower Software and help\n"
-#~ "streamline customer experience and success."
-#~ msgstr "This data is used to enhance\n"
-#~ "future releases of the Tower Software and help\n"
-#~ "streamline customer experience and success."
-
 #: screens/Project/shared/ProjectSubForms/SharedFields.js:140
 msgid "Allow Branch Override"
 msgstr "Allow Branch Override"
@@ -5834,11 +5308,6 @@ msgstr "Allow Branch Override"
 #: screens/Inventory/Inventories.js:112
 msgid "Create new source"
 msgstr "Create new source"
-
-#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:268
-#: screens/Instances/InstanceDetail/InstanceDetail.js:308
-#~ msgid "# forks"
-#~ msgstr "# forks"
 
 #: screens/TopologyView/Tooltip.js:256
 msgid "Download Bundle"
@@ -6000,10 +5469,6 @@ msgstr "No JSON Available"
 msgid "Destination channels or users"
 msgstr "Destination channels or users"
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:29
-#~ msgid "Webhook service for this workflow job template."
-#~ msgstr "Webhook service for this workflow job template."
-
 #: screens/Job/JobOutput/shared/OutputToolbar.js:126
 msgid "Play Count"
 msgstr "Play Count"
@@ -6034,10 +5499,6 @@ msgid "This schedule uses complex rules that are not supported in the\n"
 msgstr "This schedule uses complex rules that are not supported in the\n"
 "        UI.  Please use the API to manage this schedule."
 
-#: screens/Project/shared/Project.helptext.js:113
-#~ msgid "Remove any local modifications prior to performing an update."
-#~ msgstr "Remove any local modifications prior to performing an update."
-
 #: screens/Inventory/InventoryList/InventoryList.js:143
 msgid "Add smart inventory"
 msgstr "Add smart inventory"
@@ -6063,10 +5524,6 @@ msgstr "End date"
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:425
 msgid "Disable SSL Verification"
 msgstr "Disable SSL Verification"
-
-#: screens/Job/Job.helptext.js:22
-#~ msgid "Select a branch for the workflow. This branch is applied to all job template nodes that prompt for a branch."
-#~ msgstr "Select a branch for the workflow. This branch is applied to all job template nodes that prompt for a branch."
 
 #: screens/ManagementJob/ManagementJob.js:131
 msgid "Management job not found."
@@ -6142,18 +5599,6 @@ msgstr "This step contains errors"
 msgid "source control branch"
 msgstr "source control branch"
 
-#: components/Lookup/HostFilterLookup.js:352
-#~ msgid "Populate the hosts for this inventory by using a search\n"
-#~ "filter. Example: ansible_facts__ansible_distribution:\"RedHat\".\n"
-#~ "Refer to the documentation for further syntax and\n"
-#~ "examples.  Refer to the Ansible Controller documentation for further syntax and\n"
-#~ "examples."
-#~ msgstr "Populate the hosts for this inventory by using a search\n"
-#~ "filter. Example: ansible_facts__ansible_distribution:\"RedHat\".\n"
-#~ "Refer to the documentation for further syntax and\n"
-#~ "examples.  Refer to the Ansible Controller documentation for further syntax and\n"
-#~ "examples."
-
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:101
 msgid "The execution environment that will be used for jobs\n"
 "          inside of this organization. This will be used a fallback when\n"
@@ -6220,10 +5665,6 @@ msgstr "Red Hat, Inc."
 msgid "Workflow Cancelled "
 msgstr "Workflow Cancelled "
 
-#: screens/Template/shared/JobTemplate.helptext.js:65
-#~ msgid "Branch to use in job run. Project default used if blank. Only allowed if project allow_override field is set to true."
-#~ msgstr "Branch to use in job run. Project default used if blank. Only allowed if project allow_override field is set to true."
-
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:132
 msgid "Workflow Statuses"
 msgstr "Workflow Statuses"
@@ -6260,18 +5701,6 @@ msgstr ""
 msgid "Nested groups inventory definition:"
 msgstr "Nested groups inventory definition:"
 
-#: screens/NotificationTemplate/shared/Notifications.helptext.js:10
-#~ msgid "The amount of time (in seconds) before the email\n"
-#~ "notification stops trying to reach the host and times out. Ranges\n"
-#~ "from 1 to 120 seconds."
-#~ msgstr "The amount of time (in seconds) before the email\n"
-#~ "notification stops trying to reach the host and times out. Ranges\n"
-#~ "from 1 to 120 seconds."
-
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:15
-#~ msgid "Prompt for limit on launch."
-#~ msgstr "Prompt for limit on launch."
-
 #: components/JobList/JobListCancelButton.js:96
 msgid "Cancel selected job"
 msgstr "Cancel selected job"
@@ -6286,20 +5715,12 @@ msgstr "Started"
 msgid "Pending Workflow Approvals"
 msgstr "Pending Workflow Approvals"
 
-#: util/validators.js:162
-#~ msgid "Please enter a valid URL"
-#~ msgstr "Please enter a valid URL"
-
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressList.js:129
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressListItem.js:39
 #: screens/Instances/InstancePeers/InstancePeerList.js:253
 #: screens/Instances/InstancePeers/InstancePeerListItem.js:61
 msgid "Canonical"
 msgstr "Canonical"
-
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:109
-#~ msgid "Day {num}"
-#~ msgstr "Day {num}"
 
 #: components/Workflow/WorkflowNodeHelp.js:168
 #: screens/Job/JobOutput/shared/OutputToolbar.js:167
@@ -6324,10 +5745,6 @@ msgstr "Required approvals"
 #: screens/Project/ProjectList/ProjectListItem.js:282
 msgid "Last used"
 msgstr "Last used"
-
-#: screens/Dashboard/shared/ChartTooltip.js:83
-#~ msgid "No Jobs"
-#~ msgstr "No Jobs"
 
 #: screens/Credential/CredentialDetail/CredentialDetail.js:302
 msgid "This credential is currently being used by other resources. Are you sure you want to delete it?"
@@ -6358,20 +5775,6 @@ msgstr ""
 #: components/Schedule/shared/ScheduleFormFields.js:137
 msgid "None (run once)"
 msgstr "None (run once)"
-
-#: screens/Template/shared/JobTemplate.helptext.js:109
-#~ msgid "Prevent Instance Group Fallback: If enabled, the job template will prevent adding any inventory or organization instance groups to the list of preferred instances groups to run on."
-#~ msgstr "Prevent Instance Group Fallback: If enabled, the job template will prevent adding any inventory or organization instance groups to the list of preferred instances groups to run on."
-
-#: screens/Inventory/shared/ConstructedInventoryHint.js:164
-#~ msgid "This constructed inventory input \n"
-#~ "creates a group for both of the categories and uses \n"
-#~ "the limit (host pattern) to only return hosts that \n"
-#~ "are in the intersection of those two groups."
-#~ msgstr "This constructed inventory input \n"
-#~ "creates a group for both of the categories and uses \n"
-#~ "the limit (host pattern) to only return hosts that \n"
-#~ "are in the intersection of those two groups."
 
 #: screens/User/UserList/UserListItem.js:48
 msgid "social login"
@@ -6426,15 +5829,6 @@ msgstr "Workflow Job 1/{0}"
 msgid "The inventories will be in a pending status until the final delete is processed."
 msgstr "The inventories will be in a pending status until the final delete is processed."
 
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:133
-#~ msgid "JOB ID:"
-#~ msgstr "JOB ID:"
-
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:34
-#~ msgid "{interval, plural, one {# month} other {# months}}"
-#~ msgstr "{interval, plural, one {# month} other {# months}}"
-
 #: screens/SubscriptionUsage/SubscriptionUsageChart.js:131
 msgid "Last recalculation date:"
 msgstr "Last recalculation date:"
@@ -6474,19 +5868,9 @@ msgstr "Unknown Finish Date"
 msgid "toggle changes"
 msgstr "toggle changes"
 
-#: screens/ActivityStream/ActivityStream.js:131
-#~ msgid "Select an activity type"
-#~ msgstr "Select an activity type"
-
 #: screens/Template/Survey/SurveyReorderModal.js:156
 msgid "Multiple Choice"
 msgstr "Multiple Choice"
-
-#: screens/Project/shared/Project.helptext.js:14
-#~ msgid "Change PROJECTS_ROOT when deploying\n"
-#~ "{brandName} to change this location."
-#~ msgstr "Change PROJECTS_ROOT when deploying\n"
-#~ "{brandName} to change this location."
 
 #: components/AdHocCommands/AdHocCredentialStep.js:101
 #: components/AdHocCommands/AdHocCredentialStep.js:102
@@ -6505,20 +5889,9 @@ msgstr "Evaluate on"
 msgid "Back to Dashboard."
 msgstr "Back to Dashboard."
 
-#: components/Lookup/InventoryLookup.js:129
-#~ msgid "Select the inventory containing the hosts\n"
-#~ "you want this job to manage."
-#~ msgstr "Select the inventory containing the hosts\n"
-#~ "you want this job to manage."
-
 #: screens/Setting/shared/SharedFields.js:348
 msgid "cancel edit login redirect"
 msgstr "cancel edit login redirect"
-
-#: screens/Job/Job.helptext.js:21
-#: screens/Template/shared/JobTemplate.helptext.js:54
-#~ msgid "Skip tags are useful when you have a large playbook, and you want to skip specific parts of a play or task. Use commas to separate multiple tags. Refer to the documentation for details on the usage of tags."
-#~ msgstr "Skip tags are useful when you have a large playbook, and you want to skip specific parts of a play or task. Use commas to separate multiple tags. Refer to the documentation for details on the usage of tags."
 
 #: screens/User/User.js:140
 msgid "View User Details"
@@ -6545,11 +5918,6 @@ msgstr "Selected Category"
 #: screens/Team/TeamDetail/TeamDetail.js:77
 msgid "Delete Team"
 msgstr "Delete Team"
-
-#: screens/Job/Job.helptext.js:10
-#: screens/Template/shared/JobTemplate.helptext.js:20
-#~ msgid "The execution environment that will be used when launching this job template. The resolved execution environment can be overridden by explicitly assigning a different one to this job template."
-#~ msgstr "The execution environment that will be used when launching this job template. The resolved execution environment can be overridden by explicitly assigning a different one to this job template."
 
 #: components/JobList/JobList.js:215
 msgid "Label Name"
@@ -6597,11 +5965,6 @@ msgstr "Clear subscription selection"
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginTestAlert.js:44
 msgid "Test passed"
 msgstr "Test passed"
-
-#: screens/Job/Job.helptext.js:19
-#: screens/Template/shared/JobTemplate.helptext.js:48
-#~ msgid "Select the Instance Groups for this Job Template to run on."
-#~ msgstr "Select the Instance Groups for this Job Template to run on."
 
 #: screens/Template/shared/WebhookSubForm.js:204
 msgid "Leave blank to generate a new webhook key on save"
@@ -6684,21 +6047,6 @@ msgstr "Module Name"
 msgid "Expires"
 msgstr "Expires"
 
-#: screens/Job/Job.helptext.js:13
-#: screens/Template/shared/JobTemplate.helptext.js:27
-#~ msgid "Optional labels that describe this job template, such as 'dev' or 'test'. Labels can be used to group and filter job templates and completed jobs."
-#~ msgstr "Optional labels that describe this job template, such as 'dev' or 'test'. Labels can be used to group and filter job templates and completed jobs."
-
-#: components/SelectedList/DraggableSelectedList.js:87
-#~ msgid "Press space or enter to begin dragging,\n"
-#~ "and use the arrow keys to navigate up or down.\n"
-#~ "Press enter to confirm the drag, or any other key to\n"
-#~ "cancel the drag operation."
-#~ msgstr "Press space or enter to begin dragging,\n"
-#~ "and use the arrow keys to navigate up or down.\n"
-#~ "Press enter to confirm the drag, or any other key to\n"
-#~ "cancel the drag operation."
-
 #: components/Search/LookupTypeInput.js:171
 msgid "Lookup type"
 msgstr "Lookup type"
@@ -6746,10 +6094,6 @@ msgstr "Delete Questions"
 msgid "How to use constructed inventory plugin"
 msgstr "How to use constructed inventory plugin"
 
-#: util/validators.js:102
-#~ msgid "This field must not contain spaces"
-#~ msgstr "This field must not contain spaces"
-
 #: screens/Inventory/InventoryList/InventoryList.js:266
 msgid "This inventory is currently being used by some templates. Are you sure you want to delete it?"
 msgstr "This inventory is currently being used by some templates. Are you sure you want to delete it?"
@@ -6772,17 +6116,9 @@ msgstr "Add user permissions"
 msgid "Exceptions"
 msgstr "Exceptions"
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:11
-#~ msgid "Select a branch for the workflow."
-#~ msgstr "Select a branch for the workflow."
-
 #: screens/Template/Survey/SurveyQuestionForm.js:262
 msgid "Refer to the"
 msgstr "Refer to the"
-
-#: util/getRelatedResourceDeleteDetails.js:75
-#~ msgid "Credential Input Sources"
-#~ msgstr "Credential Input Sources"
 
 #: components/Schedule/shared/FrequencyDetailSubform.js:432
 msgid "Second"
@@ -6806,11 +6142,6 @@ msgstr "Visualizer"
 msgid "Relaunch Job"
 msgstr "Relaunch Job"
 
-#: screens/Inventory/shared/Inventory.helptext.js:105
-#: screens/Inventory/shared/Inventory.helptext.js:120
-#~ msgid "If you want the Inventory Source to update on launch , click on Update on Launch, and also go to"
-#~ msgstr "If you want the Inventory Source to update on launch , click on Update on Launch, and also go to"
-
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:232
 msgid "Get subscription"
 msgstr "Get subscription"
@@ -6823,10 +6154,6 @@ msgstr "Toggle host"
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironmentForm.js:140
 msgid "Globally available execution environment can not be reassigned to a specific Organization"
 msgstr "Globally available execution environment can not be reassigned to a specific Organization"
-
-#: screens/Setting/Settings.js:49
-#~ msgid "Azure AD"
-#~ msgstr "Azure AD"
 
 #: components/PromptDetail/PromptInventorySourceDetail.js:180
 msgid "Source Variables"
@@ -6857,10 +6184,6 @@ msgstr ""
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.js:156
 msgid "Add existing host"
 msgstr "Add existing host"
-
-#: components/Search/LookupTypeInput.js:22
-#~ msgid "Lookup select"
-#~ msgstr "Lookup select"
 
 #: screens/Organization/OrganizationList/OrganizationListItem.js:48
 #: screens/Organization/OrganizationList/OrganizationListItem.js:52
@@ -6921,16 +6244,6 @@ msgstr "Group"
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:78
 msgid "Request subscription"
 msgstr "Request subscription"
-
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:162
-#~ msgid "Last Job Status"
-#~ msgstr "Last Job Status"
-
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:298
-#~ msgid "Last Modified"
-#~ msgstr "Last Modified"
 
 #: components/Schedule/ScheduleToggle/ScheduleToggle.js:67
 msgid "Toggle schedule"
@@ -7049,14 +6362,6 @@ msgstr "Edit Survey"
 msgid "Pan Down"
 msgstr "Pan Down"
 
-#: screens/NotificationTemplate/shared/Notifications.helptext.js:21
-#~ msgid "Use one IRC channel or username per line. The pound\n"
-#~ "symbol (#) for channels, and the at (@) symbol for users, are not\n"
-#~ "required."
-#~ msgstr "Use one IRC channel or username per line. The pound\n"
-#~ "symbol (#) for channels, and the at (@) symbol for users, are not\n"
-#~ "required."
-
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventorySyncButton.js:33
 msgid "Start inventory source sync"
 msgstr "Start inventory source sync"
@@ -7075,10 +6380,6 @@ msgstr "Provisioning Callbacks"
 #: screens/InstanceGroup/shared/InstanceGroupForm.js:30
 msgid "Minimum number of instances that will be automatically assigned to this group when new instances come online."
 msgstr "Minimum number of instances that will be automatically assigned to this group when new instances come online."
-
-#: components/LaunchPrompt/LaunchPrompt.js:132
-#~ msgid "Launch | {0}"
-#~ msgstr "Launch | {0}"
 
 #: components/NotificationList/NotificationListItem.js:84
 msgid "Toggle notification success"
@@ -7147,10 +6448,6 @@ msgstr "min"
 msgid "Inventory Sources"
 msgstr "Inventory Sources"
 
-#: screens/Template/shared/JobTemplate.helptext.js:74
-#~ msgid "If enabled, simultaneous runs of this job template will be allowed."
-#~ msgstr "If enabled, simultaneous runs of this job template will be allowed."
-
 #: screens/Template/shared/WorkflowJobTemplateForm.js:273
 msgid "Enable Concurrent Jobs"
 msgstr "Enable Concurrent Jobs"
@@ -7198,10 +6495,6 @@ msgstr "Set preferences for data collection, logos, and logins"
 msgid "Add"
 msgstr ""
 
-#: components/TemplateList/TemplateListItem.js:170
-#~ msgid "Custom virtual environment {0} must be replaced by an execution environment. For more information about migrating to execution environments see <0>the documentation.</0>"
-#~ msgstr "Custom virtual environment {0} must be replaced by an execution environment. For more information about migrating to execution environments see <0>the documentation.</0>"
-
 #: screens/Team/TeamRoles/TeamRolesList.js:126
 #: screens/User/UserRoles/UserRolesList.js:126
 msgid "System administrators have unrestricted access to all resources."
@@ -7220,10 +6513,6 @@ msgstr "Failed to cancel Constructed Inventory Source Sync"
 #: screens/Inventory/InventoryHost/InventoryHost.js:65
 msgid "Back to Hosts"
 msgstr "Back to Hosts"
-
-#: screens/ExecutionEnvironment/shared/ExecutionEnvironment.helptext.js:22
-#~ msgid "Credential to authenticate with a protected container registry."
-#~ msgstr "Credential to authenticate with a protected container registry."
 
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:207
 msgid "Context"
@@ -7250,11 +6539,6 @@ msgstr "Privilege escalation password"
 #: screens/Job/JobOutput/EmptyOutput.js:32
 msgid "Please try another search using the filter above"
 msgstr "Please try another search using the filter above"
-
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:193
-#~ msgid "Manual"
-#~ msgstr "Manual"
 
 #: screens/Setting/shared/SharedFields.js:357
 msgid "Are you sure you want to edit login redirect override URL?  Doing so could impact users' ability to log in to the system once local authentication is also disabled."
@@ -7349,10 +6633,6 @@ msgstr "Browser default"
 msgid "Follow"
 msgstr "Follow"
 
-#: components/AdHocCommands/AdHocDetailsStep.js:245
-#~ msgid "Pass extra command line changes. There are two ansible command line parameters:"
-#~ msgstr "Pass extra command line changes. There are two ansible command line parameters:"
-
 #: components/AddRole/AddResourceRole.js:71
 #: components/AdHocCommands/AdHocCredentialStep.js:128
 #: components/AdHocCommands/AdHocExecutionEnvironmentStep.js:117
@@ -7398,14 +6678,6 @@ msgstr "Follow"
 msgid "Modified By (Username)"
 msgstr "Modified By (Username)"
 
-#: components/LaunchPrompt/steps/OtherPromptsStep.js:188
-#~ msgid "If enabled, show the changes made\n"
-#~ "by Ansible tasks, where supported. This is equivalent to Ansible’s\n"
-#~ "--diff mode."
-#~ msgstr "If enabled, show the changes made\n"
-#~ "by Ansible tasks, where supported. This is equivalent to Ansible’s\n"
-#~ "--diff mode."
-
 #: screens/InstanceGroup/ContainerGroup.js:58
 msgid "Back to instance groups"
 msgstr "Back to instance groups"
@@ -7413,10 +6685,6 @@ msgstr "Back to instance groups"
 #: components/Pagination/Pagination.js:26
 msgid "page"
 msgstr "page"
-
-#: screens/Project/shared/Project.helptext.js:81
-#~ msgid "Note: This field assumes the remote name is \"origin\"."
-#~ msgstr "Note: This field assumes the remote name is \"origin\"."
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.js:82
 #: screens/Setting/Settings.js:57
@@ -7426,19 +6694,6 @@ msgstr "GitHub Default"
 #: screens/Template/Survey/SurveyQuestionForm.js:221
 msgid "Maximum"
 msgstr "Maximum"
-
-#: screens/Project/shared/Project.helptext.js:5
-#~ msgid "The execution environment that will be used for jobs that use this project. This will be used as fallback when an execution environment has not been explicitly assigned at the job template or workflow level."
-#~ msgstr "The execution environment that will be used for jobs that use this project. This will be used as fallback when an execution environment has not been explicitly assigned at the job template or workflow level."
-
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:5
-#~ msgid "Name of the workflow job template."
-#~ msgstr "Name of the workflow job template."
-
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:131
-#~ msgid "MOST RECENT SYNC"
-#~ msgstr "MOST RECENT SYNC"
 
 #: screens/Inventory/InventoryList/InventoryList.js:243
 msgid "Sync Status"
@@ -7472,10 +6727,6 @@ msgstr "Git"
 msgid "Choose a Playbook Directory"
 msgstr "Choose a Playbook Directory"
 
-#: components/PaginatedTable/PaginatedTable.js:97
-#~ msgid "Please add {pluralizedItemName} to populate this list "
-#~ msgstr "Please add {pluralizedItemName} to populate this list "
-
 #: components/JobList/JobListItem.js:237
 #: components/Workflow/WorkflowNodeHelp.js:61
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateListItem.js:21
@@ -7484,14 +6735,6 @@ msgstr "Choose a Playbook Directory"
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:222
 msgid "Workflow Job Template"
 msgstr "Workflow Job Template"
-
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:18
-#~ msgid "Prompt for labels on launch."
-#~ msgstr "Prompt for labels on launch."
-
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.js:159
-#~ msgid "Name of an artifact produced by the parent node via set_stats. The link is only followed when the parent job succeeds and the condition below is true. A missing key never matches."
-#~ msgstr "Name of an artifact produced by the parent node via set_stats. The link is only followed when the parent job succeeds and the condition below is true. A missing key never matches."
 
 #: screens/SubscriptionUsage/SubscriptionUsageChart.js:118
 #: screens/SubscriptionUsage/SubscriptionUsageChart.js:169
@@ -7507,27 +6750,9 @@ msgstr "Execute when the parent node results in a failure state."
 msgid "{0, plural, one {This approval cannot be deleted due to insufficient permissions or a pending job status} other {These approvals cannot be deleted due to insufficient permissions or a pending job status}}"
 msgstr "{0, plural, one {This approval cannot be deleted due to insufficient permissions or a pending job status} other {These approvals cannot be deleted due to insufficient permissions or a pending job status}}"
 
-#: screens/Project/shared/Project.helptext.js:118
-#~ msgid "Submodules will track the latest commit on\n"
-#~ "their master branch (or other branch specified in\n"
-#~ ".gitmodules). If no, submodules will be kept at\n"
-#~ "the revision specified by the main project.\n"
-#~ "This is equivalent to specifying the --remote\n"
-#~ "flag to git submodule update."
-#~ msgstr "Submodules will track the latest commit on\n"
-#~ "their master branch (or other branch specified in\n"
-#~ ".gitmodules). If no, submodules will be kept at\n"
-#~ "the revision specified by the main project.\n"
-#~ "This is equivalent to specifying the --remote\n"
-#~ "flag to git submodule update."
-
 #: components/VerbositySelectField/VerbositySelectField.js:20
 msgid "2 (More Verbose)"
 msgstr "2 (More Verbose)"
-
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:32
-#~ msgid "Webhook credential for this workflow job template."
-#~ msgstr "Webhook credential for this workflow job template."
 
 #: components/Lookup/HostFilterLookup.js:358
 msgid "Populate the hosts for this inventory by using a search\n"
@@ -7549,14 +6774,6 @@ msgstr "This schedule is missing required survey values"
 msgid "LDAP4"
 msgstr "LDAP4"
 
-#: screens/NotificationTemplate/shared/Notifications.helptext.js:15
-#~ msgid "The base URL of the Grafana server - the\n"
-#~ "/api/annotations endpoint will be added automatically to the base\n"
-#~ "Grafana URL."
-#~ msgstr "The base URL of the Grafana server - the\n"
-#~ "/api/annotations endpoint will be added automatically to the base\n"
-#~ "Grafana URL."
-
 #: screens/Dashboard/shared/LineChart.js:182
 msgid "Date"
 msgstr "Date"
@@ -7566,10 +6783,6 @@ msgstr "Date"
 msgid "User and Automation Analytics"
 msgstr "User and Automation Analytics"
 
-#: screens/Template/shared/JobTemplate.helptext.js:96
-#~ msgid "Privilege escalation: If enabled, run this playbook as an administrator."
-#~ msgstr "Privilege escalation: If enabled, run this playbook as an administrator."
-
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.js:198
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/RunStep.js:161
 msgid "Value to compare the artifact against. Interpreted as JSON when possible (e.g. true, 3), otherwise as a plain string."
@@ -7578,11 +6791,6 @@ msgstr "Value to compare the artifact against. Interpreted as JSON when possible
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:162
 msgid "Failed to delete one or more groups."
 msgstr "Failed to delete one or more groups."
-
-#: components/AppContainer/PageHeaderToolbar.js:111
-#: components/AppContainer/PageHeaderToolbar.js:115
-#~ msgid "Switch to dark mode"
-#~ msgstr "Switch to dark mode"
 
 #: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.js:197
 msgid "Confirm Disable Local Authorization"
@@ -7607,10 +6815,6 @@ msgstr "Failed to load related groups."
 #: screens/SubscriptionUsage/SubscriptionUsageChart.js:126
 msgid "Subscription Compliance"
 msgstr "Subscription Compliance"
-
-#: util/validators.js:65
-#~ msgid "This field must be a number and have a value greater than {min}"
-#~ msgstr "This field must be a number and have a value greater than {min}"
 
 #: components/LaunchButton/ReLaunchDropDown.js:43
 #: components/PromptDetail/PromptDetail.js:138
@@ -7638,11 +6842,6 @@ msgstr "Confirm Delete"
 msgid "Workflow timed out message"
 msgstr "Workflow timed out message"
 
-#: screens/Job/Job.helptext.js:11
-#: screens/Template/shared/JobTemplate.helptext.js:22
-#~ msgid "Select the playbook to be executed by this job."
-#~ msgstr "Select the playbook to be executed by this job."
-
 #: components/Schedule/ScheduleOccurrences/ScheduleOccurrences.js:52
 msgid "(Limited to first 10)"
 msgstr "(Limited to first 10)"
@@ -7664,11 +6863,6 @@ msgstr "April"
 msgid "Host Failure"
 msgstr "Host Failure"
 
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:177
-#~ msgid "Name"
-#~ msgstr "Name"
-
 #: screens/ActivityStream/ActivityStreamDetailButton.js:30
 #: screens/ActivityStream/ActivityStreamListItem.js:46
 msgid "View event details"
@@ -7681,16 +6875,6 @@ msgstr "Gathering Facts"
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:124
 msgid "Are you sure you want delete the group below?"
 msgstr "Are you sure you want delete the group below?"
-
-#: screens/Inventory/shared/ConstructedInventoryHint.js:115
-#~ msgid "Create vars from jinja2 expressions. This can be useful\n"
-#~ "if the constructed groups you define do not contain the expected\n"
-#~ "hosts. This can be used to add hostvars from expressions so\n"
-#~ "that you know what the resultant values of those expressions are."
-#~ msgstr "Create vars from jinja2 expressions. This can be useful\n"
-#~ "if the constructed groups you define do not contain the expected\n"
-#~ "hosts. This can be used to add hostvars from expressions so\n"
-#~ "that you know what the resultant values of those expressions are."
 
 #: components/AdHocCommands/AdHocDetailsStep.js:215
 msgid "Enables creation of a provisioning\n"
@@ -7727,10 +6911,6 @@ msgstr "Host Skipped"
 msgid "View Project Details"
 msgstr "View Project Details"
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:22
-#~ msgid "Prompt for tags on launch."
-#~ msgstr "Prompt for tags on launch."
-
 #: components/Workflow/WorkflowTools.js:160
 msgid "Pan Right"
 msgstr "Pan Right"
@@ -7753,10 +6933,6 @@ msgstr "Organization Name"
 msgid "Host Filter"
 msgstr "Host Filter"
 
-#: components/JobList/JobListCancelButton.js:168
-#~ msgid "{numJobsToCancel, plural, one {This action will cancel the following job:} other {This action will cancel the following jobs:}}"
-#~ msgstr "{numJobsToCancel, plural, one {This action will cancel the following job:} other {This action will cancel the following jobs:}}"
-
 #: screens/ActivityStream/ActivityStream.js:269
 msgid "Keyword"
 msgstr "Keyword"
@@ -7769,10 +6945,6 @@ msgstr "Delete the project before syncing"
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.js:159
 msgid "Unlimited"
 msgstr "Unlimited"
-
-#: components/SelectedList/DraggableSelectedList.js:33
-#~ msgid "Dragging started for item id: {newId}."
-#~ msgstr "Dragging started for item id: {newId}."
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.js:96
 msgid "File, directory or script"
@@ -7787,10 +6959,6 @@ msgstr "Resource type"
 msgid "The execution environment that will be used for jobs inside of this organization. This will be used a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level."
 msgstr "The execution environment that will be used for jobs inside of this organization. This will be used a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level."
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:12
-#~ msgid "Enable a survey for this workflow job template."
-#~ msgstr "Enable a survey for this workflow job template."
-
 #. Aria label for paginated table list
 #: components/PaginatedTable/PaginatedTable.js:83
 msgid "{pluralizedItemName} List"
@@ -7799,10 +6967,6 @@ msgstr "{pluralizedItemName} List"
 #: screens/Template/Survey/SurveyList.js:151
 msgid "Please add survey questions."
 msgstr "Please add survey questions."
-
-#: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:86
-#~ msgid "(Default)"
-#~ msgstr "(Default)"
 
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:261
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:124
@@ -8117,10 +7281,6 @@ msgstr "Sign in with GitHub Enterprise"
 msgid "Select a value for this field"
 msgstr "Select a value for this field"
 
-#: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:40
-#~ msgid "Never expires"
-#~ msgstr "Never expires"
-
 #. placeholder {0}: job.id
 #: components/Sparkline/Sparkline.js:43
 msgid "View job {0}"
@@ -8133,10 +7293,6 @@ msgstr "Sign in with SAML {samlIDP}"
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:164
 msgid "Browse"
 msgstr "Browse"
-
-#: screens/InstanceGroup/shared/ContainerGroupForm.js:78
-#~ msgid "Maximum number of forks to allow across all jobs running concurrently on this group.\\n          Zero means no limit will be enforced."
-#~ msgstr "Maximum number of forks to allow across all jobs running concurrently on this group.\\n          Zero means no limit will be enforced."
 
 #: components/NotificationList/NotificationList.js:193
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:134
@@ -8173,16 +7329,6 @@ msgstr "The application that this token belongs to, or leave this field empty to
 #: screens/Instances/Shared/InstanceForm.js:57
 msgid "Listener Port"
 msgstr "Listener Port"
-
-#: screens/Project/shared/Project.helptext.js:108
-#~ msgid "Enable content signing to verify that the content\n"
-#~ "has remained secure when a project is synced.\n"
-#~ "If the content has been tampered with, the\n"
-#~ "job will not run."
-#~ msgstr "Enable content signing to verify that the content\n"
-#~ "has remained secure when a project is synced.\n"
-#~ "If the content has been tampered with, the\n"
-#~ "job will not run."
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:287
 msgid "SSL Connection"
@@ -8275,10 +7421,6 @@ msgstr "Construct 2 groups, limit to intersection"
 msgid "# sources with sync failures."
 msgstr "# sources with sync failures."
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:30
-#~ msgid "Webhook URL for this workflow job template."
-#~ msgstr "Webhook URL for this workflow job template."
-
 #: components/Schedule/shared/ScheduleFormFields.js:93
 msgid "Start date/time"
 msgstr "Start date/time"
@@ -8299,11 +7441,6 @@ msgstr "Sign in with GitHub Organizations"
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.js:260
 msgid "Redirecting to subscription detail"
 msgstr "Redirecting to subscription detail"
-
-#: screens/Job/Job.helptext.js:18
-#: screens/Template/shared/JobTemplate.helptext.js:42
-#~ msgid "The amount of time (in seconds) to run before the job is canceled. Defaults to 0 for no job timeout."
-#~ msgstr "The amount of time (in seconds) to run before the job is canceled. Defaults to 0 for no job timeout."
 
 #: screens/Host/HostGroups/HostGroupsList.js:251
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.js:262
@@ -8331,10 +7468,6 @@ msgstr "Never Updated"
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:145
 msgid "Successful"
 msgstr ""
-
-#: screens/Template/shared/JobTemplate.helptext.js:86
-#~ msgid "Concurrent jobs: If enabled, simultaneous runs of this job template will be allowed."
-#~ msgstr "Concurrent jobs: If enabled, simultaneous runs of this job template will be allowed."
 
 #: screens/Job/JobOutput/JobOutputSearch.js:137
 msgid "Task Started"
@@ -8374,11 +7507,6 @@ msgstr "Exact search on id field."
 #: screens/ManagementJob/ManagementJob.js:96
 msgid "Back to management jobs"
 msgstr "Back to management jobs"
-
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:181
-#~ msgid "Organization"
-#~ msgstr "Organization"
 
 #: screens/Job/JobOutput/JobOutputSearch.js:119
 msgid "Host OK"
@@ -8437,10 +7565,6 @@ msgstr "Back to Settings"
 msgid "Default"
 msgstr "Default"
 
-#: components/Schedule/shared/buildRuleObj.js:111
-#~ msgid "End did not match an expected value ({0})"
-#~ msgstr "End did not match an expected value ({0})"
-
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:114
 msgid "Add instance group"
 msgstr "Add instance group"
@@ -8489,12 +7613,6 @@ msgstr "Unfollow"
 msgid "string"
 msgstr "string"
 
-#: screens/NotificationTemplate/shared/Notifications.helptext.js:28
-#~ msgid "One Slack channel per line. The pound symbol (#)\n"
-#~ "is required for channels. To respond to or start a thread to a specific message add the parent message Id to the channel where the parent message Id is 16 digits. A dot (.) must be manually inserted after the 10th digit.  ie:#destination-channel, 1231257890.006423. See Slack"
-#~ msgstr "One Slack channel per line. The pound symbol (#)\n"
-#~ "is required for channels. To respond to or start a thread to a specific message add the parent message Id to the channel where the parent message Id is 16 digits. A dot (.) must be manually inserted after the 10th digit.  ie:#destination-channel, 1231257890.006423. See Slack"
-
 #: screens/User/shared/UserForm.js:130
 msgid "Confirm Password"
 msgstr "Confirm Password"
@@ -8511,12 +7629,6 @@ msgstr "Relaunch from first node"
 #: screens/Template/WorkflowJobTemplate.js:102
 msgid "Back to Templates"
 msgstr "Back to Templates"
-
-#: screens/NotificationTemplate/shared/Notifications.helptext.js:38
-#~ msgid "Specify a notification color. Acceptable colors are hex\n"
-#~ "color code (example: #3af or #789abc)."
-#~ msgstr "Specify a notification color. Acceptable colors are hex\n"
-#~ "color code (example: #3af or #789abc)."
 
 #: screens/Setting/SettingList.js:54
 msgid "Authentication"
@@ -8642,11 +7754,6 @@ msgstr "Specify HTTP Headers in JSON format. Refer to\n"
 msgid "Rocket.Chat"
 msgstr "Rocket.Chat"
 
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:289
-#~ msgid "Playbook Directory"
-#~ msgstr "Playbook Directory"
-
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:398
 msgid "Frequency Exception Details"
 msgstr "Frequency Exception Details"
@@ -8688,10 +7795,6 @@ msgstr "command"
 msgid "Copy Execution Environment"
 msgstr "Copy Execution Environment"
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:16
-#~ msgid "Prompt for SCM branch on launch."
-#~ msgstr "Prompt for SCM branch on launch."
-
 #: components/Workflow/WorkflowTools.js:142
 msgid "Set zoom to 100% and center graph"
 msgstr "Set zoom to 100% and center graph"
@@ -8706,24 +7809,6 @@ msgstr "Revert all to default"
 msgid "Inventory file"
 msgstr "Inventory file"
 
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.js:254
-#~ msgid "Note that only hosts directly in this group can\n"
-#~ "be disassociated. Hosts in sub-groups must be disassociated\n"
-#~ "directly from the sub-group level that they belong."
-#~ msgstr "Note that only hosts directly in this group can\n"
-#~ "be disassociated. Hosts in sub-groups must be disassociated\n"
-#~ "directly from the sub-group level that they belong."
-
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:282
-#~ msgid "Project Base Path"
-#~ msgstr "Project Base Path"
-
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:321
-#~ msgid "Project Sync Error"
-#~ msgstr "Project Sync Error"
-
 #: screens/Project/ProjectList/ProjectListItem.js:118
 msgid "Refresh for revision"
 msgstr "Refresh for revision"
@@ -8735,14 +7820,6 @@ msgstr "Project sync failures"
 #: components/Schedule/shared/FrequencyDetailSubform.js:368
 msgid "Run on"
 msgstr "Run on"
-
-#: components/HostToggle/HostToggle.js:21
-#~ msgid "Indicates if a host is available and should be included in running\n"
-#~ "jobs.  For hosts that are part of an external inventory, this may be\n"
-#~ "reset by the inventory sync process."
-#~ msgstr "Indicates if a host is available and should be included in running\n"
-#~ "jobs.  For hosts that are part of an external inventory, this may be\n"
-#~ "reset by the inventory sync process."
 
 #: components/LaunchPrompt/LaunchPrompt.js:142
 #: components/Schedule/shared/SchedulePromptableFields.js:108
@@ -8757,14 +7834,6 @@ msgstr "Amazon EC2"
 #: screens/Instances/InstancePeers/InstancePeerList.js:197
 msgid "Peer removed. Please be sure to run the install bundle for {0} again in order to see changes take effect."
 msgstr "Peer removed. Please be sure to run the install bundle for {0} again in order to see changes take effect."
-
-#: components/SelectedList/DraggableSelectedList.js:69
-#~ msgid "Draggable list to reorder and remove selected items."
-#~ msgstr "Draggable list to reorder and remove selected items."
-
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:167
-#~ msgid "The last {weekday} of {month}"
-#~ msgstr "The last {weekday} of {month}"
 
 #: screens/Job/JobOutput/PageControls.js:53
 msgid "Collapse all job events"
@@ -8799,11 +7868,6 @@ msgstr "ID of the panel (optional)"
 #: screens/Template/shared/JobTemplateForm.js:641
 msgid "Prevent Instance Group Fallback"
 msgstr "Prevent Instance Group Fallback"
-
-#: components/AppContainer/PageHeaderToolbar.js:111
-#: components/AppContainer/PageHeaderToolbar.js:115
-#~ msgid "Switch to light mode"
-#~ msgstr "Switch to light mode"
 
 #: screens/InstanceGroup/shared/InstanceGroupForm.js:58
 msgid "Maximum number of forks to allow across all jobs running concurrently on this group. Zero means no limit will be enforced."
@@ -8936,10 +8000,6 @@ msgstr "No inventory sync failures."
 msgid "Note: The order in which these are selected sets the execution precedence. Select more than one to enable drag."
 msgstr "Note: The order in which these are selected sets the execution precedence. Select more than one to enable drag."
 
-#: components/LaunchPrompt/steps/credentialsValidator.js:56
-#~ msgid "Credentials that require passwords on launch are not permitted.  Please remove or replace the following credentials with a credential of the same type in order to proceed: {0}"
-#~ msgstr "Credentials that require passwords on launch are not permitted.  Please remove or replace the following credentials with a credential of the same type in order to proceed: {0}"
-
 #: screens/Login/Login.js:385
 msgid "Sign in with OIDC"
 msgstr "Sign in with OIDC"
@@ -8978,21 +8038,9 @@ msgstr "Remote Archive"
 msgid "Troubleshooting"
 msgstr "Troubleshooting"
 
-#: screens/Project/shared/Project.helptext.js:76
-#~ msgid "A refspec to fetch (passed to the Ansible git\n"
-#~ "module). This parameter allows access to references via\n"
-#~ "the branch field not otherwise available."
-#~ msgstr "A refspec to fetch (passed to the Ansible git\n"
-#~ "module). This parameter allows access to references via\n"
-#~ "the branch field not otherwise available."
-
 #: screens/Application/Applications.js:90
 msgid "This is the only time the client secret will be shown."
 msgstr "This is the only time the client secret will be shown."
-
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:6
-#~ msgid "Optional description for the workflow job template."
-#~ msgstr "Optional description for the workflow job template."
 
 #: screens/ActivityStream/ActivityStreamDescription.js:511
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:197
@@ -9046,10 +8094,6 @@ msgstr "Inventory (Name)"
 msgid "Update Revision on Launch"
 msgstr "Update Revision on Launch"
 
-#: screens/Job/Job.helptext.js:8
-#~ msgid "The project containing the playbook this job will execute."
-#~ msgstr "The project containing the playbook this job will execute."
-
 #: screens/Credential/shared/CredentialForm.js:189
 msgid "Select Credential Type"
 msgstr "Select Credential Type"
@@ -9057,10 +8101,6 @@ msgstr "Select Credential Type"
 #: screens/Setting/Settings.js:87
 msgid "LDAP 2"
 msgstr "LDAP 2"
-
-#: screens/Project/shared/Project.helptext.js:84
-#~ msgid "Examples include:"
-#~ msgstr "Examples include:"
 
 #: components/JobList/JobList.js:222
 #: components/JobList/JobListItem.js:55
@@ -9104,12 +8144,6 @@ msgstr "Recent Jobs"
 msgid "These are the modules that {brandName} supports running commands against."
 msgstr "These are the modules that {brandName} supports running commands against."
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:65
-#~ msgid "If you do not have a subscription, you can visit\n"
-#~ "Red Hat to obtain a trial subscription."
-#~ msgstr "If you do not have a subscription, you can visit\n"
-#~ "Red Hat to obtain a trial subscription."
-
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.js:48
 msgid "Workflow link modal"
 msgstr "Workflow link modal"
@@ -9123,19 +8157,9 @@ msgstr "Edit Inventory"
 msgid "Failed to user token."
 msgstr "Failed to user token."
 
-#: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:67
-#~ msgid "Minimum number of instances that will be automatically\n"
-#~ "assigned to this group when new instances come online."
-#~ msgstr "Minimum number of instances that will be automatically\n"
-#~ "assigned to this group when new instances come online."
-
 #: screens/Login/Login.js:404
 msgid "Sign in with SAML"
 msgstr "Sign in with SAML"
-
-#: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:27
-#~ msgid "canceled"
-#~ msgstr "canceled"
 
 #: screens/WorkflowApproval/WorkflowApproval.js:66
 msgid "Back to Workflow Approvals"
@@ -9179,10 +8203,6 @@ msgstr "Auto"
 msgid "Delete All Groups and Hosts"
 msgstr "Delete All Groups and Hosts"
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:24
-#~ msgid "Prompt for execution environment on launch."
-#~ msgstr "Prompt for execution environment on launch."
-
 #: screens/Host/HostDetail/HostDetail.js:58
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:56
 msgid "Failed to delete {name}."
@@ -9206,10 +8226,6 @@ msgstr "Preview"
 #: screens/Application/shared/ApplicationForm.js:129
 msgid "Client type"
 msgstr "Client type"
-
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:25
-#~ msgid "Prompt for instance groups on launch."
-#~ msgstr "Prompt for instance groups on launch."
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:637
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:213
@@ -9262,16 +8278,6 @@ msgstr "Expires on"
 msgid "Each time a job runs using this inventory, refresh the inventory from the selected source before executing job tasks."
 msgstr "Each time a job runs using this inventory, refresh the inventory from the selected source before executing job tasks."
 
-#: screens/Project/shared/Project.helptext.js:104
-#~ msgid "Branch to checkout. In addition to branches,\n"
-#~ "you can input tags, commit hashes, and arbitrary refs. Some\n"
-#~ "commit hashes and refs may not be available unless you also\n"
-#~ "provide a custom refspec."
-#~ msgstr "Branch to checkout. In addition to branches,\n"
-#~ "you can input tags, commit hashes, and arbitrary refs. Some\n"
-#~ "commit hashes and refs may not be available unless you also\n"
-#~ "provide a custom refspec."
-
 #: components/JobList/JobList.js:241
 #: components/StatusLabel/StatusLabel.js:46
 #: components/TemplateList/TemplateListItem.js:105
@@ -9304,10 +8310,6 @@ msgstr "Sign in with Azure AD"
 msgid "Relaunch all hosts"
 msgstr "Relaunch all hosts"
 
-#: screens/Template/shared/JobTemplate.helptext.js:91
-#~ msgid "Fact storage: If enabled, this will store gathered facts so they can be viewed at the host level. Facts are persisted and injected into the fact cache at runtime.."
-#~ msgstr "Fact storage: If enabled, this will store gathered facts so they can be viewed at the host level. Facts are persisted and injected into the fact cache at runtime.."
-
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.js:117
 msgid "Delete credential type"
 msgstr "Delete credential type"
@@ -9326,14 +8328,6 @@ msgstr "Are you sure you want to remove this link?"
 msgid "A Jinja2 template rendered with upstream set_stats artifacts when the approval is created. Use this to show the approver relevant context from previous job steps. Available variables come from set_stats data of parent nodes."
 msgstr "A Jinja2 template rendered with upstream set_stats artifacts when the approval is created. Use this to show the approver relevant context from previous job steps. Available variables come from set_stats data of parent nodes."
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:14
-#~ msgid "Prompt for variables on launch."
-#~ msgstr "Prompt for variables on launch."
-
-#: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:14
-#~ msgid "Denied by {0} - {1}"
-#~ msgstr "Denied by {0} - {1}"
-
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:206
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:209
 msgid "None (Run Once)"
@@ -9349,10 +8343,6 @@ msgstr "Failed to sync project."
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:122
 msgid "Total hosts"
 msgstr "Total hosts"
-
-#: util/validators.js:199
-#~ msgid "This field must be greater than 0"
-#~ msgstr "This field must be greater than 0"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:152
 msgid "User Guide"
@@ -9370,10 +8360,6 @@ msgstr "Credential copied successfully"
 msgid "The search filter did not produce any results…"
 msgstr "The search filter did not produce any results…"
 
-#: util/validators.js:128
-#~ msgid "This field must be a number"
-#~ msgstr "This field must be a number"
-
 #: screens/Job/JobOutput/PageControls.js:82
 msgid "Scroll last"
 msgstr "Scroll last"
@@ -9385,10 +8371,6 @@ msgstr "Disassociate related team(s)?"
 #: components/Schedule/shared/FrequencyDetailSubform.js:441
 msgid "Last"
 msgstr ""
-
-#: screens/Template/shared/JobTemplate.helptext.js:72
-#~ msgid "Enable webhook for this template."
-#~ msgstr "Enable webhook for this template."
 
 #: components/Schedule/shared/FrequencyDetailSubform.js:567
 msgid "On date"
@@ -9446,11 +8428,6 @@ msgstr ""
 msgid "Cancel selected jobs"
 msgstr "Cancel selected jobs"
 
-#: util/validators.js:112
-#: util/validators.js:196
-#~ msgid "This field must be an integer"
-#~ msgstr "This field must be an integer"
-
 #: components/Workflow/WorkflowStartNode.js:64
 #: screens/Job/WorkflowOutput/WorkflowOutput.js:77
 #: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.js:314
@@ -9471,14 +8448,6 @@ msgstr "ID"
 #: components/Search/LookupTypeInput.js:90
 msgid "Greater than comparison."
 msgstr "Greater than comparison."
-
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:77
-#~ msgid "This data is used to enhance\n"
-#~ "future releases of the Software and to provide\n"
-#~ "Automation Analytics."
-#~ msgstr "This data is used to enhance\n"
-#~ "future releases of the Software and to provide\n"
-#~ "Automation Analytics."
 
 #: components/PromptDetail/PromptInventorySourceDetail.js:44
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:133
@@ -9513,10 +8482,6 @@ msgstr "Execution Environment"
 msgid "Delete Workflow Job Template"
 msgstr "Delete Workflow Job Template"
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:9
-#~ msgid "Pass extra command line variables to the workflow."
-#~ msgstr "Pass extra command line variables to the workflow."
-
 #: screens/InstanceGroup/InstanceGroups.js:36
 msgid "Instance details"
 msgstr "Instance details"
@@ -9524,11 +8489,6 @@ msgstr "Instance details"
 #: screens/Job/JobOutput/EmptyOutput.js:60
 msgid "No output found for this job."
 msgstr "No output found for this job."
-
-#: screens/Job/Job.helptext.js:6
-#: screens/Template/shared/JobTemplate.helptext.js:8
-#~ msgid "For job templates, select run to execute the playbook. Select check to only check playbook syntax, test environment setup, and report problems without executing the playbook."
-#~ msgstr "For job templates, select run to execute the playbook. Select check to only check playbook syntax, test environment setup, and report problems without executing the playbook."
 
 #: screens/Setting/SettingList.js:117
 msgid "Logging settings"
@@ -9613,11 +8573,6 @@ msgstr "Not configured"
 msgid "Workflow Job"
 msgstr "Workflow Job"
 
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:270
-#~ msgid "Seconds"
-#~ msgstr "Seconds"
-
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:81
 msgid "Use custom messages to change the content of\n"
 "                notifications sent when a job starts, succeeds, or fails. Use\n"
@@ -9695,10 +8650,6 @@ msgstr "Update options"
 msgid "Last Modified"
 msgstr ""
 
-#: screens/Project/shared/Project.helptext.js:100
-#~ msgid "Documentation."
-#~ msgstr "Documentation."
-
 #: components/LaunchPrompt/steps/InstanceGroupsStep.js:84
 #: components/Lookup/InstanceGroupsLookup.js:107
 msgid "Credential Name"
@@ -9742,16 +8693,6 @@ msgstr "A job has already been launched"
 msgid "Host Async OK"
 msgstr "Host Async OK"
 
-#: screens/Inventory/shared/ConstructedInventoryHint.js:242
-#~ msgid "This constructed inventory input\n"
-#~ "creates a group for both of the categories and uses\n"
-#~ "the limit (host pattern) to only return hosts that\n"
-#~ "are in the intersection of those two groups."
-#~ msgstr "This constructed inventory input\n"
-#~ "creates a group for both of the categories and uses\n"
-#~ "the limit (host pattern) to only return hosts that\n"
-#~ "are in the intersection of those two groups."
-
 #: screens/Dashboard/Dashboard.js:168
 msgid "Recent Templates"
 msgstr "Recent Templates"
@@ -9760,36 +8701,6 @@ msgstr "Recent Templates"
 #: screens/ActivityStream/ActivityStream.js:240
 msgid "Applications & Tokens"
 msgstr "Applications & Tokens"
-
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:231
-#~ msgid "Source Control Branch"
-#~ msgstr "Source Control Branch"
-
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:257
-#~ msgid "Source Control Credential"
-#~ msgstr "Source Control Credential"
-
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:236
-#~ msgid "Source Control Refspec"
-#~ msgstr "Source Control Refspec"
-
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:196
-#~ msgid "Source Control Revision"
-#~ msgstr "Source Control Revision"
-
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:192
-#~ msgid "Source Control Type"
-#~ msgstr "Source Control Type"
-
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:226
-#~ msgid "Source Control URL"
-#~ msgstr "Source Control URL"
 
 #: screens/Dashboard/shared/LineChart.js:140
 msgid "Job Runs"
@@ -9822,11 +8733,6 @@ msgstr "Deprecated"
 msgid "Update revision on job launch"
 msgstr "Update revision on job launch"
 
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:136
-#~ msgid "STATUS:"
-#~ msgstr "STATUS:"
-
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListDenyButton.js:21
 msgid "Select a row to deny"
 msgstr "Select a row to deny"
@@ -9835,11 +8741,6 @@ msgstr "Select a row to deny"
 #: screens/Dashboard/shared/ChartTooltip.js:59
 msgid "Successful"
 msgstr "Successful"
-
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:202
-#~ msgid "Successfully copied to clipboard!"
-#~ msgstr "Successfully copied to clipboard!"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.js:256
 msgid "Redirecting to dashboard"
@@ -9876,10 +8777,6 @@ msgstr "Workflow approved message body"
 msgid "OpenStack"
 msgstr "OpenStack"
 
-#: components/Search/AdvancedSearch.js:165
-#~ msgid "Returns results that satisfy this one or any other filters."
-#~ msgstr "Returns results that satisfy this one or any other filters."
-
 #: screens/Inventory/shared/ConstructedInventoryHint.js:78
 msgid "required"
 msgstr "required"
@@ -9914,11 +8811,6 @@ msgstr ""
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.js:146
 msgid "Edit Notification Template"
 msgstr "Edit Notification Template"
-
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:214
-#~ msgid "Sync for revision"
-#~ msgstr "Sync for revision"
 
 #: components/About/About.js:51
 msgid "Brand Image"
@@ -10008,10 +8900,6 @@ msgstr "Webhook Key"
 msgid "Select a Node Type"
 msgstr "Select a Node Type"
 
-#: screens/Application/shared/Application.helptext.js:5
-#~ msgid "The Grant type the user must use to acquire tokens for this application"
-#~ msgstr "The Grant type the user must use to acquire tokens for this application"
-
 #: screens/Job/JobOutput/HostEventModal.js:133
 msgid "Play"
 msgstr "Play"
@@ -10030,10 +8918,6 @@ msgstr "November"
 msgid "Show changes"
 msgstr "Show changes"
 
-#: screens/Project/shared/ProjectSubForms/ManualSubForm.js:46
-#~ msgid "WARNING:"
-#~ msgstr "WARNING:"
-
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.js:248
 msgid "Edit this node"
 msgstr "Edit this node"
@@ -10041,10 +8925,6 @@ msgstr "Edit this node"
 #: screens/Team/TeamDetail/TeamDetail.js:92
 msgid "Failed to delete team."
 msgstr "Failed to delete team."
-
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:301
-#~ msgid "Workflow Cancelled"
-#~ msgstr "Workflow Cancelled"
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/DaysToKeepStep.js:29
 msgid "Days of data to be retained"
@@ -10058,12 +8938,6 @@ msgstr "Create new execution environment"
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:226
 msgid "Get subscriptions"
 msgstr "Get subscriptions"
-
-#: screens/Project/shared/Project.helptext.js:126
-#~ msgid "Allow changing the Source Control branch or revision in a job\n"
-#~ "template that uses this project."
-#~ msgstr "Allow changing the Source Control branch or revision in a job\n"
-#~ "template that uses this project."
 
 #: components/AddRole/AddResourceRole.js:260
 #: components/AssociateModal/AssociateModal.js:117
@@ -10112,16 +8986,6 @@ msgstr "Provisioning Callback URL"
 msgid "Modified"
 msgstr ""
 
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:212
-#~ msgid "The project must be synced before a revision is available."
-#~ msgstr "The project must be synced before a revision is available."
-
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:339
-#~ msgid "This project is currently being used by other resources. Are you sure you want to delete it?"
-#~ msgstr "This project is currently being used by other resources. Are you sure you want to delete it?"
-
 #: screens/Project/shared/ProjectSubForms/ManualSubForm.js:47
 msgid "WARNING: "
 msgstr "WARNING: "
@@ -10151,12 +9015,6 @@ msgstr "Required"
 #: components/Search/AdvancedSearch.js:210
 msgid "Set type typeahead"
 msgstr "Set type typeahead"
-
-#: screens/NotificationTemplate/shared/Notifications.helptext.js:50
-#~ msgid "Specify HTTP Headers in JSON format. Refer to\n"
-#~ "the Ansible Controller documentation for example syntax."
-#~ msgstr "Specify HTTP Headers in JSON format. Refer to\n"
-#~ "the Ansible Controller documentation for example syntax."
 
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginField.js:67
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginField.js:73
@@ -10196,10 +9054,6 @@ msgstr "Insights Credential"
 msgid "Jobs"
 msgstr ""
 
-#: components/SelectedList/DraggableSelectedList.js:84
-#~ msgid "Reorder"
-#~ msgstr "Reorder"
-
 #: screens/Inventory/AdvancedInventoryHost/AdvancedInventoryHost.js:92
 msgid "View constructed inventory host details"
 msgstr "View constructed inventory host details"
@@ -10217,19 +9071,10 @@ msgstr "Token"
 msgid "policy rules."
 msgstr "policy rules."
 
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:100
-#~ msgid "weekday"
-#~ msgstr "weekday"
-
 #: components/StatusLabel/StatusLabel.js:58
 #: screens/TopologyView/Legend.js:179
 msgid "Deprovisioning"
 msgstr "Deprovisioning"
-
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:110
-#~ msgid "Track submodules latest commit on branch"
-#~ msgstr "Track submodules latest commit on branch"
 
 #: components/DetailList/LaunchedByDetail.js:27
 #: components/NotificationList/NotificationList.js:202
@@ -10240,11 +9085,6 @@ msgstr "Webhook"
 #: screens/Instances/InstancePeers/InstancePeerList.js:325
 msgid "Failed to associate peer."
 msgstr "Failed to associate peer."
-
-#: screens/Job/Job.helptext.js:20
-#: screens/Template/shared/JobTemplate.helptext.js:51
-#~ msgid "Tags are useful when you have a large playbook, and you want to run a specific part of a play or task. Use commas to separate multiple tags. Refer to the documentation for details on the usage of tags."
-#~ msgstr "Tags are useful when you have a large playbook, and you want to run a specific part of a play or task. Use commas to separate multiple tags. Refer to the documentation for details on the usage of tags."
 
 #: screens/ActivityStream/ActivityStream.js:265
 msgid "Events"
@@ -10323,10 +9163,6 @@ msgstr "System Administrator"
 msgid "Settings"
 msgstr ""
 
-#: components/Schedule/shared/UnsupportedScheduleForm.js:14
-#~ msgid "This schedule uses complex rules that are not supported in the\\n  UI.  Please use the API to manage this schedule."
-#~ msgstr "This schedule uses complex rules that are not supported in the\\n  UI.  Please use the API to manage this schedule."
-
 #: screens/CredentialType/CredentialType.js:56
 msgid "Back to credential types"
 msgstr "Back to credential types"
@@ -10357,12 +9193,6 @@ msgstr "/ (project root)"
 #: screens/TopologyView/Tooltip.js:356
 msgid "Last seen"
 msgstr "Last seen"
-
-#: screens/Inventory/shared/ConstructedInventoryHint.js:82
-#~ msgid "Token that ensures this is a source file\n"
-#~ "for the ‘constructed’ plugin."
-#~ msgstr "Token that ensures this is a source file\n"
-#~ "for the ‘constructed’ plugin."
 
 #: components/Schedule/shared/FrequencyDetailSubform.js:134
 msgid "July"
@@ -10550,17 +9380,9 @@ msgstr "Source Control Revision"
 msgid "Search is disabled while the job is running"
 msgstr "Search is disabled while the job is running"
 
-#: components/SelectedList/DraggableSelectedList.js:44
-#~ msgid "Dragging cancelled. List is unchanged."
-#~ msgstr "Dragging cancelled. List is unchanged."
-
 #: components/Schedule/shared/FrequencyDetailSubform.js:434
 msgid "Third"
 msgstr "Third"
-
-#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:333
-#~ msgid "Note: This instance may be re-associated with this instance group if it is managed by"
-#~ msgstr "Note: This instance may be re-associated with this instance group if it is managed by"
 
 #: screens/Login/Login.js:264
 msgid "Sign in with Azure AD Tenant"
@@ -10571,26 +9393,9 @@ msgstr "Sign in with Azure AD Tenant"
 msgid "Azure AD Default"
 msgstr "Azure AD Default"
 
-#: screens/Template/Survey/SurveyToolbar.js:106
-#~ msgid "Survey Disabled"
-#~ msgstr "Survey Disabled"
-
-#. js-lingui-explicit-id
-#: screens/Project/ProjectDetail/ProjectDetail.js:116
-#~ msgid "Update revision on job launch"
-#~ msgstr "Update revision on job launch"
-
 #: components/Search/LookupTypeInput.js:72
 msgid "Case-insensitive version of endswith."
 msgstr "Case-insensitive version of endswith."
-
-#: screens/Organization/OrganizationDetail/OrganizationDetail.js:97
-#~ msgid "The maximum number of hosts allowed to be managed by\n"
-#~ "this organization. Value defaults to 0 which means no limit.\n"
-#~ "Refer to the Ansible documentation for more details."
-#~ msgstr "The maximum number of hosts allowed to be managed by\n"
-#~ "this organization. Value defaults to 0 which means no limit.\n"
-#~ "Refer to the Ansible documentation for more details."
 
 #: components/Lookup/Lookup.js:204
 msgid "Cancel lookup"
@@ -10710,10 +9515,6 @@ msgstr "Waiting"
 msgid "If you want the Inventory Source to update on launch , click on Update on Launch, and also go to "
 msgstr "If you want the Inventory Source to update on launch , click on Update on Launch, and also go to "
 
-#: screens/Template/shared/JobTemplate.helptext.js:71
-#~ msgid "If enabled, run this playbook as an administrator."
-#~ msgstr "If enabled, run this playbook as an administrator."
-
 #: components/Search/AdvancedSearch.js:179
 msgid "Set type select"
 msgstr "Set type select"
@@ -10797,10 +9598,6 @@ msgstr "Seconds"
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:62
 msgid "User analytics"
 msgstr "User analytics"
-
-#: screens/Job/Job.helptext.js:34
-#~ msgid "These arguments are used with the specified module. You can find information about {moduleName} by clicking"
-#~ msgstr "These arguments are used with the specified module. You can find information about {moduleName} by clicking"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:66
 msgid "If you do not have a subscription, you can visit\n"
@@ -10986,27 +9783,13 @@ msgstr "Add new group"
 msgid "Current page"
 msgstr ""
 
-#: screens/Job/Job.helptext.js:26
-#: screens/Template/shared/JobTemplate.helptext.js:117
-#~ msgid "The number of parallel or simultaneous processes to use while executing the playbook. An empty value, or a value less than 1 will use the Ansible default which is usually 5. The default number of forks can be overwritten with a change to"
-#~ msgstr "The number of parallel or simultaneous processes to use while executing the playbook. An empty value, or a value less than 1 will use the Ansible default which is usually 5. The default number of forks can be overwritten with a change to"
-
 #: screens/InstanceGroup/shared/ContainerGroupForm.js:97
 msgid "Field for passing a custom Kubernetes or OpenShift Pod specification."
 msgstr "Field for passing a custom Kubernetes or OpenShift Pod specification."
 
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:120
-#~ msgid "The last {dayOfWeek}"
-#~ msgstr "The last {dayOfWeek}"
-
 #: screens/Inventory/shared/InventorySourceSyncButton.js:37
 msgid "Start sync source"
 msgstr "Start sync source"
-
-#: screens/Job/Job.helptext.js:14
-#: screens/Template/shared/JobTemplate.helptext.js:30
-#~ msgid "Pass extra command line variables to the playbook. This is the -e or --extra-vars command line parameter for ansible-playbook. Provide key/value pairs using either YAML or JSON. Refer to the documentation for example syntax."
-#~ msgstr "Pass extra command line variables to the playbook. This is the -e or --extra-vars command line parameter for ansible-playbook. Provide key/value pairs using either YAML or JSON. Refer to the documentation for example syntax."
 
 #: components/FormField/PasswordInput.js:36
 msgid "Hide"
@@ -11016,10 +9799,6 @@ msgstr "Hide"
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeViewModal.js:137
 msgid "The resource associated with this node has been deleted."
 msgstr "The resource associated with this node has been deleted."
-
-#: screens/Application/shared/Application.helptext.js:6
-#~ msgid "Set to Public or Confidential depending on how secure the client device is."
-#~ msgstr "Set to Public or Confidential depending on how secure the client device is."
 
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:64
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:85
@@ -11031,16 +9810,6 @@ msgstr "Max forks"
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironment.helptext.js:13
 msgid "Examples:"
 msgstr "Examples:"
-
-#: components/AdHocCommands/AdHocDetailsStep.js:211
-#~ msgid "Enables creation of a provisioning\n"
-#~ "callback URL. Using the URL a host can contact {brandName}\n"
-#~ "and request a configuration update using this job\n"
-#~ "template"
-#~ msgstr "Enables creation of a provisioning\n"
-#~ "callback URL. Using the URL a host can contact {brandName}\n"
-#~ "and request a configuration update using this job\n"
-#~ "template"
 
 #: screens/Project/shared/ProjectSubForms/SvnSubForm.js:22
 msgid "Revision #"
@@ -11067,24 +9836,9 @@ msgstr "Module"
 msgid "Confirm revert all"
 msgstr "Confirm revert all"
 
-#: components/SelectedList/DraggableSelectedList.js:86
-#~ msgid "Press space or enter to begin dragging,\n"
-#~ "                    and use the arrow keys to navigate up or down.\n"
-#~ "                    Press enter to confirm the drag, or any other key to\n"
-#~ "                    cancel the drag operation."
-#~ msgstr "Press space or enter to begin dragging,\n"
-#~ "                    and use the arrow keys to navigate up or down.\n"
-#~ "                    Press enter to confirm the drag, or any other key to\n"
-#~ "                    cancel the drag operation."
-
 #: screens/Inventory/shared/Inventory.helptext.js:90
 msgid "If checked, all variables for child groups and hosts will be removed and replaced by those found on the external source."
 msgstr "If checked, all variables for child groups and hosts will be removed and replaced by those found on the external source."
-
-#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:267
-#: screens/Instances/InstanceDetail/InstanceDetail.js:307
-#~ msgid "# fork"
-#~ msgstr "# fork"
 
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:332
 msgid "Delete inventory source"
@@ -11121,10 +9875,6 @@ msgstr "Return"
 msgid "Failed to delete role."
 msgstr "Failed to delete role."
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:23
-#~ msgid "Prompt for skip tags on launch."
-#~ msgstr "Prompt for skip tags on launch."
-
 #: components/Lookup/shared/LookupErrorMessage.js:12
 msgid "An error occurred"
 msgstr "An error occurred"
@@ -11137,10 +9887,6 @@ msgstr "GitHub Organization"
 #: screens/Metrics/Metrics.js:182
 msgid "Metrics"
 msgstr "Metrics"
-
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:27
-#~ msgid "Prompt for timeout on launch."
-#~ msgstr "Prompt for timeout on launch."
 
 #: screens/User/UserTeams/UserTeamList.js:249
 msgid "Select Teams"
@@ -11173,10 +9919,6 @@ msgstr "{interval} day"
 msgid "Copy Project"
 msgstr "Copy Project"
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:21
-#~ msgid "Prompt for verbosity on launch."
-#~ msgstr "Prompt for verbosity on launch."
-
 #: components/LaunchButton/WorkflowReLaunchDropDown.js:30
 msgid "Relaunch from failed node"
 msgstr "Relaunch from failed node"
@@ -11204,10 +9946,6 @@ msgstr "Back to Users"
 #: screens/Team/Team.js:121
 msgid "View Team Details"
 msgstr "View Team Details"
-
-#: screens/Credential/shared/CredentialForm.js:187
-#~ msgid "Galaxy credentials must be owned by an Organization."
-#~ msgstr "Galaxy credentials must be owned by an Organization."
 
 #: screens/TopologyView/MeshGraph.js:424
 msgid "Failed to get instance."
@@ -11245,10 +9983,6 @@ msgstr "Replace field with new value"
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkDeleteModal.js:26
 msgid "Confirm link removal"
 msgstr "Confirm link removal"
-
-#: components/LaunchPrompt/steps/useSurveyStep.js:100
-#~ msgid "This field must be at least {0} characters"
-#~ msgstr "This field must be at least {0} characters"
 
 #: components/JobList/JobListItem.js:205
 #: components/PromptDetail/PromptInventorySourceDetail.js:82
@@ -11348,14 +10082,6 @@ msgstr "Key select"
 msgid "Pass extra command line changes. There are two ansible command line parameters: "
 msgstr "Pass extra command line changes. There are two ansible command line parameters: "
 
-#: screens/Template/Survey/SurveyQuestionForm.js:48
-#~ msgid "Choose an answer type or format you want as the prompt for the user.\n"
-#~ "Refer to the Ansible Controller Documentation for more additional\n"
-#~ "information about each option."
-#~ msgstr "Choose an answer type or format you want as the prompt for the user.\n"
-#~ "Refer to the Ansible Controller Documentation for more additional\n"
-#~ "information about each option."
-
 #: screens/Inventory/shared/Inventory.helptext.js:85
 msgid "When not checked, local child hosts and groups not found on the external source will remain untouched by the inventory update process."
 msgstr "When not checked, local child hosts and groups not found on the external source will remain untouched by the inventory update process."
@@ -11421,21 +10147,9 @@ msgstr "Total groups"
 msgid "Webhook Credential"
 msgstr "Webhook Credential"
 
-#: screens/Template/shared/JobTemplate.helptext.js:101
-#~ msgid "Provisioning callbacks: Enables creation of a provisioning callback URL. Using the URL a host can contact Ansible AWX and request a configuration update using this job template."
-#~ msgstr "Provisioning callbacks: Enables creation of a provisioning callback URL. Using the URL a host can contact Ansible AWX and request a configuration update using this job template."
-
 #: screens/User/shared/UserTokenForm.js:27
 msgid "Please enter a value."
 msgstr "Please enter a value."
-
-#: screens/Organization/shared/OrganizationForm.js:73
-#~ msgid "The maximum number of hosts allowed to be managed by this organization.\n"
-#~ "Value defaults to 0 which means no limit. Refer to the Ansible\n"
-#~ "documentation for more details."
-#~ msgstr "The maximum number of hosts allowed to be managed by this organization.\n"
-#~ "Value defaults to 0 which means no limit. Refer to the Ansible\n"
-#~ "documentation for more details."
 
 #: screens/ActivityStream/ActivityStreamDescription.js:522
 msgid "updated"
@@ -11511,18 +10225,6 @@ msgstr "Start time"
 msgid "Total inventory sources"
 msgstr "Total inventory sources"
 
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:73
-#~ msgid "Use custom messages to change the content of\n"
-#~ "notifications sent when a job starts, succeeds, or fails. Use\n"
-#~ "curly braces to access information about the job:"
-#~ msgstr "Use custom messages to change the content of\n"
-#~ "notifications sent when a job starts, succeeds, or fails. Use\n"
-#~ "curly braces to access information about the job:"
-
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:10
-#~ msgid "Provide a host pattern to further constrain the list of hosts that will be managed or affected by the workflow."
-#~ msgstr "Provide a host pattern to further constrain the list of hosts that will be managed or affected by the workflow."
-
 #: components/LaunchButton/WorkflowReLaunchDropDown.js:27
 msgid "Canceled node"
 msgstr "Canceled node"
@@ -11555,10 +10257,6 @@ msgstr "Edit Node"
 #: screens/Template/shared/PlaybookSelect.js:127
 msgid "Clear"
 msgstr "Clear"
-
-#: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:43
-#~ msgid "Expires on {0}"
-#~ msgstr "Expires on {0}"
 
 #: components/Workflow/WorkflowTools.js:81
 msgid "Tools"
@@ -11598,10 +10296,6 @@ msgstr "Vault password"
 #: components/Schedule/shared/FrequencyDetailSubform.js:225
 msgid "Run every"
 msgstr "Run every"
-
-#: screens/Project/shared/Project.helptext.js:62
-#~ msgid "Example URLs for Remote Archive Source Control include:"
-#~ msgstr "Example URLs for Remote Archive Source Control include:"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:94
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:203
@@ -11658,10 +10352,6 @@ msgstr "Error message"
 msgid "Instance Group"
 msgstr "Instance Group"
 
-#: util/validators.js:95
-#~ msgid "Invalid email address"
-#~ msgstr "Invalid email address"
-
 #: components/PromptDetail/PromptJobTemplateDetail.js:97
 #: components/PromptDetail/PromptWFJobTemplateDetail.js:61
 #: components/TemplateList/TemplateList.js:251
@@ -11694,11 +10384,6 @@ msgstr "Cloud"
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:196
 msgid "Email Options"
 msgstr "Email Options"
-
-#: screens/Job/Job.helptext.js:28
-#: screens/Template/shared/JobTemplate.helptext.js:121
-#~ msgid "Refer to the Ansible documentation for details about the configuration file."
-#~ msgstr "Refer to the Ansible documentation for details about the configuration file."
 
 #: screens/Template/Survey/SurveyQuestionForm.js:239
 #: screens/Template/Survey/SurveyQuestionForm.js:247
@@ -11775,10 +10460,6 @@ msgstr "Sign in with GitHub"
 msgid "Deleting these inventory sources could impact other resources that rely on them. Are you sure you want to delete anyway"
 msgstr "Deleting these inventory sources could impact other resources that rely on them. Are you sure you want to delete anyway"
 
-#: util/validators.js:34
-#~ msgid "Invalid time format"
-#~ msgstr "Invalid time format"
-
 #: screens/Job/JobDetail/JobDetail.js:196
 msgid "Unknown Project"
 msgstr "Unknown Project"
@@ -11808,12 +10489,6 @@ msgstr "FINISHED:"
 #: components/Schedule/shared/SchedulePromptableFields.js:101
 msgid "Prompt | {0}"
 msgstr "Prompt | {0}"
-
-#: screens/Inventory/InventorySources/InventorySourceListItem.js:80
-#: screens/Organization/OrganizationList/OrganizationListItem.js:55
-#: screens/Project/ProjectList/ProjectListItem.js:189
-#~ msgid "Custom virtual environment {0} must be replaced by an execution environment."
-#~ msgstr "Custom virtual environment {0} must be replaced by an execution environment."
 
 #: screens/Dashboard/DashboardGraph.js:50
 #: screens/Dashboard/DashboardGraph.js:169
@@ -11933,10 +10608,6 @@ msgstr ""
 msgid "Failed to delete role"
 msgstr "Failed to delete role"
 
-#: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:10
-#~ msgid "Approved - {0}.  See the Activity Stream for more information."
-#~ msgstr "Approved - {0}.  See the Activity Stream for more information."
-
 #: screens/WorkflowApproval/shared/WorkflowDenyButton.js:28
 msgid "Successfully Denied"
 msgstr "Successfully Denied"
@@ -11965,26 +10636,6 @@ msgstr "Remove Instances"
 msgid "Select a module"
 msgstr "Select a module"
 
-#: screens/Project/shared/ProjectSubForms/ManualSubForm.js:52
-#~ msgid "There are no available playbook directories in {project_base_dir}.\n"
-#~ "Either that directory is empty, or all of the contents are already\n"
-#~ "assigned to other projects. Create a new directory there and make\n"
-#~ "sure the playbook files can be read by the \"awx\" system user,\n"
-#~ "or have {brandName} directly retrieve your playbooks from\n"
-#~ "source control using the Source Control Type option above."
-#~ msgstr "There are no available playbook directories in {project_base_dir}.\n"
-#~ "Either that directory is empty, or all of the contents are already\n"
-#~ "assigned to other projects. Create a new directory there and make\n"
-#~ "sure the playbook files can be read by the \"awx\" system user,\n"
-#~ "or have {brandName} directly retrieve your playbooks from\n"
-#~ "source control using the Source Control Type option above."
-
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:88
-#~ msgid "You may apply a number of possible variables in the\n"
-#~ "message. For more information, refer to the"
-#~ msgstr "You may apply a number of possible variables in the\n"
-#~ "message. For more information, refer to the"
-
 #: screens/User/UserDetail/UserDetail.js:61
 #: screens/User/UserList/UserListItem.js:42
 msgid "LDAP"
@@ -11994,11 +10645,6 @@ msgstr "LDAP"
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateList.js:98
 msgid "Workflow Template"
 msgstr "Workflow Template"
-
-#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:265
-#: screens/Instances/InstanceDetail/InstanceDetail.js:305
-#~ msgid "{forks, plural, one {{0}} other {{1}}}"
-#~ msgstr "{forks, plural, one {{0}} other {{1}}}"
 
 #: components/NotificationList/NotificationListItem.js:45
 #: components/Workflow/WorkflowLegend.js:118
@@ -12043,10 +10689,6 @@ msgstr "Disassociate?"
 msgid "Notification timed out"
 msgstr "Notification timed out"
 
-#: util/dates.js:75
-#~ msgid "Unrecognized day string"
-#~ msgstr "Unrecognized day string"
-
 #: components/Schedule/shared/FrequencyDetailSubform.js:200
 msgid "{intervalValue, plural, one {minute} other {minutes}}"
 msgstr "{intervalValue, plural, one {minute} other {minutes}}"
@@ -12084,12 +10726,6 @@ msgstr "Job Slice Pinned Hosts"
 #: components/AddRole/AddResourceRole.js:187
 msgid "Choose the type of resource that will be receiving new roles.  For example, if you'd like to add new roles to a set of users please choose Users and click Next.  You'll be able to select the specific resources in the next step."
 msgstr "Choose the type of resource that will be receiving new roles.  For example, if you'd like to add new roles to a set of users please choose Users and click Next.  You'll be able to select the specific resources in the next step."
-
-#: screens/NotificationTemplate/shared/Notifications.helptext.js:42
-#~ msgid "The number associated with the \"Messaging\n"
-#~ "Service\" in Twilio with the format +18005550199."
-#~ msgstr "The number associated with the \"Messaging\n"
-#~ "Service\" in Twilio with the format +18005550199."
 
 #: components/AddRole/AddResourceRole.js:225
 #: components/AddRole/AddResourceRole.js:237
@@ -12176,18 +10812,6 @@ msgstr "Automation controller version"
 msgid "Access Token Expiration"
 msgstr "Access Token Expiration"
 
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:26
-#~ msgid "{interval, plural, one {# minute} other {# minutes}}"
-#~ msgstr "{interval, plural, one {# minute} other {# minutes}}"
-
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:192
-#~ msgid "After {numOccurrences, plural, one {# occurrence} other {# occurrences}}"
-#~ msgstr "After {numOccurrences, plural, one {# occurrence} other {# occurrences}}"
-
-#: screens/Template/shared/WorkflowJobTemplate.helptext.js:17
-#~ msgid "Prompt for inventory on launch."
-#~ msgstr "Prompt for inventory on launch."
-
 #: screens/Template/shared/WebhookSubForm.js:154
 msgid "a new webhook url will be generated on save."
 msgstr "a new webhook url will be generated on save."
@@ -12215,10 +10839,6 @@ msgstr "Loading"
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListItem.js:123
 msgid "Cancel Workflow"
 msgstr "Cancel Workflow"
-
-#: screens/Template/shared/JobTemplate.helptext.js:17
-#~ msgid "The container image to be used for execution."
-#~ msgstr "The container image to be used for execution."
 
 #: components/JobList/JobList.js:201
 msgid "Please run a job to populate this list."
@@ -12304,12 +10924,6 @@ msgstr "The maximum number of hosts allowed to be managed by this organization.\
 msgid "Associate role error"
 msgstr "Associate role error"
 
-#: util/getRelatedResourceDeleteDetails.js:116
-#: util/getRelatedResourceDeleteDetails.js:158
-#: util/getRelatedResourceDeleteDetails.js:261
-#~ msgid "Workflow Job Template Nodes"
-#~ msgstr "Workflow Job Template Nodes"
-
 #: components/Lookup/HostFilterLookup.js:148
 msgid "Insights system ID"
 msgstr "Insights system ID"
@@ -12368,10 +10982,6 @@ msgstr ""
 msgid "Hybrid"
 msgstr "Hybrid"
 
-#: App.js:172
-#~ msgid "Loading..."
-#~ msgstr "Loading..."
-
 #: screens/Job/JobOutput/JobOutputSearch.js:121
 msgid "Host Retry"
 msgstr "Host Retry"
@@ -12384,10 +10994,6 @@ msgstr "Host Retry"
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:158
 msgid "Webhook Service"
 msgstr "Webhook Service"
-
-#: screens/Template/shared/JobTemplate.helptext.js:69
-#~ msgid "Enables creation of a provisioning callback URL. Using the URL a host can contact {brandName} and request a configuration update using this job template."
-#~ msgstr "Enables creation of a provisioning callback URL. Using the URL a host can contact {brandName} and request a configuration update using this job template."
 
 #: components/AdHocCommands/AdHocDetailsStep.js:194
 #: components/HostToggle/HostToggle.js:64
@@ -12538,10 +11144,6 @@ msgstr "Failed to associate."
 msgid "Groups"
 msgstr "Groups"
 
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:32
-#~ msgid "{interval, plural, one {# week} other {# weeks}}"
-#~ msgstr "{interval, plural, one {# week} other {# weeks}}"
-
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:568
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:159
 msgid "Error message body"
@@ -12651,14 +11253,6 @@ msgstr "Create New Workflow Template"
 msgid "IRC Server Address"
 msgstr "IRC Server Address"
 
-#: screens/Inventory/shared/Inventory.helptext.js:32
-#~ msgid "Optional labels that describe this inventory,\n"
-#~ "such as 'dev' or 'test'. Labels can be used to group and filter\n"
-#~ "inventories and completed jobs."
-#~ msgstr "Optional labels that describe this inventory,\n"
-#~ "such as 'dev' or 'test'. Labels can be used to group and filter\n"
-#~ "inventories and completed jobs."
-
 #: screens/User/UserList/UserListItem.js:41
 msgid "ldap user"
 msgstr "ldap user"
@@ -12694,14 +11288,6 @@ msgstr "If yes make invalid entries a fatal error, otherwise skip and\n"
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupListItem.js:70
 msgid "Running jobs"
 msgstr "Running jobs"
-
-#: screens/Project/shared/Project.helptext.js:18
-#~ msgid "Select from the list of directories found in\n"
-#~ "the Project Base Path. Together the base path and the playbook\n"
-#~ "directory provide the full path used to locate playbooks."
-#~ msgstr "Select from the list of directories found in\n"
-#~ "the Project Base Path. Together the base path and the playbook\n"
-#~ "directory provide the full path used to locate playbooks."
 
 #: components/AdHocCommands/useAdHocDetailsStep.js:49
 msgid "This field must not be blank."
@@ -12761,19 +11347,11 @@ msgstr "Toggle notification start"
 msgid "Inventory"
 msgstr "Inventory"
 
-#: util/validators.js:68
-#~ msgid "This field must be a number and have a value between {min} and {max}"
-#~ msgstr "This field must be a number and have a value between {min} and {max}"
-
 #: components/PromptDetail/PromptInventorySourceDetail.js:49
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:139
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:96
 msgid "Update on launch"
 msgstr "Update on launch"
-
-#: screens/Template/Survey/MultipleChoiceField.js:35
-#~ msgid "There must be a value in at least one input"
-#~ msgstr "There must be a value in at least one input"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:105
 msgid "Add hosts to group based on Jinja2 conditionals."
@@ -12786,12 +11364,6 @@ msgstr "Copy Template"
 #: components/NotificationList/NotificationListItem.js:56
 msgid "Toggle notification approvals"
 msgstr "Toggle notification approvals"
-
-#: screens/NotificationTemplate/shared/Notifications.helptext.js:46
-#~ msgid "Use one phone number per line to specify where to\n"
-#~ "route SMS messages. Phone numbers should be formatted +11231231234. For more information see Twilio documentation"
-#~ msgstr "Use one phone number per line to specify where to\n"
-#~ "route SMS messages. Phone numbers should be formatted +11231231234. For more information see Twilio documentation"
 
 #: screens/Template/Survey/SurveyToolbar.js:85
 msgid "Delete survey question"
