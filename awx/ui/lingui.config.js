@@ -17,7 +17,7 @@ module.exports = defineConfig({
   runtimeConfigModule: ['@lingui/core', 'i18n'],
   sourceLocale: 'en',
   format: formatter({
-    lineNumbers: true, // Prevents line breaks at 80 characters
-    foldLength: 0 // Dont wrap long lines
+    lineNumbers: true,
+    foldLength: 0 // Don't wrap long lines
   }),
 });
