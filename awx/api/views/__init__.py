@@ -4739,11 +4739,13 @@ class WorkflowApprovalVotesList(SubListAPIView):
     parent_model = models.WorkflowApproval
     relationship = 'votes'
     parent_key = 'workflow_approval'
+    search_fields = ('workflow_approval_name', 'workflow_job_name', 'user_name', 'comment')
 
 
 class WorkflowApprovalVoteList(ListAPIView):
     model = models.WorkflowApprovalVote
     serializer_class = serializers.WorkflowApprovalVoteSerializer
+    search_fields = ('workflow_approval_name', 'workflow_job_name', 'user_name', 'comment')
 
 
 class WorkflowApprovalVoteDetail(RetrieveAPIView):
