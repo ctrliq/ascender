@@ -128,7 +128,7 @@ msgstr "Add a new node between these two nodes"
 #~ "fetches the Github pull request number 62, in this example\n"
 #~ "the branch needs to be \"pull/62/head\"."
 
-#: screens/Job/JobOutput/JobOutputSearch.js:113
+#: screens/Job/JobOutput/JobOutputSearch.js:120
 msgid "Host Polling"
 msgstr "Host Polling"
 
@@ -383,7 +383,7 @@ msgstr "Select Roles to Apply"
 #: screens/Template/Survey/SurveyList.js:108
 #: screens/Template/Survey/SurveyListItem.js:64
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/ProjectsList.js:93
-#: screens/User/UserDetail/UserDetail.js:81
+#: screens/User/UserDetail/UserDetail.js:94
 #: screens/User/UserRoles/UserRolesList.js:152
 #: screens/User/UserRoles/UserRolesListItem.js:22
 msgid "Type"
@@ -472,7 +472,7 @@ msgstr "Basic auth password"
 msgid "Multiple Choice (multiple select)"
 msgstr "Multiple Choice (multiple select)"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:128
+#: screens/Job/JobOutput/JobOutputSearch.js:135
 msgid "Running Handlers"
 msgstr "Running Handlers"
 
@@ -523,7 +523,7 @@ msgstr "Launched By"
 
 #: screens/ActivityStream/ActivityStream.js:300
 #: screens/ActivityStream/ActivityStreamListItem.js:42
-#: screens/Job/JobOutput/JobOutputSearch.js:100
+#: screens/Job/JobOutput/JobOutputSearch.js:107
 msgid "Event"
 msgstr "Event"
 
@@ -609,7 +609,7 @@ msgstr "Options"
 #~ msgid "For more information, refer to the"
 #~ msgstr "For more information, refer to the"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:297
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:371
 msgid "Maximum number of times this node's job is automatically retried after failing before its failure paths are followed. Canceled jobs are never retried."
 msgstr "Maximum number of times this node's job is automatically retried after failing before its failure paths are followed. Canceled jobs are never retried."
 
@@ -737,7 +737,7 @@ msgstr "Host Metrics"
 msgid "Create new credential Type"
 msgstr "Create new credential Type"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeAddModal.js:106
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeAddModal.js:109
 msgid "Add Node"
 msgstr "Add Node"
 
@@ -759,7 +759,7 @@ msgstr "Variables must be in JSON or YAML syntax. Use the radio button to toggle
 msgid "Repeat frequency"
 msgstr "Repeat frequency"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:106
+#: screens/Job/JobOutput/JobOutputSearch.js:113
 msgid "File Difference"
 msgstr "File Difference"
 
@@ -835,7 +835,7 @@ msgstr "Exception Frequency"
 msgid "Select an organization before editing the default execution environment."
 msgstr "Select an organization before editing the default execution environment."
 
-#: screens/Job/JobOutput/JobOutputSearch.js:121
+#: screens/Job/JobOutput/JobOutputSearch.js:128
 msgid "Item Skipped"
 msgstr "Item Skipped"
 
@@ -917,7 +917,7 @@ msgstr "Refresh Token"
 msgid "Host details"
 msgstr "Host details"
 
-#: screens/User/shared/UserForm.js:185
+#: screens/User/shared/UserForm.js:207
 msgid "This value does not match the password you entered previously. Please confirm that password."
 msgstr "This value does not match the password you entered previously. Please confirm that password."
 
@@ -991,7 +991,7 @@ msgstr "Elapsed Time"
 #~ msgid "{interval, plural, one {# year} other {# years}}"
 #~ msgstr "{interval, plural, one {# year} other {# years}}"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:74
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:82
 msgid "Inventory Source Sync"
 msgstr "Inventory Source Sync"
 
@@ -1050,7 +1050,7 @@ msgstr "Failed to copy template."
 msgid "Year"
 msgstr "Year"
 
-#: screens/Job/JobOutput/JobOutput.js:1034
+#: screens/Job/JobOutput/JobOutput.js:1036
 msgid "Reload output"
 msgstr "Reload output"
 
@@ -1147,8 +1147,8 @@ msgid "Copy full revision to clipboard."
 msgstr "Copy full revision to clipboard."
 
 #: components/PromptDetail/PromptDetail.js:147
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:295
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:296
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:369
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:370
 msgid "Max Retries"
 msgstr "Max Retries"
 
@@ -1174,7 +1174,7 @@ msgstr "Controls whether or not this instance is managed by policy. If enabled, 
 
 #: components/JobList/JobList.js:257
 #: screens/Job/JobDetail/JobDetail.js:262
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:188
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:244
 msgid "Finished"
 msgstr "Finished"
 
@@ -1354,7 +1354,7 @@ msgstr "Node types"
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:127
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:450
 #: screens/Template/Survey/SurveyQuestionForm.js:270
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:240
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:314
 msgid "documentation"
 msgstr "documentation"
 
@@ -1374,7 +1374,7 @@ msgstr "Revert to factory default."
 msgid "Filter by failed jobs"
 msgstr "Filter by failed jobs"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:127
+#: screens/Job/JobOutput/JobOutputSearch.js:134
 msgid "Playbook Started"
 msgstr "Playbook Started"
 
@@ -1444,7 +1444,7 @@ msgstr "E-mail"
 msgid "Job Type"
 msgstr "Job Type"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:122
+#: screens/Job/JobOutput/JobOutputSearch.js:129
 msgid "No Hosts Matched"
 msgstr "No Hosts Matched"
 
@@ -1456,7 +1456,7 @@ msgstr "Only Group By"
 #~ msgid "More information for"
 #~ msgstr "More information for"
 
-#: screens/Login/Login.js:147
+#: screens/Login/Login.js:156
 msgid "There was a problem logging in. Please try again."
 msgstr "There was a problem logging in. Please try again."
 
@@ -1480,7 +1480,7 @@ msgstr "Protocol"
 msgid "option to the"
 msgstr "option to the"
 
-#: screens/User/UserDetail/UserDetail.js:135
+#: screens/User/UserDetail/UserDetail.js:148
 msgid "Failed to delete user."
 msgstr "Failed to delete user."
 
@@ -1540,7 +1540,7 @@ msgstr "Failed node"
 msgid "Soft delete"
 msgstr "Soft delete"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:92
+#: screens/Job/JobOutput/JobOutputSearch.js:99
 msgid "Stdout"
 msgstr "Stdout"
 
@@ -1565,7 +1565,7 @@ msgstr "Enable privilege escalation"
 msgid "Filter..."
 msgstr "Filter..."
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:208
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:219
 msgid "Timeout seconds"
 msgstr "Timeout seconds"
 
@@ -1902,7 +1902,7 @@ msgstr "Create new federated inventory"
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.js:88
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.js:121
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.js:153
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:179
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:190
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/ProjectsList.js:68
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/ProjectsList.js:88
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/SystemJobTemplatesList.js:74
@@ -1918,7 +1918,7 @@ msgstr "Create new federated inventory"
 #: screens/User/UserTeams/UserTeamList.js:230
 #: screens/User/UserTeams/UserTeamListItem.js:17
 #: screens/User/UserTokenList/UserTokenListItem.js:22
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:120
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:134
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:172
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:221
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListItem.js:53
@@ -1956,7 +1956,7 @@ msgstr "Subscription manifest"
 #: components/Workflow/WorkflowNodeHelp.js:103
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:44
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:138
-#: screens/Job/JobOutput/shared/HostStatusBar.js:48
+#: screens/Job/JobOutput/shared/HostStatusBar.js:47
 #: screens/Job/JobOutput/shared/OutputToolbar.js:155
 msgid "Failed"
 msgstr "Failed"
@@ -2089,7 +2089,7 @@ msgstr "Key"
 #: components/AddRole/AddResourceRole.js:47
 #: components/ResourceAccessList/ResourceAccessList.js:145
 #: components/ResourceAccessList/ResourceAccessList.js:198
-#: screens/Login/Login.js:220
+#: screens/Login/Login.js:229
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:188
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:303
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:355
@@ -2100,8 +2100,8 @@ msgstr "Key"
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:548
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:94
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:214
-#: screens/User/shared/UserForm.js:98
-#: screens/User/UserDetail/UserDetail.js:70
+#: screens/User/shared/UserForm.js:107
+#: screens/User/UserDetail/UserDetail.js:73
 #: screens/User/UserList/UserList.js:120
 #: screens/User/UserList/UserList.js:161
 #: screens/User/UserList/UserListItem.js:35
@@ -2140,7 +2140,7 @@ msgstr "Playbook run"
 msgid "Go to first page"
 msgstr ""
 
-#: screens/Job/JobOutput/JobOutputSearch.js:119
+#: screens/Job/JobOutput/JobOutputSearch.js:126
 msgid "Item Failed"
 msgstr "Item Failed"
 
@@ -2214,7 +2214,7 @@ msgstr "Parent node outcome required before the condition is evaluated."
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateList.js:97
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateListItem.js:20
 #: screens/Job/JobDetail/JobDetail.js:271
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:80
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:88
 msgid "Job Template"
 msgstr "Job Template"
 
@@ -2289,12 +2289,12 @@ msgstr "Field matches the given regular expression."
 msgid "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 msgstr "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 
-#: screens/Login/Login.js:218
+#: screens/Login/Login.js:227
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:143
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:103
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:222
 #: screens/Template/Survey/SurveyQuestionForm.js:82
-#: screens/User/shared/UserForm.js:110
+#: screens/User/shared/UserForm.js:119
 msgid "Password"
 msgstr ""
 
@@ -2408,7 +2408,7 @@ msgid "pages"
 msgstr ""
 
 #: components/StatusLabel/StatusLabel.js:48
-#: screens/Job/JobOutput/shared/HostStatusBar.js:40
+#: screens/Job/JobOutput/shared/HostStatusBar.js:39
 msgid "Skipped"
 msgstr "Skipped"
 
@@ -2610,7 +2610,7 @@ msgstr "{0} (deleted)"
 msgid "The inventory that this host belongs to."
 msgstr "The inventory that this host belongs to."
 
-#: screens/Login/Login.js:208
+#: screens/Login/Login.js:217
 msgid "Log In"
 msgstr "Log In"
 
@@ -2663,7 +2663,7 @@ msgstr "boolean"
 #~ msgid "Allow branch override"
 #~ msgstr "Allow branch override"
 
-#: components/AppContainer/PageHeaderToolbar.js:203
+#: components/AppContainer/PageHeaderToolbar.js:223
 msgid "User Details"
 msgstr ""
 
@@ -2688,7 +2688,7 @@ msgstr "If you are ready to upgrade or renew, please <0>contact us.</0>"
 msgid "Enable log system tracking facts individually"
 msgstr "Enable log system tracking facts individually"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/useWorkflowNodeSteps.js:388
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/useWorkflowNodeSteps.js:394
 msgid "Job Templates with credentials that prompt for passwords cannot be selected when creating or editing nodes"
 msgstr "Job Templates with credentials that prompt for passwords cannot be selected when creating or editing nodes"
 
@@ -2730,8 +2730,8 @@ msgid "Microsoft Azure Resource Manager"
 msgstr "Microsoft Azure Resource Manager"
 
 #: screens/Job/JobDetail/JobDetail.js:678
-#: screens/Job/JobOutput/JobOutput.js:1146
-#: screens/Job/JobOutput/JobOutput.js:1147
+#: screens/Job/JobOutput/JobOutput.js:1148
+#: screens/Job/JobOutput/JobOutput.js:1149
 #: screens/Job/WorkflowOutput/WorkflowOutput.js:138
 msgid "Job Delete Error"
 msgstr "Job Delete Error"
@@ -2886,7 +2886,7 @@ msgstr "See errors on the left"
 #~ "repository this may significantly increase the amount\n"
 #~ "of time required to complete an update."
 
-#: screens/Job/JobOutput/JobOutputSearch.js:116
+#: screens/Job/JobOutput/JobOutputSearch.js:123
 msgid "Host Started"
 msgstr "Host Started"
 
@@ -2916,7 +2916,7 @@ msgstr "HTTP Headers"
 msgid "Zoom Out"
 msgstr "Zoom Out"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:120
+#: screens/Job/JobOutput/JobOutputSearch.js:127
 msgid "Item OK"
 msgstr "Item OK"
 
@@ -2961,8 +2961,8 @@ msgstr "0 (Normal)"
 
 #: components/Workflow/WorkflowNodeHelp.js:146
 #: components/Workflow/WorkflowNodeHelp.js:182
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:281
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:282
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:355
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:356
 msgid "Node Alias"
 msgstr "Node Alias"
 
@@ -3033,7 +3033,7 @@ msgstr "Use one Annotation Tag per line, without commas."
 #~ "Zero means no limit will be enforced."
 
 #: components/StatusLabel/StatusLabel.js:45
-#: screens/Job/JobOutput/shared/HostStatusBar.js:52
+#: screens/Job/JobOutput/shared/HostStatusBar.js:51
 #: screens/Job/JobOutput/shared/OutputToolbar.js:145
 msgid "Unreachable"
 msgstr "Unreachable"
@@ -3141,7 +3141,7 @@ msgstr "Enter inputs using either JSON or YAML syntax. Refer to the Ansible Cont
 msgid "Create New Host"
 msgstr "Create New Host"
 
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:200
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:256
 msgid "Workflow job details"
 msgstr "Workflow job details"
 
@@ -3182,7 +3182,7 @@ msgstr "SSH password"
 msgid "View OIDC settings"
 msgstr "View OIDC settings"
 
-#: components/AppContainer/PageHeaderToolbar.js:160
+#: components/AppContainer/PageHeaderToolbar.js:180
 msgid "Help"
 msgstr "Help"
 
@@ -3244,7 +3244,7 @@ msgstr "Running Jobs"
 msgid "Client identifier"
 msgstr "Client identifier"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:110
+#: screens/Job/JobOutput/JobOutputSearch.js:117
 msgid "Host Failed"
 msgstr "Host Failed"
 
@@ -3284,8 +3284,8 @@ msgstr ""
 #~ msgid "Cancel Sync"
 #~ msgstr "Cancel Sync"
 
-#: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:44
-#: screens/WorkflowApproval/shared/WorkflowDenyButton.js:37
+#: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:46
+#: screens/WorkflowApproval/shared/WorkflowDenyButton.js:38
 msgid "This workflow has already been acted on"
 msgstr "This workflow has already been acted on"
 
@@ -3334,7 +3334,7 @@ msgstr "Used capacity"
 msgid "Instance ID"
 msgstr "Instance ID"
 
-#: components/AppContainer/PageHeaderToolbar.js:146
+#: components/AppContainer/PageHeaderToolbar.js:166
 msgid "Info"
 msgstr ""
 
@@ -3342,7 +3342,7 @@ msgstr ""
 msgid "<0>Note: Instances may be re-associated with this instance group if they are managed by <1>policy rules.</1></0>"
 msgstr "<0>Note: Instances may be re-associated with this instance group if they are managed by <1>policy rules.</1></0>"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:194
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:205
 msgid "Timeout minutes"
 msgstr "Timeout minutes"
 
@@ -3351,8 +3351,10 @@ msgstr "Timeout minutes"
 msgid "This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?"
 msgstr "This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?"
 
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:251
 #: screens/WorkflowApproval/shared/WorkflowDenyButton.js:38
 #: screens/WorkflowApproval/shared/WorkflowDenyButton.js:45
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:185
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListDenyButton.js:33
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListDenyButton.js:49
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListDenyButton.js:57
@@ -3394,8 +3396,8 @@ msgstr "{intervalValue, plural, one {hour} other {hours}}"
 #: screens/Inventory/shared/ConstructedInventoryForm.js:39
 #: screens/Inventory/shared/FederatedInventoryForm.js:27
 #: screens/Template/shared/JobTemplateForm.js:176
-#: screens/User/shared/UserForm.js:114
-#: screens/User/shared/UserForm.js:125
+#: screens/User/shared/UserForm.js:123
+#: screens/User/shared/UserForm.js:134
 msgid "This field must not be blank"
 msgstr ""
 
@@ -3433,7 +3435,7 @@ msgstr "Name of an artifact produced by the parent node via set_stats. The link 
 msgid "View all Inventories."
 msgstr "View all Inventories."
 
-#: screens/Job/JobOutput/JobOutputSearch.js:108
+#: screens/Job/JobOutput/JobOutputSearch.js:115
 msgid "Host Async Failure"
 msgstr "Host Async Failure"
 
@@ -3510,9 +3512,9 @@ msgstr "Less than or equal to comparison."
 #: screens/Template/Survey/SurveyList.js:71
 #: screens/Template/Survey/SurveyToolbar.js:95
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:271
-#: screens/User/UserDetail/UserDetail.js:124
+#: screens/User/UserDetail/UserDetail.js:137
 #: screens/User/UserTokenDetail/UserTokenDetail.js:81
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:319
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:375
 msgid "Delete"
 msgstr ""
 
@@ -3522,7 +3524,7 @@ msgid "By default, we collect and transmit analytics data on the service usage t
 msgstr "By default, we collect and transmit analytics data on the service usage to Red Hat. There are two categories of data collected by the service. For more information, see <0>{0}</0>. Uncheck the following boxes to disable this feature."
 
 #: components/StatusLabel/StatusLabel.js:53
-#: screens/Job/JobOutput/shared/HostStatusBar.js:44
+#: screens/Job/JobOutput/shared/HostStatusBar.js:43
 msgid "Changed"
 msgstr "Changed"
 
@@ -3565,7 +3567,7 @@ msgid "Click this button to verify connection to the secret management system us
 msgstr "Click this button to verify connection to the secret management system using the selected credential and specified inputs."
 
 #: components/Workflow/WorkflowLegend.js:108
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:86
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:94
 msgid "Project Sync"
 msgstr "Project Sync"
 
@@ -3611,6 +3613,11 @@ msgstr "The number associated with the \"Messaging\n"
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginSelected.js:47
 msgid "This field will be retrieved from an external secret management system using the specified credential."
 msgstr "This field will be retrieved from an external secret management system using the specified credential."
+
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:277
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:287
+msgid "Context Template"
+msgstr "Context Template"
 
 #: screens/Job/JobOutput/HostEventModal.js:183
 msgid "No YAML Available"
@@ -3687,10 +3694,10 @@ msgstr "GitHub Team"
 #: screens/Team/TeamDetail/TeamDetail.js:53
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:362
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:189
-#: screens/User/UserDetail/UserDetail.js:94
+#: screens/User/UserDetail/UserDetail.js:107
 #: screens/User/UserTokenDetail/UserTokenDetail.js:61
 #: screens/User/UserTokenList/UserTokenList.js:150
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:179
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:235
 msgid "Created"
 msgstr ""
 
@@ -3783,7 +3790,7 @@ msgstr "August"
 msgid "View smart inventory host details"
 msgstr "View smart inventory host details"
 
-#: screens/Login/Login.js:362
+#: screens/Login/Login.js:371
 msgid "Sign in with Google"
 msgstr "Sign in with Google"
 
@@ -3942,7 +3949,7 @@ msgstr "Minimum length"
 msgid "Smart host filter"
 msgstr "Smart host filter"
 
-#: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:29
+#: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:31
 msgid "Successfully Approved"
 msgstr "Successfully Approved"
 
@@ -3993,7 +4000,7 @@ msgid "This table gives a few useful parameters of the constructed\n"
 msgstr "This table gives a few useful parameters of the constructed\n"
 "               inventory plugin. For the full list of parameters "
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:255
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:329
 msgid "Convergence select"
 msgstr "Convergence select"
 
@@ -4017,7 +4024,7 @@ msgstr "Done"
 #: screens/InstanceGroup/Instances/InstanceListItem.js:242
 #: screens/Instances/InstanceDetail/InstanceDetail.js:288
 #: screens/Instances/InstanceList/InstanceListItem.js:260
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:242
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:316
 msgid "for more info."
 msgstr "for more info."
 
@@ -4057,8 +4064,8 @@ msgstr "Address"
 msgid "After number of occurrences"
 msgstr "After number of occurrences"
 
-#: screens/User/shared/UserForm.js:156
-#: screens/User/UserDetail/UserDetail.js:76
+#: screens/User/shared/UserForm.js:165
+#: screens/User/UserDetail/UserDetail.js:79
 msgid "Preferred Language"
 msgstr "Preferred Language"
 
@@ -4383,7 +4390,7 @@ msgstr "Delete Credential"
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:241
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:243
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeViewModal.js:274
-#: screens/User/UserDetail/UserDetail.js:113
+#: screens/User/UserDetail/UserDetail.js:126
 msgid "Edit"
 msgstr ""
 
@@ -4424,6 +4431,10 @@ msgstr "Destination SMS Number(s)"
 #: screens/Job/JobDetail/JobDetail.js:452
 msgid "No timeout specified"
 msgstr "No timeout specified"
+
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:183
+msgid "On Timeout"
+msgstr "On Timeout"
 
 #: screens/Inventory/shared/Inventory.helptext.js:197
 msgid "Prevent Instance Group Fallback: If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on."
@@ -4575,7 +4586,7 @@ msgstr "Failed"
 #~ msgid "Failed to delete project."
 #~ msgstr "Failed to delete project."
 
-#: screens/Job/JobOutput/JobOutputSearch.js:131
+#: screens/Job/JobOutput/JobOutputSearch.js:138
 msgid "Variables Prompted"
 msgstr "Variables Prompted"
 
@@ -4622,12 +4633,17 @@ msgstr "Exit Without Saving"
 msgid "Date operator select"
 msgstr "Date operator select"
 
+#: components/AppContainer/PageHeaderToolbar.js:111
+#: components/AppContainer/PageHeaderToolbar.js:117
+msgid "Theme"
+msgstr "Theme"
+
 #: screens/Inventory/shared/ConstructedInventoryHint.js:247
 msgid "Filter on nested group name"
 msgstr "Filter on nested group name"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.js:762
-#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.js:764
+#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.js:780
+#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.js:782
 msgid "Error saving the workflow!"
 msgstr "Error saving the workflow!"
 
@@ -4680,7 +4696,7 @@ msgstr "This will cancel all subsequent nodes in this workflow"
 msgid "Client Identifier"
 msgstr "Client Identifier"
 
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:308
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:364
 msgid "This will cancel all subsequent nodes in this workflow."
 msgstr "This will cancel all subsequent nodes in this workflow."
 
@@ -4767,8 +4783,8 @@ msgid "RADIUS"
 msgstr "RADIUS"
 
 #: components/JobCancelButton/JobCancelButton.js:68
-#: screens/Job/JobOutput/JobOutput.js:1114
-#: screens/Job/JobOutput/JobOutput.js:1115
+#: screens/Job/JobOutput/JobOutput.js:1116
+#: screens/Job/JobOutput/JobOutput.js:1117
 msgid "Cancel Job"
 msgstr "Cancel Job"
 
@@ -4776,7 +4792,7 @@ msgstr "Cancel Job"
 msgid "Instance State"
 msgstr "Instance State"
 
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:149
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:163
 msgid "Actor"
 msgstr "Actor"
 
@@ -4896,28 +4912,28 @@ msgstr "View Organization Details"
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:545
 #: screens/Template/TemplateSurvey.js:137
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:279
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:196
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:211
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:362
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:199
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:214
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:365
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.js:378
 #: screens/TopologyView/MeshGraph.js:420
 #: screens/TopologyView/Tooltip.js:198
-#: screens/User/UserDetail/UserDetail.js:132
+#: screens/User/UserDetail/UserDetail.js:145
 #: screens/User/UserList/UserList.js:197
 #: screens/User/UserRoles/UserRolesList.js:240
 #: screens/User/UserRoles/UserRolesList.js:251
 #: screens/User/UserTeams/UserTeamList.js:257
 #: screens/User/UserTokenDetail/UserTokenDetail.js:88
 #: screens/User/UserTokenList/UserTokenList.js:218
-#: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:54
+#: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:56
 #: screens/WorkflowApproval/shared/WorkflowDenyButton.js:51
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:327
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:383
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:249
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:268
 msgid "Error!"
 msgstr "Error!"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:117
+#: screens/Job/JobOutput/JobOutputSearch.js:124
 msgid "Host Unreachable"
 msgstr "Host Unreachable"
 
@@ -5013,7 +5029,7 @@ msgstr "Edit Project"
 msgid "Tuesday"
 msgstr "Tuesday"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:132
+#: screens/Job/JobOutput/JobOutputSearch.js:139
 msgid "Verbose"
 msgstr "Verbose"
 
@@ -5022,10 +5038,11 @@ msgid "Failed to toggle host."
 msgstr "Failed to toggle host."
 
 #: screens/ActivityStream/ActivityStreamDescription.js:519
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:197
 msgid "denied"
 msgstr "denied"
 
-#: screens/Login/Login.js:331
+#: screens/Login/Login.js:340
 msgid "Sign in with GitHub Enterprise Organizations"
 msgstr "Sign in with GitHub Enterprise Organizations"
 
@@ -5121,7 +5138,7 @@ msgstr "View SAML settings"
 #: components/JobList/JobList.js:245
 #: components/StatusLabel/StatusLabel.js:52
 #: components/Workflow/WorkflowNodeHelp.js:109
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:192
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:248
 msgid "Canceled"
 msgstr "Canceled"
 
@@ -5186,7 +5203,7 @@ msgstr "View all Projects."
 msgid "0 (Warning)"
 msgstr "0 (Warning)"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:129
+#: screens/Job/JobOutput/JobOutputSearch.js:136
 msgid "System Warning"
 msgstr "System Warning"
 
@@ -5274,7 +5291,7 @@ msgstr "Select a question to delete"
 #: screens/Template/shared/JobTemplateForm.js:431
 #: screens/Template/shared/WorkflowJobTemplateForm.js:222
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:228
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:273
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:329
 msgid "Variables"
 msgstr "Variables"
 
@@ -5325,6 +5342,11 @@ msgstr "Tasks"
 msgid "Unreachable Hosts"
 msgstr "Unreachable Hosts"
 
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:234
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:245
+msgid "On timeout"
+msgstr "On timeout"
+
 #: screens/Team/Teams.js:17
 #: screens/Team/Teams.js:28
 msgid "Create New Team"
@@ -5348,7 +5370,7 @@ msgstr "Text Area"
 msgid "View User Interface settings"
 msgstr "View User Interface settings"
 
-#: screens/Login/Login.js:300
+#: screens/Login/Login.js:309
 msgid "Sign in with GitHub Teams"
 msgstr "Sign in with GitHub Teams"
 
@@ -5359,6 +5381,10 @@ msgstr "Inventory copied successfully"
 #: screens/Template/shared/JobTemplate.helptext.js:80
 #~ msgid "If enabled, this will store gathered facts so they can be viewed at the host level. Facts are persisted and injected into the fact cache at runtime."
 #~ msgstr "If enabled, this will store gathered facts so they can be viewed at the host level. Facts are persisted and injected into the fact cache at runtime."
+
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:260
+msgid "The number of distinct users that must approve before the workflow continues. A single denial always denies the node."
+msgstr "The number of distinct users that must approve before the workflow continues. A single denial always denies the node."
 
 #: screens/Instances/InstanceEdit/InstanceEdit.js:82
 msgid "View all Instances."
@@ -5422,7 +5448,7 @@ msgstr ""
 #: screens/Template/shared/JobTemplateForm.js:416
 #: screens/Template/shared/WorkflowJobTemplateForm.js:205
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:208
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:253
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:309
 msgid "Labels"
 msgstr "Labels"
 
@@ -5653,9 +5679,14 @@ msgstr "Use TLS"
 #: components/Workflow/WorkflowLegend.js:112
 #: components/Workflow/WorkflowNodeHelp.js:77
 #: screens/Job/JobDetail/JobDetail.js:74
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:103
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:111
 msgid "Management Job"
 msgstr "Management Job"
+
+#: screens/User/shared/UserForm.js:173
+#: screens/User/UserDetail/UserDetail.js:84
+msgid "Preferred Theme"
+msgstr "Preferred Theme"
 
 #: screens/Instances/Shared/InstanceForm.js:27
 #: screens/Inventory/shared/InventorySourceForm.js:85
@@ -5750,7 +5781,7 @@ msgstr "Frequency Details"
 #: components/Schedule/shared/SchedulePromptableFields.js:133
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.js:37
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.js:58
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:186
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:189
 msgid "Next"
 msgstr ""
 
@@ -5764,7 +5795,7 @@ msgstr ""
 msgid "Create"
 msgstr "Create"
 
-#: screens/Job/JobOutput/JobOutput.js:1138
+#: screens/Job/JobOutput/JobOutput.js:1140
 msgid "Are you sure you want to submit the request to cancel this job?"
 msgstr "Are you sure you want to submit the request to cancel this job?"
 
@@ -5863,7 +5894,7 @@ msgstr "Last automation"
 #: screens/Instances/InstancePeers/InstancePeerList.js:250
 #: screens/Instances/InstancePeers/InstancePeerList.js:312
 #: screens/Instances/InstancePeers/InstancePeerListItem.js:59
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:119
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:127
 msgid "Node Type"
 msgstr "Node Type"
 
@@ -5937,7 +5968,7 @@ msgstr "Past two weeks"
 msgid "Back"
 msgstr "Back"
 
-#: screens/User/UserDetail/UserDetail.js:89
+#: screens/User/UserDetail/UserDetail.js:102
 msgid "Last Login"
 msgstr "Last Login"
 
@@ -5953,7 +5984,7 @@ msgstr "Copy Error"
 msgid "Back to applications"
 msgstr "Back to applications"
 
-#: screens/User/UserDetail/UserDetail.js:83
+#: screens/User/UserDetail/UserDetail.js:96
 msgid "login type"
 msgstr "login type"
 
@@ -6185,7 +6216,7 @@ msgstr "Filter by successful jobs"
 msgid "Red Hat, Inc."
 msgstr "Red Hat, Inc."
 
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:299
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:355
 msgid "Workflow Cancelled "
 msgstr "Workflow Cancelled "
 
@@ -6251,7 +6282,7 @@ msgstr "Cancel selected job"
 msgid "Started"
 msgstr "Started"
 
-#: components/AppContainer/PageHeaderToolbar.js:120
+#: components/AppContainer/PageHeaderToolbar.js:140
 msgid "Pending Workflow Approvals"
 msgstr "Pending Workflow Approvals"
 
@@ -6273,7 +6304,7 @@ msgstr "Canonical"
 #: components/Workflow/WorkflowNodeHelp.js:168
 #: screens/Job/JobOutput/shared/OutputToolbar.js:167
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.js:179
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:196
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:252
 msgid "Elapsed"
 msgstr "Elapsed"
 
@@ -6284,6 +6315,11 @@ msgstr "3 (Debug)"
 #: screens/Project/shared/ProjectSubForms/SharedFields.js:126
 msgid "Track submodules"
 msgstr "Track submodules"
+
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:256
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:266
+msgid "Required approvals"
+msgstr "Required approvals"
 
 #: screens/Project/ProjectList/ProjectListItem.js:282
 msgid "Last used"
@@ -6347,7 +6383,7 @@ msgstr "social login"
 msgid "Revert"
 msgstr "Revert"
 
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:315
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:371
 msgid "Delete Workflow Approval"
 msgstr "Delete Workflow Approval"
 
@@ -6418,7 +6454,7 @@ msgstr "here."
 msgid "Unavailable"
 msgstr "Unavailable"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:125
+#: screens/Job/JobOutput/JobOutputSearch.js:132
 msgid "Play Started"
 msgstr "Play Started"
 
@@ -6571,8 +6607,8 @@ msgstr "Test passed"
 msgid "Leave blank to generate a new webhook key on save"
 msgstr "Leave blank to generate a new webhook key on save"
 
-#: screens/User/shared/UserForm.js:41
-#: screens/User/UserDetail/UserDetail.js:51
+#: screens/User/shared/UserForm.js:42
+#: screens/User/UserDetail/UserDetail.js:54
 #: screens/User/UserList/UserListItem.js:18
 msgid "System Auditor"
 msgstr "System Auditor"
@@ -6644,7 +6680,7 @@ msgstr "Module Name"
 #: screens/User/UserTokenList/UserTokenList.js:194
 #: screens/User/UserTokenList/UserTokenListItem.js:38
 #: screens/User/UserTokens/UserTokens.js:87
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:131
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:145
 msgid "Expires"
 msgstr "Expires"
 
@@ -6667,16 +6703,16 @@ msgstr "Expires"
 msgid "Lookup type"
 msgstr "Lookup type"
 
-#: screens/Job/JobOutput/JobOutput.js:1122
-#: screens/Job/JobOutput/JobOutput.js:1125
+#: screens/Job/JobOutput/JobOutput.js:1124
+#: screens/Job/JobOutput/JobOutput.js:1127
 msgid "Cancel job"
 msgstr "Cancel job"
 
 #: components/AddRole/AddResourceRole.js:36
 #: components/AddRole/AddResourceRole.js:51
 #: components/ResourceAccessList/ResourceAccessList.js:150
-#: screens/User/shared/UserForm.js:80
-#: screens/User/UserDetail/UserDetail.js:66
+#: screens/User/shared/UserForm.js:89
+#: screens/User/UserDetail/UserDetail.js:69
 #: screens/User/UserList/UserList.js:124
 #: screens/User/UserList/UserList.js:164
 #: screens/User/UserList/UserListItem.js:54
@@ -6800,7 +6836,7 @@ msgstr "Source Variables"
 msgid "Instance"
 msgstr "Instance"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:118
+#: screens/Job/JobOutput/JobOutputSearch.js:125
 msgid "Including File"
 msgstr "Including File"
 
@@ -6831,7 +6867,7 @@ msgstr "Add existing host"
 msgid "Edit Organization"
 msgstr "Edit Organization"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:126
+#: screens/Job/JobOutput/JobOutputSearch.js:133
 msgid "Playbook Complete"
 msgstr "Playbook Complete"
 
@@ -6933,7 +6969,7 @@ msgstr "View Jobs settings"
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:152
 #: screens/Project/ProjectDetail/ProjectDetail.js:344
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.js:229
-#: screens/User/UserDetail/UserDetail.js:109
+#: screens/User/UserDetail/UserDetail.js:122
 msgid "edit"
 msgstr "edit"
 
@@ -6972,8 +7008,8 @@ msgstr "Time"
 msgid "Create new instance group"
 msgstr "Create new instance group"
 
-#: screens/User/shared/UserForm.js:35
-#: screens/User/UserDetail/UserDetail.js:53
+#: screens/User/shared/UserForm.js:36
+#: screens/User/UserDetail/UserDetail.js:56
 #: screens/User/UserList/UserListItem.js:20
 msgid "Normal User"
 msgstr "Normal User"
@@ -7053,8 +7089,8 @@ msgid "Application not found."
 msgstr "Application not found."
 
 #: components/PromptDetail/PromptDetail.js:139
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:264
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:270
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:338
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:344
 msgid "Any"
 msgstr "Any"
 
@@ -7102,7 +7138,7 @@ msgstr "Peers"
 msgid "User Roles"
 msgstr ""
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:204
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:215
 msgid "min"
 msgstr "min"
 
@@ -7188,6 +7224,10 @@ msgstr "Back to Hosts"
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironment.helptext.js:22
 #~ msgid "Credential to authenticate with a protected container registry."
 #~ msgstr "Credential to authenticate with a protected container registry."
+
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:207
+msgid "Context"
+msgstr "Context"
 
 #: screens/Project/ProjectDetail/ProjectDetail.js:299
 #: screens/Template/shared/WebhookSubForm.js:224
@@ -7301,11 +7341,11 @@ msgstr "Registry credential"
 msgid "Host Details"
 msgstr "Host Details"
 
-#: screens/User/UserDetail/UserDetail.js:77
+#: screens/User/UserDetail/UserDetail.js:80
 msgid "Browser default"
 msgstr "Browser default"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:186
+#: screens/Job/JobOutput/JobOutputSearch.js:194
 msgid "Follow"
 msgstr "Follow"
 
@@ -7440,8 +7480,8 @@ msgstr "Choose a Playbook Directory"
 #: components/Workflow/WorkflowNodeHelp.js:61
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateListItem.js:21
 #: screens/Job/JobDetail/JobDetail.js:286
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:92
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:166
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:100
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:222
 msgid "Workflow Job Template"
 msgstr "Workflow Job Template"
 
@@ -7541,14 +7581,14 @@ msgstr "Failed to delete one or more groups."
 
 #: components/AppContainer/PageHeaderToolbar.js:111
 #: components/AppContainer/PageHeaderToolbar.js:115
-msgid "Switch to dark mode"
-msgstr "Switch to dark mode"
+#~ msgid "Switch to dark mode"
+#~ msgstr "Switch to dark mode"
 
 #: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.js:197
 msgid "Confirm Disable Local Authorization"
 msgstr "Confirm Disable Local Authorization"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.js:766
+#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.js:784
 msgid "There was an error saving the workflow."
 msgstr "There was an error saving the workflow."
 
@@ -7575,8 +7615,8 @@ msgstr "Subscription Compliance"
 #: components/LaunchButton/ReLaunchDropDown.js:43
 #: components/PromptDetail/PromptDetail.js:138
 #: screens/Metrics/Metrics.js:84
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:264
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:273
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:338
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:347
 msgid "All"
 msgstr "All"
 
@@ -7620,7 +7660,7 @@ msgstr "No items found."
 msgid "April"
 msgstr "April"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:111
+#: screens/Job/JobOutput/JobOutputSearch.js:118
 msgid "Host Failure"
 msgstr "Host Failure"
 
@@ -7634,7 +7674,7 @@ msgstr "Host Failure"
 msgid "View event details"
 msgstr "View event details"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:107
+#: screens/Job/JobOutput/JobOutputSearch.js:114
 msgid "Gathering Facts"
 msgstr "Gathering Facts"
 
@@ -7679,7 +7719,7 @@ msgstr "Recent jobs"
 msgid "Failed to disassociate one or more instances."
 msgstr "Failed to disassociate one or more instances."
 
-#: screens/Job/JobOutput/JobOutputSearch.js:115
+#: screens/Job/JobOutput/JobOutputSearch.js:122
 msgid "Host Skipped"
 msgstr "Host Skipped"
 
@@ -7797,11 +7837,11 @@ msgstr "Cache timeout (seconds)"
 
 #: components/AppContainer/AppContainer.js:91
 #: components/AppContainer/AppContainer.js:160
-#: components/AppContainer/PageHeaderToolbar.js:211
+#: components/AppContainer/PageHeaderToolbar.js:231
 msgid "Logout"
 msgstr ""
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:218
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:229
 msgid "sec"
 msgstr "sec"
 
@@ -7941,7 +7981,7 @@ msgstr "Sync"
 #: screens/Template/shared/WorkflowJobTemplateForm.js:123
 #: screens/Template/Survey/SurveyQuestionForm.js:172
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:114
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:184
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:195
 #: screens/User/shared/UserTokenForm.js:69
 #: screens/User/UserOrganizations/UserOrganizationList.js:81
 #: screens/User/UserOrganizations/UserOrganizationListItem.js:20
@@ -7952,7 +7992,7 @@ msgstr "Sync"
 #: screens/User/UserTokenList/UserTokenList.js:138
 #: screens/User/UserTokenList/UserTokenList.js:191
 #: screens/User/UserTokenList/UserTokenListItem.js:30
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:125
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:139
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:177
 msgid "Description"
 msgstr ""
@@ -7996,7 +8036,7 @@ msgstr "On or after"
 msgid "Max concurrent jobs"
 msgstr "Max concurrent jobs"
 
-#: screens/User/UserDetail/UserDetail.js:120
+#: screens/User/UserDetail/UserDetail.js:133
 msgid "Delete User"
 msgstr "Delete User"
 
@@ -8036,7 +8076,7 @@ msgstr "Edit Team"
 msgid "User Interface"
 msgstr ""
 
-#: screens/Login/Login.js:315
+#: screens/Login/Login.js:324
 msgid "Sign in with GitHub Enterprise"
 msgstr "Sign in with GitHub Enterprise"
 
@@ -8073,7 +8113,7 @@ msgstr "Sign in with GitHub Enterprise"
 #: screens/Team/shared/TeamForm.js:49
 #: screens/Template/shared/WorkflowJobTemplateForm.js:137
 #: screens/Template/Survey/SurveyQuestionForm.js:30
-#: screens/User/shared/UserForm.js:173
+#: screens/User/shared/UserForm.js:195
 msgid "Select a value for this field"
 msgstr "Select a value for this field"
 
@@ -8086,7 +8126,7 @@ msgstr "Select a value for this field"
 msgid "View job {0}"
 msgstr "View job {0}"
 
-#: screens/Login/Login.js:394
+#: screens/Login/Login.js:403
 msgid "Sign in with SAML {samlIDP}"
 msgstr "Sign in with SAML {samlIDP}"
 
@@ -8100,8 +8140,8 @@ msgstr "Browse"
 
 #: components/NotificationList/NotificationList.js:193
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:134
-#: screens/User/shared/UserForm.js:92
-#: screens/User/UserDetail/UserDetail.js:68
+#: screens/User/shared/UserForm.js:101
+#: screens/User/UserDetail/UserDetail.js:71
 #: screens/User/UserList/UserList.js:115
 #: screens/User/UserList/UserList.js:169
 #: screens/User/UserList/UserListItem.js:56
@@ -8212,7 +8252,7 @@ msgstr "Case-insensitive version of startswith."
 msgid "Unsaved changes modal"
 msgstr "Unsaved changes modal"
 
-#: screens/Login/Login.js:347
+#: screens/Login/Login.js:356
 msgid "Sign in with GitHub Enterprise Teams"
 msgstr "Sign in with GitHub Enterprise Teams"
 
@@ -8252,7 +8292,7 @@ msgstr "Grafana URL"
 msgid "GitHub settings"
 msgstr "GitHub settings"
 
-#: screens/Login/Login.js:285
+#: screens/Login/Login.js:294
 msgid "Sign in with GitHub Organizations"
 msgstr "Sign in with GitHub Organizations"
 
@@ -8296,7 +8336,7 @@ msgstr ""
 #~ msgid "Concurrent jobs: If enabled, simultaneous runs of this job template will be allowed."
 #~ msgstr "Concurrent jobs: If enabled, simultaneous runs of this job template will be allowed."
 
-#: screens/Job/JobOutput/JobOutputSearch.js:130
+#: screens/Job/JobOutput/JobOutputSearch.js:137
 msgid "Task Started"
 msgstr "Task Started"
 
@@ -8340,7 +8380,7 @@ msgstr "Back to management jobs"
 #~ msgid "Organization"
 #~ msgstr "Organization"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:112
+#: screens/Job/JobOutput/JobOutputSearch.js:119
 msgid "Host OK"
 msgstr "Host OK"
 
@@ -8361,12 +8401,12 @@ msgstr "View Azure AD settings"
 msgid "Hop"
 msgstr "Hop"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:103
+#: screens/Job/JobOutput/JobOutputSearch.js:110
 msgid "Debug"
 msgstr "Debug"
 
 #: components/DataListToolbar/DataListToolbar.js:116
-#: screens/Job/JobOutput/JobOutputSearch.js:145
+#: screens/Job/JobOutput/JobOutputSearch.js:153
 msgid "Clear all filters"
 msgstr "Clear all filters"
 
@@ -8393,6 +8433,7 @@ msgstr "Back to Settings"
 #: screens/Template/Survey/SurveyList.js:109
 #: screens/Template/Survey/SurveyList.js:109
 #: screens/Template/Survey/SurveyListItem.js:67
+#: screens/User/UserDetail/UserDetail.js:88
 msgid "Default"
 msgstr "Default"
 
@@ -8440,7 +8481,7 @@ msgstr "Unable to look up the credential type for this webhook service, so the w
 msgid "Drag a file here or browse to upload"
 msgstr "Drag a file here or browse to upload"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:186
+#: screens/Job/JobOutput/JobOutputSearch.js:194
 msgid "Unfollow"
 msgstr "Unfollow"
 
@@ -8454,7 +8495,7 @@ msgstr "string"
 #~ msgstr "One Slack channel per line. The pound symbol (#)\n"
 #~ "is required for channels. To respond to or start a thread to a specific message add the parent message Id to the channel where the parent message Id is 16 digits. A dot (.) must be manually inserted after the 10th digit.  ie:#destination-channel, 1231257890.006423. See Slack"
 
-#: screens/User/shared/UserForm.js:121
+#: screens/User/shared/UserForm.js:130
 msgid "Confirm Password"
 msgstr "Confirm Password"
 
@@ -8492,6 +8533,10 @@ msgstr "Recipient list"
 #: components/ContentError/ContentError.js:33
 msgid "Not Found"
 msgstr "Not Found"
+
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:193
+msgid "Votes"
+msgstr "Votes"
 
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:79
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:97
@@ -8757,8 +8802,8 @@ msgstr "Prevent Instance Group Fallback"
 
 #: components/AppContainer/PageHeaderToolbar.js:111
 #: components/AppContainer/PageHeaderToolbar.js:115
-msgid "Switch to light mode"
-msgstr "Switch to light mode"
+#~ msgid "Switch to light mode"
+#~ msgstr "Switch to light mode"
 
 #: screens/InstanceGroup/shared/InstanceGroupForm.js:58
 msgid "Maximum number of forks to allow across all jobs running concurrently on this group. Zero means no limit will be enforced."
@@ -8805,8 +8850,8 @@ msgstr "This template is currently being used by some workflow nodes. Are you su
 msgid "First Run"
 msgstr "First Run"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:123
-#: screens/Job/JobOutput/JobOutputSearch.js:124
+#: screens/Job/JobOutput/JobOutputSearch.js:130
+#: screens/Job/JobOutput/JobOutputSearch.js:131
 msgid "No Hosts Remaining"
 msgstr "No Hosts Remaining"
 
@@ -8862,7 +8907,7 @@ msgid "Job ID"
 msgstr "Job ID"
 
 #: components/PromptDetail/PromptDetail.js:134
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:226
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:300
 msgid "Convergence"
 msgstr "Convergence"
 
@@ -8895,7 +8940,7 @@ msgstr "Note: The order in which these are selected sets the execution precedenc
 #~ msgid "Credentials that require passwords on launch are not permitted.  Please remove or replace the following credentials with a credential of the same type in order to proceed: {0}"
 #~ msgstr "Credentials that require passwords on launch are not permitted.  Please remove or replace the following credentials with a credential of the same type in order to proceed: {0}"
 
-#: screens/Login/Login.js:376
+#: screens/Login/Login.js:385
 msgid "Sign in with OIDC"
 msgstr "Sign in with OIDC"
 
@@ -8950,6 +8995,7 @@ msgstr "This is the only time the client secret will be shown."
 #~ msgstr "Optional description for the workflow job template."
 
 #: screens/ActivityStream/ActivityStreamDescription.js:511
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:197
 msgid "approved"
 msgstr "approved"
 
@@ -8958,7 +9004,7 @@ msgid "Last Run"
 msgstr "Last Run"
 
 #. placeholder {0}: workflowApproval.name
-#: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:57
+#: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:59
 msgid "Failed to approve {0}."
 msgstr "Failed to approve {0}."
 
@@ -9083,7 +9129,7 @@ msgstr "Failed to user token."
 #~ msgstr "Minimum number of instances that will be automatically\n"
 #~ "assigned to this group when new instances come online."
 
-#: screens/Login/Login.js:395
+#: screens/Login/Login.js:404
 msgid "Sign in with SAML"
 msgstr "Sign in with SAML"
 
@@ -9100,7 +9146,7 @@ msgid "Enter injectors using either JSON or YAML syntax. Refer to the Ansible Co
 msgstr "Enter injectors using either JSON or YAML syntax. Refer to the Ansible Controller documentation for example syntax."
 
 #: components/Workflow/WorkflowLegend.js:122
-#: screens/Job/JobOutput/JobOutputSearch.js:133
+#: screens/Job/JobOutput/JobOutputSearch.js:140
 msgid "Warning"
 msgstr "Warning"
 
@@ -9250,7 +9296,7 @@ msgstr "Workflow documentation"
 msgid "January"
 msgstr "January"
 
-#: screens/Login/Login.js:240
+#: screens/Login/Login.js:249
 msgid "Sign in with Azure AD"
 msgstr "Sign in with Azure AD"
 
@@ -9275,6 +9321,10 @@ msgstr "GitHub"
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkDeleteModal.js:45
 msgid "Are you sure you want to remove this link?"
 msgstr "Are you sure you want to remove this link?"
+
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:281
+msgid "A Jinja2 template rendered with upstream set_stats artifacts when the approval is created. Use this to show the approver relevant context from previous job steps. Available variables come from set_stats data of parent nodes."
+msgstr "A Jinja2 template rendered with upstream set_stats artifacts when the approval is created. Use this to show the approver relevant context from previous job steps. Available variables come from set_stats data of parent nodes."
 
 #: screens/Template/shared/WorkflowJobTemplate.helptext.js:14
 #~ msgid "Prompt for variables on launch."
@@ -9558,7 +9608,7 @@ msgstr "Not configured"
 #: components/JobList/JobListItem.js:63
 #: components/Schedule/ScheduleList/ScheduleListItem.js:39
 #: screens/Job/JobDetail/JobDetail.js:75
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:204
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:260
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:222
 msgid "Workflow Job"
 msgstr "Workflow Job"
@@ -9639,9 +9689,9 @@ msgstr "Update options"
 #: screens/Project/ProjectDetail/ProjectDetail.js:328
 #: screens/Team/TeamDetail/TeamDetail.js:57
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:367
-#: screens/User/UserDetail/UserDetail.js:99
+#: screens/User/UserDetail/UserDetail.js:112
 #: screens/User/UserTokenDetail/UserTokenDetail.js:66
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:184
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:240
 msgid "Last Modified"
 msgstr ""
 
@@ -9670,7 +9720,7 @@ msgstr "Command"
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:142
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:148
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:225
-#: screens/Job/JobOutput/JobOutputSearch.js:105
+#: screens/Job/JobOutput/JobOutputSearch.js:112
 #: screens/TopologyView/Legend.js:195
 msgid "Error"
 msgstr "Error"
@@ -9688,7 +9738,7 @@ msgstr "Back to Groups"
 msgid "A job has already been launched"
 msgstr "A job has already been launched"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:109
+#: screens/Job/JobOutput/JobOutputSearch.js:116
 msgid "Host Async OK"
 msgstr "Host Async OK"
 
@@ -9763,7 +9813,7 @@ msgstr "Inventory Source"
 msgid "Cancel node removal"
 msgstr "Cancel node removal"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:104
+#: screens/Job/JobOutput/JobOutputSearch.js:111
 msgid "Deprecated"
 msgstr "Deprecated"
 
@@ -9844,7 +9894,7 @@ msgid "Generic OIDC settings"
 msgstr "Generic OIDC settings"
 
 #: components/DataListToolbar/DataListToolbar.js:108
-#: screens/Job/JobOutput/JobOutputSearch.js:137
+#: screens/Job/JobOutput/JobOutputSearch.js:144
 msgid "Advanced"
 msgstr "Advanced"
 
@@ -9954,7 +10004,7 @@ msgstr "Failed to toggle notification."
 msgid "Webhook Key"
 msgstr "Webhook Key"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:123
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:131
 msgid "Select a Node Type"
 msgstr "Select a Node Type"
 
@@ -10030,7 +10080,7 @@ msgstr "Get subscriptions"
 #: screens/Setting/shared/RevertFormActionGroup.js:18
 #: screens/Template/Survey/SurveyReorderModal.js:241
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.js:72
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:185
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:188
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerToolbar.js:168
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerToolbar.js:172
 msgid "Save"
@@ -10080,7 +10130,7 @@ msgstr "WARNING: "
 msgid "Related search type"
 msgstr "Related search type"
 
-#: components/AppContainer/PageHeaderToolbar.js:197
+#: components/AppContainer/PageHeaderToolbar.js:217
 msgid "User details"
 msgstr "User details"
 
@@ -10204,8 +10254,8 @@ msgstr "Events"
 msgid "Group type"
 msgstr "Group type"
 
-#: screens/User/shared/UserForm.js:137
-#: screens/User/UserDetail/UserDetail.js:74
+#: screens/User/shared/UserForm.js:146
+#: screens/User/UserDetail/UserDetail.js:77
 msgid "User Type"
 msgstr "User Type"
 
@@ -10248,7 +10298,7 @@ msgstr "An inventory must be selected"
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:247
 #: screens/Template/shared/JobTemplateForm.js:359
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:135
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:225
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:281
 msgid "Source Control Branch"
 msgstr "Source Control Branch"
 
@@ -10257,8 +10307,8 @@ msgid "This organization is currently being by other resources. Are you sure you
 msgstr "This organization is currently being by other resources. Are you sure you want to delete it?"
 
 #: screens/Team/TeamRoles/TeamRolesList.js:124
-#: screens/User/shared/UserForm.js:47
-#: screens/User/UserDetail/UserDetail.js:49
+#: screens/User/shared/UserForm.js:48
+#: screens/User/UserDetail/UserDetail.js:52
 #: screens/User/UserList/UserListItem.js:16
 #: screens/User/UserRoles/UserRolesList.js:124
 msgid "System Administrator"
@@ -10340,8 +10390,8 @@ msgstr "When not checked, a merge will be performed, combining local variables w
 
 #: components/JobList/JobListItem.js:132
 #: screens/Job/JobDetail/JobDetail.js:656
-#: screens/Job/JobOutput/JobOutput.js:1157
-#: screens/Job/JobOutput/JobOutput.js:1158
+#: screens/Job/JobOutput/JobOutput.js:1159
+#: screens/Job/JobOutput/JobOutput.js:1160
 #: screens/Job/JobOutput/shared/OutputToolbar.js:182
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.js:192
 msgid "Job Cancel Error"
@@ -10375,7 +10425,7 @@ msgstr "Inventory sources with failures"
 #: screens/Project/ProjectList/ProjectList.js:222
 #: screens/Project/ProjectList/ProjectListItem.js:167
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.js:64
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:142
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:156
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:226
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListItem.js:76
 msgid "Status"
@@ -10450,7 +10500,7 @@ msgstr "Toggle Tools"
 msgid "Organization"
 msgstr "Organization"
 
-#: screens/Login/Login.js:186
+#: screens/Login/Login.js:195
 msgid "Your session has expired. Please log in to continue where you left off."
 msgstr "Your session has expired. Please log in to continue where you left off."
 
@@ -10496,7 +10546,7 @@ msgstr "Deleting these instance groups could impact other resources that rely on
 msgid "Source Control Revision"
 msgstr "Source Control Revision"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:153
+#: screens/Job/JobOutput/JobOutputSearch.js:161
 msgid "Search is disabled while the job is running"
 msgstr "Search is disabled while the job is running"
 
@@ -10512,7 +10562,7 @@ msgstr "Third"
 #~ msgid "Note: This instance may be re-associated with this instance group if it is managed by"
 #~ msgstr "Note: This instance may be re-associated with this instance group if it is managed by"
 
-#: screens/Login/Login.js:255
+#: screens/Login/Login.js:264
 msgid "Sign in with Azure AD Tenant"
 msgstr "Sign in with Azure AD Tenant"
 
@@ -10680,8 +10730,8 @@ msgstr "{0, plural, one {This credential is currently being used by other resour
 #: components/AddRole/AddResourceRole.js:40
 #: components/AddRole/AddResourceRole.js:55
 #: components/ResourceAccessList/ResourceAccessList.js:154
-#: screens/User/shared/UserForm.js:86
-#: screens/User/UserDetail/UserDetail.js:67
+#: screens/User/shared/UserForm.js:95
+#: screens/User/UserDetail/UserDetail.js:70
 #: screens/User/UserList/UserList.js:128
 #: screens/User/UserList/UserList.js:167
 #: screens/User/UserList/UserListItem.js:55
@@ -10701,7 +10751,7 @@ msgid "and click on Update Revision on Launch"
 msgstr "and click on Update Revision on Launch"
 
 #: components/About/About.js:48
-#: components/AppContainer/PageHeaderToolbar.js:168
+#: components/AppContainer/PageHeaderToolbar.js:188
 msgid "About"
 msgstr ""
 
@@ -10881,7 +10931,7 @@ msgstr "Execute when the parent node results in a successful state."
 msgid "Schedule Rules"
 msgstr "Schedule Rules"
 
-#: screens/User/UserDetail/UserDetail.js:60
+#: screens/User/UserDetail/UserDetail.js:63
 #: screens/User/UserList/UserListItem.js:49
 msgid "SOCIAL"
 msgstr "SOCIAL"
@@ -10902,7 +10952,7 @@ msgstr "Edit details"
 #: components/Workflow/WorkflowNodeHelp.js:191
 #: screens/HostMetrics/HostMetrics.js:141
 #: screens/HostMetrics/HostMetricsListItem.js:25
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:211
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:267
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListItem.js:59
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListItem.js:70
 msgid "Deleted"
@@ -11061,8 +11111,8 @@ msgstr "Missing"
 #: components/JobCancelButton/JobCancelButton.js:99
 #: components/JobList/JobListCancelButton.js:163
 #: components/JobList/JobListCancelButton.js:166
-#: screens/Job/JobOutput/JobOutput.js:1131
-#: screens/Job/JobOutput/JobOutput.js:1134
+#: screens/Job/JobOutput/JobOutput.js:1133
+#: screens/Job/JobOutput/JobOutput.js:1136
 msgid "Return"
 msgstr "Return"
 
@@ -11163,7 +11213,7 @@ msgstr "View Team Details"
 msgid "Failed to get instance."
 msgstr "Failed to get instance."
 
-#: screens/User/shared/UserForm.js:59
+#: screens/User/shared/UserForm.js:61
 msgid "Use browser default"
 msgstr "Use browser default"
 
@@ -11244,7 +11294,7 @@ msgstr "{numJobsToCancel, plural, one {{0}} other {{1}}}"
 msgid "Fit the graph to the available screen size"
 msgstr "Fit the graph to the available screen size"
 
-#: screens/Job/JobOutput/JobOutput.js:1023
+#: screens/Job/JobOutput/JobOutput.js:1025
 msgid "Events processing complete."
 msgstr "Events processing complete."
 
@@ -11482,7 +11532,7 @@ msgstr "Canceled node"
 msgid "Edit workflow"
 msgstr "Edit workflow"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeEditModal.js:76
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeEditModal.js:79
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeViewModal.js:271
 msgid "Edit Node"
 msgstr "Edit Node"
@@ -11713,11 +11763,11 @@ msgstr "Delete error"
 msgid "Failed to delete one or more inventory sources."
 msgstr "Failed to delete one or more inventory sources."
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:283
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:357
 msgid "If specified, this field will be shown on the node instead of the resource name when viewing the workflow"
 msgstr "If specified, this field will be shown on the node instead of the resource name when viewing the workflow"
 
-#: screens/Login/Login.js:270
+#: screens/Login/Login.js:279
 msgid "Sign in with GitHub"
 msgstr "Sign in with GitHub"
 
@@ -11733,7 +11783,7 @@ msgstr "Deleting these inventory sources could impact other resources that rely 
 msgid "Unknown Project"
 msgstr "Unknown Project"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:232
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:306
 msgid "Preconditions for running this node when there are multiple parents. Refer to the"
 msgstr "Preconditions for running this node when there are multiple parents. Refer to the"
 
@@ -11826,7 +11876,7 @@ msgstr "The pattern used to target hosts in the inventory. Leaving the field bla
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:185
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:276
 #: screens/Template/shared/JobTemplateForm.js:513
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:187
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:198
 msgid "Timeout"
 msgstr "Timeout"
 
@@ -11887,7 +11937,7 @@ msgstr "Failed to delete role"
 #~ msgid "Approved - {0}.  See the Activity Stream for more information."
 #~ msgstr "Approved - {0}.  See the Activity Stream for more information."
 
-#: screens/WorkflowApproval/shared/WorkflowDenyButton.js:26
+#: screens/WorkflowApproval/shared/WorkflowDenyButton.js:28
 msgid "Successfully Denied"
 msgstr "Successfully Denied"
 
@@ -11935,7 +11985,7 @@ msgstr "Select a module"
 #~ msgstr "You may apply a number of possible variables in the\n"
 #~ "message. For more information, refer to the"
 
-#: screens/User/UserDetail/UserDetail.js:58
+#: screens/User/UserDetail/UserDetail.js:61
 #: screens/User/UserList/UserListItem.js:42
 msgid "LDAP"
 msgstr "LDAP"
@@ -11952,7 +12002,7 @@ msgstr "Workflow Template"
 
 #: components/NotificationList/NotificationListItem.js:45
 #: components/Workflow/WorkflowLegend.js:118
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:68
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:76
 msgid "Approval"
 msgstr "Approval"
 
@@ -12110,6 +12160,10 @@ msgstr "Welcome to Red Hat Ansible Automation Platform!\n"
 msgid "Provisioning fail"
 msgstr "Provisioning fail"
 
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:238
+msgid "Whether the approval node is automatically approved or denied when the timeout expires."
+msgstr "Whether the approval node is automatically approved or denied when the timeout expires."
+
 #: screens/Inventory/shared/Inventory.helptext.js:126
 msgid "Time in seconds to consider an inventory sync to be current. During job runs and callbacks the task system will evaluate the timestamp of the latest sync. If it is older than Cache Timeout, it is not considered current, and a new inventory sync will be performed."
 msgstr "Time in seconds to consider an inventory sync to be current. During job runs and callbacks the task system will evaluate the timestamp of the latest sync. If it is older than Cache Timeout, it is not considered current, and a new inventory sync will be performed."
@@ -12142,7 +12196,7 @@ msgstr "a new webhook url will be generated on save."
 msgid "Back to execution environments"
 msgstr "Back to execution environments"
 
-#: screens/Job/JobOutput/shared/HostStatusBar.js:77
+#: screens/Job/JobOutput/shared/HostStatusBar.js:76
 msgid "Host status information for this job is unavailable."
 msgstr "Host status information for this job is unavailable."
 
@@ -12151,12 +12205,12 @@ msgid "This is the only time the token value and associated refresh token value 
 msgstr "This is the only time the token value and associated refresh token value will be shown."
 
 #: components/ContentLoading/ContentLoading.js:26
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:378
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:381
 msgid "Loading"
 msgstr "Loading"
 
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:302
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:307
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:358
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:363
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListItem.js:117
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListItem.js:123
 msgid "Cancel Workflow"
@@ -12188,9 +12242,13 @@ msgstr "Please run a job to populate this list."
 #: screens/Template/shared/JobTemplateForm.js:458
 #: screens/Template/shared/WorkflowJobTemplateForm.js:169
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:153
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:218
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:274
 msgid "Limit"
 msgstr "Limit"
+
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:176
+msgid "Approvals"
+msgstr "Approvals"
 
 #: screens/Instances/Shared/InstanceForm.js:52
 msgid "Sets the current life cycle stage of this instance. Default is \"installed.\""
@@ -12278,7 +12336,7 @@ msgstr "Delete Survey"
 msgid "Policy instance minimum"
 msgstr "Policy instance minimum"
 
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:330
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:386
 msgid "Failed to delete workflow approval."
 msgstr "Failed to delete workflow approval."
 
@@ -12314,7 +12372,7 @@ msgstr "Hybrid"
 #~ msgid "Loading..."
 #~ msgstr "Loading..."
 
-#: screens/Job/JobOutput/JobOutputSearch.js:114
+#: screens/Job/JobOutput/JobOutputSearch.js:121
 msgid "Host Retry"
 msgstr "Host Retry"
 
@@ -12352,8 +12410,10 @@ msgstr "On"
 msgid "If you only want to remove access for this particular user, please remove them from the team."
 msgstr "If you only want to remove access for this particular user, please remove them from the team."
 
-#: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:45
-#: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:48
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:252
+#: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:47
+#: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:50
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:185
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListApproveButton.js:34
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListApproveButton.js:50
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListApproveButton.js:58
@@ -12415,7 +12475,7 @@ msgid "Launch"
 msgstr "Launch"
 
 #: components/JobList/JobListItem.js:343
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:161
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:217
 msgid "Explanation"
 msgstr "Explanation"
 
@@ -12438,7 +12498,7 @@ msgstr "Survey preview modal"
 #: components/StatusLabel/StatusLabel.js:42
 #: components/Workflow/WorkflowNodeHelp.js:115
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.js:37
-#: screens/Job/JobOutput/shared/HostStatusBar.js:36
+#: screens/Job/JobOutput/shared/HostStatusBar.js:35
 msgid "OK"
 msgstr "OK"
 
@@ -12567,7 +12627,7 @@ msgstr "Created By (Username)"
 msgid "Playbook"
 msgstr "Playbook"
 
-#: screens/Login/Login.js:145
+#: screens/Login/Login.js:154
 msgid "Invalid username or password. Please try again."
 msgstr ""
 
@@ -12697,7 +12757,7 @@ msgstr "Toggle notification start"
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:222
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:143
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.js:33
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:232
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:288
 msgid "Inventory"
 msgstr "Inventory"
 

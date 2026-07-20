@@ -125,7 +125,7 @@ msgstr "在这两个节点间添加新节点"
 #~ "the branch needs to be \"pull/62/head\"."
 #~ msgstr "第一次获取所有引用。第二次获取 Github 拉取请求号 62，在本示例中，分支需要为 \"pull/62/head\"。"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:113
+#: screens/Job/JobOutput/JobOutputSearch.js:120
 msgid "Host Polling"
 msgstr "主机轮询"
 
@@ -376,7 +376,7 @@ msgstr "选择要应用的角色"
 #: screens/Template/Survey/SurveyList.js:108
 #: screens/Template/Survey/SurveyListItem.js:64
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/ProjectsList.js:93
-#: screens/User/UserDetail/UserDetail.js:81
+#: screens/User/UserDetail/UserDetail.js:94
 #: screens/User/UserRoles/UserRolesList.js:152
 #: screens/User/UserRoles/UserRolesListItem.js:22
 msgid "Type"
@@ -465,7 +465,7 @@ msgstr "基本验证密码"
 msgid "Multiple Choice (multiple select)"
 msgstr "多项选择（多选）"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:128
+#: screens/Job/JobOutput/JobOutputSearch.js:135
 msgid "Running Handlers"
 msgstr "正在运行的处理程序"
 
@@ -516,7 +516,7 @@ msgstr "启动者"
 
 #: screens/ActivityStream/ActivityStream.js:300
 #: screens/ActivityStream/ActivityStreamListItem.js:42
-#: screens/Job/JobOutput/JobOutputSearch.js:100
+#: screens/Job/JobOutput/JobOutputSearch.js:107
 msgid "Event"
 msgstr "事件"
 
@@ -600,7 +600,7 @@ msgstr "选项"
 #~ msgid "For more information, refer to the"
 #~ msgstr "有关详情请参阅"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:297
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:371
 msgid "Maximum number of times this node's job is automatically retried after failing before its failure paths are followed. Canceled jobs are never retried."
 msgstr ""
 
@@ -727,7 +727,7 @@ msgstr "指标"
 msgid "Create new credential Type"
 msgstr "创建新凭证类型"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeAddModal.js:106
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeAddModal.js:109
 msgid "Add Node"
 msgstr "添加节点"
 
@@ -749,7 +749,7 @@ msgstr "变量需要是 JSON 或 YAML 语法格式。使用单选按钮在两者
 msgid "Repeat frequency"
 msgstr "重复频率"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:106
+#: screens/Job/JobOutput/JobOutputSearch.js:113
 msgid "File Difference"
 msgstr "文件差异"
 
@@ -825,7 +825,7 @@ msgstr "例外频率"
 msgid "Select an organization before editing the default execution environment."
 msgstr "在编辑默认执行环境前选择一个机构。"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:121
+#: screens/Job/JobOutput/JobOutputSearch.js:128
 msgid "Item Skipped"
 msgstr "项已跳过"
 
@@ -904,7 +904,7 @@ msgstr "刷新令牌"
 msgid "Host details"
 msgstr "主机详情"
 
-#: screens/User/shared/UserForm.js:185
+#: screens/User/shared/UserForm.js:207
 msgid "This value does not match the password you entered previously. Please confirm that password."
 msgstr "此值与之前输入的密码不匹配。请确认该密码。"
 
@@ -975,7 +975,7 @@ msgstr "过期的时间"
 #~ msgid "{interval, plural, one {# year} other {# years}}"
 #~ msgstr "{interval, plural, one {#年} other {#年}}"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:74
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:82
 msgid "Inventory Source Sync"
 msgstr "清单源同步"
 
@@ -1033,7 +1033,7 @@ msgstr "复制模板失败。"
 msgid "Year"
 msgstr "年"
 
-#: screens/Job/JobOutput/JobOutput.js:1034
+#: screens/Job/JobOutput/JobOutput.js:1036
 msgid "Reload output"
 msgstr "重新加载输出"
 
@@ -1129,8 +1129,8 @@ msgid "Copy full revision to clipboard."
 msgstr "将完整修订复制到剪贴板。"
 
 #: components/PromptDetail/PromptDetail.js:147
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:295
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:296
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:369
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:370
 msgid "Max Retries"
 msgstr ""
 
@@ -1155,7 +1155,7 @@ msgstr "控制此实例是否由策略管理。如果启用，实例将可用于
 
 #: components/JobList/JobList.js:257
 #: screens/Job/JobDetail/JobDetail.js:262
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:188
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:244
 msgid "Finished"
 msgstr "完成"
 
@@ -1333,7 +1333,7 @@ msgstr "节点类型"
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:127
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:450
 #: screens/Template/Survey/SurveyQuestionForm.js:270
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:240
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:314
 msgid "documentation"
 msgstr "文档"
 
@@ -1353,7 +1353,7 @@ msgstr "恢复到工厂默认值。"
 msgid "Filter by failed jobs"
 msgstr "根据失败的作业过滤"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:127
+#: screens/Job/JobOutput/JobOutputSearch.js:134
 msgid "Playbook Started"
 msgstr "Playbook 已启动"
 
@@ -1420,7 +1420,7 @@ msgstr "电子邮件"
 msgid "Job Type"
 msgstr "作业类型"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:122
+#: screens/Job/JobOutput/JobOutputSearch.js:129
 msgid "No Hosts Matched"
 msgstr "未匹配主机"
 
@@ -1432,7 +1432,7 @@ msgstr "唯一分组标准"
 #~ msgid "More information for"
 #~ msgstr "更多信息"
 
-#: screens/Login/Login.js:147
+#: screens/Login/Login.js:156
 msgid "There was a problem logging in. Please try again."
 msgstr "登录时有问题。请重试。"
 
@@ -1455,7 +1455,7 @@ msgstr "协议"
 msgid "option to the"
 msgstr "选项"
 
-#: screens/User/UserDetail/UserDetail.js:135
+#: screens/User/UserDetail/UserDetail.js:148
 msgid "Failed to delete user."
 msgstr "删除用户失败。"
 
@@ -1515,7 +1515,7 @@ msgstr ""
 msgid "Soft delete"
 msgstr "软删除"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:92
+#: screens/Job/JobOutput/JobOutputSearch.js:99
 msgid "Stdout"
 msgstr "Stdout"
 
@@ -1540,7 +1540,7 @@ msgstr "启用权限升级"
 msgid "Filter..."
 msgstr ""
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:208
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:219
 msgid "Timeout seconds"
 msgstr "超时秒"
 
@@ -1877,7 +1877,7 @@ msgstr ""
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.js:88
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.js:121
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.js:153
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:179
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:190
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/ProjectsList.js:68
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/ProjectsList.js:88
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/SystemJobTemplatesList.js:74
@@ -1893,7 +1893,7 @@ msgstr ""
 #: screens/User/UserTeams/UserTeamList.js:230
 #: screens/User/UserTeams/UserTeamListItem.js:17
 #: screens/User/UserTokenList/UserTokenListItem.js:22
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:120
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:134
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:172
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:221
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListItem.js:53
@@ -1931,7 +1931,7 @@ msgstr "订阅清单"
 #: components/Workflow/WorkflowNodeHelp.js:103
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:44
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:138
-#: screens/Job/JobOutput/shared/HostStatusBar.js:48
+#: screens/Job/JobOutput/shared/HostStatusBar.js:47
 #: screens/Job/JobOutput/shared/OutputToolbar.js:155
 msgid "Failed"
 msgstr "失败"
@@ -2064,7 +2064,7 @@ msgstr "密钥"
 #: components/AddRole/AddResourceRole.js:47
 #: components/ResourceAccessList/ResourceAccessList.js:145
 #: components/ResourceAccessList/ResourceAccessList.js:198
-#: screens/Login/Login.js:220
+#: screens/Login/Login.js:229
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:188
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:303
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:355
@@ -2075,8 +2075,8 @@ msgstr "密钥"
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:548
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:94
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:214
-#: screens/User/shared/UserForm.js:98
-#: screens/User/UserDetail/UserDetail.js:70
+#: screens/User/shared/UserForm.js:107
+#: screens/User/UserDetail/UserDetail.js:73
 #: screens/User/UserList/UserList.js:120
 #: screens/User/UserList/UserList.js:161
 #: screens/User/UserList/UserListItem.js:35
@@ -2115,7 +2115,7 @@ msgstr "Playbook 运行"
 msgid "Go to first page"
 msgstr "前往第一页"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:119
+#: screens/Job/JobOutput/JobOutputSearch.js:126
 msgid "Item Failed"
 msgstr "项故障"
 
@@ -2189,7 +2189,7 @@ msgstr ""
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateList.js:97
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateListItem.js:20
 #: screens/Job/JobDetail/JobDetail.js:271
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:80
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:88
 msgid "Job Template"
 msgstr "任务模板"
 
@@ -2264,12 +2264,12 @@ msgstr "字段与给出的正则表达式匹配。"
 msgid "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 msgstr "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 
-#: screens/Login/Login.js:218
+#: screens/Login/Login.js:227
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:143
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:103
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:222
 #: screens/Template/Survey/SurveyQuestionForm.js:82
-#: screens/User/shared/UserForm.js:110
+#: screens/User/shared/UserForm.js:119
 msgid "Password"
 msgstr "密码"
 
@@ -2383,7 +2383,7 @@ msgid "pages"
 msgstr "页"
 
 #: components/StatusLabel/StatusLabel.js:48
-#: screens/Job/JobOutput/shared/HostStatusBar.js:40
+#: screens/Job/JobOutput/shared/HostStatusBar.js:39
 msgid "Skipped"
 msgstr "跳过"
 
@@ -2577,7 +2577,7 @@ msgstr "{0}（已删除）"
 msgid "The inventory that this host belongs to."
 msgstr "此主机要属于的清单。"
 
-#: screens/Login/Login.js:208
+#: screens/Login/Login.js:217
 msgid "Log In"
 msgstr "登录"
 
@@ -2630,7 +2630,7 @@ msgstr "布尔"
 #~ msgid "Allow branch override"
 #~ msgstr "允许分支覆写"
 
-#: components/AppContainer/PageHeaderToolbar.js:203
+#: components/AppContainer/PageHeaderToolbar.js:223
 msgid "User Details"
 msgstr "用户详情"
 
@@ -2655,7 +2655,7 @@ msgstr "如果您准备进行升级或续订，请<0>联系我们。</0>"
 msgid "Enable log system tracking facts individually"
 msgstr "单独启用日志系统跟踪事实"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/useWorkflowNodeSteps.js:388
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/useWorkflowNodeSteps.js:394
 msgid "Job Templates with credentials that prompt for passwords cannot be selected when creating or editing nodes"
 msgstr "在创建或编辑节点时无法选择具有提示密码凭证的作业模板"
 
@@ -2695,8 +2695,8 @@ msgid "Microsoft Azure Resource Manager"
 msgstr "Microsoft Azure Resource Manager"
 
 #: screens/Job/JobDetail/JobDetail.js:678
-#: screens/Job/JobOutput/JobOutput.js:1146
-#: screens/Job/JobOutput/JobOutput.js:1147
+#: screens/Job/JobOutput/JobOutput.js:1148
+#: screens/Job/JobOutput/JobOutput.js:1149
 #: screens/Job/WorkflowOutput/WorkflowOutput.js:138
 msgid "Job Delete Error"
 msgstr "作业删除错误"
@@ -2848,7 +2848,7 @@ msgstr "在左侧查看错误"
 #~ "of time required to complete an update."
 #~ msgstr "在进行更新前删除整个本地存储库。根据存储库的大小，这可能会显著增加完成更新所需的时间。"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:116
+#: screens/Job/JobOutput/JobOutputSearch.js:123
 msgid "Host Started"
 msgstr "主机已启动"
 
@@ -2878,7 +2878,7 @@ msgstr "HTTP 标头"
 msgid "Zoom Out"
 msgstr "缩小"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:120
+#: screens/Job/JobOutput/JobOutputSearch.js:127
 msgid "Item OK"
 msgstr "项正常"
 
@@ -2923,8 +2923,8 @@ msgstr "0（普通）"
 
 #: components/Workflow/WorkflowNodeHelp.js:146
 #: components/Workflow/WorkflowNodeHelp.js:182
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:281
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:282
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:355
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:356
 msgid "Node Alias"
 msgstr "节点别名"
 
@@ -2995,7 +2995,7 @@ msgstr "每行使用一个注解标签，不带逗号。"
 #~ "零意味着不会强制执行任何限制。"
 
 #: components/StatusLabel/StatusLabel.js:45
-#: screens/Job/JobOutput/shared/HostStatusBar.js:52
+#: screens/Job/JobOutput/shared/HostStatusBar.js:51
 #: screens/Job/JobOutput/shared/OutputToolbar.js:145
 msgid "Unreachable"
 msgstr "无法访问"
@@ -3103,7 +3103,7 @@ msgstr "使用 JSON 或 YAML 语法输入。示例语法请参阅 Ansible 控制
 msgid "Create New Host"
 msgstr "创建新主机"
 
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:200
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:256
 msgid "Workflow job details"
 msgstr "工作流作业详情"
 
@@ -3144,7 +3144,7 @@ msgstr "SSH 密码"
 msgid "View OIDC settings"
 msgstr "查看 OIDC 设置"
 
-#: components/AppContainer/PageHeaderToolbar.js:160
+#: components/AppContainer/PageHeaderToolbar.js:180
 msgid "Help"
 msgstr ""
 
@@ -3206,7 +3206,7 @@ msgstr "运行任务"
 msgid "Client identifier"
 msgstr "客户端标识符"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:110
+#: screens/Job/JobOutput/JobOutputSearch.js:117
 msgid "Host Failed"
 msgstr "主机故障"
 
@@ -3246,8 +3246,8 @@ msgstr "团队"
 #~ msgid "Cancel Sync"
 #~ msgstr ""
 
-#: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:44
-#: screens/WorkflowApproval/shared/WorkflowDenyButton.js:37
+#: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:46
+#: screens/WorkflowApproval/shared/WorkflowDenyButton.js:38
 msgid "This workflow has already been acted on"
 msgstr "此工作流已进行"
 
@@ -3294,7 +3294,7 @@ msgstr "使用的容量"
 msgid "Instance ID"
 msgstr "实例 ID"
 
-#: components/AppContainer/PageHeaderToolbar.js:146
+#: components/AppContainer/PageHeaderToolbar.js:166
 msgid "Info"
 msgstr "信息"
 
@@ -3302,7 +3302,7 @@ msgstr "信息"
 msgid "<0>Note: Instances may be re-associated with this instance group if they are managed by <1>policy rules.</1></0>"
 msgstr "< 0 >注意：如果实例由< 1 >策略规则管理，则可以将其重新关联到此实例组。</1 > </0 >"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:194
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:205
 msgid "Timeout minutes"
 msgstr "超时分钟"
 
@@ -3311,8 +3311,10 @@ msgstr "超时分钟"
 msgid "This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?"
 msgstr "依赖该清单源的其他资源目前正在使用此清单源。确定要删除它吗？"
 
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:251
 #: screens/WorkflowApproval/shared/WorkflowDenyButton.js:38
 #: screens/WorkflowApproval/shared/WorkflowDenyButton.js:45
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:185
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListDenyButton.js:33
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListDenyButton.js:49
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListDenyButton.js:57
@@ -3354,8 +3356,8 @@ msgstr "{intervalValue, plural, one {hour} other {hours}}"
 #: screens/Inventory/shared/ConstructedInventoryForm.js:39
 #: screens/Inventory/shared/FederatedInventoryForm.js:27
 #: screens/Template/shared/JobTemplateForm.js:176
-#: screens/User/shared/UserForm.js:114
-#: screens/User/shared/UserForm.js:125
+#: screens/User/shared/UserForm.js:123
+#: screens/User/shared/UserForm.js:134
 msgid "This field must not be blank"
 msgstr "此字段不能为空"
 
@@ -3386,7 +3388,7 @@ msgstr ""
 msgid "View all Inventories."
 msgstr "查看所有清单。"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:108
+#: screens/Job/JobOutput/JobOutputSearch.js:115
 msgid "Host Async Failure"
 msgstr "主机同步故障"
 
@@ -3462,9 +3464,9 @@ msgstr "小于或等于比较。"
 #: screens/Template/Survey/SurveyList.js:71
 #: screens/Template/Survey/SurveyToolbar.js:95
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:271
-#: screens/User/UserDetail/UserDetail.js:124
+#: screens/User/UserDetail/UserDetail.js:137
 #: screens/User/UserTokenDetail/UserTokenDetail.js:81
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:319
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:375
 msgid "Delete"
 msgstr "删除"
 
@@ -3474,7 +3476,7 @@ msgid "By default, we collect and transmit analytics data on the service usage t
 msgstr "默认情况下，我们收集并向Red Hat传输有关服务使用情况的分析数据。服务收集的数据分为两类。有关更多信息，请参阅< 0 > {0} </0 >。取消选中以下复选框以禁用此功能。"
 
 #: components/StatusLabel/StatusLabel.js:53
-#: screens/Job/JobOutput/shared/HostStatusBar.js:44
+#: screens/Job/JobOutput/shared/HostStatusBar.js:43
 msgid "Changed"
 msgstr "已更改"
 
@@ -3511,7 +3513,7 @@ msgid "Click this button to verify connection to the secret management system us
 msgstr "点击这个按钮使用所选凭证和指定的输入验证到 secret 管理系统的连接。"
 
 #: components/Workflow/WorkflowLegend.js:108
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:86
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:94
 msgid "Project Sync"
 msgstr "项目同步"
 
@@ -3556,6 +3558,11 @@ msgstr ""
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginSelected.js:47
 msgid "This field will be retrieved from an external secret management system using the specified credential."
 msgstr "此字段将使用指定的凭证从外部 secret 管理系统检索。"
+
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:277
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:287
+msgid "Context Template"
+msgstr ""
 
 #: screens/Job/JobOutput/HostEventModal.js:183
 msgid "No YAML Available"
@@ -3632,10 +3639,10 @@ msgstr "GitHub Team"
 #: screens/Team/TeamDetail/TeamDetail.js:53
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:362
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:189
-#: screens/User/UserDetail/UserDetail.js:94
+#: screens/User/UserDetail/UserDetail.js:107
 #: screens/User/UserTokenDetail/UserTokenDetail.js:61
 #: screens/User/UserTokenList/UserTokenList.js:150
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:179
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:235
 msgid "Created"
 msgstr "创建"
 
@@ -3723,7 +3730,7 @@ msgstr "8 月"
 msgid "View smart inventory host details"
 msgstr "查看智能清单主机详情"
 
-#: screens/Login/Login.js:362
+#: screens/Login/Login.js:371
 msgid "Sign in with Google"
 msgstr "使用 Google 登录"
 
@@ -3882,7 +3889,7 @@ msgstr "最小长度"
 msgid "Smart host filter"
 msgstr "智能主机过滤器"
 
-#: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:29
+#: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:31
 msgid "Successfully Approved"
 msgstr "成功批准"
 
@@ -3932,7 +3939,7 @@ msgid "This table gives a few useful parameters of the constructed\n"
 "               inventory plugin. For the full list of parameters "
 msgstr ""
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:255
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:329
 msgid "Convergence select"
 msgstr "趋同选择"
 
@@ -3956,7 +3963,7 @@ msgstr "完成"
 #: screens/InstanceGroup/Instances/InstanceListItem.js:242
 #: screens/Instances/InstanceDetail/InstanceDetail.js:288
 #: screens/Instances/InstanceList/InstanceListItem.js:260
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:242
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:316
 msgid "for more info."
 msgstr "更多信息。"
 
@@ -3996,8 +4003,8 @@ msgstr "地址"
 msgid "After number of occurrences"
 msgstr "发生次数后"
 
-#: screens/User/shared/UserForm.js:156
-#: screens/User/UserDetail/UserDetail.js:76
+#: screens/User/shared/UserForm.js:165
+#: screens/User/UserDetail/UserDetail.js:79
 msgid "Preferred Language"
 msgstr "首选语言"
 
@@ -4321,7 +4328,7 @@ msgstr "删除凭证"
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:241
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:243
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeViewModal.js:274
-#: screens/User/UserDetail/UserDetail.js:113
+#: screens/User/UserDetail/UserDetail.js:126
 msgid "Edit"
 msgstr "编辑"
 
@@ -4362,6 +4369,10 @@ msgstr "目标 SMS 号码"
 #: screens/Job/JobDetail/JobDetail.js:452
 msgid "No timeout specified"
 msgstr "未指定超时"
+
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:183
+msgid "On Timeout"
+msgstr ""
 
 #: screens/Inventory/shared/Inventory.helptext.js:197
 msgid "Prevent Instance Group Fallback: If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on."
@@ -4512,7 +4523,7 @@ msgstr ""
 #~ msgid "Failed to delete project."
 #~ msgstr "清除项目失败:%s"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:131
+#: screens/Job/JobOutput/JobOutputSearch.js:138
 msgid "Variables Prompted"
 msgstr "提示变量"
 
@@ -4556,12 +4567,17 @@ msgstr "不保存退出"
 msgid "Date operator select"
 msgstr ""
 
+#: components/AppContainer/PageHeaderToolbar.js:111
+#: components/AppContainer/PageHeaderToolbar.js:117
+msgid "Theme"
+msgstr ""
+
 #: screens/Inventory/shared/ConstructedInventoryHint.js:247
 msgid "Filter on nested group name"
 msgstr "按嵌套组名称筛选"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.js:762
-#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.js:764
+#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.js:780
+#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.js:782
 msgid "Error saving the workflow!"
 msgstr "保存工作流时出错！"
 
@@ -4611,7 +4627,7 @@ msgstr "这将取消此工作流中的所有后续节点"
 msgid "Client Identifier"
 msgstr "客户端标识符"
 
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:308
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:364
 msgid "This will cancel all subsequent nodes in this workflow."
 msgstr "这将取消此工作流中的所有后续节点。"
 
@@ -4696,8 +4712,8 @@ msgid "RADIUS"
 msgstr "RADIUS"
 
 #: components/JobCancelButton/JobCancelButton.js:68
-#: screens/Job/JobOutput/JobOutput.js:1114
-#: screens/Job/JobOutput/JobOutput.js:1115
+#: screens/Job/JobOutput/JobOutput.js:1116
+#: screens/Job/JobOutput/JobOutput.js:1117
 msgid "Cancel Job"
 msgstr "取消作业"
 
@@ -4705,7 +4721,7 @@ msgstr "取消作业"
 msgid "Instance State"
 msgstr "实例状态"
 
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:149
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:163
 msgid "Actor"
 msgstr "操作者"
 
@@ -4823,28 +4839,28 @@ msgstr "查看机构详情"
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:545
 #: screens/Template/TemplateSurvey.js:137
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:279
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:196
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:211
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:362
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:199
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:214
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:365
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.js:378
 #: screens/TopologyView/MeshGraph.js:420
 #: screens/TopologyView/Tooltip.js:198
-#: screens/User/UserDetail/UserDetail.js:132
+#: screens/User/UserDetail/UserDetail.js:145
 #: screens/User/UserList/UserList.js:197
 #: screens/User/UserRoles/UserRolesList.js:240
 #: screens/User/UserRoles/UserRolesList.js:251
 #: screens/User/UserTeams/UserTeamList.js:257
 #: screens/User/UserTokenDetail/UserTokenDetail.js:88
 #: screens/User/UserTokenList/UserTokenList.js:218
-#: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:54
+#: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:56
 #: screens/WorkflowApproval/shared/WorkflowDenyButton.js:51
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:327
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:383
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:249
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:268
 msgid "Error!"
 msgstr "错误！"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:117
+#: screens/Job/JobOutput/JobOutputSearch.js:124
 msgid "Host Unreachable"
 msgstr "主机无法访问"
 
@@ -4934,7 +4950,7 @@ msgstr "编辑项目"
 msgid "Tuesday"
 msgstr "周二"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:132
+#: screens/Job/JobOutput/JobOutputSearch.js:139
 msgid "Verbose"
 msgstr "详细"
 
@@ -4943,10 +4959,11 @@ msgid "Failed to toggle host."
 msgstr "切换主机失败。"
 
 #: screens/ActivityStream/ActivityStreamDescription.js:519
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:197
 msgid "denied"
 msgstr "拒绝"
 
-#: screens/Login/Login.js:331
+#: screens/Login/Login.js:340
 msgid "Sign in with GitHub Enterprise Organizations"
 msgstr "使用 GitHub Enterprise Organizations 登录"
 
@@ -5042,7 +5059,7 @@ msgstr "查看 SAML 设置"
 #: components/JobList/JobList.js:245
 #: components/StatusLabel/StatusLabel.js:52
 #: components/Workflow/WorkflowNodeHelp.js:109
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:192
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:248
 msgid "Canceled"
 msgstr "已取消"
 
@@ -5107,7 +5124,7 @@ msgstr "查看所有项目。"
 msgid "0 (Warning)"
 msgstr "0（警告）"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:129
+#: screens/Job/JobOutput/JobOutputSearch.js:136
 msgid "System Warning"
 msgstr "系统警告"
 
@@ -5195,7 +5212,7 @@ msgstr "选择要删除的问题"
 #: screens/Template/shared/JobTemplateForm.js:431
 #: screens/Template/shared/WorkflowJobTemplateForm.js:222
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:228
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:273
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:329
 msgid "Variables"
 msgstr "变量"
 
@@ -5246,6 +5263,11 @@ msgstr "任务"
 msgid "Unreachable Hosts"
 msgstr "无法访问的主机"
 
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:234
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:245
+msgid "On timeout"
+msgstr ""
+
 #: screens/Team/Teams.js:17
 #: screens/Team/Teams.js:28
 msgid "Create New Team"
@@ -5269,7 +5291,7 @@ msgstr "文本区"
 msgid "View User Interface settings"
 msgstr "查看用户界面设置"
 
-#: screens/Login/Login.js:300
+#: screens/Login/Login.js:309
 msgid "Sign in with GitHub Teams"
 msgstr "使用 GitHub Teams 登录"
 
@@ -5280,6 +5302,10 @@ msgstr "成功复制清单"
 #: screens/Template/shared/JobTemplate.helptext.js:80
 #~ msgid "If enabled, this will store gathered facts so they can be viewed at the host level. Facts are persisted and injected into the fact cache at runtime."
 #~ msgstr "如果启用，这将存储收集的事实，以便在主机一级查看它们。事实在运行时会被持久化并注入事实缓存。"
+
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:260
+msgid "The number of distinct users that must approve before the workflow continues. A single denial always denies the node."
+msgstr ""
 
 #: screens/Instances/InstanceEdit/InstanceEdit.js:82
 msgid "View all Instances."
@@ -5342,7 +5368,7 @@ msgstr "折叠"
 #: screens/Template/shared/JobTemplateForm.js:416
 #: screens/Template/shared/WorkflowJobTemplateForm.js:205
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:208
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:253
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:309
 msgid "Labels"
 msgstr "标签"
 
@@ -5572,9 +5598,14 @@ msgstr "使用 TLS"
 #: components/Workflow/WorkflowLegend.js:112
 #: components/Workflow/WorkflowNodeHelp.js:77
 #: screens/Job/JobDetail/JobDetail.js:74
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:103
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:111
 msgid "Management Job"
 msgstr "管理作业"
+
+#: screens/User/shared/UserForm.js:173
+#: screens/User/UserDetail/UserDetail.js:84
+msgid "Preferred Theme"
+msgstr ""
 
 #: screens/Instances/Shared/InstanceForm.js:27
 #: screens/Inventory/shared/InventorySourceForm.js:85
@@ -5669,7 +5700,7 @@ msgstr "频率详情"
 #: components/Schedule/shared/SchedulePromptableFields.js:133
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.js:37
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.js:58
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:186
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:189
 msgid "Next"
 msgstr "下一"
 
@@ -5683,7 +5714,7 @@ msgstr "下一"
 msgid "Create"
 msgstr "创建"
 
-#: screens/Job/JobOutput/JobOutput.js:1138
+#: screens/Job/JobOutput/JobOutput.js:1140
 msgid "Are you sure you want to submit the request to cancel this job?"
 msgstr "您确定要提交取消此任务的请求吗？"
 
@@ -5780,7 +5811,7 @@ msgstr "自动化"
 #: screens/Instances/InstancePeers/InstancePeerList.js:250
 #: screens/Instances/InstancePeers/InstancePeerList.js:312
 #: screens/Instances/InstancePeers/InstancePeerListItem.js:59
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:119
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:127
 msgid "Node Type"
 msgstr "节点类型"
 
@@ -5854,7 +5885,7 @@ msgstr "过去两周"
 msgid "Back"
 msgstr "返回"
 
-#: screens/User/UserDetail/UserDetail.js:89
+#: screens/User/UserDetail/UserDetail.js:102
 msgid "Last Login"
 msgstr "最近登陆"
 
@@ -5870,7 +5901,7 @@ msgstr "复制错误"
 msgid "Back to applications"
 msgstr "返回到应用程序"
 
-#: screens/User/UserDetail/UserDetail.js:83
+#: screens/User/UserDetail/UserDetail.js:96
 msgid "login type"
 msgstr "登录类型"
 
@@ -6093,7 +6124,7 @@ msgstr "根据成功的作业过滤"
 msgid "Red Hat, Inc."
 msgstr "Red Hat, Inc."
 
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:299
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:355
 msgid "Workflow Cancelled "
 msgstr ""
 
@@ -6155,7 +6186,7 @@ msgstr "取消所选作业"
 msgid "Started"
 msgstr "已开始"
 
-#: components/AppContainer/PageHeaderToolbar.js:120
+#: components/AppContainer/PageHeaderToolbar.js:140
 msgid "Pending Workflow Approvals"
 msgstr "等待工作流批准"
 
@@ -6177,7 +6208,7 @@ msgstr "规范"
 #: components/Workflow/WorkflowNodeHelp.js:168
 #: screens/Job/JobOutput/shared/OutputToolbar.js:167
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.js:179
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:196
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:252
 msgid "Elapsed"
 msgstr "已经过"
 
@@ -6188,6 +6219,11 @@ msgstr "3（调试）"
 #: screens/Project/shared/ProjectSubForms/SharedFields.js:126
 msgid "Track submodules"
 msgstr "跟踪子模块"
+
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:256
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:266
+msgid "Required approvals"
+msgstr ""
 
 #: screens/Project/ProjectList/ProjectListItem.js:282
 msgid "Last used"
@@ -6251,7 +6287,7 @@ msgstr "社交登录"
 msgid "Revert"
 msgstr "恢复"
 
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:315
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:371
 msgid "Delete Workflow Approval"
 msgstr "删除工作流批准"
 
@@ -6322,7 +6358,7 @@ msgstr "此处。"
 msgid "Unavailable"
 msgstr "不可用"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:125
+#: screens/Job/JobOutput/JobOutputSearch.js:132
 msgid "Play Started"
 msgstr "Play 已启动"
 
@@ -6473,8 +6509,8 @@ msgstr "测试通过"
 msgid "Leave blank to generate a new webhook key on save"
 msgstr ""
 
-#: screens/User/shared/UserForm.js:41
-#: screens/User/UserDetail/UserDetail.js:51
+#: screens/User/shared/UserForm.js:42
+#: screens/User/UserDetail/UserDetail.js:54
 #: screens/User/UserList/UserListItem.js:18
 msgid "System Auditor"
 msgstr "系统审核员"
@@ -6546,7 +6582,7 @@ msgstr "模块名称"
 #: screens/User/UserTokenList/UserTokenList.js:194
 #: screens/User/UserTokenList/UserTokenListItem.js:38
 #: screens/User/UserTokens/UserTokens.js:87
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:131
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:145
 msgid "Expires"
 msgstr "过期"
 
@@ -6566,16 +6602,16 @@ msgstr "过期"
 msgid "Lookup type"
 msgstr "查找类型"
 
-#: screens/Job/JobOutput/JobOutput.js:1122
-#: screens/Job/JobOutput/JobOutput.js:1125
+#: screens/Job/JobOutput/JobOutput.js:1124
+#: screens/Job/JobOutput/JobOutput.js:1127
 msgid "Cancel job"
 msgstr "取消作业"
 
 #: components/AddRole/AddResourceRole.js:36
 #: components/AddRole/AddResourceRole.js:51
 #: components/ResourceAccessList/ResourceAccessList.js:150
-#: screens/User/shared/UserForm.js:80
-#: screens/User/UserDetail/UserDetail.js:66
+#: screens/User/shared/UserForm.js:89
+#: screens/User/UserDetail/UserDetail.js:69
 #: screens/User/UserList/UserList.js:124
 #: screens/User/UserList/UserList.js:164
 #: screens/User/UserList/UserListItem.js:54
@@ -6699,7 +6735,7 @@ msgstr "源变量"
 msgid "Instance"
 msgstr "实例"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:118
+#: screens/Job/JobOutput/JobOutputSearch.js:125
 msgid "Including File"
 msgstr "包含文件"
 
@@ -6730,7 +6766,7 @@ msgstr "添加现有主机"
 msgid "Edit Organization"
 msgstr "编辑机构"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:126
+#: screens/Job/JobOutput/JobOutputSearch.js:133
 msgid "Playbook Complete"
 msgstr "Playbook 完成"
 
@@ -6832,7 +6868,7 @@ msgstr "查看作业设置"
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:152
 #: screens/Project/ProjectDetail/ProjectDetail.js:344
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.js:229
-#: screens/User/UserDetail/UserDetail.js:109
+#: screens/User/UserDetail/UserDetail.js:122
 msgid "edit"
 msgstr "编辑"
 
@@ -6871,8 +6907,8 @@ msgstr "时间"
 msgid "Create new instance group"
 msgstr "创建新实例组"
 
-#: screens/User/shared/UserForm.js:35
-#: screens/User/UserDetail/UserDetail.js:53
+#: screens/User/shared/UserForm.js:36
+#: screens/User/UserDetail/UserDetail.js:56
 #: screens/User/UserList/UserListItem.js:20
 msgid "Normal User"
 msgstr "普通用户"
@@ -6950,8 +6986,8 @@ msgid "Application not found."
 msgstr "未找到应用程序。"
 
 #: components/PromptDetail/PromptDetail.js:139
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:264
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:270
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:338
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:344
 msgid "Any"
 msgstr "任何"
 
@@ -6999,7 +7035,7 @@ msgstr "对等"
 msgid "User Roles"
 msgstr "用户角色"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:204
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:215
 msgid "min"
 msgstr "分钟"
 
@@ -7085,6 +7121,10 @@ msgstr "返回到主机"
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironment.helptext.js:22
 #~ msgid "Credential to authenticate with a protected container registry."
 #~ msgstr "使用受保护的容器注册表进行身份验证的凭证。"
+
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:207
+msgid "Context"
+msgstr ""
 
 #: screens/Project/ProjectDetail/ProjectDetail.js:299
 #: screens/Template/shared/WebhookSubForm.js:224
@@ -7195,11 +7235,11 @@ msgstr "注册表凭证"
 msgid "Host Details"
 msgstr "类型详情"
 
-#: screens/User/UserDetail/UserDetail.js:77
+#: screens/User/UserDetail/UserDetail.js:80
 msgid "Browser default"
 msgstr "浏览器默认"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:186
+#: screens/Job/JobOutput/JobOutputSearch.js:194
 msgid "Follow"
 msgstr "关注"
 
@@ -7332,8 +7372,8 @@ msgstr "选择 Playbook 目录"
 #: components/Workflow/WorkflowNodeHelp.js:61
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateListItem.js:21
 #: screens/Job/JobDetail/JobDetail.js:286
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:92
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:166
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:100
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:222
 msgid "Workflow Job Template"
 msgstr "工作流作业模板"
 
@@ -7422,14 +7462,14 @@ msgstr "删除一个或多个组失败。"
 
 #: components/AppContainer/PageHeaderToolbar.js:111
 #: components/AppContainer/PageHeaderToolbar.js:115
-msgid "Switch to dark mode"
-msgstr ""
+#~ msgid "Switch to dark mode"
+#~ msgstr ""
 
 #: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.js:197
 msgid "Confirm Disable Local Authorization"
 msgstr "确认禁用本地授权"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.js:766
+#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.js:784
 msgid "There was an error saving the workflow."
 msgstr "保存工作流时出错。"
 
@@ -7456,8 +7496,8 @@ msgstr "订阅合规性"
 #: components/LaunchButton/ReLaunchDropDown.js:43
 #: components/PromptDetail/PromptDetail.js:138
 #: screens/Metrics/Metrics.js:84
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:264
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:273
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:338
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:347
 msgid "All"
 msgstr "所有"
 
@@ -7501,7 +7541,7 @@ msgstr "没有找到项。"
 msgid "April"
 msgstr "4 月"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:111
+#: screens/Job/JobOutput/JobOutputSearch.js:118
 msgid "Host Failure"
 msgstr "主机故障"
 
@@ -7515,7 +7555,7 @@ msgstr "主机故障"
 msgid "View event details"
 msgstr "查看事件详情"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:107
+#: screens/Job/JobOutput/JobOutputSearch.js:114
 msgid "Gathering Facts"
 msgstr "收集事实"
 
@@ -7557,7 +7597,7 @@ msgstr "最近的作业"
 msgid "Failed to disassociate one or more instances."
 msgstr "解除关联一个或多个实例失败。"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:115
+#: screens/Job/JobOutput/JobOutputSearch.js:122
 msgid "Host Skipped"
 msgstr "主机已跳过"
 
@@ -7675,11 +7715,11 @@ msgstr "缓存超时（秒）"
 
 #: components/AppContainer/AppContainer.js:91
 #: components/AppContainer/AppContainer.js:160
-#: components/AppContainer/PageHeaderToolbar.js:211
+#: components/AppContainer/PageHeaderToolbar.js:231
 msgid "Logout"
 msgstr "退出"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:218
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:229
 msgid "sec"
 msgstr "秒"
 
@@ -7819,7 +7859,7 @@ msgstr "同步"
 #: screens/Template/shared/WorkflowJobTemplateForm.js:123
 #: screens/Template/Survey/SurveyQuestionForm.js:172
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:114
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:184
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:195
 #: screens/User/shared/UserTokenForm.js:69
 #: screens/User/UserOrganizations/UserOrganizationList.js:81
 #: screens/User/UserOrganizations/UserOrganizationListItem.js:20
@@ -7830,7 +7870,7 @@ msgstr "同步"
 #: screens/User/UserTokenList/UserTokenList.js:138
 #: screens/User/UserTokenList/UserTokenList.js:191
 #: screens/User/UserTokenList/UserTokenListItem.js:30
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:125
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:139
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:177
 msgid "Description"
 msgstr "描述"
@@ -7873,7 +7913,7 @@ msgstr ""
 msgid "Max concurrent jobs"
 msgstr "最大并发作业数"
 
-#: screens/User/UserDetail/UserDetail.js:120
+#: screens/User/UserDetail/UserDetail.js:133
 msgid "Delete User"
 msgstr "删除用户"
 
@@ -7913,7 +7953,7 @@ msgstr "编辑团队"
 msgid "User Interface"
 msgstr "用户界面"
 
-#: screens/Login/Login.js:315
+#: screens/Login/Login.js:324
 msgid "Sign in with GitHub Enterprise"
 msgstr "使用 GitHub Enterprise 登录"
 
@@ -7950,7 +7990,7 @@ msgstr "使用 GitHub Enterprise 登录"
 #: screens/Team/shared/TeamForm.js:49
 #: screens/Template/shared/WorkflowJobTemplateForm.js:137
 #: screens/Template/Survey/SurveyQuestionForm.js:30
-#: screens/User/shared/UserForm.js:173
+#: screens/User/shared/UserForm.js:195
 msgid "Select a value for this field"
 msgstr "为这个字段选择一个值"
 
@@ -7963,7 +8003,7 @@ msgstr "为这个字段选择一个值"
 msgid "View job {0}"
 msgstr "查看作业 {0}"
 
-#: screens/Login/Login.js:394
+#: screens/Login/Login.js:403
 msgid "Sign in with SAML {samlIDP}"
 msgstr "使用 SAML {samlIDP} 登陆"
 
@@ -7977,8 +8017,8 @@ msgstr "浏览"
 
 #: components/NotificationList/NotificationList.js:193
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:134
-#: screens/User/shared/UserForm.js:92
-#: screens/User/UserDetail/UserDetail.js:68
+#: screens/User/shared/UserForm.js:101
+#: screens/User/UserDetail/UserDetail.js:71
 #: screens/User/UserList/UserList.js:115
 #: screens/User/UserList/UserList.js:169
 #: screens/User/UserList/UserListItem.js:56
@@ -8089,7 +8129,7 @@ msgstr "开头不区分大小写的版本。"
 msgid "Unsaved changes modal"
 msgstr "未保存的修改 modal"
 
-#: screens/Login/Login.js:347
+#: screens/Login/Login.js:356
 msgid "Sign in with GitHub Enterprise Teams"
 msgstr "使用 GitHub Enterprise Teams 登录"
 
@@ -8128,7 +8168,7 @@ msgstr "Grafana URL"
 msgid "GitHub settings"
 msgstr "GitHub 设置"
 
-#: screens/Login/Login.js:285
+#: screens/Login/Login.js:294
 msgid "Sign in with GitHub Organizations"
 msgstr "使用 GitHub Organizations 登录"
 
@@ -8172,7 +8212,7 @@ msgstr "成功"
 #~ msgid "Concurrent jobs: If enabled, simultaneous runs of this job template will be allowed."
 #~ msgstr "并行作业：如果启用，将允许同时运行此作业模板。"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:130
+#: screens/Job/JobOutput/JobOutputSearch.js:137
 msgid "Task Started"
 msgstr "任务已启动"
 
@@ -8216,7 +8256,7 @@ msgstr "返回到管理作业"
 #~ msgid "Organization"
 #~ msgstr "组织"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:112
+#: screens/Job/JobOutput/JobOutputSearch.js:119
 msgid "Host OK"
 msgstr "主机正常"
 
@@ -8237,12 +8277,12 @@ msgstr "查看 Azure AD 设置"
 msgid "Hop"
 msgstr "Hop（跃点）"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:103
+#: screens/Job/JobOutput/JobOutputSearch.js:110
 msgid "Debug"
 msgstr "调试"
 
 #: components/DataListToolbar/DataListToolbar.js:116
-#: screens/Job/JobOutput/JobOutputSearch.js:145
+#: screens/Job/JobOutput/JobOutputSearch.js:153
 msgid "Clear all filters"
 msgstr "清除所有过滤器"
 
@@ -8269,6 +8309,7 @@ msgstr "返回到设置"
 #: screens/Template/Survey/SurveyList.js:109
 #: screens/Template/Survey/SurveyList.js:109
 #: screens/Template/Survey/SurveyListItem.js:67
+#: screens/User/UserDetail/UserDetail.js:88
 msgid "Default"
 msgstr "默认"
 
@@ -8316,7 +8357,7 @@ msgstr ""
 msgid "Drag a file here or browse to upload"
 msgstr "把文件拖放在这里或浏览以上传"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:186
+#: screens/Job/JobOutput/JobOutputSearch.js:194
 msgid "Unfollow"
 msgstr "未追随"
 
@@ -8329,7 +8370,7 @@ msgstr "字符串"
 #~ "is required for channels. To respond to or start a thread to a specific message add the parent message Id to the channel where the parent message Id is 16 digits. A dot (.) must be manually inserted after the 10th digit.  ie:#destination-channel, 1231257890.006423. See Slack"
 #~ msgstr "每行一个 Slack 频道。频道需要一个井号(#)。要响应一个特点信息或启动一个特定消息，将父信息 Id 添加到频道中，父信息 Id 为 16 位。在第 10 位数字后需要手动插入一个点(.)。例如：#destination-channel, 1231257890.006423。请参阅 Slack"
 
-#: screens/User/shared/UserForm.js:121
+#: screens/User/shared/UserForm.js:130
 msgid "Confirm Password"
 msgstr "确认密码"
 
@@ -8366,6 +8407,10 @@ msgstr "接收者列表"
 #: components/ContentError/ContentError.js:33
 msgid "Not Found"
 msgstr "未找到"
+
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:193
+msgid "Votes"
+msgstr ""
 
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:79
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:97
@@ -8618,8 +8663,8 @@ msgstr "防止实例组 Fallback"
 
 #: components/AppContainer/PageHeaderToolbar.js:111
 #: components/AppContainer/PageHeaderToolbar.js:115
-msgid "Switch to light mode"
-msgstr ""
+#~ msgid "Switch to light mode"
+#~ msgstr ""
 
 #: screens/InstanceGroup/shared/InstanceGroupForm.js:58
 msgid "Maximum number of forks to allow across all jobs running concurrently on this group. Zero means no limit will be enforced."
@@ -8666,8 +8711,8 @@ msgstr "此模板当前正被某些工作流节点使用。您确定要删除它
 msgid "First Run"
 msgstr "首次运行"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:123
-#: screens/Job/JobOutput/JobOutputSearch.js:124
+#: screens/Job/JobOutput/JobOutputSearch.js:130
+#: screens/Job/JobOutput/JobOutputSearch.js:131
 msgid "No Hosts Remaining"
 msgstr "没有剩余主机"
 
@@ -8718,7 +8763,7 @@ msgid "Job ID"
 msgstr "作业 ID"
 
 #: components/PromptDetail/PromptDetail.js:134
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:226
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:300
 msgid "Convergence"
 msgstr "趋同"
 
@@ -8751,7 +8796,7 @@ msgstr "注：选择它们的顺序设定执行优先级。选择多个来启用
 #~ msgid "Credentials that require passwords on launch are not permitted.  Please remove or replace the following credentials with a credential of the same type in order to proceed: {0}"
 #~ msgstr "不允许在启动时需要密码的凭证。请删除或替换为同一类型的凭证以便继续： {0}"
 
-#: screens/Login/Login.js:376
+#: screens/Login/Login.js:385
 msgid "Sign in with OIDC"
 msgstr "使用 OIDC 登陆"
 
@@ -8804,6 +8849,7 @@ msgstr "这是唯一显示客户端 secret 的时间。"
 #~ msgstr "工作流作业模板的可选说明。"
 
 #: screens/ActivityStream/ActivityStreamDescription.js:511
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:197
 msgid "approved"
 msgstr "批准"
 
@@ -8812,7 +8858,7 @@ msgid "Last Run"
 msgstr "最后运行"
 
 #. placeholder {0}: workflowApproval.name
-#: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:57
+#: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:59
 msgid "Failed to approve {0}."
 msgstr "批准 {0} 失败。"
 
@@ -8933,7 +8979,7 @@ msgstr "用户令牌失败。"
 #~ "assigned to this group when new instances come online."
 #~ msgstr "新实例上线时自动分配给此组的最小实例数量。"
 
-#: screens/Login/Login.js:395
+#: screens/Login/Login.js:404
 msgid "Sign in with SAML"
 msgstr "使用 SAML 登陆"
 
@@ -8950,7 +8996,7 @@ msgid "Enter injectors using either JSON or YAML syntax. Refer to the Ansible Co
 msgstr "使用 JSON 或 YAML 语法输入注入程序。示例语法请参阅 Ansible 控制器文档。"
 
 #: components/Workflow/WorkflowLegend.js:122
-#: screens/Job/JobOutput/JobOutputSearch.js:133
+#: screens/Job/JobOutput/JobOutputSearch.js:140
 msgid "Warning"
 msgstr "警告"
 
@@ -9095,7 +9141,7 @@ msgstr "工作流文档"
 msgid "January"
 msgstr "1 月"
 
-#: screens/Login/Login.js:240
+#: screens/Login/Login.js:249
 msgid "Sign in with Azure AD"
 msgstr "使用 Azure AD 登陆"
 
@@ -9120,6 +9166,10 @@ msgstr "GitHub"
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkDeleteModal.js:45
 msgid "Are you sure you want to remove this link?"
 msgstr "您确定要从删除这个链接吗？"
+
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:281
+msgid "A Jinja2 template rendered with upstream set_stats artifacts when the approval is created. Use this to show the approver relevant context from previous job steps. Available variables come from set_stats data of parent nodes."
+msgstr ""
 
 #: screens/Template/shared/WorkflowJobTemplate.helptext.js:14
 #~ msgid "Prompt for variables on launch."
@@ -9403,7 +9453,7 @@ msgstr "没有配置"
 #: components/JobList/JobListItem.js:63
 #: components/Schedule/ScheduleList/ScheduleListItem.js:39
 #: screens/Job/JobDetail/JobDetail.js:75
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:204
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:260
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:222
 msgid "Workflow Job"
 msgstr "工作流任务"
@@ -9482,9 +9532,9 @@ msgstr "更新选项"
 #: screens/Project/ProjectDetail/ProjectDetail.js:328
 #: screens/Team/TeamDetail/TeamDetail.js:57
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:367
-#: screens/User/UserDetail/UserDetail.js:99
+#: screens/User/UserDetail/UserDetail.js:112
 #: screens/User/UserTokenDetail/UserTokenDetail.js:66
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:184
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:240
 msgid "Last Modified"
 msgstr "最后修改"
 
@@ -9513,7 +9563,7 @@ msgstr "命令"
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:142
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:148
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:225
-#: screens/Job/JobOutput/JobOutputSearch.js:105
+#: screens/Job/JobOutput/JobOutputSearch.js:112
 #: screens/TopologyView/Legend.js:195
 msgid "Error"
 msgstr "错误"
@@ -9531,7 +9581,7 @@ msgstr "返回到组"
 msgid "A job has already been launched"
 msgstr "已启动一个作业"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:109
+#: screens/Job/JobOutput/JobOutputSearch.js:116
 msgid "Host Async OK"
 msgstr "主机异步正常"
 
@@ -9606,7 +9656,7 @@ msgstr "清单源"
 msgid "Cancel node removal"
 msgstr "取消节点删除"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:104
+#: screens/Job/JobOutput/JobOutputSearch.js:111
 msgid "Deprecated"
 msgstr "已弃用"
 
@@ -9687,7 +9737,7 @@ msgid "Generic OIDC settings"
 msgstr "通用 OIDC 设置"
 
 #: components/DataListToolbar/DataListToolbar.js:108
-#: screens/Job/JobOutput/JobOutputSearch.js:137
+#: screens/Job/JobOutput/JobOutputSearch.js:144
 msgid "Advanced"
 msgstr "高级"
 
@@ -9797,7 +9847,7 @@ msgstr "切换通知失败。"
 msgid "Webhook Key"
 msgstr "Webhook 密钥"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:123
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:131
 msgid "Select a Node Type"
 msgstr "选择节点类型"
 
@@ -9872,7 +9922,7 @@ msgstr "获取订阅"
 #: screens/Setting/shared/RevertFormActionGroup.js:18
 #: screens/Template/Survey/SurveyReorderModal.js:241
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.js:72
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:185
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:188
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerToolbar.js:168
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerToolbar.js:172
 msgid "Save"
@@ -9922,7 +9972,7 @@ msgstr ""
 msgid "Related search type"
 msgstr "相关的搜索类型"
 
-#: components/AppContainer/PageHeaderToolbar.js:197
+#: components/AppContainer/PageHeaderToolbar.js:217
 msgid "User details"
 msgstr "用户详情"
 
@@ -10045,8 +10095,8 @@ msgstr "事件"
 msgid "Group type"
 msgstr "组类型"
 
-#: screens/User/shared/UserForm.js:137
-#: screens/User/UserDetail/UserDetail.js:74
+#: screens/User/shared/UserForm.js:146
+#: screens/User/UserDetail/UserDetail.js:77
 msgid "User Type"
 msgstr "用户类型"
 
@@ -10089,7 +10139,7 @@ msgstr "必须选择一个清单"
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:247
 #: screens/Template/shared/JobTemplateForm.js:359
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:135
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:225
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:281
 msgid "Source Control Branch"
 msgstr "源控制分支"
 
@@ -10098,8 +10148,8 @@ msgid "This organization is currently being by other resources. Are you sure you
 msgstr "这个机构目前由其他资源使用。您确定要删除它吗？"
 
 #: screens/Team/TeamRoles/TeamRolesList.js:124
-#: screens/User/shared/UserForm.js:47
-#: screens/User/UserDetail/UserDetail.js:49
+#: screens/User/shared/UserForm.js:48
+#: screens/User/UserDetail/UserDetail.js:52
 #: screens/User/UserList/UserListItem.js:16
 #: screens/User/UserRoles/UserRolesList.js:124
 msgid "System Administrator"
@@ -10181,8 +10231,8 @@ msgstr "未选中时，将执行合并，将局部变量与外部源上的局部
 
 #: components/JobList/JobListItem.js:132
 #: screens/Job/JobDetail/JobDetail.js:656
-#: screens/Job/JobOutput/JobOutput.js:1157
-#: screens/Job/JobOutput/JobOutput.js:1158
+#: screens/Job/JobOutput/JobOutput.js:1159
+#: screens/Job/JobOutput/JobOutput.js:1160
 #: screens/Job/JobOutput/shared/OutputToolbar.js:182
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.js:192
 msgid "Job Cancel Error"
@@ -10216,7 +10266,7 @@ msgstr "出现故障的库存源"
 #: screens/Project/ProjectList/ProjectList.js:222
 #: screens/Project/ProjectList/ProjectListItem.js:167
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.js:64
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:142
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:156
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:226
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListItem.js:76
 msgid "Status"
@@ -10291,7 +10341,7 @@ msgstr "切换工具"
 msgid "Organization"
 msgstr "机构（Organization）"
 
-#: screens/Login/Login.js:186
+#: screens/Login/Login.js:195
 msgid "Your session has expired. Please log in to continue where you left off."
 msgstr "您的会话已过期。请登录以继续使用会话过期前所在的位置。"
 
@@ -10337,7 +10387,7 @@ msgstr "删除这些实例组可能会影响依赖它们的其他资源。您确
 msgid "Source Control Revision"
 msgstr ""
 
-#: screens/Job/JobOutput/JobOutputSearch.js:153
+#: screens/Job/JobOutput/JobOutputSearch.js:161
 msgid "Search is disabled while the job is running"
 msgstr "作业运行时会禁用搜索"
 
@@ -10353,7 +10403,7 @@ msgstr "第三"
 #~ msgid "Note: This instance may be re-associated with this instance group if it is managed by"
 #~ msgstr "注意：如果此实例由此实例组管理，则可以将其重新关联到此实例组"
 
-#: screens/Login/Login.js:255
+#: screens/Login/Login.js:264
 msgid "Sign in with Azure AD Tenant"
 msgstr ""
 
@@ -10519,8 +10569,8 @@ msgstr "{0, plural, one {This credential is currently being used by other resour
 #: components/AddRole/AddResourceRole.js:40
 #: components/AddRole/AddResourceRole.js:55
 #: components/ResourceAccessList/ResourceAccessList.js:154
-#: screens/User/shared/UserForm.js:86
-#: screens/User/UserDetail/UserDetail.js:67
+#: screens/User/shared/UserForm.js:95
+#: screens/User/UserDetail/UserDetail.js:70
 #: screens/User/UserList/UserList.js:128
 #: screens/User/UserList/UserList.js:167
 #: screens/User/UserList/UserListItem.js:55
@@ -10540,7 +10590,7 @@ msgid "and click on Update Revision on Launch"
 msgstr "点 Update Revision on Launch"
 
 #: components/About/About.js:48
-#: components/AppContainer/PageHeaderToolbar.js:168
+#: components/AppContainer/PageHeaderToolbar.js:188
 msgid "About"
 msgstr "关于"
 
@@ -10719,7 +10769,7 @@ msgstr "当父节点具有成功状态时执行。"
 msgid "Schedule Rules"
 msgstr "调度规则"
 
-#: screens/User/UserDetail/UserDetail.js:60
+#: screens/User/UserDetail/UserDetail.js:63
 #: screens/User/UserList/UserListItem.js:49
 msgid "SOCIAL"
 msgstr "社交"
@@ -10740,7 +10790,7 @@ msgstr "编辑详情"
 #: components/Workflow/WorkflowNodeHelp.js:191
 #: screens/HostMetrics/HostMetrics.js:141
 #: screens/HostMetrics/HostMetricsListItem.js:25
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:211
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:267
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListItem.js:59
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListItem.js:70
 msgid "Deleted"
@@ -10894,8 +10944,8 @@ msgstr "缺少"
 #: components/JobCancelButton/JobCancelButton.js:99
 #: components/JobList/JobListCancelButton.js:163
 #: components/JobList/JobListCancelButton.js:166
-#: screens/Job/JobOutput/JobOutput.js:1131
-#: screens/Job/JobOutput/JobOutput.js:1134
+#: screens/Job/JobOutput/JobOutput.js:1133
+#: screens/Job/JobOutput/JobOutput.js:1136
 msgid "Return"
 msgstr "返回"
 
@@ -10996,7 +11046,7 @@ msgstr "查看团队详情"
 msgid "Failed to get instance."
 msgstr "获取实例失败。"
 
-#: screens/User/shared/UserForm.js:59
+#: screens/User/shared/UserForm.js:61
 msgid "Use browser default"
 msgstr "使用浏览器默认"
 
@@ -11077,7 +11127,7 @@ msgstr "{numJobsToCancel, plural, one {{0}} other {{1}}}"
 msgid "Fit the graph to the available screen size"
 msgstr "使图像与可用屏幕大小匹配"
 
-#: screens/Job/JobOutput/JobOutput.js:1023
+#: screens/Job/JobOutput/JobOutput.js:1025
 msgid "Events processing complete."
 msgstr "事件处理完成。"
 
@@ -11308,7 +11358,7 @@ msgstr ""
 msgid "Edit workflow"
 msgstr "编辑工作流"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeEditModal.js:76
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeEditModal.js:79
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeViewModal.js:271
 msgid "Edit Node"
 msgstr "编辑节点"
@@ -11539,11 +11589,11 @@ msgstr "删除错误"
 msgid "Failed to delete one or more inventory sources."
 msgstr "删除一个或多个清单源失败。"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:283
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:357
 msgid "If specified, this field will be shown on the node instead of the resource name when viewing the workflow"
 msgstr "如果指定，则在查看工作流时此字段将显示在节点上，而不是资源名称"
 
-#: screens/Login/Login.js:270
+#: screens/Login/Login.js:279
 msgid "Sign in with GitHub"
 msgstr "使用 GitHub 登陆"
 
@@ -11559,7 +11609,7 @@ msgstr "删除这些库存源可能会影响依赖它们的其他资源。您确
 msgid "Unknown Project"
 msgstr "未知的工程ID"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:232
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:306
 msgid "Preconditions for running this node when there are multiple parents. Refer to the"
 msgstr "在有多个父对象时运行此节点的先决条件。请参阅"
 
@@ -11652,7 +11702,7 @@ msgstr "用于将字段保留为清单中的目标主机的模式。留空、所
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:185
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:276
 #: screens/Template/shared/JobTemplateForm.js:513
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:187
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:198
 msgid "Timeout"
 msgstr "超时"
 
@@ -11713,7 +11763,7 @@ msgstr "删除角色失败"
 #~ msgid "Approved - {0}.  See the Activity Stream for more information."
 #~ msgstr "已批准 - {0}。详情请参阅活动流。"
 
-#: screens/WorkflowApproval/shared/WorkflowDenyButton.js:26
+#: screens/WorkflowApproval/shared/WorkflowDenyButton.js:28
 msgid "Successfully Denied"
 msgstr "成功拒绝"
 
@@ -11755,7 +11805,7 @@ msgstr "选择一个模块"
 #~ "message. For more information, refer to the"
 #~ msgstr "您可以在消息中应用多个可能的变量。如需更多信息，请参阅"
 
-#: screens/User/UserDetail/UserDetail.js:58
+#: screens/User/UserDetail/UserDetail.js:61
 #: screens/User/UserList/UserListItem.js:42
 msgid "LDAP"
 msgstr "LDAP"
@@ -11772,7 +11822,7 @@ msgstr "工作流模板"
 
 #: components/NotificationList/NotificationListItem.js:45
 #: components/Workflow/WorkflowLegend.js:118
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:68
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:76
 msgid "Approval"
 msgstr "批准"
 
@@ -11927,6 +11977,10 @@ msgstr ""
 msgid "Provisioning fail"
 msgstr "置备失败"
 
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:238
+msgid "Whether the approval node is automatically approved or denied when the timeout expires."
+msgstr ""
+
 #: screens/Inventory/shared/Inventory.helptext.js:126
 msgid "Time in seconds to consider an inventory sync to be current. During job runs and callbacks the task system will evaluate the timestamp of the latest sync. If it is older than Cache Timeout, it is not considered current, and a new inventory sync will be performed."
 msgstr "将库存同步视为最新的时间（以秒为单位）。在作业运行和回调期间，任务系统将评估最新同步的时间戳。如果它早于缓存超时，则不视为当前，并将执行新的库存同步。"
@@ -11959,7 +12013,7 @@ msgstr "在保存时会生成一个新的 WEBHOOK url。"
 msgid "Back to execution environments"
 msgstr "返回到执行环境"
 
-#: screens/Job/JobOutput/shared/HostStatusBar.js:77
+#: screens/Job/JobOutput/shared/HostStatusBar.js:76
 msgid "Host status information for this job is unavailable."
 msgstr "此作业的主机状态信息不可用。"
 
@@ -11968,12 +12022,12 @@ msgid "This is the only time the token value and associated refresh token value 
 msgstr "这是唯一显示令牌值和关联刷新令牌值的时间。"
 
 #: components/ContentLoading/ContentLoading.js:26
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:378
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:381
 msgid "Loading"
 msgstr "正在加载"
 
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:302
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:307
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:358
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:363
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListItem.js:117
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListItem.js:123
 msgid "Cancel Workflow"
@@ -12005,9 +12059,13 @@ msgstr "请运行一个作业来填充此列表。"
 #: screens/Template/shared/JobTemplateForm.js:458
 #: screens/Template/shared/WorkflowJobTemplateForm.js:169
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:153
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:218
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:274
 msgid "Limit"
 msgstr "限制"
+
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:176
+msgid "Approvals"
+msgstr ""
 
 #: screens/Instances/Shared/InstanceForm.js:52
 msgid "Sets the current life cycle stage of this instance. Default is \"installed.\""
@@ -12093,7 +12151,7 @@ msgstr "删除问卷调查"
 msgid "Policy instance minimum"
 msgstr "策略实例最小值"
 
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:330
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:386
 msgid "Failed to delete workflow approval."
 msgstr "删除工作流批准失败。"
 
@@ -12129,7 +12187,7 @@ msgstr "混合"
 #~ msgid "Loading..."
 #~ msgstr "加载中..."
 
-#: screens/Job/JobOutput/JobOutputSearch.js:114
+#: screens/Job/JobOutput/JobOutputSearch.js:121
 msgid "Host Retry"
 msgstr "主机重试"
 
@@ -12167,8 +12225,10 @@ msgstr "开"
 msgid "If you only want to remove access for this particular user, please remove them from the team."
 msgstr "如果您只想删除这个特定用户的访问，请将其从团队中删除。"
 
-#: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:45
-#: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:48
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:252
+#: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:47
+#: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:50
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:185
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListApproveButton.js:34
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListApproveButton.js:50
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListApproveButton.js:58
@@ -12230,7 +12290,7 @@ msgid "Launch"
 msgstr "启动"
 
 #: components/JobList/JobListItem.js:343
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:161
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:217
 msgid "Explanation"
 msgstr "解释"
 
@@ -12253,7 +12313,7 @@ msgstr "问卷调查预览模态"
 #: components/StatusLabel/StatusLabel.js:42
 #: components/Workflow/WorkflowNodeHelp.js:115
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.js:37
-#: screens/Job/JobOutput/shared/HostStatusBar.js:36
+#: screens/Job/JobOutput/shared/HostStatusBar.js:35
 msgid "OK"
 msgstr "确定"
 
@@ -12382,7 +12442,7 @@ msgstr "创建者（用户名）"
 msgid "Playbook"
 msgstr "Playbook"
 
-#: screens/Login/Login.js:145
+#: screens/Login/Login.js:154
 msgid "Invalid username or password. Please try again."
 msgstr "无效的用户名或密码。请重试。"
 
@@ -12507,7 +12567,7 @@ msgstr "切换通知开始"
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:222
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:143
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.js:33
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:232
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:288
 msgid "Inventory"
 msgstr "清单"
 

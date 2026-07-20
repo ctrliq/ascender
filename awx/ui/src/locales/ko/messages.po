@@ -125,7 +125,7 @@ msgstr "두 노드 사이에 새 노드 추가"
 #~ "the branch needs to be \"pull/62/head\"."
 #~ msgstr "모든 참조에 대한 첫 번째 참조를 가져옵니다. Github pull 요청 번호 62에 대한 두 번째 참조를 가져옵니다. 이 예제에서 분기는 \"pull/62/head\"여야 합니다."
 
-#: screens/Job/JobOutput/JobOutputSearch.js:113
+#: screens/Job/JobOutput/JobOutputSearch.js:120
 msgid "Host Polling"
 msgstr "호스트 폴링"
 
@@ -376,7 +376,7 @@ msgstr "적용할 역할 선택"
 #: screens/Template/Survey/SurveyList.js:108
 #: screens/Template/Survey/SurveyListItem.js:64
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/ProjectsList.js:93
-#: screens/User/UserDetail/UserDetail.js:81
+#: screens/User/UserDetail/UserDetail.js:94
 #: screens/User/UserRoles/UserRolesList.js:152
 #: screens/User/UserRoles/UserRolesListItem.js:22
 msgid "Type"
@@ -465,7 +465,7 @@ msgstr "기본 인증 암호"
 msgid "Multiple Choice (multiple select)"
 msgstr "다중 선택(여러 선택)"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:128
+#: screens/Job/JobOutput/JobOutputSearch.js:135
 msgid "Running Handlers"
 msgstr "실행 중인 Handlers"
 
@@ -516,7 +516,7 @@ msgstr "시작자"
 
 #: screens/ActivityStream/ActivityStream.js:300
 #: screens/ActivityStream/ActivityStreamListItem.js:42
-#: screens/Job/JobOutput/JobOutputSearch.js:100
+#: screens/Job/JobOutput/JobOutputSearch.js:107
 msgid "Event"
 msgstr "이벤트"
 
@@ -600,7 +600,7 @@ msgstr "옵션"
 #~ msgid "For more information, refer to the"
 #~ msgstr "자세한 내용은 다음을 참조하십시오."
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:297
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:371
 msgid "Maximum number of times this node's job is automatically retried after failing before its failure paths are followed. Canceled jobs are never retried."
 msgstr ""
 
@@ -727,7 +727,7 @@ msgstr "호스트 통계"
 msgid "Create new credential Type"
 msgstr "새 인증 정보 유형 만들기"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeAddModal.js:106
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeAddModal.js:109
 msgid "Add Node"
 msgstr "노드 추가"
 
@@ -749,7 +749,7 @@ msgstr "변수는 JSON 또는 YAML 구문이어야 합니다. 라디오 버튼�
 msgid "Repeat frequency"
 msgstr "반복 빈도"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:106
+#: screens/Job/JobOutput/JobOutputSearch.js:113
 msgid "File Difference"
 msgstr "파일 차이점"
 
@@ -825,7 +825,7 @@ msgstr "예외 빈도"
 msgid "Select an organization before editing the default execution environment."
 msgstr "기본 실행 환경을 편집하기 전에 조직을 선택합니다."
 
-#: screens/Job/JobOutput/JobOutputSearch.js:121
+#: screens/Job/JobOutput/JobOutputSearch.js:128
 msgid "Item Skipped"
 msgstr "건너뛴 항목"
 
@@ -904,7 +904,7 @@ msgstr "토큰 새로 고침"
 msgid "Host details"
 msgstr "호스트 세부 정보"
 
-#: screens/User/shared/UserForm.js:185
+#: screens/User/shared/UserForm.js:207
 msgid "This value does not match the password you entered previously. Please confirm that password."
 msgstr "이 값은 이전에 입력한 암호와 일치하지 않습니다. 암호를 확인하십시오."
 
@@ -975,7 +975,7 @@ msgstr "경과된 시간"
 #~ msgid "{interval, plural, one {# year} other {# years}}"
 #~ msgstr "{interval, plural, one {# 년} other {# 년}}"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:74
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:82
 msgid "Inventory Source Sync"
 msgstr "인벤토리 소스 동기화"
 
@@ -1033,7 +1033,7 @@ msgstr "템플릿을 복사하지 못했습니다."
 msgid "Year"
 msgstr "년"
 
-#: screens/Job/JobOutput/JobOutput.js:1034
+#: screens/Job/JobOutput/JobOutput.js:1036
 msgid "Reload output"
 msgstr "출력 다시 로드"
 
@@ -1129,8 +1129,8 @@ msgid "Copy full revision to clipboard."
 msgstr "클립보드에 전체 버전을 복사합니다."
 
 #: components/PromptDetail/PromptDetail.js:147
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:295
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:296
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:369
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:370
 msgid "Max Retries"
 msgstr ""
 
@@ -1155,7 +1155,7 @@ msgstr "이 인스턴스가 정책에 의해 관리되는지 여부를 제어합
 
 #: components/JobList/JobList.js:257
 #: screens/Job/JobDetail/JobDetail.js:262
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:188
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:244
 msgid "Finished"
 msgstr "완료"
 
@@ -1333,7 +1333,7 @@ msgstr "노드 유형"
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:127
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:450
 #: screens/Template/Survey/SurveyQuestionForm.js:270
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:240
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:314
 msgid "documentation"
 msgstr "문서"
 
@@ -1353,7 +1353,7 @@ msgstr "팩토리 기본 설정으로 되돌립니다."
 msgid "Filter by failed jobs"
 msgstr "실패한 작업으로 필터링"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:127
+#: screens/Job/JobOutput/JobOutputSearch.js:134
 msgid "Playbook Started"
 msgstr "플레이북 시작됨"
 
@@ -1420,7 +1420,7 @@ msgstr "이메일"
 msgid "Job Type"
 msgstr "작업 유형"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:122
+#: screens/Job/JobOutput/JobOutputSearch.js:129
 msgid "No Hosts Matched"
 msgstr "일치하는 호스트가 없음"
 
@@ -1432,7 +1432,7 @@ msgstr "그룹 별로만"
 #~ msgid "More information for"
 #~ msgstr "더 많은 정보"
 
-#: screens/Login/Login.js:147
+#: screens/Login/Login.js:156
 msgid "There was a problem logging in. Please try again."
 msgstr "로그인하는 데 문제가 있었습니다. 다시 시도하십시오."
 
@@ -1455,7 +1455,7 @@ msgstr "프로토콜"
 msgid "option to the"
 msgstr "옵션"
 
-#: screens/User/UserDetail/UserDetail.js:135
+#: screens/User/UserDetail/UserDetail.js:148
 msgid "Failed to delete user."
 msgstr "사용자를 삭제하지 못했습니다."
 
@@ -1514,7 +1514,7 @@ msgstr ""
 msgid "Soft delete"
 msgstr "소프트 삭제"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:92
+#: screens/Job/JobOutput/JobOutputSearch.js:99
 msgid "Stdout"
 msgstr "Stdout"
 
@@ -1539,7 +1539,7 @@ msgstr "권한 에스컬레이션 활성화"
 msgid "Filter..."
 msgstr ""
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:208
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:219
 msgid "Timeout seconds"
 msgstr "시간 제한 (초)"
 
@@ -1876,7 +1876,7 @@ msgstr ""
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.js:88
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.js:121
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.js:153
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:179
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:190
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/ProjectsList.js:68
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/ProjectsList.js:88
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/SystemJobTemplatesList.js:74
@@ -1892,7 +1892,7 @@ msgstr ""
 #: screens/User/UserTeams/UserTeamList.js:230
 #: screens/User/UserTeams/UserTeamListItem.js:17
 #: screens/User/UserTokenList/UserTokenListItem.js:22
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:120
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:134
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:172
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:221
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListItem.js:53
@@ -1930,7 +1930,7 @@ msgstr "서브스크립션 매니페스트"
 #: components/Workflow/WorkflowNodeHelp.js:103
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:44
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:138
-#: screens/Job/JobOutput/shared/HostStatusBar.js:48
+#: screens/Job/JobOutput/shared/HostStatusBar.js:47
 #: screens/Job/JobOutput/shared/OutputToolbar.js:155
 msgid "Failed"
 msgstr "실패"
@@ -2063,7 +2063,7 @@ msgstr "키"
 #: components/AddRole/AddResourceRole.js:47
 #: components/ResourceAccessList/ResourceAccessList.js:145
 #: components/ResourceAccessList/ResourceAccessList.js:198
-#: screens/Login/Login.js:220
+#: screens/Login/Login.js:229
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:188
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:303
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:355
@@ -2074,8 +2074,8 @@ msgstr "키"
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:548
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:94
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:214
-#: screens/User/shared/UserForm.js:98
-#: screens/User/UserDetail/UserDetail.js:70
+#: screens/User/shared/UserForm.js:107
+#: screens/User/UserDetail/UserDetail.js:73
 #: screens/User/UserList/UserList.js:120
 #: screens/User/UserList/UserList.js:161
 #: screens/User/UserList/UserListItem.js:35
@@ -2114,7 +2114,7 @@ msgstr "플레이북 실행"
 msgid "Go to first page"
 msgstr "첫 페이지로 이동"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:119
+#: screens/Job/JobOutput/JobOutputSearch.js:126
 msgid "Item Failed"
 msgstr "항목 실패"
 
@@ -2188,7 +2188,7 @@ msgstr ""
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateList.js:97
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateListItem.js:20
 #: screens/Job/JobDetail/JobDetail.js:271
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:80
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:88
 msgid "Job Template"
 msgstr "작업 템플릿"
 
@@ -2263,12 +2263,12 @@ msgstr "필드는 지정된 정규식과 일치합니다."
 msgid "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 msgstr "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 
-#: screens/Login/Login.js:218
+#: screens/Login/Login.js:227
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:143
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:103
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:222
 #: screens/Template/Survey/SurveyQuestionForm.js:82
-#: screens/User/shared/UserForm.js:110
+#: screens/User/shared/UserForm.js:119
 msgid "Password"
 msgstr "암호"
 
@@ -2382,7 +2382,7 @@ msgid "pages"
 msgstr "페이지"
 
 #: components/StatusLabel/StatusLabel.js:48
-#: screens/Job/JobOutput/shared/HostStatusBar.js:40
+#: screens/Job/JobOutput/shared/HostStatusBar.js:39
 msgid "Skipped"
 msgstr "건너뜀"
 
@@ -2576,7 +2576,7 @@ msgstr "{0} (삭제됨)"
 msgid "The inventory that this host belongs to."
 msgstr "이 호스트가 속할 인벤토리입니다."
 
-#: screens/Login/Login.js:208
+#: screens/Login/Login.js:217
 msgid "Log In"
 msgstr "로그인"
 
@@ -2629,7 +2629,7 @@ msgstr "부울 방식"
 #~ msgid "Allow branch override"
 #~ msgstr "분기 덮어쓰기 허용"
 
-#: components/AppContainer/PageHeaderToolbar.js:203
+#: components/AppContainer/PageHeaderToolbar.js:223
 msgid "User Details"
 msgstr "사용자 세부 정보"
 
@@ -2654,7 +2654,7 @@ msgstr "업그레이드 또는 갱신할 준비가 되었으면 <0>에 문의</0
 msgid "Enable log system tracking facts individually"
 msgstr "로그 시스템 추적 사실을 개별적으로 활성화"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/useWorkflowNodeSteps.js:388
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/useWorkflowNodeSteps.js:394
 msgid "Job Templates with credentials that prompt for passwords cannot be selected when creating or editing nodes"
 msgstr "노드를 생성하거나 편집할 때 암호를 입력하라는 인증 정보가 있는 작업 템플릿을 선택할 수 없습니다."
 
@@ -2694,8 +2694,8 @@ msgid "Microsoft Azure Resource Manager"
 msgstr "Microsoft Azure Resource Manager"
 
 #: screens/Job/JobDetail/JobDetail.js:678
-#: screens/Job/JobOutput/JobOutput.js:1146
-#: screens/Job/JobOutput/JobOutput.js:1147
+#: screens/Job/JobOutput/JobOutput.js:1148
+#: screens/Job/JobOutput/JobOutput.js:1149
 #: screens/Job/WorkflowOutput/WorkflowOutput.js:138
 msgid "Job Delete Error"
 msgstr "작업 삭제 오류"
@@ -2847,7 +2847,7 @@ msgstr "왼쪽의 오류 보기"
 #~ "of time required to complete an update."
 #~ msgstr "업데이트를 수행하기 전에 전체 로컬 리포지토리를 삭제합니다. 리포지토리 크기에 따라 업데이트를 완료하는 데 필요한 시간이 크게 증가할 수 있습니다."
 
-#: screens/Job/JobOutput/JobOutputSearch.js:116
+#: screens/Job/JobOutput/JobOutputSearch.js:123
 msgid "Host Started"
 msgstr "호스트 시작됨"
 
@@ -2877,7 +2877,7 @@ msgstr "HTTP 헤더"
 msgid "Zoom Out"
 msgstr "축소"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:120
+#: screens/Job/JobOutput/JobOutputSearch.js:127
 msgid "Item OK"
 msgstr "항목 확인"
 
@@ -2922,8 +2922,8 @@ msgstr "0 (정상)"
 
 #: components/Workflow/WorkflowNodeHelp.js:146
 #: components/Workflow/WorkflowNodeHelp.js:182
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:281
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:282
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:355
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:356
 msgid "Node Alias"
 msgstr "노드 별칭"
 
@@ -2994,7 +2994,7 @@ msgstr "쉼표 없이 한 줄에 하나의 주석 태그를 사용합니다."
 #~ "0은 제한이 적용되지 않음을 의미합니다."
 
 #: components/StatusLabel/StatusLabel.js:45
-#: screens/Job/JobOutput/shared/HostStatusBar.js:52
+#: screens/Job/JobOutput/shared/HostStatusBar.js:51
 #: screens/Job/JobOutput/shared/OutputToolbar.js:145
 msgid "Unreachable"
 msgstr "연결할 수 없음"
@@ -3102,7 +3102,7 @@ msgstr "JSON 또는 YAML 구문을 사용하여 입력합니다. 구문 예제�
 msgid "Create New Host"
 msgstr "새 호스트 만들기"
 
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:200
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:256
 msgid "Workflow job details"
 msgstr "워크플로우 작업 세부 정보"
 
@@ -3143,7 +3143,7 @@ msgstr "SSH 암호"
 msgid "View OIDC settings"
 msgstr "OIDC 설정 보기"
 
-#: components/AppContainer/PageHeaderToolbar.js:160
+#: components/AppContainer/PageHeaderToolbar.js:180
 msgid "Help"
 msgstr ""
 
@@ -3205,7 +3205,7 @@ msgstr "실행 중인 작업"
 msgid "Client identifier"
 msgstr "클라이언트 식별자"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:110
+#: screens/Job/JobOutput/JobOutputSearch.js:117
 msgid "Host Failed"
 msgstr "호스트 실패"
 
@@ -3245,8 +3245,8 @@ msgstr "팀"
 #~ msgid "Cancel Sync"
 #~ msgstr ""
 
-#: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:44
-#: screens/WorkflowApproval/shared/WorkflowDenyButton.js:37
+#: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:46
+#: screens/WorkflowApproval/shared/WorkflowDenyButton.js:38
 msgid "This workflow has already been acted on"
 msgstr "이 워크플로우는 이미 수행되었습니다."
 
@@ -3293,7 +3293,7 @@ msgstr "사용된 용량"
 msgid "Instance ID"
 msgstr "인스턴스 ID"
 
-#: components/AppContainer/PageHeaderToolbar.js:146
+#: components/AppContainer/PageHeaderToolbar.js:166
 msgid "Info"
 msgstr "정보"
 
@@ -3301,7 +3301,7 @@ msgstr "정보"
 msgid "<0>Note: Instances may be re-associated with this instance group if they are managed by <1>policy rules.</1></0>"
 msgstr "< 0 > 참고: < 1 > 정책 규칙에 의해 관리되는 경우 인스턴스가 이 인스턴스 그룹과 다시 연결될 수 있습니다. </1 > </0 >"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:194
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:205
 msgid "Timeout minutes"
 msgstr "시간 제한 (분)"
 
@@ -3310,8 +3310,10 @@ msgstr "시간 제한 (분)"
 msgid "This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?"
 msgstr "이 인벤토리 소스는 현재 이를 사용하는 다른 리소스에서 사용되고 있습니다. 삭제하시겠습니까?"
 
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:251
 #: screens/WorkflowApproval/shared/WorkflowDenyButton.js:38
 #: screens/WorkflowApproval/shared/WorkflowDenyButton.js:45
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:185
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListDenyButton.js:33
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListDenyButton.js:49
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListDenyButton.js:57
@@ -3353,8 +3355,8 @@ msgstr "{intervalValue, plural, one {hour} other {hours}}"
 #: screens/Inventory/shared/ConstructedInventoryForm.js:39
 #: screens/Inventory/shared/FederatedInventoryForm.js:27
 #: screens/Template/shared/JobTemplateForm.js:176
-#: screens/User/shared/UserForm.js:114
-#: screens/User/shared/UserForm.js:125
+#: screens/User/shared/UserForm.js:123
+#: screens/User/shared/UserForm.js:134
 msgid "This field must not be blank"
 msgstr "이 필드는 비워 둘 수 없습니다."
 
@@ -3385,7 +3387,7 @@ msgstr ""
 msgid "View all Inventories."
 msgstr "모든 인벤토리 보기"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:108
+#: screens/Job/JobOutput/JobOutputSearch.js:115
 msgid "Host Async Failure"
 msgstr "호스트 동기화 실패"
 
@@ -3461,9 +3463,9 @@ msgstr "비교 값보다 적거나 같습니다."
 #: screens/Template/Survey/SurveyList.js:71
 #: screens/Template/Survey/SurveyToolbar.js:95
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:271
-#: screens/User/UserDetail/UserDetail.js:124
+#: screens/User/UserDetail/UserDetail.js:137
 #: screens/User/UserTokenDetail/UserTokenDetail.js:81
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:319
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:375
 msgid "Delete"
 msgstr "삭제"
 
@@ -3473,7 +3475,7 @@ msgid "By default, we collect and transmit analytics data on the service usage t
 msgstr "기본적으로 서비스 사용에 대한 분석 데이터를 수집하여 Red Hat으로 전송합니다. 서비스에서 수집하는 데이터에는 두 가지 범주가 있습니다. 자세한 내용은 < 0 > {0} </0 > 을 (를) 참조하십시오. 이 기능을 비활성화하려면 다음 확인란의 선택을 취소하십시오."
 
 #: components/StatusLabel/StatusLabel.js:53
-#: screens/Job/JobOutput/shared/HostStatusBar.js:44
+#: screens/Job/JobOutput/shared/HostStatusBar.js:43
 msgid "Changed"
 msgstr "변경됨"
 
@@ -3510,7 +3512,7 @@ msgid "Click this button to verify connection to the secret management system us
 msgstr "이 버튼을 클릭하여 선택한 인증 정보 및 지정된 입력을 사용하여 시크릿 관리 시스템에 대한 연결을 확인합니다."
 
 #: components/Workflow/WorkflowLegend.js:108
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:86
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:94
 msgid "Project Sync"
 msgstr "프로젝트 동기화"
 
@@ -3555,6 +3557,11 @@ msgstr ""
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginSelected.js:47
 msgid "This field will be retrieved from an external secret management system using the specified credential."
 msgstr "이 필드는 지정된 인증 정보를 사용하여 외부 시크릿 관리 시스템에서 검색됩니다."
+
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:277
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:287
+msgid "Context Template"
+msgstr ""
 
 #: screens/Job/JobOutput/HostEventModal.js:183
 msgid "No YAML Available"
@@ -3631,10 +3638,10 @@ msgstr "GitHub 팀"
 #: screens/Team/TeamDetail/TeamDetail.js:53
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:362
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:189
-#: screens/User/UserDetail/UserDetail.js:94
+#: screens/User/UserDetail/UserDetail.js:107
 #: screens/User/UserTokenDetail/UserTokenDetail.js:61
 #: screens/User/UserTokenList/UserTokenList.js:150
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:179
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:235
 msgid "Created"
 msgstr "생성됨"
 
@@ -3722,7 +3729,7 @@ msgstr "8월"
 msgid "View smart inventory host details"
 msgstr "스마트 인벤토리 호스트 세부 정보 보기"
 
-#: screens/Login/Login.js:362
+#: screens/Login/Login.js:371
 msgid "Sign in with Google"
 msgstr "Google로 로그인"
 
@@ -3881,7 +3888,7 @@ msgstr "최소 길이"
 msgid "Smart host filter"
 msgstr "스마트 호스트 필터"
 
-#: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:29
+#: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:31
 msgid "Successfully Approved"
 msgstr "성공적으로 승인됨"
 
@@ -3931,7 +3938,7 @@ msgid "This table gives a few useful parameters of the constructed\n"
 "               inventory plugin. For the full list of parameters "
 msgstr ""
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:255
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:329
 msgid "Convergence select"
 msgstr "통합 선택"
 
@@ -3955,7 +3962,7 @@ msgstr "완료"
 #: screens/InstanceGroup/Instances/InstanceListItem.js:242
 #: screens/Instances/InstanceDetail/InstanceDetail.js:288
 #: screens/Instances/InstanceList/InstanceListItem.js:260
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:242
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:316
 msgid "for more info."
 msgstr "자세한 내용"
 
@@ -3995,8 +4002,8 @@ msgstr "주소"
 msgid "After number of occurrences"
 msgstr "발생 횟수 이후"
 
-#: screens/User/shared/UserForm.js:156
-#: screens/User/UserDetail/UserDetail.js:76
+#: screens/User/shared/UserForm.js:165
+#: screens/User/UserDetail/UserDetail.js:79
 msgid "Preferred Language"
 msgstr "기본 언어"
 
@@ -4320,7 +4327,7 @@ msgstr "인증 정보 삭제"
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:241
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:243
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeViewModal.js:274
-#: screens/User/UserDetail/UserDetail.js:113
+#: screens/User/UserDetail/UserDetail.js:126
 msgid "Edit"
 msgstr "편집"
 
@@ -4361,6 +4368,10 @@ msgstr "대상 SMS 번호"
 #: screens/Job/JobDetail/JobDetail.js:452
 msgid "No timeout specified"
 msgstr "시간 초과가 지정되지 않음"
+
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:183
+msgid "On Timeout"
+msgstr ""
 
 #: screens/Inventory/shared/Inventory.helptext.js:197
 msgid "Prevent Instance Group Fallback: If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on."
@@ -4511,7 +4522,7 @@ msgstr ""
 #~ msgid "Failed to delete project."
 #~ msgstr "프로젝트를 삭제하지 못했습니다."
 
-#: screens/Job/JobOutput/JobOutputSearch.js:131
+#: screens/Job/JobOutput/JobOutputSearch.js:138
 msgid "Variables Prompted"
 msgstr "프롬프트 변수"
 
@@ -4555,12 +4566,17 @@ msgstr "저장하지 않고 종료"
 msgid "Date operator select"
 msgstr ""
 
+#: components/AppContainer/PageHeaderToolbar.js:111
+#: components/AppContainer/PageHeaderToolbar.js:117
+msgid "Theme"
+msgstr ""
+
 #: screens/Inventory/shared/ConstructedInventoryHint.js:247
 msgid "Filter on nested group name"
 msgstr "중첩된 그룹 이름 필터링"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.js:762
-#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.js:764
+#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.js:780
+#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.js:782
 msgid "Error saving the workflow!"
 msgstr "워크플로우를 저장하는 동안 오류가 발생했습니다!"
 
@@ -4610,7 +4626,7 @@ msgstr "이 워크플로우의 모든 후속 노드가 취소됩니다."
 msgid "Client Identifier"
 msgstr "클라이언트 식별자"
 
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:308
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:364
 msgid "This will cancel all subsequent nodes in this workflow."
 msgstr "이 워크플로우의 모든 후속 노드가 취소됩니다."
 
@@ -4695,8 +4711,8 @@ msgid "RADIUS"
 msgstr "RADIUS"
 
 #: components/JobCancelButton/JobCancelButton.js:68
-#: screens/Job/JobOutput/JobOutput.js:1114
-#: screens/Job/JobOutput/JobOutput.js:1115
+#: screens/Job/JobOutput/JobOutput.js:1116
+#: screens/Job/JobOutput/JobOutput.js:1117
 msgid "Cancel Job"
 msgstr "작업 취소"
 
@@ -4704,7 +4720,7 @@ msgstr "작업 취소"
 msgid "Instance State"
 msgstr "인스턴스 상태"
 
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:149
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:163
 msgid "Actor"
 msgstr "작업자"
 
@@ -4822,28 +4838,28 @@ msgstr "조직 세부 정보 보기"
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:545
 #: screens/Template/TemplateSurvey.js:137
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:279
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:196
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:211
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:362
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:199
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:214
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:365
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.js:378
 #: screens/TopologyView/MeshGraph.js:420
 #: screens/TopologyView/Tooltip.js:198
-#: screens/User/UserDetail/UserDetail.js:132
+#: screens/User/UserDetail/UserDetail.js:145
 #: screens/User/UserList/UserList.js:197
 #: screens/User/UserRoles/UserRolesList.js:240
 #: screens/User/UserRoles/UserRolesList.js:251
 #: screens/User/UserTeams/UserTeamList.js:257
 #: screens/User/UserTokenDetail/UserTokenDetail.js:88
 #: screens/User/UserTokenList/UserTokenList.js:218
-#: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:54
+#: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:56
 #: screens/WorkflowApproval/shared/WorkflowDenyButton.js:51
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:327
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:383
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:249
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:268
 msgid "Error!"
 msgstr "오류!"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:117
+#: screens/Job/JobOutput/JobOutputSearch.js:124
 msgid "Host Unreachable"
 msgstr "호스트에 연결할 수 없음"
 
@@ -4933,7 +4949,7 @@ msgstr "프로젝트 편집"
 msgid "Tuesday"
 msgstr "화요일"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:132
+#: screens/Job/JobOutput/JobOutputSearch.js:139
 msgid "Verbose"
 msgstr "상세 정보"
 
@@ -4942,10 +4958,11 @@ msgid "Failed to toggle host."
 msgstr "호스트를 전환하지 못했습니다."
 
 #: screens/ActivityStream/ActivityStreamDescription.js:519
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:197
 msgid "denied"
 msgstr "거부됨"
 
-#: screens/Login/Login.js:331
+#: screens/Login/Login.js:340
 msgid "Sign in with GitHub Enterprise Organizations"
 msgstr "GitHub Enterprise 조직으로 로그인"
 
@@ -5041,7 +5058,7 @@ msgstr "SAML 설정 보기"
 #: components/JobList/JobList.js:245
 #: components/StatusLabel/StatusLabel.js:52
 #: components/Workflow/WorkflowNodeHelp.js:109
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:192
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:248
 msgid "Canceled"
 msgstr "취소됨"
 
@@ -5106,7 +5123,7 @@ msgstr "모든 프로젝트 보기."
 msgid "0 (Warning)"
 msgstr "0 (경고)"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:129
+#: screens/Job/JobOutput/JobOutputSearch.js:136
 msgid "System Warning"
 msgstr "시스템 경고"
 
@@ -5194,7 +5211,7 @@ msgstr "삭제할 질문을 선택"
 #: screens/Template/shared/JobTemplateForm.js:431
 #: screens/Template/shared/WorkflowJobTemplateForm.js:222
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:228
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:273
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:329
 msgid "Variables"
 msgstr "변수"
 
@@ -5245,6 +5262,11 @@ msgstr "작업"
 msgid "Unreachable Hosts"
 msgstr "연결할 수 없는 호스트"
 
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:234
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:245
+msgid "On timeout"
+msgstr ""
+
 #: screens/Team/Teams.js:17
 #: screens/Team/Teams.js:28
 msgid "Create New Team"
@@ -5268,7 +5290,7 @@ msgstr "텍스트 영역"
 msgid "View User Interface settings"
 msgstr "사용자 인터페이스 설정 보기"
 
-#: screens/Login/Login.js:300
+#: screens/Login/Login.js:309
 msgid "Sign in with GitHub Teams"
 msgstr "GitHub 팀으로 로그인"
 
@@ -5279,6 +5301,10 @@ msgstr "인벤토리가 성공적으로 복사됨"
 #: screens/Template/shared/JobTemplate.helptext.js:80
 #~ msgid "If enabled, this will store gathered facts so they can be viewed at the host level. Facts are persisted and injected into the fact cache at runtime."
 #~ msgstr "활성화하면 수집된 사실이 저장되어 호스트 수준에서 볼 수 있습니다. 팩트는 지속되며 런타임 시 팩트 캐시에 주입됩니다."
+
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:260
+msgid "The number of distinct users that must approve before the workflow continues. A single denial always denies the node."
+msgstr ""
 
 #: screens/Instances/InstanceEdit/InstanceEdit.js:82
 msgid "View all Instances."
@@ -5341,7 +5367,7 @@ msgstr "접기"
 #: screens/Template/shared/JobTemplateForm.js:416
 #: screens/Template/shared/WorkflowJobTemplateForm.js:205
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:208
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:253
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:309
 msgid "Labels"
 msgstr "레이블"
 
@@ -5571,9 +5597,14 @@ msgstr "TLS 사용"
 #: components/Workflow/WorkflowLegend.js:112
 #: components/Workflow/WorkflowNodeHelp.js:77
 #: screens/Job/JobDetail/JobDetail.js:74
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:103
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:111
 msgid "Management Job"
 msgstr "관리 작업"
+
+#: screens/User/shared/UserForm.js:173
+#: screens/User/UserDetail/UserDetail.js:84
+msgid "Preferred Theme"
+msgstr ""
 
 #: screens/Instances/Shared/InstanceForm.js:27
 #: screens/Inventory/shared/InventorySourceForm.js:85
@@ -5668,7 +5699,7 @@ msgstr "빈도 세부 정보"
 #: components/Schedule/shared/SchedulePromptableFields.js:133
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.js:37
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.js:58
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:186
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:189
 msgid "Next"
 msgstr "다음"
 
@@ -5682,7 +5713,7 @@ msgstr "다음"
 msgid "Create"
 msgstr "만들기"
 
-#: screens/Job/JobOutput/JobOutput.js:1138
+#: screens/Job/JobOutput/JobOutput.js:1140
 msgid "Are you sure you want to submit the request to cancel this job?"
 msgstr "이 작업을 취소하기 위한 요청을 제출하시겠습니까?"
 
@@ -5779,7 +5810,7 @@ msgstr "자동화"
 #: screens/Instances/InstancePeers/InstancePeerList.js:250
 #: screens/Instances/InstancePeers/InstancePeerList.js:312
 #: screens/Instances/InstancePeers/InstancePeerListItem.js:59
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:119
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:127
 msgid "Node Type"
 msgstr "노드 유형"
 
@@ -5853,7 +5884,7 @@ msgstr "지난 2주"
 msgid "Back"
 msgstr "뒤로"
 
-#: screens/User/UserDetail/UserDetail.js:89
+#: screens/User/UserDetail/UserDetail.js:102
 msgid "Last Login"
 msgstr "마지막 로그인"
 
@@ -5869,7 +5900,7 @@ msgstr "복사 오류"
 msgid "Back to applications"
 msgstr "애플리케이션으로 돌아가기"
 
-#: screens/User/UserDetail/UserDetail.js:83
+#: screens/User/UserDetail/UserDetail.js:96
 msgid "login type"
 msgstr "로그인 유형"
 
@@ -6092,7 +6123,7 @@ msgstr "성공한 작업으로 필터링"
 msgid "Red Hat, Inc."
 msgstr "Red Hat, Inc."
 
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:299
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:355
 msgid "Workflow Cancelled "
 msgstr ""
 
@@ -6154,7 +6185,7 @@ msgstr "선택한 작업 취소"
 msgid "Started"
 msgstr "시작됨"
 
-#: components/AppContainer/PageHeaderToolbar.js:120
+#: components/AppContainer/PageHeaderToolbar.js:140
 msgid "Pending Workflow Approvals"
 msgstr "워크플로우 승인 보류 중"
 
@@ -6176,7 +6207,7 @@ msgstr "캐노티컬"
 #: components/Workflow/WorkflowNodeHelp.js:168
 #: screens/Job/JobOutput/shared/OutputToolbar.js:167
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.js:179
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:196
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:252
 msgid "Elapsed"
 msgstr "경과됨"
 
@@ -6187,6 +6218,11 @@ msgstr "3 (디버그)"
 #: screens/Project/shared/ProjectSubForms/SharedFields.js:126
 msgid "Track submodules"
 msgstr "하위 모듈 추적"
+
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:256
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:266
+msgid "Required approvals"
+msgstr ""
 
 #: screens/Project/ProjectList/ProjectListItem.js:282
 msgid "Last used"
@@ -6250,7 +6286,7 @@ msgstr "소셜 로그인"
 msgid "Revert"
 msgstr "되돌리기"
 
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:315
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:371
 msgid "Delete Workflow Approval"
 msgstr "워크플로우 승인 삭제"
 
@@ -6321,7 +6357,7 @@ msgstr "여기."
 msgid "Unavailable"
 msgstr "사용할 수 없음"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:125
+#: screens/Job/JobOutput/JobOutputSearch.js:132
 msgid "Play Started"
 msgstr "플레이 시작됨"
 
@@ -6472,8 +6508,8 @@ msgstr "통과"
 msgid "Leave blank to generate a new webhook key on save"
 msgstr ""
 
-#: screens/User/shared/UserForm.js:41
-#: screens/User/UserDetail/UserDetail.js:51
+#: screens/User/shared/UserForm.js:42
+#: screens/User/UserDetail/UserDetail.js:54
 #: screens/User/UserList/UserListItem.js:18
 msgid "System Auditor"
 msgstr "시스템 감사"
@@ -6545,7 +6581,7 @@ msgstr "모듈 이름"
 #: screens/User/UserTokenList/UserTokenList.js:194
 #: screens/User/UserTokenList/UserTokenListItem.js:38
 #: screens/User/UserTokens/UserTokens.js:87
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:131
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:145
 msgid "Expires"
 msgstr "만료"
 
@@ -6565,16 +6601,16 @@ msgstr "만료"
 msgid "Lookup type"
 msgstr "검색 유형"
 
-#: screens/Job/JobOutput/JobOutput.js:1122
-#: screens/Job/JobOutput/JobOutput.js:1125
+#: screens/Job/JobOutput/JobOutput.js:1124
+#: screens/Job/JobOutput/JobOutput.js:1127
 msgid "Cancel job"
 msgstr "작업 취소"
 
 #: components/AddRole/AddResourceRole.js:36
 #: components/AddRole/AddResourceRole.js:51
 #: components/ResourceAccessList/ResourceAccessList.js:150
-#: screens/User/shared/UserForm.js:80
-#: screens/User/UserDetail/UserDetail.js:66
+#: screens/User/shared/UserForm.js:89
+#: screens/User/UserDetail/UserDetail.js:69
 #: screens/User/UserList/UserList.js:124
 #: screens/User/UserList/UserList.js:164
 #: screens/User/UserList/UserListItem.js:54
@@ -6698,7 +6734,7 @@ msgstr "소스 변수"
 msgid "Instance"
 msgstr "인스턴스"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:118
+#: screens/Job/JobOutput/JobOutputSearch.js:125
 msgid "Including File"
 msgstr "파일 포함"
 
@@ -6729,7 +6765,7 @@ msgstr "기존 호스트 추가"
 msgid "Edit Organization"
 msgstr "조직 편집"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:126
+#: screens/Job/JobOutput/JobOutputSearch.js:133
 msgid "Playbook Complete"
 msgstr "플레이북 완료"
 
@@ -6831,7 +6867,7 @@ msgstr "작업 설정 보기"
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:152
 #: screens/Project/ProjectDetail/ProjectDetail.js:344
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.js:229
-#: screens/User/UserDetail/UserDetail.js:109
+#: screens/User/UserDetail/UserDetail.js:122
 msgid "edit"
 msgstr "편집"
 
@@ -6870,8 +6906,8 @@ msgstr "시간"
 msgid "Create new instance group"
 msgstr "새 인스턴스 그룹 만들기"
 
-#: screens/User/shared/UserForm.js:35
-#: screens/User/UserDetail/UserDetail.js:53
+#: screens/User/shared/UserForm.js:36
+#: screens/User/UserDetail/UserDetail.js:56
 #: screens/User/UserList/UserListItem.js:20
 msgid "Normal User"
 msgstr "일반 사용자"
@@ -6949,8 +6985,8 @@ msgid "Application not found."
 msgstr "애플리케이션을 찾을 수 없습니다."
 
 #: components/PromptDetail/PromptDetail.js:139
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:264
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:270
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:338
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:344
 msgid "Any"
 msgstr "모든"
 
@@ -6998,7 +7034,7 @@ msgstr "피어"
 msgid "User Roles"
 msgstr "사용자 역할"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:204
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:215
 msgid "min"
 msgstr "분"
 
@@ -7084,6 +7120,10 @@ msgstr "호스트로 돌아가기"
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironment.helptext.js:22
 #~ msgid "Credential to authenticate with a protected container registry."
 #~ msgstr "보안 컨테이너 레지스트리로 인증하기 위한 인증 정보."
+
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:207
+msgid "Context"
+msgstr ""
 
 #: screens/Project/ProjectDetail/ProjectDetail.js:299
 #: screens/Template/shared/WebhookSubForm.js:224
@@ -7194,11 +7234,11 @@ msgstr "레지스트리 인증 정보"
 msgid "Host Details"
 msgstr "호스트 세부 정보"
 
-#: screens/User/UserDetail/UserDetail.js:77
+#: screens/User/UserDetail/UserDetail.js:80
 msgid "Browser default"
 msgstr "브라우저 기본값"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:186
+#: screens/Job/JobOutput/JobOutputSearch.js:194
 msgid "Follow"
 msgstr "팔로우"
 
@@ -7331,8 +7371,8 @@ msgstr "Playbook 디렉토리 선택"
 #: components/Workflow/WorkflowNodeHelp.js:61
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateListItem.js:21
 #: screens/Job/JobDetail/JobDetail.js:286
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:92
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:166
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:100
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:222
 msgid "Workflow Job Template"
 msgstr "워크플로우 작업 템플릿"
 
@@ -7421,14 +7461,14 @@ msgstr "하나 이상의 그룹을 삭제하지 못했습니다."
 
 #: components/AppContainer/PageHeaderToolbar.js:111
 #: components/AppContainer/PageHeaderToolbar.js:115
-msgid "Switch to dark mode"
-msgstr ""
+#~ msgid "Switch to dark mode"
+#~ msgstr ""
 
 #: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.js:197
 msgid "Confirm Disable Local Authorization"
 msgstr "로컬 인증 비활성화 확인"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.js:766
+#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.js:784
 msgid "There was an error saving the workflow."
 msgstr "워크플로를 저장하는 동안 오류가 발생했습니다."
 
@@ -7455,8 +7495,8 @@ msgstr "구독 규정 준수"
 #: components/LaunchButton/ReLaunchDropDown.js:43
 #: components/PromptDetail/PromptDetail.js:138
 #: screens/Metrics/Metrics.js:84
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:264
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:273
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:338
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:347
 msgid "All"
 msgstr "모두"
 
@@ -7500,7 +7540,7 @@ msgstr "항목을 찾을 수 없습니다."
 msgid "April"
 msgstr "4월"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:111
+#: screens/Job/JobOutput/JobOutputSearch.js:118
 msgid "Host Failure"
 msgstr "호스트 실패"
 
@@ -7514,7 +7554,7 @@ msgstr "호스트 실패"
 msgid "View event details"
 msgstr "이벤트 세부 정보 보기"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:107
+#: screens/Job/JobOutput/JobOutputSearch.js:114
 msgid "Gathering Facts"
 msgstr "팩트 수집"
 
@@ -7556,7 +7596,7 @@ msgstr "최근 작업"
 msgid "Failed to disassociate one or more instances."
 msgstr "하나 이상의 인스턴스를 연결 해제하지 못했습니다."
 
-#: screens/Job/JobOutput/JobOutputSearch.js:115
+#: screens/Job/JobOutput/JobOutputSearch.js:122
 msgid "Host Skipped"
 msgstr "호스트 건너뜀"
 
@@ -7674,11 +7714,11 @@ msgstr "캐시 제한 시간 (초)"
 
 #: components/AppContainer/AppContainer.js:91
 #: components/AppContainer/AppContainer.js:160
-#: components/AppContainer/PageHeaderToolbar.js:211
+#: components/AppContainer/PageHeaderToolbar.js:231
 msgid "Logout"
 msgstr "로그 아웃"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:218
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:229
 msgid "sec"
 msgstr "초"
 
@@ -7818,7 +7858,7 @@ msgstr "동기화"
 #: screens/Template/shared/WorkflowJobTemplateForm.js:123
 #: screens/Template/Survey/SurveyQuestionForm.js:172
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:114
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:184
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:195
 #: screens/User/shared/UserTokenForm.js:69
 #: screens/User/UserOrganizations/UserOrganizationList.js:81
 #: screens/User/UserOrganizations/UserOrganizationListItem.js:20
@@ -7829,7 +7869,7 @@ msgstr "동기화"
 #: screens/User/UserTokenList/UserTokenList.js:138
 #: screens/User/UserTokenList/UserTokenList.js:191
 #: screens/User/UserTokenList/UserTokenListItem.js:30
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:125
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:139
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:177
 msgid "Description"
 msgstr "설명"
@@ -7872,7 +7912,7 @@ msgstr ""
 msgid "Max concurrent jobs"
 msgstr "최대 동시 작업 수"
 
-#: screens/User/UserDetail/UserDetail.js:120
+#: screens/User/UserDetail/UserDetail.js:133
 msgid "Delete User"
 msgstr "사용자 삭제"
 
@@ -7912,7 +7952,7 @@ msgstr "팀 편집"
 msgid "User Interface"
 msgstr "사용자 인터페이스"
 
-#: screens/Login/Login.js:315
+#: screens/Login/Login.js:324
 msgid "Sign in with GitHub Enterprise"
 msgstr "GitHub Enterprise로 로그인"
 
@@ -7949,7 +7989,7 @@ msgstr "GitHub Enterprise로 로그인"
 #: screens/Team/shared/TeamForm.js:49
 #: screens/Template/shared/WorkflowJobTemplateForm.js:137
 #: screens/Template/Survey/SurveyQuestionForm.js:30
-#: screens/User/shared/UserForm.js:173
+#: screens/User/shared/UserForm.js:195
 msgid "Select a value for this field"
 msgstr "이 필드의 값을 선택"
 
@@ -7962,7 +8002,7 @@ msgstr "이 필드의 값을 선택"
 msgid "View job {0}"
 msgstr "작업 {0} 보기 "
 
-#: screens/Login/Login.js:394
+#: screens/Login/Login.js:403
 msgid "Sign in with SAML {samlIDP}"
 msgstr "SAML {samlIDP}으로 로그인"
 
@@ -7976,8 +8016,8 @@ msgstr "검색"
 
 #: components/NotificationList/NotificationList.js:193
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:134
-#: screens/User/shared/UserForm.js:92
-#: screens/User/UserDetail/UserDetail.js:68
+#: screens/User/shared/UserForm.js:101
+#: screens/User/UserDetail/UserDetail.js:71
 #: screens/User/UserList/UserList.js:115
 #: screens/User/UserList/UserList.js:169
 #: screens/User/UserList/UserListItem.js:56
@@ -8088,7 +8128,7 @@ msgstr "처음에 대소문자를 구분하지 않는 버전입니다."
 msgid "Unsaved changes modal"
 msgstr "저장되지 않은 변경 사항 모달"
 
-#: screens/Login/Login.js:347
+#: screens/Login/Login.js:356
 msgid "Sign in with GitHub Enterprise Teams"
 msgstr "GitHub Enterprise 팀으로 로그인"
 
@@ -8127,7 +8167,7 @@ msgstr "Grafana URL"
 msgid "GitHub settings"
 msgstr "GitHub 설정"
 
-#: screens/Login/Login.js:285
+#: screens/Login/Login.js:294
 msgid "Sign in with GitHub Organizations"
 msgstr "GitHub 조직으로 로그인"
 
@@ -8171,7 +8211,7 @@ msgstr "성공"
 #~ msgid "Concurrent jobs: If enabled, simultaneous runs of this job template will be allowed."
 #~ msgstr "동시 작업: 활성화하면 이 작업 템플릿을 동시에 실행할 수 있습니다."
 
-#: screens/Job/JobOutput/JobOutputSearch.js:130
+#: screens/Job/JobOutput/JobOutputSearch.js:137
 msgid "Task Started"
 msgstr "호스트 시작됨"
 
@@ -8215,7 +8255,7 @@ msgstr "관리 작업으로 돌아가기"
 #~ msgid "Organization"
 #~ msgstr "조직"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:112
+#: screens/Job/JobOutput/JobOutputSearch.js:119
 msgid "Host OK"
 msgstr "호스트 확인"
 
@@ -8236,12 +8276,12 @@ msgstr "Azure AD 설정 보기"
 msgid "Hop"
 msgstr "홉"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:103
+#: screens/Job/JobOutput/JobOutputSearch.js:110
 msgid "Debug"
 msgstr "디버그"
 
 #: components/DataListToolbar/DataListToolbar.js:116
-#: screens/Job/JobOutput/JobOutputSearch.js:145
+#: screens/Job/JobOutput/JobOutputSearch.js:153
 msgid "Clear all filters"
 msgstr "모든 필터 지우기"
 
@@ -8268,6 +8308,7 @@ msgstr "설정으로 돌아가기"
 #: screens/Template/Survey/SurveyList.js:109
 #: screens/Template/Survey/SurveyList.js:109
 #: screens/Template/Survey/SurveyListItem.js:67
+#: screens/User/UserDetail/UserDetail.js:88
 msgid "Default"
 msgstr "기본값"
 
@@ -8315,7 +8356,7 @@ msgstr ""
 msgid "Drag a file here or browse to upload"
 msgstr "여기에 파일을 드래그하거나 업로드할 파일을 찾습니다."
 
-#: screens/Job/JobOutput/JobOutputSearch.js:186
+#: screens/Job/JobOutput/JobOutputSearch.js:194
 msgid "Unfollow"
 msgstr "팔로우 취소"
 
@@ -8328,7 +8369,7 @@ msgstr "string"
 #~ "is required for channels. To respond to or start a thread to a specific message add the parent message Id to the channel where the parent message Id is 16 digits. A dot (.) must be manually inserted after the 10th digit.  ie:#destination-channel, 1231257890.006423. See Slack"
 #~ msgstr "한 줄에 하나의 Slack 채널입니다. 채널에 대해 파운드 기호(#)가 필요합니다. 특정 메시지에 응답하거나 스레드를 시작하려면 상위 메시지 ID가16자리인 채널에 상위 메시지 ID를 추가합니다. 10 번째 자리 숫자 뒤에 점(.)을 수동으로 삽입해야 합니다. 예:#destination-channel, 1231257890.006423. Slack 참조"
 
-#: screens/User/shared/UserForm.js:121
+#: screens/User/shared/UserForm.js:130
 msgid "Confirm Password"
 msgstr "암호 확인"
 
@@ -8365,6 +8406,10 @@ msgstr "수신자 목록"
 #: components/ContentError/ContentError.js:33
 msgid "Not Found"
 msgstr "찾을 수 없음"
+
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:193
+msgid "Votes"
+msgstr ""
 
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.js:79
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:97
@@ -8617,8 +8662,8 @@ msgstr "인스턴스 그룹 폴백 방지"
 
 #: components/AppContainer/PageHeaderToolbar.js:111
 #: components/AppContainer/PageHeaderToolbar.js:115
-msgid "Switch to light mode"
-msgstr ""
+#~ msgid "Switch to light mode"
+#~ msgstr ""
 
 #: screens/InstanceGroup/shared/InstanceGroupForm.js:58
 msgid "Maximum number of forks to allow across all jobs running concurrently on this group. Zero means no limit will be enforced."
@@ -8665,8 +8710,8 @@ msgstr "이 템플릿은 현재 일부 워크플로 노드에서 사용되고 �
 msgid "First Run"
 msgstr "첫 번째 실행"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:123
-#: screens/Job/JobOutput/JobOutputSearch.js:124
+#: screens/Job/JobOutput/JobOutputSearch.js:130
+#: screens/Job/JobOutput/JobOutputSearch.js:131
 msgid "No Hosts Remaining"
 msgstr "남아 있는 호스트가 없음"
 
@@ -8717,7 +8762,7 @@ msgid "Job ID"
 msgstr "작업 ID"
 
 #: components/PromptDetail/PromptDetail.js:134
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:226
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:300
 msgid "Convergence"
 msgstr "통합"
 
@@ -8750,7 +8795,7 @@ msgstr "참고: 선택한 순서에 따라 실행 우선 순위가 설정됩니�
 #~ msgid "Credentials that require passwords on launch are not permitted.  Please remove or replace the following credentials with a credential of the same type in order to proceed: {0}"
 #~ msgstr "시작 시 암호가 필요한 인증 정보는 허용되지 않습니다. 계속하려면 삭제하거나 동일한 유형의 인증 정보로 교체하십시오. {0}"
 
-#: screens/Login/Login.js:376
+#: screens/Login/Login.js:385
 msgid "Sign in with OIDC"
 msgstr "OIDC로 로그인"
 
@@ -8803,6 +8848,7 @@ msgstr "이는 클라이언트 시크릿이 표시되는 유일한 시간입니�
 #~ msgstr "워크플로 작업 템플릿에 대한 선택적 설명."
 
 #: screens/ActivityStream/ActivityStreamDescription.js:511
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:197
 msgid "approved"
 msgstr "승인됨"
 
@@ -8811,7 +8857,7 @@ msgid "Last Run"
 msgstr "마지막 실행"
 
 #. placeholder {0}: workflowApproval.name
-#: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:57
+#: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:59
 msgid "Failed to approve {0}."
 msgstr "승인하지 못했습니다 {0}."
 
@@ -8932,7 +8978,7 @@ msgstr "사용자 토큰에 실패했습니다."
 #~ "assigned to this group when new instances come online."
 #~ msgstr "새 인스턴스가 온라인 상태가 되면 이 그룹에 자동으로 할당되는 최소 인스턴스 수입니다."
 
-#: screens/Login/Login.js:395
+#: screens/Login/Login.js:404
 msgid "Sign in with SAML"
 msgstr "SAML으로 로그인"
 
@@ -8949,7 +8995,7 @@ msgid "Enter injectors using either JSON or YAML syntax. Refer to the Ansible Co
 msgstr "JSON 또는 YAML 구문을 사용하여 인젝터를 입력합니다. 구문 예제는 Ansible Controller 설명서를 참조하십시오."
 
 #: components/Workflow/WorkflowLegend.js:122
-#: screens/Job/JobOutput/JobOutputSearch.js:133
+#: screens/Job/JobOutput/JobOutputSearch.js:140
 msgid "Warning"
 msgstr "경고"
 
@@ -9094,7 +9140,7 @@ msgstr "워크플로우 문서"
 msgid "January"
 msgstr "1월"
 
-#: screens/Login/Login.js:240
+#: screens/Login/Login.js:249
 msgid "Sign in with Azure AD"
 msgstr "Azure AD로 로그인"
 
@@ -9119,6 +9165,10 @@ msgstr "GitHub"
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkDeleteModal.js:45
 msgid "Are you sure you want to remove this link?"
 msgstr "이 링크를 삭제하시겠습니까?"
+
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:281
+msgid "A Jinja2 template rendered with upstream set_stats artifacts when the approval is created. Use this to show the approver relevant context from previous job steps. Available variables come from set_stats data of parent nodes."
+msgstr ""
 
 #: screens/Template/shared/WorkflowJobTemplate.helptext.js:14
 #~ msgid "Prompt for variables on launch."
@@ -9402,7 +9452,7 @@ msgstr "구성되지 않음"
 #: components/JobList/JobListItem.js:63
 #: components/Schedule/ScheduleList/ScheduleListItem.js:39
 #: screens/Job/JobDetail/JobDetail.js:75
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:204
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:260
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:222
 msgid "Workflow Job"
 msgstr "워크플로우 작업"
@@ -9481,9 +9531,9 @@ msgstr "업데이트 옵션"
 #: screens/Project/ProjectDetail/ProjectDetail.js:328
 #: screens/Team/TeamDetail/TeamDetail.js:57
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:367
-#: screens/User/UserDetail/UserDetail.js:99
+#: screens/User/UserDetail/UserDetail.js:112
 #: screens/User/UserTokenDetail/UserTokenDetail.js:66
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:184
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:240
 msgid "Last Modified"
 msgstr "최종 업데이트"
 
@@ -9512,7 +9562,7 @@ msgstr "명령"
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:142
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:148
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:225
-#: screens/Job/JobOutput/JobOutputSearch.js:105
+#: screens/Job/JobOutput/JobOutputSearch.js:112
 #: screens/TopologyView/Legend.js:195
 msgid "Error"
 msgstr "오류"
@@ -9530,7 +9580,7 @@ msgstr "그룹으로 돌아가기"
 msgid "A job has already been launched"
 msgstr "작업이 이미 시작되었습니다"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:109
+#: screens/Job/JobOutput/JobOutputSearch.js:116
 msgid "Host Async OK"
 msgstr "호스트 동기화 확인"
 
@@ -9605,7 +9655,7 @@ msgstr "인벤토리 소스"
 msgid "Cancel node removal"
 msgstr "노드 제거 취소"
 
-#: screens/Job/JobOutput/JobOutputSearch.js:104
+#: screens/Job/JobOutput/JobOutputSearch.js:111
 msgid "Deprecated"
 msgstr "더 이상 사용되지 않음"
 
@@ -9689,7 +9739,7 @@ msgid "Generic OIDC settings"
 msgstr "일반 OIDC 설정"
 
 #: components/DataListToolbar/DataListToolbar.js:108
-#: screens/Job/JobOutput/JobOutputSearch.js:137
+#: screens/Job/JobOutput/JobOutputSearch.js:144
 msgid "Advanced"
 msgstr "고급"
 
@@ -9799,7 +9849,7 @@ msgstr "알림을 전환하지 못했습니다."
 msgid "Webhook Key"
 msgstr "Webhook 키"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:123
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:131
 msgid "Select a Node Type"
 msgstr "노드 유형 선택"
 
@@ -9874,7 +9924,7 @@ msgstr "서브스크립션 가져오기"
 #: screens/Setting/shared/RevertFormActionGroup.js:18
 #: screens/Template/Survey/SurveyReorderModal.js:241
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.js:72
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:185
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:188
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerToolbar.js:168
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerToolbar.js:172
 msgid "Save"
@@ -9924,7 +9974,7 @@ msgstr ""
 msgid "Related search type"
 msgstr "관련 검색 유형"
 
-#: components/AppContainer/PageHeaderToolbar.js:197
+#: components/AppContainer/PageHeaderToolbar.js:217
 msgid "User details"
 msgstr "사용자 세부 정보"
 
@@ -10047,8 +10097,8 @@ msgstr "이벤트"
 msgid "Group type"
 msgstr "그룹 유형"
 
-#: screens/User/shared/UserForm.js:137
-#: screens/User/UserDetail/UserDetail.js:74
+#: screens/User/shared/UserForm.js:146
+#: screens/User/UserDetail/UserDetail.js:77
 msgid "User Type"
 msgstr "사용자 유형"
 
@@ -10091,7 +10141,7 @@ msgstr "인벤토리를 선택해야 함"
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:247
 #: screens/Template/shared/JobTemplateForm.js:359
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:135
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:225
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:281
 msgid "Source Control Branch"
 msgstr "소스 제어 분기"
 
@@ -10100,8 +10150,8 @@ msgid "This organization is currently being by other resources. Are you sure you
 msgstr "이 조직은 현재 다른 리소스에서 사용 중입니다. 삭제하시겠습니까?"
 
 #: screens/Team/TeamRoles/TeamRolesList.js:124
-#: screens/User/shared/UserForm.js:47
-#: screens/User/UserDetail/UserDetail.js:49
+#: screens/User/shared/UserForm.js:48
+#: screens/User/UserDetail/UserDetail.js:52
 #: screens/User/UserList/UserListItem.js:16
 #: screens/User/UserRoles/UserRolesList.js:124
 msgid "System Administrator"
@@ -10183,8 +10233,8 @@ msgstr "선택하지 않으면 병합이 수행되어 로컬 변수와 외부 �
 
 #: components/JobList/JobListItem.js:132
 #: screens/Job/JobDetail/JobDetail.js:656
-#: screens/Job/JobOutput/JobOutput.js:1157
-#: screens/Job/JobOutput/JobOutput.js:1158
+#: screens/Job/JobOutput/JobOutput.js:1159
+#: screens/Job/JobOutput/JobOutput.js:1160
 #: screens/Job/JobOutput/shared/OutputToolbar.js:182
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.js:192
 msgid "Job Cancel Error"
@@ -10218,7 +10268,7 @@ msgstr "실패가 있는 재고 소스"
 #: screens/Project/ProjectList/ProjectList.js:222
 #: screens/Project/ProjectList/ProjectListItem.js:167
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.js:64
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:142
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:156
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:226
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListItem.js:76
 msgid "Status"
@@ -10293,7 +10343,7 @@ msgstr "툴 전환"
 msgid "Organization"
 msgstr "조직"
 
-#: screens/Login/Login.js:186
+#: screens/Login/Login.js:195
 msgid "Your session has expired. Please log in to continue where you left off."
 msgstr "세션이 만료되었습니다. 세션이 만료되기 전의 위치에서 계속하려면 로그인하십시오."
 
@@ -10339,7 +10389,7 @@ msgstr "이러한 인스턴스 그룹을 삭제하면 인스턴스에 의존하�
 msgid "Source Control Revision"
 msgstr ""
 
-#: screens/Job/JobOutput/JobOutputSearch.js:153
+#: screens/Job/JobOutput/JobOutputSearch.js:161
 msgid "Search is disabled while the job is running"
 msgstr "작업이 실행되는 동안 검색이 비활성화됩니다."
 
@@ -10355,7 +10405,7 @@ msgstr "세 번째"
 #~ msgid "Note: This instance may be re-associated with this instance group if it is managed by"
 #~ msgstr "참고: 이 인스턴스가 에서 관리하는 경우 이 인스턴스 그룹과 다시 연결될 수 있습니다."
 
-#: screens/Login/Login.js:255
+#: screens/Login/Login.js:264
 msgid "Sign in with Azure AD Tenant"
 msgstr ""
 
@@ -10521,8 +10571,8 @@ msgstr "{0, plural, one {This credential is currently being used by other resour
 #: components/AddRole/AddResourceRole.js:40
 #: components/AddRole/AddResourceRole.js:55
 #: components/ResourceAccessList/ResourceAccessList.js:154
-#: screens/User/shared/UserForm.js:86
-#: screens/User/UserDetail/UserDetail.js:67
+#: screens/User/shared/UserForm.js:95
+#: screens/User/UserDetail/UserDetail.js:70
 #: screens/User/UserList/UserList.js:128
 #: screens/User/UserList/UserList.js:167
 #: screens/User/UserList/UserListItem.js:55
@@ -10542,7 +10592,7 @@ msgid "and click on Update Revision on Launch"
 msgstr "실행 시 버전 업데이트를 클릭합니다"
 
 #: components/About/About.js:48
-#: components/AppContainer/PageHeaderToolbar.js:168
+#: components/AppContainer/PageHeaderToolbar.js:188
 msgid "About"
 msgstr "정보"
 
@@ -10721,7 +10771,7 @@ msgstr "부모 노드가 성공하면 실행됩니다."
 msgid "Schedule Rules"
 msgstr "일정 규칙"
 
-#: screens/User/UserDetail/UserDetail.js:60
+#: screens/User/UserDetail/UserDetail.js:63
 #: screens/User/UserList/UserListItem.js:49
 msgid "SOCIAL"
 msgstr "SOCIAL"
@@ -10742,7 +10792,7 @@ msgstr "세부 정보 편집"
 #: components/Workflow/WorkflowNodeHelp.js:191
 #: screens/HostMetrics/HostMetrics.js:141
 #: screens/HostMetrics/HostMetricsListItem.js:25
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:211
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:267
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListItem.js:59
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListItem.js:70
 msgid "Deleted"
@@ -10895,8 +10945,8 @@ msgstr "누락됨"
 #: components/JobCancelButton/JobCancelButton.js:99
 #: components/JobList/JobListCancelButton.js:163
 #: components/JobList/JobListCancelButton.js:166
-#: screens/Job/JobOutput/JobOutput.js:1131
-#: screens/Job/JobOutput/JobOutput.js:1134
+#: screens/Job/JobOutput/JobOutput.js:1133
+#: screens/Job/JobOutput/JobOutput.js:1136
 msgid "Return"
 msgstr "돌아가기"
 
@@ -10997,7 +11047,7 @@ msgstr "팀 세부 정보 보기"
 msgid "Failed to get instance."
 msgstr "인스턴스를 가져오지 못했습니다."
 
-#: screens/User/shared/UserForm.js:59
+#: screens/User/shared/UserForm.js:61
 msgid "Use browser default"
 msgstr "브라우저 기본값 사용"
 
@@ -11078,7 +11128,7 @@ msgstr "{numJobsToCancel, plural, one {{0}} other {{1}}}"
 msgid "Fit the graph to the available screen size"
 msgstr "그래프를 사용 가능한 화면 크기에 맞춥니다."
 
-#: screens/Job/JobOutput/JobOutput.js:1023
+#: screens/Job/JobOutput/JobOutput.js:1025
 msgid "Events processing complete."
 msgstr "이벤트 처리가 완료되었습니다."
 
@@ -11309,7 +11359,7 @@ msgstr ""
 msgid "Edit workflow"
 msgstr "워크플로우 편집"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeEditModal.js:76
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeEditModal.js:79
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeViewModal.js:271
 msgid "Edit Node"
 msgstr "노드 편집"
@@ -11540,11 +11590,11 @@ msgstr "오류 삭제"
 msgid "Failed to delete one or more inventory sources."
 msgstr "하나 이상의 인벤토리 소스를 삭제하지 못했습니다."
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:283
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:357
 msgid "If specified, this field will be shown on the node instead of the resource name when viewing the workflow"
 msgstr "지정된 경우 이 필드는 워크플로우를 볼 때 리소스 이름 대신 노드에 표시됩니다."
 
-#: screens/Login/Login.js:270
+#: screens/Login/Login.js:279
 msgid "Sign in with GitHub"
 msgstr "GitHub로 로그인"
 
@@ -11560,7 +11610,7 @@ msgstr "이러한 인벤토리 소스를 삭제하면 인벤토리에 의존하�
 msgid "Unknown Project"
 msgstr "알 수 없는 프로젝트"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:232
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:306
 msgid "Preconditions for running this node when there are multiple parents. Refer to the"
 msgstr "여러 명의 부모가 있을 때 이 노드를 실행하기 위한 전제 조건"
 
@@ -11653,7 +11703,7 @@ msgstr "인벤토리의 호스트를 대상으로 지정하는 데 사용되는 
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:185
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:276
 #: screens/Template/shared/JobTemplateForm.js:513
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:187
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:198
 msgid "Timeout"
 msgstr "시간 초과"
 
@@ -11714,7 +11764,7 @@ msgstr "역할을 삭제하지 못했습니다"
 #~ msgid "Approved - {0}.  See the Activity Stream for more information."
 #~ msgstr "승인 - {0} 자세한 내용은 활동 스트림을 참조하십시오."
 
-#: screens/WorkflowApproval/shared/WorkflowDenyButton.js:26
+#: screens/WorkflowApproval/shared/WorkflowDenyButton.js:28
 msgid "Successfully Denied"
 msgstr "성공적으로 거부됨"
 
@@ -11756,7 +11806,7 @@ msgstr "모듈 선택"
 #~ "message. For more information, refer to the"
 #~ msgstr "메시지에 사용 가능한 여러 변수를 적용할 수 있습니다. 자세한 내용은 다음을 참조하십시오."
 
-#: screens/User/UserDetail/UserDetail.js:58
+#: screens/User/UserDetail/UserDetail.js:61
 #: screens/User/UserList/UserListItem.js:42
 msgid "LDAP"
 msgstr "LDAP"
@@ -11773,7 +11823,7 @@ msgstr "워크플로우 템플릿"
 
 #: components/NotificationList/NotificationListItem.js:45
 #: components/Workflow/WorkflowLegend.js:118
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:68
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:76
 msgid "Approval"
 msgstr "승인"
 
@@ -11928,6 +11978,10 @@ msgstr ""
 msgid "Provisioning fail"
 msgstr "프로비저닝 실패"
 
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:238
+msgid "Whether the approval node is automatically approved or denied when the timeout expires."
+msgstr ""
+
 #: screens/Inventory/shared/Inventory.helptext.js:126
 msgid "Time in seconds to consider an inventory sync to be current. During job runs and callbacks the task system will evaluate the timestamp of the latest sync. If it is older than Cache Timeout, it is not considered current, and a new inventory sync will be performed."
 msgstr "재고 동기화를 현재로 간주하는 데 걸리는 시간 (초) 입니다. 작업 실행 및 콜백 중에 작업 시스템은 최신 동기화의 타임스탬프를 평가합니다. 캐시 시간 초과보다 오래된 경우 현재로 간주되지 않으며 새 인벤토리 동기화가 수행됩니다."
@@ -11960,7 +12014,7 @@ msgstr "저장 시 새 Webhook URL이 생성됩니다."
 msgid "Back to execution environments"
 msgstr "실행 환경으로 돌아가기"
 
-#: screens/Job/JobOutput/shared/HostStatusBar.js:77
+#: screens/Job/JobOutput/shared/HostStatusBar.js:76
 msgid "Host status information for this job is unavailable."
 msgstr "이 작업의 호스트 상태 정보를 사용할 수 없습니다."
 
@@ -11969,12 +12023,12 @@ msgid "This is the only time the token value and associated refresh token value 
 msgstr "토큰 값과 연결된 새로 고침 토큰 값이 표시되는 유일한 시간입니다."
 
 #: components/ContentLoading/ContentLoading.js:26
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:378
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.js:381
 msgid "Loading"
 msgstr "로딩 중"
 
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:302
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:307
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:358
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:363
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListItem.js:117
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListItem.js:123
 msgid "Cancel Workflow"
@@ -12006,9 +12060,13 @@ msgstr "이 목록을 채우려면 작업을 실행하십시오."
 #: screens/Template/shared/JobTemplateForm.js:458
 #: screens/Template/shared/WorkflowJobTemplateForm.js:169
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:153
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:218
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:274
 msgid "Limit"
 msgstr "제한"
+
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:176
+msgid "Approvals"
+msgstr ""
 
 #: screens/Instances/Shared/InstanceForm.js:52
 msgid "Sets the current life cycle stage of this instance. Default is \"installed.\""
@@ -12094,7 +12152,7 @@ msgstr "설문 조사 삭제"
 msgid "Policy instance minimum"
 msgstr "정책 인스턴스 최소"
 
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:330
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:386
 msgid "Failed to delete workflow approval."
 msgstr "워크플로우 승인을 삭제하지 못했습니다."
 
@@ -12130,7 +12188,7 @@ msgstr "하이브리드"
 #~ msgid "Loading..."
 #~ msgstr "로딩 중..."
 
-#: screens/Job/JobOutput/JobOutputSearch.js:114
+#: screens/Job/JobOutput/JobOutputSearch.js:121
 msgid "Host Retry"
 msgstr "호스트 재시도"
 
@@ -12168,8 +12226,10 @@ msgstr "On"
 msgid "If you only want to remove access for this particular user, please remove them from the team."
 msgstr "이 특정 사용자에 대한 액세스 권한만 제거하려면 팀에서 제거하십시오."
 
-#: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:45
-#: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:48
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:252
+#: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:47
+#: screens/WorkflowApproval/shared/WorkflowApprovalButton.js:50
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:185
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListApproveButton.js:34
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListApproveButton.js:50
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListApproveButton.js:58
@@ -12231,7 +12291,7 @@ msgid "Launch"
 msgstr "시작"
 
 #: components/JobList/JobListItem.js:343
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:161
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:217
 msgid "Explanation"
 msgstr "설명"
 
@@ -12254,7 +12314,7 @@ msgstr "설문 조사 프리뷰 모달"
 #: components/StatusLabel/StatusLabel.js:42
 #: components/Workflow/WorkflowNodeHelp.js:115
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.js:37
-#: screens/Job/JobOutput/shared/HostStatusBar.js:36
+#: screens/Job/JobOutput/shared/HostStatusBar.js:35
 msgid "OK"
 msgstr "OK"
 
@@ -12383,7 +12443,7 @@ msgstr "(사용자 이름)에 의해 생성됨"
 msgid "Playbook"
 msgstr "Playbook"
 
-#: screens/Login/Login.js:145
+#: screens/Login/Login.js:154
 msgid "Invalid username or password. Please try again."
 msgstr "사용자 이름 또는 암호가 잘못되었습니다. 다시 시도하십시오."
 
@@ -12508,7 +12568,7 @@ msgstr "알림 시작 전환"
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:222
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:143
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.js:33
-#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:232
+#: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:288
 msgid "Inventory"
 msgstr "인벤토리"
 
