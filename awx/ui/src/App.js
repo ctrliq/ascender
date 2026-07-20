@@ -157,19 +157,8 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   useLayoutEffect(() => {
-    const storedDarkMode = localStorage.getItem('darkMode');
-    const prefersDarkMode =
-      storedDarkMode !== null
-        ? storedDarkMode === 'true'
-        : typeof window.matchMedia === 'function' &&
-          window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-    if (prefersDarkMode) {
-      document.documentElement.classList.add('pf-v6-theme-dark');
-      import('./darkmode.css');
-    } else {
-      import('./lightmode.css');
-    }
+    const { getStoredThemeId, applyTheme } = require('./themeRegistry');
+    applyTheme(getStoredThemeId());
   }, []);
   const navigate = useNavigate();
   const { search } = useLocation();

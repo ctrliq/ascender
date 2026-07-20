@@ -12,6 +12,8 @@ import ErrorDetail from 'components/ErrorDetail';
 import { formatDateString } from 'util/dates';
 import { UsersAPI } from 'api';
 import { locales } from 'i18nLoader';
+import { getThemes, getStoredThemeId } from 'themeRegistry';
+import { useConfig } from 'contexts/Config';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 
 function UserDetail({ user }) {
@@ -30,6 +32,7 @@ function UserDetail({ user }) {
   } = user;
   const navigate = useNavigate();
   const { t } = useLingui();
+  const { me = {} } = useConfig();
 
   const {
     request: deleteUser,
@@ -76,6 +79,16 @@ function UserDetail({ user }) {
           label={t`Preferred Language`}
           value={locales[user.preferred_language] || t`Browser default`}
         />
+        {me.id === id && (
+          <Detail
+            label={t`Preferred Theme`}
+            value={(() => {
+              const themes = getThemes();
+              const current = themes.find((th) => th.id === getStoredThemeId());
+              return current ? current.name : t`Default`;
+            })()}
+          />
+        )}
         {userAuthType && (
           <Detail
             label={t`Type`}

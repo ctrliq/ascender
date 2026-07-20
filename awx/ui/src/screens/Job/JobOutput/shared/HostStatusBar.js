@@ -4,11 +4,10 @@ import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
 import { Badge, Tooltip } from '@patternfly/react-core';
 
-const BarWrapper = styled.div`
+const BarWrapper = styled.div.attrs({ className: 'host-status-bar' })`
   background-color: var(--pf-v6-global--BackgroundColor--200);
   display: flex;
   height: 5px;
-  margin-top: 0;
   width: 100%;
 `;
 

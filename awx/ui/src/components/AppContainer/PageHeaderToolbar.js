@@ -7,7 +7,6 @@ import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
 import styled from 'styled-components';
 import {
-	Button,
 	Dropdown,
 	DropdownItem,
 	DropdownList,
@@ -16,11 +15,12 @@ import {
 	NotificationBadgeVariant,
 	Tooltip
 } from '@patternfly/react-core';
-import { MoonIcon, QuestionCircleIcon, SunIcon, UserIcon } from '@patternfly/react-icons';
+import { PaletteIcon, QuestionCircleIcon, UserIcon } from '@patternfly/react-icons';
 import { WorkflowApprovalsAPI } from 'api';
 import useRequest from 'hooks/useRequest';
 import getDocsBaseUrl from 'util/getDocsBaseUrl';
 import { useConfig } from 'contexts/Config';
+import { getThemes, applyTheme, getStoredThemeId } from 'themeRegistry';
 import useWsPendingApprovalCount from './useWsPendingApprovalCount';
 
 const ToolbarItems = styled.div`
@@ -57,30 +57,23 @@ function PageHeaderToolbar({
   const { t } = useLingui();
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [isUserOpen, setIsUserOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(
-    () => {
-      const storedDarkMode = localStorage.getItem('darkMode');
+  const [isThemeOpen, setIsThemeOpen] = useState(false);
+  const [currentThemeId, setCurrentThemeId] = useState(getStoredThemeId);
 
-      return storedDarkMode !== null
-        ? storedDarkMode === 'true'
-        : typeof window.matchMedia === 'function' &&
-            window.matchMedia('(prefers-color-scheme: dark)').matches;
-    }
-  );
+  useEffect(() => {
+    const handler = (e) => setCurrentThemeId(e.detail);
+    window.addEventListener('themechange', handler);
+    return () => window.removeEventListener('themechange', handler);
+  }, []);
 
-  const toggleDarkMode = () => {
-    const next = !isDarkMode;
-    setIsDarkMode(next);
-    if (next) {
-      document.documentElement.classList.add('pf-v6-theme-dark');
-      import('../../darkmode.css');
-    } else {
-      document.documentElement.classList.remove('pf-v6-theme-dark');
-      import('../../lightmode.css');
-    }
-    localStorage.setItem('darkMode', next);
-    window.dispatchEvent(new Event('resize'));
+  const themes = getThemes();
+
+  const handleThemeSelect = (themeId) => {
+    setIsThemeOpen(false);
+    const theme = applyTheme(themeId, true);
+    setCurrentThemeId(theme.id);
   };
+
   const config = useConfig();
 
   const { request: fetchPendingApprovalCount, result: pendingApprovals } =
@@ -108,13 +101,40 @@ function PageHeaderToolbar({
 
   return (
     <ToolbarItems>
-      <Tooltip position="bottom" content={isDarkMode ? t`Switch to light mode` : t`Switch to dark mode`}>
-        <Button icon={isDarkMode ? <SunIcon /> : <MoonIcon />}
-          variant="plain"
-          onClick={toggleDarkMode}
-          aria-label={isDarkMode ? t`Switch to light mode` : t`Switch to dark mode`}
-         />
-      </Tooltip>
+      <Dropdown
+        isOpen={isThemeOpen}
+        onSelect={() => setIsThemeOpen(false)}
+        onOpenChange={setIsThemeOpen}
+        popperProps={{ position: 'right' }}
+        ouiaId="toolbar-theme-dropdown"
+        toggle={(toggleRef) => (
+          <Tooltip position="bottom" content={t`Theme`}>
+            <MenuToggle
+              ref={toggleRef}
+              variant="plain"
+              onClick={() => setIsThemeOpen(!isThemeOpen)}
+              isExpanded={isThemeOpen}
+              aria-label={t`Theme`}
+              ouiaId="toolbar-theme-dropdown-toggle"
+            >
+              <PaletteIcon />
+            </MenuToggle>
+          </Tooltip>
+        )}
+      >
+        <DropdownList>
+          {themes.map((theme) => (
+            <DropdownItem
+              key={theme.id}
+              onClick={() => handleThemeSelect(theme.id)}
+              isSelected={currentThemeId === theme.id}
+              ouiaId={`theme-${theme.id}-dropdown-item`}
+            >
+              {theme.name}
+            </DropdownItem>
+          ))}
+        </DropdownList>
+      </Dropdown>
       <Tooltip
         position="bottom"
         content={t`Pending Workflow Approvals`}

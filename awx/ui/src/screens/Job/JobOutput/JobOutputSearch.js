@@ -20,6 +20,13 @@ import {
 import { isJobRunning } from 'util/jobs';
 import { useLingui } from '@lingui/react/macro';
 
+const SearchToolbarWrapper = styled.div`
+  margin-top: 0;
+  #job_output-toolbar {
+    --pf-v6-c-toolbar--PaddingInlineStart: 0 !important;
+  }
+`;
+
 const SearchToolbarContent = styled(ToolbarContent)`
   padding-left: 0px !important;
   padding-right: 0px !important;
@@ -138,6 +145,7 @@ function JobOutputSearch({
   const isDisabled = isJobRunning(job.status);
 
   return (
+    <SearchToolbarWrapper>
     <Toolbar
       id="job_output-toolbar"
       clearAllFilters={handleRemoveAllSearchTerms}
@@ -188,6 +196,7 @@ function JobOutputSearch({
         ) : null}
       </SearchToolbarContent>
     </Toolbar>
+    </SearchToolbarWrapper>
   );
 }
 

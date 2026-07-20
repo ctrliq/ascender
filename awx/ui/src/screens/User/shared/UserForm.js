@@ -19,6 +19,7 @@ import OrganizationLookup from 'components/Lookup/OrganizationLookup';
 import { required } from 'util/validators';
 import { FormColumnLayout } from 'components/FormLayout';
 import { locales } from 'i18nLoader';
+import { getThemes, applyTheme, getStoredThemeId, getSavedThemeId } from 'themeRegistry';
 
 function UserFormFields({ user }) {
   const { t } = useLingui();
@@ -54,6 +55,7 @@ function UserFormFields({ user }) {
 
   const [userTypeField, userTypeMeta] = useField('user_type');
   const [languageField] = useField('preferred_language');
+  const [themeField, , themeHelpers] = useField('preferred_theme');
 
   const languageOptions = [
     { value: '', key: '', label: t`Use browser default`, isDisabled: false },
@@ -64,6 +66,13 @@ function UserFormFields({ user }) {
       isDisabled: false,
     })),
   ];
+
+  const themeOptions = getThemes().map((theme) => ({
+    value: theme.id,
+    key: theme.id,
+    label: theme.name,
+    isDisabled: false,
+  }));
 
   const handleOrganizationUpdate = useCallback(
     (value) => {
@@ -160,6 +169,19 @@ function UserFormFields({ user }) {
           {...languageField}
         />
       </FormGroup>
+      {me.id === user.id && (
+        <FormGroup fieldId="user-preferred-theme" label={t`Preferred Theme`}>
+          <AnsibleSelect
+            id="user-preferred-theme"
+            data={themeOptions}
+            {...themeField}
+            onChange={(_event, value) => {
+              themeHelpers.setValue(value);
+              applyTheme(value);
+            }}
+          />
+        </FormGroup>
+      )}
 
       {!user.id && (
         <OrganizationLookup
@@ -188,11 +210,14 @@ function UserForm({ user = {}, handleCancel, handleSubmit, submitError }) {
       // Build the payload from a copy — mutating Formik's `values` object
       // (e.g. deleting password) flips the still-mounted password field from
       // controlled to uncontrolled after submit, which React warns about.
-      const { confirm_password, ...submitValues } = values;
+      const { confirm_password, preferred_theme, ...submitValues } = values;
       submitValues.is_superuser = submitValues.user_type === 'administrator';
       submitValues.is_system_auditor = submitValues.user_type === 'auditor';
       if (!submitValues.password) {
         delete submitValues.password;
+      }
+      if (preferred_theme) {
+        applyTheme(preferred_theme, true);
       }
       handleSubmit(submitValues);
     }
@@ -219,6 +244,7 @@ function UserForm({ user = {}, handleCancel, handleSubmit, submitError }) {
         confirm_password: '',
         user_type: userType,
         preferred_language: user.preferred_language || '',
+        preferred_theme: getStoredThemeId(),
       }}
       onSubmit={handleValidateAndSubmit}
     >
@@ -228,7 +254,10 @@ function UserForm({ user = {}, handleCancel, handleSubmit, submitError }) {
             <UserFormFields user={user} />
             <FormSubmitError error={submitError} />
             <FormActionGroup
-              onCancel={handleCancel}
+              onCancel={() => {
+                applyTheme(getSavedThemeId(), true);
+                handleCancel();
+              }}
               onSubmit={formik.handleSubmit}
             />
           </FormColumnLayout>

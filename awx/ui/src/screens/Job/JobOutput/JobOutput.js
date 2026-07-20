@@ -44,11 +44,13 @@ const CardBody = styled(_CardBody)`
   display: flex;
   flex-flow: column;
   height: calc(100vh - 267px);
+  padding-block-start: 1rem;
 `;
 
 const HeaderTitle = styled.div`
   display: inline-flex;
   align-items: center;
+  gap: 0.5rem;
   h1 {
     font-weight: var(--pf-v6-global--FontWeight--bold);
   }
@@ -58,7 +60,7 @@ const OutputHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.75rem 0;
+  padding: 0.25rem 0;
 
   h1 {
     margin: 0;
