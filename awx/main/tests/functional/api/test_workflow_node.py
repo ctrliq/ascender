@@ -128,6 +128,23 @@ class TestApprovalNodes:
         assert isinstance(approval_node.unified_job_template, WorkflowApprovalTemplate)
         assert approval_node.unified_job_template.timeout == 10
 
+    def test_approval_node_summary_fields(self, get, post, approval_node, admin_user):
+        create_url = reverse('api:workflow_job_template_node_create_approval', kwargs={'pk': approval_node.pk, 'version': 'v2'})
+        post(
+            create_url,
+            {'name': 'Test', 'description': 'Approval Node', 'timeout': 10, 'required_approvals': 2, 'on_timeout': 'approve', 'context_template': 'hello'},
+            user=admin_user,
+            expect=201,
+        )
+
+        detail_url = reverse('api:workflow_job_template_node_detail', kwargs={'pk': approval_node.pk})
+        res = get(detail_url, user=admin_user, expect=200)
+        ujt_summary = res.data['summary_fields']['unified_job_template']
+        assert ujt_summary['timeout'] == 10
+        assert ujt_summary['required_approvals'] == 2
+        assert ujt_summary['on_timeout'] == 'approve'
+        assert ujt_summary['context_template'] == 'hello'
+
     def test_approval_node_creation_failure(self, post, approval_node, admin_user):
         # This test leaves off a required param to assert that user will get a 400.
         url = reverse('api:workflow_job_template_node_create_approval', kwargs={'pk': approval_node.pk, 'version': 'v2'})
