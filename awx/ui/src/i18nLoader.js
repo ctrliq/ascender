@@ -1,11 +1,11 @@
 import { i18n } from '@lingui/core';
 
 export const locales = {
+  en: 'English',
   ar: 'Arabic',
   zh: 'Chinese',
   nl: 'Dutch',
   fr: 'French',
-  en: 'English',
   hi: 'Hindi',
   ja: 'Japanese',
   ko: 'Korean',
