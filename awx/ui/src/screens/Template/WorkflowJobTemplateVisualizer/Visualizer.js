@@ -474,6 +474,10 @@ function Visualizer({ template }) {
                     timeout: node.fullUnifiedJobTemplate.timeout,
                     context_template:
                       node.fullUnifiedJobTemplate.context_template || '',
+                    required_approvals:
+                      node.fullUnifiedJobTemplate.required_approvals || 1,
+                    on_timeout:
+                      node.fullUnifiedJobTemplate.on_timeout || 'deny',
                   })
                 );
               })
@@ -562,6 +566,10 @@ function Visualizer({ template }) {
                         timeout: node.fullUnifiedJobTemplate.timeout,
                         context_template:
                           node.fullUnifiedJobTemplate.context_template || '',
+                        required_approvals:
+                          node.fullUnifiedJobTemplate.required_approvals || 1,
+                        on_timeout:
+                          node.fullUnifiedJobTemplate.on_timeout || 'deny',
                       }
                     )
                   );
@@ -585,6 +593,10 @@ function Visualizer({ template }) {
                         timeout: node.fullUnifiedJobTemplate.timeout,
                         context_template:
                           node.fullUnifiedJobTemplate.context_template || '',
+                        required_approvals:
+                          node.fullUnifiedJobTemplate.required_approvals || 1,
+                        on_timeout:
+                          node.fullUnifiedJobTemplate.on_timeout || 'deny',
                       }
                     )
                   );

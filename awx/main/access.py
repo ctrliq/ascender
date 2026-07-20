@@ -72,6 +72,7 @@ from awx.main.models import (
     WorkflowJobTemplateNode,
     WorkflowApproval,
     WorkflowApprovalTemplate,
+    WorkflowApprovalVote,
     ROLE_SINGLETON_SYSTEM_ADMINISTRATOR,
     ROLE_SINGLETON_SYSTEM_AUDITOR,
 )
@@ -2926,6 +2927,7 @@ class WorkflowApprovalAccess(BaseAccess):
     prefetch_related = (
         'created_by',
         'modified_by',
+        'votes',
     )
 
     def can_use(self, obj):
@@ -2982,6 +2984,35 @@ class WorkflowApprovalTemplateAccess(BaseAccess):
 
     def filtered_queryset(self):
         return self.model.objects.filter(workflowjobtemplatenodes__workflow_job_template__in=WorkflowJobTemplate.accessible_pk_qs(self.user, 'read_role'))
+
+
+class WorkflowApprovalVoteAccess(BaseAccess):
+    """
+    Votes are an immutable audit trail written internally when a user approves
+    or denies a workflow approval; they can never be created, changed or
+    deleted through the API.
+
+    A user can see votes belonging to approvals they can see. Votes whose
+    approval has been deleted are only visible to superusers and system
+    auditors.
+    """
+
+    model = WorkflowApprovalVote
+    select_related = ('user', 'workflow_approval')
+
+    def filtered_queryset(self):
+        return self.model.objects.filter(
+            workflow_approval__unified_job_node__workflow_job__unified_job_template__in=WorkflowJobTemplate.accessible_pk_qs(self.user, 'read_role')
+        )
+
+    def can_add(self, data):
+        return False
+
+    def can_change(self, obj, data):
+        return False
+
+    def can_delete(self, obj):
+        return False
 
 
 for cls in BaseAccess.__subclasses__():

@@ -127,6 +127,7 @@ class ApiVersionRootView(APIView):
         data['workflow_job_templates'] = reverse('api:workflow_job_template_list', request=request)
         data['workflow_jobs'] = reverse('api:workflow_job_list', request=request)
         data['workflow_approvals'] = reverse('api:workflow_approval_list', request=request)
+        data['workflow_approval_votes'] = reverse('api:workflow_approval_vote_list', request=request)
         data['workflow_job_template_nodes'] = reverse('api:workflow_job_template_node_list', request=request)
         data['workflow_job_nodes'] = reverse('api:workflow_job_node_list', request=request)
         data['mesh_visualizer'] = reverse('api:mesh_visualizer_view', request=request)

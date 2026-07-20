@@ -108,6 +108,10 @@ const getNodeToEditDefaultValues = (
     initialValues.timeoutSeconds = timeout - Math.floor(timeout / 60) * 60;
     initialValues.contextTemplate =
       nodeToEdit.fullUnifiedJobTemplate.context_template || '';
+    initialValues.requiredApprovals =
+      nodeToEdit.fullUnifiedJobTemplate.required_approvals || 1;
+    initialValues.onTimeout =
+      nodeToEdit.fullUnifiedJobTemplate.on_timeout || 'deny';
 
     return initialValues;
   }

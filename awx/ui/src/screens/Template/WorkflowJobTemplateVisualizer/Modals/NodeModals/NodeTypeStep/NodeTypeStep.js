@@ -3,15 +3,17 @@ import { Trans, useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import { useField } from 'formik';
 import {
-	Alert,
-	Form,
-	FormGroup,
-	TextArea,
-	TextInput,
-	Select,
-	SelectOption,
-	SelectList,
-	MenuToggle,
+  Alert,
+  Form,
+  FormGroup,
+  FormSelect,
+  FormSelectOption,
+  TextArea,
+  TextInput,
+  Select,
+  SelectOption,
+  SelectList,
+  MenuToggle,
 } from '@patternfly/react-core';
 import { required } from 'util/validators';
 
@@ -59,6 +61,9 @@ function NodeTypeStep({ isIdentifierRequired }) {
   const [convergenceField, , convergenceFieldHelpers] = useField('convergence');
   const [contextTemplateField, , contextTemplateHelpers] =
     useField('contextTemplate');
+  const [requiredApprovalsField, , requiredApprovalsHelpers] =
+    useField('requiredApprovals');
+  const [onTimeoutField, , onTimeoutHelpers] = useField('onTimeout');
 
   const [isConvergenceOpen, setIsConvergenceOpen] = useState(false);
   const config = useConfig();
@@ -134,6 +139,8 @@ function NodeTypeStep({ isIdentifierRequired }) {
               timeoutMinutesHelpers.setValue(0);
               timeoutSecondsHelpers.setValue(0);
               contextTemplateHelpers.setValue('');
+              requiredApprovalsHelpers.setValue(1);
+              onTimeoutHelpers.setValue('deny');
               convergenceFieldHelpers.setValue('any');
             }}
           />
@@ -222,6 +229,49 @@ function NodeTypeStep({ isIdentifierRequired }) {
                       <Trans>sec</Trans>
                     </TimeoutLabel>
                   </div>
+                </FormGroup>
+                <FormGroup
+                  label={t`On timeout`}
+                  fieldId="approval-on-timeout"
+                  labelHelp={
+                    <Popover
+                      content={t`Whether the approval node is automatically approved or denied when the timeout expires.`}
+                    />
+                  }
+                >
+                  <FormSelect
+                    id="approval-on-timeout"
+                    ouiaId="approval-on-timeout"
+                    aria-label={t`On timeout`}
+                    value={onTimeoutField.value}
+                    onChange={(event, val) => {
+                      onTimeoutHelpers.setValue(val);
+                    }}
+                  >
+                    <FormSelectOption value="deny" label={t`Deny`} />
+                    <FormSelectOption value="approve" label={t`Approve`} />
+                  </FormSelect>
+                </FormGroup>
+                <FormGroup
+                  label={t`Required approvals`}
+                  fieldId="approval-required-approvals"
+                  labelHelp={
+                    <Popover
+                      content={t`The number of distinct users that must approve before the workflow continues. A single denial always denies the node.`}
+                    />
+                  }
+                >
+                  <TimeoutInput
+                    {...requiredApprovalsField}
+                    aria-label={t`Required approvals`}
+                    id="approval-required-approvals"
+                    min="1"
+                    onChange={(event) => {
+                      requiredApprovalsField.onChange(event);
+                    }}
+                    step="1"
+                    type="number"
+                  />
                 </FormGroup>
                 <FormGroup
                   label={t`Context Template`}

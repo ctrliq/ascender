@@ -98,6 +98,8 @@ function getInitialValues() {
     timeoutMinutes: 0,
     timeoutSeconds: 0,
     contextTemplate: '',
+    requiredApprovals: 1,
+    onTimeout: 'deny',
     nodeType: 'job_template',
     convergence: 'any',
     identifier: '',

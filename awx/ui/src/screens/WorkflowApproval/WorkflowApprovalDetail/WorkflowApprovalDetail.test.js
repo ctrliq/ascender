@@ -184,6 +184,9 @@ async function renderDetail(approval, props = {}) {
 describe('<WorkflowApprovalDetail />', () => {
   beforeEach(() => {
     WorkflowJobsAPI.readDetail.mockResolvedValue({ data: workflowJob });
+    WorkflowApprovalsAPI.readVotes.mockResolvedValue({
+      data: { count: 0, results: [] },
+    });
   });
 
   afterEach(() => {
@@ -238,6 +241,43 @@ describe('<WorkflowApprovalDetail />', () => {
       approval_expiration: '2020-10-10T17:13:12.067947Z',
     });
     assertDetail('Expires', formatDateString('2020-10-10T17:13:12.067947Z'));
+  });
+
+  test('should show quorum progress and votes', async () => {
+    WorkflowApprovalsAPI.readVotes.mockResolvedValue({
+      data: {
+        count: 1,
+        results: [
+          {
+            id: 1,
+            vote: 'approve',
+            comment: 'looks good',
+            created: '2020-10-09T18:00:00.067947Z',
+            user_name: 'alice',
+            summary_fields: { user: { id: 3, username: 'alice' } },
+          },
+        ],
+      },
+    });
+    await renderDetail({
+      ...workflowApproval,
+      required_approvals: 2,
+      approvals_received: 1,
+    });
+    assertDetail('Approvals', '1/2');
+    const votesLabel = screen.getByText('Votes');
+    expect(votesLabel.nextElementSibling).toHaveTextContent('alice');
+    expect(votesLabel.nextElementSibling).toHaveTextContent('approved');
+    expect(votesLabel.nextElementSibling).toHaveTextContent('looks good');
+  });
+
+  test('should show on timeout resolution when a timeout is set', async () => {
+    await renderDetail({
+      ...workflowApproval,
+      timeout: 60,
+      on_timeout: 'approve',
+    });
+    assertDetail('On Timeout', 'Approve');
   });
 
   test('should show finished date/time', async () => {

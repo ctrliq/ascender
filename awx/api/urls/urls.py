@@ -84,6 +84,7 @@ from .oauth2 import urls as oauth2_urls
 from .oauth2_root import urls as oauth2_root_urls
 from .workflow_approval_template import urls as workflow_approval_template_urls
 from .workflow_approval import urls as workflow_approval_urls
+from .workflow_approval_vote import urls as workflow_approval_vote_urls
 from .analytics import urls as analytics_urls
 from .receptor_address import urls as receptor_address_urls
 
@@ -153,6 +154,7 @@ v2_urls = [
     path(f'{AWX_ANALYTICS_API_PREFIX}/', include(analytics_urls)),
     path('workflow_approval_templates/', include(workflow_approval_template_urls)),
     path('workflow_approvals/', include(workflow_approval_urls)),
+    path('workflow_approval_votes/', include(workflow_approval_vote_urls)),
     path('bulk/', BulkView.as_view(), name='bulk'),
     path('bulk/host_create/', BulkHostCreateView.as_view(), name='bulk_host_create'),
     path('bulk/host_delete/', BulkHostDeleteView.as_view(), name='bulk_host_delete'),

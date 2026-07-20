@@ -188,6 +188,8 @@ describe('NodeTypeStep', () => {
           approvalDescription: '',
           timeoutMinutes: 0,
           timeoutSeconds: 0,
+          requiredApprovals: 1,
+          onTimeout: 'deny',
           convergence: 'any',
         }}
       >
@@ -204,6 +206,13 @@ describe('NodeTypeStep', () => {
     expect(descriptionInput).toBeInTheDocument();
     expect(minutesInput).toBeInTheDocument();
     expect(secondsInput).toBeInTheDocument();
+
+    const onTimeoutSelect = screen.getByLabelText('On timeout');
+    const requiredApprovalsInput = screen.getByLabelText('Required approvals');
+    expect(onTimeoutSelect).toBeInTheDocument();
+    expect(onTimeoutSelect).toHaveValue('deny');
+    expect(requiredApprovalsInput).toBeInTheDocument();
+    expect(requiredApprovalsInput).toHaveValue(1);
 
     fireEvent.change(nameInput, {
       target: { value: 'Test Approval', name: 'approvalName' },
