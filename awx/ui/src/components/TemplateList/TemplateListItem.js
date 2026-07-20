@@ -19,7 +19,6 @@ import {
 } from '@patternfly/react-icons';
 import { timeOfDay, formatDateString } from 'util/dates';
 import { JobTemplatesAPI, WorkflowJobTemplatesAPI } from 'api';
-import { toTitleCase } from 'util/strings';
 import { ActionsTd, ActionItem, TdBreakWord } from '../PaginatedTable';
 import { DetailList, Detail, DeletedDetail } from '../DetailList';
 import ChipGroup from '../ChipGroup';
@@ -147,7 +146,11 @@ function TemplateListItem({
           ) : null}
         </Td>
         <Td dataLabel={t`Last Ran`}>{lastRun}</Td>
-        <Td dataLabel={t`Type`}>{toTitleCase(template.type)}</Td>
+        <Td dataLabel={t`Type`}>
+          {template.type === 'workflow_job_template'
+            ? t`Workflow Job Template`
+            : t`Job Template`}
+        </Td>
         <ActionsTd dataLabel={t`Actions`}>
           <ActionItem
             visible={template.type === 'workflow_job_template'}
