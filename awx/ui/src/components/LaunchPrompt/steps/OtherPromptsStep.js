@@ -29,8 +29,8 @@ const FieldHeader = styled.div`
 function OtherPromptsStep({ launchConfig, variablesMode, onVarModeChange }) {
   const { t } = useLingui();
   const helpTextSource = launchConfig.job_template_data
-    ? jobHelpText
-    : workflowHelpText;
+    ? jobHelpText()
+    : workflowHelpText();
   return (
     <div data-cy="other-prompts">
       <Form

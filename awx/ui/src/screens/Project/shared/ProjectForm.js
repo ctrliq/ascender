@@ -96,7 +96,7 @@ function ProjectFormFields({
   scmSubFormState,
 }) {
   const { t } = useLingui();
-  const projectHelpText = getProjectHelpText(t);
+  const projectHelpText = getProjectHelpText();
   const scmFormFields = {
     scm_url: '',
     scm_branch: '',

@@ -230,6 +230,10 @@ msgstr "SAML"
 msgid "Privilege Escalation"
 msgstr "权限升级"
 
+#: screens/Project/shared/Project.helptext.js:90
+msgid "Enable content signing to verify that the content has remained secure when a project is synced. If the content has been tampered with, the job will not run."
+msgstr "启用内容签名以验证在同步项目时内容是否保持安全。如果内容已被篡改，任务将不会运行。"
+
 #: components/Schedule/shared/FrequencyDetailSubform.js:312
 msgid "Thu"
 msgstr "周四"
@@ -265,6 +269,10 @@ msgstr "（启动时提示）"
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.js:122
 msgid "This credential type is currently being used by some credentials and cannot be deleted"
 msgstr "一些凭证目前正在使用此凭证类型，无法删除"
+
+#: screens/Job/Job.helptext.js:16
+msgid "Divide the work done by this job template into the specified number of job slices, each running the same tasks against a portion of the inventory."
+msgstr "将此任务模板完成的工作划分为指定数量的任务切片，每个切片针对清单的一部分运行相同的任务。"
 
 #: components/Search/LookupTypeInput.js:172
 msgid "Lookup typeahead"
@@ -308,6 +316,10 @@ msgstr "启动作业失败。"
 #: components/AddRole/AddResourceRole.js:249
 msgid "Select Roles to Apply"
 msgstr "选择要应用的角色"
+
+#: screens/Project/shared/Project.helptext.js:89
+msgid "Branch to checkout. In addition to branches, you can input tags, commit hashes, and arbitrary refs. Some commit hashes and refs may not be available unless you also provide a custom refspec."
+msgstr "要检出的分支。除了分支之外，您还可以输入标签、提交哈希和任意引用。除非您还提供自定义 refspec，否则某些提交哈希和引用可能不可用。"
 
 #: components/JobList/JobList.js:265
 #: components/JobList/JobListItem.js:115
@@ -565,6 +577,10 @@ msgstr "{0, plural, one {You cannot cancel the following job because it is not r
 #: screens/Template/shared/WorkflowJobTemplateForm.js:251
 msgid "Options"
 msgstr "选项"
+
+#: screens/Project/shared/Project.helptext.js:83
+msgid "For more information, refer to the"
+msgstr "有关更多信息，请参阅"
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:371
 msgid "Maximum number of times this node's job is automatically retried after failing before its failure paths are followed. Canceled jobs are never retried."
@@ -1005,6 +1021,10 @@ msgstr "然后单击启动时更新修订版本。"
 msgid "End User License Agreement"
 msgstr "最终用户许可证协议"
 
+#: screens/Project/shared/Project.helptext.js:93
+msgid "Delete the local repository in its entirety prior to performing an update. Depending on the size of the repository this may significantly increase the amount of time required to complete an update."
+msgstr "在执行更新之前完全删除本地存储库。根据存储库的大小，这可能会显著增加完成更新所需的时间。"
+
 #: screens/ActivityStream/ActivityStreamDetailButton.js:49
 msgid "Setting category"
 msgstr "设置类别"
@@ -1157,6 +1177,10 @@ msgstr "智能清单主机过滤器中不支持 not__ 和 __search 等一些搜�
 msgid "timed out"
 msgstr "超时"
 
+#: screens/Job/Job.helptext.js:14
+msgid "Provide a host pattern to further constrain the list of hosts that will be managed or affected by the playbook. Multiple patterns are allowed. Refer to Ansible documentation for more information and examples on patterns."
+msgstr "提供主机模式以进一步限制将由 playbook 管理或影响的主机列表。允许使用多个模式。有关模式的更多信息和示例，请参阅 Ansible 文档。"
+
 #: screens/Setting/Logging/Logging.js:37
 msgid "View Logging settings"
 msgstr "查看日志记录设置"
@@ -1168,6 +1192,10 @@ msgstr "客户端 secret"
 #: screens/Template/Templates.js:19
 msgid "Create New Job Template"
 msgstr "创建新作业模板"
+
+#: screens/Job/Job.helptext.js:8
+msgid "The project from which this inventory update is sourced."
+msgstr "此清单更新的来源项目。"
 
 #: components/AddRole/AddResourceRole.js:214
 msgid "Select Items from List"
@@ -2008,6 +2036,10 @@ msgstr "团队角色"
 msgid "relaunch workflow"
 msgstr "重新启动工作流"
 
+#: screens/Project/shared/Project.helptext.js:48
+msgid "This project is currently on sync and cannot be clicked until sync process completed"
+msgstr "此项目当前正在同步，在同步过程完成之前无法单击"
+
 #: routeConfig.js:131
 #: screens/ActivityStream/ActivityStream.js:221
 msgid "Administration"
@@ -2072,6 +2104,10 @@ msgstr "清除订阅"
 #: screens/Instances/InstanceDetail/InstanceDetail.js:217
 msgid "Install Bundle"
 msgstr "安装捆绑包"
+
+#: screens/Project/shared/Project.helptext.js:17
+msgid "Example URLs for GIT Source Control include:"
+msgstr "GIT 源代码控制的示例 URL 包括："
 
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.js:75
 #: screens/CredentialType/shared/CredentialTypeForm.js:38
@@ -2173,6 +2209,10 @@ msgstr "房东首次自动执行操作的时间"
 #: screens/User/Users.js:27
 msgid "Create New User"
 msgstr "创建新用户"
+
+#: screens/Project/shared/Project.helptext.js:95
+msgid "Each time a job runs using this project, update the revision of the project prior to starting the job."
+msgstr "每次使用此项目运行任务时，在开始任务之前更新项目的修订版本。"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:31
 msgid "{interval} week"
@@ -2329,7 +2369,7 @@ msgstr "此构建的库存输入 \n"
 msgid "The project is currently syncing and the revision will be available after the sync is complete."
 msgstr "该项目目前正在同步，且修订将在同步完成后可用。"
 
-#: screens/Organization/OrganizationDetail/OrganizationDetail.js:167
+#: screens/Organization/OrganizationDetail/OrganizationDetail.js:164
 msgid "Delete Organization"
 msgstr "删除机构"
 
@@ -2364,7 +2404,7 @@ msgstr "搜索"
 msgid "confirm edit login redirect"
 msgstr "确认编辑登录重定向"
 
-#: screens/Organization/OrganizationDetail/OrganizationDetail.js:120
+#: screens/Organization/OrganizationDetail/OrganizationDetail.js:117
 msgid "The Instance Groups for this Organization to run on."
 msgstr "要运行此机构的实例组。"
 
@@ -2694,6 +2734,10 @@ msgstr "选择资源类型"
 #: components/VerbositySelectField/VerbositySelectField.js:22
 msgid "4 (Connection Debug)"
 msgstr "4（连接调试）"
+
+#: screens/Project/shared/Project.helptext.js:8
+msgid "Base path used for locating playbooks. Directories found inside this path will be listed in the playbook directory drop-down. Together the base path and selected playbook directory provide the full path used to locate playbooks."
+msgstr "用于定位 playbook 的基本路径。在此路径中找到的目录将列在 playbook 目录下拉列表中。基本路径和所选的 playbook 目录一起提供用于定位 playbook 的完整路径。"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:439
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:575
@@ -3257,7 +3301,7 @@ msgstr "小于或等于比较。"
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:165
 #: screens/Job/JobDetail/JobDetail.js:669
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:494
-#: screens/Organization/OrganizationDetail/OrganizationDetail.js:173
+#: screens/Organization/OrganizationDetail/OrganizationDetail.js:170
 #: screens/Project/ProjectDetail/ProjectDetail.js:375
 #: screens/Project/shared/ProjectSubForms/SharedFields.js:119
 #: screens/Team/TeamDetail/TeamDetail.js:81
@@ -3411,7 +3455,7 @@ msgstr "GitHub Team"
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:137
 #: screens/Job/JobDetail/JobDetail.js:588
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:449
-#: screens/Organization/OrganizationDetail/OrganizationDetail.js:107
+#: screens/Organization/OrganizationDetail/OrganizationDetail.js:104
 #: screens/Project/ProjectDetail/ProjectDetail.js:323
 #: screens/Team/TeamDetail/TeamDetail.js:53
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:362
@@ -3449,6 +3493,10 @@ msgstr "其它身份验证设置"
 #: components/Schedule/ScheduleOccurrences/ScheduleOccurrences.js:58
 msgid "Local"
 msgstr "本地"
+
+#: screens/Job/Job.helptext.js:6
+msgid "Select the inventory containing the hosts you want this job to manage."
+msgstr "选择包含您希望此任务管理的主机的清单。"
 
 #: components/AlertModal/AlertModal.js:83
 msgid "Alert modal"
@@ -3741,6 +3789,10 @@ msgstr "TACACS+ 设置"
 msgid "Zoom In"
 msgstr "放大"
 
+#: screens/Job/Job.helptext.js:22
+msgid "Project checkout results"
+msgstr "项目检出结果"
+
 #: components/Schedule/shared/FrequencyDetailSubform.js:149
 msgid "October"
 msgstr "10 月"
@@ -3982,8 +4034,8 @@ msgstr "删除凭证"
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:474
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:476
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.js:142
-#: screens/Organization/OrganizationDetail/OrganizationDetail.js:156
-#: screens/Organization/OrganizationDetail/OrganizationDetail.js:160
+#: screens/Organization/OrganizationDetail/OrganizationDetail.js:153
+#: screens/Organization/OrganizationDetail/OrganizationDetail.js:157
 #: screens/Project/ProjectDetail/ProjectDetail.js:348
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.js:107
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.js:111
@@ -4262,6 +4314,10 @@ msgstr "源控制分支/标签/提交"
 msgid "This will cancel all subsequent nodes in this workflow"
 msgstr "这将取消此工作流中的所有后续节点"
 
+#: screens/Job/Job.helptext.js:11
+msgid "Select credentials for accessing the nodes this job will be ran against. You can only select one credential of each type. For machine credentials (SSH), checking \"Prompt on launch\" without selecting credentials will require you to select a machine credential at run time. If you select credentials and check \"Prompt on launch\", the selected credential(s) become the defaults that can be updated at run time."
+msgstr "选择用于访问此任务将针对其运行的节点的凭证。每种类型只能选择一个凭证。对于计算机凭证 (SSH)，在不选择凭证的情况下勾选“启动时提示”将要求您在运行时选择计算机凭证。如果您选择凭证并勾选“启动时提示”，则所选凭证将成为可在运行时更新的默认值。"
+
 #: screens/Template/shared/WorkflowJobTemplate.helptext.js:28
 msgid "Prompt for diff mode on launch."
 msgstr "启动时提示输入差异模式。"
@@ -4360,6 +4416,10 @@ msgstr "实例状态"
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:163
 msgid "Actor"
 msgstr "操作者"
+
+#: screens/Project/shared/Project.helptext.js:34
+msgid "Example URLs for Subversion Source Control include:"
+msgstr "Subversion 源代码控制的示例 URL 包括："
 
 #: screens/Instances/InstancePeers/InstancePeerList.js:280
 msgid "Remove peers?"
@@ -4460,7 +4520,7 @@ msgstr "查看机构详情"
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:502
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:238
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.js:171
-#: screens/Organization/OrganizationDetail/OrganizationDetail.js:182
+#: screens/Organization/OrganizationDetail/OrganizationDetail.js:179
 #: screens/Organization/OrganizationList/OrganizationList.js:195
 #: screens/Project/ProjectDetail/ProjectDetail.js:383
 #: screens/Project/ProjectList/ProjectList.js:291
@@ -4923,6 +4983,10 @@ msgstr "成功复制清单"
 msgid "The number of distinct users that must approve before the workflow continues. A single denial always denies the node."
 msgstr "在工作流继续之前必须批准的不同用户数。单次拒绝始终会拒绝该节点。"
 
+#: screens/Job/Job.helptext.js:33
+msgid "These arguments are used with the specified module. You can find information about {moduleName} by clicking "
+msgstr "这些参数与指定的模块一起使用。您可以通过单击以下位置查找有关 {moduleName} 的信息 "
+
 #: screens/Instances/InstanceEdit/InstanceEdit.js:82
 msgid "View all Instances."
 msgstr "查看所有实例。"
@@ -5282,6 +5346,10 @@ msgstr "选择一个选项"
 msgid "Application information"
 msgstr "应用程序信息"
 
+#: screens/Job/Job.helptext.js:15
+msgid "Control the level of output ansible will produce as the playbook executes."
+msgstr "控制 playbook 执行时 ansible 将产生的输出级别。"
+
 #: screens/Job/JobOutput/EmptyOutput.js:37
 msgid "This job failed and has no output."
 msgstr "此作业失败，且没有输出。"
@@ -5453,6 +5521,10 @@ msgstr "查看清单脚本"
 msgid "This inventory is applied to all workflow nodes within this workflow ({0}) that prompt for an inventory."
 msgstr "此清单会应用到在这个工作流 ({0}) 中的所有作业模板，它会提示输入一个清单。"
 
+#: screens/Project/shared/Project.helptext.js:102
+msgid "Secret shared with the webhook service. The service uses it to sign its requests, so only your repository can trigger a project sync. Type your own secret to manage it as configuration, or leave the field blank to have one generated on save."
+msgstr "与 webhook 服务共享的密钥。该服务使用它来签署其请求，以便只有您的存储库才能触发项目同步。键入您自己的密钥以将其作为配置进行管理，或将该字段留空以在保存时生成一个。"
+
 #: screens/Dashboard/DashboardGraph.js:44
 #: screens/Dashboard/DashboardGraph.js:137
 msgid "Past two weeks"
@@ -5535,6 +5607,10 @@ msgid "This schedule uses complex rules that are not supported in the\n"
 msgstr "此调度使用 UI 中不支持的复杂规则。\n"
 "        请使用 API 来管理此调度。"
 
+#: screens/Project/shared/Project.helptext.js:92
+msgid "Remove any local modifications prior to performing an update."
+msgstr "在执行更新之前删除任何本地修改。"
+
 #: screens/Inventory/InventoryList/InventoryList.js:143
 msgid "Add smart inventory"
 msgstr "添加智能清单"
@@ -5560,6 +5636,10 @@ msgstr "结束日期"
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:425
 msgid "Disable SSL Verification"
 msgstr "禁用 SSL 验证"
+
+#: screens/Job/Job.helptext.js:21
+msgid "Select a branch for the workflow. This branch is applied to all job template nodes that prompt for a branch."
+msgstr "为工作流选择一个分支。此分支应用于所有提示输入分支的任务模板节点。"
 
 #: screens/ManagementJob/ManagementJob.js:131
 msgid "Management job not found."
@@ -5616,6 +5696,10 @@ msgstr "测试通知"
 msgid "Enabled Options"
 msgstr "启用的选项"
 
+#: screens/Project/shared/Project.helptext.js:14
+msgid "Select from the list of directories found in the Project Base Path. Together the base path and the playbook directory provide the full path used to locate playbooks."
+msgstr "从在项目基本路径中找到的目录列表中选择。基本路径和 playbook 目录一起提供用于定位 playbook 的完整路径。"
+
 #: screens/Template/Template.js:154
 #: screens/Template/WorkflowJobTemplate.js:139
 msgid "View Survey"
@@ -5634,16 +5718,6 @@ msgstr "这一步包含错误"
 #: screens/Template/shared/WorkflowJobTemplateForm.js:198
 msgid "source control branch"
 msgstr "源控制分支"
-
-#: screens/Organization/OrganizationDetail/OrganizationDetail.js:101
-msgid "The execution environment that will be used for jobs\n"
-"          inside of this organization. This will be used a fallback when\n"
-"          an execution environment has not been explicitly assigned at the\n"
-"          project, job template or workflow level."
-msgstr "将用于此机构内作业的执行环境。\n"
-"          当在项目、作业模板或工作流级别\n"
-"          没有显式分配执行环境时，将使用它作为\n"
-"          回退。"
 
 #: components/LaunchPrompt/steps/InstanceGroupsStep.js:97
 #: components/LaunchPrompt/steps/useInstanceGroupsStep.js:19
@@ -5664,7 +5738,7 @@ msgstr "将用于此机构内作业的执行环境。\n"
 #: screens/Instances/InstanceDetail/InstanceDetail.js:264
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:225
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:113
-#: screens/Organization/OrganizationDetail/OrganizationDetail.js:119
+#: screens/Organization/OrganizationDetail/OrganizationDetail.js:116
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:431
 msgid "Instance Groups"
 msgstr "实例组"
@@ -5855,6 +5929,10 @@ msgstr "更新"
 msgid "Failed to delete one or more schedules."
 msgstr "删除一个或多个调度失败。"
 
+#: screens/Project/shared/Project.helptext.js:100
+msgid "Service that webhook requests will be accepted from."
+msgstr "将接受 webhook 请求的来源服务。"
+
 #. placeholder {0}: zoneLinks[selectedValue]
 #: components/Schedule/shared/ScheduleFormFields.js:49
 msgid "Warning: {selectedValue} is a link to {0} and will be saved as that."
@@ -5875,6 +5953,7 @@ msgstr "上次重新计算日期："
 
 #: components/AdHocCommands/AdHocDetailsStep.js:124
 #: components/AdHocCommands/AdHocDetailsStep.js:176
+#: screens/Job/Job.helptext.js:39
 msgid "here."
 msgstr "此处。"
 
@@ -5887,6 +5966,10 @@ msgstr "此处。"
 #: screens/Instances/InstanceList/InstanceListItem.js:77
 msgid "Unavailable"
 msgstr "不可用"
+
+#: screens/Project/shared/Project.helptext.js:98
+msgid "Sync the project when a push happens in the source control repository, so the local copy is always up to date without polling or updating on every job launch."
+msgstr "当源代码控制存储库中发生推送时同步项目，以便本地副本始终保持最新，而无需在每次任务启动时轮询或更新。"
 
 #: screens/Job/JobOutput/JobOutputSearch.js:132
 msgid "Play Started"
@@ -5933,6 +6016,10 @@ msgstr "返回到仪表盘。"
 msgid "cancel edit login redirect"
 msgstr "取消编辑登录重定向"
 
+#: screens/Job/Job.helptext.js:20
+msgid "Skip tags are useful when you have a large playbook, and you want to skip specific parts of a play or task. Use commas to separate multiple tags. Refer to the documentation for details on the usage of tags."
+msgstr "当您有一个大型 playbook 并且想要跳过 play 或任务的特定部分时，跳过标签非常有用。使用逗号分隔多个标签。有关标签用法的详细信息，请参阅文档。"
+
 #: screens/User/User.js:140
 msgid "View User Details"
 msgstr "查看用户详情"
@@ -5958,6 +6045,10 @@ msgstr "选择的类别"
 #: screens/Team/TeamDetail/TeamDetail.js:77
 msgid "Delete Team"
 msgstr "删除团队"
+
+#: screens/Job/Job.helptext.js:9
+msgid "The execution environment that will be used when launching this job template. The resolved execution environment can be overridden by explicitly assigning a different one to this job template."
+msgstr "启动此任务模板时将使用的执行环境。可以通过为此任务模板显式分配不同的执行环境来覆盖解析的执行环境。"
 
 #: components/JobList/JobList.js:215
 msgid "Label Name"
@@ -5986,6 +6077,7 @@ msgid "YAML:"
 msgstr "YAML："
 
 #: components/AdHocCommands/AdHocDetailsStep.js:128
+#: screens/Job/Job.helptext.js:43
 msgid "These arguments are used with the specified module."
 msgstr "这些参数与指定的模块一起使用。"
 
@@ -6005,6 +6097,10 @@ msgstr "清除订阅选择"
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginTestAlert.js:44
 msgid "Test passed"
 msgstr "测试通过"
+
+#: screens/Job/Job.helptext.js:18
+msgid "Select the Instance Groups for this Job Template to run on."
+msgstr "选择此任务模板要在其上运行的实例组。"
 
 #: screens/Template/shared/WebhookSubForm.js:204
 msgid "Leave blank to generate a new webhook key on save"
@@ -6086,6 +6182,10 @@ msgstr "模块名称"
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:145
 msgid "Expires"
 msgstr "过期"
+
+#: screens/Job/Job.helptext.js:12
+msgid "Optional labels that describe this job template, such as 'dev' or 'test'. Labels can be used to group and filter job templates and completed jobs."
+msgstr "描述此任务模板的可选标签，例如 'dev' 或 'test'。标签可用于对任务模板和已完成的任务进行分组和过滤。"
 
 #: components/Search/LookupTypeInput.js:171
 msgid "Lookup type"
@@ -6411,6 +6511,10 @@ msgstr "向下平移"
 msgid "Start inventory source sync"
 msgstr "开始库存源同步"
 
+#: screens/Project/shared/Project.helptext.js:94
+msgid "Submodules will track the latest commit on their master branch (or other branch specified in .gitmodules). If no, submodules will be kept at the revision specified by the main project. This is equivalent to specifying the --remote flag to git submodule update."
+msgstr "子模块将跟踪其 master 分支（或 .gitmodules 中指定的其他分支）上的最新提交。如果否，子模块将保持在主项目指定的修订版本。这相当于为 git submodule update 指定 --remote 标志。"
+
 #: screens/Project/Project.js:146
 msgid "Project not found."
 msgstr "未找到项目。"
@@ -6613,7 +6717,7 @@ msgstr "API 令牌"
 msgid "Control the level of output Ansible will produce for inventory source update jobs."
 msgstr "控制Ansible将为库存源更新作业生成的输出级别。"
 
-#: screens/Organization/OrganizationDetail/OrganizationDetail.js:127
+#: screens/Organization/OrganizationDetail/OrganizationDetail.js:124
 #: screens/Organization/shared/OrganizationForm.js:100
 msgid "Galaxy Credentials"
 msgstr "Galaxy 凭证"
@@ -6731,6 +6835,10 @@ msgstr "返回到实例组"
 msgid "page"
 msgstr "页"
 
+#: screens/Project/shared/Project.helptext.js:68
+msgid "Note: This field assumes the remote name is \"origin\"."
+msgstr "注意：此字段假定远程名称为 “origin”。"
+
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.js:82
 #: screens/Setting/Settings.js:57
 msgid "GitHub Default"
@@ -6739,6 +6847,10 @@ msgstr "GitHub Default"
 #: screens/Template/Survey/SurveyQuestionForm.js:221
 msgid "Maximum"
 msgstr "最大值"
+
+#: screens/Project/shared/Project.helptext.js:5
+msgid "The execution environment that will be used for jobs that use this project. This will be used as fallback when an execution environment has not been explicitly assigned at the job template or workflow level."
+msgstr "将用于使用此项目的任务的执行环境。当未在任务模板或工作流级别显式分配执行环境时，将用作回退。"
 
 #: screens/Template/shared/WorkflowJobTemplate.helptext.js:5
 msgid "Name of the workflow job template."
@@ -6762,6 +6874,10 @@ msgstr "完整镜像位置，包括容器注册表、镜像名称和版本标签
 #: screens/TopologyView/Legend.js:114
 msgid "Node state types"
 msgstr "节点状态类型"
+
+#: screens/Project/shared/Project.helptext.js:101
+msgid "The webhook endpoint of this project. Add it to the webhook configuration of the repository to have pushes trigger a project sync."
+msgstr "此项目的 webhook 端点。将其添加到存储库的 webhook 配置中，以便推送触发项目同步。"
 
 #: components/Lookup/ProjectLookup.js:138
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:133
@@ -6900,6 +7016,10 @@ msgstr "确认删除"
 msgid "Workflow timed out message"
 msgstr "工作流超时信息"
 
+#: screens/Job/Job.helptext.js:10
+msgid "Select the playbook to be executed by this job."
+msgstr "选择此任务要执行的 playbook。"
+
 #: components/Schedule/ScheduleOccurrences/ScheduleOccurrences.js:52
 msgid "(Limited to first 10)"
 msgstr "（限制为前 10）"
@@ -6995,6 +7115,10 @@ msgstr "机构名称"
 msgid "Host Filter"
 msgstr "主机过滤器"
 
+#: screens/Project/shared/Project.helptext.js:97
+msgid "Time in seconds to consider a project to be current. During job runs and callbacks the task system will evaluate the timestamp of the latest project update. If it is older than Cache Timeout, it is not considered current, and a new project update will be performed."
+msgstr "将项目视为最新的时间（以秒为单位）。在任务运行和回调期间，任务系统将评估最新项目更新的时间戳。如果它早于缓存超时，则不将其视为最新，并将执行新的项目更新。"
+
 #: screens/ActivityStream/ActivityStream.js:269
 msgid "Keyword"
 msgstr "关键字"
@@ -7017,6 +7141,7 @@ msgstr "文件、目录或脚本"
 msgid "Resource type"
 msgstr "资源类型"
 
+#: screens/Organization/OrganizationDetail/OrganizationDetail.js:101
 #: screens/Organization/shared/OrganizationForm.js:92
 msgid "The execution environment that will be used for jobs inside of this organization. This will be used a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level."
 msgstr "用于本机构内作业的执行环境。当项目、作业模板或工作流没有显式分配执行环境时，则会使用它。"
@@ -7516,6 +7641,10 @@ msgstr "使用 GitHub Organizations 登录"
 msgid "Redirecting to subscription detail"
 msgstr "重定向到订阅详情"
 
+#: screens/Job/Job.helptext.js:17
+msgid "The amount of time (in seconds) to run before the job is canceled. Defaults to 0 for no job timeout."
+msgstr "任务被取消前的运行时间（以秒为单位）。默认为 0，表示没有任务超时。"
+
 #: screens/Host/HostGroups/HostGroupsList.js:246
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.js:262
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:277
@@ -7703,6 +7832,10 @@ msgstr "从第一个节点重新启动"
 #: screens/Template/WorkflowJobTemplate.js:102
 msgid "Back to Templates"
 msgstr "返回到模板"
+
+#: screens/Project/shared/Project.helptext.js:80
+msgid "The first fetches all references. The second fetches the Github pull request number 62, in this example the branch needs to be \"pull/62/head\"."
+msgstr "第一个获取所有引用。第二个获取 Github 拉取请求编号 62，在此示例中分支需要为 “pull/62/head”。"
 
 #: screens/Setting/SettingList.js:54
 msgid "Authentication"
@@ -8181,6 +8314,10 @@ msgstr "清单（名称）"
 msgid "Update Revision on Launch"
 msgstr "启动时更新修订"
 
+#: screens/Job/Job.helptext.js:7
+msgid "The project containing the playbook this job will execute."
+msgstr "包含此任务将执行的 playbook 的项目。"
+
 #: screens/Credential/shared/CredentialForm.js:189
 msgid "Select Credential Type"
 msgstr "编辑凭证类型"
@@ -8188,6 +8325,10 @@ msgstr "编辑凭证类型"
 #: screens/Setting/Settings.js:87
 msgid "LDAP 2"
 msgstr "LDAP 2"
+
+#: screens/Project/shared/Project.helptext.js:71
+msgid "Examples include:"
+msgstr "示例包括："
 
 #: components/JobList/JobList.js:222
 #: components/JobList/JobListItem.js:55
@@ -8599,6 +8740,10 @@ msgstr "实例详情"
 msgid "No output found for this job."
 msgstr "没有为该作业找到输出。"
 
+#: screens/Job/Job.helptext.js:5
+msgid "For job templates, select run to execute the playbook. Select check to only check playbook syntax, test environment setup, and report problems without executing the playbook."
+msgstr "对于任务模板，选择 run 以执行 playbook。选择 check 仅检查 playbook 语法、测试环境设置并报告问题，而不执行 playbook。"
+
 #: screens/Setting/SettingList.js:117
 msgid "Logging settings"
 msgstr "日志设置"
@@ -8749,7 +8894,7 @@ msgstr "更新选项"
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:85
 #: screens/Job/JobDetail/JobDetail.js:593
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:454
-#: screens/Organization/OrganizationDetail/OrganizationDetail.js:112
+#: screens/Organization/OrganizationDetail/OrganizationDetail.js:109
 #: screens/Project/ProjectDetail/ProjectDetail.js:328
 #: screens/Team/TeamDetail/TeamDetail.js:57
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:367
@@ -8758,6 +8903,10 @@ msgstr "更新选项"
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:240
 msgid "Last Modified"
 msgstr "最后修改"
+
+#: screens/Project/shared/Project.helptext.js:85
+msgid "Documentation."
+msgstr "文档。"
 
 #: components/LaunchPrompt/steps/InstanceGroupsStep.js:84
 #: components/Lookup/InstanceGroupsLookup.js:107
@@ -9195,6 +9344,10 @@ msgstr "Webhook"
 msgid "Failed to associate peer."
 msgstr "无法关联对等点。"
 
+#: screens/Job/Job.helptext.js:19
+msgid "Tags are useful when you have a large playbook, and you want to run a specific part of a play or task. Use commas to separate multiple tags. Refer to the documentation for details on the usage of tags."
+msgstr "当您有一个大型 playbook 并且想要运行 play 或任务的特定部分时，标签非常有用。使用逗号分隔多个标签。有关标签用法的详细信息，请参阅文档。"
+
 #: screens/ActivityStream/ActivityStream.js:265
 msgid "Events"
 msgstr "事件"
@@ -9251,7 +9404,7 @@ msgstr "必须选择一个清单"
 msgid "Source Control Branch"
 msgstr "源控制分支"
 
-#: screens/Organization/OrganizationDetail/OrganizationDetail.js:171
+#: screens/Organization/OrganizationDetail/OrganizationDetail.js:168
 msgid "This organization is currently being by other resources. Are you sure you want to delete it?"
 msgstr "这个机构目前由其他资源使用。您确定要删除它吗？"
 
@@ -9892,6 +10045,10 @@ msgstr "添加新组"
 msgid "Current page"
 msgstr "当前页"
 
+#: screens/Job/Job.helptext.js:25
+msgid "The number of parallel or simultaneous processes to use while executing the playbook. An empty value, or a value less than 1 will use the Ansible default which is usually 5. The default number of forks can be overwritten with a change to"
+msgstr "执行 playbook 时要使用的并行或同时进程的数量。空值或小于 1 的值将使用 Ansible 默认值，通常为 5。可以通过更改以下内容来覆盖默认的 forks 数量"
+
 #: screens/InstanceGroup/shared/ContainerGroupForm.js:97
 msgid "Field for passing a custom Kubernetes or OpenShift Pod specification."
 msgstr "用于传递自定义 Kubernetes 或 OpenShift Pod 规格的字段。"
@@ -9899,6 +10056,10 @@ msgstr "用于传递自定义 Kubernetes 或 OpenShift Pod 规格的字段。"
 #: screens/Inventory/shared/InventorySourceSyncButton.js:37
 msgid "Start sync source"
 msgstr "启动同步源"
+
+#: screens/Job/Job.helptext.js:13
+msgid "Pass extra command line variables to the playbook. This is the -e or --extra-vars command line parameter for ansible-playbook. Provide key/value pairs using either YAML or JSON. Refer to the documentation for example syntax."
+msgstr "向 playbook 传递额外的命令行变量。这是 ansible-playbook 的 -e 或 --extra-vars 命令行参数。使用 YAML 或 JSON 提供键/值对。有关语法示例，请参阅文档。"
 
 #: components/FormField/PasswordInput.js:36
 msgid "Hide"
@@ -10060,6 +10221,10 @@ msgstr "小于比较。"
 msgid "Hosts automated"
 msgstr "自动的主机"
 
+#: screens/Project/shared/Project.helptext.js:96
+msgid "Allow changing the Source Control branch or revision in a job template that uses this project."
+msgstr "允许在使用此项目的任务模板中更改源代码控制分支或修订版本。"
+
 #: screens/User/User.js:56
 msgid "Back to Users"
 msgstr "返回到用户"
@@ -10096,6 +10261,10 @@ msgstr "受管"
 #: components/Schedule/shared/DateTimePicker.js:49
 msgid "Start date"
 msgstr "开始日期"
+
+#: screens/Project/shared/Project.helptext.js:65
+msgid "A refspec to fetch (passed to the Ansible git module). This parameter allows access to references via the branch field not otherwise available."
+msgstr "要获取的 refspec（传递给 Ansible git 模块）。此参数允许通过分支字段访问其他方式无法获得的引用。"
 
 #: screens/Credential/shared/CredentialFormFields/CredentialField.js:64
 msgid "Replace field with new value"
@@ -10294,7 +10463,7 @@ msgstr "点击下面的编辑按钮重新配置节点。"
 msgid "Federated Inventory"
 msgstr "联邦库存"
 
-#: screens/Organization/OrganizationDetail/OrganizationDetail.js:185
+#: screens/Organization/OrganizationDetail/OrganizationDetail.js:182
 msgid "Failed to delete organization."
 msgstr "删除机构失败。"
 
@@ -10427,6 +10596,10 @@ msgstr "Vault 密码"
 msgid "Run every"
 msgstr "运行每"
 
+#: screens/Project/shared/Project.helptext.js:51
+msgid "Example URLs for Remote Archive Source Control include:"
+msgstr "远程存档源代码控制的示例 URL 包括："
+
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:94
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:203
 msgid "Use SSL"
@@ -10514,6 +10687,10 @@ msgstr "云"
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:196
 msgid "Email Options"
 msgstr "电子邮件选项"
+
+#: screens/Job/Job.helptext.js:27
+msgid "Refer to the Ansible documentation for details about the configuration file."
+msgstr "有关配置文件的详细信息，请参阅 Ansible 文档。"
 
 #: screens/Template/Survey/SurveyQuestionForm.js:239
 #: screens/Template/Survey/SurveyQuestionForm.js:247
@@ -10824,6 +11001,10 @@ msgstr "解除关联？"
 msgid "Notification timed out"
 msgstr "通知超时"
 
+#: screens/Project/shared/Project.helptext.js:11
+msgid "Change PROJECTS_ROOT when deploying {brandName} to change this location."
+msgstr "部署 {brandName} 时更改 PROJECTS_ROOT 以更改此位置。"
+
 #: components/Schedule/shared/FrequencyDetailSubform.js:200
 msgid "{intervalValue, plural, one {minute} other {minutes}}"
 msgstr "{intervalValue, plural, one {minute} other {minutes}}"
@@ -10946,6 +11127,10 @@ msgstr "Automation Controller 版本"
 #: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.js:81
 msgid "Access Token Expiration"
 msgstr "访问令牌过期"
+
+#: screens/Project/shared/Project.helptext.js:29
+msgid "Note: When using SSH protocol for GitHub or Bitbucket, enter an SSH key only, do not enter a username (other than git). Additionally, GitHub and Bitbucket do not support password authentication when using SSH. GIT read only protocol (git://) does not use username or password information."
+msgstr "注意：为 GitHub 或 Bitbucket 使用 SSH 协议时，请仅输入 SSH 密钥，不要输入用户名（git 除外）。此外，GitHub 和 Bitbucket 在使用 SSH 时不支持密码身份验证。GIT 只读协议 (git://) 不使用用户名或密码信息。"
 
 #: screens/Template/shared/WorkflowJobTemplate.helptext.js:17
 msgid "Prompt for inventory on launch."

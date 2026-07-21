@@ -98,10 +98,7 @@ function OrganizationDetail({ organization }) {
         <ExecutionEnvironmentDetail
           executionEnvironment={summary_fields?.default_environment}
           isDefaultEnvironment
-          helpText={t`The execution environment that will be used for jobs
-          inside of this organization. This will be used a fallback when
-          an execution environment has not been explicitly assigned at the
-          project, job template or workflow level.`}
+          helpText={t`The execution environment that will be used for jobs inside of this organization. This will be used a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level.`}
         />
         <UserDateDetail
           label={t`Created`}

@@ -37,7 +37,7 @@ const Label = styled.span`
 
 function ProjectDetail({ project }) {
   const { t } = useLingui();
-  const projectHelpText = getProjectHelpText(t);
+  const projectHelpText = getProjectHelpText();
   const {
     allow_override,
     created,
